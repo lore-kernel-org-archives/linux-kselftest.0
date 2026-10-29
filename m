@@ -1,79 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.83.148.184
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.162.73.231
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793299848;
-	b=cx1B0jDAA5/pbahDT+CtPAs6vcgDSEhXqg8T/1ljqxBQjtXhOjNvqSWjYmmzHKc3XbDo
-	 9DREQ6lF1JTyVPvMA2xMm4S0TKw74hIU9kPPVQO0IcAv2YKhUs/LPz9ULk/sgpbb5bgu8
-	 1bSnIW0mYmGPzhzExySrV3RZbHE8Ez2xdd7hLYs3N837sEelgCfoxh4GhQrWdNLzArosX
-	 6Zoxg6XsE6gA0XnY0RPrvs1Ota7BNM1vvU14w94Xa7NvJ51FIxMOPMmPnu9WLIrxFwEGE
-	 rYfZ5H0Q4LiVawvFebYsI1Tla8jkYyfY+Ab2urXLtsyMRNXBEzqwjimu3I1F+FgrfCQ==
+	t=1793299867;
+	b=fzlQI8F2T5EN2JDGihPdAqQhMauaDfxAw64Mt7kyyLBa485hVURnOuEfm9CihJc/qylV
+	 0iheeCBhykUcpzQ11O6pH2h5LYEtqeNyu+3dGniCKk2kwxKbi6nUIY8s5+eLNv3rNm0/9
+	 A/nEYRN3j64SE/1HxQGToFcESGWK1mMVhys06Q8UbN76gBDw0f5ByPSCabd5Y0IedFAth
+	 kWrK/8+XdMb3zvwSKsghzAByzQC79FhXTCbeaaJCIlg0qsggAZB2qH2PPr9iB+MjfyBWW
+	 TwUe7ub6fuBatjh9iOZzvyie+iFgs4UISIxU5lwaNoNRLKtfinfjf/AeVT76kqZ9l/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793299848;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793299867;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
 	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
 	 X-ClientProxiedBy;
-	bh=kt31RkZvs3Js/rRT4Zbm1eAJylYnR0XDwopyriblP6o=;
-	b=3qWYdRd3Wrfodh9koOJs1QTYrnnx/oUxcOXnQm3TH9NM2SfCu+0jI5ubrTyXLN/Xy3Ud
-	 rknX1VvpD4rZunhweBKIuFd8d4UEwXL1+EZZtA9jq5Zbov1vHoPaAguQ8OR4cnUcEZY8m
-	 uYce5ivnUszlah030SJU+zFR6QUdH6Bpk5ii+qtvK6LTAqb5DK8g4jc9d49k7I+8PjhvX
-	 afWVAoyz+j6QDX8t3RUBqTaKPLdISi2KRQDzgI8TPq9SjnCAyq/Fn2Twm2/AdrhPjlgcv
-	 iRdaWrs4K+M/gRh6hCPfDGr973ikzlvC+wc68UDwHOwWHKuFS7SH18bou/FJyR+O7pg==
+	bh=s8fhFjbeZNtom/0BFTMtGguNPFKuLuVDca4m55IwJCA=;
+	b=f68Ph+XBPYF+KrsIdnMnCbIEOD4tMdZ4ZPLY0FPQT6iQRDMFxDDZXUoOXORvynrx+8LL
+	 BTUvtf9qc+hHC4GYGct9/PcF3vc+Ouf0CWdQfTSYoGaTMae3lOC2wR2Mf/sPXJTu79C7U
+	 bx2qDWeBJAHlkqYkHEms6YqS9oRIExWNr1j/nX0x0MEiAIeC4/VZCecXD7SHD+iHLIkDu
+	 JtbUwAsUXJaboNWok3+4JjbHXDCtrqMSS8Fs1RCfXeIggZr1EA/kJcZ2NdTELx3XA+EZ2
+	 d1X5+NiLJbegMJ3Qnwt38S1Y2oRWvvCf1jlRglPsp7DwiGhYfqLpEDv8FA0NA2n881g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=amazon.com;
 	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=oKhzjY1z;
-	arc=none smtp.remote-ip=35.83.148.184
-Received: from pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.83.148.184])
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=sWyvzKbw;
+	arc=none smtp.remote-ip=35.162.73.231
+Received: from pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.162.73.231])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FC1606A327
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 18:50:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1FC1606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BC2606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 18:51:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37BC2606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=oKhzjY1z
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=sWyvzKbw
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1793299846; x=1824835846;
+  t=1793299866; x=1824835866;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kt31RkZvs3Js/rRT4Zbm1eAJylYnR0XDwopyriblP6o=;
-  b=oKhzjY1z8wPfygac/z8PZ/yM7tcHHfgKU0VhrT7ieiZ0gSB+P7BTKyoz
-   gr0qO8oezONex7pmbwIU4ie+NWEr8gLkbsSRPJUo4nqxTi8ks+ZJwQBxA
-   3D/7kNO7hgiKjjefOtKQc/3hgo46kg0V2KFAxLP3Xn+sqMzEKIC4T+nOu
-   As+6l96lkj4/QKWq2jCruv88Uv8vw8ErCoBFy0gFb4Vqb+EzJpIi8l8aP
-   xkJxqndwnFLcQSQCOyZWXAAei/iUEC37JPT/W+KoJaWB9BicH/xYb1oXX
-   u1XjyJp5zC4WU5bD5cZgtwUGa9LZ/7ryMrufzr4p/rXwAMPjYoQqT+oH4
-   w==;
-X-CSE-ConnectionGUID: aEgEyDVDQRO0k6U3NVhPkg==
-X-CSE-MsgGUID: a16Vh8rbQMCQzsdJYqDR3A==
+  bh=s8fhFjbeZNtom/0BFTMtGguNPFKuLuVDca4m55IwJCA=;
+  b=sWyvzKbwsxu3eHKNGSVLYw6qqlYP2gddc570TpaVzya6D/e7UCVneuh/
+   nhbrYBzQ5m+gfaRrY3hqKTj3gUYgOIgOsTKn/aliX82/5wDhl1q9qAo/T
+   J54zoRQq0NjUn7cVsFprzZsP3uDtSJjjMoPu3VzeEvHZY5YzJm150jZIu
+   v8HqAjgw0GdakIVCrHJ02HI5ed/EpwgYSL/LaEMDTWvIhRL2Q7XwO0eoB
+   oJpI8vLn6GDHcc5YTxqShJ+zaNeN+SNEiJBdBRjjDBU9ey0cT4FmGml9R
+   BjVLnSaioZXPApoRqSGjAc90EIFqif9tcy9Sr8Xa7ut0B0DphWDY008Ae
+   Q==;
+X-CSE-ConnectionGUID: CTAX/RzGRi27bPRYT3CsfA==
+X-CSE-MsgGUID: VrqK9FxoQd2hchjMMPAeuQ==
 X-IronPort-AV: E=Sophos;i="6.27,184,1787011200"; 
-   d="scan'208";a="32391019"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 18:50:43 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.53:27962]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.63.21:2525] with esmtp (Farcaster)
- id 6fd115fd-b7f7-4055-a1a0-5f83e1515a33; Thu, 29 Oct 2026 18:50:43 +0000 (UTC)
-X-Farcaster-Flow-ID: 6fd115fd-b7f7-4055-a1a0-5f83e1515a33
+   d="scan'208";a="32406869"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 18:51:05 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:6523]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.22.238:2525] with esmtp (Farcaster)
+ id 39b16434-0541-47d5-b7ab-9e730a3e40f0; Thu, 29 Oct 2026 18:51:05 +0000 (UTC)
+X-Farcaster-Flow-ID: 39b16434-0541-47d5-b7ab-9e730a3e40f0
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Thu, 29 Oct 2026 18:50:43 +0000
+ Thu, 29 Oct 2026 18:51:05 +0000
 Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Thu, 29 Oct 2026 18:50:42 +0000
+ Thu, 29 Oct 2026 18:51:04 +0000
 From: Jimmy Zuber <jamz@amazon.com>
 To: Miklos Szeredi <miklos@szeredi.hu>
 CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
  Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
 	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
 	<luis@igalia.com>
-Subject: [PATCH v2 1/2] fuse: skip LOOKUP before exclusive create
-Date: Thu, 29 Oct 2026 18:50:09 +0000
-Message-ID: <20261029185010.3080336-2-jamz@amazon.com>
+Subject: [PATCH v2 2/2] selftests/fuse: test FUSE_EXCL_CREATE
+Date: Thu, 29 Oct 2026 18:50:10 +0000
+Message-ID: <20261029185010.3080336-3-jamz@amazon.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20261029185010.3080336-1-jamz@amazon.com>
 References: <20261029185010.3080336-1-jamz@amazon.com>
@@ -88,140 +88,447 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
+X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-mkdir(), mknod(), symlink(), link() and renameat2() with RENAME_NOREPLACE
-look the new name up with FUSE_LOOKUP before sending the request, which
-costs a round trip to the server.
-
-Add an INIT flag, FUSE_EXCL_CREATE, with which the server fails
-FUSE_MKNOD, FUSE_MKDIR, FUSE_SYMLINK, FUSE_LINK, and FUSE_RENAME2 with
-RENAME_NOREPLACE, with -EEXIST for an existing name.  When the server
-sets it, the lookup of a name that is about to be created returns
-without sending FUSE_LOOKUP, and an existing name is reported by the
--EEXIST of the request.  The VFS checks the request before sending it,
-so an existing name can also fail with the error of such a check, such
-as -EROFS on a read-only mount or -EACCES without write permission on
-the directory.  After a failed request the name stays uncached, so the
-next lookup goes to the server.
-
-A rename that may replace its target looks the target up, so that the
-kernel can check the permission to replace it.
+Check that mkdir(), mknod(), symlink(), link() and renameat2() with
+RENAME_NOREPLACE of new names send no FUSE_LOOKUP when the server sets
+FUSE_EXCL_CREATE, that the created names are cached, and that creating
+an existing name fails with EEXIST and leaves the name uncached.
+The FUSE_EXCL_CREATE cases skip on kernels that do not offer the flag.
 
 Assisted-by: Claude:claude-opus-5-5 [Claude-Code]
 Signed-off-by: Jimmy Zuber <jamz@amazon.com>
 ---
- fs/fuse/dir.c             | 10 ++++++++++
- fs/fuse/fuse_i.h          |  6 ++++++
- fs/fuse/inode.c           |  4 +++-
- include/uapi/linux/fuse.h | 12 +++++++++++-
- 4 files changed, 30 insertions(+), 2 deletions(-)
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +-
+ .../filesystems/fuse/excl_create_test.c       | 386 ++++++++++++++++++
+ 3 files changed, 389 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/excl_create_test.c
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index 28516a1760e24..c4d47ef1a195c 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -627,6 +627,16 @@ static struct dentry *fuse_lookup(struct inode *dir, struct dentry *entry,
- 		return ERR_PTR(-EIO);
+diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
+index 7c787313e69b6..719298cb98c5f 100644
+--- a/tools/testing/selftests/filesystems/fuse/.gitignore
++++ b/tools/testing/selftests/filesystems/fuse/.gitignore
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++excl_create_test
+ fuse_mnt
+ fusectl_test
+ test_syncfs
+diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
+index e3ae3acff1139..ef1a241b79f8f 100644
+--- a/tools/testing/selftests/filesystems/fuse/Makefile
++++ b/tools/testing/selftests/filesystems/fuse/Makefile
+@@ -3,7 +3,7 @@
+ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
  
- 	fc = get_fuse_conn_super(dir->i_sb);
+ TEST_GEN_PROGS := fusectl_test test_syncfs
+-TEST_GEN_PROGS += write_extend_eof_test
++TEST_GEN_PROGS += write_extend_eof_test excl_create_test
+ TEST_GEN_PROGS += fuse_acl_cache_test
+ TEST_GEN_PROGS += fuse_symlink_cache_test
+ TEST_GEN_PROGS += fuse_readdir_cache_test
+@@ -12,6 +12,7 @@ TEST_GEN_FILES := fuse_mnt
+ include ../../lib.mk
+ 
+ $(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
++$(OUTPUT)/excl_create_test: LDLIBS += -lpthread
+ 
+ VAR_CFLAGS := $(shell pkg-config fuse3 --cflags 2>/dev/null)
+ ifeq ($(VAR_CFLAGS),)
+diff --git a/tools/testing/selftests/filesystems/fuse/excl_create_test.c b/tools/testing/selftests/filesystems/fuse/excl_create_test.c
+new file mode 100644
+index 0000000000000..25c8764556630
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/fuse/excl_create_test.c
+@@ -0,0 +1,386 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test mkdir(), mknod(), symlink(), link() and renameat2() with
++ * RENAME_NOREPLACE, with and without FUSE_EXCL_CREATE.
++ *
++ * Requires root to mount fuse.
++ */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <pthread.h>
++#include <sched.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/mman.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
++#include <sys/uio.h>
++#include <linux/fuse.h>
 +
-+	/* The request fails with -EEXIST if the name exists */
-+	if (fc->excl_create &&
-+	    (flags & (LOOKUP_CREATE | LOOKUP_EXCL)) ==
-+	    (LOOKUP_CREATE | LOOKUP_EXCL)) {
-+		if (entry->d_name.len > fc->name_max)
-+			return ERR_PTR(-ENAMETOOLONG);
-+		return NULL;
++#include "../../kselftest_harness.h"
++
++#define FUSE_ROOT_ID	1
++#define MAX_WRITE	(128 * 1024)
++#define MAX_ENTRIES	16
++
++struct entry {
++	char name[64];
++	uint64_t nodeid;
++	uint32_t mode;
++};
++
++/* Server state, shared with the responder thread. */
++struct server {
++	int fd;
++	int excl;
++	/* The kernel offers FUSE_EXCL_CREATE in FUSE_INIT */
++	int offered;
++	struct entry ent[MAX_ENTRIES];
++	int nent;
++	int nr_lookup, nr_mkobj, nr_rename;
++};
++
++static void reply(int fd, uint64_t unique, int error, void *data, size_t len)
++{
++	struct fuse_out_header oh = {
++		.len = sizeof(oh) + (data ? len : 0),
++		.error = error,
++		.unique = unique,
++	};
++	struct iovec iov[2] = { { &oh, sizeof(oh) }, { data, len } };
++
++	/* Errors here are teardown races (device closed on unmount); ignore. */
++	if (writev(fd, iov, data ? 2 : 1) < 0)
++		return;
++}
++
++static struct entry *find(struct server *s, const char *name)
++{
++	int i;
++
++	for (i = 0; i < s->nent; i++)
++		if (!strcmp(s->ent[i].name, name))
++			return &s->ent[i];
++	return NULL;
++}
++
++static struct entry *add(struct server *s, const char *name, uint32_t mode)
++{
++	struct entry *e = &s->ent[s->nent];
++
++	snprintf(e->name, sizeof(e->name), "%.63s", name);
++	e->nodeid = FUSE_ROOT_ID + 1 + s->nent++;
++	e->mode = mode;
++	return e;
++}
++
++/* A NULL entry is a negative entry, cached like a found one. */
++static void fill_entry(struct fuse_entry_out *out, struct entry *e)
++{
++	memset(out, 0, sizeof(*out));
++	out->entry_valid = 3600;
++	if (!e)
++		return;
++	out->nodeid = e->nodeid;
++	out->attr_valid = 3600;
++	out->attr.ino = e->nodeid;
++	out->attr.mode = e->mode;
++	out->attr.nlink = S_ISDIR(e->mode) ? 2 : 1;
++	out->attr.blksize = 4096;
++}
++
++static void *server_thread(void *arg)
++{
++	struct server *s = arg;
++	static char buf[MAX_WRITE + 4096];
++
++	for (;;) {
++		ssize_t n = read(s->fd, buf, sizeof(buf));
++		struct fuse_in_header *ih = (void *)buf;
++		char *in = (char *)(ih + 1);
++
++		if (n < 0) {
++			if (errno == EINTR || errno == EAGAIN)
++				continue;
++			return NULL;	/* device closed on unmount */
++		}
++		if (n < (ssize_t)sizeof(*ih))
++			continue;
++
++		switch (ih->opcode) {
++		case FUSE_INIT: {
++			struct fuse_init_in *init = (void *)in;
++			struct fuse_init_out out = {0};
++
++			s->offered = (init->flags & FUSE_INIT_EXT) &&
++				     (init->flags2 & (FUSE_EXCL_CREATE >> 32));
++			out.major = FUSE_KERNEL_VERSION;
++			out.minor = FUSE_KERNEL_MINOR_VERSION;
++			out.max_readahead = init->max_readahead;
++			out.max_write = MAX_WRITE;
++			out.max_background = 16;
++			out.congestion_threshold = 12;
++			out.flags = FUSE_INIT_EXT;
++			if (s->excl)
++				out.flags2 = FUSE_EXCL_CREATE >> 32;
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_GETATTR: {
++			struct fuse_attr_out out = {0};
++			struct fuse_entry_out eo;
++			int i;
++
++			out.attr_valid = 3600;
++			if (ih->nodeid == FUSE_ROOT_ID) {
++				out.attr.ino = FUSE_ROOT_ID;
++				out.attr.mode = S_IFDIR | 0777;
++				out.attr.nlink = 2;
++			}
++			for (i = 0; i < s->nent; i++) {
++				if (s->ent[i].nodeid == ih->nodeid) {
++					fill_entry(&eo, &s->ent[i]);
++					out.attr = eo.attr;
++				}
++			}
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_LOOKUP: {
++			struct fuse_entry_out out;
++
++			s->nr_lookup++;
++			fill_entry(&out, find(s, in));
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_MKNOD:
++		case FUSE_MKDIR:
++		case FUSE_SYMLINK:
++		case FUSE_LINK: {
++			struct fuse_entry_out out;
++			struct entry *e;
++			const char *name;
++			uint32_t mode;
++
++			s->nr_mkobj++;
++			if (ih->opcode == FUSE_MKNOD) {
++				struct fuse_mknod_in *mi = (void *)in;
++
++				name = (char *)(mi + 1);
++				mode = mi->mode;
++			} else if (ih->opcode == FUSE_MKDIR) {
++				struct fuse_mkdir_in *mi = (void *)in;
++
++				name = (char *)(mi + 1);
++				mode = S_IFDIR | mi->mode;
++			} else if (ih->opcode == FUSE_SYMLINK) {
++				name = in;
++				mode = S_IFLNK | 0777;
++			} else {
++				name = (char *)((struct fuse_link_in *)in + 1);
++				mode = S_IFREG | 0644;
++			}
++			if (find(s, name)) {
++				reply(s->fd, ih->unique, -EEXIST, NULL, 0);
++				break;
++			}
++			e = add(s, name, mode);
++			/* A link names the inode of its source */
++			if (ih->opcode == FUSE_LINK)
++				e->nodeid = ((struct fuse_link_in *)in)->oldnodeid;
++			fill_entry(&out, e);
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_RENAME2: {
++			struct fuse_rename2_in *ri = (void *)in;
++			const char *oldname = (char *)(ri + 1);
++			const char *newname = oldname + strlen(oldname) + 1;
++			struct entry *e = find(s, oldname);
++
++			s->nr_rename++;
++			if (!e || ri->flags != RENAME_NOREPLACE) {
++				reply(s->fd, ih->unique, -EINVAL, NULL, 0);
++				break;
++			}
++			if (find(s, newname)) {
++				reply(s->fd, ih->unique, -EEXIST, NULL, 0);
++				break;
++			}
++			snprintf(e->name, sizeof(e->name), "%.63s", newname);
++			reply(s->fd, ih->unique, 0, NULL, 0);
++			break;
++		}
++		case FUSE_FORGET:
++		case FUSE_BATCH_FORGET:
++			break;
++		default:
++			reply(s->fd, ih->unique, -EOPNOTSUPP, NULL, 0);
++			break;
++		}
++	}
++}
++
++FIXTURE(fuse)
++{
++	struct server *srv;
++	char dir[64];
++	int mounted;
++};
++
++FIXTURE_VARIANT(fuse)
++{
++	int excl;
++};
++
++FIXTURE_VARIANT_ADD(fuse, excl)
++{
++	.excl = 1,
++};
++
++FIXTURE_VARIANT_ADD(fuse, plain)
++{
++	.excl = 0,
++};
++
++static void cleanup(FIXTURE_DATA(fuse) *self)
++{
++	if (self->mounted)
++		umount2(self->dir, MNT_DETACH);
++	self->mounted = 0;
++	/* The detached server thread may still use self->srv */
++	if (self->srv && self->srv != MAP_FAILED && self->srv->fd > 0)
++		close(self->srv->fd);
++	if (self->dir[0])
++		rmdir(self->dir);
++	self->dir[0] = '\0';
++}
++
++FIXTURE_SETUP(fuse)
++{
++	char opts[128];
++	struct stat st;
++	pthread_t t;
++	int ret;
++
++	if (geteuid() != 0)
++		SKIP(return, "need root to mount fuse");
++
++	/* Mounts made by the test go away with its mount namespace */
++	ASSERT_EQ(0, unshare(CLONE_NEWNS));
++	ASSERT_EQ(0, mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL));
++
++	self->srv = mmap(NULL, sizeof(*self->srv), PROT_READ | PROT_WRITE,
++			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(MAP_FAILED, self->srv);
++	self->srv->excl = variant->excl;
++	add(self->srv, "src", S_IFREG | 0644);
++	add(self->srv, "taken", S_IFREG | 0644);
++
++	self->srv->fd = open("/dev/fuse", O_RDWR);
++	if (self->srv->fd < 0 && (errno == ENOENT || errno == ENODEV))
++		SKIP(return, "no /dev/fuse");
++	ASSERT_GE(self->srv->fd, 0);
++
++	strcpy(self->dir, "/tmp/fuse_excl_XXXXXX");
++	ASSERT_NE(NULL, mkdtemp(self->dir));
++
++	snprintf(opts, sizeof(opts),
++		 "fd=%d,rootmode=40000,user_id=0,group_id=0", self->srv->fd);
++	ret = mount("fuse", self->dir, "fuse", 0, opts);
++	if (ret)
++		cleanup(self);
++	ASSERT_EQ(0, ret);
++	self->mounted = 1;
++
++	ret = pthread_create(&t, NULL, server_thread, self->srv);
++	if (!ret) {
++		pthread_detach(t);
++		/* Wait for FUSE_INIT: the root GETATTR is queued behind it */
++		ret = stat(self->dir, &st);
++	}
++	/* The harness skips teardown when setup fails or skips */
++	if (ret)
++		cleanup(self);
++	ASSERT_EQ(0, ret);
++	if (variant->excl && !self->srv->offered) {
++		cleanup(self);
++		SKIP(return, "kernel without FUSE_EXCL_CREATE");
++	}
++}
++
++FIXTURE_TEARDOWN(fuse)
++{
++	cleanup(self);
++}
++
++TEST_F(fuse, create_new)
++{
++	static const char *const names[] = { "d", "f", "l", "h", "r" };
++	char path[128], src[128];
++	struct stat st;
++	unsigned int i;
++
++	snprintf(path, sizeof(path), "%s/d", self->dir);
++	ASSERT_EQ(0, mkdir(path, 0755));
++	snprintf(path, sizeof(path), "%s/f", self->dir);
++	ASSERT_EQ(0, mkfifo(path, 0644));
++	snprintf(path, sizeof(path), "%s/l", self->dir);
++	ASSERT_EQ(0, symlink("src", path));
++	snprintf(src, sizeof(src), "%s/src", self->dir);
++	snprintf(path, sizeof(path), "%s/h", self->dir);
++	ASSERT_EQ(0, link(src, path));
++	snprintf(path, sizeof(path), "%s/r", self->dir);
++	ASSERT_EQ(0, renameat2(AT_FDCWD, src, AT_FDCWD, path,
++			       RENAME_NOREPLACE));
++
++	/* The created names are cached */
++	for (i = 0; i < ARRAY_SIZE(names); i++) {
++		snprintf(path, sizeof(path), "%s/%s", self->dir, names[i]);
++		ASSERT_EQ(0, lstat(path, &st));
 +	}
 +
- 	epoch = atomic_read(&fc->epoch);
- 
- 	locked = fuse_lock_inode(dir);
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index c91af283aef20..1d4cc77887e50 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -537,6 +537,12 @@ struct fuse_conn {
- 	 */
- 	unsigned atomic_o_trunc:1;
- 
-+	/**
-+	 * @excl_create: Create requests check for an existing name.
-+	 * Only set in INIT
-+	 */
-+	unsigned excl_create:1;
++	EXPECT_EQ(4, self->srv->nr_mkobj);
++	EXPECT_EQ(1, self->srv->nr_rename);
++	/* Only "src" is looked up with FUSE_EXCL_CREATE */
++	EXPECT_EQ(variant->excl ? 1 : 6, self->srv->nr_lookup);
++}
 +
- 	/**
- 	 * @export_support: Filesystem supports NFS exporting.
- 	 * Only set in INIT
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 1341b681d0ed3..97ff1b87186d9 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -1445,6 +1445,8 @@ static void process_init_reply(struct fuse_args *args, int error)
- 
- 			if (fuse_syncfs_enable(fc, flags))
- 				fc->sync_fs = 1;
-+			if (flags & FUSE_EXCL_CREATE)
-+				fc->excl_create = 1;
- 		} else {
- 			ra_pages = fc->max_read / PAGE_SIZE;
- 			fc->no_lock = 1;
-@@ -1503,7 +1505,7 @@ static struct fuse_init_args *fuse_new_init(struct fuse_mount *fm)
- 		FUSE_SECURITY_CTX | FUSE_CREATE_SUPP_GROUP |
- 		FUSE_HAS_EXPIRE_ONLY | FUSE_DIRECT_IO_ALLOW_MMAP |
- 		FUSE_NO_EXPORT_SUPPORT | FUSE_HAS_RESEND | FUSE_ALLOW_IDMAP |
--		FUSE_REQUEST_TIMEOUT;
-+		FUSE_REQUEST_TIMEOUT | FUSE_EXCL_CREATE;
- #ifdef CONFIG_FUSE_VDAX
- 	if (fm->fc->vdax)
- 		flags |= FUSE_MAP_ALIGNMENT;
-diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-index 616430a2973c6..0731e555ad9cb 100644
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -257,6 +257,9 @@
-  *  - add backing_id_64 to fuse_open_out
-  *  - add FUSE_NOTIFY_BACKING_MAP, fuse_notify_backing_map_out, fuse_extent
-  *  - add FUSE_BACKING_MAP_CREATE, FUSE_BACKING_MAP_CYCLIC
-+ *
-+ *  7.48
-+ *  - add FUSE_EXCL_CREATE
-  */
- 
- #ifndef _LINUX_FUSE_H
-@@ -292,7 +295,7 @@
- #define FUSE_KERNEL_VERSION 7
- 
- /** Minor version number of this interface */
--#define FUSE_KERNEL_MINOR_VERSION 47
-+#define FUSE_KERNEL_MINOR_VERSION 48
- 
- /** The node ID of the root inode */
- #define FUSE_ROOT_ID 1
-@@ -480,6 +483,12 @@ struct fuse_file_lock {
-  *		privilege that mounting virtiofs or fuseblk requires).
-  *		Insufficiently privileged servers ignore it.
-  * FUSE_PASSTHROUGH_V2: use 64 bit server allocated backing ID
-+ * FUSE_EXCL_CREATE: FUSE_MKNOD, FUSE_MKDIR, FUSE_SYMLINK, FUSE_LINK and
-+ *		FUSE_RENAME2 with RENAME_NOREPLACE fail with -EEXIST for an
-+ *		existing name, so the kernel sends them without a LOOKUP of
-+ *		the name. The VFS checks the request before sending it, so an
-+ *		existing name can also fail with the error of such a check,
-+ *		such as -EROFS
-  */
- #define FUSE_ASYNC_READ		(1 << 0)
- #define FUSE_POSIX_LOCKS	(1 << 1)
-@@ -530,6 +539,7 @@ struct fuse_file_lock {
- #define FUSE_HAS_IO_URING_BUFPOOL (1ULL << 43)
- #define FUSE_HAS_SYNCFS		(1ULL << 44)
- #define FUSE_PASSTHROUGH_V2	(1ULL << 45)
-+#define FUSE_EXCL_CREATE	(1ULL << 46)
- 
- /*
-  * CUSE INIT request/reply flags
++TEST_F(fuse, create_existing)
++{
++	char path[128], src[128];
++	struct stat st;
++
++	snprintf(path, sizeof(path), "%s/taken", self->dir);
++	ASSERT_EQ(-1, mkdir(path, 0755));
++	ASSERT_EQ(EEXIST, errno);
++	ASSERT_EQ(-1, symlink("src", path));
++	ASSERT_EQ(EEXIST, errno);
++	ASSERT_EQ(-1, mkfifo(path, 0644));
++	ASSERT_EQ(EEXIST, errno);
++	snprintf(src, sizeof(src), "%s/src", self->dir);
++	ASSERT_EQ(-1, link(src, path));
++	ASSERT_EQ(EEXIST, errno);
++	ASSERT_EQ(-1, renameat2(AT_FDCWD, src, AT_FDCWD, path,
++				RENAME_NOREPLACE));
++	ASSERT_EQ(EEXIST, errno);
++	ASSERT_EQ(0, stat(path, &st));
++
++	if (variant->excl) {
++		/* "src" is looked up, and "taken" once it stays uncached */
++		EXPECT_EQ(4, self->srv->nr_mkobj);
++		EXPECT_EQ(1, self->srv->nr_rename);
++		EXPECT_EQ(2, self->srv->nr_lookup);
++	} else {
++		/* The cached name is looked up again for each request */
++		EXPECT_EQ(0, self->srv->nr_mkobj);
++		EXPECT_EQ(0, self->srv->nr_rename);
++		EXPECT_EQ(6, self->srv->nr_lookup);
++	}
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.50.1
 
