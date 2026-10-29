@@ -1,107 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793243207;
-	b=0rMgfB5Ypct3O/RJ0841YtiaCEMTp57/tJpPcf3g7yN/evGQsj2JEqR9e1PCnQeAJwDv
-	 5Ii+B8LosS8aXJopzNzW/a+yDu9K3fWzn6t1O26ey0+dgyGZjK4kpH9//hyr3HqVyET+o
-	 amY9hG/pgvb6LM/GnkaXVjabzCYYtK3HFxL6isIUy5UoMRYD+n3oiS6a+BbWNotpe80U8
-	 NWIjsLj0zosKPnd4ruDBjBTO4t0ph2hefm+nSGO1ZU1z74afR5SmU552sCz1s31CbKyaZ
-	 RissU6SC0ZKMfEaPcB9QAvLz6wyYecJysylpstcVeEny5qlk7ZdziezEHXKRhT2JZGg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793243207;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:User-Agent:X-Original-From:References:From:Mime-Version:
-	 In-Reply-To:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
-	bh=21fFFSCtjvZ+BnQkCcGT5s2MmdQCNwbulDZga2Yp1YU=;
-	b=1mc6iOWIRnHySDpcdo57nH/5h8LRY2IOJd0Q1VJtQkBzBYP0QnVaDAKXSzI2q15CimNj
-	 3Zk2q14gyqiNoF57EB50EzZR3zxjWYI7UeRpJzBeOLLltAjZGe27rq68/jI+ZCiIJNG+W
-	 /SALu4R7eGvxe9qhNpEBjdL4rz97nDN4B5FH4FrJJUmrtepEx8f8vt7wt5GZUkW8zTM9Q
-	 w44/0/GcLRErLiKJUUsxA+PF0+AXwQ/Dd9blGH8U7wMeVKmwPUTJcnfKHaP3frEk7ktBJ
-	 Xb/5BjQJYhuNPXcSUP80vfDy0YChUQFhTGuGufyGVEec2Rjj/UuhnJEQ8EMQqP+tnVQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bytedance.com;
-	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=h6ziHXdx;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.43
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793243419;
+	b=t1piXUZaj1uj6ZD+HQwjbglOWEjQc5BrHsgWD8tidCmFa+uhHyvuOFFNxMtxyY/lfJpB
+	 Ah8jeaJt2JP0ddNI8vB5bB7DnU+mMMYNbHLD31capUq1LnvlEF03FYT30Z3vu5y1pWNcd
+	 hj/u9krMc2FugdWPD2hXpx/FFzcy3Sqb/NX7Fd+KGn/4bhyZNhVydlDW/gZBB0SguI96G
+	 BVhb/oL26ZIxxL6VY3xl1XQB0xE53FzB4Z+58O12ndbGE7FF8gLmwJxfJX1Je+sKC0K0A
+	 b9n8fD0LlOtfFPL/uSYCC7406BHYVXNCpfdbdy1eHpGORt1rhrsNYHgMbiQF/OpB6pw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793243419;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=MLa59GNuE4juE8aN6EX7h5PeHDU2LrSedK/KeGwmNGM=;
+	b=Rf/sSiTFP46ozsKcQFDn6fgXHgLUEyBEKVr+AYFog/atJXr/Kq1PwKDVyebuZGHHxNhV
+	 oqNffcWsosLbr8JfpE4kW8CUjJa3rRpSQLx3f7VeW78iUCW1vgFZswWf6tZWrI5Eqp1M8
+	 D09LGfnQ3uK8o+OFBvTsogEnUprH0dC+k2LPE0tcIaSb031x2UgXmkT9mT4121kJsXaln
+	 kYr2J0Oszjek4y2yC9xTC1j1HH/tB3CNryyFJleHff2lPgj87sXrUggcGW9UGmwkBxljy
+	 RU48Uz744F8WPA5hz5/uYDXBYOtCdv1l7a6rsTgILO/rgYC0xHNG5QKcaK/yCyoiOSg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=K7bZGsuf;
+	arc=none smtp.remote-ip=192.198.163.7
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101B9606A31A
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 03:06:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 101B9606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C73606A31C;
+	Thu, 29 Oct 2026 03:10:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36C73606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=h6ziHXdx
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5be53e5fce1so1675260e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 20:06:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793243205; cv=none;
-        d=google.com; s=arc-20260327;
-        b=J+IZ8utbLeoTPoPaiDfUpxzihzTe/PwmI2MhCbnyrhWN/2T03OZ8dlcHE45PfqwePT
-         Eg9B1W5r3PqJ95lh6uRTeZB309jdRcJ1pQYzI9042mOPHD2AMdn9qlm5MOyxehKTMhYe
-         R5I22OhfYkIIxCHgJeNP7JBrovBZNlrvCM7XpwXd0Z3BObh172LxYfo34xGqlZDOpF2l
-         9nywZDmLKWn2J8k4daiGDB/kfsXjr/tK4U568BSabMFTA04wKjSHDaJU7pPxs9hwjh9T
-         zZb1aIOrrVNBFmb2kX2rFRjlQ4rvMByj5RcpWNuLuRA/exbdl0IyRApzaCnMFcgEDd09
-         Hhhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:in-reply-to:mime-version:from
-         :references:user-agent:dkim-signature;
-        bh=21fFFSCtjvZ+BnQkCcGT5s2MmdQCNwbulDZga2Yp1YU=;
-        fh=C/Z8q/iAPszGkY3kqQUtOw+LL3drThPJXbFueNHJO5Y=;
-        b=Gh0GxvakxjT8CI/+cMOQquo97xSPkPUQ9JZ+UCX+hKTdp1ETc/34+YTKylxTzrd0So
-         fAoKi4eOgspVCme/ERklSkQsdy9vojUfysTmfeFhjA7d5LgiQXclcUWh+eUGaKTO5x5k
-         Iu6o0ahK8NZArvDMWcyMj2pWI6MpJicB2+rHU7rOpBfr542KLTTtu5wU8j5FPoFWzJnN
-         wSYF8uUG+zuqK8TB47DNiefFYlslzyEC3TwbhDtG3pVT0JIYdo5qPmKT8IFag2sj2q8r
-         h+hJnGZTbOcjqQo9XCoupJkPDFllLBHC/rM4piNQlzI+88SGaToAyvpmxCucuI7X32J8
-         8iBw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1793243205; x=1793848005; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:in-reply-to:mime-version
-         :from:references:user-agent:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=21fFFSCtjvZ+BnQkCcGT5s2MmdQCNwbulDZga2Yp1YU=;
-        b=h6ziHXdxperKw0FMhtwDYC/nSyqfN66VH9iz1mtw8jkUEvdOawkjO1VfElLR2jSpP+
-         jqqjO8GakTohp8gam+tBwY1/eCqNz745YmdHtDmysTJhQXVQk1KHkqHBuCjAG80VMoKr
-         UsPvcHWdqdCDP6IdasdeBSbB9R/wSwCgEerazu4r+/iYkH4qZfT3rDsaZKzZ4RWfMayf
-         CQDQBq60IHafmR+XVjCAYc9Aa0nv2+nvmQ2rc7Vfblp0ZCQcn3mnB361DJv5d9I8chlY
-         w+bLmgtYklxeK9Yg/5NDZrStW1Ky6qVVfdEvSOpUq9D9p/9XftRnMGkcVdvm01gl2an0
-         OvKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793243205; x=1793848005;
-        h=content-type:cc:to:subject:message-id:date:in-reply-to:mime-version
-         :from:references:user-agent:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=21fFFSCtjvZ+BnQkCcGT5s2MmdQCNwbulDZga2Yp1YU=;
-        b=I8sK9lPp3hnNM0iMvgps18VVM6rsmfXqnMJDK0jOlVYP6ReUQj4RiA+axvlEkL8NgN
-         G2ruup+Z6pj1lMGWSctogxLYJ2jtFfOVluDVcl0MoP23RLfooaloeWNRmMIm+eYmkkYe
-         nQS1/piGzZTvXVKv2q2WsxXMF+N7eUoUa31VSbd3yO6wfncl7agBo533+hp8GsxBZkMR
-         eqUnZqvkAal6uOmQzh33XRX8e2qr6yPdd7J1XBhoorjzThB2Sld4hd6Sh8jP3CYlJ+3E
-         WehxFtRNKkIU4Ft+9dFEgDCoTUdFIKupNUK4tuzI/l6gyeW7x5tjgLo97ZiKe2VLyEV/
-         5mOQ==
-X-Forwarded-Encrypted: i=1; AKwUvByqUOX+GY0svzsbaIjDgLY50zMK33BxHDZ+X+vha3MDQjFjFMx7lUiHGnka66SU/UNFwlwkILS+ITyZzdu6UTo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJZDB+G/ImZt6HOTYq74J/5Th/jfFvtbHwVCkEtqdM5s4fKNeXp
-	SoxMommfOi3PEXFTewK/4T46+MFtHg0GQKUjhQKkFWVZIM6bPYRGQm6TH1oQt6ePlzUmABV/SIu
-	/fPWkzizQRnztn2BkIwtHH6CCHz37pia9wF9uEZmqCQ==
-X-Gm-Gg: AYBFou2GpHIL44cWZ9RkJ7ULfN9QzwjcthMxTr/0NAqkv7XZITfZdoThcm7GG6XvoDe
-	Mn2QL8fQGiRe7c7L2FpmU5NVXYm484+zA+90yEm5/PJuT+UPBrr43vC7nYqMGIS000l+TrD96yk
-	65L3KwkTxiIuTRUTEUZZ94H9fK4HkdGc0qmEgioFl7pP0ppth9bA+wem6y2zRZVJFepjbOdYSFd
-	y+GS1xzRsXmG82lpiIDJnnrGGwrq0UOrqdiatNP90V13FbkEFmyUycQ09b5sHbZ0QqiTkPDyPHq
-	f7Jr6p95yqCqw3EawQ9Z7KlmoqqJgeu5h9JhKm6iiubbyHyjc1SR72nVoUEpxAiIJDvMo7VMLpa
-	S0gyBUWzZLEYl+N/b7F9UY6PvJJsEaxQCgELFkw==
-X-Received: by 2002:a05:6512:1250:b0:5b8:997b:c606 with SMTP id
- 2adb3069b0e04-5bfcad9e1a6mr1490725e87.41.1793243205235; Wed, 28 Oct 2026
- 20:06:45 -0700 (PDT)
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 28 Oct 2026 22:06:44 -0500
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 28 Oct 2026 22:06:44 -0500
-User-Agent: Mozilla Thunderbird
-X-Original-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-References: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=K7bZGsuf
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793243419; x=1824779419;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ceg5b+r+S6lzEGiE3ja6DSXp3wyBHztec6OG3XWuy30=;
+  b=K7bZGsufPYXYw1rnk8s0ShY2yIVprgR/0AfrwgQ8azefK55uauxFoVwl
+   bMD7l480sCWjp70P9Z4jItrMHPtY0JdYnQIl5jsE96ViJun5W4tDtroKK
+   Hrf+jyY33E54BbzuuJGI967D0pZ71fnFa/fd3VJIW7f59Y27vSIwbBmXm
+   gVlizgNSVH5XuIqlxoJAWYvBHhfJrsintjNUfQHoBvAaaEByu41BPI8MW
+   4w+Dykp59/I8ZZIrzyq1Dx9PyUo9qu8lfW2BGfgR84Rn26UIXK+2M6PJ1
+   ZY5k02rWsAepSta7GKjHMCajDxQw+wibAs3vRv6x3/VYYyb7/cvRhBzrq
+   g==;
+X-CSE-ConnectionGUID: K5oOxdmDQMykITNdBiA6dA==
+X-CSE-MsgGUID: dqce/ISjS1qhJ9vOP2cn4A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1865185"
+X-IronPort-AV: E=Sophos;i="6.27,183,1787036400"; 
+   d="scan'208";a="1865185"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 20:10:17 -0700
+X-CSE-ConnectionGUID: rH0eiIP9TJSNft78hODM4g==
+X-CSE-MsgGUID: uO8hNBAuTECKIyqLspmhMA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,183,1787036400"; 
+   d="scan'208";a="5136821"
+Received: from unknown (HELO [10.238.2.205]) ([10.238.2.205])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 20:10:11 -0700
+Message-ID: <dce3875c-d590-4539-b19a-324cbfa6d4e9@linux.intel.com>
+Date: Thu, 29 Oct 2026 11:10:09 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,89 +71,199 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-In-Reply-To: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
-Date: Wed, 28 Oct 2026 22:06:44 -0500
-X-Gm-Features: AclHuK_OONCiZpFhomM73vca1DSs-MUlsV-8C6gmVeQhDkNqE4BPqIm0xCP39ic
-Message-ID: <CACnXVncwzQiUN9CO8_Ds7UQJEKzEF29vagsTFrC0WbRZXt7aLw@mail.gmail.com>
-Subject: Re: [PATCH v11 0/9] riscv: add SBI Supervisor Software Events support
-To: Anup Patel <anup.patel@oss.qualcomm.com>, Paul Walmsley <pjw@kernel.org>, 
-	Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
-Cc: Yunhui Cui <cuiyunhui@bytedance.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Will Deacon <will@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Conor Dooley <conor@kernel.org>, Anup Patel <anup@brainfault.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Atish Patra <atish.patra@linux.dev>, 
-	Yuanzhu <yuanzhu@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 12/28] KVM: x86: Add a new save/restore flag for FRED
+ metadata
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Shivansh Dhiman <shivansh.dhiman@amd.com>,
+ David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+ Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+ David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-13-sohil.mehta@intel.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <20260911213659.2025974-13-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Anup, Paul, Himanshu,
+On 9/12/2026 5:36 AM, Sohil Mehta wrote:
+> From: Xin Li <xin@zytor.com>
+> 
+> Introduce a new save/restore flag for FRED metadata (specifically, the
+> event nested flag and data) being saved and restored during VM save/
+> restore and live migration.
 
-On 10/29/26 12:55 AM, Anup Patel wrote:
+Nit:
+Would it be more natural to move this patch after patches 13 and 14?
+The commit message and the document reference changes introduced
+in later patches.
 
-> [...]
->
-> Changes in v11
-> ==============
->
-> Rebased on latest for-next branch of linux-riscv tree (commit a5ae1bf65cee).
-> Also, tested PMU driver with both PMU irqs and PMU SSE events.
->
+> 
+> Signed-off-by: Xin Li <xin@zytor.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> ---
+> v10:
+>  - Advertise KVM_CAP_X86_FRED_EVENT only when KVM can virtualize FRED, and
+>    return -EINVAL from KVM_ENABLE_CAP otherwise.
+>  - Document the new return value in api.rst.
+> ---
+>  Documentation/virt/kvm/api.rst  | 22 ++++++++++++++++++++++
+>  arch/x86/include/asm/kvm_host.h |  1 +
+>  arch/x86/include/uapi/asm/kvm.h |  1 +
+>  arch/x86/kvm/x86.c              | 18 ++++++++++++++++++
+>  include/uapi/linux/kvm.h        |  1 +
+>  5 files changed, 43 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 4eb7e75a7473..22ef94f3eb3a 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -1199,6 +1199,10 @@ The following bits are defined in the flags field:
+>    triple_fault_pending field contains a valid state. This bit will
+>    be set whenever KVM_CAP_X86_TRIPLE_FAULT_EVENT is enabled.
+>  
+> +- KVM_VCPUEVENT_VALID_FRED_STATE may be set to inform that the exception
+> +  state includes FRED state (specifically, the event nested flag and data).
+> +  This bit will be set whenever KVM_CAP_X86_FRED_EVENT is enabled.
+> +
+>  ARM64:
+>  ^^^^^^
+>  
+> @@ -1301,6 +1305,11 @@ If KVM_CAP_X86_TRIPLE_FAULT_EVENT is enabled, KVM_VCPUEVENT_VALID_TRIPLE_FAULT
+>  can be set in flags field to signal that the triple_fault field contains
+>  a valid state and shall be written into the VCPU.
+>  
+> +If KVM_CAP_X86_FRED_EVENT is enabled, KVM_VCPUEVENT_VALID_FRED_STATE can be set
+> +in the flags field to inform that the exception state contains FRED state
+> +(specifically, the event nested flag and data), which shall be written into the
+> +VCPU.
+> +
+>  ARM64:
+>  ^^^^^^
+>  
+> @@ -8979,6 +8988,19 @@ enabled, cmma can't be enabled anymore and pfmfi and the storage key
+>  interpretation are disabled. If cmma has already been enabled or the
+>  hpage_2g module parameter is not set to 1, -EINVAL is returned.
+>  
+> +7.48 KVM_CAP_X86_FRED_EVENT
+> +---------------------------
+> +
+> +:Architectures: x86
+> +:Parameters: args[0] whether feature should be enabled or not
+> +:Returns: 0 on success; -EINVAL if KVM cannot virtualize FRED.
+> +
+> +With this capability enabled, KVM allows exception save and restore operations
+> +to include FRED event context (specifically, the event nested flag and data).
+> +When injecting a FRED exception during VM entry, FRED event delivery relies
+> +on this information to select the correct event stack level and apply proper
+> +event data.
+> +
+>  8. Other capabilities.
+>  ======================
+>  
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 0fd5d4edeebb..dd68db17fdae 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1286,6 +1286,7 @@ struct kvm_arch {
+>  	bool has_mapped_host_mmio;
+>  	bool guest_can_read_msr_platform_info;
+>  	bool exception_payload_enabled;
+> +	bool exception_fred_state_enabled;
+>  
+>  	bool triple_fault_event;
+>  
+> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+> index 1585ec804066..6a67832c59bb 100644
+> --- a/arch/x86/include/uapi/asm/kvm.h
+> +++ b/arch/x86/include/uapi/asm/kvm.h
+> @@ -331,6 +331,7 @@ struct kvm_reinject_control {
+>  #define KVM_VCPUEVENT_VALID_SMM		0x00000008
+>  #define KVM_VCPUEVENT_VALID_PAYLOAD	0x00000010
+>  #define KVM_VCPUEVENT_VALID_TRIPLE_FAULT	0x00000020
+> +#define KVM_VCPUEVENT_VALID_FRED_STATE	0x00000040
+>  
+>  /* Interrupt shadow states */
+>  #define KVM_X86_SHADOW_INT_MOV_SS	0x01
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4b3681796c75..01198aba27cf 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -2288,6 +2288,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_PRE_FAULT_MEMORY:
+>  		r = tdp_enabled;
+>  		break;
+> +	case KVM_CAP_X86_FRED_EVENT:
+> +		r = kvm_cpu_cap_has(X86_FEATURE_FRED);
+> +		break;
+>  	case KVM_CAP_X86_APIC_BUS_CYCLES_NS:
+>  		r = kvm ? kvm->arch.apic_bus_cycle_ns : APIC_BUS_CYCLE_NS_DEFAULT;
+>  		break;
+> @@ -3022,6 +3025,8 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+>  			 | KVM_VCPUEVENT_VALID_SMM);
+>  	if (vcpu->kvm->arch.exception_payload_enabled)
+>  		events->flags |= KVM_VCPUEVENT_VALID_PAYLOAD;
+> +	if (vcpu->kvm->arch.exception_fred_state_enabled)
+> +		events->flags |= KVM_VCPUEVENT_VALID_FRED_STATE;
+>  	if (vcpu->kvm->arch.triple_fault_event) {
+>  		events->triple_fault.pending = kvm_test_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+>  		events->flags |= KVM_VCPUEVENT_VALID_TRIPLE_FAULT;
+> @@ -3036,6 +3041,7 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>  			      | KVM_VCPUEVENT_VALID_SHADOW
+>  			      | KVM_VCPUEVENT_VALID_SMM
+>  			      | KVM_VCPUEVENT_VALID_PAYLOAD
+> +			      | KVM_VCPUEVENT_VALID_FRED_STATE
+>  			      | KVM_VCPUEVENT_VALID_TRIPLE_FAULT))
+>  		return -EINVAL;
+>  
+> @@ -3051,6 +3057,11 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>  		events->exception_has_payload = 0;
+>  	}
+>  
+> +	if (events->flags & KVM_VCPUEVENT_VALID_FRED_STATE) {
+> +		if (!vcpu->kvm->arch.exception_fred_state_enabled)
+> +			return -EINVAL;
+> +	}
+> +
+>  	if ((events->exception.injected || events->exception.pending) &&
+>  	    (events->exception.nr > 31 || events->exception.nr == NMI_VECTOR))
+>  		return -EINVAL;
+> @@ -4038,6 +4049,13 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		kvm->arch.exception_payload_enabled = cap->args[0];
+>  		r = 0;
+>  		break;
+> +	case KVM_CAP_X86_FRED_EVENT:
+> +		r = -EINVAL;
+> +		if (!kvm_cpu_cap_has(X86_FEATURE_FRED))
+> +			break;
+> +		kvm->arch.exception_fred_state_enabled = cap->args[0];
+> +		r = 0;
+> +		break;
+>  	case KVM_CAP_X86_TRIPLE_FAULT_EVENT:
+>  		kvm->arch.triple_fault_event = cap->args[0];
+>  		r = 0;
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 9fc8dfdfd65f..c5ffc4e7ddb1 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -998,6 +998,7 @@ struct kvm_enable_cap {
+>  #define KVM_CAP_S390_VSIE_ESAMODE 248
+>  #define KVM_CAP_S390_HPAGE_2G 249
+>  #define KVM_CAP_ARM_PMU_V3_STRICT 250
+> +#define KVM_CAP_X86_FRED_EVENT 251
+>  
+>  struct kvm_irq_routing_irqchip {
+>  	__u32 irqchip;
 
-Thanks for rebasing and testing the series. I was a little surprised
-to see v11 posted, as I am still working through Himanshu's v10 review
-and validating the fixes on hardware. It would have been helpful to
-coordinate before reposting so that those changes could be included.
-
-I guess this follows Paul's request to rebase onto riscv/for-next.
-However, there is one change beyond the rebase that I would like to
-clarify: why does patch 4 remove the scoped_guard(preempt) sections
-from the CPU hotplug paths? These were present in v10 RESEND, and
-the local helpers still retain their preemption-disabled assertions.
-Is there a reason this protection is no longer needed?
-
-The changes discussed on the v10 threads are still outstanding in
-this posting:
-
-- Preserve TASK_TI_A0/A1/A2 across nested exceptions.
-- Replace the temporary GUP-based perf user-stack copy with nofault
-   uaccess, following the x86 approach.
-- Address the per-CPU initialization/preemption concern.
-- Split the MAINTAINERS updates into a separate patch.
-
-Additional fixes from Sashiko review, the kernel test robot report,
-and our follow-up debugging are also being consolidated:
-
-- NMI-safe entry and lockdep irqflags tracking.
-- The unused-function warning reported by the kernel test robot.
-- RV32 vmalloc synchronization before nofault fixup.
-- Faulting-PC validation in the kprobe single-step fault path.
-- Per-counter STOP handling in SSE error paths.
-- Ordinary IRQ CPU-PM notifier ordering and IRQ cleanup tracking.
-
-In particular, Himanshu identified the missing preservation of
-TASK_TI_A0/A1/A2 across nested exceptions [1]. Following his review,
-I validated the fix with hardware A/B testing: removing it reproduced
-corruption, while the fixed kernel completed the same test sequence.
-This also gives us a solid basis for replacing the temporary GUP
-workaround with nofault uaccess.
-
-Paul, please hold off on taking this version into for-next until
-these fixes are included. The rebase and PMU testing are useful, but
-there are still outstanding correctness issues.
-
-I will consolidate the changes and post v12 against riscv/for-next,
-with an updated changelog and validation results. Let's coordinate
-the next posting to keep everything together.
-
-Thanks,
-Zhanpeng
-
-[1] https://lore.kernel.org/r/as79MHtNYd-VbUug@hu-himchau-blr.qualcomm.com/
