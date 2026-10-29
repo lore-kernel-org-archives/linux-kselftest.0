@@ -1,87 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793316343;
-	b=mmLeTa5WUGz3y+6+zv6p3OkNbPn/m4esBKvDk8Hd6K03/XDnedfeH+oss53y3ATRwC5x
-	 c4oD34e2tlCs41nPWwAexZMvaWhxvXSFOcwHVCbxMvrSb7xB4U6wMLbd/MielRMLVamSh
-	 qm/63gU0Qv3rYRboepaSuhCxvPs53aRfkwCjMqsiL975vCUTqOkSNQsoxeTBNT0rGsvuJ
-	 FxFhHtxmMqBXG+2exP9/V1knAfr9tUnL9fKmPExfU/n6uCVX1ANs9jwCzv+as/EkDYBf/
-	 9h/QzQdUnNchiL4zES9Dgh7D58zFs3Z5TIM7jUExPQ5UmVvKTvQ6bSHPG5FF8GFPzLA==
+	t=1793318352;
+	b=ESuMqHs/mZdxK9W3W61k+b+FPrd1sU44nJccS5cD9sOmG7SNMMa9ULOq+yFQErJa0cid
+	 9FdM4XSaw/nqptqgmCR0f6cYiiRQuMoKmJjx0er53pTp922srvEtjQBrwBvIeZ5ZIWf0y
+	 PVAMQNnOUtN+vpDpC80jmkopwYilud+8lUjFas3Y64Btgo4xtvCxEMx613gFUAjdGBIui
+	 dWU4IZNMH3PodRGgUOM4/iHOJ7erqY/IewY/H8bX8oGbWNMjL1kQxG6rNxVUPoHkIrPFI
+	 hS+lys4q5bx9E6duMsN+yzpGr0g3nXGZ47GWHFTAJ4eqvQmL9qOt5ALrYduxMWIYWBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793316343;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=uy/FZh24B32RYF0ZgiKoGJHXlBRYP7HqQOuRiOOjXeE=;
-	b=LS6MDKGgtsAODh/0Ih6bmsdgV0HF4eRNJzShiFPdmHsuHvVDCrKs6/dThW4wYoJsOCm1
-	 zgc6nz/8WHcuXQb9oAsMxNL4oIVTu0Co9zUm5LIEIhQwN5RAq1pxrbvebWCDMmhxaMVHs
-	 766bzLtlbrmU9GJYGP9A0fIlMD1gNhskfvOTKZWgZWhY1RmII0QN6XOQm8atU7kpeySD2
-	 MEJE0JOI9VWYQRKvwdyPVaUVafdQ/k0JNKa/M+p4Ipg93OU4973X/eTaGdaivp3wk1LTR
-	 Mo9rnVifEtUxM5i7tap4Zg60FlzuyBaYOmSdCSm/8P/Sr4nxo0xyfZHgMom9XpxZvJg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793318352;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=VGMJLST0LGZUFVPZmCbPA5PwvaGlJCqBZDRorhKs8Vs=;
+	b=yCTEn1XOn7UlwXBjtHWiwv2ExCb5cuLcAVXHDCWZOnjfmBqh5XuyPnAY1O4qKGKBbYMm
+	 j6OK6gaB+x71H77DuyOJAZK5Yct3xtG/Zn8w45bBrFm01xJibfz8ZguZ1dIMV4cT7JPNb
+	 B/cNy4lzbojIvvM9MIecU7PE8kHls/pIJuUZh8o7f2t2Ens1i2oPY7csDw5VtcHKbu+uO
+	 RHQK4nql+Yu1zXIHZbap4e0rF/ZXcE9hgPakuh35TreG9XNnrr2L5vywpZF4TsmP8bciT
+	 uD0+K/z5UCx1Zn74jxEToqiezk/tg3f5dQXPFbbdN4FI1xMxhl2hUTeUa13PH4Itacg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="n/UfjZG4";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WoX69Q4N;
+	arc=none smtp.remote-ip=74.125.82.177
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D93EA606A31A;
-	Thu, 29 Oct 2026 23:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605EB606A31A
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 23:59:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 605EB606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n/UfjZG4
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id A7A761F00A22;
-	Thu, 29 Oct 2026 23:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793316342;
-	bh=uy/FZh24B32RYF0ZgiKoGJHXlBRYP7HqQOuRiOOjXeE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=n/UfjZG4Xre6CtdKbTCQPofGneqZlZHEt/PF/tXrPp/zphplFkx0MAcItFQeicMWW
-	 zUpED7Jle7zZ4V/nsPgVEFr8TofdfoK1fk3ZKLuC+7hWk/OCl/e/fIP2hnYoRTviZi
-	 hWVdzNIbN4JKVWQZn34gJM7dL9kPxLR2UU20xjUOM2OItlo4pTLUhCnXMGUpL+YiF2
-	 uh5N+dtNYyzCmhxVUxFKFtchSQ5ds0unIwm2uGKTr8FGYRDhqV7r0z7xD9m1y3heSO
-	 VcM16OMo1CXD4Q8ODXLxqMYnLxy66ib0QiYT4HJ1g71PJ0VL88NezJVsWlS2m2CWDk
-	 ZnrNnganPBxfA==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: keyrings@vger.kernel.org,
-	Eric Biggers <ebiggers@kernel.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Ignat Korchagin <ignat@linux.win>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-crypto@vger.kernel.org (open list:ASYMMETRIC KEYS),
-	linux-kernel@vger.kernel.org (open list),
-	dm-devel@lists.linux.dev (open list:DEVICE-MAPPER  (LVM)),
-	fsverity@lists.linux.dev (open list:FSVERITY: READ-ONLY FILE-BASED AUTHENTICITY PRO...),
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v4 1/3] KEYS: Introduce keyring_is_empty()
-Date: Fri, 30 Oct 2026 01:24:09 +0200
-Message-ID: <20261029232437.2581640-2-jarkko@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261029232437.2581640-1-jarkko@kernel.org>
-References: <20261029232437.2581640-1-jarkko@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WoX69Q4N
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-3282db206d3so424222eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 16:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793318350; x=1793923150; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=VGMJLST0LGZUFVPZmCbPA5PwvaGlJCqBZDRorhKs8Vs=;
+        b=WoX69Q4NNcPPhzbrlswGDlRi84VBL+LUZxxmp6vje32C9kac72+/Fup88MGeOvah2B
+         uTgFaECD/M9bPN1r18IQsGSn4eQj7IehJOsJ3vpYnH9CpRD+7sJG40dVA/yeHKYJKPLs
+         /tmug1prlcb0boHZFSu8Wf3xCuIh2/QPn+QvglnwwlqjMXtOijYKwsN5BRR0iob6abpr
+         DAFHKbHuC9/Ir8MkhiYpGF8gHZSHkcx4sq0H1jktw8J08TIh0PkIPo3vpyn0N72cDi5/
+         bpr/jl+gv/rY5P7w6JEF5EEG7h/2freoUlOXuBoFoCm6x0h77IMRCAlVnCPhHfqDl+r+
+         MJ2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793318350; x=1793923150;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VGMJLST0LGZUFVPZmCbPA5PwvaGlJCqBZDRorhKs8Vs=;
+        b=Zc1mHzJAINtDseiVLiEzWN1CjUdFCxKuYl7dMKfupFDOUeJcqmHQOaCIV4F1EIi+vS
+         OIEvz8t+JucZCsWVKyBp8PTRQqOSJqBS5ADJ2/deaYL/pnO89t9kw7n6121SWaYsUSjg
+         M9OZ3LwdnKsXigfutZrBzhZjalkFrArftocWdb+rxxzASorb1Hn2K3LR+3cd44vld/Zu
+         vanVUHpstT9XXqaMzIiQQhm+mgTTCXF5FQ7Y6Rfe+iocSN0P22sQWTbpl3RHjjiAkB2G
+         G9DzasG4WD5bMPl8QDhBkPhETjHJyfaTyPCeWlGDhvJX0rM/pv9DQwAwWrJaX59B1Twd
+         KwWA==
+X-Forwarded-Encrypted: i=1; AKwUvBzCryGFQLL86wr7loX18u4XQYHvzKC9UpH9472+HJB1M49TgliSwZIJpozL/gMaRjddhU1b+Bs+6HfyzH35oGQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIhLdPn9NC91MpuE/Mya+qVMSN/+ub4XQjpRJKou++Q0CNQ074k
+	9NW8Q1/eQeTJ1O3ryWJ6XrfFdvM0FCOFFi1zoyPVy559KVMkdRSrxPLJ
+X-Gm-Gg: AYBFou2zT2xX0k1RE7VJL4DJMks/DRCAU/1WmNU7RSPlE9rH5llyuzDKMGSVawFEwvj
+	EGJTslZTovm3dtY5un1r9Cnk0i439g4e4TVNaR3Sm9lNERtND3U1brUuZQ9yoYdRcaPAeWsu7Gc
+	pS518uWHVpODSh/mAgjc2AIBTEfTeRUAbCjk9/cixDBmvTIkqSUwXSz4cByTbnuNjjRXKqZPAvT
+	koFUCDXnyjXvPJV+zEyRXQmkgSitNpTF8ivLSVpClTDWzW5/j268DV35O/Fqv2Ad44dIDYpzarv
+	VRKPbcZcsjGL7Xz7lapgGMQhkGKF/7xbXIvIXlvLmeRAm6g9zmaRk7UUu1Y4BWPjZjPpGT5z/Ir
+	JykN7K8uK8UepVNlUCOS+fDnZvHvryLUXg0W6PuxmVkqgvsAKxB7NrlC/RP7agNiMf7RajFRNKx
+	B8Fc/LYRxDHQdX0kMdcua6DVofhsDlkIcHb4afKNWEC+xCIIKoC+Sjq8fNXVnX3p/zdtr4y5wbG
+	V66TpnnmldCdAMoYt2VFABz6asxue8aowtDwRVxotU+I+5OjkR4ni4+8awEdFgAVDVIgJr9Zu+U
+	ayFMfXm0EjrfSE8JuTAChZwm0yx6D62QdFnSK2jXVRyiXSO0DylkyuUQ5LLkNDJyE7UcUS32ciL
+	nN+JKNIVRsskY
+X-Received: by 2002:a05:7301:619b:10b0:36a:1d6f:917c with SMTP id 5a478bee46e88-36a423c3380mr1319780eec.22.1793318350137;
+        Thu, 29 Oct 2026 16:59:10 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:cb2e:96f2:5ce4:2074? ([2620:10d:c090:500::4:5b14])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a4293b651sm1680245eec.17.2026.10.29.16.59.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2026 16:59:09 -0700 (PDT)
+Message-ID: <bbe940d654ddbc9b099f578fd54137eecb79dd4c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 04/12] bpf: Track low-32 scalar equality
+ across zero-extending movs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
+ daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Thu, 29 Oct 2026 16:59:07 -0700
+In-Reply-To: <20261020161907.2115379-5-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+	 <20261020161907.2115379-5-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -91,106 +106,136 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
-fs-verity how keyring internally manages the keys.
+On Tue, 2026-10-20 at 09:18 -0700, Vineet Gupta wrote:
+> Linked-scalar equality is full-64-bit only, so a 32-bit mov from a source
+> with unknown high bits drops the relationship:
+>=20
+>   r6 =3D ...              /* full 64-bit unknown */
+>   w7 =3D w6               /* 32-bit zero-extending mov */
+>   if w6 !=3D 0 goto ...   /* not taken: r6's low 32 bits are 0 */
+>   if w7 =3D=3D 0 goto ...   /* not deduced today */
+>=20
+> Record it with the kind the previous patch already provides.
+> BPF_REG_LINK_ZEXT, which is what BPF_ADD_CONST32 became, says exactly
+> what the mov did:
+>=20
+> 	dst =3D=3D (u32)(src + 0)
+>=20
+> However this changes the pre-existing semantics slightly:
+>=20
+> 	today    reg =3D=3D base + delta, base known to fit u32
+> 	here     reg =3D=3D (u32)(base + delta), for any base width
+>=20
+> Every link that forms today is over a narrow base, where the two
+> readings coincide, so nothing reachable now behaves differently; what is
+> new is that a wide base forms a link where it was previously refused
+> outright.
+>=20
+> This is done by dropping the guard:
+>=20
+> 	if (alu32 && (dst_umax > U32_MAX))
+> 		goto clear_id;
+>=20
+> What the wide base costs is invertibility of the high half: dst pins
+> src's low 32 bits and says nothing about the rest. So sync_linked_regs()
+> drives such a link forwards only.
+>=20
+> That also changes how a member is updated. Where the old code replaced
+> it with the base plus the delta difference, it now intersects the two: a
+> one-directional link leaves the member free to know more about itself
+> than the base does, and overwriting would discard that.
+>=20
+> Intersecting can come out empty, when the two sides contradict -- the
+> link pins only the low 32 bits, so the verifier can walk a branch where
+> they disagree about the rest. Empty is the correct answer, and a bad
+> shape to leave behind: reg_bounds_sync() declines to touch an empty
+> range and the next reg_bounds_sanity_check() reports a verifier bug that
+> is not one. Keep the pre-intersect state instead. Without that,
+>=20
+> 	w7 =3D w6;		/* r7 =3D=3D (u32)r6 */
+> 	if w7 !=3D 5 goto out;	/* r7 =3D=3D 5 */
+> 	if r6 !=3D 7 goto out;	/* explored: r6 is wide and unknown */
+> 	r9 =3D 0;
+> 	r7 %=3D r9;		/* validates r7 without recomputing it */
+>=20
+> prints a REG INVARIANTS VIOLATION and a WARNING from an ordinary socket
+> filter. zext_contradiction_keeps_range_sane covers it, and discriminates
+> only here: the later reverse-direction patch makes "if r6 !=3D 7"
+> statically false, so the branch is never walked at the tip.
+>=20
+> The patch also allows delta composition, once. "w3 =3D w0; w3 -=3D 1" is
+> ordinary codegen, and until now the subtract threw the link away: the
+> mov gives every zero-extending link a kind, and the test that refuses a
+> second delta could not tell a link that has one from a link that merely
+> has a kind. Let the zero-extending link, and only it, compose a single
+> 32-bit delta onto a delta of zero. The updated sub32_partial_overflow
+> dump is this case, its register now rendering as id=3DN-1.
+>=20
+> Composing any further is refused deliberately. Deltas are compared for
+> equality, so a link that keeps accumulating them turns every value a
+> loop reaches into a state of its own: on arena_strsearch allowing a
+> second delta costs 1176 -> 1751 insns and 102 -> 133 states, and
+> allowing it onto a zero delta that an add produced rather than the mov
+> still costs 1176 -> 1196. Neither buys a verdict.
+>=20
+> Forming a link re-bases a wide source, since
+> assign_scalar_id_before_mov() drops whatever link it carried; that costs
+> precision only.
+>=20
+> verifier_reg_equal's subreg_equality_2 becomes __success. It is the same
+> link with a 64-bit compare on the member: "w2 < 9" bounds r3 over all 64
+> bits, not just its low half, because the zero-extending mov leaves
+> nothing above them.
+>=20
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> ---
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/md/dm-verity-verify-sig.c                      |  2 +-
- fs/verity/signature.c                                  |  2 +-
- include/linux/key.h                                    |  1 +
- kernel/bpf/keys.c                                      |  2 +-
- security/keys/keyring.c                                | 10 ++++++++++
- .../selftests/dm-verity/test-dm-verity-keyring.sh      |  2 +-
- 6 files changed, 15 insertions(+), 4 deletions(-)
+Please revisit comments in this patch, maybe as a follow-up.
+They are too wordy and, at times, hard to comprehend.
 
-diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-index aadcf5e4a47c..cad21e9144ed 100644
---- a/drivers/md/dm-verity-verify-sig.c
-+++ b/drivers/md/dm-verity-verify-sig.c
-@@ -153,7 +153,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
- 	if (ret != -ENOKEY && ret != -EKEYREJECTED)
- 		return ret;
- 
--	if (dm_verity_keyring->keys.nr_leaves_on_tree &&
-+	if (!keyring_is_empty(dm_verity_keyring) &&
- 	    dm_verity_keyring->restrict_link)
- 		ret = verify_pkcs7_signature(root_hash, root_hash_len,
- 					     sig_data, sig_len,
-diff --git a/fs/verity/signature.c b/fs/verity/signature.c
-index 0302a4e506ec..890d33b9d812 100644
---- a/fs/verity/signature.c
-+++ b/fs/verity/signature.c
-@@ -67,7 +67,7 @@ int fsverity_verify_signature(const struct fsverity_info *vi,
- 		return 0;
- 	}
- 
--	if (fsverity_keyring->keys.nr_leaves_on_tree == 0) {
-+	if (keyring_is_empty(fsverity_keyring)) {
- 		/*
- 		 * The ".fs-verity" keyring is empty, due to builtin signatures
- 		 * being supported by the kernel but not actually being used.
-diff --git a/include/linux/key.h b/include/linux/key.h
-index c4486e938a06..20ca43f5eab1 100644
---- a/include/linux/key.h
-+++ b/include/linux/key.h
-@@ -439,6 +439,7 @@ extern int restrict_link_reject(struct key *keyring,
- 				struct key *restriction_key);
- 
- extern int keyring_clear(struct key *keyring);
-+bool keyring_is_empty(const struct key *keyring);
- 
- extern key_ref_t keyring_search(key_ref_t keyring,
- 				struct key_type *type,
-diff --git a/kernel/bpf/keys.c b/kernel/bpf/keys.c
-index bffc356839ac..24e0416abc99 100644
---- a/kernel/bpf/keys.c
-+++ b/kernel/bpf/keys.c
-@@ -29,7 +29,7 @@ struct bpf_key *bpf_lookup_keyring(void)
- 
- 	if (!bpf_keyring)
- 		return NULL;
--	if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
-+	if (keyring_is_empty(bpf_keyring) ||
- 	    !READ_ONCE(bpf_keyring->restrict_link))
- 		return NULL;
- 
-diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-index 5281da9d5bf7..ac48d6204915 100644
---- a/security/keys/keyring.c
-+++ b/security/keys/keyring.c
-@@ -443,6 +443,16 @@ static void keyring_destroy(struct key *keyring)
- 	assoc_array_destroy(&keyring->keys, &keyring_assoc_array_ops);
- }
- 
-+/**
-+ * keyring_is_empty - Check whether a keyring is empty
-+ * @keyring: The keyring to check.
-+ */
-+bool keyring_is_empty(const struct key *keyring)
-+{
-+	return READ_ONCE(keyring->keys.nr_leaves_on_tree) == 0;
-+}
-+EXPORT_SYMBOL(keyring_is_empty);
-+
- /*
-  * Describe a keyring for /proc.
-  */
-diff --git a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
-index 1f9601ef22f8..792449d356cf 100755
---- a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
-+++ b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
-@@ -746,7 +746,7 @@ test_keyring_inactive_when_empty() {
-     log_info "TEST: Verify dm-verity keyring is inactive when sealed empty"
- 
-     # When keyring_unsealed=0, the keyring is sealed immediately while empty
--    # This means it should NOT be used for verification (nr_leaves_on_tree=0)
-+    # An empty keyring should NOT be used for verification.
- 
-     log_info "Keyring state (should be empty and sealed):"
-     list_keyring_keys
--- 
-2.47.3
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
+...
+
+> @@ -18485,6 +18534,27 @@ static void sync_linked_regs(struct bpf_verifier=
+_env *env, struct bpf_verifier_s
+>  			if (reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
+>  			    known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT)
+>  				zext_32_to_64(reg);
+> +			/*
+> +			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
+> +			 * link over a wide base does not propagate back, so the
+> +			 * base can be wider than what @reg has already proved
+> +			 * about itself; replacing it would lose that.
+> +			 */
+> +			cnum64_intersect_with(&reg->r64, prev.r64);
+> +			cnum32_intersect_with(&reg->r32, prev.r32);
+> +			reg->var_off =3D tnum_intersect(reg->var_off, prev.var_off);
+> +			/*
+> +			 * An empty intersection means the two sides contradict,
+> +			 * so this path is unreachable. Say nothing rather than
+> +			 * say it with an empty range: reg_bounds_sync() below
+> +			 * refuses to touch one, and the first later
+> +			 * reg_bounds_sanity_check() would report it as a
+> +			 * verifier bug, which it is not. Keeping the wider
+> +			 * pre-intersect state only costs precision on a path
+> +			 * that cannot be taken.
+> +			 */
+> +			if (range_bounds_violation(reg))
+> +				*reg =3D prev;
+
+I'm not a fan, tbh.
+As a followup, I'd suggest a wider refactoring:
+- get rid of is_scalar_branch_taken() (or most of it?)
+- branch unconditionally;
+- apply regs_refine_cond_op() for every branch;
+- apply sync_linked_regs() for every branch;
+- check if one of the branches is has registers with empty ranges and
+  avoid exploring it.
+
+>  			reg_bounds_sync(reg);
+>  		}
+>  		if (e->is_reg)
+
+...
