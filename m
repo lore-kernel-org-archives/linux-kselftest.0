@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793311897;
-	b=o0KCKY+J9QcLOpVqQ644RW0HuG4Um3E0RjW+Qwzjub9lCHt96AUKrtio9SSa5IoTY2e/
-	 W3kcI2rwaCwpSQ3t+eoVfumxFRo5mGjMnfLyLH92b1zv+PvyM1RMv+N+8xtoydOEog96h
-	 v8L7eODuJu2ytVPe2OgvCbp3YJU8IwH702GbjXCw7ZryHLgVy5jQyW91YUNuQHFLbLvpr
-	 TWfZQXV39AjRw/dVSDURfsaWak9uaYSfXe5Z2F7JxW8aDmHX23sUUsXczDfpEqHOShFrI
-	 H+GQcoOogHq0SMDIrG3mPncO/C3ZqzNgtTkNtBVjmaerIGEaEXRu/zGJVx3KoPyAlMg==
+	t=1793311900;
+	b=JvxNuXgGU5d9Aasj+OfhudT1InXFdl9sxC47CaNyLOtHPR9ELucQPnDedPPRRC6CSpyA
+	 eM6/qVBhPWqNqPMlQ5mYuIsIoQg70j/WSH5AlVNnjttoYTRfopiOW6T0ZdcQypudzZCc+
+	 stoVGkmmppvcrjKl50gzelLM9ujuyKvkEN9pMEK8MA6g6kpHCY/vcsgMYe3hPvyEqd6Yz
+	 DVUsXa7ZHa0KYP8Rw6VoTil13nI7X+K7thEmnh47/sS56hvnc9focfy7tPYw9EU5nzhH0
+	 IkBQtOQqrYX0FM2i9MOSjzU4UoJB71Ue585W+A1Lm0v5ZJG76Qo7bJOj14ktR/xpiAQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793311897;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793311900;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=3qbCVY70IGSK3kVBC6Qw8VcA8OjZRClUiqwt47D/E8o=;
-	b=jX7DjQFxM5EQTQjLRS2mT1dBTPkj/PZ5BX3DetZ+68Xon6Gztxq6ThifZDJWt4IpOB9C
-	 WTlzm9W5+FJIz79H+bMrH04BIEObcSdvj/6otFHWLg3q50ynpNXgqjzrZZweFYQpK4kkp
-	 beWMUklMu1xFA6QJkoJHGiojbJqZImHyGbBTsc769YzHnIilqxap80dUYJJpitHV9DSFp
-	 QyK+KnXP2vKbqZBUKBLZtmzryX29/iDjt/H8OP0uUySVkIag3tJpdMFVZSEVaFENgomKA
-	 YUnX9GtUDU7O4kVU0TFsqnhGz40x972I7QL51j/vq7atsu6ouyaF9Nq8YHZ+AMHsorQ==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=5jNtZbHxCXS7Amya3dC3EE3s6XNWDFBG2KE54hDksKQ=;
+	b=tSdweWFLX+WA1kts8/LWyGCMXalaZFEkZYyH9yMgcQoEKXUSvAK/0skLiTmDYkEKJGv5
+	 Sx1nwclb4gNBnI5RM41hhxgb/9dnETdT3KNdfY/b1Y/XwP7Q53JtLumwe2BST4LxkLJ3t
+	 1f8rMqnT9MRZWLLvmL/Mt/BZGJfYgdrXhQviBLuPbn9sNOrIOw1DcndUypHWH1AfALHT/
+	 /S65BbByUPMwrXAwVOuc13YMKCdbcJOv+bogp74r/Oty/CFOqtGOv+cbEfRCUZxokFnX0
+	 q0uaHHsG8E9Q2lgByyDpEMWHU7sonVQodYGzUNPAYh6cP4sp7pru821LXOYtA4iNovw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wcL38tub;
-	arc=none smtp.remote-ip=209.85.128.44
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JoZdQbsF;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DDD606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 22:11:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83DDD606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0E2606A326
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 22:11:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B0E2606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wcL38tub
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a1fbd52ab6so362775e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 15:11:36 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JoZdQbsF
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a1b07c3c5fso404565e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 15:11:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793311895; x=1793916695; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3qbCVY70IGSK3kVBC6Qw8VcA8OjZRClUiqwt47D/E8o=;
-        b=wcL38tubVKe63pYd70WVrVG1+XwO13GrLIXESOPZeWUNLjwI5GZoWeDooTkzHRnsEj
-         cLJfPjUnCIPv+8o877nGkkZmqqqpv9bEZBWvUu6b6uoDKNJNOC1YLWGG3+7kefCHIdw3
-         NvbulvR8OFOdXnkUh1m6T/0fwFuD13mTIr8YnPP04Qa54WCNlGaWoIpl6CRBcjuYX9JY
-         bZGHY/0y4EPZLAuP2CXFyJb/DvBpKP/h9ri3feN4GpHlrhopyA2t8Kjj4Cum2XfHUVG0
-         02cCzQQ+BprU8HGJHDQpLtzA6dReJI+iqlHICbVV/fRmvG47p60OdUg5wVW+d/UWrV8w
-         QE2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793311895; x=1793916695;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793311898; x=1793916698; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3qbCVY70IGSK3kVBC6Qw8VcA8OjZRClUiqwt47D/E8o=;
-        b=ygQhhqaf0vIq8xXKt7zA6E2bQaIdoV1bA5IkC7CyN9vHgKlGarYnDjEW7u8sUnMI8R
-         dx30VoCV1ivSGadE3C3R312XvsvZepMGVJ/uE/hzS36uvesymHIRfXy8NtOenk8PooYI
-         9hkqSAlPf6EwA3eXdBG9jDRImwOc42bDyRvt7QhPSWo6nXV2H4MPS/szFaa/uTkdaMDe
-         K+Hh4Ai5rysV+IH6crTpa85zF9f70/7N5ACBMVQsbdjG7DoI10dF1vW+LR2XSQ7ANPlZ
-         SyP1Exu8X7Tra18WeUCYc2rgdMYgqSmtIBlvSF3AY6xjXkk6lsIp0E7Dctn7wqHHvLw3
-         62ew==
-X-Forwarded-Encrypted: i=1; AKwUvBzjz1scN+eRy9kw0RnL+qdZW4rncc8FmJqz/awG7K8aQOw80ZRXMUnKlMys2uS4Jbvk+lmNZwfXvfZXuKtAoBI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLc+t31bYqUe6MRHz46iyDtLRTtAk/9nOB6rVxCbWKqedHi3Vq3
-	LL/IzZRW+BE7v86230fpnK542KyRJYZtSyJGDsGYGOkrfbjN4DOzHS2S
-X-Gm-Gg: AYBFou3dbNLCpjZ97hFttRs8gdGetSIwd7zb74W1yLoWuWueKcYvkWCjpIz6ae0gHbK
-	NjKmMUUdFSnpPX7tPt2bVIW8C4xej0rivu7YSeTW/K6L0p8PQ7shkm/uIBub8EFsDx3P/AtqkUT
-	45S08jShfbhEBbOv5cAbK4JJTXxFKwQlY6NciC+Gz+mJ55rDuHHGAGfI5zSut+5p+zRNwouu1Gh
-	rcuaHAb7j/t91jjkhNZVxuL7a8rE+WhZNMu8EmpBXbIbjGLvgyEw01B0bdT4TKCaVMn8a/CYOum
-	2PkqdH+z0TYFydw0fyLhRHUEhvip+5ABmY0jEfq6j+IAc/PAGmOTe1M6BXZ/EoS4Al+6gOkj6OE
-	MYBR9VeYzAvtdwJWh7fWoY8LY0m9EyFjcQUwfk1ydVed2wFB8vAviOSOjMvsRXmiJX/2m+0qWrT
-	4i0yNDqcc0NNpYqjBLqFCdugd5BI/hV5FQkaoKAQJ1+Sum+hr35765/2rVdSBHbgmmEjjjul+pq
-	0ADrvx3/9R8+y0gPj4p2Z0JBnqwEtNORN3wnIzaJq7kuiVqqtgSU/JplWlD/W2lFAROwyA7Dfl0
-	WbgwMqGRX/4ACQ==
-X-Received: by 2002:a05:600c:4f55:b0:4a3:d327:6ed with SMTP id 5b1f17b1804b1-4ac182dcba3mr6955425e9.17.1793311894768;
-        Thu, 29 Oct 2026 15:11:34 -0700 (PDT)
+        bh=5jNtZbHxCXS7Amya3dC3EE3s6XNWDFBG2KE54hDksKQ=;
+        b=JoZdQbsFVWPXIont+c9qQKJKUugHbIIPKhgkwvBEeX1Nrf1kAPMM01K3WqnfJfFwv6
+         syCiNUQV6b4DoGN2IcVUiCe4uPUuCZtMejWSVcZH01CGV2nMY3fAI6LHuJTMva71O+nu
+         DPMEXHTLobv6RcZuqJ8+UE4PhEectz/1LncuIXpwIxzexKN3EV32aWzq9X+reDQSMIPP
+         AwJRc8Vv42P4Zewsst/0OHNwogxY1e5rDTQ3ZgX8tpjVRIhL/+4czp8Elh/Uz0o+R6J6
+         Fz0i8E7ouEoc2GK8Rzm7FNpRNzKALZHZyuEP8BHrJXgdJdG4HoS8w936F2H4LAzZ450O
+         +16Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793311898; x=1793916698;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5jNtZbHxCXS7Amya3dC3EE3s6XNWDFBG2KE54hDksKQ=;
+        b=ZtwmVR9O6si/OZLY9Y9iwHL9iPXIiRqxxrpSie0cN3w9s/YadRWNNvXQlvpmNnNEJq
+         PWOTGL5fEWHUbyVOalPQ/ICXJHZ4PKeFy5cXO2l002pm5IsJCqPf63HoY/uivLZdLP0y
+         mfQU0/Z5Tt+Qzx0rITHRnvkNFjk7gFo1Rp77JAR71vMam9PmuKCMQQK22dqjN/weQutM
+         zSTWdbpCZ1Mg+BrN+352/UmX10mcgghkUP8pCppwXFm3i+eINBQVhWS7nyikmsZlAqqY
+         L342SHHbBHSBxv53o0xVMKI+8YD+KmndS47sQ5gQv6O20lBVk5hNXm8Slzqv/a7/TF4U
+         YL4g==
+X-Forwarded-Encrypted: i=1; AKwUvBxs08gX67J0QD2gJ7KREvlnS7ya8Pav0A/gkK8vqdVJvquVSDSDpC3yHaa+A9eagB/vDAFLmCHfjKyF9XJ5QfU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIrt5455xLXzi2IgW2jcjZltQBUrpw81+uWV0On2k77FDgpc1ot
+	xKucd2XBrrNnAgz3NnWaiklxu4DX2wx/ijOKcs4Z86LMHdLi/iSRQ2mZ
+X-Gm-Gg: AYBFou0MNMKt5yii5q0/FXAmsa54tFMDPQ8ndXihxZa7iu+YpXqAeH7bMvH1Xfw44NS
+	JMU6aTe8X9VesBpjSaUybTn2h7YYx2o/8tGHLHLc9zwKQYTUdFfFH1LEa4oRdbu0QN4tuFAhlaz
+	PsVtXDdWeYS8cDjPrqi1iR8Tb1XMlSG9TrQQoJwltxRW/XHIcirzG7+OOshhHOdVh1Z+p5L6y7N
+	90luONZp/0Zx+BZ7u8k3ql5+exJVzjjCljmkVERmKPziCmRu7pU461AUrqjRBFKmJ1//LVzuRjh
+	o8vPgI0s7X23iKkpsLY59PUA7R/I90tW8/nkTpC7FaiKa9V1i6WsvTAA7HHaMFupbxer9y17avO
+	I7e8xpianWP/WzRRUHWlomEB45VekPw4rtP7bMDyYDn6RM1c4Mu8y3Tgrjp6epnjIR/fXKi/qBL
+	qUk/0piY4nkFJKVBl65HpuBc/z72rCGDg3T7r0wDEaPiVOfjQE8to2GJhBvs0zqvmJagmAOjNe3
+	kNFw5X0+oupd1mrOTpxui8dG5L3GpHXDWln7pEv64S4L149A0DSWzzWA2hzQPRdzM6FQzLrWo53
+	tZVNhUoD5GRwUA==
+X-Received: by 2002:a05:600c:46ce:b0:4a6:7d6:821f with SMTP id 5b1f17b1804b1-4ac189928e9mr7162435e9.29.1793311898530;
+        Thu, 29 Oct 2026 15:11:38 -0700 (PDT)
 Received: from nobara ([83.231.69.9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa81a896fesm104011305e9.10.2026.10.29.15.11.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa81a896fesm104011305e9.10.2026.10.29.15.11.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 15:11:34 -0700 (PDT)
+        Thu, 29 Oct 2026 15:11:38 -0700 (PDT)
 From: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -93,11 +94,14 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	Muchun Song <muchun.song@linux.dev>,
 	Oscar Salvador <osalvador@suse.de>,
-	"Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-Subject: [PATCH 0/2] mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY retry
-Date: Thu, 29 Oct 2026 23:11:00 +0100
-Message-ID: <20261029221129.89068-1-azpijr@gmail.com>
+	"Jose A. Perez de Azpillaga" <azpijr@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY retry
+Date: Thu, 29 Oct 2026 23:11:01 +0100
+Message-ID: <20261029221129.89068-2-azpijr@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261029221129.89068-1-azpijr@gmail.com>
+References: <20261029221129.89068-1-azpijr@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,46 +113,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The urgent fixes made hugetlb_fault() tolerate uffd bits left in VMAs
-that are no longer registered for them, and asked for follow-ups that
-remove the sources [1]. This is one: a hugetlb UFFDIO_COPY_MODE_WP copy
-that has to fault in its source page doesn't recheck the WP registration
-before retrying, so re-registering the range without WP in that window
-leaves a uffd-wp PTE behind.
+mfill_atomic_hugetlb() drops its locks to copy the source page with page
+faults enabled and then looks the VMA up again. The retry doesn't check
+that the VMA is still registered for WP, so if the range is re-registered
+without WP in that window, a UFFDIO_COPY_MODE_WP copy installs a uffd-wp
+PTE in a VMA without VM_UFFD_WP. That is one of the leftover uffd bits
+hugetlb_fault() has to tolerate.
 
-Patch 1 adds the check the non-hugetlb retry already gets from
-mfill_get_vma(). Patch 2 adds a uffd-unit-tests case for it, which fails
-on hugetlb without patch 1.
+The non-hugetlb retry goes through mfill_get_vma() again and fails with
+-EINVAL. Do the same check in the hugetlb retry.
 
-Question:
+Fixes: 6041c6917903 ("mm/hugetlb: take care of UFFDIO_COPY_MODE_WP")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
+---
+ mm/userfaultfd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-- The non-hugetlb retry compares the whole mfill_retry_state. hugetlb
-  copies into a freshly allocated folio, so only WP seemed to matter
-  there. Mike, would you rather have the full comparison on both paths?
-
-The other source 6/10 of [1] mentions, UFFDIO_COPY in MODE_WP racing
-with UFFDIO_UNREGISTER [2], is closed by "mm/userfaultfd: write-lock the
-VMA before waking waiters when unregistering" [3].
-
-Based on mm-unstable.
-
-Tested on x86_64 in QEMU.
-
-[1] https://lore.kernel.org/20261015-urgent_fixes-v1-0-42796911043b@kernel.org
-[2] https://lore.kernel.org/20261015-urgent_fixes-v1-6-42796911043b@kernel.org
-[3] https://lore.kernel.org/20261027-fixes_core-v1-23-6f74bec9a5bb@kernel.org (v1, now 23/47 in v2)
-
-Jose A. Perez de Azpillaga (2):
-  mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY
-    retry
-  selftests/mm: add a uffd test for re-registering during UFFDIO_COPY
-
- mm/userfaultfd.c                             |   4 +
- tools/testing/selftests/mm/uffd-unit-tests.c | 105 +++++++++++++++++++
- 2 files changed, 109 insertions(+)
-
-
-base-commit: 24d45a1475dd4c671feb1df705f67ef2fc293969
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 3b71712edab4..a70ecfc8a998 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -810,6 +810,10 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
+ 		if (vma_hpagesize != vma_kernel_pagesize(dst_vma))
+ 			goto out_unlock_vma;
+ 
++		/* The range may have been re-registered without WP meanwhile. */
++		if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
++			goto out_unlock_vma;
++
+ 		/*
+ 		 * If memory mappings are changing because of non-cooperative
+ 		 * operation (e.g. mremap) running in parallel, bail out and
 -- 
 2.55.0
 
