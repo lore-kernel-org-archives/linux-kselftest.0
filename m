@@ -1,112 +1,111 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793280944;
-	b=WYePBxXK4r0Lw28BtR7lhIJM3tFMc2MkAEP7pr7FuwJU83EEx2pfCvjQ8K9cpdGZPl0V
-	 bhislf00gUwdnVTz+PLvHuiQCo2OAgGCR/eK+F5T+gcfw9CQn+TLojIRc/E3ipLKr0bEh
-	 Pat285gtkxZ56Jrkaa6eNfiVneSxxD5R/9lUpljoRCAeAntaoPTJvXeFpzqWdAzy5STDc
-	 LrEEap708yxvGzybqR/90cxOXepru6dSDCbZbKuKwtOdLCt/pdLw4ShquABKSRLNNsARA
-	 VKHFIz/wC6w5HHm+2H9qtnPBW9m+n39J8lfjRf9lEDecxJbCMKwwbS8EhCHjDutQVew==
+	t=1793280937;
+	b=gEx/oXN6wB46pZYpWH9itW5aZHo1M5FN8wPplf3kdPTJHS32bC2sMljLK461qFtIGxod
+	 kvOiEirREFoqTww2kIWyi2SddhRgnv5+OIr7bBxZMOO7PvgCwqnaeWjgDgu4PPR0QQkuM
+	 LW5C2I0r6mS9AvwVJOaMiQc9I8ZK4TZF5Jcp1HZ3Gc3IG5rzoV8VJMJ4VlbVmEq+w9V4W
+	 J759i66w6Rv3uNn4ilX2xRinnARxDljupR2GR9XuBrFxBm9POAFscx/OIGxvNw6e22koY
+	 bp88zGyaqLDuT0ruMpiv9GAq5H2f2PtcG9F8IOwDBuW4sqWZ6lwB8+MQDZKJr7xOQgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793280944;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793280937;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-GUID:X-Authority-Analysis:X-Proofpoint-Spam-Info:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:
+	 Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
 	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=/28GQRdfBjNpaKqoNfgQNMIhyHphRu4eJhHEmguSmaM=;
-	b=tRrUZZTyf49qo2uP9kkWx1eNNAD1Tn0ETe2LGbWdoYSFFBVDbu9Vj5XM4rxgGNbjkaTW
-	 r0tmrzSyUqtX8D1snQ3ACdl6TULUFtqnNahAZrBqH3MogJYNspCh+li3w7hFVMSemLRPv
-	 +gTnntGQQkAvEW64PCqHZfUQhgNiH1LQu9SxD3nQq2mGzWSe2HctV45ftG9zJikw+XhFm
-	 a0P1XNylaFT66Tmh+SEcoUoHyQMAjKCw22qF5cBeL6newDu6OaXyL7LGtGimB7KW+sxca
-	 upyfaSaYXVSUP8CiAMFlQGcKtCWK7YzRWNVKUGvyqlW4TWDImSvoBxVFbu4GbdKFORA==
+	bh=7+/RPMRcApb38IJk84iUeQLEGtR8QdU2HEBTyYQ+mr0=;
+	b=P+vBG0WzxUp+HykutNL3pQWhITRl5rg6gC90NyhH8IXvvOyFinntk36BXWL83YVEygXK
+	 xfgTDdh6RiY+grX1/WeJmcPQ2HVkgHUxAiaf4hVWddkf9i9QcZiYZo4n5W/o+1mg7wLPk
+	 4nwTNltFZYsN+5Q9BdTX3uMyyP0MpXhAcKZXX2YPgYjBl9ShG39zOlBg+kuun/MDtP11m
+	 hFqxJyTryJVbGL6CeRbwXmaSNZBhHb65a5yje8nAE4rSC9PgCa7LQlJLk7J0tY+H109EM
+	 TsPUkl39EYzu/dqZoYFlWYVJ1i+RgPMK6yjY4DFYN73E/tCrVzJCTiW9ccCOz28D8rA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=U+hV56lE;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=N99pk5SG;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=nSQI+uZS;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=HVsCxP3j;
 	arc=none smtp.remote-ip=205.220.168.131
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212F760A260B
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:35:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 212F760A260B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5893606A31F
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:35:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5893606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=U+hV56lE;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=N99pk5SG
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69TCe2lv3768196
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:35:43 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=nSQI+uZS;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=HVsCxP3j
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69TCe1Qd3399612
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:35:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/28GQRdfBjNpaKqoNfgQNMIhyHphRu4eJhHEmguSmaM=; b=U+hV56lEhV87Txso
-	hODZ4Tr9YC/5TkCyrk+ByAID7mE+2r5YtkPcx/NR7XWq0jTAZPROCUB161LureqN
-	ZjVQl/lomhnWcDgQ61Ty3ppo6gwRExs1vVsCP8SpeZLKNrZE6Zm5hRDA33PfQOtj
-	brIBEIrEOyBZqOzgNv5Lo2YCm00TPvsGR9Kdp8scg0d6mlF+vBI7KfYivROFlgZt
-	qJOiDux0zijRCy03pjD2kYyW/lW3xo/v3lbTsIJPSxR+BV9TVod+nZhDFQpt9UGN
-	UyoJcYJUoZBnyc2eMiRtF+NHmXG8Diwp2WnAXezICCgD2TJiU0TopJGfkQfRnGfL
-	GEdiLQ==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hks3nb6pe-1
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=7+/RPMRcApb38IJk84iUeQ
+	LEGtR8QdU2HEBTyYQ+mr0=; b=nSQI+uZSXb+B5WRvbBvSprvLSefhchq5n0x3iq
+	CYtCxEWN7OeLdJlBO+8OlvV5wwJmb8Z65c18V7wgfkw86lJ9VpiZttZZKX0ks7IY
+	3Ey06xL2rxIU4FHvqPsvJVj1scze+8T2N9FKCJuNfZoUGMwRm3xoBMbXkQS4Yeda
+	ogL25YwdLZBaubZuXA38XkI+UXyeJfQA6CLhu/UHZK38/NlpEOGmEJRoUAnZEQAU
+	On3ZnXIDFNVn0fpPhQTSSGJvwXXAUb2N6+XUXTvraCozY0Hvi1z/Bq41PS7UsPAi
+	YmSGMr7wwFNoKA99GIsyORqWREk8ShFz15BSF8P7h0gKZCHw==
+Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com [209.85.222.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hknb2c54y-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:35:43 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-93f1f2fafeaso264756885a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 06:35:43 -0700 (PDT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:35:35 +0000 (GMT)
+Received: by mail-ua1-f71.google.com with SMTP id a1e0cc1a2514c-98c70917433so2390366241.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 06:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793280942; x=1793885742; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/28GQRdfBjNpaKqoNfgQNMIhyHphRu4eJhHEmguSmaM=;
-        b=N99pk5SGLMZ3awEIZWchYcuiyaRBimT3d0SVYd8Qisr2QB82xM/d2cUGE8VJEZ8HLv
-         P1AZ06ex8JCZlw2BTOL7Ycb8xZQwbV7mBY46+grMgxo4S4mRg22Kh39Fi4yIxGDjeuOx
-         VtiJBWdplX43R/6fh3lP1kSraoKKi8KdGBJTtLd7BRN7fYIbiUTPaNfCdsxu18fFf1If
-         yj48TOYGaVeFc+ParUGThVTwgG322xrKRu9a8TvgIrGGVF5uZPFJfsrPLmBGsrxXUBDw
-         ZcEIvlQx+WAIRRtQvNYCjRgJafDVk/HGrQED6P3vVevidez2j+BepkcXlt3N57dyi6A/
-         0SEw==
+        d=oss.qualcomm.com; s=google; t=1793280935; x=1793885735; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=7+/RPMRcApb38IJk84iUeQLEGtR8QdU2HEBTyYQ+mr0=;
+        b=HVsCxP3j54es+6UhB2RAe9fZsDMdQEjfTEpoSY7T1n0m2thl9Lpyrkp/yRl5CS81QL
+         dQNQ8bwTlfiuUeHhrGdqbG8/SxBs34g5L+0cpFtaC4kp6Wc6eKPewMWl/trqRzLSrbII
+         HAO1LPVylenA2jh0q+2r1GmlXkoGsCrDenwoQd8ygwfqbCJb6bCOMCX1BG5xImLRIZTw
+         p/gM7IYWmHRMoHB4tG+yU5skTOzJvHcNrAPpfq/R8wakr6izNauaVc3ZsjFLoRMI0+vU
+         WUsapzqNS+YNxRwmWxWZha7T39xj1yyH/Iv0Kz+mmweXjeFM/5c4I2SsM/kikmIlUpHF
+         +/hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793280942; x=1793885742;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/28GQRdfBjNpaKqoNfgQNMIhyHphRu4eJhHEmguSmaM=;
-        b=TtFqqTyWLNIQj6qoLHUZ5+JgYsiOYX9YSLzWDXs2sGBoQm1uxcCzbGeFzdswVugEZ/
-         FS21I0zAyOqlGS7ucG91RO1w3DnTvIJQCpa8XS4/xOFoajxEmRTfpDS0WNEfGcQNqRmw
-         q0mrImGJK9Nm43AfiSpRyUT08a1cBmjPEycTrXGN/jWb6nyRWFTeb4XPZ1pV2oPuW9j7
-         m4JI7ZVdz90p1MrL6H5JArcOkisZt52K1uJLoahNAqhkRw2zgNX05dRAz46zYMA1ARbj
-         MRzAZQ5BHfo2AU8tlTzHihrQPl7DAc0iHYrviZUz0WCxM8jVkinh7hKxfTfH4Mfa49Os
-         4Xsw==
-X-Forwarded-Encrypted: i=1; AKwUvByWNyjdpBQSYYCzwAEoGq9QSh3ClRgcj94ZUniEPtLXzgFpWjTbWgLk7+7KLR+En/pcD4bKHettj1qb74S0Wwo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLihL2G3nh5tYVHhnFMtmCT5ucNcYlI9eIaEcXS7KI+UH0z8dJx
-	OT2tnWtEPm2UjKJLiTxV2ptOwCYTQeZSZxHYPj3lKU9zyCQhxpzMD0CbwrHzZCESw6J0ILQl0LE
-	Z6HMBgjSf52qrdacDhiR2C4sG7HN+GG+I+yVlXq4ZJzu8brZtt6xEDCzcPGkRisvjalaPfVE=
-X-Gm-Gg: AYBFou0dDpGX0pkwGwLhqgh1jFJM5DvQ1VE+JEOWHkpjcqP/WY8L7jC/wwx3uQBeYkX
-	YqrGoQz++M79HeJutSfpymH6Y/7YAy9MM+k+6SeAmBTuJEJeYdjNYXlnomFmUc48Czd0FZdVkRd
-	0UQc54FOrQ46+R2BNjFg45h+O3U6D/2Bm6A/xZZuquuGz7Ks8ew3avXmQfqHOKgBDP6NTRzrilf
-	PeYZ4mcweuGRfSGOvX8PEAI9S9j2nFQRl0l3W6bEDUl55YRxDOfOD8tDq7hC4rUb3jt4M7cYMFp
-	x4qsVf27RgFKHR23aGmPPlEZrLnE2wc9Vh3ssFLKVDUyYLlSLFSXIAZ7bkyoQCYLF8E7ExfYB/8
-	5SsfEbBzJ9uFPIu97QgQiBOxXI5aEc2gEc5esAEKTfsHJJufBKZUTRjbQ1iDRapMiZopKcZwXEX
-	KjQsWyZbXaXbpZoMgpcHR/7g==
-X-Received: by 2002:a05:620a:4489:b0:93f:633b:ee13 with SMTP id af79cd13be357-94408a268efmr789319085a.28.1793280941851;
-        Thu, 29 Oct 2026 06:35:41 -0700 (PDT)
-X-Received: by 2002:a05:620a:4489:b0:93f:633b:ee13 with SMTP id af79cd13be357-94408a268efmr789313485a.28.1793280941196;
-        Thu, 29 Oct 2026 06:35:41 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1793280935; x=1793885735;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=7+/RPMRcApb38IJk84iUeQLEGtR8QdU2HEBTyYQ+mr0=;
+        b=o3oJiWmvQpqAK1RV6ZbFkvbVOv0Tfv1bg0jyrmEouVO77Z9FRhNaROPhFGMJ3razn7
+         JwnfiElNtyN1cJJP/bvyCc/s88PHDqOuTdb3nitkOiAzY1SRAQymnM/qCXM38kyiN2XU
+         8TlOw7dKHMc/cxXlK5Q+jZmbzmh94GntJ9TK8iU3YAkEdPMAqilZU5DtxPsdjnOZfJJ4
+         ZIiix7qxAeuQmxsfEh4+ExLzYG8zqyGDphBMCeK4wdBDFI8R2elf0E8v8WKIPy+B5srb
+         EF9TIIa4bWkVovOkMKO38ko8iEVpr4gOrbT9HNycG5BrMI0l8+WrhZgVAjoypwiw8M12
+         uRFQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwVl3ljoJKLcwVZjtGH4YGLqxBo9jx63xR+0MCM8mLxuMiKGGnPPNXVbZHm187QnM+1uU/IzkHLXOLzP2RJTHY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ4krCxVmbAMtJYdk2SFtITBap3k5Ycq6jiT3PIHSIRChGFMguG
+	vEjFD1xdK5pfARUnzMgwkjU5rhSaCquRzDSiLpRZ0tEtJ1GaDHJeNiRQHL8G6ukSNQs+Oe6LdYh
+	+0Rjuewyg8WzzAi0ix+ctHRh7H8oL/x7kiQGizBG6yh7LfcMmQxMfy/fz/M9S2T9HkpqXWVQ=
+X-Gm-Gg: AYBFou01Mvj9AtOpF09o8QLvnzgvvV2m/DcWaQ/MmR2HMDBmoBRvLEL195dn9cH7u3V
+	AtNBOmbh19V5TxSetc57cTbcnudDqpc9ROghQbfJL6kp9HZX2DQkTVK5rNqMKBvgfPWYJBYgHn4
+	k/EUR+fyveI61oy4R1cZYFet2ex+HxTRmYNHv4DzBrtwdg0FAzb75I5mltF3L44ZK6xJCqaIExb
+	WFprTKgLuGPDVnqv81b1uvmdCygxtsrrN7ntNSy27mQFrCcK9ZUBYzJSubTH/WI7L0ojNaYNc1O
+	u6OdMNvkKG3zk7Go8wR4CYL+K1yTel/hgIg29935d27T651+jw2E3po6bu1pohYYaX3aFBqMQQL
+	XIhb+UE7Tn+1OoFzHuz9qE/iKHle1klJSQPs1y6cpvZt80kI7V4s/NkahDf8JOD/z0lySyJTvTi
+	52epxh+hYLWAWAoQKQBEWjYw==
+X-Received: by 2002:a05:6102:54ac:b0:7c3:39a3:f65c with SMTP id ada2fe7eead31-7d03a294bd7mr2751741137.1.1793280934759;
+        Thu, 29 Oct 2026 06:35:34 -0700 (PDT)
+X-Received: by 2002:a05:6102:54ac:b0:7c3:39a3:f65c with SMTP id ada2fe7eead31-7d03a294bd7mr2751724137.1.1793280934202;
+        Thu, 29 Oct 2026 06:35:34 -0700 (PDT)
 Received: from localhost (net-93-144-6-81.cust.dsl.teletu.it. [93.144.6.81])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa813d2950sm65071465e9.8.2026.10.29.06.35.39
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ece14a1sm35815214f8f.57.2026.10.29.06.35.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 06:35:39 -0700 (PDT)
+        Thu, 29 Oct 2026 06:35:32 -0700 (PDT)
 From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Date: Thu, 29 Oct 2026 14:35:14 +0100
-Subject: [PATCH nf-next 3/8] net: ip6_tunnel: add IPv4 over IPv6 flowtable
- tunnel offload
+Subject: [PATCH nf-next 0/8] Add IPv4 over IPv6 and SIT flowtable SW
+ acceleration
+Date: Thu, 29 Oct 2026 14:35:11 +0100
+Message-Id: <20261029-flowtable-sw-accel-ip6ip-sit-v1-0-6a17c54f9fb7@oss.qualcomm.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -118,9 +117,10 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261029-flowtable-sw-accel-ip6ip-sit-v1-3-6a17c54f9fb7@oss.qualcomm.com>
-References: <20261029-flowtable-sw-accel-ip6ip-sit-v1-0-6a17c54f9fb7@oss.qualcomm.com>
-In-Reply-To: <20261029-flowtable-sw-accel-ip6ip-sit-v1-0-6a17c54f9fb7@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MzQqEIBAA4FeJOe+AKfT3KrEHc8caEBNHKojeP
+ dnjd/luEMpMAlNzQ6aDhfdY0X4acJuNKyH/qkEr3bVKj+jDfha7BEI50TpHATl1nFC4oDdmNH2
+ vh0ER1CJl8nz9+xmix0hXge/zvCrhjVl3AAAA
+X-Change-ID: 20261029-flowtable-sw-accel-ip6ip-sit-f3393772880e
 To: Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
         Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
@@ -131,76 +131,61 @@ Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
-X-Proofpoint-ORIG-GUID: QV_IN7bOQWQYR9H3tiZ5MzWznQj1B_Ft
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI5MDA1MyBTYWx0ZWRfX9wooSOMr/pVb
- xPp6SXFSxaIpwuWnFf7vTfXpDScrOcyAPxqi65tmN8671AefMYTE2FZqmc2WEBd4Sfkn4LMjnGe
- QnekG4bnf9e0wzbR74wpp9ZWb3J0S8g69IXr8R6wRpLzP6zZ3t+y38N388ddQ0uzD4Reypq4v65
- 65LTAvK6+fTybnXOwA653xKhMDoWTid423UuE6eiubpubIdDpxaTy/v5wQl/fTK/Z80gB/gYmqd
- KlPUs2/8xNgIzH4Tsy+CIj0u3JuxCRTyYCbOJZPfQXwDn/X4HUYfrb3168l1sBc+15KTgozbSmR
- GWl3Z5vJ1bP0eOkpWJBjGUTg/y5r8tXyjsQSfHwV2hnbOpOKO+3zMZcvrjjrpLGjy8oRjE7odMh
- 8Sg1ArAvF1E6OBXM9MwsSlQZrZ9Lok0vZ/qXu0rN5L9QAIsa6jwp6dSdYv9lkOnL4wN6FaSX5mq
- pDHQ8xSgelZ0qbHr4Gg==
-X-Proofpoint-GUID: QV_IN7bOQWQYR9H3tiZ5MzWznQj1B_Ft
-X-Authority-Analysis: v=2.4 cv=XZEcX455 c=1 sm=1 tr=0 ts=6ae34baf cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=7fYLNvKHbgS61GKHX+yayQ==:17
+X-Authority-Analysis: v=2.4 cv=Yu2a1IYX c=1 sm=1 tr=0 ts=6ae34ba7 cx=c_pps
+ a=KB4UBwrhAZV1kjiGHFQexw==:117 a=7fYLNvKHbgS61GKHX+yayQ==:17
  a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22
- a=EUspDBNiAAAA:8 a=01qIw42SU59cxVdbmxoA:9 a=QEXdDO2ut3YA:10
- a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI5MDA1MyBTYWx0ZWRfX9FcjjHzCbwy7
- WATfDNBlUdkT5HMJJTco0kk2ngxpoS8KRF+dmZUcerT2IdhRJ6CK67/3gRLQX6R62VLHjFtW/Bv
- 2MFnrwDBwjUNSw+ygrHqysN1AoGxY6A=
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22
+ a=EUspDBNiAAAA:8 a=q9g148jr9wMc7ZL12-MA:9 a=QEXdDO2ut3YA:10
+ a=o1xkdb1NAhiiM49bd1HK:22
+X-Proofpoint-ORIG-GUID: q2s8G8iboBAnrgjpJ6yVmbEgtlsPXh-O
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI5MDA1MyBTYWx0ZWRfX4khkHmshmmNt
+ YNhD73nWBRmf69f7/xwn/4q0EQQBKIbcwAaaWMshr9shiYtkmNSyuzY7MTulOCJf4aRo7uSw3dZ
+ zSNH8J3DfPe2W0Eru+w8qct02hj+pa0=
+X-Proofpoint-GUID: q2s8G8iboBAnrgjpJ6yVmbEgtlsPXh-O
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI5MDA1MyBTYWx0ZWRfX+9/UHFBUSHaA
+ HPDA1S0ZMXzW5CeYO2oxuQqu+XqJblGZ3b6JAzv7v8B0K1vdVfriDfRQyUL+hTL6QychrtbRqDw
+ lLi4OJ3HMPAJf8XyXzuNYWaG07MLsx+Rvvr3qbqVjL1Fu5iIZ//ou0cdorrcm5WMSRYiZizTzXo
+ PIHoCdE1tBwU7DfSH9Ba2Xi/F2fJ0Og2Yg7RqB5P/mnhmrqHuatq57yt9Wxlj9PBjuoeiGDUJQt
+ TSNilg2rW192abWm8ncBeumCmonkTxDtL9wCRhUR4MIhlNG7m6MRU/g6YU8zBZfLLJf+YaN/Lh5
+ gGW0WTD1t+fjSGEo7+mQSEngTHLQtStluQafBCpiqun0h19vTyE5IiEv9YeoEhek5gVLi686R1i
+ etUb4q+VPbwKPjQcWgqXGwtcqt6DcLEqmrD5bkO4aEgK0ndVkpLrbP6t9u2csRegx3/1Mwp5Tmg
+ jDrwPAFPvAcakdqGXAQ==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-10-29_04,2026-10-21_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0
- suspectscore=0 bulkscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610290053
+ spamscore=0 suspectscore=0 malwarescore=0 bulkscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 impostorscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
+ definitions=main-2610290053
 
-Allow ip6_tnl_fill_forward_path() to set the inner protocol for IPv4
-packets (IPPROTO_IPIP) in addition to IPv6 (IPPROTO_IPV6), so that the
-flowtable can offload IPv4-in-IPv6 tunnels.
+Similar to IPIP and IP6I6 tunnels, introduce sw acceleration for IPv4 over
+IPv6 and SIT tunnels in the netfilter flowtable infrastructure.
 
-Return -EOPNOTSUPP for any other ethertype.
-
-Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 ---
- net/ipv6/ip6_tunnel.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Lorenzo Bianconi (8):
+      net: netfilter: nf_flow_table: recognize IPv4/IPv6 in tunnel proto matching
+      net: netfilter: nf_flow_table: refactor MTU check for tunnel offload
+      net: ip6_tunnel: add IPv4 over IPv6 flowtable tunnel offload
+      net: netfilter: nf_flow_table: use tunnel encap proto for route lookup
+      net: netfilter: add IPv4 over IPv6 tunnel flowtable acceleration
+      selftests: netfilter: nft_flowtable.sh: add IPv4 over IPv6 flowtable selftest
+      net: netfilter: add SIT tunnel flowtable acceleration
+      selftests: netfilter: nft_flowtable.sh: add SIT flowtable selftest
 
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index 64a184bca467..9ae14977c900 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -1844,8 +1844,16 @@ static int ip6_tnl_fill_forward_path(struct net_device_path_ctx *ctx,
- 	struct flowi6 fl6;
- 	int err;
- 
--	if (ctx->ether_type != cpu_to_be16(ETH_P_IPV6))
-+	switch (ctx->ether_type) {
-+	case cpu_to_be16(ETH_P_IP):
-+		path->tun.inner_proto = IPPROTO_IPIP;
-+		break;
-+	case cpu_to_be16(ETH_P_IPV6):
-+		path->tun.inner_proto = IPPROTO_IPV6;
-+		break;
-+	default:
- 		return -EOPNOTSUPP;
-+	}
- 
- 	if (t->parms.flags & (IP6_TNL_F_USE_ORIG_TCLASS |
- 			      IP6_TNL_F_USE_ORIG_FLOWLABEL |
-@@ -1867,7 +1875,6 @@ static int ip6_tnl_fill_forward_path(struct net_device_path_ctx *ctx,
- 		path->type = DEV_PATH_TUN;
- 		path->tun.src_v6 = fl6.saddr;
- 		path->tun.dst_v6 = fl6.daddr;
--		path->tun.inner_proto = IPPROTO_IPV6;
- 		path->tun.encap_proto = AF_INET6;
- 		path->tun.dst = dst;
- 		path->dev = ctx->dev;
+ net/ipv6/ip6_tunnel.c                              |  11 +-
+ net/ipv6/sit.c                                     |  59 +++++++++
+ net/netfilter/nf_flow_table_core.c                 |  18 ++-
+ net/netfilter/nf_flow_table_ip.c                   | 133 ++++++++++++++++-----
+ tools/testing/selftests/net/netfilter/config       |   1 +
+ .../selftests/net/netfilter/nft_flowtable.sh       |  86 ++++++++++++-
+ 6 files changed, 269 insertions(+), 39 deletions(-)
+---
+base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
+change-id: 20261029-flowtable-sw-accel-ip6ip-sit-f3393772880e
 
+Best regards,
 -- 
-2.56.0
+Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
