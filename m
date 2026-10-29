@@ -1,67 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.245.243.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793297081;
-	b=hG4sAGgEIg8IBlJF/QCtcPoTStxYKsCYUWmXiz40tgj9ZlneaOCEMTpFCu6Ov+jtye/Y
-	 Z8TOpZoLLxF+mBbAuTmO0WzXc652qpLcnYC1VE72Z/3ujCuwu/8RttEubVRpd++Qg5iPL
-	 kLLCzDMRIRc7H68cufC9FFElOih4iMDs2CSY65FvKm/q/NQgakapF/BFTTVgGgEER1fTm
-	 Z+SC3u4t7+NLCxLtBzRBSvIdxVcUdHC1A4FELoPWPP1im8HdNAOX8bz3ndbveIM1ut2Yn
-	 hGZcwkppFZ46II9ou3adDgzcZ+CtfXwH+/OAEwC2cRr5eXe6sCvwukqoBivaV32GZpA==
+	t=1793299822;
+	b=YSU1at9iCrF5R52GWpURqpwPWszgJs3Pu9pOjqF0fhQWEjy+cy90VJ96UljaWRyyU111
+	 irdRn1hnDOegp2022g+aki87j0dEBKskbs0/hygoBWSCPCd/mBNT9JKhqTk7eZb/ctsiM
+	 CsT/TkTrNnh71cqRFhA8NsYFSx6VIZlTIAnQFTijMZlAKe8HfojhP4JPGT/MyrNssfnOd
+	 NBQbaIiZ+zwm5/+k3LIMQ6Ud3iMbzNpnpNoIsl70TN2UQv2B3tdFB/8u+jzYlcnS+xtx4
+	 CJyKsrWzop6+tKUfa7U5870gK02sPN+yzhqVyUTre6/CpR7oM5xO69i6P8RZ+5ik9lA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793297081;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=dGTHaUD5kbfXafKpZr4Gwijm/14k8Ydj5B6tav1S8CY=;
-	b=oEcfB3vpNlr+nffAxhqiPFwgYxbTv3NPLhPD2atQgfUToEkr9tAlsehAN/wVkZ4gl0zM
-	 /iEiksg9/am5FEcFn2iy6dFc0Ch5F384HwHZU35XBKOXpWBaGjz6Yv/p5RVIG0fFBK6pt
-	 95MM0UvZaPAyHMGne5qOkiIQ0bXSfQgC5LtBiByfD4lvSpZahKm7y9mrwqd598nN5A7IC
-	 nxbCxIP1GGQ3YmKdfdyj7nfw079R3OOpdqxHgcg4MzkWYjQrpHVjqe6SNfdAzpUrCpyZu
-	 cRh7qv4eCXsvOmm8h4VjGmmkSYIp5J6HW2FbtjEawtAZa8VWsluLnKC3fVSveS+rtow==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793299822;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=dFQkIRXdqN/mm+HPVBnBxPUgwZQzzCyijE7O/EObV7Y=;
+	b=3Vec0i7WwpvEoBC2Mkw7CLUppG0yl0z7jl4n9dSybrgKcrZjgNSuOYJIOj+68KZrfMx1
+	 kdtPBJSvYl4DyK4J3vyVV8wvlKmkdSncrhK/Oue4z2S89AzpCZU92cuua01KGAbHDbK1v
+	 nQXHjgwzSZq41iRFVNgQl4HCFTjlLC25etmbw0n6LIcj03kLBxGSNNBpnwIyUNrxsresK
+	 Vzh5DwlBtZFnvjMVPmDXDfymHM/BHi3kDVxWRXfl818Y3f1cDuhTjPLrfK3XXmx39/6me
+	 AAQblycbDcqe2whiYiHtvUWqe7AtaUroHoE+DefAq0GGWJYI/tjzhaFN3hCvU9D3DXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HN12aBcp;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=XJHJdS5t;
+	arc=none smtp.remote-ip=44.245.243.92
+Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17A1606A31A
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 18:04:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A17A1606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA6F606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 18:50:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2AA6F606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HN12aBcp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793297079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dGTHaUD5kbfXafKpZr4Gwijm/14k8Ydj5B6tav1S8CY=;
-	b=HN12aBcpeMZQYnyeilIcr0GgVg7x/U+zdhrDd/iFOTOsNFwbIrIvsrxbZnkIs+TuZKz6yo
-	9W73CUrRpLIbxDiJqgVrGVd5CV878Kc+CkzTicdEdPQeW79niDZDyzwxnY7NQ44wcd3umz
-	iAm4qraOh4JLjIH5KLPJ/FDMBQIfJus=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-kxG7bvfzO7ymwFD1gpytYg-1; Thu,
- 29 Oct 2026 14:04:35 -0400
-X-MC-Unique: kxG7bvfzO7ymwFD1gpytYg-1
-X-Mimecast-MFC-AGG-ID: kxG7bvfzO7ymwFD1gpytYg_1793297074
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 250221955DBF;
-	Thu, 29 Oct 2026 18:04:34 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8E2941800643;
-	Thu, 29 Oct 2026 18:04:32 +0000 (UTC)
-Message-ID: <f7482836-d18b-41b9-be9a-4c4ea867c6ad@redhat.com>
-Date: Thu, 29 Oct 2026 14:04:31 -0400
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=XJHJdS5t
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1793299822; x=1824835822;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dFQkIRXdqN/mm+HPVBnBxPUgwZQzzCyijE7O/EObV7Y=;
+  b=XJHJdS5tBFXVPVcgZNm+ZTTxpJFTpbi3lO2K3iDoR+wOUxqpDPpkv54F
+   x5jES50kVRh330QiTONKfKT2Pl/IoVi2SpwH6xhROtsM65a8tX1JZuiS4
+   czT0+mlEG39bjt36cvBIgCUh+dimV41lefNwFQ4FkNBtrS1iqnpcOKqay
+   mL2TyTciu2duhzZP71Gu15YnzLc8iHLGQxbsD3+CyCCJ5jXxZ4baPQZau
+   UXdEh1ZKBqqJK1nupbV0rxggGnGpPb5Fad9KKo6xFAqBCAHQsaqQlEs0p
+   QobuDkFLmPoi28sveRdzd7owUR4nCGQtxRzDZXHjIPnBy9rO71LuLwOu7
+   g==;
+X-CSE-ConnectionGUID: PEgmo8sFTi2Ay+tuDmlHOg==
+X-CSE-MsgGUID: RBcYlA2MR/mcqFnr2Rb+rQ==
+X-IronPort-AV: E=Sophos;i="6.27,184,1787011200"; 
+   d="scan'208";a="32109494"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 18:50:21 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:16316]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.7.65:2525] with esmtp (Farcaster)
+ id 1d71a4e2-3b74-4611-8e3a-f7dd612b7bd4; Thu, 29 Oct 2026 18:50:21 +0000 (UTC)
+X-Farcaster-Flow-ID: 1d71a4e2-3b74-4611-8e3a-f7dd612b7bd4
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Thu, 29 Oct 2026 18:50:21 +0000
+Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Thu, 29 Oct 2026 18:50:20 +0000
+From: Jimmy Zuber <jamz@amazon.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
+ Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
+	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
+	<luis@igalia.com>
+Subject: [PATCH v2 0/2] fuse: skip LOOKUP before exclusive create
+Date: Thu, 29 Oct 2026 18:50:08 +0000
+Message-ID: <20261029185010.3080336-1-jamz@amazon.com>
+X-Mailer: git-send-email 2.50.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,159 +84,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next] cgroup/cpuset: Fix incorrect CPU accounting with
- parent's effective_xcpus expansion
-To: Guopeng Zhang <guopeng.zhang@linux.dev>,
- Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261028152608.648427-1-longman@redhat.com>
- <661486ab-4879-47cd-8035-ae0d7a7d7462@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <661486ab-4879-47cd-8035-ae0d7a7d7462@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC003.ant.amazon.com (10.13.139.252) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
+
+mkdir(), mknod(), symlink(), link() and renameat2() with RENAME_NOREPLACE
+look the new name up with FUSE_LOOKUP before sending the request. This
+series adds an INIT flag, FUSE_EXCL_CREATE, with which the server fails
+these requests with -EEXIST for an existing name, so the kernel can skip
+the LOOKUP.
+
+This series is independent of "fuse: atomic open" [1], which covers
+open(). Both add a 7.48 entry to the uapi changelog.
+
+Tested with the new selftest under UML and KVM.
+
+Changes in v2 (from the Sashiko review of v1 [2]):
+- Use INIT bit 46; bit 45 is FUSE_PASSTHROUGH_V2.
+- Document that an existing name can fail with the error of a VFS check
+  that runs before the request, such as -EROFS.
+- Keep the test server's state mapped at teardown, where the server
+  thread may still read it, and mount in a private mount namespace.
+  Skip without /dev/fuse or kernel support. Test mknod() and link() of
+  an existing name, and the dcache after each request.
+- Rebase onto fuse for-next.
+
+v1: https://lore.kernel.org/fuse-devel/20261020153432.3812719-1-jamz@amazon.com/
+
+[1] https://lore.kernel.org/fuse-devel/20261029130758.818617-1-jamz@amazon.com/
+[2] https://sashiko.dev/#/patchset/20261020153432.3812719-1-jamz@amazon.com
+
+Jimmy Zuber (2):
+  fuse: skip LOOKUP before exclusive create
+  selftests/fuse: test FUSE_EXCL_CREATE
+
+ fs/fuse/dir.c                                 |  10 +
+ fs/fuse/fuse_i.h                              |   6 +
+ fs/fuse/inode.c                               |   4 +-
+ include/uapi/linux/fuse.h                     |  12 +-
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +-
+ .../filesystems/fuse/excl_create_test.c       | 386 ++++++++++++++++++
+ 7 files changed, 419 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/excl_create_test.c
 
 
-On 10/29/26 5:42 AM, Guopeng Zhang wrote:
->
-> 在 2026/10/28 23:26, Waiman Long 写道:
->> Commit ec0254b9eb49 ("cgroup/cpuset: Release invalid isolated CPUs with
->> a shrunk root partition parent") fixes incorrect isolated_cpus accounting
->> when contraction of a parent's effective_xcpus can cause a child partition
->> to lose isolated CPUs. Expansion of parent's effective_cpus can also allow
->> a child partition to gain more effective_xcpus. However, the current code
->> doesn't handle this case correctly leading to incorrect effective_cpus
->> and isolated_cpus accounting. Fix that by looking for this possible
->> expansion of effective_xcpus and perform the proper accounting action.
->>
->> New test cases are added to test this effective_xcpus expansion scenarios.
->>
->> Reported-by: Guopeng Zhang <guopeng.zhang@linux.dev>
->> Link: https://lore.kernel.org/lkml/20261027123837.100909-1-guopeng.zhang@linux.dev
->> Signed-off-by: Waiman Long <longman@redhat.com>
-> I have tested this patch. In the scenarios I tested, the double grant
-> and the isolated_cpus accounting after the expansion are now correct.
->
->> ---
->>   kernel/cgroup/cpuset.c                            | 12 ++++++++++++
->>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 15 +++++++++++++++
->>   2 files changed, 27 insertions(+)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 3219f927c35e..39c81a0a8ab9 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -2097,6 +2097,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>   							     parent->effective_xcpus);
->>   			if (!cpumask_empty(tmp->addmask))
->>   				isolated_cpus_release(cs, tmp->addmask);
->> +			/* Expansion of parent's effective_xcpus is handled below */
->>   		}
->>   		if (nocpu) {
->>   			part_error = PERR_NOCPUS;
->> @@ -2106,11 +2107,22 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>   						     parent->effective_xcpus);
->>   		} else if ((parent_prs == PRS_ISOLATED) &&
->>   			   ((old_prs == PRS_ROOT) || (old_prs == -PRS_ROOT))) {
->> +			/* Parent partition state changed to PRS_ISOLATED */
->>   			part_error = PERR_ISOPARENT;
->>   			if (old_prs == PRS_ROOT) {
->>   				cpumask_copy(tmp->addmask, cs->effective_xcpus);
->>   				adding = true;
->>   			}
->> +		} else if (is_partition_valid(cs) &&
->> +			   !cpumask_equal(tmp->delmask, cs->effective_xcpus)) {
-> The branch is also entered when the freshly computed effective xcpus
-> shrink, e.g. after a parent contraction. The cpumask_andnot() then
-> computes an empty delta and it doesn't seem to cause any harm. Do we
-> need to tighten the condition?
-
-I intentionally made it simpler. For the shrink case, deleting will be 
-false and nothing will be done.
-
->
->> +			/*
->> +			 * If there is an expansion of parent's effective_xcpus,
->> +			 * we may take more xcpus from parent. The parent's
->> +			 * effective_cpus should still have active CPUs or nocpu
->> +			 * should have been set.
->> +			 */
->> +			deleting = cpumask_andnot(tmp->delmask, tmp->delmask,
->> +						  cs->effective_xcpus);
->>   		} else if (is_partition_invalid(cs)) {
->>   			struct cgroup_subsys_state *css;
->>   			struct cpuset *child;
->> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> index 83ef6c781af3..844efdf029cd 100755
->> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> @@ -531,6 +531,21 @@ TEST_MATRIX=(
->>   	" C1-4:P1 C3-4:P2   .      .    T:C4-6   .      .      .     0 A1:5-6|A2:4 A1:P1|A2:P2 4"
->>   	" C1-4:P1 C1-2:P2   .      .    T:C4-6   .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
->>   
->> +	# The extra CPUs gained by a child partition when its parent expands the
->> +	# exclusive CPUs have to be taken away from the parent.
->> +	" C2-6:X2-5:P1 CX3-6:P1 \
->> +	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
->> +	" C2-6:X2-5:P1 CX3-6:P2 \
->> +	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P2 3-6"
->> +
->> +	# Both expansion and contraction of parent's effective_xcpus will be
->> +	# correctly handled in child partition and the child can be invalidated
->> +	# if a populated parent could lose all its effective_cpus.
->> +	" C2-6:X2-5:P1 CX3,5-6:P2 \
->> +	                    .      .    X4-6     .      .      .     0 A1:4|A2:5-6|XA2:5-6 A1:P1|A2:P2 5-6"
->> +	" C2-6:X2-5:P1 CX3-6:P2 \
->> +	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
->> +
->>   	#
->>   	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
->>   	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-> BTW, about the housekeeping check issue from my previous email.
-> I verified it with the session below on a nohz_full=8-31 boot where
-> CPUs 0-7 are the housekeeping CPUs:
->
->    # cat /sys/devices/system/cpu/nohz_full
->    8-31
->    # cd /sys/fs/cgroup
->    # echo +cpuset > cgroup.subtree_control
->    # mkdir -p A/B
->    # echo 0-7 > A/cpuset.cpus
->    # echo 1-7 > A/cpuset.cpus.exclusive
->    # echo root > A/cpuset.cpus.partition
->    # echo +cpuset > A/cgroup.subtree_control
->    # echo 0-7 > A/B/cpuset.cpus
->    # echo 0-7 > A/B/cpuset.cpus.exclusive
->    # echo isolated > A/B/cpuset.cpus.partition
->    # cat /sys/fs/cgroup/cpuset.cpus.isolated
->    1-7
->    # cat A/B/cpuset.cpus.exclusive.effective
->    1-7
->    # echo 0-7 > A/cpuset.cpus.exclusive
->    # cat A/B/cpuset.cpus.partition
->    isolated
->    # cat /sys/fs/cgroup/cpuset.cpus.isolated
->    0-7
->
-> B stays a valid isolated partition holding all the housekeeping CPUs
-> and there is no warning at all.
->
-> If the housekeeping issue is going to be addressed in this series, is
-> a test case like the one below worth adding?
->
-> +	# An isolated child partition cannot grow to take over the last
-> +	# housekeeping CPU when its parent expands the exclusive CPUs.
-> +	" C0-7:X1-7:P1 C0-7:X0-7:P2 .      .      X0-7     .      .      .     0 A1:0-7 A1:P1|A2:P-2 ."
->
->
-I will fix that with another patch.
-
-Cheers,
-Longman
+base-commit: 9b1da7b4a4e197072e630c3b85d4100a399752ff
+-- 
+2.50.1
 
