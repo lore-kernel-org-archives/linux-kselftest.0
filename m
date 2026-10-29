@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.192
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793268259;
-	b=5f84Kp0wOjpQA3B2tHsHjacO0T00Kq3HCYY5DfwbAVBqedIG2aq9xY+XBErJeXNLr/Hw
-	 ejFP4XKOz5bZGEJLVolAW3S7eB0YKgglVxP4JiKbEjc2NxBsUvMs3lE9K1SByCaoXe+pb
-	 wgN8PtdEl79UvjE75V6GLb1u+aThiyJ4ks3wNDoLpZFFiht/yXqFj7ktDPoj0SHvSrMEr
-	 BLFphOH3liyae1j/ylfV++4z27jDa5Ul+ktn3BeXi2/4w7+nAHFqH+s1QIDRALU6eEidw
-	 8XFwfERMxhB8AWtWpWYvNc2iMoT42lVablkVwrsPF/hdFxML5KppVRECKlIm21l7T2Q==
+	t=1793268697;
+	b=M7VuFNQuzyPx7SdQ/Y8DMUqxjQL4FglLiNIpLZ3oOyMal4sgN+fV+4Gh6OnhCUiVOMHh
+	 kctw631xraZ7tZhiD31AZSxIEnM6Ohp1Iy0gxIxQ/Vi7LkUAakcs1MqmR2vyN2VXjLmer
+	 3QanRXc7OIa2sHfGGxEj3URu3Xoqzhw/Zk0cvsB8YOGRJEVGpUt+5jzg1OMdBHebwhDyN
+	 xrfWBmbsmxapUDQoxTNgHaWDGZGGD0SEqY/nsZO2Ye1DX4LGA3zvvZ+7E/cLocn0piHx0
+	 CxO6LmkxTOfqZVuqnnfBfdunUtbKCSNRKvdf/iABrtwUuTWNy2kmSyOfBnozZdcOjng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793268259;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793268697;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=LB/73nfCAHiY8ms6QFBHreSDwl9iYXEvUDaC3DV6Zu0=;
-	b=XJEf530fUEBgxRFQyiZzQ8l+RhQjzdEIki9KfFjP5cbcKUovuNBTioyntBDXzxZjJLdy
-	 g4nLVUkwRoF1b4NdGCqbPkFs4YPpowMPNvbqb2a3X0/AJddVq48lfwR/yP6a6iWGW8Qez
-	 HFo++VNagUbEfOaG3utxRqMncOvbK0eGfAY28qCRDfuBJWgaNf7eD4JSiQ7AZxFbHt81U
-	 N3eYaqgjmShklnXEEN4ll8pzh/oI82qdSifkQ8Pz/rz3noSg/G13tJRnKFUcKaKa2lu90
-	 hVh2kx30RheaZsRdGVDq3YKQarQXxf1YL/IfXNIwqls/rs0N1rXBOe8o9ML8KMXGczQ==
+	bh=FAoeFjOhHMIomvSZEyPcUceFOZEousEjiVEkUk7cB2Y=;
+	b=O9k2EB9OF0O3achtFL49O/VbUTvqsSOn0UmNNx5gzbZYpENwmuRgnT4UjnXn8KaVcTZz
+	 F6oYMq+O4dZnkEdYXx0nE+muVcOhqGCqgUVKn3YoEfBWzVHc28qXxuU7OnfbnAf1F3wEl
+	 8mrTTPkKdEdMisIsdnR6rLY9X3u4cQQhUoibFASZWsZdtD7LvBpyplYOc6DDPxbuAjjwh
+	 ORlmIwpsgPDRcmA3zLpxt/I3GdFB/2fOZSYLkj3CzbFEeUARhGwNEPLX8p0CsScdZNKpl
+	 9EddoKqLcm4FGyLznUZrS/9IgMlrFlFvtnI8M4+uw1elhnLd/3/LhDT42HCyevUpZ2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nTU78u7k;
-	arc=none smtp.remote-ip=95.215.58.224
-Received: from mta1.migadu.com (out-224.mta1.migadu.com [95.215.58.224])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c;
+	arc=none smtp.remote-ip=95.215.58.192
+Received: from mta1.migadu.com (out-192.mta1.migadu.com [95.215.58.192])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE762606A320
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 10:04:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE762606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91C8606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 10:11:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C91C8606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=nTU78u7k
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=BAYzLGPgGf5837fXM6g/DklP8VVuXY5OJdBGwkWAxDk=;
+DKIM-Signature: a=rsa-sha256; bh=O6pECeJaIkk7IfSov1GVY8i4R6cQbSZNmIkkj1P7D6Q=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793268256; v=1; x=1793873056;
- b=nTU78u7kXKe6fJXb4mdOo3cLUl1W8+j6jW23IQ8ZbftY929IH6CvYEOhwBSWyHqCv+6MADeL
- 2mrGTD319VdqsFjeEqhWqGRa4AjJGEDt/ItJM5qhr9Mwnnrm7QD6V7fU+Lg1W90HpEWDpC/q9Re
- LUdXm7lMRptxlcA5rq9RRANU=
+ t=1793268695; v=1; x=1793873495;
+ b=W5WC4w0csS4VEBLZ2tQ0uytPiTEYb99WY1GvVsXg6l0O8ex/VRZXKkrvDBct7VCmR2++I9yt
+ J1Tzsp1mH2e0cfsCaugOhV+bVlES9qtmuDXLzyvlpvaYXbNsekpoZ3NVes9FyZF9eS3QIzsbDxr
+ 13N8iOXXWc173Mkp2JmAx2cA=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9324b428c442bf0e;
-	Thu, 29 Oct 2026 10:04:15 +0000
-X-Mizu-Trace-ID: 9324b428c442bf0e
+Received: by smtp.migadu.com with ESMTPS id 73988b42a70c48c5;
+	Thu, 29 Oct 2026 10:11:34 +0000
+X-Mizu-Trace-ID: 73988b42a70c48c5
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <d06638d4-72fd-4b35-9d78-a2e45856d83b@linux.dev>
-Date: Thu, 29 Oct 2026 18:04:07 +0800
+Message-ID: <895cb52c-1542-4ff7-abaf-844a73126fa8@linux.dev>
+Date: Thu, 29 Oct 2026 18:11:25 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,13 +65,13 @@ Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
  eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
  linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
  alexei.starovoitov@gmail.com
-Subject: Re: [PATCH 1/5] blk-iocost: move shared definitions to blk-iocost.h
+Subject: Re: [PATCH 2/5] blk-iocost: add BPF struct_ops cost model support
 To: Tejun Heo <tj@kernel.org>
 References: <20261028143534.135968-1-cui.tao@linux.dev>
- <20261028143534.135968-2-cui.tao@linux.dev>
- <3f51067b3d4d549e8414bc19bb612cb5@kernel.org>
+ <20261028143534.135968-3-cui.tao@linux.dev>
+ <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
 From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <3f51067b3d4d549e8414bc19bb612cb5@kernel.org>
+In-Reply-To: <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -80,34 +80,88 @@ Hello Tejun,
 在 2026/10/29 04:09, Tejun Heo 写道:
 > Hello, Tao.
 > 
-> On Wed, Oct 28, 2026 at 10:35:30PM +0800, Tao Cui wrote:
->> -static struct blkcg_policy blkcg_policy_iocost;
->> -
->> -/* accessors and helpers */
->> -static struct ioc *rqos_to_ioc(struct rq_qos *rqos)
+> On Wed, Oct 28, 2026 at 10:35:31PM +0800, Tao Cui wrote:
+>> +/*
+>> +/*
+>> + * Deliver iocg_init()/iocg_free() to the cgroups already online on the
 > 
-> This isn't a pure move. The comment is dropped here.
+> The comment opens with "/*" twice. clang warns "'/*' within block comment
+> [-Wcomment]" and CONFIG_WERROR builds break.
 > 
->>  }
->>
->> -
->>  static int ioc_weight_show(struct seq_file *sf, void *v)
+A stray line was left over from an earlier edit. Sorry about that.
+>> +			/*
+>> +			 * A blkg which never went online never reached the
+>> +			 * radix tree, so it must not receive an init either;
+>> ...
+>> +			if (!iocg || !iocg->pd.online)
+>> +				continue;
 > 
-> The blank line removal is unrelated to the move.
+> blkg_create() adds a blkg to q->blkg_list only after radix_tree_insert()
+> succeeds, so the blkgs skipped here are the ones blkg_destroy() already
+> took offline, not ones that never reached the radix tree.
 > 
->> +	bool				user_qos_params:1;
->> +	bool				user_cost_model:1;
->> +
->> +};
-> 
-> The blank line is new, and 2/5 then replaces it.
-> 
+You're right, the comment described the wrong blkgs. It goes away with
+the walk, which I'll drop in v12 together with the callbacks.
 
-Dropping patch 1 resolves all three: v12 folds the definitions back
-into blk-iocost.c with the original comments and spacing intact, so
-there is no move left to keep pure.
+>> +	if (!disk_live(disk)) {
+>> +		mutex_unlock(&q->rq_qos_mutex);
+>> +		blk_mq_unfreeze_queue(q, memflags);
+>> +		blkdev_put_no_open(bdev);
+>> +		return -ENODEV;
+>> +	}
+> 
+> The guard() suggestion from v10 was only partly applied. This unlock,
+> unfreeze and put sequence is repeated on three error paths.
+> 
+I'll fold the reg error path into a single out label. Detach no longer
+needs the freeze after the v12 rework.
 
-Sorry, I should have caught these before posting.
+>> +	/*
+>> +	 * Scope the mutex so the tail bdev put runs with blkcg_mutex
+>> +	 * already released: dropping the last device reference can
+>> +	 * reach disk_release() -> blkcg_exit_disk() ->
+>> +	 * blkg_destroy_all(), which takes q->blkcg_mutex.
+>> +	 */
+>> +	{
+>> +		guard(mutex)(&q->blkcg_mutex);
+> 
+> The bare { } block isn't necessary, and ioc_bpf_detach() has the same
+> block with the same comment. Can you drop them?
+> 
+I'll drop both.
+>> +	/*
+>> +	 * The attachment is checked under rq_qos_mutex first, so an unmatched
+>> +	 * detach exits without freezing.
+>> +	 */
+>> +	mutex_lock(&q->rq_qos_mutex);
+>> +	spin_lock_irq(&q->queue_lock);
+>> +	ioc = q_to_ioc(q);
+>> +	if (ioc) {
+>> +		spin_lock(&ioc->lock);
+>> +		matched = ioc_attached_model_locked(ioc) == ops &&
+>> +			  ioc->bpf_link == link;
+>> ...
+> 
+> The same 11 lines check the attachment again after the freeze. The check
+> under rq_qos_mutex after the freeze is the one that matters.
+> 
+This goes away with the freeze removal: detach becomes a single
+mutex-critical section.
+>> +/*
+>> + * Pluggable cost model interface for blk-iocost.
+>> + *
+>> + * A BPF struct_ops implementation can take over the cost model of one device.
+>> ...
+>> + * offline and its free. Both callbacks are called with ioc->lock held and must
+>> + * not sleep; the delivery points nest inside queue_lock except for iocg_free()
+>> + * from ioc_pd_free() in blkg_free_workfn().
+>> + */
+> 
+> This restates the attach mechanics and lists the call sites. The comments
+> and descriptions in general are still long and narrate mechanics.
+> 
+v12 folds everything back into blk-iocost.c, so the private header and
+the long interface comment both go away.
 
 Thanks,
 Tao
