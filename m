@@ -1,145 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=198.175.65.19
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793254707;
-	b=fkCU/F7Z23gbpUdOHChyGfUye9MTua5TTSMi+fm8Eas4RcygJjsxAMtBc8XH3d91bvRG
-	 hrySuuCDkuy6hJC9xJUMknm16xXS6HoFIQG7jWak5bQEGBdwCO2xxBkVoEfGsnIUb6fX4
-	 vAjvt4UzUlg0kuZgUNPfcQhmA7YSvQn3TUr8mgwLkcSLlpf7Cqll/gCGWnyZqXxjNBdSR
-	 tsHauBZTG2Hjw0c8JfTXycDUS4/36GyzSZNc7fYjY5Dk5UG1i76cCaobrWDWmp70ykUld
-	 p52kYt3s66u/zJhToMw4rwPmj2imXX9juim0lE4pVhUqlFdsGgGiBg98bSGQcyo1vUA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793254707;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
-	 Received:Received:Received:Message-ID:Date:User-Agent:Subject:
-	 Content-Language:To:CC:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-LD-Processed:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
-	bh=Lb8ueSg1cPYlTA0gF9c9lzKeb+tpxTp92Qfya7K3hlM=;
-	b=ywILvscWDwF1hN6atJPv1IXRbLbtRgJrNv/H+II2UApOvvf9B9OmsvLEvVuwbfPUroa6
-	 vaMJhm9W5L7nMVGMGGzoVafVjSUAsVMB0263jJGf2AG9DwAtTz4+WUUDzAJuJ2cYIPESh
-	 WSZmxXPSaTyunQriyGVi5vyLkgNh4oBglsWhRw5TTScyWgJ3lkdN3g8wu93sXuCxGDRom
-	 AjA+7YdFn+QBF2bOmwWjkPK65No5MEkooPXUgNPFl9HR8L+QaN80AfNAYkJsW2e3VB8hY
-	 xcDCTRJcIHplMb/nai1W80vt66/hj8c4MBT6itJrM/Lr2bd5zqASAo5otEmn0pb7GoA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F0in9AlJ;
-	arc=fail smtp.remote-ip=198.175.65.19
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793255045;
+	b=N88YINdu2L6Pzz2AYAnMrdK6UmvM36Flxb4C80WGaSxdZL3orDuT7h1ET3EPJ29jjZaN
+	 TowRu6eHq30dLlQ+dSEOEWLEe+HKwo6kNTIuE55mDRd0iBZG4PahsaxzYfsVkee5N3E2n
+	 CcGLa/DERbH6Q0P7i/QVidxIp7XMA/pBqL6sLFOVPingl8VGDPm3eI6n3uEt0LUZ4zdYN
+	 V5Ruq6HQRGQzmCL16DVQyVwuyAFMe80J6Kz9GcGHpIOnErCaVxAhmGee+LvGB9r17Nym/
+	 6YEuqh1CpCHbC2MOxahR9j4qIZP6Wt0BkZSU38ntE7z7kZrYxzBC7ImnnqtmkyelJXA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793255045;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=62zl3zv2d5JAkHiUi8pE4KR/NfZKfMMIyW7AuqAQ65k=;
+	b=t2MHKLw1tHkj/G5E6NpwEYXr/dzSP4Iee2V5DXGixGN0hFfQUO+pgoUuEXV0Sud9CbWS
+	 XTE9di4kn3MebTWceVfXClC+6kPJMKkv4cQ6ncd1+H4AKhtpQX0F3KDLqoM5EvbNpeHuJ
+	 nsNyVk7s9SDDmmfP4COppXlumVwV9KhlQK/gRuebc6D3bMRIZ86/zXlwZL9L31TRQ7DD1
+	 aZ7M00XBEOCzeAQy2Dhn1cizLIB/cSgYixJoUe7wn78B+957mv9Yg4a3HlymueFYXxGLF
+	 kTYG2JEXPq3SFjhHpT/yArzuHtZ2vKfRGpOzQ2FEQXiURWQmUK5VUBIBwdhOVtEQUaw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mF4lIu+t;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77AC3606A31C;
-	Thu, 29 Oct 2026 06:18:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77AC3606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2261606A31A;
+	Thu, 29 Oct 2026 06:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F0in9AlJ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793254706; x=1824790706;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=nCxT9trzhZfEF0ysC4p0wqxBbd4L6r9K305e3NTQjpc=;
-  b=F0in9AlJPA+WHTcjhu9iyMzTaqPuWko9IhK9Du61PiHR76yAcmwjod/H
-   EGfuE5f0u+QuAdyQaXeVE2SAm6HtYK+IhmPKmrz9gFp+xsTrg+jB9/wmk
-   9TTfHRIECkq7UmJRypUF0vfkUNAg1t2mNpGJMY5Kmi3yLjJgchXAZl1Vd
-   j/cfv4BAwSAQ++HIsqEHEMQaN79O4tF8rfl017v7PndDMGqbqXqzaVKqr
-   GPyMCibyREuy1Tk+uhaKZtnXaq2EeKsjPNSaxJqqtjz19+J7Y4A315oAC
-   owq46k6iDeLm8add4O7+QfIQ+tO0WX8b9s1K8FGFGcRabnef7YBV1yDwx
-   Q==;
-X-CSE-ConnectionGUID: MvPs8YFZToeS4mmSSgD5Rw==
-X-CSE-MsgGUID: /mxLQUQPSNK1/B/MazF7ag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="2015419"
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="2015419"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 23:18:25 -0700
-X-CSE-ConnectionGUID: Svc3FlUTRZWrPl3jU9m0dw==
-X-CSE-MsgGUID: 4D67vUiWRwK56gNOrUAcFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="5575721"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 23:18:25 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Wed, 28 Oct 2026 23:18:23 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56 via Frontend Transport; Wed, 28 Oct 2026 23:18:23 -0700
-Received: from MW6PR02CU001.outbound.protection.outlook.com (52.101.48.41) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Wed, 28 Oct 2026 23:18:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=u75ExJ3EFGY96rA9NjgVsmfLrNIvrQyLvXEIBmDdBxXFXXG9iMFrHBPO2Xm4LvynTGH7zIFwgM8ra9sKsoevi6GpbsFqjm1BJPjtMj11iH28QMV36Tf7ZBo/JgGqceZ0pcJmhf04bBuT2iFyBSOB6bDsPdpptMNQzO0YWE94Tw24YWvNTe2sCZLRJcjQ2Kpc4Ozq1Oopxdd37j/7U4Nh+UQgo2kKOok5z5jU61BKHDBmr2RoXKoL2DPRPbvUecmDP8vgolBNoIJ78ol3Lt6XqGfPSjjN/to3PS9D8lv6JbCur0YQrm7dqrxbVFTtBK5kv3boldHQRc5O9yjNYqks6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Lb8ueSg1cPYlTA0gF9c9lzKeb+tpxTp92Qfya7K3hlM=;
- b=XF1TkrNAZe9Cva1wvn0/xAGQMXTuQjcP3xawtE7TskJYUrRTT9h8/E8pJZjJ09EktSbsuTEBLm4YcbAJmst+VpJd32KDS1be2IYu+V7xP9IZYKQ+s0ltsTPpnMcOGi0L07HzVXXyVXNE7tJU7w7g+VzSNNto++VapCOUfulGwvnfxNpNaxkLuwWsJfkryQf6w6RGRWEG55OfjHHIcHOegQ0v0q2dg26laycZTrmELquHjFkaWR1htmWXXiX38wsFYcuBM1lExE7/Bmdyzd1qi9dQcQnZg69upsh/igoZKDB4bBCCaFwLSV/nOp0vRqzLHBVRmyUrfDpmIjXTjEM+uA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY8PR11MB7846.namprd11.prod.outlook.com (2603:10b6:930:79::14)
- by SJ1PR11MB6154.namprd11.prod.outlook.com (2603:10b6:a03:45f::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.16; Thu, 29 Oct
- 2026 06:18:20 +0000
-Received: from CY8PR11MB7846.namprd11.prod.outlook.com
- ([fe80::cae0:d05c:b2fc:c395]) by CY8PR11MB7846.namprd11.prod.outlook.com
- ([fe80::cae0:d05c:b2fc:c395%5]) with mapi id 15.21.0569.007; Thu, 29 Oct 2026
- 06:18:20 +0000
-Message-ID: <64ec4478-8c4a-4d98-9c71-da703234c18e@intel.com>
-Date: Wed, 28 Oct 2026 23:18:16 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 10/28] KVM: VMX: Add support for saving and restoring
- FRED MSRs
-Content-Language: en-US
-To: Binbin Wu <binbin.wu@linux.intel.com>, <kvm@vger.kernel.org>,
-	<x86@kernel.org>
-CC: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
-	<seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, Xin Li
-	<xin@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Andrew Cooper <andrew.cooper3@citrix.com>, "Tom
- Lendacky" <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
-	Shivansh Dhiman <shivansh.dhiman@amd.com>, David Woodhouse
-	<dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>, Zhao Liu
-	<zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>, David Matlack
-	<dmatlack@google.com>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <20260911213659.2025974-11-sohil.mehta@intel.com>
- <9ef4e795-1222-49bb-a6a5-0823c57afce1@linux.intel.com>
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <9ef4e795-1222-49bb-a6a5-0823c57afce1@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0100.namprd05.prod.outlook.com
- (2603:10b6:a03:334::15) To CY8PR11MB7846.namprd11.prod.outlook.com
- (2603:10b6:930:79::14)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mF4lIu+t
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E6791F01825;
+	Thu, 29 Oct 2026 06:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793255044;
+	bh=62zl3zv2d5JAkHiUi8pE4KR/NfZKfMMIyW7AuqAQ65k=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=mF4lIu+tGM8htzhrd/5kvMqyF65tQpiuQ34e53o2G3K+UxilPphvpRhQKhkmmvDVe
+	 Jl+qu25/UYtV9GTQTv1wotIBgRz82g0V0f9HhEsV34eFNUdUyvpLWY8KoKee39i4S0
+	 n3HQ07ZfPw9QIQkTzL1wDesaN99GqcDdyr3qsjsq958Jc1PNVHTWswPol0SeLF+BUc
+	 lSc63C1OiCFLs1J+WEVtNaXNnPdMtCvOZb6qkIGQYrkM5dK9P5kLEWmPeXKFuDKeyO
+	 LW0OnaUSn3ebNL8qmx9v2HOyHNEhbNS/PA8oQOleDuwqf3c2A2MQVrm67B43+15jif
+	 1kxvd4LyJWDQA==
+Subject: Re: [PATCH net v4 2/2] selftests: net: packetdrill: add test for
+ negative sk_forward_alloc in tcp_wmem_schedule()
+From: netdev-bot+sashiko@kernel.org
+To: tavip@google.com
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+ davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ shuah@kernel.org, horms@kernel.org, willemb@google.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Thu, 29 Oct 2026 06:24:03 +0000
+Message-ID: <179325504311.3134.4521422682926617403@kernel.org>
+In-Reply-To: <20261026032216.1145201-3-tavip@google.com>
+References: <20261026032216.1145201-3-tavip@google.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -149,115 +65,209 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY8PR11MB7846:EE_|SJ1PR11MB6154:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53cc4751-90ec-43dc-f7eb-08df35846dba
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|23010399003|1800799024|376014|22082099003|18002099003|261026140227099003|261028144727099003|3023799007|261026121527099003|261022105027099003|11063799006|4143699003|261009223027099003|10067099003|56012099006;
-X-Microsoft-Antispam-Message-Info: 13sJs8zhz8CNGn/QXlH+Ig72puEnrwkcT6oCsbB4oXqlzdZUVYvKB6X6dtzpUz+5d4NKXFMlT2kvoCyw4WrPO5VGgF53e31rJJ4htLXpuz+geDF17eoZaZFWtUAbs8UHdSAenng9qxsN1/Cbc6xyQf1NQ64vvKW6qAlyHk5WrFbpA8CBO1NqVtLBrb3OyTz7jjo0Rd583j0bWA1cfzk51qHTuriqmGfBnTUn/aD1hLbshUYSgE8Enfq6ZgLap7I1uzNTG8u+edcfHBwUndDFbNAkr0R+c9EjdrUVNnankTIyfoXP3+KsS4+6QwGvwzd9IeZyVmkyLZ/Sm6IRXOZNsgK91pWsuFRkVsksWxax+YqiAWnsFj/2oLRDHNyOBCc2D6k0AnjDt5+xWRL1PT49CYSYMH7zhDNBK2QRAmOf2+wHEAMk2/PLHLCIGEhtmivakB7iJ2Yw8N0jnbT4sYN4H0+1jLEgEJoJ7Rb/3nteODtfp+7PjxLE8YVAJD95jmp4oxARS47L7WaYobD42Ceoa1opdqhhm8sRndYTTP1deuFVs5pL5vyCz6tUgVcxR2ApN/l+Z2JVrPVL2ccqu6d69zwlCeVw6n2YXNOTVdduIK7WjiI7+HHD50OemOBKIKiYHIJhBWmjmyMU/SezEecw+tGnyE0Ud5D2uBL2+FzoFts=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB7846.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(23010399003)(1800799024)(376014)(22082099003)(18002099003)(261026140227099003)(261028144727099003)(3023799007)(261026121527099003)(261022105027099003)(11063799006)(4143699003)(261009223027099003)(10067099003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?REJlcndXaTFWbTdIZm5GNm1qUERVZHZyZDZIUFRkL1pzWExvNTI0WlZlbkZX?=
- =?utf-8?B?cVlLUHNDNklnUUxkTGR1RUR0M1VVcFZ3REJDSGd5ZXIrUlNJR3hMdmRhTmYv?=
- =?utf-8?B?MU5pRWNFLy9Cellia3ZNUzFreG05dGxVRVdMZzdMMkJvUEJyL2ZBSGRMbW9W?=
- =?utf-8?B?YWR0N0tpNnVENExaZEx4ZUQ5azl6U3hvMysvOGJzYVRKQmN6cGtmRlFhNDdj?=
- =?utf-8?B?UjBUbXVNalU2UW0vdU9McmNQb0FSN0JldXFVQ3MxRW95OVBCam1KT0ttVnhn?=
- =?utf-8?B?MUhSVWNRbm1Ud3d4cHJ6U3ZtOVkvN2twYzBYUGw5OE5LT3RDT0NvdHZWK1Iw?=
- =?utf-8?B?UG4wS2JnN3M0RGRrUTIrNkdnSDV0Mk9CV2VCQTFQQmt3czhWZnU3MGlHNkky?=
- =?utf-8?B?OGIvNTNUVERTVlJNaGhzekVXWDdzdUhoYVBObHVhZHROZzI1MWhIRUd1cVJa?=
- =?utf-8?B?YURZVUc0R1E4NzhWNGF4QWZ6Q2podXpGTndxcC8vM1hkbzRmdkhpUWZ3UGdr?=
- =?utf-8?B?VTJwRFB0UVo1UDkvajhVUTdkUk02S2lZTDFLY3UxbVA2U1c5S0NhcWFhRzUx?=
- =?utf-8?B?Q2hUbjBQZXgraHJKV3ZrdmYwMVBzQzAzeFQ2aHl1RWRoNkNNNzQzWmtma2ho?=
- =?utf-8?B?WTNKVkJtOUZnY0doM0Q2UWFIRE1kTnpDei9lMFp5d20ya0U2TnEvaVlmTks1?=
- =?utf-8?B?L1FEQkxWRkczTG14WWd4aktubE9SdUFNcjd3cWZjeTI2bUdzRWpXcUNNUjF5?=
- =?utf-8?B?Rm5rd2NvTXFNQUNnK0krM3RiQ0loZytpb3ZXcVgvelRXdit5eFBRbjRtejFy?=
- =?utf-8?B?azh2dytlbXV2alFibU9xQythblRyZjhieGdCN1ZLWWxoMWZCeEhFUk9NTmNl?=
- =?utf-8?B?QVEvMTl5cWlSd1FVK2Q5SVVuRStjbWNUUzdic2g1RTJYUXI0L3VabjhwLzVS?=
- =?utf-8?B?QWtrSHdFRVphQitVZ1JOM25ZQjJmWUdtemsrOE5UbGVsV0pLUm5zYkRZaWRN?=
- =?utf-8?B?TUxYMjNmZlNhdlR6WVU2MFNiK1dVVXFmbU1QOXdxLy80eUZ2ZWFYUDZRM3Rz?=
- =?utf-8?B?bUFxYWJWNHVHR0RWWW9qNjdSYVk0cGxtR0hPWmZWWGl3ZFE1dHFKTkJYMWZj?=
- =?utf-8?B?YmljUmE3UjJuNWoyL0ZhYXl2TFJDY29ER2s5S1NGRktuVU15OEFGQ3FTbEY0?=
- =?utf-8?B?QTQreUVEbTR2OElnTzZvL1VybGpzNlRyNW5HcEkzOFBXV1BVdkVZZ2VvblU2?=
- =?utf-8?B?QllLdXNZTittNU1ZdWdUVFgxcC8welREUG1kbml0NFpwUU15Zk0zZ2U4eGFW?=
- =?utf-8?B?TnpkblFjZUt3VXUrWDdMSldJSkkwU0tLcjQwNE1aTHk5WDA2Yk5wcFNGbDRG?=
- =?utf-8?B?RjRkNS9lTE5JWnNvMEpPS3hTQTM2ZUs0dkY0M1dCTitHYnRVajlpQ3dPcE5j?=
- =?utf-8?B?Zy9MZlNJVnZIRFFlSGMwVnpEMm9KbUlUeEVJMGZVOGhzRk9hWG82c05sTWcx?=
- =?utf-8?B?cW5ORFNDSkJYcnZacWc3WGtIUG5STzM0aVJwem1UVG0raTNjRkxtRjVROUhY?=
- =?utf-8?B?UmF6VmV6cFhOdHNQV2lxblJnR2lJbEJ0V0JPTlh6SnRPM250TFB5ZGJCNEYv?=
- =?utf-8?B?OGRBY1JRTGRIc2l6NTRHS0huSGpRTXE5TnozSGkrdzhqbGNkbTJtMmVKM0M1?=
- =?utf-8?B?YWExNEl1SUdPbDJBWEU0Q2JlaEk4YWk1ZVUvSXFSTEsybXZ0ZGlobFVFV0ZR?=
- =?utf-8?B?aEJDTy9DVVB5MmtUOGpYT2VDOWFScWoxRC9qVHhSaEJZUHIyVU1GRWdQYTVl?=
- =?utf-8?B?SENtbGlVeU9LelNUc2Y3OVhSUU8zYUhacjNad2xTRmlZb2pUL2lFYzF0WUxk?=
- =?utf-8?B?VTlqTUNKOGpXWGtvMjA1ZTdrdmU2VUlpbXNiNVhabFhpQ0NkRGFwQis1U21N?=
- =?utf-8?B?TzJxNjVwTWtFeU1BSWtBd3VnbmdkVGQxZS9rZ2xXdXArdU9mWmhBVVFRaFZq?=
- =?utf-8?B?ZTNpaytwTUxnNHlYU2ZzUVlSQlM5WS9pSDVMMDNDbmIvdlMxWmN4QjViWGhW?=
- =?utf-8?B?TVc0SWdyMmNycWZGa20yRHczdWFWQ25PUklZdGt3T05ZbWJ1UmV6RXdMSTIv?=
- =?utf-8?B?WDYrWEtSN21HdnNlNlNwZ0JBQlBQSSs3Y0JLZzJCNmpzNG5Ec0hoMGtuTEZP?=
- =?utf-8?B?R2N5YnV4RndxQmxiZkNOYlFJOTl4cFRoYWdNcU5NSU9GSExRKzdXaEc0SE40?=
- =?utf-8?B?d2NSYXA3cnRUUUNqNU16blFKclpOdlJsaVFRZ1lDRU1QSFR5Z3E3MzB1dmdT?=
- =?utf-8?B?RWowSEc0VWRwcE9nYytIQUtRaFAzL0tsTlIxTjVza3VEWTdYR0crQT09?=
-X-Exchange-RoutingPolicyChecked: GQZVb9sOC1++vAOBIW4mjwwihGsv36EutotFnn/+XFNCjg37sE7RP/FpRa+Z3alI5xxIOPwloTrztHWSfLeDMuj++h8PHkfU/0jLyq7a2id+gcJrgfHd2Vk2OR5OIZSW4tv0xc7rxNQkGjuQn34MQFWAa/cXGp0bXMTV0Ujed4lrMlQVvLgD9HXCa4ycXTmkjaDjzPjb2mS/bmejQ4TKRr6wKaltt09v8mjJhHI26KLG2M5n169bnr68aVLzFZEXQooNi8h9P/CK5u/X3hJ4XwtjfVxwedF3bKifCH3xYYc5DZKzm8XDnnJGRTG9zGuY3n9nrO9G2EGUhAK7gn1G8g==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53cc4751-90ec-43dc-f7eb-08df35846dba
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB7846.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2026 06:18:20.3982
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yDiWFGnKo7GE0I2bTazhSHkAzDsjLaqS+8HRlp0rJwr3fwz2LVlQ/6phlXWCGw7x5pFFAkyQJjjHF9ilmqgUjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6154
-X-OriginatorOrg: intel.com
 
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
->> Specially, intercept accesses to the FRED SSP0 MSR (IA32_PL0_SSP), which
->> remains accessible when FRED is enumerated even if CET is not. 
-> 
-> Nit:
-> It sounds like the patch adds interception. But the patch emulates the access
-> of the MSR. 
-> 
+Critical: 0 · High: 0 · Medium: 3 · Low: 0
 
-Yes, will change the wording to reflect that only the emulation of the
-access is being added.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
->> This
->> ensures the guest value is fully virtual and does not alter the hardware
->> FRED SSP0 MSR.
->>
+- [Medium] The REQUIRES_MEMCG check in ksft_runner.sh (lines 61-72) only
+  confirms that `+memory` can be written to the cgroup2 root…
+- [Medium] cleanup_memcg() in
+  tools/testing/selftests/net/packetdrill/ksft_runner.sh (lines 73-80)…
+- [Medium] Step 4 of tcp_wmem_schedule_negative_fwd_alloc.pkt (lines
+  98-101) depends on the two `echo 0 > memory.high` writes having…
 
-...
+--
 
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->> index 8d3999772ac2..0fd5d4edeebb 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -1032,6 +1032,11 @@ struct kvm_vcpu_arch {
->>  #if IS_ENABLED(CONFIG_HYPERV)
->>  	hpa_t hv_root_tdp;
->>  #endif
->> +	/*
->> +	 * Stores the FRED SSP0 MSR when CET is not supported, prompting KVM
-> Nit:
-> CET could be more specific, i.e. SHSTK. I am not sure if there is a situation
-> that one is supported, but the other is not.
-> 
+selftests: net: packetdrill: add test for negative sk_forward_alloc in tcp_wmem_schedule()
 
-Agreed SHSTK is more precise that CET. I think KVM can clear SHSTK but
-keep IBT in some situations.
+This adds a packetdrill test that pushes sk_forward_alloc negative through
+tcp_collapse() while sk_wmem_queued is above tcp_wmem[0]. It then checks
+that a non-blocking write() under memcg pressure fails with EAGAIN. It also
+adds REQUIRES_PAGESIZE and REQUIRES_MEMCG directives to ksft_runner.sh. The
+REQUIRES_MEMCG directive enables the cgroup2 memory controller and installs
+an exit cleanup handler.
 
-> "prompting KVM to intercept its accesses" is confusing to me.
+> diff --git a/tools/testing/selftests/net/packetdrill/ksft_runner.sh b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+> index 0a97d5ae34699..ba62f3840eb57 100755
+> --- a/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+> +++ b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+> @@ -52,6 +52,34 @@ if [[ -n "${KSFT_MACHINE_SLOW}" ]]; then
 
-I believe it meant to say that fred_ssp0_fallback stores the SSP0 MSR
-value and the intercepted accesses are emulated using this field. I'll
-reword it to be less ambiguous.
+[ ... ]
 
->> +	 * to intercept its accesses.
->> +	 */
->> +	u64 fred_ssp0_fallback;
->>  };
-> 
-> [...]
+> +if grep -q -E '^--define=REQUIRES_MEMCG=' $script; then
+> +	cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+> +	memcg_was_enabled=0
+> +	if [[ -n "$cgroot" ]] &&
+> +	   grep -qw memory "${cgroot}/cgroup.subtree_control" 2>/dev/null; then
+> +		memcg_was_enabled=1
+> +	fi
+> +	if [[ -z "$cgroot" ]] ||
+> +	   ! echo +memory > "${cgroot}/cgroup.subtree_control" 2>/dev/null; then
+> +		ktap_skip_all "requires cgroup2 memory controller"
+> +		exit "$KSFT_SKIP"
+> +	fi
 
+[Severity: Medium]
+Is this check enough to decide that the test can run? It confirms that the
+memory controller can be enabled at the root. It does not confirm that
+socket memory is charged to the memcg.
+
+If the kernel boots with cgroup.memory=nosocket, cgroup_memory_nosocket is
+set. In that case mem_cgroup_css_online() never increments
+memcg_sockets_enabled_key:
+
+mm/memcontrol.c:mem_cgroup_css_online() {
+    ...
+    if (memcg_on_dfl && !cgroup_memory_nosocket)
+        static_branch_inc(&memcg_sockets_enabled_key);
+    ...
+}
+
+mem_cgroup_sk_alloc() then returns early:
+
+    if (!mem_cgroup_sockets_enabled)
+        return;
+
+So the accepted socket gets no sk_memcg. The memory.high and memory.max
+writes in step 4 of tcp_wmem_schedule_negative_fwd_alloc.pkt then have no
+effect on it.
+
+On such a kernel, wouldn't the final write(4, ..., 16384) succeed, so the
+test reports FAIL instead of SKIP?
+
+> +	cleanup_memcg() {
+> +		rmdir "${cgroot}"/pkt_* 2>/dev/null || true
+> +		if [[ "$memcg_was_enabled" -eq 0 ]]; then
+> +			echo -memory > "${cgroot}/cgroup.subtree_control" \
+> +				2>/dev/null || true
+> +		fi
+> +	}
+> +	trap cleanup_memcg EXIT
+> +fi
+
+[Severity: Medium]
+Can this rmdir remove cgroups that this runner did not create? The glob
+matches every empty cgroup named pkt_* at the cgroup2 root. That root is
+shared with the host, because the runner only does unshare -n.
+
+Even a single run would delete an existing empty pkt_* cgroup on the host,
+along with its configured limits.
+
+When runners overlap, one runner's EXIT trap can also remove another test's
+pkt_${PPID}. One example is kselftest's run_many() starting tests with
+run_in_netns &. That cgroup is empty, and so removable, in two windows:
+
+  - between the mkdir and the cgroup.procs write in the .pkt init command
+  - after packetdrill moves itself back to its original cgroup following
+    accept()
+
+In either case, the step 4 writes to memory.high and memory.max would fail.
+
+Could the cleanup be limited to the pkt_<pid> cgroups created by this
+runner's children? The .pkt cleanup command already removes its own
+"${cgroot}/pkt_${PPID}".
+
+There is a similar question about memcg_was_enabled. It is sampled once,
+before +memory is written. If another runner or another user starts using
+the root memory controller while this test runs, the exit trap still writes
+-memory to the root cgroup.subtree_control.
+
+Is it intended to disable a shared controller based on that earlier
+snapshot? Any EBUSY from that write is also silently dropped by the
+|| true.
+
+> +
+>  ip_versions=$(grep -E '^--ip_version=' $script | cut -d '=' -f 2)
+>  if [[ -z $ip_versions ]]; then
+>  	ip_versions="ipv4 ipv6 ipv4-mapped-ipv6"
+> diff --git a/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
+> new file mode 100644
+> index 0000000000000..e4d8d13144f0a
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/packetdrill/tcp_wmem_schedule_negative_fwd_alloc.pkt
+> @@ -0,0 +1,116 @@
+
+[ ... ]
+
+> +`set -e
+> +./defaults.sh
+> +ip link set dev tun0 mtu 65535
+> +sysctl -q net.ipv4.tcp_rmem="4096 131072 6291456"
+> +sysctl -q net.ipv4.tcp_wmem="4096 16384 4194304"
+> +taskset -cp 0 $PPID >/dev/null 2>&1 || true
+> +cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+> +[ -n "$cgroot" ]
+> +echo +memory > "${cgroot}/cgroup.subtree_control"
+> +rmdir "${cgroot}/pkt_${PPID}" 2>/dev/null || true
+> +mkdir "${cgroot}/pkt_${PPID}"
+> +echo 0 > "${cgroot}/pkt_${PPID}/memory.swap.max" 2>/dev/null || true
+> +echo $PPID > "${cgroot}/pkt_${PPID}/cgroup.procs"
+> +`
+
+[ ... ]
+
+> +// 4. Drain per-CPU memcg stock via memory.high=0, cap memory.max=0 (O_NONBLOCK
+> +//    avoids synchronous reclaim/OOM), and expect -EAGAIN on a 16 KB non-blocking
+> +//    write. Because copy (16 KB) minus sk_forward_alloc (<= -16.4 KB) exceeds
+> +//    PAGE_ALLOC_COSTLY_ORDER (32 KB), try_charge_memcg() fails without invoking
+> +//    the memcg OOM killer.
+> ++0.010 `cgroot=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+> +echo 0 > "${cgroot}/pkt_${PPID}/memory.high"
+> +echo 0 > "${cgroot}/pkt_${PPID}/memory.high"
+> +printf 0 | dd of="${cgroot}/pkt_${PPID}/memory.max" oflag=nonblock status=none`
+> ++0.000 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
+> ++0.000 write(4, ..., 16384) = -1 EAGAIN (Resource temporarily unavailable)
+
+[Severity: Medium]
+How reliably does this empty the memcg's per-CPU stock before the final
+write()?
+
+If any stock for this memcg is left on the CPU running write(),
+try_charge_memcg()->consume_stock() can cover the charge (about 9 pages)
+without checking memory.max:
+
+    if (nr_pages > MEMCG_CHARGE_BATCH ||
+        !local_trylock(&memcg_stock.lock))
+        return ret;
+
+Each memory.high write calls drain_all_stock() once. drain_all_stock()
+returns early if percpu_charge_mutex is contended. It also skips CPUs that
+already have FLUSHING_CACHED_CHARGE set, and it drains only the current CPU
+synchronously:
+
+    if (!mutex_trylock(&percpu_charge_mutex))
+        return;
+    ...
+            if (cpu == curcpu)
+                drain_local_memcg_stock(&memcg_st->work);
+            else
+                schedule_drain_work(cpu, &memcg_st->work);
+
+Remote CPUs are drained asynchronously, and nothing waits for them.
+
+The memory.max write uses oflag=nonblock. That makes memory_max_write()
+take the O_NONBLOCK path, which skips draining entirely:
+
+    if (of->file->f_flags & O_NONBLOCK)
+        goto out;
+
+The synchronous local drain only reaches the right CPU if the earlier
+taskset -cp 0 $PPID succeeded. A failure there is hidden by || true, for
+example when CPU 0 is not in the runner's cpuset.
+
+In those cases, could write() be served from leftover stock and succeed,
+making the test flaky?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261026032216.1145201-1-tavip%40google.com
