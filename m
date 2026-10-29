@@ -1,106 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793232285;
-	b=mCSqnmbi5LzcNrNRzPPRGp/JCr0WJZ4L5jTZ1gcrlq6eQcLrYdZIViqywM0zVRpJiQXv
-	 ZFKC3UEO8Jj/vlTL1N35Ls+WZT+5PYl/7LGynHLCX/Aa5Mtix1ecp+NDOpaKPGIZIRChK
-	 +5xKhOL581H3UrA3WSTwh+8DFQ2MDasV9yz2r04EOjN34VQuKdYagSxbQ4+5tsQ85g5wj
-	 DhzinKLIBXgGs55/woaAgnX7vrBjOi4DIl9iB1mdkivXqrzoJkOzNjP7NgwIYeTAhRkKM
-	 GL6oKO06xhbX0LQhg8mTk4Eo7ZYsfUGRT2SMVKZqZ0Q9ZlsA6g0gOQnByl5sL/RaSZA==
+	t=1793232607;
+	b=feqGLE0CPi5DS99OVVfocgki7Sx/i9hfT9ZAPF+BFAD/LbTR40LY0oYrPuNHgfyuWH9I
+	 6ig03gyY+cytSF1KtQ0M+jqGRNEkxN0vGDRnuxZdRMJsLhtrBOP8peCqjNUkSTqnW7I9D
+	 dshZi0HlKww7Ua8jUBVuWSsEZr5jA7fYaBuSDi5KTX4TUuEbGlmpjBSW3She8oEcH0hBP
+	 uTufEENFv+6sqVJIfkzodrEgXJRD4QatTo6IQLLHtfd9/l0zxj1qgT9XFL4CIMhN53ocX
+	 wI06sS/DEXGhLZro7ayux3lWZpAKwvm4YhJlYFMq7w5CmVOJwzBStpW2+ADtALQE61Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793232285;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=q/xBVtBLk16U8qItuEo0/3JxmIlfapOJCXoA5AObKSA=;
-	b=Qb1hkmJ2JcSNr2Z/P5wP/DOh4HET6EjAnKRtnuMcQPLOnXtBUzMtcCOIjyRiRu88fd6V
-	 D7ZWwLMCI2UkAB197yoBAmaHCtvsiKwcVcuwApQqMh+SrTGWJyAMrjuL0gnuDHQSvUkFi
-	 GerFgSEHToxjVqrhS5e4gWE0JQx8gn9q3Da0kFyqHkHTzdVol2o5LIS5lFtJWwPA0xwkS
-	 EUWRm63rU6R2UY5Zh0RjtPQTyATrTwP7rCa/GZls+w9fCwXAGYEMo7NVRlaUIKsBnwhWs
-	 /A9yJmKV9eVAiIVI3zbXs6Sb2YoJnxUf6Ba0is0OWT7vw8SwbXglHYHqhh2r6ZuJSFQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793232607;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=3OfQ2QSCA9DJafXL9xcwhSxMAk4hs6Y1SWNeM5iir/s=;
+	b=fsVim/YjJ7iyPK2FMCru6BVx7Z8Dl4YO4VUOCwwKH9RYYmWOhR9N/ku5cTm5O9g1KQkX
+	 EmikJQlXiJS9vrNxa6a791E6AmU6iDIRwgC2TWNs60Bz8MvQH15b7t04UBIqyAQ4X+V9M
+	 0P46e+IoPrc6HQpo17EYgpvlT6g4qi5E3cwLT0qw+jG6QKyZvXHfUkXdHGkDIZT8H4FQy
+	 IUbVZOXndwl3DxTDExJQKBr8w/xHZZbG0XtzWYJE8ji/4Hds/kUglfVsIuJ2/ChakLHpl
+	 431+m24GV/rfzG23VpnwiRmxK4rul6KIgSnRF8XEbDLSp4tPR6dn7CbyQX5g2ZWOvTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=soleen.com;
-	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=BDLaQPpE;
-	arc=none smtp.remote-ip=209.85.217.54
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GC9n5+AE;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE0F606A320
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 00:04:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9EE0F606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF337606A31A;
+	Thu, 29 Oct 2026 00:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=BDLaQPpE
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-7cbbb7b90efso485126137.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2026 17:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1793232283; x=1793837083; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=q/xBVtBLk16U8qItuEo0/3JxmIlfapOJCXoA5AObKSA=;
-        b=BDLaQPpEQkC/NOGErHzNgMqNEFgiZW+qixJDZ5RtDffvwjsqxm93mYTldZW4Txe7YC
-         KOlzFcRPqQr1N7PzdaxoW1U9MQgJBHjgARqwrgxXEZIU7JNfwIwgLxfO92G6pOC4G4rk
-         4OSF6jFiqrA40z8orm3/UNdvF1RJjCFi7ClJV0vWr8MykRtBgdBxnizZAivW6aZRN3kx
-         l5uvOty6CRBiTWGUrkgmOuKvd2MUI35gla4/qmesv+YfLyi3mwck9NijjEVz8zhSCgxi
-         pcgFazOCNQkh0LbGTfZyXdh3RejNnsqgBCJkWvDATwo+Kuk2B2721o1lMZ/ETjyXrhG9
-         LPqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793232283; x=1793837083;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=q/xBVtBLk16U8qItuEo0/3JxmIlfapOJCXoA5AObKSA=;
-        b=BuTUcdSLe+DGH21HJRjGbPYsjoc/TDwTVx++ewCE8+cZnGSIbOnVl5GWg6irQye5ne
-         MtCO46XV+okHWcSi6wAc7j//iUv1tpQvoR8QaJH31eow9hLjcc6yxAW+WxRlHwkUDlcv
-         JilqZL8aqs6pa6isjepIWfB2vF5WYpMrnQyKE5iG7gCVbPEqR4OMYOmEFqkogXbTeZi0
-         DpsIB055fXvRPubCUgaKDPsU2RMfjeYRrV7SKj5mdJOqdAuX1SVGO6VVu68Oq/XY3EfF
-         JXqzkW2o5+kq5AfgLTwfPPBcnM+cRhrcawD3l8bG4q34xbOPAk3lHN/r8OQPHaomTeo3
-         wQsA==
-X-Forwarded-Encrypted: i=1; AKwUvBzeibmV1U4uruGEu4yEPSoPWYMmBLUKM8fCnUV6CZJAIPRs9LPChiI44NMRsCWtoHcuINYs1ITyXC5a8AvZQec=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIys8a93xlmtywLXSgIbskFnKM8+x3LswB6HXhEdLqsiK95lzDK
-	cpk3WjaCAdTqrwbdalRegsJ6Op8w+zH8AL0n1JjBaou/7bSQi0Kwev9J3ZznyVMJQ6I=
-X-Gm-Gg: AYBFou0hE4v3d0UYZ2VjT/GcFj0A7IICrhDlcClsu1ADtP9wrturXXCstyTjQO73OWB
-	/YKTCKvfmXcS5cyfKbJnSi87ABr4B8CVUP0qQxVZod6hxAEDAwR6KACqWbpOdk1AGpdqF/dgJ4d
-	nAFAW0IlMFdskd43W7ueq+Fv418blJ8SBTpmc36GlmDrcENLUSbtVkWYpjvjVR1NIJNahp3erkp
-	BwObYVNm1XidP5OnIz/K/tAdQ1u3wnOW0IcxwP7Hud+ocdTeejGVYrSpZGNeFWEsYSqvRq8qGtr
-	JMI/ZOtV1/jX4zUk2yxEddN9fj6gknz+VqklYhzdcYUNAzrYOgu23CvE+KDU0Sy20d0QY0kcUt1
-	/m11QOIapdiKfJEnEQDymDSEioyurkVJULz9BVXg3c94HQ1y6gwQ+VhpG8bxRj5zlbcq6vH3Dkr
-	tApuFbrBItBFmoIrd5ixDqq7tnRZNKQvIuzyvGNy3TXx1kIk6OVAmP/cR6/C2cO7RdojXd42wCS
-	UEtcJQ5fTL75PW2evurOMBNX95IZjdTMKf5DBkSqM4b9no/sKRbqB3rKbSO682ztHwK8i30HadI
-	PFgQTQOYKuii9qN7CP6mIGUgfTQ6lcKy7x4qXmYAZD3mogldWH4bawj6KOjK60ba/Aba+ipsdXe
-	kVKMCXys1jZfnDEbmsiEpRDjYscpCzTt/
-X-Received: by 2002:a05:6102:3e92:b0:7b5:1ca4:9df1 with SMTP id ada2fe7eead31-7d03a29c54fmr1908368137.5.1793232283543;
-        Wed, 28 Oct 2026 17:04:43 -0700 (PDT)
-Received: from google.com (64.167.245.35.bc.googleusercontent.com. [35.245.167.64])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-99125931983sm7622737241.2.2026.10.28.17.04.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 17:04:43 -0700 (PDT)
-Date: Wed, 28 Oct 2026 20:04:42 -0400
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, kexec@lists.infradead.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, Alexander Graf <graf@amazon.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Christian Brauner <brauner@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	Hugh Dickins <hughd@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	"Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Mike Rapoport <rppt@kernel.org>, Pratyush Yadav <pratyush@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Samiullah Khawaja <skhawaja@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Vlastimil Babka <vbabka@kernel.org>
-Subject: Re: [PATCH v2 07/10] mm/shmem_luo: Retrieve tmpfs files onto a tmpfs
- mount chosen by userspace
-Message-ID: <auKND0n3LyivCrir@google.com>
-References: <20261022225035.377445-1-dmatlack@google.com>
- <20261022225035.377445-8-dmatlack@google.com>
- <179322496574.1894369.544573858973645958.b4-review@b4>
- <auKAlcPN0Lt6Y3Wm@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GC9n5+AE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6B31F01825;
+	Thu, 29 Oct 2026 00:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793232606;
+	bh=3OfQ2QSCA9DJafXL9xcwhSxMAk4hs6Y1SWNeM5iir/s=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=GC9n5+AEcEImq2OnRRCiTvlvbuvBMi5fA8l/nxnEYh6VCoNh2XIWKNSRlkDLvPiKJ
+	 kAZnp3Zg6eX4Kxxc88631fotQ7N4XkyiYQP57eDZsq3oUMlfI20XNqllE7DDpdBzqF
+	 Hzdsdc1MEzR32PHBd8npAB+6c0WpmD4xjzhxVrHpF2d0FJ0fyUe0yru+eg8vTSl8dB
+	 CRXrpNo3t7QR9vUSpNuG0zJaQ0HeYAcotG98U3ck+C1ks7Upl66Dnjn/z27bocQeRV
+	 GUASe1l7Jf2TGnDsBiGd7Yf9lIuy+iLP0nG6RdmjYGbdhfJRsMrntPFDpWDt9NnDVG
+	 dGJUnkhe98F8Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 444B53AAFC4C;
+	Thu, 29 Oct 2026 00:10:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,62 +53,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <auKAlcPN0Lt6Y3Wm@google.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] tls: Honor O_NONBLOCK in tls_sw_splice_read()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179323260507.1489873.3011023044538122487.git-patchwork-notify@kernel.org>
+Date: Thu, 29 Oct 2026 00:10:05 +0000
+References: <20261027015215.605919-1-kuba@kernel.org>
+In-Reply-To: <20261027015215.605919-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ sd@queasysnail.net, john.fastabend@gmail.com, shuah@kernel.org,
+ cel@kernel.org, linux-kselftest@vger.kernel.org
 
-On 10-28 23:09, David Matlack wrote:
-> On 2026-10-28 06:02 PM, Pasha Tatashin wrote:
-> 
-> > > +/*
-> > > + * Whether @inode is on the internal shmem mount, which is used by
-> > > + * shmem_file_setup() and thus by memfd_create().
-> > > + */
-> > > +bool shmem_inode_on_internal_mount(const struct inode *inode)
-> > > +{
-> > > +	return inode->i_sb == shm_mnt->mnt_sb;
-> > > +}
-> > 
-> > Please fix the warning reported by kernel test robot.
-> 
-> Will do.
-> 
-> The prototype for shmem_inode_on_internal_mount() is in mm/internal.h,
-> which mm/shmem.c only includes if CONFIG_SHMEM=y, but the robot was
-> building without CONFIG_SHMEM. I've moved the definition of this
-> function into CONFIG_SHMEM in v3 to fix this.
-> 
-> > Looking at this together with Pratyush's mapping-freeze series ([PATCH
-> > 0/3] mm: allow freezing mappings), I think we should extend the mapping
-> > freeze lifecycle from preserve() -> retrieve() to preserve() ->
-> > finish().
-> >
-> > When retrieve() returns an fd, its mapping should still come out frozen
-> > and only become fully user-owned/mutable once a successful session
-> > finish() happens. That keeps the index -> folio mapping invariant across
-> > the entire live update until every fd in the session (e.g. vmfd,
-> > iommufd, vfiofd that depend on the memfd) has been retrieved, passed
-> > can_finish(), and been finalized together in finish().
-> >
-> > (Doesn't have to block this series, we can do it on top or as part of
-> > Pratyush's AS_FROZEN series.), but I think we must fix it either here or
-> > there.)
-> 
-> Ok that sounds reasonable. Should we do that as part of Pratyush's
-> series then?
-> 
-> Pratyuh's series replaces shmem_freeze() with mapping_set_frozen(), so
-> retrieve() would freeze the new file and finish() would unfreeze it.
-> That should work the same for memfds and tmpfs files..
-> 
-> BTW, this tmpfs series does a lot of renames and code motion so it
-> conflicts with Pratyush's series. How should we order these?
+Hello:
 
-Initially, I thought Pratyush's patch series would land after yours. 
-However, since he plans to separate the LU changes from the rest, I 
-expect both series to land in this cycle. The order does not matter; 
-whoever lands in liveupdate/next first, the other will need to resolve 
-the merge conflicts.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
+On Mon, 26 Oct 2026 18:52:13 -0700 you wrote:
+> Extract the O_NONBLOCK fix from Chuck's zero-len record series:
+> https://lore.kernel.org/20261019-tls-follow-on-v6-0-ab01c4ecca0c@kernel.org
+> 
+> The first patch carries the fix. LLMs love to point out the missing
+> O_NONBLOCK as a risk for the zero-len record change so let's get
+> it out of the way before working on the zero-len record fix which
+> is more complex.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,1/2] tls: Honor O_NONBLOCK in tls_sw_splice_read()
+    https://git.kernel.org/netdev/net/c/78ded647d43e
+  - [net,2/2] selftests: tls: Cover splice on a nonblocking socket
+    https://git.kernel.org/netdev/net/c/7c5d62eff700
+
+You are awesome, thank you!
 -- 
-Pasha
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
