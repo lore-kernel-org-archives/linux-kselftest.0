@@ -1,138 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.225
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793257771;
-	b=niUnYmkRmc7XsjpM0OCSGJK4i+jk23QRM9bLohe8aQUYJJ8rnKLmdS+PVhu23ejSZhiA
-	 KAAZ0BN0evejht9FCFstLTGDrKmv32vOA6hrECOBG51kodE+EUOUFqG7JkGVsZbpZ4/Wx
-	 mNyBHqIRrZbHO1F5eyDeSZJEgzN7EZIlvzPgrPEOde8O8Gp/NpWSBHWqa6KVJkDtvyGfz
-	 Sxg99YGhA5rk6isC+efQqD+wy8fgyfWtFj1H23ET+KgBHOg6Dj5Zw5qVv4Iss4xYmCV0N
-	 xu69TZwwWr2tLA84FTDCqYJyTAay+bDtnDy0TzXTMP4/DtlcduJ2PbE9QXiyrLEZGUg==
+	t=1793258129;
+	b=XXjnmZm+BjlNdWYB/JZaCp1Eb41rrTF4I+qENrVeOBd+PGhDzZGUkvt5aX/QKB5OSXAp
+	 QvjMCN07q5MZUQQEDYoR17DGSX3vBMOIn+DpR0KkjSCk2Ez+55nauHC13KZKFVJ8hxl6C
+	 7E5N+Dg0buXsIcYedhTaZbcQoslXi2hn5DmKYUcPE38IoiaUvlb/Ok/Zilo6oI/LfwmSM
+	 QHB3NQISurBuNMEOAXmaV3jYe90g6yfIzPjvlF9u8QOgi40Hs5PeAAJfKhsymgF7m2sXf
+	 DpAyyqDI/6shdeGQFFOCsu6sfbGA5FPmv9DPDqGy2fXTRdYFVdaqp1z+lOyAqa7BnCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793257771;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Date:From:
-	 To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
-	 X-Authority-Analysis:X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=v33azddHtAnqfbOpoBcm9w2YymvAzUMFZ2ge/uZDhi8=;
-	b=xNKPzOXc5ZerkaY11nqsprGznKMJcTLyOpltlJw9SsbNhkoaDkg5BvmVkZf+Vf80pPpw
-	 yGAVmDoDiApJ9NsIEgPVN8di4Mv974JZ5Rbi9cb7KNYZlBKhDUEANgZYG8q81V3C8W6ck
-	 HeuAhk8JWK5PFj6qtXCqjW/HsVaCln1PfSDseKo95uUetx8Jvrq60NYoHiB/53ZEHij2+
-	 WeBNHt9zspoh+V9Mtb/w/viHCo+6//13/eParGKRlC+wVyLWbqRThBusB2BcQC4tLdafH
-	 yvCtrhFqTTprRTbAeLIqF7Ibi/4ahLZ6CqXocBZWfbG72bFdQb5w/7cq4S/X0Ig39lQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793258129;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
+	 X-CFilter-Loop:Received:DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:X-DetectorID-Processed:
+	 Content-Type;
+	bh=9jLzekRfweOxfS5IGlV80TzxdnJe086CZWxz4tuDgGw=;
+	b=zTcCy+xnK9MnFYSbw8yVkXpWNjTR0Fc+K495EGw9kpHtKTrDZOXVqHc8LxISC0sAMLg6
+	 xJU/YYibp7UNzLvMf4AHSL82H5VWQdqdiMnGbfafWT1dO1WxeTRPyiWqPygsvbJkNCaCl
+	 BKK97v310sjsRriWgHdSRdMnCp6tq7sFD1rxrd4TxzcHEAXJDmOPfgdhBVCT6ypl4z/2O
+	 ZFxFtb1wdyykhWQu5r+/SjiwjqhvS7/gQDpiPG8dUwRW8+LsaJTZA2PghPVseY/Bc1AIv
+	 CZxPb/mtrYTpW1SEBEGQj8BCKcsAvazY4nHDTEfUKGsKTKyfwmh26NeoOQ3QQw9K2QA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b="WWNiY/VA";
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=AmGiNTg4;
-	arc=none smtp.remote-ip=205.220.180.131
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=broadcom.com;
+	spf=fail smtp.mailfrom=broadcom.com;
+	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=IllslqUx;
+	arc=none smtp.remote-ip=209.85.215.225
+Received: from mail-pg1-f225.google.com (mail-pg1-f225.google.com [209.85.215.225])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA65606A31E
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 07:09:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BA65606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6E2606A32F
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 07:15:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D6E2606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=WWNiY/VA;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=AmGiNTg4
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69T5HI7W3889832
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 07:09:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	v33azddHtAnqfbOpoBcm9w2YymvAzUMFZ2ge/uZDhi8=; b=WWNiY/VATgyYMqMt
-	kWCFCPZNmeAuzOciF9qUfhoFxfGyr4tnHwXRaiqfTMEuEnbH9eqP+T6hQRblF+T1
-	erZfkl44iSRBXVfyF5ZdHmp+V84AO2tlhjCF2PrBjIvJhxoUvFb4F5LmYyscYYz+
-	PbdGAr+J4FqOnIpq83+VwbKA933OGl7DZLV9WrX5SX5U56XPy7JA4HAM6TXHLxe5
-	sxW0GauZtTQA1mizjVmlGw0QhlAWChW5IMVGTsx4uHOHfK+uB7dfSoNPHVmaktQ2
-	TEbS5NZTFeh46Bcd4auuuu5kOcCWvyLlHXTld4rfSz1CyCO6wQDwEsEPTGhj2AwB
-	JKULKw==
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hkpmc2awt-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 07:09:29 +0000 (GMT)
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-3425098ae4bso814083eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 00:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793257769; x=1793862569; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=v33azddHtAnqfbOpoBcm9w2YymvAzUMFZ2ge/uZDhi8=;
-        b=AmGiNTg4giKJshMAtf6PaJVe0x74bg1wmRbssHcp7tI/v3m28U9KonmV7heEcNJ9DU
-         Yvw2uIFnScfqAGJMFn8EVXg1gsTbycM200i4g+spS2C9oO3H7JwmwBnaRWekFJ4C5fJS
-         1Srk5KgFVUmLGOkuEZnKoWEARy/a5wy3+7M2n+EeJ1ikIzNlfyS61NyebeXpw29DV8ni
-         r3B7fGOYHO6Ua75BBZ3u1Bpb/B0q4fUxVSj+ax68ty0ueLPsUQzhomjBbk7mgPEWvMtP
-         h6wVJ8nbGmsgo9HmD2u7hSYnB/TjiudsidkZgdFiVfozRekrr6symlvYh80ALqAZn5Pr
-         oJaQ==
+	dkim=pass (1024-bit key, unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=IllslqUx
+Received: by mail-pg1-f225.google.com with SMTP id 41be03b00d2f7-cd5cd8d89a7so922081a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 00:15:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793257769; x=1793862569;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=v33azddHtAnqfbOpoBcm9w2YymvAzUMFZ2ge/uZDhi8=;
-        b=gyat37+wL6EiP62vPRCP2TH2fwksMavM1mZNu7E3ajqDceb3RiowEIXVzL7yrpIe1E
-         iaKm6QN9WCWZa3rawubVqNSU5Y+vC0+rBNAcHbk8ELVJ71+7RTyNOHaU2UApflbyii6o
-         ozsX2PEk+T3ACshg38ZjIZ3Nx2emnW8Zs92f1CMYx+0KVMcYDnMuTDCLllhBFaZrqTrp
-         eh7Xj7PORRNuEAIy7QLfdmWvWjkFVdKwh+xZ7SmOlb6UTmHzmmTkT4Cls29MZZZZX77i
-         sHB4fjKVay96KvL1rF/94It5lsYMh/pVofRopGiOR1Pt1uZMNrsFB/UOvGb7C9irrpYK
-         W10w==
-X-Forwarded-Encrypted: i=1; AKwUvBxOk46ZcL6E/YQcXw07OLRjjHYrnC/qU+xvFz0Zkbkux2Fj3E4BNNqrDwLZu9hz6D/jRCqvwjaQ0JYZ0K2algQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK3XvdmwvIiql8toOZTd5vYQdTel1IT3fCu2rZDK77mVfSoilz8
-	Rdpg1mfiMKIytI3acay7Sbj6nbmt+lBqmoo91OCfCYygVTpBPm9b+3tVmzi7q52rzjOMemKRYFK
-	JSqc6oNaF1vowBCHNDg3sRMAWebaDEI++0Pw80fjsNqg7VUgkljdFUBeQeYsb2qYJwBtopuk=
-X-Gm-Gg: AYBFou1wR2KgwoN3dvAAlbSZQh1Va20JKGpzPrnzreBHAYYd3mFInDT4uIL6LPsrEd3
-	NbH7nz8LluYXH9QFYrcBr10OsMs6pWtW2gBCu+m4hbgeD5DR6Ftsh9W3ATEnM4p2bZ/PcK4w1XJ
-	L5U2fbGNzoiDUTXylZZDMIVSUSJp/Z2ZvsIv1zTsT4XsOIec55YLkt18ZqdyZzbiN2yP2ul87Tp
-	p0vEZe2l9kK8dNEq6wNF3/NuwfuElIwXXxz+HfuIpXZeh+vcLbPrF7Ee3+ToXxdbJNSaVk4JoeY
-	O3vnMNRE5JLJ0im8bj0OgTNdR8c3cE4hmSdS/NHxuSyFK50JsENa4Uj+n+vDEzwyYjjTuHJQIvw
-	qL48y/OL6rVLpGzp/zH0EeVI3ll7CxMlp3Aig77pS3xnej2cwcBgnsMGZJb76qU4xhC2q2MiOWX
-	dGAK6cVDFtw+z5vJfMAawp7cftFDen9h+HVE+CtHFTkZFEgSrS+45qcqLBNG9sIDElKAMgekuTY
-	A==
-X-Received: by 2002:a05:7022:fa7:b0:14b:1ef8:698d with SMTP id a92af1059eb24-1a944924513mr3514455c88.15.1793257768814;
-        Thu, 29 Oct 2026 00:09:28 -0700 (PDT)
-X-Received: by 2002:a05:7022:fa7:b0:14b:1ef8:698d with SMTP id a92af1059eb24-1a944924513mr3514415c88.15.1793257768069;
-        Thu, 29 Oct 2026 00:09:28 -0700 (PDT)
-Received: from hu-himchau-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1a760569d53sm12372655c88.23.2026.10.29.00.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 00:09:27 -0700 (PDT)
-Date: Thu, 29 Oct 2026 12:39:16 +0530
-From: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
-To: Anup Patel <anup@brainfault.org>
-Cc: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>,
-        Paul Walmsley <pjw@kernel.org>,
-        Anup Patel <anup.patel@oss.qualcomm.com>,
-        Yunhui Cui <cuiyunhui@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@linaro.org>, Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Alexandre Ghiti <alex@ghiti.fr>, Randy Dunlap <rdunlap@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Atish Patra <atish.patra@linux.dev>, Yuanzhu <yuanzhu@bytedance.com>
-Subject: Re: [PATCH v11 0/9] riscv: add SBI Supervisor Software Events support
-Message-ID: <auLxHK4g-_MvFyrp@hu-himchau-blr.qualcomm.com>
-References: <20261028165531.940336-1-anup.patel@oss.qualcomm.com>
- <CACnXVncwzQiUN9CO8_Ds7UQJEKzEF29vagsTFrC0WbRZXt7aLw@mail.gmail.com>
- <CAAhSdy1u4Tme=cv7pSyYeahh1BQhQOnsnWBn3D4yxTnfzrApPA@mail.gmail.com>
- <CACnXVndt7Rm3UqZH=T3xYjQ+1H-zPMgU29FcCOjJ2mtu=avoWg@mail.gmail.com>
- <CAAhSdy3WVmzEkG4fgTuXENcys_cWX8h6Hag_fYSkyOdu++iBBQ@mail.gmail.com>
+        d=1e100.net; s=20260707; t=1793258128; x=1793862928;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:dkim-signature:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9jLzekRfweOxfS5IGlV80TzxdnJe086CZWxz4tuDgGw=;
+        b=H2VjaGeLokKPfZnitgr6VFKqeel90sqYQjXEN0Pr8oh9uXglUUkpZY3/cGFGgQn1ay
+         dfZE61WiR3LbKAwCblUFQtdR0oedjiGMZo4/Z4EXy/SE8kap3Jwei8bV8nYIPJ++eXaW
+         BkmuR56ZDlxgJcs0NFnDq8/xm40U8gxEukanXUfLAObz06kVJFYGjoyzvhM7/LHzV7CB
+         FrQysM9Zz7bEo1MycBrXdEhoVsWutVbD+LXG1a3k77yDsQmF4Eu+6RUC8tXPA7y+3IHE
+         d1nfTxxa5g4eCzY+ffXgEIqUtkCBEShQj22eZi8Dfm7XIsn3YocKhRPcMi1f00HYnfCm
+         isng==
+X-Forwarded-Encrypted: i=1; AKwUvBz6+BXYq6VvDP3b8i1xAPX6wTqXr3O3wnlJBhjUJnyHFerfjNRg32qOEeTbo0Fvik+0tZY6X2FKwh7IhxDCrqw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKESgry9YAFCSxRcDReCSJyKjbmT/d5EWxkde+0tjJ0i3FYa2/8
+	bOETmyHYB5jI4Nj0g4qNhwGCuVPIBuRPXb6sMGNEjMycGGJ2PkC5ljkxXx9KqjmB+EkQ3SSkGX7
+	h5hFuG9StojB6H8ozur/KJx4KMT2geFoCq6LYFkbp21OgNAqVqfkxCKIVHwaRbhknMqtfJqgdLS
+	GKVOv+lgUtnXFzdnregJdEOkj8mtv+3Gic6HRo4yCb4IThP6g3rShH+ndhIkeua/zDhNOa73TtR
+	ur5UTIUlO/Q8nqeIDUMlw==
+X-Gm-Gg: AYBFou0IGIkGcXThiuDMI1VbbtnLuVs54QEcCa61+tq1Snm8O3LAvd6oypTLSsWNaE1
+	LlZzZpk7rfjXlRFSIftyTyg7gwcotFNdldtmk33o7RujLJkgXa0H8yBEEKwieUK4mR1itm6sK8N
+	ghbfmu5tJA9bvvph20yPhs1dZXRJrMmNPph1WbrCUB4D1xp312Qxdku6aWh1DsZ251YJ3b+Sb5Y
+	roqE6zBRKnt59a98B/zoxcuWnqYZRZVxrOPBxJ0FWD++zDg1zb4WuDZMAiyZT7gVFouPzlRVZ3I
+	C4IV0EvHNuK4YlKToIcQVaBIV4D0j+hkA5eRXoakdkWAapM17SaUoYLE63paumc6QqH4fP+c70H
+	rL+IMMf1dVH16QLggbr/o3/nA97BBMPIzUMRDYaTL93ZOI4rkCUUEHi7+FrEpxt9eaP4chXtRbC
+	7M92Gjb+sAZ1vrRWWLjhpTXFSK/R7aP+ahng==
+X-Received: by 2002:a17:90b:3841:b0:3ac:9259:1234 with SMTP id 98e67ed59e1d1-3ae58176ce3mr3515601a91.39.1793258128209;
+        Thu, 29 Oct 2026 00:15:28 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-28.dlp.protect.broadcom.com. [144.49.247.28])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3ae6e874b16sm1502066a91.6.2026.10.29.00.15.27
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Oct 2026 00:15:28 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2ea71803effso19116245ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 00:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1793258126; x=1793862926; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9jLzekRfweOxfS5IGlV80TzxdnJe086CZWxz4tuDgGw=;
+        b=IllslqUx+XU1gTLqjKRjzODwPaQuJR4xEu7bsA+T/RIDRF8o/NqhQSb299190TXY6N
+         Lbd4LaRew/4IH9It/TR1TtWpKH9GSb2pTYHowNQncl55Mi+lOvyShj7zBRxBPC2k/OpR
+         P2lQTe0FPLX7MFbj8IAjg29CHue3WGmIvdX5w=
+X-Forwarded-Encrypted: i=1; AKwUvBwEHwoZtwd7j5s+i43tGMFQsLQtqTD4BikqF4OIbeitJXXQJoOgDyXsluAsVb4huk0+FIueJPrRAzQ/hXqhKy4=@vger.kernel.org
+X-Received: by 2002:a17:903:3885:b0:2dd:ad73:5b6d with SMTP id d9443c01a7336-2eb0042b156mr42350835ad.29.1793258126223;
+        Thu, 29 Oct 2026 00:15:26 -0700 (PDT)
+X-Received: by 2002:a17:903:3885:b0:2dd:ad73:5b6d with SMTP id
+ d9443c01a7336-2eb0042b156mr42350555ad.29.1793258125845; Thu, 29 Oct 2026
+ 00:15:25 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -142,150 +98,163 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhSdy3WVmzEkG4fgTuXENcys_cWX8h6Hag_fYSkyOdu++iBBQ@mail.gmail.com>
-X-Authority-Analysis: v=2.4 cv=X4nHu2Te c=1 sm=1 tr=0 ts=6ae2f129 cx=c_pps
- a=cFYjgdjTJScbgFmBucgdfQ==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
- a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22
- a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=968KyxNXAAAA:8 a=lYWFnMbivg8TxhJFMxEA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=scEy_gLbYbu1JhEsrz4S:22
-X-Proofpoint-GUID: wHD2CXIzcQXDExpGOBj0MswuPxRcrVcF
-X-Proofpoint-ORIG-GUID: wHD2CXIzcQXDExpGOBj0MswuPxRcrVcF
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI5MDAyNyBTYWx0ZWRfX/ZEGsW9wZXFW
- HCfsks4LpT5vJDdKrCTMY6U1g9A/uODSfTeBtxtCrVgGTfE93hysesHi2+KwFc7HQuEF7jodNwy
- BxSzRVJyDh5TTCFRmfSRS4hjNJv4xoCw/r990WLtUF8pC5E5D6/odFDyftfBdVJ4jAJzkDTvuyB
- gJz/OfGToieMinqW6P4a5vq+3Xx0JQIpEOuzJLg3+ifwqXI1P0s0GTEJxdxwarvhKv0z8NQY8bx
- eSTa8llQ+EoV0tGStWhzXampgUlTY2Eb8eix+a3cnzopdwm84Wxsihm+sYlb9yVfqQisrfNnepJ
- DEpNsKR3N6aIK6rxdCm8aXvqZsyJleeSsqaFJXhk5Yevp8WUrFi/Zq1bWK6h1A3KESDZwMBurFJ
- +9SeEcv06SAIhQCLbGedGGy+Dj0mrceTPlMS6IfxBfC1FtviKw9BxYW1wUE/w6j2nFSHx5Z2YJB
- FJ7ILzgPHNB2sUtxE6g==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI5MDAyNyBTYWx0ZWRfX/DajFtJPdnC/
- f8D0BNFOaFDUEkP/T/97u3yx14qZOUePgmgl/cehnH17WiiI7bnAsMpFw7vDmsVg5TAfv9ql4iC
- v0GMM24YoLHO+hYE8gzi3lrJS7SCMdA=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-10-29_02,2026-10-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
- adultscore=0 suspectscore=0 phishscore=0 malwarescore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610290027
+References: <20261009-psp-v2-0-5596ab50f677@gmail.com> <20261009-psp-v2-4-5596ab50f677@gmail.com>
+ <CAPHeo3erVfzLE0wTmz4=0HKWdOL63+7W2KXO67OuEfRXhf_M8Q@mail.gmail.com> <20261028152950.6624ee83@kernel.org>
+In-Reply-To: <20261028152950.6624ee83@kernel.org>
+From: Kiran Kella <kiran.kella@broadcom.com>
+Date: Thu, 29 Oct 2026 12:44:48 +0530
+X-Gm-Features: AclHuK8DHaah1R1ZECZHg9AkA4F_fCsiPZH84nmo9xD4V-Igd_4si7RqHGYezzk
+Message-ID: <CAPHeo3c0RP34ASvzV3UrwDa4PvXHhuAOq1+-Bn0Z5+QXFV+BpA@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 4/7] psp: add core tracked stat for
+ outstanding tx keys
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Daniel Zahka <daniel.zahka@gmail.com>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Donald Hunter <donald.hunter@gmail.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000a30446065ef5719c"
 
-On Thu, Oct 29, 2026 at 11:32:36AM +0530, Anup Patel wrote:
-> On Thu, Oct 29, 2026 at 9:10 AM Zhanpeng Zhang
-> <zhangzhanpeng.jasper@bytedance.com> wrote:
-> >
-> > Hi all,
-> >
-> > On 10/29/26 11:17 AM, Anup Patel wrote:
-> > > On Thu, Oct 29, 2026 at 8:36 AM Zhanpeng Zhang
-> > > <zhangzhanpeng.jasper@bytedance.com> wrote:
-> > >>
-> > >> Hi Anup, Paul, Himanshu,
-> > >>
-> > >> On 10/29/26 12:55 AM, Anup Patel wrote:
-> > >>
-> > >>> [...]
-> > >>>
-> > >>> Changes in v11
-> > >>> ==============
-> > >>>
-> > >>> Rebased on latest for-next branch of linux-riscv tree (commit a5ae1bf65cee).
-> > >>> Also, tested PMU driver with both PMU irqs and PMU SSE events.
-> > >>>
-> > >>
-> > >> Thanks for rebasing and testing the series. I was a little surprised
-> > >> to see v11 posted, as I am still working through Himanshu's v10 review
-> > >> and validating the fixes on hardware. It would have been helpful to
-> > >> coordinate before reposting so that those changes could be included.
-> > >>
-> > >> I guess this follows Paul's request to rebase onto riscv/for-next.
-> > >> However, there is one change beyond the rebase that I would like to
-> > >> clarify: why does patch 4 remove the scoped_guard(preempt) sections
-> > >> from the CPU hotplug paths? These were present in v10 RESEND, and
-> > >> the local helpers still retain their preemption-disabled assertions.
-> > >> Is there a reason this protection is no longer needed?
-> > >
-> > > Yes, this is based on discussion with Paul yesterday.
-> > >
-> > > This series is blocking the whole RAS ACPI support.
-> > >
-> > >>
-> > >> The changes discussed on the v10 threads are still outstanding in
-> > >> this posting:
-> > >>
-> > >> - Preserve TASK_TI_A0/A1/A2 across nested exceptions.
-> > >> - Replace the temporary GUP-based perf user-stack copy with nofault
-> > >>     uaccess, following the x86 approach.
-> > >> - Address the per-CPU initialization/preemption concern.
-> > >> - Split the MAINTAINERS updates into a separate patch.
-> > >
-> > > There is always going to be new updates since it will take
-> > > time to harden the SSE implementation. All these changes
-> > > can be done as separate follow-on patches.
-> > >
-> > >>
-> > >> Additional fixes from Sashiko review, the kernel test robot report,
-> > >> and our follow-up debugging are also being consolidated:
-> > >>
-> > >> - NMI-safe entry and lockdep irqflags tracking.
-> > >> - The unused-function warning reported by the kernel test robot.
-> > >> - RV32 vmalloc synchronization before nofault fixup.
-> > >> - Faulting-PC validation in the kprobe single-step fault path.
-> > >> - Per-counter STOP handling in SSE error paths.
-> > >> - Ordinary IRQ CPU-PM notifier ordering and IRQ cleanup tracking.
-> > >
-> > > Same comment as above, please do this as separate series.
-> > > No point in holding all other dependent work endlessly.
-> > >
-> >
-> > I agree that we should unblock the dependent work. However, I would
-> > not characterize addressing a known, reproduced issue as holding things
-> > up endlessly.
-> >
-> > >>
-> > >> In particular, Himanshu identified the missing preservation of
-> > >> TASK_TI_A0/A1/A2 across nested exceptions [1]. Following his review,
-> > >> I validated the fix with hardware A/B testing: removing it reproduced
-> > >> corruption, while the fixed kernel completed the same test sequence.
-> > >> This also gives us a solid basis for replacing the temporary GUP
-> > >> workaround with nofault uaccess.
-> > >>
-> > >> Paul, please hold off on taking this version into for-next until
-> > >> these fixes are included. The rebase and PMU testing are useful, but
-> > >> there are still outstanding correctness issues.
-> > >>
-> > >> I will consolidate the changes and post v12 against riscv/for-next,
-> > >> with an updated changelog and validation results. Let's coordinate
-> > >> the next posting to keep everything together.
-> > >>
-> > >> Thanks,
-> > >> Zhanpeng
-> > >>
-> > >> [1] https://lore.kernel.org/r/as79MHtNYd-VbUug@hu-himchau-blr.qualcomm.com/
-> > >
-> > > Regards,
-> > > Anup
-> >
-> > I'll post a focused v12 before this weekend with the immediate
-> > correctness fixes. Further improvements can follow separately.
-> 
-> Linux-7.4 merge window closes end-of this week so your v12
-> will be too late for it hence I suggest sending incremental fixes
-> separately.
+--000000000000a30446065ef5719c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Oct 29, 2026 at 3:59=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
 >
+> On Wed, 28 Oct 2026 17:16:17 +0530 Kiran Kella wrote:
+> > > +      -
+> > > +        name: tx-key-count
+> > > +        type: uint
+> > > +        doc: |
+> > > +          Current number of Tx keys installed on the device.
+> > > +          Only visible if the driver stores keys on device.
+> > > +          Kernel statistic.
+> > >
+> >
+> > Maybe it is good to have a counter that denotes the number of PSP
+> > sessions set up on a device, which is managed in
+> > psp_dev_tx_key_add/psp_dev_tx_key_del operations similar to the
+> > tx-key-count. That way, even in non-SADB drivers the user can know the
+> > scale of the PSP sessions set up on a device at any time.
+>
+> AFAIR the thinking was to also implicitly flag that the device has
+> an SADB here. So this stat should probably be called tx-sadb-key-count.
+> We couldn't think of a reason to count the tx keys when SADB is not
+> present. Rx keys? maybe, because of SPI exhaustion. Tx keys - why..
 
-Hi Zhanpeng,
+Tx keys to just provide info to the user about the scale of active PSP
+bidirectional sessions (after the key exchange) for debuggability and
+for any other derived scaling/performance metrics.
+Especially for non-SADB drivers, where there is no device limit on the
+Tx keys that can be created (of course limited by the SPI exhaustion
+on the peer).
 
-I agree with Anup. IMO, SSE as a feature is ready. It will be easier
-for you and for me if the patches are merged. It has become a pain to
-send revised RAS patches because of the dependency.The issue that I
-identified can be sent incrementally in coming weeks.
+--000000000000a30446065ef5719c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-I would request Paul to pick up the SSE patches now.
-
-Regards
-Himanshu
+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
+ksPFF8lRQaSHMJFFWI2usTUpS9gKxRAuJyHc0xlNKy4vK2ZEic8RWs34T6LcL98JR51RaKtE0Dw9
+7F/uUf87z+/74aOyyxrTl58LlkxL/+1yMEHZhyn6z30LHQuA52TSp7uD3au8gu0YN+hKIsPBKVbs
+dzf/bW6eDpGSwgwRzqF2BcDBOUA9U2mB2cxinBxOxCVbYRy//Q46OuAx0pXw8trIkPDdp8kHAoWD
+7JxJ70nrdMy8VRmC02NQp185/6szeMFYLA0CAwEAAaOCAdwwggHYMA4GA1UdDwEB/wQEAwIFoDAM
+BgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5BggrBgEFBQcw
+AYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUGA1UdIARe
+MFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUFBwIBFiZo
+dHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDagNKAyhjBo
+dHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwIwYDVR0RBBww
+GoEYa2lyYW4ua2VsbGFAYnJvYWRjb20uY29tMBMGA1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQY
+MBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1UdDgQWBBS/iTArBeV9hFyyktvkwzGbaKne3zAN
+BgkqhkiG9w0BAQsFAAOCAgEAdavxLwcm6Kj3S7/bA/IO6B6MTHIndKyB630T3CTPeOeuHV7ZS4wr
+rDZbrSjERD36308lnaXSESlcu8LX2SKJ0KqNM3VQNTawSKS4wMXlyTzOBfaslsjtFiT4jQW9Py6u
+6nf1EVoQ6YTCGJ+htyKqFgIljJIdBBOvXY+gECh/DC+VbLUVK9CgZLKkFJ5udhYvw1tOc3zOXGOd
+kwaK7AtwRSLgNt5RSAaikL6bvU1kUWgITNKKhBK5F3CNUbR0hD/i7yG6Afdh27V1T7FEdV07fBbu
+3+AVnAdbZmHfnB2T8lHTaR9GbgkF6lG/a8I+eUG5NPrDEM+afXT7/+zOTjf799qoyhMdfgp90DEW
+9ukfyqfUq37ctBG4TdnDlxtkwy9XYw0Avotf2lrYy+6MYjt3cZFF+AF/F6ANk+Gx9zH5gyeUlruJ
++aqmP1U1lX/n2YEXAfiLJulbb3Jfi8lvyYzHXpHLIFtLfyVOzUXdGdj3dVxxFSPJ4uXmpk2SLExM
+W7+cvJ+PxSJyWK723U609whQmqbVRz5B49CjNt/exjWtBGGjCwLPMGNWbHbwtDVWcoZzE0KoL7EK
+VPB0t6uom5ElZ+qieZghO80tR/MW2eL8i+EiVMwq5GF1Ni3D6uypwZYqgdicI0YGj7JCgrIzr1kC
+xwtQkw5ij2CCUWXxadt/C9gxggJXMIICUwIBATBiMFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBH
+bG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBDQSAyMDIz
+AgxbhXTUwXZ3dIWSpigwDQYJYIZIAWUDBAIBBQCggccwLwYJKoZIhvcNAQkEMSIEIGcwqkj+U3mi
+aoCvdub6vykMH+1kJy8zmZGrREg/DpnMMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
+hvcNAQkFMQ8XDTI2MTAyOTA3MTUyNlowXAYJKoZIhvcNAQkPMU8wTTALBglghkgBZQMEASowCwYJ
+YIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAEtF6gMuoedB5mvPI5klbqdmEcuK6aXqkHbd4ClYIlHUe6j1
+/fZMCuuJ6iKf0NLQcOmG7jGMbmmbL2AVTGyGXTrAUcg2junlM0v0YFxjBlOQHZhqNAzb8n3794C6
+MclMfxXlVrobRt50nwpDeXvWV37aU5CORdZTZOH29Joy1VOGXPQhQWgqcjbxPQ1gNOsAg7tAuzGL
+Ds0IM0urLoY+VWn4dL2SKiwU12Rfs2zUOhf9TZ6psb7wE/CPSzINnZoUZtEaCzd6z3G5sDLepTZP
+tIhbMjZEQrg5xjX1ocNMGbTKxKxBiM8jnLgfq5hzvax+IcpIBPjn6oxjwMiF003/ssk=
+--000000000000a30446065ef5719c--
