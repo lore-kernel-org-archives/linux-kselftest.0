@@ -1,73 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.72.0.81
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793302109;
-	b=B1G27VHzgPKbZxOt/PCBTTyzx2PtfsO7Qy95D2ExkE7b82PVhkRCs+sLcvXmRQ1jdyVG
-	 fR9Oz5oV6JnRLp9WXJEiUg+f5c0I0VfBWICjQtNFEbqhzJvWgk4kZrYn/L76IsBts8cA/
-	 g/r1M7m0U9H+nA5zRtUyrdqtVPzyh1Be3vQcVcbWQvU1+4w6XZSB5a8bUHMFJe1AX3vP3
-	 j6y6yKNQQSHJPP0dwBHsbpPAaTgthJJ4Hisd/4nY9zMgk6KpW1XlXaAxljXyNnc6SUcIV
-	 NFqSCRVrHqdiNXA7+B/4R2rlt00Ik7iMD3hjngSPofVWcEcq5R8N/+uXlTmI2NB5e0w==
+	t=1793302566;
+	b=ecDuTzavMGXmGQ8W7GSrbYKuGVhVXz0Rpy+2duHaHKbhbRqkSsVzRLpyrtjEEMGxmsij
+	 HHZGE21xvHmyx2YXfAkR52AC25Eet/8yL+UB5AvvKEC23VlsEgj6vlWZNywGbbwIE5sUR
+	 ptthUUxWurV6jSTzACsFMJ2ItvXsedRogpqg+xt1uNHllOVG96x5Bxdm5fKpFX9r0zwhc
+	 MbTKFvkw1xjEfjqDUmB6ocry8eCwjwePMYIjfhp3zzMhgPRgtr7rrQCf1aCxiGaXJmcYH
+	 Hrys0XEFIGwsNX3UeJ8c/imkTCyfsCoyhAKijkYGVCF7GwSfHA0koMvoWkuBFoIWUtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793302109;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type:Content-Transfer-Encoding;
-	bh=l0+5ubFd1J4lsWZ084UYpuCIbDZPJCuWoPpCJ9/g/fE=;
-	b=dBCEsI+tnnlpP9y+yjZd1S5YG2OPExKJlMR57j8ZXLLED2P9FJq7VhYwxo1e7WE9GoCQ
-	 +6ZJiZubL8/slx3BKQ0Qs7q5R16oIkxl8P0CUmN0dvDX5EOz71Ea5v4KQnY48jzzIGuxD
-	 JQLugwn+LcIGZBFw3W9Byif8XoXFcfRfV1SaHDRKtbUgBM9mjSMgRjfRLUJ4JufSRvIo5
-	 4BWZzdXmHLKmsUCIrpyqFf52ajv9wBXG9Z0WDSPUfPbDxul7WpLz5xQ2Hpq4GeZ++T0jy
-	 X1NEiohruTPLo7dtYGvTgdcXgbITVJWVFM346hFJ/cj6rBPlVNeN5IY3mmU8LP4ZdQw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793302566;
+	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=Q4H5t+eODJaHqBUAWhEmblQLDww9KM17vWg0h8HbPP8=;
+	b=Uv352I4Thnl42Np+reQmMXMQSxoQb+k/2B0pyZhXjtBvg5vvvVWUlohiXJN512ery8pn
+	 Bg1NACFiI7xlnmRqg3/2CFPqiDQCPhXneDl9WoTgnBE1u/q3clgPnMmE+7Dc5lN1GlVK3
+	 gvGL6ci/9ysIk26ICt9O471QpcrrPkXttAAW6fq2+1/br/fVl7XOaDKyHn9PSkMLusfN9
+	 4KfpwMDR9xHfpFEB2T6If+QmoDK1Hfc9teLdu8CMYnVLPpzlE8alK8JLUJjUjPDEv9Yu5
+	 AgVb/V5Hdv+/PsHyN8HTEeW9c+wIzXxKYgY4XX6th5gwbHkY3izR+46wQ/pZvNdlIRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RGkwUZO4;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=gentwo.org;
+	spf=pass smtp.mailfrom=gentwo.org;
+	dkim=pass header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=I7Fv9Qde;
+	arc=none smtp.remote-ip=62.72.0.81
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BBE3606A31E;
-	Thu, 29 Oct 2026 19:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A151E606A320;
+	Thu, 29 Oct 2026 19:36:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A151E606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RGkwUZO4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BEB1F01825;
-	Thu, 29 Oct 2026 19:28:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793302108;
-	bh=l0+5ubFd1J4lsWZ084UYpuCIbDZPJCuWoPpCJ9/g/fE=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=RGkwUZO4lk0dRv+GCt6hx+Fa3JOBxQ5LpFilAhtlj+7EgNtaLZsNIsmN7bBZoimWF
-	 mbYVmeEC6H8Wal5rW6OFzXmN8XqQHluMk/wmMoiH7gkBHSF8eJ0ss1U8W/vFZnIjY0
-	 J9etYb5B/EbNd0+VKAQdCBGYywn3pjsITdP8ljx0ZZjnWMLsh/h0q2Xmya5JARAT/e
-	 G/03IGzogJXIVC6ACnxCg2WckjZFCOVBszefNj4FOk0Kp3mOnXAtdZz/E2F9FSisRn
-	 k/+IkAHFs4FpgJkfprKkYtiyXUKTuK6I+YkkcS8nHysmEKvq/kQ9WUkcGsmDERCUYJ
-	 yxpeOhPFPCKQA==
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 84372198003A;
-	Thu, 29 Oct 2026 15:28:25 -0400 (EDT)
-Received: from ams-imap-11 ([10.64.2.31])
-  by ams-compute-02.internal (MEProxy); Thu, 29 Oct 2026 15:28:25 -0400
-X-ME-Sender: <xms:Vp7japqDDH7MTBpj2o1_0HawlWVyvY0FOU7D8Nd9IguEUhdaix0NLg>
-    <xme:Vp7jamc4F6MAAJVzCkF6_bNAJ-7k-8SOvhUA7n3HuyFOvMyH0BMFlNP5K3bDlVkmU
-    _MmSSbFPwfBRpUeSAyALsDRKfHwP5svjvMMMnJX_-T0oDwT3xHlOQ>
-X-ME-Proxy-Cause: dmFkZTEUgvLRPruJWwMD4Akvs3ZiKwYmL4oDztPDoA8hrr5wiy3BkBr/L+J8ffIc495+a8
-    sVhiVVtwPIuNAOKAlOpndG4mY3OFBA0yxH/iDkko4Iw92VWlZpDVx91SpbqSTdnJwCsCmq
-    fNWy+5fryrK9SVPiry0Lo1zBi6buqOp0lcoqLNhSe+EeqeBh3swNKQj473ROSt/e3Q3YzT
-    Y6Vqe3oHE7LWnGQ7fdLxgfCMkC2+Mben6NfQDOT8lpSGnMgUR7e0byjD60bSFe5B3Hne7U
-    w5Gfiok6+D9TuVISthJHKLQtTSjEFU84bn3lh0P6LFT1Swa09hrw4mNbqBD5zejN/EOIVm
-    llqnU5WA+hypRMru22igAtp2EarCpc/fa5olztzEdkS0JpQS4cjmX6GqUrUxqz7IITIK4z
-    K3yxyQbcBGMl04ZmpOqisSGPU9G/2asCSPnYRTSQLv5jInUHP/+yzOxTPG2wbvC9GhIS8Z
-    nwAjnIxctRgMiScIn7m6OoJIyndLKBXCkesgX55ummn8NiOto5buDBM9zYGYlz6iHP3oCs
-    7guFdH0nVF56k6/788zHoqITj7rHth1rQqq8VphlCPUZPp0f0Tf2V7S+aum5FfPDPzLsPo
-    sw2J/w3694XUXfHo/Js1a6n736sSGucGslN4UA8hN96a5+o4rLIesRyiQSiw
-X-ME-Proxy: <xmx:WZ7jam3_6jP7JYZKi7_ncq2u7jb1GraqdICHIIEXhUjfDVgazjJ8Gw>
-    <xmx:WZ7javjQ0EQPb0oalPZ_Y84GSb9fuBCm5hcsd0-_BmBh8nf4QJ4h4A>
-    <xmx:WZ7jasZ9VmdjIbSXaeztyyyt16GVwnJztwEObzWgR8yzA6LOMR-XqA>
-    <xmx:WZ7jagN_FdpPrbKtzGVUnXth4ieCquH3vlgtCHvjBwW2p6cxqSnNgQ>
-    <xmx:WZ7jaoR32XkuWPNxMvWbVBj2VFK7d4bzjxxEq1WJNsRrSY-uXsbr36X4>
-Feedback-ID: ice86485a:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id F28D7F80093; Thu, 29 Oct 2026 15:28:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key, unprotected) header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=I7Fv9Qde
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1793302559;
+	bh=IF87MDnSXrW+lYPzzhk7yjJ+lXPArYF61Deoz9hSDnc=;
+	h=From:Date:Subject:To:Cc:From;
+	b=I7Fv9QdeVydbmcUPByzLLR5JuTPgdyloTvDuidZeaGUAmRKJmzmIT5Se8W1V39mfS
+	 /OtKPpfvoRR3W9hNqPfrAlvrpqyvaOiFM0FU3XmKqEKMCrz7xnEzE8+5AwIxBtykPm
+	 sqpACwYIt+f4bu2qm/iCavcCKE3mwxdao0LQaQRw=
+Received: from sut02sys-r112.scc-lab.amperecomputing.com (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTPS id C9E3D40112;
+	Thu, 29 Oct 2026 12:35:58 -0700 (PDT)
+From: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
+Date: Thu, 29 Oct 2026 12:35:50 -0700
+Subject: [PATCH v3] ipc/msg: fix msg_qbytes truncation in IPC_SET
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,60 +55,228 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Thu, 29 Oct 2026 20:28:01 +0100
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "George Guo" <dongtai.guo@linux.dev>, "Mike Rapoport" <rppt@kernel.org>,
- "Pasha Tatashin" <pasha.tatashin@soleen.com>,
- "Pratyush Yadav" <pratyush@kernel.org>,
- "Huacai Chen" <chenhuacai@kernel.org>, shuah@kernel.org
-Cc: "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
- "Andrew Morton" <akpm@linux-foundation.org>, baoquan.he@linux.dev,
- ruirui.yang@linux.dev, guodongtai@kylinos.cn,
- "WANG Xuerui" <kernel@xen0n.name>, "Alexander Graf" <graf@amazon.com>,
- liukexin@kylinos.cn, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- kexec@lists.infradead.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
-Message-Id: <2382a0ee-cb6d-4572-be6e-ce3cf4d006e5@app.fastmail.com>
-In-Reply-To: <20261029172956.20791-2-dongtai.guo@linux.dev>
-References: <20261029172956.20791-1-dongtai.guo@linux.dev>
- <20261029172956.20791-2-dongtai.guo@linux.dev>
-Subject: Re: [PATCH v6 1/8] efi: Pass KHO state to the next kernel in a configuration
- table
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20261029-ipc-msg-qbytes-v3-1-fc3f4307c85b@gentwo.org>
+X-B4-Tracking: v=1; b=H4sIABWg42oC/32MSw6CMBQAr0Le2hpe+bWuvIdxYaEtbyGFllQJ4
+ e4Wdi50OZPMrBC0Jx3gkq3gdaRAbkhQnDJo+8dgNaMuMfCc15jzhtHYsmewbFLLrAMrpcJKFth
+ WqoYUjV4beh/D2z1xT2F2fjn+EXf7cxWRIRNC1p0q8waNvFo9zC93dt7C/or8f89TX4pOmIYbL
+ Krvftu2D33uOl/tAAAA
+X-Change-ID: 20261027-ipc-msg-qbytes-49b15931c5b6
+To: Shuah Khan <shuah@kernel.org>, Lu Shuaibing <shuaibinglu@126.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Shubhang Kaushik <shubhang@os.amperecomputing.com>, 
+ "Christopher Lameter (Ampere)" <cl@gentwo.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, 
+ Manfred Spraul <manfred@colorfullife.com>, 
+ Jan Koester <jan.koester@tuxist.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ stable@vger.kernel.org, "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793302558; l=7105;
+ i=sh@gentwo.org; s=20251010; h=from:subject:message-id;
+ bh=IF87MDnSXrW+lYPzzhk7yjJ+lXPArYF61Deoz9hSDnc=;
+ b=lboZtgg0Qa3KJETmsvMvZGd0acv/vsc/TuhfKLs3dWxW4e9vSPbwJYzDsQVBCHXtQNJEaIxNf
+ OCpvK2Uz1jhCk7HmpdxPOtLtY4NT19WMjlv47bxAnzC33882DnCy/rq
+X-Developer-Key: i=sh@gentwo.org; a=ed25519;
+ pk=jc8YIRvxPSyJaBRe5y+a4N0RXKBUEcAh8+OFhlROXPY=
 
+The msg_qbytes field in the struct msqid64_ds userspace ABI is an
+unsigned long. Commit 889b331724c82 ("ipc/msg.c: consolidate all
+xxxctl_down() functions") passes that value to msgctl_down() as an int.
 
-On Thu, 29 Oct 2026, at 18:29, George Guo wrote:
-> From: George Guo <guodongtai@kylinos.cn>
->
-> KHO has to give the next kernel two addresses: the KHO FDT and the
-> bootmem area list. arm64 and riscv put them under /chosen in the boot
-> FDT. LoongArch systems booting with EFI and ACPI do not require a boot
-> FDT, so KHO needs another way to pass this information.
->
-> Add a Linux EFI configuration table for them, under
-> LINUX_EFI_KEXEC_HANDOVER_GUID. It points to a struct linux_efi_kho_data.
->
->   - On a cold boot, the LoongArch EFI stub installs the table, zeroed.
->     Each kexec'd kernel is given the same EFI system table, so it finds
->     the same table.
->
->   - In early boot, efi_config_parse_tables() reserves the table so
->     neither the page allocator nor kexec segments use it, and calls
->     kho_populate() if the table holds KHO state.
->
->   - Provide efi_kho_update() to update the table before kexec. Map the
->     table during boot so updates do not require allocation or mapping
->     at panic time.
->
->   - efi_kho_table_found() tells architecture code whether the table was
->     found at boot, so it can turn KHO off when the table is missing.
->
-> Only the LoongArch stub installs the table, and only with
-> CONFIG_KEXEC_HANDOVER. Elsewhere there is no table and this code does
-> nothing.
->
+On ABIs where unsigned long is wider than unsigned int, this narrows
+msg_qbytes before validation and assignment. For example, an
+unprivileged queue owner can request msg_qbytes = 0x100000000. The
+conversion to int changes this value to zero, which passes the
+msg_ctlmnb check. IPC_SET then succeeds and sets q_qbytes to zero
+instead of rejecting the requested value with EPERM.
 
-Can we handle this as an arch table then, and handle everything in
-the LoongArch arch code?
+For callers with CAP_SYS_RESOURCE, values with bit 31 set are also
+incorrectly sign-extended when assigned to q_qbytes. In particular,
+UINT_MAX becomes ULONG_MAX rather than the requested UINT_MAX.
+
+Keep msg_qbytes as unsigned long through validation and assignment.
+Also preserve its type in ipcctl_obtain_check(), which passes it to the
+unsigned-long audit field.
+
+Add a regression test which drops CAP_SYS_RESOURCE and verifies that
+IPC_SET with a value above UINT_MAX fails with EPERM where unsigned long
+is wider than unsigned int. Skip the test when it is not, capabilities
+are unavailable, or System V message queues are unavailable.
+
+Fixes: 889b331724c82 ("ipc/msg.c: consolidate all xxxctl_down() functions")
+Cc: stable@vger.kernel.org
+Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
+---
+Changes in v3:
+  - Correct the analysis: msg_ctlmnb is unsigned int, so UINT_MAX is
+    already rejected for unprivileged callers on the unfixed kernel.
+  - Test an unprivileged 64-bit msg_qbytes value above UINT_MAX, which
+    truncates to zero on the unfixed kernel.
+  - Skip the test on 32-bit, where unsigned long cannot represent the
+    regression value.
+  - Remove the incorrect queue-limit-bypass and memory-exhaustion claims.
+
+Link to v2: https://lore.kernel.org/r/20261027-ipc-msg-qbytes-v2-1-48d8f72f1359@gentwo.org
+---
+ ipc/msg.c                                   |  2 +-
+ ipc/util.c                                  |  3 +-
+ ipc/util.h                                  |  3 +-
+ tools/testing/selftests/ipc/Makefile        |  2 +-
+ tools/testing/selftests/ipc/msgctl_qbytes.c | 84 +++++++++++++++++++++++++++++
+ 5 files changed, 90 insertions(+), 4 deletions(-)
+
+diff --git a/ipc/msg.c b/ipc/msg.c
+index 62996b97f0ac2137dfc2fa109394d6db1fcb4a0f..116126f1235cd6ce9b819cfd317ef039071b95ca 100644
+--- a/ipc/msg.c
++++ b/ipc/msg.c
+@@ -399,7 +399,7 @@ copy_msqid_from_user(struct msqid64_ds *out, void __user *buf, int version)
+  * NOTE: no locks must be held, the rwsem is taken inside this function.
+  */
+ static int msgctl_down(struct ipc_namespace *ns, int msqid, int cmd,
+-			struct ipc64_perm *perm, int msg_qbytes)
++			struct ipc64_perm *perm, unsigned long msg_qbytes)
+ {
+ 	struct kern_ipc_perm *ipcp;
+ 	struct msg_queue *msq;
+diff --git a/ipc/util.c b/ipc/util.c
+index 1737d776bc089e27495e810569bf302069db3712..c435b2d93a12e92e930358a8bc53a06314d065f5 100644
+--- a/ipc/util.c
++++ b/ipc/util.c
+@@ -718,7 +718,8 @@ int ipc_update_perm(struct ipc64_perm *in, struct kern_ipc_perm *out)
+  */
+ struct kern_ipc_perm *ipcctl_obtain_check(struct ipc_namespace *ns,
+ 					struct ipc_ids *ids, int id, int cmd,
+-					struct ipc64_perm *perm, int extra_perm)
++					struct ipc64_perm *perm,
++					unsigned long extra_perm)
+ {
+ 	kuid_t euid;
+ 	int err = -EPERM;
+diff --git a/ipc/util.h b/ipc/util.h
+index a55d6cebe6d3b0974548a497fcb889248aed0f87..55a76f94667cd4bb248fbcea26323db8d2778a44 100644
+--- a/ipc/util.h
++++ b/ipc/util.h
+@@ -180,7 +180,8 @@ void ipc64_perm_to_ipc_perm(struct ipc64_perm *in, struct ipc_perm *out);
+ int ipc_update_perm(struct ipc64_perm *in, struct kern_ipc_perm *out);
+ struct kern_ipc_perm *ipcctl_obtain_check(struct ipc_namespace *ns,
+ 					     struct ipc_ids *ids, int id, int cmd,
+-					     struct ipc64_perm *perm, int extra_perm);
++					     struct ipc64_perm *perm,
++					     unsigned long extra_perm);
+ 
+ static inline void ipc_update_pid(struct pid **pos, struct pid *pid)
+ {
+diff --git a/tools/testing/selftests/ipc/Makefile b/tools/testing/selftests/ipc/Makefile
+index fad10f2bb57b0f06f0c741fa89f0489f6952eba6..930a334747a6353c86bebe1f4a521aeee3fe8228 100644
+--- a/tools/testing/selftests/ipc/Makefile
++++ b/tools/testing/selftests/ipc/Makefile
+@@ -12,7 +12,7 @@ endif
+ 
+ CFLAGS += $(KHDR_INCLUDES)
+ 
+-TEST_GEN_PROGS := msgque
++TEST_GEN_PROGS := msgctl_qbytes msgque
+ 
+ include ../lib.mk
+ 
+diff --git a/tools/testing/selftests/ipc/msgctl_qbytes.c b/tools/testing/selftests/ipc/msgctl_qbytes.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..5549229a25eb6852898fdb6cd8e89f9db78444dd
+--- /dev/null
++++ b/tools/testing/selftests/ipc/msgctl_qbytes.c
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <errno.h>
++#include <limits.h>
++#include <linux/capability.h>
++#include <stdio.h>
++#include <sys/msg.h>
++#include <sys/syscall.h>
++#include <unistd.h>
++
++#include "kselftest.h"
++
++static int drop_cap_sys_resource(void)
++{
++	struct __user_cap_header_struct hdr = {
++		.version = _LINUX_CAPABILITY_VERSION_3,
++	};
++	struct __user_cap_data_struct data[_LINUX_CAPABILITY_U32S_3];
++	unsigned int index = CAP_SYS_RESOURCE / 32;
++	__u32 mask = 1U << (CAP_SYS_RESOURCE % 32);
++
++	if (syscall(SYS_capget, &hdr, data))
++		return -1;
++
++	data[index].effective &= ~mask;
++	data[index].permitted &= ~mask;
++
++	return syscall(SYS_capset, &hdr, data);
++}
++
++int main(void)
++{
++	struct msqid_ds ds;
++	int msqid;
++	int ret;
++
++	ksft_print_header();
++	ksft_set_plan(1);
++
++#if ULONG_MAX <= UINT_MAX
++	ksft_exit_skip("requires unsigned long wider than unsigned int\n");
++#endif
++
++	if (drop_cap_sys_resource()) {
++		if (errno == ENOSYS)
++			ksft_exit_skip("capabilities are unavailable\n");
++		ksft_exit_fail_perror("drop CAP_SYS_RESOURCE");
++	}
++
++	msqid = msgget(IPC_PRIVATE, 0600);
++	if (msqid == -1) {
++		if (errno == ENOSYS)
++			ksft_exit_skip("System V message queues are unavailable\n");
++		ksft_exit_fail_perror("msgget");
++	}
++
++	ret = msgctl(msqid, IPC_STAT, &ds);
++	if (ret == -1) {
++		ksft_perror("msgctl(IPC_STAT)");
++		goto out_fail;
++	}
++
++	/*
++	 * Without CAP_SYS_RESOURCE, a value above UINT_MAX must be rejected
++	 * rather than truncated to zero.
++	 */
++	ds.msg_qbytes = (unsigned long)UINT_MAX + 1;
++	errno = 0;
++	ret = msgctl(msqid, IPC_SET, &ds);
++	if (ret == -1 && errno == EPERM) {
++		ksft_test_result_pass("IPC_SET rejects oversized msg_qbytes\n");
++		msgctl(msqid, IPC_RMID, NULL);
++		ksft_exit_pass();
++	}
++
++	if (ret == -1)
++		ksft_perror("msgctl(IPC_SET)");
++	else
++		ksft_print_msg("msgctl(IPC_SET) unexpectedly succeeded\n");
++
++out_fail:
++	msgctl(msqid, IPC_RMID, NULL);
++	ksft_test_result_fail("IPC_SET accepted oversized msg_qbytes\n");
++	ksft_exit_fail();
++}
+
+---
+base-commit: c339f4010dea8b0d754f84ace70cd1b089878ef8
+change-id: 20261027-ipc-msg-qbytes-49b15931c5b6
+
+Best regards,
+-- 
+Shubhang Kaushik (Ampere) <sh@gentwo.org>
 
