@@ -1,101 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.44
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793312201;
-	b=WxC9BfqFIhTu/Vy+xPSJ1q/N1trlSJcVEnF7sXIJuGvxIUwK5Y6ysFSmOEZrTuqlVd+F
-	 rD2UQLy1uXUlzqhzYdn6kH1b0stE07AdC2CvklRrGvgboBwGsgCPxUyuLiphfvc/lbqN2
-	 dqaVhxn7fujUBLOvScFaoWh5QHW64iqxz3erNKU1uwm0+++wJDLLpqKQo2t8XOCO6ui5/
-	 Qf2JV4hnAILeyHyW1Pw6Q3ckjjBS1Jv13xQw00+LuS6clK0KeNXmix6AlbE6dyxKH83BM
-	 w1thc0dLRX37qGykVDK9zoMBSU5sVClr8qKgZW1wQtKy+kvB3IKDu2bxj9JEL1skKHA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793312201;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793312232;
+	b=KjETEt28rAR/GEYhDRPbE+hPulVQNNGYWne+XmkKQBzWkN55ptGqgInwJtnY53sNzV8w
+	 TJ+FZWpOWMxzDdRAgLKkDJYfM0aPoo3uNECtd9eZf/NrdlNF7HmsJDa92S2s14Xyb2+Ob
+	 qZrFJw6u5ToY7125PP5DWMOQ6x/R9s9CJXvaorhbVlO/hg4cY9B1DcFTLW55Hw1RMt6Nl
+	 zFPQ8TkowKH4ooT7uGebJ/sEYLSBolhalZ+4GGblBl/3pmqjpMsqW+Xi7HV2izcTyzC4/
+	 tfgKN7uPqbdqdEr3o4+SoGYfRBRDJBIvD+MzegXxe9CHNVowtt+XpiQ+0s8qAIrq4Lg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793312232;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=koZpx6vqHKuQYrxobP/d4PhoSM1zd0NfzqrWj5/V+0E=;
-	b=kezs+3WnGCEblfPIt/MEzKzGJvRUcvi80mV4zHKsIeRjZLoYc/1h71ZAdzrUWUUfxL9W
-	 7JBjtuqdUcdUxok3UPpEPWl7KsG9LTTdPrL0kJFvlPR8+JQL0oZirmwLjg8Wb3AFQgsfw
-	 M/V2QKlGqjKp5Y/vbRFf7XKmMNN/tY/BxUupQ0fkIuybnsb3dzwYPbMBbV9DaBTZio7kD
-	 XOJ3++bhWZmWdIvD0LN+b3mFLjXoyXBAJ0WY4CmryyNriImityPBl/V4UN29nXk/LtqSP
-	 AtaDZAJq6A+oVB/VHqk6fgngU54/jgGsw01YjIji04VP0s6s+3iuaOTZWJ7O9haq3hg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xr2L+YSV;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=2Se0uP/IHXwPO2mC7ObXg6kU02G6XXq9OxfYgp8eCAI=;
+	b=qBHR58UDyFgV9jNap/ahIZ98i1iNj/TPueWRglk4hkrZ/E9L+BdNhULkqn+3Exf+29zE
+	 iAWYZKvH4QeWGYreuRMv9FuAoWfwRfBtZXo3+GjOX+ctr0CvzJVB51/n3V++2sNCdSdJ5
+	 ENWKHsrzFI/gMc/+CCXKhNt6D5IVlyabImDGU5gWh/WUDZbD5OiDUVQiD4nRyTk5y2D+r
+	 bY4/gfWmZ0qjxc+8PHlMwO0J3GG2QUfrZjrIEDNMtxrrUDMhhVhkvtLOaw4izqUYzZ1Oh
+	 LViYkS6kuODB/3NySBD7sNJNyQTCnsWfBsdfnknX4frmIA+GG+EzpBlfOf8e9aFq9Pw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=f2dFy6M5;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D662B606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 22:16:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D662B606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4B9606A31A
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 22:17:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A4B9606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xr2L+YSV
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ab98332238so33515a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 15:16:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793312200; cv=none;
-        d=google.com; s=arc-20260327;
-        b=l/bV+lMWxoRNwjzcBfXxK9sPxUKxe0MQ8E6GE5rEplFka/BEkbnWE2YYTuExLOcD5c
-         YkUWNM0FGXk6gfV4b2b/07f3U1dhN8AfzPtGCC1OUWe3Vr5f6jCTUxIPgyj67UH5hkft
-         KTPIhHik1PCc/n6nSlAmduh/c8uLbsWEhWpLvmD0OLjiX3F0+uPvunhmJWl7QaIDFSO/
-         ZxM9MmteatIHdivRNOA0YuuOBON4Pi1fEPSg6zOkkQ6MMjQZOEvLnerqB4rPcl3EyNCM
-         TLm9OmnIY515XVDD4EW2eE+3xW+hM0JmzdKkQMyy4sKvqSu/0nSmV6bBmKp/snujQPnF
-         Ladg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=koZpx6vqHKuQYrxobP/d4PhoSM1zd0NfzqrWj5/V+0E=;
-        fh=IX5L6oENbelwwk1icWYv2xFLLhIk7UPB/5Rkz2aTPvk=;
-        b=sGGeg3DZ4q4kZ3ibmEIuk3pbTbWzf2kHgxvp0etx8OJqhWAfkK6jNlu0VxvH3C+wZU
-         A4bqfo5cfCpHBorbzglyJnc95cp92jvAMn79YY9D9UWzD5k+PKduPZl1UUbaruirlzvA
-         O9edZdgXR4E6OuziLhFDb900Rbr1D1rrOxgEMc0KOoNvemoYXlVAdtL4QNY13MrIRFtY
-         Osuae9imoHFxEi5KRSGij0ZmjOU2R7ulxVmTXE+LWfsla4ZVIb+LZc+C9hPMgFurWif8
-         NkQlT5TD7AIU+FGiwK7IRkAcSYy80wEQ+OmWqdtmogiWlzo4fDEy0v8UAaiaaYOqnASz
-         /Zlg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=f2dFy6M5
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2e942b1cc86so1220525ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 15:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793312200; x=1793917000; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=koZpx6vqHKuQYrxobP/d4PhoSM1zd0NfzqrWj5/V+0E=;
-        b=xr2L+YSVfPIi5bsK0sQduGMgmae01aKgXSUseaJikh3GJOXYKaCpT7MugONeWoy1Wy
-         L0fdYaceEriICAikAcMys9iLe0NuSQyGQTELjt2Ft54mZK0Ea2rsg22LaEwXUnKKsovd
-         kL7PGxEK47e2qujKLsgE9yrTo5lfZKx8nHxgb3r/PIxi0YchvNvUoe5g+rWm0xrJEUse
-         9DRaJt4wWvOsq/laKci0C89PCBiI5SJb3D52TcFto6hBRRY+AOb0prFHVuz6lvt3uQIn
-         O911UfpGGIIYXaSbBrKrO1+qB14+el9UMLEsR0DWmN+bb465NXDjwcUKwy1uZCPx7BeO
-         Va8Q==
+        d=google.com; s=20260707; t=1793312232; x=1793917032; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2Se0uP/IHXwPO2mC7ObXg6kU02G6XXq9OxfYgp8eCAI=;
+        b=f2dFy6M5D6i6UQWOf0dn9Bg04pSuwldRny+4ugbOBuBGOqGwcAMckavLXEqoMbDhTM
+         fQrzdc04feDEPFDvPkWdD9UNwMFvHF4RT+U8Ya05utIUJi+4YA2nN//Wz3uYD95q0rMp
+         rO5jNYZJuiClQ1TEXTXwMXSDPaVwKgT1JOrpK2Wg4EnRBNkQwylCC5carZwCVU0LfN2t
+         jhx/0YskAOOo6s233vKmBBA2njmYX9LJmZag7wW9zQrYCFgCuTCPTz54eYeX/Xk5LGYI
+         zNmN9AO3RP1SGnQ+YOzuZOrLN+yygBb9oR8iV7GLOjG4WCsVkiqzey1iV7LNvxq6H+V4
+         CwNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793312200; x=1793917000;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793312232; x=1793917032;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=koZpx6vqHKuQYrxobP/d4PhoSM1zd0NfzqrWj5/V+0E=;
-        b=Xn7+0AujyRU3GUdXMjozc7O/Y4XzUrWEm+38L9wFwoAdbw73SpmY6pndZGEKlRem2m
-         9VlQTteGQZiN0hc+cz5WbX1c7n2b5qUdeOTviGCdW/P9SbT8LCVy2SijoPaHCZ+r/bA0
-         UTMDMkD9DZ5l/nc7KNWB15BGVkauVXe99ri1Dj6v4otoDXGmtR8OrdHi84bGB7XB78ks
-         DCwfCAb6CK6QO3S6Gy6mAPaAMkoc53NQYk8WOKU6GbmMkpwTrX+DKD/dv2RXdqMibY84
-         cow4A5YFZM4GH1l+gHKgsN5Qt+efZeZYnps2GwDz3FVRMeSg41ZduO3EMP5m1Z4Ti+XK
-         em1Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwz3OvGkqT+svZQeNDnk9IcKSu1BJp7TAtHfKRN9BEgVw+hMKxc0rdRTMrZNsKEoRnF2rP/+ndrducBA1Kfcxg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIZc40eaT9FocAjfFPSUbzITkLvpsmVIgCpedBYfrT5WkVg+GQ1
-	GWeJFy1T68Kk5jSmYCHHgLSXdiZy+Dk/onSbQWYd6FR57vqGuu+mqq/H60yuPKhgzjaHz4zrGcN
-	9f3L6vtb3V5s8M6bDgh19HlTNhIlGwQc=
-X-Gm-Gg: AYBFou3BooidZ/GrC7AkiHHLbCuXIaBTmcU0ucJaEQ9w9WpmRkHKO89YolM1T2Y1JVt
-	lGJ0HDpU1lGVvvAEzpWKhy8SIgAxwp9gC1txUIwTXPAbzklywEQQOAANf9w/ywStHhtTmAyL1MV
-	91l6BHZl1vXBg99AP5w3bUNr0cUclIKhd8D5omBE/tFLlDtDAAG0ZTT/S4u1RCxCMZqjJr+9CUQ
-	MK01Pbz+sJbrmWZ29khdJAvxaHE9vaODkUsZs/fgrcI3K8nw1vb4Bs9BO/+MYxZNds446smJK7y
-	Ob/oDix9s0ueG5fl+D70srHnrOWk5YotpvphUUInKwkXdXd4NsdoMH4zNIFFjEOdw/A5dj8GYjI
-	GRHhcqaPIdE++IkQeWPY/6cgXt7WfktQFDdx4JD5/A7m42Cqlt9zxFP9v8EoXzsUI4R0rMPsbZu
-	cCp/ResnX8AOndVvKk7QXqe50myhnDyy9OoQ==
-X-Received: by 2002:a17:90b:380c:b0:3a7:250:333e with SMTP id
- 98e67ed59e1d1-3ae896f8315mr277145a91.11.1793312200139; Thu, 29 Oct 2026
- 15:16:40 -0700 (PDT)
+        bh=2Se0uP/IHXwPO2mC7ObXg6kU02G6XXq9OxfYgp8eCAI=;
+        b=Lzxs2ozxij4bFFYotUorVtbwC8ceMjCnjXWWrnumPEvpyvK96AE1wS+8VuE+zdgEjG
+         Z81LnpU9PlGx9AvoQ+Xk0MtnyglRcyxcOGnDCqeTB4S8J2iqLeg3zPWNGrFFeLMMCmPP
+         4BcmzTWtj9U7qUkC5dkpgzLiztLPSiLBHiIsjNnBfiz+HM1Suv2tsOFdSn35m8AR7JDz
+         NqqzeE3BjmUUuPX6PMFk21k/HzTdrZl2C0J8kEongGhUNwWNB0dFtCh6BQulriVh58P/
+         IrhzX3Im0N3f0CoZ3SsXofoiqawGekukfaaQ2Ps/UjWFb+7HDttu3tBkP6ipa18PlMoj
+         sPig==
+X-Forwarded-Encrypted: i=1; AKwUvBwev5tCqMDr400ARB/g0Z8CoAZB3j3sCFdOxrq+4nKob/i0kKPyb9MkCqXlH2QzHo2J2ol9wiwoCWaTMEpRJFU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJy9hKBbhlLOOmzZzHtbRNKFKu9p4TzZkA7aLg9/o3RNjMWdtOL
+	O3Kr0Pin9+ZVvFfSqgwCRt/QieLOZ0gkrencWcXU335JQ6p3bRaBc9Q4RDznitLihpLo4TelAH3
+	bRYfhjEyEimgHvQ==
+X-Received: from plkk16.prod.google.com ([2002:a17:902:c410:b0:2e9:5f35:6dbc])
+ (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:3804:b0:2ea:fb8b:258d with SMTP id d9443c01a7336-2eb36401e95mr7401315ad.6.1793312231450;
+ Thu, 29 Oct 2026 15:17:11 -0700 (PDT)
+Date: Thu, 29 Oct 2026 22:17:07 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,266 +75,97 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
- <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
-In-Reply-To: <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 29 Oct 2026 15:16:27 -0700
-X-Gm-Features: AclHuK9av7Er2dEcOWg6hJWIv2K2TpdNYpqUpTLgWkKxe-dORmBpAAvoyO4hh00
-Message-ID: <CAEf4BzYT4rvKwbOJ6UQ3zcp4wdsSBqRsMz-2=U1DA2RyUA3XSg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: Samuel Wu <wusamuel@google.com>
-Cc: David Laight <david.laight.linux@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
+Message-ID: <20261029221710.1871112-1-dmatlack@google.com>
+Subject: [PATCH 0/3] vfio: selftests: Automatically detect the IOMMU mode
+From: David Matlack <dmatlack@google.com>
+To: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 29, 2026 at 3:06=E2=80=AFPM Samuel Wu <wusamuel@google.com> wro=
-te:
->
-> On Wed, Oct 28, 2026 at 6:40=E2=80=AFAM David Laight
-> <david.laight.linux@gmail.com> wrote:
-> >
-> > On Thu, 22 Oct 2026 17:16:02 -0700
-> > Samuel Wu <wusamuel@google.com> wrote:
-> >
-> > > Add an extensible KALLSYMS_QUERY ioctl() interface to /proc/kallsyms
-> > > to support fast point queries without scanning the entire text file.
-> > > Exactly one query mode must be set in query_flags.
-> > >
-> > > When KALLSYMS_QUERY_BY_SYMBOL is set in query_flags, KALLSYMS_QUERY
-> > > resolves a NUL-terminated symbol name in vmlinux or loaded modules an=
-d
-> > > then populates sym_addr:
-> > > - Searches vmlinux first via kallsyms_lookup_names() (binary search),
-> > >   which takes precedence over loaded modules, and falls back to
-> > >   module_kallsyms_on_each_symbol() under module_mutex for module
-> > >   symbols
-> > > - Matches names exactly, like kallsyms_lookup_name(), disregarding th=
-e
-> > >   .llvm.<hash> matching, following precedent set by commit fb6a421fb6=
-15
-> > >   ("kallsyms: Match symbols exactly with CONFIG_LTO_CLANG")
-> >
-> > Hmmmm....
-> > What happens when you have functions foo and foo.constprop0
-> > In some sense they are duplicates.
->
-> BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
-> would be different symbols at different addresses. Please correct me
-> if I'm missing something here!
->
+This series makes the VFIO selftests library automatically detect which
+IOMMU mode to use, rather than hardcoding iommufd as the default, and
+makes tests skip, rather than fail, when the IOMMU mode they need is not
+available. This was suggested by Sean while reviewing the KVM IRQ test,
+which currently has to probe for the IOMMU mode itself [1].
 
-foo and foo.constprop0 are different functions with different
-arguments, so I think we should distinguish them. The only special
-case is .llvm.<hash> because that suffix is added by compiler for LTO
-and I don't think the function itself is any different from the
-original
+iommufd is an optional feature, and VFIO's iommufd support additionally
+requires CONFIG_VFIO_DEVICE_CDEV. On otherwise functional kernels that
+only support the legacy VFIO container, the VFIO selftests (and the KVM
+IRQ test, when using a VFIO device) currently fail with an unhelpful
+assert:
 
-> > > - Resolves 0x0 symbol addresses in both vmlinux and modules
-> > > - Rejects ambiguous symbols (multiple entries with the same name at
-> > >   different addresses within vmlinux, or across loaded modules) with
-> > >   -EADDRNOTAVAIL, while allowing same-address aliases
-> > >
-> > > Userspace symbolizers resolve kernel addresses to symbol names with
-> > > /proc/kallsyms. This is typically done by reading the entire
-> > > /proc/kallsyms text file, and keeping a compressed sorted copy of it =
-in
-> > > order to resolve addresses at runtime.
-> >
-> > You could mmap the tables into userspace and have a ioctl that reported
-> > the offsets of the tables (etc).
-> > Then user lookup would faster then kernel lookup!
-> > Especially since you could throw a bit more memory at it to remove the
-> > linear scans.
->
-> I think that would increase the UAPI surface because it would set the
-> table format, so I'd prefer not to. It would only cover vmlinux and
-> not modules, and then we'd need to apply kptr_restrict checks to the
-> mapping.
->
-> > >
-> > > When KALLSYMS_QUERY_BY_ADDR is set in query_flags, KALLSYMS_QUERY
-> > > resolves one address to the symbol that contains it:
-> > > - sym_addr holds the address to resolve on input.
-> > > - sym_name_addr must point to a user buffer of sym_name_size bytes
-> > >   that receives the NUL-terminated symbol name. On output,
-> > >   sym_name_size holds the number of bytes written (including the
-> > >   terminating NUL). -ENAMETOOLONG is returned if the buffer is too
-> > >   small; a buffer of KSYM_NAME_LEN (512 at the time of writing) bytes
-> > >   is always large enough.
-> > > - Symbols are resolved via kallsyms_lookup(), the same lookup as %pS,
-> > >   covering vmlinux, loaded modules, BPF JIT images, and freed module
-> > >   init functions still tracked by ftrace.
-> > >
-> > > On an 8 CPU Cuttlefish (x86-64 VM), using this patchseries to load a =
-BPF
-> > > program with 11 typeless ksyms has ~220x speedup (157ms -> 0.7ms).
-> >
-> > Have you tried measuring it with my patches that speed up the kernel
-> > 'search by name' code?
-> > That speeds the lookup by a factor of ~18 (testing the code in userspac=
-e).
->
-> Not yet. Can you point me to the latest version? Happy to try it out.
->
-> > You also should allow for 'find first' and 'find next'.
-> > As well as letting the code iterate though functions with the same name
-> > it is absolutely trivial to enhance the 'lookup by name' code to match
-> > a prefix.
->
-> Agreed, that would be useful. In v3, the idea will be to have BY_NAME
-> return the first match by default, and an ALL_MATCHES flag to report
-> how many matches exist. Find next and prefix matching can be added
-> later with breaking UAPI, and best to not include in v3 since there
-> isn't yet a user.
+  tools/testing/selftests/vfio/lib/iommu.c:448: Assertion Failure
 
-I do think it would be good to spend a bit of thought on how to
-support at least one-by-one pagination from the get go. The same
-mechanism can then be used by batch version. I.e., think what can we
-use to provide data back to user which they can use to continue search
-after the symbol we just returned (at least for fixed set of symbols
-in vmlinux and modules; we also have dynamic symbols added for [bpf]
-"module", etc, we should support those as much as possible with the
-least possible deviation, IMO)
+  Expression: iommu->iommufd > 0
+  Observed: 0xffffffffffffffff > 0
+  [errno: 2 - No such file or directory]
 
->
-> > (Basically it needs to 'return -index' instead of 'return -1' when the
-> > binary scan fails.)
-> >
-> >
-> > >
-> > > On an 8 CPU x86-64 VM with a 175k line kallsyms, there are broad
-> > > performance and memory savings for the symbolization and callstack
-> > > sampling tool, Perfetto:
-> > > - Init time: ~350x speedup (155.7ms -> 0.44ms)
-> > > - 50k symbolizations: ~12x speedup (25.2ms -> 2.2ms)
-> > > - VmRSS: -68% (15.1MB -> 4.8MB)
-> > >
-> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > > ---
-> > >  include/uapi/linux/fs.h |  41 +++++++++++++
-> > >  kernel/kallsyms.c       | 132 ++++++++++++++++++++++++++++++++++++++=
-++
-> > >  2 files changed, 173 insertions(+)
-> > >
-> > > diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-> > > index 34c6f219462a..b43f227dad0e 100644
-> > > --- a/include/uapi/linux/fs.h
-> > > +++ b/include/uapi/linux/fs.h
-> > > @@ -674,6 +674,47 @@ struct procmap_query {
-> > >       __u64 build_id_addr;            /* in */
-> > >  };
-> > >
-> > > +/* /proc/kallsyms ioctl */
-> > > +#define KALLSYMS_QUERY       _IOWR(PROCFS_IOCTL_MAGIC, 18, struct ka=
-llsyms_query)
-> > > +
-> > > +/* Exactly one query mode must be set in query_flags. */
-> > > +enum kallsyms_query_flags {
-> > > +     /*
-> > > +      * Look up a symbol in vmlinux or loaded modules (vmlinux first=
-; BPF
-> > > +      * and ftrace symbols are not searched) by exact NUL-terminated=
- name
-> > > +      * at sym_name_addr and return sym_addr. sym_addr and sym_name_=
-size
-> > > +      * must be 0 on input.
-> > > +      */
-> > > +     KALLSYMS_QUERY_BY_SYMBOL =3D 0x01,
-> > > +     /*
-> > > +      * Look up the symbol covering sym_addr and write its NUL-termi=
-nated
-> > > +      * name to the sym_name_addr buffer of sym_name_size bytes. The=
- same
-> > > +      * symbols as %pS are searched: vmlinux, loaded modules, BPF JI=
-T
-> > > +      * images, and freed module init functions still tracked by ftr=
-ace.
-> > > +      * A buffer of KSYM_NAME_LEN (512 at the time of writing) bytes=
- is
-> > > +      * always enough. On success, sym_name_size is set to the numbe=
-r of
-> > > +      * bytes written (including the terminating NUL).
-> > > +      */
-> > > +     KALLSYMS_QUERY_BY_ADDR =3D 0x02,
-> > > +};
-> > > +
-> > > +/*
-> > > + * Returns -ENOENT if no symbol matches, -EADDRNOTAVAIL if the name =
-maps to
-> > > + * more than one address, -ENAMETOOLONG if the name does not fit in
-> > > + * KSYM_NAME_LEN (512 at the time of writing) or sym_name_size bytes=
-, and
-> > > + * -EPERM if kallsyms addresses are hidden from the opener of /proc/=
-kallsyms
-> > > + * (e.g. kptr_restrict).
-> > > + */
-> > > +struct kallsyms_query {
-> > > +     __u64 size;             /* in - struct size for compatibility *=
-/
-> >
-> > I'm not sure you need a size here as well as the one in the ioctl comma=
-nd.
-> > It only complicates things when they differ.
-> >
-> > If you need a new version they you add an extra case to the switch stat=
-ement.
-> > Simple and easy,
->
-> Good find thanks! Will update.
+Patch 1 makes iommu_init(NULL) pick the most preferred IOMMU mode that is
+available on the current system, and drops the global default_iommu_mode.
+iommu_modes[] is now ordered by preference: iommufd, vfio_type1v2_iommu,
+vfio_type1_iommu, iommufd_compat_type1v2, iommufd_compat_type1. A mode is
+considered available if its container (or /dev/iommu) can be opened and,
+for container modes, if VFIO_CHECK_EXTENSION reports support for the
+mode's IOMMU type. iommufd mode additionally requires VFIO device cdevs.
 
-think about user space application compiled against UAPI headers from
-older kernel version. For that application size will be smaller and
-that's ok, newer kernel should honor this and only fill out smaller
-part of v2 struct. Versioning is done by appending fields. This is a
-well established pattern that provides a pretty good forward/backward
-compat story, let's keep it.
+Patch 2 adds iommu_mode_is_available() and
+SKIP_IF_IOMMU_MODE_UNAVAILABLE(), and uses them to skip tests when the
+IOMMU mode they need is not available. Tests skip via the kselftest
+harness's SKIP() rather than iommu_init() calling ksft_exit_skip(), since
+the latter produces malformed TAP output when called from within a
+harness test.
 
->
-> > > +     __u64 query_flags;      /* in - query mode (enum kallsyms_query=
-_flags) */
-> > > +     __u64 sym_name_addr;    /* in - address of symbol name buffer *=
-/
-> > > +     __u64 sym_addr;         /* out (BY_SYMBOL) / in (BY_ADDR) */
-> > > +     __u64 sym_name_size;    /* in/out - name buffer size / bytes wr=
-itten */
-> >
-> > Maybe separate the buffer size from the length of the symbol written?
-> > The in/out parameter will get annoying in code doing multiple lookups.
-> > Or just have the buffer size and require it to be '\0' terminated.
-> > (There is a strncpy_from_user() can that be used.)
->
-> That is simpler- in v3, we can have buffer sizes as input only, and
-> names will always be NUL-terminated.
->
+Patch 3 converts the KVM IRQ test to use the VFIO selftests library to
+pick the IOMMU mode, and drops its probe_iommu_type().
 
-user code can be easily written by always setting buffer size, even if
-kallsyms_query is reused. This is the pattern with PROCMAP_QUERY,
-let's keep it consistent.
+This series is based on vfio/next (vfio-v7.4-rc1).
 
-also, returning actual size even if buffer is too short is a good way
-for user space to "probe" and increase buffer if necessary. unless it
-adds tons of complexity, this is a good and flexible UAPI
+[1] https://lore.kernel.org/kvm/aiIG2L_KdPwuxYA1@google.com/
 
-> > The '\0' terminated string handling is likely to be noise against
-> > all the rest of the lookup code.
-> >
-> > David
-> >
+Testing
+-----------------------------------------------------------------------
 
-[...]
+Tested in a QEMU VM with an emulated igb device behind an emulated Intel
+IOMMU, bound to vfio-pci, on a kernel with CONFIG_IOMMUFD=y,
+CONFIG_VFIO_DEVICE_CDEV=y, and CONFIG_VFIO_CONTAINER=y. To simulate
+kernels with fewer IOMMU modes available, /dev/iommu and /dev/vfio/vfio
+were deleted in the VM:
+
+ - All IOMMU modes available: All VFIO selftests pass. irq_test -d passes
+   using iommufd.
+
+ - Only the legacy VFIO container available (/dev/iommu deleted): All
+   VFIO selftests pass, with the iommufd and iommufd_compat variants
+   skipped instead of failing. irq_test -d passes using
+   vfio_type1v2_iommu, and skips if -t iommufd is passed.
+
+ - No IOMMU mode available (/dev/iommu and /dev/vfio/vfio deleted):
+   vfio_pci_device_test, vfio_pci_driver_test, and irq_test -d all skip
+   with a message explaining why, and with well-formed TAP output.
+
+David Matlack (3):
+  vfio: selftests: Automatically detect the IOMMU mode in iommu_init()
+  vfio: selftests: Skip tests when the IOMMU mode is not available
+  KVM: selftests: Use VFIO selftests library to pick IOMMU mode in IRQ
+    test
+
+ tools/testing/selftests/kvm/irq_test.c        | 19 +----
+ .../vfio/lib/include/libvfio/iommu.h          | 30 +++++++-
+ tools/testing/selftests/vfio/lib/iommu.c      | 75 ++++++++++++++++---
+ .../vfio/vfio_dma_mapping_mmio_test.c         |  2 +
+ .../selftests/vfio/vfio_dma_mapping_test.c    |  4 +
+ .../vfio/vfio_pci_device_init_perf_test.c     |  2 +
+ .../selftests/vfio/vfio_pci_device_test.c     |  8 +-
+ .../selftests/vfio/vfio_pci_driver_test.c     |  9 ++-
+ .../selftests/vfio/vfio_pci_sriov_uapi_test.c |  4 +
+ 9 files changed, 118 insertions(+), 35 deletions(-)
+
+
+base-commit: 076d7e989cb69f6ded7d60f2a080eb909930061b
+-- 
+2.56.0.317.g454f8302e1-goog
+
