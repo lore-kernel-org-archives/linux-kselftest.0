@@ -1,88 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793270131;
-	b=PFzw4jxC9x+RpGK3ySNs0h1UDQDKcZOCYio3rxgOf0e9YdjJcYLsG/BphCRXrMt5pdBE
-	 iK06ihgZ28UZAwTS6y4pUQ56xvSN76RIOtpgr5eXtn6K/cLbwSK60PKQWUn3Dep6xxdgc
-	 bt3ioUZJ2BCUKP9szjUHlZNZ1yzLAEz4YCLlmNaUDsMPzuauUNNKF/H2Rr91xtj8I3Gj9
-	 xz5e1QdqrfFOXUCzXw2OWa6QjGz41XIOOVG9xLFXK7MPZD9wOQdB83wWmXJmtyMplJ8fK
-	 9fFz93vXsW85LjfHE1bVOtH3DRijnwvGbcuMCM277oHzVWhCd2L2nGXL9gY3L3LSZ/A==
+	t=1793270702;
+	b=29aSHhEbSCZ31xSBfJv5K9muDjmAIwbI7ONCwTf+UmzIW5XW6AKU6bRP8BvfzpXvUL9S
+	 BmogCBMVyeYEIkrxeDMXMhVqYb0YnzpeGZG2Nqg2w5RpcLmGwZZDtO+A6x4GgaWrVoyC5
+	 LNi84jlRLbDwvx8CtcGIgOrFoD6kDli6fxLlmIiQ+yia97t3rOKgGbftrmML2ZiNwnBt2
+	 bjhM3RlE0RfBy5E/pqbb+0IYIErtM/JGrnW8EVfhq9cLAp5uEjtafP1cc9DCb4VjpDsja
+	 w5bqvFP43KECG/F6Ks08/PntMHFHxBqPhtc9RSJah8wQXUibLGgRPwrcjwTGNc+DBCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793270131;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=G+dOdTKmIbVkiM3lsAF+c1rAUHzJmMdTQfVlB9f5eEM=;
-	b=OWUJsd2n/4Rp+60x6OKiC04zFq59UFz8sB/kBiITr0jiy2ROX0fg3We66bhDuW1s3SzE
-	 tkTZl1qaodt9A5iTzIiK+TmP6kV82WA6UljK9lezheO/CUa5R3/7wS3W/GN6D0TGM/bj4
-	 kJ1xqf/VpoUzOr3lOpsJ6v+eOfUsBJHUWjqU6Xx2sKPcBTJMXrdlcT4Peg5UBVCFxg8kE
-	 ppBixvsdqLcnc6OcByLlydiXL6Tq/vlNObMYGbV7A/Kl6OUVi9CJ1g7lJ8rwfjfKwFi29
-	 0E977uzLaSlFSZmNhjlWh3yS8Qn1r6JwMf/3wFZ/n0re1ixU/O0HpvZvBopAoI9bP4g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793270702;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=0dCSBHfUVHBP5GH3Zssr2yssdn3VkCL1gUTLqNUcb1c=;
+	b=3g0GjEFfFfK3bdiVjF2Fdb1J/4Gm/QksdLuuGkVBI3y1WFvMmkuKsMhRgl9+7dQ31pTb
+	 x68yyDC9/YCvxZdyjSg8mBO4O9U1DZ2p1uoyLXYbIfuL2fND+gsPh2VZIHqYJIZ4bLEJB
+	 cwtFFLmlqVwI7sQjphZTEKksfsg0+Eeemt80AhFHATnh/GBKRQKNzbjtZU/15ltKI+FWk
+	 PLCQ8z7FaZ4XKK9cMc9zFSWVndQpch6bGIuIoSx3KO2ohdWfVeuRzHnY7vHM5Kp++wBg6
+	 2Oblunedc5SjdW5JBeD7GE9T/DyiDYP8rz1fgDRI3o9N9gZNj+NJfBfjqCn4FBzviwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FLHiFmRK;
-	arc=none smtp.remote-ip=209.85.221.41
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nxT2VMz4;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA1C606A323
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 10:35:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BA1C606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBDD606A31F;
+	Thu, 29 Oct 2026 10:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FLHiFmRK
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48df0fa43c5so318876f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 03:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793270129; x=1793874929; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=G+dOdTKmIbVkiM3lsAF+c1rAUHzJmMdTQfVlB9f5eEM=;
-        b=FLHiFmRKhs6aQ57aD71jTvzjsCiFe140GiCvw03h8p9tCU/LxQPpTD/CznQGXt6IyC
-         S840b28cvdOaRql4iIbJV7Yocz7zbiDBpaEKb3wksBcgmMzYXMkdWMh5Rml0dZAtNx5B
-         NRYobEc1tCH6LlMQ63AxJ3FF0mCEHuNWq5GqMZEeSYhLCatYqLlMfqDixzKA2A0vDRac
-         iuWbLnexUkVT0TXMIKrBr5rAeyGsGNSwyT7ADIHJ8AV5Mje1PkZ+zwj69jhgp6WwM/GA
-         bp4FFfO19/jykqwD9ti9swP86Oj04mnPEccTXejLHgFP3l76gB4Z5f283u/xZiDpOsMl
-         +kXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793270129; x=1793874929;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=G+dOdTKmIbVkiM3lsAF+c1rAUHzJmMdTQfVlB9f5eEM=;
-        b=i6lTPtBpG48UurTuw0DhD1My32yzRoNGt8AIAEtoBqLnHJ0StNVeqbA3fz33MSPi5e
-         iWtu60lmXfGL8iCM9Nnw7Pi6bh9Nih3iU1SAKVB5h0zKcNYt94UuS0+WMs5+qo+zj0uN
-         HqUxvMaJjhTpyq62mKohqsJK3b24IMZ3gytXc0+bphTSCkQcsM08jtVV4gR2X937l1ti
-         UoMvypkz/sSmU/EK5Bm5/qjrSvm49bawKuv/JDklriH2nXo6cumrKxVdm+37u0V1gdnX
-         bsNXXgwSKJAX1Nd00W8ByspiHGPUR4Xci6ArwNPY3LHbEm3jcIfaVvsIJZKP+/gIAkl9
-         uFIA==
-X-Forwarded-Encrypted: i=1; AKwUvBy9aF5zxWCIvkwe7SWk8oWN+VLIX9FdNJGh352ITKdDFmjhDmJptMGhibFwe3zsSMtAv5+5UaVaZFWuebR8TuM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ9QUxyez8V45KgXD0FgSwY0WoV02hzrKu+XfPylqf+T9FEsjs7
-	i6HKGYt6fRVXwI/6EXk3fPcAbWfilaEhCpb6NtJnwM0zDwXgAcWCVSNW
-X-Gm-Gg: AYBFou3C2F02g/JQynTSul5j8dSuJR/1HrbH+XZrgo/TQa0xMNFv459pNNdpdD4hU0i
-	SYccTigU03xD9Au8KiOxIS4wZeOPtNLKdBFmspVXOAuk19UdyV1VNVGySSepb0lwWa+bYAFUm6i
-	iAccPjItL1k9IjGCNcP9R/pOMlcdPPRmc3G2CyLovJEQ7qH/KTVfPt+zgaWzvMUOfMmvFNPnNWq
-	dc01rsXVV5gR1iHMBTuFMXzyddFMHJRhXhEWU2lP724sMT3j3y0KbtKKBw9z/5gZSc+Qa7kIuh/
-	G9WBwsD1E6bntZ3+8OSe8LPi26mnvY1aOaWZ0sfNzJsOiLK07WA6f5UAW+LeT1RJtgdCnHsyzNK
-	DAbt0bAhu2BciU1TOY6ZjmRzd0SM+mHpxPnKy/MBPAuIc20n+5dd5ckofES7uWP/oYSBUxo8g6p
-	r8P9Cot4xwSQXHpNYYnI9To0E6hQ/G1ldqJfP5637DmpRzsnA7jiv9rYV2s/ZFGPJXsj3aGntNa
-	grKDxgHux869ftrXafNcMn/JRyOWYwGfZvvoK5bsJjpOCnLyjctZUuGJitMSBofjMnAoRI4cxlq
-	pnJEPyk1ndHgqWT3JQvU92zi5VqyGXI9cds7nSqz/Ky4og==
-X-Received: by 2002:a05:6000:2893:b0:48e:5e63:27fb with SMTP id ffacd0b85a97d-48e649b1219mr5739523f8f.20.1793270128547;
-        Thu, 29 Oct 2026 03:35:28 -0700 (PDT)
-Received: from [192.168.1.22] ([83.231.69.9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd8ddasm36580278f8f.48.2026.10.29.03.35.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2026 03:35:27 -0700 (PDT)
-Message-ID: <3b80c557-ea63-4d32-8901-3f7939ff541c@gmail.com>
-Date: Thu, 29 Oct 2026 11:35:26 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nxT2VMz4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 569071F031E2;
+	Thu, 29 Oct 2026 10:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793270702;
+	bh=0dCSBHfUVHBP5GH3Zssr2yssdn3VkCL1gUTLqNUcb1c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nxT2VMz4fnyBGepb2y6DIfK6SE3t2B76Yk1hsA8J6xw19WDTRWQkc5zer0rtHjzZQ
+	 Gb5inbSwozgewNJrlxHySAlYyumEcf2I2H89YJtQ2mKV0FR1qRmlFr6921WsPFWLvf
+	 mDO6xtXeNV75v/I7AsXrq4ElCmke3k3ksppR2nVk6RK7nwvVoDAMyGrK3MqSVHCrLS
+	 tx08eVD4EuQq6XQyn5UuT1nZTBQdXegs6VSSweVrPGuWGxNOLxCoSSp+LhLfxnwPRU
+	 jvL20xWFcOw1tu/0Ngm+yTfllKoTUKGa6bFKvqepHlY87fecj0Xp5xBmzDsbE6PVCD
+	 GcxWud5QzBBKw==
+Date: Thu, 29 Oct 2026 11:44:52 +0100
+From: Alexey Gladkov <legion@kernel.org>
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jan Kara <jack@suse.cz>, James Morris <jmorris@namei.org>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, Jann Horn <jannh@google.com>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	KP Singh <kpsingh@kernel.org>, Jonathan Calmels <jcalmels@3xx0.net>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	containers@lists.linux.dev, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+Message-ID: <auMjpJwXQJyXr3fW@example.org>
+References: <20261028221705.3915340-1-halg@google.com>
+ <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,79 +77,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] selftests/mm: load xfs before checking for it in
- run_vmtests.sh
-To: Qiliang Yuan <odys.yuan@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261029-bug-selftests-mm-run-vmtests-xfs-modprobe-v3-0-16ad772850ee@gmail.com>
- <20261029-bug-selftests-mm-run-vmtests-xfs-modprobe-v3-2-16ad772850ee@gmail.com>
-Content-Language: en-US
-From: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-In-Reply-To: <20261029-bug-selftests-mm-run-vmtests-xfs-modprobe-v3-2-16ad772850ee@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
 
-On 10/29/26 7:24 AM, Qiliang Yuan wrote:
-> run_vmtests.sh creates a loop-mounted XFS for "khugepaged all:file" and
-> for the pagecache folio split cases of split_huge_page_test, since
-> tmpfs does not give them large pagecache folios.
+On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
+> On Wed, Oct 28, 2026 at 3:18 PM Hallgrimur H. Gunnarsson
+> <halg@google.com> wrote:
+> >
+> > When an unprivileged process creates a new user namespace, it is granted
+> > a full set of capabilities (CAP_FULL_SET) scoped to that namespace.
+> > While these capabilities are isolated to the namespace, they allow
+> > unprivileged local users to reach deep kernel subsystems (most notably
+> > networking configuration and raw sockets via CAP_NET_ADMIN and
+> > CAP_NET_RAW) that historically assumed a trusted caller and have
+> > accounted for a large share of local privilege escalation
+> > vulnerabilities.
+> >
+> > Many workloads and sandboxes use unprivileged user namespaces strictly
+> > for basic UID/GID, mount, PID, or network isolation and never need
+> > high-risk capabilities like CAP_NET_ADMIN or CAP_NET_RAW. Likewise,
+> > system administrators often want a host-wide policy ceiling restricting
+> > which capabilities unprivileged user namespaces may acquire, without
+> > disabling unprivileged user namespaces altogether.
+> >
+> > Prior work by Jonathan Calmels [1] proposed addressing this via a sixth
+> > per-thread capability set (cap_userns) alongside a global sysctl mask.
+> > During that discussion [1, 2], feedback (e.g. from Casey Schaufler)
+> > suggested that rather than adding another per-thread capability set and
+> > prctl() interface, capability restrictions could be integrated directly
+> > into struct user_namespace and configured via clone3(). At the same
+> > time, as noted in [1], a clone3() flag alone is not sufficient for
+> > administrators who need to enforce a host-wide ceiling on unprivileged
+> > user namespaces without modifying every userspace callsite.
+> >
+> > This series combines both pieces of feedback: it embeds a capability
+> > bounding set (cap_bset) directly into struct user_namespace, reusing
+> > the existing task cap_bset, cap_permitted, and cap_effective sets on
+> > namespace entry, and provides both a system-wide sysctl ceiling for
+> > unprivileged user namespaces and a CLONE_NEWUSER_BSET flag for
+> > voluntary per-namespace restriction via clone3().
 > 
-> It only does so when xfs already shows up in /proc/filesystems. When
-> xfs is built as a module that is not loaded yet, the check fails, no
-> XFS is created, "khugepaged all:file" is reported as skipped and every
-> pagecache folio split case of split_huge_page_test is skipped with "No
-> large pagecache folio generated".
+> Why should the task's cap masks affect this?  *Maybe* cap_bset makes
+> sense, but I'm struggling a bit to see why cap_permitted and
+> cap_effective should matter.
 > 
-> Load xfs with load_module() when it is not registered yet, so that it
-> is unloaded again once the script is done. Match xfs as a whole word,
-> as "selinuxfs" contains it too, as does "vxfs" on kernels before 7.3,
-> and would otherwise skip the load and leave xfs to be loaded by
-> mount(). "run_vmtests.sh -t thp" with xfs built as a module and not
-> loaded:
+> Also, I think that Docker in non-userns mode restricts cap_bset, and
+> the purpose of that restriction is rather at odds with interpreting it
+> as a restriction on newly created user namespaces for purposes of
+> vulnerability mitigation.
 > 
->                                         before    after
->   khugepaged all:file                  skipped      run
->   skipped split_huge_page_test cases        43        0
->   xfs loaded after the run                  no       no
->   xfs loaded after the run, with
->   selinuxfs or vxfs registered             yes       no
+> >
+> > In addition, because restricting CAP_NET_ADMIN at user namespace
+> > creation time prevents userspace from bringing up the loopback
+> > interface in new network namespaces, the series first introduces
+> > an opt-in flag to automatically enable loopback on network namespace
+> > creation:
+> >
+> > 1. Opt-in loopback activation on netns creation (Patch 1)
+> >
+> >   New network namespaces start with the loopback interface (lo) DOWN by
+> >   default, requiring CAP_NET_ADMIN over the owning user namespace to
+> >   bring it up. To block external network access while preserving
+> >   localhost networking, sandboxes commonly create an isolated network
+> >   namespace with only the loopback interface enabled.
+> >
 > 
-> Fixes: fc4d182316bd ("mm: huge_memory: enable debugfs to split huge pages to any order")
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> ---
->  tools/testing/selftests/mm/run_vmtests.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> The whole unshare/clone flag situation is getting out of hand, IMO.
+> And this new thing makes logical sense but is really about reducing
+> exposure.
 > 
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index e104a9c6fdefb..b422edc2e2664 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -412,7 +412,7 @@ CATEGORY="thp" run_test ./khugepaged -s 4 all:shmem
->  # Try to create XFS if not provided
->  if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
->      if test_selected "thp"; then
-> -	if grep xfs /proc/filesystems &>/dev/null; then
-> +	if grep -qw xfs /proc/filesystems || load_module xfs; then
->  	    XFS_IMG=$(mktemp /tmp/xfs_img_XXXXXX)
->  	    XFS_DIR=$(mktemp -d /tmp/xfs_dir_XXXXXX)
->  	    truncate -s 314572800 ${XFS_IMG}
+> Perhaps we should instead have a small list associated with a userns
+> (extensible in the future) of things that the ns's admin (i.e. whoever
+> has CAP_SYS_ADMIN relative to the ns) may do.  That list could
+> include:
 > 
+> - Create loopback with sensible defaults for ipv4 and/or ipv6 (i see
+> no obvious reason to separate them)
+> - Create tun/tap interfaces in that ns (and attach them, etc)
+> 
+> And add a very simple new API to do these things.  Actually, the
+> tun/tap could just use the normal mechanism.
+> 
+> Thoughts?
 
+I think that's an interesting idea. I also think the whole flag issue is
+moving in the wrong direction.
 
-tested it on x86_64 in qemu with lockdep and DEBUG_VM, xfs as a module
-and with SELinux on and off. LGTM so:
-
-Reviewed-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
-Tested-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
+Are you thinking of something like `struct open_how` in openat2,
+or something else?
 
 -- 
-cheers,
-jose a. p-a
+Rgrds, legion
+
