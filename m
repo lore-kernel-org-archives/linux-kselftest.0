@@ -1,79 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.246.68.102
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.155.198.111
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793279313;
-	b=Q31GvPqzVg9dy2ljN85xkVw+sEC4c1rVCjkEh8e5WVQdSGpizng/rtC4jQIb1/eAnh+Y
-	 w1KUlzD81OA88rTXRRRn51G7zGdBwSwrMmZ+B8COESk1K0q81WPHb+o1VtjxiVU+Eq60i
-	 j1IYKKJh7HMTqCEgFmg/PUJ2vNqeInVh5X+DqTxH0LwzX47luW08PjeZ+rcBHnBgXWbi8
-	 Ni5rS1tgVASnCx/cQySevMvJpWJMM0/tNcjPkgcGmgXviYNRuKI6FiwnTvlFfZ3hup13w
-	 24VPQovOsSmzD6Xsod6NIZ1zWynusACX+wqiAJBUK3F/UTYZDZDnppR6507xhrXUswQ==
+	t=1793279336;
+	b=s/bDTwDES094whCVtWXqFE9e9Gp+RrEsgN6ChVLs4mAsOQydxpVRrIvkdg0HJx/UUIjE
+	 FnPca18OAhgGuY3OuMeFlxqOT8EMQb9ICzUk0sPbM8svgT0vIADUafYYEdqIG06Aoh/4N
+	 guC3So8VOfb4AyNz25AfcIdzJumpP2dKJPksX55xY5fDLNoWAFHH1GLZvdAke0XikvwPt
+	 cr/+kMDHc+jSpa9+Fx3sD5HgXI7x68hc4quezR25KZ9b9BujFKZLe3ymFk98J+MP8CC0b
+	 xtXuR1zHBdDGBTQiY6LwbCjzx5lgp+6IVHzic0/FLY1upUqrloXiSDpeaVQVJGgz8lg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793279313;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793279336;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
 	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
 	 X-ClientProxiedBy;
-	bh=6Thd4aTIhyIA5SBe0YaKd+8a0hayqYyXEOVFwEQ9qwc=;
-	b=xd32lXKKmFaTJbk+u+0k4rvFNY9nCiV8etI49/hZ5VvGwfZl49R2ZghPnc9G1V0qcgXt
-	 XDqBtMhlpnzIOcR1/9RcvjrOkzAFe1oYms2zaAJMve2cSIFgGqVNjKWh21s0j9EPvIKfF
-	 7z9G1kWrFElHV4K/HoMRquIuxihyH/yDbS8CwTmEjAwKcjIaNCyonMERsuluk7tfXL7ix
-	 wVfRYq/iAHugDIIMgdKHHU/T/YzE1mxGuHNdnGTLnsxXfFI3bhlFHP02LYi+iHnVjQY07
-	 kBYJt7uzvjed8f01Coo015eY135Y8fnGS4yCdoUx5IRgLfyqNHmGGDJS5zHJiPKT3UQ==
+	bh=wLwplkzVhj9IYM9OW2DXb6sEsrOCqo/Rbtyz1B7KwCE=;
+	b=KgnV0NCdOjvTEfEwHNh/SGxRm27AsbAHbXZ7D2EmVQZIRd/Pxpnj1MWgfpfsXVv7IQG/
+	 sxBb9Q3idsQs+lCBv4aC7bOW1gWziIKYRZgyMFb2vATgLVt6a6wpyLRiOzf/efWveURy/
+	 WLMV3c9ZVlllKLAPluPzxzKyKD+r8q9YWZGiWEgyT2Bm3wCV0XDijrrIKUSiyo5zLdiiM
+	 L1jHb5bFFz5B8QEUpcSn5ssZ9anORekDVfCNLa1PN0i0annmZSkVUCeu1NMU/zi1adtuu
+	 HimP3JZ69zxXerlgefXdfOhabTfqKOIQDbNn4FE+ZhZZjfeeeNTOQ+tOGKKQb72cCUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=amazon.com;
 	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Tuyt63de;
-	arc=none smtp.remote-ip=44.246.68.102
-Received: from pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.68.102])
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b="P/NvyK6U";
+	arc=none smtp.remote-ip=35.155.198.111
+Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328D5606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:08:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 328D5606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEE7606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 13:08:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7AEE7606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Tuyt63de
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=P/NvyK6U
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1793279313; x=1824815313;
+  t=1793279335; x=1824815335;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6Thd4aTIhyIA5SBe0YaKd+8a0hayqYyXEOVFwEQ9qwc=;
-  b=Tuyt63deUPyWND3FQwNf2XAzFVq7LL2FFn6REv01BGahvuOsa5n6vtpa
-   wuZP6R5kimNMnRZyGAkXWYgVaVeZanxsE5fmL5Pw0L7Ei3vQMxDONKVDJ
-   F9u5j8waO+eupCIggEHZPzAex2fhHE97kC3mSugQrkUg7bwyBY6R8rX6P
-   lyf+Q93iqTb7qmjf4PQHmIziTk9UWCAxB8E22BVAvRtloHCUcsw7Al0ot
-   e/0Iy3RIz7fXh3+308/VMGiE8uYjoiOlnVdDX3bmB9eSSLJZp4WeydT/l
-   PRpRhFD9ODTwxu++qlkL65ugtDV2sVmMPzD5hRmBX3wa55i9RrROJ4q9y
-   w==;
-X-CSE-ConnectionGUID: 4luPrJ9MRR6dXJV84vfheg==
-X-CSE-MsgGUID: rujhYSlQSEWPG1amWgX83w==
+  bh=wLwplkzVhj9IYM9OW2DXb6sEsrOCqo/Rbtyz1B7KwCE=;
+  b=P/NvyK6UFm9EFd8QKl2JrSL4mDtv0YTEVj6Iu8fi87mWlkZ+0/AjZWhG
+   gkHvnMqb7lIeEddCtnwsqiILRDa1hut37kw+sydQajP4+EOD5k8Rbu/jE
+   vochfyFPFOcIpPVya+GNdS9nEWsf/tWRfU4R+WfMSKnVDQAhJvkwCwrJ0
+   RY3C93K5RGXzgIMHpDziUgOHNcJ+bJhd9qDbZEG7qDBMy6kwol28Vxapb
+   Le5UmI/PSyioz1snfhBFm/EE2Ao9Dbz9JlevlyGKM1aEg/10HF6iOavL7
+   UA7NgjMceCoTAI93ZQoSOx2FSzTlC4Tx+ivGMu/qGLMVBPtwwzo1LKEbc
+   A==;
+X-CSE-ConnectionGUID: GrH8c3EgTuGUow7dgQZEHQ==
+X-CSE-MsgGUID: guM31KdVTj6jd6dyJDTkZA==
 X-IronPort-AV: E=Sophos;i="6.27,184,1787011200"; 
-   d="scan'208";a="32484620"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 13:08:32 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:1691]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.49.48:2525] with esmtp (Farcaster)
- id 894bb303-be18-4549-af3f-c5c4f932dbaf; Thu, 29 Oct 2026 13:08:32 +0000 (UTC)
-X-Farcaster-Flow-ID: 894bb303-be18-4549-af3f-c5c4f932dbaf
+   d="scan'208";a="32474627"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 13:08:55 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:7989]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.38.46:2525] with esmtp (Farcaster)
+ id 6dade49b-364c-44fc-b0d9-aa38472cb173; Thu, 29 Oct 2026 13:08:54 +0000 (UTC)
+X-Farcaster-Flow-ID: 6dade49b-364c-44fc-b0d9-aa38472cb173
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Thu, 29 Oct 2026 13:08:32 +0000
+ Thu, 29 Oct 2026 13:08:54 +0000
 Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Thu, 29 Oct 2026 13:08:31 +0000
+ Thu, 29 Oct 2026 13:08:53 +0000
 From: Jimmy Zuber <jamz@amazon.com>
 To: Miklos Szeredi <miklos@szeredi.hu>
 CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
  Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
 	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
 	<luis@igalia.com>, NeilBrown <neil@brown.name>
-Subject: [PATCH v6 1/2] fuse: add FUSE_OPEN_ATOMIC
-Date: Thu, 29 Oct 2026 13:07:57 +0000
-Message-ID: <20261029130758.818617-2-jamz@amazon.com>
+Subject: [PATCH v6 2/2] selftests/fuse: add test for FUSE_OPEN_ATOMIC
+Date: Thu, 29 Oct 2026 13:07:58 +0000
+Message-ID: <20261029130758.818617-3-jamz@amazon.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20261029130758.818617-1-jamz@amazon.com>
 References: <20261029130758.818617-1-jamz@amazon.com>
@@ -88,350 +88,639 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
+X-ClientProxiedBy: EX19D031UWC001.ant.amazon.com (10.13.139.241) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Add FUSE_OPEN_ATOMIC, which looks up a name, creates it for O_CREAT, and
-opens it in one request, so that ->atomic_open() needs no FUSE_LOOKUP
-before FUSE_OPEN or FUSE_CREATE. After a -ENOSYS reply the kernel sends
-FUSE_LOOKUP, as it does for FUSE_CREATE.
+Add atomic_open_test. A raw /dev/fuse server counts the requests the
+kernel sends for open() and create, and each test checks both the result
+and that FUSE_OPEN_ATOMIC replaces LOOKUP + OPEN or LOOKUP + CREATE
+where it should: new, existing and missing names, directories, O_TRUNC,
+read-only mounts, permission checks after the reply, and a reply the
+kernel rejects.
 
-The request carries fuse_create_in and the name. The server replies with
-the entry and, if it opened the file, fuse_open_out:
-
-- an existing regular file: the server opens it;
-- a new name with O_CREAT: the server creates and opens it, and sets
-  FOPEN_CREATED;
-- any other file: the server returns the entry only, and the VFS opens
-  it;
-- a missing name without O_CREAT: the server returns a zero nodeid,
-  cached like a negative LOOKUP.
-
-The VFS checks the open after the reply, as for other ->atomic_open()
-filesystems, and the kernel releases the file if the check fails.
-FMODE_CREATED is set only when the server reports FOPEN_CREATED.
-
-The request carries the open flags without O_TRUNC: the VFS truncates
-the opened file with SETATTR after its checks. With FUSE_ATOMIC_O_TRUNC,
-where FUSE_OPEN truncates, an O_TRUNC open keeps FUSE_LOOKUP. When the
-VFS may not create the file, it drops O_CREAT and keeps O_EXCL; that
-open keeps FUSE_LOOKUP, so an existing name gives -EEXIST.
+Each test runs against a server that replies -ENOSYS to
+FUSE_OPEN_ATOMIC, one that implements it, and one that also sets
+FUSE_ATOMIC_O_TRUNC, in its own mount namespace. The tests skip on
+kernels older than protocol 7.48.
 
 Assisted-by: Claude:claude-opus-5-5 [Claude-Code]
 Signed-off-by: Jimmy Zuber <jamz@amazon.com>
 ---
- fs/fuse/dir.c             | 193 ++++++++++++++++++++++++++++++++++++++
- fs/fuse/fuse_i.h          |   6 ++
- fs/fuse/fuse_trace.h      |   1 +
- include/uapi/linux/fuse.h |  20 +++-
- 4 files changed, 219 insertions(+), 1 deletion(-)
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +-
+ .../filesystems/fuse/atomic_open_test.c       | 572 ++++++++++++++++++
+ 3 files changed, 575 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_test.c
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index 4c64a4f812395..5820582ada650 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -938,6 +938,185 @@ static int fuse_create_open(struct mnt_idmap *idmap, struct inode *dir,
- 	return err;
- }
+diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
+index 7c787313e69b6..faac6d969ef94 100644
+--- a/tools/testing/selftests/filesystems/fuse/.gitignore
++++ b/tools/testing/selftests/filesystems/fuse/.gitignore
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++atomic_open_test
+ fuse_mnt
+ fusectl_test
+ test_syncfs
+diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
+index e3ae3acff1139..8390d6019513b 100644
+--- a/tools/testing/selftests/filesystems/fuse/Makefile
++++ b/tools/testing/selftests/filesystems/fuse/Makefile
+@@ -3,7 +3,7 @@
+ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
  
-+/* Release the file the server opened for a reply the kernel rejects */
-+static void fuse_open_atomic_release(struct fuse_file *ff, u64 nodeid,
-+				     unsigned int open_size,
-+				     unsigned int flags)
-+{
-+	if (open_size >= FUSE_COMPAT_OPEN_OUT_SIZE && !invalid_nodeid(nodeid)) {
-+		ff->fh = ff->args->open_outarg.fh;
-+		ff->nodeid = nodeid;
-+		fuse_sync_release(NULL, ff, flags & ~(O_CREAT | O_EXCL));
-+	} else {
-+		fuse_file_free(ff);
-+	}
-+}
-+
+ TEST_GEN_PROGS := fusectl_test test_syncfs
+-TEST_GEN_PROGS += write_extend_eof_test
++TEST_GEN_PROGS += write_extend_eof_test atomic_open_test
+ TEST_GEN_PROGS += fuse_acl_cache_test
+ TEST_GEN_PROGS += fuse_symlink_cache_test
+ TEST_GEN_PROGS += fuse_readdir_cache_test
+@@ -12,6 +12,7 @@ TEST_GEN_FILES := fuse_mnt
+ include ../../lib.mk
+ 
+ $(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
++$(OUTPUT)/atomic_open_test: LDLIBS += -lpthread
+ 
+ VAR_CFLAGS := $(shell pkg-config fuse3 --cflags 2>/dev/null)
+ ifeq ($(VAR_CFLAGS),)
+diff --git a/tools/testing/selftests/filesystems/fuse/atomic_open_test.c b/tools/testing/selftests/filesystems/fuse/atomic_open_test.c
+new file mode 100644
+index 0000000000000..5bea1b01b757c
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/fuse/atomic_open_test.c
+@@ -0,0 +1,572 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Look the name up, create it for O_CREAT, and open it in one request.  The
-+ * server opens an existing regular file, returns only the entry of other
-+ * files, and returns a zero nodeid for a missing name.  The VFS checks the
-+ * open afterwards.  Returns 1 if the server replies -ENOSYS.
++ * Test the requests that open() and create send with and without
++ * FUSE_OPEN_ATOMIC, against a raw /dev/fuse server.
++ *
++ * Requires root to mount fuse.
 + */
-+static int fuse_open_atomic(struct mnt_idmap *idmap, struct inode *dir,
-+			    struct dentry *entry, struct file *file,
-+			    unsigned int flags, umode_t mode)
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <grp.h>
++#include <pthread.h>
++#include <sched.h>
++#include <stddef.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/mman.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
++#include <sys/uio.h>
++#include <sys/wait.h>
++#include <linux/fuse.h>
++
++#include "../../kselftest_harness.h"
++
++#define MAX_WRITE	(128 * 1024)
++#define MAX_ENTRIES	16
++#define NOBODY		65534
++
++struct entry {
++	uint64_t parent;
++	char name[64];
++	uint64_t nodeid;
++	uint32_t mode;
++};
++
++/* Server state, shared with the responder thread */
++struct server {
++	int fd;
++	int atomic, atomic_o_trunc;
++	/* Protocol minor version of the kernel, from FUSE_INIT */
++	uint32_t minor;
++	struct entry ent[MAX_ENTRIES];
++	int nent;
++	int nr_lookup, nr_create, nr_open, nr_open_atomic, nr_setattr;
++	int nr_enosys;
++	/* Requests that carried O_TRUNC */
++	int nr_trunc;
++	/* Send fuse_open_out without backing_id_64, as older servers do */
++	int short_open;
++	/* Reply to FUSE_OPEN_ATOMIC with an opened file and a zero nodeid */
++	int open_no_nodeid;
++};
++
++static size_t open_out_size(struct server *s)
 +{
-+	struct fuse_mount *fm = get_fuse_mount(dir);
-+	struct fuse_conn *fc = fm->fc;
-+	FUSE_ARGS(args);
-+	struct fuse_forget_link *forget;
-+	struct fuse_create_in inarg;
-+	struct fuse_open_out *outopen;
-+	struct fuse_entry_out outentry;
-+	struct inode *inode = NULL;
-+	unsigned int open_size;
-+	u64 attr_version, evict_ctr;
-+	struct fuse_file *ff;
-+	struct dentry *res;
-+	bool locked = false;
-+	int epoch, err;
-+
-+	if (entry->d_name.len > fc->name_max)
-+		return -ENAMETOOLONG;
-+	forget = fuse_alloc_forget();
-+	ff = fuse_file_alloc(fm, true);
-+	if (!forget || !ff) {
-+		kfree(forget);
-+		if (ff)
-+			fuse_file_free(ff);
-+		return -ENOMEM;
-+	}
-+	outopen = &ff->args->open_outarg;
-+	if (!fc->dont_mask)
-+		mode &= ~current_umask();
-+
-+	/* The VFS truncates the file after its checks */
-+	memset(&inarg, 0, sizeof(inarg));
-+	memset(&outentry, 0, sizeof(outentry));
-+	inarg.flags = flags & ~(O_NOCTTY | O_TRUNC);
-+	inarg.mode = mode;
-+	inarg.umask = current_umask();
-+	args.opcode = FUSE_OPEN_ATOMIC;
-+	args.nodeid = get_node_id(dir);
-+	args.in_numargs = 2;
-+	args.in_args[0].size = sizeof(inarg);
-+	args.in_args[0].value = &inarg;
-+	args.in_args[1].size = entry->d_name.len + 1;
-+	args.in_args[1].value = entry->d_name.name;
-+	args.out_numargs = 2;
-+	args.out_args[0].size = sizeof(outentry);
-+	args.out_args[0].value = &outentry;
-+	args.out_argvar = true;
-+	args.out_args[1].size = sizeof(*outopen);
-+	args.out_args[1].value = outopen;
-+
-+	if (flags & O_CREAT) {
-+		err = get_create_ext(idmap, &args, dir, entry, mode);
-+		if (err)
-+			goto out_free;
-+	} else {
-+		/* Locked as for a lookup */
-+		idmap = &invalid_mnt_idmap;
-+		locked = fuse_lock_inode(dir);
-+	}
-+	epoch = atomic_read(&fc->epoch);
-+	attr_version = fuse_get_attr_version(fc);
-+	evict_ctr = fuse_get_evict_ctr(fc);
-+	err = fuse_simple_idmap_request(idmap, fm, &args);
-+	fuse_unlock_inode(dir, locked);
-+	free_ext_value(&args);
-+	if (err < 0) {
-+		if (err == -ENOSYS) {
-+			fc->no_open_atomic = 1;
-+			err = 1;
-+		} else if (err == -EEXIST) {
-+			fuse_invalidate_entry(entry);
-+		}
-+		goto out_free;
-+	}
-+
-+	open_size = args.out_args[1].size;
-+	if (open_size && (outopen->open_flags & FOPEN_CREATED))
-+		fuse_dir_changed(dir);
-+	err = -EIO;
-+	if (outentry.nodeid && (invalid_nodeid(outentry.nodeid) ||
-+				fuse_invalid_attr(&outentry.attr)))
-+		goto out_reject;
-+	/* A zero nodeid: the name does not exist and nothing was opened */
-+	if (!outentry.nodeid && (open_size || (flags & O_CREAT)))
-+		goto out_reject;
-+	/* Only a regular file is opened */
-+	if (open_size && (open_size < FUSE_COMPAT_OPEN_OUT_SIZE ||
-+			  !S_ISREG(outentry.attr.mode)))
-+		goto out_reject;
-+	if (outentry.nodeid) {
-+		inode = fuse_iget(dir->i_sb, outentry.nodeid,
-+				  outentry.generation, &outentry.attr,
-+				  ATTR_TIMEOUT(&outentry), attr_version,
-+				  evict_ctr);
-+		err = -ENOMEM;
-+		if (!inode)
-+			goto out_reject;
-+		fuse_advise_use_readdirplus(dir);
-+	}
-+	kfree(forget);
-+
-+	if (!open_size) {
-+		fuse_file_free(ff);
-+		res = d_splice_alias(inode, entry);
-+		if (!IS_ERR(res)) {
-+			fuse_dentry_set_epoch(res ?: entry, epoch);
-+			fuse_change_entry_timeout(res ?: entry, &outentry);
-+		}
-+		return finish_no_open(file, res);
-+	}
-+
-+	if (fuse_is_bad(inode)) {
-+		fuse_open_atomic_release(ff, outentry.nodeid, open_size,
-+					 inarg.flags);
-+		iput(inode);
-+		return -EIO;
-+	}
-+	if ((flags & O_CREAT) && (outopen->open_flags & FOPEN_CREATED))
-+		file->f_mode |= FMODE_CREATED;
-+	ff->fh = outopen->fh;
-+	ff->nodeid = outentry.nodeid;
-+	ff->open_flags = outopen->open_flags & ~FOPEN_CREATED;
-+	d_splice_alias(inode, entry);
-+	fuse_dentry_set_epoch(entry, epoch);
-+	fuse_change_entry_timeout(entry, &outentry);
-+
-+	err = generic_file_open(inode, file);
-+	if (!err) {
-+		file->private_data = ff;
-+		err = finish_open(file, entry, fuse_finish_open);
-+	}
-+	if (err) {
-+		/* fput() releases a file that finish_open() opened */
-+		if (!(file->f_mode & FMODE_OPENED))
-+			fuse_sync_release(get_fuse_inode(inode), ff,
-+					  inarg.flags & ~(O_CREAT | O_EXCL));
-+	} else if (!(ff->open_flags & FOPEN_KEEP_CACHE) && !IS_DAX(inode)) {
-+		invalidate_inode_pages2(inode->i_mapping);
-+	}
-+	return err;
-+
-+out_reject:
-+	fuse_open_atomic_release(ff, outentry.nodeid, open_size,
-+				 inarg.flags);
-+	if (!invalid_nodeid(outentry.nodeid))
-+		fuse_chan_queue_forget(fc->chan, forget, outentry.nodeid, 1);
-+	else
-+		kfree(forget);
-+	return err;
-+
-+out_free:
-+	fuse_file_free(ff);
-+	kfree(forget);
-+	return err;
++	if (s->short_open)
++		return offsetof(struct fuse_open_out, backing_id_64);
++	return sizeof(struct fuse_open_out);
 +}
 +
- static int fuse_mknod(struct mnt_idmap *, struct inode *, struct dentry *,
- 		      umode_t, dev_t);
- static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
-@@ -951,6 +1130,20 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
- 	if (fuse_is_bad(dir))
- 		return -EIO;
- 
-+	/*
-+	 * With atomic_o_trunc, FUSE_OPEN truncates after a FUSE_LOOKUP.  O_EXCL
-+	 * without O_CREAT, where the VFS may not create the file, needs the
-+	 * FUSE_LOOKUP so that do_open() reports -EEXIST for an existing name.
-+	 */
-+	if (!fc->no_open_atomic &&
-+	    !((file->f_flags & O_TRUNC) && fc->atomic_o_trunc) &&
-+	    ((flags & O_CREAT) || (d_in_lookup(entry) && !(flags & O_EXCL)))) {
-+		err = fuse_open_atomic(idmap, dir, entry, file, flags,
-+				       mode | S_IFREG);
-+		if (err <= 0)
-+			return err;
++static void reply(int fd, uint64_t unique, int error, void *data, size_t len)
++{
++	struct fuse_out_header oh = {
++		.len = sizeof(oh) + (data ? len : 0),
++		.error = error,
++		.unique = unique,
++	};
++	struct iovec iov[2] = { { &oh, sizeof(oh) }, { data, len } };
++
++	/* Errors here are teardown races (device closed on unmount) */
++	if (writev(fd, iov, data ? 2 : 1) < 0)
++		return;
++}
++
++static struct entry *find_in(struct server *s, uint64_t parent,
++			     const char *name)
++{
++	int i;
++
++	for (i = 0; i < s->nent; i++)
++		if (s->ent[i].parent == parent && !strcmp(s->ent[i].name, name))
++			return &s->ent[i];
++	return NULL;
++}
++
++static struct entry *add_in(struct server *s, uint64_t parent,
++			    const char *name, uint32_t mode)
++{
++	struct entry *e = &s->ent[s->nent];
++
++	if (s->nent >= MAX_ENTRIES)
++		return NULL;
++	e->parent = parent;
++	snprintf(e->name, sizeof(e->name), "%.63s", name);
++	e->nodeid = FUSE_ROOT_ID + 1 + s->nent++;
++	e->mode = mode;
++	return e;
++}
++
++static struct entry *add(struct server *s, const char *name, uint32_t mode)
++{
++	return add_in(s, FUSE_ROOT_ID, name, mode);
++}
++
++/* A NULL entry is a negative entry, cached like a found one */
++static void fill_entry(struct fuse_entry_out *out, struct entry *e)
++{
++	memset(out, 0, sizeof(*out));
++	out->entry_valid = 3600;
++	if (!e)
++		return;
++	out->nodeid = e->nodeid;
++	out->attr_valid = 3600;
++	out->attr.ino = e->nodeid;
++	out->attr.mode = e->mode;
++	out->attr.nlink = S_ISDIR(e->mode) ? 2 : 1;
++	out->attr.blksize = 4096;
++}
++
++static void do_open_atomic(struct server *s, struct fuse_in_header *ih)
++{
++	struct fuse_create_in *in = (void *)(ih + 1);
++	const char *name = (char *)(in + 1);
++	struct entry *e = find_in(s, ih->nodeid, name);
++	struct {
++		struct fuse_entry_out entry;
++		struct fuse_open_out open;
++	} out = {0};
++	size_t len = sizeof(out.entry) + open_out_size(s);
++
++	if (ih->opcode == FUSE_OPEN_ATOMIC && !s->atomic) {
++		s->nr_enosys++;
++		return reply(s->fd, ih->unique, -ENOSYS, NULL, 0);
 +	}
++	if (ih->opcode == FUSE_CREATE)
++		s->nr_create++;
++	else
++		s->nr_open_atomic++;
++	if (in->flags & O_TRUNC)
++		s->nr_trunc++;
++	if (e && (in->flags & O_CREAT) && (in->flags & O_EXCL))
++		return reply(s->fd, ih->unique, -EEXIST, NULL, 0);
++	if (e && !(in->flags & O_CREAT) && s->open_no_nodeid) {
++		fill_entry(&out.entry, NULL);
++		return reply(s->fd, ih->unique, 0, &out, len);
++	}
++	if (!e && !(in->flags & O_CREAT)) {
++		fill_entry(&out.entry, NULL);
++		return reply(s->fd, ih->unique, 0, &out.entry,
++			     sizeof(out.entry));
++	}
++	if (e && !S_ISREG(e->mode)) {
++		fill_entry(&out.entry, e);
++		return reply(s->fd, ih->unique, 0, &out.entry,
++			     sizeof(out.entry));
++	}
++	if (!e) {
++		e = add_in(s, ih->nodeid, name, S_IFREG | in->mode);
++		if (!e)
++			return reply(s->fd, ih->unique, -ENOSPC, NULL, 0);
++		if (ih->opcode == FUSE_OPEN_ATOMIC)
++			out.open.open_flags = FOPEN_CREATED;
++	}
++	fill_entry(&out.entry, e);
++	reply(s->fd, ih->unique, 0, &out, len);
++}
 +
- 	if (d_in_lookup(entry)) {
- 		struct dentry *res = fuse_lookup(dir, entry, 0);
- 		if (res || d_really_is_positive(entry))
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index c91af283aef20..c680e106bf77a 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -50,6 +50,9 @@
- /** Number of dentries for each connection in the control filesystem */
- #define FUSE_CTL_NUM_DENTRIES 5
- 
-+/** Size of fuse_open_out without backing_id_64 */
-+#define FUSE_COMPAT_OPEN_OUT_SIZE offsetofend(struct fuse_open_out, backing_id)
++static void *server_thread(void *arg)
++{
++	struct server *s = arg;
++	static char buf[MAX_WRITE + 4096];
 +
- /*
-  * Dentries invalidation workqueue period, in seconds.  The value of this
-  * parameter shall be >= FUSE_DENTRY_INVAL_FREQ_MIN seconds, or 0 (zero), in
-@@ -617,6 +620,9 @@ struct fuse_conn {
- 	/** @no_create: Is create not implemented by fs? */
- 	unsigned no_create:1;
- 
-+	/** @no_open_atomic: Is FUSE_OPEN_ATOMIC not implemented by fs? */
-+	unsigned no_open_atomic:1;
++	for (;;) {
++		ssize_t n = read(s->fd, buf, sizeof(buf));
++		struct fuse_in_header *ih = (void *)buf;
 +
- 	/** @no_bmap: Is bmap not implemented by fs? */
- 	unsigned no_bmap:1;
- 
-diff --git a/fs/fuse/fuse_trace.h b/fs/fuse/fuse_trace.h
-index 60baa10bbcb99..54d7a1891c382 100644
---- a/fs/fuse/fuse_trace.h
-+++ b/fs/fuse/fuse_trace.h
-@@ -58,6 +58,7 @@
- 	EM( FUSE_SYNCFS,		"FUSE_SYNCFS")		\
- 	EM( FUSE_TMPFILE,		"FUSE_TMPFILE")		\
- 	EM( FUSE_STATX,			"FUSE_STATX")		\
-+	EM( FUSE_OPEN_ATOMIC,		"FUSE_OPEN_ATOMIC")	\
- 	EMe(CUSE_INIT,			"CUSE_INIT")
- 
- /*
-diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-index 616430a2973c6..2986b247db615 100644
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -257,6 +257,9 @@
-  *  - add backing_id_64 to fuse_open_out
-  *  - add FUSE_NOTIFY_BACKING_MAP, fuse_notify_backing_map_out, fuse_extent
-  *  - add FUSE_BACKING_MAP_CREATE, FUSE_BACKING_MAP_CYCLIC
-+ *
-+ *  7.48
-+ *  - add FUSE_OPEN_ATOMIC and FOPEN_CREATED
-  */
- 
- #ifndef _LINUX_FUSE_H
-@@ -292,7 +295,7 @@
- #define FUSE_KERNEL_VERSION 7
- 
- /** Minor version number of this interface */
--#define FUSE_KERNEL_MINOR_VERSION 47
-+#define FUSE_KERNEL_MINOR_VERSION 48
- 
- /** The node ID of the root inode */
- #define FUSE_ROOT_ID 1
-@@ -406,6 +409,7 @@ struct fuse_file_lock {
-  *                           (FUSE_URING_ZERO_COPY) and the request carries page
-  *                           payload. Otherwise reads/writes fall back to
-  *                           copying.
-+ * FOPEN_CREATED: FUSE_OPEN_ATOMIC created the file
-  */
- #define FOPEN_DIRECT_IO		(1 << 0)
- #define FOPEN_KEEP_CACHE	(1 << 1)
-@@ -416,6 +420,7 @@ struct fuse_file_lock {
- #define FOPEN_PARALLEL_DIRECT_WRITES	(1 << 6)
- #define FOPEN_PASSTHROUGH	(1 << 7)
- #define FOPEN_IO_URING_ZERO_COPY (1 << 8)
-+#define FOPEN_CREATED		(1 << 9)
- 
- /*
-  * INIT request/reply flags
-@@ -699,6 +704,19 @@ enum fuse_opcode {
- 	FUSE_STATX		= 52,
- 	FUSE_COPY_FILE_RANGE_64	= 53,
- 
-+	/*
-+	 * FUSE_OPEN_ATOMIC looks up a name, creates it for O_CREAT, and opens
-+	 * it. The request carries fuse_create_in, without O_TRUNC, and the
-+	 * name. The reply is fuse_entry_out, followed by fuse_open_out if the
-+	 * server opened the file, with FOPEN_CREATED if it created it. The
-+	 * server opens an existing regular file, and returns the entry only
-+	 * for other files, -EEXIST for an existing name with O_CREAT | O_EXCL,
-+	 * and a zero nodeid for a missing name without O_CREAT. The kernel
-+	 * checks the open after the reply and releases the file if the check
-+	 * fails. After a -ENOSYS reply the kernel sends FUSE_LOOKUP instead.
-+	 */
-+	FUSE_OPEN_ATOMIC	= 54,
++		if (n < 0) {
++			if (errno == EINTR || errno == EAGAIN)
++				continue;
++			return NULL;	/* device closed on unmount */
++		}
++		if (n < (ssize_t)sizeof(*ih))
++			continue;
 +
- 	/* CUSE specific operations */
- 	CUSE_INIT		= 4096,
- 
++		switch (ih->opcode) {
++		case FUSE_INIT: {
++			struct fuse_init_in *in = (void *)(ih + 1);
++			struct fuse_init_out out = {0};
++
++			s->minor = in->minor;
++			out.major = FUSE_KERNEL_VERSION;
++			out.minor = FUSE_KERNEL_MINOR_VERSION;
++			out.max_readahead = in->max_readahead;
++			out.max_write = MAX_WRITE;
++			out.max_background = 16;
++			out.congestion_threshold = 12;
++			if (s->atomic_o_trunc)
++				out.flags = FUSE_ATOMIC_O_TRUNC;
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_GETATTR:
++		case FUSE_SETATTR: {
++			struct fuse_attr_out out = {0};
++			struct fuse_entry_out eo;
++			int i;
++
++			if (ih->opcode == FUSE_SETATTR)
++				s->nr_setattr++;
++			out.attr_valid = 3600;
++			out.attr.ino = FUSE_ROOT_ID;
++			out.attr.mode = S_IFDIR | 0777;
++			out.attr.nlink = 2;
++			for (i = 0; i < s->nent; i++) {
++				if (s->ent[i].nodeid == ih->nodeid) {
++					fill_entry(&eo, &s->ent[i]);
++					out.attr = eo.attr;
++					out.attr_valid = eo.attr_valid;
++				}
++			}
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_LOOKUP: {
++			struct fuse_entry_out out;
++			struct entry *e;
++
++			s->nr_lookup++;
++			e = find_in(s, ih->nodeid, (char *)(ih + 1));
++			fill_entry(&out, e);
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_CREATE:
++		case FUSE_OPEN_ATOMIC:
++			do_open_atomic(s, ih);
++			break;
++		case FUSE_OPEN: {
++			struct fuse_open_in *in = (void *)(ih + 1);
++			struct fuse_open_out out = {0};
++
++			s->nr_open++;
++			if (in->flags & O_TRUNC)
++				s->nr_trunc++;
++			reply(s->fd, ih->unique, 0, &out, open_out_size(s));
++			break;
++		}
++		case FUSE_OPENDIR: {
++			struct fuse_open_out out = {0};
++
++			reply(s->fd, ih->unique, 0, &out, open_out_size(s));
++			break;
++		}
++		case FUSE_RELEASE:
++		case FUSE_FLUSH:
++		case FUSE_RELEASEDIR:
++			reply(s->fd, ih->unique, 0, NULL, 0);
++			break;
++		case FUSE_FORGET:
++		case FUSE_BATCH_FORGET:
++			break;
++		default:
++			reply(s->fd, ih->unique, -ENOSYS, NULL, 0);
++			break;
++		}
++	}
++}
++
++FIXTURE(fuse)
++{
++	struct server *srv;
++	char dir[64];
++	int mounted;
++};
++
++FIXTURE_VARIANT(fuse)
++{
++	int atomic;
++	int atomic_o_trunc;
++};
++
++FIXTURE_VARIANT_ADD(fuse, atomic)
++{
++	.atomic = 1,
++};
++
++FIXTURE_VARIANT_ADD(fuse, atomic_trunc)
++{
++	.atomic = 1,
++	.atomic_o_trunc = 1,
++};
++
++FIXTURE_VARIANT_ADD(fuse, plain)
++{
++	.atomic = 0,
++};
++
++static void cleanup(FIXTURE_DATA(fuse) *self)
++{
++	if (self->mounted)
++		umount2(self->dir, MNT_DETACH);
++	self->mounted = 0;
++	/* The detached server thread may still use self->srv */
++	if (self->srv && self->srv != MAP_FAILED && self->srv->fd >= 0)
++		close(self->srv->fd);
++	if (self->srv && self->srv != MAP_FAILED)
++		self->srv->fd = -1;
++	if (self->dir[0])
++		rmdir(self->dir);
++	self->dir[0] = '\0';
++}
++
++FIXTURE_SETUP(fuse)
++{
++	char opts[128];
++	struct stat st;
++	pthread_t t;
++	int ret;
++
++	if (geteuid() != 0)
++		SKIP(return, "need root to mount fuse");
++
++	/* Mounts made by the test go away with its mount namespace */
++	ASSERT_EQ(0, unshare(CLONE_NEWNS));
++	ASSERT_EQ(0, mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL));
++
++	self->srv = mmap(NULL, sizeof(*self->srv), PROT_READ | PROT_WRITE,
++			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(MAP_FAILED, self->srv);
++	self->srv->fd = -1;
++	self->srv->atomic = variant->atomic;
++	self->srv->atomic_o_trunc = variant->atomic_o_trunc;
++	add(self->srv, "ro", S_IFREG | 0444);
++	add(self->srv, "rw", S_IFREG | 0644);
++	add(self->srv, "dir", S_IFDIR | 0755);
++
++	self->srv->fd = open("/dev/fuse", O_RDWR);
++	if (self->srv->fd < 0 && (errno == ENOENT || errno == ENODEV)) {
++		cleanup(self);
++		SKIP(return, "no /dev/fuse");
++	}
++	ASSERT_GE(self->srv->fd, 0);
++
++	strcpy(self->dir, "/tmp/fuse_aopen_XXXXXX");
++	if (!mkdtemp(self->dir)) {
++		self->dir[0] = '\0';
++		cleanup(self);
++	}
++	ASSERT_NE('\0', self->dir[0]);
++
++	snprintf(opts, sizeof(opts),
++		 "fd=%d,rootmode=40000,user_id=0,group_id=0,default_permissions,allow_other",
++		 self->srv->fd);
++	ret = mount("fuse", self->dir, "fuse", 0, opts);
++	if (ret)
++		cleanup(self);
++	ASSERT_EQ(0, ret);
++	self->mounted = 1;
++
++	ret = pthread_create(&t, NULL, server_thread, self->srv);
++	if (!ret) {
++		pthread_detach(t);
++		/* Wait for FUSE_INIT: the root GETATTR is queued behind it */
++		ret = stat(self->dir, &st);
++	}
++	/* The harness skips teardown when setup fails or skips */
++	if (ret || self->srv->minor < 48)
++		cleanup(self);
++	ASSERT_EQ(0, ret);
++	if (self->srv->minor < 48)
++		SKIP(return, "kernel without FUSE_OPEN_ATOMIC (protocol 7.48)");
++}
++
++FIXTURE_TEARDOWN(fuse)
++{
++	cleanup(self);
++}
++
++/* Open @name as an unprivileged user and return the errno, or 0 */
++static int open_as_nobody(struct __test_metadata *_metadata, const char *dir,
++			  const char *name, int flags)
++{
++	char path[128];
++	int status, fd;
++	pid_t pid;
++
++	snprintf(path, sizeof(path), "%s/%s", dir, name);
++	pid = fork();
++	ASSERT_GE(pid, 0);
++	if (pid == 0) {
++		if (setgroups(0, NULL) || setgid(NOBODY) || setuid(NOBODY))
++			_exit(255);
++		fd = open(path, flags, 0644);
++		_exit(fd < 0 ? errno : 0);
++	}
++	ASSERT_EQ(pid, waitpid(pid, &status, 0));
++	ASSERT_TRUE(WIFEXITED(status));
++	/* 255: the child could not drop its privileges */
++	ASSERT_NE(255, WEXITSTATUS(status));
++	return WEXITSTATUS(status);
++}
++
++static int open_at(const char *dir, const char *name, int flags)
++{
++	char path[128];
++
++	snprintf(path, sizeof(path), "%s/%s", dir, name);
++	return open(path, flags, 0644);
++}
++
++static void open_close(struct __test_metadata *_metadata, const char *dir,
++		       const char *name, int flags)
++{
++	int fd = open_at(dir, name, flags);
++
++	ASSERT_GE(fd, 0);
++	close(fd);
++}
++
++TEST_F(fuse, create_new)
++{
++	open_close(_metadata, self->dir, "a", O_CREAT | O_WRONLY);
++	open_close(_metadata, self->dir, "b", O_CREAT | O_EXCL | O_WRONLY);
++
++	EXPECT_EQ(0, self->srv->nr_open);
++	EXPECT_EQ(variant->atomic ? 2 : 0, self->srv->nr_open_atomic);
++	EXPECT_EQ(variant->atomic ? 0 : 2, self->srv->nr_lookup);
++	EXPECT_EQ(variant->atomic ? 0 : 2, self->srv->nr_create);
++}
++
++TEST_F(fuse, create_existing)
++{
++	ASSERT_EQ(-1, open_at(self->dir, "ro", O_CREAT | O_EXCL | O_WRONLY));
++	EXPECT_EQ(EEXIST, errno);
++	/* The VFS checks the open after the reply */
++	EXPECT_EQ(EACCES, open_as_nobody(_metadata, self->dir, "ro",
++					 O_CREAT | O_RDWR));
++	EXPECT_EQ(0, self->srv->nr_create);
++}
++
++TEST_F(fuse, read_only)
++{
++	ASSERT_EQ(0, mount(NULL, self->dir, NULL,
++			   MS_REMOUNT | MS_BIND | MS_RDONLY, NULL));
++	/* An existing name gives EEXIST, not EROFS */
++	ASSERT_EQ(-1, open_at(self->dir, "rw", O_CREAT | O_EXCL | O_WRONLY));
++	EXPECT_EQ(EEXIST, errno);
++	ASSERT_EQ(-1, open_at(self->dir, "ro", O_RDONLY | O_TRUNC));
++	EXPECT_EQ(EROFS, errno);
++
++	EXPECT_EQ(0, self->srv->nr_create);
++	if (variant->atomic_o_trunc) {
++		EXPECT_EQ(0, self->srv->nr_open_atomic);
++		EXPECT_EQ(2, self->srv->nr_lookup);
++	} else {
++		EXPECT_EQ(variant->atomic ? 1 : 0, self->srv->nr_open_atomic);
++		EXPECT_EQ(variant->atomic ? 1 : 2, self->srv->nr_lookup);
++	}
++}
++
++TEST_F(fuse, open_existing)
++{
++	/* The VFS checks the open after the reply */
++	EXPECT_EQ(EACCES, open_as_nobody(_metadata, self->dir, "ro", O_RDWR));
++	open_close(_metadata, self->dir, "rw", O_RDONLY);
++	ASSERT_EQ(-1, open_at(self->dir, "missing", O_RDONLY));
++	EXPECT_EQ(ENOENT, errno);
++	/* A zero nodeid is cached like a negative LOOKUP */
++	ASSERT_EQ(-1, open_at(self->dir, "missing", O_RDONLY));
++	EXPECT_EQ(ENOENT, errno);
++
++	EXPECT_EQ(variant->atomic ? 0 : 1, self->srv->nr_open);
++	EXPECT_EQ(variant->atomic ? 3 : 0, self->srv->nr_open_atomic);
++	EXPECT_EQ(variant->atomic ? 0 : 3, self->srv->nr_lookup);
++}
++
++TEST_F(fuse, open_trunc)
++{
++	open_close(_metadata, self->dir, "rw", O_WRONLY | O_TRUNC);
++	/* As a shell "> ro" */
++	open_close(_metadata, self->dir, "ro", O_CREAT | O_TRUNC | O_WRONLY);
++
++	EXPECT_EQ(0, self->srv->nr_create);
++	if (variant->atomic_o_trunc) {
++		/* FUSE_OPEN truncates, after a LOOKUP */
++		EXPECT_EQ(0, self->srv->nr_open_atomic);
++		EXPECT_EQ(2, self->srv->nr_lookup);
++		EXPECT_EQ(2, self->srv->nr_open);
++		EXPECT_EQ(2, self->srv->nr_trunc);
++		EXPECT_EQ(0, self->srv->nr_setattr);
++	} else if (variant->atomic) {
++		/* The server opens the file and SETATTR truncates it */
++		EXPECT_EQ(2, self->srv->nr_open_atomic);
++		EXPECT_EQ(0, self->srv->nr_lookup);
++		EXPECT_EQ(0, self->srv->nr_open);
++		EXPECT_EQ(0, self->srv->nr_trunc);
++		EXPECT_EQ(2, self->srv->nr_setattr);
++	} else {
++		EXPECT_EQ(2, self->srv->nr_lookup);
++		EXPECT_EQ(2, self->srv->nr_open);
++		EXPECT_EQ(2, self->srv->nr_setattr);
++	}
++}
++
++TEST_F(fuse, open_directory)
++{
++	/* The server returns the entry only, and the VFS opens it */
++	open_close(_metadata, self->dir, "dir", O_RDONLY);
++	EXPECT_EQ(variant->atomic ? 1 : 0, self->srv->nr_open_atomic);
++	EXPECT_EQ(variant->atomic ? 0 : 1, self->srv->nr_lookup);
++}
++
++TEST_F(fuse, short_open_out)
++{
++	self->srv->short_open = 1;
++	open_close(_metadata, self->dir, "a", O_CREAT | O_WRONLY);
++	open_close(_metadata, self->dir, "rw", O_RDWR);
++
++	EXPECT_EQ(variant->atomic ? 2 : 0, self->srv->nr_open_atomic);
++	EXPECT_EQ(variant->atomic ? 0 : 1, self->srv->nr_open);
++}
++
++TEST_F(fuse, open_reply_no_nodeid)
++{
++	int fd;
++
++	/* An opened file needs a nodeid */
++	self->srv->open_no_nodeid = 1;
++	fd = open_at(self->dir, "rw", O_RDONLY);
++	if (variant->atomic) {
++		ASSERT_EQ(-1, fd);
++		EXPECT_EQ(EIO, errno);
++	} else {
++		ASSERT_GE(fd, 0);
++		close(fd);
++	}
++}
++
++TEST_F(fuse, open_atomic_enosys)
++{
++	/* After -ENOSYS the kernel sends FUSE_LOOKUP */
++	self->srv->atomic = 0;
++	open_close(_metadata, self->dir, "rw", O_RDONLY);
++	open_close(_metadata, self->dir, "a", O_CREAT | O_WRONLY);
++
++	EXPECT_EQ(1, self->srv->nr_enosys);
++	EXPECT_EQ(0, self->srv->nr_open_atomic);
++	EXPECT_EQ(2, self->srv->nr_lookup);
++	EXPECT_EQ(1, self->srv->nr_open);
++	EXPECT_EQ(1, self->srv->nr_create);
++}
++
++TEST_F(fuse, name_too_long)
++{
++	char path[1200];
++	int len;
++
++	/* Longer than the 1024 byte limit of a server without FUSE_MAX_PAGES */
++	len = snprintf(path, sizeof(path), "%s/", self->dir);
++	memset(path + len, 'x', 1100);
++	path[len + 1100] = '\0';
++	ASSERT_EQ(-1, open(path, O_CREAT | O_WRONLY, 0644));
++	EXPECT_EQ(ENAMETOOLONG, errno);
++	EXPECT_EQ(0, self->srv->nr_enosys);
++	EXPECT_EQ(0, self->srv->nr_open_atomic);
++	EXPECT_EQ(0, self->srv->nr_create);
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.50.1
 
