@@ -1,105 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793275249;
-	b=Awiyv5k2SSCnzaev3s7aqT3/PQZeQs4+ht/fjBBD4eHwac8GxAgefcHP2fUjFsW1RGKJ
-	 oMcPtw3lsq0vxij/5c/ph+QYwI2RfBP1jPtJ5Luj5pt0V5gDp6P/VvM1gfWUDIKcQFcL/
-	 1EGr7txMxyiZOk8klIrghvwyKZpduwd5Bvhi7iGPduk0MNlOyxNQEHS8WZfhPrq5M1gnL
-	 LoHt/hGAesYkAxWqjAeSNlMAhvVEG+o8XgJ1fohNosfCkjsQfb9mK17zjcsvOCPfjeBK5
-	 k0pEBsKGL9nr7WdiAmvj57czhls5eKZ1L/1pzMzEC5dIx13qAmrkJCUxLs1x58npplQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793275249;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.69
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793275869;
+	b=5B5TwuCr28ep8n+HxXWi3a960kJD5f3Ok87dBtYvhU6Y8VVlOVl2xPc4oxbkB2ZUek3e
+	 1PIvZ/CHgKXW6omug/J+8mMUHvEmo/hvV12AhXVlxS77ZQoNMl5NdkxtXbrqJlkQgaJQ/
+	 ue/zBnYgZAFEYmd4npd8o9CeL6htWZ6wlHqvLJOnKnT/FGYTSVPPAwXDgJWQ5VuN8+wQH
+	 JkqHWqKxTZCl8lfwLLq4af3WC9uy+NBMPn2HjqPL+cT2I1JoE/5s431KUL07MRdRZYbbW
+	 ESQT98IKPmHE1XExV6p3cnBORMWlhvWB1bgf7b5ePSty8KjQSVky+/mbxIERJ9YOd+A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793275869;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:Mime-Version:X-Original-From:User-Agent:From:In-Reply-To:
-	 References:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=Kfh6T58QwTFlNX2tJxJJ8wG1iXiSG5Qq4FI151fPHEk=;
-	b=Y5qUsKmjYWEG/A8GoG+Mb9adzGYfd0xrLNic0eJe7tLKRNHxVFliXlKdluxXnqR8cr8O
-	 6ltUSgF5gAyw/dFU32Ga7Cw34HR8VkaOkvZ4JdraUkqt4LqflRS4TcCD13Q5zrwiOXNqa
-	 ZbMLA0399IqB7agCoR/yJj5BtOh2dOKCQFBVUE352nNXWyawSTr9gqjJk20WINDFm8+ca
-	 TaCeHYWRAGk9BwuLLqFKYnu8FJznMZtnXgYVF53FA0RRCNVIkrfoj+t32x2uxO6moIEun
-	 nojXMoX2Q2WCjWlsFCw7Q4UhjROA4T0LWs66oASCeEPNO0U0Tps8CQW6mv0836GH/Jg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bytedance.com;
-	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=DPz8UE+T;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.46
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	bh=8Jb0QjN+ngY6etMxQOZMOoIlhB+546T+PND1NORcPzA=;
+	b=HZeJWbAulcqg15eMHLz9iSIcuVOWJNxPIjOoKSgjxRhLmmZLlfNkhbBjRy+DD5rdjSzG
+	 6w1F7WY9Gi9CIjc5SAvTwfCHeaCq4srZ6XNeOaaKFuWzXZptGd4799cid2ioTkJvGaHhF
+	 cmxGuUAdRCXAyZctEtId3DzkPYcIkX9If6UZvZQ9mQUzETJVHIIsukF5+40Lg1ob8wmMv
+	 U80zFiRNZlrCTvMz5XEeSbFyIBAu6vTUnWGVsYbImU3/vucx/P7hWiWTJCM100wSpapRZ
+	 wvIDdgfnIXo1G2CZGgclQEe93R2rrDUEvpHGLNvfymT/GvBwe7Zf44ZyqyR5itF/lpA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="Jlnl/QUT";
+	arc=none smtp.remote-ip=209.85.218.69
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BB8606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 12:00:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65BB8606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D57606A324
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 12:11:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8D57606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=DPz8UE+T
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5bfc346401aso1425865e87.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 05:00:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793275246; cv=none;
-        d=google.com; s=arc-20260327;
-        b=V9CTlbd1gq8Btwmnz/jft9ovAg40ZBagdr/Za3bCoK+2YTiagncg4Sy3lOpmlIiUGO
-         8FNsJHiOJnS4yhvZK2SKOUX7DQ6ofGkPqZocKDSsQAeohufTulsyd8q5LtSJtM3GDG2R
-         hUez1EClDhX5hic5Awy6m7yWeZvACMn/R/ueZ/CVXMBEzhg/10b3xyJEm0g6hDp5+S19
-         gIlWRNrKGiptrL3gXn1EQawU1ML0EarZHJfkjLMUyPYV+T6FYFXIkzN8aEsb8iEr+N0d
-         7niRQFk/1ovx+JyFblE61evROj6cRc26IpMVN/kXPJ6gVnb7SwbX41udpPOFj3IwK+RP
-         iNUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :in-reply-to:from:user-agent:mime-version:dkim-signature;
-        bh=Kfh6T58QwTFlNX2tJxJJ8wG1iXiSG5Qq4FI151fPHEk=;
-        fh=Fh5U7cDP3NY/U/xg5OMSDwHTj1hY1GgkWSSJDYt31x4=;
-        b=RIMn7xtrSwh4GzWYxduxG8vG3l4vGOVSADshMsy6Q3ezs/EDQd4mQHgB3aeUHwGCw4
-         AQAIFUuoA3j3riLsunAEXD/ghiJuesLGIahiG+aiY0aDNQlELwOWQj1RIyAW5hzGRr7q
-         deTW+6Mu2E3746c08NQOGIcETCfMa04+/14SlgKYaORHcdc8xeisa2NIzWFhYKSxaC/f
-         y3NHoz88JWo/hUgGKGjLIFW0uZo4TVdQJy3vwLr93X8wythofHeJfpV7mPrP5U43a5+r
-         xcZGloxy/gWMhC2a2+5gGb9xk9W1WtTwjMXT3BNhlezmPJWyD9TTsQFppEvGiuc01MH/
-         vUMw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Jlnl/QUT
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c293e604f0eso225202266b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 05:11:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1793275246; x=1793880046; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:user-agent:mime-version:from:to:cc
+        d=google.com; s=20260707; t=1793275867; x=1793880667; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Kfh6T58QwTFlNX2tJxJJ8wG1iXiSG5Qq4FI151fPHEk=;
-        b=DPz8UE+Tyq/cYPEl4w9kY6RF8oUPSIePH2cHsTWTsyIww8cgzD+L4D6RUw7K7cWW8o
-         5bT6/92MEzA94ZSo9BosrD4q/8jYMsNjrBbEJbcait+RXDxiIjBHhTsmvsq8563TjuoW
-         v1ABBvVvDyu9Gu32MGKQvkCCIy5rvYW/syrlIQuko6y/kiNEMf+iNoL28ME+J/WphOGq
-         yZbm9hNqjWElPQXS2RMtV9pPlxKbl14jwd/SAR7ig0ALG3rhefYwqE+XXPLp9xRw6ZJO
-         S20d4XV4bJLSlIKAqfLFe9CMRHcOH7RmLI/OjGvEGB8AqZUUPG9kp+rQGEEtoQPZGtlR
-         IMkA==
+        bh=8Jb0QjN+ngY6etMxQOZMOoIlhB+546T+PND1NORcPzA=;
+        b=Jlnl/QUTtPccNXi+ZNNtbAqFpxXTju7rbaudqoEAepuOGdczXzyFQiuTlvKV9TRJFk
+         Fp6YrBzWkmYN3bqS/G8vDFtnVhiAlhRXvYxV7V3Wg4R2R56JN4EzGTkxQscvA2DHXocH
+         xqv3pRmejhrrxLL6D1jiPl6quIY++yph2+5UyvcgdWP33jRH+zU9UlGvQGFJZw9M4vFC
+         ah2J/703hoBaTXZRxbDhVBoL5SfyHkCEuaYbCEzb9LGTWdPAX6cLywrWb24VDZrVPpED
+         i84/UyEbcaXba0ha2kGdCV6YnJ0ZZq2iJ/jvKqL+jER6wtiVUy1Jw/OVcWsxlFH9UdV/
+         cpoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793275246; x=1793880046;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:user-agent:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793275867; x=1793880667;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Kfh6T58QwTFlNX2tJxJJ8wG1iXiSG5Qq4FI151fPHEk=;
-        b=pVrJbSIAsO0Ecs2iDo0vqbiCgTn2QquCZvXELSzDTDhKyA575Zr86mkSY4Iqn2FZaY
-         OmPIDBICuze1BalX7r+jXrOsPYMx43/ruexh4tEusgKiG7tCUe3sBasm8JBY9wCsoUg3
-         yBi/0ksuxilOycqXWokf0EaJ1fr462vgCcJjHV9J7Iu7qikPPYGDTR64299KeQptYmwB
-         lM/DTwPfWNV9XRfjzmtFb1FVuGS7j+Kl1yA/K/m1uNPq+v3h65t7nLtnr4RF3mATpW4Q
-         Yuo4ZbkLAGQGOqukox+Sxm3Ky//jnvJFs7oAdiuCJREyl9OdsXdbagR3mIl53l7/aKza
-         YSUg==
-X-Forwarded-Encrypted: i=1; AKwUvBw1HTqksUClU7bqhsHUf1g9QtLbG26xQxL6Kf8sCz5toJQaiUbSMSYSA9NrudZ7rX1iuCyTEV9dDYJb8ECmGJc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK6V5f9zSaiWkLPOisM5mj7M9OyKec1WdztG9OFOD3W+C9nK1CP
-	JQGssgK+gorAB23H3cnSCmmNeRRLrW9z3kwaR9k2jjz8Ka1VvD0JdP1FUn4BsZCPG6NK1QbGuFj
-	DWJrDKcdSfd+t8Rb9g0y7vMVddq+zf5JDzKB6zijt0A==
-X-Gm-Gg: AYBFou36hz2ZTwzHnOYskEXbNt4X2V4WRGrI+/VIGi9+xRXbr4aCCP09xXTqc4AEKtb
-	i/msVLSGjH6MRNWs1wYCUNIyKUdVvgpbWuVSShmrFOmsQ9wgasB2ISDkQbPGLp7IYHwt4ou8XkT
-	RutA1F6ls2IWljJK8VKdE365zEH8NpPZbDOcs71XBTSq4FoOh2mmuorBm+bJbZZKenId1OnAKd0
-	ToiTZEs4nAm0H3C1dq5K2dtnwPzHfYuZTDTQahGhBRQwHmNKhkKez7lViCJ4N54+TgViP6KY3gj
-	4GySAOuUlF3XULWqcuy9hfyYcfogFBKevFI06Uk70nlULecIbt9PdWHLhFQTuKRqJ4TzQtHVcKD
-	CbPSCwxGfawBAKeYjNOm30zQ6tdIZVR09lePt0A==
-X-Received: by 2002:a05:6512:340d:b0:5bf:d653:ff01 with SMTP id
- 2adb3069b0e04-5bfd6540187mr229252e87.34.1793275246438; Thu, 29 Oct 2026
- 05:00:46 -0700 (PDT)
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 29 Oct 2026 07:00:45 -0500
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 29 Oct 2026 07:00:45 -0500
+        bh=8Jb0QjN+ngY6etMxQOZMOoIlhB+546T+PND1NORcPzA=;
+        b=M1j61ltzK9xqQIZoTILM0AaZZWMEyGE8wEziWvLY2GIHSU4fFwbJuXA13wYMvhVOlx
+         xmx7X+nonv7suEwD/7ZQ4deWFCqASuqoH3rbnIgN67MPiJ0C8Jn5BmLI0mOla/p3CTFZ
+         oSgTLU4+6OYJR8n0cbbwdKYxRPVtQCoPiwwo3SfbY7oUoabGh7JxTowm/mdSsNyup4lh
+         8Sh87VBZFX8EnkFDSwF9wXq2PPxBHAUsmF/qcu4ko7Jmgj9G42KGkn2THQHodFu2PdEj
+         5bjcFQ25pllwCIEK+ctww7pX4rpR8R/80j+Nbe6K6RSwME0ki8c4NWFUprD8ehsOccRm
+         aHFA==
+X-Forwarded-Encrypted: i=1; AKwUvBxBJT3+p3jjZcgCFDrvd36PWJuCNimyWuTgnAzUMQtYHcO41RgO895qIRI2CN9x31DqHf/+TB1BzUO6ikL9P/o=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKprMSi1lTgH1WJ5bxfCDPdVzA4stjAfJ6HQczhGc9BqOWpTP5V
+	Baq+twn+JtYA3vpwqxNmywfeU6sYOkFJ4CYvZi+xMcld4mj/BBiIDI80L1DDqIFcln321c3GxA=
+	=
+X-Received: from ejoy1.prod.google.com ([2002:a17:906:4481:b0:c49:cd3a:2b6e])
+ (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:ecc5:b0:c49:d058:6901
+ with SMTP id a640c23a62f3a-c49d05873a3mr206311266b.38.1793275866775; Thu, 29
+ Oct 2026 05:11:06 -0700 (PDT)
+Date: Thu, 29 Oct 2026 12:11:06 +0000
+In-Reply-To: <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,126 +80,155 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-X-Original-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-User-Agent: Mozilla Thunderbird
-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-In-Reply-To: <auMyx7dAPbl_1I5_@hu-himchau-blr.qualcomm.com>
-References: <20261029074853.35467-1-zhangzhanpeng.jasper@bytedance.com>
- <20261029074853.35467-4-zhangzhanpeng.jasper@bytedance.com> <auMyx7dAPbl_1I5_@hu-himchau-blr.qualcomm.com>
-Date: Thu, 29 Oct 2026 07:00:45 -0500
-X-Gm-Features: AclHuK_sbU548xic3ZPbWuif9uJX5ACTcms_1cHQ__pmhhaKq4RoduWrhke4WpA
-Message-ID: <CACnXVnc0jFcNn0bmU5MSm81QTm6Ht+deSRED=91dViZnq1dNmQ@mail.gmail.com>
-Subject: Re: [PATCH v12 03/11] riscv: sse: mask events during shutdown and kexec
-To: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Conor Dooley <conor@kernel.org>, 
-	Anup Patel <anup.patel@oss.qualcomm.com>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Yunhui Cui <cuiyunhui@bytedance.com>, Atish Patra <atish.patra@linux.dev>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Will Deacon <will@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
-	Shuah Khan <shuah@kernel.org>, yuanzhu@bytedance.com, yang.yicong@picoheart.com, 
-	yang.susheng@zte.com.cn, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
+Message-ID: <auM32mOlBLu6ZUlt@google.com>
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+From: "Hallgrimur H. Gunnarsson" <halg@google.com>
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
+	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Jann Horn <jannh@google.com>, "=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-api@vger.kernel.org, containers@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Himanshu,
+On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
+> On Wed, Oct 28, 2026 at 3:18=E2=80=AFPM Hallgrimur H. Gunnarsson
+> <halg@google.com> wrote:
+> >
+> > When an unprivileged process creates a new user namespace, it is grante=
+d
+> > a full set of capabilities (CAP_FULL_SET) scoped to that namespace.
+> > While these capabilities are isolated to the namespace, they allow
+> > unprivileged local users to reach deep kernel subsystems (most notably
+> > networking configuration and raw sockets via CAP_NET_ADMIN and
+> > CAP_NET_RAW) that historically assumed a trusted caller and have
+> > accounted for a large share of local privilege escalation
+> > vulnerabilities.
+> >
+> > Many workloads and sandboxes use unprivileged user namespaces strictly
+> > for basic UID/GID, mount, PID, or network isolation and never need
+> > high-risk capabilities like CAP_NET_ADMIN or CAP_NET_RAW. Likewise,
+> > system administrators often want a host-wide policy ceiling restricting
+> > which capabilities unprivileged user namespaces may acquire, without
+> > disabling unprivileged user namespaces altogether.
+> >
+> > Prior work by Jonathan Calmels [1] proposed addressing this via a sixth
+> > per-thread capability set (cap_userns) alongside a global sysctl mask.
+> > During that discussion [1, 2], feedback (e.g. from Casey Schaufler)
+> > suggested that rather than adding another per-thread capability set and
+> > prctl() interface, capability restrictions could be integrated directly
+> > into struct user_namespace and configured via clone3(). At the same
+> > time, as noted in [1], a clone3() flag alone is not sufficient for
+> > administrators who need to enforce a host-wide ceiling on unprivileged
+> > user namespaces without modifying every userspace callsite.
+> >
+> > This series combines both pieces of feedback: it embeds a capability
+> > bounding set (cap_bset) directly into struct user_namespace, reusing
+> > the existing task cap_bset, cap_permitted, and cap_effective sets on
+> > namespace entry, and provides both a system-wide sysctl ceiling for
+> > unprivileged user namespaces and a CLONE_NEWUSER_BSET flag for
+> > voluntary per-namespace restriction via clone3().
+>=20
+> Why should the task's cap masks affect this?  *Maybe* cap_bset makes
+> sense, but I'm struggling a bit to see why cap_permitted and
+> cap_effective should matter.
 
-On 10/29/26 7:49 PM, Himanshu Chauhan wrote:
-> On Thu, Oct 29, 2026 at 03:48:45PM +0800, Zhanpeng Zhang wrote:
->> SSE delivery is independent of normal S-mode interrupts. Firmware may al=
-so
->> retain an event registration until Linux explicitly unregisters it. A ha=
-rt
->> must therefore stop accepting SSE events before Linux stops servicing th=
-e
->> registered handler.
->>
->> Mask SSE on the local hart before panic stop, CPU stop, restart, powerof=
-f,
->> and crash shutdown paths. This prevents firmware from entering Linux-own=
-ed
->> handler state after the corresponding CPU or kernel context is no longer
->> valid.
->>
->> A crash kernel cannot identify or take ownership of registrations
->> inherited from the crashed kernel. Reject a later normal kexec while suc=
-h
->> SSE state may still exist, rather than transferring unknown firmware sta=
-te
->> to another kernel.
->>
->> The restriction is deliberately based on firmware SSE availability, not
->> CONFIG_RISCV_SBI_SSE or registrations made by the crash kernel. Disablin=
-g
->> SSE in the crash kernel does not establish that registrations left by th=
-e
->> crashed kernel are absent. Consequently, normal kexec from a crash kerne=
-l
->> is also rejected when firmware advertises SSE but no registrations were
->> actually left behind. This conservative restriction remains until a safe
->> way to establish or clear inherited firmware state is available.
->>
->> Link: https://lore.kernel.org/r/as7-3PbWDxygadnJ@hu-himchau-blr.qualcomm=
-.com/
->> Reviewed-by: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
->> Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
->> ---
->>   arch/riscv/kernel/machine_kexec.c | 11 +++++++++++
->>   arch/riscv/kernel/reset.c         | 18 ++++++++++++++++++
->>   arch/riscv/kernel/smp.c           | 17 +++++++++++++++++
->>   3 files changed, 46 insertions(+)
->>
->> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machi=
-ne_kexec.c
->> index 738df176ff6..24e7affae70 100644
->> --- a/arch/riscv/kernel/machine_kexec.c
->> +++ b/arch/riscv/kernel/machine_kexec.c
->> @@ -14,10 +14,13 @@
->>   #include <asm/set_memory.h>	/* For set_memory_x() */
->>   #include <linux/compiler.h>	/* For unreachable() */
->>   #include <linux/cpu.h>		/* For cpu_down() */
->> +#include <linux/crash_dump.h>
->>   #include <linux/reboot.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/irq.h>
->>
->> +#include <asm/sse.h>
->> +
->>   /*
->>    * machine_kexec_prepare - Initialize kexec
->>    *
->> @@ -36,6 +39,13 @@ machine_kexec_prepare(struct kimage *image)
->>   	unsigned int control_code_buffer_sz =3D 0;
->>   	int i =3D 0;
->>
->> +	/* A crash kernel cannot tear down registrations inherited from firmwa=
-re. */
->> +	if (is_kdump_kernel() && image->type !=3D KEXEC_TYPE_CRASH &&
->> +	    riscv_sse_available()) {
->> +		pr_err("Normal kexec from a crash kernel is unsupported with SSE\n");
->> +		return -EOPNOTSUPP;
->
-> I think I had pointed this out in v10 also. This rejects a normal kexec f=
-rom any kdump kernel whenever firmware merely advertises SSE, regardless of=
- CONFIG_RISCV_SBI_SSE or whether anything is registered. Can you check if i=
-ts breaking kexec() with SSE just being advertised?
->
-> Regards
-> Himanshu
+Sorry, the phrasing here may have been misleading. Just to clarify:
+none of the creating task's capability sets (cap_bset, cap_permitted
+or cap_effective) are used to restrict the new user namespace.
 
-Thanks for following up. Yes, the current check rejects that case based
-on firmware advertising SSE alone. I noted this restriction in the
-commit message, but it still needs to be narrowed.
+When I wrote "reusing the existing task cap_bset, cap_permitted and
+cap_effective sets on namespace entry", I was contrasting this with
+the prior series from 2024 [1], which proposed adding a 6th per-thread
+capability set to struct cred.
 
-With the merge window closing, I kept that change out of v12 and will
-address it in a separate follow-up patch like we discussed.
+In this series, when a task creates or enters a user namespace, we
+simply initialize its new cred->cap_{bset,permitted,effective} in
+that namespace to user_ns->cap_bset instead of CAP_FULL_SET.
 
-Thanks,
-Zhanpeng
+> Also, I think that Docker in non-userns mode restricts cap_bset, and
+> the purpose of that restriction is rather at odds with interpreting it
+> as a restriction on newly created user namespaces for purposes of
+> vulnerability mitigation.
+
+When computing the new user namespace's user_ns->cap_bset in
+create_user_ns():
+
+1. The creating task's cred->cap_bset and cred->cap_permitted are not
+   consulted at all. The base ceiling is inherited from
+   parent_ns->cap_bset (which is CAP_FULL_SET in init_user_ns), not from
+   the task's cred->cap_bset. So a non-userns Docker container that
+   drops bits from its task cap_bset does not restrict newly created
+   user namespaces.
+
+2. The creating task's cred->cap_effective never restricts the new
+   user namespace, but it is used as an additive exception to the
+   unprivileged sysctl ceiling.
+
+   The rationale is that if an admin restricts e.g. CAP_NET_ADMIN in the
+   unprivileged sysctl, an unprivileged daemon that already holds
+   effective CAP_NET_ADMIN in the parent namespace is allowed to keep
+   it when creating a new user namespace. There is no added attack
+   surface if the user already had the capability in the parent ns.
+
+> > In addition, because restricting CAP_NET_ADMIN at user namespace
+> > creation time prevents userspace from bringing up the loopback
+> > interface in new network namespaces, the series first introduces
+> > an opt-in flag to automatically enable loopback on network namespace
+> > creation:
+> >
+> > 1. Opt-in loopback activation on netns creation (Patch 1)
+> >
+> >   New network namespaces start with the loopback interface (lo) DOWN by
+> >   default, requiring CAP_NET_ADMIN over the owning user namespace to
+> >   bring it up. To block external network access while preserving
+> >   localhost networking, sandboxes commonly create an isolated network
+> >   namespace with only the loopback interface enabled.
+> >
+>=20
+> The whole unshare/clone flag situation is getting out of hand, IMO.
+> And this new thing makes logical sense but is really about reducing
+> exposure.
+>=20
+> Perhaps we should instead have a small list associated with a userns
+> (extensible in the future) of things that the ns's admin (i.e. whoever
+> has CAP_SYS_ADMIN relative to the ns) may do.  That list could
+> include:
+>=20
+> - Create loopback with sensible defaults for ipv4 and/or ipv6 (i see
+> no obvious reason to separate them)
+> - Create tun/tap interfaces in that ns (and attach them, etc)
+>=20
+> And add a very simple new API to do these things.  Actually, the
+> tun/tap could just use the normal mechanism.
+>=20
+> Thoughts?
+
+I'm not particularly attached to CLONE_NEWNET_LOOPBACK. I'd be happy
+with whatever mechanism allows bringing up loopback in a new netns
+without granting all of CAP_NET_ADMIN.
+
+The main reason I went for a creation-time flag is that it avoids
+needing a separate userspace API call after namespace creation and makes
+it simple to get working loopback for sandboxes that want to drop all
+capabilities in the new userns from the start, e.g. CLONE_NEWUSER_BSET
+with cap_bset =3D 0.
+
+That said, if maintainers prefer not to spend clone/unshare flags on
+this, I'm completely open to an alternative mechanism.
+
+Also worth noting that Patch 1 is orthogonal to the rest of the series.
+The capability bounding set changes in Patches 2-4 stand on their own
+and Patch 1 just makes restricting CAP_NET_ADMIN more practical for
+common sandboxing use cases that rely on localhost networking.
+
