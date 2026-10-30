@@ -1,60 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793386280;
-	b=YegqgKriQv40ixTsN4zUe8ek9Kj51ZgBRx0yEVnMozVo4IuTAjc6WcIL3td5PQYTc9lr
-	 A0q2xwkMduEW5Moe/NOSqlyzOWIctE2ZJh07h0ZplgyBPOHLMX0zaahYMq70DR7ntc3Bh
-	 ETqBcliDWSXPyF4l9jFXOLi7Y8JWAC5spZy4064gsLgUxxJxJnbtzv/ct+4CFIYZ38mGt
-	 q7RJmfg9lclgFbakNIVVP8u6WFUBFah3fofKfBXKDrgT4sZP+sS+q2CrVjfj1PujwpwL3
-	 01n69Apn+UBjjs0zXtqYtCbREVy414sNIlAXqEMPW820MARA969SSurn5es8AE0pKcg==
+	t=1793386278;
+	b=5eNTYBB4e2eweHuaxpAw8oUkiJWVV2/1z6AAi4ZlyJN3FCEwqoVknM58atY5cfdHv3Fp
+	 9WJJY7AMPBuZCuiKMfw7VHpu+hXgUykhow0a6l8cVlXJfPMOf8TYcCzq7i44E9LleXyW4
+	 FuV8jd5STJcWF3oPtfwRbO2nJTeX8iNRSgR9wnew2EmYPqMBcwcfcHdWmBKu8IcQ7NHdD
+	 1ztbEDyAUjEIVfebAOw/0uoJDyRL8jG/pxSbYO++SV0VMv/rpNFg/e6V5bcrOwqZxnSAW
+	 0aK/nSsmnZq5wwSTo2CTovQcP3JJ/32rn3TkQavPWI/hGFAw6KMsh6tulK9/33QIzZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793386280;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793386278;
 	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Last-TLS-Session-Version;
-	bh=x3i5tKbaIcpaKEBMwIFOWYmIWZiZXyyBPQVjaTT0ymA=;
-	b=t1ZKDguY4QtcEMbLeQumBRCPxoDUOYfGGSZW/zoe4TVjw/ez6MtvkJmUqtSAaLaNgU5T
-	 kh1mKsqW4SxC/EiDSPXSZf4a4mGKPNipWSn5wsiYbiHAAk6LXHuSI+91BB0eWzfKG/aTq
-	 PXj0+FMbHJmmPKMHi16IP6l6zMvSYRc1r1OZIwC969LYgsX+NPI7+wif7Hck8pLgrlC10
-	 lNUVyXE7UCfqroC7rTXX46jjYodUTbI9jET6lCWMCZ74WeukpuuLkdQLWg4SbcoPsGA8u
-	 d+E9GeQoPENXevtCa5Do6AGcxOgOk+ZLx9zQJN0RZkQE5Es7IdVaLlMRvwiK9AzlG8A==
+	bh=tGPD1kG0muCiRaH+onMJbF8McQXw/3iybmvF3qayq9M=;
+	b=tfnldRVDY/e7edFYPSKp6gcg/TXSbyQ6OUPlMnab3ZZtDqapn+KxKEa0EDJF/YTmpgkx
+	 RItBqGpR10PHC0rbe0kRnCuwpqj9IkgLlCoc90IIRVUxEIq4mhage8776Gao6ahxL6Vue
+	 0Im4TCHzC87FX6vjrJOFQ/Qz+uQqFah47KB23go/y6QoPLHxqRDoBYU/VicfM2LQjQq+h
+	 WYFcUklW7OmHUEm0/fBmpzjF3LKuVicxrl/ho8zrg5nuNrU/YP95DCf0IjASel5wMZm2X
+	 FD33OKD4+hQ5IwslKXkxtK1watF+y5Li9tW085FF7y9kH4rMfXT/6K1wu9EmVC8Igow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bootlin.com;
 	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=pBYxc9j9;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Qw57GVyK;
+	arc=none smtp.remote-ip=185.246.84.56
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3435606A32D;
-	Fri, 30 Oct 2026 18:51:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E3435606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2D5606A31A;
+	Fri, 30 Oct 2026 18:51:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC2D5606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=pBYxc9j9
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Qw57GVyK
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 8B0D6C49F68;
-	Fri, 30 Oct 2026 18:52:20 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 644851A13D5;
+	Fri, 30 Oct 2026 18:51:15 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id A460C603C2;
-	Fri, 30 Oct 2026 18:51:17 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 530F1103290F9;
-	Fri, 30 Oct 2026 19:51:14 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 37E91603C2;
+	Fri, 30 Oct 2026 18:51:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8B4D1103290EE;
+	Fri, 30 Oct 2026 19:51:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793386276; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1793386270; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=x3i5tKbaIcpaKEBMwIFOWYmIWZiZXyyBPQVjaTT0ymA=;
-	b=pBYxc9j9iuUEnGuZ2MTQ/jHDOWMx1CDFzEYVYeoaA/5FJe0jn6NHo2p50sqZi/+nB9MCRF
-	+t4Nq+PvEGhWHqTM6S1E0I2EHgGjPKLGyZaxgjp9Px8CLYdaxyCswhd52AoCTHQ47HuGAa
-	1E8kQ7e8OEvxCLkiOjZuo2NdtZiGBft/BB57ZggrjschADMztiydDBRaygsFkgGOzXCcoN
-	z0Zc/E8g9dJOE66FpPqcamsMigOC81yQd+6WmkeX4/P3ziBOLEBH+jmsYnLnscZ64VYpDb
-	NB4z8ZdkTRv8NYvx8MQNd6NlfKLlTjQydVfJL7UfG3iEIk6VkKCr7uJqP+C7gQ==
+	bh=tGPD1kG0muCiRaH+onMJbF8McQXw/3iybmvF3qayq9M=;
+	b=Qw57GVyKDhm66E50/4M5x8JdNW3QxpdeVHS09WY2sC399HrrlHeDaQjSES0W8b/aHJr3aj
+	1kj+Ml0n2AJMr/wFRaJvq06j3maHegSC2tVAQTSvmk2zgLefhSfGwKseQPLRr2yMb/yKl1
+	BCVOFEhpsl4BsOWju5FFycYRdLdEWxylEXvB23NUP92h+27NPS9rjWddWAPCYRHumj85uZ
+	cil3sLuqvNaj+lhDhgoRfbEbWahg59PxxtMkpUUIFdZTKXmy7PUX7BmlMsO1M3fFpjK56Y
+	rpUstMBq/LY4ebEmiDVY3vvREYNBqeNIWlCpB0iIF+5Opv9R3G7ijrNFtDzG/w==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Fri, 30 Oct 2026 19:50:41 +0100
-Subject: [PATCH bpf-next 2/2] selftests/bpf: port test_ftrace.sh to
- test_progs
+Date: Fri, 30 Oct 2026 19:50:40 +0100
+Subject: [PATCH bpf-next 1/2] selftests/bpf: add helpers to manipulate
+ ftrace
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,7 +66,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261030-ftrace_in_test_progs-v1-2-aa50c5dd1ccc@bootlin.com>
+Message-Id: <20261030-ftrace_in_test_progs-v1-1-aa50c5dd1ccc@bootlin.com>
 References: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
 In-Reply-To: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -86,264 +86,306 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.16.0
 X-Last-TLS-Session-Version: TLSv1.3
 
-Commit ff205766dbbe ("ftrace: Fix function_graph tracer interaction with
-BPF trampoline") made sure that trampolines generated for tracing
-programs did not collide with the function graph when we are returning
-from the hooked function. The series bringing this commit also came with
-a new test ensuring that the kernel does not crash when executing BPF
-programs handled by trampolines while the function graph trace is
-enabled, but this test is a standalone shell script, hence not executed
-in CI.
+Add helpers to allow a test_progs test to tune ftrace configuration.
+This new set of helpers work with an opaque structure: this one is used
+to record any change performed on ftrace, so that we can restore those
+automatically once the test is done.
 
-Convert the script to the test_progs runner so it can be executed
-automatically by the CI infrastructure. There are two main options to
-port this test:
-  - just enable ftrace during some existing trampoline-related tests
-    (eg: fentry/fexit tests)
-  - create a dedicated, minimal test with function graph
-
-The new test adopts the latter approach, with a smaller scope to keep
-execution time reasonable. On top of some simple fentry/fexit program,
-it also adds a small fmod_ret program to ensure that return values are
-correctly handled while the function graph enabled. Despite the few
-asserts in the new test, the actual goal  is to make sure that the
-kernel does not crash because of some incorrect stack frame skipping
-when both the function graph and tracing programs are running.
-
-ftrace is configured through the new ftrace helpers, and restored to its
-original state afterward. Despite being restored afterward, it is
-configured for the whole system, so the test is marked as serial_ to
-avoid conflicts with other tests needing traces (eg trace_vprintk)
-
-With the new test integrated into test_progs, drop test_ftrace.sh.
+The new helpers distinguish between two entries types:
+- basic controls, that are "knobs"
+- filters, for which writes are "additive"
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- .../selftests/bpf/prog_tests/fgraph_trampoline.c   | 129 +++++++++++++++++++++
- .../selftests/bpf/progs/fgraph_trampoline.c        |  29 +++++
- tools/testing/selftests/bpf/test_ftrace.sh         |  44 -------
- 3 files changed, 158 insertions(+), 44 deletions(-)
+ tools/testing/selftests/bpf/trace_helpers.c | 247 +++++++++++++++++++++++++++-
+ tools/testing/selftests/bpf/trace_helpers.h |   9 +
+ 2 files changed, 254 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fgraph_trampoline.c b/tools/testing/selftests/bpf/prog_tests/fgraph_trampoline.c
-new file mode 100644
-index 000000000000..98edd77cf214
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fgraph_trampoline.c
-@@ -0,0 +1,129 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 6d7a4b8c4ab8..1f26a057a810 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -21,8 +21,12 @@
+ #include "bpf/libbpf_internal.h"
+ #include "bpf_util.h"
+ 
+-#define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+-#define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
++#define TRACEFS		"/sys/kernel/tracing"
++#define TRACEFS_PIPE	TRACEFS "/trace_pipe"
++#define DEBUGFS		"/sys/kernel/debug/tracing"
++#define DEBUGFS_PIPE	DEBUGFS "/trace_pipe"
 +
-+#include <test_progs.h>
-+#include "trace_helpers.h"
-+#include "fgraph_trampoline.skel.h"
-+
-+#define TRACER_GRAPH	"function_graph"
-+
-+#define FTRACE_NOTRACE	"*printk* *console* *wake* *serial* *lock*"
-+#define GRAPH_FUNCS	"bpf_prog_test*"
-+
-+/* See test_run.c: we are overriding bpf_modify_return_test with a program
-+ * returning 5, but not bpf_modify_return_test2
-+ */
-+#define FMOD_EXPECTED_RETVAL ((1 << 16) | (5 + 1 + 3 + 3 + 4 + 5 + 6 + 7))
-+
-+static int configure_tracer(struct tracefs_ctl *ftrace)
++#define CHUNK_SIZE	128
+ 
+ static struct ksyms *ksyms;
+ static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
+@@ -557,6 +561,245 @@ void read_trace_pipe(void)
+ 	read_trace_pipe_iter(trace_pipe_cb, NULL, 0);
+ }
+ 
++static const char *tracefs_mountpoint(void)
 +{
++	return access(TRACEFS_PIPE, F_OK) == 0 ? TRACEFS : DEBUGFS;
++}
++
++static int tracefs_path(char *buf, size_t size, const char *file)
++{
++	int ret = snprintf(buf, size, "%s/%s", tracefs_mountpoint(), file);
++
++	return ret < 0 ? ret : 0;
++}
++
++static int tracefs_read(int fd, char **content)
++{
++	size_t len = 0;
++	char tmp[CHUNK_SIZE];
++	char *buf = NULL;
++	ssize_t n;
++	int ret;
++
++	ret = lseek(fd, 0, SEEK_SET);
++	if (ret < 0)
++		return ret;
++
++	do {
++		n = read(fd, tmp, CHUNK_SIZE);
++		if (n < 0) {
++			if (buf)
++				free(buf);
++			return n;
++		}
++		if (!n)
++			break;
++		buf = realloc(buf, len + n + 1);
++		memcpy(buf + len, tmp, n);
++		len += n;
++	} while (1);
++
++	/* No data read at all, file was empty */
++	if (!buf) {
++		buf = malloc(1);
++		if (!buf)
++			return -ENOMEM;
++	}
++	buf[len] = '\0';
++	*content = buf;
++	return 0;
++}
++
++static int tracefs_write(int fd, const char *str)
++{
++	ssize_t ret;
++
++	ret = lseek(fd, 0, SEEK_SET);
++	if (ret < 0)
++		return ret;
++
++	ret = write(fd, str, strlen(str));
++	if (ret < 0)
++		return ret;
++	return 0;
++}
++
++static int tracefs_write_file(const char *path, const char *str)
++{
++	int fd, err;
++
++	fd = open(path, O_CLOEXEC | O_WRONLY | (*str ? 0 : O_TRUNC));
++	if (fd < 0)
++		return fd;
++
++	err = tracefs_write(fd, str);
++	close(fd);
++	return err;
++}
++
++enum tracefs_ctl_kind {
++	TRACEFS_CTL_FILTER,
++	TRACEFS_CTL_VALUE,
++};
++
++struct tracefs_ctl_entry {
++	char path[PATH_MAX];
++	char *old;
++	enum tracefs_ctl_kind kind;
++};
++
++struct tracefs_ctl {
++	struct tracefs_ctl_entry *entries;
++	size_t cnt;
++};
++
++struct tracefs_ctl *tracefs_ctl_init(void)
++{
++	return calloc(1, sizeof(struct tracefs_ctl));
++}
++
++static int tracefs_ctl_update(struct tracefs_ctl *ctl, const char *file,
++			      const char *str, enum tracefs_ctl_kind kind)
++{
++	struct tracefs_ctl_entry *entry, *tmp;
++	char path[PATH_MAX];
++	char *old = NULL;
++	bool recorded = false;
++	size_t i;
++	int fd, err;
++
++	if (!ctl)
++		return -EINVAL;
++
++	err = tracefs_path(path, sizeof(path), file);
++	if (err)
++		return err;
++
++	for (i = 0; i < ctl->cnt; i++) {
++		if (strcmp(ctl->entries[i].path, path))
++			continue;
++		if (ctl->entries[i].kind != kind)
++			return -EINVAL;
++		/* Already altered, keep the value read on the first write. */
++		return tracefs_write_file(ctl->entries[i].path, str);
++	}
++
++	fd = open(path, O_CLOEXEC | O_RDWR);
++	if (fd < 0)
++		return fd;
++
++	err = tracefs_read(fd, &old);
++	if (!err) {
++		tmp = realloc(ctl->entries, (ctl->cnt + 1) * sizeof(*tmp));
++		if (!tmp) {
++			free(old);
++			close(fd);
++			return -ENOMEM;
++		}
++		ctl->entries = tmp;
++		entry = &ctl->entries[ctl->cnt];
++		strcpy(entry->path, path);
++		entry->old = old;
++		entry->kind = kind;
++		recorded = true;
++	}
++
++	err = tracefs_write(fd, str);
++	close(fd);
++	if (err) {
++		free(old);
++		return err;
++	}
++
++	if (recorded)
++		ctl->cnt++;
++	return 0;
++}
++
++int tracefs_ctl_filter_write(struct tracefs_ctl *ctl, const char *file,
++			     const char *pattern)
++{
++	return tracefs_ctl_update(ctl, file, pattern, TRACEFS_CTL_FILTER);
++}
++
++int tracefs_ctl_set(struct tracefs_ctl *ctl, const char *file, const char *value)
++{
++	return tracefs_ctl_update(ctl, file, value, TRACEFS_CTL_VALUE);
++}
++
++static const char *tracefs_next_line(const char *content, char *buf, size_t size,
++				     int *err)
++{
++	const char *end;
++	size_t len;
++
++	*err = 0;
++	while (*content) {
++		end = strchrnul(content, '\n');
++		len = end - content;
++		content = *end ? end + 1 : end;
++
++		if (!len || end[-len] == '#')
++			continue;
++
++		if (len + 2 > size) {
++			*err = -ENAMETOOLONG;
++			return NULL;
++		}
++		memcpy(buf, end - len, len);
++		buf[len++] = '\n';
++		buf[len] = '\0';
++		return content;
++	}
++
++	return NULL;
++}
++
++static int tracefs_restore_file(const struct tracefs_ctl_entry *entry)
++{
++	char buf[CHUNK_SIZE];
++	const char *content = entry->old;
++	int err = 0;
++
++	if (!content)
++		return 0;
++
++	if (entry->kind == TRACEFS_CTL_FILTER) {
++		err = tracefs_write_file(entry->path, "");
++		if (err)
++			return err;
++	}
++
++	while ((content = tracefs_next_line(content, buf, sizeof(buf), &err))) {
++		err = tracefs_write_file(entry->path, buf);
++		if (err)
++			return err;
++	}
++
++	return err;
++}
++
++void tracefs_ctl_restore(struct tracefs_ctl *ctl)
++{
++	size_t i;
 +	int err;
 +
-+	err = tracefs_ctl_filter_write(ftrace, "set_ftrace_filter", "");
-+	if (err)
-+		return err;
-+	err = tracefs_ctl_filter_write(ftrace, "set_ftrace_notrace",
-+				       FTRACE_NOTRACE);
-+	if (err)
-+		return err;
-+	err = tracefs_ctl_filter_write(ftrace, "set_graph_function", GRAPH_FUNCS);
-+	if (err)
-+		return err;
-+	err = tracefs_ctl_filter_write(ftrace, "set_graph_notrace", "");
-+	if (err)
-+		return err;
-+	err = tracefs_ctl_set(ftrace, "current_tracer", TRACER_GRAPH);
-+	if (err)
-+		return err;
-+
-+	return err;
-+}
-+
-+static int run_test_under_ftrace_graph(struct tracefs_ctl *ftrace,
-+				       struct bpf_program *prog, int *retval)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	int err, stop_err;
-+
-+	err = tracefs_ctl_set(ftrace, "tracing_on", "1");
-+	if (err)
-+		return err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	if (retval)
-+		*retval = opts.retval;
-+
-+	stop_err = tracefs_ctl_set(ftrace, "tracing_on", "0");
-+	if (!err)
-+		err = stop_err;
-+
-+	return err;
-+}
-+
-+void serial_test_fgraph_trampoline(void)
-+{
-+	struct fgraph_trampoline *skel = NULL;
-+	struct tracefs_ctl *ftrace;
-+	int retval;
-+
-+	ftrace = tracefs_ctl_init();
-+	if (!ASSERT_OK_PTR(ftrace, "tracefs_ctl_init"))
++	if (!ctl)
 +		return;
 +
-+	if (configure_tracer(ftrace)) {
-+		test__skip();
-+		tracefs_ctl_restore(ftrace);
-+		goto cleanup;
++	for (i = ctl->cnt; i > 0; i--) {
++		struct tracefs_ctl_entry *entry = &ctl->entries[i - 1];
++
++		err = tracefs_restore_file(entry);
++		if (err)
++			fprintf(stderr, "Failed to restore %s: %s\n",
++				entry->path, strerror(-err));
++		free(entry->old);
 +	}
-+
-+	skel = fgraph_trampoline__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "fgraph_trampoline__open_and_load"))
-+		goto cleanup;
-+
-+	if (test__start_subtest("no_trampoline")) {
-+		ASSERT_OK(run_test_under_ftrace_graph(ftrace,
-+						      skel->progs.fentry_test1,
-+						      NULL),
-+			  "run test no trampoline");
-+	}
-+
-+	if (test__start_subtest("attach_fentry_fexit")) {
-+		skel->links.fentry_test1 =
-+			bpf_program__attach(skel->progs.fentry_test1);
-+		if (!ASSERT_OK_PTR(skel->links.fentry_test1, "attach_fentry"))
-+			goto destroy_cleanup;
-+		skel->links.fexit_test1 =
-+			bpf_program__attach(skel->progs.fexit_test1);
-+		if (!ASSERT_OK_PTR(skel->links.fexit_test1, "attach_fexit"))
-+			goto destroy_cleanup;
-+
-+		memset(skel->bss, 0, sizeof(*skel->bss));
-+		ASSERT_OK(run_test_under_ftrace_graph(ftrace,
-+						      skel->progs.fentry_test1,
-+						      NULL),
-+			  "run test with fentry and fexit");
-+
-+		ASSERT_EQ(skel->bss->fexit_result, 1, "fexit_result");
-+
-+		fgraph_trampoline__detach(skel);
-+	}
-+
-+	if (test__start_subtest("attach_fmod_ret")) {
-+		skel->links.fmod_ret_test =
-+			bpf_program__attach(skel->progs.fmod_ret_test);
-+		if (!ASSERT_OK_PTR(skel->links.fmod_ret_test, "attach_fmod_ret"))
-+			goto destroy_cleanup;
-+
-+		ASSERT_OK(run_test_under_ftrace_graph(ftrace,
-+						      skel->progs.fmod_ret_test,
-+						      &retval),
-+			  "run test with fmod_ret");
-+		ASSERT_EQ(retval, FMOD_EXPECTED_RETVAL, "fmod return value");
-+
-+		fgraph_trampoline__detach(skel);
-+	}
-+
-+destroy_cleanup:
-+	fgraph_trampoline__destroy(skel);
-+cleanup:
-+	tracefs_ctl_restore(ftrace);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fgraph_trampoline.c b/tools/testing/selftests/bpf/progs/fgraph_trampoline.c
-new file mode 100644
-index 000000000000..1cc2dadc817e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fgraph_trampoline.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+__u64 fexit_result;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry_test1, int a)
-+{
-+	return 0;
++	free(ctl->entries);
++	free(ctl);
 +}
 +
-+SEC("fexit/bpf_fentry_test1")
-+int BPF_PROG(fexit_test1, int a, int ret)
-+{
-+	fexit_result = (a == 1 && ret == 2);
-+	return 0;
-+}
+ static size_t symbol_hash(long key, void *ctx __maybe_unused)
+ {
+ 	return str_hash((const char *) key);
+diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+index 0f8d99746084..432a95016b69 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.h
++++ b/tools/testing/selftests/bpf/trace_helpers.h
+@@ -57,6 +57,15 @@ void read_trace_pipe(void);
+ int read_trace_pipe_iter(void (*cb)(const char *str, void *data),
+ 			 void *data, int iter);
+ 
++struct tracefs_ctl;
 +
-+SEC("fmod_ret/bpf_modify_return_test")
-+int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
-+{
-+	return 5;
-+}
++struct tracefs_ctl *tracefs_ctl_init(void);
++int tracefs_ctl_filter_write(struct tracefs_ctl *ctl, const char *file,
++			     const char *pattern);
++int tracefs_ctl_set(struct tracefs_ctl *ctl, const char *file,
++		    const char *value);
++void tracefs_ctl_restore(struct tracefs_ctl *ctl);
 +
-+char _license[] SEC("license") = "GPL";
-+
-diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
-deleted file mode 100755
-index f5109eb0e951..000000000000
---- a/tools/testing/selftests/bpf/test_ftrace.sh
-+++ /dev/null
-@@ -1,44 +0,0 @@
--#!/bin/bash
--
--if [[ -e /sys/kernel/tracing/trace ]]; then
--    TR=/sys/kernel/tracing/
--else
--    TR=/sys/kernel/debug/tracing/
--fi
--
--clear_trace() { # reset trace output
--    echo > $TR/trace
--}
--
--disable_tracing() { # stop trace recording
--    echo 0 > $TR/tracing_on
--}
--
--enable_tracing() { # start trace recording
--    echo 1 > $TR/tracing_on
--}
--
--reset_tracer() { # reset the current tracer
--    echo nop > $TR/current_tracer
--}
--
--disable_tracing
--clear_trace
--
--echo "" > $TR/set_ftrace_filter
--echo '*printk* *console* *wake* *serial* *lock*' > $TR/set_ftrace_notrace
--
--echo "bpf_prog_test*" > $TR/set_graph_function
--echo "" > $TR/set_graph_notrace
--
--echo function_graph > $TR/current_tracer
--
--enable_tracing
--./test_progs -t fentry
--./test_progs -t fexit
--disable_tracing
--clear_trace
--
--reset_tracer
--
--exit 0
+ ssize_t get_uprobe_offset(const void *addr);
+ ssize_t get_rel_offset(uintptr_t addr);
+ 
 
 -- 
 2.56.0
