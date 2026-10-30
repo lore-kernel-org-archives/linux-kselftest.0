@@ -1,85 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793379154;
-	b=gpoyQxnJJDbyj8MT7o8vctwQdnxKBqINkHC/zuQpd0Kv4oaqSGMsROxAO6IYaRM6IYYM
-	 9Spih6KT3CBBDZzPQpx3YV1ErshotA6sSpLBJWtWGxP2uZ1hmnAVr3fbBXXZl5SJY0Fh3
-	 ROkAEIzZtYhlflDeGrora0gtx4U7xy/8GhyEg524sKCaZ9QWz/fch291BfRHxbvUcX7gD
-	 riM7M7iWsuspQjKliThUiL/kwDCe352gyZeKuzij9bp0fguZkpiUnneQmDd7fuxVWNIwb
-	 E0MhVNEckDXJu3ANqcvEHQihhRQZ3zxLBEJqh/fAySI0Nv5Hsfb/uFn3YMtgQGm3q9Q==
+	t=1793379667;
+	b=0VrvsZNuG/KhiMtVEFB/XqKwgBDrIUGI3DjzDMBUD7VhRNAJYAvrAtB/HMfiwlgz9SlE
+	 EsfvhUjo/a30dkubkRkp+fzxGpSmBGaJhKGhSLelTP6SR4HhJ8tiBPaFcgUzY7xjQK/Bd
+	 qXkXSzQ/nLQZxItaj1XpA21qDD+CyxHX2OxY3k117p2os0iQ+pjzG+GIG/UnQ+cyzU5d+
+	 yKXsmuDP9CzYrD0iY3T/k6jd55glcX8Jr/R/wbVxkWar2G92ZjYugmb6vcwHtEKY/OAXf
+	 i+GxIihwMSSMn96+T7Q5LVRi4qBQkE/THT/nM57C56A32rMHaEYmH0MFiSULN0gPvzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793379154;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=ktj+5dC08v5X6CbAXYodRMTXsnx7EjXTMl4rsHotSsw=;
-	b=g5Kx7i/sh+I6a+PPnoRavJ+1jnJXRNrNgvZd69myDRlDuYgEqFO5TlMMMIbktjPgiuxX
-	 mw01rLA49xvX0OLs7iSOsIJiXsmPa1pvVn9TfJGUgpZ6RmVdGX1dGMBIbrYoVNhqWUR82
-	 rEhdRFvnyL84EDv/uSoXngUHcoEMbBjhjvWzuJ0RlWk7lo8o0xr5+TGCipsqyUN8jNUdz
-	 iLW5QLZ+iDNfPQ+hzAAJbkCwcPxNbxB44/gXQRGF9y1rw2r+WO2Vws3KAbbqNqEa7YV25
-	 jBrTnvS2J/CkmJgHfoi1pYzrLS1iopbPBFvss7EaHQAp84qVyG7hOwUZreqJDEqvLGg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793379667;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=7N/AcTlGe83vxTjpCzdB0J4XQ6LBuOM/UG4MzfOUgIc=;
+	b=dIOk/jmaSxBQuIl9L85Ykh8ckgFR7yae78ui8kEBkx6Szli29iNkAsBVm6KUNhaBqGbC
+	 N7J164/1cpE6vbmaalAEirNNeSo4ZFiIF9DX9NW8+AGsC47BJbPvFdJT0UoMZFlA4DH9r
+	 MpZQwc2BdVZxov/pry/wQ8eRMhts4p9X9njqVnakUgMm1mdKkElUnI+k12Qw580qf2ydB
+	 bfccaH30APuvXFSm6ad3X5IeilP6rMS7EOqOMsUU1/LOwJEu//Xqf5VGSjxriPk95KemE
+	 JRrBWEo1peR670bkjqdXB1T3ZU5tVwbDvOkJcTzTYKUI2HeX8ytp3xZPIhkDE08uLgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=vsLUxmt6;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1D8606A31A;
-	Fri, 30 Oct 2026 16:52:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B1D8606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yM5w6leR;
+	arc=none smtp.remote-ip=209.85.221.50
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C00606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 17:01:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 58C00606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=vsLUxmt6
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0249A1682;
-	Fri, 30 Oct 2026 09:52:29 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE1D03F673;
-	Fri, 30 Oct 2026 09:52:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793379152; bh=7VMMf7kMCadyG94rG4Zx25wwUW0u14+sRWOtUecg2H8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vsLUxmt6b/5m7BzFV7Hd8fIIx1EsthiLTP6rN+Ce6YaebNT/TyYfDFqazq9LqUwgB
-	 9RphgrRu+PvjSC9PSvb4hysq0nLDGl2+UBl5il7GrIuZiENqtwODfbcpLMWOpptqBa
-	 6Mh5JBUfaxOKWika3tkdWGger6AD196OTOfbuvSA=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	maz@kernel.org,
-	oupton@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yM5w6leR
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-48dfc0421d9so825045f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 10:01:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793379665; x=1793984465; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7N/AcTlGe83vxTjpCzdB0J4XQ6LBuOM/UG4MzfOUgIc=;
+        b=yM5w6leRa2ChVRYGNHPLUzxT0TAjhGmbXR8T1nYEpFhvp4B/17T+8Y0Mmgl947BoHi
+         yIQu7/Kce8YxZ6JlFCmRgLq/uSmLz9w/g1+ay8NwtFr/Scz4/k7FEIy8FWjsC4YQKVwC
+         1yKOJeoVEVBj6t0yOg17L57HzeKjkxrvNTXgqLXRAVxODk6bF8pXW7v+VeqcPMb9mAA5
+         tBjuiLt0eP8Z9Nug0IjwerEqTlUnc8xWLQjJ63TM5TuSqXn2tSYzh/3zCeQEakclpXRe
+         AE6l47N4xW22MwRCqXuLYh6ig3+jXoIxR9vKcEyOZ63YMAae7g1/E1L28RXR0/UawXHL
+         Ryeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793379665; x=1793984465;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7N/AcTlGe83vxTjpCzdB0J4XQ6LBuOM/UG4MzfOUgIc=;
+        b=btuU1gX0TxUQRYbq8msJy2uZoHLEX1Z9f7kaHNEd7mHmBKKUnUuwIvppFf46C0qYs8
+         9Cp6Tn2xLqtPPcaJsLgiEKPveIq0FosDxmkjNpoj+RdN2Ot04Yf5t6Wxw2e/Mc5zY+ky
+         7AxB+2AukxKeTkQN23v9fDKuCtRH/Y1rKkpGwbLlLLhwIxj4V01vo33dOlMgYfv0EhZf
+         AML+jaOaj8Z3IGmX3V6W79hC2b9hj+tKX+MkEhIkMptLa/6xk+OnFNV2Bb3hFfjEXAo3
+         oROvhzXkDWWbuWpaverRZdfnkPGxtwNVmtKMT9piJeM+2FEwN+e6u7Q0t3f8eHHCGECg
+         3hMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwBI5Xtolly+Ubrc3oSfPbgstTnAy/In9KQu9mCva9/2IG9xCwsuiqb9KSJyb56yFrEnDiX7neMZ9E56rgauqU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLo7jg8pNY3/7O/NiDKuDmY7SafKOBWq/VD4hq73BjL1j43O/UK
+	uMtXOU+MwFHyWDp7oxdtKkAfbzTRe38KDFAkz40sr/eSW3vdwXA4L/2v
+X-Gm-Gg: AYBFou3QztnEMSa1hFXbLBNb8vmhJptcYtoo70/q+kq6upsNWHGjL3XJ0XYvxvn8xHw
+	9BbXppji640QJURnHEPb9ciRtdENFjdNgd8niavtVaY9q0rVZcwHVLAbIEps268zHx2cd7nKod4
+	v5vHFuiun4Nr/QQcrTwNawUUYLD25GjLC1u3nSMev99weYPZXpbARKK3klqwJXakFEFFI80tc55
+	1D8Ps2wD/AAq6Gd7RwhPTxsJHd4KfsR9DFnYRhfiIFFqJP0/tkfVEEOECkDRiUJwz2B7m2sxnSZ
+	n0IOdUgR/90KQz1eiJlTLeKD4lwRNZ9bW1CIbbv1J9Fh9nhQ5E14tbqksYjIFJEfm1BCG78xwP5
+	g8itm1DTjGoNWqgh2xvax3SR2WGu+GwLgkBmqayIjIMr8N1UN+yUWJWy1JZ5vm0EgT22tjXvlF6
+	fUhpQNQneoyH5XuEOJDKR7EFRgLQX6K2+cyfBSMZZpNm7LhibFR4IqTwT/s8eT+MLmbfKGlvjig
+	LtQ5KtzQx0nT8fNebOR18cFfa0nltC+GFbIiQVx7tMjgpWpiIZj+0ucGf7Aqo01csO4JqYnXUt1
+	LQORdVl5BAAcWBpEBtS9kLrXd8k5lxLyAif9DwuiDllwRuvgHstf9laimcwQGoE1EQ==
+X-Received: by 2002:a05:600c:468b:b0:4a1:e225:b122 with SMTP id 5b1f17b1804b1-4ac182dcb7amr64266985e9.14.1793379664392;
+        Fri, 30 Oct 2026 10:01:04 -0700 (PDT)
+Received: from unix.. (244.red-81-44-253.staticip.rima-tde.net. [81.44.253.244])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ac0950d533sm41126555e9.3.2026.10.30.10.00.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 10:01:03 -0700 (PDT)
+From: =?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 08/15] KVM: arm64: Flush the HDBSS buffer on VM exit
-Date: Fri, 30 Oct 2026 16:52:08 +0000
-Message-ID: <auTLOIafIq4cjRho@LeoBrasDK>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <5bbd0d3b-1026-43f3-bc45-245472603144@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-9-zhengtian10@huawei.com> <auDpyRNpeDNzIk3W@LeoBrasDK> <5bbd0d3b-1026-43f3-bc45-245472603144@huawei.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] selftests/arm64: GCS must survive io_uring SQPOLL worker exit
+Date: Fri, 30 Oct 2026 14:00:45 -0300
+Message-ID: <20261030170046.439736-1-ivanrwcm25@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <179330742036.2531571.12603232226357262067.b4-ty@b4>
+References: <179330742036.2531571.12603232226357262067.b4-ty@b4>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,142 +103,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 30, 2026 at 12:57:06PM +0800, Tian Zheng wrote:
-> 
-> 
-> On 10/28/2026 2:13 AM, Leonardo Bras wrote:
-> > On Tue, Sep 29, 2026 at 06:36:48PM +0800, Tian Zheng wrote:
-> > > From: Eillon <yezhenyu2@huawei.com>
-> > > 
-> > > HDBSS entries accumulate in the per-vCPU buffer while the guest runs,
-> > > and must be drained into the dirty bitmap or dirty ring before
-> > > userspace can observe them.
-> > > 
-> > > Drain the buffer at a single point: kvm_arch_vcpu_ioctl_run() flushes
-> > > it on every VM exit, before the exit reason is handled. Flushing
-> > > inside the run loop keeps the dirty-ring feedback timely: when a flush
-> > > pushes the ring past its soft limit, kvm_dirty_ring_push() raises
-> > > KVM_REQ_DIRTY_RING_SOFT_FULL, which check_vcpu_requests() observes at
-> > > the top of the next loop iteration, so the vCPU exits to userspace for
-> > > the harvest before re-entering the guest.
-> > > 
-> > > kvm_arch_sync_dirty_log() relies on the exit path to flush: it kicks
-> > > vCPUs out of guest mode, and the GET/CLEAR protocol tolerates
-> > > concurrent bitmap writes, so the snapshot is complete without extra
-> > > synchronization.
-> > > 
-> > > Signed-off-by: Eillon <yezhenyu2@huawei.com>
-> > > Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
-> > > ---
-> > >   arch/arm64/include/asm/kvm_dirty_bit.h | 15 +++++++++
-> > >   arch/arm64/kvm/arm.c                   | 20 ++++++++++++
-> > >   arch/arm64/kvm/dirty_bit.c             | 45 ++++++++++++++++++++++++++
-> > >   3 files changed, 80 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/include/asm/kvm_dirty_bit.h b/arch/arm64/include/asm/kvm_dirty_bit.h
-> > > index fe703f02626b..d828e6b43fe9 100644
-> > > --- a/arch/arm64/include/asm/kvm_dirty_bit.h
-> > > +++ b/arch/arm64/include/asm/kvm_dirty_bit.h
-> > > @@ -13,6 +13,9 @@
-> > >   #include <asm/sysreg.h>
-> > >   #include <linux/sizes.h>
-> > > 
-> > > +#define HDBSS_ENTRY_VALID	BIT(0)
-> > > +#define HDBSS_ENTRY_IPA	GENMASK_ULL(55, 12)
-> > > +
-> > >   #define KVM_ARM_HDBSS_DEFAULT_SIZE  PAGE_SIZE
-> > >   #define KVM_ARM_HDBSS_MAX_SIZE      SZ_2M
-> > > 
-> > > @@ -22,7 +25,19 @@ static inline u32 kvm_hdbss_buffer_size(struct kvm *kvm)
-> > >   	return kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
-> > >   }
-> > > 
-> > > +static inline bool kvm_hdbss_enabled(struct kvm *kvm)
-> > > +{
-> > > +	return kvm->arch.mmu.vtcr & VTCR_EL2_HDBSS;
-> > > +}
-> > > +
-> > > +static inline bool vcpu_hdbss_enabled(struct kvm_vcpu *vcpu)
-> > > +{
-> > > +	return vcpu->arch.hw_mmu &&
-> > > +		(vcpu->arch.hw_mmu->vtcr & VTCR_EL2_HDBSS);
-> > > +}
-> > > +
-> > 
-> > IIUC, arch.mmu is always the canonical s2_mmu, while hw_mmu can be the
-> > nested s2_mmu, if enabled.
-> > 
-> > Was that your intend here?
-> > If not, we could use only kvm* version, which can be called with vcpu->kvm.
-> > 
-> > If it was, then I would like to understand the logic here, as IIUC the
-> > buffer is accessible only for the non-nested guest, as it's
-> > allocated in a per-vcpu structure. (vcpu->arch)
-> > 
-> 
-> Hi leo,
-> 
-> Yes, that was the intent. The shadow MMU never carries VTCR_EL2.HDBSS,
-> so the flush is naturally skipped when running nested.
+As suggested, a separate kselftest for the io_uring/SQPOLL worker
+path that gcs_reset_thread() also covers.
 
-Ah, right. If we always test the kvm one, we may enable it for the nested 
-guest, which is undesired.
+SQPOLL is create_io_thread() (args->fn + CLONE_VM). Without the reset,
+worker exit unmaps the parent's GCS. The test waits for iou-sqp-* to
+leave /proc/self/task after close (teardown is async), then checks the
+parent ss VMA count.
 
-[...]
-> 
-> > 
-> > > @@ -2017,7 +2025,19 @@ long kvm_arch_vcpu_unlocked_ioctl(struct file *filp, unsigned int ioctl,
-> > > 
-> > >   void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
-> > >   {
-> > > +	unsigned long i;
-> > > +	struct kvm_vcpu *vcpu;
-> > > 
-> > > +	if (!kvm_hdbss_enabled(kvm))
-> > > +		return;
-> > > +
+QEMU virt/max: pass with the reset; SIGSEGV on an unpatched kernel.
 
-And then here you check for the L1 VM because during migration the host 
-could have dirtied memory, and you want to track that as well.
+Iván Ezequiel Rodriguez (1):
+  selftests/arm64: GCS must survive io_uring SQPOLL worker exit
 
-Makes sense
+ tools/testing/selftests/arm64/gcs/Makefile    |   2 +-
+ .../selftests/arm64/gcs/gcs-uring-worker.c    | 254 ++++++++++++++++++
+ 2 files changed, 255 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/gcs/gcs-uring-worker.c
 
-> > > +	/*
-> > > +	 * The buffer is drained on every VM exit, so kicking running
-> > > +	 * vCPUs is enough to flush them; the dirty-log GET/CLEAR
-> > > +	 * protocol tolerates bits set concurrently with the snapshot.
-> > > +	 */
-> > > +	kvm_for_each_vcpu(i, vcpu, kvm)
-> > > +		kvm_vcpu_kick(vcpu);
-> > >   }
-> > > 
-> > >   static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
-> > > diff --git a/arch/arm64/kvm/dirty_bit.c b/arch/arm64/kvm/dirty_bit.c
-> > > index f9aeb9f34ad0..be0d12555c84 100644
-> > > --- a/arch/arm64/kvm/dirty_bit.c
-> > > +++ b/arch/arm64/kvm/dirty_bit.c
-> > > @@ -13,6 +13,7 @@
-> > >   #include <linux/kconfig.h>
-> > >   #include <linux/log2.h>
-> > >   #include <linux/mm.h>
-> > > +#include <linux/srcu.h>
-> > > 
-> > 
-> > Out of curiosity, could you please explain you reasoning on selecting srcu
-> > as locking here?
-> > 
-> > (Like, what are you protecting against, and why srcu is a good choice)
-> > 
-> 
-> kvm_vcpu_mark_page_dirty() resolves the memslot under SRCU
-> (kvm_vcpu_gfn_to_memslot), and the flush loop calls it for each entry,
-> so the whole loop needs the read lock held.
+-- 
+2.43.0
 
-Oh, right, it's just about getting the memslot... now I see it :)
-
-Thanks!
-Leo
