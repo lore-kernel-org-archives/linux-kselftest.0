@@ -1,54 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.32
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793325338;
-	b=qsPc0OqQap5R2v12tWDYuOIon0MgmrpcZkCZ/HbCHN6BeoIPxP0vlpyizJrdusjD5SE+
-	 4LNfiuerixklAWKXuUrxVmo+n46gfgrbrgWF9FY0WKsUH6YONtCu/VYJjKbI+w1XYZ/ED
-	 LKRsOiAG/BYgN4ewgSOeVVaqgateXsqLS5N6dI6YnO3SrCU43HacIQV/Ize1YgoliFbtd
-	 Gxr6r7Fr8jvwcVWytWR3vLwZAKNGHQzqhQmEj41FJFpSfuJ13cy6azFCuL7mzOwwxJfNB
-	 NPr/UxfvMgmAHcTU196fMHzUdX3YMzz/Sm5C0u6mzbMVSVhFsizG8nyFnAVW5CBIlBg==
+	t=1793325924;
+	b=ZFkbB2TS3aD6M4lvIGPHwZk8iRXYhax6Bfi1dbt2agH0JMZX6X6XHhGss0Hr/T3xE/gY
+	 ExPnOiis8YmrQNKnGOY3T5xIxMQ0WLuaayH22N3cc2chm3LLLftMPVyCbXOoRUbgLeOIb
+	 cS0GoeC2vBeGfBy/6p3ek5NGwLKKA6JmhJNFxFtkMve3SuUYzobtjsAV+gNWXHkJf0P3W
+	 7hQLlrUDHB3hvtipe5JFGo/pzSO1m4R/SFEZ04V18cuSmpCCGNTPvcfy4Fp/hAgGlzSYZ
+	 E+VaDIwe5YqOEpdwHDijmKpg0uh1KCtA4BForGcsHco8kgGSvRZdrrxDQp20tbSWjqA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793325338;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=NW47OZGG+imSFWQTUojgxKaRsVA/dxTDAH6Z79eqPk4=;
-	b=CbDg1aaJH/fUKUjMvUNw1tqLoT0/vOod1VFDiV3qOfl+yhe1ihTmShyQ7OmL1ZO97tfa
-	 7rYDL+kUNUWS9xhDL2cxhWDi/dHknXMRvmgbg3x65z/mCysd/TD3VMwavcMD5v/NigZtL
-	 NL/kTOCs38apq94zXBLujU7LLsd1s94tf5YGadp1mR/5XbAXNFlbI07VlIVxljUljh3k/
-	 4KZOUg4Y2JQeq/4iz6Iyh3Gt/RAAInDkdzrUI8V+rZr9u1EAIBwgaXUfeef4VQFuULOt3
-	 NKI4LzUx/FdzO/q7X86Ooft4EGIgtx3FiRo3FGeeW4qjPamYD6i0+KdhJVpgW5xySRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793325924;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=7RZ2cruY3Jw2zdeyjfrMfHJnTtLlKHCFte3yRuO4+Y0=;
+	b=qQ11IfEN3yUcG2mhlJtalXhAduepN5W9leRcCuoFfUnJkd9pkxYtukDkVem0cM0AQ43o
+	 uiZcqM1Af3+gXDKgqnb/u2Aj/Jhz4TJcw5AOjFAIci1fZ7/4lS/siREwg0gk34RrbvarS
+	 z4Ch1cCqidYHjIcPWcX9qovZ4b+o4yJHhyIxI2GaLdwUhOQxOasXHckrvrJnz09kazbvY
+	 beXGrS86JJO42eZ63ZxYM2g2xxHbDkioJXt/x/9WNZldGIfewcl0hORGVRI2L3Lefi4fF
+	 dImwSd1FNESkwkDlLpIzpRdWJ92RLSdI9VftaakQa1fvTudbmG4KSvpM1k2fXTDOEUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tJinQgl7;
-	arc=none smtp.remote-ip=91.218.175.32
-Received: from mta0.migadu.com (out-32.mta0.migadu.com [91.218.175.32])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RluOa5po;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284E0606A31A
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 01:55:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 284E0606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F6D606A320;
+	Fri, 30 Oct 2026 02:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tJinQgl7
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yLibGXRg0x614xy7jj1umLLnLSoSQ8rxXuFtkSyAjTw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793325336; v=1; x=1793930136;
- b=tJinQgl73cr3AUsCPm6B+YtFCqmb7GEy7gRNXN1Ncvnor1T3bPpjZNMlreCZ6Im6e2wSkI1F
- twibpD/2a6cx4UBL8xznzC7Rj5gmRvDynXTyjbjomOjWdixbUPIYb78y5hd4XRCHD5ujWxUOz/x
- SG3SuSCSmmfttwXvvbeosLaM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6e53ba925bba0fe2;
-	Fri, 30 Oct 2026 01:55:29 +0000
-X-Mizu-Trace-ID: 6e53ba925bba0fe2
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <96dfb9b7-1eaf-4bb2-8136-9a2478e1a068@linux.dev>
-Date: Fri, 30 Oct 2026 09:55:17 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RluOa5po
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2039E1F00A16;
+	Fri, 30 Oct 2026 02:05:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793325923;
+	bh=7RZ2cruY3Jw2zdeyjfrMfHJnTtLlKHCFte3yRuO4+Y0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=RluOa5poUUD5NMxgbYkCAXs72D+Wd+X3mGPBekn65BCF747Q8ny9bzCqTtYMSY1FL
+	 gkBjKudYp4QZ1JFquF/E1X9URGDEp8768kYPB17h1Z61dPu5tbGWIrjUbU90VG3iFZ
+	 UwtcPliMNcM1CQTcV30AUvvwkb4h2s6WwMouJVkz6uS36XFrke9Rd2e58h+W7vYYSp
+	 LYYTcIHnYSXwFPCJvToxVXotjPWyqSSvMyKtyD3SW+ZeabueGC1xLhi/K1+9iklvtM
+	 UbHKnpBqSk0jHJJVquEYFACUK4t8sMyaRDpKbY6MTEWKq5UN0a9V3Eja2XWWDyPCtl
+	 hl+j+PhDacNPQ==
+Subject: Re: [PATCH net v2 2/2] selftests: net: netlink-dumps: start a dump
+ with a notification queued
+From: netdev-bot+sashiko@kernel.org
+To: jhonata.poma@gmail.com
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kuniyu@google.com, m.szyprowski@samsung.com
+Date: Fri, 30 Oct 2026 02:05:22 +0000
+Message-ID: <179332592266.3134.13451886861849172009@kernel.org>
+In-Reply-To: <20261027-netlink-dump-livelock-v2-2-c4bb05352a33@gmail.com>
+References: <20261027-netlink-dump-livelock-v2-2-c4bb05352a33@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,100 +64,108 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 5/6] libbpf: Add log_opts support for
- bpf_link_create
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Hangbin Liu <liuhangbin@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
- Masashi Honma <masashi.honma@gmail.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261026154948.99408-1-leon.hwang@linux.dev>
- <20261026154948.99408-6-leon.hwang@linux.dev>
- <CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 30/10/26 00:22, Andrii Nakryiko wrote:
-> On Mon, Oct 26, 2026 at 8:51 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-[...]
+Low priority / nit picks for your consideration:
 
->> @@ -960,12 +970,12 @@ int bpf_link_create(int prog_fd, int target_fd,
->>                         return libbpf_err(-EINVAL);
->>                 break;
->>         default:
->> -               if (!OPTS_ZEROED(opts, flags))
->> +               if (!OPTS_ZEROED(opts, iter_info_len))
-> 
-> semantically cleaner would be to use log_opts here instead of
-> iter_info_len, send in a follow up?
+- [Low] Whether dump_with_queued_ntf
+  (tools/testing/selftests/net/netlink-dumps.c) can catch the bug…
 
-Will do.
+--
 
-> 
->>                         return libbpf_err(-EINVAL);
->>                 break;
->>         }
->>  proceed:
->> -       fd = sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz);
->> +       fd = __sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz, log_opts);
->>         if (fd >= 0)
->>                 return fd;
->>         /* we'll get EINVAL if LINK_CREATE doesn't support attaching fentry
->> @@ -975,6 +985,10 @@ int bpf_link_create(int prog_fd, int target_fd,
->>         if (err != -EINVAL)
->>                 return libbpf_err(err);
->>
->> +       /* bpf_raw_tracepoint_open() does not support log_opts */
->> +       if (log_opts)
->> +               return libbpf_err(err);
->> +
->>         /* if user used features not supported by
->>          * BPF_RAW_TRACEPOINT_OPEN command, then just give up immediately
->>          */
->> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
->> index 826d9cc9ab65..fe3b7fd8512b 100644
->> --- a/tools/lib/bpf/bpf.h
->> +++ b/tools/lib/bpf/bpf.h
->> @@ -422,7 +422,10 @@ union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
->>  struct bpf_link_create_opts {
->>         size_t sz; /* size of this struct for forward/backward compatibility */
->>         __u32 flags;
->> -       union bpf_iter_link_info *iter_info;
->> +       union {
->> +               union bpf_iter_link_info *iter_info;
->> +               struct bpf_log_opts *log_opts;
->> +       };
->>         __u32 iter_info_len;
-> 
-> in a follow up, let's add comment next to iter_info above and
-> iter_info_len here that these are deprecated and that iter.info and
-> iter.info_len should be used instead
-> 
-Will add comment when adding log_opts support for BPF_TRACE_ITER in
-libbpf in near future.
+selftests: net: netlink-dumps: start a dump with a notification queued
 
-Thanks,
-Leon
+This adds a dump_with_queued_ntf test to netlink-dumps.c. The test starts
+an RTM_GETLINK dump on a socket with SO_RCVBUF 2048 while an lo link
+notification is still queued. It reads like libnl does, peeking before
+each read, and expects the dump to finish with a zero status.
 
+> diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+> index 51129c564d0a6..4a94a25167e25 100644
+> --- a/tools/testing/selftests/net/netlink-dumps.c
+> +++ b/tools/testing/selftests/net/netlink-dumps.c
+
+[ ... ]
+
+> @@ -260,4 +263,103 @@ TEST(close_with_ref)
+
+[ ... ]
+
+> +TEST(dump_with_queued_ntf)
+> +{
+> +	struct sockaddr_nl addr = {
+> +		.nl_family	= AF_NETLINK,
+> +		.nl_groups	= RTMGRP_LINK,
+> +	};
+> +	int netlink_sock, inet_sock, i, ret, links = 0;
+> +	int rcvbuf = 2048;
+
+[ ... ]
+
+> +	// Leave one notification queued, then start the dump
+> +	ASSERT_EQ(lo_set_up(inet_sock, false), 0);
+> +	n = send(netlink_sock, &dump_links, sizeof(dump_links), 0);
+> +	ASSERT_EQ(n, sizeof(dump_links));
+
+[Severity: Low]
+Does this test catch the bug on every kernel config? The commit message
+says "The test fails without the previous patch". That seems to depend on
+how much memory the kernel charges for the queued notification, and the
+test never checks that.
+
+With SO_RCVBUF 2048, sk_rcvbuf ends up as 4096. Call the truesize of the
+queued lo RTM_NEWLINK notification T. Call the truesize of the -ENOBUFS
+ack that netlink_ack() sends A. The old check in netlink_dump():
+
+    rmem != skb->truesize && rmem >= rcvbuf
+
+rejects the first large dump skb whenever T > 0. What happens next is
+decided in netlink_attachskb():
+
+    if ((rmem == skb->truesize || rmem <= READ_ONCE(sk->sk_rcvbuf)) &&
+        !test_bit(NETLINK_S_CONGESTED, &nlk->state)) {
+
+If T + A <= 4096, the ack is queued. The unfixed kernel keeps failing the
+dump from netlink_recvmsg(), the peek/read loop never sees NLMSG_DONE,
+and EXPECT_TRUE(done) fails as intended.
+
+If T + A > 4096, the ack is dropped and netlink_overrun() is called. Once
+the test reads the notification, the socket is empty. The old
+rmem == skb->truesize exception then lets the dump go through, so the
+test passes on an unfixed kernel. When T >= 4096, the fixed check:
+
+    if (rmem - skb->truesize >= rcvbuf || rmem > INT_MAX) {
+
+also rejects the first skb, so in that case the two kernels behave the
+same.
+
+T looks config dependent. netlink_trim() shrinks the notification with
+pskb_expand_head() into a kmalloc bucket that has to hold the payload
+plus skb_shared_info.
+
+With the default CONFIG_MAX_SKB_FRAGS=17, the lo notification seems to
+fit the 2 KiB bucket (T around 2304). With CONFIG_MAX_SKB_FRAGS=45, the
+larger skb_shared_info appears to push it into the 4 KiB bucket (T around
+4352). These byte sizes are estimates, not runtime measurements.
+
+The same thing could happen in two other cases. One is if the
+pskb_expand_head() call in netlink_trim() fails, since it runs without
+direct reclaim and with __GFP_NORETRY. The other is if the lo
+notification grows in a future kernel.
+
+Would it help to read SO_MEMINFO after lo_set_up(inet_sock, false) and
+before send()? The test could then skip, or fail, unless
+SK_MEMINFO_RMEM_ALLOC is non-zero and still leaves room for the ack, for
+example RMEM_ALLOC <= SK_MEMINFO_RCVBUF / 2. Another option is to pick
+SO_RCVBUF based on the measured notification size.
+
+> +
+> +	for (i = 0; i < 100 && !done; i++) {
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261027-netlink-dump-livelock-v2-0-c4bb05352a33%40gmail.com
