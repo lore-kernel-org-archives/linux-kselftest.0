@@ -1,102 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793318352;
-	b=ESuMqHs/mZdxK9W3W61k+b+FPrd1sU44nJccS5cD9sOmG7SNMMa9ULOq+yFQErJa0cid
-	 9FdM4XSaw/nqptqgmCR0f6cYiiRQuMoKmJjx0er53pTp922srvEtjQBrwBvIeZ5ZIWf0y
-	 PVAMQNnOUtN+vpDpC80jmkopwYilud+8lUjFas3Y64Btgo4xtvCxEMx613gFUAjdGBIui
-	 dWU4IZNMH3PodRGgUOM4/iHOJ7erqY/IewY/H8bX8oGbWNMjL1kQxG6rNxVUPoHkIrPFI
-	 hS+lys4q5bx9E6duMsN+yzpGr0g3nXGZ47GWHFTAJ4eqvQmL9qOt5ALrYduxMWIYWBw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793318352;
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.208.50
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793318458;
+	b=IIvgQxG4x3cDZpN0a6NdzTXIw7Qacf8keecZwR80EfYdNQI2po+qnd1VAiQoVMu3NjkB
+	 LUYoN4ZcqnXEC+waXZebu074oELmAIVSz1ZudzeBQODjg7PQMDsA2XazeelJ5NuVuLGUc
+	 W7j1UMh4jnhXr/xuE0FP+3sAMQd2Tb1Mv69eP3hMFm96jKXs3enHcG/0iwtMGjL+Rpxj8
+	 2v2ZzcSL7tKR1Tj/Zi5+LO2yuFaOpZEDfgjoXcnKjXsf8ulnfHnAbID93XdsLexbGNKGu
+	 ENGG78rOWHjMQ4t6Q8FiOWak8ooicaRlQr3EvccOkcgFCex2abjNcIT1y0PXOsBc/5w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793318458;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=VGMJLST0LGZUFVPZmCbPA5PwvaGlJCqBZDRorhKs8Vs=;
-	b=yCTEn1XOn7UlwXBjtHWiwv2ExCb5cuLcAVXHDCWZOnjfmBqh5XuyPnAY1O4qKGKBbYMm
-	 j6OK6gaB+x71H77DuyOJAZK5Yct3xtG/Zn8w45bBrFm01xJibfz8ZguZ1dIMV4cT7JPNb
-	 B/cNy4lzbojIvvM9MIecU7PE8kHls/pIJuUZh8o7f2t2Ens1i2oPY7csDw5VtcHKbu+uO
-	 RHQK4nql+Yu1zXIHZbap4e0rF/ZXcE9hgPakuh35TreG9XNnrr2L5vywpZF4TsmP8bciT
-	 uD0+K/z5UCx1Zn74jxEToqiezk/tg3f5dQXPFbbdN4FI1xMxhl2hUTeUa13PH4Itacg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WoX69Q4N;
-	arc=none smtp.remote-ip=74.125.82.177
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
+	b=rjj9zU71tMSDgitvIpxLlbnMzMqNrS8220ETHnR3QHddv06eVDeSY3OFwldO1Fa81IdS
+	 F4pvMtR/m132GzOWuhkQf2/n8vg9FzdUgrksMaqH4CX0Vrj3zAh+9yMlh8NWcvVbOTGgL
+	 3tORr7RUhMJcvqqo/PB/Pb6EhPrYROmqdm8I5FUQye90Bh2qLT43fLXkMlyzUCuE9vrR1
+	 778FV7CAPXnfh3qHxMHClhK/byaCJlBPH3+wUaEis4e13dBpNz4ekSoqaWts9hFrBTW7z
+	 IEsD9tXueSPa4iMbyMu8hMrucP+EXavsNDD6dDxFPAzyOXxXaaxyUnMq8fZYBAYkr2A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AW1HInfw;
+	arc=fail smtp.remote-ip=209.85.208.50
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605EB606A31A
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 23:59:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 605EB606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB714606A31D
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 00:00:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB714606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WoX69Q4N
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-3282db206d3so424222eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 16:59:11 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AW1HInfw
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b1aa36fc0eso5773a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 17:00:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793318456; cv=none;
+        d=google.com; s=arc-20260327;
+        b=abxAfUgXOGM06HcJlfQuN4LbTsrUFFbxwdT52zJV/76GLapjrZ64hUwpApCMrWmvla
+         quu3efiqLg00RIeJfbhUB0Vdznij4rQcJ27obvZ/DD2x3EVF1PqkE6x48LXd9TyzTKcN
+         aT+CGYhQnjDSmvJRQpWqK2D1N20djBP4ZI5KEJd2MCwmhgPEuiiSrLIG7qj2vOk7S82o
+         PeSqTTIZBGxEprBbXaxc/DVNtDtFClVlkrTjsTTRsWXB/cQzDvQf9ykRSW7KPkiFhUGS
+         e5nDEGE8hnzrVzIfZ+qDBIVH5xP8l20Ox+sLM8rZ5TG6gOHobvvJifaRJei70T7l1xL3
+         ZnSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
+        fh=Xw/Gl3tCndsjZG/PsC3S743sVxaY3aCo11/gXJlJSdA=;
+        b=iRrKYgjHC92c+6pMuPXfAAa8q+ht+YhQV0CTIrm0DGaGRKgIk5+lhyDwoupE8IL2yG
+         MthHY7kelJ3x1MeaPofYsbS9qU85rIquRsTr3zT6kdHyi5VWzkNgdoZ5OpQdlQl58Egx
+         vGktt1Aiyi6BTuqCoMJrP74XbJrCPwA9KK+TwZE/pDlJXKjEh0s9zVGjLymrl70QWfhS
+         0nM+Rskip/vOukKdXg2vXFq7bvGmZMhZmibGMINtz+fgsJFcVCS/GWuIiHOXHRHU/s2O
+         I+RdGNw2E4zZDQHFSecuhspK8NCghogbweMhfzAZtpLOaMvzbyXJx5fVMbsOOCi9BtrR
+         xjkg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793318350; x=1793923150; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=VGMJLST0LGZUFVPZmCbPA5PwvaGlJCqBZDRorhKs8Vs=;
-        b=WoX69Q4NNcPPhzbrlswGDlRi84VBL+LUZxxmp6vje32C9kac72+/Fup88MGeOvah2B
-         uTgFaECD/M9bPN1r18IQsGSn4eQj7IehJOsJ3vpYnH9CpRD+7sJG40dVA/yeHKYJKPLs
-         /tmug1prlcb0boHZFSu8Wf3xCuIh2/QPn+QvglnwwlqjMXtOijYKwsN5BRR0iob6abpr
-         DAFHKbHuC9/Ir8MkhiYpGF8gHZSHkcx4sq0H1jktw8J08TIh0PkIPo3vpyn0N72cDi5/
-         bpr/jl+gv/rY5P7w6JEF5EEG7h/2freoUlOXuBoFoCm6x0h77IMRCAlVnCPhHfqDl+r+
-         MJ2w==
+        d=google.com; s=20260707; t=1793318456; x=1793923256; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
+        b=AW1HInfw6hVPfoRvD736sYB3zTE0cSDxnVw6yygthKUGTF4onkFNlGmz4/caAqgUU3
+         SDwEL5QPayGRF6LFj2d2Yvse1adS39hRumxe2SFEHm5nGZYUo5Ma7D/hvm5HOuoTJYxH
+         vLMH4gHyoAjN2cMOL+tNZbe/vcN1I4XdQN+B+dnDclu1g6hPdtWxTTLKHVX6SOhbm1nq
+         WDci24T9Kih9hvtVH4F/Oc1Cu+7+rDtAxm1UfsuTZs/TNYHzzBx2cCIZE/LARAvKGlQi
+         lJb9LxGzIlOhDcTPXT9GBq2MgmvebgHNmW93Xdp7GyGMYeaCS7FMN4Roth16XZtyV6me
+         TI+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793318350; x=1793923150;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1793318456; x=1793923256;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VGMJLST0LGZUFVPZmCbPA5PwvaGlJCqBZDRorhKs8Vs=;
-        b=Zc1mHzJAINtDseiVLiEzWN1CjUdFCxKuYl7dMKfupFDOUeJcqmHQOaCIV4F1EIi+vS
-         OIEvz8t+JucZCsWVKyBp8PTRQqOSJqBS5ADJ2/deaYL/pnO89t9kw7n6121SWaYsUSjg
-         M9OZ3LwdnKsXigfutZrBzhZjalkFrArftocWdb+rxxzASorb1Hn2K3LR+3cd44vld/Zu
-         vanVUHpstT9XXqaMzIiQQhm+mgTTCXF5FQ7Y6Rfe+iocSN0P22sQWTbpl3RHjjiAkB2G
-         G9DzasG4WD5bMPl8QDhBkPhETjHJyfaTyPCeWlGDhvJX0rM/pv9DQwAwWrJaX59B1Twd
-         KwWA==
-X-Forwarded-Encrypted: i=1; AKwUvBzCryGFQLL86wr7loX18u4XQYHvzKC9UpH9472+HJB1M49TgliSwZIJpozL/gMaRjddhU1b+Bs+6HfyzH35oGQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIhLdPn9NC91MpuE/Mya+qVMSN/+ub4XQjpRJKou++Q0CNQ074k
-	9NW8Q1/eQeTJ1O3ryWJ6XrfFdvM0FCOFFi1zoyPVy559KVMkdRSrxPLJ
-X-Gm-Gg: AYBFou2zT2xX0k1RE7VJL4DJMks/DRCAU/1WmNU7RSPlE9rH5llyuzDKMGSVawFEwvj
-	EGJTslZTovm3dtY5un1r9Cnk0i439g4e4TVNaR3Sm9lNERtND3U1brUuZQ9yoYdRcaPAeWsu7Gc
-	pS518uWHVpODSh/mAgjc2AIBTEfTeRUAbCjk9/cixDBmvTIkqSUwXSz4cByTbnuNjjRXKqZPAvT
-	koFUCDXnyjXvPJV+zEyRXQmkgSitNpTF8ivLSVpClTDWzW5/j268DV35O/Fqv2Ad44dIDYpzarv
-	VRKPbcZcsjGL7Xz7lapgGMQhkGKF/7xbXIvIXlvLmeRAm6g9zmaRk7UUu1Y4BWPjZjPpGT5z/Ir
-	JykN7K8uK8UepVNlUCOS+fDnZvHvryLUXg0W6PuxmVkqgvsAKxB7NrlC/RP7agNiMf7RajFRNKx
-	B8Fc/LYRxDHQdX0kMdcua6DVofhsDlkIcHb4afKNWEC+xCIIKoC+Sjq8fNXVnX3p/zdtr4y5wbG
-	V66TpnnmldCdAMoYt2VFABz6asxue8aowtDwRVxotU+I+5OjkR4ni4+8awEdFgAVDVIgJr9Zu+U
-	ayFMfXm0EjrfSE8JuTAChZwm0yx6D62QdFnSK2jXVRyiXSO0DylkyuUQ5LLkNDJyE7UcUS32ciL
-	nN+JKNIVRsskY
-X-Received: by 2002:a05:7301:619b:10b0:36a:1d6f:917c with SMTP id 5a478bee46e88-36a423c3380mr1319780eec.22.1793318350137;
-        Thu, 29 Oct 2026 16:59:10 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:cb2e:96f2:5ce4:2074? ([2620:10d:c090:500::4:5b14])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a4293b651sm1680245eec.17.2026.10.29.16.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 16:59:09 -0700 (PDT)
-Message-ID: <bbe940d654ddbc9b099f578fd54137eecb79dd4c.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 04/12] bpf: Track low-32 scalar equality
- across zero-extending movs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
- daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Thu, 29 Oct 2026 16:59:07 -0700
-In-Reply-To: <20261020161907.2115379-5-vineet.gupta@linux.dev>
-References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
-	 <20261020161907.2115379-5-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
+        b=XUTIjh5UlAUWHah1xG/5YUauSnDSYuM2mYq0qtcJjMdYSvrf04loikp1lldA26aphF
+         8s2qXHj+Zwd/IcyfoGoWeKwg4WaFoElSkws9uRnBgwwG5lV+WE8kmQmzHQW3RRXJLqVE
+         NyB+09u7d5J6W8hzR+6GGMje/bLC9YNj/T59DwSORLcWQvLpMftOOJP+oAYjZ62WQsJr
+         +Dg6D6n5gS+9zfoVnoNZE9dXOobl+sC58PU3JyWykBHJyTSJiuHuwGixSsMVqupKv19C
+         HI+goLGLiJb2CU+a9MWcyslOK5WvPP447Cp5/VsXNobDg1k0ipzBw/ZBuVK4pXPCUicX
+         4B8g==
+X-Forwarded-Encrypted: i=1; AKwUvByHe1a+XrvtwPMtC491Fr5vofsU8Wl4Wdv1lj5gbY/UF+SjR4S5ZtzETw0DYqNVq0MNiEY+CrQgCOqcujPoUvo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLG/vmSy+lz3G706MFWN470UbjSFhZ5kcNPco35ev9pSO5t5t1M
+	zdGg4QxWQHmdGMQ1yOv6AQNrrxxrMR5trygnuaQYmPduVxUryOc0ll8bYHLoCRL8yZftPCPZcvy
+	tOu0ncx6dsWAG03qG6bCYL62MK7oo+mvPaDscJunL
+X-Gm-Gg: AYBFou23MZqya6AzWkZEF2jmo+0er8o2EFO33HMXkCFpUIvBhRcm60hzP19DWqT9RVe
+	tAfLnyCPV4SpUKOBqIoNGJPWv7wdzB1/q5f2vd+ErD4cRGm4Mp3YveTiRT/jMcNwB/jHHv33dzw
+	O5yEy/t8X39qeFvm5e1Y0Ns7nVEA311ywqAXIANPv3ueSnHI2beRMQMiPTLg1vt8rGzX0CmCbTV
+	c+wxUYDIGP/pziyyiqmByZMfcqGRw+gU4kzL/kUobdECbE0MkjhGHaDtTuKmn/CoKZ4s0WM/2aR
+	skfHVUgqGQwMzYehFabYRH160Rl7ZVgvY8XFaZsAMP81Wd0HtC9MOqN/kuZTypgkTElv3EgNJdY
+	G5t+aMwT5aZ9slHm8UXX0UBu/Fdggqn8EIgoeiEzDc4TVqI01U8Vd9bpeRg==
+X-Received: by 2002:a05:6402:641:b0:6b4:597f:50ed with SMTP id
+ 4fb4d7f45d1cf-6b4b10ef524mr124485a12.5.1793318455914; Thu, 29 Oct 2026
+ 17:00:55 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,136 +104,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261029202817.901145-1-jmattson@google.com> <auO4UueaV0mTVzzB@google.com>
+ <CALMp9eTKXa9v1TxJMPrE-tSXajwJCErCk=g34dOPJtG057t5mg@mail.gmail.com>
+ <auPAFxXy4ulcK_jq@google.com> <CALMp9eQdtvjQkdgnJ_NTt=2ArdzUtqqzieXLccv9Vb_My5G+fQ@mail.gmail.com>
+In-Reply-To: <CALMp9eQdtvjQkdgnJ_NTt=2ArdzUtqqzieXLccv9Vb_My5G+fQ@mail.gmail.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Thu, 29 Oct 2026 17:00:43 -0700
+X-Gm-Features: AclHuK9Gf9FXwfveb_3CfkAO_qfPf7-qk20lAd5kJcyEb-CP0c5NZ2eSdTbAAeE
+Message-ID: <CALMp9eSgWhTFi1vxxnN=1zV4mRVsKD55F=37yg4LmT_xUAc_Pw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] KVM: SVM: Check EFER.SVME before updating MSR_VM_CR
+ on guest writes
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Yosry Ahmed <yosry@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-10-20 at 09:18 -0700, Vineet Gupta wrote:
-> Linked-scalar equality is full-64-bit only, so a 32-bit mov from a source
-> with unknown high bits drops the relationship:
->=20
->   r6 =3D ...              /* full 64-bit unknown */
->   w7 =3D w6               /* 32-bit zero-extending mov */
->   if w6 !=3D 0 goto ...   /* not taken: r6's low 32 bits are 0 */
->   if w7 =3D=3D 0 goto ...   /* not deduced today */
->=20
-> Record it with the kind the previous patch already provides.
-> BPF_REG_LINK_ZEXT, which is what BPF_ADD_CONST32 became, says exactly
-> what the mov did:
->=20
-> 	dst =3D=3D (u32)(src + 0)
->=20
-> However this changes the pre-existing semantics slightly:
->=20
-> 	today    reg =3D=3D base + delta, base known to fit u32
-> 	here     reg =3D=3D (u32)(base + delta), for any base width
->=20
-> Every link that forms today is over a narrow base, where the two
-> readings coincide, so nothing reachable now behaves differently; what is
-> new is that a wide base forms a link where it was previously refused
-> outright.
->=20
-> This is done by dropping the guard:
->=20
-> 	if (alu32 && (dst_umax > U32_MAX))
-> 		goto clear_id;
->=20
-> What the wide base costs is invertibility of the high half: dst pins
-> src's low 32 bits and says nothing about the rest. So sync_linked_regs()
-> drives such a link forwards only.
->=20
-> That also changes how a member is updated. Where the old code replaced
-> it with the base plus the delta difference, it now intersects the two: a
-> one-directional link leaves the member free to know more about itself
-> than the base does, and overwriting would discard that.
->=20
-> Intersecting can come out empty, when the two sides contradict -- the
-> link pins only the low 32 bits, so the verifier can walk a branch where
-> they disagree about the rest. Empty is the correct answer, and a bad
-> shape to leave behind: reg_bounds_sync() declines to touch an empty
-> range and the next reg_bounds_sanity_check() reports a verifier bug that
-> is not one. Keep the pre-intersect state instead. Without that,
->=20
-> 	w7 =3D w6;		/* r7 =3D=3D (u32)r6 */
-> 	if w7 !=3D 5 goto out;	/* r7 =3D=3D 5 */
-> 	if r6 !=3D 7 goto out;	/* explored: r6 is wide and unknown */
-> 	r9 =3D 0;
-> 	r7 %=3D r9;		/* validates r7 without recomputing it */
->=20
-> prints a REG INVARIANTS VIOLATION and a WARNING from an ordinary socket
-> filter. zext_contradiction_keeps_range_sane covers it, and discriminates
-> only here: the later reverse-direction patch makes "if r6 !=3D 7"
-> statically false, so the branch is never walked at the tip.
->=20
-> The patch also allows delta composition, once. "w3 =3D w0; w3 -=3D 1" is
-> ordinary codegen, and until now the subtract threw the link away: the
-> mov gives every zero-extending link a kind, and the test that refuses a
-> second delta could not tell a link that has one from a link that merely
-> has a kind. Let the zero-extending link, and only it, compose a single
-> 32-bit delta onto a delta of zero. The updated sub32_partial_overflow
-> dump is this case, its register now rendering as id=3DN-1.
->=20
-> Composing any further is refused deliberately. Deltas are compared for
-> equality, so a link that keeps accumulating them turns every value a
-> loop reaches into a state of its own: on arena_strsearch allowing a
-> second delta costs 1176 -> 1751 insns and 102 -> 133 states, and
-> allowing it onto a zero delta that an add produced rather than the mov
-> still costs 1176 -> 1196. Neither buys a verdict.
->=20
-> Forming a link re-bases a wide source, since
-> assign_scalar_id_before_mov() drops whatever link it carried; that costs
-> precision only.
->=20
-> verifier_reg_equal's subreg_equality_2 becomes __success. It is the same
-> link with a 64-bit compare on the member: "w2 < 9" bounds r3 over all 64
-> bits, not just its low half, because the zero-extending mov leaves
-> nothing above them.
->=20
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-> ---
+On Thu, Oct 29, 2026 at 3:04=E2=80=AFPM Jim Mattson <jmattson@google.com> w=
+rote:
+>
+> On Thu, Oct 29, 2026 at 2:52=E2=80=AFPM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> >
+> > On Thu, Oct 29, 2026, Jim Mattson wrote:
+> > > On Thu, Oct 29, 2026 at 2:19=E2=80=AFPM Sean Christopherson <seanjc@g=
+oogle.com> wrote:
+> > > >
+> > > > On Thu, Oct 29, 2026, Jim Mattson wrote:
+> > > > > (Host- initiated writes are allowed to set any valid MSR_VM_CR bi=
+ts.)
+> > > >
+> > > > Eww.  Why?  If we allow this, then we'll end up with the mess where=
+ the guest
+> > > > can't write back the current value (if userspace is being weird).  =
+I get that
+> > > > we want to avoid ordering issues, but there's *already* a required =
+order here,
+> > > > unless userspace ignores the failure from svm_set_vm_cr() and conti=
+nues on.
+> > > >
+> > > > KVM doesn't advertise the MSR as something to be saved/restored, an=
+d none of
+> > > > QEMU, CHV, CrosVM, or our VMM appear to save/restore it.  So why ma=
+ke trouble
+> > > > for ourselves?
+> > >
+> > > OMG! I didn't look any farther than the obviously broken svm_set_vm_c=
+r().
+> > >
+> > > It looks like svm->nested.vm_cr_msr controls nothing other than itsel=
+f.
+> >
+> > LOL, nice.
+> >
+> > > It's just 5 bits of storage with some weird locking rules, and it
+> > > resets to 0 on suspend/resume.
+> > >
+> > > What is the point of such half-baked support?
+> >
+> > More than likely, so that older kernels didn't crash when writing an MS=
+R KVM
+> > didn't emulate. :-(
+>
+> You're not going to let me get rid of it, are you?
 
-Please revisit comments in this patch, maybe as a follow-up.
-They are too wordy and, at times, hard to comprehend.
+LOL! Even the 'LOCK' check is wrong:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+ if (svm->nested.vm_cr_msr & SVM_VM_CR_SVM_DIS_MASK)
+        chg_mask &=3D ~(SVM_VM_CR_SVM_LOCK_MASK | SVM_VM_CR_SVM_DIS_MASK);
 
-...
+The condition should be checking SVM_VM_CR_SVM_LOCK_MASK.
 
-> @@ -18485,6 +18534,27 @@ static void sync_linked_regs(struct bpf_verifier=
-_env *env, struct bpf_verifier_s
->  			if (reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
->  			    known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT)
->  				zext_32_to_64(reg);
-> +			/*
-> +			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
-> +			 * link over a wide base does not propagate back, so the
-> +			 * base can be wider than what @reg has already proved
-> +			 * about itself; replacing it would lose that.
-> +			 */
-> +			cnum64_intersect_with(&reg->r64, prev.r64);
-> +			cnum32_intersect_with(&reg->r32, prev.r32);
-> +			reg->var_off =3D tnum_intersect(reg->var_off, prev.var_off);
-> +			/*
-> +			 * An empty intersection means the two sides contradict,
-> +			 * so this path is unreachable. Say nothing rather than
-> +			 * say it with an empty range: reg_bounds_sync() below
-> +			 * refuses to touch one, and the first later
-> +			 * reg_bounds_sanity_check() would report it as a
-> +			 * verifier bug, which it is not. Keeping the wider
-> +			 * pre-intersect state only costs precision on a path
-> +			 * that cannot be taken.
-> +			 */
-> +			if (range_bounds_violation(reg))
-> +				*reg =3D prev;
-
-I'm not a fan, tbh.
-As a followup, I'd suggest a wider refactoring:
-- get rid of is_scalar_branch_taken() (or most of it?)
-- branch unconditionally;
-- apply regs_refine_cond_op() for every branch;
-- apply sync_linked_regs() for every branch;
-- check if one of the branches is has registers with empty ranges and
-  avoid exploring it.
-
->  			reg_bounds_sync(reg);
->  		}
->  		if (e->is_reg)
-
-...
+Well, at least it can be used as a sentinel you can poll to see if
+your VM has live-migrated. :)
