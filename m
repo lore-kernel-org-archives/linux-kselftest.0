@@ -1,61 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=84.16.66.170
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793362188;
-	b=EqkdOz/1K+aWJszYKfrMnh08M0dfn7IRpc5h6ub5a31SXBHKFYkfylfYlfmNeZmQy+ml
-	 mnv3hRVOM/yMxWZk2DenRZ8gPSY4uUvkd2nzt+ss7gX3VUd77WrrD3xG/ZSXBXe7YG5fu
-	 HrsPktJqdLYRWI2kaUDbS4gEvYnPd59Fw4/Q/UOnN9YriSFGtltHm3Z6dPsSJj9J3PYhl
-	 FmwuQZdG83DpGztG79djzWMBH/FNLZ1W6/wHy3J/p6fz/rX2tKFBWytCbqyc7bHWMBpVW
-	 twBzjvSUghPnYTQiUkR0LnYBOYKJNdAh1sfPldLSvxgOZdnPy+pjtfLGyaHi08KeAtw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793362188;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Infomaniak-Routing;
-	bh=CHiOHhGM8wF8lZDketcUzQJ4hUyzLdW+kg23E8g6Q8Y=;
-	b=Rk+I5kdzLTYs7agCTqtEAxxzqhgX/FuDWDPL8En+lHEAFOeU69L+cUyVDmXAstONzmQc
-	 vnhpCWlZ83lNtWDUTwEnTiAfrdB2ha3i/PP3M/RZDgO9gRPFRyM3KR7JIfpqGo+R1YsS3
-	 LjssaEx2GxxTyrTZBILfbxfyQ0DaFRiM633v3Phk0n1tmltY4q31ImNzziv+FRWciOL06
-	 9zkBuy+qAeiQ4b/nWWkIqaiCJqNEnKu0/1MdlJlNwXBcIy6VGvfmj0gBvhtw1OTpLMWK7
-	 hGPDxXs2IuWO3Ya7QoBI5URZ7BZvjywGX2OiEYBAXjkbZqvlT2ZvE5Q5sy2f/T55eTQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=digikod.net;
-	spf=pass smtp.mailfrom=digikod.net;
-	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=hK77lSuE;
-	arc=none smtp.remote-ip=84.16.66.170
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.169
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793362251;
+	b=Os5Dtya7zK0nfhQYPmr5fLNvHeVtQ9aUhVAKiwkfJ/az6W3LVOAWCaOy6Kx3s3YH326c
+	 q1Jo0iccsiPStlpQUUk4yFmlCDgMzJ2jjX1O9Z3AfzJRhOZrPKkf2mbj9tbjUOEK8My0u
+	 mLBITP/luoOGuGMF8CsrBRNxiEC+WHPvXghZP5oHdJPZ4AUlhjf2K1uA2QrhF2EKGGXO+
+	 zVjx4GGc8HXO5GCnJBrZTuxutMt1Ht8EKIJAELQ/XEbYSAQyowC/u97Lfd571Jyi+oLZo
+	 TeXUzAth6xwc6WeETV2mYYnMubGGfA4IJ3wlrSMxi62DUBCRKOkLH9ThgpzoktlOeVw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793362251;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=QA50g16aHudGDcSXsItQdqb/ZNETm3wfRubXwKNAx98=;
+	b=yqTEic5Yi8jOKDvxHl5LYwUFRyfeLeOD2mKjxvY4d5ONoggvDoSJQ4HHRKyy1Ttj+PEB
+	 aWs0WfuhmeDa7oBCZKSxcM21TYhGAraQ4B9pMmx6kUniHhyOlY2FXrMSjqwOSQUO82Gds
+	 z7LdpW1H2NmvVq/M2vtvFXbCt6IfC0uBT5CV9W+j7BX33hlBJh7E0OGV9oTYPzBV7VjI3
+	 2Yudo6LEWJput+wGYx5F9N74YilpuPyO2iphb7vyfp3F27xnI4049CdzwekKS9PStwn3n
+	 ja/VYjmEkMuDWHgppFUq6V0z9IUJWSYql4gwl+VQ2sws8kHwM4QxIvgiQSYFnucEgMw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E3MVxeMT;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.169
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3BDD606A31C
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 12:09:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3BDD606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A83C4606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 12:10:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A83C4606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=hK77lSuE
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4jGKfB3Ns3z2hD0;
-	Fri, 30 Oct 2026 13:09:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1793362178;
-	bh=CHiOHhGM8wF8lZDketcUzQJ4hUyzLdW+kg23E8g6Q8Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hK77lSuE5wzFwhCRobE9qXWskjQ3zxNRilzRvFrQtPauZ2z/+6poqRZVQebnFDiJ/
-	 1wzkAGB0/h2FUJeLSQC2e4E48yWXjrgs+Cy+sAJZc51JcSXjfYYSs/oDCVT/jY0PwE
-	 UhjntZlEcLXvsUm91zESPOyaZLrU9HbrzVtBdLNo=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4jGKf62QN9zdbQ;
-	Fri, 30 Oct 2026 13:09:34 +0100 (CET)
-Date: Fri, 30 Oct 2026 13:09:29 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	John Ericson <mail@johnericson.me>, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/3] landlock: Add access rights on created files
-Message-ID: <20261030.ohkopheePh2a@digikod.net>
-References: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E3MVxeMT
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-54cd7de2d42so445872b6e.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 05:10:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793362249; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Iw1jgSgabf21LUaSEoFdHRVtLYZhWmFKh78jgiQQHNqsYynyURPapvMaXwDGkRgv3X
+         nchSMn7sPuqxyqMVf0HMR7itbEBQdXlViFVh9Zw/o8EpUMCAQuNRAEeCxLwkutP/GigG
+         ZMs/G+tPIUk4+nV+KkhTLxm9fzXL/jyqjNqG74WMI6fI52VSAtxKJXgjFboMSUPYhMlF
+         UEU22tKXPtetlFSR7IuANB7NBTSGNaDZBKqEJPjqxidfUVzjmDFvsalugwwjpQuKsTZU
+         k9aE62fpvf7SzguzHF15SgCPZVLDJKd0TG405NeqhtB4F11ygCXDKhWxcnGYnA5Tn3Z4
+         Ld/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QA50g16aHudGDcSXsItQdqb/ZNETm3wfRubXwKNAx98=;
+        fh=JAKCRH/bpNAqR+R3DhJDgXrrNgs7KgbFFhZdT81FBS4=;
+        b=Q5fyk9OZRFfz38mXl58JyDJMf4/IWLgQQ8dzHnBED/yY5tLvRU2rIFKJDaQRRiRwzi
+         9gIcKjcpUcUMjKtG1ohqfSpl8Vjuxy4aI0zwc9IYtgAFCy/ly5+qp2izgVCBBQO2P+ve
+         vKApVSfB6/6W34VkLFNGYqUqrQLeXWcbc0ozCYDDFQ3cJRQ1lBvE14ca4agPVNO68Huk
+         C2ZjXHsLjEJoCCwaJKGMoe6I1svrCu2OK6MVIWxgPXI9Lm+vy5dEy1JIQVCOOfFSlDRB
+         e00bBrGVu5wX0gNy08+N+cHsqMDJaLfWqzmBAZLMtbukjIwlkmBCSQibfidV0u1iQ7gB
+         RcxA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793362249; x=1793967049; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QA50g16aHudGDcSXsItQdqb/ZNETm3wfRubXwKNAx98=;
+        b=E3MVxeMT8vw/bg1QUyjHbM1ISQlhs/B0OjX5kTo0urxT0gAbzc58k9InBnhmf0Ewq6
+         9uQP1EjXZp5Ph/2dBCyX5aryfZuIBJnI4TdnO6iboEASvYrnFeCYMdxOYHS/ZMaTgp73
+         66OF6RhEb4JN4nS5RUBjFIQX7yQLn6JSZQjjVw6yNjLHcbcu+DcwMSLDuQm4cMNZ3u4S
+         U4iFYjlHgMAf0CI/BXBgKLRuZdFHaZndU8wBpzhviYsdkr/MMywz48GuqWsuP6fy9emD
+         H4ZatYNBP8gqNAniHitbn2O8gz0knFr4+WJZ19C2pJJl+nTEfBdy35IlkfowWXVWJpGk
+         XNuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793362249; x=1793967049;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QA50g16aHudGDcSXsItQdqb/ZNETm3wfRubXwKNAx98=;
+        b=l3DECC/cgnh3HmojKD7fZrhhLIzIq19UoXb0EPnEt2g0hNfVBZW5MHDaqu0YQmwUYo
+         xW5sR5i+9B0CZQQ9qp/+drt4XPLQmZ1vRODvSF7lWBiZe2ujxAPTlxsPdvISwpVBCDZR
+         vuoT/MVqFsGvRPHBlT9rejqvsLDW9xxyBkheXGrz/f9nTSfEqBxIkpiR8R6A5CrAl8zq
+         pcBBT82O6vPfim9M3/UqqwVjwBJFvtKZQLU4o0CGT2KLB72TsJ1SVypQ86BY97F5qKsJ
+         tk2lfzcFHsahXGWAjX81YavqLxIL8Y26Sjyi9RrF7F5y2ltaQ5QhjXHJBV3+cHfDr+jT
+         yAUw==
+X-Forwarded-Encrypted: i=1; AKwUvBxZRDbLFsV3n/Hsy92140ZIjyks9yeRNNDSaq7v1Isni8nFhz008DRiQWR9ylRLSzR7TW0nSgZQjz9J2vuq3dc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIo5K8xovSPTrwRde2uzcyWXzpFOcXlJrF7P4degXfFMVu+OFJ0
+	NWOTHNH/OGScZkQ1lDBBZ26FSasf2cPZQ9XRbAP0L8KCR4w8XuPT6ISqAfrB5Fqt/P5N95oqFVl
+	x6ncuwUKRYBIucpWbs6nEMV/4ErSs2+8=
+X-Gm-Gg: AYBFou18a8k5RXWDmr63hhySfugCgRzQKsXT5a9kg4ZSJa9O55heQQYsujBrz4XK6Ao
+	nSTzfnxaMa55/q3JwWBZA+4nicK3D59wXfRx/UaNjp7jQz8wpHrgxTXumjFQoN3UI3jV6014cgi
+	wsWT+VeAWeGZezv5YEA8Fes72sSjCa660pvn7OYvWiWyVG64lFyPzuejTLxrU4XAGi85hdMlyBq
+	rp4SwS5mogx6c1nKZeKhP0t4W8pLPAIAyzGmsq8Gou0Xxt66gV7IBcbquVVltlJ1EsljXt9KCBJ
+	AVuVH8jQlQvTQJuWQZJPmZ4xTY4fvpemNObasUZzSDvknPuV2UkUeEniQ3wRoG9TWOl3fY/bwwP
+	HvTQhh2/keMOcICKTpJRGvCMqEOG1Ya2MFtEh/rQxAHxpXl9owIp9gXjg9EkYGLa0G5TInN26qU
+	yyhNiqr78lnnAvHe1Bzw2zj8g=
+X-Received: by 2002:a05:6808:11c7:b0:4ea:686e:fe86 with SMTP id
+ 5614622812f47-5640df62ac0mr1416797b6e.63.1793362249561; Fri, 30 Oct 2026
+ 05:10:49 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,158 +105,272 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261024-landlock-created-rights-v1-0-77c8db3f6bd2@gmail.com>
-X-Infomaniak-Routing: alpha
+References: <20261027-netlink-dump-livelock-v2-1-c4bb05352a33@gmail.com> <179332592143.3134.3446883215083774550@kernel.org>
+In-Reply-To: <179332592143.3134.3446883215083774550@kernel.org>
+From: Jhonata Poma-Hansen <jhonata.poma@gmail.com>
+Date: Fri, 30 Oct 2026 13:10:37 +0100
+X-Gm-Features: AclHuK_RWzDPl0fMVJWfqiGX-48WGTJYsqVpLqwIl0KpdhbtkY637vTEbdwkYGs
+Message-ID: <CACgZWq6SQjQDvCz6L_4yo=JG-tB8sdM=1yGWGZA+uaD8CjT=pA@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/2] netlink: check sk_rcvbuf before charging the
+ dump skb
+To: netdev-bot+sashiko@kernel.org
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kuniyu@google.com, m.szyprowski@samsung.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Farid,
+On Thu, 30 Oct 2026, Sashiko wrote:
+> [High] In netlink_dump() (net/netlink/af_netlink.c:2327), a dump can
+> still fail to start because of memory charged by skbs that have...
 
-Thanks for this RFC.  The Nix build sandbox is definitely a valid use
-case for Landlock.
+This is real, but it is not new: both the previous check and the one
+before ae8f160e7eb2 refuse the skb when the stale charge alone is at or
+above sk_rcvbuf. It needs a single notification with a truesize of at
+least sk_rcvbuf, so only very small receive buffers. The patch fixes
+the common case where the stale charge is below sk_rcvbuf; the commit
+message could have been narrower about that.
 
-I didn't have time to do a full review of your patches yet, but I'll do
-that next week.  In the meantime, I have a few questions:
+Never failing the first skb on rcvbuf would let a reader that does not
+read queue one skb per dump request without bound, which is what
+ae8f160e7eb2 closed.
+
+> [Medium] This problem wasn't introduced by this patch, but it has the
+> same trigger the commit describes.
+
+Right, the gate in netlink_recvmsg() is unchanged by this patch.
+
+Thanks,
+Jhonata
+
+Best regards,
+Jhonata Poma-Hansen
+
+=F0=9F=87=A9=F0=9F=87=B0 +45 7143 7020 =F0=9F=87=AE=F0=9F=87=B9 +39 3205740=
+789
 
 
-On Sat, Oct 24, 2026 at 01:39:16PM -0700, Farid Zakaria wrote:
-> This is a proposal for an idea to add support for landlock to work
-> better with build systems such as Nix where they want to apply
-> restrictions but the paths may not yet exist.
-> 
-> TL;DR;
-> ========
-> 
-> Landlock rules attach to inodes that exist when a ruleset is built.
-> That makes a directory shared between trusted and sandboxed tasks hard
-> to confine: the sandbox may create entries there with
-> LANDLOCK_ACCESS_FS_MAKE_*, but no rule can name those entries ahead of
-> time, and granting read access on the directory to cover them exposes
-> every other entry as well. This series adds a rule flag that grants
-> access rights on the entries a domain creates in a directory, instead
-> of on the directory.
-> 
-> Motivation
-> ==========
-> 
-> The motivating user is the Nix build sandbox. Every Nix build runs in
-> its own sandbox, and a build may only read its declared inputs in
-> /nix/store and must be able to write and read back the outputs it
-> creates there. Nix enforces this with a private mount namespace: it
-> creates an empty store directory and bind-mounts each input path into
-> it, one mount per input. Nix has paid this per-input cost since the
-> sandbox was introduced [1].
-> 
-> The cost is paid per build and grows with the size of the input
-> closure. Nix is moving towards much finer-grained builds (many small
-> derivations instead of a few large ones), so the number of sandboxes
-> grows while each build's own work shrinks, and the sandbox setup is
-> becoming the bottleneck. A typical build has hundreds of inputs; large
-> ones have thousands.
-> 
-> A microbenchmark sets up and tears down a Nix-like sandbox (user,
-> mount, PID, IPC, UTS and network namespaces, pivot_root into a chroot,
-> removing the chroot afterwards). It compares one bind mount per input
-> with a single bind mount of the whole store plus one Landlock rule per
-> input. Median latency per sandbox, one sandbox at a time, Linux 7.1,
-> ext4, 16 cores:
-> 
->   inputs   bind mount per input   one bind mount + Landlock   speedup
->       10         3.2 ms                    2.3 ms               1.4x
->      100        11.6 ms                    2.8 ms               4.1x
->     1000        79.3 ms                    6.4 ms              12.4x
->     5000       400.1 ms                   24.4 ms              16.4x
 
-Did you do this benchmark with this series?  Do you have the related
-code to easily reproduce it?
 
-> 
-> With Landlock, an input costs an O_PATH open and a landlock_add_rule()
-> call: there is a single mount, and no mountpoint directory to create
-> before the build and remove after it (removing the 1000 empty
-> mountpoints alone took 17 ms).
-> 
-> The single bind mount is only sound if the store listing and the
-> undeclared store paths stay unreadable while the build can still use
-> its outputs. Without this series, covering the outputs requires a rule
-> on /nix/store itself, which makes every store path readable again.
-> 
-> [1] https://github.com/NixOS/nix/issues/179
-
-I'm wondering if the Nix build sandbox can create the store dir per
-build before the actual build.  Isn't already the case with the bind
-mount?
-
-> 
-> Series
-> ======
-> 
-> Patch 1 lets an LSM observe inode creation through the
-> inode_init_security hook when no LSM provides an xattr. Patch 2 adds
-> the LANDLOCK_ADD_RULE_CREATED flag for path-beneath rules and bumps the
-> ABI to 13. Patch 3 adds selftests.
-> 
-> Testing
-> =======
-> 
-> The series applies to the Landlock next branch (3e271a27c46f) and was
-> tested on Linux 7.3 with that branch applied.
-> 
-> Without patch 2, the five new tests and the ABI version check fail.
-> 
-> Open questions
-> ==============
-> 
-> - A created inode stays pinned until the layer's hierarchy is freed, so a
->   sandbox that creates many entries in such a directory keeps them all in
->   memory. Should this be bounded?
-
-Only the sandbox creator should pay for the related kernel memory
-allocations, and this should be at creation time.
-
-Another property that would be nice is that if a sandboxed process can
-create a file, the related policy should also make it possible to delete
-this file.  Is that the case with the current approach?  We need to
-think not only about the lifetime of the sandbox, but about consecutive
-creations of such sandboxes by/for the same program.
-
-> 
-> - Creation is detected in inode_init_security, so on filesystems that do
->   not call security_inode_init_security() created entries get no rights.
->   Is there a better hook?
-> 
-> - Through overlayfs, created entries get no rights either, because the
->   upper inode is created with the mounter's credentials. Should overlayfs
->   be handled, e.g. via security_dentry_create_files_as()?
-> 
-> - A file renamed or linked in keeps only the rights it had at its source.
->   Should it get none instead?
-> 
-> ---
-> Farid Zakaria (3):
->       lsm: Call inode_init_security hooks without xattrs
->       landlock: Add access rights on created files
->       selftests/landlock: Test LANDLOCK_ADD_RULE_CREATED
-> 
->  Documentation/userspace-api/landlock.rst     |  42 +++++
->  include/uapi/linux/landlock.h                |  18 +++
->  security/landlock/domain.c                   | 182 ++++++++++++++++++++-
->  security/landlock/domain.h                   |  28 ++++
->  security/landlock/fs.c                       | 176 +++++++++++++++++++--
->  security/landlock/object.h                   |   6 +
->  security/landlock/ruleset.c                  |   6 +
->  security/landlock/ruleset.h                  |  14 ++
->  security/landlock/syscalls.c                 |  20 ++-
->  security/security.c                          |   9 +-
->  tools/testing/selftests/landlock/base_test.c |   2 +-
->  tools/testing/selftests/landlock/fs_test.c   | 227 +++++++++++++++++++++++++++
->  12 files changed, 703 insertions(+), 27 deletions(-)
-> ---
-> base-commit: 3e271a27c46fd591d1011c7de5a644a41e2010f1
-> change-id: 20261024-landlock-created-rights-9340b00a8c4d
-> 
-> Best regards,
-> --  
-> Farid Zakaria <farid.m.zakaria@gmail.com>
-> 
-> 
+Il giorno ven 30 ott 2026 alle ore 03:05
+<netdev-bot+sashiko@kernel.org> ha scritto:
+>
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 (1) =C2=B7 Low: 2
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwor=
+k
+> know by including "pw-bot: cr" as a separate line at the end of your repl=
+y
+> (one such reply per series is enough).
+>
+> - [High] In netlink_dump() (net/netlink/af_netlink.c:2327), a dump can
+>   still fail to start because of memory charged by skbs that have=E2=80=
+=A6
+> - [Low] The new comment in netlink_dump() ("netlink_recvmsg() continues
+>   the dump at or below half of sk_rcvbuf, and the skb must be queued=E2=
+=80=A6
+> - [Low] The dump_extack selftest (tools/testing/selftests/net/netlink-
+>   dumps.c, comment at lines 158-161, branch at 162-163) still describes=
+=E2=80=A6
+>
+> Pre-existing issues:
+> - [Medium] This problem wasn't introduced by this patch, but it has the
+>   same trigger the commit describes.
+>
+> --
+>
+> netlink: check sk_rcvbuf before charging the dump skb
+>
+> This patch changes netlink_dump() so that sk_rmem_alloc is compared
+> against sk_rcvbuf before the new dump skb is charged instead of after.
+> A dump can then start while something else is still charged to the
+> socket. It also refuses an skb that would push sk_rmem_alloc past
+> INT_MAX, so the wraparound fix from ae8f160e7eb2 still holds.
+>
+> > diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> > index a904dc3bcad6b..4129e93a9ff0c 100644
+> > --- a/net/netlink/af_netlink.c
+> > +++ b/net/netlink/af_netlink.c
+> > @@ -2318,9 +2318,13 @@ static int netlink_dump(struct sock *sk, bool lo=
+ck_taken)
+> >       if (!skb)
+> >               goto errout_skb;
+> >
+> > +     /* Check the limit before charging the skb: netlink_recvmsg() con=
+tinues
+> > +      * the dump at or below half of sk_rcvbuf, and the skb must be qu=
+eued
+> > +      * then. Keep sk_rmem_alloc at or below INT_MAX.
+> > +      */
+>
+> [Severity: Low]
+> Is "the skb must be queued then" guaranteed? netlink_recvmsg() checks its
+> gate without any lock that keeps senders out:
+>
+> netlink_recvmsg() {
+>     ...
+>         if (READ_ONCE(nlk->cb_running) &&
+>             atomic_read(&sk->sk_rmem_alloc) <=3D sk->sk_rcvbuf / 2) {
+>                 ret =3D netlink_dump(sk, false);
+>     ...
+> }
+>
+> netlink_dump() then takes nl_cb_mutex and calls alloc_skb(GFP_KERNEL).
+> Both can sleep before the skb is charged. Several things can happen in
+> that window:
+>
+>   - netlink_broadcast_deliver() fills the socket up to rcvbuf, or puts
+>     an skb of any truesize into an empty socket.
+>   - A rejected broadcast briefly over-charges before its atomic_sub().
+>   - setsockopt(SO_RCVBUF) shrinks rcvbuf.
+>   - A second reader's dump skb gets queued first.
+>
+> Any of these can make rmem - skb->truesize >=3D rcvbuf true after the gat=
+e
+> passed. netlink_recvmsg() then sets sk_err while the dump keeps running.
+> A later read seems to resume the dump, so this looks transient. The same
+> races also existed before this patch.
+>
+> Could the comment and the commit message ("so the skb is then always
+> queued") be softened to say this only holds when nothing else charges
+> the socket concurrently?
+>
+> Separately, the plain read of sk->sk_rcvbuf in that gate races with the
+> WRITE_ONCE() in sock_setsockopt(). That part is pre-existing.
+>
+> >       rcvbuf =3D READ_ONCE(sk->sk_rcvbuf);
+> >       rmem =3D atomic_add_return(skb->truesize, &sk->sk_rmem_alloc);
+> > -     if (rmem !=3D skb->truesize && rmem >=3D rcvbuf) {
+> > +     if (rmem - skb->truesize >=3D rcvbuf || rmem > INT_MAX) {
+>
+> [Severity: High]
+> Can the dump still get stuck when the stale charge alone is at least
+> sk_rcvbuf?
+>
+> The commit message says this fixes "A dump that starts while something
+> else is still charged to a socket with a small receive buffer fails with
+> ENOBUFS and stays running". This check only covers a stale charge that is
+> below sk_rcvbuf.
+>
+> netlink_broadcast_deliver() accepts a notification of any truesize into
+> a socket with nothing charged, through rmem =3D=3D skb->truesize. The
+> selftest in the next patch uses SO_RCVBUF 2048, which gives sk_rcvbuf
+> 4096. With a buffer that small, one rtnetlink or genetlink notification
+> can have truesize >=3D sk_rcvbuf.
+>
+> do_one_broadcast() gives the first listener the original skb through
+> p->skb2 =3D skb_get(p->skb). After the reader dequeues it, the charge sta=
+ys
+> on the socket until netlink_broadcast_filtered() calls consume_skb(skb).
+> This is the preempted-sender state from the commit message. The
+> broadcaster can also sleep in skb_clone() for later listeners.
+>
+> The reader then sends a dump request:
+>
+> __netlink_dump_start()
+>     WRITE_ONCE(nlk->cb_running, true);
+>     netlink_dump()
+>         rmem - skb->truesize >=3D rcvbuf -> -ENOBUFS
+>     return ret;   /* cb_running is still true */
+>
+> The ack goes through netlink_rcv_skb()->netlink_ack()->netlink_unicast()
+> ->netlink_attachskb(). There rmem =3D stale + ack truesize, which is abov=
+e
+> rcvbuf and not equal to the ack truesize, so the ack is dropped.
+> netlink_overrun() then sets sk_err, or does nothing if NETLINK_NO_ENOBUFS
+> is set.
+>
+> When the broadcaster later drops its reference, sock_rfree() only
+> uncharges. It does not wake the reader or call netlink_dump().
+>
+> netlink_recvmsg() resumes a dump only after skb_recv_datagram() returns
+> an skb, and the queue is empty. So:
+>
+>   - the next recvmsg() returns sk_err;
+>   - the one after that blocks;
+>   - every later dump request gets -EBUSY from __netlink_dump_start(),
+>     until some unrelated message arrives.
+>
+> Would it be more robust to never fail the first netlink_dump() call from
+> __netlink_dump_start() because of rcvbuf? Another option is to clear
+> cb_running, or arrange a resume, when that call fails.
+>
+> [Severity: Low]
+> This isn't a bug, but the dump_extack test in
+> tools/testing/selftests/net/netlink-dumps.c still describes the old
+> behaviour:
+>
+> dump_extack() {
+>     ...
+>                 /* Once we fill the buffer we'll see one ENOBUFS followed
+>                  * by a number of EBUSYs. Then the last recv() will final=
+ly
+>                  * trigger and complete the dump.
+>                  */
+>                 if (ret =3D=3D FOUND_ERR && (ea.err =3D=3D ENOBUFS || ea.=
+err =3D=3D EBUSY))
+>                         continue;
+>     ...
+> }
+>
+> With this check, the bad RTM_GETNEIGH dumps keep queueing DONE+extack
+> skbs as long as the charge before each one is below sk_rcvbuf. So
+> sk_rmem_alloc ends up in [rcvbuf, rcvbuf + truesize).
+>
+> The ENOBUFS ack for the next dump is then refused in netlink_attachskb(),
+> and netlink_overrun() sets NETLINK_S_CONGESTED. Because of that bit, the
+> later EBUSY acks are dropped as well. The ENOBUFS/EBUSY branch above can
+> no longer be reached.
+>
+> Should the comment and the branch be updated, perhaps to check the new
+> behaviour instead? The next patch in the series only adds a new test and
+> leaves dump_extack unchanged.
+>
+> [Severity: Medium]
+> This isn't a bug introduced by this patch, but the same trigger can also
+> stall a dump after it has started. netlink_recvmsg() is the only place
+> that continues a running dump:
+>
+> netlink_recvmsg() {
+>     ...
+>         skb_free_datagram(sk, skb);
+>
+>         if (READ_ONCE(nlk->cb_running) &&
+>             atomic_read(&sk->sk_rmem_alloc) <=3D sk->sk_rcvbuf / 2) {
+>                 ret =3D netlink_dump(sk, false);
+>     ...
+> }
+>
+> The sk_rmem_alloc value read there still includes the charge of a
+> notification that was dequeued but is held through skb_get() in
+> do_one_broadcast(). That charge stays until consume_skb(skb) in
+> netlink_broadcast_filtered().
+>
+> Suppose that notification's truesize is between rcvbuf/2 and rcvbuf:
+>
+>   1. The dump starts normally under the new check.
+>   2. The reader consumes the first dump skb.
+>   3. The gate sees the stale charge above rcvbuf/2 and does not
+>      continue the dump.
+>   4. The next recvmsg() blocks on an empty queue.
+>   5. netlink_skb_destructor()->sock_rfree() later uncharges, but neither
+>      wakes the reader nor calls netlink_dump().
+>
+> A dump that needs several skbs, such as a scan dump, then stalls until
+> some unrelated message arrives. Could this be handled together with the
+> start-of-dump case? The gate and the destructor are not changed here, and
+> they behaved the same way before ae8f160e7eb2.
+>
+> >               atomic_sub(skb->truesize, &sk->sk_rmem_alloc);
+> >               goto errout_skb;
+> >       }
+>
+> --
+> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
+set/20261027-netlink-dump-livelock-v2-0-c4bb05352a33%40gmail.com
