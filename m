@@ -1,99 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.243.164.118
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793355904;
-	b=rbY87RtdPAjtTNDXcOxTLEp1EtT8kJ8VC/5gYj1INbmwQUujhzlj2q64LhC4XcHZLpW2
-	 dwdEYJgwjpwcAHTAxlE6xIYLUNqqOKEOo2HwWSy19nYoN9Fz2C/RFDglDXN1Qt5DM+tja
-	 iajXao7dfjUORk34lpPu1uwoMjWmHPgohzZd3/2DKU8ijYJR/K133BzAmyFHolD4ExBHa
-	 doTlp7jeReAzHHF9BcaAa9PFIJJkO0TblxTSRWeZ6xiflMWf7sWTeJaXOYt9oMHgjJP3p
-	 eyfJXz23sM2ygt+jAA04siEAgfvywbsRFyMUf+BW/e4T8oAMclVI4yAhQ5fPOo5rIvg==
+	t=1793356768;
+	b=Hh5c/JuGmyzN9kihYpVFQiC//G0ARtd94Qc0C0kbD9ui6co0Pqvf6aKKgK8WeIvwBvzq
+	 dDHv0s7BLwn2daMOD6qFiaZ4uOM9U49KkkbIBoF5O0GOmMNgKXLx0DkS9xycq4t7QVk5g
+	 chi7j+4oglCuXLkNllCV3zCpp/0k/aBR+LdsVB9P+zO7mXov7v8wZFEZ5BhpjtgY/ZdpB
+	 CP4ehwlabRphh9eBDSkV8t7yI+svsGiWhRK+Sdu+4AFKNvU/JRYZnwHXTj6Si7ZBWF3oE
+	 LWQWGdeGprLR7vZHrvlt3ufSArwrZT0tqY4shW7uM56VSUd5p1LepTL3HmahKJnPkwg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793355904;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=HuBbZFfmsbv55VA2uPYkZzZXFL/PczYYekIANInBKXc=;
-	b=q4ezaEoyCQ/FuJc0ezBEBcCeeSYmdvWZvNFUNRsUtjrNMKKqcfPMFhqs4UPy8p49O/UC
-	 eJmVnZbClebFFaK4Aazns90VpLTD74KJODLBqdSVeOVIvvxJeisI5MkBuGEu2vP4gUPU5
-	 31kFuZlTqmiObqYlwg+CUSby33gksRVGinWX2/Qu0o/5lh2QqO6mdYYN/OVUnncgn2nYx
-	 WwqlRtIK4HiU92CzQkhSdIDAlUXUG8LG4ejFnxyy8tKXNlbX8P0yadM+XAW+iLamqT6bx
-	 NEANDZO1CnXg8KNtQcVnQPkaYLZ7LIvrA7WtjazcMLfcI2pK2wnu/ehN0Qjd7lJo7gw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793356768;
+	h=DMARC-Filter:Received:Received:Date:From:Cc:Subject:References:
+	 X-Priority:X-Has-Attach:X-Mailer:Mime-Version:Message-ID:Content-Type:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
+	 X-Coremail-Antispam;
+	bh=qOtVBURnDilyxFWXOG1CCLW2lEhEOn6TnvzakyEZlZI=;
+	b=vB0RnD/c/K1akd2DelPhjNB7FVvyUl0cVUMW4tsPXoZnXtFQSk5+BvPmrZFiIjSJcTf/
+	 zm5nbLOagV6JsSvr0Y7RLWWwQvVCgMbAOvUCyMr9UIF8FcVJK0PZgN8dM/pLmqVUJKAW9
+	 Oz/2LO1Kgj2SNxS/vASXEHnG1jff2aOZdWlbLH7rEMPnr4lTUSBoqwHsSCep+dFxpDo60
+	 RZlfa+3KWs7jCLUbfrpmjG4Lcqj9QvktkIb8LLfTSBCN6+FP3pwCNOPbSxt9DbQpBQyG5
+	 /wuJQ2IPN+P2yx/rhUn18RvTcRcRi6zzw2X8uUFtrEip0pTPjKLpx52Qju+MSaJZ+Ng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WH0pUumP;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF67606A336
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 10:25:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEF67606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WH0pUumP
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a2072b9832so8698995e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 03:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793355902; x=1793960702; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HuBbZFfmsbv55VA2uPYkZzZXFL/PczYYekIANInBKXc=;
-        b=WH0pUumP62m2FpRN4el6/yxdfGNl6glm5dxHyT+PoslYBKWOtwcJZzUidXa1s9ElUq
-         qn1+gtJ7p95+v3ARiB3mG6GmGabemikbRTCdSf1o1O4+HIOPPKJjggFWO+qISQ9gc3LR
-         2d/yqhS2Kc+wtTOMgsKflInybDn50AEl2qGkstwRej3nPe/Tolo7I8opj7HH8t10966f
-         qBAT0U8U1LWx80j5U58927Z68iCE39qwPzWmiONerj6wzT24q/w9E7mwq1zdWFQd5FVV
-         z1skikCAaCh+iEXLa9Iz+0xv99Tx20Dg0J0NH+Z/T1cPSm4OEowrHSfTiM4z0CHIKU72
-         wcHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793355902; x=1793960702;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HuBbZFfmsbv55VA2uPYkZzZXFL/PczYYekIANInBKXc=;
-        b=K2dJTqic7X4zjPO0++gwGuW8GXjqttAVPqx1wBIJ2rqyMFN27+m1/1uwIVUFEMjMvA
-         XY2xdgFqkOMhBM63H7sy80k7wecRPdlxQ6GdFMLgjLsckhtOhG83BIPMXa00R/Vlt8Vq
-         HaDsP/809PCaSCBEKpHRQsqdzzKBTTU5GyikKIyvdxVnrOf2Qb3EGnyARdWS1E504E7f
-         CDzzI4CA0JS+mAOL+PZzdQNuzdSQOOV8yJ9yCNHUhCyoYG0rz7Od/yvPH1IkCZzSQJAz
-         fPloW4jOu27JLT/etYZcC58FJa4BkcYq9sTBo7ochn6HZQfC6PkQO2V1UA7VnWFkW7O6
-         fbXw==
-X-Forwarded-Encrypted: i=1; AKwUvBwolnrig9Nm/bPIwt+DqDz7In4Robq2MBrBdwQ8aqkjwqPudaPEBTKyTMzYtTy/hPhlcnv+jS3CZmslLlCyj6Y=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIXiIJRDz/6KQnCEE6rwTlWsPSntW8gzzniodqV9eJgRd9busW4
-	Ikl3zzheU+iJwEtaHkuFTosJeeS+AGhW9OtCGwx7Wo+Upe3nEUdvSKuhhNht5gB4
-X-Gm-Gg: AYBFou2P078qmrunzkZcqe4JbGPVWFyiin/4FBfS3E6g0baThQkl1HBM1kr5nNAVk0r
-	TOOZbQx2yqxdcbPUsYtPKTH90zBo3yGUSm6+wE5nrgnZGba6RBD6PZb/tIi2to6HD3m3McPUhME
-	BpnhWOL80P2itYUBrX9k7fH1yt4m1NkFpiSkSauIR9bXVsjJq34XGLtrb91d9BJK9lSwIRqMEGD
-	7a9dqy6UtAPAJ1XNcgNmc1KbQZJmT5FHsOQKB2xD2inx+QUtozWfrkFFTuLA1uCh8koHYNZsTgH
-	acTiFeeOYbui82nq8UMHXbV6d5ClIrxXvtTlRReZrvOlOul2JGjnjtrytmWV1u3YhbzMxQZE7s4
-	qA+utOOSbGJsvxXiXJuHImYtbOgelPnXvYrtIDNRnvf9vS/EqJ/4u0A7/azQDZRBRSBhJNSHhRM
-	ulgtlXf6rRPwhoJzCmqI1ZL7+2btt5TxfFHd2w0BYD1PyCM+CoxgZKSehBp7CUikVb7PgBILgjO
-	d3fq5glpH0KKc4ZXJkZFwI82WLaVqDuRngCFkFgNKIvhI3IByWn0/pmZb+26RxZQ9Cc1Va3NyrC
-	g7sDQ7u7MYw/1ZT9yNFIWvjYsqS1Hw/gmPn/GUn/uoPuACivZICpFQ==
-X-Received: by 2002:a05:600c:19d3:b0:4a2:526b:d40f with SMTP id 5b1f17b1804b1-4ac1209eafcmr39549955e9.0.1793355902258;
-        Fri, 30 Oct 2026 03:25:02 -0700 (PDT)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa81b7fe80sm143295135e9.11.2026.10.30.03.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 03:25:02 -0700 (PDT)
-From: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Cc: linux-security-module@vger.kernel.org,
-	Dwi Siswanto <me@dw1.io>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] selftests/landlock: Test that layering does not break refer
-Date: Fri, 30 Oct 2026 11:24:09 +0100
-Message-ID: <20261030102411.12985-3-gnoack3000@gmail.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261030102411.12985-1-gnoack3000@gmail.com>
-References: <20261030102411.12985-1-gnoack3000@gmail.com>
+	dmarc=none header.from=phytium.com.cn;
+	spf=pass smtp.mailfrom=phytium.com.cn;
+	arc=none smtp.remote-ip=162.243.164.118
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11565606A31D;
+	Fri, 30 Oct 2026 10:39:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11565606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytium.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytium.com.cn
+Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
+	by hzbj-icmmx-7 (Coremail) with UTF8SMTP id AQAAfwAXyJzZc+Rq3FAHBQ--.3894S2;
+	Fri, 30 Oct 2026 18:39:21 +0800 (CST)
+Received: from Foxmail (unknown [218.76.62.144])
+	by mail (Coremail) with SMTP id AQAAf8DwwXPZc+Rq6nPzAA--.17080S2;
+	Fri, 30 Oct 2026 18:39:21 +0800 (CST)
+Date: Fri, 30 Oct 2026 18:39:20 +0800
+From: "xiongyining1480@phytium.com.cn" <xiongyining1480@phytium.com.cn>
+Cc: linux-pm <linux-pm@vger.kernel.org>, 
+	linux-kselftest <linux-kselftest@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?5Zue5aSNOiBSZTogW1BBVENIIHYyXSBzZWxmdGVzdHM6IGNwdWZyZXE6IHN0b3AgQ1BVIGhvdHBsdWcgbG9vcCBhZnRlciBjcHVmcmVxIHVwZGF0ZSB0ZXN0?=
+References: <20261028100241.189085-1-xiongyining1480@phytium.com.cn>, 
+	<b228d3c3-ac4b-43df-8829-edb9c459860d@oss.qualcomm.com>
+X-Priority: 3
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.25.563[cn]
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,74 +53,67 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Message-ID: <202610301839207103055@phytium.com.cn>
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-CM-TRANSID:AQAAf8DwwXPZc+Rq6nPzAA--.17080S2
+X-CM-SenderInfo: x0lr0wp1lqx0bjrumio6sk53xlxphulrpou0/1tbiAQAECmrjns4IMwAKsn
+Authentication-Results: hzbj-icmmx-7; spf=neutral smtp.mail=xiongyinin
+	g1480@phytium.com.cn;
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWw13GrWkXF4UCw4UurWxWFg_yoW5Gry7pr
+	W3Ja1xtrWqkFW8Zw1DK3WfXrWxAF4kZF4UGrs5Kr1rA3s8Aa4fJr1fKry8XF93Aryfur4Y
+	vwsYvas8Ga4UGrDanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+	DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
+	UUUUU
 
-Regression test to exercise that layered Landlock domains do not
-accidentally deny the LANDLOCK_ACCESS_FS_REFER access right.  This
-used to be the case when layering a non-filesystem ruleset with a
-filesystem-enforcing ruleset.  In that case, REFER operations that
-would have been allowed for the individual rulesets would get denied
-when layering the same rulesets.
-
-Link: https://github.com/landlock-lsm/linux/issues/67
-Link: https://github.com/landlock-lsm/go-landlock/issues/66
-Signed-off-by: Günther Noack <gnoack3000@gmail.com>
----
- tools/testing/selftests/landlock/fs_test.c | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 6e979cef884d..c319bcea1437 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -2619,6 +2619,45 @@ TEST_F_FORK(layout1, refer_denied_by_default4)
- 				layer_dir_s1d1_refer);
- }
- 
-+/*
-+ * Regression test for layered domains: The two enforced Landlock layers both do
-+ * not restrict the tested "refer" operations on their own, so they should also
-+ * not restrict them when they are layered.
-+ */
-+static void test_layering_does_not_break_refer(
-+	struct __test_metadata *const _metadata,
-+	const struct landlock_ruleset_attr *const non_fs_attr)
-+{
-+	ASSERT_EQ(0, unlink(file1_s1d2));
-+
-+	enforce_fs(_metadata, LANDLOCK_ACCESS_FS_REFER, layer_dir_s1d1_refer);
-+
-+	drop_access_rights(_metadata, non_fs_attr);
-+
-+	EXPECT_EQ(0, test_rename(file1_s1d1, file1_s1d2));
-+	EXPECT_EQ(0, test_rename(file1_s1d2, file1_s1d1));
-+	EXPECT_EQ(0, test_exchange(file2_s1d1, file2_s1d2));
-+	EXPECT_EQ(0, test_exchange(file2_s1d2, file2_s1d1));
-+}
-+
-+TEST_F_FORK(layout1, layering_with_net_does_not_break_refer)
-+{
-+	const struct landlock_ruleset_attr attr = {
-+		.handled_access_net = LANDLOCK_ACCESS_NET_BIND_TCP,
-+	};
-+
-+	test_layering_does_not_break_refer(_metadata, &attr);
-+}
-+
-+TEST_F_FORK(layout1, layering_with_scoped_does_not_break_refer)
-+{
-+	const struct landlock_ruleset_attr attr = {
-+		.scoped = LANDLOCK_SCOPE_SIGNAL,
-+	};
-+
-+	test_layering_does_not_break_refer(_metadata, &attr);
-+}
-+
- /*
-  * Tests walking through a denied root mount.
-  */
--- 
-2.56.0
+SGksIAoKVGhhbmsgeW91IGZvciB0aGUgcmV2aWV3IGFuZCB0aGUgdGVzdCBzY3JpcHQuCgo+IFRo
+ZSBjaGFuZ2Vsb2cgc3RpbGwgZGVzY3JpYmVzIHRoZSB2MSBzdG9wLWZpbGUgYXBwcm9hY2g7IHBs
+ZWFzZQo+IHVwZGF0ZSBpdC4KClJpZ2h0LCB0aGFua3MgZm9yIGNhdGNoaW5nIHRoYXQuIEnigJls
+bCB1cGRhdGUgdGhlIGNoYW5nZWxvZyB0byBkZXNjcmliZSB0aGUgCmN1cnJlbnQgYXBwcm9hY2gu
+Cgo+IFRoZSBiYWNrZ3JvdW5kIGhvdHBsdWcgbG9vcCBpcyBub3cgc3RhcnRlZCBiZWZvcmUgc3dp
+dGNoaW5nIHRvIG9uZGVtYW5kCj4gYW5kIGJlZm9yZSByZWFkaW5nIHNjYWxpbmdfYXZhaWxhYmxl
+X2ZyZXF1ZW5jaWVzIC8gc2NhbGluZ19taW5fZnJlcS4gSWYKPiB0aGUgQ1BVIGhhcHBlbnMgdG8g
+YmUgb2ZmbGluZSBhdCB0aGF0IHBvaW50IChzdWNoIGFzIHNpbmdsZS1DUFUgcG9saWN5KSwKPiB0
+aG9zZSBhY2Nlc3NlcyByZXR1cm4gLUVCVVNZOiB0aGUgZ292ZXJub3Igc3dpdGNoIGlzIGxvc3Qs
+IGZyZXFzIGlzCj4gZW1wdHkgc28gdGhlIHVwZGF0ZSBsb29wIGRvZXMgbm90aGluZyB3aGlsZSB0
+aGUgdGVzdCBzdGlsbCBwYXNzZXMsIGFuZAo+IG9sZGZyZXEgaXMgZW1wdHkgc28gc2NhbGluZ19t
+aW5fZnJlcSBpcyBub3QgcmVzdG9yZWQuIFBsZWFzZSBzdGFydCB0aGUKPiBob3RwbHVnIHN1YnNo
+ZWxsIG9ubHkgYWZ0ZXIgdGhhdCBzZXR1cCBpcyBkb25lLgoKQWdyZWVkLiBTdGFydGluZyBpdCBi
+ZWZvcmUgZ292ZXJub3Igc3dpdGNoaW5nIGFuZCBzeXNmcyBmcmVxdWVuY3kgcmVhZHMgY2FuIApo
+aXQgLUVCVVNZIGlmIHRoZSB0YXJnZXQgQ1BVIGlzICBvZmZsaW5lLiBJIHdpbGwgbGF1bmNoIHRo
+ZSBob3RwbHVnIGNoaWxkIG9ubHkgCmFmdGVyIHRob3NlIHNldHVwIHN0ZXBzIGZpbmlzaC4KCj4g
+QmFzaCBydW5zIHRoZSBFWElUIHRyYXAgb24gU0lHSU5ULCBTSUdURVJNLCBhbmQgU0lHSFVQLCBz
+byBJIGRvbid0IHRoaW5rCj4gYWRkaXRpb25hbCB0cmFwcyBhcmUgbmVjZXNzYXJ5LiBUaGlzIGlz
+c3VlIG9jY3VycyB3aXRoIERhc2gsIGJ1dCBub3QKPiB3aXRoIEJhc2guCgpUaGFua3MgZm9yIHRo
+ZSBjb21wYXJpc29uIHNjcmlwdCBhbmQgdGhlIHRlc3QgcmVzdWx0cyDigJQgdGhhdCdzIHZlcnkg
+aGVscGZ1bC4KSSBhZ3JlZSB0aGF0IEJhc2ggcnVucyB0aGUgRVhJVCB0cmFwIG9uIFNJR0lOVCwg
+U0lHVEVSTSwgYW5kIFNJR0hVUC4gIEkgdGVzdGVkIApib3RoIHRoZSBzdWJzaGVsbCBjYXNlIGFu
+ZCB0aGUgbWFpbi1zaGVsbCBjYXNlOgoKV2hlbiB0aGUgc2lnbmFsIGlzIHNlbnQgdG8gdGhlIGRv
+X3Rlc3Qgc3Vic2hlbGwsIHRoZSBFWElUIHRyYXAgcnVucyBhbmQgY2xlYW51cCAKY29tcGxldGVz
+LgoKV2hlbiB0aGlzIHNpZ25hbCBpcyBzZW50IHRvIHRoZSBtYWluIHNoZWxsLCB0aGUgc3Vic2hl
+bGwgZG9lcyBub3QgcmVjZWl2ZSBpdCwga2VlcHMgCnJ1bm5pbmcsICBhbmQgcGVyZm9ybXMgY2xl
+YW51cCB3aGVuIGl0IGV4aXRzIG5hdHVyYWxseS4KCkNsZWFudXAgd29ya3MgY29ycmVjdGx5IGlu
+IGJvdGggY2FzZXMuCgpTYW1wbGUgc2ltdWxhdGlvbiBzY3JpcHQ6CgojIS9iaW4vYmFzaAoKCmRv
+X3Rlc3QoKSB7CiAgICB0cmFwICdlY2hvICJFWElUIHRyYXAgcmFuIicgRVhJVAogICAgbG9jYWwg
+c2lnPSIkMSIKICAgIGxvY2FsIHRhcmdldD0iJDIiCgoKICAgIGNhc2UgIiR0YXJnZXQiIGluCiAg
+ICAgICAgMSkKICAgICAgICAgICAgZWNobyAiLS0tLSBzZW5kICRzaWcgdG8gZG9fdGVzdCBwaWQg
+LS0tLSIKICAgICAgICAgICAga2lsbCAtIiRzaWciICIkQkFTSFBJRCIKICAgICAgICAgICAgOzsK
+ICAgICAgICAyKQogICAgICAgICAgICBlY2hvICItLS0tIHNlbmQgJHNpZyB0byBtYWluIHBpZCAt
+LS0tIgogICAgICAgICAgICBraWxsIC0iJHNpZyIgJCQKICAgICAgICAgICAgOzsKICAgIGVzYWMK
+CiAgICBlY2hvICJkb190ZXN0IGZpbmlzaGVkIgoKfQoKIApleHBvcnQgLWYgZG9fdGVzdAoKZWNo
+byAiLS0tLS0tLS0tc3ViIHNoZWxsLS0tLS0tLS0tLS0iCmZvciBzaWcgaW4gSU5UIFRFUk0gSFVQ
+OyBkbwogICAgICAgIGJhc2ggLWMgImRvX3Rlc3QgJyRzaWcnIDEgfCB0ZWUgdGVzdC5sb2ciCmRv
+bmUKIAplY2hvICItLS0tLS0tLS1tYWluIHNoZWxsLS0tLS0tLS0tLS0iCmZvciBzaWcgaW4gSU5U
+IFRFUk0gSFVQOyBkbwogICAgICAgIGJhc2ggLWMgImRvX3Rlc3QgJyRzaWcnIDIgfCB0ZWUgdGVz
+dC5sb2ciIDI+L2Rldi9udWxsCmRvbmUKIApvdXRwdXQ6Ci0tLS0tLS0tLXN1YiBzaGVsbC0tLS0t
+LS0tLS0tCi0tLS0gc2VuZCBJTlQgdG8gZG9fdGVzdCBwaWQgLS0tLQpFWElUIHRyYXAgcmFuCi0t
+LS0gc2VuZCBURVJNIHRvIGRvX3Rlc3QgcGlkIC0tLS0KRVhJVCB0cmFwIHJhbgotLS0tIHNlbmQg
+SFVQIHRvIGRvX3Rlc3QgcGlkIC0tLS0KRVhJVCB0cmFwIHJhbgotLS0tLS0tLS1tYWluIHNoZWxs
+LS0tLS0tLS0tLS0KLS0tLSBzZW5kIElOVCB0byBtYWluIHBpZCAtLS0tCmRvX3Rlc3QgZmluaXNo
+ZWQKRVhJVCB0cmFwIHJhbgpUZXJtaW5hdGVkCi0tLS0gc2VuZCBURVJNIHRvIG1haW4gcGlkIC0t
+LS0KZG9fdGVzdCBmaW5pc2hlZApFWElUIHRyYXAgcmFuCi0tLS0gc2VuZCBIVVAgdG8gbWFpbiBw
+aWQgLS0tLQpkb190ZXN0IGZpbmlzaGVkCkVYSVQgdHJhcCByYW4KIAoKVGhhbmtzIGFnYWluIGZv
+ciB5b3VyIHVzZWZ1bCB0ZXN0LgpCZXN0IHJlZ2FyZHMsCllpbmluZyBYaW9uZw==
 
