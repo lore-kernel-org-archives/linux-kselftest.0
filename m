@@ -1,107 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793382407;
-	b=bjc09fhNuaP1lUnNICqUoxpQVYrOcCGXroAZJFALebfDTRYsUE2Yv8i8zidJ2IeV5Q3C
-	 1kif8MAMlH+n1TENiUeNOrMgQbjAjgMe8K+6x+7w8G4oFbmdeFKdg9P4ErPFfeKqHyQEM
-	 8ojZxcjDFhaivpb5hELi5J48W41uhTIAcM3kAwIwSk5oprva0pIhqvglirKoeqnZRAVP3
-	 Sbjcb7kZ78doXuq+1WUSD+AQcTLXZvkS5tlxpLvWuu6tzXMoYg1jIEPJGhDwK1k5HkORr
-	 1nYQ5XSGevH8gj1OsLsVpDxpktO8AyEOaTNxhORCnpxDLMtzEzQkgKd+jmmaCLWH6HQ==
+	t=1793382725;
+	b=tRM+BhctM4jyrUMy7cMUTadQpE/wTo0gejdqaUieryKgprnJM8Fc1QVXPXA+giKmeYvX
+	 60M6NoPVqxlp+Qyege5GvwORcL4hwsc+r05wKRUBlqfRSThKowwOSp532RBJFbOwXPbIV
+	 FhVhvhz4KUEPC0HT3ON9FiQ7WLsuONtJ0j8nJCYHpV0qta5X3rsOlYRWhp3RzelQgore1
+	 BTgaHav6YxvPxvwKF+INoL15HyLQe712pL7H4kuJRE5TKcLwsp6xsNXHVkO0oU2ON0/gS
+	 vKxfjzFU8YK9NbBOqIWn7Z2TQwndnPICHhNL4tlPBc0mDlp0qyyNBFmEwrxch6i84SA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793382407;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 To:Cc:References:Content-Language:From:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=ZXTuUfTiwARPzYpe47EVYVEZfhSupOV6v+3jKAilH3I=;
-	b=Z20MVhE7nEFybHofjsCyHlpq8cX/CQDIDVocWQykBJtNaV1303On8WocStwXcRjRfyBr
-	 +M6qX8WhAmqQUddrwB5cPbc7lB44t3OGI3WUATp4YoyLRRJ23uE6zPS5G6v082gH27bud
-	 Mqho73YbsTz9a9jA8hdzjHBJyFteeYuwFP01Cm4dHvdTByoLtm64kSviLcrcCoB+WyyBf
-	 erOzQxYA/Tq2tx7Yl7+Po7XDhog7xka1G2frjQ21dXeZ9RekJDXUMcUEts66I1sDY2gui
-	 YAPAvrRbGdGugK4wFdu1nWbmMDZ91cjeA3L0PQsagEl6OhIAvtjfUjhOb3sVz38rJVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793382725;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=A8Qg/pMJM7YKXFTAJR9+7x3FSNCuA32iDB+ph1tKvW8=;
+	b=w8dJpc/uOAspMA9+2rf/2qdjaQw6OWTUq/40XR+WZNqgKtX7TIPx2b60wajY2obo5pxu
+	 I9jooao9gVQAKg/mlDoK7622ZWd4+oSdoBsnFUqPcmfWNzPFE88JxpYFsE7hexh3jtbQs
+	 1UEnDk3+gqijVZvEVHaMBM8KKeeWO8HcFR1c2PZFMZAOlxfbM1YbljRi5v1HA6GGC7IMy
+	 qYJZRoT04df7kPd67SrDrOaJbG/k2bC3+7fNCGKARLI9nzUv2c2xk8bTRRvaPgZDWcHD2
+	 EQkMDG80NbbQ67E6HXZSZtqLMCnED1AVFSX9sG8mICKZy/ySWtUk5wbSb2tDnY0DJBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=R+pjGXQK;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=NJwbNV2G;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gMjz0H0R;
+	arc=none smtp.remote-ip=74.125.82.41
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CAC606A31D
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 17:46:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4CAC606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DA5606A320
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 17:52:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3DA5606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=R+pjGXQK;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=NJwbNV2G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793382405;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ZXTuUfTiwARPzYpe47EVYVEZfhSupOV6v+3jKAilH3I=;
-	b=R+pjGXQK2vOeZxQ7btHHK7ync5G+4T+9txQFl6ZD+YRJsNUe782PXKwBTgQJcMcYgbhw6X
-	E6Ws7wnRoazdsN6J9/bh8uMWzrs/JYVgBjBFTHxZ0o77kSyTrTNLaw7GR8Bh6Rd2Si637Q
-	saKHf06vZ87yh7Nc5Q9Qw1ObFPrERJ0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-447-Gc106hOoOWeG29Iu04Fkaw-1; Fri, 30 Oct 2026 13:46:44 -0400
-X-MC-Unique: Gc106hOoOWeG29Iu04Fkaw-1
-X-Mimecast-MFC-AGG-ID: Gc106hOoOWeG29Iu04Fkaw_1793382403
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4a35db2d6b3so7021575e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 10:46:44 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gMjz0H0R
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-18cdcfc05ffso1344023c88.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 10:52:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793382403; x=1793987203; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZXTuUfTiwARPzYpe47EVYVEZfhSupOV6v+3jKAilH3I=;
-        b=NJwbNV2GpbtlmkfoggFyWomsgRYlC8jCV5yblDd33K4RzVcHjJkfqyvATZsbh8/HNl
-         742Et3UoK4NQsRSRxfIKP7QW8JQGAmiF9C9rwmg9q+Oy7uKK7QFPtZ42Um3Ms+LioLTo
-         mIuKCF1XscR6pgtBIMddp7SVH7mJLdrP847ydxmcv66//NkF4VOS4hBLGmTpO2qqr3jd
-         2hVtPXgBVOic4zLnEIjzdG/cy48ykuoed21wBb0n5AzHR60TsW6Tn+cmKd7hi90ZfRMy
-         tJ2wLGDn61qDszezk1/ZjCYX9Y0spocKA9HzLCOXXu8uCfq4MdnVTm8LYx192sH1nn0P
-         hI5Q==
+        d=gmail.com; s=20260707; t=1793382724; x=1793987524; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=A8Qg/pMJM7YKXFTAJR9+7x3FSNCuA32iDB+ph1tKvW8=;
+        b=gMjz0H0RIRMM5QvfYV6/Ej/bAPyVkgOILxvt/3iq5/cdQX451SCDHLnj1fHGFPpYAM
+         dmZ4eBmqBDNGjDyFZUsXvh2CvpSNAGgLe2Lt139SOzXkkESnWDqGg+7vSfc7VuQ+eX7V
+         eWonTrVPqd3bddDTnhH3AWkzZpehVy8BjrlRsuEctZ2MgnAIgVPWZwx8e8qqdGLNgqdn
+         U4zBHnmv2I56iUPzrbjdAcvJ9zfHJ9J+ZWAWqj6LxKnefglO7ogDxh6zYVfVgBXWWDEf
+         wxEQasae2fsoJ0FIVlkQkxrWmnNLXtQFCvEmO2iGbOB3W09FWMg67h3y4+ybI8ErnGcO
+         O1jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793382403; x=1793987203;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ZXTuUfTiwARPzYpe47EVYVEZfhSupOV6v+3jKAilH3I=;
-        b=U6AVUBWk/BzGK4Lt3+btv+L1Muva/PwcBl6jOHXGkr3gKlursWFQ1yqKj7wn7+/hGu
-         1ZELcEyBXxBgtcdSRmxL32Wz2rtmwfx3JSPOPF5FipdY3HyllwjvRXlFvx28LSsGx01K
-         mYYtswvGwdBGZk3iKwiqWzYxY/cP0nY07UIofLOF1lFNIohlXX68eFKwet/h8Cs8rA1P
-         MgJXXEx9zRkuxRIXUoFifcBKKNnfyB/1c7hX8Of37MksC6I8o8QjqOz+8kiTAzCegw0o
-         EU9f1P76LqdjE5CYWT9u6JWmAswihaDtwkobFAacPGuX5GBq2amMlBxhWzvhlQi+cvid
-         5LBg==
-X-Forwarded-Encrypted: i=1; AKwUvBxozxqEEBJjc77Xl8Hz2wIJccBFxuJyYw04QnoGEhiqOqL/lqhT+j+Ryt2zgiTh5/MzBDVyDI8q94B5FBleFl4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLrtSGoAJ1exasFJOVqrmJnWNL8Jon3kUfKKomOoPKc6yGDWdGE
-	+ge1PZ86Q/fczawaWLAVboSSJQmUwKkP/5Fv+ZFG73Ma3DLmQWyObQU5eXFXx7xKzqxNT9yqnsN
-	KYQNg3Mx8VnMylHh1oXwmQFelhWIdqka3izXEx4x3xpoiiMqXevjd+RLVDWAztaOksXCPMQ==
-X-Gm-Gg: AYBFou0pBTLUfBlr/eT8j5PBldxIiU9HssWE1wxylzKeaPh9rgRfKMQQ2i38bZpd2P4
-	0/ojDx04DqJ2ZHNBSklXkc82B7iT3eJcN624ltLvZCEOrAc7qUsjGufmGRfgJfep0u3yCOHej2e
-	x8diG36xM6BUzjkqXcTDu3flMip1h+LIwSH7XTMv0dkhdn1071YoPoB4Beo+bx2azCfAdAT4JyE
-	aYrcB+PAsOq1rORQPvjkbDIhF7Y/nxNcr2cudxJ2jBZgwDz6nIkvlLlVtHeXNrxqy95WeQ7xlaO
-	qKZbpsJdy/QkXSQwxg1pPJcrprYHnZyQRX++Da/Xv+rFbCaHcHiTecDYAMf/5SZS/Z18d+Ddm01
-	boQQ5Z1Fo65VwUD5G+Tl10YGgUsT4z6dPX4EDPTUfVrBYwQ==
-X-Received: by 2002:a05:600c:800c:b0:4a2:d99:3171 with SMTP id 5b1f17b1804b1-4ac17753c13mr73718625e9.23.1793382402986;
-        Fri, 30 Oct 2026 10:46:42 -0700 (PDT)
-X-Received: by 2002:a05:600c:800c:b0:4a2:d99:3171 with SMTP id 5b1f17b1804b1-4ac17753c13mr73718145e9.23.1793382402620;
-        Fri, 30 Oct 2026 10:46:42 -0700 (PDT)
-Received: from [192.168.0.9] ([47.64.112.102])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf60f1114sm77200805e9.7.2026.10.30.10.46.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Oct 2026 10:46:41 -0700 (PDT)
-Message-ID: <cdf09fa3-e251-4d8d-9f0a-316998df036b@redhat.com>
-Date: Fri, 30 Oct 2026 18:46:39 +0100
+        d=1e100.net; s=20260707; t=1793382724; x=1793987524;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=A8Qg/pMJM7YKXFTAJR9+7x3FSNCuA32iDB+ph1tKvW8=;
+        b=q6YE5DYnaswFxTt1jhqxlIVBzJEXuUjluKgfLRqxOrcrE/C8N9I9FIylLUXRmYy2Qb
+         0M5ttXJlT5uak4BWDdnTicgfrXLwLk/m9YWS62dM2RgXkD/oO+7PXAhkjBl9L2uhvG7t
+         6kx9Dc7Kp7h5h4E46VQh0Wrr610DAJjGmFOXxGXj219BQMkiY0ltVkBOKQpNiR82rMC1
+         bJw3X/d+z1PKvp7ITnDc9UwnNupmTtdwjxU1aujgPzO8nVoTVnQhSNExyrlL+DzH5jT0
+         kB2a/fvOPlC+LxBoftvN+hQlJ5jLlgZfyQbL7X2a+JnUSoQpeYvcNQW9TvQiouUXSP7I
+         qXuQ==
+X-Forwarded-Encrypted: i=1; AKwUvByhEFijbu++5tAfeFvUteFFtJnRST62GIrKEN7ZuvxJKvxSdo8hSxn/DmB2qoBP8mgyBfkshK0hRHlpfZaP7B8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIY1DSheoebeIW0bzajjBk0ko4tYhn2umJkm5YIgg/ww7hrdeYg
+	fbZej6/9RQj6MCk3AD9GaICgmG/8ge+LWwk3SdxH92U/mGtJ22MPs+z+
+X-Gm-Gg: AYBFou0Wz4dtr7WW0g9CQms2dSGq+nt0ItmLdQq7qLLjZJK+2fleYryQWUkYKT4rOeE
+	0SUOG1uXyHPM5GTOzU+bidcwuOQX1e5TFoom4ZP+DBxKiE/4X/6WMoeahGDk7UF4lMXsgf1XlMM
+	8imagdouBUVhLd+hzZ9niANqzxpIlTw0DfLTtHIcvVGLK1xItEYKXpkQTLdbyardLYGyLTGMUfn
+	fuz+Oy51qcR9+GFgRp/mmRaN4ATU9ahesMkDfJvCtSI72ZrrdAlWsLpzzxv8LVL6E8YQZrbaaqy
+	GfztsVBFxgQ4+S12WZXpNMhL+ZKyY3CBjw1SB0wybNtH1rwoRL1hI9kIb5YRQB4dA1CFulsjFl/
+	vfom2pQGEi+YKx1Igci9WMQhGHmiDi2eIjVqcY/Bc2gB2iI9ucdM/mVrRGcWcazPVbuQmCrIm0U
+	6E0N/2IFAGoUJFyZ68YnOIFUMEzSCWlB+3fr7Vix22nJYSvyU/x2+u5ZkCA37zAtIPe598B9hFq
+	8Q1GLdYjuueD5rqV+IevBl8YZSGvTuYnxtlZG3nwxbPdAIIcDVyQgbIR9hnGNToY7wTJnGHC47r
+	s+wWXIsCwpRFK4LkxfWZfhMD+lsmKueBsfrentIccH7Qjr85ypUhN6IWSGpdep7LjYgkMnfahNC
+	KgCdmISS3N6c=
+X-Received: by 2002:a05:7022:eb45:20b0:184:992:c9ef with SMTP id a92af1059eb24-1ac5de547a4mr3991157c88.36.1793382723587;
+        Fri, 30 Oct 2026 10:52:03 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:5d10:1794:f0d8:db5b? ([2620:10d:c090:500::4:1201])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac13ef1a16sm7637612c88.1.2026.10.30.10.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 10:52:03 -0700 (PDT)
+Message-ID: <bec189f3ba6ff18c2a09f3cbc19bb73e4d3277cf.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/12] bpf: Track low-32 scalar equality
+ across sign-extending movs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
+ daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Fri, 30 Oct 2026 10:52:00 -0700
+In-Reply-To: <20261020161907.2115379-7-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+	 <20261020161907.2115379-7-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,125 +106,210 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [arnd-asm-generic:asm-generic 15/15]
- /usr/aarch64-linux-gnu/include/linux/types.h:12: Error: unknown mnemonic
- `typedef' -- `typedef __signed__ __int128 __s128
- __attribute__((aligned(16)))'
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- "Jason A. Donenfeld" <Jason@zx2c4.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-References: <202610291918.kHO0GTDB-lkp@intel.com>
- <9e294bfd-4704-42a5-a704-f301f4afe042@app.fastmail.com>
-Content-Language: en-US
-From: Thomas Huth <thuth@redhat.com>
-Autocrypt: addr=thuth@redhat.com; keydata=
- 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
-In-Reply-To: <9e294bfd-4704-42a5-a704-f301f4afe042@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 29/10/2026 23.13, Arnd Bergmann wrote:
-> On Thu, Oct 29, 2026, at 19:09, kernel test robot wrote:
->> tree:
->> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
->> asm-generic
->> head:   dd7cc8c26b6a37a54adc5ce38d286521b7201044
->> commit: dd7cc8c26b6a37a54adc5ce38d286521b7201044 [15/15] treewide: Stop
->> defining __ASSEMBLY__ for assembler files
-> 
-> Hi Thomas,
-> 
->> config: arm64-allnoconfig-bpf
->> (https://download.01.org/0day-ci/archive/20261029/202610291918.kHO0GTDB-lkp@intel.com/config)
->> compiler: aarch64-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
->> reproduce (this is a W=1 build):
->> (https://download.01.org/0day-ci/archive/20261029/202610291918.kHO0GTDB-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new
->> version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes:
->> https://lore.kernel.org/oe-kbuild-all/202610291918.kHO0GTDB-lkp@intel.com/
->>
->> Note: the arnd-asm-generic/asm-generic HEAD
->> dd7cc8c26b6a37a54adc5ce38d286521b7201044 builds fine.
->>        It only hurts bisectability.
->>
->> All errors (new ones prefixed by >>):
->>
->>     /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h: Assembler messages:
->>>> /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h:20: Error: unknown mnemonic `typedef' -- `typedef __signed__ char __s8'
->>>> /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h:21: Error: unknown mnemonic `typedef' -- `typedef unsigned char __u8'
-> 
-> 
->  From what I can tell, this happens after your last patch when cross-compiling
-> kselftest against system headers that still check for __ASSEMBLY__ instead of
-> __ASSEMBLER__.
-> 
-> The command from the build log is:
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-14.2.0 ~/lkp-tests/kbuild/make.cross W=1 -C tools/testing/selftests
-> 
-> The command that causes this is
-> 
-> gcc -std=gnu99 -O2 -Wall -Wstrict-prototypes -D_GNU_SOURCE= -I/home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/testing/selftests -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/include/generated -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../arch/arm64/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../include -Wa,--noexecstack    vdso_test_chacha.c vgetrandom-chacha.S  -o /home/arnd/arm-soc/build/tmp/kselftest/vDSO/vdso_test_chacha
-> 
-> and looking at the preprocessed file, I see a wild mix of tools/include,
-> ${srctree}/arch/arm64/include/ and /usr/include. I also see that at least
-> part of the problem is that arch/arm64/kernel/vdso/vgetrandom-chacha.S
-> includes arch/arm64/include/asm/assembler.h, which then goes on to include
-> the world.
-After getting access to an aarch64 host, I was finally able to reproduce the 
-problem. I think it's likely best if we force the selftest to use the 
-headers from the current kernel sources instead of using the headers from
-/usr/include ... i.e. this patch fixes the issue for me:
+On Tue, 2026-10-20 at 09:19 -0700, Vineet Gupta wrote:
+> A 32-bit sign extension shares the source's low 32 bits too, filling the
+> high half from bit 31:
+>
+>   r6 =3D ...              /* full 64-bit unknown */
+>   r7 =3D (s32)r6          /* 32-bit sign-extending mov */
+>   if w6 =3D=3D -1 goto ...  /* taken: r6's low 32 bits are all ones */
+>   ...                   /* r7 is -1, not deduced today */
+>
+> No constant k makes dst =3D=3D (u32)(src + k) a sign extension, so this
+> needs a third kind, BPF_REG_LINK_SEXT, driven by sext_32_to_64() where
+> the zero-extending arm uses zext_32_to_64(). The enum already had room,
+> so bpf_reg_state stays 80 bytes.
+>
+> Both work from the base's 32-bit range, which is what a 32-bit compare
+> narrows; coerce_reg_to_size_sx() cannot serve, as it reads smin/smax,
+> which straddle after such a compare. tnum_sext() is the counterpart to
+> tnum_cast(), keeping the known low bits where a tnum_range() over the new
+> bounds would not.
+>
+> sext_32_to_64() resets the register's base/step line; the comment there
+> gives the arithmetic. Note it resets unconditionally, where
+> coerce_reg_to_size_sx() and coerce_subreg_to_size_sx() return early when
+> the extension is a provable no-op and keep the line. That costs a little
+> precision in the same case here, which is not worth an extra branch on a
+> path that has just rebuilt the value from the base.
+>
+> Unlike the zero-extending arm, the source's delta comes along. Both
+> base + d and (u32)(base + d) have low half (base + d), so dst is
+> (s32)(base + d) whichever the source was:
+>
+> 	w7 =3D w6;	/* BPF_REG_LINK_ZEXT, delta 0 */
+> 	w7 +=3D 5;	/* BPF_REG_LINK_ZEXT, delta 5 */
+> 	r8 =3D (s32)r7;	/* BPF_REG_LINK_SEXT, delta 5 */
+>
+> keeps r8 tied to r6. sext_mov_inherits_delta pins it; without the
+> inheritance the program is rejected. A self-mov can form a link here too,
+> which is how a sign-extended int return lands.
+>
+> sync_linked_regs() needs no separate sext path: the differencing arm
+> already copies the base and adds the delta difference, and which extensio=
+n
+> follows is just the member's kind. Where the base does fit 32 bits the
+> reverse direction runs for both narrow kinds with the *zero* extension --
+> the base is then below 2^32 and equal to the member's low half, whichever
+> way the member filled its own high half.
 
-  https://lore.kernel.org/lkml/20261030174323.370687-1-thuth@redhat.com/
+The above paragraph is very hard to parse.
+sync_linked_regs() does call sext_32_to_64().
+Please re-read whatever comments and messages the machine generates.
+For whatever reason the bias is towards a wall of text and complex
+sentences. I do read those and it hurts. Asking my machine rewrite
+your machine's text, such that I can understand it is very time consuming.
 
-WDYT?
+...
 
-  Thomas
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index ce7016446936..dffcaa2e1392 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3763,7 +3763,7 @@ static void assign_scalar_id_before_mov(struct bpf_=
+verifier_env *env,
+>  	 * rY->id has special linked register already.
+>  	 * Cleared it, since multiple rX +=3D const are not supported.
+>  	 */
+> -	if (src_reg->link_kind)
+> +	if (src_reg->link_kind && src_reg->link_kind !=3D BPF_REG_LINK_SEXT)
 
+Why is this rule relaxed only for SEXT?
+Can it be relaxed for ZEXT/FULL as well?
+
+>  		bpf_clear_scalar_id(src_reg);
+>  	/*
+>  	 * Ensure that src_reg has a valid ID that will be copied to
+> @@ -6057,6 +6057,25 @@ static void zext_32_to_64(struct bpf_reg_state *re=
+g)
+>  	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
+>  }
+>
+> +/*
+> + * The sign-extending counterpart. Signed bounds carry over directly bec=
+ause
+> + * sign extension is monotonic over the signed 32-bit range.
+> + */
+> +static void sext_32_to_64(struct bpf_reg_state *reg)
+> +{
+> +	/*
+> +	 * See comment at reg_step_check_unsigned(). Sign extension subtracts
+> +	 * 2^32 from every value with bit 31 set, which preserves a residue
+> +	 * mod step only when step divides 2^32, so the line cannot be kept.
+> +	 * The zero-extending twin calls reg_step_check_unsigned(reg, 32) for
+> +	 * the same reason; the unsigned form does not apply here because the
+> +	 * result is not the low 32 bits but the low 32 bits moved.
+> +	 */
+> +	reg_step_reset(reg);
+> +	reg->var_off =3D tnum_sext(reg->var_off, 4);
+> +	reg_set_srange64(reg, reg_s32_min(reg), reg_s32_max(reg));
+> +}
+> +
+
+Please use coerce_reg_to_size_sx(). You can improve it by doing:
+
+  reg->var_off =3D tnum_sext(reg->var_off, 4);
+  reg_set_srange64(reg, reg_s32_min(reg), reg_s32_max(reg));
+
+>  /* truncate register to smaller size (in bytes)
+>   * must be called with size < BPF_REG_SIZE
+>   */
+> @@ -17544,12 +17563,29 @@ static int check_alu_op(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn)
+>  						return -EACCES;
+>  					} else if (src_reg->type =3D=3D SCALAR_VALUE) {
+>  						bool no_sext;
+> +						/*
+> +						 * A 32-bit sign extension keeps the low 32
+> +						 * bits, so dst shares them with whatever src
+> +						 * shares them with. Both base + d and
+> +						 * (u32)(base + d) have low half (base + d), so
+> +						 * dst is (s32)(base + d) either way: inherit
+> +						 * src's id and delta and record
+> +						 * BPF_REG_LINK_SEXT.
+> +						 */
+> +						bool subreg_link =3D
+> +							(insn->off >> 3) =3D=3D 4 &&
+                                                        ^^^^^^^^^^^^^^^^^^^=
+^^
+                                    please make this a bool variable is_sex=
+t32
+
+> +							(src_reg !=3D dst_reg || src_reg->id);
+>
+>  						no_sext =3D reg_umax(src_reg) < (1ULL << (insn->off - 1));
+>  						if (no_sext)
+>  							assign_scalar_id_before_mov(env, src_reg);
+> +						else if (subreg_link && !src_reg->id &&
+> +							 !tnum_is_const(src_reg->var_off))
+> +							src_reg->id =3D ++env->id_gen;
+
+I don't like how this code sidesteps assign_scalar_id_before_mov().
+
+>  						*dst_reg =3D *src_reg;
+> -						if (!no_sext)
+> +						if (!no_sext && subreg_link && src_reg->id)
+> +							dst_reg->link_kind =3D BPF_REG_LINK_SEXT;
+> +						else if (!no_sext)
+>  							bpf_clear_scalar_id(dst_reg);
+>  						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
+>  					} else {
+> @@ -18485,17 +18521,29 @@ static void sync_linked_regs(struct bpf_verifie=
+r_env *env, struct bpf_verifier_s
+>  		if (reg->id !=3D known_reg->id)
+>  			continue;
+>  		/*
+> -		 * A zero-extending link, spelled BPF_REG_LINK_ZEXT: the
+> -		 * relation reg =3D=3D (u32)(base + delta) does not invert once the
+> -		 * base is wider than 32 bits, so the reverse direction is
+> -		 * skipped.
+> +		 * The reverse direction does not work for a narrow known_reg:
+> +		 * it knows only its low 32 bits, which say nothing about a
+> +		 * wider reg's high half. Neither (u32)(base + delta) nor
+> +		 * (s32)(base + delta) inverts once the base is wider than 32
+> +		 * bits.
+
+Why is this "reverse direction"? what's "inverts"?
+
+>  		 */
+> -		if (known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT &&
+> +		if ((known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
+> +		     known_reg->link_kind =3D=3D BPF_REG_LINK_SEXT) &&
+> +		    reg->link_kind !=3D BPF_REG_LINK_ZEXT &&
+> +		    reg->link_kind !=3D BPF_REG_LINK_SEXT &&
+
+On a second thought, it appears it would make sense to collapse FULL
+and NONE into the same category. E.g. the above condition would become
+known_reg->link_kind !=3D FULL && reg->link_kind =3D=3D FULL,
+much clearer.
+
+>  		    get_reg_width(reg) > 32)
+>  			continue;
+>  		/*
+> -		 * Skip mixed 32/64-bit links: the delta relationship doesn't
+> -		 * hold across different ALU widths.
+> +		 * Skip a pair of differing kinds. Where BPF_REG_LINK_FULL meets
+> +		 * a 32-bit kind the delta relationship genuinely does not hold:
+> +		 * the deltas were added at different ALU widths.
+> +		 * BPF_REG_LINK_ZEXT against BPF_REG_LINK_SEXT is not that case
+> +		 * -- both are base + delta in the low 32 bits, so narrowing one
+> +		 * really does narrow the other -- but that deduction is
+> +		 * declined on purpose. It makes an int loop counter a fresh
+> +		 * constant on every iteration, so no two iterations prune
+> +		 * against each other and the program runs to the instruction
+> +		 * limit. See sext_no_sync_from_zext_sibling.
+>  		 */
+>  		if (reg->link_kind && known_reg->link_kind &&
+>  		    reg->link_kind !=3D known_reg->link_kind)
+
+Does this check skips propagation in the following case?
+
+  w7 =3D w6              ; r6=3D{NONE,0}, r7=3D{ZEXT,0}
+  r6 +=3D 1              ; r6=3D{FULL,1}
+  if w6 !=3D 5 goto ...
+
+known_reg is r6 in this case, so:
+ZEXT && FULL && ZEXT !=3D FULL -> true, continue is hit.
+
+...
