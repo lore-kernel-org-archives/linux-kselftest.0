@@ -1,51 +1,114 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.152
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793400451;
-	b=OOLpBsG/dba9K1mXem5+B4M306wbBrAS5jgavlDSaqKU/fOB8ndmb2KE+0MhksEkmP0T
-	 BxMCdBviFJLv0U+/O0qZCCz9x4PEdauvEYs6GO0mKcM0Q0z7VVrYrCI8ctbWt9MeswRGy
-	 xnFIV5jpgEKjrKCSGQAQZLw76j+XXnsYA9Nsp0aZmFaxP4Z16nQ7siNwudcxLGP2hiuI7
-	 Qp/6dSiMrcY34w/k5BsCVZ+KHyIjBw+DyFl8PG3E9M33bWP2OFi5+rYd8mhlhI5wWb3VS
-	 x+/cBdbFtSoY4iGAIQRGI8wRNMic0MVUGoTGriSm5HhnRImQNWESo8u2Y7d9RONMiBg==
+	t=1793400547;
+	b=tN9mH0U9my1dBcylTIZ43eRK2d2JcXyJP8TIH6iRUreJK2Co2SxrIkWTYHejqAU3LnU4
+	 c7fD05/lcZ06wtyiYj6e0hpSdtzJZIVgkh+GRmsLIQxNXrRJQ9nRoFE3FHgknSC0gutI6
+	 eQlvNhure/Q35AorGbwBYDz3y1kNgeQZWFND6JyvvfuQBpbKXM5YKJsbg2GLIigTylj90
+	 Ix3jvhzKuc3v588T1Od6C4s/vqGXJBCrZyXpF8n6oa/EBF7ENdpKtMOuWjn20CXJjcRo/
+	 b/KIU0QydhQeJPsm4a3QrkNlJMcNkJQoEwNOK2poDq+7NTpSYpC/QGJbj15rB6wk4ug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793400451;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=tKDzLJhYKbJR+X+k1vwgMCOk3SGsPhBqojG8RZdsFk8=;
-	b=3+DdlnkK5U4BApYnK6PK77XZlK7e4781KSuPYSJSyhqxZOeeGWBm24trZySXBsGCtoL/
-	 p9i5K/Z7zrFO5wX0opcVNZ5se+fzbChYIbOjo+XDqiWX1WcRbrlOd1NkjkdlwzVMD1RsH
-	 uP3JeWIX93jFrfdnT76jaW0vmMriNxUyOr0zCvkg755SsyrYW2LqLPz3WnbbDlQd5QNYu
-	 kvq2qp1ag8Y4wtG3FOvwvhKcXja59HkLr5zUlAe0Z2+ejS3zXfP7iPWoAT4mAvQgbDURE
-	 O45pI+HSW01eJcnsuuEj/uvvsBfb736t8Q3V3/bJ8lQJq20WLkT+payBppl87tRPNaw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793400547;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Content-Type:Content-Transfer-Encoding:MIME-Version:From:To:
+	 Cc:Subject:In-reply-to:References:Date:Message-id:Reply-To;
+	bh=fT+OQrSBFiPM7CM2+FPmKMpeUOAFK5ZNFYv+xxEStMQ=;
+	b=AGi0bpdZqbdVZSEXVatnxBaZPDCbGOTUVJK+F80qLDvFMc2Kgu3MwOVnDcM00CMu0hHX
+	 rL02XdmO35xH0YiuwTbHzijbp3wOxf0dhmEge/RhwDNhZ6hMjmix9VO1aP3WnG4y1trRa
+	 ZkufFw2J79I9sw9jV6mXymAp3g4wEXBoyMAik3N0W5WdZglIpB4Cwoo1uW0LxkE9rnGEG
+	 OZYN98egp67lPwW3vKdOBdQGeWyhFEGSbbclAGBNT9xPiRUCbcFDxWhyZEdcN3omyg8Hc
+	 NHfAH3SwXiBWGZf3QotDx6irl55LZnRsWKJbNy/Cx0tRh3Engs/tCUkIgIyimXhMI8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gentwo.org;
-	spf=pass smtp.mailfrom=gentwo.org;
-	dkim=pass header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=J5RgqXy1;
-	arc=none smtp.remote-ip=62.72.0.81
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+	dmarc=pass header.from=ownmail.net;
+	spf=pass smtp.mailfrom=ownmail.net;
+	dkim=pass header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=PS9N+iyH;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b="fpd/+Nyg";
+	arc=none smtp.remote-ip=202.12.124.152
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB73B606A31D;
-	Fri, 30 Oct 2026 22:47:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB73B606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0A0606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 22:49:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC0A0606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=J5RgqXy1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1793400015;
-	bh=ZMs2FNIcBMES5Rg/sKY//vE3KG0UYrjCWf/LHF+Ga0U=;
-	h=From:Date:Subject:To:Cc:From;
-	b=J5RgqXy1zDpOKb9UfxtpznEUhSRO9gGhLbcmmNBGpHD9KqpvGOfiEaVKyils1Fh93
-	 L7/zoz8pUy8TmvhJOCKaIB/UpsBT3miZVWAi5VfM/ad8CWWgbSBRH2lo56/lZvNIbV
-	 y1uCQgRfY7TZH0hyrGY6lOHXYi6yX0h+OsI/Dj3M=
-Received: from sut02sys-r112.scc-lab.amperecomputing.com (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTPS id 2B05F402A4;
-	Fri, 30 Oct 2026 15:40:15 -0700 (PDT)
-From: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-Date: Fri, 30 Oct 2026 15:39:59 -0700
-Subject: [PATCH v2] futex: Canonicalize arm64 tagged user addresses
+	dkim=pass (2048-bit key, unprotected) header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=PS9N+iyH;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=fpd/+Nyg
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 54A267A0167
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 18:49:06 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Fri, 30 Oct 2026 18:49:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:reply-to:subject:subject:to:to; s=fm2; t=
+	1793400546; x=1793486946; bh=fT+OQrSBFiPM7CM2+FPmKMpeUOAFK5ZNFYv
+	+xxEStMQ=; b=PS9N+iyHnT4SMV+a/5c60a0KDAN+qLUOhwPxsPf8FvyRlReqeoM
+	ZKzC2gz10eGm6Xb+LCe7Uaf+VTnB5ez1QO4Ju1X8TC5WnUBoFBAQuKxrFPg1mwe+
+	19QiR+P2mq+MENxmsyM+n6auS8jyh07lASywIS4UrNIBUXI98D/CuGtz9Qwm4+EI
+	5oegIepvdq5bVQ35iC5BwDihY6D6mVtidHzw7vCHEGpT6eS+ffOuzORsYvvAlRYk
+	+hTj8LK6XXQhcpcPVrD1Dord/1vX7Nq08cK4pwiwXjKzlF4HJYyceh84Y7bd4RF2
+	vO+LbalL09KOClfxZh48T9NqHa1NU/EAAcw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793400546; x=
+	1793486946; bh=fT+OQrSBFiPM7CM2+FPmKMpeUOAFK5ZNFYv+xxEStMQ=; b=f
+	pd/+Nygh3CC5o6XjAnJqNd7/+xlGjWygAWneG+6aeJhzHWQuZI7JACPn8LtKmZcP
+	b+rcRyP1XqQX7oeiJStxONo8vrHRd8sKvBw1u88TuDv2voTzddTN0VXKirciUsRS
+	/KEu16Fmjokp8aIXdsq0rAMGMeT+w/F1FFgR0PVVryOETCCz0IXfTFPBnntApis1
+	D6tcLnaSK4goaimJtLlcne8HMdqEUUiyubFF3XDjs7usEhDFM2l4dNIKC0yFrSlH
+	vXiYVO1MkhF1eEcp9NVzyJhm2nZvTHuX3KONiOOTq197oFFHsgFIMSk5Q4PNsBwc
+	Ur4enULKWw+8jDBG90Okg==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=ownmail.net a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793400546; d=ownmail.net;
+	mf=PG5laWxiQG93bm1haWwubmV0Pg==;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:YoBt/0CGEjvU5Ab6w524Iykd+drJHOi3CURG9FashK3IxX3
+	THxEAcZT3g/oiFHvHlOQmEPZ4aO2xRrrGp6z2o3p0hZKksBaSM6bAXiPlyLPU5Re
+	fi16nfZ0EWHvJsEhF7QJK1id6u4xvYOQGcv2rloWNX+ICNRxhEyEMV2QhjCEcv51
+	UAEn3n8OA0o1/GyPEgxNf2I5W2k5d0kkju1TH2bXeyFpp1vz01tmED3uWIIzTM1q
+	TT2mwzllOwpA9bHVuFVInyYLhzaCeqVVT0R1ZooMdWsqvUiaTqm0fMWrpJMrW/0W
+	dfrKhikZt+tUA6H+2wjvcAT2EwvZ3lUkZfVs0cg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=13;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,reply-to,
+	subject,to;
+Message-Instance: m=1; h=sha256:qXyJA32715ys7VP3B1xOVzqg3w5XTTlw5JUhnW6+wj4=:vDPxt7fnzMYx869eXAmOq9q1872D0rg0gCFSZrL8AIc=;
+X-ME-Sender: <xms:4R7lat06Onejd_rg7tIjnRHPiiea8EouIsjq2brQvjJV6nTctbU8Qg>
+    <xme:4R7lapBT9gsEnrMHz1jmbPZgn2fTtvOvJgprKX_GdMxy0sgNRFM05Xk_PB7JjhStv
+    ogcyioeZt6BMgXDdQdnJRxSLl4JrSsHi3Q7MiKVE3qh64xGMAQ>
+X-ME-Received: <xmr:4R7laiIkNdElKXokxRcGLlZIkuuSCdToGA8Ra0uCkNjGWQ5mMT-X9-UWrEpm8gXNx0osEqg--QzVPtdMxCS502UNDwDnvhA>
+X-ME-Proxy-Cause: dmFkZTGx86ixzxqFr7DG5/S+744NrKiMWwWjcvwQgnQsFo0EefnYYiMCulkqJ66UugMNng
+    wBjrtDzZ9TVctwx69E6l9V6DCeOYO5IVpg0/LuX8q4d9e7MMEroZDzSAG+16bTxU4Cs4W/
+    qJYGJymIE57pCF1demnq8FKiwEwzYTZ+otHY6fNFhvZoPPh7ihGsD9OJOnpZggc5jK2Smh
+    Foc7k1wenTtcAkSuWiFJYkQL7w/61fGJVHGwTP4S7QDytK3Qpuf/Pjxl3s8wtxVOAoUJDh
+    Y2btYl4iyNxh6Gt2M/IwEQIAaZRkBpKc77GWwe3V7M4vJL0v1zYwbOcqmmv20+Kv/ZiCYF
+    8X2fMpcGjNemVu4DAdpXQQRkXJ41n9tWX9EgGONLKa3JJW6UhiF5DjydZGI/X5jzi5AmQQ
+    XhaHdiQbLZ0K7KlPNbBzFzWBNf+SKwmyrptTuf9B9gCV2feh2+uujl0h1fqwtNsqLHlgx/
+    t91zaNbcj959uefyoqOUfgz4SyuymeiQ11h1mvQ0wEckM9erqmptNBSUXBh9gJve2/Ak1V
+    0Wu2sv9TqKogMUGDJqsfEoGwCmevfA4Mtta5TZeC9n7jbAXIiF7nSGAh4EFMP97yax09X4
+    0I5J8HGSdK7lE4iFKjIZ/pYscqxIZzEZEkG9mq6XfElLOTl9w+7X9NnurVeQ
+X-ME-Proxy: <xmx:4R7laqmkEK8LRQbivM0TwxF9Ak7rr0X6vAgr1jeIYoTyJlFnGTK6NQ>
+    <xmx:4R7lajbu2KBRaJCwWD0Hk06wlXa5mdxw6VzIsMVuB6AMKdBiKdPtaA>
+    <xmx:4R7lau_X9Ue_K63IwrYA9xCTmqlpgDKAkbuAYrGFkM7q6Gss8sx1DA>
+    <xmx:4R7laqbjp0lKHVX3CJRzgCmeSz9zeCEBQznXBQuxEcqDLvg2nfg9LQ>
+    <xmx:4h7lavoy-TdniUV-G_sUPk_FrW_0IPsFOCJ412qdhJqQ7r3dt-bnZJNv>
+Feedback-ID: i9d664b8f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 30 Oct 2026 18:49:02 -0400 (EDT)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,197 +118,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261030-futex-tagged-uaddr-v2-prep-v2-1-131eb7414bda@gentwo.org>
-X-B4-Tracking: v=1; b=H4sIAL4c5WoC/6XOsQ6CMBDG8VcxnT0DB1bi5HsYhmKvpQOUXAtiC
- O9uIQ7G1fF/w++7RQRiR0FcD4tgmlxwvk+Bx4N4tKq3BE6nFpihzLMiAzNGmiEqa0nDqLRmmBA
- GpgFkQarMmrNCNCIB6WjcvOP3OrVh30FsmdQXifghFXey/IFzyKEqdaVMQxcpq5ulPj79ybPdB
- loXoufX/vyE28y/aL2u6xs6wH+5FAEAAA==
-X-Change-ID: 20261030-futex-tagged-uaddr-v2-prep-63ea40b5a22f
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
- Davidlohr Bueso <dave@stgolabs.net>, 
- =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
- Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
- Shubhang Kaushik <shubhang@os.amperecomputing.com>, 
- "Christoph Lameter (Ampere)" <cl@gentwo.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Will Deacon <will@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- stable@vger.kernel.org, "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793400015; l=5966;
- i=sh@gentwo.org; s=20251010; h=from:subject:message-id;
- bh=ZMs2FNIcBMES5Rg/sKY//vE3KG0UYrjCWf/LHF+Ga0U=;
- b=ja6txryyLZ/C4E0k9cmXCj5fe92DM/gog19hgBK/XJn9of6noFlXXUV0e/VrdLnx9GaIhS7kU
- H82XOp78jg5AMyZ8iKUCGkF2dGolUSpKDN2du71Fn7Zl2nLbtDJCs+m
-X-Developer-Key: i=sh@gentwo.org; a=ed25519;
- pk=jc8YIRvxPSyJaBRe5y+a4N0RXKBUEcAh8+OFhlROXPY=
+From: NeilBrown <neilb@ownmail.net>
+To: "Jimmy Zuber" <jamz@amazon.com>
+Cc: "Miklos Szeredi" <miklos@szeredi.hu>, fuse-devel@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, "Shuah Khan" <shuah@kernel.org>,
+ "Bernd Schubert" <bernd@bsbernd.com>, "Jim Harris" <jiharris@nvidia.com>,
+ "Horst Birthelmer" <horst@birthelmer.de>, "Luis Henriques" <luis@igalia.com>
+Subject: Re: [PATCH v6 1/2] fuse: add FUSE_OPEN_ATOMIC
+In-reply-to: <20261030192401.2543699-1-jamz@amazon.com>
+References: <179332437497.269288.7305999595462479305@noble.neil.brown.name>
+  <20261030192401.2543699-1-jamz@amazon.com>
+Date: Sat, 31 Oct 2026 09:49:00 +1100
+Message-id: <179340054030.269288.17605002354655480101@noble.neil.brown.name>
+Reply-To: NeilBrown <neil@brown.name>
 
-On arm64, a thread that enables the tagged address ABI can pass valid
-top-byte-tagged user pointers to futex syscalls. Such a pointer must
-have the same syscall behaviour as its untagged form.
+On Sat, 31 Oct 2026, Jimmy Zuber wrote:
+> On Fri, 30 Oct 2026, NeilBrown wrote:
+> > > - any other file: the server returns the entry only, and the VFS opens
+> > >   it;
+> >
+> > Why is this a requirement?  I understand that the server *may* choose to
+> > not open the file, so that the open doesn't happen until after the
+> > permission check.  But shouldn't be up to the server to decide.
+> 
+> This doesn't have to be a requirement, for regular files the server can
+> open if it chooses to. I'll reword. Are you also asking why this is just
+> regular files and not directories too? I could look into that if you'd
+> like? For what it's worth, special files should never get opened by the
+> server on this path, the kernel opens them itself.
 
-get_futex_key() validates the user address with access_ok(), but uses
-the raw address when constructing private and shared-anonymous futex
-keys. A waiter using a tagged address and a waker using the untagged
-form can therefore access the same futex word while hashing to distinct
-keys, causing FUTEX_WAKE to miss the waiter.
+No, I wasn't asking about directories.  Opening directories this way
+might be interesting, but I don't think it is important.
 
-Keep access_ok() on the original pointer so that arm64 retains its
-per-thread tagged-address ABI enforcement. Canonicalize the address
-afterwards, before it is used for futex key construction and shared
-mapping lookup.
+> 
+> > > The VFS checks the open after the reply, as for other ->atomic_open()
+> > > filesystems, and the kernel releases the file if the check fails.
+> > > FMODE_CREATED is set only when the server reports FOPEN_CREATED.
+> >
+> > The above para seems to suggest that the server might open a file that
+> > wasn't created.
+> 
+> Yeah, atomic_open is a lookup+open on the FUSE server, and that open
+> might be an open-create or just an open. Either way, the server might
+> open a preexisting file. I'll try to make all of this clearer in the
+> next rev, once I've gotten any feedback on directional changes here.
 
-Add an arm64 64-bit selftest for a tagged private waiter woken through
-the corresponding untagged address.
+Thanks for clarifying.  My only problem with the patch was that I found
+the description confusing - everything looks OK from a VFS perspective.
 
-Fixes: 63f0c6037965 ("arm64: Introduce prctl() options to control the tagged user addresses ABI")
-Cc: stable@vger.kernel.org
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
----
-Changes in v2:
-- Add the generated tagged-address test binary to .gitignore.
-- Compile the arm64-specific test implementation only for arm64 64-bit
-  builds.
-- Avoid relying on /proc/<tid>/wchan to detect that the waiter has
-  queued; retry the untagged wake for a bounded interval instead.
+Thanks,
+NeilBrown
 
-Link to v1: https://lore.kernel.org/r/20261022-futex-arm64-tagged-uaddr-v1-1-84d8afbe7668@gentwo.org
----
- kernel/futex/core.c                                |  2 +
- .../testing/selftests/futex/functional/.gitignore  |  1 +
- tools/testing/selftests/futex/functional/Makefile  |  1 +
- .../selftests/futex/functional/futex_tagged_addr.c | 61 ++++++++++++++++++++++
- tools/testing/selftests/futex/functional/run.sh    |  3 ++
- 5 files changed, 68 insertions(+)
 
-diff --git a/kernel/futex/core.c b/kernel/futex/core.c
-index a240638f69e5c65bd036434a15f3df680efb4638..dcc8ffca38595a5ea69f3672375ffb9f9c6766f9 100644
---- a/kernel/futex/core.c
-+++ b/kernel/futex/core.c
-@@ -539,6 +539,8 @@ int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
- 	if (unlikely(!access_ok(uaddr, size)))
- 		return -EFAULT;
- 
-+	address = untagged_addr(address);
-+
- 	if (unlikely(should_fail_futex(fshared)))
- 		return -EFAULT;
- 
-diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index 7c39d10b38e4d86096d2d1ce5fe8d6036e8ca758..c64b93a683bd6e9f6b9d3e4f02397eb24cc5a0ad 100644
---- a/tools/testing/selftests/futex/functional/.gitignore
-+++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -6,6 +6,7 @@ futex_requeue
- futex_requeue_pi
- futex_requeue_pi_mismatched_ops
- futex_requeue_pi_signal_restart
-+futex_tagged_addr
- futex_wait
- futex_wait_private_mapped_file
- futex_wait_timeout
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index a03bd5acba50319f08b04ff0904ef155c000fee3..8f7f6730285b725b483787362db4626c459d65c9 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -19,6 +19,7 @@ TEST_GEN_PROGS := \
- 	futex_requeue_pi \
- 	futex_requeue_pi_signal_restart \
- 	futex_requeue_pi_mismatched_ops \
-+	futex_tagged_addr \
- 	futex_wait_uninitialized_heap \
- 	futex_wait_private_mapped_file \
- 	futex_wait \
-diff --git a/tools/testing/selftests/futex/functional/futex_tagged_addr.c b/tools/testing/selftests/futex/functional/futex_tagged_addr.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..0b0e350eff11939e42b7b1aca01136b037ed7217
---- /dev/null
-+++ b/tools/testing/selftests/futex/functional/futex_tagged_addr.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <errno.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/prctl.h>
-+#include <time.h>
-+#include <unistd.h>
-+
-+#include <linux/prctl.h>
-+
-+#include "futextest.h"
-+#include "futex_thread.h"
-+#include "kselftest_harness.h"
-+
-+#define WAKE_RETRIES	100
-+#define WAKE_WAIT_US	10000
-+
-+#if defined(__aarch64__) && __SIZEOF_POINTER__ == 8
-+static futex_t futex;
-+static futex_t *tagged_futex;
-+
-+static int waiterfn(void *arg)
-+{
-+	struct timespec timeout = { .tv_sec = 2 };
-+
-+	return futex_wait(tagged_futex, 0, &timeout, FUTEX_PRIVATE_FLAG);
-+}
-+#endif
-+
-+TEST(tagged_addr)
-+{
-+#if !defined(__aarch64__) || __SIZEOF_POINTER__ != 8
-+	SKIP(return, "arm64 64-bit tagged address ABI not available");
-+#else
-+	struct futex_thread waiter;
-+	int ret, i;
-+
-+	ret = prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0);
-+	if (ret && errno == EINVAL)
-+		SKIP(return, "tagged address ABI not available");
-+	ASSERT_EQ(ret, 0)
-+		TH_LOG("PR_SET_TAGGED_ADDR_CTRL failed: %s", strerror(errno));
-+
-+	tagged_futex = (futex_t *)((uintptr_t)&futex | (0x42ULL << 56));
-+	ASSERT_EQ(futex_thread_create(&waiter, waiterfn, NULL), 0)
-+		TH_LOG("pthread_create failed");
-+
-+	for (i = 0; i < WAKE_RETRIES; i++) {
-+		ret = futex_wake(&futex, 1, FUTEX_PRIVATE_FLAG);
-+		if (ret)
-+			break;
-+		usleep(WAKE_WAIT_US);
-+	}
-+
-+	EXPECT_EQ(ret, 1);
-+	EXPECT_EQ(futex_thread_destroy(&waiter), 0);
-+#endif
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index d1a681b798bd385570710e7c5f9bb28cca64de3e..620d13ee7171e7cc6061053750c9ff4cf525ff72 100755
---- a/tools/testing/selftests/futex/functional/run.sh
-+++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -46,6 +46,9 @@ echo
- echo
- ./futex_waitv
- 
-+echo
-+./futex_tagged_addr
-+
- echo
- ./futex_priv_hash
- 
-
----
-base-commit: 3ac032ef6ca8e47bb06d1e189dfcf88fa0a09c75
-change-id: 20261030-futex-tagged-uaddr-v2-prep-63ea40b5a22f
-
-Best regards,
--- 
-Shubhang Kaushik (Ampere) <sh@gentwo.org>
+> 
+> Thanks,
+> Jimmy
+> 
 
