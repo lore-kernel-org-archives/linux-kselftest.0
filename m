@@ -1,100 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.208.50
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793318458;
-	b=IIvgQxG4x3cDZpN0a6NdzTXIw7Qacf8keecZwR80EfYdNQI2po+qnd1VAiQoVMu3NjkB
-	 LUYoN4ZcqnXEC+waXZebu074oELmAIVSz1ZudzeBQODjg7PQMDsA2XazeelJ5NuVuLGUc
-	 W7j1UMh4jnhXr/xuE0FP+3sAMQd2Tb1Mv69eP3hMFm96jKXs3enHcG/0iwtMGjL+Rpxj8
-	 2v2ZzcSL7tKR1Tj/Zi5+LO2yuFaOpZEDfgjoXcnKjXsf8ulnfHnAbID93XdsLexbGNKGu
-	 ENGG78rOWHjMQ4t6Q8FiOWak8ooicaRlQr3EvccOkcgFCex2abjNcIT1y0PXOsBc/5w==
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.53
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793319844;
+	b=xxS3HriWhA8dwvtpJ1xuf5P8w2ed42xK78z6nA8LqcM/HALPN2Yv6gXISQMh0vjGNxvs
+	 yrAw47Xa88qkcfFjqc6enlWZCNVkTTEM2OhLH1pR6rR1rIsvbtYq/uObbr4BeExSP9fYY
+	 +dcAUnZ+Qi/+zQcaeRmWaIUyg4EoDRKbtOLRMFx2o4pKqfu/NtYc+cRW4v2vPDICvQlsQ
+	 b5FqDjkAPIQMszC80D3rqMlvvF2nnHJOsRXUboUrfvQtiQ2GNXvXeBWGpwvG8SrlBL1Xg
+	 ycY4aSP9ajjUfAWFpSd4QUjRIlMfAMcfXpNl5RiLlx2SYslMjx5bQ5O784erQWl4XRg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793318458;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793319844;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
-	b=rjj9zU71tMSDgitvIpxLlbnMzMqNrS8220ETHnR3QHddv06eVDeSY3OFwldO1Fa81IdS
-	 F4pvMtR/m132GzOWuhkQf2/n8vg9FzdUgrksMaqH4CX0Vrj3zAh+9yMlh8NWcvVbOTGgL
-	 3tORr7RUhMJcvqqo/PB/Pb6EhPrYROmqdm8I5FUQye90Bh2qLT43fLXkMlyzUCuE9vrR1
-	 778FV7CAPXnfh3qHxMHClhK/byaCJlBPH3+wUaEis4e13dBpNz4ekSoqaWts9hFrBTW7z
-	 IEsD9tXueSPa4iMbyMu8hMrucP+EXavsNDD6dDxFPAzyOXxXaaxyUnMq8fZYBAYkr2A==
+	bh=VMmqUl9uJsPT0M2OBCk5mwHznWO8pexQECw7k6bATJE=;
+	b=nn/hiKd1M1PfAIlJHrPPThK/wW2fgOFvtlgtqESpo3IOPkQJOwbMIXoylcsVhyh48u74
+	 oG3AKXWFunxDKFzsobiD05MANoB/jLhQddjxIKAGqCtzntc3StACjqJbOGKAUtokkW311
+	 4G6oeJwdpu+jcHtiRMyKm6Kfu5xwKwZC/YSO2Y5/Lh27NluuV+eTYNyb6jldvJ4Lfnp4v
+	 MvxUoV0ExcQ58qz5mnlJOLA26PM1zm9HZ6lYOfIrv5RYtWKnLCu8ymdHoQEExpIpRSzCw
+	 px1MsQ5pDqj7GCV09gQ8LfjFq+r/NRwCzs2NFkzc2J06YW7yzDAd5bg/3h1w5m9cRbw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AW1HInfw;
-	arc=fail smtp.remote-ip=209.85.208.50
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LpGlNmog;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.53
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB714606A31D
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 00:00:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB714606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C9E606A329
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 00:24:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56C9E606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AW1HInfw
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b1aa36fc0eso5773a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 17:00:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793318456; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LpGlNmog
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6a642495d81so188345a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 17:24:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793319843; cv=none;
         d=google.com; s=arc-20260327;
-        b=abxAfUgXOGM06HcJlfQuN4LbTsrUFFbxwdT52zJV/76GLapjrZ64hUwpApCMrWmvla
-         quu3efiqLg00RIeJfbhUB0Vdznij4rQcJ27obvZ/DD2x3EVF1PqkE6x48LXd9TyzTKcN
-         aT+CGYhQnjDSmvJRQpWqK2D1N20djBP4ZI5KEJd2MCwmhgPEuiiSrLIG7qj2vOk7S82o
-         PeSqTTIZBGxEprBbXaxc/DVNtDtFClVlkrTjsTTRsWXB/cQzDvQf9ykRSW7KPkiFhUGS
-         e5nDEGE8hnzrVzIfZ+qDBIVH5xP8l20Ox+sLM8rZ5TG6gOHobvvJifaRJei70T7l1xL3
-         ZnSg==
+        b=P0k+6CmBu1ZZuKaaYq4K7Cw2R7d0y6x9u9KnYCRJ9c5Vt0+Exf3yizjLBgkyErIehr
+         fAYk5Qb/s3ElPHgRtUIvTSu/fGaH0tKR7zWTu+OfGzx8wUoZrBKgFEgyKDuZuGF+Fofg
+         oTlwSB5SYICdoHF0w7+S4St7zziqL3DYABD3XAu/H0vobwaSnH5mq4JNPu0x9mPmsvUZ
+         1WdqbMSpQ4ZWpIOv/UAOu+ZMz5YPURs96GoMDuU7xYhOg0uOcQixoisOMbt/qyvsZGD4
+         CN1dSiWhhMJ8TesLzlTgzUzMu6Yv43hWpa2mGifnOf1jeHRZzLwhYGXXUptQ+cvVnjdn
+         J61A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
-        fh=Xw/Gl3tCndsjZG/PsC3S743sVxaY3aCo11/gXJlJSdA=;
-        b=iRrKYgjHC92c+6pMuPXfAAa8q+ht+YhQV0CTIrm0DGaGRKgIk5+lhyDwoupE8IL2yG
-         MthHY7kelJ3x1MeaPofYsbS9qU85rIquRsTr3zT6kdHyi5VWzkNgdoZ5OpQdlQl58Egx
-         vGktt1Aiyi6BTuqCoMJrP74XbJrCPwA9KK+TwZE/pDlJXKjEh0s9zVGjLymrl70QWfhS
-         0nM+Rskip/vOukKdXg2vXFq7bvGmZMhZmibGMINtz+fgsJFcVCS/GWuIiHOXHRHU/s2O
-         I+RdGNw2E4zZDQHFSecuhspK8NCghogbweMhfzAZtpLOaMvzbyXJx5fVMbsOOCi9BtrR
-         xjkg==;
+        bh=VMmqUl9uJsPT0M2OBCk5mwHznWO8pexQECw7k6bATJE=;
+        fh=eyaXDlroo3UBt0T/ViDtP0p3xrl1Czsn9Rb7NX8pYcg=;
+        b=SqLmtKgbTgDi9kPxnRecfQ9Ljay1jbBK90txxQKbHG62pGMkkyI5uAWoGwej5KEmwB
+         KKK3v+3JQFzeBBLoHbCP2lfd2Kn/fJuEbsExXW2ZH6gx49SYCSr6YzNllwTRfaQqiCli
+         sSRIia7z4plxJ5hhd8SOaOelPnKnRjyGtOwRjj+RI7xniatZTifkkh6ESmjqkHjCbjlV
+         eT+Qs7ZXh7lppWD+jCTqDoI8bhCb4yybsAFb/k4z63bdidg8lXsRCyflf6S1f5Hm0u6H
+         BTXWUC8OrO2IcXmtPVXCV+AuVs/sJEEzMtTxR1MffhzqOXYyuMab2jOFUSYSJU8rpNXd
+         j+Gg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793318456; x=1793923256; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1793319843; x=1793924643; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
-        b=AW1HInfw6hVPfoRvD736sYB3zTE0cSDxnVw6yygthKUGTF4onkFNlGmz4/caAqgUU3
-         SDwEL5QPayGRF6LFj2d2Yvse1adS39hRumxe2SFEHm5nGZYUo5Ma7D/hvm5HOuoTJYxH
-         vLMH4gHyoAjN2cMOL+tNZbe/vcN1I4XdQN+B+dnDclu1g6hPdtWxTTLKHVX6SOhbm1nq
-         WDci24T9Kih9hvtVH4F/Oc1Cu+7+rDtAxm1UfsuTZs/TNYHzzBx2cCIZE/LARAvKGlQi
-         lJb9LxGzIlOhDcTPXT9GBq2MgmvebgHNmW93Xdp7GyGMYeaCS7FMN4Roth16XZtyV6me
-         TI+w==
+        bh=VMmqUl9uJsPT0M2OBCk5mwHznWO8pexQECw7k6bATJE=;
+        b=LpGlNmogTRImOIcoGkVK6kX1FwvGGuvBqIqbOQmm5KJ3xSt2iFKkzmTKCxMImHdVaB
+         aDfTjwZqyoMW2Iv2ufgeHFBdYwUo31Cysp7oHlTZ5mddkgutsSip90Yu0xuL4dwsjPlG
+         H2d2o1NYWkpAmpZotlXfjCTbgYadKtl2mltD866hVzSHDvqBS7/xSgXNB9gCvo5NaMp6
+         UR5LppzANcnsvAThS9ZzZ+t3lqd2cQjUINGMXJlzmHMLf95KKq7TGISjrOlO8RGNlmd6
+         PEsSvEAPMgc2Des3Z6s7C7VBy/qcyKQWcN9VLLn5h9MLqOJtFhjlOBczCmc7Ss729Ap1
+         cjAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793318456; x=1793923256;
+        d=1e100.net; s=20260707; t=1793319843; x=1793924643;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6AajOicrvuRgSKCOUIMtr9ZDlZu1f1csRJX+CeX/PXg=;
-        b=XUTIjh5UlAUWHah1xG/5YUauSnDSYuM2mYq0qtcJjMdYSvrf04loikp1lldA26aphF
-         8s2qXHj+Zwd/IcyfoGoWeKwg4WaFoElSkws9uRnBgwwG5lV+WE8kmQmzHQW3RRXJLqVE
-         NyB+09u7d5J6W8hzR+6GGMje/bLC9YNj/T59DwSORLcWQvLpMftOOJP+oAYjZ62WQsJr
-         +Dg6D6n5gS+9zfoVnoNZE9dXOobl+sC58PU3JyWykBHJyTSJiuHuwGixSsMVqupKv19C
-         HI+goLGLiJb2CU+a9MWcyslOK5WvPP447Cp5/VsXNobDg1k0ipzBw/ZBuVK4pXPCUicX
-         4B8g==
-X-Forwarded-Encrypted: i=1; AKwUvByHe1a+XrvtwPMtC491Fr5vofsU8Wl4Wdv1lj5gbY/UF+SjR4S5ZtzETw0DYqNVq0MNiEY+CrQgCOqcujPoUvo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLG/vmSy+lz3G706MFWN470UbjSFhZ5kcNPco35ev9pSO5t5t1M
-	zdGg4QxWQHmdGMQ1yOv6AQNrrxxrMR5trygnuaQYmPduVxUryOc0ll8bYHLoCRL8yZftPCPZcvy
-	tOu0ncx6dsWAG03qG6bCYL62MK7oo+mvPaDscJunL
-X-Gm-Gg: AYBFou23MZqya6AzWkZEF2jmo+0er8o2EFO33HMXkCFpUIvBhRcm60hzP19DWqT9RVe
-	tAfLnyCPV4SpUKOBqIoNGJPWv7wdzB1/q5f2vd+ErD4cRGm4Mp3YveTiRT/jMcNwB/jHHv33dzw
-	O5yEy/t8X39qeFvm5e1Y0Ns7nVEA311ywqAXIANPv3ueSnHI2beRMQMiPTLg1vt8rGzX0CmCbTV
-	c+wxUYDIGP/pziyyiqmByZMfcqGRw+gU4kzL/kUobdECbE0MkjhGHaDtTuKmn/CoKZ4s0WM/2aR
-	skfHVUgqGQwMzYehFabYRH160Rl7ZVgvY8XFaZsAMP81Wd0HtC9MOqN/kuZTypgkTElv3EgNJdY
-	G5t+aMwT5aZ9slHm8UXX0UBu/Fdggqn8EIgoeiEzDc4TVqI01U8Vd9bpeRg==
-X-Received: by 2002:a05:6402:641:b0:6b4:597f:50ed with SMTP id
- 4fb4d7f45d1cf-6b4b10ef524mr124485a12.5.1793318455914; Thu, 29 Oct 2026
- 17:00:55 -0700 (PDT)
+        bh=VMmqUl9uJsPT0M2OBCk5mwHznWO8pexQECw7k6bATJE=;
+        b=YRPZoODGAXfzFqzx8J541p3Ltpr/qBtV5zDfY3hF/xy8Mt5gWtCrqhdISqdsAcNSBw
+         6PuLFtk9viraMbdWkXXXLyts/5nbJU7ev/Ay4U517R0IXeAL9jD4p7kZqVBIAMp0czP4
+         hG6rRP6R07FETyvAdoPEIhb+IR/6ifnw7gnmWLzSdkhCOlnbxhsoT5lixfs4uh9WoXjh
+         UB9Gy6FYYvdJpgDRqGVN4EDDvsB/pZ3ybnVIDjKkidr1hjHWXQR2v9bXYJiFz1rVx8Vw
+         t92ySDwNd8z8Mq+CsWvO+mAsFbRxXKr9vDGkZ3usMg9cnns98t8y/s/tqIjsFyS0BfCq
+         MtDA==
+X-Forwarded-Encrypted: i=1; AKwUvBzh1pvWbisJ6dtygBLztSJ4y/nu7StP+Bhy8INyDxkPvyv16UDhQY7NUKGYGzBpUg/JUr5BSt0qMwjebadEc+k=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIb1R30HRyzp3eV4TjSw/Zx8I1nKHQJA1HkHXGibZ3FpZ2rSs48
+	sMTjT/mtJ/xvzJG0P49MIIoOKLZc1mgCUk0R/xpErCVlJbCFL3HuNCbrXhbQS3UiVrsPQcMRicP
+	WQ/233qtCet29uQhTP6Z9WSwXJUH0Qp0Y6p/p0T29
+X-Gm-Gg: AYBFou3DBvlKO5SOi+ggkExotOw1jddQ79oO8M9N7NlSfXQEw/23WOLs/k/GclWBSbP
+	b3od35KEYgGJvEQyMk9Wkw+YvxCt5paIyXHHBsjyJnAtydGE6xzTl/HcUY3sSnEJky1oVBQfGDE
+	I3ahgA0QtigPpKNt85tRC3K9wPB2DCK6GaJ6dEJHyFPvpqz5wFp7d4LXMlSL7FegLDL2j6s3GKt
+	yqDj1enbasY+lA8Us/8PYdje8ZZYmjDq6U1weQrRMDj3Bd0y6HR+weYn82y0yn2oS98gx2/pZqY
+	TlLlkV0MucjS/r2i9lWXiPdGq9sDsbzgzNKOUf5kKlbXeTNu01PB0eS1kElKf5uKu1wP9o3TdKV
+	uujgkCl8+KgqMGBJpbuqKZFeSP/HqEz+132eIzWL0KWkEe+kY9DbDoGvimBBOsAb3Lq5sjPEbNj
+	RkRpRLiAVLNrtOLzOh
+X-Received: by 2002:a17:907:6d20:b0:c46:7643:ae91 with SMTP id
+ a640c23a62f3a-c4ca7a08673mr59997166b.8.1793319842360; Thu, 29 Oct 2026
+ 17:24:02 -0700 (PDT)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,77 +105,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261029202817.901145-1-jmattson@google.com> <auO4UueaV0mTVzzB@google.com>
- <CALMp9eTKXa9v1TxJMPrE-tSXajwJCErCk=g34dOPJtG057t5mg@mail.gmail.com>
- <auPAFxXy4ulcK_jq@google.com> <CALMp9eQdtvjQkdgnJ_NTt=2ArdzUtqqzieXLccv9Vb_My5G+fQ@mail.gmail.com>
-In-Reply-To: <CALMp9eQdtvjQkdgnJ_NTt=2ArdzUtqqzieXLccv9Vb_My5G+fQ@mail.gmail.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Thu, 29 Oct 2026 17:00:43 -0700
-X-Gm-Features: AclHuK9Gf9FXwfveb_3CfkAO_qfPf7-qk20lAd5kJcyEb-CP0c5NZ2eSdTbAAeE
-Message-ID: <CALMp9eSgWhTFi1vxxnN=1zV4mRVsKD55F=37yg4LmT_xUAc_Pw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] KVM: SVM: Check EFER.SVME before updating MSR_VM_CR
- on guest writes
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Yosry Ahmed <yosry@kernel.org>
+References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
+ <CAEf4Bzb--Jzz696u057G9_CgQN7zf6ksvoL80KJacKO2CorsnQ@mail.gmail.com>
+ <CAG2Kctojb7xiOqTmwWqoAKFaNUECjOzXVc_t6KbG13Pqm2dbng@mail.gmail.com>
+ <CAEf4Bzbs8F1DPBz=WXVTExrrNjzvaFsi4L+HEj+zbUTpPSTX5g@mail.gmail.com>
+ <CAG2KctpSTCyWQHgJ8GyFEhHPdFawUa6zy0g7rkfCcujJRN6f6w@mail.gmail.com> <CAEf4BzbyqPC=RQGWEdpkqu1WDQ2_S0H8pZU2i=_gLuSDQtpFbg@mail.gmail.com>
+In-Reply-To: <CAEf4BzbyqPC=RQGWEdpkqu1WDQ2_S0H8pZU2i=_gLuSDQtpFbg@mail.gmail.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Thu, 29 Oct 2026 17:23:50 -0700
+X-Gm-Features: AclHuK_8kDb2R9N0iMUoVO0Y5pzDVtS-1XOT4NszWcH8axoYKkVXrpd6hnWmpKQ
+Message-ID: <CAG2KctrkKOTdsjWVRBEHuH45-9xpYsxDTk8PpZ4Gu6Ygq1Azew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 29, 2026 at 3:04=E2=80=AFPM Jim Mattson <jmattson@google.com> w=
+On Thu, Oct 29, 2026 at 3:54=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Oct 29, 2026 at 3:36=E2=80=AFPM Samuel Wu <wusamuel@google.com> w=
 rote:
+
+[...]
+
+> > I envision ALL_MATCHES to do some form of lower_bound() +
+> > upper_bound() on vmlinux since it's sorted, and then linear scan of
+> > all modules. Of course, just one of the two or both aforementioned
+> > things depending on the module filter (any, vmlinux, module).
 >
-> On Thu, Oct 29, 2026 at 2:52=E2=80=AFPM Sean Christopherson <seanjc@googl=
-e.com> wrote:
+> no point in upper_bound() if it's sorted, you just start at
+> lower_bound and go linearly from there. I don't think it's realistic
+> to assume large number of duplicates, so I wouldn't optize for that,
+> one log(N) lower bound + linear scan will be faster in most cases,
+> probably
+
+Ack, lower_bound() + linear almost certainly will be faster in practice.
+
+[...]
+
+> > My understanding is that the size is encoded in the ioctl command
+> > itself: _IOWR() puts sizeof(struct) into the command number when
+> > userspace is compiled, so _IOC_SIZE(cmd) is the struct size of the
+> > header the caller was built against.
 > >
-> > On Thu, Oct 29, 2026, Jim Mattson wrote:
-> > > On Thu, Oct 29, 2026 at 2:19=E2=80=AFPM Sean Christopherson <seanjc@g=
-oogle.com> wrote:
-> > > >
-> > > > On Thu, Oct 29, 2026, Jim Mattson wrote:
-> > > > > (Host- initiated writes are allowed to set any valid MSR_VM_CR bi=
-ts.)
-> > > >
-> > > > Eww.  Why?  If we allow this, then we'll end up with the mess where=
- the guest
-> > > > can't write back the current value (if userspace is being weird).  =
-I get that
-> > > > we want to avoid ordering issues, but there's *already* a required =
-order here,
-> > > > unless userspace ignores the failure from svm_set_vm_cr() and conti=
-nues on.
-> > > >
-> > > > KVM doesn't advertise the MSR as something to be saved/restored, an=
-d none of
-> > > > QEMU, CHV, CrosVM, or our VMM appear to save/restore it.  So why ma=
-ke trouble
-> > > > for ourselves?
-> > >
-> > > OMG! I didn't look any farther than the obviously broken svm_set_vm_c=
-r().
-> > >
-> > > It looks like svm->nested.vm_cr_msr controls nothing other than itsel=
-f.
-> >
-> > LOL, nice.
-> >
-> > > It's just 5 bits of storage with some weird locking rules, and it
-> > > resets to 0 on suspend/resume.
-> > >
-> > > What is the point of such half-baked support?
-> >
-> > More than likely, so that older kernels didn't crash when writing an MS=
-R KVM
-> > didn't emulate. :-(
 >
-> You're not going to let me get rid of it, are you?
+> oh, interesting, I didn't realize we embed struct size into ioctl cmd
+> and match it exactly. I see that pm_scan_arg has the same __u64 size
+> in the struct approach, I'd stick to that, and when we extend any of
+> them we'd need to make sure to either ignore or hard-code the size
+> part, hm..
 
-LOL! Even the 'LOCK' check is wrong:
+Ack, will include the size in the struct for v3.
 
- if (svm->nested.vm_cr_msr & SVM_VM_CR_SVM_DIS_MASK)
-        chg_mask &=3D ~(SVM_VM_CR_SVM_LOCK_MASK | SVM_VM_CR_SVM_DIS_MASK);
-
-The condition should be checking SVM_VM_CR_SVM_LOCK_MASK.
-
-Well, at least it can be used as a sentinel you can poll to see if
-your VM has live-migrated. :)
+[...]
