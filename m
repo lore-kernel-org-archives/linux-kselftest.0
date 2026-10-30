@@ -1,60 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.145
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793386278;
-	b=5eNTYBB4e2eweHuaxpAw8oUkiJWVV2/1z6AAi4ZlyJN3FCEwqoVknM58atY5cfdHv3Fp
-	 9WJJY7AMPBuZCuiKMfw7VHpu+hXgUykhow0a6l8cVlXJfPMOf8TYcCzq7i44E9LleXyW4
-	 FuV8jd5STJcWF3oPtfwRbO2nJTeX8iNRSgR9wnew2EmYPqMBcwcfcHdWmBKu8IcQ7NHdD
-	 1ztbEDyAUjEIVfebAOw/0uoJDyRL8jG/pxSbYO++SV0VMv/rpNFg/e6V5bcrOwqZxnSAW
-	 0aK/nSsmnZq5wwSTo2CTovQcP3JJ/32rn3TkQavPWI/hGFAw6KMsh6tulK9/33QIzZg==
+	t=1793387050;
+	b=zS++xF5krRJOCKZBejuWWuECtuzT4fg1P3XtFCnVImj+uGsqOip5mZuHBubTL6dI2A+P
+	 PXqN2+M3zvGfsWerE/ZVf7CKloXXvBUuYc9xp4QPVVHvHl5bjblgFt2qW67YIxvs76+j7
+	 A/ZiUcNoP7jQ10o4QYV/x3vu4GplL40BhM7Y7M8x8zacDDhqs/B1YGeXloK9DNRruB4xq
+	 QJrrxa91f/ENynfggQrWvgESC7mVTgNn+Ok2NlnU7hNSP2LJuvjBFCQJQz6Olbb7p/T87
+	 cE1c9FyKeeiQr6sGxLBkQl8HdO6S6HTLvKg9Eez9Xg9EMwRev9c/jligP7LRi+XwMag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793386278;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Last-TLS-Session-Version;
-	bh=tGPD1kG0muCiRaH+onMJbF8McQXw/3iybmvF3qayq9M=;
-	b=tfnldRVDY/e7edFYPSKp6gcg/TXSbyQ6OUPlMnab3ZZtDqapn+KxKEa0EDJF/YTmpgkx
-	 RItBqGpR10PHC0rbe0kRnCuwpqj9IkgLlCoc90IIRVUxEIq4mhage8776Gao6ahxL6Vue
-	 0Im4TCHzC87FX6vjrJOFQ/Qz+uQqFah47KB23go/y6QoPLHxqRDoBYU/VicfM2LQjQq+h
-	 WYFcUklW7OmHUEm0/fBmpzjF3LKuVicxrl/ho8zrg5nuNrU/YP95DCf0IjASel5wMZm2X
-	 FD33OKD4+hQ5IwslKXkxtK1watF+y5Li9tW085FF7y9kH4rMfXT/6K1wu9EmVC8Igow==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793387050;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:From:Content-Language:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=cYVDAfGu21tw8B4SsY7KTa+EHXRT8hV/QKN7JLK9TAU=;
+	b=enF/xVsnGDlMlyu23MsVKbZsqMTO41V3fD6efrPFO4jGlL1I0oLESj6C6k7fqzdAtVcC
+	 hfRWhpH/X2abMi3cUra9L8YcpeCaAeZTrzSQt8+8nHF0qAZOf316P8GyfBhNQuln2wsIz
+	 A3OksvDVbXN6FsUg/n1s4z5Y/7g94kxs009dCT2IabIjbA5dMlswSLzpeDDhjkUkl713Y
+	 U11Qpf3NILZSQbRygu212N1YYVAxatMPvay/TEdWWE8Yz824FB6Nrb8DSmv3j0jadcfS0
+	 ORc7ctLf+ri9Bx6edQoGkwihl1zkN5erZNnWxk1yMLj0volLDpNEkv8S0CdE/bRi48w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Qw57GVyK;
-	arc=none smtp.remote-ip=185.246.84.56
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	dmarc=pass header.from=bsbernd.com;
+	spf=pass smtp.mailfrom=bsbernd.com;
+	dkim=pass header.d=bsbernd.com header.i=@bsbernd.com header.a=rsa-sha256 header.s=fm1 header.b=V5d6RUpT;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=ceY2zdYE;
+	arc=none smtp.remote-ip=103.168.172.145
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2D5606A31A;
-	Fri, 30 Oct 2026 18:51:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC2D5606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A548E606A31C
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 19:04:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A548E606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bsbernd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bsbernd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Qw57GVyK
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 644851A13D5;
-	Fri, 30 Oct 2026 18:51:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 37E91603C2;
-	Fri, 30 Oct 2026 18:51:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8B4D1103290EE;
-	Fri, 30 Oct 2026 19:51:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793386270; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=tGPD1kG0muCiRaH+onMJbF8McQXw/3iybmvF3qayq9M=;
-	b=Qw57GVyKDhm66E50/4M5x8JdNW3QxpdeVHS09WY2sC399HrrlHeDaQjSES0W8b/aHJr3aj
-	1kj+Ml0n2AJMr/wFRaJvq06j3maHegSC2tVAQTSvmk2zgLefhSfGwKseQPLRr2yMb/yKl1
-	BCVOFEhpsl4BsOWju5FFycYRdLdEWxylEXvB23NUP92h+27NPS9rjWddWAPCYRHumj85uZ
-	cil3sLuqvNaj+lhDhgoRfbEbWahg59PxxtMkpUUIFdZTKXmy7PUX7BmlMsO1M3fFpjK56Y
-	rpUstMBq/LY4ebEmiDVY3vvREYNBqeNIWlCpB0iIF+5Opv9R3G7ijrNFtDzG/w==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Fri, 30 Oct 2026 19:50:40 +0100
-Subject: [PATCH bpf-next 1/2] selftests/bpf: add helpers to manipulate
- ftrace
+	dkim=pass (2048-bit key, unprotected) header.d=bsbernd.com header.i=@bsbernd.com header.a=rsa-sha256 header.s=fm1 header.b=V5d6RUpT;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=ceY2zdYE
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 7A29FEC0596
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 15:04:03 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Fri, 30 Oct 2026 15:04:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bsbernd.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1793387043;
+	 x=1793473443; bh=cYVDAfGu21tw8B4SsY7KTa+EHXRT8hV/QKN7JLK9TAU=; b=
+	V5d6RUpTicfIhe0AxolL4QxYG21F0bNNbESm/QvyT+gvHGLlf7WGbhEnpT82TDQh
+	473dLcaoP+Hcxnusw0COqVMbzWg2LxGu0TySeSxogcKN7YEUit2vHXBybyiUi7ij
+	TAlMJvNQ5k2EFNrz0USqC84mTzE0P5qt1FIJ2qvyHkZpEyBvBCjIYwVAsTBSNi5+
+	frN+JVkbN1qIj98x6S2eQmyDzYpvlEydcFPEw0wQrN+kz4ThD8vClNTvbVro3ctk
+	vXO+YF0yDCrHrQlF0Uuk9EyphtPGpNAezqFyDu2W/H1jelWZuvdKS7LqPtyCCtbE
+	ObV0Lj7fK4l42Mqm+C2i/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793387043; x=
+	1793473443; bh=cYVDAfGu21tw8B4SsY7KTa+EHXRT8hV/QKN7JLK9TAU=; b=c
+	eY2zdYEg1BV2iKEB8nZGiC3B1aDTAHfWTqNmyW7k96rO6IazFkOnaondXrsde59U
+	CMvhFSROsnpsregFHRLRDJa1nTSxI1xnpXumROi1FbnKCs3FAZwu24i5jNdyb9jU
+	cUvr1oH4k+LvWmoEJsXqmZzyOvjBBft5JGL56HluWeZaMX79yeygDiqn095doJDT
+	1xWSRpnGP3Jch9fhtf11lrBbVo2FT3CdZF0O4owrnM1EbAbtBVxZ+G77tXJcOnTM
+	hoOu1onPnc+ooBV9RI2RPpj+tIwFIUjMXRS7gP/n0Wh1yDhfDL2J0cJPQdZ5dD28
+	Vrop7K/masqbMOaBhkFrA==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=bsbernd.com a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793387043; d=bsbernd.com;
+	mf=PGJlcm5kQGJzYmVybmQuY29tPg==;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm1:rsa-sha256:LEyBh2DiBq5fyDMQxwJOUlV31SHEgJ7Eaka+R/ucjOgsVCD
+	N0/z6dRCwmYaOzE86zUA9pVgNPp4beAHtHSMR2pVMOKOFEZUctcpRVyCmpi8MNAx
+	fwNa7Tl7HatTfqF5Xx43nLoknOSy8SSs2/d4ugys7Lxa1EaaQ0U3gvbMvSSFuN2/
+	ll1Uho2HH2K4q/n+5tLGiC/WLQE/JN2K5nJlq8g+7Dlfrm30LZBcHW1SfSEoIPkX
+	9wGVJktfCEAe4GLk+FOl3QOQiG6GQ2QOVutFxKyfYl+XzgAhjj4oza7fKxcrWIOM
+	ameZe4X+OevL96OUL/OCVKZ3JBBMCZD/Cp8mDhg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=14;
+	hn=cc,content-language,content-transfer-encoding,content-type,
+	date,feedback-id,from,in-reply-to,message-id,mime-version,
+	references,subject,to,user-agent;
+Message-Instance: m=1; h=sha256:GJ9fIEhAAWVvEm6l7nB65LDWNZcyynBlOQf87Xosm3w=:SG1zBtFmdbw8Pqs1ZYzjFw/IGozPKTzhO0Fpu10JQx4=;
+X-ME-Sender: <xms:IurkatfI8cTL2WhXNzRCkIF_orTOKowPbrR14WGcjSIWuuM8dGCWzA>
+    <xme:IurkagJjJLvTfYcLIJnDquiGZue88E_lLFI-FbEfNsVw8EJYZo5N_5efYYEq__mGW
+    s6NWp-z3mimYkfTXPt6oIEPh6ry4I9D4Vh3ZqWcv9eb8ANoTcR2>
+X-ME-Received: <xmr:IurkaqwjyuKSHsPvddcumzQ2OVWhUn0MoGZ6iyj8LBK2U2cVldtQvg7SU6UlQA1o9CRm3lrOvgNgNhjvIWllke6TT6mBBoDEoi6vwepigZL4EK1msg>
+X-ME-Proxy-Cause: dmFkZTEO+OiwYsZGLYiEqeEWlniUSUgrfOSvhBiT6vjhnKa9rY71lnQBvzv6vOmKSLeSvt
+    j7S0Deu0nXp7TuIZJPE9OXCw9qvCV4bwyR567dyr4/zW81P27qFLEwYzpmXV5CxRGIKyQT
+    nqc4kdC7LChm4De6LRWWR388VVNtUxxPwYVRL1exE8pO5GMMm0BhxIL7udWpluiw99Sk+z
+    FH7Sk1npvSPetmU1IXxatbTEeXIAWEkyqnwy2CNYIewfKTuPF2chh+nIBZWxLrcryoQhdV
+    4FlqXF3FaOsncC/UitXWE3bdmNvIKl85DCLFSRzR4C9RhbwenPfAr1fVh4RWuguVIpn3S2
+    cOOgpfqJXW1k+HtKTPb5hEzUk5b/nBs6IOr3RL9tfhlmvvOgzaSGLI1c5OT2mQmwDbnS9G
+    zDy8tuDjCY8pkLkYND12FXycRhphqq6cF2hsPSBEe65UsZJ1DgmiA2lmSEWnoVtfJHbwuq
+    17ie0UklBh8g0RyNJMvwG+W2r1fUUv9ZZgASIrZSQvjv6ehskmAiV/6cjdXwq/0WpSNsVW
+    fgzEegIb9kW7TZ5inMXiHH0bQt2FLy/S371s9S6j1SYmIakwkoOtDgn2Jk++InB4r+PziX
+    GnrGSesbKcmmOKhUaJmvlLwIiEZ8J0e1MHXcDjv3ytrQvavThwe8bYTCdOtg
+X-ME-Proxy: <xmx:IurkamtuT0jpX_8cY1jck4SpdXlZ154loJk5SUpgas4GtIiAOP8wGA>
+    <xmx:IurkatAhsYQz1QVPjFqF_Hzo74qr08nEnolKYy2glY-XuF1Jw9qcCw>
+    <xmx:IurkaoEsWKeDd00VLHQBm0QvHKBrbLvrYkvXDZWqni9DYlDG6bYs7Q>
+    <xmx:IurkatARGdEXcKHnvNRgJRsNLwVycPbn3wWL8_C0pA1Ew-XAi3kixA>
+    <xmx:I-rkagyUhBGaWhPeEsfakV4m8Eqa5PhVQqhXLOMd_s72ijJoADN_hd4O>
+Feedback-ID: i5c2e48a5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 30 Oct 2026 15:04:01 -0400 (EDT)
+Message-ID: <6bb36b51-cbf7-432d-b837-29ab4f7ef789@bsbernd.com>
+Date: Fri, 30 Oct 2026 20:03:58 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,329 +119,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20261030-ftrace_in_test_progs-v1-1-aa50c5dd1ccc@bootlin.com>
-References: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
-In-Reply-To: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.16.0
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] fuse: add FUSE_OPEN_ATOMIC
+To: Jimmy Zuber <jamz@amazon.com>, NeilBrown <neilb@ownmail.net>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, fuse-devel@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ Jim Harris <jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>,
+ Luis Henriques <luis@igalia.com>
+References: <179331349568.1157394.13124360154896615084@noble.neil.brown.name>
+ <20261030183631.2126171-1-jamz@amazon.com>
+From: Bernd Schubert <bernd@bsbernd.com>
+Content-Language: fr, en-US, de-DE, ru-RU
+In-Reply-To: <20261030183631.2126171-1-jamz@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add helpers to allow a test_progs test to tune ftrace configuration.
-This new set of helpers work with an opaque structure: this one is used
-to record any change performed on ftrace, so that we can restore those
-automatically once the test is done.
 
-The new helpers distinguish between two entries types:
-- basic controls, that are "knobs"
-- filters, for which writes are "additive"
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- tools/testing/selftests/bpf/trace_helpers.c | 247 +++++++++++++++++++++++++++-
- tools/testing/selftests/bpf/trace_helpers.h |   9 +
- 2 files changed, 254 insertions(+), 2 deletions(-)
+On 10/30/26 19:36, Jimmy Zuber wrote:
+> On Fri, 30 Oct 2026, NeilBrown wrote:
+>> The /proc different seems cosmetic and probably of no consequence.
+>> The nlink issue might be significant - I cannot say.
+>> It might be nice to include a comment where d_instantiate() is used,
+>> explaining why d_tmpfile() was avoided(?).
+> 
+> I dug into this a bit more. I couldn't find a FUSE server that actually
+> implements FUSE_TMPFILE, besides the example servers in some FUSE
+> libraries. However, switching to d_tmpfile() is a behavior change that's
+> unrelated to the core of the atomic open series. I'd be happy to cut a
+> separate patch series for it if you think it's an important improvement,
+> but I want to keep things decoupled. In v7 of the atomic open series
+> I'll make the "why" of d_instantiate() clear, i.e. that it is uniform
+> with the rest of the fuse kernel module.
 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 6d7a4b8c4ab8..1f26a057a810 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -21,8 +21,12 @@
- #include "bpf/libbpf_internal.h"
- #include "bpf_util.h"
- 
--#define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
--#define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
-+#define TRACEFS		"/sys/kernel/tracing"
-+#define TRACEFS_PIPE	TRACEFS "/trace_pipe"
-+#define DEBUGFS		"/sys/kernel/debug/tracing"
-+#define DEBUGFS_PIPE	DEBUGFS "/trace_pipe"
-+
-+#define CHUNK_SIZE	128
- 
- static struct ksyms *ksyms;
- static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
-@@ -557,6 +561,245 @@ void read_trace_pipe(void)
- 	read_trace_pipe_iter(trace_pipe_cb, NULL, 0);
- }
- 
-+static const char *tracefs_mountpoint(void)
-+{
-+	return access(TRACEFS_PIPE, F_OK) == 0 ? TRACEFS : DEBUGFS;
-+}
-+
-+static int tracefs_path(char *buf, size_t size, const char *file)
-+{
-+	int ret = snprintf(buf, size, "%s/%s", tracefs_mountpoint(), file);
-+
-+	return ret < 0 ? ret : 0;
-+}
-+
-+static int tracefs_read(int fd, char **content)
-+{
-+	size_t len = 0;
-+	char tmp[CHUNK_SIZE];
-+	char *buf = NULL;
-+	ssize_t n;
-+	int ret;
-+
-+	ret = lseek(fd, 0, SEEK_SET);
-+	if (ret < 0)
-+		return ret;
-+
-+	do {
-+		n = read(fd, tmp, CHUNK_SIZE);
-+		if (n < 0) {
-+			if (buf)
-+				free(buf);
-+			return n;
-+		}
-+		if (!n)
-+			break;
-+		buf = realloc(buf, len + n + 1);
-+		memcpy(buf + len, tmp, n);
-+		len += n;
-+	} while (1);
-+
-+	/* No data read at all, file was empty */
-+	if (!buf) {
-+		buf = malloc(1);
-+		if (!buf)
-+			return -ENOMEM;
-+	}
-+	buf[len] = '\0';
-+	*content = buf;
-+	return 0;
-+}
-+
-+static int tracefs_write(int fd, const char *str)
-+{
-+	ssize_t ret;
-+
-+	ret = lseek(fd, 0, SEEK_SET);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = write(fd, str, strlen(str));
-+	if (ret < 0)
-+		return ret;
-+	return 0;
-+}
-+
-+static int tracefs_write_file(const char *path, const char *str)
-+{
-+	int fd, err;
-+
-+	fd = open(path, O_CLOEXEC | O_WRONLY | (*str ? 0 : O_TRUNC));
-+	if (fd < 0)
-+		return fd;
-+
-+	err = tracefs_write(fd, str);
-+	close(fd);
-+	return err;
-+}
-+
-+enum tracefs_ctl_kind {
-+	TRACEFS_CTL_FILTER,
-+	TRACEFS_CTL_VALUE,
-+};
-+
-+struct tracefs_ctl_entry {
-+	char path[PATH_MAX];
-+	char *old;
-+	enum tracefs_ctl_kind kind;
-+};
-+
-+struct tracefs_ctl {
-+	struct tracefs_ctl_entry *entries;
-+	size_t cnt;
-+};
-+
-+struct tracefs_ctl *tracefs_ctl_init(void)
-+{
-+	return calloc(1, sizeof(struct tracefs_ctl));
-+}
-+
-+static int tracefs_ctl_update(struct tracefs_ctl *ctl, const char *file,
-+			      const char *str, enum tracefs_ctl_kind kind)
-+{
-+	struct tracefs_ctl_entry *entry, *tmp;
-+	char path[PATH_MAX];
-+	char *old = NULL;
-+	bool recorded = false;
-+	size_t i;
-+	int fd, err;
-+
-+	if (!ctl)
-+		return -EINVAL;
-+
-+	err = tracefs_path(path, sizeof(path), file);
-+	if (err)
-+		return err;
-+
-+	for (i = 0; i < ctl->cnt; i++) {
-+		if (strcmp(ctl->entries[i].path, path))
-+			continue;
-+		if (ctl->entries[i].kind != kind)
-+			return -EINVAL;
-+		/* Already altered, keep the value read on the first write. */
-+		return tracefs_write_file(ctl->entries[i].path, str);
-+	}
-+
-+	fd = open(path, O_CLOEXEC | O_RDWR);
-+	if (fd < 0)
-+		return fd;
-+
-+	err = tracefs_read(fd, &old);
-+	if (!err) {
-+		tmp = realloc(ctl->entries, (ctl->cnt + 1) * sizeof(*tmp));
-+		if (!tmp) {
-+			free(old);
-+			close(fd);
-+			return -ENOMEM;
-+		}
-+		ctl->entries = tmp;
-+		entry = &ctl->entries[ctl->cnt];
-+		strcpy(entry->path, path);
-+		entry->old = old;
-+		entry->kind = kind;
-+		recorded = true;
-+	}
-+
-+	err = tracefs_write(fd, str);
-+	close(fd);
-+	if (err) {
-+		free(old);
-+		return err;
-+	}
-+
-+	if (recorded)
-+		ctl->cnt++;
-+	return 0;
-+}
-+
-+int tracefs_ctl_filter_write(struct tracefs_ctl *ctl, const char *file,
-+			     const char *pattern)
-+{
-+	return tracefs_ctl_update(ctl, file, pattern, TRACEFS_CTL_FILTER);
-+}
-+
-+int tracefs_ctl_set(struct tracefs_ctl *ctl, const char *file, const char *value)
-+{
-+	return tracefs_ctl_update(ctl, file, value, TRACEFS_CTL_VALUE);
-+}
-+
-+static const char *tracefs_next_line(const char *content, char *buf, size_t size,
-+				     int *err)
-+{
-+	const char *end;
-+	size_t len;
-+
-+	*err = 0;
-+	while (*content) {
-+		end = strchrnul(content, '\n');
-+		len = end - content;
-+		content = *end ? end + 1 : end;
-+
-+		if (!len || end[-len] == '#')
-+			continue;
-+
-+		if (len + 2 > size) {
-+			*err = -ENAMETOOLONG;
-+			return NULL;
-+		}
-+		memcpy(buf, end - len, len);
-+		buf[len++] = '\n';
-+		buf[len] = '\0';
-+		return content;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int tracefs_restore_file(const struct tracefs_ctl_entry *entry)
-+{
-+	char buf[CHUNK_SIZE];
-+	const char *content = entry->old;
-+	int err = 0;
-+
-+	if (!content)
-+		return 0;
-+
-+	if (entry->kind == TRACEFS_CTL_FILTER) {
-+		err = tracefs_write_file(entry->path, "");
-+		if (err)
-+			return err;
-+	}
-+
-+	while ((content = tracefs_next_line(content, buf, sizeof(buf), &err))) {
-+		err = tracefs_write_file(entry->path, buf);
-+		if (err)
-+			return err;
-+	}
-+
-+	return err;
-+}
-+
-+void tracefs_ctl_restore(struct tracefs_ctl *ctl)
-+{
-+	size_t i;
-+	int err;
-+
-+	if (!ctl)
-+		return;
-+
-+	for (i = ctl->cnt; i > 0; i--) {
-+		struct tracefs_ctl_entry *entry = &ctl->entries[i - 1];
-+
-+		err = tracefs_restore_file(entry);
-+		if (err)
-+			fprintf(stderr, "Failed to restore %s: %s\n",
-+				entry->path, strerror(-err));
-+		free(entry->old);
-+	}
-+	free(ctl->entries);
-+	free(ctl);
-+}
-+
- static size_t symbol_hash(long key, void *ctx __maybe_unused)
- {
- 	return str_hash((const char *) key);
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index 0f8d99746084..432a95016b69 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -57,6 +57,15 @@ void read_trace_pipe(void);
- int read_trace_pipe_iter(void (*cb)(const char *str, void *data),
- 			 void *data, int iter);
- 
-+struct tracefs_ctl;
-+
-+struct tracefs_ctl *tracefs_ctl_init(void);
-+int tracefs_ctl_filter_write(struct tracefs_ctl *ctl, const char *file,
-+			     const char *pattern);
-+int tracefs_ctl_set(struct tracefs_ctl *ctl, const char *file,
-+		    const char *value);
-+void tracefs_ctl_restore(struct tracefs_ctl *ctl);
-+
- ssize_t get_uprobe_offset(const void *addr);
- ssize_t get_rel_offset(uintptr_t addr);
- 
 
--- 
-2.56.0
+It took me a while to find the link.
+
+
+
+https://lore.kernel.org/all/20220922084442.2401223-1-mszeredi@redhat.com/
+
+In [PATCH v4 09/10] vfs: open inside ->tmpfile()
+
+<quote>
+This is in preparation for adding tmpfile support to fuse, which requires
+that the tmpfile creation and opening are done as a single operation.
+
+Replace the 'struct dentry *' argument of i_op->tmpfile with
+'struct file *'.
+
+Call finish_open_simple() as the last thing in ->tmpfile() instances (may
+be omitted in the error case).
+
+Change d_tmpfile() argument to 'struct file *' as well to make callers more
+readable.
+</quote>
+
 
