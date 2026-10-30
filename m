@@ -1,58 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.157
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793382887;
-	b=vAtFNmTuMu5T6QVLlbkhRU8DS9lRn0uBsb0s815biUvpMTMY+wXtE9gnm13uLlBA36u0
-	 OhpY7KdKIh4MLJB2+NCD7GozRbLk0V4Z+No7cu+76kHwtTGDn4S9TCBRL8SaRzxQpy2UG
-	 R2o6gYr29a/qa23hrSCz+leIvqVigVNzVGUq9IyYNXOZ74Aw/dBVnITBDQvfUlE2aitUN
-	 Ggp43DzT+N2T0OgGZVXKZkXg16ROKNsNuc3MYIQKqf1Fb/mDtQvvmunlX3aPNf9CDvYsm
-	 74LzYuicsPDByFuReDknIcnSJ+8PVnNYybcbIhr0e1l2NzEgV8hywh2Dw3+Hsxp1kdw==
+	t=1793384639;
+	b=qHBCDjh5yzwXYxSoD1Ni62YlKB7lHxFs3i4ZN0cO/+vwcrUDf7fW0IPjiO3DDU4SUmqg
+	 Yi7ja7UPr1KR8R27macCw+sgODJA4dRMLu071/kxvNyF19y59fY4iMDNWS3+y6uwtasV7
+	 wdDDXt/dQoM0WqFKDm1y89cQC7OZbcSSGPr2+Y/lIwK8f6Iu1n/Phx75/QxkvB2MvyRpc
+	 LPIn33L/umgFivVGWWNh9dwJYgpkxxE5Kvn8i5y3YyfjjxIuQjYyqwKN6ThLlF0WhDAgh
+	 iKdb9Gy3z1Nz/8acWzvEZ0+QWNF0hAet9BeA9LixjsQezIeQebMKRZ7ZZkEXb0RFpgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793382887;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
-	bh=3UfZG3+pcxBGzlDM7p3wxd7lWx3StudQV3isrWC7GYo=;
-	b=Hq/m/Ql7UTI8LY/51qfqbtKq5UU/+Xw6DJbCVeJiIW2SpE2folflXQxta6oV8WNdGaOk
-	 kEpxYv0iLyuL6m76uLnGyQDLjScIHha95vBgT/0SrKruAHVgoP+dyls/F8rGtjHFBHDfN
-	 l2RiCnrQqNSSiHnYMJdMSkLDyhgZaz1FyyymU2BnfOGn2LqiE1ewPlnW1/ca0GO5xaVqp
-	 u6xh9ZNqYVJKbyBGr//etBAEW6IaCxEwBSgS4NCAFcLMWBRyGgmS+mThagSjzgOK/m4m7
-	 jR3WzVf/yvrngFR9IWXEs7soFNzf8BgXcQZFcNtFPgbZyTU7yNONkE2L20HiVrxCqbQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793384639;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=st/TkA6CBLvuYEqwa+4bf7yeukWH3Bzp53kbH1Y4OCQ=;
+	b=YPg22+3wSFMBhfUwz7242p3YT8FJom2cYudkMZZ+5Pl9PVkOUo4Gb3TGopCgGRpenzJS
+	 MA/uGLYk6eO71VbgGvh7Vz+We2gfcoUf9mGOpHnWgH2l3zsV2WJjoVRXabuSYwuSPKhlV
+	 oW+q47A92jT34uuoIyg4Z7YOpPsZeUMMxZySchab4p/XLCsq3uu/nS0sTtcJV7gNWV9sZ
+	 xABpDxZNiG3l/F84X0iL/TcdLgLVcWsWxRvqwNIGxaYYhjrxNw0a+Mv1V59xhzcx0QP9G
+	 1aOipck3qFL3nbyrLvZmVj+EqhEYsxKwUyC7R8XrlSDQkKtU7gd3q0DLIeCfuLZIxgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b="Ed/AU9Ef";
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=jm0TEPUQ;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YcZlobTd;
+	arc=none smtp.remote-ip=103.168.172.157
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4AA606A32F;
-	Fri, 30 Oct 2026 17:54:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B4AA606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D478C606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 18:23:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D478C606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Ed/AU9Ef
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id AC81D4E413A1;
-	Fri, 30 Oct 2026 17:54:43 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6CDC0603C2;
-	Fri, 30 Oct 2026 17:54:43 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2DF2610328D09;
-	Fri, 30 Oct 2026 18:54:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793382878; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=3UfZG3+pcxBGzlDM7p3wxd7lWx3StudQV3isrWC7GYo=;
-	b=Ed/AU9EffaVtc40WEgAfXmqRJd0jQnDRTVE2wED7Hwrq55Rwh+eQG6ovoxUQLGR63U8fC6
-	mNRoZWfjywsPPSY81bOYrdXfKxGAA9raI1qMIBNFVwMrEcUK9vzBGfp1DzysTvSECPwCz4
-	Uyzksz2eyOXr6Y58PdOzc80JDSedjpZRhdT5lW9zWyJkACFylYsQdz8nusoPcqhL0H18tP
-	W7PDks3GpMiEzH8VoxZAnOzpeQUWfu2Rr8PdTRXGNNfXY8AZ5UKkXGbU9Ok933rdtsbQcH
-	DauqcFr9/QVIepsN9CTkMlA8Ks/hsLI98uQl8KpqOpD5omSg/BmlA7GazG2uGA==
-Message-ID: <701c6f7e-e715-4647-bddf-48a1485afbe2@bootlin.com>
-Date: Fri, 30 Oct 2026 18:54:32 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=jm0TEPUQ;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YcZlobTd
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 08B4A14000D4
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 14:23:57 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Fri, 30 Oct 2026 14:23:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793384634;
+	 x=1793471034; bh=st/TkA6CBLvuYEqwa+4bf7yeukWH3Bzp53kbH1Y4OCQ=; b=
+	jm0TEPUQIa3Is3BgMXlrBATE52PsQRU58rWlFIzdzO63kLG3qDoJ+OtDHCltsabb
+	pJt/+qXt28Vk+hUNWYtUcfZ5tR6npQwJAKWcYIOk+CcD1H5k2URXrJ7kehR/QsEX
+	etnNm71UY5KRhYOki5V1Yk2H5JgDsImUqkcO6WxPCYmrkjGTsUeyYhSyysG1ktom
+	R+EKgmncReTBsDX8XJCURkEECNNbPxtzYh8tjNvh0pGqCLAv33EDeXq03A+JtoEr
+	poGGPySKBvBGHo5YRb3qhrD4vgXDHIsKenBWWoifZI0jQOFrcjmEBTTocoBEQoFd
+	iYo1d4CBCvXB94WQ/fKMrw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793384634; x=
+	1793471034; bh=st/TkA6CBLvuYEqwa+4bf7yeukWH3Bzp53kbH1Y4OCQ=; b=Y
+	cZlobTdKjuNElX0tkSAggn098DsNOfBfR+8bi5YyVYFg6wBxkrTAs2725dqx0dhJ
+	CdI4P12n1xXNGQqzpAwJozzp51zq3/S5cAqZk2IJHKCbpJnJ17K/3l8l0uan4Mdf
+	j6fOuDJmV7sCbcSAiZObjIavAi5YABidWMzAyoii+YXl7Pttb2jvybccUYG0I2xz
+	VDYgDXQLTQw8/IET1moAJsXAh4F8H91AxdLIwmkJJAfZS4CYqnUArF6DLXVbBZtp
+	9WwKjQPs/1rdqSq/KnAhbBV+yPs7Yg6zymU/pJiIBy8nR52Y0kW0WVPjkK8EvOj2
+	q5rRqa7M1eFsNmf6KpK3g==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793384634; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:c70DI71jpNzrtam3BngHipjyC+Xooc3KnxthnCiYEHumCPy
+	tZ4B6dIjPi09+6/nxVIefup5DWBO5I/3mulYKUxMr3qQt6k030UyOv1NwP5+ElU0
+	j8uYAYGlRebqbobUv4HfVTI0BThwkzd1aKcGfxs2zsVNgHPhVZ7HbW3vDEZVKiVT
+	8VPL0uBnCZ9rZxWmHvtrIg7qb/CiJWIGEzwO+LkSuAv9gqQc+q34mciwseiDRXJZ
+	DoJ7CHjsR1MEjycfL4xGpIzlrPfBDAS+qgqzFwMdNhzWk92GtvvYqpOvyV/oEUSq
+	2w3uXl0Czq/eOq1m26ZJyGhaqY4olJgRxHSjSkQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:wSTNAuUov5ELYxK0Ezwh6wKOfN1DQCJ+buHooUAknuc=:CJjo0U4Q4WipuJBG6WDA4qv8EpzWNDrOCQwbutjeOgQ=;
+X-ME-Sender: <xms:tuDkalg5ZRqDYu6TWRpgvkK9dTxe188VEl0lyRyOzuugVATS07YKVw>
+    <xme:tuDkak1OTTe-thO_El-oboLsYAufoeCICCOA4tRRc8jJ4DqMdINbNKjF0bSxqrIS6
+    nUibdeNxGRYMWK96raI8lyL9Iu2Pem4R_x8pVIlz0vNheSdby_x1qNz9Q>
+X-ME-Proxy-Cause: dmFkZTFHz7yaXqSibdqx0TXzdAIv9WG31ARUUtQAsNvw3trTKkJqvMEcJ72/EEKZAETlDx
+    B8XezTsJEEgkSNUEH6sTEwEUQY29QcGCn6EqKcwtbz7Hccm9w/NKrSnV6hk2ZAhFVqnYPQ
+    8SWdIEFk1RqHQ9W1BzlC2nlkkQHrvZk0S8w/lGu5hyRZwAiQxkGfkWY330qwlJT0lTsdG3
+    FJqJvp7ipBAyeadxFYwqHPjZjWRAB9Xc06qu7irEKi0Q3Q6LNvSo09cTbl8lEgTLNy4ThB
+    mm/UyDCay8VFVAD5XvcCGfV698AjsSv8MRF8+0tU8JR14nMcum6I2G6Bn10615A7V2nua8
+    WZ/YCnl2ayBV2cYjs0wdXacltDpXtAcmdmd/UA97Ht+nVV4z7Jhp3Q9DzHEbMxOkorcDyG
+    1qY59pVi9/HruJvrqaFrcdtBWkcZS1r0GePa+W1uk2G4A1kiO4nmcEXz1bjw2tvQiHPiit
+    MWKgMpx0jpelg01eC8+JgsSAmS2+9aHMamWmCpbvVxyJNOcBGlZAJ9JNJob1DsOt4egY61
+    1KnPCelHqk7eIxNRz19yqqh0kTY7t1P/l3eKyAnWEQhFOKbJhImP4vQW5b7f7VCchH7I6R
+    JgUWN/xJud6iPJRxqvef92bseDiQ/MbVW7Rvg+Ckc8vXPzat6x7U+G3W2lPA
+X-ME-Proxy: <xmx:uODkagT3CaKHEJxKHGQjco2NhaWl30vt-vC337p6DzsZIKJ6lCu5OA>
+    <xmx:uODkagWlj1Q6rC2PWZCKeysISPjZmXwvR-ymcbYMhORmofh_fYC-IQ>
+    <xmx:uODkaheWJQ31OQoK5BQ_WqsEr2yU3-2o2WAkBPkYSmRCyGrxW-gsHg>
+    <xmx:uODkakJHmrpijvuzft31wRhLIVws9KWJYsSpF_3x7vNCauvlcSmK0A>
+    <xmx:uuDkapaq4uwX8LmqERqamOWFCuD6L9Ogr5tQyB6y2jycqot7bnShvde9>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 60F7E32A0093; Fri, 30 Oct 2026 14:23:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,68 +115,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: drv-net: pause: Skip support tests without
- link autonegotiation
-To: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org
-References: <20261030173516.1002250-1-mohsin.bashr@gmail.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20261030173516.1002250-1-mohsin.bashr@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: AA4M8BakChSJ
+Date: Fri, 30 Oct 2026 19:23:30 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Thomas Huth" <thuth@redhat.com>, "kernel test robot" <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+ shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Message-Id: <5f898f0f-915c-4aef-a3f9-0118f4539951@app.fastmail.com>
+In-Reply-To: <cdf09fa3-e251-4d8d-9f0a-316998df036b@redhat.com>
+References: <202610291918.kHO0GTDB-lkp@intel.com>
+ <9e294bfd-4704-42a5-a704-f301f4afe042@app.fastmail.com>
+ <cdf09fa3-e251-4d8d-9f0a-316998df036b@redhat.com>
+Subject: Re: [arnd-asm-generic:asm-generic 15/15]
+ /usr/aarch64-linux-gnu/include/linux/types.h:12: Error: unknown mnemonic
+ `typedef' -- `typedef __signed__ __int128 __s128
+ __attribute__((aligned(16)))'
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
+On Fri, Oct 30, 2026, at 18:46, Thomas Huth wrote:
+> On 29/10/2026 23.13, Arnd Bergmann wrote:
+>> On Thu, Oct 29, 2026, at 19:09, kernel test robot wrote:
 
-On 10/30/26 18:35, Mohsin Bashir wrote:
-> From: Mohsin Bashir <hmohsin@meta.com>
-> 
-> Devices without link autonegotiation support may reject both link-setting
-> requests in pause_test_support(). On fbnic, all four variants then fail
-> in cleanup when the deferred restore of unchanged link settings returns
-> EOPNOTSUPP. Removing the restore alone would report PASS without running
-> any pause checks.
-> 
-> Fix this by calling require_link_autoneg() before pause_setup() to skip
-> the test when either interface lacks link autonegotiation support. This
-> also skips devices that support only forced link configuration.
-> 
-> The issue was observed in the fbnic CI/CD pipeline. It was reproduced and
-> the fix was tested on a local fbnic device.
-> 
-> Fixes: cbd8a536cd6d ("selftests: drv-net: Introduce a selftest for ethtool flow control")
-> Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  tools/testing/selftests/drivers/net/hw/pause.py | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
-> index ca4a55e59c30..1537f88e0e77 100755
-> --- a/tools/testing/selftests/drivers/net/hw/pause.py
-> +++ b/tools/testing/selftests/drivers/net/hw/pause.py
-> @@ -466,6 +466,7 @@ def pause_test_support(cfg, pauseparams):
->      supported fields.
->      """
->  
-> +    require_link_autoneg(cfg)
+>> and looking at the preprocessed file, I see a wild mix of tools/include,
+>> ${srctree}/arch/arm64/include/ and /usr/include. I also see that at least
+>> part of the problem is that arch/arm64/kernel/vdso/vgetrandom-chacha.S
+>> includes arch/arm64/include/asm/assembler.h, which then goes on to include
+>> the world.
+> After getting access to an aarch64 host, I was finally able to reproduce the 
+> problem. I think it's likely best if we force the selftest to use the 
+> headers from the current kernel sources instead of using the headers from
+> /usr/include ... i.e. this patch fixes the issue for me:
+>
+>   https://lore.kernel.org/lkml/20261030174323.370687-1-thuth@redhat.com/
+>
+> WDYT?
 
-This helper checks if the remote supports aneg too, so it's too restrictive.
+The idea sounds right, but it doesn't appear to do anything for me,
+I still get the same output:
 
-The goal of this test is to check the local device's behaviour, without too
-much dependencies on the remote, so that we can at least have it test some of
-the local driver behaviour even when it's connected to a dumb remote or a switch.
+arnd@studio:~/arm-soc/asm-generic$ make O=../build/tmp/ ARCH=arm64 -C tools/testing/selftests/vDSO/ V=1
+make: Entering directory '/home/arnd/arm-soc/asm-generic/tools/testing/selftests/vDSO'
+gcc -std=gnu99 -O2 -Wall -Wstrict-prototypes -D_GNU_SOURCE= -I/home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/testing/selftests -isystem /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../usr/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/include/generated -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../arch/arm64/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../include -Wa,--noexecstack    vdso_test_chacha.c vgetrandom-chacha.S  -o /home/arnd/arm-soc/asm-generic/tools/testing/selftests/vDSO/vdso_test_chacha
+/tmp/ccKJRkeX.s: Assembler messages:
+/usr/include/asm-generic/int-ll64.h:20: Error: unknown mnemonic `typedef' -- `typedef __signed__ char __s8'
+/usr/include/asm-generic/int-ll64.h:21: Error: unknown mnemonic `typedef' -- `typedef unsigned char __u8'
+/usr/include/asm-generic/int-ll64.h:23: Error: unknown mnemonic `typedef' -- `typedef __signed__ short __s16'
 
-Maybe the sane thing to do is to allows the defer() calls in pause_setup() to
-fail silently with "fail=False" ?
+It looks like tools/testing/selftests/ is built in the source directory,
+while the 'make headers_install' installed the headers to the object
+directory in '../build/tmp/usr/include/'.
 
-Or maybe a bit more clever, have a quick check to see if the device accepts
-an ethtool -s XXX command ? looks like fbnic will refuse all of'em as it
-doesn't have a .set_link_ksettings.
+I have never been able to figure out how kselftest actually wants
+to handle this.
 
-Maxime
-
+      Arnd
