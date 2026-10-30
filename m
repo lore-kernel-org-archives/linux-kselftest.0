@@ -1,47 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793360829;
-	b=UAqurKJL2roJ4sVwgWp8qelgDBjPvadoFHy4uZlhhRaVc9K+wZqZUWEHR9OuLe//x+ia
-	 y1M/nZ2loB7Vwp4DLC1KefCYF9MqZCtC6eEzbIhp8/8B/+JLCYT8XhGbyuhIsvfier+UJ
-	 PPPZP6SE1TR/qLkTdc0nb2UxgoioodK+AtySM+pvlzyZd72rN1iDvby4YpwuUA/PEgw2e
-	 1AX6Y+yKrwdFIJJ/hu8OqDiL2DxYelU5zyJRDqcKv5sXA6iTS5GMpHP6pAZRiJwE4SM93
-	 n/U4N4f0wOtDp3wr3ZumPS6Z37QoXh9OxJewtidwOgi96Mi1S/0wu11tIbu9YP/k1cQ==
+	t=1793360831;
+	b=V33pXeb35kM39bGKr77+NqO3U3hbbRxeV0yIQ58XWt/aR31u4IDJ6Lch60KH6VgSnkEe
+	 p9AuKZbLxkjt2nsTm6NJEAL/mLBNWy/1t6yoUOkJeWVSLoJEHiX7pY2nalHQVPLcQ4uax
+	 OQSZGgqfILFdA5R8IPJjRpz/FFx9mf5j2C8V5vugvtar5Ph1CJW1/6kQtrw0tWFyWxJe4
+	 KB/5YDiaCcAZrwc2VRSIllCUKaPssFmx92P9cupZRWyxdIPzD6LjzzLfKBZPFaLV5CQzO
+	 xAnZp/PFA59WaGeAutuRW9/tlFbK4dk49CivnbETJFnS8prFc1tC52yT5fdMIMEUAKw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793360829;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793360831;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=xFqGwbDc/ZISyvtgD022O2EhfQ27gF1dVFuSLHm9Ym0=;
-	b=Zx8xzxvDHjEhm8h9RkxrlObe9bfrBuqE1x2SAU+gxWb+Hk94otMTaVhvv6lDHJYaq60i
-	 N1/kjr0DeRzmDqIhmc+ppU5pXpkRtxayPO6PH2SEt4qjVJB/zl3/wMxkOA5EGBI5234X5
-	 RZjPJQ/oQ2RErf9dMyctSuWDBVPKJu+9xk+uvzdtr/aCnWyG16npssxG1AXZxVfQkckXB
-	 XiqvvmL/li2AKbClHw85IDr3TWhYEGe8U10YgErq1CM9vtbAiNLfjiutzubfiNTE83Arr
-	 dLsiU8SNLCKn6WGBtnQyVm3XcGXW2nMfBPkSR7BkldJXNEmYgNzpnLlOMuf+UPT1UMQ==
+	bh=ZHnthCPj5A6KgOWJmAMgtWXYoYKIGFyJsExFrwrVca4=;
+	b=30rjNceowBQXxiq6p48vEZ1HDvOKebiu7Zon291M1nSyW9P1YQ1yom3V91hAXcySmlK1
+	 SD0UTQfJboKsIxPvruQ+F3olCGTKIvSLkTvH2t3M7pPGBVigs1dP6Susc65+hVhCGWQWH
+	 KxZgMTEkXX/quXbbk3DfPr+AbAdEMRmESsolF252dA8u5s8T9qlyuzJ5P/9nzSPzVgUcN
+	 MlaguCMJC3BqI2Rx7qUMfJqomIy9W63k7VV/o6psQ61KTT9LjCGZqpaT0CyvCyV6bHmlI
+	 UzoDsXUayn761xvyoWT69dv3ItvY9W3Egen4zrHcVH8sgc/eGAhuOwmsp0ujQmoZFPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R3ZxyzQJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T2WTb1m5;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF69B606A322;
-	Fri, 30 Oct 2026 11:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E88606A31C;
+	Fri, 30 Oct 2026 11:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R3ZxyzQJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90DE51F0093A;
-	Fri, 30 Oct 2026 11:47:07 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T2WTb1m5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7B81F0093A;
+	Fri, 30 Oct 2026 11:47:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793360828;
-	bh=xFqGwbDc/ZISyvtgD022O2EhfQ27gF1dVFuSLHm9Ym0=;
+	s=k20260515; t=1793360830;
+	bh=ZHnthCPj5A6KgOWJmAMgtWXYoYKIGFyJsExFrwrVca4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=R3ZxyzQJzVYcIUfIAU85w4oX0NmLZ9ezV58yFSQ7zwTJdIHqmOGldxeryGtqXMEJW
-	 rYQPCJovfHKfQbcZ84Q2437NvkP4aJVdVn9aibmeuR0TlfpHtCJPtxoddcecjEwCT2
-	 SuZuA8QMoqOQlTYwIgIt3s7jWt2F+ilwnTHUxl/H3bbF6mvM69ep0jbR9gtzLMBo0D
-	 wYZPT8db+GmYkx80Tg05hiRk0Up4id4x/a7W0W9aCNlT87zIyjMuHEwfcBbmOJ3Lzj
-	 KiWK4LJMaj6LGX1mJLxvA4Q8Pt5Eq9J5buXZ8AO/4s5Cd9rk47PXlHDDz0G/BND1X0
-	 VyVokG4VHtPgg==
-Subject:
- Re: [PATCH 1/3] ipv6: route: consider IOAM options in ECMP hash policy 0
+	b=T2WTb1m5MkLrfB9+44eh/42hi2IX9gXdgu1uxKd3v6Lb1zaOMP0VTYVYUh9wSeSri
+	 9LzOLUTxzkt9JJwU5/UZRq4KcgcQXwn4ZYw0FkxcnY7p2/Dyn82ow6oHrYYuLtsVIo
+	 3AblVupXhu5/7LukPGMeiTNfRtwTVkCPQ5BUOrLnWqFO8T9jOB7ofQPUcpGOQCIiG5
+	 qdWIsHWl63LslyYg/lYIkfp5nn23zYXh448NRj1nxo+qeJQ6P4ZeVd2w2zhYxOTuWK
+	 JWpgFrZe8r97iImXmQ2vZb4eSieJMWoSKQJugyxaiEJzB0UENAFFGLVjV/+hg6jJ9e
+	 OU+CFMq9s5ESQ==
+Subject: Re: [PATCH 3/3] selftests: net: add ioam6 ECMP test (RFC 9486 C2)
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
@@ -49,10 +48,10 @@ Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  justin.iurman@gmail.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  liuhangbin@kylinos.cn
-Date: Fri, 30 Oct 2026 11:47:07 +0000
-Message-ID: <179336082713.3134.17393085405117332504@kernel.org>
-In-Reply-To: <20261028-ipv6_ioam_ecmp-v1-1-9b6715b6f4c0@kylinos.cn>
-References: <20261028-ipv6_ioam_ecmp-v1-1-9b6715b6f4c0@kylinos.cn>
+Date: Fri, 30 Oct 2026 11:47:09 +0000
+Message-ID: <179336082983.3134.2219805582819533763@kernel.org>
+In-Reply-To: <20261028-ipv6_ioam_ecmp-v1-3-9b6715b6f4c0@kylinos.cn>
+References: <20261028-ipv6_ioam_ecmp-v1-3-9b6715b6f4c0@kylinos.cn>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,10 +65,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 5 potential
+Thank you for your contribution! Sashiko AI review found 7 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 3 · Low: 2
+Critical: 0 · High: 0 · Medium: 2 · Low: 5
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -77,278 +76,245 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] ip6_nexthdr_without_ioam() (net/ipv6/route.c) reads the Hop-
-  by-Hop header at `off = sizeof(*iph)`.
-- [Medium] In ip6_multipath_l3_keys(), the outer header of an IOAM-
-  carrying packet is now hashed with the recovered L4 protocol…
-- [Medium] On IOAM-enabled ingress with a known namespace,
-  ipv6_hop_ioam() calls ip6_route_input() while ip6_parse_tlv() is still…
-- [Low] The new comment in ip6_nexthdr_without_ioam() says 'The Hop-by-
-  Hop header was already pulled and validated by ipv6_parse_hopopts()…
-- [Low] In the ip6_nexthdr_without_ioam() TLV loop,
-  `skb_header_pointer(skb, off + i, sizeof(obuf), obuf)` fetches 2 bytes…
+- [Medium] The compatibility probe in MAIN (lines 308-315) only checks
+  that an inline-mode IOAM trace can be attached (`encap ioam6 mode…
+- [Medium] In MAIN, `setup_topology || { log_test_skip "Setup failed.";
+  exit ...; }` (line 305) runs before `trap cleanup EXIT` (line 306).
+- [Low] The commit message and the ioam6_ecmp.sh header comment describe
+  scenario 2 differently from what the script does.
+- [Low] ioam6_ecmp.sh skips the whole test when
+  /proc/sys/net/ipv4/fib_multipath_hash_seed is missing (lines 300-303).
+- [Low] The comment in set_beta_tnl() (lines 139-143) says "ip6_tnl
+  caches the outer dst per CPU for a few seconds".
+- [Low] setup_topology() does not check the return value of the multipath
+  route install, which is the core of the test (`ip -netns $ns_beta -6…
+- [Low] setup_tunnel() (lines 274-287) decides whether the test loaded
+  ip6_tunnel only from `lsmod | grep -q ip6_tunnel`.
 
 --
 
-ipv6: route: consider IOAM options in ECMP hash policy 0
+selftests: net: add ioam6 ECMP test (RFC 9486 C2)
 
-This patch adds ip6_nexthdr_without_ioam(). It walks a Hop-by-Hop header
-and, if the header holds only IOAM options and padding, returns the
-nexthdr that follows it. ip6_multipath_l3_keys() uses that value for the
-policy 0 ip_proto key and for its ICMPv6 error check, so that packets
-with and without IOAM hash the same way, as RFC 9486 (C2) requires.
+This adds ioam6_ecmp.sh. The test checks that, with hash policy 0, the
+ECMP nexthop chosen for a packet carrying IOAM options is the same as
+for the packet without them. It covers a transit node forwarding
+inline-inserted IOAM Hop-by-Hop packets, and an encapsulating node
+doing the ioam6 encap re-lookup with a plain ip6ip6 tunnel as the
+baseline.
 
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index 94e5ef1c4f83e..d0761f05d3260 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-> @@ -2342,6 +2342,60 @@ struct dst_entry *ip6_route_input_lookup(struct net *net,
+> diff --git a/tools/testing/selftests/net/ioam6_ecmp.sh b/tools/testing/selftests/net/ioam6_ecmp.sh
+> new file mode 100755
+> index 0000000000000..c5c82884c7579
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/ioam6_ecmp.sh
+> @@ -0,0 +1,349 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0+
 
 [ ... ]
 
-> +static u8 ip6_nexthdr_without_ioam(const struct sk_buff *skb,
-> +				   const struct ipv6hdr *iph)
+> +# 2) encapsulating node: beta itself encapsulates (ioam6 encap mode,
+> +#    tunnel dst = original dst, tunnel src pinned) over a multipath
+> +#    route. The ioam6 re-lookup hashed NEXTHDR_HOP instead of the
+> +#    transformed packet's real nexthdr (IPPROTO_IPV6). The baseline is
+> +#    the same encapsulation without the IOAM option: a plain ip6ip6
+> +#    tunnel over the same multipath route, with the same outer
+> +#    addresses.
+
+[Severity: Low]
+Is "tunnel dst = original dst" accurate here? The commit message says
+the same thing:
+
+  - encapsulating node re-lookup: the forwarder itself encapsulates
+    (ioam6 encap mode, tunnel dst equal to the original dst) over a
+    multipath route, with a plain ip6ip6 tunnel as the
+    identical-packet-without-IOAM baseline.
+
+The script sends to 2001:db8:3::2, but set_beta_ioam_encap() installs
+this route:
+
+  2001:db8:3::2/128 encap ioam6 mode encap ... tundst 2001:db8:2:1::2
+
+So the tunnel dst is not the original dst. The topology comment further
+down describes this correctly.
+
+If the tunnel dst really were the original dst, the re-lookup would
+resolve back to the same ioam6 route:
+
+net/ipv6/ioam6_iptunnel.c:ioam6_output() {
+    ...
+		if (orig_dst->lwtstate == dst->lwtstate)
+			dst_cache_set_ip6(&ilwt->cache,
+					  &ilwt->null_rt.dst, &fl6.saddr);
+    ...
+}
+
+In that case orig_output would be used and the multipath route would
+never be consulted.
+
+The ip6ip6 baseline is also not an identical packet on the wire.
+ip6_tnl_xmit() pushes an encap-limit Destination Options header when
+encap_limit >= 0, and it sets the flow label with ip6_make_flowlabel()
+after the route lookup. Only the hash inputs at beta's lookup match.
+
+Could the commit message and this header comment be updated to match
+what the test actually does?
+
+[ ... ]
+
+> +set_beta_tnl()
 > +{
-
-[ ... ]
-
-> +	if (iph->nexthdr != NEXTHDR_HOP)
-> +		return iph->nexthdr;
-> +
-> +	/* The Hop-by-Hop header was already pulled and validated by
-> +	 * ipv6_parse_hopopts() before routing, so this walk is safe.
-> +	 */
+> +	# Recreate the tunnel: ip6_tnl caches the outer dst per CPU for a
+> +	# few seconds, and neither the route change below nor the
+> +	# fib_multipath_hash_seed write resets it. A stale cache would
+> +	# resolve the outer sibling under a previous seed (or on another
+> +	# CPU), making the baseline flip between attempts of one seed.
 
 [Severity: Low]
-Does this comment hold for every caller of rt6_multipath_hash()?
+This isn't a bug, but is "for a few seconds" accurate? ip6_tnl_xmit()
+reads the cache with dst_cache_get(&t->dst_cache), and
+dst_cache_per_cpu_get() only drops an entry in two cases:
 
-icmp6_send() also hashes the offending skb:
-
-net/ipv6/icmp.c:icmp6_send() {
+net/core/dst_cache.c:dst_cache_per_cpu_get() {
     ...
-	fl6.mp_hash = rt6_multipath_hash(net, &fl6, skb, NULL);
-    ...
-}
-
-That skb can be generated locally and never pass through
-ipv6_parse_hopopts(). One example is a packet built with IPV6_HOPOPTS
-or a raw socket that hits a reject or unreachable route:
-
-ip6_pkt_discard_out()->ip6_pkt_drop()->icmpv6_send()->icmp6_send()->
-    rt6_multipath_hash()
-
-On IOAM-enabled ingress, ipv6_hop_ioam() calls ip6_route_input() while
-ip6_parse_tlv() is still running. So any TLVs after the IOAM option have
-not been validated yet:
-
-net/ipv6/exthdrs.c:ipv6_hop_ioam() {
-    ...
-		if (!skb_valid_dst(skb))
-			ip6_route_input(skb);
+	if (unlikely(!time_after(idst->refresh_ts,
+				 READ_ONCE(dst_cache->reset_ts)) ||
+		     (READ_ONCE(dst->obsolete) && !dst->ops->check(dst, idst->cookie)))) {
     ...
 }
 
-Today the walk is memory safe only because every access goes through
-skb_header_pointer(). With unvalidated input it can also return
-hhdr->nexthdr for a malformed HBH header whose TLV lengths run past the
-header.
+That means an explicit dst_cache_reset(), or an obsolete dst that fails
+->check(). There is no time-based expiry, so a cached outer dst can
+stay indefinitely.
 
-Could the comment be updated to describe what actually makes the walk
-safe?
+Recreating the tunnel for every seed is still the right workaround. The
+comment, though, could lead someone to replace the recreation with a
+sleep.
 
-> +	off = sizeof(*iph);
-> +	hhdr = skb_header_pointer(skb, off, sizeof(hbuf), &hbuf);
+[ ... ]
+
+> +set_beta_ioam_encap()
+> +{
+> +	ip -netns "$ns_beta" -6 route replace 2001:db8:3::2/128 \
+> +		encap ioam6 mode encap tunsrc 2001:db8:2:1::1 tundst 2001:db8:2:1::2 \
+> +		trace prealloc type 0x800000 ns 0 size 12 dev veth1
+> +}
 
 [Severity: Medium]
-Does this offset assume that skb->data sits at the network header?
+What happens on a kernel or iproute2 that supports ioam6 inline and
+encap modes but not the tunsrc attribute? The compat check in MAIN
+only probes inline mode, so it passes, and setup_tunnel() succeeds.
 
-skb_header_pointer() counts the offset from skb->data. iph is
-ipv6_hdr(skb), i.e. skb_network_header(). The two only agree when
-skb->data has not been pulled past the network header.
+This route install would then fail on every seed, and run_scenario()
+takes this path:
 
-They do not agree when icmp6_send() is called from the L4 receive paths.
-By then ip6_protocol_deliver_rcu() has already pulled to the transport
-header:
+		if ! $ioam; then
+			RET=$ksft_fail
+			log_test "$desc (ioam route setup failed, seed $seed)"
 
-net/ipv6/ip6_input.c:ip6_protocol_deliver_rcu() {
-    ...
-		if (!pskb_pull(skb, skb_transport_offset(skb)))
-    ...
-}
+The result is 12 hard FAILs instead of a SKIP. ioam6.sh already treats
+tunsrc as a feature under test.
 
-icmp6_send() then hashes the offending skb with policy 0:
+Is the tunsrc pin needed at all? Without it, ioam6_do_encap() calls
+ipv6_dev_get_saddr() on the original dst device (veth1), which should
+pick 2001:db8:2:1::1 anyway.
 
-__udp6_lib_rcv()->icmpv6_send()->icmp6_send()->rt6_multipath_hash()->
-    ip6_multipath_l3_keys()->ip6_nexthdr_without_ioam()
+[ ... ]
 
-icmp6_send() already handles this when it quotes the packet:
-
-	msg.offset = skb_network_offset(skb);
-
-The ICMPV6_UNK_NEXTHDR parameter problem in ip6_protocol_deliver_rcu()
-and the tunnel6/xfrm6 errors take the same path. If the offending
-packet has nexthdr == NEXTHDR_HOP (even PadN only), the helper treats
-the bytes 40 past the L4 header as the HBH header and its TLVs. Those
-bytes are payload controlled by the sender.
-
-If the packet has a real IOAM-only HBH header, the locally generated
-ICMP error is still hashed with proto 0. That is the mismatch this patch
-sets out to fix.
-
-A crafted payload can also make the helper return any nexthdr, including
-IPPROTO_ICMPV6. ip6_multipath_l3_keys() then reads the UDP header at
-transport offset 0 as an icmp6hdr. If the high byte of the source port
-is 1-4, icmpv6_is_err() passes and the UDP payload is used as the inner
-ipv6hdr. The payload then picks the addresses, flow label and proto
-used as ECMP hash keys.
-
-Before this patch, HBH packets never reached this parsing. All reads are
-bounded by skb_header_pointer(), so the result is wrong hash input, not
-an out-of-bounds access.
-
-Would using skb_network_offset(skb) + sizeof(*iph) as the base offset
-avoid this? The follow-up patch in the series only changes
-ioam6_iptunnel.c and the selftests, so route.c is unchanged after it.
-
-> +	if (!hhdr)
-> +		return iph->nexthdr;
-> +
-> +	len = (hhdr->hdrlen + 1) << 3;
-> +
-> +	for (i = 2; i < len; ) {
-> +		opt = skb_header_pointer(skb, off + i, sizeof(obuf), obuf);
-> +		if (!opt)
-> +			return iph->nexthdr;
-> +		if (opt[0] == IPV6_TLV_PAD1) {
-> +			i++;
-> +			continue;
-> +		}
+> +	# The ECMP route under test (scenario 1 hashes its selection at
+> +	# beta's input; scenario 2 at the encapsulating re-lookup).
+> +	ip -netns "$ns_beta" -6 route add 2001:db8:2:1::2/128 \
+> +		nexthop via 2001:db8:2:1::2 dev veth1 \
+> +		nexthop via 2001:db8:2:2::2 dev veth2
 
 [Severity: Low]
-Can a trailing Pad1 make this 2-byte fetch fail?
+Should this route add check its return value? If it fails, beta still
+has the connected 2001:db8:2:1::/64 prefix on veth1, so all traffic to
+2001:db8:2:1::2 leaves through veth1 and arrives on gamma's veth0.
 
-ip6_parse_tlv() accepts Pad1 as the last byte of the HBH header, because
-the Pad1 branch continues before the len < 2 check:
+measure_link() would then return "A" for both variants on every seed.
+run_scenario() would report PASS even though no ECMP route exists.
 
-net/ipv6/exthdrs.c:ip6_parse_tlv() {
-    ...
-		if (nh[off] == IPV6_TLV_PAD1) {
-			padlen++;
-			if (padlen > 7)
-				goto bad;
-			off++;
-			len--;
-			continue;
-		}
-		if (len < 2)
-			goto bad;
-    ...
-}
-
-Suppose an IOAM-only HBH header ends in Pad1 and nothing follows it in
-the skb, e.g. nexthdr is NEXTHDR_NONE with no payload. The fetch at
-off + len - 1 needs one byte past skb->len, so it returns NULL. The
-function then returns iph->nexthdr (0) even though has_ioam is true.
-This packet then hashes differently from the same packet without IOAM.
-
-Would it work to read one byte first and fetch the length byte only for
-options other than Pad1?
+Adding "|| return 1" here would catch this.
 
 [ ... ]
 
-> @@ -2353,8 +2407,10 @@ static void ip6_multipath_l3_keys(const struct sk_buff *skb,
->  	const struct icmp6hdr *icmph;
->  	struct ipv6hdr _inner_iph;
->  	struct icmp6hdr _icmph;
-> +	u8 nexthdr;
->  
-> -	if (likely(outer_iph->nexthdr != IPPROTO_ICMPV6))
-> +	nexthdr = ip6_nexthdr_without_ioam(skb, outer_iph);
-> +	if (likely(nexthdr != IPPROTO_ICMPV6))
->  		goto out;
->  
->  	icmph = skb_header_pointer(skb, skb_transport_offset(skb),
+> +setup_tunnel()
+> +{
+> +	if ! lsmod 2>/dev/null | grep -q "ip6_tunnel"; then
+> +		modprobe ip6_tunnel &>/dev/null
+> +		lsmod 2>/dev/null | grep -q "ip6_tunnel" || \
+> +			ip a 2>/dev/null | grep -q "ip6tnl0" || return 1
+> +		ip6tnl_loaded=1
+> +	fi
 
-[Severity: Medium]
-On IOAM-enabled ingress, where does skb_transport_offset(skb) point
-when this code runs?
+[Severity: Low]
+Can this unload an ip6_tunnel module the test did not load? Consider
+lsmod being unavailable or failing while modprobe works, with
+ip6_tunnel already loaded:
 
-For a known namespace, ipv6_hop_ioam() calls ip6_route_input() from
-inside ip6_parse_tlv(). ip6_rcv_core() has set transport_header to the
-HBH header:
+  - the first grep fails;
+  - modprobe ip6_tunnel succeeds as a no-op;
+  - grep ip6tnl0 matches the existing fallback device in the init
+    netns;
+  - ip6tnl_loaded=1 is set.
 
-	skb->transport_header = skb->network_header + sizeof(*hdr);
+cleanup() then runs:
 
-ipv6_parse_hopopts() moves it past the HBH header only after
-ip6_parse_tlv() returns:
+		modprobe -r ip6_tunnel &>/dev/null
 
-	skb->transport_header += extlen;
+This removes the module if nothing else is using it.
 
-Take an ICMPv6 error with an IOAM-only HBH header.
-ip6_nexthdr_without_ioam() now returns IPPROTO_ICMPV6, but icmph is read
-from the HBH header itself. icmp6_type is then the HBH nexthdr (58), and
-icmpv6_is_err(58) is false.
-
-The error is therefore hashed on its outer addresses with proto 58. The
-same error without IOAM would be hashed on the quoted inner header.
-ip6_rcv_finish_core() only routes when !skb_valid_dst(skb), so this
-early dst stays in place.
-
-On IOAM transit nodes, does this match what the commit message claims?
-
-  "and use it for the policy-0 key and for the ICMPv6-error
-  check, so errors that quote a flow keep hashing that flow."
-
-No later patch in the series addresses this.
+When ip6_tunnel is built in, lsmod does not list it either, so
+ip6tnl_loaded=1 is set in that case too. The later modprobe -r then
+fails harmlessly. ioam6.sh uses the same heuristic.
 
 [ ... ]
 
-> @@ -2383,7 +2439,14 @@ static void ip6_multipath_l3_keys(const struct sk_buff *skb,
->  		keys->addrs.v6addrs.src = key_iph->saddr;
->  		keys->addrs.v6addrs.dst = key_iph->daddr;
->  		keys->tags.flow_label = ip6_flowlabel(key_iph);
-> -		keys->basic.ip_proto = key_iph->nexthdr;
-> +		/* Only for the outer header: an ICMPv6-quoted inner header
-> +		 * is payload, and its (possibly truncated) extension
-> +		 * headers must not be walked here.
-> +		 */
-> +		if (key_iph == outer_iph)
-> +			keys->basic.ip_proto = nexthdr;
-> +		else
-> +			keys->basic.ip_proto = key_iph->nexthdr;
+> +if [ ! -e /proc/sys/net/ipv4/fib_multipath_hash_seed ]; then
+> +	log_test_skip "Kernel without CONFIG_IP_ROUTE_MULTIPATH."
+> +	exit "${EXIT_STATUS}"
+> +fi
+
+[Severity: Low]
+Should tools/testing/selftests/net/config be updated for this test?
+fib_multipath_hash_seed only exists with CONFIG_IP_ROUTE_MULTIPATH.
+That option depends on CONFIG_IP_ADVANCED_ROUTER, neither has a
+default, and neither is in the net selftests config fragment.
+
+On a kernel built from a minimal base plus that fragment, this test
+would always SKIP.
+
+CONFIG_IPV6_TUNNEL, which scenario 2 needs, is not listed explicitly
+either. It only gets enabled because CONFIG_IPV6_GRE=m selects it.
+
+> +
+> +setup_topology || { log_test_skip "Setup failed."; exit "${EXIT_STATUS}"; }
+> +trap cleanup EXIT
 
 [Severity: Medium]
-Does this give flow packets and the ICMPv6 errors that quote them
-different ip_proto keys?
+Can this leak ns_alpha, ns_beta and ns_gamma? setup_ns has already
+created them by the time setup_topology() returns failure. The trap is
+installed only after this exit, so cleanup_all_ns never runs and the
+namespaces and any veths stay on the host.
 
-Consider a transit router using policy 0. A flow packet carrying IOAM
-reaches this code through fib6_select_path() and is hashed with the
-recovered proto, e.g. IPPROTO_TCP. An ICMPv6 error that quotes such a
-packet takes the inner branch:
+setup_topology() can fail after setup_ns through the veth "|| return 1"
+paths. Its exit status is also that of its last command:
 
-	key_iph = inner_iph;
-	_flkeys = NULL;
+	tc -n "$ns_alpha" filter add dev veth0 ingress pref 1 \
+                protocol ipv6 flower skip_hw ip_proto icmpv6 type 1 action drop
 
-It then hashes the raw nexthdr of the quoted header, which is
-NEXTHDR_HOP (0).
+That command fails on a kernel without cls_flower or act_gact.
+setup_ns only cleans up when ip netns add itself fails, and lib.sh
+does not install an EXIT trap.
 
-Before this patch, when IOAM was present in both directions, both sides
-hashed proto 0 and matched. Now they differ, so an error such as Packet
-Too Big can go to a different ECMP sibling than the flow. Commit
-23aebdacb05d ("ipv6: Compute multipath hash for ICMP errors from
-offending packet") hashes ICMP errors on the inner header so that the
-two would match.
+As a side effect, a missing flower is reported as "Setup failed.", and
+the later "Cannot install tc flower measurement filters" skip is never
+reached for that cause.
 
-This seems to contradict the commit message:
+Would installing the trap before calling setup_topology() fix this?
 
-  "so errors that quote a flow keep hashing that flow."
-
-The stated reason for not walking the quoted header is truncation.
-However, every access in ip6_nexthdr_without_ioam() goes through
-skb_header_pointer(), is bounded by skb->len, and falls back on failure.
-
-Could the helper take a base offset and also be used for the quoted
-header? No later patch in the series changes this.
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0%40kylinos.cn
