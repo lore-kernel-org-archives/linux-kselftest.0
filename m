@@ -1,76 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793391181;
-	b=Hzmg56mwcCFACfcMcAcZ47ZAnuP5xoc6H1cctw4k6RqOfnT1HYKlKUZPqwd9kNojbuwK
-	 v1Ept/VSSplSF3D+6oKZGMtaasnf+sBVpjKGF1D/OyuCQ9xAjDSEtjpX7zqDoApWseJci
-	 2FaJIDfhr/WvKbsUq38Io2nesNONQe7zpPC4S47miIDOJobmip7FgSmD33UtRJZ56lPSr
-	 /09+fvub2Ccb2LnVhNo4VQLuWYfIL5+QVBCFK9zeEzsOoMA1vcSiu7PtoMDFTDW2yplf/
-	 exLCmnfYCCf5CbubByBoVPJfTcaZzZ29+R5WjiO3vggaPKv9vnzaCePj91+mKcO/7gA==
+	t=1793392273;
+	b=sl+ISnrS+i1XFyaSJ5N6YxCdr9lhj+Hz84f92b2laRQ6kPxB8BJzwfUvmBFW+4DUU58z
+	 8Zl+jjGGbJ3GPdwWprT05DaryjO/5CBYHpvyaVTYCjH5bl5tSpbYoma/fw6tg2fMRk5E4
+	 +zm6CYIhAstYu5PDAXB6URviEaUODyKXUXklTnEHs10uyridXpgvu1TjK1TIOUDHM2nya
+	 xTizqDgSSvJGeN4dkZ3LCGfDOLQSpU1AhWiMhf0dzljKNCUw924YsPVrjjkZDJnq9KQJI
+	 ociwlaHn710X0MzqvqMPZWiZQYo4cksrmqSMQtQGMZuwAcqmLgru8a3iuE8ZOjzsXHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793391181;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ua+C9vpOidUeh38X5VWKBRe9NwFSaOtLQgMBx+NbHhE=;
-	b=DbpTP9TRHMs84t8hVujCfcU+NQsvrmERvdIYDDyJADP5iQTpe9x+mv8cG7TTecp53BUh
-	 gbKJUy79N2yAlOn6e77mBSV12ozyfU+trCxnffYmPq66zxPSWiFq/zuwil62RbyGhzzS0
-	 iZZdORG9XFnjnHr41imGs32Pzk8o2jgRisbN6QLaox2yZEpqwkt/8NdnjC/tMx6xVzUNf
-	 heoOjRytAS1qw/TVJl2ZwyrpRtlX4pBhUiEvwZ9PBvbT/KNLoj5RUgXqBxVVjCVEUVaQH
-	 OVp4DbXZZMYhDBHN3ivmYIrYbxclBS/91zkXn63Jfa6Xdy03uneIDojD0FAfoBAq/sQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793392273;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
+	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Originating-IP:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
+	 X-Proofpoint-Virus-Version;
+	bh=PunFyZW/30a+kuyc67KGszLqyQv1/BfkX7hCjwAirrc=;
+	b=Ip/qyYDXaDWtzr0XHk1Qxw6MWSbOvLqsGV/+kmN1gwTEw/gLvqwYsrV2zIqXVqdGz6I0
+	 L0aqP5xbSZPw4wpxqg0u6TmOJ3qNiLPoKtGJqIQWdVq+qxaTqAgwLZR+EiDZ0n03Fq842
+	 0eWtltx26EI4uU9+aHzQPGxKNaCvlyv2x6EMbO08T1XhMSaBmr1nz8Ogg8boOHzqCqhLm
+	 AhCCGJ+URDN7cK1ewghnk7TcX578P+jmBP/4RrUh9fqfibcPnodQJtOK58k5Fp7Ugjtln
+	 S9hmCzsGH72b2jmG/O5oaUukv5c+LnvvEnxmERtV41BYZNUnNI0hqEQe7k2q2rfQ/bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bBIGQQUl;
-	arc=none smtp.remote-ip=209.85.210.197
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=CDBF4R0s;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52155606A31F
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 20:13:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52155606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3E1606A31A;
+	Fri, 30 Oct 2026 20:31:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C3E1606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bBIGQQUl
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8a030e0f9c1so1053267b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 13:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793391181; x=1793995981; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ua+C9vpOidUeh38X5VWKBRe9NwFSaOtLQgMBx+NbHhE=;
-        b=bBIGQQUlZU11drb/YdFP19thgVsO6QOFUewvM8uTGj9M+dlBtUlEyYAJrqOaKrY0Ry
-         ZF/Z6VGVe3MMd03CD5Fb65U7josq/sX+OAZTyj4s0lOpru20jpEG70EJHE0TaPcIVrCJ
-         0gqE3M1IQvGGYNqyDLAImm3T9amMsXOJG0aEjOnTEaTDShiI4RvuE0CHjoQEcFdEF2hH
-         hNjqb8gzMNFXB5oBceQHMg9Omp37T0WV/oHmkBx7odrvwT8oxOu05Q+R5YR2mJ2XdqAc
-         F4pfAJKagJjscnMr31jT8gi1LoKuza6T4XKZv8b270LH23krUcwq9Skon3EkRUqWmnOL
-         hrjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793391181; x=1793995981;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ua+C9vpOidUeh38X5VWKBRe9NwFSaOtLQgMBx+NbHhE=;
-        b=IIGVFyFNCng4HYxEy+td7sBjdaNseQvAywt/RDEzGqSbp2eIo7kzYEVIPpN0zRpkIn
-         D3KW+lzMTKq67q+vxLk68tIr78mwpRyge64zKRrB2i4tfmQFpu2bn1mlpxBI0J6Nsyen
-         n+eIlH2lJXZlJ1IG3bDOTir2aa5qScIVyXdc17tBiFd/ZGYidbVMcNk8HvP5F24cezry
-         CZfbEOFmiVGofeCbUECRiBCizQA0kimA+aqdCJpxWRvD+wC2PmN6S6VNMy83qjOip+vr
-         lyi7M4PNyDrqyfTjTdFK82BdyeMDdpcGd3AiG04rHyF3vIWqHx87pvM+hqMCLm6AbYEE
-         MjkA==
-X-Forwarded-Encrypted: i=1; AKwUvBxLphekfqZgwdzQzOUJTzDnI4OJ6oO8J7YsiJSbkIXr5Fc5j+V/inocIVQkbUm7PBVkDuWFit+YjogT54B6xQw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLat6tjvWdZF8Ea6dJ9qh4FlX/g9KPLbSA0pW8bgbqkTF3t5LvX
-	0WWp0eFX7OYdGv+Fb4tnISC+xFh3o5SByx75BvJwRhiD0ZsY59R1SDBKkIt2q1klIL0pLCCcBes
-	ZNEKFxA==
-X-Received: from pfbgr18.prod.google.com ([2002:a05:6a00:4d12:b0:888:e7c7:5580])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1daa:b0:882:956c:58e2
- with SMTP id d2e1a72fcca58-8a9bd2f071fmr3325949b3a.17.1793391180582; Fri, 30
- Oct 2026 13:13:00 -0700 (PDT)
-Date: Fri, 30 Oct 2026 13:12:59 -0700
-In-Reply-To: <62e09b20-b839-448c-90ad-0c63233b523e@oracle.com>
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=CDBF4R0s
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69UHxBY83674304;
+	Fri, 30 Oct 2026 13:30:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=PunFyZW/30a
+	+kuyc67KGszLqyQv1/BfkX7hCjwAirrc=; b=CDBF4R0s9hM+Ea7IMLSiaRsTxDZ
+	quio+vsBvOgVgH7k89sHccXF8cXSX9Wu69eM50YxI9R/TJQJ8RbO2pOLlDoHmy3F
+	qKtOBLkbNWfS2YRUMApKnKH40RlYPg3nxiUA4W38mzSKlrSSAx5Pwspwa9uoVX14
+	5zfZOPM5RjizWLDi20B29DwOUwpvdFW0kz1tzqBooSxza00XhfgYiafpS45fj6PG
+	Ei/b5oAmUMBmTx7NDIn/Hd1hwPYEP6SJHP8YRo7fjjXqHW/mV7TniML0O8CSjzM5
+	sMX2+7u7PIDlKOr9Ssi+DPfNfshwL4NqUSElPNgUgMOZNr4NZPT74z2UKfw==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hme63fnun-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Fri, 30 Oct 2026 13:30:26 -0700 (PDT)
+Received: from localhost (2620:10d:c0a8:fe::f072) by mail.thefacebook.com
+ (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Fri, 30 Oct
+ 2026 20:30:25 +0000
+Date: Fri, 30 Oct 2026 13:30:24 -0700
+From: Bobby Eshleman <bobbyeshleman@meta.com>
+To: Michal Luczaj <mhal@rbox.co>
+CC: Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller"
+	<davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Jonathan Corbet
+	<corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Stefan Hajnoczi
+	<stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang
+	<jasowangio@gmail.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Eugenio
+ =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Shuah Khan
+	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Donald Hunter
+	<donald.hunter@gmail.com>,
+        Eric Dumazet <edumazet@kernel.org>, <virtualization@lists.linux.dev>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>,
+        <jlinbox@meta.com>
+Subject: Re: [PATCH net-next v4 4/7] vsock: add a netlink command to assign
+ the g2h device to a netns
+Message-ID: <auT+YIawHSMPHbJI@devvm29614.prn0.facebook.com>
+References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+ <20261020-vsock-guest-ns-v4-4-047527cfccfc@meta.com>
+ <atjZZP2ebhXKzMxL@sgarzare-redhat>
+ <atld3+5LKmGxJ8+s@devvm29614.prn0.facebook.com>
+ <atnjOZjKUBagRVWq@sgarzare-redhat>
+ <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,195 +101,190 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261027051808.243000-1-partha.satapathy@oracle.com>
- <auDF9WpqW8OCu_8w@google.com> <85b0e3aa-0b84-4a00-852a-821aed4a0649@oracle.com>
- <auEI0B7QkIhg-lLG@google.com> <62e09b20-b839-448c-90ad-0c63233b523e@oracle.com>
-Message-ID: <auT6S-I5b5ordXy9@google.com>
-Subject: Re: [PATCH 1/2] KVM: x86: Select lowest vCPU ID for aliased xAPIC IDs
-From: Sean Christopherson <seanjc@google.com>
-To: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-Cc: Partha Sarathi Satapathy <partha.satapathy@oracle.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	wim.ten.have@oracle.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDMwMDA4MSBTYWx0ZWRfX+u8t3xPcK3Uy
+ So3oF9phiOG+8ojVRe7MR4HP4ySg8uFKCHxq4CJMxeBrqsSpTk2sbDrDBEBnL/5uP8iK+UCj5Dr
+ O2UVoq4zX0VCVgHvGXmS/4RB/W4K9kk=
+X-Proofpoint-ORIG-GUID: SI97KzjvKEBjGtzT_r0z5xUn00r9BRfJ
+X-Authority-Analysis: v=2.4 cv=Mbv5KJ/f c=1 sm=1 tr=0 ts=6ae4fe62 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=JnKecZnUtZousrUlYMGU:22 a=xYO5Uv-UIaOSZ6Su2S0A:9
+ a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDMwMDA4MSBTYWx0ZWRfX89pfh9+x+N7/
+ 9tCBN5hdBCjSCETHefDSnTYmixNoa043R36J17ev2Q8xfZdSf+ULWkYcWNPfWJdz/jNZh22jVyt
+ 7BZwb0ywCLU74DW6rGSLBR1PaT+GPzWZ+SdMmdBNM/yYPIgppA4NoMlKQFmw0xRPWEKOmqSTHvB
+ 5fREQTcgUcbu4wrErS/+fjZm4xFyWLDOsAx5eOXqPVKlsQdY1sP/CQ2B1Ue0qde50YuuX7QDcrZ
+ fTsIDkKsy7gLXetWuYqcu2OT5tXHZgdtGGXDqfCWdMpa4ZrKInDxzQQIoZ0BMWU6KgAUsml823g
+ pakFktNTQ5aEuMzMy+CLFCJ9cyKD1eLhBLwbkdF/RiIRFsoQ0V7RmRg0EXF5UBopPI/50rAqPYT
+ STGbbTj3RBMPkHz9TLubQLvt6Zay5HuRDmnPBXIpU/ocBhrrerBhpG8/pBqyFF/3L7qTREilCzm
+ LhqgKa3NJT/Ai1rH0Vg==
+X-Proofpoint-GUID: SI97KzjvKEBjGtzT_r0z5xUn00r9BRfJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-30_06,2026-10-21_02,2025-10-01_01
 
-On Wed, Oct 28, 2026, Alejandro Jimenez wrote:
-> On 10/27/26 4:25 PM, Sean Christopherson wrote:
-> > On Tue, Oct 27, 2026, Alejandro Jimenez wrote: > On 10/27/26 11:=E2=80=
-=8A40 AM,
-> >> The issue was triggered with QEMU and a tool that uses libvirt API for
-> >> resizing guests and balancing their vCPU allocations across NUMA nodes=
-. I
-> >> am not sure if similar work has been published upstream, so I'll defer=
- to
-> >> Wim (CC'd) if you want more details.
-> >=20
-> > Oooh, actual hotplug of vCPUs.  That makes sense.
+On Thu, Oct 29, 2026 at 10:39:50PM +0100, Michal Luczaj wrote:
+> On 10/22/26 12:47, Stefano Garzarella wrote:
+> >>>> +/* Move @vsk to TCP_ESTABLISHED and into the connected table, unless the device
+> >>>> + * has moved to a namespace @vsk cannot reach. Returns false without doing
+> >>>> + * either in that case.
+> >>>> + *
+> >>>> + * The reset sweep walks the same table under the same lock, so an assign
+> >>>> + * cannot land between the check and the insert: either the sweep finds @vsk
+> >>>> + * and closes it, or @vsk is never added.
+> >>>> + */
+> >>>> +bool vsock_maybe_set_connected(struct vsock_sock *vsk)
+> >>>> +{
+> >>>> +	struct list_head *list;
+> >>>> +	bool reachable;
+> >>>> +
+> >>>> +	list = vsock_connected_sockets(&vsk->remote_addr, &vsk->local_addr);
+> >>>> +
+> >>>> +	spin_lock_bh(&vsock_table_lock);
+> >>>> +	reachable = vsock_g2h_reachable_sk(vsk);
+> >>>> +	if (reachable) {
+> >>>> +		sk_vsock(vsk)->sk_state = TCP_ESTABLISHED;
+> >>>> +		__vsock_insert_connected(list, vsk);
+> >>>> +	}
+> >>>> +	spin_unlock_bh(&vsock_table_lock);
+> >>>> +
+> >>>> +	return reachable;
+> >>>> +}
+> >>>> +EXPORT_SYMBOL_GPL(vsock_maybe_set_connected);
+> >>>> +
+> >>>> +static bool vsock_g2h_should_reset(struct vsock_sock *vsk,
+> >>>> +				   const struct vsock_transport *t)
+> >>>> +{
+> >>>> +	return vsk->transport == t &&
+> >>>> +	       READ_ONCE(sk_vsock(vsk)->sk_state) != TCP_CLOSE &&
+> >>>> +	       !READ_ONCE(vsk->close_work_scheduled) &&
+> >>>> +	       !vsock_g2h_reachable_sk(vsk);
+> >>>> +}
+> >>>> +
+> >>>> +static struct vsock_sock *
+> >>>> +vsock_g2h_next_unreachable(const struct vsock_transport *t, unsigned int *i)
+> >>>> +{
+> >>>> +	struct vsock_sock *vsk;
+> >>>> +
+> >>>> +	spin_lock_bh(&vsock_table_lock);
+> >>>> +
+> >>>> +	for (; *i < ARRAY_SIZE(vsock_connected_table); (*i)++) {
+> >>>> +		list_for_each_entry(vsk, &vsock_connected_table[*i],
+> >>>> +				    connected_table) {
+> >>>> +			if (vsock_g2h_should_reset(vsk, t)) {
+> >>>> +				sock_hold(sk_vsock(vsk));
+> >>>> +				spin_unlock_bh(&vsock_table_lock);
+> >>>> +				return vsk;
+> >>>> +			}
+> >>>> +		}
+> >>>> +	}
+> >>>> +
+> >>>> +	spin_unlock_bh(&vsock_table_lock);
+> >>>> +
+> >>>> +	return NULL;
+> >>>> +}
+> >>>> +
+> >>>> +/* Close every connected socket of @t that can no longer reach the g2h device.
+> >>>> + */
+> >>>> +static void vsock_g2h_reset_unreachable(const struct vsock_transport *t)
+> >>>> +{
+> >>>> +	struct vsock_sock *vsk;
+> >>>> +	unsigned int i = 0;
+> >>>> +	struct sock *sk;
+> >>>> +	bool reset;
+> >>>> +
+> >>>> +	lockdep_assert_held(&vsock_g2h_assign_mutex);
+> >>>> +	lockdep_assert_not_held(&vsock_register_mutex);
+> >>>> +
+> >>>> +	while ((vsk = vsock_g2h_next_unreachable(t, &i))) {
+> >>>
+> >>> can we reuse vsock_for_each_connected_socket() ?
+> >>>
+> >>> If not, maybe a comment here will be nice and maybe I'll try to merge
+> >>> vsock_g2h_next_unreachable() here if it's not used somewhere else.
+> >>
+> >> I think we would need a variant that returns the socket, since we need
+> >> to be able to acquire the lock_sock after releasing the
+> >> vsock_table_lock.
+> > 
+> > That would be nice if it's not too complicated.
+> > 
+> >>
+> >> Maybe the callback could return a bool, if true then return socket
+> >> otherwise skip. Then the cb could also grab the sock_hold ref under the
+> >> table lock.
+> > 
+> > Yeah, looks promising to me!
+> > 
+> >>
+> >>>
+> >>> I find these functions a bit hard to read.
+> >>
+> >> Yeah its all kind of a pain. The problem is that we need to hold
+> >> sock_lock to set sk_state and sk_err, but can't acquire it under the
+> >> table lock. Instead, we grab the socket ref sock_hold under the table
+> >> lock to guarantee it stays alive between releasing the table lock and
+> >> grabbing the socket lock.
+> >>
+> >> I was really tempted to not do this lock_sock dance though. The race
+> >> condition I'm avoiding here is that if this reset races with an RST
+> >> receive, then the socket could end up with TCP_CLOSING + sk_err
+> >> ECONNRESET... but I'm not sure this actually propagates up into a real
+> >> problem for any potential user.
+> 
+> Right, vsock_connect() is fragile. Two things to be cautious about:
+> 1. Don't let it reset the already connected socket. Because that would
+> allow user to "re-connect()" and make mess in connected_table.
+> 2. Don't let it re-assign transport of an already connected socket. Because
+> that breaks the contract in few places.
+> 
+> State 1 is not an issue: vsock_g2h_reset_unreachable() calls
+> __vsock_remove_connected().
+> 
+> State 2 may be problematic: if vsock_g2h_reset_unreachable() sets TCP_CLOSE
+> when connect() is scheduled out, then after the wake-up sock may get reset
+> to SS_UNCONNECTED. Then user re-connect()s and hits the transport
+> re-assignment logic. I'm worried that, as we re-assign, someone may be
+> holding a reference to such "connected" (even if not in connected_table
+> anymore) vsock.
 
-...
+I see path you're looking at... after vsock_connect() gets scheduled
+back in we set TCP_CLOSE/SS_UNCONNECTED if sock_error returns non-zero.
+Could you elaborate on your last concern there about someone holding a
+reference? I'm not sure I fully understood.
 
-> > I suspect there's no solution that will magically fix everything.  E.g.=
- if you're
-> > trying to resolve an issue where vCPUs aren't recognizing SIPIs, then t=
-he example
-> > you provided means vCPU_531 will never wakeup, i.e. which vCPU is  "bug=
-gy" changes,
-> > but the bug itself is still there.
-> >=20
->=20
-> Sorry, I don't follow. vCPU 531 would not receive an INIT/SIPI addressed =
-to
-> the aliased 0x13 APIC ID in my example, but it will be reachable using it=
-s
-> full x2APIC ID of 0x213, for which an entry in the phys_map was installed=
- in:
->=20
->         if (vcpu->kvm->arch.x2apic_format) {
->=20
->                 /* See also kvm_apic_match_physical_addr(). */
->=20
->                 if (apic_x2apic_mode(apic) || x2apic_id > 0xff)
->=20
->                         new->phys_map[x2apic_id] =3D apic;
+> 
+> So I don't know, maybe it's vsock_connect() that should be fixed/hardened
+> instead?
+> 
+> Or at least disallow transport *re*-assignment? Does the "re-" part have a
+> use case?
+> 
+> Hope it's not too off-topic.
+> 
+> >> It also avoided some racing with the tx path, but now that send_pkt()
+> >> also checks reachability I think that path is safe.
+> >>
+> >> What do you think about doing the below hunk (TCP_CLOSE, ECONNRESET,
+> >> sk_error_report) with no lock_sock?
+> > 
+> > Looking at the code, it seems that in all the places where we close all 
+> > connections (virtio_vsock_reset_sock, vhost_vsock_reset_orphans) we do 
+> > with no lock_sock but with vsock_table_lock.
+> > 
+> > So, makes sense to me.
+> 
+> virtio_vsock_reset_sock() and vhost_vsock_reset_orphans() are my pet
+> peeves: state switcheroo without taking lock_sock(). Which, again, races
+> vsock_connect().
 
-Oh, duh, the hotplug hack allows using the x2APIC ID even if the target isn=
-'t
-in x2APIC mode.
+True, I don't love that either, but I feel the impact is at least
+constrained by the fact that it only happens when the module or device
+is already going away.
 
-> My interpretation is that behavior is "the KVM hotplug hack", and that
-> behavior is not changed in the proposed patch.
->=20
-> My example was meant to show the conflict of your proposed change with th=
-e
-> "deliver to the lowest ID" rule, which you clarified is not a rule after
-> all :) (but perhaps it should be since it has been working so far..?)
-
-Heh, "rule".  More like half-assed description of what KVM kinda sorta does=
-.
-
-> > If this is about SIPIs hitting the all CPUs, then I think to have a rob=
-ust (well,
-> > as robust as this mess can get) implementation, we'd have to disable us=
-e of the
-> > optimized map when processing SIPIs with PHYSICAL delivery, e.g.
->=20
-> But then we would also have to disable the optimized map for INIT as well
-> (APIC_DM_INIT), since those would still be routed to the wrong vCPU other=
-wise?
->=20
-> And if both INIT & SIPI are using the slow path, they will be delivered t=
-o
-> all matching vCPU IDs, which is likely to cause problems e.g. hot pluggin=
-g
-> one vCPU will potentially initialize and start all of its aliases too?
->=20
-> I need to test this with proper instrumented kernel so I can "bring
-> receipts" (and I think Partha is doing it already), but hopefully my
-> concern above makes sense.
-
-Don't bother testing my patch, my brain was slow to catch on.
-
-> In short, I think the original proposal of allowing a replacement of a
-> phys_map[xapic_id] entry only with a new "low" entry (i.e. one with vcpu_=
-id
-> =3D=3D x2apic_id =3D=3D xapic_id) fixes the creation order issue while pr=
-eserving
-> the existing behavior for the typical cases.
-
-Agreed, though I think we tie the overide to "xapic_id <=3D 0xff" instead o=
-f letting
-the "lower" vCPU win.  I.e. to make it a bit more obvious that the goal is =
-to keep
-the non-truncated xAPIC ID reachable.
-
-Ha!  Yeah, looking at 5bd5db385b3e ("KVM: x86: allow hotplug of VCPU with A=
-PIC ID
-over 0xff"), it had:
-
-                /*
-                 * ... xAPIC ID of VCPUs with APIC ID > 0xff will wrap-arou=
-nd,
-                 * prevent them from masking VCPUs with APIC ID <=3D 0xff.
-                 */
-                if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
-                        new->phys_map[xapic_id] =3D apic;
-
-so the goal really was to prevent an truncated x2APIC ID from clobbering a =
-"pure"
-xAPIC ID.
-
-Actually, even better: what if we only let the vCPU whose ID exactly matche=
-s the
-aliased xAPIC ID win?  Unless I've gone into the weeds yet again, that's wh=
-at we
-(and more importantly, userspace and guest firmware) really want.  It shoul=
-dn't
-matter in practice, but it lets KVM provide a stronger, and hopefully easie=
-r to
-understand, guarantee in the errata.
-
-E.g.
-
-diff --git a/Documentation/virt/kvm/x86/errata.rst b/Documentation/virt/kvm=
-/x86/errata.rst
-index a9cf0e004651..09c6e6a29ae2 100644
---- a/Documentation/virt/kvm/x86/errata.rst
-+++ b/Documentation/virt/kvm/x86/errata.rst
-@@ -63,10 +63,11 @@ When KVM_X2APIC_API_USE_32BIT_IDS is enabled, KVM activ=
-ates a hack/quirk that
- allows sending events to a single vCPU using its x2APIC ID even if the tar=
-get
- vCPU has legacy xAPIC enabled, e.g. to bring up hotplugged vCPUs via INIT-=
-SIPI
- on VMs with > 255 vCPUs.  A side effect of the quirk is that, if multiple =
-vCPUs
--have the same physical APIC ID, KVM will deliver events targeting that API=
-C ID
--only to the vCPU with the lowest vCPU ID.  If KVM_X2APIC_API_USE_32BIT_IDS=
- is
--not enabled, KVM follows x86 architecture when processing interrupts (all =
-vCPUs
--matching the target APIC ID receive the interrupt).
-+have the same physical legacy xAPIC ID, KVM may deliver events targeting t=
-hat
-+xAPIC ID only to the vCPU whose vCPU ID matches the aliased x2APIC ID.  If
-+KVM_X2APIC_API_USE_32BIT_IDS is not enabled, KVM follows x86 architecture =
-when
-+processing interrupts (all vCPUs matching the target APIC ID receive the
-+interrupt).
-=20
- MTRRs
- -----
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index d6e5fbc3c58c..e89c4fef1832 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -297,8 +297,8 @@ static int kvm_recalculate_phys_map(struct kvm_apic_map=
- *new,
- 	 * Apply KVM's hotplug hack if userspace has enable 32-bit APIC IDs.
- 	 * Allow sending events to vCPUs by their x2APIC ID even if the target
- 	 * vCPU is in legacy xAPIC mode, and silently ignore aliased xAPIC IDs
--	 * (the x2APIC ID is truncated to 8 bits, causing IDs > 0xff to wrap
--	 * and collide).
-+	 * but make sure the non-truncated xAPIC ID always "wins" (the x2APIC
-+	 * ID is truncated to 8 bits, causing IDs > 0xff to wrap and collide).
- 	 *
- 	 * Honor the architectural (and KVM's non-optimized) behavior if
- 	 * userspace has not enabled 32-bit x2APIC IDs.  Each APIC is supposed
-@@ -312,7 +312,8 @@ static int kvm_recalculate_phys_map(struct kvm_apic_map=
- *new,
- 		if (apic_x2apic_mode(apic) || x2apic_id > 0xff)
- 			new->phys_map[x2apic_id] =3D apic;
-=20
--		if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
-+		if (!apic_x2apic_mode(apic) &&
-+		    (!new->phys_map[xapic_id] || vcpu->vcpu_id =3D=3D xapic_id))
- 			new->phys_map[xapic_id] =3D apic;
- 	} else {
- 		/*
-
+Best,
+Bobby
