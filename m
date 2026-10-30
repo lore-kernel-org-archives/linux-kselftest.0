@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793325924;
-	b=ZFkbB2TS3aD6M4lvIGPHwZk8iRXYhax6Bfi1dbt2agH0JMZX6X6XHhGss0Hr/T3xE/gY
-	 ExPnOiis8YmrQNKnGOY3T5xIxMQ0WLuaayH22N3cc2chm3LLLftMPVyCbXOoRUbgLeOIb
-	 cS0GoeC2vBeGfBy/6p3ek5NGwLKKA6JmhJNFxFtkMve3SuUYzobtjsAV+gNWXHkJf0P3W
-	 7hQLlrUDHB3hvtipe5JFGo/pzSO1m4R/SFEZ04V18cuSmpCCGNTPvcfy4Fp/hAgGlzSYZ
-	 E+VaDIwe5YqOEpdwHDijmKpg0uh1KCtA4BForGcsHco8kgGSvRZdrrxDQp20tbSWjqA==
+	t=1793325923;
+	b=m6l9B4W6JIMM2L87sWyL9CVU4aDGXntglM2vDuLFvUGgzIv79hT5QjI9X5FhmGgfFaxv
+	 FCy2NHgJRn+JXXRshGeO27xVqZOG0sjYNsl0XiacB0lPzmu1mukL/xl4RVq7mnWGapVpO
+	 blALBWjlmj7HNo0dEC0oYqsh8eXn5cHZf1LgMsphgS58f4THKN2SrAPec2mHG/Gzyk2V2
+	 Va+6nd6a5HOBq4WKbZJipQGdlu4gLos3R+fK93k+eHotWPzcaRNFNDmtsPz9okr1ydiJ6
+	 DyArGziqAufPurgkwFjtgx8EsG4WyOsE8OEJHlGvDDyVo1DspfN83eEogsj3oPiv//Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793325924;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793325923;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=7RZ2cruY3Jw2zdeyjfrMfHJnTtLlKHCFte3yRuO4+Y0=;
-	b=qQ11IfEN3yUcG2mhlJtalXhAduepN5W9leRcCuoFfUnJkd9pkxYtukDkVem0cM0AQ43o
-	 uiZcqM1Af3+gXDKgqnb/u2Aj/Jhz4TJcw5AOjFAIci1fZ7/4lS/siREwg0gk34RrbvarS
-	 z4Ch1cCqidYHjIcPWcX9qovZ4b+o4yJHhyIxI2GaLdwUhOQxOasXHckrvrJnz09kazbvY
-	 beXGrS86JJO42eZ63ZxYM2g2xxHbDkioJXt/x/9WNZldGIfewcl0hORGVRI2L3Lefi4fF
-	 dImwSd1FNESkwkDlLpIzpRdWJ92RLSdI9VftaakQa1fvTudbmG4KSvpM1k2fXTDOEUg==
+	bh=W03CTg8YBsTmEJlqmouPl1VKaY9WqanjxmoS0oDAFEg=;
+	b=cErg3+eISxQfw2Vp3G3VAdyfRoFliwF1t/R2fxAJkIAuvzLodOzV/EmIXLiYqyMui9rF
+	 d0zQ40hvmzeHf9O8c6Ak0Pm0ah4VeVrAx8w3wyvcAuQuvoCqgMLQDmZNimEgEODWMgSEp
+	 BNlLydEz3PRKhUdHiax4wbe6gaYrqI+3ob+vZEVjuhjSpAwWQ4Pb+x1Go28JDtfm5Tsf9
+	 imdF54sw6lmVsChmkYzhGlCVQ1rBvFZivAMW8uMoRwaKuD26QZ1XV9V48kRJtu+4fFBgQ
+	 R/knGO1R4MNb+pAmMOWr41FKrVHVaf1zxlb1vWtQFxfjxvqwj34uuXSoU5y/IQwvgAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RluOa5po;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RFLXXb8N;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F6D606A320;
-	Fri, 30 Oct 2026 02:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E814606A31A;
+	Fri, 30 Oct 2026 02:05:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RluOa5po
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2039E1F00A16;
-	Fri, 30 Oct 2026 02:05:23 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RFLXXb8N
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D1F1F00A15;
+	Fri, 30 Oct 2026 02:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793325923;
-	bh=7RZ2cruY3Jw2zdeyjfrMfHJnTtLlKHCFte3yRuO4+Y0=;
+	s=k20260515; t=1793325922;
+	bh=W03CTg8YBsTmEJlqmouPl1VKaY9WqanjxmoS0oDAFEg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=RluOa5poUUD5NMxgbYkCAXs72D+Wd+X3mGPBekn65BCF747Q8ny9bzCqTtYMSY1FL
-	 gkBjKudYp4QZ1JFquF/E1X9URGDEp8768kYPB17h1Z61dPu5tbGWIrjUbU90VG3iFZ
-	 UwtcPliMNcM1CQTcV30AUvvwkb4h2s6WwMouJVkz6uS36XFrke9Rd2e58h+W7vYYSp
-	 LYYTcIHnYSXwFPCJvToxVXotjPWyqSSvMyKtyD3SW+ZeabueGC1xLhi/K1+9iklvtM
-	 UbHKnpBqSk0jHJJVquEYFACUK4t8sMyaRDpKbY6MTEWKq5UN0a9V3Eja2XWWDyPCtl
-	 hl+j+PhDacNPQ==
-Subject: Re: [PATCH net v2 2/2] selftests: net: netlink-dumps: start a dump
- with a notification queued
+	b=RFLXXb8N0skjj/X4DD5Uj57g7PcDqchi79wRj2b9r34BC9itEQyFvDHTpn1kPXolR
+	 rt4zQ3vhfpThatMi+Eds8uwDGK3bSGV4ZZsDdURZQFd99Dlf/ODlWmqrnPmwQxobol
+	 u3POCU3jWAWa5g2+PiUcQt3KEe2nBtv3lI7OISX0vRtRkLWs+Oy0cv/eIMROrDfj5Q
+	 WEBfZgEqZONGyszDevw6kMzVaGb7P0ek76zIG6gkMleRIJVlFd8rNOyHkwy5SAQB92
+	 ttQpsaQzNdPRF2DaovTVRWWbDwa+hLJsqwav/iEAj4nm76FNoyzi7jifob/fMfw001
+	 TuohcfUb86ZsQ==
+Subject:
+ Re: [PATCH net v2 1/2] netlink: check sk_rcvbuf before charging the dump skb
 From: netdev-bot+sashiko@kernel.org
 To: jhonata.poma@gmail.com
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  kuniyu@google.com, m.szyprowski@samsung.com
-Date: Fri, 30 Oct 2026 02:05:22 +0000
-Message-ID: <179332592266.3134.13451886861849172009@kernel.org>
-In-Reply-To: <20261027-netlink-dump-livelock-v2-2-c4bb05352a33@gmail.com>
-References: <20261027-netlink-dump-livelock-v2-2-c4bb05352a33@gmail.com>
-X-sashiko-severity: Low
+Date: Fri, 30 Oct 2026 02:05:21 +0000
+Message-ID: <179332592143.3134.3446883215083774550@kernel.org>
+In-Reply-To: <20261027-netlink-dump-livelock-v2-1-c4bb05352a33@gmail.com>
+References: <20261027-netlink-dump-livelock-v2-1-c4bb05352a33@gmail.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,107 +65,207 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 1 · Medium: 0 (1) · Low: 2
 
-- [Low] Whether dump_with_queued_ntf
-  (tools/testing/selftests/net/netlink-dumps.c) can catch the bug…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] In netlink_dump() (net/netlink/af_netlink.c:2327), a dump can
+  still fail to start because of memory charged by skbs that have…
+- [Low] The new comment in netlink_dump() ("netlink_recvmsg() continues
+  the dump at or below half of sk_rcvbuf, and the skb must be queued…
+- [Low] The dump_extack selftest (tools/testing/selftests/net/netlink-
+  dumps.c, comment at lines 158-161, branch at 162-163) still describes…
+
+Pre-existing issues:
+- [Medium] This problem wasn't introduced by this patch, but it has the
+  same trigger the commit describes.
 
 --
 
-selftests: net: netlink-dumps: start a dump with a notification queued
+netlink: check sk_rcvbuf before charging the dump skb
 
-This adds a dump_with_queued_ntf test to netlink-dumps.c. The test starts
-an RTM_GETLINK dump on a socket with SO_RCVBUF 2048 while an lo link
-notification is still queued. It reads like libnl does, peeking before
-each read, and expects the dump to finish with a zero status.
+This patch changes netlink_dump() so that sk_rmem_alloc is compared
+against sk_rcvbuf before the new dump skb is charged instead of after.
+A dump can then start while something else is still charged to the
+socket. It also refuses an skb that would push sk_rmem_alloc past
+INT_MAX, so the wraparound fix from ae8f160e7eb2 still holds.
 
-> diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
-> index 51129c564d0a6..4a94a25167e25 100644
-> --- a/tools/testing/selftests/net/netlink-dumps.c
-> +++ b/tools/testing/selftests/net/netlink-dumps.c
-
-[ ... ]
-
-> @@ -260,4 +263,103 @@ TEST(close_with_ref)
-
-[ ... ]
-
-> +TEST(dump_with_queued_ntf)
-> +{
-> +	struct sockaddr_nl addr = {
-> +		.nl_family	= AF_NETLINK,
-> +		.nl_groups	= RTMGRP_LINK,
-> +	};
-> +	int netlink_sock, inet_sock, i, ret, links = 0;
-> +	int rcvbuf = 2048;
-
-[ ... ]
-
-> +	// Leave one notification queued, then start the dump
-> +	ASSERT_EQ(lo_set_up(inet_sock, false), 0);
-> +	n = send(netlink_sock, &dump_links, sizeof(dump_links), 0);
-> +	ASSERT_EQ(n, sizeof(dump_links));
+> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> index a904dc3bcad6b..4129e93a9ff0c 100644
+> --- a/net/netlink/af_netlink.c
+> +++ b/net/netlink/af_netlink.c
+> @@ -2318,9 +2318,13 @@ static int netlink_dump(struct sock *sk, bool lock_taken)
+>  	if (!skb)
+>  		goto errout_skb;
+>  
+> +	/* Check the limit before charging the skb: netlink_recvmsg() continues
+> +	 * the dump at or below half of sk_rcvbuf, and the skb must be queued
+> +	 * then. Keep sk_rmem_alloc at or below INT_MAX.
+> +	 */
 
 [Severity: Low]
-Does this test catch the bug on every kernel config? The commit message
-says "The test fails without the previous patch". That seems to depend on
-how much memory the kernel charges for the queued notification, and the
-test never checks that.
+Is "the skb must be queued then" guaranteed? netlink_recvmsg() checks its
+gate without any lock that keeps senders out:
 
-With SO_RCVBUF 2048, sk_rcvbuf ends up as 4096. Call the truesize of the
-queued lo RTM_NEWLINK notification T. Call the truesize of the -ENOBUFS
-ack that netlink_ack() sends A. The old check in netlink_dump():
+netlink_recvmsg() {
+    ...
+	if (READ_ONCE(nlk->cb_running) &&
+	    atomic_read(&sk->sk_rmem_alloc) <= sk->sk_rcvbuf / 2) {
+		ret = netlink_dump(sk, false);
+    ...
+}
 
-    rmem != skb->truesize && rmem >= rcvbuf
+netlink_dump() then takes nl_cb_mutex and calls alloc_skb(GFP_KERNEL).
+Both can sleep before the skb is charged. Several things can happen in
+that window:
 
-rejects the first large dump skb whenever T > 0. What happens next is
-decided in netlink_attachskb():
+  - netlink_broadcast_deliver() fills the socket up to rcvbuf, or puts
+    an skb of any truesize into an empty socket.
+  - A rejected broadcast briefly over-charges before its atomic_sub().
+  - setsockopt(SO_RCVBUF) shrinks rcvbuf.
+  - A second reader's dump skb gets queued first.
 
-    if ((rmem == skb->truesize || rmem <= READ_ONCE(sk->sk_rcvbuf)) &&
-        !test_bit(NETLINK_S_CONGESTED, &nlk->state)) {
+Any of these can make rmem - skb->truesize >= rcvbuf true after the gate
+passed. netlink_recvmsg() then sets sk_err while the dump keeps running.
+A later read seems to resume the dump, so this looks transient. The same
+races also existed before this patch.
 
-If T + A <= 4096, the ack is queued. The unfixed kernel keeps failing the
-dump from netlink_recvmsg(), the peek/read loop never sees NLMSG_DONE,
-and EXPECT_TRUE(done) fails as intended.
+Could the comment and the commit message ("so the skb is then always
+queued") be softened to say this only holds when nothing else charges
+the socket concurrently?
 
-If T + A > 4096, the ack is dropped and netlink_overrun() is called. Once
-the test reads the notification, the socket is empty. The old
-rmem == skb->truesize exception then lets the dump go through, so the
-test passes on an unfixed kernel. When T >= 4096, the fixed check:
+Separately, the plain read of sk->sk_rcvbuf in that gate races with the
+WRITE_ONCE() in sock_setsockopt(). That part is pre-existing.
 
-    if (rmem - skb->truesize >= rcvbuf || rmem > INT_MAX) {
+>  	rcvbuf = READ_ONCE(sk->sk_rcvbuf);
+>  	rmem = atomic_add_return(skb->truesize, &sk->sk_rmem_alloc);
+> -	if (rmem != skb->truesize && rmem >= rcvbuf) {
+> +	if (rmem - skb->truesize >= rcvbuf || rmem > INT_MAX) {
 
-also rejects the first skb, so in that case the two kernels behave the
-same.
+[Severity: High]
+Can the dump still get stuck when the stale charge alone is at least
+sk_rcvbuf?
 
-T looks config dependent. netlink_trim() shrinks the notification with
-pskb_expand_head() into a kmalloc bucket that has to hold the payload
-plus skb_shared_info.
+The commit message says this fixes "A dump that starts while something
+else is still charged to a socket with a small receive buffer fails with
+ENOBUFS and stays running". This check only covers a stale charge that is
+below sk_rcvbuf.
 
-With the default CONFIG_MAX_SKB_FRAGS=17, the lo notification seems to
-fit the 2 KiB bucket (T around 2304). With CONFIG_MAX_SKB_FRAGS=45, the
-larger skb_shared_info appears to push it into the 4 KiB bucket (T around
-4352). These byte sizes are estimates, not runtime measurements.
+netlink_broadcast_deliver() accepts a notification of any truesize into
+a socket with nothing charged, through rmem == skb->truesize. The
+selftest in the next patch uses SO_RCVBUF 2048, which gives sk_rcvbuf
+4096. With a buffer that small, one rtnetlink or genetlink notification
+can have truesize >= sk_rcvbuf.
 
-The same thing could happen in two other cases. One is if the
-pskb_expand_head() call in netlink_trim() fails, since it runs without
-direct reclaim and with __GFP_NORETRY. The other is if the lo
-notification grows in a future kernel.
+do_one_broadcast() gives the first listener the original skb through
+p->skb2 = skb_get(p->skb). After the reader dequeues it, the charge stays
+on the socket until netlink_broadcast_filtered() calls consume_skb(skb).
+This is the preempted-sender state from the commit message. The
+broadcaster can also sleep in skb_clone() for later listeners.
 
-Would it help to read SO_MEMINFO after lo_set_up(inet_sock, false) and
-before send()? The test could then skip, or fail, unless
-SK_MEMINFO_RMEM_ALLOC is non-zero and still leaves room for the ack, for
-example RMEM_ALLOC <= SK_MEMINFO_RCVBUF / 2. Another option is to pick
-SO_RCVBUF based on the measured notification size.
+The reader then sends a dump request:
 
-> +
-> +	for (i = 0; i < 100 && !done; i++) {
+__netlink_dump_start()
+    WRITE_ONCE(nlk->cb_running, true);
+    netlink_dump()
+        rmem - skb->truesize >= rcvbuf -> -ENOBUFS
+    return ret;   /* cb_running is still true */
 
-[ ... ]
+The ack goes through netlink_rcv_skb()->netlink_ack()->netlink_unicast()
+->netlink_attachskb(). There rmem = stale + ack truesize, which is above
+rcvbuf and not equal to the ack truesize, so the ack is dropped.
+netlink_overrun() then sets sk_err, or does nothing if NETLINK_NO_ENOBUFS
+is set.
+
+When the broadcaster later drops its reference, sock_rfree() only
+uncharges. It does not wake the reader or call netlink_dump().
+
+netlink_recvmsg() resumes a dump only after skb_recv_datagram() returns
+an skb, and the queue is empty. So:
+
+  - the next recvmsg() returns sk_err;
+  - the one after that blocks;
+  - every later dump request gets -EBUSY from __netlink_dump_start(),
+    until some unrelated message arrives.
+
+Would it be more robust to never fail the first netlink_dump() call from
+__netlink_dump_start() because of rcvbuf? Another option is to clear
+cb_running, or arrange a resume, when that call fails.
+
+[Severity: Low]
+This isn't a bug, but the dump_extack test in
+tools/testing/selftests/net/netlink-dumps.c still describes the old
+behaviour:
+
+dump_extack() {
+    ...
+		/* Once we fill the buffer we'll see one ENOBUFS followed
+		 * by a number of EBUSYs. Then the last recv() will finally
+		 * trigger and complete the dump.
+		 */
+		if (ret == FOUND_ERR && (ea.err == ENOBUFS || ea.err == EBUSY))
+			continue;
+    ...
+}
+
+With this check, the bad RTM_GETNEIGH dumps keep queueing DONE+extack
+skbs as long as the charge before each one is below sk_rcvbuf. So
+sk_rmem_alloc ends up in [rcvbuf, rcvbuf + truesize).
+
+The ENOBUFS ack for the next dump is then refused in netlink_attachskb(),
+and netlink_overrun() sets NETLINK_S_CONGESTED. Because of that bit, the
+later EBUSY acks are dropped as well. The ENOBUFS/EBUSY branch above can
+no longer be reached.
+
+Should the comment and the branch be updated, perhaps to check the new
+behaviour instead? The next patch in the series only adds a new test and
+leaves dump_extack unchanged.
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but the same trigger can also
+stall a dump after it has started. netlink_recvmsg() is the only place
+that continues a running dump:
+
+netlink_recvmsg() {
+    ...
+	skb_free_datagram(sk, skb);
+
+	if (READ_ONCE(nlk->cb_running) &&
+	    atomic_read(&sk->sk_rmem_alloc) <= sk->sk_rcvbuf / 2) {
+		ret = netlink_dump(sk, false);
+    ...
+}
+
+The sk_rmem_alloc value read there still includes the charge of a
+notification that was dequeued but is held through skb_get() in
+do_one_broadcast(). That charge stays until consume_skb(skb) in
+netlink_broadcast_filtered().
+
+Suppose that notification's truesize is between rcvbuf/2 and rcvbuf:
+
+  1. The dump starts normally under the new check.
+  2. The reader consumes the first dump skb.
+  3. The gate sees the stale charge above rcvbuf/2 and does not
+     continue the dump.
+  4. The next recvmsg() blocks on an empty queue.
+  5. netlink_skb_destructor()->sock_rfree() later uncharges, but neither
+     wakes the reader nor calls netlink_dump().
+
+A dump that needs several skbs, such as a scan dump, then stalls until
+some unrelated message arrives. Could this be handled together with the
+start-of-dump case? The gate and the destructor are not changed here, and
+they behaved the same way before ae8f160e7eb2.
+
+>  		atomic_sub(skb->truesize, &sk->sk_rmem_alloc);
+>  		goto errout_skb;
+>  	}
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261027-netlink-dump-livelock-v2-0-c4bb05352a33%40gmail.com
