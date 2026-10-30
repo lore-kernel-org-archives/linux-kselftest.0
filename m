@@ -1,114 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793400547;
-	b=tN9mH0U9my1dBcylTIZ43eRK2d2JcXyJP8TIH6iRUreJK2Co2SxrIkWTYHejqAU3LnU4
-	 c7fD05/lcZ06wtyiYj6e0hpSdtzJZIVgkh+GRmsLIQxNXrRJQ9nRoFE3FHgknSC0gutI6
-	 eQlvNhure/Q35AorGbwBYDz3y1kNgeQZWFND6JyvvfuQBpbKXM5YKJsbg2GLIigTylj90
-	 Ix3jvhzKuc3v588T1Od6C4s/vqGXJBCrZyXpF8n6oa/EBF7ENdpKtMOuWjn20CXJjcRo/
-	 b/KIU0QydhQeJPsm4a3QrkNlJMcNkJQoEwNOK2poDq+7NTpSYpC/QGJbj15rB6wk4ug==
+	t=1793401233;
+	b=iPLHBDT5r0tltc1GC1SNQBwZItlExGszjSV4XpEF38SynLcUbV31ijzV7mke8xiZxS0o
+	 mOxAtoDojCC2WD4xG5J52t4M97+zGszh4xPCgCWuXGNTvJKITmgTNdW2qg8AvtBMODI9a
+	 E6UL87sgy6Y6Yt1Y0u1mLXuvwXUW/6KIZdbKxZu5dQgOZyqN8QOCvbTuD6Am9dExkXVyG
+	 PfOB/Ep9dsx0iDtEYYGxJ+sAtFCAl/8QooaSN4PAm2tFtz/EBpXGL76MsJEj4sJnTra7U
+	 BSlzSpOuR5t/3L5x8M+TAKct6yb6CkayfhsJB7j4/rgAyglmbV/2MvpGNxkfJnifabQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793400547;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Content-Type:Content-Transfer-Encoding:MIME-Version:From:To:
-	 Cc:Subject:In-reply-to:References:Date:Message-id:Reply-To;
-	bh=fT+OQrSBFiPM7CM2+FPmKMpeUOAFK5ZNFYv+xxEStMQ=;
-	b=AGi0bpdZqbdVZSEXVatnxBaZPDCbGOTUVJK+F80qLDvFMc2Kgu3MwOVnDcM00CMu0hHX
-	 rL02XdmO35xH0YiuwTbHzijbp3wOxf0dhmEge/RhwDNhZ6hMjmix9VO1aP3WnG4y1trRa
-	 ZkufFw2J79I9sw9jV6mXymAp3g4wEXBoyMAik3N0W5WdZglIpB4Cwoo1uW0LxkE9rnGEG
-	 OZYN98egp67lPwW3vKdOBdQGeWyhFEGSbbclAGBNT9xPiRUCbcFDxWhyZEdcN3omyg8Hc
-	 NHfAH3SwXiBWGZf3QotDx6irl55LZnRsWKJbNy/Cx0tRh3Engs/tCUkIgIyimXhMI8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793401233;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=VJF0CUXK29LO5bKdyyqKbNK4/EKb/LtfiBdeNXFNeJo=;
+	b=0jtZK2pvGgcolPPM3I4nFzP0O4YdnstWJ4tcNnGUac3f/xoACCjsRbDDKxq8h6LBwlLI
+	 sM7JLl3EPKaZLXjwF2PN+PwHZLOPl68kiSd+JkK95Nn2DNMt3rP+1jHTHcGoujaZJibDl
+	 +C7Wte6SsZrHDyDd1q6wAfZigIe2dfrrrd5aF4y0tKyfrAxIMZLsFjzucENKJ18UNYfWv
+	 v5iD4QZK5Yczr9Xo8Ne7Dd7tywyDZ9zANozOvY2tAhBhjIOu4As90Wk18I1vbcx1O7FPF
+	 eTqAFODINh/5oa7cPIXMhThzs5hq3FAHOcdEmXpsA0VtStj+tAIiisBA1LqurBM+kqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=ownmail.net;
-	spf=pass smtp.mailfrom=ownmail.net;
-	dkim=pass header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=PS9N+iyH;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b="fpd/+Nyg";
-	arc=none smtp.remote-ip=202.12.124.152
-Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gMX2HlcR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0A0606A31A
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 22:49:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC0A0606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6F0606A323;
+	Fri, 30 Oct 2026 23:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ownmail.net header.i=@ownmail.net header.a=rsa-sha256 header.s=fm2 header.b=PS9N+iyH;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=fpd/+Nyg
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 54A267A0167
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 18:49:06 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 30 Oct 2026 18:49:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm2; t=
-	1793400546; x=1793486946; bh=fT+OQrSBFiPM7CM2+FPmKMpeUOAFK5ZNFYv
-	+xxEStMQ=; b=PS9N+iyHnT4SMV+a/5c60a0KDAN+qLUOhwPxsPf8FvyRlReqeoM
-	ZKzC2gz10eGm6Xb+LCe7Uaf+VTnB5ez1QO4Ju1X8TC5WnUBoFBAQuKxrFPg1mwe+
-	19QiR+P2mq+MENxmsyM+n6auS8jyh07lASywIS4UrNIBUXI98D/CuGtz9Qwm4+EI
-	5oegIepvdq5bVQ35iC5BwDihY6D6mVtidHzw7vCHEGpT6eS+ffOuzORsYvvAlRYk
-	+hTj8LK6XXQhcpcPVrD1Dord/1vX7Nq08cK4pwiwXjKzlF4HJYyceh84Y7bd4RF2
-	vO+LbalL09KOClfxZh48T9NqHa1NU/EAAcw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793400546; x=
-	1793486946; bh=fT+OQrSBFiPM7CM2+FPmKMpeUOAFK5ZNFYv+xxEStMQ=; b=f
-	pd/+Nygh3CC5o6XjAnJqNd7/+xlGjWygAWneG+6aeJhzHWQuZI7JACPn8LtKmZcP
-	b+rcRyP1XqQX7oeiJStxONo8vrHRd8sKvBw1u88TuDv2voTzddTN0VXKirciUsRS
-	/KEu16Fmjokp8aIXdsq0rAMGMeT+w/F1FFgR0PVVryOETCCz0IXfTFPBnntApis1
-	D6tcLnaSK4goaimJtLlcne8HMdqEUUiyubFF3XDjs7usEhDFM2l4dNIKC0yFrSlH
-	vXiYVO1MkhF1eEcp9NVzyJhm2nZvTHuX3KONiOOTq197oFFHsgFIMSk5Q4PNsBwc
-	Ur4enULKWw+8jDBG90Okg==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=sign d=ownmail.net a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793400546; d=ownmail.net;
-	mf=PG5laWxiQG93bm1haWwubmV0Pg==;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:YoBt/0CGEjvU5Ab6w524Iykd+drJHOi3CURG9FashK3IxX3
-	THxEAcZT3g/oiFHvHlOQmEPZ4aO2xRrrGp6z2o3p0hZKksBaSM6bAXiPlyLPU5Re
-	fi16nfZ0EWHvJsEhF7QJK1id6u4xvYOQGcv2rloWNX+ICNRxhEyEMV2QhjCEcv51
-	UAEn3n8OA0o1/GyPEgxNf2I5W2k5d0kkju1TH2bXeyFpp1vz01tmED3uWIIzTM1q
-	TT2mwzllOwpA9bHVuFVInyYLhzaCeqVVT0R1ZooMdWsqvUiaTqm0fMWrpJMrW/0W
-	dfrKhikZt+tUA6H+2wjvcAT2EwvZ3lUkZfVs0cg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=mi-m=1; hc=13;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,reply-to,
-	subject,to;
-Message-Instance: m=1; h=sha256:qXyJA32715ys7VP3B1xOVzqg3w5XTTlw5JUhnW6+wj4=:vDPxt7fnzMYx869eXAmOq9q1872D0rg0gCFSZrL8AIc=;
-X-ME-Sender: <xms:4R7lat06Onejd_rg7tIjnRHPiiea8EouIsjq2brQvjJV6nTctbU8Qg>
-    <xme:4R7lapBT9gsEnrMHz1jmbPZgn2fTtvOvJgprKX_GdMxy0sgNRFM05Xk_PB7JjhStv
-    ogcyioeZt6BMgXDdQdnJRxSLl4JrSsHi3Q7MiKVE3qh64xGMAQ>
-X-ME-Received: <xmr:4R7laiIkNdElKXokxRcGLlZIkuuSCdToGA8Ra0uCkNjGWQ5mMT-X9-UWrEpm8gXNx0osEqg--QzVPtdMxCS502UNDwDnvhA>
-X-ME-Proxy-Cause: dmFkZTGx86ixzxqFr7DG5/S+744NrKiMWwWjcvwQgnQsFo0EefnYYiMCulkqJ66UugMNng
-    wBjrtDzZ9TVctwx69E6l9V6DCeOYO5IVpg0/LuX8q4d9e7MMEroZDzSAG+16bTxU4Cs4W/
-    qJYGJymIE57pCF1demnq8FKiwEwzYTZ+otHY6fNFhvZoPPh7ihGsD9OJOnpZggc5jK2Smh
-    Foc7k1wenTtcAkSuWiFJYkQL7w/61fGJVHGwTP4S7QDytK3Qpuf/Pjxl3s8wtxVOAoUJDh
-    Y2btYl4iyNxh6Gt2M/IwEQIAaZRkBpKc77GWwe3V7M4vJL0v1zYwbOcqmmv20+Kv/ZiCYF
-    8X2fMpcGjNemVu4DAdpXQQRkXJ41n9tWX9EgGONLKa3JJW6UhiF5DjydZGI/X5jzi5AmQQ
-    XhaHdiQbLZ0K7KlPNbBzFzWBNf+SKwmyrptTuf9B9gCV2feh2+uujl0h1fqwtNsqLHlgx/
-    t91zaNbcj959uefyoqOUfgz4SyuymeiQ11h1mvQ0wEckM9erqmptNBSUXBh9gJve2/Ak1V
-    0Wu2sv9TqKogMUGDJqsfEoGwCmevfA4Mtta5TZeC9n7jbAXIiF7nSGAh4EFMP97yax09X4
-    0I5J8HGSdK7lE4iFKjIZ/pYscqxIZzEZEkG9mq6XfElLOTl9w+7X9NnurVeQ
-X-ME-Proxy: <xmx:4R7laqmkEK8LRQbivM0TwxF9Ak7rr0X6vAgr1jeIYoTyJlFnGTK6NQ>
-    <xmx:4R7lajbu2KBRaJCwWD0Hk06wlXa5mdxw6VzIsMVuB6AMKdBiKdPtaA>
-    <xmx:4R7lau_X9Ue_K63IwrYA9xCTmqlpgDKAkbuAYrGFkM7q6Gss8sx1DA>
-    <xmx:4R7laqbjp0lKHVX3CJRzgCmeSz9zeCEBQznXBQuxEcqDLvg2nfg9LQ>
-    <xmx:4h7lavoy-TdniUV-G_sUPk_FrW_0IPsFOCJ412qdhJqQ7r3dt-bnZJNv>
-Feedback-ID: i9d664b8f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Oct 2026 18:49:02 -0400 (EDT)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gMX2HlcR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A64D1F000C1;
+	Fri, 30 Oct 2026 23:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793401230;
+	bh=VJF0CUXK29LO5bKdyyqKbNK4/EKb/LtfiBdeNXFNeJo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=gMX2HlcRcPcjQO+WZuUs9mvbtbFdxBmsFJS0J02H8KiuT9f3ThRhaMGE/B+0OgpL/
+	 R7Kp+c3zgL2Jiww6AIxWac94GC3LwPVyK3bRyG9dukPf3FpnSLnKSJfs3PfnqbNdXV
+	 mTmLE72kDI/KwHlAb2wumu3NJmkKwoRh6qbU2OGHu2q5iq3P8iyqQwYZZKzSOueg/X
+	 BeoHJDyWjC2nAwer3MB/c9esauUaHRz25c62JqpAfdwF6sjNTGI6i7RuwCTdJG/lXp
+	 YTy63jcsehsSgYu9JXB1opIeG5Ua5pycxfXrgX181JqEV6sPTHmTDcp9tEYwbT1RMo
+	 iRHVrtw9iAy8w==
+Date: Fri, 30 Oct 2026 16:00:29 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Yingjie Wang <x-professor@outlook.com>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "davem@davemloft.net"
+ <davem@davemloft.net>, "edumazet@kernel.org" <edumazet@kernel.org>,
+ "pabeni@redhat.com" <pabeni@redhat.com>, "horms@kernel.org"
+ <horms@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
+ "phx0fer@gmail.com" <phx0fer@gmail.com>, "wang.zhan@smartx.com"
+ <wang.zhan@smartx.com>, "kuniyu@google.com" <kuniyu@google.com>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net v2 1/2] net: preserve rps_default_mask on failed
+ writes
+Message-ID: <20261030160029.76ee6c7f@kernel.org>
+In-Reply-To: <11f9052cba649eb1efec6e9e45eb9377d46e19d1.1793286626.git.x-professor@outlook.com>
+References: <cover.1793286626.git.x-professor@outlook.com>
+	<11f9052cba649eb1efec6e9e45eb9377d46e19d1.1793286626.git.x-professor@outlook.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -118,60 +66,105 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: NeilBrown <neilb@ownmail.net>
-To: "Jimmy Zuber" <jamz@amazon.com>
-Cc: "Miklos Szeredi" <miklos@szeredi.hu>, fuse-devel@lists.linux.dev,
- linux-kselftest@vger.kernel.org, "Shuah Khan" <shuah@kernel.org>,
- "Bernd Schubert" <bernd@bsbernd.com>, "Jim Harris" <jiharris@nvidia.com>,
- "Horst Birthelmer" <horst@birthelmer.de>, "Luis Henriques" <luis@igalia.com>
-Subject: Re: [PATCH v6 1/2] fuse: add FUSE_OPEN_ATOMIC
-In-reply-to: <20261030192401.2543699-1-jamz@amazon.com>
-References: <179332437497.269288.7305999595462479305@noble.neil.brown.name>
-  <20261030192401.2543699-1-jamz@amazon.com>
-Date: Sat, 31 Oct 2026 09:49:00 +1100
-Message-id: <179340054030.269288.17605002354655480101@noble.neil.brown.name>
-Reply-To: NeilBrown <neil@brown.name>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, 31 Oct 2026, Jimmy Zuber wrote:
-> On Fri, 30 Oct 2026, NeilBrown wrote:
-> > > - any other file: the server returns the entry only, and the VFS opens
-> > >   it;
-> >
-> > Why is this a requirement?  I understand that the server *may* choose to
-> > not open the file, so that the open doesn't happen until after the
-> > permission check.  But shouldn't be up to the server to decide.
+On Thu, 29 Oct 2026 15:10:36 +0000 Yingjie Wang wrote:
+> rps_default_mask_sysctl() passes the live per-netns mask to
+> cpumask_parse(). bitmap_parse() stores chunks as it scans from right to
+> left, so a later error can leave lower chunks changed.
+> rps_cpumask_housekeeping() also intersects its input in place before
+> returning -EINVAL when no housekeeping CPUs remain.
 > 
-> This doesn't have to be a requirement, for regular files the server can
-> open if it chooses to. I'll reword. Are you also asking why this is just
-> regular files and not directories too? I could look into that if you'd
-> like? For what it's worth, special files should never get opened by the
-> server on this path, the kernel opens them itself.
-
-No, I wasn't asking about directories.  Opening directories this way
-might be interesting, but I don't think it is important.
-
+> Consequently, a failed write changes both the value read from the sysctl
+> and the default copied to RX queues created later. On a four-CPU VM,
+> after setting the mask to 1, writing zz,00000003 failed with EOVERFLOW
+> but changed the mask to 3. Writing a mask containing only isolated CPUs
+> failed with EINVAL but changed it to 0. No kernel modification or error
+> injection was needed to reproduce either case.
 > 
-> > > The VFS checks the open after the reply, as for other ->atomic_open()
-> > > filesystems, and the kernel releases the file if the check fails.
-> > > FMODE_CREATED is set only when the server reports FOPEN_CREATED.
-> >
-> > The above para seems to suggest that the server might open a file that
-> > wasn't created.
+> Parse and validate a temporary mask before taking the mutex. After both
+> steps succeed, take the mutex and replace the live pointer. Readers
+> access and consume the pointer while holding the same mutex, so the
+> replaced mask can be freed after dropping the mutex.
 > 
-> Yeah, atomic_open is a lookup+open on the FUSE server, and that open
-> might be an open-create or just an open. Either way, the server might
-> open a preexisting file. I'll try to make all of this clearer in the
-> next rev, once I've gotten any feedback on directional changes here.
-
-Thanks for clarifying.  My only problem with the patch was that I found
-the description confusing - everything looks OK from a VFS perspective.
-
-Thanks,
-NeilBrown
-
-
+> The rps_default_mask selftest failed on the base kernel and passed with
+> the fix. The fixed kernel also kept the mask at 1 for the overflow and
+> housekeeping failure cases, while valid writes of 2 and 0 still
+> succeeded.
 > 
-> Thanks,
-> Jimmy
+> The issue was found while fuzzing sysctl write error paths.
 > 
+> Fixes: 605cfa1b1090 ("net: introduce default_rps_mask netns attribute")
+> Reviewed-by: Wang Zhan <wang.zhan@smartx.com>
+> Tested-by: Wang Zhan <wang.zhan@smartx.com>
+> Signed-off-by: Yingjie Wang <x-professor@outlook.com>
+
+kzalloc(cpumask_size(), GFP_KERNEL) failure seems purely theoretical.
+Please drop the Fixes tag and drop the selftest, and repost after the
+merge window is over (https://netdev.bots.linux.dev/net-next.html)
+
+> diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+> index 473c162736d69..f25281c709346 100644
+> --- a/net/core/sysctl_net_core.c
+> +++ b/net/core/sysctl_net_core.c
+> @@ -105,34 +105,37 @@ static int rps_default_mask_sysctl(const struct ctl_table *table, int write,
+>  				   void *buffer, size_t *lenp, loff_t *ppos)
+>  {
+>  	struct net *net = (struct net *)table->data;
+> +	struct cpumask *new_mask = NULL;
+>  	struct cpumask *mask;
+>  	int err = 0;
+>  
+> -	mutex_lock(&rps_default_mask_mutex);
+> -	mask = net->core.rps_default_mask;
+>  	if (write) {
+> -		if (!mask) {
+> -			mask = kzalloc(cpumask_size(), GFP_KERNEL);
+> -			net->core.rps_default_mask = mask;
+> -		}
+> -		err = -ENOMEM;
+> -		if (!mask)
+> -			goto done;
+> +		new_mask = kzalloc(cpumask_size(), GFP_KERNEL);
+> +		if (!new_mask)
+> +			return -ENOMEM;
+>  
+> -		err = cpumask_parse(buffer, mask);
+> +		err = cpumask_parse(buffer, new_mask);
+>  		if (err)
+> -			goto done;
+> +			goto out;
+>  
+> -		err = rps_cpumask_housekeeping(mask);
+> +		err = rps_cpumask_housekeeping(new_mask);
+>  		if (err)
+> -			goto done;
+> +			goto out;
+> +	}
+> +
+> +	mutex_lock(&rps_default_mask_mutex);
+> +	mask = net->core.rps_default_mask;
+> +	if (write) {
+> +		net->core.rps_default_mask = new_mask;
+> +		new_mask = mask;
+
+nit: this could use
+
+		swap(net->core.rps_default_mask, new_mask);
+
+>  	} else {
+>  		err = dump_cpumask(buffer, lenp, ppos,
+>  				   mask ?: cpu_none_mask);
+>  	}
+>  
+> -done:
+>  	mutex_unlock(&rps_default_mask_mutex);
+> +out:
+> +	kfree(new_mask);
+>  	return err;
+>  }
+>  
+-- 
+pw-bot: cr
 
