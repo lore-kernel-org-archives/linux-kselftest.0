@@ -1,111 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793384639;
-	b=qHBCDjh5yzwXYxSoD1Ni62YlKB7lHxFs3i4ZN0cO/+vwcrUDf7fW0IPjiO3DDU4SUmqg
-	 Yi7ja7UPr1KR8R27macCw+sgODJA4dRMLu071/kxvNyF19y59fY4iMDNWS3+y6uwtasV7
-	 wdDDXt/dQoM0WqFKDm1y89cQC7OZbcSSGPr2+Y/lIwK8f6Iu1n/Phx75/QxkvB2MvyRpc
-	 LPIn33L/umgFivVGWWNh9dwJYgpkxxE5Kvn8i5y3YyfjjxIuQjYyqwKN6ThLlF0WhDAgh
-	 iKdb9Gy3z1Nz/8acWzvEZ0+QWNF0hAet9BeA9LixjsQezIeQebMKRZ7ZZkEXb0RFpgA==
+	t=1793384880;
+	b=QpdCFyCXG6OvbfBgRv5Z3xFcxwU5DzV+pecNvW+7LbYYx+zjgC7BUorw1233yVqqcFQR
+	 rPAHDyD/V9ZwOC8e2c2OdSNBUTQHeM2CYvjb9o3mL63NqN2TFzIou8z/Va+0WbQJt9O51
+	 DwE7Slhx2ykXj7MwAPiEsbthcrfzRF7mPaS6maFHqp4ajdbWdFahbuMS24REO/PMqbHVA
+	 mOdVRQo/A3/fIV4KBacGbXKq65EgCQFWCxSIrQWmas22reGti3Tvcbj6FThDAdld6o4Ko
+	 WTLiZ9kUHL1h/rIAP/uZqOOdfLukj+TvaQ+eBvxfnd+HC7eV5ByhLYazYWFGkXXqNbQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793384639;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=st/TkA6CBLvuYEqwa+4bf7yeukWH3Bzp53kbH1Y4OCQ=;
-	b=YPg22+3wSFMBhfUwz7242p3YT8FJom2cYudkMZZ+5Pl9PVkOUo4Gb3TGopCgGRpenzJS
-	 MA/uGLYk6eO71VbgGvh7Vz+We2gfcoUf9mGOpHnWgH2l3zsV2WJjoVRXabuSYwuSPKhlV
-	 oW+q47A92jT34uuoIyg4Z7YOpPsZeUMMxZySchab4p/XLCsq3uu/nS0sTtcJV7gNWV9sZ
-	 xABpDxZNiG3l/F84X0iL/TcdLgLVcWsWxRvqwNIGxaYYhjrxNw0a+Mv1V59xhzcx0QP9G
-	 1aOipck3qFL3nbyrLvZmVj+EqhEYsxKwUyC7R8XrlSDQkKtU7gd3q0DLIeCfuLZIxgQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793384880;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=yXZ3QNZbPs7glkJ4yH5pl4fnldsOoVguypIOmbZ2coQ=;
+	b=ytYj5yKPoE5eO4m0aU6HENGOIUpB2PfvJgFrE1tWGscNgJAz+bSEsa4H8UE/NGqOatfw
+	 xwdf6kOSU7SrpswCzDgU2TmRs2mlGhre8nCWHraHXUOOtgEZL1HTrlWJXIH+iP3WJLQW5
+	 UvVfMGmx11gbgcKj87yZMA4mbt7OPakuRLZOM27WJ9tb3USJYYeforc2ynKF2wm5oUNHi
+	 GlLz8XDtKbMljBXZu5a1NtJXOtHunDjhtJUS8Dnmwt3it3GfJy6nrGv+Sfx6ejrFGQI4l
+	 qFHbrG3oxnaOJ9IBiqR4C8bBFdqSEMRaf41dpuUgCCGLC12dEjb1tnAO0Qn+zKNFVgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=jm0TEPUQ;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YcZlobTd;
-	arc=none smtp.remote-ip=103.168.172.157
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b7H+9f06;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D478C606A31A
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 18:23:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D478C606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28704606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 18:28:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28704606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=jm0TEPUQ;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YcZlobTd
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 08B4A14000D4
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 14:23:57 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Fri, 30 Oct 2026 14:23:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793384634;
-	 x=1793471034; bh=st/TkA6CBLvuYEqwa+4bf7yeukWH3Bzp53kbH1Y4OCQ=; b=
-	jm0TEPUQIa3Is3BgMXlrBATE52PsQRU58rWlFIzdzO63kLG3qDoJ+OtDHCltsabb
-	pJt/+qXt28Vk+hUNWYtUcfZ5tR6npQwJAKWcYIOk+CcD1H5k2URXrJ7kehR/QsEX
-	etnNm71UY5KRhYOki5V1Yk2H5JgDsImUqkcO6WxPCYmrkjGTsUeyYhSyysG1ktom
-	R+EKgmncReTBsDX8XJCURkEECNNbPxtzYh8tjNvh0pGqCLAv33EDeXq03A+JtoEr
-	poGGPySKBvBGHo5YRb3qhrD4vgXDHIsKenBWWoifZI0jQOFrcjmEBTTocoBEQoFd
-	iYo1d4CBCvXB94WQ/fKMrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793384634; x=
-	1793471034; bh=st/TkA6CBLvuYEqwa+4bf7yeukWH3Bzp53kbH1Y4OCQ=; b=Y
-	cZlobTdKjuNElX0tkSAggn098DsNOfBfR+8bi5YyVYFg6wBxkrTAs2725dqx0dhJ
-	CdI4P12n1xXNGQqzpAwJozzp51zq3/S5cAqZk2IJHKCbpJnJ17K/3l8l0uan4Mdf
-	j6fOuDJmV7sCbcSAiZObjIavAi5YABidWMzAyoii+YXl7Pttb2jvybccUYG0I2xz
-	VDYgDXQLTQw8/IET1moAJsXAh4F8H91AxdLIwmkJJAfZS4CYqnUArF6DLXVbBZtp
-	9WwKjQPs/1rdqSq/KnAhbBV+yPs7Yg6zymU/pJiIBy8nR52Y0kW0WVPjkK8EvOj2
-	q5rRqa7M1eFsNmf6KpK3g==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793384634; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:c70DI71jpNzrtam3BngHipjyC+Xooc3KnxthnCiYEHumCPy
-	tZ4B6dIjPi09+6/nxVIefup5DWBO5I/3mulYKUxMr3qQt6k030UyOv1NwP5+ElU0
-	j8uYAYGlRebqbobUv4HfVTI0BThwkzd1aKcGfxs2zsVNgHPhVZ7HbW3vDEZVKiVT
-	8VPL0uBnCZ9rZxWmHvtrIg7qb/CiJWIGEzwO+LkSuAv9gqQc+q34mciwseiDRXJZ
-	DoJ7CHjsR1MEjycfL4xGpIzlrPfBDAS+qgqzFwMdNhzWk92GtvvYqpOvyV/oEUSq
-	2w3uXl0Czq/eOq1m26ZJyGhaqY4olJgRxHSjSkQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:wSTNAuUov5ELYxK0Ezwh6wKOfN1DQCJ+buHooUAknuc=:CJjo0U4Q4WipuJBG6WDA4qv8EpzWNDrOCQwbutjeOgQ=;
-X-ME-Sender: <xms:tuDkalg5ZRqDYu6TWRpgvkK9dTxe188VEl0lyRyOzuugVATS07YKVw>
-    <xme:tuDkak1OTTe-thO_El-oboLsYAufoeCICCOA4tRRc8jJ4DqMdINbNKjF0bSxqrIS6
-    nUibdeNxGRYMWK96raI8lyL9Iu2Pem4R_x8pVIlz0vNheSdby_x1qNz9Q>
-X-ME-Proxy-Cause: dmFkZTFHz7yaXqSibdqx0TXzdAIv9WG31ARUUtQAsNvw3trTKkJqvMEcJ72/EEKZAETlDx
-    B8XezTsJEEgkSNUEH6sTEwEUQY29QcGCn6EqKcwtbz7Hccm9w/NKrSnV6hk2ZAhFVqnYPQ
-    8SWdIEFk1RqHQ9W1BzlC2nlkkQHrvZk0S8w/lGu5hyRZwAiQxkGfkWY330qwlJT0lTsdG3
-    FJqJvp7ipBAyeadxFYwqHPjZjWRAB9Xc06qu7irEKi0Q3Q6LNvSo09cTbl8lEgTLNy4ThB
-    mm/UyDCay8VFVAD5XvcCGfV698AjsSv8MRF8+0tU8JR14nMcum6I2G6Bn10615A7V2nua8
-    WZ/YCnl2ayBV2cYjs0wdXacltDpXtAcmdmd/UA97Ht+nVV4z7Jhp3Q9DzHEbMxOkorcDyG
-    1qY59pVi9/HruJvrqaFrcdtBWkcZS1r0GePa+W1uk2G4A1kiO4nmcEXz1bjw2tvQiHPiit
-    MWKgMpx0jpelg01eC8+JgsSAmS2+9aHMamWmCpbvVxyJNOcBGlZAJ9JNJob1DsOt4egY61
-    1KnPCelHqk7eIxNRz19yqqh0kTY7t1P/l3eKyAnWEQhFOKbJhImP4vQW5b7f7VCchH7I6R
-    JgUWN/xJud6iPJRxqvef92bseDiQ/MbVW7Rvg+Ckc8vXPzat6x7U+G3W2lPA
-X-ME-Proxy: <xmx:uODkagT3CaKHEJxKHGQjco2NhaWl30vt-vC337p6DzsZIKJ6lCu5OA>
-    <xmx:uODkagWlj1Q6rC2PWZCKeysISPjZmXwvR-ymcbYMhORmofh_fYC-IQ>
-    <xmx:uODkaheWJQ31OQoK5BQ_WqsEr2yU3-2o2WAkBPkYSmRCyGrxW-gsHg>
-    <xmx:uODkakJHmrpijvuzft31wRhLIVws9KWJYsSpF_3x7vNCauvlcSmK0A>
-    <xmx:uuDkapaq4uwX8LmqERqamOWFCuD6L9Ogr5tQyB6y2jycqot7bnShvde9>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 60F7E32A0093; Fri, 30 Oct 2026 14:23:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b7H+9f06
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ad787e0593so524077a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 11:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793384879; x=1793989679; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=yXZ3QNZbPs7glkJ4yH5pl4fnldsOoVguypIOmbZ2coQ=;
+        b=b7H+9f06pwRUzYSGWS60atfV/e2WB+6N0etMptiWqMNLfpMVRFYE6xz7+tLnOlMJ8m
+         l4SIv9aREVkp9842Fr1v5LoazVZcq8MgefUZbqskNwwGqnYVQwPLb5cgXDdLqh3lVJmz
+         yeD/vwqZl9NDQ8dVdkwY4Jc4AE/13giiNIZKdQQSdtDMzMEE1MTZy2RPGU7BUM41kGQq
+         zA9eR5lCiYp99ytaJePKv/0xmGTXy8yWZKLg3CFozTDmRiy5HXQb3+AnPLpPebPS72A/
+         NkIMJMgAvgZJamlhMaxVr8jlLQpMD1vYxfwJLnxVRMgrfas8J05N4GhpDhWvaVtrFslC
+         yR2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793384879; x=1793989679;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yXZ3QNZbPs7glkJ4yH5pl4fnldsOoVguypIOmbZ2coQ=;
+        b=AQKSYshPZ8u4n8881vCwQltT1UGX2jm9oXombRvViUOiHkvrBXxhhSy8ozoBJNit+9
+         RpBYesY3LLySHpkyLdc526O5mWK2iXi2/JKZ4YtNh+dLBXNbiPTWAJULRzs8hVYZIfkZ
+         Rt8dgOF27EXj7ICdyUOo8JqTds3YfvNPPYE9JsdqaU0zyAJFVcJ10ziTO2LTSeiExGMZ
+         CEDCltOXT4PyXqD8qFDxSGFtfqYMzcxN1qqz5p5AlYZEl6G9Z7/lUZkf3mPUp0Kki7jx
+         5Ce8M5tup8FQMqywYqDXSTGMB1xgH1FfEVeH8WzwkMtpZbtHkYV69E/VlrILea5LDtrn
+         MfbQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzDt9xILhnsJhuiyvxN8Pofihq93qUT8J3+Rv6jCKll1EKWGKOsmz5BZwFg2H3++akGGT5/faaeb8UeqJR8Ueg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKIDTtuHaQPLjhGlLzysI2H2XLcBOIMs1CDG0If6OsJxdTh9WOr
+	PnJUO2z74DF7NdMg1rzwIzdx9auVbOr5pQnxgL1EJoG4BsywHQ70q2xO
+X-Gm-Gg: AYBFou3upcvLU1zSVn3T48rsmlsgxM29QxwQlmFWEDRVLs9thTRnAEKJ7S8aq/jV6SE
+	yMLI9ALjPFQf56uGNIDuOZmwd/l5/tvMql5wuvb0MmDTOia+ybEk9lFP/UR3WVlnaxh8Jb5aVDj
+	S0nx1hNKiHOruPsElOIS+o3rDl7BfkiI/h/C+AZgXmmhWZS/h73uvIr56nmCWbfDijYMItBmorO
+	7GPrjNFDy0lgYJ8DCPCz3cAGIb7khuSl2vM+X3R+j8+wPtzZ9cZkw6qXNl1MgCBrbeBUTLGr4pe
+	ejRP//nLEvdaikNldDDaSHP8/LwQOhntOuyWgSQEiKHC13mPB5zDnAVpybExpNnmHtM6R9olfL+
+	ecJujYugTuL9ur1pAzBqDHp1F1tGhRZAOQA3X9KgjFR+HOPszLIBOoGeA7A2f1KA+rMhCJh5sc6
+	s9tRSG+NurbAQI7FkT8JGVO6q/ZxZiF/boBh0KKFVBcqbAXitTwhGNCE6aE5In8SgVAAmPAp8Gi
+	6UivhjNt2T3+g6enasPPsMghYHeUdgrIPG9RpGyk8HNueT6F2Zu5GzeGKpNOej6C9bpyPtK+ZqR
+	ZHaTFOra5bMLrAu+134NLRSyBkztXYP89PRZSMZHIDTZQArO09/MB57tTlptgyUpRqDedPMq67t
+	Hg30IiTv/frM=
+X-Received: by 2002:a17:90b:5485:b0:3ab:be66:ddb6 with SMTP id 98e67ed59e1d1-3ae897763fdmr2169146a91.20.1793384879377;
+        Fri, 30 Oct 2026 11:27:59 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:5d10:1794:f0d8:db5b? ([2620:10d:c090:500::4:1201])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae845984absm5186356a91.10.2026.10.30.11.27.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 11:27:59 -0700 (PDT)
+Message-ID: <34b76ef03fb2b7385de32647f21441c6ff267c6a.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 09/12] bpf: Track low-32 scalar equality
+ across narrowing stack fills
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
+ daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Fri, 30 Oct 2026 11:27:56 -0700
+In-Reply-To: <20261020161907.2115379-10-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+	 <20261020161907.2115379-10-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -115,60 +106,126 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AA4M8BakChSJ
-Date: Fri, 30 Oct 2026 19:23:30 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Thomas Huth" <thuth@redhat.com>, "kernel test robot" <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
- shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- "Jason A . Donenfeld" <Jason@zx2c4.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Message-Id: <5f898f0f-915c-4aef-a3f9-0118f4539951@app.fastmail.com>
-In-Reply-To: <cdf09fa3-e251-4d8d-9f0a-316998df036b@redhat.com>
-References: <202610291918.kHO0GTDB-lkp@intel.com>
- <9e294bfd-4704-42a5-a704-f301f4afe042@app.fastmail.com>
- <cdf09fa3-e251-4d8d-9f0a-316998df036b@redhat.com>
-Subject: Re: [arnd-asm-generic:asm-generic 15/15]
- /usr/aarch64-linux-gnu/include/linux/types.h:12: Error: unknown mnemonic
- `typedef' -- `typedef __signed__ __int128 __s128
- __attribute__((aligned(16)))'
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 30, 2026, at 18:46, Thomas Huth wrote:
-> On 29/10/2026 23.13, Arnd Bergmann wrote:
->> On Thu, Oct 29, 2026, at 19:09, kernel test robot wrote:
+On Tue, 2026-10-20 at 09:19 -0700, Vineet Gupta wrote:
+> A 32-bit fill from a wider spilled scalar has the same shape as a 32-bit
+> mov from a wider source, and the relation was dropped rather than
+> recorded:
+>=20
+>   r6 =3D ...                  /* full 64-bit unknown */
+>   *(u64 *)(r10 - 8) =3D r6;   /* slot linked to r6 */
+>   r2 =3D *(u32 *)(r10 - 8);   /* narrowing fill */
+>   if w6 !=3D 0 goto ...       /* not taken: r6's low 32 bits are 0 */
+>   if r2 =3D=3D 0 goto ...       /* not deduced today */
+>=20
+> Record a low-32 link as the mov arm does. Stack slots are already
+> first-class members of an ->id set, so sync_linked_regs() and the
+> reconstruction helpers apply unchanged. A fill narrower than 32 bits has
+> no expressible relation and still drops it.
+>=20
+> Which extension rebuilds the high half depends on the load, so
+> check_stack_read() takes is_ldsx and sets BPF_REG_LINK_SEXT where that
+> is known. check_mem_access() then keeps a sign-extending link across a
+> 4-byte sign-extending load only: BPF_REG_LINK_SEXT means (s32)(base +
+> delta) specifically, so an 8- or 16-bit ldsx is a relation the kind
+> cannot express, the same way the ALU arm's subreg_link is gated on
+> (insn->off >> 3) =3D=3D 4.
+>=20
+> Costs. A bisect lands one clang regression here -- big_alloc2 2956 -> 309=
+5
+> insns, 157 -> 165 states -- but it is not this patch alone: it takes both
+> this and the preceding reverse-direction patch, and neither moves
+> big_alloc2 by itself. The external corpus does move for this patch alone,
+> no verdict changes, six programs verifying in more instructions:
+>=20
+>   +1812    2470 ->  4282  test_file_open    bpfjailer-lib-tests open
+>   +1765   59556 -> 61321  twfw_connect4     tupperware-agent twfw_sock
+>   +1765   59556 -> 61321  twfw_sendmsg4     same object
+>    +752    5874 ->  6626  layered_enqueue   scx_layered 1.0.11.1
+>    +252    2512 ->  2764  bpfj_exec_execve  exec_enforce
+>    +252    2512 ->  2764  bpfj_exec_execveat  same object
+>=20
+> +6598 over 25.2M, or +0.026%, and +218 states. The shape is the familiar
+> one: a more precise recorded state has a smaller equivalence class and
+> prunes against fewer predecessors.
+>=20
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> ---
 
->> and looking at the preprocessed file, I see a wild mix of tools/include,
->> ${srctree}/arch/arm64/include/ and /usr/include. I also see that at least
->> part of the problem is that arch/arm64/kernel/vdso/vgetrandom-chacha.S
->> includes arch/arm64/include/asm/assembler.h, which then goes on to include
->> the world.
-> After getting access to an aarch64 host, I was finally able to reproduce the 
-> problem. I think it's likely best if we force the selftest to use the 
-> headers from the current kernel sources instead of using the headers from
-> /usr/include ... i.e. this patch fixes the issue for me:
->
->   https://lore.kernel.org/lkml/20261030174323.370687-1-thuth@redhat.com/
->
-> WDYT?
+Please de-claude the comments.
 
-The idea sounds right, but it doesn't appear to do anything for me,
-I still get the same output:
+...
 
-arnd@studio:~/arm-soc/asm-generic$ make O=../build/tmp/ ARCH=arm64 -C tools/testing/selftests/vDSO/ V=1
-make: Entering directory '/home/arnd/arm-soc/asm-generic/tools/testing/selftests/vDSO'
-gcc -std=gnu99 -O2 -Wall -Wstrict-prototypes -D_GNU_SOURCE= -I/home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/testing/selftests -isystem /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../usr/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../tools/include/generated -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../arch/arm64/include -idirafter /home/arnd/arm-soc/asm-generic/tools/testing/selftests/../../../include -Wa,--noexecstack    vdso_test_chacha.c vgetrandom-chacha.S  -o /home/arnd/arm-soc/asm-generic/tools/testing/selftests/vDSO/vdso_test_chacha
-/tmp/ccKJRkeX.s: Assembler messages:
-/usr/include/asm-generic/int-ll64.h:20: Error: unknown mnemonic `typedef' -- `typedef __signed__ char __s8'
-/usr/include/asm-generic/int-ll64.h:21: Error: unknown mnemonic `typedef' -- `typedef unsigned char __u8'
-/usr/include/asm-generic/int-ll64.h:23: Error: unknown mnemonic `typedef' -- `typedef __signed__ short __s16'
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
 
-It looks like tools/testing/selftests/ is built in the source directory,
-while the 'make headers_install' installed the headers to the object
-directory in '../build/tmp/usr/include/'.
+...
 
-I have never been able to figure out how kselftest actually wants
-to handle this.
+> @@ -4258,22 +4259,52 @@ static int check_stack_read_fixed_off(struct bpf_=
+verifier_env *env,
+> =20
+>  			if (size <=3D spill_size &&
+>  			    bpf_stack_narrow_access_ok(off, size, spill_size)) {
+> +				bool narrowing =3D get_reg_width(reg) > size * BITS_PER_BYTE;
+> +				/*
+> +				 * A narrowing fill keeps only the slot's low 32 bits,
+> +				 * so record a low-32 link rather than dropping the
+> +				 * relation, as a 32-bit mov from a wide source does.
+> +				 * Which link kind depends on how the load fills the high
+> +				 * half, hence is_ldsx.
+> +				 */
+> +				bool subreg_link =3D narrowing && size =3D=3D 4;
+> +
+>  				if (dst_regno < 0)
+>  					return 0;
+> =20
+> -				if (env->bpf_capable && size =3D=3D 4 && spill_size =3D=3D 4 &&
+> -				    get_reg_width(reg) <=3D 32)
+> +				if (env->bpf_capable && size =3D=3D 4 &&
+> +				    (subreg_link || (spill_size =3D=3D 4 && !narrowing)))
 
-      Arnd
+This check can be simplified to 'env->bpf_capable && size =3D=3D 4'.
+
+>  					/* Ensure stack slot has an ID to build a relation
+>  					 * with the destination register on fill.
+>  					 */
+>  					assign_scalar_id_before_mov(env, reg);
+
+...
+
+> @@ -7392,13 +7423,20 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, struct b
+>  			 * Sign-extension can change the register value relative
+>  			 * to a scalar it is linked with by id (e.g. a zero-
+>  			 * extending fill of the same spilled stack slot), thus
+> -			 * drop the shared id in that case.
+> +			 * drop the shared id in that case. Only a 4-byte
+> +			 * BPF_REG_LINK_SEXT link survives: it says the high
+> +			 * half is this very sign-extension. BPF_REG_LINK_ZEXT
+> +			 * says the opposite and would be a lie about the value
+> +			 * just produced, and an 8- or 16-bit sign extension is
+> +			 * a relation BPF_REG_LINK_SEXT cannot express at all --
+> +			 * it means (s32)(base + delta) specifically.
+>  			 */
+>  			bool no_sext =3D reg_umax(&regs[value_regno]) <
+>  					(1ULL << (size * BITS_PER_BYTE - 1));
+> =20
+>  			coerce_reg_to_size_sx(&regs[value_regno], size);
+> -			if (!no_sext)
+> +			if (!no_sext &&
+> +			    !(size =3D=3D 4 && regs[value_regno].link_kind =3D=3D BPF_REG_LIN=
+K_SEXT))
+
+Please make this:
+
+  bool sext =3D reg_umax(&regs[value_regno]) >=3D (1ULL << (size * BITS_PER=
+_BYTE - 1));
+  bool sext32_link =3D ...;
+
+  if (sext && !sext32_link)
+    bpf_clear_scalar_id(&regs[value_regno]);
+
+=3D> no giant comment necessary.
+
+>  				bpf_clear_scalar_id(&regs[value_regno]);
+>  		}
+>  	}
