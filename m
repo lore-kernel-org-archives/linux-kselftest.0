@@ -1,68 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.193
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793342587;
-	b=3YA8W1DWgIwzPgo3OmZMA1VQ7tli9F8RZdjAnupeD9dn6mC326QJh6/MgoMj089gUGBm
-	 KA+v9F0IN5+xER2AV2PDXQQeLhKC9BMhgjTr06buUMqP+IhEEwBsUDsE1abQRAVjif6WY
-	 IAc0v42TGUhKiefJ96/cd7RNvJVrfw8NC9YnaaD5Kd415Ade9UScXFmHuZjW+wwKLEHZB
-	 DUS4AW28kZpw4zVKRCvdeoItMCEq+/Sai4LINHTrO7ZEzG20K6bjvBI7FzIEqz2xvXUrO
-	 qXeFnS/l1y5r67c+tCtXT2oveXVzbdVRcAgL/cdgo4HCdudiOwJJ/Rfl5m88dhoYVvw==
+	t=1793347960;
+	b=LY0+EKJ1qTyk4/gH88EM1Qz/zci+N42Ue4pnK6asAuDcrDMH/rwDG74GgcAowVYEi2mn
+	 5k19NiaKXelSbz5TAfeXoVhup6JPiJXtkElMy2ieHaBtIyDMUG+nWqKGI82bY2w90T0eh
+	 Sx8lvONKauwy/0hVFqloCnLdTjq8WANmoNRABSrGTgTt7cIK6cILIGo5Kw/xRMP6VIqL+
+	 BN6i5n7u7cCM4xeKb9fk6PnsiP/2VcnRaEyPhlCnR9V7mZ3tw83JZt41hsXB7zpXpleYR
+	 bFqYMoYP0mrXgaQlJAOi+M1WFb0Zr4QKaGzNQEGDHAPDNJTZ3Ios0X8UGWxx6k7F43A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793342587;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=JuXi952FsDjJhJT+JGh3Ua47MpEPJYCkj3UAjd1LQec=;
-	b=FLYiF0+fmgLSSVGZ+YUEqotDhr4I7xk07WxWXCg37+WEovCOdEM3qEVMdzRbSRW0qJQw
-	 Qk0fPv01tER7VI+Lnaj8Huk9e9ZpuPChWomkb3hEeu5QD15GXcho/s9EFuYK/mIK6D3Bl
-	 UWJoQBfJnHeJLJZxPlFlRni2eulDYJ38VIe47aDRiIpukMJ1fRZNf6ZfgWSXOGojem8sK
-	 bugBIj3Y+yAxobjDW5zxXwj1pDM/g4n/XntAI3jm0fmP8mmlb3cQJuyP0Yu+MVS7FNnpJ
-	 +UQSc3yTJfOMEYun983iYHnUZEphl9YugB8SBCpRL7qNMiEu/SM3A1pzqu3QAGZCj8A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793347960;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=1eOarHzAsENVZMHKn6FEU4kOA/5SkTXSfgR+jYQ2Wck=;
+	b=Y+P7JFYv4hxYyiaGMbHnciav7WfeTq2DCUVeCmKwgi/3OHdBezwjkTFqVWuN1kaTYAuC
+	 O/9WqUPQnHHCTX4ml8PIeZlEhHhPo2nWnrOllXt9g3OcCNQbLSP73D8dEWeMpb1/srsc0
+	 xklftBbtjggaZBI1KlZHLzZCoT2xVzqScyxbN7gjIeB7bA/L6+DhZ3Mt5TgjolLJHPF/4
+	 dz7aGKXVw/2hDOJLHflfbhks1yHw2ceuI3k2+Po8NhzpcxFmVQLerMqidRxquB9uM9ReG
+	 QHKEDHuH3BiY6UR8yFWeUfmWAsqtWbfj9zfrwUSuLqGgwmtHrtxDZuhIsorzhSX2UBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=CS0uuwo6;
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CFU5B0tc;
+	arc=none smtp.remote-ip=91.218.175.193
+Received: from mta0.migadu.com (out-193.mta0.migadu.com [91.218.175.193])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7A4606A31C;
-	Fri, 30 Oct 2026 06:43:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D7A4606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B07606A31E
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 08:12:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8B07606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=CS0uuwo6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793342585; x=1824878585;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pq35H8oWxEAEfaKcFCrhRdow2wrZ1TGL9MQL4x0/uII=;
-  b=CS0uuwo6y28o+H3sECVaBlzH6RtlN2KnXrFzvKVxi8qbD9yTWwzoTA0s
-   iuK0+seE+s9ZwHT0OucKxJTT31gzzpyYz1eTwjyh/vqttbqN3P7fkOEDi
-   8Fp87uNNcnksWuwpPESNpq1dulWqam7fkjK34bmPYxAGhZTxYNMXZbb5E
-   PTjSHiY2hnOx+gYt8FLDGBQxzfWgJkl72mQu8KMiiMx7rz9lrki4em/wN
-   opRGdOOCu7hMrSWrAOQIJbsN4o62t1pHee5gtyEi9+2J8XXvM+yTBe/Wh
-   +sj9rlGMbJu5C51YXbFbw/M+EskcFdcO224pebcNcrXW3+qjH02MvLSvo
-   A==;
-X-CSE-ConnectionGUID: FEk564pERky1Wtghfhxi8Q==
-X-CSE-MsgGUID: TWB5dFnSQHO+9wCSz8VKvQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11950"; a="2193165"
-X-IronPort-AV: E=Sophos;i="6.27,185,1787036400"; 
-   d="scan'208";a="2193165"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 23:43:04 -0700
-X-CSE-ConnectionGUID: jQA90I7vS8SfeoBXB8ahTg==
-X-CSE-MsgGUID: yGXTMymSRTiwYhgOcsrVSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,185,1787036400"; 
-   d="scan'208";a="5253035"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 23:43:00 -0700
-Message-ID: <51fb9ceb-3fff-401c-8e6a-2a249e3f358f@linux.intel.com>
-Date: Fri, 30 Oct 2026 14:42:57 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CFU5B0tc
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=6R09/GlFusOPFb6unSV/Xj0uyriwOdbAv2ijaqmAJX0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793347956; v=1; x=1793952756;
+ b=CFU5B0tcSto+raXKFA6eoXJPcFOBtRF4gllgF2A5Z9cUkrC+pPT7XSxUXBECD3BIA6ImP5Q7
+ QS/k2yT/QThyaAa0jXzw/nvUjXIbdC9YNtrpcmvd2iVH02J4io74MiQpQm1lVuxVthsF35LbO5u
+ yA8QN6GPYLKUtSvHj5a9Ijlg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 28f7219672ac7ce9;
+	Fri, 30 Oct 2026 08:12:36 +0000
+X-Mizu-Trace-ID: 28f7219672ac7ce9
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 30 Oct 2026 16:12:19 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Justin Iurman <justin.iurman@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH 0/3] net: ioam6: makes IOAM insertion transparent to IPv6
+ ECMP
+Message-ID: <auRRYzF8iExhcVZp@bogon>
+References: <20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0@kylinos.cn>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,95 +71,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 16/28] KVM: x86: Mark CR4.FRED as not reserved
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
- <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Andrew Cooper <andrew.cooper3@citrix.com>,
- Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
- Shivansh Dhiman <shivansh.dhiman@amd.com>,
- David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
- Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
- David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <20260911213659.2025974-17-sohil.mehta@intel.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <20260911213659.2025974-17-sohil.mehta@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0@kylinos.cn>
 
-On 9/12/2026 5:36 AM, Sohil Mehta wrote:
-> From: "Xin Li (Intel)" <xin@zytor.com>
+On Wed, Oct 28, 2026 at 01:45:28PM +0800, Hangbin Liu wrote:
+> This series makes IOAM insertion transparent to IPv6 ECMP, as required
+> by RFC 9486 (C2): a packet carrying IOAM options must be forwarded
+> along the same path as the identical packet without them.
 > 
-> The CR4.FRED bit, i.e., CR4[32], is no longer a reserved bit when
-> guest cpu cap has FRED, i.e.,
->   1) All of FRED KVM support is in place.
->   2) Guest enumerates FRED.
+> Patch 1 fixes the transit side: hash policy 0 hashed the raw IPv6
+> nexthdr, which becomes NEXTHDR_HOP once an IOAM Hop-by-Hop header is
+> inserted. The policy-0 key (and the ICMPv6-error flow selection) now
+> uses the nexthdr the packet would have had if the Hop-by-Hop header
+> carried only IOAM options and padding.
 > 
-> Otherwise it is still a reserved bit.
+> Patch 2 fixes the injecting node: the ioam6 output re-lookup on a
+> destination-cache miss hashed the transformed packet's NEXTHDR_HOP
+> instead of the original nexthdr (inline) or IPPROTO_IPV6 (encap), and
+> rebuilt the flow keys from the outer header only.
 > 
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> Patch 3 adds selftests/net/ioam6_ecmp.sh, covering both places: a
+> transit forwarder with a multipath route, and an encapsulating node
+> compared against a plain ip6ip6 baseline.
+> 
+> The issue was found while reviewing RFC9486. It can be reproduced and
+> verified by the newly added ioam6_ecmp.sh test.
+> 
+> Tested with:
+> ecmp_rehash.sh
+> fib_nexthops.sh
+> ioam6_ecmp.sh
+> tcp_ecmp_failover.sh
+> forwarding/gre_inner_v4_multipath.sh
+> forwarding/gre_inner_v6_multipath.sh
+> forwarding/gre_multipath_nh_res.sh
+> forwarding/gre_multipath_nh.sh
+> forwarding/gre_multipath.sh
+> forwarding/ip6gre_inner_v4_multipath.sh
+> forwarding/ip6gre_inner_v6_multipath.sh
+> forwarding/router_mpath_nh_res.sh
+> forwarding/router_mpath_nh.sh
+> forwarding/router_multipath.sh
+> 
+> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 > ---
-> v10:
->  - Check CR4.FRED against IA-32e mode in kvm_set_cr4() instead of
->    __kvm_is_valid_cr4(), so that KVM_SET_SREGS no longer rejects a CR4
->    and EFER pair that are loaded together (e.g., when restoring a FRED
->    guest)
-> ---
->  arch/x86/kvm/regs.c | 7 +++++++
->  arch/x86/kvm/regs.h | 4 +++-
->  2 files changed, 10 insertions(+), 1 deletion(-)
+> Hangbin Liu (3):
+>       ipv6: route: consider IOAM options in ECMP hash policy 0
+>       ipv6: ioam6: use transformed packet nexthdr for ECMP re-lookup
+>       selftests: net: add ioam6 ECMP test (RFC 9486 C2)
 > 
-> diff --git a/arch/x86/kvm/regs.c b/arch/x86/kvm/regs.c
-> index 8f66438989e4..ba6c8856b4ff 100644
-> --- a/arch/x86/kvm/regs.c
-> +++ b/arch/x86/kvm/regs.c
-> @@ -429,6 +429,13 @@ int kvm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
->  			return 1;
->  	}
->  
-> +	/*
-> +	 * FRED can not be enabled when EFER.LMA=0.  Note, MOV to CR4 outside
-> +	 * 64-bit mode clears CR4[63:32] so only emulation can get here.
-> +	 */
+>  include/uapi/linux/in6.h                  |   1 +
+>  net/ipv6/ioam6_iptunnel.c                 |   4 +-
+>  net/ipv6/route.c                          |  67 +++++-
+>  tools/testing/selftests/net/Makefile      |   1 +
+>  tools/testing/selftests/net/ioam6_ecmp.sh | 349 ++++++++++++++++++++++++++++++
+>  5 files changed, 419 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 5d7f3375cd574fc83f0cd30839b21455c0e79ae2
+> change-id: 20261020-ipv6_ioam_ecmp-ae4ef0a4bdae
+> 
+> Best regards,
+> --  
+> Hangbin Liu <liuhangbin@kylinos.cn>
+> 
 
-Could you elaborate what "emulation" means here?
+Sashiko found some issues. I will fix them and post new version.
 
-> +	if ((cr4 & X86_CR4_FRED) && !is_long_mode(vcpu))
-> +		return 1;
-> +
->  	if ((cr4 & X86_CR4_CET) && !kvm_is_cr0_bit_set(vcpu, X86_CR0_WP))
->  		return 1;
->  
-> diff --git a/arch/x86/kvm/regs.h b/arch/x86/kvm/regs.h
-> index ef46918daf43..5db01693ad07 100644
-> --- a/arch/x86/kvm/regs.h
-> +++ b/arch/x86/kvm/regs.h
-> @@ -28,7 +28,7 @@ static_assert(!(KVM_POSSIBLE_CR0_GUEST_BITS & X86_CR0_PDPTR_BITS));
->  			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_FSGSBASE \
->  			  | X86_CR4_OSXMMEXCPT | X86_CR4_LA57 | X86_CR4_VMXE \
->  			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP \
-> -			  | X86_CR4_LAM_SUP | X86_CR4_CET))
-> +			  | X86_CR4_LAM_SUP | X86_CR4_CET | X86_CR4_FRED))
->  
->  #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
->  
-> @@ -423,6 +423,8 @@ static inline bool __kvm_is_valid_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
->  	if (!__cpu_has(__c, X86_FEATURE_SHSTK) &&       \
->  	    !__cpu_has(__c, X86_FEATURE_IBT))           \
->  		__reserved_bits |= X86_CR4_CET;         \
-> +	if (!__cpu_has(__c, X86_FEATURE_FRED))          \
-> +		__reserved_bits |= X86_CR4_FRED;        \
->  	__reserved_bits;                                \
->  })
->  
-
+pw-bot: cr
