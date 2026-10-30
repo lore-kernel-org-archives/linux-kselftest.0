@@ -1,79 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.155.198.111
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793388259;
-	b=Im7B2Mn+HvVWDemD2qS6lpLnO2V8RoE7PtUeOJ4WwoYpQtkbbMMyz9m9YVjEyAdBL9A9
-	 fSOM/Ogd92BfMwYttnxpzi/0ol12Biavo9ySRiaGrAOmO2DBh801tMc5YOQH1pz9Ybrga
-	 N2r4iBAmOvQxqb4+bca2nsQdQUfaokEyVzp0/47YegAO9wRe6D5Q0/ixpfYtaitOXmQ7E
-	 vr+L12yXq/NuLEcekVpU9f6JZhHbAnRYReuyFz7RJRVbT5rJEiA2C/dMBPoCWCrChX5El
-	 5LDtio68SVdREBN9lZ1RQzgSA4wwCbjGgX5Ae9KCK6FS+SSlgaueMVWtied8q+12X0g==
+	t=1793388899;
+	b=WYzJEzHt5m/He/Cm9yXkN/lZtDsnI9cPBmzQWiEwfkMoVXyXhSWemxpsAX+gBOH8KbAy
+	 cAIIfX/iLk+D9YyGYQABsoLfTS/MpGPTVbNIezXitzL8LgskNAzHFlz67TEqwuLV8zpLw
+	 bjjGfYYgpIjDGCrwaaWhlOWpmFbF13V5NqtpB+35EgHovdz4RzJMam/y2UXv0487HyUX7
+	 /fDjqFTxFWtTZFf1EHh4YaP0uijgORA3kr5zjiSOOZA0nlcEW3FtcqHrhaZoPM3/VCQ1q
+	 cD38fQho0k5P7QJkgBxsg722jyXA+YWR+n2Yk6qfv4hkSIj9NP3ol44aWOFDnjmpymg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793388259;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=pkezIO5EgOZugo4H5IpRr29h/eZHVxjAk1pOcW+pZUg=;
-	b=MU/ZpprX7XQx8EKTki6uLWJwdXhxk6mHwhqVEGZA8ZmVpC0dVT6rxnBynt3gM8su2ViY
-	 PI2EXNIpjE+2vs3upP5/MuNWoF33JRISOuIHQxxu21h5KV2MW2z4yL2AGLL0L27PZ5uUI
-	 co6yP142cMDxNJh4RzVC68sMEPJfzLlaF9RFuhuX41dYFgC6Y5M09tQfMGzcovK3VTVaV
-	 aY8MgsDeCuJcdKCpWbu/hjzXKhZe9FN8W6dKA8EE1MZh/dJOBeHiM8wmjEYBHW3z7sdJb
-	 vCGuftEIUSCnZqPKT/GMCQiknGilkCLeKaCCHuV5OgYEDwwAmMbkDuBkBvM3P5aayAQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793388899;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=crQRzA1NZRP9Kane1rHo0PkkqJUfG1/DLCkh3lApae8=;
+	b=haQXuwOVly6SAtyVvw68J3OlMd6VYnz9FSmbMOLJo5M3r+2ItmiNJwXbQCGI8cQJEc38
+	 vGtJiAmgoOBOKpcAPbgbF0jPC8Yt2MMYk5FMaj0igPgKRqDd2TImhwD1qvFcMp3q98Hzn
+	 iH3HCZDU/VVMPoPNyO8wpdC86yICJ5lCDI+Fw1O5aJ+ZDlAAN1foIVCfLE0dWrlzQofQq
+	 V7+BLyfSD9eu3R2dFATnGfYYf8LwOVjAsrK/J41r0WleK8bbuUXVHsdXxlCJZx3PpU94w
+	 pEu2T03bIHSgy9lzeViYuQnd6fSOZvv5ZekXPGMEzdSh98E5uF401ubcrHDi42Be2VQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	arc=none smtp.remote-ip=35.155.198.111
-Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lv64Q36d;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8EC606A320
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 19:24:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B8EC606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1793388249; x=1824924249;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pkezIO5EgOZugo4H5IpRr29h/eZHVxjAk1pOcW+pZUg=;
-  b=O8VaaUTb2Y1VstjwYeiKAddvhIeQQLA+yprdVdPkNLhYMS2wO0X5V5nI
-   Rn+eNxuqvJzIq005F4aE2O1v5TLsK4MvyDr2VQOTTsk4+5e+36BeF2i/K
-   nN9dUG2xNFauylwajJ2sPrFuX2kgLVC9YVAPT52FkExUoCaR800WxjGaI
-   thIP2F+/G7LsNVgkyPrQno0pjGTcULPCB4K0Dm15MtMNWJShV57Nzankj
-   0W2TfxVyL9vXMeIsMkM3bsw3j2i2BfLv9uO6Yg4lbh6BGucLDJ5A5zObZ
-   JFUzaavnywY2wSQm0nZmPJXn58MKmOpUalflN/e4VMBS/KVlI+q02Tsns
-   Q==;
-X-CSE-ConnectionGUID: XW7VraI7QoerkK5AUENd8A==
-X-CSE-MsgGUID: ER1+0G/GSyOnJbhMTZgHJQ==
-X-IronPort-AV: E=Sophos;i="6.27,186,1787011200"; 
-   d="scan'208";a="32602116"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 19:24:08 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.104:24377]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.63.21:2525] with esmtp (Farcaster)
- id 7f75e6f1-28f2-4c6d-bf2e-bec889c1f73e; Fri, 30 Oct 2026 19:24:08 +0000 (UTC)
-X-Farcaster-Flow-ID: 7f75e6f1-28f2-4c6d-bf2e-bec889c1f73e
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Fri, 30 Oct 2026 19:24:08 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Fri, 30 Oct 2026 19:24:07 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: NeilBrown <neilb@ownmail.net>
-CC: Miklos Szeredi <miklos@szeredi.hu>, <fuse-devel@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, "Bernd
- Schubert" <bernd@bsbernd.com>, Jim Harris <jiharris@nvidia.com>, "Horst
- Birthelmer" <horst@birthelmer.de>, Luis Henriques <luis@igalia.com>
-Subject: Re: [PATCH v6 1/2] fuse: add FUSE_OPEN_ATOMIC
-Date: Fri, 30 Oct 2026 19:24:01 +0000
-Message-ID: <20261030192401.2543699-1-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <179332437497.269288.7305999595462479305@noble.neil.brown.name>
-References: <179332437497.269288.7305999595462479305@noble.neil.brown.name>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F65C606A31C;
+	Fri, 30 Oct 2026 19:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lv64Q36d
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D141F000C1;
+	Fri, 30 Oct 2026 19:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793388898;
+	bh=crQRzA1NZRP9Kane1rHo0PkkqJUfG1/DLCkh3lApae8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lv64Q36dqcfNzh9rv+WZ16OOePlRH6JNyTyhtKgdajymrh/a6wJkIxQKelCoEpCG8
+	 K2NBflVPluGAlDJJ2swH25jXWDWOP4L7LAOUbjA4jnzZ1jgPCXu6Bi1wbxYPh+OUuf
+	 4pdLu7cVa2M2/0ls6FV6C5o60me2UUMxN301lcahnwnMTBVPQAJMMAOmjiiiJwmTfC
+	 PmTui3Qtkx0jEoxWBXLWf9P5eo7HivRwmVMwcf6RKv4eby6q9gfjGE8nmL/zr5bJnP
+	 JilI3c50W9J2qggRmcNVnNGPmIRpiMohfOiB76OcU2CRIJIowq2wFrUPDRyy0icpHB
+	 VRXI88NVcfgsg==
+Content-Type: multipart/mixed; boundary="===============1483456430051234551=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,36 +49,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Message-Id: <09475f69602098aa106af66960f75de688d53ca24efdf8dcdc6f91c0d2a59c6e@mail.kernel.org>
+In-Reply-To: <20261030-ftrace_in_test_progs-v1-1-aa50c5dd1ccc@bootlin.com>
+References: <20261030-ftrace_in_test_progs-v1-1-aa50c5dd1ccc@bootlin.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: add helpers to manipulate ftrace
+From: bot+bpf-ci@kernel.org
+To: alexis.lothore@bootlin.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 30 Oct 2026 19:34:58 +0000 (UTC)
 
-On Fri, 30 Oct 2026, NeilBrown wrote:
-> > - any other file: the server returns the entry only, and the VFS opens
-> >   it;
->
-> Why is this a requirement?  I understand that the server *may* choose to
-> not open the file, so that the open doesn't happen until after the
-> permission check.  But shouldn't be up to the server to decide.
+--===============1483456430051234551==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This doesn't have to be a requirement, for regular files the server can
-open if it chooses to. I'll reword. Are you also asking why this is just
-regular files and not directories too? I could look into that if you'd
-like? For what it's worth, special files should never get opened by the
-server on this path, the kernel opens them itself.
+> selftests/bpf: add helpers to manipulate ftrace
 
-> > The VFS checks the open after the reply, as for other ->atomic_open()
-> > filesystems, and the kernel releases the file if the check fails.
-> > FMODE_CREATED is set only when the server reports FOPEN_CREATED.
->
-> The above para seems to suggest that the server might open a file that
-> wasn't created.
+TL;DR: Restoring ftrace filters in trace_helpers.c may abort on a saved line
+over 126 bytes (128-byte buffer), leaving the filter empty, so all functions
+get traced and global ftrace state isn't restored.
 
-Yeah, atomic_open is a lookup+open on the FUSE server, and that open
-might be an open-create or just an open. Either way, the server might
-open a preexisting file. I'll try to make all of this clearer in the
-next rev, once I've gotten any feedback on directional changes here.
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> index 6d7a4b8c4ab8..1f26a057a810 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
 
-Thanks,
-Jimmy
+[ ... ]
+
+> +#define CHUNK_SIZE	128
+
+[ ... ]
+
+> +static const char *tracefs_next_line(const char *content, char *buf, size_t size,
+> +				     int *err)
+> +{
+> +	const char *end;
+> +	size_t len;
+> +
+> +	*err = 0;
+> +	while (*content) {
+> +		end = strchrnul(content, '\n');
+> +		len = end - content;
+> +		content = *end ? end + 1 : end;
+> +
+> +		if (!len || end[-len] == '#')
+> +			continue;
+> +
+> +		if (len + 2 > size) {
+> +			*err = -ENAMETOOLONG;
+> +			return NULL;
+> +		}
+> +		memcpy(buf, end - len, len);
+> +		buf[len++] = '\n';
+> +		buf[len] = '\0';
+> +		return content;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static int tracefs_restore_file(const struct tracefs_ctl_entry *entry)
+> +{
+> +	char buf[CHUNK_SIZE];
+> +	const char *content = entry->old;
+> +	int err = 0;
+> +
+> +	if (!content)
+> +		return 0;
+> +
+> +	if (entry->kind == TRACEFS_CTL_FILTER) {
+> +		err = tracefs_write_file(entry->path, "");
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	while ((content = tracefs_next_line(content, buf, sizeof(buf), &err))) {
+> +		err = tracefs_write_file(entry->path, buf);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return err;
+> +}
+
+Can a saved line longer than 126 bytes abort the restore here?
+
+tracefs_restore_file() splits the saved content into a buffer sized by the
+read chunk constant:
+
+	char buf[CHUNK_SIZE];     /* CHUNK_SIZE is 128 */
+
+and tracefs_next_line() fails the whole restore with -ENAMETOOLONG when
+len + 2 > size.  The kernel can print much longer entries than that.
+print_rec() emits the full symbol (KSYM_NAME_LEN is 512) plus the
+" [module]" suffix, so mangled Rust symbols or long C names with a module
+suffix can exceed 126 bytes.
+
+For TRACEFS_CTL_FILTER entries the file has already been emptied by
+tracefs_write_file(entry->path, "") before the long line is reached:
+
+	if (entry->kind == TRACEFS_CTL_FILTER) {
+		err = tracefs_write_file(entry->path, "");
+		...
+	}
+	while ((content = tracefs_next_line(content, buf, sizeof(buf), &err))) {
+
+so the restore stops part-way, every entry after the long line is lost, and
+if none were restored yet the filter is left empty.  For set_ftrace_filter
+an empty filter means all functions are traced, which is the opposite of
+the original restriction, and the global ftrace state is not restored.
+
+Should the line buffer be sized to the actual line length (or should the
+content be written straight from the saved string) instead of being tied to
+CHUNK_SIZE?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41113297251
+--===============1483456430051234551==--
