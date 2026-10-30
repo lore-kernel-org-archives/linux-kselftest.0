@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793361220;
-	b=gJTT7/iQLEpDC/b0B6klyG9l40Q3/+iq2P733b6dyJOZGT2JpGHJCtsNffffu5IAnnr9
-	 p5L68FM+l8sK8QoDP3Fk1jJoa1o9Si0vpqJPupWN8j8G0zpX63OGaLXF2Sn04p1zno6JA
-	 YHwB5WP5Bat2yO+ZUTALGUIaHOfSDWiGc4mpOEmq6VmlDZzuOJhZ5GaUBlQ2/hVJhelWU
-	 Uxhq/PsEVKWnOR++7bn+xMgDyfUrw7FU9ZRZNjg1d1M91hUf2InZdxFYD8bqvn+fUhGTa
-	 vNq+o7slEZdmrwr7iFsMazTuG4P4UmYoMtYggDkTkdQFSE6iU232MoW2J1fOwDTsgsA==
+	t=1793361224;
+	b=iBgaEpbffHdln8I4V2T1Olj1PyIdxHh4hSCUmGYArWGgYK+fmA6gJGyZM2ZTBy+gB/rt
+	 9rauuuDBE5uLpF9X3CKPNAAWGWz+MFOumljYgsE+2WKn8PXHltRs8lQALlSVLyqokRopf
+	 D/vNFx7rFEvNQ76k7zFxzH+r5hAoabpdiSpkNNugtnwmQt8tfwnx3vBn98ft5RFpoHJZB
+	 3aujcC1rRe+CxSQHmqLu9VCQW0+fBpfSSZgft2izKV1oVBU6Z+ijdKG3Ga2I1iV2h6qZm
+	 YQYyLjWzfSWSLTGfhA2Jebzh1jjAQXpQFg1q5TVyMsFGdNK+txLKzta2oEP24ZxHkZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793361220;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793361224;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=TKWZuZG+bW7642rYW3zpPqTbn0tZZWfVUvRwG7l2gZQ=;
-	b=pitBZzxkSGpw014SrZxid6Z1ne3JhAEwf80fMFirV2BeTBQW2nA/WnUSziUxK9dJSbG6
-	 k5887cCKAYla8K3hjfiTCGWB2rPdzC3KYY3gI939BtpTcOtio9jokysn5/A3ZnP8iZsBV
-	 67Nqqkq3BXu2chuasasKUrJWYyCXj200YfiCSZkiFv4w6h3HbmdwwvNSJT9vOPHwPTvk+
-	 ZFv8hMAnj0p/MX4JZaTWk2+IrEE3RfeADFrKiyYDMP9qI0gSQOPpAPajdG/uTvYEUAdT3
-	 n/on7U9W7r8J348cnY4T/xWrJxAk9gzq1C2aX1inOdDgnv4x6sh8UOYA5Ma7q37kNpA==
+	bh=6ruo65qqTejJkM60HrkQCd1JUBkgnydByGT5wOincoQ=;
+	b=K/BOxJmKqPLrM9u2/NzDitMQ+9dZIaNoxiJa8Uiz9QOJ/IpvbJTt97gIJJyyf5OSVjt6
+	 V19AalQgG5tmxetpdFth+DzBlbQZN0WZx7a5h5OwMgvNRTjtzJvO7I2eu0PqTGBxjOBwr
+	 2J7nESpT1nuycmpNI8oQLnWI02SNBwyEhPzyoKNJZloR34+Bni+uNTdEk183u7PyLzZ+Y
+	 +kNHR+EKBo2L4GiNMwiGA9a5dIk9TSPx7FJuvDdA1W33JwMwZzIXwKZPtQZ+o/LrGONR7
+	 /t24ZGoODe9Cz+l1c4zlnxJp80526WKh+ssZfZ4sbr7MRxZDGX4foGbtk3rH2sUJ31Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="CQFo/ONj";
-	arc=none smtp.remote-ip=74.125.82.41
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=F347P88d;
+	arc=none smtp.remote-ip=74.125.82.44
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E51606A337
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 11:53:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C6E51606A337
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE85607085C
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 11:53:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5CE85607085C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CQFo/ONj
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1a3c08d6928so719749c88.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 04:53:39 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=F347P88d
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-188406bb948so599688c88.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 04:53:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793361219; x=1793966019; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793361223; x=1793966023; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TKWZuZG+bW7642rYW3zpPqTbn0tZZWfVUvRwG7l2gZQ=;
-        b=CQFo/ONjIW7wqxbYDitPhH8+58GSQlnQ4RcQlLnwhJbh/RFvK34C9PPFX2MUuV06AU
-         234Kz++dk8rMS/BNohsLznOh99O9pkjP0a/kWno3kvjGVfxc+MjUdWskfH76WOroozFU
-         oxArs1yu0GWvsfmLal8FR/45YJ/3aqo5qdoCYwhMEPrr9hTTXFvqlIX9kG25LTRi9blh
-         ZceuIbFbA9mwP2kY8v5YulFL0XxR0qC7A3fp40gGG9RmaqgWdDsSrwqChqFcvIbktN65
-         3a/uksYlJ26XniTjcB4zJqS54iF99DAFhsuItMaESqzWaZwRSiQFro3mKFrT4rFlBxUK
-         QamQ==
+        bh=6ruo65qqTejJkM60HrkQCd1JUBkgnydByGT5wOincoQ=;
+        b=F347P88dkcNAwI/Py3aXKr3+GIgiMhP4IWCqBMWkNV7OXrzJ2M6pEPoVHM6sqTsaUm
+         XD3pg/LaMNPZv3sPxiypCmqUB7mvFhieZnQ3uMqxCM04uVto9LUn58B1wIsAi9f5ETEI
+         j/QbfrJeNkLI+V+SjFVhhufAkqxtCHXaHVMUvv/i4Tezyfe+uoFsXv4MGwcdObizxLZW
+         xE9jFwFHDEE4lBlq0KV4ePg2oDqRbNpO4rQ3beNX2yPaOCWWKeDnS5gCLTaA9q4ql/v0
+         euV+/1RoBqCqKFpGP2EJNp3zXpht0aB2Y5WecI6trv1GqOb9rj99mAvbV0gVgboQzIyh
+         UWwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793361219; x=1793966019;
+        d=1e100.net; s=20260707; t=1793361223; x=1793966023;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TKWZuZG+bW7642rYW3zpPqTbn0tZZWfVUvRwG7l2gZQ=;
-        b=h2PE3uVu6ZO+RktZ04Abukhx8BmrnkyRwz5Ok+JJ9Q/quhT1B+F0S8GwVO73hwG01G
-         2ucU/MMYWB+6oKMtGLh9GtGS2BBJwkNc3OtLjIqJph9OoCSaIuRbMMA7X709oF1NDLw1
-         LMfZD72pzMWbFxbaZ+e/caSSUXkAoQoTCQbnuhDf4ebsCoIhtamMaUEy3eTsS23OFjEL
-         dFQ7L2XA0wsJcgcl52/yTtUQfXAiViTu3eoQc59bpnHRtloy46RFpsVzcvSIr51IGrsm
-         G9QU3PJv1z0gZgrgR54TVA2pUnR2DLmzlii7pNc73diE13Jlgry8RiCoodkt3tf2PeFp
-         7JYQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzwgHpAtgNnJmOgpLhIfTVopJcXbNY1bmqcJYEgrNc2AhWLKFJbOszVhgc/MIJOFLyPMER+S29y0eX3tf6AmBA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKjlakmrPsJneSJHntsA2wsV/bTTqGIgTP1QzZFtOExP8YX22kf
-	TSLiCekmGPnFDrj9GfLAxmnDTWY/wyZqEDvgQz/2J+IrwjL9IwKxIVJd
-X-Gm-Gg: AYBFou3yXg0Ft5cCZuIjwxv6CeiQhBxUdWqFqdHPTEr3RYw+r4jqGr5BOjWK7MuvBTo
-	oQPR9jJcgUotYGLysDex693kDBBhT9lBUUbeZYJyjvz8Hyrsx37BrRjK6PrTuTD5V3s5acCAwDA
-	+GIgaA3Nqp5FKnmphidZsungZNV97UJ/76P7ftp+wciH9xhtweXFVOr9+VZdW71nkOeplmVeAV6
-	eLf09kRS8R03lwRMcbnr/0tySHE25qYalvJ01YnqH1PryDfi/Usasj7xAPc/x+nQd/Rc1xIliEP
-	aqrt28bxAYH91odASlQnFAsOdZ0yDQyO4OFWLjhToz/s2fIMMVrCkOC79Ed0hoj9arq3djvfpk7
-	KL0SJpC+qQ0FMwpzRpZqIoO5i3ceKF+joDb/EXeEaPMUkN1l8Jv8XPT0VgNI33naMsZIDNrLRFF
-	ZssR3K9bvMW4i4fFwiZ3AzDzHMZG4BnVGuou/7/A6hNm1Jaqns3YW/JvoWRqKvVnvpX8kk+JmoG
-	ochOfQNJrJ3WOnVtEnodi7YT0cVhLK3ha0+q8A62SuPZ63FFIOrvTJeB9lTh8NmBnmV9eLOMJ3F
-	ZRVc1uVbGN/pSsy7ft9othCj
-X-Received: by 2002:a05:701b:4213:10b0:1a4:fac9:aeee with SMTP id a92af1059eb24-1ac56d95c0amr2878019c88.4.1793361218584;
-        Fri, 30 Oct 2026 04:53:38 -0700 (PDT)
+        bh=6ruo65qqTejJkM60HrkQCd1JUBkgnydByGT5wOincoQ=;
+        b=tTCREFUbK6VWZu1K6Bk0QTTYygKggracKg2ny61EBM2iZxOSgRRiqPGSAYL31Zgegv
+         Y84kQwqeS8fnl0ZOCEKJvH+sD4ffEgCMcSWBoaWSC0k5TNXzIO+Gk3fBnW1YWz0q8S5X
+         z7MRBh+GPCkNlGD/FrjW3iNFnMUrXDXr6lFfXydWhlzLayTNS0v8ZeHUy+0lWKztSpOY
+         UHwiPXWnojPzXxCgb0sNY0ZF6XEK6eIxKpdo4XS8PPyM7JXIfwqABfrkrfjUdfebEMl2
+         EjaV8pneZBon37/alI9zCGDB1z6C/1WK4II2Gp6Oe6OC7OHHbN4L0eR8rvYhSfLeCehQ
+         etHA==
+X-Forwarded-Encrypted: i=1; AKwUvBwHRl4pJzakTZlT+/cmJr4WJIzCgvs9A46REJcU1CksLalsQu6y1R33qrr4XQwjFA/Fu45+cSa1v2g/Pf0NRdg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIrTR4iYxpwoMJTULuj9estKc2lgO8kxYsraPXgoYx+a/9mMLwj
+	kLf+PDAuv7IJbsVsrnuT/1XNVnzFeDibQ3GMLGBRU+L9GCqVoiRyc9E+
+X-Gm-Gg: AYBFou3MECPhvw9DaK9KnOmEMRWceUq08HC/jigKm1bopbDR0grJwweZkdoZAAYnbPf
+	D8krJUUkdSYvrA+MmlJV5KOo3VpVqOhwfkKIwui5+G9BGquQ1tfZv7cqH1J5ws/h7nNLmNTkltO
+	6SMCnXxrMPnhNv3ncy/gRs5CKOrpvKXL5CZ1j8Om+n/JgNvtv2GDoTHKHas7Gn0/1YAYU/6aXCF
+	xHWW5B3wRmUvFDRj57re5H1PZnCjFRGZRPNZ6X4GroErCbjUAHCuFmt/2DhVQRFZUGl8LYcGuzH
+	vMGLAMYNYm/oBoMt3eT4tTp0nta9PxJpR7cTG5R6CNNQ5v4XJcqzNg1rd+0XB2fK4naZoC5B3E5
+	V2NU8n2QEFLvkb2exGZj/IDQiMq5HCIOcX8bhfP5GixosgdhA9RVIyP39ceNdcItweZpmlv8E9i
+	GIg+nlA1w+5aJoIC+5Ri/Rqxt9JngksFHKWboShie9geSU7sZK2WaY/zIPYYNRRU5yBTEy8i/CS
+	EiGG88I9f+naN03w7bUvCsqjwhw210Qe2Hu+1OmbyYHtKLEDktIZBtXCfac+K7GJFCxYS4m0yU6
+	9kg/Ea8ZVxrJ61SEY3F9j1cyeJh+OqLqhk7zrsBI/LQ8pw==
+X-Received: by 2002:a05:7022:b047:20b0:16d:dd5c:4261 with SMTP id a92af1059eb24-1ac5e6f4e87mr3095742c88.46.1793361223437;
+        Fri, 30 Oct 2026 04:53:43 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.53.33
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.53.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 04:53:38 -0700 (PDT)
+        Fri, 30 Oct 2026 04:53:42 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 30 Oct 2026 07:52:02 -0400
-Subject: [PATCH bpf-next v2 17/22] bpf: Inline bpf_loop() calls through the
- patch list
+Date: Fri, 30 Oct 2026 07:52:03 -0400
+Subject: [PATCH bpf-next v2 18/22] bpf: Apply the patch list without a
+ verifier env
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,7 +94,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261030-bpf-verifier-patch-batch-v2-17-55cd43439f7c@gmail.com>
+Message-Id: <20261030-bpf-verifier-patch-batch-v2-18-55cd43439f7c@gmail.com>
 References: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -110,145 +110,78 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-bpf_optimize_bpf_loop() patches the program for every bpf_loop() call
-that it inlines, then points the call in the patch to the callback with
-the start of the callback subprog after patching.
+Rewrites outside of the verifier, like the blinding of constants in
+classic BPF programs, have no verifier env, and core.c is built without
+the verifier as well.
 
-Each inlining costs O(prog->len), and the call can't be pointed to the
-callback before the patch is applied.
+bpf_patch_list_commit() needs the env for the aux data and the tables
+of the verifier, so these rewrites can't use the patch list.
 
-Queue the patches and commit them once. Set the call relative to the
-patch placed at the bpf_loop() call in the unpatched program, adding
-the growth of the patch itself for a callback behind it.
+Add bpf_patch_list_apply(), which builds the new image of a program,
+puts it in place and moves its poke descriptors and line info along.
+Without the aux data and the tables of the verifier, it can't remove
+instructions.
 
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- kernel/bpf/fixups.c | 62 +++++++++++++++++++++--------------------------------
- 1 file changed, 24 insertions(+), 38 deletions(-)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/core.c            | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 84aaaa4632aa3..217771aca0161 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -2845,11 +2845,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 	return 0;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 9562665757a79..b133bbaf614ac 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1118,6 +1118,7 @@ int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog
+ 			 struct bpf_patch_image *img);
+ void bpf_patch_image_free(struct bpf_patch_image *img);
+ void bpf_patch_image_install(struct bpf_prog *prog, const struct bpf_patch_image *img);
++struct bpf_prog *bpf_patch_list_apply(struct bpf_prog *prog, struct bpf_patch_list *pl);
+ 
+ /* single container for all structs
+  * one verifier_env per bpf_check() call
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 0447e3b4cfa48..10d2c37f81280 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -880,6 +880,37 @@ void bpf_patch_image_install(struct bpf_prog *prog, const struct bpf_patch_image
+ 					      prog->aux->linfo[i].insn_off);
  }
  
--static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
--					int position,
--					s32 stack_base,
--					u32 callback_subprogno,
--					u32 *total_cnt)
-+static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
-+			   s32 stack_base, u32 callback_subprogno)
++/*
++ * Apply the patches queued for 'prog' without a verifier env, which can't
++ * remove insns. Return the patched program, which may have moved.
++ */
++struct bpf_prog *bpf_patch_list_apply(struct bpf_prog *prog, struct bpf_patch_list *pl)
++{
++	struct bpf_patch_image img;
++	struct bpf_prog *new;
++	int err;
++
++	if (!pl->cnt)
++		return prog;
++
++	err = bpf_patch_list_build(pl, prog, &img);
++	if (!err && WARN_ON_ONCE(img.del))
++		err = -EINVAL;
++	if (!err) {
++		new = bpf_prog_realloc(prog, bpf_prog_size(img.new_cnt), GFP_USER);
++		if (new) {
++			prog = new;
++			bpf_patch_image_install(prog, &img);
++		} else {
++			err = -ENOMEM;
++		}
++	}
++
++	bpf_patch_image_free(&img);
++	bpf_patch_list_release(pl);
++	return err ? ERR_PTR(err) : prog;
++}
++
+ static void bpf_prog_kallsyms_del_subprogs(struct bpf_prog *fp)
  {
- 	s32 r6_offset = stack_base + 0 * BPF_REG_SIZE;
- 	s32 r7_offset = stack_base + 1 * BPF_REG_SIZE;
-@@ -2859,9 +2856,8 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 	int reg_loop_ctx = BPF_REG_8;
- 
- 	struct bpf_insn *insn_buf = env->insn_buf;
--	struct bpf_prog *new_prog;
- 	u32 callback_start;
--	u32 call_insn_offset;
-+	struct bpf_insn *last;
- 	s32 callback_offset;
- 	u32 cnt = 0;
- 
-@@ -2887,9 +2883,7 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 	 * if reg_loop_cnt >= reg_loop_max skip the loop body
- 	 */
- 	insn_buf[cnt++] = BPF_JMP_REG(BPF_JGE, reg_loop_cnt, reg_loop_max, 5);
--	/* callback call,
--	 * correct callback offset would be set after patching
--	 */
-+	/* callback call, the offset is set below */
- 	insn_buf[cnt++] = BPF_MOV64_REG(BPF_REG_1, reg_loop_cnt);
- 	insn_buf[cnt++] = BPF_MOV64_REG(BPF_REG_2, reg_loop_ctx);
- 	insn_buf[cnt++] = BPF_CALL_REL(0);
-@@ -2906,19 +2900,19 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offset);
- 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
- 
--	*total_cnt = cnt;
--	new_prog = bpf_patch_insn_data(env, position, insn_buf, cnt);
--	if (!new_prog)
--		return new_prog;
--
--	/* callback start is known only after patching */
-+	/*
-+	 * Note: insn_buf[12] is the BPF_CALL_REL instruction. Jumps out of a
-+	 * patch are relative to it in place, which takes the place of 'cnt'
-+	 * insns behind 'position'.
-+	 */
- 	callback_start = env->subprog_info[callback_subprogno].start;
--	/* Note: insn_buf[12] is an offset of BPF_CALL_REL instruction */
--	call_insn_offset = position + 12;
--	callback_offset = callback_start - call_insn_offset - 1;
--	new_prog->insnsi[call_insn_offset].imm = callback_offset;
-+	callback_offset = callback_start - position;
-+	if (callback_start > position)
-+		callback_offset += cnt - 1;
-+	insn_buf[12].imm = callback_offset - 12 - 1;
- 
--	return new_prog;
-+	last = bpf_patch_list_add(env, position, insn_buf, cnt);
-+	return PTR_ERR_OR_ZERO(last);
- }
- 
- static bool is_bpf_loop_call(struct bpf_insn *insn)
-@@ -2940,7 +2934,7 @@ static bool is_bpf_loop_call(struct bpf_insn *insn)
- int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *subprogs = env->subprog_info;
--	int i, cur_subprog = 0, cnt, delta = 0;
-+	int i, cur_subprog = 0, err;
- 	struct bpf_insn *insn = env->prog->insnsi;
- 	int insn_cnt = env->prog->len;
- 	u16 stack_depth = subprogs[cur_subprog].stack_depth;
-@@ -2949,26 +2943,18 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
- 
- 	for (i = 0; i < insn_cnt; i++, insn++) {
- 		struct bpf_loop_inline_state *inline_state =
--			&env->insn_aux_data[i + delta].loop_inline_state;
-+			&env->insn_aux_data[i].loop_inline_state;
- 
- 		if (is_bpf_loop_call(insn) && inline_state->fit_for_inline) {
--			struct bpf_prog *new_prog;
--
- 			stack_depth_extra = BPF_REG_SIZE * 3 + stack_depth_roundup;
--			new_prog = inline_bpf_loop(env,
--						   i + delta,
--						   -(stack_depth + stack_depth_extra),
--						   inline_state->callback_subprogno,
--						   &cnt);
--			if (!new_prog)
--				return -ENOMEM;
--
--			delta     += cnt - 1;
--			env->prog  = new_prog;
--			insn       = new_prog->insnsi + i + delta;
-+			err = inline_bpf_loop(env, i,
-+					      -(stack_depth + stack_depth_extra),
-+					      inline_state->callback_subprogno);
-+			if (err)
-+				return err;
- 		}
- 
--		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
-+		if (subprogs[cur_subprog + 1].start == i + 1) {
- 			subprogs[cur_subprog].stack_depth += stack_depth_extra;
- 			cur_subprog++;
- 			stack_depth = subprogs[cur_subprog].stack_depth;
-@@ -2979,7 +2965,7 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
- 
- 	env->prog->aux->stack_depth = env->subprog_info[0].stack_depth;
- 
--	return 0;
-+	return bpf_patch_list_commit(env);
- }
- 
- /* Remove unnecessary spill/fill pairs, members of fastcall pattern,
+ 	int i;
 
 -- 
 2.43.0
