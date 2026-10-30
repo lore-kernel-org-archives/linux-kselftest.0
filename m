@@ -1,61 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793360830;
-	b=BKdFxha1DxZXVugQLiQ5A/gmtIsqy09XJFBP3USxE8JMBgf9cHc2AxBKBaYn3dG2GSgR
-	 6VJxVenONEM27JKYqcN3skjAyG9WrS0MD1IN6B/pXqQIZhKRKWYrGcKaUcPV/5dCV5irP
-	 +p+njSfaTrL6GAn7vAwSsQdw8erLtcB6SY4we0dXMLPqDPv60nX1TxU37xWuE4KLkZNIN
-	 x2xLN6rvOvh6aKUYIdWVb7ibmO8YYLenHZ9KowqN89Dmh8rOir4XgCIDPcU5HU19w1sef
-	 KMEdQWCaKdtcmyZu7NpDy31DcbQtliO7lbj3nMidTTRlWXXPJDA7e7o8+Ru2IkXyeSQ==
+	t=1793361116;
+	b=xXYlveNI3Rk6Yl4vZt72pCcW3DvBIusM9KA14amQsAlkzd4PfeOqCnlz3qVgkCsajGTP
+	 nLl8cAS/XahFfEVBSdBHhjm+OrCJRqYxCi4gzLga94dVfNt9hHFEHaHRhy4I4H3jgIJOe
+	 iS38v8wletJawfvthnFyyzfoxxXBYZPpeGfIPgp3JoMY2k49S7RMp4+sLIFOkfHut0uS2
+	 u4ZRXIbS1LvCYW+1g9LwGRWyeshridmFifEwie4wh+RVeVZcENJzKvN72gBCBiWmx6M+m
+	 +lHM4yxiE6fIZOkj2zZsm9wOCpdwV7ga/EiYfUrlw/ErtvYwSyI2auzHz1WQ9JA179w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793360830;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=bTRePxoUjak0eijJFB471LMpNq/VaGSQo1sU1mVSCbU=;
-	b=aoBcrTZG2bwKq/0Yt0vxwgVSXqfJjUKCqvmu7PY64ONi2R0SlHGhcTnF6nXnSUGmJSKd
-	 x8nJjcXhuTp7V0rzSg7pJGiecIbY7mQoMlBKndWKsqwkmRV2vUcmvlUniW5Q7vZDHv0i2
-	 /Pcqqc2M31Ab7cpCUqW26GGI/Nlr9eDgNl+XWJtRCLTjsWmFOglv2MB+zJLcddADHvAUc
-	 o/0aKqLLmxjoVHqaYE52X9io2uMHwCTv8Po+LmBGj7SQ6aQ1yMAhhEnw6xsIRVwY6tT+Z
-	 lbGivAtS0NdKAEOJpeCv1KH032lRmO97FsrafoEG9mm+3guNCCsKI3lSMF12KGZxn8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793361116;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:To:Cc:X-Mailer;
+	bh=n9kcoaXq9ZX8rpwr/RlmQNWBtCpFTUM1yYrrw2E3eQY=;
+	b=4bNM3NmlUzekxGmEW8qhZbRQuZi5D5MxhywMsXwL9CB0dCeL8lYh6LcYhrglyFYziM5/
+	 LWiTfzz5Qmj586ObQrXBTlUvMzA1UltDCXPxCfh5VReV0ZAAZtWjEGkBla0d4IBVmN1co
+	 DrVOlfcEVr9ZtfjcgeGPLNCTOfpDzrk/V7Ll/22g228VjYCUTtIsoQID5iaMdv6zA0XRW
+	 nGfHC0r86qdaTir27O2OHpjfSdTidR1JNapPcWpIItxJCi/udrpRKqWpxCh5qmvYjg5T7
+	 LvHXNlYuRdyQfh08AA9bLe24/aZSDWJk1e4xaajIEAXHlkh00h4cibTeNCWdlWlPQJw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlpGgHa5;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HevXf8d8;
+	arc=none smtp.remote-ip=74.125.82.47
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8DB606A32E;
-	Fri, 30 Oct 2026 11:47:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE0C606A31E
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 11:51:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BE0C606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlpGgHa5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA1D1F00A16;
-	Fri, 30 Oct 2026 11:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793360829;
-	bh=bTRePxoUjak0eijJFB471LMpNq/VaGSQo1sU1mVSCbU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=LlpGgHa55EM63wRvlBRDUbID7rGkg3bwb68yN9d8oJe/TpX6Klp+Bq+W5EF1aQ7CE
-	 9naEy9TVELlQLc3KtmeNc6c5krsVyU8wdCdy7FumHB7aLFyTbN29x2cwp9oaASoWCr
-	 y0sM0W4zmWpdF+xBKZldGxYNRhelDp4KieIbwbaiTHSez9aMrQrsjuswzWtYWwQPLH
-	 LIreZAgp98LZAZ86hjfxFGythTONbtBHYaQ+qLkJ5hmNrcFwVv72YcQHgAqEeASBUl
-	 oECgVNrrJ9Eq/PsOyUBfuHUDBDu2grgXXvsaTZfjD66RCI7luu/bcqq65VFkkWbaO2
-	 H7zmuZzOXW2kA==
-Subject: Re: [PATCH 2/3] ipv6: ioam6: use transformed packet nexthdr for ECMP
- re-lookup
-From: netdev-bot+sashiko@kernel.org
-To: hangbin.liu@linux.dev
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- justin.iurman@gmail.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- liuhangbin@kylinos.cn
-Date: Fri, 30 Oct 2026 11:47:08 +0000
-Message-ID: <179336082844.3134.1265197633714491521@kernel.org>
-In-Reply-To: <20261028-ipv6_ioam_ecmp-v1-2-9b6715b6f4c0@kylinos.cn>
-References: <20261028-ipv6_ioam_ecmp-v1-2-9b6715b6f4c0@kylinos.cn>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HevXf8d8
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-15943c9c005so1059776c88.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 04:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793361116; x=1793965916; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=n9kcoaXq9ZX8rpwr/RlmQNWBtCpFTUM1yYrrw2E3eQY=;
+        b=HevXf8d8OLPlf55rrpk2CJ2RYu0Pok6eNVW1u67C3MLD1VKcGuWmoeGKx9unYYZB3d
+         vbN5SD9iZgXFEV5BUMja5rI2DrtE3/dqfAMtnqzY5QDiLS6PcoJHEDg+uWG09nmyDREY
+         BKHrDnEYxA8wxEDyr+EFwMdffM7oKdRG1LJGE0HvaMNiOpgn/ucUPXjqpRH/GS5RRCEs
+         ZICuZMN8emg3UF6hGfCqNymAUxO7f07LU9kmH+96QyTLV92MJjZfofrfFwEKYhaiQkN1
+         nMO5dXFXOSyQ6YnU9Vb13vIYVurOOjbHcSYYVaMhXkKQb9flw6LQLq7kaig0GWUTmd7l
+         DuhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793361116; x=1793965916;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=n9kcoaXq9ZX8rpwr/RlmQNWBtCpFTUM1yYrrw2E3eQY=;
+        b=R4gbLQNZlzmdS4ujubWWQhBj/ahDcqQ9dd0BEqiUH3bQc0SFEDhwukeUT6S67TzgcB
+         x0M6MwEk/ql4zxY0wRnya6SRfIXn8QhP6xIErUm0o3LxNOd969HMhQOQrG19j3cYn5wl
+         TdAhFb6K0o79J0cDMONamGL+KrRDkXSRKIcUKqyt97FzfwLKnA3vWCPM/6A6fKs+th7p
+         aTC1Bb12eXczitSHiZ1kGXzosLHe8Iu1V/ziQ/JpBH5K7167l0PtlLMNv6Xhzw2bmXjw
+         YFBVMzG4726bXb+HE95J2E9RMnnn8nPskPb/0/DmBjnMXGsszdyQ0Vk8gYvTAXXdEFns
+         Ox0g==
+X-Forwarded-Encrypted: i=1; AKwUvBzWhUT/qV4Mu9rqXHNDa8r1l7koYvGWjKofVxWqhMAxYjYenM5Ld436YbxUTU6P7lrdtlSDnsKTtIqWhkdNYEA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJvU0x4ilelhgtceIPWdDSDiP18QhVNRMupLUYuDyTXtbYuJftj
+	Cc48YsMxgY5kWH4U0MlUdO6UnL8+4cw9+ukFNOt0ZOsvkQvOexziR1C1
+X-Gm-Gg: AYBFou3lgACcpAW61WfMis2EwH1BbMbyIk5YNEPm2wHA8vJQGGtj6ThL0at+UfQh8mn
+	koHJAkYxNg0mBszF8D0VEbkjfcNfZt9CkJohbhSQmo4ERBz6GFCAPLGtyKuTXV1Djcgfb5YL60B
+	YiNPo7RaGQyHGKEznpM0ei54e85mIYwz37p2kWx2kcRi+23y1EwBv+7YF6OvCHmCWEkHuBaIKH+
+	WtW02li934kXDgIIaQq3Qn0wpqNfh8zom3ITNhQan4IPIlx+7IGRMqw+rPiHGhv8LgpGu8tYyRE
+	RFbw/MKkDVm9jd8/3q3aWmFQJ+6EylTUQoa79B7kTcSVKtwKiM4VR3QYk6LS2/FSAUJhnd8Eo/v
+	VMv1a/RGfwLoWboOwiTvd/3TfqASuywrpJJP6Jylb/0SNU869ElpjPf0mqvlZTLiu0AIXz/JJQf
+	mHO+7a1CtMiR7AJuTUXXXsvEsUt0NAFUBx8CyKUNj9EQnzhttLLQLEae4RM9vA1+UvQmo1HWMRS
+	SvrbMiwaXIyxuHjqLTDH7zaCx1MQVCJYAlDbmC9Q+fhhf9qgBFe4Ey43TQKN8i/FoFbaPUhB5lD
+	lOtG6zSY114/yKrIzn9Cz9nG
+X-Received: by 2002:a05:7022:b90d:b0:163:a197:722d with SMTP id a92af1059eb24-1ac55777052mr2693722c88.4.1793361115315;
+        Fri, 30 Oct 2026 04:51:55 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 04:51:54 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Subject: [PATCH bpf-next v2 00/22] bpf: Replace bpf_patch_insn_data() with
+ a list of deferred patches
+Date: Fri, 30 Oct 2026 07:51:45 -0400
+Message-Id: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,324 +92,142 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-
-Thank you for your contribution! Sashiko AI review found 8 potential
-issue(s) to consider.
-
-Critical: 0 · High: 2 (1) · Medium: 3 · Low: 3
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] In ioam6_output() (net/ipv6/ioam6_iptunnel.c:416-417), the
-  inline-mode re-lookup does not keep ICMPv6 errors hashed on their…
-- [High] For locally generated packets that ioam6_output() handles in
-  INLINE mode (or AUTO mode with !skb->dev), orig_dst came from…
-- [Medium] ioam6_output() (ioam6_iptunnel.c:416) reads the per-route
-  shared template field ilwt->tuninfo.eh.nexthdr into fl6.flowi6_proto…
-- [Medium] The commit message credits the policy-0 fix to using
-  eh.nexthdr as fl6.flowi6_proto in the re-lookup.
-- [Medium] ipv6: route: wrong skb offset in ip6_nexthdr_without_ioam()
-  via icmp6_send()
-- [Low] Because mp_hash is precomputed from the skb, the main user-
-  visible effect of changing fl6.flowi6_proto from hdr->nexthdr…
-- [Low] fib6_select_path() (route.c:464-469) treats fl6->mp_hash == 0 as
-  'not computed'.
-- [Low] ipv6: ioam6: duplicate ip6_route.h include in ioam6_iptunnel.c
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch
-  relies on the same racy template.
-
---
-
-ipv6: ioam6: use transformed packet nexthdr for ECMP re-lookup
-
-On a dst_cache miss, the ioam6 output path re-looks up the route. This
-patch changes that lookup to use the Hop-by-Hop nexthdr stored in the
-tunnel template (eh.nexthdr) as flowi6_proto instead of NEXTHDR_HOP. It
-also precomputes fl6.mp_hash from the transformed skb with
-rt6_multipath_hash(), so that the ECMP hash matches RFC 9486 (C2).
-
-> diff --git a/net/ipv6/ioam6_iptunnel.c b/net/ipv6/ioam6_iptunnel.c
-> index cfb2c41634a0b..713e625bfa3aa 100644
-> --- a/net/ipv6/ioam6_iptunnel.c
-> +++ b/net/ipv6/ioam6_iptunnel.c
-
-[ ... ]
-
-> @@ -412,7 +413,8 @@ static int ioam6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
->  		fl6.saddr = hdr->saddr;
->  		fl6.flowlabel = ip6_flowinfo(hdr);
->  		fl6.flowi6_mark = skb->mark;
-> -		fl6.flowi6_proto = hdr->nexthdr;
-> +		fl6.flowi6_proto = ilwt->tuninfo.eh.nexthdr;
-
-[Severity: Medium]
-Is ilwt->tuninfo.eh.nexthdr guaranteed to still belong to this packet
-when it is read here?
-
-The template is shared per route. Every CPU sending through it writes
-this field with plain stores:
-
-ioam6_do_inline():
-	tuninfo->eh.nexthdr = hdr->nexthdr;
-
-ioam6_do_encap():
-	tuninfo->eh.nexthdr = NEXTHDR_IPV6;
-
-Nothing serializes the lwtunnel output path. Between the return of
-ioam6_do_inline()/ioam6_do_encap() and this read, another CPU may have
-stored a different packet's nexthdr. In inline mode that could be
-TCP, UDP or ICMPv6. In auto mode the inline and encap values alternate.
-
-The protocol read here is used by fib6_rule_match() for ipproto
-selectors. fib6_select_path() also falls back to it when the
-precomputed mp_hash is 0. The resulting dst is then cached in
-ilwt->cache.
-
-Could the value come from a local instead, for example
-ipv6_hdr(skb)->nexthdr saved before ioam6_do_inline(), or NEXTHDR_IPV6
-for encap? KCSAN would probably also flag this plain read/write pair.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but the new read depends on
-the same shared template, and the write side of it already looks racy.
-
-ioam6_do_inline() stores to the template and then copies it into the
-packet:
-
-	tuninfo->eh.nexthdr = hdr->nexthdr;
-
-	skb_set_transport_header(skb, sizeof(*hdr));
-	skb_postpush_rcsum(skb, hdr, sizeof(*hdr) + hdrlen);
-
-	memcpy(skb_transport_header(skb), (u8 *)tuninfo, hdrlen);
-
-ioam6_do_encap() does the same with NEXTHDR_IPV6:
-
-	tuninfo->eh.nexthdr = NEXTHDR_IPV6;
-	memcpy(skb_transport_header(skb), (u8 *)tuninfo, hdrlen);
-
-There is no locking here. Can another CPU's store land between this
-CPU's store and its memcpy()? If so, the packet goes out with an HBH
-nexthdr that does not describe its payload.
-
-With mixed-protocol inline traffic, a TCP segment could be labelled
-as UDP, and the receiver would drop it.
-
-In auto mode, a local packet could be labelled nexthdr=41. The receiver
-would then parse the UDP header and payload as an inner IPv6 header,
-so UDP payload bytes 0-31 become the inner saddr/daddr. If the
-destination runs an ip6ip6 decap tunnel, this might allow spoofed inner
-packets to be injected there. That part depends on how the receiver is
-configured.
-
-[Severity: Low]
-mp_hash is now precomputed from the skb. So the main visible effect of
-this flowi6_proto change seems to be on policy routing, not on the
-ECMP hash. fib6_rule_match() does:
-
-	if (rule->ip_proto && (rule->ip_proto != fl6->flowi6_proto))
-		return 0;
-
-Before this patch, "ip -6 rule ... ipproto X" never matched the ioam6
-re-lookup. Now it matches the inner L4 protocol in inline mode and
-IPPROTO_IPV6 in encap mode. IOAM traffic can therefore be routed
-through a different table than before.
-
-This is arguably more consistent with the original lookup. Could the
-commit message mention this routing behaviour change?
-
-> +		fl6.mp_hash = rt6_multipath_hash(net, &fl6, skb, NULL);
-
-[Severity: Medium]
-This isn't introduced by this patch. It is in the helper added by the
-earlier patch in this series, which this re-lookup now depends on, so
-I am raising it here.
-
-ip6_nexthdr_without_ioam() looks for the Hop-by-Hop header at
-off = sizeof(*iph). It passes that offset to skb_header_pointer(),
-which indexes from skb->data. That only works when skb->data points
-at the IPv6 header. It does in ioam6_output(), but not for every
-caller of rt6_multipath_hash().
-
-icmp6_send() also calls rt6_multipath_hash() with the offending skb.
-For locally delivered packets, ip6_protocol_deliver_rcu() has already
-done:
-
-	pskb_pull(skb, skb_transport_offset(skb))
-
-After that, skb->data sits at the transport header and
-skb_network_offset(skb) is negative. Two cases reach the helper with
-such an skb when the packet carries a Hop-by-Hop header:
-
-- udpv6_rcv() sends ICMPV6_PORT_UNREACH
-- ip6_protocol_deliver_rcu() reports an unknown nexthdr
-
-In both, ip6_multipath_l3_keys() calls ip6_nexthdr_without_ioam(),
-which then parses L4 payload bytes as a Hop-by-Hop header and walks
-them as options.
-
-skb_header_pointer() keeps the reads bounds-checked. The problem is
-the ip_proto fed into the policy 0 hash for the ICMPv6 error. It is
-no longer the real HBH nexthdr. It is either derived from
-remote-supplied payload bytes, or it falls back to NEXTHDR_HOP when
-the payload is short. So the precomputed mp_hash in icmp6_send() no
-longer reflects the offending flow, and the sender can influence which
-ECMP sibling the error takes.
-
-Should the helper start at skb_network_offset(skb) + sizeof(*iph), or
-derive the offset from iph? That would match the rest of
-ip6_multipath_l3_keys(), which works from the header offsets rather
-than assuming skb->data is the network header.
-
-[Severity: High]
-Does this keep ICMPv6 errors hashed on their quoted flow in inline mode,
-as the commit message says?
-
-ioam6_do_inline() leaves the transport header pointing at the inserted
-Hop-by-Hop header:
-
-	skb_set_transport_header(skb, sizeof(*hdr));
-	...
-	memcpy(skb_transport_header(skb), (u8 *)tuninfo, hdrlen);
-
-Under policy 0 and the policy 2 fallback, rt6_multipath_hash() calls
-ip6_multipath_l3_keys(). That function gets IPPROTO_ICMPV6 back from
-ip6_nexthdr_without_ioam(), but then reads the ICMPv6 header at the
-transport offset:
-
-	icmph = skb_header_pointer(skb, skb_transport_offset(skb),
-				   sizeof(_icmph), &_icmph);
-	...
-	if (!icmpv6_is_err(icmph->icmp6_type))
-		goto out;
-
-Those bytes are the HBH header, so icmp6_type is eh.nexthdr (58) and
-icmpv6_is_err() returns false. The outer addresses and flowlabel are
-hashed instead of the quoted flow.
-
-orig_dst was chosen on the quoted flow. For forwarded errors that was
-done by ip6_route_input(). For local errors, icmp6_send() precomputes
-fl6.mp_hash from the offending skb.
-
-On a dst_cache miss, can this re-lookup pick a different ECMP sibling
-and cache it for this lwtstate?
-
-Also, this comment in ip6_nexthdr_without_ioam() does not hold for the
-new output-path caller:
-
-	/* The Hop-by-Hop header was already pulled and validated by
-	 * ipv6_parse_hopopts() before routing, so this walk is safe.
-	 */
-
-Would it work to compute the hash before the HBH is inserted, or to
-find the ICMPv6 header past the IOAM HBH?
-
-[Severity: High]
-Locally generated packets take inline mode, or auto mode with
-!skb->dev. For them, orig_dst came from ip6_route_output() with no
-skb, so fib6_select_path() used the fl6 branch of
-rt6_multipath_hash(). This re-lookup uses the skb branch instead. For
-the same flow, the two branches hash different keys:
-
-Policy 0 with default sysctls: the socket lookup hashes
-flowi6_get_flowlabel(fl6), which is 0 unless a label was set. The skb
-branch hashes ip6_flowlabel(hdr), which is the auto flowlabel written
-by ip6_make_flowlabel(). auto_flowlabels is on by default.
-
-Policy 1: skb_set_hash_from_sk() sets skb->l4_hash from sk_txhash, so
-the skb branch returns early instead of hashing the fl6 5-tuple:
-
-	if (skb->l4_hash)
-		return skb_get_hash_raw(skb) >> 1;
-
-Policy 3: the skb branch uses rt6_multipath_custom_hash_skb(), while
-the original lookup used rt6_multipath_custom_hash_fl6().
-
-Each nexthop has its own lwtstate. A different sibling would fail the
-orig_dst->lwtstate check, and its dst would be cached in ilwt->cache
-for later packets.
-
-In the default configuration, is the policy 0 divergence described in
-the commit message still reachable for local traffic? Closing it seems
-to need the re-lookup to reproduce the original lookup's hash. Changing
-flowi6_proto alone would not do that.
-
-[Severity: Medium]
-The commit message credits the policy 0 fix to using eh.nexthdr as
-flowi6_proto. With a non-NULL skb, though, no rt6_multipath_hash()
-policy reads fl6->flowi6_proto:
-
-- policy 0 and the policy 2 fallback use ip6_multipath_l3_keys()
-- policy 1 uses the flow dissector
-- policy 3 uses rt6_multipath_custom_hash_skb()
-
-fib6_select_path() only recomputes when the precomputed value is zero:
-
-	if (!fl6->mp_hash &&
-	    (!match->nh || nexthop_is_multipath(match->nh)))
-		fl6->mp_hash = rt6_multipath_hash(net, fl6, skb, NULL);
-
-So the policy 0 behaviour comes entirely from
-ip6_nexthdr_without_ioam(), which the earlier patch "ipv6: route:
-consider IOAM options in ECMP hash policy 0" added. This commit still
-carries its own tag:
-
-    Fixes: 8cb3bf8bff3c ("ipv6: ioam: Add support for the ip6ip6 encapsulation")
-
-If this commit is backported alone, ip6_multipath_l3_keys() would hash
-outer_iph->nexthdr == NEXTHDR_HOP, and the stated bug would not be
-fixed.
-
-Could the commit message describe this dependency, and say which change
-actually affects the hash?
-
-[Severity: Low]
-fib6_select_path() treats mp_hash == 0 as "not computed". Its comment
-assumes that only ICMPv6 errors precompute, and that the value is
-always non-zero:
-
-	/* We might have already computed the hash for ICMPv6 errors. In such
-	 * case it will always be non-zero. Otherwise now is the time to do it.
-	 */
-
-rt6_multipath_hash() returns mhash >> 1, and __flow_hash_from_keys()
-maps 0 to 1, so the result can be 0. The policy 1 path,
-skb_get_hash_raw(skb) >> 1, can also return 0. When that happens,
-fib6_select_path() recomputes from fl6 with no skb, and the skb-based
-hash is lost.
-
-This is rare, and icmp6_send() already has the same sentinel collision.
-Since ioam6_output() now precomputes too, should the comment be
-updated, and is the zero case worth handling?
-
->  
->  		dst = ip6_route_output(net, NULL, &fl6);
->  		if (dst->error) {
-
-[ ... ]
-
-> @@ -13,6 +13,7 @@
->  #include <linux/ioam6.h>
->  #include <linux/ioam6_iptunnel.h>
->  #include <net/dst.h>
-> +#include <net/ip6_route.h>
->  #include <net/sock.h>
->  #include <net/lwtunnel.h>
->  #include <net/ioam6.h>
-
-[Severity: Low]
-This has no runtime effect, but ioam6_iptunnel.c already includes
-<net/ip6_route.h> further down, after <net/dst_cache.h>. The new
-include at the top is a duplicate of it.
-
-rt6_multipath_hash() was already visible through the existing
-include. Could this hunk be dropped?
-
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANKE5GoC/4WNQQqDMBBFryKz7pRJKtZ25T2Ki6gTHagaEgkW8
+ e5Nc4FuPjw+7/8DAnvhAM/iAM9RgqxLAn0poJ/MMjLKkBg06UoRKeycxZgcK+zRma2fsMupy1J
+ TTVzf7gMk3Xm2sufpF/yshfcN2tRMErbVf/JnVLn/Px8VEhqlB1sbeqiKmnE28r726wzteZ5fS
+ tp2v8oAAAA=
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
+
+bpf_patch_insn_data() and bpf_patch_insn_single() apply a patch right
+away: they move the tail of the instruction and aux data arrays and walk
+the whole program to fix up branches and every table that names
+instructions. Removing instructions works the same way.
+
+A pass that patches M instructions of an N instruction program does
+O(N * M) work. Eduard pointed out that this takes a large share of the
+time to load pyperf180 [1], and with bpf_jit_harden=2 or many nops to
+remove it gets to minutes.
+
+Replace them with a list that a pass fills with patches and commits
+once in O(N + inserted instructions). Following the layout of Jiong's
+RFC [2], the list goes to core.c and the verifier side to fixups.c,
+then each pass moves over and the last patch removes the old code. As
+Andrii suggested there, map every old index to a new one once and
+relocate all jumps through that map. Since passes queue patches in
+increasing order of the instruction they replace, keep the list in a
+sorted array instead of a linked list.
+
+  1-3   the patch list in core.c and in the verifier
+  4-6   bpf_do_misc_fixups(), gotol for a backward may_goto
+  7-9   removal of instructions, dead code and nops
+  10    zext
+  11-13 patching an instruction twice, inserting in front of one
+  14-17 ctx accesses, may_goto counter setup, hidden subprog, bpf_loop()
+  18-19 commit without a verifier env, constant blinding
+  20    removal of the old code
+  21-22 selftests
+
+Load times on an x86_64 VM with 32 vCPUs, the base commit below with
+and without the series, measured in one round: perf stat -r30 --
+veristat -q <obj> averaged over two runs, -r10 for BPF_F_TEST_RND_HI32
+and bpf_jit_harden=2, three runs of loading 131072 "ja 0":
+
+                                   base       patched
+  pyperf180                       0.512 s    0.350 s
+  pyperf600                       1.407 s    0.885 s
+  strobemeta                      0.591 s    0.588 s
+  test_verif_scale2               0.643 s    0.646 s
+  pyperf180, BPF_F_TEST_RND_HI32  1.708 s    0.360 s
+  pyperf600, BPF_F_TEST_RND_HI32  5.161 s    0.891 s
+  pyperf180, bpf_jit_harden=2     3.185 s    0.362 s
+  pyperf600, bpf_jit_harden=2     9.879 s    0.899 s
+  131072 "ja 0" removed          53.146 s    0.769 s
+
+With bpf_jit_harden=2, test_verifier's "ld_dw: xor semi-random 64 bit
+imms, test 5" doesn't load within 900 s on base and loads in 5 s with
+the series.
+
+For the 1052 objects of the selftests, every program that loads has the
+same xlated code, line info and func info on both kernels, by default,
+with BPF_F_TEST_RND_HI32 and with bpf_jit_harden=2, masking the
+immediates that hold addresses, BTF ids and blinding constants.
+test_verifier passes on both, test_bpf fails the same 53 tests on both
+when hardened, and test_progs only shows failures that are flaky in
+parallel runs.
+
+[1] https://lore.kernel.org/bpf/a714ee96d0ad96bbc9d51037616e5c4e2790a8ec.camel@gmail.com/
+[2] https://lore.kernel.org/bpf/1562275611-31790-1-git-send-email-jiong.wang@netronome.com/
+
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+V1 -> V2:
+- Convert every pass and remove the old patching code (Alexei)
+- Build the new image in core.c, so that blinding without a verifier env
+  uses the list too
+- Let the list remove instructions, insert in front of one and patch one
+  twice
+- Pick JEQ or gotol for a backward may_goto from its offset grown by the
+  patches in between, v1 picked JEQ when that offset was -32768 (CI bot)
+- Test a backward may_goto expanded to gotol
+- Test a jump that the patches push out of its 16-bit range, and a gotox
+  to a patched insn
+- Rebase onto current bpf-next, which adds the arena_scalar rewrite
+
+v1: https://lore.kernel.org/r/20261001-bpf-verifier-patch-batch-v1-0-a12df8a09160@gmail.com
+
+---
+Qiliang Yuan (22):
+      bpf: Add a list of deferred instruction patches
+      bpf: Remap the verifier state through the patch list
+      bpf: Apply single-instruction patches of the verifier in place
+      bpf: Queue the rewrites of bpf_do_misc_fixups()
+      bpf: Expand a backward may_goto to gotol when patches push it out of range
+      bpf: Drop the constant delta from bpf_do_misc_fixups()
+      bpf: Let the patch list remove instructions
+      bpf: Remove dead code through the patch list
+      bpf: Strip nops through the patch list
+      bpf: Batch the patches of bpf_opt_subreg_zext_lo32_rnd_hi32()
+      bpf: Allow patching an instruction twice through the patch list
+      bpf: Teach the patch list to insert in front of an instruction
+      bpf: Allow inserting in front of a queued patch
+      bpf: Move bpf_convert_ctx_accesses() to the patch list
+      bpf: Insert the may_goto counter setup through the patch list
+      bpf: Append the hidden subprog through the patch list
+      bpf: Inline bpf_loop() calls through the patch list
+      bpf: Apply the patch list without a verifier env
+      bpf: Blind constants through the patch list
+      bpf: Remove the old instruction patching code
+      selftests/bpf: Test jumps around patches of bpf_do_misc_fixups()
+      selftests/bpf: Cover a backward may_goto pushed out of range by patches
+
+ include/linux/bpf.h                                |    4 +-
+ include/linux/bpf_verifier.h                       |   87 +-
+ include/linux/filter.h                             |   16 -
+ kernel/bpf/bpf_insn_array.c                        |   35 +-
+ kernel/bpf/core.c                                  |  552 ++++++---
+ kernel/bpf/fixups.c                                | 1285 +++++++++-----------
+ kernel/bpf/verifier.c                              |   46 +-
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |    2 +
+ .../selftests/bpf/progs/verifier_patch_list.c      |  210 ++++
+ 9 files changed, 1240 insertions(+), 997 deletions(-)
+---
+base-commit: 7101b10cf281f629ac58c99697ca6f6d082b99a7
+change-id: 20261001-bpf-verifier-patch-batch-2442080e837d
+
+Best regards,
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0%40kylinos.cn
+Qiliang Yuan <odys.yuan@gmail.com>
+
