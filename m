@@ -1,82 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793385403;
-	b=FxBjTSfnjdgOT5p0HuzhwBHQ5T5fzANd4+qD7BM/g3YolfWpocO3+rhOziG3Qq7DrCht
-	 RXeQztkhMzOTOIr/IQnbOXUuXEloWXLWxRrYyh3VzHFnqKYJbD76NW49a7OpxdfTRRqhi
-	 2ihKOTFf1qWBA44aCS0s792reikLmoIB/XhAXhiNnj4MQbkipQdbHhslOBT/1DwRWXNIE
-	 DuudsLZFxPy7JyiaXr0gZ30zNiJoql93BL3GcVpnhjrRMSZMyWfTwoPvqXwmbo3Nm+EzC
-	 Rj2HNbx4kDeDNrV5g6sx5oigBU33qx2zMyjnWS8BtOIzDmESNZGbj8oLN4oUAMhKWxw==
+	t=1793385548;
+	b=yY4wb3k7o9WC9g5X5ft/1yypHymCdz9/D4ycZVHLOKnuI5tVZPE5bpxuxvrpUw8hJs9Y
+	 O8KAE+P3of9jEl9AVUAiWpxi3c5ZU2l2MDKPvSfst1FR/gn9TQvpFJqBUWhtZpEz/66Ng
+	 uw+X/QPSDdoKOP5LFrgVQ/nq2esfBUOIemdqzTzpbhgqmyDXMnry2G3g16NrSbML1+yQs
+	 wXKXsMF2yNPrCnkqsamzRCarXs8yRzFwdMun3uH4e8ktvevRt9OipOF6fxOe+1KKhyxn0
+	 wqYU/gvzv+VDAkobppqEMIQwrNBhv+IsQOew+5Kk0rx9HqbQZpQcdm8DUnGNDUvbeag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793385403;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=1t9+4vkPL/biYXGFrfoKrzKJULEQM0zn032UNq7ifM4=;
-	b=o96P6EpZTPrST3v3D0AS5Sqe+rH3x0znQsB/IbbhrkstV1BOecqylUVmk65YeJ+XQQ1F
-	 w7eVIBEPR3ltBBLmAlfiBpAeLgyConTn/JtpdnJ8fBQodCNObik/0zHfCp5iIQP+w3Jzs
-	 prvC3nR0DHTC51RXIhJMRQ1XlYRM13qORIQDWTjlwNGchjrPdTPme4AuXVWlWaC8blag0
-	 0a81jg9sLOWCKpojOJyFVQZUxyYayPicJsc3+/pUoZwAOZAVpYp26s+2NpJaP6WTLx68t
-	 G3moQAv5I6LwVdDm0gRH4seVGQWwB6CLT/j3LBe8CZyWFTgzOnYSUp3ZLcgOMxpOV+A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793385548;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=cM+BvkDxP8fM78hQZg5AYrn5YUAQx7WN9vYLoZ70OUo=;
+	b=FbJb2etzIwWB1iKZQJ9RgFg8LuDleqerMLaKRi5b6xovkMURt5ZsnTAHu9Ap4o6Xsgqp
+	 9RzqkEf6OC5L64yDs5SgGsbain8Wstp+uM4Y9CbHceNRk+WuSrhgeKb3YnMAltjfpb5Rc
+	 2e/WRMiTndZPreeTg7MKoZxKgy8JIA3dtF2Z5PhD3YT0WHg3Tm/59UmSpMNG95sU/9uQQ
+	 Sb5mJ19T1uQlFfhPsCoS4hVovIkpDM6fCu8Rc/8SRpcnfu8sr1k2SfjoYnj4TvAyb3go1
+	 DHP8/2ZUPo/WNPqWjTIYrzkLIZoH24O3XtL+PBnUt4a2zy7XfQS4ylImKxe6k1CPwcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Li0DWd72;
-	arc=none smtp.remote-ip=52.35.192.45
-Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t0jDxw+g;
+	arc=none smtp.remote-ip=74.125.82.46
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589D5606A31A
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 18:36:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 589D5606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF99606A31A
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 18:39:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5EF99606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Li0DWd72
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t0jDxw+g
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1a3c08d6928so1338460c88.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 11:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1793385403; x=1824921403;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1t9+4vkPL/biYXGFrfoKrzKJULEQM0zn032UNq7ifM4=;
-  b=Li0DWd72Rbzmy6m4qRsZWOWkFwlHWpcdAOv9NmLovjkCiLbQ9pXlnB8k
-   up3Er7irBTtrfHMAXKsrAKiVwGAWdc6O5jEOuRl0H+xAP+fL2EvJbYZeH
-   FUuUFk5zr4VMYH984o+y2XiAYxUXz7Oj23nWFzgcqRuyzvsn1Rwqk2IaN
-   ZmOM0WRmvvucGl+h4w+kfAdpOFTQ0PQxqGFdL47HtundTVfAlhpHc4em5
-   WfT5Xd9zbT/6XXQucMo/+Bn2TQLNcDlS0o4bGyAUPLyk4VO73ppPtnF6D
-   W/zN/uWlK+zOsxpBU84yKBmDCcIIiO8bvxwqFuh7ToFRWykL0ohZPs62Q
-   Q==;
-X-CSE-ConnectionGUID: VQFaTsuISZ+CYRqnY39gfg==
-X-CSE-MsgGUID: /FcxKp5jS9+Zy7uHCcSSKQ==
-X-IronPort-AV: E=Sophos;i="6.27,186,1787011200"; 
-   d="scan'208";a="32463827"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 18:36:43 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.53:6113]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.15.208:2525] with esmtp (Farcaster)
- id 8eaf1e5d-ca57-4525-a596-d9afe06312d5; Fri, 30 Oct 2026 18:36:42 +0000 (UTC)
-X-Farcaster-Flow-ID: 8eaf1e5d-ca57-4525-a596-d9afe06312d5
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Fri, 30 Oct 2026 18:36:42 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Fri, 30 Oct 2026 18:36:41 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: NeilBrown <neilb@ownmail.net>
-CC: Miklos Szeredi <miklos@szeredi.hu>, <fuse-devel@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, "Bernd
- Schubert" <bernd@bsbernd.com>, Jim Harris <jiharris@nvidia.com>, "Horst
- Birthelmer" <horst@birthelmer.de>, Luis Henriques <luis@igalia.com>
-Subject: Re: [PATCH 1/3] fuse: add FUSE_OPEN_ATOMIC
-Date: Fri, 30 Oct 2026 18:36:31 +0000
-Message-ID: <20261030183631.2126171-1-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <179331349568.1157394.13124360154896615084@noble.neil.brown.name>
-References: <179331349568.1157394.13124360154896615084@noble.neil.brown.name>
+        d=gmail.com; s=20260707; t=1793385547; x=1793990347; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cM+BvkDxP8fM78hQZg5AYrn5YUAQx7WN9vYLoZ70OUo=;
+        b=t0jDxw+gwG9FlkDiEEVKvJaGAMnA0fNNcq4vgNLzqnEQ0wgefhM8hHDjvJHbU4urig
+         ZK/LbzZbDDXFxa5we+5dvRUq34ibd/Er8cHs3w5LD2Cc6ZnLoMubT9It4w7KF20N5xY4
+         itU//CqLRqBco9eTk66evHlYiF0s7qxOhR8cm1Js5PMWBoAT6KS6LYbAl1EKBW2is0IB
+         1hvxsNSEXCXS+Cf5IZsGZWIoongcTVYTGGsIJ+KrgT8eDM+Ylb29+k0yvtbpGPAGwrAl
+         SDQVoEbP+vAn4gtgCUB0JeUzIR99YqVXZTy+YbU0AQ8TI2VqBAgGqI1Cof9PYQGgOwLA
+         D4Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793385547; x=1793990347;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cM+BvkDxP8fM78hQZg5AYrn5YUAQx7WN9vYLoZ70OUo=;
+        b=snM7/pulzTnIA2mOJ0omiJwwG/Pn/7wzzJUTeP+vkrYnbfEwaTWB6TVT2aEAQmYDWb
+         lAWWaN1rytPdCTLy9TPXhIOVVXk6lrvRwWtL9l9aaqeil371EZQajoLK4in1ffoaS4Q/
+         vI5V84XMkn223HM9vzeetEkle/hp1MF2Blj2+mhH4tQ7IZ6NhuHP72BBK3/aQ8P9Jjz9
+         09kuhj/C+eQ2xL4hQb8hqjGINRejZMd4cmExMlSMY4g28kCHh4XPch1et1sMHo7L5wgI
+         dNSmVmSsgX/pAbeL4iMNkaBB6pdPT1giPT1gSj8zSwh0P1iPiHRcARzBZA5MMMVG5Dr/
+         hv9w==
+X-Gm-Message-State: AFq9FYKBS9pFIrDKwreUVFTIZI4Ub9YKa+B0+JjtfUoJKyrcXa37gJ33
+	9/gBPW1xjQUVMIzjPbEg/6eGqpxuKc2qYh2cddqdLQDfb07SMCSQrXt6
+X-Gm-Gg: AYBFou1mjWw8Ve3ox8Y2mEZsdeXumVJo3jh9zxXGXUjQlEY/Zpv1CpRleaaiTx1p9zR
+	2pewJ6/fA7MSAryKqdbQtad+h/P9JuZS+J3QNFuJb+Fx+V+Z4wzeV0GpEBQCmUdjEfUElFbC8FG
+	q4lovmUIDL7E5IYW+CQacXnUsw6QFANdmfc+07E4k+mU5944nooBfm0k90kFpEOgThaHvtfxe5F
+	2MPj7rO7IgQDnBsFKm4WK1aUllJyXnjbga8pwldxbZFBZLztSpe5uBsJ10d6swhK4VmvrVJJWeh
+	A3aUmZhGPHgvrTJlaqI/GK+OusTjuzt+Jsb28qmJvU9jxhzHrdm1hOCBwRdpMNgmzY4I2DQnRmB
+	wZFXP5Xms+Ow8+EBeI39Gm4svftGDOjLqoL9nUlC6xeMdz+s6/P+HToThMDRxSO+94IOkloNuZB
+	+R/p5cXyWJUMax8GsSKj5bPRfsWgu5wbEMix07l9NXq4cZKrKxSnz+gLDcurgJd7O1tUKgdGPiG
+	GLXow82LoHGJqVlF2JZMjdq8GDEemcYD0ZmJubNNcBX72EXQQH6yNXoiVanqZ0c6ynM9XoPA9MV
+	LUC/hhhbPyWViycwJZbxcm+LySFgDpoCNz/9NELoLDGvsAN2MqQoPs3q9STHRXuNaoBvsB8LXUJ
+	s
+X-Received: by 2002:a05:701b:4213:10b0:1a4:fac9:aeee with SMTP id a92af1059eb24-1ac56d95c0amr4153882c88.4.1793385547176;
+        Fri, 30 Oct 2026 11:39:07 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1151:15:c56:221b:35d5:85f? ([2620:10d:c090:500::4:2e7d])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac194b5437sm9886300c88.13.2026.10.30.11.39.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Oct 2026 11:39:06 -0700 (PDT)
+Message-ID: <7cd99851-5bc0-4db8-a44c-a664c3f824b1@gmail.com>
+Date: Fri, 30 Oct 2026 11:39:05 -0700
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,25 +91,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests: drv-net: pause: Skip support tests without
+ link autonegotiation
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org
+References: <20261030173516.1002250-1-mohsin.bashr@gmail.com>
+ <701c6f7e-e715-4647-bddf-48a1485afbe2@bootlin.com>
+Content-Language: en-US
+From: Mohsin Bashir <mohsin.bashr@gmail.com>
+In-Reply-To: <701c6f7e-e715-4647-bddf-48a1485afbe2@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWA003.ant.amazon.com (10.13.139.47) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Fri, 30 Oct 2026, NeilBrown wrote:
-> The /proc different seems cosmetic and probably of no consequence.
-> The nlink issue might be significant - I cannot say.
-> It might be nice to include a comment where d_instantiate() is used,
-> explaining why d_tmpfile() was avoided(?).
 
-I dug into this a bit more. I couldn't find a FUSE server that actually
-implements FUSE_TMPFILE, besides the example servers in some FUSE
-libraries. However, switching to d_tmpfile() is a behavior change that's
-unrelated to the core of the atomic open series. I'd be happy to cut a
-separate patch series for it if you think it's an important improvement,
-but I want to keep things decoupled. In v7 of the atomic open series
-I'll make the "why" of d_instantiate() clear, i.e. that it is uniform
-with the rest of the fuse kernel module.
 
-Thanks!
-Jimmy
+On 10/30/26 10:54 AM, Maxime Chevallier wrote:
+> Hi,
+> 
+> On 10/30/26 18:35, Mohsin Bashir wrote:
+>> From: Mohsin Bashir <hmohsin@meta.com>
+>>
+>> Devices without link autonegotiation support may reject both link-setting
+>> requests in pause_test_support(). On fbnic, all four variants then fail
+>> in cleanup when the deferred restore of unchanged link settings returns
+>> EOPNOTSUPP. Removing the restore alone would report PASS without running
+>> any pause checks.
+>>
+>> Fix this by calling require_link_autoneg() before pause_setup() to skip
+>> the test when either interface lacks link autonegotiation support. This
+>> also skips devices that support only forced link configuration.
+>>
+>> The issue was observed in the fbnic CI/CD pipeline. It was reproduced and
+>> the fix was tested on a local fbnic device.
+>>
+>> Fixes: cbd8a536cd6d ("selftests: drv-net: Introduce a selftest for ethtool flow control")
+>> Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
+>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> ---
+>>   tools/testing/selftests/drivers/net/hw/pause.py | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
+>> index ca4a55e59c30..1537f88e0e77 100755
+>> --- a/tools/testing/selftests/drivers/net/hw/pause.py
+>> +++ b/tools/testing/selftests/drivers/net/hw/pause.py
+>> @@ -466,6 +466,7 @@ def pause_test_support(cfg, pauseparams):
+>>       supported fields.
+>>       """
+>>   
+>> +    require_link_autoneg(cfg)
+> 
+> This helper checks if the remote supports aneg too, so it's too restrictive.
+> 
+> The goal of this test is to check the local device's behaviour, without too
+> much dependencies on the remote, so that we can at least have it test some of
+> the local driver behaviour even when it's connected to a dumb remote or a switch.
+> 
+
+Right, it may be too restrictive however cleanup handling is still 
+required on both interfaces even when the DUT accepts the configuration 
+and runs its checks, the remote can reject the deferred restore and fail 
+the test. Ideally, this test should not depend on remote config in the 
+first place.
+
+> Maybe the sane thing to do is to allows the defer() calls in pause_setup() to
+> fail silently with "fail=False" ?
+> 
+
+IMO using fail=False would also suppress genuine restoration errors when 
+settings actually changed and can leaving the interface in an unexpected 
+configuration. No?
+
+
+> Or maybe a bit more clever, have a quick check to see if the device accepts
+> an ethtool -s XXX command ? looks like fbnic will refuse all of'em as it
+> doesn't have a .set_link_ksettings.
+> 
+
+Yes, checking whether the DUT accepts ethtool -s is one options. We 
+could reuse the existing autonegotiated and forced-link attempts, and 
+report SKIP if neither allows pause checks to run. Alternatively, we can 
+add a remote arg to require_link_autoneg(), default to True, and pass 
+False for this test so it checks only the DUT’s autonegotiation support.
