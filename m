@@ -1,100 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.208.173
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793400247;
-	b=oY4UKDEUJqFV1eIaaaKUVCGv0Qrg2Jc3PoX9NhBW6s6sNZZklxqLtQ8AoxxtUgY+uxOQ
-	 s1/c/Nf0rBfyiijcxcp+bxoPX2rbkVkFSZzDJnPMSWxsl3YJMv4kMQRrlgq4JHp/K6S6I
-	 PFfPyzi0oybV1KFrOCtrGtwAw376wDx3xdZkX4IQo1alOFCubPNw01KAYOWeh4O+I98xR
-	 wNdQvzp+byID117Uz9/ArUkqmlf7CfKfZ05UJ+muF1Gwe6MjEKpQoJZcKEOgjNsvsBQkW
-	 LBD44Wx9Cb8oYfn31o4wA1o8bXGUKrROSHN7gBOlUmRP8Q+iBNqXdwHj4vvZAdZ69UA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793400247;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=+vnvo88Pr3dQY7eSVbimo7vIzM+xuPPq1OrMINl+rL8=;
-	b=jFHmsYuMYxGmqxuT2IysXlyWnle6+km5Isl8LzGKVrgen2NYA+ashzqorHoTJVDlC/FU
-	 9wnwpUXe7OqlaetHjmkIEqjYtTemGkwZz2fPri2iXR5EVSWT3Sv3tmB3b5uLhiiPWznh8
-	 813mJuIiXP90sINi99K6w4z6Je7a28RT117yKHmfH6hHdz1fKSpkzX4X6VwrRj5bDKalF
-	 LJv3y+3u87AijYndZHLqBjcpy54QSfmzWwWGa/5mtEc+zs3pLLo89//zVkWI2vvzW6kkm
-	 vQETVq2G+iVReMA5kpw4m1XLQDSWroxp5P+rypJc9cgx/px7qyleIhtz0v+DwKyGudg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amacapital.net;
-	spf=pass smtp.mailfrom=amacapital.net;
-	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=DaiZLmwQ;
-	arc=fail smtp.remote-ip=209.85.208.173
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.72.0.81
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793400451;
+	b=OOLpBsG/dba9K1mXem5+B4M306wbBrAS5jgavlDSaqKU/fOB8ndmb2KE+0MhksEkmP0T
+	 BxMCdBviFJLv0U+/O0qZCCz9x4PEdauvEYs6GO0mKcM0Q0z7VVrYrCI8ctbWt9MeswRGy
+	 xnFIV5jpgEKjrKCSGQAQZLw76j+XXnsYA9Nsp0aZmFaxP4Z16nQ7siNwudcxLGP2hiuI7
+	 Qp/6dSiMrcY34w/k5BsCVZ+KHyIjBw+DyFl8PG3E9M33bWP2OFi5+rYd8mhlhI5wWb3VS
+	 x+/cBdbFtSoY4iGAIQRGI8wRNMic0MVUGoTGriSm5HhnRImQNWESo8u2Y7d9RONMiBg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793400451;
+	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=tKDzLJhYKbJR+X+k1vwgMCOk3SGsPhBqojG8RZdsFk8=;
+	b=3+DdlnkK5U4BApYnK6PK77XZlK7e4781KSuPYSJSyhqxZOeeGWBm24trZySXBsGCtoL/
+	 p9i5K/Z7zrFO5wX0opcVNZ5se+fzbChYIbOjo+XDqiWX1WcRbrlOd1NkjkdlwzVMD1RsH
+	 uP3JeWIX93jFrfdnT76jaW0vmMriNxUyOr0zCvkg755SsyrYW2LqLPz3WnbbDlQd5QNYu
+	 kvq2qp1ag8Y4wtG3FOvwvhKcXja59HkLr5zUlAe0Z2+ejS3zXfP7iPWoAT4mAvQgbDURE
+	 O45pI+HSW01eJcnsuuEj/uvvsBfb736t8Q3V3/bJ8lQJq20WLkT+payBppl87tRPNaw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gentwo.org;
+	spf=pass smtp.mailfrom=gentwo.org;
+	dkim=pass header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=J5RgqXy1;
+	arc=none smtp.remote-ip=62.72.0.81
+Received: from gentwo.org (gentwo.org [62.72.0.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D936606A31D
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 22:44:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D936606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB73B606A31D;
+	Fri, 30 Oct 2026 22:47:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB73B606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=DaiZLmwQ
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-3a1f628b1d1so10964081fa.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 15:44:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793400245; cv=none;
-        d=google.com; s=arc-20260327;
-        b=R9W6dJ5D2qBHknEpDpBmOxGaT781tMmUqSUp7dM7rzvTEY0m+OgXphlq4scSdOXeoG
-         8V4dMh1CZUN5/jLvAd305w2HjKkyD4s1Mh65oJ3fHy5Pt49Pg7HlaHyVwcsL15XJtmkX
-         yFO4c1a4veYnhpO1hOIUtYumshnK/1bj1zwNpQ0U1v09PBVpmRY4/FIGyMYJOmgaHn85
-         xzKMLESdrzrXj7nUKqp1SROazAAOaPxtBcH8im7+RNPgCJkUYRzPlOxMtl8mTLG6Lb22
-         kKj8kJy95tKLFl2zshk7wpQlBAAP4IUxTP6pogOwBBf0nnz78IvHxMo0579GGZSZbvvn
-         AO6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+vnvo88Pr3dQY7eSVbimo7vIzM+xuPPq1OrMINl+rL8=;
-        fh=WJfZxHuSxKUw5xXH/cpSdwqSzDHHs5614Ughu0fmMLg=;
-        b=HZK4agkl8yHcav0zVZaJMmsldRrk0yADc1SfeOR63DMEr3sPbmlT0xIxTwwMNQQEqv
-         1P1QuONQE+1sJ2fAXqgmni5bJm5Ds5kdM2PJIEIzMgkKdXLlAFeR7sBAyggNZcfGV9P3
-         VdP64dR7HOic1F+W0jo1kSCs3wW0joiVjlODaYsV/MMJnwsZFN+L+Z1rPgZcu9GcLsBL
-         JjsqUPiAIvvqmBp5fMNvNpAGWMiVGOnADkRSGnRy3otyJ6PTpZ/fil3ea1fTsArJbHoa
-         0MRQcNtpW0cXTDrIFggBesFda/V88EvWHR0YTUO2yEwW6R6ugtf8T5e0F5DVe1l9w60p
-         kY3Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1793400245; x=1794005045; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=+vnvo88Pr3dQY7eSVbimo7vIzM+xuPPq1OrMINl+rL8=;
-        b=DaiZLmwQeVKbbcdVOyDCZyZxvLmchXpkwa6kU1MTGUpPaTuPAdDfGq0V4QSy0+e7bX
-         b0djsAS8FyOOR3W52Qg6YzAzerrLCBVpq7nY+MxSj0j5lIi2ungzeDifs29L4IGMfolk
-         vUkRosIQQ1t+JOdfgYq5iXS7fw9pjV7FBSmpiC1Zgex2wat6xMyz7LwVHydh7FZQ18Pk
-         V5U1+RQU9/KzyxvYcSFLDB4cWd1lv+HjWcchRSFrFwNd+9add2cR5WSZFMgBjt05oqSY
-         uuu1CuFi3rF5jSHSUWu5guBupRZ5HM+kS6UfQLzvmZ0E/CaNK/UbRTu0rtCd1L2LT4O6
-         nvIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793400245; x=1794005045;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+vnvo88Pr3dQY7eSVbimo7vIzM+xuPPq1OrMINl+rL8=;
-        b=h475U5FoHvTEoENQYT2dqVZlZdX9VykNiNsxjMwGRBQkreL3CWB+prV3FC1xQ+zF8l
-         FT/dXZ/TlwDMldQjCxmwW9RmRaPsluZtbbzfq5Hnt3KO5Lj8KibzSEk+ZWtLk5lX3eW7
-         hEBufwrpMqzo6kN5kmmaAy/kq3TJ28XqSoH3cPkR9u0Hxhk+1mtIw8tx7Rns3jWksloG
-         Sbkx6j3DWrYRclBBlVVmGV6FCi+kknSOyqztbicmcsNSM/7ixy87t01WOK8/7AxE0Rdc
-         +p/hk1lMqcjnviSTo6cJrAuipIzibeqSGly6AG3Tq3KghLXxX3YIv6ZGztsFV5wkENFG
-         aB1Q==
-X-Forwarded-Encrypted: i=1; AKwUvByROLbo9qr2dUc8fDkGaIgCbicNPVFgHYW6WBIKtBvcfrZ5V3yRBS0bgMzy1vZOasvLJPnfecznTKumtFkaTqA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIxY5CyYONBFUmDHJiuvKCn1e4MRsDZfs35Ne5f7ChesaogHg81
-	UMb/Tl9aFGExkse4zXujTfxMJkqQ2vMzVxJ9WQRicQ/LeaOcMucKOjTZS0tN0sc9t7a1KIRloAw
-	/J98+YlveyTyp0A+iFyzujgcE9eY7xyOUkNXUnsX+
-X-Gm-Gg: AYBFou2A/fTVIGCt31bHNl3UigH0FInALBD+UDLMPl9KmMREOBQGUTAWS0f0hEj6RvH
-	7SfIs1kBWWG1H26Jfozi7ARNYC8Uw938y6qr2neaFRtyInMjwm8Av0rR/7zjjpPzRSUaTy8TFM8
-	EkUur8G/sEiQf0nh+f491zkzl9tQl1xtOWy6d0ViyfW17nusXrvPcQLxnoMeGtLKbK/9lLw8iBM
-	iJjUcz29DoLpveIP3XXkvYcfgLxtLbMr1Vr4S7yD+IixmdlaTQTpvgCcaN6rAI4YCJOw+tLRXwH
-	dEAKHuVKNEqwtnwihzlF57jgM9Z1N/rMmvBcH3+GKEDO6tOgWcSlbALoerwaZjdvfFPR01ehQog
-	1oJt2n0uVmHChYcfM2Ujh1YWDz3FyLH/3IA==
-X-Received: by 2002:a05:6512:a94:b0:5bf:b246:87a2 with SMTP id
- 2adb3069b0e04-5bfd957b610mr1268679e87.10.1793400245078; Fri, 30 Oct 2026
- 15:44:05 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=J5RgqXy1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1793400015;
+	bh=ZMs2FNIcBMES5Rg/sKY//vE3KG0UYrjCWf/LHF+Ga0U=;
+	h=From:Date:Subject:To:Cc:From;
+	b=J5RgqXy1zDpOKb9UfxtpznEUhSRO9gGhLbcmmNBGpHD9KqpvGOfiEaVKyils1Fh93
+	 L7/zoz8pUy8TmvhJOCKaIB/UpsBT3miZVWAi5VfM/ad8CWWgbSBRH2lo56/lZvNIbV
+	 y1uCQgRfY7TZH0hyrGY6lOHXYi6yX0h+OsI/Dj3M=
+Received: from sut02sys-r112.scc-lab.amperecomputing.com (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTPS id 2B05F402A4;
+	Fri, 30 Oct 2026 15:40:15 -0700 (PDT)
+From: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
+Date: Fri, 30 Oct 2026 15:39:59 -0700
+Subject: [PATCH v2] futex: Canonicalize arm64 tagged user addresses
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,145 +55,197 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026220546.3114241-1-skhawaja@google.com> <d4891333-43ea-4d74-9fb9-6ad8dac1a446@kernel.org>
- <20261030121113.GB3889730@ziepe.ca> <2c7aa5c1-3af3-4654-b244-1257d05c9d45@kernel.org>
- <auTR9SnDLsLVmnJ7@google.com>
-In-Reply-To: <auTR9SnDLsLVmnJ7@google.com>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Fri, 30 Oct 2026 15:43:53 -0700
-X-Gm-Features: AclHuK84pmgR6t7GwgKZ09yPCaz9JinHcZg2AVlK1zJKyqi05vBjmcmKbMe2QqI
-Message-ID: <CALCETrV5eqg6d9=+BQhCpRwBNe3aCQiut8vxPBs8b7PToqjaHg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] mm/memfd: add F_SEAL_PUNCH_HOLE
-To: Samiullah Khawaja <skhawaja@google.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Andrew Morton <akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, Jeff Layton <jlayton@kernel.org>, Chuck Lever <cel@kernel.org>, 
-	Alexander Aring <alex.aring@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Gerd Hoffmann <kraxel@redhat.com>, Vivek Kasireddy <vivek.kasireddy@intel.com>, 
-	Jeff Xu <jeffxu@google.com>, David Matlack <dmatlack@google.com>, 
-	Pasha Tatashin <tatashin@google.com>, linux-mm@kvack.org, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261030-futex-tagged-uaddr-v2-prep-v2-1-131eb7414bda@gentwo.org>
+X-B4-Tracking: v=1; b=H4sIAL4c5WoC/6XOsQ6CMBDG8VcxnT0DB1bi5HsYhmKvpQOUXAtiC
+ O9uIQ7G1fF/w++7RQRiR0FcD4tgmlxwvk+Bx4N4tKq3BE6nFpihzLMiAzNGmiEqa0nDqLRmmBA
+ GpgFkQarMmrNCNCIB6WjcvOP3OrVh30FsmdQXifghFXey/IFzyKEqdaVMQxcpq5ulPj79ybPdB
+ loXoufX/vyE28y/aL2u6xs6wH+5FAEAAA==
+X-Change-ID: 20261030-futex-tagged-uaddr-v2-prep-63ea40b5a22f
+To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
+ Davidlohr Bueso <dave@stgolabs.net>, 
+ =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+ Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Shubhang Kaushik <shubhang@os.amperecomputing.com>, 
+ "Christoph Lameter (Ampere)" <cl@gentwo.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, 
+ Andrey Konovalov <andreyknvl@gmail.com>, Will Deacon <will@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ stable@vger.kernel.org, "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793400015; l=5966;
+ i=sh@gentwo.org; s=20251010; h=from:subject:message-id;
+ bh=ZMs2FNIcBMES5Rg/sKY//vE3KG0UYrjCWf/LHF+Ga0U=;
+ b=ja6txryyLZ/C4E0k9cmXCj5fe92DM/gog19hgBK/XJn9of6noFlXXUV0e/VrdLnx9GaIhS7kU
+ H82XOp78jg5AMyZ8iKUCGkF2dGolUSpKDN2du71Fn7Zl2nLbtDJCs+m
+X-Developer-Key: i=sh@gentwo.org; a=ed25519;
+ pk=jc8YIRvxPSyJaBRe5y+a4N0RXKBUEcAh8+OFhlROXPY=
 
-On Fri, Oct 30, 2026 at 10:40=E2=80=AFAM Samiullah Khawaja <skhawaja@google=
-.com> wrote:
->
-> On Fri, Oct 30, 2026 at 03:39:40PM +0100, David Hildenbrand (Arm) wrote:
-> >On 10/30/26 13:11, Jason Gunthorpe wrote:
-> >> On Fri, Oct 30, 2026 at 11:20:30AM +0100, David Hildenbrand (Arm) wrot=
-e:
-> >>> On 10/26/26 23:05, Samiullah Khawaja wrote:
-> >>>> This series introduces F_SEAL_PUNCH_HOLE, a new memfd seal that prev=
-ents
-> >>>> holes from being punched into a shmem or hugetlbfs memfd while leavi=
-ng
-> >>>> the file fully writable.
-> >>>>
-> >>>> Background
-> >>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>
-> >>>> Drivers such as udmabuf and iommufd (via IOMMU_IOAS_MAP_FILE) use
-> >>>> memfd_pin_folios() to pin the folios backing a memfd and hand them t=
-o a
-> >>>> device for DMA. Pinning keeps those folios allocated, but it does no=
-t
-> >>>> keep them in the file. If userspace later calls
-> >>>> fallocate(FALLOC_FL_PUNCH_HOLE) or madvise(MADV_REMOVE) on the range=
-,
-> >>>> the folios are dropped from the page cache while the device continue=
-s
-> >>>> to use them. The pin holder is never notified, and from that point o=
-n
-> >>>> the device and the file silently diverge.
-> >>>
-> >>> We have the exact same situation when userspace maps anonymous folios=
- into vfio
-> >>> and then desides to MADV_DONTNEED the pages. Or any other memory back=
-end that is
-> >>> used for such purposes.
-> >>>
-> >>> User space must not zap/punch things that might be pinned elsewhere.
-> >>>
-> >>> That's not specific to memfd, udmabuf, iommufd or anything else.
-> >>>
-> >>> I don't see a reason to make userspace (that should not shoot itself =
-into the
-> >>> foot) a kernel feature it must activate itself to not shoot itself in=
-to the foot.
->
-> Agreed, for normal use this is userspace's problem. The seal was meant
-> for the kernel to cheaply verify at preserve time that nothing was
-> punched.
->
-> >>
-> >> The issue is live update doesn't preserve those background punched
-> >> folios and now we have created an UAF attack on the kernel across
-> >> kexec if you don't do something about it.
-> >>
-> >> There was some notion here that with the right sealing flags we could
-> >> tell if everything was 'live update compatible' and then know that
-> >> these attacks are impossible.
-> >Just remember that there was any hole punch and refuse to live update th=
-is instance.
-> >
-> >We could likely implement "we saw hole punch on a pinned folio" as well,=
- but I
-> >don't think that's required initially.
->
-> If I understand correctly, you mean recording on the memfd that a hole
-> punch happened, and refusing the live update if it did? That would work
-> and is much cheaper than what we do today, where iommufd walks all the
-> mapped pages at preserve time. For truncate, the existing F_SEAL_SHRINK
-> is enough or I can record that also on the memfd. I will send patches
-> for this.
+On arm64, a thread that enables the tagged address ABI can pass valid
+top-byte-tagged user pointers to futex syscalls. Such a pointer must
+have the same syscall behaviour as its untagged form.
 
-This entire situation continues to give me the willies.  After much
-prodding and contemplating (in my own brain), I got a friendly LLM to
-report:
+get_futex_key() validates the user address with access_ok(), but uses
+the raw address when constructing private and shared-anonymous futex
+keys. A waiter using a tagged address and a waker using the untagged
+form can therefore access the same futex word while hashing to distinct
+keys, causing FUTEX_WAKE to miss the waiter.
 
---- begin AI output ---
+Keep access_ok() on the original pointer so that arm64 retains its
+per-thread tagged-address ABI enforcement. Canonicalize the address
+afterwards, before it is used for futex key construction and shared
+mapping lookup.
 
-IOMMU_IOAS_MAP_FILE uses memfd_pin_folios(). Collapse [MADV_COLLAPSE
-or khugepaged] checks the old folio=E2=80=99s reference count, so a pin
-acquired before that check makes collapse fail.
+Add an arm64 64-bit selftest for a tagged private waiter woken through
+the corresponding untagged address.
 
-  The problematic interleaving is:
+Fixes: 63f0c6037965 ("arm64: Introduce prctl() options to control the tagged user addresses ABI")
+Cc: stable@vger.kernel.org
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
+---
+Changes in v2:
+- Add the generated tagged-address test binary to .gitignore.
+- Compile the arm64-specific test implementation only for arm64 64-bit
+  builds.
+- Avoid relying on /proc/<tid>/wchan to detect that the waiter has
+  queued; retry the untagged wake for a bounded interval instead.
 
-  1. collapse_file() locks and unmaps the old folio, then passes its
-reference-count check (mm/khugepaged.c:2446).
-  2. memfd_pin_folios() (mm/gup.c:3483) obtains the old folio from the
-file=E2=80=99s XArray and pins it, without taking the folio lock.
-  3. Collapse copies the contents and replaces the old cache entries
-with the new huge folio. It does not repeat the reference check or
-freeze the old count.
-  4. IOAS retains the old physical pages; accesses through the file
-use the new folio.
+Link to v1: https://lore.kernel.org/r/20261022-futex-arm64-tagged-uaddr-v1-1-84d8afbe7668@gentwo.org
+---
+ kernel/futex/core.c                                |  2 +
+ .../testing/selftests/futex/functional/.gitignore  |  1 +
+ tools/testing/selftests/futex/functional/Makefile  |  1 +
+ .../selftests/futex/functional/futex_tagged_addr.c | 61 ++++++++++++++++++++++
+ tools/testing/selftests/futex/functional/run.sh    |  3 ++
+ 5 files changed, 68 insertions(+)
 
---- end AI output ---
+diff --git a/kernel/futex/core.c b/kernel/futex/core.c
+index a240638f69e5c65bd036434a15f3df680efb4638..dcc8ffca38595a5ea69f3672375ffb9f9c6766f9 100644
+--- a/kernel/futex/core.c
++++ b/kernel/futex/core.c
+@@ -539,6 +539,8 @@ int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
+ 	if (unlikely(!access_ok(uaddr, size)))
+ 		return -EFAULT;
+ 
++	address = untagged_addr(address);
++
+ 	if (unlikely(should_fail_futex(fshared)))
+ 		return -EFAULT;
+ 
+diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
+index 7c39d10b38e4d86096d2d1ce5fe8d6036e8ca758..c64b93a683bd6e9f6b9d3e4f02397eb24cc5a0ad 100644
+--- a/tools/testing/selftests/futex/functional/.gitignore
++++ b/tools/testing/selftests/futex/functional/.gitignore
+@@ -6,6 +6,7 @@ futex_requeue
+ futex_requeue_pi
+ futex_requeue_pi_mismatched_ops
+ futex_requeue_pi_signal_restart
++futex_tagged_addr
+ futex_wait
+ futex_wait_private_mapped_file
+ futex_wait_timeout
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index a03bd5acba50319f08b04ff0904ef155c000fee3..8f7f6730285b725b483787362db4626c459d65c9 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -19,6 +19,7 @@ TEST_GEN_PROGS := \
+ 	futex_requeue_pi \
+ 	futex_requeue_pi_signal_restart \
+ 	futex_requeue_pi_mismatched_ops \
++	futex_tagged_addr \
+ 	futex_wait_uninitialized_heap \
+ 	futex_wait_private_mapped_file \
+ 	futex_wait \
+diff --git a/tools/testing/selftests/futex/functional/futex_tagged_addr.c b/tools/testing/selftests/futex/functional/futex_tagged_addr.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..0b0e350eff11939e42b7b1aca01136b037ed7217
+--- /dev/null
++++ b/tools/testing/selftests/futex/functional/futex_tagged_addr.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <errno.h>
++#include <stdint.h>
++#include <string.h>
++#include <sys/prctl.h>
++#include <time.h>
++#include <unistd.h>
++
++#include <linux/prctl.h>
++
++#include "futextest.h"
++#include "futex_thread.h"
++#include "kselftest_harness.h"
++
++#define WAKE_RETRIES	100
++#define WAKE_WAIT_US	10000
++
++#if defined(__aarch64__) && __SIZEOF_POINTER__ == 8
++static futex_t futex;
++static futex_t *tagged_futex;
++
++static int waiterfn(void *arg)
++{
++	struct timespec timeout = { .tv_sec = 2 };
++
++	return futex_wait(tagged_futex, 0, &timeout, FUTEX_PRIVATE_FLAG);
++}
++#endif
++
++TEST(tagged_addr)
++{
++#if !defined(__aarch64__) || __SIZEOF_POINTER__ != 8
++	SKIP(return, "arm64 64-bit tagged address ABI not available");
++#else
++	struct futex_thread waiter;
++	int ret, i;
++
++	ret = prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0);
++	if (ret && errno == EINVAL)
++		SKIP(return, "tagged address ABI not available");
++	ASSERT_EQ(ret, 0)
++		TH_LOG("PR_SET_TAGGED_ADDR_CTRL failed: %s", strerror(errno));
++
++	tagged_futex = (futex_t *)((uintptr_t)&futex | (0x42ULL << 56));
++	ASSERT_EQ(futex_thread_create(&waiter, waiterfn, NULL), 0)
++		TH_LOG("pthread_create failed");
++
++	for (i = 0; i < WAKE_RETRIES; i++) {
++		ret = futex_wake(&futex, 1, FUTEX_PRIVATE_FLAG);
++		if (ret)
++			break;
++		usleep(WAKE_WAIT_US);
++	}
++
++	EXPECT_EQ(ret, 1);
++	EXPECT_EQ(futex_thread_destroy(&waiter), 0);
++#endif
++}
++
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
+index d1a681b798bd385570710e7c5f9bb28cca64de3e..620d13ee7171e7cc6061053750c9ff4cf525ff72 100755
+--- a/tools/testing/selftests/futex/functional/run.sh
++++ b/tools/testing/selftests/futex/functional/run.sh
+@@ -46,6 +46,9 @@ echo
+ echo
+ ./futex_waitv
+ 
++echo
++./futex_tagged_addr
++
+ echo
+ ./futex_priv_hash
+ 
 
-Is this correct?  I haven't personally verified it.  But this whole
-pinning-folios-doesn't-keep-them-in-the-mapping situation seems
-*extremely* fragile.
+---
+base-commit: 3ac032ef6ca8e47bb06d1e189dfcf88fa0a09c75
+change-id: 20261030-futex-tagged-uaddr-v2-prep-63ea40b5a22f
 
---Andy
+Best regards,
+-- 
+Shubhang Kaushik (Ampere) <sh@gentwo.org>
 
->
-> >
-> >No need for more shaky seals.
-> >
-> >--
-> >Cheers,
-> >
-> >David
->
-> Thanks for the feedback,
-> Sami
->
-
-
---=20
-Andy Lutomirski
-AMA Capital Management, LLC
