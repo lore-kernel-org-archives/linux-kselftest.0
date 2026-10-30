@@ -1,111 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793396195;
-	b=Fax9lPL6G62RLBBLIX6R22/Mq/huLC2E3kR+b5/t3cweT4tt9GtL3VRl2TAaWvQDtXPy
-	 YzwGpqwv8vnZv9o/sub6RzPe3lFN9kQk1WXmEWB3xRO6W503hzQhpd3NOV3pipN6weap7
-	 R/3ue4Cui5vXDUmex1vIhxSkJggTtIzKSTCJfwKYrv8I20ivg9TkH2/veN//FSeboiVoJ
-	 eLXRcj875yR6at2GGayE1gj5G27IpotV5stkqWoBcwYQQpy/ADEBv90wVwoY3lvPpN61q
-	 lPrnXD5UQcgbB5okAxJh9o1xxmMo94/AqCChR9nHsGVIXvU7iv84v3gEIyerF4AP5PQ==
+	t=1793396858;
+	b=EWvZgHq9QrGWbYOlSg6lIsfXxKZ4Hrme3v4ROTmAQfR9Os5ZlNXUtE1cLcEGJ2/r9hae
+	 hgXn9IrH1P2vDoItcj8Dn7r1wf9/0fA9lpTbWMdmws/Xvn8/KkvYz4haTUbqxQrNjTrG5
+	 bnSvcoVSSITITC9RCx63SfpQEpXU/j7giV3lDDMtNnVDGEebZ2G/CmLUX1dLdr3LRQ0rO
+	 tPXjiXP54d7S/fBhfo4i2/1dFRvyiZLW4wjuURVpuGE9g27fhwvp6gqsbLvBvyTvJieMd
+	 zFfxTGoE3OUbWuovCCw0zCxx5O6iz8TgqJVTjZWOKjKektbHR99NiSUNcpz6BwaldJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793396195;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=oE0Ccbr5yPAfVWX0+h/q9Kt+558GBYavtTp5xHQ+Vuk=;
-	b=zHOD2QpXhd8+Uli0Oap33TToIBVo9qa94kRJEQBhgXjrTG/lYtT/WLyXcdKxQsC7c3OZ
-	 Te4GDKuy8wPqw0+11EAcTQlTh5w7CZsoesb6TI4WBY9o39tzvYJJgK/oUaacL6T2REX+e
-	 3RoAMP2WZL6r65bQZNDziGEO+1HI9owHHr5wSx6rqG2JFEl4gjcerpOhOBag8lcvDNLPS
-	 5ObxjnMyplWziNbdLom+sP7B7IVpMhUgGcVdhHNy/4/bBN3sWEmF0kBznfRk+RzPk1ggI
-	 yQH1xdsp3GKSDBmDifiPx7vYBM03h4/+IDqdw78wNBdNULIxfc8PnrNRCg0g2bKwZIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793396858;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=gIM0Lf0RizPpF2lV6gAp9aopG/Lg9g5C4lkrOp+TfwU=;
+	b=tarFqTGzoHZAuhQVBzYSF4k4pHJ92lqpH9aUk1saKlg2d5WjBqFCi2wAO5wb1S1qdo5C
+	 W6BAfCb32p1z1pKeYTuJk61j0nHV1GwmtJhCht+ml5FtLRJIB9CBip8uc1ZM2rm7MrRew
+	 KaSKph3JH7N+zo6rEOCqIChEKoaToXEiORUd29J0KSmvQq08gU62AS8nTTxiVsb6+uP0A
+	 liVd+zCEAvd6sKtzu3plpXYjW65FFGhmVHYbiFcx8fkWxSSnyx1Jwfylgg9nGqygphjf3
+	 0GEiYULvRralz8h+hw04S/9gfvWH/qUbN+n/Lrp0bDkE1+RREHQ2rj8+kDKRLKuM2MA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=QmnpfjVN;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=I4s6ucNT;
-	arc=none smtp.remote-ip=103.168.172.146
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QwLgp5NI;
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97AA8606A320
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 21:36:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97AA8606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07E4606A31E
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 21:47:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C07E4606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=QmnpfjVN;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=I4s6ucNT
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.phl.internal (Postfix) with ESMTP id B5C1AEC01C5
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 17:36:28 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Fri, 30 Oct 2026 17:36:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793396184;
-	 x=1793482584; bh=oE0Ccbr5yPAfVWX0+h/q9Kt+558GBYavtTp5xHQ+Vuk=; b=
-	QmnpfjVNb5PXtxkjQ3UfhXQ4o0SvEsjyn7V0+caN/qbtfHRXESD5RTKYvbzZsMBo
-	N6QilYQT74A7Hx7q31WKAYj/3K9dBmZzizD2a+qYzCdWLU0/Adthf7gC5X86mdKv
-	JGZ3v8nlD1n3XQVzoPy0I0J1p8WpXUxH5FeXHflbczfM2ISqm1vPlQmmGp0FoooJ
-	vrbgFD1EgFMx/cnmYgG4crMhUyxdGaGUHR7GGepJ41yA6BWbbkXqudqWqfXcAsM2
-	+wCycCwu/0/KB7VvcMy1p+y4D4VyYj+TWy5zzGdmdknRH2jgJmOacFNcoJQxh0S5
-	xg/C4i0snQ8pdLkPK767Rg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793396184; x=
-	1793482584; bh=oE0Ccbr5yPAfVWX0+h/q9Kt+558GBYavtTp5xHQ+Vuk=; b=I
-	4s6ucNT0OpQGltlw/h/IkCTcLN6YqujL7bLXr8rGedbS420TBCOfhKYc24uEaN5i
-	f0dyJj2Gn4XWMW4diuZS+PhRHWIMgZRLDXnrrDTiFyqGsR/td41nTxy9FPm65lxw
-	q25fRkA6u/AFLgfd74l+O/VpbAKWWpMfXDVT9mpxWbeFu85Vdbdh2scH2DcPk6FX
-	RuGPSzo2UySDGJlUWWcvHUFgu4Siq+V0xy7T3PwSwslXDXWSfjoAfP/+EEJ5trYC
-	Zuda8n37Rh2gPq83ueOceo69C5cUZkriWFHQhlZKoy0TpN3Bsb5pKA+Y6kvPiG+e
-	ippXTr6hH6U/iyzA4djsg==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793396184; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:eujrh4vOU8OiB+/WOn3vbsVxbCkUBab4qVc7mzW+rGN9ujU
-	RgCXBaYjIVGUQhG2evPI902BW0V2idBngroWu3jhHOTOem4XBkXVFz1hxUP9jnxs
-	1jV/5TfSqjzWOaqxkZvmAqbRO1RpK9egufy70Y37Ei3RrPdjmy4/hquo/1GNzIFA
-	cPS1CJgI2egj6DDk3a2FrDm9IQcrsvuCsKdpz7XcBzxcMenCnCO4GgfpKm6BItLr
-	wgIkoe7OSdLy6mhPtOaGrkzpfWtWxg95SN9KWblSLYnnHEe7rq2Te4m+WzISgAhv
-	Fl076v0srYBY2IYP1NFveoO6Wai0zqO/oEg6Q5Q==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:YjdUR5jCf6CjMO0+1WbAwxi6QqFcALkLZWjqCdv+dcU=:pBZXxo+rCnq0x6xDr1cY3qhidvDU5DP2DXZEtcqtZs8=;
-X-ME-Sender: <xms:1Q3laipJfgN2WInhuzFVKtohAghkocsfPS7uiLCraWZ8ji4gZVEP5g>
-    <xme:1Q3lare2x6zOCX8YOFF0ic5K_dgi10zFWYFVccZ69DNIo3yhDHjScWZwCjdVajqHW
-    klc0khOIEIRDDNaxjmVxc9cKB1pa9EqMDj0bzTvAqyT25QiJxlzl8wA3Q>
-X-ME-Proxy-Cause: dmFkZTGUd5/iMN2OMhfaJ26juaq7IE2rBPXg7DztrvCvjbx5YO48EAz/0qrk50laxyF6V4
-    BpHj+L/0zigYN+dd2FqR85zk+puHQvwqHZwCrCjIJS5scqSsPNYZbmnAz3pZ9gQnNJgqz4
-    qR+dkgsbrsYNJ1kCDdM3cDQirs82a7YUELotdxvyARVaYGqegdjrqXZTIlBItc3gUah1+I
-    LoZoIEpjze+CkB57ofs85o25dD1AH6lY9KF6MRoq4GQqy1NQ/mnMrlOb8tgeuuXDShbXw/
-    ALk65+CCens+NJLxICTHolv0gf74lmQMLkWgISvAgUotRrvsqezLCq3zuaYfhLj8kiPMBb
-    Hq8hK1ZcR7+WQUGkK1xNKhCjAMrE6fNTe7aqJ0Wl3Uu7maczhAywzeIyxF1bPFmHgANBct
-    dQNrN6SWqEaPS1S4zRyuNcBlbblte16I6+y0AC9Q2/QdBXRPzuxUcJfShI0X92EAI/1j/A
-    RxOOzZmgBUCgmgA4j97KN7hcRSaQPPvLy0enI1P+fOrxD8bbbNxu/Yf7KSBNoB5zpI47tH
-    AprzbWLkx1NhrGdnrbj07ksxdHavsR6zyeMYD49BNIA0kPfbTYmzJzRaf+eL6HfyXSE2lR
-    zvc5jfe/iOrOHilz+6Np8tMaOpMUP1+Fp7W3a8EdNpJBl6jJWordvuKNdYuw
-X-ME-Proxy: <xmx:1g3lapZIrhjgDU9w0EFAes4_xwS2wYEqX6aRYLBJqrmegBKSW4j8rg>
-    <xmx:1g3lai-MZ0iZvFndWav1FxS6a8XRtOW7u7EDRGLbxEBkPlTAmbQ0xg>
-    <xmx:1g3lavm-emB2RSY8iJlop2Du48NG9roLQHmuyKNYqYnNUlqpKAjIsg>
-    <xmx:1g3lany772SX77tf-3-5KM0RnnPSe7i7teX5KFzMmdcx-_dLb_A7mQ>
-    <xmx:2A3lamG4l-BrpFSVsyCzMMkofxQoTQviPK25Ox2SCMtIjYmSaY7acsnn>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 4ED5232A0097; Fri, 30 Oct 2026 17:36:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QwLgp5NI
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e942864693so6873705ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 14:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793396852; x=1794001652; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gIM0Lf0RizPpF2lV6gAp9aopG/Lg9g5C4lkrOp+TfwU=;
+        b=QwLgp5NIIMg4AA8/Z8CtU3veu8cREA/NoPqO23FoHKGC2AvsPNQmzks5z8NjAGnG/7
+         BD+ScScN5uJUv8ITeksQDGK+fqx3rm7eK5nu5JL35HXr5EeDTZqo8H6lUhoriOU0kp3T
+         n4Cr6obn1rdNu4BtmuGD/0gHHQOz/9joE+tLRnTxTz3OpMJ8aym3QAdjy+0zl7O+2L0w
+         OcJWym7XY8P4pwpSMytqPjqzLzyaJmqOxy6zVKYr8aq3T+f039sSxExWB+CFDlN8z0yd
+         uiAKWbQYezGYKcGlBy2DHE+7yOcvR6xCHyhfPmirxfPFcswd06xFfor8tls/BoU2Rz6I
+         NofQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793396852; x=1794001652;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gIM0Lf0RizPpF2lV6gAp9aopG/Lg9g5C4lkrOp+TfwU=;
+        b=hbme3h5I0fh/9Q1Uy+XMaeyITEs/cyKr0kurglMJqj07xdXLorc84CYP4ydKPzRb+z
+         8K9IDyjzHfJdP4ycrSS8T2Qt4vT/Ujs0iONLjJfFylgvks666nYrDugP6fLwbyQjG67H
+         Oh7PJxARd/MJGKgP6fgAQFxEZSTH/HDcazVVbxZo7fRWCcvapNnOdufx0QR5U1R3e/q6
+         2IEF3sRHleOXDeXkaePKaVSGoktzPfUYjpGx4hiaTq0OyO8S03sxa6zbRFKBDE6tpJuI
+         eeAFFtHW0VNPa2obIY9MM3WOwp8GVHqpc4jKJMntH7vLabUOjXBQ3tsjbFVGit8P7XkD
+         MtgA==
+X-Forwarded-Encrypted: i=1; AKwUvBzlH2EkGpVGzDraxV1/9pult63xWC+CwyTkBjQ3tbnoqjSOHKpMpX6PQu5DtJoBSYnJwviLhOvkvO8cBKemcOQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIsX2TM1ZZcmJtHuEY0ZQ0xOTzXTvZVmBbE/ImuQacvhMQXqs36
+	mIvR9QnFh3sPUbIGfLrGk3xKLzXtZdZI6Krs2m7BGdD+AhEEzkP1WGfx
+X-Gm-Gg: AYBFou2ZF2tDREkKlJiQDeHw7J5lJEfatMCGWlkK08p8UKhTWteLv1+z7ebeGBmlOxT
+	cSq9Bwx6tGspLl/4/a5Xx59UCWM0VSN7g21lNlLLYlUVPzy+uARzez6E3vwGUuF/k+mjYbVmdHX
+	vGQlO7c6nRVv/o63GQqj7mMuRxuftBpRjOlEOjdWn4/c5Ya1xOXiMerimWBJ41/mDBMc7T6dfwh
+	y4b3+lK0jSyRpTls1oq6PSAGHnWtGoDT5T1nDNZnz7yfhM47hkTtIwkuyjKDI+CWoS3nXBSqXhf
+	DNj/sPHgrh3GIjf740ohdHYm1jU6XTOqINcHn2kZX+S5tiCkschSbaCyayVLhhb5dxYN/tw3dhi
+	E3WssRFaJ4mGe2Q8BT9KDXBl9KgzkjfsFawtWc3N234Tm19LpGx6/e5cTDXXHjBJQMPKFWZZOLX
+	9ZmrKsx9RmJDh8TLgd6/6pwRb1jxqsJArp6UWNapY6GXfkHKljq6RqB5ioKhdEIR3/5I13AgVkQ
+	1vrlZcyGwopyDMuzPXRdrin/3Q1d1dUPTnrDEWUvxbjNo6bYFbGH05GU1fAXkQNrSQSOlWGmEeF
+	WVQauyHK5X7bVS/hZssRqyX++o61wE+Hfr/cgnZk8Q8FLO7bDffPeXKZoZkbnWMjxXd6rDE9RaE
+	+P4B8hYx6qSfYUt9vD2KIpVlvb37sjsl8KA==
+X-Received: by 2002:a17:903:144b:b0:2e9:42d8:48d3 with SMTP id d9443c01a7336-2eb364d2529mr35787295ad.36.1793396851935;
+        Fri, 30 Oct 2026 14:47:31 -0700 (PDT)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39230bbfsm11775285ad.19.2026.10.30.14.47.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Oct 2026 14:47:31 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 30 Oct 2026 21:47:30 +0000
+Message-Id: <DMII4JGTEUEG.2WRJPT6ODT6J0@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jamal Hadi Salim" <jhs@mojatatu.com>, <netdev@vger.kernel.org>
+Cc: "Eric Dumazet" <edumazet@kernel.org>, <bpf@vger.kernel.org>,
+ <bot+bpf-ci@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "David
+ Ahern" <dsahern@gmail.com>, "Martin KaFai Lau" <kafai@fb.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "David S . Miller" <davem@davemloft.net>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Jiri Pirko" <jiri@resnulli.us>, "Victor
+ Nogueira" <victor@mojatatu.com>, <linux-kselftest@vger.kernel.org>, "Shuah
+ Khan" <shuah@kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH net v2] bpf: Fix skb_pull() BUG in
+ __bpf_redirect_neigh()
+In-Reply-To: <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
+References: <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -115,46 +113,99 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: Ar2juRASE0hJ
-Date: Fri, 30 Oct 2026 22:36:01 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Thomas Huth" <thuth@redhat.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>
-Cc: soc@lists.linux.dev, shuah <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <256fea10-f0c9-411d-a6b6-a82cad357b57@app.fastmail.com>
-In-Reply-To: <20261030174323.370687-1-thuth@redhat.com>
-References: <20261030174323.370687-1-thuth@redhat.com>
-Subject: Re: [PATCH] selftests: vDSO: Fix header search list for vgetrandom-chacha.S
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 30, 2026, at 18:43, Thomas Huth wrote:
-> On aarch64, vgetrandom-chacha.S includes the assembler file from
-> arch/arm64/kernel/vdso/vgetrandom-chacha.S, and that includes
-> <asm/assembler.h> which in turn includes lots of system header files.
-> For this, we should make sure that the kernel headers of the
-> *current* kernel are in the search path of the compiler, otherwise
-> we end up including headers from /usr/include of the current distro
-> instead, and this is calling for trouble! Thus use $(KHDR_INCLUDES)
-> here to make sure that we are using the right header files.
-> (This issue has been found in a patch series that replaces __ASSEMBLY__
-> with __ASSEMBLER__ in the various kernel headers and finally stops
-> defining __ASSEMBLY__ in the kernel makefiles - when vgetrandom-chacha.S
-> now tries to include a header from /usr/include the compilation fails
-> since those headers still require __ASSEMBLY__ to fence away the C code)
+On Thu, Oct 29, 2026 at 02:36 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+> Add egress coverage to tc_redirect_neigh: the existing test only attaches
+> redirect_neigh at ingress, where mac_len is populated.
+
+This test cannot hit the BUG.
+Just drop it and respin as [PATCH bpf v3].
+
+>  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
+>  				struct bpf_nh_params *nh)
+>  {
+> -	struct ethhdr *ethh = eth_hdr(skb);
+> +	struct ethhdr *ethh;
 >
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  See this link for the build failure:
->  
-> https://lore.kernel.org/oe-kbuild-all/9e294bfd-4704-42a5-a704-f301f4afe042@app.fastmail.com/
+>  	if (unlikely(skb->mac_header >= skb->network_header))
+>  		goto out;
+> +	if (unlikely(skb_mac_header_len(skb) < ETH_HLEN ||
+> +		     !pskb_may_pull(skb, ETH_HLEN)))
+> +		goto out;
+> +	ethh = eth_hdr(skb);
 
-Tested-by: Arnd Bergmann <arnd@arndb.de> # (build tested)
+ETH_HLEN is not enough.
+__bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() read ip_hdr()
+and ipv6_hdr() right after the pull. Nothing makes these headers linear.
+Take the AF_PACKET frame from the commit log without pop_eth and
+bpf_skb_change_head():
 
-If you like, I can add this to the asm-generic tree to avoid the
-regression from your series, or Shuah can pick this up the normal
-way as a bugfix for kselftest.
+  packet_snd()                     headlen == 14, IP header in frags
+  skb_pull(skb, ETH_HLEN)          headlen == 0
+  skb_reset_network_header(skb)    network header == skb->tail
+  ip4h->daddr, ip4h->saddr         read past skb->tail
 
-      Arnd
+The route lookup runs on garbage.
+
+Eric's skb_network_offset() check also covers
+mac_header >= network_header. No need for two checks.
+
+Something like this:
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2290,10 +2290,14 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
+ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
+ 				   struct bpf_nh_params *nh)
+ {
+-	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
+ 	struct net *net = dev_net(dev);
+ 	int err, ret = NET_XMIT_DROP;
++	const struct ipv6hdr *ip6h;
++
++	if (unlikely(!pskb_may_pull(skb, sizeof(*ip6h))))
++		goto out_drop;
++	ip6h = ipv6_hdr(skb);
+ 
+ 	if (!nh) {
+ 		struct dst_entry *dst;
+ 		struct flowi6 fl6 = {
+@@ -2399,10 +2403,14 @@ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
+ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+ 				   struct bpf_nh_params *nh)
+ {
+-	const struct iphdr *ip4h = ip_hdr(skb);
+ 	struct net *net = dev_net(dev);
+ 	int err, ret = NET_XMIT_DROP;
++	const struct iphdr *ip4h;
++
++	if (unlikely(!pskb_may_pull(skb, sizeof(*ip4h))))
++		goto out_drop;
++	ip4h = ip_hdr(skb);
+ 
+ 	if (!nh) {
+ 		struct flowi4 fl4 = {
+ 			.flowi4_flags = FLOWI_FLAG_ANYSRC,
+@@ -2451,15 +2459,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+ static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
+ 				struct bpf_nh_params *nh)
+ {
+-	struct ethhdr *ethh = eth_hdr(skb);
+-
+-	if (unlikely(skb->mac_header >= skb->network_header))
++	if (unlikely(skb_network_offset(skb) < ETH_HLEN ||
++		     !pskb_may_pull(skb, ETH_HLEN)))
+ 		goto out;
+ 	bpf_push_mac_rcsum(skb);
+-	if (is_multicast_ether_addr(ethh->h_dest))
++	if (is_multicast_ether_addr(eth_hdr(skb)->h_dest))
+ 		goto out;
+ 
+-	skb_pull(skb, sizeof(*ethh));
++	skb_pull(skb, ETH_HLEN);
+ 	skb_unset_mac_header(skb);
+ 	skb_reset_network_header(skb);
+ 
+
+pw-bot: cr
