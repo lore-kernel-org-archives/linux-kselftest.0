@@ -1,52 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.243.164.118
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793356943;
-	b=1/fhMFuV9EADNOqeyVYUWqBhEfAcCY2ZghT2HpoWpNHXyN19YXLyj4006cTqpwWex6Ad
-	 nx4nAA+AHlmjZC7li6GSCo4L5THNxrDwFVq1Gx5ntqptse5GP4jfG/3dYCoglkiAM4mhO
-	 6Ikcv1J0BTD6sRLdc66Ja1q7SIhCNG3kL3LR6usl05+aVWIuo8LWL1LSEz3r8zBiwSnBS
-	 u4x5I3e0X6dHaVSO4aohqBgF9a2+jUYNhxdzXEvapRy0YHGHRmrFbRoISwAqTNEA4zpb/
-	 gguwA8O9DwUaAVb3WEVZHz3PGavunJOGl36EeyMjGowGJ8Ryc+8wNsbga3fFiSEG+5g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793356943;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=V91mG1ucI7P99bGc4LQseFhOC+7VxJiPPM+PptTC53o=;
-	b=VvaVWUX9h0MmSDRV+b841y2gETW+uBvIsJh6TiSrMAIsjzFy+DhYXaksp+FaM2BKX+4+
-	 nxRZuJlwnmNiVvqkpt7Q5brJ8/QFoq87cqmIZL2uQw9pKqtRVeyuaENltnphcLBhfGgyA
-	 UqIxsoeLHjkZGZw4e09JORGDA6RJiMDjlOd0fdFAJs4wMVS0NaR0jz60qHz9TgPWoGhJx
-	 o3XrH8kv63DGzmQ55ruc+CBaPxHCl7e0JfYfsLhtwHmQq4NeWWS3NANUjmkQTMJ8uCwps
-	 GIpZpZ+q7BhMCWywV76aIueCeu76qTdYQU4e2EH15fhZIURX0xc8IrylfWVoB15DOIg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=phytium.com.cn;
-	spf=pass smtp.mailfrom=phytium.com.cn;
-	arc=none smtp.remote-ip=162.243.164.118
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80694606A31E;
-	Fri, 30 Oct 2026 10:42:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80694606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytium.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytium.com.cn
-Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
-	by hzbj-icmmx-7 (Coremail) with UTF8SMTP id AQAAfwD36r6KdORqiF4HBQ--.9378S2;
-	Fri, 30 Oct 2026 18:42:19 +0800 (CST)
-Received: from phytium.com.cn (unknown [218.76.62.144])
-	by mail (Coremail) with SMTP id AQAAf8Dwj3KGdORqNXXzAA--.24040S3;
-	Fri, 30 Oct 2026 18:42:15 +0800 (CST)
-From: xiong yining <xiongyining1480@phytium.com.cn>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chenbaozi@phytium.com.cn,
-	"zhongqiu . han" <zhongqiu.han@oss.qualcomm.com>,
-	xiong yining <xiongyining1480@phytium.com.cn>
-Subject: [PATCH v3] selftests: cpufreq: stop CPU hotplug loop after cpufreq update test
-Date: Fri, 30 Oct 2026 18:42:13 +0800
-Message-Id: <20261030104213.2030283-1-xiongyining1480@phytium.com.cn>
-X-Mailer: git-send-email 2.34.1
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793359099;
+	b=C2A8y0E6DlwJVqFop69GOgyYqK5LGA8t4MLhz//xPYczUY6HqK7jfBwiSS0WMDbklhVn
+	 HDaXxc6Etyxvmw1Wf/TTnwXeivWv/kF3/Wxy2SyBXn1ZegXYLfkB5p7+kDA6whWJVkkru
+	 /xT/BQAl0cwWgyw9S0cP7R1Rk+y5h5gmrW90TwcJDhSPqdpIR8APjA2CUdyxp9LN5VGUZ
+	 z9ghu9HwHIpbBgy+ESjgW1/o9W989gf9uVxaAEMBLqaROEe9eMN/y+UE39h6Xy8KP4l3B
+	 SG8VUQyErrShDku3/TEjBjrxoTNNfUcxWGJksbus2jZSZZgRCvavK2WauQ+6tLlTZOA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793359099;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=3AVm04Y0KOzb9VUkceVI3VXe0cWPKBaHmwO9QhAw3ls=;
+	b=fGY3yGQNkIndwPzM/1tfnsq6JdjuRDT1RVWAAEZd8ANV0hoGcNBASLj8a4bb8UKC3bU6
+	 t7DEFXFtJPTHBjct327CJVP2SvEry1Fvqvsp1O74nXR81+epQmeVziUa1vrQlRfszALoK
+	 DJ5DFaDl7Ord8dBdChB30zlcTl1c6Oo69de+N73iNSoIekyHceWYZOPHjhT4y8hzvR8Y3
+	 6nZ8lycijQRAbWwAejFwxaLJgAKwgtdmQqmbyTGMWJSQQZMVN5F9xCNXMuv8rmpNCisnm
+	 ua0934z8STpDizF2plLO4ZInUVf8/cKV+mMORlckBLQR2zgq0Eu1mGnMXBKpkCHOYfQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="HZ/fjRsi";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F581606A31A;
+	Fri, 30 Oct 2026 11:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HZ/fjRsi
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793359099;
+	b=CxTULWO8+QdZgvxBMe7xW7v6MaL46lhjH5NPUVUVO9M2m6wolO+DJt+tE2xrc3+v/UXc
+	 H5DbdgDW1o/c8lapWMAzWZvKYGyZ1Dr24xx+Iwp9uWvW25zhROuzE6L4xMUw6gs2U1pZr
+	 Pu4gjbxoNpV4dTrqbKcqDsFawVW6QOqqK96UXgPcrKKo5A2yZZcSy39vi/u+9hmQfCb9p
+	 JFU77sAp+c31eD7aHcEKpFep//anrxG7aCxJk66rGxam9Alr/8MHq09MWxiE8Z+0r2IZY
+	 cQPaUtL+R3YiTJsfRv4ZGrhWI2pafWY+xd5hLG755ylw1qM9n8qxPkNSmR7+nfZxG+g==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793359099;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=3AVm04Y0KOzb9VUkceVI3VXe0cWPKBaHmwO9QhAw3ls=;
+	b=3uwY7tg69q/6ub8S5R5drmD1ZsDmeSZ/edPfDBrZzT//gq/CKZWCtZDuAEpwZ/cdIKBL
+	 73GFycqASWxxuaaJCt6q1ewaZ+7EWar8eAjGgh8n/fp1s9PNMdmxLeFjj41ljyGhDLpM1
+	 SZvgIJolACMOrZy0L7/A1K6j4ggoA4DgdnMP224yJIg7IaH9/uSUoMwY2L5xO4f01woH3
+	 apEkfak9Ae8KjTvswnBGio49Hnv1R2jceHjsqoxh0tf5PhKFqdkbqhe/q2MvBVlKzbJLX
+	 286XflPVMkcSE3vfVr19Xezi0Y8ARjLy0w+Ce/32WTi1X4AZv8vM/QMIBc2FZWysj4A==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0D0531F0093A;
+	Fri, 30 Oct 2026 11:18:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793359098;
+	bh=3AVm04Y0KOzb9VUkceVI3VXe0cWPKBaHmwO9QhAw3ls=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=HZ/fjRsifC3tVMU2aDCE1oDKo7F7SxPhEOK2tcmas4/V1Sts21siRX3TVY9/D2jF7
+	 ++LRI2bBhUk+86oL7b2+1bLd1/CpbCT8j5+j6zJH8DE27YZeQZXdpZsF63tw50i6fk
+	 glL3tPVQZR5swbwGq/Zp1D7dVcAq+e1Od5urQEitcvM34rfN4QHfAdTDzsNSzfl+U0
+	 xk09dN5b/uRjLGOWeCwvBKT+F2ZwJ39DOZxMP67YUxi7AQBrNxWwrGXDYWfk9wjaRE
+	 q2gZRJ/a5TWle1aERdxQDCTmcvWnCO5V2QXljfkaty1ZKilf+fO/bul1VMf4X1eRYV
+	 CniiG2W5JlA7w==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 7568743773;
+	Fri, 30 Oct 2026 11:18:17 +0000 (UTC)
+From: Martin Belanger via B4 Relay <devnull+martin.nvme.dev.gmail.com@kernel.org>
+Date: Fri, 30 Oct 2026 07:18:13 -0400
+Subject: [PATCH RFC net-next v3 2/5] tls: add socket options to register
+ the traffic secrets
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,125 +83,345 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8Dwj3KGdORqNXXzAA--.24040S3
-X-CM-SenderInfo: x0lr0wp1lqx0bjrumio6sk53xlxphulrpou0/1tbiAQAECmrjns4IMwAOsj
-Authentication-Results: hzbj-icmmx-7; spf=neutral smtp.mail=xiongyinin
-	g1480@phytium.com.cn;
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWF15Kw48tw15GFW7tr45GFg_yoW5Ww43pF
-	WkGw45twn7CF1qyws3G34UX3y8X3Z3CF47Wrsaqr1Svw15JF9Iv3WSg3W7WFy3uFWkZw4F
-	kanYy3W09rWYyrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-	DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
-	UUUUU
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261030-keyupdate-rfc-v3-2-8e1e32226e51@gmail.com>
+References: <20261030-keyupdate-rfc-v3-0-8e1e32226e51@gmail.com>
+In-Reply-To: <20261030-keyupdate-rfc-v3-0-8e1e32226e51@gmail.com>
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Hannes Reinecke <hare@kernel.org>, Chuck Lever <cel@kernel.org>, 
+ kernel-tls-handshake@lists.linux.dev, linux-nvme@lists.infradead.org, 
+ Alistair Francis <alistair.francis@wdc.com>, 
+ Martin Belanger <martin.belanger@dell.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793359096; l=10206;
+ i=martin.nvme.dev@gmail.com; s=20261014; h=from:subject:message-id;
+ bh=ya67y+Wr3WIxZQ3KQukxoHaZoZuKeJaPwCpCCjo7qXQ=;
+ b=QttupLSlF3Jm1XUZp4QKkOx9t9iTYzNWGxsewjR/TXYVbiY4mvDUOIAnk/CG5zNYGHj95z7iB
+ hNAA5Cnuq2aDhGK50DIVNJ18k3jTCLP0tDLCL2IcnkcU7t9gpAul6EK
+X-Developer-Key: i=martin.nvme.dev@gmail.com; a=ed25519;
+ pk=4K+XXetGK35w2LzRRddd/bbHawZU222BN+YZRuSpN+k=
+X-Endpoint-Received: by B4 Relay for martin.nvme.dev@gmail.com/20261014
+ with auth_id=1176
+X-Original-From: Martin Belanger <martin.nvme.dev@gmail.com>
+Reply-To: martin.nvme.dev@gmail.com
 
-Original test uses a fixed 5000 iteration loop to trigger CPU hotplug
-for verifying cpufreq synchronization between CPU hotplug and sysfs
-writes.
+From: Martin Belanger <martin.belanger@dell.com>
 
-Two issues exist:
-1. Background hotplug task keeps running after test completes, causing
-redundant CPU on/offline operations.
-2. When cpufreq frequency setup is slow, the hotplug loop may exit
-before frequency updates finish, which breaks test purpose.
+kTLS holds the key and IV of each direction, but not the traffic secret
+they were derived from. The derivation is one-way, so the kernel cannot
+compute the next generation for a KeyUpdate on its own.
 
-Use signal notification to terminate the infinite hotplug loop, and
-add an EXIT trap to clean up the hotplug child when this test function
-terminates abnormally.
+Add TLS_TX_TRAFFIC_SECRET and TLS_RX_TRAFFIC_SECRET. The owner of the
+socket passes the TLS 1.3 application traffic secret of a direction after
+installing its key. The cipher of the installed key selects the hash, so
+the option takes only the secret. A socket without a registered secret
+behaves as before.
 
-This makes hotplug run only during cpufreq sysfs write test,
-align with test objective.
+The secret must give the installed key and IV, or the option fails with
+-EINVAL. A wrong secret would otherwise fail only at the first
+KeyUpdate.
 
-Signed-off-by: xiong yining <xiongyining1480@phytium.com.cn>
+The TX secret can be registered alone. The RX secret needs the TX secret
+first: a received KeyUpdate can ask for one in reply, and since the
+kernel consumes the record, only the kernel can send that reply.
+
+Installing a new key with TLS_TX or TLS_RX removes the secrets that no
+longer apply. The secrets are cleared when the context is freed and
+cannot be read back.
+
+Assisted-by: LLM
+Reviewed-by: Hannes Reinecke <hare@kernel.org>
+Signed-off-by: Martin Belanger <martin.belanger@dell.com>
 ---
-Changes in v3:
-- Start the hotplug child after governor switch and sysfs frequency reads,
-to avoid -EBUSY errors when the target CPU is offline.
+ Documentation/networking/tls.rst |  26 +++++++
+ include/net/tls.h                |  13 ++++
+ include/uapi/linux/tls.h         |   2 +
+ net/tls/tls_main.c               | 145 ++++++++++++++++++++++++++++++++++++++-
+ 4 files changed, 185 insertions(+), 1 deletion(-)
 
-Changes in v2:
-- Stop the hotplug child process by signal notification instead of
-a stop file, avoiding the predictable temporary path.
-- Add an exit trap so the hotplug child is also cleaned up when the
-main shell terminates abnormally.
-- Link to v1:
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2662696.html
-
-This addresses the security and robustness concerns raised by Sashiko.
----
- .../selftests/cpufreq/special-tests.sh        | 30 +++++++++++++++----
- 1 file changed, 24 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/cpufreq/special-tests.sh b/tools/testing/selftests/cpufreq/special-tests.sh
-index e87ed7c8e5e5..0665da8f2444 100755
---- a/tools/testing/selftests/cpufreq/special-tests.sh
-+++ b/tools/testing/selftests/cpufreq/special-tests.sh
-@@ -16,6 +16,8 @@ source cpu.sh
- source cpufreq.sh
- source governor.sh
+diff --git a/Documentation/networking/tls.rst b/Documentation/networking/tls.rst
+index 980c442d7161..2e011bd1ce4a 100644
+--- a/Documentation/networking/tls.rst
++++ b/Documentation/networking/tls.rst
+@@ -300,6 +300,32 @@ extra byte used by the ContentType field.
  
-+HOTPLUG_PID=""
+ [1] https://datatracker.ietf.org/doc/html/rfc8449
+ 
++TLS_TX_TRAFFIC_SECRET and TLS_RX_TRAFFIC_SECRET
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
- # Test 1
- # $1: policy
- __simple_lockdep()
-@@ -92,6 +94,16 @@ governor_race()
- 	restore_all_governors
++``TLS_TX_TRAFFIC_SECRET`` registers the TLS 1.3 application traffic secret
++of the transmit direction, ``TLS_RX_TRAFFIC_SECRET`` that of the receive
++direction. With a registered secret, the kernel performs KeyUpdate for that
++direction itself (RFC 9846, section 4.7.3). The value is the secret itself.
++TLS 1.3 only, software path only.
++
++Install the key of the direction first, with the ``TLS_TX`` or ``TLS_RX``
++socket option described above. The cipher of that key selects the hash, and
++the secret must have the length of that hash: 32 bytes for SHA-256
++(AES-128-GCM, AES-128-CCM, ChaCha20-Poly1305) or 48 bytes for SHA-384
++(AES-256-GCM). Other ciphers return ``EOPNOTSUPP``.
++
++Each secret can be registered once. ``TLS_RX_TRAFFIC_SECRET`` needs
++``TLS_TX_TRAFFIC_SECRET`` first: a received KeyUpdate can ask for one in
++reply, and only the kernel sees it. ``TLS_TX_TRAFFIC_SECRET`` alone is
++allowed.
++
++If the application installs a new key itself with ``TLS_TX``, both secrets
++are removed. With ``TLS_RX``, the RX secret is removed. KeyUpdate for that
++direction is then left to the application again.
++
++The secrets cannot be read back.
++
+ Statistics
+ ==========
+ 
+diff --git a/include/net/tls.h b/include/net/tls.h
+index e57bef58851e..aacc6d12226e 100644
+--- a/include/net/tls.h
++++ b/include/net/tls.h
+@@ -65,6 +65,9 @@ struct tls_rec;
+ 
+ #define TLS_AAD_SPACE_SIZE		13
+ 
++/* SHA-384, the longest hash of a TLS 1.3 cipher suite kTLS supports */
++#define TLS_MAX_TRAFFIC_SECRET_SIZE	48
++
+ #define TLS_MAX_IV_SIZE			16
+ #define TLS_MAX_SALT_SIZE		4
+ #define TLS_TAG_SIZE			16
+@@ -224,6 +227,12 @@ struct tls_prot_info {
+ 	u16 tail_size;
+ };
+ 
++/* A TLS 1.3 application traffic secret. len is 0 if none is registered. */
++struct tls_traffic_secret {
++	u8 data[TLS_MAX_TRAFFIC_SECRET_SIZE];
++	u8 len;
++};
++
+ struct tls_context {
+ 	/* read-only cache line */
+ 	struct tls_prot_info prot_info;
+@@ -266,6 +275,10 @@ struct tls_context {
+ 	union tls_crypto_context crypto_send;
+ 	union tls_crypto_context crypto_recv;
+ 
++	/* Registered for KeyUpdate, protected by the socket lock */
++	struct tls_traffic_secret tx_secret;
++	struct tls_traffic_secret rx_secret;
++
+ 	struct list_head list;
+ 	refcount_t refcount;
+ 	struct rcu_head rcu;
+diff --git a/include/uapi/linux/tls.h b/include/uapi/linux/tls.h
+index 1245ab38afc1..d1b136ecea96 100644
+--- a/include/uapi/linux/tls.h
++++ b/include/uapi/linux/tls.h
+@@ -42,6 +42,8 @@
+ #define TLS_TX_ZEROCOPY_RO	3	/* TX zerocopy (only sendfile now) */
+ #define TLS_RX_EXPECT_NO_PAD	4	/* Attempt opportunistic zero-copy */
+ #define TLS_TX_MAX_PAYLOAD_LEN	5	/* Maximum plaintext size */
++#define TLS_TX_TRAFFIC_SECRET	6	/* TLS 1.3 TX traffic secret */
++#define TLS_RX_TRAFFIC_SECRET	7	/* TLS 1.3 RX traffic secret */
+ 
+ /* Supported versions */
+ #define TLS_VERSION_MINOR(ver)	((ver) & 0xFF)
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index 8bdb78718a8d..c46dc399af16 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -31,6 +31,8 @@
+  * SOFTWARE.
+  */
+ 
++#include <crypto/sha2.h>
++#include <crypto/utils.h>
+ #include <linux/module.h>
+ 
+ #include <net/tcp.h>
+@@ -325,6 +327,8 @@ void tls_ctx_free(struct sock *sk, struct tls_context *ctx)
+ 
+ 	memzero_explicit(&ctx->crypto_send, sizeof(ctx->crypto_send));
+ 	memzero_explicit(&ctx->crypto_recv, sizeof(ctx->crypto_recv));
++	memzero_explicit(&ctx->tx_secret, sizeof(ctx->tx_secret));
++	memzero_explicit(&ctx->rx_secret, sizeof(ctx->rx_secret));
+ 	mutex_destroy(&ctx->tx_lock);
+ 
+ 	if (sk)
+@@ -757,8 +761,16 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 		ctx->rx_conf = conf;
+ 	update_sk_prot(sk, ctx);
+ 
+-	if (update)
++	if (update) {
++		/* The registered secret no longer matches the key. The RX
++		 * secret also needs the TX one, see do_tls_setsockopt_secret().
++		 */
++		if (tx)
++			memzero_explicit(&ctx->tx_secret,
++					 sizeof(ctx->tx_secret));
++		memzero_explicit(&ctx->rx_secret, sizeof(ctx->rx_secret));
+ 		return 0;
++	}
+ 
+ 	if (tx) {
+ 		ctx->sk_write_space = sk->sk_write_space;
+@@ -857,6 +869,130 @@ static int do_tls_setsockopt_tx_payload_len(struct sock *sk, sockptr_t optval,
+ 	return 0;
  }
  
-+hotplug_cleanup()
++/* Length of the TLS 1.3 traffic secret for @cipher_type, the size of
++ * its hash. 0 if KeyUpdate is not supported for the cipher.
++ */
++static int tls_traffic_secret_len(u16 cipher_type)
 +{
-+	if [[ -n "$HOTPLUG_PID" ]]; then
-+		kill -s SIGTERM "$HOTPLUG_PID"
-+		wait "$HOTPLUG_PID"
-+
-+		HOTPLUG_PID=""
-+	fi
++	switch (cipher_type) {
++	case TLS_CIPHER_AES_GCM_128:
++	case TLS_CIPHER_AES_CCM_128:
++	case TLS_CIPHER_CHACHA20_POLY1305:
++		return SHA256_DIGEST_SIZE;
++	case TLS_CIPHER_AES_GCM_256:
++		return SHA384_DIGEST_SIZE;
++	default:
++		return 0;
++	}
 +}
 +
- # Test 4
- # $1: cpu
- hotplug_with_updates_cpu()
-@@ -101,14 +113,18 @@ hotplug_with_updates_cpu()
- 	# switch to ondemand
- 	__switch_governor_for_cpu $1 "ondemand"
- 
--	for i in `seq 1 5000`
--	do
--		reboot_cpu $1
--	done &
--
- 	local freqs=$(cat $filepath/scaling_available_frequencies)
- 	local oldfreq=$(cat $filepath/scaling_min_freq)
- 
-+	(
-+		local quit=0
-+		trap 'quit=1' SIGTERM
-+		while [ "$quit" -eq 0 ]; do
-+			reboot_cpu "$1"
-+		done
-+	) &
-+	HOTPLUG_PID=$!
++/* The installed key and IV must be the ones that @secret gives
++ * (RFC 9846 section 7.3):
++ *
++ *   key = HKDF-Expand-Label(secret, "key", "", key_length)
++ *   iv  = HKDF-Expand-Label(secret, "iv", "", iv_length)
++ *
++ * crypto_info holds the iv as salt followed by iv. Each KeyUpdate
++ * derives the next key from the secret, so a wrong secret fails only
++ * at the first KeyUpdate, with no clear cause.
++ */
++static int tls_check_traffic_secret(struct tls_crypto_info *crypto_info,
++				    const u8 *secret, int len)
++{
++	const struct tls_cipher_desc *cipher_desc;
++	u8 iv[TLS_MAX_SALT_SIZE + TLS_MAX_IV_SIZE];
++	u8 key[TLS_CIPHER_AES_GCM_256_KEY_SIZE];
++	int rc;
 +
- 	for j in `seq 1 5000`
- 	do
- 		# Set all frequencies one-by-one
-@@ -117,14 +133,16 @@ hotplug_with_updates_cpu()
- 		done
- 	done
- 
-+	hotplug_cleanup
++	cipher_desc = get_cipher_desc(crypto_info->cipher_type);
++	if (!cipher_desc || cipher_desc->key > sizeof(key) ||
++	    cipher_desc->salt + cipher_desc->iv > sizeof(iv))
++		return -EINVAL;
 +
- 	# restore old freq
- 	echo $oldfreq > $filepath/scaling_min_freq
- }
- 
- hotplug_with_updates()
++	rc = tls_hkdf_expand_label(secret, len, "key", key, cipher_desc->key);
++	if (rc)
++		goto out;
++
++	rc = tls_hkdf_expand_label(secret, len, "iv", iv,
++				   cipher_desc->salt + cipher_desc->iv);
++	if (rc)
++		goto out;
++
++	if (crypto_memneq(key, crypto_info_key(crypto_info, cipher_desc),
++			  cipher_desc->key) ||
++	    crypto_memneq(iv, crypto_info_salt(crypto_info, cipher_desc),
++			  cipher_desc->salt) ||
++	    crypto_memneq(iv + cipher_desc->salt,
++			  crypto_info_iv(crypto_info, cipher_desc),
++			  cipher_desc->iv))
++		rc = -EINVAL;
++
++out:
++	memzero_explicit(key, sizeof(key));
++	memzero_explicit(iv, sizeof(iv));
++
++	return rc;
++}
++
++static int do_tls_setsockopt_secret(struct sock *sk, sockptr_t optval,
++				    unsigned int optlen, int tx)
++{
++	struct tls_context *ctx = tls_get_ctx(sk);
++	struct tls_crypto_info *crypto_info;
++	struct tls_traffic_secret *secret;
++	u8 data[TLS_MAX_TRAFFIC_SECRET_SIZE];
++	int len, rc;
++
++	if (tx) {
++		crypto_info = &ctx->crypto_send.info;
++		secret = &ctx->tx_secret;
++	} else {
++		crypto_info = &ctx->crypto_recv.info;
++		secret = &ctx->rx_secret;
++	}
++
++	/* The key must be installed first: its cipher selects the hash */
++	if (!TLS_CRYPTO_INFO_READY(crypto_info) ||
++	    crypto_info->version != TLS_1_3_VERSION)
++		return -EINVAL;
++
++	if ((tx ? ctx->tx_conf : ctx->rx_conf) != TLS_SW)
++		return -EOPNOTSUPP;
++
++	len = tls_traffic_secret_len(crypto_info->cipher_type);
++	if (!len)
++		return -EOPNOTSUPP;
++
++	if (sockptr_is_null(optval) || optlen != len)
++		return -EINVAL;
++
++	/* A received KeyUpdate may ask for one in reply. The kernel
++	 * consumes the record, so only the kernel can send the reply.
++	 */
++	if (!tx && !ctx->tx_secret.len)
++		return -EINVAL;
++
++	if (secret->len)
++		return -EBUSY;
++
++	if (copy_from_sockptr(data, optval, len)) {
++		rc = -EFAULT;
++		goto out;
++	}
++
++	rc = tls_check_traffic_secret(crypto_info, data, len);
++	if (rc)
++		goto out;
++
++	memcpy(secret->data, data, len);
++	secret->len = len;
++
++out:
++	memzero_explicit(data, sizeof(data));
++
++	return rc;
++}
++
+ static int do_tls_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+ 			     unsigned int optlen)
  {
-+	trap 'hotplug_cleanup' EXIT
- 	save_all_governors
- 	for_each_non_boot_cpu hotplug_with_updates_cpu
--	wait
- 	restore_all_governors
- }
+@@ -883,6 +1019,13 @@ static int do_tls_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+ 		rc = do_tls_setsockopt_tx_payload_len(sk, optval, optlen);
+ 		release_sock(sk);
+ 		break;
++	case TLS_TX_TRAFFIC_SECRET:
++	case TLS_RX_TRAFFIC_SECRET:
++		lock_sock(sk);
++		rc = do_tls_setsockopt_secret(sk, optval, optlen,
++					      optname == TLS_TX_TRAFFIC_SECRET);
++		release_sock(sk);
++		break;
+ 	default:
+ 		rc = -ENOPROTOOPT;
+ 		break;
+
 -- 
-2.34.1
+2.53.0
+
 
