@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793364303;
-	b=DB/jLOAalJ1rK1wxDXHm4Nuky8VMutm65HqtS1RgcMEgRfjNluMuKSUeB38eAMuFdiWe
-	 if0t1xntPuULVpoEwnmeGX5e1YGibvdAEbUaB03TIj+naBOYchoykx7YGPZyn5TI+Zogg
-	 lkkiwxRUYcwKgzy0y/+BuZnJu2Z4suiz7u8YiJOwlRd+ywHBFCfiLO+WzPaKKuVp9YsJ6
-	 D83WSfb9rkUFmhCJ09ktGLcAv/kIpC/8MTnW2IXDhGMhVBl9duBuLW8qiESjM2RZwUXgc
-	 N68I7viL1vQEFX87T+NNq43zQDIv6XJo1U0mCL7AxkVyXaaweRUEueyvATYlDXIsHhg==
+	t=1793365175;
+	b=b7Li4151AhLB8yNpvRfvNGK5AZTHk4+1S/5p2/kgmykx2WFBh0NlUv+BhZsj2J0zXPQa
+	 GhyYevLQ2VSq7kWxXxH6s+CyR07Ypv6UrLMIN8xLPQnwyHInh5XJkEyJzOEQmbis4izmi
+	 5hGc8XGUWc3kqKRDIqjTtYLfW+yIYmeeT05hSd05kHcWGWw3lRC7fcJlHQmjUbsH2MA7d
+	 AUf4z/MxfcloHOYlpp2E/KCObyo4gbRjnfde2uVLMAtGLq+2Btknohj7AZkpf7JjNaeV/
+	 YDxPSIzmjOX9cTpSOZSq6FCZEMdZNazzOTg69Rr3ZJFt3Nv3j+3fAwdIrPC/IVQzLPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793364303;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793365175;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=39vmiQMtWyNbLcbiDzlBusK1H/cuZi9zmgm0sXTcFYY=;
-	b=FFtPDSUMcxQthxEYd7AhQtUlVzrf3WNGhdIDvSscef02fw0JfvQupLfQiBt8Mdxr6xTJ
-	 Cy34/tGjM/s6KqS0In/PjhgIycnEoGvsvgqiKmKHOQiK6X8pTpiqLE/z5GH3WqEBuFxt7
-	 bFb++scj75uYwUKtsYzQzj0n/bq9RIQnW3eZWlpP+V+cdN1jyRSM5pLTg5Mqfr4Vfq8e9
-	 aYPxw1vOxbn2/Ep2uW3M01/3ZOftb6WmAeDLLyQp9XfFuD2x5WxCuFoxt5m9Fqb/nETki
-	 ez/4wGF3es3ivXRGeArGayB7+J0cpuhddkZRAYgoDolIiCOzRois2ejzhOpG/BPGb3w==
+	bh=lvKBwCgVqUax5qNd5AsU9XWWoRcofUbjmwMFYfXyy7E=;
+	b=LkkSgGNm3PIp5xUEn/iax54YX+QqaDN/rmS46YmnL8e4SZqmYb/mZysyg5iIXnOl+uyS
+	 R9yEQVY/YY2IbenqbJhwGoNNyxOHaK9+KNLpInS1QB/5qmFpKSC4SfUDRMKG458oG3nm+
+	 GBhQCC4DVM2FQv7mgAfp/lGEyFn68fkXLZF5Aw658i81VDS9lXENX/TgZNrNtGudpt7Au
+	 xWhSW04nMzBH2Bw4KRsgfdUT/L/saxwp371SpxabYHEM+v97EgilJUYeYEfxpgEGvXamD
+	 fi/Khy8hQIZxfU+K5PeYrugBMLIZ1NV0klgiqSRyFDAo2WJrv2SFhqxGsqAaDQz9Pww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gj2RPzp5;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JQKgJKF9;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CF0606A32D;
-	Fri, 30 Oct 2026 12:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB6C60A260B;
+	Fri, 30 Oct 2026 12:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gj2RPzp5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AD91F00A02;
-	Fri, 30 Oct 2026 12:45:02 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JQKgJKF9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542A71F0093A;
+	Fri, 30 Oct 2026 12:59:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793364302;
-	bh=39vmiQMtWyNbLcbiDzlBusK1H/cuZi9zmgm0sXTcFYY=;
+	s=k20260515; t=1793365174;
+	bh=lvKBwCgVqUax5qNd5AsU9XWWoRcofUbjmwMFYfXyy7E=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Gj2RPzp5KoxwoKF1iHeEhDwox+gnRST+yoH0o9v+d3TaC6a5en8t/et4Zjfs6KMQo
-	 JWb0Hgjhz0DR0zbCMuCWrPee21xbdusghAgokXsj6RME6McX2q3RV+/SVabtEUDQXP
-	 gwip9Usb5Mqcl1RlK3wRv5+KSZUKLMeeCmq42pfRbPMx1dH7dSvKI+3UYKs3h1pxLL
-	 mCw9H8fdP/hy5yRACZQUQRvkv0mGfAycJ9pP4nslDpPL7MVaAY8NYvZFiXcJIlfjsi
-	 oObkI2BLOa4aMKBV1BCw7Kdt+VmsMNc9SUP3WNylBFLB3MbTSQ/xJyt9zr526VsvA1
-	 dmUYU21IBRG8g==
-Content-Type: multipart/mixed; boundary="===============8628985895442330667=="
+	b=JQKgJKF9p6qlA5gouG7fJ0kHH6t0mI6CrViW/uM10YWP1FaEbN9GumCYOR6ssW553
+	 9ftiwE9mcUj52Dz6FaDjbfklj958jE07w7v6gZithw8B0TX56TOvTVAqPlWOc3o+XY
+	 neMZqgYK1p10DqbeRn1B5ApEHlaGJFCizlNgHuWHTd/buTdZvUG4mFfwl+hvfc6tPC
+	 hSCj0EwJTakAuzrgBTWIzl+0VHWl7qSLzowJy9hw1cyRpNihw2ElXwb4hYvrtCWCGp
+	 6HpiCPYLvYp5h+hgi6KQb+IiBqJs2uKRBzDFA6Li2vxQ+NxAvrsQXHtuckzTRIQQUl
+	 hbGSAE754Vl+g==
+Content-Type: multipart/mixed; boundary="===============1236647830006293705=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,129 +49,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <e928310aa89e34b3521d3ab468a8021ecd0704cc400986d33e88ba45cba1b7d1@mail.kernel.org>
-In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-9-55cd43439f7c@gmail.com>
-References: <20261030-bpf-verifier-patch-batch-v2-9-55cd43439f7c@gmail.com>
-Subject: Re: [PATCH bpf-next v2 09/22] bpf: Strip nops through the patch list
+Message-Id: <7b3485c45dbd413cc9c48ca9f1891a307181ab0db3a999aaa41823284e700831@mail.kernel.org>
+In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-5-55cd43439f7c@gmail.com>
+References: <20261030-bpf-verifier-patch-batch-v2-5-55cd43439f7c@gmail.com>
+Subject: Re: [PATCH bpf-next v2 05/22] bpf: Expand a backward may_goto to gotol when patches push it out of range
 From: bot+bpf-ci@kernel.org
 To: odys.yuan@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org
 Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 30 Oct 2026 12:45:02 +0000 (UTC)
+Date: Fri, 30 Oct 2026 12:59:34 +0000 (UTC)
 
---===============8628985895442330667==
+--===============1236647830006293705==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Strip nops through the patch list
+> bpf: Expand a backward may_goto to gotol when patches push it out of range
 
-TL;DR: The nop-stripping look-back in bpf_opt_remove_nops() may be quadratic
-with no preemption or signal check, so a crafted program with many nops could
-stall BPF_PROG_LOAD on non-preemptible kernels.
+TL;DR: Nits only: the new may_goto_expand() comment on 'reach' overstates
+coverage, since forward jumps are still unadjusted, and it detaches the older
+function comment.
 
 > diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 95f4fe5d607e..7c7c38eb9f0c 100644
+> index c9963d8d8135..1d281428acbb 100644
 > --- a/kernel/bpf/fixups.c
 > +++ b/kernel/bpf/fixups.c
-
-[ ... ]
-
-> -static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
-> -{
-> -	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
-> -	unsigned int orig_prog_len = env->prog->len;
-> -	int err;
-> -
-> -	if (bpf_rewrite_must_abort())
-> -		return -EINTR;
-> -
-
-[ ... ]
-
-> @@ -1028,32 +855,63 @@ int bpf_opt_remove_dead_code(struct bpf_verifier_env *env)
->  	return bpf_patch_list_commit(env);
->  }
->
+> @@ -1968,16 +1968,21 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+>   * may_goto when it is zero, then the tail that updates the count.
+>   * Use gotol when the target is too far for 16-bit offset of a conditional jump.
+>   */
+> -static int may_goto_expand(struct bpf_insn *insn_buf, int off, int stack_off,
+> -			   const struct bpf_insn *tail, int tail_cnt)
 > +/*
-> + * Whether insn i is a nop once the insns in 'removed' are gone. Only forward
-> + * jumps over removed insns can turn into one.
+> + * 'off' is the offset of may_goto, 'reach' how far it jumps once the patches
+> + * in between are applied, which decides whether a 16-bit jump will do.
 > + */
-> +static bool insn_is_nop(struct bpf_verifier_env *env, int i,
-> +			const unsigned long *removed)
-> +{
+> +static int may_goto_expand(struct bpf_insn *insn_buf, int off, int reach,
+> +			   int stack_off, const struct bpf_insn *tail, int tail_cnt)
 
-[ ... ]
+This isn't a bug, but the new comment says 'reach' is how far may_goto jumps
+once the patches in between are applied.  Does that hold for forward jumps?
 
->  int bpf_opt_remove_nops(struct bpf_verifier_env *env)
+may_goto_off() returns the unpatched offset for them:
+
+	if (off >= 0)
+		return off;
+
+so reach == off for a forward may_goto, and a forward may_goto that later
+patches push past S16_MAX still gets a 16-bit JEQ.  That then fails in
+bpf_patch_list_commit() -> patch_list_adj_insn() -> insn_set_rel() with
+-ERANGE, the same as before this patch.
+
+Could the comment say that 'reach' only accounts for the patches already
+queued, so only backward jumps are covered?
+
+Also, the new comment block sits directly below the existing comment for
+may_goto_expand(), which leaves the older comment detached from the function
+it describes.  Could the two be merged into one?
+
 >  {
+>  	int cnt = 0;
+>
+>  	/* Forward jump has to step over the tail */
+>  	off = off >= 0 ? off + tail_cnt : off - 1;
+> +	reach = reach >= 0 ? reach + tail_cnt : reach - 1;
+>
+>  	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
+> -	if (off == (s16)off) {
+> +	if (reach == (s16)reach) {
+>  		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
+>  	} else {
+>  		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
+> @@ -1987,6 +1992,23 @@ static int may_goto_expand(struct bpf_insn *insn_buf, int off, int stack_off,
+>  	return cnt + tail_cnt;
+>  }
 
 [ ... ]
-
-> +	for (i = 0; i < insn_cnt; i++) {
-> +		if (!insn_is_nop(env, i, removed))
->  			continue;
-> +		/*
-> +		 * Removing may_goto +0 can turn the may_goto +1 in front of it
-> +		 * into another one, look back as long as it does.
-> +		 */
-> +		for (j = i; ; ) {
-> +			__set_bit(j, removed);
-> +			if (env->prog->insnsi[j].code != MAY_GOTO_0.code)
-> +				break;
-> +			while (--j >= 0 && test_bit(j, removed))
-> +				;
-> +			if (j < 0 || !insn_is_nop(env, j, removed))
-> +				break;
-> +		}
-> +	}
-
-Is the look-back here still linear in the program size, and can it still be
-interrupted?
-
-The removed verifier_remove_insns() called bpf_rewrite_must_abort() on every
-removal, and the old "i -= 2" step back went through it each time, so each
-step had a fatal_signal_pending() and cond_resched() check.  The new
-look-back has neither.
-
-After a may_goto +0 is marked, the inner loop walks back bit by bit over the
-whole contiguous run of already removed insns:
-
-    while (--j >= 0 && test_bit(j, removed))
-            ;
-
-Consider N "ja 0" followed by K "may_goto +0" and an exit.  Every
-may_goto +0 walks back over all of the N "ja 0" plus the earlier
-may_goto +0 insns before it reaches j < 0, so the marking loop does about
-K * N test_bit() calls.
-
-K is limited by BPF_COMPLEXITY_LIMIT_JMP_SEQ (8192), since each may_goto
-pushes a pending state while the main path continues to the exit.  N is
-limited by BPF_COMPLEXITY_LIMIT_INSNS (1M) for a privileged loader, and
-nops are only stripped when env->bpf_capable is set.  With N around 970k and
-K around 8000 that is about 8e9 iterations of test_bit() in a loop with no
-preemption point, so BPF_PROG_LOAD cannot be killed or rescheduled on a
-CONFIG_PREEMPT_NONE or CONFIG_PREEMPT_VOLUNTARY kernel until it finishes.
-
-The only bpf_rewrite_must_abort() check left is in bpf_patch_list_del(),
-which is reached from the for_each_set_bit() loop that runs after this
-marking loop.
-
-Could the loop remember the index of the last insn that was kept, instead of
-rescanning the removed run for each may_goto +0?  That would keep the pass
-linear, as the commit message intends, and a bpf_rewrite_must_abort() call
-in the look-back would restore the killable/preemptible behaviour.
-
-> +
-> +	for_each_set_bit(i, removed, insn_cnt) {
-> +		err = bpf_patch_list_del(env, i);
-> +		if (err)
-> +			break;
->  	}
-> +	bitmap_free(removed);
->
-> -	return 0;
-> +	return err ?: bpf_patch_list_commit(env);
->  }
 
 
 ---
@@ -179,4 +131,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41053659762
---===============8628985895442330667==--
+--===============1236647830006293705==--
