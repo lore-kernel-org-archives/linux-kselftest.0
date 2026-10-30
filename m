@@ -1,98 +1,143 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793392273;
-	b=sl+ISnrS+i1XFyaSJ5N6YxCdr9lhj+Hz84f92b2laRQ6kPxB8BJzwfUvmBFW+4DUU58z
-	 8Zl+jjGGbJ3GPdwWprT05DaryjO/5CBYHpvyaVTYCjH5bl5tSpbYoma/fw6tg2fMRk5E4
-	 +zm6CYIhAstYu5PDAXB6URviEaUODyKXUXklTnEHs10uyridXpgvu1TjK1TIOUDHM2nya
-	 xTizqDgSSvJGeN4dkZ3LCGfDOLQSpU1AhWiMhf0dzljKNCUw924YsPVrjjkZDJnq9KQJI
-	 ociwlaHn710X0MzqvqMPZWiZQYo4cksrmqSMQtQGMZuwAcqmLgru8a3iuE8ZOjzsXHA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793392273;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=PunFyZW/30a+kuyc67KGszLqyQv1/BfkX7hCjwAirrc=;
-	b=Ip/qyYDXaDWtzr0XHk1Qxw6MWSbOvLqsGV/+kmN1gwTEw/gLvqwYsrV2zIqXVqdGz6I0
-	 L0aqP5xbSZPw4wpxqg0u6TmOJ3qNiLPoKtGJqIQWdVq+qxaTqAgwLZR+EiDZ0n03Fq842
-	 0eWtltx26EI4uU9+aHzQPGxKNaCvlyv2x6EMbO08T1XhMSaBmr1nz8Ogg8boOHzqCqhLm
-	 AhCCGJ+URDN7cK1ewghnk7TcX578P+jmBP/4RrUh9fqfibcPnodQJtOK58k5Fp7Ugjtln
-	 S9hmCzsGH72b2jmG/O5oaUukv5c+LnvvEnxmERtV41BYZNUnNI0hqEQe7k2q2rfQ/bw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=CDBF4R0s;
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=198.175.65.16
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793393639;
+	b=2JNlbRDbDEa9tNLa0LpMtr7ZOXhHXErWMqR/0b1aNhJxtYxJnejNqHAoWs6xlWl0Kt0+
+	 +719Wr4WhVs4q6KBqnO2OlNuRErvoPj4ufjBUv1lW1hJtDxUfqwIOxhKd1VoxBvcduwzg
+	 nNUHnzp79GkDtqkOnN2KdFDJJPWEtbO495OIiUi9kO5TinXjPaoywdMeSNFwMBgaXiPnR
+	 C7ZmPqW9zUC8LPD7Z+b24hVQE+kJnKuKD/7Hm+wmb0DGg7QwhMqBe8We/n7M1BJIvFaJ7
+	 dvVy2rY3mNwwkf2y6mfWzi2UwXtI3cKTcWjifyMXXMRfzlkkJHET82YSXQtigmwXknw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793393639;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:Received:Received:Message-ID:Date:User-Agent:From:Subject:To:
+	 CC:References:Content-Language:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-LD-Processed:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=UhwtbPFZ7cFdsb1nfTQeZJyB/lwXQENWPnLo6uALBQw=;
+	b=c1TY7NtYLWdWSsDB3Hrt0mklu4RUqRfbs2l5krX1XEpmD9wN+L3paPrw6fDLbRWv/fEY
+	 P8ZMB9zAhCI2R92tBYupR95GbyaPQHFS7CoOQxm5nScMVfyJnV6HkRlTGKkS//N/x9OsO
+	 +VHpngGbTAsVI8FGZBO07vJXhuU9nElegnWLROmBaqc0MoYoUVePpBKa7lVNDF8d0xv1Y
+	 S94GdTjJLR4HBSauQ0Ey9QsknLpdlaIr5ez8dRJvFVh2cirk8atsY/sDPxUPjuVqCT40e
+	 bmh5rXG7rmT2VliaryTpwgESLSWqrCDnLYrDijMOk91ODW/yo+G3xKnzHKUB0KeYmzQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nvXb15qZ;
+	arc=fail smtp.remote-ip=198.175.65.16
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3E1606A31A;
-	Fri, 30 Oct 2026 20:31:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C3E1606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4CB606A31A;
+	Fri, 30 Oct 2026 20:53:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A4CB606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=CDBF4R0s
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69UHxBY83674304;
-	Fri, 30 Oct 2026 13:30:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=PunFyZW/30a
-	+kuyc67KGszLqyQv1/BfkX7hCjwAirrc=; b=CDBF4R0s9hM+Ea7IMLSiaRsTxDZ
-	quio+vsBvOgVgH7k89sHccXF8cXSX9Wu69eM50YxI9R/TJQJ8RbO2pOLlDoHmy3F
-	qKtOBLkbNWfS2YRUMApKnKH40RlYPg3nxiUA4W38mzSKlrSSAx5Pwspwa9uoVX14
-	5zfZOPM5RjizWLDi20B29DwOUwpvdFW0kz1tzqBooSxza00XhfgYiafpS45fj6PG
-	Ei/b5oAmUMBmTx7NDIn/Hd1hwPYEP6SJHP8YRo7fjjXqHW/mV7TniML0O8CSjzM5
-	sMX2+7u7PIDlKOr9Ssi+DPfNfshwL4NqUSElPNgUgMOZNr4NZPT74z2UKfw==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hme63fnun-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 30 Oct 2026 13:30:26 -0700 (PDT)
-Received: from localhost (2620:10d:c0a8:fe::f072) by mail.thefacebook.com
- (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Fri, 30 Oct
- 2026 20:30:25 +0000
-Date: Fri, 30 Oct 2026 13:30:24 -0700
-From: Bobby Eshleman <bobbyeshleman@meta.com>
-To: Michal Luczaj <mhal@rbox.co>
-CC: Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller"
-	<davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>,
-        Simon Horman <horms@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Stefan Hajnoczi
-	<stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang
-	<jasowangio@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Eugenio
- =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Shuah Khan
-	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Donald Hunter
-	<donald.hunter@gmail.com>,
-        Eric Dumazet <edumazet@kernel.org>, <virtualization@lists.linux.dev>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>,
-        <jlinbox@meta.com>
-Subject: Re: [PATCH net-next v4 4/7] vsock: add a netlink command to assign
- the g2h device to a netns
-Message-ID: <auT+YIawHSMPHbJI@devvm29614.prn0.facebook.com>
-References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
- <20261020-vsock-guest-ns-v4-4-047527cfccfc@meta.com>
- <atjZZP2ebhXKzMxL@sgarzare-redhat>
- <atld3+5LKmGxJ8+s@devvm29614.prn0.facebook.com>
- <atnjOZjKUBagRVWq@sgarzare-redhat>
- <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=nvXb15qZ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793393638; x=1824929638;
+  h=message-id:date:from:subject:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=JTTmuW0Qf5dffg49hQ0pLw7RpJfgX5pL86M6RLo4JSw=;
+  b=nvXb15qZJLXxv4iLYXIEjRGed7Ooz8yDOzzYwu0tdctfw1IhacTGujaM
+   yTLd4Jud6I48Is8OxQDli7bpxUlMQNjRoDC1uJx/X3vrCSxMJzCiQpdLw
+   trFCGVKfCtRhqLWShPcvNyWqkP/wmBxFoBkHD/rA9BAuBEs6k/HE6RNNa
+   dnGSY49FSi0h+NymIYETcoWpXhnNjB6NHtYeo2BVLfygJGdLUBt5bsLei
+   LGD/lZX8DrnhyV/qSn1LvaH2z8bt+qig/Bh/IuKIpCUI+Re3O5yw4O7Ot
+   jKGWVfJEYgFXR9kjvBBy4f/JsVG748cpyPh09zRDz9ZtnmuC8OfJ++sFG
+   Q==;
+X-CSE-ConnectionGUID: fZ3HvLsoQjyzigmBrGoEQw==
+X-CSE-MsgGUID: iYAqTyc9SVmhaoEmmDhtvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11951"; a="2159058"
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="2159058"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 13:53:57 -0700
+X-CSE-ConnectionGUID: ncecYJBeRn+soMWm7HFp8A==
+X-CSE-MsgGUID: X8qQr6weShysVaHShwNJFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,186,1787036400"; 
+   d="scan'208";a="5426033"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2026 13:53:57 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Fri, 30 Oct 2026 13:53:57 -0700
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56 via Frontend Transport; Fri, 30 Oct 2026 13:53:57 -0700
+Received: from CY7PR03CU001.outbound.protection.outlook.com (40.93.198.11) by
+ edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Fri, 30 Oct 2026 13:53:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hVlXXxTf00BQjt6gMdQcKdNU5kT3eoa+sGIVtSMOcKkJ427w1U++o1Oe4Zhi0lZC9xUV9tn3Trwfd2ZOjbYB1RKh9OdAUncn117sb0qf++fZu7V3JTncuYWosFONIlNbhHuBCRcpQ2ZCbBs8CJ0MrlBytq6Gb/pEtZbnG6rspHUTw/DJonfeDpOyrRziZ1sxwiEQPZeX5SbGul4v/a0FizK/IWzALQ99QUrIY0TJ/AvaQ48XC6YO1Dz2Ukx601jd6FhmXOmHqr7LtvPVZod2olbpwQvHIHY5TIrMueCJhuv+KSWzJHFRqI2TN0OwKSsGVEbFxzrJ8/FJIsnCHoa4gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UhwtbPFZ7cFdsb1nfTQeZJyB/lwXQENWPnLo6uALBQw=;
+ b=bV+OCEdz95TRh2aiEnp+lqkoUwy/G015+QnuiiVSG0LQ7lDRUXUXsiZU8OaxMPWebQAdGaNuMe39w8nC0DvMmyXOXaco0//orqcQ1X17LZuplfdUFVwbDSGHVIBH1dC3AIxO79klyyR79xlAxazkzqirNtoF5Au6J4dZBApUkcATvM7plFafuFXIXhnmdvXa94PykMd0fzaHGx1E8MIWtabRe3hMJax4H8MCjJEjmtvuHBF/gowmXAVKbs//a4rkVD4+RnPQSWhc15p7ws/uCtBApqxNgoQEWbh1Vi7xJEqRCXskKguPo2AqTRJ2w4D9wsP+XysrJZnRWrK5gCztgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB7925.namprd11.prod.outlook.com (2603:10b6:8:f8::18) by
+ SA3PR11MB7415.namprd11.prod.outlook.com (2603:10b6:806:318::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.569.9; Fri, 30 Oct
+ 2026 20:53:54 +0000
+Received: from DS0PR11MB7925.namprd11.prod.outlook.com
+ ([fe80::60af:89a0:65dc:9c84]) by DS0PR11MB7925.namprd11.prod.outlook.com
+ ([fe80::60af:89a0:65dc:9c84%7]) with mapi id 15.21.0569.008; Fri, 30 Oct 2026
+ 20:53:54 +0000
+Message-ID: <609c2e22-db8f-417a-93b6-c4fcafe79bc1@intel.com>
+Date: Fri, 30 Oct 2026 13:53:50 -0700
+User-Agent: Mozilla Thunderbird
+From: "Chang S. Bae" <chang.seok.bae@intel.com>
+Subject: Re: [PATCH v10 00/28] KVM: Enable FRED support with KVM VMX
+To: Sohil Mehta <sohil.mehta@intel.com>, <kvm@vger.kernel.org>,
+	<x86@kernel.org>
+CC: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+	<seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, Xin Li
+	<xin@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
+	<peterz@infradead.org>, Andrew Cooper <andrew.cooper3@citrix.com>, "Tom
+ Lendacky" <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+	Shivansh Dhiman <shivansh.dhiman@amd.com>, David Woodhouse
+	<dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>, Binbin Wu
+	<binbin.wu@linux.intel.com>, Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed
+	<yosry@kernel.org>, David Matlack <dmatlack@google.com>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+Content-Language: en-US
+In-Reply-To: <20260911213659.2025974-1-sohil.mehta@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0124.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c6::9) To DS0PR11MB7925.namprd11.prod.outlook.com
+ (2603:10b6:8:f8::18)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,189 +147,122 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDMwMDA4MSBTYWx0ZWRfX+u8t3xPcK3Uy
- So3oF9phiOG+8ojVRe7MR4HP4ySg8uFKCHxq4CJMxeBrqsSpTk2sbDrDBEBnL/5uP8iK+UCj5Dr
- O2UVoq4zX0VCVgHvGXmS/4RB/W4K9kk=
-X-Proofpoint-ORIG-GUID: SI97KzjvKEBjGtzT_r0z5xUn00r9BRfJ
-X-Authority-Analysis: v=2.4 cv=Mbv5KJ/f c=1 sm=1 tr=0 ts=6ae4fe62 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=kj9zAlcOel0A:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=JnKecZnUtZousrUlYMGU:22 a=xYO5Uv-UIaOSZ6Su2S0A:9
- a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDMwMDA4MSBTYWx0ZWRfX89pfh9+x+N7/
- 9tCBN5hdBCjSCETHefDSnTYmixNoa043R36J17ev2Q8xfZdSf+ULWkYcWNPfWJdz/jNZh22jVyt
- 7BZwb0ywCLU74DW6rGSLBR1PaT+GPzWZ+SdMmdBNM/yYPIgppA4NoMlKQFmw0xRPWEKOmqSTHvB
- 5fREQTcgUcbu4wrErS/+fjZm4xFyWLDOsAx5eOXqPVKlsQdY1sP/CQ2B1Ue0qde50YuuX7QDcrZ
- fTsIDkKsy7gLXetWuYqcu2OT5tXHZgdtGGXDqfCWdMpa4ZrKInDxzQQIoZ0BMWU6KgAUsml823g
- pakFktNTQ5aEuMzMy+CLFCJ9cyKD1eLhBLwbkdF/RiIRFsoQ0V7RmRg0EXF5UBopPI/50rAqPYT
- STGbbTj3RBMPkHz9TLubQLvt6Zay5HuRDmnPBXIpU/ocBhrrerBhpG8/pBqyFF/3L7qTREilCzm
- LhqgKa3NJT/Ai1rH0Vg==
-X-Proofpoint-GUID: SI97KzjvKEBjGtzT_r0z5xUn00r9BRfJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-10-30_06,2026-10-21_02,2025-10-01_01
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7925:EE_|SA3PR11MB7415:EE_
+X-MS-Office365-Filtering-Correlation-Id: 854653c8-cfc7-4d08-2242-08df36c7e8cc
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|23010399003|1800799024|22082099003|18002099003|56012099006|11063799006|261022075727099003|10067099003|261021123027099003|261026121527099003;
+X-Microsoft-Antispam-Message-Info: S/VqHvhZZGRLXrsXGSNtujntRfH4zAfTftjMoDQaIUWZKPDyu7ML0f/Vu3MB5Xn9zE1Jzo5F+1Ef7qA+XRsrDdOtj6kGf/kYEzYSIJHONEdAdxV2Tid7EE5mRuj5HvvE4qPCS3QbAHtOKU+UknXT3MNo98zT3vk4HBBym89HXRF/jEd3tjF8LzpeYUsZ3FLaR2VTgIwR2If7Wrcymhi5Y9VMFo4LRaLQYaXxDJDWQSh4hcA6CRUI+gK6inM8yQ0+DsOo1x5m6fbO+yZ4SwE+gANoFo8lkddsTOP1RXFBRahtneyu4XFJO4k8LvJtouzAx5VJp8LDbpfP++ID/xgGkPUH7rp3ekwtHqKemGmK6r4miDiz1LzLCW8Vka0gQhifCnJ3K36R5eyyAzXqUUaiYjb5D0b5s9lZNhcAQqTaQW9nG61ujF2TDGOk17GvxuQ6vvKIt/26ofuwMe/aByP7/PHPEhMM7zhaYkTPlJJU77tEb4BgQ/a9Dft6IvdWoyjbEGjNuMZILIagbeb5GYWjkMfkUDpnc8/I6SUye2i9/6VNQTPIGWqiEgnm2wBsorIKN5rMWfGbKBMWl6ixdoxyDYwFUG4MX87g7Jpetq0QnJC3BS6+A57L10zeXeBnwVRyjkUhb2bgGfe7x8Q+j8SMe+kVwenxGYz0dB/lJNksMsg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7925.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(23010399003)(1800799024)(22082099003)(18002099003)(56012099006)(11063799006)(261022075727099003)(10067099003)(261021123027099003)(261026121527099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmZXMDhEL0tReENNL0dhZHNEYmY3Q3FTbGF5Z3lNdUtPbUVmMG9CczRZZ1JD?=
+ =?utf-8?B?NEh6VGI1anlJTUdYK2QzaFZrUnFrWG1LZFBsY28rRGM1KzR3SVRVU3QxbUVp?=
+ =?utf-8?B?N2psSGFhZGkwT2lSa05QUGtZcnZmOEdRdzFKa1dFWTVhb1lkcDEySXNIN3gx?=
+ =?utf-8?B?Zk5HcGpJZFNxekJ6cUFqWitWaEVmTDRRVkEvODRKdlNlVmtDYmlNT2p1akdH?=
+ =?utf-8?B?cE12ZEdGSFFhQXdzWE1NQmhDWUxVLzcxUFE0RW1rNlVKcWlSak1tSlhtM0g3?=
+ =?utf-8?B?TTIzczluVHdkK0ppbDZkVWUwbG5Yb2t6OTdCVEJtcTJqZFV0ck9saXI3dHVs?=
+ =?utf-8?B?WkdXbUoxRXFRUnQ1MVkvbU90NDUza1lrY3dPcmdTb1FhUHpvNjB5TlNBNjRp?=
+ =?utf-8?B?aXlUeHNsOVp3YUhlS2dnS2lsVUZSdCsrTTdieVVDc3dUTWFvUFoxZy9uOUZM?=
+ =?utf-8?B?N1BFQzd4Y2dVcEVjMkFxZWRBS0RqOHhzc09kaFNxUHcvUTVzU0V0bnlSVjZw?=
+ =?utf-8?B?MmU3U2FodU16QlBzdlJiQWF5NlcrcDZtVVBvdGdMWEZpM3p5VElQMm5Ka1hw?=
+ =?utf-8?B?WGQrcCtjck1BZHpLK2R4VXhEbkEzSzBYSGszMnB5M1FueFM0UEYrMmFvRjVx?=
+ =?utf-8?B?ZzgzYnpkZVVQVFdYWGx1QXIyVlhvWDhoMTRkcGNZQ3JsNC96SEZ3eUljUWRI?=
+ =?utf-8?B?SmRmSk1Pc25haGRtZFhkYi9GQmRJZlk4QzhQSnNnZU94WnRHdTlZTFI4dVVJ?=
+ =?utf-8?B?dVdIcTl6bktHTnVoNHhQYkhLNG1wenRaMTg0UVdROHlWQVZxU2Q0ejVlRE93?=
+ =?utf-8?B?ZXM2OWVpUElveUpuY3F5RnFBRFdCamF3OFBHanltVEREUUpDUW5HblJvbVN0?=
+ =?utf-8?B?VTBuUEJNVnNSc2w4Wm1JcStjQ1R5NG5JVGoxUk40bWVNYWtwTUh5dTNreTNH?=
+ =?utf-8?B?OXNYdTkvVDkrTmttV1FFMzlJaVlmSldtaU1Tb2xYS0dNS1FEZUZOT05qSWpq?=
+ =?utf-8?B?VjB2NFdXY2ZJbWM0NHdQTlZQQ3BnNG44UVBWY2psdTd5S2plM2VvS1F3dlBy?=
+ =?utf-8?B?UHFocE1rSUR5T1YyLzQyWWxPVWdwMjlhdERvd00zKzFNaE94eDFhT0gvQUdr?=
+ =?utf-8?B?V3l4SEtENTdXSmcyQjVqU2ZFNzZWZEV6U1c4RC9icG8vZXgzeFdjUUFrSVJa?=
+ =?utf-8?B?UXdCbmNkWHpHdHR6b0lKU1IrbUJvWHZkakN4cUtJZkZvNE4xWkhMWHUzUjdM?=
+ =?utf-8?B?SkE3c1NReXo3M2JaZkdjUHlHaDNQMkM0cE5OSUt3OWE5S3l0eHI1NVF2S1oz?=
+ =?utf-8?B?blQ3NHdlNE1YQ2VFSE9SNzdURzFjNkpvMENvZHpQQWVaWWJoM3NsaWdmMUZ4?=
+ =?utf-8?B?REZBbGxjOTFpdHFCaDl0QTNiSWprSmkwUEkrbFp4MTVxZ2c4ekpqek5MQ2Vs?=
+ =?utf-8?B?b29tVzdtUitNbHM0bU05RHl1elhJek43eWYwQzZjSGhIWmY1a2lvVjh1eG00?=
+ =?utf-8?B?dlp6S2txNHdtWC9xZlJhZkxCZjhUUTY3WjI4eEswZ3l0NzdpVk55aGx2cWdW?=
+ =?utf-8?B?bjM2THJ0cmFrb2lPNjMzeE9RbXJaT2s4VmRDVFlLK245YlhVV0h3dHVGcXgw?=
+ =?utf-8?B?eTNvMXExYkFyU0kzNG1hNzgzNko3UjJ6SjFwbDhIdTRrOWV4S09tdm5FR2Vw?=
+ =?utf-8?B?alBNSUJ0b1dSRkJHRnVrRVdiWFlrY3JPelpvZHVZeXBRM3BOOWVkdm1GODM0?=
+ =?utf-8?B?dzlnbGFISGsxOURpYmhTY1hIclJoOGUxcndNUE1IRUhkMXR1NUJrMVRaeXNu?=
+ =?utf-8?B?MzBUMjBGWnRtOGJGUkx6TW50QmZIMGhkbXpCYXdNL3c1YStuVm1IeSthMlFs?=
+ =?utf-8?B?UmRkUmdrVUV2VVdPUzA1bHNpbEVuRy9MbytFcmV6SWczc25BaE01ODdZemdT?=
+ =?utf-8?B?eWM0Sm5LZXRWbHdwMldVQVh1YnpnaGJ0Rkk1OUxnZGRTT1VnL1NRZjljV3Ry?=
+ =?utf-8?B?d08vcXl5THplMVBVLzg3YTY3V2xUTTFmSzdBUTliL1g0TGNYY2I4OHgvRnBW?=
+ =?utf-8?B?NGxhZmJ4by8wMUdaUG92ZGQvQ1dSQ1BvVUk2VDJvNzkyalNtaUtxeEVhNGE5?=
+ =?utf-8?B?OEUyUVFXRXUzOVNzWkJWbnZlbnptU0NZeTF5ei9YV0Qycy9ZMlcwQVhsZG51?=
+ =?utf-8?B?MGlFcGpZSmF5dUpoY2dSdnlnYlcrWlI3SDBQK1g1bVlPRVgxK0xKdEt0R1hX?=
+ =?utf-8?B?bTFzNDk4eFpCM2RrdFE5QUN6ZmVQdFI5eWtjSm5kMWlzeWs0TkhuYUNITVFC?=
+ =?utf-8?B?dEtmQ1d4V09ISDBPMlBndHpKc2luV3FONUlESTZHcFcrZytsQ2NUZz09?=
+X-Exchange-RoutingPolicyChecked: 3pTyDAzKF4KMVVFeSBEbWiGsELWqmaekvEDHkB8mYoWHgqnQLRKizifiEI4cQ10tU+5S8g/4tsbw6CcxnWW2tMaXjPl5iv71V+bKoQ7ZSe0ZL1CrG4DCevpkzYDFgAcqUwZvBKF2DWD87Wh2saMXj1Avewub5eDFw0g0UNVadREnmhm+E1sBXRZfpIl2eb96HugbDZhnfRbutz1bVEq/AHuVIc8wuZxpslFN1nxba5ep+ijjB2dP0bewkoOMCxMydRCHvLcby9Ma8n24X/VsqJH5wFrmhCvGO10WeyhNH0k/8SEamx1ICELVxL8LF1m9Ri30fIf8Czrosq0wzUEqIw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 854653c8-cfc7-4d08-2242-08df36c7e8cc
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7925.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2026 20:53:54.4100
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LYE9/m/QGsvCJPWdwF8ud5tqfN06IihXqoNhebiskbFbe74KoQXU1GsL1MguOiajonMhXGsk8/KULjQ8qwy6TlAuKfHDLXhNB8Bb82CHCuI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7415
+X-OriginatorOrg: intel.com
 
-On Thu, Oct 29, 2026 at 10:39:50PM +0100, Michal Luczaj wrote:
-> On 10/22/26 12:47, Stefano Garzarella wrote:
-> >>>> +/* Move @vsk to TCP_ESTABLISHED and into the connected table, unless the device
-> >>>> + * has moved to a namespace @vsk cannot reach. Returns false without doing
-> >>>> + * either in that case.
-> >>>> + *
-> >>>> + * The reset sweep walks the same table under the same lock, so an assign
-> >>>> + * cannot land between the check and the insert: either the sweep finds @vsk
-> >>>> + * and closes it, or @vsk is never added.
-> >>>> + */
-> >>>> +bool vsock_maybe_set_connected(struct vsock_sock *vsk)
-> >>>> +{
-> >>>> +	struct list_head *list;
-> >>>> +	bool reachable;
-> >>>> +
-> >>>> +	list = vsock_connected_sockets(&vsk->remote_addr, &vsk->local_addr);
-> >>>> +
-> >>>> +	spin_lock_bh(&vsock_table_lock);
-> >>>> +	reachable = vsock_g2h_reachable_sk(vsk);
-> >>>> +	if (reachable) {
-> >>>> +		sk_vsock(vsk)->sk_state = TCP_ESTABLISHED;
-> >>>> +		__vsock_insert_connected(list, vsk);
-> >>>> +	}
-> >>>> +	spin_unlock_bh(&vsock_table_lock);
-> >>>> +
-> >>>> +	return reachable;
-> >>>> +}
-> >>>> +EXPORT_SYMBOL_GPL(vsock_maybe_set_connected);
-> >>>> +
-> >>>> +static bool vsock_g2h_should_reset(struct vsock_sock *vsk,
-> >>>> +				   const struct vsock_transport *t)
-> >>>> +{
-> >>>> +	return vsk->transport == t &&
-> >>>> +	       READ_ONCE(sk_vsock(vsk)->sk_state) != TCP_CLOSE &&
-> >>>> +	       !READ_ONCE(vsk->close_work_scheduled) &&
-> >>>> +	       !vsock_g2h_reachable_sk(vsk);
-> >>>> +}
-> >>>> +
-> >>>> +static struct vsock_sock *
-> >>>> +vsock_g2h_next_unreachable(const struct vsock_transport *t, unsigned int *i)
-> >>>> +{
-> >>>> +	struct vsock_sock *vsk;
-> >>>> +
-> >>>> +	spin_lock_bh(&vsock_table_lock);
-> >>>> +
-> >>>> +	for (; *i < ARRAY_SIZE(vsock_connected_table); (*i)++) {
-> >>>> +		list_for_each_entry(vsk, &vsock_connected_table[*i],
-> >>>> +				    connected_table) {
-> >>>> +			if (vsock_g2h_should_reset(vsk, t)) {
-> >>>> +				sock_hold(sk_vsock(vsk));
-> >>>> +				spin_unlock_bh(&vsock_table_lock);
-> >>>> +				return vsk;
-> >>>> +			}
-> >>>> +		}
-> >>>> +	}
-> >>>> +
-> >>>> +	spin_unlock_bh(&vsock_table_lock);
-> >>>> +
-> >>>> +	return NULL;
-> >>>> +}
-> >>>> +
-> >>>> +/* Close every connected socket of @t that can no longer reach the g2h device.
-> >>>> + */
-> >>>> +static void vsock_g2h_reset_unreachable(const struct vsock_transport *t)
-> >>>> +{
-> >>>> +	struct vsock_sock *vsk;
-> >>>> +	unsigned int i = 0;
-> >>>> +	struct sock *sk;
-> >>>> +	bool reset;
-> >>>> +
-> >>>> +	lockdep_assert_held(&vsock_g2h_assign_mutex);
-> >>>> +	lockdep_assert_not_held(&vsock_register_mutex);
-> >>>> +
-> >>>> +	while ((vsk = vsock_g2h_next_unreachable(t, &i))) {
-> >>>
-> >>> can we reuse vsock_for_each_connected_socket() ?
-> >>>
-> >>> If not, maybe a comment here will be nice and maybe I'll try to merge
-> >>> vsock_g2h_next_unreachable() here if it's not used somewhere else.
-> >>
-> >> I think we would need a variant that returns the socket, since we need
-> >> to be able to acquire the lock_sock after releasing the
-> >> vsock_table_lock.
-> > 
-> > That would be nice if it's not too complicated.
-> > 
-> >>
-> >> Maybe the callback could return a bool, if true then return socket
-> >> otherwise skip. Then the cb could also grab the sock_hold ref under the
-> >> table lock.
-> > 
-> > Yeah, looks promising to me!
-> > 
-> >>
-> >>>
-> >>> I find these functions a bit hard to read.
-> >>
-> >> Yeah its all kind of a pain. The problem is that we need to hold
-> >> sock_lock to set sk_state and sk_err, but can't acquire it under the
-> >> table lock. Instead, we grab the socket ref sock_hold under the table
-> >> lock to guarantee it stays alive between releasing the table lock and
-> >> grabbing the socket lock.
-> >>
-> >> I was really tempted to not do this lock_sock dance though. The race
-> >> condition I'm avoiding here is that if this reset races with an RST
-> >> receive, then the socket could end up with TCP_CLOSING + sk_err
-> >> ECONNRESET... but I'm not sure this actually propagates up into a real
-> >> problem for any potential user.
+On 9/11/2026 2:36 PM, Sohil Mehta wrote:
 > 
-> Right, vsock_connect() is fragile. Two things to be cautious about:
-> 1. Don't let it reset the already connected socket. Because that would
-> allow user to "re-connect()" and make mess in connected_table.
-> 2. Don't let it re-assign transport of an already connected socket. Because
-> that breaks the contract in few places.
-> 
-> State 1 is not an issue: vsock_g2h_reset_unreachable() calls
-> __vsock_remove_connected().
-> 
-> State 2 may be problematic: if vsock_g2h_reset_unreachable() sets TCP_CLOSE
-> when connect() is scheduled out, then after the wake-up sock may get reset
-> to SS_UNCONNECTED. Then user re-connect()s and hits the transport
-> re-assignment logic. I'm worried that, as we re-assign, someone may be
-> holding a reference to such "connected" (even if not in connected_table
-> anymore) vsock.
+> Patch structure
+> ---------------
 
-I see path you're looking at... after vsock_connect() gets scheduled
-back in we set TCP_CLOSE/SS_UNCONNECTED if sock_error returns non-zero.
-Could you elaborate on your last concern there about someone holding a
-reference? I'm not sure I fully understood.
+Since now at the 10th iteration, and I saw Sean gave a bunch of feedback 
+already, I suppose pieces are quite sorted out. So I'm more interested 
+in how those pieces could be organized to make easier to follow, review, 
+and integrate going forward.
 
-> 
-> So I don't know, maybe it's vsock_connect() that should be fixed/hardened
-> instead?
-> 
-> Or at least disallow transport *re*-assignment? Does the "re-" part have a
-> use case?
-> 
-> Hope it's not too off-topic.
-> 
-> >> It also avoided some racing with the tx path, but now that send_pkt()
-> >> also checks reachability I think that path is safe.
-> >>
-> >> What do you think about doing the below hunk (TCP_CLOSE, ECONNRESET,
-> >> sk_error_report) with no lock_sock?
-> > 
-> > Looking at the code, it seems that in all the places where we close all 
-> > connections (virtio_vsock_reset_sock, vhost_vsock_reset_orphans) we do 
-> > with no lock_sock but with vsock_table_lock.
-> > 
-> > So, makes sense to me.
-> 
-> virtio_vsock_reset_sock() and vhost_vsock_reset_orphans() are my pet
-> peeves: state switcheroo without taking lock_sock(). Which, again, races
-> vsock_connect().
+> Patches   1-6: Enable the VMX controls and export the host stacks
 
-True, I don't love that either, but I feel the impact is at least
-constrained by the fact that it only happens when the module or device
-is already going away.
+These seem to be preparatory changes for supporting the state and 
+extending event delivery later in this series.
 
-Best,
-Bobby
+Would it make sense to put the x86 core preparation up front rather than 
+having it in the middle of the KVM changes?
+
+> Patches  7-19: Virtualize the FRED context and advertise it to userspace
+
+I think there are a few sub-groups here:
+  (1) patch07-10: Support FRED state context switching
+  (2) patch11-14: Extend event delivery
+  (3) patch15-17: Handle CR4
+  (4) patch18-19: Advertise the feature, etc.
+
+At glance, (2) looks a little difficult to follow. Patch 13/14 in 
+particular appear to mix the FRED support itself with some preparatory 
+changes. IIUC, the code is saying everything outside of the 
+is_fred_enabled() path has no functional change.
+
+Perhaps, the changes outside of is_fred_enabled() could be separated 
+out. That would make the actual is_fred_enabled() path easier to follow. 
+Also, the part introduces the ABI immediately after adding 
+is_fred_enabled(), before showing up the callsite of is_fred_enabled(). 
+This flow is a bit abrupt.
+
+For example, extending kvm_requeue_exception() alone could be one step. 
+The next step could add the code under is_fred_enabled(), initially with 
+is_fred_enabled() as a placeholder that simply returns false. I think 
+that would better highlight which parts are actually FRED-specific and 
+why this dynamic check is needed.
+
+Since is_fred_enabled() depends on CR4 anyway, its actual implementation 
+could then come with (3), or somewhere later. Finally, (2) could perhaps 
+be completed by adding the new ABI at the end.
+
+> Patches 20-25: Extend FRED virtualization to nested VMX
+
+Since nVMX support comes after exposing the feature, does that also mean 
+the series could be partitioned into two parts, one up through the 
+advertisement (and tests) and another for nVMX support? Splitting up a 
+complex series like this may make review and integration easier going 
+forward.
+
+Thanks,
+Chang
