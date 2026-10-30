@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793361196;
-	b=oHWoG6Ua5Y2RTIiA78ignAqaE+aSyoKN8rXAJsPSVv9rbz9ojzzPlx/vHVLN4jSY9io3
-	 pA9WChrTC/2lZDyYn2QWU1WRZDiLHC5rVf6UInu57bng0GLQJzn86knjxkuXFXcQfXFPo
-	 woQ0cZLMpI/+vm3YVmNEg1gCxDljVLqeii4wAQWc/4CZQlM8U/qizP/s4S5Je/LajBdD3
-	 RLTz4R6MZfBcjM4PM/M7jpQx2QjxmUyXNANkaKfV2/md+Cz8YJJNglwKtMZK8rlaLPIIM
-	 cefvTHGz8qa5Xv6h0tS/TsmtBoe7qYsi7UjM4lU2hbtyMIJ9jEnK3qyOL87x4XMFN/A==
+	t=1793361202;
+	b=tVle817WpAklkp8DXQ32Keb05O5z0aPq74sDNltZjgHTsMN+HPaot1PjL5IpMdyIYivC
+	 sq4adaj6izbre9J7PYGdyi3a84/ymMxvvk18l8N9aJxKleKCKHtbqdw9NSdGtp6LhUZuY
+	 DAUtG1kXQneJBUZh06whO816kV8BHAVN8FPeRF9jpLuTRSyaYqiqPdWK/ROJ60Bi++xNB
+	 Pmm++9plaZkr8Ey9p+FBqh1jIl5WQqVzbfHiNHsOiboxU/p4SkHl4x+6NcFkfO1YwLXnr
+	 HkB1jo81B1jPxF6SIRc159b9IUBB8ONgOPQJSJ2veQnHuf6H+CzoQKblT4fIrWGLIgQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793361196;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793361202;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=7RaPea1Qjt8hsmpjEa8tMwhSJ3KypYa/1YHVOL45aDk=;
-	b=Pds2agFPXQcu9M3cBlTKEK0FEMVXeogXfbFKWJqbBn4GUq+kAFHMpA/80tFTMGfx8uG8
-	 gz4T4Y9kK3x2fp+irOu/RMmNIo1wGtV0V5uOano8ZLX8+AswDmvlxrwhLosmBePJLvzZG
-	 h8sl7k+aDgjiqC+qknQeqyQ47Q3PkJvcww1spoACvQU7/kKH8+xPSe0lW+XrnNNkZpxNA
-	 iXNC/PA7L5m1+V8j3T8dgbupmt9hDRPabFAABdHL1Y7FOOdaCpiu+Ar1P1eoliZA36kMc
-	 2fH/SBTs8ryMau/OTJxw3jc9quys/2ZDl+ciTVIAOoZlJ0XFar0jR4osNrVfmUhMXyg==
+	bh=lZKd5uP9xhIuLtTGrO2A9gbQECjDP9CCvg1QwDJYWs8=;
+	b=ZpTGxi154dExxGs8kt12sF1/L8hf0wKJscVikUfbgEQJBqZWs6u2Q1n8/c+9HlE5z9Ga
+	 cmQzAnpE5uck0D1KSlwV7wDyNrdHpXq4mp0eoQIcpPJOgqYfR+fnNO/KmhIWfSq8LGZQO
+	 pTw9PcNOiywekX5COJ6jBaJ8zS8CIigR8TcFxaZmlCChvvlBlOVV7uPbky9IgRrHNeD3W
+	 OmX+rC/ak5XbObZxo/MrfhjpXnZ/2k8olvKLaXWo5XxuEwojBLkJaGlDPGOJF/X8PsWWu
+	 HMeV0ntMt1qp3lPiUJ6YxYH5WNiKhAL1PeYcCOf8tCSUoD9g8ID9vBFo0+Q6kq47Usw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="RI/MK7K+";
-	arc=none smtp.remote-ip=74.125.82.53
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VUquGmoG;
+	arc=none smtp.remote-ip=74.125.82.48
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36332606A32D
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 11:53:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36332606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759A6606A320
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 11:53:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 759A6606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RI/MK7K+
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-18cdcfc05ffso751363c88.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 04:53:16 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VUquGmoG
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-181516de561so550875c88.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 04:53:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793361195; x=1793965995; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793361202; x=1793966002; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7RaPea1Qjt8hsmpjEa8tMwhSJ3KypYa/1YHVOL45aDk=;
-        b=RI/MK7K+fVA+qCXVBxa379mqnjirEnm3l6A/b7x1T1+jyHpmAO31rKMcbfZfdWrhh8
-         HnVuYJ2PZ1DzLxOObEMchGIbnBAGbfl2m3WNDe8993EbxfCh4Tb6/U41B27bh+aU/Ymv
-         Ah/6+7zXJixz91W05I4ZoUe9sEyBqgEDG+rmMTyKfzZqzxeWNvOixWKslgk4+jvBrujy
-         R1jm1A7HWWAJc4EZpI75G696hz6fsk0FfBGV3syfi1edJ3yvGy6GBMjdGboedLE2SfOE
-         in5t2prwW4yPCrb3f3yXIznOg8o3BkxZF/mS61+ZQ+zWqqKS/65LY2MutedgfdJP3iyf
-         E5uA==
+        bh=lZKd5uP9xhIuLtTGrO2A9gbQECjDP9CCvg1QwDJYWs8=;
+        b=VUquGmoGpJ9kGE17Zv91BFiLuqtAnTci/5c8erYPTARzSBWnFBQXgs114L/zhv60sY
+         LRcSGossp7I/Ma9EGFGitVT+KVcF8NYVDeYhLhzQT+W6VH6JSKZ22fDnRj+bBR5Dknht
+         YcJVp9IcGFEdkOAFwk5QhfH4svcyoGSYmqJk6DyqTwu8R7L+LRRK0hVe8XPIB1ezEyPj
+         mhZUoVxgNwOyyN5JHAzi7wxTi+ud1eNeuGXaNSCws5WxM24wSfB9RJYeDeotdi5zMZwl
+         +hoRusfnHubRZKsFspCrkngoGr7U5NlH0co96zgEgqTQgvGuWKl3+MVumJKVA9qV5Ym1
+         EjBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793361195; x=1793965995;
+        d=1e100.net; s=20260707; t=1793361202; x=1793966002;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7RaPea1Qjt8hsmpjEa8tMwhSJ3KypYa/1YHVOL45aDk=;
-        b=ThplO9NZLF0YbOX7GM3isZFzIK4Yqml9DA4cZJom0qrxCKVLsVmPR+xTlXSzW1n4mB
-         hirSkNmGsAKPHE2EaKBSjqNtKlfkSrU8BmyYbOszKFMJWABEY+R3N2DtKZFuCukKUjT2
-         5tCNz9e89sj9EvRDt3AR7rG59+TEsb/S+UtRkB+mGtRlNEj7OXADqw4pqYEQ2SucJXel
-         d5NgX9vU++/jJoICG2yPGAnF0G/cvADDwYsbrZ6aVKVk3xAIy0oSGuhSYMTZ2QQrHQtk
-         lx0ghGksqs8H8ShasYTgoxcDeBsnMt0sE9908GjmcIhLzNUiSgwE3sArQed9kh6POk0u
-         OYrw==
-X-Forwarded-Encrypted: i=1; AKwUvBzgbbBrZnjAs7QO5RpUiLjZVWnMBTi/reNLhRx5odl0GtOug/EeZiW5KRlAnn7skmIOLBvR0NcSx4B4zjh2HCM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLNto+JlNt6r8YTd3OKmB2XdZekiFL9QwjexnQJyo8fKq+VOF6j
-	EjOcooj73TvwEcrPosR/zAAZBqjQS7hLqxOjPI6Qv9w12DjmdFkQrRO/
-X-Gm-Gg: AYBFou3LwvBsADYbyTUYnIOrbKnzKZSgvM5i49uxjSBzHcED1E/xgtxN1zrIp+kWryr
-	I3DZh0Nfz97NIC6D15y4E0c6VloCLq2iDG0yzqTpXF1QWiudxG4uoliQlxkRQG/xXFxiqldGlgM
-	QjuSLAbMbKMvl4qiU0U1cMtnbi4icauJ8cZ03TdusY6bsar5GEVSc7Qph7MxETtxo30ox/27oGc
-	2XUgtAUbBK7XDv61q3bCXDjebdtHeUUz7lsBMd7r3bQPp16br1r/ugYJ6t20RQJuqVrZwXSAVGH
-	6GpDn1sIZ+UwgO/jtaMGBYlHBB8p1RHwBpb94AqJf+wAErHfzT69zT4C1z3yVrAxZL83UuuPFvh
-	ya1TMFkBzf3DfRJIit/675Hb0eWA66LRKSWF5vbEqmf6XnJ58grB0QAScnsz2CckGCJs9auDioI
-	RYFwaK8z6Dq8m0TxTpImlnUWyYrM6oZHnGOydIOA//bduFdwB1IJ6U4NnM5mhMhMgmYc0RPccg6
-	TeEUvKoCTXHXtDTopjAh4m2/t6xYwNTFfBuaQv5o//V3fcpkucmC8yDK88wW/TGtyfI+6YCCNI7
-	F+ALysRBSPvpmhbwDAO9hIKW
-X-Received: by 2002:a05:701b:4549:20b0:14a:51c8:ea06 with SMTP id a92af1059eb24-1ac5d69f695mr2698743c88.29.1793361195245;
-        Fri, 30 Oct 2026 04:53:15 -0700 (PDT)
+        bh=lZKd5uP9xhIuLtTGrO2A9gbQECjDP9CCvg1QwDJYWs8=;
+        b=WOzye+f1qZ2CKkURM/1vp+K5DH+bySa1zG55caIZ/uKfbQWr2luGYCyM1dMBmI5jgS
+         SpppzUv7JdqpXpWzjxtFZJ02qGK2X8YrT1DaX8Lov2XNejp6LCJzNVAsX2Kdl++YU6SG
+         WrLMVrpFcp56pBQrmc6j0VAhjKyny7ExyANyoJva/kFpf7D+3g/O/pbym49ODZJd5+NT
+         5TlRDUCnTnFlWbXSHFAS1XakBbtqF0xlQCwIhtwIvgge+yslPDXSZox83CrO73sIZMpP
+         PLeYZsaduFIDeg8cX0iitlFN8v786x90mvA6/A7MCD5T/tk/S+WOnwpOytKoQNKIObhx
+         QXhw==
+X-Forwarded-Encrypted: i=1; AKwUvBxDYiB+jy2T1QsrLW1hU9D1ehPthfdLbWtG7eKRbqdiyrSOLJolqE/zuILAxRNrPizHZuKQGIRKV4YwM4QELoA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIHtYG1dfhI3tvu1mJc2iliG3RBjjZc1ve0HBVIYj1Gd99PPgq9
+	84Ru2vnsLELSP0X3ghygkpYr7UJwi7L+d1fR0A0eQlXuWIS5X6aUNLcx
+X-Gm-Gg: AYBFou14cyJ2eI9EqdgLNA7dw1qG4kuhFAu0/351u8QjIUbZuNa6cEUvSftDcGBI1O9
+	h54IwFKOT7X21MSA9lVattGnzqyy56kueziDkA5UZeR0tEv8aDQ2P8YuS8zgCFwrfexrJxlgvr0
+	ZanPokYwNGGVyCB4y+MyIK3H0EfzRqaLqlzV/qmdGk5IFd4Ta7OzFNQx7GCufuhXjsfuPd0auFD
+	UlUec/1gSihmIJgTw4qcXspISPC4XEWb9ZODDoPicOScPzUMQ6oVfo3Hf1kg94H/ARlT/7pwSH+
+	QV5cw5jHUBrJCOxpUrlRJO3xYabiVX1XZQQTQSRThyP784rtU8XX2qQxH4d9XdnC/ViRetAJSKn
+	sTVJP+Obeg1eGZmYZMo49ybDkxbtjF8ZRLFzFXLfz+rmErxMlmKJET31J+MxmCZl9qnMQGmeORj
+	C0nICYys92/MoeqVT2mJhFqIq0BLcHkeusJfqUBX5QzP5bE/6uoEhVW6QuQTwa3B1Kg/8GgHooh
+	pr5l33eb1kbp7NKiXmu3ZYqyaOKhiWr4y4Ebtto67NcjwxtoP3m+5Mbbfj/BcYX9uhqtiO0Smag
+	jCzgvLJdTmn2qR+WYMQWV/iA
+X-Received: by 2002:a05:7022:628d:b0:184:40db:6bb9 with SMTP id a92af1059eb24-1a94876dbd0mr10003072c88.8.1793361201527;
+        Fri, 30 Oct 2026 04:53:21 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.53.10
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.53.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 04:53:14 -0700 (PDT)
+        Fri, 30 Oct 2026 04:53:21 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 30 Oct 2026 07:51:58 -0400
-Subject: [PATCH bpf-next v2 13/22] bpf: Allow inserting in front of a
- queued patch
+Date: Fri, 30 Oct 2026 07:51:59 -0400
+Subject: [PATCH bpf-next v2 14/22] bpf: Move bpf_convert_ctx_accesses() to
+ the patch list
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,7 +94,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261030-bpf-verifier-patch-batch-v2-13-55cd43439f7c@gmail.com>
+Message-Id: <20261030-bpf-verifier-patch-batch-v2-14-55cd43439f7c@gmail.com>
 References: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -110,80 +110,280 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-bpf_convert_ctx_accesses() inserts the store of the context pointer
-for the epilogue in front of the first instruction, and then the
-prologue in front of it as well.
+bpf_convert_ctx_accesses() patches the program for every context
+access that it rewrites and every barrier that it adds, one
+bpf_patch_insn_data() at a time.
 
-bpf_patch_list_insert() only takes an instruction that has no patch
-queued yet, so the second insertion is refused.
+Each of these patches costs O(prog->len), so a program with many
+context accesses pays it once for every one of them.
 
-Put insns inserted in front of a queued patch in front of all of it,
-and move the patch down behind them the same way as a single
-instruction.
+Queue the prologue, the store of the context pointer for the epilogue
+and the rewrites, and commit them at the end of the pass. Queue a
+barrier in front of an instruction before rewriting the instruction,
+whose rewrite then replaces the last instruction of the barrier. As
+ops->gen_prologue() ends the prologue with the first instruction of the
+program, insert the prologue without it with bpf_patch_list_insert().
+As the epilogue is now found by its index in the unpatched program,
+which can be 0, mark that there is none yet with -1.
 
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- kernel/bpf/core.c   | 27 +++++++++++++++------------
- kernel/bpf/fixups.c |  2 +-
- 2 files changed, 16 insertions(+), 13 deletions(-)
+ kernel/bpf/fixups.c | 132 +++++++++++++++++++---------------------------------
+ 1 file changed, 49 insertions(+), 83 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 6e356e16613b3..0447e3b4cfa48 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -746,24 +746,27 @@ int __bpf_patch_list_del(struct bpf_patch_list *pl, const struct bpf_prog *prog,
-  * Queue 'insns[0..cnt)' to go in front of insn 'off'. Jumps to 'off',
-  * instruction arrays and poke descriptors still name the insn at 'off', while
-  * subprogs, line info, function pointers and calls that start at 'off' start
-- * at the first inserted insn.
-+ * at the first inserted insn. Inserting in front of a queued patch puts the
-+ * insns in front of it.
-  */
- int __bpf_patch_list_insert(struct bpf_patch_list *pl, const struct bpf_prog *prog,
- 			    u32 off, const struct bpf_insn *insns, u32 cnt)
- {
--	struct bpf_insn_patch *p;
-+	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
- 	int err;
- 
--	err = patch_list_reserve_patch(pl) ?: patch_list_reserve_insns(pl, 1);
--	if (err)
--		return err;
--	p = &pl->patches[pl->cnt++];
--	p->off = off;
--	p->len = 1;
--	p->target = 0;
--	p->start = pl->insn_cnt;
--	p->orig = prog->insnsi[off];
--	pl->insns[pl->insn_cnt++] = p->orig;
-+	if (!p || off != p->off) {
-+		err = patch_list_reserve_patch(pl) ?: patch_list_reserve_insns(pl, 1);
-+		if (err)
-+			return err;
-+		p = &pl->patches[pl->cnt++];
-+		p->off = off;
-+		p->len = 1;
-+		p->target = 0;
-+		p->start = pl->insn_cnt;
-+		p->orig = prog->insnsi[off];
-+		pl->insns[pl->insn_cnt++] = p->orig;
-+	}
- 
- 	err = patch_list_reserve_insns(pl, cnt);
- 	if (err)
 diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index bb4fd75a70624..6d99de1be2581 100644
+index 6d99de1be2581..08c89f2baffb6 100644
 --- a/kernel/bpf/fixups.c
 +++ b/kernel/bpf/fixups.c
-@@ -429,7 +429,7 @@ int bpf_patch_list_insert(struct bpf_verifier_env *env, u32 off,
- 		return -EINTR;
+@@ -1090,16 +1090,15 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *subprogs = env->subprog_info;
+ 	const struct bpf_verifier_ops *ops = env->ops;
+-	int i, cnt, size, ctx_field_size, ret, delta = 0, epilogue_cnt = 0;
++	int i, cnt, size, ctx_field_size, ret, epilogue_cnt = 0;
+ 	const int insn_cnt = env->prog->len;
+ 	struct bpf_insn *epilogue_buf = env->epilogue_buf;
+ 	struct bpf_insn *insn_buf = env->insn_buf;
+ 	struct bpf_insn *insn;
+ 	u32 target_size, size_default, off;
+-	struct bpf_prog *new_prog;
+ 	enum bpf_access_type type;
+ 	bool is_narrower_load;
+-	int epilogue_idx = 0;
++	int epilogue_idx = -1;
  
- 	if (verifier_bug_if(!cnt || off >= env->prog->len ||
--			    (p && off <= p->off),
-+			    (p && (off < p->off || (off == p->off && !p->len))),
- 			    env, "insns inserted at %u out of order", off))
- 		return -EFAULT;
+ 	if (ops->gen_epilogue) {
+ 		epilogue_cnt = ops->gen_epilogue(epilogue_buf, env->prog,
+@@ -1109,17 +1108,12 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			return -EFAULT;
+ 		} else if (epilogue_cnt) {
+ 			/* Save the ARG_PTR_TO_CTX for the epilogue to use */
+-			cnt = 0;
+ 			subprogs[0].stack_depth += 8;
+-			insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
+-						      -subprogs[0].stack_depth);
+-			insn_buf[cnt++] = env->prog->insnsi[0];
+-			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
+-							 BPF_PATCH_MOVE_TARGET);
+-			if (!new_prog)
+-				return -ENOMEM;
+-			env->prog = new_prog;
+-			delta += cnt - 1;
++			insn_buf[0] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
++						  -subprogs[0].stack_depth);
++			ret = bpf_patch_list_insert(env, 0, insn_buf, 1);
++			if (ret)
++				return ret;
  
+ 			ret = add_kfunc_in_insns(env, epilogue_buf, epilogue_cnt - 1);
+ 			if (ret < 0)
+@@ -1150,13 +1144,14 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 						   env->prog->aux->attach_btf_id))
+ 				return -EINVAL;
+ 			env->prog->aux->has_prologue = true;
+-			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
+-							 BPF_PATCH_MOVE_TARGET);
+-			if (!new_prog)
+-				return -ENOMEM;
+-
+-			env->prog = new_prog;
+-			delta += cnt - 1;
++			/* the prologue ends with the first insn of the program */
++			if (verifier_bug_if(memcmp(&insn_buf[cnt - 1], env->prog->insnsi,
++						   sizeof(*insn_buf)), env,
++					    "prologue doesn't end with the first insn"))
++				return -EFAULT;
++			ret = bpf_patch_list_insert(env, 0, insn_buf, cnt - 1);
++			if (ret)
++				return ret;
+ 
+ 			ret = add_kfunc_in_insns(env, insn_buf, cnt - 1);
+ 			if (ret < 0)
+@@ -1164,21 +1159,18 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		}
+ 	}
+ 
+-	if (delta)
+-		WARN_ON(adjust_jmp_off(env->prog, 0, delta));
+-
+ 	if (bpf_prog_is_offloaded(env->prog->aux))
+-		return 0;
+-
+-	insn = env->prog->insnsi + delta;
++		return bpf_patch_list_commit(env);
+ 
+-	for (i = 0; i < insn_cnt; i++, insn++) {
++	for (i = 0; i < insn_cnt; i++) {
+ 		bpf_convert_ctx_access_t convert_ctx_access;
+ 		enum bpf_reg_type ptr_type;
+ 		u8 mode;
+ 
+-		if (env->insn_aux_data[i + delta].nospec) {
+-			WARN_ON_ONCE(env->insn_aux_data[i + delta].alu_state);
++		insn = &env->prog->insnsi[i];
++
++		if (env->insn_aux_data[i].nospec) {
++			WARN_ON_ONCE(env->insn_aux_data[i].alu_state);
+ 			struct bpf_insn *patch = insn_buf;
+ 
+ 			*patch++ = BPF_ST_NOSPEC();
+@@ -1186,17 +1178,13 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			ret = bpf_adj_moved_insn(patch++, 1);
+ 			if (ret) {
+ 				verbose(env, "insn %d cannot be patched due to 16-bit range\n",
+-					env->insn_aux_data[i + delta].orig_idx);
++					env->insn_aux_data[i].orig_idx);
+ 				return ret;
+ 			}
+ 			cnt = patch - insn_buf;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+-			if (!new_prog)
+-				return -ENOMEM;
+-
+-			delta    += cnt - 1;
+-			env->prog = new_prog;
+-			insn      = new_prog->insnsi + i + delta;
++			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
++			if (IS_ERR(insn))
++				return PTR_ERR(insn);
+ 			/* This can not be easily merged with the
+ 			 * nospec_result-case, because an insn may require a
+ 			 * nospec before and after itself. Therefore also do not
+@@ -1226,42 +1214,34 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			    insn->code == (BPF_STX | BPF_ATOMIC | BPF_H) ||
+ 			    insn->code == (BPF_STX | BPF_ATOMIC | BPF_W) ||
+ 			    insn->code == (BPF_STX | BPF_ATOMIC | BPF_DW)) &&
+-			   env->insn_aux_data[i + delta].ptr_type == PTR_TO_ARENA) {
++			   env->insn_aux_data[i].ptr_type == PTR_TO_ARENA) {
+ 			insn->code = BPF_STX | BPF_PROBE_ATOMIC | BPF_SIZE(insn->code);
+ 			env->prog->aux->num_exentries++;
+ 			continue;
+ 		} else if (insn->code == (BPF_STX | BPF_ATOMIC | BPF_DW) &&
+ 			   insn->imm == BPF_LOAD_ACQ &&
+-			   env->insn_aux_data[i + delta].arena_member) {
++			   env->insn_aux_data[i].arena_member) {
+ 			/* an acquire load of an __arena member is rewritten like a plain load */
+-			cnt = arena_member_fixup(env, i + delta, insn, insn_buf);
++			cnt = arena_member_fixup(env, i, insn, insn_buf);
+ 			if (cnt < 0)
+ 				return cnt;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+-			if (!new_prog)
+-				return -ENOMEM;
+-
+-			delta    += cnt - 1;
+-			env->prog = new_prog;
+-			insn      = new_prog->insnsi + i + delta;
++			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
++			if (IS_ERR(insn))
++				return PTR_ERR(insn);
+ 			continue;
+ 		} else if (insn->code == (BPF_JMP | BPF_EXIT) &&
+ 			   epilogue_cnt &&
+-			   i + delta < subprogs[1].start) {
++			   i < subprogs[1].start) {
+ 			/* Generate epilogue for the main prog */
+-			if (epilogue_idx) {
++			if (epilogue_idx >= 0) {
+ 				/* jump back to the earlier generated epilogue */
+-				insn_buf[0] = BPF_JMP32_A(epilogue_idx - i - delta - 1);
++				insn_buf[0] = BPF_JMP32_A(epilogue_idx - i - 1);
+ 				cnt = 1;
+ 			} else {
+ 				memcpy(insn_buf, epilogue_buf,
+ 				       epilogue_cnt * sizeof(*epilogue_buf));
+ 				cnt = epilogue_cnt;
+-				/* epilogue_idx cannot be 0. It must have at
+-				 * least one ctx ptr saving insn before the
+-				 * epilogue.
+-				 */
+-				epilogue_idx = i + delta;
++				epilogue_idx = i;
+ 			}
+ 			goto patch_insn_buf;
+ 		} else {
+@@ -1269,7 +1249,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		if (type == BPF_WRITE &&
+-		    env->insn_aux_data[i + delta].nospec_result) {
++		    env->insn_aux_data[i].nospec_result) {
+ 			/* nospec_result is only used to mitigate Spectre v4 and
+ 			 * to limit verification-time for Spectre v1.
+ 			 */
+@@ -1278,17 +1258,13 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			*patch++ = *insn;
+ 			*patch++ = BPF_ST_NOSPEC();
+ 			cnt = patch - insn_buf;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+-			if (!new_prog)
+-				return -ENOMEM;
+-
+-			delta    += cnt - 1;
+-			env->prog = new_prog;
+-			insn      = new_prog->insnsi + i + delta;
++			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
++			if (IS_ERR(insn))
++				return PTR_ERR(insn);
+ 			continue;
+ 		}
+ 
+-		ptr_type = env->insn_aux_data[i + delta].ptr_type;
++		ptr_type = env->insn_aux_data[i].ptr_type;
+ 		switch ((int)ptr_type) {
+ 		case PTR_TO_CTX:
+ 			if (!ops->convert_ctx_access)
+@@ -1341,22 +1317,18 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 				return -EFAULT;
+ 			}
+ 
+-			cnt = arena_member_fixup(env, i + delta, insn, insn_buf);
++			cnt = arena_member_fixup(env, i, insn, insn_buf);
+ 			if (cnt < 0)
+ 				return cnt;
+ 			if (!cnt)
+ 				continue;
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+-			if (!new_prog)
+-				return -ENOMEM;
+-
+-			delta    += cnt - 1;
+-			env->prog = new_prog;
+-			insn      = new_prog->insnsi + i + delta;
++			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
++			if (IS_ERR(insn))
++				return PTR_ERR(insn);
+ 			continue;
+ 		}
+ 
+-		ctx_field_size = env->insn_aux_data[i + delta].ctx_field_size;
++		ctx_field_size = env->insn_aux_data[i].ctx_field_size;
+ 		size = BPF_LDST_BYTES(insn);
+ 		mode = BPF_MODE(insn->code);
+ 
+@@ -1424,18 +1396,12 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 						       size * 8, 0);
+ 
+ patch_insn_buf:
+-		new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+-		if (!new_prog)
+-			return -ENOMEM;
+-
+-		delta += cnt - 1;
+-
+-		/* keep walking new program and skip insns we just inserted */
+-		env->prog = new_prog;
+-		insn      = new_prog->insnsi + i + delta;
++		insn = bpf_patch_list_add(env, i, insn_buf, cnt);
++		if (IS_ERR(insn))
++			return PTR_ERR(insn);
+ 	}
+ 
+-	return 0;
++	return bpf_patch_list_commit(env);
+ }
+ 
+ static u32 *bpf_dup_subprog_starts(struct bpf_verifier_env *env)
 
 -- 
 2.43.0
