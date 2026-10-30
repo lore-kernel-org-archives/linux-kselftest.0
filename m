@@ -1,107 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.36.163.20
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793339305;
-	b=VS+BGxtTHdQ9ENPFenLwmZcF2idqqwIXZpzd3Vb/MP/lc9JVQTANtxDVHT1wPseitoif
-	 oB35hg+Qk6b6O/yw/cXUdTnsNyr5nd/6rFa15YODzIVr1iwMRbLJrEgrSy9spxf8XQxLQ
-	 cpW+oYyTRF1r+S2+OMkGtVee3WWHoCE7NrawLwJ9T0489ZsrGuFGhUqKTaa5lNfVQGhAa
-	 sa71ioUasa9QPh4WQvPBTiOhZBSqhMnEJpF9SmJbgev4zl2ZwWXqMP2zyNtcIZpUCEJlx
-	 88NoGf+fQ9tJVokpKEmpShbO5iplvqwss25cT26CuDs3d0lTmFNFwNavFnWzl5YgtOw==
+	t=1793339985;
+	b=JeGXt9ew4YiYeA5nmGxqcA4Fc88Fh9wreTivtvBtCRBHKTCUXElpMy77gocOpU5vsj++
+	 EFMgciaCSXVnDEmjh05IigqSyGLq9FA+isfeiEpSyWAHaILL0M1lpJUI9myt9xFyVUp3T
+	 AlMsy+Q9PMJevob8B5h19B034vAM9OotzWLH60ZoEPDAU3WqOytXG7/pR/45Kdkh4otKi
+	 KAzDAFZN8hJpdpLixp+hYI0XYeEvkHQtLAoyJ65nC2tkP6jfCgRxj4jARwNsVyzn8jP4T
+	 ATXpTmj4997VOfQ0zJXLjYXlMOakWeEzceaiaxe68u08RRibaLLX8giR7F5hDOd1HAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793339305;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 To:Cc:References:Content-Language:From:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=jk0rm4jvaiDVGk2youcQLM21ekVKsq8blgclz8ObRLc=;
-	b=2P9NeZ7fhhkCWZPqeRlh6qh6HcXoviAmT8ZHTFa6xh2jeNa5OaQRatFDzHjyEy9lOppR
-	 nU6eWHJRXATRcVp4XgRe26paZ35s+xGzXTH6fGqNAnf36aOZKTt19Yidq40Om++vZ1zLo
-	 2LVUfN4xNlUcEk7flLrO0uDl5feAwvGlglIFkKXnLO70E3lEVLH1gRk53xeNoezQ7HVee
-	 LfJLwGAV11pZfn6rNne9yT66kdYayz1CsA9hCwZtiW6whuQyzQ6OgXKlHCjEIdkhOsEhd
-	 9ZLTUN4xKwv9AtBhd69xlKFnOYCEbN/P/CLbEbOMdp9Zr2K56oKy2D0bWo5Dga+qpjQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793339985;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding:X-SEG-SpamProfiler-Analysis:
+	 X-SEG-SpamProfiler-Score:x-atlnz-ls;
+	bh=Wm/iilB5CgT7+iUai4Q2JgTujeFHrVbrWuLvh18fVpo=;
+	b=x8+Yap6RzRr3Y+Rw2+X7s1ngJNDMCWwzh8DGT618e1I87OF0S+m3Hsxeuz/+2zZbzIG8
+	 oQ29vbPIobiHMlQdmLbsMhuFpybaTeoqYnp3YO6P6MlNL4NGGUZH4DxzclvOUii8jGKrO
+	 wuedW2mvxsWKgqJJrBzPIy6htXOPXnV6Gx5F5JkBTmOzk9AtWS4zjScfAQmCow583pOKR
+	 bM4C4nplX/fBWznFHkS0r+t57R0ys0KmxfVGKd2qwGJSyOwYbcl9+zk3EHaRBlYPlcv8b
+	 acZBg+qby9TP9Y7YhtzwMPQEdrD+WFJc+PzTZUMkgzTceacc62SgfjLxxzUpRqktgcg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=f3RbfGK4;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=KADzmYZ7;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dmarc=pass header.from=alliedtelesis.co.nz;
+	spf=pass smtp.mailfrom=alliedtelesis.co.nz;
+	dkim=pass header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.a=rsa-sha256 header.s=mail181024 header.b=CrIHP+Ni;
+	arc=none smtp.remote-ip=202.36.163.20
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEED606A31A
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 05:48:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCEED606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22540606A327
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2026 05:59:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 22540606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=f3RbfGK4;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=KADzmYZ7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793339303;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=jk0rm4jvaiDVGk2youcQLM21ekVKsq8blgclz8ObRLc=;
-	b=f3RbfGK4ovSZFk5iY2+5oPCbyW6HgYxLSwIIWird5yZMuW+NJO4gd4O+3x+BG+xZ1NF8vs
-	Lt4uaXmW4hGfuuziTfyaig8+Ph/xbfLVv5AQwMZ0z+FSLVbjsjLnwZS3IOnqG/MEvWGOTy
-	LVc7aRFMvcHmRAAFCf8stVez0UNLuxk=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-79-ZZlFTRv_MsuGf1K9VMBNKw-1; Fri, 30 Oct 2026 01:48:21 -0400
-X-MC-Unique: ZZlFTRv_MsuGf1K9VMBNKw-1
-X-Mimecast-MFC-AGG-ID: ZZlFTRv_MsuGf1K9VMBNKw_1793339301
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-48e0fc747a7so274598f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2026 22:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793339300; x=1793944100; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jk0rm4jvaiDVGk2youcQLM21ekVKsq8blgclz8ObRLc=;
-        b=KADzmYZ7ktK7ZmjSi303THK5Lh8efgG04iQ/f0kPVW5kJINAYeVlP4TZmQcpYNtgZu
-         ATkT2q4dzg7SACaTFRKNQSV063REPQWM+tk6PkjUSe4rz+O3iPgRLWI0qkxVwu9hhZ7+
-         MNaij1QyajYHmjoD9+ef/gDVYTf9YyUQp0+w+i059qvDiK61HwKPBRz2F5xBBpX9Jl25
-         KRfr7cMM72aRRUNZpLHa+BGwV61ITu4dEJQuLdkyPfX/OxT/A8HSNO7Jx+beJvacfDe4
-         asCXbx5SLUB1Wb5ddVz4sf1C0q61c7YoZLUMGYesZSFBOLVx61JqueJe01OVRDQFUWKW
-         YA7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793339300; x=1793944100;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jk0rm4jvaiDVGk2youcQLM21ekVKsq8blgclz8ObRLc=;
-        b=2rB/UBWcFi8JNHdDJ43kZl+opFjYsf8SHp0AqG+TvUc8IukFkBJbB2rX6SSkR5xynC
-         CuUHSVBSEoxvnqQIRol6RLmgngzcwFJOuUzDS+FmNsuP3wxnd8gI+5Gmezs/PonM8e8d
-         wuwQr7dcWDTLOmvHJaH3WPvfVSk1av8jUudBM2ueq5aOCqQA9SNLjPU0za1Wn/JhegVg
-         jlTQipeOzYDLVgLVBQiRUdMc2duM8Kv2vDrgRfyCR2WxDuFGOFiKjqjEmH0L6DcdHvRf
-         4YHRIOcLiGqQ0IFKo7xnJdmHH7e0g/PqKzmqetwpcRn8fv4qfrGbgwQhfaXixHH/M97J
-         f+3w==
-X-Forwarded-Encrypted: i=1; AKwUvBwHjrE1jBjM4vHF+gleEGZ3hP6QoEbua6gvQl5g6Tmce2O+S88WpEcaHe+ear9n7u7cDoV4/90TxXbofoE7rrE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKoHy+x/DUQtPBJKz5n2m6o9wT5WRtl8quHDrawhjQZYeGhHsFT
-	QT96OhPFkMNcKJgR0gfk8fXI7LH0tJtnabUGjvTlWGusoxlSEnWEPko3dPQNOYLnLCVwNH68+SL
-	b9VOtZ2QOG8JX34/uhPTYJtvamGYhLN+5Xm/3YtxXaUw+O9xlskyKuyJ16otJZttnhfkTFQ==
-X-Gm-Gg: AYBFou1elWTsn0x//dwJnHxbUAJZ+f/g5Ng8j4YUYjYA7ZQhMQ69zmMrEmsCWA7Ur15
-	qpJD/L2CiTxObiNd6c5SnbfcM79jApZsy4bGRln0WlJijgkeeD7U7rk4rJiO4Ppj8W6wfzOezH8
-	q8lD97ck2+2r3ba0G/E6J207+tu+mWtq6lI7dJfuttCoKdwOa7FFltJc5C/mVcuCH/miSzaiTG5
-	bI+fNcIcdQpeCDz1YD38DOPWMur74MoqtoqmUYXNtGRc8xgG2mk+wKkhqbUi1oNKv5GSTO1KoYM
-	BDhD98dwyvMrC+JaKhVF4Bpp8zzjn9h0FGXdm9Few9b3YCQMDl5tj+a2uY9/wvWPasxspYEaBua
-	Y5eVKOAA1bxh+P6Eny9gUXFh1aRVpCsxEvO1Rzo1jHKAE6OQ=
-X-Received: by 2002:a05:600c:354a:b0:4a3:5aee:2c25 with SMTP id 5b1f17b1804b1-4ac181e759dmr23905775e9.31.1793339300599;
-        Thu, 29 Oct 2026 22:48:20 -0700 (PDT)
-X-Received: by 2002:a05:600c:354a:b0:4a3:5aee:2c25 with SMTP id 5b1f17b1804b1-4ac181e759dmr23905515e9.31.1793339300195;
-        Thu, 29 Oct 2026 22:48:20 -0700 (PDT)
-Received: from [192.168.0.9] ([47.64.112.102])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71a4d5dfsm1501346f8f.3.2026.10.29.22.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2026 22:48:19 -0700 (PDT)
-Message-ID: <0a5de4d5-8b02-40f3-8067-f75b9f1020eb@redhat.com>
-Date: Fri, 30 Oct 2026 06:48:17 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.a=rsa-sha256 header.s=mail181024 header.b=CrIHP+Ni
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id B6FCA2C0677;
+	Fri, 30 Oct 2026 18:59:42 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1793339982;
+	bh=Wm/iilB5CgT7+iUai4Q2JgTujeFHrVbrWuLvh18fVpo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CrIHP+NiwoE3I3YvGcNeolh5ie4qLS+HTgmvjsQMh5srrwGERRvGAOA9Ex4cVg1+Y
+	 biTA1SSSmbJCiNu8n/f6XDoxMbSNzc6YvQA6VBDePcghfQnP5uFqw8WhO/M98SruE7
+	 Jv1HKYGFKWPgOJ1avNOtZ0JT91C3YzGBDVYez90xlcF4qpsfJy58Ekig/ZYErVGpaW
+	 y4vd6SXt9a0WR9e2AhRW9woViM2y94CFh6TEWNaLADM1nq/Dbimjve84a2Jekmy3lV
+	 mMl8JcrVhNsYEY9QfRx9pP03la7mdeWp1NXgn0VaYXJ7G8P2WC27j3KjCvsTkWPJdh
+	 8V6l9ALpLq6fw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6ae4324e0000>; Fri, 30 Oct 2026 18:59:42 +1300
+Received: from angga-dl.ws.atlnz.lc (angga-dl.ws.atlnz.lc [10.33.22.14])
+	by pat.atlnz.lc (Postfix) with ESMTP id 8173213EE2B;
+	Fri, 30 Oct 2026 18:59:42 +1300 (NZDT)
+Received: by angga-dl.ws.atlnz.lc (Postfix, from userid 1025)
+	id 7F907564D90; Fri, 30 Oct 2026 18:59:42 +1300 (NZDT)
+From: Hermin Anggawijaya <hermin.anggawijaya@alliedtelesis.co.nz>
+To: dsahern@kernel.org,
+	idosch@nvidia.com,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hermin Anggawijaya <hermin.anggawijaya@alliedtelesis.co.nz>
+Subject: [PATCH net-next 2/2] selftests: net: test RA PIO handling of manually added addresses
+Date: Fri, 30 Oct 2026 18:57:57 +1300
+Message-ID: <20261030055757.2094944-3-hermin.anggawijaya@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261030055757.2094944-1-hermin.anggawijaya@alliedtelesis.co.nz>
+References: <20261030055757.2094944-1-hermin.anggawijaya@alliedtelesis.co.nz>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,107 +83,153 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [arnd-asm-generic:asm-generic 15/15]
- /usr/aarch64-linux-gnu/include/linux/types.h:12: Error: unknown mnemonic
- `typedef' -- `typedef __signed__ __int128 __s128
- __attribute__((aligned(16)))'
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- "Jason A. Donenfeld" <Jason@zx2c4.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-References: <202610291918.kHO0GTDB-lkp@intel.com>
- <9e294bfd-4704-42a5-a704-f301f4afe042@app.fastmail.com>
-Content-Language: en-US
-From: Thomas Huth <thuth@redhat.com>
-Autocrypt: addr=thuth@redhat.com; keydata=
- xsFNBFH7eUwBEACzyOXKU+5Pcs6wNpKzrlJwzRl3VGZt95VCdb+FgoU9g11m7FWcOafrVRwU
- yYkTm9+7zBUc0sW5AuPGR/dp3pSLX/yFWsA/UB4nJsHqgDvDU7BImSeiTrnpMOTXb7Arw2a2
- 4CflIyFqjCpfDM4MuTmzTjXq4Uov1giGE9X6viNo1pxyEpd7PanlKNnf4PqEQp06X4IgUacW
- tSGj6Gcns1bCuHV8OPWLkf4hkRnu8hdL6i60Yxz4E6TqlrpxsfYwLXgEeswPHOA6Mn4Cso9O
- 0lewVYfFfsmokfAVMKWzOl1Sr0KGI5T9CpmRfAiSHpthhHWnECcJFwl72NTi6kUcUzG4se81
- O6n9d/kTj7pzTmBdfwuOZ0YUSqcqs0W+l1NcASSYZQaDoD3/SLk+nqVeCBB4OnYOGhgmIHNW
- 0CwMRO/GK+20alxzk//V9GmIM2ACElbfF8+Uug3pqiHkVnKqM7W9/S1NH2qmxB6zMiJUHlTH
- gnVeZX0dgH27mzstcF786uPcdEqS0KJuxh2kk5IvUSL3Qn3ZgmgdxBMyCPciD/1cb7/Ahazr
- 3ThHQXSHXkH/aDXdfLsKVuwDzHLVSkdSnZdt5HHh75/NFHxwaTlydgfHmFFwodK8y/TjyiGZ
- zg2Kje38xnz8zKn9iesFBCcONXS7txENTzX0z80WKBhK+XSFJwARAQABzR5UaG9tYXMgSHV0
- aCA8dGh1dGhAcmVkaGF0LmNvbT7CwXgEEwECACIFAlVgX6oCGwMGCwkIBwMCBhUIAgkKCwQW
- AgMBAh4BAheAAAoJEC7Z13T+cC21EbIP/ii9cvT2HHGbFRl8HqGT6+7Wkb+XLMqJBMAIGiQK
- QIP3xk1HPTsLfVG0ao4hy/oYkGNOP8+ubLnZen6Yq3zAFiMhQ44lvgigDYJo3Ve59gfe99KX
- EbtB+X95ODARkq0McR6OAsPNJ7gpEUzfkQUUJTXRDQXfG/FX303Gvk+YU0spm2tsIKPl6AmV
- 1CegDljzjycyfJbk418MQmMu2T82kjrkEofUO2a24ed3VGC0/Uz//XCR2ZTo+vBoBUQl41BD
- eFFtoCSrzo3yPFS+w5fkH9NT8ChdpSlbNS32NhYQhJtr9zjWyFRf0Zk+T/1P7ECn6gTEkp5k
- ofFIA4MFBc/fXbaDRtBmPB0N9pqTFApIUI4vuFPPO0JDrII9dLwZ6lO9EKiwuVlvr1wwzsgq
- zJTPBU3qHaUO4d/8G+gD7AL/6T4zi8Jo/GmjBsnYaTzbm94lf0CjXjsOX3seMhaE6WAZOQQG
- tZHAO1kAPWpaxne+wtgMKthyPLNwelLf+xzGvrIKvLX6QuLoWMnWldu22z2ICVnLQChlR9d6
- WW8QFEpo/FK7omuS8KvvopFcOOdlbFMM8Y/8vBgVMSsK6fsYUhruny/PahprPbYGiNIhKqz7
- UvgyZVl4pBFjTaz/SbimTk210vIlkDyy1WuS8Zsn0htv4+jQPgo9rqFE4mipJjy/iboDzsFN
- BFH7eUwBEAC2nzfUeeI8dv0C4qrfCPze6NkryUflEut9WwHhfXCLjtvCjnoGqFelH/PE9NF4
- 4VPSCdvD1SSmFVzu6T9qWdcwMSaC+e7G/z0/AhBfqTeosAF5XvKQlAb9ZPkdDr7YN0a1XDfa
- +NgA+JZB4ROyBZFFAwNHT+HCnyzy0v9Sh3BgJJwfpXHH2l3LfncvV8rgFv0bvdr70U+On2XH
- 5bApOyW1WpIG5KPJlDdzcQTyptOJ1dnEHfwnABEfzI3dNf63rlxsGouX/NFRRRNqkdClQR3K
- gCwciaXfZ7ir7fF0u1N2UuLsWA8Ei1JrNypk+MRxhbvdQC4tyZCZ8mVDk+QOK6pyK2f4rMf/
- WmqxNTtAVmNuZIwnJdjRMMSs4W4w6N/bRvpqtykSqx7VXcgqtv6eqoDZrNuhGbekQA0sAnCJ
- VPArerAZGArm63o39me/bRUQeQVSxEBmg66yshF9HkcUPGVeC4B0TPwz+HFcVhheo6hoJjLq
- knFOPLRj+0h+ZL+D0GenyqD3CyuyeTT5dGcNU9qT74bdSr20k/CklvI7S9yoQje8BeQAHtdV
- cvO8XCLrpGuw9SgOS7OP5oI26a0548M4KldAY+kqX6XVphEw3/6U1KTf7WxW5zYLTtadjISB
- X9xsRWSU+Yqs3C7oN5TIPSoj9tXMoxZkCIHWvnqGwZ7JhwARAQABwsFfBBgBAgAJBQJR+3lM
- AhsMAAoJEC7Z13T+cC21hPAQAIsBL9MdGpdEpvXs9CYrBkd6tS9mbaSWj6XBDfA1AEdQkBOn
- ZH1Qt7HJesk+qNSnLv6+jP4VwqK5AFMrKJ6IjE7jqgzGxtcZnvSjeDGPF1h2CKZQPpTw890k
- fy18AvgFHkVk2Oylyexw3aOBsXg6ukN44vIFqPoc+YSU0+0QIdYJp/XFsgWxnFIMYwDpxSHS
- 5fdDxUjsk3UBHZx+IhFjs2siVZi5wnHIqM7eK9abr2cK2weInTBwXwqVWjsXZ4tq5+jQrwDK
- cvxIcwXdUTLGxc4/Z/VRH1PZSvfQxdxMGmNTGaXVNfdFZjm4fz0mz+OUi6AHC4CZpwnsliGV
- ODqwX8Y1zic9viSTbKS01ZNp175POyWViUk9qisPZB7ypfSIVSEULrL347qY/hm9ahhqmn17
- Ng255syASv3ehvX7iwWDfzXbA0/TVaqwa1YIkec+/8miicV0zMP9siRcYQkyTqSzaTFBBmqD
- oiT+z+/E59qj/EKfyce3sbC9XLjXv3mHMrq1tKX4G7IJGnS989E/fg6crv6NHae9Ckm7+lSs
- IQu4bBP2GxiRQ+NV3iV/KU3ebMRzqIC//DCOxzQNFNJAKldPe/bKZMCxEqtVoRkuJtNdp/5a
- yXFZ6TfE1hGKrDBYAm4vrnZ4CXFSBDllL59cFFOJCkn4Xboj/aVxxJxF30bn
-In-Reply-To: <9e294bfd-4704-42a5-a704-f301f4afe042@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=FJW4xPos c=1 sm=1 tr=0 ts=6ae4324e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=660iZSQnnn4A:10 a=Q208khUp9j-A8GAraSAA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On 29/10/2026 23.13, Arnd Bergmann wrote:
-> On Thu, Oct 29, 2026, at 19:09, kernel test robot wrote:
->> tree:
->> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
->> asm-generic
->> head:   dd7cc8c26b6a37a54adc5ce38d286521b7201044
->> commit: dd7cc8c26b6a37a54adc5ce38d286521b7201044 [15/15] treewide: Stop
->> defining __ASSEMBLY__ for assembler files
-> 
-> Hi Thomas,
-> 
->> config: arm64-allnoconfig-bpf
->> (https://download.01.org/0day-ci/archive/20261029/202610291918.kHO0GTDB-lkp@intel.com/config)
->> compiler: aarch64-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
->> reproduce (this is a W=1 build):
->> (https://download.01.org/0day-ci/archive/20261029/202610291918.kHO0GTDB-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new
->> version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes:
->> https://lore.kernel.org/oe-kbuild-all/202610291918.kHO0GTDB-lkp@intel.com/
->>
->> Note: the arnd-asm-generic/asm-generic HEAD
->> dd7cc8c26b6a37a54adc5ce38d286521b7201044 builds fine.
->>        It only hurts bisectability.
->>
->> All errors (new ones prefixed by >>):
->>
->>     /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h: Assembler messages:
->>>> /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h:20: Error: unknown mnemonic `typedef' -- `typedef __signed__ char __s8'
->>>> /usr/aarch64-linux-gnu/include/asm-generic/int-ll64.h:21: Error: unknown mnemonic `typedef' -- `typedef unsigned char __u8'
-> 
-> 
->  From what I can tell, this happens after your last patch when cross-compiling
-> kselftest against system headers that still check for __ASSEMBLY__ instead of
-> __ASSEMBLER__.
-D'oh! Could you please drop that last patch for now 'til I figured out a 
-solution for that mess...?
+Add a test that sends a Router Advertisement with three autonomous
+PIOs to a host that has two manually added addresses matching the
+addresses SLAAC would form from the first two prefixes:
 
-  Thanks,
-   Thomas
+ - a plain manual address must keep its infinite lifetimes,
+ - a manual address added with mngtmpaddr must have its lifetimes
+   refreshed from the PIO,
+ - the third prefix must create a SLAAC address with the advertised
+   lifetimes.
+
+Extend _send_ra() so it can emit PIOs with the autonomous flag set.
+
+Signed-off-by: Hermin Anggawijaya <hermin.anggawijaya@alliedtelesis.co.nz=
+>
+---
+ tools/testing/selftests/net/rtnetlink.py | 79 +++++++++++++++++++++++-
+ 1 file changed, 78 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/sel=
+ftests/net/rtnetlink.py
+index 5534ade056a5..a1294460e9b5 100755
+--- a/tools/testing/selftests/net/rtnetlink.py
++++ b/tools/testing/selftests/net/rtnetlink.py
+@@ -266,7 +266,7 @@ def ipv6_route_del_reason_expired() -> None:
+             ksft_eq(attrs.get('del-reason'), 'expired')
+=20
+=20
+-def _send_ra(sock, ifindex, lifetime, rio=3DNone, pio=3DNone):
++def _send_ra(sock, ifindex, lifetime, rio=3DNone, pio=3DNone, slaac_pios=
+=3D()):
+     """The kernel fills in the ICMPv6 checksum on raw ICMPv6 sockets."""
+=20
+     # type, code, cksum, hop limit, flags, router lifetime,
+@@ -282,6 +282,11 @@ def _send_ra(sock, ifindex, lifetime, rio=3DNone, pi=
+o=3DNone):
+         # RFC 4861 prefix information option, on-link only (L set, A cle=
+ar)
+         ra +=3D struct.pack('!BBBBIII', 3, 4, plen, 0x80, valid_lft, 0, =
+0)
+         ra +=3D socket.inet_pton(socket.AF_INET6, prefix)
++    for prefix, plen, valid_lft in slaac_pios:
++        # RFC 4861 prefix information option, on-link and autonomous
++        ra +=3D struct.pack('!BBBBIII', 3, 4, plen, 0xc0, valid_lft,
++                          valid_lft, 0)
++        ra +=3D socket.inet_pton(socket.AF_INET6, prefix)
+     sock.sendto(ra, ('ff02::1', 0, 0, ifindex))
+=20
+=20
+@@ -382,6 +387,77 @@ def ipv6_route_del_reason_absent() -> None:
+                         "user deletion must not carry del-reason")
+=20
+=20
++def _ipv6_addr_lifetimes(ns, ifname):
++    """Map each global IPv6 address on ifname to (valid, preferred)."""
++
++    addrs =3D ip(f"-6 addr show dev {ifname} scope global", json=3DTrue,=
+ ns=3Dns)
++    return {a['local']: (a['valid_life_time'], a['preferred_life_time'])
++            for a in addrs[0]['addr_info'] if 'local' in a}
++
++
++def ipv6_ra_pio_manual_addr_lifetime() -> None:
++    """
++    A PIO must refresh the lifetimes of SLAAC addresses only (RFC 4862
++    Section 5.5.3 e). A manually added address that matches the address
++    SLAAC would form keeps its lifetimes, unless it was added with
++    mngtmpaddr.
++    """
++
++    forever =3D 0xffffffff
++    lft =3D 600
++    # EUI-64 interface identifier of 02:00:00:00:00:01
++    iid =3D '::ff:fe00:1'
++    manual =3D '2001:db8:7' + iid
++    mngtmp =3D '2001:db8:8' + iid
++    slaac =3D '2001:db8:9' + iid
++
++    with NetNS() as ns_h, NetNS() as ns_r:
++        ip(f"link add veth0 netns {ns_h} type veth peer name veth1 netns=
+ {ns_r}")
++        with NetNSEnter(str(ns_h)):
++            _write_ipv6_sysctl("conf/veth0/accept_ra", 2)
++            _write_ipv6_sysctl("conf/veth0/accept_dad", 0)
++            _write_ipv6_sysctl("conf/veth0/addr_gen_mode", 0)
++        with NetNSEnter(str(ns_r)):
++            _write_ipv6_sysctl("conf/veth1/accept_dad", 0)
++        ip("link set dev veth0 address 02:00:00:00:00:01", ns=3Dstr(ns_h=
+))
++        ip(f"-6 addr add {manual}/64 dev veth0 nodad", ns=3Dstr(ns_h))
++        ip(f"-6 addr add {mngtmp}/64 dev veth0 nodad mngtmpaddr",
++           ns=3Dstr(ns_h))
++        ip("link set dev veth0 up", ns=3Dstr(ns_h))
++        ip("link set dev veth1 up", ns=3Dstr(ns_r))
++
++        sock, ifindex =3D _ra_router_sock(ns_r, "veth1")
++        # The PIOs are processed in order, so once the SLAAC address
++        # shows up the other two prefixes have been handled as well.
++        pios =3D [('2001:db8:7::', 64, lft), ('2001:db8:8::', 64, lft),
++                ('2001:db8:9::', 64, lft)]
++
++        lfts =3D {}
++        for _ in range(20):
++            try:
++                _send_ra(sock, ifindex, 0, slaac_pios=3Dpios)
++            except OSError:
++                # router link-local address still tentative
++                pass
++            time.sleep(0.2)
++            lfts =3D _ipv6_addr_lifetimes(str(ns_h), "veth0")
++            if slaac in lfts:
++                break
++
++        ksft_in(slaac, lfts, "RA did not create the SLAAC address")
++        if slaac not in lfts:
++            return
++
++        ksft_eq(lfts[manual], (forever, forever),
++                "RA changed the lifetimes of a manually added address")
++        # valid_lft is not lowered below two hours (RFC 4862 5.5.3 e),
++        # so only the preferred lifetime follows the PIO
++        ksft_true(0 < lfts[mngtmp][1] <=3D lft,
++                  f"RA did not refresh mngtmpaddr lifetimes: {lfts[mngtm=
+p]}")
++        ksft_true(0 < lfts[slaac][0] <=3D lft and 0 < lfts[slaac][1] <=3D=
+ lft,
++                  f"unexpected SLAAC address lifetimes: {lfts[slaac]}")
++
++
+ def _insert_and_get_addrs_ipv4(test_addrs: list[str], scopes: list[str])=
+ -> list[str]:
+     with NetNS() as ns, NetNSEnter(str(ns)):
+         dev_name =3D "dummy_dev"
+@@ -497,6 +573,7 @@ def main() -> None:
+               ipv6_route_del_reason_expired,
+               ipv6_route_del_reason_ra_withdrawn,
+               ipv6_route_del_reason_absent,
++              ipv6_ra_pio_manual_addr_lifetime,
+               ipv4_verify_same_scope_addr_order, ipv4_verify_inter_scope=
+_addr_order,
+               ipv6_verify_same_scope_addr_order, ipv6_verify_inter_scope=
+_addr_order])
+     ksft_exit()
+--=20
+2.56.0
 
