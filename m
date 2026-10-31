@@ -1,63 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793487142;
-	b=d2kMmZWeK2YT630b3gGAVayZljrBFY7mTXZFgfhRns2GSyZYa6zljlJbH1zRdZ0RmkCg
-	 EhKs4K192IANp4QEjlaA8G+zN1ypGlnrNYb+IaSCmfNT+baLDkKYLLAPIMA+hbYJnUJDo
-	 CoeU2Yel6iSlEsFefOn+pzII6MIXokMm+v8xx9GRsqIU8ATjqZWHxDUu8Q8VJqv/TNaab
-	 C9R5OdteAwGcw7EIduravbkMmvqgDFkJVaKoQG2mPHdiZaZJmGnwLX1n5FghM+pcn2XRA
-	 SuN9vhrDea4KFZwqUEVz4zrbqNrNyeVkghhg+DXLRau8ApSDM9hDsPYSQpSLi34MEsw==
+	t=1793487143;
+	b=vRnlTHRdhwdAMfEN3WWprE3KhS1TM5YPKBdJ3aTuWqU8IzGd1CTQ5TDTXVPf6ngcfwPl
+	 jnFhFI/aW4Wc/dXEp32yH7xpmc/eK87JBh64/x9m3qheG3YVirERHP5z1Ld7YM6WKwgb/
+	 ykpMUqdE4dCJpFvmYfDJHiPyrmrUVGeX3pNdPyIFfN4cfhJhNzkjcuSfv4BLoHvYSPNHc
+	 i7FqKd/Se4khikgF/Y9UuiKSUGPPdE4HzSTZDsI2BFSicllh7f8CcfarZbYgs3hSDmcG8
+	 U8oohteLdyIAp4dp3sGGnAzug3Ebtu4p0t1mFa1j3WnjN3uBrRSQeeNkAPxDoWYmfRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793487142;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793487143;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:From:To:
 	 Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding:X-Virus-Scanned:
 	 X-Virus-Status;
-	bh=lY5rZikPuT99XWMY8+HAaXAbjrVFlbn2PfEKSg7534A=;
-	b=uvG6j5fBuqqRhvb3yQyUONpiRY0zaDiIWfqEO4RpmHOARe7QlBMXhOSWzn2/36XyEVyu
-	 CIHcn01XL9KthY4ICGd0QS5M13CC2ThhpWySJvpynro5w75YJeis1cyk7nC8xL4tz3vEZ
-	 vazC1DTb+CxXacJ91SnvVzioj+JNi44JNMaE22/r4Jicfy8rrVxvKQ2L67wSZXAirF57V
-	 M950+ASZOrCWaI7iFltGtw7rhdHvMVRPY1MDk4QRfu4OM2Sri37MDSrR0Je7yGXzvglPY
-	 J2XgBC3gj/Do94OKFpOqYOfAI/wIWCgQCzmy502AfW2retfmpjUnFoaZhNaNJj5T22Q==
+	bh=bK4w1yMKnR9FGJtFhRyJrL+d6EWl3MZqzIXWR3zmOmk=;
+	b=2qdFrPSoNUkPe9cR6VQ4egDn84n3hk06MvI+WtJ8nXg6Z2/QL7ttGmczGFTaU71uhUhN
+	 nbm1iuhhUiuLr4U8vXkiToFt82kApYj6rNnnEcwjNnBlj+bwZjLvqC0CVW6a8RR8tU9J4
+	 Ag8RNsiESmmcQY7hGqNaO2n0rqrydqv2/urTnZ+1Fk+t7wOeYEK7qRqTkuprbW3XYK2A8
+	 cGXvL7zWGG2UMXEfFnjYJMs7cdXH/QIJevA8aq346pq+fQZQAR5FS8R90d4gMlMXvggbk
+	 4JfcpXTXhuF4sFxhTKjmokA/10PqcmeQJfEEu4LBY1D5B7Y2Xj2uAu17ywwzLkL9TCg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=uniroma2.it;
 	spf=pass smtp.mailfrom=uniroma2.it;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b="wk/kgJ5L";
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=QQf0V8tn;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=E3I7x+c5;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=t5RCtOui;
 	arc=none smtp.remote-ip=160.80.4.37
 Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B48606A320;
-	Sat, 31 Oct 2026 22:52:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33B48606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C5A606A322;
+	Sat, 31 Oct 2026 22:52:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1C5A606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=wk/kgJ5L;
-	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=QQf0V8tn
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69VMpGEY021943;
-	Sat, 31 Oct 2026 23:51:21 +0100
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=E3I7x+c5;
+	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=t5RCtOui
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69VMpR8B021984;
+	Sat, 31 Oct 2026 23:51:32 +0100
 Received: from localhost.localdomain (unknown [160.80.105.87])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id BFEE5122930;
-	Sat, 31 Oct 2026 23:51:11 +0100 (CET)
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 0AB62122954;
+	Sat, 31 Oct 2026 23:51:12 +0100 (CET)
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1793487071; h=from:from:sender:reply-to:subject:subject:date:date:
+	s=ed201904; t=1793487072; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lY5rZikPuT99XWMY8+HAaXAbjrVFlbn2PfEKSg7534A=;
-	b=wk/kgJ5Lfa99YS1CGkBrbF29C18xo0epH2XHFb4Z0kWP6JNVUNpyPziqYWTpjqVGqEmPsF
-	XEn1tK4JshccOKAQ==
+	bh=bK4w1yMKnR9FGJtFhRyJrL+d6EWl3MZqzIXWR3zmOmk=;
+	b=E3I7x+c59ia0dZtEfqqS7U5qwtdUFli23Md1S/9PJARzagwdEN/t8Km0lPvTtlNS78lIDK
+	/cfsGKlQyzn0fWBQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1793487071; h=from:from:sender:reply-to:subject:subject:date:date:
+	t=1793487072; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lY5rZikPuT99XWMY8+HAaXAbjrVFlbn2PfEKSg7534A=;
-	b=QQf0V8tn4PqQ89cc/HfsFAOC69VKLW3naWTIqTX+kKmQbMQFwqtu/G5WDluI0inSxrnUHx
-	fStit+e4IhTu0xa3xTyXw970AHOLO0jZ/UUgZn0K8/YvL7Y42nuNEv3vw0C0F74XSYd7Sr
-	8IkPwOFFbDf0jJR0KgSw6nAnPkaCEwmOTkQ8N7Oo8+SgZkJ0x6iNZSZvw/3LVNvx1bEG0D
-	nzsxujt4wORkoMnWq7xmicz5GygJFL54droOyOS6siUJp8dKXIf/MvD6kaEmpIbKyh+g/M
-	zZ3AWXphEq2CUBWjKetmtZU76vbAUtnm5xnRVmnJNAHDsBBotK9Ij0VyrcbEvQ==
+	bh=bK4w1yMKnR9FGJtFhRyJrL+d6EWl3MZqzIXWR3zmOmk=;
+	b=t5RCtOuijMPHSJV3sJrONmM3QJXHfz0CHdp2TcydULY2hXg05q6TvauETd6S2owMVJ5IUG
+	vHkhC4D5fJuVyNW3J1wPDKSgt5ysCpNsRmz2jB45dOFshAaNmGiL2/sq8iUbB9TPHgCg86
+	JzyNcJpw3qmGvfJ7f7rmPW3CfIb538zTV96Ij5pH0j/Zm2U1ltJRrUb3MVZ7uZ8GXVjLwk
+	ERLiwjXVoF7b3gK/pfU3lJYOTKl8FwQivD09S1wLGdwT4RHuxWgeSs9NJmLddou1om8h9k
+	6BseQknCFoS7757sQWc8GDE5X0l9wK/4N9UwbBRq1DR68stXUypC6yuMOq0dcw==
 From: Andrea Mayer <andrea.mayer@uniroma2.it>
 To: "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
@@ -73,9 +73,9 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Stefano Salsano <stefano.salsano@uniroma2.it>,
         Andrea Mayer <andrea@common-net.org>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [PATCH net 2/6] seg6: update skb checksum when ipv6_srh_rcv() decrements the Hop Limit
-Date: Sat, 31 Oct 2026 23:50:29 +0100
-Message-Id: <20261031225033.64-3-andrea.mayer@uniroma2.it>
+Subject: [PATCH net 5/6] seg6: account for the MAC header in skb checksum on L2 encapsulation
+Date: Sat, 31 Oct 2026 23:50:32 +0100
+Message-Id: <20261031225033.64-6-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261031225033.64-1-andrea.mayer@uniroma2.it>
 References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
@@ -92,59 +92,48 @@ Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
 X-Virus-Status: Clean
 
-When the next segment is a local address, ipv6_srh_rcv() processes it
-directly and also decrements the Hop Limit. With CHECKSUM_COMPLETE,
-skb->csum is not updated for this change. If the packet is then delivered
-on the same node and skb->csum was computed in software, for instance by
-conntrack, UDP can drop the packet as a checksum error. With skb->csum
-computed by the device, TCP can instead log a "hw csum failure", as if the
-device had computed a wrong skb->csum.
+In L2ENCAP and L2ENCAP_RED mode, seg6_do_srh() puts the MAC header back
+in front of the frame with skb_push(), without adding it to skb->csum.
+The encapsulation then calls skb_postpush_rcsum() only for the outer
+headers. With CHECKSUM_COMPLETE the MAC header is missing from
+skb->csum, which no longer covers the whole packet as required.
 
-Update skb->csum for the Hop Limit decrement with update_csum_diff4().
+For a forwarded packet, ip6_forward() sets ip_summed to CHECKSUM_NONE with
+skb_forward_csum(), and End.DX2 does the same before sending the frame.
+When the packet is delivered on the same node, a raw socket with
+IPV6_CHECKSUM still reads skb->csum. With skb->csum computed by the device,
+the kernel can then log a "hw csum failure", as if the device had computed
+a wrong skb->csum.
 
-Depends on patch "seg6: fix skb checksum update helpers".
+Use skb_push_rcsum(), which also calls skb_postpush_rcsum() for the MAC
+header.
 
-Found by manual code inspection, and reproduced in a VM without kernel
-changes or error injection. A following commit adds a selftest that
-reproduces the problem with a tc ct action. With this patch, the selftest
-passes for the path with local SRH segments. Also tested against the srv6
-selftests, and with a ConnectX-6 Lx NIC (mlx5) that provides
-CHECKSUM_COMPLETE.
+Found by manual code inspection of the skb->csum updates in the SRv6 code,
+and observed in a VM without kernel changes or error injection: with
+skb->csum computed by a tc ct action, a BPF tracing program on
+ip6_forward() shows skb->csum missing the MAC header. With this patch,
+skb->csum covers it. Also tested against the srv6 selftests, and with a
+ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
 
-Fixes: 1ababeba4a21 ("ipv6: implement dataplane support for rthdr type 4 (Segment Routing Header)")
+Fixes: 38ee7f2d4756 ("ipv6: sr: add support for encapsulation of L2 frames")
 Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- net/ipv6/exthdrs.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ net/ipv6/seg6_iptunnel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv6/exthdrs.c b/net/ipv6/exthdrs.c
-index 96c8402a27a5..9d3ba310065a 100644
---- a/net/ipv6/exthdrs.c
-+++ b/net/ipv6/exthdrs.c
-@@ -460,6 +460,10 @@ static int ipv6_srh_rcv(struct sk_buff *skb, struct inet6_dev *idev)
- 	}
+diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+index 0d39a38a5dd2..3821d8e1409e 100644
+--- a/net/ipv6/seg6_iptunnel.c
++++ b/net/ipv6/seg6_iptunnel.c
+@@ -456,7 +456,7 @@ static int seg6_do_srh(struct sk_buff *skb, struct dst_entry *cache_dst)
+ 			return err;
  
- 	if (skb_dst_dev(skb)->flags & IFF_LOOPBACK) {
-+		/* payload_len, nexthdr and hop_limit */
-+		__be32 *hlim_word = (__be32 *)ipv6_hdr(skb) + 1;
-+		__be32 old;
-+
- 		if (ipv6_hdr(skb)->hop_limit <= 1) {
- 			__IP6_INC_STATS(net, idev, IPSTATS_MIB_INHDRERRORS);
- 			icmpv6_send(skb, ICMPV6_TIME_EXCEED,
-@@ -467,8 +471,12 @@ static int ipv6_srh_rcv(struct sk_buff *skb, struct inet6_dev *idev)
- 			kfree_skb_reason(skb, SKB_DROP_REASON_IP_TTL_EXCEEDED);
- 			return -1;
- 		}
-+		old = *hlim_word;
- 		ipv6_hdr(skb)->hop_limit--;
+ 		skb_mac_header_rebuild(skb);
+-		skb_push(skb, skb->mac_len);
++		skb_push_rcsum(skb, skb->mac_len);
  
-+		if (skb->ip_summed == CHECKSUM_COMPLETE)
-+			update_csum_diff4(skb, old, *hlim_word);
-+
- 		skb_pull(skb, skb_transport_offset(skb));
- 		goto looped_back;
- 	}
+ 		if (tinfo->mode == SEG6_IPTUN_MODE_L2ENCAP)
+ 			err = __seg6_do_srh_encap(skb, tinfo->srh,
 -- 
 2.43.0
 
