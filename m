@@ -1,62 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=128.30.2.78
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793461146;
-	b=S9I+ELeDfeugWJI53LSlnW3S1iFJ5mDGza/fqaugpyiRSs+usmnl5C7W1Av028sLF+83
-	 LLhQjKk8TITQHx3KPLm6grG3A1NezgzHFZ/dLtcUlRUs2bVa3R990RABIYDz93FACaNHA
-	 FYwLDtI4uPLa16RMA69H+9rKURbg2whBO6HNWIMpt+4A+7dwO+UPoPbtJVLwFLE5zx63p
-	 wJwrqCO1t5PcgcRrjHaCHibYRR2+fhyI6t6BoRzWxEHRSjzRuqX8Mp3KUhPNp7lWnF/7R
-	 FxeFdtddY660FqQvG+Iyl2yN7NYj8SXC6eni+8dF8y1rZBoiXm8rqGIJ/Is/xFaa5dw==
+	t=1793463515;
+	b=BrhjJMf6lCJG+bqAyu6g74y88fgq8/StpGCLjGik60z5T4EkwE2eqgO0j7ER70Z76GEC
+	 PVft1HjrI1ekdv9u4EAURGDIMdWtS14oObPOYrBS0B3eeV1BJLAE6JYBA7pp23R1LGb+2
+	 5qXA09MMLm0ZjW3gFrDVTfLWEiaqq50PuLc7QcgopcBu6XIdNhYDzLCkJNdnnOa5lG6iA
+	 rdhXE1j16GeeE8611WP85aKbK2m8A9YElhAdl8FUqLzH0PmzIr2Q4a8dVEssU9uUxEueN
+	 yxHvR4LXPSpDnPCU1DyBMZEQd6Nd2AQMkQEroU2+SLP29L1xtSCfFxQog8YGsVSdVBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793461146;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=mspr96Dyew9GjRaqoBbyrqZlGPtbBgXGKI0UbOV96jY=;
-	b=3eShpcVzs14sMK/J0iweBfj1RNLWja/WRKkkuHdPupJB0AFL38jgWV70BDYjyDRzFX1a
-	 KHfm68CrSlfNreZPvjiLIeKEKGhu5DAyremwxExcI6OdUkwSmy9DaWFIzhvyi6YsMwCF8
-	 SZTutptZdVqAsaX9LRqFh9haVwuFIDuoHXkj/6UHDeoKCj1iUMuwvQa0PvKBEUXTATsY4
-	 GUn2yjme+taYOx71BWS5vezhKMF6QQoBtXvo+r7znJ505J2V4bumPH+fJiMy1Oxz+qNZX
-	 B07lEcbRgK4VYAky4xt7iabyyvmCSRa1WZgs2jGx/eHsLSUFaGA9XK6P6iWfQQqNvdw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793463515;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=94iRS+svfMmRFKW8nlnhYNbyyFySTBVOf1GYEPxEDQ8=;
+	b=hvSfhP91+7+e8epBVczxGooN3J/VjBwT8FjzTF3Nxlb6BlxhuA4NPKEEn5p2YiLLqfDv
+	 lDwK3AoLT7o6/eksYIDo6dumQO1R+EfamD7AVAjFO3zPGXXOCw47iF58U2Yp3rrR+U0Fi
+	 fi+y34tLfOySYr+ZOnQ23kvxYc12X2k+4FjOFuO67q9t1Kv6LoVrDyAG5yN631JdAQLig
+	 DLlEmzocdw7XB9XMKFvTLsI1t2YhjiGMgKHDFH8n6TskMnRS/FV/VjMhs1584Ek5UUn/n
+	 Yj4MGN5uHHqrlHi66TyPjnjVTgYbCkO07BKbUih/+/7D+7d1EyfXVR7jF1XM20c7zjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H0J1TNFm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=csail.mit.edu;
+	spf=pass smtp.mailfrom=csail.mit.edu;
+	arc=none smtp.remote-ip=128.30.2.78
+Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B87606A31C;
-	Sat, 31 Oct 2026 15:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H0J1TNFm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8AB1F000C1;
-	Sat, 31 Oct 2026 15:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793461145;
-	bh=mspr96Dyew9GjRaqoBbyrqZlGPtbBgXGKI0UbOV96jY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=H0J1TNFmCNYiAaFJK3l778Sec+Hp9f+EaEq+OwIJelwCvKAoviR/oJ/AwqW2uX0eh
-	 DOQYTnZkkAZrE1lNg40zKR0xskJGJHuYNsak5zGpvSYKj6TDSe2+mXfhYqofh9oekW
-	 5DwDeOWc5UaWPHYoi32coQ9zA+UNG2Z29bomBoA2wMxr1YBLpWZVlzWFQhsJ0wZpaL
-	 JOuU3/IPyvkeSPih3Rehvx+awd5FmK4Jtcx6NAsXRsN3fXcZF7I9D8azpNQKrFeHEP
-	 jJy+794UZvO/0ALsOGfzrDcHdcpVFTbgRi/M320PH8eVYUgdphYPjpp8hJvEjIlayv
-	 1yWbNNv1uIArg==
-From: SJ Park <sj@kernel.org>
-To: Aveline Noir <jm5905938@gmail.com>
-Cc: SJ Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	sashiko-bot@kernel.org,
-	sashiko-reviews@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0024D606A31E;
+	Sat, 31 Oct 2026 16:18:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0024D606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
+Received: from escalante.csail.mit.edu ([128.52.128.198])
+	by outgoing2021.csail.mit.edu with esmtp (Exim 4.95)
+	(envelope-from <nickolai@csail.mit.edu>)
+	id 1xNBml-00Eg4I-4z;
+	Sat, 31 Oct 2026 12:18:27 -0400
+From: Nickolai Zeldovich <nickolai@csail.mit.edu>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	Andy Chiu <andybnac@gmail.com>,
+	Guobin Zhang <guobin.zhang@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
 	Shuah Khan <shuah@kernel.org>,
-	stable@vger.kernel.org
-Subject: Re: [RFC PATCH] selftests/damon/sysfs_memcg_path_leak: define ksft_skip
-Date: Sat, 31 Oct 2026 08:38:58 -0700
-Message-ID: <20261031153858.84302-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <179342136087.2.16978105493403840270@gmail.com>
-References: 
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nickolai Zeldovich <nickolai@csail.mit.edu>
+Subject: [PATCH v2 0/2] riscv: signal: fix the FP state restore in rt_sigreturn()
+Date: Sat, 31 Oct 2026 12:18:24 -0400
+Message-ID: <20261031161826.858908-1-nickolai@csail.mit.edu>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,21 +62,41 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Sat, 31 Oct 2026 15:36:00 +1100 Aveline Noir <jm5905938@gmail.com> wrote:
+If rt_sigreturn() is preempted or sleeps on a page fault while it copies
+the FP registers from the signal frame, the interrupted code resumes
+with the signal handler's FP registers. Patch 1 fixes this, patch 2 adds
+a selftest that reproduces it with userfaultfd.
 
-> Hi SJ,
-> 
-> On Thu, 29 Oct 2026 21:46:42 -0700 SJ Park wrote:
-> 
-> > Define the value at the beginning of the test.
-> 
-> Makes sense to me.
+Tested under QEMU with riscv64 defconfig plus CONFIG_USERFAULTFD: the
+new test fails 10 of 10 runs on master, with preempt=lazy and
+preempt=none, and passes 10 of 10 with patch 1, also on top of Guobin
+Zhang's "riscv: signal: protect regs->status RMW from concurrent
+preemption" v2 [1]; the two apply in either order.
 
-Thank you for reviewing, Aveline.  No pressure, but have you forgot giving your
-Reviewed-by: tag?
+This series was prepared with the help of an AI tool.
+
+Changes in v2:
+- Disable preemption around __fstate_clean() (Andy Chiu)
+- Add a selftest (Andy Chiu)
+- Shorten the commit message
+
+v1: https://lore.kernel.org/all/20261016160708.790397-1-nickolai@csail.mit.edu/
+[1] https://lore.kernel.org/all/20261020-vector_fpu_regs_status_rmw_fix-v2-1-474a59155e96@intel.com/
+
+Nickolai Zeldovich (2):
+  riscv: signal: mark the FP state clean before restoring it from the
+    frame
+  selftests: riscv: test FP state restore when rt_sigreturn() faults
+
+ arch/riscv/kernel/signal.c                    |   7 +
+ .../selftests/riscv/sigreturn/.gitignore      |   1 +
+ .../selftests/riscv/sigreturn/Makefile        |   5 +-
+ .../selftests/riscv/sigreturn/fp_restore.c    | 146 ++++++++++++++++++
+ 4 files changed, 158 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/riscv/sigreturn/fp_restore.c
 
 
-Thanks,
-SJ
+base-commit: 36aad21d50d1af3f6954bb0c988257a908202477
+-- 
+2.53.0
 
-[...]
