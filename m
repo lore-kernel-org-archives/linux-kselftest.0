@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793450442;
-	b=yNQumhTyzi++UZ1482NtqF04gN/5WozlrEtb+LwwC7nyUq0aZ/3dTqwCieWY1pH4sOH1
-	 YdFCJPMLJLRrpnAa7ETh/hNeXpqdFwPMusauxTfQpffGhW+FPh1FeofJ1HpvhQW59g8Gh
-	 /gr6wXpKttjxzkFOfNO3Rz/0CKq2ighIH4bBE3itekJE4CqKWSzie/eBLNxFIjUBq/Emy
-	 ov53BvFH+ryMQ1CMZZnvgLAvjSbq2CcE7D1GFeuyAfSMHKRj5Kq+MeuEc9XO6RM1nNr5T
-	 HnLJDgJgTEb4cdjSMGe3ozTQ6psRY/AyFsKdWfU8yc9IHfiF7MI5xHB9d/AcEoRdnmA==
+	t=1793450652;
+	b=JZzHM3O6h7SLFHp3cCXJ6XPKYHkY1z8F+PEDH/F7sA3WbUCDTOj3pzBIk3M78fbOh9yA
+	 3AolxatCqsCe1TPY3eqZRY7F4CY6Kl+kqhhcfo5DcOPBEjwg9pK8SMNoy+IwybxocwVIt
+	 VkvmVK2ocAj4NZ0Sq+6uCuzTFSTiZGw+td5L2s9C3PupuVX/ClJ9h09croFv2sg7dWLhG
+	 GLkvzCcIz1hEXz1JK8SNmmrQnO6gMvvyw5filv/z730d5z5DFolZaE9OorUOer0mDeue7
+	 A+n1d/ugEQpjia2YxgKQyrjCDqp4M1iHi2N2hLofnh7Sx1oyxLQB9tWLCUWN2teDmvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793450442;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793450652;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
 	 Content-Language:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=Cxqf9Bqorso0fGl5m6PKE59KMlkjDZ4/kjDJmjbnK7Y=;
-	b=ZsTXOwtansrP1Ls//iI5DMoneQH6lfNDUE8Z5wy3jiX0CvcFHcy55ktD3VHrIkYjoGmQ
-	 u6m2RpJ2sXKNQGZ9CyO/WDEJSuOpOlz36e6tkJULYO0ZxTnvudkJKGPzZo4T2vTd5XjY+
-	 fYEPWxASfo/5wDeThCVrfGwoyQHXlbfygiuT9aZ9IeNayxHKGBhtR41FtXYMhzZN2PLJO
-	 5t2wH+azKpugrwWsm7TU22pcLCKLKj7/FtsL4v+EeRBlk0ouns58xc8vdFsdgJXC7CwuU
-	 ZmjeT9Cr+YKs9zmBCcntXddpXbZaoKMAACS5GeVmBoKbW2VZ67+vaKVWTdCXAxd6YeA==
+	bh=qM0g5QCvuJGUtjqSB25y9Tm1UtAHR4vqLa/CLEokVL4=;
+	b=F3Dq0NljuHXGwwzZZkd3oAuzjhEcl/kc9Mvs+RTrD2RNww9rDSUI7ADmC2rvYYLLljhD
+	 Zr/6mnvISKsRwyI4K4Plu000Atp03n0b8ENW8m96ZN9kIJNjLgSg2NONUfr02ClZdISw1
+	 vS4CgSIcWdB7wLO8qHaGaBjanYHXH1OLokyM5BFwot+UTXB2NfEbCwnCPBWuurkU2dPjS
+	 EYOD3gvLlyurREwbtXpcFs+B2WvEh4ArXj3w3nZ6LayllFxGOfa1/4mbLznHurYa+q/NC
+	 +zA3MjhWZtX4qhqK2eDxNSXHL9CcBBxn/AFhYFEiaQuc2cYjGayDWMSAMjc2WuOINrw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qy8WbEhN;
-	arc=none smtp.remote-ip=209.85.221.43
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h5nbvypM;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B107606A31C
-	for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 12:40:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B107606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABEF3606A31A
+	for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 12:44:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ABEF3606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qy8WbEhN
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-48dee593f18so1302545f8f.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 05:40:42 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h5nbvypM
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso16460045e9.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 05:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793450441; x=1794055241; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793450650; x=1794055450; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Cxqf9Bqorso0fGl5m6PKE59KMlkjDZ4/kjDJmjbnK7Y=;
-        b=qy8WbEhNvxLv28vR/bD8Dmmw3fyZBPw4FeqtBM+B5UsizZTUzx99aZZM3rs9fe3wRv
-         CTZvEO/yoOWb851TAoLT5y1t/fM3PEOkEhj7XSDMljPsoYR0GhFQvSoDAvAL848fzLQp
-         bXVAVuNWGnESh09nncjfS3UAOqUnOMM+BYpAGuILeFmTfDugnPI7tdNKbTqyR+xJdEoO
-         qozVY55bD7jSu1YAUzrqGxzH3IPVygjs60wre44jjyjwJg4qql1xoMCfI3ByE73s/83W
-         F1Oy0idXYhtOytdKxVKdQqAdnF3H8/uDPNULdTTvlD8cF94qwQjxtrDErjQqSBJu5qQg
-         ZAIg==
+        bh=qM0g5QCvuJGUtjqSB25y9Tm1UtAHR4vqLa/CLEokVL4=;
+        b=h5nbvypM+dxrbPhNFr1VY1VFje1G8a9lHnV2FF0TwZKM8Fg1+yP9mc+nV0FicvDPHW
+         r7D2/WAt7eeH0bbk/OwSaRLBt9y42C4YyzUEMStwwg3EQmIRVuYtcQi7iSEXTBnQAHBD
+         xxDRESwtmZ/vk7J2HDxuK0Wd3+70bUH7A+MFUGo6q+y9RuWtZ78XoRVsJRpFIeZa4x3G
+         29xkGAKo+LdHSoVXTmfT4EY5DbznX1z5ZAAy2hpybtm5x7sreN0Rwl7cTPkUJYhAeZ0Q
+         Tfcg5E17s3xGDp0CnMTxZPvpzKjnp3qzE3D5Rp6lILNemK1woweKiGY6X1YpJhHnpr/q
+         Bhag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793450441; x=1794055241;
+        d=1e100.net; s=20260707; t=1793450650; x=1794055450;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Cxqf9Bqorso0fGl5m6PKE59KMlkjDZ4/kjDJmjbnK7Y=;
-        b=YI/W/tX+A85jCDk0yCIK5ODDqADePWfEkcqCgvFLqDtkXvQEiCG9x4GOYFquwZBppm
-         OYYUGkb0wo649vsaz4aztqhyNbAO6mHKlZ24str3FMzfR7p/nr9bb84WPS+Cr38aOtWi
-         p0iymrcwN30aOBSMs4EVihlIM4diDy5m3Yvg1OLcKlQLIrsDf7taPLZ1CXB4NsU7gCEA
-         k2oxwt5BAt9jdhWa4E7OlBxMrKXiIcqOr1N6A37H/5Nfs9egbMaXRzTZz8uRbUvlgngg
-         6ruEU0N9ot1zunhOaY7NJwVkrRcn9h/TUiI6MrjugTmAARTddcTpEL3Bcg/WUxQYbMDy
-         YX6g==
-X-Forwarded-Encrypted: i=1; AKwUvBzcbOKpCox3oANBs8KAXCLaRIcA/3j+DC9CEOBnhLx3t5ex//xqmcxuCEyZ4JwZT8eZv3duYM6/lHVC/jACkH8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI2Oua7fYMkGxwcv2H4gfJhSpscymyIBr8VIVtdqNc4iUEytd3M
-	rmj7VpE8RJ8vzYQSR6ch3941d7Gnp8t/Uq9LiGnxcFLbARGmEshSY0QD
-X-Gm-Gg: AYBFou0JXcCmrYMY62UgX9/2smCNs8l4z1aNmTUzrY8Y9WHXciBVYEHlhaUPCAwURq3
-	TCbAT9YqKgomH2QDJqa68ON5NWyRImXiU57HCeT68O9lNQ8OJG0FSx9y2WuzrGVqc+HBIzG276Q
-	xA8Gr5nOmYPT5+NWsWzhFYzrwrW8Ar+TW9akxOWOnbISpEfHWmoafCzYi0uqYlP/uCGbMGtexgM
-	7senRpjIjWhCx+tE6f3FtY8MaJ0EM4G0ToxgBEafP7KZbXCi7opz/KB/fSvMKnzDC4dOVjJTlUL
-	xwiR7yjtmwDcH6DpFiDH9RoD351n2/04ULwGsl5PYdkuOD0zw668+hs9bm2N/y6ZnyZQQ6ZCgQd
-	naU4rZrZqRojr8cotW22sSPW8bXX8seYiwncoiBeVGXBS6Jsw8YmXdusPR/dNK9c004au1zWi2K
-	lJKjy+WXS266rlmquNM0XEzPPThs6ZZPv0fG8WMrn8oeYu1byCANljiVe58inNVZ6FkshGqfJ3n
-	IT3GlekYmaE1+xPNgjZi5rVzXC4PCBt+faf1S5WlrcBQAGkGbgVwdiBmREDzJkmBxlckekc8Ytj
-	kuvkhmZOw1wBNp1AgftOjhQC/HYLLDM2416beYXDTcIcHA==
-X-Received: by 2002:a05:6000:2c0f:b0:48b:68:594a with SMTP id ffacd0b85a97d-48e6e2e7798mr11167496f8f.12.1793450440315;
-        Sat, 31 Oct 2026 05:40:40 -0700 (PDT)
+        bh=qM0g5QCvuJGUtjqSB25y9Tm1UtAHR4vqLa/CLEokVL4=;
+        b=fR8o2dmVJNZqKoShGstqvP7gyAqsLy+HsvoqPglKEMr9ovS1MAS1wzQ9P1anjmlaY9
+         BW4Z6keQICJPurHEea/ch2ruaY57JOu9b6DRyneY9SCePpeU5QuEViQE61bSwPxfkN65
+         8bGR+YCh45Jp7Rgtf/x9bGXHAwbKD7bvAQiYzWKPZ/TRtENZN0UZkBViE5lZvEbNe0g+
+         wI3usqOHHL+FZ0tlEhnNbV4BBLrtcVkYpNcwmZrJClRXplSvceEwGQdeJTo3Ch5b51xZ
+         VdcZ4n2I/R+e1k27fJbRo1wqKtp1ReR2FGKODA5rbc27SPzBDF8GNmHbY1oAyHVR1+7X
+         Dvqw==
+X-Forwarded-Encrypted: i=1; AKwUvBxoQahg5PpilY+PXpHYfWlh45qn0hcBwITs/r1LUPkndQyBiHFFkS1NrkSgZllPZKsZZK157G4V0wuGnDyY/kE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI15DBOMaIeMz9jBB/ZENF8frEAY9KckSc+8Szcc9gwwdiYKyeP
+	MvSCU3kH85XnXNf2bW4l4c8v1iwnlZNnp/HHfcuF8FP+ZnqDwk2czSi0
+X-Gm-Gg: AYBFou3uCT0FGSglgQ816OXKqtGhmQugy9bWNSQ60ZPZQN0FU/nXZ0v+I7phkC2QFkb
+	Bo9QDYDRcVf4eKDV7AQPvJ0t1BPs9WozcAqDMaMc5faKSfHOm1Lq9+a19WlfHRKBnBEe/3fnm7V
+	0Ml7oI48Q7pUOnK/49F9zPjhGPqWwnBKvIRmBf+BDaXGW25NB9esGniRLSgxwh2YXHI1CFmeUPx
+	PPy88TugL6Tzn+DKOnA3mHKBqDtwKy6lDKDLAN68WqFxIWbdRDDM01PCs+xaKvV8UVE52wguk35
+	QRz0fKlapJkT6u1kuYKLr4Wstr6OZwoHDd+BHrsrYxzNCV03hEbRNlKYhmAuXQrl6KE7xMvLsFL
+	S9dmht7olJW6ZHlMrNODczkAmJJz0hJT1yWZSycHpT/R7Fd2u1r9mCvrXIA0ReZJz88T6pPfvhz
+	XWg/mAdj4dbljkfVoUkkpBweBRYeswhgsEYh6kwmbAl8Asw5hRkF3hJcL4EhWiGs+50PVjveG9T
+	8ctepGn8XudRiyFq4H7NJtLx8PMZA5FIxNknWTF//Gnuz7fRywdVweb0nJjDJDs6zbSa9vOKI07
+	K9pqodYVwqp/BszQqRl1TcYk
+X-Received: by 2002:a05:600c:8b0a:b0:4a1:742e:3 with SMTP id 5b1f17b1804b1-4ac185bc4a1mr118043085e9.27.1793450649910;
+        Sat, 31 Oct 2026 05:44:09 -0700 (PDT)
 Received: from [192.168.1.22] ([83.231.69.9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b789c6sm9294444f8f.26.2026.10.31.05.40.38
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf6c76507sm134704015e9.10.2026.10.31.05.44.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Oct 2026 05:40:38 -0700 (PDT)
-Message-ID: <57717da3-d309-47c5-8c1d-d4686e8fd8a2@gmail.com>
-Date: Sat, 31 Oct 2026 13:40:37 +0100
+        Sat, 31 Oct 2026 05:44:09 -0700 (PDT)
+Message-ID: <bb5eee33-fbdf-4382-83fb-4a8db33ce358@gmail.com>
+Date: Sat, 31 Oct 2026 13:44:08 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,8 +93,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] mm/userfaultfd: recheck WP registration in the
- hugetlb UFFDIO_COPY retry
+Subject: Re: [PATCH 2/2] selftests/mm: add a uffd test for re-registering
+ during UFFDIO_COPY
 To: Mike Rapoport <rppt@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
  David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
@@ -103,74 +103,48 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
  linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
- Oscar Salvador <osalvador@suse.de>, stable@vger.kernel.org
+ Oscar Salvador <osalvador@suse.de>
 References: <20261029221129.89068-1-azpijr@gmail.com>
- <20261029221129.89068-2-azpijr@gmail.com> <auWz5tAzi0p6NMou@kernel.org>
+ <20261029221129.89068-3-azpijr@gmail.com> <auW2RZNy4jgR-ZNU@kernel.org>
 Content-Language: en-US
 From: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-In-Reply-To: <auWz5tAzi0p6NMou@kernel.org>
+In-Reply-To: <auW2RZNy4jgR-ZNU@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/31/26 10:24 AM, Mike Rapoport wrote:
-> Hi Jose,
+On 10/31/26 10:35 AM, Mike Rapoport wrote:
+> On Thu, Oct 29, 2026 at 11:11:02PM +0100, Jose A. Perez de Azpillaga wrote:
+>> Re-register the destination without WP while a UFFDIO_COPY_MODE_WP copy
+>> waits for its source page, then check that the copy fails with -EINVAL
+>> and leaves no uffd-wp bit behind. This covers both the hugetlb and the
+>> non-hugetlb UFFDIO_COPY retry.
 > 
-> On Thu, Oct 29, 2026 at 11:11:01PM +0100, Jose A. Perez de Azpillaga wrote:
->> mfill_atomic_hugetlb() drops its locks to copy the source page with page
->> faults enabled and then looks the VMA up again. The retry doesn't check
->> that the VMA is still registered for WP, so if the range is re-registered
->> without WP in that window, a UFFDIO_COPY_MODE_WP copy installs a uffd-wp
->> PTE in a VMA without VM_UFFD_WP. That is one of the leftover uffd bits
->> hugetlb_fault() has to tolerate.
+> maybe "all memory types"?
+
+yep, that reads better.
+
 > 
-> The "leftover" sentence will be confusing for future readers
-
-sure, will drop it.
-
->  
->> The non-hugetlb retry goes through mfill_get_vma() again and fails with
->> -EINVAL. Do the same check in the hugetlb retry.
-> 
-> No need to reference non-hugetlb path, just describe the added check.
-
-okay, will do in v2.
-
->  
->> Fixes: 6041c6917903 ("mm/hugetlb: take care of UFFDIO_COPY_MODE_WP")
->> Cc: stable@vger.kernel.org
 >> Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
-> 
-> With those fixed:
-> 
-> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-thanks for the review :)
-
-> 
 >> ---
->>  mm/userfaultfd.c | 4 ++++
->>  1 file changed, 4 insertions(+)
+>>  tools/testing/selftests/mm/uffd-unit-tests.c | 105 +++++++++++++++++++
+>>  1 file changed, 105 insertions(+)
 >>
->> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
->> index 3b71712edab4..a70ecfc8a998 100644
->> --- a/mm/userfaultfd.c
->> +++ b/mm/userfaultfd.c
->> @@ -810,6 +810,10 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->>  		if (vma_hpagesize != vma_kernel_pagesize(dst_vma))
->>  			goto out_unlock_vma;
+>> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+>> index 2a97ba1d6feb..8a7efaa7b3ac 100644
+>> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+>> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+>> @@ -375,6 +375,104 @@ static void uffd_wp_unpopulated_test(uffd_global_test_opts_t *gopts, uffd_test_a
+>>  	uffd_test_pass();
+>>  }
 >>  
->> +		/* The range may have been re-registered without WP meanwhile. */
->> +		if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
->> +			goto out_unlock_vma;
->> +
->>  		/*
->>  		 * If memory mappings are changing because of non-cooperative
->>  		 * operation (e.g. mremap) running in parallel, bail out and
->> -- 
->> 2.55.0
->>
+>> +struct wp_copy_args {
+>> +	uffd_global_test_opts_t *gopts;
+>> +	char *src;
+>> +	__s64 copy;
 > 
+> maybe result?
 
+sure, will rename it in v2.
 
 -- 
 cheers,
