@@ -1,85 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793480284;
-	b=uM9NPnktRFFMopD83egoPk0KpwxvyMxc5hl0vuk4yFQzFU+RLmt+Dq8Ktq8HqKcUptPi
-	 rSHnT1eCFBGQkScDDd7GOpQjNEHdHq6eFWTHZA/hEp5wpNPwpzBfj8aB7NdZ+tO8908IB
-	 dScLoDtKArFg6EPbBpv4h8UgkQzHjdXRRDXqKzhCAobFmt0Ggc/epeOW6Kofsa0awh61L
-	 rYNapTZeYdpkwdrzzoLYiYa1AtMlJPL84XqIy+0+LNkAOxmqsI4FN2nmn0NF80wu1mYJ+
-	 Lqdx3E7yKStCc0g2RJfqiDkvosMSFi5mwmvwYCJS2RYfzjFjuexKbTqOSpozHidZf6Q==
+	t=1793487141;
+	b=I6voSkbjorhMapqapMg3QQJK+HSyWubVKsrebcDnwJPA1SGja60/l74Hd2a9mig7iPKi
+	 rGoAEfK9OGuW+E4R9AafEs+yUMPGTFVpGxmUAuh1cj2vL/qULJ21zrn9IzSDdamrwsqDK
+	 obLjDbbwWi03ltrifpntlZT1IO91FS6ogNHXb2Q5PWkmwYitOG8ZOzFl4OIJXsW2FVlNA
+	 4jGL6lCyx0NwVYmEPRwBk0mfuNWXn6aSDvDdBsbse0nCtrcsmsufiXXDGnijgza44JmP3
+	 PlFGqw3sktN/CflQtrmLWiqn0WqscX9G8XaBdDjrllSzBmeuUWjGmeChozZ9XZtfkFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793480284;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
-	bh=Y/LYbbBt7trzTMNEroyzygNAvIrDGCzErGprATR8hIs=;
-	b=oyShzDxy/0pUIX5UM6k3+/1ps4b1mCqb5HcKvH2osg2XAOX+8EMeHDJ9PjFXqGDJPMB1
-	 2Fooz0/bxaFWDWSvPe75QvuZVmdOkHx5xb//XMvBrE4/d5ucLEcjKUKr9o5BuTUm5e4KG
-	 21evpIOBjx03m7l7PFC7LslENb0Xq3Oi9n2aiFi27GHuKpnUvFHrXC0xL53m09+XKiozE
-	 UY5v+U2YHOodb6UnjMJ6ktI+B4xyKedEw8YCGi3g9Ao8P5FhMckPAZkZdrDc/gWMI1IIi
-	 ID4HDtcWBELUbSwnMnYj8MoQV5fQWrFIfFIv7TDuMG2r7IvweHuvGK89bWBYOEjAnNg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793487141;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:From:To:
+	 Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding:X-Virus-Scanned:
+	 X-Virus-Status;
+	bh=V8S7mRav071ig+pdoADGRJ11FK7siUO/ISnPNSD918g=;
+	b=I5LXKuMT3x+8wnoxG++0vpiUrQ0denKYqUsBedor68z+kU26BnqzfPHT7ES6K3SyF22F
+	 8QJsMPmO6NknZJUaID71xo0Y4W4t3xGUla1/zSH0QvBTwJvfhi/iad2bdxz36z7MmBVQ9
+	 wftI8xfshb33aF5kgPuvkwW3e1V8XRkHBSCCcy3PWQYRzUCW8w4co9E0W1ocQdivb2ge1
+	 s7iORhFxzzS+3Q21WXPwxPpvTmD4Tv6O3U4gowcdI9wWGsyiFeGsegK6yBKBXnp9vVYjK
+	 3kpnG298+JsG3lk7uqgp/LRyb1KLADu0CSWqHEGFzfs7QQEt1WQVWn4dPu2x5I3MjDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vIz5pZpn;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FD6606A31D
-	for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 20:58:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4FD6606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	dmarc=pass header.from=uniroma2.it;
+	spf=pass smtp.mailfrom=uniroma2.it;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=2w6ziNFb;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=vIB+6lPD;
+	arc=none smtp.remote-ip=160.80.4.37
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236F5606A31D;
+	Sat, 31 Oct 2026 22:52:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 236F5606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vIz5pZpn
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e5fb79ce82so11637465ad.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 13:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793480283; x=1794085083; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Y/LYbbBt7trzTMNEroyzygNAvIrDGCzErGprATR8hIs=;
-        b=vIz5pZpn/CV/yT3JZ9+1Z8dTi8d7iNdhPVwu7OHZVUJIqYzO+tijbQDNdD4DTk6NDL
-         Gje9LUAQUA2bhu3AtYBzjfgA+ADNZMmCw75yfHKfhu69QGj8bU74LyR4Rc6mDTEaZ5YE
-         b77vZZqkQqCWM60tqV1LmKF7ixexHIaZDLyG9T6tKaxPpy8oHSZKQMCmPEqOP51FLPgG
-         MT1VRA1zNe9Ww3FN8aLr7AgQ/ivfkQ/d7jYTqRuvitlh05Ebui+s6dpbGoEa8h/sT4G7
-         o3LLNgX4g1GuuFV11VC3Rm8Dxd8h11rh1Pc/HKAxRcc+psyMI20jAACnaB06y8W9RyIJ
-         7rHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793480283; x=1794085083;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y/LYbbBt7trzTMNEroyzygNAvIrDGCzErGprATR8hIs=;
-        b=2FRXZxPldT6NQpRTB4vsqoLSPnL6CoonSc4rTzk3rfK8buoEmUEpPMMKBkbt2LANVV
-         Sx9vJbZQhyyRyje1yyFHcbIBEj9pJjA2M/b+gpy+bwRvu6WoHpsI1KxhIfz1MQBMPejc
-         Yq4RdI2Cxlz2kbrLAFoKq1GqbXWWVHO2hkSZvlEVHXYbaLLmGB+N6cbKBf2Sxvf6fERO
-         Qh5qAV89EW0pgNEhqiCfu2HEa7xbsHfM3EMnXc+DIPlDlvPZSlqj3ocQXmbO72gZcSy7
-         cCnqJWYAlgo6trLSFuLMIlkflRqw4lD/1bFx/jcTWGuWT9hBfWqN6eeU+av62LwSkuwJ
-         WBvg==
-X-Forwarded-Encrypted: i=1; AKwUvBxuAu/U3wBn2GqepzoGqGBRn7mAUzjjDP25jBAt5pjcivX+q62LNLXtJx6mI5UGU2+9RlumnYwwBrKz7lCUllo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJWLfBsZUHA+9n/wFxmDlSOW2evW+ZwkMZ+9y33MkN0lBzpJazC
-	VEDg2oFeQF89LRD5pP0iZoqMW61LKNf319vGLAJt+BqQ+P6+lBy0BKxH
-X-Gm-Gg: AYBFou2OF8WW5BneseSTl6eQ8iIlDmEAdruWaVnVx6Fcly9Zh8Zg3qFOP/1Y7MUs7Gf
-	FFgUSkgsj9vpO25VngW281oiPErxbi6Rc9VJkeP0QfY0xMPyX+8k7spCwh7HFOwhxpkmtvd3620
-	eIxTdaa5wV0Xd5AHv0op+pUcJgtZ6fD4DxnS/IMll2TAeLqCJKAvnP36GBXk/lqGYSo8e4KqAql
-	lfo4sNCiZh2X4Xq3r/YpJJbOR8XxooyF8/mjSltFOo4zh9x1NSWeH5SOC0niIy+IudGyM1m+XTP
-	bzvaRNfu7l2VrANmyhqGsfzSlsXkQ5U+JPReMNY3OM7nkVEDhcux79WggP2lI2TYz5fpx327tmV
-	ulOgeNY3NjriD5b9IQUpzlfJ66Z9b7rJU88C3HQqJO3ZDXFVBUrvpQDZFJ5o7SEYEwcwst0J/40
-	VrSIxul26fH2KRe7nITSLZx+vDXLqCPDw7IYv9ALzccH3GZW2xW6oVxut5pRogdIecaH62CYZgO
-	RMaNT6xJeLyXX5PbDYxi4YfGc45A+B4XGYFackhJwEWUhCfsKwqqpH6ERkNh8SbcPbj4nzu2fz+
-	0bcrHvbEcVQXOvSWeoOl/II5f9NFb+LeuQIVGHzkyFAe5M3k4BHK+hbIjeQ55bFa7EUAbnCfANf
-	sBQqvbCV5w4Bw+0/LnS4hryllkUsiK3X5j6j3tcVJAaBHhC3tveCnso4=
-X-Received: by 2002:a17:90b:4a85:b0:3ab:c674:cad1 with SMTP id 98e67ed59e1d1-3ae897994c4mr4981300a91.50.1793480283148;
-        Sat, 31 Oct 2026 13:58:03 -0700 (PDT)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9426ffsm13250949a91.7.2026.10.31.13.58.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Oct 2026 13:58:02 -0700 (PDT)
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=2w6ziNFb;
+	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=vIB+6lPD
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 69VMpGqW021945;
+	Sat, 31 Oct 2026 23:51:21 +0100
+Received: from localhost.localdomain (unknown [160.80.105.87])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id E8CF0122953;
+	Sat, 31 Oct 2026 23:51:11 +0100 (CET)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1793487072; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V8S7mRav071ig+pdoADGRJ11FK7siUO/ISnPNSD918g=;
+	b=2w6ziNFbLdyL77eNSTlhd0ji0y1Gl23GdXM5so3RYRsl8m7rIekU0zeGmBER43HVppzJx3
+	wHomMWvdkhun7EAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1793487072; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V8S7mRav071ig+pdoADGRJ11FK7siUO/ISnPNSD918g=;
+	b=vIB+6lPDT+IU7Lhs889FKRKiV+a4OtEumS6DsVEtHXaaPHo5B41vMd72YpV6WsHSz6BYRx
+	ON/XACN7JIjLztSpAeGYvmcfphdFkeb/qEBs5veFQ3fimK7XMcfrP/2QnfAB46j94Azavo
+	2lIxS/TSeuWvspU7Y8bikx0wrmXw6XIJVLGAVyiiOhgvfM4hAFhkwy+Q/qpk3Rz6DAg53/
+	qKCYSIfwVqd3gfL7/gATr22DE5fkKTXYkekLUCnBaiPjvBNKizKwGDC2gJaAWWcYBNoWfo
+	MXYjIh73Al5/OuuF/269jbAQ/g/8PmwkgiCQC87htucJ1VBT88OXe8Zc9ZS1Jw==
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        David Lebrun <david.lebrun@uclouvain.be>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Mathieu Xhonneux <m.xhonneux@gmail.com>,
+        David Lebrun <dlebrun@google.com>, Hangbin Liu <hangbin.liu@linux.dev>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Andrea Mayer <andrea@common-net.org>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [PATCH net 4/6] seg6: discard CHECKSUM_COMPLETE after the End.BPF program
+Date: Sat, 31 Oct 2026 23:50:31 +0100
+Message-Id: <20261031225033.64-5-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20261031225033.64-1-andrea.mayer@uniroma2.it>
+References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,44 +87,56 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 31 Oct 2026 20:58:02 +0000
-Message-Id: <DMJBP7BG3GE8.1ZXVVR0YIM9OO@gmail.com>
-To: "Chris Down" <chris@chrisdown.name>
-Cc: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Mykyta Yatsenko" <yatsenko@meta.com>, "Shuah Khan"
- <shuah@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf 0/2] bpf: Gate dynptr probe-read kfuncs like helpers
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn> <DJ9QOWVIXFHR.1S8UL5H0USVCB@gmail.com> <auN_R9gCBqNwEkKV@chrisdown.name>
-In-Reply-To: <auN_R9gCBqNwEkKV@chrisdown.name>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-On Thu Oct 29, 2026 at 5:15 PM UTC, Chris Down wrote:
-> Hey Alexei,
->
-> Alexei Starovoitov writes:
->> It's fine as-is. Won't fix.
->
-> Could you expand a bit on the lockdown side of this? I ran into the same=
-=20
-> discrepancy independently and was preparing fixes until I found this thre=
-ad=20
-> while looking for prior discussion.
->
-> The CAP_PERFMON side is now covered by 81c975aae375 ("bpf: Require CAP_PE=
-RFMON=20
-> for kfuncs reading memory"), but the probe_read_kernel helpers still chec=
-k=20
-> LOCKDOWN_BPF_READ_KERNEL while the matching dynptr kfuncs don't. Is that=
-=20
-> intentional?
+The End.BPF program can change the packet through the seg6 BPF helpers,
+for instance the SRH Tag with bpf_lwt_seg6_store_bytes(). After the
+program, seg6_bpf_has_valid_srh() can also rewrite the SRH Hdr Ext Len.
 
-lockdown is a security circus. It was broken from day one. It never worked.
-So all these 'ohh let's fix it' missing the point.
+With CHECKSUM_COMPLETE, the program does not always update skb->csum for
+the bytes it writes, and seg6_bpf_has_valid_srh() does not either. If the
+packet is then delivered on the same node and skb->csum was computed in
+software, for instance by conntrack, UDP can drop the packet as a checksum
+error. With skb->csum computed by the device, TCP can instead log a
+"hw csum failure", as if the device had computed a wrong skb->csum.
+
+Discard CHECKSUM_COMPLETE with skb_checksum_complete_unset() after the
+program, since input_action_end_bpf() does not know which bytes the program
+changed. The checksum is then verified in software.
+
+Found by manual code inspection and reproduced in a VM without kernel
+changes or error injection: with skb->csum computed by a tc ct action, an
+End.BPF program that writes the SRH Tag, followed by End.B6.Encaps and a
+local End.DT6 SID, makes UDP drop the packet. With this patch, the packet
+is delivered. Also tested against the lwt_seg6local BPF selftest, and with
+a ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
+
+Fixes: 004d4b274e2a ("ipv6: sr: Add seg6local action End.BPF")
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ net/ipv6/seg6_local.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index 57a82477ce3f..3045a351f4e9 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -1582,6 +1582,12 @@ static int input_action_end_bpf(struct sk_buff *skb,
+ 		goto drop;
+ 	}
+ 
++	/* The program may have changed the packet and seg6_bpf_has_valid_srh()
++	 * may rewrite the SRH Hdr Ext Len below.
++	 * skb->csum may then no longer be the checksum of the full packet.
++	 */
++	skb_checksum_complete_unset(skb);
++
+ 	if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+ 		goto drop;
+ 	local_unlock_nested_bh(&seg6_bpf_srh_states.bh_lock);
+-- 
+2.43.0
+
