@@ -1,111 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793559752;
-	b=LxjNSPBwjuJkpE4tgICentuiMzFLMKTArI0tDewgZkBqQ/LJp/X4s5BK2uzxUwn5HXAX
-	 X1mZA61/oCpQ95ZNPSqo+HIzwG+COpcwOJWLVMDTIfLfTX1vKAu6jTDtjPtLJCaVurLeI
-	 Idk6MetZFawpzdC5W1FTKq482v09rrnZVF5EJxn5P26x7ErlfxE+9xwlKQI4TxTYEGZSx
-	 tvsMxlYtL8VibzHQDSq4hzXTkfudJUSGeIMOzTM3tvHP9Ve4LvshJc/O3VDwPtDHPtUCD
-	 6gbJb9SEvuJbElLKAm0DDLJeESBisZBjCnk+YYNT2iXZ+ChKwSjboJLIDvMcHU6vboA==
+	t=1793559753;
+	b=0IVwxOPWMcuap8f+qfF5VgadXwPo4K73lU3x+FrnZGLB0IjHY05z2JsH8U6RFvijjWEz
+	 n3kvxMXSXpXD9j2Lj5JRt3cZmSdph1c4Tg1KrYBQjL0P3L/sraKMfkJeZtPtHlAYEWqdJ
+	 vK4edVobDV8ixtPghqsuQxg1U4DyEtUi1pY+MJLUEkgllZFqV7EbMkSq/wmdtbBc3n2Zs
+	 3vQPwqgLhhxTnamYjs3Lc19xxzWDbFAi9+hq4z1OSweEwywSXuZVKgnCqMdJioBCZqlD4
+	 +dYRjnPiqoNRGC8kyAckyIE8at5RxM4DeOSwQfR1uzuQ6i4SVCU1V3l4ayOeRqyDPmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793559752;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793559753;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-GUID:
 	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
 	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=bkyFaU7pm1UiMcf0aTZkl/EEwuv05ryAASaXqNs27JQ=;
-	b=H1vDX1m604nghm5hvC0oZSNObG7R3yls1Ebu6ARGdNftZYDYIvxYzdxvhbF2OFsRBNZZ
-	 Dgiy+UupfomgyFaJuOTQqC1OlJuohvtoSrSV6HPojxGYcFfP3IfZvChW2iG+muYFcsdvY
-	 Tr6U7i/gPogbG44ENXoy8hkNSuC9vQhNzIktJLOQyT9wWSmtEvxSDm9a600QW6zP/5A9T
-	 QMjzPdO4TJVmmoH3MF5uNpZmj8Y432AAQWaAzkNTqQWIuob81PrSJpFXlDpMQNhQLdh5/
-	 1WJ10FONEWMOg8rtMbGE7kVjuY8Zr9sq03Y9St+tFji4xkUlIzIk7dWuFttXGJONTFw==
+	bh=DzRHvF1o9IKB57O9mz1DN5HJc48wgTP5DHvcTPcKook=;
+	b=4uBtINEVp86/Dqe9zU6YpPRPLtq25DQ2L8+Vw4OvDOIIuEoTggYNDUpvqvHTwIBXJCZt
+	 AZmCYLuCTjuBfTQ11L/GtJjC6Y4TvY3uvOXOW6S7pEDbbt/OEIjKgVJAm9KCqxCW/bZW1
+	 BGxpkwOnIN5ArBm5wAOU92JKblOunnnpPhid1GeFD0XQR80l6mB9Y9J6BWyxS66AMHqqJ
+	 GeVeW1/LVUn3fkwb35KJnuhpwdIW3/e+8V5svf3WSq3EbicDE5gfdWVKI+c9lMRugGiQb
+	 9DeKl9+A4Z/MKuB7xxrStv+zOaVawqg7jA1SfhatDd6x9AZFunSIuHQSqD8I8Z3/4pQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=SYR1ltU+;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=MrzkMnWW;
-	arc=none smtp.remote-ip=205.220.180.131
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=j13F44FW;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=gehWbO5s;
+	arc=none smtp.remote-ip=205.220.168.131
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EE7606A326
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Nov 2026 19:02:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70EE7606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A05606A326
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Nov 2026 19:02:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33A05606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=SYR1ltU+;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=MrzkMnWW
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A1HQ8oH1099024
-	for <linux-kselftest@vger.kernel.org>; Sun, 1 Nov 2026 19:02:31 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=j13F44FW;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=gehWbO5s
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A1HRPYv2423379
+	for <linux-kselftest@vger.kernel.org>; Sun, 1 Nov 2026 19:02:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	bkyFaU7pm1UiMcf0aTZkl/EEwuv05ryAASaXqNs27JQ=; b=SYR1ltU+h+DcYgUS
-	KwUm0gjiC5pxOnmN0rOWydYeeAQUt2Y5GWUV9Ssqisgziv5GYDbOASmCtvnRklNM
-	APIZSukBaEgcR3cERN5oruncVgcULyq4erxjZw8TgDl1wWIHHGNuka3Q1Q95btu0
-	pnxBUwc0ZZ0C/7h5DlIidVGslPUtUURR3NQzhfWVggWB8/1hcLjTcAAtzN/xPHgj
-	FnP4bpvTxS78Vlwbejci9vIiNuUZsZVVXVTIzzdyPh06ygnBRAA+iE/8kkFVpgH9
-	A4x57MuD7p9gUqjd4rPOuJkPlnmenqRuznfsc52aM4vJf4VqlMmbmYqUDytuTE1u
-	mbNusQ==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hn7nfv3sp-1
+	DzRHvF1o9IKB57O9mz1DN5HJc48wgTP5DHvcTPcKook=; b=j13F44FWa3psSY/7
+	lNkojb7xoskbkA73eq3t4IDLBEOO8P5A/NQW0ZzeMfyKCTC++ZzuaEcKe4aRKVhD
+	6Y+8e1AlImR57CkXzDE2DKhmgtUCTxH4xe/EWo9kW2EgEH4Z17+zNrrlRMHmoUNE
+	fLSs36MeyWcjXVLbR/S0hOuedcpH6BSGYw2DoO//B2AmaAXTO5FglM0HIfSqSQpD
+	nVZBl6nlVkbsd/Q5RjaKd5AlNU4qF9RjfcQeSRwUXeVOomP6WZOCB//SdXTAFvlp
+	xYbhlCZXrjrqgxWNsbHmAnPKUICGl9Tdzh02ZMzzzus1URnwd/K6Y9ODOPoHqGrx
+	egcm/A==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hn61fvaj5-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 19:02:31 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-93f32050e72so125390485a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 11:02:31 -0800 (PST)
+	for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 19:02:32 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93f3969a2a7so367900185a.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 11:02:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=oss.qualcomm.com; s=google; t=1793559751; x=1794164551; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=bkyFaU7pm1UiMcf0aTZkl/EEwuv05ryAASaXqNs27JQ=;
-        b=MrzkMnWWxj+1T9HABI6xBvJwGSQLbYo4iE6lfkI1NvW8OVeXZhecN+LkSQWhxGAOT9
-         nYe59VJfFzevnVGjaaj+LMMbo+sd+CQ4iFyqDRLNeMUFyY3TxfixG1a6ddpS2l2bUajn
-         05JgH8LgLximpWeSdmwFnEGqQUAT4gzPX6XbmXySPrLDQ+yt7AWbOksnSkkzG7TvudGX
-         6bKpEn3rMNZ4OEi/3J1z0f/e/L3jsVsNREu8jaL2dCoycnxKs6G/idBQwUZS+AerXWZ7
-         IW79arVsPxQaNofBgQozxxNFJBaHOpRzVfvxngwy7/7gwssMfwYjDw0tYvIKXZy9l3M1
-         Nc1Q==
+        bh=DzRHvF1o9IKB57O9mz1DN5HJc48wgTP5DHvcTPcKook=;
+        b=gehWbO5sMc9C+0OtOLyQYeWogkEPmuXO2zCKenJRE+DGlpQSVDG/VqmCxVrjsWMnLl
+         jG1ZQ6GBRc1g9xIw45KyyfxcrvzTYh61yjAF6SBYJJoJ2jRY3n9CSO0+2bn092OtEfOA
+         6OK3bRngu+MfMJB6B3haUc+9ye632tstuOPC/sQf47xSYwUBbKFNzb0AfArjJfm18Zmz
+         NQ6o1H1sdnUQE9AcfNkQe7oOqOvukps1VtIZ6m+fDgPAq/xuGPUVOXXJfA4evuS5VTIT
+         GyVVwRicpiQbU+PTGk8GOEeEVScMmCxagcSUfoowqumnMEGKrpCe9t/a1U46vh/77LgJ
+         CA4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1793559751; x=1794164551;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bkyFaU7pm1UiMcf0aTZkl/EEwuv05ryAASaXqNs27JQ=;
-        b=Wn0aDjyKP6O21w5isjOFPeo9PhsBFF9e0LT3KgL4YMCypnsW5amzTsFMikQHwaeSLk
-         6YsNNOfUFunR9Mv1vUHJqPnSFP63en6lK6A9HYN6Dxnh1ansuuIxUuMfoseHPE9mIUsU
-         nqnoKJyKHQzrHuR3DDMRoeeoOLriSs2fMyY8p5ODW7jxW5DCvg+sTqa/nGK1mP+cWykG
-         VHcasmXGlIspUsWJhwXVVto5USe0mjOv4+AJHW3DeOrOFGnEu8AXLs2SUCVJor5inmXr
-         QQc+uM4EoPvsGOdacfcjAkpIYhf3jo1kyyiVK65ho9yhHwbS/8gaOu5SdIgD3dbtxUNK
-         DnrA==
-X-Forwarded-Encrypted: i=1; AKwUvBxhbhmTynX0wMY6KP1B/MZOvT84MTh51qYUtCNCrVmwdcJfGXjd2j385dhHupds0/dNQcUq/4L4LwidJA2YN0o=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIkNjQvUrX9akncvDgYbPJ5m8zRhZE7LtBtFvi3ER01i+yJLIi0
-	iZH5tUd7Y4ACLjxB0KmBN1mVt5CF+MqvVDjBomaoeJxkloI3NKozkgmMlQfKU0J4MnFVQ7GFOZh
-	ooya1mF1uWbm42BftxJ6/uSuZ/Gv/DZJPzm/ug2dp90wMtLfmySEvvqYnXlBV1Gjgp9GTINc=
-X-Gm-Gg: AYBFou2ecY1vqa1KqskG6uWAjqDm3Skl+e+22uH/wfJkuzz96TJVUi+bex0jcV2LPLY
-	F3Oqa5DnB4prIAdl9czvee1CKLHyIzISGuANSjFfEm9D2aSjSEMW2F3Ndgafx2y0biNlJB3hGGK
-	5A2PbA43bQ+AON7PTvpfWdunVCOjYqFy/IcodAVd8jGhkLyZNj0+VCPgsU1OTw8oWhJ9PLBw7PM
-	88xywfjDjMD9d7NB039f/gcgqGnwj0CzH7wM5YU8WSLOiSPsFj8XZFl+S1Z1GQuFgRhd4W+RnW0
-	48TzyrOFo68wjpkQ0Moc/YwbE1SRikH0JKIP8/GFHgKjACVW9iokbe6Y5IsQcM9uWrFwdd0MRzA
-	uEKFR92rt749tL/pUgs4guVT/EOEWXQsBgtljVtmEsXfn6Z07fVz2KWmp5NejaOA=
-X-Received: by 2002:a05:620a:404c:b0:93b:d7a1:ba16 with SMTP id af79cd13be357-94421725362mr1333069585a.65.1793559750708;
-        Sun, 01 Nov 2026 11:02:30 -0800 (PST)
-X-Received: by 2002:a05:620a:404c:b0:93b:d7a1:ba16 with SMTP id af79cd13be357-94421725362mr1333065585a.65.1793559750104;
-        Sun, 01 Nov 2026 11:02:30 -0800 (PST)
-Received: from localhost ([93.66.104.131])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa80f047bfsm287704435e9.3.2026.11.01.11.02.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=DzRHvF1o9IKB57O9mz1DN5HJc48wgTP5DHvcTPcKook=;
+        b=wu/Z60CxHeXMbdMJbgkwxqEyv8IbiydA3CR0M6Ia+zGyLg4qRagtqps7bI9+3UPBfG
+         fhROq8lp5JQsxlwVZx5iHjR1MmoLuFaxBVNdJNqA6kzj+ldnC1N/ZzRsrH4Xr5HxDqhb
+         0bt6720NIWHBGaD99OITUc9q6POP7gEqbj54UoZHG281v38fjmKtAxkNiL2SjwGGCfW+
+         72lt+c5fR7gctVAvNSKBF4PgjHaTbwjcmkmIWwb2nZvgd+IRBWH8eunZAuln5mwKi0NE
+         UvIDH0Wl8MScXJ3MHYuGEcX0xoLd4aIpT/NSjh/9x6IjvM/uBdyDxLtfFoFUb9SaD16R
+         0Aog==
+X-Forwarded-Encrypted: i=1; AKwUvByrZBhNTz3wubsfJPgCViJyY+rpvKf7gcCS+VSNFH+aKEzpRuft+vCxPWZZRxoZ4R3EtQTsOypp6IuvR1tKtfQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIAkcjG+iuAfmkfeVi2zCExZ/UjNKATAs12KRM3yLpd0VGQ7lX3
+	7zZMOoOroRAfoclWV+I8q2h+KVwu4jgAO+NUSocQVmEfsgpyuWaZX8FevZfEDcP8lrVyNpjeMGF
+	ZEIbgLe5uxSQNfz8Ihz/CXwynpVDARbbNpzL5+3i3TkzbRINyWcDee6tqchFLKAnYGVyJ4bE=
+X-Gm-Gg: AYBFou06N12gxEq4FrWbJFyi4+n7LyuHlZZ1Ei+0taYcu3VHtct4eGTbtk9ogg9EUfi
+	f4d9rGRJ6x1Rk28BwCUypAb8JNpiDSLQ5G0JSP5RDZDSQPQj29znbt4LuS71/BR1R0g6ox9tO+M
+	IYRTGxhTImJkZ9KMPnEFbrH8lb9hUoxbSDJ87C+n4NEBF4mjWGeUwN5DxiMtwE6Iy63xpZdIUJp
+	wt3uojjUoAh0C1VstEZrCFkeM73R88O5nuE2HyqXi1z/SqJiHewH6D9Bu0jAFcs10o+wQPq0fqK
+	T+tK6tpbt6vJ3/I690w/4SDlDZSiZ00v+36WJJCoIjXs44Ezt2knK7u7Iuf+Iah8dRH/LyPyKTb
+	ZqOjrZEW0gLehf4KcfrAZ0CgowJl0ftrZxj28XUX+Nmg2QimWLis0x9AEuVrd44o=
+X-Received: by 2002:a05:620a:2603:b0:939:fde0:a71b with SMTP id af79cd13be357-9442135c728mr1396720685a.0.1793559747495;
         Sun, 01 Nov 2026 11:02:27 -0800 (PST)
+X-Received: by 2002:a05:620a:2603:b0:939:fde0:a71b with SMTP id af79cd13be357-9442135c728mr1396713285a.0.1793559746844;
+        Sun, 01 Nov 2026 11:02:26 -0800 (PST)
+Received: from localhost ([93.66.104.131])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf751c2d2sm238335775e9.15.2026.11.01.11.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2026 11:02:25 -0800 (PST)
 From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Date: Sun, 01 Nov 2026 20:02:00 +0100
-Subject: [PATCH nf-next v2 6/8] selftests: netfilter: nft_flowtable.sh: add
- IPv4 over IPv6 flowtable selftest
+Date: Sun, 01 Nov 2026 20:01:59 +0100
+Subject: [PATCH nf-next v2 5/8] net: netfilter: add IPv4 over IPv6 tunnel
+ flowtable acceleration
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -117,7 +117,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261101-flowtable-sw-accel-ip6ip-sit-v2-6-c6c282cab5cb@oss.qualcomm.com>
+Message-Id: <20261101-flowtable-sw-accel-ip6ip-sit-v2-5-c6c282cab5cb@oss.qualcomm.com>
 References: <20261101-flowtable-sw-accel-ip6ip-sit-v2-0-c6c282cab5cb@oss.qualcomm.com>
 In-Reply-To: <20261101-flowtable-sw-accel-ip6ip-sit-v2-0-c6c282cab5cb@oss.qualcomm.com>
 To: Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
@@ -130,139 +130,244 @@ Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAxMDA3NSBTYWx0ZWRfX38GfTBYFNSNc
- D99xqLyMEY4cVELcIkPBRQta+YHbGqy1OOIc2Eu6biv1yzgi7zfE6kNksV9bMDhIKmLvKZ6yvOx
- 33n6F1Iav0UjZlHr7sropasANKmHAWU=
-X-Proofpoint-GUID: ut_3KD_Eh2HMwH7Wvd5OaJi7FqCwmRye
-X-Authority-Analysis: v=2.4 cv=FJ2OVOos c=1 sm=1 tr=0 ts=6ae78cc7 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=cAAIdyqZgEis9HJxay2Blw==:17
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAxMDA3NSBTYWx0ZWRfX25fQ3b7L5gze
+ Hr4cSZf28IjCksrEl1HVEEk5PtlhIJxIC/PvCVPHEcaRy1UxI26CvSOafJ6Np8Wn4P5IJL+hv19
+ UsjhKUK0o0pRe5bf9ZY/7dmnHzqP+xE=
+X-Authority-Analysis: v=2.4 cv=V/LoQuni c=1 sm=1 tr=0 ts=6ae78cc8 cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=cAAIdyqZgEis9HJxay2Blw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
- a=EUspDBNiAAAA:8 a=bN0dAzVfwMEGxDOd9cEA:9 a=QEXdDO2ut3YA:10
- a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-ORIG-GUID: ut_3KD_Eh2HMwH7Wvd5OaJi7FqCwmRye
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAxMDA3NSBTYWx0ZWRfX5XCDTXSHg9kN
- lcd4+qo1fPjWWxIzw3RNXF2WtRMhPRRUgkK9rzgbAdWQ0y3//MzIQtac8U2QjYnFhNDL4L72HW+
- /wzwkSNZsOPxtEQ/kDLtzC5Z5RDE6mhMl5qYvRaLOF1TjAKufnM+ZAR+2XL6nJShrxT8BGlJmCD
- YKgDyGT6euNdgVGjD55x00qFK9yxBHUZSiGVOSWaNlj6f5qZzpV3It6WOG+C5NHHXQhMVEbhvkz
- U6TRnUI3SyZlPUVdVREDn2TN0t0SHATTy/Fwttp0dnhYdEqqGi8oi44GeAuANASI+ECqqUBanJD
- GV/0ZDC581vOf5rpFGFHLmbPgBOb29Avf1WR0Imexy8GDRus13ldaa8jRI+IBScV6wsF6Gc417G
- 2Yv0Yl/NagQkiFUgUvdj11OGUPGKTEoZvZDGOg+6uJbdfEfhMbxHoFL6dmEntWZcz/U/5Ze5HkB
- ulCZ5FAsm2EJGXo496Q==
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=EUspDBNiAAAA:8 a=Q9s6MkQQiHVZyQ02r30A:9 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-GUID: m0a3-KL_XCVQ3ExwAsFXnTuQvAtcQM-_
+X-Proofpoint-ORIG-GUID: m0a3-KL_XCVQ3ExwAsFXnTuQvAtcQM-_
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAxMDA3NSBTYWx0ZWRfX85UK0SH1sTG4
+ eJB2PdUCC/cVWP955yvHMXl81fd+x59yNhlffTFtqdpq3NPMtVLr91POAnEyia6mdQip9Y2LPnl
+ BJMDi86gXeZlae48B1tD7omgiRZnjfxi6NqhfZ0LlPv44lxi9HDTnrdvFNvE4bURNWDFbZ+dkem
+ PUF9QGT/Jxdq02BOGwTu6e3iRiPoLcbdvagYlnMEcG9rJGzdO4EfJI3OeBEMc41Ppv1wS2Sbje1
+ hGdGu0ZeJ6V0ZUb9cWmXKgCa+p93Ee+oj1CzcD/Xp0F09lrgEM05YCpNJaAJjZIQMofOtap8D2N
+ 93rOocFDVDKhcR1J01nFHzwWVMzCIuBV5TyuM4Lk5PYnWyXSdKwzrADydbDFigfZ05/Zg6LEa/u
+ u5SkXuy6xsz76owWwmx7rtAxdAT7MauEMInNRU6hYWb2QPUzhmf3Yfc5eGLeGH6AQ/Ep8JBRIM1
+ 43pXysh6Xe9tTKAjnew==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-01_06,2026-10-21_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 impostorscore=0 adultscore=0 suspectscore=0
- spamscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611010075
 
-Similar to IPIP and IP6IP6, introduce specific selftest for IPv4 over IPv6
-flowtable sw acceleration in nft_flowtable.sh
+Introduce sw flowtable acceleration for the TX/RX paths of
+IPv4 over IPv6 tunnels, relying on the netfilter flowtable
+infrastructure.
+The feature can be tested with a forwarding scenario between two
+NICs (eth0 and eth1), where an IPv4 over IPv6 tunnel is used to
+reach a remote site via eth1 as the underlay device:
+
+    ETH0 -- TUN0 <==> ETH1 -- [IP network] -- TUN1 (2001:db8:2::2)
+
+[IP configuration]
+
+6: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 00:00:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.2/24 scope global eth0
+       valid_lft forever preferred_lft forever
+7: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 00:11:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+    inet6 2001:db8:2::1/64 scope global nodad
+       valid_lft forever preferred_lft forever
+8: tun0@NONE: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/tunnel6 2001:db8:2::1 peer 2001:db8:2::2 permaddr ce9c:2940:7dcc::
+    inet 192.168.100.1/24 scope global tun0
+       valid_lft forever preferred_lft forever
+
+$ ip route show
+default via 192.168.100.2 dev tun0
+192.168.0.0/24 dev eth0 proto kernel scope link src 192.168.0.2
+192.168.100.0/24 dev tun0 proto kernel scope link src 192.168.100.1
+
+$ ip -6 route show
+2001:db8:2::/64 dev eth1 proto kernel metric 256 pref medium
+
+$ nft list ruleset
+table inet filter {
+    flowtable ft {
+        hook ingress priority filter
+        devices = { eth0, eth1 }
+    }
+
+    chain forward {
+        type filter hook forward priority filter; policy accept;
+        meta l4proto { tcp, udp } flow add @ft
+    }
+}
+
+When reproducing this scenario using veth interfaces, the following
+results were observed:
+
+- TCP stream received from IPv4 over IPv6 tunnel:
+  - net-next (baseline):                ~126 Gbps
+  - net-next + IP4IP6 flowtable support: ~138 Gbps
+
+- TCP stream transmitted to IPv4 over IPv6 tunnel:
+  - net-next (baseline):                ~127 Gbps
+  - net-next + IP4IP6 flowtable support: ~140 Gbps
 
 Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 ---
- .../selftests/net/netfilter/nft_flowtable.sh       | 33 +++++++++++++++++++---
- 1 file changed, 29 insertions(+), 4 deletions(-)
+ net/netfilter/nf_flow_table_ip.c | 70 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 56 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-index 449c518bd947..dcbae9a3d92b 100755
---- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-@@ -579,9 +579,8 @@ if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 ""; then
- 	ip netns exec "$nsr1" nft list ruleset
- fi
- 
--# IPIP tunnel test:
--# Add IPIP tunnel interfaces and check flowtable acceleration.
--test_ipip() {
-+# IP tunnel tests:
-+test_ip_tnls() {
- if ! ip -net "$nsr1" link add name tun0 type ipip \
-      local 192.168.10.1 remote 192.168.10.2 >/dev/null;then
- 	echo "SKIP: could not add ipip tunnel"
-@@ -594,7 +593,9 @@ ip netns exec "$nsr1" sysctl net.ipv4.conf.tun0.forwarding=1 > /dev/null
- 
- ip -net "$nsr1" link add name tun6 type ip6tnl local fee1:2::1 remote fee1:2::2 encaplimit none
- ip -net "$nsr1" link set tun6 up
-+ip -net "$nsr1" addr add 192.168.210.1/24 dev tun6
- ip -net "$nsr1" addr add fee1:3::1/64 dev tun6 nodad
-+ip netns exec "$nsr1" sysctl net.ipv4.conf.tun6.forwarding=1 > /dev/null
- 
- ip -net "$nsr2" link add name tun0 type ipip local 192.168.10.2 remote 192.168.10.1
- ip -net "$nsr2" link set tun0 up
-@@ -603,7 +604,9 @@ ip netns exec "$nsr2" sysctl net.ipv4.conf.tun0.forwarding=1 > /dev/null
- 
- ip -net "$nsr2" link add name tun6 type ip6tnl local fee1:2::2 remote fee1:2::1 encaplimit none || ret=1
- ip -net "$nsr2" link set tun6 up
-+ip -net "$nsr2" addr add 192.168.210.2/24 dev tun6
- ip -net "$nsr2" addr add fee1:3::2/64 dev tun6 nodad
-+ip netns exec "$nsr2" sysctl net.ipv4.conf.tun6.forwarding=1 > /dev/null
- 
- ip -net "$nsr1" route change default via 192.168.100.2
- ip -net "$nsr2" route change default via 192.168.100.1
-@@ -640,6 +643,15 @@ else
- 	ret=1
- fi
- 
-+ip -net "$nsr1" route change default via 192.168.210.2
-+ip -net "$nsr2" route change default via 192.168.210.1
-+
-+if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IP4IP6 tunnel"; then
-+	echo "FAIL: flow offload for ns1/ns2 with IP4IP6 tunnel" 1>&2
-+	ip netns exec "$nsr1" nft list ruleset
-+	ret=1
-+fi
-+
- # Create vlan tagged devices for IPIP traffic.
- ip -net "$nsr1" link add link veth1 name veth1.10 type vlan id 10
- ip -net "$nsr1" link set veth1.10 up
-@@ -661,7 +673,9 @@ ip netns exec "$nsr1" nft -a insert rule inet filter forward 'meta oif tun0.10 a
- 
- ip -net "$nsr1" link add name tun6.10 type ip6tnl local fee1:4::1 remote fee1:4::2 encaplimit none
- ip -net "$nsr1" link set tun6.10 up
-+ip -net "$nsr1" addr add 192.168.220.1/24 dev tun6.10
- ip -net "$nsr1" addr add fee1:5::1/64 dev tun6.10 nodad
-+ip netns exec "$nsr1" sysctl net.ipv4.conf.tun6/10.forwarding=1 > /dev/null
- ip -6 -net "$nsr1" route delete default
- ip -6 -net "$nsr1" route add default via fee1:5::2
- ip netns exec "$nsr1" nft -a insert rule inet filter forward \
-@@ -682,7 +696,9 @@ ip netns exec "$nsr2" sysctl net.ipv4.conf.tun0/10.forwarding=1 > /dev/null
- 
- ip -net "$nsr2" link add name tun6.10 type ip6tnl local fee1:4::2 remote fee1:4::1 encaplimit none || ret=1
- ip -net "$nsr2" link set tun6.10 up
-+ip -net "$nsr2" addr add 192.168.220.2/24 dev tun6.10
- ip -net "$nsr2" addr add fee1:5::2/64 dev tun6.10 nodad
-+ip netns exec "$nsr2" sysctl net.ipv4.conf.tun6/10.forwarding=1 > /dev/null
- ip -6 -net "$nsr2" route delete default
- ip -6 -net "$nsr2" route add default via fee1:5::1
- 
-@@ -700,6 +716,15 @@ else
- 	ret=1
- fi
- 
-+ip -net "$nsr1" route change default via 192.168.220.2
-+ip -net "$nsr2" route change default via 192.168.220.1
-+
-+if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IP4IP6 tunnel over vlan"; then
-+	echo "FAIL: flow offload for ns1/ns2 with IP4IP6 tunnel over vlan" 1>&2
-+	ip netns exec "$nsr1" nft list ruleset
-+	ret=1
-+fi
-+
- # Restore the previous configuration
- ip -net "$nsr1" route change default via 192.168.10.2
- ip -net "$nsr2" route change default via 192.168.10.1
-@@ -847,7 +872,7 @@ ip -net "$nsr1" addr add dead:1::1/64 dev veth0 nodad
- ip -net "$nsr1" link set up dev veth0
+diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
+index 902b9b595677..2bdebd3ff5f9 100644
+--- a/net/netfilter/nf_flow_table_ip.c
++++ b/net/netfilter/nf_flow_table_ip.c
+@@ -856,7 +856,8 @@ static unsigned int nf_flow_queue_xmit(struct net *net, struct sk_buff *skb,
+ 	return NF_STOLEN;
  }
  
--test_ipip
-+test_ip_tnls
+-static int nf_flow_queue_xmit4(struct sk_buff *skb,
++static int nf_flow_queue_xmit4(struct nf_flowtable_ctx *ctx,
++			       struct sk_buff *skb,
+ 			       struct flow_offload_tuple_rhash *tuplehash,
+ 			       const struct nf_hook_state *state)
+ {
+@@ -886,22 +887,38 @@ static int nf_flow_queue_xmit4(struct sk_buff *skb,
+ 		return NF_DROP;
  
- test_bridge
+ 	switch (tuplehash->tuple.xmit_type) {
+-	case FLOW_OFFLOAD_XMIT_NEIGH:
+-		rt = dst_rtable(tuplehash->tuple.dst_cache);
++	case FLOW_OFFLOAD_XMIT_NEIGH: {
++		struct dst_entry *dst;
++
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.ifidx);
+ 		if (!xmit.outdev) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+-		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, ip_addr->ip));
++		if (other_tuple->tun.encap_proto ?
++		    other_tuple->tun.encap_proto == AF_INET6 :
++		    ctx->tun.inner_proto == IPPROTO_IPV6) {
++			struct rt6_info *rt6;
++
++			rt6 = dst_rt6_info(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw6(rt6->dst.dev,
++					     rt6_nexthop(rt6, &ip_addr->in6));
++			dst = &rt6->dst;
++		} else {
++			rt = dst_rtable(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw4(rt->dst.dev,
++					     rt_nexthop(rt, ip_addr->ip));
++			dst = &rt->dst;
++		}
+ 		if (IS_ERR(neigh)) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+ 		xmit.dest = neigh->ha;
+ 		skb_dst_drop(skb);
+-		skb_dst_set_noref(skb, &rt->dst);
++		skb_dst_set_noref(skb, dst);
+ 		break;
++	}
+ 	case FLOW_OFFLOAD_XMIT_DIRECT:
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.out.ifidx);
+ 		if (!xmit.outdev) {
+@@ -948,7 +965,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+ 	else if (ret == 0)
+ 		return NF_ACCEPT;
  
+-	return nf_flow_queue_xmit4(skb, tuplehash, state);
++	return nf_flow_queue_xmit4(&ctx, skb, tuplehash, state);
+ }
+ EXPORT_SYMBOL_GPL(nf_flow_offload_ip_hook);
+ 
+@@ -1175,13 +1192,18 @@ nf_flow_offload_ipv6_lookup(struct nf_flowtable_ctx *ctx,
+ {
+ 	struct flow_offload_tuple tuple = {};
+ 
+-	if (nf_flow_tuple_ipv6(ctx, skb, &tuple) < 0)
++	if (ctx->tun.inner_proto == IPPROTO_IPIP) {
++		if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0)
++			return NULL;
++	} else if (nf_flow_tuple_ipv6(ctx, skb, &tuple) < 0) {
+ 		return NULL;
++	}
+ 
+ 	return flow_offload_lookup(flow_table, &tuple);
+ }
+ 
+-static int nf_flow_queue_xmit6(struct sk_buff *skb,
++static int nf_flow_queue_xmit6(struct nf_flowtable_ctx *ctx,
++			       struct sk_buff *skb,
+ 			       struct flow_offload_tuple_rhash *tuplehash,
+ 			       const struct nf_hook_state *state)
+ {
+@@ -1211,22 +1233,38 @@ static int nf_flow_queue_xmit6(struct sk_buff *skb,
+ 		return NF_DROP;
+ 
+ 	switch (tuplehash->tuple.xmit_type) {
+-	case FLOW_OFFLOAD_XMIT_NEIGH:
+-		rt = dst_rt6_info(tuplehash->tuple.dst_cache);
++	case FLOW_OFFLOAD_XMIT_NEIGH: {
++		struct dst_entry *dst;
++
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.ifidx);
+ 		if (!xmit.outdev) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+-		neigh = ip_neigh_gw6(rt->dst.dev, rt6_nexthop(rt, &ip_addr->in6));
++		if (other_tuple->tun.encap_proto ?
++		    other_tuple->tun.encap_proto == AF_INET :
++		    ctx->tun.inner_proto == IPPROTO_IPIP) {
++			struct rtable *rt4;
++
++			rt4 = dst_rtable(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw4(rt4->dst.dev,
++					     rt_nexthop(rt4, ip_addr->ip));
++			dst = &rt4->dst;
++		} else {
++			rt = dst_rt6_info(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw6(rt->dst.dev,
++					     rt6_nexthop(rt, &ip_addr->in6));
++			dst = &rt->dst;
++		}
+ 		if (IS_ERR(neigh)) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+ 		xmit.dest = neigh->ha;
+ 		skb_dst_drop(skb);
+-		skb_dst_set_noref(skb, &rt->dst);
++		skb_dst_set_noref(skb, dst);
+ 		break;
++	}
+ 	case FLOW_OFFLOAD_XMIT_DIRECT:
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.out.ifidx);
+ 		if (!xmit.outdev) {
+@@ -1267,12 +1305,16 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_buff *skb,
+ 	if (!tuplehash)
+ 		return NF_ACCEPT;
+ 
+-	ret = nf_flow_offload_ipv6_forward(&ctx, flow_table, tuplehash, skb);
++	if (ctx.tun.inner_proto == IPPROTO_IPIP)
++		ret = nf_flow_offload_forward(&ctx, flow_table, tuplehash, skb);
++	else
++		ret = nf_flow_offload_ipv6_forward(&ctx, flow_table, tuplehash,
++						   skb);
+ 	if (ret < 0)
+ 		return NF_DROP;
+ 	else if (ret == 0)
+ 		return NF_ACCEPT;
+ 
+-	return nf_flow_queue_xmit6(skb, tuplehash, state);
++	return nf_flow_queue_xmit6(&ctx, skb, tuplehash, state);
+ }
+ EXPORT_SYMBOL_GPL(nf_flow_offload_ipv6_hook);
 
 -- 
 2.56.0
