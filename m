@@ -1,79 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793587007;
-	b=PRfRi4s4TNNpuuLPT6rWqgVbNZDJajCIlPj+N3nlfTRxf/wYZD4NU+vZZVxkK4mC6KoN
-	 GIAn1yny+BROq9urk5YKaRNOPbqRRUg4QHUhsBo1UJtOEiKgbfQMQFH0tvY/VTwtU20MI
-	 TmN7GtADqrd4p9pqcbPrtpTzpYzRKxtKvEuWs6fea9O2De14L/IbkaVHGJpLilccGDZFy
-	 GIPi6+bAh8HysXey9biJVc4Bu7mjqKM/Oh31RIVbmsTHlU1y/Dd9Eni0rPQz9/RUpz2/b
-	 G2Ds+bQ8JxdlGAH2hLqCxdRqi0dK46BgyiojYj9Ku4ePQyYXGeheSaoOs/osMgEy1Bg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793587007;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=DRmE5KHmA5aDoz/5PiXzFOa81nzQkhxyRpJ0L3vIsC4=;
-	b=1dJM9ZpI2eO37RV548h1dZY07jXnpOaa/2vsz0UrsIZ1MN+PnDiR4+A8NFMe9B5XLQqC
-	 aAeSgKSiOwHZDz/Dgw+xWVqxOUKat7O3N29FeV3Nb9XizihEp4J9nnOUYuEYleCYcRLrW
-	 X3gNu8j6ChgucrnMqcUM32w1fheaY+mH+w/N8w/wtpwlalppEHKqAPIurBAGx91ad8K/I
-	 dHyMlm0szKIVenZbebllWp4XFMs82vmO3JHy5ADmQhX8GcTKcmHAk3K6WRhIs4pEcOb8g
-	 8u9hgmQCbvK0X+qqHxbiKttj6+0IAkomNW7P7Zmtx7lihQyOVrjv5DYblvXjE3EKw9Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="AFk/c7Ai";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FA3606A327;
-	Mon,  2 Nov 2026 02:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AFk/c7Ai
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793587006;
-	b=Fy7X+jW6lJXY7g6hLp1KkwuhzJYZJraK0Z9bm1troAKRiVUl2xPhzxElxp5L4j0Nr1W7
-	 NJkQ1OmFwZZrdhCh6Ke4octu83jCJ+YUF2pyv5jR1gZ+toC0VegeafUSGvrwLCfCjU5A/
-	 TEddfMr59oLBMXeWMZdyTUvY6OeESNr7zZKQswdFLk3ijiTuUg0JrHHgtMG1eBLON7n4I
-	 SKL85QHiDJqrASPr+X/dcEypj0pqZ34rWWaTfXskVrhatpd7YR8jnX4dxjTkBsoYdzGjZ
-	 q94R+WJRAwDAZVPVoZhB3QM6LUC0uyczobeGv9w36tiMUSnuNwzGqNfj14PWJ9tl9Wg==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793587006;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=DRmE5KHmA5aDoz/5PiXzFOa81nzQkhxyRpJ0L3vIsC4=;
-	b=X4Pa+NOuJaSZxTt7+CWvdT6bQzhI50CMlYaQuJ5ImKuPT0hNk+FC3PFTfeq00icKwYJ8
-	 nTH1TcfD/IqmPiBOOJbQUSzJanzbkz2LhTfhcbosu8UVeV18ULjNtU0qyc/THqHI11I8v
-	 rtKPGLqISw5EQMrzS4i32AWRFh3221vcU3RqQ3bvf05bIaxdfI37OqGTgrwqEE/rrShHG
-	 O6kO7G0O6cLN1p0yUvx2kDkqfJleUnMiKxBcJcHIiZhXQLPrMEVI3yhwGlvJxltZUq34m
-	 SyI2aYlr4z4um/NEBUkQ83xypu0MlJEiy+BXrLkW2mpshzSz7zZVQstcEAFx/g6MSeg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793588223;
+	b=cTQn3OGT3axnsuCvnVGTawnfGc+AF6e2u7mC2VLYJCsLIj10o3Cravm3dYvVBDoQtN/c
+	 yccoDpRcsWn7SNMoMOjIwJjys6UwErOSWwuZ6u5JeX+ZuejPyruhZiES7VVGoGKCwUdOv
+	 8ScAECkxWW0SSCLhktWbRuhF4ef8Mm3Af/xOiJjw3YuYliAyzyUFQlLLBapMdn29xxKS0
+	 w1cm0sGfdcDg9WMOjGVgjHPqTaO6dVypuIPaF0MGHKgWE4qQkYj1ueB2Ob0+d6UcCtmBy
+	 bOfWFUlrxNMI7+Ffk68xl0RtQ8jYr9a3QBIP6hocsUq8Cg1OdBVjKu8Dbd+uMGu6Y0Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793588223;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=JZ2K+Osj5CGwdFpoUsq3gGFL7dbV984RRFXoZaP0g58=;
+	b=hhuEEt4wxzrghRQmL/N8BXoJGSDiqJ82UWR9kQuiCh5DOHuMg4Ri6v6OFX0VUS1/bnn+
+	 7tL8E89ZsBhflAEezi3Mn6jGi8XGlyYPCcwn3B/CBx+F/gcld00i9XnvgzYNGIBcIxMoH
+	 Q3gffYR+j4QxwkLyOl9/PF3VcgTOhs/uRag0Y4oJC9yDR7erQwZFm56XV2MxrZOWPtbfE
+	 sLzMsecMQZCWYeEFIEf44OE7gYDWh3+yxBRbQHAM11k3eTT/XLk8rAtPBdS23wmsv2yfA
+	 KrtXDKddwj9FM60XHK+Hhif0cL410P7zzsXWSfyHoHk0fjuQpKiNQFt7H6YJYakzXgA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="BVQI/exg";
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3FB671F000C1;
-	Mon,  2 Nov 2026 02:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793587006;
-	bh=DRmE5KHmA5aDoz/5PiXzFOa81nzQkhxyRpJ0L3vIsC4=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=AFk/c7AinfDvTZT9lGhPD4bSCfmbLgPAXEdiZo/Nc9R4pQtmzJTJvpCMGgc1I+Wm0
-	 hTi1lOA96KQmfExBtXg7Kd4LTpHtx/CHCewFEokEW/7gOE58+6IXooBuvna27DYRES
-	 cjil3BWWJc2bmkdK8kVbQj1szCvmcjUakPRjCcN/gVfyF2J8sSpY1SVu3OTGqguPWf
-	 4p4r6oXHCqxOaigpsBdCanXMJ1olGUqMNsdwBD6L49TglC7RXD6EPqCfynxztAhD3G
-	 /HBfcuHVwBg/MSbkC6Jw5OHuH4gpKr1qiGP62GmWkjFZooAto5WTLKeDn76s/vy+Ec
-	 HAg2DHZhaWPIA==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 912344632A;
-	Mon,  2 Nov 2026 02:36:45 +0000 (UTC)
-From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
-Date: Mon, 02 Nov 2026 09:36:01 +0700
-Subject: [PATCH bpf-next v2] selftests/bpf: Wait for wq callback before
- checking ok_sleepable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C45D606A32F
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 02:57:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C45D606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BVQI/exg
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ab60ff4273so2053366a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 18:57:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793588223; x=1794193023; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JZ2K+Osj5CGwdFpoUsq3gGFL7dbV984RRFXoZaP0g58=;
+        b=BVQI/exgTIjj0BMukq+7/lRjZCXiHFbiDMk9cu4WWF8wVDNd1EWn8ihLBNuuMlDIZA
+         2+bSgyy82iLtkUmfJ4toiMoPS+efvSM4PpOBX5eboRjj3a6AiLgeMR0eKS8huFByhNHO
+         RMUKQokAXy//KsWH5cqt2NtdmOLmnhrW2qQkfie30J7gfTHqyo4mhmtHzCOksDkPRS56
+         2KIe9cyC9DLncRgr/Eh7M/430tLR4iHQUU8TexqW/X9OfNNWgrmOKruJZdaqWvMpx+hM
+         8RmqCfXIjt57BueKM/0t3SCl5J3XnR7GLC5iBUX5uo4bkVewlZYvg4XGShzYnmHNCzQI
+         xrgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793588223; x=1794193023;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JZ2K+Osj5CGwdFpoUsq3gGFL7dbV984RRFXoZaP0g58=;
+        b=Dd7kg0U9f6Q39qHWa8fDmtbHBzYUTiem1x/gunuzrLYaB4SUf0obcqBJFG0gt/hiQO
+         WgBJud7Py03w2P2KE7s7LRkmLGrIKkQrqPtxtmaBW1JT5VuiJy72c3fV8dQIvtH+ciEN
+         4YIGZPH2yPrUBBhsT6V8KPBu0hFzA7jC8z3PnDWWSl3ydgqRz0h3WGy33GDi4hgnwMKZ
+         GJrE8MOqFmxEZAAV90Czdx8Kkwa8H05OLldAxFcILQkEhLOqiCJYzHX0BoxGQ3Lt2dfK
+         dClGwDEe337nBDuEqk8qRjO07VGcF+Yk0+tS+5kqKHeOmev/QRQJwlCXakul581F5gH/
+         gGFg==
+X-Forwarded-Encrypted: i=1; AKwUvByECS9Hz9LA/jA6iHFNFGVu5RvH79p1d2QESSjmlXR+AALsman3rVENy69MPetxjIeE0nk3fCLA9EPZvDmHSqg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/JRvQPOCVyE8mIb1v9iDv37IAEAENW7nAQz+p9MAL17LKhM6od
+	NkA7XHkGz0FF3ALnpDaIVkl5n2DHUWtuS8GIyIKsmT9Ei/1rbo4+Rhw=
+X-Gm-Gg: AYBFou34Nw05h+CvGbzlkMis46KKuhTnrDO5M2fqMWmxJBx32G+mcULj85IKsu8syfq
+	3JWKl5bt3A7qSkJRiz8hUezYHTXgmCkuzEahOGAgripAHOv4julWxqULL/aAm/0ukuHzGsFD1KN
+	4BnV9XL24GqZ/2Rc34qNaQhlI7DZfDtGGI86s9V/8M4BFffQ2F2oklnpD0FBxeDSc2g5c5gDVo6
+	+kfnN4n5T1sW7teS5vGYdF4XbYgd1qZXvzuoZDv6X+D/oehDppp+MrQYZ1ES04TQI+Cd0IXpdnM
+	GHdIPe9bGZpLg8r3xUSeYo/YqXmwzElERYzV0AO92suz4gynXfr7DGFhxS3XQoPMuYSe4QnStzM
+	8nKSQz8wIURmHknZpPmURJKG7YKlbl2XFis1xasHX1TqeL94ZWjHBuoivpBuac73xZ5/kJ43iH3
+	bjR+ykA2rOr8kIRA40yAQI15AUwRZ0EjK2+Zs9olQKfLUS1FzN9RdrLskJVSRE/LVTmqjzkRghL
+	k17oeaRbmFPy5/W8b6wfUv39onydBAIQtLBclh0bKfv085hqXIB0RjvxABt+nYJpm5gUjWqSDs7
+	OXdkSqDAnuG71fHq+IY4yqgCxWs=
+X-Received: by 2002:a17:90b:1c88:b0:3aa:6b5d:a00a with SMTP id 98e67ed59e1d1-3ae898510b3mr7446929a91.53.1793588222609;
+        Sun, 01 Nov 2026 18:57:02 -0800 (PST)
+Received: from [127.0.1.1] ([185.220.238.36])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9bc6f7sm15882317a91.16.2026.11.01.18.57.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2026 18:57:02 -0800 (PST)
+From: Wang Yibo <szwyb123@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Gow <david@davidgow.net>,
+ linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+Subject: [PATCH v2] lib/tests: convert test_memcat_p module to KUnit
+Date: Sun, 01 Nov 2026 13:49:39 +0800
+Message-ID: <20261101134939.32-1-szwyb123@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,120 +96,326 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261102-wq-poll-fix-v2-1-48b7d12815b8@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22NwQ6DIBBEf8XsuduARRt76n80HgAX3UTFgrE2x
- n8v4dzjzMu8OSBSYIrwKA4ItHFkP6dQXgqwg557Qu5ShlKUtRSiws8bFz+O6HhHp2qr7p3RTtw
- gLZZAqc62F5jF4Uz7Cm0iA8fVh2++2WTmf42bRIlNY0kZbavGqWc/aR6v1k/Qnuf5A9N5ZsawA
- AAA
-X-Change-ID: 20261005-wq-poll-fix-f46c47dbaf03
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mykyta Yatsenko <yatsenko@meta.com>, 
- qikeyu2017@gmail.com, Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793587005; l=2820;
- i=thamrinjonathan@gmail.com; s=20261005; h=from:subject:message-id;
- bh=hj1bolorYbBPrCihpIUsWO5AkHVCWxDBPFRwoFbNmSE=;
- b=2qboYx7ki1e6LqE0lhjhrM98EDBq+eZMEpyS8XxWBLu9Cy712OkJLs6X2eAh+pHcSfsen8tu9
- hnzvV2sXU3eBpNnqYwlHmZ9beozVU9HkH1aam4rdDat+z8buLX+3kiO
-X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
- pk=QU907bIMYty/tEI/iJF2SrD1lqOf/+2B1MI1zwJ5cBw=
-X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261005
- with auth_id=1114
-X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-Reply-To: thamrinjonathan@gmail.com
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
 
-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Both AI review questions are addressed; the changes are described
+below the --- in the patch.
 
-wq test fails with ok_sleepable reading 0 instead of 2 as workqueue
-callback hasn't executed before check.
+From 4ebf2dfe3e71066a3af1d6f53b85e3ce3ca3ed4d Mon Sep 17 00:00:00 2001
+From: Wang Yibo <szwyb123@gmail.com>
+Date: Tue, 13 Oct 2026 22:21:49 +0800
+Subject: [PATCH v2] lib/tests: convert test_memcat_p module to KUnit
 
-This happens as callback runs later on a kworker and 50us isn't always
-enough.
+Move lib/test_memcat_p.c to lib/tests/memcat_p_kunit.c and convert it to
+use KUnit.
 
-Change from 50us sleep to waiting for callback by checking wq_cb_run.
-wq_cb_sleepable() now increments wq_cb_run after setting ok_sleepable
-and test loops with sched_yield() until wq_cb_run is set before
-checking.
+This change switches the ad-hoc test code to standard KUnit test cases.
+The test data remains the same, but the verification logic is updated to
+use KUNIT_EXPECT_* macros, so a failure now reports which element
+mismatched instead of a single pr_err() message.  The input arrays and
+their elements are allocated with the kunit_kmalloc() family, which lets
+the manual error unwinding paths and the empty module exit hook go away.
 
-Before (usleep(50)): 3 fails out of 5000 runs
-Diagnosing issue (usleep(0)): 23 out of 100 runs
-After: 0 out of 2000 runs
-Tested using vmtest on x86_64, test pinned to one CPU with `yes` load
+Three things are spelled out differently, because a KUnit assertion can
+abandon the test half way through:
 
-Link: https://github.com/kernel-patches/vmtest/issues/455
-Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+  - The array returned by memcat_p() is allocated with kmalloc_array()
+    inside the function under test, so kunit_kfree() does not know about
+    it and does nothing.  It is freed with kfree() through a registered
+    test action instead, so that it is released even when a later
+    assertion fails the test.
+
+  - The check on the number of merged elements is a KUNIT_ASSERT_EQ():
+    the element order loop that follows indexes out[] up to
+    2 * INPUT_MAX - 3 without any bound check, so a shorter than expected
+    array has to stop the test there rather than be walked off the end.
+
+  - The counting loop compares against its limit before dereferencing, so
+    that a missing terminator cannot be read past the last element.
+
+CONFIG_TEST_MEMCAT_P keeps its name so that the defconfigs enabling it
+stay valid; it now depends on KUNIT and defaults to KUNIT_ALL_TESTS, like
+the other lib KUnit tests.  Those defconfigs already select KUNIT and
+KUNIT_ALL_TESTS, so they keep turning the test on unchanged.
+
+Signed-off-by: Wang Yibo <szwyb123@gmail.com>
 ---
-Changes in v2:
-- Wait for callback via a wq_cb_run flag instead of polling with a
-  timeout, similar to test_struct_ops_assoc.c (Kumar)
-- Link to v1: https://lore.kernel.org/r/20261005-wq-poll-fix-v1-1-99ce4bac59f4@gmail.com
+v2: address the AI review questions: free the memcat_p() result with
+    kfree() (through a test action) instead of kunit_kfree(), which
+    silently ignores memory KUnit does not own; and make the element
+    count check fatal, so a short array cannot lead to an out-of-bounds
+    read in the element order loop.  While at it, move the limit check in
+    the counting loop before the dereference.
 ---
- tools/testing/selftests/bpf/prog_tests/wq.c |  5 +++--
- tools/testing/selftests/bpf/progs/wq.c      | 10 ++++++----
- 2 files changed, 9 insertions(+), 6 deletions(-)
+ lib/Kconfig.debug          |   4 +-
+ lib/Makefile               |   1 -
+ lib/test_memcat_p.c        | 116 -------------------------------------
+ lib/tests/Makefile         |   1 +
+ lib/tests/memcat_p_kunit.c |  91 +++++++++++++++++++++++++++++
+ 5 files changed, 95 insertions(+), 118 deletions(-)
+ delete mode 100644 lib/test_memcat_p.c
+ create mode 100644 lib/tests/memcat_p_kunit.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
-index 97926e35aaf2..95ed4b69c0f5 100644
---- a/tools/testing/selftests/bpf/prog_tests/wq.c
-+++ b/tools/testing/selftests/bpf/prog_tests/wq.c
-@@ -28,8 +28,9 @@ void serial_test_wq(void)
- 	ASSERT_OK(err, "test_run");
- 	ASSERT_EQ(topts.retval, 0, "test_run");
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index f754a24acd2c..65edbbabf075 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3364,7 +3364,9 @@ config TEST_DEBUG_VIRTUAL
+ 	  If unsure, say N.
  
--	usleep(50); /* 10 usecs should be enough, but give it extra */
+ config TEST_MEMCAT_P
+-	tristate "Test memcat_p() helper function"
++	tristate "KUnit test for memcat_p() helper function" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Test the memcat_p() helper for correctly merging two
+ 	  pointer arrays together.
+diff --git a/lib/Makefile b/lib/Makefile
+index 3104710e1e68..f385888b1d50 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -97,7 +97,6 @@ obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
+ obj-$(CONFIG_TEST_PARMAN) += test_parman.o
+ obj-$(CONFIG_TEST_KMOD) += test_kmod.o
+ obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
+-obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
+ obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
+ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
+ obj-$(CONFIG_TEST_CSD_LOCK) += test_csd_lock.o
+diff --git a/lib/test_memcat_p.c b/lib/test_memcat_p.c
+deleted file mode 100644
+index 62f1633b30f8..000000000000
+--- a/lib/test_memcat_p.c
++++ /dev/null
+@@ -1,116 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Test cases for memcat_p() in lib/memcat_p.c
+- */
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 -
-+	/* wait for wq callback to finish */
-+	while (!READ_ONCE(wq_skel->bss->wq_cb_run))
-+		sched_yield();
- 	ASSERT_EQ(wq_skel->bss->ok_sleepable, (1 << 1), "ok_sleepable");
- clean_up:
- 	wq__destroy(wq_skel);
-diff --git a/tools/testing/selftests/bpf/progs/wq.c b/tools/testing/selftests/bpf/progs/wq.c
-index 25be2cd9d42c..8148db35effe 100644
---- a/tools/testing/selftests/bpf/progs/wq.c
-+++ b/tools/testing/selftests/bpf/progs/wq.c
-@@ -52,6 +52,7 @@ struct {
+-#include <linux/string.h>
+-#include <linux/slab.h>
+-#include <linux/module.h>
+-
+-struct test_struct {
+-	int		num;
+-	unsigned int	magic;
+-};
+-
+-#define MAGIC		0xf00ff00f
+-/* Size of each of the NULL-terminated input arrays */
+-#define INPUT_MAX	128
+-/* Expected number of non-NULL elements in the output array */
+-#define EXPECT		(INPUT_MAX * 2 - 2)
+-
+-static int __init test_memcat_p_init(void)
+-{
+-	struct test_struct **in0, **in1, **out, **p;
+-	int err = -ENOMEM, i, r, total = 0;
+-
+-	in0 = kzalloc_objs(*in0, INPUT_MAX);
+-	if (!in0)
+-		return err;
+-
+-	in1 = kzalloc_objs(*in1, INPUT_MAX);
+-	if (!in1)
+-		goto err_free_in0;
+-
+-	for (i = 0, r = 1; i < INPUT_MAX - 1; i++) {
+-		in0[i] = kmalloc_obj(**in0);
+-		if (!in0[i])
+-			goto err_free_elements;
+-
+-		in1[i] = kmalloc_obj(**in1);
+-		if (!in1[i]) {
+-			kfree(in0[i]);
+-			goto err_free_elements;
+-		}
+-
+-		/* lifted from test_sort.c */
+-		r = (r * 725861) % 6599;
+-		in0[i]->num = r;
+-		in1[i]->num = -r;
+-		in0[i]->magic = MAGIC;
+-		in1[i]->magic = MAGIC;
+-	}
+-
+-	in0[i] = in1[i] = NULL;
+-
+-	out = memcat_p(in0, in1);
+-	if (!out)
+-		goto err_free_all_elements;
+-
+-	err = -EINVAL;
+-	for (i = 0, p = out; *p && (i < INPUT_MAX * 2 - 1); p++, i++) {
+-		total += (*p)->num;
+-
+-		if ((*p)->magic != MAGIC) {
+-			pr_err("test failed: wrong magic at %d: %u\n", i,
+-			       (*p)->magic);
+-			goto err_free_out;
+-		}
+-	}
+-
+-	if (total) {
+-		pr_err("test failed: expected zero total, got %d\n", total);
+-		goto err_free_out;
+-	}
+-
+-	if (i != EXPECT) {
+-		pr_err("test failed: expected output size %d, got %d\n",
+-		       EXPECT, i);
+-		goto err_free_out;
+-	}
+-
+-	for (i = 0; i < INPUT_MAX - 1; i++)
+-		if (out[i] != in0[i] || out[i + INPUT_MAX - 1] != in1[i]) {
+-			pr_err("test failed: wrong element order at %d\n", i);
+-			goto err_free_out;
+-		}
+-
+-	err = 0;
+-	pr_info("test passed\n");
+-
+-err_free_out:
+-	kfree(out);
+-err_free_all_elements:
+-	i = INPUT_MAX;
+-err_free_elements:
+-	for (i--; i >= 0; i--) {
+-		kfree(in1[i]);
+-		kfree(in0[i]);
+-	}
+-
+-	kfree(in1);
+-err_free_in0:
+-	kfree(in0);
+-
+-	return err;
+-}
+-
+-static void __exit test_memcat_p_exit(void)
+-{
+-}
+-
+-module_init(test_memcat_p_init);
+-module_exit(test_memcat_p_exit);
+-
+-MODULE_DESCRIPTION("Test cases for memcat_p() in lib/memcat_p.c");
+-MODULE_LICENSE("GPL");
+diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+index df0537e1b91f..d44baa280126 100644
+--- a/lib/tests/Makefile
++++ b/lib/tests/Makefile
+@@ -40,6 +40,7 @@ CFLAGS_longest_symbol_kunit.o += $(call cc-disable-warning, missing-prototypes)
+ obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) += longest_symbol_kunit.o
  
- __u32 ok;
- __u32 ok_sleepable;
-+__u32 wq_cb_run;
- 
- static int test_elem_callback(void *map, int *key,
- 		int (callback_fn)(void *map, int *key, void *value))
-@@ -130,11 +131,12 @@ static int wq_cb_sleepable(void *map, int *key, void *value)
- 	struct elem *data = (struct elem *)value;
- 	int offset = data->ok_offset;
- 
--	if (*key != offset)
--		return 0;
-+	if (*key == offset) {
-+		bpf_kfunc_call_test_sleepable();
-+		ok_sleepable |= (1 << offset);
+ obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
++obj-$(CONFIG_TEST_MEMCAT_P) += memcat_p_kunit.o
+ obj-$(CONFIG_MIN_HEAP_KUNIT_TEST) += min_heap_kunit.o
+ CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
+ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+diff --git a/lib/tests/memcat_p_kunit.c b/lib/tests/memcat_p_kunit.c
+new file mode 100644
+index 000000000000..5fe2ac97c95e
+--- /dev/null
++++ b/lib/tests/memcat_p_kunit.c
+@@ -0,0 +1,91 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test cases for memcat_p() in lib/memcat_p.c
++ */
++
++#include <kunit/test.h>
++
++#include <linux/slab.h>
++#include <linux/string.h>
++
++struct test_struct {
++	int		num;
++	unsigned int	magic;
++};
++
++#define MAGIC		0xf00ff00f
++/* Size of each of the NULL-terminated input arrays */
++#define INPUT_MAX	128
++/* Expected number of non-NULL elements in the output array */
++#define EXPECT		(INPUT_MAX * 2 - 2)
++
++KUNIT_DEFINE_ACTION_WRAPPER(kfree_wrapper, kfree, const void *);
++
++static void memcat_p_test(struct kunit *test)
++{
++	struct test_struct **in0, **in1, **out, **p;
++	int i, r, total = 0;
++
++	in0 = kunit_kcalloc(test, INPUT_MAX, sizeof(*in0), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in0);
++
++	in1 = kunit_kcalloc(test, INPUT_MAX, sizeof(*in1), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in1);
++
++	for (i = 0, r = 1; i < INPUT_MAX - 1; i++) {
++		in0[i] = kunit_kmalloc(test, sizeof(**in0), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in0[i]);
++
++		in1[i] = kunit_kmalloc(test, sizeof(**in1), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, in1[i]);
++
++		/* lifted from test_sort.c */
++		r = (r * 725861) % 6599;
++		in0[i]->num = r;
++		in1[i]->num = -r;
++		in0[i]->magic = MAGIC;
++		in1[i]->magic = MAGIC;
 +	}
- 
--	bpf_kfunc_call_test_sleepable();
--	ok_sleepable |= (1 << offset);
-+	wq_cb_run++;
- 	return 0;
- }
- 
-
----
-base-commit: a30c772627b2ef4bc715332b1b04938a914556cd
-change-id: 20261005-wq-poll-fix-f46c47dbaf03
-
-Best regards,
++
++	in0[i] = NULL;
++	in1[i] = NULL;
++
++	out = memcat_p(in0, in1);
++	KUNIT_ASSERT_NOT_NULL(test, out);
++	/*
++	 * memcat_p() allocates the result with kmalloc_array(), so it is not
++	 * known to kunit_kfree().  Register it by hand, so that an assertion
++	 * aborting the test cannot leak it.
++	 */
++	KUNIT_ASSERT_EQ(test, kunit_add_action(test, kfree_wrapper, out), 0);
++
++	/* Bound first, so a missing terminator is not dereferenced. */
++	for (i = 0, p = out; i < INPUT_MAX * 2 - 1 && *p; p++, i++) {
++		total += (*p)->num;
++		KUNIT_EXPECT_EQ(test, (*p)->magic, MAGIC);
++	}
++
++	KUNIT_EXPECT_EQ(test, total, 0);
++	/* The loop below indexes out[] up to 2 * INPUT_MAX - 3. */
++	KUNIT_ASSERT_EQ(test, i, EXPECT);
++
++	for (i = 0; i < INPUT_MAX - 1; i++) {
++		KUNIT_EXPECT_PTR_EQ(test, out[i], in0[i]);
++		KUNIT_EXPECT_PTR_EQ(test, out[i + INPUT_MAX - 1], in1[i]);
++	}
++}
++
++static struct kunit_case memcat_p_test_cases[] = {
++	KUNIT_CASE(memcat_p_test),
++	{}
++};
++
++static struct kunit_suite memcat_p_test_suite = {
++	.name = "memcat_p",
++	.test_cases = memcat_p_test_cases,
++};
++
++kunit_test_suite(memcat_p_test_suite);
++
++MODULE_DESCRIPTION("Test cases for memcat_p() in lib/memcat_p.c");
++MODULE_LICENSE("GPL");
 -- 
-Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+2.25.1
 
 
