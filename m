@@ -1,104 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793494990;
-	b=kszKXwhezRpIc75Fc1LlOJZ3xL8aj/0maRKaR7V+ERJIVT4TN9jy8WCB7oqmfcrD88z5
-	 zemKBh+BMTYH3R/9XES/y4RwCRoUtuAUSkbQNDzlE10MxXsskcS6MebHZRtY4Yv5QvENN
-	 3zYddsvMZWyAJUAqhb6v1BRuLbHgx8m72huc7VFetsVe+53WjMx8TPhkpwtBOS3NKjVF6
-	 3Wz7VELJQNwL63NMK16OR7pUMAq+YXC+OjIcLl8o0cqdGqCIkR8wN+gTzRyAK2vV08LpR
-	 vBBG8FYXligOjGypyG9NA+I790BYAZ6jnA7uOZVV6sv1BP72pEeHBBjx9li9CbiFQ5Q==
+	t=1793496489;
+	b=NOeP/nNIQ6QA7w8ruwvQLxyMQeaSwcmkXC+FN+XPtrZwj1v22Oj7k/lNWP/ahrDUu9QM
+	 tVuy/TcUkXrWBc8lp/irRq8hpr4h7qzPYvUifSzpARIq3cSKV98VOmPddEO1kTJzPDotj
+	 3juUGB+/J9pyE+Pt0bn/2Oj3I30wFsPdYVwtC0QhMr9CzyvJu5OPbNXAeqQBV9NWcWFBR
+	 UXzLuOo4ek5eO0iACE7p8tF29yn7AacoJ9rCNi6MO1Ot6qYJwabNEHSNIxPU8ISMRR7YH
+	 6gtly3ZPmh1yKCscZKILTaaF0fLpl4ii2QDD8SHmigiwWiLrAMVcCQU8sQB68YF8soQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793494990;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793496489;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=/U+dm6O7ibLuqp1u5mfZ05KhbMMiFWjnF5fZVcet2uE=;
-	b=UDbv8jAvpF/CpcWrdVnpHEtE18wqc9+Tvt5MMb6KUhC1Kmdyzfy6aa9hbPbdpUeisxet
-	 zyFP3In0haT2v1C2Qfjrl/+0w+OyzsZnltvKZzID9S7lmnIRqbr4RjIQ4KbYiG7HoXO/Y
-	 lclNtxxrCJlK9VeXyg1dGtqnKSEHH/rRr52f0Kn9aAbp8pQEyh7fMc70QmLDp661rkkTl
-	 chj4TRwtB8O32+yyKxEAGcFIKQQWegBsK/bnedU3whPNvPlBddLG8Xq10YstpFvcv1xye
-	 Lrx6z8ZggYfEUsB7sBibAWrfMS1hwNmcKhJqdMVyRpD3vywBTuMiednqMkalYrVUqnw==
+	bh=7LrPxy9BAKXEpY6N5O++ZaxG2WFSWYtlj7o2XKSx/mA=;
+	b=vw/adyYD+mxlZobWv9npZnpn7c8VMfmUBa23A2gcvf3EaysxkCtebLRHgkhr1L3Wyp6Z
+	 MY+gEFuUmVEyz4pNUUJdg07RI5M5JwqJ5HAMPc3BNevihBSNJxQ24OoEkGE2OqH4TTHlh
+	 e2siTUSy8BKRzHFoRTXROdPdj4mbeTN44mWAu+72IKwjRwm5StwS0sbMiNDfa1O0sD/Ng
+	 eG5ZIPW6WX2y95S1ILBZnimwQtBaWDAU7sKs2dmwiupgp4NS8Lk36wRNWjmLf8yNdGdVu
+	 YRMbTapFF+qjwnC9TxP4BKUBaFEGGdPNriyIfGbsa69ry+L+k8pb4+8Nwu5oO4u7URg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e80VcSTP;
-	arc=none smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e7QGLOUt;
+	arc=none smtp.remote-ip=209.85.214.179
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F33606A31A
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Nov 2026 01:03:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16F33606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EED606A31D
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Nov 2026 01:28:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E3EED606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e80VcSTP
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2e5378b281aso10580625ad.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 18:03:09 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e7QGLOUt
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e9eb579c0eso9785245ad.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 31 Oct 2026 18:28:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793494989; x=1794099789; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=/U+dm6O7ibLuqp1u5mfZ05KhbMMiFWjnF5fZVcet2uE=;
-        b=e80VcSTPEtt+Rqb+MVQ7zyTHE1DjqfAfg4HaJ1qxZqT47NXqiL0RJkcrMzTz7Jgw2q
-         BNgkv1CdagEzyEPK9CqJ3ElM6tP4DsQGcuQN9c5U+5/rElou5PiS0yMPgA+csE0rLTrS
-         RRf7Lj6ZW3STr8rwnVdX0snKtXHEC6K260p8EhcOijSK5hOLpVkfSJjm98tpv5UtgdF6
-         u7oIy2ErClch2aW+dXVQrAan3ZSNhGsO/4iU9QU944mQr38Kgktm8k/X0n51TyeQXjWN
-         iIuJJ2uHNYdOT4SC6ODalg6slpVi5JFxDnEfmx7LtADgEaHhLxR6TWzXfJP4/RPxbg9R
-         rkow==
+        d=gmail.com; s=20260707; t=1793496488; x=1794101288; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7LrPxy9BAKXEpY6N5O++ZaxG2WFSWYtlj7o2XKSx/mA=;
+        b=e7QGLOUt1jxbs51TNaA0p1UUxmGARGoDenhBRBvjutBP0RHrN3UgwV4ztk4nScfO2I
+         CE0Khf/XsabYm+Az0Fh2deLwMw4WrujKvXwboO7GN+8g/mw3DBwk3vAe2ccjnq0v0y8K
+         m1GbyoFMkINnRyNsmQx2GyNiWksPqWZd8cZg21VJhUR9Utr5VjzGL0yU4w6zsqwVVekr
+         8JaIez//EUyXR/rRBaNHY3y98GohEKGOtA09sJN19Od5PNGhCKHglo8MNnVhwLeIJXHS
+         1ll7DAejSrLUJGKn2R8vIExPLwpt9dh6o+h4OeI4WLiPUCWOy2DmJbDq1x39rNKV0usU
+         QgEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793494989; x=1794099789;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793496488; x=1794101288;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/U+dm6O7ibLuqp1u5mfZ05KhbMMiFWjnF5fZVcet2uE=;
-        b=mwe4/r4mnavBeoBaX43DFPwBRgvQDITkRVEcAQf7ynPZJdb2ZFmuTQSGoA9cDFMbuO
-         EoVIGx3rLcdhb9GQSsdZNbeRdpGyQcTSOSq+ZANn0hgfvmtqe7OdNY2P5sHgOXoaQjQb
-         +iyUZdaruobPY/PZ0VFDPqjykBNCzCasQHgHxHzAK9vFhyiMf2gT6xHeBjHSinZNinK2
-         xg2dCpiC2j+ZNAIaWqatW4UMBaKf6GjKt9g8/kxmgFLUDH7h/xe+4sey2tdgnD9nbvSL
-         97P260pHyzeGL9JYrUg6VpDPUCZL8wkD8Ep5C+gufIqkEk6xkRdqlSM5go7J9S31IrXi
-         bl2w==
-X-Forwarded-Encrypted: i=1; AKwUvBx/BuHRzECNF5qHd8nJBJjqZ0jNCfNgy1jWdgt0souaU4zLlj+G29jIhwiObAoKXpYPWyH6uCfC5HzBmPeziyY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Nh6RCak7VftHPqbGdmmdX5dBg3d/oDasZYY0nuyDFLvR6p3l5
-	mzbWymQMhTAD/zqKwzfBmbmzbdouZBsmCv3gAImY32gvfAmbgn1S5HMr
-X-Gm-Gg: AYBFou2RfEpT2lugE4ttAdMOlH968M11YEd9uY4gh/kv6efdnnGI0I20JVciG0jdF/3
-	QTt5Or1FalJ9KIo7cdNdyud4WVEy+mOcmiLH0BIRCZzvzNtsvTQ1GCezuFcdwuImjbKAP7HWWKK
-	PnF1C2Urd8aa5X4ReXlLUmIMKk73FIDesOJvDmBG8GKY7u+gxwt6clwUMk0HVGH/tIg/M4szYUa
-	hhan9G5VZNKfiaLzFzsqPpp3kVBjP2y1W6wuEgVxl0fVXQBct16J8owMUwdCy9BRpnDygCbH7iC
-	5xChz6fe+avYfY3NBqcBG1CuQTwS/e7y6jds0+ZClkDaoiJPnWcApYwbX6UpavcTicHqHbVC3R1
-	4YpDgKsklY0GmGD5AImyjjDX6WwT70Qu0STEbwGNWs0mdBvso0ACIaru6M0aTtY0+LIqA33RCx7
-	XiM7hk4V3qRH/v4G/US+R7bpkUzScx/db/Q1zfMWvggAqs5uVGIgkQaNZJQEIsNiLCY+omR8YAK
-	IRwuzsYJoiS1yecumot7yHhMd6YNmG1dD8qIqk6g8lpHZkM3O9EBL7tk+atJWvTzGKJrkjwaYza
-	g40Nw3PnNcVHmudcL4Y5Xjr+Rl+CVnlVv3oOcM76CF8ujdtkLlZ8Ho4lyCeA4xFAUfct1dNuPQO
-	OFFLBXn0A4UE9qqgHksfgto7Zb202ofig6h4X0fBy1SrWPf085IflU70=
-X-Received: by 2002:a17:90b:17cb:b0:3ac:9ed8:f309 with SMTP id 98e67ed59e1d1-3ae89736030mr5688613a91.29.1793494989295;
-        Sat, 31 Oct 2026 18:03:09 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e98afe3sm13151497a91.12.2026.10.31.18.03.08
+        bh=7LrPxy9BAKXEpY6N5O++ZaxG2WFSWYtlj7o2XKSx/mA=;
+        b=NVfYm2opemvHp2ssFswInEuDN/bCeK37uwYTMF3YzxEw02UU/01WWiGe4M6C4P/kvr
+         RDdnLEDIwogbSgLemNZ6vYzWdKpy/VFQzvncUFbC3L+Yuahrkvc9prznzIO1w7CdDxm2
+         uO+hKx6mLCfpUucdpFwoJIUlBy8J63Wyl1l2wHNUTyyLPSDhH+P7EaBv/sCsLbCX1lEg
+         4MtA8zQUB/bOoFeP+4C6ZAn71C5970X4j7VFn2gtx7/968QSSUps4s4MuQmTdyqu/Nvn
+         77zMxb7hnCUptdHuosDadPYLAoaOGxt7q3O1qKsK1i+n0dJjkpUhpLvhkeEyNWovAgRY
+         Qc5A==
+X-Forwarded-Encrypted: i=1; AKwUvBy0uHBBvdZ+JYDc4C5Ger/NOK+mDOp+HyQ8EIFhnzCMK7CPLZjWdEd/dIZSjPZoV/NN2uvW3SRxuNXSuRXbWuQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9x7Azr3Mk7fNgmId7nDQsI5y72RxZX568ZCq1yRqfr+ASbIqTI
+	TPGECX4VBHVvkK3Uoe9dqYmFWamYCca6LiDSt0I2MrXvNuPMHNyRxWZG
+X-Gm-Gg: AYBFou2UKaaiFi6h83XvJ/bnNHO2MKxIcxa5J9zHUmE5wpnVVr4OpiGPC6hYFcmiFNO
+	+gm4jlbvbz7JeUvRkE47GgP8RiKtM07bQ3FgA61ky/gUw7aKauELGtZelapNDajgtHhJV6mUSZi
+	ekgQl111T7vd9bH6OfVJlb6DEjLNkB0yPx/Ss62O396e/xf7vXh16pw/W36WDf1s/UPL4H10SzA
+	J/9j2RDwhZmjm2MZJZJTn/zwXaWvgk6CESc1GWtFZdrAbkfI6YQJNtM82Z++dCGHfX6FTh2nuYI
+	13GOfbupklgOVuaNVp75K7jpO1JS5wAPffURBKbTiiNHEaETC0t8MmrAGr+4vZkqTN/A/YUkdLS
+	bws+eNegDlBzTRzeZrN3qBAMAEe33aiC5+izPIRlBgXkmHebhA7BDt9VaHTUaEgW9jkSP5bBzsI
+	r4jZWf7H0Y3wL6atJC2qBUQX8OAVXbPvJXu3DCrxWYtFnW3cQGfPESq8++RMfAQsKW4Rr7ssdQl
+	ZozB7y8ZZtA846hblqljRsqTy+PiQCUnG3+1a5C0A3wEEWsTvfoOHx7gmpWIkHWksy+60XMN2ZO
+	HoCiRkg7Lko4r6FLSznin7xickudE9NMONcTz9qHjHOrPAtHuEd5XuBoNiuQCR644mv0gsq+Z8m
+	605oeMUTj5DZw+0Fen9rMB0O4Nq0oZSWYjg==
+X-Received: by 2002:a17:902:d585:b0:2e8:422e:19c5 with SMTP id d9443c01a7336-2eb3647c0b4mr52613375ad.55.1793496488003;
+        Sat, 31 Oct 2026 18:28:08 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39298329sm16832345ad.61.2026.10.31.18.28.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Oct 2026 18:03:08 -0700 (PDT)
+        Sat, 31 Oct 2026 18:28:07 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 01 Nov 2026 01:03:08 +0000
-Message-Id: <DMJGWV96Y5SV.33OTYFHFZQ1WT@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, <david.dai@linux.dev>, "Gavin
- Guo" <gavinguo@igalia.com>, <bpf@vger.kernel.org>,
- <sched-ext@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kernel-dev@igalia.com>
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: libarena: Cache the
- rbtree's leftmost node and count
+Date: Sun, 01 Nov 2026 01:28:06 +0000
+Message-Id: <DMJHFZPKETD8.PUM30IJH9D66@gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf, sockmap: Restrict iter-context
+ sockmap updates to iter/sockmap
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Changwoo Min" <changwoo@igalia.com>, "Daniel Borkmann"
+To: "Michal Luczaj" <mhal@rbox.co>, "Daniel Borkmann"
  <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
  Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
-In-Reply-To: <20261028060046.549097-3-changwoo@igalia.com>
-References: <20261028060046.549097-1-changwoo@igalia.com> <20261028060046.549097-3-changwoo@igalia.com>
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Lorenz Bauer" <lmb@cloudflare.com>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>, "Jakub
+ Sitnicki" <jakub@cloudflare.com>
+In-Reply-To: <0bcebb4f-4b36-4f8e-a3cd-1eb0455081a8@rbox.co>
+References: <20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co> <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co> <DM6O08VBRY20.1PFUYACCZ38JL@gmail.com> <a9ba4549-4bae-4516-85ef-ee38f13551cd@rbox.co> <DM92JCFA4X4U.30MTDH0KCPTJ@gmail.com> <0bcebb4f-4b36-4f8e-a3cd-1eb0455081a8@rbox.co>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,62 +110,27 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Tue, Oct 27, 2026 at 11:00 PM Changwoo Min <changwoo@igalia.com> wrote:
->  struct rbtree {
-> +	/* Writer fields, on a cache line of their own. */
->  	struct rbnode __arena *root;
->  	enum rbtree_alloc alloc;
->  	enum rbtree_insert_mode insert;
-> +
-> +	/*
-> +	 * The leftmost node and the node count on their own cache line.
-> +	 * The writer keeps them current, and readers may read them without
-> +	 * the writer's lock (see rb_first() and friends).
-> +	 */
-> +	struct {
-> +		struct rbnode __arena *first;
-> +		uint64_t nr;
-> +	} __attribute__((aligned(RB_CACHELINE_SIZE)));
->  };
+On Wed, Oct 21, 2026 at 04:12 AM Michal Luczaj <mhal@rbox.co> wrote:
 
-That's 16 -> 128 bytes.
-Without perf numbers it's a premature optimization.
+sorry for delay.
 
-> +	ret = rbnode_remove(rbtree, node);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (was_first)
-> +		rb_set_first(rbtree, next);
+> But, if I understand correctly, the removal of plain PTR_TO_BTF_ID will
+> make pointers like `peer` inaccessible to helpers. And we just accept progs
+> have to deal with potentially stale data, e.g. the value of sk_shutdown.
 
-In an RB_ALLOC tree rbnode_remove() frees the node and then rebalances
-the tree. first points to the freed node all that time:
+Right. Then the lock can go.
 
-  CPU 0, holds the lock            CPU 1, no lock
-  rb_pop()
-    rb_node_remove()
-      rbnode_remove()
-        rb_node_free(node)
-                                   rb_first_key()
-                                     first = rbtree->first
-                                     first->key    <- use after free
-        rebalance
-      rb_set_first(next)
+> Ah, sure. So the same bit for unix_reg_info left for later?
 
-buddy_free() poisons the node. A prog built with ASAN gets a report from
-rb_first_key().
+Yes. iter/unix cannot update sockmap after this patch.
 
-rb_erase_cached() moves rb_leftmost before rb_erase().
-Should it be the same here?
-Move rb_next() from patch 3 in front of this patch. Then at the top of
-rb_node_remove():
+> I've noticed commit 7cc639dc45c5 ("bpf: Don't take an extension for an
+> iterator program") got merged. Should I post v2 with the env->prog->type
+> check dropped or you guys don't want to restrict iters anymore?
 
-  if (rbtree->first == node)
-          rb_set_first(rbtree, rb_next(node));
-  WRITE_ONCE(rbtree->nr, rbtree->nr - 1);
+The former. We still want it.
+bpf-next doesn't close during merge window. Only people that
+can process patches get busier.
+Pls send the PTR_TRUSTED part in v2.
 
-and no need for the wrapper, was_first and the rename to rbnode_remove().
-
-Patch 1 looks good.
-
-pw-bot: cr
+I'd also limit tracing_iter_filter() to iter/tcp and iter/udp.
