@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793633823;
-	b=oZx/AiMD4xbzqwif6L6IvWl3DZPLGp0OSTJSKuKTZ13BUjBL/AbECCVQzIFf+0CVV0qJ
-	 P76PctWvbNrxJ9fBY+0234hS+LcU7y4oEJ/vGiyMPV0yBFBoh9ljpHj7kF9+ejj+x04Ck
-	 IZYOZLiPLeELMWfhq2w7XFc9533hpNp1dLzCdVb8KsX7SMAHwm3b2uqDFm//kVwZG1zKt
-	 WafOsAwL6jy0n1ek1C2CQ2510lY3t+meBbBnZ87VtUVOSddLoysxe0i6YAmGHuR7PH4Lp
-	 jPB86wUeAA/wLC/xdxuQDPiBYH3+RSJHeE24IW9GIn1+3zo36JpGWliW+NrLcPnjGYA==
+	t=1793633824;
+	b=46KRPpwELhOlhaO7cVUny53s+0z81/XS61Q3b0WWn1B32MqMVeSS6Jp/uqhvuNzaFsrG
+	 /PqrfHrG5iqJPLhRl7RIuElFbGCSsFXGqX2LXODDgLz3YQFYNhy5mRwoN3MRVbImCwKuX
+	 VMhgNyauLVK6jywRRbupypqv4/ImhgQL2BpFJpeS8kOAmfXd/3hnnulzyhl1EchzPbbQr
+	 zINsQruvGIPhpppNXpt6/SCGutcnLz2+CpymkXqX4jHxVOMxq4aWYJreQcfl8s5PXCgHM
+	 LswAhVUOFD0J6nPUSlTj/G9usNaD7GEaV1wWs9pAlRsJTSKGK9fl/kHCD/xmlMxeCGw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793633823;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793633824;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=Vop91WdATuHzNe6oB2d844wTZCMgIxCkWovun1wskQ4=;
-	b=4ImnrreLL/g+FifqVzZ5ECAPD1Q7kCOcAVTtSyZ6y5O8ONwyb6QeF3X7pKnqxWgKd92q
-	 GbI0jf/79RnbRs1kbSHT6LaE3agHGRBwwbRIr+hdA7MpC1d2A50QEYYD1PIgHh7w6U7J8
-	 4rf1eXsOCqRYXEs1YwdXN27T9scVe4Up1KAcozD74tBPo4qB/dN93O8rJZipBuOhn/bYs
-	 yHQu3wn6KVKRBuTFmLqAdAqMUUTVD5QxoYiualKqCUH204gR1zC0U2EitH0IOSZkZvH+3
-	 jUL+DtkvosaLyJHMwI2dqMu8HBs61Eph40CAgUETR8AOB0gbJyxVdnD3pdGEIHXNrxg==
+	bh=zTFnRhvBDyUF5JRAjEQ7l0v+FU3UL1Jli3F24C62wAY=;
+	b=x3g+ocVi0xOZmrgVTdaR7phvlHx3N0bL8NgM14mV4nO4H/3SIK4kt5OHtBC4kTDuIp2n
+	 6iOCU6PQcYVdKSi0vX4ZESCeFvuHHjKbyIMSJhd6mYeXXJSUuII/wDS16AnjOS9K7eElX
+	 F0oh++nCDy+KJL9/D5BfmitGvC0FTiH7nt2kbgN9kCMQAyDwtARqS05hvcHr0E3tZInUK
+	 pRIS6+2EOk/WcLKE1NRLPGAOWAeVAm6VQJHHHjHJGNdyQaGFw2e7765Ii9igwOYtjSuyU
+	 azg7DHrf9Dv0MpT5znA0+43aSPCcMzxYNDyb0QeYxaVIYJfvnGBfyUqZWMF2Vw0+adQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kJYtKJTA;
-	arc=none smtp.remote-ip=209.85.216.72
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=nXLsDoSj;
+	arc=none smtp.remote-ip=209.85.214.200
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D955960A6D39
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 15:37:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D955960A6D39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0314B60E34D8
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 15:37:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0314B60E34D8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kJYtKJTA
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3ae73921fd1so2664456a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 07:37:02 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=nXLsDoSj
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2e95f8543c9so31496175ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 07:37:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793633822; x=1794238622; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1793633823; x=1794238623; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Vop91WdATuHzNe6oB2d844wTZCMgIxCkWovun1wskQ4=;
-        b=kJYtKJTAckpRc7FocLjk8QHxqgeRut7GlcgHqn3lvkwOku+d00iTncufBRhDqK7cUu
-         Mcq4Xt3g9NbGfGfJje8UKhnS90LMyxht5vVRPzqF3rEocIRWDMOv4C84ZM73yTUK4use
-         RRMkPWvjSma0znzU9pQHgP7SMFfa5iW3XBrdghIq6L+QWZiZTQv7F1bv8oHjnv23xfh0
-         nsJZGeYvE0wDVyc8hu/F/kZ/PxF0IWtNW2UXzntNLX5ObHwlISWiEtG85qPzxqinfjAh
-         XuS3VIt7XQVphq8yJGdlJEJhNohm/dGYOp7kt1Wd3wVvYMtPsn8j68/VqF+9YxZyxUNU
-         3J1g==
+        bh=zTFnRhvBDyUF5JRAjEQ7l0v+FU3UL1Jli3F24C62wAY=;
+        b=nXLsDoSjK7QlSr/DnZV29AOmi6/B614U+TOun2xkrK/KJypU7Mja/+yJSOyjJxJ1JF
+         t92COURKlIfRrn1/scsE+b40xxlxhspMd2I9Q9Wqc1Rop+oBtvAxFRnfy7/O20ogpcFq
+         Jol0jpmDSxb5uczvuaj2CUxAcq1MN1DpIGD5a6S/pHwoQuHxTPhPGC5pwjFRsZ1l6ack
+         Yxc1p9QadsYcSW5Hy6Sl94tjJyH0r7PHzSrnzqQC6OPCxkrExXnGnS1VNa3II3GVUxcU
+         umtILXOrPPXnRct93QK3FksTnkTXilahIdHh+nMJDQKpBK38etXfk9kUXiV6iKhvbFzn
+         nRag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793633822; x=1794238622;
+        d=1e100.net; s=20260707; t=1793633823; x=1794238623;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Vop91WdATuHzNe6oB2d844wTZCMgIxCkWovun1wskQ4=;
-        b=2ivUaK6yo5xATYNPs19cSxjK6aZZ/l5a/IDWaQcYBEgV9j/wpsrqViLoLhp/nDE984
-         fph2pIS+2dOdlr2hCf0tm4kQLU+2lYp9bkwrLs+efGzkyqKtwt8FPrYMjuaWudkGvCtZ
-         tpZPV349b4v5g2ojFdl6qLJcD9O3QqwFfEn0Mu9qyZeG3AVarwtryzJveVZQmbm7u3dy
-         0MdOF9i6KRd/W89EAJSONyoh3xYb1MBDkcF845iq7LUkjet715kPq6cuautiGVXqMXR5
-         8+LZQMwmgsWoBDs/S9irUwvaLbEmw7ikGUn6In6BMDLGKWPTm/mVbxMRCFBDZLrZ2OJI
-         Z+ag==
-X-Forwarded-Encrypted: i=1; AKwUvBxQuOIugyU6sGWNZte4ZZdsPSTYoitwwGDb4D9Gc12KVgfb/4ndSyBnmQ55+RnSx2ZWDoB1RAuAdHZ0iZ6YeBs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8VxGa5Hp1vpdBftaoFh7Bx2ZdRvcYaQ0xuc4rxDyvEeHC8MpZt
-	mK4VVxAHgc1L3rKrgH/mvEeIIN81IXQY+2hEt3plndk6NlDSNOZF2AFdEsUYG/+Q3pnEVI/+PRs
-	wnGTgkfXOMw==
-X-Received: from pgr20.prod.google.com ([2002:a63:1154:0:b0:cd8:c6e9:7c0a])
- (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4a4d:b0:3ac:9e5e:d19c
- with SMTP id 98e67ed59e1d1-3ae897ccc1emr8773759a91.17.1793633822052; Mon, 02
- Nov 2026 07:37:02 -0800 (PST)
-Date: Mon,  2 Nov 2026 07:36:31 -0800
+        bh=zTFnRhvBDyUF5JRAjEQ7l0v+FU3UL1Jli3F24C62wAY=;
+        b=eFAgCD6H/nGGzcMeO0VuWLL8Sr339xLsM1qqf4EP5mZXkgpiwJfT2CpNk26m+4jqjW
+         XX/ECjY4xh76/UDBBDtQg9iUAIXuELZNtbE25B/+5S2yn6/KvxH9rm41qYpwszcsIr4m
+         1yn+W9oQ7YeRonQASa8JqRHfUfF422EPXPNaAiZqbj4YISsgmHSd2iTGhYHGFiubKtwO
+         EstcbHG7J9Fx5OG/uCXoquiO8uNFqSYUI5ItrBUn/ArGPQE8m/ZHY2+e6BpDqSa8v9CU
+         nS+j0zXZLTj5TEGbh5hVt5xoosSbpZmc7lBGJ1Wxc1rdi5GLyReMQ7jbqN6RLNv3EAuL
+         XLKw==
+X-Forwarded-Encrypted: i=1; AKwUvByfFPDboMyBVG9RqbPWHIA0bUdqxDr18TawlyEugneOW/gNuuw2RBbYyXjpaWNb4h1i5oHoi1vFZbvjtd9AEA4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9TJlhgNJ+j2hWIwAllFstQjaJUplaMWoRFeJSdaKp3YCnWl23R
+	lvPVi/IGwkYL8DEfr8us5Up/A5IGL9M5cvaCRQXEC2hNDDsoywefYMw8G7Se8AT+VsLRMhZ7pYQ
+	H+tj938LFbg==
+X-Received: from plar18.prod.google.com ([2002:a17:902:c7d2:b0:2e4:8c0e:97db])
+ (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ce0e:b0:2e2:fc90:11a4
+ with SMTP id d9443c01a7336-2eb364faec7mr97592545ad.48.1793633823158; Mon, 02
+ Nov 2026 07:37:03 -0800 (PST)
+Date: Mon,  2 Nov 2026 07:36:32 -0800
 In-Reply-To: <20261102153656.1431701-1-vipinsh@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261102153656.1431701-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261102153656.1431701-3-vipinsh@google.com>
-Subject: [PATCH v6 02/27] vfio: Export various helpers from VFIO
+Message-ID: <20261102153656.1431701-4-vipinsh@google.com>
+Subject: [PATCH v6 03/27] liveupdate: Export symbols needed by modules
 From: Vipin Sharma <vipinsh@google.com>
 To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
@@ -102,83 +102,38 @@ Cc: ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com,
 	yanjun.zhu@linux.dev, yi.l.liu@intel.com
 Content-Type: text/plain; charset="UTF-8"
 
-The upcoming VFIO live update feature needs to access various helper
-functions for its logic which are not exported by default.
+Export liveupdate_register_file_handler() and
+liveupdate_unregister_file_handler(). All of these will be used by
+vfio-pci in a subsequent commit, which can be built as a module.
 
-Export vfio_device_from_file() for other modules to use it, and make
-vfio_pci_ops non-static so it can be accessed within the vfio-pci
-module. Remove static from their declarations and add them in
-include/linux/vfio.h and drivers/vfio/pci/vfio_pci_priv.h header files.
-
-No functional change intended.
-
+Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
+Signed-off-by: David Matlack <dmatlack@google.com>
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- drivers/vfio/pci/vfio_pci.c      | 2 +-
- drivers/vfio/pci/vfio_pci_priv.h | 2 ++
- drivers/vfio/vfio_main.c         | 3 ++-
- include/linux/vfio.h             | 1 +
- 4 files changed, 6 insertions(+), 2 deletions(-)
+ kernel/liveupdate/luo_file.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
-index 830369ff878d..2ec600768007 100644
---- a/drivers/vfio/pci/vfio_pci.c
-+++ b/drivers/vfio/pci/vfio_pci.c
-@@ -146,7 +146,7 @@ static int vfio_pci_init_dev(struct vfio_device *core_vdev)
- 	return vfio_pci_core_init_dev(core_vdev);
+diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+index dbae0715220b..6aaa9a531428 100644
+--- a/kernel/liveupdate/luo_file.c
++++ b/kernel/liveupdate/luo_file.c
+@@ -916,6 +916,7 @@ int liveupdate_register_file_handler(struct liveupdate_file_handler *fh)
+ 	up_write(&luo_register_rwlock);
+ 	return err;
  }
- 
--static const struct vfio_device_ops vfio_pci_ops = {
-+const struct vfio_device_ops vfio_pci_ops = {
- 	.name		= "vfio-pci",
- 	.init		= vfio_pci_init_dev,
- 	.release	= vfio_pci_core_release_dev,
-diff --git a/drivers/vfio/pci/vfio_pci_priv.h b/drivers/vfio/pci/vfio_pci_priv.h
-index 4e7162234a2e..1634135de3f8 100644
---- a/drivers/vfio/pci/vfio_pci_priv.h
-+++ b/drivers/vfio/pci/vfio_pci_priv.h
-@@ -11,6 +11,8 @@
- /* Cap maximum number of ioeventfds per device (arbitrary) */
- #define VFIO_PCI_IOEVENTFD_MAX		1000
- 
-+extern const struct vfio_device_ops vfio_pci_ops;
-+
- struct vfio_pci_ioeventfd {
- 	struct list_head	next;
- 	struct vfio_pci_core_device	*vdev;
-diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-index 423ead48aafe..73a5c4f3751c 100644
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@ -1497,7 +1497,7 @@ const struct file_operations vfio_device_fops = {
- #endif
- };
- 
--static struct vfio_device *vfio_device_from_file(struct file *file)
-+struct vfio_device *vfio_device_from_file(struct file *file)
- {
- 	struct vfio_device_file *df = file->private_data;
- 
-@@ -1505,6 +1505,7 @@ static struct vfio_device *vfio_device_from_file(struct file *file)
- 		return NULL;
- 	return df->device;
- }
-+EXPORT_SYMBOL_GPL(vfio_device_from_file);
++EXPORT_SYMBOL_GPL(liveupdate_register_file_handler);
  
  /**
-  * vfio_file_is_valid - True if the file is valid vfio file
-diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-index 45f08986359e..de3fa6e6bf2a 100644
---- a/include/linux/vfio.h
-+++ b/include/linux/vfio.h
-@@ -379,6 +379,7 @@ static inline bool vfio_file_has_dev(struct file *file, struct vfio_device *devi
- bool vfio_file_is_valid(struct file *file);
- bool vfio_file_enforced_coherent(struct file *file);
- void vfio_file_set_kvm(struct file *file, struct kvm *kvm);
-+struct vfio_device *vfio_device_from_file(struct file *file);
+  * liveupdate_unregister_file_handler - Unregister a liveupdate file handler
+@@ -933,6 +934,7 @@ void liveupdate_unregister_file_handler(struct liveupdate_file_handler *fh)
+ 	luo_flb_unregister_all(fh);
+ 	list_del(&ACCESS_PRIVATE(fh, list));
+ }
++EXPORT_SYMBOL_GPL(liveupdate_unregister_file_handler);
  
- #define VFIO_PIN_PAGES_MAX_ENTRIES	(PAGE_SIZE/sizeof(unsigned long))
- 
+ /**
+  * liveupdate_get_token_outgoing - Get the token for a preserved file.
 -- 
 2.56.0.317.g454f8302e1-goog
 
