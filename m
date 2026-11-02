@@ -1,62 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=85.214.250.239
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793618866;
-	b=yEe4wC9p4ma/snLNFqcdK6Ed9TIMLS1hNKUtIWv64Gl341kAxuFwTGaKIyijIsuudJ2I
-	 oJ0UnT0UxVLi8GXY18yaGwIgvzJsVJ90dqNgJ3XeMC09P8TALWA9aeSEQUmIoinqJOFiS
-	 Sxt2qdhd8/N84E+bCqJ/6o1YFHmBJd5V86mUT6XVZgmX8tQe76eWVhzWEPttmh9QmWbAP
-	 15NQcgQJn4+lvfp9T69dxRf0nrnuKSiW7rMwFF2V5HB/eqiGRV/6hdbqpG2xVR8Puzcju
-	 yw3xh/K+q8NN3nN0nAoXj9E5DAnWBVjxjf/8FssE2qsSP4bARpY2mzNQUDAk6rKBBHw==
+	t=1793619731;
+	b=Ql2pO450s2kxZBqdRabREvfVfOJCkG5o5lhDskaxbaHraxu0gCoYMaRpRy5Fegju2vSV
+	 1i4trVcoOWCKk6ovMdWFGBVEskLCrWu4DuKKSMaPhlgKsEOQHpl1b6lpshYXTrzR0ebJH
+	 zDeW5D1QXKXh1APDIvDwUj1eN8Rq61NMEM4MFVosDO6Vkd6bRiUsHVINHPd1pMGHV595z
+	 rwAIgKMOgOxFzYMt1zN10RaKLTPD6sEdsa1zCz2RolnzMO3WeMfCecLj1wZipCf1SuXxz
+	 /vOTp4Nt24QC8bYmOCpKGCIn9O70vHvTbwQxGRCu48gH595UEoPzdrG65/rJdU6TgQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793618866;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:From:Subject:To:Cc:References:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=TEl1DgfXUA5pWV0ULqPFDtP6OTn2CRZgvQuqRoLVd2k=;
-	b=vbME1SJBQaK+iwRWiw/uKNi+6hiJ1OwGddbf/odL7moRVQbsxGx6vgGNaD/mbZ55jXQr
-	 E2Y57LShEWdYUZ9GRUsqTIqLW0nqeFDdJW2zo0mApEOQD/Xnh4ZR0Lpf/2tF+Ae9lvNn3
-	 O6hIS1rcWPoncUftc+IxaArHoeL/AOyEFdwNys7JZgzWQ8SaQAqCY5cI87yemTFuo1rJ1
-	 qIOIvuGTKkKHDbw/sBjjY5CaiaFISlnkvenhfc+iNuKffx+BdIbz356f9XGdulsMUQQfR
-	 VYAM0szThOhE4OMUlxkl/4K14seM8uVYwMPNHB2olUoKq+L/omtQ5Jin3vxH0201EpQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793619731;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=cEKO6AbTEkaEMYPPPS77a1ICtNzJ6R+npNeQZ3VAiX8=;
+	b=mYq/SZgD9F4j378dyDutzUcwaPm46+fe2/M16pb97ij8XzwL1KintC7J1YiG+ncHwqEl
+	 TPSMZFWCiY5WVZTQOdvtGvvrIkGvwNgDDb5ATq8H5pPAhtd7B+F9Os+mrH6K/MPpX6h7k
+	 KlDUIbyvAan0TbPzdN9+ZHYfZg04lK1S7ntRQAkgIB+ISsbjLM1DQV0Wn0opFw9EI+tNv
+	 nuCTGpTftWpQNijehmKV/icDNXnTKjBIGPqkNr3zzVjpusIvfcDKBA8RO8ENkwjIosmX4
+	 v03gYE00aEejM/1b4A2dljdyB9MMFC2jBo9ZJMKkQosRxohYVD2cRxQMwK0GEqj1tzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=rbox.co;
-	spf=pass smtp.mailfrom=rbox.co;
-	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=UdlUnKwa;
-	arc=none smtp.remote-ip=185.226.149.38
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	dmarc=none header.from=8bytes.org;
+	spf=pass smtp.mailfrom=8bytes.org;
+	arc=none smtp.remote-ip=85.214.250.239
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F5A606A335;
+	Mon,  2 Nov 2026 11:42:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8F5A606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
+Received: from io.fritz.box (p200300f6af404a0027ad06761c59e6b3.dip0.t-ipconnect.de [IPv6:2003:f6:af40:4a00:27ad:676:1c59:e6b3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C27D606A32C;
-	Mon,  2 Nov 2026 11:27:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C27D606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=UdlUnKwa
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1xNqCJ-00BSF2-62; Mon, 02 Nov 2026 12:27:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=TEl1DgfXUA5pWV0ULqPFDtP6OTn2CRZgvQuqRoLVd2k=; b=UdlUnKwa2wwdsv4p1NZcbSZeV7
-	t4UOZnJaFeNb1oOLIegteX+/dZrJeyljqcQ8j+DemSAkcNZ9NA6RWxLB1qHZwZpB51BTC6BQllue7
-	kUMdtmojCpnGTa7941e3k/nOmpzV90w9kZJo+S6M0WLvFJcPy3x0eW7Okn9UrI0Mho7XOqc1/gDPz
-	J7OgLEcen16fXD3G+0uHsUVhj/SkBoJl+XumCZkg+45U3u6GRIH5EaDajhTqxh8WHW1GAr4INWy4d
-	nUkOjpuLeOMmHg40TB5oRoTVszVeAuf/LQnMd7teaFJCfeGJI7wxfjhsnD0t6bOizG7rupdqMfw7W
-	shLj9clg==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1xNqC6-0001gG-1k; Mon, 02 Nov 2026 12:27:18 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1xNqC0-00BRqT-Uz;
-	Mon, 02 Nov 2026 12:27:13 +0100
-Message-ID: <44aa83c2-042b-4d4f-9f9c-f9be8b0fccc1@rbox.co>
-Date: Mon, 2 Nov 2026 12:27:10 +0100
+	by mail.8bytes.org (Postfix) with ESMTPSA id D649A243AC4;
+	Mon,  2 Nov 2026 12:42:03 +0100 (CET)
+From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>
+Cc: Michael Roth <michael.roth@amd.com>,
+	Liam Merwick <liam.merwick@oracle.com>,
+	Vishal Annapurve <vannapurve@google.com>,
+	Ninad Naik <ninadnaik07@gmail.com>,
+	Joerg Roedel <joerg.roedel@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	coconut-svsm@lists.linux.dev,
+	joro@8bytes.org
+Subject: [PATCH v3 0/8] KVM: SVM: Support direct setting of VMSA for SEV-SNP guests
+Date: Mon,  2 Nov 2026 12:41:29 +0100
+Message-ID: <20261102114137.1198982-1-joro@8bytes.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,53 +61,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH net-next v4 4/7] vsock: add a netlink command to assign
- the g2h device to a netns
-To: Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin"
- <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
- <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Donald Hunter
- <donald.hunter@gmail.com>, Eric Dumazet <edumazet@kernel.org>,
- virtualization@lists.linux.dev, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, sargun@sargun.me,
- jlinbox@meta.com
-References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
- <20261020-vsock-guest-ns-v4-4-047527cfccfc@meta.com>
- <atjZZP2ebhXKzMxL@sgarzare-redhat>
- <atld3+5LKmGxJ8+s@devvm29614.prn0.facebook.com>
- <atnjOZjKUBagRVWq@sgarzare-redhat>
- <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
- <auT+YIawHSMPHbJI@devvm29614.prn0.facebook.com>
- <5a411a67-f550-459d-be9b-5e8e51d3018c@rbox.co>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <5a411a67-f550-459d-be9b-5e8e51d3018c@rbox.co>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/2/26 02:21, Michal Luczaj wrote:
-> On 10/30/26 21:30, Bobby Eshleman wrote:
->>> virtio_vsock_reset_sock() and vhost_vsock_reset_orphans() are my pet
->>> peeves: state switcheroo without taking lock_sock(). Which, again, races
->>> vsock_connect().
->>
->> True, I don't love that either, but I feel the impact is at least
->> constrained by the fact that it only happens when the module or device
->> is already going away.
-> 
-> Doesn't it happen on suspend as well? Is so, with a poorly timed connect()
-> things can go south on resume.
+From: Joerg Roedel <joerg.roedel@amd.com>
 
-What I wrote doesn't really make sense, does it? vsock_connect() cannot
-freeze midway, so SS_UNCONNECTED (due to virtio_vsock_reset_sock() flipping
-state to TCP_CLOSE) can't be set. Sorry.
+Hi,
 
-But it is still the case for bind/unbind, right?
+here is the updated version of KVM-AMD changes to allow user-space to
+directly set the boot VMSA (direct-vmsa) for an SEV-SNP virtual
+machine.
+
+The direct-vmsa support is required for stable launch measurements
+when loading the initial SEV-SNP guest image from an IGVM file.
+Without this support KVM measures a VMSA at a fixed GPA for every
+VCPU, which makes the launch measurement dependent on the number of
+VCPUs. Besides that the current KVM VMSA-allocation behavior poses
+challenges for live migration of SEV-SNP VMs. The current behavior is
+fully preserved when direct-vmsa is not used.
+
+For a longer justification have a look at this email from the v1
+thread:
+	
+	https://lore.kernel.org/kvm/aiqwjn2DVOumfr3T@8bytes.org/
+
+The user-space API remains unchanged since v2 of the series and
+consists of three parts:
+
+	- A new KVM_CAP_SNP_DIRECT_VMSA VM-level capability which can
+	  be queried and enabled from user-space. When user-space
+	  enabled the capability, KVM will no longer allocate VMSA
+	  pages when creating VCPUs. This means that the capability
+	  can only be enabled before any VCPUs are created.
+
+	- Allow VMSA pages in SNP launch updates. This was already
+	  present in the previous version, but has different semantics
+	  now. In this version all it does is adding the VMSA pages to
+	  the initial image and the launch measurement. 
+	
+	- A new per-VCPU MEM_ENC operation to get and set the VMSA and
+	  GHCB addresses of a VCPU. User-space will use this operation
+	  to set the GPA of the launch VMSA of the VCPUs, but can
+	  also query and set the addresses during runtime. 
+
+	  This operation is designed to support the requirements of
+	  future live-migration support, which needs to be able to set
+	  and get VMSA as well as GHCB addresses. Since this
+	  functionality is a superset of the operation needed for
+	  direct-vmsa support, it goes the extra mile and allows
+	  import and export of all SEV-SNP specific VCPU state.
+
+The changes are rebased to v7.4-rc1 and tested with lockdep enabled.
+
+Please review.
+
+-Joerg
+
+Joerg Roedel (8):
+  KVM: SEV: Document SNP direct VMSA userspace ABI
+  KVM: SVM: Implement GET_AP_APIC_IDS NAE event
+  KVM: SVM: Hold SRCU while reloading guest-owned VMSAs
+  KVM: SEV: Add direct VMSA capability
+  KVM: SEV: Allow VMSA pages in SNP launch updates
+  KVM: SEV: Add SNP vCPU state get and set commands
+  KVM: selftests: Test the SNP APIC-ID-list GHCB request
+  KVM: selftests: Test SNP vCPU state and direct VMSA launch
+
+ .../virt/kvm/x86/amd-memory-encryption.rst    |  66 ++-
+ arch/x86/include/asm/kvm-x86-ops.h            |   1 +
+ arch/x86/include/asm/kvm_host.h               |   1 +
+ arch/x86/include/asm/sev-common.h             |   1 +
+ arch/x86/include/uapi/asm/kvm.h               |  13 +
+ arch/x86/include/uapi/asm/svm.h               |   1 +
+ arch/x86/kvm/svm/sev.c                        | 290 +++++++++++-
+ arch/x86/kvm/svm/svm.c                        |  23 +
+ arch/x86/kvm/svm/svm.h                        |   2 +
+ arch/x86/kvm/x86.c                            |   6 +
+ include/uapi/linux/kvm.h                      |   2 +
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ tools/testing/selftests/kvm/include/x86/sev.h |  49 ++
+ .../selftests/kvm/x86/sev_snp_apic_id_test.c  | 180 ++++++++
+ .../kvm/x86/sev_snp_direct_vmsa_test.c        | 421 ++++++++++++++++++
+ 15 files changed, 1042 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/sev_snp_apic_id_test.c
+ create mode 100644 tools/testing/selftests/kvm/x86/sev_snp_direct_vmsa_test.c
+
+-- 
+2.53.0
+
