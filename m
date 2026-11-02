@@ -1,99 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793648646;
-	b=YrraTWZG5ua25kd5p6ZwACxUB7whPXLky1ccIe5OafCZe+mkFwWzCMS2+8n8TXs4FVPr
-	 bx+RdEWdqVVcOkZ4hOjme1BUMz6SU9i5ZiQX5xEB28u/VQQ6LsqSdTiAxT1RaBVKMmLwy
-	 UdDSaDaxCXTASp2rUuPxSzjTIAd7Kb8ZLwbi9Z/NzAU4MsVikzynQp6FqExJ0LS6rXewl
-	 YARQR8obZYkKgzgCP2/WOZzojbrej2Frz1Gz0HDxfUrKvJ27gfSY7Rs0xewc4hOt7xEWq
-	 yvvR7mHJi4GiTw6DxtaARpvqzVPzC9NRzYFfIscfMK8bq8sDaUoDQYKiNHKOSHhl1wQ==
+	t=1793649990;
+	b=TzXKhvXkSsfEY3soQtBBOZleRClu0F4mOoLelf8w21h5ciOFWfNyAPKj/zXd0/06H0OY
+	 08Ns7Lo4ZPQ4m0ylQHvOnwCRYDKuQiXBCZb+0+uh0qkxj/M/h6M/nl3GJPYqcEgGV9tPT
+	 5o8LYkGThFRTqn+Gom4mhodZOWw+sSECDQ5S8A9JT9TaBuVa1tQtZhRmWsytR1sZ8rMZe
+	 gQfrHVNHKCtFfPcRakTtm9Hizz2lanBoRYz6iDVNTtXRb2/Ion/3le/Rys5ndYtyPXh24
+	 ZvarD8QSm8d+2/E/BrrOhN78omJftKTQKaSzElfod1IK8OLCCjKGmhYfuQUH4APKn6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793648646;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version;
-	bh=Xs/bknxSjUD992DcwA52sYwD2HmK67B3GQnMd3KGXmA=;
-	b=306C/nc87W1Gv9iMjt66t+nM6PjnZw4eRcRwW+jiz5tVQ/Sis2xEmuOn9tnTcTMYnv6k
-	 rKlNH0PHvQxMafJH/030/TBdcN1HoIqeUKyp6d/g/e5SSYGd8hqstSTCEUA4aWtzqF8ND
-	 vT1138QX2hqS7TEzBxnSGs32HvbgvxlkBBs2vhaV9fvYPMHcdFWhaxfJxe2ebMU4xH4JI
-	 1WH5GWyGY8Pxsm0WG4GnNyIcC27s7OzGEE2AQW+y3Q2BTsnRNVCW2Pexft9MXg42ZfV9y
-	 BIXyRy06xaCxVKFH/g+CpHgmuTnoLkA6PBSAaTnC0rTBT3q2Ttab0riyyqp+upoG3eA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793649990;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=zNXiOAtCffaAA2fqTojb2+8iN0aPYzLlWRJ/9iKFuRk=;
+	b=vg9UU2ZrX5uNj1C73uo+BxK6SfqoRRRDzqwrNjQdOdEBZqS/3+V+uC3VZJDMy2vsUqMd
+	 2iimPpmNYQL4IxYl/jZIDjWk3T6RUvogZmyfWgtS9YJLRskCM+BbdYpKSMDGpaer3C0rT
+	 ovISNOETY5fdbmqzrGnXt/9PwVT2VjYE5Di0BKlczN1B3/Mynv38jshj9INEu/4OoyRk2
+	 OES23bg+5c/svLBx0cbvJHwAbFoJ7Jm+F52xBZuWHWTXBTycwfYSLpwuhab710AeGTSKd
+	 OLnCDW46xiPOvNFq8PBanrzj3eHTTKRn4b8f3smnLjQ5J/Ktahsn5Jy1LcVAMZZDJZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Xz6MZ6Q5;
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=h2tEebi8;
+	arc=none smtp.remote-ip=209.85.210.199
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8917A606A329;
-	Mon,  2 Nov 2026 19:44:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8917A606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C65E606D80A
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 20:06:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C65E606D80A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Xz6MZ6Q5
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A2IhL6b3944200;
-	Mon, 2 Nov 2026 11:43:38 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=Xs/bknxSjUD
-	992DcwA52sYwD2HmK67B3GQnMd3KGXmA=; b=Xz6MZ6Q55LH2h5+cH8Uv9SYwyhG
-	fqA0wCgtCeQ2MLDJE5lEOYNeF2tBmMxf/Ozjov+u3E3gde/WflZJDwBao7xj7sS8
-	x+YiE+yvgTc53YY5b89vpl2L1l5FAQsyGao1lBjvZhO8LmPpCMJBYfR3WLhJRaz2
-	Ju7xsfJ+U1/q/2/dM4jxfqRL6Ri1wUnlzo7YVwGCzoLAfU43sEFrXSNt0sPjpgP5
-	gLVtCwSquAWEu6Ibk9k1YodRwN+FMA10HHh0dhV5VT1HmU1Ongvi3dFQqWf18xtd
-	P9ElzdgxTJCRynqy7J0zQLiia8LoN7NTX3cEsjNE3ribWcsz5OF/7y+21Dg==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hne57ca7n-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 02 Nov 2026 11:43:37 -0800 (PST)
-Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Mon, 2 Nov
- 2026 19:43:36 +0000
-Date: Mon, 2 Nov 2026 11:43:35 -0800
-From: Bobby Eshleman <bobbyeshleman@meta.com>
-To: Michal Luczaj <mhal@rbox.co>
-CC: Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller"
-	<davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>,
-        Simon Horman <horms@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Stefan Hajnoczi
-	<stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang
-	<jasowangio@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Eugenio
- =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Shuah Khan
-	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Donald Hunter
-	<donald.hunter@gmail.com>,
-        Eric Dumazet <edumazet@kernel.org>, <virtualization@lists.linux.dev>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>,
-        <jlinbox@meta.com>
-Subject: Re: [PATCH net-next v4 4/7] vsock: add a netlink command to assign
- the g2h device to a netns
-Message-ID: <aujn5/nm9f9YX6bM@devvm29614.prn0.facebook.com>
-References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
- <20261020-vsock-guest-ns-v4-4-047527cfccfc@meta.com>
- <atjZZP2ebhXKzMxL@sgarzare-redhat>
- <atld3+5LKmGxJ8+s@devvm29614.prn0.facebook.com>
- <atnjOZjKUBagRVWq@sgarzare-redhat>
- <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
- <auT+YIawHSMPHbJI@devvm29614.prn0.facebook.com>
- <5a411a67-f550-459d-be9b-5e8e51d3018c@rbox.co>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=h2tEebi8
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8a05c820ecbso4302515b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 12:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793649989; x=1794254789; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=zNXiOAtCffaAA2fqTojb2+8iN0aPYzLlWRJ/9iKFuRk=;
+        b=h2tEebi8FlhlcvgSGF+Nw/ZVewUA2y/5u0vJabVq7OkTIT3HMeELFE9IJdjSJCWHqL
+         8bWvBIE0icLkBRS1dkuUxeXd1ZFPvyWKOg6SU/fCfEfSN8xoRfs0ZdDoJgDJAcmoORYb
+         D+/OipMtTEeuyPRDjNy0D/5E7e/AyZgXuJZe7EzaVIVbWExIlJT/53qyXQRgz1c4R5c9
+         KmFQ3sBY1LHQtnO0XDwp+JDuHwsknqQJaINYhagN8WR0EnTUr4rf892ZcnTKhFPeXHRt
+         L9CSrjI7+nJNEWqPvrNd5ft3ixghCVbw3jpqySsZo/K5nB5WyCmh6DYeyyMtMwii5Rj8
+         Retg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793649989; x=1794254789;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zNXiOAtCffaAA2fqTojb2+8iN0aPYzLlWRJ/9iKFuRk=;
+        b=m0lecc4peKkNAcezEpZW9TjpB8a67ZJTJdVfgodw/6eVoi9IsXD28rbDBy6Uex2V2T
+         nLR1Q5dmtnEWbH74Oiq1ryKBE51fHcPZ7YIAu4t4fPrx+2cqNc3mL9oaVDAi1byqVMLv
+         rqvr5HZHUuIjYHOjNip0t1+bMjDu3wdn3qGG5gfzKdkYw+ArOnW4ue9S6HWmvcA5fCpY
+         QIdcgvH/DJuXHqpbcMMwV3Fex5VHe0e7gMAOYvP+HtDzZ2rH8FnBvsYKu88ds/b4LHT/
+         lB3GyrqDXDtKHHuXPFglpOaiBcrNA8fnSC1o5TnkAb2f0WYffDngeUyfrsH2itUmIpI7
+         z7RQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwYU/KZXl4q9kcvqTRDAluAEScDXuNR2f9l8X6DPmMHxyMP+UQEPK3M/3yDf/juWyAXIATU9VjlmN0d5cxGgGw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+RQ/hvgQZJRCpiLYFUG+DupY3Ma2j7fTOcUo8bQgAgUMzOpgSS
+	KPn/pDM3OMYXssNEXGEb5OHDpFVe7h3BYG3GEe/Osh6UiliZvKdxUqgbjfATWAaY/79wox0/LNc
+	2ARB0UDd8t553WA==
+X-Received: from pffl1-n2.prod.google.com ([2002:a05:6a00:c341:20b0:8a1:d11:a833])
+ (user=skhawaja job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:71c7:b0:89f:6989:cb9c with SMTP id d2e1a72fcca58-8acb218bb8cmr3588221b3a.13.1793649988443;
+ Mon, 02 Nov 2026 12:06:28 -0800 (PST)
+Date: Mon,  2 Nov 2026 20:06:24 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,167 +75,165 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <5a411a67-f550-459d-be9b-5e8e51d3018c@rbox.co>
-X-Proofpoint-GUID: QR2S-efKBO6QdYqmIxgc6lAyUaLaTRaV
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAyMDA3OCBTYWx0ZWRfX/+ZJayM1LQ+r
- 9CV/sgjbk1pFruMf2Sg0Afqz45bxdOm/q1kCI1B+bg8HW4Cjn7g4Lr79nb2RdSW2Xmzq4dF0XOW
- GqQjtLSbwrhVrlFabcgVpqZqM5ZWyic=
-X-Authority-Analysis: v=2.4 cv=SJ/Xx+vH c=1 sm=1 tr=0 ts=6ae8e7e9 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=wpfVPzegXHpEFt3DAXn9:22 a=VwQbUJbxAAAA:8
- a=BjZWFOVnn3HtxxQ2TYoA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: QR2S-efKBO6QdYqmIxgc6lAyUaLaTRaV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAyMDA3OCBTYWx0ZWRfX2ea4iepLya8e
- u/RHH1/wfHIKJZ8+Jf7wOY4wj8XR9xzoUNBYjnpFjO47yzsaKfjU/XN8j7g82pGNcHLIAuDVzMJ
- KMGfZDToKxladXb1lbLFhLwt5iGVw3LJBtrZsMaVjskGsjdSEfVKQXCCYwA5zkPm482GMtvPwN3
- jyJIuvtvK2eZdI8VGkblCf8zlVF/GyFNxFgJDRGQUE4YhkD6gz6U8H7oeeXXITLS0LjBEBIQkVd
- hciJv6mh5dbOOr8WbBAG68O9jPfYLSopCyL97moXfPwULj4fUglw2KjlroxFs7mDRTA3fUU1qXY
- XulWKBv1MwarGtHmsJHqll9CuwDtloBZZGQW/RsUBi0kqUJ/29Ugn3cBOSVu/19P+N8EkFP2I+3
- RQ+4KR1LzEbgliAqZ8kR4kJ2WqGwZjinnsOjv8iLgk7AxJ9WUGp/AjfY+5pp07gMXMNbiYKu5YO
- VcLFK14qbwpeW4bMkfw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-02_05,2026-11-02_03,2025-10-01_01
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
+Message-ID: <20261102200624.1570562-1-skhawaja@google.com>
+Subject: [PATCH v2] vfio: selftests: Remove libuuid dependency
+From: Samiullah Khawaja <skhawaja@google.com>
+To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Samiullah Khawaja <skhawaja@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 02, 2026 at 02:21:27AM +0100, Michal Luczaj wrote:
-> On 10/30/26 21:30, Bobby Eshleman wrote:
-> >>>> Yeah its all kind of a pain. The problem is that we need to hold
-> >>>> sock_lock to set sk_state and sk_err, but can't acquire it under the
-> >>>> table lock. Instead, we grab the socket ref sock_hold under the table
-> >>>> lock to guarantee it stays alive between releasing the table lock and
-> >>>> grabbing the socket lock.
-> >>>>
-> >>>> I was really tempted to not do this lock_sock dance though. The race
-> >>>> condition I'm avoiding here is that if this reset races with an RST
-> >>>> receive, then the socket could end up with TCP_CLOSING + sk_err
-> >>>> ECONNRESET... but I'm not sure this actually propagates up into a real
-> >>>> problem for any potential user.
-> >>
-> >> Right, vsock_connect() is fragile. Two things to be cautious about:
-> >> 1. Don't let it reset the already connected socket. Because that would
-> >> allow user to "re-connect()" and make mess in connected_table.
-> >> 2. Don't let it re-assign transport of an already connected socket. Because
-> >> that breaks the contract in few places.
-> >>
-> >> State 1 is not an issue: vsock_g2h_reset_unreachable() calls
-> >> __vsock_remove_connected().
-> >>
-> >> State 2 may be problematic: if vsock_g2h_reset_unreachable() sets TCP_CLOSE
-> >> when connect() is scheduled out, then after the wake-up sock may get reset
-> >> to SS_UNCONNECTED. Then user re-connect()s and hits the transport
-> >> re-assignment logic. I'm worried that, as we re-assign, someone may be
-> >> holding a reference to such "connected" (even if not in connected_table
-> >> anymore) vsock.
-> > 
-> > I see path you're looking at... after vsock_connect() gets scheduled
-> > back in we set TCP_CLOSE/SS_UNCONNECTED if sock_error returns non-zero.
-> > Could you elaborate on your last concern there about someone holding a
-> > reference? I'm not sure I fully understood.
-> 
-> Ah, sorry, let me explain. This case reminded me of the vsock's TCP_CLOSING
-> bug[1]: reporter mentioned vsk->trans getting freed when skb was still in
-> flight. I did not reproduce the exact scenario, but it did sound plausible
-> and I thought it applies here: virtio_transport_destruct() frees vsk->trans
-> the moment vsock_loopback_work() invokes virtio_transport_consume_skb_sent().
-> 
-> Now, to get there let's start with vsock_connect() setting SS_UNCONNECTED
-> (on a connected) socket after vsock_g2h_reset_unreachable(). Then user is
-> able to re-assign the transport, which involves
-> virtio_transport_destruct(). But since we're dealing with a connected
-> socket, (before the reset) some send() might have triggered
-> vsock_loopback_work(). Does this make sense to you?
+Libvfio depends on an external dependency libuuid for parsing vf_tokens.
+Building it in cross compilation environments gives the following error,
 
-Ah you're right. I think that your approach of making vsock_connect()
-more robust is probably the right way to go...
+ ld: cannot find -luuid: No such file or directory
 
-I think this is the new race...
+It also complicates building with glibc alternatives like musl, see
+https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
 
-1) vsock_connect(cid=VMADDR_CID_HOST)
-   -> enqueue pkt
-   -> sleep
+As it is only used for parsing vf_tokens, remove the dependency by
+adding a minimal uuid_t and uuid_parse() to libvfio.
 
-2) rx worker receives OP_RESPONSE
-   ->  sets TCP_ESTABLISHED/SS_CONNECTED
+Tested by running vfio_pci_sriov_uapi_test selftest.
 
-   (vsock_connect() still asleep)
+Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+---
+v2:
+- Move the parser to lib/uuid.c and lib/include/libvfio/uuid.h (David)
+- Drop the vfio_ prefixes and add a uuid_t (David)
+- Mention musl in the commit message (David)
 
-2) sendmsg()
-   -> sees SS_CONNECTED
-   -> enqueues skb
+v1: https://lore.kernel.org/all/20260925013110.3447626-1-skhawaja@google.com/
+---
+ .../selftests/vfio/lib/include/libvfio.h      |  1 +
+ .../selftests/vfio/lib/include/libvfio/uuid.h | 11 +++++
+ tools/testing/selftests/vfio/lib/libvfio.mk   |  3 +-
+ tools/testing/selftests/vfio/lib/uuid.c       | 47 +++++++++++++++++++
+ .../selftests/vfio/lib/vfio_pci_device.c      |  2 -
+ 5 files changed, 60 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+ create mode 100644 tools/testing/selftests/vfio/lib/uuid.c
 
-3) netns reset sets TCP_CLOSE and sk_err=ECONNRESET
+diff --git a/tools/testing/selftests/vfio/lib/include/libvfio.h b/tools/testing/selftests/vfio/lib/include/libvfio.h
+index 07862b470777..e9d513c3a08e 100644
+--- a/tools/testing/selftests/vfio/lib/include/libvfio.h
++++ b/tools/testing/selftests/vfio/lib/include/libvfio.h
+@@ -6,6 +6,7 @@
+ #include <libvfio/iommu.h>
+ #include <libvfio/iova_allocator.h>
+ #include <libvfio/sysfs.h>
++#include <libvfio/uuid.h>
+ #include <libvfio/vfio_pci_device.h>
+ #include <libvfio/vfio_pci_driver.h>
+ 
+diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+new file mode 100644
+index 000000000000..52406f3409b7
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
++#define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
++
++#define UUID_SIZE	16
++
++typedef unsigned char uuid_t[UUID_SIZE];
++
++int uuid_parse(const char *in, uuid_t uu);
++
++#endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H */
+diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+index eff95828719e..d1d1b2b05af1 100644
+--- a/tools/testing/selftests/vfio/lib/libvfio.mk
++++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+@@ -7,6 +7,7 @@ LIBVFIO_C := iommu.c
+ LIBVFIO_C += iova_allocator.c
+ LIBVFIO_C += libvfio.c
+ LIBVFIO_C += sysfs.c
++LIBVFIO_C += uuid.c
+ LIBVFIO_C += vfio_pci_device.c
+ LIBVFIO_C += vfio_pci_driver.c
+ 
+@@ -30,8 +31,6 @@ $(LIBVFIO_O_DIRS):
+ 
+ CFLAGS += -I$(LIBVFIO_SRCDIR)/include
+ 
+-LDLIBS += -luuid
+-
+ $(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c | $(LIBVFIO_O_DIRS)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+ 
+diff --git a/tools/testing/selftests/vfio/lib/uuid.c b/tools/testing/selftests/vfio/lib/uuid.c
+new file mode 100644
+index 000000000000..378904d9340a
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/uuid.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <string.h>
++
++#include <libvfio.h>
++
++/*
++ * Minimal replacement for libuuid's uuid_parse(). libuuid is part of
++ * util-linux and is routinely absent from cross-compilation sysroots, which
++ * makes the vfio selftests unbuildable for non-native architectures.
++ */
++#define UUID_STRING_LEN	36
++
++static int hexval(char c)
++{
++	if (c >= '0' && c <= '9')
++		return c - '0';
++	if (c >= 'a' && c <= 'f')
++		return c - 'a' + 10;
++	if (c >= 'A' && c <= 'F')
++		return c - 'A' + 10;
++	return -1;
++}
++
++int uuid_parse(const char *in, uuid_t uu)
++{
++	const char *p = in;
++	int i, hi, lo;
++
++	if (strlen(in) != UUID_STRING_LEN)
++		return -1;
++
++	for (i = 0; i < UUID_SIZE; i++) {
++		if (i == 4 || i == 6 || i == 8 || i == 10) {
++			if (*p++ != '-')
++				return -1;
++		}
++
++		hi = hexval(*p++);
++		lo = hexval(*p++);
++		if (hi < 0 || lo < 0)
++			return -1;
++
++		uu[i] = (hi << 4) | lo;
++	}
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index 4063a0e2b3df..4ae6ac1f8ed8 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -23,8 +23,6 @@
+ #include <linux/types.h>
+ #include <linux/vfio.h>
+ 
+-#include <uuid/uuid.h>
+-
+ #include "kselftest.h"
+ #include <libvfio.h>
+ 
 
-4) vsock_connect()
-   -> scheduled back in
-   -> sees sk_err != 0
-   -> sets SS_UNCONNECTED
+base-commit: 2637bdec0535a2044cd830eba9a79363651d9043
+-- 
+2.56.0.385.gac671c819a-goog
 
-5) vsock_connect(CID=VMADDR_CID_LOCAL) call #2
-   -> sees SS_UNCONNECTED
-   -> frees old vsk->trans
-
-6) sendmsg's skb tx completes
-   -> tx worker dereferences vsk->trans for the UAF
-
-If connect() checks for SS_CONNECTING before setting SS_UNCONNECTED,
-then in step 4 sock->state stays as SS_CONNECTING and the second
-connect() call will hit -EISCONN instead of freeing vsk->trans.
-
-Seems to work for a racing vsock_shutdown() too, where sock->state would
-become SS_DISCONNECTING, and the second connect() would hit -EINVAL
-instead of freeing the vsk->trans.
-
-I guess the rule would be that vsock_connect() sets SS_CONNECTING before
-sleeping and only changes it to SS_UNCONNECTED after waking if and only
-if it is still SS_CONNECTING.
-
-WDYT?
-
-> 
-> Another thing is this feature of vsock_assign_transport(): in some
-> re-assign failure paths you may end up with vsk->transport = NULL. In the
-> past this caused issues with sockmap: see WARN_ON_ONCE in
-> vsock_bpf_recvmsg(). Problem here is that normally vsock gets removed from
-> sockmap on close(), but in our (reset+reassign) case close() is never invoked.
-> 
-> [1]: https://lore.kernel.org/netdev/anzT1fREOSyHT99k@v4bel/
-> 
-> >> So I don't know, maybe it's vsock_connect() that should be fixed/hardened
-> >> instead?
-> >>
-> >> Or at least disallow transport *re*-assignment? Does the "re-" part have a
-> >> use case?
-> >>
-> >> Hope it's not too off-topic.
-> >>
-> >>>> It also avoided some racing with the tx path, but now that send_pkt()
-> >>>> also checks reachability I think that path is safe.
-> >>>>
-> >>>> What do you think about doing the below hunk (TCP_CLOSE, ECONNRESET,
-> >>>> sk_error_report) with no lock_sock?
-> >>>
-> >>> Looking at the code, it seems that in all the places where we close all 
-> >>> connections (virtio_vsock_reset_sock, vhost_vsock_reset_orphans) we do 
-> >>> with no lock_sock but with vsock_table_lock.
-> >>>
-> >>> So, makes sense to me.
-> >>
-> >> virtio_vsock_reset_sock() and vhost_vsock_reset_orphans() are my pet
-> >> peeves: state switcheroo without taking lock_sock(). Which, again, races
-> >> vsock_connect().
-> > 
-> > True, I don't love that either, but I feel the impact is at least
-> > constrained by the fact that it only happens when the module or device
-> > is already going away.
-> 
-> Doesn't it happen on suspend as well? Is so, with a poorly timed connect()
-> things can go south on resume.
-
-Ah that's true.
-
-Thanks,
-Bobby
