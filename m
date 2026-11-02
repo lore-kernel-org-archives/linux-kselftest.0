@@ -1,84 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793631500;
-	b=3UpLOPf/rtXoUrFe2cxMI8jXQqdZ+yXMGieNL/4S/CwQR5w8jh0IKMPgHiZdi/HSOuAr
-	 NIdBqcXswUEj2y5C1mw6ue/hZ4TJwnncLjgVBA/iVJa1L+6D8cPPD4RMGhnV8fq2vPFBB
-	 QOaCJBfQpoQ/EG8oOQqh1SeU/Oi4FySTQ55GNj1zHTjkyOYr2mw7btTre0WiALHeP/AsX
-	 KjrISp7ayhG+mKUWmwnDPdUxDLbDZJSSFhssYTl2svUIKJyyMjqi00KxIC2kixR36Lgxp
-	 4+4vhG4h4UKt+3cSR0+o7yNHoyOT9FJpJcXMID1Gfa0Jaw1n5ZcPL5ZPRAMqcpLZYNw==
+	t=1793631609;
+	b=1MYgR9x1VnSj6Nhvo7D+3rlSIGOfPLio5XG40vaV+78HSjJJ2kz6JvTsQPTf7wAJYylb
+	 yxWYojwpsHuo0YBLi5GK4XG3+7+LaJjlO0X7dp+xZ+L6ZVFjXcDrdIz8RBnAcM0FfNRzI
+	 hZYXjdm29bDQNgjzSkI3YVVTRcO800LsQ3CyO8zCQ2ogk9yg7jYYLpsIaZXErw+/RxOy6
+	 tlOQBxLV4PnmDXy6gotMeHdenaouOihv30OSXJxjbKt6hLgVQWt4I6wHoTTb7Olzqz9SV
+	 Gmf2unh1rt7jL1/DEkxMKOKkRBjryiXMD5SAy7sRZyrsg+/0L9Spm78r3VmasoaDn6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793631500;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=p6saGje44sOd9IVlSUbpbD3i/Gf15gvuNPhaoK8DjVU=;
-	b=Qi8oQsjpcgN2+b1Qhl7hcDBkqUqWfaHZLTEXiHxsCVXN+bHkWlgVobq9Csa61LIQcNI3
-	 OYXs8toKVKFZZHc/t1ilNWNwmgZZgqBq7BXFJ8xBl6ODLQsbkV07CJrowWjEJ/zXmpL0h
-	 2fRSnffTamfzcRqgTJHpHy83Uu4CgqN3+nLAonEgzn35P4XrXQQqb2PsqD0fWjk10IEbq
-	 UXPct6gbv42cL505F18ih4AixIp1QTWy09X3w/OA4K1usZwXqXdCWNEGMP253+ydF1tMJ
-	 /BUcKOX+nv3zUIZcHkjHtphb27U1z0K/zWJqpX/bZKbHD1hNVyci7vllWEdeMJ2Jg0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793631609;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer;
+	bh=DA4U0m1CHtqk19BjQpd8o6fqolui3N68b+LzMS0kHTM=;
+	b=wafcBgrgIx4If4F7Fe2zvcThncvS9+sFecm/lXjEHD29fLo7h6qi6rJ3vT5rYwfB4DK2
+	 DanhvSWT1opqXU8qpESE4B4owU0vsMeUH7HtLjxWpsl5XymhiC28S79C/fjUQWllwvYQy
+	 TFJ6wvP3U8+KVNfEBdg2H7kbeHN7bbDY28MSV6LFcz0jA9cEcZwo032Q1HSL7NBgY+QyC
+	 qYPnPjPa14OUqdNt9DZFDxDlSMhi61IlfPhPo/j2ct3iTQzw4OXPyttyN84gyv2oagxvD
+	 2+zp22INlkNji1eOJ8bwGqEdN2+aQda4yNBm6cRMwJHGGGQdyxoazyMsnFawAYBc8OA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=A7TNQmEt;
-	arc=none smtp.remote-ip=74.125.82.50
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kIejajPL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9E8606FB5D
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 14:58:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA9E8606FB5D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F214606C55A;
+	Mon,  2 Nov 2026 15:00:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=A7TNQmEt
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-15ea896ddc8so5284665c88.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 06:58:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793631499; x=1794236299; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=p6saGje44sOd9IVlSUbpbD3i/Gf15gvuNPhaoK8DjVU=;
-        b=A7TNQmEtRhSGmI+/kljCE0Gf4gfBJHEXFtpbChpK1os5kr5tgYhjV+owLFr3lxH8Cl
-         ccE8XMbOJoiUuY7e5Yjkc2+Dxpku9mV+tl255IkMZfvrrbw1S4XZr+GEshcP1SgVuJlX
-         hxR8HudvVUygZv7ZszkctSoeyEcH1yC5lYWLIOiP5GLlYgTB90kg1Cx3PUkN1nVkhhMG
-         Y/Bm72LV7J/NZyre2Nzisx0wk1LzHo2wi0DyxJE9CURZoU8cYI4W/ECQ+ZQAtofypAh9
-         SNT3pEAqIVGV3ITZxyIjtB+WE2fLlhHCrd/UAKuPBIQjvdTNNGMpBbV8CGl+oECIvuV7
-         ICNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793631499; x=1794236299;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=p6saGje44sOd9IVlSUbpbD3i/Gf15gvuNPhaoK8DjVU=;
-        b=UDkYoI8S+wrxiwXBdqVwLQ76Cw7D8Qq36Pliqg/SrETl7bSXQ1PilgS3S1YAXFisPA
-         NQwxDIRi4qHURY3lY6OKGU9QgGgQ6hN+XyPCAyeZCBRN0TfU+Ghi8mm+L52vWxqJILL6
-         AxG4iOO71/4UV5Bk72bOwRSi1N/umJ3K8AWyWUl8zxFV1oMEYwSIMOC+XRRQDZTAveoF
-         q6cH18bCtnttnWu5a4w9AXMFxm/ro3zYgAtqKcltB4HAr4LnjUxEU2nnONg9bqSRIsCO
-         0553sIneFg9s49qiJYXzdWI4Ilgw8GSe891GoFvjZj4DXVabKG+wiJD5wFyae5rzKG+M
-         K6Ng==
-X-Forwarded-Encrypted: i=1; AKwUvBwnu1GHgGkhNfvMhJLxlx193+z0yYKnRshc/eO+VEl9/iX4+ewaOUzpbMohivnqqfntUlhmjj0G3AeXLhHKl7c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/COwQRoKr045vDgiBQ9xEZTTvLHKRcr31kxilCGIrYSkCXyYpB
-	uh7/nPxj/nm1XG9ptXSW/4+5fzcGPM5GE1xCL2G30YrnGky56YvhC+I=
-X-Gm-Gg: AYBFou0VCxLohXy73vQ5Ww2mYn4WVTBDFIFkq1om0VWAP73T4wz3MLO5UnotNJJvwrO
-	LYZYhCoMTP9IrKDG+r7Wo/3fLd8iZFEKqX5JTZLxg/+gcjOB1FazrA9XOedzbulVQ8Bx7G4hXI+
-	/rBWrbUEQHf0TYbyOXSuYB96df6CTD+wseQhg+SEGr19fIJapUmguurpFTAqyLeXZ4nyIjnshdK
-	NGeJdM/tmeQMhLFC/C7kzPnjQ+xOLW0ZGbJ+JOuihSsKoDAoo/hBSWqtdj8Lk8x+gA7qRkZulN4
-	gk8SbZRdpv3K9aOxsKr5YrixCPKvJBh4/MDKPw/QnpPFwrfEV+Q9tIwDhYVkaaNH2tsALiOUWiA
-	IEL+VLwTk8jLnNVLBVEo70j7iYLBZKT3dsy9tMSpAh3yFmDv/a2/wljkL4wEUhP2EYX0KhKNoOC
-	/iSse4pY3TtAhewyQewRb9LF42q0cFX3lSOqUJoFeijDlX/y/UkOweM/hqknr1qGUy6OTY4bulU
-	OMptRHbYBaC4Oxjg63+062lBugsOE/fNERcae5jcsKYSG+H1YTMdSdJkLKZFBXfD//HBNcuenmq
-	Y3iGa5A62Ro4QwKGKTnFFpDi6oSrnpSP7Sv7Nr8xj0gGypOHEgmR3puSpLC6/Pk2
-X-Received: by 2002:a05:7300:fe41:b0:34c:fb30:3e30 with SMTP id 5a478bee46e88-36a42401960mr16137115eec.7.1793631498925;
-        Mon, 02 Nov 2026 06:58:18 -0800 (PST)
-Received: from localhost ([186.158.238.108])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a42aa8999sm42424368eec.29.2026.11.02.06.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 06:58:17 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kIejajPL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C201F00A16;
+	Mon,  2 Nov 2026 14:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793631608;
+	bh=DA4U0m1CHtqk19BjQpd8o6fqolui3N68b+LzMS0kHTM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=kIejajPLDhBhNAF+5qAkd+IjamKUOnO1hhgOl6ob3NywfSYo1UCCZClj+UVXxg6hN
+	 8GZuczs7QvhEz8GqB31Q0v4Sfe6zaLku1E8g4bV1Nm7S11GUdX9udG3+A+XpQmpG4w
+	 SKp3yZE5RKwGE6D9RxNOhr665KUXvrAf7U9EgM6t8GMzBMTN1Hyi8S9DzqCn2e/KFT
+	 qYkBu+IipshrjT/yGx4WL5OycQQAysKT17bx+VTU/wQ//N1IctW6952TFgl4pmjQUh
+	 Zgj0NC/jh4zpBceIV8H3jC5zH7xmHBcraK25zYbCARrQ8e4MvgCvvVFdA3MjVOm0bI
+	 x3pJnolxi8+9Q==
+From: Christian Brauner <brauner@kernel.org>
+Date: Mon, 02 Nov 2026 15:48:54 +0100
+Subject: [PATCH RFC 14/16] fs/proc/vmcore: let procfs copy out reads
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,89 +51,112 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 02 Nov 2026 11:58:11 -0300
-Message-Id: <DMKTARY7GF4B.27HUM6XMDTQNV@gmail.com>
-Cc: "Alexandre Courbot" <acourbot@nvidia.com>, "Andreas Hindborg"
- <a.hindborg@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Burak Emir" <burak.emir@gmail.com>, "Rae Moar"
- <raemoar63@gmail.com>, "Tamir Duberstein" <tamird@kernel.org>, "Trevor
- Gross" <tmgross@umich.edu>, "Yury Norov" <yury.norov@gmail.com>,
- <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] rust: kunit: add #[should_panic] support
-From: =?utf-8?q?Nicol=C3=A1s_Antinori?= <nico.antinori.7@gmail.com>
-To: <nico.antinori.7@gmail.com>, "Alice Ryhl" <aliceryhl@google.com>, "Benno
- Lossin" <lossin@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Brendan
- Higgins" <brendan.higgins@linux.dev>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Danilo Krummrich" <dakr@kernel.org>,
- "David Gow" <david@davidgow.net>, "Gary Guo" <gary@garyguo.net>, "Miguel
- Ojeda" <ojeda@kernel.org>, =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-X-Mailer: aerc 0.20.0
-References: <20261029-rust_kunit_v6_send-v2-0-5ce551efc48e@gmail.com>
- <20261029-rust_kunit_v6_send-v2-1-5ce551efc48e@gmail.com>
-In-Reply-To: <20261029-rust_kunit_v6_send-v2-1-5ce551efc48e@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261102-work-procfs-core-v1-14-75df35e4f8b8@kernel.org>
+References: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
+In-Reply-To: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+ Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+ Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+ NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+ Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+ Greg Kroah-Hartman <gregkh@suse.de>, 
+ Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+ linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+ linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
+ ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+ coreteam@netfilter.org, kexec@lists.infradead.org, 
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+ netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
+ linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+ sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+ linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
+ linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
+ linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+ linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-debuggers@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+ Chuck Lever <cel@kernel.org>
+X-Mailer: b4 0.17-dev
 
-On Thu Oct 29, 2026 at 1:59 PM -03, Nicol=C3=A1s Antinori via B4 Relay wrot=
-e:
-> From: Nicol=C3=A1s Antinori <nico.antinori.7@gmail.com>
->
-> KUnit tests in Rust are written using user-space like syntax. This patch
-> adds support for the `#[should_panic]` attribute, enabling the user to
-> test conditions that are expected to cause a panic and report the test
-> as successful.
->
-> Signed-off-by: Nicol=C3=A1s Antinori <nico.antinori.7@gmail.com>
+Implement ->proc_read_buf() so procfs copies what is read to userspace
+after it unpinned the entry. __read_vmcore() fills procfs' buffer
+through a kvec iov_iter. So a read goes through that buffer now instead
+of straight from the old memory into the reader's, which is what
+splice() did already. mmap() isn't affected. On ppc64 a machine check
+while reading the old memory used to be recovered through the exception
+table of copy_to_user(), by accident. copy_oldmem_page() copies with
+_copy_mc_to_iter() now, so a read through procfs' buffer recovers from
+it as well.
 
-Hello, Sashiko found two issues [1] with this patch:
+The buffer is 128k, which keeps the entry pinned for one such piece at
+a time, and /proc/vmcore asks for PROC_ENTRY_FULL_READS so that a
+larger read is filled in pieces. kexec-tools treats a short read of it
+as fatal. A read that faults on its buffer in a later piece returns the
+pieces before it now instead of failing with -EFAULT. fadump removes
+/proc/vmcore when its memory is released and that no longer waits for a
+reader that faults on its buffer.
 
-> [Severity: High]
-> Will these new selftests crash the kernel or hang when
-> CONFIG_RUST_KUNIT_SELFTEST is enabled under CONFIG_UML=3Dy,
-> CONFIG_PANIC_ON_OOPS=3Dy, or CONFIG_BUG=3Dn?
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ fs/proc/vmcore.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-This is true, I tested this with:
+diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
+index ccb795b85509..1c1e71231f4e 100644
+--- a/fs/proc/vmcore.c
++++ b/fs/proc/vmcore.c
+@@ -27,6 +27,7 @@
+ #include <linux/mutex.h>
+ #include <linux/vmalloc.h>
+ #include <linux/pagemap.h>
++#include <linux/sizes.h>
+ #include <linux/uio.h>
+ #include <linux/cc_platform.h>
+ #include <asm/io.h>
+@@ -427,9 +428,14 @@ static ssize_t __read_vmcore(struct iov_iter *iter, loff_t *fpos)
+ 	return acc;
+ }
+ 
+-static ssize_t read_vmcore(struct kiocb *iocb, struct iov_iter *iter)
++static ssize_t read_vmcore(struct file *file, char *buf, size_t count,
++			   loff_t *ppos)
+ {
+-	return __read_vmcore(iter, &iocb->ki_pos);
++	struct kvec kvec = { .iov_base = buf, .iov_len = count };
++	struct iov_iter iter;
++
++	iov_iter_kvec(&iter, ITER_DEST, &kvec, 1, count);
++	return __read_vmcore(&iter, ppos);
+ }
+ 
+ /**
+@@ -709,9 +715,11 @@ static int mmap_vmcore(struct file *file, struct vm_area_struct *vma)
+ #endif
+ 
+ static const struct proc_ops vmcore_proc_ops = {
++	.proc_flags	= PROC_ENTRY_FULL_READS,
+ 	.proc_open	= open_vmcore,
+ 	.proc_release	= release_vmcore,
+-	.proc_read_iter	= read_vmcore,
++	.proc_read_buf	= read_vmcore,
++	.proc_read_size	= SZ_128K,
+ 	.proc_lseek	= default_llseek,
+ 	.proc_mmap	= mmap_vmcore,
+ };
 
-./tools/testing/kunit/kunit.py run \
-	--make_options LLVM=3D1 \
-	--kconfig_add CONFIG_RUST=3Dy \
-	--kconfig_add CONFIG_RUST_KUNIT_TESTS=3Dy \
-	--kconfig_add CONFIG_KUNIT=3Dy \
-	--kconfig_add CONFIG_UML=3Dy \
-	--arch=3Dum rust_kernel_kunit
+-- 
+2.53.0
 
-./tools/testing/kunit/kunit.py run \
-	--make_options LLVM=3D1 \
-	--kconfig_add CONFIG_RUST=3Dy \
-	--kconfig_add CONFIG_RUST_KUNIT_TESTS=3Dy \
-	--kconfig_add CONFIG_KUNIT=3Dy \
-	--kconfig_add CONFIG_PANIC_ON_OOPS=3Dy \
-	--arch=3Dx86_64 rust_kernel_kunit
-
-And some other configs using the configs causing problems.
-
-To solve this I created a new config "RUST_KUNIT_SHOULD_PANIC_ATTRIBUTE"
-that depends on !UML && !PANIC_ON_OOPS && BUG. If the test is annotated
-with `#[should_panic]` and CONFIG_RUST_KUNIT_SHOULD_PANIC_ATTRIBUTE=3Dn,
-the test won't run and won't show up in the summary.
-
-> [Severity: Medium]
-> Does defining macro_rules! assert and macro_rules! assert_eq at module sc=
-ope
-> in kunit_tests() leak the preceding test's #should_panic value into helpe=
-r
-> functions or impl blocks defined later in the module?
-
-This is also true, the solution was redefining the `assert!` and
-`assert_eq!` macros inside the function's body (as Sashiko suggested).
-
-I'll wait a bit in case there are any feedback on the current series and
-send a v3 with these changes.=20
-
-Best Regards,
-Nicol=C3=A1s=20
-
-[1] https://sashiko.dev/#/patchset/20261029-rust_kunit_v6_send-v2-0-5ce551e=
-fc48e@gmail.com?part=3D1
