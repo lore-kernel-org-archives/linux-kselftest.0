@@ -1,100 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.214.171
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793661875;
-	b=uFeh64d2HVpGoFNrPWnvQVejwu3qI5D2xtjGs9K8y6Tg2XI5SXp6k/NRCc+DEH/rQeIT
-	 tkmeDOx8SkseiAp4CaY845Llwg2PVTM+F7+kb/nJ996bQpHU+iaSH5i1CrwbFm8MueP72
-	 8ZJoIn8XSFv7Y9+sx11EBt2VAwd6FjzRxF3W6+Phqyj6g9mMz8tQsvOff+y8r/wK1dKI5
-	 YKAcYd6TStR2SsCgBu7xqRa0yrBdJ3v8VBpbYu+ximhTnroiD629ppWV+v+oRc1EZsI9G
-	 +xTSDyEYYK9eyMvhte/Vf4PlI2b+hsFlA1aGdHzBhFohWeXJG2adLN9FCK+1RiWqoLA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793661875;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793662689;
+	b=fXhDmVt+Ys4PHD7PfgwtJa87ptoBKEj5Oa7tnX7XxNb7gnQNJNlv7GqQV0kydcNmN26f
+	 HTCJKhCzTUivHB/EXMhQpdv+/MGoFcwj71fHiCQ2vHvLZt/n5vkdpURRCrL5CjCQGvSZo
+	 9ipl82dbFfEb64jI+QWx/9K7G8sN6BDAdMR93rSC8bds60CB9zG1hi1bwAfOu2gvW4EP/
+	 b9IROL3/6CHy8X2YID1Zz0AoU0yvY0w/Ov7zoDiNohtIOJKqqDHaU0P2NvwH66IgaDGii
+	 NT/UJbITKf/vcU06wi4cM+9YM4lL2Cea5b3zG/riqj4QUHbeRMvg7rFzgR3ILDREM0Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793662689;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
-	b=ko2+e3xIomTj3tH2cASXlvuUfYIMq1tT9wBG1inJQ6o2btQIqmxttVJcl+L+W+mAGrq8
-	 /hJZu9Lkza60iHizfa61s0L04zdV4sc1MblLVk1MCpf5O853Qh7ccCNdoarceofY/TmLS
-	 JWBsRNwv/LKKz386QPHlUlLB5RW7vyZbC0Sx/92hew2iXMoVbmo2X41HbTVVrfe7Rm209
-	 78kOqAofIIuRQmlfFoHZP47uMkA0HZL70RkQ8j1/nphdwgegHTvjY38RAFp9tprFEhCZu
-	 M3uCSSdwNu7hM16pfoKqU94TJdE0FLH37noFAdOBBye2quooMf7wmP6e+akaj12ricA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=sentinelone.com;
-	spf=pass smtp.mailfrom=sentinelone.com;
-	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=lPNowPvc;
-	arc=fail smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=CpN0nyOlHAAHfSUiOBw/jygsiBzrfum7qcPzJKfy0Js=;
+	b=m6iI5Gn2lqxxZFpDpJzJqry9EnAbSeQFGx1KD1Xkznov53Qsg/hL8LBnupNAH0ZSDOsN
+	 UwQxBP3EtOWvMcs+UaSRt6Vy21l7NkBca41BQ1pvKa8o314egiPKvkD6D9SxsgvjANNoZ
+	 cw32eMX0SS40hyocMl2ZRh05GGpmIJcVuygYIG7UvMCEYPIKEY69IlgWzCq4a5owNwaNX
+	 5mlZPYZm6lncocQmro/Bubqcw8FcA8kDRmQT9A0tT/FJAeEhUUmD9aF+4BBcPxVjLZmEH
+	 XK8BG+BkjeIQT29zh88NGR4EioyyIh5pFybKMki/3D8RS94QppJImYgtOp+VfOwLa/w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=npq2+qmp;
+	arc=none smtp.remote-ip=74.125.229.8
+Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B992606A326
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:24:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B992606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734B2606D801
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:38:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 734B2606D801
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=lPNowPvc
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2eb4a9a580eso4020435ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:24:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793661875; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pIjNP70vo00HEj05QT7mhh/0V54GxhT+s/f7bNU77UTA8ei+j8aHA1j65I6v9c891n
-         9Sg45BJfjcBLl6BvAuxICxoLAbnJS2RXkR1uwcadE7/kGdJAJQs5RH01DdzRdZsAnSjO
-         FrpSzjr/6WR1uHGFz+7QlS0hNvtHZuozkyoMvP8S5W45tcTEwWFh33b4x6u1mbdIPK/1
-         9m9fY1neEJvVlkE1I5Rs59W+bTlfhN9NeCxE97i0unTD2NeJb2LRq/ZC1ttbeL5mu5Vg
-         R+YBcMDFelnvWzyZYzPJvt69k+aOXY7xFyAJqbXRaOC+8qoDTGwEbwCXoq4Z4nX2lP/N
-         YAKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
-        fh=kfgGSmmr0bUrsWCzvaEfgU5wIE9e4chM+aH1BpJIMhU=;
-        b=ci0S16ABwq6TO0VrZItYLL8LBWla6YvGHWRf2kNjcbMkZABBmtp7qa5X8S1MTSUT8q
-         mtRjMStcX2rYyWa17Rab+nIGt77YB96LXAb1X7s5al1ehhZmGVDu30Cu6PUG0uMeJnae
-         JuoOLEYQ1euJLSnmJzIjNxOfAE2p4yV3rP/NCrVNU7TwbNY32WsgDwfxeVNVnEH5ijMt
-         x1YMEd12q81iqf5buAfxKSvWV/MQ1zzSMljn7Y2gixbHBezQ+PP0X7jnc8LIWtDqxRZj
-         1nVo8wvGBwZjKYQmQuNVAMIIUO9/+rFYVhGgx2LVtMFml+GlQq90IHukdQuda7dpJuZw
-         FZcQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=npq2+qmp
+Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-36a6ce64b95so845823eec.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:38:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sentinelone.com; s=google; t=1793661874; x=1794266674; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
-        b=lPNowPvcJrNcgZcVmTAEbOq+QYlPf5qIaJfVayFML8doyDAU0rfgEOPiXNFqCofLgu
-         gq6wvFBEYBDzEVNaIN+re2NUxix3aM/J18omnnVIUr0OZCKaLKVOWuDk5khl0bJifz8r
-         eKb2U84UZfX7VFnzXbmaaHuOPtpq10ihd82JhQ3t9KKp4bjJ1zTFMWFVmogRrE9cR19O
-         /yJmNG62lBW6t4DMj/zGNmTExT2plbfBQ1wZ6A3eRN8xHAfp53dfYDKyw+0gY44qraJR
-         wI0HX9K8s2Y0K38xJU7tGnAo5FmneyllJ4fMQ6FVJBADUJUSBtg0pfaHBMeziROEHYej
-         bRlA==
+        d=gmail.com; s=20260707; t=1793662687; x=1794267487; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CpN0nyOlHAAHfSUiOBw/jygsiBzrfum7qcPzJKfy0Js=;
+        b=npq2+qmpq5UBVj3/fLPNaAEtiZsX+I+usrWfMdIJiPyxvpqaN6KTNnBj/Gxiokhb9U
+         cz1BQpDAcWByapX4YJsWk+wnj5jyqb4re2eEcV3kRqJAyS1d9pNhCbJRD6+dPKUdJaNU
+         b5uEEciepNPVX4EYXpaWjIyva23a438fCWxNH/08NriXyQDXO8dmAJ0h4umVYBMy1OK7
+         E5iFPI1a6Ont6Q+jrRPFOrp30fh3eX8Ix1g3fETarH2jkCHwRA3LZKjKpASrWJWT+6TB
+         r6Hxgfv1qEP+/lvZuMfR8Ht+MORI/VHkgXwFkujpSiO/9HI+GDL3JjQ+eM4wxCO5eqtq
+         n57Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793661875; x=1794266675;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
-        b=SwLBm6GYa9m00n6tJ0EIibjGTOxBDJzhBCKLC3kXvvlNla11VuZVvHvlZTiYgQ5CFi
-         9CGKY7n94dk5WuQWQf63aV6AN/aa0TXIhE2Cl2/uytcGlHXv/NWJPTw3/L4jimPHR7r9
-         nq4t9kc1Ub3/md6BXM/qbHhlzNE+mk5L7IwTLHda8juKOy4s7I5rH6ZRGEWjDqBwI+Wo
-         1AvRVW6OULf1VzbWP3ybnFlTastKlHGKRCvLlE9RxiOJeAL+s5c9wqMOtf0C+c1XbFqH
-         AusyaAhFuqMdYDXNK4oqPhmLEukWp7YIXHy/wlNJ60i+UdXOLWKJdiXiZrRqoG4tdmFw
-         VU5A==
-X-Forwarded-Encrypted: i=1; AKwUvBy5FzNseGjf3u2T9qWNR7rsqXKQuftntt3ukxYNmgBNHfLU68ELVGxqllw2vYz+slDf7t2dnnG66flcnxNYuh0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8TSgLiXe8CKu+dJ7Fy2FEWYEk/EQySuZ05RFdoNLTlF0U36/mU
-	mYBtVjaeKlpEgb8d4LBVK/8WfZQ2h6hpSWud0W29DbTRoL55C1P29DNNpCIkGOZ5eIpwiHRBCdc
-	K1o76r38Ch0gc+L0x2dum+EzO176K/ZllQZI6BY+f3g==
-X-Gm-Gg: AYBFou2ChtQOXBPtBohVBqBHWwdALbbAkCzl7TDn//Z1WLJlgLNZolTZjAZl7PYwYKH
-	BwXPVzpaT3W/sh2q69RBMveOzMSxJG/ZduVArkof2hHzVqceJOn3gT6Ne9MTRiLwXhstMg4zhjH
-	pj4NSqrolZddBW/c7gHaE1D7ToRZj0iacdTiP0pL+3RXnJD4l1oEp6X3xWpHcL3VriI9qaw8pny
-	cvsYqYzapUUzxc5DVS8KlJjHhSKAMYnOgk/wbGPst4b3rr84c+JiJ8bkCwYZ4y9X33sdBtrIAg4
-	BXATZ12fBwvlKxVJEguL4yizH35r2kIr+AklAVO8wp4DN1H7mGmaPIE7TXC5+UrHo3yYK0o9c5P
-	XNG85N7YBqyQvX1NGkBSKAjTZpYyDeVy6tkgO4WY/yxTtfkNBHbBrILMgJUoG
-X-Received: by 2002:a17:903:3804:b0:2e8:3cf2:49a0 with SMTP id
- d9443c01a7336-2eb36405287mr188158475ad.1.1793661874532; Mon, 02 Nov 2026
- 15:24:34 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793662688; x=1794267488;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CpN0nyOlHAAHfSUiOBw/jygsiBzrfum7qcPzJKfy0Js=;
+        b=MBoACiCTE+VA6blP5BvcINfTGDr5raH6u4H7Zux+nRGaPwfGaCKgGoISYsbuvJuyYL
+         UumGteOenaad6JVRqa2MgLEiu1/7bZdY2LFeV4OdftIRSANJ5L10GHHR+ftackXNKYvV
+         89LRc7HqSu8mWFsaKalkDR5GouUgZ7jVvjtNJ8AX1Qhn1vu+V3TnHlkOqGAOdqQy2z+w
+         FaQg+YWM55Y+X9NVI9zab7CIWazQ+xjDL1AB9SUm5KtEExetSwGpUSl0IwiAWdezvEA0
+         q6IyT7vJm/71cXdOS+MmBPvFaBTzCQUXILViBs0bICVnZ0NdFHwUP9FII4TdytaSZtE1
+         ngwA==
+X-Forwarded-Encrypted: i=1; AKwUvBw7RCMN5VzkfRVmlzWjgexEtAwt4yF9oocA8SltWFHRYS9Y8UrcdddNXSxm0RHJ8M4DjK3l4S29FR36d7Ffb7A=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJfOMhNpaavWQsopsRatB5LG2JeXLCFuGjnm4deIsZlnWYqxdvz
+	xRfVK3jbxwlErszou6+bb/ewYDO6PEbsiGxptHyYBXooj1vdjGdctXrG
+X-Gm-Gg: AYBFou2DBn+UNvVnld+5/llvwpCV5m6xSdMwsfAgwjO9wGAHc5XvcHz2aGoo8vjBtt7
+	MRN8QW1SBRGsvR7F14XK2+aIdlmz0QZpX+WeHkpZ/pURIGowEcJxEyEbdvFNDdgmSJfQNzqpDEN
+	2EDUjmITyYLIKTUwyyIUhPGQPJbQqbIzIRgSXl9lAS0/KkDj5xg06dqoyrsmsFVe1HmKRWv4Krw
+	UBPoUCiSZW+KTlu4g/Yp47BUxRjU399tUqFeaFdMAQGFRlfDvaaKHgc5ngd1Q6WnDlTQmdCNGK7
+	c7qyQxa/JIMD1ZGu2YcO9z+E9vdKlqxtE6R1HHHLsOQwwxrUMOXrTniuWZvy2A7wSBZ6bBRzCfn
+	PhNjQMQjcwg2BRxT6ODaeoUlbePzG9JgR1+3kC53u0Q4UsYXanm1mfs+RUPN2trkuUIQo5urDy5
+	lpyCW05PermAZqi/kn7v3HA3mgVfOOWxRBvQr2seFvVC79Wp9Pvb2Qh67rETdXytucdZ6SnzlXo
+	yABiYkEnvQStw6l6UpE3LDASvxA8FXdwkQBHPrziuDo0vi8uDnr6q6Cmv+/MzCNemq1kP8jJtrR
+	Gn58Hpqeqxx4XHD4+D+eeQ==
+X-Received: by 2002:a05:7022:3b88:b0:143:54c6:6a5 with SMTP id a92af1059eb24-1ac5c8379a3mr17375543c88.37.1793662687477;
+        Mon, 02 Nov 2026 15:38:07 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:44::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b23f20d36csm580363c88.11.2026.11.02.15.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 15:38:07 -0800 (PST)
+Date: Mon, 2 Nov 2026 15:37:54 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, edumazet@kernel.org, 
+	horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org, 
+	michael.chan@broadcom.com, pavan.chebbi@broadcom.com, sdf@fomichev.me, 
+	bobbyeshleman@meta.com, asml.silence@gmail.com, daniel@iogearbox.net, 
+	razor@blackwall.org, leitao@debian.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 6/7] net: devmem: size TX net_iovs from the
+ dmabuf sg table
+Message-ID: <aukcZBLBir_91hPr@devvm16445.scu0.facebook.com>
+References: <20261102191438.1059771-1-sdf@fomichev.me>
+ <20261102191438.1059771-7-sdf@fomichev.me>
+ <CAHS8izMRtaL=kZaM29XQBodT8e+srppnK_DjNSTJnxFfNgG9aw@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,62 +105,115 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
-In-Reply-To: <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
-From: Mike Bazov <mikeba@sentinelone.com>
-Date: Tue, 3 Nov 2026 01:24:37 +0200
-X-Gm-Features: AclHuK8h_cYpK4lk7OO76ee8Kks2WVPwHiw9tfTN1WU_Lw9F0nS26YCUvD9J2rQ
-Message-ID: <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izMRtaL=kZaM29XQBodT8e+srppnK_DjNSTJnxFfNgG9aw@mail.gmail.com>
 
-On Sat, Oct 31, 2026 at 12:22=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sun, Oct 25, 2026 at 04:02 AM Mike Bazov via B4 Relay <devnull+mikeba.=
-sentinelone.com@kernel.org> wrote:
->
-> > Is disabling preemption in __bpf_prog_enter_recur() on !PREEMPT_RT the
-> > preferred fix for fentry/fexit, or would you prefer a different
-> > mechanism for reconciling preemptible execution with prog->active and
-> > the per-CPU private stack?
->
-> No.
-> We cannot disable preemption, since progs are not short
-> with may_goto they can take 1/4 sec.
->
-> Sounds like private stack is the culprit.
-> Should we disable it?
->
-> pw-bot: cr
+On 11/02, Mina Almasry wrote:
+> On Mon, Nov 2, 2026 at 11:14 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
+> >
+> > PAGE_SIZE TX net_iovs cap devmem skbs at MAX_SKB_FRAGS pages (~68KB),
+> > which makes BIG TCP ineffective.
+> >
+> > TX net_iovs only need to be DMA contiguous. Use the largest power of 2,
+> > up to 2MB, which aligns every DMA segment of the dmabuf:
+> > - 2MB hugepage-backed udmabufs get 2MB net_iovs
+> > - no UAPI change, TX addresses are dmabuf offsets
+> > - skbs are still bounded by TCP's size_goal, only frags get larger
+> >
+> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> > ---
+> >  net/core/devmem.c      | 28 ++++++++++++++++++++++++++--
+> >  net/core/netdev-genl.c |  2 +-
+> >  2 files changed, 27 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/net/core/devmem.c b/net/core/devmem.c
+> > index 19c039ed2cb2..98c9594dbf99 100644
+> > --- a/net/core/devmem.c
+> > +++ b/net/core/devmem.c
+> > @@ -181,6 +181,20 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> >         return err;
+> >  }
+> >
+> > +static bool net_devmem_sgt_aligned(struct sg_table *sgt, size_t size)
+> > +{
+> > +       struct scatterlist *sg;
+> > +       unsigned int i;
+> > +
+> > +       for_each_sgtable_dma_sg(sgt, sg, i) {
+> > +               if (!IS_ALIGNED(sg_dma_address(sg), size) ||
+> > +                   !IS_ALIGNED(sg_dma_len(sg), size))
+> > +                       return false;
+> > +       }
+> > +       return true;
+> > +}
+> > +
+> > +/* niov_shift == 0 picks the net_iov size from the dmabuf, TX only */
+> >  struct net_devmem_dmabuf_binding *
+> >  net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+> >                        struct device *dma_dev,
+> > @@ -191,11 +205,11 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+> >                        struct netlink_ext_ack *extack)
+> >  {
+> >         struct net_devmem_dmabuf_binding *binding;
+> > -       size_t niov_size = 1UL << niov_shift;
+> >         static u32 id_alloc_next;
+> >         struct scatterlist *sg;
+> >         struct dma_buf *dmabuf;
+> >         unsigned int sg_idx;
+> > +       size_t niov_size;
+> >         size_t niov_idx;
+> >         size_t i;
+> >         long err;
+> > @@ -221,7 +235,6 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+> >         binding->tx_max_frag_size = dev->netmem_tx_max_frag_size;
+> >         write_pnet(&binding->net, sock_net(nl_sk));
+> >         binding->uid = sk_uid(nl_sk);
+> > -       binding->niov_shift = niov_shift;
+> >         xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+> >
+> >         err = percpu_ref_init(&binding->ref,
+> > @@ -266,6 +279,17 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+> >                 goto err_unmap;
+> >         }
+> >
+> > +       if (!niov_shift) {
+> > +               niov_size = SZ_2M;
+> > +               while (niov_size > PAGE_SIZE &&
+> > +                      (!IS_ALIGNED(dmabuf->size, niov_size) ||
+> > +                       !net_devmem_sgt_aligned(binding->sgt, niov_size)))
+> > +                       niov_size /= 2;
+> > +               niov_shift = ilog2(niov_size);
+> > +       }
+> > +       binding->niov_shift = niov_shift;
+> > +       niov_size = 1UL << niov_shift;
+> > +
+> 
+> How come we're not checknig the largest supported size of the netdev here?
+> 
+> Also, maybe should clarify in the cl with the largest supported size,
+> is it actually only powers of 2 up to that power of 2? Or all sizes up
+> to that (not-necassirly) power of 2 size?
 
-I think disabling private stack alone won't stop the false drops by
-itself: for fentry/fexit, bpf_prog_check_recur()
-is always true even when priv_stack_ptr is NULL (as in the reproducer
-and selftest where stack < 64B).
+I think these are a bit orthogonal, no? We can have niovs larger than
+the HW can tx. If that's the case, we'll just sub-divide when we build
+the skb. If we limit to the same chunk the device can handle here,
+we might use 2 frags to send single chunk worth of data more often (offset
+doesn't have to be aligned to the chunk size).
 
-So when Task A is preempted on CPU 0, this_cpu_inc_return(*prog->active)
-in __bpf_prog_enter_recur() stays 1 on CPU 0 and skips Task B even when
-private stack is not used.
 
-To fix fentry/fexit while keeping preemption enabled, we'll need to:
-   1. Disable private stack for fentry/fexit (so each task uses its own
-      kernel stack), and
-   2. Check recursion in __bpf_prog_enter_recur() per-task rather than via
-      the per-CPU prog->active counter (still blocking same-task recursion
-      and IRQ/NMI re-entry on the same CPU, while allowing a preempting
-      Task B to run).
+Assuming device can only send 16K, current patch:
 
-Does that direction sound good to you for v2?
+[       2MB        ] 2BM niov
+     [ 16K ]         sending 16K from that 2MB will use one chunk
 
-Regards, Mike
+
+Limiting chunks to device's chunk size:
+
+[ 16K ][ 16K ]       16K niov
+    [ 16K ]          sending 16K from offset 8K will have to use 2 frags
+
+(obviously, the same thing can happen with 2MB chunks, but less often)
+
+LMK if it does not sound convincing.
