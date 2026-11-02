@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793613824;
-	b=3ioMkm9wLchwbXSHAs1FaXpJxx0vE1a9/jE6v00Q6wECG4xDW9yLB/qy2dcrkygTUAAc
-	 xSUcEihRZqXoFDScru+PG5yEeLHT8M8HSj2uDQVpxV3qg76kHILRDUe65qsZ/b5QRRGr4
-	 mYr5EdQimnSrPCeEY4Ar/6tHiymv0L0CF3C4jSwvDxO5nfPW33tPeA3KVksw/xaS3GGRg
-	 vdw0AkFGNEBh55szQNC4JVD+mfOa7FCt0dTdVBepmES4cDXJPlOD9m/2kZMfkrCgKLRtz
-	 G6QzEO6MjJlxYuRL7bmsGQG8xg00btf9jguVW/RDviIMR5Ux+7ewkOurrkTPoBb2D7Q==
+	t=1793613831;
+	b=kMNggv+TsjZQTH8p5CepEcBVz+6ELH0r2E86Bg/LZDlO+X66W9tJQQOmzzmwz1+m2lA4
+	 n1Ol8h+yzVP9GplKT4AFXEmstfE6QUP7EEBaR5BVSOqqEnLTqm6+A4yXCMfhhVM8IdZx/
+	 UM/Kui1WsyzEdTppgRT56N5xcy6N+nRleFgb6EfoQK5CT54A3OXveAKWy3uyWFpiN2JJj
+	 lNZci8w8MZt1qh/0eziFBV8yn/LqZYDdIeKAmzykdb2u5eJZNwFidsG91SCgfTIVJW2HP
+	 SshsO1WTYa8NtG3BkTFenDYc3Db6zRHkIYq5BWGGSmRB+aMScHqzh1xH7VT7d9Wdsfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793613824;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793613831;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Q0mRcK2bKQo+q66MkLAlKH/V2mp0o6C8AmD4irh5/SQ=;
-	b=0r8lzcZjhNbRgKnH5rpDjtwz/o9ulKMPLW13UlT71Qeskjdirm5pQk4WHmjcN2cvw6Nt
-	 37I6MhBehrppm0W8QW6h1qhpR7egWXnjSdtI8oO/7sqlV2fKWQIuEFCqrvOq5ihpjQWr0
-	 T/FcoL/tGZnx1bADZVJlvyEX4Ldo2B6rv0jh+nCGY8joA7ZKvfYYBXjpRF3hdKXna8dq8
-	 BsPOPv7TtWzf7eWADH5KNii24NHbnBbzvcNwAAPAtlDYNSocyLLlsxCsp8JAqTENx+MQ3
-	 f3BOPzUN99M/0lKPUjyIM/zfPcHpeIsmxCXBw0sssduAYDGNIv3AhlfK5briHtcGJ3w==
+	bh=EZFI/lghrWCtHux+dgu45SkP6jtwsu8V0UM4c/Ac4uw=;
+	b=YelEH+kP1Badov7Wd1AjrDG+0BQvtNklNollhRzGfjJUeeEntcYV2qJsA1ISPa9HB+EB
+	 KAhYKvnoClHQHY5L/5R35+nAAHtYO50cuGHWiUulRqJxFCTJtmfm/apX7qz57LELlnAXw
+	 ikFJcjJUV3DhWCCRigPiqLhvkPiN58z7EUiMu069T+2TbVfPJsWLcNkGk0InczGZDLOu4
+	 Z++gGj1GSYKIy0CLEj6NDbcD7OenVJQkXcaEt3Lyqo3D2ta2JLXiXLn3+p7JlE3rvrjL7
+	 ocG7lOUgooPTCrlt2hCCk2RzngAo7/qtc1cieG7vRqIYGh+4U1ul66klgzd6UaXSDDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arm.com;
 	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MbiEQKPA;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=HxtUQgez;
 	arc=none smtp.remote-ip=217.140.110.172
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85611606A324;
-	Mon,  2 Nov 2026 10:03:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85611606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68635606A336;
+	Mon,  2 Nov 2026 10:03:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68635606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MbiEQKPA
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=HxtUQgez
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB9D51595;
-	Mon,  2 Nov 2026 02:03:39 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EAD901595;
+	Mon,  2 Nov 2026 02:03:47 -0800 (PST)
 Received: from a081061.arm.com (unknown [10.163.156.187])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6657D3F59E;
-	Mon,  2 Nov 2026 02:03:35 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B7BDA3F59E;
+	Mon,  2 Nov 2026 02:03:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793613822; bh=XoWrK/XFPSHrKoCJr1hb8lpBF7nrUDVvP6yJJO84omg=;
+	t=1793613831; bh=JeVzv9NQz+Y+oK0TojJCh1R9phHXpiaYLkfzxvD34FQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MbiEQKPAwioHsY+oTq9XEBh9wl6T/SXLEbkOp0d1rHU3X0r6FnGj4M0e6q6SrIuV5
-	 8CNaAhOdahyRRYqjLg/E712Rr1XZIJUQpu1Li1F8DkLIxLWlI4jXaO5xjj0H7jBA8e
-	 2aZADk44Lbi6xCgAQJwt2Es++wvqtA7MKLbxfLNw=
+	b=HxtUQgezyM6AXpWKLe/S0ihuJXrVR0dJIceYhT5wnWp0yPZ7+jdpbAH18eN9cxpsu
+	 RHWrF9LhtPohzlyi5M+2aPkIl6RnTGTrRAwp+zKtYX7QE0sGk1phBcjmhbJoUJXIpF
+	 TogNqFGV/PpSUdlQ9UpxwkO5UP7Y7p0HeIm2B8f8=
 From: Sarthak Sharma <sarthak.sharma@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -60,9 +60,9 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH RESEND v2 09/12] selftests/mm: mremap_test: remove perf tests and timing
-Date: Mon,  2 Nov 2026 15:32:08 +0530
-Message-ID: <20261102100211.141831-10-sarthak.sharma@arm.com>
+Subject: [PATCH RESEND v2 10/12] selftests/mm: mremap_test: replace validation threshold with sampled checks
+Date: Mon,  2 Nov 2026 15:32:09 +0530
+Message-ID: <20261102100211.141831-11-sarthak.sharma@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261102100211.141831-1-sarthak.sharma@arm.com>
 References: <20261102100211.141831-1-sarthak.sharma@arm.com>
@@ -77,170 +77,179 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-mremap_test contains three perf tests that report the time
-taken to move 1GB mappings with different page table level
-alignments. Although they validate the remapped data,
-their main purpose is to report timing information. The
-recorded time also does not affect the test result. Also,
-they are not run with the default validation threshold.
+mremap_test validates only the first 4MB of large mappings by
+default. Now since the command line option has been removed,
+this threshold is fixed and covers only the beginning of
+each mapping.
 
-Remove these tests and the timing infrastructure from
-mremap_test.c. The regular tests continue to cover PUD
-and PMD aligned remaps.
+Remove validation threshold and fully validate mappings that
+fit within the 40MB random pattern buffer. For larger mappings,
+initialize and validate 10 pages each at the start, middle
+and end. This increases coverage without significantly
+increasing the test's RSS.
 
 Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
 ---
- tools/testing/selftests/mm/mremap_test.c | 64 +++---------------------
- 1 file changed, 7 insertions(+), 57 deletions(-)
+ tools/testing/selftests/mm/mremap_test.c | 85 +++++++++++++-----------
+ 1 file changed, 48 insertions(+), 37 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 63bf8a475fe6..bf825ffa29f6 100644
+index bf825ffa29f6..572e4d9e9f00 100644
 --- a/tools/testing/selftests/mm/mremap_test.c
 +++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -22,7 +22,6 @@
+@@ -22,13 +22,7 @@
  #define EXPECT_FAILURE 1
  #define NON_OVERLAPPING 0
  #define OVERLAPPING 1
--#define NS_PER_SEC 1000000000ULL
- #define VALIDATION_DEFAULT_THRESHOLD 4	/* 4MB */
- #define VALIDATION_NO_THRESHOLD 0	/* Verify the entire region */
+-#define VALIDATION_DEFAULT_THRESHOLD 4	/* 4MB */
+-#define VALIDATION_NO_THRESHOLD 0	/* Verify the entire region */
  
-@@ -929,14 +928,13 @@ static void mremap_move_multi_invalid_vmas(FILE *maps_fp, unsigned long page_siz
+-#ifndef MIN
+-#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+-#define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
+-#endif
+ #define SIZE_MB(m) ((size_t)m * (1024 * 1024))
+ #define SIZE_KB(k) ((size_t)k * 1024)
+ 
+@@ -928,19 +922,49 @@ static void mremap_move_multi_invalid_vmas(FILE *maps_fp, unsigned long page_siz
  }
  #endif /* __NR_userfaultfd */
  
--/* Returns the time taken for the remap on success else returns -1. */
--static long long remap_region(struct config c, unsigned int threshold_mb,
--			      char *rand_addr)
-+static int remap_region(struct config c, unsigned int threshold_mb,
-+			char *rand_addr)
+-static int remap_region(struct config c, unsigned int threshold_mb,
+-			char *rand_addr)
++static void populate_test_data(char *addr, size_t size, char *pattern_addr,
++		size_t pattern_size, size_t page_size)
++{
++	size_t mid, end;
++	size_t len = 10 * page_size;
++
++	if (size <= pattern_size) {
++		memcpy(addr, pattern_addr, size);
++		return;
++	}
++
++	end = size - len;
++	mid = end / 2;
++
++	memcpy(addr, pattern_addr, len);
++	memcpy(addr + mid, pattern_addr + len, len);
++	memcpy(addr + end, pattern_addr + 2 * len, len);
++}
++
++static bool validate_test_data(char *addr, size_t size, char *pattern_addr,
++		size_t pattern_size, size_t page_size)
++{
++	size_t mid, end;
++	size_t len = 10 * page_size;
++
++	if (size <= pattern_size)
++		return !memcmp(addr, pattern_addr, size);
++
++	end = size - len;
++	mid = end / 2;
++
++	return !memcmp(addr, pattern_addr, len) &&
++	       !memcmp(addr + mid, pattern_addr + len, len) &&
++	       !memcmp(addr + end, pattern_addr + 2 * len, len);
++}
++
++static int remap_region(struct config c, char *rand_addr, size_t rand_size,
++		size_t page_size)
  {
  	void *addr, *tmp_addr, *src_addr, *dest_addr, *dest_preamble_addr = NULL;
--	struct timespec t_start = {0, 0}, t_end = {0, 0};
--	long long  start_ns, end_ns, align_mask, ret, offset;
-+	long long align_mask, offset;
- 	unsigned long long threshold;
-+	int ret = 0;
+ 	long long align_mask, offset;
+-	unsigned long long threshold;
+ 	int ret = 0;
  
- 	if (threshold_mb == VALIDATION_NO_THRESHOLD)
- 		threshold = c.region_size;
-@@ -996,10 +994,8 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		memcpy(dest_preamble_addr, rand_addr, c.dest_preamble_size);
- 	}
- 
--	clock_gettime(CLOCK_MONOTONIC, &t_start);
- 	dest_addr = mremap(src_addr, c.region_size, c.region_size,
- 			   MREMAP_MAYMOVE | MREMAP_FIXED, (char *)addr);
--	clock_gettime(CLOCK_MONOTONIC, &t_end);
- 
- 	if (dest_addr == MAP_FAILED) {
- 		ksft_print_msg("mremap failed: %s\n", strerror(errno));
-@@ -1022,16 +1018,6 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		goto clean_up_dest;
- 	}
- 
--	start_ns = t_start.tv_sec * NS_PER_SEC + t_start.tv_nsec;
--	end_ns = t_end.tv_sec * NS_PER_SEC + t_end.tv_nsec;
--	ret = end_ns - start_ns;
+-	if (threshold_mb == VALIDATION_NO_THRESHOLD)
+-		threshold = c.region_size;
+-	else
+-		threshold = MIN(threshold_mb * _1MB, c.region_size);
 -
--/*
-- * Since the destination address is specified using MREMAP_FIXED, subsequent
-- * mremap will unmap any previous mapping at the address range specified by
-- * dest_addr and region_size. This significantly affects the remap time of
-- * subsequent tests. So we clean up mappings after each test.
-- */
- clean_up_dest:
- 	munmap(dest_addr, c.region_size);
- clean_up_dest_preamble:
-@@ -1119,10 +1105,9 @@ static void run_mremap_test_case(struct test test_case,
- 				 unsigned int threshold_mb,
- 				 char *rand_addr)
- {
--	long long remap_time = remap_region(test_case.config, threshold_mb,
--					    rand_addr);
-+	int ret = remap_region(test_case.config, threshold_mb, rand_addr);
- 
--	if (remap_time < 0) {
-+	if (ret < 0) {
- 		if (test_case.expect_failure)
- 			ksft_test_result_xfail("%s: expected mremap failure\n",
- 					       test_case.name);
-@@ -1132,25 +1117,15 @@ static void run_mremap_test_case(struct test test_case,
- 		if (test_case.expect_failure)
- 			ksft_test_result_fail("%s: unexpected mremap success\n",
- 					      test_case.name);
--		/*
--		 * Comparing mremap time is only applicable if entire region
--		 * was faulted in.
--		 */
--		else if (threshold_mb == VALIDATION_NO_THRESHOLD ||
--			 test_case.config.region_size <= threshold_mb * _1MB)
--			ksft_test_result_pass("%s: mremap time: %12lldns\n",
--					      test_case.name, remap_time);
- 		else
- 			ksft_test_result_pass("%s\n", test_case.name);
+ 	src_addr = get_source_mapping(c);
+ 	if (!src_addr) {
+ 		ret = -1;
+@@ -948,7 +972,7 @@ static int remap_region(struct config c, unsigned int threshold_mb,
  	}
+ 
+ 	/* Set byte pattern for source block. */
+-	memcpy(src_addr, rand_addr, threshold);
++	populate_test_data(src_addr, c.region_size, rand_addr, rand_size, page_size);
+ 
+ 	/* Mask to zero out lower bits of address for alignment */
+ 	align_mask = ~(c.dest_alignment - 1);
+@@ -1004,7 +1028,8 @@ static int remap_region(struct config c, unsigned int threshold_mb,
+ 	}
+ 
+ 	/* Verify byte pattern after remapping */
+-	if (memcmp(dest_addr, rand_addr, threshold)) {
++	if (!validate_test_data(dest_addr, c.region_size, rand_addr,
++				rand_size, page_size)) {
+ 		ksft_print_msg("Data after remap doesn't match\n");
+ 		ret = -1;
+ 		goto clean_up_dest;
+@@ -1102,10 +1127,11 @@ static void mremap_move_1mb_from_start(unsigned int pattern_seed,
  }
  
- #define MAX_TEST 15
--#define MAX_PERF_TEST 3
+ static void run_mremap_test_case(struct test test_case,
+-				 unsigned int threshold_mb,
+-				 char *rand_addr)
++				 char *rand_addr,
++				 size_t rand_size,
++				 size_t page_size)
+ {
+-	int ret = remap_region(test_case.config, threshold_mb, rand_addr);
++	int ret = remap_region(test_case.config, rand_addr, rand_size, page_size);
+ 
+ 	if (ret < 0) {
+ 		if (test_case.expect_failure)
+@@ -1126,12 +1152,6 @@ static void run_mremap_test_case(struct test test_case,
  int main(void)
  {
  	unsigned int i;
--	int run_perf_tests;
- 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
- 
- 	/* hard-coded test configs */
-@@ -1164,7 +1139,6 @@ int main(void)
- 	int num_expand_tests = 2;
- 	int num_misc_tests = 9;
- 	struct test test_cases[MAX_TEST] = {};
--	struct test perf_test_cases[MAX_PERF_TEST];
- 	int page_size;
- 	time_t t;
- 	FILE *maps_fp;
-@@ -1254,22 +1228,7 @@ int main(void)
- 				  "5MB mremap - Source 1MB-aligned, Dest 1MB-aligned with 40MB Preamble");
- 	test_cases[14].config.dest_preamble_size = 10 * _4MB;
- 
--	perf_test_cases[0] =  MAKE_TEST(page_size, page_size, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
--					"1GB mremap - Source PTE-aligned, Destination PTE-aligned");
--	/*
--	 * mremap 1GB region - Page table level aligned time
--	 * comparison.
--	 */
--	perf_test_cases[1] = MAKE_TEST(PMD, PMD, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
--				       "1GB mremap - Source PMD-aligned, Destination PMD-aligned");
--	perf_test_cases[2] = MAKE_TEST(PUD, PUD, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
--				       "1GB mremap - Source PUD-aligned, Destination PUD-aligned");
+-	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
 -
--	run_perf_tests =  (threshold_mb == VALIDATION_NO_THRESHOLD) ||
--				(threshold_mb * _1MB >= _1GB);
--
--	ksft_set_plan(ARRAY_SIZE(test_cases) + (run_perf_tests ?
--		      ARRAY_SIZE(perf_test_cases) : 0) + num_expand_tests + num_misc_tests);
-+	ksft_set_plan(ARRAY_SIZE(test_cases) + num_expand_tests + num_misc_tests);
+-	/* hard-coded test configs */
+-	size_t max_test_variable_region_size = _2GB;
+-	size_t max_test_constant_region_size = _2MB;
+-	size_t dest_preamble_size = 10 * _4MB;
+ 
+ 	unsigned int pattern_seed;
+ 	char *rand_addr;
+@@ -1150,21 +1170,12 @@ int main(void)
+ 	pattern_seed = (unsigned int) time(&t);
+ 
+ 	ksft_print_msg("Test configs:\n");
+-	ksft_print_msg("threshold_mb=%u\n", threshold_mb);
+ 	ksft_print_msg("pattern_seed=%u\n", pattern_seed);
+ 
+ 	/*
+-	 * set preallocated random array according to test configs; see the
+-	 * functions for the logic of setting the size
++	 * The 40MB destination preamble determines the random buffer size
+ 	 */
+-	if (!threshold_mb)
+-		rand_size = MAX(max_test_variable_region_size,
+-				max_test_constant_region_size);
+-	else
+-		rand_size = MAX(MIN(threshold_mb * _1MB,
+-				    max_test_variable_region_size),
+-				max_test_constant_region_size);
+-	rand_size = MAX(dest_preamble_size, rand_size);
++	rand_size = 10 * _4MB;
+ 
+ 	rand_addr = (char *)mmap(NULL, rand_size, PROT_READ | PROT_WRITE,
+ 				 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+@@ -1231,7 +1242,7 @@ int main(void)
+ 	ksft_set_plan(ARRAY_SIZE(test_cases) + num_expand_tests + num_misc_tests);
  
  	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
- 		run_mremap_test_case(test_cases[i], threshold_mb, rand_addr);
-@@ -1296,15 +1255,6 @@ int main(void)
+-		run_mremap_test_case(test_cases[i], threshold_mb, rand_addr);
++		run_mremap_test_case(test_cases[i], rand_addr, rand_size, page_size);
  
- 	fclose(maps_fp);
+ 	maps_fp = fopen("/proc/self/maps", "r");
  
--	if (run_perf_tests) {
--		ksft_print_msg("%s\n",
--		 "mremap HAVE_MOVE_PMD/PUD optimization time comparison for 1GB region:");
--		for (i = 0; i < ARRAY_SIZE(perf_test_cases); i++)
--			run_mremap_test_case(perf_test_cases[i],
--					     threshold_mb,
--					     rand_addr);
--	}
--
- 	munmap(rand_addr, rand_size);
- 
- 	ksft_finished();
 -- 
 2.53.0
 
