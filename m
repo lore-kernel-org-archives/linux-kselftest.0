@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793607107;
-	b=xLhAGQukJHfLGNxZp6Hbs2/GCzfDp03VnM854PKlxUmecYI9OodMs8h8GbOCz9UTYgyp
-	 91/Kgs2Y7FfL9YjkbFBeTWt7miLnWcbJDFh13yy5S4RAQhqgAUUB/tCqHoh5ybG9NZNiv
-	 4wLTEuFrEozDb0h07DYBz4VEeiGXwgSEGMoaKsVxpsIB21zM+9iXdxU+Shksgzr7sOyrU
-	 vsQm22vYE9cI+yDJMLqn1zXwXMDYb9dNHVVEF/RN7rII7Pif2+oXK/aNFxuLUZbTsWCwL
-	 iuqQS/yJDtDc8N+lb1+sU6/SO9XazlTkBPMKp3s0l+l2v9v807GY9fTg6uv/vr+k8YA==
+	t=1793607110;
+	b=Ecg0DqBn067c/uA0nX7FDBHFJvIcj/5r+/5rYzR6tUd2hSX5DbR/jYDkNE5bq0B01ZDa
+	 zJo4mJ5cD7jJQ5MtKfF3QmIPO++PCSMQThJ8ZNyRsDgKYHvlgLq0AyR0FOIffhzqEhk6m
+	 fRAoSjy7NSX5fNSc7olaEPrQzWdF3qyVreogfeMBRBt8jAf3SFmiFqcBsktIm5vPk3LYo
+	 KtxIySJyYA3XvTqUbBp0ExAcjn9gmIExyF18Pe0fa2KAVTnVncv94Bb0THjbdBJVr7c2A
+	 TbOEpGyPjOLBupr+hDkzuNkkYSNptihJZmc17oxSO9UtkufqPNyoRPHYqwieuYbW6sg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793607107;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793607110;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=n45aLFyavI2LtF2m7I+VQnPGHMyctlLmfLLfzdcQlpQ=;
-	b=bbrOwgdPaE7i7KHaGj/ah80ot42I0SAlBuYZP44f7pyYvBM5sD94EShHt6xdIE2yo+IG
-	 zssRTEqEQCB0zvs1R8W86FtwNC+UcDrQUd5Q4ASNnBK/Jds70VbxSTSQ3y8tXXznaU2Ya
-	 zYkxb/z4j+kbfGpYZzFHRQevo/3HLE6iLyis9njFRG3xCS4nycHwqb3d5eOb16Sqq5BfT
-	 Q20BFAUhL3i9l9QdVq8jpM+yez2IhXxBhdM2uqV9AaY6suYtRso2HnhTuupXW3CxFbboV
-	 PYK47JavC7XoSuYvnEFApmOgtpiIlydsKOVgDctqCcin3ir1gkeOwLpmEY5zp3oDLYA==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=FAyyYwHdR5Ch5uO/F1MiXirGDsn56GrI3GAO8iDRceA=;
+	b=Uknzaq4BGOdVOcgSKQTriIZ4LlIgFGVCvhUzG9gehdoNZ17Oto2VWRltnsZ/J0gA918g
+	 LautpfGFKndi72nGSqpym7ZvrfX2Rdnih0l4GAwwadK8ACvZViqdhV2rTFDfwMjR81fKK
+	 edfMQrzq2czp3r95bA8Zq6i01ICAomfhu/0guFgtWG/iX/MYt/oRQkVnb88Lgt4kQKFXI
+	 g/cWGrqNgzd7y6B4lxrM5CjPOxG3Kqze/hag+O/tAA+BJTNPwrjqj2MfUCekqSBizZZI7
+	 8pEt6tODAkw+VqulOAiviLy9MYwp6thx3LmZkc9+lp3xZSVgA9i/mgytnnaiqNL86dA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XUS6RQPy;
-	arc=none smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YStxYhS2;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98CA606A326
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 08:11:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E98CA606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F0B606A331
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 08:11:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31F0B606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XUS6RQPy
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a20bdaf39cso30577565e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 00:11:46 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YStxYhS2
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a5b2be99a8so16860065e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 00:11:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793607105; x=1794211905; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=n45aLFyavI2LtF2m7I+VQnPGHMyctlLmfLLfzdcQlpQ=;
-        b=XUS6RQPyb3otLnmDTaqJaQXOx+d5IGnB97gdhyJ16YFLMBS9Oi9L5ba5RebRSivImX
-         xUKMnCVgsV8Zo94W80KHvK8Y6iHgiVUyQ3mxKPGhDQ8t+goiA1toTD7uDr0dy4ExQvbf
-         UkqXJFec3gDJSxPjQiiS3zCpiwwd2IV3+dCOsbo2vQndD0h3weBG6qM1+8VyU3zYfRDB
-         p4F+vHBU3+378wo8ZVn6soA6X+CfQdNY8KXaJZfIQ8zZizSbpiMf2ARPB9ehyNNWz8pN
-         tEqOOt04zgi2h4pWjc7qyqfFb1693V/mCU9IrLV80LXrwFhLuGmv7fJzKMUdGh6t6pi6
-         VEzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793607105; x=1794211905;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793607108; x=1794211908; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=n45aLFyavI2LtF2m7I+VQnPGHMyctlLmfLLfzdcQlpQ=;
-        b=WY+fWtv2d45kdG4vc7ock2BxvKgaKDQMwNH5mi43cUcEOFgavgVceE1bnDh/oAcmU+
-         5fYe62oHXWCIaQ9qjEVqXRp8P4bo9ItES8p5AetsbP6mYcTcoo931ma+kpxAju0w8OeA
-         oTsxI3NuPAwXigtOfd/EAVrl42XIBmvG4UQm2rKqAdqh6dKlAYDppmd17KNBX2TWPkxu
-         TgJhi38jRpI3v7pkx/tmZ28sQCPxo0cLAHebkacNK1m6bbFKGD5JHCBp+20Ku5zG4ULN
-         2DbnfyD28oFNSuurspr4z0b4opSIAPQK4NA2sRX2cnA2U9eTIIXrqVfdEvribyybnwKN
-         TrvQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxjaCRC1z6BUTWYuJ5I0u2YEvxAl000s3Ls3z8UuXStM5HBGPaZK6BWJEKmGfvdyzmd/IwXHG6oaUnQ8gJZWNI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKPq3NPT4OjytwW+WjfKv6GgQA2Y5EAJv2IanmKEMYlZZVDojot
-	DJtfoK9h2kyvQQegbgBQX2/MNZtd2wJfcmrjD/AwFqpR2EgJ09pGCMIQ
-X-Gm-Gg: AYBFou1/s5uO8MBEtfhFEoSkVf0suhUnA05w1MPiOohct3GhivKfqmqmfG0VZWSIrC2
-	bJwU12UwsQ0MUVO1fiE0530VNTb1NgRj8b26U63+ZLHre02VGk9Od4IQZ69S8HPk9ryeYkGTyVh
-	XiBeujHwCFkCdSQP4r8nmjM/dYN4vPyP1ELSJa8MeSPCB+EMnKnhyWnaVqbOylXgkm5fEEIQO/f
-	kS9frxmkBtRqTz0hbZ62QuepIwj5pWXiItOzmDCQKiRQJLFB/Blzp33UK3/1WR9foITc/zLGjYO
-	P0xaRCbKhACXGi2y3Ajbdmv2KD/6KRJighHjRRJuSXWiC3Z03byMm1ui8rVgpzOLDyAbkkYsMdN
-	qtcRdErhZKYFYrsPUkJWvUhzmAsK71KTnLjXDuFxhCVmQhdECvB48jNikLjdx2B9TSjxEeOFe+w
-	8reRv/KKGWqxlJOLRi7WFdRM9qilY/KWsqZkVevaTRETCLnu87iet6V8S0U25fD2Vei1WFjr5+F
-	7zTqI4qxRGFhbB38SZklqKt7lZOAxbDIJ5Y7CRclUQ9NT4yF6mmfQfbKNDiu3UC0eudzzM/kPeF
-	xo6u0jYTLrpugeWqHH6uS7kKze2qubFUzSs=
-X-Received: by 2002:a05:600c:46d2:b0:4a1:7ec7:a479 with SMTP id 5b1f17b1804b1-4ac1980118cmr202498175e9.33.1793607105171;
-        Mon, 02 Nov 2026 00:11:45 -0800 (PST)
+        bh=FAyyYwHdR5Ch5uO/F1MiXirGDsn56GrI3GAO8iDRceA=;
+        b=YStxYhS2u0SmwT7c0BAO3eh23j05Vsv0xbEu/kN1OVblWYq9Lj6EC9f+W+RuyafvaW
+         jDYRmFK2XFgD850Vh2O9J+HJ1uWuVgITD3z0D7S8Xb74iG8k+jScmYN5ap8X/oV4xYkP
+         XK++OAjpueHON5AlXSh70ofRtiil9xZF8dligA3Z0P9KitQ0n76P61ugapBc7RCOoMew
+         3j6+fLkm4kqdrmrKGWOZKw6+KAsTP+FQW+hzLea/S0/2GhUKWYxfkCWdDL0TzNzQqme6
+         7epabvsLqV01UUxAJeQ3ZRCXuPUiXynx11JzazCmGNOOlTL0ZSxpQ8mC64M9YF/BjEyc
+         pfdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793607108; x=1794211908;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FAyyYwHdR5Ch5uO/F1MiXirGDsn56GrI3GAO8iDRceA=;
+        b=OTpTnSZJOMu1+f5Cg7qq51bgX2m8l91blw+WVzD536eKA+ut0T11C//8LypDUNm/9P
+         V57TPc43fjdA8SiDzJrvXNfsIffRt/S3swrZLs0sRU6P1JSD4vj9skzN0ZRb4/VJUqzG
+         qbHbR/yP63q0nlKa0QtzGbQe2ZGfZjM1ovoDSk5pxcefpgxxzV+DxWtlHUr2tdnRqj0U
+         sKykBQ1eIdOaV5lxAlne39bp18QAyBSc+IAUcJdKV1Tt8+TWYu9/Te60Ju2A8CrcRDWq
+         fD78FYYCGPEdIuDGngSTBrTFrFOuvbKTy3AYxdv0bsdDclX2rbh88aUHeLjk7hEZDNLq
+         +yQw==
+X-Forwarded-Encrypted: i=1; AKwUvBxliMqwX0IehnP2ci4FW7GNfe9t8U+f78diq2btkKxHirtMlG1srUEoK8fXHPhkwCyiioUxqjRA6HRX2BALFYQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI7C5lCplu/vT1zdLhgnk1VsvkBcnRvtHICuEGflILH00LYTNzn
+	EhTLeohpWoFT7uucC5bpTfmN51PI9IE9/bwM0cSUTAKkWZxHpj1APjvw
+X-Gm-Gg: AYBFou0seTsAg3/eOqQo04myDCEnA/r6KGE5KTXRrnKew7mOLZ/ettXTgZIhK2LCAii
+	gw0GQ1kFRsdSkrYYnyghR+IOddwhpqAivGPPQET3Ilyw8vyc8Xgsvzv8Wv5VknDtu1QAt1GtN5d
+	FtJ9V8YfwSKNx0xgRCYImFBT3Jl9Z8pahWitU8VhS2kjaghaKIDxZacvjDwqQOxRUCLRzg0ia0o
+	RMLfAHATEI7QkRyG5oF9MaxHxLO6QVTqEgaMmSvWJ5D2xgHO3iNWICy4LsnbrqFjvZwFzQDNEv9
+	poitnb8dEGrTNKA98f4y6Mcwlh+XyL+Q9oK1eKRyPVC4tmCnicV6tY3hinHQIF73tboXJX19OD8
+	6G6uojPtmX3G7ZfNupSHFFvXJ5PLK0W5zHxu4DMTrcuwhXC7N/A22oNHT1e89vkz2I8x9N2udAp
+	nQrQvJrT0dDipg/q8P7G+F5dVfJBuhuO13oe6QDkOPlrVu8yyx55PLP9At0PewYVyljcrknPdZt
+	ChWCiuhLPGcEvOoiPSUoqw0Y7/WCDWkWAm6WhzdtOhCBPbSEtuliaJuwuEbEyCQYP7S6+ADF4oa
+	DjaORz1qQxASFw==
+X-Received: by 2002:a05:600c:a00b:b0:4a2:180b:3153 with SMTP id 5b1f17b1804b1-4ac185bcc7dmr226206975e9.14.1793607108359;
+        Mon, 02 Nov 2026 00:11:48 -0800 (PST)
 Received: from nobara ([83.231.69.9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa8213ead6sm333331005e9.14.2026.11.02.00.11.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa8213ead6sm333331005e9.14.2026.11.02.00.11.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 00:11:44 -0800 (PST)
+        Mon, 02 Nov 2026 00:11:47 -0800 (PST)
 From: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -93,11 +94,14 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	Muchun Song <muchun.song@linux.dev>,
 	Oscar Salvador <osalvador@suse.de>,
-	"Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-Subject: [PATCH v2 0/2] mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY retry
-Date: Mon,  2 Nov 2026 09:11:29 +0100
-Message-ID: <20261102081140.201987-1-azpijr@gmail.com>
+	"Jose A. Perez de Azpillaga" <azpijr@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2 1/2] mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY retry
+Date: Mon,  2 Nov 2026 09:11:30 +0100
+Message-ID: <20261102081140.201987-2-azpijr@gmail.com>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261102081140.201987-1-azpijr@gmail.com>
+References: <20261102081140.201987-1-azpijr@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,47 +113,45 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The urgent fixes made hugetlb_fault() tolerate uffd bits left in VMAs
-that are no longer registered for them, and asked for follow-ups that
-remove the sources [1]. This is one: a hugetlb UFFDIO_COPY_MODE_WP copy
-that has to fault in its source page doesn't recheck the WP registration
-before retrying, so re-registering the range without WP in that window
-leaves a uffd-wp PTE behind.
+mfill_atomic_hugetlb() drops its locks to copy the source page with page
+faults enabled and then looks the VMA up again. The retry doesn't check
+that the VMA is still registered for WP, so if the range is re-registered
+without WP in that window, a UFFDIO_COPY_MODE_WP copy installs a uffd-wp
+PTE in a VMA without VM_UFFD_WP.
 
-Patch 1 adds the missing check. Patch 2 adds a uffd-unit-tests case for
-it, which fails on hugetlb without patch 1.
+Recheck VM_UFFD_WP for UFFDIO_COPY_MODE_WP copies after looking the VMA
+up again, and fail with -EINVAL if it is gone.
 
-The other source 6/10 of [1] mentions, UFFDIO_COPY in MODE_WP racing
-with UFFDIO_UNREGISTER [2], is closed by "mm/userfaultfd: write-lock the
-VMA before waking waiters when unregistering" [3].
-
-Based on mm-unstable.
-
-Tested on x86_64 in QEMU.
-
-[1] https://lore.kernel.org/20261015-urgent_fixes-v1-0-42796911043b@kernel.org
-[2] https://lore.kernel.org/20261015-urgent_fixes-v1-6-42796911043b@kernel.org
-[3] https://lore.kernel.org/20261027-fixes_core-v1-23-6f74bec9a5bb@kernel.org (v1, now 23/47 in v3)
-
+Fixes: 6041c6917903 ("mm/hugetlb: take care of UFFDIO_COPY_MODE_WP")
+Cc: stable@vger.kernel.org
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
+---
 Changes in v2:
-- 1/2: drop the leftover sentence and the non-hugetlb reference from the
-  commit message, add Mike's Reviewed-by
-- 2/2: "all memory types" in the commit message, rename copy to result
-- rebase on mm-unstable
+- drop the leftover sentence and the non-hugetlb reference from the
+  commit message
+- add Mike's Reviewed-by
 
-v1: https://lore.kernel.org/20261029221129.89068-1-azpijr@gmail.com
+v1: https://lore.kernel.org/20261029221129.89068-2-azpijr@gmail.com
 
-Jose A. Perez de Azpillaga (2):
-  mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY
-    retry
-  selftests/mm: add a uffd test for re-registering during UFFDIO_COPY
+ mm/userfaultfd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- mm/userfaultfd.c                             |   4 +
- tools/testing/selftests/mm/uffd-unit-tests.c | 105 +++++++++++++++++++
- 2 files changed, 109 insertions(+)
-
-
-base-commit: 34f88a114888c9dba49e45f2b0c2a3e83c4c871c
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index f33ccedfecd2..6321bb82c1ef 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -810,6 +810,10 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
+ 		if (vma_hpagesize != vma_kernel_pagesize(dst_vma))
+ 			goto out_unlock_vma;
+ 
++		/* The range may have been re-registered without WP meanwhile. */
++		if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
++			goto out_unlock_vma;
++
+ 		/*
+ 		 * If memory mappings are changing because of non-cooperative
+ 		 * operation (e.g. mremap) running in parallel, bail out and
 -- 
 2.56.0
 
