@@ -1,108 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793656869;
-	b=MR65ppJKwqgVboKfL6wyrZ95WFP/FOWUgSCl2o0y/FxExog+Z9tpzknvrvsDjJ5LpELA
-	 lhoLFPtzYgtiyjpKS1uTqRqHmNdxguhm805EDOrJHUlq1DfUGhqXiPP4ZyL5meCf6aPXY
-	 w9BTndXl3/pVRjii31XnVoMjbYyGKOs3uAEugPWTCjxlmP63iHh5NtXEXvWZ4UE+4WoDS
-	 UieCtZ61MEYN8Wv8NdV74o+57pRJUdZWlsWC+lbKd3mxeLpTnOwoaACOP0/e/Af3cYCI3
-	 8usNSKfPqvn0tiKZBCIWFQPVVaoFHgEeuCuuNqPK5kzaLnq8mwOpfH5vdSNUdLw331w==
+	t=1793657186;
+	b=EUWEaaYy4AYL5v0Wt9tSBY7cePBy2EudzyJSi6X50ez4UTSXfHnoG9K7twEnt06rnsPk
+	 9fZYTDCZr7KwftknEUhQmQuA/XfaMoqdOB4PEZ1+U5ptivVNDbeQHjsSIRtVsSZYVIUD+
+	 zxp///UYX2QJWF7YLObZ8g2pEWQdYu3bE1+M1J7BDcXjPDcRPCj0/sLha33qDcio48XwI
+	 fghkG9xd7EbNHBGYZqtzmSrKkR538s9gAzJFdLR7ddiDWLVac9Tq97DN5rnjlNRqzLUSS
+	 8wlqglrQA2we1fGLTCid9ry4CXtXCVK1HnA5zTXdsScda/azX4zjcOGOAefPIMJjGNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793656869;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
-	b=dMd8DlkqQnsU7Cc12hvMoSq6yLxYRipGTDLdi29+rQuuuzvNyg5aHRHVMbBax8urDtx4
-	 4YFzv2eR4AShFxeBt3SUt6yuugunazvQLk74LN1y4cSAKLabqk703j6gFdged89AZCfrW
-	 jeuaAKfY5QEFIPY8vaDo9fgi6vryEEsIhMncp/tGEh4cZ/6lUdD6qcwEp+LuGHIFvCKBO
-	 Emz5gMciNyxIf4JRqHyMl5CwXiefXmds4RwZVXVtKTdYcIhkxiNmZtKjVFtP/+iduGYoz
-	 shf6ZvnoBNvpHNHr8w7qeuiWeV4c9mFubynDmYkUNj9TUh5QsJscPfh/hsfBp7Exn0Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793657186;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=NH6jz3WPUJHIT+J12ydGYZK6J+d3CqEgAa315HjW4cw=;
+	b=z0HlrQyxD4nXeSL7twRZbshjjE7aktXl2TevnlLKwazHwq+qewhk3arbV3zNPWObruTB
+	 mIXCCM0gYwCHSqPkRGWDfhRbtf7gtEnJx9Nw+ybgooX+wGh8D2M79CN+z6xQCVpRGijWc
+	 OVlw3zOmIBqVggNvQ3WNP4vRQC0TRSfdtn7XavzVI21vg7LKAf2f61DrTJZLkOjFbGH5T
+	 I+O0lYdz0LO3jlgaaH/vX5sMj27rKqC7vRblemi+XkQbxuqGFbKPRfjiAVPC35JDZuUa6
+	 bIOng7ptcDI/1nf0HCyIp42JA2GKsvO9ZeXPTkvMWpGHGzViqkNRarkwEWj0pqcsPTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b="JY/wmp8u";
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=kxub1Oep;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B1AD7UqS;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BCD606A326
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 22:01:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92BCD606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78C7606A32D
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 22:06:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E78C7606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JY/wmp8u;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=kxub1Oep
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793656867;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
-	b=JY/wmp8uEajzUkf1vNeZ7IdqqrYGiqbB+JyZfHIwoBnRWFnXx6MxOMBQ1QPWUuN47HN3vw
-	WfXsqF3y2s4CK8roeZtKzy6VSl6JCH36pHlSmbwr5v1VaCKfqJsb28FskLBuSe+4H8NHu8
-	7PydJ4vC0jswAldSb+/rh1oN5K8jTB0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-382-Kvolrw9iPVSNzIZ3skoRaQ-1; Mon, 02 Nov 2026 17:01:06 -0500
-X-MC-Unique: Kvolrw9iPVSNzIZ3skoRaQ-1
-X-Mimecast-MFC-AGG-ID: Kvolrw9iPVSNzIZ3skoRaQ_1793656865
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-48e1d839ddaso2477188f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 14:01:06 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B1AD7UqS
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e98798cbddso16975955ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 14:06:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793656865; x=1794261665; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
-        b=kxub1OepQwqzw4DlS3rfA1OfAXqLMScfhFOmzNrJ1pTHliNk1VVITv2fVQ/UPxKoLU
-         QfvGseif6c5bt0WFIJ0q12sb2pzR4u2J4YfJgBY7U8Om8in4RhWC7yMK34FmrE+4GSz+
-         5gXSOvnknqCcZQQIYxRFUSH+fmdwg/m1R0R8VfsuasglNTZRYb1vc9L4ZSq03EUkFDpQ
-         EDxoO11i0GUZyyb3Z5IUsmyft32Qt8D4a3HtGkVBQt9F6v0zVqPJqQvaXlauDKBuBqnI
-         GfhxNDuwUIHctovuzeuFDmtxLnWhbV/XbrnwbJ+DDZqa2/otPHbkMbnwSEawQFS4m4PK
-         1XbQ==
+        d=google.com; s=20260707; t=1793657185; x=1794261985; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NH6jz3WPUJHIT+J12ydGYZK6J+d3CqEgAa315HjW4cw=;
+        b=B1AD7UqSqrGX1/VZ9OPSvRwQQaY1cQeTHUa+6qKksae8nAaFO6w3T01WQxSAS5F9pr
+         3p3mBtKjiUnZw4iKOK+uwGkSkRA8Rx/rlSVfvuv1XSvkvMyiLlzoHOE2DOHXpivjkpHO
+         htLEikQv31Jn0Hyi6pbSQKcJQTV+ZlUcssFRrd7PJLhdXlbVw84gu2Z4D/xFcfnKNiDm
+         MlrIHQvplxHQEgqxKc+vHzBp0zIEgNH2xDIAARXoQmgTFLQ0X9PlbjR1qsFkCsL4LAoe
+         OQI33JJnV+fdOJz0LxWGRphXSw8FC4m5WltrkCBeEsddhd/jdWDedF4pmEKRg+SPdhTa
+         uafw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793656865; x=1794261665;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
-        b=Z6ablm18bWtQd6Zi703pRFQctopz6El7aUnZVogCJfbXfLA92zIZSj/bnC9cpmjpvL
-         HKA6F0MsneR4wxya5z5mscItx/dt898blxA4zNJZTTn4T5QbkW9ER5lzU8QfLkDjyTwb
-         li1LwAZxZwFApNOx6Ox9kg6pNU+f/KymUF/ihs8IWIEzDARWsnjd2DarzXEjboJ8p95g
-         1QLY2q5LwBkN3IxWh2mJ3wuOrIdBV5oWm7vt+ajX3mX7Pj2SwBRTcFC80rLFzwqiK63T
-         Y8eIxaVYhazwTmn5sgLFU0RLpWTmh9ryPYBnJELwnknef5ivtwblb41j6wqbs2Pbuh04
-         x5vQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwS1oHUct3jdZk6yq9T5m+xS9QiUmv+fsY91YUK4mc31hDomtGvkpF83gry3SjI6cPshQQApVtQY6cFYD/XvZE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z87ZyfMP8ryu7LbfwEkv6gw/PITb3R1as5DmgtP1I+aNkp2jIA1
-	L6TQEGStglmXK5fhNi+2erimXa9tsaGBwnwCN/ImerqetxKP5FhOOxzmZDsFMIxUy4BvvbQKw7Y
-	w1ReRFwO19t+IhwU85VbnIivjqaOzDnAUnTmm+xISoNqueoO/A8V3D6pXSluCOWizoC6bXg==
-X-Gm-Gg: AYBFou2HIY1U3TIiKkh8u1TCpm1hXl3/6UdLjJP5HhVEaPvVDcH9s/VgYJ+lBYQeQm9
-	gGzJ81HH/KJupXe4d/xNH/pP0zOvnTHVhBCUlM4KKsSe7jB0TtEujcjIfglQKwilq4VDf30Lss9
-	tWGws4STtNnkCufIPlVvs7eWMyKlbStc2yHbn+WLBFVM+KwWh545VkC0+uF2Cx14SSNz644LjjW
-	d2vNfeOpObPWyVqX5M+qAtOK3Lx8Jx4NTYPzDBEB1gKAl9ZcebRxGmqQcg+0FWHnfUk/f40tM1N
-	L435iGZIAAOS0zLua8VOs5zo04ICiqJDblNmkrzcM5UTmVZVwlajuGWWCdnEhSk/wvsvLB9jq6j
-	UF06c3G2P18NzbqBO42nlZDG/0c8wjuF5gd3VqOexNUITA+n/4IBQtsg/bbKktcwZsfVqNlfD88
-	j83G/h8IIF50SrUJEmGip1bocZx+TYAArPxf6VovvZmzs=
-X-Received: by 2002:a5d:5f41:0:b0:48e:68d5:818d with SMTP id ffacd0b85a97d-48e6e2eb83emr27445782f8f.16.1793656864958;
-        Mon, 02 Nov 2026 14:01:04 -0800 (PST)
-X-Received: by 2002:a5d:5f41:0:b0:48e:68d5:818d with SMTP id ffacd0b85a97d-48e6e2eb83emr27445750f8f.16.1793656864628;
-        Mon, 02 Nov 2026 14:01:04 -0800 (PST)
-Received: from [192.168.88.29] (ip231-128-192-82.pool-bba.aruba.it. [82.192.128.231])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71baa1b3sm20953601f8f.56.2026.11.02.14.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 14:01:03 -0800 (PST)
-Message-ID: <f4f0fbd6-63e4-42d3-87bf-9f888a8de1a8@redhat.com>
-Date: Mon, 2 Nov 2026 23:01:00 +0100
+        d=1e100.net; s=20260707; t=1793657185; x=1794261985;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NH6jz3WPUJHIT+J12ydGYZK6J+d3CqEgAa315HjW4cw=;
+        b=l5FcGEclUebiK6ufe61CyGFoASbrHURZEWhbNibOaniOrgcQrAcFV/umSD4fW6BBkR
+         JX2pGQPlnpWvsD4p9WXnE4O9xdRak3ebePChBY60EscT738mKhx3QskQgEjdtpUv+1S4
+         AN7aRKvRyvGTj9FjF2Ztg8a/cKY5N4qKBdOBC3vm42aZFtvAI2GPFTiA30gi2V1fXcDV
+         ZNm0p+FZCADBqGvcd6G2LJ9eg4bKhV8fkFomC0WH4bMOVtBQVHca6LKux2mKMN0Y76K0
+         p6/ohzp5beS+rztGeYWx1fUTy7eDIQ/8K2b3dW8EA1mDvM/Wk/UfoHndRfLhiqsSU9fR
+         EQsg==
+X-Forwarded-Encrypted: i=1; AKwUvBwOOMVoe5vSCtNgMgsGOAAS2bsUzUfus2XNagX4DH+r1auGcolADSO/xWj/aCWV+vx6Inz/W8sZq1v+TEdcnhw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/EDQp5R1xQppjd+h8+URDDNjeVZCVMuyEhkNMQPftcqb3cwOad
+	xjlFVAkZndJVzdHXK6YHjyaRM0mtbGZ0gNdVQCpFYknjzthDoCM91q9jpNa08KHlKQ==
+X-Gm-Gg: AYBFou0ltcRmZk6vdEyJ8a5wqSTa2Aqy4pu4hBAm93bovCXHMjh+PIWRQQc3EBcG+/1
+	s0VwPb+cHPY2T7BJJJyEwVlZUuIHk9FYWI8IjZbW8I2TMjlb53YPCDXsYFIdAy+ASIfqrZyMBPu
+	i1pOGlX7hlzPE7e+1KbaI+ULP3JB0stElAVJ9+Dn6sgHMKZJ2skur+Lgc5soFL0eT67/KuCaRwb
+	NQjGxDej4vCYz9H0/Zd9mejArkfYTo+eePfuY32jCckl3nmC0+LrTCXOc8M9CeGQk7zWB4AHCYu
+	/JJDAJfhIyqFM7cI07ucI1y8ttXaY3WHmm60T/uGyBQ0bGIqrrG3iV79z6Tuj9uqtV9S9x6YCjr
+	zGMskyK+G6UuOqRAQupRNMKCk71kR/32+ZCh44naW+U05U2qwEfFerS/pni8iB97r6MR348LtYT
+	6uspY15btU//0peFayXSrzXHngn0ZfGjQJALUmmQMHMya47VLZdJjOOGTnUJoU+eitc/3BGq72U
+	Jpv8Xb60mtAh0tSIqiBf5rEqjd3VnBAhowpX+1czIshbXYLUott75bH/1D8p9uPVWVFOZZapjV6
+	gzL1fQ2A6GT7pGVpN++xccG0wZzjzqxzaYsSS5gnlaRtQNjLalrtGGoBDT0AUCHY02ak88s3MQq
+	lwF9dPAX4HA==
+X-Received: by 2002:a17:902:e54b:b0:2eb:250a:f4c0 with SMTP id d9443c01a7336-2eb364b121dmr103721415ad.33.1793657184617;
+        Mon, 02 Nov 2026 14:06:24 -0800 (PST)
+Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39248909sm32370385ad.33.2026.11.02.14.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 14:06:22 -0800 (PST)
+Date: Mon, 2 Nov 2026 22:06:19 +0000
+From: David Matlack <dmatlack@google.com>
+To: Samiullah Khawaja <skhawaja@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vfio: selftests: Remove libuuid dependency
+Message-ID: <aukJW-svGhlH4Jut@google.com>
+References: <20261102200624.1570562-1-skhawaja@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,72 +98,207 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v5 1/4] net: devmem: unmap dma_buf synchronously on
- queue uninstall
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev-bot+sashiko@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- sdf@fomichev.me, kaiyuanz@google.com, kuba@kernel.org,
- bobbyeshleman@meta.com, asml.silence@gmail.com, dw@davidwei.uk,
- ap420073@gmail.com, davem@davemloft.net, edumazet@kernel.org,
- horms@kernel.org, shuah@kernel.org, sumit.semwal@linaro.org,
- christian.koenig@amd.com, phasta@kernel.org, andrew+netdev@lunn.ch,
- sdf.kernel@gmail.com, hawk@kernel.org, ilias.apalodimas@linaro.org,
- daniel@iogearbox.net, razor@blackwall.org, tariqt@nvidia.com,
- kaifengw@google.com, dtatulea@nvidia.com
-References: <20261030083539.777877-2-almasrymina@google.com>
- <179357408146.3131.2882435952119280563@kernel.org>
- <CAHS8izMt+5HBjkOOsb-FrwKoXxEBuDn=gf5p+64akYS=SAoQrQ@mail.gmail.com>
- <9afff44d-f8eb-4549-8aae-f99a53339319@redhat.com>
- <20261102185856.1824792-1-almasrymina@google.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20261102185856.1824792-1-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102200624.1570562-1-skhawaja@google.com>
 
-On 11/2/26 19:58, Mina Almasry wrote:
-> On Mon, Nov 2, 2026 at 7:29 AM Paolo Abeni <pabeni@redhat.com> wrote:
->> On 11/2/26 00:16, Mina Almasry wrote:
->>> On Sun, Nov 1, 2026 at 3:01 PM <netdev-bot+sashiko@kernel.org> wrote:
->>>>
->>>> - [High] The dma_dev use-after-free this patch says it fixes can still
->>>>     happen for RX bindings made on a virtual device that leases queues,...
->>>>
->>>
->>> I know about the issues with leased devices. That needs a bit of a
->>> rework, which I have done locally, and would like to send out as a
->>> follow up fix.
->> Will such follow-up rework the code touched by  current patch/series?
->> how much? I'm under the impression that at least the fix for the issue
->> reported here would be quite overlapping.
->>
->> /P
+On 2026-11-02 08:06 PM, Samiullah Khawaja wrote:
+> Libvfio depends on an external dependency libuuid for parsing vf_tokens.
+> Building it in cross compilation environments gives the following error,
 > 
-> I pushed the follow-up branch on top of v5 here so you can see the exact diff:
-> https://github.com/mina/linux/compare/devmem-teardown-v4...devmem-lease-bind-map-dev
-> (commits: https://github.com/mina/linux/commits/devmem-lease-bind-map-dev)
+>  ld: cannot find -luuid: No such file or directory
 > 
-> There is some overlap (~55 lines of v5 touched across a 6-patch +262/-99
-> follow-up): it renames binding->dev/vdev to binding->map_dev/bind_dev, passes
-> the net_device explicitly to net_devmem_lock_dev(), factors out
-> net_devmem_close_rxqs(), and replaces the !rxq->lease / !netif_is_queue_leasee()
-> skips in net_devmem_dev_unregister() and mp_dmabuf_devmem_uninstall().
+> It also complicates building with glibc alternatives like musl, see
+> https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
 > 
-> I kept it separate only to keep this net fix smaller and easier to review,
-> since the lease issue is pre-existing. Happy to either land v5 first and send
-> those 6 patches right after, or fold them into a v6 if you prefer avoiding the
-> churn.
-I hoped for something smaller :)
+> As it is only used for parsing vf_tokens, remove the dependency by
+> adding a minimal uuid_t and uuid_parse() to libvfio.
+> 
+> Tested by running vfio_pci_sriov_uapi_test selftest.
+> 
+> Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
 
-I definitely would not fold the 2 series.
+Please lead the commit message with what the patch does, and then follow
+up with the background and motivation. The VFIO selftests documentation
+(merged for 7.4-rc1) asks contributors to follow the KVM x86 guidelines
+for changelogs:
 
-I'm wondering if this could be considered net-next material? pointing to
-net-next will offer better guarantees for all the work to land in the same
-release (no need to repost in such a case, I can apply this one to net-next
-directly).
+  https://docs.kernel.org/driver-api/vfio-selftests.html#contribution-guidelines
+  https://docs.kernel.org/process/maintainer-kvm-x86.html#changelog
 
-/P
+Also please drop the "Tested by ..." line. Details about how you tested
+the patch are useful to reviewers, but they do not belong in the commit
+message. Put them below the "---" line (e.g. next to the v2 changelog)
+instead.
 
+How about something like this:
+
+  vfio: selftests: Remove libuuid dependency
+
+  Replace libuuid with a minimal uuid_t and uuid_parse() in libvfio, and
+  drop -luuid from the build. libvfio only uses libuuid to parse VF
+  tokens, so pulling in an external library is not worth it.
+
+  libuuid is often missing from cross-compilation sysroots, which causes
+  the VFIO selftests to fail to link:
+
+    ld: cannot find -luuid: No such file or directory
+
+  It also complicates building against glibc alternatives such as musl,
+  see https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
+
+  Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+
+Other than the commit message and the minor comment nit below, the patch
+looks good. Feel free to add my R-b tag in v3.
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+> ---
+> v2:
+> - Move the parser to lib/uuid.c and lib/include/libvfio/uuid.h (David)
+> - Drop the vfio_ prefixes and add a uuid_t (David)
+> - Mention musl in the commit message (David)
+> 
+> v1: https://lore.kernel.org/all/20260925013110.3447626-1-skhawaja@google.com/
+> ---
+>  .../selftests/vfio/lib/include/libvfio.h      |  1 +
+>  .../selftests/vfio/lib/include/libvfio/uuid.h | 11 +++++
+>  tools/testing/selftests/vfio/lib/libvfio.mk   |  3 +-
+>  tools/testing/selftests/vfio/lib/uuid.c       | 47 +++++++++++++++++++
+>  .../selftests/vfio/lib/vfio_pci_device.c      |  2 -
+>  5 files changed, 60 insertions(+), 4 deletions(-)
+>  create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+>  create mode 100644 tools/testing/selftests/vfio/lib/uuid.c
+> 
+> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio.h b/tools/testing/selftests/vfio/lib/include/libvfio.h
+> index 07862b470777..e9d513c3a08e 100644
+> --- a/tools/testing/selftests/vfio/lib/include/libvfio.h
+> +++ b/tools/testing/selftests/vfio/lib/include/libvfio.h
+> @@ -6,6 +6,7 @@
+>  #include <libvfio/iommu.h>
+>  #include <libvfio/iova_allocator.h>
+>  #include <libvfio/sysfs.h>
+> +#include <libvfio/uuid.h>
+>  #include <libvfio/vfio_pci_device.h>
+>  #include <libvfio/vfio_pci_driver.h>
+>  
+> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+> new file mode 100644
+> index 000000000000..52406f3409b7
+> --- /dev/null
+> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+> @@ -0,0 +1,11 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
+> +#define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
+> +
+> +#define UUID_SIZE	16
+> +
+> +typedef unsigned char uuid_t[UUID_SIZE];
+> +
+> +int uuid_parse(const char *in, uuid_t uu);
+
+Note that this differs from the kernel's uuid_t, which is a struct, and
+the kernel's uuid_parse(), which takes a uuid_t *. I think matching the
+libuuid API is the right call since this is userspace code (and it keeps
+the callers unchanged), but it would be good to call that out here. The
+"Minimal replacement for libuuid's uuid_parse()" comment in uuid.c could
+move to this header and mention that uuid_t and uuid_parse() mirror
+libuuid, so readers familiar with the kernel API aren't surprised that
+uu is not a pointer.
+
+> +
+> +#endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H */
+> diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+> index eff95828719e..d1d1b2b05af1 100644
+> --- a/tools/testing/selftests/vfio/lib/libvfio.mk
+> +++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+> @@ -7,6 +7,7 @@ LIBVFIO_C := iommu.c
+>  LIBVFIO_C += iova_allocator.c
+>  LIBVFIO_C += libvfio.c
+>  LIBVFIO_C += sysfs.c
+> +LIBVFIO_C += uuid.c
+>  LIBVFIO_C += vfio_pci_device.c
+>  LIBVFIO_C += vfio_pci_driver.c
+>  
+> @@ -30,8 +31,6 @@ $(LIBVFIO_O_DIRS):
+>  
+>  CFLAGS += -I$(LIBVFIO_SRCDIR)/include
+>  
+> -LDLIBS += -luuid
+> -
+>  $(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c | $(LIBVFIO_O_DIRS)
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+>  
+> diff --git a/tools/testing/selftests/vfio/lib/uuid.c b/tools/testing/selftests/vfio/lib/uuid.c
+> new file mode 100644
+> index 000000000000..378904d9340a
+> --- /dev/null
+> +++ b/tools/testing/selftests/vfio/lib/uuid.c
+> @@ -0,0 +1,47 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <string.h>
+> +
+> +#include <libvfio.h>
+> +
+> +/*
+> + * Minimal replacement for libuuid's uuid_parse(). libuuid is part of
+> + * util-linux and is routinely absent from cross-compilation sysroots, which
+> + * makes the vfio selftests unbuildable for non-native architectures.
+> + */
+> +#define UUID_STRING_LEN	36
+> +
+> +static int hexval(char c)
+> +{
+> +	if (c >= '0' && c <= '9')
+> +		return c - '0';
+> +	if (c >= 'a' && c <= 'f')
+> +		return c - 'a' + 10;
+> +	if (c >= 'A' && c <= 'F')
+> +		return c - 'A' + 10;
+> +	return -1;
+> +}
+> +
+> +int uuid_parse(const char *in, uuid_t uu)
+> +{
+> +	const char *p = in;
+> +	int i, hi, lo;
+> +
+> +	if (strlen(in) != UUID_STRING_LEN)
+> +		return -1;
+> +
+> +	for (i = 0; i < UUID_SIZE; i++) {
+> +		if (i == 4 || i == 6 || i == 8 || i == 10) {
+> +			if (*p++ != '-')
+> +				return -1;
+> +		}
+> +
+> +		hi = hexval(*p++);
+> +		lo = hexval(*p++);
+> +		if (hi < 0 || lo < 0)
+> +			return -1;
+> +
+> +		uu[i] = (hi << 4) | lo;
+> +	}
+> +
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> index 4063a0e2b3df..4ae6ac1f8ed8 100644
+> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> @@ -23,8 +23,6 @@
+>  #include <linux/types.h>
+>  #include <linux/vfio.h>
+>  
+> -#include <uuid/uuid.h>
+> -
+>  #include "kselftest.h"
+>  #include <libvfio.h>
+>  
+> 
+> base-commit: 2637bdec0535a2044cd830eba9a79363651d9043
+> -- 
+> 2.56.0.385.gac671c819a-goog
+> 
