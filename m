@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793623045;
-	b=rw8iia0PEPAfOmlbs4Dwmt1MIFeHM+/DSoJcahdw0olDLCuw6w0/NmwzB7dyCucqo+nn
-	 ZZTDTuazURAwXWThoOiOR2aqXfxc+RZcQ8sJmH7dCIKiuw6A0/tZ1FKXwxG07lrM48/PX
-	 WjQiy8pA9/n/1mosXqo6e2Hk6/dBMJfQPmpzetE9WykOHuxgDj7ja8jY4lMFECrmOj0pI
-	 EXnW0M+lRk7VSVV9H9ETUqCZqdHNc1KBqxi3G31AILZ9ZwMIYhc7C454YUVNDavnZ7+3v
-	 rGRZk1tHhlfZuKgdB0jR4ScqaZT9AEjrjNV63wl7kwsju+6sKPxexi9aFJ6ZLA678mg==
+	t=1793623050;
+	b=06aVLaGY/XidfBPPGu5XZ+jDObh3fJPj51vbX6wW8vNTvOOfU9XfDmee0BdxPgYCi09i
+	 JFyU43WjJsG/Q7t0JCg4ROq/CnK32p9rwHfATPAt6dwSSXP1sM2lobT+K73A7xgEYIAUe
+	 0B7prqWfEhOK01Yp73d5b6c/ndgsz0uoPh/PZVRigcdZPIbCB5/ZWisoSi3e1hqFeTdce
+	 khcwDUCCbVaG7T0CqcG5twuXuPAVL90Cenhxr8jlP/5DRtPVnY2e3Ma75sZg8P/aImsnx
+	 aFbjCdJfJQvhiZjVZd9wRhQY0elFtYwbqo2qRaA77HinatVm5HXTRoOY+svF46J+JmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793623045;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793623050;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=8yGgdG3MuTUgBN2IlwGn1nZkRcdu7c0DJVMNgsIQLTs=;
-	b=IOuzpuUMubUHBz+13QLH9oBJ+q5W7bi9Z/ska0EyMrX68r1JbcGMfUxsTCgOguxmthKs
-	 g0JlqrGjdHU5ZVCHPGbwd1Y2tYcwsaNV5vRMRFMrAgVCZusOyoQhLPF6shWnfCV+nJDrK
-	 FmYXYv8/Bg8n8MieMdpmyOW6JLu8HOSjxfuQ0JQdKEIJDceUB+Pc0/1AUbkU+ctSdGUNm
-	 NCSioA57yHt3khmlbAFsw/MJfEjSy4r/FWq0nYwFbALzcV1wLQZ8n0tFcQ0M5EzTUynLA
-	 Q8FEJ53dOJ4IhIUgHJQGP/66PdcsnYYtOY0SNhlStGya6fB7EEcUE4YViqZqzAoSZrQ==
+	bh=/vslpHUHQt4zv0LMPIebRm/wLQOZFs5cvdXDbCFaR+E=;
+	b=HpjMn56Qts0yaUmEsz0xpeJD6Tq2jEJggAb0quSIhfKpUhjxIYj5sgxfZO11Zxb6tTEk
+	 SrRnpl95yA/go6zvezXy/OvhmPPQkuRPn1DLT70sGNZfkI8waC7YWlYOjBScNJ9VX/jI0
+	 EGnVdvhbFQOKE14WTeEcCNX/WOob65v1t83TbuW43nBi/nfPerHa70Pey8gTnDuHm6+94
+	 py7M7e+wPCs8CqPYom5+VSFJb7dCxlUIN6TAzp1vf63pI6/2ivSU0STiBomou3u2GHyN5
+	 QKBma3IboqnS08UHT2md+YZW4f4yePrp3+p0eFzW1wjt0979fVMzF0wMowb+G6vArMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GOoSOkIu;
-	arc=none smtp.remote-ip=74.125.82.41
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=btSZZLME;
+	arc=none smtp.remote-ip=74.125.82.177
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C10606A326
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 12:37:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91C10606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C73606A337
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 12:37:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0C73606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GOoSOkIu
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1931ff67a29so5404677c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 04:37:24 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=btSZZLME
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-369f3e9e431so2142853eec.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 04:37:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793623044; x=1794227844; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793623049; x=1794227849; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8yGgdG3MuTUgBN2IlwGn1nZkRcdu7c0DJVMNgsIQLTs=;
-        b=GOoSOkIuby+zJ+pcXZDwDkR/Nxf9MBeqs/4E1GhaH0/jXxzlb1TOan8oTVifidcaD4
-         20IQiOHxKTyNlO1vLS2jf4UCq0esA9+3smJJX824cnVNTgTVW6Z7riIFdCW6fq/44sTd
-         NRIqrG9j9aMuDD/rdYH1NvHifYY2Glsh7UmhK4s5vpqEK6WbEg9XXdLqiioiNeaFGAIJ
-         S6GgXgkSFha5wibG7ycUOTuZ0BwCxt07FTOwakhHFyJxzzmXaaZKF4k29n38IVTm+FnB
-         YkLT7u58R3zKGSCMFRDbGR3fX+LUWd2UHPMC6ESCvhHHQm527TrBDQPDGE5aOC0mXzCl
-         ysQg==
+        bh=/vslpHUHQt4zv0LMPIebRm/wLQOZFs5cvdXDbCFaR+E=;
+        b=btSZZLME4NXKTBXQYwPzJB4oGl+56WB0aw+k0g8i/7pgJNTpaYVm3SoJKV4jwKkoDm
+         9Pn7LlFO7+TmcfOKxY5Ww6qhXB/tpCS2xpmuJk9rjGn4ebRZhynfPjh069AG0ANRS5P9
+         PT54Z9cYPMEBD/C6Ay41YorqxfnKcDt0v1J9+amowN/k/Ibd5IW+MS36fTnR1hOMLIIv
+         llob5TH6glydf/uFszEhkP4dTL0E9cwz+QLpYoKbFmXBN2/Gk293EYrjMwy7EEWDbEU3
+         vYOMCrmLkkHiLDqtw0x3OYAELTE6JeD7Q7bsBBdErWkbiP1RC6TxTuLr7+IhCzVtDJs5
+         Jk4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793623044; x=1794227844;
+        d=1e100.net; s=20260707; t=1793623049; x=1794227849;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8yGgdG3MuTUgBN2IlwGn1nZkRcdu7c0DJVMNgsIQLTs=;
-        b=cLO5m5vDqbXvaBVVpTJRNtCYgDvUkJUfOCJbQYTcQ5gnbZr5WbkFddIRmEGZFekLq1
-         O5QXWGL7x3XatLiekcUU/YL/SOg4OY+mV5Ljt/x5SbZzzYQeGakIqey1hzp5IqWIrZxU
-         Ev5HX+8fb67+Rwz8JAAJSEiPEqTzg0OT1UXYmm5fZ2paxEHwkZTgmeN0wZmB6v1xf5lS
-         IJK4cZI08kMIeEvRGV4OdlgufY9lDz20jkqlNiESiSNegdNWZsLz68BTGMK86O+rpxba
-         qRbUzDSN/SYNxwtBoBxTvKoaNqVqI0ZUi1hYigLk58ujaHw93UawH2F+9HovpGh0wxA8
-         yWQQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzWi7H00Fpu7ayyq2i8h2doC6aRgem5q+70/L5cTrijKE6UBCp39svIVfVy8vh0J10cxOisS+CWy2RF8mAxpz4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJTlDTqPS4K1OWIGHfN5ApJfbHXaZn+tEbmjq76e+MNTtP8SlwP
-	fQp5l69LMaGvUjETgFyrt3HchxeeOT/TwXNU6Eo3bJmisddLmuHqmyd6
-X-Gm-Gg: AYBFou0LzKalpP8b8c11KI+aS2XVmyYxD/wSgXfLqNeyIMew5xMY0vQ0qTal4heZ1xW
-	qUq6djOMcOf7msgeGrQoM4VcPcY3TCuztXq+3FuX9vmdqlgni1Ej4sqIfYS7LtMJhUMcI69NZ6Y
-	B/BXRsWoS0QWd+LhXSERUMpP2p6U1X461PbrmAVt8Iubi+Jr1aoMTZ1PJNRCgxRTr4/AftVtJWt
-	/GnqsscVym9tO6797HcQ9SiVRHHOkC1dgF/1tgToYCD56pTDgres9hwJicYc4T2tlODpKAONE6c
-	m5XBrSIGg1ddZ62astqSYWE8FAgwlQPDxDd8rpIkU9/AWMAUirsKP4QVk9bTofO/utPQz6P6o+8
-	Qnect3ZHR2ThHG7cgojtCnfCt9igNgp2rA8ssFEqF4OZVoX14kzWrBIM8IHwFluYEO1Ar9cDcTV
-	G0U4ccf7EeiSNDfYdS7symnGfQAP05Bw+OEc7rFKCrdC3ckgH8L/QLWRKq+zVQX5dH8FHi109Lu
-	+jGQbqMoeDK+Oy9eNsYqj7vD21lzBKSKhy1PbFEg6M++YAagSQr45EeEuvJQVR9v4UTDjTpycu0
-	2BC/5pkgCQSU8aqZtk2qaJuj
-X-Received: by 2002:a05:693c:41da:10b0:36a:1cc2:45d5 with SMTP id 5a478bee46e88-36a423ca2e9mr15639313eec.26.1793623043663;
-        Mon, 02 Nov 2026 04:37:23 -0800 (PST)
+        bh=/vslpHUHQt4zv0LMPIebRm/wLQOZFs5cvdXDbCFaR+E=;
+        b=D8j6Jgpk+4jB6ayqkNzINiFl1BSAgCqNMlrVo+6XbNJh6r3lybNdSYCFE+M7gAuO+x
+         gudcBOYcIFw0MdVPlblu9k0k602V2TNgVxHSb94isVH9C3iVPRa3ic/IN01av4PL1Cxh
+         yprjpeVxVCy2hZvdgFIT35D7BeyASx+bo/YHwdUzIq2G7i+tZvWgENF8PcMB/+bKboAw
+         MMg7Vf95OUxwbMLDL8xUJYRKAr4+5BXVsdgLkPckyjeaOev8Zung4a6w7QOtCjpejg2Q
+         UrgP0f/h8RJQD6DiQPpcR9EkE+ru8UYkuC+f/E7uZYfhYJmeT6qyPaCDmwT6TlpsbY9J
+         vYBA==
+X-Forwarded-Encrypted: i=1; AKwUvBzqfJe9YACD52smDY2Wc8KBezp11XMEqIhwv0TpIPKTMJM+3H7H8YHlGCICKUC2sj6X9rQA+0szdCitsQxPoZA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLlk5yq4O6lcwXwr/e2jKf1EHcbjAQXPS89DolwESbE75Plqo1T
+	KfSn6dHRdEJZ36ByFeIs9Nxr2itCQi5PiCqo6OYV0+1Mi2vXC3n7jjfo
+X-Gm-Gg: AYBFou3NDyGixEtq/C/3MkRkOMW7ke95mUX9afD+X2/l+Qk140DFqutzQL1Ibjt5T1G
+	+yQ9QP42hcW5ITo2yPMvYGvNLYghLfsnRI0Q2qN7FQCJ1DibaoTbLS79bmjsyXwghLDaLxNuILR
+	3MKwtguCt4IPE+MmpV0FA+My+bMVKMUUnEDvk8tazCPFOwJweT6OqbGlUtVwd55XxKdNQ0m3gGe
+	64MXuad4N5EZB96S8sb4XMKTRyOLVmH/V0lVImZuhmGCnRfSmPidTrNxu+oQe+P3D9255ba9nI5
+	ECAonyGb/AXfjTZs4PA1jeQhYSFaF7N+lUJDRQHt1Wa1TkYq5hn8HsIPUKhLl/DG2S7twenZYZb
+	cM7J1swiJX6Nw4WTrUaJP7R+EjPZcAx0bjm+4Bkb6GY7poW6pkUpowiHSJ3+95rZZUDx6XLGY8U
+	aK9QbYaVvMWs61Tzsg4Da4qo/iGJjsp/HsKtl09XBFIzuEC+DaTZhzIfWyy9IE1JLMvVXYSNzWV
+	P0rVouvuLhNtWnYfFoE78PGDAHPDdyIt8NUvGuIXmn4yUDWZfNBWEU2ncu0CjGEFT84pyeiVvwL
+	WMAejRAh+gruXOlxaV7tPgoOYqjkStPORDIuJt8estuZTw==
+X-Received: by 2002:a05:693c:4088:b0:36a:2f6c:490e with SMTP id 5a478bee46e88-36a30009ecemr21223699eec.6.1793623048591;
+        Mon, 02 Nov 2026 04:37:28 -0800 (PST)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428c17bdsm36326095eec.6.2026.11.02.04.37.18
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428c17bdsm36326095eec.6.2026.11.02.04.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 04:37:23 -0800 (PST)
+        Mon, 02 Nov 2026 04:37:28 -0800 (PST)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Mon, 02 Nov 2026 07:37:03 -0500
-Subject: [PATCH bpf-next 3/5] bpf: Finalize the verifier log after the
- runtime is selected
+Date: Mon, 02 Nov 2026 07:37:04 -0500
+Subject: [PATCH bpf-next 4/5] selftests/bpf: Cover a nospec jump that
+ becomes a nop
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,7 +94,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-bpf-blind-nops-fixes-v1-3-844300e42cdb@gmail.com>
+Message-Id: <20261102-bpf-blind-nops-fixes-v1-4-844300e42cdb@gmail.com>
 References: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
 In-Reply-To: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -115,56 +115,67 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-bpf_check() finalizes the log, which reports its size in log_true_size,
-and selects the runtime of the prog after that. For a prog of one
-function, selecting the runtime blinds the constants.
+A conditional jump that is unsafe on a mispredicted path gets a barrier,
+even when it later becomes a 'goto' over dead code only.
 
-Blinding can log "insn %d cannot be patched due to 16-bit range". The
-message lands in the buffer, but log_true_size doesn't count it: with a
-stats-only log, log_true_size is 219 while the log takes 264 bytes. A
-caller that sizes the buffer from log_true_size loses the message.
+No test has such a jump, so nothing checks that bpf_opt_remove_nops()
+keeps it with its barrier.
 
-Finalize the log after __bpf_prog_select_runtime().
+Compare a pointer on the mispredicted path at a jump that always goes
+over dead code, and check that the barrier and the jump stay for a prog
+loaded without CAP_PERFMON.
 
-Fixes: d9ef13f72711 ("bpf: Pass bpf_verifier_env to JIT")
 Reported-by: Alexei Starovoitov <ast@kernel.org>
 Closes: https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- kernel/bpf/verifier.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ .../testing/selftests/bpf/progs/verifier_unpriv.c  | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 935b163f81e4b..974dc571eff05 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -24112,11 +24112,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	print_verification_stats(env);
- 	env->prog->aux->verified_insns = env->insn_processed;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index a54b5a58b945b..b9d96366e656d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -1072,4 +1072,39 @@ __naked void nospec_backward_call(void)
+ "	::: __clobber_all);
+ }
  
--	/* preserve original error even if log finalization is successful */
--	err = bpf_log_attr_finalize(attr_log, &env->log);
--	if (err)
--		ret = err;
--
- 	if (ret)
- 		goto err_release_maps;
- 
-@@ -24167,6 +24162,14 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	env->prog = __bpf_prog_select_runtime(env, env->prog, &ret);
- 
- err_release_maps:
-+	/*
-+	 * Finalize the log after the runtime is selected, which blinds the
-+	 * constants of a prog of one function and can log an error. Preserve
-+	 * the original error even if log finalization is successful.
-+	 */
-+	err = bpf_log_attr_finalize(attr_log, &env->log);
-+	if (err)
-+		ret = err;
- 	if (ret)
- 		release_insn_arrays(env);
- 	if (!env->prog->aux->used_maps)
++/*
++ * Compare a pointer at l0 on the mispredicted path, so that the jump gets a
++ * barrier. On the real path r1 is 0, and the jump only goes over dead code and
++ * becomes a nop. Keep it with its barrier.
++ */
++SEC("socket")
++__description("unpriv: nospec on a jump that becomes a nop")
++__success __success_unpriv
++__caps_unpriv(CAP_BPF)
++__retval(0)
++#ifdef SPEC_V1
++__xlated_unpriv("r1 = 0")
++__xlated_unpriv("nospec")
++__xlated_unpriv("goto pc+0")
++__xlated_unpriv("r0 = 0")
++__xlated_unpriv("exit")
++#endif
++__naked void nospec_jump_becomes_nop(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = 0;						\
++	if r0 < 0x100 goto l0_%=;			\
++	/* executed only speculatively */		\
++	r1 = r10;					\
++l0_%=:	if r1 == 0 goto l1_%=;				\
++	r0 = 1;						\
++l1_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.43.0
