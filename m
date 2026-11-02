@@ -1,101 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.48
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793650074;
-	b=uIKqEKyUi9jO3hZcte26s6UXNHAoQ+CQVIKC9lIqt5nZDvF6lpxC1lj+ufDJeA3OW77o
-	 BwCk5dSNqCP9tCfWPDavPCgjk0K9U2Ty1TAm0odp796LJyWL1Dgj+MN1rJo6bNJblVKAp
-	 xGeANNaAEeNxT/MCIloSguYJlaD0bfR15PzVQ2Er9iGUskPWGU6/+brmb2AEbc6920m2f
-	 vC11jwrRxdWC9pfaMqvjjxJcBlLDXzCrlQDc+1JS0x4sRMTp5abar0SB7g07L+T2qvTvB
-	 qAhV7reQahvCVvjfB/su8wk2rfh1KEH+joW2bpgGZRda4ilbTe7/joRpXTUyqMubl6A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793650074;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793650444;
+	b=1115WpnKkfgP6/WJox2ZOmU+GL+I+x9f8sF8+qT8TNDPZ0ZCaVtDct7h2jfw6o93Uqwr
+	 mhiZkECIhnIjyJhGel9FgIbH/Y4gizFNZ0v98Qq6pn0WhVBAjkPNjuev/79mNWo+bzyVt
+	 F0GvfV9CX83kKgSSPzOgis9wbShgIyx32MT78yybTo8deLa2+gTXFZk2opom98pX/62hR
+	 k+GFfJa1dmtQbjLBz+ZP59KfoPhcwvXykMr8M9afaQlHpflwWPFWwGa4zfFZVE6Ak2tCS
+	 McfAcn0AA5PQ8vRjCQB00Ci+UFlUbLIXConl1OE2PYC6a1OmyeF7y+U4UHbgFvc7fyw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793650444;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=2y2WavsP8svBBeJai9Uevzqpj1fQ7NNZDo+HgkQhGww=;
-	b=DS+L2nhRa+FUYt8r8NwbItckU1tB347o6NbGOjH41LLEyf2LPCBcrrDPIRXOMApz9moG
-	 C2aEsUiSqSy2CzfkWSaIm2wvC2HjuEEv48bnFmjtfwOLIou2H9flX2spPjIMOaInIS8tI
-	 aKUIwNbzfgHkoI+DIQdWR3d1EPWabe4Im2IMtt8g5gwgnZuSPDus7+K6OGdsewKhyqwmU
-	 cavDyvIFYJCabI74v7leTJzyVmB7qEoKkH0tfNASj87AqeVphU3nTzT3PSukazmp3m5OS
-	 +l5QSNUMYU/SWJFccI2BpfoReCmHYmT+XQdjqrmnAQNIVLJQKuf5QAchh7mds/R/eUw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jk8TrkOl;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.48
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=tGanUMfayq3PdyLOv1Doxlx1VPFFMeHl/eaWWctPQ0U=;
+	b=bSlH6CR3Lk8QYCs7uCJtvN6WnrcWkB83wPi7W2JlWclR5sbo8B0s3O3eXI91G79MHdgt
+	 TVQpNkoNR5lDBSsTFwB/dkY6Q4RahCCtsUnFHa3Mj00JvhUM4oiDNvQ56gLNZgPijDm3T
+	 NfhUPycIOOAMpXldh6PvRQt1U3mV4KjVDk0mUseaaV4ED3fdpeAQvTLYs/VxRJRf4w9Ln
+	 uR0HRENUVXkssBJEGow81mkkCatf/38LJv92nD/O+Q5rVoYAuuC8ws8KYhS3se7pcQmEI
+	 BOgLEeNXnjWqBDnybPO4l/7L3JPs+oeXMKTZTuM43zop+aut6OLWqFt+u+2ThFHtCTw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zixO318e;
+	arc=none smtp.remote-ip=209.85.128.45
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5724606A32C
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 20:07:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5724606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0744E606A327
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 20:14:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0744E606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jk8TrkOl
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6b1b12de661so1783a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 12:07:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793650067; cv=none;
-        d=google.com; s=arc-20260327;
-        b=nQIp0zDoFoyaOYkccNOrwq2aZRQbA1wi6cfOEF0P5erfg6x/K9ViJuJkgLEEuz+GBZ
-         qVqZGHzL1WU0eJ5qEzz1dUj0lr0JOYxpDRvqi75W8qTFj4025RMcVZ5fPm44MJRowUrr
-         asnnka5DIvG/MUvIg+DZD5O450Eene2gYdLZW/1bDyjwse+Ozao6ASTjkPCiSUYB+wzv
-         UUeRn5v17GRTYthelji9h0Tg03PvyFUV9QryM8uk8k13w78RKvXsriQ1M0iHSIQ5GrcK
-         dTSVP7OSZm13ouVElvx/RlgTe85RaAw10apk6Y9Zl65FchwcBriKfWry8Abo3mWv5bwA
-         VYXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2y2WavsP8svBBeJai9Uevzqpj1fQ7NNZDo+HgkQhGww=;
-        fh=m/jHjRArWJsvu9FJanDbeisR45Lbuf4CGNiuE14AC9Q=;
-        b=Nsk8xDFmYRPoqUu61k61AqcA3WBPo366c3bUaSdGlY1WjTGR3nVb/MsnjB2ZGCmA++
-         YN3gRgwHlPQuBdim72XHZ5UySSNi4eKfbJzwZzbfOoP9Mmhj6hptb+FO28mgF4/ym4p1
-         BVLvM/8DNV61QuO0EFvwyaVpa1+pZ5qill02V0KqzWODEQ/+amOAPWWQ1QGsvJVI2Hzi
-         ZDJ5BszSG2HjEBkMpoFpZF1ce7Hf7ZYhzBEh98fbg8s/k1yiGr9i0xmlkZPXDt87TWhF
-         dyneEqsnb8E29HNRcJ827ArjGLAyFosat/GrPeaTuibBxX4Qco+GNitNLFPAb7DfXMro
-         mYlw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zixO318e
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso34613365e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 12:14:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793650067; x=1794254867; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2y2WavsP8svBBeJai9Uevzqpj1fQ7NNZDo+HgkQhGww=;
-        b=jk8TrkOlsW97Uh2N2lxEQCWSr5BDOlLraKDAJDImF5X93emauVjuWCB4kRG5DXJ2mg
-         oXi8tL+XOW49nPtI2u2njp9hmZSDUMa6G/1KMaO9Q5qzNu07fJxBg+FGZwHSPkrB/3+p
-         +n35tr9rPg7bWoPu4eX8xtne358FzfbxYLhTbxaih9uGNnm8EspyFlcWvKfSR929T1wP
-         PdhuKIXNMBvyc8JGPZ0UjLnzK8d/ugvhnqcVfKUScJJXgrIRL8SofUmBK+358GTHLXn6
-         4DOPImXL7BUxCQKWkh8a6VYnY27wG/hPyzEY2mSBDHGTrMVjqQIyvUjbN5Mtc+HYQcjd
-         XJ+A==
+        d=gmail.com; s=20260707; t=1793650442; x=1794255242; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tGanUMfayq3PdyLOv1Doxlx1VPFFMeHl/eaWWctPQ0U=;
+        b=zixO318eJYLfhb+XNiTcj4Wd8KTuj8oKOfOp7Fqp8NvJFc/1JZBHI6keegIn+u7btr
+         CKKm0WeJ7v4EhvVDWDguBbTah0n7jssE4aJOXj/5z27tjK+6U5lClhma48jfdLpNYWJp
+         Wi2T5jaYdn/ArobqwxviNhfr4U0CAmYzvuhyX+4yYNYUCwhmQ05bBgyI6F6aICXxcz75
+         +4VHeU7duOBeddPuirmFB5z8bWKFF21FZEDwXEGu0ADxleF3gJboUmDE/aGw2unc33L4
+         MvNohpwynI346AQ0mB/RMr0S98P5cuSOcOranZBcOrgxmz0XnaSWkLTNSoHMOvZosjWI
+         g3Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793650067; x=1794254867;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2y2WavsP8svBBeJai9Uevzqpj1fQ7NNZDo+HgkQhGww=;
-        b=J0KPB/WXphZPZt9bp6mKbBr1SHsAgt8j4SbgHoY42cskIwS85kAUIbOoLMO892FcDJ
-         9Xl3Vlve00b2L0t4k2LeHcOxqLKs6LfWyPy8IEgotshg0uKuEq0Ev1rKtYRzzZwewgBC
-         RuhzUcIpE2AYw/SusqZt2nufiqYHFnPNTnPEdJ3GsERw/cZgpnG9Sn13GtMWxlE5tYAI
-         3nAO1f4Arqp+SR3HA3AyojEehDRJznPeUQZ5DroRO8H6ZZhWU6G+WbMcyRXc2VxyxfzK
-         DU+VqwlGOydR3/cr96nBWRWTasAJl+tbdbwey7O0/cwP3602Pf5B94PP5TFhD3fAdEDa
-         96sQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxxe0o/PnHLccLzeoYrxzEVXed1PlEVwd39KJ5npGOcQSjORpZlJUifcwbvP5eS27Q8BK6X4wNF1ObwMIt1YMc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+VQNzjNN/bq1KDYUZQbN29HVyKVjYROyB2+m+6TfS5efMDO2DT
-	WVvIG1orhWqG8mjMypkuSa3q5vthtBxu+qnJ0SwevEprYkU6iAPHBtReC17kr93ztKCyuQ9S8T3
-	g4bZHWfUN4DbD9GEUoqGDa/be5yRoT8TIakjuad4n
-X-Gm-Gg: AYBFou1TJPnpsbDoE78GxguwsripfKqYTXZ3Rz+hEwqHI8MBZgRELevDDTAMMMM88L5
-	nkd58tCwbElJfIe1Ao2pH1mYxl797Nd8N074dODNxtx32sjBrklIXB561lYEAC+ifYaisTfmPVp
-	xiK0KsJSubWQPpo1bJJVHtPyOUVWgHewNOZJCmoU6nNsY6Np8Ju2v90H0jbmOPoaENRAeshsBgL
-	UrXMpvNbLeLLvbTaKMp9f8S0VQwD7z0FTgRmj3owqM4S0wKBnj/MDZsqAWGQw5e5y8ZOAXia6VV
-	EHJf5G0d5zKUenx+gfItmQzIVHkVxl3zlN9iiOkFMyj/yAsDTA5+ON29OAVf1MRUSSxChHF61D1
-	Cm1pl0nOexCzsLXLwYGs2eRh0YBRwJgTPsLtMh9cUn++cdKwTXpIFXutOd/FCDS4fgWD0GzJARA
-	1yIqsTHhO6gof3
-X-Received: by 2002:aa7:d752:0:b0:6b4:629a:6352 with SMTP id
- 4fb4d7f45d1cf-6b539cf7661mr6374a12.5.1793650066614; Mon, 02 Nov 2026 12:07:46
- -0800 (PST)
+        d=1e100.net; s=20260707; t=1793650442; x=1794255242;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=tGanUMfayq3PdyLOv1Doxlx1VPFFMeHl/eaWWctPQ0U=;
+        b=b6Oi6qoM0yFEr3zG3F34/72NIVUQHOnFJ30DKPSMch0HPnH67400iJiVtxwLpPFyFT
+         OypviPNLatR+YcrjTRV1UiKhuiCLVfnX0c8Thfd+yl2ZKlUkdVDnIuhdF6ElL9c5N7A3
+         golJqly9cJVvfAULnJ9bVw6RuZcHaf782MgNlO2yW9HDvcIuWdAu0vo0/EGQNw7qlTH0
+         WJS/0U/OvXUWtniPiyc67srAeCCEHdoY0cKD68R+1Ba1yVi+kPqB3zlvGAGOSpqajcvP
+         TQwR9hkWhccGPZNILmn1ojWOL29l8kFiDzDzs1xZbqWRtj+Gf03GBtLRf6tP+0M3LQbq
+         7tVQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxXVps21y6rbB/Qy3gq79kWTbRNgY1QflrrJdU0SSFO0sm3/Luui1uXqkeI9FqcPtaBK8i59NtI2WbhpzhKMlw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLMae+ZhPC49pfusz6hZab1bNN4ISnVWf2WKlIGBe354oVZ7RbI
+	9xYy0oIhDQ8z2CGm7Be+ebF5lSk6bkuOYh6YvZTkR3tZOeRS8/JzeZ/S
+X-Gm-Gg: AYBFou3BN8dadTDpXAWxjm3GJd3HqwlS/b/t+QfP9O+OB5BBL2GRQhWmArxKDlRoSiw
+	w0Dz9w58f3rPuQju4GNSGAn2ZNLoWjKVWkeC1Dfw6by57aJJb/TOQIFR+BAZtZa0JSlakqqMui6
+	JFW2/hHto6CkPz2Ro6ew/DEbtDhj5Gky1vbfcF3KUlzOch/rvOMf8wwXp76vblEmvqCWMuV143B
+	3tABVTBmuxiV2QmwVvA3Bfkm9/ROOJbDdk2tb2ZcHivCfJ3c/4hERr+vUsN+avDAbvHlvtN8x7z
+	J1n0Ifw3LUOKUmG2dAHyl1HSRgn6g3xk0yuF3nfFobDVM+bAGpN1nBFVChDil6/OdiUJzGGm8Bl
+	EE+OvIfQJ693tZ5tXcK51zStKyTwjshxsaJACOH5sJ7ftjZKdix0KN9oC0Ztc9dwqMgAItNgNuo
+	RfC2fc1Ldx7/CXgb4bRTd6zE86s1mIfheYkRwlNv0Y/BBLlkgFy7jySsdTP+Wq6tJk7UGMR7kkM
+	Y4wx9DPAsQbnqni4W4a+KVrNqq82wMlBjTpIrgPUpiQXmmdFnyO6lZTtM0uCg/cNQDe6/77ou/i
+	vDyjVrZV6fDRa/P9o19pFh6aeerjnWIjHZtel1Py/D1x8FoIpTbQ59LDEUHwy8vknzNEeCPde++
+	d
+X-Received: by 2002:a05:600c:34d1:b0:4a2:133:45e1 with SMTP id 5b1f17b1804b1-4ac183d136dmr250002875e9.24.1793650442391;
+        Mon, 02 Nov 2026 12:14:02 -0800 (PST)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48e71b8c6e9sm21471805f8f.43.2026.11.02.12.14.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 12:14:01 -0800 (PST)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Mahe Tardy <mahe.tardy@gmail.com>,
+	Tianyi Chen <hi@tychen.cc>,
+	Gyutae Bae <gyutae.bae@navercorp.com>,
+	Hui Su <sh_def@163.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/5] libbpf: Support gen loader attach
+Date: Mon,  2 Nov 2026 20:13:51 +0000
+Message-ID: <20261102201356.5798-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,63 +113,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261102191438.1059771-1-sdf@fomichev.me>
-In-Reply-To: <20261102191438.1059771-1-sdf@fomichev.me>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 2 Nov 2026 12:07:34 -0800
-X-Gm-Features: AclHuK9gfr07IGAAZ9tA7d9yIuAWy2wfQLlcGX2KzOTTr8xZ9Khn8LIVGKzus2g
-Message-ID: <CAHS8izPAaA5fNGmA6TTAuo7z8T4-+1xmR0yF=OZH6EAcQEF-RA@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/7] net: devmem: size TX net_iovs from the
- dmabuf layout
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, 
-	edumazet@kernel.org, horms@kernel.org, corbet@lwn.net, 
-	skhan@linuxfoundation.org, rdunlap@infradead.org, michael.chan@broadcom.com, 
-	pavan.chebbi@broadcom.com, sdf@fomichev.me, bobbyeshleman@meta.com, 
-	asml.silence@gmail.com, daniel@iogearbox.net, razor@blackwall.org, 
-	leitao@debian.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 2, 2026 at 11:14=E2=80=AFAM Stanislav Fomichev <sdf.kernel@gmai=
-l.com> wrote:
->
-> TX bindings use PAGE_SIZE net_iovs, so a frag covers at most a page.
-> A 64KB skb needs 16 frags, and MAX_SKB_FRAGS caps devmem skbs at about
-> 68KB, which makes BIG TCP ineffective for devmem TX.
->
-> This series picks the TX net_iov size from the dmabuf sg table instead:
-> the largest power of 2, up to 2MB, which aligns every DMA segment. With
-> a 2MB hugepage-backed udmabuf a BIG TCP skb takes a few frags. There's
-> no UAPI change since TX addresses are dmabuf offsets.
->
-> TCP still bounds skbs by size_goal, so frags get larger, skbs don't.
-> A single frag can now be as large as the skb, which matters for
-> NETMEM_TX drivers with tso_max_size above 64KB:
-> - mlx5: 32-bit length per data segment
-> - gve: splits frags into 16KB descriptors
-> - fbnic: keeps the default 64KB tso_max_size
-> - bnxt: 16-bit BD length, devmem TX frags are capped at 32KB by a new
->   per-device limit
->
-> Tested on two mlx5 400Gb/s hosts with kperf (udmabuf, 32KB RX
-> net_iovs, 2MB hugepage-backed TX buffer), series backported to a 7.1
-> kernel on the sender only. 4 flows, MTU 4200, 6 x 60s runs, medians
-> (CPU over the 3 runs where every flow got its own CPUs):
->
->                               before    after
->   frags per skb (sender)       16-17      1-2
->   throughput (Gb/s)            389.6    389.6
->   sender sendmsg CPU (sys)     12.0%     6.7%   (-44%)
->
-> The link is the bottleneck, so the gain is CPU, not throughput.
->
+Hey,
 
-I mean, test single flow please so we see the throughput gain. But
-CPU% reduction is good enough reason to merge I guess too.
+I've been working on this in the context of Shirudo[^1]. The current
+limitations we face is that gen_loader cannot attach the program it
+loads so we still need a userspace component to be allowed to
+BPF_LINK_CREATE and we'd like to gradually remove the allowed operations
+done in userspace to solely rely on the signed program.
 
---=20
-Thanks,
-Mina
+Note that there's no kernel modification in this series, it adds the
+gen_attach options and code generation to libbpf and do the wiring from
+bpftool. The kernel side was already allowed thanks to 'b1d18a7574d0
+("bpf: Extend sys_bpf commands for bpf_syscall programs.")'.
+
+Also note that I did some analyzis with Sashiko and it's been
+complaining because I've followed the approach with the prog fds being
+initialized to 0 (and not fixing the two fds to init to -1 sentinel
+value), so maybe we should pre-patch this.
+
+Lastly, I don't know much about bpftool so unsure if the way I've added
+it is the most appropriate way for the lskel attach option.
+
+v3 updates:
+- rebased again because I had a debug commit in between master and my
+  patches that somehow surprisingly conflicted... sorry for the spam!
+
+v2 updates:
+- rebased to includes changes from the 'libbpf: BPF program manual
+  loading'[^2] patch series that conflicts with that series.
+
+[^1]: https://lpc.events/event/20/contributions/2437/
+[^2]: https://lore.kernel.org/bpf/20261029223348.3730738-1-andrey.grodzovsky@crowdstrike.com/
+
+Mahe Tardy (5):
+  libbpf: Count entry programs for bpf_gen__init()
+  libbpf: Track generated loader link FDs
+  libbpf: Emit BPF_LINK_CREATE calls in generated loaders
+  bpftool: Add attach option for light skeleton generation
+  selftests/bpf: Test gen loader attach
+
+ .../bpf/bpftool/Documentation/bpftool-gen.rst |  11 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
+ tools/bpf/bpftool/gen.c                       |  67 +++--
+ tools/lib/bpf/bpf_gen_internal.h              |   7 +
+ tools/lib/bpf/gen_loader.c                    |  41 +++-
+ tools/lib/bpf/libbpf.c                        |  55 ++++-
+ tools/lib/bpf/libbpf.h                        |   3 +-
+ tools/lib/bpf/skel_internal.h                 |   4 +
+ .../bpf/prog_tests/gen_loader_attach.c        | 229 ++++++++++++++++++
+ .../selftests/bpf/progs/gen_loader_attach.c   |  48 ++++
+ 10 files changed, 435 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/gen_loader_attach.c
+
+--
+2.43.0
+
