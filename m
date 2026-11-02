@@ -1,73 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793643915;
-	b=WS4EcA0nRbToB5StrKE29uYVAJuP8NqlvbcrUgtZn/2sySXRan2pRlxQFCmsJnrHxUyk
-	 bdjE699c9CDkYGp4sBmuF9QOb4VRF1xd11TOTNT0vtegz26/iT6rLRh+W2tcejS7xzCN3
-	 2Idzir/58OasU+9T/gO4I7KdgdtXPM8zPGamn+UGs2reM0qWRbrLzVoLJM0hWFUagmRGk
-	 9si7mSoVR3Clq0pDRQN1ooS788lAZhwRS71xEA7u0Yg/CH1YaV8FpSF/MPjv5ZUpUdouM
-	 JDkHDfLRatkggpAH+DBjzsbK/w1MB+3pVpRsVKs4fbxsMV3C0Z+eSAdE5F2EwMRDDng==
+	t=1793645514;
+	b=GvxFgEDSyvJ2dW/fATZXzaUOmDdKT9BTK33YQBv6Sb/q9dNMWVfEkxqrGbCfcvQNgyyX
+	 hKPMgJoK7PLJSR5IUUvsfCAVlBt3UDnB9esErz7b/k+kW2yQ8WmCuIAM40vfQdpaCWxPW
+	 CVZtyjGC/0LSb0RUf3zMu+efi3piTm5LWeXjU1gULbvCyuDK8FNVdJRKSc1ZxzEGIx4h9
+	 vsunLFUB4SEK1XnquFcI4Cd0uika2YbcgU6JTL4KRAp1d9+Rxe5IcGNaGubnZcnbOc7x5
+	 6Q3LMfv4hsD28w1luCSekbcddbLBZ5ljuPddcKZ7zidw/NENVgFpAcCzyTnpwaBVhSA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793643915;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=DwUxU5MMRSRGB53ooWpa2gSeYWoVPcRIMte/SUEqib4=;
-	b=ukqx62unkBsJrIOoeOp52ckgQTD1nPwj9lexIvN4vNSlSbPoGul/S+uocmeLcWQYuOIO
-	 jB38v1IdS6wiOuwXOf8Rh+k4zFc4B/R4PXpPps1khK88kHZByRq8b1ifbeS5nApiUVjKc
-	 VCmjh95VwcPH/JRfGeALUHUzMq+BqnPQSfzro5Vo9s0IHXSaEH9GANhPbclxyDerIgihF
-	 XvjmflSyhNuvql00MoJvaDTALJBtiIQidGTwDqmjFGM/x9R2XZEPhudjQGf/WYPjsgh+j
-	 LW0tjEbJsUhc1az0XS+mE8syiYdAIBIsA39Npx+O2mcBFEPRkveBTwpwMEga3LVHe4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793645514;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=jUhK5m1lvTjtdfmztu+bilD4B6b4ERUK5SOg2m81DN4=;
+	b=qtHOiAZskMAW710qA2YRAywtHKN+db71nljbIxrM2tkNMgn6jg9bGar9/uaV7ZiJx6nc
+	 YgKj4ULqxhg357+pBGruQ0A+/jjCJ80W6vyJ7K2KucabMoTPCGnWfzR+ralT552C+f8Xs
+	 rO2pj4RIb5Jp9CCF0Y6q67EWcj/1qj0dukp4L7da6GitKZHsmSdYRxqruHyutWeIJx8Es
+	 LH+yKo0od2DaeI73a3++9kMofI+QOz/5SuHXIa5WdXT+Wv9gSaOWcUzontWoC76Yfp0+0
+	 Zw7YSPsBQnoH5D+foeiLIZRRXI/FnLat+rtYkaNHnoPhicPND6Jm33Jf4WDd2jJddzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DO8KBDUo;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CqAS3Mzh;
+	arc=none smtp.remote-ip=209.85.221.47
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C3E606D81A;
-	Mon,  2 Nov 2026 18:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A10606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 18:51:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9A10606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DO8KBDUo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB351F00A18;
-	Mon,  2 Nov 2026 18:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793643915;
-	bh=DwUxU5MMRSRGB53ooWpa2gSeYWoVPcRIMte/SUEqib4=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=DO8KBDUoinB2c8upVdaNfcUaaIt/J901VIQHV7jaeHgrZhqVWLSmBXL/iZMoQTtG4
-	 /YaqyMZRH+OTXqjc/SD7cme+4VJFnTkGcEiZNJGbmCqleiHBKpH9YrUFwsZsQ6T7uB
-	 m5axw0xZxrJvhKslFQfkhlLN4ydPs9UPWdlsn4m+DY4+gbAzoKDfymY+41p9hE1AWp
-	 VgROnXVJcwPeO2Ufp5OWHCl5x8ezh4xUElFQ16W06lCerHsY5d6QhCzRan+6QByhtN
-	 Wc9j9QAusfK8Ur+dDHEX3ts4EQ9AJr9Oaz6eLP40uVrijTixH8EzEj2xoIi86+Rx53
-	 9NMV2aVORJB/Q==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id E7CF6F40068;
-	Mon,  2 Nov 2026 13:25:13 -0500 (EST)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Mon, 02 Nov 2026 13:25:13 -0500
-X-ME-Sender: <xms:idXoagBzuYlzre8QIG3-U-pGKG4EQRWBRKMIOXInVjJBoNgKwmao6Q>
-    <xme:idXoatXK1iBgdCqf682ZKGCfsVcw0NNh-4bP9rxpiTEyWsCh8oALYaiOYdEgPW2sN
-    cAZ0cyqPNfxpFEaqAy1scOjFOvOUba4-wGKabOSe5B7a-JOzArZ_N2i>
-X-ME-Proxy-Cause: dmFkZTEOGs0hcWdWXEfyub+Da46+PL0kBKeqpM/w6ivdu9YCedEBg8rRqdVWHz8/X/SdFG
-    y7yuL51ylboXPbp6xTMl35xletDjsoSwkB83fzOO1+spFr7ySCYZLQf45dI0zjtpHD/B80
-    VzPHj8DAvF6CJ0Ui1QZQYhFXngMxCWh92FQG9aZcyphw9KGIRq3ea5NMO5umPnbnt0wfte
-    MKGi98qj9MlNLgMkH+QKMO+xA03SpJjdE55F+77r47OQZ1KmFCSzZjXJ7LP3FNArjN8mNB
-    JcrXzIL8Fx1SLpHJaqCVgwfX66WGNBQPYopXKrH7Bj+bDL/BkH6LT82I5Rm75wp/8aKrdE
-    nWUremJ3Zh8jKKYElUWff2RgEKAWDvlbF/Xl46rvHFoq4yzseH5wRf/+beEmIguatoPM5L
-    z6s4dljP0FTtYYSQIFUUXzh3bVrA/mO4sdoNSUzA+NPEax1yrBV88yejZexohRxOsf1xRw
-    mi5+OlZrbIQmf5G7Ecuol/sHv4jvv0oRNVod31oVZdVJ2Wicc6/KH5p5Vb+t7Otqu5/F5E
-    5/A91xgw01/AumWly9nqkU74X8c/CypAOrRo9IJJrCVZiDPqHX6J3HzdNQLGk4LmkYval6
-    P1fCLwX+ObUaxhmENw8edXwGd6QnCsaQBR5Q3oO7kSzXJeUUx7gup9ehVfTA
-X-ME-Proxy: <xmx:idXoai6BOZPE-0YxtScKYT1-KJqnzjA0ayaxpNx2tS7DPPqVuQrhxw>
-    <xmx:idXoasQIAh4VIeRLEL3A7mZxV6_7sptA8LUxHvzpqtl35Oslm1JdZw>
-    <xmx:idXoainhJyYhSy2cnJmk5TnO7tKeYdg-EJYPr4MVg-qvgGxKZ5w4bw>
-    <xmx:idXoarJl49Cg-lh4ohVOgxPP81N_OtiHP38WAwtp4Lp7tEQ2R5CPCA>
-    <xmx:idXoalQ9d_XagLm4DSz8YqPXKIgvmtgKN4Y7WmM1LwLIBzGOebXFoikh>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B6154782738; Mon,  2 Nov 2026 13:25:13 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CqAS3Mzh
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48b042c0728so791759f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 10:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793645512; x=1794250312; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jUhK5m1lvTjtdfmztu+bilD4B6b4ERUK5SOg2m81DN4=;
+        b=CqAS3MzhLYzg+B3jKeGN3yX4yq1SxSwhC86d6uYzoHUr89jLXMs9uLMiSJAJ7Ub+iH
+         znMrNrNTfQ1Pwb+rIeySiVqrW9e/SRwcwJ2Z2VNdN9P/sa0B86STdO7qVdUx4hY+g4Vt
+         vHnLQWSPCkOZL7bayIjJQf5A6NHjvXFEy+PZmZG+jHOWrQ9fHZR7MBQ5FEhNCE5MRBN3
+         h7OdM79DoV3FhvRuILYZXbtFL4OGvnNuu5Oai8mlNnrrzMhHdKYJXZ2RqfI8Z18VArMl
+         3ycXtja8msh7ppZopdmNbyszb9hc5nzmKaF9B9jLuBZ/CYIXZliiTUZwP6lf0EjyIA5g
+         ZAjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793645512; x=1794250312;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jUhK5m1lvTjtdfmztu+bilD4B6b4ERUK5SOg2m81DN4=;
+        b=NfeN4m7YTfv5+ooM6M8Z4ZtYIpRBPwENgUGorx9jTrqC2uaEy0WcmRjD2W7pXRS4ja
+         2YzTUFLzdEGbTDI8QHMjTWz75AwsCDcVtFc1OB7Qnc67QFTcoJ1X/JlDn/E+gFD8KsuC
+         t0j3nYdOJi4Mc4ywQ581XYNptiGa6N4Wk9owVQkYKnlwwjJ/xcnKm1mEss7GBIYRT1ZN
+         XSps0MkLakwx+gRzv0FnH1TZ910fofiTOfzagEQZlUPXHhb3jJPSx4GP6xlbAQ4Obfeu
+         HWjDCnPWP6M8l1mTmRAeBelUY0onJyaw1K0wEH/ucwwgLxnRY+3jRsTMeN8Gw5iNAxc3
+         DKWw==
+X-Forwarded-Encrypted: i=1; AKwUvBxFaTd9PhEVDUug4awxnWWlAJgmP+UfopwvBtF5aXJ2mZd9xJpVe3WgxC3dPJjBxCowRt0A41atu5ylDCkDeJg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8vm8H8rMwRnCFuBlzN+AvCxOWtqWX3eMjFUjg8Za89DJiZXxkh
+	HjGpTHDCIUjR6NPCU4VSHsvARQSsU014dGYqOn7gbbZh9IZPkjpiFUl2
+X-Gm-Gg: AYBFou1ouxnUAA8PitnC3jSCIlL12k1Zi6TVsvhp8mHX27KbI9eHStk8y5djlpPEWB3
+	RVuPpn2zWSJT13H0gPi1MhO9doFvMDGwruCBxziQu8m8hp/Z2Nam0nFQiOX0Kadxvy+fAAxdQ9N
+	YKmfmUkt2bV17BH8SPQ6wjhXwy5C67cZB9N8xpnP7hUBtcRJ+Ty1ts0oz23aS9X2unUhggqTY0p
+	QYt83DkoiRwcE8s8zJLmtzlaFHU1lyYrzcDxbs3ff3at6IOCEY6NfbvE6WX9s+qzW+9u71a9CwD
+	c/RQN0nvoiRG9bPwyPzzvk0w9C3HdtN8G9cbKlUePqgX0jNyRhz1mTJkXN9XQLJiB5ZIZhtYoaJ
+	7tir8SxPqgiykVkFVOSGROKKwa/58RflKGIYipizhoxePHWJYCR0B9jAdNZ9h0YQK0rKt0EPccD
+	TymKhD1I/3PPad17WU6CIbv1HFwJNXMfw4dN5Oy6zoO5Jrfe+UkFl+sRj/HZhByKam+t5yqKiYj
+	JZU8vmx27BNLJXUAY+J/HM5y73g/vrXjGF2uLdU4zbhQru8IKlLtl4tXxOwAtL9UF5rNcERugJ4
+	/NPah7mwuVSNjMLxSy55GCM=
+X-Received: by 2002:a05:6000:4559:b0:488:79d6:a4a6 with SMTP id ffacd0b85a97d-48e6e2bc780mr16125799f8f.8.1793645512031;
+        Mon, 02 Nov 2026 10:51:52 -0800 (PST)
+Received: from fedora ([2a02:4540:28:4cc2:7f6a:92cc:ff40:8b84])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b728f9sm21260812f8f.10.2026.11.02.10.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 10:51:51 -0800 (PST)
+From: Muhammad Mahdi Amirpour <ampr.mhd@gmail.com>
+To: kas@kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	yeoreum.yun@arm.com,
+	ziy@nvidia.com,
+	Muhammad Mahdi Amirpour <ampr.mhd@gmail.com>
+Subject: [PATCH v2] selftests/mm: handle child status safely in khugepaged
+Date: Mon,  2 Nov 2026 22:21:30 +0330
+Message-ID: <20261102185130.30504-1-ampr.mhd@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <auhvkuDO8cP9Pip4@thinkstation>
+References: <auhvkuDO8cP9Pip4@thinkstation>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,55 +104,160 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: ANkgOu9LufOw
-Date: Mon, 02 Nov 2026 13:24:52 -0500
-From: "Chuck Lever" <cel@kernel.org>
-To: "Martin Belanger" <martin.belanger@dell.com>
-Cc: "John Fastabend" <john.fastabend@gmail.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Sabrina Dubroca" <sd@queasysnail.net>,
- "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- "Shuah Khan" <skhan@linuxfoundation.org>,
- "Randy Dunlap" <rdunlap@infradead.org>, "Shuah Khan" <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "Hannes Reinecke" <hare@kernel.org>, kernel-tls-handshake@lists.linux.dev,
- linux-nvme@lists.infradead.org, "Alistair Francis" <alistair.francis@wdc.com>
-Message-Id: <785aa669-8229-4909-ad33-66f0824687bd@slotpi15m67>
-In-Reply-To: <20261102-keyupdate-rfc-v4-0-f17419972b9f@gmail.com>
-References: <20261102-keyupdate-rfc-v4-0-f17419972b9f@gmail.com>
-Subject: Re: [PATCH net-next v4 0/5] tls: perform TLS 1.3 KeyUpdate in the kernel
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon, 02 Nov 2026 11:57:57 -0500, Martin Belanger wrote:
-> The matching tlshd change for ktls-utils is a small patch to be
-> submitted at a later time if this series is accepted.
+collapse_fork(), collapse_fork_compound() and
+collapse_max_ptes_shared() take the child result from
+WEXITSTATUS() without checking WIFEXITED(). For a child
+killed by a signal WEXITSTATUS() is 0, which is KSFT_PASS:
+the parent runs its own checks and the test reports ok even
+though the child crashed.
 
-Recognizing that there may be further API changes, for the series:
+Fail the test when the child did not exit normally, and print
+the signal that killed it. Also fail when fork() fails,
+instead of reading an uninitialised status.
 
-  Reviewed-by: Chuck Lever <cel@kernel.org>
+Use get_child_status() in all four fork tests, and use
+wait_for_child() to handle fork() and waitpid() in the
+three blocking-wait tests.
 
-I don't expect any changes for the sunrpc consumers will be necessary.
-For tlshd, as far as I can tell the whole change is:
+Fixes: bd212a7dbdb1 ("kselftest: mm: return fail when child test result is fail in khugepaged")
+Signed-off-by: Muhammad Mahdi Amirpour <ampr.mhd@gmail.com>
+---
+ tools/testing/selftests/mm/khugepaged.c | 61 +++++++++++++++++++------
+ 1 file changed, 48 insertions(+), 13 deletions(-)
 
-- In tlshd_start_tls_handshake(), register a callback with
-  gnutls_handshake_set_secret_function() before the gnutls_handshake()
-  loop, as quic.c already does. We rely on SSLKEYLOGFILE to decrypt
-  NFS traffic in Wireshark, so that needs to continue to work.
-
-- In tlshd_initialize_ktls(), after the existing TLS_TX and TLS_RX
-  install succeeds and only for a TLS 1.3 session, set
-  TLS_TX_TRAFFIC_SECRET with the write secret, then
-  TLS_RX_TRAFFIC_SECRET with the read secret.
-
-- A configure.ac check for TLS_TX_TRAFFIC_SECRET in the installed
-  uapi header, so the build works against older kernels.
-
-I assume you plan to send tlshd patches, but let me know if instead
-you'd like the ktls-handshake folks to take care of this.
-
-
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 1bc7acc66a46..b90daf008239 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -1004,9 +1004,44 @@ static void collapse_compound_extreme(struct collapse_context *c, struct mem_ops
+ 	ksft_test_result_report(exit_status, "%s\n", __func__);
+ }
+ 
+-static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
++static int get_child_status(int wstatus)
++{
++	char buf[64];
++
++	if (WIFEXITED(wstatus))
++		return WEXITSTATUS(wstatus);
++
++	if (WIFSIGNALED(wstatus)) {
++		snprintf(buf, sizeof(buf), "Child killed by signal %d",
++			 WTERMSIG(wstatus));
++		fail(buf);
++	} else {
++		fail("Child terminated abnormally");
++	}
++
++	return KSFT_FAIL;
++}
++
++static int wait_for_child(pid_t pid)
+ {
+ 	int wstatus;
++
++	if (pid < 0) {
++		fail("fork() failed");
++		return KSFT_FAIL;
++	}
++
++	if (waitpid(pid, &wstatus, 0) == -1) {
++		fail("waitpid() failed");
++		return KSFT_FAIL;
++	}
++
++	return get_child_status(wstatus);
++}
++
++static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
++{
++	pid_t pid;
+ 	void *p;
+ 
+ 	p = ops->setup_area(1);
+@@ -1019,7 +1054,8 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+ 		fail("Fail");
+ 
+ 	ksft_print_msg("Share small page over fork()...");
+-	if (!fork()) {
++	pid = fork();
++	if (pid == 0) {
+ 		/* Do not touch settings on child exit */
+ 		if (ops->check_huge(p, hpage_pmd_size, 0, hpage_pmd_size))
+ 			success("OK");
+@@ -1035,8 +1071,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+ 		_exit(exit_status);
+ 	}
+ 
+-	wait(&wstatus);
+-	exit_status = WEXITSTATUS(wstatus);
++	exit_status = wait_for_child(pid);
+ 	if (exit_status == KSFT_FAIL)
+ 		goto out;
+ 
+@@ -1053,12 +1088,13 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+ 
+ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *ops)
+ {
+-	int wstatus;
++	pid_t pid;
+ 	void *p;
+ 
+ 	p = alloc_hpage(ops);
+ 	ksft_print_msg("Share huge page over fork()...");
+-	if (!fork()) {
++	pid = fork();
++	if (pid == 0) {
+ 		/* Do not touch settings on child exit */
+ 		if (ops->check_huge(p, hpage_pmd_size, 1, hpage_pmd_size))
+ 			success("OK");
+@@ -1085,8 +1121,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
+ 		_exit(exit_status);
+ 	}
+ 
+-	wait(&wstatus);
+-	exit_status = WEXITSTATUS(wstatus);
++	exit_status = wait_for_child(pid);
+ 	if (exit_status == KSFT_FAIL)
+ 		goto out;
+ 
+@@ -1104,12 +1139,13 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
+ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops *ops)
+ {
+ 	int max_ptes_shared = thp_read_num("khugepaged/max_ptes_shared");
+-	int wstatus;
++	pid_t pid;
+ 	void *p;
+ 
+ 	p = alloc_hpage(ops);
+ 	ksft_print_msg("Share huge page over fork()...");
+-	if (!fork()) {
++	pid = fork();
++	if (pid == 0) {
+ 		/* Do not touch settings on child exit */
+ 		if (ops->check_huge(p, hpage_pmd_size, 1, hpage_pmd_size))
+ 			success("OK");
+@@ -1146,8 +1182,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+ 		_exit(exit_status);
+ 	}
+ 
+-	wait(&wstatus);
+-	exit_status = WEXITSTATUS(wstatus);
++	exit_status = wait_for_child(pid);
+ 	if (exit_status == KSFT_FAIL)
+ 		goto out;
+ 
+@@ -1248,7 +1283,7 @@ static void collapse_fork_cow_race(struct collapse_context *c, struct mem_ops *o
+ 	for (; i < n; i++)
+ 		ip[i * stride] = i + 0xbeef0000;
+ 	/* A child that died reading the racing pages is a failure, not a zero */
+-	child_status = WIFEXITED(wstatus) ? WEXITSTATUS(wstatus) : KSFT_FAIL;
++	child_status = get_child_status(wstatus);
+ 
+ 	ksft_print_msg("Check the parent sees only its own writes...");
+ 	for (i = 0; i < n; i++)
 -- 
-Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
+2.55.0
+
