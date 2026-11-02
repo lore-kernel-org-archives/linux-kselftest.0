@@ -1,83 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793637152;
-	b=BaGphVJRZ/EFWRBSE/QUZOtjrrdUqVAa5nlbRf6PREq+/v+RkR58WdXqVI+ntWpqCZns
-	 nQW7Q2IHJOfjEqgTqMRurZ3pgtJVPkxjRY76medk6/gejv8YOpk1EDjTZJYzgaiGK2rfw
-	 LzaC4Vreu1fLf5FZ0BWUcv0W4j4mlWZxNXFHOmXb96pWb3RuVNfPgdKAOSN1pHvheRH/r
-	 MccK9tO+w/S9Tnnp0UpedFxOExoptgnvIWbWPQgSsnXUyqLinNhDr+qdmPIJQV/NAp7LD
-	 VO0MhAVvoMKQt1uxEFHo+2GxHeNDL4m0LqUkc06zrUEXWw78xunjCam5EuS+VUVXC8A==
+	t=1793637778;
+	b=Y4aSENPulxlFtCvS89xIxoKjMHqOMBapAsYjcY6zcLEFb4PWi5IKYqjZErx764rqZPU9
+	 GPnaRmK7XyaOTr3VCWFdCqGBmdeieOsxzwk5QkW+dep2eFqfpzuXfzNdvY7wv1hsEf3gs
+	 1SVzwn63xq3iLqgfRZv4IGWyrcFP2DDBA8eYNP5F4/Wyf4N2qwxICPUt5f9e51bXogtbI
+	 ntB/ZnkUOSzIk6rheTmv3o8gLewgoTuwSoq5o1Sq0bLsM2d812PdGIXfryim8XnGDOiIq
+	 jRovXCznH/+RXLT0zQGQfOq6ptU4Crg0jKoyW48oXv6T8YJe7LzQALJvQAG/EfAUmCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793637152;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=wb4mBzyfZ0kKUChcn64LcBZNg4proTG3oaURoFMVm9o=;
-	b=Wbcvsdj7icqCaJr1iiHS3Amy9uSnOmNp466nLI4X0a/v7JB53/aU60KhcmINWAfdWWyS
-	 3K6zRkcchSCusAD+5/q2BikI/YQeD4rQQ4v5V9PW0VSwrAletOJ/AGUE2TPuoHYfTLEK8
-	 LdqdQI7NV0nlk7TDcBmlO5fFRd/uS5gGMMz3iHmZ2v4dZ9DfnVUoQtgesDixPmuWdKp3+
-	 REwOZC+dJBydsGCf9Hg6UCK/yTOXsHVS2D2ydhYJZpON8EeDjibu3SaMPXBQUV6KbUN/L
-	 K5HQitrVoFzDgZV/CBSqikwfG5gN5su+ASIJfSPkse0g/ebZUPMg66tySFGNHCEQa0A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793637778;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=hamBEuV7gXRtKOsQfWyZlxR5aAN+CtsuFbIk3kGlk/E=;
+	b=1yTJ872v+a2rERSXqXo/pH24ct/oyovHdPOA/NGZuWe11QAbfHFJ64Xleo5t1uUpFd8L
+	 t69nopXc9FDQxgOlXs54HDFfR8sH3veX1W1LJiPZ4Ga2KoySFII6zkOpMljGxAXY7lEhm
+	 lLaCiaPFyu987cxHjD4quEzG/6dH0sCss3ifsQOQmfhtjAyhsDX60X8Njs2dR9kWwYS/x
+	 Mjq1mNdZCZ9LePiVC0/eDKzs2/KS2LVtqQhDmamFyVvaA3oxxGguspKWLyFPN670TqXNa
+	 W3z3O52O5e3Xm+I8LIDDMkgWAdqBGYNOo19V+v/Pbx4jH03LFtfthetp/IGR9DsDxKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linuxfoundation.org;
-	spf=pass smtp.mailfrom=linuxfoundation.org;
-	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=K7dM6d50;
-	arc=none smtp.remote-ip=209.85.210.54
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=euSt2yyR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25C26072EFD
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 16:32:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F25C26072EFD
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1E960A44CD;
+	Mon,  2 Nov 2026 16:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=K7dM6d50
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-83bbcfba0ffso2437796a34.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 08:32:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1793637150; x=1794241950; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wb4mBzyfZ0kKUChcn64LcBZNg4proTG3oaURoFMVm9o=;
-        b=K7dM6d50zwoz7aBhfl+TN8bK1XqD7HIB6KXzJnB6Ev2K7k6UMTITkbg/ivKc+8K2at
-         TSljeWav5xZoG4upTbnADlaxFwv3+NlnzDGoelfQvT2EyAjf34EMwTBQhp5rFgxcGHz8
-         bE2G0wwNppAlW6XH8B4OtcffWhAaq4xQphf5o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793637150; x=1794241950;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wb4mBzyfZ0kKUChcn64LcBZNg4proTG3oaURoFMVm9o=;
-        b=oNGWkMEVZbMJP/LQCGdZDMgDTPnkEtZN6fU+aGKsEvaTLS8Gg8I6DtvI33z7bQldUZ
-         AGPjy92rvnbxDdm3qxPlApo7oS3vvpbvcc6xqFVyWuCDbOyj5+mR1pPHum/THwmG/Ija
-         5Xy067sXbWxzeL7+Co1w8R0mdsuaE5Zo+eoSo+xM1hgHbRZG/GSvO59IEa2BzIMyDAER
-         mJpFsgBhrh1Uacl0PviavlDuNrKb65SVs8HTdtahJmnkqKOcCTUpUGQ9PAk4EG4a4JK/
-         jUI8/Zg2sVty9UWBB8W299Z3XC6EnDkDyfpLv+P4KI40nAfS4VHcZq4vPhmQq1Yd4/Rp
-         Rg+Q==
-X-Gm-Message-State: AFq9FYLQGUiScUCDlg4HAZ9epR37VRw5XdKYl0VplHhVfcnjKIIG33Tk
-	bZGER5DmvqaJLcrkrGaR9rz9fXBNQg4tN2wqptKmzo37k5wkl71OxfX3Nhx3EMma9Jc=
-X-Gm-Gg: AYBFou1Q4n8ONGsQRRT1CdT4AnkDpIdgN12kH2D6DkSL3KmjNcnLw1QjTw1I8V57z0b
-	XRE5t/I8i/RFSND0XYk0i7C80Gmt+PSA7aYFHWyOrOnNNW99TNins6+A9r3PuRXElF3pqpM4Fmv
-	HtBKrgQ+waSkaqRPI5hr4KFP6XDEDYsJ/IqsC5KFcKmlRojDU1a3dygBhe69ad70uDit8j+cUjM
-	AaFnHFFAdOvDf90pAbVNyta/39k8y0+Lik89i19Eq7HB6CbVysCFCanR59vJsuC9ochE5wnhcqn
-	hMwys0xG2Qaeywk/BDAZudugTMINMxeYYe/Olj/BN112Z0Yh1vxx6AWD4ii+akdN6nRqFu1fhbS
-	yfR3w7o9YAbCY+3v4qQV+aCYOpeCFFc7elx4UuXDTtUB/G/8VExNwh2PF/otF8Qi0Az/MYej0K7
-	4YT/wWuw3ZejM/8RXmlq8SW31fQRxzZrkAhr76xYUGghN5EqtBZw8XG8xpI2oK45Pz/Ql+pLduj
-	Vbd5uf2J3DyWBp1pMc1NZLSkwRFQZz3o7FxdYS7iRaiu4wFEDVfUkVdBG8kLk8UoCn0Fr00fUSe
-	1QB02e566ThK1l1UNB/2nhGvWXilW0WX9yAc
-X-Received: by 2002:a05:6830:7197:b0:822:27d6:c28a with SMTP id 46e09a7af769-85d362f2e48mr7714233a34.4.1793637149826;
-        Mon, 02 Nov 2026 08:32:29 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85d351e841fsm10329751a34.1.2026.11.02.08.32.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 08:32:28 -0800 (PST)
-Message-ID: <97e486d7-b5e0-4293-8bce-75251f5d3c20@linuxfoundation.org>
-Date: Mon, 2 Nov 2026 09:32:24 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=euSt2yyR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DE81F00A18;
+	Mon,  2 Nov 2026 16:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793637777;
+	bh=hamBEuV7gXRtKOsQfWyZlxR5aAN+CtsuFbIk3kGlk/E=;
+	h=From:Subject:Date:To:Cc;
+	b=euSt2yyRWWfkTKF0cWx7EZrHGYDl9ua4g8hU1rksJq62LG7P5yqj2pgpaCNHCES2n
+	 SZ3+NwmSNDsxZdKhhHuHongnMld8YPJXpyHf4/Hi+rt3K2zBSgax22ze+04qvPEwKa
+	 eKl/jZwFmzZhRiue1w3sr1UvlFfxJsacZ8387NNwIonBqmLev9VoTojHCK7iAKjxaz
+	 S8OdOtcvsy+1x1LlggHz1omwGBTfOGhnzFu3QuGJVpd4tHmg0WXwNUDp2NfrD7i1n/
+	 h7vOKXOpQznDl5BitNc3L3GyZMQBF0DG+gPHh7y1Dz5jjQdqzTabxJwebydwgSwKjl
+	 OHbnVy3z6VYzA==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/7] kunit: tool: Support parallel test execution
+Date: Mon, 02 Nov 2026 16:37:41 +0000
+Message-Id: <20261102-kunit-parallel-v2-0-8774b558d4b0@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,36 +53,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re:
-To: Regen Yang <regentropfen.yang@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <CAJze65gQg=q2OW-1n5wT6vah8FnjxD9rsPCsyg4HspOB42o53g@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAJze65gQg=q2OW-1n5wT6vah8FnjxD9rsPCsyg4HspOB42o53g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFa86GoC/12NQQ6CMBBFr0JmbU1bRMGV9zAsSh1gpGnJFIiGc
+ HcB48blS95/f4aITBjhmszAOFGk4FfQhwRsa3yDgh4rg5b6rKTSohs9DaI3bJxDJ0xuLphaVZh
+ UwjrqGWt67cF7+eU4Vk+0w1bZjJbiEPi9P05q837x9D8+KSFFfapQ5zYvMsxuHbJHdwzcQLksy
+ wdp46OPvwAAAA==
+X-Change-ID: 20261012-kunit-parallel-a8a7e3c19a30
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Daniel Latypov <dlatypov@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3124; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=y8lyyoJh2Nm4AuwxAjiMi5AE1q5sIB1iDKcXzCvU8n8=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLJe7O1RXbgwd/tx2UMPdp7fWcSuunzXxY7Lksnuk1PLx
+ Kd9W7kuuKOUhUGMi0FWTJElLov7ZX3J6zV8Bxe2wcxhZQIZwsDFKQATeZ7O8M/q8uXcgxnyat1c
+ lgcOxVcc8D1r6Ofl/u7A5shwgb7gVmFGhqmlU9KsXnhyxh7vLYw+rXhJ4Sf/LBdls/vbvnvf1Xu
+ +hQMA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 10/31/26 12:20, Regen Yang wrote:
-> run_kselftest.sh sources runner.sh under /bin/sh, but run_in_netns()
-> uses Bash's &> redirection for running a test and deleting its namespace.
-> With dash, this backgrounds the command and performs a separate
-> redirection-only command. Consequently, rc captures the successful
-> redirection instead of the test status, and namespace cleanup can race
-> with test execution.
-> 
-> A failing test run with run_kselftest.sh -n can therefore be counted as a
-> pass and return success. The totals can also appear before the test
-> result, and skipped and expected-failure tests are counted as passes.
-> 
-> Use portable stdout and stderr redirections so the runner waits for the
-> test and namespace cleanup, preserves the test status, and reads the log
-> after the test has finished.
+Currently the test execution part of KUnit is very single threaded,
+meaning that on larger systems with many CPUs the wall clock time for
+running the full suite is longer than it could be.  While we don't want
+to run multiple tests in parallel on the same kernel for stability and
+clarity reasons all the tests are being run in a virtual environment of
+some kind so we can achieve better parallelism by splitting the tests
+between multiple simultaneously running virtual environments.  The KUnit
+runner already has support for splitting tests up and running either
+suites or individual tests in isolated guests, build on this to support
+parallel execution.
 
-Please send a proper patch with patch summary? Add output before and
-after to the commit log.
+While developing this some existing issues became more visible, some of
+these are fixed with some standalone patches at the start of the series 
+but I split some issues with test naming out, these were sent as:
 
-thanks,
--- Shuah
+ - lib/tests: util_macros: Drop the '.' from the KUnit suite name
+   https://lore.kernel.org/r/20261012-kunit-util-macros-name-v1-1-810b401baeb0@kernel.org
+ - kunit: Add KUNIT_CASE_PARAM_UNIQUE() and KUNIT_CASE_PARAM_WITH_INIT_UNIQUE()
+   https://lore.kernel.org/r/20261013-kunit-param-names-v1-0-4b22ec5b85b9@kernel.org
+
+Performance results with --alltests, using the elapsed time reported by
+the KUnit runner with an already built kernel on a Raspberry Pi 5 with 4
+CPUs and a Graviton 4 with 192 CPUs:
+
+                     default  parallel  per test   parallel per test
+  Raspberry Pi 5     67.7s    49.4s     836.4s     326.5s
+  Graviton 4         64.1s    30.8s     445.9s      39.7s
+
+Even with the overhead of having to boot more kernels we are seeing
+substantial speedups, even on lower end systems with limited parallelism
+available.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Rebase onto v7.4-rc1.
+- Link to v1: https://patch.msgid.link/20261013-kunit-parallel-v1-0-f4be28c895e5@kernel.org
+
+---
+Mark Brown (7):
+      kunit: tool: Preserve failures from kernels without test results
+      kunit: tool: Combine reports from isolated kernels
+      kunit: tool: Boot with a larger log buffer when listing tests
+      kunit: tool: Add an outfile argument to run_kernel()
+      kunit: tool: Allow several run_kernel() calls to be in flight at once
+      kunit: tool: Serialise output written from multiple threads
+      kunit: tool: Add --parallel to run suites in concurrent kernels
+
+ Documentation/dev-tools/kunit/run_wrapper.rst |  11 ++
+ tools/testing/kunit/kunit.py                  | 151 +++++++++++----
+ tools/testing/kunit/kunit_junit.py            |   3 +-
+ tools/testing/kunit/kunit_kernel.py           |  78 +++++---
+ tools/testing/kunit/kunit_printer.py          |   9 +-
+ tools/testing/kunit/kunit_tool_test.py        | 253 +++++++++++++++++++++++++-
+ 6 files changed, 438 insertions(+), 67 deletions(-)
+---
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+change-id: 20261012-kunit-parallel-a8a7e3c19a30
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
+
