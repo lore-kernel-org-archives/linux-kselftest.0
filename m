@@ -1,89 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.41
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793661175;
-	b=EPkcJz5seWY2RY961Uw27gxSigEXk3iirMSH9ZA6AK9BWNxEaW53mLEOqI6lm44q10do
-	 4m825VhOfVZ6t3D+lyxxZdEZwHjHcTRe4dsJ5P5rCrfWBJ6NJdKyuxep510lRdsV8Oily
-	 /Jml7YAk9rvp87XzXdtthY/xWqYN73JfPdgTM16aGP1PBJCPhhtJJlJ7ygb627+3COj6f
-	 Y7QLGKtbEclOZNfr4NMovgQl1+jgL4xJ7eBkfK6i8TXs7SmJTCXJtZYOSySPuHkeuKEtZ
-	 SxDrC8dziXfNC60GpIu/+hxH3qxgJl78qSs73MsBdNAXkg7HxFQRa3WLDA6fskDPKoQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793661175;
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.214.171
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793661875;
+	b=uFeh64d2HVpGoFNrPWnvQVejwu3qI5D2xtjGs9K8y6Tg2XI5SXp6k/NRCc+DEH/rQeIT
+	 tkmeDOx8SkseiAp4CaY845Llwg2PVTM+F7+kb/nJ996bQpHU+iaSH5i1CrwbFm8MueP72
+	 8ZJoIn8XSFv7Y9+sx11EBt2VAwd6FjzRxF3W6+Phqyj6g9mMz8tQsvOff+y8r/wK1dKI5
+	 YKAcYd6TStR2SsCgBu7xqRa0yrBdJ3v8VBpbYu+ximhTnroiD629ppWV+v+oRc1EZsI9G
+	 +xTSDyEYYK9eyMvhte/Vf4PlI2b+hsFlA1aGdHzBhFohWeXJG2adLN9FCK+1RiWqoLA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793661875;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=OXN/npWsGuscMDKYzwQyqKyh6TSWjmZFiWK4TeHONjs=;
-	b=xkbTgEqwTAjmzclc2RtDAUF7wqEPKc0tarYb7zQeX5olKSVqwOtIJe7vF7Hg3TZ/9dsN
-	 K7r+YCveGe8mbTIny6M7jxZWDoFDfYuop6KhON3if9akgI+gcUxvm6WsOd6U7O6bT0pja
-	 nZj8P5E8sSUyi53PyrtJtKmZog3WWcQAyWyP0Gj24U2RwOBy3JlcUiaIBY0Ui6fEaqTiw
-	 t11vQVHaDivBbgzGN8wpVyRE2lSCjR/Os5IUYqZ1u1T8nHmdWYTPIedflQBHO3iyvonP7
-	 LvNRjpU7EAb+ZC/q4rbSqXmy9c5zzArYODF692y9+px2h7+vlVvFyuC2OxRbMp2qScg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amutable.com;
-	spf=pass smtp.mailfrom=amutable.com;
-	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=GuCtLrDd;
-	arc=none smtp.remote-ip=74.125.224.41
-Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
+	b=ko2+e3xIomTj3tH2cASXlvuUfYIMq1tT9wBG1inJQ6o2btQIqmxttVJcl+L+W+mAGrq8
+	 /hJZu9Lkza60iHizfa61s0L04zdV4sc1MblLVk1MCpf5O853Qh7ccCNdoarceofY/TmLS
+	 JWBsRNwv/LKKz386QPHlUlLB5RW7vyZbC0Sx/92hew2iXMoVbmo2X41HbTVVrfe7Rm209
+	 78kOqAofIIuRQmlfFoHZP47uMkA0HZL70RkQ8j1/nphdwgegHTvjY38RAFp9tprFEhCZu
+	 M3uCSSdwNu7hM16pfoKqU94TJdE0FLH37noFAdOBBye2quooMf7wmP6e+akaj12ricA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=sentinelone.com;
+	spf=pass smtp.mailfrom=sentinelone.com;
+	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=lPNowPvc;
+	arc=fail smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170FB606D827
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:12:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 170FB606D827
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B992606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:24:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B992606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=GuCtLrDd
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-67921b515a7so2973158d50.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:12:54 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=lPNowPvc
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2eb4a9a580eso4020435ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:24:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793661875; cv=none;
+        d=google.com; s=arc-20260327;
+        b=pIjNP70vo00HEj05QT7mhh/0V54GxhT+s/f7bNU77UTA8ei+j8aHA1j65I6v9c891n
+         9Sg45BJfjcBLl6BvAuxICxoLAbnJS2RXkR1uwcadE7/kGdJAJQs5RH01DdzRdZsAnSjO
+         FrpSzjr/6WR1uHGFz+7QlS0hNvtHZuozkyoMvP8S5W45tcTEwWFh33b4x6u1mbdIPK/1
+         9m9fY1neEJvVlkE1I5Rs59W+bTlfhN9NeCxE97i0unTD2NeJb2LRq/ZC1ttbeL5mu5Vg
+         R+YBcMDFelnvWzyZYzPJvt69k+aOXY7xFyAJqbXRaOC+8qoDTGwEbwCXoq4Z4nX2lP/N
+         YAKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
+        fh=kfgGSmmr0bUrsWCzvaEfgU5wIE9e4chM+aH1BpJIMhU=;
+        b=ci0S16ABwq6TO0VrZItYLL8LBWla6YvGHWRf2kNjcbMkZABBmtp7qa5X8S1MTSUT8q
+         mtRjMStcX2rYyWa17Rab+nIGt77YB96LXAb1X7s5al1ehhZmGVDu30Cu6PUG0uMeJnae
+         JuoOLEYQ1euJLSnmJzIjNxOfAE2p4yV3rP/NCrVNU7TwbNY32WsgDwfxeVNVnEH5ijMt
+         x1YMEd12q81iqf5buAfxKSvWV/MQ1zzSMljn7Y2gixbHBezQ+PP0X7jnc8LIWtDqxRZj
+         1nVo8wvGBwZjKYQmQuNVAMIIUO9/+rFYVhGgx2LVtMFml+GlQq90IHukdQuda7dpJuZw
+         FZcQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1793661174; x=1794265974; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OXN/npWsGuscMDKYzwQyqKyh6TSWjmZFiWK4TeHONjs=;
-        b=GuCtLrDdKx7WZqs6WOcKxAJeztLkuF4NCrr7VlX4Jhge7qBvmkIigLqpaIll3VC8Sn
-         8Zmr/IJmoKc381jPHIBvLZn/invWMntUi/ZAJ+ao8q2+6gwUAGTHSYuvxT5h78kLv2Pm
-         UcSw3SWWKxuplvPna5N06aDFoS+1PdJLxRYplIr2VBI3N7f/gd3dMLe+EVtzolbn1A7B
-         w4NLgZ8gaoqBgQ+0wwmZmszEA6lLqvFrb+U9J76fSN7BgrwehR3702+IegtTEd0UFX+d
-         6jiO+hvJlPKRrXNw+I78EBpD2hqMKz+2mh8z36VqzqlfXsuHs6ELm0fPoLq1MLEBqI8n
-         d50g==
+        d=sentinelone.com; s=google; t=1793661874; x=1794266674; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
+        b=lPNowPvcJrNcgZcVmTAEbOq+QYlPf5qIaJfVayFML8doyDAU0rfgEOPiXNFqCofLgu
+         gq6wvFBEYBDzEVNaIN+re2NUxix3aM/J18omnnVIUr0OZCKaLKVOWuDk5khl0bJifz8r
+         eKb2U84UZfX7VFnzXbmaaHuOPtpq10ihd82JhQ3t9KKp4bjJ1zTFMWFVmogRrE9cR19O
+         /yJmNG62lBW6t4DMj/zGNmTExT2plbfBQ1wZ6A3eRN8xHAfp53dfYDKyw+0gY44qraJR
+         wI0HX9K8s2Y0K38xJU7tGnAo5FmneyllJ4fMQ6FVJBADUJUSBtg0pfaHBMeziROEHYej
+         bRlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793661174; x=1794265974;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1793661875; x=1794266675;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OXN/npWsGuscMDKYzwQyqKyh6TSWjmZFiWK4TeHONjs=;
-        b=z5vvwmn1rPCbg68Lkce7b2WOekRss6vfamlErCQXM6bsz5Q1YVlll9NQLcCPqNkdrI
-         8yeq+aYaB3ir6JtqDo0YDZoUTgH5p8LsGYjLNoaurgrlUXqDC+3AXp698XcO/tmJ/e+F
-         XQWB24EPdw2JUAPgSSO/DlmUv+DUGzf6bjQLhyMcolb2EqA5bJoChIRr8UJr1KoOTmKD
-         UDgwrNzZ7AtejXimjqUqMgLBVRQFqmSgd/PzFTVC1as5tqu2mAz9gOyTNSRz5IIdFZbx
-         gCaFxLrP+a91pav9Gso6zD4WfFrmFd8lZd9ZunqMxo1od5IXOFfZ0dKDe9hLqwbTAs2D
-         /duQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzWD0Y1pMZovIiY9LWe1Clp2eKH86kN938vbd0plhNQGRro7IDdz/l7d2cMSHGpnFbyHONAkk3IeliihVHsJKk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/U9MI6B0MHqemViFC4r4uzR92piI/Ov8SQJmv21022mQYULL88
-	EPD2nrLnk+4rKW5xr9h8YHq/5aLYK1mzs7uqebryhA/0e5I78B5Zpiinz+n+xXnUwMq4
-X-Gm-Gg: AYBFou14NAZDPPEGMl0DXsMTFHv9mjeX8dfCk5NOBVnF3YkYm/GLGc9BVZ/cJ3aPLCG
-	mt5PIpdolANLPaOTdJjYArIUcQbwrKs0n3BkhlhtzN6cjFKtBTN137zS6G2UuqGIGoUrBEwGVXq
-	r0vzAYIsnR5uIHGWNXV5lye57ZwlYbd1z5L66bvycNfiyrTJwVnY4pcS8EiR849+m8lB58qaYvp
-	FaP8qnLWAdZBF/g5kYo1u3YYeKhaOeaiBvOx58po8wlB3Z/2ZreMiPUCM13GwRmQfjNV0a0/8Dl
-	/Jm7MJ68zjeHsbWIxXXBYaoxERa0qA7kurxH+8av/glohdFcL0IRzmhbRwqyiNCoOeZQR2CN9ay
-	hieRFdxhZJsv+tMBVFGYRXb9Ov9r95bHdgG+tK8LI/YQECou9GFaQ7pxeT/9hu8gyY3q73mQRNf
-	R/FTUAmCJb/PC1l6uDi4T0FBKVVwrC1n909m9Ud2GkPFeV9PcfqR69ebPW6zg1LcMMCHEpdaaQr
-	sE/bwMu95/RpUzu81eqPzussHJ+OzkLJNZjRY9FYr3d4j5FanlOicz9n1r0CDMow8fZL65ZsUeK
-	f9x4cAWyJAzKWI4+EhtX8x2FfHyzqcfThikp1nvSm5ixqEC2vnUVhx3wTDdCvO1myR801HLwYim
-	5HqCMms90fQ==
-X-Received: by 2002:a53:da06:0:b0:679:b50e:9a with SMTP id 956f58d0204a3-67ba5114fb5mr6079051d50.108.1793661173861;
-        Mon, 02 Nov 2026 15:12:53 -0800 (PST)
-Received: from [192.168.1.110] (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67baf3303ebsm5946481d50.18.2026.11.02.15.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 15:12:53 -0800 (PST)
-From: Andrew Halaney <andrew@amutable.com>
-Date: Mon, 02 Nov 2026 17:12:36 -0600
-Subject: [PATCH net-next 3/3] selftests/net: Add tests for
- SO_PASSCRED_THREAD
+        bh=clGd0kEztycgStZjRN35b8z63U5kKCgKQbE7kXLWxN8=;
+        b=SwLBm6GYa9m00n6tJ0EIibjGTOxBDJzhBCKLC3kXvvlNla11VuZVvHvlZTiYgQ5CFi
+         9CGKY7n94dk5WuQWQf63aV6AN/aa0TXIhE2Cl2/uytcGlHXv/NWJPTw3/L4jimPHR7r9
+         nq4t9kc1Ub3/md6BXM/qbHhlzNE+mk5L7IwTLHda8juKOy4s7I5rH6ZRGEWjDqBwI+Wo
+         1AvRVW6OULf1VzbWP3ybnFlTastKlHGKRCvLlE9RxiOJeAL+s5c9wqMOtf0C+c1XbFqH
+         AusyaAhFuqMdYDXNK4oqPhmLEukWp7YIXHy/wlNJ60i+UdXOLWKJdiXiZrRqoG4tdmFw
+         VU5A==
+X-Forwarded-Encrypted: i=1; AKwUvBy5FzNseGjf3u2T9qWNR7rsqXKQuftntt3ukxYNmgBNHfLU68ELVGxqllw2vYz+slDf7t2dnnG66flcnxNYuh0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8TSgLiXe8CKu+dJ7Fy2FEWYEk/EQySuZ05RFdoNLTlF0U36/mU
+	mYBtVjaeKlpEgb8d4LBVK/8WfZQ2h6hpSWud0W29DbTRoL55C1P29DNNpCIkGOZ5eIpwiHRBCdc
+	K1o76r38Ch0gc+L0x2dum+EzO176K/ZllQZI6BY+f3g==
+X-Gm-Gg: AYBFou2ChtQOXBPtBohVBqBHWwdALbbAkCzl7TDn//Z1WLJlgLNZolTZjAZl7PYwYKH
+	BwXPVzpaT3W/sh2q69RBMveOzMSxJG/ZduVArkof2hHzVqceJOn3gT6Ne9MTRiLwXhstMg4zhjH
+	pj4NSqrolZddBW/c7gHaE1D7ToRZj0iacdTiP0pL+3RXnJD4l1oEp6X3xWpHcL3VriI9qaw8pny
+	cvsYqYzapUUzxc5DVS8KlJjHhSKAMYnOgk/wbGPst4b3rr84c+JiJ8bkCwYZ4y9X33sdBtrIAg4
+	BXATZ12fBwvlKxVJEguL4yizH35r2kIr+AklAVO8wp4DN1H7mGmaPIE7TXC5+UrHo3yYK0o9c5P
+	XNG85N7YBqyQvX1NGkBSKAjTZpYyDeVy6tkgO4WY/yxTtfkNBHbBrILMgJUoG
+X-Received: by 2002:a17:903:3804:b0:2e8:3cf2:49a0 with SMTP id
+ d9443c01a7336-2eb36405287mr188158475ad.1.1793661874532; Mon, 02 Nov 2026
+ 15:24:34 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,248 +104,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-halaney-scm-creds-thread-v1-3-0b4d75dbf35f@amutable.com>
-References: <20261102-halaney-scm-creds-thread-v1-0-0b4d75dbf35f@amutable.com>
-In-Reply-To: <20261102-halaney-scm-creds-thread-v1-0-0b4d75dbf35f@amutable.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Christian Brauner <brauner@kernel.org>, 
- Richard Henderson <richard.henderson@linaro.org>, 
- Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>, 
- Willem de Bruijn <willemb@google.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
- sparclinux@vger.kernel.org, linux-arch@vger.kernel.org, 
- Andrew Halaney <andrew@amutable.com>
-X-Mailer: b4 0.14.3
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+ <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
+In-Reply-To: <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
+From: Mike Bazov <mikeba@sentinelone.com>
+Date: Tue, 3 Nov 2026 01:24:37 +0200
+X-Gm-Features: AclHuK8h_cYpK4lk7OO76ee8Kks2WVPwHiw9tfTN1WU_Lw9F0nS26YCUvD9J2rQ
+Message-ID: <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
+ cause false recursion drops in trampoline progs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add SO_PASSCRED_THREAD tests to the af_unix scm_pidfd selftests.
+On Sat, Oct 31, 2026 at 12:22=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sun, Oct 25, 2026 at 04:02 AM Mike Bazov via B4 Relay <devnull+mikeba.=
+sentinelone.com@kernel.org> wrote:
+>
+> > Is disabling preemption in __bpf_prog_enter_recur() on !PREEMPT_RT the
+> > preferred fix for fentry/fexit, or would you prefer a different
+> > mechanism for reconciling preemptible execution with prog->active and
+> > the per-CPU private stack?
+>
+> No.
+> We cannot disable preemption, since progs are not short
+> with may_goto they can take 1/4 sec.
+>
+> Sounds like private stack is the culprit.
+> Should we disable it?
+>
+> pw-bot: cr
 
-Signed-off-by: Andrew Halaney <andrew@amutable.com>
----
- tools/testing/selftests/net/af_unix/scm_pidfd.c | 160 +++++++++++++++++++++++-
- 1 file changed, 156 insertions(+), 4 deletions(-)
+I think disabling private stack alone won't stop the false drops by
+itself: for fentry/fexit, bpf_prog_check_recur()
+is always true even when priv_stack_ptr is NULL (as in the reproducer
+and selftest where stack < 64B).
 
-diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-index 7524f3f6a8aa..75387ede1eeb 100644
---- a/tools/testing/selftests/net/af_unix/scm_pidfd.c
-+++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-@@ -40,6 +40,14 @@
- #define SO_PEERPIDFD_THREAD 87
- #endif
- 
-+#ifndef SO_PASSCRED_THREAD
-+#define SO_PASSCRED_THREAD 88
-+#endif
-+
-+#ifndef SCM_CREDENTIALS_THREAD
-+#define SCM_CREDENTIALS_THREAD 0x06
-+#endif
-+
- #define CHILD_EXIT_CODE_OK 123
- 
- static void child_die()
-@@ -689,6 +697,10 @@ struct pidfd_msg {
- 	int thread_flags;
- 	bool have_tgid;
- 	bool have_thread;
-+	struct ucred creds;
-+	struct ucred thread_creds;
-+	bool have_creds;
-+	bool have_thread_creds;
- };
- 
- static int get_pidfd_info(int pidfd, struct pidfd_info *info)
-@@ -703,11 +715,12 @@ static int get_pidfd_info(int pidfd, struct pidfd_info *info)
- }
- 
- /* One recvmsg(), reporting how many bytes came back and what the pidfd
-- * cmsgs that came with them say.
-+ * and credentials cmsgs that came with them say.
-  */
- static int read_pidfd_msg(int fd, struct pidfd_msg *out)
- {
--	char control[CMSG_SPACE(sizeof(int)) * 2] = { 0 };
-+	char control[CMSG_SPACE(sizeof(int)) * 2 +
-+		     CMSG_SPACE(sizeof(struct ucred)) * 2] = { 0 };
- 	int tgid_pidfd = -1, thread_pidfd = -1;
- 	struct thread_ids buf[2] = { 0 };
- 	struct msghdr msg = { 0 };
-@@ -739,10 +752,18 @@ static int read_pidfd_msg(int fd, struct pidfd_msg *out)
- 		if (cmsg->cmsg_level != SOL_SOCKET)
- 			continue;
- 
--		if (cmsg->cmsg_type == SCM_PIDFD)
-+		if (cmsg->cmsg_type == SCM_PIDFD) {
- 			memcpy(&tgid_pidfd, CMSG_DATA(cmsg), sizeof(tgid_pidfd));
--		else if (cmsg->cmsg_type == SCM_PIDFD_THREAD)
-+		} else if (cmsg->cmsg_type == SCM_PIDFD_THREAD) {
- 			memcpy(&thread_pidfd, CMSG_DATA(cmsg), sizeof(thread_pidfd));
-+		} else if (cmsg->cmsg_type == SCM_CREDENTIALS) {
-+			memcpy(&out->creds, CMSG_DATA(cmsg), sizeof(out->creds));
-+			out->have_creds = true;
-+		} else if (cmsg->cmsg_type == SCM_CREDENTIALS_THREAD) {
-+			memcpy(&out->thread_creds, CMSG_DATA(cmsg),
-+			       sizeof(out->thread_creds));
-+			out->have_thread_creds = true;
-+		}
- 	}
- 
- 	out->have_tgid = tgid_pidfd >= 0;
-@@ -769,6 +790,9 @@ static int read_pidfd_msg(int fd, struct pidfd_msg *out)
- static const int pass_tgid[] = { SO_PASSPIDFD, 0 };
- static const int pass_thread[] = { SO_PASSPIDFD_THREAD, 0 };
- static const int pass_both[] = { SO_PASSPIDFD, SO_PASSPIDFD_THREAD, 0 };
-+static const int creds_tgid[] = { SO_PASSCRED, 0 };
-+static const int creds_thread[] = { SO_PASSCRED_THREAD, 0 };
-+static const int creds_both[] = { SO_PASSCRED, SO_PASSCRED_THREAD, 0 };
- 
- static int set_opts(int fd, const int *opts)
- {
-@@ -1061,6 +1085,134 @@ TEST(scm_pidfd_thread_creds)
- 	EXPECT_EQ(msg.ids.pid, msg.thread_info.tgid);
- }
- 
-+TEST(scm_creds_thread_setsockopt_values)
-+{
-+	int sk[2];
-+	int inet;
-+
-+	ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, sk));
-+
-+	/* Verify that the options are truly set independently */
-+	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED_THREAD, 1));
-+	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED_THREAD));
-+	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED));
-+
-+	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED, 1));
-+	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED));
-+	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED_THREAD));
-+
-+	/* Verify that the options are truly cleared independently */
-+	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED, 0));
-+	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED));
-+	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED_THREAD));
-+
-+	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED_THREAD, 0));
-+	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED_THREAD));
-+	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED));
-+
-+	close(sk[0]);
-+	close(sk[1]);
-+
-+	/* Only AF_UNIX records the sending thread */
-+	inet = socket(AF_INET, SOCK_DGRAM, 0);
-+	ASSERT_LE(0, inet);
-+	EXPECT_EQ(-1, sockopt_set(inet, SO_PASSCRED_THREAD, 1));
-+	EXPECT_EQ(EOPNOTSUPP, errno);
-+	close(inet);
-+}
-+
-+/* A receiver that only asked about the process cannot tell the two
-+ * threads apart, so their writes are glued into one read.
-+ */
-+TEST(scm_creds_stream_glues_threads)
-+{
-+	struct pidfd_msg msg[1] = { 0 };
-+
-+	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 2, creds_tgid, msg, 1));
-+	EXPECT_EQ(sizeof(struct thread_ids) * 2, msg[0].len);
-+
-+	EXPECT_TRUE(msg[0].have_creds);
-+	EXPECT_FALSE(msg[0].have_thread_creds);
-+	EXPECT_EQ(msg[0].ids.pid, msg[0].creds.pid);
-+}
-+
-+/* SO_PASSCRED_THREAD on its own is enough to split a stream per thread */
-+TEST(scm_creds_thread_stream_splits_on_threads)
-+{
-+	struct pidfd_msg msg[2] = { 0 };
-+	int i;
-+
-+	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 2, creds_thread, msg, 2));
-+
-+	for (i = 0; i < 2; i++) {
-+		EXPECT_EQ(sizeof(struct thread_ids), msg[i].len);
-+		EXPECT_FALSE(msg[i].have_creds);
-+		EXPECT_TRUE(msg[i].have_thread_creds);
-+		EXPECT_NE(msg[i].ids.pid, msg[i].ids.tid);
-+		EXPECT_EQ(msg[i].ids.tid, msg[i].thread_creds.pid);
-+	}
-+
-+	/* Make sure we really got unique threads per message */
-+	EXPECT_NE(msg[0].thread_creds.pid, msg[1].thread_creds.pid);
-+}
-+
-+TEST(scm_creds_thread_leader_sender)
-+{
-+	struct pidfd_msg msg = { 0 };
-+
-+	ASSERT_EQ(getpid(), gettid());
-+
-+	ASSERT_EQ(0, leader_flow(creds_both, &msg));
-+	ASSERT_TRUE(msg.have_creds);
-+	ASSERT_TRUE(msg.have_thread_creds);
-+
-+	EXPECT_EQ(getpid(), msg.creds.pid);
-+	EXPECT_EQ(getpid(), msg.thread_creds.pid);
-+}
-+
-+TEST(scm_creds_thread_and_group)
-+{
-+	struct pidfd_msg msg = { 0 };
-+
-+	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 1, creds_both, &msg, 1));
-+	ASSERT_NE(msg.ids.pid, msg.ids.tid);
-+	ASSERT_TRUE(msg.have_creds);
-+	ASSERT_TRUE(msg.have_thread_creds);
-+
-+	EXPECT_EQ(msg.ids.pid, msg.creds.pid);
-+	EXPECT_EQ(msg.ids.tid, msg.thread_creds.pid);
-+	EXPECT_EQ(msg.creds.uid, msg.thread_creds.uid);
-+	EXPECT_EQ(msg.creds.gid, msg.thread_creds.gid);
-+}
-+
-+TEST(scm_creds_thread)
-+{
-+	struct pidfd_msg msg = { 0 };
-+
-+	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 1, creds_thread, &msg, 1));
-+	ASSERT_NE(msg.ids.pid, msg.ids.tid);
-+	ASSERT_TRUE(msg.have_thread_creds);
-+	EXPECT_FALSE(msg.have_creds);
-+
-+	EXPECT_EQ(msg.ids.tid, msg.thread_creds.pid);
-+	EXPECT_EQ(getuid(), msg.thread_creds.uid);
-+	EXPECT_EQ(getgid(), msg.thread_creds.gid);
-+}
-+
-+/* A sender passing its own SCM_CREDENTIALS still reports the sending thread */
-+TEST(scm_creds_thread_explicit_creds)
-+{
-+	struct pidfd_msg msg = { 0 };
-+
-+	ASSERT_EQ(0, pidfd_flow(send_ids_creds_thread, 1, creds_both, &msg, 1));
-+	ASSERT_NE(msg.ids.pid, msg.ids.tid);
-+	ASSERT_TRUE(msg.have_creds);
-+	ASSERT_TRUE(msg.have_thread_creds);
-+
-+	EXPECT_EQ(msg.ids.pid, msg.creds.pid);
-+	EXPECT_EQ(msg.ids.tid, msg.thread_creds.pid);
-+}
-+
- static void *peer_connect_thread(void *arg)
- {
- 	struct sock_addr *sa = arg;
+So when Task A is preempted on CPU 0, this_cpu_inc_return(*prog->active)
+in __bpf_prog_enter_recur() stays 1 on CPU 0 and skips Task B even when
+private stack is not used.
 
--- 
-2.56.0
+To fix fentry/fexit while keeping preemption enabled, we'll need to:
+   1. Disable private stack for fentry/fexit (so each task uses its own
+      kernel stack), and
+   2. Check recursion in __bpf_prog_enter_recur() per-task rather than via
+      the per-CPU prog->active counter (still blocking same-task recursion
+      and IRQ/NMI re-entry on the same CPU, while allowing a preempting
+      Task B to run).
 
+Does that direction sound good to you for v2?
+
+Regards, Mike
