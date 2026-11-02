@@ -1,82 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793617916;
-	b=oEgz3mkd3WdOqJ6khBDgkUR93Z1YSQThG84TcEuFSO1WUO3JEBmyOoeJmtanmZlPaIQB
-	 tZha0Hr8iALXjbQ6hsGmfW9gkHvTEDrYp7WR+9YiRRHXMaL6TWlcyU3EgTyRDgV+g58kv
-	 RME66p8LGMiBbmz/f57ax0Yln+AkMVWfRDdZvoXeFZMELAhzJqKzy15R456uMrAGDRjE8
-	 uS0r+CGqRD6VttVfW1GGXFpv+H+TGbYO+XK5a9cpM14Drl6z3UK8OeHsIbW63jifOA4co
-	 jwAAYOleE+DotCJK3+8O6zIYOh03rYjxZTLjr4bdGsH595+ZM7+jV4iot0iG2Viy66g==
+	t=1793618866;
+	b=yEe4wC9p4ma/snLNFqcdK6Ed9TIMLS1hNKUtIWv64Gl341kAxuFwTGaKIyijIsuudJ2I
+	 oJ0UnT0UxVLi8GXY18yaGwIgvzJsVJ90dqNgJ3XeMC09P8TALWA9aeSEQUmIoinqJOFiS
+	 Sxt2qdhd8/N84E+bCqJ/6o1YFHmBJd5V86mUT6XVZgmX8tQe76eWVhzWEPttmh9QmWbAP
+	 15NQcgQJn4+lvfp9T69dxRf0nrnuKSiW7rMwFF2V5HB/eqiGRV/6hdbqpG2xVR8Puzcju
+	 yw3xh/K+q8NN3nN0nAoXj9E5DAnWBVjxjf/8FssE2qsSP4bARpY2mzNQUDAk6rKBBHw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793617916;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=tQierFXrtdBxsv90Wvr5GLl7ZIg6QP9xO7JbeTEr+Xw=;
-	b=JApkbTLWcVe/NUycRWZCT/kjaeB9owYFNnhE0s6CHXzVhXZtqWTtl74qxyScB6nrGF/S
-	 fV5Kn/EY1UGeknsdMUoSOTK+FX0rE92bhqUdQwq8O9/m/mF8ueU3YqUXIpoVecHw1fIcH
-	 Ap5kO6WMD8Un9/01s3KmhHlccEA3Yz7X17PN05r66r3IMSDgbryJ2qr45BAU3IL73ZdOb
-	 u16ETFe98hB0a52zCp8P/bRMmtI8sektqRe4Xrl9bLUQvKf/bWRDn9L3CvxtfLsym09ck
-	 tdcFcZKktksdMVO2QFfgxiDw3kSuN0wN7tbhljmeY7UR7/6/eWSzrMuJE09OOW27f2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793618866;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:From:Subject:To:Cc:References:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=TEl1DgfXUA5pWV0ULqPFDtP6OTn2CRZgvQuqRoLVd2k=;
+	b=vbME1SJBQaK+iwRWiw/uKNi+6hiJ1OwGddbf/odL7moRVQbsxGx6vgGNaD/mbZ55jXQr
+	 E2Y57LShEWdYUZ9GRUsqTIqLW0nqeFDdJW2zo0mApEOQD/Xnh4ZR0Lpf/2tF+Ae9lvNn3
+	 O6hIS1rcWPoncUftc+IxaArHoeL/AOyEFdwNys7JZgzWQ8SaQAqCY5cI87yemTFuo1rJ1
+	 qIOIvuGTKkKHDbw/sBjjY5CaiaFISlnkvenhfc+iNuKffx+BdIbz356f9XGdulsMUQQfR
+	 VYAM0szThOhE4OMUlxkl/4K14seM8uVYwMPNHB2olUoKq+L/omtQ5Jin3vxH0201EpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BFAwBKbw;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=rbox.co;
+	spf=pass smtp.mailfrom=rbox.co;
+	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=UdlUnKwa;
+	arc=none smtp.remote-ip=185.226.149.38
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8936C606A324
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 11:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C27D606A32C;
+	Mon,  2 Nov 2026 11:27:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C27D606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BFAwBKbw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A281F00A21;
-	Mon,  2 Nov 2026 11:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793617911;
-	bh=tQierFXrtdBxsv90Wvr5GLl7ZIg6QP9xO7JbeTEr+Xw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BFAwBKbwGTlz0Mn4enaQSgX8dTUg8pp7VJO7rtcJP9h8ODPemnCLR2eNJMPd38/pI
-	 o3ypw45HPEIawjkPWwjC7vpedMr/rhrB556WMYHevVOUGn2DSZqM3XyTdvy9xaafGs
-	 d+/SQtsBFnDZzf2np20BbCeTeaBHQValygZuXcE0jqxRoGvyrwoaqpftP2ml8O9MU/
-	 0HATVm85QPYzXDyRzMncrpNRNw91wJIj2+fA+lGi97MgKvO2KPKjh0YegXTGOM4QlH
-	 zeFv0Pn0ofxsDPqODF/sKmuouK59j9ZhHiStG+T3gwfGMbUvELpg99pmqo5mqiQtDr
-	 OUMAd/jT7HUPw==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 7A9A5198003A;
-	Mon,  2 Nov 2026 06:11:47 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Mon, 02 Nov 2026 06:11:48 -0500
-X-ME-Sender: <xms:8m_oap1pn22irz7gCc14BXj8OEqUpwx3JaQztnNOC7KHO2BMy333Eg>
-    <xme:8m_oao2hpwX1d8FZPJSOjgh5MInTWJxHlbjIquzEsa5ouO7aByPoj37Jp-SCbE9ou
-    Nx7vfKB-Oa4pHtVAHO_eH4WUmfTl6goBh_HywHjHO3FzyOQfPRy7n98>
-X-ME-Received: <xmr:8m_oaomWH4ItRcaBeR3WStFTWfJK0mu8lLjdJPwJHfA2OBb4biLzLTw2OPw>
-X-ME-Proxy-Cause: dmFkZTEK1+02a4zp88u4Tj7j1xR++eJHRcOeZsjArkkCuSqZTrG8QN3et3PJ5Yhpp8JgOy
-    tSOq45tZMVN3zAAAPAjPYdiYp4+PM3U5Ilw/Pvtw7Ftx3GpE/TzxD++/NwBVjZwRlAofk7
-    pgG6siSuYHP+MNHzb/HomkI1yVPL+oawmIR9pZi9gWP0otMusCPkQ232d0l/98yOZyjaO8
-    HCSiHgy4dMxZTYLPkGusk7UMm8k5Wt2nCqc9q31PZ/V6ihq/eUyqlvPexGPv0hMZ1E+YGx
-    sYu7Zoyhe+tajg6s4E3RIIUMBh/H9WcY7aPjBvRgJ+f/iJ4hRlMvNuh74OMKCJAds2lDaw
-    LuHKwEP2phflf9q4kE1iwNJtNjh7Mpe/RdmadkWMkn6nU+Wb0hAdhkVdLAVbDQIOIPTSkB
-    lKxK3Thu7rQlxOUPlh1jbY0wFMZNQpWVLZO8yoh/UobjpsE+YBH8Gm+QCT+dRaiS+FcvdP
-    zkcv0QSHR1X6YeFjlgRImzCdCwdeFLmZAWzMlz59bkHguqNYREG58mLEZ2yCI5P0Fx7ld7
-    0oN+qmyXHVQTlWvextupVYS/txj5aUgCi95wcxQcH7qyY2K7M8bHoBgwfMTdb5Rjozx/jc
-    qNE9yUW3AJqwqBNA5BKKdk/cxyRYVf8/3eXZjLEoHkP9zWRSitoidzhZiOeA
-X-ME-Proxy: <xmx:8m_oapPFGL__hvcoMqMzBnRZ-INyOEygljbY6EiycThk6Y0F6l6DsQ>
-    <xmx:8m_oav7wSNhrP83Arz50u-l3HyYq7VbGbdKXaWdvfmj4GLR7kpXEOg>
-    <xmx:8m_oas2GsREdtezfri6lt-3yakSD4672zKA1Jdet-JKU7ZBgwJBZWQ>
-    <xmx:8m_oatqcVCgLulftk8UoOuP943tkcFU81X7byj4o9pPXmFkdhPVZtQ>
-    <xmx:82_oamkCzupz1ocn0mSfB1WUaZPNn8heBXCkh_JvDXLF73A7bEu48WfY>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Nov 2026 06:11:46 -0500 (EST)
-Date: Mon, 2 Nov 2026 11:11:45 +0000
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Muhammad Mahdi Amirpour <ampr.mhd@gmail.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	yeoreum.yun@arm.com, ziy@nvidia.com
-Subject: Re: [PATCH] selftests/mm: handle child status safely in khugepaged
-Message-ID: <auhvkuDO8cP9Pip4@thinkstation>
-References: <20261030215841.229969-1-ampr.mhd@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=UdlUnKwa
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1xNqCJ-00BSF2-62; Mon, 02 Nov 2026 12:27:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=TEl1DgfXUA5pWV0ULqPFDtP6OTn2CRZgvQuqRoLVd2k=; b=UdlUnKwa2wwdsv4p1NZcbSZeV7
+	t4UOZnJaFeNb1oOLIegteX+/dZrJeyljqcQ8j+DemSAkcNZ9NA6RWxLB1qHZwZpB51BTC6BQllue7
+	kUMdtmojCpnGTa7941e3k/nOmpzV90w9kZJo+S6M0WLvFJcPy3x0eW7Okn9UrI0Mho7XOqc1/gDPz
+	J7OgLEcen16fXD3G+0uHsUVhj/SkBoJl+XumCZkg+45U3u6GRIH5EaDajhTqxh8WHW1GAr4INWy4d
+	nUkOjpuLeOMmHg40TB5oRoTVszVeAuf/LQnMd7teaFJCfeGJI7wxfjhsnD0t6bOizG7rupdqMfw7W
+	shLj9clg==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1xNqC6-0001gG-1k; Mon, 02 Nov 2026 12:27:18 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xNqC0-00BRqT-Uz;
+	Mon, 02 Nov 2026 12:27:13 +0100
+Message-ID: <44aa83c2-042b-4d4f-9f9c-f9be8b0fccc1@rbox.co>
+Date: Mon, 2 Nov 2026 12:27:10 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,64 +66,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261030215841.229969-1-ampr.mhd@gmail.com>
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH net-next v4 4/7] vsock: add a netlink command to assign
+ the g2h device to a netns
+To: Bobby Eshleman <bobbyeshleman@meta.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Donald Hunter
+ <donald.hunter@gmail.com>, Eric Dumazet <edumazet@kernel.org>,
+ virtualization@lists.linux.dev, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, sargun@sargun.me,
+ jlinbox@meta.com
+References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
+ <20261020-vsock-guest-ns-v4-4-047527cfccfc@meta.com>
+ <atjZZP2ebhXKzMxL@sgarzare-redhat>
+ <atld3+5LKmGxJ8+s@devvm29614.prn0.facebook.com>
+ <atnjOZjKUBagRVWq@sgarzare-redhat>
+ <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
+ <auT+YIawHSMPHbJI@devvm29614.prn0.facebook.com>
+ <5a411a67-f550-459d-be9b-5e8e51d3018c@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <5a411a67-f550-459d-be9b-5e8e51d3018c@rbox.co>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 31, 2026 at 01:28:41AM +0330, Muhammad Mahdi Amirpour wrote:
-> The khugepaged selftest reports child exit status through a shared
-> variable without checking that the child actually ran to completion.
-> When fork() fails or the child is killed by a signal, the status is
-> undefined and the test can report a false pass.
+On 11/2/26 02:21, Michal Luczaj wrote:
+> On 10/30/26 21:30, Bobby Eshleman wrote:
+>>> virtio_vsock_reset_sock() and vhost_vsock_reset_orphans() are my pet
+>>> peeves: state switcheroo without taking lock_sock(). Which, again, races
+>>> vsock_connect().
+>>
+>> True, I don't love that either, but I feel the impact is at least
+>> constrained by the fact that it only happens when the module or device
+>> is already going away.
 > 
-> Capture the waitpid() result and distinguish normal exit, signal
-> death, and fork failure before interpreting the status. Report the
-> child's actual termination cause in the TAP output so failures are
-> visible rather than silently masked.
+> Doesn't it happen on suspend as well? Is so, with a poorly timed connect()
+> things can go south on resume.
 
-The bug is real: for a child killed by a signal WEXITSTATUS() is 0,
-which is KSFT_PASS. The parent goes on with its own checks and reports
-ok, so a child that crashes in the middle of the collapse goes unnoticed.
+What I wrote doesn't really make sense, does it? vsock_connect() cannot
+freeze midway, so SS_UNCONNECTED (due to virtio_vsock_reset_sock() flipping
+state to TCP_CLOSE) can't be set. Sorry.
 
-The description doesn't match it, though. The status comes from wait(),
-not from a shared variable. For a killed child it is not undefined, it
-is a pass. And the patch doesn't report the termination cause anywhere.
-Maybe something like:
-
-  collapse_fork(), collapse_fork_compound() and
-  collapse_max_ptes_shared() take the child's result from WEXITSTATUS()
-  without checking WIFEXITED(). For a child killed by a signal
-  WEXITSTATUS() is 0, which is KSFT_PASS: the parent runs its own checks
-  and the test reports ok even though the child crashed.
-
-  Fail the test when the child did not exit normally, and print the
-  signal that killed it. Also fail it when fork() fails, instead of
-  reading an uninitialised status.
-
-It came with bd212a7dbdb1 ("kselftest: mm: return fail when child test
-result is fail in khugepaged"), so a Fixes: tag would be good.
-
-> +     exit_status = WIFEXITED(wstatus) ? WEXITSTATUS(wstatus) : KSFT_FAIL;
-
-A child that dies in the middle of a step leaves the progress line open,
-and the "not ok" line ends up on the "# ..." comment. Could you call
-fail() with the signal number here?
-
-> +     while (waitpid(pid, &wstatus, 0) == -1) {
-> +             if (errno == EINTR)
-> +                     continue;
-> +
-> +             fail("waitpid() failed");
-> +             goto out;
-> +     }
-
-The test installs no signal handlers, so waitpid() cannot return EINTR,
-and it has no other way to fail for our own child. A plain waitpid() is
-enough.
-
-The same check is now open-coded three times, four with
-collapse_fork_cow_race(). A helper that takes wstatus, prints the signal
-and returns the KSFT status would cover all of them.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+But it is still the case for bind/unbind, right?
