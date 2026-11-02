@@ -1,62 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.230.115
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793614081;
-	b=mY7YO0yZLv4X9p46oylQitNzbtE3gvbWxIf0ppTdJd7GhafvyRnNRYUVVBudsf/GAbz3
-	 WYmHTOIadjdhcTv0yyxIony0CRzHwZXGKyVoUyjrNK56R2ZUaiB4nFbCzoZ1YOACaUEQR
-	 kwHkYmoIHXUxFNBCSIT6r+OtY5j7z5QSh24tJb97nWWv5gGY7GC6XI98fvN6Ha563UMzC
-	 CutB4kLu1xiccdsp/9826sHGGIeqZGI5gUxxYPeoNr9Np3KpDJEvCw5jVF8+xa4ZRknU9
-	 6R9wL9zpKNvxroCIXA946F1eT0c4BkXE5Sq7DJIwg8IIqi1SeLEcfrM/Zzw0JUz1mig==
+	t=1793614164;
+	b=09X92No23PaiPEU4Sps9dvBk/GQ3VvYT2LEaWqyyU6TkO3mH3hkBBsdI+vFikkRz81/4
+	 bOLttJ/CFHP23gj/J8m3EVx3u/jlo4lDrOSFKXfi179i4O1z41Hd6XWNGP6umXVvJIADI
+	 wLs+vPAc/ji5wjnOC+B0K5AvVMAXwvKqFBLLnT1M30TMcqQt0l0+ku7xD65Yr5Uvnoc+Z
+	 Zr/GYlhp47iQEM1sQPZSHvIy7sZDLNwG8anSWDIFD7N5qWaRfKRsDdWACoU1k34TVSr48
+	 NwZH1IYMYc4sfmKszAd4C/ZqOexQ/ergWZtCjzqmgRXvEctcEYs4rZTmQyYiXoOAXiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793614081;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=PHGkVJUa8HZ0EZXHtvtoWcBsgIqIizfSFjqQHTffook=;
-	b=cBn5iNF6GUcKIIjcFJWzykRMn+7SOL+a98byKdK4XfgDCLkoj5QPuWVMHAjyTNfm4U65
-	 S/52vL+C/cxQRQnAxCBYteCAlaFUINJ8M7wvsPqqmFmk3Dj4ZMN/k6XK9T+nlAfZIjDf4
-	 4ZDos6qh6nUHI0OwP3dOdQxn1A1LakMiyy99vC3lEh+9p8rcoJ107LyOuHw5a5LRSOoFu
-	 ZiP/MNmOP8k0BQ6xJF6448qVhvREi8oK6WT5hQKwvtPM6h7gP9qSj0t6WwNry0982xbv5
-	 Vuhajt90yf64c4paufEWG7SFGeml+wiLbOJC1EsF5loCr2qA7Grs+GJjK69gvgP/7jQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793614164;
+	h=DMARC-Filter:DKIM-Signature:Cc:Content-Transfer-Encoding:
+	 Content-Type:X-Original-From:To:Date:X-Mailer:Mime-Version:
+	 X-Lms-Return-Path:From:Subject:Message-Id;
+	bh=j///8M5sOuCP4zIrDfL0phJ8BzITe20/aCrKuakg3b4=;
+	b=hDfDH3QRwAniCupOH3BbIeUIkAdqaeScGkrYRPniTjw2X5q/OyIg2q0GwO63z6eRprvZ
+	 bNnN1tqCLAmIHF95yOeHMq1bqiX0qtaHVQLHPgi+EksHGqwR0hsZBLl2QpjkdulaRf3Q6
+	 ij5cHsS258EOfLQQTCzESF+vfZBsF4ybu2KRS70bZWvGCoiL2sUSN1c3SrH7Q5ggzfTVB
+	 vl70r2FmGR4I3C4m9+e+JbV4aln+nV7wYmkFVqVhJZvy5vNuTi3TJqh3u2WEw7WSrOAQL
+	 Hu1BibJxcowE92LTdU3GnXwhN9YMNJEu42m/RylgR6R8D9ema5H5xWYvAox8aCKFTwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iPYSnUUT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=bytedance.com;
+	spf=pass smtp.mailfrom=bytedance.com;
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=aVzyIn7h;
+	arc=none smtp.remote-ip=209.127.230.115
+Received: from va-1-115.ptr.blmpb.com (va-1-115.ptr.blmpb.com [209.127.230.115])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E23606A324;
-	Mon,  2 Nov 2026 10:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B77B606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 10:09:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B77B606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iPYSnUUT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AE71F000C1;
-	Mon,  2 Nov 2026 10:07:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793614081;
-	bh=PHGkVJUa8HZ0EZXHtvtoWcBsgIqIizfSFjqQHTffook=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iPYSnUUTD7dz8nPcsslscQX96/YM7XFOPcKFwif1kzlBcgxqvNAMCrVFP3QT6/mJZ
-	 H4VRAaYJzIFAyHlW5W1jLO3NPMD+c7alEhiQmcQJo+OUkp/auAy/BT+u5o9cpDVicR
-	 p9fAM54yUdtbuB81DDxcYdF0dj4wOmfT9f70NL3ZyZHE9Lm9PsFsx30ljFlCCZ9xU2
-	 QViJXiddc29ptMiRWPuA7RjV29OSdK5nN+kph0hj6UopE8NUZ7NYGF4+RJ5ctqT9VH
-	 xalu0NI6bpvoTvTg0ePb8jy898hnsvd3z6I97tBZ5f9Zx7neuXHAP6Zaz4MoUb5VX7
-	 RbtKVBHSplV/w==
-Date: Mon, 2 Nov 2026 12:07:52 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH v2 2/2] selftests/mm: add a uffd test for re-registering
- during UFFDIO_COPY
-Message-ID: <auhg-HLrl4jbpaAT@kernel.org>
-References: <20261102081140.201987-1-azpijr@gmail.com>
- <20261102081140.201987-3-azpijr@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=aVzyIn7h
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1793614157; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=j///8M5sOuCP4zIrDfL0phJ8BzITe20/aCrKuakg3b4=;
+ b=aVzyIn7hPAlCdIOx+6LkHu37rCXeiqy+qTzS51y+FHUoaxF4raMqIF30/l+ckwu4C6wFLN
+ Id2tg8dfKcrqxvLzaAXPeuE6pe46r7QR61COCjIzyMylTz7xxpdLKaabVOG9U3WWWu70rw
+ S2fPiZTc4W8u1M+UUOMm2ChLwB6/K32ZUHu1M/gRWnTDL+VWifqwjRDybV8ffMIZTihG20
+ CjH39/YYyt0wpautCoYcaJM8gQwCpcWxTc0bar1NXs4poFMBXbJJ7hTdBZLvfXtLjt0TO2
+ aQ8i7TeXEI3ECnD+3FknZNiO7FNViifBPM1+bat1ZAdVzeE2NqI2c3krgcj3SQ==
+Cc: "Guixiong Wei" <weiguixiong@bytedance.com>, 
+	"Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, 
+	"Borislav Petkov" <bp@alien8.de>, 
+	"Dave Hansen" <dave.hansen@linux.intel.com>, 
+	"H . Peter Anvin" <hpa@zytor.com>, 
+	"Chang S . Bae" <chang.seok.bae@intel.com>, 
+	"Shuah Khan" <shuah@kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+X-Original-From: Guixiong Wei <weiguixiong@bytedance.com>
+To: <x86@kernel.org>
+Date: Mon,  2 Nov 2026 18:08:52 +0800
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,157 +65,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102081140.201987-3-azpijr@gmail.com>
+Mime-Version: 1.0
+X-Lms-Return-Path: <lba+26ae8614b+9c7a8f+vger.kernel.org+weiguixiong@bytedance.com>
+From: "Guixiong Wei" <weiguixiong@bytedance.com>
+Subject: [PATCH v4 0/2] x86/fpu: Fix dynamic fpstate leak on exec()
+Message-Id: <cover.1793604327.git.weiguixiong@bytedance.com>
 
-On Mon, Nov 02, 2026 at 09:11:31AM +0100, Jose A. Perez de Azpillaga wrote:
-> Re-register the destination without WP while a UFFDIO_COPY_MODE_WP copy
-> waits for its source page, then check that the copy fails with -EINVAL
-> and leaves no uffd-wp bit behind. This covers all memory types.
-> 
-> Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
+An exec() after using an XFD-controlled xfeature leaks the dynamically
+allocated fpstate. Fix the cleanup in fpstate_reset() and add an AMX
+regression selftest.
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+The selftest reports FAIL on an unfixed kernel (10/10 FAILs on 7.1.3),
+SKIP when vmallocinfo addresses are hidden, and OK with the fix applied.
 
-> ---
-> Changes in v2:
-> - "all memory types" in the commit message
-> - rename copy to result
-> 
-> v1: https://lore.kernel.org/20261029221129.89068-3-azpijr@gmail.com
-> 
->  tools/testing/selftests/mm/uffd-unit-tests.c | 105 +++++++++++++++++++
->  1 file changed, 105 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index 2a97ba1d6feb..cc22b4cde621 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -375,6 +375,104 @@ static void uffd_wp_unpopulated_test(uffd_global_test_opts_t *gopts, uffd_test_a
->  	uffd_test_pass();
->  }
->  
-> +struct wp_copy_args {
-> +	uffd_global_test_opts_t *gopts;
-> +	char *src;
-> +	__s64 result;
-> +};
-> +
-> +static void *wp_copy_thread(void *data)
-> +{
-> +	struct wp_copy_args *args = data;
-> +	struct uffdio_copy copy = {
-> +		.dst = (unsigned long)args->gopts->area_dst,
-> +		.src = (unsigned long)args->src,
-> +		.len = args->gopts->page_size,
-> +		.mode = UFFDIO_COPY_MODE_WP,
-> +	};
-> +
-> +	ioctl(args->gopts->uffd, UFFDIO_COPY, &copy);
-> +	args->result = copy.copy;
-> +
-> +	return NULL;
-> +}
-> +
-> +/*
-> + * UFFDIO_COPY drops its locks to fault in the source page.  Re-register the
-> + * destination without WP while it waits there: the MODE_WP copy must then
-> + * fail instead of leaving a uffd-wp bit in a VMA that no longer has WP.
-> + */
-> +static void uffd_wp_copy_reregister_test(uffd_global_test_opts_t *gopts,
-> +					 uffd_test_args_t *args)
-> +{
-> +	struct uffdio_api api = { .api = UFFD_API };
-> +	struct wp_copy_args copy_args = { .gopts = gopts };
-> +	unsigned long len = gopts->page_size;
-> +	struct uffdio_zeropage zeropage;
-> +	struct uffd_msg msg;
-> +	struct pollfd pfd;
-> +	pthread_t thread;
-> +	uint64_t value;
-> +	int pagemap_fd;
-> +	int src_uffd;
-> +
-> +	/* The source fault comes from the kernel, so no UFFD_USER_MODE_ONLY */
-> +	src_uffd = uffd_open(O_CLOEXEC);
-> +	if (src_uffd < 0) {
-> +		uffd_test_skip("cannot open a kernel-mode userfaultfd");
-> +		return;
-> +	}
-> +	if (ioctl(src_uffd, UFFDIO_API, &api))
-> +		err("UFFDIO_API failed");
-> +
-> +	copy_args.src = mmap(NULL, len, PROT_READ | PROT_WRITE,
-> +			     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	if (copy_args.src == MAP_FAILED)
-> +		err("mmap() failed");
-> +
-> +	if (uffd_register(src_uffd, copy_args.src, len, true, false, false))
-> +		err("register src failed");
-> +	if (uffd_register(gopts->uffd, gopts->area_dst, len, true, true, false))
-> +		err("register dst failed");
-> +
-> +	if (pthread_create(&thread, NULL, wp_copy_thread, &copy_args))
-> +		err("pthread_create() failed");
-> +
-> +	/* Wait until UFFDIO_COPY blocks on the source page */
-> +	pfd = (struct pollfd){ .fd = src_uffd, .events = POLLIN };
-> +	if (poll(&pfd, 1, 10000) != 1)
-> +		err("no fault on the source page");
-> +	if (read(src_uffd, &msg, sizeof(msg)) != sizeof(msg))
-> +		err("read() failed");
-> +
-> +	if (uffd_unregister(gopts->uffd, gopts->area_dst, len))
-> +		err("unregister dst failed");
-> +	if (uffd_register(gopts->uffd, gopts->area_dst, len, true, false, false))
-> +		err("re-register dst failed");
-> +
-> +	zeropage.range.start = (unsigned long)copy_args.src;
-> +	zeropage.range.len = len;
-> +	zeropage.mode = 0;
-> +	if (ioctl(src_uffd, UFFDIO_ZEROPAGE, &zeropage))
-> +		err("UFFDIO_ZEROPAGE failed");
-> +
-> +	if (pthread_join(thread, NULL))
-> +		err("pthread_join() failed");
-> +
-> +	if (copy_args.result != -EINVAL)
-> +		err("UFFDIO_COPY returned %lld, expected %d",
-> +		    (long long)copy_args.result, -EINVAL);
-> +
-> +	pagemap_fd = pagemap_open();
-> +	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
-> +	pagemap_check_wp(value, false);
-> +	close(pagemap_fd);
-> +
-> +	munmap(copy_args.src, len);
-> +	close(src_uffd);
-> +	uffd_test_pass();
-> +}
-> +
->  static void uffd_wp_fork_test_common(uffd_global_test_opts_t *gopts, uffd_test_args_t *args,
->  				     bool with_event)
->  {
-> @@ -2403,6 +2501,13 @@ uffd_test_case_t uffd_tests[] = {
->  		.uffd_feature_required =
->  		UFFD_FEATURE_PAGEFAULT_FLAG_WP | UFFD_FEATURE_WP_UNPOPULATED,
->  	},
-> +	{
-> +		.name = "wp-copy-reregister",
-> +		.uffd_fn = uffd_wp_copy_reregister_test,
-> +		.mem_targets = MEM_ALL,
-> +		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP |
-> +		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
-> +	},
->  	{
->  		.name = "minor",
->  		.uffd_fn = uffd_minor_test,
-> -- 
-> 2.56.0
-> 
+Changes since v3:
+- Close the use-after-free that freeing in fpstate_reset() exposed.
+  fpu_flush_thread() called fpstate_reset() before
+  fpu_reset_fpstate_regs() set TIF_NEED_FPU_LOAD, so a context switch
+  or a kernel FPU user in that window could still see live register
+  state and save it into the freed buffer. Set TIF_NEED_FPU_LOAD before
+  the reset and document on fpstate_reset() that callers operating on
+  the current task must prevent such a save. The race was caught by
+  the Sashiko review and the fix was suggested by Chang S. Bae.
 
+v3: https://lore.kernel.org/r/cover.1793072271.git.weiguixiong@bytedance.com
+v2: https://lore.kernel.org/r/cover.1791428412.git.weiguixiong@bytedance.com
+v1: https://lore.kernel.org/r/20260929151013.81562-2-weiguixiong@bytedance.com
+
+Guixiong Wei (2):
+  x86/fpu: Fix memory leak with dynamic fpstate and exec()
+  selftests/x86/amx: Test dynamic fpstate cleanup across exec()
+
+ arch/x86/kernel/fpu/core.c        |  12 ++
+ tools/testing/selftests/x86/amx.c | 251 +++++++++++++++++++++++++++++-
+ 2 files changed, 261 insertions(+), 2 deletions(-)
+
+
+base-commit: 72d3fcf802c45d00b300f25b848a93c3a2bd7c7e
 -- 
-Sincerely yours,
-Mike.
+2.55.0
