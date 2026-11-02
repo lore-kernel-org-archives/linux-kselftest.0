@@ -1,49 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793631250;
-	b=H7YJg/ftyPHTKzsN4tfdXhVD+3qg+kc1/GejYgXj6zz2wgopJ6oYepDABjzVdFIcsFui
-	 ksENVNE8Z8Geu8FAhXbDEEWOZW2WCvrxkEyLEy6OsKCk9kTuZePnFeKV13vFAAOMMgMsx
-	 9BWfSVqIcKyUg7txJPA3BNzb3xhhH4FBhPw6oouIc2yhep3ipm8wV+4WqTRG3PhZ+4AkF
-	 L5AVBCJKUIO+PtE2gfBQFeFOzXDG+SfxTJ5ieIkl+aeBlg3/Ut8Ur9ts0DCkAXkXdaVXp
-	 YEF03Zg8kRw6NI1Kvvz885rwcE+Jwz5POPEwUVmTiiNjcr+IF5uNvQVUR6lIuZ1eqIw==
+	t=1793631266;
+	b=4+cu+xKSTknYMpmNCiWNDrOLLrLUO7UreUi1LyfHseNzsbCkVFwMmD5mPDoO94DPL32B
+	 S+hsMWlnqyaWIHbyqkv/kF4dk/dFxvohLYFasfggp8n8wyEeKGRyVf5Z3HlV/si3fJxqh
+	 yO+WTq/MWYigRpaWNP6jGGNT13l4AgGjAi9Oqpw8teA1T8GJo4RtIkVu1oBf7AOm23CBi
+	 bS9ycl5wqLMXLeAcwIvVz/uhI9BUtxFdW+NHiDL1gT2YfcxcsDs2bKEaYTLciffrzaSRn
+	 Xhl93u04/eBbR5poWNnrUXa65upzpgdlmPLWRx8+hs5iOwkDUZrqNRRzZshlBgkIaiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793631250;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer;
-	bh=6D+rhj9AMzsL4ZxAMbTTFRqO6BNcfNzlOGN8XoIy1BQ=;
-	b=2GCg/mc9/6AUTHT2gRIauO6of0bto0JieH9xVZq+7ShAP2AyxpUCe1cLOujqQFeXZDoE
-	 lNnERBN4VAxxKmxWs3nP90zWNPhV2ep7m5Ko+hlWn/6Liwg08aCg8ZrqV4rQqJLYXuCTm
-	 YzLcedmIJl+9BK8SO9PrG/KCgj9uL7KcckVuo/GfNTWuoBabia6Ph9hcLQSqPdEoz+Z2O
-	 BlW4Mwe72mCqf4NshKd/QDrIo0nFfPclNlohqlzWHOKU7e5+jbBeNo5FKfgX7d8aN+lkF
-	 cZhyd+aCs/Hyf42OwbC2Hbj3Aikmyr1CilUUWxqPNPj9Pr01RX64TiYQAb+w7Gqo/+g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793631266;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
+	bh=3nu4A7upnl5Om0m7LZNGnD5TdTBPU65hBgFN+c/tzUc=;
+	b=O+MvTh+NY63/JVVbOWHUGS4QUm7HE+3pM6WxolTK7/whNId7MzNb5uTW+Kfk1EQXbStA
+	 xJhuJQR8TFogJwpGhsxcweNopKDjmlN4262i4+KWnapKvjSHudA38tZ0d5VXAUDzjfzyt
+	 pFE5ED/RJ/YTMYkpxO5oyBV/zsq4NU6Rywkho8RxJTCR7LqQtXXN8T9epxOywB9IMAqD3
+	 ho6C3w8LELPb2C08wYswn2IuHu+a1jPkeG8Tj0cd5F/a7p82v+hJYDtO62Bo8ncWNmSe2
+	 x/4Ke2O8oOI3PwAi4Kyi66z+P919O5zuAVzP03zY2IQ3NQvqMeRvWCHItbQFar6JPmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KxNpZEKk;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90BA607905F;
-	Mon,  2 Nov 2026 14:54:09 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=NtQSE6Hg;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B261606A589;
+	Mon,  2 Nov 2026 14:54:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B261606A589
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KxNpZEKk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 292341F00A16;
-	Mon,  2 Nov 2026 14:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793631249;
-	bh=6D+rhj9AMzsL4ZxAMbTTFRqO6BNcfNzlOGN8XoIy1BQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=KxNpZEKkyph0s1VFnWYugNb2QhC01F2/bH2mO62CWQZ+LGZOjH8D13WJhEvaEvssq
-	 ll1kDcMtrg3ROkFYJi4p7/Ri4zQ67sgTvcwZMysRa8udyqg9CDy7DJ1FOKzlD3OUC5
-	 hck0+uoaMFl0apM+ydUoJxSpyX1BiEd45EYN5ZcmyZZdhFNON3LUDyLw+HmFRG6kWj
-	 hKJyb7cb24m5nGVzK7xwTb/BfbuX6mn66mIH+I2qikOKVjpdkTR++4BkGvLnpQYbfU
-	 N42B37TnDt/oZhvY4ym1lTPmywWw6rqu+aAeSl/T4Fq53VdxKX+t4v7df9GH9Jeepm
-	 bu9oR3VWn5S8Q==
-From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 02 Nov 2026 15:48:53 +0100
-Subject: [PATCH RFC 13/16] proc: let procfs copy out reads that don't go
- through seq_file
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=NtQSE6Hg
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E35B1576;
+	Mon,  2 Nov 2026 06:54:22 -0800 (PST)
+Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E92D63F871;
+	Mon,  2 Nov 2026 06:54:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1793631265; bh=pe+eF55ZtCt9EK50Q3JeMHIuu3r98fGvy4S7dN+6afo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=NtQSE6Hg4NZPFXQ1EiNFOU1PmKa4H+Hf6xPJvfcB7KdwuZLbI457GZl+8mrCNBtNo
+	 2PyrOqZhuMSPZNmfOZxZdtkgpZkjgebncw8Do9WE4zg2AeHLkFeYCskOC/ovLTR/p3
+	 5sUzDS++27WFhdVSSUC8oDy0ouhPtxEMyn5zal3U=
+From: Leonardo Bras <leo.bras@arm.com>
+To: Tian Zheng <zhengtian10@huawei.com>
+Cc: Leonardo Bras <leo.bras@arm.com>,
+	maz@kernel.org,
+	oupton@kernel.org,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	corbet@lwn.net,
+	pbonzini@redhat.com,
+	yuzenghui@huawei.com,
+	wangzhou1@hisilicon.com,
+	yangjinqian1@huawei.com,
+	caijian11@h-partners.com,
+	liuyonglong@huawei.com,
+	tangchengchang@huawei.com,
+	yezhenyu2@huawei.com,
+	yubihong@huawei.com,
+	linuxarm@huawei.com,
+	joey.gouly@arm.com,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	seiden@linux.ibm.com,
+	suzuki.poulose@arm.com,
+	fuad.tabba@linux.dev,
+	mark.rutland@arm.com,
+	seanjc@google.com,
+	rdunlap@infradead.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH v5 11/15] KVM: arm64: Reserve dirty ring space for the HDBSS buffer
+Date: Mon,  2 Nov 2026 14:54:19 +0000
+Message-ID: <auikG0clmr19sAjh@LeoBrasDK>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20260929103655.85107-12-zhengtian10@huawei.com>
+References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-12-zhengtian10@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,265 +89,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-work-procfs-core-v1-13-75df35e4f8b8@kernel.org>
-References: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
-In-Reply-To: <20261102-work-procfs-core-v1-0-75df35e4f8b8@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
- Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
- NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
- Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
- Greg Kroah-Hartman <gregkh@suse.de>, 
- Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
- Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
- linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
- linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
- ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
- coreteam@netfilter.org, kexec@lists.infradead.org, 
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
- netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
- linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
- sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
- linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
- linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
- linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-debuggers@vger.kernel.org, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>, 
- Chuck Lever <cel@kernel.org>
-X-Mailer: b4 0.17-dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-proc_reg_read() and proc_reg_read_iter() pin the entry and call
-->proc_read() or ->proc_read_iter() which copy to userspace
-themselves. Like for seq_file reads and for writes, a reader can make
-a page fault in that copy take as long as it wants and
-remove_proc_entry() waits for it.
+On Tue, Sep 29, 2026 at 06:36:51PM +0800, Tian Zheng wrote:
+> The dirty ring reserves room for CPU-side dirty buffers via
+> kvm_cpu_dirty_log_size(). Report the HDBSS buffer entry count
+> through it, so a full buffer flush always fits in the ring.
+> 
+> Pin the HDBSS buffer size to PAGE_SIZE when dirty-ring is enabled,
+> via kvm_arch_dirty_ring_size_updated(): a larger buffer only
+> shrinks the soft_limit and forces more frequent userspace drains.
+> 
+> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
+> ---
+>  arch/arm64/kvm/arm.c | 8 ++++++++
+>  arch/arm64/kvm/mmu.c | 8 ++++++++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 9d7bdece149a..5a7046acb62e 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -215,6 +215,14 @@ static int kvm_arm_default_max_vcpus(void)
+>  	return vgic_present ? kvm_vgic_get_max_vcpus() : KVM_MAX_VCPUS;
+>  }
+> 
+> +void kvm_arch_dirty_ring_size_updated(struct kvm *kvm)
+> +{
+> +	if (!system_supports_hdbss())
+> +		return;
+> +
+> +	kvm->arch.hdbss_buffer_size = KVM_ARM_HDBSS_DEFAULT_SIZE;
+> +}
+> +
 
-So do what kernfs does for these reads as well. An entry that implements
-->proc_read_buf() fills a kernel buffer of at most ->proc_read_size
-bytes, a page if the entry doesn't care, and procfs copies it to
-userspace after unpinning the entry. The entry moves the position like
-it did for ->proc_read() but that only sticks if the copy to userspace
-worked, like in kernfs_file_read_iter(). If the copy fails halfway the
-read fails with -EFAULT and the position stays, where
-simple_read_from_buffer() returned what it had copied until then.
-procfs remembers ->proc_read_size in the entry like ->proc_write_size.
+On the same subject as a previous patch:
+I don't think this is the best approach, on top of adding a new weak 
+function to take care.
 
-Larger reads come up short, like with kernfs. An entry whose readers
-want all of a large file in one read asks for PROC_ENTRY_FULL_READS and
-procfs fills the read in pieces of ->proc_read_size, unpinning the entry
-in between. A piece whose copy fails ends the read with what the pieces
-before it returned. kexec-tools treats any short read of /proc/vmcore
-as fatal for example (cf. [1]).
+Maybe during the dirty-ring allocation, on vcpu creation, we could take 
+into account the requested dirty-ring size, and just allocate the HDBSS 
+buffer taking that into account. That would make it simpler, don't you 
+agree?
 
-These entries are read through ->read_iter() so readv(), splice(), aio,
-the RWF flags, kernel_read() and io_uring work for them like for the
-->proc_read_iter() ones. io_uring's nonblocking attempt gets -EAGAIN
-though, like loop_rw_iter() gave it for ->proc_read() entries. Neither
-the allocation nor the entry can honor IOCB_NOWAIT, and io_uring would
-take a short read of a record file for an unfinished one and glue the
-next record to it. So it retries from a worker like before.
-
-An entry that implements ->proc_read_buf() and also declares a seq_file
-or one of the other read methods fails to register.
-
-No users yet.
-
-[1]: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/tree/util_lib/elf_info.c
-
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- fs/proc/generic.c       |  9 ++++++++
- fs/proc/inode.c         | 60 ++++++++++++++++++++++++++++++++++++++++++++++++-
- fs/proc/internal.h      | 11 +++++++++
- include/linux/proc_fs.h | 16 +++++++++++++
- 4 files changed, 95 insertions(+), 1 deletion(-)
-
-diff --git a/fs/proc/generic.c b/fs/proc/generic.c
-index 83d273778a60..fc4d10c92d7c 100644
---- a/fs/proc/generic.c
-+++ b/fs/proc/generic.c
-@@ -476,6 +476,15 @@ static int pde_set_flags(struct proc_dir_entry *pde)
- 		if (proc_ops->proc_flags & PROC_ENTRY_SHORT_WRITES)
- 			pde->flags |= PROC_ENTRY_SHORT_WRITES;
- 	}
-+	if (proc_ops->proc_read_buf) {
-+		if (WARN_ON_ONCE(pde_is_seq_file(pde) || proc_ops->proc_read ||
-+				 proc_ops->proc_read_iter))
-+			return -EINVAL;
-+		pde->flags |= PROC_ENTRY_proc_read_buf;
-+		pde->read_size = proc_ops->proc_read_size ?: PAGE_SIZE;
-+		if (proc_ops->proc_flags & PROC_ENTRY_FULL_READS)
-+			pde->flags |= PROC_ENTRY_FULL_READS;
-+	}
- 	return 0;
- }
- 
-diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-index c0bb40e7ff96..3f29a1663d26 100644
---- a/fs/proc/inode.c
-+++ b/fs/proc/inode.c
-@@ -23,6 +23,8 @@
- #include <linux/sysctl.h>
- #include <linux/seq_file.h>
- #include <linux/slab.h>
-+#include <linux/sched/signal.h>
-+#include <linux/uio.h>
- #include <linux/mount.h>
- #include <linux/bug.h>
- 
-@@ -400,11 +402,67 @@ static loff_t proc_reg_llseek(struct file *file, loff_t offset, int whence)
- 	return rv;
- }
- 
-+/*
-+ * The entry fills a kernel buffer and procfs copies that to userspace after
-+ * unpinning the entry. A reader that faults on its buffer then doesn't hold
-+ * up remove_proc_entry().
-+ */
-+static ssize_t pde_read_buf(struct proc_dir_entry *pde, struct kiocb *iocb,
-+			    struct iov_iter *iter)
-+{
-+	struct file *file = iocb->ki_filp;
-+	char *buf __free(kvfree) = NULL;
-+	ssize_t rv, done = 0;
-+	size_t len, count;
-+	loff_t pos;
-+
-+	if (!iov_iter_count(iter))
-+		return 0;
-+	/* neither the allocation nor the entry can honor IOCB_NOWAIT */
-+	if ((iocb->ki_flags & IOCB_NOWAIT) && !(file->f_flags & O_NONBLOCK))
-+		return -EAGAIN;
-+	len = min_t(size_t, iov_iter_count(iter), pde->read_size);
-+	buf = kvmalloc(len, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	/* PROC_ENTRY_FULL_READS fills the read in pieces */
-+	do {
-+		count = min_t(size_t, iov_iter_count(iter), len);
-+		pos = iocb->ki_pos;
-+		if (!pde_pin(pde)) {
-+			rv = -EIO;
-+			break;
-+		}
-+		rv = pde->proc_ops->proc_read_buf(file, buf, count, &pos);
-+		pde_unpin(pde);
-+		if (rv <= 0)
-+			break;
-+		if (WARN_ON_ONCE(rv > count)) {
-+			rv = -EIO;
-+			break;
-+		}
-+		if (copy_to_iter(buf, rv, iter) != rv) {
-+			rv = -EFAULT;
-+			break;
-+		}
-+		iocb->ki_pos = pos;
-+		done += rv;
-+		if (!pde_has_full_reads(pde) || rv < count)
-+			break;
-+		cond_resched();
-+	} while (iov_iter_count(iter) && !fatal_signal_pending(current));
-+
-+	return done ?: rv;
-+}
-+
- static ssize_t proc_reg_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- {
- 	struct proc_dir_entry *pde = PDE(file_inode(iocb->ki_filp));
- 	ssize_t ret;
- 
-+	if (pde_has_proc_read_buf(pde))
-+		return pde_read_buf(pde, iocb, iter);
- 	if (!pde_pin(pde))
- 		return -EIO;
- 	ret = pde->proc_ops->proc_read_iter(iocb, iter);
-@@ -814,7 +872,7 @@ struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
- 		inode->i_op = de->proc_iops;
- 		if (pde_is_seq_file(de))
- 			inode->i_fop = &proc_seq_file_ops;
--		else if (pde_has_proc_read_iter(de))
-+		else if (pde_has_proc_read_iter(de) || pde_has_proc_read_buf(de))
- 			inode->i_fop = &proc_iter_file_ops;
- 		else
- 			inode->i_fop = &proc_reg_file_ops;
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index ed22c6dfb0bf..11bd3fa07705 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -52,6 +52,7 @@ struct proc_dir_entry {
- 	void *data;
- 	unsigned int state_size;
- 	unsigned int write_size;
-+	unsigned int read_size;
- 	unsigned int low_ino;
- 	nlink_t nlink;
- 	kuid_t uid;
-@@ -118,6 +119,16 @@ static inline bool pde_has_short_writes(const struct proc_dir_entry *pde)
- 	return pde->flags & PROC_ENTRY_SHORT_WRITES;
- }
- 
-+static inline bool pde_has_proc_read_buf(const struct proc_dir_entry *pde)
-+{
-+	return pde->flags & PROC_ENTRY_proc_read_buf;
-+}
-+
-+static inline bool pde_has_full_reads(const struct proc_dir_entry *pde)
-+{
-+	return pde->flags & PROC_ENTRY_FULL_READS;
-+}
-+
- /* procfs owns the seq_file, see pde_seq_ops */
- static inline bool pde_is_seq_file(const struct proc_dir_entry *pde)
- {
-diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
-index c81c93325044..0f0997898ba3 100644
---- a/include/linux/proc_fs.h
-+++ b/include/linux/proc_fs.h
-@@ -38,6 +38,13 @@ enum {
- 	 * failing with -EINVAL.
- 	 */
- 	PROC_ENTRY_SHORT_WRITES		= 1U << 9,
-+	PROC_ENTRY_proc_read_buf	= 1U << 10,
-+
-+	/*
-+	 * Reads larger than ->proc_read_size are filled in pieces instead of
-+	 * coming up short.
-+	 */
-+	PROC_ENTRY_FULL_READS		= 1U << 11,
- };
- 
- struct proc_ops {
-@@ -84,6 +91,15 @@ struct proc_ops {
- 	 */
- 	ssize_t	(*proc_write_buf)(struct file *, char *, size_t, loff_t *);
- 	unsigned int proc_write_size;
-+	/*
-+	 * procfs calls ->proc_read_buf() to fill a kernel buffer of at most
-+	 * ->proc_read_size bytes, PAGE_SIZE if that's 0, and copies it to
-+	 * userspace afterwards. Larger reads come up short unless the entry
-+	 * asks for PROC_ENTRY_FULL_READS. The position the entry moves to only
-+	 * sticks if the copy works.
-+	 */
-+	ssize_t	(*proc_read_buf)(struct file *, char *, size_t, loff_t *);
-+	unsigned int proc_read_size;
- } __randomize_layout;
- 
- /* definitions for hide_pid field */
-
--- 
-2.53.0
-
+Thanks!
+Leo
