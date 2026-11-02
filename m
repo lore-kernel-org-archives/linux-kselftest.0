@@ -1,85 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793632333;
-	b=xHfAXoKmm10SMZe2o2Z5Bc0tHnGAfXeXBLY6kzEmOklaG9gZwBuOayGhxVCbUMAK90fK
-	 dVuG1pLq9z+cMZLkRbqH0WUvz2+meuCzzBDuJ/gMIvq6I6z8dfL0KIbYwY5fBZ7hFTTgb
-	 /PoJcAxBEmrSxImiop6qRAvMpqhkGxJbk6k0RbYF96MKSCeGn33UujThIDnuTz262Ngx1
-	 WcykLwVM+7iK0vodhcFiJ3zWJRY+/BlvqT+oHtY6x9UQVJAEI2tyO/cjLSsEzfToYgPQz
-	 u88nHRjC4tft0qwTVbLlJTaGPb71iZRnAfg3EAjR7Oq68KBE/RSqXsX2R65/AUXT2AA==
+	t=1793632344;
+	b=0NEIMvvIYrpRFJ18AKkvpMH/H3fU5PkEN31lZY9tRtoTMdLfw3Gk51SE5JUnePQ3bABn
+	 j2qfeX1buAtGck6QFLVmOJ3HIj6+64EuH8POBy4uNRqZFT3otSftImUplovsSAElwpFm1
+	 p9Hylei3YnE4PTYwpDQAo3afjw/7DJBBlGUgxAMCba2Qxflvc8pU6GUMbt/bU9AuSOyLG
+	 Zf0KRHTyWQogowJskm7NCLVbpvd3IDppktABA1DuXaqOAvxYT6E6LtpUE0yvJlqcCL4U8
+	 lXUswRuyieel0pnIrLzUr+ZNymI0ry7M7C52RPGN83U8zl9bHYSJsW80x9/H9auiVyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793632333;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=s7ppLZMAjyyuilbixYy866dZSoM5/UMmIQ8fY8VwQIM=;
-	b=1Dle2zAiRlbSd4Vg94BKAwrnV6dfV1vVSSiaiyOecVR2PjEuV2vYGCAgluyRfxvaRa2s
-	 1ENkOyx5pg86DLFze25A33y6l33LsGRXiVhtudV5nJwoRNV2tHHFA0w/AU9DCsbbNToNA
-	 +1axIrR8wsmBG7DESwxzHpllkNFE8Zk7biLjISm5TGG7S+B2aV6Bxjn9hQ9vEbm8LMCkJ
-	 B4rAWCJnMEtVS+Qo/0th9uOGwyLmy2SfZNh6gwvk3CmAq7OhJEV7Pi/7fR2YXYWsO5DsG
-	 wOB2Xi1pfFUOPXCOXC24YWl3ph8qZ1vJwjsaqm47JUMEf0S0ziYbFBLPuu2Mk31TxnA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793632344;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=RGxB3CLuL3hdMOFW6c8rETuQc0/Gu93ks+OA3zHK0Kk=;
+	b=37NohKSHcw+foYbAvmZRwPSBHw1IMzpv09BkgPu+jWlyY/wVcX2hqXggDPY7FSLvixUZ
+	 h5UYw8+oOUksJJ0tS1yn1kkQ6j6nqsdp6L4GzMWZUxl5Hze9KZINjnjPeMfH/Ai4ujSc5
+	 CGrdsM7KoN5z1R6MQUi1lVuOg8Qbl9GH3tcT1FC4QLeTrYuGNiZtR0tXZD8HimNTCNmdB
+	 Ak6kVH1S6ArXfVLRJsaz5Xp0DcJryl8EjIRu6U4OOxc8vyqmb9MJ8Cnh9QrbFNxV7as4J
+	 +KSE1xj8ZrW2sydVhmQ6OI0a+UXU08B5z9SnA0qDXQdi6hMdWS/p1JflAV1isUDAfjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=d5U+AbfK;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9F360771E0;
-	Mon,  2 Nov 2026 15:12:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB9F360771E0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=edn0AYPt;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE858606DEBF;
+	Mon,  2 Nov 2026 15:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=d5U+AbfK
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BED8B1595;
-	Mon,  2 Nov 2026 07:12:08 -0800 (PST)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8053F3F871;
-	Mon,  2 Nov 2026 07:12:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793632331; bh=m3wJSJtQD9D+ud0ZiYqt81AP0zFjBodMC7qvifLjgJM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d5U+AbfKMQ+WQ+H64mUgHOPj+0VxOmTroJphZ7yU3xRTnKcSzCeOPvCZ51upxaez9
-	 1zseJ0VSVrE65X5rYLfPftuaGKIecMKJ7UMt38Z8i6G17tBccd47v2kL5UbnRkZwv2
-	 FGg9aEze2odeZX47fJ5ayfhbvGDPwmGheoxz4Lw0=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	maz@kernel.org,
-	oupton@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 13/15] KVM: arm64: Add HDBSS buffer size ioctl for dirty-bitmap mode
-Date: Mon,  2 Nov 2026 15:12:04 +0000
-Message-ID: <auioRICO9Frhk-zT@LeoBrasDK>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20260929103655.85107-14-zhengtian10@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-14-zhengtian10@huawei.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=edn0AYPt
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82CE1F00A16;
+	Mon,  2 Nov 2026 15:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793632343;
+	bh=RGxB3CLuL3hdMOFW6c8rETuQc0/Gu93ks+OA3zHK0Kk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=edn0AYPt5jRwhzogids3xv0SIWD2ZJhmY0NQPvBljECs8aa0X00ejVbwi8wkj25C/
+	 2U5H4P82mtq9mk7Gq7o6e3/c1q4G3kbagk9jpohANeLaXrMVCD+eHlCpevZFWYYYSS
+	 zfdTR6xsYkavU1Yyn93mOd5uM9GVA/ziiwPly/tLPD8EKmEgx8k3MJ6ijWmLm10fQ5
+	 aAJwWIQlFfdnqETK+vq3WSm6gSr6XKfcJMe7u/+KEhkto92jBEq1FJaT413U5aWoNC
+	 fX2qVLNTgmiFU3l4keyd4RISYlleq5zE0TOEd/g/8NAtAr7PPLpG0OuAXPXHvgwwGx
+	 A5koDE6WAQthg==
+From: Christian Brauner <brauner@kernel.org>
+Date: Mon, 02 Nov 2026 16:07:14 +0100
+Subject: [PATCH RFC 07/23] s390/dasd: let procfs copy in writes to
+ /proc/dasd/statistics
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,94 +53,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261102-work-procfs-drivers-v1-7-a994bd4d3b1a@kernel.org>
+References: <20261102-work-procfs-drivers-v1-0-a994bd4d3b1a@kernel.org>
+In-Reply-To: <20261102-work-procfs-drivers-v1-0-a994bd4d3b1a@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+ Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+ Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+ NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+ Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+ Greg Kroah-Hartman <gregkh@suse.de>, 
+ Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+ linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+ linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
+ ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+ coreteam@netfilter.org, kexec@lists.infradead.org, 
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+ netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
+ linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+ sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+ linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
+ linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
+ linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+ linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-debuggers@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+ Chuck Lever <cel@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2121; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=tPoM7KW2jugAI3HBgjDAkvMMKrMKVevq5gq8BMZsIqc=;
+ b=kA0DAAoWkcYbwGV43KIByyZiAGropzCjfwupU8fn9+VxtZv2ThSIu2nz9SfrAQKMYBoRl89VB
+ Ih1BAAWCgAdFiEEQIc0Vx6nDHizMmkokcYbwGV43KIFAmropzAACgkQkcYbwGV43KL3vwEA7DgZ
+ qwKtRcRruUUjfm5rBcGQ2NDy+57vyMOGubX9wNEBAPGDTMKrc7NwpMTdmoTSB/UBaD6PA7NAvur
+ lg4LjKr4D
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Tue, Sep 29, 2026 at 06:36:53PM +0800, Tian Zheng wrote:
-> In dirty-bitmap mode, a larger HDBSS buffer lets the guest dirty more
-> pages between VM exits, at the cost of memory. The default of one page
-> per vCPU is a reasonable starting point, so allow userspace to opt
-> into a larger buffer via KVM_CAP_ARM_HDBSS_BUFFER_SIZE.
-> 
-> The size is specified in bytes through KVM_ENABLE_CAP and must be a
-> power of two in [PAGE_SIZE, SZ_2M]: the upper bound is the largest
-> HDBSSBR_EL2.SZ encoding, and the power-of-two requirement matches the
-> buddy allocator. It must be set before any vCPU is created: -EINVAL
-> after vCPUs exist, -EBUSY if already set.
-> 
-> The capability is rejected in dirty-ring mode, where the size is
-> pinned by kvm_arch_dirty_ring_size_updated().
-> 
-> KVM_CHECK_EXTENSION returns the configured size for a VM, or SZ_2M
-> when queried globally with a NULL kvm.
-> 
-> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
-> ---
->  arch/arm64/kvm/arm.c     | 34 ++++++++++++++++++++++++++++++++++
->  include/uapi/linux/kvm.h |  1 +
->  2 files changed, 35 insertions(+)
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 5a7046acb62e..eadbf3a88d31 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -19,6 +19,7 @@
->  #include <linux/kvm.h>
->  #include <linux/kvm_irqfd.h>
->  #include <linux/irqbypass.h>
-> +#include <linux/log2.h>
->  #include <linux/sched/stat.h>
->  #include <linux/psci.h>
->  #include <trace/events/kvm.h>
-> @@ -203,6 +204,31 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->  		r = 0;
->  		set_bit(KVM_ARCH_FLAG_EXIT_SEA, &kvm->arch.flags);
->  		break;
-> +	case KVM_CAP_ARM_HDBSS_BUFFER_SIZE: {
-> +		u64 size = cap->args[0];
-> +
-> +		if (!system_supports_hdbss())
-> +			break;
-> +		if (kvm->dirty_ring_size)
-> +			break;
-> +		if (size < KVM_ARM_HDBSS_DEFAULT_SIZE ||
-> +		    size > KVM_ARM_HDBSS_MAX_SIZE)
-> +			break;
-> +		if (!is_power_of_2(size))
-> +			break;
-> +
-> +		mutex_lock(&kvm->lock);
-> +		if (kvm->created_vcpus) {
-> +			r = -EINVAL;
-> +		} else if (kvm->arch.hdbss_buffer_size) {
-> +			r = -EBUSY;
-> +		} else {
-> +			kvm->arch.hdbss_buffer_size = size;
-> +			r = 0;
-> +		}
-> +		mutex_unlock(&kvm->lock);
-> +		break;
-> +	}
->  	default:
->  		break;
->  	}
-> @@ -500,6 +526,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  		else
->  			r = KVM_ARM_EAGER_SPLIT_CHUNK_SIZE_DEFAULT;
->  		break;
-> +	case KVM_CAP_ARM_HDBSS_BUFFER_SIZE:
-> +		if (!system_supports_hdbss())
-> +			r = 0;
-> +		else if (kvm)
-> +			r = kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
+Implement ->proc_write_buf() so procfs copies in what is written before
+it pins the entry, and parse the command from that copy. Commands longer
+than PAGE_SIZE - 1 bytes are rejected now instead of cut at 64k.
 
-This whole thing of allowing hdbss_buf_size to be set only once makes 
-everything more complex. Why do we have this limitation again?
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ drivers/s390/block/dasd_proc.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-I mean, if we want to restrict size changes after the first hdbss buffer 
-gets allocated, it makes sense, other than that, I would like to understand 
-the reason for that.
+diff --git a/drivers/s390/block/dasd_proc.c b/drivers/s390/block/dasd_proc.c
+index 86399427f01d..6c3bbb7dfe85 100644
+--- a/drivers/s390/block/dasd_proc.c
++++ b/drivers/s390/block/dasd_proc.c
+@@ -15,7 +15,6 @@
+ #include <linux/slab.h>
+ #include <linux/string.h>
+ #include <linux/seq_file.h>
+-#include <linux/vmalloc.h>
+ #include <linux/proc_fs.h>
+ 
+ #include <asm/debug.h>
+@@ -247,17 +246,15 @@ static int dasd_stats_proc_show(struct seq_file *m, void *v)
+ }
+ 
+ static ssize_t dasd_stats_proc_write(struct file *file,
+-		const char __user *user_buf, size_t user_len, loff_t *pos)
++		char *buffer, size_t user_len, loff_t *pos)
+ {
+ #ifdef CONFIG_DASD_PROFILE
+-	char *buffer, *str;
++	char *str;
+ 	int rc;
+ 
+-	if (user_len > 65536)
+-		user_len = 65536;
+-	buffer = dasd_get_user_string(user_buf, user_len);
+-	if (IS_ERR(buffer))
+-		return PTR_ERR(buffer);
++	/* strip linefeed */
++	if (user_len && buffer[user_len - 1] == '\n')
++		buffer[user_len - 1] = 0;
+ 
+ 	/* check for valid verbs */
+ 	str = skip_spaces(buffer);
+@@ -296,13 +293,11 @@ static ssize_t dasd_stats_proc_write(struct file *file,
+ 		pr_info("The statistics have been reset\n");
+ 	} else
+ 		goto out_parse_error;
+-	vfree(buffer);
+ 	return user_len;
+ out_parse_error:
+ 	rc = -EINVAL;
+ 	pr_warn("%s is not a supported value for /proc/dasd/statistics\n", str);
+ out_error:
+-	vfree(buffer);
+ 	return rc;
+ #else
+ 	pr_warn("/proc/dasd/statistics: is not activated in this kernel\n");
+@@ -312,7 +307,7 @@ out_error:
+ 
+ static const struct proc_ops dasd_stats_proc_ops = {
+ 	.proc_show	= dasd_stats_proc_show,
+-	.proc_write	= dasd_stats_proc_write,
++	.proc_write_buf	= dasd_stats_proc_write,
+ };
+ 
+ /*
 
-Thanks!
-Leo
+-- 
+2.53.0
+
