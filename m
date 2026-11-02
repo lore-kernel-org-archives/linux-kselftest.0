@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793605463;
-	b=JmaQB+WPX9XNHsAO7hkTONEtLFqXnxE6NdyGHZ4wbLFAXcXbt68SbkNwlEG8lcsDvbHe
-	 rSnu3MukCG/Rzg2tkDrGCNOau6AeG4rSWuiUpzm5YmFhur3TrZK+oE+ZlKfUeUaZzbCqF
-	 +Z9WZ9rs8+ZRqMWmLVbNK3D77ScFELF6/Y5bDVdhd/ZYZOxdpBZEHUyqhvpiVpvxixXPD
-	 d3PCVxZcycPcWYsPTMOrW4Djj/bUNCHRaiXYqcuhOsjCvbWxv/fIVe4y2t6OHPxUQcmOM
-	 qK7nI6m5RSmYe4C7u0WiFezVcsXBN6FdObfZXNqFrkDFDjwm//Dyz1WP64rIyQF8xSw==
+	t=1793605466;
+	b=KMwB0r7TyfuXJ6YZSvyMIaYK+sbyBtcJCQ5rpHkBkn1//TsYvBaiDsZo7rvntgZ6HpcH
+	 7EeR16vtjak4MBQbrYMYE1K78zpE09rLZbpLGHFRoSmMPt+jd+1u1Sq7lP3ZJg1KJdk8O
+	 qworIRYEJOvMfamtr5fwXu+xnl4EUqxbN8lF/KiX322D2pG/CoqurGPfHK6TPXLX34AL5
+	 K4eMgkKpIzjjvqatu60Rri2JSnWYYfDpX+DIk2Jr0z0hakyR68fCsjnLjmqu0pgMAJ/9I
+	 qSOukCsT5SuVmE76/ajTS80T1C6pMAZG34Sc/XqGGeO8J9jbfzjMm4m45hiY+wIWXTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793605463;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793605466;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=KUnvJpVPViW69AF9NkZWmBblFWCE3alugKf4rSddKS0=;
-	b=L7kVeUdUdKryAw/WcjklsBSc6gZwU2XF/8FMsjeuTxDjRoZ1BUJxad4M3FuE9t12HBWQ
-	 MaroK/9kVOYlcA9PjxWoZJPonFbPSPKlexanSZDmGDw0m69xeRL9+d6eIhkNWU0J6refY
-	 q7JYcS+OmafntKgto8CKTKyvl6CrkF0Ejm1nowQrOCiHl6iGccFx2qjgQe7jvzQ6kMsdW
-	 54N4p2Ja2njM5+wiiDfweC34XRuMBWesrgHc7JgF3dmv2rcPGPjJ6sfcjkQKWpwD5yrIs
-	 6gd7Sb577grDZswDhPRgCx5LT1ViX3GoWnpXymCnOYvPI97Vztw4bMw3YwPPcIj0Lyw==
+	bh=frsPb1t3Wa1UoN+W1OLcN+MUypjNEa6QpG2s8csovOc=;
+	b=apkisi8EXHA4H3JwGtk4BeJo5cos/cLzErrNs9FecsuCjdlyMHzz+s5zECxQNXIiGBOp
+	 96SxfoXHXvAaAUdPWW9478fgnraHCcKjsiivYcZWN02hYTw5IUjXszCzHGGfORWC8G3t9
+	 qKiiluq7OdeevLjmvMwh2MyHRa5+gKfDShq0gncMEgNAWTtbKvkMvqbAUQCJj6NTzvmCe
+	 JTaVBveVyrFFogK6NXkuRY3hyHW7bFnaiXqv9/qw9XxiNLgn1KZa/7vKzShHFNUOEtuGY
+	 DMGrhpYOX/8VYHcnEpGc/gbm0vrGkZngVmLG63cZePGqX0chbr9eXP4OhEIWUuOzWyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QeLZFuY6;
-	arc=none smtp.remote-ip=209.85.221.44
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HJ+cDcAL;
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDFB606A33C
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 07:44:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7BDFB606A33C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBD6606A33F
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 07:44:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFBD6606A33F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QeLZFuY6
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48afbd2c386so1477435f8f.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 23:44:22 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HJ+cDcAL
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48dfdd0678dso1806696f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 23:44:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793605461; x=1794210261; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793605464; x=1794210264; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KUnvJpVPViW69AF9NkZWmBblFWCE3alugKf4rSddKS0=;
-        b=QeLZFuY6mIhG5rzjWO62mDesKo0jmIC+d12Httjn5kyoXafH5D2vvtFeUt40Vry7WS
-         m34GzWAdpIRf8fdu4MqLLqQ4UBO5jbUVcSc5aj6KsNB/tK1vo4ffHQGnPr10MZoMPDiz
-         IOmXiiPcmjbGg+rPF4qbqZvL3WqrdHND3PeC8ZQ8XVVIj2Qe8mFARNngJRFbpzkp4DIz
-         i3oLbHSVB7/AMa2Q+kixbii2k1XlYcnonfs62EueJka30Y+0vJQsmM2lIUWGYYPWxTIS
-         yUY0fqONZh76OqmB2NtlbMiAe+YAQqduPeD3+n5AdqAQb3wDt52BmrOHMkThaZg5S1ac
-         uKbQ==
+        bh=frsPb1t3Wa1UoN+W1OLcN+MUypjNEa6QpG2s8csovOc=;
+        b=HJ+cDcALq3xnIfz5alX6NrO8pJjmgk2lptN87Lv9/jmTYd0C8pjGqWCsPnsQnEFfIc
+         5euRxL2BrUL2aSUkgYwLXwRP7ZCctu5IrmPKpKW7GynqOLnaZjgXlQIjlNqBhnP4mwL1
+         +cvQ0Nv/F8WdxDo/MjyDGNymVkwMk6SquY8auEWQeUPjHYtExMe3rW5GAI2oF+uj9mp0
+         bq2EjuUjcX7F3xx/ZrsCS+rEbt6D1tAk8pJmoWTlYIiPr2j67fUb7zHy45fa7Z7HpP4q
+         e4646eu7GoZcH6b//6E1PYX57Ce4wYme0SB7JDWYm+WVcBBdWd+sdhipZELs0I2Y/uLC
+         fMbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793605461; x=1794210261;
+        d=1e100.net; s=20260707; t=1793605464; x=1794210264;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KUnvJpVPViW69AF9NkZWmBblFWCE3alugKf4rSddKS0=;
-        b=pvtgBt3odahV5Rir/M1NsuyHEFqzvo6pA9thd+E7fobAC5vejJ/b5Tjx5xeSa/Vxl1
-         XTBEjHdT7W+9uRIAGR6Vy9ec79Tu/Vmk1tXfOaHXSORLvn0fsAJN0tbwYpBaSDjaz3t0
-         kQ/khP3sL5hg/mGd8zEOgsKHIFtrtS6taQwizDYPdMr/Sp3jnWlogZbqLkijGGmMuEQf
-         LqZZ2m0m0Qj/Y02WjqeJ1kxfYTawl1u2n6w1IwxBHTFZDj1dnO0mO3UQyS7BIxz7fea6
-         zQfOA/1eu6Ke3dVPA/VuoTBALz/VhiCB53TenHjmcqITmxHDE6yhT+SnP5AWwwFSQGOJ
-         9ggA==
-X-Forwarded-Encrypted: i=1; AKwUvBwr1SVutUXAr3ewAIegxKODPX/wYQOv659GvuWpE48/vyF71i5xqFLtC4r35p1/MN62JWt5ieQAl9gCW4IJbWk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+GtjSB1Ag3zxPXCBBkewkOthzrog3aM71Y0iAZZGnpMwUjABS+
-	d9rKMey8JZOM668bJlWdkQFS4PZVjbVjrHYkJbgPrtiAX5q0WY6raI3Y
-X-Gm-Gg: AYBFou1vM9d2Yy+Ex35SGuV8FoWPU5xMae1Uophrw12m+US8ObN7go7ugtDJN8XelHH
-	gn/BN+BwDkDtArzAb3vQqnXQgiSXjPSnGN9UA3XzDbWsGbptx1u+r02HtxhlIQpWBENAsA4yPBB
-	7xVf9PQPUIQWJdN+giykiyujGk+kEVE0fw7mxHlRv+fyBAOKqGtsj0Xbtvn8ER/9oiUMAhsDOsO
-	NgwtjDuW/Jh+aazhykBW9sr1YZRstcY9P80PFTgogQif4Qv19NbiBYWLDA3Ah3Aewdm6RWfDf/u
-	BSPTV29rXKklMX+QsTH5rxWcbnE7JUwUqmIuCZ+5tJQIHnC5yO6Hg5wDVGzY/K56tZZSAgc+FB3
-	N/2zabsF/wRmQiJHRb6BxkKp9t7nP1qbY7rP1/+jR/g+4ApMOpXG6Q/wAFFw0jvstMyElCPk3/I
-	3T8TlGmCQb+y+bmQMHm+nXDqRXs8MFEarcNdKdsOYyI4o6e+uMBEZA5PdfFSyisIcyHW62mX7jz
-	aX+9esC+c2Gg1SitlVs4m4LxwIxkyuCg9h2V6DfwQ6ZdAHC7txwTDJdzbAqLvLcFGX9YA8lM9HJ
-	Hb19P+OCLc6Zmg==
-X-Received: by 2002:a05:6000:310f:b0:48d:f95e:6e8 with SMTP id ffacd0b85a97d-48e6e2c3586mr19528998f8f.1.1793605460880;
-        Sun, 01 Nov 2026 23:44:20 -0800 (PST)
+        bh=frsPb1t3Wa1UoN+W1OLcN+MUypjNEa6QpG2s8csovOc=;
+        b=BpInkFC6YLI1VNEnAh4OTt29wP8n2k5tsSNwHA/8QLUL+pttgIK6D2lU6aPK0dQlWz
+         pFl1o7n4dU8KNqq95Ue5NSxEwRwmW06B9AuQuskmgkox+5ZuzkPgYUGQP3Cl7QadUihb
+         KKHuIdAyO7+6RlTAknfcH+ha6yPrwP7fKdvUbA5a4VoXL9Qm5NVQwnHYSWhVCG8A5K1S
+         lAwUZ4w5RHt0nAb2o9lE36eOpx1dAIdJg9j/NlZvHRZXL4we1EDFh594ChVEaVOoR61/
+         NtwaVkdk6SkkFgcWQ5aOpiw6UY6Vyg+KVWaml4VvrFIv0cu/JWRPVTLHymDaYlSc9lVH
+         Ajbw==
+X-Forwarded-Encrypted: i=1; AKwUvBxQHPg4/MmsP6O0z3c1Gn8f9HxEZ6fFzYxWIIis80ChQa73t9Mh8ONCbQwTyPRFC33Y9FiozRQJ7g3B55RJN7Q=@vger.kernel.org
+X-Gm-Message-State: AFq9FYILW6lTKw73aowjd9/sdsH9fJSSKaAiYq+ZYar6M2/A6qvgbJ3M
+	dI78Gd6Ux3hHMUzR64rWv/pgSbK4+lWBQpekbyq+NcwCJRxBoq8MSmrA
+X-Gm-Gg: AYBFou0daSOOtwcZ1rJF7OvcyZUCFgUj7df65zMfp1UAi5NSI5gKWtQeObpGRBG/G7w
+	Trf4zxUpwcLfOHaett9N7+OghSnR+w17qczyN/IGjOf+93XuTULwzvYu8d7sqmNIWnb9pHDUuiG
+	ZSfPW9Uy8SjPFOWOXnUbKrnMKFploAmLz09j3oIPO8MZri74jXL6BHSC9Vuubg5n3oPGzbiS1RC
+	+tdVTcOjfjasNpyHq6jupVM9FvBe+h45vwfZ3BCRGInXd+PtNTxMbJOsLSxMUgyKzG6mrjhXE/0
+	1v4i8Rl+xlcUeeuN065WUqh4xrGBwrUr0/yYCoPZn2kLs8I4ETirRIzh+RjcofOIhiou9KrP0kn
+	pSb+KVY4+FsXUNJck6uztS9eUQ4aLnPTw7YwU62fVTbWuAi7oDnAHlTXe200IBIQ77x0AdnCgW7
+	wOyUZYZcf8ZabG7SZlr99TCBabmviD2sy6Kg8Ot1Fhe5ep1XM9eTn0BWQptwOlxyeJmZmf51whH
+	XBiDCGU5orbWTn6yQfRLC5a2NfXgbFjxRCufj/5WMRpisMu26B3+Ym2BMkw1NAYnypbK2eXPNVj
+	MDrsof7HJRHHeQ==
+X-Received: by 2002:a05:600c:1907:b0:4a2:1a:a116 with SMTP id 5b1f17b1804b1-4ac16fa15edmr211678515e9.0.1793605464208;
+        Sun, 01 Nov 2026 23:44:24 -0800 (PST)
 Received: from nobara ([83.231.69.9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b81c74sm18050374f8f.36.2026.11.01.23.44.19
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b81c74sm18050374f8f.36.2026.11.01.23.44.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 23:44:20 -0800 (PST)
+        Sun, 01 Nov 2026 23:44:23 -0800 (PST)
 From: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	"Liam R. Howlett" <liam@infradead.org>,
@@ -98,9 +98,9 @@ Cc: Vlastimil Babka <vbabka@kernel.org>,
 	linux-api@vger.kernel.org,
 	linux-man@vger.kernel.org,
 	"Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-Subject: [PATCH RESEND 1/3] mm/mlock: make a zero length request a no-op whatever the alignment
-Date: Mon,  2 Nov 2026 08:43:59 +0100
-Message-ID: <20261102074412.189554-2-azpijr@gmail.com>
+Subject: [PATCH RESEND 2/3] mm/mlock: reject ranges that cannot be represented
+Date: Mon,  2 Nov 2026 08:44:00 +0100
+Message-ID: <20261102074412.189554-3-azpijr@gmail.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261102074412.189554-1-azpijr@gmail.com>
 References: <20261102074412.189554-1-azpijr@gmail.com>
@@ -115,49 +115,85 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A zero length mlock() or munlock() at an unaligned address is rounded up
-to a page, so mlock(addr + 5, 0) locks a page that was never asked for,
-and munlock(addr + 5, 0) unlocks one the caller may still rely on.  An
-aligned zero length is already a no-op.
+A length within a page of ULONG_MAX wraps when mlock() and munlock()
+round the range to pages.  At an aligned address the length becomes 0 and
+the call is a silent success; at an unaligned one it becomes a single
+page, which is then locked or unlocked.  An overflowing start + len is
+only caught in apply_vma_lock_flags(), after the RLIMIT_MEMLOCK check, so
+mlock() returns -ENOMEM without CAP_IPC_LOCK and -EINVAL with it.
 
-Return early for a zero length, before the rounding and before
-can_do_mlock().  This is a uapi change: with RLIMIT_MEMLOCK=0 and no
-CAP_IPC_LOCK, mlock(addr, 0) returns 0 instead of -EPERM, which is what
-munlock(addr, 0) already returns.  man 2 mlock does not say what a zero
-length should do, and -EINVAL would break callers that pass one today and
-get 0.
+Return -EINVAL, as man 2 mlock documents, when start + len overflows or
+the end overflows when rounded up to a page.  Doing this before
+can_do_mlock() also avoids making the result depend on
+RLIMIT_MEMLOCK/CAP_IPC_LOCK.  Requests that get a silent success today
+now fail.
 
 Reported-by: Park Tae-sun <ts930@dgu.ac.kr>
-Link: https://lore.kernel.org/all/179066531783.50175.13377521828379196177@dgu.ac.kr/
+Closes: https://lore.kernel.org/all/179066531783.50175.13377521828379196177@dgu.ac.kr/
 Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
 ---
- mm/mlock.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ mm/mlock.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
 diff --git a/mm/mlock.c b/mm/mlock.c
-index 1c70a7829394..673a8433a0a9 100644
+index 673a8433a0a9..0e9d8c110152 100644
 --- a/mm/mlock.c
 +++ b/mm/mlock.c
-@@ -612,6 +612,9 @@ static __must_check int do_mlock(unsigned long start, size_t len,
+@@ -608,6 +608,7 @@ static __must_check int do_mlock(unsigned long start, size_t len,
+ {
+ 	unsigned long locked;
+ 	unsigned long lock_limit;
++	unsigned long end;
+ 	int error = -ENOMEM;
  
  	start = untagged_addr(start);
+@@ -615,12 +616,19 @@ static __must_check int do_mlock(unsigned long start, size_t len,
+ 	if (!len)
+ 		return 0;
  
-+	if (!len)
-+		return 0;
++	/* Reject a wrapping range before can_do_mlock() and the rlimit check. */
++	end = start + len;
++	if (end < start)
++		return -EINVAL;
++	end = PAGE_ALIGN(end);
++	if (!end)
++		return -EINVAL;
++	start &= PAGE_MASK;
++	len = end - start;
 +
  	if (!can_do_mlock())
  		return -EPERM;
  
-@@ -678,6 +681,9 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+-	len = PAGE_ALIGN(len + (offset_in_page(start)));
+-	start &= PAGE_MASK;
+-
+ 	lock_limit = rlimit(RLIMIT_MEMLOCK);
+ 	lock_limit >>= PAGE_SHIFT;
+ 	locked = len >> PAGE_SHIFT;
+@@ -676,6 +684,7 @@ SYSCALL_DEFINE3(mlock2, unsigned long, start, size_t, len, int, flags)
  
- 	start = untagged_addr(start);
+ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+ {
++	unsigned long end;
+ 	vma_flags_t flags = EMPTY_VMA_FLAGS;
+ 	int ret;
  
-+	if (!len)
-+		return 0;
-+
- 	len = PAGE_ALIGN(len + (offset_in_page(start)));
+@@ -684,8 +693,14 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+ 	if (!len)
+ 		return 0;
+ 
+-	len = PAGE_ALIGN(len + (offset_in_page(start)));
++	end = start + len;
++	if (end < start)
++		return -EINVAL;
++	end = PAGE_ALIGN(end);
++	if (!end)
++		return -EINVAL;
  	start &= PAGE_MASK;
++	len = end - start;
  
+ 	if (mmap_write_lock_killable(current->mm))
+ 		return -EINTR;
 -- 
 2.56.0
 
