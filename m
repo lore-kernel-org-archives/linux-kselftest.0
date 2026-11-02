@@ -1,75 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793633826;
-	b=Hq4wocJXKPaYHF5JzfA1FHeDXtpAobveINeOLKfWI9HHTaMcIlutGhXYHfws5mN6q+Kl
-	 S16uyNj2j/b72XJRxOmiNd5743a7beqjgBjnSppgB0FKSuqq1mjRRqtYbH8qDsdERnQSi
-	 B4aFf0FoNX1qT21chDHLxp4ZAPby9u/NXpslScg8t/ZWjEHRd23XCNHHw5Dum3BA7nXZJ
-	 QLW/Wlavvf3n623vW/l+SLh6vtbdAiLi7TREdJK73glmaZfVKiw1KaJ4LfK/Bg36SdAzS
-	 wsd2kdgVW0o5ps8MR+zxcyhtLwYTUz9upoL0oju/KCq9EIigZuURFRHOvSRV8t/Zkcw==
+	t=1793633817;
+	b=H04jT7kXNHe/d9AlvD+HoQpYgzA0yn9RysoVtWs1sFIFJmmHZnRqOYOFK6bFbVjH3uNw
+	 /+s0AOl+sCA2UJfudK6KdqiNbxwqhEEUbVKBfH/nK4pca4x2nwf/j+CzuWrfSGmY61LvW
+	 NBfQ0VkOHjq5+YwBIUt++aaffpHLbqDDwQSMMnGGW8VOAsdaTdCL3Uqdh9w5Yt2o1z2p6
+	 oQJh9Pz4vgqQjDBc135ymdXr0sccyBXufFgRQnYEABYjDcCEXZVGkdx+K6XZ5mJH1V7qv
+	 nxD68EFGWfb93636a5Hc0E4DXPZVA6zV25rRA/z7reHmyaj+e7j9ZkZCTMl0SFobCxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793633826;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=YmR/P9susfgWpN3rWVzDSZpJhyqX0qvQbvTnkpaf48E=;
-	b=ulup8zt82+kwoSrvIG5lAWOfqB0fZ0U0eIRDKfV9ZI3J0GAgSdsPCvShN5zAZb+C4LDM
-	 qeFJis2qtpV7ltGdRqbGsOyHNq7nwfndKhsI8Mr7qvG58q7YuDH1B2ucqSjfjDV+LBTUx
-	 OsqOwTJ7MotOBhpQCHfAViSgzgvnCp5HbKQXmcBediBt/NpLMpEPlPXPRSsyO0rKtVeDG
-	 blpFcdHVeEqMOFe4mgvXJt85aUvXlNY2fAybTN6nFZh/XXFSA0kcFC6VK/DpyX9EHJhr8
-	 cgYrd3GUMppI7IA1UMIxhMGpcis8WTsaF7TKryywkcOO08tr/48LuTNNEb0d3wMRHIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793633817;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=S9tzR156ub0Ko3Mv53tQ+R8L9hVWUPj+OCS3UYlYhFM=;
+	b=K81AVEcDz51PfEn8pd82/Ml1o66NqeRfjIBqee6JQuS2I4nQmtfXFV2WH4ijXAYpdqEC
+	 b370JIGtlRd0advkOw3XEl++QLuzIMoROBgcLTdvVMEZYvAeASLidYQnQfPGYY61NjkN9
+	 qm0VI4Hgn7oPRSpZndq0nxZvWKSXJRqoRmem+0zek92XNfzRbsrbo/LPbNNMCmX8wHA1P
+	 Bh7gvcP9k1W5e6cfqHPhUsr3eFryJcc+zSa6qWMru8sXC8UWYimwGtYX/AbONbxEmfXf0
+	 c9Qc1fqwAyo9JORQIC+W448q65nnggeQraZk3NnSBz3/8CE8m0abnoXiAUiVpxSOlhQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=MGfRWuh0;
-	arc=none smtp.remote-ip=209.85.214.198
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xv854kNM;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1436660E34FC
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 15:37:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1436660E34FC
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F4860A0FFF;
+	Mon,  2 Nov 2026 15:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=MGfRWuh0
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2e869e00005so49833965ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 07:37:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793633825; x=1794238625; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YmR/P9susfgWpN3rWVzDSZpJhyqX0qvQbvTnkpaf48E=;
-        b=MGfRWuh0nAimPxPxxuPTWsBxmMpPf9c8Jkj5XumT7cI2yKlZzZGCb9BhKJE1H4nXwl
-         x4o+33wIlKpWRlQgnz4mBvmf3A9mUF//SGkPlgVTSawUTsTT2hXyXCu12xbtwD2yN9SS
-         itzLhHX4BbdxLi9iiUR3ll24JJvCb3dEBkSwsWNDvGS2l1IRwbiAtlPXQhlvQEuc+m8a
-         yTrNihdaHs7yx++aCuqpDmmMR0hTUhX0yNJDnwxN7C6LRbyRMgYuVSy7qZWigIpv3J3D
-         /IPdQV6isWwEx8A2uzeJD5t1mtlwKRHwOcNUPg+tMhx6AIQhTtf2hK2g4ifwe4d2yGkA
-         adug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793633825; x=1794238625;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YmR/P9susfgWpN3rWVzDSZpJhyqX0qvQbvTnkpaf48E=;
-        b=hQIocVPqFdZ9JDXrAC4QEDf2XicRcERzXRRI30V/KZJ17ieLAlnyFuEWXLIZhJWIua
-         H1Ve733yoB7n7P3tUkLQHBIhWGo9QNXi0cTYPRRTHqo4EB7/B2+clAjgbpWcy1PdLCaz
-         CQmZg/jwG65Pj3V93yI8jzC7D30O5CeyiVKCAjobYYdnuSECQwEmmzGyvre8i05fO/ie
-         BaFv22vrVTU09OnfLXvxIZr4qDwttAp6q/roTQwmkEIzX3/Nf/rFjq1Ks5nxIoTydLXT
-         /EfLXxiHZU6tNkadU1xZuysi0XOIBOG6BHMfwV6o51BwjstOC3d6pQL6dkp8dRRbZaTj
-         4hhQ==
-X-Forwarded-Encrypted: i=1; AKwUvByeWNrKKTsgDlR7Al1SLePG/v1/Gq7j3cIJhS0/EX+FyE1qZkaq1n787utGTvS4PKosYjngNoYgqeEU410BF10=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+mqgfYR+rryclZ7aK7iuYJ35bYKE2/VwKTk4CeOoDCeKH0zJFO
-	xzAzXyXwTWLqTGZpjMsZcFghsZFHZP9FQsQVakGibs8VSZGu1b1dkSqHBFp7tpuMUprOuEIsiBL
-	H9rkISkWinw==
-X-Received: from pldq13.prod.google.com ([2002:a17:902:c9cd:b0:2e8:2364:2533])
- (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:fd8d:b0:2e8:7686:4d46
- with SMTP id d9443c01a7336-2eb364552bemr101310195ad.34.1793633825121; Mon, 02
- Nov 2026 07:37:05 -0800 (PST)
-Date: Mon,  2 Nov 2026 07:36:34 -0800
-In-Reply-To: <20261102153656.1431701-1-vipinsh@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xv854kNM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531081F00A18;
+	Mon,  2 Nov 2026 15:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793633816;
+	bh=S9tzR156ub0Ko3Mv53tQ+R8L9hVWUPj+OCS3UYlYhFM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=Xv854kNMsGwo7y+d1KGrPoCvj8xhJsXdx+NPbr36bs+rW5xwmzoPtt2iRcwjhbEKU
+	 XfGn3WHT/EUTweyMuOntYcuRNkJ8rTxnpo6+2PE2yMcenfdCzl5eIgjm5/Mh5ebn7G
+	 fkhyKa0rXacAXgJ+DCsssER449+cBLCHyxVdSSLX+Dc8MDSqMopDEivA7yuiSDKGIt
+	 S+zxOV5qOgzsYi0jxj417k6xxIdELaXugUKSSeWJd0Mj/Dej88U0tMQwopSyTcFdVs
+	 +LuR+neBjXGs3pWPltnJUq6afbVpYXhNMgZlQFhveRD+FSFnPEgw7sZPZlNM5HmN/s
+	 Kl3S3hqMGw5FQ==
+From: Christian Brauner <brauner@kernel.org>
+Date: Mon, 02 Nov 2026 16:15:56 +0100
+Subject: [PATCH RFC 3/5] proc: only let permanent entries read straight
+ into userspace
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,422 +52,162 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261102153656.1431701-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261102153656.1431701-6-vipinsh@google.com>
-Subject: [PATCH v6 05/27] PCI: liveupdate: Add helpers to preserve struct pci_saved_state
-From: Vipin Sharma <vipinsh@google.com>
-To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Cc: ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com, 
-	ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com, chrisl@kernel.org, 
-	christian.koenig@amd.com, corbet@lwn.net, dmatlack@google.com, 
-	graf@amazon.com, jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, 
-	jrhilke@google.com, julianr@linux.ibm.com, kees@kernel.org, 
-	kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, lukas@wunner.de, 
-	mattev@meta.com, michal.winiarski@intel.com, parav@nvidia.com, 
-	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org, 
-	rananta@google.com, rdunlap@infradead.org, rientjes@google.com, 
-	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com, 
-	schnelle@linux.ibm.com, skhan@linuxfoundation.org, skhawaja@google.com, 
-	vipinsh@google.com, vivek.kasireddy@intel.com, witu@nvidia.com, 
-	yanjun.zhu@linux.dev, yi.l.liu@intel.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261102-work-procfs-cleanup-v1-3-c40014bc12f5@kernel.org>
+References: <20261102-work-procfs-cleanup-v1-0-c40014bc12f5@kernel.org>
+In-Reply-To: <20261102-work-procfs-cleanup-v1-0-c40014bc12f5@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+ Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+ Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+ NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+ Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+ Greg Kroah-Hartman <gregkh@suse.de>, 
+ Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+ linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+ linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
+ ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+ coreteam@netfilter.org, kexec@lists.infradead.org, 
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+ netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
+ linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+ sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+ linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
+ linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
+ linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+ linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-debuggers@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+ Chuck Lever <cel@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3948; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=HAEx+xWoU7bRVFGL7mPvEVPlpuc3m3z2NxJgiNg4Kyk=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS9WJlZf/pOH6N9WMJzv9uNpixmJcz8Ug/Ejvz11/239
+ 6GG0aykjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIncamf4X3St2856z96lFedd
+ LXNe81VttXmn+CW5oKrcbePRNO7QUwz/LLla1BTNtBU3uscdWNC45ueiHItPagqx/Q8zd6094Fv
+ ADgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Drivers that keep a device running across Live Update need to hand the
-state they captured with pci_store_saved_state() to the next kernel,
-since the next kernel never sees the device in that state. VFIO, for
-example, captures it at first open and uses it to restore the device
-when the last user closes it.
+Every entry that can be removed implements ->proc_read_buf() now and
+procfs copies what is read to userspace after unpinning the entry.
+->proc_read() and ->proc_read_iter() are left for the entries that are
+never removed, kcore, kmsg, kpagecount, kpageflags, kpagecgroup and
+profile. procfs never pins those, so nothing can wait for them.
 
-struct pci_saved_state is private to the PCI core and its in-memory
-layout is not a stable ABI. Add helpers to serialize it into a
-caller-provided buffer and rebuild it in the next kernel with a stable
-struct pci_saved_state_ser ABI. Using caller-provided buffers allows
-drivers to embed the serialized saved state directly in their own
-KHO-preserved data with a single allocation and lifetime.
+Say so in struct proc_ops and refuse to register an entry that can be
+removed and has one of them. The read paths then don't need to pin the
+entry anymore.
 
-Validate the serialized buffer and verify that the saved standard
-configuration header matches the live device before rebuilding the
-state: the vendor and device IDs must match, only Type 0 (Normal)
-headers are accepted, and BAR0-5 and the expansion ROM BAR address must
-equal the current hardware values. This ensures that restoring the
-saved state cannot write stale BAR addresses if resources were
-reassigned in the new kernel. Only the address bits of the ROM BAR are
-compared, since its enable and validation status bits may legitimately
-differ.
+PROC_ENTRY_PERMANENT is 0 in modules, so a module can't register an
+entry with one of them anymore.
 
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- Documentation/PCI/liveupdate.rst |   3 +
- drivers/pci/liveupdate.c         | 223 +++++++++++++++++++++++++++++++
- drivers/pci/pci.c                |   5 -
- drivers/pci/pci.h                |   6 +
- include/linux/kho/abi/pci.h      |  47 +++++++
- include/linux/pci_liveupdate.h   |   7 +
- 6 files changed, 286 insertions(+), 5 deletions(-)
+ fs/proc/generic.c       |  4 ++++
+ fs/proc/inode.c         | 27 ++++++++-------------------
+ include/linux/proc_fs.h |  6 ++++++
+ 3 files changed, 18 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/PCI/liveupdate.rst b/Documentation/PCI/liveupdate.rst
-index 96b1d7f5df3a..b6cd9621b3b3 100644
---- a/Documentation/PCI/liveupdate.rst
-+++ b/Documentation/PCI/liveupdate.rst
-@@ -25,6 +25,9 @@ Live Update ABI
- .. kernel-doc:: include/linux/kho/abi/pci.h
-    :doc: PCI File-Lifecycle Bound (FLB) Live Update ABI
+diff --git a/fs/proc/generic.c b/fs/proc/generic.c
+index 413382efefc7..7c8def4ed9fc 100644
+--- a/fs/proc/generic.c
++++ b/fs/proc/generic.c
+@@ -443,6 +443,10 @@ static int pde_set_flags(struct proc_dir_entry *pde)
  
-+.. kernel-doc:: include/linux/kho/abi/pci.h
-+   :doc: PCI Saved State Live Update ABI
-+
- .. kernel-doc:: include/linux/kho/abi/pci.h
-    :internal:
- 
-diff --git a/drivers/pci/liveupdate.c b/drivers/pci/liveupdate.c
-index 6f92d4ddca2b..363453b06243 100644
---- a/drivers/pci/liveupdate.c
-+++ b/drivers/pci/liveupdate.c
-@@ -1036,3 +1036,226 @@ void pci_liveupdate_unregister_flb(struct liveupdate_file_handler *fh)
- 	liveupdate_unregister_flb(fh, &pci_liveupdate_flb);
- }
- EXPORT_SYMBOL_GPL(pci_liveupdate_unregister_flb);
-+
-+static const struct pci_cap_saved_data *pci_saved_cap_next(const struct pci_cap_saved_data *cap)
-+{
-+	return (const void *)cap + sizeof(*cap) + cap->size;
-+}
-+
-+/**
-+ * pci_liveupdate_saved_state_ser_size() - Size needed to serialize a saved state
-+ * @state: Saved state returned by pci_store_saved_state(), or NULL.
-+ *
-+ * Return: Number of bytes needed by pci_liveupdate_serialize_saved_state(), or
-+ * 0 if @state is NULL.
-+ */
-+size_t pci_liveupdate_saved_state_ser_size(const struct pci_saved_state *state)
-+{
-+	const struct pci_cap_saved_data *cap;
-+	size_t size;
-+
-+	if (!state)
-+		return 0;
-+
-+	size = sizeof(struct pci_saved_state_ser);
-+	for (cap = state->cap; cap->size; cap = pci_saved_cap_next(cap))
-+		size += sizeof(struct pci_cap_saved_data_ser) + cap->size;
-+
-+	return size;
-+}
-+EXPORT_SYMBOL_GPL(pci_liveupdate_saved_state_ser_size);
-+
-+/**
-+ * pci_liveupdate_serialize_saved_state() - Serialize a struct pci_saved_state
-+ * @state: Saved state returned by pci_store_saved_state().
-+ * @buf: Destination buffer.
-+ * @size: Size of @buf, must equal pci_liveupdate_saved_state_ser_size(@state).
-+ *
-+ * Drivers that keep a device running across Live Update can use this to hand
-+ * the state captured by pci_store_saved_state() (e.g. before the device was
-+ * handed to userspace) to the next kernel, which never sees the device in that
-+ * state.
-+ *
-+ * Return: 0 on success, -EINVAL if the arguments are invalid.
-+ */
-+int pci_liveupdate_serialize_saved_state(const struct pci_saved_state *state,
-+					 void *buf, size_t size)
-+{
-+	const struct pci_cap_saved_data *cap;
-+	struct pci_saved_state_ser *ser = buf;
-+	size_t off;
-+	u32 nr = 0;
-+
-+	if (!state || !buf || size != pci_liveupdate_saved_state_ser_size(state))
+ 	if (proc_ops->proc_flags & PROC_ENTRY_PERMANENT)
+ 		pde->flags |= PROC_ENTRY_PERMANENT;
++	/* These copy to userspace and only an entry that can't go away may. */
++	if (WARN_ON_ONCE((proc_ops->proc_read || proc_ops->proc_read_iter) &&
++			 !pde_is_permanent(pde)))
 +		return -EINVAL;
-+
-+	memset(buf, 0, size);
-+	ser->size = size;
-+	memcpy(ser->config_space, state->config_space, sizeof(ser->config_space));
-+
-+	off = sizeof(*ser);
-+	for (cap = state->cap; cap->size; cap = pci_saved_cap_next(cap)) {
-+		struct pci_cap_saved_data_ser *cap_ser = buf + off;
-+
-+		cap_ser->cap_nr = cap->cap_nr;
-+		cap_ser->extended = cap->cap_extended ? 1 : 0;
-+		cap_ser->size = cap->size;
-+		memcpy(cap_ser->data, cap->data, cap->size);
-+
-+		off += sizeof(*cap_ser) + cap->size;
-+		nr++;
-+	}
-+
-+	ser->nr_caps = nr;
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(pci_liveupdate_serialize_saved_state);
-+
-+/* Read the byte at config space offset @where from a saved config header. */
-+static u8 pci_saved_config_byte(const u32 *config_space, int where)
-+{
-+	return config_space[where / 4] >> ((where % 4) * 8);
-+}
-+
-+/*
-+ * Compare the bits in @mask of the config space dword at offset @where with
-+ * the saved config header.
-+ */
-+static int pci_validate_saved_config_dword(struct pci_dev *dev,
-+					   const u32 *config_space, int where,
-+					   u32 mask)
-+{
-+	u32 val;
-+
-+	if (pci_read_config_dword(dev, where, &val) ||
-+	    (val & mask) != (config_space[where / 4] & mask))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int pci_validate_saved_config_header(struct pci_dev *dev,
-+					    const u32 *config_space)
-+{
-+	u8 hdr_type;
-+	int bar;
-+
-+	if (config_space[PCI_VENDOR_ID / 4] !=
-+	    ((u32)dev->device << 16 | dev->vendor))
-+		return -EINVAL;
-+
-+	/* Only Type 0 (Normal) configuration headers are supported. */
-+	hdr_type = pci_saved_config_byte(config_space, PCI_HEADER_TYPE) &
-+		   PCI_HEADER_TYPE_MASK;
-+	if (hdr_type != PCI_HEADER_TYPE_NORMAL ||
-+	    dev->hdr_type != PCI_HEADER_TYPE_NORMAL)
-+		return -EINVAL;
-+
-+	/*
-+	 * Verify that BAR0-5 and the expansion ROM BAR address match the
-+	 * current hardware values so that restoring the saved state cannot
-+	 * write stale BAR addresses if resources were reassigned in the new
-+	 * kernel.
-+	 */
-+	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
-+		if (pci_validate_saved_config_dword(dev, config_space,
-+						    PCI_BASE_ADDRESS_0 + bar * 4,
-+						    ~0U))
-+			return -EINVAL;
-+	}
-+
-+	/*
-+	 * Only the address bits of the ROM BAR are compared, since its enable
-+	 * and validation status bits may legitimately differ.
-+	 */
-+	return pci_validate_saved_config_dword(dev, config_space,
-+					       PCI_ROM_ADDRESS,
-+					       PCI_ROM_ADDRESS_MASK);
-+}
-+
-+/**
-+ * pci_liveupdate_deserialize_saved_state() - Rebuild a struct pci_saved_state
-+ * @dev: The PCI device the saved state belongs to.
-+ * @buf: Buffer written by pci_liveupdate_serialize_saved_state().
-+ * @size: Size of @buf in bytes.
-+ *
-+ * Validates @buf against the PCI Saved State Live Update ABI and @dev's
-+ * standard configuration header, and allocates a struct pci_saved_state that
-+ * can be passed to pci_load_saved_state() and freed with kfree(). @buf is not
-+ * modified or freed.
-+ *
-+ * Return: Newly allocated struct pci_saved_state on success, or an ERR_PTR() on
-+ * failure (-EINVAL if @buf is malformed or incompatible with @dev, -EOPNOTSUPP
-+ * if @buf uses an unsupported flag, -ENOMEM on allocation failure).
-+ */
-+struct pci_saved_state *pci_liveupdate_deserialize_saved_state(struct pci_dev *dev,
-+							       const void *buf,
-+							       size_t size)
-+{
-+	const struct pci_saved_state_ser *ser = buf;
-+	struct pci_cap_saved_data *cap;
-+	struct pci_saved_state *state;
-+	size_t off, state_size;
-+	u32 i;
-+
-+	if (!dev || !buf || size < sizeof(*ser))
-+		return ERR_PTR(-EINVAL);
-+
-+	if (ser->size != size)
-+		return ERR_PTR(-EINVAL);
-+
-+	if (ser->flags)
-+		return ERR_PTR(-EOPNOTSUPP);
-+
-+	if (pci_validate_saved_config_header(dev, ser->config_space))
-+		return ERR_PTR(-EINVAL);
-+
-+	off = sizeof(*ser);
-+	state_size = sizeof(*state) + sizeof(*cap);
-+
-+	for (i = 0; i < ser->nr_caps; i++) {
-+		const struct pci_cap_saved_data_ser *cap_ser;
-+		size_t entry_size;
-+
-+		if (size - off < sizeof(*cap_ser))
-+			return ERR_PTR(-EINVAL);
-+
-+		cap_ser = buf + off;
-+		if (!cap_ser->size || cap_ser->size > PCI_CFG_SPACE_EXP_SIZE ||
-+		    cap_ser->extended > 1)
-+			return ERR_PTR(-EINVAL);
-+
-+		entry_size = sizeof(*cap_ser) + cap_ser->size;
-+		if (size - off < entry_size)
-+			return ERR_PTR(-EINVAL);
-+
-+		off += entry_size;
-+		state_size += sizeof(*cap) + cap_ser->size;
-+	}
-+
-+	if (off != size)
-+		return ERR_PTR(-EINVAL);
-+
-+	state = kzalloc(state_size, GFP_KERNEL);
-+	if (!state)
-+		return ERR_PTR(-ENOMEM);
-+
-+	memcpy(state->config_space, ser->config_space, sizeof(state->config_space));
-+
-+	off = sizeof(*ser);
-+	cap = state->cap;
-+	for (i = 0; i < ser->nr_caps; i++) {
-+		const struct pci_cap_saved_data_ser *cap_ser = buf + off;
-+
-+		cap->cap_nr = cap_ser->cap_nr;
-+		cap->cap_extended = cap_ser->extended;
-+		cap->size = cap_ser->size;
-+		memcpy(cap->data, cap_ser->data, cap_ser->size);
-+
-+		off += sizeof(*cap_ser) + cap_ser->size;
-+		cap = (void *)cap + sizeof(*cap) + cap->size;
-+	}
-+
-+	return state;
-+}
-+EXPORT_SYMBOL_GPL(pci_liveupdate_deserialize_saved_state);
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index e5b960ca26e6..192f6766cc31 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -2032,11 +2032,6 @@ void pci_restore_state(struct pci_dev *dev)
- }
- EXPORT_SYMBOL(pci_restore_state);
- 
--struct pci_saved_state {
--	u32 config_space[16];
--	struct pci_cap_saved_data cap[];
--};
--
- /**
-  * pci_store_saved_state - Allocate and return an opaque struct containing
-  *			   the device saved state.
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index 037c1674f164..d10df3203725 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -244,6 +244,12 @@ struct pci_cap_saved_data {
- 	u32		data[];
- };
- 
-+/* Opaque to drivers, see pci_store_saved_state() */
-+struct pci_saved_state {
-+	u32 config_space[16];
-+	struct pci_cap_saved_data cap[];
-+};
-+
- struct pci_cap_saved_state {
- 	struct hlist_node		next;
- 	struct pci_cap_saved_data	cap;
-diff --git a/include/linux/kho/abi/pci.h b/include/linux/kho/abi/pci.h
-index c2e3a5949f73..3d0822f2067d 100644
---- a/include/linux/kho/abi/pci.h
-+++ b/include/linux/kho/abi/pci.h
-@@ -93,4 +93,51 @@ struct pci_ser {
- 	u64 devices;
- } __packed;
- 
-+/**
-+ * DOC: PCI Saved State Live Update ABI
-+ *
-+ * Drivers that keep a PCI device running across a Live Update can hand the
-+ * state returned by pci_store_saved_state() to the next kernel by embedding a
-+ * struct pci_saved_state_ser in their own preserved data, produced and parsed
-+ * by the PCI core via pci_liveupdate_serialize_saved_state() and
-+ * pci_liveupdate_deserialize_saved_state().
-+ *
-+ * Like the FLB data above, this layout is a contract between kernels and is
-+ * extended by appending fields and defining bits in ``flags`` for features the
-+ * next kernel must understand, while recording the size of each entry. Unlike
-+ * the FLB data, it is embedded in a driver's preserved state rather than
-+ * referenced from struct pci_ser, and validation failures are reported to the
-+ * calling driver rather than panicking.
-+ */
-+
-+/**
-+ * struct pci_cap_saved_data_ser - A saved capability in a struct pci_saved_state_ser
-+ * @cap_nr: Capability ID (PCI_CAP_ID_* or PCI_EXT_CAP_ID_*).
-+ * @extended: 1 if @cap_nr is an extended capability ID, 0 otherwise.
-+ * @size: Size of @data in bytes, never 0.
-+ * @data: The saved registers.
-+ */
-+struct pci_cap_saved_data_ser {
-+	u16 cap_nr;
-+	u16 extended;
-+	u32 size;
-+	u8 data[];
-+} __packed;
-+
-+/**
-+ * struct pci_saved_state_ser - Serialized struct pci_saved_state
-+ * @size: Size in bytes of this struct, including all entries in @caps.
-+ * @flags: Features a kernel must support to restore the state. None defined.
-+ * @nr_caps: Number of entries in @caps.
-+ * @config_space: The saved standard configuration header.
-+ * @caps: @nr_caps struct pci_cap_saved_data_ser entries.
-+ */
-+struct pci_saved_state_ser {
-+	u32 size;
-+	u32 flags;
-+	u32 nr_caps;
-+	u32 config_space[16];
-+	u8 caps[];
-+} __packed;
-+
- #endif /* _LINUX_KHO_ABI_PCI_H */
-diff --git a/include/linux/pci_liveupdate.h b/include/linux/pci_liveupdate.h
-index bb79348769b7..cfff200bce36 100644
---- a/include/linux/pci_liveupdate.h
-+++ b/include/linux/pci_liveupdate.h
-@@ -32,6 +32,7 @@ struct pci_liveupdate {
- };
- 
- struct pci_dev;
-+struct pci_saved_state;
- 
- #ifdef CONFIG_PCI_LIVEUPDATE
- int pci_liveupdate_register_flb(struct liveupdate_file_handler *fh);
-@@ -40,6 +41,12 @@ int pci_liveupdate_preserve(struct pci_dev *dev);
- void pci_liveupdate_unpreserve(struct pci_dev *dev);
- void pci_liveupdate_finish(struct pci_dev *dev);
- bool pci_liveupdate_is_incoming(struct pci_dev *dev);
-+size_t pci_liveupdate_saved_state_ser_size(const struct pci_saved_state *state);
-+int pci_liveupdate_serialize_saved_state(const struct pci_saved_state *state,
-+					 void *buf, size_t size);
-+struct pci_saved_state *pci_liveupdate_deserialize_saved_state(struct pci_dev *dev,
-+							       const void *buf,
-+							       size_t size);
- #else
- static inline int pci_liveupdate_register_flb(struct liveupdate_file_handler *fh)
+ 	if (proc_ops->proc_seq_ops) {
+ 		pde->seq_ops = proc_ops->proc_seq_ops;
+ 		pde->state_size = proc_ops->proc_state_size;
+diff --git a/fs/proc/inode.c b/fs/proc/inode.c
+index 971f2aecc006..a7f8818b0b74 100644
+--- a/fs/proc/inode.c
++++ b/fs/proc/inode.c
+@@ -460,35 +460,24 @@ static ssize_t pde_read_buf(struct proc_dir_entry *pde, struct kiocb *iocb,
+ static ssize_t proc_reg_read_iter(struct kiocb *iocb, struct iov_iter *iter)
  {
+ 	struct proc_dir_entry *pde = PDE(file_inode(iocb->ki_filp));
+-	ssize_t ret;
+ 
+ 	if (pde_has_proc_read_buf(pde))
+ 		return pde_read_buf(pde, iocb, iter);
+-	if (!pde_pin(pde))
+-		return -EIO;
+-	ret = pde->proc_ops->proc_read_iter(iocb, iter);
+-	pde_unpin(pde);
+-	return ret;
+-}
+-
+-static ssize_t pde_read(struct proc_dir_entry *pde, struct file *file, char __user *buf, size_t count, loff_t *ppos)
+-{
+-	const auto read = pde->proc_ops->proc_read;
+-	if (read)
+-		return read(file, buf, count, ppos);
+-	return -EIO;
++	/* only permanent entries have one, see pde_set_flags() */
++	return pde->proc_ops->proc_read_iter(iocb, iter);
+ }
+ 
+ static ssize_t proc_reg_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ {
+ 	struct proc_dir_entry *pde = PDE(file_inode(file));
+-	ssize_t rv;
+ 
+-	if (!pde_pin(pde))
++	/*
++	 * Only permanent entries have one, see pde_set_flags(). Anything else
++	 * might be gone along with its ->proc_ops.
++	 */
++	if (!pde_is_permanent(pde) || !pde->proc_ops->proc_read)
+ 		return -EIO;
+-	rv = pde_read(pde, file, buf, count, ppos);
+-	pde_unpin(pde);
+-	return rv;
++	return pde->proc_ops->proc_read(file, buf, count, ppos);
+ }
+ 
+ /*
+diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
+index 64242a9aa117..17516b064922 100644
+--- a/include/linux/proc_fs.h
++++ b/include/linux/proc_fs.h
+@@ -17,6 +17,8 @@ struct seq_operations;
+ enum {
+ 	/*
+ 	 * All /proc entries using this ->proc_ops instance are never removed.
++	 * procfs calls into them without pinning them, so they may copy to
++	 * userspace themselves through ->proc_read() or ->proc_read_iter().
+ 	 *
+ 	 * If in doubt, ignore this flag.
+ 	 */
+@@ -72,6 +74,10 @@ struct proc_ioctl_arg {
+ struct proc_ops {
+ 	unsigned int proc_flags;
+ 	int	(*proc_open)(struct inode *, struct file *);
++	/*
++	 * These two are only for PROC_ENTRY_PERMANENT entries. Everything else
++	 * uses ->proc_read_buf().
++	 */
+ 	ssize_t	(*proc_read)(struct file *, char __user *, size_t, loff_t *);
+ 	ssize_t (*proc_read_iter)(struct kiocb *, struct iov_iter *);
+ 	/*
+
 -- 
-2.56.0.317.g454f8302e1-goog
+2.53.0
 
