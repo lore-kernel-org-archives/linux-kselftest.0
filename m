@@ -1,45 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793652358;
-	b=E0cFqOxOjTJZQamiCSVQbg9LBmclTFDH7Vng6m7/JjneaiTK9CZQFEZ4KS2YfP6tR5Qq
-	 YFK6ArH/Y0uW+4gnK2RiJUd0H7n6r0iYyqOrPWLjcJ4mMzkZLpdVrRSSgu5ojIzNCOpT3
-	 Fhlq67Iqv0BdsQfgqtO/hcWmnftqyqV3SugvoUshVYDtapcmhwRBBUhYFUvkcKCLXUqEX
-	 +j/mogNMD1rJfouKPg0TXNnSdWTGqVK8JeNKo1M2/5CfEREt9Y+z5jrwbusOwr7lAQe2o
-	 RFIWXS2ILrSYdMEQQUHJm0n76I99NCycUzkIWU/SmkZjEv/9WxE8gRhfHFoGnmw/9xQ==
+	t=1793652797;
+	b=Yq3HoHBmGVmrOy+ADjemWyu/aRHd2dZ3OnRl+nR+KxzKqUTsAqsaQkWFDuOGJeh6ks2z
+	 F64cLnjPsi7oaDIReMN0yOlp1MAaAoV7JY0h5mbHUKdUqREdrs83ggfDCH/Topfxz61P7
+	 tlIx2ZMkrXm1JabOTOi7/Mdik16lYM/wCR61zxbIL4Z4ZDVSXtb1bHgsehYl7OZCViAe7
+	 jeS0cOjgJhFC+SKC41WEbLoUgy2WrBmFsyVhwwJ45gN7NuT2qd3TlZbMjI2znvVZiYYaz
+	 +IbBPJWSfMBIT32sxNtDnbRRdv82MVzodHmwYVTzpOcYWkqzzXXimvo1oTwB4B6y0rg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793652358;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=QkdyNHg04PdgtDZN025BsbPuS1BoVbcEcI259SLB2e0=;
-	b=sAbnALV0y4x77Gz25kLe3XIeCD6p6/pgtx6yJ/R1yqs1q+ERk/fLI0RV8HtOBNvI/JST
-	 ARGsP6s1DX5v0nsAItjBXCbAD/tSQEBtTkNhnJh1uQxsgLazpS2LgYgnYek05iEcJn/hB
-	 C8cEtQiDm89Xr+e36itlypnMcutEQw156K5UvzvLbWYTIsd2EWsujXuFITZO0euoxq4s7
-	 L0UASSxb4bADG+ijmA1JvfE2gElDSBtDDp0QDQYhi1VHAaV4q/eu3md998tsrBIrf8+/5
-	 tJb2maH/rDSUbBSeHC/lZl9kjE6AVJ8OBvXs0Y25g2VTJIJVFjcr5VfyxdWg53BpVFg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793652797;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=e2uq0IAsarHDTLXqFZ/CFLC17YQu7mmJAfgLDCf/Xbw=;
+	b=CI7Z3eqY7UsMmtOub1TMh+TOmwM+Xx3TCKVRWT/0Pc89fAfMa44dKVRh1iwaTWpqd76y
+	 AGjBtwR4V+Zud7HS2hNwqc0oss5kE/iBHA4aIgKQAUyeiMk0rXMNZGmZj4ftuTOE6/MAv
+	 /L52h7Cgegi1U5hokEl/RymmxNLli+1MQL7E6u1sJ94enIABEeUUH6Vp9wF0KLCNJ5C8T
+	 nwmG4eroOZqCXHA7M4XgPe/67OG2COGCNsV6xpOicGVoOloHLr0KU6zCbgMj4AWsNmMI3
+	 JQxbYA6Dvi8N4n+wj7hmXFpXyexpi46rc4tLkebZHTBknAoiD6radIainI2N1cec0SQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bf2oltEk;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="qy4/nMyO";
+	arc=none smtp.remote-ip=209.85.221.176
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0EC606A332;
-	Mon,  2 Nov 2026 20:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2D7606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 20:53:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA2D7606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bf2oltEk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 519FB1F00A18;
-	Mon,  2 Nov 2026 20:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793652357;
-	bh=QkdyNHg04PdgtDZN025BsbPuS1BoVbcEcI259SLB2e0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Bf2oltEkOnr79Jo6LB4R74wBRhRXNQpGwNAzG0BoDPJkqUwaMwM3NMEUNj0BmjBfg
-	 g2HFPcQeyO9G8Se1plADPwPA56KT9PvuzIMOsqJPAmtWQpBBCDhM5jZMqiS+ejBTI8
-	 MW69njMJ7xcqn7Pg2A5twkXGmi5GkQAV4Kls56d0WmgXMNQdQZ0nS2TKfdbHfu2fGH
-	 ppL5e56v8ponxhNGin2BxXBGK2+HAJ/ORhK6OD9TybCiSwmwcNTHsXAa7W2ROyzDjh
-	 K/7MYT/prlPhLJAFMMUaxnF0PYLRWOQ1k9Oghpjrxn4u2U+bpiZiib9MDZ65PAGmGN
-	 j5i/nAJa2zUWw==
-Content-Type: multipart/mixed; boundary="===============8048107970388410369=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qy4/nMyO
+Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-5eac01ff101so1271782e0c.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 12:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793652796; x=1794257596; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=e2uq0IAsarHDTLXqFZ/CFLC17YQu7mmJAfgLDCf/Xbw=;
+        b=qy4/nMyOD2tvlZ+lCMFZXzwX1bR7Z92mNyX9ed8vsHjy7D8YOFf4wJCD3irRABXwuv
+         tRnRQ3a07FzomD3HdEtcyU9aC01aB3cnxpkSjm5itPFUZkohG6yNZnbuaiU/rJpHVsMH
+         m2t0ECWmneskImGe5GHRozAhoak3QNDdWYS7K/0BH7eYUz4VPR6UEAoO8o2zPh30ifYY
+         O3TPOYxgDVLaHuCN1vNAVUUFoLoi7/h+/28kcDEzunmUFPeTaQQkx4nx7Jk+zhfor3Ql
+         EnO+FXOs+ry3iOjWASHJ0AssEdooqmV81e5NQPjjQ5WLjSZ7mnqlG90WrETa5W7j05BE
+         86/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793652796; x=1794257596;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=e2uq0IAsarHDTLXqFZ/CFLC17YQu7mmJAfgLDCf/Xbw=;
+        b=EndGWlOTo19PiboMlGYnjre555CR3wkMCadWsAl+toK+mrYrKSs9k51sgE9pYCAwyE
+         3cKVfcLyNWEry1+iQaGpU52v3/VA8a9iVkwvmzWkQl2bljA2mie+BHwIFS3IS5UOgk+0
+         IxnkkyEJY+i9Qjw7sznyt+ywAWZ2l4aWmagOvN0y0tN9gEdXF/94SYEDBVaAmjPl6xaD
+         HtE9K8PHnHgu9qC4s1VU/vAuAZaKhe++4zyKjI/OpbqBLKs1H6XTCEGQNk8H7jy9K9lP
+         xN/37bi5uDzHPFT0QMeCK7Ru8uKeLUPdAfWcojt7UnOtIucSjPZIFV82mba/4eh8ksWH
+         csDQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwuLm8hXYMT28ZtpH7k4aMFgxpFexioxWENLwZk5alcmnDXz/9RXKtYlZRuWCRcqkgGOPhm8w604sXuPdocH4s=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8xY+RiNZWBrCytDG1lc4iBFFvPVq/JWKaJCN1kFq01l1gjRICM
+	6PXAGTTSwwJOFzcskKtoihLcVHUkBBBlbIRdgfugqIt4Ay95QL8WY2k=
+X-Gm-Gg: AYBFou2XqYTI4gv1/EsBiYXBUXn9T1caxAk9o2goq3tuUbqCV9wBswXnu1fZRQ7kKm0
+	gg0eRDT8tQA1Hd1Zy//Tq++dt8dEJacEifhHiwbkpROcb1t8pRd37ZPBojC9mB4EwiU6ZmVmQhV
+	vAh5kA1kUSNdx89OcxlnGm5I1xnV40LT8fd4HaSpod9rOTPzyklr1QTjvGEH/cLgbNW6pX3zYkh
+	4BWTbjv6Vq+Q75b5SEniFa+OXHRC5fo2JrxHw5EP+3td9yySmzHwNGuKMOzEigZfKSSGA+EYwZg
+	YMy/kmWAm1UsfRz4J3UXWU6doAerK6MlL7daBbwsNzqiMxQd9txKdbOBhYxEFUr2G3ldcXoRhRH
+	aS8CmGSJ5bG3bm1np7M4/k2P9DRXsEyLNLM0JYqFmuPaJPl+vilFGPe91AD2wE4SKp5hgO8fxX4
+	BHshs1oL+F1eldk2ds1PZ/mxN+hsR+OFc7bRIsvB/jY3qRTNhfMefQvCIIiKXqIPexD5da3OLrY
+	j10rI8DScgyc6eRSaOZt0ptfGvlI8MPckiemGrTPuz1FNRYlTAeeickIRROnicjiQggtZcRW5bL
+	OTLkAE8OOjzsnphsD8tnsvwSYogW9zkMaKggXafSAtR9x0/qioPxy3TjS22fKUOZuQ==
+X-Received: by 2002:a05:6122:d2a:b0:5ea:d14a:ef8f with SMTP id 71dfb90a1353d-5ec6870c5d1mr4724163e0c.4.1793652795618;
+        Mon, 02 Nov 2026 12:53:15 -0800 (PST)
+Received: from localhost ([186.158.238.108])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ec69caeccdsm10740493e0c.16.2026.11.02.12.53.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 12:53:15 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -48,79 +87,149 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <c013a7069c06d1120f89eb75e9418938b9e4e71cc81043f41f11cb06d75ca634@mail.kernel.org>
-In-Reply-To: <20261102201356.5798-2-mahe.tardy@gmail.com>
-References: <20261102201356.5798-2-mahe.tardy@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/5] libbpf: Count entry programs for bpf_gen__init()
-From: bot+bpf-ci@kernel.org
-To: mahe.tardy@gmail.com,bpf@vger.kernel.org
-Cc: qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,mahe.tardy@gmail.com,hi@tychen.cc,gyutae.bae@navercorp.com,sh_def@163.com,josef@toxicpanda.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  2 Nov 2026 20:45:57 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 02 Nov 2026 17:53:05 -0300
+Message-Id: <DML0UIHJNE2R.3JDG4HTEN6U0S@gmail.com>
+Cc: "Alice Ryhl" <aliceryhl@google.com>, "Benno Lossin" <lossin@kernel.org>,
+ "Boqun Feng" <boqun@kernel.org>, "Brendan Higgins"
+ <brendan.higgins@linux.dev>, "Daniel Almeida"
+ <daniel.almeida@collabora.com>, "Danilo Krummrich" <dakr@kernel.org>,
+ "David Gow" <david@davidgow.net>, "Gary Guo" <gary@garyguo.net>, "Miguel
+ Ojeda" <ojeda@kernel.org>, =?utf-8?q?Onur_=C3=96zkan?=
+ <work@onurozkan.dev>, "Alexandre Courbot" <acourbot@nvidia.com>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Burak Emir" <burak.emir@gmail.com>, "Rae Moar"
+ <raemoar63@gmail.com>, "Tamir Duberstein" <tamird@kernel.org>, "Trevor
+ Gross" <tmgross@umich.edu>, "Yury Norov" <yury.norov@gmail.com>,
+ <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] rust: kunit: add #[should_panic] support
+From: =?utf-8?q?Nicol=C3=A1s_Antinori?= <nico.antinori.7@gmail.com>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>
+X-Mailer: aerc 0.20.0
+References: <20261029-rust_kunit_v6_send-v2-0-5ce551efc48e@gmail.com>
+ <20261029-rust_kunit_v6_send-v2-1-5ce551efc48e@gmail.com>
+ <DMKTARY7GF4B.27HUM6XMDTQNV@gmail.com>
+ <CANiq72n3YfMpWndR06B0s1Mj_PjAR8MJ+0nP4XXPkaFh3zX7pA@mail.gmail.com>
+In-Reply-To: <CANiq72n3YfMpWndR06B0s1Mj_PjAR8MJ+0nP4XXPkaFh3zX7pA@mail.gmail.com>
 
---===============8048107970388410369==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon Nov 2, 2026 at 12:51 PM -03, Miguel Ojeda wrote:
+> On Mon, Nov 2, 2026 at 3:58=E2=80=AFPM Nicol=C3=A1s Antinori
+> <nico.antinori.7@gmail.com> wrote:
+>>
+>> To solve this I created a new config "RUST_KUNIT_SHOULD_PANIC_ATTRIBUTE"
+>> that depends on !UML && !PANIC_ON_OOPS && BUG. If the test is annotated
+>> with `#[should_panic]` and CONFIG_RUST_KUNIT_SHOULD_PANIC_ATTRIBUTE=3Dn,
+>> the test won't run and won't show up in the summary.
+>
+> I was wondering if we needed the flexibility, i.e. if we could just
+> simply disable them when the conditions are not satisfied, but I guess
+> given `CONFIG_KUNIT_FAULT_TEST`'s existing description, it may make
+> sense to have a new Kconfig symbol=20
 
-> libbpf: Count entry programs for bpf_gen__init()
+I first thought of disabling `#[should_panic]` tests by directly
+checking the conditions in the macro code. I ended up creating a new
+config because I thought it would be cleaner codewise, if a new
+constraint arises in the future, we just have to add it to the=20
+`depends on` clause instead of modifying the macro code.
 
-TL;DR: Nit only: the comment in bpf_gen__init() in gen_loader.c still says
-nr_progs includes subprogs, which is now stale after this change. Suggests
-updating it.
+> -- do the ones added here look
+> similar in the kernel log to those fault ones?
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+Yes! they are pretty similar, for `KUNIT_FAULT_TEST`:
 
-[ ... ]
+KTAP version 1
+1..1
+    KTAP version 1
+    # Subtest: kunit_fault
+    # module: kunit_test
+    1..1
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0002) - not-present page
+PGD 0 P4D 0
+Oops: Oops: 0002 [#1] SMP NOPTI
+CPU: 0 UID: 0 PID: 30 Comm: kunit_try_catch Tainted: G                 N   =
+7.3.0-18137-ga2943ba718b4-dirty #357 PREEMPT(lazy)
+Tainted: [N]=3DTEST
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.1 11/11/2019
 
-> @@ -9815,13 +9815,16 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
->  			if (prog_is_subprog(obj, &obj->programs[i]) &&
->  			    prog_has_callx(&obj->programs[i]))
->  				text_has_callx = true;
-> -		for (i = 0; i < obj->nr_programs; i++)
-> +		for (i = 0; i < obj->nr_programs; i++) {
-> +			if (prog_is_subprog(obj, &obj->programs[i]))
-> +				continue;
-> +			nr_obj_progs++;
->  			if (obj->programs[i].load_strategy != BPF_PROG_LOAD_STRATEGY_DISABLED &&
-> -			    !prog_is_subprog(obj, &obj->programs[i]) &&
->  			    (text_has_callx || prog_has_callx(&obj->programs[i])))
->  				nr_progs++;
-> +		}
->  		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level,
-> -			      obj->nr_programs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
-> +			      nr_obj_progs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
+... <Registers and stack trace> ...
 
-This isn't a bug, but the comment in bpf_gen__init() now looks stale:
+note: kunit_try_catch[30] exited with irqs disabled
+    # kunit_test_fault_null_dereference: try faulted: last line seen lib/ku=
+nit/kunit-test.c:100
+    ok 1 kunit_test_fault_null_dereference
+ok 1 kunit_fault
 
-tools/lib/bpf/gen_loader.c:bpf_gen__init() {
-    ...
-	/* nr_progs includes subprogs and progs that are not loaded */
-	nr_progs = min(nr_progs, MAX_USED_PROGS);
-    ...
+For `RUST_KUNIT_TESTS` (left only one that panics to shrink the log, but
+they are all pretty much the same):
+
+KTAP version 1
+1..1
+    KTAP version 1
+    # Subtest: rust_kernel_kunit
+    # speed: normal
+    1..1
+rust_kernel: panicked at ../rust/kernel/kunit.rs:399:9:
+This test should panic and pass
+------------[ cut here ]------------
+kernel BUG at rust/helpers/bug.c:7!
+Oops: invalid opcode: 0000 [#1] SMP NOPTI
+CPU: 0 UID: 0 PID: 29 Comm: kunit_try_catch Tainted: G                 N   =
+7.3.0-18137-ga2943ba718b4-dirty #357 PREEMPT(lazy)
+Tainted: [N]=3DTEST
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.1 11/11/2019
+
+... <Registers and stack trace> ...
+
+    # rust_test_kunit_panic_in_kunit_test.speed: normal
+    ok 1 rust_test_kunit_panic_in_kunit_test
+ok 1 rust_kernel_kunit
+
+The only one that is different in `RUST_KUNIT_TESTS` is:
+
+#[test]
+#[should_panic]
+fn rust_test_assert_false_success_with_should_panic() {
+    assert!(false)
 }
 
-With this change, the nr_progs argument no longer includes subprogs.  It is
-the number of entry programs, which is the same count that
-bpf_object__for_each_program() and the skeleton expose, and it still
-includes entry programs that are not loaded.  The comment came from
-259172bb6514 ("libbpf: Fix gen_loader assumption on number of programs."),
-which the commit message cites.
+That logs:
 
-None of the later patches in the series (276212ecac70, 28aa06d2c9ca,
-c9412c70e104, 5b9c2e5eed2a) update it.  276212ecac70 ("libbpf: Track
-generated loader link FDs") also sizes link_fds from this same nr_progs
-value, so the comment now misdescribes a value that later code depends on.
+KTAP version 1
+1..1
+    KTAP version 1
+    # Subtest: rust_kernel_kunit
+    # speed: normal
+    1..1
+    # rust_test_assert_false_success_with_should_panic.speed: normal
+    ok 1 rust_test_assert_false_success_with_should_panic
+ok 1 rust_kernel_kunit
 
-Should the comment be changed to something like "nr_progs includes progs
-that are not loaded, but not subprogs"?
+Because a BUG() is never called, the failed assertion is catched in the
+`kunit_assert!` macro and, if the test should panic, the KUnit thread is
+aborted without throwing a failed asssertion.
 
+>
+> (And I was wondering because, in general, adding Kconfig symbols has a
+> price: users may get confused etc.).
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On top of the reasons I gave above, I tried to follow the same as
+`CONFIG_RUST_BUG_KUNIT_TEST` or `CONFIG_KUNIT_FAULT_TEST` are doing, but
+in this case in particular, the config is not for enabling a test suite
+but for enabling a feature that can affect multiple suites (in this
+patch series the ones behind `CONFIG_RUST_KUNIT_TESTS` and
+`CONFIG_RUST_BITMAP_KUNIT_TESTS`).
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41519963115
---===============8048107970388410369==--
+If this is prone to causing confusion, I think I am going to check the
+contraints direclty in the code.=20
+
+Thank you for the feedback!
+
+>
+> Cheers,
+> Miguel
+
