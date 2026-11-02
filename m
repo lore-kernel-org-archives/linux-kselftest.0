@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793648517;
-	b=ir2SXvg5WW+VkNryRG9Gl3WDYhRfmc1TSJjIVfFjCCU3+5AkzGHAIzeu4PkkiW58yMKs
-	 esyT663xrD5d7wcaQeyYp+F8mtFRtsZYWf8qFfeIAnRxkAUZPA/Ss+iG9P3Cf5WK1hcT4
-	 Qc+i5jRa+Hrp4Carzl4UsLS87SuXrafKar3ab+JrGxYpbnOUzN67iJDBevB2ey+Uf03e+
-	 GBh0kcGTMRAcbfaVkr6UO+eXvUEOOxxICeI+dzeNI6W2tD/ZCwWQLCQ3Ru9lY3SnX4pQY
-	 AoqtSKcVgD8bjPrLnQIdQRtL/IAdf8Sd7NjPIsRfOkZc4KK8gna0QPwNAUmN0AM0KBw==
+	t=1793648515;
+	b=xJsTF0cuhoMGJfoBwsF//xgSwY54iOhYVx2eRgL0Z+R88khbsdT3WUTRS00I1CwleMiP
+	 1B/FWx3fVxyoTgUIzf7ouj8O0yn4YKBUAJPevpeKZkrbYKUurThqyg0OpDhecTjRLYHE8
+	 I2QhasvewkXzDu2FNVlK++QJW0ugiKZAzRzngufYQ3iefXNaSmbJLHmgZ6cmWgsuGW5j0
+	 jOx/0LB8le6IyqhEzplpyTARt/hneeiGeSlTrtKh6OGLpfGbzQ3LLuiQVCDjSkWSvRKov
+	 YZ1HQQR2qV1SMSPRuoNrg6tgky3QEqb6hp495wz2ZmNK/JgWTDzsRBBQJcFW9lXUhJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793648517;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793648515;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=6kh38ixGlcMYvSMO0Cs+3boaaPdMbwOiDcXF3MCXi/8=;
-	b=RA4Ict+ULUcwBMTT41MTDnkwJUMDHpP2aZrActoelekCowq22aD9Cd2TL9piUaAIQOdz
-	 o7BYopQGop0tey24UjXYCpOBxr/rNE00JqcjJFKKNjGynF+Kj6ckqsjO1lgM3M8mrIH1+
-	 1CyOOlIksSDhsPUf2uQIdD0cVRuJEcBxdPMiF3YO4W6UPacHppVzl6Dn2I9X9Rop4F+0W
-	 7EIlqCk7TJDhB9qNi5cXbP5uJfjpb+1DepqJlN4E7iX6fDn2xjMX6uwZrRRl2LHwRgZuD
-	 /gCIGs+s36ndwIc/Y2p1yPQRPn8ynB8WFOu4FhPBPrdVrhkoKuEPhjzgfWuUQamgDPQ==
+	bh=MlxGrO4qVY13JT+narJGH0GFq85Jy87gUAILKXGl+Ms=;
+	b=SvOp1sLP867M/vc5Bo92fm2GHsp5meu3VA45zDTwebeWesNYoOQPReSdOm92zL6E9dS7
+	 nP7KwrGM6YbwGtwh2LwsKfLZPMTgsSSlwQCIvA4vhxPXi8WUFwCsa1KYwHq9IZ28x3lsJ
+	 tP784HFnL2xWRV+/pKS6jrfGqaZZcasx0wmaDzTM5K47MiXvP+iGi2odvT4b8WD6iGx/p
+	 umLq9VT5FY9ljGdsvg/DlfgO1QS1YTBgj0AMonrsW7CeLq2MY4QnzYZo++CVoYxuo7PXR
+	 zT40qnx2QBuvQpzyUi41Ydbyt00aFv20v+tjqDddb7uxevxjysaEWR/mi460pEDcOqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZMXiY0Ux;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QcDzCNWM;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1AA6606EE9C
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 19:41:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1AA6606EE9C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AAD606A337
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 19:41:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8AAD606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZMXiY0Ux
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so28582095e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 11:41:56 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QcDzCNWM
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a549cd7fd2so30550785e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 11:41:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793648515; x=1794253315; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793648513; x=1794253313; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6kh38ixGlcMYvSMO0Cs+3boaaPdMbwOiDcXF3MCXi/8=;
-        b=ZMXiY0UxckHKiYUkSbMmtuJNifVY3O1sRQ5KrcrwqONncNToBiPJeHV7Lr8YZiquta
-         l9/UAHqZkEYPXlO2vG3PtYIIRVgftJTE4nqQzskaU66Bw4L8ILveYj7pxRTVhXrzJG+E
-         BFgZjNU+MQo/m4OyiMkMDixuKcUuwt9vHd4QWxVuEgNtnx/xUEQqfgh5pbvGRbkZPegg
-         /RiueflA1UOXMOdcCqiEif0E1/28VbDXWk4JutTLbOpjbbs4qaP34pCJJHTtuHkkEC7+
-         eFYmZlB2jOb6Lvy2KgExln+uYGvali4EGTPXZ8Je8waSwERgAkSv8oL1+9lrBeQ5PM4I
-         LaVw==
+        bh=MlxGrO4qVY13JT+narJGH0GFq85Jy87gUAILKXGl+Ms=;
+        b=QcDzCNWMmAKVwvWckR04y20Nz6TYmmXMX2PW1oRXh4Tpc+tUqtSLgJpckrGxox0rup
+         CLJYVKN8T8hcDixLwoHS0jKNBKVVF0MTwbBtxuA5sIsqNM6RuJeRKelGVY5pYVwH+4Ei
+         y9JA/06g/3TS7/Fk4Pw+XAYR4TivKripWnddFnln0FoaZ1QtSlhqRcTo7CupZDm0OAEs
+         RfzAxsT+B+/kS8SBeAJqGuT0ZNeRFFu0Hnt3bhOcR1FeQTWdub1qco5DPLj7TcSyhuVt
+         YIzvoBOAzBj44pOPTgceTzl3aP+F8LeRDVjJoUTaF7da2uTX2Oycb9rKGO6SSoageuW6
+         cgRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793648515; x=1794253315;
+        d=1e100.net; s=20260707; t=1793648513; x=1794253313;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6kh38ixGlcMYvSMO0Cs+3boaaPdMbwOiDcXF3MCXi/8=;
-        b=T6eGVHufFmL4FAk94jvG/xrgd2CRak1/A9ZK3h75d/xIfYrhCKwWOQUmMQHoN82Af9
-         kJgKdJfo5EyKpthuO14k3mpB3ZE5+9H057JuWAqsg47B8fMrvkPZwb8B8AjDCNZE+1Az
-         3WE861k9AWXVtl7z8ufmclBmWQbspLOxlK79R5wulMwc2bXoqLmQvExkfITRPTWodj+4
-         xbEvY9Fnwu4TvJzx4a3jsQV7XVrakoigRZ2zXmwILqmkD2hgAhiZSSA5Tgk3VO5qb82S
-         MK1Q3QLemcMBMUngwDEuGuR5TJWHUtaxZgSG9m1trgAUljPAwvVGMKMrcxB8kTTG9Rsz
-         qBKw==
-X-Forwarded-Encrypted: i=1; AKwUvBw9DI8yutIH3j60TI8v4xMw+sYpkHgza4dr/cxLcfraGqf6mNhvvvNNkd/VnV1GfZ7e7kc4NKsG/WjM/nV2iIQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKdqoV9pr7UIqjA/ixq0Ma3C+2uIvt3dXaMY6xRRUWbehw3xWA3
-	QpJb9YPDK7SZEqfiUG7GBMFZZcDP2986cocb05BE1xG9hwwyBLwi7eOV
-X-Gm-Gg: AYBFou2EjERegj4t30jbNWI70HxX1TPLVthWqgwHLJ1P4EorVRs5cHBimIMKXiLlFff
-	5V9z/iRtKdFIc+PP1q8OykOQqnFEBGDuEKytnYYVKq0Kb9CN8I865zyXLToMgJdy0fRBu+mHJA7
-	P/FRW5qasQO1CtPUfLbxegCZII4pTlAaxsjZUIBnx0xPesCuiOZKlLh77oyJAHFuIAK/+MP0G9U
-	f0rbf34OoFkFjsvFjMV5UBYxpoUVbBujZGoGhZyf3ss5docKYjBZKcgoo9ekpIyQUwz5ZavSEn/
-	SXrwze0wi3ASyYsb9go9qns7InyDd3wo2KJYFg0I3znoezCOYNaVrEAJkdk8Ee9+u9yNhKxBJYu
-	Q2KVtFcp+wd6dLIWDlxzsWFDsvkij9CbfYCkH7s6K9GMfePwZubMeSuFHPLVgWhpOprAHy+vCNV
-	GVTme5M0oL5mjZBvUPVpo354xOt4YyFwmyKPLcLbVY1Zz6fVTKew6cF3TcM6A13gAEmy4H8QihT
-	jfpYBRW4QgiH/XiurH2acIFWVBEIP2ifyXC3CyvXrPhQLsxLpWHjgt6j+VlRpcA0F4ddaoQIFpy
-	QAI6SzffEhOb34OwQwlkDpbGSRbPsal2pnfpIzX9TLRjnITpQkMVV7hTbeCfboBdfH1Fxpi9FCm
-	x
-X-Received: by 2002:a05:600c:6089:b0:4a2:a8c:22b0 with SMTP id 5b1f17b1804b1-4ac14ec75fbmr242302055e9.1.1793648515119;
-        Mon, 02 Nov 2026 11:41:55 -0800 (PST)
+        bh=MlxGrO4qVY13JT+narJGH0GFq85Jy87gUAILKXGl+Ms=;
+        b=JPQRtBWcRuIoIK2ZogqvE0Q7p5LNzcblw16HaDxbw61dmeHFNZLutFKxOdqUMrV2Ps
+         rY4tIH2LECvRU5GGN8y2o6C0jbCj0Ye5WnEfLBG5Xs2CJPMrwusrAboqQqptBgiPGa0P
+         n3T40WQ4/4nvaihTcyMeeQireG9UwXwWufBNOKy2pO488eh6FqpqQS9Jdivo9TEY93Wu
+         gUuJ0+N4XzRcD+Qkso8uLOvJwif+ovftAx7EbspYjSKGbaCq2IDj2r/Xu3v30QQePszj
+         KRz1GTry2yj7w6SkCjJbao+P7g/C4UfA6S7Iv4MneC99R8eUGOEUXatM5jkKtTWWJAME
+         G29A==
+X-Forwarded-Encrypted: i=1; AKwUvByvPIABmph3Rnwz3IdRusdWuve21BHYq1f5rBJIyH/z3RUq7+H3iQhNAyv7rmTI/EngBZck/52onZVAP5mw+MI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK61KKwSY+g0oNrfTK6OiPNcTp9eSrK5anfmrIkcV8Opbw/Fajb
+	sZgLHTBDlQ4c1ABo3rsaZ9JY4aVrmWlYfliOEa22KRRH2FCQAsScuCTl
+X-Gm-Gg: AYBFou2bsfKzYU8DT3qCTd3r6UJ2fI8/b5ocSNmo9GGsRwjVVxyudFcrwoPCi29hoQj
+	Ian9SDePQYkdm1gO7EedARySQI+iKrh709d9D1tIIniUUhLlU+obU5jhNWtuhh1YgooauyQi3un
+	b3r6cxo60AK2mWewTaeGEvNVrjEs8xMUNHsUoBRGjVfEOF75X7UlHEWNTdUyUP1IBemxLUIhMni
+	KIx3GpU0zLiRi/7z2PxTtPlcNEbraU7LnHqA0Q0rzkGMxcbmgivZyWiogFnOL885yXPhPkmv7qi
+	gaPdkHqIm+/JjKmZ/uQptwO0x3zCbMJ5soIh+5+X3cLdKxr1SX1toTTisrf1r4eiNndqN+36GhS
+	FD0hig4Uu0Bosx8QXLPLguwx7QOduZa7UhfIUqi2GS4NfhgEzz+rpxeRX07G3tu6k4aenBik6uH
+	EyEZwo9cQnyqfI5IY+SeMIvs4OewVvn7QCSh7CpkI6/axF0WM22ZgUMg3ef066wAU1SoBV5GdAT
+	QvatnzSQktBZc1uEkrzj57Lc1hLSLbGHqwaBLQ/Sh0z4XCRiu47eDIisFekhK65eCMrL/VdxeeI
+	QXbjwqKqc3reyOhaZ+bpJjw1t128LepBp76BxB8ooaCyicgJZzSGC9XMISQkxEk+yMrdapENTf3
+	v
+X-Received: by 2002:a05:600c:8116:b0:4a0:20b4:ba93 with SMTP id 5b1f17b1804b1-4ac17e10724mr259459885e9.16.1793648512913;
+        Mon, 02 Nov 2026 11:41:52 -0800 (PST)
 Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4ac0a0a3495sm231386345e9.4.2026.11.02.11.41.54
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4ac0a0a3495sm231386345e9.4.2026.11.02.11.41.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 11:41:54 -0800 (PST)
+        Mon, 02 Nov 2026 11:41:52 -0800 (PST)
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Quentin Monnet <qmo@kernel.org>,
@@ -101,9 +101,9 @@ Cc: Quentin Monnet <qmo@kernel.org>,
 	Josef Bacik <josef@toxicpanda.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Test gen loader attach
-Date: Mon,  2 Nov 2026 19:41:44 +0000
-Message-ID: <20261102194145.620210-6-mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v2 1/5] libbpf: Count entry programs for bpf_gen__init()
+Date: Mon,  2 Nov 2026 19:41:40 +0000
+Message-ID: <20261102194145.620210-2-mahe.tardy@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261102194145.620210-1-mahe.tardy@gmail.com>
 References: <20261102194145.620210-1-mahe.tardy@gmail.com>
@@ -118,313 +118,54 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Tests that nothing changes when only loading without attach, verifies
-that unsupported program types return an error, and check that all
-tracing program types successfully generate loader attach prog.
+Commit '259172bb6514 ("libbpf: Fix gen_loader assumption on number of
+programs.")' explicitly mention that we may pass a higher number of
+progs because we include subprogs and autoload=false to bpf_gen__init()
+generating a bigger cleanup section which is harmless.
 
-Then actually checks execution of the generated loader attach for two
-LSM progs, verifying the links are correctly loading the appropriate
-programs and that autoload=false and autoattach=false disable it.
-Finally, checks that if one program out of many fails to attach, the
-cleanup with detach is done correctly.
+This is in preparation for the next commits that will introduce cleanup
+of the link_fds to bpf_gen__init(). We don't want to overallocate but
+have the correct count of progs in this situation so that the
+program-slot count matches the programs exposed by the skeleton.
 
 Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- .../bpf/prog_tests/gen_loader_attach.c        | 229 ++++++++++++++++++
- .../selftests/bpf/progs/gen_loader_attach.c   |  48 ++++
- 2 files changed, 277 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/gen_loader_attach.c
+ tools/lib/bpf/libbpf.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c b/tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
-new file mode 100644
-index 000000000000..1277709d7ef2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
-@@ -0,0 +1,229 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+#include <test_progs.h>
-+#include <dirent.h>
-+#include <bpf/skel_internal.h>
-+
-+#define NR_PROGS 7
-+
-+enum execution_case {
-+	ATTACH,
-+	NO_AUTOLOAD,
-+	NO_AUTOATTACH,
-+	ROLLBACK,
-+};
-+
-+static int link_create_attr_offset(const struct gen_loader_opts *opts, int index)
-+{
-+	const struct bpf_insn *insns = (const void *)opts->insns;
-+	int i, count = opts->insns_sz / sizeof(*insns);
-+
-+	for (i = 4; i < count; i++) {
-+		if (insns[i].code != (BPF_JMP | BPF_CALL) ||
-+		    insns[i].imm != BPF_FUNC_sys_bpf ||
-+		    insns[i - 4].code != (BPF_ALU64 | BPF_MOV | BPF_K) ||
-+		    insns[i - 4].dst_reg != BPF_REG_1 ||
-+		    insns[i - 4].imm != BPF_LINK_CREATE)
-+			continue;
-+		if (!index--)
-+			return insns[i - 2].imm;
-+	}
-+	return -1;
-+}
-+
-+static struct bpf_object *generate(struct gen_loader_opts *opts, enum execution_case test)
-+{
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+
-+	obj = bpf_object__open_file("gen_loader_attach.bpf.o", NULL);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return NULL;
-+	prog = bpf_object__find_program_by_name(obj, "lsm_open");
-+	bpf_program__set_autoload(prog, test != NO_AUTOLOAD);
-+	bpf_program__set_autoattach(prog, test != NO_AUTOATTACH);
-+	if (!ASSERT_OK(bpf_object__gen_loader(obj, opts), "gen_loader") ||
-+	    !ASSERT_OK(bpf_object__load(obj), "generate"))
-+		goto err_out;
-+	return obj;
-+
-+err_out:
-+	bpf_object__close(obj);
-+	return NULL;
-+}
-+
-+static void check_load_only(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, opts);
-+	struct bpf_object *obj;
-+
-+	obj = generate(&opts, ATTACH);
-+	if (!obj)
-+		return;
-+	ASSERT_EQ(link_create_attr_offset(&opts, 0), -1, "no_link_create");
-+	bpf_object__close(obj);
-+}
-+
-+static void check_unsupported(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, opts, .gen_attach = true);
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+
-+	obj = bpf_object__open_file("gen_loader_attach.bpf.o", NULL);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return;
-+	prog = bpf_object__find_program_by_name(obj, "socket");
-+	bpf_program__set_autoload(prog, true);
-+	if (ASSERT_OK(bpf_object__gen_loader(obj, &opts), "gen_loader"))
-+		ASSERT_EQ(bpf_object__load(obj), -EOPNOTSUPP, "unsupported_attach");
-+	bpf_object__close(obj);
-+}
-+
-+static void check_tracing_generation(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, opts, .gen_attach = true);
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	int index = 0;
-+
-+	obj = bpf_object__open_file("gen_loader_attach.bpf.o", NULL);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return;
-+	bpf_object__for_each_program(prog, obj)
-+		bpf_program__set_autoload(prog, bpf_program__type(prog) == BPF_PROG_TYPE_TRACING);
-+	if (!ASSERT_OK(bpf_object__gen_loader(obj, &opts), "gen_loader") ||
-+	    !ASSERT_OK(bpf_object__load(obj), "generate"))
-+		goto out;
-+	bpf_object__for_each_program(prog, obj) {
-+		const union bpf_attr *attr;
-+		int off;
-+
-+		if (!bpf_program__autoload(prog))
-+			continue;
-+		off = link_create_attr_offset(&opts, index++);
-+		if (!ASSERT_GE(off, 0, bpf_program__name(prog)))
-+			goto out;
-+		attr = (const void *)(opts.data + off);
-+		ASSERT_EQ(attr->link_create.attach_type,
-+			  bpf_program__expected_attach_type(prog), bpf_program__name(prog));
-+	}
-+	ASSERT_EQ(link_create_attr_offset(&opts, index), -1, "link_count");
-+out:
-+	bpf_object__close(obj);
-+}
-+
-+static int count_fds(void)
-+{
-+	struct dirent *entry;
-+	int count = 0;
-+	DIR *dir;
-+
-+	dir = opendir("/proc/self/fd");
-+	if (!dir)
-+		return -errno;
-+	while ((entry = readdir(dir)))
-+		if (entry->d_name[0] != '.')
-+			count++;
-+	closedir(dir);
-+	return count;
-+}
-+
-+static void check_execution(enum execution_case test)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gen, .gen_attach = true);
-+	struct {
-+		struct bpf_loader_ctx ctx;
-+		struct bpf_prog_desc progs[NR_PROGS];
-+		struct bpf_link_desc links[NR_PROGS];
-+	} ctx = { .ctx.sz = sizeof(ctx) };
-+	struct bpf_load_and_run_opts run = { .ctx = &ctx.ctx };
-+	struct bpf_object *obj;
-+	int i, off, err, before;
-+
-+	obj = generate(&gen, test);
-+	if (!obj)
-+		return;
-+	run.insns = gen.insns;
-+	run.insns_sz = gen.insns_sz;
-+	run.data = gen.data;
-+	run.data_sz = gen.data_sz;
-+
-+	if (test == ROLLBACK) {
-+		off = link_create_attr_offset(&gen, 1);
-+		if (!ASSERT_GE(off, 0, "second_link_attr"))
-+			goto out;
-+		/* Force the second attachment to fail after the first succeeded. */
-+		((union bpf_attr *)(gen.data + off))->link_create.attach_type = BPF_TRACE_FENTRY;
-+
-+		before = count_fds();
-+		if (!ASSERT_GE(before, 0, "count_fds"))
-+			goto out;
-+		ASSERT_EQ(bpf_load_and_run(&run), -EINVAL, "second_attach_failed");
-+		ASSERT_EQ(count_fds(), before, "rollback_fds");
-+		goto out;
-+	}
-+
-+	err = bpf_load_and_run(&run);
-+	if (!ASSERT_OK(err, "run_loader"))
-+		goto out;
-+
-+	for (i = 0; i < NR_PROGS; i++) {
-+		struct bpf_link_info link = {};
-+		struct bpf_prog_info prog = {};
-+		__u32 size;
-+
-+		/*
-+		 * Only the first two programs load by default; NO_AUTOLOAD also
-+		 * skips the first. NO_AUTOATTACH must still return its program FD.
-+		 */
-+		if (i >= 2 || (!i && test == NO_AUTOLOAD)) {
-+			ASSERT_EQ(ctx.progs[i].prog_fd, 0, "skipped_program");
-+		} else {
-+			size = sizeof(prog);
-+			if (!ASSERT_GT(ctx.progs[i].prog_fd, 0, "program_fd") ||
-+			    !ASSERT_OK(bpf_prog_get_info_by_fd(ctx.progs[i].prog_fd, &prog, &size),
-+				       "prog_info"))
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 02e75b183ed0..a7cbe7204043 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9800,7 +9800,7 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
+ 	 * permit cross-endian creation of "light skeleton".
+ 	 */
+ 	if (obj->gen_loader) {
+-		int nr_func_ptr_maps = 0, nr_progs = 0, i;
++		int nr_func_ptr_maps = 0, nr_progs = 0, nr_obj_progs = 0, i;
+ 		bool text_has_callx = false;
+
+ 		/*
+@@ -9815,13 +9815,16 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
+ 			if (prog_is_subprog(obj, &obj->programs[i]) &&
+ 			    prog_has_callx(&obj->programs[i]))
+ 				text_has_callx = true;
+-		for (i = 0; i < obj->nr_programs; i++)
++		for (i = 0; i < obj->nr_programs; i++) {
++			if (prog_is_subprog(obj, &obj->programs[i]))
 +				continue;
++			nr_obj_progs++;
+ 			if (obj->programs[i].load_strategy != BPF_PROG_LOAD_STRATEGY_DISABLED &&
+-			    !prog_is_subprog(obj, &obj->programs[i]) &&
+ 			    (text_has_callx || prog_has_callx(&obj->programs[i])))
+ 				nr_progs++;
 +		}
-+
-+		/*
-+		 * Unloaded programs have no link. NO_AUTOATTACH also leaves the
-+		 * first program's link slot zero, even though its program is loaded.
-+		 */
-+		if (i >= 2 || (!i && (test == NO_AUTOLOAD || test == NO_AUTOATTACH))) {
-+			ASSERT_EQ(ctx.links[i].link_fd, 0, "skipped_link");
-+			continue;
-+		}
-+		/* Verify the link references the corresponding loaded program. */
-+		size = sizeof(link);
-+		if (!ASSERT_OK(bpf_link_get_info_by_fd(ctx.links[i].link_fd, &link, &size),
-+			       "link_info"))
-+			continue;
-+		ASSERT_EQ(link.prog_id, prog.id, "attached_program");
-+	}
-+out:
-+	for (i = 0; i < NR_PROGS; i++) {
-+		skel_closenz(ctx.links[i].link_fd);
-+		skel_closenz(ctx.progs[i].prog_fd);
-+	}
-+	bpf_object__close(obj);
-+}
-+
-+void test_gen_loader_attach(void)
-+{
-+	if (test__start_subtest("load_only"))
-+		check_load_only();
-+	if (test__start_subtest("unsupported"))
-+		check_unsupported();
-+	if (test__start_subtest("tracing"))
-+		check_tracing_generation();
-+	if (test__start_subtest("execute"))
-+		check_execution(ATTACH);
-+	if (test__start_subtest("execute_no_autoload"))
-+		check_execution(NO_AUTOLOAD);
-+	if (test__start_subtest("execute_no_autoattach"))
-+		check_execution(NO_AUTOATTACH);
-+	if (test__start_subtest("rollback"))
-+		check_execution(ROLLBACK);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/gen_loader_attach.c b/tools/testing/selftests/bpf/progs/gen_loader_attach.c
-new file mode 100644
-index 000000000000..9a38fe4ac7bb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/gen_loader_attach.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("lsm/file_open")
-+int lsm_open(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("lsm/file_permission")
-+int lsm_perm(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?socket")
-+int socket(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?fentry/security_inode_getattr")
-+int fentry(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?fexit/security_inode_getattr")
-+int fexit(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?fmod_ret/security_inode_getattr")
-+int fmod_ret(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?tp_btf/sys_enter")
-+int tp_btf(void *ctx)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level,
+-			      obj->nr_programs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
++			      nr_obj_progs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
+ 	} else if (!is_native_endianness(obj)) {
+ 		pr_warn("object '%s': loading non-native endianness is unsupported\n", obj->name);
+ 		return libbpf_err(-LIBBPF_ERRNO__ENDIAN);
 --
 2.43.0
 
