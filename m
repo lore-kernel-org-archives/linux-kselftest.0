@@ -1,59 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=85.214.250.239
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793619733;
-	b=co74pB3kfHlepYN+pCnB2F9f+IAQTB1a1ZF5cT9mxbArt2bFbrBW8hbl5Hud7xyYBhLW
-	 eZHgg6G+Kjf9C01BRu1LRDSqm0vq1yOZXavmskTfzhnfPLfpk6gp8JzepxBZGYRfAeVPn
-	 l/y/kIludPjaLlVdNmkTCg7CsJJpssFjqr/us+XfBPQy+Rvyh2x+Z2/ZS1iG26QKGQL+5
-	 0wpEhYQjvn5WZjzkQVSSTB7H6k2ANmwYVsWeuQo1IanQwVzWY737qwmWJ04zsKdvZrEx8
-	 0gFCf2Sq3UPJzFs5Ad4TDn6ETi+ePzwq3FHBmTyuWtMrQD6AB2CcvGClFGVaOqeXfRQ==
+	t=1793622738;
+	b=TeMx9Q3M7UPAEzxOQMghNfno8yCq+sDkYkr9UHW30GZoEJMWXO98AdHbKgmIfvGSNdF8
+	 Vm3qqA3LGNhK7B1qLQ4r8Y2qcc/SuUjLZlR7u1m2qjMH/tX49dsuqQds0+T+4/C/GjwKa
+	 rxPIH+XA4Jxc+fU99Rsp1d1dd+Cg81khF9Ovni3EVmPilk60yyhpsnycKJvWbGMpshs/g
+	 FP/T5/h17lU9TI9L4ewPcTwEpRQ3J+WX7P5bHKBZgLWEh368OtFM2XaKa5IA11J32SuCg
+	 wBz0YYKJ69LgxN+Ol+to4qz0zhYtu47jqxP9vBuPOJzOEdpjawAVOa+wPn6vDccHudA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793619733;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=SdG6k/fm+cjC6ftUgRYpN6R8s8VTL7ygwpdINXwatvE=;
-	b=TmcaQnkhdypgNp3lFF5mZULeiPKAMB43EB4kDalkwrhXNtnxvCHV/9dIPwfGhxahr22l
-	 Pf/h53OhAixglVeb9qVHSoi0th+AoVV/qaBXq779OShyNatipAtQJrgXG2JnVkB3PdsHA
-	 zsSdvyM4OHGQjvTQ11grzrqPQqRE9jx/3hAqGpGSwk9+wALE3n9Tor8t1PEInUg9v8dxp
-	 leNnMmqIGJ3M94mp6X8UKduO+3bZfU1B4grKEbJ0k5rMrnZAWE2MMON9sKfA9KKzVmXvK
-	 5hqQCVpfFH+ZWeBursG7kXnFBY4d1sEvWeoT9e9b9x03XvP7mCM9yK/pNel7cu/3aKg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793622738;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:To:Cc:X-Mailer;
+	bh=lfTEZtUhCcU2T3URSEVjIEX2SBlCGYIkFNQ2td3t68s=;
+	b=bjAmhyWBBDy1l2yWbvNSy4WcDKeZdTPaWVY7xSwUkcxH6WVDvrTYvNd+BFByJypaQ/BK
+	 8X/YdYTbLI3jLwjyzXTXnfo5ib9TR88CT4E1+XNHQW/lgDnDYAc9m/9aIMldaygozA5qX
+	 Ync5AFkpw31aewvhEyi17gJvUuzi9gxPgxYo4Xwre1Wr+FQUL9MTW1ag5iwfAX1E1IT74
+	 1AUdQXaHO5OQ0GW+JDYxA1l3PfRx+yUl2qXx2qDDCo/PLI+pkkOzkrGeoFnSG+/Fmpp5G
+	 5m62AACiBr1VVa9Rg4pYKiYA2THUFB39Q6Z1D/WFrwTtkeSIeQUNznRUcA52xoeWnsw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=8bytes.org;
-	spf=pass smtp.mailfrom=8bytes.org;
-	arc=none smtp.remote-ip=85.214.250.239
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67AAB60A2635;
-	Mon,  2 Nov 2026 11:42:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67AAB60A2635
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
-Received: from io.fritz.box (p200300f6af404a0027ad06761c59e6b3.dip0.t-ipconnect.de [IPv6:2003:f6:af40:4a00:27ad:676:1c59:e6b3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IXPnlnEf;
+	arc=none smtp.remote-ip=74.125.82.47
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 0D427243ADC;
-	Mon,  2 Nov 2026 12:42:05 +0100 (CET)
-From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>
-Cc: Michael Roth <michael.roth@amd.com>,
-	Liam Merwick <liam.merwick@oracle.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Ninad Naik <ninadnaik07@gmail.com>,
-	Joerg Roedel <joerg.roedel@amd.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	coconut-svsm@lists.linux.dev,
-	joro@8bytes.org
-Subject: [PATCH v3 7/8] KVM: selftests: Test the SNP APIC-ID-list GHCB request
-Date: Mon,  2 Nov 2026 12:41:36 +0100
-Message-ID: <20261102114137.1198982-8-joro@8bytes.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261102114137.1198982-1-joro@8bytes.org>
-References: <20261102114137.1198982-1-joro@8bytes.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84FD606A329
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 12:32:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C84FD606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IXPnlnEf
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1931ff67a29so5386704c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 04:32:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793622737; x=1794227537; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=lfTEZtUhCcU2T3URSEVjIEX2SBlCGYIkFNQ2td3t68s=;
+        b=IXPnlnEf1jbwltyqwb/bMrMK51l6iyIhrrQ2fg5JpDukS+CGDClt7341hvbF5LgmoZ
+         lDtIXS3hLWs85Dg+lsrWh8miuMxZNQQS1X33IKqRQzG+Iqc1uUlLHJfRn+NEnpfpOkZh
+         pjjn/y8s7Jpgswe6EtcawE0iWbKlupkm3mD8iMTbGCNacQe6IvFvCIbyofBbMJ0gvNvh
+         KD4xEXocV+m8rLK23MliT6D3sXPLe4KKybWp0FW9gJaSHwAMf0StDJ/ZmLIoDg9ELzzr
+         JF8VGiBv5TGe9DFbIpvL60shkoXNgSBo0XqF9V2ABii8GCzN9u3Y9xw/QuF0KJb/Ez93
+         y4lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793622737; x=1794227537;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=lfTEZtUhCcU2T3URSEVjIEX2SBlCGYIkFNQ2td3t68s=;
+        b=s5aLOAN9y/asZ+OjEuKQjj6dcD7dgy41iWw3zMnsbiIT6sUNwQ663ko4Hz9oi9JHO0
+         Q5u0zQO/1No6mwbKDKwJLHHKGWPdTi30J+rHAhm5eBCmXqw7Z8AVEBQXczQAHlqGBi8R
+         09vs6A+A33MksuBPQxGIx2R6S1JrPujaHH4skqKDokIICI6b9xJx0Or5Sv5hIEv9ri+F
+         VVrcQExzysmYufa6EHQcIDclmYlqrCsA1lQSoDbip8B6h7Y2EL3ylTzP8HHSGEa5imZk
+         5BfClsp/tHIKog0jfKFtIP8Q3KpXJ9d7aZiSCgF/HEUjIaiwgcgFM2s253y6J98ybrc2
+         oRzg==
+X-Forwarded-Encrypted: i=1; AKwUvBzb9+Z45DN2ZM6Yw7WS0Soyr9GshzF871jE6f539gJq/ySlgZFwF2j2M5/eiIfYW/ITcqPjxeZC6U9ypnsneWs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLqqdtXdd0PkwvFTlwiPu3jxN64gXWtY7FD49pBRMGOCfTxLG+e
+	pKOfSgUpGTuu0CUbQi7tF+c7r4syiPhaI5LCOybO6YyuC5QJLyyJKaHD
+X-Gm-Gg: AYBFou0Wo9QtPVR3LRIWjcZyx+8dn2W2Xjov9DoWjuyWMFVcd8xvMu9TfB+DmBG1ndx
+	pb70me4Y6ORo5e09mgD47W88ziqH4ucy2T679krUvhiYI6/kEjZDQ/vCXJTa/L1zo4N8O03XyBA
+	IKN3BSjpESLOE8ZUFW0YXgNGGzmicjJD88O0qmSmYmdHwYHSuPbt6AvquDQTppIvi3yoxwPTTNH
+	oUYDr2F84/RHochfwxpCsLzm+0nzMTIUpYXl+ah0q4PDs+OG7FeAiDBMZUjr+uBQxtwAtt8SuCe
+	LcAkDpJPjFVhWUBbUU180I6N4o5bpqLOYUiiaMRF6iEw+iaLbYjJ0DZ90GMutd1xZxiTp9d14Vz
+	QuWs1W4MxBU8xs371rKRcF3hL9gPZ9nxCQ5Fi7mjRAGzeKWhG1cjh1Sx2dlF3WG95adkpwurv5F
+	5ekLZiLZ6yXecDvnx6E4hb4btd59lqD2gqCa1Ob6uu2ccsHueSl8qFzSopwfrNiRwiqfNrVO5Br
+	E0x3KgO73Zxe0GKEyHE81I/qbZ+vuqytb3A2y6MMYlxAascv6RsTs7xUOYcxTU/JLL3goD+SAb7
+	XMF6TAjS+U27xjkCBApxjYt1
+X-Received: by 2002:a05:7022:eb50:10b0:14d:baf5:c415 with SMTP id a92af1059eb24-1ac5a0b4324mr16360361c88.7.1793622736733;
+        Mon, 02 Nov 2026 04:32:16 -0800 (PST)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b2360d2066sm4950951c88.11.2026.11.02.04.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 04:32:16 -0800 (PST)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Subject: [PATCH bpf-next 0/4] bpf: Follow up on the patch list
+Date: Mon, 02 Nov 2026 07:32:10 -0500
+Message-Id: <20261102-bpf-patch-list-followups-v1-0-ddc8ccf40f43@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,220 +91,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMqC6GoC/x3MTQqDMBBA4avIrDuQHwjVq5QubJzUgZCETGoF8
+ e6mXb7F9w4QqkwC03BApY2Fc+qhbwP4dU5vQl56g1HGaa0MvkrAMje/YmRpGHKM+fspguScvSu
+ r/KgtdF4qBd7/6wf8VKK9wfM8LySpHKB0AAAA
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
-From: Joerg Roedel <joerg.roedel@amd.com>
+Alexei listed what the patch list series [1] still needed when he
+applied it [2]. This series covers items 1, 2, 3 and 5 of that list:
 
-Exercise the GET_AP_APIC_IDS NAE event from an SNP guest using a test-local
-GHCB encoder.  Verify the exact count and APIC IDs, missing RAX validity,
-zero-sized requests, invalid GPAs, and the 1024-vCPU descriptor boundary
-when supported.
+  item  problem                                           patch
+  1     the tests break with bpf_jit_harden at 2          2
+  2     the out-of-range test ignores the insn number     3
+  3     the comments on the aux data rules are gone       1
+  5     no test has a second patch with a jump            4
 
-Signed-off-by: Joerg Roedel <joerg.roedel@amd.com>
+Item 4 is about a commit log that is already in the tree. Items 10-12,
+bugs that were there before the series, come as separate fixes.
+
+With net.core.bpf_jit_harden at 0 and at 2 before the run,
+verifier_patch_list and patch_list pass and leave the sysctl as it
+was. Without patch 2 and with the sysctl at 2, 8 verifier_patch_list
+tests and patch_list/line_and_func_info fail. test_verifier and
+test_progs show no new failures.
+
+[1] https://lore.kernel.org/r/20261102012940.1756142-1-alexei.starovoitov@gmail.com
+[2] https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
+
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../selftests/kvm/x86/sev_snp_apic_id_test.c  | 180 ++++++++++++++++++
- 2 files changed, 181 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/sev_snp_apic_id_test.c
+Qiliang Yuan (4):
+      bpf: Document the aux data rules of patched instructions
+      selftests/bpf: Run the patch list tests with bpf_jit_harden off
+      selftests/bpf: Match the insn number of the out-of-range message
+      selftests/bpf: Cover a second patch with a jump behind a barrier
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 17a4256e9081..9f2b15250a2a 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -154,6 +154,7 @@ TEST_GEN_PROGS_x86 += x86/xen_vmcall_test
- TEST_GEN_PROGS_x86 += x86/sev_dbg_test
- TEST_GEN_PROGS_x86 += x86/sev_init2_tests
- TEST_GEN_PROGS_x86 += x86/sev_migrate_tests
-+TEST_GEN_PROGS_x86 += x86/sev_snp_apic_id_test
- TEST_GEN_PROGS_x86 += x86/sev_smoke_test
- TEST_GEN_PROGS_x86 += x86/amx_test
- TEST_GEN_PROGS_x86 += x86/max_vcpuid_cap_test
-diff --git a/tools/testing/selftests/kvm/x86/sev_snp_apic_id_test.c b/tools/testing/selftests/kvm/x86/sev_snp_apic_id_test.c
-new file mode 100644
-index 000000000000..8ad9c15091c2
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/sev_snp_apic_id_test.c
-@@ -0,0 +1,180 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <stddef.h>
-+#include <stdint.h>
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "sev.h"
-+#include "svm_util.h"
-+
-+#define GHCB_SAVE_RAX_OFFSET		0x1f8
-+#define GHCB_SAVE_SW_EXIT_CODE_OFFSET	0x390
-+#define GHCB_SAVE_SW_EXIT_INFO_1_OFFSET	0x398
-+#define GHCB_SAVE_SW_EXIT_INFO_2_OFFSET	0x3a0
-+#define GHCB_SAVE_VALID_BITMAP_OFFSET	0x3f0
-+
-+#define GHCB_MSR_REG_GPA_REQ		0x012
-+#define GHCB_MSR_REG_GPA_RESP		0x013
-+#define GHCB_MSR_INFO_MASK		GENMASK_ULL(11, 0)
-+
-+#define GHCB_HV_RESP_MALFORMED_INPUT	2
-+#define GHCB_ERR_MISSING_INPUT		4
-+#define GHCB_ERR_INVALID_INPUT		5
-+
-+struct apic_id_desc {
-+	u32 nr_entries;
-+	u32 apic_ids[];
-+};
-+
-+struct apic_id_results {
-+	u64 missing_info1;
-+	u64 missing_info2;
-+	u64 zero_info1;
-+	u64 zero_info2;
-+	u64 zero_rax;
-+	u64 invalid_info1;
-+	u64 invalid_info2;
-+	u64 valid_info1;
-+	u64 valid_info2;
-+	u32 nr_entries;
-+	u32 first_apic_id;
-+	u32 last_apic_id;
-+};
-+
-+static void ghcb_set_field(void *ghcb, size_t offset, u64 value, bool valid)
-+{
-+	u8 *valid_bitmap = ghcb + GHCB_SAVE_VALID_BITMAP_OFFSET;
-+
-+	*(u64 *)(ghcb + offset) = value;
-+	if (valid)
-+		valid_bitmap[(offset / sizeof(u64)) / 8] |=
-+			BIT((offset / sizeof(u64)) % 8);
-+}
-+
-+static u64 ghcb_get_field(void *ghcb, size_t offset)
-+{
-+	return *(u64 *)(ghcb + offset);
-+}
-+
-+static void do_get_apic_ids(void *ghcb, gpa_t buffer_gpa, u64 pages,
-+			    bool rax_valid)
-+{
-+	memset(ghcb, 0, PAGE_SIZE);
-+	ghcb_set_field(ghcb, GHCB_SAVE_SW_EXIT_CODE_OFFSET,
-+		       SVM_VMGEXIT_GET_APIC_IDS, true);
-+	ghcb_set_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_1_OFFSET, buffer_gpa, true);
-+	ghcb_set_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_2_OFFSET, 0, true);
-+	ghcb_set_field(ghcb, GHCB_SAVE_RAX_OFFSET, pages, rax_valid);
-+	vmgexit();
-+}
-+
-+static void guest_code(void *ghcb, gpa_t ghcb_gpa, void *list,
-+		       gpa_t list_gpa, struct apic_id_results *results,
-+		       u64 expected_vcpus)
-+{
-+	struct apic_id_desc *desc = list;
-+	u64 msr;
-+
-+	wrmsr(MSR_AMD64_SEV_ES_GHCB,
-+	      (ghcb_gpa >> PAGE_SHIFT) << PAGE_SHIFT | GHCB_MSR_REG_GPA_REQ);
-+	vmgexit();
-+	msr = rdmsr(MSR_AMD64_SEV_ES_GHCB);
-+	if ((msr & GHCB_MSR_INFO_MASK) != GHCB_MSR_REG_GPA_RESP)
-+		goto terminate;
-+
-+	wrmsr(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
-+
-+	do_get_apic_ids(ghcb, list_gpa, 1, false);
-+	results->missing_info1 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_1_OFFSET);
-+	results->missing_info2 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_2_OFFSET);
-+
-+	do_get_apic_ids(ghcb, list_gpa, 0, true);
-+	results->zero_info1 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_1_OFFSET);
-+	results->zero_info2 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_2_OFFSET);
-+	results->zero_rax = ghcb_get_field(ghcb, GHCB_SAVE_RAX_OFFSET);
-+
-+	do_get_apic_ids(ghcb, BIT_ULL(52), 2, true);
-+	results->invalid_info1 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_1_OFFSET);
-+	results->invalid_info2 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_2_OFFSET);
-+
-+	do_get_apic_ids(ghcb, list_gpa, 2, true);
-+	results->valid_info1 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_1_OFFSET);
-+	results->valid_info2 = ghcb_get_field(ghcb, GHCB_SAVE_SW_EXIT_INFO_2_OFFSET);
-+	results->nr_entries = desc->nr_entries;
-+	results->first_apic_id = desc->apic_ids[0];
-+	results->last_apic_id = desc->apic_ids[expected_vcpus - 1];
-+
-+terminate:
-+	wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
-+	vmgexit();
-+}
-+
-+static void run_apic_id_test(unsigned int nr_vcpus)
-+{
-+	struct apic_id_results *results;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	gva_t ghcb_gva, list_gva, results_gva;
-+	gpa_t ghcb_gpa, list_gpa;
-+	unsigned int i;
-+
-+	kvm_set_files_rlimit(nr_vcpus);
-+	vm = vm_sev_create_with_one_vcpu(KVM_X86_SNP_VM, guest_code, &vcpu);
-+	for (i = 1; i < nr_vcpus; i++)
-+		__vm_vcpu_add(vm, i);
-+
-+	ghcb_gva = vm_alloc_shared(vm, PAGE_SIZE, KVM_UTIL_MIN_VADDR,
-+				   MEM_REGION_TEST_DATA);
-+	list_gva = vm_alloc_shared(vm, 2 * PAGE_SIZE, KVM_UTIL_MIN_VADDR,
-+				   MEM_REGION_TEST_DATA);
-+	results_gva = vm_alloc_shared(vm, PAGE_SIZE, KVM_UTIL_MIN_VADDR,
-+				      MEM_REGION_TEST_DATA);
-+	ghcb_gpa = addr_gva2gpa(vm, ghcb_gva);
-+	list_gpa = addr_gva2gpa(vm, list_gva);
-+	results = addr_gva2hva(vm, results_gva);
-+
-+	vcpu_args_set(vcpu, 6, ghcb_gva, ghcb_gpa, list_gva, list_gpa,
-+		      results_gva, nr_vcpus);
-+	memset(addr_gva2hva(vm, ghcb_gva), 0, PAGE_SIZE);
-+	memset(addr_gva2hva(vm, list_gva), 0, 2 * PAGE_SIZE);
-+	memset(results, 0, PAGE_SIZE);
-+	vm_sev_launch(vm, snp_default_policy(), NULL);
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
-+	TEST_ASSERT_EQ(vcpu->run->system_event.type, KVM_SYSTEM_EVENT_SEV_TERM);
-+
-+	TEST_ASSERT_EQ(results->missing_info1, GHCB_HV_RESP_MALFORMED_INPUT);
-+	TEST_ASSERT_EQ(results->missing_info2, GHCB_ERR_MISSING_INPUT);
-+	TEST_ASSERT_EQ(results->zero_info1, 0);
-+	TEST_ASSERT_EQ(results->zero_info2, 0);
-+	TEST_ASSERT_EQ(results->zero_rax,
-+		       DIV_ROUND_UP(sizeof(struct apic_id_desc) + nr_vcpus * sizeof(u32),
-+				    PAGE_SIZE));
-+	TEST_ASSERT_EQ(results->invalid_info1, GHCB_HV_RESP_MALFORMED_INPUT);
-+	TEST_ASSERT_EQ(results->invalid_info2, GHCB_ERR_INVALID_INPUT);
-+	TEST_ASSERT_EQ(results->valid_info1, 0);
-+	TEST_ASSERT_EQ(results->valid_info2, 0);
-+	TEST_ASSERT_EQ(results->nr_entries, nr_vcpus);
-+	TEST_ASSERT_EQ(results->first_apic_id, 0);
-+	TEST_ASSERT_EQ(results->last_apic_id, nr_vcpus - 1);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	unsigned int max_vcpus;
-+
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SNP_VM));
-+	run_apic_id_test(2);
-+
-+	/* 1024 IDs cross the one-page descriptor boundary. */
-+	max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
-+	if (max_vcpus >= 1024)
-+		run_apic_id_test(1024);
-+	else
-+		pr_info("Skipping vCPU-count boundary test (max vCPUs: %u)\n", max_vcpus);
-+
-+	return 0;
-+}
+ kernel/bpf/fixups.c                                | 18 +++++++++-
+ .../testing/selftests/bpf/prog_tests/patch_list.c  | 10 +++++-
+ tools/testing/selftests/bpf/prog_tests/verifier.c  | 17 +++++++--
+ .../selftests/bpf/progs/verifier_patch_list.c      | 41 +++++++++++++++++++++-
+ 4 files changed, 81 insertions(+), 5 deletions(-)
+---
+base-commit: cd5bc55288d4fd999595c8f2af6a5408cbe92a52
+change-id: 20261102-bpf-patch-list-followups-e6638030c913
+
+Best regards,
 -- 
-2.53.0
+Qiliang Yuan <odys.yuan@gmail.com>
 
