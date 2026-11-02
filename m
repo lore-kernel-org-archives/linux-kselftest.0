@@ -1,100 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.51
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793657334;
-	b=oSX9bUekDzHtFMfh8DwqgY8ZQO510NeOlsSAkAWR6PaYsMDQfhlq3dfE88NZkbRCj5f/
-	 +vQDguozbC2Lhv19ZcOtqPtVtcHi/tr3VyNRTLv6qoXvbhDh8iistqXe6ZloQIK3OZ9fp
-	 cTpMODtFRxp2Gi29o2KS5n8TLmQd1brB2iDKIyzd/lYZAjZ1vZYGD8bGEZhXbzlB/Ra7k
-	 nf7chAFykjEoA/hjQVqDaQlz6Rl+Fz8rqUfmfQQXhX3RXiBDqVOHQw41pnDwEDprKehDs
-	 c2TaQF5Rhxb0doDV6RuQx+lGv3iwYJcs9LRethT+dt1sgW5T5jfTlgt8uhELKNQC1Qw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793657334;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793658979;
+	b=P55UBXy4LnM7OpF9dy6cD3u1oI8DiFvc5d+rIvoEKidWI4PspTh8SlSbT3Y5XU/in/MS
+	 E8Ylv9qMnHnJIWLXEmV9ZkWeoXYXlG9A5bKlQpxbFgt56vnv05sbh1ln1k5yn7Z69oSmB
+	 7x+hl0ofgat/MeVg5Rz+JiuVJZDJDB7ltqEkYUrjEdamzRVnOVCuBpWDHqogFPT+I94Gv
+	 4kigf7HMzTlYJUt+ZiJ/4lmVgo17Y6opxpQoNJWmqMLi/S5mYrCY1OvhLSwKnFktQvmN8
+	 2hvEQUM54Su0hWpIwsiXrleciZZaCIIaoNqDpo989b9nVgVZB0/VXd83ZjyK+RUbM3g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793658979;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=04iaPr/Q4xOZpTpewylydaBAPbXSsxNLl37nHemVSI4=;
-	b=EaaqyfiXyIVn/loVAv1nwwOUfG06leRH59I86oWP9U4zUgL33CIKfAKdtWx00LX8ZYb4
-	 OTtX+qwpu57axub/JuZsVvs91NOQJuOwWMKt9Gi6VtcElxxBkxTgFqImqqldcs2DJevVT
-	 E8dsaz1yWCWg3XfmZ/1Wf2OENHw2vBF7xK20D4sVY6uLUkkD3lW6BflWvP7RC33k4uwHR
-	 rUIiwZzY6T9cxPkAR4TWS4X1cjHFQe/gP7kfpIJbYgbpU/RXHG5+HGdcp5c8lvErErMIU
-	 RWu1V9VCUvdhHMrqoVXvFa8Pz8K1vd+HSY8zeEWMDXhMqumwR8As6MiwQ2CsURDp2Fw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NQVmmG6P;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.51
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=+2B62P6pygpI8xDXVCsGnEznvKzC8xpzSm47oWeOBg4=;
+	b=XOpvxBF2xz6HuS3L9c7fhB3QuKf2348mdwD+pZvOPdaCYyHNfPMDlULsX5Bop4I+ROco
+	 7eRkWxHVnlDRqaQpIAPEh86T/9Aq6aSCtxhYTQItLGk+x8fCkKouxBO9jTGNVIWdlU2ti
+	 6vASg+0hmwMalIiA6JKVVkbOF/eMymLcCEAMtbI6UtQPvj3+vVjHdZRla1bA9s67g9JYr
+	 6OolZ1SOsqbxDLGuMNA1E7V6rdAA4e7BaWtEC0wwlyhGrXmFn9+cIeIkkPLzQ/e+Y2da6
+	 RexoFIv+MXKmYfasmQaVlDvmLCYG1gy+D0SGsPLmA8RNnG1wN3NNS1xqJd7muEi7utg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PRSdtq08;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F853606A339
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 22:08:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F853606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528C7606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 22:36:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 528C7606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NQVmmG6P
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b1b12de661so3163a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 14:08:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793657332; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VFwlD8p6m9Uyg8pIUX1OfvP4p8GkNhQ5EMa3t2FBJq/Kejdb00TZz4dgnEnT9C1n0M
-         gULGESC1sIVI/IuofB+gcm2I+T1dfDsIQjYV/OLY+Zc9jVQRkzIMbaI+GrT9DUN0ltQh
-         dIPhIPh/1kF+3rRURzraC9VqcOKQfwkkNjwl5M9JwjWgXBg0Y5oIKVwqO7p6/sCITv1a
-         3uRGUYUcsUi7jivjD1JAkLrsKVNGK4f0qxgpm+ZW76Te2nS7mXqNpjdZJTPsWrQgxEve
-         XZO4G3KA78BZaJZ1+8qUWI4DXn2Y/cAIsKUfMnwiik0ZkcyzRT61va6+fZWI0G5L12TC
-         qWHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=04iaPr/Q4xOZpTpewylydaBAPbXSsxNLl37nHemVSI4=;
-        fh=Qv8ZzCmVTbJ8Powt7A4n2hXounfEhZlMbnkMU6EHbiA=;
-        b=JcflyPdDNwvH6iPy1ScJihKLD1P8XNeFs/rHnScTpvbg33O51TB6lhm2UtVWHn8mST
-         xuWqCyRDL0A9EFIlGeq61bSaeAl/wVCSsVUnbIi9TN4Rhmuga/lQ+glCcQYJ3V7d1Su0
-         /DpFXsKoHSn3bow9hL3lWVypx8/XQj4UfvQP4xvRZ/vRquj4Vmb/sg6bT+0JX1Ay0gDn
-         Aasbsm/K4eFHpMKQMOpzj8PQRSVvFRdAkQ1LVYRksvrd2IERmOCHUBNUfhVXgb65QxuB
-         ldmJMxhiv4fKLMXoN64TRBYnVD0IVeDl/nkgTadwnXARisBGvPp9+YtoB9AKNsRXHzep
-         I/tg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PRSdtq08
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a0673d9bd2so2053811b3a.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 14:36:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793657332; x=1794262132; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1793658979; x=1794263779; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=04iaPr/Q4xOZpTpewylydaBAPbXSsxNLl37nHemVSI4=;
-        b=NQVmmG6PVNjIV2neyCA9M2St1Rsk5SaTQnqw5Z6BjHpTxwxLNWVY8mIkPbVqVv43Ez
-         g1kwACtxFVkWQNTvKZae+D3NXZb1mGV/FYrWMJmL1ujN5VbI0phU2UUIvZ1RySl3e3Zo
-         pSWAqChgMM4wStuo1gtjzteMY/kaOtiT6M570xyqph8/dEsROs5zKnwpOJAET9qepMSV
-         vCdB69pn/VvgSV+86EtlwKhYvkM3M3xgeJW6A9qGry6TY6rHG0YTPrb0+QZyIpwScHCC
-         ZGyoBcYE1XaKnaLT2NSoMPElQaaW3yDHAgebA3x6qLhgrJbVVPEyWmoctHmuVm5Jwrjd
-         9rQg==
+        bh=+2B62P6pygpI8xDXVCsGnEznvKzC8xpzSm47oWeOBg4=;
+        b=PRSdtq08wl5FtZ7YS71F2pJ+fvUKNonuRqIl/3w069O+LydfKKf3y1lbdaULR1O9y4
+         Ref/0pdN127yUikWeo1tveFpvSxg3gJV6hhnV7pgUse7yY4f3BxnTSGvSgW9UKVsugFu
+         V4t3N9gHX51MYQ3e2qkaG0ai9zUmEckq4VxxtW2ItS+pIbA1aP8kvdqLrCyvjk8csSPL
+         KfDs0FO4R0jDEDbcmYBIHPG3BnjfSuq7BQnGTem7bEam2MREX0VaMcLK7pYU4fjyjnHq
+         nuHokar16KkJJhXoitdL9rkBIbfqr93oTFjFwTDtugRESc0n9V0OgKK6VwYfjgx3VPXw
+         yWgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793657332; x=1794262132;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793658979; x=1794263779;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=04iaPr/Q4xOZpTpewylydaBAPbXSsxNLl37nHemVSI4=;
-        b=zm6QlrZM9d0I8gL07rb/I3EZz4mpTMSIbZrAF1OciQinLiI6puQgGvbpOnyhyi1aOm
-         8ofiouDhaiYawRz/J6gRch+/iX2YaLBlvCeL/40HbOIKBrlgM5RcCIKcgvG89CXZioal
-         wWWayzFcxwodEgJH+OG4zSMY0RDAcFGO8Ayi5kgM70oZxx6UxVjLmJJVdrzM4s72vtbV
-         ds79XpFlniNTUEO7X+PXELcXw8henrumlcfpS4jOEYLs6n0XCVohq/WCTGv5yqUSN68F
-         1i622wdQShOg02eHMjVzj6YkTbRT0it58osIY1NRpp+24nXNt8xbwTObGq8NaPmXE8IG
-         F6ZQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwIxJAk0S7Cn+ZYbEPAnzo1QCYqFKe0BVBDn+Ab9+RaSWjslbTlv5PbJbnQcJzq/8FhtcjWSWu1Q8PUXfFGHT0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9w5AlNmc/cRkx9gD+rtQUqBvlsIAOjKAlVgTh09rFZL+ie1rfM
-	8WvpxKqEbU1QxggOEzeIB93NDji5a4StKoOJ9C+tuTc0ACEwxm29EmheS7P8bw6lajLlTlOI4Es
-	8sj0Gr/coZjdV1LZvr3jjTkKHaVSnAkhuiDM8TuYs
-X-Gm-Gg: AYBFou38R8UOBj3LvcDs1gLMqfQJH94Qljb6KkJpzdI1MJBfc9urnH8JuBVWuo0RiXE
-	PGhavQ26lTjqVlmULow4PoP4AH6liO52FJA/0Bb2+C1vssW1XYh2mgzgnzLfcwRU1nwtEg/5RhH
-	s8iUbG9Fb54NN5RtZQjwmrshtKLD+lgFIJmyPFLEpDPGsArnSmvbLUsDhO6Yrf1wV5BhyuMvqS5
-	q4DCgO2vxDkB8XwFDbYagNn592Ipz7pssEG9P7HUjk3Z+AUp6Num3jNHUhKqvZI2kh0uOCuXHx6
-	fm+vHI3ojQhhJqCMmqi+2KvJJpw3/a6wbgIkqRTKFDoAZirOwmDvJ4u2tUjCaVPTwA4inyAHxhA
-	fbgT3+0rMypF7D+O+yGenmLhSN3u4Hg3B9B+hF8Q1Qy+zj9oxmj5QIH8/Rt5oa2fXkmU=
-X-Received: by 2002:a05:6402:438d:b0:6b3:f12d:7405 with SMTP id
- 4fb4d7f45d1cf-6b53e778d41mr6126a12.14.1793657332128; Mon, 02 Nov 2026
- 14:08:52 -0800 (PST)
+        bh=+2B62P6pygpI8xDXVCsGnEznvKzC8xpzSm47oWeOBg4=;
+        b=P6p/j6D4l6iOyV26WgPaPHTo2U9tbAcUSXNdlRYgNyOktnbBVxXu9b0Q9O2oVoB0zN
+         MYhbKm3b7UYWR9ZGQXRdmLOC5itJlAYI0yW4pZxeE4QyiEzcmrZYMlEE+QxsFnm5mMIV
+         CyeTvtpdHvhFwQf3Aim8LiPT7YO2Ns+7IhNr5TgpDgQC8JloJ7HmasFZ6jr8cXMmoy8w
+         +hAE73V3pWeqGCER1X+0k3D5tom0N6mDGD91nXbiVfSmwdprrhUOWUkiEj0vD5kxmz1f
+         V8pyaTRB5QnarCnbJyj7P+9bW6FclSduoVTLioUB28REFacWHLa89rW+d+Db8KShXA9/
+         FRKA==
+X-Forwarded-Encrypted: i=1; AKwUvBxKQrrMM4EYv0xHcibIf+bvMqu2T6eZd0D0Bf4M5u5UiyHeyr7W69UI+r2foN2z95xeotXr7ptdrJ/mhp3KnBE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLrhY5RwPpGJymJZJs7bApLwFQQUg/KY3BTCaFgx+Q4cYdYhw1J
+	+NKUrGoRgKtDZI/Ziy7DHtnet12TBpre50CnANq9UCR+W/dZMNY1/w66
+X-Gm-Gg: AYBFou1BNgoMAnLCne4RrHD/CktPiWf8u/fUNQoHoAJ0B8oOtq+BFuBAYGj224kZY27
+	X2H8wYCpq7hfq64K3Oo3ziY0pOyP4Y7KAOyt4cYrGNLXct++Nep/3lBhSCq6BRMPTLM/EjPHUs/
+	O+K901ESlBVCgmpkBsimVFUq5qsAmWkEDj8oCPAobzER6cNAs5q8yvMvyEfE/BJwC/2dMsbBhMa
+	YO23BhGkP/GvCXqJw7SG9uiBd4Dq/Kf8X6oQhmbhaqUSi+NOzdcEQHd7lEdljOEdSBOVepDGkKo
+	WNIiTjj/nVtGyFMKFLXJ6DGuC0U5JAWnV5WtrxJEZ0wc7kHuvXC3NXL9EGThOM4yULbr4NptZBW
+	gzYyQhbZfZ6GElItJKczQUhrWUXEkFWDGVLfGGCsALmUqNEhj5qLgp8zkbt7fAq4CL58guIhYPa
+	vm63jGAEfHZWM/wm6gCMogEPNkkzwmwU19C3riNzhdHcKmOHCloibWA4ZCiuOhictr7nqTwnlw7
+	Hio3LvogxrfnWzasjaKCN3XJDO8bDZxZ24eu9e2VNwlqz+rrTtS011JIKn7FnA3ZtzQADzzMWNJ
+	cmI5G9dJYtU9P+qrezNvys7+i8XTQe1KDs94GZQ2hPwosU6cZ9cKLST12A7iE+A3y4rCpzP9eEK
+	YBQCGJ9M45qVKQnph2MOYf3yet2O+JoF61w==
+X-Received: by 2002:a05:6a00:288c:b0:89e:9c7e:fd5e with SMTP id d2e1a72fcca58-8a9bd1facdbmr9633354b3a.9.1793658978321;
+        Mon, 02 Nov 2026 14:36:18 -0800 (PST)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aada3d479dsm2513387b3a.39.2026.11.02.14.36.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 14:36:17 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 02 Nov 2026 22:36:17 +0000
+Message-Id: <DML31IUICB7B.2FO0J06WCREC8@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <john.fastabend@gmail.com>, <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <jose.marchesi@oracle.com>, <david.faust@oss.qualcomm.com>
+Subject: Re: [PATCH bpf-next v3 3/8] selftests/bpf: report SKIP for arena
+ tests a compiler cannot build
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Vineet Gupta" <vineet.gupta@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20261102220717.4079739-4-vineet.gupta@linux.dev>
+References: <20261102220717.4079739-1-vineet.gupta@linux.dev> <20261102220717.4079739-4-vineet.gupta@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,93 +105,147 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030083539.777877-2-almasrymina@google.com>
- <179357408146.3131.2882435952119280563@kernel.org> <CAHS8izMt+5HBjkOOsb-FrwKoXxEBuDn=gf5p+64akYS=SAoQrQ@mail.gmail.com>
- <9afff44d-f8eb-4549-8aae-f99a53339319@redhat.com> <20261102185856.1824792-1-almasrymina@google.com>
- <f4f0fbd6-63e4-42d3-87bf-9f888a8de1a8@redhat.com>
-In-Reply-To: <f4f0fbd6-63e4-42d3-87bf-9f888a8de1a8@redhat.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 2 Nov 2026 14:08:40 -0800
-X-Gm-Features: AclHuK_l2m6u_KEy2pbXoZVvzOwIMj8tI1lJiwLeWg-R9MKJCqxW8rPbMreP4XU
-Message-ID: <CAHS8izNQjF6nzPym-kXO2Nr6jv5oKsnFGCNYWZH_zBTGoT98ew@mail.gmail.com>
-Subject: Re: [PATCH net v5 1/4] net: devmem: unmap dma_buf synchronously on
- queue uninstall
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev-bot+sashiko@kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, sdf@fomichev.me, 
-	kaiyuanz@google.com, kuba@kernel.org, bobbyeshleman@meta.com, 
-	asml.silence@gmail.com, dw@davidwei.uk, ap420073@gmail.com, 
-	davem@davemloft.net, edumazet@kernel.org, horms@kernel.org, shuah@kernel.org, 
-	sumit.semwal@linaro.org, christian.koenig@amd.com, phasta@kernel.org, 
-	andrew+netdev@lunn.ch, sdf.kernel@gmail.com, hawk@kernel.org, 
-	ilias.apalodimas@linaro.org, daniel@iogearbox.net, razor@blackwall.org, 
-	tariqt@nvidia.com, kaifengw@google.com, dtatulea@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 2, 2026 at 2:01=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
-e:
->
-> On 11/2/26 19:58, Mina Almasry wrote:
-> > On Mon, Nov 2, 2026 at 7:29 AM Paolo Abeni <pabeni@redhat.com> wrote:
-> >> On 11/2/26 00:16, Mina Almasry wrote:
-> >>> On Sun, Nov 1, 2026 at 3:01 PM <netdev-bot+sashiko@kernel.org> wrote:
-> >>>>
-> >>>> - [High] The dma_dev use-after-free this patch says it fixes can sti=
-ll
-> >>>>     happen for RX bindings made on a virtual device that leases queu=
-es,...
-> >>>>
-> >>>
-> >>> I know about the issues with leased devices. That needs a bit of a
-> >>> rework, which I have done locally, and would like to send out as a
-> >>> follow up fix.
-> >> Will such follow-up rework the code touched by  current patch/series?
-> >> how much? I'm under the impression that at least the fix for the issue
-> >> reported here would be quite overlapping.
-> >>
-> >> /P
-> >
-> > I pushed the follow-up branch on top of v5 here so you can see the exac=
-t diff:
-> > https://github.com/mina/linux/compare/devmem-teardown-v4...devmem-lease=
--bind-map-dev
-> > (commits: https://github.com/mina/linux/commits/devmem-lease-bind-map-d=
-ev)
-> >
-> > There is some overlap (~55 lines of v5 touched across a 6-patch +262/-9=
-9
-> > follow-up): it renames binding->dev/vdev to binding->map_dev/bind_dev, =
-passes
-> > the net_device explicitly to net_devmem_lock_dev(), factors out
-> > net_devmem_close_rxqs(), and replaces the !rxq->lease / !netif_is_queue=
-_leasee()
-> > skips in net_devmem_dev_unregister() and mp_dmabuf_devmem_uninstall().
-> >
-> > I kept it separate only to keep this net fix smaller and easier to revi=
-ew,
-> > since the lease issue is pre-existing. Happy to either land v5 first an=
-d send
-> > those 6 patches right after, or fold them into a v6 if you prefer avoid=
-ing the
-> > churn.
-> I hoped for something smaller :)
->
-> I definitely would not fold the 2 series.
->
-> I'm wondering if this could be considered net-next material? pointing to
-> net-next will offer better guarantees for all the work to land in the sam=
-e
-> release (no need to repost in such a case, I can apply this one to net-ne=
-xt
-> directly).
->
+On Mon, Nov 02, 2026 at 02:07 PM Vineet Gupta <vineet.gupta@linux.dev> wrote:
+> Give each guard an #else with a dummy marked __skip(), so the skip gap is
+> reported rather than invisible.  Add __skip_without_arena for it, which
+> expands to __skip() with a fixed reason when the compiler cannot do arena.
 
-I'm more than happy with net-next. Honestly so many AI-foudn fixes
-requiring so many refactors that net-next makes sense most of the time
-now, for me at least. Thank you Paolo!
+How about the following approach instead...
+looks much simpler to me...
 
---=20
-Thanks,
-Mina
+pw-bot: cr
+
+diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c b/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c
+index b5a01cb..16c3dd9 100644
+--- a/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c
++++ b/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c
+@@ -23,8 +23,6 @@ struct {
+ /* volatile to force the scalar reloads below */
+ volatile u64 stash;
+
+-#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+-
+ SEC("syscall")
+ __arch_x86_64
+ __jited("...")
+@@ -93,6 +91,7 @@ __jited("	cbz	w4, L0")
+ __jited("	add	x4, x28, w4, uxtw")
+ __jited("L0:	{{.*}}")
+ __success
++__skip_without_arena
+ int arena_arg_jit_args5(void *ctx)
+ {
+ 	u64 __arena *val;
+@@ -113,6 +112,4 @@ int arena_arg_jit_args5(void *ctx)
+ 	return 0;
+ }
+
+-#endif /* __BPF_FEATURE_ADDR_SPACE_CAST */
+-
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index d7f706c..4ec840b 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -116,6 +116,10 @@
+  *                   feature the toolchain or JIT cannot provide, so a run does
+  *                   not report OK for coverage it never executed.
+  *
++ * __skip_without_arena
++ *                   __skip() when the compiler does not support the arena
++ *                   address space, nothing otherwise.
++ *
+  * __log_level       Log level to use for the program, numeric value expected.
+  *
+  * __flag            Adds one flag use for the program, the following values are valid:
+@@ -156,6 +160,11 @@
+ #define __success		__test_tag("test_expect_success")
+ #define __description(desc)	__test_tag("test_description=" desc)
+ #define __skip(reason)		__test_tag("test_skip=" reason)
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++#define __skip_without_arena
++#else
++#define __skip_without_arena	__skip("compiler does not support the arena address space")
++#endif
+ #define __msg_unpriv(msg)	__test_tag("test_expect_msg_unpriv=" msg)
+ #define __not_msg_unpriv(msg)	__test_tag("test_expect_not_msg_unpriv=" msg)
+ #define __msg_next_unpriv(msg)	__test_tag("test_expect_msg_next_unpriv=" msg)
+diff --git a/tools/testing/selftests/bpf/progs/jit_insns_arena.c b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
+index 95736ea..77d135a 100644
+--- a/tools/testing/selftests/bpf/progs/jit_insns_arena.c
++++ b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
+@@ -106,6 +106,14 @@ int cast_to_user(void *ctx)
+ 	: "r1", "r2", "r7", "r9");
+ 	return res != 0;
+ }
++#else
++SEC("socket")
++__skip_without_arena
++__success
++int arena_unsupported(void)
++{
++	return 0;
++}
+ #endif
+
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+index dbdea14..428b984 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+@@ -181,7 +181,6 @@ int free_reserved(void *ctx)
+ 	return 0;
+ }
+
+-#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ #define PAGE_CNT 100
+ __u8 __arena * __arena page[PAGE_CNT]; /* occupies the first page */
+ __u8 __arena *base;
+@@ -220,6 +219,7 @@ __noinline int alloc_pages(int page_cnt, int pages_atonce, bool first_pass,
+
+ SEC("syscall")
+ __success __retval(0)
++__skip_without_arena
+ int big_alloc2(void *ctx)
+ {
+ 	__u8 __arena *pg;
+@@ -290,9 +290,9 @@ int big_alloc2(void *ctx)
+ /* Nonsleepable because it binds to a socket program. */
+ SEC("socket")
+ __success __retval(0)
++__skip_without_arena
+ int big_alloc3(void *ctx)
+ {
+-#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ 	char __arena *pages;
+ 	u64 i;
+ 	int err = 0;
+@@ -314,16 +314,14 @@ int big_alloc3(void *ctx)
+
+ 	bpf_arena_free_pages(&arena, pages, LARGE_PAGE_CNT);
+ 	return err;
+-#endif
+-	return 0;
+ }
+
+ /* SYSCALL programs are always sleepable. */
+ SEC("syscall")
+ __success __retval(0)
++__skip_without_arena
+ int big_alloc4(void *ctx)
+ {
+-#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ 	char __arena *pages;
+ 	u64 i;
+ 	int err = 0;
+@@ -345,8 +343,6 @@ int big_alloc4(void *ctx)
+
+ 	bpf_arena_free_pages(&arena, pages, LARGE_PAGE_CNT);
+ 	return err;
+-#endif
+-	return 0;
+ }
+-#endif
++
+ char _license[] SEC("license") = "GPL";
