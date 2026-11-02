@@ -1,49 +1,68 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793613413;
-	b=dMQzWcQt6nAwEJ2zsLkSMzcMFlr1fCQUnF5wF6oPE+0Q2dQI6W85fHiQlCum1KoFuKOF
-	 kDG3gwI9CqlR34DbI0kNEK5X/J0sYpKs4vtkbd8CBVaUBe0hR5oDvRbIFjb1u0PvUS9oa
-	 acyY+3rKoML9kVJousx7QRZZFp80FzTqCJZfueSTeamzsbygYCR/XOmJCYvgOo8Uey9hC
-	 mXqmgPDCMgCpD4O4M3W1xAdudSvbTt1KeGiZwqrjHaa8ZRvGwHB7NNWSiNnQ6H4cpYPbv
-	 bVzmMBK89N8VxZO/UZ6EtNN7tTiAf7UD/usNTaAdlMW8XElW+QmaxiPCB0T+AKZgf9w==
+	t=1793613750;
+	b=i3hr3p7rvME+mKkrUqL732oft0Ryz3hCDQt/WlXkmHFhA/vCtfsV4T9QlRpZwQcXKwT8
+	 idUyOZ8X7jb8pzUw9Rz4oe17S8qniVsEtpG/YoNA2E7gjPK71Sfq63jxxrseCSy9KVv+d
+	 d/DFhZ81Nd1gXegRJA+O+iyjk6T02KB0q5aCkZ5A2dqqOv3Xzn2DDWftuD7ol+trfipks
+	 3X7npggSbnlB5tBwdyqx4nX796MHzo5K0s+AJjWgE89A0tMEtpX7A+bdNz5ivugjt87Zq
+	 CrliVqr2ugHPOHnDueEdbSYRyylGfQNsc8PhPchjCfll5vvI7jYHEHKZLSOCfwdJ2hg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793613413;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=jEXZn25mOSnRSnFkDPXVKbT86gLRaygrv7hBJoYn83Y=;
-	b=Sw75FOHCMo/wJKzDrXOZTIQoyRwVoCdlqEOBUWPc4hvzXBGn6jqOBWo1IuA4M0kxFXTP
-	 PEMK+Ivv3HNJnhdp91bLIqzSQ4TilP38GMoNgyG2VFknD5GUk+z0SlxS16GUqaAbEh9IU
-	 k0BY4ON3JqawT0zVnDikWgjeHOAXOM/YrYuFVSANeIgEPJf456sXygsvONTjlFfxYQfr6
-	 m/MVeeZro+TIadWx8S1TYU6RLrqmxro1NPo/3n1/9GKLgsW405LSujQh83KG8smPII6ir
-	 jSAXP8H6r6WQK6bXXVzxAIpaxR442Aia3M9CjwdKljsHEumz6+7cpLk8Qe2sgIIH/NQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793613750;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=W9ES0MdL/PxxpQ6IyNXfcZ2egSpleg7sxTTOorn7k2o=;
+	b=PkpAo5nyhwi38gQH+WQqDhUdjTeyMJWfGugwz5rXO457dJeLq58t+zN4ldNKiKYQghkl
+	 GcaaY9z24ATnslIFBWQ4k7XwhJIJeahWneHnqjeE+jPv9HSAG8Pv7Tgxt0Y8ZOrEfyIMT
+	 kkC1wWFLwYFl+HeIktcjb7vZouJCnFgcPyWPZprk6RnYSBFnLhBGvdNej+KKRO8GWBHsg
+	 C0Ile0QHMKpMaGQ8GjEdU4Y9JXwz2Q5LSx2LCf3trsLOmv+fGaI10jIMOO3xXGihY6sEG
+	 rhDZvwxxBrz2Mpq6uXNBT+O7rbnNsN2RwFtadNXfmj7kCZVGKEcqfHGOiobncKprIvA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arm.com;
 	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Zg48mlwk;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=NJS9yRpP;
 	arc=none smtp.remote-ip=217.140.110.172
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A60606A33D;
-	Mon,  2 Nov 2026 09:56:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4A60606A33D
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB16D606A324;
+	Mon,  2 Nov 2026 10:02:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CB16D606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Zg48mlwk
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=NJS9yRpP
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF3DE1595;
-	Mon,  2 Nov 2026 01:56:48 -0800 (PST)
-Received: from [10.57.16.53] (unknown [10.57.16.53])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E43FB3F59E;
-	Mon,  2 Nov 2026 01:56:49 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CFB71595;
+	Mon,  2 Nov 2026 02:02:26 -0800 (PST)
+Received: from a081061.arm.com (unknown [10.163.156.187])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EEDE13F59E;
+	Mon,  2 Nov 2026 02:02:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793613411; bh=a+LR+CmbFBIcR2fiRj3wp8/wI+yAEpxcNhNDKOn/P+0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Zg48mlwkHNaWfJLi8qkWbskLRD3Pspw0QyjdDGJgFahD1n2OQCvVFP2WKnQ6GxZG6
-	 nbsNHPO6jsU2jOL517F/o6Cxqe5x79PUYiiL5XhOm8Bd/BYbyZUE72pzyB3COFi8C1
-	 eagMYzWRrNx5SLM9k3X3rs43KFd3aK/61j/dJIio=
-Message-ID: <3005f6f5-3b6a-4139-a170-1f60d93c9902@arm.com>
-Date: Mon, 2 Nov 2026 09:57:20 +0000
+	t=1793613749; bh=CWd3JrR/28ban77aC5ukTIuSZHmjR150vlaanvtwD58=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NJS9yRpPJ0mwANfpaNDgHapiNm0wUXsKOOQhKctdse7NVjXIzOdEVbULyGILaOUUo
+	 bJ6sMPgulpbJHri3Ts/Uj7EPudgkIZBRh5e4ApzBD2p8r3x6FzMTUHa1QumtI44Ltz
+	 ZMYEaohBrYzoTt6Tdrm3qTvhQ7Q477frqfLJ5Fh8=
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Park Tae-sun <ts930@dgu.ac.kr>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: [PATCH RESEND v2 00/12] improve mremap_test
+Date: Mon,  2 Nov 2026 15:31:59 +0530
+Message-ID: <20261102100211.141831-1-sarthak.sharma@arm.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,189 +72,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/6] powercap: dtpm: Use generic powercap hierarchy
- helpers
-To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-Cc: Daniel Lezcano <daniel.lezcano@kernel.org>, rafael@kernel.org,
- Heiko Stuebner <heiko@sntech.de>, Shuah Khan <shuah@kernel.org>,
- Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1793288783.git.daniel.lezcano@oss.qualcomm.com>
- <f34635d2ce1d5c741968708e6349f7f059b03173.1793288783.git.daniel.lezcano@oss.qualcomm.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <f34635d2ce1d5c741968708e6349f7f059b03173.1793288783.git.daniel.lezcano@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Daniel,
+This series fixes correctness issues in mremap_test, simplifies its
+test infrastructure and strengthens validation of remapped mappings.
 
-On 10/29/26 16:56, Daniel Lezcano wrote:
-> DTPM implements its own hierarchy creation and destruction logic while
-> the powercap core now provides generic helpers for this purpose.
-> 
-> Convert DTPM to use the generic powercap hierarchy infrastructure.
-> Duplicate the platform hierarchy before creating it, and use
-> powercap_hierarchy_create() and powercap_hierarchy_destroy() to manage
-> the DTPM zones.
-> 
-> Add DTPM callbacks to create and destroy the zones associated with each
-> powercap hierarchy node. Adapt the CPU and devfreq backends to return
-> the created DTPM instance and use the node name provided by the
-> hierarchy.
-> 
-> Convert the Rockchip RK3399 description to struct powercap_hierarchy
-> and keep the device tree path as DTPM-specific node data.
-> 
-> This removes the DTPM-specific hierarchy traversal and destruction code
-> and leaves the hierarchy management to the powercap core.
-> 
-> Preserve best-effort creation: an unavailable backend returns NULL to
-> skip its branch, and setup failures are warned about and skipped rather
-> than rolling back independent zones. Invalid node descriptors remain
-> fatal.
-> 
-> When the representative CPU is offline, find an active policy through an
-> online sibling whose related_cpus mask contains it. Hold the CPU hotplug
-> read lock during selection and setup, and initialize the zone through the
-> policy's active CPU while keeping the hierarchy-provided name. An entirely
-> offline policy still has no active CPU to initialize through.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-> ---
-> Changes in v4 (since v3):
-> - Rebase on v7.3; no code or commit-description changes.
-> 
-> Changes in v3 (since v2):
-> - Rebase on v7.3-rc7.
-> - Preserve best-effort branch creation using the generic NULL result.
-> - Find an online policy sibling for offline CPU representatives and
->    protect policy selection and setup against CPU hotplug.
-> - Keep generic API behavior and documentation in patch 1.
-> - Fix __initdata placement; match-table indentation is handled in patch 3.
-> - Name setup callback arguments and remove whitespace-only lines.
-> - Update the description.
-> 
->   drivers/powercap/dtpm.c         | 177 +++++++++++++++-----------------
->   drivers/powercap/dtpm_cpu.c     |  62 ++++++++---
->   drivers/powercap/dtpm_devfreq.c |  22 ++--
->   drivers/soc/rockchip/dtpm.c     |  67 +++++++++---
->   include/linux/dtpm.h            |   6 +-
->   5 files changed, 195 insertions(+), 139 deletions(-)
+Patches 1-3 remove unused command line handling, unnecessary cleanup
+checks and redundant errno handling. Patch 4 converts the test to use
+kselftest helpers and removes manual failure tracking.
 
-Tha patch in general looks good. I only have one
-comment related to the future usage of this mechanism.
-For this implementation it's safe, but I would add
-some extra safety net around the of_find_node_by_path().
-See comments below.
-[snip]
+Patches 5-8 fix handling of unavailable userfaultfd support, unexpected
+mremap() successes, data-corruption failures and cleanup after mmap()
+failures. Patch 9 removes perf tests and timing infrastructure.
 
->   
-> -static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
-> +static struct dtpm *dtpm_setup_dt(const char *name, const char *path,
->   				  struct dtpm *parent)
->   {
->   	struct device_node *np;
-> -	int i, ret;
-> +	struct dtpm *dtpm = NULL;
-> +	int i;
->   
-> -	np = of_find_node_by_path(hierarchy->name);
+Patches 10 and 11 replace threshold-based random-data validation with
+sampled validation and a deterministic data pattern. Patch 12
+strengthens multi VMA validation by also checking the mapping state
+of holes after remapping.
 
+This is a resend of v2 without any changes.
 
-I would add a NULL check for 'path' here, or below
-where dtpm_setup_dt() is called.
+Changes in v2:
+- Add a first patch to remove command-line options (David)
+- Add a second patch to remove munmap() checks from cleanup paths (David)
+- Add a third patch to simplify errno handling
+- Drop the "correct multiple VMA range size" patch
+- Add an eighth patch to fix cleanup after target mmap() failures
+- Replace fully populating and validating large mappings with
+  populating and validating 10 pages each from the start, middle
+  and end (David)
+- Extend multi VMA strengthening to userfaultfd multi VMA test
+- Fix minor formatting issues
 
-Usually it's up the the code which is calling that API
-to make sure that the NULL is not sneaked in.
-We probably can force drivers code for that, right?
+Previous versions:
+v2: https://lore.kernel.org/all/20261006092511.145776-1-sarthak.sharma@arm.com/
+v1: https://lore.kernel.org/all/20260924050009.19974-1-sarthak.sharma@arm.com/
 
-> +	np = of_find_node_by_path(path);
->   	if (!np) {
-> -		pr_err("Failed to find '%s'\n", hierarchy->name);
-> +		pr_err("Failed to find '%s'\n", path);
->   		return ERR_PTR(-ENXIO);
->   	}
->   
->   	for (i = 0; i < ARRAY_SIZE(dtpm_subsys); i++) {
-> +		struct dtpm *tmp;
->   
->   		if (!dtpm_subsys[i]->setup)
->   			continue;
->   
-> -		ret = dtpm_subsys[i]->setup(parent, np);
-> -		if (ret) {
-> -			pr_err("Failed to setup '%s': %d\n", dtpm_subsys[i]->name, ret);
-> -			of_node_put(np);
-> -			return ERR_PTR(ret);
-> +		tmp = dtpm_subsys[i]->setup(parent, np, name);
-> +		if (IS_ERR(tmp)) {
-> +			pr_err("Failed to setup '%s': %ld\n",
-> +			       dtpm_subsys[i]->name, PTR_ERR(tmp));
-> +			dtpm = tmp;
-> +			break;
-> +		}
-> +
-> +		if (tmp) {
-> +			dtpm = tmp;
-> +			break;
->   		}
->   	}
->   
->   	of_node_put(np);
->   
-> -	/*
-> -	 * By returning a NULL pointer, we let know the caller there
-> -	 * is no child for us as we are a leaf of the tree
-> -	 */
-> -	return NULL;
-> +	return dtpm;
->   }
->   
-> -typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
-> -
-> -static dtpm_node_callback_t dtpm_node_callback[] = {
-> -	[DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
-> -	[DTPM_NODE_DT] = dtpm_setup_dt,
-> -};
-> -
-> -static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
-> -			       const struct dtpm_node *it, struct dtpm *parent)
-> +static struct powercap_zone *
-> +dtpm_node_create(struct powercap_control_type *pct, const char *name,
-> +		 void *data, struct powercap_zone *parent)
->   {
-> +	struct dtpm_node *node = data;
-> +	struct dtpm *dtpm_parent = parent ? to_dtpm(parent) : NULL;
->   	struct dtpm *dtpm;
-> -	int i, ret;
->   
-> -	for (i = 0; hierarchy[i].name; i++) {
-> +	if (!node)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	switch (node->type) {
-> +	case DTPM_NODE_VIRTUAL:
-> +		dtpm = dtpm_setup_virtual(name, dtpm_parent);
-> +		break;
-> +	case DTPM_NODE_DT:
+---
+Sarthak Sharma (12):
+  selftests/mm: mremap_test: remove command line options
+  selftests/mm: mremap_test: drop munmap() checks from cleanup paths
+  selftests/mm: mremap_test: simplify errno handling
+  selftests/mm: mremap_test: use kselftest helpers
+  selftests/mm: mremap_test: skip test when userfaultfd is unavailable
+  selftests/mm: mremap_test: fail unexpected mremap successes
+  selftests/mm: mremap_test: fail on data corruption
+  selftests/mm: mremap_test: handle cleanup after mmap failures
+  selftests/mm: mremap_test: remove perf tests and timing
+  selftests/mm: mremap_test: replace validation threshold with sampled
+    checks
+  selftests/mm: mremap_test: replace random data with deterministic
+    pattern
+  selftests/mm: mremap_test: strengthen multi VMA validation
 
-... or a NULL check here.
+ tools/testing/selftests/mm/mremap_test.c | 701 ++++++++++-------------
+ 1 file changed, 291 insertions(+), 410 deletions(-)
 
-> +		dtpm = dtpm_setup_dt(name, node->path, dtpm_parent);
-> +		break;
-> +	default:
-> +		return ERR_PTR(-EINVAL);
-> +	}
+-- 
+2.53.0
 
-
-The rest looks good.
-
-If we are sure we would never experience that NULL ptr coming to those
-registration callbacks - then OK.
-
-Regards,
-Lukasz
