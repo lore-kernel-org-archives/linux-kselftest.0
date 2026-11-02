@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793633840;
-	b=bAneb735fKlWTw+XZSNf5GbDpkBEq5TmaqWq+DLNl+pg/ME84MEZMCR+Io/4whG5EMC0
-	 nRaO5DBb/vT5x6OwTUsw9HopolDc4omvblXYvLAw0B5bD9tifvpxDRB6B7bFNmYEL3jvc
-	 /xHWAdaY7aXG5fjis9lbudO14Bla7s8GOgzC8Xg/TTpHMZPgPCoKkJtu3dFDo8EBAs0j6
-	 RUZl8N5WN2I7u4h5cvTdXuvAJHMVPJW5rL8OgXSFzM1PUy0NKkqjie20XJ78cbvQ/9nbe
-	 NK0l5jodtZOzIniHK8kv3CVRfCvTFYINH6CnX5TYkJ4NIpHso4QQ38TC7VfnGvYahwA==
+	t=1793633841;
+	b=K2o6Oga9zgfnls7RPJard0PmXVYw04UhZL6sncF6eoZGl09ws20YA9pGZKHzqfwgsweK
+	 df2gkgX1OpTxYMLUNuyfGUhddphD8nzMwuAeopaI4taJlI2vWCOqoozIeAjOBGKts5wag
+	 dv4qWJw31JVRCNyowrYVXPatCODdy61OjAZmI39oiukIRfIVz4qBMSmXdqLCebnt7QRSN
+	 2up9Y6gRtHj9LmEBCxjtjgBsxoUS+EmdjLiJ6U/b5tc9cd1v9SkWkydriH8oO1+F2txrH
+	 Wr5+pU4NCEaBUPZSDKvEAXN8407kQCYPW15QUX+SrQJg/WfLDfP2IQgGS00LPIkhjRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793633840;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793633841;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=HVnfWSj8ZzZvrderQaZLMWS7UwjUc+ra7btm+XE8Eyg=;
-	b=UGVsBQGcCoYeo/NG7R7Ypm0F1hUOCFr1NcABWBhzj1HdAiSHOtmol4j4IK/pscj7q3Z3
-	 3qt7lPWKURQFczNwqf1Qav3A1ScwHx3cbDA4c9nb2vrOq7lgxTtIqzrX6Jc0aXKx3tIl/
-	 lhsqIE/Se1Q3Cp7niacrh2X6N8ESDTL9WqCkTgbUftRBaSRjrHiaFvDatF4Nk1fHrhsHH
-	 huD67p7GG19PGeYsUy4Vp75kSTUtQerFEkEyILDgBf8jjGxaIE8NG+vK7n8vlRvW3ZCMK
-	 fbL/yvgeOW5fQPtzBmVbD5nCvUF+peT+OARnjauxD6478nhm+QRIjOprxSgbyS8PpTQ==
+	bh=tylWbFCUgeCOXBn9trkYSMBYVlhA9mV6Qs1lbXsCOco=;
+	b=g0g3nXKeinzKtMTpaGd9/XUtMOu4znzJqi2+PRtex/vo+UKhwvlIcFzYrRZrtykrIohJ
+	 3eYww8KPtslN3mlLxi13UnxApN6P54fBEMYvV+E+5YvBYzRb4QbRNaqxEZ8+k2i7jIalx
+	 /sJ6tuPsnWp+DoL5DyfpZaf4dxy737Q7PikqCAg+vjqbMcSwCtvRXhg1IhGJuxdzsEnjA
+	 VHhlo6N3QHJcfXKAYuiGPPDKEIrNRXdTfIS2Q+HOBU2tF+eQxuDHfOnqL0eqZJ0ws2/Og
+	 0jPm60zv0Nkei3Dmey0y64q6FrN6b56ESKP7f6y3MyLEx7MpaWM8YTkWKXanFDdMj/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pqP7Tvet;
-	arc=none smtp.remote-ip=209.85.216.70
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NSzJydZv;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2881160EA5E0
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 15:37:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2881160EA5E0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2725860EB600
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 15:37:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2725860EB600
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pqP7Tvet
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3ae73921fd1so2664698a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 07:37:20 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=NSzJydZv
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2eb2437d752so46915125ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 07:37:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20260707; t=1793633840; x=1794238640; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HVnfWSj8ZzZvrderQaZLMWS7UwjUc+ra7btm+XE8Eyg=;
-        b=pqP7Tvet8OgHy4y8rb6i5QryqY0omXHUsWqYSnFE6K/w1lN0HZwG9hzmbaqbNH5ynF
-         5vJ0NoZd1AJ2+lUsqPO2GPYMhTBeP3X5qvb7Tcp1SC5firmzfA+hwhCTX/cx7UstvBfF
-         TGUOu/qnajXUaTmOw2DDj94jGJqAIBNyaLvZ6WmI3TQYE45PynMfrn4lVHIByYbpWnVd
-         nonx9yi9tQUsQn8ZJHOaOk7hNV4J6MD9Zu/Mrht7zSvkFPH991l6UNyBa0vhJljRtfFR
-         h8McEimqnWvBMQQIimznp/pUljWtRRhXJvZgUpG9NzFcZnxyIbwk0IodC7hbCcm3Qhj0
-         ieDA==
+        bh=tylWbFCUgeCOXBn9trkYSMBYVlhA9mV6Qs1lbXsCOco=;
+        b=NSzJydZvMVXYxTC62CIB6ze6cmzNxnlcYaAgAV5q0w8GPnprJgO1rjDotE1ldsqVF7
+         id7VY8rj8sVMHSKlTmzi/PwHWNeII+QwqojnCqdiqX3PxCO2GIn3vjlHmseHkMN5XYqg
+         BYPAspktX6r0+V8A2/zX1+AyJq1DpXHLE0LDtoRiJxXMg8DAr6vPt8WXhLgLQF8ebD15
+         QcofgRuBHeqjWN5y9E3jlhTLHW98sFut6vpM+lSkpNsQsFyL3sjc0/ACce80N8Qbe8HF
+         sfB8sbQFa0HOWibvXSBBCPqGq5tFavtJkOEq49CN4uJoCYR6CeAVMFVKwOily0i0nNoJ
+         IFzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1793633840; x=1794238640;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HVnfWSj8ZzZvrderQaZLMWS7UwjUc+ra7btm+XE8Eyg=;
-        b=ZKTtXeMTl6CxpGat7JFh+magDxdrNiQZRCjveXHoHcrkSGODrTbAmHsDp3eD/Hufjd
-         DLV4WGiGW6Ry6yvwhFCatfwAK+QC4K6399RSXGJ1rB/6mJShWCKiGQURAxONPQLmWmj1
-         Jrwc941gw5mT4QZLysC6tyzzdBKk2+0fVXTrNzXAQufmSmT+e72xpIkll4QNluauApao
-         RylORzjn8f9z7waCA6kZszIqmDdxFv/Zvs8BHvOc6Xexgn4p26lFDgpGJFjgPifwH4Q1
-         X6Hf6gidGiES5+JfAzevGo8Kn5EMh4pIDu512Y1KlkyAW5f6a5nyuiApgQxpoz5WqQkY
-         Z68g==
-X-Forwarded-Encrypted: i=1; AKwUvBxwgrt8VWGM1dnH+fpcJhiKxf9TOmbBa55MRuJ7YzPAcpsJ/3dJNA2VrxENlTrKfUD6BX6UgIo5HGRHBweCZJE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8HcjKhs2gz7p9RVMtGISvKzah4hCyRyfA3bC4eAlp1Dr9eicXx
-	5+6I7atFSbvL9+Spw0AC9yWCfx2DnTUzuls17WyaFl/j96CzkF2gTALQXuEj9qoF73p/psjWcFm
-	M4O/UDCdf0Q==
-X-Received: from pjat8.prod.google.com ([2002:a17:90a:d08:b0:3ac:3195:12b4])
- (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5870:b0:3ad:6090:a189
- with SMTP id 98e67ed59e1d1-3ae8983e2f3mr7697277a91.45.1793633839167; Mon, 02
- Nov 2026 07:37:19 -0800 (PST)
-Date: Mon,  2 Nov 2026 07:36:47 -0800
+        bh=tylWbFCUgeCOXBn9trkYSMBYVlhA9mV6Qs1lbXsCOco=;
+        b=VbbcdlPlmCRf5iJlf1pbYVdAbffKoXEVEWhdDrXc8ud4eSPA05h4qJ15gjQfAjs7gV
+         FWlNhrwo6b90uYo4LmEsMmhyFRDQwlwjCFjhqY2ADHd7jfiaArAcv/DnRX/LjD4fUBUO
+         9WbI2NPl29sA6JCO0mPtWRT9V4qYivynMrTFSq9OjKxVjRIAfjLAsn3JS8nYCtuDRZcM
+         FRMX/YzU+6oqdvFbztG9OiXdvcY1/rHsS7XMzohwsPrm8aKqhX1gZLr2M9rO1MQ9C6Vl
+         LSF5z5GFdVeXNv+qPbjOweEFWv7gBAYQYHR64c041/Xeseq/bbQac6DF84T7bb0C15su
+         WAHg==
+X-Forwarded-Encrypted: i=1; AKwUvBywt6kFl+Ya9Ofyx2IGZRxblfHHaJU7k1bMjW/6LToywaNehibnIM17cItu6YMRyTE3kIgEJO5xnjvgRoaTCUk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8u+8APQYWEA4epk0D4EeGds8Kbil/hKoSnOjJ5GJ0MhACw8toY
+	vN0lmWiOlzFHzB+tSNBpdXsxwl1BZZnfbopE8EPYwzJNbZka3dPyR0dRLsrWp+qFYkmQCc7hOsj
+	vxSgOwDlUMg==
+X-Received: from plbix15.prod.google.com ([2002:a17:902:f80f:b0:2ea:a5c1:240f])
+ (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:37c7:b0:2e8:b5b2:a9f9
+ with SMTP id d9443c01a7336-2eb364e9f75mr92959155ad.37.1793633840266; Mon, 02
+ Nov 2026 07:37:20 -0800 (PST)
+Date: Mon,  2 Nov 2026 07:36:48 -0800
 In-Reply-To: <20261102153656.1431701-1-vipinsh@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261102153656.1431701-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261102153656.1431701-19-vipinsh@google.com>
-Subject: [PATCH v6 18/27] vfio: selftests: Initialize vfio_pci_device using a
- VFIO cdev FD
+Message-ID: <20261102153656.1431701-20-vipinsh@google.com>
+Subject: [PATCH v6 19/27] vfio: selftests: Add Makefile support for TEST_GEN_PROGS_EXTENDED
 From: Vipin Sharma <vipinsh@google.com>
 To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
@@ -103,93 +102,50 @@ Cc: ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com,
 	yanjun.zhu@linux.dev, yi.l.liu@intel.com
 Content-Type: text/plain; charset="UTF-8"
 
-Use the given VFIO cdev FD to initialize vfio_pci_device in VFIO
-selftests. Add the assertion to make sure that passed cdev FD is not
-used with legacy VFIO APIs. If VFIO cdev FD is provided then do not open
-the device instead use the FD for any interaction with the device.
+From: David Matlack <dmatlack@google.com>
 
-This API will allow writing selftests where VFIO device FD is preserved
-using liveupdate and retrieved later using liveupdate ioctl after kexec.
+Add Makefile support for TEST_GEN_PROGS_EXTENDED targets. These tests
+are not run by default.
 
-Co-developed-by: David Matlack <dmatlack@google.com>
+TEST_GEN_PROGS_EXTENDED will be used for Live Update selftests in
+subsequent commits. These selftests must be run manually because they
+require the user/runner to perform additional actions, such as kexec,
+during the test.
+
 Signed-off-by: David Matlack <dmatlack@google.com>
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- .../lib/include/libvfio/vfio_pci_device.h     |  3 +++
- .../selftests/vfio/lib/vfio_pci_device.c      | 25 ++++++++++++++-----
- 2 files changed, 22 insertions(+), 6 deletions(-)
+ tools/testing/selftests/vfio/Makefile | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-index e19bd94b8dd2..9a62bfb6b440 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-@@ -40,6 +40,9 @@ struct vfio_pci_device {
+diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+index c2764fcef31d..ece2a3618f2b 100644
+--- a/tools/testing/selftests/vfio/Makefile
++++ b/tools/testing/selftests/vfio/Makefile
+@@ -34,16 +34,18 @@ LDFLAGS += -pthread
+ LIBS_O := $(LIBVFIO_O)
+ LIBS_O += $(LIBLIVEUPDATE_O)
  
- struct vfio_pci_device *vfio_pci_device_alloc(const char *bdf, struct iommu *iommu);
- void vfio_pci_device_free(struct vfio_pci_device *device);
-+struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
-+					       struct iommu *iommu,
-+					       int device_fd);
- struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iommu);
- void vfio_pci_device_cleanup(struct vfio_pci_device *device);
+-$(TEST_GEN_PROGS): $(OUTPUT)/%: $(OUTPUT)/%.o $(LIBS_O)
++$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/%: $(OUTPUT)/%.o $(LIBS_O)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< $(LIBS_O) $(LDLIBS) -o $@
  
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 4063a0e2b3df..af789c859586 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -457,9 +457,13 @@ void vfio_pci_cdev_open(struct vfio_pci_device *device, const char *bdf)
- }
- 
- static void vfio_pci_iommufd_setup(struct vfio_pci_device *device,
--				   const char *bdf, const char *vf_token)
-+				   const char *bdf, int device_fd,
-+				   const char *vf_token)
- {
--	vfio_pci_cdev_open(device, bdf);
-+	if (device_fd >= 0)
-+		device->fd = device_fd;
-+	else
-+		vfio_pci_cdev_open(device, bdf);
- 	vfio_device_bind_iommufd(device->fd, device->iommu->iommufd, vf_token);
- 	vfio_device_attach_iommufd_pt(device->fd, device->iommu->ioas_id);
- }
-@@ -482,16 +486,20 @@ void vfio_pci_device_free(struct vfio_pci_device *device)
- 	free(device);
- }
- 
--struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iommu)
-+struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
-+					       struct iommu *iommu,
-+					       int device_fd)
- {
- 	struct vfio_pci_device *device;
- 
- 	device = vfio_pci_device_alloc(bdf, iommu);
- 
--	if (iommu->mode->container_path)
-+	if (iommu->mode->container_path) {
-+		VFIO_ASSERT_EQ(device_fd, -1);
- 		vfio_pci_container_setup(device, bdf, NULL);
--	else
--		vfio_pci_iommufd_setup(device, bdf, NULL);
-+	} else {
-+		vfio_pci_iommufd_setup(device, bdf, device_fd, NULL);
-+	}
- 
- 	vfio_pci_device_setup(device);
- 	vfio_pci_driver_probe(device);
-@@ -499,6 +507,11 @@ struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iomm
- 	return device;
- }
- 
-+struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iommu)
-+{
-+	return __vfio_pci_device_init(bdf, iommu, /*device_fd=*/-1);
-+}
+-TEST_GEN_PROGS_O = $(patsubst %, %.o, $(TEST_GEN_PROGS))
+-$(TEST_GEN_PROGS_O): $(OUTPUT)/%.o: %.c
++TESTS_O := $(patsubst %, %.o, $(TEST_GEN_PROGS))
++TESTS_O += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
 +
- void vfio_pci_device_cleanup(struct vfio_pci_device *device)
- {
- 	int i;
++$(TESTS_O): $(OUTPUT)/%.o: %.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+ 
+-TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_PROGS_O) $(LIBS_O))
++TEST_DEP_FILES = $(patsubst %.o, %.d, $(TESTS_O) $(LIBS_O))
+ -include $(TEST_DEP_FILES)
+ 
+-EXTRA_CLEAN += $(TEST_GEN_PROGS_O) $(TEST_DEP_FILES)
++EXTRA_CLEAN += $(TESTS_O) $(TEST_DEP_FILES)
+ 
+ endif
 -- 
 2.56.0.317.g454f8302e1-goog
 
