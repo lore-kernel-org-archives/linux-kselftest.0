@@ -1,104 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793616117;
-	b=wYzpQhHdmvtyiacEYaXwusiy8YEwIVrvcBx+5ip5LAJmmqr0JRzFfJLFrteHDsD6B2AF
-	 GnIBSV8OrpfTejwEsmuR2TiNDk9McoY3GayYwm38O2p/uz+CNu2RyMXghJgW4LU3cuhZk
-	 iUKgsvHo9V1IdM0d6cs7QfvnlIkxuoNez2OsJrj8m1F8iXNTJIt3yWiFnXuVWY+8vU4lK
-	 9S1clAbhJOz9+0987YEdG8HjYOaKblbOWgUrTZcU6GbtW7uvOE8w00B9LHQdM7lgnuFkB
-	 b6vF4BQgwWrmB6f3zy5stLqyF5pGg6gPpDRpiLoozA8PmNykczwPK5/IywjOaYqGjHQ==
+	t=1793617916;
+	b=oEgz3mkd3WdOqJ6khBDgkUR93Z1YSQThG84TcEuFSO1WUO3JEBmyOoeJmtanmZlPaIQB
+	 tZha0Hr8iALXjbQ6hsGmfW9gkHvTEDrYp7WR+9YiRRHXMaL6TWlcyU3EgTyRDgV+g58kv
+	 RME66p8LGMiBbmz/f57ax0Yln+AkMVWfRDdZvoXeFZMELAhzJqKzy15R456uMrAGDRjE8
+	 uS0r+CGqRD6VttVfW1GGXFpv+H+TGbYO+XK5a9cpM14Drl6z3UK8OeHsIbW63jifOA4co
+	 jwAAYOleE+DotCJK3+8O6zIYOh03rYjxZTLjr4bdGsH595+ZM7+jV4iot0iG2Viy66g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793616117;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=OJg1Na+PMAE5RwVgjsfjwULctd8zKBeuPkayvvN7fUg=;
-	b=rpZz+wFRKRdJKlEVzwDUse49Ccvpwo0JxpLqM4aEyyUKO1wBcp/DzeE5RNDJhQgQ3FF5
-	 wPH4HOzljPNVB8lI/jfH7/kSGfLMkGaaehicdS1tTe/C5GgJKdClAgI7i0gzSKJt+6aH/
-	 DOLob/tSlKw06SKcz0xyi2B4fxgtsXK36PY3TumsmxYWO0JI/qXY40grXl/Nydj+lLFDS
-	 gg7sTfiSdJVumE9QSh/TdlFjHwF0MCqc641jxCeQFVH9zvmGJA2/0Qx9AB8x04sw+yCFi
-	 paI7s+RbRnaXpEZi6xK+i9pfC659jc3EaB+Mfm6M7i4glnwzAr7iA5hTmhh0sy+6iBw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793617916;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=tQierFXrtdBxsv90Wvr5GLl7ZIg6QP9xO7JbeTEr+Xw=;
+	b=JApkbTLWcVe/NUycRWZCT/kjaeB9owYFNnhE0s6CHXzVhXZtqWTtl74qxyScB6nrGF/S
+	 fV5Kn/EY1UGeknsdMUoSOTK+FX0rE92bhqUdQwq8O9/m/mF8ueU3YqUXIpoVecHw1fIcH
+	 Ap5kO6WMD8Un9/01s3KmhHlccEA3Yz7X17PN05r66r3IMSDgbryJ2qr45BAU3IL73ZdOb
+	 u16ETFe98hB0a52zCp8P/bRMmtI8sektqRe4Xrl9bLUQvKf/bWRDn9L3CvxtfLsym09ck
+	 tdcFcZKktksdMVO2QFfgxiDw3kSuN0wN7tbhljmeY7UR7/6/eWSzrMuJE09OOW27f2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xXxlfkdP;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BFAwBKbw;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B105606A331
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 10:41:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B105606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8936C606A324
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 11:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xXxlfkdP
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ea138a3497so17292345ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 02:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793616116; x=1794220916; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OJg1Na+PMAE5RwVgjsfjwULctd8zKBeuPkayvvN7fUg=;
-        b=xXxlfkdPW21250q7PUPfcil8BeNIbEIshPoxXLywEd8TRjzx1liJ7/Hz9KCGpAulKp
-         Dyk0yEGAHFjU3byqDEtn+VPd/OIRaeF3IOwmpSqWjFPuaOCjeOlwwdQXD6ptVoc9q6yw
-         KTCE7U0PdC+Ng87qYy6SXn9sgJlF39YnJ2Cra8SWyf2awCjZUEk/7wAuOLxsbF973QVW
-         jCBY7wSdvIa4/IViLo5T+6LDm9Ekl89YUdl+iUpB9iqNt/Mbh58EBQgHVcuzYtjkIWlm
-         B75GsR+BwNFMvc6qU1tSEt42oFlj1ZdcWmhlhXQxbdF3MDQpjAzt5A7CM/wZnFus0NI9
-         21bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793616116; x=1794220916;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OJg1Na+PMAE5RwVgjsfjwULctd8zKBeuPkayvvN7fUg=;
-        b=pNkp7ryKmKu1PTopHmE1ucu6JunPjtD79972stCQnKJxYPrW3aXguC6ENCj7twykIN
-         +n6QnQt5GCvdojf4+L6c92KLpioYTZAYEb8HYkvR+e4jV+dMtE01VEpA4NKU1inlTVSo
-         zUb2QsddqIPg2JeRx1/DXtsuCm27BO+JYrhJCnUGh/vEAmd7qBMghdvW8tchYNXpWg3o
-         ddm27aJaWpjUEGtelYY6rM3AJRhIBiM2dIzF2MbawU1PMXoo20+3LBPzfz98zcGVygUe
-         thm1h/wRxnNYwfgJZsdZ94+NeN95sYnNxMTTYy20dRoCr7xw3/fqRHl8S0vxg3CNiAs1
-         6kNA==
-X-Forwarded-Encrypted: i=1; AKwUvBwWqyJpMGsL0F0CaYNCM5bSlhjMYe7wzFmvMeTQ8i+Zetxdbr0TTUud0+vuu1lBZAthn92MvSTIQ2L1+Wzy0wM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/AvzK6UYVbRTj50IJBrT6XrDm6XrIPoVCLlEQ5JLK48A1mnsrg
-	6oVu+Z/CiQBMQmU8ZqCpbdAI0jFlYF85uQ9Z/PoKU0lCQmr/ifarWy6I
-X-Gm-Gg: AYBFou2bocP3Hdb+RezIe+JZH7vU84sPmHsEat/ncASTy5Kh5CawmY2adOVFaBhptsX
-	XIPDpMOGWi1MqDCuMFoarHnUqYPeu44EwR4V8LQ1VCjSaiJWMS0DrXuPKOH+VuMeo5ZBDiBIrm+
-	cSp7maxCj7vIKIIYNNoGqSkOcf00EQcIOlwZaIT+LZKNqncyBoRtdReh7xyQer15OtcQNWfoiJd
-	9yiGcVyB79OMgZEbxMsZ6pB0B3GL2XP50PisUBs/5sZpBx96lVtjfUJoAqCSTf+k1o4luwRHkCL
-	h/x63LWNPJIlU9HjwEX0CTdJmjtzvQP/mKa3QvJn3NCoiSuOJVNAaWNSFZoETVRinX6uW6gSJED
-	WjD4gEw3pzYj4oGLTXoX8ajltwmvE1FuHprf1QDjAJmxVL7DEePYgEnQiEcHaIkbq0rWWlKmvf4
-	VgiGo4BUYH2knOtbVuY5AiyGELD65+Cojwwv4YdcoSne3l/xUCNxHXA3nXVv+plAQwXqnnFeP7V
-	vDX2yQs5f3gtgSAUI4tv3xbBG39rbI1ZBcUGQWlTa9kSgzy3RgcoIlwMudUqEt+LUaVwdHW9GeE
-	ELPBp3hOkjkYewMGT5a3If/U2dZHKqI8NQ1L7pBb8mhUIsuaF5bN
-X-Received: by 2002:a17:902:f691:b0:2df:8b09:93bb with SMTP id d9443c01a7336-2eb3648b69fmr89524235ad.10.1793616115753;
-        Mon, 02 Nov 2026 02:41:55 -0800 (PST)
-Received: from umang-Inspiron-3501 ([2401:4900:1f3a:7c59:eeec:de7d:b077:9b9f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb3925ff38sm25195465ad.36.2026.11.02.02.41.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 02:41:54 -0800 (PST)
-From: Umang Pokhriyal <umangpokhriyall@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mike Rapoport <rppt@kernel.org>,
-	Peter Xu <peterx@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Umang Pokhriyal <umangpokhriyall@gmail.com>
-Subject: [PATCH 2/2] selftests/mm: test a uffd write-protect range with an unregistered page
-Date: Mon,  2 Nov 2026 16:06:21 +0530
-Message-ID: <20261102103621.156928-3-umangpokhriyall@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261102103621.156928-1-umangpokhriyall@gmail.com>
-References: <20261102103621.156928-1-umangpokhriyall@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BFAwBKbw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A281F00A21;
+	Mon,  2 Nov 2026 11:11:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793617911;
+	bh=tQierFXrtdBxsv90Wvr5GLl7ZIg6QP9xO7JbeTEr+Xw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=BFAwBKbwGTlz0Mn4enaQSgX8dTUg8pp7VJO7rtcJP9h8ODPemnCLR2eNJMPd38/pI
+	 o3ypw45HPEIawjkPWwjC7vpedMr/rhrB556WMYHevVOUGn2DSZqM3XyTdvy9xaafGs
+	 d+/SQtsBFnDZzf2np20BbCeTeaBHQValygZuXcE0jqxRoGvyrwoaqpftP2ml8O9MU/
+	 0HATVm85QPYzXDyRzMncrpNRNw91wJIj2+fA+lGi97MgKvO2KPKjh0YegXTGOM4QlH
+	 zeFv0Pn0ofxsDPqODF/sKmuouK59j9ZhHiStG+T3gwfGMbUvELpg99pmqo5mqiQtDr
+	 OUMAd/jT7HUPw==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 7A9A5198003A;
+	Mon,  2 Nov 2026 06:11:47 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Mon, 02 Nov 2026 06:11:48 -0500
+X-ME-Sender: <xms:8m_oap1pn22irz7gCc14BXj8OEqUpwx3JaQztnNOC7KHO2BMy333Eg>
+    <xme:8m_oao2hpwX1d8FZPJSOjgh5MInTWJxHlbjIquzEsa5ouO7aByPoj37Jp-SCbE9ou
+    Nx7vfKB-Oa4pHtVAHO_eH4WUmfTl6goBh_HywHjHO3FzyOQfPRy7n98>
+X-ME-Received: <xmr:8m_oaomWH4ItRcaBeR3WStFTWfJK0mu8lLjdJPwJHfA2OBb4biLzLTw2OPw>
+X-ME-Proxy-Cause: dmFkZTEK1+02a4zp88u4Tj7j1xR++eJHRcOeZsjArkkCuSqZTrG8QN3et3PJ5Yhpp8JgOy
+    tSOq45tZMVN3zAAAPAjPYdiYp4+PM3U5Ilw/Pvtw7Ftx3GpE/TzxD++/NwBVjZwRlAofk7
+    pgG6siSuYHP+MNHzb/HomkI1yVPL+oawmIR9pZi9gWP0otMusCPkQ232d0l/98yOZyjaO8
+    HCSiHgy4dMxZTYLPkGusk7UMm8k5Wt2nCqc9q31PZ/V6ihq/eUyqlvPexGPv0hMZ1E+YGx
+    sYu7Zoyhe+tajg6s4E3RIIUMBh/H9WcY7aPjBvRgJ+f/iJ4hRlMvNuh74OMKCJAds2lDaw
+    LuHKwEP2phflf9q4kE1iwNJtNjh7Mpe/RdmadkWMkn6nU+Wb0hAdhkVdLAVbDQIOIPTSkB
+    lKxK3Thu7rQlxOUPlh1jbY0wFMZNQpWVLZO8yoh/UobjpsE+YBH8Gm+QCT+dRaiS+FcvdP
+    zkcv0QSHR1X6YeFjlgRImzCdCwdeFLmZAWzMlz59bkHguqNYREG58mLEZ2yCI5P0Fx7ld7
+    0oN+qmyXHVQTlWvextupVYS/txj5aUgCi95wcxQcH7qyY2K7M8bHoBgwfMTdb5Rjozx/jc
+    qNE9yUW3AJqwqBNA5BKKdk/cxyRYVf8/3eXZjLEoHkP9zWRSitoidzhZiOeA
+X-ME-Proxy: <xmx:8m_oapPFGL__hvcoMqMzBnRZ-INyOEygljbY6EiycThk6Y0F6l6DsQ>
+    <xmx:8m_oav7wSNhrP83Arz50u-l3HyYq7VbGbdKXaWdvfmj4GLR7kpXEOg>
+    <xmx:8m_oas2GsREdtezfri6lt-3yakSD4672zKA1Jdet-JKU7ZBgwJBZWQ>
+    <xmx:8m_oatqcVCgLulftk8UoOuP943tkcFU81X7byj4o9pPXmFkdhPVZtQ>
+    <xmx:82_oamkCzupz1ocn0mSfB1WUaZPNn8heBXCkh_JvDXLF73A7bEu48WfY>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 2 Nov 2026 06:11:46 -0500 (EST)
+Date: Mon, 2 Nov 2026 11:11:45 +0000
+From: Kiryl Shutsemau <kas@kernel.org>
+To: Muhammad Mahdi Amirpour <ampr.mhd@gmail.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	yeoreum.yun@arm.com, ziy@nvidia.com
+Subject: Re: [PATCH] selftests/mm: handle child status safely in khugepaged
+Message-ID: <auhvkuDO8cP9Pip4@thinkstation>
+References: <20261030215841.229969-1-ampr.mhd@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,91 +86,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261030215841.229969-1-ampr.mhd@gmail.com>
 
-Register only the first of two pages and check that UFFDIO_WRITEPROTECT
-over both pages fails with ENOENT without changing the first page, when
-protecting and when unprotecting.
+On Sat, Oct 31, 2026 at 01:28:41AM +0330, Muhammad Mahdi Amirpour wrote:
+> The khugepaged selftest reports child exit status through a shared
+> variable without checking that the child actually ran to completion.
+> When fork() fails or the child is killed by a signal, the status is
+> undefined and the test can report a false pass.
+> 
+> Capture the waitpid() result and distinguish normal exit, signal
+> death, and fork failure before interpreting the status. Report the
+> child's actual termination cause in the TAP output so failures are
+> visible rather than silently masked.
 
-Signed-off-by: Umang Pokhriyal <umangpokhriyall@gmail.com>
----
- tools/testing/selftests/mm/uffd-unit-tests.c | 56 ++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+The bug is real: for a child killed by a signal WEXITSTATUS() is 0,
+which is KSFT_PASS. The parent goes on with its own checks and reports
+ok, so a child that crashes in the middle of the collapse goes unnoticed.
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 298609544..57e442fd2 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -375,6 +375,56 @@ static void uffd_wp_unpopulated_test(uffd_global_test_opts_t *gopts, uffd_test_a
- 	uffd_test_pass();
- }
- 
-+/*
-+ * UFFDIO_WRITEPROTECT over a range whose second page is not registered must
-+ * fail without changing the first page, in both directions.
-+ */
-+static void uffd_wp_partial_range_test(uffd_global_test_opts_t *gopts,
-+				       uffd_test_args_t *args)
-+{
-+	struct uffdio_writeprotect prms = {
-+		.range.start = (uint64_t)gopts->area_dst,
-+		.range.len = 2 * gopts->page_size,
-+	};
-+	uint64_t value;
-+	int pagemap_fd;
-+
-+	/* Only the first page is registered; the second is a separate VMA */
-+	if (uffd_register(gopts->uffd, gopts->area_dst, gopts->page_size,
-+			  false, true, false))
-+		err("register failed");
-+
-+	pagemap_fd = pagemap_open();
-+	*gopts->area_dst = 1;
-+
-+	prms.mode = UFFDIO_WRITEPROTECT_MODE_WP;
-+	if (!ioctl(gopts->uffd, UFFDIO_WRITEPROTECT, &prms) || errno != ENOENT) {
-+		uffd_test_fail("protect over an unregistered page did not fail with ENOENT");
-+		goto out;
-+	}
-+	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
-+	if (value & PM_UFFD_WP) {
-+		uffd_test_fail("failed protect changed the first page");
-+		goto out;
-+	}
-+
-+	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, true);
-+	prms.mode = 0;
-+	if (!ioctl(gopts->uffd, UFFDIO_WRITEPROTECT, &prms) || errno != ENOENT) {
-+		uffd_test_fail("unprotect over an unregistered page did not fail with ENOENT");
-+		goto out;
-+	}
-+	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
-+	if (!(value & PM_UFFD_WP)) {
-+		uffd_test_fail("failed unprotect changed the first page");
-+		goto out;
-+	}
-+
-+	uffd_test_pass();
-+out:
-+	close(pagemap_fd);
-+}
-+
- static void uffd_wp_fork_test_common(uffd_global_test_opts_t *gopts, uffd_test_args_t *args,
- 				     bool with_event)
- {
-@@ -2403,6 +2453,12 @@ uffd_test_case_t uffd_tests[] = {
- 		.uffd_feature_required =
- 		UFFD_FEATURE_PAGEFAULT_FLAG_WP | UFFD_FEATURE_WP_UNPOPULATED,
- 	},
-+	{
-+		.name = "wp-partial-range",
-+		.uffd_fn = uffd_wp_partial_range_test,
-+		.mem_targets = MEM_ANON,
-+		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP,
-+	},
- 	{
- 		.name = "minor",
- 		.uffd_fn = uffd_minor_test,
+The description doesn't match it, though. The status comes from wait(),
+not from a shared variable. For a killed child it is not undefined, it
+is a pass. And the patch doesn't report the termination cause anywhere.
+Maybe something like:
+
+  collapse_fork(), collapse_fork_compound() and
+  collapse_max_ptes_shared() take the child's result from WEXITSTATUS()
+  without checking WIFEXITED(). For a child killed by a signal
+  WEXITSTATUS() is 0, which is KSFT_PASS: the parent runs its own checks
+  and the test reports ok even though the child crashed.
+
+  Fail the test when the child did not exit normally, and print the
+  signal that killed it. Also fail it when fork() fails, instead of
+  reading an uninitialised status.
+
+It came with bd212a7dbdb1 ("kselftest: mm: return fail when child test
+result is fail in khugepaged"), so a Fixes: tag would be good.
+
+> +     exit_status = WIFEXITED(wstatus) ? WEXITSTATUS(wstatus) : KSFT_FAIL;
+
+A child that dies in the middle of a step leaves the progress line open,
+and the "not ok" line ends up on the "# ..." comment. Could you call
+fail() with the signal number here?
+
+> +     while (waitpid(pid, &wstatus, 0) == -1) {
+> +             if (errno == EINTR)
+> +                     continue;
+> +
+> +             fail("waitpid() failed");
+> +             goto out;
+> +     }
+
+The test installs no signal handlers, so waitpid() cannot return EINTR,
+and it has no other way to fail for our own child. A plain waitpid() is
+enough.
+
+The same check is now open-coded three times, four with
+collapse_fork_cow_race(). A helper that takes wstatus, prints the signal
+and returns the KSFT status would cover all of them.
+
 -- 
-2.53.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
