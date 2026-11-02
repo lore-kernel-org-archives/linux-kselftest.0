@@ -1,97 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793655924;
-	b=SfBpWFQsGnsySAV+EGj9Q0jzZC0I7bnszY9yuBD/fKz/8iedgDD632v+F1znw8617oJh
-	 C9Vk9LFeDhNx/7OB5TfOu3yxpSeb4n2Mx0OloXVNnOaVA6tKSeQq08kY5742/8vrBPMLM
-	 PSoK04sna4Io86573cxYZ+8UazOMGEeX+Rw16W7oVZJ07FVcfqVoM735AifYTSTwAhiLA
-	 I+JYenyeVw1Gy7XE/LB22NaOVqRGMuc2hjuGyzmbrPJedb+eUOvkKemRdaltUxcOFpQtQ
-	 Ix7kQbuYie64QYbbI8KbJuf2aEWTOP+sKTxE0aONiugochAgEXgi8LGBI1bEbgLJzVg==
+	t=1793656869;
+	b=MR65ppJKwqgVboKfL6wyrZ95WFP/FOWUgSCl2o0y/FxExog+Z9tpzknvrvsDjJ5LpELA
+	 lhoLFPtzYgtiyjpKS1uTqRqHmNdxguhm805EDOrJHUlq1DfUGhqXiPP4ZyL5meCf6aPXY
+	 w9BTndXl3/pVRjii31XnVoMjbYyGKOs3uAEugPWTCjxlmP63iHh5NtXEXvWZ4UE+4WoDS
+	 UieCtZ61MEYN8Wv8NdV74o+57pRJUdZWlsWC+lbKd3mxeLpTnOwoaACOP0/e/Af3cYCI3
+	 8usNSKfPqvn0tiKZBCIWFQPVVaoFHgEeuCuuNqPK5kzaLnq8mwOpfH5vdSNUdLw331w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793655924;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=q5JdWOppAER7/sVf+/wRTQ5JltDoWihbM3Khp4hBQTg=;
-	b=h347QMSiDC0tgX97tegPa2vVLZWLqESlV6Ni027w3y54Q0zPESZT1dnQE9cH6IuOx3bw
-	 ojPTHiRbCAmWEyL20e2X3oD91W46ScMfQEfJMAnnjc7cdKsxKhtgEYjWwHSp3BxmwpTCd
-	 XCOqG4iVasaIUctNhzCfjKnHjcfDncsAup3lXIWOb1MqhrAloeBd4Ev6xF2xuBDFIpWeq
-	 sWMkcKd0eJ9Z8p9ipQjiTO3N/V6HdiqTSB+LlQrzPbp3LLIoIOSA+NkKDUAc9pg/S0Nsl
-	 5vUT+P7isIVa1hkW0gIuUsSRMf9rZrCjSRmymSHAMj3EWb37ErbFlV4xQA7qcBN2QnA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793656869;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
+	b=dMd8DlkqQnsU7Cc12hvMoSq6yLxYRipGTDLdi29+rQuuuzvNyg5aHRHVMbBax8urDtx4
+	 4YFzv2eR4AShFxeBt3SUt6yuugunazvQLk74LN1y4cSAKLabqk703j6gFdged89AZCfrW
+	 jeuaAKfY5QEFIPY8vaDo9fgi6vryEEsIhMncp/tGEh4cZ/6lUdD6qcwEp+LuGHIFvCKBO
+	 Emz5gMciNyxIf4JRqHyMl5CwXiefXmds4RwZVXVtKTdYcIhkxiNmZtKjVFtP/+iduGYoz
+	 shf6ZvnoBNvpHNHr8w7qeuiWeV4c9mFubynDmYkUNj9TUh5QsJscPfh/hsfBp7Exn0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ju1dB82V;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b="JY/wmp8u";
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=kxub1Oep;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FEC606A32F
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 21:45:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43FEC606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BCD606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 22:01:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92BCD606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ju1dB82V
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e985106c0cso33011725ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 13:45:24 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=JY/wmp8u;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=kxub1Oep
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793656867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
+	b=JY/wmp8uEajzUkf1vNeZ7IdqqrYGiqbB+JyZfHIwoBnRWFnXx6MxOMBQ1QPWUuN47HN3vw
+	WfXsqF3y2s4CK8roeZtKzy6VSl6JCH36pHlSmbwr5v1VaCKfqJsb28FskLBuSe+4H8NHu8
+	7PydJ4vC0jswAldSb+/rh1oN5K8jTB0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-382-Kvolrw9iPVSNzIZ3skoRaQ-1; Mon, 02 Nov 2026 17:01:06 -0500
+X-MC-Unique: Kvolrw9iPVSNzIZ3skoRaQ-1
+X-Mimecast-MFC-AGG-ID: Kvolrw9iPVSNzIZ3skoRaQ_1793656865
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-48e1d839ddaso2477188f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 14:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793655924; x=1794260724; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=q5JdWOppAER7/sVf+/wRTQ5JltDoWihbM3Khp4hBQTg=;
-        b=ju1dB82VQQqOsK6FJwUKlROowYAnHc7WAOAKWhSrOELJE48tonFCd3m2ZEjZAkZodI
-         qz0wz2tcfJ4S7FFEi29BZe/uWUebVzxGVUMwRiyXtRrs6gQVIGLbgXElfr5KOmpdmjHb
-         MejA6pOMJg0tuUT0QVaik2mdI5WI7Ujlh03twErxIH8gwTUxdncGKZy+TiXdckSUu7jw
-         fyCqXYxwO9C0j8hNfpPyZjAhDX3uJDLSE9RSnt/7HYsIztMC1fyXY59SmxH6r7xqmnf+
-         h4FSPJgxDQSqrYhQSf0gBSkeUowc3TZYpO744Me9aRAn6nQQ5GNmAq4fA/9aV5N2GELH
-         Y0XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793655924; x=1794260724;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1793656865; x=1794261665; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=q5JdWOppAER7/sVf+/wRTQ5JltDoWihbM3Khp4hBQTg=;
-        b=vb4ezjaFONXIcJx19nB0a5zOzVJRQuuMl5Och43ZHaAGayJSgchtOBpIMAAj9kMyVj
-         qIo7rTnzFdEO0w7nwF9X2oPn+xuzez3RX5psN4uxlVqhmyokRkcipY5iQKQWn5PHKxku
-         zX7NlYFA23GN/RI8MS+ySBy0VRnfr/EYcBmShwtnXA3RoFXjbmC31K4dltEygLjyt08o
-         +KTUisvJ1n5ylAkpm4BX+PUkhZcepOdMi64MuO3JnmSfvZRpreDR4blDmYPtK8ydADE2
-         U1jWDLafa2/ljNRUcwLm2JqbS39QO8hm3uZYTEPBU/86tXBtUOiCW0KEp4lZ3iYi53kf
-         1GNA==
-X-Forwarded-Encrypted: i=1; AKwUvBymErR8mdBNNgabxMCs/4cNnUhBx1hOz30+tT1NhJcQcdFKVb7vhrXuy2aTDIRJqxgR2VoCx4Yx1dwrq9ZNUr0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+CKGz1sjtp/ekQ8ZfZXEAlyBfwlFEj5n1jalW2De5fZJiQJhks
-	44tiE8WBgLU/ECx/NNpsxsPs9UBrGo7ndQQie24XPh7kHf9IQoJyVKC8yqkdpnwntA==
-X-Gm-Gg: AYBFou2ua/abOFxQUephyNqiy80yIAWz+4WXf4+lPrG09c9XJtELtp7SAYM99NUzZ6W
-	Pg6rzom9g7s5v8wwt6bKCNnRQtJvgWrJX9ulTbE4Cud4reo+CZOPYqJ9eLca2UMw2+2NSWI+Q69
-	AsI75WgxH0C2Ye15EPhds2WZ4ePlaDp2gHyfdx30kmMNF/Kysu043a2lf+QWAlNfjBGoY+SZttx
-	fmNtwkPGuSqb57MC/iT1ssmFWOXEmvZblJkMuh9IKxAiUzVfQD4LlHoaxIo1yncdMP7rScXh8qb
-	Jtt0V5MoeFt0BnGv3K1v8sFVcVwND8ElAFdsVdcuGDWsOlrHr7lS+B74yi3+dJKP0x/D8WzW20F
-	T8P+FGdqhZwknBpXSrvoEyu1h0LI5WBy1DdVf9bfTnPXLgBp2V/qAfOO7Ck/lHSdrnwNnxt2U4n
-	JdvmwplSfYBQt2QRY67hdUqmWJJL9qtAjcHF2oEOFw0R3O5PoXn1aoXWieufqgeZEKq7EGWliBY
-	rdWLCWNqZ2eCFOtTu/Jqyc16LmxzxrRSziU9G/ELopoSHjdQtxh4ExbI1xN1U2h6V9oy1KkEiBl
-	Urs29469kwevK7Tlu5Nmm+5RLApb7MEUv4wt5/LDFO+wdan2IpSQXW+FxdeCKPjt
-X-Received: by 2002:a17:90b:570c:b0:3ac:8897:7ba9 with SMTP id 98e67ed59e1d1-3ae8985d52dmr10189518a91.56.1793655923061;
-        Mon, 02 Nov 2026 13:45:23 -0800 (PST)
-Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c29e619sm1046130a91.0.2026.11.02.13.45.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 13:45:22 -0800 (PST)
-Date: Mon, 2 Nov 2026 21:45:18 +0000
-From: David Matlack <dmatlack@google.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Peter Xu <peterx@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
-	Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Matt Evans <matt@ozlabs.org>
-Subject: Re: [PATCH v2 2/2] vfio: selftests: Test BAR write faults after
- clear_refs
-Message-ID: <aukEbs9W2rnjb1jQ@google.com>
-References: <20261101062049.998160-1-almasrymina@google.com>
- <20261101062049.998160-3-almasrymina@google.com>
+        bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
+        b=kxub1OepQwqzw4DlS3rfA1OfAXqLMScfhFOmzNrJ1pTHliNk1VVITv2fVQ/UPxKoLU
+         QfvGseif6c5bt0WFIJ0q12sb2pzR4u2J4YfJgBY7U8Om8in4RhWC7yMK34FmrE+4GSz+
+         5gXSOvnknqCcZQQIYxRFUSH+fmdwg/m1R0R8VfsuasglNTZRYb1vc9L4ZSq03EUkFDpQ
+         EDxoO11i0GUZyyb3Z5IUsmyft32Qt8D4a3HtGkVBQt9F6v0zVqPJqQvaXlauDKBuBqnI
+         GfhxNDuwUIHctovuzeuFDmtxLnWhbV/XbrnwbJ+DDZqa2/otPHbkMbnwSEawQFS4m4PK
+         1XbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793656865; x=1794261665;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nmYBbIk5usy6FeDyc+DCeJpHSSfN/V5GCfHKFupvluE=;
+        b=Z6ablm18bWtQd6Zi703pRFQctopz6El7aUnZVogCJfbXfLA92zIZSj/bnC9cpmjpvL
+         HKA6F0MsneR4wxya5z5mscItx/dt898blxA4zNJZTTn4T5QbkW9ER5lzU8QfLkDjyTwb
+         li1LwAZxZwFApNOx6Ox9kg6pNU+f/KymUF/ihs8IWIEzDARWsnjd2DarzXEjboJ8p95g
+         1QLY2q5LwBkN3IxWh2mJ3wuOrIdBV5oWm7vt+ajX3mX7Pj2SwBRTcFC80rLFzwqiK63T
+         Y8eIxaVYhazwTmn5sgLFU0RLpWTmh9ryPYBnJELwnknef5ivtwblb41j6wqbs2Pbuh04
+         x5vQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwS1oHUct3jdZk6yq9T5m+xS9QiUmv+fsY91YUK4mc31hDomtGvkpF83gry3SjI6cPshQQApVtQY6cFYD/XvZE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z87ZyfMP8ryu7LbfwEkv6gw/PITb3R1as5DmgtP1I+aNkp2jIA1
+	L6TQEGStglmXK5fhNi+2erimXa9tsaGBwnwCN/ImerqetxKP5FhOOxzmZDsFMIxUy4BvvbQKw7Y
+	w1ReRFwO19t+IhwU85VbnIivjqaOzDnAUnTmm+xISoNqueoO/A8V3D6pXSluCOWizoC6bXg==
+X-Gm-Gg: AYBFou2HIY1U3TIiKkh8u1TCpm1hXl3/6UdLjJP5HhVEaPvVDcH9s/VgYJ+lBYQeQm9
+	gGzJ81HH/KJupXe4d/xNH/pP0zOvnTHVhBCUlM4KKsSe7jB0TtEujcjIfglQKwilq4VDf30Lss9
+	tWGws4STtNnkCufIPlVvs7eWMyKlbStc2yHbn+WLBFVM+KwWh545VkC0+uF2Cx14SSNz644LjjW
+	d2vNfeOpObPWyVqX5M+qAtOK3Lx8Jx4NTYPzDBEB1gKAl9ZcebRxGmqQcg+0FWHnfUk/f40tM1N
+	L435iGZIAAOS0zLua8VOs5zo04ICiqJDblNmkrzcM5UTmVZVwlajuGWWCdnEhSk/wvsvLB9jq6j
+	UF06c3G2P18NzbqBO42nlZDG/0c8wjuF5gd3VqOexNUITA+n/4IBQtsg/bbKktcwZsfVqNlfD88
+	j83G/h8IIF50SrUJEmGip1bocZx+TYAArPxf6VovvZmzs=
+X-Received: by 2002:a5d:5f41:0:b0:48e:68d5:818d with SMTP id ffacd0b85a97d-48e6e2eb83emr27445782f8f.16.1793656864958;
+        Mon, 02 Nov 2026 14:01:04 -0800 (PST)
+X-Received: by 2002:a5d:5f41:0:b0:48e:68d5:818d with SMTP id ffacd0b85a97d-48e6e2eb83emr27445750f8f.16.1793656864628;
+        Mon, 02 Nov 2026 14:01:04 -0800 (PST)
+Received: from [192.168.88.29] (ip231-128-192-82.pool-bba.aruba.it. [82.192.128.231])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71baa1b3sm20953601f8f.56.2026.11.02.14.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 14:01:03 -0800 (PST)
+Message-ID: <f4f0fbd6-63e4-42d3-87bf-9f888a8de1a8@redhat.com>
+Date: Mon, 2 Nov 2026 23:01:00 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,158 +112,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261101062049.998160-3-almasrymina@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v5 1/4] net: devmem: unmap dma_buf synchronously on
+ queue uninstall
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev-bot+sashiko@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ sdf@fomichev.me, kaiyuanz@google.com, kuba@kernel.org,
+ bobbyeshleman@meta.com, asml.silence@gmail.com, dw@davidwei.uk,
+ ap420073@gmail.com, davem@davemloft.net, edumazet@kernel.org,
+ horms@kernel.org, shuah@kernel.org, sumit.semwal@linaro.org,
+ christian.koenig@amd.com, phasta@kernel.org, andrew+netdev@lunn.ch,
+ sdf.kernel@gmail.com, hawk@kernel.org, ilias.apalodimas@linaro.org,
+ daniel@iogearbox.net, razor@blackwall.org, tariqt@nvidia.com,
+ kaifengw@google.com, dtatulea@nvidia.com
+References: <20261030083539.777877-2-almasrymina@google.com>
+ <179357408146.3131.2882435952119280563@kernel.org>
+ <CAHS8izMt+5HBjkOOsb-FrwKoXxEBuDn=gf5p+64akYS=SAoQrQ@mail.gmail.com>
+ <9afff44d-f8eb-4549-8aae-f99a53339319@redhat.com>
+ <20261102185856.1824792-1-almasrymina@google.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20261102185856.1824792-1-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2026-11-01 06:20 AM, Mina Almasry wrote:
-
-> +TEST_F(vfio_pci_device_test, bar_write_fault_after_clear_refs)
-> +{
-> +	const u32 rw_mmap_flags = VFIO_REGION_INFO_FLAG_MMAP |
-> +				  VFIO_REGION_INFO_FLAG_READ |
-> +				  VFIO_REGION_INFO_FLAG_WRITE;
-> +	struct vfio_pci_bar *bar;
-> +	bool tested = false;
-> +	int ret, i;
-> +	u32 val;
-> +
-> +	ret = clear_soft_dirty_refs();
-> +	if (ret == -ENOENT || ret == -EINVAL)
-> +		SKIP(return, "soft-dirty clear_refs unsupported (%d)\n", ret);
-> +	ASSERT_EQ(0, ret);
-> +
-> +	vfio_pci_cmd_set(self->device, PCI_COMMAND_MEMORY);
-> +
-> +	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> +		void *vaddr;
-> +
-> +		bar = &self->device->bars[i];
-> +		if ((bar->info.flags & rw_mmap_flags) != rw_mmap_flags)
-> +			continue;
-> +
-> +		ASSERT_NE(NULL, bar->vaddr);
-> +
-> +		/*
-> +		 * clear_soft_dirty_refs() stripped write permissions from
-> +		 * vma->vm_page_prot on the unpopulated BAR mapping created by
-
-Sashiko's finding here is right. The BAR mappings may be populated
-already at this point. You can reliably zap the BAR mappings by clearing
-PCI_COMMAND_MEMORY. e.g.
-
-  static void zap_bar_mappings(struct vfio_pci_device *device)
-  {
-          vfio_pci_cmd_clear(device, PCI_COMMAND_MEMORY);
-          vfio_pci_cmd_set(device, PCI_COMMAND_MEMORY);
-  }
-
-Then you can also use this instead of mmap()+madvise() below.
-
-> +		 * vfio_pci_device_init(). Fault it read-only first, then write
-> +		 * to exercise in-place write-upgrade (wp_huge_pmd/wp_huge_pud).
-> +		 */
-> +		val = READ_ONCE(*(u32 *)bar->vaddr);
-> +		WRITE_ONCE(*(u32 *)bar->vaddr, val);
-
-Writing to offset 0 of every read/write BAR isn't necessarily safe. It
-could be a doorbell, a write-1-to-clear status register, the MSI-X
-table, etc.
-
-There's no way to trigger the write fault without actually writing to
-the BAR (e.g. MADV_POPULATE_WRITE fails on VM_PFNMAP VMAs), so the test
-needs to know where it's safe to write.
-
-To solve this, I propose adding a helper to the VFIO selftests library
-that finds a BAR (or range within a BAR) that behaves like memory, i.e.
-every location can be read and written with arbitrary values without
-side effects. Something like:
-
-  bool vfio_pci_find_mem_bar(struct vfio_pci_device *device, u64 min_size,
-                             struct vfio_pci_mem_bar *mem_bar);
-
-Detection would be based on a table of known devices, and tests SKIP()
-when no such BAR is found. Your test would then ask for a mem BAR of at
-least PMD_SIZE and run both cases on it.
-
-This came up recently with Matt's DMABUF mmap() test as well [1], so I
-think it belongs in the library rather than in vfio_pci_device_test.c.
-It shouldn't be much more work than a test-local helper (but please add
-it in a separate commit).
-
-My suggestion would be for QEMU's pci-testdev (1b36:0005) to be the
-first device in the table, since anyone can run it in a VM without any
-special hardware. With membar-backed=on, pci-testdev's BAR2 is a 64-bit
-prefetchable BAR backed by plain RAM, so it's safe to read and write
-anywhere in it. membar-backed requires QEMU 10.1 or newer. For example:
-
-  qemu-system-x86_64 \
-    -machine q35,accel=kvm,kernel-irqchip=split \
-    -device intel-iommu,intremap=on \
-    -device pci-testdev,membar=1G,membar-backed=on \
-    ...
-
-Then boot the guest and run the test against the device:
-
-  $ BDF=$(lspci -D -d 1b36:0005 | awk '{print $1}')
-  $ ./scripts/setup.sh $BDF
-  $ ./vfio_pci_device_test $BDF
-
-membar=1G is large enough to exercise both PMD and PUD mappings, since
-vfio_pci_bar_map() aligns the mapping to min(size, 1G). If 1G of host
-RAM for the BAR is too much, membar=2M still covers the PMD case.
-
-If you want to also add the device you reproduced on to the table, that
-works for me too. More devices can be added later as needed.
-
-This could also be added to the vfio_pci_driver framework, but I'm not
-sure that is a good idea. Devices that have large memory-like BARs
-aren't necessarily the same devices that can implement memcpy and send
-MSIs.
-
-Would you be open to adding vfio_pci_find_mem_bar() as part of this
-series?
-
-[1] https://lore.kernel.org/kvm/CALzav=cGtmkBBpfUA8nP7AQ3azB_Hn7_8jJL=J+E+h61CpOFrw@mail.gmail.com/
-
-> +
-> +		/*
-> +		 * Replace the VMA with a fresh unpopulated mapping at the same
-> +		 * hugepage-aligned address, clear soft-dirty again, and fault
-> +		 * with an immediate store to exercise initial write insertion
-> +		 * (vmf_insert_pfn_pmd/pud with write=true).
-> +		 */
-> +		vaddr = mmap(bar->vaddr, bar->info.size, PROT_READ | PROT_WRITE,
-> +			     MAP_SHARED | MAP_FIXED, self->device->fd,
-> +			     bar->info.offset);
-> +		ASSERT_EQ(bar->vaddr, vaddr);
-> +		madvise(bar->vaddr, bar->info.size, MADV_HUGEPAGE);
-> +
-> +		ASSERT_EQ(0, clear_soft_dirty_refs());
-> +
-> +		WRITE_ONCE(*(u32 *)bar->vaddr, val);
-> +		(void)READ_ONCE(*(u32 *)bar->vaddr);
-> +
-> +		tested = true;
-
-Should only BARs >= PMD_SIZE be considered tested?
-
-> +	}
-> +
-> +	vfio_pci_cmd_clear(self->device, PCI_COMMAND_MEMORY);
-
-This should restore PCI_COMMAND_MEMORY to whatever it was at the start
-of the test. Or just leave PCI_COMMAND_MEMORY enabled (that would also
-be harmless).
-
-> +
-> +	if (!tested)
-> +		SKIP(return, "No mappable read/write BAR on %s\n", device_bdf);
-> +}
-> +
->  FIXTURE(vfio_pci_irq_test) {
->  	struct iommu *iommu;
->  	struct vfio_pci_device *device;
-> -- 
-> 2.56.0.385.gac671c819a-goog
+On 11/2/26 19:58, Mina Almasry wrote:
+> On Mon, Nov 2, 2026 at 7:29 AM Paolo Abeni <pabeni@redhat.com> wrote:
+>> On 11/2/26 00:16, Mina Almasry wrote:
+>>> On Sun, Nov 1, 2026 at 3:01 PM <netdev-bot+sashiko@kernel.org> wrote:
+>>>>
+>>>> - [High] The dma_dev use-after-free this patch says it fixes can still
+>>>>     happen for RX bindings made on a virtual device that leases queues,...
+>>>>
+>>>
+>>> I know about the issues with leased devices. That needs a bit of a
+>>> rework, which I have done locally, and would like to send out as a
+>>> follow up fix.
+>> Will such follow-up rework the code touched by  current patch/series?
+>> how much? I'm under the impression that at least the fix for the issue
+>> reported here would be quite overlapping.
+>>
+>> /P
 > 
+> I pushed the follow-up branch on top of v5 here so you can see the exact diff:
+> https://github.com/mina/linux/compare/devmem-teardown-v4...devmem-lease-bind-map-dev
+> (commits: https://github.com/mina/linux/commits/devmem-lease-bind-map-dev)
+> 
+> There is some overlap (~55 lines of v5 touched across a 6-patch +262/-99
+> follow-up): it renames binding->dev/vdev to binding->map_dev/bind_dev, passes
+> the net_device explicitly to net_devmem_lock_dev(), factors out
+> net_devmem_close_rxqs(), and replaces the !rxq->lease / !netif_is_queue_leasee()
+> skips in net_devmem_dev_unregister() and mp_dmabuf_devmem_uninstall().
+> 
+> I kept it separate only to keep this net fix smaller and easier to review,
+> since the lease issue is pre-existing. Happy to either land v5 first and send
+> those 6 patches right after, or fold them into a v6 if you prefer avoiding the
+> churn.
+I hoped for something smaller :)
+
+I definitely would not fold the 2 series.
+
+I'm wondering if this could be considered net-next material? pointing to
+net-next will offer better guarantees for all the work to land in the same
+release (no need to repost in such a case, I can apply this one to net-next
+directly).
+
+/P
+
