@@ -1,37 +1,37 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=85.214.250.239
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793619733;
-	b=DMBxsD9l3d0hHMrNmT4kEwrmRaoUJKVv/oeDTxB8mLJB20xWz2d6jdO/pxG4+vYjGKct
-	 wYZcSLHQWC2OBNDs8CuuhB8SN9/vMoTLYijKc+olgD7v5ZnVeH+RZDyhl/C8NSjoP51os
-	 cOVAwCqiOEYKheHPb3Op1ZAgvuiO2R8OwuKsOG8aIq1MieFGBfXdYEi4f82Za6J4bmxAu
-	 dfhbARWTsmG6IaDNu3vmOAYaqcshSK/uCDPvdDPGUmIn0SYgSlMYWGZirlXUo/6Obq+jB
-	 mfPyVDKC0R09lB0T4Ev6xEergpmK78FjglYtF5hbR4JY4qXCJVcwsUtU6ZjQC9q7DDA==
+	t=1793619731;
+	b=kJd3uYuXq2sWtDsgYdFelqObUccTb4Sv46QubpFM/XTFT4iSYNiwZW/xNhSdVqxFct6x
+	 +i8OElkcAeHl4XCAohWCYYr6+pZHG4QfXA5BxV3PdMe2Fphpyo1qQCz1Dv8NGmbQTWqhB
+	 hvbKFNcMv1xXgftdXJ6x9jOnoh0M0O0tS+csevunvhCd2R09kXgFarrceWsMgYvaAW35O
+	 b4MjSYQDSOZn9RdMi+2iDQUWoiUQ4GOEM+wTwmrwyGXRquVuErVC2c4+HShlu9c8OtE7d
+	 sEQRuqUigK8aITNV1buxWcHQi2C69cStNM5akY0wNIiGLOeV/iSaiOdm/CZkHASE8MA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793619733;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793619731;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=d+Y6u7PEJRFqOIWKsdKXhTwqPG37On6ycpJokSLmKTg=;
-	b=qJmAY2XrkLPALPylt++WnUoKyL+lvG6iv/GepZA6PT1et3pT4fjE8qld1v0I3WE73Bf7
-	 1TbZM1iuOMH/HS/a/ZGreVn6AD+V7aqkgQdjtDX8BAiwU3+o9bNYokrtBlEkitqOPtpG4
-	 HBOOnj5ZeWAMyFnhDp29kMHxRx5iByKv0BuJ/TimiBk7GsVMn941zhYtF79GrhhSJc4K9
-	 //C2rj+2N1DtQ8biPny3ohcVMc4xBYUtsC/5Pn4yz+mkgto5oPzr3WR/ziWCwDLQL4M9r
-	 AE55GUw1CO+rHO2kE8EDhHsd8IXNXKNXySb1QNtv9KAj09tp+LMuvTIaqKgmX9v7JhA==
+	bh=TEU2WoAEETIO1KA1ci4BU3Q44LkzMYCz5O8+st3qozg=;
+	b=uglohwT6zTMq5gbVOGad6s7tXIovXS/vdOtvAj/Khrvd8MDny7yRlANGAZwq4pkk6x47
+	 i0bQQM2PygKT2+l8EJ7LoX1eR+5JHApqIMBFcupOD6xVQaiwvZ5Dv0AGd+gHOxUCTHA2C
+	 Mux4owF4pZ9xjt8hQlyBw+4lhc92zbS5NikH7BQf0PE8LwhItpgGyJ4jhsL1Vg8pgE24r
+	 V0qs2HpfQGyiagfydVwO6ivMxbuUzMYH5i416lzqdvSQhhi+j5QMgh4moYl5Mrn3CpamI
+	 kEP4Ix0ZvZaG8c68N7v7mCyWuTWYozf5UHf0hfzSBfmBIyq3DjEtyikUb7SehI6zFBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=8bytes.org;
 	spf=pass smtp.mailfrom=8bytes.org;
 	arc=none smtp.remote-ip=85.214.250.239
 Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A8760A2633;
-	Mon,  2 Nov 2026 11:42:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67A8760A2633
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8001606A334;
+	Mon,  2 Nov 2026 11:42:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8001606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
 Received: from io.fritz.box (p200300f6af404a0027ad06761c59e6b3.dip0.t-ipconnect.de [IPv6:2003:f6:af40:4a00:27ad:676:1c59:e6b3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 373A3243AE0;
-	Mon,  2 Nov 2026 12:42:05 +0100 (CET)
+	by mail.8bytes.org (Postfix) with ESMTPSA id 84E4B243AB0;
+	Mon,  2 Nov 2026 12:42:04 +0100 (CET)
 From: =?UTF-8?q?J=C3=B6rg=20R=C3=B6del?= <joro@8bytes.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Sean Christopherson <seanjc@google.com>
@@ -48,9 +48,9 @@ Cc: Michael Roth <michael.roth@amd.com>,
 	linux-kselftest@vger.kernel.org,
 	coconut-svsm@lists.linux.dev,
 	joro@8bytes.org
-Subject: [PATCH v3 8/8] KVM: selftests: Test SNP vCPU state and direct VMSA launch
-Date: Mon,  2 Nov 2026 12:41:37 +0100
-Message-ID: <20261102114137.1198982-9-joro@8bytes.org>
+Subject: [PATCH v3 4/8] KVM: SEV: Add direct VMSA capability
+Date: Mon,  2 Nov 2026 12:41:33 +0100
+Message-ID: <20261102114137.1198982-5-joro@8bytes.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261102114137.1198982-1-joro@8bytes.org>
 References: <20261102114137.1198982-1-joro@8bytes.org>
@@ -67,535 +67,221 @@ Content-Transfer-Encoding: 8bit
 
 From: Joerg Roedel <joerg.roedel@amd.com>
 
-Add vCPU-scoped SEV ioctl helpers and exercise the SNP vCPU state get and
-set commands.  Enable KVM_CAP_SNP_DIRECT_VMSA before creating vCPUs and
-verify that invalid capability arguments and late enable attempts fail.
+Direct VMSA mode is currently selected implicitly when userspace installs
+a guest-owned VMSA on any vCPU.  That makes the launch model a side effect
+of per-vCPU state and applies it retroactively to every vCPU.
 
-Boot through a handcrafted BSP VMSA, verify VMSA and GHCB address round
-trips and validity bits, rebind to the selected GPA, and verify an extra
-unassociated AP remains uninitialized.
+Add KVM_CAP_SNP_DIRECT_VMSA as a VM-scoped settable capability.  Require
+userspace to enable it on an SNP VM before creating vCPUs, and reject
+nonzero arguments.
 
-Reject multi-page launch updates and VMSAs with nonzero VMPL or mismatched
-SEV features.  Also verify the legacy launch path and reject non-SNP use,
-bad or reserved arguments, unsafe alignment, absent pages, wrong ordering,
-and post-launch SET calls.  Verify that SET accepts both shared and private
-guestmemfd-backed VMSA GPAs without consulting memory attributes or the
-RMP.
+When enabled, skip allocating KVM-owned VMSAs during vCPU creation and
+skip generating and measuring KVM-owned VMSAs at launch finish.  Keep
+legacy allocation and measurement behavior when it is not enabled.
 
 Signed-off-by: Joerg Roedel <joerg.roedel@amd.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- tools/testing/selftests/kvm/include/x86/sev.h |  49 ++
- .../kvm/x86/sev_snp_direct_vmsa_test.c        | 421 ++++++++++++++++++
- 3 files changed, 471 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/sev_snp_direct_vmsa_test.c
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +
+ arch/x86/include/asm/kvm_host.h    |  1 +
+ arch/x86/kvm/svm/sev.c             | 28 ++++++++++++++++++++--------
+ arch/x86/kvm/svm/svm.c             | 22 ++++++++++++++++++++++
+ arch/x86/kvm/svm/svm.h             |  1 +
+ arch/x86/kvm/x86.c                 |  5 +++++
+ include/uapi/linux/kvm.h           |  1 +
+ 7 files changed, 51 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 9f2b15250a2a..1131fb0f630d 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -155,6 +155,7 @@ TEST_GEN_PROGS_x86 += x86/sev_dbg_test
- TEST_GEN_PROGS_x86 += x86/sev_init2_tests
- TEST_GEN_PROGS_x86 += x86/sev_migrate_tests
- TEST_GEN_PROGS_x86 += x86/sev_snp_apic_id_test
-+TEST_GEN_PROGS_x86 += x86/sev_snp_direct_vmsa_test
- TEST_GEN_PROGS_x86 += x86/sev_smoke_test
- TEST_GEN_PROGS_x86 += x86/amx_test
- TEST_GEN_PROGS_x86 += x86/max_vcpuid_cap_test
-diff --git a/tools/testing/selftests/kvm/include/x86/sev.h b/tools/testing/selftests/kvm/include/x86/sev.h
-index dec383e59a47..0f6c92b802ee 100644
---- a/tools/testing/selftests/kvm/include/x86/sev.h
-+++ b/tools/testing/selftests/kvm/include/x86/sev.h
-@@ -100,6 +100,30 @@ static inline u64 snp_default_policy(void)
- 	__TEST_ASSERT_VM_VCPU_IOCTL(!ret, #cmd,	ret, vm);		\
- })
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index 4dde4e3e608a..c853dc65fb53 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -23,6 +23,7 @@ KVM_X86_OP(vcpu_after_set_cpuid)
+ KVM_X86_OP(vm_init)
+ KVM_X86_OP_OPTIONAL(vm_destroy)
+ KVM_X86_OP_OPTIONAL(vm_pre_destroy)
++KVM_X86_OP_OPTIONAL(enable_vm_cap)
+ KVM_X86_OP_OPTIONAL_RET0(vcpu_precreate)
+ KVM_X86_OP(vcpu_create)
+ KVM_X86_OP(vcpu_free)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 1ee4b127004d..be758e0d55aa 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1524,6 +1524,7 @@ struct kvm_x86_ops {
+ 	int (*vm_init)(struct kvm *kvm);
+ 	void (*vm_destroy)(struct kvm *kvm);
+ 	void (*vm_pre_destroy)(struct kvm *kvm);
++	int (*enable_vm_cap)(struct kvm *kvm, struct kvm_enable_cap *cap);
  
-+static inline int __vcpu_sev_ioctl(struct kvm_vcpu *vcpu, u32 cmd, void *arg)
-+{
-+	union {
-+		struct kvm_sev_cmd c;
-+		unsigned long raw;
-+	} sev_cmd = { .c = {
-+		.id = cmd,
-+		.data = (u64)arg,
-+		.sev_fd = vcpu->vm->arch.sev_fd,
-+	} };
-+	int ret;
+ 	/* Create, but do not attach this VCPU */
+ 	int (*vcpu_precreate)(struct kvm *kvm);
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 9681ff0aa5d3..09e1c2da546d 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2541,8 +2541,15 @@ static int snp_launch_update_vmsa(struct kvm *kvm, struct kvm_sev_cmd *argp)
+ 
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
+ 		struct vcpu_svm *svm = to_svm(vcpu);
+-		u64 pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
++		u64 pfn;
 +
-+	ret = __vcpu_ioctl(vcpu, KVM_MEMORY_ENCRYPT_OP, &sev_cmd.raw);
-+	return ret ?: sev_cmd.c.error;
-+}
++		if (sev->snp_direct_vmsa) {
++			if (!svm->sev_es.snp_has_guest_vmsa)
++				svm->vmcb->control.vmsa_pa = INVALID_PAGE;
++			goto protect_vcpu;
++		}
+ 
++		pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
+ 		ret = sev_es_sync_vmsa(svm);
+ 		if (ret)
+ 			goto out;
+@@ -2562,6 +2569,7 @@ static int snp_launch_update_vmsa(struct kvm *kvm, struct kvm_sev_cmd *argp)
+ 			goto out;
+ 		}
+ 
++protect_vcpu:
+ 		svm->vcpu.arch.guest_state_protected = true;
+ 		/*
+ 		 * SEV-ES (and thus SNP) guest mandates LBR Virtualization to
+@@ -3583,6 +3591,9 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+ 	 * a guest-owned page. Transition the page to hypervisor state before
+ 	 * releasing it back to the system.
+ 	 */
++	if (!svm->sev_es.vmsa)
++		goto skip_vmsa_free;
 +
-+#define vcpu_sev_ioctl(vcpu, cmd, arg)				\
-+({								\
-+	struct kvm_vcpu *__vcpu = (vcpu);				\
-+	int ret = __vcpu_sev_ioctl(__vcpu, cmd, arg);		\
-+								\
-+	__TEST_ASSERT_VM_VCPU_IOCTL(!ret, #cmd, ret, __vcpu->vm);	\
-+})
+ 	if (is_sev_snp_guest(vcpu)) {
+ 		u64 pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
+ 
+@@ -4078,13 +4089,9 @@ static void __sev_snp_reload_vmsa(struct kvm_vcpu *vcpu, gpa_t gpa)
+ 	vmcb_mark_all_dirty(svm->vmcb);
+ 
+ 	/*
+-	 * From this point forward, the VMSA will always be a guest-mapped page
+-	 * rather than the initial one allocated by KVM in svm->sev_es.vmsa. In
+-	 * theory, svm->sev_es.vmsa could be free'd and cleaned up here, but
+-	 * that involves cleanups like flushing caches, which would ideally be
+-	 * handled during teardown rather than guest boot.  Deferring that also
+-	 * allows the existing logic for SEV-ES VMSAs to be re-used with
+-	 * minimal SNP-specific changes.
++	 * From this point forward, the VMSA will always be a guest-mapped page.
++	 * If KVM allocated an initial VMSA, keep it until teardown to defer
++	 * cache flushing and other cleanup out of the guest boot path.
+ 	 */
+ 	svm->sev_es.snp_has_guest_vmsa = true;
+ 
+@@ -4975,12 +4982,15 @@ void sev_init_vmcb(struct vcpu_svm *svm, bool init_event)
+ int sev_vcpu_create(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
++	struct kvm_sev_info *sev = to_kvm_sev_info(vcpu->kvm);
+ 	struct page *vmsa_page;
+ 
+ 	mutex_init(&svm->sev_es.snp_vmsa_mutex);
+ 
+ 	if (!is_sev_es_guest(vcpu))
+ 		return 0;
++	if (is_sev_snp_guest(vcpu) && sev->snp_direct_vmsa)
++		goto init_vmsa_state;
+ 
+ 	/*
+ 	 * SEV-ES guests require a separate (from the VMCB) VMSA page used to
+@@ -4991,6 +5001,8 @@ int sev_vcpu_create(struct kvm_vcpu *vcpu)
+ 		return -ENOMEM;
+ 
+ 	svm->sev_es.vmsa = page_address(vmsa_page);
 +
- void sev_vm_init(struct kvm_vm *vm);
- void sev_es_vm_init(struct kvm_vm *vm);
- void snp_vm_init(struct kvm_vm *vm);
-@@ -144,6 +168,31 @@ static inline void snp_launch_update_data(struct kvm_vm *vm, gpa_t gpa,
- 	vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_UPDATE, &update_data);
++init_vmsa_state:
+ 	svm->sev_es.snp_pending_vmsa_gpa = INVALID_PAGE;
+ 	svm->sev_es.snp_guest_vmsa_gpa = INVALID_PAGE;
+ 
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 136069dfcd44..d84109394115 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -5458,6 +5458,27 @@ static void *svm_alloc_apic_backing_page(struct kvm_vcpu *vcpu)
+ 	return page_address(page);
  }
  
-+static inline void snp_launch_update_vmsa(struct kvm_vm *vm, gpa_t gpa,
-+					  void *vmsa)
++static int svm_enable_vm_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
 +{
-+	vm_mem_set_private(vm, gpa, PAGE_SIZE);
-+	snp_launch_update_data(vm, gpa, (u64)vmsa, PAGE_SIZE,
-+			       KVM_SEV_SNP_PAGE_TYPE_VMSA);
++	switch (cap->cap) {
++#ifdef CONFIG_KVM_AMD_SEV
++	case KVM_CAP_SNP_DIRECT_VMSA:
++		if (memchr_inv(cap->args, 0, sizeof(cap->args)) ||
++		    kvm->arch.vm_type != KVM_X86_SNP_VM)
++			return -EINVAL;
++
++		guard(mutex)(&kvm->lock);
++		if (kvm->created_vcpus)
++			return -EINVAL;
++
++		to_kvm_sev_info(kvm)->snp_direct_vmsa = true;
++		return 0;
++#endif
++	default:
++		return -EINVAL;
++	}
 +}
 +
-+static inline void snp_get_vcpu_state(struct kvm_vcpu *vcpu,
-+				      struct kvm_sev_snp_vcpu_state *state)
-+{
-+	vcpu_sev_ioctl(vcpu, KVM_SEV_SNP_GET_VCPU_STATE, state);
-+}
-+
-+static inline void snp_set_vcpu_state(struct kvm_vcpu *vcpu, gpa_t vmsa_gpa)
-+{
-+	struct kvm_sev_snp_vcpu_state state = {
-+		.vmsa_gpa = vmsa_gpa,
-+		.valid_fields = KVM_SEV_SNP_VCPU_STATE_VMSA_VALID |
-+				KVM_SEV_SNP_VCPU_STATE_GHCB_VALID,
-+	};
-+
-+	vcpu_sev_ioctl(vcpu, KVM_SEV_SNP_SET_VCPU_STATE, &state);
-+}
-+
- static inline void sev_dbg_crypt_memory(struct kvm_vm *vm, unsigned int cmd,
- 					void *dst, void *src, unsigned int len)
- {
-diff --git a/tools/testing/selftests/kvm/x86/sev_snp_direct_vmsa_test.c b/tools/testing/selftests/kvm/x86/sev_snp_direct_vmsa_test.c
-new file mode 100644
-index 000000000000..63b01d563dc0
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/sev_snp_direct_vmsa_test.c
-@@ -0,0 +1,421 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <errno.h>
-+#include <stdlib.h>
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "sev.h"
-+#include "svm_util.h"
-+
-+#define DIRECT_MARKER	0x444952454354564dULL
-+#define LEGACY_MARKER	0x4c4547414359564dULL
-+#define SNP_ACTIVE_SEV_FEATURE	BIT_ULL(0)
-+#define VMSA_PMD_SIZE	BIT_ULL(21)
-+#define VMSA_MIN_GPA	(VMSA_PMD_SIZE + PAGE_SIZE)
-+
-+struct test_vmsa {
-+	struct vmcb_seg es, cs, ss, ds, fs, gs;
-+	struct vmcb_seg gdtr, ldtr, idtr, tr;
-+	u64 pl0_ssp, pl1_ssp, pl2_ssp, pl3_ssp;
-+	u64 u_cet;
-+	u8 reserved_0xc8[2];
-+	u8 vmpl;
-+	u8 cpl;
-+	u8 reserved_0xcc[4];
-+	u64 efer;
-+	u8 reserved_0xd8[104];
-+	u64 xss;
-+	u64 cr4, cr3, cr0, dr7, dr6, rflags, rip;
-+	u64 dr0, dr1, dr2, dr3;
-+	u64 dr0_addr_mask, dr1_addr_mask, dr2_addr_mask, dr3_addr_mask;
-+	u8 reserved_0x1c0[24];
-+	u64 rsp, s_cet, ssp, isst_addr, rax;
-+	u64 star, lstar, cstar, sfmask, kernel_gs_base;
-+	u64 sysenter_cs, sysenter_esp, sysenter_eip, cr2;
-+	u8 reserved_0x248[32];
-+	u64 g_pat, dbgctl, br_from, br_to, last_excp_from, last_excp_to;
-+	u8 reserved_0x298[80];
-+	u32 pkru, tsc_aux;
-+	u64 tsc_scale, tsc_offset;
-+	u8 reserved_0x300[8];
-+	u64 rcx, rdx, rbx, reserved_0x320, rbp, rsi, rdi;
-+	u64 r8, r9, r10, r11, r12, r13, r14, r15;
-+	u8 reserved_0x380[16];
-+	u64 guest_exit_info_1, guest_exit_info_2, guest_exit_int_info, guest_nrip;
-+	u64 sev_features, vintr_ctrl, guest_exit_code, virtual_tom, tlb_id, pcpu_id;
-+	u64 event_inj, xcr0;
-+	u8 reserved_0x3f0[16];
-+	u64 x87_dp;
-+	u32 mxcsr;
-+	u16 x87_ftw, x87_fsw, x87_fcw, x87_fop, x87_ds, x87_cs;
-+	u64 x87_rip;
-+	u8 fpreg_x87[80];
-+	u8 fpreg_xmm[256];
-+	u8 fpreg_ymm[256];
-+} __packed;
-+
-+static_assert(offsetof(struct test_vmsa, vmpl) == 0xca);
-+static_assert(offsetof(struct test_vmsa, rip) == 0x178);
-+static_assert(offsetof(struct test_vmsa, sev_features) == 0x3b0);
-+static_assert(offsetof(struct test_vmsa, xcr0) == 0x3e8);
-+
-+static void guest_direct_entry(u64 *marker)
-+{
-+	*marker = DIRECT_MARKER;
-+	wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
-+	vmgexit();
-+}
-+
-+static void guest_legacy_entry(u64 *marker)
-+{
-+	*marker = LEGACY_MARKER;
-+	wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
-+	vmgexit();
-+}
-+
-+static void copy_segment(struct vmcb_seg *dst, const struct kvm_segment *src)
-+{
-+	dst->selector = src->selector;
-+	dst->base = src->base;
-+	dst->limit = src->limit;
-+	dst->attrib = src->type |
-+		(src->s << SVM_SELECTOR_S_SHIFT) |
-+		(src->dpl << SVM_SELECTOR_DPL_SHIFT) |
-+		((src->present && !src->unusable) << SVM_SELECTOR_P_SHIFT) |
-+		(src->avl << SVM_SELECTOR_AVL_SHIFT) |
-+		(src->l << SVM_SELECTOR_L_SHIFT) |
-+		(src->db << SVM_SELECTOR_DB_SHIFT) |
-+		(src->g << SVM_SELECTOR_G_SHIFT);
-+}
-+
-+static void copy_dtable(struct vmcb_seg *dst, const struct kvm_dtable *src)
-+{
-+	dst->base = src->base;
-+	dst->limit = src->limit;
-+}
-+
-+static void prepare_vmsa(struct kvm_vcpu *vcpu, struct test_vmsa *vmsa,
-+			 void *entry)
-+{
-+	struct kvm_sregs sregs;
-+	struct kvm_regs regs;
-+
-+	memset(vmsa, 0, PAGE_SIZE);
-+	vcpu_sregs_get(vcpu, &sregs);
-+	vcpu_regs_get(vcpu, &regs);
-+
-+	copy_segment(&vmsa->es, &sregs.es);
-+	copy_segment(&vmsa->cs, &sregs.cs);
-+	copy_segment(&vmsa->ss, &sregs.ss);
-+	copy_segment(&vmsa->ds, &sregs.ds);
-+	copy_segment(&vmsa->fs, &sregs.fs);
-+	copy_segment(&vmsa->gs, &sregs.gs);
-+	copy_dtable(&vmsa->gdtr, &sregs.gdt);
-+	copy_segment(&vmsa->ldtr, &sregs.ldt);
-+	copy_dtable(&vmsa->idtr, &sregs.idt);
-+	copy_segment(&vmsa->tr, &sregs.tr);
-+
-+	vmsa->cpl = sregs.cs.dpl;
-+	/*
-+	 * KVM_GET_SREGS exposes the guest-visible EFER and therefore omits
-+	 * SVME, which KVM normally adds to the hardware VMSA itself.
-+	 */
-+	vmsa->efer = sregs.efer | EFER_SVME;
-+	vmsa->cr4 = sregs.cr4;
-+	vmsa->cr3 = sregs.cr3;
-+	vmsa->cr0 = sregs.cr0;
-+	vmsa->dr7 = 0x400;
-+	vmsa->dr6 = 0xffff0ff0;
-+	vmsa->rflags = regs.rflags;
-+	vmsa->rip = (u64)entry;
-+	vmsa->rsp = regs.rsp;
-+	vmsa->rax = regs.rax;
-+	vmsa->rcx = regs.rcx;
-+	vmsa->rdx = regs.rdx;
-+	vmsa->rbx = regs.rbx;
-+	vmsa->rbp = regs.rbp;
-+	vmsa->rsi = regs.rsi;
-+	vmsa->rdi = regs.rdi;
-+	vmsa->r8 = regs.r8;
-+	vmsa->r9 = regs.r9;
-+	vmsa->r10 = regs.r10;
-+	vmsa->r11 = regs.r11;
-+	vmsa->r12 = regs.r12;
-+	vmsa->r13 = regs.r13;
-+	vmsa->r14 = regs.r14;
-+	vmsa->r15 = regs.r15;
-+	vmsa->g_pat = 0x0007040600070406ULL;
-+	vmsa->sev_features = SNP_ACTIVE_SEV_FEATURE;
-+	vmsa->xcr0 = 1;
-+	vmsa->mxcsr = 0x1f80;
-+	vmsa->x87_fcw = 0x37f;
-+}
-+
-+static void expect_launch_update_vmsa_error(struct kvm_vm *vm, gpa_t gpa,
-+					    void *vmsa, u64 size)
-+{
-+	struct kvm_sev_snp_launch_update update = {
-+		.gfn_start = gpa >> PAGE_SHIFT,
-+		.uaddr = (u64)vmsa,
-+		.len = size,
-+		.type = KVM_SEV_SNP_PAGE_TYPE_VMSA,
-+	};
-+
-+	errno = 0;
-+	TEST_ASSERT_EQ(__vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_UPDATE, &update), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+}
-+
-+static void exclude_from_normal_launch(struct kvm_vm *vm, gpa_t gpa,
-+				       unsigned int npages)
-+{
-+	struct userspace_mem_region *region;
-+
-+	region = memslot2region(vm, vm->memslots[MEM_REGION_TEST_DATA]);
-+	sparsebit_clear_num(region->protected_phy_pages, gpa >> PAGE_SHIFT, npages);
-+}
-+
-+static void assert_vcpu_terminated(struct kvm_vcpu *vcpu)
-+{
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
-+	TEST_ASSERT_EQ(vcpu->run->system_event.type, KVM_SYSTEM_EVENT_SEV_TERM);
-+}
-+
-+static struct kvm_vm *create_direct_vmsa_vm(unsigned int nr_vcpus,
-+					    void *guest_code,
-+					    struct kvm_vcpu **vcpus)
-+{
-+	struct vm_shape shape = {
-+		.mode = VM_MODE_DEFAULT,
-+		.type = KVM_X86_SNP_VM,
-+	};
-+	struct kvm_vm *vm;
-+	unsigned int i;
-+
-+	vm = __vm_create(shape, nr_vcpus, 0);
-+	vm_enable_cap(vm, KVM_CAP_SNP_DIRECT_VMSA, 0);
-+	for (i = 0; i < nr_vcpus; i++)
-+		vcpus[i] = vm_vcpu_add(vm, i, guest_code);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+
-+	return vm;
-+}
-+
-+static void test_direct_vmsa(void)
-+{
-+	struct test_vmsa *vmsas, *selected_vmsa;
-+	struct kvm_sev_snp_vcpu_state state = {};
-+	struct kvm_mp_state mp_state = {
-+		.mp_state = KVM_MP_STATE_UNINITIALIZED,
-+	};
-+	struct kvm_vcpu *vcpus[2];
-+	struct kvm_vcpu *vcpu, *ap;
-+	struct kvm_vm *vm;
-+	gva_t marker_gva;
-+	gpa_t vmsa_gpa;
-+	u64 *marker;
-+
-+	vm = create_direct_vmsa_vm(ARRAY_SIZE(vcpus), guest_legacy_entry, vcpus);
-+	vcpu = vcpus[0];
-+	ap = vcpus[1];
-+	/* Restore normal AP state after vm_vcpu_add() makes it runnable. */
-+	vcpu_mp_state_set(ap, &mp_state);
-+	marker_gva = vm_alloc_shared(vm, PAGE_SIZE, KVM_UTIL_MIN_VADDR,
-+				     MEM_REGION_TEST_DATA);
-+	marker = addr_gva2hva(vm, marker_gva);
-+	vcpu_args_set(vcpu, 1, marker_gva);
-+
-+	vmsa_gpa = ____vm_phy_pages_alloc(vm, 2, VMSA_MIN_GPA,
-+					vm->memslots[MEM_REGION_TEST_DATA], true, false);
-+	TEST_ASSERT(vmsa_gpa & (VMSA_PMD_SIZE - 1), "unsafe VMSA GPA");
-+	vmsas = aligned_alloc(PAGE_SIZE, 2 * PAGE_SIZE);
-+	TEST_ASSERT(vmsas, "Failed to allocate VMSA source pages");
-+	selected_vmsa = (void *)vmsas + PAGE_SIZE;
-+	prepare_vmsa(vcpu, &vmsas[0], guest_legacy_entry);
-+	prepare_vmsa(vcpu, selected_vmsa, guest_direct_entry);
-+
-+	snp_vm_launch_start(vm, snp_default_policy());
-+	vm_mem_set_private(vm, vmsa_gpa, 2 * PAGE_SIZE);
-+	expect_launch_update_vmsa_error(vm, vmsa_gpa, vmsas, 2 * PAGE_SIZE);
-+
-+	vmsas[0].vmpl = 1;
-+	expect_launch_update_vmsa_error(vm, vmsa_gpa, vmsas, PAGE_SIZE);
-+	vmsas[0].vmpl = 0;
-+	vmsas[0].sev_features = 0;
-+	expect_launch_update_vmsa_error(vm, vmsa_gpa, vmsas, PAGE_SIZE);
-+	vmsas[0].sev_features = SNP_ACTIVE_SEV_FEATURE;
-+
-+	snp_launch_update_vmsa(vm, vmsa_gpa, vmsas);
-+	snp_launch_update_vmsa(vm, vmsa_gpa + PAGE_SIZE, selected_vmsa);
-+	exclude_from_normal_launch(vm, vmsa_gpa, 2);
-+	snp_vm_launch_update(vm);
-+
-+	/* Rebinding is allowed; the second, selected VMSA must win. */
-+	snp_set_vcpu_state(vcpu, vmsa_gpa);
-+	snp_set_vcpu_state(vcpu, vmsa_gpa + PAGE_SIZE);
-+	snp_get_vcpu_state(vcpu, &state);
-+	TEST_ASSERT_EQ(state.valid_fields,
-+		       KVM_SEV_SNP_VCPU_STATE_VMSA_VALID |
-+		       KVM_SEV_SNP_VCPU_STATE_GHCB_VALID);
-+	TEST_ASSERT_EQ(state.vmsa_gpa, vmsa_gpa + PAGE_SIZE);
-+	TEST_ASSERT_EQ(state.ghcb_gpa, 0);
-+	snp_vm_launch_finish(vm);
-+
-+	vcpu_mp_state_get(ap, &mp_state);
-+	TEST_ASSERT_EQ(mp_state.mp_state, KVM_MP_STATE_UNINITIALIZED);
-+	*marker = 0;
-+	assert_vcpu_terminated(vcpu);
-+	TEST_ASSERT_EQ(*marker, DIRECT_MARKER);
-+
-+	state = (struct kvm_sev_snp_vcpu_state) {
-+		.vmsa_gpa = vmsa_gpa,
-+		.valid_fields = KVM_SEV_SNP_VCPU_STATE_VMSA_VALID,
-+	};
-+	errno = 0;
-+	TEST_ASSERT_EQ(__vcpu_sev_ioctl(vcpu, KVM_SEV_SNP_SET_VCPU_STATE,
-+					&state), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+
-+	free(vmsas);
-+	kvm_vm_free(vm);
-+}
-+
-+static void expect_set_vcpu_state_error(struct kvm_vcpu *vcpu,
-+					struct kvm_sev_snp_vcpu_state *state,
-+					int expected_errno)
-+{
-+	errno = 0;
-+	TEST_ASSERT_EQ(__vcpu_sev_ioctl(vcpu, KVM_SEV_SNP_SET_VCPU_STATE, state), -1);
-+	TEST_ASSERT_EQ(errno, expected_errno);
-+}
-+
-+static void test_invalid_requests(void)
-+{
-+	struct kvm_sev_snp_vcpu_state state = {
-+		.valid_fields = KVM_SEV_SNP_VCPU_STATE_VMSA_VALID,
-+	};
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	gva_t shared_gva;
-+	gpa_t private_gpa;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_legacy_entry);
-+	expect_set_vcpu_state_error(vcpu, &state, ENOTTY);
-+	kvm_vm_free(vm);
-+
-+	vm = vm_sev_create_with_one_vcpu(KVM_X86_SNP_VM, guest_legacy_entry, &vcpu);
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+	TEST_ASSERT_EQ(__vm_enable_cap(vm, KVM_CAP_SNP_DIRECT_VMSA, 0), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+	snp_vm_launch_start(vm, snp_default_policy());
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+	kvm_vm_free(vm);
-+
-+	vm = create_direct_vmsa_vm(1, guest_legacy_entry, &vcpu);
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+	snp_vm_launch_start(vm, snp_default_policy());
-+
-+	state.pad[4] = 1;
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+	state.pad[4] = 0;
-+	state.valid_fields |= BIT_ULL(2);
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+	state.valid_fields &= ~BIT_ULL(2);
-+	state.vmsa_gpa = PAGE_SIZE + 1;
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+	state.vmsa_gpa = VMSA_PMD_SIZE;
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+	state.vmsa_gpa = BIT_ULL(40) + PAGE_SIZE;
-+	expect_set_vcpu_state_error(vcpu, &state, EINVAL);
-+
-+	shared_gva = vm_alloc_shared(vm, 2 * PAGE_SIZE, KVM_UTIL_MIN_VADDR,
-+				     MEM_REGION_TEST_DATA);
-+	state.vmsa_gpa = addr_gva2gpa(vm, shared_gva);
-+	if (!(state.vmsa_gpa & (VMSA_PMD_SIZE - 1)))
-+		state.vmsa_gpa += PAGE_SIZE;
-+	state.ghcb_gpa = BIT_ULL(40);
-+	state.valid_fields |= KVM_SEV_SNP_VCPU_STATE_GHCB_VALID;
-+	vcpu_sev_ioctl(vcpu, KVM_SEV_SNP_SET_VCPU_STATE, &state);
-+
-+	private_gpa = ____vm_phy_pages_alloc(vm, 1, VMSA_MIN_GPA,
-+					   vm->memslots[MEM_REGION_TEST_DATA], true, false);
-+	vm_mem_set_private(vm, private_gpa, PAGE_SIZE);
-+	state.vmsa_gpa = private_gpa;
-+	vcpu_sev_ioctl(vcpu, KVM_SEV_SNP_SET_VCPU_STATE, &state);
-+
-+	memset(&state, 0, sizeof(state));
-+	snp_get_vcpu_state(vcpu, &state);
-+	TEST_ASSERT_EQ(state.valid_fields,
-+		       KVM_SEV_SNP_VCPU_STATE_VMSA_VALID |
-+		       KVM_SEV_SNP_VCPU_STATE_GHCB_VALID);
-+	TEST_ASSERT_EQ(state.vmsa_gpa, private_gpa);
-+	TEST_ASSERT_EQ(state.ghcb_gpa, BIT_ULL(40));
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_direct_vmsa_capability(void)
-+{
-+	struct kvm_enable_cap cap = {
-+		.cap = KVM_CAP_SNP_DIRECT_VMSA,
-+	};
-+	struct vm_shape shape = {
-+		.mode = VM_MODE_DEFAULT,
-+		.type = KVM_X86_SNP_VM,
-+	};
-+	struct kvm_vm *vm;
-+
-+	vm = vm_create_barebones();
-+	TEST_ASSERT_EQ(__vm_enable_cap(vm, KVM_CAP_SNP_DIRECT_VMSA, 0), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+	kvm_vm_free(vm);
-+
-+	vm = __vm_create(shape, 1, 0);
-+	TEST_ASSERT_EQ(__vm_enable_cap(vm, KVM_CAP_SNP_DIRECT_VMSA, 1), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+	cap.args[3] = 1;
-+	TEST_ASSERT_EQ(__vm_ioctl(vm, KVM_ENABLE_CAP, &cap), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+	cap.args[3] = 0;
-+	cap.flags = 1;
-+	TEST_ASSERT_EQ(__vm_ioctl(vm, KVM_ENABLE_CAP, &cap), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+	vm_enable_cap(vm, KVM_CAP_SNP_DIRECT_VMSA, 0);
-+	vm_vcpu_add(vm, 0, guest_legacy_entry);
-+	TEST_ASSERT_EQ(__vm_enable_cap(vm, KVM_CAP_SNP_DIRECT_VMSA, 0), -1);
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_legacy_launch(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	gva_t marker_gva;
-+	u64 *marker;
-+
-+	vm = vm_sev_create_with_one_vcpu(KVM_X86_SNP_VM, guest_legacy_entry, &vcpu);
-+	marker_gva = vm_alloc_shared(vm, PAGE_SIZE, KVM_UTIL_MIN_VADDR,
-+				     MEM_REGION_TEST_DATA);
-+	marker = addr_gva2hva(vm, marker_gva);
-+	vcpu_args_set(vcpu, 1, marker_gva);
-+	vm_sev_launch(vm, snp_default_policy(), NULL);
-+	*marker = 0;
-+	assert_vcpu_terminated(vcpu);
-+	TEST_ASSERT_EQ(*marker, LEGACY_MARKER);
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_SNP_VCPU_STATE));
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_SNP_DIRECT_VMSA));
-+	TEST_ASSERT(sizeof(struct test_vmsa) <= PAGE_SIZE, "VMSA structure is too large");
-+
-+	test_direct_vmsa_capability();
-+	test_invalid_requests();
-+	test_direct_vmsa();
-+	test_legacy_launch();
-+	return 0;
-+}
+ struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.name = KBUILD_MODNAME,
+ 
+@@ -5478,6 +5499,7 @@ struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.vm_init = svm_vm_init,
+ 	.vm_pre_destroy = avic_vm_pre_destroy,
+ 	.vm_destroy = svm_vm_destroy,
++	.enable_vm_cap = svm_enable_vm_cap,
+ 
+ 	.prepare_switch_to_guest = svm_prepare_switch_to_guest,
+ 	.vcpu_load = svm_vcpu_load,
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 6d0242966dc8..1a94d0c1ef91 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -122,6 +122,7 @@ struct kvm_sev_info {
+ 	struct mutex guest_req_mutex; /* Must acquire before using bounce buffers */
+ 	cpumask_var_t have_run_cpus; /* CPUs that have done VMRUN for this VM. */
+ 	bool snp_certs_enabled;	/* SNP certificate-fetching support. */
++	bool snp_direct_vmsa;	/* Userspace provides and measures VMSA pages. */
+ };
+ #endif
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 32563a91fba9..0a96bdc7f869 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2415,6 +2415,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_VM_TYPES:
+ 		r = kvm_caps.supported_vm_types;
+ 		break;
++	case KVM_CAP_SNP_DIRECT_VMSA:
++		r = !!(kvm_caps.supported_vm_types & BIT(KVM_X86_SNP_VM));
++		break;
+ 	case KVM_CAP_READONLY_MEM:
+ 		r = kvm ? kvm_arch_has_readonly_mem(kvm) : 1;
+ 		break;
+@@ -4254,6 +4257,8 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+ 	}
+ 	default:
+ 		r = -EINVAL;
++		if (kvm_x86_ops.enable_vm_cap)
++			r = kvm_x86_call(enable_vm_cap)(kvm, cap);
+ 		break;
+ 	}
+ 	return r;
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 8dff2fc1972e..005c25263030 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -1000,6 +1000,7 @@ struct kvm_enable_cap {
+ #define KVM_CAP_PPC_COMPAT_CAPS 250
+ #define KVM_CAP_ARM_PMU_V3_STRICT 251
+ #define KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES 252
++#define KVM_CAP_SNP_DIRECT_VMSA 253
+ 
+ struct kvm_irq_routing_irqchip {
+ 	__u32 irqchip;
 -- 
 2.53.0
 
