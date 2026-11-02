@@ -1,102 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.49
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793629607;
-	b=FJA3VGYdB7P3Vc3cLY1xrReJALJhPvPubULh+VgEMNYTzW5s9uKwpF65icQTXupco8IW
-	 SeqhJ2rj2gc/mwpLGf+KsBIcfv7Ju3pvVK/vnBaSGdNR3pusWoYF2x0Gxt8NgoeRAZQFq
-	 LkYu1d2Q/X2CaHLiTmObdfZj8PHlpDYE8Uf79kACyx9ntyPkU7ZR4NaCqiA4X4XWvYb+V
-	 O0QnxJHBUquo1e2gGNxz4IbUUhy5hwpEJLrxBaHi+YNPkzIGW2exTR00b8fKHKtjmBMyH
-	 bRpd6OwoXgDXOBBGlAhOkZDRe4fzrbHRMLQHaWjDifyBx68ypY96SJkDtGy5OAMV7GQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793629607;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=907vDR9YOAsJsqtOg4wwhmn9BwQZ5LLRrPWhrdWp11Q=;
-	b=xefaukzFiAf0af5DttDLbow8hGLcpAfS9T1RKFjXwBANPK3142vVg7dWhrcp1zm45+zx
-	 x12giZ+809SKdqTaJ8yVPQ28SHQZqUFBNKgD5oOVR/uay9OfzAs3mSoZOw28lAI5FLyKK
-	 rTdgSZ61K1oGQH4pUEdb7LBT9Ww8lTfoEir4bXz+Qc2tp94Fb4U+c6HtXwQxgK/8I36IL
-	 FTKaY4XUiHrJrceUAZ2imy3IfXDcC/mR1jgjCnNavQXkAONg0voUTM5m5Gsxq1vj0bxDv
-	 LqAuQQ0dCN8HcyjtmDyJVwpO1toSYzTSajgqQYNCrXu2N6xm3HzqC+Vl4nERswHe7zw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=g4lf3Q7C;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.49
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793629614;
+	b=RWBsxOcNzzjtEKjw0ghkETiVVGqvHtQZ3JtrGi0oeVxnfgr0GI1UBCzDPMwyTtqIGomS
+	 xOpLSdS9CUcBawRY2iAOTB0zj3hQ6AVWaKATm4Fpge6FHTaNwadOtbL7/YdfLy/sAfpiJ
+	 MvY7POMEA2Bd7Qflt0rqEuyrWTfMmh4Duz6+ttRrkdktTrMMpyYx6OvhhzJFZm+cY9HVl
+	 i62tR0lUnqHPzczgQA4vg1moBaUnzIl0LVZDKPzzLh1zyDUk0h8Jb6wi9+Lt2l5+jre9L
+	 2HmBzaDPrKkxBW/o62Neso0bFgbOWh4Ay6HLYCzCjMF3fZ0gTUa50YdkoAZugcWTWgQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793629614;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=9aVyOXB46BuISsBUhN38Gy53ksJP5B0VIb3fhsBGGRA=;
+	b=H9NKRHswJm8gwzoy8oZz9tMtXvv3CshCP5oc8bGDc3IXWDJm35SIwqxIQpXFnU8unmz+
+	 6rRyHMPSoYMnY4PCVtG+3/ZHLqWa/Yjhv4z+FcuMXLKfEONgX/3OuZys/FfaQXjTBVnaQ
+	 t3PBkAEK9c6CtbohJp4+eQz8Y7Qg3k1FsOR0YJqUQ9O2foBdrN5E4M7pPt88gJUAWLv9i
+	 SqgvlWA4HHQm8kW7zb3deIDFw2XkOoBkr2Yq8QI68I33zxKyxU2tQPcK/Btbb42XALWrn
+	 Wc2kv1NMUFaIqq5mRFsMlUiNeco3gyRVoO6QkxUXKRtkfXlTds1kZUA3iYkJTKBZsuw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kX8+D9NV;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DC2606A324
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 14:26:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8DC2606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD19606E010;
+	Mon,  2 Nov 2026 14:26:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=g4lf3Q7C
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5bb786c89c8so337061e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 06:26:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793629605; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Y+fse8LlNVC4i0xxnYIMBvM/P4GjSBV9ekJfOIMMk5kIHCocfZA6hlWSRibd1bHt9/
-         l7AFVjSW/6Tdn9S4vgSBmp3ZRk7u1TASvKRRX3tvloIve3sntonrVfHWGqISUhFRwg7B
-         ydgFt/dkNZs1/hHxJVqrzCDpnSFqlzjXX/KoTqZNb/HutPm9Jtk8Cn7AxbHOmpTIyZ5J
-         cMHTowJhkmfjJn3LUwJjGXs2IO6+TA1FdRKLaV/29vQex/WspqkldWQi/F/TY6D5650c
-         flAl0vxllJ5e6UILxhJyo/Hqr/rgyLMiLz6iqTKbEPlC5btcbDszvnXMi5C6NpGgN6Md
-         r0IA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=907vDR9YOAsJsqtOg4wwhmn9BwQZ5LLRrPWhrdWp11Q=;
-        fh=pCaSjtV4+goD6FRikbuUwQgad11O/yqk+jdyuUx4UtY=;
-        b=aIiqHcPVgAj4iOj/GY24ynwCrLZXldBf6E77LhgCJu4QuBomSivDEbQuVjP1EMY8Vg
-         ckcdyR+P8sRKsuqKhlxiN3vVfYq/Divu+isiSHm/GUcdJkOp9gLJaz+36MrCkQBetgPe
-         biMwN0EuQQpIir2xXUtLnvsIaNPAkGWR00UpU1E+u4PWq1qbvff/tc+DN3HsmvikbPVb
-         1mJ8DVGARour5ETONNGETOjPuvJZ1tY0ZX1UfVnX9FoLst2Lw5EduiJatQ1saDvJSBi3
-         sPBPjBOp1RhXdLLeLY0MizpYCSsu48LiotM2vD/0justkVIxoIFkzgeP9H2W1dhoE94y
-         ZI4g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793629605; x=1794234405; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=907vDR9YOAsJsqtOg4wwhmn9BwQZ5LLRrPWhrdWp11Q=;
-        b=g4lf3Q7C/ECvl0ewWE3h3lYQ8L1Zui7aD54BIDr3V1N3Km5Sr1f/fn854t/MRGZjNN
-         sNdMgMCrxMB0zDoeI7bUQuQPvpQd0wbj3RB3BTXjJKa7hhMGfN+WR3OLNZUZImJLGLa+
-         zXEsOz2KXsBMVaSrf/+3I5XGZQbaGRbqVxMXTxgxr2irqEkeVO0F+7BOc0obkHOLakHp
-         beEiMidfsTQxxwA+hGc0URvyhVngIC1sLwx7Q32KfWvNQ+TnIWF23cgnETDj02w7aoF4
-         +KOkgN853eF1nlGnjs5J2yQAN195pT/tZTYytbeSLLp7PZBPKBzVUze+umlqlXRhaALu
-         HqDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793629605; x=1794234405;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=907vDR9YOAsJsqtOg4wwhmn9BwQZ5LLRrPWhrdWp11Q=;
-        b=jT0O1YrJyLFHMKY3hkx+0DFvPhNW+JPECTAIDfYT1DhKvwTmIHRIQLlg6XjdwduUK+
-         uhWf2K4V0u1Q4HeoUs6N6QHTbj6CLuiC7QPeVUbVXFIb1MHPlcSGUj7nuM1j3c+nlL+l
-         2mZx5K3UYnSluiHQSpm1kyLwp2rGnDKJpTJYaPSfsW7UVodzmFenkQEKWu9BiBFXTm/t
-         GHptNjRMGII+yHWZGofFiC5Hvos6wSmeuLfSY/DsfgBqYQCsu2NeCJAqH4Gh9XF9x0wX
-         Wnit7Hj3Nfyyo7gYqi3onUo0319mu4Sk0XIKKIR3KRhvLcIrILaPuASq6KKoLXSZW4Nn
-         6Sog==
-X-Forwarded-Encrypted: i=1; AKwUvBwCPY5Js4LrD+hn0zusSKc3PUNwVZB0mdF6mS5W42g77pgAJOgZ60sGAC6CuDUvN2zB9fJmdDO4IJFHYar0wnY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9LFkUvA+4N9RW2LZw3iOtHXswROsOAtLkYb5dtyy11nC7+JPUa
-	oqb3yfCXy4URyKNtToS7n7r2g3pYAHaCheT0fQQLMk32RQ39lquO2mqoriRCaorHZhYMs6FDoKt
-	3poN2eTPQVVVrCmw2cR/ED5NyKTnQuJI=
-X-Gm-Gg: AYBFou3PODHqJksv0bBouSrF1InqYFxFNHyv2ggdK4NnhRb9IhnYnGQYOtU+BdI/apG
-	zaDtKCNeMNSH/XIqBWlZKCKZqz7m5Ihg7G6+Tyoz5kq2RraqS//rHxVW/HlXBQD37BvJBR8txDQ
-	YZYW45hwwIcT6fBlSygFbTOtCZsxGU5lJb703Fn5wSmGHox8X2CGHTfFraoxEFXM8xbvGlL0331
-	Tpy74RtjvqX4Pyafp2L+c5ufxrcokT2w7qmPGOKrQJBEsuJvKzmgv+PDlJY8uaDdrSvzWDnC4JK
-	XUa02Cbeekd+ODUulNuXzVbQ2+VeQyyGNfW/HYXngtzqbmurkct6i46sJ31KmZcVq6c5LLC8qXv
-	S+LNpk3LZNZEvf+cKczfENLBuuaTbwiXvntX7wx8eyMJVQ+1wCEFTdxD41OPxZGF69Zodi9jq8V
-	Wp9IVBaqehpkzxPVINUjIn/KqmYCnhBa09hHPKU3H6E+02sBp/rfajdvaxFOAa0VivZ22e0HNjs
-	x1uG5E175rw1FelQPeRSeiU1uZxkOChsWs0
-X-Received: by 2002:a05:6512:ac2:b0:5bf:e32c:526 with SMTP id
- 2adb3069b0e04-5bfe32c075emr2457375e87.3.1793629604846; Mon, 02 Nov 2026
- 06:26:44 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kX8+D9NV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C131F00A16;
+	Mon,  2 Nov 2026 14:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793629614;
+	bh=9aVyOXB46BuISsBUhN38Gy53ksJP5B0VIb3fhsBGGRA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=kX8+D9NVfqUSc8gdnE5o7Q3Oq/uGaLH3xjedKLYih9wdsnnjGcjcRNyhrZaxgnxxx
+	 6mJPp78Dyw5jmgqKUNdlhpYQ/2Qf2LxAvvtdrBxj50iBxD11Dxk7n+iHGOSy2yxUdF
+	 FBfa3aXoeS07kk/77nHtewMxpER9ltz8Mj/fE7xHULINbv3mdMS1KJ84n3AWWtBdk/
+	 bya8kywSYeK0JZbU+HmtQD21/aGPUSusYBz+eyTQ4qL+4aq772xEp6pJWjXfU6i3HK
+	 oQcjHkwy6Nkk9N/kAx/z/L8sk7X6Lk8bFh4mVxNn8C/PKjrqbaPSzJA45GkFv8YnRt
+	 zK+G0svabDX1Q==
+From: Christian Brauner <brauner@kernel.org>
+Date: Mon, 02 Nov 2026 15:21:37 +0100
+Subject: [PATCH RFC 22/38] proc: warn about entries left in /proc/net of a
+ dying namespace
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,48 +53,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261027-rust-doctest-line-fix-v1-1-0c13185a58b6@younes.io>
- <CANiq72ntn6ThPz9Q6+BxU6w-x2jUQ50xpiy1_gCRi6o0peHi8w@mail.gmail.com> <kw-1793624159.027890950-307523-1@younes.io>
-In-Reply-To: <kw-1793624159.027890950-307523-1@younes.io>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 2 Nov 2026 15:26:29 +0100
-X-Gm-Features: AclHuK_BjZvgCearm3rbmVV9O5UMJr8vcWg-8C7BUiu_MBE5WEN3h5cW65l1BlY
-Message-ID: <CANiq72k=Ru3QsiUjrXOtFqVuA-D+w8fJ2fUOTAL2cKFS0EhLDQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: doctest: fix line numbers after crate-level attributes
-To: Younes <git@younes.io>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Shuah Khan <skhan@linuxfoundation.org>, rust-for-linux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261102-work-procfs-bugfixes-v1-22-59422ed3e465@kernel.org>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+ Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+ Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+ NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+ Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+ Greg Kroah-Hartman <gregkh@suse.de>, 
+ Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+ linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+ linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, 
+ ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+ coreteam@netfilter.org, kexec@lists.infradead.org, 
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+ netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org, 
+ linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+ sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+ linux-doc@vger.kernel.org, linux-serial@vger.kernel.org, 
+ linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>, 
+ linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+ linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-debuggers@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+ Chuck Lever <cel@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1461; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=VO4WYvqdbdInF0wrRh04dkmiJiaJmigcn5WsH5ed6c4=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS9mJO9wixVJYzvlj178KfJTowVe+L0g7o9JBeHSb4ui
+ OJO1MvqKGVhEONikBVTZHFoNwmXW85TsdkoUwNmDisTyBAGLk4BmMiaf4wMS+2vzm0vtpws3xjx
+ Ms/u6ofZgus/vnESzThVVPxXfJGuFSPDjsrTjR0fyxMDjG7OlZnMcnPhiY11+Y35btcVvI932r1
+ jBQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Mon, Nov 2, 2026 at 1:56=E2=80=AFPM Younes <git@younes.io> wrote:
->
-> It can only underflow if rustdoc stops emitting its own
-> `#![allow(unused)]`, e.g. in a future version. A related case is a
-> crate setting `#![doc(test(attr(...)))]`: rustdoc then emits those
-> attributes instead, so the `- 1` can silently become wrong and
-> doctests without any attributes get shifted. Either way we'd want to
-> notice, so in v2 I'll check that the first line is `#![allow(unused)]`
-> and panic otherwise, instead of clamping. What do you think?
+proc_net_ns_exit() runs after all the other pernet exits and frees
+net->proc_net right after removing "stat" from it. An entry that some
+pernet exit forgot to remove is left with a freed ->parent, and so
+PDE_NET() hands seq_open_net() and single_open_net() a freed struct net
+when the entry is opened through a file descriptor that someone kept.
 
-If what we want is for people to simply notice, then I was thinking of
-just `unwrap()`ping like others we have around there.
+There is no such entry in the tree that we know of, but nothing would
+tell us about one either. So warn about it like remove_proc_entry()
+does for a directory that isn't empty.
 
-Having said that, it can be annoying and confusing if someone writes a
-doctest and has to figure out what to change in these scripts (scripts
-that they may not even know they exist...).
+Reported-by: Chris Mason <mason@kernel.org>
+Fixes: e9720acd728a ("[NET]: Make /proc/net a symlink on /proc/self/net (v3)")
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ fs/proc/proc_net.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Ideally, I think we would have a "warning" somehow, i.e. something
-that doesn't stop people from working but that will get noticed.
+diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
+index dbcf87a257e1..df5484813d5d 100644
+--- a/fs/proc/proc_net.c
++++ b/fs/proc/proc_net.c
+@@ -410,7 +410,13 @@ static __net_init int proc_net_ns_init(struct net *net)
+ 
+ static __net_exit void proc_net_ns_exit(struct net *net)
+ {
++	struct proc_dir_entry *left;
++
+ 	remove_proc_entry("stat", net->proc_net);
++	/* Whatever is left still points at net->proc_net and so at net. */
++	left = rb_entry_safe(rb_first(&net->proc_net->subdir),
++			     struct proc_dir_entry, subdir_node);
++	WARN(left, "/proc/net: leaking at least '%s'\n", left->name);
+ 	pde_free(net->proc_net);
+ }
+ 
 
-Cheers,
-Miguel
+-- 
+2.53.0
+
