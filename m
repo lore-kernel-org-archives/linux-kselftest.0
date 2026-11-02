@@ -1,88 +1,112 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793647610;
-	b=xGoMFZpKxNFvavyFSOdpZ+DbY3//rg9WGJG2CHmyCW3J8PMo0UPmk6+Da6E003YYsQ9Y
-	 jGXhb7AWq881SFkoZr1/vXZyhrqoiKkHzu3MiDfLcDFGBv8GTr6HlJmqvF9JBDkrC130s
-	 40T0ziGE6QxLy0cUhHq0oGgSbO7/cYkVcEIjAHRiIURzR43MP74WbHdFSNDVCXa447yQQ
-	 fzQWeOkxIlCit7v7U4agKLcIcqWuF3Cj81VWyGbmOETWLLHLUJhGxVyvPXQ4PdNBYI4js
-	 JTzeth66qj7fmbGGwbbeAsz3mMQI9XC3RnbM6OniEvUureIe44DKvBqKx/wMvJjTFeg==
+	t=1793648515;
+	b=wolF2l+on08jJwdBixw9lOL3berfWCsbwBIkh6j1dhSYvbZKbRPMrFYIMqZ0sSLXmeOf
+	 oDhzh1n28hzZ/iuZbRy+lwAvGWbGKAMmI4BWvJYvxamymAp287MXyIBtpq19YVhgVh3mf
+	 Gw6gcx258G/XnrdBM6A45nyhymLgXCdhJXHJRImRKibGyNYyjvVKNX03e+bX928gRul/9
+	 O+L30fxqLg3yob+ORKCISAYiPMgTRG6CrzXAi5TisP2gBK3glOj8ia5jN9Pk8fUAP0+Ho
+	 XJlyPPyksceqV2eUkIKPLZUgKXLJL3AxjQQ+vuhBl/x6BAPYUIugAKW99Q7Wm1pBYUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793647610;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793648515;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=GGgFPYYG6oWLUvP1KotHDJ9Xw83iP8ii3ww9kM3hKP0=;
-	b=169wSZ2zwUlHkHi6s0fLxHv7E8EbgBgH/BcatLpYwXX2bgahfwGAF9KGeQ29XS2/VKXC
-	 ILC9ThNOgaZJgDC8d9FRrQvccQaDGwcxR5fvVkUg5GxrZuJgM6W6lb/OcWPg6URkU+maa
-	 Or06ntX+CJyp8M0AkSqRn7S06UNLCxtqRS2DZAr24hR7uw7IaJNYfVWZB/TYs+cLpLh21
-	 0bDvVNZm7AXOw4sXy+qo43DKHH/UV6J2+DXW3ydgmSBwpfHgWi2hT7Onb3qlXQaPVuKfC
-	 P7fm9KXSZEsJODbXWnngTMu+TARpg1dR1WfMYqtbKRIsHzRTOyaOxjhzxFO71IpXFeg==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=SpB8+CQBXkjbs7fgG+qom3QzkI74HttnULs4D1eQfjE=;
+	b=idp6UiAY79nY2s/LZIFsnlyoNapdtgs7M3aiMokR4ybOJYo96lbAUxlW6OpPffcFnK7a
+	 cCjeHgfoqH7aHlEH7m7tRd96cBb4i5YEfObPQUqtjTHm91aX96jmffvjetEvF8VfhUhEE
+	 sMAuiPDWaQDbGPBbLir5WYsJ1fIx+xolfQXZBl3GtYoFgn6ILOhHAUJQ0XDZYUQ2/Qz1b
+	 nf88aIg1DmqKjLZEfqiHjwEPTmcYdUAltXTpPWhWPGKIZXX/oXMKw4+BWHVXyxUUv5ZNl
+	 S7vaifPUASDteX6Z1QcQnz93fUFxDf/cuwYlkZ29JJXbQG6/+FNcja+sEMmKoQO42JA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ji5BHOzQ;
-	arc=none smtp.remote-ip=74.125.224.130
-Received: from mail-yx2-f2.google.com (mail-yx2-f2.google.com [74.125.224.130])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GtziaFNk;
+	arc=none smtp.remote-ip=209.85.128.45
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C606C606A324
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 19:26:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C606C606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB6D606A33C
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 19:41:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EAB6D606A33C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ji5BHOzQ
-Received: by mail-yx2-f2.google.com with SMTP id 956f58d0204a3-67569b8cbf8so1728917d50.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 11:26:49 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GtziaFNk
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so28581805e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 11:41:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793647609; x=1794252409; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GGgFPYYG6oWLUvP1KotHDJ9Xw83iP8ii3ww9kM3hKP0=;
-        b=ji5BHOzQ1RzwPyqsk2s8cHAViYOWD/O+3bZQY/tAGPh6iajASEYoYfopk4UXn09Dvp
-         a8Y3e2wrg8IO3piRB36K67BsnG7u0nhbSW+8Ju9C2+l8e4PSWFRKG3DHntj+sT/fctga
-         4R6gRl67e2TJBXI2nqrqp02Uj3sBQ8yzPwhNpwHIW8R2V6i2xrLJ0gU3vj79VkfBnMpJ
-         5UoLOdz12VNFiwzSkpjsJT5tWJh95TTv8UHajaoTTo6ciV2sUFHKn09peiEAe3KCubYa
-         gmdR7/rtDT7RHk67imJuw2/NIFZXKHl0hTZH0cbZIjhp8KOT1bA+l8VGOwaPX59+N1dJ
-         pdZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793647609; x=1794252409;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793648513; x=1794253313; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GGgFPYYG6oWLUvP1KotHDJ9Xw83iP8ii3ww9kM3hKP0=;
-        b=1NGWLQgVy6oDgAZadc7fTqCrtzvRfwi2D6P2m7Nn7CyLK4ZbkK3Y/x7GcuSCGpX4xy
-         W56fJspkOyp6zw9ywiNu+ADPnEstwIRu1Pl+bJvsQQw27q376kVEQAfG9WsGwHRv+Fhf
-         JXtVKBOTLFacD+atveN0oAXcj4jOgU2yjgYYcLs6pJiH8Yc7vCxhGllckEtFmxFgARIa
-         i39ZHHpgVralIZafkS0ZyI2Gjm47FQ6+C/LvLOyHeWtRTQg9WWHyzi+wZeFhTSyO8xQ7
-         RvZNuQ/u4qbPUkjdZpdLcc6o3OKjMGU/XvYwt2UorjBtEdFYTqcrf3zG/Lb2u4R1Mvbq
-         ocAw==
-X-Forwarded-Encrypted: i=1; AKwUvBz4j4dExutwow3bAvILYpx4fqTgfnO2IvsQlp7PO2zTTBJlOMmc0UlBfO0GeyQqxWLeYxUK6L5F5VRMD/UxLYM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9ZEd9aDw3OZpnP2QrZ73DYlWEmNX9gkEzfzKcrrjnSR6r9gViS
-	e/K/mcz/F/25YF81BuJA+vPsq9dAfqTR/JdbRJNvHxebW2U/sTia/HFQ
-X-Gm-Gg: AYBFou0rltgqhQo2euXxMdH6GBeXModLt+SR8sU6HVP9xwvmbD/z4fQN+lmrrhDb/la
-	FGb146i2VkPIV2+qi23a6FzAYUbDB21H6UVWjLC3SMLN/z3IOSl9lOq/nmPBItxSd9//cTjgI1c
-	P6/gsxBiRQx8r2qFeKIcp//WjxFbrpeQ/ScHkjV4pUAyauPLL1StTe9una1mI+O0USZY7yVzUSy
-	42nFpmqYmP5RMzcOX/TbLt4L+M0Ssn0SGQL8k6FuyfV97rryk5Hn0cuEYDoO4J3aanqjYplmw3W
-	BCjz4DkiJ4sRjXW5UU9or31oc650GQBHgEM59b3JL15ILZxXPPPQc1yenjtocDEw395I8aq4fDD
-	cicvUNCJL/IP77JV6krTxgwO65fFTSZe1B0BysKHRRqauOgIbRbQ2epC0NWygNlowGh03LkRBTt
-	EDZtrC+QaI+Zy2Z3JxxkaIC4DeumPW1nLDrRcvQzODUrYGnmZFhW03lqXAbP+ysuDrrMHem6Hej
-	16PvdNmoP0xbfcQdy6DZcA8NzK4qLBJeoR36ZSaUcysI/v+DhSW9RZP75rmT5lWsZ8NOkrunKfm
-	yP5h1/GOXik8VWiRtKFg1LV3MW+aB8LBu8c=
-X-Received: by 2002:a53:d148:0:b0:679:93bd:85ee with SMTP id 956f58d0204a3-67ba4ffc1a6mr6007860d50.39.1793647608751;
-        Mon, 02 Nov 2026 11:26:48 -0800 (PST)
-Received: from [10.0.0.48] ([71.69.222.122])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67baf3700b8sm5719489d50.23.2026.11.02.11.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 11:26:48 -0800 (PST)
-Message-ID: <d39dfdac-e0e3-4c42-9a55-fbcef6806d77@gmail.com>
-Date: Mon, 2 Nov 2026 14:26:47 -0500
+        bh=SpB8+CQBXkjbs7fgG+qom3QzkI74HttnULs4D1eQfjE=;
+        b=GtziaFNk7i2iMppP9Qcz+i8RcKdgwHDsyTAT934sJr/OaTBtb3h2dV5qniSRazAapp
+         SUmrDaGzlrYlNg89YGnCT4Mf0eqOr18dHSkyOsRIQIADiu9aBs9ESliC+dwl7FwmCznf
+         nrKGLS3s2SXxKzVbc6rw1XISBr8HI5awkFV3U4/xNg+C56qymnJLf0AipwEAx5z2r7no
+         13EVVHzDcta2f2NGD0XUIYLViGjxozUYAIPs5FRAceTjVog7ywHy6xeKvBlUJRSUlzca
+         aylDB3rDbVguUDXteFKsWzGmcZYfChkkVaRqpIZROnhOwNjsjs12B2cM2pS1PXfY2o/C
+         KmUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793648513; x=1794253313;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SpB8+CQBXkjbs7fgG+qom3QzkI74HttnULs4D1eQfjE=;
+        b=Jen3OFK5ydukhSIbwdRx8Grs11NqrAHsObpNT3ByzPtl0Cvrj1DWk09TMRTeGoODt8
+         VbfJCz5mTScmUpoyJqMbriwn36bKdPZbEjyg029etmld2v7YNiHCepjoFTt/cgwRUCiL
+         zn9kwfNiNVi4RyMKA3ooM9uHFziBrSSPx2tKdXA0dItjPS81OQd4h1X6ZZCbB/aoGuZP
+         OMm7if8YMBo6D0yje6xZii+kxN+50JCKq45Ba17Y7NB/SIgPw1M6/di3WVHBtIO32way
+         a7hcZ5Le1E5AdzqhTswPi3Ddky+xarxpLLK1xYSO25xSX2CC060dD3MPTIRnqVFeZsuh
+         G+Cw==
+X-Forwarded-Encrypted: i=1; AKwUvBx9jx7xaUvqWRC+59Ldx+rQoerWI6N96Hlssjis6/1rJbESCvZJ9JMZ7DjAfbMmD735qWSh1FJzpqTn6qLIi3Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIf43tVG1FYdDSrSXtTPXJRLH8IdCYTvMbLdmP4VEXPsHRwX4jt
+	u3K1wFH9bB+xAB5RoomqSnkxr2pLj0CLZPoZCyNbVKCkwDL9FjMQs4wy
+X-Gm-Gg: AYBFou1P9fG4Yu2L/dndvsMFojlQklCy2NieD7fP9jvMlZkt/lKMjurKgR6/dx1lFpF
+	WyUrZ8ZiQaadDsIyYb8lF84vkqPu8fy9JLkTKh1PzxaNyZsgzPZm2XXXwHUsCeE8a694aq4QCzD
+	Edyr47P6k1AfoRCtQ0VvsgsTqEtDl/S3HtKfbTm53tQcjFwVtTzMApC2Nl6M4iA2gzBYfhCo5xi
+	HZtPv+EToS1rHdyZNfHrmvskVpknsjgzX+9V0i37XJA4D1P6sldx7Lfq2fcQPpycCo293N0MY/w
+	hZ/f99xjl9VWb8FnzF95TIr3xtc9FBAmWJKh5Wq0GvvBaHKEYoGLaBIlK3HcdqzoDnY7Tajoh24
+	s2ZVdJhehoskMtPTsSXNK4chIcelwRvpBkiqJveChiuA/4JpLVKnlrmz+Qs0j2wE5KOA9qWZnvv
+	T9Uzxnn355b2C2/h4b78bjJLIO+mqWxHvu6Hu1zLEaLU93AQ5xOotvEgLY+xxezAJmrydE/cX26
+	wnZfG/9vAQCntRL1MUWe6lXP797QcabG/QRbWOoRNl2SRYpSkccdo9cn7UB3yy0j1JAmFhpj5B2
+	FvEXBSAk2PpDFqSvrA9cFfNsbh6nh/A24Fv5/KCpgxyoY4MVaFg9Vq3hz8oYuw5T6SSba7F97iI
+	N
+X-Received: by 2002:a05:600c:6215:b0:4aa:1527:659 with SMTP id 5b1f17b1804b1-4ac17a366c0mr264076435e9.17.1793648513483;
+        Mon, 02 Nov 2026 11:41:53 -0800 (PST)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4ac0a0a3495sm231386345e9.4.2026.11.02.11.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 11:41:53 -0800 (PST)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Mahe Tardy <mahe.tardy@gmail.com>,
+	Tianyi Chen <hi@tychen.cc>,
+	Gyutae Bae <gyutae.bae@navercorp.com>,
+	Hui Su <sh_def@163.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 2/5] libbpf: Track generated loader link FDs
+Date: Mon,  2 Nov 2026 19:41:41 +0000
+Message-ID: <20261102194145.620210-3-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261102194145.620210-1-mahe.tardy@gmail.com>
+References: <20261102194145.620210-1-mahe.tardy@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,66 +116,115 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 0/5] tls: perform TLS 1.3 KeyUpdate in the
- kernel
-To: Chuck Lever <cel@kernel.org>, Martin Belanger <martin.belanger@dell.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hannes Reinecke <hare@kernel.org>, kernel-tls-handshake@lists.linux.dev,
- linux-nvme@lists.infradead.org, Alistair Francis <alistair.francis@wdc.com>
-References: <20261102-keyupdate-rfc-v4-0-f17419972b9f@gmail.com>
- <785aa669-8229-4909-ad33-66f0824687bd@slotpi15m67>
-Content-Language: en-US
-From: Martin Belanger <martin.nvme.dev@gmail.com>
-In-Reply-To: <785aa669-8229-4909-ad33-66f0824687bd@slotpi15m67>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Introduce gen_attach field to emit program attachment instructions in
+generated SYSCALL loaders.
 
+Generate failure cleanup that closes any created links before releasing
+programs and maps reusing emit_sys_close_blob(). Store the link fds in
+the data buffer similarly to map fds.
 
-On 11/2/26 13:24, Chuck Lever wrote:
-> On Mon, 02 Nov 2026 11:57:57 -0500, Martin Belanger wrote:
->> The matching tlshd change for ktls-utils is a small patch to be
->> submitted at a later time if this series is accepted.
-> 
-> Recognizing that there may be further API changes, for the series:
-> 
->    Reviewed-by: Chuck Lever <cel@kernel.org>
-> 
-> I don't expect any changes for the sunrpc consumers will be necessary.
-> For tlshd, as far as I can tell the whole change is:
-> 
-> - In tlshd_start_tls_handshake(), register a callback with
->    gnutls_handshake_set_secret_function() before the gnutls_handshake()
->    loop, as quic.c already does. We rely on SSLKEYLOGFILE to decrypt
->    NFS traffic in Wireshark, so that needs to continue to work.
-> 
-> - In tlshd_initialize_ktls(), after the existing TLS_TX and TLS_RX
->    install succeeds and only for a TLS 1.3 session, set
->    TLS_TX_TRAFFIC_SECRET with the write secret, then
->    TLS_RX_TRAFFIC_SECRET with the read secret.
-> 
-> - A configure.ac check for TLS_TX_TRAFFIC_SECRET in the installed
->    uapi header, so the build works against older kernels.
-> 
-> I assume you plan to send tlshd patches, but let me know if instead
-> you'd like the ktls-handshake folks to take care of this.
-> 
-> 
-Thanks for the review.
+Append bpf_link_desc outputs after the program descriptors and copy the
+link FDs to the loader context on success.
 
-Yes, I will send the tlshd patches. I have a prototype, but it uses
-gnutls_session_set_keylog_function(). That replaces the default
-SSLKEYLOGFILE writer, so I will switch it to
-gnutls_handshake_set_secret_function() as quic.c does, and add the
-configure.ac check. I will post it to ktls-utils once the kernel uAPI
-is settled.
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+---
+ tools/lib/bpf/bpf_gen_internal.h |  2 ++
+ tools/lib/bpf/gen_loader.c       | 17 ++++++++++++++++-
+ tools/lib/bpf/libbpf.h           |  3 ++-
+ tools/lib/bpf/skel_internal.h    |  4 ++++
+ 4 files changed, 24 insertions(+), 2 deletions(-)
 
-Martin
+diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
+index 206adf28793d..b601269abe45 100644
+--- a/tools/lib/bpf/bpf_gen_internal.h
++++ b/tools/lib/bpf/bpf_gen_internal.h
+@@ -39,6 +39,8 @@ struct bpf_gen {
+ 	ssize_t cleanup_label;
+ 	__u32 nr_progs;
+ 	__u32 nr_maps;
++	int link_fds;
++	__u32 nr_link_slots;
+ 	int log_level;
+ 	int error;
+ 	struct ksym_relo_desc *relos;
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 555d4757a898..7f41b5a517fe 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -122,6 +122,10 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
+ 	gen->log_level = log_level;
+ 	gen->nr_obj_maps = nr_maps;
+ 	gen->max_func_ptr_maps = max_func_ptr_maps;
++	if (OPTS_GET(gen->opts, gen_attach, false)) {
++		gen->link_fds = add_data(gen, NULL, nr_progs * sizeof(int));
++		gen->nr_link_slots = nr_progs;
++	}
+ 	if (nr_maps + max_func_ptr_maps > MAX_USED_MAPS) {
+ 		pr_warn("Total maps exceeds %d\n", MAX_USED_MAPS);
+ 		gen->error = -E2BIG;
+@@ -150,10 +154,14 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
+ 			      /* 6 insns for emit_sys_close_blob,
+ 			       * 6 insns for debug_regs in emit_sys_close_blob
+ 			       */
+-			      nr_maps * (6 + (gen->log_level ? 6 : 0))));
++			      (nr_maps + gen->nr_link_slots) *
++			      (6 + (gen->log_level ? 6 : 0))));
+
+ 	/* remember the label where all error branches will jump to */
+ 	gen->cleanup_label = gen->insn_cur - gen->insn_start;
++	/* Detach any programs activated before a later operation failed. */
++	for (i = 0; i < gen->nr_link_slots; i++)
++		emit_sys_close_blob(gen, gen->link_fds + i * sizeof(int));
+ 	/* emit cleanup code: close all temp FDs */
+ 	for (i = 0; i < nr_progs_sz; i += 4) {
+ 		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -stack_sz + i));
+@@ -413,6 +421,13 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
+ 			      sizeof(struct bpf_map_desc) * i +
+ 			      offsetof(struct bpf_map_desc, map_fd), 4,
+ 			      blob_fd_array_off(gen, i));
++	for (i = 0; i < gen->nr_link_slots; i++)
++		move_blob2ctx(gen,
++			      sizeof(struct bpf_loader_ctx) +
++			      sizeof(struct bpf_map_desc) * gen->nr_maps +
++			      sizeof(struct bpf_prog_desc) * gen->nr_link_slots +
++			      sizeof(struct bpf_link_desc) * i, 4,
++			      gen->link_fds + i * sizeof(int));
+ 	emit(gen, BPF_MOV64_IMM(BPF_REG_0, 0));
+ 	emit(gen, BPF_EXIT_INSN());
+ 	if (!gen->error) {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 22204a544b23..a2ee239c114d 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1990,9 +1990,10 @@ struct gen_loader_opts {
+ 	__u32 data_sz;
+ 	__u32 insns_sz;
+ 	bool gen_hash;
++	bool gen_attach;
+ };
+
+-#define gen_loader_opts__last_field gen_hash
++#define gen_loader_opts__last_field gen_attach
+ LIBBPF_API int bpf_object__gen_loader(struct bpf_object *obj,
+ 				      struct gen_loader_opts *opts);
+
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index 9e16b8e8cb7c..cac7b1d2abfb 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -47,6 +47,10 @@ struct bpf_prog_desc {
+ 	int prog_fd;
+ };
+
++struct bpf_link_desc {
++	int link_fd;
++};
++
+ enum {
+ 	BPF_SKEL_KERNEL = (1ULL << 0),
+ };
+--
+2.43.0
+
