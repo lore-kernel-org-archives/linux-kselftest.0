@@ -1,66 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793613147;
-	b=ljo0Yag96jeFrtigak+fvxFQKJw3RzSjstH6QXPjQaxACxGt/W2siz7hv0Lk+u/SfcWU
-	 igQYUGbvV7mVQ7lmiqWbBOYoy0jrnTpgevIq28J+re2F+y/j9DWxDVRELo0rvjK63bm3+
-	 ahrHIXnSblcr0z17XDUV9vTX9lXptIxsam6Nrg+BHF/GUfp6dFanktwEJxyHvwf5qL+Yi
-	 owEpcXHUdNA7vZQb7wTD5Gq6Lk4epC4BbNbNl38S3t0grgmGVvT9DzYH2Y08rG1oGQZ32
-	 gaCTAHVvqIrqu8mWygDBiDsRn38PU0HrkU7a9ORvyJ2CW1M9u8doieZqKjDETQZ20hQ==
+	t=1793613413;
+	b=dMQzWcQt6nAwEJ2zsLkSMzcMFlr1fCQUnF5wF6oPE+0Q2dQI6W85fHiQlCum1KoFuKOF
+	 kDG3gwI9CqlR34DbI0kNEK5X/J0sYpKs4vtkbd8CBVaUBe0hR5oDvRbIFjb1u0PvUS9oa
+	 acyY+3rKoML9kVJousx7QRZZFp80FzTqCJZfueSTeamzsbygYCR/XOmJCYvgOo8Uey9hC
+	 mXqmgPDCMgCpD4O4M3W1xAdudSvbTt1KeGiZwqrjHaa8ZRvGwHB7NNWSiNnQ6H4cpYPbv
+	 bVzmMBK89N8VxZO/UZ6EtNN7tTiAf7UD/usNTaAdlMW8XElW+QmaxiPCB0T+AKZgf9w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793613147;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=0J0BmS8+dLS8Lnfxixm46w2lRSFsoL6zql/BE+pRkys=;
-	b=nUDYbSzWxy4HD81yhjRm7XzqtEl1Ru0hQ/qFaEpXB5NEYN5qcEJdjMq3avtYVk2NwQT8
-	 52ojbtq5giQHJCV/5kP4hsdpEMX59UjiCBXDoS37DMUjUiB/89tOFLfDXDy7BnInH2b9+
-	 IisDfhi8cPLyCmlugISf2RawZQp3A9OFL5qWJ3BuehmG4pt1G8cS5Pcr/O7izYpMwCGrV
-	 ny4zEXoS4QpcH3u8KaOLj/hkiPL0ySk3v1i/IQjwiiYrpljZ6Kp757oUm5M43qGDsYQw7
-	 k1U0z/IctAfhAhECLU63Wtmqk8fMmjC3oVerjGnyuHbBGgwUUK4ZaNY2ZxLdp9t9wWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793613413;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=jEXZn25mOSnRSnFkDPXVKbT86gLRaygrv7hBJoYn83Y=;
+	b=Sw75FOHCMo/wJKzDrXOZTIQoyRwVoCdlqEOBUWPc4hvzXBGn6jqOBWo1IuA4M0kxFXTP
+	 PEMK+Ivv3HNJnhdp91bLIqzSQ4TilP38GMoNgyG2VFknD5GUk+z0SlxS16GUqaAbEh9IU
+	 k0BY4ON3JqawT0zVnDikWgjeHOAXOM/YrYuFVSANeIgEPJf456sXygsvONTjlFfxYQfr6
+	 m/MVeeZro+TIadWx8S1TYU6RLrqmxro1NPo/3n1/9GKLgsW405LSujQh83KG8smPII6ir
+	 jSAXP8H6r6WQK6bXXVzxAIpaxR442Aia3M9CjwdKljsHEumz6+7cpLk8Qe2sgIIH/NQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fBzi8KrU;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F6C606A329;
-	Mon,  2 Nov 2026 09:52:26 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Zg48mlwk;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A60606A33D;
+	Mon,  2 Nov 2026 09:56:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4A60606A33D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fBzi8KrU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2F31F000C1;
-	Mon,  2 Nov 2026 09:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793613146;
-	bh=0J0BmS8+dLS8Lnfxixm46w2lRSFsoL6zql/BE+pRkys=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=fBzi8KrUITMMy/FxZ//4IX3xaa7J4BrBosrQDqYydu5b3QpyBV7XxvUVgYG2jH1kM
-	 vdkb8jj1+YPi1tX4nep3zJIWBXYu562KFQpFWBXDQB5yn7RZbwFbPLSgcjVrpJuBIn
-	 bu3snGE6mWq0oQOHlVwfbpUaKGj7CksNuW8S4ql0b+E8T1xO7cYrUldJPpIvE5q3Bi
-	 E6l0KO/EeUHDNsAokeSzu6nEi0iETqU1q8l410eOMLHIZz0qP1Q1AImeCXojDk4Ghs
-	 TRfVKR1ZXEtz4UsP8nlAdKDVUQIBJXHpzsFh/xLGUrij5yWqGnjOOmsyzubjjy6pq7
-	 lnOjSSuVRIlxA==
-Subject: Re: [PATCH net v2] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
-From: netdev-bot+sashiko@kernel.org
-To: jhs@mojatatu.com
-Cc: netdev@vger.kernel.org, edumazet@kernel.org, bpf@vger.kernel.org,
- bot+bpf-ci@kernel.org, daniel@iogearbox.net, ast@kernel.org,
- dsahern@gmail.com, kafai@fb.com, martin.lau@linux.dev,
- john.fastabend@gmail.com, sdf@fomichev.me, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- jiri@resnulli.us, victor@mojatatu.com, linux-kselftest@vger.kernel.org,
- shuah@kernel.org, stable@vger.kernel.org
-Date: Mon, 02 Nov 2026 09:52:24 +0000
-Message-ID: <179361314430.3131.5109011406127069679@kernel.org>
-In-Reply-To:
- <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
-References:
- <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Zg48mlwk
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF3DE1595;
+	Mon,  2 Nov 2026 01:56:48 -0800 (PST)
+Received: from [10.57.16.53] (unknown [10.57.16.53])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E43FB3F59E;
+	Mon,  2 Nov 2026 01:56:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1793613411; bh=a+LR+CmbFBIcR2fiRj3wp8/wI+yAEpxcNhNDKOn/P+0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Zg48mlwkHNaWfJLi8qkWbskLRD3Pspw0QyjdDGJgFahD1n2OQCvVFP2WKnQ6GxZG6
+	 nbsNHPO6jsU2jOL517F/o6Cxqe5x79PUYiiL5XhOm8Bd/BYbyZUE72pzyB3COFi8C1
+	 eagMYzWRrNx5SLM9k3X3rs43KFd3aK/61j/dJIio=
+Message-ID: <3005f6f5-3b6a-4139-a170-1f60d93c9902@arm.com>
+Date: Mon, 2 Nov 2026 09:57:20 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,255 +53,189 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/6] powercap: dtpm: Use generic powercap hierarchy
+ helpers
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: Daniel Lezcano <daniel.lezcano@kernel.org>, rafael@kernel.org,
+ Heiko Stuebner <heiko@sntech.de>, Shuah Khan <shuah@kernel.org>,
+ Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1793288783.git.daniel.lezcano@oss.qualcomm.com>
+ <f34635d2ce1d5c741968708e6349f7f059b03173.1793288783.git.daniel.lezcano@oss.qualcomm.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <f34635d2ce1d5c741968708e6349f7f059b03173.1793288783.git.daniel.lezcano@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Hi Daniel,
 
-Critical: 0 · High: 0 (1) · Medium: 1 (1) · Low: 1
+On 10/29/26 16:56, Daniel Lezcano wrote:
+> DTPM implements its own hierarchy creation and destruction logic while
+> the powercap core now provides generic helpers for this purpose.
+> 
+> Convert DTPM to use the generic powercap hierarchy infrastructure.
+> Duplicate the platform hierarchy before creating it, and use
+> powercap_hierarchy_create() and powercap_hierarchy_destroy() to manage
+> the DTPM zones.
+> 
+> Add DTPM callbacks to create and destroy the zones associated with each
+> powercap hierarchy node. Adapt the CPU and devfreq backends to return
+> the created DTPM instance and use the node name provided by the
+> hierarchy.
+> 
+> Convert the Rockchip RK3399 description to struct powercap_hierarchy
+> and keep the device tree path as DTPM-specific node data.
+> 
+> This removes the DTPM-specific hierarchy traversal and destruction code
+> and leaves the hierarchy management to the powercap core.
+> 
+> Preserve best-effort creation: an unavailable backend returns NULL to
+> skip its branch, and setup failures are warned about and skipped rather
+> than rolling back independent zones. Invalid node descriptors remain
+> fatal.
+> 
+> When the representative CPU is offline, find an active policy through an
+> online sibling whose related_cpus mask contains it. Hold the CPU hotplug
+> read lock during selection and setup, and initialize the zone through the
+> policy's active CPU while keeping the hierarchy-provided name. An entirely
+> offline policy still has no active CPU to initialize through.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+> ---
+> Changes in v4 (since v3):
+> - Rebase on v7.3; no code or commit-description changes.
+> 
+> Changes in v3 (since v2):
+> - Rebase on v7.3-rc7.
+> - Preserve best-effort branch creation using the generic NULL result.
+> - Find an online policy sibling for offline CPU representatives and
+>    protect policy selection and setup against CPU hotplug.
+> - Keep generic API behavior and documentation in patch 1.
+> - Fix __initdata placement; match-table indentation is handled in patch 3.
+> - Name setup callback arguments and remove whitespace-only lines.
+> - Update the description.
+> 
+>   drivers/powercap/dtpm.c         | 177 +++++++++++++++-----------------
+>   drivers/powercap/dtpm_cpu.c     |  62 ++++++++---
+>   drivers/powercap/dtpm_devfreq.c |  22 ++--
+>   drivers/soc/rockchip/dtpm.c     |  67 +++++++++---
+>   include/linux/dtpm.h            |   6 +-
+>   5 files changed, 195 insertions(+), 139 deletions(-)
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Tha patch in general looks good. I only have one
+comment related to the future usage of this mechanism.
+For this implementation it's safe, but I would add
+some extra safety net around the of_find_node_by_path().
+See comments below.
+[snip]
 
-- [Medium] The new netns_load_egress_bpf() calls inside
-  test_tc_redirect_neigh() leave the test thread in the test runner's…
-- [Low] No selftest runs the new rejection branch in
-  __bpf_redirect_neigh() (skb_mac_header_len(skb) < ETH_HLEN ||…
+>   
+> -static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
+> +static struct dtpm *dtpm_setup_dt(const char *name, const char *path,
+>   				  struct dtpm *parent)
+>   {
+>   	struct device_node *np;
+> -	int i, ret;
+> +	struct dtpm *dtpm = NULL;
+> +	int i;
+>   
+> -	np = of_find_node_by_path(hierarchy->name);
 
-Pre-existing issues:
-- [High] The patch closes the ETH_HLEN pull BUG only in
-  __bpf_redirect_neigh().
-- [Medium] __bpf_redirect_neigh() now linearizes only ETH_HLEN bytes,
-  then does skb_pull(ETH_HLEN) and skb_reset_network_header(), and…
 
---
+I would add a NULL check for 'path' here, or below
+where dtpm_setup_dt() is called.
 
-bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
+Usually it's up the the code which is calling that API
+to make sure that the NULL is not sneaked in.
+We probably can force drivers code for that, right?
 
-This commit hardens __bpf_redirect_neigh() before it reads and pulls the
-Ethernet header. The MAC header length (network_header - mac_header) must
-now be at least ETH_HLEN, and pskb_may_pull() must make the header linear.
-It also adds tc egress coverage to the tc_redirect_neigh selftest.
-
-Link: https://lore.kernel.org/all/2a0f5ff1d8db81b07fc4b344b8e68e3505fcbf36f72a471d1678b2f1cecd881b@mail.kernel.org/
-Link: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 70dc621672f2e..4925f3e355d46 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2432,10 +2432,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
->  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
->  				struct bpf_nh_params *nh)
->  {
-> -	struct ethhdr *ethh = eth_hdr(skb);
-> +	struct ethhdr *ethh;
->  
->  	if (unlikely(skb->mac_header >= skb->network_header))
->  		goto out;
-> +	if (unlikely(skb_mac_header_len(skb) < ETH_HLEN ||
-> +		     !pskb_may_pull(skb, ETH_HLEN)))
-> +		goto out;
-
-[Severity: High]
-This is a pre-existing issue and was not introduced by this patch. Still,
-the skb from the commit message's own reproducer looks like it can BUG
-through the sibling redirect paths. Is that expected?
-
-After vlan pop_eth and bpf_skb_change_head(skb, 1, 0) on the nonlinear
-AF_PACKET skb, len is 8193, data_len is 8192, and one L2 byte is linear.
-__bpf_redirect_common() only checks:
-
-net/core/filter.c:__bpf_redirect_common() {
-    ...
-	if (unlikely(skb->mac_header >= skb->network_header || skb->len == 0)) {
-    ...
-}
-
-so the 1-byte MAC header gets through there. With BPF_F_INGRESS:
-
-bpf_redirect(BPF_F_INGRESS)
-  __bpf_rx_skb()
-    dev_forward_skb_nomtu()
-      __dev_forward_skb2()
-        eth_type_trans()
-          eth_skb_pull_mac()
-            skb_pull_inline(skb, ETH_HLEN)
-              __skb_pull() -> BUG()
-
-Without BPF_F_INGRESS the path is:
-
-__bpf_tx_skb()
-  dev_queue_xmit(lo)
-    loopback_xmit()
-      eth_type_trans()
-
-veth goes through __dev_forward_skb() and ends the same way.
-bpf_clone_redirect() takes the same __bpf_redirect() path. On lo, a plain
-TC_ACT_OK instead of bpf_redirect_neigh() also reaches
-loopback_xmit()->eth_type_trans().
-
-In each case the 14 <= 8193 length check passes. __skb_pull() then leaves
-len at 8179, which is below data_len (8192), and hits BUG().
-
-The commit message calls this a follow-up to Eric's short link-layer
-header fixes. This tree has no pskb_may_pull() in eth_type_trans() or
-eth_skb_pull_mac(), and bpf_skb_change_head() still accepts a header
-shorter than ETH_HLEN.
-
-Should one of those two places be hardened as well? Otherwise stable
-backporters may assume this change fully closes the reproducer.
-
-> +	ethh = eth_hdr(skb);
->  	bpf_push_mac_rcsum(skb);
->  	if (is_multicast_ether_addr(ethh->h_dest))
->  		goto out;
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but only ETH_HLEN bytes are
-made linear here. After skb_pull(skb, sizeof(*ethh)) and
-skb_reset_network_header(), can the L3 header sit entirely in frags?
-
-__bpf_redirect_neigh_v4() reads the header directly from skb->data:
-
-net/core/filter.c:__bpf_redirect_neigh_v4() {
-	const struct iphdr *ip4h = ip_hdr(skb);
-    ...
-			.flowi4_dscp  = ip4h_dscp(ip4h),
-			.flowi4_oif   = dev->ifindex,
-			.flowi4_proto = ip4h->protocol,
-			.daddr	      = ip4h->daddr,
-			.saddr	      = ip4h->saddr,
-    ...
-}
-
-__bpf_redirect_neigh_v6() does the same with ipv6_hdr(skb) for flowinfo,
-nexthdr, saddr and daddr. When the route has no gateway,
-bpf_out_neigh_v4()->ip_neigh_for_gw() reads ip_hdr(skb)->daddr again.
-
-Take an AF_PACKET SOCK_RAW frame where prepad + len >= PAGE_SIZE.
-packet_snd() and packet_alloc_skb() make only hard_header_len (14) bytes
-linear. The frame passes both new checks, and skb_pull(14) leaves
-skb_headlen() == 0.
-
-Wouldn't the 20 or 40 byte L3 reads then come from past skb->tail, from
-the tailroom or skb_shared_info? Those bytes would become the flowi4 or
-flowi6 keys and drive the neighbour lookup. No pop_eth or change_head is
-needed, just bpf_redirect_neigh() on such a packet.
-
-Would a pskb_may_pull() of sizeof(struct iphdr) or sizeof(struct ipv6hdr)
-before calling the v4/v6 helpers be appropriate?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> index af8968b89ad7c..829f84fb64a30 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> @@ -407,6 +407,26 @@ static int netns_load_bpf(const struct bpf_program *src_prog,
->  	return -1;
->  }
->  
-> +static int netns_load_egress_bpf(const struct bpf_program *prog,
-> +				 const char *ns, int ifindex)
-> +{
-> +	LIBBPF_OPTS(bpf_tc_hook, qdisc);
-> +	struct nstoken *nstoken;
-> +	int err;
+> +	np = of_find_node_by_path(path);
+>   	if (!np) {
+> -		pr_err("Failed to find '%s'\n", hierarchy->name);
+> +		pr_err("Failed to find '%s'\n", path);
+>   		return ERR_PTR(-ENXIO);
+>   	}
+>   
+>   	for (i = 0; i < ARRAY_SIZE(dtpm_subsys); i++) {
+> +		struct dtpm *tmp;
+>   
+>   		if (!dtpm_subsys[i]->setup)
+>   			continue;
+>   
+> -		ret = dtpm_subsys[i]->setup(parent, np);
+> -		if (ret) {
+> -			pr_err("Failed to setup '%s': %d\n", dtpm_subsys[i]->name, ret);
+> -			of_node_put(np);
+> -			return ERR_PTR(ret);
+> +		tmp = dtpm_subsys[i]->setup(parent, np, name);
+> +		if (IS_ERR(tmp)) {
+> +			pr_err("Failed to setup '%s': %ld\n",
+> +			       dtpm_subsys[i]->name, PTR_ERR(tmp));
+> +			dtpm = tmp;
+> +			break;
+> +		}
 > +
-> +	nstoken = open_netns(ns);
-> +	if (!ASSERT_OK_PTR(nstoken, "setns egress"))
-> +		return -1;
+> +		if (tmp) {
+> +			dtpm = tmp;
+> +			break;
+>   		}
+>   	}
+>   
+>   	of_node_put(np);
+>   
+> -	/*
+> -	 * By returning a NULL pointer, we let know the caller there
+> -	 * is no child for us as we are a leaf of the tree
+> -	 */
+> -	return NULL;
+> +	return dtpm;
+>   }
+>   
+> -typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
+> -
+> -static dtpm_node_callback_t dtpm_node_callback[] = {
+> -	[DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
+> -	[DTPM_NODE_DT] = dtpm_setup_dt,
+> -};
+> -
+> -static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+> -			       const struct dtpm_node *it, struct dtpm *parent)
+> +static struct powercap_zone *
+> +dtpm_node_create(struct powercap_control_type *pct, const char *name,
+> +		 void *data, struct powercap_zone *parent)
+>   {
+> +	struct dtpm_node *node = data;
+> +	struct dtpm *dtpm_parent = parent ? to_dtpm(parent) : NULL;
+>   	struct dtpm *dtpm;
+> -	int i, ret;
+>   
+> -	for (i = 0; hierarchy[i].name; i++) {
+> +	if (!node)
+> +		return ERR_PTR(-EINVAL);
 > +
-> +	QDISC_CLSACT_CREATE(&qdisc, ifindex);
-> +	XGRESS_FILTER_ADD(&qdisc, BPF_TC_EGRESS, prog, 0);
-> +	close_netns(nstoken);
-> +	return 0;
+> +	switch (node->type) {
+> +	case DTPM_NODE_VIRTUAL:
+> +		dtpm = dtpm_setup_virtual(name, dtpm_parent);
+> +		break;
+> +	case DTPM_NODE_DT:
 
-[ ... ]
+... or a NULL check here.
 
-> @@ -1055,6 +1075,12 @@ static void test_tc_redirect_neigh(struct netns_setup_result *setup_result)
->  			   skel->progs.tc_chk, setup_result))
->  		goto done;
->  
-> +	if (netns_load_egress_bpf(skel->progs.tc_egress, NS_SRC,
-> +				  setup_result->ifindex_src) ||
-> +	    netns_load_egress_bpf(skel->progs.tc_egress, NS_DST,
-> +				  setup_result->ifindex_dst))
-> +		goto done;
-> +
->  	if (!ASSERT_OK(set_forwarding(false), "disable forwarding"))
->  		goto done;
+> +		dtpm = dtpm_setup_dt(name, node->path, dtpm_parent);
+> +		break;
+> +	default:
+> +		return ERR_PTR(-EINVAL);
+> +	}
 
-[Severity: Medium]
-Is the test thread still in NS_FWD when set_forwarding(false) runs here?
 
-test_tc_redirect() runs the tests in a separate pthread. open_netns()
-saves the original namespace with:
+The rest looks good.
 
-tools/testing/selftests/bpf/network_helpers.c:open_netns() {
-    ...
-	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
-    ...
-}
+If we are sure we would never experience that NULL ptr coming to those
+registration callbacks - then OK.
 
-/proc/self resolves to the thread-group leader. So the saved fd points to
-the runner's root netns, not NS_FWD, which the worker entered at the top
-of test_tc_redirect_neigh().
-
-The close_netns() calls in netns_load_egress_bpf() therefore setns() the
-worker back into the root netns. set_forwarding(false) then writes the
-ipv4 and ipv6 forwarding sysctls, and those resolve through
-current->nsproxy->net_ns.
-
-Would this turn off forwarding in the host namespace and leave NS_FWD
-unchanged? Nothing restores the setting afterwards. The test would also no
-longer check redirect_neigh with forwarding disabled in NS_FWD.
-
-test_tc_redirect_peer_ing() already has the same pattern via
-netns_attach_nk(). Any of these would avoid it:
-
-- attach the egress programs before entering NS_FWD
-- re-enter NS_FWD before calling set_forwarding()
-- have open_netns() save /proc/thread-self/ns/net
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh.c b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-> index de15155f2609f..e0b6c14a3935e 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-> @@ -133,4 +133,14 @@ int tc_src(struct __sk_buff *skb)
->  	return bpf_redirect_neigh(IFINDEX_DST, NULL, 0, 0);
->  }
->  
-> +SEC("tc")
-> +int tc_egress(struct __sk_buff *skb)
-> +{
-> +	if (skb->mark)
-> +		return TC_ACT_OK;
-> +
-> +	skb->mark = 1;
-> +	return bpf_redirect_neigh(skb->ifindex, NULL, 0, 0);
-> +}
-
-[Severity: Low]
-This isn't a bug, but does any packet in this test reach the new rejection
-branch in __bpf_redirect_neigh()?
-
-This program sees ordinary locally generated TCP/ICMP packets at veth
-egress. __dev_queue_xmit() has already reset mac_header there, so
-skb_mac_header_len() is 14 and the header is linear. These packets pass
-both the old and the new checks, so removing the new check would go
-unnoticed.
-
-tc_redirect_neigh is also registered only for veth:
-
-	RUN_TEST(tc_redirect_neigh, MODE_VETH);
-
-so the netkit case mentioned in the changelog is not exercised.
-
-Would a negative test be worth adding? For example,
-bpf_skb_change_head(skb, 1, 0) on a nonlinear skb followed by
-bpf_redirect_neigh(), expecting a drop.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1%40mojatatu.com
+Regards,
+Lukasz
