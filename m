@@ -1,86 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793662689;
-	b=fXhDmVt+Ys4PHD7PfgwtJa87ptoBKEj5Oa7tnX7XxNb7gnQNJNlv7GqQV0kydcNmN26f
-	 HTCJKhCzTUivHB/EXMhQpdv+/MGoFcwj71fHiCQ2vHvLZt/n5vkdpURRCrL5CjCQGvSZo
-	 9ipl82dbFfEb64jI+QWx/9K7G8sN6BDAdMR93rSC8bds60CB9zG1hi1bwAfOu2gvW4EP/
-	 b9IROL3/6CHy8X2YID1Zz0AoU0yvY0w/Ov7zoDiNohtIOJKqqDHaU0P2NvwH66IgaDGii
-	 NT/UJbITKf/vcU06wi4cM+9YM4lL2Cea5b3zG/riqj4QUHbeRMvg7rFzgR3ILDREM0Q==
+	t=1793662690;
+	b=JB0VNODpEBlx15Nc44tUMysEjq7g7VnHugndvSWPhCx4oKKhNblPGcBZ28GzrCTEFrmp
+	 1UOoS+v9AatNXFU2LNeURrsGrkPRZb9Y3Rvb5IMsbuhfEfcqvCsllz0uF1inLqG1vkjOl
+	 S8T/QVSMXdoIkennP0LzC4Y1xQmvqd8TgC93P0B0j0zcVb+BLeR8yRNxruSKHXkbKss7w
+	 rywRJVjtHjOGu7yFyiwVBFTZJZJZTCNv55MD8yxkpNr6iu7LavZWjo70BW7yPNB5XK/Ik
+	 wH+2qogd7iLhtSzyeH8lwg/dNKOT87KfVScqXv0hgNqnD3K3tO+J2U4BTsnIY/dtlfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793662689;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793662690;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
 	 In-Reply-To;
-	bh=CpN0nyOlHAAHfSUiOBw/jygsiBzrfum7qcPzJKfy0Js=;
-	b=m6iI5Gn2lqxxZFpDpJzJqry9EnAbSeQFGx1KD1Xkznov53Qsg/hL8LBnupNAH0ZSDOsN
-	 UwQxBP3EtOWvMcs+UaSRt6Vy21l7NkBca41BQ1pvKa8o314egiPKvkD6D9SxsgvjANNoZ
-	 cw32eMX0SS40hyocMl2ZRh05GGpmIJcVuygYIG7UvMCEYPIKEY69IlgWzCq4a5owNwaNX
-	 5mlZPYZm6lncocQmro/Bubqcw8FcA8kDRmQT9A0tT/FJAeEhUUmD9aF+4BBcPxVjLZmEH
-	 XK8BG+BkjeIQT29zh88NGR4EioyyIh5pFybKMki/3D8RS94QppJImYgtOp+VfOwLa/w==
+	bh=ajTKbCVfUpvl1PRge5ZE4DWrvmI1TQg3QGvcmd035B4=;
+	b=G8NEVZBT9rNKBY5/NZu99YPzRZ5QFFkex8sXosXkNlF8cFawIUBFTKoGx9UFB8cIN/Us
+	 mm2MPFo5oZ76bB+aucN3UC97Tf3KdSD8Rsdh/mDY3Jd0/jCT+GiWwbKX2KvUL6Bh2qy2Y
+	 yujb5plRewWgB4uwFCoXKUHDXkbySMT2aapWJTfDsHKazFvuDNAVBbLv4yH+cBxqSjRJ8
+	 Q0nLThDj/YWQqV7K8exLlwUcxjRphhDbMBkJ0e+RC/MqJu01LaLKOTePz9RfYpodpL6EC
+	 tjSXNSYc6p0R0+Lm3nyXHE3sF1ABwViV4idfLF0cPrxcYN8JroW71xxoxbzYfpjGIOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=npq2+qmp;
-	arc=none smtp.remote-ip=74.125.229.8
-Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eZcRAdFi;
+	arc=none smtp.remote-ip=74.125.229.137
+Received: from mail-dl2-f9.google.com (mail-dl2-f9.google.com [74.125.229.137])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734B2606D801
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:38:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 734B2606D801
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4363C606A329
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:38:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4363C606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=npq2+qmp
-Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-36a6ce64b95so845823eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:38:08 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eZcRAdFi
+Received: by mail-dl2-f9.google.com with SMTP id a92af1059eb24-164f08a9e84so813805c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:38:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793662687; x=1794267487; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793662684; x=1794267484; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CpN0nyOlHAAHfSUiOBw/jygsiBzrfum7qcPzJKfy0Js=;
-        b=npq2+qmpq5UBVj3/fLPNaAEtiZsX+I+usrWfMdIJiPyxvpqaN6KTNnBj/Gxiokhb9U
-         cz1BQpDAcWByapX4YJsWk+wnj5jyqb4re2eEcV3kRqJAyS1d9pNhCbJRD6+dPKUdJaNU
-         b5uEEciepNPVX4EYXpaWjIyva23a438fCWxNH/08NriXyQDXO8dmAJ0h4umVYBMy1OK7
-         E5iFPI1a6Ont6Q+jrRPFOrp30fh3eX8Ix1g3fETarH2jkCHwRA3LZKjKpASrWJWT+6TB
-         r6Hxgfv1qEP+/lvZuMfR8Ht+MORI/VHkgXwFkujpSiO/9HI+GDL3JjQ+eM4wxCO5eqtq
-         n57Q==
+        bh=ajTKbCVfUpvl1PRge5ZE4DWrvmI1TQg3QGvcmd035B4=;
+        b=eZcRAdFir/tOfKhPPQaXb6mUvOPizNEbwDyFtkl3vKeIKU9Co8R0LPR3N7E8YyU+0G
+         2EdC+Hi7HYUfRQP/PCKsIm9h8tS8eEbpeWjCtKW5O49DuznCRmny/sHaglVMRcQjk1XW
+         wZt8hlBXazvlT3+G+BQ3Bmz9IyCxfZiYOF/RVxubvZmHO0sNkpaX5eNVfAoQpCQUlI5l
+         2QeIfN1za7Fyo1Y5LFedwCSm+BskmtaBZmZEv/AWmFxszO3hxsuhm+PC8SWdRra5+cJc
+         WZBdVfPBmr8WSta2fMLe085t0LYYVIzsbbeoSfFqPtbxZ27fS5V/opLjzid1gkFKzQ8Y
+         foCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793662688; x=1794267488;
+        d=1e100.net; s=20260707; t=1793662684; x=1794267484;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=CpN0nyOlHAAHfSUiOBw/jygsiBzrfum7qcPzJKfy0Js=;
-        b=MBoACiCTE+VA6blP5BvcINfTGDr5raH6u4H7Zux+nRGaPwfGaCKgGoISYsbuvJuyYL
-         UumGteOenaad6JVRqa2MgLEiu1/7bZdY2LFeV4OdftIRSANJ5L10GHHR+ftackXNKYvV
-         89LRc7HqSu8mWFsaKalkDR5GouUgZ7jVvjtNJ8AX1Qhn1vu+V3TnHlkOqGAOdqQy2z+w
-         FaQg+YWM55Y+X9NVI9zab7CIWazQ+xjDL1AB9SUm5KtEExetSwGpUSl0IwiAWdezvEA0
-         q6IyT7vJm/71cXdOS+MmBPvFaBTzCQUXILViBs0bICVnZ0NdFHwUP9FII4TdytaSZtE1
-         ngwA==
-X-Forwarded-Encrypted: i=1; AKwUvBw7RCMN5VzkfRVmlzWjgexEtAwt4yF9oocA8SltWFHRYS9Y8UrcdddNXSxm0RHJ8M4DjK3l4S29FR36d7Ffb7A=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJfOMhNpaavWQsopsRatB5LG2JeXLCFuGjnm4deIsZlnWYqxdvz
-	xRfVK3jbxwlErszou6+bb/ewYDO6PEbsiGxptHyYBXooj1vdjGdctXrG
-X-Gm-Gg: AYBFou2DBn+UNvVnld+5/llvwpCV5m6xSdMwsfAgwjO9wGAHc5XvcHz2aGoo8vjBtt7
-	MRN8QW1SBRGsvR7F14XK2+aIdlmz0QZpX+WeHkpZ/pURIGowEcJxEyEbdvFNDdgmSJfQNzqpDEN
-	2EDUjmITyYLIKTUwyyIUhPGQPJbQqbIzIRgSXl9lAS0/KkDj5xg06dqoyrsmsFVe1HmKRWv4Krw
-	UBPoUCiSZW+KTlu4g/Yp47BUxRjU399tUqFeaFdMAQGFRlfDvaaKHgc5ngd1Q6WnDlTQmdCNGK7
-	c7qyQxa/JIMD1ZGu2YcO9z+E9vdKlqxtE6R1HHHLsOQwwxrUMOXrTniuWZvy2A7wSBZ6bBRzCfn
-	PhNjQMQjcwg2BRxT6ODaeoUlbePzG9JgR1+3kC53u0Q4UsYXanm1mfs+RUPN2trkuUIQo5urDy5
-	lpyCW05PermAZqi/kn7v3HA3mgVfOOWxRBvQr2seFvVC79Wp9Pvb2Qh67rETdXytucdZ6SnzlXo
-	yABiYkEnvQStw6l6UpE3LDASvxA8FXdwkQBHPrziuDo0vi8uDnr6q6Cmv+/MzCNemq1kP8jJtrR
-	Gn58Hpqeqxx4XHD4+D+eeQ==
-X-Received: by 2002:a05:7022:3b88:b0:143:54c6:6a5 with SMTP id a92af1059eb24-1ac5c8379a3mr17375543c88.37.1793662687477;
-        Mon, 02 Nov 2026 15:38:07 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:44::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b23f20d36csm580363c88.11.2026.11.02.15.38.07
+        bh=ajTKbCVfUpvl1PRge5ZE4DWrvmI1TQg3QGvcmd035B4=;
+        b=rCxlcTV0oMTyLuqJcl+zfuNRVSxDS7rkX2+klZxU0uuteMl4GUHF+qYdBgl3InySHl
+         S2t6L8SUrAAZuTT+/nfnRnVGkPisFiQgHF4MX09hEi0x6uDEIojyvxj3aYJ2/L3oVUBt
+         5VOt3M2rUiv2SYlVvv3vD4gg1XrCCicIDDqUvHmxXbg6/dOL2Ndx/cxXhXjL1H6SMPSG
+         91q+I/R54X5h83jzo566Sj3EJEMYGo3WrK7GGPvQr8Skc0s/XOt7m8mP6xMqN2WVbM5Y
+         Eat+Uid2KjAArfsJvS7IbHr3nBOddJyJHngbF7rOANwxgqFnDeuQEzZasvQaNR446rV4
+         9RzA==
+X-Forwarded-Encrypted: i=1; AKwUvBxRs6NOh4P2OdNZku2N6INnU/MO+U14AiTLlPi0/UynNkRdyr9F3VjoNrnsGqqh7ZmWdtmekzlIoor5ycrKJ0I=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ+nZE728DaRhiHPIv//v0ATXUtX6ZzsjzOOjmqCnhn9BzF2SAz
+	uzH92UJVCRuoVZ19QpMmoFEMmPfnWjMBmmMW8Jd1DALE6rDnIYj5lc70
+X-Gm-Gg: AYBFou3+Np+NpSBiRXxQ/ytX8l0Z8KhF4YAl7Ho9qCzSRdRYncUFOp4bp7S/mQoasQ8
+	eVGmddULL23DahNio4WJZ4ztHL9mLllE47Kiud9Sr+PYofGAoyvg1TinI6EmsoLmIHpcAIIcG/P
+	mp+6gODUI2u4R/6nAbsrG5w4D0ZlwOZB89WzgbqeueA/1XD//qppGe8ZAUY0AFPZ4EFGMQ6jtiL
+	7oi3YIJSzfiF692naWSq7e6CVg1PwZmc4zmVzQDHwLHc9PRar9QyzU5bf38RSBkOf8PrsZPqJ66
+	fEnsU09fKm/m05oMbhWWaefV/Uc9xNStyOcvuc3e3cCSpJ9GM76/P5ppco9KotOyUXQU+EIpgc0
+	bBdMDCXxMf5dW65eqJtkX9DRAX2Jkc4I3qCzp8PJmlvXTluApKerHvIegKH1OEFHeBFlmnpVyt3
+	APIBDYjewVS71Zy+OpPJjsT9OnScgsCn4hq9NV1goAukze+4Qe2vpUfAQemOeW3AtX6EVcfgL47
+	xgvcrN9f5J50OXvpz19axVYfJCSS6TLSkthGAufP1YSn6A2qr5+nvx8Oy/7dRI18MUhHyoj7+Kw
+	Ke/ZgKgwoVFoRsIs6x6VYA==
+X-Received: by 2002:a05:7022:68a4:b0:147:8a40:cdf3 with SMTP id a92af1059eb24-1ac5d1d155amr22814754c88.24.1793662684121;
+        Mon, 02 Nov 2026 15:38:04 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:60::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1a136537sm36897502c88.18.2026.11.02.15.38.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 15:38:07 -0800 (PST)
-Date: Mon, 2 Nov 2026 15:37:54 -0800
+        Mon, 02 Nov 2026 15:38:03 -0800 (PST)
+Date: Mon, 2 Nov 2026 15:23:26 -0800
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
@@ -90,12 +90,12 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
 	bobbyeshleman@meta.com, asml.silence@gmail.com, daniel@iogearbox.net, 
 	razor@blackwall.org, leitao@debian.org, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 6/7] net: devmem: size TX net_iovs from the
- dmabuf sg table
-Message-ID: <aukcZBLBir_91hPr@devvm16445.scu0.facebook.com>
+Subject: Re: [PATCH net-next 2/7] net: devmem: charge the frag length to TX
+ skb truesize
+Message-ID: <aukaiHZJcYsRCpr0@devvm16445.scu0.facebook.com>
 References: <20261102191438.1059771-1-sdf@fomichev.me>
- <20261102191438.1059771-7-sdf@fomichev.me>
- <CAHS8izMRtaL=kZaM29XQBodT8e+srppnK_DjNSTJnxFfNgG9aw@mail.gmail.com>
+ <20261102191438.1059771-3-sdf@fomichev.me>
+ <CAHS8izPefhGytGNeDWZzgZOi=gLeigZ63nFnkq1ERXXGwrNkeg@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,112 +108,43 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izMRtaL=kZaM29XQBodT8e+srppnK_DjNSTJnxFfNgG9aw@mail.gmail.com>
+In-Reply-To: <CAHS8izPefhGytGNeDWZzgZOi=gLeigZ63nFnkq1ERXXGwrNkeg@mail.gmail.com>
 
 On 11/02, Mina Almasry wrote:
 > On Mon, Nov 2, 2026 at 11:14 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
 > >
-> > PAGE_SIZE TX net_iovs cap devmem skbs at MAX_SKB_FRAGS pages (~68KB),
-> > which makes BIG TCP ineffective.
+> > truesize isn't well defined for devmem TX frags: they point into a
+> > dmabuf which stays mapped for the lifetime of the binding, and freeing
+> > the skb releases no memory. The charge only feeds sk_sndbuf and TSQ,
+> > which limit queued bytes.
 > >
-> > TX net_iovs only need to be DMA contiguous. Use the largest power of 2,
-> > up to 2MB, which aligns every DMA segment of the dmabuf:
-> > - 2MB hugepage-backed udmabufs get 2MB net_iovs
-> > - no UAPI change, TX addresses are dmabuf offsets
-> > - skbs are still bounded by TCP's size_goal, only frags get larger
+> > Charge the frag length instead of PAGE_SIZE:
+> > - TCP uncharges in bytes (tcp_trim_head(), tcp_fragment(),
+> >   tso_fragment()), so the charge must not be smaller than the frag.
+> >   PAGE_SIZE only guarantees that while net_iovs are PAGE_SIZE.
+> > - Frags shorter than a page now count their length, not a page.
 > >
-> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> > ---
-> >  net/core/devmem.c      | 28 ++++++++++++++++++++++++++--
-> >  net/core/netdev-genl.c |  2 +-
-> >  2 files changed, 27 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/net/core/devmem.c b/net/core/devmem.c
-> > index 19c039ed2cb2..98c9594dbf99 100644
-> > --- a/net/core/devmem.c
-> > +++ b/net/core/devmem.c
-> > @@ -181,6 +181,20 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
-> >         return err;
-> >  }
-> >
-> > +static bool net_devmem_sgt_aligned(struct sg_table *sgt, size_t size)
-> > +{
-> > +       struct scatterlist *sg;
-> > +       unsigned int i;
-> > +
-> > +       for_each_sgtable_dma_sg(sgt, sg, i) {
-> > +               if (!IS_ALIGNED(sg_dma_address(sg), size) ||
-> > +                   !IS_ALIGNED(sg_dma_len(sg), size))
-> > +                       return false;
-> > +       }
-> > +       return true;
-> > +}
-> > +
-> > +/* niov_shift == 0 picks the net_iov size from the dmabuf, TX only */
-> >  struct net_devmem_dmabuf_binding *
-> >  net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
-> >                        struct device *dma_dev,
-> > @@ -191,11 +205,11 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
-> >                        struct netlink_ext_ack *extack)
-> >  {
-> >         struct net_devmem_dmabuf_binding *binding;
-> > -       size_t niov_size = 1UL << niov_shift;
-> >         static u32 id_alloc_next;
-> >         struct scatterlist *sg;
-> >         struct dma_buf *dmabuf;
-> >         unsigned int sg_idx;
-> > +       size_t niov_size;
-> >         size_t niov_idx;
-> >         size_t i;
-> >         long err;
-> > @@ -221,7 +235,6 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
-> >         binding->tx_max_frag_size = dev->netmem_tx_max_frag_size;
-> >         write_pnet(&binding->net, sock_net(nl_sk));
-> >         binding->uid = sk_uid(nl_sk);
-> > -       binding->niov_shift = niov_shift;
-> >         xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
-> >
-> >         err = percpu_ref_init(&binding->ref,
-> > @@ -266,6 +279,17 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
-> >                 goto err_unmap;
-> >         }
-> >
-> > +       if (!niov_shift) {
-> > +               niov_size = SZ_2M;
-> > +               while (niov_size > PAGE_SIZE &&
-> > +                      (!IS_ALIGNED(dmabuf->size, niov_size) ||
-> > +                       !net_devmem_sgt_aligned(binding->sgt, niov_size)))
-> > +                       niov_size /= 2;
-> > +               niov_shift = ilog2(niov_size);
-> > +       }
-> > +       binding->niov_shift = niov_shift;
-> > +       niov_size = 1UL << niov_shift;
-> > +
 > 
-> How come we're not checknig the largest supported size of the netdev here?
+> I don't know about this patch. The justification reads a bit like.
+> "net-iov charging is weird and broken anyway, so we can do whatever we
+> want. Charge size instead of PAGE_SIZE for no reason."
 > 
-> Also, maybe should clarify in the cl with the largest supported size,
-> is it actually only powers of 2 up to that power of 2? Or all sizes up
-> to that (not-necassirly) power of 2 size?
+> I agree that charging for net-iov is extremely weird. Neither of
+> today's net-iov types actually allocates any memory. Of course when I
+> was developing the original infra, I took every shortcut I could and
+> just charged net-iov as regular memory, but that doesn't mean we can
+> do whatever we want.
+> 
+> I think either:
+> 
+> 1. say net-iovs are not really occupied memory, so do a global cleanup
+> that charges 0 for all net-iovs (optionally making it conditional on
+> the net-iov type, so in the future someone can easily add a net-iov
+> that actually can be charged)", or
+> 2. change the net-iov size to be actually size instead of PAGE_SIZE,
+> and keep the current 'we charge net-iovs even though they're not
+> really memory', and then this patch makes sense.
 
-I think these are a bit orthogonal, no? We can have niovs larger than
-the HW can tx. If that's the case, we'll just sub-divide when we build
-the skb. If we limit to the same chunk the device can handle here,
-we might use 2 frags to send single chunk worth of data more often (offset
-doesn't have to be aligned to the chunk size).
-
-
-Assuming device can only send 16K, current patch:
-
-[       2MB        ] 2BM niov
-     [ 16K ]         sending 16K from that 2MB will use one chunk
-
-
-Limiting chunks to device's chunk size:
-
-[ 16K ][ 16K ]       16K niov
-    [ 16K ]          sending 16K from offset 8K will have to use 2 frags
-
-(obviously, the same thing can happen with 2MB chunks, but less often)
-
-LMK if it does not sound convincing.
+SG, let me try to explain it better in the commit msg. I don't think
+we can charge 0 because the uncharge path is non-zero. It currently
+works ok because skb frag uncharges the small error that can accumulate.
