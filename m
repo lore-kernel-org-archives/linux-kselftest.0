@@ -1,71 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793613850;
-	b=H9tMtRpz/tWcF0U4GqAE4RY3/m1EFptL/yJn8I+fPXOqDY7YQXo4OgBjfKMk11Adqa+8
-	 etMsPPNtI8zBHyvYgLho4puGFg8pFIkSx+BrYFIOH7Xr29aUFrUopMoOQewCQh8MCL/03
-	 a+SOxK3olvu/77GyNqe+EZQGaqZWqxpr8CU1QDq6iiO8ICu7KjUOuafCIxEgWs24IPFEn
-	 cF5dEZ1PBM9mOahxInR83d8eBbIugpYzOOMepQpfLVXu27z3V1htzxNJmrJDl+ccTWy3U
-	 /+xH/zBSFKnyxbFXDXhbzYld2sGgHLly1U6xMVel3d+NjqrBkjxSaTXlvxg7RH0aX2w==
+	t=1793614081;
+	b=mY7YO0yZLv4X9p46oylQitNzbtE3gvbWxIf0ppTdJd7GhafvyRnNRYUVVBudsf/GAbz3
+	 WYmHTOIadjdhcTv0yyxIony0CRzHwZXGKyVoUyjrNK56R2ZUaiB4nFbCzoZ1YOACaUEQR
+	 kwHkYmoIHXUxFNBCSIT6r+OtY5j7z5QSh24tJb97nWWv5gGY7GC6XI98fvN6Ha563UMzC
+	 CutB4kLu1xiccdsp/9826sHGGIeqZGI5gUxxYPeoNr9Np3KpDJEvCw5jVF8+xa4ZRknU9
+	 6R9wL9zpKNvxroCIXA946F1eT0c4BkXE5Sq7DJIwg8IIqi1SeLEcfrM/Zzw0JUz1mig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793613850;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Y8MIrwrxZZBXR4U1tlZDUC+Iooupo8bVDyTYl7iwQ+Q=;
-	b=0LSRidcn7+jSXPNgrvSsgOKTdsqCwo6xWtYuxxtkoiKO7d7ZTKgs+nUco25bQMMyDLft
-	 C0EdtFSSofYSMxlKfpCuG6D36EbZncKhreTRSwNOlUIj/iZbEpBy3nfa2jU19vZXskuY8
-	 xpi1su8TDjLzA/OAKsUozxtskf+qUQ5F+r4lo+QndCfwkU+VkdmJ/yfrkf6o3NV2EsZB/
-	 DGws34+En6RbIw70gq+8YHnr1ldipYhun0xPGR05Pm4yH5E97pnOHJylLLvJRK5c33PhG
-	 NHccInapebPbg0ReRvoeEGSLNb3hkcTOI3paFxkUuN9XMkJGIrIQWQ1MvVsw8OaBZgQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793614081;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=PHGkVJUa8HZ0EZXHtvtoWcBsgIqIizfSFjqQHTffook=;
+	b=cBn5iNF6GUcKIIjcFJWzykRMn+7SOL+a98byKdK4XfgDCLkoj5QPuWVMHAjyTNfm4U65
+	 S/52vL+C/cxQRQnAxCBYteCAlaFUINJ8M7wvsPqqmFmk3Dj4ZMN/k6XK9T+nlAfZIjDf4
+	 4ZDos6qh6nUHI0OwP3dOdQxn1A1LakMiyy99vC3lEh+9p8rcoJ107LyOuHw5a5LRSOoFu
+	 ZiP/MNmOP8k0BQ6xJF6448qVhvREi8oK6WT5hQKwvtPM6h7gP9qSj0t6WwNry0982xbv5
+	 Vuhajt90yf64c4paufEWG7SFGeml+wiLbOJC1EsF5loCr2qA7Grs+GJjK69gvgP/7jQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=oxbcq5ES;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB8D606A326;
-	Mon,  2 Nov 2026 10:04:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1BB8D606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iPYSnUUT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E23606A324;
+	Mon,  2 Nov 2026 10:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=oxbcq5ES
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93FBC1595;
-	Mon,  2 Nov 2026 02:04:06 -0800 (PST)
-Received: from a081061.arm.com (unknown [10.163.156.187])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 52C663F59E;
-	Mon,  2 Nov 2026 02:04:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793613849; bh=Vl3ojrGKhQ4pEt8ey4N/OpGEcmtPIkRQd8WiP7k/B/0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oxbcq5ES1uFxcvGr3iCpN5o9yV5gFISnJHlauxh6ZuP+UY3+4tvL+NVZV1ReaYWaB
-	 FCfG9VF7yKYLh6Ypp0f232lbvym0PSPYncoe/ses5mqB+r0Ok7NDuBX+WQ7YT4bRh7
-	 rJbrhiwnoReTByr0xUDDN4lmmui2IrtJq2ZyMVG0=
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iPYSnUUT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AE71F000C1;
+	Mon,  2 Nov 2026 10:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793614081;
+	bh=PHGkVJUa8HZ0EZXHtvtoWcBsgIqIizfSFjqQHTffook=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=iPYSnUUTD7dz8nPcsslscQX96/YM7XFOPcKFwif1kzlBcgxqvNAMCrVFP3QT6/mJZ
+	 H4VRAaYJzIFAyHlW5W1jLO3NPMD+c7alEhiQmcQJo+OUkp/auAy/BT+u5o9cpDVicR
+	 p9fAM54yUdtbuB81DDxcYdF0dj4wOmfT9f70NL3ZyZHE9Lm9PsFsx30ljFlCCZ9xU2
+	 QViJXiddc29ptMiRWPuA7RjV29OSdK5nN+kph0hj6UopE8NUZ7NYGF4+RJ5ctqT9VH
+	 xalu0NI6bpvoTvTg0ePb8jy898hnsvd3z6I97tBZ5f9Zx7neuXHAP6Zaz4MoUb5VX7
+	 RbtKVBHSplV/w==
+Date: Mon, 2 Nov 2026 12:07:52 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
 	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Park Tae-sun <ts930@dgu.ac.kr>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH RESEND v2 12/12] selftests/mm: mremap_test: strengthen multi VMA validation
-Date: Mon,  2 Nov 2026 15:32:11 +0530
-Message-ID: <20261102100211.141831-13-sarthak.sharma@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261102100211.141831-1-sarthak.sharma@arm.com>
-References: <20261102100211.141831-1-sarthak.sharma@arm.com>
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH v2 2/2] selftests/mm: add a uffd test for re-registering
+ during UFFDIO_COPY
+Message-ID: <auhg-HLrl4jbpaAT@kernel.org>
+References: <20261102081140.201987-1-azpijr@gmail.com>
+ <20261102081140.201987-3-azpijr@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -75,238 +66,156 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102081140.201987-3-azpijr@gmail.com>
 
-Tests in mremap_test.c where a multi VMA range is involved only
-check if the data remains consistent across mapped pages after
-remap. They do not verify the mapping state of gaps in the
-remapped range.
+On Mon, Nov 02, 2026 at 09:11:31AM +0100, Jose A. Perez de Azpillaga wrote:
+> Re-register the destination without WP while a UFFDIO_COPY_MODE_WP copy
+> waits for its source page, then check that the copy fails with -EINVAL
+> and leaves no uffd-wp bit behind. This covers all memory types.
+> 
+> Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
 
-Add helpers to check whether a range is mapped with the
-expected permissions using /proc/self/maps. Use them to
-verify that gaps remain unmapped after regular multi VMA
-moves and after the partial move in the userfaultfd
-multi VMA test. Also verify that gaps retain PROT_NONE
-permissions when remapping over an existing mapping
-with PROT_NONE permissions.
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
----
- tools/testing/selftests/mm/mremap_test.c | 105 ++++++++++++++++++-----
- 1 file changed, 85 insertions(+), 20 deletions(-)
+> ---
+> Changes in v2:
+> - "all memory types" in the commit message
+> - rename copy to result
+> 
+> v1: https://lore.kernel.org/20261029221129.89068-3-azpijr@gmail.com
+> 
+>  tools/testing/selftests/mm/uffd-unit-tests.c | 105 +++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+> index 2a97ba1d6feb..cc22b4cde621 100644
+> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> @@ -375,6 +375,104 @@ static void uffd_wp_unpopulated_test(uffd_global_test_opts_t *gopts, uffd_test_a
+>  	uffd_test_pass();
+>  }
+>  
+> +struct wp_copy_args {
+> +	uffd_global_test_opts_t *gopts;
+> +	char *src;
+> +	__s64 result;
+> +};
+> +
+> +static void *wp_copy_thread(void *data)
+> +{
+> +	struct wp_copy_args *args = data;
+> +	struct uffdio_copy copy = {
+> +		.dst = (unsigned long)args->gopts->area_dst,
+> +		.src = (unsigned long)args->src,
+> +		.len = args->gopts->page_size,
+> +		.mode = UFFDIO_COPY_MODE_WP,
+> +	};
+> +
+> +	ioctl(args->gopts->uffd, UFFDIO_COPY, &copy);
+> +	args->result = copy.copy;
+> +
+> +	return NULL;
+> +}
+> +
+> +/*
+> + * UFFDIO_COPY drops its locks to fault in the source page.  Re-register the
+> + * destination without WP while it waits there: the MODE_WP copy must then
+> + * fail instead of leaving a uffd-wp bit in a VMA that no longer has WP.
+> + */
+> +static void uffd_wp_copy_reregister_test(uffd_global_test_opts_t *gopts,
+> +					 uffd_test_args_t *args)
+> +{
+> +	struct uffdio_api api = { .api = UFFD_API };
+> +	struct wp_copy_args copy_args = { .gopts = gopts };
+> +	unsigned long len = gopts->page_size;
+> +	struct uffdio_zeropage zeropage;
+> +	struct uffd_msg msg;
+> +	struct pollfd pfd;
+> +	pthread_t thread;
+> +	uint64_t value;
+> +	int pagemap_fd;
+> +	int src_uffd;
+> +
+> +	/* The source fault comes from the kernel, so no UFFD_USER_MODE_ONLY */
+> +	src_uffd = uffd_open(O_CLOEXEC);
+> +	if (src_uffd < 0) {
+> +		uffd_test_skip("cannot open a kernel-mode userfaultfd");
+> +		return;
+> +	}
+> +	if (ioctl(src_uffd, UFFDIO_API, &api))
+> +		err("UFFDIO_API failed");
+> +
+> +	copy_args.src = mmap(NULL, len, PROT_READ | PROT_WRITE,
+> +			     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (copy_args.src == MAP_FAILED)
+> +		err("mmap() failed");
+> +
+> +	if (uffd_register(src_uffd, copy_args.src, len, true, false, false))
+> +		err("register src failed");
+> +	if (uffd_register(gopts->uffd, gopts->area_dst, len, true, true, false))
+> +		err("register dst failed");
+> +
+> +	if (pthread_create(&thread, NULL, wp_copy_thread, &copy_args))
+> +		err("pthread_create() failed");
+> +
+> +	/* Wait until UFFDIO_COPY blocks on the source page */
+> +	pfd = (struct pollfd){ .fd = src_uffd, .events = POLLIN };
+> +	if (poll(&pfd, 1, 10000) != 1)
+> +		err("no fault on the source page");
+> +	if (read(src_uffd, &msg, sizeof(msg)) != sizeof(msg))
+> +		err("read() failed");
+> +
+> +	if (uffd_unregister(gopts->uffd, gopts->area_dst, len))
+> +		err("unregister dst failed");
+> +	if (uffd_register(gopts->uffd, gopts->area_dst, len, true, false, false))
+> +		err("re-register dst failed");
+> +
+> +	zeropage.range.start = (unsigned long)copy_args.src;
+> +	zeropage.range.len = len;
+> +	zeropage.mode = 0;
+> +	if (ioctl(src_uffd, UFFDIO_ZEROPAGE, &zeropage))
+> +		err("UFFDIO_ZEROPAGE failed");
+> +
+> +	if (pthread_join(thread, NULL))
+> +		err("pthread_join() failed");
+> +
+> +	if (copy_args.result != -EINVAL)
+> +		err("UFFDIO_COPY returned %lld, expected %d",
+> +		    (long long)copy_args.result, -EINVAL);
+> +
+> +	pagemap_fd = pagemap_open();
+> +	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
+> +	pagemap_check_wp(value, false);
+> +	close(pagemap_fd);
+> +
+> +	munmap(copy_args.src, len);
+> +	close(src_uffd);
+> +	uffd_test_pass();
+> +}
+> +
+>  static void uffd_wp_fork_test_common(uffd_global_test_opts_t *gopts, uffd_test_args_t *args,
+>  				     bool with_event)
+>  {
+> @@ -2403,6 +2501,13 @@ uffd_test_case_t uffd_tests[] = {
+>  		.uffd_feature_required =
+>  		UFFD_FEATURE_PAGEFAULT_FLAG_WP | UFFD_FEATURE_WP_UNPOPULATED,
+>  	},
+> +	{
+> +		.name = "wp-copy-reregister",
+> +		.uffd_fn = uffd_wp_copy_reregister_test,
+> +		.mem_targets = MEM_ALL,
+> +		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP |
+> +		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
+> +	},
+>  	{
+>  		.name = "minor",
+>  		.uffd_fn = uffd_minor_test,
+> -- 
+> 2.56.0
+> 
 
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 084f5d4c7b5e..b83c5797a2d8 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -122,13 +122,14 @@ static unsigned long long get_mmap_min_addr(void)
- }
- 
- /*
-- * Using /proc/self/maps, assert that the specified address range is contained
-- * within a single mapping.
-+ * Using /proc/self/maps, check whether the specified address range is contained
-+ * within a single mapping with the expected permissions, if supplied.
-  */
--static bool is_range_mapped(FILE *maps_fp, unsigned long start,
--			    unsigned long end)
-+static bool is_range_mapped_with_perms(FILE *maps_fp, unsigned long start,
-+		unsigned long end, const char *expected_perms)
- {
- 	char *line = NULL;
-+	char perms[5];
- 	size_t len = 0;
- 	bool success = false;
- 	unsigned long first_val, second_val;
-@@ -136,12 +137,13 @@ static bool is_range_mapped(FILE *maps_fp, unsigned long start,
- 	rewind(maps_fp);
- 
- 	while (getline(&line, &len, maps_fp) != -1) {
--		if (sscanf(line, "%lx-%lx", &first_val, &second_val) != 2) {
-+		if (sscanf(line, "%lx-%lx %4s", &first_val, &second_val, perms) != 3) {
- 			ksft_exit_fail_msg("cannot parse /proc/self/maps\n");
- 			break;
- 		}
- 
--		if (first_val <= start && second_val >= end) {
-+		if (first_val <= start && second_val >= end &&
-+		    (!expected_perms || !strcmp(perms, expected_perms))) {
- 			success = true;
- 			fflush(maps_fp);
- 			break;
-@@ -152,6 +154,12 @@ static bool is_range_mapped(FILE *maps_fp, unsigned long start,
- 	return success;
- }
- 
-+static bool is_range_mapped(FILE *maps_fp, unsigned long start,
-+			    unsigned long end)
-+{
-+	return is_range_mapped_with_perms(maps_fp, start, end, NULL);
-+}
-+
- /* Check if [ptr, ptr + size) mapped in /proc/self/maps. */
- static bool is_ptr_mapped(FILE *maps_fp, void *ptr, unsigned long size)
- {
-@@ -161,6 +169,20 @@ static bool is_ptr_mapped(FILE *maps_fp, void *ptr, unsigned long size)
- 	return is_range_mapped(maps_fp, start, end);
- }
- 
-+/*
-+ * Check if [ptr, ptr + size) is mapped with the required permissions in
-+ * /proc/self/maps.
-+ */
-+static bool is_ptr_mapped_with_perms(FILE *maps_fp, void *ptr,
-+				     unsigned long size,
-+				     const char *expected_perms)
-+{
-+	unsigned long start = (unsigned long)ptr;
-+	unsigned long end = start + size;
-+
-+	return is_range_mapped_with_perms(maps_fp, start, end, expected_perms);
-+}
-+
- /*
-  * Returns the start address of the mapping on success, else returns
-  * NULL on failure.
-@@ -348,10 +370,33 @@ static void mremap_move_within_range(char *pattern_addr)
- 	ksft_test_result(success, "%s\n", test_name);
- }
- 
--static bool is_multiple_vma_range_ok(char *pattern_addr, char *ptr,
--				     unsigned long page_size)
-+static bool is_multiple_vma_range_ok(FILE *maps_fp, char *pattern_addr,
-+				     char *ptr, unsigned long page_size,
-+				     bool expect_gaps_mapped)
- {
--	for (int i = 0; i <= 10; i += 2) {
-+	for (int i = 0; i <= 10; i++) {
-+
-+		if (i == 5)
-+			continue;
-+
-+		/* Odd pages correspond to gaps between the source VMAs. */
-+		if (i & 1) {
-+			if (expect_gaps_mapped) {
-+				if (!is_ptr_mapped_with_perms(maps_fp,
-+							      ptr + i * page_size,
-+							      page_size, "---p")) {
-+					ksft_print_msg("Page %d PROT_NONE mapping overwritten\n",
-+						       i);
-+					return false;
-+				}
-+			} else if (is_ptr_mapped(maps_fp, ptr + i * page_size,
-+						 page_size)) {
-+				ksft_print_msg("Page %d is unexpectedly mapped\n", i);
-+				return false;
-+			}
-+			continue;
-+		}
-+
- 		size_t size = i == 4 ? 2 * page_size : page_size;
- 
- 		if (memcmp(ptr + i * page_size, pattern_addr + i * page_size,
-@@ -365,7 +410,7 @@ static bool is_multiple_vma_range_ok(char *pattern_addr, char *ptr,
- 	return true;
- }
- 
--static void mremap_move_multiple_vmas(char *pattern_addr,
-+static void mremap_move_multiple_vmas(FILE *maps_fp, char *pattern_addr,
- 				      unsigned long page_size,
- 				      bool dont_unmap)
- {
-@@ -428,7 +473,8 @@ static void mremap_move_multiple_vmas(char *pattern_addr,
- 		goto out_unmap;
- 	}
- 	/* Check move was ok. */
--	if (!is_multiple_vma_range_ok(pattern_addr, tgt_ptr, page_size)) {
-+	if (!is_multiple_vma_range_ok(maps_fp, pattern_addr, tgt_ptr,
-+				      page_size, false)) {
- 		success = false;
- 		goto out_unmap;
- 	}
-@@ -441,7 +487,8 @@ static void mremap_move_multiple_vmas(char *pattern_addr,
- 		goto out_unmap;
- 	}
- 	/* Check that the move is ok. */
--	if (!is_multiple_vma_range_ok(pattern_addr, &tgt_ptr[size], page_size)) {
-+	if (!is_multiple_vma_range_ok(maps_fp, pattern_addr, &tgt_ptr[size],
-+				      page_size, false)) {
- 		success = false;
- 		goto out_unmap;
- 	}
-@@ -461,7 +508,8 @@ static void mremap_move_multiple_vmas(char *pattern_addr,
- 		goto out_unmap;
- 	}
- 	/* Check that the move is ok. */
--	if (!is_multiple_vma_range_ok(pattern_addr, tgt_ptr, page_size)) {
-+	if (!is_multiple_vma_range_ok(maps_fp, pattern_addr, tgt_ptr,
-+				      page_size, true)) {
- 		success = false;
- 		goto out_unmap;
- 	}
-@@ -547,7 +595,8 @@ static void mremap_shrink_multiple_vmas(unsigned long page_size,
- 	ksft_test_result(success, "%s%s\n", test_name, inplace ? " [inplace]" : "");
- }
- 
--static void mremap_move_multiple_vmas_split(char *pattern_addr,
-+static void mremap_move_multiple_vmas_split(FILE *maps_fp,
-+					    char *pattern_addr,
- 					    unsigned long page_size,
- 					    bool dont_unmap)
- {
-@@ -623,8 +672,15 @@ static void mremap_move_multiple_vmas_split(char *pattern_addr,
- 
- 	/* Check pattern. */
- 	for (i = 0; i < 7; i++) {
--		if (i == 3)
-+		if (i == 3) {
-+			if (is_ptr_mapped(maps_fp, tgt_ptr + i * page_size,
-+					  page_size)) {
-+				ksft_print_msg("Page %d is unexpectedly mapped\n", i);
-+				success = false;
-+				goto out_unmap;
-+			}
- 			continue;
-+		}
- 
- 		if (memcmp(tgt_ptr + i * page_size,
- 			   pattern_addr + (i + 2) * page_size, page_size)) {
-@@ -840,10 +896,19 @@ static void mremap_move_multi_invalid_vmas(FILE *maps_fp,
- 		goto out_unmap;
- 	}
- 
--	for (i = 0; i < 10; i += 2) {
-+	for (i = 0; i < 10; i++) {
- 		bool is_mapped = is_ptr_mapped(maps_fp,
- 				&tgt_ptr[i * page_size], page_size);
- 
-+		if (i & 1) {
-+			if (is_mapped) {
-+				ksft_print_msg("Gap unexpectedly mapped at %d\n", i);
-+				success = false;
-+				goto out_unmap;
-+			}
-+			continue;
-+		}
-+
- 		if (i < 8 && !is_mapped) {
- 			ksft_print_msg("Valid VMA not moved at %d\n", i);
- 			success = false;
-@@ -1208,10 +1273,10 @@ int main(void)
- 	mremap_move_1mb_from_start(pattern_addr);
- 	mremap_shrink_multiple_vmas(page_size, /* inplace= */true);
- 	mremap_shrink_multiple_vmas(page_size, /* inplace= */false);
--	mremap_move_multiple_vmas(pattern_addr, page_size, /* dontunmap= */ false);
--	mremap_move_multiple_vmas(pattern_addr, page_size, /* dontunmap= */ true);
--	mremap_move_multiple_vmas_split(pattern_addr, page_size, /* dontunmap= */ false);
--	mremap_move_multiple_vmas_split(pattern_addr, page_size, /* dontunmap= */ true);
-+	mremap_move_multiple_vmas(maps_fp, pattern_addr, page_size, /* dontunmap= */ false);
-+	mremap_move_multiple_vmas(maps_fp, pattern_addr, page_size, /* dontunmap= */ true);
-+	mremap_move_multiple_vmas_split(maps_fp, pattern_addr, page_size, /* dontunmap= */ false);
-+	mremap_move_multiple_vmas_split(maps_fp, pattern_addr, page_size, /* dontunmap= */ true);
- 	mremap_move_multi_invalid_vmas(maps_fp, page_size);
- 
- 	fclose(maps_fp);
 -- 
-2.53.0
-
+Sincerely yours,
+Mike.
