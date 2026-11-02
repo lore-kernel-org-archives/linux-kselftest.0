@@ -1,109 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793641445;
-	b=vJTZ/d1hY2mgQjAKMM1betuKxlF2HqPl1k6+80uMNRkSy8E+lJZzygqh29I+3mf0lmnd
-	 gxEx3R1SgrkzSY0uUWlbB3VD8/ZXGZALJ/OIc2VtN+1JhdELSu0oobksJ0Nzvab4MzOO5
-	 ak6PMBkqBDb2sfbCdFyE4kbmgfy6IIi7rBqyfVJZe7uTaO6aCrAKvMGJ9U+5ac+krS8dd
-	 pEFM260pVcS5eHvrKIIIBnwF1Ujm2AZNrY1+Da97ZKucsVK70rCZN82h+y6T1Jp/Q0nAf
-	 Rns5JXNs8ESftDJwrWyiOGtF18Q3NPUnCV3WFrJP9rAddO4tzP4yH2tI8GVFsDa2jEQ==
+	t=1793642842;
+	b=vk5HOCg1t87qkuUvx0R6laRysCP2nZeOqpM39w00JHcrOYD+LLu4UTEc9iLxKqYHOPy/
+	 RZIWvdZMJdIjiOeggK5dTWqgWF2kJR1osbJgNfcSMWItVcu4zAHgJBGesypPrP6plijli
+	 yL58T394DC9fL8XQi4h83Tnw8N6l1M83HSN5gMZzfCz1cx2tklrQoXkC4Rpmu0dPsvLtg
+	 GFdUmAdPAMDVLSuPg2eojNQ1TmK+fiiLESPv6SElk/d4FXszf53dDF15Mb9rpJVUNxLHI
+	 YtLW977OsOZpvEa9Refzb0h9k83n5sTG+szNj+GMFw+20lnkbatvHhnmxTEeqmu1jpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793641445;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793642842;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=DU6n5xddllI3TFFpGzdMLCmW2JMizz1ppgKr4JRiny0=;
-	b=MNeyCyTuJrkifwxIX7q3jX73q2SDbwVt2GMCKup3jAosd1aQppj1Ssqo3Z3jp9UR+pYl
-	 9dOiaOFffYyuYFl0BkfcD8l9LKeYR/zK3Kw+H+mSiAWbh2Y5grpl5PJ32Jv0EMjPvPUwK
-	 9BpdAKnitrDUt5bLb+hv/gJiADaScU1w0wCZyS0ZlTTHvUolyWQ7qR/51aDCZ7jsqXj+Z
-	 qWugVL81iu1qM9fS8IrXixypcJBkxc50VBZJcYv+vKRI4rTT0NhrC6suevNLuVPE7t3Wy
-	 oEFgzjWL7GNIPGC9pPc0TQ5V8dYel6WsuOcZKlVKQv53tMEnxX7Xkee63PU+zzvdVGA==
+	 Received:X-Forwarded-Encrypted:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=/vXXDZI2TLqXD/tqTZGHj/cF0YcMq0fXP1TpWYkM2ME=;
+	b=3Qh2qlgGCfnbEFd7A/1aNjdQa/ogf3K/FSfw1Ld/Esoa/cNaW+RptxuMFx9Cnv9NPxLl
+	 pvJqf1qiIQMkRkLRGH5c5j8YA2D5Fu20ukhDQ9ZXDwFdP0T11IxqkrcdiIDluB0crdEfU
+	 wO692eLStsKg+wCHwmZ+dvYDmg5E3eQtwbHc82k8TPgNtsuOmF5pxi5aDehOJJ2ajM8rt
+	 utH8EjqAjGPtyneY3cGDK3XbdEZN3hJr+WpdcPBE4Whyug4zStAOaccMnlYbxERxlB6ZZ
+	 bYWsB37Bo2IoECP41gDiar0hnstWoPTA0lGWPZ2guamf5hziFcHzH4mhgrNd6eBgFNQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="ELreSK/6";
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	dmarc=none header.from=linux-foundation.org;
+	spf=pass smtp.mailfrom=linuxfoundation.org;
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=LDYBUokF;
+	arc=none smtp.remote-ip=209.85.167.54
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04031606A32E
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 17:44:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04031606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1C4606A327
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 18:07:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB1C4606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ELreSK/6
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a4d7ae1ae9so31921785e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 09:44:04 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=LDYBUokF
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5be4fea434bso3803147e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 10:07:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793641443; x=1794246243; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DU6n5xddllI3TFFpGzdMLCmW2JMizz1ppgKr4JRiny0=;
-        b=ELreSK/6sFM2LAmhADhCQ+Je840uXhfuSmlxBE2nyYecZDxpNCEdvZIZP5MgGlerwN
-         2bgPw5WGEZEfZ033KjYNcUP1+lOJmHbbChgRRqJhSpFcHXg8sUokgDDste67WVukBG5/
-         nrW7Ho0LPvfbLnj8L6PkQKwAJCu1zz8d5ZXRcvFFZ69B4/OljG32iAn922CXQzvSfwmj
-         JN27kOXyV1+LqkbrgJMW9xjKS/cWpKaVhcnSOJ0eD85iyBrsnHmXO6bXN2K+jP59ZoJh
-         GnnrE26mDV7Svi4EToXq8/JYskzjJru9AgygJJvB35aBgSwpDO7ZGARzxTPAHHtdWvxy
-         t46A==
+        d=linux-foundation.org; s=google; t=1793642840; x=1794247640; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/vXXDZI2TLqXD/tqTZGHj/cF0YcMq0fXP1TpWYkM2ME=;
+        b=LDYBUokFBH18lz0UWRqILYRMY9l3Pk155MuQIGVagceH3xSPXLVFowyJwnmzjAFToO
+         O3ZxKe1ywEeXQFHG7Ol4VzX0EthlI4AU8Fa+scXSZSAhv7Taa4P7aSrR2RirhrB+yTQU
+         WMwhKBQsUMFns0JPGeGo9osQawT8z111jaohE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793641443; x=1794246243;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=DU6n5xddllI3TFFpGzdMLCmW2JMizz1ppgKr4JRiny0=;
-        b=Pm+RXM04frVWunl7pqBIvYHVXciyw4IGZ8vAVqqXGBPJgAajKc0U/jCdK/xIGyX0Qy
-         71pEZX0B+o3Pj/AZrRvigzGHcx1/s+xtzu1uspNjNdenA1Mg4qvIsYwYRFdBwMS3COX4
-         l8sdHSfCdasMMbJAaoVh0BCLjhTUckecfxe8YaYlaQhh2tgZotxlCo9GnVoI/vmhvMzU
-         jwPEGfA33Vv5tvDiiLHHQZWjpYbmex8zYuooDozubRdZwgFUi8Ap1npwmcmScRsNjBMg
-         BikcgLCijRcE8urOHJzzF6UKs7MgAdTOORgq1BZKFnWG3pvujqXXZ8dt/3XRPagEv2YB
-         1ZCw==
-X-Forwarded-Encrypted: i=1; AKwUvBxC5WklV8Zwf0mv4J2QkImkNFX0V2ZeLmDFL0/VuOmdV650Kr1/cUTPvNtqMWi9nvevTC8nqAubLRMBgR1iDQw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJo4vr0il6dfrmWgeOeaB8eH/wdctakTqeZcQF8mBX4DJjH4dAD
-	bC5LtwI9It73o8gcQgJMrD4diCqbuSbSfuFJk9fzTIoSwPAHLC4jJiLK
-X-Gm-Gg: AYBFou1/xIh9Zyt3GpBpzv8LpoLDD9ma6BZvUrmzbZvkiVN2mqPgzy/dom2l1GwKtAX
-	wWPPtj+uwifr/57a0iFd2WzFctoB2MnxDa09+k/7xh+dDDv9uM2jnIT39Q2R5UtzwgKREyk1BK3
-	mqUTn5M3svy2m/ftVniOvA01QWSj6gRsMNfB1HM9BLSeRqLW/d1jmRDAbdOM4qYTSN6Tn1dOEEC
-	3VCm3PHDc/M6OZTcMgez9/pF6xW2FSnjJ4kvadQUrEJo28djiT9h2AaEHE5cvbWQqlssLgt1uYO
-	GWqGTM5Snzslj+LE3Sylp9l3qwMVTg64p6be+OrDsHPPHjYFPw90ZHeS2ukNNWJx1rTmg1X8ria
-	/Z7gxNxObEbUuoId0l6rHc2uN6Z5aFDVClAy67d4hNqKwl9yUdteFZ8RehlpBECB/y+23Y6DIyg
-	ABzcxDGgPeRBsU8czNt4e5n8Tvyv0z+hmOUv6APNv5Rof03mm57mhVBbU7NbGBUpLSQmjGST6TX
-	zJB3kaFxph3ZfkC6Kx/TJFFBL/kDGkhek13wnF7+vXm6fyquZwpJVXNXkzQ0MrnfIKhNMrrWSZn
-	PsUxiEqFktd9bUKjWJqff82wnZJJ9xfRN/sndWeixgePVdvBLXdocygBV41vHRaa1fEuJEQEgfW
-	q2w==
-X-Received: by 2002:a05:600c:870f:b0:4a2:1612:6367 with SMTP id 5b1f17b1804b1-4ac185bcf74mr238434735e9.15.1793641443318;
-        Mon, 02 Nov 2026 09:44:03 -0800 (PST)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4abea533a1esm196311865e9.1.2026.11.02.09.44.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 09:44:02 -0800 (PST)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Quentin Monnet <qmo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Mahe Tardy <mahe.tardy@gmail.com>,
-	Tianyi Chen <hi@tychen.cc>,
-	Gyutae Bae <gyutae.bae@navercorp.com>,
-	Hui Su <sh_def@163.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 0/5] libbpf: Support gen loader attach
-Date: Mon,  2 Nov 2026 17:43:45 +0000
-Message-ID: <20261102174350.472592-1-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20260707; t=1793642840; x=1794247640;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=/vXXDZI2TLqXD/tqTZGHj/cF0YcMq0fXP1TpWYkM2ME=;
+        b=K41NgKO2Efuz02CBWy1I0C61lG8YpWmOjYeE9iSxKy7r9QBwi8A9aWxyuDZHct1hGJ
+         HC8qmtJBL6is3lEzIMICxKhMZmJ8v5irB0f9j+c+JUT2X0mjv1vPGoBlP6cYEenbHEpt
+         UZn34FvJDNB+Oyg7m/Q/OZ7Qt5U4WowLdTOivhJdvu52QZaehkk3KOUKeSiDPxJIgdza
+         F6r0+YRgdmuk0Y+HA2oeDf0YvlWx/OaerHpZDuOle3bgdf8qxBXy3Fb9uFm1zaTGIhKL
+         V5hX1fSBv6hq8+rNU+6gZpVGpsATEv3AawoEPmv+0k3bOGxKMwN2LVCa74xlxuUB1dm1
+         +VIw==
+X-Forwarded-Encrypted: i=1; AKwUvBzKg4wdogH+5399Rsp7Gz/q2JQqWW7eaR9wxaR69qRrP5FbvWNgKSO3ggGbMXjp4YPDEgyz0gYWUcXmQtlM6wg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9l7b2QADLUKpO5D+Md4iQMdAm3249lOKYhjRWgv3cVPA75EQOF
+	GwpsG0mdib1HzQfqqmhZxo2a5qfUGXzjEmi8Ps5crSVP4QtEt1pTfMvygWbEHLTWpboliSWqOR/
+	Akc/yG3Q1sg==
+X-Gm-Gg: AYBFou3wnde6zEfDLtZZ5++SPLlOhMJ46WlffpiAwtND+5xWzJV4aYJuRWK5S4o1y3l
+	wXTy24pzPyuyuZpDgpljYWwfwzPJJ+AvTJBqFMsIJpSWUdFbfiSuKi16u1/EYepDE0kgcoXXv7D
+	Kfg676cUtRVBdNWQV051bNZ619PbxBPom1+UYGSEoGJzyXKjzisdAQ3mkzwm8vmH3J8PGm3XXMR
+	7XedIqnW1hhX6W3HFUKJ+n5UCkekQFpaVDTSmYDf2xZQP8MIAUQlrhQ7XtxuhTfCU9k7iR376F+
+	CZ93ahZ3VKh/crfb+8nK30J3r6giL0u7rhgMLtNe43ZC51hHITHdHGOJGc80Q+R66c1KiN7VF8c
+	NnieTf1aSb4Pey3kVoRGSnkLMrVOGghK9gZFYY9saSudj6vuJTLBal0SzkP4oxHYij4pZqe352O
+	5eFa/QJd8lLdqLmxKxe9+5RoIGAOcpA1lHskgZBaJp3o2tzKsUNXOxfsx/qmnizUmhr+oY78GXc
+	rY2sgMtDqem8Im6dYz5mV1p51k+uSipdbnJJfhoUdLE8RxlHw6s4jStsfYLPpDHHR7ylt0TMklf
+	zx75s/Ru4WQt3TQ1Il3wWBbynx4WN2Oc//yOB9LnFzQo1eE5bpxNUfUp1zI9RvpBtKkm+IcFbcS
+	hIUE=
+X-Received: by 2002:ac2:4c54:0:b0:5be:ab1f:f04d with SMTP id 2adb3069b0e04-5bfd11fc9b6mr4098957e87.23.1793642839882;
+        Mon, 02 Nov 2026 10:07:19 -0800 (PST)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bfe07378d3sm1791905e87.45.2026.11.02.10.07.19
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 10:07:19 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5be4fea434bso3803134e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 10:07:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBwsk5bc89076d21e+QS4vZpZrYlRpjiCro5punFClfVEZkroRH6m7rstpJ/66lPigmkNeK/F8HsBCJXWsrxkQQ=@vger.kernel.org
+X-Received: by 2002:a17:907:d94:b0:c2d:c80e:8366 with SMTP id
+ a640c23a62f3a-c4ca7426f6emr874452266b.0.1793642348398; Mon, 02 Nov 2026
+ 09:59:08 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,52 +94,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org> <20261102-work-procfs-bugfixes-v1-1-59422ed3e465@kernel.org>
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-1-59422ed3e465@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 2 Nov 2026 09:58:51 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiSA7-mqmAjTQDaU7UjUyWt0TxYwXHafL8ZAPudy+B_uQ@mail.gmail.com>
+X-Gm-Features: AclHuK_qZTBVsLQIdymgRHScSFenC6XsGggUDmcuOugjrSTbuVkeASUmC_hYPZo
+Message-ID: <CAHk-=wiSA7-mqmAjTQDaU7UjUyWt0TxYwXHafL8ZAPudy+B_uQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 01/38] PCI/proc: don't truncate the position of config
+ space accesses
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Josef Bacik <josef@toxicpanda.com>, Chris Mason <mason@kernel.org>, 
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, Greg Kroah-Hartman <gregkh@suse.de>, 
+	Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
+	platform-driver-x86@vger.kernel.org, coreteam@netfilter.org, 
+	kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net, 
+	jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, 
+	samba-technical@lists.samba.org, sparclinux@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hey,
+On Mon, 2 Nov 2026 at 06:22, Christian Brauner <brauner@kernel.org> wrote:
+>
+> proc_bus_pci_write() truncates the file position to an int. A pwrite()
+> at an offset like 0xfffff000 turns it negative [..]
 
-I've been working on this in the context of Shirudo[^1]. The current
-limitations we face is that gen_loader cannot attach the program it
-loads so we still need a userspace component to be allowed to
-BPF_LINK_CREATE and we'd like to gradually remove the allowed operations
-done in userspace to solely rely on the signed program.
+I think this would actually be better with rw_verify_area() just
+checking a per-file maxbytes.
 
-Note that there's no kernel modification in this series, it adds the
-gen_attach options and code generation to libbpf and do the wiring from
-bpftool. The kernel side was already allowed thanks to 'b1d18a7574d0
-("bpf: Extend sys_bpf commands for bpf_syscall programs.")'.
+We already have that logic for lseek and friends - using that fairly
+hacky combination of s_maxbytes and !unsigned_offsets().
 
-Also note that I did some analyzis with Sashiko and it's been
-complaining because I've followed the approach with the prog fds being
-initialized to 0 (and not fixing the two fds to init to -1 sentinel
-value), so maybe we should pre-patch this.
+We should combine s_maxbytes and unsigned_offsets() at file open time
+into f_maxbytes and check that not just at lseek but in
+rw_verify_area.
 
-Lastly, I don't know much about bpftool so unsure if the way I've added
-it is the most appropriate way for the lskel attach option.
+And then things like proc_bus_pci could set it's size limit in one single place.
 
-[^1]: https://lpc.events/event/20/contributions/2437/
+Hmm?
 
-Mahe Tardy (5):
-  libbpf: Count entry programs for bpf_gen__init()
-  libbpf: Track generated loader link FDs
-  libbpf: Emit BPF_LINK_CREATE calls in generated loaders
-  bpftool: Add attach option for light skeleton generation
-  selftests/bpf: Test gen loader attach
-
- .../bpf/bpftool/Documentation/bpftool-gen.rst |  11 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
- tools/bpf/bpftool/gen.c                       |  67 +++--
- tools/lib/bpf/bpf_gen_internal.h              |   7 +
- tools/lib/bpf/gen_loader.c                    |  41 +++-
- tools/lib/bpf/libbpf.c                        |  56 ++++-
- tools/lib/bpf/libbpf.h                        |   3 +-
- tools/lib/bpf/skel_internal.h                 |   4 +
- .../bpf/prog_tests/gen_loader_attach.c        | 229 ++++++++++++++++++
- .../selftests/bpf/progs/gen_loader_attach.c   |  48 ++++
- 10 files changed, 436 insertions(+), 32 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/gen_loader_attach.c
-
---
-2.43.0
-
+                   Linus
