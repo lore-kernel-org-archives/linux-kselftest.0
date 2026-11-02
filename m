@@ -1,77 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.216.245.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793630474;
-	b=ikjCLBrhwjBVUT7U5Xikw1gopAJondWQMvIOqfw3TmJ7Ng+BdAwUipIejsbBXmZhVysH
-	 g2rTbSUh/aVFpREvjT0OsM+v/hoqrCqQeyqFqVI3B4iqbJvHENlCu8xbylDt65Z+sbmHr
-	 1pdJvmBEudMFjMHPzd23GvB5kgCjSNry+hi2VSOSF6S37Q5hcC5vki9pr+f6BYEygqvp3
-	 +aTTMxasxESjxsMw39DgOV6xsb2ay+c9FoKLj3Va3XcTJ0fE1UBB+xHZ+eUt3KvcalIdK
-	 7ewmOX7/ybCf3R0x34d3ABMbg5sn7vlNgK4EJMpsmhHiFc+Ua4+jA0UPrw2PYiEvpqg==
+	t=1793630795;
+	b=X2qItx23mivUl9CxXd/7cGQSgXoGTHNG5bXa9Tj+wKsYEMhFqt3kvZUUP0n10qu7KsZz
+	 fxUobOzYZVPMR3DYw63oWdcGdcSD56k9fOSrQ6Axkma2plUpHM2eositKB4AdVeISdNWX
+	 VcpqHTmNW2fhXVksqPZVpUfkJfW/Js8QxcsP/rBhS4oaJaAdzu5T9LMquCTV9dagB9tpZ
+	 7dXzGYg1RqDzkCbZF6HWJ3vfFpvn9QcIIULd3xKVWvwgpoYejgiOKhwdo5qM3wqt8g9Bh
+	 2yk4CjmacV7v4YAy/Ez17JKi3v0OV7ksk/dLJfZ/LNkQLjaYVtNBeyVz1gSgtLedCpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793630474;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=OMjVTvjZtZrTjrcI72ExCzD1i9afB7DwzHLxEXPZD7Y=;
-	b=QAagfSfraZYCEWKYZoj7u18gvF+xVL0V9/XxN5HTb6ZU3XKXclP9VH4SNNrwOqMzBKa+
-	 DRYSv7dtCh6H6VlEvbbdaGzExo53YYKKGvGBi/zx94DsuUj9C7KIqVHah8OUn1Kb+FDC8
-	 U9igneJDol81Z8fYH2au+BwZy/bwcCnQgp5ne4ccYY87pUYBX38WP7I8sJys5IrYlZC/S
-	 lswLfFcvpIpFqiH/8qxntTabuu3jR1DnZhtSX8DWwyDHjVxlPRUxOa3T90LLIyppyNiHX
-	 FFdiUa3ErmSZG7ukOKwm5rYbfLFwwiww4XEYOJFqdxNhttcnqNNj1K0k4Yn7WuKj/Bw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793630795;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=+CbOy/w4oZmoVyUdrE5PFeUUqcG8Qy13cgKPirYGonw=;
+	b=tA/oWasUSf0zVHptQRpBY1J6greX4c64ZJHa4dE/pnJxiVfV6RUQkqIJ8LPdIvz9oMeb
+	 egRM8OgcTqdw/9YWRHg88/ynx2JGOhgl+Q3dPMytRcvZvWNjJdyxKO4mSqEYRyAtpiJV9
+	 DN2nYzYxofKo5INAUxxz9Vc/Yi/DfR+HXFT/bH3K01vpm/wpgpCJ4+h/+r0QjwZnvhKkj
+	 8VZx86qsml3g5FMNcogG1/+DvxMHlkq0xiSJ7ttiALCW6dzRUNPJiMYzNMArGlYGtVMOW
+	 fLK8tSOpxHjw4SSb9f/Hmcex8X9IMk5ejYyAFrLQT3N1CDYKruHrK9d7QYI453BjQnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=strlen.de;
-	spf=pass smtp.mailfrom=strlen.de;
-	arc=none smtp.remote-ip=91.216.245.30
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UzgLpTAs;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE80607BDEE;
-	Mon,  2 Nov 2026 14:41:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFE80607BDEE
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id B65DD60342; Mon, 02 Nov 2026 15:41:04 +0100 (CET)
-Date: Mon, 2 Nov 2026 15:41:03 +0100
-From: Florian Westphal <fw@strlen.de>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>,
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>,
-	Christoph Hellwig <hch@lst.de>, Greg Kroah-Hartman <gregkh@suse.de>,
-	Joel Granados <joel.granados@kernel.org>,
-	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>,
-	Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	netdev@vger.kernel.org, ntfs3@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org, coreteam@netfilter.org,
-	kexec@lists.infradead.org, linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	ibm-acpi-devel@lists.sourceforge.net,
-	jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-mm@kvack.org, linux-sh@vger.kernel.org,
-	linux-usb@vger.kernel.org, samba-technical@lists.samba.org,
-	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-doc@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org,
-	linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org,
-	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH RFC 03/38] netfilter: xt_recent: don't remove the proc
- entries under a spinlock
-Message-ID: <auig_zhd3L0HEis3@strlen.de>
-References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
- <20261102-work-procfs-bugfixes-v1-3-59422ed3e465@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B3E6070D96;
+	Mon,  2 Nov 2026 14:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UzgLpTAs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735601F00A18;
+	Mon,  2 Nov 2026 14:46:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793630795;
+	bh=+CbOy/w4oZmoVyUdrE5PFeUUqcG8Qy13cgKPirYGonw=;
+	h=From:To:Cc:Subject:Date;
+	b=UzgLpTAsh/8b2lAuCsP4MmQBFlTwq27nXfldudYpUFO9wJWmkv9UIHFAXDDexAlif
+	 iO1Q0+qe6cHXAUlIT+U3r4HyjZYBl4HukMhSEITaTw4So/C+I1yS3Syg7C5sIxDZPG
+	 5S0ZNudLwPF0WmqBgUtsD6evmUSs8XzPvMYhh9Bl1eVwPb+BqphU2ASIGP7YiG/TJe
+	 ZGwuEjboJWhAA6PG6w3PUOPbiFKqwfO9qGu2VmKADh+w6P2mhbFyIdU7jmBJpgBnal
+	 IG0ZgOE6r9qhpaa0kScLQ3/QfF4TUP+ddUJtSY/QX/sgQfDsbHDsuF3Ku34F0iemg5
+	 EEcdLIA1YJTXQ==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	stable@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH mm-hotfixes-unstable 0/3] mm/damon: fix watermark state, kunit pid leak and selftest fake pass
+Date: Mon,  2 Nov 2026 06:46:23 -0800
+Message-ID: <20261102144627.88843-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,18 +69,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102-work-procfs-bugfixes-v1-3-59422ed3e465@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Christian Brauner <brauner@kernel.org> wrote:
-> recent_proc_net_exit() removes the proc entries of all tables with
-> recent_lock held. remove_proc_entry() waits until nobody calls into the
-> entry anymore, and reading one of them takes recent_lock in
-> recent_seq_start() while procfs has the entry pinned. So when a reader
-> gets there while the network namespace goes away, the exit path sleeps
-> with a spinlock held and bh disabled, waiting for a reader that spins
-> on that very lock:
+Three hotfixes for core, kunit and selftest.  Fix kdamond deactivation
+from missed watermark reset with patch 1.  Fix pid leak in kunit test
+with patch 2.  Fix a selftest wrongly passing when it should skip, with
+patch 3.
 
-Yes, but note that this change is already part of a pending nf -> net
-merge request.
+Note for reviewers.  This series is a collection of fixes that were
+initially developed by different people.  Changelog is in each patch.
+
+Aveline Noir (1):
+  mm/damon/core: reset watermark wait state on each iteration
+
+SJ Park (1):
+  selftests/damon/sysfs_memcg_path_leak: define ksft_skip
+
+Wang Xiaolei (1):
+  mm/damon/tests/sysfs-kunit: fix leaked pid reference in add_targets
+    test
+
+ mm/damon/core.c                                        | 5 +++--
+ mm/damon/tests/sysfs-kunit.h                           | 9 +++++++++
+ tools/testing/selftests/damon/sysfs_memcg_path_leak.sh | 3 +++
+ 3 files changed, 15 insertions(+), 2 deletions(-)
+
+
+base-commit: 395206c0e287bdd981918e033a2b1621ea6a3b9a
+-- 
+2.47.3
