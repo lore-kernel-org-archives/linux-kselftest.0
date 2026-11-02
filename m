@@ -1,90 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=34.202.193.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793642842;
-	b=vk5HOCg1t87qkuUvx0R6laRysCP2nZeOqpM39w00JHcrOYD+LLu4UTEc9iLxKqYHOPy/
-	 RZIWvdZMJdIjiOeggK5dTWqgWF2kJR1osbJgNfcSMWItVcu4zAHgJBGesypPrP6plijli
-	 yL58T394DC9fL8XQi4h83Tnw8N6l1M83HSN5gMZzfCz1cx2tklrQoXkC4Rpmu0dPsvLtg
-	 GFdUmAdPAMDVLSuPg2eojNQ1TmK+fiiLESPv6SElk/d4FXszf53dDF15Mb9rpJVUNxLHI
-	 YtLW977OsOZpvEa9Refzb0h9k83n5sTG+szNj+GMFw+20lnkbatvHhnmxTEeqmu1jpw==
+	t=1793643534;
+	b=ciywmJdlRlq77ulq9UyphZwJ61id4gS1BQy/7MDgi8UnBGDYPZHStQyLVZP9JnSpjO7o
+	 wgm9DPNqhtoOZF3hOuT3+gD/+fFaDIUqiR/0a3UGNkEPOJZwJ9Q/zVNwcqiu5SGi447jV
+	 fnUMfUOEY3Ro8+1o2lhYSYALVRS7mKHmZtKXniSHz6rSvg2ehsShbQpsi6tAwbimIXP2F
+	 XyCrmeMzOwnD1VuO3Pio7LNbjXxVcW7IdWszhKojG6hLjWDnNwxsVrVJvjzJmkcdhmqCL
+	 s/vfh+vkB0M6zwSTs004akuVhqEgtJ4IL8MfwDu8wUiGLUTJD6LbTkwRcDNBD61u9MA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793642842;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:X-Forwarded-Encrypted:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=/vXXDZI2TLqXD/tqTZGHj/cF0YcMq0fXP1TpWYkM2ME=;
-	b=3Qh2qlgGCfnbEFd7A/1aNjdQa/ogf3K/FSfw1Ld/Esoa/cNaW+RptxuMFx9Cnv9NPxLl
-	 pvJqf1qiIQMkRkLRGH5c5j8YA2D5Fu20ukhDQ9ZXDwFdP0T11IxqkrcdiIDluB0crdEfU
-	 wO692eLStsKg+wCHwmZ+dvYDmg5E3eQtwbHc82k8TPgNtsuOmF5pxi5aDehOJJ2ajM8rt
-	 utH8EjqAjGPtyneY3cGDK3XbdEZN3hJr+WpdcPBE4Whyug4zStAOaccMnlYbxERxlB6ZZ
-	 bYWsB37Bo2IoECP41gDiar0hnstWoPTA0lGWPZ2guamf5hziFcHzH4mhgrNd6eBgFNQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793643534;
+	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Feedback-ID:
+	 X-Pm-Original-To:Received:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=o4fnmGuYE2qLagLLz4EmxxYZ3imDPsAHaJFgN5jWSiE=;
+	b=vCuYxMhevbx4w6oo5ZLkkAYvKB+rbU0kfPDE934Z7c0aw/dAHeoE1xBZBLH8fb2u4URU
+	 Izv89+ktf+rUIE2a49pTnKD4dGKSaDn9RCnRIoY70qmo6af0PlhIx5tEWY670dbVXY2ti
+	 lMXWmuCR72SE73fDPVBmI/XGNeLtlv572FNSmdZUb90pqhktsrizHGTBeEqI9h/mcV53p
+	 TB1lkVJcEz2qL6eD+P8eJMotAYQybhvsN1Ei+v0/tgAZEgBzco142BY/MZQih/0DnHJZK
+	 wLyR9YSHDfah7MVf6jOYqhGsHKQjAbieW53hSJuGJiS6oz0z09Ko2rv3iyQEH6XaGRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=linux-foundation.org;
-	spf=pass smtp.mailfrom=linuxfoundation.org;
-	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=LDYBUokF;
-	arc=none smtp.remote-ip=209.85.167.54
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=younes.io;
+	spf=pass smtp.mailfrom=younes.io;
+	dkim=pass header.d=younes.io header.i=@younes.io header.a=rsa-sha256 header.s=purelymail2 header.b=IfF1ease;
+	dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=vYWSPGJ+;
+	arc=none smtp.remote-ip=34.202.193.197
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1C4606A327
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 18:07:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB1C4606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41232606A324
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 18:18:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41232606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=younes.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=younes.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=google header.b=LDYBUokF
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5be4fea434bso3803147e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 10:07:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1793642840; x=1794247640; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/vXXDZI2TLqXD/tqTZGHj/cF0YcMq0fXP1TpWYkM2ME=;
-        b=LDYBUokFBH18lz0UWRqILYRMY9l3Pk155MuQIGVagceH3xSPXLVFowyJwnmzjAFToO
-         O3ZxKe1ywEeXQFHG7Ol4VzX0EthlI4AU8Fa+scXSZSAhv7Taa4P7aSrR2RirhrB+yTQU
-         WMwhKBQsUMFns0JPGeGo9osQawT8z111jaohE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793642840; x=1794247640;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=/vXXDZI2TLqXD/tqTZGHj/cF0YcMq0fXP1TpWYkM2ME=;
-        b=K41NgKO2Efuz02CBWy1I0C61lG8YpWmOjYeE9iSxKy7r9QBwi8A9aWxyuDZHct1hGJ
-         HC8qmtJBL6is3lEzIMICxKhMZmJ8v5irB0f9j+c+JUT2X0mjv1vPGoBlP6cYEenbHEpt
-         UZn34FvJDNB+Oyg7m/Q/OZ7Qt5U4WowLdTOivhJdvu52QZaehkk3KOUKeSiDPxJIgdza
-         F6r0+YRgdmuk0Y+HA2oeDf0YvlWx/OaerHpZDuOle3bgdf8qxBXy3Fb9uFm1zaTGIhKL
-         V5hX1fSBv6hq8+rNU+6gZpVGpsATEv3AawoEPmv+0k3bOGxKMwN2LVCa74xlxuUB1dm1
-         +VIw==
-X-Forwarded-Encrypted: i=1; AKwUvBzKg4wdogH+5399Rsp7Gz/q2JQqWW7eaR9wxaR69qRrP5FbvWNgKSO3ggGbMXjp4YPDEgyz0gYWUcXmQtlM6wg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9l7b2QADLUKpO5D+Md4iQMdAm3249lOKYhjRWgv3cVPA75EQOF
-	GwpsG0mdib1HzQfqqmhZxo2a5qfUGXzjEmi8Ps5crSVP4QtEt1pTfMvygWbEHLTWpboliSWqOR/
-	Akc/yG3Q1sg==
-X-Gm-Gg: AYBFou3wnde6zEfDLtZZ5++SPLlOhMJ46WlffpiAwtND+5xWzJV4aYJuRWK5S4o1y3l
-	wXTy24pzPyuyuZpDgpljYWwfwzPJJ+AvTJBqFMsIJpSWUdFbfiSuKi16u1/EYepDE0kgcoXXv7D
-	Kfg676cUtRVBdNWQV051bNZ619PbxBPom1+UYGSEoGJzyXKjzisdAQ3mkzwm8vmH3J8PGm3XXMR
-	7XedIqnW1hhX6W3HFUKJ+n5UCkekQFpaVDTSmYDf2xZQP8MIAUQlrhQ7XtxuhTfCU9k7iR376F+
-	CZ93ahZ3VKh/crfb+8nK30J3r6giL0u7rhgMLtNe43ZC51hHITHdHGOJGc80Q+R66c1KiN7VF8c
-	NnieTf1aSb4Pey3kVoRGSnkLMrVOGghK9gZFYY9saSudj6vuJTLBal0SzkP4oxHYij4pZqe352O
-	5eFa/QJd8lLdqLmxKxe9+5RoIGAOcpA1lHskgZBaJp3o2tzKsUNXOxfsx/qmnizUmhr+oY78GXc
-	rY2sgMtDqem8Im6dYz5mV1p51k+uSipdbnJJfhoUdLE8RxlHw6s4jStsfYLPpDHHR7ylt0TMklf
-	zx75s/Ru4WQt3TQ1Il3wWBbynx4WN2Oc//yOB9LnFzQo1eE5bpxNUfUp1zI9RvpBtKkm+IcFbcS
-	hIUE=
-X-Received: by 2002:ac2:4c54:0:b0:5be:ab1f:f04d with SMTP id 2adb3069b0e04-5bfd11fc9b6mr4098957e87.23.1793642839882;
-        Mon, 02 Nov 2026 10:07:19 -0800 (PST)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bfe07378d3sm1791905e87.45.2026.11.02.10.07.19
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 10:07:19 -0800 (PST)
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5be4fea434bso3803134e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 10:07:19 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBwsk5bc89076d21e+QS4vZpZrYlRpjiCro5punFClfVEZkroRH6m7rstpJ/66lPigmkNeK/F8HsBCJXWsrxkQQ=@vger.kernel.org
-X-Received: by 2002:a17:907:d94:b0:c2d:c80e:8366 with SMTP id
- a640c23a62f3a-c4ca7426f6emr874452266b.0.1793642348398; Mon, 02 Nov 2026
- 09:59:08 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=younes.io header.i=@younes.io header.a=rsa-sha256 header.s=purelymail2 header.b=IfF1ease;
+	dkim=pass (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=vYWSPGJ+
+DKIM-Signature: a=rsa-sha256; b=IfF1easev/Ee2YVPBiTxxFyUeVOpwPyg7AtV5wA9t1zybRzNu74YDPlVCqmhnuiMOlxU/618TmPjvTF2zWcgqe4AQw1PvYSy2GiQDgPgcdy0P6PIoDYOrQgLow5HZnwWkw5zQeWix0cv2eaTz1iGlvizsUzWTjYRNUeGQXPDoVbNtBqkI5bror6WXto0D87a0PTz52TpDarLTXwN7tbISiutVWyPBd3NpYVTayArJ7urvKg51D8f4AMR6IcsJ3itAYz25LTAvzvnVD7Z5wrGlgo2//75w23EniYyEcFD+R4Oa9Jl1gUIZtgtqQSqiL6lqFpr4yWOLgZW4qra0rDddw==; s=purelymail2; d=younes.io; v=1; bh=o4fnmGuYE2qLagLLz4EmxxYZ3imDPsAHaJFgN5jWSiE=; h=Received:From:To:Subject:Date;
+DKIM-Signature: a=rsa-sha256; b=vYWSPGJ+XF++FZqXhv68N8DXNOgOur1+ajGn94jx2GrOw6jqMZD+b1NeP2E1pMkWLK9IB1StvUhHRRsrJeZ3lhBOV4PHHrPABwZ6/9pahde8WFVZEa5bpX3NJkzaUX3T8nSkeDQuYUtuEe1dY47VvqzZBHmPksbB02BkubEO9+RZ7eAg+145wat8+B7BoS9leuALbiJX7kOx4ROBgB3DZwGrKqIP7g8072yiBCm/YyhZ8zRURP9r4VkvlGdm7u3KLIvp+aBLl+50Gsi9uw1BAAu+RHO//dUgcZ7I3MlASOtvLltu9YCHpWcO3WzJdRL05PDDcf1ShhJgv3RGrqByZQ==; s=purelymail2; d=purelymail.com; v=1; bh=o4fnmGuYE2qLagLLz4EmxxYZ3imDPsAHaJFgN5jWSiE=; h=Feedback-ID:Received:From:To:Subject:Date;
+Feedback-ID: 1578161:62319:null:purelymail
+X-Pm-Original-To: linux-kselftest@vger.kernel.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1704967885;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Mon, 02 Nov 2026 18:18:12 +0000 (UTC)
+From: Younes Akhouayri <git@younes.io>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Tamir Duberstein <tamird@kernel.org>,
+ Alexandre Courbot <acourbot@nvidia.com>,
+ =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ Shuah Khan <skhan@linuxfoundation.org>, rust-for-linux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rust: doctest: fix line numbers after crate-level attributes
+Date: Mon, 2 Nov 2026 18:18:12 +0000
+Message-ID: <kw-1793643492.088831861-665782-0@younes.io>
+In-Reply-To: <CANiq72k=Ru3QsiUjrXOtFqVuA-D+w8fJ2fUOTAL2cKFS0EhLDQ@mail.gmail.com>
+References: <20261027-rust-doctest-line-fix-v1-1-0c13185a58b6@younes.io>
+ <CANiq72ntn6ThPz9Q6+BxU6w-x2jUQ50xpiy1_gCRi6o0peHi8w@mail.gmail.com>
+ <kw-1793624159.027890950-307523-1@younes.io>
+ <CANiq72k=Ru3QsiUjrXOtFqVuA-D+w8fJ2fUOTAL2cKFS0EhLDQ@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,60 +78,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org> <20261102-work-procfs-bugfixes-v1-1-59422ed3e465@kernel.org>
-In-Reply-To: <20261102-work-procfs-bugfixes-v1-1-59422ed3e465@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 2 Nov 2026 09:58:51 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiSA7-mqmAjTQDaU7UjUyWt0TxYwXHafL8ZAPudy+B_uQ@mail.gmail.com>
-X-Gm-Features: AclHuK_qZTBVsLQIdymgRHScSFenC6XsGggUDmcuOugjrSTbuVkeASUmC_hYPZo
-Message-ID: <CAHk-=wiSA7-mqmAjTQDaU7UjUyWt0TxYwXHafL8ZAPudy+B_uQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 01/38] PCI/proc: don't truncate the position of config
- space accesses
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
-	Josef Bacik <josef@toxicpanda.com>, Chris Mason <mason@kernel.org>, 
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, Greg Kroah-Hartman <gregkh@suse.de>, 
-	Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	platform-driver-x86@vger.kernel.org, coreteam@netfilter.org, 
-	kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net, 
-	jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, 
-	samba-technical@lists.samba.org, sparclinux@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2 Nov 2026 at 06:22, Christian Brauner <brauner@kernel.org> wrote:
+On Mon, 2 Nov 2026 15:26:29 +0100, Miguel Ojeda wrote:
+> If what we want is for people to simply notice, then I was thinking of
+> just `unwrap()`ping like others we have around there.
 >
-> proc_bus_pci_write() truncates the file position to an int. A pwrite()
-> at an offset like 0xfffff000 turns it negative [..]
+> Having said that, it can be annoying and confusing if someone writes a
+> doctest and has to figure out what to change in these scripts (scripts
+> that they may not even know they exist...).
+>
+> Ideally, I think we would have a "warning" somehow, i.e. something
+> that doesn't stop people from working but that will get noticed.
 
-I think this would actually be better with rw_verify_area() just
-checking a per-file maxbytes.
+Makes sense.
 
-We already have that logic for lseek and friends - using that fairly
-hacky combination of s_maxbytes and !unsigned_offsets().
+Note that a doctest author cannot really trigger this check: it only
+looks at the first line of rustdoc's output, which rustdoc writes
+itself, so in practice only a toolchain change would hit it.
 
-We should combine s_maxbytes and unsigned_offsets() at file open time
-into f_maxbytes and check that not just at lseek but in
-rw_verify_area.
+The generator's stderr already ends up in the build log (only rustdoc's
+stdout is sent to /dev/null in rust/Makefile), so for v2 I'll do: if the
+output starts with `#![allow(unused)]`, subtract the moved lines with a
+plain `- 1`; otherwise print a single warning naming the test and the
+script, and apply no adjustment, so things keep working as today with
+possibly wrong line numbers. I'll also note in the comment that only
+single-line attributes are handled.
 
-And then things like proc_bus_pci could set it's size limit in one single place.
-
-Hmm?
-
-                   Linus
+Best regards,
+Younes
