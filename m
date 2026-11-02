@@ -1,74 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793643534;
-	b=ciywmJdlRlq77ulq9UyphZwJ61id4gS1BQy/7MDgi8UnBGDYPZHStQyLVZP9JnSpjO7o
-	 wgm9DPNqhtoOZF3hOuT3+gD/+fFaDIUqiR/0a3UGNkEPOJZwJ9Q/zVNwcqiu5SGi447jV
-	 fnUMfUOEY3Ro8+1o2lhYSYALVRS7mKHmZtKXniSHz6rSvg2ehsShbQpsi6tAwbimIXP2F
-	 XyCrmeMzOwnD1VuO3Pio7LNbjXxVcW7IdWszhKojG6hLjWDnNwxsVrVJvjzJmkcdhmqCL
-	 s/vfh+vkB0M6zwSTs004akuVhqEgtJ4IL8MfwDu8wUiGLUTJD6LbTkwRcDNBD61u9MA==
+	t=1793643915;
+	b=WS4EcA0nRbToB5StrKE29uYVAJuP8NqlvbcrUgtZn/2sySXRan2pRlxQFCmsJnrHxUyk
+	 bdjE699c9CDkYGp4sBmuF9QOb4VRF1xd11TOTNT0vtegz26/iT6rLRh+W2tcejS7xzCN3
+	 2Idzir/58OasU+9T/gO4I7KdgdtXPM8zPGamn+UGs2reM0qWRbrLzVoLJM0hWFUagmRGk
+	 9si7mSoVR3Clq0pDRQN1ooS788lAZhwRS71xEA7u0Yg/CH1YaV8FpSF/MPjv5ZUpUdouM
+	 JDkHDfLRatkggpAH+DBjzsbK/w1MB+3pVpRsVKs4fbxsMV3C0Z+eSAdE5F2EwMRDDng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793643534;
-	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Feedback-ID:
-	 X-Pm-Original-To:Received:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=o4fnmGuYE2qLagLLz4EmxxYZ3imDPsAHaJFgN5jWSiE=;
-	b=vCuYxMhevbx4w6oo5ZLkkAYvKB+rbU0kfPDE934Z7c0aw/dAHeoE1xBZBLH8fb2u4URU
-	 Izv89+ktf+rUIE2a49pTnKD4dGKSaDn9RCnRIoY70qmo6af0PlhIx5tEWY670dbVXY2ti
-	 lMXWmuCR72SE73fDPVBmI/XGNeLtlv572FNSmdZUb90pqhktsrizHGTBeEqI9h/mcV53p
-	 TB1lkVJcEz2qL6eD+P8eJMotAYQybhvsN1Ei+v0/tgAZEgBzco142BY/MZQih/0DnHJZK
-	 wLyR9YSHDfah7MVf6jOYqhGsHKQjAbieW53hSJuGJiS6oz0z09Ko2rv3iyQEH6XaGRg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793643915;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=DwUxU5MMRSRGB53ooWpa2gSeYWoVPcRIMte/SUEqib4=;
+	b=ukqx62unkBsJrIOoeOp52ckgQTD1nPwj9lexIvN4vNSlSbPoGul/S+uocmeLcWQYuOIO
+	 jB38v1IdS6wiOuwXOf8Rh+k4zFc4B/R4PXpPps1khK88kHZByRq8b1ifbeS5nApiUVjKc
+	 VCmjh95VwcPH/JRfGeALUHUzMq+BqnPQSfzro5Vo9s0IHXSaEH9GANhPbclxyDerIgihF
+	 XvjmflSyhNuvql00MoJvaDTALJBtiIQidGTwDqmjFGM/x9R2XZEPhudjQGf/WYPjsgh+j
+	 LW0tjEbJsUhc1az0XS+mE8syiYdAIBIsA39Npx+O2mcBFEPRkveBTwpwMEga3LVHe4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=younes.io;
-	spf=pass smtp.mailfrom=younes.io;
-	dkim=pass header.d=younes.io header.i=@younes.io header.a=rsa-sha256 header.s=purelymail2 header.b=IfF1ease;
-	dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=vYWSPGJ+;
-	arc=none smtp.remote-ip=34.202.193.197
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DO8KBDUo;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41232606A324
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 18:18:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41232606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=younes.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=younes.io
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C3E606D81A;
+	Mon,  2 Nov 2026 18:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=younes.io header.i=@younes.io header.a=rsa-sha256 header.s=purelymail2 header.b=IfF1ease;
-	dkim=pass (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=vYWSPGJ+
-DKIM-Signature: a=rsa-sha256; b=IfF1easev/Ee2YVPBiTxxFyUeVOpwPyg7AtV5wA9t1zybRzNu74YDPlVCqmhnuiMOlxU/618TmPjvTF2zWcgqe4AQw1PvYSy2GiQDgPgcdy0P6PIoDYOrQgLow5HZnwWkw5zQeWix0cv2eaTz1iGlvizsUzWTjYRNUeGQXPDoVbNtBqkI5bror6WXto0D87a0PTz52TpDarLTXwN7tbISiutVWyPBd3NpYVTayArJ7urvKg51D8f4AMR6IcsJ3itAYz25LTAvzvnVD7Z5wrGlgo2//75w23EniYyEcFD+R4Oa9Jl1gUIZtgtqQSqiL6lqFpr4yWOLgZW4qra0rDddw==; s=purelymail2; d=younes.io; v=1; bh=o4fnmGuYE2qLagLLz4EmxxYZ3imDPsAHaJFgN5jWSiE=; h=Received:From:To:Subject:Date;
-DKIM-Signature: a=rsa-sha256; b=vYWSPGJ+XF++FZqXhv68N8DXNOgOur1+ajGn94jx2GrOw6jqMZD+b1NeP2E1pMkWLK9IB1StvUhHRRsrJeZ3lhBOV4PHHrPABwZ6/9pahde8WFVZEa5bpX3NJkzaUX3T8nSkeDQuYUtuEe1dY47VvqzZBHmPksbB02BkubEO9+RZ7eAg+145wat8+B7BoS9leuALbiJX7kOx4ROBgB3DZwGrKqIP7g8072yiBCm/YyhZ8zRURP9r4VkvlGdm7u3KLIvp+aBLl+50Gsi9uw1BAAu+RHO//dUgcZ7I3MlASOtvLltu9YCHpWcO3WzJdRL05PDDcf1ShhJgv3RGrqByZQ==; s=purelymail2; d=purelymail.com; v=1; bh=o4fnmGuYE2qLagLLz4EmxxYZ3imDPsAHaJFgN5jWSiE=; h=Feedback-ID:Received:From:To:Subject:Date;
-Feedback-ID: 1578161:62319:null:purelymail
-X-Pm-Original-To: linux-kselftest@vger.kernel.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1704967885;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Mon, 02 Nov 2026 18:18:12 +0000 (UTC)
-From: Younes Akhouayri <git@younes.io>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
- Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Tamir Duberstein <tamird@kernel.org>,
- Alexandre Courbot <acourbot@nvidia.com>,
- =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- Shuah Khan <skhan@linuxfoundation.org>, rust-for-linux@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: doctest: fix line numbers after crate-level attributes
-Date: Mon, 2 Nov 2026 18:18:12 +0000
-Message-ID: <kw-1793643492.088831861-665782-0@younes.io>
-In-Reply-To: <CANiq72k=Ru3QsiUjrXOtFqVuA-D+w8fJ2fUOTAL2cKFS0EhLDQ@mail.gmail.com>
-References: <20261027-rust-doctest-line-fix-v1-1-0c13185a58b6@younes.io>
- <CANiq72ntn6ThPz9Q6+BxU6w-x2jUQ50xpiy1_gCRi6o0peHi8w@mail.gmail.com>
- <kw-1793624159.027890950-307523-1@younes.io>
- <CANiq72k=Ru3QsiUjrXOtFqVuA-D+w8fJ2fUOTAL2cKFS0EhLDQ@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DO8KBDUo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB351F00A18;
+	Mon,  2 Nov 2026 18:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793643915;
+	bh=DwUxU5MMRSRGB53ooWpa2gSeYWoVPcRIMte/SUEqib4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=DO8KBDUoinB2c8upVdaNfcUaaIt/J901VIQHV7jaeHgrZhqVWLSmBXL/iZMoQTtG4
+	 /YaqyMZRH+OTXqjc/SD7cme+4VJFnTkGcEiZNJGbmCqleiHBKpH9YrUFwsZsQ6T7uB
+	 m5axw0xZxrJvhKslFQfkhlLN4ydPs9UPWdlsn4m+DY4+gbAzoKDfymY+41p9hE1AWp
+	 VgROnXVJcwPeO2Ufp5OWHCl5x8ezh4xUElFQ16W06lCerHsY5d6QhCzRan+6QByhtN
+	 Wc9j9QAusfK8Ur+dDHEX3ts4EQ9AJr9Oaz6eLP40uVrijTixH8EzEj2xoIi86+Rx53
+	 9NMV2aVORJB/Q==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id E7CF6F40068;
+	Mon,  2 Nov 2026 13:25:13 -0500 (EST)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Mon, 02 Nov 2026 13:25:13 -0500
+X-ME-Sender: <xms:idXoagBzuYlzre8QIG3-U-pGKG4EQRWBRKMIOXInVjJBoNgKwmao6Q>
+    <xme:idXoatXK1iBgdCqf682ZKGCfsVcw0NNh-4bP9rxpiTEyWsCh8oALYaiOYdEgPW2sN
+    cAZ0cyqPNfxpFEaqAy1scOjFOvOUba4-wGKabOSe5B7a-JOzArZ_N2i>
+X-ME-Proxy-Cause: dmFkZTEOGs0hcWdWXEfyub+Da46+PL0kBKeqpM/w6ivdu9YCedEBg8rRqdVWHz8/X/SdFG
+    y7yuL51ylboXPbp6xTMl35xletDjsoSwkB83fzOO1+spFr7ySCYZLQf45dI0zjtpHD/B80
+    VzPHj8DAvF6CJ0Ui1QZQYhFXngMxCWh92FQG9aZcyphw9KGIRq3ea5NMO5umPnbnt0wfte
+    MKGi98qj9MlNLgMkH+QKMO+xA03SpJjdE55F+77r47OQZ1KmFCSzZjXJ7LP3FNArjN8mNB
+    JcrXzIL8Fx1SLpHJaqCVgwfX66WGNBQPYopXKrH7Bj+bDL/BkH6LT82I5Rm75wp/8aKrdE
+    nWUremJ3Zh8jKKYElUWff2RgEKAWDvlbF/Xl46rvHFoq4yzseH5wRf/+beEmIguatoPM5L
+    z6s4dljP0FTtYYSQIFUUXzh3bVrA/mO4sdoNSUzA+NPEax1yrBV88yejZexohRxOsf1xRw
+    mi5+OlZrbIQmf5G7Ecuol/sHv4jvv0oRNVod31oVZdVJ2Wicc6/KH5p5Vb+t7Otqu5/F5E
+    5/A91xgw01/AumWly9nqkU74X8c/CypAOrRo9IJJrCVZiDPqHX6J3HzdNQLGk4LmkYval6
+    P1fCLwX+ObUaxhmENw8edXwGd6QnCsaQBR5Q3oO7kSzXJeUUx7gup9ehVfTA
+X-ME-Proxy: <xmx:idXoai6BOZPE-0YxtScKYT1-KJqnzjA0ayaxpNx2tS7DPPqVuQrhxw>
+    <xmx:idXoasQIAh4VIeRLEL3A7mZxV6_7sptA8LUxHvzpqtl35Oslm1JdZw>
+    <xmx:idXoainhJyYhSy2cnJmk5TnO7tKeYdg-EJYPr4MVg-qvgGxKZ5w4bw>
+    <xmx:idXoarJl49Cg-lh4ohVOgxPP81N_OtiHP38WAwtp4Lp7tEQ2R5CPCA>
+    <xmx:idXoalQ9d_XagLm4DSz8YqPXKIgvmtgKN4Y7WmM1LwLIBzGOebXFoikh>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B6154782738; Mon,  2 Nov 2026 13:25:13 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,33 +77,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: ANkgOu9LufOw
+Date: Mon, 02 Nov 2026 13:24:52 -0500
+From: "Chuck Lever" <cel@kernel.org>
+To: "Martin Belanger" <martin.belanger@dell.com>
+Cc: "John Fastabend" <john.fastabend@gmail.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Sabrina Dubroca" <sd@queasysnail.net>,
+ "David S. Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Simon Horman" <horms@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Shuah Khan" <skhan@linuxfoundation.org>,
+ "Randy Dunlap" <rdunlap@infradead.org>, "Shuah Khan" <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "Hannes Reinecke" <hare@kernel.org>, kernel-tls-handshake@lists.linux.dev,
+ linux-nvme@lists.infradead.org, "Alistair Francis" <alistair.francis@wdc.com>
+Message-Id: <785aa669-8229-4909-ad33-66f0824687bd@slotpi15m67>
+In-Reply-To: <20261102-keyupdate-rfc-v4-0-f17419972b9f@gmail.com>
+References: <20261102-keyupdate-rfc-v4-0-f17419972b9f@gmail.com>
+Subject: Re: [PATCH net-next v4 0/5] tls: perform TLS 1.3 KeyUpdate in the kernel
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Mon, 2 Nov 2026 15:26:29 +0100, Miguel Ojeda wrote:
-> If what we want is for people to simply notice, then I was thinking of
-> just `unwrap()`ping like others we have around there.
->
-> Having said that, it can be annoying and confusing if someone writes a
-> doctest and has to figure out what to change in these scripts (scripts
-> that they may not even know they exist...).
->
-> Ideally, I think we would have a "warning" somehow, i.e. something
-> that doesn't stop people from working but that will get noticed.
+On Mon, 02 Nov 2026 11:57:57 -0500, Martin Belanger wrote:
+> The matching tlshd change for ktls-utils is a small patch to be
+> submitted at a later time if this series is accepted.
 
-Makes sense.
+Recognizing that there may be further API changes, for the series:
 
-Note that a doctest author cannot really trigger this check: it only
-looks at the first line of rustdoc's output, which rustdoc writes
-itself, so in practice only a toolchain change would hit it.
+  Reviewed-by: Chuck Lever <cel@kernel.org>
 
-The generator's stderr already ends up in the build log (only rustdoc's
-stdout is sent to /dev/null in rust/Makefile), so for v2 I'll do: if the
-output starts with `#![allow(unused)]`, subtract the moved lines with a
-plain `- 1`; otherwise print a single warning naming the test and the
-script, and apply no adjustment, so things keep working as today with
-possibly wrong line numbers. I'll also note in the comment that only
-single-line attributes are handled.
+I don't expect any changes for the sunrpc consumers will be necessary.
+For tlshd, as far as I can tell the whole change is:
 
-Best regards,
-Younes
+- In tlshd_start_tls_handshake(), register a callback with
+  gnutls_handshake_set_secret_function() before the gnutls_handshake()
+  loop, as quic.c already does. We rely on SSLKEYLOGFILE to decrypt
+  NFS traffic in Wireshark, so that needs to continue to work.
+
+- In tlshd_initialize_ktls(), after the existing TLS_TX and TLS_RX
+  install succeeds and only for a TLS 1.3 session, set
+  TLS_TX_TRAFFIC_SECRET with the write secret, then
+  TLS_RX_TRAFFIC_SECRET with the read secret.
+
+- A configure.ac check for TLS_TX_TRAFFIC_SECRET in the installed
+  uapi header, so the build works against older kernels.
+
+I assume you plan to send tlshd patches, but let me know if instead
+you'd like the ktls-handshake folks to take care of this.
+
+
+-- 
+Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
