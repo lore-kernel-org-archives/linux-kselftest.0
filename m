@@ -1,113 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793609631;
-	b=ef1yOwpDTYVYMYbyB1ktXclCmFU3vzO4I2bvAWGyJMzuEk77jLwtzmRQR8Zk7ft1B+6B
-	 T/LRo+EYeGQdAQPTpHJ0yExEDG6mR8GzzDQcrBz9ocyDs7NwmO6SU0ZaQsXKrsHAVeCkh
-	 rKGG28WAUKIK3a+4R1Hj1yiZOqAOSqHyo4KNI4Gq6sNOQpfJFfk5TpIpQftKMl/92LIi6
-	 YI/kkOXnrvOvPhT/yAOjqt6KdJS7cPufA20f+Emm0SnfM8EX2zzQpLtlzDww02rLKH+1B
-	 abQIPFdAnW+LcPT6xIs4xYBTz7VpNMR9PxUPFtQ0G9ixtXx17w9enMMONitIGs6CwHw==
+	t=1793609705;
+	b=WiHwqHFfOeM3sFC4+gCecvWFJzXoO4bUaYpAgqSncjj95eZHGRkMpodzhwb50JnpzzNJ
+	 zn6szarnS9haHgCA5SLHFk0DhWDJbkN7HXLn7h/rjnBI7EkPUWmwJ2MlhOO23rkYaznKh
+	 eeN/iMt1FRcWlB+/PFhP+6ucLlc0OxgvK8KB/FetaRdwYJGYF6c7rablXthm9fbShbo9v
+	 /hfzMsxtmCq57Bx2r+UrZHnb2Aw72ys1Ej3WYlShEPp5gpPwo4KNb5q3sdNNPA+kGzftf
+	 DADsv0irPJDhLxZhbql0Fl4wK5XVE5cC8WmRZlHoy/KcJGO/H0TU6C3K+n1uUDA03tA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793609631;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
-	 X-Rspamd-Queue-Id:X-Spam-Level:X-Rspamd-Server:X-Rspamd-Action:
-	 X-Spam-Flag:X-Spamd-Result:X-Spam-Score;
-	bh=+KGaFK0hXbsr6P3pyaOfsnWeHMObgqJEyVunXcd4Hmc=;
-	b=i04+Bv5DMqs1+yyW3KWu4lKSRvyn44UJjWMGAE5VX+dWde2TLRChQt9vKrFJCr2hVL77
-	 J84f609t6Bu14VHPki9/jb7waLtbt3z2NkLMig1jcmk5ymaZLVQtca590H1dip5UtrX35
-	 t+HB8to7C1XfPN/dVJPVYZZeKxNoOjD6Y0023bZQ40r28uiVaoujx9HO7wJitzoBRlMzw
-	 50qXWAS1KfvReoiC1s8XtKJ3W6xVs3JcImi7JZBYsWAZ39BVI8CvgcgDWxowYcygFRpKO
-	 SswjhK0ch4xPzsy8QwUC1cihOpQHybtpA6qLc7kBxoMj04TW7Y7TRe1fu/pXXWVX3Cg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793609705;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:From:Subject:To:Cc:References:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=mle+NIlXkrafF5xGCK7Z3UNOEf1ykyCcklkT9REqyzw=;
+	b=nPjyxq034x+0bOoadlG4tYZDlJ9bv69lYp9Pmi4lwoDE+x9YmRr8XmhqLW79d6xrTqr1
+	 X3wQ7Cpw7VrJ0V5OBx0WsGnxttbOUp5vZYBU7DhxbuX/q6gc/8K5C+8w61xt4ojgcldO/
+	 Z0i6KTCh8hMlnCKlz75n2/v7GjLWQp8HD3NmLrs7jB+YUEpcASsG+zgXi1NYBh/zTBdWP
+	 LQT1mfmXUeX0snLt5nNA6j61MfWZm0TPu1R+kBbytXDhSWP+7sSZKTowqcKjRKQURae9I
+	 dD3Mx4LxlEpNeKS5TB9koyRgMzUB6tiUWI30YWR/BZlUKgafJy3JKPfDtNIwKPwu6ZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.de;
-	spf=pass smtp.mailfrom=suse.de;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=UcPPE8QJ;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BzsyZ33W;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=UcPPE8QJ;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BzsyZ33W;
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	dmarc=pass header.from=rbox.co;
+	spf=pass smtp.mailfrom=rbox.co;
+	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=URR8JRFC;
+	arc=none smtp.remote-ip=185.226.149.37
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF52606A332;
-	Mon,  2 Nov 2026 08:53:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EDF52606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0829606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 08:55:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0829606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=UcPPE8QJ;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BzsyZ33W;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=UcPPE8QJ;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BzsyZ33W
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 718791F7CE;
-	Mon,  2 Nov 2026 08:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793609629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+KGaFK0hXbsr6P3pyaOfsnWeHMObgqJEyVunXcd4Hmc=;
-	b=UcPPE8QJ8lG8ZGClFH9L+PfqufKn0HrKewSGAe8xQCk9x843/7U2MZoIi5ZUCuL9aJElqt
-	Vwn10Znha/v6c3Kf1TtaxdSSuDFDm6SW9anEv7AKeBFLp+XSEuZ2wZkUttB3K1FxMYSgp5
-	xwVqv7Pm5/H5NK6Ko4JBi2QtFjWaIoQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793609629;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+KGaFK0hXbsr6P3pyaOfsnWeHMObgqJEyVunXcd4Hmc=;
-	b=BzsyZ33WIy9qY2wAsoT6BKk68KjFGVmUplF+ut/pbfR0+6tS4HArNJFn6G8FoR/9RPqmh8
-	qKtZePvgnrNKLrAA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=UcPPE8QJ;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=BzsyZ33W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793609629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+KGaFK0hXbsr6P3pyaOfsnWeHMObgqJEyVunXcd4Hmc=;
-	b=UcPPE8QJ8lG8ZGClFH9L+PfqufKn0HrKewSGAe8xQCk9x843/7U2MZoIi5ZUCuL9aJElqt
-	Vwn10Znha/v6c3Kf1TtaxdSSuDFDm6SW9anEv7AKeBFLp+XSEuZ2wZkUttB3K1FxMYSgp5
-	xwVqv7Pm5/H5NK6Ko4JBi2QtFjWaIoQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793609629;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+KGaFK0hXbsr6P3pyaOfsnWeHMObgqJEyVunXcd4Hmc=;
-	b=BzsyZ33WIy9qY2wAsoT6BKk68KjFGVmUplF+ut/pbfR0+6tS4HArNJFn6G8FoR/9RPqmh8
-	qKtZePvgnrNKLrAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 197AE134B8;
-	Mon,  2 Nov 2026 08:53:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id tjHCOJxP6GpDTAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 02 Nov 2026 08:53:49 +0000
-Date: Mon, 02 Nov 2026 09:53:48 +0100
-Message-ID: <87ik2f4ns3.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: HyeongJun An <sammiee5311@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.com>,
-	Ivan Orlov <ivan.orlov0322@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] selftests: ALSA: pcmtest: Test error injection and pause
-In-Reply-To: <cover.1792660433.git.sammiee5311@gmail.com>
-References: <cover.1792660433.git.sammiee5311@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=URR8JRFC
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1xNnoY-00923i-Fk; Mon, 02 Nov 2026 09:54:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=mle+NIlXkrafF5xGCK7Z3UNOEf1ykyCcklkT9REqyzw=; b=URR8JRFCVx/BTa6tC0SC34HbSi
+	FamZlQHtkoCy1nCYcKoVNV+U8CUckkPCfMsIkG4H6/tYWRZ/i/Vt+gD4JdNLXuVN1q7KTptrBttV8
+	XPT1WR0OUivtmZpFLmAmRNGOFLTDKz90/qZNhBF0T7lZgvCjbbrmuvP60Q8+1thu+gCBcAhBfeJyY
+	XADeYpwL+/Le8X5JGCPFc40Mh3iypww9yLXtGaSkxajQ/CDfCZgkH1+KfI8kkSSl4JHEietPkd/9m
+	bMIOQWO2aMDNOAShv+siilVLLUc1sbT/bAkoHazmVwq7dCPUnz8puMATGN5Q27XWX7ajBrZ0V+1qx
+	p5DLXuZg==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1xNnoM-0000bz-Do; Mon, 02 Nov 2026 09:54:38 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xNno3-00B7Ye-Lf;
+	Mon, 02 Nov 2026 09:54:19 +0100
+Message-ID: <7c609c7f-1dc3-438a-b6b0-7e59ed62d1f6@rbox.co>
+Date: Mon, 2 Nov 2026 09:54:18 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,68 +65,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: 718791F7CE
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-11.01 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,gmail.com,kernel.org,perex.cz,vger.kernel.org];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TAGGED_RCPT(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim]
-X-Spam-Score: -11.01
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH RFC v2 0/4] bpf, sockmap: Restrict iter-context sockmap
+ updates to sockmap iterators
+To: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Lorenz Bauer
+ <lmb@cloudflare.com>, Eric Dumazet <edumazet@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jakub Sitnicki
+ <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ Sashiko <sashiko-bot@kernel.org>
+References: <20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 22 Oct 2026 13:12:41 +0200,
-HyeongJun An wrote:
+On 11/2/26 02:15, Michal Luczaj wrote:
+> Follow-up to Sashiko's report [1] and the decision to restrict which
+> iterator may perform sockmap updates [2].
 > 
-> The pcmtest driver can return errors from its PCM callbacks and
-> supports pause, but the selftest covers neither. This series adds tests
-> for both.
+> Short series: remove about-to-be-stale test, restrict updates, add a
+> negative test. Related bonus: mark bpf_iter__sockmap::sk as PTR_TRUSTED.
 > 
-> Patch 1 moves the capture data check into a helper, so patch 3 can
-> reuse it. Patch 2 tests each inject_*_err parameter. Patch 3 tests
-> pausing a capture stream.
-> 
-> Tested on x86_64 with the sound/for-next driver, built for a 6.17 host.
-> All 10 tests pass in three runs. To check that the pause test catches
-> real bugs, I loaded two broken drivers. One keeps running on PAUSE_PUSH.
-> The other restarts the data on PAUSE_RELEASE. Only capture_pause fails
-> on each.
-> 
-> HyeongJun An (3):
->   selftests: ALSA: pcmtest: Move the capture data check into a helper
->   selftests: ALSA: pcmtest: Test errors from the PCM callbacks
->   selftests: ALSA: pcmtest: Test pausing a capture stream
+> [1]: https://msgid.link/20260626205814.BAC3C1F000E9@smtp.kernel.org
+> [2]: https://msgid.link/87echn2fhd.fsf@cloudflare.com
 
-Applied to for-next branch now.  Thanks.
+Apologies, I forgot to strip the RFC prefix (which I set thinking bpf-next
+is closed).
 
+Sashikos reviews just as pointed out by Alexei: bpf_sock_destroy(). I left
+out the tracing_iter_filter() change since I was not confident I understood
+the reasoning behind it.
 
-Takashi
+thanks,
+Michal
+
