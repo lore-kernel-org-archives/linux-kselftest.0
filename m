@@ -1,112 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793650448;
-	b=nkbbnJjvfEiWy/YNrnzH33cf1xAQuwsXkCl6fjpyaFeZpLMDsJK1e+E3MQ/FzpnQqxcS
-	 PmyVlZbsnzjrSh095ezPe7qgUXvUwLgtNoz7OMjhI1ONqwDJK65edDiwf5RzxRDe0/Ntk
-	 YmT4Dw8ng9CLE3k5kCnwyG25Mke47NUOC8mPVChNAi5PXHsolZri3LZG0ULRygkconFdL
-	 KOntWApdto6byKPd57z1IYeseRW/5Jw+VeoRUMGovmCXmWUXLQAXU0AQ/gkrwSwUz93Ll
-	 JyWXFrft+UWpeLOB4OzurvVOD0/Bj1PofIz+vbwMFShxiP/cDcqb9Jh7kQiFX+9gDjw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793650448;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793650973;
+	b=pRj6S0eOVMwjG47NQ1QY1ThAeq/GDjJncrls5BCcrIvm2iy2DOv8YAtfOj8y/F63osnd
+	 yEWfG7Ikuf8A7o5Y45KM88BdI1qeXw4xPofplmAub0TQPPTdLD+KD55nDZrMHK1RQTSi6
+	 Z30eaqQ56pjpsDyLNrI1WMzFj2wJMzsOYet+/PNHMGxH/YY8dcBkbVYVHq3D6H47tcNjU
+	 GfhVXZQ8shOHoJ2v6EgRrUtQavdtsp9V4LnjYEkw2GU9H/Gggj+ASUhTuf2SG894Fn73H
+	 1XoG98SnIcETde4iz0C1yrF9VooYdxk7U8PSGXcsT+uI18zQShAXoHpYXlMEP6ISVgw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793650973;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=6kh38ixGlcMYvSMO0Cs+3boaaPdMbwOiDcXF3MCXi/8=;
-	b=Ysddn8Xwu4Gr3NXWg/doxgMK5lOum1bFhCRs4Q4Nwpdz5zZ36eMNxG6QbnTlcPjo4rd6
-	 LyAevUONrQKwmxu/Jb9m15BoXAN8Je5Op6jNPlCxi3fOb45X9zqJ4YFt0zRpLD+WklhSA
-	 S8KLCxVpq8/Q1KgUuSCeluDTchERuBjfTw0PKrLawYEX8gdVeQRK+dHUdkvAwr8f5SjW1
-	 CxmAL7vZF8YSyMG1K3nPl0VDQWDM7lmt4OLo8K4NZSMQc42GW7CEHKFzIxgy4TUdkmhWM
-	 jiysjpfePs0v9r7wHc4bhkvEKCUdpyXz9e3hLj4a4pi27tJQfY67CMRvILOMVxys4Fw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=shURqN8r;
-	arc=none smtp.remote-ip=209.85.221.42
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=nGgNd76Kt0jva/qUzoPfHVBqT3P4/TT41j1U9WFJiKc=;
+	b=JhENBAxufjkSxOn2KSsQqKC555upZNLLVWrqLtygP7kl9wv1GR/lso7eOOHycfg2yGDj
+	 MB12Hdu8UCX7MekmRiigwyFPbyAp52hbVSyt5WZzV8MKH3XLpnKi+OM9wtgCfuFfVoYL5
+	 Jb9JTj5BDmqMhyPxfzX6WlRLu5HglNyKNxbYr0BiK5NtEimR3t1KKzBQrg1K7agygjEnC
+	 cpIItU4ykZvACwYSagC2T6OFi7ItRQs6uHJcnGrcpy4WEcQaU7C2Soypm6QYtnqR3euJh
+	 ZwotV1KIv2Z27t7KlgwxF2QfBuAaukEga/6nbIuC0gu1KNNlDXgWBJhgFoJqaciCpMw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Xuj0cyZ4;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB32606D823
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 20:14:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BB32606D823
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DAF606A329
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 20:22:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37DAF606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=shURqN8r
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48e47347279so2124901f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 12:14:08 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Xuj0cyZ4
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6afac79b3a3so1648a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 12:22:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793650972; cv=none;
+        d=google.com; s=arc-20260327;
+        b=aRB8ihFXVR4aTEWWDBHMGZhesW0oxjECfN6wNWtLD6DP791sceU6yrXuXoQlAghfEo
+         sWpKtaQRXrl/sjzrI3gPXObIeGNtpP+Ar46dfJEzfwC7u6WB8Uv6wW3DqPA83zqJsf3M
+         P3C2Wjv2klqvZdBoS58I7N1618Pn9lpf1lzdR9cHgsFexppr0PD6p0rh4luhCISYoYUf
+         tdlq9mAnJUfZOH6NymiSDnBP7UDDnqwlIpLTgwpCkaINWzJNp2PK0n2eRyPJ9UFEPENV
+         rH9ZXUiq0t1em0ZaCndPTLqgFdTdICWWtiVVIWAiNnJ98qJ1THDzvpfAi8Ruq6jOpv89
+         xkWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nGgNd76Kt0jva/qUzoPfHVBqT3P4/TT41j1U9WFJiKc=;
+        fh=YzqbUdKWdLlgj/ZTsBO+L03uRQ1hZTmW+t4ehfsAaDE=;
+        b=a769D8xtI9xnMIXs9SLyjGJaFw2q4fFgFEXpsJLnSz3n3EVOBGqIe6MGLJ4b002W9o
+         66EpxwAHaxbIMbULTxjpDLgxQVWPbP2P/BbqTgHVXecX7huBI9SWXaXQaCQ9JP2kB34p
+         kJGjqPebXzpOgTfSdoRE+4t18FWZ5DoL5jMQwnZJI8y9nn7au9Xfegj8WunpoHkeqBwA
+         qMk5kA4LWqeTs5lrr8QSNE7Ku06FvWHe4bSJ2pRTHFpyhGPeiznFHI/+2A3pT0+V4qOx
+         YxwMOA5jTW8K5MX4AGUZ0IGcqq7UVf8F2KbFYpg9yWh0+tqo8492HF+1n/tDPxLvY8YU
+         wQNg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793650447; x=1794255247; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6kh38ixGlcMYvSMO0Cs+3boaaPdMbwOiDcXF3MCXi/8=;
-        b=shURqN8rf9F3s+vikAaXNN13XP68JcAbANXWVGIgl4rSC3OGdNHoJKZMpm+n5Xq8tS
-         GOudvS22ZCCcmXnE1SJ7fP0dzh8CsgtyrI4Qa+8Agn5Qhpij44rNWkSmbvwTsww4bnOC
-         11TCf+A5+tN4XuvmTDEXPbEhx64CJGbICXcOivGGeZ4nkI8D0WRKgH5JK2VRqYl5sPE9
-         /YwEwlCnl1ixFWbCtuQCvuoTCZjS5RpUIsg3L+OWG7YCa+H8bzLcB6RQ/k7QDXQiSn3h
-         ry1e6aTFckb1qC48T9VFTOz2N5GgKFe0KjS2QCBsAFfvxG5fSMTETaaeoDWeDYBEEMIn
-         1n7Q==
+        d=google.com; s=20260707; t=1793650972; x=1794255772; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=nGgNd76Kt0jva/qUzoPfHVBqT3P4/TT41j1U9WFJiKc=;
+        b=Xuj0cyZ4emQb1iCBxP+MN2UJGJzsbWOms4z/k2g2RQzUR0FwAme4c5ZkYjCgOB2CU7
+         iMeBNnzO9gjmOq3gRDuDFcNiXWDfChvkjvK3wfirDwEPKD+pdNpcVXwwF/ZC9DO6Afxr
+         o5sPOMnYusljsvrxxu5b9Lq/8FpYF1Ka6bLAEWcZlRzMIQe2xe56by117331u530ceb9
+         cHxgyIQ6hUKyUrgJCUfeyP7MyIsw8Sn4fRgo7SLgeEcWb5DYvaKFnFZinrrDjo0eS31t
+         y7kLbmugsHME1CI/r+BjLGWUS4a66mt16RN+QagEcXFyq/NIiGYkBVaG8bqCWz35Fk+c
+         2URQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793650447; x=1794255247;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6kh38ixGlcMYvSMO0Cs+3boaaPdMbwOiDcXF3MCXi/8=;
-        b=xVrudT2ny5Hl/aZ4j/8gotFZNwctltvh3HOhw39I6+exsy+hSisdlWY2xgfo5ioeLJ
-         0qeqQxENyoazs/O5U3Gtyej5AzMITBJ7pyaBSqBQ5ID4mKzsX16nrvTtqJc+3KbzoPm1
-         GFjKJhVTp/894AiVGAG68vC62KFsF2OpytLrC4SyPxsEns+j068TYf9lJCgIo5VEr/M1
-         yOUYd4HgFjr3A9KlMEYErcK5jgPX3dMI15++ZFg3UQtI4j5A10DxlGGOHD2u7oy842s2
-         I1aejbQXmUg18NG+TRJuujI1vjCOsM3RazM01t8uQCunwqYGh/ZhtxVxUD9w+Uh1VFai
-         pCgA==
-X-Forwarded-Encrypted: i=1; AKwUvByUGWlk5biLJ1dCNSzfu5kSfFxLdasZpMXKafk7pN+XOoJccf6P0bizeQCcyjgTU8VgkVaJGnPOLEY1WBIYk3Q=@vger.kernel.org
-X-Gm-Message-State: APuU4Z98M96U+RklrgTL/+QcAYfVr7t1NeVajt+7JnvgwYeyr9aM34HM
-	Ioqx3r5P8PNHfo+VKZjjmHe/bNlnxxrzAoXElK/FGkZ8wBAAAnJEvDsnX2C7RmN03SQXkA==
-X-Gm-Gg: AYBFou05Z2QtDjMeG82YggHnDQxKOMe9HVgaEm3tBFfbD6yQvy7N8Jw6jZJ7dLP2HJl
-	aDE1+GUmTojd1DQTa2hGJJltvSjcDp63jZtw6LF4oN/oIVXU0uH+g5gEB2d3jg1WlUU7zbTsTVy
-	K4bzKKYTgn95aAZjkk3TmPpsOEu+ZwXmN+kZE/MRqLL3nY+2P9ANAUyB++QfGQN2apJJTQmxUkN
-	x/slGgEGfTd2fLVDbz7VfUCvxN/P9+aAhMlN2mtouUSYOmn1WJl2JbU0ISWWYu8Z95N4VBfwJF7
-	IRIgTNuj3p5KLKyiHVFgOzsuHtbHIdmtmmHJP1gQfXLtnvUDsnujqWtalcipez5gEXe7+sV2riS
-	wFqeidGQytL4XN6lFtBO7dy1xpKDJUrlr+QOWywJsVHxH0ONQUuNnz+pRvnZudkace0X8cR/BJ0
-	ffUV0Le1B7E/0jyo95tlX5/ls2ijBPKgnlhUQM8lgwfIlMZwAd8meu1QcmI4JVrt9lsW9QN/cpn
-	I9EjyMLpzam8WZwB4zZ/y4Ps6/3qqtV/dr8iyMpDcJN2AXUzRJLUIWfByL0SAJfgCUhxiBaIK4e
-	i0qJVtHtuQfEMxgs2Kp+Xbh2lGhVULB7kTcBl1+EdsmTe7zjVFSHGZ5Zbz0DkfJ0xoYuSZd4LWG
-	Q
-X-Received: by 2002:a05:6000:4810:b0:487:106f:ee31 with SMTP id ffacd0b85a97d-48e6e304036mr27957602f8f.27.1793650446745;
-        Mon, 02 Nov 2026 12:14:06 -0800 (PST)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48e71b8c6e9sm21471805f8f.43.2026.11.02.12.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 12:14:06 -0800 (PST)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Quentin Monnet <qmo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Mahe Tardy <mahe.tardy@gmail.com>,
-	Tianyi Chen <hi@tychen.cc>,
-	Gyutae Bae <gyutae.bae@navercorp.com>,
-	Hui Su <sh_def@163.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 5/5] selftests/bpf: Test gen loader attach
-Date: Mon,  2 Nov 2026 20:13:56 +0000
-Message-ID: <20261102201356.5798-6-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261102201356.5798-1-mahe.tardy@gmail.com>
-References: <20261102201356.5798-1-mahe.tardy@gmail.com>
+        d=1e100.net; s=20260707; t=1793650972; x=1794255772;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nGgNd76Kt0jva/qUzoPfHVBqT3P4/TT41j1U9WFJiKc=;
+        b=vv2UyzpdybvnfgJ995p2gNmMT+q8xuFgLSPloIxGwlwxSxRz6nGcr2XbOtyXPYNzmP
+         s346TsyjwlSoRXLQP6NCJ6rZbhfHFpbic+TB+Ts1P2U02I4IdePFi51UtlAW8rY8Erh5
+         ppJfnxcPZ2woKk++tuecDAlFI2jqTydTDw7FmQt7oeEm3Xp9c2yafRDN/79vnC7FED1u
+         DA89axO6jcQU4Y5FD5+CfCQRTvL51h7WthSExGMKg4imHwVD/37109avKAiKchokVsCE
+         xOS5GMe0YP0P8bAs3ror9AJj8x5WQ0veYyQ6VilSbZfpS8MudisHK1w2RWkbI0P86bM2
+         FeJA==
+X-Forwarded-Encrypted: i=1; AKwUvBx0W6UZy0ScSCZCM0uFlgFa0rpKJt0zXmxeyhkXSg6yFhMIs5HHbD9FJvMTFjamlbcAedi7s4B8FiVO2+yKvKs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8WFz/1OmSpMOPIIxQpr+PTiaSkZBUDD/1ymAvl5AkUpzKBcbcD
+	QedviAaVTlvNyTnaw0su97UzWA0v6fGFgE/966vF5if9YphFVUQBrNjJc9BhREDE1Dwu27AClPN
+	5CLfETv/VpcmbZVsnw5Xr5dGrCo7JAIzhua5VhyYC
+X-Gm-Gg: AYBFou37/mKNEbFQvGHZb0nd6E2REhnXpjLivHeUXaF+qRoFLPdMutaOl21UfN418aE
+	IbmcDQAwJeOpISbK/BUDEUi8mn9Pr+MFb8dZcGTsYdtSLGfC/r7C3J5TiIRMyqekJTGLDssmjfF
+	Elr4JCzEMSLKpMzJmLm3hVfaAHq5UBvQlTksAdd+Rw3pE3f6jYJR4PhHLxvngsj+L/dWcqb5FCw
+	9qJKsQlFS1s/JqB7FtzUqdgmTkrZuwk3TNRjESmdx+BS4esZx08A1r5s6r+J5UWUnz3peju487q
+	xBAY34gvuMEL7A+8sT9ctOtE7KTo4ilQ6z3K2ka3POg03TwvqgJkW/6g6HoS3PQ+3UGaK3gL0Jj
+	Y6Y2Qhuai9B41YC+YUTBb9fjrVSwutagQ3BhSIyUj+sxvK3Wq0ys9LRmzlYG2x1dGy2w=
+X-Received: by 2002:a05:6402:15d4:b0:6b1:aa31:a627 with SMTP id
+ 4fb4d7f45d1cf-6b539cf5521mr2845a12.4.1793650971061; Mon, 02 Nov 2026 12:22:51
+ -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,315 +104,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261102191438.1059771-1-sdf@fomichev.me> <20261102191438.1059771-3-sdf@fomichev.me>
+In-Reply-To: <20261102191438.1059771-3-sdf@fomichev.me>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 2 Nov 2026 12:22:39 -0800
+X-Gm-Features: AclHuK-QodshQH_GCQKz7_frUweWOEIBaSlwEKwxSIRLVgKwE5w2Aav3CTXsWCY
+Message-ID: <CAHS8izPefhGytGNeDWZzgZOi=gLeigZ63nFnkq1ERXXGwrNkeg@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/7] net: devmem: charge the frag length to TX
+ skb truesize
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, 
+	edumazet@kernel.org, horms@kernel.org, corbet@lwn.net, 
+	skhan@linuxfoundation.org, rdunlap@infradead.org, michael.chan@broadcom.com, 
+	pavan.chebbi@broadcom.com, sdf@fomichev.me, bobbyeshleman@meta.com, 
+	asml.silence@gmail.com, daniel@iogearbox.net, razor@blackwall.org, 
+	leitao@debian.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Tests that nothing changes when only loading without attach, verifies
-that unsupported program types return an error, and check that all
-tracing program types successfully generate loader attach prog.
+On Mon, Nov 2, 2026 at 11:14=E2=80=AFAM Stanislav Fomichev <sdf.kernel@gmai=
+l.com> wrote:
+>
+> truesize isn't well defined for devmem TX frags: they point into a
+> dmabuf which stays mapped for the lifetime of the binding, and freeing
+> the skb releases no memory. The charge only feeds sk_sndbuf and TSQ,
+> which limit queued bytes.
+>
+> Charge the frag length instead of PAGE_SIZE:
+> - TCP uncharges in bytes (tcp_trim_head(), tcp_fragment(),
+>   tso_fragment()), so the charge must not be smaller than the frag.
+>   PAGE_SIZE only guarantees that while net_iovs are PAGE_SIZE.
+> - Frags shorter than a page now count their length, not a page.
+>
 
-Then actually checks execution of the generated loader attach for two
-LSM progs, verifying the links are correctly loading the appropriate
-programs and that autoload=false and autoattach=false disable it.
-Finally, checks that if one program out of many fails to attach, the
-cleanup with detach is done correctly.
+I don't know about this patch. The justification reads a bit like.
+"net-iov charging is weird and broken anyway, so we can do whatever we
+want. Charge size instead of PAGE_SIZE for no reason."
 
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- .../bpf/prog_tests/gen_loader_attach.c        | 229 ++++++++++++++++++
- .../selftests/bpf/progs/gen_loader_attach.c   |  48 ++++
- 2 files changed, 277 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/gen_loader_attach.c
+I agree that charging for net-iov is extremely weird. Neither of
+today's net-iov types actually allocates any memory. Of course when I
+was developing the original infra, I took every shortcut I could and
+just charged net-iov as regular memory, but that doesn't mean we can
+do whatever we want.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c b/tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
-new file mode 100644
-index 000000000000..1277709d7ef2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
-@@ -0,0 +1,229 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+#include <test_progs.h>
-+#include <dirent.h>
-+#include <bpf/skel_internal.h>
-+
-+#define NR_PROGS 7
-+
-+enum execution_case {
-+	ATTACH,
-+	NO_AUTOLOAD,
-+	NO_AUTOATTACH,
-+	ROLLBACK,
-+};
-+
-+static int link_create_attr_offset(const struct gen_loader_opts *opts, int index)
-+{
-+	const struct bpf_insn *insns = (const void *)opts->insns;
-+	int i, count = opts->insns_sz / sizeof(*insns);
-+
-+	for (i = 4; i < count; i++) {
-+		if (insns[i].code != (BPF_JMP | BPF_CALL) ||
-+		    insns[i].imm != BPF_FUNC_sys_bpf ||
-+		    insns[i - 4].code != (BPF_ALU64 | BPF_MOV | BPF_K) ||
-+		    insns[i - 4].dst_reg != BPF_REG_1 ||
-+		    insns[i - 4].imm != BPF_LINK_CREATE)
-+			continue;
-+		if (!index--)
-+			return insns[i - 2].imm;
-+	}
-+	return -1;
-+}
-+
-+static struct bpf_object *generate(struct gen_loader_opts *opts, enum execution_case test)
-+{
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+
-+	obj = bpf_object__open_file("gen_loader_attach.bpf.o", NULL);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return NULL;
-+	prog = bpf_object__find_program_by_name(obj, "lsm_open");
-+	bpf_program__set_autoload(prog, test != NO_AUTOLOAD);
-+	bpf_program__set_autoattach(prog, test != NO_AUTOATTACH);
-+	if (!ASSERT_OK(bpf_object__gen_loader(obj, opts), "gen_loader") ||
-+	    !ASSERT_OK(bpf_object__load(obj), "generate"))
-+		goto err_out;
-+	return obj;
-+
-+err_out:
-+	bpf_object__close(obj);
-+	return NULL;
-+}
-+
-+static void check_load_only(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, opts);
-+	struct bpf_object *obj;
-+
-+	obj = generate(&opts, ATTACH);
-+	if (!obj)
-+		return;
-+	ASSERT_EQ(link_create_attr_offset(&opts, 0), -1, "no_link_create");
-+	bpf_object__close(obj);
-+}
-+
-+static void check_unsupported(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, opts, .gen_attach = true);
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+
-+	obj = bpf_object__open_file("gen_loader_attach.bpf.o", NULL);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return;
-+	prog = bpf_object__find_program_by_name(obj, "socket");
-+	bpf_program__set_autoload(prog, true);
-+	if (ASSERT_OK(bpf_object__gen_loader(obj, &opts), "gen_loader"))
-+		ASSERT_EQ(bpf_object__load(obj), -EOPNOTSUPP, "unsupported_attach");
-+	bpf_object__close(obj);
-+}
-+
-+static void check_tracing_generation(void)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, opts, .gen_attach = true);
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	int index = 0;
-+
-+	obj = bpf_object__open_file("gen_loader_attach.bpf.o", NULL);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return;
-+	bpf_object__for_each_program(prog, obj)
-+		bpf_program__set_autoload(prog, bpf_program__type(prog) == BPF_PROG_TYPE_TRACING);
-+	if (!ASSERT_OK(bpf_object__gen_loader(obj, &opts), "gen_loader") ||
-+	    !ASSERT_OK(bpf_object__load(obj), "generate"))
-+		goto out;
-+	bpf_object__for_each_program(prog, obj) {
-+		const union bpf_attr *attr;
-+		int off;
-+
-+		if (!bpf_program__autoload(prog))
-+			continue;
-+		off = link_create_attr_offset(&opts, index++);
-+		if (!ASSERT_GE(off, 0, bpf_program__name(prog)))
-+			goto out;
-+		attr = (const void *)(opts.data + off);
-+		ASSERT_EQ(attr->link_create.attach_type,
-+			  bpf_program__expected_attach_type(prog), bpf_program__name(prog));
-+	}
-+	ASSERT_EQ(link_create_attr_offset(&opts, index), -1, "link_count");
-+out:
-+	bpf_object__close(obj);
-+}
-+
-+static int count_fds(void)
-+{
-+	struct dirent *entry;
-+	int count = 0;
-+	DIR *dir;
-+
-+	dir = opendir("/proc/self/fd");
-+	if (!dir)
-+		return -errno;
-+	while ((entry = readdir(dir)))
-+		if (entry->d_name[0] != '.')
-+			count++;
-+	closedir(dir);
-+	return count;
-+}
-+
-+static void check_execution(enum execution_case test)
-+{
-+	LIBBPF_OPTS(gen_loader_opts, gen, .gen_attach = true);
-+	struct {
-+		struct bpf_loader_ctx ctx;
-+		struct bpf_prog_desc progs[NR_PROGS];
-+		struct bpf_link_desc links[NR_PROGS];
-+	} ctx = { .ctx.sz = sizeof(ctx) };
-+	struct bpf_load_and_run_opts run = { .ctx = &ctx.ctx };
-+	struct bpf_object *obj;
-+	int i, off, err, before;
-+
-+	obj = generate(&gen, test);
-+	if (!obj)
-+		return;
-+	run.insns = gen.insns;
-+	run.insns_sz = gen.insns_sz;
-+	run.data = gen.data;
-+	run.data_sz = gen.data_sz;
-+
-+	if (test == ROLLBACK) {
-+		off = link_create_attr_offset(&gen, 1);
-+		if (!ASSERT_GE(off, 0, "second_link_attr"))
-+			goto out;
-+		/* Force the second attachment to fail after the first succeeded. */
-+		((union bpf_attr *)(gen.data + off))->link_create.attach_type = BPF_TRACE_FENTRY;
-+
-+		before = count_fds();
-+		if (!ASSERT_GE(before, 0, "count_fds"))
-+			goto out;
-+		ASSERT_EQ(bpf_load_and_run(&run), -EINVAL, "second_attach_failed");
-+		ASSERT_EQ(count_fds(), before, "rollback_fds");
-+		goto out;
-+	}
-+
-+	err = bpf_load_and_run(&run);
-+	if (!ASSERT_OK(err, "run_loader"))
-+		goto out;
-+
-+	for (i = 0; i < NR_PROGS; i++) {
-+		struct bpf_link_info link = {};
-+		struct bpf_prog_info prog = {};
-+		__u32 size;
-+
-+		/*
-+		 * Only the first two programs load by default; NO_AUTOLOAD also
-+		 * skips the first. NO_AUTOATTACH must still return its program FD.
-+		 */
-+		if (i >= 2 || (!i && test == NO_AUTOLOAD)) {
-+			ASSERT_EQ(ctx.progs[i].prog_fd, 0, "skipped_program");
-+		} else {
-+			size = sizeof(prog);
-+			if (!ASSERT_GT(ctx.progs[i].prog_fd, 0, "program_fd") ||
-+			    !ASSERT_OK(bpf_prog_get_info_by_fd(ctx.progs[i].prog_fd, &prog, &size),
-+				       "prog_info"))
-+				continue;
-+		}
-+
-+		/*
-+		 * Unloaded programs have no link. NO_AUTOATTACH also leaves the
-+		 * first program's link slot zero, even though its program is loaded.
-+		 */
-+		if (i >= 2 || (!i && (test == NO_AUTOLOAD || test == NO_AUTOATTACH))) {
-+			ASSERT_EQ(ctx.links[i].link_fd, 0, "skipped_link");
-+			continue;
-+		}
-+		/* Verify the link references the corresponding loaded program. */
-+		size = sizeof(link);
-+		if (!ASSERT_OK(bpf_link_get_info_by_fd(ctx.links[i].link_fd, &link, &size),
-+			       "link_info"))
-+			continue;
-+		ASSERT_EQ(link.prog_id, prog.id, "attached_program");
-+	}
-+out:
-+	for (i = 0; i < NR_PROGS; i++) {
-+		skel_closenz(ctx.links[i].link_fd);
-+		skel_closenz(ctx.progs[i].prog_fd);
-+	}
-+	bpf_object__close(obj);
-+}
-+
-+void test_gen_loader_attach(void)
-+{
-+	if (test__start_subtest("load_only"))
-+		check_load_only();
-+	if (test__start_subtest("unsupported"))
-+		check_unsupported();
-+	if (test__start_subtest("tracing"))
-+		check_tracing_generation();
-+	if (test__start_subtest("execute"))
-+		check_execution(ATTACH);
-+	if (test__start_subtest("execute_no_autoload"))
-+		check_execution(NO_AUTOLOAD);
-+	if (test__start_subtest("execute_no_autoattach"))
-+		check_execution(NO_AUTOATTACH);
-+	if (test__start_subtest("rollback"))
-+		check_execution(ROLLBACK);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/gen_loader_attach.c b/tools/testing/selftests/bpf/progs/gen_loader_attach.c
-new file mode 100644
-index 000000000000..9a38fe4ac7bb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/gen_loader_attach.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("lsm/file_open")
-+int lsm_open(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("lsm/file_permission")
-+int lsm_perm(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?socket")
-+int socket(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?fentry/security_inode_getattr")
-+int fentry(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?fexit/security_inode_getattr")
-+int fexit(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?fmod_ret/security_inode_getattr")
-+int fmod_ret(void *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("?tp_btf/sys_enter")
-+int tp_btf(void *ctx)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
---
-2.43.0
+I think either:
 
+1. say net-iovs are not really occupied memory, so do a global cleanup
+that charges 0 for all net-iovs (optionally making it conditional on
+the net-iov type, so in the future someone can easily add a net-iov
+that actually can be charged)", or
+2. change the net-iov size to be actually size instead of PAGE_SIZE,
+and keep the current 'we charge net-iovs even though they're not
+really memory', and then this patch makes sense.
+
+But I welcome disagreements.
+
+--=20
+Thanks,
+Mina
