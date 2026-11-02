@@ -1,94 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.160
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793657186;
-	b=EUWEaaYy4AYL5v0Wt9tSBY7cePBy2EudzyJSi6X50ez4UTSXfHnoG9K7twEnt06rnsPk
-	 9fZYTDCZr7KwftknEUhQmQuA/XfaMoqdOB4PEZ1+U5ptivVNDbeQHjsSIRtVsSZYVIUD+
-	 zxp///UYX2QJWF7YLObZ8g2pEWQdYu3bE1+M1J7BDcXjPDcRPCj0/sLha33qDcio48XwI
-	 fghkG9xd7EbNHBGYZqtzmSrKkR538s9gAzJFdLR7ddiDWLVac9Tq97DN5rnjlNRqzLUSS
-	 8wlqglrQA2we1fGLTCid9ry4CXtXCVK1HnA5zTXdsScda/azX4zjcOGOAefPIMJjGNg==
+	t=1793657254;
+	b=dycc80/Erapd7RFBuDam0EyKALLu+3PfGK/GZ9QTbdWldr8xPDsjiU9aYhBJQYW/g6Bs
+	 0S1iAEmVo2vU+vcUSo8Ux05t0BVzLm4NECs1jkNnEENbOohYHazZR4bvL+UjxQLlYXt+V
+	 MXfYJCeZAW2MJ7Rd/PYnaloM0hga6DXNRV41XN7xhaTO0u4RP9WeWf9v0A4chtTo3LRs0
+	 h7UN32oAONm7UXw0Ie6nx1SowCt/kBoJ1n1dAJrUQoGv9iGevZXDgAMXG16MIiFC7gs0x
+	 QfNvuTT23AxuRjTJCbYQcX/1JCHPL94lxFmfAjzabUm/5gYLVtaOol2IC7CA0s5xvbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793657186;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=NH6jz3WPUJHIT+J12ydGYZK6J+d3CqEgAa315HjW4cw=;
-	b=z0HlrQyxD4nXeSL7twRZbshjjE7aktXl2TevnlLKwazHwq+qewhk3arbV3zNPWObruTB
-	 mIXCCM0gYwCHSqPkRGWDfhRbtf7gtEnJx9Nw+ybgooX+wGh8D2M79CN+z6xQCVpRGijWc
-	 OVlw3zOmIBqVggNvQ3WNP4vRQC0TRSfdtn7XavzVI21vg7LKAf2f61DrTJZLkOjFbGH5T
-	 I+O0lYdz0LO3jlgaaH/vX5sMj27rKqC7vRblemi+XkQbxuqGFbKPRfjiAVPC35JDZuUa6
-	 bIOng7ptcDI/1nf0HCyIp42JA2GKsvO9ZeXPTkvMWpGHGzViqkNRarkwEWj0pqcsPTw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793657254;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=SK35Qq0pP7U3ITxQEzMwjyV70Jp5lJ0aak8ieWZ3W1M=;
+	b=q67UR8+bwQ2hzE0t+KpOI8CdcxnqcB7RFbmv+6/n5397uAZHGXzompCRbqx/Rjg5TT8v
+	 caIPcN9GZwA5hpe4CxhQes6mXWwK+x0QxfnRGyrsDSINsglZ2oPhBmzjX0HG605nAZ59A
+	 IqJeKOFtF0Y7MNz4OJF8uyZ3PhXJqkoF2zD1BAN54PX/QVsKRypUxQBDiLFx46HOBgQrn
+	 23zwDGqc835wcd8DBoDpRaxjGPgumFxwPLFHS8302TOct5aIzdwBDBeKeGF6JqIgrDKov
+	 UnVNPOIpPiWbayNVdVtXRlA0BhJKs5MbpUOMtM5en0WwJOwE9HBdNXcXoGDNsgEXevA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B1AD7UqS;
-	arc=none smtp.remote-ip=209.85.214.178
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=i8U5w5mo;
+	arc=none smtp.remote-ip=91.218.175.160
+Received: from mta0.migadu.com (out-160.mta0.migadu.com [91.218.175.160])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78C7606A32D
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 22:06:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E78C7606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB0E606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 22:07:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDB0E606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B1AD7UqS
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e98798cbddso16975955ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 14:06:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793657185; x=1794261985; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=NH6jz3WPUJHIT+J12ydGYZK6J+d3CqEgAa315HjW4cw=;
-        b=B1AD7UqSqrGX1/VZ9OPSvRwQQaY1cQeTHUa+6qKksae8nAaFO6w3T01WQxSAS5F9pr
-         3p3mBtKjiUnZw4iKOK+uwGkSkRA8Rx/rlSVfvuv1XSvkvMyiLlzoHOE2DOHXpivjkpHO
-         htLEikQv31Jn0Hyi6pbSQKcJQTV+ZlUcssFRrd7PJLhdXlbVw84gu2Z4D/xFcfnKNiDm
-         MlrIHQvplxHQEgqxKc+vHzBp0zIEgNH2xDIAARXoQmgTFLQ0X9PlbjR1qsFkCsL4LAoe
-         OQI33JJnV+fdOJz0LxWGRphXSw8FC4m5WltrkCBeEsddhd/jdWDedF4pmEKRg+SPdhTa
-         uafw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793657185; x=1794261985;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NH6jz3WPUJHIT+J12ydGYZK6J+d3CqEgAa315HjW4cw=;
-        b=l5FcGEclUebiK6ufe61CyGFoASbrHURZEWhbNibOaniOrgcQrAcFV/umSD4fW6BBkR
-         JX2pGQPlnpWvsD4p9WXnE4O9xdRak3ebePChBY60EscT738mKhx3QskQgEjdtpUv+1S4
-         AN7aRKvRyvGTj9FjF2Ztg8a/cKY5N4qKBdOBC3vm42aZFtvAI2GPFTiA30gi2V1fXcDV
-         ZNm0p+FZCADBqGvcd6G2LJ9eg4bKhV8fkFomC0WH4bMOVtBQVHca6LKux2mKMN0Y76K0
-         p6/ohzp5beS+rztGeYWx1fUTy7eDIQ/8K2b3dW8EA1mDvM/Wk/UfoHndRfLhiqsSU9fR
-         EQsg==
-X-Forwarded-Encrypted: i=1; AKwUvBwOOMVoe5vSCtNgMgsGOAAS2bsUzUfus2XNagX4DH+r1auGcolADSO/xWj/aCWV+vx6Inz/W8sZq1v+TEdcnhw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/EDQp5R1xQppjd+h8+URDDNjeVZCVMuyEhkNMQPftcqb3cwOad
-	xjlFVAkZndJVzdHXK6YHjyaRM0mtbGZ0gNdVQCpFYknjzthDoCM91q9jpNa08KHlKQ==
-X-Gm-Gg: AYBFou0ltcRmZk6vdEyJ8a5wqSTa2Aqy4pu4hBAm93bovCXHMjh+PIWRQQc3EBcG+/1
-	s0VwPb+cHPY2T7BJJJyEwVlZUuIHk9FYWI8IjZbW8I2TMjlb53YPCDXsYFIdAy+ASIfqrZyMBPu
-	i1pOGlX7hlzPE7e+1KbaI+ULP3JB0stElAVJ9+Dn6sgHMKZJ2skur+Lgc5soFL0eT67/KuCaRwb
-	NQjGxDej4vCYz9H0/Zd9mejArkfYTo+eePfuY32jCckl3nmC0+LrTCXOc8M9CeGQk7zWB4AHCYu
-	/JJDAJfhIyqFM7cI07ucI1y8ttXaY3WHmm60T/uGyBQ0bGIqrrG3iV79z6Tuj9uqtV9S9x6YCjr
-	zGMskyK+G6UuOqRAQupRNMKCk71kR/32+ZCh44naW+U05U2qwEfFerS/pni8iB97r6MR348LtYT
-	6uspY15btU//0peFayXSrzXHngn0ZfGjQJALUmmQMHMya47VLZdJjOOGTnUJoU+eitc/3BGq72U
-	Jpv8Xb60mtAh0tSIqiBf5rEqjd3VnBAhowpX+1czIshbXYLUott75bH/1D8p9uPVWVFOZZapjV6
-	gzL1fQ2A6GT7pGVpN++xccG0wZzjzqxzaYsSS5gnlaRtQNjLalrtGGoBDT0AUCHY02ak88s3MQq
-	lwF9dPAX4HA==
-X-Received: by 2002:a17:902:e54b:b0:2eb:250a:f4c0 with SMTP id d9443c01a7336-2eb364b121dmr103721415ad.33.1793657184617;
-        Mon, 02 Nov 2026 14:06:24 -0800 (PST)
-Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39248909sm32370385ad.33.2026.11.02.14.06.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 14:06:22 -0800 (PST)
-Date: Mon, 2 Nov 2026 22:06:19 +0000
-From: David Matlack <dmatlack@google.com>
-To: Samiullah Khawaja <skhawaja@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vfio: selftests: Remove libuuid dependency
-Message-ID: <aukJW-svGhlH4Jut@google.com>
-References: <20261102200624.1570562-1-skhawaja@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=i8U5w5mo
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nEYHTijhG3y2jMigu8DXS+u3k3k5VFqb7Kpwqv8LdG8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793657250; v=1; x=1794262050;
+ b=i8U5w5moEYiilcF5tWYTLIxEpxQC6lRRaVnyP+69WE+lae3zUR4VaQCoufPMsv6GyGwYySHU
+ GTfa3Siog0bA/I+CJhr+wo/XpjSsnyZ+XuLMowxfK22Ds/BaBpRAPUR3lu2sgNqsTBikw/ZdpWL
+ L0od0Kqfp6cnZAdE90YA7Ez0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 366f3409fd7c6eee;
+	Mon, 02 Nov 2026 22:07:30 +0000
+X-Mizu-Trace-ID: 366f3409fd7c6eee
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	jose.marchesi@oracle.com,
+	david.faust@oss.qualcomm.com,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v3 0/8] selftests/bpf: cleanup bpf-gcc runs
+Date: Mon,  2 Nov 2026 14:07:09 -0800
+Message-ID: <20261102220717.4079739-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -98,207 +79,158 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102200624.1570562-1-skhawaja@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2026-11-02 08:06 PM, Samiullah Khawaja wrote:
-> Libvfio depends on an external dependency libuuid for parsing vf_tokens.
-> Building it in cross compilation environments gives the following error,
-> 
->  ld: cannot find -luuid: No such file or directory
-> 
-> It also complicates building with glibc alternatives like musl, see
-> https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
-> 
-> As it is only used for parsing vf_tokens, remove the dependency by
-> adding a minimal uuid_t and uuid_parse() to libvfio.
-> 
-> Tested by running vfio_pci_sriov_uapi_test selftest.
-> 
-> Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+This series came out of testing a still in-works __arena support for
+BPF_GCC and anomalies seen in the A/B reports.
 
-Please lead the commit message with what the patch does, and then follow
-up with the background and motivation. The VFIO selftests documentation
-(merged for 7.4-rc1) asks contributors to follow the KVM x86 guidelines
-for changelogs:
+BPF_GCC selftest builds reports a number of things that are not true.
+ - Tests the compiler cannot build do not appear at all, so the
+   report is silent about them
+ - Others are compiled down to an empty body and report OK despite
+   not even been executed
+ - Two programs that fail to verify take four unrelated tests down with
+   them, because everything in that object is loaded together.
+ - Unconditional gating on __clang__ when newer GCC support for those
+   is coming online.
 
-  https://docs.kernel.org/driver-api/vfio-selftests.html#contribution-guidelines
-  https://docs.kernel.org/process/maintainer-kvm-x86.html#changelog
+Only 7/8 needs the in-works arena support to be exercised at all; the
+rest are measured below with a stock bpf-gcc.  Nothing in the series
+changes what clang emits.
 
-Also please drop the "Tested by ..." line. Details about how you tested
-the patch are useful to reviewers, but they do not belong in the commit
-message. Put them below the "---" line (e.g. next to the v2 changelog)
-instead.
+What each patch does, and what it measurably changes.  Numbers are
+test_progs on bpf-next with a stock bpf-gcc:
 
-How about something like this:
+ 1/8: Gate the callx tests on CAN_USE_CALLX, which also accepts a GCC
+      defining __BPF_FEATURE_CALLX.
+   -> 79 subtests newly visible, 78 OK and one @unpriv SKIP; the two
+      dummies retire; callx_rodata_lskel SKIP -> OK.
 
-  vfio: selftests: Remove libuuid dependency
+ 2/8: Keep clang-only warning flags out of GCC builds.
 
-  Replace libuuid with a minimal uuid_t and uuid_parse() in libvfio, and
-  drop -luuid from the build. libvfio only uses libuuid to parse VF
-  tokens, so pulling in an external library is not worth it.
+ 3/8: Add __skip_without_arena, and give each arena guard an #else
+      dummy carrying it.
+   -> 7 subtests newly visible, all SKIP; arena_kfunc_jit OK -> SKIP.
 
-  libuuid is often missing from cross-compilation sysroots, which causes
-  the VFIO selftests to fail to link:
+ 4/8: Make arena_base() opaque to GCC's -Warray-bounds, behind
+      #ifdef __clang__ since clang does not warn.
+   -> no verdict change.  +35 insns over 20 call sites under GCC;
+      clang output unchanged, bit for bit.
 
-    ld: cannot find -luuid: No such file or directory
+ 5/8: Tag the tests whose body dereferences an arena pointer, and only
+      those; drop the in-body guards.
+   -> 13 subtests OK -> SKIP, check_arena_arg_ret FAIL -> SKIP, and
+      verifier_arena itself FAIL -> OK.  The rest now actually run.
 
-  It also complicates building against glibc alternatives such as musl,
-  see https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
+ 6/8: Cast explicitly with bpf_addr_space_cast() in the arena subprog
+      and callback faults, as the sibling tests already do.
+   -> 15 FAIL -> OK, and 5 subtests newly visible.
 
-  Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+ 7/8: Write the mixed arena/scalar ALU tests in asm, rather than a
+      volatile register variable GCC may optimise away.
+   -> not exercised by a stock bpf-gcc.
 
-Other than the commit message and the minor comment nit below, the patch
-looks good. Feel free to add my R-b tag in v3.
+ 8/8: trigger() in the four struct_ops arena progs is guarded in-body
+      and test_loader does not drive them, so the tag cannot reach
+      them; use the flag-in-.data pattern from linked_externs.c.
+   -> 2 tests stop reporting a vacuous OK.  The other two need a
+      testmod BTF carrying the arena tag, so are unreached here.
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+Totals for the series.  Nothing regresses:
 
-> ---
-> v2:
-> - Move the parser to lib/uuid.c and lib/include/libvfio/uuid.h (David)
-> - Drop the vfio_ prefixes and add a uuid_t (David)
-> - Mention musl in the commit message (David)
-> 
-> v1: https://lore.kernel.org/all/20260925013110.3447626-1-skhawaja@google.com/
-> ---
->  .../selftests/vfio/lib/include/libvfio.h      |  1 +
->  .../selftests/vfio/lib/include/libvfio/uuid.h | 11 +++++
->  tools/testing/selftests/vfio/lib/libvfio.mk   |  3 +-
->  tools/testing/selftests/vfio/lib/uuid.c       | 47 +++++++++++++++++++
->  .../selftests/vfio/lib/vfio_pci_device.c      |  2 -
->  5 files changed, 60 insertions(+), 4 deletions(-)
->  create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
->  create mode 100644 tools/testing/selftests/vfio/lib/uuid.c
-> 
-> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio.h b/tools/testing/selftests/vfio/lib/include/libvfio.h
-> index 07862b470777..e9d513c3a08e 100644
-> --- a/tools/testing/selftests/vfio/lib/include/libvfio.h
-> +++ b/tools/testing/selftests/vfio/lib/include/libvfio.h
-> @@ -6,6 +6,7 @@
->  #include <libvfio/iommu.h>
->  #include <libvfio/iova_allocator.h>
->  #include <libvfio/sysfs.h>
-> +#include <libvfio/uuid.h>
->  #include <libvfio/vfio_pci_device.h>
->  #include <libvfio/vfio_pci_driver.h>
->  
-> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
-> new file mode 100644
-> index 000000000000..52406f3409b7
-> --- /dev/null
-> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
-> +#define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
-> +
-> +#define UUID_SIZE	16
-> +
-> +typedef unsigned char uuid_t[UUID_SIZE];
-> +
-> +int uuid_parse(const char *in, uuid_t uu);
+  FAIL  472 -> 456        OK -> FAIL regressions:  0
+  OK   7061 -> 7141
+  SKIP  753 ->  779
 
-Note that this differs from the kernel's uuid_t, which is a struct, and
-the kernel's uuid_parse(), which takes a uuid_t *. I think matching the
-libuuid API is the right call since this is userspace code (and it keeps
-the callers unchanged), but it would be good to call that out here. The
-"Minimal replacement for libuuid's uuid_parse()" comment in uuid.c could
-move to this header and mention that uuid_t and uuid_parse() mirror
-libuuid, so readers familiar with the kernel API aren't surprised that
-uu is not a pointer.
+Two things worth re-iterating explicitly:
 
-> +
-> +#endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H */
-> diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
-> index eff95828719e..d1d1b2b05af1 100644
-> --- a/tools/testing/selftests/vfio/lib/libvfio.mk
-> +++ b/tools/testing/selftests/vfio/lib/libvfio.mk
-> @@ -7,6 +7,7 @@ LIBVFIO_C := iommu.c
->  LIBVFIO_C += iova_allocator.c
->  LIBVFIO_C += libvfio.c
->  LIBVFIO_C += sysfs.c
-> +LIBVFIO_C += uuid.c
->  LIBVFIO_C += vfio_pci_device.c
->  LIBVFIO_C += vfio_pci_driver.c
->  
-> @@ -30,8 +31,6 @@ $(LIBVFIO_O_DIRS):
->  
->  CFLAGS += -I$(LIBVFIO_SRCDIR)/include
->  
-> -LDLIBS += -luuid
-> -
->  $(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c | $(LIBVFIO_O_DIRS)
->  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
->  
-> diff --git a/tools/testing/selftests/vfio/lib/uuid.c b/tools/testing/selftests/vfio/lib/uuid.c
-> new file mode 100644
-> index 000000000000..378904d9340a
-> --- /dev/null
-> +++ b/tools/testing/selftests/vfio/lib/uuid.c
-> @@ -0,0 +1,47 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <string.h>
-> +
-> +#include <libvfio.h>
-> +
-> +/*
-> + * Minimal replacement for libuuid's uuid_parse(). libuuid is part of
-> + * util-linux and is routinely absent from cross-compilation sysroots, which
-> + * makes the vfio selftests unbuildable for non-native architectures.
-> + */
-> +#define UUID_STRING_LEN	36
-> +
-> +static int hexval(char c)
-> +{
-> +	if (c >= '0' && c <= '9')
-> +		return c - '0';
-> +	if (c >= 'a' && c <= 'f')
-> +		return c - 'a' + 10;
-> +	if (c >= 'A' && c <= 'F')
-> +		return c - 'A' + 10;
-> +	return -1;
-> +}
-> +
-> +int uuid_parse(const char *in, uuid_t uu)
-> +{
-> +	const char *p = in;
-> +	int i, hi, lo;
-> +
-> +	if (strlen(in) != UUID_STRING_LEN)
-> +		return -1;
-> +
-> +	for (i = 0; i < UUID_SIZE; i++) {
-> +		if (i == 4 || i == 6 || i == 8 || i == 10) {
-> +			if (*p++ != '-')
-> +				return -1;
-> +		}
-> +
-> +		hi = hexval(*p++);
-> +		lo = hexval(*p++);
-> +		if (hi < 0 || lo < 0)
-> +			return -1;
-> +
-> +		uu[i] = (hi << 4) | lo;
-> +	}
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> index 4063a0e2b3df..4ae6ac1f8ed8 100644
-> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> @@ -23,8 +23,6 @@
->  #include <linux/types.h>
->  #include <linux/vfio.h>
->  
-> -#include <uuid/uuid.h>
-> -
->  #include "kselftest.h"
->  #include <libvfio.h>
->  
-> 
-> base-commit: 2637bdec0535a2044cd830eba9a79363651d9043
-> -- 
-> 2.56.0.385.gac671c819a-goog
-> 
+ - 1/8 needs a GCC defining __BPF_FEATURE_CALLX, in bleeding-edge
+   but not released yet.
+
+ - 7/8, needs a GCC with arena support; that work is coming along
+   but not yet ready for public review.
+
+v1 -> v2:
+
+ - 1/8: the __skip() reason named only x86/arm64 while CAN_USE_CALLX
+   also accepts riscv64.  Say "arch JIT" instead of listing them, so
+   the string cannot go stale the next time an arch is added.  (bot)
+ - 3/8: jit_insns_arena.c was missed.  Both of its programs are inside
+   the guard, so without arena support the object has none at all and
+   RUN_TESTS(jit_insns_arena) ran zero subtests without saying so.
+   (bot)
+ - 5/8: commit message only.  It cited arena_types to argue the kfunc
+   tests need no cast, but the address parameters carry the __ign
+   suffix, so get_kfunc_arg_type() returns ARG_IGNORE and
+   check_func_arg() returns before any register type check.
+   Conclusion unchanged, for a better reason.  (bot)
+ - 5/8: arena_kfunc.c, verifier_arena_globals1.c and
+   verifier_arena_globals2.c had the same empty-body shape and were
+   missed; nine more guards go and seven more tags arrive.
+   arena_kfunc.c alone had eight subtests reporting a vacuous OK.
+ - 8/8: new patch, for the four struct_ops arena progs.
+
+The three bot findings prompted a sweep of every prog with an arena
+guard, which is where the last two came from.  The totals above were
+re-measured on the series as posted.
+
+v2 -> v3:
+
+ - Rebased on bpf-next.
+ - 1/8: the bot asked about data_in_arena.c, whose use_ops() gated an
+   indirect call on __clang__ with no arch condition.  That file has
+   since gone in 3c13b2e5a40e ("selftests/bpf: Remove tests for global
+   data in arena"), so nothing is left to convert.  The missing word in
+   the commit message is fixed.  (bot)
+ - 7/8: the comment on the r9 load said it was what makes libbpf record
+   the arena, which stopped being true with cd7a395838cb ("libbpf: Bind
+   the arena of an object to every program in it").  The load is now
+   only a fallback for a kernel without fd_array_cnt and for the light
+   skeleton; say that instead.  (bot)
+
+Link: https://lore.kernel.org/bpf/20261028000411.4010967-1-vineet.gupta@linux.dev/ [v1]
+Link: https://lore.kernel.org/bpf/20261028204158.1021284-1-vineet.gupta@linux.dev/ [v2]
+
+Vineet Gupta (8):
+  selftests/bpf: Build callx tests with GCC that defines
+    __BPF_FEATURE_CALLX
+  selftests/bpf: don't pass clang-only warning flags to GCC
+  selftests/bpf: report SKIP for arena tests a compiler cannot build
+  selftests/bpf: make arena_base() opaque to GCC's -Warray-bounds
+  selftests/bpf: don't report arena tests as passing with an empty body
+  selftests/bpf: cast explicitly in the arena subprog and callback
+    faults
+  selftests/bpf: write the mixed arena/scalar ALU tests in asm
+  selftests/bpf: skip the struct_ops arena tests without compiler
+    support
+
+ tools/testing/selftests/bpf/Makefile          |   8 +-
+ .../testing/selftests/bpf/Makefile.buildvars  |   6 +-
+ .../bpf/libarena/include/bpf_arena_common.h   |  16 +++
+ .../bpf/prog_tests/callx_rodata_lskel.c       |   2 +-
+ .../bpf/prog_tests/test_struct_ops_arena.c    |  27 ++++
+ .../testing/selftests/bpf/progs/arena_kfunc.c |  18 +--
+ .../selftests/bpf/progs/arena_kfunc_jit.c     |   9 ++
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  21 +++
+ .../selftests/bpf/progs/callx_rodata.c        |   4 +-
+ .../bpf/progs/compute_live_registers.c        |  10 ++
+ .../selftests/bpf/progs/jit_insns_arena.c     |  10 ++
+ tools/testing/selftests/bpf/progs/stream.c    |   7 +-
+ .../selftests/bpf/progs/struct_ops_arena.c    |  10 ++
+ .../bpf/progs/struct_ops_arena_autobind.c     |  10 ++
+ .../bpf/progs/struct_ops_arena_member.c       |  10 ++
+ .../progs/struct_ops_arena_member_render.c    |  10 ++
+ .../selftests/bpf/progs/verifier_arena.c      | 131 +++++++++---------
+ .../bpf/progs/verifier_arena_globals1.c       |   6 +-
+ .../bpf/progs/verifier_arena_globals2.c       |   3 +-
+ .../bpf/progs/verifier_arena_large.c          |  24 ++--
+ .../selftests/bpf/progs/verifier_callx.c      |   5 +-
+ .../bpf/progs/verifier_callx_rodata.c         |   5 +-
+ .../selftests/bpf/progs/verifier_ldsx.c       |   9 ++
+ .../selftests/bpf/progs/verifier_zext.c       |   9 ++
+ 24 files changed, 253 insertions(+), 117 deletions(-)
+
+-- 
+2.53.0-Meta
+
