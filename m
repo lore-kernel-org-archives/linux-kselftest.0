@@ -1,62 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.109
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793582531;
-	b=jvyV/hxyg8rEZbLDE7cJXmQ/tPmRoHtTHWXl829RiEkfmTme5vDLYF6HADZt8lLX7mSt
-	 PwOWPx1Js/2LHdlXSvPeDqXXQ4jQGcbKWmIWahTAiDFA/Y8Wlf2x9lmh//QAC03tZBkp+
-	 GuE+c2PWbHDTR2JZIeGg9jn8nD8Ebf8dQII2k8eAATVAQjDWwmrYlLZPXhm+Aymd5mbQM
-	 TJd1DzQLi6cTwJ2C45Ap895fZIugraEWnh4HOTd46l8Yyt9U+WHEQLMmU9TgE+FyT8UbF
-	 IRL9No2jWeCuD55zbQc65d7m2pwuG3r6GP8wPRvjhARsQ6oaNLzpgwgtcQhS/nUYGbw==
+	t=1793582898;
+	b=D9d2j23nszQuJ4x60FVDIi4FRO5WeLgIW0Po5xg5C9uRVz7O38H9lvcpRDvY/LXRoFpa
+	 JBwFP4/dyQWj4yjqg0Xh0gZfH2NS/GyyBD1W3Gjl787iBJu1zfw/qI2uRIsxLZHL2n/gW
+	 ADdpcy5gc7Z4CWvubjqkYhb97CNawyHntumUYEkHt3YT0BFtMwcaLyKAbwCrUR6a6qAh3
+	 MhbQXa0L+aCrpeQThTSUJt3+mETf+ZuWe5vDh3eSqdnS9B5VbmE3ez3vFKujjGIzANaM1
+	 JybWDOd4sjwrXsogCm1FP2W2zr4vicqL8OCCuZ/sZ6qxnEfXWguizK1CP3t9eHCV5aQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793582531;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:From:Subject:To:Cc:References:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=C5gqpTOgkDU//zQkGOQKjOKsqsvBDDMS+gbejxMeVdk=;
-	b=r1jk7OLvcBx//RbsjTw+M51BupX6xk1APaIKGgw4oiraqYGsVxNEcKk9/VmV8YdF67m+
-	 6muAyAFYhp07T/6hpsDAMzotn0UuY+i4Z8caFLZCHa5GclZTHgbyTPJiBm3o21tca7Lst
-	 gnNHBkXKvLcLjW1jUYFDiLMEZMYKYyCybXm3g7Ks2jA/dD3m2ojyeUkMCFVuRFjeGcysY
-	 7nfDzhxcAh5RXUKY+Qq2Ao+87aqn77FyBhE7Ean4ofmaA4rU7TpQZufJUVusWAM1SkjdN
-	 g0BSvQW1nrqtZa0BTHYLs2QdNG4ldoPq1+fUt/oTXc+ft041LP4R1rxJCs9kPI1aztQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793582898;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=rzoLRGpbA1YnRSHf730F0SGoltNl9naGbkAysUDHcXM=;
+	b=ab4fo9mYvNHFA5A8inTiXQMn2YWN5JWpzMMZnxYDlxLouZnyF2dBzLn+Ki83vFW3sOuC
+	 ego0daVxJbh6Eel20kvIhTA7tovPf5Dt1kSjrrjTmC6A0NRzOA0bBBn8Wh4ynlNMeBym2
+	 59aKjrS7BuFpD3Ps/zLc+PDknM9LTyRaYia1gy8k+3rHNIPLKmPH9GVCcLUzDN/i7AcOM
+	 o7DSS/AcfmfqZpq9FQqCYLyI17UHLGKbGCCKnuU7ROV2PFUt7JU0oi5b4o8yH29iL/R+I
+	 LgapOCOJAZ8zFLDGkCXdOjPxeye2rJufHmNwCX/m9Qbf9BpqjNzUAQt/DjseC0aQVfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=rbox.co;
-	spf=pass smtp.mailfrom=rbox.co;
-	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=I2EnYMrr;
-	arc=none smtp.remote-ip=185.226.149.37
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="Lc5RIJD/";
+	arc=none smtp.remote-ip=95.215.58.109
+Received: from mta1.migadu.com (out-109.mta1.migadu.com [95.215.58.109])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF74606A324;
-	Mon,  2 Nov 2026 01:22:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BF74606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E59C606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 01:28:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E59C606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=I2EnYMrr
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1xNgkL-008BKP-AU; Mon, 02 Nov 2026 02:22:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=C5gqpTOgkDU//zQkGOQKjOKsqsvBDDMS+gbejxMeVdk=; b=I2EnYMrrFCOKTtqiYFvChN8tuO
-	Cy6ULEkHqZw8Q+rhppEMB19ro7BO6VuN7dn5ELjJpjzLDnCsLnHAmJUg76QVbr15RlNupVPczMgOt
-	WYkrmzXN0jXh8lEMvXbiTMmKmjoXOSWj46V1Cq2SE+xjtzOUeBeI2TCoF+OAImGTyva3Ujp36uUn2
-	+OMa3CNuLMCPwwJtY0Kp5TaNEtIzTJgcWZ1rDSglQuY4CGsVryG5zGIVdAkk8GgEeZN9Yd8LC/G5i
-	eU1Z+j1RLVNA9qCUpGXnxdd7hU17+050tLzAXhcYSJFagJ/wJ9TbMYxkYmr5DaiWwyI0KVcfok/4+
-	uvU/cxWw==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1xNgk3-00069h-Pc; Mon, 02 Nov 2026 02:21:43 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1xNgjp-00AfUJ-El;
-	Mon, 02 Nov 2026 02:21:29 +0100
-Message-ID: <5a411a67-f550-459d-be9b-5e8e51d3018c@rbox.co>
-Date: Mon, 2 Nov 2026 02:21:27 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Lc5RIJD/
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=csedd/GblkcolFtqfu+Niv7QfYyLxrzwGS2iiAkK03Y=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793582895; v=1; x=1794187695;
+ b=Lc5RIJD/C+ZOkULKnTOKXU6Ebmmh2sMF209sykEtga+NC9g05M8X2/AvNiWlqRZx0tZCtmsx
+ TCz9GfkRyDrE8by1YvbI6FE/TXMOnhaphWxYIVQnumwLOlpseIz9GBAk328/oSTbo/Eu9FsVfUN
+ svKBvLmnD1oyo7E6b1QqT1BA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 768c53e075c1f637;
+	Mon, 02 Nov 2026 01:28:14 +0000
+X-Mizu-Trace-ID: 768c53e075c1f637
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d1da9c1d-5ecf-4ae3-bedf-f73906758ec8@linux.dev>
+Date: Mon, 2 Nov 2026 09:28:07 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,118 +59,108 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH net-next v4 4/7] vsock: add a netlink command to assign
- the g2h device to a netns
-To: Bobby Eshleman <bobbyeshleman@meta.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin"
- <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
- <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Donald Hunter
- <donald.hunter@gmail.com>, Eric Dumazet <edumazet@kernel.org>,
- virtualization@lists.linux.dev, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, sargun@sargun.me,
- jlinbox@meta.com
-References: <20261020-vsock-guest-ns-v4-0-047527cfccfc@meta.com>
- <20261020-vsock-guest-ns-v4-4-047527cfccfc@meta.com>
- <atjZZP2ebhXKzMxL@sgarzare-redhat>
- <atld3+5LKmGxJ8+s@devvm29614.prn0.facebook.com>
- <atnjOZjKUBagRVWq@sgarzare-redhat>
- <d946003a-8bec-4e8b-89a3-05eeb96780cc@rbox.co>
- <auT+YIawHSMPHbJI@devvm29614.prn0.facebook.com>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <auT+YIawHSMPHbJI@devvm29614.prn0.facebook.com>
+Subject: Re: [PATCH v2 1/3] cgroup/cpuset: Fix incorrect CPU accounting with
+ parent's effective_xcpus expansion
+To: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261030190701.78308-1-longman@redhat.com>
+ <20261030190701.78308-2-longman@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261030190701.78308-2-longman@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/30/26 21:30, Bobby Eshleman wrote:
->>>> Yeah its all kind of a pain. The problem is that we need to hold
->>>> sock_lock to set sk_state and sk_err, but can't acquire it under the
->>>> table lock. Instead, we grab the socket ref sock_hold under the table
->>>> lock to guarantee it stays alive between releasing the table lock and
->>>> grabbing the socket lock.
->>>>
->>>> I was really tempted to not do this lock_sock dance though. The race
->>>> condition I'm avoiding here is that if this reset races with an RST
->>>> receive, then the socket could end up with TCP_CLOSING + sk_err
->>>> ECONNRESET... but I'm not sure this actually propagates up into a real
->>>> problem for any potential user.
->>
->> Right, vsock_connect() is fragile. Two things to be cautious about:
->> 1. Don't let it reset the already connected socket. Because that would
->> allow user to "re-connect()" and make mess in connected_table.
->> 2. Don't let it re-assign transport of an already connected socket. Because
->> that breaks the contract in few places.
->>
->> State 1 is not an issue: vsock_g2h_reset_unreachable() calls
->> __vsock_remove_connected().
->>
->> State 2 may be problematic: if vsock_g2h_reset_unreachable() sets TCP_CLOSE
->> when connect() is scheduled out, then after the wake-up sock may get reset
->> to SS_UNCONNECTED. Then user re-connect()s and hits the transport
->> re-assignment logic. I'm worried that, as we re-assign, someone may be
->> holding a reference to such "connected" (even if not in connected_table
->> anymore) vsock.
+
+
+在 2026/10/31 03:06, Waiman Long 写道:
+> Commit ec0254b9eb49 ("cgroup/cpuset: Release invalid isolated CPUs with
+> a shrunk root partition parent") fixes incorrect isolated_cpus accounting
+> when contraction of a parent's effective_xcpus can cause a child partition
+> to lose isolated CPUs. Expansion of parent's effective_cpus can also allow
+> a child partition to gain more effective_xcpus. However, the current code
+> doesn't handle this case correctly leading to incorrect effective_cpus
+> and isolated_cpus accounting. Fix that by looking for this possible
+> expansion of effective_xcpus and perform the proper accounting action.
 > 
-> I see path you're looking at... after vsock_connect() gets scheduled
-> back in we set TCP_CLOSE/SS_UNCONNECTED if sock_error returns non-zero.
-> Could you elaborate on your last concern there about someone holding a
-> reference? I'm not sure I fully understood.
-
-Ah, sorry, let me explain. This case reminded me of the vsock's TCP_CLOSING
-bug[1]: reporter mentioned vsk->trans getting freed when skb was still in
-flight. I did not reproduce the exact scenario, but it did sound plausible
-and I thought it applies here: virtio_transport_destruct() frees vsk->trans
-the moment vsock_loopback_work() invokes virtio_transport_consume_skb_sent().
-
-Now, to get there let's start with vsock_connect() setting SS_UNCONNECTED
-(on a connected) socket after vsock_g2h_reset_unreachable(). Then user is
-able to re-assign the transport, which involves
-virtio_transport_destruct(). But since we're dealing with a connected
-socket, (before the reset) some send() might have triggered
-vsock_loopback_work(). Does this make sense to you?
-
-Another thing is this feature of vsock_assign_transport(): in some
-re-assign failure paths you may end up with vsk->transport = NULL. In the
-past this caused issues with sockmap: see WARN_ON_ONCE in
-vsock_bpf_recvmsg(). Problem here is that normally vsock gets removed from
-sockmap on close(), but in our (reset+reassign) case close() is never invoked.
-
-[1]: https://lore.kernel.org/netdev/anzT1fREOSyHT99k@v4bel/
-
->> So I don't know, maybe it's vsock_connect() that should be fixed/hardened
->> instead?
->>
->> Or at least disallow transport *re*-assignment? Does the "re-" part have a
->> use case?
->>
->> Hope it's not too off-topic.
->>
->>>> It also avoided some racing with the tx path, but now that send_pkt()
->>>> also checks reachability I think that path is safe.
->>>>
->>>> What do you think about doing the below hunk (TCP_CLOSE, ECONNRESET,
->>>> sk_error_report) with no lock_sock?
->>>
->>> Looking at the code, it seems that in all the places where we close all 
->>> connections (virtio_vsock_reset_sock, vhost_vsock_reset_orphans) we do 
->>> with no lock_sock but with vsock_table_lock.
->>>
->>> So, makes sense to me.
->>
->> virtio_vsock_reset_sock() and vhost_vsock_reset_orphans() are my pet
->> peeves: state switcheroo without taking lock_sock(). Which, again, races
->> vsock_connect().
+> New test cases are added to test this effective_xcpus expansion scenarios.
 > 
-> True, I don't love that either, but I feel the impact is at least
-> constrained by the fact that it only happens when the module or device
-> is already going away.
+> Reported-by: Guopeng Zhang <guopeng.zhang@linux.dev>
+> Link: https://lore.kernel.org/lkml/20261027123837.100909-1-guopeng.zhang@linux.dev
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c                            | 12 ++++++++++++
+>  tools/testing/selftests/cgroup/test_cpuset_prs.sh | 15 +++++++++++++++
+>  2 files changed, 27 insertions(+)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3219f927c35e..39c81a0a8ab9 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2097,6 +2097,7 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  							     parent->effective_xcpus);
+>  			if (!cpumask_empty(tmp->addmask))
+>  				isolated_cpus_release(cs, tmp->addmask);
+> +			/* Expansion of parent's effective_xcpus is handled below */
+>  		}
+>  		if (nocpu) {
+>  			part_error = PERR_NOCPUS;
+> @@ -2106,11 +2107,22 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  						     parent->effective_xcpus);
+>  		} else if ((parent_prs == PRS_ISOLATED) &&
+>  			   ((old_prs == PRS_ROOT) || (old_prs == -PRS_ROOT))) {
+> +			/* Parent partition state changed to PRS_ISOLATED */
+>  			part_error = PERR_ISOPARENT;
+>  			if (old_prs == PRS_ROOT) {
+>  				cpumask_copy(tmp->addmask, cs->effective_xcpus);
+>  				adding = true;
+>  			}
+> +		} else if (is_partition_valid(cs) &&
+> +			   !cpumask_equal(tmp->delmask, cs->effective_xcpus)) {
+> +			/*
+> +			 * If there is an expansion of parent's effective_xcpus,
+> +			 * we may take more xcpus from parent. The parent's
+> +			 * effective_cpus should still have active CPUs or nocpu
+> +			 * should have been set.
+> +			 */
+> +			deleting = cpumask_andnot(tmp->delmask, tmp->delmask,
+> +						  cs->effective_xcpus);
+>  		} else if (is_partition_invalid(cs)) {
+>  			struct cgroup_subsys_state *css;
+>  			struct cpuset *child;
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 83ef6c781af3..844efdf029cd 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -531,6 +531,21 @@ TEST_MATRIX=(
+>  	" C1-4:P1 C3-4:P2   .      .    T:C4-6   .      .      .     0 A1:5-6|A2:4 A1:P1|A2:P2 4"
+>  	" C1-4:P1 C1-2:P2   .      .    T:C4-6   .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+>  
+> +	# The extra CPUs gained by a child partition when its parent expands the
+> +	# exclusive CPUs have to be taken away from the parent.
+> +	" C2-6:X2-5:P1 CX3-6:P1 \
+> +	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
+> +	" C2-6:X2-5:P1 CX3-6:P2 \
+> +	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P2 3-6"
+> +
+> +	# Both expansion and contraction of parent's effective_xcpus will be
+> +	# correctly handled in child partition and the child can be invalidated
+> +	# if a populated parent could lose all its effective_cpus.
+> +	" C2-6:X2-5:P1 CX3,5-6:P2 \
+> +	                    .      .    X4-6     .      .      .     0 A1:4|A2:5-6|XA2:5-6 A1:P1|A2:P2 5-6"
+> +	" C2-6:X2-5:P1 CX3-6:P2 \
+> +	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+> +
+>  	#
+>  	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+>  	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
 
-Doesn't it happen on suspend as well? Is so, with a poorly timed connect()
-things can go south on resume.
+Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+
+Thanks,
+Guopeng
