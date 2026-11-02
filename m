@@ -1,89 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793661174;
-	b=OoD7K/5Q+O7AISI0Zq0e30nSZjlXMx7nCdgxijsFma+XuM4a7VWuSTQ7q7y0PpW7R9YC
-	 qfc64dLJlusBGkCkYY2vQBKupkf0J1JlNlJTJXTjn4iNUW3L9aqk6l+5pECO+4XKE70/9
-	 Iq9xJZZUId5ZH/4oajEPtB8qL9aubGGNEoOKcuZYaYd25aZERfGQcbeP8jjUNvVsht956
-	 bOXCY3FWjOof6X/N5TBlftoQ1tdYXSFIuw+l7AulnPHGrCZsCTpaI8AHNAXG3TUzjqrjf
-	 Zp+1dlsE++n6TQEq4qqAtO3UjBgXt5azSCdP3Cl81PzDam10hYU3GzaKus5vgt/FOBw==
+	t=1793661175;
+	b=EPkcJz5seWY2RY961Uw27gxSigEXk3iirMSH9ZA6AK9BWNxEaW53mLEOqI6lm44q10do
+	 4m825VhOfVZ6t3D+lyxxZdEZwHjHcTRe4dsJ5P5rCrfWBJ6NJdKyuxep510lRdsV8Oily
+	 /Jml7YAk9rvp87XzXdtthY/xWqYN73JfPdgTM16aGP1PBJCPhhtJJlJ7ygb627+3COj6f
+	 Y7QLGKtbEclOZNfr4NMovgQl1+jgL4xJ7eBkfK6i8TXs7SmJTCXJtZYOSySPuHkeuKEtZ
+	 SxDrC8dziXfNC60GpIu/+hxH3qxgJl78qSs73MsBdNAXkg7HxFQRa3WLDA6fskDPKoQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793661174;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793661175;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=GPdhfWAD7Ide4EFf7M4rZk0kSAs4c2Xf02rJ8beDsak=;
-	b=FIOwLO8Z67a6TpddP3Ck7LHz6nNl0taAJ+q05LAYMlp7TAg6eNMEOAgx0kpHLPiWygEd
-	 LOs5qgpT9MJZawmo0FzKaqzxTnQ1OIZ6Lyl4GjYUG7KfbpA8Jz/u7PSxGSEej3Z0+IqXD
-	 FpHJwnHOUgb6OkEkk8IFJrg5RSSCKudglSPlNXqYuF1ZElT+MN4hICMQTK2fvIw4qrP8m
-	 /5lCIflq5UH5Toa5HOKf95DQ0IXn80+vcc6klvV0hej4LiYciclN/H+QHMGCzzzBZFNnK
-	 N7B24ixZ9yrDu3BzB0Ba12arizjn0NAKjrny2UNbpSSv0qOh+GVRmGiItkK1Y4WtOZg==
+	bh=OXN/npWsGuscMDKYzwQyqKyh6TSWjmZFiWK4TeHONjs=;
+	b=xkbTgEqwTAjmzclc2RtDAUF7wqEPKc0tarYb7zQeX5olKSVqwOtIJe7vF7Hg3TZ/9dsN
+	 K7r+YCveGe8mbTIny6M7jxZWDoFDfYuop6KhON3if9akgI+gcUxvm6WsOd6U7O6bT0pja
+	 nZj8P5E8sSUyi53PyrtJtKmZog3WWcQAyWyP0Gj24U2RwOBy3JlcUiaIBY0Ui6fEaqTiw
+	 t11vQVHaDivBbgzGN8wpVyRE2lSCjR/Os5IUYqZ1u1T8nHmdWYTPIedflQBHO3iyvonP7
+	 LvNRjpU7EAb+ZC/q4rbSqXmy9c5zzArYODF692y9+px2h7+vlVvFyuC2OxRbMp2qScg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=amutable.com;
 	spf=pass smtp.mailfrom=amutable.com;
-	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=j+0PQ1n1;
-	arc=none smtp.remote-ip=74.125.224.48
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=GuCtLrDd;
+	arc=none smtp.remote-ip=74.125.224.41
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2F7606A326
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:12:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D2F7606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170FB606D827
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:12:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 170FB606D827
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=j+0PQ1n1
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-676804a3a22so2855580d50.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:12:53 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=GuCtLrDd
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-67921b515a7so2973158d50.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:12:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1793661173; x=1794265973; darn=vger.kernel.org;
+        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1793661174; x=1794265974; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GPdhfWAD7Ide4EFf7M4rZk0kSAs4c2Xf02rJ8beDsak=;
-        b=j+0PQ1n1kmFQTc+BosPd73pckERKHrhtxYJjj3ZP/1bLRCNZ6qm9O3IOkbwOJ+gmvN
-         c52YIdN61lhz4DzALcQ/xcR8osNMhdFshJIPCtg3QTu/bu2nskQAvDUhO8XdJBMZxyqt
-         uQGQngkXYHf+JHkgrr/JqiX9kYl84+l8GcS/7wWP1t+ev0zlzbVtnfQqpbu4W5LlX4Ef
-         aMxBI2/aWDJIzP04YG0L9UmvGpUJnm3VOd4TRkgdGv+RNzDAJhPJ6j7P23y1Za3eNHOR
-         zk7qXQ+C8La7nDIjKyFS4gUx1Bq/+huALi44jhbM77ykSsm0XFaysNwKa+WbHmjql3lq
-         bxJQ==
+        bh=OXN/npWsGuscMDKYzwQyqKyh6TSWjmZFiWK4TeHONjs=;
+        b=GuCtLrDdKx7WZqs6WOcKxAJeztLkuF4NCrr7VlX4Jhge7qBvmkIigLqpaIll3VC8Sn
+         8Zmr/IJmoKc381jPHIBvLZn/invWMntUi/ZAJ+ao8q2+6gwUAGTHSYuvxT5h78kLv2Pm
+         UcSw3SWWKxuplvPna5N06aDFoS+1PdJLxRYplIr2VBI3N7f/gd3dMLe+EVtzolbn1A7B
+         w4NLgZ8gaoqBgQ+0wwmZmszEA6lLqvFrb+U9J76fSN7BgrwehR3702+IegtTEd0UFX+d
+         6jiO+hvJlPKRrXNw+I78EBpD2hqMKz+2mh8z36VqzqlfXsuHs6ELm0fPoLq1MLEBqI8n
+         d50g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793661173; x=1794265973;
+        d=1e100.net; s=20260707; t=1793661174; x=1794265974;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GPdhfWAD7Ide4EFf7M4rZk0kSAs4c2Xf02rJ8beDsak=;
-        b=BS5B5EU13dmXZBpEBsyWS6rpLPHQktB9yJILodqeTfMkNzpkT5QaECV0Dkdxl4x73m
-         19/Eh5qYcI5xfnfVDTJkbsMjCEz4EcZYvCHi1R3TXuyww0mPKo7fjt0bACzRheyPd7Qd
-         OfVjXampF9kiqJOFBv/8qJvuzOusJ4QZf7zfvTGs3923sn9oGXosfbY9E7k6aC0SNDaz
-         eDNTRiWUXT4nHf4riAmAxpkSbCFhsAWfoW5Gv0NH8tEx/6KYqd/90Jmi0LMI+AsGJ+3Z
-         v+Nfy2XTaKM56A7cjdikSWonEOOLm5Ix7V1PC3VauEtdY15TK1rBN1B7c0UF2w8bo4Et
-         FtcQ==
-X-Forwarded-Encrypted: i=1; AKwUvByXHZIRDb5i/NNrnxx5kK+HpPn2An0jQxnffPBE4V6dTkveDDypc4WEk9IctEJcQX6zl+7NDo1SpUbcTm4LFN4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z929azanZGos/p+/e+ln49eNAO4GgfvBo/I3uTvLlHImcENPi8k
-	Ws2muZXPv8KmYbK9r3AGwhGbVridZHt9XiQIWyLEpuJKhCmXNioapmawtN3ep83KRUXA
-X-Gm-Gg: AYBFou3Z80td2aHDuT4trPlprrOutKQ8PbJIgyjtEwj8SbC9XIYipGhsLsHooXB3SRl
-	2egSHyOkor7KuuhiG5nEGq3nlHKeaKufIsU4eOMH35UbkJj3JsVNcWYsSGDXB+M8vmDwTwi9pro
-	e74KF2bC+h8WAx3wqtrtehrBWFMrI5GTAEzGWZtCZxi6jqWuLfQaXQ1zYpqmT0+sAD8cWrEf/q5
-	E4jhVp0gea4JVgme5bGPOvleH3CFhlbyulNups020hgDK/81DqzRHqFikRZJBjYgMoFbACNB4KQ
-	A/xdqrv+aqqYw3spF9XOVZjVyWWnTJbzAYQeaH/DcBS+65yOFQzej1OpMIwFxQ7JtVyLSskQPTR
-	b37f4FK+BtcOnN55JsnFK6UgpFSNiFVVAtEyV5554+P5XrJFKsZnZnj3IUX/SthbkhYoi2nVUYn
-	+6ichwmRL/TmOTvqhyUrgVuQOBUODdI9JtJqnIJjhmIHbapl1H0XE2/Ky40Egyc+S8/OynI8IfC
-	xyOBIN/o4sFX9H8LHVklke5sAGmj24yQN8Pv7K5/E+dB7nTk9kMzJWEpW8AvHSddbDKg8+S87GT
-	LmJHrV/cBMsI4VYT9RoDYCTheyN3e1y8z6fRBXi825OE78Wg0TT24zw6T/+pT7IXzxcWl+MZvUh
-	FHUpvSRXkaA==
-X-Received: by 2002:a05:690e:d0e:b0:677:cc34:2f4b with SMTP id 956f58d0204a3-67ba4fb4b08mr8740681d50.22.1793661172549;
-        Mon, 02 Nov 2026 15:12:52 -0800 (PST)
+        bh=OXN/npWsGuscMDKYzwQyqKyh6TSWjmZFiWK4TeHONjs=;
+        b=z5vvwmn1rPCbg68Lkce7b2WOekRss6vfamlErCQXM6bsz5Q1YVlll9NQLcCPqNkdrI
+         8yeq+aYaB3ir6JtqDo0YDZoUTgH5p8LsGYjLNoaurgrlUXqDC+3AXp698XcO/tmJ/e+F
+         XQWB24EPdw2JUAPgSSO/DlmUv+DUGzf6bjQLhyMcolb2EqA5bJoChIRr8UJr1KoOTmKD
+         UDgwrNzZ7AtejXimjqUqMgLBVRQFqmSgd/PzFTVC1as5tqu2mAz9gOyTNSRz5IIdFZbx
+         gCaFxLrP+a91pav9Gso6zD4WfFrmFd8lZd9ZunqMxo1od5IXOFfZ0dKDe9hLqwbTAs2D
+         /duQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzWD0Y1pMZovIiY9LWe1Clp2eKH86kN938vbd0plhNQGRro7IDdz/l7d2cMSHGpnFbyHONAkk3IeliihVHsJKk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/U9MI6B0MHqemViFC4r4uzR92piI/Ov8SQJmv21022mQYULL88
+	EPD2nrLnk+4rKW5xr9h8YHq/5aLYK1mzs7uqebryhA/0e5I78B5Zpiinz+n+xXnUwMq4
+X-Gm-Gg: AYBFou14NAZDPPEGMl0DXsMTFHv9mjeX8dfCk5NOBVnF3YkYm/GLGc9BVZ/cJ3aPLCG
+	mt5PIpdolANLPaOTdJjYArIUcQbwrKs0n3BkhlhtzN6cjFKtBTN137zS6G2UuqGIGoUrBEwGVXq
+	r0vzAYIsnR5uIHGWNXV5lye57ZwlYbd1z5L66bvycNfiyrTJwVnY4pcS8EiR849+m8lB58qaYvp
+	FaP8qnLWAdZBF/g5kYo1u3YYeKhaOeaiBvOx58po8wlB3Z/2ZreMiPUCM13GwRmQfjNV0a0/8Dl
+	/Jm7MJ68zjeHsbWIxXXBYaoxERa0qA7kurxH+8av/glohdFcL0IRzmhbRwqyiNCoOeZQR2CN9ay
+	hieRFdxhZJsv+tMBVFGYRXb9Ov9r95bHdgG+tK8LI/YQECou9GFaQ7pxeT/9hu8gyY3q73mQRNf
+	R/FTUAmCJb/PC1l6uDi4T0FBKVVwrC1n909m9Ud2GkPFeV9PcfqR69ebPW6zg1LcMMCHEpdaaQr
+	sE/bwMu95/RpUzu81eqPzussHJ+OzkLJNZjRY9FYr3d4j5FanlOicz9n1r0CDMow8fZL65ZsUeK
+	f9x4cAWyJAzKWI4+EhtX8x2FfHyzqcfThikp1nvSm5ixqEC2vnUVhx3wTDdCvO1myR801HLwYim
+	5HqCMms90fQ==
+X-Received: by 2002:a53:da06:0:b0:679:b50e:9a with SMTP id 956f58d0204a3-67ba5114fb5mr6079051d50.108.1793661173861;
+        Mon, 02 Nov 2026 15:12:53 -0800 (PST)
 Received: from [192.168.1.110] (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67baf3303ebsm5946481d50.18.2026.11.02.15.12.51
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67baf3303ebsm5946481d50.18.2026.11.02.15.12.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 15:12:52 -0800 (PST)
+        Mon, 02 Nov 2026 15:12:53 -0800 (PST)
 From: Andrew Halaney <andrew@amutable.com>
-Date: Mon, 02 Nov 2026 17:12:35 -0600
-Subject: [PATCH net-next 2/3] net: add SO_PASSCRED_THREAD to get a
- thread-specific SCM_CREDENTIALS
+Date: Mon, 02 Nov 2026 17:12:36 -0600
+Subject: [PATCH net-next 3/3] selftests/net: Add tests for
+ SO_PASSCRED_THREAD
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -95,7 +95,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-halaney-scm-creds-thread-v1-2-0b4d75dbf35f@amutable.com>
+Message-Id: <20261102-halaney-scm-creds-thread-v1-3-0b4d75dbf35f@amutable.com>
 References: <20261102-halaney-scm-creds-thread-v1-0-0b4d75dbf35f@amutable.com>
 In-Reply-To: <20261102-halaney-scm-creds-thread-v1-0-0b4d75dbf35f@amutable.com>
 To: Kuniyuki Iwashima <kuniyu@google.com>, 
@@ -116,261 +116,224 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Andrew Halaney <andrew@amutable.com>
 X-Mailer: b4 0.14.3
 
-Currently, SCM_CREDENTIALS carries the pid of the thread-group leader,
-despite carrying the uid/gid of the actual sending thread.
-SO_PASSPIDFD_THREAD lets a receiver identify the sending thread, but
-only through a pidfd. If you just want to know what the tid of the
-sending thread is you have to do something like:
-
-    1. Setup SO_PASSPIDFD_THREAD on the socket
-    2. ioctl(thread_pidfd, PIDFD_GET_INFO) per message
-    3. close(thread_pidfd) per message
-
-For example systemd-journald wants to log the tid as "trusted field"
-(aka provided by the kernel) but doesn't have a great way to do so
-right now, unlike the options for uid/gid/pid which are covered by
-SO_PASSCRED currently.
-
-So add SO_PASSCRED_THREAD as a sibling of SO_PASSCRED. It delivers
-SCM_CREDENTIALS_THREAD whose ucred carries the tid of the sending
-thread instead of the thread-group leader. This is completely
-independent of SO_PASSCRED, so a receiver can ask for both. Use
-a new cmsg rather than changing SCM_CREDENTIALS because users
-expect ucred.pid in that context to be the thread-group leader.
-
-As with SO_PASSPIDFD_THREAD, recvmsg() on SOCK_STREAM sockets stops
-merging data at a thread boundary once SO_PASSCRED_THREAD is set.
+Add SO_PASSCRED_THREAD tests to the af_unix scm_pidfd selftests.
 
 Signed-off-by: Andrew Halaney <andrew@amutable.com>
 ---
- arch/alpha/include/uapi/asm/socket.h  |  2 ++
- arch/mips/include/uapi/asm/socket.h   |  2 ++
- arch/parisc/include/uapi/asm/socket.h |  2 ++
- arch/sparc/include/uapi/asm/socket.h  |  2 ++
- include/linux/socket.h                |  1 +
- include/net/sock.h                    |  4 +++-
- include/uapi/asm-generic/socket.h     |  2 ++
- net/core/scm.c                        | 32 +++++++++++++++++++++-----------
- net/core/sock.c                       | 14 ++++++++++++++
- net/unix/af_unix.c                    |  6 +++---
- 10 files changed, 52 insertions(+), 15 deletions(-)
+ tools/testing/selftests/net/af_unix/scm_pidfd.c | 160 +++++++++++++++++++++++-
+ 1 file changed, 156 insertions(+), 4 deletions(-)
 
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index 5d3524c26b2b..430ef65e51ea 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -161,6 +161,8 @@
+diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+index 7524f3f6a8aa..75387ede1eeb 100644
+--- a/tools/testing/selftests/net/af_unix/scm_pidfd.c
++++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+@@ -40,6 +40,14 @@
+ #define SO_PEERPIDFD_THREAD 87
+ #endif
  
- #define SO_PEERPIDFD_THREAD    87
- 
-+#define SO_PASSCRED_THREAD     88
++#ifndef SO_PASSCRED_THREAD
++#define SO_PASSCRED_THREAD 88
++#endif
 +
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index 245a43f52fb1..7e49b24170d2 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -172,6 +172,8 @@
- 
- #define SO_PEERPIDFD_THREAD    87
- 
-+#define SO_PASSCRED_THREAD     88
++#ifndef SCM_CREDENTIALS_THREAD
++#define SCM_CREDENTIALS_THREAD 0x06
++#endif
 +
- #if !defined(__KERNEL__)
+ #define CHILD_EXIT_CODE_OK 123
  
- #if __BITS_PER_LONG == 64
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index f23710e1c671..e414c2397224 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -153,6 +153,8 @@
+ static void child_die()
+@@ -689,6 +697,10 @@ struct pidfd_msg {
+ 	int thread_flags;
+ 	bool have_tgid;
+ 	bool have_thread;
++	struct ucred creds;
++	struct ucred thread_creds;
++	bool have_creds;
++	bool have_thread_creds;
+ };
  
- #define SO_PEERPIDFD_THREAD	0x4055
- 
-+#define SO_PASSCRED_THREAD	0x4056
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index b35b25bdefc2..9ca7ec9ba450 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -154,6 +154,8 @@
- 
- #define SO_PEERPIDFD_THREAD      0x0060
- 
-+#define SO_PASSCRED_THREAD       0x0061
-+
- #if !defined(__KERNEL__)
- 
- 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index b17fdb7d38a7..37ddcdfc0377 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -194,6 +194,7 @@ static inline size_t msg_data_left(const struct msghdr *msg)
- #define SCM_SECURITY		0x03	/* rw: security label		*/
- #define SCM_PIDFD		0x04	/* ro: pidfd (int)		*/
- #define SCM_PIDFD_THREAD	0x05	/* ro: thread pidfd (int)	*/
-+#define SCM_CREDENTIALS_THREAD	0x06	/* ro: struct ucred, thread	*/
- 
- struct ucred {
- 	__u32	pid;
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 173b37b2b8bb..344057d3aa74 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -357,6 +357,7 @@ struct sk_filter;
-   *	@sk_scm_pidfd: flagged by SO_PASSPIDFD to recv SCM_PIDFD
-   *	@sk_scm_rights: flagged by SO_PASSRIGHTS to recv SCM_RIGHTS
-   *	@sk_scm_pidfd_thread: flagged by SO_PASSPIDFD_THREAD to recv a thread SCM_PIDFD
-+  *	@sk_scm_credentials_thread: flagged by SO_PASSCRED_THREAD to recv SCM_CREDENTIALS_THREAD
-   *	@sk_scm_unused: unused flags for scm_recv()
-   *	@ns_tracker: tracker for netns reference
-   *	@sk_user_frags: xarray of pages the user is holding a reference on.
-@@ -564,7 +565,8 @@ struct sock {
- 				sk_scm_pidfd : 1,
- 				sk_scm_rights : 1,
- 				sk_scm_pidfd_thread : 1,
--				sk_scm_unused : 3;
-+				sk_scm_credentials_thread : 1,
-+				sk_scm_unused : 2;
- 		};
- 	};
- 	u8			sk_clockid;
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index 56fed7ab27ab..2e5d9db1c9fa 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -156,6 +156,8 @@
- 
- #define SO_PEERPIDFD_THREAD	87
- 
-+#define SO_PASSCRED_THREAD	88
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-diff --git a/net/core/scm.c b/net/core/scm.c
-index ae38f3c1165c..d0d453fb811d 100644
---- a/net/core/scm.c
-+++ b/net/core/scm.c
-@@ -543,28 +543,34 @@ static void scm_pidfd_recv(struct msghdr *msg, struct scm_cookie *scm,
- 		fd_install(pidfd, pidfd_file);
+ static int get_pidfd_info(int pidfd, struct pidfd_info *info)
+@@ -703,11 +715,12 @@ static int get_pidfd_info(int pidfd, struct pidfd_info *info)
  }
  
-+static void scm_creds_recv(struct msghdr *msg, struct scm_cookie *scm,
-+			   u32 pid, int cmsg_type)
-+{
-+	struct user_namespace *current_ns = current_user_ns();
-+	struct ucred ucreds = {
-+		.pid = pid,
-+		.uid = from_kuid_munged(current_ns, scm->creds.uid),
-+		.gid = from_kgid_munged(current_ns, scm->creds.gid),
-+	};
-+
-+	put_cmsg(msg, SOL_SOCKET, cmsg_type, sizeof(ucreds), &ucreds);
-+}
-+
- static bool __scm_recv_common(struct sock *sk, struct msghdr *msg,
- 			      struct scm_cookie *scm, int flags)
+ /* One recvmsg(), reporting how many bytes came back and what the pidfd
+- * cmsgs that came with them say.
++ * and credentials cmsgs that came with them say.
+  */
+ static int read_pidfd_msg(int fd, struct pidfd_msg *out)
  {
- 	if (!msg->msg_control) {
- 		if (sk->sk_scm_credentials || sk->sk_scm_pidfd ||
--		    sk->sk_scm_pidfd_thread || scm->fp || scm_has_secdata(sk))
-+		    sk->sk_scm_pidfd_thread || sk->sk_scm_credentials_thread ||
-+		    scm->fp || scm_has_secdata(sk))
- 			msg->msg_flags |= MSG_CTRUNC;
+-	char control[CMSG_SPACE(sizeof(int)) * 2] = { 0 };
++	char control[CMSG_SPACE(sizeof(int)) * 2 +
++		     CMSG_SPACE(sizeof(struct ucred)) * 2] = { 0 };
+ 	int tgid_pidfd = -1, thread_pidfd = -1;
+ 	struct thread_ids buf[2] = { 0 };
+ 	struct msghdr msg = { 0 };
+@@ -739,10 +752,18 @@ static int read_pidfd_msg(int fd, struct pidfd_msg *out)
+ 		if (cmsg->cmsg_level != SOL_SOCKET)
+ 			continue;
  
- 		scm_destroy(scm);
- 		return false;
+-		if (cmsg->cmsg_type == SCM_PIDFD)
++		if (cmsg->cmsg_type == SCM_PIDFD) {
+ 			memcpy(&tgid_pidfd, CMSG_DATA(cmsg), sizeof(tgid_pidfd));
+-		else if (cmsg->cmsg_type == SCM_PIDFD_THREAD)
++		} else if (cmsg->cmsg_type == SCM_PIDFD_THREAD) {
+ 			memcpy(&thread_pidfd, CMSG_DATA(cmsg), sizeof(thread_pidfd));
++		} else if (cmsg->cmsg_type == SCM_CREDENTIALS) {
++			memcpy(&out->creds, CMSG_DATA(cmsg), sizeof(out->creds));
++			out->have_creds = true;
++		} else if (cmsg->cmsg_type == SCM_CREDENTIALS_THREAD) {
++			memcpy(&out->thread_creds, CMSG_DATA(cmsg),
++			       sizeof(out->thread_creds));
++			out->have_thread_creds = true;
++		}
  	}
  
--	if (sk->sk_scm_credentials) {
--		struct user_namespace *current_ns = current_user_ns();
--		struct ucred ucreds = {
--			.pid = scm->creds.pid,
--			.uid = from_kuid_munged(current_ns, scm->creds.uid),
--			.gid = from_kgid_munged(current_ns, scm->creds.gid),
--		};
--
--		put_cmsg(msg, SOL_SOCKET, SCM_CREDENTIALS, sizeof(ucreds), &ucreds);
--	}
-+	if (sk->sk_scm_credentials)
-+		scm_creds_recv(msg, scm, scm->creds.pid, SCM_CREDENTIALS);
+ 	out->have_tgid = tgid_pidfd >= 0;
+@@ -769,6 +790,9 @@ static int read_pidfd_msg(int fd, struct pidfd_msg *out)
+ static const int pass_tgid[] = { SO_PASSPIDFD, 0 };
+ static const int pass_thread[] = { SO_PASSPIDFD_THREAD, 0 };
+ static const int pass_both[] = { SO_PASSPIDFD, SO_PASSPIDFD_THREAD, 0 };
++static const int creds_tgid[] = { SO_PASSCRED, 0 };
++static const int creds_thread[] = { SO_PASSCRED_THREAD, 0 };
++static const int creds_both[] = { SO_PASSCRED, SO_PASSCRED_THREAD, 0 };
  
- 	scm_passec(sk, msg, scm);
- 
-@@ -587,6 +593,10 @@ void scm_recv_unix(struct socket *sock, struct msghdr *msg,
- 	if (!__scm_recv_common(sock->sk, msg, scm, flags))
- 		return;
- 
-+	if (sock->sk->sk_scm_credentials_thread)
-+		scm_creds_recv(msg, scm, pid_vnr(scm->pid[PIDTYPE_PID]),
-+			       SCM_CREDENTIALS_THREAD);
-+
- 	if (scm->fp) {
- 		struct unix_sock *u;
- 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index e7405be8941f..6b443bd44581 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1586,6 +1586,13 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
- 			ret = -EOPNOTSUPP;
- 		break;
- 
-+	case SO_PASSCRED_THREAD:
-+		if (sk_is_unix(sk))
-+			sk->sk_scm_credentials_thread = valbool;
-+		else
-+			ret = -EOPNOTSUPP;
-+		break;
-+
- 	case SO_PASSRIGHTS:
- 		if (sk_is_unix(sk))
- 			sk->sk_scm_rights = valbool;
-@@ -1952,6 +1959,13 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
- 		v.val = sk->sk_scm_pidfd_thread;
- 		break;
- 
-+	case SO_PASSCRED_THREAD:
-+		if (!sk_is_unix(sk))
-+			return -EOPNOTSUPP;
-+
-+		v.val = sk->sk_scm_credentials_thread;
-+		break;
-+
- 	case SO_PASSRIGHTS:
- 		if (!sk_is_unix(sk))
- 			return -EOPNOTSUPP;
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 98fcfd7301f6..d802463cec45 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -800,7 +800,7 @@ static void copy_peercred(struct sock *sk, struct sock *peersk)
- static bool unix_may_passcred(const struct sock *sk)
+ static int set_opts(int fd, const int *opts)
  {
- 	return sk->sk_scm_credentials || sk->sk_scm_pidfd ||
--		sk->sk_scm_pidfd_thread;
-+		sk->sk_scm_pidfd_thread || sk->sk_scm_credentials_thread;
+@@ -1061,6 +1085,134 @@ TEST(scm_pidfd_thread_creds)
+ 	EXPECT_EQ(msg.ids.pid, msg.thread_info.tgid);
  }
  
- static int unix_listen(struct socket *sock, int backlog)
-@@ -2047,8 +2047,8 @@ static int unix_maybe_add_creds(struct sk_buff *skb, const struct sock *sk,
- static bool unix_skb_scm_eq(const struct sock *sk, struct sk_buff *skb,
- 			    struct scm_cookie *scm)
++TEST(scm_creds_thread_setsockopt_values)
++{
++	int sk[2];
++	int inet;
++
++	ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, sk));
++
++	/* Verify that the options are truly set independently */
++	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED_THREAD, 1));
++	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED_THREAD));
++	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED));
++
++	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED, 1));
++	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED));
++	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED_THREAD));
++
++	/* Verify that the options are truly cleared independently */
++	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED, 0));
++	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED));
++	ASSERT_EQ(1, sockopt_get(sk[0], SO_PASSCRED_THREAD));
++
++	ASSERT_EQ(0, sockopt_set(sk[0], SO_PASSCRED_THREAD, 0));
++	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED_THREAD));
++	ASSERT_EQ(0, sockopt_get(sk[0], SO_PASSCRED));
++
++	close(sk[0]);
++	close(sk[1]);
++
++	/* Only AF_UNIX records the sending thread */
++	inet = socket(AF_INET, SOCK_DGRAM, 0);
++	ASSERT_LE(0, inet);
++	EXPECT_EQ(-1, sockopt_set(inet, SO_PASSCRED_THREAD, 1));
++	EXPECT_EQ(EOPNOTSUPP, errno);
++	close(inet);
++}
++
++/* A receiver that only asked about the process cannot tell the two
++ * threads apart, so their writes are glued into one read.
++ */
++TEST(scm_creds_stream_glues_threads)
++{
++	struct pidfd_msg msg[1] = { 0 };
++
++	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 2, creds_tgid, msg, 1));
++	EXPECT_EQ(sizeof(struct thread_ids) * 2, msg[0].len);
++
++	EXPECT_TRUE(msg[0].have_creds);
++	EXPECT_FALSE(msg[0].have_thread_creds);
++	EXPECT_EQ(msg[0].ids.pid, msg[0].creds.pid);
++}
++
++/* SO_PASSCRED_THREAD on its own is enough to split a stream per thread */
++TEST(scm_creds_thread_stream_splits_on_threads)
++{
++	struct pidfd_msg msg[2] = { 0 };
++	int i;
++
++	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 2, creds_thread, msg, 2));
++
++	for (i = 0; i < 2; i++) {
++		EXPECT_EQ(sizeof(struct thread_ids), msg[i].len);
++		EXPECT_FALSE(msg[i].have_creds);
++		EXPECT_TRUE(msg[i].have_thread_creds);
++		EXPECT_NE(msg[i].ids.pid, msg[i].ids.tid);
++		EXPECT_EQ(msg[i].ids.tid, msg[i].thread_creds.pid);
++	}
++
++	/* Make sure we really got unique threads per message */
++	EXPECT_NE(msg[0].thread_creds.pid, msg[1].thread_creds.pid);
++}
++
++TEST(scm_creds_thread_leader_sender)
++{
++	struct pidfd_msg msg = { 0 };
++
++	ASSERT_EQ(getpid(), gettid());
++
++	ASSERT_EQ(0, leader_flow(creds_both, &msg));
++	ASSERT_TRUE(msg.have_creds);
++	ASSERT_TRUE(msg.have_thread_creds);
++
++	EXPECT_EQ(getpid(), msg.creds.pid);
++	EXPECT_EQ(getpid(), msg.thread_creds.pid);
++}
++
++TEST(scm_creds_thread_and_group)
++{
++	struct pidfd_msg msg = { 0 };
++
++	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 1, creds_both, &msg, 1));
++	ASSERT_NE(msg.ids.pid, msg.ids.tid);
++	ASSERT_TRUE(msg.have_creds);
++	ASSERT_TRUE(msg.have_thread_creds);
++
++	EXPECT_EQ(msg.ids.pid, msg.creds.pid);
++	EXPECT_EQ(msg.ids.tid, msg.thread_creds.pid);
++	EXPECT_EQ(msg.creds.uid, msg.thread_creds.uid);
++	EXPECT_EQ(msg.creds.gid, msg.thread_creds.gid);
++}
++
++TEST(scm_creds_thread)
++{
++	struct pidfd_msg msg = { 0 };
++
++	ASSERT_EQ(0, pidfd_flow(send_ids_thread, 1, creds_thread, &msg, 1));
++	ASSERT_NE(msg.ids.pid, msg.ids.tid);
++	ASSERT_TRUE(msg.have_thread_creds);
++	EXPECT_FALSE(msg.have_creds);
++
++	EXPECT_EQ(msg.ids.tid, msg.thread_creds.pid);
++	EXPECT_EQ(getuid(), msg.thread_creds.uid);
++	EXPECT_EQ(getgid(), msg.thread_creds.gid);
++}
++
++/* A sender passing its own SCM_CREDENTIALS still reports the sending thread */
++TEST(scm_creds_thread_explicit_creds)
++{
++	struct pidfd_msg msg = { 0 };
++
++	ASSERT_EQ(0, pidfd_flow(send_ids_creds_thread, 1, creds_both, &msg, 1));
++	ASSERT_NE(msg.ids.pid, msg.ids.tid);
++	ASSERT_TRUE(msg.have_creds);
++	ASSERT_TRUE(msg.have_thread_creds);
++
++	EXPECT_EQ(msg.ids.pid, msg.creds.pid);
++	EXPECT_EQ(msg.ids.tid, msg.thread_creds.pid);
++}
++
+ static void *peer_connect_thread(void *arg)
  {
--	/* Only a thread pidfd receiver can tell threads of one process apart. */
--	if (sk->sk_scm_pidfd_thread &&
-+	/* Only a thread-aware receiver can tell threads of one process apart. */
-+	if ((sk->sk_scm_pidfd_thread || sk->sk_scm_credentials_thread) &&
- 	    UNIXCB(skb).pid[PIDTYPE_PID] != scm->pid[PIDTYPE_PID])
- 		return false;
- 
+ 	struct sock_addr *sa = arg;
 
 -- 
 2.56.0
