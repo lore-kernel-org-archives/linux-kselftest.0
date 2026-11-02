@@ -1,95 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793579839;
-	b=lT3043WF58/rEcSsq3AsxwvIPhuiKsKJdjKoEGaJSytnZCXQvUTjuX8pPuf3Ec87k9Fq
-	 kuVcWr4ZW7n9w5Fv0IszYCHUQ0UZmjm7VY5ploa2chisFz9kWKm/y9kD/63YxVZgGygjv
-	 aLFny16tW8wEYpgKfd8Iob0VGjquRVgtBUEw0OdWXsydpsOSa9Zi6+PqfbednJmEln2kx
-	 liliEjDqdkmu8j1m5/S03EWk24P9pIXfrxBZFT5kqMghSgjhzdREHEEYv0wdvVe+pe3N6
-	 cPv7d+xHkA/2tbhsDxUf5e/gN1JiGdxc0k6Hrw2H9o0rQu+L02g/boEhozAyqsgA2CA==
+	t=1793582299;
+	b=2+BxkvsPjHKIJS5C2IC0ZRZhOTa+Brsa8F8DJjgfi8nS5YhS6npxnb7WnTU5O6/sM7T2
+	 pjYgG7IWOc9yUY/aIJrO8YvFO3uvPWlslB+XvctU5ch247r24LvBbSne1acHbxaM3Bw21
+	 gTULJRrIZJJpJyHI8fKqVqPMMyFaxDaI1O+XMrOjDWOB7TLmr2fpRSlrAHXx+KttV9Yxm
+	 5tWS4L93oT/o3hB+JLxaUG9EGlY6EVwCiZ1YXfuUfWhThCHZ11hhmNhfgx/UnPoNtV8Tj
+	 wBZiJLSg5Nar7wfHpSXJbyw5IznESN6xcZsKjlLNyLqUg+SeFn6NrRcp60fFYXhNwIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793579839;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=8U2P0iAh2BG7KjvPP6wqvmh3hv9L2W1VYLUEiGNWDRM=;
-	b=WvyQgFc91BrhxT1g8z1Vco7aFUgG+rhTstaS11iek8FsqR0ZdRoduwlCy22Wc7b321pv
-	 tR7d7WJSpIQmK0dAOzWnpiOd8RrOutcWyp+USyHXvEWn0bBP9OWYZnnTVcDzTu6vH7mzM
-	 X44MA7dRWScXSFL5ax5PEElrEPKtwa3QMXw4lXOg/r8awoUNCXDE0hUrHL50z4RXjZ70o
-	 QWLUq1KNDHThlkRDWcjg5jzFeWU82yEPdHA1lzDxip2JeEGp0NeSFBqrIHH+167qRdDM2
-	 k+qSVRVW3vbKC4qTtfmq21iwNj4Ns+CUdMgsoVNRc4BD6VGyL8RLpUtsw+nP9x1sDcg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793582299;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
+	bh=8tIm04Oja/SW4T8u6sczsnBdJ7I+/QcEMyTu0oj4EaQ=;
+	b=HhfNVhsG3PHaUtZjZYryWQYTj0MldJFK1LgD8juK004ha+2aPneNmFGJFvfNWPzu3+EJ
+	 /kQV6pxBTdi1jjOEANEWCPjNPMkNHzzrxAvcKAMAVF1zoLCl+QesDdWTNWAPp266m5bT/
+	 ftczOe5EBG11HrftgaU2mNvZ3QF+6qq4CCoEN08XTCugL1JYXZmIu9Y8IuJmo1bGuqMte
+	 4/mVuQx9+pHfzL5zEFkiZ7g0yNQBVElU1lwKKrMTNsC7bBmPaekR7xhxUBECqF3BkmK+a
+	 fqT9zhAbCdNWu4yO+vtSIpblhbfzH2p8xG8IPldBaRZMmRf1Hezdq032e+lxL4GH6SA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=QcWYu3dF;
-	arc=none smtp.remote-ip=209.85.219.43
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=rbox.co;
+	spf=pass smtp.mailfrom=rbox.co;
+	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=SMdZ9D9x;
+	arc=none smtp.remote-ip=185.226.149.38
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C08D606A338
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 00:37:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C08D606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02C9606A32C;
+	Mon,  2 Nov 2026 01:18:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B02C9606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=QcWYu3dF
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-91c5e31bea9so43983436d6.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Nov 2026 16:37:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1793579838; x=1794184638; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8U2P0iAh2BG7KjvPP6wqvmh3hv9L2W1VYLUEiGNWDRM=;
-        b=QcWYu3dF8fE5k6F25sAPvmrZihimPCxUbC4DFTVaeDf1sMJ7pYu2/tpkP8nXiDa1SB
-         shV/LeeL4Y3hhZvtvFQb/YYYgk5J5HuSJOQWh22OoY47Kf/8wag8hjZsPj/eOEucflPR
-         NWK6T/gRcP50O/9nH7z2lzsR+kwdrlHY+oo0o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793579838; x=1794184638;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8U2P0iAh2BG7KjvPP6wqvmh3hv9L2W1VYLUEiGNWDRM=;
-        b=yXcdDVobZtldTajVAcR0IGblRl6CyX7ha4gMDNGZ7z7wEw2AqV13K2WI0h1b7q41x7
-         qWI5hfLtScCsdRL9QXmH38qage8gx0IzPnvtPpo87i4wkrKNj4Xq87W5zJGP/i9of03+
-         goxxMvnltT8RvHBQ4BKkf5OzUcZ7uR8qX3xjABIZtl4xzuhnEGGC2YO3qHWVeteK+Z0n
-         vUOvAZSosw3gr6FxW7EGUWY1SNDgM0i+nIYYW3soh8YYvMzpgdlZuw5ILy0lmVX9zT+W
-         5VSx9PfHKUw2Q/Ko6QADlfN62vsQf+sE/pbbwWue6ROYY9AIE3O8KgPsHPFtx6udG7hy
-         3f2A==
-X-Forwarded-Encrypted: i=1; AKwUvBxdtdw2+y8eeUtmhI86oumZ5mbZytcBXr0VaTaawPJli0E8fR5a82sIZwjMIPZyhmDdsMTvzUWffFuoCd5iz7Q=@vger.kernel.org
-X-Gm-Message-State: APuU4Z84LdlVN+v5QYvtUsUiR2B0aYvJP6uEbUI6ojeSjuQ3PWj8Iv57
-	u4W6rdM62h+H8LLJMXXgZ6NrqYxInwTnLPJvsv8qwDWXXuA0eo28iG8+oAkjYfefQA==
-X-Gm-Gg: AYBFou3HY7bc+JrjYHABUJqmVUsJ3cSPB7SQifrBjj4gETZXsJjw9FNn6hNNubcHE0o
-	h9bmDJpf631RTj0P4pwx4ACWsvIH7Xh9o5Qsk/KxDwOslV4TpzhpDM8aQ3FdnvRQxA68+M9DMSy
-	UCfqOvMo8t/bDpmyHtesbS6BKIJx8SKI1gaKekzPvDP5CTJXj+Dh8ap+qHAT9+CK2+4T707ipWF
-	89d9d10deYEk4EJSgxExk5GWJhz+31r7a0TLChY+eO5hYcXOAQl2jAA8djjXDWnN7+ObgIFEUIj
-	BQ6oFSncEAXQiLsj5kc2PRRlTchEa24KgmPuzYOMpxYL3mB/iqb3NkebvzH2OCfX2a5M43XjEth
-	PwQGO43WDMZLgF7RE0CKs5rLoLxl59WFV4jJzjA24ni1xRrCS/QKzD/AcuE9hSpTYG59yWrcCDd
-	jsNV/qJDyAAl8kgShP0jpo5No1vpj7XLrHuKS3HxdzKOzgSRYCKesGEWzGfsr7JlKRF/usUp73W
-	GtLnUpuBFO57ukPmJ3kI+tYZbZ6SPPN30t1IylPgq5hHJBAa1alC+GF55uBz1zmQGuBAzKHCqCi
-	PDEX4UG2tlit1AAkOpdvFfzcF2dvQhAOjZF4gsogHATKf4HImST/HmDGTN9MrU9zp4KLNm6W38p
-	c9GY3EDhYR2SDJvo=
-X-Received: by 2002:a05:6214:3d0d:b0:90e:8221:f1c7 with SMTP id 6a1803df08f44-91ca49e9c82mr156416236d6.1.1793579838604;
-        Sun, 01 Nov 2026 16:37:18 -0800 (PST)
-Received: from mbili.tail33bf8.ts.net ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91ca7f23754sm77043066d6.9.2026.11.01.16.37.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 16:37:18 -0800 (PST)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Sashiko <sashiko-bot@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 4/4] selftests: tc-testing: teql: reject attach from another netns
-Date: Sun,  1 Nov 2026 19:37:06 -0500
-Message-Id: <SER-NSBD.v2.r0.20261101171325-4@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <SER-NSBD.v2.r0.20261101171325@mojatatu.com>
-References: <SER-NSBD.v2.r0.20261101171325@mojatatu.com>
+	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=SMdZ9D9x
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1xNggX-00AGXc-6s; Mon, 02 Nov 2026 02:18:05 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=8tIm04Oja/SW4T8u6sczsnBdJ7I+/QcEMyTu0oj4EaQ=; b=SMdZ9D9xVKQXZPhSoZ6UThEiwR
+	FJY2FadAoyT3s3OfVkbW1bRfZw7FQnWVRs8muTJkeMl1iy8AyCJvCTQSrCaW6mKHwNa2TjaSuaRIn
+	y6kifW7E+iweoHXJsMBPFS0nRp+xESj7P9OjvszqltwpmchHOuAdSybYDO8P06H/zPgy3lRWWrVgr
+	Ufh0mAXQR+e9tLHP31SkLRZhLLApNSQFFHX7wkSG72TThhL452dNHnQCT3qfG+U5CEI2prKyC0HKB
+	Zre7fSOF9GDf04NozlwgR0JiBIvV2LyiC6IP6LFmczy8Si+ae3FZaVpiX+q7sNoPfyBOim4jK9T10
+	IbpqsDqA==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1xNggR-0005sB-H8; Mon, 02 Nov 2026 02:17:59 +0100
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xNggK-008JiF-9p;
+	Mon, 02 Nov 2026 02:17:52 +0100
+From: Michal Luczaj <mhal@rbox.co>
+Date: Mon, 02 Nov 2026 02:15:59 +0100
+Subject: [PATCH RFC v2 2/4] bpf, sockmap: Restrict iter-context sockmap
+ updates to iter/sockmap
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -99,69 +68,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261102-sockmap-update-limit-iter-v2-2-e96a63c43b39@rbox.co>
+References: <20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co>
+In-Reply-To: <20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Lorenz Bauer <lmb@cloudflare.com>, Eric Dumazet <edumazet@kernel.org>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Michal Luczaj <mhal@rbox.co>, 
+ netdev@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
+X-Mailer: b4 0.15.2
 
-Found by Sashiko (nipa) while reviewing the previous posting of the
-cross-netns rejection fix:
-https://netdev-ai.bots.linux.dev/sashiko/#/patchset/SER-NSBD.v1.r2.20261031160050-3%40mojatatu.com
+Among tracing progs, allow only iter/sockmap to update sockmaps and
+sockhashes. Previously, any BPF_TRACE_ITER program could perform these
+updates, which caused locking issues in specific scenarios [1][2][3]. This
+tightening is part of the broader effort to lock down the BPF API [4].
 
-The issue:
-Case 124e covers the root-only rejection, but nsPlugin moves the test
-device into its own network namespace, so the namespace check answers it
-first unless the two checks run in the other order. Nothing else covers
-the namespace rejection: the teql0 master is registered in init_net, and
-a root qdisc attach from the test namespace must be refused with
--EOPNOTSUPP. Without a case of its own, a later reordering can make the
-namespace check answer 124e and leave the root check untested.
+[1]: commit 4d328dd69538 ("bpf, sockmap: Fix af_unix iter deadlock")
+[2]: commit 64c2f93fc325 ("bpf, sockmap: Take state lock for af_unix iter")
+[3]: https://msgid.link/87echn2fhd.fsf@cloudflare.com
+[4]: https://msgid.link/akRZ_e7DJh2aP-2i@john-p8
 
-The Fix:
-Add a case that attaches a root teql0 qdisc from the test namespace. The
-attach is a root qdisc as well, so only the namespace check can refuse
-it. Without the fix the attach succeeds and the master is mutated from
-the foreign namespace.
-
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://msgid.link/20260626205814.BAC3C1F000E9@smtp.kernel.org
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- .../tc-testing/tc-tests/qdiscs/teql.json      | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ kernel/bpf/verifier.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json
-index 0179c57104ad..3df315629d2f 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json
-@@ -106,5 +106,32 @@
-         "teardown": [
-             "$TC qdisc del dev $DUMMY root handle 1:"
-         ]
-+    },
-+    {
-+        "id": "6a06",
-+        "name": "Reject TEQL attach from a different network namespace",
-+        "category": [
-+            "qdisc",
-+            "teql"
-+        ],
-+        "plugins": {
-+            "requires": [
-+                "nsPlugin"
-+            ]
-+        },
-+        "setup": [],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY root handle 3: teql0",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc teql0 3: root",
-+        "matchCount": "0",
-+        "teardown": [
-+            [
-+                "$TC qdisc del dev $DUMMY root handle 3:",
-+                0,
-+                1,
-+                2
-+            ]
-+        ]
-     }
- ]
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1b6c0674ff6a..4dadfe9505a2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10487,6 +10487,7 @@ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
+ {
+ 	enum bpf_attach_type eatype = env->prog->expected_attach_type;
+ 	enum bpf_prog_type type = resolve_prog_type(env->prog);
++	const char *afname = env->prog->aux->attach_func_name;
+ 
+ 	if (func_id != BPF_FUNC_map_update_elem &&
+ 	    func_id != BPF_FUNC_map_delete_elem)
+@@ -10497,7 +10498,8 @@ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
+ 	 */
+ 	switch (type) {
+ 	case BPF_PROG_TYPE_TRACING:
+-		if (eatype == BPF_TRACE_ITER)
++		if (eatype == BPF_TRACE_ITER &&
++		    !strcmp(afname + strlen(BPF_ITER_FUNC_PREFIX), "sockmap"))
+ 			return true;
+ 		break;
+ 	case BPF_PROG_TYPE_SOCK_OPS:
+
 -- 
-2.43.0
+2.56.0
 
