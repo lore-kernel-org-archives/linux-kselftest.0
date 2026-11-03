@@ -1,102 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793690284;
-	b=dfnKp7Ft9wX15ngnzIyOoDfxqXBc0edPulVk2G6kON+q8TcU9m/IKGsruIYCpX7aRm3c
-	 imJhPjQkEjlE23KtpzO84xP9tnDsEoclIWg5tCP/4G8rrCiU0Mp2CvpTjW67q3iQ1JS8U
-	 HH43lHbiq6dGIRrecSPXs8xkgeq+TPSJf2OqRSUaDbLAXJWGiIBH5Lox4i1Rat9ry9T6/
-	 bXhkxt1nJjp40yRxcN9CFeotQ3Eax5plECeZaIsxtea4tVvVsXGzIcCyhtRfc6ydIra06
-	 FeuWtMh6zqjIPwmD4qpAZEJDW9x3QbxRoAYyeHMalVuuyuNVSaiG2D0iS39Dc5tmDlQ==
+	t=1793692291;
+	b=Z5hgAHzKrHVElhX6fKCKWNEpMvXF1H7CnVhMzsUv9AOV5a11CvYLUCGmUKC0Wq3eh0ZL
+	 wSHPPRXgw73QizC5CPAXShHwWWVww6UjlLjHrGdnh7kGHjU/dnTtXxcJv3qhSCtvGyHfI
+	 fmlwEDw+ozGqi7zJ0DpYtxJyiZClpGqwwrnfqrScBSjfpiqptqKKlPWvZnTkFHh9mZXer
+	 1zyauTP2KePHgOs7ocr1jwxQKDE+RzffGnVKD4V+fbqsmord5J/PUvCyPaY6K7/bhf0wN
+	 pv3MaC9TFVE1QTACEopNG/GIc/AcX1uv/QrJgAXgvt+dNC0g8O/VzoDDDkjpHRlaxoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793690284;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Spam-Flag:X-Spam-Level:
-	 X-Spamd-Result:X-Spam-Score;
-	bh=lpocdNVUbmYyyd056ZZlbZF2yCCZZiKZbl6Sa7xUaRM=;
-	b=LU9YCxVUXWINibZgR7sLRXjg++J+FxQ042y/9SQsXDiKzfRHAcnAv9wl4alf4Lh9N9hb
-	 HgfgzrWTJo3Tz1ATadpSwadr3E7JpVTkhSjp8NT9oOaSyEYQ/ltIfqGcu1YL7o8GR69ZN
-	 wm1AagvOTowVPJbsDbfxWY7PmAx3t/NZzxgIggcIG9IoExx4/rp4d9WG1BoSgzTgjJeig
-	 rgorB4JSCbcafQltcR3PrKKa0qEh+NwbuwUI9yIKLiP4aMT3SRwG0pjpzMwGO5mFDNDwB
-	 L4j4PYJm7rfZl/KHjDG/4ErX5pMVArwx8J/xvsDho41pzlnTTn9cOq/XDP1jQMT80nQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793692291;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:X-Originating-IP:X-ClientProxiedBy;
+	bh=TebaHDOnvqGDEokgRq+1L6bEUOTWP5a/DEIL9I18Csw=;
+	b=yu4a05mwwuewBTTFMg9NfTFm8i++ZlD+fIWxlKzVH43Yg0A+0yfiNv6YOspeItJaGHnm
+	 dFVsekk/adiAM4SCKrswJPVf5cpTeJTeqbl5vQctW38NlWN7ygoCjfs9dSqzNmhZntC3W
+	 O8G9pq+QnzPeIKQYGF3rVXtRnQjs8v8jw1xXjTV7AOFwPtmTXRVHjwtFKHHrQ9URNi24n
+	 iUEL2yXrvcGIBZp64Bod3mL9O1X+RMy7Yrg05gRb587SoAxUqugLcPF3OhxknUmzsKIRM
+	 5DBO8Au958z8qNFIdOnUgbb215RVH70/Ny5nkyVABJiiM3jWr8DtWX5lVEvUzjbtMJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.de;
-	spf=pass smtp.mailfrom=suse.de;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=FbXFSRy6;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="aMl3/vL3";
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=FbXFSRy6;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="aMl3/vL3";
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=QI+HDJ7a;
+	arc=none smtp.remote-ip=113.46.200.224
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE33606A337;
-	Tue,  3 Nov 2026 07:18:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1BE33606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9423E606A32D;
+	Tue,  3 Nov 2026 07:51:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9423E606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=FbXFSRy6;
-	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=aMl3/vL3;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=FbXFSRy6;
-	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=aMl3/vL3
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 4A3D41F830;
-	Tue,  3 Nov 2026 07:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793690275; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lpocdNVUbmYyyd056ZZlbZF2yCCZZiKZbl6Sa7xUaRM=;
-	b=FbXFSRy6ytSYU92ZOd8VR7iCCxOCv4lXwxN8kLqornC86vh8rlG8Iql8mTCShHMM2nG2Tw
-	wK1oel4EUgMvtFFo2Dz6x6njCXrIO9lnOPVYuCpAJCZKq53wtgrGrbcTvDNqhNd1LksW4b
-	pMpyt3hf4+ZbmQsui2fAUF48LgwN/TY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793690275;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lpocdNVUbmYyyd056ZZlbZF2yCCZZiKZbl6Sa7xUaRM=;
-	b=aMl3/vL3fU3giMRWG0V/pApmNtVe1Hnpuf0lkMH6KWd1RnifQVI7ZHEVWhXecpwUBHCPWf
-	Lkl6kuCS4mgHW5Aw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1793690275; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lpocdNVUbmYyyd056ZZlbZF2yCCZZiKZbl6Sa7xUaRM=;
-	b=FbXFSRy6ytSYU92ZOd8VR7iCCxOCv4lXwxN8kLqornC86vh8rlG8Iql8mTCShHMM2nG2Tw
-	wK1oel4EUgMvtFFo2Dz6x6njCXrIO9lnOPVYuCpAJCZKq53wtgrGrbcTvDNqhNd1LksW4b
-	pMpyt3hf4+ZbmQsui2fAUF48LgwN/TY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1793690275;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lpocdNVUbmYyyd056ZZlbZF2yCCZZiKZbl6Sa7xUaRM=;
-	b=aMl3/vL3fU3giMRWG0V/pApmNtVe1Hnpuf0lkMH6KWd1RnifQVI7ZHEVWhXecpwUBHCPWf
-	Lkl6kuCS4mgHW5Aw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7C6D7134B8;
-	Tue,  3 Nov 2026 07:17:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id E4UCFaKK6WozPwAAD6G6ig
-	(envelope-from <hare@suse.de>); Tue, 03 Nov 2026 07:17:54 +0000
-Message-ID: <3798994b-f252-45d9-80ad-e98932d9c2c0@suse.de>
-Date: Tue, 3 Nov 2026 08:17:54 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=QI+HDJ7a
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=TebaHDOnvqGDEokgRq+1L6bEUOTWP5a/DEIL9I18Csw=;
+	b=QI+HDJ7aYe8MfkCuKU7dL0yAZWuoB3bd+VDsT3gwYFTrsb1hr0Ak2GGm/2Z6sOlQpEj5dAjwC
+	cId1TF3zeh0ixUSq0abtvLa21nW0CfqfPxdhz33HmksBh+4BEDjl0JhHFhOJfM/aVOLBEKsblB5
+	VKzoMwEuXC7338Pwxfrh4PQ=
+Received: from mail.maildlp.com (unknown [172.19.163.214])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jJgk41ShFz1cyqr;
+	Tue,  3 Nov 2026 15:51:08 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id A1D724056C;
+	Tue,  3 Nov 2026 15:51:18 +0800 (CST)
+Received: from octopus.huawei.com (10.67.174.191) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 3 Nov 2026 15:51:17 +0800
+From: Cai Xinchen <caixinchen1@huawei.com>
+To: <nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+	<shuah@kernel.org>, <caixinchen1@huawei.com>
+CC: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+Subject: [PATCH -next 1/9] lockdown: Add break in lockdown_write
+Date: Tue, 3 Nov 2026 16:24:13 +0800
+Message-ID: <20261103082421.3033195-2-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
+In-Reply-To: <20261103082421.3033195-1-caixinchen1@huawei.com>
+References: <20261103082421.3033195-1-caixinchen1@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,97 +72,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 4/5] tls: send a KeyUpdate at the record limit
- and on request
-To: martin.nvme.dev@gmail.com, John Fastabend <john.fastabend@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hannes Reinecke <hare@kernel.org>, Chuck Lever <cel@kernel.org>,
- kernel-tls-handshake@lists.linux.dev, linux-nvme@lists.infradead.org,
- Alistair Francis <alistair.francis@wdc.com>,
- Martin Belanger <martin.belanger@dell.com>
-References: <20261102-keyupdate-rfc-v4-0-f17419972b9f@gmail.com>
- <20261102-keyupdate-rfc-v4-4-f17419972b9f@gmail.com>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20261102-keyupdate-rfc-v4-4-f17419972b9f@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spamd-Result: default: False [-11.79 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,queasysnail.net,davemloft.net,redhat.com,lwn.net,linuxfoundation.org,infradead.org];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -11.79
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-On 11/2/26 5:58 PM, Martin Belanger via B4 Relay wrote:
-> From: Martin Belanger <martin.belanger@dell.com>
-> 
-> RFC 9846 section 5.5 requires a key update before the key reaches its
-> usage limit, 2^24.5 full-size records for AES-GCM. The limit counts
-> records, and only the record layer knows where records start and end.
-> Section 4.7.3 also requires a reply to a KeyUpdate with
-> update_requested, sent before the next Application Data record. Both
-> need a KeyUpdate at an exact position in the record stream.
-> 
-> For a socket with a registered TX secret, send a KeyUpdate before the
-> next Application Data record when the key has protected 2^24 records, as
-> GnuTLS does, or when the peer asked for one. ChaCha20-Poly1305 has no
-> record limit. The KeyUpdate is sent as a handshake record, which closes
-> the open data record first. Pending encryptions are then completed, and
-> only then is the next key installed.
-> 
-> Add TLS_TX_KEY_UPDATE to send a KeyUpdate now, optionally asking the
-> peer to update too. It can only bring a KeyUpdate forward: the record
-> limit is enforced either way. Following section 4.7.3, a new request
-> to the peer waits for the answer to the previous one, and no more than
-> 2^48-1 epochs are used.
-> 
-> Signed-off-by: Martin Belanger <martin.belanger@dell.com>
-> ---
->   Documentation/networking/tls.rst |  17 +++++
->   include/net/tls.h                |   5 +-
->   include/uapi/linux/tls.h         |   1 +
->   net/tls/tls.h                    |   1 +
->   net/tls/tls_keyupdate.c          |   5 ++
->   net/tls/tls_main.c               |  38 +++++++++-
->   net/tls/tls_sw.c                 | 160 +++++++++++++++++++++++++++++++++++++++
->   7 files changed, 225 insertions(+), 2 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@kernel.org>
+After the label is matched successful, any other levels judgements
+are meaningless. Therefore, add break to return early
 
-Cheers,
+Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
+---
+ security/lockdown/lockdown.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Hannes
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 8d46886d2cca..263dcc80d839 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -139,8 +139,10 @@ static ssize_t lockdown_write(struct file *file, const char __user *buf,
+ 		enum lockdown_reason level = lockdown_levels[i];
+ 		const char *label = lockdown_reasons[level];
+ 
+-		if (label && !strcmp(state, label))
++		if (label && !strcmp(state, label)) {
+ 			err = lock_kernel_down("securityfs", level);
++			break;
++		}
+ 	}
+ 
+ 	kfree(state);
 -- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+2.18.0.huawei.25
+
