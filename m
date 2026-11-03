@@ -1,128 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.165.32
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793726848;
-	b=cmn0iNfpG3YXgUe5G2fiznjukVZ2EVFMNFIHwvlAxsLU09XInrlIHdayzoApKJ8WvGeG
-	 ShxgvpPwUO5UN9O41q0W0rQfe8lWqDf9eEJAKazMHLzilsYRDq7VAZFaKaEV8UteRFI8Y
-	 Q45xM8FEUVhhx6Co8TlR9k5e3fviCUnnhm85QlJxtGshcZDYCzZiPfd1AgUqLOyfz8Wcq
-	 WXIgiQFU/1+TwLm+gAfKmC44gLXgvsx37lTYWIhCSwJVgcN+AoKcJhNUGLQchGwHw4Ay0
-	 tbYUqc6uZsdQ4pVoBlyocw8QH6FdIfA4kZE/xXeJkO7GEfqRvoBGMb5vRM42E2yR5zQ==
+	t=1793728097;
+	b=bj+2wSCK6jeuFHmCq1HeGTMTQk3fi5+bEp1drip8Q37CzHa7dSjsbBBEkrLiRXZvWXfo
+	 zMgfuF3PyalPeCccsm8d+WzrfEg0Rx9Zxl8q7ziFQ7bHDFLnci9PTEzyJPdx1S67FQvhj
+	 ph0eGxbooJ3MYqj+7EqFyN2/KAjyoy8m35CAe9lhrA2vlxjwGeOFTAKJeKIKX7l3gM0r2
+	 hRzQ0aAa4I7/Aul5gkuhtsOuV9hnE7jdHc74gkx59mXNUiKqkWZ3SlDSImKjlWaTVvecK
+	 GmRlQh2IveQLwwKnwSBAGhf9f6bk8Ab9ED+Vg5ExK19pevmxbhxDtMd6gjrRaBZaKwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793726848;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=oQ9etUacckBarYb1JALwGYSQHISLb3hr+LJXqLQq1xU=;
-	b=evNVRdlGAhnvHGjE7cVM9b3IWMfOrgdUMB3kdWkXP943ObyZOSChytwN1VOz6qYTUmzG
-	 L4ohFxkmmbIzpT4WFMRHMe3lJVInmR7LuHtKe95OR+6nJZCh7gXWzQQ1pXGSc6PMOImaJ
-	 CFtFasC0wE0roFgiTP+TMr0pc4xnd8tenwHIxs0Yet5f4ozSqAAevzmzXVb+slpi8m5o9
-	 m4CrP1PplI7u7Qeon6LWNpU5Aeo/Xeo/rsfw+R6dMI1mL8vvDJjyyAQopapNqpfdfqTC5
-	 a+q/Rui7Bt3qyi4s4I2eydvwueHMabwjI3TP7eqOYp+QoY3wY3Zdy6btcDQK5IhSyyw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793728097;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Proofpoint-Reinject:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID;
+	bh=dLUVtjZIJ/v1snvst+dkbepdyQJMtG/e3rdPXYts+UU=;
+	b=csvg67gZH2GKsTNHYJEIk83OTscEWsoRNZ6JCbxXW7czaP3o/j2/sBAl4CZfgJjA8mvy
+	 w6xlEKVtN42BK9K+9O+T6mb0fYu1TDZj7AK4n9ABNwz8Ovq7fIf+YHSxVTWBU27sVCWNu
+	 Iub+tLEuxkXVXzsyXfdlnzMBymMMZ1CZfLnVU6Fble7CzKlpmEr+6NZd7Q4xc+AblDBXq
+	 vnyaudx1z/kA5UDFri4ekZ6/zaj4CEOX65UK/TsWOkxOkkeOFYuzV78av4IsNQ1YhaHtG
+	 d0Ait4p4TABEav0dsz4tHb/kYDo7Bih/DTBOU1c9Z14bQhLMhZOqsZQcMPgfLekv8BA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=shazbot.org;
-	spf=pass smtp.mailfrom=shazbot.org;
-	dkim=pass header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=zetR+WpW;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=JXEGoqh0;
-	arc=none smtp.remote-ip=202.12.124.151
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+	dmarc=pass header.from=oracle.com;
+	spf=pass smtp.mailfrom=oracle.com;
+	dkim=pass header.d=oracle.com header.i=@oracle.com header.a=rsa-sha256 header.s=corp-2025-04-25 header.b=RbfOy8UC;
+	arc=none smtp.remote-ip=205.220.165.32
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A24606A32D
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 17:27:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66A24606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F16606A330;
+	Tue,  3 Nov 2026 17:48:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60F16606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=zetR+WpW;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=JXEGoqh0
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id C1BD31D00167
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 12:27:26 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 03 Nov 2026 12:27:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793726845;
-	 x=1793813245; bh=oQ9etUacckBarYb1JALwGYSQHISLb3hr+LJXqLQq1xU=; b=
-	zetR+WpWn9DhB4CeqpdiTiOi6s3x1UHu7weQGhm2ryOeMvJOG6EbjaND+uAwD8/F
-	+yHK9G6THdOWskS1PZ3uPXbtfVJ5VnYmCM6ZHf/59jXjuDRF9Xg+pQNYcaq2Kz0a
-	UohJvK4+1FeTRUVIGvzYmST4S/mgxuWW+jX5ktnkedgHLoz1bUCNAT0lgOU3s98h
-	jkBfEAoQJ4MlzRq5yYvNvoHW7Bl9wX/Y8z4iaTltOKNwt1NZcOQf6osZ5mAPZQnO
-	wGm11tfJNslo4W/hBKsbwas0lKBNhrCzsT9BqMms8t9yW+GlEKcAVqCWBUJi8A1v
-	VQLn9FtvziPL99xru7n1/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1793726845; x=
-	1793813245; bh=oQ9etUacckBarYb1JALwGYSQHISLb3hr+LJXqLQq1xU=; b=J
-	XEGoqh0vkEc6Pb/P4kC/F0BEteuIO/Gug2WUziJjRiNGWhl+PUL61lnf5/MwAfVY
-	G1Z+toMCX+Gig21jp5bKjQHEklPhbiBXGUkk9lbNC2I+4QaLx4b4+kZQxwetlir5
-	YTXzm52wvRo7IXoyuLgcatTA6poR/3N10IcXIEZNmy9fmB7wMvtG96yr+cs/S+oq
-	pOJwW3PbjAIZwYcwPm4W4k63DYPC5bb49lqXYI8G6EJpcr2f0AeLLKUhCPwAs6cu
-	Wa3nC/7SA4V8/A0G1ID4Gf+ZEuSyPK8ae3u0LDt5x5BdW4nC4oWhKdZmrC2AQQn6
-	B3DJz8UxMO9rEBcDue2VA==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=sign d=shazbot.org a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793726845; d=shazbot.org;
-	mf=PGFsZXhAc2hhemJvdC5vcmc+;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:UWqX1xpl5gPzvNKLwOwy+7LKYkeNrQSlQYKfznoewbtvtBO
-	e39sT6BJXcdjQwl7B5SIOJXvyZzbFUhGaQ3t9USRp9NKcoiVfwsjTl5CjS5Gri54
-	GfwJHGI3VnwP1Bodrx4kW1lah0acY8Pks2UlYv627XD2g3c28eHz3TAIHcNBSDu/
-	QoXL/1R558I3c2FErAlVxY/B6THvzYKdi24/beW0Lwz4cCTqyYdF6WBIR0wXM7hA
-	emASqziPnryCZ8WmxtI/8+liK/d1wTnuxc5MKPxmmAkDTX50r0P//jVVvbPvBBQR
-	IhOfEEMFsZESNRhnxhqyq9pMqrjMpqkVf2T5KWw==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:zgsJtPfv4psusrXCbVcJ6TIGiHw75jq9I7pFokzImBE=:1pZpE/kNCy4mvcWmUyjXa3kNQemONISbbXXEIL2Fhpc=;
-X-ME-Sender: <xms:fRnqaj0V-QKEOq1eWK_awsP416S3Tw7nbbLXILBvLcdO_fLz-5OpJQ>
-    <xme:fRnqahj9xaJXLVmq9Y4wmagmx4LVjPk5RbX0y8s46lDo4aK-JlfwMOBt5EuoXEjnQ
-    rAkLdsTkV2721_9jOUNkl5ZeQje3tHvECC_RoaImz0fYLBsgHklib8>
-X-ME-Received: <xmr:fRnqak9Y--WXP7stmwrYpG7OBqRtSh9g_RYTNEt6Oabd5t6pVjqEKzf6nKdRaw>
-X-ME-Proxy-Cause: dmFkZTEJbO7YJqbe3YmLuAs4b/MTR3S3PLssy8c1J8Dg54gC2msHiH/u1QXpq0oEYWNfTb
-    hf36B+a5u4em/nWh9BXbMQ/a2ZW7sNVARuiEEtjeDq8w8dG3VaVDwRMhuHoZ9s8IblQTn5
-    bHDnhh7ylFoeH3xSPHkVrElHsF60YWho6nGjfmw7brc9qWQqKtTbwRlTrxwpHpeHI0gk1o
-    OJKEmoMYPVHZQ0G8eiTiDqh+guwsvgUkXid7sYO8x4URpUpiaOvj3cma+uUHcgifjVZXUF
-    qfbrBZoIK2hwkdF1003/NfsNJpQtwsdsaLt8mdLyskdHAA+dQu84KG5ZGrkeclgWWllPkd
-    ufqcYs3l3M79OWXxL77HBpdZEev7DnuniUyXWGZ1Yc6UPRZG1+gK4AahhOs6B/aCp8JfZ+
-    ctHoRSRRaTzZ5GumKU+CYtCTrxtY6u9Cpm+CJb7uGruJ78E5G6kSXQm07BaQ2y46Vw7M/+
-    QDuyqOl0ayEVsg51PK+iudM5iTBJkjtTxXIPle5tdcWFZ6vm8MkHVyBxL7yybcMcgqzTBg
-    qB1wa7Sc9WZoQy36mNlp0zUye5n4mSwCsO5u7mfDO8gmyEVZi7Kk7jIvNN7HDajScxuVU9
-    0xK1D6Il1AytMWcd95a17xV4iwctmW09Y3rpMtR84n/OsnEuAUCCmXPU7hrQ
-X-ME-Proxy: <xmx:fRnqatIG2ttoasAnQjYUfvKx2__Tdpyy1ASYNwKkaEmQ7sbcioWN8w>
-    <xmx:fRnqapwDcUT0CvZ3g_T8mFC5YlVb3-P9Gn4NmJj4-0Ji2LPtJZu65w>
-    <xmx:fRnqag2Bvp8UxJ9xdzcq7fZZ1zA-SAYuI6Mq12lMtQY4KMdiSNc93Q>
-    <xmx:fRnqai-rtYSLoJ1NTkhlE6sFTafVvxHnTeN4GZGlvkZgL9-CZpwZTQ>
-    <xmx:fRnqalxC73gaLcpjFT8RgXzJ4RBhPhe2hnFhfY0AVwnl7qi23jCSP9Cb>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 Nov 2026 12:27:23 -0500 (EST)
-Date: Tue, 3 Nov 2026 10:27:21 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Peter Xu <peterx@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, David Matlack <dmatlack@google.com>, Shuah
- Khan <shuah@kernel.org>, Kevin Tian <kevin.tian@intel.com>, Jason Gunthorpe
- <jgg@ziepe.ca>, Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma
- <vipinsh@google.com>, Alex Mastro <amastro@fb.com>, Matt Evans
- <matt@ozlabs.org>, alex@shazbot.org
-Subject: Re: [PATCH v3 3/3] vfio: selftests: Test BAR write faults after
- clear_refs
-Message-ID: <20261103102721.5d76c471@shazbot.org>
-In-Reply-To: <20261102230445.3993629-4-almasrymina@google.com>
-References: <20261102230445.3993629-1-almasrymina@google.com>
-	<20261102230445.3993629-4-almasrymina@google.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=oracle.com header.i=@oracle.com header.a=rsa-sha256 header.s=corp-2025-04-25 header.b=RbfOy8UC
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A3EAlMN1539806;
+	Tue, 3 Nov 2026 17:48:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=dLUVtjZIJ/v1snvs
+	t+dkbepdyQJMtG/e3rdPXYts+UU=; b=RbfOy8UCiu1qMmoLNrs0He5ysvIxm6Lt
+	Cw/zREpoVpdk+eYHc8alz7UKyeO2Knldv/Fr3fRzosCpAgSjvJ8p7ED2UyXP3FcS
+	JsxrDa69WYlP6nEePaFWObLXPPD2MoZ7mMpCFgYQfz97EMkpHWa80FAMpxhgJvLb
+	1ucHQ9C9IwQ/+yDYjMeWbEjOFprtsayZp1xPSMOGZqmCGDCbFyn7r9dIzQlJhx2h
+	ZJ9WWBZZ8/ss669RKA07BO340Ku9eebU3lDLeIC1N+22lMASM2VldyvtUVwcNjw4
+	ax3K43NNWSwpWT0P7NwiB2cAIX+dPj5r2WI4aWQ55nfC0XGgaJAyQw==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4hn78acrta-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Tue, 03 Nov 2026 17:48:05 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.11/8.18.1.11) with ESMTP id 6A3HPsgx2435237;
+	Tue, 3 Nov 2026 17:48:05 GMT
+Received: from lab61.no.oracle.com (lab61.no.oracle.com [10.172.144.82])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4hqk4nk116-1;
+	Tue, 03 Nov 2026 17:48:04 +0000 (GMT)
+From: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+To: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, John Stultz <jstultz@google.com>,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+Subject: [RESEND PATCH v2 0/1] kernel/locking: Add mutual exclusion self-test
+Date: Tue,  3 Nov 2026 18:47:56 +0100
+Message-ID: <20261103174800.1398612-1-haakon.bugge@oracle.com>
+X-Mailer: git-send-email 2.43.5
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -132,134 +79,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-03_04,2026-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ adultscore=0 bulkscore=0 phishscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=797 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611030070
+X-Proofpoint-GUID: jyFQ29lINDPDYLKVHJnGNi3_gHlU_GLM
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAzMDA3MCBTYWx0ZWRfX3h2MsqWEFWcS
+ RvFKSSv8XTrHZBPAkvtPtUaU9uVdsfieUPnAQ6h2Xs8JhTETNxksAz2baDxOEZZS4c2dKnnTN5t
+ SfgxJfb0SsCYyKuXZ7qUXUm+tjN87G6xm5+sgIdFYaRCrybbeIBY
+X-Authority-Analysis: v=2.4 cv=Mo3HeGae c=1 sm=1 tr=0 ts=6aea1e55 b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=M51BFTxLslgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22
+ a=R5gcnNxLHOFc8d1k_nsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13532
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAzMDA3MCBTYWx0ZWRfX7GiO0qhJCIGH
+ kp2CKTDzxE8XPFMpdR1HUe/JoQpCzO7sq5ELAhbe/R/dMxpXetD7PhnHRv/ZiH6JATF65FBr/d5
+ bXbl6jrhMED3TlPHIe1pT7vvHxn1ZjQGJUFelL9r+x0uo3g+rL4tIRQPA419dCojprgPEhDCdxb
+ 2pySCIWit4tAHg2vxaFBXU0TOLtO5CHO91xgRMLlmfduzydep2+DCdZdtwNyCenpyeDULExrfXu
+ uyknE9ppXb1wI59W0pdKKZQqoLtNgce2wjBus5WJOs19Ank/au2gQWwKXWBt26NJSuviCwjNr67
+ cKt1BRukrCdPRweb08pyWN1yPT4J+fFZJQexET/0VA0Frd1JXXz8NEuKN1JE8s5i2CqMkLetnqc
+ YMeXNGBR5sscmMPzd1jigb3NFaGL2BnO/CVmBrElk/7YwEcE0tga1BjVmnGcVmQ+gyHP3iB+kOd
+ ulowm1FzdBeVYUwyn5ykjTKJcUvqDzTa+XN4Mg6g=
+X-Proofpoint-ORIG-GUID: jyFQ29lINDPDYLKVHJnGNi3_gHlU_GLM
 
-On Mon,  2 Nov 2026 23:04:45 +0000
-Mina Almasry <almasrymina@google.com> wrote:
+Hi,
 
-> Add a regression test in vfio_pci_device_test to verify that huge_fault
-> on writable MAP_SHARED VFIO PCI BAR mappings handles write faults after
-> soft-dirty tracking clears VM_SOFTDIRTY and downgrades vma->vm_page_prot
-> to read-only via /proc/self/clear_refs ("4").
-> 
-> Use vfio_pci_find_mem_bar() to locate a memory-backed BAR of at least
-> 2 MiB that is safe to read and write, and zap existing BAR mappings via
-> PCI_COMMAND_MEMORY before each sub-test to verify both:
-> 
-> 1. Read-then-write fault sequence after clear_refs, exercising in-place
->    huge PMD/PUD write-protection upgrade via wp_huge_pmd()/wp_huge_pud().
-> 2. Direct initial write fault on an unpopulated BAR VMA after clear_refs,
->    exercising vmf_insert_pfn_pmd()/vmf_insert_pfn_pud() with
->    FAULT_FLAG_WRITE set.
-> 
-> Skip gracefully when the device has no known memory-backed BAR >= 2 MiB
-> or when /proc/self/clear_refs soft-dirty tracking (CONFIG_MEM_SOFT_DIRTY)
-> is unavailable.
-> 
-> Suggested-by: Alex Williamson <alex@shazbot.org>
-> Cc: David Matlack <dmatlack@google.com>
-> Cc: Matt Evans <matt@ozlabs.org>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> ---
->  .../selftests/vfio/vfio_pci_device_test.c     | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vfio/vfio_pci_device_test.c b/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> index 93c11fd5e081..323a316f59e7 100644
-> --- a/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> +++ b/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> @@ -1,10 +1,13 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> +#include <errno.h>
->  #include <fcntl.h>
->  #include <stdlib.h>
-> +#include <unistd.h>
->  
->  #include <sys/ioctl.h>
->  #include <sys/mman.h>
->  
-> +#include <linux/compiler.h>
->  #include <linux/limits.h>
->  #include <linux/pci_regs.h>
->  #include <linux/sizes.h>
-> @@ -102,6 +105,68 @@ TEST_F(vfio_pci_device_test, validate_bars)
->  	}
->  }
->  
-> +static void zap_bar_mappings(struct vfio_pci_device *device)
-> +{
-> +	vfio_pci_cmd_clear(device, PCI_COMMAND_MEMORY);
-> +	vfio_pci_cmd_set(device, PCI_COMMAND_MEMORY);
-> +}
-> +
-> +static int clear_soft_dirty_refs(void)
-> +{
-> +	ssize_t ret;
-> +	int fd;
-> +
-> +	fd = open("/proc/self/clear_refs", O_WRONLY);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	ret = write(fd, "4\n", 2);
-> +	if (ret < 0)
-> +		ret = -errno;
-> +	else
-> +		VFIO_ASSERT_EQ(ret, 2);
-> +
-> +	VFIO_ASSERT_EQ(close(fd), 0);
-> +	return ret < 0 ? ret : 0;
-> +}
-> +
-> +TEST_F(vfio_pci_device_test, bar_write_fault_after_clear_refs)
-> +{
-> +	struct vfio_pci_mem_bar mem_bar;
-> +	int ret;
-> +	u32 val;
-> +
-> +	if (!vfio_pci_find_mem_bar(self->device, SZ_2M, &mem_bar))
-> +		SKIP(return, "No memory-backed BAR >= 2M on %s\n", device_bdf);
-> +
-> +	zap_bar_mappings(self->device);
-> +
-> +	ret = clear_soft_dirty_refs();
-> +	if (ret == -ENOENT || ret == -EINVAL)
-> +		SKIP(return, "soft-dirty clear_refs unsupported (%d)\n", ret);
+Please consider the following patch for the v7.4 merge window.
 
-My comment on v2 that this doesn't accurately test whether soft-dirty
-is supported, potentially leading to a false pass still stands.
+This patch adds a stress-based selftest for kernel locking and atomic
+synchronization primitives. The test runs concurrent workers against
+an array of counters while maintaining a simple invariant: every
+increment is paired with a decrement, so the sum of all counters must
+remain zero.
 
-Please also have the courtesy to give reasonable time for review before
-a respin.  Personally I would expect self review and testing to take
-longer than the 80 minutes between David's feedback and v3.  Thanks,
+A common test interface allows the same workload to exercise a range
+of locking primitives, including spinlocks and rwlocks, as well as
+variants using atomic and bit operations without an explicit
+lock. After the workers complete, the module checks the invariant and
+reports a failure if the resulting sum is nonzero.
 
-Alex
+The test provides regression coverage for memory-ordering issues that
+may otherwise be difficult to reproduce. In particular, it can expose
+the regression fixed by commit 415d83249709 ("locking/atomic: Make
+test_and_*_bit() ordered on failure") on weakly ordered architectures
+such as Arm. It also includes a variant modeling the incorrect
+acquire/release ordering formerly used by RDS before commit
+1422f28826d2 ("rds: introduce acquire/release ordering in
+acquire/release_in_xmit()"). This variant fails on Arm systems.
 
-> +	ASSERT_EQ(0, ret);
-> +
-> +	/*
-> +	 * clear_soft_dirty_refs() stripped write permissions from
-> +	 * vma->vm_page_prot on the unpopulated BAR mapping. Fault it read-only
-> +	 * first, then write to exercise in-place write-upgrade
-> +	 * (wp_huge_pmd/wp_huge_pud).
-> +	 */
-> +	val = READ_ONCE(*(u32 *)mem_bar.vaddr);
-> +	WRITE_ONCE(*(u32 *)mem_bar.vaddr, val);
-> +
-> +	/*
-> +	 * Zap the BAR PTEs/PMDs, clear soft-dirty again, and fault with an
-> +	 * immediate store to exercise initial write insertion
-> +	 * (vmf_insert_pfn_pmd/pud with write=true).
-> +	 */
-> +	zap_bar_mappings(self->device);
-> +	ASSERT_EQ(0, clear_soft_dirty_refs());
-> +
-> +	WRITE_ONCE(*(u32 *)mem_bar.vaddr, val);
-> +	(void)READ_ONCE(*(u32 *)mem_bar.vaddr);
-> +}
-> +
->  FIXTURE(vfio_pci_irq_test) {
->  	struct iommu *iommu;
->  	struct vfio_pci_device *device;
+The patch also adds a kselftest script that:
+
+* first runs an intentionally unsynchronized variant to verify that the
+  workload is capable of exposing lost updates;
+* obtains the available test variants from the module;
+* runs each non-broken variant; and
+* supports low, medium, and high effort levels for interactive and CI use.
+
+The module exposes parameters for selecting the test variant, run
+duration, and number of elements.
+
+A successful run does not prove correctness, but the test provides a
+practical way to detect synchronization regressions and reproduce
+known classes of ordering bugs under load.
+
+If this commit gets accepted, I have the intention, subject to other
+work priorities, to expand on the locking primitives, and in
+particular add a double set of ww_mutexes for each counter and attempt
+to acquire both in a random order. Using both the Wound-Wait and
+Wait-Die variants.
+
+
+Thxs, Håkon
+Håkon Bugge (1):
+  kernel/locking: Add mutual exclusion self-test
+
+ kernel/locking/Makefile                    |   1 +
+ kernel/locking/mx_test.c                   | 723 +++++++++++++++++++++
+ lib/Kconfig.debug                          |  10 +
+ tools/testing/selftests/locking/Makefile   |   2 +-
+ tools/testing/selftests/locking/mx_test.sh | 171 +++++
+ 5 files changed, 906 insertions(+), 1 deletion(-)
+ create mode 100644 kernel/locking/mx_test.c
+ create mode 100755 tools/testing/selftests/locking/mx_test.sh
+
+--
+2.43.5
 
