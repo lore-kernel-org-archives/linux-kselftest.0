@@ -1,67 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793724370;
-	b=35eVVaOaP++U9ihW4ouf9JewzRSjgAB/Kkdc+rQPCDeX/N3hOJgJM1/TFc4f+MqMZaqm
-	 ITM5KslW7BkXxIMWXsGXK9cK+sqoJkxwPES1MAhTwtjsE13L5jT2EToBNJIsHvnHt2MMs
-	 VPFdBrTfSHWooxjBV7tT0JqFUHpfiU6x+m5Bkc+xAR4jiX4UQyTQwk4w+GmXTuVw4yYGI
-	 nXpVoASZKjmlVZs78L/+QrfZPDQuiwCpIXrnC3nz1JGZ+9r2Hig3617Uz4z6THKC+j3ZZ
-	 2XFJRVAqB93OmWkEUeL6RrzWMVwWzrsyx5QV/WiCcpgDILgC+3oLbfPbAUNWLT9wgvQ==
+	t=1793724702;
+	b=vnSLo6ysl+jFRuUuFL45kZxI5Cvjc2veHSmlAxfDrhCeP1rclOgX4S101Ay2OcqJR0Zm
+	 MoWMxce6IE/Z/YMNI8LYNGWRVIvevWPR9lO9SI3ZghSEyEIy2X7+s1rcWrtAc8S3jA3Al
+	 z8b0Uhv4F9nbyxtokq7GRue6ceQt7xB0EdPINjWrQA2LkljoKE1aAjNFWUFDYj5inrgWh
+	 LtGkZLeVvzcVHI0/+oXtqDc8XPzeK1/oO5uzdu8DbCMlwoKeRRLY3t3v7B0f0EeEqnoX0
+	 8t7HbipEmq5eqIeLlESDhI7EDPK8wrvi2iTvEhZ5c9TZRjzgHs8y+FFcCehVc72NMPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793724370;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=QrQxpAgOB38zPWPykzyeyLu30lUbfa9ddi7dGDk1YNA=;
-	b=BX+9XIVHrdb2Kj55bykDP4egogwhNWUR4WjsyjDr0kyNgpAYK5OfiBt0ZBTPQcj8Fqwu
-	 bxUv94hjM+7FEtiBaa7ep4xaOO1w16rDu/bEWv+hha30BxguWc/dVTd/vN7pq4gZVnoz3
-	 OHXLA3bELngQD7uZbEyd0oiJelhH1MJcV2Wv+T5Cyvu4o+9SLKO0ojI9k08Q7vrcAlVce
-	 1a9xZUSVPQyTpKrfEO+gb2c7FqTeGDa2Z5AtRKOipOF2ZU5KJ+4cc3LBxvuzuSXLiAMez
-	 xnXcInrLLurvXWgY2dyr14ncDAMyoeqe89fsqYjF9nIWDWocLDtE8TIKQeKPBowiOhg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793724702;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=z/+aYEPLoBSp7AxjoxxgYR8cgspXFyNdt6Vr/KNLDmE=;
+	b=ThyJARHiLVB5zJiCpD2hFS6+6J9qOX2D06lJ0tKqIMPGJnYaoa9eOk5KyrTGWEohrbA0
+	 KAdbYPaGGCkDc9kXwfCMDE5n1j3GQI22jCMTvqUqgkSapTsTczHDKzxWUCDamBiD2MJiA
+	 ZIEFsCS7TORU5DkZbCNuFx0pc3iPjIVtY+kBiMinXb+jFvsgJC1xRYfGGjwLa1kXHEOqx
+	 Zmde0oct2OnN3/gK8XePgtovkSRziKkIwZlOmZs5elRxOjJckgqLFvNo/0KtLpHPBp1KO
+	 hVa2QbKEdW6F8Un31Moo3kuV9LaRuhbp/QxK6yJk5YwdU7oZG+hyCFLfRIUArdJHmkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iZzu06Zt;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eTIFtqdT;
+	arc=none smtp.remote-ip=209.85.210.175
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A196E606A329
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 16:46:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A196E606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAFE606A33C
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 16:51:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BAAFE606A33C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=iZzu06Zt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793724368;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QrQxpAgOB38zPWPykzyeyLu30lUbfa9ddi7dGDk1YNA=;
-	b=iZzu06ZtlqzR1vHiN8GKNeAVWZPV2Uz+e5l+7vOWUnMNf//IddEzZD/xngwn5Ko114YweC
-	kXapQ32LvCDjSm+7azIz2O2tUJigjw53D919NRqA/c1XK0dmw+aGj4aqJgAo/x3KwkLxTd
-	IxPsOLeUkHL2kL6DIElMuXpB8u9lK1c=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-668-inK9B4OPMa6z1NdhMIdAQg-1; Tue,
- 03 Nov 2026 11:46:05 -0500
-X-MC-Unique: inK9B4OPMa6z1NdhMIdAQg-1
-X-Mimecast-MFC-AGG-ID: inK9B4OPMa6z1NdhMIdAQg_1793724363
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1BB3319560B7;
-	Tue,  3 Nov 2026 16:46:03 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 734531955F43;
-	Tue,  3 Nov 2026 16:46:01 +0000 (UTC)
-Message-ID: <33024a13-9706-486c-aef0-aeeb2193c8ee@redhat.com>
-Date: Tue, 3 Nov 2026 11:46:00 -0500
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eTIFtqdT
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8a06cc097c7so2940231b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 08:51:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793724701; x=1794329501; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=z/+aYEPLoBSp7AxjoxxgYR8cgspXFyNdt6Vr/KNLDmE=;
+        b=eTIFtqdTdXpA/AfqqKkL10HIQZLcduWeqawGhkY8XSlpOW7wAg7SwK7IyckCmAeC8z
+         QZEJnVKKbFm1lme2SYMMxv1HNP1Njw8KJE3QtzbovqqCyntSjZr0OxFCZk8earTy7ZeP
+         s5VZOXYH++PjPF1kTEA3lESRC8qsEpTcVQUri9WLAkuFv2cuZix2S1MDadbIk2gWxXcO
+         a1CWIRWP4N0snge7OVszIUi9zzUBbb6XW85sc28z+DIK0qUMW3AE1Bt1XJHJEohjeBO9
+         ub6LOMq+gg31oFsCGTjAhEdvsMpjkdKA0Yw0Eq/2gp4qZRvsM2ML5GSPlkglQB80sBeL
+         ogXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793724701; x=1794329501;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=z/+aYEPLoBSp7AxjoxxgYR8cgspXFyNdt6Vr/KNLDmE=;
+        b=vIZ259AbOsjrlnfwlwy2C+VkGVub6fyRXbVco53O+Uh3D/tDE2hpo6bQkmfLlVqyp2
+         mtRk01Cg+QHl1LyyhC4jMwaBWJzBxZsUqgzRvq0+O6REX2JT8Uk4m2iglbaTM+DuYjPe
+         8vJ0kGjrc8A11VH+InH3pW3TYZOooVyRHXh0x6Pa0RWvNDINyAybG8M5yceTEAfop7g3
+         6/sTBIvHLnH6hvM/u+BsAzCzq5p96XCkZRxyRqbaQf/9jQJ/Oe8wGoFHQpLEra9Q06i9
+         HPfId0lGO4G4kSkJAUvKMqb/+Buq93uEf4TkoFvHX//J8ISIcjRDT5xZbzjaTSlcaz7J
+         NNWg==
+X-Forwarded-Encrypted: i=1; AKwUvByqZNfByq+uEfKIp2XktGpp4Pca5DT8QUQ3nb/aSqZbAHPB36xtrcDHZUxcW9KXGDTVsXhFUMJuR4j1VBVx9xM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/LXmbdZ/hqGi79lwvQpr2YOj2dPYuftKOSRzajzNIQgQ8S9hfv
+	l0WRkTBXKKHBfRWyHrDBo6gx0eXIFhHdSKok3K62EYs/JTQWNPNk9Hti
+X-Gm-Gg: AYBFou03aDoxd5Jz5f9KiccdiNz9sZ+9UZa/RE/NDv0oFZtNitXnu6G2ZmE1ttARndO
+	/d9lfVoIFyRRzBVGSP4+FilJ0ZQAJzeIeEQIdfdTewxmPikD41vEHymIovCV4AuSu+QygvVGTtH
+	ZenRnfIJ0xBRBqLVbh6Ky1E1predMYPfiz+j6J5zo2JfRsSqXK7SU4Kq+BYGSBqNLCu/PVUjemk
+	D7qbWQhSS53+Nh9nL5tQK+cIs2GaFi+OlJBj7fvPudXzR5ghPdz6OayaOaGDwynIlolNc9CrPFj
+	S6uX5YvJcWyyagK64NDhedOdd1yNeuYBqal+uwuEFc0xrPizUj41dvIDRLd1mKRtqjDxb8ZSOOJ
+	8yl7IRXMp+rBBcJ2LFLC+PEnBVg0KKacyP6lcuAdtT1PCFzbOVkJE4+uBh+oKnpCYtZ3jVd1weI
+	WI1Qny6zvGBNeX+Xl89kFso0Xr7xstRWEF0hTpVNHv7n1cFOXBjQULEOMUeLf7CnYayCDDfYUUk
+	dUAYk8+gLKzGEb/3jewqYdpv0Zg8GYvW5iEmZUvaFV5ywyk7VtoS7bAhAqfDvhqpEYc252AQMU1
+	kvPWIMjUm6xai78sbRPmiuUULtR6gIIVxSG1bIbeRz+6UNLMlE15U0eMBdeSWiznpQkBc5fijeR
+	1LVvOJuKWvuC2lDnc3ejnEnxmvhF0zdShzw==
+X-Received: by 2002:a05:6a00:3a12:b0:8a0:2cfd:87cb with SMTP id d2e1a72fcca58-8a9bf90ab27mr11070101b3a.43.1793724700510;
+        Tue, 03 Nov 2026 08:51:40 -0800 (PST)
+Received: from localhost ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aad77fccffsm3794904b3a.7.2026.11.03.08.51.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Nov 2026 08:51:40 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 03 Nov 2026 16:51:39 +0000
+Message-Id: <DMLQC758A2C3.175VOTFQ2Z8HD@gmail.com>
+Cc: <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <daniel@iogearbox.net>,
+ <linux-kselftest@vger.kernel.org>, <cuitao@kylinos.cn>,
+ <ameryhung@gmail.com>
+Subject: Re: [RFC PATCH v12 1/4] blk-iocost: add BPF struct_ops cost model
+ support
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Tao Cui" <cui.tao@linux.dev>, <tj@kernel.org>, <josef@toxicopanda.com>,
+ <axboe@kernel.dk>
+In-Reply-To: <20261103132613.1952975-2-cui.tao@linux.dev>
+References: <20261103132613.1952975-1-cui.tao@linux.dev> <20261103132613.1952975-2-cui.tao@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,50 +105,16 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] cgroup/cpuset: Fix some more bugs in cpuset
- partition code
-To: Tejun Heo <tj@kernel.org>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Johannes Weiner
- <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20261030190701.78308-1-longman@redhat.com>
- <886a562b52b1c5094142d547a8336457@kernel.org>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <886a562b52b1c5094142d547a8336457@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 11/2/26 3:04 AM, Tejun Heo wrote:
->>    cgroup/cpuset: Fix incorrect CPU accounting with parent's
->>      effective_xcpus expansion
->>    cgroup/cpuset: Recompute effective cpumask in update_cpumasks_hier()
->>      after calling update_parent_effective_cpumask()
->>    cgroup/cpuset: Do housekeeping check when isolated child with root
->>      parent may get more xcpus
-> Applied 1-3 to cgroup/for-7.4-fixes with the following tags added:
+On Tue, Nov 03, 2026 at 05:26 AM Tao Cui <cui.tao@linux.dev> wrote:
+> @@ -3223,7 +3306,6 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
+>  	return 0;
+>  }
 >
->    Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->    Tested-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->
-> Two issues I noticed:
->
-> - Three of patch 1's new TEST_MATRIX rows end with A1 as a single-CPU
->    root partition, which has no sched domain, so they fail the ISOLCPUS
->    check when the script runs with -v.
->
-> - The comment at the end of the "partcmd_update w/o newmask" block in
->    update_parent_effective_cpumask() still says there is no need to
->    adjust the parent's effective_cpus. Patch 1's new expansion branch now
->    does exactly that.
+> -
+>  static int ioc_weight_show(struct seq_file *sf, void *v)
 
-Thanks for noticing that. Will fix that in the next set of fixes that I 
-am working on.
+Unrelated change. Tejun pointed at this hunk in v11.
 
-Cheers,
-Longman
-
+Overall makes sense to me:
+Acked-by: Alexei Starovoitov <ast@kernel.org>
