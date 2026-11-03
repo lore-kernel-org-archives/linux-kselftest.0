@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793721316;
-	b=Mnh5S3cMiga1ezDADU7DETEjzy61brmNNBTWPLJxYaTrnQZT2TNKVmK9mWyCGhSr7i99
-	 oTsPyStshfildMmBcQfUoNYfbLPNU4VyfXzaJYoh7T46qq2vwSf6woK0DuNFZyRTMz/AB
-	 wyqk1XP9shl9VaS4RVd4T30zdyciffjxYtWzTYDgMn1I34fXuQIkkjHlxRCRZItxr1IOf
-	 m/8ObYzoWe8DP6YvoaRhojN8gvg4hC2MOrLy1ud0yFuqWO6fShcuL2m+mhnBANYX9tvJl
-	 dNOWXiZZN18FA4epUAQMR/yYuxJE77oEH6j61+FJJsnFbp863LJpPuDXR5EluQ6Lxtw==
+	t=1793721318;
+	b=i9ZbL30t35cliehFr1sEvG9xt2R630meVTxTkpZZghAg6uF5ibyo4560pouvrv6BwfBW
+	 l2jN91/MQmdXwRtVF2qbJTr6s78fPMl+xPaboehXvnP1/u2GZ/Orw9G59BXKJ6zbhc4eY
+	 alZhedm3o+cC2ht7RnsKS9kDVdGhxL78BuhZnaoLqx7V+2T4RijjgoXcv11VO0ICb31of
+	 yqdBMytwVBCTojkgNI2Qltd/EHlPOeN+8Vu3YEdR72Ytmy2w5FdqHRUAaFUnk6CAqf7b6
+	 KvD9yA/wBkdvrQU7p8SK7VTM+5jY7S+476SaH4YNVMG92O3EdD4sHMjN+jgXSO6tzkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793721316;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793721318;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=qeNLbpSQYWeLzu/9GgYKukuneWHtvUD45tJUmCL2fts=;
-	b=albZEJ3QnfcfHdiudByJGrIvcG+kx78Hh/vK59O2TAkiZqf8GGJX7reRcyxCNTOZMsLY
-	 ABGYCFf3GfqCF5vLe8bDLNbbczvQZLLKZQxkL2TiU03SwfGtUJ6A8krDtPUKJk2b1GToK
-	 S2y8Z814IbuZugUurXyApyj1PWfyweP3YNjZSEEejAFHvimGmZVaiLIf1elHhwyXpeV8o
-	 hXEZjG5BD03POX1a71zytL3s7g0AtekzVT5QNMJM1TgMHlNKIDurJXamRWd+1JDVXhR9d
-	 sZB+PX9Wln4ESnKfwVvf76DfiVOlgBVHqDgEY84K/IemUT20nPTJMKSn9P8pb5+fHKA==
+	bh=4fImzfbtewSDlw3aOU4hnHhQwuzzQup7a7LaOymAdO4=;
+	b=VdlajLIG55GEYVi5frhn+JbYqLUz+1svyEle7dazttho71oYdNg1f0UXMXydQoHeWAea
+	 pSgob5ip7FNJhh8RIelVAjbQl4wiIa+rnqBOJ6Vi555ZZg0tIuTIoUIDvd2yo1MtekS1j
+	 n7H027d7t0FrnxIo/jiexeu1xYgQblQlJFJcFDEPhCqsVTFtBpsQpioN+z+r8S2EyA8fB
+	 Uum5/laDpF+Y7NVb2uXu4VEnd7X1JvNlaB7f+40JClvwBvGn39Dg0UpeIsEUeFB3dRa5W
+	 J7937hg5ZpXcyqpEhNWMQLwz1DWpVNUcb1Kc3ATqN/+VFyqoU+jtNOhQAzkaw2oQTOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KOCil7qn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="THQ+5WN/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5F5606D825;
-	Tue,  3 Nov 2026 15:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706D36083614;
+	Tue,  3 Nov 2026 15:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KOCil7qn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1931F00A02;
-	Tue,  3 Nov 2026 15:55:15 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=THQ+5WN/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FB21F00919;
+	Tue,  3 Nov 2026 15:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793721316;
-	bh=qeNLbpSQYWeLzu/9GgYKukuneWHtvUD45tJUmCL2fts=;
+	s=k20260515; t=1793721318;
+	bh=4fImzfbtewSDlw3aOU4hnHhQwuzzQup7a7LaOymAdO4=;
 	h=From:To:Cc:Subject:Date;
-	b=KOCil7qnJ7iH8OXOC7YbkX6YWpVpJt4vBJNx3+pVJhiPkuzPGNJ2TT8DwYVNClmKd
-	 t8+iMBaT4yd5oUUfaYiCeB3hR7XEztxJBgwaScdQUSRZ0/VmzNJXxK+fGcp9ynT/vn
-	 bwcXp26H5GOpe7Q+/+SkKnv+CKzvkG9/aWwLFqCVAQTW5k2GwyTY1GSj+tDbFGnigs
-	 NNMNdJzAHdc9gHuJ2bqJ8lGDfry/QBoxx9qE4EVQgNVCAtHy0Cp97OVY32rfM6kyeu
-	 4QoleFLc6K9CLsP/1wHua0LbeA/hl7i1LCqIPG7MRRs6rOUPXiZsR0xTaV79qVkBZq
-	 b7xBRr6+T3cXQ==
+	b=THQ+5WN/0wlZMkd2MUFoxWuNRmT6Rq5184fsAW2kFKTmC77+0Uk5EZ+g+Rjtinigo
+	 dcFezDpZzCYXCMQ0EFskCDUMMouvKBL2b8a17inOMb8XDY+XYVCuBaUiRggXRO2WhT
+	 cxL9PxbAZXuCyypHbBZU2P+Q9YwUw4R+rayP9wA3TmkmOcddSThSL83UI4zZjqS1mP
+	 ljQAjGyaSDod1QPVWCOynWjTrbXcnYwmPq/Xw6ZULItOe0AW3E37Y3WEYYY1/SNn5l
+	 zuyLq5w3Pp++Do9v1/eTnVN4KJ3WRt5H7SuUThDozf4KMDTiaG4BLnxRy7BMlCzywi
+	 BJzZPSyonIrig==
 From: Sasha Levin <sashal@kernel.org>
-To: Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>
+Cc: Kyle Huey <me@kylehuey.com>,
 	Shuah Khan <shuah@kernel.org>,
+	linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: vDSO: print tv_sec as long long in vdso_test_getrandom
-Date: Tue,  3 Nov 2026 10:55:14 -0500
-Message-ID: <20261103155514.535166-1-sashal@kernel.org>
+Subject: [PATCH] selftests/perf_events: use the ll64 types on powerpc64
+Date: Tue,  3 Nov 2026 10:55:16 -0500
+Message-ID: <20261103155516.535193-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,87 +64,33 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 32-bit architectures with a 64-bit time_t, such as armhf in Debian
-13, tv_sec is a long long, and printing it with %lu warns:
+On powerpc64 __u64 is an unsigned long unless __SANE_USERSPACE_TYPES__
+is defined, so printing attr.config with %llx warns:
 
-  vdso_test_getrandom.c:184:40: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type '__time64_t' {aka 'long long int'} [-Wformat=]
+  watermark_signal.c:85:58: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type '__u64' {aka 'long unsigned int'} [-Wformat=]
 
-Cast it to long long and print it with %lld. While at it, print tv_nsec,
-a long, with %ld instead of %lu, and cast it to long, as it is a long
-long on x32.
+Define __SANE_USERSPACE_TYPES__, as other selftests do.
 
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Found with a 32-bit build of the selftests with a 64-bit time_t (gcc 16
-and clang 21 with -m32 -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
-KernelCI's 32-bit arm builds show the same warnings. The changed files
-build without format warnings there now, and the x86_64 builds don't
-change. The other selftests get the same kind of fix in separate
-patches.
+KernelCI's powerpc kselftest builds show this. The define makes the same
+change on alpha and mips64 and none on the other architectures; the
+x86_64 and 32-bit builds don't change.
 
- .../selftests/vDSO/vdso_test_getrandom.c       | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ tools/testing/selftests/perf_events/watermark_signal.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index ef402001e8988..504b84d4cc53e 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -181,19 +181,22 @@ static void bench_single(void)
- 	test_vdso_getrandom(NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
- 	timespecsub(&end, &start, &diff);
--	printf("   vdso: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
-+	printf("   vdso: %u times in %lld.%09ld seconds\n", TRIALS,
-+	       (long long)diff.tv_sec, (long)diff.tv_nsec);
+diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
+index a84709cabd8be..abff011f63161 100644
+--- a/tools/testing/selftests/perf_events/watermark_signal.c
++++ b/tools/testing/selftests/perf_events/watermark_signal.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #define _GNU_SOURCE
++#define __SANE_USERSPACE_TYPES__
  
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	test_libc_getrandom(NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
- 	timespecsub(&end, &start, &diff);
--	printf("   libc: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
-+	printf("   libc: %u times in %lld.%09ld seconds\n", TRIALS,
-+	       (long long)diff.tv_sec, (long)diff.tv_nsec);
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	test_syscall_getrandom(NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
- 	timespecsub(&end, &start, &diff);
--	printf("syscall: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
-+	printf("syscall: %u times in %lld.%09ld seconds\n", TRIALS,
-+	       (long long)diff.tv_sec, (long)diff.tv_nsec);
- }
- 
- static void bench_multi(void)
-@@ -208,7 +211,8 @@ static void bench_multi(void)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
- 	timespecsub(&end, &start, &diff);
--	printf("   vdso: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
-+	printf("   vdso: %u x %u times in %lld.%09ld seconds\n", TRIALS, THREADS,
-+	       (long long)diff.tv_sec, (long)diff.tv_nsec);
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
-@@ -217,7 +221,8 @@ static void bench_multi(void)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
- 	timespecsub(&end, &start, &diff);
--	printf("   libc: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
-+	printf("   libc: %u x %u times in %lld.%09ld seconds\n", TRIALS, THREADS,
-+	       (long long)diff.tv_sec, (long)diff.tv_nsec);
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
-@@ -226,7 +231,8 @@ static void bench_multi(void)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
- 	timespecsub(&end, &start, &diff);
--	printf("   syscall: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
-+	printf("   syscall: %u x %u times in %lld.%09ld seconds\n", TRIALS, THREADS,
-+	       (long long)diff.tv_sec, (long)diff.tv_nsec);
- }
- 
- static void fill(void)
+ #include <errno.h>
+ #include <fcntl.h>
 -- 
 2.53.0
 
