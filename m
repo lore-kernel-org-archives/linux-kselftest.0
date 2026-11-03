@@ -1,53 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793711733;
-	b=yKbHTQlOeWoF8QtYhoJ1XW1JA/kHOfrcz7iQe0/t1fpyEheiZPsOaU3Lis7bC7dr0mTp
-	 4/wmdfjKboJhF1V0Sm6uWfF7j0LH0A/Wzs1lsiS/CVAkWAD5MeX+hLUpMprX7TqPCYmxg
-	 /98St4HDii+lvjnS19dAsufhaK1Rsaj0Xz6lg2aN5gwiPy6EkNg7ysjR4gkQmd4eGgefx
-	 uah0DfGIpYzUUAwPLaIIWYMDx2gCIFLvCbqG4S6EClr8ZXXaENXlDXVrNxTW/nYnFH6VO
-	 W7HHuD8HzxynZN32dHi9agvzExsmRc0W5QKEBmFP40CyaQzH/dTYa12DU8uCPvkCo+A==
+	t=1793712399;
+	b=AY4NUGgNAKqfgewXt4IDJ5e4iPBYDm9O2AupX7q8VFQwP6Lsn0BW8pb8HAatwABHOUk+
+	 gQCSv+iPXaPGA4EHyivIoDbaSk/ti8tGTW4alKSZwcl2oNKfHm9HXETFar8hPmJ1S8FnW
+	 s3+/9+T6UHf7cFAl94haHpVpExCjKARMavbt/xuQ+1NpakMRa5WF44IfVq9cNXkS4mMz/
+	 TFA9CuTwPLL77/tvXZGIuC8KoYOkhKFvTjYo9Mg6Itb6H63Trnq9TvoweIHLQgvTMKlzc
+	 56GnCBCf4VxufbQduPRugaO9isZlQcK2fXIxiB4gprMaq+pRjsDWoyFuUwlBdJT2HJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793711733;
-	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=iQyUbsIr1eaHQc2Hjl2d87Wsi2zieh9fyDAeTXMlsuY=;
-	b=RytnIp68yYCZKYLhVU6oN/FJ5qpInrTn1N1bVo8xDfP3PDupgyNeilv5M8twNKwZeGr6
-	 eX+ObV72GHXOwQ+PumMiBLEhn5EGrjnre8LlSeDWbOlOHwU/ytjw5M/rY1rKkJMramSkA
-	 r6C9hWPrD3ofWE+LhVu31yjfleIt+1rDWvrpDZh26fSm13sCVMXo732n9feA0UKQJ72BH
-	 66mxYPAYsutQrq9KpsWjm30Ldu8xBmwnjEIK5y3RG4TRZ7tb2bOiIhFxMieKnpPeYg0Hm
-	 uiHYPvYfpKZ6koFcU8JIXkEo30fksBCmCuihowKwI9ywtNhTOyZQWamszZo5PC8KEoQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793712399;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=8lMZMIQfgxM1Y1sLfd9pmLbFTG91TDyafPfpoX4xnzA=;
+	b=MOvYxup9QwA0a8GPO/r1sSAw+lbCLJhuWpdfbizi+2UqS0H1EU3MjT8ilyqsKIWLcbFt
+	 FFPapO8HC7WcVBqsLsxXmNvLTya2TEBWagVf/5QNfrc9vLaOp5GA+MolyRPhMo1B97gyW
+	 AbWnw3lmiK6R6uiOIGMSud09C5BpFx5lGnTrDDA59OPCFo7lyA9QNCxbwpgJbNFqEtyh1
+	 4WFvppDofwKX1X8M20FrO+03kAcXFZd3OQM84SisCJ9EbXisGwYX3nGL2zdyoxQ/isUAI
+	 vMOG/iCjHopdqtNprFmMyZWMF+VOTNLP2iVw64Wc6bNMJn8GyMZ4IhDcbrtwIGyGi+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=igalia.com;
-	spf=pass smtp.mailfrom=igalia.com;
-	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=XLsQboEs;
-	arc=none smtp.remote-ip=213.97.179.56
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RKUEs0xX;
+	arc=none smtp.remote-ip=91.218.175.15
+Received: from mta0.migadu.com (out-15.mta0.migadu.com [91.218.175.15])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8388606A326;
-	Tue,  3 Nov 2026 13:15:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8388606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78497606D827
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 13:26:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78497606D827
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=XLsQboEs
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
-	MIME-Version:Date:Message-ID:From:Reply-To;
-	bh=iQyUbsIr1eaHQc2Hjl2d87Wsi2zieh9fyDAeTXMlsuY=; t=1793711731; x=2109071731; 
-	b=XLsQboEsX5/FQQBVlTFM59rbOb69QRWC55e+jTWAXKxJqatwyVu9yWqZY6U61G9XmYKRKnvolIV
-	Z2/hAwmq+ekvP7aPKecHnem6fLoaytDZVs84PN8bxGn4idLXyeIEJ0enFDMOMGDFdo68rhgI/bUyg
-	+HgArplIxnj9GCzX87bTEPI8STIEQPmYDbDfbBhpcTBsoF71SxdHzgZ2VbBMzdXBjiMBrocFLzfT3
-	TEfQ6uCX4W0OsfayANQU/GggH85fzOWwqipuTvwAmLjUI1HRJfpunRTM7qpJTr++inKVdedza1MRn
-	evKjxxHROsGBGMPGYZmbZmBObrsYoiHV88Hw==;
-Received: from [58.29.145.179] (helo=[192.168.8.237])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1xOEMF-001F7T-F9; Tue, 03 Nov 2026 14:15:23 +0100
-Message-ID: <a82664f2-79a2-41c0-8dfe-4c7ccb1412e4@igalia.com>
-Date: Tue, 3 Nov 2026 22:15:15 +0900
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RKUEs0xX
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=VwdILgRNSWIPkWDn3eJqPy63I1Bwv0LiB91pK15cOp4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793712391; v=1; x=1794317191;
+ b=RKUEs0xXGMHXqpldvK6xKP9OgY/JkqJguHg9nwDITmPZYbZSfAdhCDOfLqEXbyxGkw5DOJg+
+ sUpJMrY5rz4yDlReExV7mql76Heuw9veg2/T3jq7KFYQjb+PtZryeX40GnyotIZJX2ts1N6upNJ
+ 9H01i8xwDXIYfrtWX8KekVE4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 223b7a157b0f36b3;
+	Tue, 03 Nov 2026 13:26:31 +0000
+X-Mizu-Trace-ID: 223b7a157b0f36b3
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	josef@toxicopanda.com,
+	axboe@kernel.dk,
+	alexei.starovoitov@gmail.com
+Cc: cgroups@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	linux-kselftest@vger.kernel.org,
+	cui.tao@linux.dev,
+	cuitao@kylinos.cn,
+	ameryhung@gmail.com
+Subject: [RFC PATCH v12 0/4] blk-iocost: BPF struct_ops cost model
+Date: Tue,  3 Nov 2026 21:26:09 +0800
+Message-ID: <20261103132613.1952975-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -57,149 +76,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: libarena: Add rb_next()
-To: Emil Tsalapatis <emil@etsalapatis.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, david.dai@linux.dev,
- Gavin Guo <gavinguo@igalia.com>, bpf@vger.kernel.org,
- sched-ext@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-dev@igalia.com
-References: <20261028060046.549097-1-changwoo@igalia.com>
- <20261028060046.549097-4-changwoo@igalia.com>
- <DMKKK0ZLYSKU.3UZ614ZC9DH05@etsalapatis.com>
-From: Changwoo Min <changwoo@igalia.com>
-Content-Language: en-US, ko-KR, en-US-large, ko
-In-Reply-To: <DMKKK0ZLYSKU.3UZ614ZC9DH05@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Tao Cui <cuitao@kylinos.cn>
 
+This series lets a BPF program take over the cost model of one device.
+The BPF model provides calc_cost() for charged IOs plus two transfer
+coefficients for the completion-time sizing, io.cost.model selects
+between the attached model and the builtin one, and enabling and
+disabling the controller stays with io.cost.qos.
 
-On 11/2/26 5:07 PM, Emil Tsalapatis wrote:
-> On Wed Oct 28, 2026 at 6:00 AM UTC, Changwoo Min wrote:
->> Add rb_next(), the in-order successor through parent pointers.
->>
->> Add a selftest that walks a tree with repeated keys and checks the walk
->> against the order in which the head leaves the tree.
->>
->> Signed-off-by: Changwoo Min <changwoo@igalia.com>
->> ---
->>   .../bpf/libarena/include/libarena/rbtree.h    | 23 ++++++++
->>   .../bpf/libarena/selftests/test_rbtree.bpf.c  | 54 +++++++++++++++++++
->>   2 files changed, 77 insertions(+)
->>
->> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
->> index a8dd8c2e7596..956b4a24b52a 100644
->> --- a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
->> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
->> @@ -103,6 +103,29 @@ void rb_node_free(struct rbnode __arena *rbnode);
->>   
->>   int rb_integrity_check(struct rbtree __arena *rbtree);
->>   
->> +/*
->> + * Return the in-order successor of @node, or NULL if @node is the last one.
->> + * Walking from rb_first() with it visits the tree in key order, equal keys in
->> + * insertion order. Call it under the writer's lock.
->> + */
-> 
-> Let's move this to the main *.bpf.c file, with the rest of the traversal functions.
+The builtin model is a linear formula derived from a handful of device
+parameters, and the right formula is device specific.  A BPF model can
+be adapted to the device and updated without rebuilding the kernel.
 
-Sure. Will do in v2.
+The series is based on next-20261030.
 
-Regards,
-Changwoo Min
+Patches:
 
-> 
->> +static __always_inline struct rbnode __arena *rb_next(struct rbnode __arena *node)
->> +{
->> +	struct rbnode __arena *parent;
->> +
->> +	if (node->right) {
->> +		node = node->right;
->> +		while (node->left && can_loop)
->> +			node = node->left;
->> +		return node;
->> +	}
->> +
->> +	/* Climb until we leave a left subtree; its parent comes next. */
->> +	while ((parent = node->parent) && node == parent->right && can_loop)
->> +		node = parent;
->> +
->> +	return parent;
->> +}
->> +
->>   /*
->>    * Lockless reads of the head and the node count. They need not be called
->>    * under the writer's lock, so they are advisory: the tree may change before
->> diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
->> index 57c4395c046a..784cc9edea17 100644
->> --- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
->> +++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
->> @@ -425,6 +425,60 @@ __weak int test_rbtree_first_update(void)
->>   	return rb_destroy(rbtree);
->>   }
->>   
->> +#define NEXT_NR_NODES	64
->> +
->> +static struct rbnode __arena *next_nodes[NEXT_NR_NODES];
->> +
->> +SEC("syscall")
->> +__weak int test_rbtree_next(void)
->> +{
->> +	struct rbtree __arena *rbtree;
->> +	struct rbnode __arena *node;
->> +	u64 seed = 0xcafe;
->> +	int i;
->> +
->> +	rbtree = rb_create(RB_NOALLOC, RB_DUPLICATE);
->> +	if (!rbtree)
->> +		return 1;
->> +
->> +	/* Pseudo-random keys with repeats, so the walk crosses equal keys. */
->> +	for (i = 0; i < NEXT_NR_NODES && can_loop; i++) {
->> +		/* LCG using Knuth's MMIX constants for determinism. */
->> +		seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
->> +		node = rb_node_alloc((seed >> 33) % 16, i);
->> +		if (!node)
->> +			return 2;
->> +
->> +		if (rb_insert_node(rbtree, node))
->> +			return 3;
->> +	}
->> +
->> +	node = rb_first(rbtree);
->> +	for (i = 0; i < NEXT_NR_NODES && can_loop; i++) {
->> +		if (!node)
->> +			return 4;
->> +
->> +		next_nodes[i] = node;
->> +		node = rb_next(node);
->> +	}
->> +
->> +	if (node)
->> +		return 5;
->> +
->> +	for (i = 0; i < NEXT_NR_NODES && can_loop; i++) {
->> +		node = rb_first(rbtree);
->> +		if (node != next_nodes[i])
->> +			return 6;
->> +
->> +		if (rb_remove_node(rbtree, node))
->> +			return 7;
->> +
->> +		rb_node_free(node);
->> +	}
->> +
->> +	return rb_destroy(rbtree);
->> +}
->> +
->>   struct rb_embed {
->>   	u64 pad;
->>   	struct rbtree tree;
-> 
+  1/4 blk-iocost: add BPF struct_ops cost model support
+  2/4 blk-iocost: add iocost_ioc_tick tracepoint for per-period
+      device summary
+  3/4 selftests/bpf: add iocost cost model test
+  4/4 docs: cgroup-v2: document the iocost BPF cost model attachment
 
+Changes since v11:
+
+- dropped the cgroup callbacks (the models build their state in
+  calc_cost() anyway)
+- dropped the queue freeze from detach
+- folded everything into blk-iocost.c
+- the selftest now uses cgroup_helpers: the tests create their own
+  cgroups and remove them on exit; io.cost.qos/io.cost.model are
+  root-only cgroupfs files and the test reverts them on its exit
+  paths
+
+Tested on next-20261030 (qemu x86_64): the selftests pass, and the
+2x example model doubles the charged cost over the builtin on a
+rotational device (2.01x measured), returning to 1.00x after
+"model=linear".
+
+Link: https://lore.kernel.org/r/20261028143534.135968-1-cui.tao@linux.dev # v11
