@@ -1,61 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793744829;
-	b=UvB/UgB1J8KiDm6pXiGlmTFmDS23l2AgIckaLWvlZHln1TGx7SkHQh9jQKhGzd4L20Xb
-	 +E6CcmC3w0/84NzO4qUwCpiNAtpsovq8innUx2eJplOmYBKo+FUscXjvRYI8vjWeXcZnA
-	 NuoUCAiW0St0Lu2prD+lfzAIKFF9N0o2cTvO64qPLofiHjAhK9IcZqNsf/YRwBMSEK55t
-	 VCmWxdmdoJj77a2SJlOKxKrWHBb+GodxqfOi8Fs9l2enMd5+hAykElmYJH0E4qiypMT0+
-	 LMXYKh9Fle3NNgKxs6fmif+ndu1rjcIHOIoIsJSTg7tVoPMPMMlIfXc68xteGA6f26Q==
+	t=1793745057;
+	b=u2N8CPudmIc/gF0RLyekgmKHRFLDrF3yf78wxqP/LbjUZUmiYUI/4ZGZxeJrnnNKpyt0
+	 P8kZ53OOP1poze4+/DLy4t14fTkbuM9vseWLkpf8WQYxJGPFUXMuYU+09QKtHyobkhqBO
+	 EB1osxjb0eXsuoPd5wbezIoGb0HMiNlrl3izm/eFktwCcg+O1Owl4Wtrtw6rjjb8fNfsg
+	 5VCnPNB3jxPcso6+VkhoKfb3+0/9dS45/eAufHsiZw2VwJgZ0gPIgpzo6GUmq/u3f/VMQ
+	 U+bDrb/Snfri3jN56BjMEiztDKoZR2w8OasR5z0EFXMfscBHC3zYBCsOXOLOAHofTcw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793744829;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=CX279Eb4tbMpKOIQlNE7fd8p5zbQeZ51F2VkoR5Ky6s=;
-	b=a57nkC7dGZf2HJaZ1CK8mHZnyEtUENjaRXU+GVBM+BmESQeZlMOJCardWAEVgdM2BceU
-	 MVFMiuAJf/yZpish/7B9JBjGwwlfR6JITUhtrMURElt4fZnTNj1yTn/1d3djSRWw2QlFy
-	 y4VpSvHpHUt86gxiv3zcKYu4Wucjpr7RlRXzDQe0oSfjKQhIJvJgsB1iTva1od1DT54m2
-	 lFcXDY4Hy4ZLn73vEwtiVhaJ3Oqa81ZQatDT5U6eO6BzZndX0XCAsOalZSQmEWH4pmhB7
-	 QPd+YVx9LbNMusxQenlf3tcyXa7SEJlhGxngzijXkhhKWyNCfkaLg1Ij6QkMJmi1MfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793745057;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=jR34NGZ61TpHfusisNrWeWFWjKfnQMBDd7J0gfV9A00=;
+	b=qrpfxdpp+sW1MemDElOLb8loRLVvCcymE6rbwLMpn7UnWGQ30Ui/4MXMXmip/eLz9HIc
+	 0uMy+ro5zaO2/P2F6/R4kSEgF1RsxvOfqAmhq8i5lJedPj74keLJfXQkTS2f9DU07jn5o
+	 sfj34qQlBVVONxywSnIoRlmerwg161522KAJMH/qwI9ub3NChUI1uFB39n3Co3eBBh7dx
+	 ahZwGXtQvvzIVuH3Ixe8PsWO5Pz3leASsVg5xYw9ujnzb37vdc7MVtes5nZ79s3Vwl2sa
+	 WkTHs86uGcl2qrVrVlXQlsO8p+rMgWDcph0BBD70zb5+gsmtHmO5/4q1Ea0orRqr7OQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hiTOAc9Q;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=obEQ2k0u;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE74606A31B;
-	Tue,  3 Nov 2026 22:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A401B606A31B;
+	Tue,  3 Nov 2026 22:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hiTOAc9Q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858BC1F000C1;
-	Tue,  3 Nov 2026 22:27:07 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=obEQ2k0u
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20651F000C1;
+	Tue,  3 Nov 2026 22:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793744828;
-	bh=CX279Eb4tbMpKOIQlNE7fd8p5zbQeZ51F2VkoR5Ky6s=;
-	h=From:To:Cc:Subject:Date;
-	b=hiTOAc9QiC8NEHTB+6maeLQHqivGXNc2o52KUZ7h4A2jDrZvTAHbrl+FB/5cEfEml
-	 SZ2cFgQEltrBJlpFsPU4PX/miCLSi5o+9K/lqa4Y97I4zTVcNpbluLxxeYiIIwkWJc
-	 /QQQa+6/Uhnwi82aRRTqA+iGwFgfmS7Lfv4E3WhRrdiQ14RTU4qcZ/C8F1BvW6vZ+1
-	 bZwnj79+eIihBz3X3m9zjrVJYsdLhKy/LdQ6Y+BopsNwpYLoOVbUU2P/B+40k11Wp+
-	 0o0HCj4ipuOACaVDID9sOAaRpu6SjkCc89d3uxW6j+DNvPt9Y0YZSt5j4xUGDjQrQL
-	 ucj6GT9x5gb9A==
-From: Sasha Levin <sashal@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] selftests/livepatch: fix building and running outside the host kernel
-Date: Tue,  3 Nov 2026 17:27:04 -0500
-Message-ID: <20261103222706.1642224-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20260515; t=1793745057;
+	bh=jR34NGZ61TpHfusisNrWeWFWjKfnQMBDd7J0gfV9A00=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=obEQ2k0u2ksT03QsD+eQpW6bjWMvgeL1N4qzYIM9yjqhPNMdTfAk8Z005vmG/2NLO
+	 7zIUzA3fSdv1dn2D9yyze4lDXFzJUy1SY+FJN5hMeJIm8M1vsgzFquRCE5ouTW26fT
+	 M0tGlRQdlqZtzm9eCEpZNiSsCYvP5tBGB+2qzn5FNqV/uyTrK1ACOSw2ouRImggUGL
+	 6a2z2DBF8TmuD5t/ZE40IsgCxVUn7N0PrPUKIqRNMp0IRGLtbxIAZnjpxSEUF825y2
+	 BHscCNSV3qjsr/J2qWgmitMjujDR1jA0ZfIT4ADfko5i6HpJY0/yjNabPhptpq4W+T
+	 v/knV1lUt14xQ==
+Content-Type: multipart/mixed; boundary="===============2477829407028560827=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,47 +49,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <3f89e3df5173e081e45425852c59a5a32cc979ee67c37ab53cd563da24a98572@mail.kernel.org>
+In-Reply-To: <20261103215309.19950-1-dennylin0707@gmail.com>
+References: <20261103215309.19950-1-dennylin0707@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Account for zero extensions in patch list expectations
+From: bot+bpf-ci@kernel.org
+To: dennylin0707@gmail.com,ast@kernel.org,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,iii@linux.ibm.com,bjorn@kernel.org,pulehui@huawei.com,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,dennylin0707@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  3 Nov 2026 22:30:56 +0000 (UTC)
 
-The livepatch test modules are built against the running host kernel
-even when the selftests are built for a kernel in an output directory,
-and the scripts skip every test on a machine without a kernel build
-tree, even when the modules were built and installed with the
-selftests.
+--===============2477829407028560827==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Patch 1 picks KDIR from O or KBUILD_OUTPUT, stops passing O and
-KBUILD_OUTPUT on to the module build, and skips the modules for kernels
-without CONFIG_LIVEPATCH. Patch 2 makes the scripts check for the test
-modules instead of a kernel build tree.
+> selftests/bpf: Account for zero extensions in patch list expectations
 
-Tested on v7.4-rc1 with an x86_64 kernel with CONFIG_LIVEPATCH built in
-an output directory. The modules build against it with relative and
-absolute O and KDIR, through tools/testing/selftests and through the
-kernel's kselftest targets, and clean removes them in all of those
-cases, also after Module.symvers is gone. The installed tree was run in
-a VM that has no build directory for that kernel: all 8 livepatch tests
-pass, and they skip cleanly when test_modules/ is missing.
+TL;DR: Commit message only: the Fixes: tag names a merge commit rather than
+the commit that introduced patch_list_insert_in_front(), and it lacks a
+preceding blank line.
 
-Changes since v2:
-- Patch 1: clean test_modules through the kernel source tree that
-  contains them, so that clean no longer skips them for a relative O, a
-  missing Module.symvers or a missing /lib/modules/$(uname -r)/build,
-  and pass a KDIR given on the command line on as an absolute path.
-  Both found by Sashiko.
-- Patch 2 is unchanged.
+>     selftests/bpf: Account for zero extensions in patch list expectations
+>
+>     patch_list_insert_in_front() checks the translated instructions around
+>     the call of an inlined bpf_loop() and its callback. On s390, the verifier
+>     adds zero extensions after the two 32-bit register writes in the loop.
+>     The call is therefore at instruction 25 rather than 23, and the later
+>     instructions checked by the test are also shifted by two. The test
+>     fails despite the call and jump offsets being correct.
+>     Use the corresponding instruction indices on s390 and RISC-V, whose
+>     JITs request explicit zero extensions. Keep the original expectations
+>     for the other enabled architectures and retain all branch offset and
+>     callback entry checks.
+>     Fixes: 57fae4059380 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf 7.4-rc1")
+>     Link: https://github.com/kernel-patches/bpf/actions/runs/41696128762/job/126138168160
+>     Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
 
-v2: https://lore.kernel.org/all/20261103140218.17568-1-sashal@kernel.org/
-v1: https://lore.kernel.org/all/20261014200154.1365200-1-sashal@kernel.org/
+The Fixes: tag names 57fae4059380, which is a merge commit.  Should it name
+the commit that introduced patch_list_insert_in_front() instead?
 
-Sasha Levin (2):
-  selftests/livepatch: build test modules against the selected kernel
-  selftests/livepatch: skip based on the test modules instead of KDIR
+  Fixes: d86e6695cb2f ("selftests/bpf: Test the tables that follow patched and removed instructions")
 
- tools/testing/selftests/livepatch/Makefile    | 28 +++++++++++++++++++
- .../testing/selftests/livepatch/functions.sh  | 17 ++++-------
- .../selftests/livepatch/test_modules/Makefile | 11 ++++----
- 3 files changed, 40 insertions(+), 16 deletions(-)
+Also, the Fixes: line follows the body paragraph directly.  Could a blank
+line be added between them?
 
--- 
-2.53.0
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41728315768
+--===============2477829407028560827==--
