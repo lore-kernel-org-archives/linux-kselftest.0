@@ -1,107 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.71.93.112
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793710188;
-	b=OF9k8xnZF60Spg48nPD8jn6qEP31lyglyit/zkt2kk2uaBR2gH4t3plTlnocHbR1ou7B
-	 2E6mAqrliQ+dpESHWpGYDe7EkYHEui+OgkhR9N6YXffeOthe0rded2Nrb7QuYdot3z8TV
-	 lpkMSFyknQ/xLfgL0eE0XBn9Li+3hmWs5GmghqZ5z6XRrcaNmrMUagu24lg2UYw6GDS0T
-	 aBSRIWOMdE+A/d9kw3Ul1FQKK02yFoO7Bi3S8VNL3Mr82hdrXt+cDPCWjpAIncsWQ0URq
-	 hjDoDavCxC4sSxwnbIXRHoMjsSn118JoPgYVe8Xy1JDkHv3PJ0kw/wWz7l2WiuKtinw==
+	t=1793710736;
+	b=VRQFVw3cAlBirMeQkeHYo3LMYxTUJ04uhuEHdbfL2jljn+VObZOB8Ds8LDhGeLMRcysB
+	 ovty6j1obQiG7EcPvxWQwz09c2CPIbtwL6JqCxG55+jFRnhN2TKNN4TEWZ284+dEKwUql
+	 r4m31eJioDvrVwzjoGHRHBza8J++ICkmg5IiRiH7HJPe+ExWL0vmRHvjd3OKKm+zEtSDT
+	 kjut5CSfjPrEUnfVAcTSh1G3jy6RH4ONDxCMrDtKxgFs1vUUPtaRJd9E3xPev7/urnktJ
+	 +qQ+rLdv3umrv0x185o/rlCS9WLKXlmbDlbKPN17FFIAhB5banxu45W20ffroByHEcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793710188;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 Content-Language:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=myuQnKOqiP9L07B+scEBOciTR/Sw8p8F06G+sEEbi1w=;
-	b=tH9SY3jKMWxnIOIZeH4iZ/s3G0qOQPWh2dueFcoEtE9EnIkdaUjT3P8TY+2UHu0t0Ws1
-	 sA3BqkgyZqX/QYz0QYgyar5wS5CYFix2qCcwqFKjbTS8iiC0HpqV0HIG1QaYq9Axa3TQz
-	 sGP0ZumYpxZEYib8k5QDutiOPPKl2XZhRrllypeSobEVagcxpkgmSWR+R3T4wfn2rylnL
-	 Bx/5gchzv9h1EEpoOwMjb4DGerRgvDu2cbPW8bH0rK/RGMg71lfqAAv4E2yDY0hnkmnbM
-	 UAEg0fmBla9Z/6v+dTL3wk9CyaSDzprsjRNFudGrmQxq7k0GU71stDe+Yg/Dmy9pQbA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793710736;
+	h=DMARC-Filter:Received:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:Content-Language:To:Cc:References:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=vKGX0/i3wC0V58dab4rJAfdJ/0V3Q5QkyS4WjlOpXCU=;
+	b=NbDSSxaqRS6yXeMwJux4k2me169d1W5KQOjLkDxz55gV6FNi4xSNnIBZFKEaxKll4F4A
+	 qUqcPh9XHGS3j9bPC+d0/bZ83F3+VOKPu9l8rE//JQ+jwyKY8S3lCsLrvSHVRsaIk1ctj
+	 yheXzS7ncWHMHB3SUbVbXJSAY8Pvvj41rcFnz759Osvv+9MAa3eYmg636q9y0yMxPmNT7
+	 8xjjZYkg9zuU5NjdGqMzBF5hPB7gwCMg424tYJwepvGRg742cyH5jZFfE/yr0PIdPFpNy
+	 DvQC/gCemmuBm3VYce5mYsr2yqPrRtU5f11RdABzAiU2X53HVuqjTsbaFYQzMmb7Dlw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=FFqwHaIC;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Xww7JLoQ;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dmarc=none header.from=huaweicloud.com;
+	spf=pass smtp.mailfrom=huaweicloud.com;
+	arc=none smtp.remote-ip=124.71.93.112
+Received: from dggmsgout12.his.huawei.com (dggmsgout12.his.huawei.com [124.71.93.112])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF217606D81F
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 12:49:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF217606D81F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=FFqwHaIC;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Xww7JLoQ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793710186;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=myuQnKOqiP9L07B+scEBOciTR/Sw8p8F06G+sEEbi1w=;
-	b=FFqwHaICct7QSwW0MYlBXJYNLiSGf/Lkxoww3ILpHDpkKGKpDBSCblGXbBVA8Y+SEkiPrl
-	kGRrGwZm4yuL5JGM3qNzIJnVEb+VI873zD5wh2aIv0X5Dxi6KTAwmB3Y+x/CeebebblUXE
-	bUqSORcltwzLWtBAbjz7aG5VcVGMhzM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-590-h48p8gQbMzuhMfEbVBCDNA-1; Tue, 03 Nov 2026 07:49:45 -0500
-X-MC-Unique: h48p8gQbMzuhMfEbVBCDNA-1
-X-Mimecast-MFC-AGG-ID: h48p8gQbMzuhMfEbVBCDNA_1793710184
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4a70b42bab0so8487645e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 04:49:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793710184; x=1794314984; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=myuQnKOqiP9L07B+scEBOciTR/Sw8p8F06G+sEEbi1w=;
-        b=Xww7JLoQMeMT0Huf7Hi/NXKYvB12byum4d8AkaunCDsvtr1fiQ6OU8UVKa4Weoujoe
-         FVWcwa+A9Tjf4Ihz2OAgsjh0ML09t1+i4kArRCa2ToN2uggyc14m1PCQt889XeS+OmSd
-         ylhDzvW+16k/Vq0RHhjZGT/YROWPzWlvBJZbihCllk9h/Nb3yhdAsMCPUeGWkwe3GL5T
-         9T8TvmlavoTkgdQQNr3SWdszdiiKn/NgsiXiMVE99OuMETWEKVb7gBImpDeQcfSYbrMe
-         PxBCukwxgkqG7fdGRY/ttjFpBOd/Oux5DnG9ehYzZWu4KSR4aQ0L6wwKGA9/sBGjXPV7
-         2thw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793710184; x=1794314984;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=myuQnKOqiP9L07B+scEBOciTR/Sw8p8F06G+sEEbi1w=;
-        b=X5iId6jm66aam+YwD1zCAiAZZdu4gCSD62ITk2lzf6SRPmZm34COSZIwyN3HbYl4kB
-         TtpUlIpWhHjTnSZny9TatFI4kHTj2nt/F/qv3irlQm6CuNGUW/rrqnC9BmdtQWuR7VUH
-         UgQaR5/tPlB228eSKU77WbWSimYA0uf7f5sQFP6YDSALt2kro7dTRVWRF0n1DM5441Lc
-         DVJE1TK/nH/1GjEVcHsbsEfLnK1C9Q7/VDl1sjhFujWCk3iSqz0K6C3sVJjrVcN5Ah1m
-         aKBjxa/3zhd8RlTyhXVbD/o8P6cSsqI1HN1UXqIEA4rsdoYncDqy3K0N2HKQLNk+624w
-         xkug==
-X-Forwarded-Encrypted: i=1; AKwUvBwDKmCuZ18PrI/BgOOgokjqokTIA+k547tgRxx6N/yIs4AltSi7zR61RLebu0DXdOgwdqL4R/6Tz2g1pT3TNgA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+tyfZEBRRfrbBiSj1woYIzoFlfipenD4E82c7gA+zATYHoWvxu
-	lcxwFTbOSQjgu/rOki0Y3+CcvEnacBE2i78fiHYDRpOJUMwHbfERz0FT8u3pq8dMizzbnJOGm8h
-	XVSoJIOQMBNDweQc74+vkfGFb1YVNaxeldfgUhc5hTrCioF9xFU3MOfbtrcxc57qNQ3xbENtEZX
-	0U/u4o
-X-Gm-Gg: AYBFou2ofWtI3ho9LsW+t5jBa0rCvM66kQD4ofyWjAACriCzbTaTjLzljWB9GfNK0xJ
-	DReYBOOxpjom6ia8JyJT/abApSlH3WdWX/VSrxHn7Odhbkg4GJNgPbGOyMj1HgvaGeQY3LFBhSP
-	w1KCbVfQqClUF00rJ71/Z3yTFXCvHMjlw16tW/cz+Rtq6WS6SevmtoQHYK97g1NCPlEBcMAkbqd
-	FW/K69VTdOyiEtvP8wz3JC3Raj70aKa0jugpnDr51qZc1VzW8eIIJooOlZ1l2KZt4OB8vdpOVOK
-	hed6stN6ANP/l5zbUw6PLd96p7iO2oOB1ZT3wwLXaUSC9nxiBVg0C6mib8D7ubPKBGtNAdRIiJU
-	c51RdWkQNwEOGrauR1JJLXvoozWTwQdgQsaa0CsLwQJ6gKA==
-X-Received: by 2002:a05:600c:848c:b0:4a3:5da2:38ae with SMTP id 5b1f17b1804b1-4ac17a3628emr299087995e9.14.1793710183954;
-        Tue, 03 Nov 2026 04:49:43 -0800 (PST)
-X-Received: by 2002:a05:600c:848c:b0:4a3:5da2:38ae with SMTP id 5b1f17b1804b1-4ac17a3628emr299087755e9.14.1793710183537;
-        Tue, 03 Nov 2026 04:49:43 -0800 (PST)
-Received: from [192.168.2.75] ([46.175.183.46])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abebe33e79sm247611225e9.2.2026.11.03.04.49.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 04:49:41 -0800 (PST)
-Message-ID: <cc1e3d99-a96f-4589-8541-5c8b9fb509b7@redhat.com>
-Date: Tue, 3 Nov 2026 13:49:40 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A789606A327;
+	Tue,  3 Nov 2026 12:58:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A789606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggmsgout12.his.huawei.com (SkyGuard) with ESMTP id 4jJpXd4bjhz1yFm;
+	Tue,  3 Nov 2026 20:58:25 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 0867E4056E;
+	Tue,  3 Nov 2026 20:58:50 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgBHfu2I2ulqezG5Cw--.9002S2;
+	Tue, 03 Nov 2026 20:58:49 +0800 (CST)
+Message-ID: <25a29a41-b14b-4a9c-9876-da1537be176b@huaweicloud.com>
+Date: Tue, 3 Nov 2026 20:58:48 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,58 +52,99 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 00/14] dpll: add a simulated DPLL device driver
+Subject: Re: [PATCH bpf-next 3/5] bpf: Finalize the verifier log after the
+ runtime is selected
 Content-Language: en-US
-To: Jiri Pirko <jiri@resnulli.us>
-Cc: netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
- Ivan Vecera <ivecera@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261103093910.596225-1-poros@redhat.com>
- <aunT5wlkgVJ9xyTb@FV6GYCPJ69>
-From: Petr Oros <poros@redhat.com>
-In-Reply-To: <aunT5wlkgVJ9xyTb@FV6GYCPJ69>
+To: Qiliang Yuan <odys.yuan@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Luis Gerhorst
+ <luis.gerhorst@fau.de>, Henriette Herzog <henriette.herzog@rub.de>,
+ Anton Protopopov <a.s.protopopov@gmail.com>,
+ Hengqi Chen <hengqi.chen@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
+ <20261102-bpf-blind-nops-fixes-v1-3-844300e42cdb@gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20261102-bpf-blind-nops-fixes-v1-3-844300e42cdb@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgBHfu2I2ulqezG5Cw--.9002S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF4UAr1fCFyxJw15WFyUWrg_yoW8uw1rpa
+	yIganrtryvqw42kw12vF40yay5X3WFq3W3Ga9Yy34xur4IqrnIgrWUKa1agFy5tF9Ykw10
+	vF1293s7K34UurJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
+	0PDUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-
-
-On 11/3/26 1:31 PM, Jiri Pirko wrote:
-> Tue, Nov 03, 2026 at 10:38:56AM +0100, poros@redhat.com wrote:
->> The DPLL subsystem has no in-tree driver that can run without real
->> hardware, so core changes and userspace tooling are hard to exercise in
->> CI, and the pin-on-pin and reference sync paths see almost no coverage
->> outside the vendors' labs. This series adds dpllsim, a simulated DPLL
->> device driver, together with selftests that run against it.
->>
->> The driver is controlled through configfs, following gpio-sim. Writing a
+On 11/2/2026 8:37 PM, Qiliang Yuan wrote:
+> bpf_check() finalizes the log, which reports its size in log_true_size,
+> and selects the runtime of the prog after that. For a prog of one
+> function, selecting the runtime blinds the constants.
 > 
-> Why not debugfs? Works good for netdevsim.
+> Blinding can log "insn %d cannot be patched due to 16-bit range". The
+> message lands in the buffer, but log_true_size doesn't count it: with a
+> stats-only log, log_true_size is 219 while the log takes 264 bytes. A
+> caller that sizes the buffer from log_true_size loses the message.
 > 
-
-I did consider debugfs, but it does not fit what the simulator
-needs. The key difference is who creates the objects. In debugfs the
-kernel builds the directory tree and userspace can only read and
-write the files in it; there is no mkdir or rmdir. In configfs
-userspace creates and removes the items itself, which is exactly
-what dpllsim is about: you mkdir a device, mkdir its pins, set a few
-attributes and flip it live. configfs also gives me
-configfs_depend_item(), so a pin cannot be removed under a live
-device. Doing the same over debugfs would mean inventing a little
-command language in a couple of files and parsing it in the driver,
-plus handling object lifetimes by hand.
-
-netdevsim gets away with debugfs because it creates devices through
-a sysfs bus file and debugfs only carries knobs on top of the object
-model devlink already has. DPLL has no equivalent, there is no
-netlink command to create a device. gpio-sim went through the same
-decision and ended up on configfs as the replacement for the module
-parameter and debugfs based gpio-mockup; usb gadget, pci-epf and the
-target subsystem use it for the same purpose.
-
-> [..]
+> Finalize the log after __bpf_prog_select_runtime().
+> 
+> Fixes: d9ef13f72711 ("bpf: Pass bpf_verifier_env to JIT")
+> Reported-by: Alexei Starovoitov <ast@kernel.org>
+> Closes: https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> ---
+>   kernel/bpf/verifier.c | 13 ++++++++-----
+>   1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 935b163f81e4b..974dc571eff05 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -24112,11 +24112,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+>   	print_verification_stats(env);
+>   	env->prog->aux->verified_insns = env->insn_processed;
+>   
+> -	/* preserve original error even if log finalization is successful */
+> -	err = bpf_log_attr_finalize(attr_log, &env->log);
+> -	if (err)
+> -		ret = err;
+> -
+>   	if (ret)
+>   		goto err_release_maps;
+>   
+> @@ -24167,6 +24162,14 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+>   	env->prog = __bpf_prog_select_runtime(env, env->prog, &ret);
+>   
+>   err_release_maps:
+> +	/*
+> +	 * Finalize the log after the runtime is selected, which blinds the
+> +	 * constants of a prog of one function and can log an error. Preserve
+> +	 * the original error even if log finalization is successful.
+> +	 */
+> +	err = bpf_log_attr_finalize(attr_log, &env->log);
+> +	if (err)
+> +		ret = err;
+>   	if (ret)
+>   		release_insn_arrays(env);
+>   	if (!env->prog->aux->used_maps)
+>
+Acked-by: Xu Kuohai <xukuohai@huawei.com>
 
