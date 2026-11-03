@@ -1,101 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793662688;
-	b=ibbWw+cQWAR5JdrH3mpCyGU0zXiYrG9ViXj8BjaKU9BAJxDQGrVtGrf8GELX8KgGlL2J
-	 zjBSytgJtc81xTl+YtYKShv3Tjo1uqArTYhF/I3Jj4xEPUljM6f7rnMC3GxDyM2lIAJOT
-	 DVq3+wFxl+dWOzWMCfA/Gn96f582kYgTbaj5XGSpzxDFtjMXfmK+LBOIRNDTdX+iXBSJ0
-	 PvJpTMt7DvHcoVdqso8EpHhhM4ZefGG2bYzoxz8ku80l8+MW957aWz0PKUZMFaEuFU8n7
-	 Uh9Zra/fX7otHYlrS3mKsRzy6ieo/maC7OrzJqBmSUSLTefjAAKoxgkoLpx+ZNX5VJw==
+	t=1793664714;
+	b=XMiAP4RIZU6Ennt1AbfS014vU9pGidlAMdPTYnDGb4iAAGLOw+qIGbUh2UARgzcyXCwc
+	 75hOWlMFI+FmQ6I29Xb7YSmG/YPZSEGkP4nuSbt5ddtEGNIYnKS+44Cj3WTnW00dQTJXx
+	 mtU8lUqMak3DuDP54V0Ig+CWYAwXkSyLsIU4glaoTJinLmygwXGSPyI724JOH/ut0PS1R
+	 drghGWT5nf/atKHP50bcqhO2OoMW3eFPwrg047/ziYXBWTq3F+cMieHXqIgF3+U+i99v4
+	 R96HL97mq0m5r2anBQh6xZJybkgjIQP/IWZ+wwKurzb/9p/iMsuioHfIYX1fnp4mKsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793662688;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=VgQ+KN2VyFhEnUQIyYXKW6M1JeW0WUnB3l+NuZRm2I0=;
-	b=sILETnekEAV04tltkofR73oRg7iRL5no7Nqq3pWoRvz4hWlbB5vNzzSK8GqG7jNoMYN+
-	 zVZPsKR8+/keS7UePVRcFSKiXgaT+daLMMhKooqlMwozSfysNKqTJGn3Jj1WGuguiIvhn
-	 UMIukCQHR5CG3eiP5DZgQlV3Vl/UlDA0Wv2LjEj5I7amnXmKnF2P3X6vW/TTA/B75GPDo
-	 M670j9JDg0wW747oPAqE4o5hv7yQOLskf/3PpHyl0zP6JYRbMhUtFziUpq7WPsF+mK/99
-	 WVy25iVh9seYsuCuWiqb7/NoNkWMuDKZYKwH9PhU2YMOyJrEW0Zi4KKmEBBSFFF5z1A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793664714;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version;
+	bh=uEdJZuEv+71ZJNyRFUsTQlDm4iAneiepeaY/wo4w+Xc=;
+	b=qIo2acdQ2yOZO8pG+6O/vkzX7pXjbFHhU1oZmyrcONXKaLeUGBhkMCosQyByxhgKQ6pc
+	 WVT5nL5AOnvxBN4YLoJdlPJBKYvKFKqn08Oc6OWZLU0FiSzUPZC4852vWtr0awhav1Epg
+	 SOlVKlzZWgZLoEWdpe5n8G6XaCVxYYQm6LvEhbOPYT/m8kfLoYKWWuIMidDTrVc+dkMJ5
+	 09451vEbO1Ivb/Jq9fabmdzf3s5ueuqh1pLYVqC9IRmu7wMAhk19pQherxcMMoOc2T6/H
+	 JHTdoDSi1qr5vI4aFguzUZd006u4I8zpWP+TrbTYHP4D9ARMzUZz0aPuHHmbU1uIAxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DwrWH4g5;
-	arc=none smtp.remote-ip=74.125.229.7
-Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=BL+TYsC3;
+	arc=none smtp.remote-ip=67.231.145.42
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701C9606A33A
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 23:38:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 701C9606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBAF606D80B;
+	Tue,  3 Nov 2026 00:11:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BBAF606D80B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DwrWH4g5
-Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-36758ba1f01so1676270eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 15:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793662687; x=1794267487; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VgQ+KN2VyFhEnUQIyYXKW6M1JeW0WUnB3l+NuZRm2I0=;
-        b=DwrWH4g5a2ySoC+GOC6eDg0PYRp7kGP9JqdiDDKQU+vGcurm0exab5wPwxJ0QyOwWT
-         2Fy1qABOHcYH4XtCS9N93PB3f5mLk9h1CqWwZKRqQOE0783eu+1pjl+5aBSA8aIDUT5y
-         kRsrGrXLGooT2yuPKu1NHWCBJ8t8DbWXvJHSr8qpg7OenSVvzNivb3UVHBsv8XUuzv3d
-         EFEs/jZg5QvPXc78m9V/s4lPqx8NYIz1h4wQ2paI/UL85bH2HHR5x0gwnKVWe5NepVeM
-         npoBHLbHCq2DQ4oqarJVcLy1iMxKK3M4BZkpFG4cdgyiRfVDfKbEiy4SLaa+Z8J1JNQU
-         F6Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793662687; x=1794267487;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=VgQ+KN2VyFhEnUQIyYXKW6M1JeW0WUnB3l+NuZRm2I0=;
-        b=HJ6sn6lktx+1QHKfDAQYGqEuruNt1Vki0dzOSxa+cFeY7zx6wxpToDDvVxtLESoiJ6
-         ye0RcoH9YmFZubVINF/lDvUDn0oX4T81Sl10NZq/wB16Plw2YQkFihAhXqzeqdUAHV1d
-         7RnQW/Yf3XlhLJJFWCOGZUBlZlcT5b5DG8htp+u4oJb8YzpAGtba0IB+/FtUrdWtQkxq
-         d43n8gwkveim/jrYCLB5MzmJya00PkYBtnbqJJlPFuAHHmte9PzLzXW/KmGyzW0eD4pD
-         0O+tr0UXUDzGWipIzV5GbiklpbX8UmCYA3Zdeu42bIqUmG3XADXWtrw7Z7lTDZ61RoyT
-         gVGQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw+e4l1O4JPbqlTUZjblZZ9s9trJ0fIBBOo0Q+fC1uL0HDBFLxoxCR22I4bpkyA/ZeBbKZtURgKklrXzoXUiDU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9qP4lUQGvbJH0GlfkQhiYlDIOu+PbaGdxoSuqqmyv8mA1aAj9C
-	eIKIF7QsSNrZV3ueL6CxfPoV80eh5HTxap3xYnMDdGSacMIMSm7NwQyQ
-X-Gm-Gg: AYBFou31U3LL9jYTZKzE8s01biXE3YlCfwGSaYqRcWRAKr0SRbPwqecZxvGHuoOds9n
-	kquvv97AMS7qTk1XoP/0me2p+A0g0EOSTzH4GMpNhz9/O7Xu7ICEoVKCNZXlf5edIUIuL7m69bW
-	dwxpkilWobYSTacbTeD5SHP7khK5T0MgRHA/khr0+nvn35nM67INlb/icuEmL72k3wN6qrGIixL
-	svVLTbdBNLYWzPmijlIbqp063GzIGtIKNGv7M3UvoHibdoxT9thZh1ksNiGqaNlX1z2sqctVGqM
-	rnYZ/2mHyv81EadkqH3NmUkWZCNZBg2H5RW0i79KyYP50B+XwIj89zPbSuSPhTJPVSuQyqFweUI
-	lse657DPGOSbFhu7/lbpFy8eD3PanZHnEXoh5WYKZ3Eg2kFQi4GeA05/hguSqDCJQDwRsO2RdKH
-	gCCtDbgcGOfxd01WivQwyRA3PFnj4vJvA0+M8DYXsZ7ztWZWp5PLQxpZMXDCnqdayo6q3d+jg6u
-	EJJxIJcnmVEMZUxaY3a5op+XWN7+YEMML9cjO+6Ix4wSV0artiTXyskFc2Fi6A0DVbV7Uuq9ZB2
-	ft5Lw5AI9maZrUmqTajShg==
-X-Received: by 2002:a05:7300:c7cb:b0:36a:214f:169e with SMTP id 5a478bee46e88-36a4238426cmr18543511eec.21.1793662686396;
-        Mon, 02 Nov 2026 15:38:06 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:41::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a4239ca83sm1701518eec.0.2026.11.02.15.38.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 15:38:06 -0800 (PST)
-Date: Mon, 2 Nov 2026 15:27:23 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, edumazet@kernel.org, 
-	horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	michael.chan@broadcom.com, pavan.chebbi@broadcom.com, sdf@fomichev.me, 
-	bobbyeshleman@meta.com, asml.silence@gmail.com, daniel@iogearbox.net, 
-	razor@blackwall.org, leitao@debian.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 4/7] net: devmem: add a per-device netmem TX
- frag size limit
-Message-ID: <aukb2qxV5Y0b3H0N@devvm16445.scu0.facebook.com>
-References: <20261102191438.1059771-1-sdf@fomichev.me>
- <20261102191438.1059771-5-sdf@fomichev.me>
- <CAHS8izP6BmNJLUdKR0DpqieOVXreR7ycKWmVbtbBtP-kHy7HOg@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=BL+TYsC3
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A2K6EZ7168672;
+	Mon, 2 Nov 2026 16:11:52 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=uEdJZuEv+
+	71ZJNyRFUsTQlDm4iAneiepeaY/wo4w+Xc=; b=BL+TYsC3qdatBOu8xN+TwrEPZ
+	Bx5G9uHPM8yIoUF1KaXNktEVeEWOhMTO3CRf2yKCOqb3VEX3Yopx2bdJpbSrO9Kt
+	apjA3bH2Hp8QuHvShHcSTxInEoq1XIA7X29kCy6ZaHvmaJ8DlubyBqwkW6A5X7HG
+	0YpSopZCGdfs3QcYylN8ykU2AbdYVUCWeopBlVdb9OQLVNFhxCCF5lWL+tWGb/db
+	gIo+HcSdxCWmgHq/iYNUz+t49qUKDIgCUauxh/ZO3B0B0rXx0U1IV/uujUGIBBan
+	ufKwmQms+AY0xG+oFHV40TvYYRJ8qrc+q7k9G3hwdk8ZxoJoHz4d8J7GPEotA==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hnde7f5ss-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 02 Nov 2026 16:11:52 -0800 (PST)
+Received: from localhost (2620:10d:c085:208::f) by mail.thefacebook.com
+ (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Tue, 3 Nov
+ 2026 00:11:51 +0000
+From: Todd Freed <toddfreed@meta.com>
+To: <netdev@vger.kernel.org>, <toddfreed@meta.com>
+CC: <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net v4 0/7] psp, tls: don't send offloaded contents in cleartext
+Date: Mon, 2 Nov 2026 16:11:36 -0800
+Message-ID: <20261103001143.246081-1-toddfreed@meta.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,38 +71,125 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izP6BmNJLUdKR0DpqieOVXreR7ycKWmVbtbBtP-kHy7HOg@mail.gmail.com>
+X-Proofpoint-ORIG-GUID: vjivpWtr9xn9rNKPyx5dy-QSh5PEau05
+X-Proofpoint-GUID: vjivpWtr9xn9rNKPyx5dy-QSh5PEau05
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAzMDAwMCBTYWx0ZWRfX36RJhpVf0DFi
+ r6jSSEXEbDKVj1OTAnlEKx+KMqEkfx4H2H9MbydgfEtQiD/YitZukw+kla4i+C+TEu7XohvNX/e
+ Vji4GInzWAAkSZFSOCmbHG/PGrGL6Dg=
+X-Authority-Analysis: v=2.4 cv=W6+txhWk c=1 sm=1 tr=0 ts=6ae926c8 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=03ozwUkBphtHgyqjj1sw:22 a=VwQbUJbxAAAA:8
+ a=VabnemYjAAAA:8 a=lmvCLA915dBuvYjvTxIA:9 a=QEXdDO2ut3YA:10
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAzMDAwMCBTYWx0ZWRfX8ibHkltqsB8N
+ oUMpEs+q+aExVhTUEIPpbzN0UUOrzX7UqhGfurdi3g+7j83N6Cfi6ZQYMNBnyrY3LMFu/BQjyAm
+ uJKWUj6x2xdkxIvf9bKlZHhu9RwaL8Pi0Uf/0Pr9n3wWDEXfPCR0UHTdqRuRQhx3U1FiRdvqpe5
+ HARVar1fn62Pvzoy+f+d53uuRsgG/Z5NufNChGKYmrdUoQ91LvAtsegOLV9BZeivX/hT/TISEP/
+ Ioq2KT1hrlAhdzh6meRLkVm1Qrv8ItznMvoC3Zy7qM4vtcnkxvawBTjN51tu9U4tutiiceAKjhA
+ zTTJbaNn7jF0BYw8DGZLS/bdwVyYYhochYRa/x3htYEjaYdeOwEHN/F2LKPDX9x8Xz8SGGuBTY2
+ GjmcHAQvT+JY7RD4ssSAThbRQlXFxhyhExhc5WNUds7IlG95CJwELl/0na8V/e8NXkglmHEpuw+
+ gJ16Wu2jm5TmRKjuOrA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-02_06,2026-11-02_03,2025-10-01_01
 
-On 11/02, Mina Almasry wrote:
-> On Mon, Nov 2, 2026 at 11:14 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> >
-> > Devmem TX frags are bounded only by the net_iov size, which is about
-> > to grow up to 2MB, more than some devices can describe in a single TX
-> > descriptor.
-> >
-> > Add netmem_tx_max_frag_size, U32_MAX by default, and cap devmem TX
-> > frags to the limit of the device the binding is attached to.
-> >
-> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> 
-> Abstractly LGTM but I'm not sure why this is TX-specific. Didn't we
-> add non-PAGE_SIZE rx net-iovs? This should have been a problem then.
-> Either you know what you're doing (maybe document in the commit
-> message) or we need some more alignment on RX and TX.
-> 
-> TBH I was dissapointed when LLMs started reporting that
-> binding->vdev/dev are treated very differently for RX and TX and I
-> have to write a cleanup that consolidates this:
-> 
-> https://github.com/mina/linux/compare/devmem-teardown-v4...devmem-lease-bind-map-dev
-> 
-> I think maybe my reviews and yours maybe should be more mindful about
-> keeping these memory things consolidated and as much as possible not
-> RX/TX specific.
+While working on adding support for socket-less psp associations, I
+noticed the case of ipv6 extension headers was not being handled
+properly for psp packets. It will be relevant with that series, because
+it adds udp support, for which the psp nexthdr needs to look at the
+inner packet.
 
-This patch is mostly a bandaid for bnxt which can't express sizes
-longer than 2^16-1 in its tx descriptors. And rx is even more restricted
-I think? Up to 32K HW GRO aggregated?
+That led me to various other ways where packets on the crypto offload
+path could be transmitted unencrypted.
+
+Since the tx/tls association encodes intent to send encrypted packets,
+but these various cases circumvent that, sending these as fixes.
+
+The cases are,
+
+ 1/ ipv6 extension headers,
+ 2/ ipv4 fragments,
+ 3/ icmp errors,
+ 4/ icmpv6 errors,
+
+Cases 2, 3 and 4 are relevant for ktls as well as psp.
+
+The last patch fixes an mlx5e bug in tso checksum calculation for psp
+packets when the l3 dest is an intermediate hop (ipv4 source routing).
+It's not about preventing unencrypted tx, so could be considered
+separate.
+
+Testing:
+
+all hardware testing was done on connectx-7 (fw 28.48), between two x86
+hosts, plus netdevsim.
+
+ - tso checksum seed: a psp tcp socket with an ipv4 loose source route,
+   the peer checking tcp checksums in software. hundreds of checksum
+   errors before the fix, none after.
+
+ - tls offload, with a kernel built with CONFIG_TLS_DEVICE and
+   CONFIG_MLX5_EN_TLS:
+   - tx offload, ipv4 fragments (route mtu above the device mtu,
+     IP_PMTUDISC_OMIT): without the fix, some fragments after the first
+     go out in cleartext. with it they're dropped.
+   - rx offload, an iptables REJECT rule on the receiver: the icmp and
+     icmpv6 errors about device decrypted packets quote the ip(v6) and
+     tcp headers only (52 and 72 bytes). errors about locally generated
+     tx offload packets, rejected in OUTPUT, are still quoted in full.
+
+ - net/icmp.sh and net/pmtu.sh pass.
+
+v4:
+ - new subject, since the series grew beyond ipv6 extension headers
+   (v1-v3: "psp: fix transport mode with ipv6 extension headers")
+ - back to dropping ipv6 packets with extension headers, but moved into
+   mlx5e instead of psp_dev_encapsulate()
+ - drop the psp core changes to rx and tx ipv6 extension headers
+ - new patch 2 to drop decrypted skbs instead of fragmenting
+ - new patches 3 and 4 to prevent quoting just-decrypted packet contents
+   in icmp errors, v4 and v6 respectively (Jakub, Bjorn, Sashiko)
+ - new selftest: ipv4 fragments of a psp tcp socket
+
+v3: https://lore.kernel.org/netdev/20261023234640.1459291-1-toddfreed@meta.com
+ - new patch 1 to fix tso checksum seed calculation in mlx5e (Daniel)
+ - accept routing headers and reject ah (Daniel)
+ - split the psp_dev_rcv() change into its own patch (Daniel)
+ - return -EINVAL instead of -1 (Daniel)
+ - selftest: one variant per extension header type (Daniel)
+
+v2: https://lore.kernel.org/netdev/20261022223014.556388-1-toddfreed@meta.com
+ - walk the extension headers instead of dropping (Daniel)
+ - reject fragment headers (Bjorn, Daniel)
+ - reject routing headers
+ - psp_dev_rcv() handle the rx case as well
+
+v1: https://lore.kernel.org/netdev/20261021210200.788191-1-toddfreed@meta.com
+
+
+Todd Freed (7):
+  net/mlx5e: psp: drop ipv6 packets with extension headers
+  net: don't fragment decrypted skbs
+  ipv4: icmp: don't quote decrypted payload in icmp errors
+  ipv6: icmpv6: don't quote decrypted payload in icmpv6 errors
+  selftests: drv-net: psp: test ipv6 tcp socket with extension headers
+  selftests: drv-net: psp: test that ipv4 psp packets aren't fragmented
+  net/mlx5e: psp: tso: replace only the length in checksum seed
+
+ .../mellanox/mlx5/core/en_accel/psp_rxtx.c    |  39 +--
+ include/net/psp/functions.h                   |  11 +
+ net/ipv4/icmp.c                               |  54 ++++-
+ net/ipv4/ip_output.c                          |   8 +
+ net/ipv6/icmp.c                               |  61 ++++-
+ net/psp/psp_main.c                            |   1 +
+ tools/testing/selftests/drivers/net/config    |   1 +
+ tools/testing/selftests/drivers/net/psp.py    | 229 +++++++++++++++++-
+ 8 files changed, 378 insertions(+), 26 deletions(-)
+
+
+base-commit: abeacca61eea4f6803df4a595b656ea45c2d3249
+-- 
+2.53.0-Meta
