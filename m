@@ -1,54 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793723953;
-	b=Diy7jWqYmy3P/5WgMD05/ptUEubOeBISZ3RUnxzBzCgC1peIabjF+L3wpXRm7eAlKqmB
-	 a0MSuCIoO+/T4kCbgF8iTf3i1UX0QBvJFNanANWh9OOn252QB4dYF0f5yynPpG9XLaz8d
-	 hM+BrSDFpt2SgU8rF0t0Cl++R6kuHUP/ywR+sw3zQW9XqvV9GOFZUq2zn0rrn4wtfXtOv
-	 dds4PlXnUx2Zns+njGiwapRmwIcToZQYnsTHUhI28i9CE1ByZlhw5nMOxkISkAfhWFyFe
-	 NKmZhQYQ5OJepH5g64aqr3h9srPw5blVgW2hFZ+LFDMBhGVD1YZtfM288CM7aScO/7g==
+	t=1793723955;
+	b=ecd6vncZ6OBywir13NbQGlLscf9YTT5GI2INWmPiXmQcjMQLw/1vtOYcjvfv9c1ukR6I
+	 05kEs/jPAQHX1FofsMNn/XW1cn2KsGaE7m3TOlooHvAC+eCRmg7sy/1WQ6mv2xE8OsaRR
+	 6gyaOJi+6n5QY/I+dqoZ9KhZ7pajZavsOb0+Qbc8u0mTSSUTJIBSvRn+3+pvKj5gbrSbY
+	 DXqeVmtOJHKOklB/C3+JLMXWXu0JpfI4bGFaN17sksqTzig4UtsVlWZAOsZECxIl7UY7E
+	 UqwfbBpxpJ3Cr4wNldl5kOzUAOWFRPqlMeiejljtVbA7EjnjvCuxnOaAwY13i1lVy3Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793723953;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793723955;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=V7CHaxJjio26zC0cpwOTJ7GJgFVKnUUB8e0VQq1U5gQ=;
-	b=my0dlfNmZQvVcdZKl+83Fsc+SDtTMr0V4KbdkrvBk+qVV2nrnnznhifyaulGZI9Nbq2K
-	 AVy/+Ezh1aNy+s9e9x0no1CxESiHkYt6EsuASRGeAQD2BSOB6NLwXj8OXcgROn37Jf76T
-	 l9NXTS0PzcO+Zeu41BL39x835lfi73MPdVH17RU/6AbEeowmNYMGPfD9NU4o63MNh1H1A
-	 f4O7EZAkNEZU2ykOXbKhgJ0+R9Sr+jLTMScBoTi3f9LBIdcO8fSJn0NH6P2qcTJGHtm57
-	 eXHfHM/LkTWDzJR7lIo449uRqvE67En51y0Coo0EfECk9Nv3vEueldQBVJCtQJuuLIg==
+	bh=BG3XUXNGfMqSZ+a+VmceyaP8SMwUJ/N4OhmMopGxXnI=;
+	b=nK/VspCl+NVeOmXjOC0KUmtzhzB8sUyVwEMS9Oms1+veUn+LKRyOSiDVWoNq0tzp19B5
+	 iKxO0D2U0ZiyAy6+U06WyZZ8TTDnnv6R25gxHvW7gZfyzATop3A/fXq0n4IGl9OFhLVrS
+	 bGLF21SDkAqTn6fpo41Q+Wr3GSgGkrFmKSxR9AINpNNH8ChuKgu/JhBpod/JU8q/LMKph
+	 MU5Ga2KezJRie0scppwJD8XvChXVJHUO2xrjLQCb83duDQNERBb/pQNDjFxKEMVH9BPR4
+	 9BwSG6du/gIf34vVTstEHSZrJ2B9/ZItdHM7PK+DyFxP83vNsb+zJdNXtdv74UVqS2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TdBvAHNI;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EEPDf/dh";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29596606D82E;
-	Tue,  3 Nov 2026 16:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39753606EE95;
+	Tue,  3 Nov 2026 16:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TdBvAHNI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1251E1F000C1;
-	Tue,  3 Nov 2026 16:39:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EEPDf/dh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04CBE1F0180A;
+	Tue,  3 Nov 2026 16:39:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793723952;
-	bh=V7CHaxJjio26zC0cpwOTJ7GJgFVKnUUB8e0VQq1U5gQ=;
+	s=k20260515; t=1793723954;
+	bh=BG3XUXNGfMqSZ+a+VmceyaP8SMwUJ/N4OhmMopGxXnI=;
 	h=From:To:Cc:Subject:Date;
-	b=TdBvAHNIBiCJJBY5I1S+uoEa5ecgBwXwsRVhoUSH1ux5MYJu9206o9rs5ElSUGLok
-	 OXNwcM7ttaX5bSOZLAZ2llT/uQ3WAh6GNnqE52m3yVx9FWQpgu82M4qVxHJW5eUCT0
-	 qlplwpqd2UA+MJRQRpXsN8CmcCiGcchQoDMhNhKItMDQWJippImuH/bnHvE3Bv1VQX
-	 XsVp9O70ggB4iyeh4+p8D5x6cA+IK11qbfs8b0skK/pmJ/j8UGb+qXN3Rl/KSOBubw
-	 1mrPPLdkH0xSYsUO5VDqF19GrHIoQ2T0jeKydoMiDedrBTZP0WyiGEW5KGtRfGHny7
-	 dVk+5HlNbDO3A==
+	b=EEPDf/dhT7W2hBjYPrg/nsqs3GTbPjG0gj7KyYetH6vhN0Bobt1yOz+L33XsANHM9
+	 8a2Fr93Ac2KTKweHbSHf9OpBa3ea6ato2xeH8XWQ+kxF6PtsLtmw+1HPJhKU+MCtMY
+	 K3UaMfXMrQmWfm0j/qdq8vYnKj/JtO3fD09mRYPf/VNQrR9fxkOwgIqgs0Lykx4o1u
+	 oVKEDgWs6SoYkM0YJ/rOEFn0cUT401eXsyOt57kGKsXXWEb0E6XOEuwaaU7Swcbjnw
+	 9TGIGB0uK0Qj3Ne1h/J9InaRgcFNc94rnbnVWBgIeh4Jq0CRQOSeX1MM4VC/27p0AN
+	 uFOXGM/NP43og==
 From: Sasha Levin <sashal@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	iommu@lists.linux.dev,
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Beau Belgrave <beaub@linux.microsoft.com>,
+	linux-trace-kernel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] iommufd/selftest: fix the unmap-all length on 32-bit architectures
-Date: Tue,  3 Nov 2026 11:39:10 -0500
-Message-ID: <20261103163910.640756-1-sashal@kernel.org>
+Subject: [PATCH] selftests/user_events: cast pointers through uintptr_t
+Date: Tue,  3 Nov 2026 11:39:13 -0500
+Message-ID: <20261103163913.640876-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,16 +62,13 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-_test_ioctl_ioas_unmap() takes the length as a size_t, so on 32-bit
-architectures test_ioctl_ioas_unmap(0, UINT64_MAX), which asks to unmap
-everything, passes SIZE_MAX instead and doesn't test the unmap-all case:
+The tests put pointers into the 64-bit fields of struct user_reg and
+struct user_unreg with a plain (__u64) cast, which warns on 32-bit
+architectures:
 
-  iommufd.c:861:9: warning: conversion from 'long long unsigned int' to 'size_t' {aka 'unsigned int'} changes value from '18446744073709551615' to '4294967295' [-Woverflow]
+  abi_test.c:182:25: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
 
-Take the length as uint64_t, like the length field of struct
-iommu_ioas_unmap. While at it, cast the pointers that go into 64-bit
-UAPI fields through uintptr_t, as casting them straight to uint64_t
-warns on 32-bit.
+Cast through uintptr_t.
 
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -79,81 +77,220 @@ Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
 KernelCI's 32-bit arm builds show the same warnings. The changed files
 build without them now, and the x86_64 builds don't change.
 
- tools/testing/selftests/iommu/iommufd.c       |  2 +-
- tools/testing/selftests/iommu/iommufd_utils.h | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ .../testing/selftests/user_events/abi_test.c  | 10 +++---
+ .../testing/selftests/user_events/dyn_test.c  |  6 ++--
+ .../selftests/user_events/ftrace_test.c       | 32 +++++++++----------
+ .../testing/selftests/user_events/perf_test.c | 10 +++---
+ 4 files changed, 29 insertions(+), 29 deletions(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index ca2b35e9d443a..f96c262c6a245 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -2454,7 +2454,7 @@ TEST_F(iommufd, map_cmd)
- 	struct vfio_iommu_type1_dma_map map_cmd = {
- 		.iova = MOCK_APERTURE_START,
- 		.size = PAGE_SIZE,
--		.vaddr = (__u64)buffer,
-+		.vaddr = (__u64)(uintptr_t)buffer,
- 	};
+diff --git a/tools/testing/selftests/user_events/abi_test.c b/tools/testing/selftests/user_events/abi_test.c
+index b71813eaf5c04..21e1e3cca1979 100644
+--- a/tools/testing/selftests/user_events/abi_test.c
++++ b/tools/testing/selftests/user_events/abi_test.c
+@@ -179,10 +179,10 @@ static int reg_enable_multi(void *enable, int size, int bit, int flags,
+ 	}
  
- 	map_cmd.argsz = 1;
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index b4928cbd4d9c8..38339dc9f943b 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -198,7 +198,7 @@ static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id, __u32 ft_i
- 		.pt_id = pt_id,
- 		.data_type = data_type,
- 		.data_len = data_len,
--		.data_uptr = (uint64_t)data,
-+		.data_uptr = (uint64_t)(uintptr_t)data,
- 		.fault_id = ft_id,
- 	};
- 	int ret;
-@@ -310,7 +310,7 @@ static int _test_cmd_hwpt_invalidate(int fd, __u32 hwpt_id, void *reqs,
- 		.size = sizeof(cmd),
- 		.hwpt_id = hwpt_id,
- 		.data_type = data_type,
--		.data_uptr = (uint64_t)reqs,
-+		.data_uptr = (uint64_t)(uintptr_t)reqs,
- 		.entry_len = lreq,
- 		.entry_num = *nreqs,
- 	};
-@@ -341,7 +341,7 @@ static int _test_cmd_viommu_invalidate(int fd, __u32 viommu_id, void *reqs,
- 		.size = sizeof(cmd),
- 		.hwpt_id = viommu_id,
- 		.data_type = data_type,
--		.data_uptr = (uint64_t)reqs,
-+		.data_uptr = (uint64_t)(uintptr_t)reqs,
- 		.entry_len = lreq,
- 		.entry_num = *nreqs,
- 	};
-@@ -695,7 +695,7 @@ static int _test_ioctl_ioas_map(int fd, unsigned int ioas_id, void *buffer,
- 	})
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)full_args;
++	reg.name_args = (__u64)(uintptr_t)full_args;
+ 	reg.flags = USER_EVENT_REG_MULTI_FORMAT | flags;
+ 	reg.enable_bit = bit;
+-	reg.enable_addr = (__u64)enable;
++	reg.enable_addr = (__u64)(uintptr_t)enable;
+ 	reg.enable_size = size;
  
- static int _test_ioctl_ioas_unmap(int fd, unsigned int ioas_id, uint64_t iova,
--				  size_t length, uint64_t *out_len)
-+				  uint64_t length, uint64_t *out_len)
- {
- 	struct iommu_ioas_unmap cmd = {
- 		.size = sizeof(cmd),
-@@ -832,7 +832,7 @@ static int _test_cmd_get_hw_info(int fd, __u32 device_id, __u32 data_type,
- 		.dev_id = device_id,
- 		.data_len = data_len,
- 		.in_data_type = data_type,
--		.data_uptr = (uint64_t)data,
-+		.data_uptr = (uint64_t)(uintptr_t)data,
- 		.out_capabilities = 0,
- 	};
- 	int ret;
-@@ -978,7 +978,7 @@ static int _test_cmd_viommu_alloc(int fd, __u32 device_id, __u32 hwpt_id,
- 		.type = type,
- 		.dev_id = device_id,
- 		.hwpt_id = hwpt_id,
--		.data_uptr = (uint64_t)data,
-+		.data_uptr = (uint64_t)(uintptr_t)data,
- 		.data_len = data_len,
- 	};
- 	int ret;
+ 	ret = ioctl(fd, DIAG_IOCSREG, &reg);
+@@ -202,10 +202,10 @@ static int reg_enable_flags(void *enable, int size, int bit, int flags)
+ 		return -1;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__abi_event";
++	reg.name_args = (__u64)(uintptr_t)"__abi_event";
+ 	reg.flags = flags;
+ 	reg.enable_bit = bit;
+-	reg.enable_addr = (__u64)enable;
++	reg.enable_addr = (__u64)(uintptr_t)enable;
+ 	reg.enable_size = size;
+ 
+ 	ret = ioctl(fd, DIAG_IOCSREG, &reg);
+@@ -231,7 +231,7 @@ static int reg_disable(void *enable, int bit)
+ 
+ 	reg.size = sizeof(reg);
+ 	reg.disable_bit = bit;
+-	reg.disable_addr = (__u64)enable;
++	reg.disable_addr = (__u64)(uintptr_t)enable;
+ 
+ 	ret = ioctl(fd, DIAG_IOCSUNREG, &reg);
+ 
+diff --git a/tools/testing/selftests/user_events/dyn_test.c b/tools/testing/selftests/user_events/dyn_test.c
+index 78e3c33f4015f..32f159544d0bc 100644
+--- a/tools/testing/selftests/user_events/dyn_test.c
++++ b/tools/testing/selftests/user_events/dyn_test.c
+@@ -58,9 +58,9 @@ static int reg_event(int fd, int *check, int bit, const char *value)
+ 	struct user_reg reg = {0};
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)value;
++	reg.name_args = (__u64)(uintptr_t)value;
+ 	reg.enable_bit = bit;
+-	reg.enable_addr = (__u64)check;
++	reg.enable_addr = (__u64)(uintptr_t)check;
+ 	reg.enable_size = sizeof(*check);
+ 
+ 	if (ioctl(fd, DIAG_IOCSREG, &reg) == -1)
+@@ -75,7 +75,7 @@ static int unreg_event(int fd, int *check, int bit)
+ 
+ 	unreg.size = sizeof(unreg);
+ 	unreg.disable_bit = bit;
+-	unreg.disable_addr = (__u64)check;
++	unreg.disable_addr = (__u64)(uintptr_t)check;
+ 
+ 	return ioctl(fd, DIAG_IOCSUNREG, &unreg);
+ }
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index decce06b9ba83..b9c75202f0bd3 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -127,7 +127,7 @@ static int clear(int *check)
+ 
+ 	unreg.size = sizeof(unreg);
+ 	unreg.disable_bit = 31;
+-	unreg.disable_addr = (__u64)check;
++	unreg.disable_addr = (__u64)(uintptr_t)check;
+ 
+ 	fd = open(data_file, O_RDWR);
+ 
+@@ -174,9 +174,9 @@ static int check_print_fmt(const char *event, const char *expected, int *check)
+ 		return fd;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)event;
++	reg.name_args = (__u64)(uintptr_t)event;
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)check;
++	reg.enable_addr = (__u64)(uintptr_t)check;
+ 	reg.enable_size = sizeof(*check);
+ 
+ 	/* Register should work */
+@@ -239,14 +239,14 @@ TEST_F(user, register_events) {
+ 	struct user_unreg unreg = {0};
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
++	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1; u32 field2";
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)&self->check;
++	reg.enable_addr = (__u64)(uintptr_t)&self->check;
+ 	reg.enable_size = sizeof(self->check);
+ 
+ 	unreg.size = sizeof(unreg);
+ 	unreg.disable_bit = 31;
+-	unreg.disable_addr = (__u64)&self->check;
++	unreg.disable_addr = (__u64)(uintptr_t)&self->check;
+ 
+ 	/* Register should work */
+ 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+@@ -263,13 +263,13 @@ TEST_F(user, register_events) {
+ 
+ 	/* Register without separator spacing should still match */
+ 	reg.enable_bit = 29;
+-	reg.name_args = (__u64)"__test_event u32 field1;u32 field2";
++	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1;u32 field2";
+ 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+ 	ASSERT_EQ(0, reg.write_index);
+ 
+ 	/* Multiple registers to same name but different args should fail */
+ 	reg.enable_bit = 29;
+-	reg.name_args = (__u64)"__test_event u32 field1;";
++	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1;";
+ 	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+ 	ASSERT_EQ(EADDRINUSE, errno);
+ 
+@@ -310,9 +310,9 @@ TEST_F(user, write_events) {
+ 	int before = 0, after = 0;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
++	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1; u32 field2";
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)&self->check;
++	reg.enable_addr = (__u64)(uintptr_t)&self->check;
+ 	reg.enable_size = sizeof(self->check);
+ 
+ 	field1 = 1;
+@@ -367,9 +367,9 @@ TEST_F(user, write_empty_events) {
+ 	int before = 0, after = 0;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__test_event";
++	reg.name_args = (__u64)(uintptr_t)"__test_event";
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)&self->check;
++	reg.enable_addr = (__u64)(uintptr_t)&self->check;
+ 	reg.enable_size = sizeof(self->check);
+ 
+ 	io[0].iov_base = &reg.write_index;
+@@ -401,9 +401,9 @@ TEST_F(user, write_fault) {
+ 	void *anon;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__test_event u64 anon";
++	reg.name_args = (__u64)(uintptr_t)"__test_event u64 anon";
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)&self->check;
++	reg.enable_addr = (__u64)(uintptr_t)&self->check;
+ 	reg.enable_size = sizeof(self->check);
+ 
+ 	anon = mmap(NULL, l, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+@@ -439,9 +439,9 @@ TEST_F(user, write_validator) {
+ 	int before = 0, after = 0;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__test_event __rel_loc char[] data";
++	reg.name_args = (__u64)(uintptr_t)"__test_event __rel_loc char[] data";
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)&self->check;
++	reg.enable_addr = (__u64)(uintptr_t)&self->check;
+ 	reg.enable_size = sizeof(self->check);
+ 
+ 	/* Register should work */
+diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
+index 5727cb5b914cf..b444d114b2f00 100644
+--- a/tools/testing/selftests/user_events/perf_test.c
++++ b/tools/testing/selftests/user_events/perf_test.c
+@@ -89,7 +89,7 @@ static int clear(int *check)
+ 
+ 	unreg.size = sizeof(unreg);
+ 	unreg.disable_bit = 31;
+-	unreg.disable_addr = (__u64)check;
++	unreg.disable_addr = (__u64)(uintptr_t)check;
+ 
+ 	int fd = open(data_file, O_RDWR);
+ 
+@@ -160,9 +160,9 @@ TEST_F(user, perf_write) {
+ 	__u32 *val;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
++	reg.name_args = (__u64)(uintptr_t)"__test_event u32 field1; u32 field2";
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)&self->check;
++	reg.enable_addr = (__u64)(uintptr_t)&self->check;
+ 	reg.enable_size = sizeof(self->check);
+ 
+ 	/* Register should work */
+@@ -224,9 +224,9 @@ TEST_F(user, perf_empty_events) {
+ 	__u32 *val;
+ 
+ 	reg.size = sizeof(reg);
+-	reg.name_args = (__u64)"__test_event";
++	reg.name_args = (__u64)(uintptr_t)"__test_event";
+ 	reg.enable_bit = 31;
+-	reg.enable_addr = (__u64)&self->check;
++	reg.enable_addr = (__u64)(uintptr_t)&self->check;
+ 	reg.enable_size = sizeof(self->check);
+ 
+ 	/* Register should work */
 -- 
 2.53.0
 
