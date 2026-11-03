@@ -1,100 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.6
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793742955;
-	b=sKYa9r5KJyaGbEPJUPl9sesJUvfmF2CrF2bhQauYoV8MEDZYP86AOY+LeM7W2+F0uTAR
-	 Q4WBE6jQ9DCPjcsBCQ/3dK07YsIlODBsu6yTy5UBUlO/qW7UaAR9qewyOxVo7XNwpi0a0
-	 Qb8FlFyjwuxR+GP2306WJXNbWjCIAs862a/QkchNKclKLVNzk8OT6ExbdSaCbinAafhdk
-	 5nIPZz8e4w3nabEU/yT5RoiyTM8O2pMdTfQwGOaE3uDL+XxXUt/fH3gOf8an3SX3vvgqA
-	 7Tf6Qaa7t49HKwe4UmKv0BeJgRWK6KBLtfzURP1duT5abKV0WCTLhwGjs2anCJULtAw==
+	t=1793743426;
+	b=mEFwQ8iyv4a0ECCTnpcyf+vBHmv+SbhJkrBE8pmS/jawdMULKTruxk8mSc+g99Em+iyC
+	 C8UJMB4VLh05jemSO+NSBr6PUUElxmR8mnf37sjeZBG0OSsfhjD0eyJvKj6U8fPXqeJoZ
+	 Ai+dY2mct+IdC9xIO/OG/udeimc62tMzERYvwMgPJYL4IYWZNKdTzxQfcMwiPdjwiDghT
+	 sbLZxGHmr1uMVpKve2GIB7nrfgE6rnC53BWMBhOlnEQLZWmY7o+JulasOhv3TX8uSdSgj
+	 D9bayTMY2T4JDg/TNM6Bz4BNiSNPS88fTG3h6v9yAKZ1kJZo+cM1DS1Mw3PAVa+u9gw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793742955;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793743426;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
-	b=TevhBnELvGRe4d/D8S5tAd+w5OSRHFQhKYFRPD2DOnVdUAfPNYxuxBMTsRGiaq2EQQEO
-	 gsCqeqkfpMFytmLw0NK6R9+a04DxjMNcxZqST72JP9wLjijHsMkKOSVDEepD7isOXwofp
-	 1ya1e6yxm/7gcsLQIqZN7F6znIlnhSZ75ZTwIOG1TT+gAtCn/Yt/gvq2z/3O+8i3Hxfwn
-	 lzkxJ1rzKmsr4WeYmTF52UErqemsGpSrW+yN6regLVhS7sx3w4LjwVvRxY8eobunBPue/
-	 0eQXMHDLcQBdN+bjxYHeZywe4L41lj3to2UaJwii09b9LRQiWg6qD/v9TIGsxOvGlvg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=lT95gwxqijZuWNZmAFyry0p0ILAiPcgM7CWPA1WXiYY=;
+	b=FO4KgrWLsnvrq3qH/UtJm/gMAQoJYOBl5ZREZx56NNR5gP8ZUImFxpVR/og/8wPxiD5S
+	 IFtoHQIZl2mR+cCDGaUz7Cu3F5u3ZAqj1Vtp7VZwm7urdeLS7QYgshu2GUi+IzIRvXo92
+	 TnuLuSkVn4xBOuZFLpB82MuEaUx2zN8tk+OmPmGVjrgYgNIY3y1TQFWPs5Co12DT4EcQx
+	 Bb6F43Q8O+qvcAcgJav3TLKjXE8+DWw6WuM5+8shOieWT9VKen69fR5lbb0eQ6LwvCKNF
+	 m8+LGmE7XTgMxesxX5dk+mO7kgQi9brRP2/9X2a2CEmRLduP07Fw6Mnf2LfYps55tIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sfuNBzzN;
-	arc=none smtp.remote-ip=74.125.229.6
-Received: from mail-dy2-f6.google.com (mail-dy2-f6.google.com [74.125.229.6])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YrPHjkfQ;
+	arc=none smtp.remote-ip=209.85.216.70
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8513B606A324
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 21:55:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8513B606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8BF606D82F
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 22:03:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C8BF606D82F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--skhawaja.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sfuNBzzN
-Received: by mail-dy2-f6.google.com with SMTP id 5a478bee46e88-33e48934fa8so166eec.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 13:55:54 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YrPHjkfQ
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3ac0ae43900so117365a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 14:03:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793742954; x=1794347754; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
-        b=sfuNBzzN/UPokfGhMFu7uaQLMXvaErnOcSaFw2i3bFhGkgbRskcKeni8N53tr/B4WI
-         +boW9bxRpBvOUiE4wWizeSWbRvN5zEt4A73maTA/LhcdeO1KuKwFdLMEkL0VCr2NPHx2
-         0c0z0J/lzfmH4L6dj4TEzzwOsZQ/FBo6LAIr72HvRiUqNIN0jW+RNHA7LuSwUzbgrNwj
-         HyeR0ginrwv94KBDVPeF6hKIglgoX+LoEOaevgMT2vgy2lRomtXkYwIOer/Rl6RULaZQ
-         oEpKMyiPK1719m9OvaU1G0OvijYckCFUYvGpYXGohwjNa3gBDqROKfN7kYQWwvPf1bie
-         Ib4w==
+        d=google.com; s=20260707; t=1793743420; x=1794348220; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=lT95gwxqijZuWNZmAFyry0p0ILAiPcgM7CWPA1WXiYY=;
+        b=YrPHjkfQQh4ijubwBazdKI+yMwlkLJUg5TjWVSXFcp1YDbSKtWorLoUvwdNWd4YVHA
+         ror4GM67h5kJBzOor5OLrdVV5xOl+YsnuViIsfJT6nbleXHUAUIhcmma3wfOn2gyaQ5w
+         8MGGX5DEJD58BhkizxiB7w2Sp51vDUXFJ5Tx+oTQ7fd3tAYKAVBTLxFF9iioRgF2WiTw
+         9/RDrW+i7ay1RyvVUW1LkU8yrKh46TkN+8G+myBIT0Kg1cdlM/gLvGC8WJYsG9XtkvUo
+         tDbBZDkIUB3WvP7lSslMD+hVrzxs+PChef2VOMH/n7++b2Yiws6h26sYH24gE9oJitfL
+         5TVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793742954; x=1794347754;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
-        b=RL3/P+7CUKc+rRgnGZgnGnxHtUtmS35Nyq/xo4hQRZ+i6sNTW92/7/AIYIOMBUv74A
-         8PqnqitR5C0c4vkXiNL/P+NSmp1AU44Tfxy/6L1W5sqXzQAbZ+lSsckjDNlw6YHCFO9G
-         ir/+Fmv5p1BP40LCop1C2cPrScS84CQjNpxA7N/rZoALkSz8p4tr45WxTFTOUJ0IdB1B
-         FXmM4fkFzluNrXz6rfd2g7WMSQMvps/AY07k7OxxJkqvSkHvqmLlA+bDZcTpljMwg911
-         gw6aa+Ogr/z1bkv39K328g9rT9MAsQWb6uSi4mnEf4D+pe/vAlkxRKHCUFLDropemEl1
-         sHkg==
-X-Forwarded-Encrypted: i=1; AKwUvBwY2TQMgworfYggKm591Pggb3DtAWXmGODrlGR1iDlQ/wXpL3lIyUEKMg5ojCZZCZUkNF9UOgGl28bZBqRYc1Q=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9c588ynYdOssG14nygVxVYc+n4+SFlwirOBUxvpls5zwtqmeb5
-	Yt/VJEctr3Xxb/eDFpgIM/bYPcaD+XmK2x0I3yM6QiM56IvKJxpVJkY54tYpdEls7yk=
-X-Gm-Gg: AYBFou0KjVza/+CnMUkIktZr8LRnCO+fsGpJF5Q9dJkjdWYEEWgIxlnJsY8EDOkJxtG
-	2YGU1YEde/XM2g+Vqym2HrlDv+qKlYQCezRnDKSEyb6iya4pUi2ci2Fo6cbOhwjh2XQP4W1iu4F
-	yICDInnQG+s6gXLAb9xmVOKqN4rb8WApWE+rKRM+9PYJicLCuWWuOxtzw/OkYaMHdkuV27ylWXt
-	tTbvajPVt6l+Uxtf6rp1aYjJYAkUDc/5FX176ZLOvfdGOOdaaH1uW2cntpzPSkDbJ4qsr0/f6sP
-	HzGD246Azj7i8B3votUWCtMbxsmOCJyUJUX32b5vS2UWmLhb/l79IZbOGODo1xh2r8Z7j6LoCpr
-	fgSDGiiUIP3mewjq7B3efZg0jTYBYMtp7gMhagV0V+duXjxWwEZSOYod8BtK4sNvLJ7DCEgA8qD
-	dmcpuRcOb25X84gCvbXjnIbdRjT+pCdQFnI1+zkaGjVWLApS6x+Dk8fKVMvJQszQSU3iRhOD4/L
-	djSkv233TbYFxkbOlromzHJK25yi4PJH4cLMt1dms8N6eyGPyynKNLb41l4XfSaeJgUUDUpwtjH
-	KgX3s2iiWfH4TbHvl41qcXL4qLkutKuiEJH/ev8tBA5qPu9YkJNms5xw7foWc1iuhIU5RFeJT5/
-	Rc9jZI4CRZlWKYE3PrnNSDFKjMSfowKD3dAUh7g==
-X-Received: by 2002:a05:693c:6090:b0:36a:4a68:84e5 with SMTP id 5a478bee46e88-36a4a68851cmr22202818eec.8.1793742953533;
-        Tue, 03 Nov 2026 13:55:53 -0800 (PST)
-Received: from localhost.localdomain ([98.148.34.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca3958746sm867414eec.22.2026.11.03.13.55.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 13:55:53 -0800 (PST)
-From: Hungyu Lin <dennylin0707@gmail.com>
-To: ast@kernel.org,
-	bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	iii@linux.ibm.com,
-	bjorn@kernel.org,
-	pulehui@huawei.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hungyu Lin <dennylin0707@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Account for zero extensions in patch list expectations
-Date: Tue,  3 Nov 2026 21:53:09 +0000
-Message-ID: <20261103215309.19950-1-dennylin0707@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20260707; t=1793743420; x=1794348220;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lT95gwxqijZuWNZmAFyry0p0ILAiPcgM7CWPA1WXiYY=;
+        b=IVA16EaeY7bllalYhLOmw8GtJlkX7RJChg+sCUJAsJIj6MTMmsoayM8NFOB5/vlSfq
+         AMBJ8kuIICLOyTO+4aYKThNvo7oGkpw/9+UcsTvIvYRUmQ2s2aiV/HfVkSsS0/qU9ndJ
+         O12FsIKmmiUUvxRPVDG4eGmDI5uJsLu2cfnzyIbPMGxkRTNheqgzjzrMXmQWW8eesMhM
+         fqbKgtIFJ1ZJsJ6zlcgeVTe16aYlrjCVEqTu6Egk7BTb7QOia3OVLia1zbty4y7zE0+3
+         odBXHmYRtEf9EfvV2l+KI5xM97zC8zxLLvK49osG4mjJLt8sJ6T/cVH+/nK/MS4CNkhB
+         R7/w==
+X-Forwarded-Encrypted: i=1; AKwUvBzpEzv48W6KcxiEg2brf38LzltHcFj3kQZFasKzPXOYWau0yiNhHfhXzZTJ/BaJpyb6GuL1c+67dxTtq+Wlkyg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+WnuBsiqdr6KnyKtePiYhIGlXw7fI/8oX63KQeIngYqcBHcEsb
+	e6iu6VzadyAq6vF8736uMA7wAWG+xg7NGFWInGFY9+XLfl7yRo49mPTOMGjRYvV5j2tq5ULhY1D
+	8vM9PbwWWLKZQGQ==
+X-Received: from pgbdw19.prod.google.com ([2002:a05:6a02:4493:b0:cc9:f793:b980])
+ (user=skhawaja job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90a:e397:b0:3b0:96ce:104f with SMTP id 98e67ed59e1d1-3b096ce1144mr146764a91.5.1793743420343;
+ Tue, 03 Nov 2026 14:03:40 -0800 (PST)
+Date: Tue,  3 Nov 2026 22:03:37 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,66 +75,171 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
+Message-ID: <20261103220337.3578111-1-skhawaja@google.com>
+Subject: [PATCH v3] vfio: selftests: Remove libuuid dependency
+From: Samiullah Khawaja <skhawaja@google.com>
+To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Samiullah Khawaja <skhawaja@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-patch_list_insert_in_front() checks the translated instructions around
-the call of an inlined bpf_loop() and its callback. On s390, the verifier
-adds zero extensions after the two 32-bit register writes in the loop.
-The call is therefore at instruction 25 rather than 23, and the later
-instructions checked by the test are also shifted by two. The test
-fails despite the call and jump offsets being correct.
+Replace libuuid with a minimal uuid_t and uuid_parse() in libvfio, and
+drop -luuid from the build. libvfio only uses libuuid to parse VF
+tokens, so pulling in an external library is not worth it.
 
-Use the corresponding instruction indices on s390 and RISC-V, whose
-JITs request explicit zero extensions. Keep the original expectations
-for the other enabled architectures and retain all branch offset and
-callback entry checks.
+libuuid is often missing from cross-compilation sysroots, which causes
+the VFIO selftests to fail to link:
 
-Fixes: 57fae4059380 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf 7.4-rc1")
-Link: https://github.com/kernel-patches/bpf/actions/runs/41696128762/job/126138168160
-Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
+  ld: cannot find -luuid: No such file or directory
+
+It also complicates building against glibc alternatives such as musl, see
+https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
 ---
- .../selftests/bpf/progs/verifier_patch_list.c  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-index 581b75b7b5c5..a9ad1dc56c3a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-@@ -298,6 +298,23 @@ __arch_arm64
- __arch_riscv64
- __arch_loongarch
- __success
-+/* The verifier adds two zero extensions for these JITs. */
-+#if defined(__TARGET_ARCH_s390) || defined(__TARGET_ARCH_riscv)
-+__xlated("25: call pc+7")
-+__xlated("...")
-+__xlated("32: exit")
-+__xlated("33: r0 = ")
-+__xlated("35: r0 = &(void __percpu *)(r0)")
-+__xlated("36: r0 = *(u64 *)(r0 +0)")
-+__xlated("37: if r0 != 0x0 goto pc+2")
-+__xlated("38: r0 = 1")
-+__xlated("39: exit")
-+__xlated("40: r1 += -1")
-+__xlated("...")
-+__xlated("51: if r1 != 0x0 goto pc-12")
-+__xlated("52: r0 = 0")
-+__xlated("53: exit")
-+#else
- __xlated("23: call pc+7")
- __xlated("...")
- __xlated("30: exit")
-@@ -312,6 +329,7 @@ __xlated("...")
- __xlated("49: if r1 != 0x0 goto pc-12")
- __xlated("50: r0 = 0")
- __xlated("51: exit")
-+#endif
- __naked void patch_list_insert_in_front(void)
- {
- 	asm volatile (
+v3:
+- Reword the changelog and drop the testing note from it (David)
+- Move the libuuid comment to uuid.h and explain how it differs from
+  the kernel API (David)
 
-base-commit: d4bf9e34e299e45af8da2b0457b0ac3efbd7ae8d
+v2: https://lore.kernel.org/all/20261102200624.1570562-1-skhawaja@google.com/
+- Move the parser to lib/uuid.c and lib/include/libvfio/uuid.h (David)
+- Drop the vfio_ prefixes and add a uuid_t (David)
+- Mention musl in the commit message (David)
+
+v1: https://lore.kernel.org/all/20260925013110.3447626-1-skhawaja@google.com/
+---
+ .../selftests/vfio/lib/include/libvfio.h      |  1 +
+ .../selftests/vfio/lib/include/libvfio/uuid.h | 16 +++++++
+ tools/testing/selftests/vfio/lib/libvfio.mk   |  3 +-
+ tools/testing/selftests/vfio/lib/uuid.c       | 42 +++++++++++++++++++
+ .../selftests/vfio/lib/vfio_pci_device.c      |  2 -
+ 5 files changed, 60 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+ create mode 100644 tools/testing/selftests/vfio/lib/uuid.c
+
+diff --git a/tools/testing/selftests/vfio/lib/include/libvfio.h b/tools/testing/selftests/vfio/lib/include/libvfio.h
+index 07862b470777..e9d513c3a08e 100644
+--- a/tools/testing/selftests/vfio/lib/include/libvfio.h
++++ b/tools/testing/selftests/vfio/lib/include/libvfio.h
+@@ -6,6 +6,7 @@
+ #include <libvfio/iommu.h>
+ #include <libvfio/iova_allocator.h>
+ #include <libvfio/sysfs.h>
++#include <libvfio/uuid.h>
+ #include <libvfio/vfio_pci_device.h>
+ #include <libvfio/vfio_pci_driver.h>
+ 
+diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+new file mode 100644
+index 000000000000..5c4ebe5ae3d3
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/include/libvfio/uuid.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
++#define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H
++
++/*
++ * Minimal replacement for libuuid's uuid_t and uuid_parse(). These mirror
++ * the libuuid API, not the kernel's: uuid_t is a byte array (not a struct)
++ * and uuid_parse() fills it in place (it does not take a uuid_t pointer).
++ */
++#define UUID_SIZE	16
++
++typedef unsigned char uuid_t[UUID_SIZE];
++
++int uuid_parse(const char *in, uuid_t uu);
++
++#endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_UUID_H */
+diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+index eff95828719e..d1d1b2b05af1 100644
+--- a/tools/testing/selftests/vfio/lib/libvfio.mk
++++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+@@ -7,6 +7,7 @@ LIBVFIO_C := iommu.c
+ LIBVFIO_C += iova_allocator.c
+ LIBVFIO_C += libvfio.c
+ LIBVFIO_C += sysfs.c
++LIBVFIO_C += uuid.c
+ LIBVFIO_C += vfio_pci_device.c
+ LIBVFIO_C += vfio_pci_driver.c
+ 
+@@ -30,8 +31,6 @@ $(LIBVFIO_O_DIRS):
+ 
+ CFLAGS += -I$(LIBVFIO_SRCDIR)/include
+ 
+-LDLIBS += -luuid
+-
+ $(LIBVFIO_O): $(LIBVFIO_OUTPUT)/%.o : $(LIBVFIO_SRCDIR)/%.c | $(LIBVFIO_O_DIRS)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+ 
+diff --git a/tools/testing/selftests/vfio/lib/uuid.c b/tools/testing/selftests/vfio/lib/uuid.c
+new file mode 100644
+index 000000000000..906a5db70ce1
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/uuid.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <string.h>
++
++#include <libvfio.h>
++
++#define UUID_STRING_LEN	36
++
++static int hexval(char c)
++{
++	if (c >= '0' && c <= '9')
++		return c - '0';
++	if (c >= 'a' && c <= 'f')
++		return c - 'a' + 10;
++	if (c >= 'A' && c <= 'F')
++		return c - 'A' + 10;
++	return -1;
++}
++
++int uuid_parse(const char *in, uuid_t uu)
++{
++	const char *p = in;
++	int i, hi, lo;
++
++	if (strlen(in) != UUID_STRING_LEN)
++		return -1;
++
++	for (i = 0; i < UUID_SIZE; i++) {
++		if (i == 4 || i == 6 || i == 8 || i == 10) {
++			if (*p++ != '-')
++				return -1;
++		}
++
++		hi = hexval(*p++);
++		lo = hexval(*p++);
++		if (hi < 0 || lo < 0)
++			return -1;
++
++		uu[i] = (hi << 4) | lo;
++	}
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index 4063a0e2b3df..4ae6ac1f8ed8 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -23,8 +23,6 @@
+ #include <linux/types.h>
+ #include <linux/vfio.h>
+ 
+-#include <uuid/uuid.h>
+-
+ #include "kselftest.h"
+ #include <libvfio.h>
+ 
+
+base-commit: 2637bdec0535a2044cd830eba9a79363651d9043
 -- 
-2.43.0
+2.56.0.385.gac671c819a-goog
 
