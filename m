@@ -1,60 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.149
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793729888;
-	b=OoTqObtgAVEut4w2TDYP+98fKkj7YO7P1lS/NJhn2/GB/6HDCaiQ2otvtTcJgL4Tj8Ta
-	 DKvszghPD3RF4syY9ddqEUlJ1M0IJV3QbxFIhFX6kwW0wdEKh6uwLzEU/D2rrUq+VhJB1
-	 F0i0BA+sj0sfVuJjQbcD84lAGqBT5NUpM45/LK/v1Q1O8A7gz4815iiOjN96/rAEVQdJ5
-	 OrZFmQUCmPsrqWV044KQUIHBR6Zl8D5RT03frxmK97UJ6WFiD3h1MYMznM84G7LteP3Xm
-	 Xgq1CyH1fqMt5q+IMNgy1u2NZQfrk5pk9Nnw9zAJmPIR+CF9+E/8T7awUXptgZDbX1A==
+	t=1793729912;
+	b=pI8rvTzPzFCj1NxNq3IRfoJ4DKjgMFLTolpPSD0AGOzPRzgyb+j+rAwwn7qugrR3YF1E
+	 2fGt7qOOqKC48gv3Q5/Q1WPhNPwOstSo3d03oB4MGwXiAeKMok5IoWAje7PL4vsxyCwn4
+	 08aJ+49G5l+OMs7HQ8cqTLujj0g4zMT+00gdUEfBVYTcs9SjM5aquXJhN8anbt0ahJL3S
+	 3QtYe/VvA1sIOjFAnGpTpJz5aJ9t6zTb1WZrGnC7mOMzMpHivInEeygqgw4WvYHCFm8z9
+	 LaiPblxa5tjmwGD3ZaIFJwp7kbW/SXJ1zrzwTCmagTIgPKTQMOHXtqXPKltBiconJhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793729888;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=DSR0F9dYIX2PVgUgo+faFrW6sPidANVelznumvDC+iU=;
-	b=n8y3Fx8yfgH87QKOlRTwlhWxk9S5YRuHcpnRQjN1VlVlwerqqFgWnZ9gYP9pHoThwtrJ
-	 UkBscw4B2a8F4YXk6S4Ou+KN0zxVXZad9Qm1p/uDdaEVF4LQwAkEKG/rN7wu8823akmQ2
-	 8MWSHsc0fxUP0C2HSJQDrlpX/IQucaNC6UKhNn/m+HJDE2PUv+85VkWQXHMrh6zUjeNLD
-	 3Md0pFZ/Zayd97y1/54m9NH5VEZBT/Qw7H/9AJJd5Te/Lp7i85RDwXVK5WlZ0u/D0MinL
-	 kg5DdJ4n4+kNYjIEU7TabyTpSX1Y31HfydWVz3CfEG4r7KedFflc5ZhM6in7X1LH7Dw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793729912;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=JOdDlevIHNgLi2iwEh1cVPzFxmgUEr7GY2bhR9cio/A=;
+	b=wfZy6u5efcluD+oE4yS9B9qDLZFZ+YejjfL6A/hpt9jOB5QaOZqIth68AKgNc7HFmJPY
+	 vvmnS1Rav6aAE5cWurkLTYZ+BtHNdr/5maU6nrHdE+azWWfFbqxY7mJial1e20/MuFyNL
+	 bPd1fS0/zuBeSOe3D0Aqshqd+WZPPFEAlfy93p3s1QS6iy1TVOGA+mF/obKWFOzdo3KdP
+	 JSaoNyt6lCk9CbkRHbr8MA4n/YjmKfLBycgmf1JTNikRNGapRZvSjs0o71iWjxz/6ebuF
+	 5nmGoaJ/BfTUg7nMYpVhgO1+rV7bBN7fLpYW0rQtECw5EPzeT9ZknwsxhOpKof147mA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l07Usqya;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=91.218.175.149
+Received: from mta0.migadu.com (out-149.mta0.migadu.com [91.218.175.149])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51799606A326;
-	Tue,  3 Nov 2026 18:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l07Usqya
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9791F00919;
-	Tue,  3 Nov 2026 18:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793729887;
-	bh=DSR0F9dYIX2PVgUgo+faFrW6sPidANVelznumvDC+iU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=l07UsqyaJzFG7ahJtea0kkm7vIGcocBIXoapK09NCgQVLOetoXvpcBgb3I2gf4aAJ
-	 Zz+/mrV8BT7jEJuET0svSSpZUAHTOXx8GCKqSx9MfTfhkQVuVOWsX/XvLE0J3csxpg
-	 sjX17buevItZO6odX3QytPXCFhPfBsVdygyApnYJ/ORsrQn6RVOI7GoFi9N0/7RTj/
-	 GMBa0Gqt/MiiA7O+EQNc65lhvT3i7fv7o8YIt9JSwRSNhaLsinK0HLiQbSUYCdw3zj
-	 B5gBnNjLf4+2h0Hhn7cbzg3/k4o678sGKD6KmOhYYCnExsL2jd5JAyKvx46Edht78H
-	 P9a/IFOnTLxag==
-Date: Tue, 3 Nov 2026 20:17:59 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: uffd-wp-mremap: keep the THP sizes in
- unsigned long
-Message-ID: <auolVwDqg2rXAGmv@kernel.org>
-References: <20261103150232.291827-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEA8606A328
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 18:18:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EEA8606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=9H6pGX+rS5AHSpcrFCfzr8bnyddolLBtfUym3kTqrEw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793729908; v=1; x=1794334708;
+ b=Amh9Kqcq0wK3tEPwBgJF9ZqDdhzwCOdklWc2r/zczwHAbc0bFOMiEMfBGTXn/471i0kRLz+v
+ jkL7S3mPNvzsw0xKjwFsIT/zt83KnYKFtP959Nd9aznJgbQmZk5A9BNdg9VM+B7GKdLrAfoRzcb
+ wvTYp4htO/MHB5yAszIf/lKc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 8b07ecaecb260597;
+	Tue, 03 Nov 2026 18:18:28 +0000
+X-Mizu-Trace-ID: 8b07ecaecb260597
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	jose.marchesi@oracle.com,
+	david.faust@oss.qualcomm.com,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v4 0/8] selftests/bpf: let the arena tests build with GCC
+Date: Tue,  3 Nov 2026 10:18:08 -0800
+Message-ID: <20261103181816.254686-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,62 +76,161 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261103150232.291827-1-sashal@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 03, 2026 at 10:02:32AM -0500, Sasha Levin wrote:
-> Commit 0020a1f5ca36 ("selftests/mm: hugepage_settings: use unsigned long
-> in detect_hugetlb_page_size") changed the sizes of the test cases to
-> unsigned long, but left thpsizes and detect_thp_sizes() with size_t. On
-> 32-bit architectures size_t is unsigned int, and gcc 14 rejects the test
-> cases that point at thpsizes:
-> 
->   uffd-wp-mremap.c:299:26: error: initialization of 'long unsigned int *' from incompatible pointer type 'size_t *' {aka 'unsigned int *'} [-Wincompatible-pointer-types]
-> 
-> Use unsigned long for the THP sizes as well.
-> 
-> Fixes: 0020a1f5ca36 ("selftests/mm: hugepage_settings: use unsigned long in detect_hugetlb_page_size")
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+The arena selftests cannot be built by GCC today. Three separate
+build failures stand in the way, and they are all hidden rather than
+avoided by the __BPF_FEATURE_ADDR_SPACE_CAST guards wrapped around
+those tests -- the moment a GCC defines that macro, which is what the
+in-progress arena support does, the guards stop hiding them and the
+build breaks.
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Behind the same guards the reporting is also not true. Tests inside a
+whole-file guard do not appear at all, so the report is silent about
+them. Tests with a guard inside the function keep an empty body that
+satisfies __success __retval(0) by doing nothing, and report OK.
 
-> ---
-> KernelCI's 32-bit arm kselftest builds hit this. Built the mm selftests
-> with gcc 14 and gcc 16 -m32 (four errors in this file before, none
-> after) and natively with gcc and clang (no change). An i386 build with
-> clang runs and detects the THP sizes as before, up to the point where
-> the test needs root.
-> 
->  tools/testing/selftests/mm/uffd-wp-mremap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
-> index c48eaab8e75cf..fb5582ec5b201 100644
-> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-> @@ -15,7 +15,7 @@ static int pagemap_fd;
->  static int nr_pagesizes = 1;
->  static unsigned long pagesize;
->  static int nr_thpsizes;
-> -static size_t thpsizes[20];
-> +static unsigned long thpsizes[20];
->  static int nr_hugetlbsizes;
->  static unsigned long hugetlbsizes[10];
->  
-> @@ -30,7 +30,7 @@ static void check_uffd_wp_feature_supported(void)
->  		ksft_exit_skip("uffd-wp feature not supported\n");
->  }
->  
-> -static int detect_thp_sizes(size_t sizes[], int max)
-> +static int detect_thp_sizes(unsigned long sizes[], int max)
->  {
->  	int count = 0;
->  	unsigned long orders;
-> -- 
-> 2.53.0
-> 
+So: fix the build failures, then drop the guards entirely and tag the
+few tests that genuinely need the feature, which removes the
+empty-body failure mode rather than reporting around it.
+
+Numbers are test_progs on bpf-next with a stock bpf-gcc, before and
+after:
+
+ 1/8: Gate the callx tests on CAN_USE_CALLX, which also accepts a GCC
+      defining __BPF_FEATURE_CALLX.
+   -> 79 newly visible, 78 OK and one @unpriv SKIP.
+
+ 2/8: Keep clang-only warning flags out of GCC builds.
+
+ 3/8: Make arena_base() opaque to GCC's -Warray-bounds, as stream.c
+      already did for its own copy, and fold that copy back in.
+   -> no verdict change.
+
+ 4/8: Spell the addr_space_cast address spaces in decimal. gas only
+      took hex after 2.47, and the failure is in the assembler.
+   -> no functional change.
+
+ 5/8: Write the mixed arena/scalar ALU tests in asm, rather than a
+      volatile register variable GCC may optimise away.
+   -> both now run under a stock bpf-gcc.
+
+ 6/8: Drop the arena guards and tag the tests that need the feature.
+   -> 27 newly visible, 22 running and passing; four need the tag.
+
+ 7/8: Cast explicitly in the four struct_ops arena triggers, which
+      test_loader does not drive so the tag cannot reach them.
+   -> 2 tests stop reporting a vacuous OK and run for real.
+
+ 8/8: Cast explicitly with bpf_addr_space_cast() in the arena subprog
+      and callback faults, as the sibling tests already do.
+   -> 15 FAIL -> OK, 5 newly visible.
+
+Totals for the series:
+
+  FAIL  472 -> 456        OK -> FAIL regressions:  0
+  OK   7061 -> 7167
+  SKIP  753 ->  772
+
+v3 -> v4:
+
+Alexei suggested simpler mechanisms for three patches. That exposed
+build failures that had to be fixed first, so the series is renumbered.
+
+ - v3 3/8: the #else dummies are gone. Rather than give each guard a
+   placeholder that reports SKIP, drop the guards and tag the tests
+   that need the feature (Alexei)
+ - v3 4/8: arena_base() folds barrier_var() (Alexei)
+ - v3 8/8: cast_kern() instead of the flag in .data. (Alexei)
+
+ - New 4/8: addr_space_cast address spaces in decimal. gas has bug
+   which is fixed but not released yet
+ - 5/8: the asm rewrite of the mixed ALU tests moves ahead of the
+   guard removal -- with the guards gone GCC sees the volatile
+   register variables and -Werror=volatile-register-var fires. Both
+   tests now run under a stock bpf-gcc.
+ - verifier_hmul_arena.c converted away from dummy skip for consistency.
+
+v2 -> v3:
+
+ - Rebased on bpf-next.
+ - 1/8: the bot asked about data_in_arena.c, whose use_ops() gated an
+   indirect call on __clang__ with no arch condition. That file has
+   since gone in 3c13b2e5a40e ("selftests/bpf: Remove tests for global
+   data in arena"), so nothing is left to convert. The missing word in
+   the commit message is fixed. (bot)
+ - 7/8: the comment on the r9 load said it was what makes libbpf record
+   the arena, which stopped being true with cd7a395838cb ("libbpf: Bind
+   the arena of an object to every program in it"). The load is now
+   only a fallback for a kernel without fd_array_cnt and for the light
+   skeleton; say that instead. (bot)
+
+v1 -> v2:
+
+ - 1/8: the __skip() reason named only x86/arm64 while CAN_USE_CALLX
+   also accepts riscv64. Say "arch JIT" instead of listing them, so
+   the string cannot go stale the next time an arch is added. (bot)
+ - 3/8: jit_insns_arena.c was missed. Both of its programs are inside
+   the guard, so without arena support the object has none at all and
+   RUN_TESTS(jit_insns_arena) ran zero subtests without saying so.
+   (bot)
+ - 5/8: commit message only. It cited arena_types to argue the kfunc
+   tests need no cast, but the address parameters carry the __ign
+   suffix, so get_kfunc_arg_type() returns ARG_IGNORE and
+   check_func_arg() returns before any register type check.
+   Conclusion unchanged, for a better reason. (bot)
+ - 5/8: arena_kfunc.c, verifier_arena_globals1.c and
+   verifier_arena_globals2.c had the same empty-body shape and were
+   missed; nine more guards go and seven more tags arrive.
+   arena_kfunc.c alone had eight subtests reporting a vacuous OK.
+ - 8/8: new patch, for the four struct_ops arena progs.
+
+   The three bot findings prompted a sweep of every prog with an
+   arena guard, which is where the last two came from.
+
+Link: https://lore.kernel.org/bpf/20261028000411.4010967-1-vineet.gupta@linux.dev/ [v1]
+Link: https://lore.kernel.org/bpf/20261028204158.1021284-1-vineet.gupta@linux.dev/ [v2]
+Link: https://lore.kernel.org/bpf/20261102220717.4079739-1-vineet.gupta@linux.dev/ [v3]
+
+Vineet Gupta (8):
+  selftests/bpf: Build callx tests with GCC that defines
+    __BPF_FEATURE_CALLX
+  selftests/bpf: don't pass clang-only warning flags to GCC
+  selftests/bpf: make arena_base() opaque to GCC's -Warray-bounds
+  selftests/bpf: spell the addr_space_cast address spaces in decimal
+  selftests/bpf: write the mixed arena/scalar ALU tests in asm
+  selftests/bpf: drop the arena guards and tag the tests that need arena
+  selftests/bpf: cast explicitly in the struct_ops arena triggers
+  selftests/bpf: cast explicitly in the arena subprog and callback
+    faults
+
+ tools/testing/selftests/bpf/Makefile          |   8 +-
+ .../testing/selftests/bpf/Makefile.buildvars  |   6 +-
+ .../bpf/libarena/include/bpf_arena_common.h   |  11 +-
+ .../bpf/prog_tests/callx_rodata_lskel.c       |   2 +-
+ .../selftests/bpf/progs/arena_atomics.c       |  32 ++--
+ .../testing/selftests/bpf/progs/arena_kfunc.c |  18 +--
+ .../selftests/bpf/progs/arena_kfunc_jit.c     |   5 +-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  16 ++
+ .../selftests/bpf/progs/callx_rodata.c        |   4 +-
+ .../bpf/progs/compute_live_registers.c        |   2 -
+ .../selftests/bpf/progs/jit_insns_arena.c     |  10 +-
+ tools/testing/selftests/bpf/progs/stream.c    |  62 ++------
+ .../selftests/bpf/progs/struct_ops_arena.c    |   3 +-
+ .../bpf/progs/struct_ops_arena_autobind.c     |   3 +-
+ .../bpf/progs/struct_ops_arena_member.c       |   3 +-
+ .../progs/struct_ops_arena_member_render.c    |   3 +-
+ .../selftests/bpf/progs/verifier_arena.c      | 138 ++++++++----------
+ .../bpf/progs/verifier_arena_globals1.c       |   6 +-
+ .../bpf/progs/verifier_arena_globals2.c       |   3 +-
+ .../bpf/progs/verifier_arena_large.c          |  21 +--
+ .../selftests/bpf/progs/verifier_callx.c      |   5 +-
+ .../bpf/progs/verifier_callx_rodata.c         |   5 +-
+ .../selftests/bpf/progs/verifier_hmul_arena.c |  19 +--
+ .../selftests/bpf/progs/verifier_ldsx.c       |  14 +-
+ .../selftests/bpf/progs/verifier_zext.c       |   4 -
+ 25 files changed, 159 insertions(+), 244 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.53.0-Meta
+
