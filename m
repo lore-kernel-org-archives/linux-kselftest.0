@@ -1,105 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793728776;
-	b=fqzQihg6eoGR0ihz1xaEUgQJVoPKmyZk9nhEI5X/pV1cc/9ECpHLP5arceE5rP4mFWWW
-	 qtzadasoBMac4GQ8eWg1kGQM8qNEx8Wk3zrb2AyHoeU8brpDdfBwXMs+jgWeCmD/VfjzX
-	 rkGqaSfHBB0cZlbOTkSu9I1c0zK3n2SuGBsRSB98J80VmjkCBZv1bUOKERKw5j9m35y93
-	 YE1+hT0+D3BpuqZOXvC1kuqnwKFTto19gEtI4KsoPCuk48zGQCHvoodffO19xQZDlv0Rg
-	 +M8orB5fo2UmTG3rK23HXtDjcS+zrnPYjAs9Pa6urbZ4O08O7TnKnUZ9wrdxTD9T6ow==
+	t=1793728793;
+	b=U3JHhjnLM19/KA+5iBkHXW4rQa0+88nIbK5zF5uB5CF7QXKGp7/j/YVHHMK5SG8Xnq8S
+	 l2KkMD5YWwTthUZQdZg3QH1Sdpo+A+GdJ9WyjW51UnO/6Wlng0DNDcjCeVohr4qWWm57N
+	 aR1BxnZA/HL9PNrWC/2oP8FqGhaja92uX3zGrfuy1z3tcmV1g3KSbdewLeZyI/8x9nxv1
+	 54/xWfpMl1tz2Htbsp5AMRKEZt9jF74dO1BWyhwDeev/Eb2di0ukr6W146weU/32qn69u
+	 x7hXxFS+e453vzoevT+YwQP0gj1t35ICLXNlLNnNo2v4WGM2I+n9KeFT2ZuS6bHJcsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793728776;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793728793;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=2TUqSI293fsyrQWudSmrDIdAlCbevrZ1mBB1b508g7w=;
-	b=dD3H2JloYItK/W2R4lUD9QGlFeLk2nuCP5MsUpHN/GNBGDgqXAVgMSO7pyZl/pYVGEfL
-	 iK0//IP1xuA4homtTCe+kbaBhVux3boRepMxThiuDmoSUKXX4U5GJipBJBDq4D4okHMgL
-	 gRUBzFlRWZ9FMONIxaMy4DI64zY3bkpoiWVcHnFGbluOL5OJVkmDqCGyoqhV4euVYAGsz
-	 9CHnJtbvxmpRUgBdCOTmp9DpKCPdPM7ZdeW629Zbo8nNPt9AcWkMnWmNVVikAVE2mnZ/T
-	 ZH4ArQDgnC8+GV0/a6+x9xoFOqHUCIzzh6BXVGeEA44Z3cRtw+cqxu2NlBJoFbv5osQ==
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=2F2lIdK086BENYIYPQD2Q2okdf2dHEkNd/6V9465bEA=;
+	b=lceJC83JMxbRJ/YIteTGuUThkXaJEww8WrP8XCaItTr2TjKDVzlu2U6YZZUC5XwCwWNE
+	 Ei3wvZmWXFHyT7HFcZm61Wjazri9LTrz4755KvI/NzgMnUqEQWAA6rKuF/K6xL2YVO8wC
+	 FAQ7xiiDZuSHyWqeyBJCjwFDQhkzaVZgGEG9kSk4birt9Q/sA8XUSMYUwsXwtSDSALTvE
+	 fZcLbfHqQ4lffZSSPriZxELZnQWokv8x5s51ZOABBQVD9pR9QGBe2ahS4arFQboer3mx/
+	 7Kd8lIZBhRr+wQ4h6flhtz27pOIVIYVZ7bAGqLwLoXWrPlyuAIEIigfWgWT/lE+sbbg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kFvxFiEw;
-	arc=none smtp.remote-ip=209.85.215.173
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TCjz6mkB;
+	arc=none smtp.remote-ip=74.125.82.47
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1769C606A328
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 17:59:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1769C606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7234F606A328
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 17:59:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7234F606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kFvxFiEw
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cdb2e0062bbso902325a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 09:59:35 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TCjz6mkB
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1ae18eb9b69so3323047c88.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 09:59:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793728775; x=1794333575; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2TUqSI293fsyrQWudSmrDIdAlCbevrZ1mBB1b508g7w=;
-        b=kFvxFiEwufdLvpOT39N2UeNLxtqJQW9lb1AdQsz7LvIlds6tjDPQtbsiYMc3dozVhv
-         u9IZEEbKHO7ElWHXy3cNMM6pgDBNk9VDRFDgblG6vlmFSsLIUvO5QdpfGvtmQ9+TBfof
-         pQKAoo17o8oC8O/Ejc8aAzFSkO5CwhojZ2S22jYvxKAN/ABnDS87eQq4AlJ3U8PGpM51
-         Gp3nYRRd5ZjAGdRPXezrtIt0DklYXuiJAu2vlMu4cIIS25sibSkgHonScjBxVO/Pozzn
-         5Pj/YTPHQdrQGvNEAmAz9icNnz/OeqSCe3K9Rglr34+tlbi8xcc12zVSxmG+avNvVKiC
-         u5PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793728775; x=1794333575;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20260707; t=1793728792; x=1794333592; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2TUqSI293fsyrQWudSmrDIdAlCbevrZ1mBB1b508g7w=;
-        b=YqF6KDpA++h0OSGJaZEXCmlJLSUMstHmMBs0dM1TCrqlMDPV82zt3v7uopJDTTHfAR
-         gjathH4fhqXwr53oi5V6q1Eqxuba9nCaET2ThmpDPQJVY773IecYNyvGNO8brcHqJjDj
-         5bIVIQ1uccQLv08lDRag/91hK9bNTPpfjvgmREHNo+NXctVpQDFy1H0duzKvoWf71nDO
-         7vnVr6Zo9XaifZspXHh2JlnfyLqo/fYJS7mrtSJ3g0hUMphMZIxS7aK8G+65JQ0GQ2f0
-         /N2GL+JkpjnD8R4KsHATlnoDDheuIymyEaGBrFfEmozrdqbRK03gll3ZXyNey+jSCH7w
-         yxbQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwUa78juBy8u3UUePnXwknrST3sVWxF0VfksGsqHQ6UjLZjES8G/DOhry5pjIukRdGuMX869n4u/aOHkqwiwrk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9g5nNTz8ysGy9TfGLPVT6GA0tz48YjLcwe1EXX2PdhLQCPn9rn
-	zJGZiTu5JOiTZpwIyuuZzJIalRU8njacS0xv89UCrSWwnj5mPOJXC7Mz
-X-Gm-Gg: AYBFou3lI6qj33MctZWWTgQo0n72KjY2eTCnrGQkHMg5CkL6vPsXH/pMoXCYZ5SXZIp
-	eAenmIWvAzAfrSzry06XXGqLW9bM+I+zmMY+qfT+8Q3BFHV1IqchspNznKYNwZQ3hJW5Qbon+rz
-	PI3dCzMgt6wAy47X0UXHn6Qs5E6HWvZALLc3TZlA54tcQeTHnOmgr9oLPtTGPwZpBlHARxOp5ZK
-	eyn6i/kELNSmrB2/boJVDwNGfL55lpmN/o84+0lOCRhOKhn+RRs2I8jOvUh4Zmge8dVbHQ/EBHG
-	9lvFAqJh+PDLcgEIUu+2NGQVavPQk+VFHyRX4sLNwt9ISABtszx/KUftTsFD/F3TprxS4EkZ8ev
-	00uHj1CBH21OVJgoBm7Gu3ZNC1/6XdNQlega8NLCQwuEum5ThaUGCilfVN2634HXqc0Mtq3k5fj
-	GrCUnUMcU1FC2ZoZ8IB62PPA6pm5O2Y4N9l7FIP/BtwS66S0z4WEGRDYk9g8Gd0FQY6OMr+OOy9
-	2qROxQ/mYErE+GADDmv8ZpO3Vp5n+MPD3w2xle8Y72a/W/dZuuPabdTGcZ4zaQwByROR0jh4AhF
-	4KdAboCEAgnkVLeY/0W0ehenYpWP4o94qyih6ceeKZKAsq+Mzop1dm8wZzMxCWn8BP+0S6d7rhe
-	Hbx20HQKAUD6HG6RVguTnwk3hF+nkDN2xWw8TelIWd4E9ZV83hpyL/t4=
-X-Received: by 2002:a17:90b:3909:b0:3ac:a203:e095 with SMTP id 98e67ed59e1d1-3ae89536c23mr10766358a91.7.1793728775284;
-        Tue, 03 Nov 2026 09:59:35 -0800 (PST)
-Received: from localhost ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09369c638sm136047a91.0.2026.11.03.09.59.34
+        bh=2F2lIdK086BENYIYPQD2Q2okdf2dHEkNd/6V9465bEA=;
+        b=TCjz6mkBL99yj7gcdlCxhkwe/S1344iWFLlicIpOOL8sh5AZPdcffvifLfg7haM9pE
+         zST8Mq20JhE4GJsoCQm3Hwz8nuKlSI46LWNjKkhhLnLHo70247g6nrlv1k7bM1ysBw7Y
+         ZqLAIsi9gkq6nv1jr34z/oW128mpWH0hWG5frvuyXcVCEspkykU7rWa13cfbPUyEsPge
+         JqVpeLojl3l4YjD9R+CPkz42fMdWKiZpONPHyU4iryYbge7Rzow2PCCVWBkz54rXMgnY
+         PLg2ce51LXdHBAN6WX80jHcpLsHMucqmRZILe2gC4Oq+Qt/W7PxCCuXq4uBFr6XJdMz+
+         FHaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793728792; x=1794333592;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2F2lIdK086BENYIYPQD2Q2okdf2dHEkNd/6V9465bEA=;
+        b=2QPqjRXGOAY8YDqFN9BRhpBSo2YR4Cu5pnhgfi4ZIUCbwNuVlw+APDRa+qZN/hiBL5
+         LhKS2lypo+G3P74UlI2hZ5QjfKkg7S+EORyv/YWSCWirHL58k+/Z6kZpZfPrg/izSue5
+         GkNY7RbPsTEFXCuM7XM6NnbEbufP26+X/J3i3k/QnYJZYjVKPTBAJGxp6H1F2+P0w4tH
+         OZ1H6plyNu7cEKpJoI3Gj8oiOTTeS9UOJRTmR6O5pUK74xqFuOrmOPnrUD2Gx+G9buZU
+         wKB26PDaMBVuMVvUpMJj/w6We2Pj/TKamj3/xARfqpZZMtdsetJRYFXWjTk2pX8SAj1s
+         5YfQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwd53Jz6xyMUeu9kqs2CjWBar2Q7usvu8Se3/AoNcgaeN87JGn90e8telR0p3BDk/iAcnthWJWweuQZ2qeWq4I=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/9Jn5MZ2rpGPDWxeWRCwK3JB4Uw2IyTJRaejXtyBwA0V6TmlO8
+	vpdjnrLJJxJvRGMbkZU2U5O9i1NYuK1vfb6Ic7lZ7GftS2to9cJsSCme
+X-Gm-Gg: AYBFou3iVruWchZ+7biHM1Irx74VFA5L/xgXEF0wxxwN93I6NA3yVNttDrV+JS1oVWG
+	IdHW2pFTLAQpD9Ut+CYZPGhm+WCx538dBavaHtWCazEqGfeKozCGI2/+95Fhg4D95NOcZJcZ3Qe
+	YhxC/0lfK6jQp35o8GxbtSPAZCruPV1p7AHO3NtNPAAlpuQagpHgxEjqqXDONFZPRH0deLPNe2I
+	u3MZVhglIHkUWwffliBWczI/yNf8h/cv27QPiYJRRJxJF4GgvKpn+TwCDPKvpA+UMYBqujgAmIE
+	VPpncM/2ro1V+tFxjTKXchpO+EjCnB5t7LlHnTWmjAywF3bm54TsAErnywZzg9Rbolr7s0yj8ul
+	JxA4dQbLNaJsoPOkbgFWZfCKqKzw/rQtq+2nMzs4C+gKSEcsKKOIkXO6WY8wFfy5fRpTI6WAo8/
+	2wFP8P01Z91JUuUfZWxnVywZSPcQWhA8JnUgi9Tq+rR5P+0u8lzJg6/x/RXRz7N9xZqi8Twjl03
+	YF5c27B88Z93Pmv790r0VuJOHrlBz9ysjJVh9NGujWLS5Jiyl1BL6wkaOIVqdB3OwWCPSRweRWe
+	KKBBS1nQUy3i6a/pfgL/NgGv84zSnkHTjnKSGQu1j8BXvsKTH56CtQjFOWx6bDfq3g==
+X-Received: by 2002:a05:701b:420c:20b0:194:f017:5a01 with SMTP id a92af1059eb24-1ac5fc0d363mr20693907c88.42.1793728791460;
+        Tue, 03 Nov 2026 09:59:51 -0800 (PST)
+Received: from ?IPV6:2620:10d:c085:21c1::14ac? ([2620:10d:c090:400::5:e3cc])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b245c65194sm427461c88.19.2026.11.03.09.59.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 09:59:34 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Nov 2026 17:59:34 +0000
-Message-Id: <DMLRS6Y81EGP.2YS38LF0YFGL@gmail.com>
-Cc: "Quentin Monnet" <qmo@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>,
- "Tianyi Chen" <hi@tychen.cc>, "Gyutae Bae" <gyutae.bae@navercorp.com>, "Hui
- Su" <sh_def@163.com>, "Josef Bacik" <josef@toxicpanda.com>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 3/5] libbpf: Emit BPF_LINK_CREATE calls in
- generated loaders
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20261102201356.5798-4-mahe.tardy@gmail.com>
-References: <20261102201356.5798-1-mahe.tardy@gmail.com> <20261102201356.5798-4-mahe.tardy@gmail.com>
-Content-Transfer-Encoding: 8bit
+        Tue, 03 Nov 2026 09:59:51 -0800 (PST)
+Message-ID: <cf4b221c-cf4b-414f-b087-815848c85b2e@gmail.com>
+Date: Tue, 3 Nov 2026 09:59:49 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,374 +92,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: net: fix format warnings on 32-bit
+ architectures
+To: Sasha Levin <sashal@kernel.org>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jason Xing <kerneljasonxing@gmail.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261103155503.534876-1-sashal@kernel.org>
+Content-Language: en-US
+From: Mohsin Bashir <mohsin.bashr@gmail.com>
+In-Reply-To: <20261103155503.534876-1-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 02, 2026 at 12:13 PM Mahe Tardy <mahe.tardy@gmail.com> wrote:
-> @@ -412,7 +411,8 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
->  		move_stack2ctx(gen,
->  			       sizeof(struct bpf_loader_ctx) +
->  			       sizeof(struct bpf_map_desc) * gen->nr_maps +
-> -			       sizeof(struct bpf_prog_desc) * i +
-> +			       sizeof(struct bpf_prog_desc) *
-> +			       (gen->nr_link_slots ? gen->prog_output_idx[i] : i) +
 
-This is an existing bug. It's not specific to gen_attach.
 
-> +		if (!bpf_program_supports_gen_attach(prog)) {
-> +			pr_warn("prog '%s': loader attachment is not supported for section '%s'\n",
-> +				prog->name, prog->sec_name);
-> +			return -EOPNOTSUPP;
-> +		}
+On 11/3/26 7:55 AM, Sasha Levin wrote:
+> On 32-bit architectures ssize_t is an int, tv_sec is a long long with a
+> 64-bit time_t, and uint64_t is not a size_t, so ipsec, txtimestamp and
+> the tcp_ao library warn when printing them with %ld, %lu and %zu:
+> 
+>    txtimestamp.c:191:42: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type '__time64_t' {aka 'long long int'} [-Wformat=]
+> 
+> Print ssize_t with %zd, tv_sec as long long, and the net namespace
+> cookies with PRIu64 as the rest of ftrace-tcp.c already does. While at
+> it, print tv_nsec, a long, with %ld instead of %lu, and cast it to long,
+> as it is a long long on x32.
+> 
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+> Found with a 32-bit build of the selftests with a 64-bit time_t (gcc 16
+> and clang 21 with -m32 -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
+> KernelCI's 32-bit arm builds show the same warnings. The changed files
+> build without format warnings there now, and the x86_64 builds don't
+> change. The other selftests get the same kind of fix in separate
+> patches.
+> 
+>   tools/testing/selftests/net/ipsec.c                 | 2 +-
+>   tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c | 2 +-
+>   tools/testing/selftests/net/txtimestamp.c           | 9 +++++----
+>   3 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+> index 89c32c354c008..ba8c36a93f176 100644
+> --- a/tools/testing/selftests/net/ipsec.c
+> +++ b/tools/testing/selftests/net/ipsec.c
+> @@ -2030,7 +2030,7 @@ static int __write_desc(int test_desc_fd, struct xfrm_desc *desc)
+>   	if (ret == sizeof(*desc))
+>   		return 0;
+>   
+> -	pr_err("Writing test's desc failed %ld", ret);
+> +	pr_err("Writing test's desc failed %zd", ret);
+>   
+>   	return -1;
+>   }
+> diff --git a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+> index 27403f8750547..cd93ff8965dda 100644
+> --- a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+> +++ b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+> @@ -504,7 +504,7 @@ static int setup_tcp_trace_events(struct test_ftracer *tracer)
+>   	size_t i;
+>   	int ret;
+>   
+> -	filter = test_sprintf("net_cookie == %zu || net_cookie == %zu",
+> +	filter = test_sprintf("net_cookie == %" PRIu64 " || net_cookie == %" PRIu64,
+>   			      ns_cookie1, ns_cookie2);
+>   	if (!filter)
+>   		return -ENOMEM;
+> diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
+> index f7bdf30b78d9f..be1452d73b303 100644
+> --- a/tools/testing/selftests/net/txtimestamp.c
+> +++ b/tools/testing/selftests/net/txtimestamp.c
+> @@ -188,12 +188,13 @@ static void __print_timestamp(const char *name, struct timespec *cur,
+>   		return;
+>   
+>   	if (cfg_print_nsec)
+> -		fprintf(stderr, "  %s: %lu s %lu ns (seq=%u, len=%u)",
+> -				name, cur->tv_sec, cur->tv_nsec,
+> +		fprintf(stderr, "  %s: %lld s %ld ns (seq=%u, len=%u)",
+> +				name, (long long)cur->tv_sec, (long)cur->tv_nsec,
+>   				key, payload_len);
+>   	else
+> -		fprintf(stderr, "  %s: %lu s %lu us (seq=%u, len=%u)",
+> -				name, cur->tv_sec, cur->tv_nsec / NSEC_PER_USEC,
+> +		fprintf(stderr, "  %s: %lld s %ld us (seq=%u, len=%u)",
+> +				name, (long long)cur->tv_sec,
+> +				(long)(cur->tv_nsec / NSEC_PER_USEC),
+>   				key, payload_len);
+>   
+>   	if (cur != &ts_usr) {
 
-bpf_object__attach_skeleton(), __attach() of lskel and
-"bpftool prog load ... autoattach" skip the progs they cannot attach.
-Here one SEC("syscall") or SEC("iter/...") prog fails the generation.
-bpftool gen skeleton has no way to clear autoattach.
-Let's skip such progs here too ?
-
-Also fsession is not in the list.
-It goes through bpf_tracing_prog_attach() like fentry.
-
-> +		bpf_gen__link_create(obj->gen_loader, prog_idx, link_idx,
-> +				     prog->expected_attach_type);
-
-I think it can be implemented a bit simpler.
-
-Keep link_fd next to prog_fd in struct loader_stack.
-The cleanup loop in bpf_gen__init() closes both.
-It costs 3 more insns per prog in the cleanup code.
-Then no need for link_fds, nr_link_slots, link_idx,
-struct bpf_link_desc and patch 1.
-
-In the skeleton __attach() skips the progs that have a link,
-like bpf_object__attach_skeleton() does.
-It attaches the rest from user space as before.
-Then no need for the bool in codegen_attach_detach().
-Attach after detach works too. fentry_test.c does that.
-
-The diff replaces patches 1-4 and has the fix for the shift.
-Doc and bash completion are missing.
-Something like this (not even compile tested):
-
-diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
---- a/tools/lib/bpf/bpf_gen_internal.h
-+++ b/tools/lib/bpf/bpf_gen_internal.h
-@@ -6,6 +6,8 @@
- #include "bpf.h"
- #include "libbpf_internal.h"
- 
-+#define MAX_USED_PROGS 32
-+
- struct ksym_relo_desc {
- 	const char *name;
- 	int kind;
-@@ -39,6 +41,8 @@ struct bpf_gen {
- 	ssize_t cleanup_label;
- 	__u32 nr_progs;
- 	__u32 nr_maps;
-+	/* slot of every loaded prog in progs and links of the loader ctx */
-+	int prog_ctx_idx[MAX_USED_PROGS];
- 	int log_level;
- 	int error;
- 	struct ksym_relo_desc *relos;
-@@ -73,6 +77,7 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 			enum bpf_prog_type prog_type, const char *prog_name,
- 			const char *license, struct bpf_insn *insns, size_t insn_cnt,
- 			struct bpf_prog_load_opts *load_attr, int prog_idx);
-+void bpf_gen__link_create(struct bpf_gen *gen, int loaded_idx, enum bpf_attach_type attach_type);
- void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *value, __u32 value_size,
- 			      __u64 flags);
- void bpf_gen__map_freeze(struct bpf_gen *gen, int map_idx);
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -16,7 +16,6 @@
- #include "skel_internal.h"
- 
- #define MAX_USED_MAPS	64
--#define MAX_USED_PROGS	32
- #define MAX_KFUNC_DESCS 256
- #define MAX_FD_ARRAY_SZ (MAX_USED_MAPS + MAX_KFUNC_DESCS)
- 
-@@ -34,7 +33,10 @@
- struct loader_stack {
- 	__u32 btf_fd;
- 	__u32 inner_map_fd;
--	__u32 prog_fd[MAX_USED_PROGS];
-+	struct {
-+		__u32 prog_fd;
-+		__u32 link_fd;
-+	} progs[MAX_USED_PROGS];
- };
- 
- #define stack_off(field) \
-@@ -142,7 +144,7 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
- 	/* nr_progs includes subprogs and progs that are not loaded */
- 	nr_progs = min(nr_progs, MAX_USED_PROGS);
- 	/* amount of stack actually used, only used to calculate iterations, not stack offset */
--	nr_progs_sz = offsetof(struct loader_stack, prog_fd[nr_progs]);
-+	nr_progs_sz = offsetof(struct loader_stack, progs[nr_progs]);
- 	/* jump over cleanup code */
- 	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0,
- 			      /* size of cleanup code below (including map fd cleanup) */
-@@ -400,13 +402,23 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
- 	/* programs hold their maps with pointers to functions, nothing else needs them */
- 	for (i = 0; i < gen->nr_func_ptr_maps; i++)
- 		emit_sys_close_blob(gen, blob_fd_array_off(gen, gen->nr_obj_maps + i));
--	for (i = 0; i < gen->nr_progs; i++)
-+	for (i = 0; i < gen->nr_progs; i++) {
- 		move_stack2ctx(gen,
- 			       sizeof(struct bpf_loader_ctx) +
- 			       sizeof(struct bpf_map_desc) * gen->nr_maps +
--			       sizeof(struct bpf_prog_desc) * i +
-+			       sizeof(struct bpf_prog_desc) * gen->prog_ctx_idx[i] +
- 			       offsetof(struct bpf_prog_desc, prog_fd), 4,
--			       stack_off(prog_fd[i]));
-+			       stack_off(progs[i].prog_fd));
-+		if (!OPTS_GET(gen->opts, gen_attach, false))
-+			continue;
-+		/* nr_progs link fds follow nr_progs bpf_prog_desc-s */
-+		move_stack2ctx(gen,
-+			       sizeof(struct bpf_loader_ctx) +
-+			       sizeof(struct bpf_map_desc) * gen->nr_maps +
-+			       sizeof(struct bpf_prog_desc) * nr_progs +
-+			       sizeof(int) * gen->prog_ctx_idx[i], 4,
-+			       stack_off(progs[i].link_fd));
-+	}
- 	for (i = 0; i < gen->nr_maps; i++)
- 		move_blob2ctx(gen,
- 			      sizeof(struct bpf_loader_ctx) +
-@@ -1143,10 +1155,38 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 	}
- 	/* remember prog_fd in the stack, if successful */
- 	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
--			      stack_off(prog_fd[gen->nr_progs])));
-+			      stack_off(progs[gen->nr_progs].prog_fd)));
-+	gen->prog_ctx_idx[gen->nr_progs] = prog_idx;
- 	gen->nr_progs++;
- }
- 
-+/* attach the prog that bpf_gen__prog_load() saw as number loaded_idx */
-+void bpf_gen__link_create(struct bpf_gen *gen, int loaded_idx, enum bpf_attach_type attach_type)
-+{
-+	int attr_size = offsetofend(union bpf_attr, link_create.flags);
-+	int link_create_attr;
-+	union bpf_attr attr;
-+
-+	if (!OPTS_GET(gen->opts, gen_attach, false))
-+		return;
-+
-+	memset(&attr, 0, attr_size);
-+	attr.link_create.attach_type = tgt_endian(attach_type);
-+	link_create_attr = add_data(gen, &attr, attr_size);
-+	pr_debug("gen: link_create: prog %d attach_type %u, attr: off %d size %d\n",
-+		 loaded_idx, attach_type, link_create_attr, attr_size);
-+	/* populate union bpf_attr with prog_fd saved in the stack earlier */
-+	move_stack2blob(gen, attr_field(link_create_attr, link_create.prog_fd), 4,
-+			stack_off(progs[loaded_idx].prog_fd));
-+	/* emit LINK_CREATE command */
-+	emit_sys_bpf(gen, BPF_LINK_CREATE, link_create_attr, attr_size);
-+	debug_ret(gen, "link_create prog %d attach_type %d", loaded_idx, attach_type);
-+	emit_check_err(gen);
-+	/* remember link_fd in the stack, if successful */
-+	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
-+			      stack_off(progs[loaded_idx].link_fd)));
-+}
-+
- /*
-  * if (map_desc[map_idx].initial_value) {
-  *    if (ctx->flags & BPF_SKEL_KERNEL)
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8593,9 +8593,14 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog,
- 	}
- 
- 	if (obj->gen_loader) {
-+		int i, prog_idx = 0;
-+
-+		/* subprogs have no slot in the loader ctx */
-+		for (i = 0; i < prog - obj->programs; i++)
-+			if (!prog_is_subprog(obj, &obj->programs[i]))
-+				prog_idx++;
- 		bpf_gen__prog_load(obj->gen_loader, prog->type, prog->name,
--				   license, insns, insns_cnt, &load_attr,
--				   prog - obj->programs);
-+				   license, insns, insns_cnt, &load_attr, prog_idx);
- 		*prog_fd = -1;
- 		return 0;
- 	}
-@@ -9784,6 +9789,40 @@ static int bpf_object_prepare(struct bpf_object *obj, const char *target_btf_pat
- 	return 0;
- }
- 
-+/* The target is known since the load. BPF_LINK_CREATE needs prog_fd only. */
-+static bool gen_loader_can_attach(const struct bpf_program *prog)
-+{
-+	switch (prog->type) {
-+	case BPF_PROG_TYPE_LSM:
-+		return prog->expected_attach_type == BPF_LSM_MAC;
-+	case BPF_PROG_TYPE_TRACING:
-+		return prog->expected_attach_type == BPF_TRACE_FENTRY ||
-+		       prog->expected_attach_type == BPF_TRACE_FEXIT ||
-+		       prog->expected_attach_type == BPF_TRACE_FSESSION ||
-+		       prog->expected_attach_type == BPF_MODIFY_RETURN ||
-+		       prog->expected_attach_type == BPF_TRACE_RAW_TP;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static int bpf_object_gen_finish(struct bpf_object *obj)
-+{
-+	int nr_progs = 0, nr_loaded = 0;
-+	struct bpf_program *prog;
-+
-+	bpf_object__for_each_program(prog, obj) {
-+		nr_progs++;
-+		if (prog->load_strategy != BPF_PROG_LOAD_STRATEGY_AUTO)
-+			continue;
-+		if (prog->autoattach && gen_loader_can_attach(prog))
-+			bpf_gen__link_create(obj->gen_loader, nr_loaded,
-+					     prog->expected_attach_type);
-+		nr_loaded++;
-+	}
-+	return bpf_gen__finish(obj->gen_loader, nr_progs, obj->nr_maps);
-+}
-+
- static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const char *target_btf_path)
- {
- 	int err;
-@@ -9841,7 +9880,7 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
- 		if (obj->btf)
- 			btf__set_fd(obj->btf, -1);
- 		if (!err)
--			err = bpf_gen__finish(obj->gen_loader, obj->nr_programs, obj->nr_maps);
-+			err = bpf_object_gen_finish(obj);
- 	}
- 
- 	bpf_object_post_load_cleanup(obj, false);
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1990,9 +1990,10 @@ struct gen_loader_opts {
- 	__u32 data_sz;
- 	__u32 insns_sz;
- 	bool gen_hash;
-+	bool gen_attach;
- };
- 
--#define gen_loader_opts__last_field gen_hash
-+#define gen_loader_opts__last_field gen_attach
- LIBBPF_API int bpf_object__gen_loader(struct bpf_object *obj,
- 				      struct gen_loader_opts *opts);
- 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -621,7 +621,8 @@ static void codegen_attach_detach(struct bpf_object *obj, const char *obj_name)
- 	bpf_object__for_each_program(prog, obj) {
- 		codegen("\
- 			\n\
--				ret = ret < 0 ? ret : %1$s__%2$s__attach(skel);   \n\
-+				if (ret >= 0 && skel->links.%2$s_fd <= 0)	    \n\
-+					ret = %1$s__%2$s__attach(skel);		    \n\
- 			", obj_name, bpf_program__name(prog));
- 	}
- 
-@@ -639,6 +640,7 @@ static void codegen_attach_detach(struct bpf_object *obj, const char *obj_name)
- 		codegen("\
- 			\n\
- 				skel_closenz(skel->links.%1$s_fd);	    \n\
-+				skel->links.%1$s_fd = 0;		    \n\
- 			", bpf_program__name(prog));
- 	}
- 
-@@ -691,7 +693,8 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
- 		obj_name);
- }
- 
--static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *header_guard)
-+static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *header_guard,
-+		     bool gen_attach)
- {
- 	DECLARE_LIBBPF_OPTS(gen_loader_opts, opts);
- 	struct bpf_load_and_run_opts sopts = {};
-@@ -702,6 +705,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 	char ident[256];
- 	int err = 0;
- 
-+	opts.gen_attach = gen_attach;
- 	if (sign_progs)
- 		opts.gen_hash = true;
- 
-@@ -740,7 +744,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 			skel = (struct %1$s *)skel_alloc(sizeof(*skel));    \n\
- 			if (!skel)					    \n\
- 				goto cleanup;				    \n\
--			skel->ctx.sz = (char *)&skel->links - (char *)skel; \n\
-+			skel->ctx.sz = (char *)(&skel->links + 1) - (char *)skel; \n\
- 		",
- 		obj_name, opts.data_sz);
- 	bpf_object__for_each_map(map, obj) {
-@@ -1249,6 +1253,7 @@ static int do_skeleton(int argc, char **argv)
- 	struct bpf_map *map;
- 	struct btf *btf;
- 	struct stat st;
-+	bool gen_attach = false;
- 
- 	if (!REQ_ARGS(1)) {
- 		usage();
-@@ -1257,10 +1262,9 @@ static int do_skeleton(int argc, char **argv)
- 	file = GET_ARG();
- 
- 	while (argc) {
--		if (!REQ_ARGS(2))
--			return -1;
--
- 		if (is_prefix(*argv, "name")) {
-+			if (!REQ_ARGS(2))
-+				return -1;
- 			NEXT_ARG();
- 
- 			if (obj_name[0] != '\0') {
-@@ -1270,6 +1274,8 @@ static int do_skeleton(int argc, char **argv)
- 
- 			strncpy(obj_name, *argv, MAX_OBJ_NAME_LEN - 1);
- 			obj_name[MAX_OBJ_NAME_LEN - 1] = '\0';
-+		} else if (is_prefix(*argv, "autoattach")) {
-+			gen_attach = true;
- 		} else {
- 			p_err("unknown arg %s", *argv);
- 			return -1;
-@@ -1278,6 +1284,11 @@ static int do_skeleton(int argc, char **argv)
- 		NEXT_ARG();
- 	}
- 
-+	if (gen_attach && !use_loader) {
-+		p_err("autoattach requires a light skeleton (-L)");
-+		return -1;
-+	}
-+
- 	if (argc) {
- 		p_err("extra unknown arguments");
- 		return -1;
-@@ -1441,7 +1452,7 @@ static int do_skeleton(int argc, char **argv)
- 			goto out;
- 	}
- 	if (use_loader) {
--		err = gen_trace(obj, obj_name, header_guard);
-+		err = gen_trace(obj, obj_name, header_guard, gen_attach);
- 		goto out;
- 	}
- 
-@@ -2005,7 +2016,7 @@ static int do_help(int argc, char **argv)
- 
- 	fprintf(stderr,
- 		"Usage: %1$s %2$s object OUTPUT_FILE INPUT_FILE [INPUT_FILE...]\n"
--		"       %1$s %2$s skeleton FILE [name OBJECT_NAME]\n"
-+		"       %1$s %2$s skeleton FILE [name OBJECT_NAME] [autoattach]\n"
- 		"       %1$s %2$s subskeleton FILE [name OBJECT_NAME]\n"
- 		"       %1$s %2$s min_core_btf INPUT OUTPUT OBJECT [OBJECT...]\n"
- 		"       %1$s %2$s help\n"
-
-pw-bot: cr
+Reviewed-by: Mohsin Bashir <hmohsin@meta.com>
