@@ -1,54 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793721303;
-	b=amdKtiIVZtLQyYWpTi9HfBtOcgBBAnrlnvNxJMTRvavUG8wPoxBsy4StmsNpLA5TizdH
-	 FxDt6bAdwtfI/tGViR/ezxlKXK9+tcQv2RE+WCPWpE/c1q59C1ks1vlWH7/XdystPT9Ts
-	 3/k8u7AxII48i7qa8XqEEIdwXWWurNHzoY5+h6JnaBavGh6eG1mkneuHv/MQU2VQnSGyZ
-	 I5v9z49w7KA9BvRFmAEiZHkHia1QdS1cNXixDn1Wm4LJEv+US3l49OLVwyyNRLCqaXsxz
-	 1Kq7oIX8mCu1Wz+yCBQOdakw48tjwwXr2UeggaEPpHxVbs0GUClnkNseGWa0tPHx3cQ==
+	t=1793721306;
+	b=U1IwRdyWMyGVN+rhFGjZSAScLtTdywPN4/ElcmmQRPouPx4es0ZF4Zt2uYpwkwZ8TUJd
+	 DxpQ4IcGUOo1fpuoTniiawTVL451xmXRPbaQppLxWIfXQq+o5UiJxDRnUH6BvHm9vUYGE
+	 2sZlluxZnfLDS7YNQo1kFiGkW4olIjJzmZ4HA56FC4eJKq0d6gFJR/OFNrieDxMhL6Wm/
+	 4vtN/dmNa0mX6vvsTRy/aFZP9RUTCvQee7e27KgPvi9zS1rmeVm432JRHyS6dAhuSltif
+	 /qztDEZdLb4kKsLGi4OZM1q3ls2kNRQ22Cwgjr2+1VZdNOagYbv+00qGsj3oyqI7jTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793721303;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793721306;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=fGhp2O/N0uN4OUEkdVSlSLYttb9l0vrzXnpdE47eUqI=;
-	b=05V7FEoJQOPXUZQUsOHyYHbftQ6xvVWXc6osBMuqgwVPBix3PnYTsoVoE/kKx28AHanM
-	 LmfanRSIJZW2G3gcw2iiJLSL7jpZoHcmuJVLEh0xLZxKswn8Z6UqeLqhI8dIoERIdNNU6
-	 a99CZmgYeOs8hVMC8G6dpx/S6KAnEwxgAjxyrY1QBvb6LrGYLjrt6F2+x1UoYClcrMjNL
-	 dyNo+oeJ/UyweLOsHdvlx4WBJ78MjrN79IxFzKR1AiVc67CAjQhNIx19uHNqQXyPSVUgn
-	 cEbcJtmoITVTmd1xQCuNJhCRtjLTdfCSQ/K2nOVduZRQG+kAtOasDUgNwVxsO+EGzNw==
+	bh=XREKEeftscoz1Hi8GedJ6sHaQ24A+16k7dbdppJWu+c=;
+	b=ch+LeL3988ZNRxRCclZuXVcvUUFkvVe6F9x6F5J8UBdGPXxyjYs4Avi4Yypskep2VFD/
+	 FSPpy/QQLXdayX6eSp+eS40d18b/kiYA6VdGrMclhgOhz69KQZPqFVEH74EkROB5zB9XZ
+	 yAABHlg370iUvLb0XFFigogI8yVpEJcvewg+bDc5pWXPSC4qjLJtACiHORT7vys2OeQ8b
+	 ta44dkRlNwh2jGYEvmL6U7nS2SfYGUm0pyb3WSw9zMMXbqnX209fCv4RjHq1T7px8uCm8
+	 PKAnDHcBjR/ksschu5xz7rzi3eo1Yg4uJUU7xMu0RUFv4kNOK9+ZYpf7o5iz/H2wtmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lpS+OpaD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c94PUqed;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF79606EE86;
-	Tue,  3 Nov 2026 15:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C031606A332;
+	Tue,  3 Nov 2026 15:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lpS+OpaD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1711F00A1A;
-	Tue,  3 Nov 2026 15:55:02 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c94PUqed
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775281F00A1D;
+	Tue,  3 Nov 2026 15:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793721303;
-	bh=fGhp2O/N0uN4OUEkdVSlSLYttb9l0vrzXnpdE47eUqI=;
+	s=k20260515; t=1793721305;
+	bh=XREKEeftscoz1Hi8GedJ6sHaQ24A+16k7dbdppJWu+c=;
 	h=From:To:Cc:Subject:Date;
-	b=lpS+OpaDg/8PKdYML7pzVsZdHWVLpkwBjZlbrjiDf1Gb0RkcwUT1Clbt867Wozq9h
-	 S0DpCtaPzXFRzxvweaovKqaYaCUru/IOoSjrjUSWAXDKfK0NtjhVkKtiSUncJxEfJg
-	 Gnw73qWCD93M4YaI/bBd8CXpSA/pt2rLcGfTT8Ux8gM2YgNjhjQymI6Jy7ipHbQUNB
-	 zWLVrYMrdSvakoAV3kfKTp96oMvr62RtFOTVZeiMYmmKrR5wsKdFmS9Jef2EGoI/yj
-	 9fOndBMzOEcb+kuOYXURJ3cCNeFaLkDco/f45fwmaJ2yr7jz4az3eEubU3EQNaCpq9
-	 GpERD1uAUjX/A==
+	b=c94PUqeddn/1T6sh1Ph5uX9dXjXrVhLiuzaw8PGT8I5Bndy7Fuv5EokDK6a00EUUw
+	 QPqp8XBih9PeVEHP+DQhZfEQfByb885n4IvpeuejxQftb+nRjCy7QgLEL5QUdaaHDD
+	 dTZDcnMVTVbC1wojEFcroWovwRbZsOCw6jVMXtgpGS6vuwyy4zRp1QCDkDXN7lve5P
+	 B7NCmtr074deIEYEQQ3py3459q9ooTwF2AWjSMQmSyaPSHAmqL4I8gZAtdjb1u8UIr
+	 UhGNDPu6N58ccxPz73CAj2j7u9CM0JLDYJIfQ/digYaiqNf2fC91xeScgSOcHvatrS
+	 30AHc4Fr9Wdbg==
 From: Sasha Levin <sashal@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	iommu@lists.linux.dev,
+To: Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] iommufd/selftest: print size_t with %zu
-Date: Tue,  3 Nov 2026 10:55:01 -0500
-Message-ID: <20261103155501.534820-1-sashal@kernel.org>
+Subject: [PATCH] selftests: net: fix format warnings on 32-bit architectures
+Date: Tue,  3 Nov 2026 10:55:03 -0500
+Message-ID: <20261103155503.534876-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,12 +68,16 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 32-bit architectures size_t is an unsigned int, and printing it with
-%lu warns:
+On 32-bit architectures ssize_t is an int, tv_sec is a long long with a
+64-bit time_t, and uint64_t is not a size_t, so ipsec, txtimestamp and
+the tcp_ao library warn when printing them with %ld, %lu and %zu:
 
-  iommufd.c:2157:30: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+  txtimestamp.c:191:42: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type '__time64_t' {aka 'long long int'} [-Wformat=]
 
-Use %zu.
+Print ssize_t with %zd, tv_sec as long long, and the net namespace
+cookies with PRIu64 as the rest of ftrace-tcp.c already does. While at
+it, print tv_nsec, a long, with %ld instead of %lu, and cast it to long,
+as it is a long long on x32.
 
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -77,22 +88,59 @@ build without format warnings there now, and the x86_64 builds don't
 change. The other selftests get the same kind of fix in separate
 patches.
 
- tools/testing/selftests/iommu/iommufd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/ipsec.c                 | 2 +-
+ tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c | 2 +-
+ tools/testing/selftests/net/txtimestamp.c           | 9 +++++----
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index ca2b35e9d443a..c4d4f3659626e 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -2154,7 +2154,7 @@ FIXTURE_SETUP(iommufd_dirty_tracking)
+diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+index 89c32c354c008..ba8c36a93f176 100644
+--- a/tools/testing/selftests/net/ipsec.c
++++ b/tools/testing/selftests/net/ipsec.c
+@@ -2030,7 +2030,7 @@ static int __write_desc(int test_desc_fd, struct xfrm_desc *desc)
+ 	if (ret == sizeof(*desc))
+ 		return 0;
  
- 	rc = posix_memalign(&self->buffer, HUGEPAGE_SIZE, mmap_buffer_size);
- 	if (rc || !self->buffer) {
--		SKIP(return, "Skipping buffer_size=%lu due to errno=%d",
-+		SKIP(return, "Skipping buffer_size=%zu due to errno=%d",
- 			   mmap_buffer_size, rc);
- 	}
- 	assert((uintptr_t)self->buffer % HUGEPAGE_SIZE == 0);
+-	pr_err("Writing test's desc failed %ld", ret);
++	pr_err("Writing test's desc failed %zd", ret);
+ 
+ 	return -1;
+ }
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+index 27403f8750547..cd93ff8965dda 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
++++ b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+@@ -504,7 +504,7 @@ static int setup_tcp_trace_events(struct test_ftracer *tracer)
+ 	size_t i;
+ 	int ret;
+ 
+-	filter = test_sprintf("net_cookie == %zu || net_cookie == %zu",
++	filter = test_sprintf("net_cookie == %" PRIu64 " || net_cookie == %" PRIu64,
+ 			      ns_cookie1, ns_cookie2);
+ 	if (!filter)
+ 		return -ENOMEM;
+diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
+index f7bdf30b78d9f..be1452d73b303 100644
+--- a/tools/testing/selftests/net/txtimestamp.c
++++ b/tools/testing/selftests/net/txtimestamp.c
+@@ -188,12 +188,13 @@ static void __print_timestamp(const char *name, struct timespec *cur,
+ 		return;
+ 
+ 	if (cfg_print_nsec)
+-		fprintf(stderr, "  %s: %lu s %lu ns (seq=%u, len=%u)",
+-				name, cur->tv_sec, cur->tv_nsec,
++		fprintf(stderr, "  %s: %lld s %ld ns (seq=%u, len=%u)",
++				name, (long long)cur->tv_sec, (long)cur->tv_nsec,
+ 				key, payload_len);
+ 	else
+-		fprintf(stderr, "  %s: %lu s %lu us (seq=%u, len=%u)",
+-				name, cur->tv_sec, cur->tv_nsec / NSEC_PER_USEC,
++		fprintf(stderr, "  %s: %lld s %ld us (seq=%u, len=%u)",
++				name, (long long)cur->tv_sec,
++				(long)(cur->tv_nsec / NSEC_PER_USEC),
+ 				key, payload_len);
+ 
+ 	if (cur != &ts_usr) {
 -- 
 2.53.0
 
