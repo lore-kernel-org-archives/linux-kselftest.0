@@ -1,49 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793730060;
-	b=xBl37QfxdIgmkL1Zx/0iNN4r7l/ycihkwO2XRcmb5SLIj15HgwtN2FDKhV1o2gxMI9Ya
-	 5axqD9mkqdfmJw33u61etNI3vT1tiWkHWo9RpbyVh2cldZ121fplnqJNSV6gbjXzS3zNn
-	 8s35NOd9bMk2J/dspuHfcXjaNPsAqR4bPPYiQa9nZLPF1Y23OU9+eHuOHBoUr2A2gjLRV
-	 v+eL4+UmcAHBVGPArrXXQTYAnofAVZAUJaGVQkywujYVvk0h2aIsOUaCdTrCLdqq91s7r
-	 6rsFoGiQbBMbC5lUt2zSyxciJII9wQepY84kuwo45eEstHshAbvdZAXC8reytjYGMuA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793730060;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=2m+uq7MVnkIoFrhs7ntSWvQPgNiinhHqXi8jI9QVcsM=;
-	b=HPskwl6Rq/bKODnOLbbRqyo+TQAI5zTvwFrwBdtb2BVeq7epdRgopmNHMzeuwzcSaQlb
-	 GkvneGIpprkjPkLKrkVGttMgkMdbp6bPnHjIEIUPjwCUdvr/IDmTAf6zZiPVyA/HY3yO4
-	 dqwTocW1zNSOq+AXg+eWnEYJFI5P7yrgnfD+zmXy5LqRYEh+NIBlF/qk6mk0VeujGaWA+
-	 QMUyQ1sD0x8HP6K62mPURb0wsUmVoooHUOea1MgH6hH3ydHWbqb08n5opxRTvcN25yyVZ
-	 BDaSkoQfttqKGn6Dk5o2dj5RLtD5bhU1iZ/pOtJ4AF3G11H9F/OLfiRr1quIQorOa0Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wphqn7KM;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793731088;
+	b=fpwUunTVofVa/6nNQFXH7k/8j6zClWlXcwHEoL38yWhpIC7E7jriR0IwRTG5ySwAsa5t
+	 gZZefmA5AAJT+vOY9N7UDfLIHlUvh9E30hTCPj5bxRbyVXlvfDnrO5lvhcSQf85UvBU4W
+	 yR3QZgJzR9RcEED4qTELUpUqrFMyMign6kXpzIUP216UG0MNMCA8RlQa4Hq18SwVs4MoY
+	 PaCU5uk3FPuTwGM/vFOzH+oFiaxdUW5FKQoT6l0svmnHf74nYpGNzAKiNM/H3Cxbxs2D9
+	 uBbmglJtll6Me7i/kXXVTFltk8mNHMcxvfpxcWwI1NwVcMvdTTTX5EDiP+a4HhlCX0A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793731088;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=fviwjroG//qntBAn39plNVA6JSIngXI7akYS02td+eA=;
+	b=3WbhfDW4XYJ3ujztJ+Oy+MwsGeq/i/k/XCJCpZShGtva8wsZo9kMnHFJKzct43gunXu0
+	 2Le0cFRApSivGdJubq7MGhut41CtUblvTbb3+aC/eh5Ircd7MbhsKq92aPbb2+bgn1FLF
+	 HVXciR9Zbd00ogQfIpBu4Ky1RqbvHd8Q6ZqHoxmSjTduE9zahB9VHjNw8tXds5vJmH8aU
+	 QARtjr7YW6uzZVHM0hK59M9ZDDfNGFUOSQwocFCYOltoUPjBsh9om06hN5h7qrp8b31Cb
+	 UmEaJry5TL4l3D+sqitPTcLjagbiJIUVKdg5my9xIS387crGbMZqqfZrf+II9GC6UYg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=amacapital.net;
+	spf=pass smtp.mailfrom=amacapital.net;
+	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=nVCsNw0y;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.181
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CEC606D817;
-	Tue,  3 Nov 2026 18:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EE2606A32C
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 18:38:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6EE2606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wphqn7KM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64A21F00A1F;
-	Tue,  3 Nov 2026 18:20:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793730059;
-	bh=2m+uq7MVnkIoFrhs7ntSWvQPgNiinhHqXi8jI9QVcsM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Wphqn7KM2aepBbdu6GAoOlmiWHkO5KIB6AFAwlzHRi4mAkackCr3PdHLDrbISQ7+B
-	 ekuhRO/zLrYwJTjxxinLJ5LAx8nZ969DrSiqL5uEEHikF+US9ZQY9fltPbGtYkPs76
-	 lXff/S8iukhbpL0730HEp5FHEU7JG8EnYiLZNM6ncdJVp3prkzH6R26JFyMFKWebjE
-	 OC0WDXbVMeoAawHj2gNjYRqGhOYByaqGuPHLFoLx7PzF63ksphnb2PAfq2QrJ7+bZt
-	 mVIUs5SAEQaO6j0RgZCvxKtSXMW2KCj0R8UWefBoqcgYGaT9Oh3OeO3+t2wPTUg0Cx
-	 qpXzad5cyeOsw==
-From: Mark Brown <broonie@kernel.org>
-Date: Tue, 03 Nov 2026 18:19:23 +0000
-Subject: [PATCH v9 3/3] KVM: selftests: arm64: Make set_id_regs bitfield
- validity checks non-fatal
+	dkim=pass (2048-bit key, unprotected) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=nVCsNw0y
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-3accd1ff4c3so23428901fa.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 10:38:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793731081; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Nxcp7q32pr8Lo3utSOvvDVlUHXHmTFEWIKNLG+9YJUujRqoZibbgSGIwN8akwDeXMi
+         JY5gPtlhISPQSGvJkNyQDXZ2i35SloL9SB7sSWc4jVfYJfjKrKfxJJF4J3ft4y1tl3d9
+         TI+gRLTYrE6XFQExpPR3aJEDjs57kqidpahyTkCiTvMVCqN26sCkGUjx68Rs83XpzDzt
+         1D/u88SvKHGI1mRYic0NdJrDf9qo83804oRhNjT4hsrlTqkSglcCdAQzzwaalDSg4DmU
+         Ma7dxYVP0QTCgYg7uJ3SBihW/SVR/j1Yc3TNYY6QPEownI+G67x37KqEU+tPjjA1n7TG
+         SkWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=fviwjroG//qntBAn39plNVA6JSIngXI7akYS02td+eA=;
+        fh=uRYB+v8igBE4Kc8ztw97lAGDbKArUM9Y0kNgEyUT/RA=;
+        b=BJDbPIkQmfyBKft/qO8Lot/Clu6KHa0IPZcN1+ZcfCyMSp1qLMyToCE2UfN3uzLpbO
+         FpX0El3YnKVjz9lLxxwCZMwKxDdjvHFmt4DSeD554njR8zZIXeZkg/XB69DKHxutQcgT
+         wgsihUrUM3fdXJ18dcKtyR8cCKD/2yxVdGUHRRLUc7RaSFfU0FIczFr9Wd+JxTAqD4VB
+         dknm2/B/6GbUBt/1SH88XgukfoPGw4s0lZv/jbX5j1j6k5Ia47O5DFt/k4qbe1NUiUTJ
+         oBASJydM9pGZQXzerY8xwNzQlKppvOHak0oNHHvn0VGuHRK7bif8VoKHTavRgGP2r3YK
+         dc5w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1793731081; x=1794335881; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fviwjroG//qntBAn39plNVA6JSIngXI7akYS02td+eA=;
+        b=nVCsNw0y6hskrENSBv8EU3amWuYztT8dLT5p7AwDRfBEJgh5KCH4wcnDy1+4F8oz26
+         mugE2B8LWKKCR0Y9k2Z98xSLZ5eNvcfR272i+te/45lnsb9AWyAtGJcy3D9bL7ir+f71
+         qQpNmsSv7T5esoFkU7QTr7zF74lmigXGg9dzQbwmAGy2M5yd+bQ/6ZIx3r0WugxBJ5RO
+         hJm/oKDuQExrJP3FUtAD2VCpRZdYySsqRCW8MbRDOe9JChKA+5WjiMn7EutjmI1dtjC9
+         TX6PAuZUUq43suQ5ErDcrLsoaFbkM/WfFXDhbG1erayEtyXYdgmMQ2TL7MALbarBBDH6
+         21vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793731081; x=1794335881;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fviwjroG//qntBAn39plNVA6JSIngXI7akYS02td+eA=;
+        b=yav++qWFiXR/xuv9vANndIHPHlYXNmxSqaHbfaWLnJIcM1zP9YU0NVvHwy+ICuurVF
+         EBjRzWBAERIGKTGjC2d3NKhV9NpaW1JjYDGU++Hf40xcs0H9NkUvnQcbnL5+jmsyOIHa
+         jx3PsuuJ2Jgpz0Ziqyysyc2PYZWm05XMYSTu056UVhoFt9ZvGyU++5NaqUHRtny2qLPD
+         PfQQmQTuvJXWlIJLN72u22iK8vG7luO7nn41q+Wl6h52O7DzNov//KOmXv3x2QqJSGIe
+         SqDGFHQLjMqllcYyNcu/V5WdBt7jhP8qd3MMqUF9ynZZETIpSUDSFVASTFmqn+MnfpyD
+         xDSQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy8X6rIKwgC8qSsMnrDbbGJ0ye/9h6mhFDOmdmytUkyw4T0/PTqgE6fsoZ+v1nGUpFNBzbJyn0uN7PotfvBYKY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/W2h/oX/1sHL6rIzWo89CudwnqsdZbojVb78GgE3C2eooq6GUa
+	cVXoGv1sVI1uVYw99BHIJUqxFUus2Sx5yh7WVmjITCOF1353GFs7gOrh0EJ7sAVj8SN2hOSvLoX
+	KbACJlEDUPR+89LwbtZolbYs/cXBeZWfucL3oUQZf
+X-Gm-Gg: AYBFou3gpN3VmC3E+f+D14eJ8k0l5ZcxEhcwcFSOvpMImD4IdVgK26GNHkaEw8+GMbr
+	WSNwSYEjWhRfcBhpF6TwnVoVGAM+BRi3paTbd6rZZU5/vwPMWq9Fm7yGOjFCKhC9vbRKdCzsjCE
+	muqU/1kthdV9JxHl7rPpuOH95iREXrXt5D00x321yQetcd02WalB6wUxg9Z2xzCVdoYI0x3V6sQ
+	9gKAJ7uFN/Mg9cy845CF5xo61Uc7yrwE3wCldeZDH4i0pjnxA1B3LcThbptmU5V7RTdk7QnQ016
+	rfzRR+biYx5TVja/Hy0gKdElroGSJ4XQ0PwJLFes6Zrvw7UBDLNETinHgO1XMT2039fdeQ+0o5s
+	8jOPY/OiTH/IZRWAsam3mcUH0MhkPwkbrJA==
+X-Received: by 2002:a05:6512:3ca7:b0:5bc:e8b0:5652 with SMTP id
+ 2adb3069b0e04-5bfd9589099mr5147409e87.63.1793731080985; Tue, 03 Nov 2026
+ 10:38:00 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,133 +104,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261103-kvm-arm64-set-id-regs-aarch64-v9-3-ab32bc79fa9c@kernel.org>
-References: <20261103-kvm-arm64-set-id-regs-aarch64-v9-0-ab32bc79fa9c@kernel.org>
-In-Reply-To: <20261103-kvm-arm64-set-id-regs-aarch64-v9-0-ab32bc79fa9c@kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Oliver Upton <oupton@kernel.org>
-Cc: Ben Horgan <ben.horgan@arm.com>, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3918; i=broonie@kernel.org;
- h=from:subject:message-id; bh=DR3JCmRl+vJjwzZoyBmX6kSjTvh5QD2/OBbm9i0ZJ1k=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLJeqf7b/vjYSQPlx+kztKuPaPqpbT4Q97Z+1oPUK6xTT
- i+5/vF2akcpC4MYF4OsmCJLXBb3y/qS12v4Di5sg5nDygQyhIGLUwAmEhHA8FfO8dss98cxd94J
- GR/6uliEk0NIq1YnTH7H71WV2i4G4Q8YGbZe2/3sXFTT+7N8f7/wh/etYDnjuPIr44+zaTX5s28
- mlzICAA==
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
+ <auM32mOlBLu6ZUlt@google.com>
+In-Reply-To: <auM32mOlBLu6ZUlt@google.com>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Tue, 3 Nov 2026 10:37:48 -0800
+X-Gm-Features: AclHuK_sfbKF658HbwyCTsOToNn9cXs0qzXn8uaPUG4vxi_nXA5hXmjvbt4jwHQ
+Message-ID: <CALCETrUD4vh_iSHV7G0bprUFU8=c+ECo701-tXcbQ3UXBWC1ig@mail.gmail.com>
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+To: "Hallgrimur H. Gunnarsson" <halg@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
+	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Jann Horn <jannh@google.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Jonathan Calmels <jcalmels@3xx0.net>, 
+	Casey Schaufler <casey@schaufler-ca.com>, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently when set_id_regs encounters a problem checking validation of
-writes to feature registers it uses an immediately fatal assert to report
-the problem. This is not idiomatic for kselftest, and it is also not great
-for usability. The affected bitfield is not clearly reported and further
-tests do not have their results reported.
+On Thu, Oct 29, 2026 at 5:11=E2=80=AFAM Hallgrimur H. Gunnarsson
+<halg@google.com> wrote:
+>
+> On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
 
-Switch to using standard kselftest result reporting for the asserts we
-do, these are non-fatal asserts so allow the program to continue and the
-test names include the affected field.
+> >
+> > Why should the task's cap masks affect this?  *Maybe* cap_bset makes
+> > sense, but I'm struggling a bit to see why cap_permitted and
+> > cap_effective should matter.
+>
+> Sorry, the phrasing here may have been misleading. Just to clarify:
+> none of the creating task's capability sets (cap_bset, cap_permitted
+> or cap_effective) are used to restrict the new user namespace.
+>
+> When I wrote "reusing the existing task cap_bset, cap_permitted and
+> cap_effective sets on namespace entry", I was contrasting this with
+> the prior series from 2024 [1], which proposed adding a 6th per-thread
+> capability set to struct cred.
+>
+> In this series, when a task creates or enters a user namespace, we
+> simply initialize its new cred->cap_{bset,permitted,effective} in
+> that namespace to user_ns->cap_bset instead of CAP_FULL_SET.
+>
 
-Reviewed-by: Ben Horgan <ben.horgan@arm.com>
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/arm64/set_id_regs.c | 31 ++++++++++++++++++-------
- 1 file changed, 23 insertions(+), 8 deletions(-)
+Okay, this makes *more* sense, but I think it's too weak.
 
-diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-index 37107eadd985..d7f8b8efe1e2 100644
---- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-@@ -423,6 +423,7 @@ static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
- 	u8 shift = ftr_bits->shift;
- 	u64 mask = ftr_bits->mask;
- 	u64 val, new_val, ftr;
-+	bool match;
- 
- 	val = vcpu_get_reg(vcpu, reg);
- 	ftr = (val & mask) >> shift;
-@@ -435,7 +436,10 @@ static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
- 
- 	vcpu_set_reg(vcpu, reg, val);
- 	new_val = vcpu_get_reg(vcpu, reg);
--	TEST_ASSERT_EQ(new_val, val);
-+	match = new_val == val;
-+	if (!match)
-+		ksft_print_msg("%lx != %lx\n", new_val, val);
-+	ksft_test_result(match, "%s valid write succeeded\n", ftr_bits->name);
- 
- 	return new_val;
- }
-@@ -447,6 +451,7 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
- 	u64 mask = ftr_bits->mask;
- 	u64 val, old_val, ftr;
- 	int r;
-+	bool match;
- 
- 	val = vcpu_get_reg(vcpu, reg);
- 	ftr = (val & mask) >> shift;
-@@ -459,11 +464,19 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
- 	val |= ftr;
- 
- 	r = __vcpu_set_reg(vcpu, reg, val);
--	TEST_ASSERT(r < 0 && errno == EINVAL,
--		    "Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d", r, errno);
-+	if (r >= 0 || errno != EINVAL) {
-+		ksft_print_msg("Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d (%s)\n",
-+			       r, errno, strerror(errno));
-+		ksft_test_result_fail("%s invalid write rejected\n",
-+				      ftr_bits->name);
-+		return;
-+	}
- 
- 	val = vcpu_get_reg(vcpu, reg);
--	TEST_ASSERT_EQ(val, old_val);
-+	match = val == old_val;
-+	if (!match)
-+		ksft_print_msg("%lx != %lx\n", val, old_val);
-+	ksft_test_result(match, "%s invalid write rejected\n", ftr_bits->name);
- }
- 
- static u64 test_reg_vals[KVM_ARM_FEATURE_ID_RANGE_SIZE];
-@@ -503,7 +516,11 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
- 		for (int j = 0;  ftr_bits[j].type != FTR_END; j++) {
- 			/* Skip aarch32 reg on aarch64 only system, since they are RAZ/WI. */
- 			if (aarch64_only && sys_reg_CRm(reg_id) < 4) {
--				ksft_test_result_skip("%s on AARCH64 only system\n",
-+				ksft_print_msg("%s on AARCH64 only system\n",
-+					       ftr_bits[j].name);
-+				ksft_test_result_skip("%s invalid write rejected\n",
-+						      ftr_bits[j].name);
-+				ksft_test_result_skip("%s valid write succeeded\n",
- 						      ftr_bits[j].name);
- 				continue;
- 			}
-@@ -515,8 +532,6 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
- 
- 			test_reg_vals[idx] = test_reg_set_success(vcpu, reg,
- 								  &ftr_bits[j]);
--
--			ksft_test_result_pass("%s\n", ftr_bits[j].name);
- 		}
- 	}
- }
-@@ -995,7 +1010,7 @@ int main(void)
- 		ID_REG_RESET_UNCHANGED_TEST;
- 	for (i = 0; i < ARRAY_SIZE(test_regs); i++)
- 		for (j = 0; test_regs[i].ftr_bits[j].type != FTR_END; j++)
--			test_cnt++;
-+			test_cnt += 2;
- 
- 	ksft_set_plan(test_cnt);
- 
+I have a sort-of goal of having the creation of unprivileged
+namespaces be allowed in most contexts by default, *even in Docker*
+(which would involve the Docker team changing their default seccomp
+rules, but that bridge can be crossed later).  (In furtherance of this
+goal, I fixed an ancient bug in newuidmap that gets us quite a bit
+closer a couple weeks ago.)
 
--- 
-2.47.3
+But tying this mitigation to a parent userns means that it's
+completely unusable in the single-deep case.
 
+I do have a question about this whole scheme, though: are we talking
+*just* about CAP_NET_ADMIN?  That is, is there any other bit that has
+anywhere near enough security relevance to make this kind of thing
+worthwhile?  Because if it's really just a single bit control, maybe
+we can come up with a nicer scheme.
+
+--=20
+Andy Lutomirski
+AMA Capital Management, LLC
