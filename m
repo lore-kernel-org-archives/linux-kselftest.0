@@ -1,70 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.177.127.194
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793732545;
-	b=WB5clT9nSKxfA7z1BjpLaNqW8aZqFJjoU/CbgLG5nv2WTtZpOWhsYKjZA8JNxsxHVkVb
-	 USuvvsqfGeX1DuYoo92dwDxkmPyeFlkpBBOMzDehgqpjPkaRxu1NfTKiBhO2Mc0GdqTyJ
-	 IEPe1pk3eJfyS61BfSerxvrsb9MWQ7aXBMufaSN4s18362LXXM3Z2YzRR6Pndbe8QWpTh
-	 dJpj92bu6fF6mGNxCQ6I/G4+VXSjp4yq9lyiRLCb/0UKMR2Jdb3qMneMcNl1dPyU3wYrs
-	 fno3MFQD17bI2hGlksIwOS/8adA4a4HcK0w8jswYxu/tL26Z6dLtwtY1Pny32SOiC9Q==
+	t=1793732753;
+	b=JiihUpa5P3V9zWFLrgKdtftc7EspZhRKL4OXZpMjExKEzv3pMmpWUkkU9kBTS7iCIgTT
+	 imjbwoMLZbgJ+Ox+5iuWidmPNLta7n5TO3ZPtOLA5ImnUc9lgE4oh3jeoLGBNo+HweZXG
+	 k+eN47V6YW0kk4QnK/kqRBrD1ODCE1JK1gNsrKYtexvhj+jn5G/OxJeN1sc2DcYDjsQ9p
+	 VAuKmvtK5T8PVqjxLaqKBtqYqzGfLYtdQyPd042/v9KHMtAMWFaBvOGU99azTVbUUAhNf
+	 J1x9NERDsuVTI0c+gKYjdAe850pfEUQJS7M4gQiQD3uP5ZcIskGRJTtxsdnhBOYSmDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793732545;
-	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:In-Reply-To:
-	 References:From:Date:Subject:To:Cc:X-Envelope-From;
-	bh=iRcFKVq4yzOPPq5tlMD3IhnrPnQrcTTJkLYWnS8Ojxg=;
-	b=vt7nQYCnkXPYkeU2vR2JIfbbyUHfxBdnq8kSvCWyJqbKwjdDf06FM+LODq1wTb2KDkbK
-	 eSpyxqBKvoH8ng4UuXv6Yp3TbAv7rFihpxuOrJLB9AlE236PLRqXwFqNANXnlAZwEkLF8
-	 aUmx92/3uNMeMWbVMuP3vlQkLGnI1YODDpJ9TMRGBpGLUWAPexT3ZUJBiU1ZWTw5zPzsT
-	 xpIy7fQb9EZJazoGtZ2p0RuLUonQFc3Xbz9IsqSqBovYOzNCPTzHaborXM5DrDmBtL7gY
-	 QTQ7Js5ulsqIjRSyOtdueUQdYSCyI79U1RPF/2Xr34nu8CBIj6WSQydCNo5Gq+IKAVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793732753;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=HeJNsa6cJ6QNpsjilhgs8PG10NtpxUmbMSyIykHPOow=;
+	b=nyfeQpaML0jB67pgDKfc7zfWmsonOr+YMRaX35AZefd+/j3oJe4nDZKlh6b+Sgd1uEJ1
+	 D82O0o8VMaat0Ktmh7n/8c9TXWoWqJ0dMwZ/mZcTx8bLofWdCsV02H5NcF7c0G5Ttbomz
+	 vNYjx4DP7scjZgeeD5wowkeqRbzvvcEf7LBIX+f21sUv6md9wKtEGHAdNNv4SFJOpZAgK
+	 p4Zt2RxudNs7Ug6gtZmpC10OkYcOWyY3nYT2bJhsNlpZ4uXKOPAJLxlwTeaXatyeCr5ag
+	 2RvBWRTmWvt25lr6dtsFsMvYcSl9p8Dc+3AzbdjUeG8wRVrlzq/TecinTBmxB8EEdgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=tychen.cc;
-	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b="BE73ii/7";
-	arc=none smtp.remote-ip=198.177.127.194
-Received: from out-utut-a194.jellyfish.systems (out-utut-a194.jellyfish.systems [198.177.127.194])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tm2Ms7AR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA09B606A328
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 19:02:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA09B606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24FA606A31B;
+	Tue,  3 Nov 2026 19:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=BE73ii/7
-Received: from [10.18.116.108] (unknown [151.145.76.168])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jJyc73fspz8sWS;
-	Tue, 03 Nov 2026 19:01:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1793732524;
-	bh=iRcFKVq4yzOPPq5tlMD3IhnrPnQrcTTJkLYWnS8Ojxg=;
-	h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-	b=BE73ii/704qk/HXdjhkCYdpTN/L5SBEpfmk83JNnCYY6KHeUZaifDCg9KJjsvFmJU
-	 2nF7VFj3s0DEz/ePQvniaYqX2YeNic8aLgBfUeq8HLLkH4J3R3cDF7jXbcnHfh3h3b
-	 XYjKnJ1Kgo+3EYVWcKIgwWLsXKCzoSY49ZiPx54ERFn7OC9LFcrVq0sHIk0Wuy0VtZ
-	 i8uefOFHi7ic4CACUDCK4UnDnLXiSYnzicwuM/yMoqBOCcfb8gHcUzghaostDXoNCy
-	 6KHl76Rpjf0gTNBRkUqpBBXtB91OXJnXI1ytCFZR4mDQT3uk0aGvqr7CV9h6OKz3l6
-	 wSNc6ev7VBy7g==
-Message-ID: <a970aee62ffdc611105549c4263dfa41d00ace6d.1793732386.git.hi@tychen.cc>
-In-Reply-To: <cover.1793732386.git.hi@tychen.cc>
-References: <cover.1793732386.git.hi@tychen.cc>
-From: Tianyi Chen <hi@tychen.cc>
-Date: Wed, 04 Nov 2026 04:01:59 +0900
-Subject: [PATCH bpf-next v7 2/2] selftests/bpf: Check bpftool batch map dump
- contents
-To: bpf@vger.kernel.org
-Cc: qmo@kernel.org,
-    andrii@kernel.org,
-    eddyz87@gmail.com,
-    ihor.solodrai@linux.dev,
-    linux-kselftest@vger.kernel.org,
-    daniel@iogearbox.net,
-    ast@kernel.org,
-    hi@tychen.cc
-X-Envelope-From: hi@tychen.cc
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tm2Ms7AR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF4671F000C1;
+	Tue,  3 Nov 2026 19:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793732753;
+	bh=HeJNsa6cJ6QNpsjilhgs8PG10NtpxUmbMSyIykHPOow=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Tm2Ms7ARRWfmr8ayv6N+1djm7L5xFdCVSz8tSi2mTXHAowcCDGbvK/lDyvmEqybsd
+	 YfDAVqXOvWa4BDymDjqjfclHOqtSr8ymzmt/0+WPxd2iF7sJ7/p3FXEjFN8WVgKilX
+	 i5Iiv2pQfvys9YvlFvxuZ1GCEyDMpBJqr8P3hSl17H4Frg1xvFViFFe0dCySAvB50L
+	 oUnoQyhIS1hdArWYWvLM8NYL+liPREMfvy6as1ttb2ndB2mzCduEvcwdrzYk21GksW
+	 gjlNL7ArZ32XovBSVOh8Ce4gWgYE1fqxdDx77occRhf9rMxbebHhcEQV9rZYSugPPx
+	 4RNHVFB4PRPsA==
+Date: Tue, 3 Nov 2026 21:05:46 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Umang Pokhriyal <umangpokhriyall@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/mm: test a uffd write-protect range with
+ an unregistered page
+Message-ID: <auowiuwkogQ0-g7V@kernel.org>
+References: <20261102103621.156928-1-umangpokhriyall@gmail.com>
+ <20261102103621.156928-3-umangpokhriyall@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,223 +64,104 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102103621.156928-3-umangpokhriyall@gmail.com>
 
-Exercise hash map dumps around the initial batch size and across
-multiple batches, including empty and single-entry maps. Compare each
-complete unordered key/value set with the input data in plain, JSON
-and pretty JSON output.
+Hi Umang,
 
-Cover one-byte keys, three-byte values and BTF-formatted maps to catch
-cursor sizing, buffer alignment and formatting regressions.
+On Mon, Nov 02, 2026 at 04:06:21PM +0530, Umang Pokhriyal wrote:
+> Register only the first of two pages and check that UFFDIO_WRITEPROTECT
+> over both pages fails with ENOENT without changing the first page, when
+> protecting and when unprotecting.
 
-Also cover a sparse hash map whose maximum capacity exceeds the batch
-buffer budget.
+I don't think it's worth keeping the test for a regression we already
+fixed.
+ 
+> Signed-off-by: Umang Pokhriyal <umangpokhriyall@gmail.com>
+> ---
+>  tools/testing/selftests/mm/uffd-unit-tests.c | 56 ++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+> index 298609544..57e442fd2 100644
+> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> @@ -375,6 +375,56 @@ static void uffd_wp_unpopulated_test(uffd_global_test_opts_t *gopts, uffd_test_a
+>  	uffd_test_pass();
+>  }
+>  
+> +/*
+> + * UFFDIO_WRITEPROTECT over a range whose second page is not registered must
+> + * fail without changing the first page, in both directions.
+> + */
+> +static void uffd_wp_partial_range_test(uffd_global_test_opts_t *gopts,
+> +				       uffd_test_args_t *args)
+> +{
+> +	struct uffdio_writeprotect prms = {
+> +		.range.start = (uint64_t)gopts->area_dst,
+> +		.range.len = 2 * gopts->page_size,
+> +	};
+> +	uint64_t value;
+> +	int pagemap_fd;
+> +
+> +	/* Only the first page is registered; the second is a separate VMA */
+> +	if (uffd_register(gopts->uffd, gopts->area_dst, gopts->page_size,
+> +			  false, true, false))
+> +		err("register failed");
+> +
+> +	pagemap_fd = pagemap_open();
+> +	*gopts->area_dst = 1;
+> +
+> +	prms.mode = UFFDIO_WRITEPROTECT_MODE_WP;
+> +	if (!ioctl(gopts->uffd, UFFDIO_WRITEPROTECT, &prms) || errno != ENOENT) {
+> +		uffd_test_fail("protect over an unregistered page did not fail with ENOENT");
+> +		goto out;
+> +	}
+> +	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
+> +	if (value & PM_UFFD_WP) {
+> +		uffd_test_fail("failed protect changed the first page");
+> +		goto out;
+> +	}
+> +
+> +	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, true);
+> +	prms.mode = 0;
+> +	if (!ioctl(gopts->uffd, UFFDIO_WRITEPROTECT, &prms) || errno != ENOENT) {
+> +		uffd_test_fail("unprotect over an unregistered page did not fail with ENOENT");
+> +		goto out;
+> +	}
+> +	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
+> +	if (!(value & PM_UFFD_WP)) {
+> +		uffd_test_fail("failed unprotect changed the first page");
+> +		goto out;
+> +	}
+> +
+> +	uffd_test_pass();
+> +out:
+> +	close(pagemap_fd);
+> +}
+> +
+>  static void uffd_wp_fork_test_common(uffd_global_test_opts_t *gopts, uffd_test_args_t *args,
+>  				     bool with_event)
+>  {
+> @@ -2403,6 +2453,12 @@ uffd_test_case_t uffd_tests[] = {
+>  		.uffd_feature_required =
+>  		UFFD_FEATURE_PAGEFAULT_FLAG_WP | UFFD_FEATURE_WP_UNPOPULATED,
+>  	},
+> +	{
+> +		.name = "wp-partial-range",
+> +		.uffd_fn = uffd_wp_partial_range_test,
+> +		.mem_targets = MEM_ANON,
+> +		.uffd_feature_required = UFFD_FEATURE_PAGEFAULT_FLAG_WP,
+> +	},
+>  	{
+>  		.name = "minor",
+>  		.uffd_fn = uffd_minor_test,
+> -- 
+> 2.53.0
+> 
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- .../bpf/prog_tests/bpftool_map_batch.c        | 191 ++++++++++++++++++
- 1 file changed, 191 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-new file mode 100644
-index 0000000000000..5387de2ba79fd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-@@ -0,0 +1,191 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <bpftool_helpers.h>
-+#include <bpf/btf.h>
-+#include <ctype.h>
-+
-+#define MAX_ENTRIES 1025
-+#define RECORD_SIZE 256
-+#define OUTPUT_SIZE (MAX_ENTRIES * RECORD_SIZE + 1024)
-+
-+struct dump_case {
-+	const char *name;
-+	unsigned int count;
-+	unsigned int key_size;
-+	unsigned int value_size;
-+	bool btf;
-+	unsigned int max_entries;
-+};
-+
-+static void hex_bytes(char *out, const void *data, unsigned int size, bool json)
-+{
-+	const unsigned char *bytes = data;
-+	unsigned int i;
-+
-+	if (json)
-+		*out++ = '[';
-+	for (i = 0; i < size; i++) {
-+		if (json && i)
-+			*out++ = ',';
-+		out += sprintf(out, json ? "\"0x%02x\"" : "%02x", bytes[i]);
-+	}
-+	if (json)
-+		*out++ = ']';
-+	*out = '\0';
-+}
-+
-+static void expected_record(char *record, const struct dump_case *test,
-+			    unsigned int index, bool json)
-+{
-+	__u32 key = index, value = index * 37 + 11;
-+	unsigned char short_key = index;
-+	char key_hex[64], value_hex[64], formatted[96];
-+
-+	hex_bytes(key_hex, test->key_size == 1 ? (void *)&short_key : &key,
-+		  test->key_size, json);
-+	hex_bytes(value_hex, &value, test->value_size, json);
-+	snprintf(formatted, sizeof(formatted), "{\"key\":%u,\"value\":%u}",
-+		 key, value);
-+	if (json && test->btf)
-+		snprintf(record, RECORD_SIZE,
-+			 "{\"key\":%s,\"value\":%s,\"formatted\":%s}",
-+			 key_hex, value_hex, formatted);
-+	else if (json)
-+		snprintf(record, RECORD_SIZE, "{\"key\":%s,\"value\":%s}",
-+			 key_hex, value_hex);
-+	else if (test->btf)
-+		snprintf(record, RECORD_SIZE, "%s", formatted);
-+	else
-+		snprintf(record, RECORD_SIZE, "key:%svalue:%s", key_hex, value_hex);
-+}
-+
-+static void check_dump(const struct dump_case *test, __u32 id, bool json, bool pretty)
-+{
-+	bool array = json || test->btf;
-+	char command[MAX_BPFTOOL_CMD_LEN], expected[RECORD_SIZE], footer[64];
-+	bool seen[MAX_ENTRIES] = {};
-+	char *output, *src, *dst, *cursor;
-+	unsigned int i, n;
-+	int err;
-+
-+	output = calloc(1, OUTPUT_SIZE);
-+	if (!ASSERT_OK_PTR(output, "alloc_output"))
-+		return;
-+	snprintf(command, sizeof(command), "%smap dump id %u",
-+		 pretty ? "-p " : json ? "-j " : "", id);
-+	err = get_bpftool_command_output(command, output, OUTPUT_SIZE);
-+	if (!ASSERT_OK(err, "map_dump"))
-+		goto out;
-+	/*
-+	 * Ignore presentation whitespace, but compare complete records and all
-+	 * punctuation. Expected contents come only from the input data, never
-+	 * from another map walk or bpftool invocation.
-+	 */
-+	for (src = output, dst = output; *src; src++)
-+		if (!isspace((unsigned char)*src))
-+			*dst++ = *src;
-+	*dst = '\0';
-+	cursor = output;
-+	if (array) {
-+		if (!ASSERT_EQ(*cursor, '[', "array_start"))
-+			goto out;
-+		cursor++;
-+	}
-+	for (n = 0; n < test->count; n++) {
-+		if (array && n) {
-+			if (!ASSERT_EQ(*cursor, ',', "record_separator"))
-+				goto out;
-+			cursor++;
-+		}
-+		for (i = 0; i < test->count; i++) {
-+			if (seen[i])
-+				continue;
-+			expected_record(expected, test, i, json);
-+			if (!strncmp(cursor, expected, strlen(expected)))
-+				break;
-+		}
-+		if (!ASSERT_LT(i, test->count, "unique_expected_record"))
-+			goto out;
-+		seen[i] = true;
-+		cursor += strlen(expected);
-+	}
-+	if (array) {
-+		ASSERT_STREQ(cursor, "]", "array_end_and_count");
-+	} else {
-+		snprintf(footer, sizeof(footer), "Found%uelement%s", test->count,
-+			 test->count == 1 ? "" : "s");
-+		ASSERT_STREQ(cursor, footer, "plain_count");
-+	}
-+out:
-+	free(output);
-+}
-+
-+static void run_dump_case(const struct dump_case *test)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct btf *btf = NULL;
-+	unsigned int i;
-+	int fd = -1;
-+
-+	if (test->btf) {
-+		btf = btf__new_empty();
-+		if (!ASSERT_OK_PTR(btf, "btf_new"))
-+			return;
-+		if (!ASSERT_EQ(btf__add_int(btf, "unsigned int", 4, 0), 1,
-+			       "btf_int") ||
-+		    !ASSERT_OK(btf__load_into_kernel(btf), "btf_load"))
-+			goto out;
-+		opts.btf_fd = btf__fd(btf);
-+		opts.btf_key_type_id = 1;
-+		opts.btf_value_type_id = 1;
-+	}
-+	if (test->max_entries)
-+		opts.map_flags = BPF_F_NO_PREALLOC;
-+	fd = bpf_map_create(BPF_MAP_TYPE_HASH, "dump_batch", test->key_size,
-+			    test->value_size, test->max_entries ?: (test->count ?: 1), &opts);
-+	if (!ASSERT_OK_FD(fd, "map_create"))
-+		goto out;
-+	for (i = 0; i < test->count; i++) {
-+		__u32 key = i, value = i * 37 + 11;
-+		unsigned char short_key = i;
-+		void *key_ptr = test->key_size == 1 ? (void *)&short_key : &key;
-+
-+		if (!ASSERT_OK(bpf_map_update_elem(fd, key_ptr, &value, BPF_ANY),
-+			       "map_update"))
-+			goto out;
-+	}
-+	if (!ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "map_info"))
-+		goto out;
-+	check_dump(test, info.id, false, false);
-+	check_dump(test, info.id, true, false);
-+	check_dump(test, info.id, true, true);
-+out:
-+	if (fd >= 0)
-+		close(fd);
-+	btf__free(btf);
-+}
-+
-+void test_bpftool_map_batch(void)
-+{
-+	static const struct dump_case cases[] = {
-+		{ "empty", 0, 4, 4 },
-+		{ "single", 1, 4, 4 },
-+		{ "below_batch", 255, 4, 4 },
-+		{ "exact_batch", 256, 4, 4 },
-+		{ "above_batch", 257, 4, 4 },
-+		{ "multiple_batches", 1025, 4, 4 },
-+		{ "large_sparse", 1025, 4, 4, false, 1U << 20 },
-+		{ "one_byte_key", 256, 1, 4 },
-+		{ "odd_value_size", 257, 4, 3 },
-+		{ "btf_empty", 0, 4, 4, true },
-+		{ "btf_single", 1, 4, 4, true },
-+		{ "btf_multiple_batches", 1025, 4, 4, true },
-+	};
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(cases); i++)
-+		if (test__start_subtest(cases[i].name))
-+			run_dump_case(&cases[i]);
-+}
 -- 
-2.56.0
-
+Sincerely yours,
+Mike.
