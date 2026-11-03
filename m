@@ -1,59 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.6
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793742584;
-	b=GslN14wG9725m06em4A3ybTZEQurtwnuPpfvUNnzFYk5CvuWXmyM+DGJitu8chXHT5Kg
-	 4+lCPSPd8U3MQSn4OOMbXA0lXMI0Bjq0lFEjfWWIoXzPicLypNVJOEjviS83zrMVhThYN
-	 wXhrUAj8Dfb5/GpCkIV7ap8Msg9xx6SvoFKhWJn5/mThEUMjwUYG0ecuX1rHh9GgMKitc
-	 T8QzXnCVZ2pE2b9hgXNnBiKUoSb0j4k4AEtkSgejL0iH6uK0GEqWIFMHqvFP5SmlQufak
-	 LCisXK5bHF9YcGzfCzO/57K2Ca2EICZ1kGaq1/QvZdPgodgNJKYSZ9x12kVt+KNlEAQ==
+	t=1793742955;
+	b=sKYa9r5KJyaGbEPJUPl9sesJUvfmF2CrF2bhQauYoV8MEDZYP86AOY+LeM7W2+F0uTAR
+	 Q4WBE6jQ9DCPjcsBCQ/3dK07YsIlODBsu6yTy5UBUlO/qW7UaAR9qewyOxVo7XNwpi0a0
+	 Qb8FlFyjwuxR+GP2306WJXNbWjCIAs862a/QkchNKclKLVNzk8OT6ExbdSaCbinAafhdk
+	 5nIPZz8e4w3nabEU/yT5RoiyTM8O2pMdTfQwGOaE3uDL+XxXUt/fH3gOf8an3SX3vvgqA
+	 7Tf6Qaa7t49HKwe4UmKv0BeJgRWK6KBLtfzURP1duT5abKV0WCTLhwGjs2anCJULtAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793742584;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793742955;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=0PzhGlwivk5ut3NM8Y+GDWARHDeV9ILEL9ouE21WHXs=;
-	b=rJRurZQic2tYiqBjpYLje9hKSoy78L1aqbhHq3AdAmhGHEg9b/HwNOU9d7uJVf5jzc7t
-	 qBpMu0oCRFdze9flKLU927s6uu7ifgNh/v7SkOAIByQs4fZuPBk9Fa32uaHBZW+UCobEj
-	 FcNfIEiNgPj1DgOtntEMo1ROey/0RcQZLDuPUrkdRFpVv9EkGidUV3XMGYbkdByVAyOFA
-	 msJcujnkJ17TDGEjcSQ/aIUFRSRMRzxa/dOKspNOAhyod9Mv7JFRZof5kR3vNO3/lDksb
-	 BPpnek9+5+XdUQQrfS4UBnSgQNbNTFXHPGKoPqJNAlF01tNw7derGV72zg75VhqfAmA==
+	bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
+	b=TevhBnELvGRe4d/D8S5tAd+w5OSRHFQhKYFRPD2DOnVdUAfPNYxuxBMTsRGiaq2EQQEO
+	 gsCqeqkfpMFytmLw0NK6R9+a04DxjMNcxZqST72JP9wLjijHsMkKOSVDEepD7isOXwofp
+	 1ya1e6yxm/7gcsLQIqZN7F6znIlnhSZ75ZTwIOG1TT+gAtCn/Yt/gvq2z/3O+8i3Hxfwn
+	 lzkxJ1rzKmsr4WeYmTF52UErqemsGpSrW+yN6regLVhS7sx3w4LjwVvRxY8eobunBPue/
+	 0eQXMHDLcQBdN+bjxYHeZywe4L41lj3to2UaJwii09b9LRQiWg6qD/v9TIGsxOvGlvg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=awQn3FXj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sfuNBzzN;
+	arc=none smtp.remote-ip=74.125.229.6
+Received: from mail-dy2-f6.google.com (mail-dy2-f6.google.com [74.125.229.6])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AE3606A328;
-	Tue,  3 Nov 2026 21:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8513B606A324
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 21:55:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8513B606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=awQn3FXj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B1D1F000C1;
-	Tue,  3 Nov 2026 21:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793742583;
-	bh=0PzhGlwivk5ut3NM8Y+GDWARHDeV9ILEL9ouE21WHXs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=awQn3FXjuOnS27R9NiFgA40a8ycZiyjB7WyB+ZdTaZHz8wDVh/wlO0aoJV3txzJBj
-	 qCC4t0405STFRpj0WJMIUexCw5Gx+F8OI273ek+JE/NIaem9xbvpWyBuBUwanuYB5V
-	 Rkv6jNofbUC+x2fILvbqVNaOAHprz5I16S3+f/vTzOusjyxFWmx9M0I17PE4+MoVBK
-	 qKdF2heyGvIS5VRqgqbwMAMbz+Nj5WRpgpHlVSoVmZeMu645xh9vGML8s8iqh3uz1N
-	 YEAzKcaIP/h6hUM/s+BEkQuEZHcKMTT8iDDsY2rxYxr0E2ASMeD+g8w2xKkCCQD885
-	 02m6yFD4spVvA==
-From: Sasha Levin <sashal@kernel.org>
-To: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-security-module@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sfuNBzzN
+Received: by mail-dy2-f6.google.com with SMTP id 5a478bee46e88-33e48934fa8so166eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 13:55:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793742954; x=1794347754; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
+        b=sfuNBzzN/UPokfGhMFu7uaQLMXvaErnOcSaFw2i3bFhGkgbRskcKeni8N53tr/B4WI
+         +boW9bxRpBvOUiE4wWizeSWbRvN5zEt4A73maTA/LhcdeO1KuKwFdLMEkL0VCr2NPHx2
+         0c0z0J/lzfmH4L6dj4TEzzwOsZQ/FBo6LAIr72HvRiUqNIN0jW+RNHA7LuSwUzbgrNwj
+         HyeR0ginrwv94KBDVPeF6hKIglgoX+LoEOaevgMT2vgy2lRomtXkYwIOer/Rl6RULaZQ
+         oEpKMyiPK1719m9OvaU1G0OvijYckCFUYvGpYXGohwjNa3gBDqROKfN7kYQWwvPf1bie
+         Ib4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793742954; x=1794347754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
+        b=RL3/P+7CUKc+rRgnGZgnGnxHtUtmS35Nyq/xo4hQRZ+i6sNTW92/7/AIYIOMBUv74A
+         8PqnqitR5C0c4vkXiNL/P+NSmp1AU44Tfxy/6L1W5sqXzQAbZ+lSsckjDNlw6YHCFO9G
+         ir/+Fmv5p1BP40LCop1C2cPrScS84CQjNpxA7N/rZoALkSz8p4tr45WxTFTOUJ0IdB1B
+         FXmM4fkFzluNrXz6rfd2g7WMSQMvps/AY07k7OxxJkqvSkHvqmLlA+bDZcTpljMwg911
+         gw6aa+Ogr/z1bkv39K328g9rT9MAsQWb6uSi4mnEf4D+pe/vAlkxRKHCUFLDropemEl1
+         sHkg==
+X-Forwarded-Encrypted: i=1; AKwUvBwY2TQMgworfYggKm591Pggb3DtAWXmGODrlGR1iDlQ/wXpL3lIyUEKMg5ojCZZCZUkNF9UOgGl28bZBqRYc1Q=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9c588ynYdOssG14nygVxVYc+n4+SFlwirOBUxvpls5zwtqmeb5
+	Yt/VJEctr3Xxb/eDFpgIM/bYPcaD+XmK2x0I3yM6QiM56IvKJxpVJkY54tYpdEls7yk=
+X-Gm-Gg: AYBFou0KjVza/+CnMUkIktZr8LRnCO+fsGpJF5Q9dJkjdWYEEWgIxlnJsY8EDOkJxtG
+	2YGU1YEde/XM2g+Vqym2HrlDv+qKlYQCezRnDKSEyb6iya4pUi2ci2Fo6cbOhwjh2XQP4W1iu4F
+	yICDInnQG+s6gXLAb9xmVOKqN4rb8WApWE+rKRM+9PYJicLCuWWuOxtzw/OkYaMHdkuV27ylWXt
+	tTbvajPVt6l+Uxtf6rp1aYjJYAkUDc/5FX176ZLOvfdGOOdaaH1uW2cntpzPSkDbJ4qsr0/f6sP
+	HzGD246Azj7i8B3votUWCtMbxsmOCJyUJUX32b5vS2UWmLhb/l79IZbOGODo1xh2r8Z7j6LoCpr
+	fgSDGiiUIP3mewjq7B3efZg0jTYBYMtp7gMhagV0V+duXjxWwEZSOYod8BtK4sNvLJ7DCEgA8qD
+	dmcpuRcOb25X84gCvbXjnIbdRjT+pCdQFnI1+zkaGjVWLApS6x+Dk8fKVMvJQszQSU3iRhOD4/L
+	djSkv233TbYFxkbOlromzHJK25yi4PJH4cLMt1dms8N6eyGPyynKNLb41l4XfSaeJgUUDUpwtjH
+	KgX3s2iiWfH4TbHvl41qcXL4qLkutKuiEJH/ev8tBA5qPu9YkJNms5xw7foWc1iuhIU5RFeJT5/
+	Rc9jZI4CRZlWKYE3PrnNSDFKjMSfowKD3dAUh7g==
+X-Received: by 2002:a05:693c:6090:b0:36a:4a68:84e5 with SMTP id 5a478bee46e88-36a4a68851cmr22202818eec.8.1793742953533;
+        Tue, 03 Nov 2026 13:55:53 -0800 (PST)
+Received: from localhost.localdomain ([98.148.34.5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca3958746sm867414eec.22.2026.11.03.13.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 13:55:53 -0800 (PST)
+From: Hungyu Lin <dennylin0707@gmail.com>
+To: ast@kernel.org,
+	bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	iii@linux.ibm.com,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/landlock: fix the regex_escape() error check
-Date: Tue,  3 Nov 2026 16:49:41 -0500
-Message-ID: <20261103214941.1553946-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261103.06edcd6fc9f1@gnoack.org>
-References: <20261103163917.641130-1-sashal@kernel.org> <20261103.06edcd6fc9f1@gnoack.org>
+	linux-kernel@vger.kernel.org,
+	Hungyu Lin <dennylin0707@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Account for zero extensions in patch list expectations
+Date: Tue,  3 Nov 2026 21:53:09 +0000
+Message-ID: <20261103215309.19950-1-dennylin0707@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,23 +104,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 03, 2026 at 09:31:33PM +0100, Günther Noack wrote:
-> Thanks for the contribution!  I also stumbled across this one when I
-> did a wider cleanup, and at the time I came to the conclusion that it
-> would be wiser to fix the weird way in which regex_escape() reports
-> errors.
->
-> https://lore.kernel.org/all/20261008142604.39107-20-gnoack3000@gmail.com/
->
-> Does that seem reasonable to you?
+patch_list_insert_in_front() checks the translated instructions around
+the call of an inlined bpf_loop() and its callback. On s390, the verifier
+adds zero extensions after the two 32-bit register writes in the loop.
+The call is therefore at instruction 25 rather than 23, and the later
+instructions checked by the test are also shifted by two. The test
+fails despite the call and jump offsets being correct.
 
-Yes, that's better. Your 18/27 also fixes the size miscount after the
-escaped path, so it covers everything this patch does. Let's drop this
-one in favor of your series.
+Use the corresponding instruction indices on s390 and RISC-V, whose
+JITs request explicit zero extensions. Keep the original expectations
+for the other enabled architectures and retain all branch offset and
+callback entry checks.
 
---
-Thanks,
-Sasha
+Fixes: 57fae4059380 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf 7.4-rc1")
+Link: https://github.com/kernel-patches/bpf/actions/runs/41696128762/job/126138168160
+Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
+---
+ .../selftests/bpf/progs/verifier_patch_list.c  | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+index 581b75b7b5c5..a9ad1dc56c3a 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
++++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+@@ -298,6 +298,23 @@ __arch_arm64
+ __arch_riscv64
+ __arch_loongarch
+ __success
++/* The verifier adds two zero extensions for these JITs. */
++#if defined(__TARGET_ARCH_s390) || defined(__TARGET_ARCH_riscv)
++__xlated("25: call pc+7")
++__xlated("...")
++__xlated("32: exit")
++__xlated("33: r0 = ")
++__xlated("35: r0 = &(void __percpu *)(r0)")
++__xlated("36: r0 = *(u64 *)(r0 +0)")
++__xlated("37: if r0 != 0x0 goto pc+2")
++__xlated("38: r0 = 1")
++__xlated("39: exit")
++__xlated("40: r1 += -1")
++__xlated("...")
++__xlated("51: if r1 != 0x0 goto pc-12")
++__xlated("52: r0 = 0")
++__xlated("53: exit")
++#else
+ __xlated("23: call pc+7")
+ __xlated("...")
+ __xlated("30: exit")
+@@ -312,6 +329,7 @@ __xlated("...")
+ __xlated("49: if r1 != 0x0 goto pc-12")
+ __xlated("50: r0 = 0")
+ __xlated("51: exit")
++#endif
+ __naked void patch_list_insert_in_front(void)
+ {
+ 	asm volatile (
+
+base-commit: d4bf9e34e299e45af8da2b0457b0ac3efbd7ae8d
+-- 
+2.43.0
+
