@@ -1,83 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793699467;
-	b=vdVwUj8m+4iEoW+dpEEGctLhhbzXxVy6HHZNrKmtTFMV1+TyJHf5kqMYiTIkx8Dx9tib
-	 Vnj7ilOV+sYwUhTT38+tFVKYC9hCPYNVCs+8hF7jZoqyN+X6bCL2lp/Vyde+fXAAGxO/k
-	 A2dg2lqlw5r8PpGkzfBxjlKzXHCmmyqnyjCWMkO79iUXp7tIWxmdyGzty9k+smjcN7rFY
-	 /2taCFnLZlRnheudDnJbYdE7HcAEPku9aNGCx1lfeH7fECb41I5TctG8gzEDZmIPRQPM5
-	 Ymv/a3YYwdaGBgmLp3Kq21y9lxYzYyvSOWldYJDlPXUdOV1zLJ8N3hzGRaVWMQO2+XA==
+	t=1793701728;
+	b=PIT95cLRij+VKg8tXLW/aEgRsJ5OeQoETgAaw7Ne6EOu/BFXX5XV8s1IJ5E1WYS+a872
+	 /6xUCtyavjInAGUhhOWVJrlMsqEL50BZWRAzULyD140zL1gtUIn2i5Gzv1vZSxzfyH7dL
+	 0DXovd7kvJUaruwF1ZZxomdNgcPd9FDaoelk08yz1107BJnB+AJ9vheVzSTcIOD5ITd9Y
+	 lPbHnH/EQ1AhT0kTisTpYRFzn9BSmEjgmqtP9VKxLLI9flvMz4ej12if2Wp4Y226yoQz4
+	 WlIAJKBSGAz28u/hvhhIR9IIAG6BVbJm3eBm+BG/CS8tPVDkv0zD8UiF/5fuKQl3Tww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793699467;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=egFZ+CUkcSsEU6Plv0bPxdEnwjHAJmOsofwONArJtfE=;
-	b=oR95ZouEBmJIaNuQmKiDyzM9SIgy1MFazjuCxlSYqlbUdpHM9A7oHg+RmaRu2KF/R4SS
-	 Z1Yd6bXdvDc+uHsf2Id1jF3EaphlFjVynLXNE+jEodTXhcAmZ+zwuq2KUz+ZHO8hi3aeM
-	 eLmacl08zA66aKEHp/UxYUMUTLhBpxsQ/fhEVYiaInBKM02T79IJwI9ld+L3hjSuWJcSB
-	 3t4NuwBLdzsIgk4aWwd4bwDEHZb3b0KmEwAbJnsGBEcDS1w5Q2FCx7un/Zf2kdPcbJF+t
-	 bJempRttnS20jj9+z/sMC2Kr69zapwMfSRiqeBWAqZvurmMn0ijcS0OBq4VRVAjNgBg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793701728;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=+slzZtIqAmiMo+gR8iGw7sSnQz1zeHTQz+LiYF2Om1s=;
+	b=ZamrdGzLV4aufRxVwg4aB+6nXq5RXEKNibE8ZphAC6K/3kgv+iv3Ixo4XLIvJPS8iZH3
+	 WJyxfxiBqkd8D8CrGPeNNELelOOBCSP8cx+mLvDE4YO0A+MXxNtejMPOOHJEAIeo0y9bV
+	 dpjhy1XL09x5HFT3PZlttJJWMisfLi4iHtyzZX0A9nLEt1BVg/jzNPiCb6aYrpbL90ZoD
+	 BICvpltiYA4EKeTDA0Anyd++yYmEbwxITLF8C0gGSSueT6cwWJhtqYq8SfQmY9QNv08l+
+	 zbtViiLF7GHu4inAMVDH21gNBvZyI7XtLdwdNJfagGeQplky42hdsyB/dDK9ED6jsYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZMBHJpc5;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jgMfvJwK;
+	arc=none smtp.remote-ip=209.85.221.47
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A478A606EE8E
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 09:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDFD607153A
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 10:28:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1CDFD607153A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZMBHJpc5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A191F00A2B
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 09:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793699467;
-	bh=egFZ+CUkcSsEU6Plv0bPxdEnwjHAJmOsofwONArJtfE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZMBHJpc5LnVjVqMmky/1Z98hT6vvYftg4A2uaHSbanSa9m0ZPl8r1yYSOD0LDhO7S
-	 x9eyo9iCxd1UrEIfH9GWrkpR2i0fGYq9QkF9AGJIO7X1DGGYVOwzw/eBzkAQ2B0gQo
-	 TGAcyF/5FIa+zza+heBC1wmnytrxl3MGMXw569pZSUfLodwCVkqtjqiaEale3b3pKA
-	 OaRwtst7itnDduWXrHxMhTDvJ3xIacZZPkLIe/VGMID9wnrXLBojpijPr3S3IiBUsr
-	 E/S9MLKZa42KqAWItRHIZ9AU5NPUoSN2UZQOm/s4Jx1idQaKw4MiC4upH32BvChUU1
-	 tIooJ8CeIsKDw==
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfauth.ams.internal (Postfix) with ESMTP id B4B621980052;
-	Tue,  3 Nov 2026 04:51:03 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Tue, 03 Nov 2026 04:51:05 -0500
-X-ME-Sender: <xms:h67pal9ZnLbWHExwOAy9SGfyqSpwEUA3NMoQdTM_tJujWsv3OVjV0w>
-    <xme:h67paicDmptRKFXkjwKv0nICnqf6UGXUOBoNs43PdN6dDU75HqZ_sRU53pb4eCnHZ
-    NyYG72C9VWjHhnBKO_6yXDQ_XgwcuqbqayOrtgsPfmHuMB18PoKS6SVzw>
-X-ME-Received: <xmr:h67pahuB-6My-vFtxfkBuHVD9wBj-SrVnKtNnHHVEzPKySakCJ2-hDMjBUM>
-X-ME-Proxy-Cause: dmFkZTEafPFpDsB+iCHvxJAO8+/K3z3CdRdJQPrpIxEVD39bmGj4/U/LJCZAd51olEmH1k
-    6qE564jpNX+1TdKbvOIB6IQqoEWMe6lmfsHXz/7H5av9n07ycVm9KaqNAIFuxM/2yQ6ZQf
-    2WwWRfyTOBvsJefTEHwTSIlMEprKmlBMCaMQEiOCHNx9GlqItvdGfsqrXvTSv4YwWhfjog
-    Hisq+Pm0kPe9yLdILX1nzJHxDiI4HZI/f/WiRyVg1IU5TnSyC+qdCi/OaPKH/o52uYw5Pg
-    NWBfdHzJ6Nj9gleMoUsWymwlxC4s3Xd8EfbSP1s94cT1TvBMvX9Px0+DW0sTMVcz6ljQEA
-    bNAqnrXT9kSnldOc7GBnoXknTZI4CrGQbGLxz5gcYZTcqrYDenzWioW72YDipsFCgRr9Nc
-    uHBP0n3wHEHm0xd1bC4PM449f0K6KLv76IEdnFJtRBmsT/86yFTF/k+YNA7ynRtyx7gRna
-    Kdv04/M7HAJayP6d0M6sfwsmt2NxrALe4AgmeDI6puNDmrhfuTxLwDKsNAcQvOKadj7BTj
-    haYfLIDqjkraFwT0ww55Xb+vCFS+FGgc4wHxE4eUt8EVIgb2JTv4LQ1XW3ZWMb1d2KhaT2
-    PU8/KLA1icWuLdOTL6ghs2iL36LEgDAWlkXyHmhA1D22rcIIoeNo1PaFssdA
-X-ME-Proxy: <xmx:h67par3REpkKj-iFbIx6OpMTiClv6JggmrTZ2vnL95mTjoV1WnqWTw>
-    <xmx:h67pauDaZfE9CaGgf87_XUEHj4UdQQBG6yShD9rbXk1nBnYJmINEwQ>
-    <xmx:h67pagcoelXpPMERwyrq_euIeL4P3SsGx8hAa2itEDWuoAW_H3ASQA>
-    <xmx:h67paoxeEzN5MwZep7_7iT4Ux1UqJY_4UkUcxyapsgxs5qXS9IeIBw>
-    <xmx:h67pajNnJMxSw7lfAbohqfwd3JfPbixn6e8WbpqRLjWogVqlRQ-CqeHQ>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 Nov 2026 04:51:02 -0500 (EST)
-Date: Tue, 3 Nov 2026 09:51:01 +0000
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Muhammad Mahdi Amirpour <ampr.mhd@gmail.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	yeoreum.yun@arm.com, ziy@nvidia.com
-Subject: Re: [PATCH v2] selftests/mm: handle child status safely in khugepaged
-Message-ID: <aumtBg9KOgrY9MIe@thinkstation>
-References: <auhvkuDO8cP9Pip4@thinkstation>
- <20261102185130.30504-1-ampr.mhd@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jgMfvJwK
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48e47347279so2480858f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 02:28:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793701726; x=1794306526; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+slzZtIqAmiMo+gR8iGw7sSnQz1zeHTQz+LiYF2Om1s=;
+        b=jgMfvJwKLdkmgUM6l2TOqZELOJ6ig3ZVEGTUwduPV4c+zsQn3+YESL5L+WYD0Y3KZQ
+         eQiEIwJVHJow0yant5InqS7PfE3x9YEHccd5hFvXroYV1qHqS6o2nOj9OjI4xV8/qJwQ
+         VqvZq3ntFfzFe0dT7yi/B59rTcSsTW7TWI1ycFsF5NXMozZ9mz68KXijqgSV3ebkKq0f
+         brS7Ns/VwL+YyUNg7VB8z/zUaLeQEoZO1Gugkb1JzukwTTKlCPIX8opDvs6RQRylgKSH
+         w8cobvXSeeiD90kVslFuGOvLJlcw9gU3OnJ72W2PKGfz5rCiQ8GGXs3lZh7H2SbTJh/8
+         7Vfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793701726; x=1794306526;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+slzZtIqAmiMo+gR8iGw7sSnQz1zeHTQz+LiYF2Om1s=;
+        b=VMTxpDu+5za/up1h30/8ztpjhwU+HOxAtvEeDF124Mk4OZh1/uwRzLvbB1ElxsRl1i
+         XmOdk/fHJc5LaMZHWY7cFlVLncwVHZUmr4LvamCeylFPCHjXdLcV5fggKEXZskmUzMwZ
+         H1KeMMiZUKP608btblBRTzDiATrI6A0jkEID/7/APwTGsaFEMv57uklOmB2SM1OPJE34
+         +iahJkdccwMUrGenBbK7oVZZbZDE1JUn67+KddkFfIImvPR3RD/4rlO0VIwFrsDCltzk
+         +PqTqoglEHJPGGYo560bpBeaKaw7fQLYP0yZP+dRFOHfJKw0+OO3Z44FElu+oy9QDEIX
+         ymAw==
+X-Forwarded-Encrypted: i=1; AKwUvByb7dQxgvOHSGyVdgDwPNmnMKZ7OJ0lms8FF49cO+mTaKw/Z4QrumFellxtzgtyxdgg5ZJYNU7zq33MySL+AoQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8ccNG2v2fsY3Lk8Gkadvcwtz5P/Q1lGe9HwQQ6zH/0RcQi1tr9
+	XKwJtoTAAoVauV0DqBo9mB56U0kKra8lBd/qPVtvZiji0lAXfVQUprxc
+X-Gm-Gg: AYBFou3OFNezO4W5f3eZeuIhO3PvtrUCZMma6rH34rVanvj9Dw8FtysTBprdiMdvn0q
+	Pkwmc9Y5faiz0B4E2+0fWOcuvXUVt2DyKVnhvWtPIKNtMv7qONMjUdKAut7hIctcUON0wlyeQFF
+	WfeTr8mdz4uilpdneXi9lTs6NQB486xPB2186aaoOs+o/jtQvR5D3R9Y664tPnW9iLKIlJXuIAL
+	FhXocFm+pc+YksGeLdlGzcKyex2PmuZrEu0V/ORWdH4R5IXrJf+21Y2JyAy+Kvvf8gXUv0Pwd3H
+	NrMSgp/R4rZC9xj6eAw5a8s/Lud+0XHEzeWPj6unoBFGlOKMyCp80igWVltWmZOKCINUKuQ0b3P
+	hmjroitXUhWx0PdLgAihgOwiNSgOdvA1EMSarZHb3BvMKMIAIcjvuUc7o3yuPIoYlvxbVINMHJg
+	wKb3oF/boNimpb1rNNvYUAN2kVu6+jTRy+/oYOIvVI6+zaA8V21dmmwO/EdxLt4Sax5bWjpI5lV
+	ofAmDJs275foHlmEx9KFkTSy6egNxPrrXSvusJq4ntWQX+XjXc9gWpG1Ab7Nn4/fwhN6PzZQfcy
+	sa0XC4uua2nzuQ==
+X-Received: by 2002:a05:6000:e89:b0:487:baa:aa6b with SMTP id ffacd0b85a97d-48e6e4fac5bmr20986010f8f.43.1793701726165;
+        Tue, 03 Nov 2026 02:28:46 -0800 (PST)
+Received: from nobara ([83.231.69.9])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b7815fsm24941003f8f.22.2026.11.03.02.28.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 02:28:45 -0800 (PST)
+From: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Xu <peterx@redhat.com>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	"Jose A. Perez de Azpillaga" <azpijr@gmail.com>
+Subject: [PATCH v3 0/2] mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY retry
+Date: Tue,  3 Nov 2026 11:28:34 +0100
+Message-ID: <20261103102840.68903-1-azpijr@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,30 +107,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102185130.30504-1-ampr.mhd@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 02, 2026 at 10:21:30PM +0330, Muhammad Mahdi Amirpour wrote:
-> collapse_fork(), collapse_fork_compound() and
-> collapse_max_ptes_shared() take the child result from
-> WEXITSTATUS() without checking WIFEXITED(). For a child
-> killed by a signal WEXITSTATUS() is 0, which is KSFT_PASS:
-> the parent runs its own checks and the test reports ok even
-> though the child crashed.
-> 
-> Fail the test when the child did not exit normally, and print
-> the signal that killed it. Also fail when fork() fails,
-> instead of reading an uninitialised status.
-> 
-> Use get_child_status() in all four fork tests, and use
-> wait_for_child() to handle fork() and waitpid() in the
-> three blocking-wait tests.
-> 
-> Fixes: bd212a7dbdb1 ("kselftest: mm: return fail when child test result is fail in khugepaged")
-> Signed-off-by: Muhammad Mahdi Amirpour <ampr.mhd@gmail.com>
+The urgent fixes made hugetlb_fault() tolerate uffd bits left in VMAs
+that are no longer registered for them, and asked for follow-ups that
+remove the sources [1]. This is one: a hugetlb UFFDIO_COPY_MODE_WP copy
+that has to fault in its source page doesn't recheck the WP registration
+before retrying, so re-registering the range without WP in that window
+leaves a uffd-wp PTE behind.
 
-Reviewed-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+Patch 1 adds the missing check. Patch 2 adds a uffd-unit-tests case for
+it, which fails on hugetlb without patch 1.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+The other source 6/10 of [1] mentions, UFFDIO_COPY in MODE_WP racing
+with UFFDIO_UNREGISTER [2], is closed by "mm/userfaultfd: write-lock the
+VMA before waking waiters when unregistering" [3].
+
+Based on mm-unstable.
+
+Tested on x86_64 in QEMU.
+
+[1] https://lore.kernel.org/20261015-urgent_fixes-v1-0-42796911043b@kernel.org
+[2] https://lore.kernel.org/20261015-urgent_fixes-v1-6-42796911043b@kernel.org
+[3] https://lore.kernel.org/20261031-fixes_core-v3-23-d6437171ecc3@kernel.org (in linux-next)
+[4] https://lore.kernel.org/sashiko-outbox-194303@kernel.org
+
+Changes in v3:
+- 2/2: open the source userfaultfd with O_NONBLOCK and check for POLLIN,
+  so poll() waits for the fault instead of returning POLLERR at once
+  (reported by sashiko [4]), add Mike's Reviewed-by
+- rebase on mm-unstable
+
+Changes in v2:
+- 1/2: drop the leftover sentence and the non-hugetlb reference from the
+  commit message, add Mike's Reviewed-by
+- 2/2: "all memory types" in the commit message, rename copy to result
+- rebase on mm-unstable
+
+v2: https://lore.kernel.org/20261102081140.201987-1-azpijr@gmail.com
+v1: https://lore.kernel.org/20261029221129.89068-1-azpijr@gmail.com
+
+Jose A. Perez de Azpillaga (2):
+  mm/userfaultfd: recheck WP registration in the hugetlb UFFDIO_COPY
+    retry
+  selftests/mm: add a uffd test for re-registering during UFFDIO_COPY
+
+ mm/userfaultfd.c                             |   4 +
+ tools/testing/selftests/mm/uffd-unit-tests.c | 105 +++++++++++++++++++
+ 2 files changed, 109 insertions(+)
+
+
+base-commit: 0ea6dc8c4a2192227ec25768625686b8fcd5cb09
+--
+2.56.0
+
