@@ -1,126 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793664715;
-	b=kBGKsF2Ch4YEVVdhtpSOdlDywfk8L+QkGeW2u7MJ3MaJp1M9ai/qmLQD3YmvU+IO8hKH
-	 Rzs8ig8KrdgS2K6KPQVc8cr6uUnTU4t6poQQkoeltDv0iGm4balGebUONKzlQhCJ5z1rw
-	 881YanOhvgvL5oNGn2MpEw7fdBTBEwLn0oaIHz+qIMan/rJTYpkFEG3rnJtbMPVBSdLIu
-	 v4P73+i/T88FyyuS9M9zaA3mIwo3JzUDd+C1jiOoaCNOf0yS4JslbmOVU13XNEBbTfint
-	 7tnsXlo6sOclTMXz8dotq6T9oy1k76rocfbUOhRDHFIwuuurfMNByGczSxJQD8lbA6w==
+	t=1793664719;
+	b=QqkeEHMzCmFuBq+9do6nUUaScaR1XxPCIh7Rj0pE6oWlx19n1QC9R3BIa0eBC54juVd2
+	 kD32SR3Vtm2VNTBwkp984NpXUtPjmSd4k0dTlzZI1O8k2/v+56D/a5N3IzwwytNFXnwVO
+	 rmfPI4kkXox67uvQxYoU2SF+ONlFxG6BdJsS0MuxbBOCeMU083WZmquWIR3gCOEoNXHM1
+	 VQPNALGsYPK2RwirimYmzGZ4ELOidgXae9s7wSjdb+hKusCOuALGELMtc93mkdHOi0xbE
+	 XJsvytxuC89EF/uX45NqG1QqJcHtAIBb6QIO3r8ZjiIbHqflGRPMGrhc2YLWnC2j3gA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793664715;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=nAYlfopKplFpCvjeBoKRW2i4VXzCq65tChw/Zjl0dY4=;
-	b=l3PtHvmsSCHFcIWnuVAO82RHOFyJfRqslfX8kqhl7wX6b5cu6w3Lg27X7Y6W6Q4TPdQv
-	 /LFTSW0qJnXJ/giOhF6NlP451v3xlfItOvEzyxzhx/tLq45Kebzne98YV4N/VeTO30WgK
-	 31zTA1WQ7OVZ4FyDWCJe/4OvgJuoLVfjR3Mbt2qCpKD+mJzn5+g4kEapWQ03tuicqAPkZ
-	 kk26P5yAUk131XPz4Lf/In44DwidlNjRAiL4J7sUgahAYduUrGSnjWsaB3ZIzs+cWEdqf
-	 gkKqsopxjnWfCNFCEY7b0s8I/e/VTLiv6KdhQdta5uX5iDjREmq8JeBkK3othdYOhJQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793664719;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:X-Authority-Analysis:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version;
+	bh=QL//j5rlcK0rQihLj2JoP8H/zY55tP730TFuZ5PnLto=;
+	b=nMjdQN5kjCVl9AeGfuxTwbpZI+DJqfbwS2CJwBvrC3/xSEKgpe9iCa6vUMz9HKoQZFEV
+	 y0ULqeO4iVFfvGIUwtxFn9mli2+kSE/fqy6AkelQnFTP3CGj5f/wWQ/X0/L+N2NvnmTFv
+	 twISeZM5NVjGanMaPUiHtcVptmITmifRZCxB9mdXEvmfHfGGx7C+jF17EGnkCHs9Cb+3c
+	 6k02Ro4lG+4R/tO8jh0ONZYo7IcyZJcv9Ur3pKsm7LZU8BNhdhoMln/RpOOsh5HVRK0n/
+	 EltzJ5RuiQhg2inX51hBLh+dkOHRofL28RknM8gV2G6mPQupEgymxR8z6mTmanePIZg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=shazbot.org;
-	spf=pass smtp.mailfrom=shazbot.org;
-	dkim=pass header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=EWqjTzRU;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=CGBEru57;
-	arc=none smtp.remote-ip=202.12.124.145
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=XizV0XpU;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF27606D80F
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 00:11:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DF27606D80F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81C6606A326;
+	Tue,  3 Nov 2026 00:11:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C81C6606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=EWqjTzRU;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=CGBEru57
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.stl.internal (Postfix) with ESMTP id E4B891D000F9
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2026 19:11:52 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Mon, 02 Nov 2026 19:11:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793664712;
-	 x=1793751112; bh=nAYlfopKplFpCvjeBoKRW2i4VXzCq65tChw/Zjl0dY4=; b=
-	EWqjTzRUMCSlXkFm/qHNJt2WYDzbJtU+3zVCFQOJEbKYfeIQs/euI7/NsHeUTUuc
-	MLk6Tbssr5r8EHudUe0Oi7iVGCdvRiqOMz/hk5ZOGljqjicxdURb9sjKjKKSJ2hB
-	yp+Y/uAHoFeCibQF03TzpejhJQS1kw6nXCw7bRuTBCARCTmsAW/pbBUpoG7QycmG
-	AYdCZBknmI65WPu9q46Id84i2biz+14bH/grLQHDTub3hKAq7jBD53pDgJbOqSE1
-	DX0QiJnSOei/q+94BMCqEYoKMyZYN7zrvlZUQscp3aLXXaBbKWFpX+jASsya61Gn
-	O/HpIBRltIHT5z9cCj3qmQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793664712; x=
-	1793751112; bh=nAYlfopKplFpCvjeBoKRW2i4VXzCq65tChw/Zjl0dY4=; b=C
-	GBEru57NEjJ6zEnaA/s3EIUI3aPlGmG/pAEregPm5wc6mHMbRLmtkamFH6seghnm
-	LeFCzR7G3tGYE0xExNw4tR/20RaElOLwwuFEAhXIS4NKWEdMu42t3QZLHFv+lc/c
-	W4WfQ60scjhI2RQPr/SKdf0Tl8/+7BAzyodhFduaXvgitbvbrsW7cIA5Irci4hvc
-	AR1m7IbtdHkoWYHPirkYttAa+hlRExfHWY0Vug2yxfAWzLwKId2t877gj3DgIY6t
-	UiS5llybi467MaKcYcZcms3gxwnc5XMEEfWzcGbKtf+3uZrmSdS7ecIjnuCRGKma
-	898CGzOwBhkw4fkFzneXg==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=sign d=shazbot.org a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793664712; d=shazbot.org;
-	mf=PGFsZXhAc2hhemJvdC5vcmc+;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:uUMh/pYm33qMHYEa2NkQ6XN5xr44EcVCTUU8aFq9opYvLaW
-	E3KYQuMlOvceIi46AVw3wdtH4L+wsY4rLaTleaGUCsTz/YcTKXzZnSvC7L12FaZl
-	Whhno54lH7ye2AUoax0sh2tJdOyU3GC2ZCWKWL8+RLAwbvdBB0tf4Y7Kxww0VXV9
-	JO1RkaZ6jbLddllJkPEhkpS6Yp4xqHbUe4QcTyLrTJ2wtYLJyJm0yHEKuveoPh1p
-	qDTS+1Q4Tw/xJDPozhrL1TUPacaxYQbrBM0aCHA1heYG+9W0HbxNG5fTYp74TiYb
-	9A6+CH9zGfpchIMZuT7ZIDvZ5p3BvAftG+qq8iA==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:ib1t8J7HIPjzcbaZLgDmo/S57AG8FFWKbLaEUAQkbF4=:zK6xMzgqMIjtNl7Qhz3cYyMrvTIOUJ7JryNKniSNlhU=;
-X-ME-Sender: <xms:xybpatN3nQAp7QPYzH0wgeoEnvFG2dnvFnf9HKbwANOiSYKDfjDl2w>
-    <xme:xybpar1pHCT9adN5rW0WHIV6zZXCYYmEGQgcPJxM0lIUlJaz7VeYPKVp8kITLcYoQ
-    Bd1bbk2YCI4BaVaT2P3egpW19O3yx9ZhWwaO-pvL8yAYEARYxkXI_th>
-X-ME-Received: <xmr:xybpapTuHxewKOQrbVrg0fLzvBDRF8xKrFVz9ld8VaMaeNh9CvYVSbj9EwChBA>
-X-ME-Proxy-Cause: dmFkZTF8SRv5LTr0bKOnRmaCpL3IXr8QyK44csVcumPgbXUJKzwO6qj90HElaIqZj6Sbw5
-    BlqP7qlQ31TVW0XeIQsoS0kLaluG5E5gQIy/LqC8pfIUyeBKs4IDzqt4lXJXV0OMnxa0Bu
-    KGqrGWZnL5TlXEQj5TDi6EZBrQjNdWJAMnoCqtig8KTzwoumcmz0WDKnoUzjRAn6KaggE1
-    oGrVPEExI31142Sx+/mPwdixYE342dJEur+yURNKSGHWQ1w/XJpGUWnysJHcQXcAgzcRix
-    e2yRmWUdGFWsMGhFnQq6XW3MjKgFt3+162/wvdiQgzHrtyJ0ldBAxkPGCmCyvetm5PpykQ
-    +cenZSYyi2nbRwKNbqTxJ5Rfz3PEf8p1RH5EsIuCWyDVpkeFyNsC9ZFCKjTpNfZKbYiLqA
-    mv7pPrOnhSmFvoxpt/U1bZB8YccViG+jeTxlZaVfQ2atsmb3rGj1hLu51Yxyz1xho4I0SK
-    /PdUOCGZ11MdUcKzT1I14pSzUvp5QOWD/r72hR6wvdw/szYAjYH2j8OhtTuy23kWsnWhg9
-    JscAAv2E9BEDLM48MCyKMdYbMjowUtly4kyr6SaLwTT3/1xe+ap+3quwrtM9GciNoo96Nq
-    JptV8LIGhDq8tQpvXb9T97GOk4q5Uxb/WcYBSe2u7u2Qb+2FUzFUbJJMKZgw
-X-ME-Proxy: <xmx:xybpaun3ko6mTuDTVd0HLAfSi1pvedrzl8M8aHOzCUc0iTDd7kQj3Q>
-    <xmx:xybpaqMdbCD11pLmhLVP44f6nIEwNGgTou8QLnToBNnd_xSW0LgKxA>
-    <xmx:xybpaqhNm8-8kYvqmRjMvPuU5Yeauhsv_OXJ5nqd01vEay7mJq3YQQ>
-    <xmx:xybpagiXT3q4xre88zdBaYsV-aoafPS3PgDha1ROqV8l0fVhcjz5xg>
-    <xmx:yCbpalAX22tVfHT8wEautQEQ2wx8RRpBaOUxKdlkd6-ftoMHrdxFNfwn>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Nov 2026 19:11:50 -0500 (EST)
-Date: Mon, 2 Nov 2026 17:11:49 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Peter Xu <peterx@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, David Matlack <dmatlack@google.com>, Shuah
- Khan <shuah@kernel.org>, Kevin Tian <kevin.tian@intel.com>, Jason Gunthorpe
- <jgg@ziepe.ca>, alex@shazbot.org
-Subject: Re: [PATCH v2 2/2] vfio: selftests: Test BAR write faults after
- clear_refs
-Message-ID: <20261102171149.5d4ed369@shazbot.org>
-In-Reply-To: <20261101062049.998160-3-almasrymina@google.com>
-References: <20261101062049.998160-1-almasrymina@google.com>
-	<20261101062049.998160-3-almasrymina@google.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=XizV0XpU
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A2K74Qs4129116;
+	Mon, 2 Nov 2026 16:11:57 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	pps82601-s2048-2026-q3; bh=QL//j5rlcK0rQihLj2JoP8H/zY55tP730TFuZ
+	5PnLto=; b=XizV0XpUEeTJmSKH3gFao/3xwcxwVzibzGm6zJK0++5Oe2gDLPlkb
+	Go/sniK/H3kEu0U7pX1EFD1YQnbwd6Z1G8tLZ0kSTnvxXhr0UbPA4wUET4cdFObQ
+	W16KM/mdFPH+ELrhA9uGHLN95IY05D/wyy8SQyquG0xoQXY2bjnMeOTt8igwIAyQ
+	3BSVKiIcJbuoMIcviBl6LYoDoCzwWEw0soGYwpnrscw318Igdt8CqM5MEO6x7dB+
+	6qZrjbl6zGEY9c4gtueZKDSU0hyqVp6up4qTZc+FFoZVH1cATISsVrUqxNtwLBpB
+	2jhv7F+mPwjMujntJp2FKPaxA2DRikM0w==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hne57e69y-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 02 Nov 2026 16:11:57 -0800 (PST)
+Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
+ (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Tue, 3 Nov
+ 2026 00:11:56 +0000
+From: Todd Freed <toddfreed@meta.com>
+To: <netdev@vger.kernel.org>, <toddfreed@meta.com>
+CC: <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net v4 1/7] net/mlx5e: psp: drop ipv6 packets with extension headers
+Date: Mon, 2 Nov 2026 16:11:37 -0800
+Message-ID: <20261103001143.246081-2-toddfreed@meta.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261103001143.246081-1-toddfreed@meta.com>
+References: <20261103001143.246081-1-toddfreed@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -130,173 +75,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: bVzsdbRnXlLK7z-CSJ0Ix07c9ySbhGFL
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAzMDAwMCBTYWx0ZWRfX0YFGIZvGCtcv
+ zPzOILoNvjSeHAb4m96noa2+IuTfdODd7S5ocgrqPyEuOIlS98UDEoIqllyGCHCEk8jFPsYE3yK
+ F2aubyqfDBhfMJ3SYvZ3lyVXO3nxnlA=
+X-Authority-Analysis: v=2.4 cv=SJ/Xx+vH c=1 sm=1 tr=0 ts=6ae926cd cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=wpfVPzegXHpEFt3DAXn9:22 a=VabnemYjAAAA:8 a=cAl5mJhCS4EPViv6kLYA:9
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-ORIG-GUID: bVzsdbRnXlLK7z-CSJ0Ix07c9ySbhGFL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAzMDAwMCBTYWx0ZWRfXwD7sECByTHZY
+ +v1hHsrc8oK/QeViTNLtkkPTsrGml/TVWRc7mONSIkuxBLXZsNEg5BEfyLTSq+88HosI++jKvQO
+ 282nlz774Eg0o6RU7TWj6mf4y6IW16oEvi+tTmtxb3xY5SX/y4oayaBxlhBohaNFqyQLbAkogre
+ GcLHgoSFxqsisWieRdlIM+Wrjz6nzISoNKIgHPnXRkRRHOMkoliQKVirKa7FK3beoEn+SXVFFP2
+ +9DGxoKb4S7yRmJz6Mf7NyWRMEuJUPMivkm1zE6DXajWqT39yabUI5/N5bOuXeHDSvuOvyL4V8M
+ c+E6M9LHnR4ZYDZlk5a0JuLovhRpPAL+5az81DSFXzio5ddULnmEqD3WF8xfUCCf7C736W+o7hl
+ ZayIqD7CqqLEPXxNhaBvdtFh5v/VBq93mFZ1MkZXmAsn6usMiOhVv+wZNwgbQTIsg/IYoYop6Da
+ 88qAig2EugGyMJox5Bg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-02_06,2026-11-02_03,2025-10-01_01
 
-On Sun,  1 Nov 2026 06:20:49 +0000
-Mina Almasry <almasrymina@google.com> wrote:
+mlx5e_psp_handle_tx_skb() uses psp_dev_encapsulate() to insert the
+udp+psp headers and rewrite the nexthdr of the fixed l3 header to udp.
 
-> Add a regression test in vfio_pci_device_test to verify that huge_fault
-> on writable MAP_SHARED VFIO PCI BAR mappings handles write faults after
-> soft-dirty tracking clears VM_SOFTDIRTY and downgrades vma->vm_page_prot
-> to read-only via /proc/self/clear_refs ("4").
-> 
-> Specifically, for each mappable read/write BAR (already aligned up to
-> SZ_1G by vfio_pci_bar_map() with MADV_HUGEPAGE), verify both:
-> 
-> 1. Read-then-write fault sequence after clear_refs, exercising in-place
->    huge PMD/PUD write-protection upgrade via wp_huge_pmd()/wp_huge_pud().
-> 2. Direct initial write fault on a freshly mapped unpopulated BAR VMA
->    after clear_refs, exercising vmf_insert_pfn_pmd()/vmf_insert_pfn_pud()
->    with FAULT_FLAG_WRITE set.
-> 
-> Skip gracefully when /proc/self/clear_refs is absent or soft-dirty
-> tracking (CONFIG_MEM_SOFT_DIRTY) is disabled, or when the device exposes
-> no mappable read/write BARs.
-> 
-> Cc: David Matlack <dmatlack@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> ---
->  .../selftests/vfio/vfio_pci_device_test.c     | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vfio/vfio_pci_device_test.c b/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> index 93c11fd5e081..75ccc557efb9 100644
-> --- a/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> +++ b/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> @@ -1,10 +1,13 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> +#include <errno.h>
->  #include <fcntl.h>
->  #include <stdlib.h>
-> +#include <unistd.h>
->  
->  #include <sys/ioctl.h>
->  #include <sys/mman.h>
->  
-> +#include <linux/compiler.h>
->  #include <linux/limits.h>
->  #include <linux/pci_regs.h>
->  #include <linux/sizes.h>
-> @@ -102,6 +105,86 @@ TEST_F(vfio_pci_device_test, validate_bars)
->  	}
->  }
->  
-> +static int clear_soft_dirty_refs(void)
-> +{
-> +	ssize_t ret;
-> +	int fd;
-> +
-> +	fd = open("/proc/self/clear_refs", O_WRONLY);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	ret = write(fd, "4\n", 2);
-> +	if (ret < 0)
-> +		ret = -errno;
-> +	else
-> +		VFIO_ASSERT_EQ(ret, 2);
-> +
-> +	VFIO_ASSERT_EQ(close(fd), 0);
-> +	return ret < 0 ? ret : 0;
-> +}
-> +
-> +TEST_F(vfio_pci_device_test, bar_write_fault_after_clear_refs)
-> +{
-> +	const u32 rw_mmap_flags = VFIO_REGION_INFO_FLAG_MMAP |
-> +				  VFIO_REGION_INFO_FLAG_READ |
-> +				  VFIO_REGION_INFO_FLAG_WRITE;
-> +	struct vfio_pci_bar *bar;
-> +	bool tested = false;
-> +	int ret, i;
-> +	u32 val;
-> +
-> +	ret = clear_soft_dirty_refs();
-> +	if (ret == -ENOENT || ret == -EINVAL)
-> +		SKIP(return, "soft-dirty clear_refs unsupported (%d)\n", ret);
+if the packet is an ipv6 packet with extension headers, udp+psp is
+placed after them, but the nexthdr indicating the l4 proto is on the
+last extension header in the chain, not in the fixed header. therefore
+this produces a malformed packet.
 
--ENOENT seems to map to the open() when /proc/self/clear_refs is not
-present.  We can't clear soft-dirty by virtue that the file is absent.
-Fine.
+in addition to being malformed, with mlx5 this kind of packet goes out
+unencrypted. since the tx association encodes intent to send encrypted
+packets, drop such packets instead.
 
--EINVAL seems to be intended to catch:
+a psp tcp socket emits such packets if certain socket options are set on
+it (e.g. IPV6_DSTOPTS). refusing the combination of such socket options
+with psp association would be helpful but is not implemented here. since
+extension headers can also come from a route the datapath check is
+needed anyway.
 
-clear_refs_write():
+Fixes: e5a1861a298e ("net/mlx5e: Implement PSP Tx data path")
+Signed-off-by: Todd Freed <toddfreed@meta.com>
+---
+ .../mellanox/mlx5/core/en_accel/psp_rxtx.c     | 18 ++++++++++++++++--
+ net/psp/psp_main.c                             |  1 +
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-        if (type < CLEAR_REFS_ALL || type >= CLEAR_REFS_LAST)
-                return -EINVAL;
-
-But that's only testing for a known type, not that it's supported.
-This is never triggered, which can lead to a false pass if soft-dirty
-really isn't supported and silently does nothing.
-
-
-> +	ASSERT_EQ(0, ret);
-> +
-> +	vfio_pci_cmd_set(self->device, PCI_COMMAND_MEMORY);
-> +
-> +	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> +		void *vaddr;
-> +
-> +		bar = &self->device->bars[i];
-> +		if ((bar->info.flags & rw_mmap_flags) != rw_mmap_flags)
-> +			continue;
-
-Where do we filter out BARs that wouldn't trigger a PMD/PUD fault?  If
-we're only testing sub-PMD BARs, this is another false pass.
-
-If we do find a BAR to trigger a PMD/PUD mapping, what's the value in
-continuing to exhaustively search and test the remaining BARs?
-
-> +
-> +		ASSERT_NE(NULL, bar->vaddr);
-> +
-> +		/*
-> +		 * clear_soft_dirty_refs() stripped write permissions from
-> +		 * vma->vm_page_prot on the unpopulated BAR mapping created by
-> +		 * vfio_pci_device_init(). Fault it read-only first, then write
-> +		 * to exercise in-place write-upgrade (wp_huge_pmd/wp_huge_pud).
-> +		 */
-> +		val = READ_ONCE(*(u32 *)bar->vaddr);
-> +		WRITE_ONCE(*(u32 *)bar->vaddr, val);
-
-Sashiko notes[1] an issue here that might be a false positive, but the
-comment should at least note that a matching driver could already have
-touched the BAR via read/write but doesn't invalidate the test... if so.
-Thanks,
-
-Alex
-
-[1]https://sashiko.dev/#/patchset/20261101062049.998160-1-almasrymina@google.com
-
-> +
-> +		/*
-> +		 * Replace the VMA with a fresh unpopulated mapping at the same
-> +		 * hugepage-aligned address, clear soft-dirty again, and fault
-> +		 * with an immediate store to exercise initial write insertion
-> +		 * (vmf_insert_pfn_pmd/pud with write=true).
-> +		 */
-> +		vaddr = mmap(bar->vaddr, bar->info.size, PROT_READ | PROT_WRITE,
-> +			     MAP_SHARED | MAP_FIXED, self->device->fd,
-> +			     bar->info.offset);
-> +		ASSERT_EQ(bar->vaddr, vaddr);
-> +		madvise(bar->vaddr, bar->info.size, MADV_HUGEPAGE);
-> +
-> +		ASSERT_EQ(0, clear_soft_dirty_refs());
-> +
-> +		WRITE_ONCE(*(u32 *)bar->vaddr, val);
-> +		(void)READ_ONCE(*(u32 *)bar->vaddr);
-> +
-> +		tested = true;
-> +	}
-> +
-> +	vfio_pci_cmd_clear(self->device, PCI_COMMAND_MEMORY);
-> +
-> +	if (!tested)
-> +		SKIP(return, "No mappable read/write BAR on %s\n", device_bdf);
-> +}
-> +
->  FIXTURE(vfio_pci_irq_test) {
->  	struct iommu *iommu;
->  	struct vfio_pci_device *device;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
+index 348fd7a96261..c9829a124c53 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
+@@ -160,6 +160,19 @@ void mlx5e_psp_handle_tx_wqe(struct mlx5e_tx_wqe *wqe,
+ 	inlseg->byte_count = cpu_to_be32(psp_st->tailen | MLX5_INLINE_SEG);
+ }
+ 
++/* psp_dev_encapsulate() inserts udp+psp at the transport header, rewrites the
++ * protocol of the fixed l3 header to udp, and writes tcp as the psp next
++ * header. thus tcp must directly follow the fixed header.
++ */
++static bool mlx5e_psp_l4_is_tcp(const struct sk_buff *skb)
++{
++	if (skb->protocol == htons(ETH_P_IP))
++		return ip_hdr(skb)->protocol == IPPROTO_TCP;
++	if (skb->protocol == htons(ETH_P_IPV6))
++		return ipv6_hdr(skb)->nexthdr == IPPROTO_TCP;
++	return false;
++}
++
+ bool mlx5e_psp_handle_tx_skb(struct net_device *netdev,
+ 			     struct sk_buff *skb,
+ 			     struct mlx5e_accel_tx_psp_state *psp_st)
+@@ -170,8 +183,9 @@ bool mlx5e_psp_handle_tx_skb(struct net_device *netdev,
+ 	if (!mlx5e_psp_set_state(priv, skb, psp_st))
+ 		return true;
+ 
+-	/* psp_encap of the packet */
+-	if (!psp_dev_encapsulate(net, skb, psp_st->spi, psp_st->ver, 0)) {
++	/* psp_encap of the packet. only tcp right after the ip header */
++	if (unlikely(!mlx5e_psp_l4_is_tcp(skb)) ||
++	    !psp_dev_encapsulate(net, skb, psp_st->spi, psp_st->ver, 0)) {
+ 		kfree_skb_reason(skb, SKB_DROP_REASON_PSP_OUTPUT);
+ 		atomic_inc(&priv->psp->tx_drop);
+ 		return false;
+diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
+index c9c1a8826b7f..5049ed400be0 100644
+--- a/net/psp/psp_main.c
++++ b/net/psp/psp_main.c
+@@ -272,6 +272,7 @@ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
+ 		ip_hdr(skb)->check =
+ 			ip_fast_csum((u8 *)ip_hdr(skb), ip_hdr(skb)->ihl);
+ 	} else {
++		/* assumes there are no ipv6 extension headers */
+ 		ipv6_hdr(skb)->nexthdr = IPPROTO_UDP;
+ 		be16_add_cpu(&ipv6_hdr(skb)->payload_len, PSP_ENCAP_HLEN);
+ 	}
+-- 
+2.53.0-Meta
 
