@@ -1,57 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793716079;
-	b=wU69ITzaZXkjnObnvCblsYg3HFz5ib8rimQ+FBDVEKVYC3S65h0qUDqK/3bqf7hTRXPC
-	 gRcfEkFefpsp8+4woU+pN6x5pYZT3gLA7qlhrsh/VdPV2riXBZmKEX/PjcfoZJa629vl1
-	 x18H0aKnUcgxUFlsnVFlIkTzWZk6/RpXe875PSWeTiUnvR3pQETOqpT4CXHqM0x1CgUst
-	 LoEr2+dQypzk3DrGblH20QlBJ0fWfBpf2xlT79UD+u0TKCT1luQxnHFpk5Pf1mlNmKb6s
-	 ZrTy4L/CvHyne52a37I9iqsB+2juwKGKwNw9jzjXof5jj9v48hzti6wOLHFbZn0WQ9g==
+	t=1793717102;
+	b=DyIXMFaDPxLpR7sFbW4YyUiuXhgmdMwkoym8jpM/Hihf6RtMP/p5TSbC/94M5zyTe+Nw
+	 nLeSHLyx3hul3J42B0RzHXBPD/IFVJyu3w0VX9240/LNFvLQ4Kh5gseSSDPf4s3Qe0jg5
+	 4kYdoTHNM7nxDHUfpE8CcSn1PIg5FrJRE7CNKdoGCRFFAYC9DCLolrmB11iqNdhpzCtw6
+	 FrbsxcZV/0ixvZET6d26FDGQw5QAE+COstbNestGCJvqZyHKWQCZ5yCBoKigdtvvcBv9O
+	 Rrk/FlgvLa69Vjs7obsmBHalqfrGic6//ApcHU9N48NO+MnlnlSqmqUO2o+kbUwsA1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793716079;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793717102;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=dejmHhxeXbifKefac16SRC6v8LfF3VPO/ivty0pHofI=;
-	b=erZkof23WKVSyJGNY9gPus03kqbQC8CEZ8u/JEcb3Wtm7cjl11N0dBuKNITSAlnh1ohQ
-	 rYkQt8gu6K7MPfG+wALuY4rvtJZVH7xnBLxzod6iVOZKjOpKrAr8oxjy7cAyvNWmp5BHG
-	 KoujHb5nqxYah2sARzfNq1z09Eya6Il3v4SyheeL4nmnMOPUwCK1mdUU1Fq0/RVYSKkl2
-	 zJ7oTL/JYIifPicMUnfnf9FYjmAS/RFAnPNB+xGHf07Q8dWUsd1nFS1obMchGL9iT0WxQ
-	 BLIeupAPJKQh/ThzW7FW7zZ/CYBRttWK9z9xR88IeHnLD64PtoelIA8B5rDZo3gKQyg==
+	bh=uJvYEUew1JHkHj/dhPylyYrqAryCHhap4K6++Evtw2U=;
+	b=5iq8AjwLemGnsme2/2Xr8EIECnK6yWRXVJYmdegPg6Pr7Lp12zZwM4B2vaj5jtQodJhT
+	 2/g9qRd3BOHWNtczj1lIsESf+rKoxAtIIhVnHlyP8FniKHobcGY+0aCsEIKycyvoGvSz4
+	 yd0lCWwt8AJBoegh3Y/pS2dl6IAeBJWwBBuTsUm7f3yCHgBjInIkijgnBMScRzFSu0FIa
+	 GdpOpk5+AAf239122kp6eG/G4jEd73efBfSdrNsmnkj4ONhiqREveu8hcAOZJ630IZAwY
+	 3ZlS1IKetdQzzgzuLd1BNxiaRCNMFAuHZCBZitVrsTpUA2cwn5joEfk+33uEyj5ObEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nUKzUwyK;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ViRV4QG+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E143606A32C;
-	Tue,  3 Nov 2026 14:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C433606A32E;
+	Tue,  3 Nov 2026 14:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nUKzUwyK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8CBC1F00919;
-	Tue,  3 Nov 2026 14:27:57 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ViRV4QG+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254921F000C1;
+	Tue,  3 Nov 2026 14:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793716078;
-	bh=dejmHhxeXbifKefac16SRC6v8LfF3VPO/ivty0pHofI=;
+	s=k20260515; t=1793717101;
+	bh=uJvYEUew1JHkHj/dhPylyYrqAryCHhap4K6++Evtw2U=;
 	h=From:To:Cc:Subject:Date;
-	b=nUKzUwyK0jqNK151DC/OEVBoJAFG407hZrQ/MasVYD0biSZutqbyf+1knwKD4Yqqd
-	 GVMota9jUUK2m4BSRL5GkG75UJbVC3E/ZJHsn15Z6UdXek/7MSnBI8rL+pyEVyYtLM
-	 SImgscDKmCOEFdPG7weJ9C2SuC2w+Y7Pqs3m3yE39wtUGeHiAmM+dt+pqVid8ME/UT
-	 sWcCjssy4K94wqnkkLJ2BbvJKKLUxnnUBqurlaUyRL6OuY+xUQm6T4pHnb5nYM+WkZ
-	 nJP+CqxPHm0YZIAHpPUlbDPMOajRlPhwQ4ubFIaFmjuPspNiz5DAEAAHsfrrjYyt1H
-	 X3+k0XKREgR6g==
+	b=ViRV4QG+DpQ15R1veRMJ+sXpb9WbJ+6JOWbdEjJDxKrXtOlH3NeuqYP0r/4qj8CN6
+	 ZR8BhjiH+19blJnaujqe7Z3S5wQHz3Omczasi/4osDYYkAfzQrJQsf8jQIXBiRNOy/
+	 hjqTIogsRPYc3Nxf4pX9o1EMHJZwoF4qjOFvRJGMPbvxeB55a5sOiv46UDoj+R+vuB
+	 9eXNlbhdpdpbwIug1gFZbmKItK9a+cBjGX1IULiNfv9eWSQxWLjTs3Fi1pqSzAuF1D
+	 q2KvrtYY3sk7tTSaBartwi7IaNB/jdEscrS577jLSOKtYAxpfIRZHxphXI6N8BMhN7
+	 Z9S8/D7K7XDzA==
 From: Sasha Levin <sashal@kernel.org>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Aleksa Sarai <aleksa@amutable.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
+To: Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: probe for sanitizer support in fchmodat2 and openat2
-Date: Tue,  3 Nov 2026 09:27:56 -0500
-Message-ID: <20261103142756.132111-1-sashal@kernel.org>
+Subject: [PATCH] selftests: harness: print pointers through uintptr_t
+Date: Tue,  3 Nov 2026 09:44:59 -0500
+Message-ID: <20261103144459.194046-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,102 +62,100 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The fchmodat2 and openat2 tests are always built with -fsanitize=address
-and -fsanitize=undefined. Toolchains without the sanitizer runtimes,
-such as clang without the compiler-rt package, cannot link them and the
-tests fail to build:
+__EXPECT() casts both operands to intmax_t or uintmax_t to print them
+when an assertion fails. When an operand is a pointer, as in
+ASSERT_NE(ptr, MAP_FAILED) or ASSERT_NULL(ptr), gcc warns about the cast
+to an integer of a different size on 32-bit architectures, once for
+each case of the signedness switch. A 32-bit arm kselftest build in
+KernelCI has over 4000 of these warnings, and a suite that builds with
+-Werror fails:
 
-  ld: cannot find /usr/lib/llvm-21/lib/clang/21/lib/x86_64-unknown-linux-gnu/libclang_rt.asan_static.a: No such file or directory
+  kselftest_harness.h:797:49: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
 
-The same happens with USERLDFLAGS=-static, which AddressSanitizer does
-not support. KernelCI's clang builds fail this way on every
-architecture.
-
-Link an empty program with the sanitizer flags first, and only add them
-when that works. With the runtimes available the tests are built as
-before.
+Convert pointers to uintptr_t before widening them. Other types are
+cast as before, so the printed values do not change.
 
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Tested on x86_64 with gcc 16 and clang 21, building both suites with
-O=: with the runtimes installed the binaries still link ASan as before.
-With clang pointed at a resource directory without the runtimes, and
-with gcc and USERLDFLAGS=-static, the build failed before and now
-builds all five programs without the sanitizers. fchmodat2_test and the
-openat2 tests give the same results from both builds.
+The -Werror case is the configfs test, which I've also sent a separate
+fix for. Testing:
 
- tools/testing/selftests/fchmodat2/Makefile     | 18 +++++++++++++-----
- .../selftests/filesystems/openat2/Makefile     | 18 +++++++++++++-----
- 2 files changed, 26 insertions(+), 10 deletions(-)
+- A test that fails assertions on pointers, signed and unsigned integers
+  of each width, bool, an enum and a double prints the same values
+  before and after with gcc and clang on x86_64 and with clang on i386.
+  The harness selftest still matches its expected output on all three.
 
-diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-index 4373cea79b794..21f6b0b0cdc8f 100644
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -1,15 +1,23 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
+- Building alsa, filesystems, iommu, landlock, lsm, mm, nfsd, pidfd and
+  seccomp with gcc -m32 goes from 3221 of these warnings to none from
+  the harness. 53 remain, from casts in the tests themselves.
+
+- Full native gcc and clang builds of the selftests (without bpf,
+  sched_ext and hid) produce the same binaries and warnings as before.
+
+ tools/testing/selftests/kselftest_harness.h | 25 ++++++++++++++-------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 29a19bc870846..a4404699a6dee 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -762,6 +762,15 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
  
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-+CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
+ #define is_signed_var(var)	(!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+ 
++/*
++ * Pointers go through uintptr_t before they are widened for printing, as
++ * casting them straight to an integer of a different size warns on 32-bit.
++ * 5 is the pointer type class of __builtin_classify_type().
++ */
++#define __printable_var(var) \
++	__builtin_choose_expr(__builtin_classify_type(var) == 5, \
++			      (uintptr_t)(var), (var))
 +
-+TEST_GEN_PROGS := fchmodat2_test
-+
-+include ../lib.mk
- 
- # gcc requires -static-libasan in order to ensure that Address Sanitizer's
- # library is the first one loaded. However, clang already statically links the
- # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
- # -static-libasan for clang builds.
-+SANITIZER_CFLAGS := -fsanitize=address -fsanitize=undefined
- ifeq ($(LLVM),)
--    CFLAGS += -static-libasan
-+    SANITIZER_CFLAGS += -static-libasan
- endif
- 
--TEST_GEN_PROGS := fchmodat2_test
--
--include ../lib.mk
-+# Build without the sanitizers when the toolchain cannot link them.
-+ifeq ($(shell echo 'int main(void) { return 0; }' | $(CC) $(CFLAGS) \
-+	$(SANITIZER_CFLAGS) $(LDFLAGS) -x c - -o /dev/null >/dev/null 2>&1 && \
-+	echo y),y)
-+CFLAGS += $(SANITIZER_CFLAGS)
-+endif
-diff --git a/tools/testing/selftests/filesystems/openat2/Makefile b/tools/testing/selftests/filesystems/openat2/Makefile
-index d848aac96bded..2f712dfcbf75c 100644
---- a/tools/testing/selftests/filesystems/openat2/Makefile
-+++ b/tools/testing/selftests/filesystems/openat2/Makefile
-@@ -1,17 +1,25 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
- 
- CFLAGS += $(KHDR_INCLUDES)
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(TOOLS_INCLUDES)
-+CFLAGS += -Wall -O2 -g $(TOOLS_INCLUDES)
- TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test emptypath_test
- 
-+LOCAL_HDRS += helpers.h
-+
-+include ../../lib.mk
-+
- # gcc requires -static-libasan in order to ensure that Address Sanitizer's
- # library is the first one loaded. However, clang already statically links the
- # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
- # -static-libasan for clang builds.
-+SANITIZER_CFLAGS := -fsanitize=address -fsanitize=undefined
- ifeq ($(LLVM),)
--    CFLAGS += -static-libasan
-+    SANITIZER_CFLAGS += -static-libasan
- endif
- 
--LOCAL_HDRS += helpers.h
--
--include ../../lib.mk
-+# Build without the sanitizers when the toolchain cannot link them.
-+ifeq ($(shell echo 'int main(void) { return 0; }' | $(CC) $(CFLAGS) \
-+	$(SANITIZER_CFLAGS) $(LDFLAGS) -x c - -o /dev/null >/dev/null 2>&1 && \
-+	echo y),y)
-+CFLAGS += $(SANITIZER_CFLAGS)
-+endif
+ #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+ 	/* Avoid multiple evaluation of the cases */ \
+ 	__typeof__(_expected) __exp = (_expected); \
+@@ -770,32 +779,32 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
+ 		/* Report with actual signedness to avoid weird output. */ \
+ 		switch (is_signed_var(__exp) * 2 + is_signed_var(__seen)) { \
+ 		case 0: { \
+-			uintmax_t __exp_print = (uintmax_t)__exp; \
+-			uintmax_t __seen_print = (uintmax_t)__seen; \
++			uintmax_t __exp_print = (uintmax_t)__printable_var(__exp); \
++			uintmax_t __seen_print = (uintmax_t)__printable_var(__seen); \
+ 			__TH_LOG("Expected %s (%ju) %s %s (%ju)", \
+ 				 _expected_str, __exp_print, #_t, \
+ 				 _seen_str, __seen_print); \
+ 			break; \
+ 			} \
+ 		case 1: { \
+-			uintmax_t __exp_print = (uintmax_t)__exp; \
+-			intmax_t  __seen_print = (intmax_t)__seen; \
++			uintmax_t __exp_print = (uintmax_t)__printable_var(__exp); \
++			intmax_t  __seen_print = (intmax_t)__printable_var(__seen); \
+ 			__TH_LOG("Expected %s (%ju) %s %s (%jd)", \
+ 				 _expected_str, __exp_print, #_t, \
+ 				 _seen_str, __seen_print); \
+ 			break; \
+ 			} \
+ 		case 2: { \
+-			intmax_t  __exp_print = (intmax_t)__exp; \
+-			uintmax_t __seen_print = (uintmax_t)__seen; \
++			intmax_t  __exp_print = (intmax_t)__printable_var(__exp); \
++			uintmax_t __seen_print = (uintmax_t)__printable_var(__seen); \
+ 			__TH_LOG("Expected %s (%jd) %s %s (%ju)", \
+ 				 _expected_str, __exp_print, #_t, \
+ 				 _seen_str, __seen_print); \
+ 			break; \
+ 			} \
+ 		case 3: { \
+-			intmax_t  __exp_print = (intmax_t)__exp; \
+-			intmax_t  __seen_print = (intmax_t)__seen; \
++			intmax_t  __exp_print = (intmax_t)__printable_var(__exp); \
++			intmax_t  __seen_print = (intmax_t)__printable_var(__seen); \
+ 			__TH_LOG("Expected %s (%jd) %s %s (%jd)", \
+ 				 _expected_str, __exp_print, #_t, \
+ 				 _seen_str, __seen_print); \
 -- 
 2.53.0
 
