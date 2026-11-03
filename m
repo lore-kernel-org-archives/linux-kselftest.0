@@ -1,69 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793724868;
-	b=XqUCrxHWsVf+kFs7KnElXpNsPbrAI308rnpFt7Vg+8i67wkG//BMnvw8wmZyRqRzbi3Z
-	 4o25NdzCV0T50bJJt0qAC+K4GpQokIg6strsTH63K1ytv0UViNZoZtMkH0ahIue1rCEN5
-	 elFPsQCAxeirvjXi2uHFGAlDDWEruwKYaSdON7nEljyQ8yQi8JNMav4K5GaGoET7HFUVp
-	 2QQO/+qJxmot84Izg17Xxl4273lPRlnsCE7NMSU18gdDN2lBm9fvlvaDFo+MR7qm0l9r2
-	 foirj0aG2ozy8vf9B/2sZDSdD+bAzKciUmLX8g4OKAOWjOqi08zy3XP4f9CCbVoVOUw==
+	t=1793725821;
+	b=gfT9+gSUZo/nbPfQyQ+d97gAj4mxd9sf1HzLeB0htTc8LWHuVmZXZEZfFzDWpgTi7Uso
+	 8e6vhiUnad7r0JV6vZb+KXpbHvLEm7Q8z8cAirY3GG/mFqEB6XQbokaYRkqQpMQnB7/6U
+	 uPvYTtT2GNFayFHqJGZUwU/Y/WPWK4RdkGnroFgRJEzgc7WKRqyFiollsFO6nWMImgxlN
+	 N2jHMAnwOOItqFTQRqrxru4y7empUWIIB3gh7ia+Jh5cq37aucpPkuFVSqXY5FD8Q9Cx+
+	 GdN+pdqkF9R6y+XAH92KFmPS2VEe5k1JcQ1KCJKFi0RggTiQOtNXJlCPvmi867leScw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793724868;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=mca1WBmTRuBVPkCPXuqqTeUuiPIqAE1gGlgH4qiGb6o=;
-	b=hzEBqZ/yYyT31eL5K0OoL7Y34ccVta2bTmmtvyCossDWpyzA5EJcvFktOtLgb3NEBjba
-	 N3O7VoESU3LvMfl6Yb7dyOjoGxU9yIXnD76hfwN4XA73NhKpPvi00UPevLnFx1uQSIFSl
-	 qsfQkvDpYxHJWC7SHfV26s0d0XpAhVsrVvP9mqcNlNlgr6Itsp1Bag8eDGwzUvKNou8h8
-	 lEtoqil9LfXZrSvTvHql/q1WkR9ZX1pg0QlCRJD2AF+lnkXwq5S8/WhDBkd+LUmh6/8cB
-	 Bww3fWelYmF5XYtvvfGFPt4TXaCLySErF9vgQKTB0pJbmUn2GGZGaM1zsH4EQhMRz8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793725821;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=+TD4KfNsj3/UrFRijVzp0aBQ2ycYA4MK0lvSZb8XyWU=;
+	b=2tlgVMF0Yyc5m5e95BdboofvWtlJBhKfq3aayrZKF7i8Bj4onukV2rZivI/nUIEHL3F5
+	 XemKx3KRhBn9XnDgGOMXOqLaVD8nEvNavXxZht/y1jamuZg5zdTFf68UQwpbCjUgpfBg9
+	 RfonnhSN/oS9ObgLjiKCgOnNtFRprAE1wfEJ+yIuvHmkzUuphZY9lxiy3PVu8AeqCvxH4
+	 oaxY2a6oU3yOrZ/e8L9rd5sGfyNq72cR4Fs3DbIPozjdopYK2S1GUNluktR4YjQH9tlnX
+	 L/VHeLTzUQ3qQ7u3sICpOOIg9w5XodcsyjxbzZFY7Q+xAjZ84fWxesDCE70fwhM5b3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WQk70WNd;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VxaGgJX+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58BE606D830;
-	Tue,  3 Nov 2026 16:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44680606A32F;
+	Tue,  3 Nov 2026 17:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WQk70WNd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B041C1F00A17;
-	Tue,  3 Nov 2026 16:54:25 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VxaGgJX+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D57F51F000C1;
+	Tue,  3 Nov 2026 17:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793724867;
-	bh=mca1WBmTRuBVPkCPXuqqTeUuiPIqAE1gGlgH4qiGb6o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WQk70WNd9+IhuavwuTuN0IzfVvgkKjVnGGwps0px+xa2uNgdvzTTjnlDwsVXkaERu
-	 EfeW5ZLFgjnJH+nLtVoYiep2aw87QMHow0+QbOWvsWDye3i+znvLbxgM1ZcR3sMi5L
-	 QSFj4SyfdxRinwJh7ns7UAe7g2hr5Gc2J8r+MLBEGfLwk3mWBQtAqqpbWzD+MpkXHZ
-	 ERgLVt6lFrpp1REgtIYt/PLgUpjenhESstnouC/NLCZ9Y1aAEVnEwg1KcB9ujzyU1l
-	 4G601oZmZqeGoT13BrvpsCxNm7T3d8v6mEy9F6TcuD/GGjbGydYQgBJsmVgF00N9KO
-	 33unVj5OwzlYA==
-From: Sasha Levin <sashal@kernel.org>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>
-Cc: Sasha Levin <sashal@kernel.org>,
-	Phil Sutter <phil@nwl.cc>,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH nf-next] selftests: netfilter: nf_queue: drop the no-op loop initializer
-Date: Tue,  3 Nov 2026 11:54:18 -0500
-Message-ID: <20261103165419.687806-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261103165419.687806-1-sashal@kernel.org>
-References: <20261103165419.687806-1-sashal@kernel.org>
+	s=k20260515; t=1793725820;
+	bh=+TD4KfNsj3/UrFRijVzp0aBQ2ycYA4MK0lvSZb8XyWU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=VxaGgJX+NhI3el1gfofJnmiTMXPVVPFAD/Zbbn2GN8+WYkhKJNmd4FtAzHHVV4bjX
+	 Se4xnfAVE52NXtS/7ybU/dgIMm29RQXtpnLk7xb4Wfh4YNy15K3ele0RnTXudceNv+
+	 rJxnEsfQRfoVJ7V42VfVH0oJrZAFvLM+x69erRZcn5skFeJFkPu3MzdUWslSQ0bT5w
+	 xy3K/kqUZBQqWMRpwPNxVZcF/ZNnQccLeVjG4Q5PTomGqFACK0aMAQBeEAEqiWcSkk
+	 pKexwSv6lzbL9OMdMnBETRwZKg5jI87wm6H67UUUxyUonhawZmkJxxnlFhpu6Dv66B
+	 v+hUzBuGNVc6A==
+Date: Tue, 3 Nov 2026 17:10:15 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>, 
+	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: uffd-wp-mremap: keep the THP sizes in
+ unsigned long
+Message-ID: <auoVbT8O10HFC2ju@gremlin>
+References: <20261103150232.291827-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,35 +61,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261103150232.291827-1-sashal@kernel.org>
 
-The out-of-order verdict loop starts with "for (ooo_count; ...", and
-clang warns about the unused expression:
+On Tue, Nov 03, 2026 at 10:02:32AM -0500, Sasha Levin wrote:
+> Commit 0020a1f5ca36 ("selftests/mm: hugepage_settings: use unsigned long
+> in detect_hugetlb_page_size") changed the sizes of the test cases to
+> unsigned long, but left thpsizes and detect_thp_sizes() with size_t. On
+> 32-bit architectures size_t is unsigned int, and gcc 14 rejects the test
+> cases that point at thpsizes:
+>
+>   uffd-wp-mremap.c:299:26: error: initialization of 'long unsigned int *' from incompatible pointer type 'size_t *' {aka 'unsigned int *'} [-Wincompatible-pointer-types]
+>
+> Use unsigned long for the THP sizes as well.
+>
+> Fixes: 0020a1f5ca36 ("selftests/mm: hugepage_settings: use unsigned long in detect_hugetlb_page_size")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-  nf_queue.c:354:10: warning: expression result unused [-Wunused-value]
+LGTM so:
 
-Leave the initializer empty.
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-KernelCI's clang builds show this warning.
+> ---
+> KernelCI's 32-bit arm kselftest builds hit this. Built the mm selftests
+> with gcc 14 and gcc 16 -m32 (four errors in this file before, none
+> after) and natively with gcc and clang (no change). An i386 build with
+> clang runs and detects the THP sizes as before, up to the point where
+> the test needs root.
+>
+>  tools/testing/selftests/mm/uffd-wp-mremap.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> index c48eaab8e75cf..fb5582ec5b201 100644
+> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
+> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> @@ -15,7 +15,7 @@ static int pagemap_fd;
+>  static int nr_pagesizes = 1;
+>  static unsigned long pagesize;
+>  static int nr_thpsizes;
+> -static size_t thpsizes[20];
+> +static unsigned long thpsizes[20];
+>  static int nr_hugetlbsizes;
+>  static unsigned long hugetlbsizes[10];
+>
+> @@ -30,7 +30,7 @@ static void check_uffd_wp_feature_supported(void)
+>  		ksft_exit_skip("uffd-wp feature not supported\n");
+>  }
+>
+> -static int detect_thp_sizes(size_t sizes[], int max)
+> +static int detect_thp_sizes(unsigned long sizes[], int max)
+>  {
+>  	int count = 0;
+>  	unsigned long orders;
+> --
+> 2.53.0
+>
 
- tools/testing/selftests/net/netfilter/nf_queue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/netfilter/nf_queue.c b/tools/testing/selftests/net/netfilter/nf_queue.c
-index cca6c3cfa9e46..bc0b2f601a0a4 100644
---- a/tools/testing/selftests/net/netfilter/nf_queue.c
-+++ b/tools/testing/selftests/net/netfilter/nf_queue.c
-@@ -351,7 +351,7 @@ static int mainloop(void)
- 		if (opts.out_of_order) {
- 			ooo_ids[ooo_count] = id;
- 			if (ooo_count >= 15) {
--				for (ooo_count; ooo_count >= 0; ooo_count--) {
-+				for (; ooo_count >= 0; ooo_count--) {
- 					nlh = nfq_build_verdict(buf, ooo_ids[ooo_count],
- 								opts.queue_num, opts.verdict);
- 					if (mnl_socket_sendto(nl, nlh, nlh->nlmsg_len) < 0) {
--- 
-2.53.0
-
+--
+Cheers, Lorenzo
