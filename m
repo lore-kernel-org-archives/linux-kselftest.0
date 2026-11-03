@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793721291;
-	b=U5ivIo46mBacm/B7evRbzCHGzej8nasGkBgLOUkm5ksOJV1CbmGIopDSosKRG+jgwlgR
-	 Pd/bjxvi2vxW4LTanejXpXoZ7UkI9QDOeY+tuI3tRq+up6HWCMsmvsA8R5rC3V7HnzRSb
-	 uWPXiMNgDOApMKLQr42mkI8dv/l636UPQysHC23s9LqDK2ppqBmnz6BBqlvMKBNitCGqs
-	 qRnuSFBHJ+OOaCfVFaP7ydd6XXzSVzk84ATXCH5oMyWlVj9nH06IetHbqQ7hZXR6k+vL+
-	 rggcc93rB7rcSvFCWLoHaSKiNPZTMVxN3DrRY+2jUm7xJBE0v9OO/DrwKBBOIRBh6fw==
+	t=1793721296;
+	b=twzB76TdV0sdNmMYlhywL+5x80iEBVS3jFqWTHs4V98SHSE31qg7cPq9nXmO0k7SQyee
+	 Bjqw+HcjRZSdkwDdYcOOEDb6UODvUAlbxGOM8jidM4ngmfQQb+v5p/0TAbyWQpDnOcthU
+	 8k2zXr2DFzvTORozFs+NimXu6FRgyB3SM+e0bVMzi2J94rpGIlq0vPczBwyf++dNdrsRO
+	 xvUNyizTSW2NITBD1YQk11AoXXlYA2iNjp/4U3E7BM/h4/yz/ZX9aUx7jiLYqC3T4Od0p
+	 4iEgpCQYJGM+f5N7tr5Og+Uqe0HPmH4xL2FtCqzet/zZM8XZuxuL4Tywex1ZiF1CZKw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793721291;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793721296;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=wQeTNNr0ny3k8/wWiQeXVoNElgXTiplTi+Aj/FTcEJg=;
-	b=LIWRBy9Sn3qVFe378VOo7xPqm1jtuyk0aFfKLu3TDUwOFP6Gum1wGspRvUt6cA8Y4MhC
-	 wClwPMDMSykehra0p7F4k152N/KGVGsCdopmKBXoqNSgYAhJMAuCDMBP9cT2mu71E+b/h
-	 AnpA587dSn8g6nS5hCNA90Wus2B8Gvaq4kJizvSHh074QdeaTJNE8UOQwVXoNEx6w/Rgp
-	 yKXR7qRMk2/oxhturK8ztYArvZ8gKRmpCYodZHeyiZQ2epVDBaIEsAti2Y/wZTZpjgv7f
-	 IP5TnI65tUarItGxsIFwVTIorpgXUEEJRUPQKt0wealwAd6JnlAc1p7HTS1+8puQ9hw==
+	bh=Ck44c2UfWH+h/SZjs6hhnY4TSP8skS7HgYjW2Pc3Sw8=;
+	b=aLKtRuZN+Bxjxl+/KiExZltblRgcy0CfznwUaT7XI04FMnhGRnH+a78V1iSTH7a0pdfe
+	 SbU2b3aSB4vUHkPKrmRLkGTdwIDqwXCcMQBjdwNjFoA0zSMnABd8icr+oifpdjKqg1KEU
+	 n9ggJBLB3Ra2sI3bkuEgoee/eVZx29mslfOoCZ4ePxq1lKoUC5TxGwVX0bBvVTlF3e/F9
+	 vYQbnAx91bEPfhQItAaOZJZVzrlwoZJmPps2wXkdDuYclFY8aPBcW2T2/ZV0SVj4Tglhx
+	 BzyTNNYLePlPLsnqP33Oo+yjZR9zrKBtLTMXzUp0CrbZdDLvfQ4Nw5ScjCjhkAh5i6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="LQ/qLY6J";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=muMo7dJ+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BEF606D812;
-	Tue,  3 Nov 2026 15:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A297F606D83B;
+	Tue,  3 Nov 2026 15:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LQ/qLY6J
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D591F00A1F;
-	Tue,  3 Nov 2026 15:54:50 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=muMo7dJ+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC571F00A1D;
+	Tue,  3 Nov 2026 15:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793721291;
-	bh=wQeTNNr0ny3k8/wWiQeXVoNElgXTiplTi+Aj/FTcEJg=;
+	s=k20260515; t=1793721296;
+	bh=Ck44c2UfWH+h/SZjs6hhnY4TSP8skS7HgYjW2Pc3Sw8=;
 	h=From:To:Cc:Subject:Date;
-	b=LQ/qLY6JORtMWR2ZwTpVR8VsQCuQE8Ecro1TWg7HRojxtuQlZ0Boowb9JS3mdiOxY
-	 FhaOHk8RWlH2Lx/pXVjmhLEd0h8/izz8juVJJo/vGxMICmz2LeFW3X2nHZlVUJsDuO
-	 dCo84GfKeMyCeSS0hJ09o1wQ9gpB5VK79stNzSje3acAppRW/wY+Q3pPLIpQRMkklv
-	 6/BAtw2+Aums7+CubehXucFqudqtuajtNatkZyRJJZP0a7vN3lgAKlpsYVgKMu11Xy
-	 TJJiBg30LVDEj01eudkqwPrQbeVbNmx4wKyjEbzBNV/aeqmIxkUleD+I6Ys+NLlaxI
-	 QRDvC9xmluxVg==
+	b=muMo7dJ+XRD3cJ3oFIwHl/jPZeP8jiC9wxWa1y734cCt4RL6GEyoT/YLz5Wp14p8H
+	 tX/Dk+tFd8w0P191zFqGB5ErDAS5dxY8hMgyuYmseMWOoV1v0Y++TgJtY7erk17Gs5
+	 w0uiiT+BIn54P4tiGOghaAasKgMYSmetD+wZGCvHGS0Nf2FEo4MwyW9P7J2XtPDG4R
+	 fEQhh4dgFN2h8WL4E6MXQC1Sf2i+JFkDn5Yd8cv7GWnaBj1a/+I5EtP9mRq9K8N7gL
+	 XbFE/pA0H7TTrmXBM5EFZpfjzIds8LFOpysf0OkaSe2Rb0YaNOkWHv7ASsIlpt8kM9
+	 xB4Awo/sGIZQg==
 From: Sasha Levin <sashal@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Hao Ge <hao.ge@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/seccomp: print tv_sec as long long
-Date: Tue,  3 Nov 2026 10:54:49 -0500
-Message-ID: <20261103155449.534498-1-sashal@kernel.org>
+Subject: [PATCH] kselftest: alloc_tag: use the ll64 types on powerpc64
+Date: Tue,  3 Nov 2026 10:54:54 -0500
+Message-ID: <20261103155454.534649-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,44 +61,32 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 32-bit architectures with a 64-bit time_t, such as armhf in Debian
-13, tv_sec is a long long, and printing it with %lu warns:
+On powerpc64 __u64 is an unsigned long unless __SANE_USERSPACE_TYPES__
+is defined, so printing and scanning the __u64 fields with %llu warns:
 
-  seccomp_benchmark.c:43:27: warning: format '%lu' expects argument of type 'long unsigned int', but argument 2 has type '__time64_t' {aka 'long long int'} [-Wformat=]
+  allocinfo_ioctl_test.c:93:73: warning: format '%llu' expects argument of type 'long long unsigned int', but argument 2 has type '__u64' {aka 'long unsigned int'} [-Wformat=]
 
-Cast it to long long and print it with %lld. While at it, print tv_nsec,
-a long, with %ld instead of %lu, and cast it to long, as it is a long
-long on x32.
+Define __SANE_USERSPACE_TYPES__, as other selftests do.
 
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Found with a 32-bit build of the selftests with a 64-bit time_t (gcc 16
-and clang 21 with -m32 -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
-KernelCI's 32-bit arm builds show the same warnings. The changed files
-build without format warnings there now, and the x86_64 builds don't
-change. The other selftests get the same kind of fix in separate
-patches.
+KernelCI's powerpc kselftest builds show this. The define makes the same
+change on alpha and mips64 and none on the other architectures; the
+x86_64 and 32-bit builds don't change.
 
- tools/testing/selftests/seccomp/seccomp_benchmark.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/alloc_tag/allocinfo_ioctl_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_benchmark.c b/tools/testing/selftests/seccomp/seccomp_benchmark.c
-index ea4068cdefd6e..5a5d7733c6f5f 100644
---- a/tools/testing/selftests/seccomp/seccomp_benchmark.c
-+++ b/tools/testing/selftests/seccomp/seccomp_benchmark.c
-@@ -40,9 +40,9 @@ unsigned long long timing(clockid_t clk_id, unsigned long long samples)
- 	i *= 1000000000ULL;
- 	i += finish.tv_nsec - start.tv_nsec;
+diff --git a/tools/testing/selftests/alloc_tag/allocinfo_ioctl_test.c b/tools/testing/selftests/alloc_tag/allocinfo_ioctl_test.c
+index 74fd64b2370cc..18c761fecfde0 100644
+--- a/tools/testing/selftests/alloc_tag/allocinfo_ioctl_test.c
++++ b/tools/testing/selftests/alloc_tag/allocinfo_ioctl_test.c
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
++#define __SANE_USERSPACE_TYPES__
  
--	ksft_print_msg("%lu.%09lu - %lu.%09lu = %llu (%.1fs)\n",
--		       finish.tv_sec, finish.tv_nsec,
--		       start.tv_sec, start.tv_nsec,
-+	ksft_print_msg("%lld.%09ld - %lld.%09ld = %llu (%.1fs)\n",
-+		       (long long)finish.tv_sec, (long)finish.tv_nsec,
-+		       (long long)start.tv_sec, (long)start.tv_nsec,
- 		       i, (double)i / 1000000000.0);
- 
- 	return i;
+ /* kselftest for allocinfo ioctl
+  * allocinfo ioctl retrieves allocinfo data through ioctl
 -- 
 2.53.0
 
