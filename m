@@ -1,63 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793714544;
-	b=iWSO78MoUTnxRltbCZQ9hMiXJdO2hqGOHWK4q+ZjgeKNGzhK5i52XvNGhV6kd87Ig0K5
-	 ompRpF9evgaLwnYqnwEt4/xEKUeIuON5VXJCsswFvqsp9I3Cn5Tdhic4DECUgHvPfrbON
-	 QVI9OhJF529MQX6uz/ljRMpY/wST5T1K4MtffxuFx09eC6z1ocoQfeksUjROyPwbw//jI
-	 waXpJO/H3n2Mo0fx7cq5EKb5XeCb6iqellHtBtI9L3dXlicXGpv42CcAGgfdSiwht2uvm
-	 auL2gtd3L1rrCeTMwObGQH+wcuLDf1J4/V/JQ1VWZBudKOTi7WQuGRwd28oGwIusQeA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793714544;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=/ci6k4oqs2nbzif7LoyW5jMqduAUL1OYo5QDwTnoE6U=;
-	b=YmLZ/Rt+Vb62hTfD6RKV6ptZTjLIdwDxv3AItp4YCW7+haZTa3YaCPK41L+om1+FORpS
-	 33uIB4I9cHYgAVrhURkbhkfThcFfrkpvbOpF9PFlrDIO0n6WqOhoEGCddx4q1paQniUTc
-	 UgMsa+cjqt9ZiKFeGaacpKD1VUEFiO/BZFmtm6sdHOu29atYLSCugO4dRySzOxZtUgBP/
-	 G3TmsbKnvbLQ9UwSmvnczmfeujY1jmsDBcr8SqIiJYRl9+mvr5NV8tTpwM031x2T7J9e1
-	 kRptY2SCP+BpkhebjBBy8DyLHGKGkBAzyYrVwyYOztmEgf58ZxyvBPMzE9QvRD1gFdQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ClcOSqOh;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.52
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793714792;
+	b=jIyHUsUsM7mMYuxy53ETETGK9Wm6SDBi5Xu69U7ccCVrINOlOsSq1NWIrFyXW7j7plOQ
+	 RlnkEb+SYn5Okt5a+YlOkTO+Cd3OIMreBDkaHk/vywxXxLnNChMCUPBdki1imzE0rrIYa
+	 4SNApIOCCWSBas+q1ca4XB/gNYKv7gGW2K18L4Wul/Crr2RRi1s2cphew/7SyFjWXfMx8
+	 BQX15RoBiJLnrMX7kJz3ALxyeMJFwPcjg8ZlwEEruVgyhQaxWVAp8ysIsdc/OmWIdm5w+
+	 KuspQT6wTFUd0o2Q+jsf5sWCXkjz+dUp+ofpTayJPa68elrnf9tATRGKHveVDfjzUOA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793714792;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=rXy+hT+GwvN91RjiAPqGZZe7u+gyV8gNKc/Oopg1PG0=;
+	b=Q12Gpgg3TALAkgPTwME4A8mtIod0oKb+/eP9P6E+N+CvlQUjpqbpcbxU8nc4Fm1A8o8G
+	 2klLMXXk83bJ150diTNb4zmeh+/UkK5ep6b/BX18JHD7dWtgeAKstAmVmXk2Q0BIF/7gw
+	 O0B9+F4t4Yx+ZI5lZuCu0znJRPHHmPjyUY+JBddinnc41T1ojay4tDPbIOanJBuwfEma2
+	 K9Lb05zzsQJbdZteOLqWRnxqWVDHr/cV31pyA16WJd5PAW2la+1LXbVhw87e1FU8t+YeF
+	 c3nKmjah+gsDilrbryMPOkLEtONV82DIpV5Y49+hhR5tPBZnRgxycFSfyORGCABQuYg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MnhRH4q4;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.52
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69EC1606D810;
-	Tue,  3 Nov 2026 14:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30AB606EE96
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 14:06:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C30AB606EE96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ClcOSqOh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FA8F1F00919;
-	Tue,  3 Nov 2026 14:02:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793714544;
-	bh=/ci6k4oqs2nbzif7LoyW5jMqduAUL1OYo5QDwTnoE6U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ClcOSqOh/CnPKw1DMkG91z2imhABNwjhBfnoloDtaj7Cug8/HNTgrWmo0q0/NLRM0
-	 jAQBjZQPvvERHlTJoaha8MziXTISd7ublVu3Axv8F4iBf/5mG5n4L4RSRXC9sKPM3B
-	 J147+7K7A0X+pRUEOt4aTUxHuAkoPl/SpHj/WVEz3xwYpiCOik3M5ThafXIoNvtXRs
-	 i+FLDmDdBBneLljLlj+p9/36DwN2IvmuS9689/gt9TbctHz/LFIVa1mWOJDGHIHV24
-	 oUF5I164rW9nTudIjIBH/NQym/yCqTysWmFw6sYUTgXgGo3B8n/16mojf0AqAvjtZv
-	 Xviiok/VRFJxg==
-From: Sasha Levin <sashal@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/livepatch: skip based on the test modules instead of KDIR
-Date: Tue,  3 Nov 2026 09:02:18 -0500
-Message-ID: <20261103140218.17568-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261103140218.17568-1-sashal@kernel.org>
-References: <20261103140218.17568-1-sashal@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MnhRH4q4
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-82109f51565so2150796a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 06:06:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793714791; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JrX7W7E+LeRdCPaP2pgwJ/4laZRUjq8w7hH/GqErP1ftyk22HLcvst4xbpx9KA7urr
+         vDTRwA1gvY/zkASVF36pNtyGM0yagiyPgMlz1im9fdIUpXY1Z7oHGLol1jipa/c4vuzR
+         /pxGfjc0Pm/rG61T/7Gc+zeOqfwzh3ZUjV/jfxuobTvz9/HL3uIrVKPRAzfxjHllncoW
+         YrOqpipcMO8n7eZbc/nExQSSHN+YnCKahdOJWXSbG9To6kW8Oo2ZAxMuDejo8mIXtj2T
+         h/D0KQ24JTLIxi/gOeB6PIwyrIEQORGZ4C6F2okEpJ/Fk4utBXtSteAVBKmH7qtRHe9q
+         5s3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rXy+hT+GwvN91RjiAPqGZZe7u+gyV8gNKc/Oopg1PG0=;
+        fh=VaPUQ7rEIQN7av1zLx3grbO7Y7mNIMX9jTFNU4YX5HQ=;
+        b=o0wpSAjKHKbnybWLqotVjEm9XiWKyyML5XSOFbSoJAdFPH3tfP3vEAeyASU2w74rWF
+         GR7qRR1SszNDTU+Vz2rfKSIFXv1PrNtfgvQu0tVGAT2KBlYBFbCuigrj8noavuylAJQ5
+         nnr6Z7qW/USYfq+QIIgF1Yu1/Ozweuij2tfnth9+RQWM2BqfchXAL8FOSnHXT8FOy1IW
+         Mbv7NBWpStz3qQsAsq41AACO5dg74kuyIVgs28EqevSoMrDbgMKrdy2C9C6IU+dJuqW/
+         6r+A63WhPvuvItglrKeomEIazT+hGn3XytMsrEjzQ0Gz64r3cVwpEVqBh+dy9rj/9ucY
+         2TPQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793714791; x=1794319591; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rXy+hT+GwvN91RjiAPqGZZe7u+gyV8gNKc/Oopg1PG0=;
+        b=MnhRH4q4kEx7MQV7Rveki/MdNDXRe1zt023+RsTRp9ZgP2RKoKBip9q3+52kK1z81+
+         J+SrpZbE3mPFTr97SFKGpBZHbx2vOHLztgUKJGNuDoCwkJa7yTfqOJL/+WbeeS/kj6Lf
+         pop1st7WFkcaMg7e7KhcGXiN9gl8ISnWW1X0PnpbWFA8dMnjYUZna+T2K78K7QTg0aXP
+         APg9pg4MSSJPUhy0peHKAU4G0leLOdzbGiCRXqtqerLqxYGt7OKn4L+jaiKAua+u6Ydn
+         tfKdonCTEocezY9or2iLYhuvlK+OaD36riqELJfDrgMaQKK93Ehu5Otc3QT1jmTtlhhY
+         3Wyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793714791; x=1794319591;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rXy+hT+GwvN91RjiAPqGZZe7u+gyV8gNKc/Oopg1PG0=;
+        b=MjfZOUB5EhQOh+3Jzas9629zcW1qQlAGm7jt6+Y37B1QVKFB8aN+SeuFv3r2jbVa+6
+         BoG9sRgcxDzJmAiiy7mDxQdbbfnxR0kQJQElF5sd+PelZi3d1yatx3/AiH25aT62kfLj
+         qNYA0lxA7kwfWE4Wot4Zoi6Do2HkWo8G0bYHYWkT9fvfnPJSRscYhOQym3Gurn71SX6s
+         NkqkRUIhTkBIP+qirgWMKUNYJp1d9rekvRTjQe94x13mDuYQLRc+I/NPopZyOPO8XIBH
+         VmSz+183wo4A2ZqsKT1hstiG16iVlOiAmlN6oWa8kd5uDh+L0SWvGALl15o28JFgjr3N
+         lgKg==
+X-Forwarded-Encrypted: i=1; AKwUvBytEh1Ah99dYm0QcBFhQcuN0K7myvhYiKz9E47du2Fp36OG7iSSK2w+3x/NtpV+BM2dRG+n1wEPlT5tOKOH5J8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/4ASiWl9b4H6Qs5EpTHadmq/+O/t9xuqGD1/pFbHMO7jSOfCI2
+	luw1Yw0T18Yn3nq8iTRzRmoYJkn25SaIwPQLzeH9Aha+LanLE4n3Gfcl8kWRFMSWQrwSP4ozofH
+	acxd+3I+GUck5ChaIxOqQ/g9+/eZIghI=
+X-Gm-Gg: AYBFou3q5nVhsZo8X8tthKPsuRiRy5D7QfIZnde3p1DZcMNpBsBcFB0VPwg8s7FhX22
+	UIn3FV5ylONCUx7GRRhcfOw4TV2PzGuD2GBb6YJTj8j/UDnGVYfc2BFcW1GRnhC++nEXCyj6SPv
+	8dOSHKharth6CV3MB6P+uIjmjYxk1Vvu1KALMGG2o4BwOnOSOdD3ehRHXVk7f/iBNIehQgiO9iN
+	6vix5ZbKVPVTh2YBFFjLIfbzZbR8oLgc9SeuWs1z8mr+AtBIO9H+yjbNU/vWnFxy/qx3H8DUxXj
+	P/vx1tDcE+0rR1G2nI5dpCevgrKqjbiPyu+6M7qaEI2XPanHqUiFeejEHruTM9A74sh7/kUP1aA
+	L/EDixxFIKJOuMqAPIBIKgPp3/EFgRA86YNhoq0NNAyfex0cuh8U4Pu9eP5RYJ5A505OCgrjksP
+	JwAKy8Pt1W6Etr7LiEuoPF1i0F8URNO/NbUmS0
+X-Received: by 2002:a05:6830:2647:b0:823:e626:2765 with SMTP id
+ 46e09a7af769-85d36641a21mr9639694a34.31.1793714790698; Tue, 03 Nov 2026
+ 06:06:30 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,58 +105,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261103130131.4069212-7-sashal@kernel.org>
+In-Reply-To: <20261103130131.4069212-7-sashal@kernel.org>
+From: Ming Lei <tom.leiming@gmail.com>
+Date: Tue, 3 Nov 2026 08:06:18 -0600
+X-Gm-Features: AclHuK9jA1t6T_L1_qeaqjfhfdt4HQoTqtOL_ZuGwvDN3vPKQfefu2TCWCSIAkA
+Message-ID: <CACVXFVNhw7HP7SkR-1aokfOguBprsSdGBPtkZ-DyZssz4XaVAg@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/ublk: use the configured kernel UAPI headers
+To: Sasha Levin <sashal@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Uday Shankar <ushankar@purestorage.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-setup_config() skips every test when there is no kernel build directory
-at $KDIR or /lib/modules/$(uname -r)/build. The test modules are built
-together with the selftests and the scripts load them from
-test_modules/, so nothing needs a build directory at run time. A
-machine running an installed kselftest tree usually has none, and the
-tests are skipped there although the modules were built and installed.
+On Tue, Nov 3, 2026 at 7:01=E2=80=AFAM Sasha Levin <sashal@kernel.org> wrot=
+e:
+>
+> With generated headers in an output directory, the hardcoded source-tree
+> include path falls through to distribution headers. New ublk flags and
+> structure members, including UBLK_F_IO_DESC_SIZE, are then missing.
+>
+> Use KHDR_INCLUDES to consume the headers from the kernel under test, and
+> add the headers target as an order-only prerequisite of the ublk
+> programs, as nolibc-test does, so that a standalone build installs them
+> first. Baseline builds fail on the missing definitions; GCC 14 and Clang
+> 21 builds succeed with the output-directory headers and target liburing
+> development files available.
+>
+> Fixes: e371b9d3368c ("selftests: ublk: kublk: fix include path")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+> Changes since v1:
+> - Rebased on v7.4-rc1. ublk_cancel_ready got its own rule next to
+>   kublk in the meantime, no other changes.
 
-Check for the modules that __load_mod() loads instead, and remove
-has_kdir(), which has no other users.
+Reviewed-by: Ming Lei <tom.leiming@gmail.com>
 
-Fixes: 54ee3526796f ("selftests: livepatch: Avoid running the tests if kernel-devel is missing")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/livepatch/functions.sh | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 8b26b70f92d8c..14fc9cade4de3 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -44,16 +44,10 @@ function is_root() {
- 	fi
- }
- 
--# Check if we can compile the modules before loading them
--function has_kdir() {
--	if [ -z "$KDIR" ]; then
--		KDIR="/lib/modules/$(uname -r)/build"
--	fi
--
--	if [ ! -d "$KDIR" ]; then
--		echo "skip all tests: KDIR ($KDIR) not available to compile modules."
--		exit $ksft_skip
--	fi
-+# Check that the test modules were built before loading them
-+function has_test_modules() {
-+	compgen -G "test_modules/*.ko" > /dev/null ||
-+		skip "test modules are not available"
- }
- 
- # die(msg) - game over, man
-@@ -151,7 +145,7 @@ function cleanup() {
- function setup_config() {
- 	is_root
- 	[[ -d "$SYSFS_KLP_DIR" ]] || skip "livepatch is not available"
--	has_kdir
-+	has_test_modules
- 	push_config
- 	set_dynamic_debug
- 	set_ftrace_enabled 1
--- 
-2.53.0
-
+Thanks,
