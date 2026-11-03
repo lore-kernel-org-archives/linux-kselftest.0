@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.202
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793729961;
-	b=2Z3FjRGNuyQdhgTF+9W/sTe6AIQQmEI4Fhq02Uz6QPIGsMCivZY11HICYvO0VpdVkWMU
-	 h1Xea+bLSZqVUm+5JNEBY6vESmCc0b3ICrqs0JJGGvTJGZQK1SmNdMbCrlJgZZZyQHORT
-	 YY/dl0ybRBmmJZ4xuPuWKIJpdhrocTQUvaeHXuaWzXyG4F/sSSVqcRayuQsr2FtUK3nFw
-	 ydqiNlpjSDkF3gROusofdPFRXeBIikQKmCT+VUadzkN2rmQpD1GSjw8lZcy0xy+sjkH0N
-	 hcRP+YaFDEKrgXLpXDL2yX1GoolMBy0X2MuylEKbgoXstmGtbz/Qz9TVW41BYjfVTGA==
+	t=1793729964;
+	b=tDtFDYjZUh5s/xZqQuu1l4hsU2WfoyIyCUy5gvLFlTbgQzYMKEVgH4736Pmo3SZlnvjP
+	 S/BNiKQZQh5a6xtwgGJWknVAnrh4yNxfPgkztwdtBtxMNsQQGeG9xEuOREocW5sTpMUNx
+	 vemBXAieVz+gbKdW9uCyWREwrdvekFD1BbSuJ1UFy1GM7YIa2KGlTjGVUhq0J61fANBGb
+	 KICyt7egUGnb4JHdrJzYeXw5i+dY/J6ILp8SFXDfWvXgbx4jfnGuaJz/1UiFLCxkG9Iqx
+	 siozkKbtVJwu28rEHuDxcZvQ1rUg2gimkPJAb1r567WT0UNMtdWqP0PcVgW9LgaBVxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793729961;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793729964;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=a6e33FUXB/GBiDw4+lwPznAxPC7ALaJyHv7KaCKbPmk=;
-	b=5EoErpZ0zsCjMpMlMTK5aBVlhFsrgqGwejvdwnE78uumnG/RLZQnKmtIzcsCAp0iYCS9
-	 oCEasgYoNRAuj2QE9/oGKKF+zf9lsO6UV2Tt9k6YIEfsoq6cUsOhJb+l66ZFyGGP07wyR
-	 +NQR9bdERtZZrsDTJVyoE/w9J47buLBe02O1ttHQ6BsdRriU8G5Bew6Ki75O+P8jLu3gv
-	 f4LJacFKXvLO/2OoPXwCqxCFHYkIU2hcmcqjCsCkcRbmYX6tofeeVZZHuSy+bg4Ii1dFB
-	 DM49G/yc7ILfhH1j+HyaGQFwMMDjsOA7RClq8gJounGtpAiAIws+IStfCM/wRmY4lHA==
+	bh=cy5NVa4zy9qS6Mga9ltUsUEtCniHJojXVPr9zJunu6w=;
+	b=mhsKKx2L31cu2Ho81g7Qc+xdtvqlUFjK31e8eD1cXMao4EZQq31Ppy9hM6GTalZU8Ok2
+	 36nT0a2GQ7nk7WaExqQ8i7/wJ5eh37osbvptfMMOvnTEk26TzVg9jFEdcr7CwpIsWVsNf
+	 RnDjFyv6kE3z3cf3fblfvBRTNVtAj+NUHHdArYVwnC0qHShUv6JFfQSTMjenMQkWxCqpP
+	 JT29l2WtcFVHr21qn443okGE+n9oAsVbQL4r+MgfwH1h26qDM7qmWoyth/lBSyYo6++ay
+	 NRqno/xAg6TnUmSwKrtLAU7P4rVaWTyd1J9vAC41Z8dzhfN3Mj2O5l1wypxNFw2CN5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PK6AizbL;
-	arc=none smtp.remote-ip=95.215.58.137
-Received: from mta1.migadu.com (out-137.mta1.migadu.com [95.215.58.137])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wG6CV3Gj;
+	arc=none smtp.remote-ip=91.218.175.202
+Received: from mta0.migadu.com (out-202.mta0.migadu.com [91.218.175.202])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E39606D83D
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 18:19:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59E39606D83D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23255606D811
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 18:19:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23255606D811
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PK6AizbL
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wG6CV3Gj
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=2hguKlDZFZ6O92tcQVjyXL2fJi6dM7PMsX0fLFDYtGg=;
+DKIM-Signature: a=rsa-sha256; bh=q/ovGyzi7R6zckhCMNiZ94Ym7wcqVfK/WB2DmfreLvE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793729958; v=1; x=1794334758;
- b=PK6AizbLtyu1CxXklZGGmxDaJ3afApG4wSjRuW53XtJ7HVsIYb5nODCMXJCcvSJYrEXJfylH
- aSgWMyS8j7OFpvN2Iy+ZbAOU0ORCkNlBt6iPueL+qJpXdJaadHUY/5Wxhw6kDCzzkNF32nOVRTC
- z8BhVp+RSaVyDBK1WNSbvVig=
+ t=1793729962; v=1; x=1794334762;
+ b=wG6CV3GjvIJcnzS8uuv6N0bGjfTxLRFRQU7Bm7+tTALamOvLkvRQX5O2Ao75S25YdPf+butm
+ NFU+j4fHQYBhxOus7INUPkcqkAQRbl2Tklzr6Qr12le4YBlRGkaGnwlRJAwDlHFJXWehEIM79kh
+ l6lhRrAT7hnl+9ByiUPhSAVE=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ccfdecbf43939bb5;
-	Tue, 03 Nov 2026 18:19:17 +0000
-X-Mizu-Trace-ID: ccfdecbf43939bb5
+Received: by smtp.migadu.com with ESMTPS id a72f377556df3c9b;
+	Tue, 03 Nov 2026 18:19:21 +0000
+X-Mizu-Trace-ID: a72f377556df3c9b
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	jose.marchesi@oracle.com,
 	david.faust@oss.qualcomm.com,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v4 7/8] selftests/bpf: cast explicitly in the struct_ops arena triggers
-Date: Tue,  3 Nov 2026 10:18:15 -0800
-Message-ID: <20261103181816.254686-8-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v4 8/8] selftests/bpf: cast explicitly in the arena subprog and callback faults
+Date: Tue,  3 Nov 2026 10:18:16 -0800
+Message-ID: <20261103181816.254686-9-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261103181816.254686-1-vineet.gupta@linux.dev>
 References: <20261103181816.254686-1-vineet.gupta@linux.dev>
@@ -84,143 +84,113 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-trigger() in struct_ops_arena.c and its three siblings puts the
-__BPF_FEATURE_ADDR_SPACE_CAST guard inside the function, so without
-arena support the body is gone and the program falls through to
-"return 0". The host side then does
+Stream tests fail with BPF_GCC, e.g.
 
-  err = bpf_prog_test_run_opts(bpf_program__fd(trigger), &topts);
-  ASSERT_OK(err, "test_run");
-  ASSERT_EQ(topts.retval, 0, "trigger_retval");
+  test_stream_arena_fault_address:FAIL:stream__open_and_load unexpected error: -13
 
-and passes, having run a program that did nothing.
+They call stream__open_and_load(), which loads every program in the object,
+and two of those do not verify:
 
-These are not driven by test_loader, so __skip_without_arena cannot
-reach them. They do not need it: cast_kern() is a nop when the
-compiler supports the address space and bpf_addr_space_cast(ptr, 0, 1)
-when it does not, so one cast makes the body work either way and the
-tests run for real instead of being skipped.
+  #481/11 stream_success/stream_arena_subprog_fault:FAIL
+  #481/12 stream_success/stream_arena_callback_fault:FAIL
 
-No verdict changes: struct_ops_arena/arena_arg and /arena_autobind
-reported OK before, from an empty body, and report OK now from one
-that runs. What changes is that the OK means something.
+Both dereference an arena pointer and leave the cast to the compiler:
+
+  int __arena *addr = (int __arena *)0xdeadbeef;
+  *addr = 1;
+
+Without arena support __arena is only btf_type_tag("arena"), so no
+addr_space_cast is emitted and the store is to a scalar, which the
+verifier rejects. GCC splits it into byte stores, 0xdeadbeef not
+being aligned:
+
+  r2=3735928559 ll
+  *(u8*)(r2+0)=1            <- plain store, no cast
+
+Their siblings in the same file do not rely on the compiler; they use
+bpf_addr_space_cast(), which emits the instruction byte by byte and
+works anywhere. Do the same here.
+
+The address space has to come off the local as well. Left on, a
+compiler that supports arenas casts a second time for the
+dereference, on a pointer the explicit cast has already converted:
+
+  r2 = addr_space_cast(r2, 0, 1)
+  r3 = addr_space_cast(r2, 0, 1)
+  *(u32*)(r3+0)=1
+
+With it off, GCC with and without arena support and clang all emit the
+same thing, which is what the test wants:
+
+  r2 = addr_space_cast(r2, 0, 1)
+  *(u32*)(r2+0)=1
+
+What these two assert is the fault report, not how the pointer was
+produced, so nothing they were testing is lost.
+
+Measured on bpf-next with a stock bpf-gcc, test_progs before and
+after. Every test that loads this object recovers, not just the arena
+ones:
+
+  stream_arena_fault_address                   FAIL -> OK
+  stream_fd                                    FAIL -> OK
+  stream_fd/blocking                           FAIL -> OK
+  stream_fd/edge                               FAIL -> OK
+  stream_fd/empty                              FAIL -> OK
+  stream_fd/hup                                FAIL -> OK
+  stream_fd/nmi_epoll                          FAIL -> OK
+  stream_fd/nonblock                           FAIL -> OK
+  stream_fd/open                               FAIL -> OK
+  stream_oversize                              FAIL -> OK
+  stream_partial_read                          FAIL -> OK
+  stream_success                               FAIL -> OK
+  stream_success/stream_arena_callback_fault   FAIL -> OK
+  stream_success/stream_arena_subprog_fault    FAIL -> OK
+  stream_syscall                               FAIL -> OK
+
+and the subtests of the object that failed to load appear for the
+first time:
+
+  stream_arena_fault_address/read_fault             -> OK
+  stream_arena_fault_address/write_fault            -> OK
+  stream_arena_fault_address/xchg_fault             -> OK
+  stream_arena_fault_address/cmpxchg_fault          -> OK
+  stream_arena_fault_address/load_acquire_fault     -> OK
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v3 -> v4: was 8/8. cast_kern() instead of the skip_tests flag in
-.data, so these run rather than skip. (Alexei)
+v3 -> v4: was 6/8. No longer drops #include <bpf_arena_common.h>,
+which the arena_base() patch now needs in this file.
 
- tools/testing/selftests/bpf/progs/struct_ops_arena.c           | 3 +--
- tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c  | 3 +--
- tools/testing/selftests/bpf/progs/struct_ops_arena_member.c    | 3 +--
- .../selftests/bpf/progs/struct_ops_arena_member_render.c       | 3 +--
- 4 files changed, 4 insertions(+), 8 deletions(-)
+ tools/testing/selftests/bpf/progs/stream.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena.c b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
-index 8aa8639df91f..3fffa24839ee 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_arena.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
-@@ -86,7 +86,6 @@ struct bpf_testmod_ops3 testmod_arena = {
- SEC("syscall")
- int trigger(void *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
+index b4d88d0e01ad..8c49a130150b 100644
+--- a/tools/testing/selftests/bpf/progs/stream.c
++++ b/tools/testing/selftests/bpf/progs/stream.c
+@@ -341,9 +341,10 @@ int stream_arena_cmpxchg_fault(void *ctx)
+ 
+ static __noinline void subprog(void)
  {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	u64 __arena *val;
- 	int ret;
+-	int __arena *addr = (int __arena *)0xdeadbeef;
++	int *addr = (int *)0xdeadbeef;
  
-@@ -94,6 +93,7 @@ int trigger(void *ctx)
- 	if (!val)
- 		return 1;
- 
-+	cast_kern(val);
- 	*val = 41;
- 	ret = bpf_testmod_ops3_call_test_arena((u64 *)val);
- 	if (ret)
-@@ -134,6 +134,5 @@ int trigger(void *ctx)
- 		return 11;
- 
- 	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
--#endif
- 	return 0;
+ 	arena_ptr = &arena;
++	bpf_addr_space_cast(addr, 0, 1);
+ 	*addr = 1;
  }
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
-index 495faa0f4a8b..3455ca9e2d47 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
-@@ -45,13 +45,13 @@ int unrelated(void *ctx)
- SEC("syscall")
- int trigger(void *ctx)
+ 
+@@ -364,9 +365,10 @@ int stream_arena_subprog_fault(void *ctx)
+ 
+ static __noinline int timer_cb(void *map, int *key, struct bpf_timer *timer)
  {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	u64 __arena *val;
+-	int __arena *addr = (int __arena *)0xdeadbeef;
++	int *addr = (int *)0xdeadbeef;
  
- 	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
- 	if (!val)
- 		return 1;
- 
-+	cast_kern(val);
- 	*val = 41;
- 	if (bpf_testmod_ops3_call_test_arena((u64 *)val))
- 		return 2;
-@@ -59,6 +59,5 @@ int trigger(void *ctx)
- 		return 3;
- 
- 	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
--#endif
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
-index a2218cd81619..afbe59f77af6 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
-@@ -80,7 +80,6 @@ struct bpf_testmod_ops3 testmod_arena_member = {
- SEC("syscall")
- int trigger(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	u64 __arena *val;
- 	int ret;
- 
-@@ -88,6 +87,7 @@ int trigger(void *ctx)
- 	if (!val)
- 		return 1;
- 
-+	cast_kern(val);
- 	*val = 41;
- 	ret = bpf_testmod_ops3_call_test_arena_member((u64 *)val);
- 	if (ret)
-@@ -104,6 +104,5 @@ int trigger(void *ctx)
- 		return 4;
- 
- 	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
--#endif
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
-index 09b4c740bdca..c4e134e14f87 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
-@@ -63,7 +63,6 @@ struct bpf_testmod_ops3 testmod_arena_member_render = {
- SEC("syscall")
- int trigger(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	u64 __arena *val;
- 	int ret;
- 
-@@ -71,6 +70,7 @@ int trigger(void *ctx)
- 	if (!val)
- 		return 1;
- 
-+	cast_kern(val);
- 	*val = 41;
- 	ret = bpf_testmod_ops3_call_test_arena_member((u64 *)val);
- 	if (ret)
-@@ -80,6 +80,5 @@ int trigger(void *ctx)
- 		return 3;
- 
- 	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
--#endif
+ 	arena_ptr = &arena;
++	bpf_addr_space_cast(addr, 0, 1);
+ 	*addr = 1;
  	return 0;
  }
 -- 
