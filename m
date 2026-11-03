@@ -1,61 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793721309;
-	b=BamjSip+7+RS4b7D78bxcHD34JsxMV9efVHsE9QzOJSD5zpCLThuIOaJxTvIdxkjTKp7
-	 DlQj2JZH6u2h5nE27+47vWN1GVzS/+NEIziYUd7XEDr/Fz3zlZXO6BhwUU8HzRxdisOsY
-	 BEb+coEowybvzS43Bfv97JSeh1u7zlxYXRLQQnV3Kr0kjI8TYNIIaY2DXEGvE4QNW2y3b
-	 EZlhpsKQbayWTV4HK0RVC4aT9pEj9CVSgS6aShH5MNq+iezq++yiUnukzc9VGAfivw0tz
-	 XNui7OHtOWji1GihfyKpknebYLqmGFXpgEDXvz56blaYd7eAE2OyvChtv2tfhOawJ9g==
+	t=1793721316;
+	b=Mnh5S3cMiga1ezDADU7DETEjzy61brmNNBTWPLJxYaTrnQZT2TNKVmK9mWyCGhSr7i99
+	 oTsPyStshfildMmBcQfUoNYfbLPNU4VyfXzaJYoh7T46qq2vwSf6woK0DuNFZyRTMz/AB
+	 wyqk1XP9shl9VaS4RVd4T30zdyciffjxYtWzTYDgMn1I34fXuQIkkjHlxRCRZItxr1IOf
+	 m/8ObYzoWe8DP6YvoaRhojN8gvg4hC2MOrLy1ud0yFuqWO6fShcuL2m+mhnBANYX9tvJl
+	 dNOWXiZZN18FA4epUAQMR/yYuxJE77oEH6j61+FJJsnFbp863LJpPuDXR5EluQ6Lxtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793721309;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793721316;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=yaC7RemHrCY0ZTmPbLRW/qDx17GtrNAPuzVu4bchE2s=;
-	b=yAcHH5N8SvjDFxpvfjaLahOIOgrP5xWPTliUe/vCn3HIagex08nQtutDiTes9Ifl+LhB
-	 xE+8t1K5+T9m9ADSE5zPjOWDpoAFFyQRBldgtZ7ry8Ayoi7XPlA77E5/maIrZbZd+ncdQ
-	 SNZQJqqJ5kpDyZZeplKIUScFYGn/INp/MofNi0rQSh3T6js95px7/JgxhkMO7R/PAO+Vd
-	 d1k1+3AUmrFpGmYUjRT5HrNQtG7a4VjNOTs7HZ8dclqe9Z4igLXFAtjU5WuE5ZpFxj6sO
-	 Ub1tVZ6EsregjaScTk5djkaoNQzhGN1Y9Q3h09nHzjn/XOwAPqWsRboHHnQuk5yWgzQ==
+	bh=qeNLbpSQYWeLzu/9GgYKukuneWHtvUD45tJUmCL2fts=;
+	b=albZEJ3QnfcfHdiudByJGrIvcG+kx78Hh/vK59O2TAkiZqf8GGJX7reRcyxCNTOZMsLY
+	 ABGYCFf3GfqCF5vLe8bDLNbbczvQZLLKZQxkL2TiU03SwfGtUJ6A8krDtPUKJk2b1GToK
+	 S2y8Z814IbuZugUurXyApyj1PWfyweP3YNjZSEEejAFHvimGmZVaiLIf1elHhwyXpeV8o
+	 hXEZjG5BD03POX1a71zytL3s7g0AtekzVT5QNMJM1TgMHlNKIDurJXamRWd+1JDVXhR9d
+	 sZB+PX9Wln4ESnKfwVvf76DfiVOlgBVHqDgEY84K/IemUT20nPTJMKSn9P8pb5+fHKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hLXgIEv2;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KOCil7qn;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12F9606EEB6;
-	Tue,  3 Nov 2026 15:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5F5606D825;
+	Tue,  3 Nov 2026 15:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hLXgIEv2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028791F00A28;
-	Tue,  3 Nov 2026 15:55:06 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KOCil7qn
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1931F00A02;
+	Tue,  3 Nov 2026 15:55:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793721308;
-	bh=yaC7RemHrCY0ZTmPbLRW/qDx17GtrNAPuzVu4bchE2s=;
+	s=k20260515; t=1793721316;
+	bh=qeNLbpSQYWeLzu/9GgYKukuneWHtvUD45tJUmCL2fts=;
 	h=From:To:Cc:Subject:Date;
-	b=hLXgIEv20wc45g5EP92/nbkUmcT8jSo/ey6cPa3pZL6+CRTUSwhTO3h+5/Jn2y3np
-	 AAxaBZXOgQ8M9HZzxQlw6kZlQMep09bYP3TA2dE8micrX78ffs+6OXswRW3A0SDOwh
-	 viU2bTDftxu5pJhWYV0iCTIaKRN778XFwJBGE2UHjs5Jz6Pch0qgzbhzlT1QsyxOTq
-	 /62GxXwMEMN4HC2ZXzruD4sLfM7JWvKnAqYPQlxwHQb1TdOl+oNQI1FA3YbVsJgOIh
-	 kz0z9Xo8+nhJe4hmWx7rRG7U+wB67m9UN12Vk0w0jcxNuKjPg3PjjtWwB57NYAA7GW
-	 ItouEshxcpb5w==
+	b=KOCil7qnJ7iH8OXOC7YbkX6YWpVpJt4vBJNx3+pVJhiPkuzPGNJ2TT8DwYVNClmKd
+	 t8+iMBaT4yd5oUUfaYiCeB3hR7XEztxJBgwaScdQUSRZ0/VmzNJXxK+fGcp9ynT/vn
+	 bwcXp26H5GOpe7Q+/+SkKnv+CKzvkG9/aWwLFqCVAQTW5k2GwyTY1GSj+tDbFGnigs
+	 NNMNdJzAHdc9gHuJ2bqJ8lGDfry/QBoxx9qE4EVQgNVCAtHy0Cp97OVY32rfM6kyeu
+	 4QoleFLc6K9CLsP/1wHua0LbeA/hl7i1LCqIPG7MRRs6rOUPXiZsR0xTaV79qVkBZq
+	 b7xBRr6+T3cXQ==
 From: Sasha Levin <sashal@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Geliang Tang <geliang@kernel.org>,
-	Simon Horman <horms@kernel.org>,
+To: Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org,
-	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: mptcp: pm_nl_ctl: print sizeof() with %zu
-Date: Tue,  3 Nov 2026 10:55:06 -0500
-Message-ID: <20261103155506.534973-1-sashal@kernel.org>
+Subject: [PATCH] selftests: vDSO: print tv_sec as long long in vdso_test_getrandom
+Date: Tue,  3 Nov 2026 10:55:14 -0500
+Message-ID: <20261103155514.535166-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,12 +63,14 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 32-bit architectures size_t is an unsigned int, and printing
-sizeof(struct nlmsgerr) with %ld warns:
+On 32-bit architectures with a 64-bit time_t, such as armhf in Debian
+13, tv_sec is a long long, and printing it with %lu warns:
 
-  pm_nl_ctl.c:73:71: warning: format '%ld' expects argument of type 'long int', but argument 5 has type 'unsigned int' [-Wformat=]
+  vdso_test_getrandom.c:184:40: warning: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type '__time64_t' {aka 'long long int'} [-Wformat=]
 
-Use %zu.
+Cast it to long long and print it with %lld. While at it, print tv_nsec,
+a long, with %ld instead of %lu, and cast it to long, as it is a long
+long on x32.
 
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -84,22 +81,69 @@ build without format warnings there now, and the x86_64 builds don't
 change. The other selftests get the same kind of fix in separate
 patches.
 
- tools/testing/selftests/net/mptcp/pm_nl_ctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/vDSO/vdso_test_getrandom.c       | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-index 78180da1efcc5..36a6d39b31bbf 100644
---- a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-+++ b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-@@ -70,7 +70,7 @@ static int nl_error(struct nlmsghdr *nh)
- 	uint32_t off;
+diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+index ef402001e8988..504b84d4cc53e 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
++++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+@@ -181,19 +181,22 @@ static void bench_single(void)
+ 	test_vdso_getrandom(NULL);
+ 	clock_gettime(CLOCK_MONOTONIC, &end);
+ 	timespecsub(&end, &start, &diff);
+-	printf("   vdso: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
++	printf("   vdso: %u times in %lld.%09ld seconds\n", TRIALS,
++	       (long long)diff.tv_sec, (long)diff.tv_nsec);
  
- 	if (len < sizeof(struct nlmsgerr)) {
--		error(1, 0, "netlink error message truncated %d min %ld", len,
-+		error(1, 0, "netlink error message truncated %d min %zu", len,
- 		      sizeof(struct nlmsgerr));
- 		return -1;
- 	}
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
+ 	test_libc_getrandom(NULL);
+ 	clock_gettime(CLOCK_MONOTONIC, &end);
+ 	timespecsub(&end, &start, &diff);
+-	printf("   libc: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
++	printf("   libc: %u times in %lld.%09ld seconds\n", TRIALS,
++	       (long long)diff.tv_sec, (long)diff.tv_nsec);
+ 
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
+ 	test_syscall_getrandom(NULL);
+ 	clock_gettime(CLOCK_MONOTONIC, &end);
+ 	timespecsub(&end, &start, &diff);
+-	printf("syscall: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
++	printf("syscall: %u times in %lld.%09ld seconds\n", TRIALS,
++	       (long long)diff.tv_sec, (long)diff.tv_nsec);
+ }
+ 
+ static void bench_multi(void)
+@@ -208,7 +211,8 @@ static void bench_multi(void)
+ 		pthread_join(threads[i], NULL);
+ 	clock_gettime(CLOCK_MONOTONIC, &end);
+ 	timespecsub(&end, &start, &diff);
+-	printf("   vdso: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
++	printf("   vdso: %u x %u times in %lld.%09ld seconds\n", TRIALS, THREADS,
++	       (long long)diff.tv_sec, (long)diff.tv_nsec);
+ 
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
+ 	for (size_t i = 0; i < THREADS; ++i)
+@@ -217,7 +221,8 @@ static void bench_multi(void)
+ 		pthread_join(threads[i], NULL);
+ 	clock_gettime(CLOCK_MONOTONIC, &end);
+ 	timespecsub(&end, &start, &diff);
+-	printf("   libc: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
++	printf("   libc: %u x %u times in %lld.%09ld seconds\n", TRIALS, THREADS,
++	       (long long)diff.tv_sec, (long)diff.tv_nsec);
+ 
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
+ 	for (size_t i = 0; i < THREADS; ++i)
+@@ -226,7 +231,8 @@ static void bench_multi(void)
+ 		pthread_join(threads[i], NULL);
+ 	clock_gettime(CLOCK_MONOTONIC, &end);
+ 	timespecsub(&end, &start, &diff);
+-	printf("   syscall: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
++	printf("   syscall: %u x %u times in %lld.%09ld seconds\n", TRIALS, THREADS,
++	       (long long)diff.tv_sec, (long)diff.tv_nsec);
+ }
+ 
+ static void fill(void)
 -- 
 2.53.0
 
