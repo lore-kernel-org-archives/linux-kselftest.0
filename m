@@ -1,54 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793723959;
-	b=z1ea9v0dgaNAYmV0UIa5yrlyG06umzHxqQh1vqO3sZKx+RDdOQ5MCsldsosLoWSuXb9P
-	 yD43IHkv8kwnpc9BQSimj+3b0xZOR22kfapA9UxYl2RUsdaFMBYpdT0v7CyPro7QquHGq
-	 novod9RSJNqDYGbrU/XRZIRR1j/ekJ0YtvBOPcUDDbhlXHfHPxgfXZTSKXoRQnlR7mhH1
-	 ziO3Jswfv7neHZ0mA4vklQ7L6gImVQfHV80H9agTShV47UnifNO3JREU8zmWrlmyqwKI4
-	 Fk3vQI2Km39s+RVlImVRRmZIAVHzFmtWwidzDKJ6nWauAdTiN09ZZrt4RvoVs38jpbw==
+	t=1793723964;
+	b=jrZtcdzH3CtrcVRSzWFBQUb2CgnNkVqiSRVo2yY+IJzhgd5Pnd++7oKJMo0j+8l0R4uC
+	 kkvsy1YDlL8aKTLkKy/Ets0opZ57/KRQfNamkkGCRwgS/6IIpLzqMo5EFvdM7uOD1Scnr
+	 YlqnHxz4SWbkLpm/LgJXV7NUKMc7CAxeyt2gNqUzCuCDdYz+h8uFJrJTqeFdWcX+eNhgP
+	 B+EtpDEt/DIseStnHb9IucdieDIFQPnAeqdAJMLTQsYd6/nHoPB09xFqc1BEUZM0dziNn
+	 UjLEqzTm0c8gzehhGj8ma1eiY/UFg20fDlrlPPwE746u1XXZQzMOBM7ySi5lrIXrZRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793723959;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793723964;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=nFEbpr1S/fywdsLNs6gMW5AfQVW9GmywjT2Nznx1bkQ=;
-	b=hg5SS0dGMCmIiXsuFXn1+bG9JR/jNxKSiek/UwUfNzjnKukgQNxM3x8GCjUPkwXD+oBP
-	 h9V4Blzo6mV9I4tfrJeBUVGOeeY5nbRbrnFbk4pG7f0TBl39I8JdhnDoipEJmzP8trn53
-	 CGM2PEglKUMcQMXvsuh1PMyBRj+25NllToR9KsAiz/L6I6TwsM4MRGSaKx9VWDdpaGb4x
-	 1Wo3sF/jR3TE8dVCKuvJ9DCmfG/ZY9p93DKEWDicMFTWo5kB6Mm/HxVAW+gr89PlVJZJt
-	 tr+8AKqI1e+uJadyD20x+hewDMNbpT2dJwcWkEzNwN3UzWqPFIJXow61x8NtCsgSuww==
+	bh=LTSU5/pZYUh6nYi5BogYnBf5CzMMj9W0mg8QPzWoMe4=;
+	b=vb9vFwC36E2Gi3vurxm3FYWe88ugo2ndxoqeDjX6svGqVW/eSNAD76XjjJH0eR3d8vqO
+	 6gc5NKM6vg1+1EcU+gGm6VgOSAXhFlVqoznf2pT3SgErzue9kD8yzpCKJGW0Ge33rI8B9
+	 28HLhRscfvWYRdoYfqncyaSJ+YL2ac+KkNDh/dhjtzULxOfe/rcoq+0drcX663471QvyU
+	 jRC+Hk6/JXAYjkQuUAFPYiTJJijTjfNuNF3AzLv8193ErcWK1GxOON/Q0pY3YGZHL8nN/
+	 xcSODDcVmjZxiblnzsx/bhr6UiIg5EdsXcFr9NLbk9W/ORiXYBPmffONRX19PyFTg+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G9Wh75Qn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=duNoA8Y5;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC436082BFA;
-	Tue,  3 Nov 2026 16:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0483E606EE95;
+	Tue,  3 Nov 2026 16:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G9Wh75Qn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3030A1F000C1;
-	Tue,  3 Nov 2026 16:39:18 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=duNoA8Y5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5541F000C1;
+	Tue,  3 Nov 2026 16:39:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793723958;
-	bh=nFEbpr1S/fywdsLNs6gMW5AfQVW9GmywjT2Nznx1bkQ=;
+	s=k20260515; t=1793723963;
+	bh=LTSU5/pZYUh6nYi5BogYnBf5CzMMj9W0mg8QPzWoMe4=;
 	h=From:To:Cc:Subject:Date;
-	b=G9Wh75QnGhYvovPg5xAzjnRYZqswO6/JSyToounH/GNCzWXa1YiMDtTzI0yEf5A1e
-	 R6bL/+7PGUsb9YoJWx4mQ5x9FUsppgUSwvz5oOLHDmcmBhVMcgw3NKlVLre6kfKSEY
-	 xte9qOcNLndu3Rxu9Jur0l5DoNYJqcGa1l8T/STZzPuBBdI8QVFxnmMXPMAQYDH3Ns
-	 2aUg22dCfai76o3kJX8k91825irAJGyj9xKK7GQ0gKJRN33FYBXLSwOEtwX4j/4POE
-	 7myZOqswosqcRIrlguNcREYjFu4Of2YV0N2c+NbLSLOQMoNN2rmH3eIrPWupUdNr8u
-	 xJIIHhOy6BU5Q==
+	b=duNoA8Y5ru9vlhtYc4y6cbTqMFzvbnfZDFyrvGZ5VsuAlu7DS3eSJnqfIfKuYeX3n
+	 wbC39fXFRvoBdC6gbwC7FXBT+9RF5u7MbAkwuZzLJV+/RVxa3z3e7ZssOFCr2n/p0J
+	 qMHvQu0Omko9bbjLNv39izqEHCUNXQ38Efw51BAhSfaatvm5QlTVl8noeIN5tbBfpw
+	 utdFBNNFR59nnU5WCJhZaBOOj7U4/XM1O/aXv4CLSKvOTxxJcJJY3ZJ45FHHZfQ+6c
+	 GmNVy4DZfgNOj77yG2rLX/gXgkEa6gjoN9/BLk39tDuqUoYalDBdv5bt/SSzHykTRb
+	 nEU+a3s/uJo0Q==
 From: Sasha Levin <sashal@kernel.org>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Cc: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/landlock: fix the regex_escape() error check
-Date: Tue,  3 Nov 2026 11:39:17 -0500
-Message-ID: <20261103163917.641130-1-sashal@kernel.org>
+Subject: [PATCH] selftests: net: tcp_ao: don't shift a size_t by 32
+Date: Tue,  3 Nov 2026 11:39:21 -0500
+Message-ID: <20261103163921.641347-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,20 +65,14 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-regex_escape() returns (char *)-ENOMEM when the buffer is too small, but
-matches_log_fs_extra() checks the returned pointer with "< 0", which is
-never true, and goes on with a bogus cursor. On 32-bit architectures gcc
-also warns about the cast of the pointer in the error return:
+gen_tcp_addr() shifts the size_t n right by 32 and masks it with BIT(32)
+- 1. On 32-bit architectures both shifts are as wide as the type, which
+is undefined:
 
-  fs_test.c:7474:24: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+  aolib.h:230:40: warning: right shift count >= width of type [-Wshift-count-overflow]
 
-Compare against (char *)-ENOMEM instead.
+Convert n to uint64_t first and mask with 0xffffffff.
 
-The size left after the escaped path also subtracts the prefix a second
-time, which can make a long path fail with -E2BIG. Compute it from the
-cursor instead.
-
-Fixes: 316d06b01130 ("selftests/landlock: Add audit tests for filesystem")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
@@ -82,27 +80,24 @@ Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
 KernelCI's 32-bit arm builds show the same warnings. The changed files
 build without them now, and the x86_64 builds don't change.
 
- tools/testing/selftests/landlock/fs_test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/tcp_ao/lib/aolib.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index f725882fa4a78..27a78434d1c21 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -7470,10 +7470,10 @@ static int matches_log_fs_extra(struct __test_metadata *const _metadata,
- 	log_match_cursor = regex_escape(absolute_path, log_match_cursor,
- 					log_match_remaining);
- 	free(absolute_path);
--	if (log_match_cursor < 0)
--		return (long long)log_match_cursor;
-+	if (log_match_cursor == (char *)-ENOMEM)
-+		return -ENOMEM;
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+index 53be1744237ee..71ff975533089 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
++++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+@@ -226,8 +226,8 @@ static inline union tcp_addr gen_tcp_addr(union tcp_addr net, size_t n)
+ 	union tcp_addr ret = net;
  
--	log_match_remaining -= log_match_cursor - log_match;
-+	log_match_remaining = sizeof(log_match) - (log_match_cursor - log_match);
- 	chunk_len = snprintf(log_match_cursor, log_match_remaining,
- 			     "\" dev=\"[^\"]\\+\" ino=[0-9]\\+%s$",
- 			     extra ?: "");
+ #ifdef IPV6_TEST
+-	ret.a6.s6_addr32[3] = htonl(n & (BIT(32) - 1));
+-	ret.a6.s6_addr32[2] = htonl((n >> 32) & (BIT(32) - 1));
++	ret.a6.s6_addr32[3] = htonl((uint64_t)n & 0xffffffff);
++	ret.a6.s6_addr32[2] = htonl((uint64_t)n >> 32);
+ #else
+ 	ret.a4.s_addr = htonl(ntohl(net.a4.s_addr) + n);
+ #endif
 -- 
 2.53.0
 
