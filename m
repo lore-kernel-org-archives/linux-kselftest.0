@@ -1,88 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.195
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793705031;
-	b=vZmzFZIH1RZ0HM6ZHm3hoK/ZLmMLyqtZQr9db/aOKNk8+iwssNLQ+xQtH5zNEFUI0pIf
-	 lj0s/DZvObM+C8ARR+8ckgGw4Lgn8CmvpdCEW7at20p0m33cJ7WAwcsJpsJXClNgPG2vM
-	 e08SClZ7gq/pxzEFYEST5nHDbeBl0P/fjLCq31RkALUgLq2W0tN8cXBc0VHf1vGPgAgqT
-	 Cy8LVWSxhbwSuFHdjrfcPdiU5x26YtwoPhIO1IR22LJSy8Ti1xBCkFC7GcKQHwoX9yFZE
-	 HkD67TVWawoi28zWuoIKCDuFavMwJr69iehyxu+4japoWlFvVcPbz5kv6+NFHfs7QAw==
+	t=1793706639;
+	b=c/CyCSdWcvuwQerogu8YctX6jFtdhAGp9IdvKLJD2xLWV91UNtI2btpV+dXujaBDCDvh
+	 z4mXntHDftUjAs6dQLxxUhYKzZ2FaUzqs+qXh8uND/kdgvaUAnI1s6+XVR/o9SyQ+dcGX
+	 gLYlTYdhadPxRh1XC1fErUWqx2ZAKS9gNyf4AVSjaZrs+UgRWb41fGhyyZeOR2LbvLZKH
+	 i+i/jD2lgh5LA+JcpR2mgsit2ajg96A8X12UluQ66xAkYaW9m9ASMgKQyWBWbaj6022um
+	 8hsZqT+TcoJ5g0Zq/Q4vdeJgOt1nw5dzNv73ZDu7zLhay0LmGnkTLKjj9yMUcydKPoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793705031;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793706639;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=3isOR4cYwJAxFOsjqP/jTzCRrBz4npHrA3MCjWbtdPs=;
-	b=D3BbU8vU6pc2aZOVq/DuxagDCyzOnl94+JLlFAFTmm9ln4O/372hXrTqxumrN308etYA
-	 x9N/puEAREmWux/4OfWNwM67SuYiEWT0DFGPpz9xcQM6r04oVqH0sO5kSwGNMSf4c08rW
-	 iqmNswSZw/RXNJNuWyaX49xDrphLKTliBTYxh+H2GG2JMddcV1zTxjsF1jHGeo31Ja6qy
-	 kHx9bDFMg30UBUBgUWYCsEEw5fiWJozZTDOUjv/cxM5inGEUXtAJHzLNMLErnA2nHiZw+
-	 D100ZBlznCYABTNSuIsDt5DD42/BYiKOAoZ2mwynXCldVoLXzaqa0zESfXEXUzEgCQg==
+	bh=K2XfEeUcN1jWTOzmdT3RYJ78fSiNTv4T5ATMrI0edQw=;
+	b=YbBjPokcNQUa6dUdwhVYWBK3UQQFyml7QuYrtxDe8wWQNm6IvLKc5YiCe4S06sU29pEA
+	 vZLY8zhWgaaPTFL9rgTOSw+XLnSAznvLHMTsyoauVXwiHOJE37k8BEuC5xr6pfk9MWikG
+	 LBQuL23woW7vh1tgOhb2DbrA28sV/wBICJK6ksugm/tlVRmcUPAwvza6nFik4MbNyM0Cc
+	 JymrXkLj7pvcoFjhjJkTlVvMAvchvCCI3JmlyoZKvjlgG0edQKO4xoGgu+l9YUv7+Vwh4
+	 zBef3DMQAWMirWDd/IzKz3eo8M8QMAsjJCqB81TGoBLnw0EzwVQb0TUp/MmPH1n2gMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u7GOmtxM;
-	arc=none smtp.remote-ip=209.85.128.195
-Received: from mail-yw1-f195.google.com (mail-yw1-f195.google.com [209.85.128.195])
+	dmarc=none header.from=mojatatu.com;
+	spf=none smtp.mailfrom=mojatatu.com;
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=SM83Qf9N;
+	arc=none smtp.remote-ip=209.85.128.178
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E66606D81A
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 11:23:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96E66606D81A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE338606EEB1
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 11:50:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE338606EEB1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u7GOmtxM
-Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-8ab43af5e97so6697267b3.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 03:23:50 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=SM83Qf9N
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b0a921ee46so34996267b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 03:50:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793705029; x=1794309829; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3isOR4cYwJAxFOsjqP/jTzCRrBz4npHrA3MCjWbtdPs=;
-        b=u7GOmtxMAIIctqm6Yp/jpShpYO6ZSxXjRH44r9swpdZQ6sTrwEk4jGg5Ny6uTH0qM2
-         nl9yDsZS7UJ5X1SjouCLkw4tTzVDkqnS1m+MABapV9I0viuELNCjdF4HG1qmWAFGo9B7
-         3szsc/0HCww+MabXRaVnYnWlFeGVAIsoRF2KjS4Y4RcWwbdnsQdCW9vsJ+owdTNAj4t8
-         ciTMNX/cib7bjLGHpTXgc18NHQqkB2R6jUm9puqRs4nMbWUdIZFV/IArj+Mz4b97K9iC
-         uQEHOQILdbFw+Cl3iKFbrWk5X3NWVL/5FEeF3jMGXezL2liXOLpQ4cr71YDAQkPT/hWU
-         A3kQ==
+        d=mojatatu.com; s=google; t=1793706637; x=1794311437; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=K2XfEeUcN1jWTOzmdT3RYJ78fSiNTv4T5ATMrI0edQw=;
+        b=SM83Qf9NT+SVsUiUy+tTcJBP+bhj27xdLr5TwKW9X3AhPEMUBFKimxyNr36cGB9ybP
+         PWWD7bW/bpvEE6UX2ABkt5nox7TMUIHabOtmOqNpki/3A231PcqnuD7DiSnq3wHohoiR
+         SnQ+C12ADuw0H7Vo/DhbHdpyPmlSW2yLlyiCE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793705029; x=1794309829;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1793706637; x=1794311437;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3isOR4cYwJAxFOsjqP/jTzCRrBz4npHrA3MCjWbtdPs=;
-        b=iMmQD4wRL/lu4oVefgHil9yuxoN2BsvDRMJnV14erfHI8jm22gBxLfHwMqIKarg/sB
-         nsfE4jAbd/dpLe3r066qBlUVyJIGXTsTn850QhpfhbxOhX5tmSH5hXbioF4skstbt+CI
-         pq7iDCIl6AKKuqAgkKBerijnhkAWj4U8lwKVpj7su5+4h2nVUS5qaTWcd2c/Lzq4TfYY
-         0qct7MCdpB84WGGwtThMYyrSUYjwHJ+brqRDfVgWxkZ3OTZjpbirebf4EqToeDsGXNT4
-         d9qMnKBecq4SjqlQZf6cFrdmSHqorxqRCmEudmojXcfr0h7Fon6sFkOv8qn7iRxCA1TE
-         EgFw==
-X-Forwarded-Encrypted: i=1; AKwUvBw7gNdCAaKpXkNZaZgD4HpyAP8KMRVmtOx7rW1W072fQy882sL7xLpDitYSjVsf0ARNVop/f8+zKwcoAHYgFm0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z87VeBqsQsCLqIyNtJ0uP+n6rjQv+UircLezUZLQwhpjAi5kKNl
-	exqpKtCXyH0r59ov7dYZ++m84+30HSf5UHg+XOyZKmXFPlRMVdf6Rt9m
-X-Gm-Gg: AYBFou1obJPjXAoxStjGVGxUY/SyJQBXxBs7/s0pkhiZFbGMsKZhKPcejLQLRs96zZ1
-	y+UWgxC3ZNYHRIrGXDLNYaTEv108sORp/Aqn6BnctYx1LSRfmvUy+cUex2evV3cuhvA30uHf5Dt
-	tDCT7fADBiP56n1MB+gmQTi6VXLB9p5IvNA+Bs8NYY6n+HISNpyAw3i+6lNgKhL0PuYZfwIH1BA
-	Z6bhg3i9RKTfeuzasM33yCvfT3QNZpiXi/9vBv4fOIgkNsw2m0oQbMtAGlIZfs0bTjZwbUDfqG1
-	n3ocT+RbKkZ9b59GweChtBAY8MCm0bUbdXbGiVsiMDa03rD5Bj/OMXN6A3nTVKt1QXChHGsA0ro
-	qsbVUfF4rOmIEpxhKr6F4vLRVip6PU4tH3fJZFkmSp30GThwNvIEabIAyZygwZDaTxFYNPgSXX+
-	nl5MtnXjnHseQMpqq9+rQro1ZiOmAyBYzfQ2mBElgr/LgDTfkp8iiimaboZ8fTKudihXHHV2mxp
-	PeCt1O0I0/aoWA0NkWhn3pEZSnNT+0z/4lBr828AKKkN23YqfEhMcj+/UYrn62RIINxc8fUv+AM
-	qYcou5QjIagiUJmY2yFFELCWKQAlVssxs7o=
-X-Received: by 2002:a05:690c:2b8e:b0:8b3:392:dc0c with SMTP id 00721157ae682-8b30392e29emr1408757b3.12.1793705029365;
-        Tue, 03 Nov 2026 03:23:49 -0800 (PST)
-Received: from [10.0.0.48] ([71.69.222.122])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b2b7123fd9sm70536037b3.12.2026.11.03.03.23.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 03:23:48 -0800 (PST)
-Message-ID: <46288afa-affe-4262-bd0d-38a16f4608b4@gmail.com>
-Date: Tue, 3 Nov 2026 06:23:47 -0500
+        bh=K2XfEeUcN1jWTOzmdT3RYJ78fSiNTv4T5ATMrI0edQw=;
+        b=S314oUKUOINrxyVBSgSRuDKfjYv0wirewQVn2F7E+n8WxiHgmILSd4o6EN2DA0spMU
+         pdc4Ii7scUjXQ3NBTbBHDhsEltzhP6TSMejw+kFXHStuTpSLzm3BHzwT8J6tp2PDSZb7
+         ud+lw6D+IqO+9Lki6MjgrUBw/i9JxQKGHvXVmMTlYu6rKF19iJ7AD612/qYwAkCg3Hb1
+         DOO+Ltvb9mihiP4BG69NSopJsGbdt3c7kvzmnDMiC3t3ijXjN6eUMeiIn++gpa3ha95y
+         wZb7QaeUgtZRtUse5+nEuReBsCBLEB5+zMJ9F/J3w8RCvLvFdxyNgONyqdiPIaCl1RQV
+         3naA==
+X-Forwarded-Encrypted: i=1; AKwUvBywUgEHtIi6kvPxOh/DQ3tQG+PfvmhUKD8F5/2gItiFX0HJTQOBPxdR/qML/tm04yCg/Kr9uaGEWj9lqzwWcAQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8L/pfpQSWtGKCk/wwKFRkTDoA2kx/Uy+oWCZSxsC3sXLrDGQdU
+	ok5b9RjQOgp3qFv8YL+Q4W7lNDIoKbOMXAddP9vfVu0pMyH5CWGW3CFZXylB/9776g==
+X-Gm-Gg: AYBFou2PDRcx4U61WIaQdcm4vhS5Wy4wAqXb53a43/EusS/gPhCChuihvYJWyvjsJBU
+	tLPJtvEyUJTQxnOxxaT7ROmNrDbBYqIwUORpD7vwl+0uJaGYaARQ5XeEVH6oOeBraTRE/6eLGQr
+	lbxKt0BnFlVqnWhzju/Lc1x1Sq+LGPgQSA3CTdRTiSn8nmq9b05CcpW0Saii0o/rXeuUfkEibT3
+	b87h5vH1GucpuFBxvAMkv5PGcm7+hBFWJllXrQCSvk9AXU05JTKxUaZBrXcBI24ItmGyeCCWzxa
+	Y2fJbpA7vves14drz8UMEVh56pQoiUGeYYk2M0zAc+cBOmbY0KCi3iOwXCIxYqpaPTTflWzPM4y
+	dPQp7lNw6KfZZDkU+2UMWEzwjIYRbuFJnt2sF8ALrImYneXeMp0rAPFl1z81pzkv2kQgka7ONTp
+	eYKOntHfJOy8ZMVbcqh+Ow+ss1RNdKQGIlZ0OQbL7CG0CCSUac0uPY9drmRmzGRVjuQC8qDpq/p
+	a1nYlzZaHhm8Zc/n2CpJF5MTQ8I3F4Mr/nA0tTSuNaRjnLy3V11Emc3azPmUM2k44ED5TE6wLOV
+	P67lTbeQK4Z9mpGClMMI+H8IU3mch7v5gKI9M7wkhNgQbN0BqvFPpSB2h/xN537w9YlraHUHwKN
+	CeoR9bzqtB6Ofj7w=
+X-Received: by 2002:a05:690c:fce:b0:8b1:738a:b44c with SMTP id 00721157ae682-8b2b66c780bmr74176927b3.23.1793706636793;
+        Tue, 03 Nov 2026 03:50:36 -0800 (PST)
+Received: from mbili.tail33bf8.ts.net ([64.203.83.2])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b2b704d699sm70016857b3.5.2026.11.03.03.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 03:50:36 -0800 (PST)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
+	stable@vger.kernel.org,
+	shaos <shawnq1@163.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Victor Nogueira <victor@mojatatu.com>,
+	Sashiko <sashiko-bot@kernel.org>,
+	Tom Goff <thomas.goff@boeing.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Yotam Gigi <yotam.gi@gmail.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v3 0/4] net/sched: fix short-skb metadata and namespace boundaries
+Date: Tue,  3 Nov 2026 06:50:28 -0500
+Message-Id: <SER-NSBD.v3.r0.20261103064310@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,385 +105,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 3/5] tls: update the RX key when a KeyUpdate
- is received
-To: Hannes Reinecke <hare@suse.de>, John Fastabend
- <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
- Sabrina Dubroca <sd@queasysnail.net>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hannes Reinecke <hare@kernel.org>, Chuck Lever <cel@kernel.org>,
- kernel-tls-handshake@lists.linux.dev, linux-nvme@lists.infradead.org,
- Alistair Francis <alistair.francis@wdc.com>,
- Martin Belanger <martin.belanger@dell.com>
-References: <20261102-keyupdate-rfc-v4-0-f17419972b9f@gmail.com>
- <20261102-keyupdate-rfc-v4-3-f17419972b9f@gmail.com>
- <dd6d8c92-a96c-4bb3-aee1-a28f2156fb9d@suse.de>
-Content-Language: en-US
-From: Martin Belanger <martin.nvme.dev@gmail.com>
-In-Reply-To: <dd6d8c92-a96c-4bb3-aee1-a28f2156fb9d@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+This series fixes three independent boundary problems in net/sched, and
+covers the third one with tc-testing cases.
 
+1/4 act_ife: encode a configured zero metadata value.  The u32 and u16
+presence callbacks reserve an 8-byte TLV for a configured zero value, but
+the encoders returned without writing it, leaking stale skb headroom bytes.
 
-On 11/3/26 02:15, Hannes Reinecke wrote:
-> On 11/2/26 5:58 PM, Martin Belanger via B4 Relay wrote:
->> From: Martin Belanger <martin.belanger@dell.com>
->>
->> When a KeyUpdate arrives, kTLS blocks reads with -EKEYEXPIRED until
->> the user installs the next key. A kernel user such as nvme-tcp or
->> sunrpc never does, so the connection stalls.
->>
->> For a socket with a registered RX secret, derive the next key and
->> install it when the KeyUpdate is decrypted. The record is not passed to
->> the user, so recvmsg(), splice() and read_sock() go on to the next
->> record. Without a registered secret the behavior is unchanged.
->>
->> A KeyUpdate that is not alone in its record, has a wrong length or an
->> invalid request_update value ends the connection, as RFC 9846 section
->> 4.7.3 requires. So does a peer that sends more than 8 KeyUpdates in one
->> second, the same limit as GnuTLS. That case is counted as
->> TlsRxRekeyError and logged, rate limited.
->>
->> Signed-off-by: Martin Belanger <martin.belanger@dell.com>
->> ---
->>   include/net/tls.h       |   7 +++
->>   net/tls/Makefile        |   3 +-
->>   net/tls/tls.h           |   2 +
->>   net/tls/tls_keyupdate.c | 154 ++++++++++++++++++++++++++++++++++++++ 
->> ++++++++++
->>   net/tls/tls_sw.c        |  43 ++++++++++++--
->>   5 files changed, 202 insertions(+), 7 deletions(-)
->>
->> diff --git a/include/net/tls.h b/include/net/tls.h
->> index aacc6d12226e..a5bc28a7d1f5 100644
->> --- a/include/net/tls.h
->> +++ b/include/net/tls.h
->> @@ -63,6 +63,11 @@ struct tls_rec;
->>   #define TLS_HANDSHAKE_KEYUPDATE        24    /* rfc8446 B.3: Key 
->> update */
->> +/* KeyUpdate: msg_type, 24-bit length, request_update (RFC 9846 
->> 4.7.3) */
->> +#define TLS_KEYUPDATE_MSG_SIZE        5
->> +#define TLS_KEY_UPDATE_NOT_REQUESTED    0
->> +#define TLS_KEY_UPDATE_REQUESTED    1
->> +
->>   #define TLS_AAD_SPACE_SIZE        13
->>   /* SHA-384, the longest hash of a TLS 1.3 cipher suite kTLS supports */
->> @@ -142,6 +147,8 @@ struct tls_sw_context_rx {
->>       u8 zc_capable:1;
->>       u8 reader_contended:1;
->>       bool key_update_pending;
->> +    u8 key_update_count;        /* received in this window */
->> +    unsigned long key_update_window;    /* jiffies */
->>       struct tls_strparser strp;
->> diff --git a/net/tls/Makefile b/net/tls/Makefile
->> index 6edcf1271b75..ce8ac6a59f8c 100644
->> --- a/net/tls/Makefile
->> +++ b/net/tls/Makefile
->> @@ -7,6 +7,7 @@ CFLAGS_trace.o := -I$(src)
->>   obj-$(CONFIG_TLS) += tls.o
->> -tls-y := tls_main.o tls_sw.o tls_proc.o trace.o tls_strp.o tls_hkdf.o
->> +tls-y := tls_main.o tls_sw.o tls_proc.o trace.o tls_strp.o tls_hkdf.o \
->> +     tls_keyupdate.o
->>   tls-$(CONFIG_TLS_DEVICE) += tls_device.o tls_device_fallback.o
->> diff --git a/net/tls/tls.h b/net/tls/tls.h
->> index b2061f6bf065..63ece8074985 100644
->> --- a/net/tls/tls.h
->> +++ b/net/tls/tls.h
->> @@ -149,6 +149,8 @@ int init_prot_info(struct tls_prot_info *prot,
->>              const struct tls_cipher_desc *cipher_desc);
->>   int tls_hkdf_expand_label(const u8 *secret, size_t secret_len,
->>                 const char *label, u8 *out, size_t out_len);
->> +int tls_keyupdate_rekey(struct sock *sk, int tx);
->> +int tls_keyupdate_rx(struct sock *sk, struct sk_buff *skb);
->>   int tls_set_sw_offload(struct sock *sk, int tx,
->>                  struct tls_crypto_info *new_crypto_info);
->>   void tls_update_rx_zc_capable(struct tls_context *tls_ctx);
->> diff --git a/net/tls/tls_keyupdate.c b/net/tls/tls_keyupdate.c
->> new file mode 100644
->> index 000000000000..281c7b13eb82
->> --- /dev/null
->> +++ b/net/tls/tls_keyupdate.c
->> @@ -0,0 +1,154 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/* Copyright (c) 2026 Dell Technologies Inc. or its subsidiaries.
->> + *
->> + * TLS 1.3 KeyUpdate, RFC 9846 sections 4.7.3 and 7.2.
->> + *
->> + * A TLS 1.3 peer can change the key of the direction it sends in at any
->> + * time. It sends a KeyUpdate message, then encrypts all later records
->> + * with the next key. A sender must also change its key before the key
->> + * has protected too many records (section 5.5).
->> + *
->> + * The next key is derived from the application traffic secret, not from
->> + * the current key. User space gives the kernel only the key and IV, so
->> + * the kernel cannot derive the next key on its own. Without the secret,
->> + * a received KeyUpdate goes to the application, and the kernel stops
->> + * decrypting until the application installs the next key with TLS_RX.
->> + *
->> + * With TLS_TX_TRAFFIC_SECRET or TLS_RX_TRAFFIC_SECRET, user space also
->> + * gives the kernel the secret of that direction. The kernel then 
->> handles
->> + * KeyUpdate itself. This file derives and installs the next key, and
->> + * processes a received KeyUpdate. tls_sw.c sends KeyUpdate messages.
->> + */
->> +
->> +#include <linux/jiffies.h>
->> +#include <linux/skbuff.h>
->> +#include <net/strparser.h>
->> +#include <net/tls.h>
->> +
->> +#include "tls.h"
->> +
->> +/* A peer that sends more KeyUpdates than this in one second ends the
->> + * connection. Each one costs three HMACs and a new key, and carries no
->> + * data.
->> + */
->> +#define TLS_KEYUPDATE_RX_MAX_PER_SEC    8
->> +
->> +/**
->> + * tls_keyupdate_rekey - install the next key of one direction
->> + * @sk: socket
->> + * @tx: non-zero for the transmit direction
->> + *
->> + * Derive the next application traffic secret from the registered one,
->> + * then its key and IV, and install them. The record sequence number
->> + * restarts at zero.
->> + *
->> + * Return: 0 on success, or a negative errno. On error the installed key
->> + * and the registered secret do not change.
->> + */
->> +int tls_keyupdate_rekey(struct sock *sk, int tx)
->> +{
->> +    struct tls_context *ctx = tls_get_ctx(sk);
->> +    struct tls_traffic_secret *secret;
->> +    const struct tls_cipher_desc *cipher_desc;
->> +    u8 iv[TLS_MAX_SALT_SIZE + TLS_MAX_IV_SIZE];
->> +    u8 next[TLS_MAX_TRAFFIC_SECRET_SIZE];
->> +    union tls_crypto_context tmp = {};
->> +    struct tls_crypto_info *info = &tmp.info;
->> +    int rc;
->> +
->> +    secret = tx ? &ctx->tx_secret : &ctx->rx_secret;
->> +    cipher_desc = get_cipher_desc(ctx->prot_info.cipher_type);
->> +    if (!cipher_desc || !secret->len ||
->> +        cipher_desc->salt + cipher_desc->iv > sizeof(iv))
->> +        return -EINVAL;
->> +
->> +    /* version and cipher_type; the rest of tmp stays zero */
->> +    *info = tx ? ctx->crypto_send.info : ctx->crypto_recv.info;
->> +
->> +    rc = tls_hkdf_expand_label(secret->data, secret->len, "traffic upd",
->> +                   next, secret->len);
->> +    if (rc)
->> +        goto out;
->> +
->> +    rc = tls_hkdf_expand_label(next, secret->len, "key",
->> +                   crypto_info_key(info, cipher_desc),
->> +                   cipher_desc->key);
->> +    if (rc)
->> +        goto out;
->> +
->> +    rc = tls_hkdf_expand_label(next, secret->len, "iv", iv,
->> +                   cipher_desc->salt + cipher_desc->iv);
->> +    if (rc)
->> +        goto out;
->> +
->> +    memcpy(crypto_info_salt(info, cipher_desc), iv, cipher_desc->salt);
->> +    memcpy(crypto_info_iv(info, cipher_desc), iv + cipher_desc->salt,
->> +           cipher_desc->iv);
->> +
->> +    rc = tls_set_sw_offload(sk, tx, info);
->> +    if (rc)
->> +        goto out;
->> +
->> +    memcpy(secret->data, next, secret->len);
->> +
->> +out:
->> +    memzero_explicit(next, sizeof(next));
->> +    memzero_explicit(iv, sizeof(iv));
->> +    memzero_explicit(&tmp, sizeof(tmp));
->> +
->> +    return rc;
->> +}
->> +
->> +/**
->> + * tls_keyupdate_rx - process a received KeyUpdate
->> + * @sk: socket
->> + * @skb: the decrypted record, which starts with a KeyUpdate message
->> + *
->> + * Called with the socket locked, for a direction with a registered
->> + * secret. The caller does not pass the record to the user.
->> + *
->> + * Return: 0 on success, or a negative errno if the connection must end.
->> + */
->> +int tls_keyupdate_rx(struct sock *sk, struct sk_buff *skb)
->> +{
->> +    struct tls_context *ctx = tls_get_ctx(sk);
->> +    struct tls_sw_context_rx *rx_ctx = tls_sw_ctx_rx(ctx);
->> +    const struct strp_msg *rxm = strp_msg(skb);
->> +    u8 msg[TLS_KEYUPDATE_MSG_SIZE];
->> +    int rc;
->> +
->> +    /* A KeyUpdate must end its record (section 5.1). Another message
->> +     * in the same record is not supported.
->> +     */
->> +    if (rxm->full_len != sizeof(msg) ||
->> +        skb_copy_bits(skb, rxm->offset, msg, sizeof(msg)))
->> +        return -EBADMSG;
->> +
->> +    /* msg_type, a 24-bit length of 1, then request_update */
->> +    if (msg[1] || msg[2] || msg[3] != 1)
->> +        return -EBADMSG;
->> +    if (msg[4] != TLS_KEY_UPDATE_NOT_REQUESTED &&
->> +        msg[4] != TLS_KEY_UPDATE_REQUESTED)
->> +        return -EBADMSG;
->> +
->> +    if (!rx_ctx->key_update_count ||
->> +        time_after(jiffies, rx_ctx->key_update_window + HZ)) {
->> +        rx_ctx->key_update_window = jiffies;
->> +        rx_ctx->key_update_count = 0;
->> +    }
->> +    if (++rx_ctx->key_update_count > TLS_KEYUPDATE_RX_MAX_PER_SEC) {
->> +        TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYERROR);
->> +        net_warn_ratelimited("tls: peer sent more than %d KeyUpdates 
->> in one second\n",
->> +                     TLS_KEYUPDATE_RX_MAX_PER_SEC);
->> +        return -EBADMSG;
->> +    }
->> +
->> +    rc = tls_keyupdate_rekey(sk, 0);
->> +    if (rc) {
->> +        TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYERROR);
->> +        return rc;
->> +    }
->> +    TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYOK);
->> +
->> +    return 0;
->> +}
->> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
->> index 771e02bff519..027c32edaf85 100644
->> --- a/net/tls/tls_sw.c
->> +++ b/net/tls/tls_sw.c
->> @@ -1551,15 +1551,28 @@ static int tls_check_pending_rekey(struct sock 
->> *sk, struct tls_context *ctx,
->>       if (hs_type == TLS_HANDSHAKE_KEYUPDATE) {
->>           struct tls_sw_context_rx *rx_ctx = ctx->priv_ctx_rx;
->> -        WRITE_ONCE(rx_ctx->key_update_pending, true);
->>           TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYRECEIVED);
->> +
->> +        if (ctx->rx_secret.len) {
->> +            err = tls_keyupdate_rx(sk, skb);
->> +            if (err) {
->> +                tls_err_abort(sk, err);
->> +                /* callers free the record only on success */
->> +                consume_skb(skb);
->> +                return err;
->> +            }
->> +            return 1;
->> +        }
->> +
->> +        WRITE_ONCE(rx_ctx->key_update_pending, true);
->>       }
->>       return 0;
->>   }
->>   /* On decrypt failure the connection is aborted (sk_err set) before
->> - * returning a negative errno.
->> + * returning a negative errno. Return 1 for a record the kernel consumed
->> + * (a KeyUpdate): the caller frees it and does not pass it to the user.
->>    */
->>   static int tls_rx_one_record(struct sock *sk, struct msghdr *msg,
->>                    struct tls_decrypt_arg *darg)
->> @@ -1883,6 +1896,11 @@ int tls_sw_recvmsg(struct sock *sk,
->>           err = tls_rx_one_record(sk, msg, &darg);
->>           if (err < 0)
->>               goto recv_end;
->> +        if (err > 0) {
->> +            tls_rx_rec_done(ctx);
->> +            consume_skb(darg.skb);
->> +            continue;
->> +        }
->>           async |= darg.async;
->> @@ -2023,9 +2041,8 @@ ssize_t tls_sw_splice_read(struct socket *sock,  
->> loff_t *ppos,
->>       if (err)
->>           goto splice_read_end;
->> -    if (!skb_queue_empty(&ctx->rx_list)) {
->> -        skb = __skb_dequeue(&ctx->rx_list);
->> -    } else {
->> +    skb = __skb_dequeue(&ctx->rx_list);
->> +    while (!skb) {
->>           struct tls_decrypt_arg darg;
->>           err = tls_rx_rec_wait(sk, nonblock, true, false);
-> 
-> Why this change? Looks a bit out of place here...
+2/4 act_ife: require a full Ethernet header on egress.  An undersized
+linear head can make the encoder read past the end of the skb data.
 
-splice() handles a single record. With this patch,
-tls_rx_one_record() returns 1 for a KeyUpdate that the kernel
-consumed. splice() then frees that record and has no skb to pass to
-the user, so it must wait for the next record. The loop does that.
-recvmsg() and read_sock() already loop over records, so there a
-"continue" is enough.
+3/4 sch_teql: reject qdiscs from another network namespace.  The global
+TEQL master lives in the initial netns; a qdisc created in another netns
+could still mutate the master's MTU and flags.
 
-The unconditional __skb_dequeue() only sets skb for the loop test.
-It returns NULL on an empty queue, so it does the same as the old
-skb_queue_empty() check.
+4/4 selftests: tc-testing: cover each of the two teql attach rejections on
+its own.  Case 124e moves to the initial namespace, where it creates its
+own device, so only the root-only check can refuse it; a root attach from
+the test namespace is refused only by the namespace check.
 
-I can move the restructuring into a separate patch without a
-functional change, if you prefer.
+Origins:
 
-> 
->> @@ -2039,7 +2056,10 @@ ssize_t tls_sw_splice_read(struct socket 
->> *sock,  loff_t *ppos,
->>               goto splice_read_end;
->>           tls_rx_rec_done(ctx);
->> -        skb = darg.skb;
->> +        if (err > 0)
->> +            consume_skb(darg.skb);
->> +        else
->> +            skb = darg.skb;
->>       }
->>       rxm = strp_msg(skb);
->> @@ -2121,6 +2141,11 @@ int tls_sw_read_sock(struct sock *sk, 
->> read_descriptor_t *desc,
->>               err = tls_rx_one_record(sk, NULL, &darg);
->>               if (err < 0)
->>                   goto read_sock_end;
->> +            if (err > 0) {
->> +                tls_rx_rec_done(ctx);
->> +                consume_skb(darg.skb);
->> +                continue;
->> +            }
->>               released = tls_read_flush_backlog(sk, prot, INT_MAX,
->>                                 0, decrypted,
->> @@ -2520,6 +2545,12 @@ static void tls_finish_key_update(struct sock 
->> *sk, struct tls_context *tls_ctx)
->>   {
->>       struct tls_sw_context_rx *ctx = tls_ctx->priv_ctx_rx;
->> +    /* Only a pending KeyUpdate holds poll() back. The in-kernel rekey
->> +     * runs while the KeyUpdate record is still queued.
->> +     */
->> +    if (!READ_ONCE(ctx->key_update_pending))
->> +        return;
->> +
->>       WRITE_ONCE(ctx->key_update_pending, false);
->>       /* wake-up pre-existing poll() */
->>       ctx->saved_data_ready(sk);
->>
-> 
-> Otherwise looks good.
-> 
-> Cheers,
-> 
-> Hannes
+1/4: reported by shaos <shawnq1@163.com> with a reproducer, which was
+reproduced and verified in our test environment.
+2/4: found by Sashiko (nipa and gemini) while reviewing Victor Nogueira's
+parent act_ife patchset; independently reported by shaos
+<shawnq1@163.com> with a reproducer, which was verified in our test
+environment.
+3/4: reported by shaos <shawnq1@163.com> with a reproducer, which was
+reproduced and verified in our test environment.
+4/4: follows Sashiko (nipa) reviews of the v2 posting, which pointed out
+that a single case cannot witness both teql attach rejections.
 
-Thanks for the review,
-Martin
+The four patches are independent.  They target net and the three fixes
+carry a stable nomination; the test cases do not.  They are sent together
+because they share the short-skb and namespace-boundary review context.
 
+Jamal Hadi Salim (4):
+  net/sched: act_ife: encode configured zero metadata values
+  net/sched: act_ife: require a full Ethernet header on egress
+  net/sched: sch_teql: reject qdiscs from another network namespace
+  selftests: tc-testing: teql: cover each attach rejection on its own
+
+ net/sched/act_ife.c                                | 13 ++++----
+ net/sched/sch_teql.c                               |  9 ++++--
+ .../selftests/tc-testing/tc-tests/qdiscs/teql.json | 36 ++++++++++++++++++----
+ 3 files changed, 44 insertions(+), 14 deletions(-)
+
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
+
+v2 -> v3: considers comments from Sashiko (nipa) on the v2 posting.  Case 124e
+ran under nsPlugin, in a namespace where the teql0 master is not present,
+so the namespace check answered it and the case no longer proved that a
+child attach is refused as such; the case added in v2 covered only the
+namespace check.  124e now runs in the initial namespace and creates its
+own device, and the namespace rejection keeps its own case.  Both cases
+were verified to fail when the check they exercise is removed.
+
+1/4's and 3/4's diffs are unchanged from the v2 posting, so neither carries
+a changelog; 2/4's Fixes: tag now names the commit that introduced the
+unguarded copy.
+
+v1 -> v2: considers comments from Sashiko (nipa) on the repost2 posting.  The
+cross-netns check in 3/4 ran before the "teql can only be used as root"
+check, so every case it did not catch was answered by that check, masking
+the assertion that tc-testing case 124e makes.  The root-parent validation
+now runs first and the namespace check second, and 4/4 covers the namespace
+rejection on its own as suggested by sashiko-nipa.
+
+1/4 and 2/4 are unchanged from the repost2 posting.
