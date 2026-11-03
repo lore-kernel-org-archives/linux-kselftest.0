@@ -1,58 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793725993;
-	b=tOjJGpizYxsZGs6PRUUDv16tsPdNUguD3fSWJ/frwWez/FbrVknY0Xd219eSqhC/DmJF
-	 VIUwOE0h2Bj4sjQdv6T8OdIphMevsBcUV0h5aAPd7rUnxDSv/6t80LjDhobZK8WRwrbzd
-	 sPNgwYI8VG0I9DWng8ln5VXfm1qZD2gTUivbzz1YEa+kc1Lr9nV92KvGFp5N8W8OVDkAV
-	 Q6XKMAj++fCgUho1Sv/3lO7Zq76pJqumFcrmzC0sJcoWDMXRvm3YjNlM562j/tXnRflz+
-	 8+HJ6db+dSH5YCninFRkCJQMRxj4KseHTle/sQ54pJ6Y0myUbCzKjd2HeCV+9nxN/mQ==
+	t=1793726320;
+	b=xnmxH6By0IgdUcm+XTuEp6qg+mNbKazqj7VZl0Eza+1Zt/6ci2cms4jvzesw52NeDvtc
+	 UBVCG5YzEVbtfdiGTU9/ypnKtWCe47p/OFwNBJsA+aK+Km+3bF7oFwAjH+VX+RmUWQUFn
+	 1DeWeYqnciUlycy5RlVnHqu2zHxntvLZlVPJpE86XA37+RvyW5txPktMMc+I7eFDtN6tv
+	 ToKNWq2rDOlnHjQJ8LjHey6VwmZTrPaYEh55YD6vHDZ0XhdWoUbf3z5aUWOa2chUJ/V9B
+	 HfEsBby1SfJ2H5AyfnbO6aqKpdygNlNg/9qkIGFkLxV8KGQzhZ0/7NnF4Gs/c1hZf1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793725993;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=sLuH5QF1q2x16rx6DETeA38UkEEB7fIUOu+tH3AKEAw=;
-	b=LQUUjrkFvA1EY6XO59POplH7nF2jiBzBWUshNiKVYy6sEORAo/LN/hmNkeu+Yd/3yU92
-	 lV0E8wtzE5G46enQ2MlkzmFBwbXf92sMa9TU+/x2t50vcz+uwYSVAjqSEvNRnSQxdYHK9
-	 +qM9xl++vg8XiSYgqN8pkmldro7HIQSuvDKiq/zICEGZuWtlbCTvAf5zxoKqUBLePq0Hm
-	 yLK/aAYGe7pEyQtTTIbimKfvi80DUvWUG4Zkd0cb8k15s6BJUJPFUtRpf4J2jWPmn+lCK
-	 tLoa3FE8/OybEAP1s9/q63QgXdQkqNBEL09gDJxiUPz4WWguDzDjg0fuuqT2+mJ872A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793726320;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Debian-User;
+	bh=zUB0hsoYpltSXGgmhjCTbURxtzzGIGicuUjcqG2tTT0=;
+	b=yBLA7Qe2LN5MENpgseLURrgzdpjGCVTRFo8cy0w4AVbBhnKPNoLIsE1IYBtTSALIFVV5
+	 QJ6vTqHbkfAe6MjoAXCwZEIUn1H7hO0uXg2w4rBLl6YYN3CxOXs3t6+swJuElPupJyuVs
+	 lEI/5YNac3BVVyb29i02vQJ5qC74L0P7eO81CPSpV3/IdnKx1vsG4mHXxmS7ER5rTGCFb
+	 qfI0UiGGtNkRoOqyOH2ojs9nUko1CTvi+YquFLN9X19P1B9MzMWxhM73R9X0G5i6G9HvV
+	 0hN0kEIlvi0rkDlz/qQJy2ZU2owW5aowxkRNFCLO8g3JAqC386U4rm6vZCOrRacu0AA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KJXS+4SZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=S3SUQB5y;
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74481606D804;
-	Tue,  3 Nov 2026 17:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E87606A31B;
+	Tue,  3 Nov 2026 17:18:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48E87606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KJXS+4SZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9557B1F000C1;
-	Tue,  3 Nov 2026 17:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793725993;
-	bh=sLuH5QF1q2x16rx6DETeA38UkEEB7fIUOu+tH3AKEAw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KJXS+4SZsMHevqyj/V53u+r07uc5LN5NwlmIboYWnoi9dWPvub4Tc4+Sq1MiaI/ZQ
-	 gtlW5Mia2tNdOTWc9cKH1pvKkwhmpkkcIAppcp+ITZUI62F33mhBjhJphldmAOguLo
-	 SV56BQ0kGzGR1y8OAoX6K3Nr/xB3fjsEZWzWrYbnZha0nKqD1nxUuFtfQDr++LDsrn
-	 YUeHwYypuRkUo/+BxdqwuYqeTtT/IVzuJ/qJlSTu2cori6hlKpj69pXMtlW1AlQyVd
-	 qn5unp/aOJNiB6qGtFyssM46a3Dh07x0hBZEZ2FmN2giOZeVIdKdmA4XBXqyXYe+1T
-	 l//FF8HwZOUig==
-Date: Tue, 3 Nov 2026 17:13:07 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: fix pointer width warnings on 32-bit
- architectures
-Message-ID: <auoV594YOaoeo0Vz@gremlin>
-References: <20261103163907.640667-1-sashal@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=S3SUQB5y
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=zUB0hsoYpltSXGgmhjCTbURxtzzGIGicuUjcqG2tTT0=; b=S3SUQB5y1+ytWwuP5SrKm7EFV1
+	PFAKSr4Kj0JHctbaWZMzZON2t2/Fp0BaBT6XVTbxMsnpuWQJG4z/1rjrXusKvv32ZBvV89NIlj6AV
+	wtpWI02I6QIOiaK0rR9LsqdEDbhzn/1yVsFDk7ph8Poy7SsuzbQd6MkH2YjGJOUthX+PMw/HnFzBN
+	4sd6FMzX+wJ+tsQgxU7k9iUQw2VJoS8MiF2R3tKS0PQ1XXOKon7CPKB3MbXgJ49+8ltIMcvbRwCBO
+	qVXnK91yhQh6l693aFRhWhlx3AT8aLskx46YLfFzujsBoFhozx3oKD5zy/Wd5nmSGNGlXU56HaPvT
+	OmhdQh7w==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xOI9c-0075lY-2u;
+	Tue, 03 Nov 2026 17:18:37 +0000
+Date: Tue, 3 Nov 2026 09:18:31 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Sasha Levin <sashal@kernel.org>, chleroy@kernel.org
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/configfs: fix the build on 32-bit architectures
+Message-ID: <auoW3rXVeBkgM4qp@gmail.com>
+References: <20261103141627.30838-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,400 +66,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261103163907.640667-1-sashal@kernel.org>
+In-Reply-To: <20261103141627.30838-1-sashal@kernel.org>
+X-Debian-User: leitao
 
-On Tue, Nov 03, 2026 at 11:39:07AM -0500, Sasha Levin wrote:
-> Several mm tests convert between pointers and 64-bit integers with a
-> plain cast, which warns on 32-bit architectures, and hugetlb-mremap
-> passes 47-bit mmap() hints that don't fit in an unsigned long:
->
->   uffd-unit-tests.c:344:31: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
->
-> Cast through uintptr_t where pointers meet the 64-bit UAPI fields and
-> the 64-bit address arithmetic in mremap_test, and include stdint.h there
-> for it. The hugetlb-mremap hints don't fit in a 32-bit address space, so
-> only pass them when long is 64 bits.
->
+On Tue, Nov 03, 2026 at 09:16:27AM -0500, Sasha Levin wrote:
+> The fixture setup checks the result of mkdtemp() with ASSERT_NE(), which
+> hands the pointer to the harness. The harness casts both operands to
+> intmax_t to print them, and on 32-bit architectures gcc warns about the
+> cast from a pointer to an integer of a different size. The configfs
+> test builds with -Werror, so it fails to build there:
+> 
+>   kselftest_harness.h:797:49: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+> 
+> Compare the result against NULL inside ASSERT_TRUE(), so that the
+> harness only sees an int.
+> 
+> Fixes: a7fdcb2edd0f ("selftests/configfs: add tests for the userspace interface")
 > Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-I see you add:
+Thanks for the fix.
 
-static void *addr_hint(unsigned long long addr)
-{
-	return sizeof(long) == 8 ? (void *)(uintptr_t)addr : NULL;
-}
-
-for the void * stuff, but then open-code the uint64_t parts.
-
-Could you do something similar there please?
-
-Thanks!
+Reviewed-by: Breno Leitao <leitao@debian.org>
 
 > ---
-> Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
-> -m32, with and without -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
-> KernelCI's 32-bit arm builds show the same warnings. The changed files
-> build without them now, and the x86_64 builds don't change.
->
->  tools/testing/selftests/mm/hmm-tests.c       |  4 +-
->  tools/testing/selftests/mm/hugetlb-mremap.c  | 17 ++++---
->  tools/testing/selftests/mm/migration.c       |  4 +-
->  tools/testing/selftests/mm/mremap_test.c     | 13 +++---
->  tools/testing/selftests/mm/uffd-common.c     |  2 +-
->  tools/testing/selftests/mm/uffd-unit-tests.c | 48 ++++++++++----------
->  6 files changed, 47 insertions(+), 41 deletions(-)
->
-> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-> index e5f273ca84c10..2a8806a131a5b 100644
-> --- a/tools/testing/selftests/mm/hmm-tests.c
-> +++ b/tools/testing/selftests/mm/hmm-tests.c
-> @@ -196,8 +196,8 @@ static int hmm_dmirror_cmd(int fd,
->  	int ret;
->
->  	/* Simulate a device reading system memory. */
-> -	cmd.addr = (__u64)buffer->ptr;
-> -	cmd.ptr = (__u64)buffer->mirror;
-> +	cmd.addr = (__u64)(uintptr_t)buffer->ptr;
-> +	cmd.ptr = (__u64)(uintptr_t)buffer->mirror;
->  	cmd.npages = npages;
->
->  	for (;;) {
-> diff --git a/tools/testing/selftests/mm/hugetlb-mremap.c b/tools/testing/selftests/mm/hugetlb-mremap.c
-> index 9b724af66e938..531f270fabfb5 100644
-> --- a/tools/testing/selftests/mm/hugetlb-mremap.c
-> +++ b/tools/testing/selftests/mm/hugetlb-mremap.c
-> @@ -33,6 +33,11 @@
->  #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
->  #define FLAGS (MAP_HUGETLB | MAP_SHARED)
->
-> +static void *addr_hint(unsigned long long addr)
-> +{
-> +	return sizeof(long) == 8 ? (void *)(uintptr_t)addr : NULL;
-> +}
-> +
->  static void check_bytes(char *addr)
->  {
->  	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
-> @@ -130,21 +135,21 @@ int main(int argc, char *argv[])
->  		ksft_exit_fail_msg("Open failed: %s\n", strerror(errno));
->
->  	/* mmap to a PUD aligned address to hopefully trigger pmd sharing. */
-> -	unsigned long suggested_addr = 0x7eaa40000000;
-> -	void *haddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
-> +	void *haddr = mmap(addr_hint(0x7eaa40000000ULL), length, PROTECTION, FLAGS,
-> +			   fd, 0);
->  	ksft_print_msg("Map haddr: Returned address is %p\n", haddr);
->  	if (haddr == MAP_FAILED)
->  		ksft_exit_fail_msg("mmap1: %s\n", strerror(errno));
->
->  	/* mmap again to a dummy address to hopefully trigger pmd sharing. */
-> -	suggested_addr = 0x7daa40000000;
-> -	void *daddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
-> +	void *daddr = mmap(addr_hint(0x7daa40000000ULL), length, PROTECTION, FLAGS,
-> +			   fd, 0);
->  	ksft_print_msg("Map daddr: Returned address is %p\n", daddr);
->  	if (daddr == MAP_FAILED)
->  		ksft_exit_fail_msg("mmap3: %s\n", strerror(errno));
->
-> -	suggested_addr = 0x7faa40000000;
-> -	void *vaddr = mmap((void *)suggested_addr, length, PROTECTION, FLAGS, fd, 0);
-> +	void *vaddr = mmap(addr_hint(0x7faa40000000ULL), length, PROTECTION, FLAGS,
-> +			   fd, 0);
->  	ksft_print_msg("Map vaddr: Returned address is %p\n", vaddr);
->  	if (vaddr == MAP_FAILED)
->  		ksft_exit_fail_msg("mmap2: %s\n", strerror(errno));
-> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-> index d1d0989ed2cad..1c5208ce048ee 100644
-> --- a/tools/testing/selftests/mm/migration.c
-> +++ b/tools/testing/selftests/mm/migration.c
-> @@ -236,7 +236,7 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
->  		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->  	ASSERT_NE(ptr, MAP_FAILED);
->
-> -	ptr = (uint64_t *) ALIGN((uintptr_t) ptr, pmdsize);
-> +	ptr = (uint64_t *)(uintptr_t)ALIGN((uintptr_t) ptr, pmdsize);
->  	ASSERT_EQ(madvise(ptr, pmdsize, MADV_HUGEPAGE), 0);
->  	memset(ptr, 0xde, pmdsize);
->  	for (i = 0; i < self->nthreads; i++)
-> @@ -270,7 +270,7 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
->  		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
->  	ASSERT_NE(ptr, MAP_FAILED);
->
-> -	ptr = (uint64_t *) ALIGN((uintptr_t) ptr, pmdsize);
-> +	ptr = (uint64_t *)(uintptr_t)ALIGN((uintptr_t) ptr, pmdsize);
->  	ASSERT_EQ(madvise(ptr, pmdsize, MADV_HUGEPAGE), 0);
->
->  	memset(ptr, 0xde, pmdsize);
-> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-> index 31b484517bda6..7e7ca67f7e94c 100644
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -15,6 +15,7 @@
->  #include <syscall.h>
->  #include <time.h>
->  #include <stdbool.h>
-> +#include <stdint.h>
->
->  #include "kselftest.h"
->
-> @@ -190,7 +191,7 @@ static void *get_source_mapping(struct config c)
->  	if (addr < mmap_min_addr)
->  		goto retry;
->
-> -	src_addr = mmap((void *) addr, c.region_size, PROT_READ | PROT_WRITE,
-> +	src_addr = mmap((void *)(uintptr_t)addr, c.region_size, PROT_READ | PROT_WRITE,
->  					MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
->  					-1, 0);
->  	if (src_addr == MAP_FAILED) {
-> @@ -206,8 +207,8 @@ static void *get_source_mapping(struct config c)
->  	 * requested alignment of 2MB. This is done to reduce coincidental
->  	 * alignment in the tests.
->  	 */
-> -	if (((unsigned long long) src_addr & (c.src_alignment - 1)) ||
-> -			!((unsigned long long) src_addr & c.src_alignment)) {
-> +	if (((unsigned long long)(uintptr_t)src_addr & (c.src_alignment - 1)) ||
-> +			!((unsigned long long)(uintptr_t)src_addr & c.src_alignment)) {
->  		munmap(src_addr, c.region_size);
->  		goto retry;
->  	}
-> @@ -996,15 +997,15 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
->  	align_mask = ~(c.dest_alignment - 1);
->  	/* Offset of destination address from the end of the source region */
->  	offset = (c.overlapping) ? -c.dest_alignment : c.dest_alignment;
-> -	addr = (void *) (((unsigned long long) src_addr + c.region_size
-> +	addr = (void *)(uintptr_t)(((unsigned long long)(uintptr_t)src_addr + c.region_size
->  			  + offset) & align_mask);
->
->  	/* Remap after the destination block preamble. */
->  	addr += c.dest_preamble_size;
->
->  	/* See comment in get_source_mapping() */
-> -	if (!((unsigned long long) addr & c.dest_alignment))
-> -		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
-> +	if (!((unsigned long long)(uintptr_t)addr & c.dest_alignment))
-> +		addr = (void *)(uintptr_t)((unsigned long long)(uintptr_t)addr | c.dest_alignment);
->
->  	/* Don't destroy existing mappings unless expected to overlap. */
->  	while (!is_remap_region_valid(addr - c.dest_preamble_size,
-> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-> index a76851aced4d0..4188991fab245 100644
-> --- a/tools/testing/selftests/mm/uffd-common.c
-> +++ b/tools/testing/selftests/mm/uffd-common.c
-> @@ -488,7 +488,7 @@ void uffd_handle_page_fault(uffd_global_test_opts_t *gopts, struct uffd_msg *msg
->  		 */
->
->  		area = (uint8_t *)(gopts->area_dst +
-> -		       ((char *)msg->arg.pagefault.address -
-> +		       ((char *)(uintptr_t)msg->arg.pagefault.address -
->  		       gopts->area_dst_alias));
->  		for (b = 0; b < gopts->page_size; ++b)
->  			area[b] = ~area[b];
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index 2a97ba1d6feb1..2e4d1742f340b 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -341,17 +341,17 @@ static void uffd_wp_unpopulated_test(uffd_global_test_opts_t *gopts, uffd_test_a
->  	pagemap_fd = pagemap_open();
->
->  	/* Test applying pte marker to anon unpopulated */
-> -	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, true);
-> +	wp_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, gopts->page_size, true);
->  	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
->  	pagemap_check_wp(value, true);
->
->  	/* Test unprotect on anon pte marker */
-> -	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, false);
-> +	wp_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, gopts->page_size, false);
->  	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
->  	pagemap_check_wp(value, false);
->
->  	/* Test zap on anon marker */
-> -	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, true);
-> +	wp_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, gopts->page_size, true);
->  	if (madvise(gopts->area_dst, gopts->page_size, MADV_DONTNEED))
->  		err("madvise(MADV_DONTNEED) failed");
->  	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
-> @@ -366,7 +366,7 @@ static void uffd_wp_unpopulated_test(uffd_global_test_opts_t *gopts, uffd_test_a
->  		err("madvise(MADV_DONTNEED) failed");
->
->  	/* Test read-zero-page upon pte marker */
-> -	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, true);
-> +	wp_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, gopts->page_size, true);
->  	*(volatile char *)gopts->area_dst;
->  	/* Drop it to make pte none again */
->  	if (madvise(gopts->area_dst, gopts->page_size, MADV_DONTNEED))
-> @@ -389,7 +389,7 @@ static void uffd_wp_fork_test_common(uffd_global_test_opts_t *gopts, uffd_test_a
->
->  	/* Touch the page */
->  	*gopts->area_dst = 1;
-> -	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, true);
-> +	wp_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, gopts->page_size, true);
->  	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
->  	pagemap_check_wp(value, true);
->  	if (pagemap_test_fork(gopts, with_event, false)) {
-> @@ -430,7 +430,7 @@ static void uffd_wp_fork_test_common(uffd_global_test_opts_t *gopts, uffd_test_a
->  	}
->
->  	/* Unprotect; this tests swap pte modifications */
-> -	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, false);
-> +	wp_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, gopts->page_size, false);
->  	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
->  	pagemap_check_wp(value, false);
->
-> @@ -469,7 +469,7 @@ static void uffd_wp_fork_pin_test_common(uffd_global_test_opts_t *gopts,
->
->  	/* Touch the page */
->  	*gopts->area_dst = 1;
-> -	wp_range(gopts->uffd, (uint64_t)gopts->area_dst, gopts->page_size, true);
-> +	wp_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, gopts->page_size, true);
->
->  	/*
->  	 * 1. First pin, then fork().  This tests fork() special path when
-> @@ -675,7 +675,7 @@ static void uffd_rwp_async_test(uffd_global_test_opts_t *gopts,
->  		err("register failure");
->
->  	/* RW-protect all pages (sets protnone) */
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			 nr_pages * page_size, true);
->
->  	/* Access all pages — should auto-resolve, no faults */
-> @@ -739,7 +739,7 @@ static void uffd_rwp_sync_test(uffd_global_test_opts_t *gopts,
->  		err("register failure");
->
->  	/* RW-protect all pages */
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			 nr_pages * page_size, true);
->
->  	/* Start fault handler thread */
-> @@ -816,7 +816,7 @@ static void uffd_rwp_pagemap_test(uffd_global_test_opts_t *gopts,
->  			  nr_pages * page_size))
->  		err("register failure");
->
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			 nr_pages * page_size, true);
->
->  	/* Touch first half of pages to re-activate them (async auto-resolve) */
-> @@ -825,7 +825,7 @@ static void uffd_rwp_pagemap_test(uffd_global_test_opts_t *gopts,
->  		(void)*page;
->  	}
->
-> -	uint64_t start = (uint64_t)gopts->area_dst;
-> +	uint64_t start = (uint64_t)(uintptr_t)gopts->area_dst;
->  	uint64_t boundary = start + (nr_pages / 2) * page_size;
->  	uint64_t end = start + nr_pages * page_size;
->
-> @@ -844,7 +844,7 @@ static void uffd_rwp_pagemap_test(uffd_global_test_opts_t *gopts,
->  	pm_arg.size = sizeof(pm_arg);
->  	pm_arg.start = start;
->  	pm_arg.end = end;
-> -	pm_arg.vec = (uint64_t)regions;
-> +	pm_arg.vec = (uint64_t)(uintptr_t)regions;
->  	pm_arg.vec_len = ARRAY_SIZE(regions);
->  	pm_arg.category_mask = PAGE_IS_ACCESSED;
->  	pm_arg.return_mask = PAGE_IS_ACCESSED;
-> @@ -897,7 +897,7 @@ static void uffd_rwp_mprotect_test(uffd_global_test_opts_t *gopts,
->  	if (uffd_register_rwp(gopts->uffd, gopts->area_dst,
->  			      nr_pages * page_size))
->  		err("register failure");
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			nr_pages * page_size, true);
->
->  	/* Round-trip mprotect(): PROT_NONE -> PROT_READ|PROT_WRITE */
-> @@ -937,9 +937,9 @@ static void uffd_rwp_mprotect_test(uffd_global_test_opts_t *gopts,
->
->  	memset(&pm_arg, 0, sizeof(pm_arg));
->  	pm_arg.size = sizeof(pm_arg);
-> -	pm_arg.start = (uint64_t)gopts->area_dst;
-> -	pm_arg.end = (uint64_t)gopts->area_dst + nr_pages * page_size;
-> -	pm_arg.vec = (uint64_t)regions;
-> +	pm_arg.start = (uint64_t)(uintptr_t)gopts->area_dst;
-> +	pm_arg.end = (uint64_t)(uintptr_t)gopts->area_dst + nr_pages * page_size;
-> +	pm_arg.vec = (uint64_t)(uintptr_t)regions;
->  	pm_arg.vec_len = ARRAY_SIZE(regions);
->  	pm_arg.category_mask = PAGE_IS_ACCESSED;
->  	pm_arg.category_inverted = PAGE_IS_ACCESSED;
-> @@ -982,7 +982,7 @@ static void uffd_rwp_gup_test(uffd_global_test_opts_t *gopts,
->  	if (uffd_register_rwp(gopts->uffd, gopts->area_dst, gopts->page_size))
->  		err("register failure");
->
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			gopts->page_size, true);
->
->  	if (pipe(pipefd))
-> @@ -1045,7 +1045,7 @@ static void uffd_rwp_async_toggle_test(uffd_global_test_opts_t *gopts,
->  		err("register failure");
->
->  	/* Phase 1: async detection — RW-protect, access first half */
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			 nr_pages * page_size, true);
->
->  	for (p = 0; p < nr_pages / 2; p++) {
-> @@ -1092,7 +1092,7 @@ static void uffd_rwp_async_toggle_test(uffd_global_test_opts_t *gopts,
->  	set_async_mode(gopts->uffd, true);
->
->  	/* RW-protect and access again — should auto-resolve */
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			 nr_pages * page_size, true);
->
->  	for (p = 0; p < nr_pages; p++) {
-> @@ -1127,7 +1127,7 @@ static void uffd_rwp_close_test(uffd_global_test_opts_t *gopts,
->  			  nr_pages * page_size))
->  		err("register failure");
->
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			 nr_pages * page_size, true);
->
->  	/* Close uffd — should restore protnone PTEs */
-> @@ -1169,7 +1169,7 @@ static void uffd_rwp_fork_test(uffd_global_test_opts_t *gopts,
->
->  	/* Populate + RWP-protect */
->  	*gopts->area_dst = 1;
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst,
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst,
->  			page_size, true);
->
->  	/* Parent: verify uffd-wp bit is set before fork */
-> @@ -1223,7 +1223,7 @@ static void uffd_rwp_fork_pin_test(uffd_global_test_opts_t *gopts,
->  	}
->
->  	/* RWP-protect: PTE is now PAGE_NONE + uffd bit. */
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst, page_size, true);
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, page_size, true);
->
->  	pagemap_fd = pagemap_open();
->  	value = pagemap_get_entry(pagemap_fd, gopts->area_dst);
-> @@ -1332,7 +1332,7 @@ static void uffd_rwp_swap_cow_test(uffd_global_test_opts_t *gopts,
->  	*gopts->area_dst = 0x11;
->
->  	/* RWP-protect: PTE becomes PAGE_NONE + uffd bit (still exclusive). */
-> -	rwprotect_range(gopts->uffd, (uint64_t)gopts->area_dst, page_size, true);
-> +	rwprotect_range(gopts->uffd, (uint64_t)(uintptr_t)gopts->area_dst, page_size, true);
->
->  	/*
->  	 * Swap the page out while it is still exclusive: a shared (forked)
-> @@ -1498,7 +1498,7 @@ static int faulting_process(uffd_global_test_opts_t *gopts, int signal_test, boo
->  						/* This is a WP request */
->  						assert(steps == 2);
->  						wp_range(gopts->uffd,
-> -							 (__u64)gopts->area_dst +
-> +							 (__u64)(uintptr_t)gopts->area_dst +
->  							 offset,
->  							 gopts->page_size, false);
->  					}
-> --
-> 2.53.0
->
+> KernelCI's 32-bit arm kselftest builds fail on this. Built
+> configfs_test.c with gcc 16 -m32, with and without _TIME_BITS=64 (fails
+> before, builds after), clang 21 -m32, and both compilers for x86_64.
+> 
+> The harness cast warns for every pointer comparison on 32-bit, a few
+> thousand warnings in one KernelCI arm build, and configfs only breaks
+> because of its -Werror. Making the harness print pointers through
+> uintptr_t would be a separate change.
 
---
-Cheers, Lorenzo
+Christophe posted a harness fix for this in January, but it was never
+merged?
+
+    https://lore.kernel.org/all/948937bfe461cf0fb6ade2623e51f673f845fa51.1768298756.git.chleroy@kernel.org/
+
+It still applies to linux-next, and with it configfs_test.c compiles on
+32-bit without this patch.
+
+Either way, I will merge your patch tomorrow if no other review pops up.
+
+Thanks,
+--breno
