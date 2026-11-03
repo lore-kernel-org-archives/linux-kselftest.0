@@ -1,49 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793669871;
-	b=FgphZWy9+6+8m7p6iXxgZtaRKwNyeJtTOBsAH9qVk2BnuXwwhOwSvRO22jKy+5vm55tZ
-	 FOOJ1Ek4wTufnnVYctHB2iNwcBxbZis3dkL9J7V6wR0Tddiu7a5X30Q1KV1zvF8GkRK6T
-	 PsTki/imaM2s0BTRS4p2UZEwCWqxXJv5DKxo32abzy0x1EyWjE6maR6tUz35GCY1rlu8i
-	 X1iHKfeYK008vgOTEpUTSujssw2forkJB0C/b93OHUhwIVV6udsZVZNYUgOCtOkUVfMlW
-	 eyoX0d/VhJx/fHYTDhnMplhl3vCcM6GM0dxzNAz0PbSMXmSARd1C8mwtIp4vANtxUTg==
+	t=1793670556;
+	b=RjUAEplHDdY96bbOYWVj2UfpGhsJC4ZFGuPTG7MaPzTikmTZTgnBBlSv5dmRiqGoUh+x
+	 Qb2gw8HnwDu9vVCQzQj/OdApHH8hJRB+2avlHP2h4HU5+Pso1rng0IDagG/g7bS4y3MMn
+	 F1S6QhKp1FsJM1QcvhH3K6GYCdU3TLYeUIxvcPyRZt4HZbWIotiL0WxBHUDgClc0NJLIO
+	 m+0XmgyMOa1UzmrN5AguQdIrReMQsoaqSjB4v+ww2VSeAo41f4ThqmfDvNtRnRFiXr0p3
+	 3koj3yjjCV1RsNzPZaO2GgvpRkDP/hjnxnUvwdFLzi5g3u01ZZhwh9VLDCOMcpjD8RA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793669871;
-	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=NkKLoQiT3QLn1o0kL1YKYPKps4dql8DQmXqMzeu4JqA=;
-	b=qjnFNXqFvRnBgHVD6z2yWAb6hxHtzOq18T8Gib8X1KUVAfsQPB+ciX5wUHRfyOaez8c8
-	 ePNS8tqiXOKUmEVcJZrMYpNcVoZYiHRVgQyijaySzNYuxUgcCFv2YNvLNNDgtfbK0TmUQ
-	 qnmU2DdaUUbo99evSoSU0smgklenU/G3m2Ck2o1c6A0ksLuZbJta5ymKBA1Hysi4tbYR4
-	 2RIJ2WOp5dcCLjiGs6kGABeHRXMjyAOupEeji7VfDd2ZSiBn9HwGaEVLkacjRQIDBDq3o
-	 O28TjZhJjNB7lBPnh+Mtpuxl4Tt69R0SHjVbXD/z3/Mx5qWk/79WtKZ6I4lk2WEitcQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793670556;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=JkIPtkRIMfFcSEfUGwxsTLNIjz/Hdrm5pN4sxYxlXGQ=;
+	b=Eg7K+miKyHnYlXzvDl/3Deaw9miR5VHK4q8vTteGPF/KrjRxUOxwhqqn2d6F8IJAR0wp
+	 dFhGhdZEduaVWUj0uwWTL1TykJaF4PCzyoiqY5Lxf7RIqlrsyLMkSJBHobhrmV8xAowfb
+	 2F48kJva92Hky1H1xF4+LvJtrIr3y3yQy7zKTg2chj77w30PLtj1oIYWbgZPDoGdm+B+r
+	 VIRaFXMrZ0wXIVPBfPkXH8A8hBEzl3Et40BPMFBook/jucGfBls1eOCCXvfsH0OWsGYFG
+	 /rSYKJJlfp91ZetZ3c6EKUGCQFVbXkMBjllXJjKFrYzxSTmyV4eScWf3UxaR0utQ+qg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.alibaba.com;
-	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=khEmIFfW;
-	arc=none smtp.remote-ip=115.124.30.133
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=A7BJO4Lo;
+	arc=none smtp.remote-ip=209.85.215.174
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2D1606A324;
-	Tue,  3 Nov 2026 01:37:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A2D1606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35CD606A326
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 01:49:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A35CD606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=khEmIFfW
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1793669867; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=NkKLoQiT3QLn1o0kL1YKYPKps4dql8DQmXqMzeu4JqA=;
-	b=khEmIFfW61Vx04EDurerN1Hds3zuwk5P+dNfJ624RCcQ4Xguvzh6gNR71Xwx/uHHR1itaVJ9rkjCqk+q9eunETbbIn51Se7G8/mDIISDgu8AAqDdA03Cro1L90LW1ljzwThY5GyaAO9TlRymR2RyNZljqEw+7fNZ4LHpfQ8Hok0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0XE0PTwb_1793669863;
-Received: from 30.247.169.117(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XE0PTwb_1793669863 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 03 Nov 2026 09:37:45 +0800
-Message-ID: <70e15aaa-44c9-478a-8e61-1dfc19dc50a0@linux.alibaba.com>
-Date: Tue, 3 Nov 2026 09:37:43 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=A7BJO4Lo
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cdab6ae1ee9so1474609a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2026 17:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793670555; x=1794275355; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JkIPtkRIMfFcSEfUGwxsTLNIjz/Hdrm5pN4sxYxlXGQ=;
+        b=A7BJO4LoPpfxT6+H+ASpf8yGG9XZnj4GXxUtBiNX2dAZVoPB5KgLe7CBPmVM3Vgnp8
+         dvKfDhjUDTRsKY170r6Chzx/5Ety2nC39hhwCg2njDrwCboUt+RtjVVKcpVWxcDZfkzQ
+         KEWPtqMk+RC4F5tIsgO7faez614XCFe1pCoScDUC0+RXyytYiJBO0RQh53jUe+M3/9EB
+         9dneUAlA4I40aRZ21WI3NNHBmQ5vORTDct/3PTlsqSy0vAJ24f9JSIGAqONzH7euyTuS
+         o+YC3cMmYpmuCqLxyuVAwvJwEjF29hy7TWjUaZZ+aYjoh6TRwHRM6UFgg6a2hnuaA53N
+         IMag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793670555; x=1794275355;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JkIPtkRIMfFcSEfUGwxsTLNIjz/Hdrm5pN4sxYxlXGQ=;
+        b=KmoHE2BN6cgm3NCgZlRTu8Z9YcKhux6BAYadkoMp1mNvzrbvu03iRjBg9ROIz3Fv+6
+         NJkGmne1o6Dlsu9BUQoAVhlFZK72Km8/4LrhzCXYnnvLQg/dulsD/XeF/h13kragyWkY
+         jZDHSjqaAHAanVjQDlT6tjhuFTd6HKGHRtE44P1ZLLUA0zMiq3qXnmcfdG7yxp/548Wk
+         e6QGee8d7/lUJr5s91lE7r/zmyTWga1prOm2JE9JxSCNW7F3digyMEpqPS06liQw+A0y
+         5DIc3bVv3NC0aoAnPBUzTtFMaeuQY/N+wMqenwnkeqYKvYGtYLqR1exNtJqbnGakGbYL
+         6yoQ==
+X-Forwarded-Encrypted: i=1; AKwUvBybU3deXzh1PUS9bCDt0P1Cr7gtvy6bV2e/rDwwdpKDpB8wX0NXk/55rrGNw8nP//0EhBM+iHY0zsV8tmgC0iQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8yFaEsKqO8CgxsTOs+1FuLcK8uS+Bv8saJwcjKUesxMEwp1S3T
+	1RgETAuwhJtnGKKAsrf0fa5NXC6GNvWoRMKsisnvn40SgAP/LC+e4MON
+X-Gm-Gg: AYBFou30QWTPedWGJKbF4Rj20Pwe1ZGeyXG5Ffh4iUNCv7GOTXr5gYxgOUo5iu4rYM6
+	xvwfW/Tt+RXxldxdz3S41+EJUUXAbwe3ds/hMriwrUqZOxoubbjm7UVdqyF7I/QYk+wZViIq+z7
+	qZJYnVepzBR65m8kNBNX0K+W1YNeUoAmFHO6MZz9tTFcY10u/BRg/3DBVJZ91OjKhqLDcqM237G
+	oakbqzuFwUwGKheMBmveu5nlCJKL5n7j0LMa1nT+m9fVyOEMdWIyQtEAnIb3KQzdGus4PnPAXiu
+	jT6STjscNVy/8Io/7Xd8FCKcL4nj3OTK2xM24jtoXcukofLi5JLIa35lEnmOOkJE5ZtaYMjv/oG
+	PiPz/krhq2T1NSsMQeMqPYV3Mkq416qxG4NV8hOkEaWGRY/r4yHcCFhUgoqTvdCLWVHabFSYbLv
+	BlLjWn4cmeWF8FHfyN7QtCm0K48tVx7JeyEtB5xD0vYNmrKoHo5OdZgyWOx18QnL+/nQir4ogSE
+	YEDEHlcX/IWA3je+ALBzhhle/E/nidSSbe55Cf1U1hxR0yqGcmjDVlu8Maqw/pVSEyMROZIRpvl
+	MdsozABppCCk7rzsODDXJ9kiaBms7CMMnP0PT74zkP73Z0doHwPbpsx8e4Af9oQkTFtm/6QyopF
+	VSKkdTEaJmKsjEV4ILbNOkMshF5JSPHzfdw==
+X-Received: by 2002:a17:90b:2745:b0:3a4:b0a1:c7ed with SMTP id 98e67ed59e1d1-3ae89776d99mr9290272a91.13.1793670555014;
+        Mon, 02 Nov 2026 17:49:15 -0800 (PST)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85e4ff4csm10375603a91.1.2026.11.02.17.49.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 17:49:14 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 03 Nov 2026 01:49:12 +0000
+Message-Id: <DML75890DWIX.EYB690LPBM1O@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let
+ preemption cause false recursion drops in trampoline progs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Mike Bazov" <mikeba@sentinelone.com>
+In-Reply-To: <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com> <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,82 +107,20 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] riscv: stacktrace: do not report the walker's own
- frame from arch_stack_walk()
-To: Karl Mehltretter <kmehltretter@gmail.com>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Changbin Du <changbin.du@intel.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
- Rae Moar <raemoar63@gmail.com>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20261010132712.46931-1-kmehltretter@gmail.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20261010132712.46931-1-kmehltretter@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+On Mon, Nov 02, 2026 at 03:24 PM Mike Bazov <mikeba@sentinelone.com> wrote:
+> To fix fentry/fexit while keeping preemption enabled, we'll need to:
+>    1. Disable private stack for fentry/fexit (so each task uses its own
+>       kernel stack), and
 
+Yes.
+Then the stack limit covers the whole call chain instead of one frame.
+It's 2 Kbytes on x86-64 and arm64 now.
 
-On 10/10/26 9:27 PM, Karl Mehltretter wrote:
-> stack_trace_save() uses skipnr + 1 because arch_stack_walk() is expected
-> to first report the return into stack_trace_save(). With FRAME_POINTER,
-> the RISC-V arch_stack_walk() calls walk_stackframe(), which starts from
-> its own frame and first reports the return into arch_stack_walk().
-> stack_trace_save() therefore starts one frame too early. For example,
-> page_owner records begin at __set_page_owner() instead of the allocation
-> site.
-> 
-> Move the walker into an always-inlined helper and call it directly from
-> arch_stack_walk(). Keep walk_stackframe() as a wrapper for its existing
-> callers.
-> 
-> return_address() skips level + 3 entries, while the arm64 implementation
-> skips level + 2. After removing the extra frame, use level + 2 so
-> ftrace_return_address() and CALLER_ADDR results do not shift by one caller.
-> 
-> Fixes: 6a00ef449370 ("riscv: eliminate unreliable __builtin_frame_address(1)")
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-> ---
-> Tested with the KUnit suite from patch 2 on QEMU's virt machine, clang 22
-> (LLVM=1), on af32da41b032:
-> 
->    mainline                        stack_trace_save 0/3, return_address 2/2
->    stacktrace.c change alone       stack_trace_save 3/3, return_address 0/2
->    this patch                      stack_trace_save 3/3, return_address 2/2
-> 
-> A BeagleV Ahead (TH1520) booted with this patch passes all five cases.
-> The stack_trace_save() result on mainline (0/3) was also reproduced with
-> GCC 15.2 and QEMU 10.2.1.
-> 
-> Without CONFIG_FRAME_POINTER the walker scans the stack for anything that
-> looks like a text address and its start frame is not exact before or
-> after this patch. What return_address() returns there is unchanged: the
-> walk loses one leading entry and the skip count goes down by one.
-> 
-> The reliable unwinder series [1] rewrites this walker and has the correct
-> start frame for stack_trace_save() as a side effect, but leaves
-> return_address() at level + 3. This patch conflicts with 5/7 of that
-> series; if that goes in first, only the return_address.c hunk is needed.
-> 
-> [1] https://lore.kernel.org/r/20260914092648.51254-1-xueshuai@linux.alibaba.com
-Hi Karl,
+>    2. Check recursion in __bpf_prog_enter_recur() per-task rather than via
+>       the per-CPU prog->active counter (still blocking same-task recursion
+>       and IRQ/NMI re-entry on the same CPU, while allowing a preempting
+>       Task B to run).
 
-Now that 7.4-rc1 is out and neither your two patches nor the reliable
-unwinder series made this merge window, I'm preparing v7 of the series
-for the next one.
-
-Are you OK with folding your patches into the livepatch series rather
-than keeping two conflicting walkers in flight?
-
-Thanks.
-Shuai
-
-
-
+No. I don't think we can switch to per-task that easily.
+For your use case try fsession. It was added specifically to match entry/exit.
