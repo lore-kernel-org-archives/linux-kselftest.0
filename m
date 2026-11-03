@@ -1,74 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793664749;
-	b=oEEP6sYuhIFy3pa0xaQeRvk9CAxSN+/UBrPVxyuCWb06Zw5rdAkgWNH8mDmQ5VAC0lkw
-	 127mj0bsYUKKqs07PQGFLLQ4f0ky3PcdrMrzi1zazWxe/uMK95zJUNH5mTc8ThMbHrZzC
-	 1jOGTtHWcQOmIN/+t7AkeqXM8wNP/CbG3YCPc/BPx4y0RCs5LvfEMsf2bInaWy4qYuO3U
-	 2oerI+GLhImqm2+IbwhKUJw/KPeFN1gzWoIWD9KJQNAwp1KCLlBFhvz5pCX/C/ryzrQZa
-	 KsxQupmdPbMA1jaY8T2je8u5y3tcw9oBj05G2ISmdacZukQ/RNFuaIw4D+f5MgRw3YA==
+	t=1793664969;
+	b=4TjxV+DVhobf4I6u0+NaYUz5KB79GdWHlz6tFGZQ893ctYf5Oin8/mYmdE0enZFgMnsl
+	 YNbrq+EpS5GOIX09JMEJ8uwtjGLK5ZNyfAYc8HFHRKc/gkKyx16xh1OMEmV9niPgsJeXq
+	 Axj5bhPAsB20a+rhpi95Qo+DFN/1Sb7TlJ4JDBxJ59tQtX/+XZHDKTsIb3CS2j06NDv6n
+	 cVLh4bTfOwaArjUpxdbrfW6A+HqOrRLSfA3gQVeQ1CvC3wfT0ALHSZhXaTODctckz5xJN
+	 DBxSF17rllIwZLJYJluZYcxiVu7zg1Hm/j2scwN8sQpXNmCH6/1CpvrHjTwEheSGfiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793664749;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=Ajr8MtZr/s7zY2op24HaaZTlKrJAnkeMPao/wkbA4kE=;
-	b=0RBtamRDT0GKk8/uVOpuSSQzRl1i8GrsZ06AbCOwfLod7br6t4YTplG1dEsBAWuA1XA+
-	 BisgGszoQo0vOMoFwUeXWevGEcb7jrYwFb1kjApyl0dLcDa2QbFZ5bCnAt5EP5XRDK/w6
-	 PQ7ONXrQKjTq1gZrzXJwtMS9fFIBdW3DcUfn3Ko73ELcdm2DhWmujguQabSdnHxs8BE97
-	 1X2v4mcCMUVMC9K1Ac5QpoLR/LkgQyRIXNaicgjqrPo0s/Mk9k7slVWPGzKObflCy9/wD
-	 sxz5YSuYGHHp8/Xz1LerbJdM5MvUwm00gzhu2pPzagxgimzdjF/0FVlmDKpz/lZx4PQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793664969;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=/uPT4vdHUQZrtGUWIDhvkzHSaxat7xD3UNSEdtv7bHA=;
+	b=RLmVGYZ+tB4VAQuaAs+991Jzs2LhF1PyjoAkWlbxgahRUOJeHHItANIe6+axlV6m4nzi
+	 umXyZcMgl31R9yY29/hHMBsjo6lmrLLcOyvKEWq9vCX3K///LlkZxX2jLqrnkKDVfluM+
+	 dCuoMDwEDcW76Tb8J/Iwb/cU2B/e2ecgyFT1GWtweKsGxnHnUITOsHiHardxkbf+vl0F6
+	 2mK5dWTvcr6fik9DX3ZAxgkKOtlPQqfQDD72CYdML3/SuTNmIJIM8TJVOhdYNHZJXxmM3
+	 Ak7Q63YtFku6hDaO0vi36GzoR7fY+AKa4oF0CDHhkcABt8uws1gRzV+HrjwhdAyQwtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Sc8DE8Di;
-	arc=none smtp.remote-ip=67.231.145.42
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HNf0zk5b;
+	arc=none smtp.remote-ip=91.218.175.179
+Received: from mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0512606A327;
-	Tue,  3 Nov 2026 00:12:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0512606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B250606A327
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 00:16:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B250606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=Sc8DE8Di
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A2K6JS72959384;
-	Mon, 2 Nov 2026 16:12:26 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=Ajr8MtZr/s7zY2op24HaaZTlKrJAnkeMPao/w
-	kbA4kE=; b=Sc8DE8DiHt+tUHcu2nLJ8rAIF+6nXTC3c8cZwPVUew26O7P9PMAGf
-	WLOL3kQFkdnap6wzRB7SSN7K32UfmsVO+2lV8A4fJGMb9LUMSyzYBP+4ycYzZAt5
-	5rxE6nsAPMiC7aXyvOBTISAbWvUuwggsHZHiWFiz/cO4QdgRGmgiV2YHUaxN75qz
-	QCKpX6rXZSwq3B9QsoenMgiUYW2G8obzSw+G04D4/EzmTTabTZzBseta8XX8+w3L
-	Z0qwC8n0b/kG6977vfUSRr+KG4KSlUjMiPxRoP/5RlO2halySUNfZVyct0joY4Ai
-	AxcO7QAXa4b9JxpJ+Cp5Jg+u2lBNPoIpg==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hnbn1ydkj-18
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 02 Nov 2026 16:12:26 -0800 (PST)
-Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
- (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Tue, 3 Nov
- 2026 00:12:13 +0000
-From: Todd Freed <toddfreed@meta.com>
-To: <netdev@vger.kernel.org>, <toddfreed@meta.com>
-CC: <linux-kselftest@vger.kernel.org>, Sashiko <sashiko-bot@kernel.org>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=
-	<bjorn@kernel.org>
-Subject: [PATCH net v4 4/7] ipv6: icmpv6: don't quote decrypted payload in icmpv6 errors
-Date: Mon, 2 Nov 2026 16:11:40 -0800
-Message-ID: <20261103001143.246081-5-toddfreed@meta.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261103001143.246081-1-toddfreed@meta.com>
-References: <20261103001143.246081-1-toddfreed@meta.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HNf0zk5b
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=0XIP2nwc6eaTMkjHzyVrBh3ylA4dDdfFpXWL7zb1+wc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793664965; v=1; x=1794269765;
+ b=HNf0zk5b7JsjzBN040M2Q4qRLual1HyMagKRSCTOiXIVNdyUcptondMSoT65ys2Jq6H2mLgY
+ OvU8PZyXkLzYRrKNMtmw5TN4pLHpIseYXiMIhO2IPrgsgi5v4v48dSQ9KS3nvM+RzpKzfmzjcfW
+ 7npEsvXbD7EKdYEn0wclsWrA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ca924cd7e3058c18;
+	Tue, 03 Nov 2026 00:16:04 +0000
+X-Mizu-Trace-ID: ca924cd7e3058c18
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7c603b2b-6fcc-41d7-84e3-31e8af005776@linux.dev>
+Date: Mon, 2 Nov 2026 16:15:55 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,171 +58,165 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: nEfRLXr77fFYE9vJUCblQr3SmWl6yYZR
-X-Proofpoint-ORIG-GUID: nEfRLXr77fFYE9vJUCblQr3SmWl6yYZR
-X-Authority-Analysis: v=2.4 cv=TplzFzXh c=1 sm=1 tr=0 ts=6ae926ea cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=8elwO82fXORLTBIkMd32:22 a=9R54UkLUAAAA:8
- a=VabnemYjAAAA:8 a=VwQbUJbxAAAA:8 a=-z2kMTAr2hpZfj2momEA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=YTcpBFlVQWkNscrzJ_Dz:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAzMDAwMCBTYWx0ZWRfX1c0DK2O+1NM6
- uBF0aeTrgocxNJbSPCGdYkBAbK/J2ZDZx4/E/FzKpQfzq4xItwvSFiAb9Sp9t1phKwbuBXyEptK
- 0/a1dmeKwzDra2EnZPigB/oQCrJYsMU=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAzMDAwMCBTYWx0ZWRfXyDlBjJFoFF4A
- iosjfQLq1ci9vaQwMcRF6zilQxZc+J0HhOgx9DbrrLhXcSVUqjxA9zLX7X3d7utfxf9uFMRpvLj
- 5xVwWs7TsTuhrHAsOSlHMkF+ffI6VAY0Ht3JHIs8t0O2ggDQXfkYnYu1EpVGVhq8aFre+JP6iUP
- xFoc4H625jcZeN0+fbpFkP+t4XphgY/BHXOqrVIvjk79auAmM9BCUtXOHtIefDRIhf+zWisTwq3
- 4m9JM51oufHzlKZ9i4A2wqZb7do5E9vZs7oZj2jFTYQlxng/nHREZ7f9u5qHogm7HTBczQ5T5dj
- Zm9cR/8vh1hfOjPKVbDuhfjx8wPhJoNVximuB6NmABGVEYYVIXtMPK2v82ChzFyWnIkWh9yQQ6A
- VHX4+YKrmHd1SHyAxFp0nLZP3V+CqdkEwiJiMrYheRLUAB1N+cwNeAq3Uaft5TdYwj2q6bF8cTJ
- 0G1cfQPIdnGCBPIXw9Q==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-02_06,2026-11-02_03,2025-10-01_01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 4/8] selftests/bpf: make arena_base() opaque
+ to GCC's -Warray-bounds
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, john.fastabend@gmail.com, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ jose.marchesi@oracle.com, david.faust@oss.qualcomm.com
+References: <20261102220717.4079739-1-vineet.gupta@linux.dev>
+ <20261102220717.4079739-5-vineet.gupta@linux.dev>
+ <DML32WAB5JZD.1LR3JA1OYY6A5@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <DML32WAB5JZD.1LR3JA1OYY6A5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-an icmpv6 error quotes as much of the invoking packet as fits in the
-minimum ipv6 mtu. if the device had decrypted the packet
-(as indicated by skb->decrypted), then the icmpv6 error is sending part
-of it back out onto the network in cleartext.
+On 11/2/26 2:38 PM, Alexei Starovoitov wrote:
+> On Mon, Nov 02, 2026 at 02:07 PM Vineet Gupta <vineet.gupta@linux.dev> wrote:
+>> The barrier is behind #ifdef __clang__ so clang keeps the plain macro.
+>> It does not need it, and the barrier is not free: it blocks reuse of
+>> the map address, so each call site reloads it.  Across the five progs
+>> and 20 call sites that is +35 instructions under GCC
+>> (2528 -> 2563), about 1.4% on those objects and nothing elsewhere.
+>> Clang output is unchanged, bit for bit.
+> stream.c already has barrier_var() for both compilers.
+>
+> How about this one instead:
 
-the two offloads encrypt different parts of the packet:
+Yeah definitely much better. Just to be clear the intent of series is to 
+not make current compiler look better o anything. As I mentioned in the 
+cover, this was during in my in-works arena compiler testing, ....
 
-- ktls rx device offload decrypts the tls records in the tcp payload.
-  the ipv6 header, the extension headers and the tcp header were in the
-  clear on the wire, so quote those, tcp options included, and leave out
-  the rfc 4884 extension, which would carry the payload too. also clear
-  the rfc 4884 length, which a caller relaying an error with extensions
-  (e.g. a tunnel) may have set.
+Thx for the quick feedback.
+-Vineet
 
-- psp encryption also covers the L4 header. the quote could include just
-  the ipv6 header and extension headers, but that's not really useful.
-  linux receivers want to look at the l4 layer on the quoted packet, so
-  such a truncated icmpv6 error packet is just dropped (icmpv6_notify()).
-  don't send the error at all for psp.
 
-a decrypted psp skb has SKB_EXT_PSP, which is used to distinguish the
-two cases. note though that if an inner tunnel is decapsulated,
-skb_scrub_packet() drops the extension but keeps skb->decrypted, so an
-error about the inner packet takes the ktls path in this case (quote
-includes the l4 header), which is less than before.
-
-on tx, skb->decrypted is also set. an error about a locally originated
-skb (skb_iif is 0) is sent in full as before, if it would go to a local
-address, as determined by the packet's source address.
-
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261023234640.1459291-1-toddfreed%40meta.com
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Suggested-by: Björn Töpel <bjorn@kernel.org>
-Fixes: 784abe24c903 ("net: Add decrypted field to skb")
-Signed-off-by: Todd Freed <toddfreed@meta.com>
----
- net/ipv6/icmp.c | 61 +++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 57 insertions(+), 4 deletions(-)
-
-diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
-index a95b0351824f..4a064e3089cd 100644
---- a/net/ipv6/icmp.c
-+++ b/net/ipv6/icmp.c
-@@ -55,6 +55,7 @@
- #include <net/ip6_checksum.h>
- #include <net/ping.h>
- #include <net/protocol.h>
-+#include <net/psp/functions.h>
- #include <net/raw.h>
- #include <net/rawv6.h>
- #include <net/seg6.h>
-@@ -644,7 +645,8 @@ void icmp6_send(struct sk_buff *skb, u8 type, u8 code, __u32 info,
- 	struct ipv6_pinfo *np;
- 	const struct in6_addr *saddr = NULL;
- 	bool apply_ratelimit = false;
--	struct sk_buff *ext_skb;
-+	struct sk_buff *ext_skb = NULL;
-+	bool decrypted = false;
- 	struct dst_entry *dst;
- 	unsigned int room;
- 	struct icmp6hdr tmp_hdr;
-@@ -773,6 +775,23 @@ void icmp6_send(struct sk_buff *skb, u8 type, u8 code, __u32 info,
- 
- 	np = inet6_sk(sk);
- 
-+	/* Don't send the decrypted part of a received skb onto the network */
-+	if (unlikely(skb_is_decrypted(skb)) && skb->skb_iif) {
-+		/* PSP encrypts the transport header too, so it should not be
-+		 * quoted. But an error whose quote is truncated to fewer than
-+		 * 8 bytes of the transport header won't be processed on the
-+		 * receive side, so just skip it.
-+		 */
-+		if (psp_skb_is_decrypted(skb))
-+			goto out_unlock;
-+		/* TLS offload leaves the tcp header in the clear and so can be
-+		 * quoted up to its end. A psp skb whose inner tunnel was
-+		 * decapsulated also ends up here, since skb_scrub_packet()
-+		 * drops SKB_EXT_PSP.
-+		 */
-+		decrypted = true;
-+	}
-+
- 	if (!icmpv6_xrlim_allow(sk, type, &fl6, apply_ratelimit))
- 		goto out_unlock;
- 
-@@ -794,6 +813,15 @@ void icmp6_send(struct sk_buff *skb, u8 type, u8 code, __u32 info,
- 	if (IS_ERR(dst))
- 		goto out_unlock;
- 
-+	/* A locally originated skb to be encrypted. Permit the packet to be
-+	 * quoted if the packets source address is local.
-+	 */
-+	if (unlikely(skb_is_decrypted(skb)) && !skb->skb_iif &&
-+	    !(dst_rt6_info(dst)->rt6i_flags & RTF_LOCAL)) {
-+		dst_release(dst);
-+		goto out_unlock;
-+	}
-+
- 	ipc6.hlimit = ip6_sk_dst_hoplimit(np, &fl6, dst);
- 
- 	msg.skb = skb;
-@@ -801,9 +829,34 @@ void icmp6_send(struct sk_buff *skb, u8 type, u8 code, __u32 info,
- 	msg.type = type;
- 
- 	room = IPV6_MIN_MTU - sizeof(struct ipv6hdr) - sizeof(struct icmp6hdr);
--	ext_skb = icmp6_ext_append(net, skb, &tmp_hdr, room, parm->iif);
--	if (ext_skb)
--		msg.skb = ext_skb;
-+	if (unlikely(decrypted)) {
-+		u8 nexthdr = hdr->nexthdr;
-+		const struct tcphdr *th;
-+		struct tcphdr _th;
-+		__be16 frag_off;
-+		int hlen, tlen = 8;
-+
-+		/* Quote the IPv6 header, its extension headers, and the L4
-+		 * header. The RFC 4884 extension would carry the payload too.
-+		 */
-+		hlen = ipv6_skip_exthdr(skb, msg.offset + sizeof(*hdr),
-+					&nexthdr, &frag_off);
-+		if (hlen < 0) {
-+			hlen = msg.offset + sizeof(*hdr);
-+		} else if (nexthdr == IPPROTO_TCP) {
-+			th = skb_header_pointer(skb, hlen, sizeof(_th), &_th);
-+			if (th)
-+				tlen = max_t(int, th->doff * 4, 8);
-+		}
-+		room = min_t(unsigned int, room, hlen - msg.offset + tlen);
-+		if (type == ICMPV6_DEST_UNREACH || type == ICMPV6_TIME_EXCEED)
-+			tmp_hdr.icmp6_datagram_len = 0;
-+	} else {
-+		ext_skb = icmp6_ext_append(net, skb, &tmp_hdr, room,
-+					   parm->iif);
-+		if (ext_skb)
-+			msg.skb = ext_skb;
-+	}
- 
- 	len = msg.skb->len - msg.offset;
- 	len = min_t(unsigned int, len, room);
--- 
-2.53.0-Meta
+> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> index 82aafe8..0eba529 100644
+> --- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> @@ -49,7 +49,16 @@ void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cn
+>   int bpf_arena_reserve_pages(void *map, void __arena *addr, __u32 page_cnt) __ksym __weak;
+>   void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 page_cnt) __ksym __weak;
+>
+> -#define arena_base(map) ((void __arena *)((struct bpf_arena *)(map))->user_vm_start)
+> +/*
+> + * The map definition is smaller than struct bpf_arena.
+> + * barrier_var() hides that from -Warray-bounds of GCC.
+> + */
+> +#define arena_base(map)							\
+> +	({								\
+> +		struct bpf_arena *___arena = (void *)(map);		\
+> +		barrier_var(___arena);					\
+> +		(void __arena *)___arena->user_vm_start;		\
+> +	})
+>
+>   #else /* when compiled as user space code */
+>
+> diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
+> index 1ae015c..b4d88d0 100644
+> --- a/tools/testing/selftests/bpf/progs/stream.c
+> +++ b/tools/testing/selftests/bpf/progs/stream.c
+> @@ -178,16 +178,8 @@ __stderr("Call trace:\n"
+>   "|[ \t]+[^\n]+\n)*}}")
+>   int stream_arena_write_fault(void *ctx)
+>   {
+> -	struct bpf_arena *ptr = (void *)&arena;
+> -	u64 user_vm_start;
+> +	u64 user_vm_start = (u64)arena_base(&arena);
+>
+> -	/* Prevent GCC bounds warning: casting &arena to struct bpf_arena *
+> -	 * triggers bounds checking since the map definition is smaller than struct
+> -	 * bpf_arena. barrier_var() makes the pointer opaque to GCC, preventing the
+> -	 * bounds analysis
+> -	 */
+> -	barrier_var(ptr);
+> -	user_vm_start = ptr->user_vm_start;
+>   	fault_addr = user_vm_start + 0x7fff;
+>   	bpf_addr_space_cast(user_vm_start, 0, 1);
+>   	asm volatile (
+> @@ -212,16 +204,8 @@ __stderr("Call trace:\n"
+>   "|[ \t]+[^\n]+\n)*}}")
+>   int stream_arena_read_fault(void *ctx)
+>   {
+> -	struct bpf_arena *ptr = (void *)&arena;
+> -	u64 user_vm_start;
+> +	u64 user_vm_start = (u64)arena_base(&arena);
+>
+> -	/* Prevent GCC bounds warning: casting &arena to struct bpf_arena *
+> -	 * triggers bounds checking since the map definition is smaller than struct
+> -	 * bpf_arena. barrier_var() makes the pointer opaque to GCC, preventing the
+> -	 * bounds analysis
+> -	 */
+> -	barrier_var(ptr);
+> -	user_vm_start = ptr->user_vm_start;
+>   	fault_addr = user_vm_start + 0x7fff;
+>   	bpf_addr_space_cast(user_vm_start, 0, 1);
+>   	asm volatile (
+> @@ -252,17 +236,9 @@ int stream_arena_load_acquire_fault(void *ctx)
+>   		.off	 = 0x7fff,
+>   		.imm	 = 0x100,	/* BPF_LOAD_ACQ */
+>   	};
+> -	struct bpf_arena *ptr = (void *)&arena;
+> -	u64 user_vm_start, val;
+> +	u64 user_vm_start = (u64)arena_base(&arena);
+> +	u64 val;
+>
+> -	/*
+> -	 * Prevent GCC bounds warning: casting &arena to struct bpf_arena *
+> -	 * triggers bounds checking since the map definition is smaller than
+> -	 * struct bpf_arena. barrier_var() makes the pointer opaque to GCC,
+> -	 * preventing the bounds analysis.
+> -	 */
+> -	barrier_var(ptr);
+> -	user_vm_start = ptr->user_vm_start;
+>   	fault_addr = user_vm_start + 0x7fff;
+>   	bpf_addr_space_cast(user_vm_start, 0, 1);
+>   	asm volatile (
+> @@ -296,17 +272,9 @@ int stream_arena_xchg_fault(void *ctx)
+>   		.off	 = 0x7fff,
+>   		.imm	 = 0xe1,	/* BPF_XCHG */
+>   	};
+> -	struct bpf_arena *ptr = (void *)&arena;
+> -	u64 user_vm_start, val;
+> +	u64 user_vm_start = (u64)arena_base(&arena);
+> +	u64 val;
+>
+> -	/*
+> -	 * Prevent GCC bounds warning: casting &arena to struct bpf_arena *
+> -	 * triggers bounds checking since the map definition is smaller than
+> -	 * struct bpf_arena. barrier_var() makes the pointer opaque to GCC,
+> -	 * preventing the bounds analysis.
+> -	 */
+> -	barrier_var(ptr);
+> -	user_vm_start = ptr->user_vm_start;
+>   	fault_addr = user_vm_start + 0x7fff;
+>   	bpf_addr_space_cast(user_vm_start, 0, 1);
+>   	/*
+> @@ -346,17 +314,9 @@ int stream_arena_cmpxchg_fault(void *ctx)
+>   		.off	 = 0x7fff,
+>   		.imm	 = 0xf1,	/* BPF_CMPXCHG */
+>   	};
+> -	struct bpf_arena *ptr = (void *)&arena;
+> -	u64 user_vm_start, val;
+> +	u64 user_vm_start = (u64)arena_base(&arena);
+> +	u64 val;
+>
+> -	/*
+> -	 * Prevent GCC bounds warning: casting &arena to struct bpf_arena *
+> -	 * triggers bounds checking since the map definition is smaller than
+> -	 * struct bpf_arena. barrier_var() makes the pointer opaque to GCC,
+> -	 * preventing the bounds analysis.
+> -	 */
+> -	barrier_var(ptr);
+> -	user_vm_start = ptr->user_vm_start;
+>   	fault_addr = user_vm_start + 0x7fff;
+>   	bpf_addr_space_cast(user_vm_start, 0, 1);
+>   	/*
 
