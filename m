@@ -1,87 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793737897;
-	b=ldlEA6O3gyZevlmY9QYIioOKI5phvbBQhSRbduEESG9hcXsmsFdb6GyJjY364Mv9slSF
-	 mUkU+/lmst1ADD/9nILNXHiYPPDO58ueaSYWLj4sP77IEpCfpdU848+Z1We85mxeXIUXM
-	 +sogMpK2+68aQkuJxVP+dfQSOLuggfirsD7zeIwdFBQ95traGzVgTQIE9MtIHU8/V0gQZ
-	 mDe2NxJKMhEwHRrvZtZ2mvRxJcxoLqwzVRfptUd7reyT5Fr2LZmXrVigWNDeDAMeNMWqB
-	 rHxtAuhtVVAJLpwPTt5PAKG15+Pyd7jMoojDhn3QUYphISomzIGv/XOUBgrCJ3vgmxg==
+	t=1793738050;
+	b=caiwDtIpYg6r78RTynrPuX6wIDpICpYIgwNw7PxV75L+RXA5vd9CAHg3OoU+9a+v8zAp
+	 wuNZLN6VJ1WMmYluFSO2+60jiI+N9qi2yM3tz9T0bDAdSztnRVpvNGwEQKqHzvww7kNsj
+	 IRbwimBhk6sZ+SqYdcqXHlq7c/87mvHzKQ8F4kcD9UwmdrVvNQdk2Wh8tgaYHkceshLlK
+	 FFccAZjIhzenSIAeCu7fNbnAcSEn53O9Sk2NlhONHDGOWEFpEwJVzpYIUKVxwZJ8fEj1T
+	 OZXDsIaJBSa2ef2IZdzh99y5ljK4t82sMfJYKLMp6RFZKQuo0WPGgCM8iONThqx0s+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793737897;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793738050;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
 	 In-Reply-To;
-	bh=yH/XRG7heWWZ+jvry39cY9jHOPmxtv5uOcm4fDn0jL8=;
-	b=ZD/ZLnnX7C5vpoYAjgGsVpF9v7W2n4Jc0jeU3RYTk7bG/K7yJrHMAKPxsvxqo9OuEnkJ
-	 bx+RmbtXC03ZDg6SQOKv1SzR/TnbyDam7JowbWKvhQ4gBqn4AkmTh3s7albOqz13kRHug
-	 FkFPjYCLOnbGnsa3eNm8UMFcbPKAZ15bakmqiRf9AgVVoa6FPz0ssiWL0/gqphf1kuCmW
-	 j55Rq1fvabCy6LSWl0YB3Mh4YAve33AGSF0PfYzx/DH9Dr5imMqOacCgrN0ZLmJ7ETK0g
-	 EzpIDpxk4fbakBW7DOdkrcT/YEf0rlO6zrcdBUP9CsRnYu1LmDRNZ56zojQ7NgeaLXw==
+	bh=dNjq2OxDVtbu8F9xl0nqlhF7Q6giPt5SRyE2tzpRWmQ=;
+	b=kdWZ83Wd3bKIyOwL/SC8MOpvvYeuCt3r3caS979FylEZSWAX0YqJKb46jDR1DkyrWMu2
+	 nkAgeKbDogRrUpqtYYi1eldzGFU0b/rQ3scKY0YZjGVpH8xEZ8fSAlZuQZHgpaCZ91Ptv
+	 bLqKXSpJe22DrjE5gsVjiLKWn+y9LqdJqXf3zUDjkuBAixaqOT9nkQICj0WXjtk1R1J2o
+	 VmoFajXPFN7xNBqLjCPJ+ewQ1psUfTY8XDJ+PHKzV6T6jHUWXm8T8J5UAVbvxLuaPrXwv
+	 kuSqP6lP2ExuVReT+G3Y1ht/+XsMKgibYdrj3RKQQ+SlDk56+DpI3RI3Nqv5F4NzqVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RFz8Yp7u;
-	arc=none smtp.remote-ip=209.85.128.44
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UWXAKpab;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFA1606A326
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 20:31:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BFA1606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264E3606A329
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 20:34:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 264E3606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RFz8Yp7u
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a4d7ae1ae9so45936865e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 12:31:37 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UWXAKpab
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a2000d5fb1so32077135e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 12:34:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793737896; x=1794342696; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793738047; x=1794342847; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yH/XRG7heWWZ+jvry39cY9jHOPmxtv5uOcm4fDn0jL8=;
-        b=RFz8Yp7uY0eJxd+1QzwiZ7WVFvlDvKXPH/KU7OnSu4C4lVInrMJDIUgw+t6NS3QwWN
-         51a1+V0XGOm2kfNpKTsIFbU7XtCaiaeVNmEhgFeFb1/CrgAAdjx6RnrCKSI/GQcbxXIj
-         zk4oXe/ZcmhoB/9RZoXaMLelwk9hUZc0kCiiJoa4eh/Mo95xbaQlqYkyTUWpyU5DunS8
-         /Rk43e8dBuiwCxXMo+YKIA/4tuqPntQC4r09s1wi8SZN3fTyOhCC4XzaoNcMkwT97oky
-         TyvMinMrf3bhPU4GoPScWDTt5Yyl27cvFCNI9OWgSMUN/ce15ceTsoEM8yVAia/L78Wh
-         u65w==
+        bh=dNjq2OxDVtbu8F9xl0nqlhF7Q6giPt5SRyE2tzpRWmQ=;
+        b=UWXAKpabW7n4FQOPPPF0svuPcfJ1+lbF/6LldmOQX8FUE3AwCxbl4EQ2MD/7z3T0LG
+         kyfXvLfhChBscW4Kg0gq9jXN/BcVcD8RGQ9RNsnZTAVvEns0JPRgzD96cPSBT4mAV60x
+         xTYsry0bqdfVVSL4DK5PhIvfcIyJKAQaIkX2zLbgzZ3/vrpFH2Y9hsEaECR0cxCqLmc2
+         04XY/1XM97cVRyPPxGlvWFbEcRNi0DEAH5uie568rx5C16IQwYXiPaVQT/AmYXg/oE8C
+         6QrhtCYf6CqL6zTK3B7msS7WRpUMJeOoqmI/GbQ3XtqZkQbRQ+NUZI7Jn6FYAkOtzO1X
+         TnhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793737896; x=1794342696;
+        d=1e100.net; s=20260707; t=1793738047; x=1794342847;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=yH/XRG7heWWZ+jvry39cY9jHOPmxtv5uOcm4fDn0jL8=;
-        b=LKCzqTJFtMiApTDf9Bj87HSFCKbRdUUwMiIWF4iNXHxbNh9CCesTeS03kLcXCrfCc9
-         ijCbwgUid2tAcwgIFzBfB4VC8LFpCRXM0g77gB6Fa4luRyIk1ozzQ2WEyk7zVchMoFqS
-         w/N+CTADuo4jHD4U5EXLU+za43hd0JU7x4YX+9dzmE8hYWwXOMhfc2v1z+RX+GwWpVjA
-         n/39AaiBcPsIT4M5XEPrTgehaxLwN49xG3465S8b0tR1ZklwfswHRY1YBIG3FglA7lk3
-         Xw6X5cgs0itQVNKtVl2C2EaJ6bIw0eKyEfRRNgJwsFlKagXvzMwfSEsQiROe4om29r9V
-         +Tpg==
-X-Forwarded-Encrypted: i=1; AKwUvBwxV9j0MZG8dlKmWVbziZlyYYYDvaSTpPgE5qvJ73spClIshxkvYUr3YSva1sSzBIEArHaf4tfPfUEQ0+EuvGk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/mhjTT81N7Py56iciyp1kbs9Sz+Pg0FXmn6vYTG2M8C5074SWI
-	bp0T64xw2dufWKWFOkExQZycWFzg96pQCfM3SBnsem6d591o0Z7Gx6uPTmAEYvkx
-X-Gm-Gg: AYBFou1saXjqf0Y56ofatrTVCsJxv7bBAnlHPZNuOt8Oc0RX6tNG6utSKWtcEsHasPa
-	FhXPwk4FEGTui1AkZcCjXATCVM6vpweSYKqO6q96hwgleTM8scU+/Jwo/QCG2ub0LxiemgQaCZq
-	b/0vLSgsQMamevVEmgafuZO/HBk/J3M9A/KaqZ8kuZW4zms3qh1ycPltK+KPvhq3iCIDKKvAz9Y
-	ctlcEuh9eyaxDrYlJ9JSsXHNzmPuegd3RDNMs0kioxg/xXdM/cel1SmoAfgZOkjqZRb8b5ULTPl
-	ld6Q2Sb7Zji/ORQAYNAvZZPFeba5DWXEjaNG78id4nw6NeRji5Qgcy5lrqZx2dM3b6skzBRGowK
-	fCs5m901IlemRvYhDXs5fyKirzjjBtliyEgq9gCnqkFW0ow+Xhf6GIs9JB9VpMbjtBwwGJi00vC
-	hMyk6SvuElpfsWSe4Kf7IKGrvLRNLSyf3jIkLkiMQeJYxJUjairRHfLWAiO+1VNIPYfI150agC5
-	QCpFjlx3oAAoTU8r90fkKLXnx2/1/9fZ3EvZqKAVgwCFs2kX0UcWck/opBmdxOV2YrDHkg4WxuS
-	Sk+I9q7kuGxR7j9xPVv6dhooISQahdQMfse2h7F7JTlYgwQFs0YaL3MjLqILoCMGzrTxTVgyxg=
-	=
-X-Received: by 2002:a05:600c:1c17:b0:4a0:1efa:c74a with SMTP id 5b1f17b1804b1-4ac18b7ddcdmr302817215e9.20.1793737895986;
-        Tue, 03 Nov 2026 12:31:35 -0800 (PST)
+        bh=dNjq2OxDVtbu8F9xl0nqlhF7Q6giPt5SRyE2tzpRWmQ=;
+        b=bk+5bAJb6qMDsyoQw1qaPT9Xvt4QUkyuhPaFvDHCJoWJjRNOBuWv5nth8bCtRTqXXL
+         XSg1dVF9MiO1xVUlPxs6v8O6EFiX47CHnJY5JTYqqCDQSheEs77dkZsR57lzFhj9AFIT
+         kwQ6MOzYqh2+e3YT8sp90fW6ZfL0e4FtF/TsevVRHUB/pzFn17kBH/eyBBQJO1Cs9Zs/
+         +oooIBhIg8bzidlO+uCubnjABeKkz3NNdja4Sa/a7u0rpiWVi3SIK8EhhcJvpKHTpq77
+         s60iePftWMXlwPu+OLUZELdHOJG5g0gN1Jy00iQOguU1DRm5BO5WbWaIWWU1css6ID5V
+         YuQg==
+X-Forwarded-Encrypted: i=1; AKwUvBy1JopT2ND6gkNwMoLobYCXtxGwUcUaiIZhMgTA/BszxdpoRHASpssRY+vFsTnV3f8BO2WUodhV8JNnWim4X80=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+dGSwE4P405O8xE+JRTv5YJocxI91O4Sjcocl0TC5k5peKIIKN
+	FPyBga4Onej1zNU0lHq0HLHotRO3Mv3hdB0MztKJq9j6O+lpDzxJ3qVI
+X-Gm-Gg: AYBFou0fXK57tKA05fOXX//ZkMRzK80v4X9O3fw4o0AySucrRuDNLKpXE9MR9/klvqt
+	ikxIs+E+HFGnP9OGiiyRJWXb2iHYotzEYpkjNaeSeaLnJO4r2y4mztyyg9tfYRjKgKGrEPHmCV+
+	PFYig/V8lj6X4zNQazx2JKOPCgA/KNm0m+qAB8mlQKCEm/Bs5cEKBAFwuvldvr7tY26lrlc4TS1
+	KphXbfTQsLbcQ/WJW+50oxGIUUajyQHav5AuQBVf+1PkN9oy0FeAFK/qbUWLbyLuWzSyCEJER8z
+	jUvCLWbi7qp2TmpY8HNuqxzCO7rL9Rtpj2LOZv/2DsLyq/L+bQy/pGHX8dahwRC315QMPmg3n2z
+	OwjvxSC7vBMvkj/IiezVDA/tXm/KBHdFoxSZYBv+dMo70/eEe+iW2zwnIO8PcNNnehRuy77/4Ix
+	RlQjZqZA/0AoEbtyqo2Ui5hsvjos/80yBnGUKAwgLHy7vnvyZ6zHsLIhA9FVy6wxM2xtPQvEu1/
+	8pODf13O+zQba+cr07c+wISITGhdBNEfQVnUDcLfd7zral6L7y/xDphuBOY2yq9RXb+/UpXZJBB
+	2YpqQSaXgEvCjE2DQAfJrWVWRSB3v5VAsPLx4ebWvvA9COFPwF6P9Q==
+X-Received: by 2002:a05:600c:6099:b0:4a1:992f:d0e7 with SMTP id 5b1f17b1804b1-4ac180f2ac5mr302267155e9.16.1793738047466;
+        Tue, 03 Nov 2026 12:34:07 -0800 (PST)
 Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b411de95b4sm4931815e9.0.2026.11.03.12.31.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48fcd03d01dsm479666f8f.44.2026.11.03.12.34.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 12:31:35 -0800 (PST)
-Date: Tue, 3 Nov 2026 21:31:33 +0100
+        Tue, 03 Nov 2026 12:34:07 -0800 (PST)
+Date: Tue, 3 Nov 2026 21:34:05 +0100
 From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
 To: Sasha Levin <sashal@kernel.org>
 Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
@@ -89,9 +88,9 @@ Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-security-module@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/landlock: fix the regex_escape() error check
-Message-ID: <20261103.06edcd6fc9f1@gnoack.org>
-References: <20261103163917.641130-1-sashal@kernel.org>
+Subject: Re: [PATCH] selftests/landlock: print st_ino as unsigned long long
+Message-ID: <20261103.96f7e09c16ae@gnoack.org>
+References: <20261103155512.535137-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,71 +103,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261103163917.641130-1-sashal@kernel.org>
+In-Reply-To: <20261103155512.535137-1-sashal@kernel.org>
 
-Hello Sasha!
-
-On Tue, Nov 03, 2026 at 11:39:17AM -0500, Sasha Levin wrote:
-> regex_escape() returns (char *)-ENOMEM when the buffer is too small, but
-> matches_log_fs_extra() checks the returned pointer with "< 0", which is
-> never true, and goes on with a bogus cursor. On 32-bit architectures gcc
-> also warns about the cast of the pointer in the error return:
+On Tue, Nov 03, 2026 at 10:55:12AM -0500, Sasha Levin wrote:
+> On 32-bit architectures with a 64-bit ino_t, st_ino is an unsigned long
+> long, and printing it with %lu warns:
 > 
->   fs_test.c:7474:24: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+>   fs_test.c:10511:57: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type '__ino64_t' {aka 'long long unsigned int'} [-Wformat=]
 > 
-> Compare against (char *)-ENOMEM instead.
+> Cast it to unsigned long long and print it with %llu.
 > 
-> The size left after the escaped path also subtracts the prefix a second
-> time, which can make a long path fail with -E2BIG. Compute it from the
-> cursor instead.
-> 
-> Fixes: 316d06b01130 ("selftests/landlock: Add audit tests for filesystem")
 > Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
-> Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
-> -m32, with and without -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
+> Found with a 32-bit build of the selftests with a 64-bit time_t (gcc 16
+> and clang 21 with -m32 -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
 > KernelCI's 32-bit arm builds show the same warnings. The changed files
-> build without them now, and the x86_64 builds don't change.
+> build without format warnings there now, and the x86_64 builds don't
+> change. The other selftests get the same kind of fix in separate
+> patches.
 > 
->  tools/testing/selftests/landlock/fs_test.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/landlock/fs_test.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 > diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index f725882fa4a78..27a78434d1c21 100644
+> index f725882fa4a78..a2dc9a7f0481a 100644
 > --- a/tools/testing/selftests/landlock/fs_test.c
 > +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -7470,10 +7470,10 @@ static int matches_log_fs_extra(struct __test_metadata *const _metadata,
->  	log_match_cursor = regex_escape(absolute_path, log_match_cursor,
->  					log_match_remaining);
->  	free(absolute_path);
-> -	if (log_match_cursor < 0)
-> -		return (long long)log_match_cursor;
-> +	if (log_match_cursor == (char *)-ENOMEM)
-> +		return -ENOMEM;
+> @@ -10508,7 +10508,8 @@ TEST_F(trace_layout1, check_rule_fs_fields)
+>  	ASSERT_EQ(0, stat(dir_s1d1, &dir_stat));
+>  	snprintf(expected_dev, sizeof(expected_dev), "%u:%u",
+>  		 major(dir_stat.st_dev), minor(dir_stat.st_dev));
+> -	snprintf(expected_ino, sizeof(expected_ino), "%lu", dir_stat.st_ino);
+> +	snprintf(expected_ino, sizeof(expected_ino), "%llu",
+> +		 (unsigned long long)dir_stat.st_ino);
 >  
-> -	log_match_remaining -= log_match_cursor - log_match;
-> +	log_match_remaining = sizeof(log_match) - (log_match_cursor - log_match);
->  	chunk_len = snprintf(log_match_cursor, log_match_remaining,
->  			     "\" dev=\"[^\"]\\+\" ino=[0-9]\\+%s$",
->  			     extra ?: "");
+>  	set_cap(_metadata, CAP_DAC_OVERRIDE);
+>  	ASSERT_EQ(0, tracefs_clear());
 > -- 
 > 2.53.0
 > 
 
-Thanks for the contribution!  I also stumbled across this one when I
-did a wider cleanup, and at the time I came to the conclusion that it
-would be wiser to fix the weird way in which regex_escape() reports
-errors.
+Reviewed-by: Günther Noack <gnoack3000@gmail.com>
 
-https://lore.kernel.org/all/20261008142604.39107-20-gnoack3000@gmail.com/
-
-Does that seem reasonable to you?
-
-If you are looking into Landlock selftests, you might want to have a
-look at that patch set, it already fixes a wide range of issues.
-
+Thank you!
 –Günther
-
-P.S.: Mickaël, gentle nudge!  I would still appreciate a review on the
-      selftest cleanup patch set, even though I know that I need to
-      start rebasing it soon to make it apply cleanly.
