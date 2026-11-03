@@ -1,52 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.76
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793672122;
-	b=N7qHDVrAfoAVM2D96nULGj8YUuykjU7Z8+GCY4uTZOVhYbUS8QXJl0AgNnbbjwtQgm1L
-	 LCqtCzMzBC8QfWGjg6hhBXLH3sCI6nqg6luON8O8tWtRhsH6ZsafvD4Ay1Yf1c4/NwwHy
-	 gbtweZsN+BLVDVvtxM6mspd9hPTFELLKjBIK1qAjS04n/0jM53RsSguDjX7r8vc1SX+fn
-	 iyAO9NwmBDxYglQgOn4FPHEbVKXmsKlsnUnncqG3PocwnyHfxb8dCFe0cyv2yFsWKmhD8
-	 cuuDpSxBb1UkF5hjYfpj0zWR6XOzsSHFuR1J2InpI5tzseZUTeAAAzcHTYIptBFqIJg==
+	t=1793672958;
+	b=3Q/eKKegCOk1Kss22/mRrjUNModuOuqDpjiQZp7RcPpKLZxTf3Db2CvMJ9/CvzSrIRY5
+	 lijkP4oUPWDNd4p0KEh51DW3mv/iIgV970wehUKplJZEMeSSUWwdxx1HpzldLSBS3CbMu
+	 bS1LcAHnWiceBZrEX7ounj65PHdg7EjFM6hfBBWK8j1X7Y5KaEW5mzSzv0mlfiVLUJ8Re
+	 NzjUqcckabumaxsEY7doMWWhVcgKAv5VtVHhm/66gIMMBlY/XBi+VsV392SRnQmJV11VL
+	 FyBr+nKRToNtpN4VaZIAguU8H8rwRTi5zgNNP9jYN+pldJZmtTZtP40b/fiIDICbFcg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793672122;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793672958;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=swMBrZuLYQl7RYBGcyFALBP5NnR05K4Y76My6FBJtU0=;
-	b=OudFvIb17T/mB2DbBrBua+j5SPXmeeRJ/HWSehQYoVRoGREzpcxeasIzjvhSyc/4kw1h
-	 QSuMnUeCiSHg2BmNFYG5uMLEqdjdL0KmohHRT2smnyucTWjBHoAmykHVBLF/8uq16o/h4
-	 vjwHOHgRfQb9orw0IEMCpx6i8nfJgWdpKLcQGR0knc2gVbVJ5PJ3+p/5q3gMP0nWFer30
-	 IhN2ZwOtK9/beiDiKzHbotD73OiRIm0Vwr/beVGau1ry4vcPu5FSPVzgM1lbYk3JuDd/H
-	 ATEO2UanWfODWTNwCKJYhYVTFVAcSoupWHb2wnqJ6NP3t+pvCWtk0+rrjb7QPIrFwXQ==
+	bh=+Odq/nWUXS9jHPYJFLtSPbg5YmanbMJct1bOQuLz9a0=;
+	b=dud5jmS3z/k8C3neWofKABEcUGR4YuVs8+BT8VZKNANGSyHnDE17QP1OQjYCxHtE+F76
+	 FxHTmqj9JKUrea7LVjSpZOpH9LrI0H27UYXZqEfoH6ttm++tuyFhcWElXpdiIWu04pblF
+	 FogXz1XVVKh7CLqG8ypA31cVOm60A/Kpo6NqVkeBWex8i1630JwbLLfPVKqaJTH5ICdFl
+	 OX/+4UZCLuNklZ5FOVrLzbHNDLHFkL+xqVqZQQ/TQWt1fo6VQLh0QriHGNypWUmQYO3d7
+	 BbqhexNdacGaxnxUrq3ivP8t9bsqbrWhdq7OSbWxD1CFNLcB+cPSJWMqj2O68qIhP6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lX4qJf0e;
-	arc=none smtp.remote-ip=91.218.175.76
-Received: from mta0.migadu.com (out-76.mta0.migadu.com [91.218.175.76])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gbaU8Ezm;
+	arc=none smtp.remote-ip=91.218.175.177
+Received: from mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643FF606A32E
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 02:15:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 643FF606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE41A606D801
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 02:29:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE41A606D801
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lX4qJf0e
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gbaU8Ezm
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Z4q8r55MMjPLd9lBbgy0/F1GPB2LJsVrIvS8JZYXVIM=;
+DKIM-Signature: a=rsa-sha256; bh=K7tUnBieg+x8yoMHcEYMmFpmpR2noKDKE9apnAPDyxQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793672119; v=1; x=1794276919;
- b=lX4qJf0evWkWo2H1GzdHljzs7DptE1ZYrRbf8XisV/6XjG1cxnHYRhmmVUWcCY8tKdmyuoP2
- C/LAmXc7JadQV4BZR++4X9gTsqc8mVhmW9xcw7rlz8NHNS85TPF1wyRIM1FfbDU8M0Hgj+oor4L
- ZfC4OZaZ+0qyvGEzfhUwqhWY=
+ t=1793672954; v=1; x=1794277754;
+ b=gbaU8EzmhpM70F02M6NZuxqiGA/M3RfyTnyhoPLdG9UkR7FnGJTkry7QY/EqGuMe7bIAgj1Z
+ KCXu0+nAecYzRtMRB5LzLh/9OyK5zrcgRCYGFGb5nxq673/stw5ehoyCU3iWPtaG6vGDaJ2iay3
+ 5+GI147Y7BVdk4EZ7unaIvlo=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 635985c26460c19e;
-	Tue, 03 Nov 2026 02:15:16 +0000
-X-Mizu-Trace-ID: 635985c26460c19e
+Received: by mta11.migadu.com with ESMTPS id 406c5c1624b3d690;
+	Tue, 03 Nov 2026 02:29:14 +0000
+X-Mizu-Trace-ID: 406c5c1624b3d690
 X-Migadu-Flow: FLOW_OUT
-Date: Tue, 3 Nov 2026 10:15:03 +0800
+Date: Tue, 3 Nov 2026 10:28:52 +0800
 From: Hangbin Liu <hangbin.liu@linux.dev>
 To: Andrea Mayer <andrea.mayer@uniroma2.it>
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -62,11 +62,11 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	David Lebrun <dlebrun@google.com>,
 	Stefano Salsano <stefano.salsano@uniroma2.it>,
 	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net 3/6] seg6: update skb checksum when SRv6 behaviors
- advance to the next SID
-Message-ID: <aulA09qBNtIxJq7S@fedora>
+Subject: Re: [PATCH net 4/6] seg6: discard CHECKSUM_COMPLETE after the
+ End.BPF program
+Message-ID: <aulG5DJroKs6BuzS@fedora>
 References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
- <20261031225033.64-4-andrea.mayer@uniroma2.it>
+ <20261031225033.64-5-andrea.mayer@uniroma2.it>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,108 +78,61 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261031225033.64-4-andrea.mayer@uniroma2.it>
+In-Reply-To: <20261031225033.64-5-andrea.mayer@uniroma2.it>
 
 Hi Andrea,
-On Sat, Oct 31, 2026 at 11:50:30PM +0100, Andrea Mayer wrote:
-> advance_nextseg() decrements Segments Left and writes the next segment into
-> the destination address, and seg6_next_csid_advance_arg() advances the
-> NEXT-C-SID argument in the destination address.
-> With CHECKSUM_COMPLETE, neither updates skb->csum for these changes. The
-> stale skb->csum is read when the packet is delivered on the same node, e.g.
-> through End.B6.Encaps towards a local End.DT6 SID.
-> As a consequence, when skb->csum is computed in software, for instance by
-> conntrack, UDP can drop the packet as a checksum error. With skb->csum
-> computed by the device, TCP can instead log a "hw csum failure", as if the
-> device had computed a wrong skb->csum.
+On Sat, Oct 31, 2026 at 11:50:31PM +0100, Andrea Mayer wrote:
+> The End.BPF program can change the packet through the seg6 BPF helpers,
+> for instance the SRH Tag with bpf_lwt_seg6_store_bytes(). After the
+> program, seg6_bpf_has_valid_srh() can also rewrite the SRH Hdr Ext Len.
 > 
-> Update skb->csum in both functions with update_csum_diff16() for the
-> destination address. advance_nextseg() also uses update_csum_diff4() for
-> Segments Left.
+> With CHECKSUM_COMPLETE, the program does not always update skb->csum for
+> the bytes it writes, and seg6_bpf_has_valid_srh() does not either. If the
+> packet is then delivered on the same node and skb->csum was computed in
+> software, for instance by conntrack, UDP can drop the packet as a checksum
+> error. With skb->csum computed by the device, TCP can instead log a
+> "hw csum failure", as if the device had computed a wrong skb->csum.
 > 
-> Depends on patch "seg6: fix skb checksum update helpers".
+> Discard CHECKSUM_COMPLETE with skb_checksum_complete_unset() after the
+> program, since input_action_end_bpf() does not know which bytes the program
+> changed. The checksum is then verified in software.
 > 
-> Found by manual code inspection while working on
-> commit 8ae3f4067ba4 ("seg6: ensure packet data is writable before modifying
-> SRH and IPv6 DA"), and reproduced in a VM without kernel changes or error
-> injection. A following commit adds a selftest that reproduces the problem
-> with a tc ct action. With this patch, the selftest passes for the
-> End.B6.Encaps and next-csid paths. Also tested against the srv6 selftests,
-> and with a ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
+> Found by manual code inspection and reproduced in a VM without kernel
+> changes or error injection: with skb->csum computed by a tc ct action, an
+> End.BPF program that writes the SRH Tag, followed by End.B6.Encaps and a
+> local End.DT6 SID, makes UDP drop the packet. With this patch, the packet
+> is delivered. Also tested against the lwt_seg6local BPF selftest, and with
+> a ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
 > 
-> Fixes: 140f04c33bbc ("ipv6: sr: implement several seg6local actions")
-> Fixes: 848f3c0d4769 ("seg6: add NEXT-C-SID support for SRv6 End behavior")
+> Fixes: 004d4b274e2a ("ipv6: sr: Add seg6local action End.BPF")
 > Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 > ---
->  net/ipv6/seg6_local.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+>  net/ipv6/seg6_local.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 > diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 0c3d1be7f129..57a82477ce3f 100644
+> index 57a82477ce3f..3045a351f4e9 100644
 > --- a/net/ipv6/seg6_local.c
 > +++ b/net/ipv6/seg6_local.c
-> @@ -291,7 +291,9 @@ static struct ipv6_sr_hdr *advance_nextseg(struct sk_buff *skb,
->  					   struct ipv6_sr_hdr *srh,
->  					   enum skb_drop_reason *reason)
->  {
-> +	struct in6_addr *daddr;
->  	struct in6_addr *addr;
-> +	__be32 old;
->  	int srhoff;
->  	int wlen;
+> @@ -1582,6 +1582,12 @@ static int input_action_end_bpf(struct sk_buff *skb,
+>  		goto drop;
+>  	}
 >  
-> @@ -309,10 +311,19 @@ static struct ipv6_sr_hdr *advance_nextseg(struct sk_buff *skb,
->  
->  	/* skb_ensure_writable() may change skb pointers; evaluate srh again */
->  	srh = (struct ipv6_sr_hdr *)(skb->data + srhoff);
-> +	daddr = &ipv6_hdr(skb)->daddr;
-> +	/* nexthdr, hdrlen, type and segments_left */
-> +	old = *(__be32 *)srh;
->  
->  	srh->segments_left--;
->  	addr = srh->segments + srh->segments_left;
-> -	ipv6_hdr(skb)->daddr = *addr;
+> +	/* The program may have changed the packet and seg6_bpf_has_valid_srh()
+> +	 * may rewrite the SRH Hdr Ext Len below.
+> +	 * skb->csum may then no longer be the checksum of the full packet.
+> +	 */
+> +	skb_checksum_complete_unset(skb);
 > +
-> +	if (skb->ip_summed == CHECKSUM_COMPLETE) {
-> +		update_csum_diff4(skb, old, *(__be32 *)srh);
-> +		update_csum_diff16(skb, (__be32 *)daddr, (__be32 *)addr);
-> +	}
-> +
-> +	*daddr = *addr;
 
-Nit: we can re-use seg6_update_csum() if the transport header set correctly.
-But that function is static and we need adjust header files.
-So the current change looks good for me.
+Should we move this a bit later?
 
->  
->  	return srh;
->  }
-> @@ -427,11 +438,13 @@ seg6_next_csid_advance_arg(struct sk_buff *skb,
->  	__u8 fnc_octects = seg6_flv_lcnode_func_octects(finfo);
->  	__u8 blk_octects = seg6_flv_lcblock_octects(finfo);
->  	struct in6_addr *addr;
-> +	struct in6_addr old;
->  
->  	if (unlikely(skb_ensure_writable(skb, sizeof(struct ipv6hdr))))
->  		return SKB_DROP_REASON_NOMEM;
->  
->  	addr = &ipv6_hdr(skb)->daddr;
-> +	old = *addr;
->  
->  	/* advance DA.Argument */
->  	memmove(&addr->s6_addr[blk_octects],
-> @@ -440,6 +453,9 @@ seg6_next_csid_advance_arg(struct sk_buff *skb,
->  
->  	memset(&addr->s6_addr[16 - fnc_octects], 0x00, fnc_octects);
->  
-> +	if (skb->ip_summed == CHECKSUM_COMPLETE)
-> +		update_csum_diff16(skb, (__be32 *)&old, (__be32 *)addr);
-> +
->  	return SKB_NOT_DROPPED_YET;
->  }
->  
+>  	if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+>  		goto drop;
+>  	local_unlock_nested_bh(&seg6_bpf_srh_states.bh_lock);
 > -- 
-> 2.43.0
-> 
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+e.g. after this. As there is not need to do the setting if the skb is dropped.
+
+Thanks
+Hangbin
