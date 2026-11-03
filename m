@@ -1,61 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793732066;
-	b=jI4aZX8LkYWe2MqZaYXtshindNEDkkG0sdyXWw2dx1GsivXCEB/XgLDvS6xy+t49fZnh
-	 qYxY2KTdn7NWgRF4orpLDNIwZo0yFFjKzCU5hfQ7TnhmTr4MDFbuZc+4uTMTzyDmhpBVu
-	 aGSnt6nbgR9dtA9BUT/8B1JkGSuZ2sltvD0aZugokWzWMEqxlZhJcFJcR2wcmxjqccAmx
-	 h4TV0TjNeoJyRYUTksjKv8Wv1Ud9gWaOvOT39xEjbJQHmTxhcMke11zPfYg+MbnwC5KUq
-	 Yf/KY4OBhXxpmtsC+RvqENbUY/iN0cpBXKREMGe1htC7m+4eMSI+lTvFBeIldVSWkUg==
+	t=1793732248;
+	b=386HQMjfRmC/zlK20AsVGlMiPc5qdlS/qwJL2uTzGIkBWB87u+mnHRaB+uQZ7nRCj4xD
+	 zPrXNqhU1r+zvnpZZL65nTxtcFxTBTPbGbpsLF8G7ulwzVsjhz39cUx+StdQFvvXSSuEZ
+	 ZBfIZ+nG29f7gyKptdkypqN+rOL+rfwmlFOnQljyJDsv406W+xFzcMeA/PegDvp7ZVuLs
+	 5B5/YAQMlJ3xgybNCzdcrjbzhCAdzZsPLppfW/N1aQHqlGaUAQCC6HwmscMwkVAvjLjgc
+	 y463P5EAD1v78fnZU5zXqlXAp7E3l4QYT4dAt91Omc2N05O7KhTTuWmKWY6x5hrciZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793732066;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=JPljfIGYRDg6q52cSpwt94ZpPrzmAsejEq2y2BXIXP4=;
-	b=qxJIvfIVxCuO3EXZV9aPZObsTtONAclQ8e6kr3ZLeU9FOC4je/ZqUpl0LUD8SADpaQ1m
-	 XfZZJ2nGXog+Piexw24tGa9aGmkIrQ4p3kjo73rNSzAZHZQMPVN4KCmY4RhS4VzFb+Psz
-	 5h4eIQTIglVoUZlFI+PXW+nKEQoJ9OAtN5qPPhwP9fz23hDlj29IvjtKKvBSDn8Bwnjox
-	 rbv853vaUY2bCPTFQ7owrvnWyXeniWjuZYnGM64OBcMFdtPcw8YS/VtN37eSTbFSx7dkR
-	 lpu/K8Ef+e9B9l497tSmVpxsNZwPcpK4UobCPD9QZHzjrCSMiz6R5Lu2/Oy+6XjE+Og==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793732248;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=nPL/HHow+XbEwmcyq88DWxF7CGJ43yDoyFa2spd4mwc=;
+	b=dZx1rQj3nUmwJ4inweVIEX4cUiVVoYqPPdd2Kabu1rrJzcKmpXnd0B86pIMCG1fzRzlN
+	 CkpxykW+YFICGBGX++YSQ3MSrt6+/0f7Btc/xLV+g/5Zq1DCpWyJGQJ7VA+N9Mpoambwf
+	 j51j/CNbzv9XGa5tNO7T5GMoXVaxsgkFLck7Sgw+ImjQQ3q/TkP9Dt7nqEBavErdb2qm6
+	 D4T/GFLADgBnRewnreXa9ZxxgnWclQoTWPLHad+z3XwEjb6yAngEAP4o/7/NDujeb+e1q
+	 4uSjeR8pqgJo/rQmFEZlh3p5KzAXnSerH9mK52sY4q+e1C0GmOWVu+nzzRnTcSjdftA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jC9C5R9C;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="HZH4gE/O";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370D9606A32C;
-	Tue,  3 Nov 2026 18:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049BA606A324;
+	Tue,  3 Nov 2026 18:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jC9C5R9C
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A2D1F000C1;
-	Tue,  3 Nov 2026 18:54:21 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HZH4gE/O
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1986E1F00919;
+	Tue,  3 Nov 2026 18:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793732066;
-	bh=JPljfIGYRDg6q52cSpwt94ZpPrzmAsejEq2y2BXIXP4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jC9C5R9C/AIcfymo/OgR/5QSN9tRRJhOrWZZ3Ql64cmS7m2RytoQaDU1OOEFjiI1+
-	 LUmcdiwRvFuMNeeOYl6DX5oVQ9GcYX/ijn0V0CXkUrebK6h8Lzg27aVbUF3FFQJInW
-	 ga+3CMyMi7i/WATmUjAQcRfeLz+nDG2yy0i6cyCqLHJXGgQbKiaWqIK1mVnTGbM6e9
-	 xzHQK/m6ctGPw56Mki0ZFtWQ6Snkvt7dFuZQjKKPaBFcoHz8Aiaa2lARbnzTQ1p189
-	 tsM8fDrTcFvS8KTGv5Jao1uv80MSSY3BSv4GdKf90dbSmYvQuVQVqPFc3bOYcF3Wz9
-	 RNt3GxHOfeKvg==
-Date: Tue, 3 Nov 2026 20:54:17 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Umang Pokhriyal <umangpokhriyall@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] userfaultfd: validate the whole range before
- changing write protection
-Message-ID: <auot2ZVM5YjyFlZZ@kernel.org>
-References: <20261102103621.156928-1-umangpokhriyall@gmail.com>
- <20261102103621.156928-2-umangpokhriyall@gmail.com>
+	s=k20260515; t=1793732247;
+	bh=nPL/HHow+XbEwmcyq88DWxF7CGJ43yDoyFa2spd4mwc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=HZH4gE/OsGeU9N50QJIyULBLdqV1Nn2A+jfiYpFuTHgJWa//+Vp6X4LnuaabGZTkO
+	 iQ6lTtQXWbxVeAGK4J7WRzbO6Ux6DRIaCdMLVkHzGzLS8PeVGD/ftnfR8462fUZI7z
+	 uASFtgoITJkS8YUfaxK3cpijX55N6mT2PEWK4WW699vQhbEY9D+W90ZTx5zmG0Kzq7
+	 hfca3/mawy2Zt/Mxt6KNNCXsAwJka0LKuEUylJjw3nEQ9uSkZG01tTGgNx7iabBUuA
+	 kn4vyx4DIwHqI6hTlA0MeBeIlcl+RiQIQIedhpCq8lQkGg2psOIWY/rVymVkcgcvZk
+	 JDtw/4ZWlaCGQ==
+Content-Type: multipart/mixed; boundary="===============0701282565522060909=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,86 +49,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102103621.156928-2-umangpokhriyall@gmail.com>
+Message-Id: <a649383646b7d5a6867f5eabfbfe36d281225a44c592e8c0c1c5b3976fce9087@mail.kernel.org>
+In-Reply-To: <20261103181816.254686-5-vineet.gupta@linux.dev>
+References: <20261103181816.254686-5-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v4 4/8] selftests/bpf: spell the addr_space_cast address spaces in decimal
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,jose.marchesi@oracle.com,david.faust@oss.qualcomm.com,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  3 Nov 2026 18:57:27 +0000 (UTC)
 
-On Mon, Nov 02, 2026 at 04:06:20PM +0530, Umang Pokhriyal wrote:
-> mwriteprotect_range() checks each VMA as it walks the range.  When a later
-> VMA is not registered for write protection, or is a hugetlb VMA the range
-> is not aligned to, the call fails after the earlier VMAs were already
-> changed.  When unprotecting, userfaultfd_writeprotect() then skips
-> wake_userfault(), so threads blocked on those pages are not woken although
-> the pages are writable again.
-> 
-> An unprivileged process can trigger this with a range that spans an
-> unregistered VMA.  It hasn't been seen in practice; it was found while
-> reviewing the userfaultfd range ioctls with an LLM.
-> 
-> Validate the whole range first, as mrwprotect_range() already does.
-> 
-> Fixes: a1b92a3f1498 ("mm/userfaultfd: support WP on multiple VMAs")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Umang Pokhriyal <umangpokhriyall@gmail.com>
-> ---
->  mm/userfaultfd.c | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> index 87da92526..b8a9d9574 100644
-> --- a/mm/userfaultfd.c
-> +++ b/mm/userfaultfd.c
-> @@ -1105,21 +1105,31 @@ static int mwriteprotect_range(struct userfaultfd_ctx *ctx, unsigned long start,
->  	if (atomic_read(&ctx->mmap_changing))
->  		goto out_unlock;
->  
-> +	/*
-> +	 * Validate every spanned VMA before changing any of them, so an
-> +	 * invalid range is rejected without changing part of it.
-> +	 */
->  	err = -ENOENT;
+--===============0701282565522060909==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Nit: this assignment is now redundant, isn't it?
+> selftests/bpf: spell the addr_space_cast address spaces in decimal
 
->  	for_each_vma_range(vmi, dst_vma, end) {
-> -
->  		if (!userfaultfd_wp(dst_vma)) {
->  			err = -ENOENT;
-> -			break;
-> +			goto out_unlock;
->  		}
->  
->  		if (vma_is_hugetlb(dst_vma)) {
-> -			err = -EINVAL;
+TL;DR: Commit message only: the last sentence about GCC and "capable binutils"
+is unclear, since the edited code is still behind
+__BPF_FEATURE_ADDR_SPACE_CAST. Suggests saying it prepares for the later
+guard-dropping patch.
 
-Same here.
+>     selftests/bpf: spell the addr_space_cast address spaces in decimal
+>
+>     The inline asm in the arena tests writes the two address spaces of
+>     addr_space_cast() in hex which trips up a GNU assembler bug:
+>
+>       progs/jit_insns_arena.c:49: Error: unrecognized instruction `r7 =addr_space_cast(r7,0x0,0x1)'
+>       progs/jit_insns_arena.c:49: Error: expected ',', got 'x'
+>
+>     This has been fixed and landed binutils commit 835aee81fa93 ("bpf: accept
+>     any spelling of the addr_space_cast address spaces"), but will only land
+>     in the 2.47 release, so add the workarounds for now.
+>     A GCC that defines __BPF_FEATURE_ADDR_SPACE_CAST would be paired with
+>     a capable binutils.
+>
+>     No functional change.
+>
+>     Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
->  			page_mask = vma_kernel_pagesize(dst_vma) - 1;
-> -			if ((start & page_mask) || (len & page_mask))
-> -				break;
-> +			if ((start & page_mask) || (len & page_mask)) {
-> +				err = -EINVAL;
-> +				goto out_unlock;
-> +			}
->  		}
-> +		err = 0;
-> +	}
-> +	if (err)
-> +		goto out_unlock;
+This isn't a bug, but the last sentence of the changelog is unclear:
 
-If we a breaking on any error to out_unlock, why do we need err = 0 and
-this check?
+  "A GCC that defines __BPF_FEATURE_ADDR_SPACE_CAST would be paired with
+  a capable binutils."
 
->  
-> +	vma_iter_set(&vmi, start);
-> +	for_each_vma_range(vmi, dst_vma, end) {
->  		_start = max(dst_vma->vm_start, start);
->  		_end = min(dst_vma->vm_end, end);
->  
-> -- 
-> 2.53.0
-> 
+Every addr_space_cast() edited in this patch sits inside an
+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) block (jit_insns_arena.c,
+verifier_arena.c, verifier_hmul_arena.c, and the guards in fetch_r0(),
+uaf(), load_acquire() and store_release() in arena_atomics.c).
 
--- 
-Sincerely yours,
-Mike.
+Read literally, that means none of the edited code can reach the buggy
+assembler at this point.  The gas failure quoted for jit_insns_arena.c
+only becomes reachable once the later commit 05738ae8e1ca ("selftests/bpf:
+drop the arena guards and tag the tests that need arena") removes those
+guards.
+
+Since every addr_space_cast changed here is still behind
+__BPF_FEATURE_ADDR_SPACE_CAST, which bpf-gcc does not define yet, could
+the changelog say this prepares for the following patch that drops those
+guards, and say what "capable binutils" means here (one that knows the
+addr_space_cast mnemonic, or one that also accepts the hex spelling)?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41694978246
+--===============0701282565522060909==--
