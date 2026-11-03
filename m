@@ -1,62 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793710904;
-	b=ICyWNAuALe5sz413lhLIVUfMqBW62m4KjPaAIHF76ifz5noGQ+px0AffHFKQR4YcCJkw
-	 id2udw6jGL7DZiSzZW3wZ6yN0V5TcmcHBNSrhpvUsUs5ZVKUQbGl93Nb3edi+bsflX3MX
-	 QqCR7kFla0IbClTtHLHxvf34QAaOdz/DMppKnvjVYHHzxhna/cW4Q0MdkT85R1puM+GTE
-	 gPduISngSDsuF7N1Llx5utHP2hXNmpuvSu0bbZd2Lg9H4Iy52Bn3gFt59YxCERe+rDiWe
-	 ITcyRey/Zo+h24duNz66KUf+Wwx4XUh31YA1mtq3nEN9L7Dg8mA3SvynDzfyXVxFGwA==
+	t=1793710897;
+	b=ulEnEHce0IxHqH4xoM+H2zDisXuUTVvf3g0PTPM13bhsNZj1kbrUp1g85ZWl/meDw+9f
+	 1zMd3NFYGsgPDse7DSPoba5/FaC70NVO6FUVjXMU9CyWSsTfLxmx3x6Gd8PgkZ8kbvkG4
+	 7UvlK7f7G18Dah9AJNkZLc6y8EQA+WxR0QyIupMgaieQ2aUTZR4TlZdtaTbKEZ1Lmpgr0
+	 dLZbRwqeouUGiFgBPWc68lsY24LoRN4rUeYpig4pcHOFSgtFZq7AxsnYiSJbxlF0kltTx
+	 jPy1cXxTeTJhQGGH8fp7skId2t8ewA0fiMbcJBWP0aIbwc8R7PrZAdQLS4M1SC5tzwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793710904;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793710897;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=CM1sHdFY9XeKp8SyPiofbXJvq/Pp2zuA6NY4f40oVL0=;
-	b=KYk565KiLsCFCqs48OsiuiuF9SoMteQicrS9oRTyO6QBjwPXKMAKoxv4Y3ldHMwX7Tc4
-	 W0DfVfmBM7JGCfEZHn4BuM7pAxur7UTRT9PjHIrEKka05JhsCOReB2/EcT8bvLC4eSA0F
-	 DjfZfaBpLwIqALhh6u+4g8maVncLQRz0Jxi6iINRw3y2HuIawGR69nUPVmJDGWl5GrOdr
-	 MFp9eYH4ST0wWxDGGnAyEfip1b+yqJkVsy6seZ1ATGhCgOeHzpuOLtWdUvlizl0/CECFn
-	 X7D4Z00CHLp76jkNpzHVjoU/XmwK2vsJSazuygOiiJ6J0CIqcygI4EsdGjtHqSSAXvg==
+	bh=kq5BwZFlyCx7Ts+tlLob/ycCmrlDmGIBrdYtnLLIhRQ=;
+	b=wbIaTFurm/wLwPuRyXa+ks5mn4xIxA+WQscd/uRKa37BR5LdNkCS9XAb12p3J4uxU7NJ
+	 dFHOiMYyMQF5v/SNPGrODTp0J+QYj9jSGnl2o9dBJvERv6QbZ85dvfR7ZY+DdIhJgcoYL
+	 BV8bBNJYh5grr/ppz6S3re8ZKjqwH4HAAGGRBZ10tqB3qNIz4RtMNBxfb+pTxmVTrjLzV
+	 9/zDgCyaZlEIquadVgyiam6DP+eDKJSgrwbyTXO2KYe2VfgBfYIPvfueymWDBNJk4cF0t
+	 imkHm09qYQj902nhGAC92xC1u7OtythxbMkPwbd/yF4dBS7SZHo1tLycYP5+0Tjd2BQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gu7j3C9n;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LnZtfiJ4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8489E606D828;
-	Tue,  3 Nov 2026 13:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33DA606A327;
+	Tue,  3 Nov 2026 13:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gu7j3C9n
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166A81F00919;
-	Tue,  3 Nov 2026 13:01:43 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LnZtfiJ4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259AB1F000C1;
+	Tue,  3 Nov 2026 13:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793710904;
-	bh=CM1sHdFY9XeKp8SyPiofbXJvq/Pp2zuA6NY4f40oVL0=;
+	s=k20260515; t=1793710896;
+	bh=kq5BwZFlyCx7Ts+tlLob/ycCmrlDmGIBrdYtnLLIhRQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Gu7j3C9nge11nrKHIyt2s335jtyd60bB98+u93DZ1xaM76HFgJ5osT30x+erpcVcS
-	 bS9xaYm1kEu4a+g+YxPAwADB+ugBA9U0EClIqnLn3KnIOBH2oCrJTyONQ1sym+CjV8
-	 oG1U+4gfnwrPhzFsqr7YzKnbiwUHL8QczROJAA7lo0V0z2/hMUp3/OI4O76FeLR2Vt
-	 Af45joD858QkFP7+sNrOAw+nx1WxuXQZn8YIum6AgJMCjsNHaFTm8h8C4nrWsFyZvQ
-	 hv+u88ZBBVZgQamNg4QWR/LWAPp2uZ06WVVyemx8mRnG5gFrYxeYoRvT2YsM7I+wP6
-	 nEWltcVNiHaEg==
+	b=LnZtfiJ45MApyCSpJguo0tOn5IzCJqlk3dCFfTSJlW2DkL5NawvtQU95uVhOON2gl
+	 jJcFWKMscToJYgxM5g4JYYHTepp3iN9pCQhHLV/xfrDuxhrEeopcy+UqeYiD4sesxl
+	 WPmZrlIOPJpKhy9PiwLZZg337q0EQ6KqslCiyXhofnPQtmgBtA/jf0T8A6txLIzw1R
+	 /0oDXlM94agtOYLSgivi1jsPgwhDXzkOm2LUnwK8sAVbwOyuL9zDv5BgAYHK1ckJuR
+	 7CtQTgsdX5YZvzBVKhPFB0BpQ9R97FEw7mu07A3cp7CGgxOXDxglQ744DH0nzj3Qub
+	 NqOcvwsexmNKQ==
 From: Sasha Levin <sashal@kernel.org>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	llvm@lists.linux.dev,
+To: Shuah Khan <shuah@kernel.org>
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	linux-pm@vger.kernel.org,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Nageswara R Sastry <rnsastry@linux.ibm.com>,
+	kexec@lists.infradead.org,
+	Willy Tarreau <w@1wt.eu>,
+	=?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Wake Liu <wakel@google.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/futex: load atomic values before harness comparisons
-Date: Tue,  3 Nov 2026 08:01:29 -0500
-Message-ID: <20261103130131.4069212-6-sashal@kernel.org>
+Subject: Re: [PATCH 0/5] selftests: target selection fixes for cross and LLVM builds
+Date: Tue,  3 Nov 2026 08:01:24 -0500
+Message-ID: <20261103130131.4069212-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261014200147.1364987-1-sashal@kernel.org>
-References: <20261014200147.1364987-1-sashal@kernel.org>
+In-Reply-To: <20261014200127.1363472-1-sashal@kernel.org>
+References: <20261014200127.1363472-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,9 +71,14 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Ping, this still applies on 7.4-rc1. The clang jobs in KernelCI still
-fail to build futex/functional/robust_list.c with the three
-invalid-operands errors.
+Hi Shuah,
+
+Ping on this one. Rafael took 3/5 through his tree. The other four
+still apply on 7.4-rc1, and Thomas reviewed 5/5.
+
+KernelCI still can't build prctl on any architecture (the Makefile is
+skipped whenever CROSS_COMPILE is set), kexec on powerpc, or size with
+clang on arm and on loongarch. Could you pick up 1/5, 2/5, 4/5 and 5/5?
 
 -- 
 Thanks,
