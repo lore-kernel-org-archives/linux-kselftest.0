@@ -1,111 +1,111 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793714473;
-	b=er1vvGaTZ62L9/EMNJqZR8RnP6GaWNOGa8FtOHSUCQVWczLbmCWQ9BjhlTEjltEeFEMf
-	 su2GwUTdqSKFkt7bzzPB47aseZsf3EGzEpvZdD5dYI11KPgb+17QxPzPZo/BbO48JKW30
-	 t4zQnVhU3hR4uL5UGh3EdD3xc24MEFHJsTUyN9JrmCu+edZfGRNfCgZ62L3F7EhR2yLOs
-	 NGXacXoA6pkpiwnVRbIh9xbd5lyb4vv+uQVswXQNBtLWB7SnkYmBiAvhUZ+P15QI1tlbQ
-	 zyE7YtDHLW+9u6EjRu74u4TnvPkwH1+L0cVMAd6nq7aKBT4G/Gc8WuhoNaJ60XvW9ag==
+	t=1793714488;
+	b=yDlKwxwBgYbnL7UWmAxwBO00Q1hFKZO6zSs2ojOdCmjnzOobYHInuWHuFYK2zLT9KYVE
+	 ffU+v54MHKn+9dD4EA5V3Rq8Mx3Dym6nPmc+5vWeUjIMmpr+w3wtRNzevezv+qDStNBOj
+	 Lhdturpqd8Gvq4ErKMVGZyJVTjXz6rTZzu2NOXxW892WYJxOgbvvAZU8ukT9zZqUUjlN+
+	 JZZ414H4ndLdN1q2fxbZWah5Tt9PoWTNaDmYx6f8br3RzE/e/j4WcPg4bVTIhpVCmiWHh
+	 7q2fDrT7CeZi8FJTXG/Lq49p3a0ua+ReZAn4v1SLWVCvtb+j2RzMnUr8Q6PCwjv/WYg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793714473;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793714488;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
 	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=G7QJTXk+yyu2noyd0AhwDq/i52OWJ/qR9UIyjE9rMjs=;
-	b=nkNELqhiaI3i1H7rdoXrlSv8Gf9Gg5c7oAO3DioEZsiBKVqsdV0o+yEN77rx3aYxopeU
-	 1h9Qi8akFp8zifTl+o9PNPqpx0i7QH49Y2IZuezOoIXF01NP6s6LNYnZ1DDU1KZHMQN/K
-	 tErmHRgheyYjiaYwLuddaaZ3cGySCFGx8961+hHL+mvvdDM003zBwYpJa+snteakHKQwK
-	 RzNoP0/BrCKz060NNVUnCD0kGO1NDNwVPZHHgISfJd+N+9eGQIi/WrSX1GaTwZgZGQd4q
-	 wDzcIpDbLp564w066QMJBzh9qfcduewMMRF7OBjxpAezrFH9442LinWlLdwicETjjdg==
+	bh=P8+OlAzHpVINqx3IR0YOlEKwLLVVCuMyCCuAZDrv7Z4=;
+	b=VmmFUDT6HcljV/Dxj2isvxoOlMpzVY0FAIk4K9bjPX2SR6U4ldUECRKnZvFrguv1lhNa
+	 xR9F/xefHtzdqZCkLDv4v/KcV3ZR0Nb7hx0UKZ/ckbZfsrtPm+/11bc+X81fXzyYEzTar
+	 4CaNcvrv8Vlf880KO9RutTUGmA9jc8KFI+V6zkQbwFMDk9oP0sW67qXDHctFFYzRnbLFx
+	 YOtbpBONEH+VHImof+phWuR8hoYRnSMH4c/W1vYlBJAmFRHGL5BuC2XP3DLETWpWt2z+3
+	 H2/xP+rDFXRvHHogN/MySi7Wx/Pq3HjGHIAvsYDnAVmMPLnNKNRNDrEsDmHi0QXxiCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=AuODcAX+;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=T8ak817K;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=XRepnCLA;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=eFb3lYmJ;
 	arc=none smtp.remote-ip=205.220.180.131
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E6E606A328
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 14:01:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40E6E606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201896082BDE
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 14:01:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 201896082BDE
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=AuODcAX+;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=T8ak817K
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A3DZCQ23612399
-	for <linux-kselftest@vger.kernel.org>; Tue, 3 Nov 2026 14:01:12 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=XRepnCLA;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=eFb3lYmJ
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A3DZI9C3003447
+	for <linux-kselftest@vger.kernel.org>; Tue, 3 Nov 2026 14:01:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	G7QJTXk+yyu2noyd0AhwDq/i52OWJ/qR9UIyjE9rMjs=; b=AuODcAX+odnE96rG
-	unhsBxUS8tw/cE8LXCIiTpdx5fVoTH8v/HB0Z12EykOwm6/kUjnwZWHRlxxOR5nS
-	TiiIjhWzqSXaaO2LWfzLTzSvsWcpsX31guEY68T+8aog21zNLuwHIFyivU6oegb8
-	a+MCJV1ZxoZZPxs4KF1S4UZeZVVJ0SjONEfg8C7yujr/nSO7VszYgcbO6c3eM9N1
-	jilCdGh5YBx8qfqxgVime+DBVKLjINQvkG+firwAlgfrzgig+rkqkM/tfG5wn5BK
-	f/kM7pY5gP5XCfByR1lgZPK4SC33IWqVEEpboPieJo2wsI2oTFQrTfq9MFlR1GwB
-	pIVY4A==
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com [209.85.221.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hq6m9ajr7-1
+	P8+OlAzHpVINqx3IR0YOlEKwLLVVCuMyCCuAZDrv7Z4=; b=XRepnCLAElgDIwA4
+	F0nnCHQrLDx2V8gXyTP2NIpU1L9fumaq3v07NgpgexeQzcW+kcthvG2bytU15byT
+	ChjqVw7wWUNsFwBvI3Bpvgou7FD9gSWG4OMks68uvSWJJjO/EadMBFRSM61DbALd
+	KGvwaJf29na9B+ulHffsmAW+JOhpH/gRMvdyaFLfMdkgb6TS57WeEm1ZTcdC9nUq
+	A/8GPGWw5nOWLnK1LjuXR9P6i8nLrplakISNlB7RV9TdQNqBr0AfZu527c5s1qRE
+	yolFZt8NQU7xy2qQZs696+BXUSY6noaEZgZ9mw1dsmHKVIb3eb7AHCrhNEQgYreW
+	vvfVbA==
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com [209.85.221.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hq2ackfe5-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 14:01:11 +0000 (GMT)
-Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-5eab2a9a633so3904243e0c.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 06:01:11 -0800 (PST)
+	for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 14:01:26 +0000 (GMT)
+Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-5eaad995a7eso984154e0c.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 06:01:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793714471; x=1794319271; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1793714486; x=1794319286; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=G7QJTXk+yyu2noyd0AhwDq/i52OWJ/qR9UIyjE9rMjs=;
-        b=T8ak817Krnd/5fdUXW/nnHWEku0BfbVUzjXQYXMBGFAD65s2H6XQLYopfHJgX6AvbE
-         nc9EleofFDNrgLWOecdQwtHq88cYCSXBFme/yYlVXmXVZq0IMyWBXbYMW0Ek4sYVV1AR
-         pid8UvherAdkYQrevq5a9ebLe384xaZLB3vdU1eE+7gzztzDr5ocjAu9F4zen4F/n4A0
-         OHa3JunW0sxiNnt90f5gWid8RgEh7/SIKsIGubvih7n+jMWF1bs+RWanHNn4SnEc0/mT
-         Xy8yS2rGCHMZqy+GgB46X46QQXQ/V4g68TlxE7z5oGQ3Q0bFVAf4p3nD1xsYlsAS3Qbx
-         lh7Q==
+        bh=P8+OlAzHpVINqx3IR0YOlEKwLLVVCuMyCCuAZDrv7Z4=;
+        b=eFb3lYmJAtlSxhs/umysz+MotOckKm5zqptMQz8gkDd5GRe2Ib10xuMuM+CkyzbPnX
+         R3YvFxGCx+mox6FFMHuFLMTVMwgxmqO3ITZN6x+8nT0DKmpbK9ydgEAuGbnJxORp2C7t
+         /sOGr6JJAtJgOor8AKE+iv8BQiXIGsgq+PncsRkafCElzjOamvAvGoVH14b8DrKbF5Kq
+         VjqIe08yOu5lAXz6trO4falvEL/GsnijXTEOM34o/RsY5d6qYlUsZ84W/W3SJV/fJhCo
+         KYeCZxJJEiw8nIZ8ityP41D16w7+pZl4x0W2Ri0QQldWcTRPbJ5j39NyoFBVEQ0+qc+S
+         8hlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793714471; x=1794319271;
+        d=1e100.net; s=20260707; t=1793714486; x=1794319286;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=G7QJTXk+yyu2noyd0AhwDq/i52OWJ/qR9UIyjE9rMjs=;
-        b=00X4uLhR/G/Xihr0aoy8ApSz00CQU0C6q2bx+2ICUaIogkbFNGkoVeWp/hUC0NIez+
-         nxt/MmH5i/U2Rn3ghfF6eAwGEeaLykwGt66FzshlN9e++zaqUbk/Eo49T1Sn+T1/g75c
-         hZe0Cc6izJnPpS0U0QxkqHGWC9i2TJhMVLwl3gyTDQm+vDW12fMIldrwJ4dum7xfxi+S
-         Y4aoLAYgTElt6ZyZH+Dg4RM+TDAD2OSh4K9iHdKAB8MEYifueX79AnKA5zAkqGMGXrxw
-         NidUmIn3ij+L2366+BzIvGVc9H+r37pnvtNqMb5Q2edkNZEyyCoIsLTiTcmUxOM2bjmN
-         ONzQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxRGQ8tQ36PMXpm7pvIBelT+IaHS8EzYjY4iap7KlMrdac6qmSRIkytDo7jd5tKlqHNEWi9X1IWfPjjZBNRLgs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+FbK24bXR07WwTdPP2dVjFkPYFaxdNHlcgitI0sln1SIAcPLUu
-	kgVb3WZhfB37v+U7I1WEzFNwmBBFrX4rKlK4cXIJkn5Fp2rf/4JZll9ZI8pJkewEO1lmDkp/xnX
-	KWCIsX9XpDaLLLyp0JemTjfJA7M89c69K2X1Koz4WMAH/qEpKA61dAfv1aDfb/e061Jjyskg=
-X-Gm-Gg: AYBFou3kFyTXd9NRePT9msnSVzmVaiwog3Iv8b0OwxxSh5FcYQTKkvxMU5PYOV0XjHN
-	yc/qjYarWsVkinROJ08IAPtday5Ng40LC0iMQ9MZ5uod3gXKP5fEyQOVhoQAC3c9rPjarekoTnY
-	Y4Hz/yTjirp0KorXR6qiWcc/aNPmQBLS5A9I2hMl4hJkrVFfTtH24h62LLsjLxzmzLYRA5869R2
-	egIDqmYPa1rv6Zg4+RhlOVVFEYfN4//XdSe+ziDbWPthiPdRqF5E7caOnUTDJFX2MsFBKgNwYaV
-	JpVUbBDtpkG8ettZVCieXkWwFtaIfMEDoQF0Otd5OFABugEXCh4jm9KoO9/LtWzWFxXWEfvU3Of
-	185UX/KCGu5TYEB1hfBix2p3fSQg7wNFTos4SfHwDbhz7AtNJVauLmPA4g9mnQYk=
-X-Received: by 2002:a05:6122:4d86:b0:5ea:aedd:6087 with SMTP id 71dfb90a1353d-5ec6871d3d2mr5829644e0c.4.1793714471145;
-        Tue, 03 Nov 2026 06:01:11 -0800 (PST)
-X-Received: by 2002:a05:6122:4d86:b0:5ea:aedd:6087 with SMTP id 71dfb90a1353d-5ec6871d3d2mr5829582e0c.4.1793714470476;
-        Tue, 03 Nov 2026 06:01:10 -0800 (PST)
+        bh=P8+OlAzHpVINqx3IR0YOlEKwLLVVCuMyCCuAZDrv7Z4=;
+        b=QM9+H7wUPhMcdvRkIAtM2roP3nqCinbPL52JG8+Nxsbn+CCnWXO2L8fCpWghLcUxHg
+         V0pgVDLoW11V8x6EXCAJEc6/Khh+FQMxUxAAbKFBbaT4Hyr6edWBcCXFgfcxgq2vMwft
+         W/f8nPHGlB33rZ0LYSV2dX+ubt4R8CnHHWA5grZZYxQNzfKHKtnAfzb/7OsQokM5/cp2
+         WUKONuKLEFNIFdjmnuyv25w9ofd5rsu7jh8vwVRKBgRC+kOYFpyHH82PELaKcujDejUx
+         Xl0xZWutJ2gqFFJAb3FkW2pgiGh1gz/4UsjOqQ6h57MIH35hQWorj86LAjRroIvZhmf7
+         ADOA==
+X-Forwarded-Encrypted: i=1; AKwUvBw3SYW0OOcHqdnl8ldwuj+LqmOTkuNOmozdp4wjnq9YrEsZgVjtN4xh+pC0+MjL5XAWDLyjvb9LpOfLthus+WA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8JKFtc6AkaxItgvb8OsLFUU8J2kSJBSgflRKoDFNTiVq74tk3u
+	M4ONlCv4fCd23Q9FgLhPSKDlza92cDjX9ya3RMfxnBwC8tCNJbbbnjWAAGrB52ACUy6nm6P8XVP
+	fxljzdEwANTvf40xirk8B0TOgjpEtJWC+QEmIetCT/+NFJh4a7O1kXIqX3Sshf5VxiyMuPUI=
+X-Gm-Gg: AYBFou1fWFalbHQqfbQX24z3lu2730oiJxqbKFZWjW6SBuEqaR5BRRWe5gS4ObvTFD+
+	9Go1DR+owkjGCj746eIvmzzRRghtPxIyjdsdAPsK46a7p/nPqcGfzJjUNp5eI7wf9tWU1wlySlK
+	uiahbftUq+dkVlR+5Fee2x8eIa/yhiVyAT4+WxxqCwmePM0Yac7PZcp0WSqBykYlG7Zs1IimE5V
+	3NuS4SpunxFdSQnsrXItdQAhN97X/BxFd1v9QHDcMA3wEGdzpfUmM7yvOQXLBaCZFWTcrrU1NnT
+	GpZ3GKE+oLpmYH0M0X821q9o+v6Ospdsta7H9ky9TFnD3y7lSch2qCTw0XEc/2Xo/hXefrqToUs
+	1PngkJtsoseecZ7GSHrUBRcliQDOdG3f/vjsHDZlEqB9+4YlO+tmuas/04HZtc3M=
+X-Received: by 2002:a05:6122:a5c6:20b0:5d7:2918:c648 with SMTP id 71dfb90a1353d-5ec68718fe7mr3068425e0c.8.1793714485783;
+        Tue, 03 Nov 2026 06:01:25 -0800 (PST)
+X-Received: by 2002:a05:6122:a5c6:20b0:5d7:2918:c648 with SMTP id 71dfb90a1353d-5ec68718fe7mr3068357e0c.8.1793714485081;
+        Tue, 03 Nov 2026 06:01:25 -0800 (PST)
 Received: from localhost ([93.66.104.131])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b2afee292bsm65369595e9.4.2026.11.03.06.01.08
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b2aaa4b85fsm55934655e9.10.2026.11.03.06.01.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 06:01:08 -0800 (PST)
+        Tue, 03 Nov 2026 06:01:21 -0800 (PST)
 From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Date: Tue, 03 Nov 2026 15:00:42 +0100
-Subject: [PATCH nf-next v3 1/8] net: netfilter: nf_flow_table: recognize
- IPv4/IPv6 in tunnel proto matching
+Date: Tue, 03 Nov 2026 15:00:46 +0100
+Subject: [PATCH nf-next v3 5/8] net: netfilter: add IPv4 over IPv6 tunnel
+ flowtable acceleration
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -117,7 +117,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261103-flowtable-sw-accel-ip6ip-sit-v3-1-60b5f063f1df@oss.qualcomm.com>
+Message-Id: <20261103-flowtable-sw-accel-ip6ip-sit-v3-5-60b5f063f1df@oss.qualcomm.com>
 References: <20261103-flowtable-sw-accel-ip6ip-sit-v3-0-60b5f063f1df@oss.qualcomm.com>
 In-Reply-To: <20261103-flowtable-sw-accel-ip6ip-sit-v3-0-60b5f063f1df@oss.qualcomm.com>
 To: Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
@@ -130,69 +130,278 @@ Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
-X-Proofpoint-GUID: 0TxynIz3yUnNGmX9APEVMQnLwyqbMEVN
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAzMDA1NSBTYWx0ZWRfX7EegkIf9MfqX
- 4Fzs3yhpd1cRTOMSKGVj5kdx4YSlp/Bs6cJuoUpMIZwdwTrWqtIEm7ZIqS7GROEg2+iw28erDGV
- uxoH+VZbG3LsuuKJO67VYv2QIRm7CDY=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAzMDA1NSBTYWx0ZWRfXywugErr0QCLn
- WX/k84nVG6rl+QvvXihEkDQfPO2AF7dxlCZxq9tR+6pxBaEuh913NnW8+D3ndbDT9O79ZPPfBSz
- tZnPL9me1kwwDn1mEcVzaR2tgnCrU2XHIpWG9YA7hCCgczuQv+AdIGbRN0N3iMlGCYh0nK4b1lq
- inCL70TuChBfQhdiXTaGieaNLzuK4pur5+d//1XpMO5Aw+AARN1Jg96tX83EioGrcsPUSiAMjkV
- 7q9oRpxOGqsVy3/c7H/blXmDW7CEA/G3IQIXHwVFjGl0aQUo7+YisSGzaTURR5WJpVSqQeeu+vc
- hUqzD4orgzS0nIVGN/z+x6tLzMbi4sAD5oiWTusVCRGd4igrB9AjaMhYwnw4GiHBWRTjU1AHhUx
- +HSASk9FJatdXKNvS4y9u+xvYM/L+GYxvCsMbqRXWkaSjfW/b6cl83jPUxoicOEvfYeJjxksUxq
- rl/9wEo0I3dsie4NoBQ==
-X-Authority-Analysis: v=2.4 cv=C7B8WgP+ c=1 sm=1 tr=0 ts=6ae9e927 cx=c_pps
- a=JIY1xp/sjQ9K5JH4t62bdg==:117 a=cAAIdyqZgEis9HJxay2Blw==:17
+X-Authority-Analysis: v=2.4 cv=T4gZ3PKQ c=1 sm=1 tr=0 ts=6ae9e936 cx=c_pps
+ a=+D9SDfe9YZWTjADjLiQY5g==:117 a=cAAIdyqZgEis9HJxay2Blw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22
- a=EUspDBNiAAAA:8 a=m99eJ5p7w77CmUfuVTAA:9 a=QEXdDO2ut3YA:10
- a=tNoRWFLymzeba-QzToBc:22
-X-Proofpoint-ORIG-GUID: 0TxynIz3yUnNGmX9APEVMQnLwyqbMEVN
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
+ a=EUspDBNiAAAA:8 a=D7r3e7iHu4DLkCbRepYA:9 a=QEXdDO2ut3YA:10
+ a=vmgOmaN-Xu0dpDh8OwbV:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAzMDA1NSBTYWx0ZWRfXx+Eaf8jKfIuG
+ Y1VWTYym2+AAmZajyvDgB5AYz7eBsPsTZQlDLIP3tMVUSXL1vboxgTy+3CoME/8CfquUdLpJTIu
+ ICsB+qh3KwPNvIDc6liADItAi4iRCYujNs42G3ZbnVAwo0A94d6PGox9Y6gl5tUnekT18GfB1qA
+ tPzNswzdGo2WJ+6joFICaw58nX3sRhzT2AjsjFMh/fgOMZ3ZuTR26FCh5bNZNA86vUqYASDGmJd
+ TqcVpryepTVWZdLFHKFpqIAkI8aphiPf8+lKt16s9Sdbwjn0nXMtp9N1Velp4Gt6ZRild4p/AzC
+ 2ydmWj7ZYxHgPLwgayp/7W7zjOEABj5IAOX8KIbMc9Y0SwVhNdfumv8GxT5YsoUToz6mrdURF5Q
+ KBg/jOU23pUFUlUnbLCiOg+5B0O6W4xw/aWETTkIC9NLfWRGo3yn+O4fcBTxlYC9pkPG1qlxPtq
+ I3w3iTIMue8arn58eTA==
+X-Proofpoint-GUID: hkO4GlXOW-GpUSwTFQ3iZdnUbFuIQbxH
+X-Proofpoint-ORIG-GUID: hkO4GlXOW-GpUSwTFQ3iZdnUbFuIQbxH
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAzMDA1NSBTYWx0ZWRfXz0/HxDHqs0+a
+ Rv4CtM1R/hMB+jW9qHekw0IjmthQgz9LFkWbBA64WKuCBeqQgVY568oN97gpCxxSNG9uEYTFNmr
+ 7F68DTtT+9GKnQUqCVHwoAFIImxzyDQ=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-03_02,2026-11-03_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
- impostorscore=0 phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0
+ clxscore=1015 phishscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611030055
 
-Allow the flowtable to parse IPv4-in-IPv6 and IPv6-in-IPv4 tunnels by
-accepting both IPPROTO_IPIP and IPPROTO_IPV6 as the inner protocol when
-walking the outer header in nf_flow_ip4_tunnel_proto() and
-nf_flow_ip6_tunnel_proto(). This is a preliminary patch to support IPv4
-over IPv6 and SIT tunnel flowtable offload.
-Please note IPv4 over IPv6 and SIT tunnel flowtable offloading is not
-enabled yet.
+Introduce sw flowtable acceleration for the TX/RX paths of
+IPv4 over IPv6 tunnels, relying on the netfilter flowtable
+infrastructure.
+The feature can be tested with a forwarding scenario between two
+NICs (eth0 and eth1), where an IPv4 over IPv6 tunnel is used to
+reach a remote site via eth1 as the underlay device:
+
+    ETH0 -- TUN0 <==> ETH1 -- [IP network] -- TUN1 (2001:db8:2::2)
+
+[IP configuration]
+
+6: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 00:00:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.2/24 scope global eth0
+       valid_lft forever preferred_lft forever
+7: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 00:11:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+    inet6 2001:db8:2::1/64 scope global nodad
+       valid_lft forever preferred_lft forever
+8: tun0@NONE: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/tunnel6 2001:db8:2::1 peer 2001:db8:2::2 permaddr ce9c:2940:7dcc::
+    inet 192.168.100.1/24 scope global tun0
+       valid_lft forever preferred_lft forever
+
+$ ip route show
+default via 192.168.100.2 dev tun0
+192.168.0.0/24 dev eth0 proto kernel scope link src 192.168.0.2
+192.168.100.0/24 dev tun0 proto kernel scope link src 192.168.100.1
+
+$ ip -6 route show
+2001:db8:2::/64 dev eth1 proto kernel metric 256 pref medium
+
+$ nft list ruleset
+table inet filter {
+    flowtable ft {
+        hook ingress priority filter
+        devices = { eth0, eth1 }
+    }
+
+    chain forward {
+        type filter hook forward priority filter; policy accept;
+        meta l4proto { tcp, udp } flow add @ft
+    }
+}
+
+When reproducing this scenario using veth interfaces, the following
+results were observed:
+
+- TCP stream received from IPv4 over IPv6 tunnel:
+  - net-next (baseline):                ~126 Gbps
+  - net-next + IP4IP6 flowtable support: ~138 Gbps
+
+- TCP stream transmitted to IPv4 over IPv6 tunnel:
+  - net-next (baseline):                ~127 Gbps
+  - net-next + IP4IP6 flowtable support: ~140 Gbps
 
 Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 ---
- net/netfilter/nf_flow_table_ip.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/netfilter/nf_flow_table_ip.c | 90 +++++++++++++++++++++++++++++++++-------
+ 1 file changed, 76 insertions(+), 14 deletions(-)
 
 diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
-index 19cafae748ab..e07fa9327eb7 100644
+index 902b9b595677..ea2cd9df33f8 100644
 --- a/net/netfilter/nf_flow_table_ip.c
 +++ b/net/netfilter/nf_flow_table_ip.c
-@@ -328,7 +328,7 @@ static bool nf_flow_ip4_tunnel_proto(struct nf_flowtable_ctx *ctx,
- 	if (iph->ttl <= 1)
- 		return false;
+@@ -856,7 +856,8 @@ static unsigned int nf_flow_queue_xmit(struct net *net, struct sk_buff *skb,
+ 	return NF_STOLEN;
+ }
  
--	if (iph->protocol == IPPROTO_IPIP) {
-+	if (iph->protocol == IPPROTO_IPIP || iph->protocol == IPPROTO_IPV6) {
- 		ctx->tun.inner_proto = iph->protocol;
- 		ctx->tun.hdr_size = size;
- 		ctx->offset += ctx->tun.hdr_size;
-@@ -353,7 +353,7 @@ static bool nf_flow_ip6_tunnel_proto(struct nf_flowtable_ctx *ctx,
- 	if (ipv6_ext_hdr(ip6h->nexthdr))
- 		return false;
+-static int nf_flow_queue_xmit4(struct sk_buff *skb,
++static int nf_flow_queue_xmit4(struct nf_flowtable_ctx *ctx,
++			       struct sk_buff *skb,
+ 			       struct flow_offload_tuple_rhash *tuplehash,
+ 			       const struct nf_hook_state *state)
+ {
+@@ -869,6 +870,16 @@ static int nf_flow_queue_xmit4(struct sk_buff *skb,
+ 	struct rtable *rt;
  
--	if (ip6h->nexthdr == IPPROTO_IPV6) {
-+	if (ip6h->nexthdr == IPPROTO_IPIP || ip6h->nexthdr == IPPROTO_IPV6) {
- 		ctx->tun.inner_proto = ip6h->nexthdr;
- 		ctx->tun.hdr_size = sizeof(*ip6h);
- 		ctx->offset += ctx->tun.hdr_size;
+ 	if (unlikely(tuplehash->tuple.xmit_type == FLOW_OFFLOAD_XMIT_XFRM)) {
++		if (tuplehash->tuple.l3proto == AF_INET6) {
++			struct rt6_info *rt6;
++
++			rt6 = dst_rt6_info(tuplehash->tuple.dst_cache);
++			memset(skb->cb, 0, sizeof(struct inet6_skb_parm));
++			IP6CB(skb)->iif = skb->dev->ifindex;
++			IP6CB(skb)->flags = IP6SKB_FORWARDED;
++			return nf_flow_xmit_xfrm(skb, state, &rt6->dst);
++		}
++
+ 		rt = dst_rtable(tuplehash->tuple.dst_cache);
+ 		memset(skb->cb, 0, sizeof(struct inet_skb_parm));
+ 		IPCB(skb)->iif = skb->dev->ifindex;
+@@ -886,22 +897,38 @@ static int nf_flow_queue_xmit4(struct sk_buff *skb,
+ 		return NF_DROP;
+ 
+ 	switch (tuplehash->tuple.xmit_type) {
+-	case FLOW_OFFLOAD_XMIT_NEIGH:
+-		rt = dst_rtable(tuplehash->tuple.dst_cache);
++	case FLOW_OFFLOAD_XMIT_NEIGH: {
++		struct dst_entry *dst;
++
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.ifidx);
+ 		if (!xmit.outdev) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+-		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, ip_addr->ip));
++		if (other_tuple->tun.encap_proto ?
++		    other_tuple->tun.encap_proto == AF_INET6 :
++		    ctx->tun.inner_proto == IPPROTO_IPV6) {
++			struct rt6_info *rt6;
++
++			rt6 = dst_rt6_info(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw6(rt6->dst.dev,
++					     rt6_nexthop(rt6, &ip_addr->in6));
++			dst = &rt6->dst;
++		} else {
++			rt = dst_rtable(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw4(rt->dst.dev,
++					     rt_nexthop(rt, ip_addr->ip));
++			dst = &rt->dst;
++		}
+ 		if (IS_ERR(neigh)) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+ 		xmit.dest = neigh->ha;
+ 		skb_dst_drop(skb);
+-		skb_dst_set_noref(skb, &rt->dst);
++		skb_dst_set_noref(skb, dst);
+ 		break;
++	}
+ 	case FLOW_OFFLOAD_XMIT_DIRECT:
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.out.ifidx);
+ 		if (!xmit.outdev) {
+@@ -948,7 +975,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+ 	else if (ret == 0)
+ 		return NF_ACCEPT;
+ 
+-	return nf_flow_queue_xmit4(skb, tuplehash, state);
++	return nf_flow_queue_xmit4(&ctx, skb, tuplehash, state);
+ }
+ EXPORT_SYMBOL_GPL(nf_flow_offload_ip_hook);
+ 
+@@ -1175,13 +1202,18 @@ nf_flow_offload_ipv6_lookup(struct nf_flowtable_ctx *ctx,
+ {
+ 	struct flow_offload_tuple tuple = {};
+ 
+-	if (nf_flow_tuple_ipv6(ctx, skb, &tuple) < 0)
++	if (ctx->tun.inner_proto == IPPROTO_IPIP) {
++		if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0)
++			return NULL;
++	} else if (nf_flow_tuple_ipv6(ctx, skb, &tuple) < 0) {
+ 		return NULL;
++	}
+ 
+ 	return flow_offload_lookup(flow_table, &tuple);
+ }
+ 
+-static int nf_flow_queue_xmit6(struct sk_buff *skb,
++static int nf_flow_queue_xmit6(struct nf_flowtable_ctx *ctx,
++			       struct sk_buff *skb,
+ 			       struct flow_offload_tuple_rhash *tuplehash,
+ 			       const struct nf_hook_state *state)
+ {
+@@ -1194,6 +1226,16 @@ static int nf_flow_queue_xmit6(struct sk_buff *skb,
+ 	struct rt6_info *rt;
+ 
+ 	if (unlikely(tuplehash->tuple.xmit_type == FLOW_OFFLOAD_XMIT_XFRM)) {
++		if (tuplehash->tuple.l3proto == AF_INET) {
++			struct rtable *rt4;
++
++			rt4 = dst_rtable(tuplehash->tuple.dst_cache);
++			memset(skb->cb, 0, sizeof(struct inet_skb_parm));
++			IPCB(skb)->iif = skb->dev->ifindex;
++			IPCB(skb)->flags = IPSKB_FORWARDED;
++			return nf_flow_xmit_xfrm(skb, state, &rt4->dst);
++		}
++
+ 		rt = dst_rt6_info(tuplehash->tuple.dst_cache);
+ 		memset(skb->cb, 0, sizeof(struct inet6_skb_parm));
+ 		IP6CB(skb)->iif = skb->dev->ifindex;
+@@ -1211,22 +1253,38 @@ static int nf_flow_queue_xmit6(struct sk_buff *skb,
+ 		return NF_DROP;
+ 
+ 	switch (tuplehash->tuple.xmit_type) {
+-	case FLOW_OFFLOAD_XMIT_NEIGH:
+-		rt = dst_rt6_info(tuplehash->tuple.dst_cache);
++	case FLOW_OFFLOAD_XMIT_NEIGH: {
++		struct dst_entry *dst;
++
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.ifidx);
+ 		if (!xmit.outdev) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+-		neigh = ip_neigh_gw6(rt->dst.dev, rt6_nexthop(rt, &ip_addr->in6));
++		if (other_tuple->tun.encap_proto ?
++		    other_tuple->tun.encap_proto == AF_INET :
++		    ctx->tun.inner_proto == IPPROTO_IPIP) {
++			struct rtable *rt4;
++
++			rt4 = dst_rtable(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw4(rt4->dst.dev,
++					     rt_nexthop(rt4, ip_addr->ip));
++			dst = &rt4->dst;
++		} else {
++			rt = dst_rt6_info(tuplehash->tuple.dst_cache);
++			neigh = ip_neigh_gw6(rt->dst.dev,
++					     rt6_nexthop(rt, &ip_addr->in6));
++			dst = &rt->dst;
++		}
+ 		if (IS_ERR(neigh)) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
+ 		}
+ 		xmit.dest = neigh->ha;
+ 		skb_dst_drop(skb);
+-		skb_dst_set_noref(skb, &rt->dst);
++		skb_dst_set_noref(skb, dst);
+ 		break;
++	}
+ 	case FLOW_OFFLOAD_XMIT_DIRECT:
+ 		xmit.outdev = dev_get_by_index_rcu(state->net, tuplehash->tuple.out.ifidx);
+ 		if (!xmit.outdev) {
+@@ -1267,12 +1325,16 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_buff *skb,
+ 	if (!tuplehash)
+ 		return NF_ACCEPT;
+ 
+-	ret = nf_flow_offload_ipv6_forward(&ctx, flow_table, tuplehash, skb);
++	if (ctx.tun.inner_proto == IPPROTO_IPIP)
++		ret = nf_flow_offload_forward(&ctx, flow_table, tuplehash, skb);
++	else
++		ret = nf_flow_offload_ipv6_forward(&ctx, flow_table, tuplehash,
++						   skb);
+ 	if (ret < 0)
+ 		return NF_DROP;
+ 	else if (ret == 0)
+ 		return NF_ACCEPT;
+ 
+-	return nf_flow_queue_xmit6(skb, tuplehash, state);
++	return nf_flow_queue_xmit6(&ctx, skb, tuplehash, state);
+ }
+ EXPORT_SYMBOL_GPL(nf_flow_offload_ipv6_hook);
 
 -- 
 2.56.0
