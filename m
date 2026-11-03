@@ -1,79 +1,123 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.111
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793701788;
-	b=wpof4v9c5KenfVckG5Ec1v8SBvCbuBGqxn2bEPbyq/pys8+4RsEI2un9HDJtmwncz7BM
-	 ksYqSFHHgwxLXf9tTD2nqZpLk2xCDH5eKFtFZqHHtNKNHAjkjzQLmPYQEguitCV4nS4hn
-	 UgUqNLcd67R+l6FLI/Gagk3G/RJGPAgInaefqs2pmO6m3/g/NWNig43vZENFmTO4g04R5
-	 IEjYLpT4uSojgEBSCp1Xoav5Pm8lhfrDY7DFH3Za+cGSj4qVZbmi2Ty/ROBn9br3Ry/tl
-	 xssWw2cJJr1hspZRJpFIbhdSUjKe/Z3QQHb7j195wIxzXvMzuYZ2fwOFpeKq+xv0phA==
+	t=1793702481;
+	b=rNYQKEDqsmiP3MogOH/JR171y9Bs0RPAUwcIkgx4wTrTnXiX0EkZzzdiNOoeGUQkJk/N
+	 emtRRJKWq4qI4yD5eWKjFrg065QOuhwb0g69WMOfcom9AczxxmJltma8tJ60qZmDgFI9X
+	 PCFnKfrJzpIayLsjNj1HSXwQYPc1HnpU+UVHoPVucU7VypwaMApYrYxv0w/YEU7iS0B4a
+	 1aMbLFDImW5tkACbeKz65AcT0DCBaMAQoLT2qEitamQvh8IzAE10Fzlwl8LyXjw0f/GVf
+	 41fVQbwRW+xf5uThEmf7ALfYfLztxSin0PNIvk48UJoFuZWdj4cyOcsf3woGgeozWOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793701788;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=9OSvScGRwha8A7Tb2tHR3R5F02sXRmMamVkr8+PRTWs=;
-	b=ZwUsJ8ltYJCWRMXfouxQGGN5/LfdM9jK5v1RRekGkH+i9Q/ih5AANy+S9M559FQsar+q
-	 PUgg6kKHWDhI3aD56eHj1EJ+8zgcPRXkD88KxpUAr2ZH3bar9vvlyh7ZkddW6tGeso7bp
-	 Vf9om5xc/qUtJsMYRUQFeqpApEZeyMiNulOfVnSeezgQ6kpcDrn48VC9k/gZe1lO5bzDq
-	 G/zhLlVjZ07cchlv/++EzsAbXBI6IIWNMH92Xoa3nH8bdZ8Gfr6V5cMaIKZUo9qZ2SdbE
-	 rmQkfNxATWtP7xnvhR5WkW86k7NRl4BEtUzORxnxqhKxbVYBq+brWRnsOR3Y6fMJFwQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793702481;
+	h=DMARC-Filter:Received:Received:Received:Date:Message-ID:From:To:Cc:
+	 Subject:In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
+	 X-Rspamd-Pre-Result:X-Rspamd-Server:X-Spamd-Result:X-Spam-Flag:
+	 X-Spam-Score:X-Spam-Level:X-Rspamd-Queue-Id:X-Rspamd-Pre-Result:
+	 X-Rspamd-Action;
+	bh=n3928gBIWqHxVcE0Q0TQTSHKUQ5+JmJrD1oVco54lEw=;
+	b=HwjEIW3xc83Pm0CwR2K/jkKioKJQAd99tyX6Cj6/AI9N9iW/GZLJnxdXlQ0Md8xjAhXp
+	 UE7o9jZIB+LI63ZtxP6vN6y+Xa2ri8buth6IGDfiJmvMTMZhzbTH0SsXovYkLzVbKMXXq
+	 vFiXEDLAkZ+L9q6fw4jUwFncyR3YRX4/Enl/UY62hCFlYX14DcVGD2BOI8gPoV+9s44Gh
+	 NTh6As2zyA8On/8V/FwUCthQCAD8QE6ugtIC2CMxuUVLpLwWQObkkycenc7WWO7gIR9OU
+	 N7zwdfKQiWgR5tYfGnHvdPnsVNyCZZ3iwLafK2p+H23NKktgtnQh2Lj+IsH/Ghh3akA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QQ1qfgqU;
-	arc=none smtp.remote-ip=95.215.58.111
-Received: from mta1.migadu.com (out-111.mta1.migadu.com [95.215.58.111])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54C4606B130
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 10:29:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A54C4606B130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QQ1qfgqU
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9OSvScGRwha8A7Tb2tHR3R5F02sXRmMamVkr8+PRTWs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793701785; v=1; x=1794306585;
- b=QQ1qfgqUbGhGBerxeLuJhyNk7bgr29IpB6mdUWq7I5GBjwVxZyy1/52gPaY/7kXtM0GXHLCx
- 4RpcT2uiJ1ar4EFiI4YDe8tiB1L5f3BVfM1Orm01rf7eF0WUMSfamObsQPcMPJ6r1YAuC3tWkmp
- 0vu1Vhi7wZbuoThW/OWjzw8w=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 129eb9b76a2afe71;
-	Tue, 03 Nov 2026 10:29:45 +0000
-X-Mizu-Trace-ID: 129eb9b76a2afe71
-X-Migadu-Flow: FLOW_OUT
-From: George Guo <dongtai.guo@linux.dev>
-To: ardb@kernel.org,
-	pratyush@kernel.org
-Cc: rppt@kernel.org,
-	pasha.tatashin@soleen.com,
-	chenhuacai@kernel.org,
-	shuah@kernel.org,
-	ilias.apalodimas@linaro.org,
-	akpm@linux-foundation.org,
-	baoquan.he@linux.dev,
-	ruirui.yang@linux.dev,
-	guodongtai@kylinos.cn,
-	kernel@xen0n.name,
-	graf@amazon.com,
-	liukexin@kylinos.cn,
-	loongarch@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D3A606A81C;
+	Tue,  3 Nov 2026 10:41:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 23D3A606A81C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8017122D12;
+	Tue,  3 Nov 2026 10:41:18 +0000 (UTC)
+Authentication-Results: smtp-out1.suse.de;
+	none
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A98D41350A;
+	Tue,  3 Nov 2026 10:41:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id fPJkIE266WqxEgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 03 Nov 2026 10:41:17 +0000
+Date: Tue, 03 Nov 2026 11:41:09 +0100
+Message-ID: <87ik2exkmy.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jann Horn <jannh@google.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Chris Mason <mason@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Christoph Hellwig <hch@lst.de>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	Joel Granados <joel.granados@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jan Kara <jack@suse.com>,
 	linux-kernel@vger.kernel.org,
-	kexec@lists.infradead.org,
-	linux-mm@kvack.org,
+	linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH v6 1/8] efi: Pass KHO state to the next kernel in a configuration table
-Date: Tue,  3 Nov 2026 19:29:41 +0900
-Message-ID: <20261103102941.11087-1-dongtai.guo@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <2382a0ee-cb6d-4572-be6e-ce3cf4d006e5@app.fastmail.com>
-References: <2382a0ee-cb6d-4572-be6e-ce3cf4d006e5@app.fastmail.com>
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	coreteam@netfilter.org,
+	kexec@lists.infradead.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	ibm-acpi-devel@lists.sourceforge.net,
+	jfs-discussion@lists.sourceforge.net,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-cifs@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-sh@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	sparclinux@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-doc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	Takashi Iwai <tiwai@suse.de>,
+	linux-input@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-debuggers@vger.kernel.org,
+	Chuck Lever <cel@kernel.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH RFC 09/38] ALSA: info: don't write past the end of a data entry
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-9-59422ed3e465@kernel.org>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+	<20261102-work-procfs-bugfixes-v1-9-59422ed3e465@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,26 +126,64 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.00
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 8017122D12
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
 
-Hi Ard, Pratyush,
+On Mon, 02 Nov 2026 15:21:24 +0100,
+Christian Brauner wrote:
+> 
+> snd_info_entry_write() clamps the count to what is left of the entry
+> by computing entry->size - pos as a size_t. For a position past the end
+> that wraps and the write goes to the driver unclamped, for opl4 into
+> sample memory outside of what the entry covers. At the end of the entry
+> the driver gets a count of 0 and vmalloc(0) warns. Before the clamp
+> moved into the common code the driver ignored such writes. Fail them
+> with -ENOSPC instead, like a block device does at the end of the
+> device. Returning 0 would make writers that use stdio retry forever.
+> 
+> Fixes: d97e1b78239c ("ALSA: info - Check file position validity in common layer")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-On Thu, Oct 29 2026, Ard Biesheuvel wrote:
-> Can we handle this as an arch table then, and handle everything in
-> the LoongArch arch code?
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
-Ard, LoongArch is currently the only user, so I understand the suggestion
-to keep the handling in the architecture code.
 
-My preference is to keep the table definition and handling common, given
-the potential for x86 to use it as Pratyush described in his reply, to
-replace setup_data once x86 gains EFI support. The table contains no
-LoongArch-specific fields, and only the LoongArch stub installs it. On
-systems without the table, the common code does nothing.
+thanks,
 
-Would that be acceptable, or would you prefer to keep the handling in
-LoongArch until a second architecture adopts it?
+Takashi
 
-Thanks,
-George
+> ---
+>  sound/core/info.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/sound/core/info.c b/sound/core/info.c
+> index c4d57d0809ad..982087bc8575 100644
+> --- a/sound/core/info.c
+> +++ b/sound/core/info.c
+> @@ -171,6 +171,8 @@ static ssize_t snd_info_entry_write(struct file *file, const char __user *buffer
+>  	pos = *offset;
+>  	if (!valid_pos(pos, count))
+>  		return -EIO;
+> +	if (pos >= entry->size)
+> +		return count ? -ENOSPC : 0;
+>  	if (count > 0) {
+>  		size_t maxsize = entry->size - pos;
+>  		count = min(count, maxsize);
+> 
+> -- 
+> 2.53.0
+> 
