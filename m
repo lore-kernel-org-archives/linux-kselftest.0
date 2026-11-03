@@ -1,127 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793719155;
-	b=OSqGek1AmMgCpeUpWnQRUNS69jtgzubZAjyZ+fL4LVF5lDhWvB9cbHjXvU/R2FaymNhP
-	 WAWMQJbTu8anSuc8soxBIYC8+Iq5Cup8rF9q7HT5ODf9wrQlDdUn/Mk6jXP1hOKJBIHrB
-	 rQ0vEXXLx0mbJyi5o8RfR2OAUCptgu0AmhjNa+ZRvm7UYAaabiQfbsIUWECkIu3dnl8ha
-	 5FwJBhCW+7xtdGQvFfPeKVGxpDrG+b+zyFxIubfDAfIZ0SX4VriGtIgzOMzaUp1rP0/Fg
-	 GlJ1vopIIQ7tbPvcfz9bTntDVXlkC3GFhK5wQOgIWTuMJmcgwQaKt+h2Z/Xu/BpwhYg==
+	t=1793721285;
+	b=LGKZxFwkkzCuxR4M+JFuw4FAd28LbE5hCFEH4QrNXIDqY9ZpUJoP9sd2tN0e3KIt8IGZ
+	 FX9+FY6Rt772S3QnEKvGejBEm2alRA+TonjU1SrCtOH4uWRhRoTZCoI3eHgVo212fPx13
+	 ap0uy6vpsmnU1JCq7KLCeTUVm39vAtBLXy7aqaqDFC5FxBVgudtp+M8PKMKks9guu4bmF
+	 6iUoTPQvXUNH2IaQzXbB8NKQ9ChRld61G25oSu06bMpZ7c4x1NrLPyARslKgo+PJ4duqn
+	 LAlsbkZb8v2LaYNDmchzes1pWSR3qZoxn+GwUwlSfT9+QU3J4+CkTKRFNre1HChpw9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793719155;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:User-Agent;
-	bh=nFMfg3/nt4kJ6ByBxDP0S88zpskLBtu8XVaP0ySPO4M=;
-	b=lWF3X0P5yKPe5TUaUcXl1UWGaI1ZVmeFz7ncj/XDrXY7QIejx6TaBjYVIV+I3unUcNmZ
-	 2+NT3dNW0y+88PmVfAdVVHKpjNifEUAqrLy2xRarGio6bcqic9Nv0fAh7w3Nvf5RNErSx
-	 2ITuMA0olJOPnA28AfgPjYkgRfkh1/bRxPHZ71rsIVx8JX2twbSsdM9Y7XPh8LeMPBc+K
-	 eavC6Mi2GIgqpuUNsEF3yNKS6BHoGSsTewrxxqImKm9kb3fAHVS0855eCQfWsYE5gjxrX
-	 IhIqOcwykCrOYdbhogGjCwNcUbDF9dTF90eMXpYMVWQn0WyeZ7u51CT9H6uOCm9T6vA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793721285;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=BtCx3J4pR7AaZm5gEtmZSSdNWFEZJJaJEEBMSycaNwk=;
+	b=NIYJkePKbIdjzKl8w8VQRvcPjeUC5b9NcSIDACaZ/JWljnwWrmt7mNLB39/HEovPGIxC
+	 RrcZjaN47OmNJtuQv8x2JiqtgyRYWDnB3s3vJrKDnlGwXr8xxNU+VrxNPSocz8lvC2bZL
+	 swpYZu54CFBOhYq0UlhM1C5JUnc4esJMlyS6N2nvy7HfGf8HpQyfM5WirpFLQ1O9N1IYy
+	 fy/82acBZVNwL1+xuwRd38l463IUP98SOB1MHMP4DdBKoD0Vdf2sP+LpA6nAnnynVWV0y
+	 ZU+0sWKTQKwk0cIYSkGNMMYjLOeFhAsDX8xfQnHmJmGgqDgAot+BkJYWZJ1InM0s/fg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=HiZKqjod;
-	arc=none smtp.remote-ip=209.85.214.170
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fbEVwT+G;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1D460A5BE8
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 15:19:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B1D460A5BE8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAD8606A327;
+	Tue,  3 Nov 2026 15:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=HiZKqjod
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e5378b281aso25420255ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 07:19:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1793719155; x=1794323955; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=nFMfg3/nt4kJ6ByBxDP0S88zpskLBtu8XVaP0ySPO4M=;
-        b=HiZKqjodmC+QQmLAeaRDa6IAzpCvNu0e/O+ZxnDhxZcqbtzhfsFirRaImXsTbNtcHc
-         kZnISC5LjTgyAMGkaIBpkPEgBVilEidh2y0Jo0Uw2J2JKg+dkQ20GsYD/n1Qq+ZJyvAP
-         S9mhCv9d2fjHoV5vo3CMXEefki+aKbj9UEvwY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793719155; x=1794323955;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nFMfg3/nt4kJ6ByBxDP0S88zpskLBtu8XVaP0ySPO4M=;
-        b=oMGvPUYfBAFSednrWGurtNBqBA50F89MdHLtHIFXtJmUQeCpRuyptUKks3iKyJlRH8
-         ZBtyQnEGKVMWQs6Aj8kkyM7D0q++f/RBmTLQ2H7Ly6XlnMWXzHDzx8wiW6JjJ/kceS/N
-         dci+9jQNnWW/idZt7+3kI7zHK5KzUHkqp5diPVxFB61c2z4nqLTLp8PSRVd3NDzdrnA7
-         m3aHd1jEKNLE6Ben5sV6duX3WuCfgIa/45sr0tEHhMfXKrtRsyZyVBfA6iZ9GF15B/Oi
-         17CUTWyzVVlTL654bL9UHsl9vuNx9ub08wuw1htAIwGKktr5hXDyLihQqeBxKUmrT/Vc
-         aJaA==
-X-Forwarded-Encrypted: i=1; AKwUvBzSD02nqDY0d4LIYwgjgxQ61FTbGEglNcRgOz8KejenZ0a3Kg8WYpy8NW34bwp8sgIcctJyxBzW6XMWsujjW2I=@vger.kernel.org
-X-Gm-Message-State: APuU4Z86xYTTikrthXIkgtfc6DPuouLhia8ST/8xpBNtpAZleAxosZGV
-	JF9+3KJGwqxuWqjpkJvJ3/FhyTPc996SzaN2S4nmFM5tWTM89W8HVOG4tDDXnQfXvOY=
-X-Gm-Gg: AYBFou1yl0J7mVJY9q79R+NpL58m+U9HP8OU9t3AATTKMpR5KOfpp8RyzU7MDpsqf8g
-	2de7B1sTmINUP5wxJodw4e5aaYOCNe8VikoNDjlj5pVajVPhaSDc0/vpSiJUttA9Gt+wI5n3JJB
-	vbJ8xxHI4bnKDNbKVNgcRLBnaXYiDAWz/tOE/PDIOG8FWH1tDOwfX7V2uzyhfDc0jlc/wAzDrT8
-	c+KgomcbuKdihpbZtWCF5SELxZNEIHjJpiNPXEc6AJq78QbGDnpzvtk6S82cnWjVtTUSNAd8pzl
-	DsxD9Uc/MfLdA7UwpN6KISqWZYR5TL78lLgZ7hmChQaIuymXAhqdA3umkG+ifOiR/u4R62XRaHe
-	e+AqstB68ZqGQu3NnHTHDhF8HIA3n08VnVGXSt+EoJG6Wqo+QC603SPK+yFQxYGeinIiZ3gKvSZ
-	TjASnvSSIiCnip1FKu6vSGFP2hUhSIEos03Vz3LyWOsC+2FNJ5aeyQliU+xALr59SXbUJcWmGfJ
-	spL6Bg5aEoPoLpms0LMpk3xQ8oMU9Zmh9CedOz6zPgLPowmkVUyX3ACGajeh9YVHCF3AJDZaZE2
-	T4ZBn6JYn1/59z51VTf8ichYt9Oa4kUQBTsi0Dk9l7WFPGBe/NjjywzawjVQ0PMJupIzz6B2+jj
-	1FlzVRrrPYCosQucU3AgwB4Zu8JEKuft5PyyOwOY4x/Rv4nEYOKSACiILb/TJupWe6kdjGfZe
-X-Received: by 2002:a17:903:1b2d:b0:2d6:f6ba:263d with SMTP id d9443c01a7336-2eb36414d03mr125058495ad.7.1793719154563;
-        Tue, 03 Nov 2026 07:19:14 -0800 (PST)
-Received: from localhost ([116.86.153.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392492fbsm42885535ad.32.2026.11.03.07.19.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 07:19:13 -0800 (PST)
-Date: Tue, 3 Nov 2026 23:19:10 +0800
-From: Chris Down <chris@chrisdown.name>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>
-Cc: Jeff Xu <jeffxu@google.com>, David Hildenbrand <david@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Kees Cook <kees@kernel.org>,
-	Andrey Vagin <avagin@gmail.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Shuah Khan <shuah@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, Jiri Olsa <jolsa@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: [PATCH v2 8/8] selftests/mm: Check that no_mseal_sys_mappings
- unseals system mappings
-Message-ID: <053ef1ff0a6a7e5b37109d59a064a7665e087cb0.1793718940.git.chris@chrisdown.name>
-References: <cover.1793718940.git.chris@chrisdown.name>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fbEVwT+G
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093D51F000C1;
+	Tue,  3 Nov 2026 15:54:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793721285;
+	bh=BtCx3J4pR7AaZm5gEtmZSSdNWFEZJJaJEEBMSycaNwk=;
+	h=From:To:Cc:Subject:Date;
+	b=fbEVwT+G+FcOHUoT1D6DZBK+mkuxbYJ0mo5fcDP3n1KcPYDZfpLWZey8sMVwtwFht
+	 hpBGBn+QwZB/NWbC6fD+KGQs+UvBTPRirMHSAhN8n9EVsiOxrPmzkRD2Ua7k9yTWNZ
+	 4+I3oczPXTig3bhFmwG4S3nuLhcBZBmREc7pEnQimvKHtmgsphqiV7fYSof0HVp6St
+	 mC3DUHQ1lfTzPD/05z2lRqnF2wqVILgXp+yfri8mpLb/KRrnnYJ3yknAy+SS3L7B5T
+	 Bsb7c9u2B6Ns3o/0+SqAcIjwjl9kwdeF7oTJr/zH0vpxK/+SA2S/oHv5dEeV1HnW+R
+	 I7eOP28BHzpxA==
+From: Sasha Levin <sashal@kernel.org>
+To: John Stultz <jstultz@google.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>,
+	Miroslav Lichvar <mlichvar@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: timers: print time values as long long
+Date: Tue,  3 Nov 2026 10:54:42 -0500
+Message-ID: <20261103155442.534141-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -131,84 +62,231 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1793718940.git.chris@chrisdown.name>
-User-Agent: Mutt/2.3.3 (9073d26d) (2026-06-12)
+Content-Transfer-Encoding: 8bit
 
-Booting with no_mseal_sys_mappings currently makes check_sealed skip and
-expect_sealed fail, so nothing checks that the parameter actually turns
-sealing off.
+On 32-bit architectures with a 64-bit time_t, such as armhf in Debian
+13, time_t, the tv_sec fields of struct timespec and struct timeval,
+their tv_usec field and the freq field of struct timex are long long,
+and printing them with %ld or %lu warns:
 
-So let's check /proc/cmdline for it, and when it's there, expect [vdso]
-and the other system mappings to be unsealed rather than skipping or
-failing. The vdso tests already expect munmap(), mremap() and mprotect()
-to succeed when [vdso] isn't sealed, so that covers what the parameter
-allows as well.
+  leap-a-day.c:142:69: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'time_t' {aka 'long long int'} [-Wformat=]
 
-Suggested-by: Jeff Xu <jeffxu@google.com>
-Signed-off-by: Chris Down <chris@chrisdown.name>
+Cast the values to long long and print them with %lld. While at it,
+print tv_nsec, a long, with %ld instead of %lu, and cast it to long, as
+it is a long long on x32, and print the unsigned long frequency in
+rtcpie with %lu.
+
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/mm/sysmap_is_sealed.c | 25 ++++++++++++++++---
- 1 file changed, 21 insertions(+), 4 deletions(-)
+Found with a 32-bit build of the selftests with a 64-bit time_t (gcc 16
+and clang 21 with -m32 -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
+KernelCI's 32-bit arm builds show the same warnings. The changed files
+build without format warnings there now, and the x86_64 builds don't
+change. The other selftests get the same kind of fix in separate
+patches.
 
-diff --git a/tools/testing/selftests/mm/sysmap_is_sealed.c b/tools/testing/selftests/mm/sysmap_is_sealed.c
-index bfa140e01d8a..158e116ca3b4 100644
---- a/tools/testing/selftests/mm/sysmap_is_sealed.c
-+++ b/tools/testing/selftests/mm/sysmap_is_sealed.c
-@@ -56,6 +56,21 @@ static bool sysmaps_sealed(void)
- 	return vdso && check_vmflag_sealed(vdso);
- }
+ .../selftests/timers/alarmtimer-suspend.c     |  9 +++---
+ .../selftests/timers/inconsistency-check.c    |  5 ++--
+ tools/testing/selftests/timers/leap-a-day.c   | 28 ++++++++++---------
+ tools/testing/selftests/timers/rtcpie.c       |  4 +--
+ tools/testing/selftests/timers/threadtest.c   |  6 ++--
+ .../testing/selftests/timers/valid-adjtimex.c | 14 ++++++----
+ 6 files changed, 37 insertions(+), 29 deletions(-)
+
+diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/testing/selftests/timers/alarmtimer-suspend.c
+index 120b3ce8b39e8..c1d87cbfee27e 100644
+--- a/tools/testing/selftests/timers/alarmtimer-suspend.c
++++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
+@@ -60,8 +60,8 @@ void sigalarm(int signo)
+ 	delta_ns = timespec_sub(start_time, ts);
+ 	delta_ns -= NSEC_PER_SEC * SUSPEND_SECS * alarmcount;
  
-+static bool sysmaps_disabled(void)
-+{
-+	char cmdline[4096];
-+	bool disabled = false;
-+	FILE *f;
-+
-+	f = fopen("/proc/cmdline", "r");
-+	if (!f)
-+		return false;
-+	if (fgets(cmdline, sizeof(cmdline), f))
-+		disabled = strstr(cmdline, "no_mseal_sys_mappings");
-+	fclose(f);
-+	return disabled;
-+}
-+
- /*
-  * Kernels built without CONFIG_MSEAL_SYSTEM_MAPPINGS don't seal system
-  * mappings either, so check_sealed skips if they aren't sealed. This fails
-@@ -63,7 +78,7 @@ static bool sysmaps_sealed(void)
-  */
- TEST(expect_sealed)
- {
--	EXPECT_TRUE(sysmaps_sealed());
-+	EXPECT_EQ(!sysmaps_disabled(), sysmaps_sealed());
- }
+-	printf("ALARM(%i): %ld:%ld latency: %lld ns ", alarmcount, ts.tv_sec,
+-							ts.tv_nsec, delta_ns);
++	printf("ALARM(%i): %lld:%ld latency: %lld ns ", alarmcount,
++	       (long long)ts.tv_sec, (long)ts.tv_nsec, delta_ns);
  
- FIXTURE(basic) {
-@@ -127,7 +142,9 @@ FIXTURE_VARIANT_ADD(basic, stack) {
+ 	if (delta_ns > UNREASONABLE_LAT) {
+ 		printf("[FAIL]\n");
+@@ -103,8 +103,9 @@ int main(void)
+ 		}
  
- TEST_F(basic, check_sealed)
- {
--	if (!sysmaps_sealed())
-+	bool disabled = sysmaps_disabled();
-+
-+	if (!disabled && !sysmaps_sealed())
- 		SKIP(return, "system mappings are not sealed");
+ 		clock_gettime(alarm_clock_id, &start_time);
+-		printf("Start time (%s): %ld:%ld\n", clock_name(alarm_clock_id),
+-				start_time.tv_sec, start_time.tv_nsec);
++		printf("Start time (%s): %lld:%ld\n", clock_name(alarm_clock_id),
++				(long long)start_time.tv_sec,
++				(long)start_time.tv_nsec);
+ 		printf("Setting alarm for every %i seconds\n", SUSPEND_SECS);
+ 		its1.it_value = start_time;
+ 		its1.it_value.tv_sec += SUSPEND_SECS;
+diff --git a/tools/testing/selftests/timers/inconsistency-check.c b/tools/testing/selftests/timers/inconsistency-check.c
+index d7982ac4bd18b..e8012fed2280c 100644
+--- a/tools/testing/selftests/timers/inconsistency-check.c
++++ b/tools/testing/selftests/timers/inconsistency-check.c
+@@ -86,8 +86,9 @@ int consistency_test(int clock_type, unsigned long seconds)
+ 			for (i = 0; i < CALLS_PER_LOOP; i++) {
+ 				if (i == inconsistent)
+ 					ksft_print_msg("--------------------\n");
+-				ksft_print_msg("%lu:%lu\n", list[i].tv_sec,
+-							list[i].tv_nsec);
++				ksft_print_msg("%lld:%ld\n",
++					       (long long)list[i].tv_sec,
++					       (long)list[i].tv_nsec);
+ 				if (i == inconsistent + 1)
+ 					ksft_print_msg("--------------------\n");
+ 			}
+diff --git a/tools/testing/selftests/timers/leap-a-day.c b/tools/testing/selftests/timers/leap-a-day.c
+index b93cb5714b37b..e932e13071ed2 100644
+--- a/tools/testing/selftests/timers/leap-a-day.c
++++ b/tools/testing/selftests/timers/leap-a-day.c
+@@ -139,20 +139,21 @@ void sigalarm(int signo)
+ 	ret = adjtimex(&tx);
  
- 	if (!has_mapping(variant->name, self->maps)) {
-@@ -135,8 +152,8 @@ TEST_F(basic, check_sealed)
- 			variant->name);
+ 	if (tx.time.tv_sec < next_leap) {
+-		printf("Error: Early timer expiration! (Should be %ld)\n", next_leap);
++		printf("Error: Early timer expiration! (Should be %lld)\n",
++		       (long long)next_leap);
+ 		error_found = 1;
+-		printf("adjtimex: %10ld sec + %6ld us (%i)\t%s\n",
+-					tx.time.tv_sec,
+-					tx.time.tv_usec,
++		printf("adjtimex: %10lld sec + %6lld us (%i)\t%s\n",
++					(long long)tx.time.tv_sec,
++					(long long)tx.time.tv_usec,
+ 					tx.tai,
+ 					time_state_str(ret));
  	}
+ 	if (ret != TIME_WAIT) {
+ 		printf("Error: Timer seeing incorrect NTP state? (Should be TIME_WAIT)\n");
+ 		error_found = 1;
+-		printf("adjtimex: %10ld sec + %6ld us (%i)\t%s\n",
+-					tx.time.tv_sec,
+-					tx.time.tv_usec,
++		printf("adjtimex: %10lld sec + %6lld us (%i)\t%s\n",
++					(long long)tx.time.tv_sec,
++					(long long)tx.time.tv_usec,
+ 					tx.tai,
+ 					time_state_str(ret));
+ 	}
+@@ -291,7 +292,8 @@ int main(int argc, char **argv)
+ 		printf("Scheduling leap second for %s", ctime(&next_leap));
  
--	EXPECT_EQ(variant->sealed,
--		mapping_is_sealed(variant->name, self->maps));
-+	EXPECT_EQ(variant->sealed && !disabled,
-+		  mapping_is_sealed(variant->name, self->maps));
- };
+ 		/* Set up timer */
+-		printf("Setting timer for %ld -  %s", next_leap, ctime(&next_leap));
++		printf("Setting timer for %lld -  %s", (long long)next_leap,
++		       ctime(&next_leap));
+ 		memset(&se, 0, sizeof(se));
+ 		se.sigev_notify = SIGEV_SIGNAL;
+ 		se.sigev_signo = signum;
+@@ -339,17 +341,17 @@ int main(int argc, char **argv)
  
- static void *find_vdso(struct procmap_fd *procmap, size_t *size)
+ 			if (tai_time) {
+ 				clock_gettime(CLOCK_TAI, &tai);
+-				printf("%ld sec, %9ld ns\t%s\n",
+-						tai.tv_sec,
+-						tai.tv_nsec,
++				printf("%lld sec, %9ld ns\t%s\n",
++						(long long)tai.tv_sec,
++						(long)tai.tv_nsec,
+ 						time_state_str(ret));
+ 			} else {
+ 				ctime_r(&tx.time.tv_sec, buf);
+ 				buf[strlen(buf)-1] = 0; /*remove trailing\n */
+ 
+-				printf("%s + %6ld us (%i)\t%s\n",
++				printf("%s + %6lld us (%i)\t%s\n",
+ 						buf,
+-						tx.time.tv_usec,
++						(long long)tx.time.tv_usec,
+ 						tx.tai,
+ 						time_state_str(ret));
+ 			}
+diff --git a/tools/testing/selftests/timers/rtcpie.c b/tools/testing/selftests/timers/rtcpie.c
+index 4ba42d198b7ec..5d88c78e3bdbc 100644
+--- a/tools/testing/selftests/timers/rtcpie.c
++++ b/tools/testing/selftests/timers/rtcpie.c
+@@ -111,8 +111,8 @@ int main(int argc, char **argv)
+ 			timersub(&end, &start, &diff);
+ 			if (diff.tv_sec > 0 ||
+ 			    diff.tv_usec > ((1000000L / tmp) * 1.10)) {
+-				fprintf(stderr, "\nPIE delta error: %ld.%06ld should be close to 0.%06ld\n",
+-				       diff.tv_sec, diff.tv_usec,
++				fprintf(stderr, "\nPIE delta error: %lld.%06lld should be close to 0.%06lu\n",
++				       (long long)diff.tv_sec, (long long)diff.tv_usec,
+ 				       (1000000L / tmp));
+ 				fflush(stdout);
+ 				exit(-1);
+diff --git a/tools/testing/selftests/timers/threadtest.c b/tools/testing/selftests/timers/threadtest.c
+index 60b8b21bf7824..fbf5d4cd80792 100644
+--- a/tools/testing/selftests/timers/threadtest.c
++++ b/tools/testing/selftests/timers/threadtest.c
+@@ -63,7 +63,8 @@ void checklist(const struct timespec *list, int size)
+ 			for (j = 0; j < size; j++) {
+ 				if (j == i)
+ 					printf("---------------\n");
+-				printf("%lu:%lu\n", list[j].tv_sec, list[j].tv_nsec);
++				printf("%lld:%ld\n", (long long)list[j].tv_sec,
++				       (long)list[j].tv_nsec);
+ 				if (j == i+1)
+ 					printf("---------------\n");
+ 			}
+@@ -162,7 +163,8 @@ int main(int argc, char **argv)
+ 	start = time(0);
+ 	strftime(buf, 255, "%a, %d %b %Y %T %z", localtime(&start));
+ 	printf("%s\n", buf);
+-	printf("Testing consistency with %i threads for %ld seconds: ", thread_count, runtime);
++	printf("Testing consistency with %i threads for %lld seconds: ",
++	       thread_count, (long long)runtime);
+ 	fflush(stdout);
+ 
+ 	/* spawn */
+diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
+index f641d5fb09023..c666a327d0580 100644
+--- a/tools/testing/selftests/timers/valid-adjtimex.c
++++ b/tools/testing/selftests/timers/valid-adjtimex.c
+@@ -136,8 +136,8 @@ int validate_freq(void)
+ 		tx.modes = 0;
+ 		ret = adjtimex(&tx);
+ 		if (tx.freq != valid_freq[i]) {
+-			printf("Warning: freq value %ld not what we set it (%ld)!\n",
+-					tx.freq, valid_freq[i]);
++			printf("Warning: freq value %lld not what we set it (%ld)!\n",
++					(long long)tx.freq, valid_freq[i]);
+ 		}
+ 	}
+ 	for (i = 0; i < NUM_FREQ_OUTOFRANGE; i++) {
+@@ -156,8 +156,8 @@ int validate_freq(void)
+ 		ret = adjtimex(&tx);
+ 		if (tx.freq == outofrange_freq[i]) {
+ 			printf("[FAIL]\n");
+-			printf("ERROR: out of range value %ld actually set!\n",
+-					tx.freq);
++			printf("ERROR: out of range value %lld actually set!\n",
++					(long long)tx.freq);
+ 			pass = -1;
+ 			goto out;
+ 		}
+@@ -218,7 +218,8 @@ int set_offset(long long offset, int use_nano)
+ 
+ 	ret = clock_adjtime(CLOCK_REALTIME, &tmx);
+ 	if (ret < 0) {
+-		printf("(sec: %ld  usec: %ld) ", tmx.time.tv_sec, tmx.time.tv_usec);
++		printf("(sec: %lld  usec: %lld) ", (long long)tmx.time.tv_sec,
++		       (long long)tmx.time.tv_usec);
+ 		printf("[FAIL]\n");
+ 		return -1;
+ 	}
+@@ -238,7 +239,8 @@ int set_bad_offset(long sec, long usec, int use_nano)
+ 	tmx.time.tv_usec = usec;
+ 	ret = clock_adjtime(CLOCK_REALTIME, &tmx);
+ 	if (ret >= 0) {
+-		printf("Invalid (sec: %ld  usec: %ld) did not fail! ", tmx.time.tv_sec, tmx.time.tv_usec);
++		printf("Invalid (sec: %lld  usec: %lld) did not fail! ",
++		       (long long)tmx.time.tv_sec, (long long)tmx.time.tv_usec);
+ 		printf("[FAIL]\n");
+ 		return -1;
+ 	}
 -- 
-2.54.0
+2.53.0
 
