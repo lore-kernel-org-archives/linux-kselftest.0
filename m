@@ -1,63 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793716081;
-	b=LCtoUBzR9fAQ4LHikW/iVgdY5/R+efGtXmToLN7r4VNXZ7/OMyYYcK02dVgrP4IFfHIE
-	 c7QuvKjxe/q+uDoNDnIwZOg9TWt8BJFMxHiPJ2yzs3HGtiwogjbFY+0IjBOwpb5Bws9hx
-	 9rL/fvo2Uz8KFhylyADng+2VizmOauiKfmIW7tDDHPL2BSX0A77oCWG7K9/12VxZhVp1b
-	 Tp9T3EcwWfGLTEFEUtO8Ou9goPe0Pf3tBvRgY8RG9gysqovn4Jk6wDjyjH4IKYhZp4OJV
-	 yERA7TOEW2R+GEWOhJvZFHrtBeTL0HZZqm+NJ8+kLsfew7vfT+udm2Y6GT3i8XLYjmg==
+	t=1793716079;
+	b=wU69ITzaZXkjnObnvCblsYg3HFz5ib8rimQ+FBDVEKVYC3S65h0qUDqK/3bqf7hTRXPC
+	 gRcfEkFefpsp8+4woU+pN6x5pYZT3gLA7qlhrsh/VdPV2riXBZmKEX/PjcfoZJa629vl1
+	 x18H0aKnUcgxUFlsnVFlIkTzWZk6/RpXe875PSWeTiUnvR3pQETOqpT4CXHqM0x1CgUst
+	 LoEr2+dQypzk3DrGblH20QlBJ0fWfBpf2xlT79UD+u0TKCT1luQxnHFpk5Pf1mlNmKb6s
+	 ZrTy4L/CvHyne52a37I9iqsB+2juwKGKwNw9jzjXof5jj9v48hzti6wOLHFbZn0WQ9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793716081;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=PJRu7W6/Or1we5Gv3BgoLEtby0D0Y0UGgfjBHfRc5+k=;
-	b=sgCEzOG5MmlwroamKp6HsP5IgH649KiGgr5TeVMmM9eFBzB9VU40yezASGZuQKH7xnVz
-	 ist4wogupJ2YOvcZMVXs5wzXwPS9TVaYpaD7njqi7lMYFJm4Aa++VQDjUsJMtyKrBtAp2
-	 2q08JcTntdRbpcqHMHr/VZJQ31oeuUMVuj4pup3/7da8p4QMD+AxM0/WBCGAiXR12QhaU
-	 b/hoicxz+63QOpDBAzMde6sfP4Ufpl40RYSsQ03DUWekpjISbYu+6j/JVY7Fm7ht3nzuB
-	 1MLhTdvmO0CrY8ZOQfCNikOq3TVxZz8eKWfbuyhfxhuUfE/Lm1YHkUAckXwk4lTEHsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793716079;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=dejmHhxeXbifKefac16SRC6v8LfF3VPO/ivty0pHofI=;
+	b=erZkof23WKVSyJGNY9gPus03kqbQC8CEZ8u/JEcb3Wtm7cjl11N0dBuKNITSAlnh1ohQ
+	 rYkQt8gu6K7MPfG+wALuY4rvtJZVH7xnBLxzod6iVOZKjOpKrAr8oxjy7cAyvNWmp5BHG
+	 KoujHb5nqxYah2sARzfNq1z09Eya6Il3v4SyheeL4nmnMOPUwCK1mdUU1Fq0/RVYSKkl2
+	 zJ7oTL/JYIifPicMUnfnf9FYjmAS/RFAnPNB+xGHf07Q8dWUsd1nFS1obMchGL9iT0WxQ
+	 BLIeupAPJKQh/ThzW7FW7zZ/CYBRttWK9z9xR88IeHnLD64PtoelIA8B5rDZo3gKQyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HHpjdexY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nUKzUwyK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12D1606A328;
-	Tue,  3 Nov 2026 14:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E143606A32C;
+	Tue,  3 Nov 2026 14:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HHpjdexY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 732951F000C1;
-	Tue,  3 Nov 2026 14:27:59 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nUKzUwyK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8CBC1F00919;
+	Tue,  3 Nov 2026 14:27:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793716080;
-	bh=PJRu7W6/Or1we5Gv3BgoLEtby0D0Y0UGgfjBHfRc5+k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HHpjdexYLv1LKFZhWNvbOPCNPUsD/VZW8osv5/BChV1k2ouAGtlQR9SQn5QMzOthq
-	 m058MRJH9UbvslLaBI1qYprnEAb8vklbQkkWKgqM/Npgil7PBBZAAGOM/gYC2e4srq
-	 rPcFraQzJMLo3j+FOTlKmjQbtfV9Xd/gd7YWIn8/3BJ3zXJCJNjUHtdy3R3ELgP197
-	 lT0QIgG9IL6pFlvA0J/7Vn0b4Uv2Dlpc9L6O1HBJJuSxrNGQYxxgx+qK3FnWOD3K5L
-	 2903gMFeOEbJvYRba/ie5qyjb5Sx1gCrtsdqtfjwmUJ8k8Cn3QHuJWrjGCfIeJAgzn
-	 1ATTd+1lQLj9Q==
-From: netdev-bot+sinfo@kernel.org
-To: Antonio Quartulli <antonio@mandelbit.com>
-Cc: willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, mst@redhat.com,
- eperezma@redhat.com, shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- maheshb@google.com, peterpenkov96@gmail.com, netdev@vger.kernel.org,
- virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH net v4 0/2] tun: bound the NAPI receive queue
-Date: Tue, 03 Nov 2026 14:27:59 +0000
-Message-ID: <179371607900.488859.488506175171813009@kernel.org>
-In-Reply-To: <20261103142232.1869185-1-antonio@mandelbit.com>
-References: <20261103142232.1869185-1-antonio@mandelbit.com>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	s=k20260515; t=1793716078;
+	bh=dejmHhxeXbifKefac16SRC6v8LfF3VPO/ivty0pHofI=;
+	h=From:To:Cc:Subject:Date;
+	b=nUKzUwyK0jqNK151DC/OEVBoJAFG407hZrQ/MasVYD0biSZutqbyf+1knwKD4Yqqd
+	 GVMota9jUUK2m4BSRL5GkG75UJbVC3E/ZJHsn15Z6UdXek/7MSnBI8rL+pyEVyYtLM
+	 SImgscDKmCOEFdPG7weJ9C2SuC2w+Y7Pqs3m3yE39wtUGeHiAmM+dt+pqVid8ME/UT
+	 sWcCjssy4K94wqnkkLJ2BbvJKKLUxnnUBqurlaUyRL6OuY+xUQm6T4pHnb5nYM+WkZ
+	 nJP+CqxPHm0YZIAHpPUlbDPMOajRlPhwQ4ubFIaFmjuPspNiz5DAEAAHsfrrjYyt1H
+	 X3+k0XKREgR6g==
+From: Sasha Levin <sashal@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Aleksa Sarai <aleksa@amutable.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: probe for sanitizer support in fchmodat2 and openat2
+Date: Tue,  3 Nov 2026 09:27:56 -0500
+Message-ID: <20261103142756.132111-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,21 +62,104 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi!
+The fchmodat2 and openat2 tests are always built with -fsanitize=address
+and -fsanitize=undefined. Toolchains without the sanitizer runtimes,
+such as clang without the compiler-rt package, cannot link them and the
+tests fail to build:
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+  ld: cannot find /usr/lib/llvm-21/lib/clang/21/lib/x86_64-unknown-linux-gnu/libclang_rt.asan_static.a: No such file or directory
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+The same happens with USERLDFLAGS=-static, which AddressSanitizer does
+not support. KernelCI's clang builds fail this way on every
+architecture.
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account. If the series needs another revision for
-other reasons, please include the information in the commit messages
-then.
+Link an empty program with the sanitizer flags first, and only add them
+when that works. With the runtimes available the tests are built as
+before.
 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+Tested on x86_64 with gcc 16 and clang 21, building both suites with
+O=: with the runtimes installed the binaries still link ASan as before.
+With clang pointed at a resource directory without the runtimes, and
+with gcc and USERLDFLAGS=-static, the build failed before and now
+builds all five programs without the sanitizers. fchmodat2_test and the
+openat2 tests give the same results from both builds.
+
+ tools/testing/selftests/fchmodat2/Makefile     | 18 +++++++++++++-----
+ .../selftests/filesystems/openat2/Makefile     | 18 +++++++++++++-----
+ 2 files changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
+index 4373cea79b794..21f6b0b0cdc8f 100644
+--- a/tools/testing/selftests/fchmodat2/Makefile
++++ b/tools/testing/selftests/fchmodat2/Makefile
+@@ -1,15 +1,23 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
+-CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
++CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
++
++TEST_GEN_PROGS := fchmodat2_test
++
++include ../lib.mk
+ 
+ # gcc requires -static-libasan in order to ensure that Address Sanitizer's
+ # library is the first one loaded. However, clang already statically links the
+ # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
+ # -static-libasan for clang builds.
++SANITIZER_CFLAGS := -fsanitize=address -fsanitize=undefined
+ ifeq ($(LLVM),)
+-    CFLAGS += -static-libasan
++    SANITIZER_CFLAGS += -static-libasan
+ endif
+ 
+-TEST_GEN_PROGS := fchmodat2_test
+-
+-include ../lib.mk
++# Build without the sanitizers when the toolchain cannot link them.
++ifeq ($(shell echo 'int main(void) { return 0; }' | $(CC) $(CFLAGS) \
++	$(SANITIZER_CFLAGS) $(LDFLAGS) -x c - -o /dev/null >/dev/null 2>&1 && \
++	echo y),y)
++CFLAGS += $(SANITIZER_CFLAGS)
++endif
+diff --git a/tools/testing/selftests/filesystems/openat2/Makefile b/tools/testing/selftests/filesystems/openat2/Makefile
+index d848aac96bded..2f712dfcbf75c 100644
+--- a/tools/testing/selftests/filesystems/openat2/Makefile
++++ b/tools/testing/selftests/filesystems/openat2/Makefile
+@@ -1,17 +1,25 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ CFLAGS += $(KHDR_INCLUDES)
+-CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(TOOLS_INCLUDES)
++CFLAGS += -Wall -O2 -g $(TOOLS_INCLUDES)
+ TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test emptypath_test
+ 
++LOCAL_HDRS += helpers.h
++
++include ../../lib.mk
++
+ # gcc requires -static-libasan in order to ensure that Address Sanitizer's
+ # library is the first one loaded. However, clang already statically links the
+ # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
+ # -static-libasan for clang builds.
++SANITIZER_CFLAGS := -fsanitize=address -fsanitize=undefined
+ ifeq ($(LLVM),)
+-    CFLAGS += -static-libasan
++    SANITIZER_CFLAGS += -static-libasan
+ endif
+ 
+-LOCAL_HDRS += helpers.h
+-
+-include ../../lib.mk
++# Build without the sanitizers when the toolchain cannot link them.
++ifeq ($(shell echo 'int main(void) { return 0; }' | $(CC) $(CFLAGS) \
++	$(SANITIZER_CFLAGS) $(LDFLAGS) -x c - -o /dev/null >/dev/null 2>&1 && \
++	echo y),y)
++CFLAGS += $(SANITIZER_CFLAGS)
++endif
+-- 
+2.53.0
+
