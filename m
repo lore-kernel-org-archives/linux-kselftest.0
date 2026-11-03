@@ -1,55 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793697221;
-	b=bqtb7LlJjAM3oGv5ZMxjhZBWqBvT/sBX1GpxBrI5l/il7v+0YZgGQIjVFzIo+EuXaX8x
-	 276xqlTS/7TyC/vnA5L/zFBAiQhcVLmpa5GnJcVXNQCZqlqOYJjeQp3ZE1DuJfRF6VBlL
-	 jd1XyS4MR2fv/9sYBuiN73OpWMW74TO494x52SUK7Qc3GCm6QnqvVWQi0cqW/ClypQVZm
-	 Hwspf0LY16+KOhSI1uK5QX69OKIoCHF8B04qdSJpHxVpffymYWUAbT7A2gryBD2uOzunL
-	 WxZRGmV2fH/ZnO1QQlwvbZAi9QkL0dZng8aeqcUnkZ9QLrcdBbgXEul67kxiWT9jPWA==
+	t=1793697677;
+	b=t1ce46u+o7WuaYHTJ5esH0F//EJezIepX1mwn/F0CsLqg2OTTNkM3KJra1vvtNdxeNdR
+	 bPhatI7y1/gZQ0tr/tXL0xXzvyV3fbwK5BEfwwLXUZPO5E2jye1G+iIz+0vuKf+XZPep/
+	 YFhLMPmuXh2ZxIgyklvH63srgvWhOrJ0yDUrhxTKUqJjXfGFTM/MoID0/fmTnCOi+/ASZ
+	 ndWBqgz1CI2ET0x2PoufYD+/ptUVo/kXD/8TprdVq94r7/uulxgi+kMJaTW6fBTK3d6xM
+	 nhU+J8b5bCn+xW46ezOM/IROxl+HRA6LVT90jD/YmH519PPpuN3/45l+7MtyDMxoK/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793697221;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Subject:Cc:
-	 From:To:X-Mailer:References:In-Reply-To:X-Last-TLS-Session-Version;
-	bh=vtVAKn63hZjF/xRzAIkMWt9nMX0J7jxb6ymkgZ0SCsU=;
-	b=vSVpI6yKqQ8K9ycfWOM0ymj7xfg9p3/L6xuwJ/SeiMaBahzn0F+yk7zAq7Oz3HHt6pfP
-	 oahcJ9lKspKWHX6AnEI4lLWS5/RNL9+PHETYfCo5Rj/mXfBuWMkllLAuwVh4SNE6GzVMq
-	 LJBXTlp6RIcIY9EsgV0hZ1MSEohcR/XvRGt35wwMDpJhwOMu8V7IdtdPcHPSSLtEUD7JX
-	 kgQ/KJBAGvwEmSNR+UqZUP44p7/7MDPjuCe/dbvQr8U6ZpYjmyb0Qa9JyW3GIFCXdWdUQ
-	 It2vqz3d+EOzJyLO4KNOhbrcCKnJ/Rb4Ispw/8eNNN5y40HMTqVbqxUHz0QXbsW1haQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793697677;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer;
+	bh=9seIfKUb5mL9/pRiltJe+WDkz9VAJT3ACyumajU4uZs=;
+	b=3Nn3ODWhGFWhqqDDVqYGLVdcYAi8LSe87MaL060BQ95tgJDLrc9ZjIy0QysaQ5SuiYxI
+	 b+SHFMjU4SvaGZwnCvNli9VrNqYB4DD80/jze758HCjAS412f/qBgaANHkW+VVTrEd2RK
+	 to7MnmJCs1fFWRDtwWPEVPGSc1IywHmCHGAXRmshxzu1/atzykBezkDx0m8UQpV2RaCnB
+	 Ev5mt3ZAdH0QOWLEL8f9O8peWNNWMMZeq1A6Utx31mGrY0+p1qL40GiXwLp3U35XjKahK
+	 RI/Q0v7JHElyyy6/p/xlfa+6oasKWPQs8WJzEYmb8+4ZkjRjF3RaMBSrJaoz6mzVcxQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=cPq5+JP3;
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=I0mgW61i;
+	arc=none smtp.remote-ip=91.218.175.37
+Received: from mta0.migadu.com (out-37.mta0.migadu.com [91.218.175.37])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E803606A324;
-	Tue,  3 Nov 2026 09:13:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E803606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FAC606A324
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2026 09:21:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20FAC606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=cPq5+JP3
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id C2A0D4E413DE;
-	Tue,  3 Nov 2026 09:13:31 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 8E1316046C;
-	Tue,  3 Nov 2026 09:13:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DD7FA103291A7;
-	Tue,  3 Nov 2026 10:13:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793697210; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=vtVAKn63hZjF/xRzAIkMWt9nMX0J7jxb6ymkgZ0SCsU=;
-	b=cPq5+JP3kobZDqlYo39DZ+3Paj1cwtc/pvNC0LuBXLgLwwnSpM2mp6IUEDwhutPm1t8hqv
-	n44j+7fSOB6IObByAy0qi5dP1QLN/hrCpek0/uV9rUhpBb5SP1likytMenSrorpctG28PS
-	yoIwswHOY2tgefkrBvnwAElPtFDg3/CddFj5r4hL9DZphSne4tPmXX6qufxcGByRBoR4Kz
-	ZVn7HI5Fjy1nn17IwfcwPdrtHS8m7C5rnxJSKFLAWAMbNLik0GATdnVf0nGsQm+TiKlKc8
-	uVffO7L9pjgZM1IjeE5jfcryXlLKf9umc06Bh3mgGh+dj2k12v2Px/DfieIgKQ==
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=I0mgW61i
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Dogg26upRcYPteVZYsSyT1265sb9gcafjUHnbvF97og=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793697675; v=1; x=1794302475;
+ b=I0mgW61inAYftsexWS2+OTxq41aS9OM4setyUhQfKYaBmWfTJytrcMqojQ0HODeozLwBPc8B
+ F2sx/UdNm9jEmk4u1B8Ym+o8SjPVTsrOktNVM0L/K66HIL7G9pqJIfOc53Pz+vjek0BaOQevYR5
+ dfLHkzjveKcQhLRg/Iyy8nb4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 6dbf83cf33588557;
+	Tue, 03 Nov 2026 09:21:15 +0000
+X-Mizu-Trace-ID: 6dbf83cf33588557
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Subject: [PATCH net v2 0/3] net: ioam6: makes IOAM insertion transparent to
+ IPv6 ECMP
+Date: Tue, 03 Nov 2026 17:20:49 +0800
+Message-Id: <20261103-ipv6_ioam_ecmp-v2-0-6ef0318bdb5e@kylinos.cn>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,118 +60,101 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Nov 2026 10:13:25 +0100
-Message-Id: <DMLGLCFQW48J.334XR00MX6V0T@bootlin.com>
-Subject: Re: [PATCH bpf-next 0/2] selftests/bpf: port test_ftrace.sh into
- test_progs
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Daniel Borkmann" <daniel@iogearbox.net>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>
-X-Mailer: aerc 0.22.0-0-gc2f86b7abde3
-References: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
- <DMJE6776F9F0.1O5A9ZMKWYEUP@gmail.com>
-In-Reply-To: <DMJE6776F9F0.1O5A9ZMKWYEUP@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/12Nyw6CMBREf4XctTVtg/Wx4j8MIW25yFVpSYuNh
+ PDvArpyeSYzcyaIGAgjXLIJAiaK5N0CcpeBbbW7IaN6YZBcKsElZ9QnVZHXXYW265nGHBuuc1N
+ rhGXUB2zovR1eweEA5TeML3NHO6xXa62lOPgwbtoktvLPcPo3JME4Oxt1FAejmtzy4jE+yfm4t
+ w7KeZ4/uK+fcMQAAAA=
+X-Change-ID: 20261020-ipv6_ioam_ecmp-ae4ef0a4bdae
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Justin Iurman <justin.iurman@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.16.0
 
-Hi Alexei,
+This series makes IOAM insertion transparent to IPv6 ECMP, as required
+by RFC 9486 (C2): a packet carrying IOAM options must be forwarded
+along the same path as the identical packet without them.
 
-On Sat Oct 31, 2026 at 11:54 PM CET, Alexei Starovoitov wrote:
-> On Fri, Oct 30, 2026 at 11:50 AM Alexis Lothor=C3=A9 (eBPF Foundation) <a=
-lexis.lothore@bootlin.com> wrote:
->> - commit 1 brings a few new helpers to manipulate ftrace from test_progs
->> - commit 2 performs the actual porting
-> [...]
->>  5 files changed, 412 insertions(+), 46 deletions(-)
->
-> This is quite heavy for a port of a 44 line script.
->
-> Lets use a tracing instance. function_graph works in instances.
-> An instance has its own set_ftrace_filter, current_tracer and ring
-> buffer. rmdir undoes all of it.
+Patch 1 fixes the transit side: hash policy 0 hashed the raw IPv6
+nexthdr, which becomes NEXTHDR_HOP once an IOAM Hop-by-Hop header is
+inserted. The policy-0 key (and the ICMPv6-error flow selection) now
+uses the nexthdr the packet would have had if the Hop-by-Hop header
+carried only IOAM options and padding.
 
-I initially went with a ftrace instance, but I came back to global
-ftrace because graph function filters (set_graph_function,
-set_graph_notrace) are not handled at instance level, only at global
-level. But maybe setting only set_ftrace_filter and set_ftrace_notrace
-is enough for this test ? That would indeed simplify a lot the setup.
+Patch 2 fixes the injecting node: on an ioam6 output destination-cache
+miss, inline mode now reuses orig_dst so the ECMP sibling from the
+original socket lookup is kept (the destination does not change).
+Encapsulation may switch the destination to tundst, so it still
+re-looks up the transformed packet, using the Hop-by-Hop nexthdr for
+flowi6_proto (IPPROTO_IPV6 after encap) and precomputing fl6.mp_hash
+from the packet so ICMPv6 quoted-flow and L4 keys are not lost when
+ip6_route_output() runs with no skb.
 
-> What goes away:
->
->   series                          tracing instance
->   ------------------------------  ------------------------------
->   global tracefs files            files of the instance
->   save and restore, patch 1       rmdir
->   serial_                         not needed
->   all functions are patched       only the filtered functions
+Patch 3 adds selftests/net/ioam6_ecmp.sh, covering both places: a
+transit forwarder with a multipath route, and an encapsulating node
+compared against a plain ip6ip6 baseline.
 
-Are all functions really patched with the current series ? It is still
-applying filters.
+The issue was found while reviewing RFC9486. It can be reproduced and
+verified by the newly added ioam6_ecmp.sh test.
 
->   new progs                       progs/modify_return.c as is
->
-> modify_return has fentry, fmod_ret and fexit on the same function
-> and checks the return values.
->
-> The removal of test_ftrace.sh stays.
->
-> Instead of patches 1 and 2:
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/too=
-ls/testing/selftests/bpf/prog_tests/modify_return.c
-> --- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-> @@ -61,3 +61,28 @@ void test_modify_return(void)
->  		 0 /* want_side_effect */,
->  		 -EINVAL * 2 /* want_ret */);
->  }
-> +
-> +/*
-> + * The same test while function_graph traces the same functions.
-> + * A tracing instance has its own filter, tracer and ring buffer.
-> + * rmdir() undoes all of it.
-> + */
-> +void test_modify_return_fgraph(void)
-> +{
-> +	char dir[128];
-> +
-> +	snprintf(dir, sizeof(dir), "%s/instances/bpf-XXXXXX",
-> +		 access("/sys/kernel/tracing/trace", F_OK) ?
-> +		 "/sys/kernel/debug/tracing" : "/sys/kernel/tracing");
-> +	if (!ASSERT_OK_PTR(mkdtemp(dir), "mkdtemp"))
-> +		return;
-> +
-> +	SYS(out, "echo 'bpf_modify_return_test*' > %s/set_ftrace_filter", dir);
-> +	SYS(out, "echo function_graph > %s/current_tracer", dir);
-> +
-> +	test_modify_return();
-> +
-> +	SYS(out, "grep -q bpf_modify_return_test2 %s/trace", dir);
-> +out:
-> +	ASSERT_OK(rmdir(dir), "rmdir");
-> +}
->
-> pw-bot: cr
+Tested with:
+ecmp_rehash.sh
+fib_nexthops.sh
+ioam6_ecmp.sh
+tcp_ecmp_failover.sh
+forwarding/gre_inner_v4_multipath.sh
+forwarding/gre_inner_v6_multipath.sh
+forwarding/gre_multipath_nh_res.sh
+forwarding/gre_multipath_nh.sh
+forwarding/gre_multipath.sh
+forwarding/ip6gre_inner_v4_multipath.sh
+forwarding/ip6gre_inner_v6_multipath.sh
+forwarding/router_mpath_nh_res.sh
+forwarding/router_mpath_nh.sh
+forwarding/router_multipath.sh
 
+---
+Changes in v2:
+- patch 01:
+  * use skb_network_offset() as the start of offset.
+  * try get inner next header for ICMPv6 errors.
+- patch 02:
+  * use origin dst for inline mode, as dst is not changed.
+  * use HBH nexthdr for encap mode, as dst may change to tundst.
+- patch 03:
+  * remove `-w` to prevent ping from ignoring `-c` and continuing to send
+    packets before receiving replies.
+  * remove beta_tnl warm up since the tunnel will be re-create every time.
+  * move trap cleanup before setup
+  * update some comments
+  * remove tunsrc in ioam encap setup
+- Link to v1: https://patch.msgid.link/20261028-ipv6_ioam_ecmp-v1-0-9b6715b6f4c0@kylinos.cn
 
+---
+Hangbin Liu (3):
+      ipv6: route: consider IOAM options in ECMP hash policy 0
+      ipv6: ioam6: use transformed packet nexthdr for ECMP re-lookup
+      selftests: net: add ioam6 ECMP test (RFC 9486 C2)
 
+ include/uapi/linux/in6.h                  |   1 +
+ net/ipv6/ioam6_iptunnel.c                 |  79 ++++---
+ net/ipv6/route.c                          |  95 +++++++-
+ tools/testing/selftests/net/Makefile      |   1 +
+ tools/testing/selftests/net/config        |   2 +
+ tools/testing/selftests/net/ioam6_ecmp.sh | 348 ++++++++++++++++++++++++++++++
+ 6 files changed, 495 insertions(+), 31 deletions(-)
+---
+base-commit: c3e67bd82b9b9b1a5118f09a429ccefe2aab0741
+change-id: 20261020-ipv6_ioam_ecmp-ae4ef0a4bdae
 
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+--  
+Hangbin Liu <liuhangbin@kylinos.cn>
 
