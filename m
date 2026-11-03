@@ -1,54 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793721314;
-	b=MTncO6bhj+ol1uncCFC+ZgtHHUQbIgCaDegfsNpg9owhokHYWOW74pJm/mjMACgb+viF
-	 n6b7u6g2515lpS8zhNo9mzzIcXfAXmeVXMUDOi+zTJJ5zTYQUcptVhHtt9+nYdVeRYPp5
-	 42h49dWuy9u71+axYS4seOjvlwiMXi32qdk+rGDOiWcC62c+0aqkN/qglHL5PB5W5kzhm
-	 D8nwlLxl5ARbLF5gjDEBEZse7QWKftYpD0dY+Vsft3vlzD6qXbcDmYsNQO0eO9BLaKErm
-	 91Nwet+CVfIumgPavqN8+/9YSl05GOKO4ymk2gnWj4DkJ6/Pt80O727ubH/2583NJQw==
+	t=1793721309;
+	b=BamjSip+7+RS4b7D78bxcHD34JsxMV9efVHsE9QzOJSD5zpCLThuIOaJxTvIdxkjTKp7
+	 DlQj2JZH6u2h5nE27+47vWN1GVzS/+NEIziYUd7XEDr/Fz3zlZXO6BhwUU8HzRxdisOsY
+	 BEb+coEowybvzS43Bfv97JSeh1u7zlxYXRLQQnV3Kr0kjI8TYNIIaY2DXEGvE4QNW2y3b
+	 EZlhpsKQbayWTV4HK0RVC4aT9pEj9CVSgS6aShH5MNq+iezq++yiUnukzc9VGAfivw0tz
+	 XNui7OHtOWji1GihfyKpknebYLqmGFXpgEDXvz56blaYd7eAE2OyvChtv2tfhOawJ9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793721314;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793721309;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=+bvowQ2tsMrsReD+KwAHfxLIFb4ikb5391MbuSpKn4E=;
-	b=N3f8eCvMlI3Z2Pkzp4TG8KQLIAn0HtvqSSTy77fGBsKHhbdGmVUX8vFKR/Lbd6hx0CvL
-	 G7edE66W9tp9iF+dkuT3801ArWuaQhoqOy9WwSI09NPFQHW/7BHZ8uqV3BpYTYBpPlEeH
-	 Yt8hmkAitPXPvT2DCvJGw15te9wMY9boSruMQOPx4BZgBi9Rv9N0/PLJ0LYnsze6pQ6rC
-	 ZKpuIVa0+noYxZzOGVOraXTFictYYCoRutFCKoZhhBaQk2aq8JZ/L7kyz5S1iVj2ryayd
-	 UKQZVdXgeha2or0TACv6oGfVkmQ6GrxmJWpkFxH7EOYHDVGaCSrCE7yGORWKnVsbPxg==
+	bh=yaC7RemHrCY0ZTmPbLRW/qDx17GtrNAPuzVu4bchE2s=;
+	b=yAcHH5N8SvjDFxpvfjaLahOIOgrP5xWPTliUe/vCn3HIagex08nQtutDiTes9Ifl+LhB
+	 xE+8t1K5+T9m9ADSE5zPjOWDpoAFFyQRBldgtZ7ry8Ayoi7XPlA77E5/maIrZbZd+ncdQ
+	 SNZQJqqJ5kpDyZZeplKIUScFYGn/INp/MofNi0rQSh3T6js95px7/JgxhkMO7R/PAO+Vd
+	 d1k1+3AUmrFpGmYUjRT5HrNQtG7a4VjNOTs7HZ8dclqe9Z4igLXFAtjU5WuE5ZpFxj6sO
+	 Ub1tVZ6EsregjaScTk5djkaoNQzhGN1Y9Q3h09nHzjn/XOwAPqWsRboHHnQuk5yWgzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YG771SOn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hLXgIEv2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7EB6083602;
-	Tue,  3 Nov 2026 15:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12F9606EEB6;
+	Tue,  3 Nov 2026 15:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YG771SOn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485D61F00A25;
-	Tue,  3 Nov 2026 15:55:13 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hLXgIEv2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028791F00A28;
+	Tue,  3 Nov 2026 15:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793721313;
-	bh=+bvowQ2tsMrsReD+KwAHfxLIFb4ikb5391MbuSpKn4E=;
+	s=k20260515; t=1793721308;
+	bh=yaC7RemHrCY0ZTmPbLRW/qDx17GtrNAPuzVu4bchE2s=;
 	h=From:To:Cc:Subject:Date;
-	b=YG771SOn5LCH41hN+89Pt4Ol9E33pLNQO0TsT0O7G5/d6YKDZ/wsgj586ovRKWSEk
-	 PbeuOXvwUxQ31ROOqcdNVWFOC8SzjcLlBYXGbNb0uzlsU2nkBMWxPSkkAVRejCYXeq
-	 30TfBT8/G0/F+z/4R3SLEoAl3fv+NqvQlMqjRXg96ZZOXY7L47uSRNAvzppc1EH1aJ
-	 +eEJ8SA3SCywua3aN27dQn5eRh4bYxfGQXCibX+qu6vMyWyChPNDblB3NXT1GejGIf
-	 lZH+8TmnjUqUb598PHcfJ8Ugkr6XvWIN1zQDZYkVoHdQSRpw2C16S2ckd98/gKkGea
-	 sq3A4604D0qSQ==
+	b=hLXgIEv20wc45g5EP92/nbkUmcT8jSo/ey6cPa3pZL6+CRTUSwhTO3h+5/Jn2y3np
+	 AAxaBZXOgQ8M9HZzxQlw6kZlQMep09bYP3TA2dE8micrX78ffs+6OXswRW3A0SDOwh
+	 viU2bTDftxu5pJhWYV0iCTIaKRN778XFwJBGE2UHjs5Jz6Pch0qgzbhzlT1QsyxOTq
+	 /62GxXwMEMN4HC2ZXzruD4sLfM7JWvKnAqYPQlxwHQb1TdOl+oNQI1FA3YbVsJgOIh
+	 kz0z9Xo8+nhJe4hmWx7rRG7U+wB67m9UN12Vk0w0jcxNuKjPg3PjjtWwB57NYAA7GW
+	 ItouEshxcpb5w==
 From: Sasha Levin <sashal@kernel.org>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Cc: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+To: Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Geliang Tang <geliang@kernel.org>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org,
+	mptcp@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/landlock: print st_ino as unsigned long long
-Date: Tue,  3 Nov 2026 10:55:12 -0500
-Message-ID: <20261103155512.535137-1-sashal@kernel.org>
+Subject: [PATCH] selftests: mptcp: pm_nl_ctl: print sizeof() with %zu
+Date: Tue,  3 Nov 2026 10:55:06 -0500
+Message-ID: <20261103155506.534973-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,12 +68,12 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 32-bit architectures with a 64-bit ino_t, st_ino is an unsigned long
-long, and printing it with %lu warns:
+On 32-bit architectures size_t is an unsigned int, and printing
+sizeof(struct nlmsgerr) with %ld warns:
 
-  fs_test.c:10511:57: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type '__ino64_t' {aka 'long long unsigned int'} [-Wformat=]
+  pm_nl_ctl.c:73:71: warning: format '%ld' expects argument of type 'long int', but argument 5 has type 'unsigned int' [-Wformat=]
 
-Cast it to unsigned long long and print it with %llu.
+Use %zu.
 
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -77,23 +84,22 @@ build without format warnings there now, and the x86_64 builds don't
 change. The other selftests get the same kind of fix in separate
 patches.
 
- tools/testing/selftests/landlock/fs_test.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index f725882fa4a78..a2dc9a7f0481a 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -10508,7 +10508,8 @@ TEST_F(trace_layout1, check_rule_fs_fields)
- 	ASSERT_EQ(0, stat(dir_s1d1, &dir_stat));
- 	snprintf(expected_dev, sizeof(expected_dev), "%u:%u",
- 		 major(dir_stat.st_dev), minor(dir_stat.st_dev));
--	snprintf(expected_ino, sizeof(expected_ino), "%lu", dir_stat.st_ino);
-+	snprintf(expected_ino, sizeof(expected_ino), "%llu",
-+		 (unsigned long long)dir_stat.st_ino);
+diff --git a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+index 78180da1efcc5..36a6d39b31bbf 100644
+--- a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
++++ b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
+@@ -70,7 +70,7 @@ static int nl_error(struct nlmsghdr *nh)
+ 	uint32_t off;
  
- 	set_cap(_metadata, CAP_DAC_OVERRIDE);
- 	ASSERT_EQ(0, tracefs_clear());
+ 	if (len < sizeof(struct nlmsgerr)) {
+-		error(1, 0, "netlink error message truncated %d min %ld", len,
++		error(1, 0, "netlink error message truncated %d min %zu", len,
+ 		      sizeof(struct nlmsgerr));
+ 		return -1;
+ 	}
 -- 
 2.53.0
 
