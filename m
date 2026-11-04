@@ -1,70 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=104.207.68.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793817242;
-	b=bJHJJdpkoCPK/KLovbd/MyQHUtDAChVIwXklOL0GcCC05jyq5JahFi8G1YYPDyH/eo64
-	 k0ZL8EYc1VFdU5aoi5zBDH+MudXIliMVOtckQztnRx9BWRepDbv7MKDxG9oeJxPoyg89j
-	 P5ShamfCWxu52C+8bTrFWkLKWlcgkGmsLvAoMN3HomuAwiGTGMzUFYB1CH9oEh6kaCg26
-	 RrnoDfJcBglXD1Xaq5zH1F8qyqhpw4xjk4kBjHDwbL1VC5NjD1til5dzw8hDHpxwI97xS
-	 h451kc2a29aUhZ3fEuA6ggn/qRf6MY1ugRv60GXiotNmFABc0Au9Ni0FAuuKzz+gNJA==
+	t=1793817596;
+	b=BlQgriMZLGg/yfbCecgnT/WRHHdMyMysZ5/p+CO9fkZ2sHG8eo7X1pLiAU074Vtqdt62
+	 4nf/2o/wRFQS1htOabDUwzs9WrPQU9Xb0j48hVgq6dRvESExkCyAHBbKFeO1mv460jVCd
+	 XL7YmRZuIy5pY5DBF5FpSVv7tWBcJ0foc7xCB9W85WOqFZstnh+Qsc216l827yZCJIqPl
+	 E6KVXO/EYb/OyoFVQGBmC9mIRhfESuokZKYmrTpbcIn6vEvZ7YUDQBIZIGVcBN6YROBbx
+	 hH2o3cQsMLDk9yvP/KOMslRFXuJJlgkW5qYfmVR6IHh4r67ryrs/kMaRJ9AxxdxEGxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793817242;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-Envelope-From;
-	bh=Xgai1G4OTIWdkpPHAVPKrNN9CkdFO7yMfOuATYz1nZA=;
-	b=1cODCcWIrOeyOFB6ZsKrqwAodtfQWz4x3ZN9dvn4lwCCmGB0Sr9+z+1wFeI4QNz03s77
-	 NEnE+oXy3zUEWDzQbmclPY8lGSio1jQlCfbg3cWrJG1thiaL6R6U6hEjltRbjwzKAYsvA
-	 IHpaZi5gElkWG2zNLc8/0L6f3RxHX95qAL+nHEDHdrvVF5rXkViX7NUL6u720PYA2BmEp
-	 3T180bBi6/g8zguqaRXJQbOT+fM5GkZY3qwSUxMO7+PCBffoGe+9bLK12xbgH7d+EXWbA
-	 OXCuxJDSl19u6egWpp4fbWd5x/PAkqiqnv0xgravbK49CfpPrKN/vtyFya3mO59r1WQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793817596;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=cfX+RSDf63q8RdYOSefxL9B17eZvLgT/fF9r72R8ItM=;
+	b=JpGYuH62Vv5k02PpA0XvVss9NtYioYWRtz69gVxHJQEeqpNvr77/I4KuTb9VkV3L5XUO
+	 9jvVW9vuqOBaUjPjt64Phu7te06oPAul0ykvdEjKqj8PFHulCZsF5i1uhcE69M8W8fDIO
+	 /Z5KurUGXmfaPmfbAWxkquRdmUiO76oMFEaeP7fHcQ7S0BxDNysZeSGr1YPCvQLNGpmB4
+	 oa2WYUsLgb+AAYZzr8cbHqzwkcxmOz9z8boV7QT6aRxDHBvq/nIy+aFfKOBlUBrtPPP0U
+	 vXvvhlxmvtSYD9GcdQbGEr6fGCSogYCS+V8Fu7+Wy8aLgECQEQNhdoqRH1Dyr4cT/JQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=tychen.cc;
-	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=c2x6iZxD;
-	arc=none smtp.remote-ip=104.207.68.39
-Received: from out-93wp-a39.jellyfish.systems (out-93wp-a39.jellyfish.systems [104.207.68.39])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GDU8EuhU;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96967606A32D
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 18:34:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96967606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2318606A337;
+	Wed,  4 Nov 2026 18:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=c2x6iZxD
-Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKYwr53Znz2x9C;
-	Wed, 04 Nov 2026 18:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1793817215;
-	bh=Xgai1G4OTIWdkpPHAVPKrNN9CkdFO7yMfOuATYz1nZA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=c2x6iZxDJCJcOpuC2yxPuxPaa9ztC6rOJxy9VJ6+nToD8PHfv+HyslfB+oaU/9gOv
-	 qSylU4EajjvgYer3gQT8R7Ika4DMeWFtfL5f5dFbtgQ4ku7WLGrlljfE/Hp+YMStuu
-	 yoCFZUMDsC2ayfZ8SPFiD1oTiRADlge6Ven7VssueOUmOs+oJQwAiD5qYikGBhHSbD
-	 TCDWsbDgjvRht1cvd22EZCmMaAXiS945etQ7EL0M4hp+Wb2egrBKhLjNJ19+SAXY0G
-	 j8tdSio0ReXL3c0qho6UuWOTrZ+q1TXMYxad1qYkHDrD76gMy4J4/dDIiRAarps/QF
-	 cNdoChBRg1twQ==
-From: Tianyi Chen <hi@tychen.cc>
-To: bpf@vger.kernel.org
-Cc: Tianyi Chen <hi@tychen.cc>,
-	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
-	qmo@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf] selftests/bpf: Look up unpinned maps by ID in bpftool_maps_access
-Date: Thu,  5 Nov 2026 03:33:23 +0900
-Message-ID: <20261104183323.409412-1-hi@tychen.cc>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GDU8EuhU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D94A1F000C1;
+	Wed,  4 Nov 2026 18:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793817595;
+	bh=cfX+RSDf63q8RdYOSefxL9B17eZvLgT/fF9r72R8ItM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=GDU8EuhUF/10B5PY7Ge41gK5xPnjrcLHs7feXWHlvH4fq+/JLsc6ePLzmMcenBTV8
+	 F8DU2mNIqG7yMOIN0gPqiAwJM3jV9nVVVUEYkA/ePBSooGTee00ROqhKBnF1Bqim3H
+	 1MIVC6ndCg4IYSs9ehay5xqAR6tGspnn8txoZnqUV3a/rwlemC2StvUcjU4rBzRdDh
+	 smT5Fi28DptI2/GHQw2s7uG8id08IW1enmMV0ZcuUo2Xf6u9ciNae6b4/FwizkvKf5
+	 0O5jZIOLbbQIYlYObNdALqLNo9VEtQX1aZ+lQxJHqEn6uUf5MjI2wjNp8uWWy07SZL
+	 e+KRVPYe7/Ndw==
+Date: Wed, 4 Nov 2026 19:39:40 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Chuck Lever <chuck.lever@oracle.com>, Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, 
+	linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] proc: move procfs to what kernfs does
+Message-ID: <20261104-angriff-abgewandelt-ohnehin-e5ba30d31576@brauner>
+References: <20261104-trompete-gejagt-raddampfer-9fb5640a6102@brauner>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,131 +76,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Envelope-From: hi@tychen.cc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261104-trompete-gejagt-raddampfer-9fb5640a6102@brauner>
 
-The unpinned subtests pass "name prot_map" or "name not_prot_map" to
-bpftool. Both maps are used by programs attached through trampolines,
-which are freed only after RCU grace periods and hold their map
-references until then. A run's maps therefore stay in the map ID table
-after its skeleton is destroyed, for about 300 ms in an x86-64 VM.
+Please ignore this. Network dropped halfway through and the umbrella
+went out under a broken message-id.
 
-If the test runs again within that window, the name matches maps from
-both runs, bpftool fails with "several maps match this handle", and
-the unpinned subtests fail.
+I'll resend it all correctly.
 
-Look up these maps by ID instead and drop the now unused map names.
-
-Fixes: 2d96bbdfd3b5 ("selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework")
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
-Tested in an x86-64 VM with unmodified bpftool. Back-to-back runs of
-this test fail before the fix; with the fix, all six subtests pass in
-ten consecutive runs, including ID lookups while stale same-name maps
-are still present.
-
- .../bpf/prog_tests/bpftool_maps_access.c      | 31 +++++++++----------
- 1 file changed, 15 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c b/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c
-index e0eb869cb1b47..5763cb19236a6 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c
-@@ -13,8 +13,6 @@
- #include <bpf/bpf.h>
- #include "security_bpf_map.skel.h"
- 
--#define PROTECTED_MAP_NAME	"prot_map"
--#define UNPROTECTED_MAP_NAME	"not_prot_map"
- #define BPF_ITER_FILE		"bpf_iter_map_elem.bpf.o"
- #define BPFFS_PIN_DIR		"/sys/fs/bpf/test_bpftool_map"
- #define INNER_MAP_NAME		"inner_map_tt"
-@@ -32,7 +30,6 @@ struct test_desc {
- 	char *name;
- 	enum map_protection protection;
- 	struct bpf_map *map;
--	char *map_name;
- 	bool pinned;
- 	char pin_path[PATH_MAX_LEN];
- 	bool write_must_fail;
-@@ -93,13 +90,10 @@ static void update_test_desc(struct security_bpf_map *skel,
- 	/* Now that the skeleton is loaded, update all missing fields to
- 	 * have the subtest properly configured
- 	 */
--	if (test->protection == PROTECTED) {
-+	if (test->protection == PROTECTED)
- 		test->map = skel->maps.prot_map;
--		test->map_name = PROTECTED_MAP_NAME;
--	} else {
-+	else
- 		test->map = skel->maps.not_prot_map;
--		test->map_name = UNPROTECTED_MAP_NAME;
--	}
- }
- 
- static int test_setup(struct security_bpf_map *skel, struct test_desc *desc)
-@@ -253,16 +247,25 @@ static int add_outer_map_entry(int key)
- 
- static void test_basic_access(struct test_desc *desc)
- {
-+	struct bpf_map_info info = {};
-+	__u32 len = sizeof(info);
- 	char map_handle[MAP_NAME_MAX_LEN];
- 	char iter_pin_path[PATH_MAX_LEN];
- 	int ret;
- 
--	if (desc->pinned)
-+	if (desc->pinned) {
- 		ret = snprintf(map_handle, MAP_NAME_MAX_LEN, "pinned %s",
- 			       desc->pin_path);
--	else
--		ret = snprintf(map_handle, MAP_NAME_MAX_LEN, "name %s",
--			       desc->map_name);
-+	} else {
-+		/*
-+		 * Maps from an earlier run stay visible until its trampoline
-+		 * programs are freed, so a name can match more than one map.
-+		 */
-+		ret = bpf_map_get_info_by_fd(bpf_map__fd(desc->map), &info, &len);
-+		if (!ASSERT_OK(ret, "get map info"))
-+			return;
-+		ret = snprintf(map_handle, MAP_NAME_MAX_LEN, "id %u", info.id);
-+	}
- 	if (!ASSERT_GT(ret, 0, "format map handle"))
- 		return;
- 
-@@ -312,28 +315,24 @@ static struct test_desc tests[] = {
- 	{
- 		.name = "unprotected_unpinned",
- 		.protection = UNPROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = false,
- 		.write_must_fail = false,
- 	},
- 	{
- 		.name = "unprotected_pinned",
- 		.protection = UNPROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = true,
- 		.write_must_fail = false,
- 	},
- 	{
- 		.name = "protected_unpinned",
- 		.protection = PROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = false,
- 		.write_must_fail = true,
- 	},
- 	{
- 		.name = "protected_pinned",
- 		.protection = PROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = true,
- 		.write_must_fail = true,
- 	}
-
-base-commit: 05441d697f7f9a927264f4058cbbc6a03dfcac9d
 -- 
-2.56.0
-
