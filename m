@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793826573;
-	b=zqCGKLWkud8FWY40H2F67r/zqWIzPNZ3BrKARImmsxFucu3hQRwdg3nDGtikSB6/+UUe
-	 O2fJB9jBjIJcdC9He/hvyyFuTZWBKFQZq5YVhDMaF2SvU7WCFiVx3KYjPEu+hDqvKD0zo
-	 YC3UwwNf3w8W4ywpezha1RyE8CQOYM64c6YSWEQTJNpbPkZ1dKQHwcVwj6k+yEVt5XuxY
-	 WA6oZ2d/1JUbE7i4npcWwNQx4eQxKFJEEF0VRICMZRzPI76ZeCTkp6/clYsA2DB38ueo2
-	 A7HQhLVpF12zKcff2QqDJFJASB1rYL5U64aVX+IBhwJIXdXMQ/NlO9ARf7SyMR8ziKg==
+	t=1793826577;
+	b=t357OHko7lAwSy5tADc78chL44hYD/p2QFuaKzUIERlNqaOKj4hEvq8S/JKIaRXdZhuH
+	 QWfnkgrmM/4QobE3CXF3Ml9Mw9Sdv3LYKOAPKrGegigLT2mkOPFcHHbxBLExjn8g3wM0S
+	 r5bx0q9nzJwA5aW9IcuwGOea7hThinN34nXHXVAjW6tnG9tcUFNGhBQGZKs2wIYOX//TF
+	 kKbMRXMB8brcPOlmaNDrQ9eaM8qAaRmlIstpMZLNUnMR909nFOMWwgdDbl1Ytod/+WT9I
+	 aZ6A47euvX/NmE7e53qeV6n0+2dxRMqRS2hw4lzaQP4jC727Vf0SEtlsyy65P+k/xWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793826573;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793826577;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=Ss5K7VdimwtEzHrJxiGNHkTNhcFCp3+4eOm/oJ/PrYc=;
-	b=vj3a5Acd4TSXXU7ty8j0Yr5N5/LfaBRuBLRgKa9FHxpdWoVGKdw6/GGV3cYb6myBx1bO
-	 IsNcBAPYVTNn64vOcMcw2vqRD6uD6aDDE7zRp2qBPiXOCvk6trSsQP9B3pEO7bQolDZg1
-	 7e1h85rg5EqBmSPcUfX5VvDP5qbTbxUHDyuRw4EzKeHV3O24jRBEWtT1z06+iIl7Iqich
-	 AQ7NLcuZn1Lhk3UzMLWIWvhX95wex928ArRNaUL8QpPXsxi/yxhyE2ELtojyQ6lsPLgR6
-	 Q8r0a5JNqe4AdAg21xyO2W8qoo238/nMf28o+1DwymUMY6gkkoEgFYj+jQWtT5ITRrA==
+	bh=3194YaOP0F+FMB6I5klv6B2ufzZSORnnEQ/EVm90CVQ=;
+	b=1HL/LBTq4q8Um20TGstzLmTRG3gPv68BE9oc89hkY22oG7DMgCZG1/3E9wM2dFuUkIkD
+	 juAgJr0EX3/Vn/4VMhtyWbhKJ+34lJBIQn9Yjcb1nmyHw2yhcDTPNCtWN4oUN5L3mPO9p
+	 pJLXmVqvxprHvmqmIUd5TPIKvmHeXJ+GuE1jnfDUH9SAPjxmvOxtDlaisG22/+TTnTCur
+	 ht1GDJPJBZ40cEOPmJp5rcvFM2+zi06YC//rDPYLHWkyLLmjyU/d5Wk+zIReOd4KhLLtI
+	 feovoLpyvqkEDg1qYpELiu4r2oqTck/seKERUDQhNzPDR1Oti10ZUtReTkLO0vK5B/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yNleuUFv;
-	arc=none smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3CiICk1;
+	arc=none smtp.remote-ip=209.85.221.46
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7398607E931
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:09:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7398607E931
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6BD607E916
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:09:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA6BD607E916
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yNleuUFv
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a4d7ae1ae9so11978555e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:09:32 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3CiICk1
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4910b863b84so10495f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793826571; x=1794431371; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793826575; x=1794431375; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Ss5K7VdimwtEzHrJxiGNHkTNhcFCp3+4eOm/oJ/PrYc=;
-        b=yNleuUFvXKHQO5Qgbw//ExknATpNsOSVaC3K/xU3oDknAycNLKqEzInKcKsAtr5EPf
-         Qy8MqurLXPEku7zhwKGhHi4YCR163qp3/bmpBefEtKKjbDV8x5iwk319b27zPIsZ8BQC
-         GQCzghEJHgG2piORnYWKLx8CwtHDbKmbwrRs3TtMEu443e9gggfO78/v2w4vdRQZAC1o
-         0hGj3M1pnqz78vq/OKDi632mKvpzbuxRPbH5pe2SbA3h6whxFEhwwGwztbxcCWvFzgx7
-         6K3aCYxbxH2qvQDVbouruIm7cCVVkB/GHlsvxSHaoXZM2hYIOpO55EQe8GAh6Vq7cPOo
-         4JgQ==
+        bh=3194YaOP0F+FMB6I5klv6B2ufzZSORnnEQ/EVm90CVQ=;
+        b=D3CiICk1IU3LYOkkUsP513zcLWLMA5i0GRg6LkkHP7BB1EcQ9D0tGOHgvlqQic9CyG
+         V9De65zZ6pPKCjXt8CLX8huiMGmVM8Inj2UUFzrZY0nCvugX/vvz5/2JWSXbVIrBdXTU
+         Re0JRKL42TnXy9iCrvGCJI5MoqYTj730qvHIH19f9+ROUvad/DUzXDNEgITCVKtx2Qp+
+         oYXgOh34bDIWWKeKUvRqnI7wBV449fL2F+7jYT9no/Z00SI4itNxQLWOv/DNusGaCG45
+         /SHfXt9/FBavBlhJuvypvpJYwYR0aHSalFMIqYLv5/ghs3VUk1YWys0LyB9z38PfEY45
+         JGuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793826571; x=1794431371;
+        d=1e100.net; s=20260707; t=1793826575; x=1794431375;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ss5K7VdimwtEzHrJxiGNHkTNhcFCp3+4eOm/oJ/PrYc=;
-        b=zpkdt/oJ6ovHwbnBDsbRBG5ck9E4hRQ8IXf6ioRQ2qEkWUk9Ault+J5SXolPbwMCaB
-         gVoB3Y0798boPnktN7rSXov7zgddCgognENcHUmoDs2A9JQZrjN3IWd02otFpwPnTHxs
-         d0ZifXozIgDwe2mgDv01S2MzOSg36dwxtYnYnZzEc+GjR0zZldDltJu3iRLqjs+knaJj
-         Dnq6Wn4Q9DQCvy+jtEuZdfjrQhbgvBb2HvZctwZPEDz7qerMCdFM6r1yhaARmWpb6991
-         0jMuX+dJHmMBc7+WRR8HQW3/c99l3TywfpZgWD03cAXZyTK2X11l9hZKkSGoQMgBrt0c
-         ODjQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzjIPInjZnYjdSMdcPdX7iHMbknyO5BMFWdu1nLwO2TsIq/fT+t4UnlHa5gwXZjCU/trS6pz+6nUV9UqaWOWqc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9BP8WWEd1P5OatjpiWbYzNF6M8F6v0sQXXDoJiJ1eZxk6Lqgj0
-	OqbRbSp7jTctgkGRrgZOvwKBU4T05ji7hSoHohtDrTvJmlz3I7g1OSqY
-X-Gm-Gg: AYBFou0hdSiZ5m8HelGCcdRBx+VIgNSJvjsgyzHMaeZlhZwxltZRPWOy+OovY1J88xO
-	axTlw5dXyrr335MOykzkp7ULp6/nKrHgX9d/4iKa6I+xUcDaD0esDDLHHfyUWC3gezd7uI/J1NB
-	pBLhoSfVP1LNdKSFAUjL5kWwPZESK6ZkgTBOO/JREaWd3+RVzmWffhG5NB2lU0adMI52Ks5/EG+
-	OSW4kwS3JYeaA4AwFFsqmMzGdMr9Iv9vlxMhAFrrKxrY+WoYZImoGsYLm7xMWHA4/yxM5xEWPwn
-	gmxmFN2ZxxHDoSQlFu+AG+5z8eAwtT7f6aVowNd6I8JelH7rtxhNikXmtlNPCKW6Gow+hIfvvnB
-	Irf+LMTF0ZqmHcEJPToO9JqeUEQKlifJ3Ia1VRATJPDOkSJHnPUOtMKscYM29rLIw1lxakwFYkO
-	VCcnBX3X2liOY1lxThh3KLS2eMXMO433IVajRxT6A4E5s3c+HBKsn5+MmjfObqqJ5ROdMs7E3Tx
-	xdL0PnqhglyL4qobRt5lfhj3n4Fwgvvn7b/81eR2qN4jrghiY1tq0sBFr4cH/tAH4whkUVL+Yes
-	81kJb+3fKzT8RqlkgkN5o6vPeeqaMnacDSlI5LECNHJjf2Xbc0r3Yw==
-X-Received: by 2002:a05:600c:3ba0:b0:4a1:e0db:8cf8 with SMTP id 5b1f17b1804b1-4ac151a84f0mr390832275e9.3.1793826571178;
-        Wed, 04 Nov 2026 13:09:31 -0800 (PST)
+        bh=3194YaOP0F+FMB6I5klv6B2ufzZSORnnEQ/EVm90CVQ=;
+        b=VEXyfCAM1V6idwhljxY9xJelPeqPuzgjOMhk6yo+1bfpZaoXFYsswOdthCvfwMhVEd
+         Y2bMJ+e18E8/JjMnVjuxYFzsKvasG3nCuVMrZPAq1l+1YXOUj5sB6QjXRxWHbOlq2BZz
+         wbphaBrhcHY0IQ+mDpu3a2MBqc/8E0eKwj68wjNfPRmj6uhM/0o0SB02SB3aypu8o6SQ
+         DN8N8CFoR2PoF5QCm/gB2RxMrTwsyjfKOr/FFEWXGzIA1eyebJUOjcGrD0MD/3TOzlos
+         tSStMXKK0DWAXUAmfyKv3HkrNQ8BCjReLOxmzbxMR8ZGmLZA2UeUZMUDxvMuVf7K5Ob2
+         YvzA==
+X-Forwarded-Encrypted: i=1; AKwUvByikPgpwn4q1YbZvWJKm9fCkkhHdebzUNKKjYswbi9Hn17JdG71qQBAA4ymEJyGeWNCP7zkepP3WMrJPP3Ltd8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z90QFXr6PTmDbfL3Uy0C1z99mV+bByT0X/dPj5c5JjL5XoQsDQn
+	+cP8raaVLK+Etr+LVGoYZ7jKtjos6ruB5CCsPNA/4q/A8rMj3TG/8NDA
+X-Gm-Gg: AYBFou2GbvLd+OONxy5LsDyDYYhlTX3jFGW+KqVeZR/efcwj6G6StAxIDjfUe56DLg3
+	UyNRglysiQLnCImA0ggol7ynVBfco2xnRDX1T1l4P++wu2ULQSqnTiY/IUXKwou0Uon6luf0zsi
+	MIcRGlOcxNeqrWYNmdNyxs7PNkZ0kaB/NEECRIhVWtP62mctLYecCmJx9H7jFHKLQUCNqdy7d7T
+	lBqd9QTfFx7uyHjFQ6sMYZ5sOvWJL5+SWmKdt5gHpJUu1PCWOgJqPqLMXXeJIWqEmOGOTREt108
+	BRe8thoVLHgV/VfXcdv3xOHP55flEYpGVdEY5qX0Qro0OcX+FvUdx2N3UrEolBMeEG0ZOsFUMvz
+	6C9XhBppsZHxYtrzC3vI2/k5O14Tk+3ppkHujgLB5Qr72TSzbkOiud9X5hiyl1h2PeyN5jLY7C5
+	+rWJ7q1rNGQq+DUne+o0uhE/DM8hIAa5uNT5PaX2OtSHckueVabZ7FwUE0Ltq+stGUBCjIi1qWN
+	HoXDXal6PYC5BkAj9+bvp5r6giZnnbw6Gk3v6pkHpBdu7T2Zg0VTtTOn2ys+fkZmygWZRYEYL+O
+	JB/NYuXUmWMtS5QC/8LPwRhvmx4h7SsgMYeeBor1cEqMKo2gYgUSfA==
+X-Received: by 2002:a05:600c:46cf:b0:4b0:b9ff:1e7c with SMTP id 5b1f17b1804b1-4b55e07e569mr10214435e9.15.1793826575088;
+        Wed, 04 Nov 2026 13:09:35 -0800 (PST)
 Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48fecac17c1sm5654419f8f.10.2026.11.04.13.09.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b4533873f0sm77710365e9.4.2026.11.04.13.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 13:09:21 -0800 (PST)
+        Wed, 04 Nov 2026 13:09:34 -0800 (PST)
 From: =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
-Date: Wed, 04 Nov 2026 22:09:02 +0100
-Subject: [PATCH v2 16/27] selftests/landlock: Check errno for combined
- VERSION and ERRATA flags
+Date: Wed, 04 Nov 2026 22:09:03 +0100
+Subject: [PATCH v2 17/27] selftests/landlock: Fix SIGURG handler setup in
+ scoped_signal_test
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,7 +94,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261104-selftests-refactor-v2-16-c52f23f7ce33@gmail.com>
+Message-Id: <20261104-selftests-refactor-v2-17-c52f23f7ce33@gmail.com>
 References: <20261104-selftests-refactor-v2-0-c52f23f7ce33@gmail.com>
 In-Reply-To: <20261104-selftests-refactor-v2-0-c52f23f7ce33@gmail.com>
 To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
@@ -105,28 +105,88 @@ Cc: linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
  =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
 X-Mailer: b4 0.15.2
 
-The errata test checks that combining LANDLOCK_CREATE_RULESET_VERSION
-and LANDLOCK_CREATE_RULESET_ERRATA fails, but not the resulting errno,
-unlike the other checks in this test.
+Drop SA_SIGINFO, and rename the function to setup_sigurg_handler()
+without the parameter.
+
+* Drop the SA_SIGINFO flag: This flag implies that we use the
+  three-argument sa_sigaction signal handlers, which is not the case
+  here. (c.f. sigaction(2))
+* Remove the "int signal" argument and rename the function:
+  The function was already specific to SIGURG and this is better
+  communicated through a different name.
 
 Signed-off-by: Günther Noack <gnoack3000@gmail.com>
 ---
- tools/testing/selftests/landlock/base_test.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/landlock/scoped_signal_test.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
-index a6d355807dab..9a1d5b8aacb8 100644
---- a/tools/testing/selftests/landlock/base_test.c
-+++ b/tools/testing/selftests/landlock/base_test.c
-@@ -136,6 +136,8 @@ TEST(errata)
- 			      NULL, 0,
- 			      LANDLOCK_CREATE_RULESET_VERSION |
- 				      LANDLOCK_CREATE_RULESET_ERRATA));
-+	ASSERT_EQ(EINVAL, errno);
-+
- 	ASSERT_EQ(-1, landlock_create_ruleset(NULL, 0,
- 					      LANDLOCK_CREATE_RULESET_ERRATA |
- 						      1 << 31));
+diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
+index 0f88a6af9c72..66fec3822812 100644
+--- a/tools/testing/selftests/landlock/scoped_signal_test.c
++++ b/tools/testing/selftests/landlock/scoped_signal_test.c
+@@ -392,7 +392,7 @@ static void handle_sigurg(int sig)
+ 		signal_received = -1;
+ }
+ 
+-static int setup_signal_handler(int signal)
++static int setup_sigurg_handler(void)
+ {
+ 	struct sigaction sa = {
+ 		.sa_handler = handle_sigurg,
+@@ -401,7 +401,7 @@ static int setup_signal_handler(int signal)
+ 	if (sigemptyset(&sa.sa_mask))
+ 		return -1;
+ 
+-	sa.sa_flags = SA_SIGINFO | SA_RESTART;
++	sa.sa_flags = SA_RESTART;
+ 	return sigaction(SIGURG, &sa, NULL);
+ }
+ 
+@@ -506,7 +506,7 @@ TEST_F(fown, sigurg_socket)
+ 		EXPECT_EQ(0, close(pipe_parent[1]));
+ 		EXPECT_EQ(0, close(pipe_child[0]));
+ 
+-		ASSERT_EQ(0, setup_signal_handler(SIGURG));
++		ASSERT_EQ(0, setup_sigurg_handler());
+ 		client_socket = socket(AF_UNIX, SOCK_STREAM, 0);
+ 		ASSERT_LE(0, client_socket);
+ 
+@@ -612,7 +612,7 @@ TEST(sigio_to_pgid_members)
+ 	ASSERT_EQ(0, setpgid(0, 0));
+ 
+ 	/* The non-sandboxed parent is the protected (out-of-domain) target. */
+-	ASSERT_EQ(0, setup_signal_handler(SIGURG));
++	ASSERT_EQ(0, setup_sigurg_handler());
+ 	signal_received = 0;
+ 
+ 	ASSERT_EQ(0, pipe2(trigger, O_CLOEXEC));
+@@ -629,7 +629,7 @@ TEST(sigio_to_pgid_members)
+ 		EXPECT_EQ(0, close(sync_child[0]));
+ 
+ 		/* In-domain positive control: the child must be signaled. */
+-		ASSERT_EQ(0, setup_signal_handler(SIGURG));
++		ASSERT_EQ(0, setup_sigurg_handler());
+ 		signal_received = 0;
+ 
+ 		create_scoped_domain(_metadata, LANDLOCK_SCOPE_SIGNAL);
+@@ -737,7 +737,7 @@ TEST(sigio_to_pgid_self)
+ 	ASSERT_EQ(0, setpgid(0, 0));
+ 
+ 	/* The non-sandboxed thread-group leader is the SIGIO target. */
+-	ASSERT_EQ(0, setup_signal_handler(SIGURG));
++	ASSERT_EQ(0, setup_sigurg_handler());
+ 	signal_received = 0;
+ 
+ 	ASSERT_EQ(0, pipe2(trigger, O_CLOEXEC));
+@@ -1062,7 +1062,7 @@ TEST_F(trace_fown, deny_scope_fown)
+ 		EXPECT_EQ(0, close(pipe_parent[1]));
+ 		EXPECT_EQ(0, close(pipe_child[0]));
+ 
+-		ASSERT_EQ(0, setup_signal_handler(SIGURG));
++		ASSERT_EQ(0, setup_sigurg_handler());
+ 		client_socket = socket(AF_UNIX, SOCK_STREAM, 0);
+ 		ASSERT_LE(0, client_socket);
+ 
 
 -- 
 2.56.0
