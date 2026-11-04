@@ -1,84 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793827614;
-	b=WWrUAd4lLwMBdV7WoUGlNijionYecGeiUJKjZ9bjN6ukF1JnhFqOb2MQ64rA0VBeT36H
-	 TSVhGe5YVg1fw4MzS7SKS1gELAwGs3AMKNmKv0zTGiNSSOsQ8mucEP9CDu4DvWDmtUFuj
-	 MXNwOvyDQMD3wP6TADGmVyp7GQepDiEBInjNajghtktdLm5b1B+4VOFxMJi9W8xG1HjSA
-	 mm/EC0pEyTCbOc51hNfqI2tOdtVl0SR6Djn/FvB0GsNys5N7a0HbtpAIfzKYguKr890kl
-	 KxPUdpQHvIY0oVopyw+fJg8sgae+ZMA+FlRt1JamvxtQP1er8hD/r+UDd2MLQ/AW0LQ==
+	t=1793829048;
+	b=QiY/rSpRTX7dWcXVgmoLTZ4Gve1DXn/ErtB2sXf8FrAWGn1R2ifLOgQHacgQU0FIXggz
+	 URMecabT+4LTE1yhjmOk815+EE952ky68zo8JWGxrIxjompPnT8w1cOu2Usg3hJudI1+T
+	 mfeMCGCwSS83Jg2kBuaP550cOicdH9ec2I2VKnZvCTd2WllM9MYkjkn6LSLPqyc0AOPyC
+	 FwEyBs6mfQUsvT7vpPL4sbrqjOYY00/DN4xtTcm0DKCCoHkt6aTRaGlpkSvWFbu9NnH+P
+	 oMkf5NPrnudgYB8SDNMarxtF6DPew7LeCCL/o894/ny8TJYHGFY3vv/yvhSC1LNKsng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793827614;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793829048;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=Fx8mwjCrbZCWbiZSWWBXN0aiI/C9oFeig/QmjdPJVek=;
-	b=kVvo87PLOGqlkZ6FbbdJXPc19OEmHkPn92LP8+Vyh09905xdnNsRCswxGokhxlTTKhHc
-	 ZNidY1UMBYrjnck6MY9499tglgRIA16NqBvykoC6wf5rw7g4j95co4Nm1VxdrTmZMwBoO
-	 kKYwczFrOFein/ebUzIAAYphD1FylnuklorPYN4fI02FNtebJ8wRoIUnrazjrofDF3qCS
-	 QOOK7oWUaBvtVQ+rZMXWoW23N3spzfe2fVFeniTKGgOsK56XWRU/QXY1QDLi8IAxEB7vJ
-	 jsvd4f3giSWXGBDYdtEuOdn/7HahkrQGQ+2OkH3uIM67/pwZKNIx23b3HTtuf1Ad4BQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=dFChQ0mLr2TKcvvcevcbTzUnz/dF2dQnZUL2ZukNc7M=;
+	b=YBxyBgaqYNKGddRx9lXy5PP348bTY9+jQ2xz8FvqJ5XFeuaSA7ZFZJx5ctPnvEkQia9i
+	 3h/Cr3GlwTE6IZCgVAYPWVkMlhAlm50Iah1RT+RmyjvTzMqHnaqO9f2PNdXFlwR+VF7K5
+	 lDW86vS4C6s0eBUVrBEgQuxtJqQ5WsexSOex8NOJY5/g20gMNJ0ELXhh1WlvEMOgWlslf
+	 IMAq6U8DBB/y4awyi0uny2VO4EsPX2z/vKglQm2VvkOvbDSeTpyynETEWfWJw6EuHZPB+
+	 kNhRgdbRNxOnycfeQ5N0bu6ZziYhjGKJ+Vl9hxkZ0pbF9nSMQi1i0z0pkB3HYloUuPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vy+SWiVb;
-	arc=none smtp.remote-ip=209.85.160.179
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=M9S0tvwz;
+	arc=none smtp.remote-ip=209.85.214.197
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E94D606AB3A
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:26:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E94D606AB3A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4DC6070771
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:50:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E4DC6070771
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vy+SWiVb
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-536c8f958d7so9079741cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:26:53 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=M9S0tvwz
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2eb2437d752so16977075ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:50:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793827612; x=1794432412; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Fx8mwjCrbZCWbiZSWWBXN0aiI/C9oFeig/QmjdPJVek=;
-        b=Vy+SWiVb/NpXstpdw56lw+criQ5VLmL5fI7nn0T68KlPT3t+Dt/ZXXIrVA+Cb9oTH4
-         TPCa6A3seRH9NuwzLYB4U8f/OShYV6IlQIso/owGoN/zGKf8RjT/HHAYQiFq6Md9/AGx
-         OQu+WfEphT/kKjXP8GvKBBFJyiAVMrQefdiWdJmUUcdvKTLoDsWtPAZotnQX9UJOrzaQ
-         xRONIbMdbEwkr1WI3Kg4PeBEsFZ5Y37wda519hWTRbTA9zS4VszXsqzBXwuK7HvvH0Qa
-         FvCJLDSn4KAlIWnCl9a6eAaYBJKX17NVHsnq7L+bnHg+v812XRAWefqQg5U2r0LgvExP
-         /fLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793827612; x=1794432412;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1793829048; x=1794433848; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Fx8mwjCrbZCWbiZSWWBXN0aiI/C9oFeig/QmjdPJVek=;
-        b=wuJ1G1nTg1c2QFtuzLC/6jPz/UEDNuc3dDmT2hfxdUUQUPaHEPISvecNjhgIkUA5H6
-         cWrz9HmE/bV/uU1HMMOlWNgNX79HabOObasHn60qHqYs5LFfrchgQmweuD3ta5pZ+JUT
-         me62TtglgrdKr0gEXGoJisR/1qVLR6dKMuhnN24IV71Qr0PrRD7GIKcQK6lVJHOKpUFB
-         oM4ILi3OI93Be1hQFc9ej5gNZYwlIkCY9VroA8sETm9D2sGg22wFEbdftnPdhcUa7mAq
-         glBA37elIMNwK6G2k0BVZTUC7THxHQpkY9jL1L6eWAiYA2k8zxRHMvD2rtRoQngTIgyh
-         JbKA==
-X-Forwarded-Encrypted: i=1; AKwUvBwBiE8oCtOj8KMCd5ucBh2d+Io5W1CoEy0K5Z9nhtgBfPjrV+LP73v/ZxwIT3aTccqSswr//eHlmcfzILKQp/k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/ilNFYeYzKRkxW5jKCJJCGXtadJ1SYEe0b0Va8ZCUzPR7CHQE/
-	SyIugHxWf916zHrFh2m55lbxmEjhhq+kEF1EhwbrY0zJN+yBIxtTw/5s
-X-Gm-Gg: AYBFou0HEnbj0xzbrJLvf9YYGGpkW8oNtm5rv1/bRsG92IKwM+glRXOdvadPHznROKp
-	HsT1mN7ofjK/XxYmvAi+mEmVr8TCRqHZsxt0JBviVpmAwMFeNUNqrttLOBejfWQhWgbV0oAA/CN
-	WZ5B+mx2DAiHzZgCGFCw9QZF5Hqmo87dfLYdGdpyPQ66KVo1fgRqIcVxD6j38bG7UYeGR6+HJk0
-	5AmRZHCQs4T8BOcBtptXDWL4qcqzWSHncy+1qDvG3PchvO5R/2fGS18c5h3nbuVuEHdc4sk2Xh5
-	R6IxUHb0t6ozzUWOUHW7EkiUuuqwfeLEFJYeKYXPBmM7JBHqYegU8R+PONMWwCOCcztTWr5L5el
-	AsKzmuRq6aoHL+ewfc9UtxWVIJOEgMmXjl/y4CpSg7/idrbNXVycHwMC80etUP5/U/zAbhioYd0
-	RWWmEmB14bVJSF6FLJG9eHQpBy1g7v8iT6vDJwmBSwkIfRT+zcRkW3/IAyeLYi7tN9Vj5kg+8aI
-	NhQleOTPAx13Llhu85d5q5FcTLVn6Xbo0gd1+0lpLE7OPNOoDSrGLhXkrr6QkHFEB3Z48YDmC/p
-	+ChabMq1ekOErIII
-X-Received: by 2002:a05:622a:2510:b0:533:8bf0:e6 with SMTP id d75a77b69052e-542b6a703c1mr284677281cf.35.1793827611998;
-        Wed, 04 Nov 2026 13:26:51 -0800 (PST)
-Received: from localhost ([2620:10d:c091:500::4:a8c5])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-54b10c4dcddsm34508841cf.20.2026.11.04.13.26.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2026 13:26:51 -0800 (PST)
+        bh=dFChQ0mLr2TKcvvcevcbTzUnz/dF2dQnZUL2ZukNc7M=;
+        b=M9S0tvwzc3cQs/jygskQ5D8xUmXs1a229U7+1Z0I98bqqBjLA/pme3j2jrHJ/tu3dg
+         WXusFODXXGOllpNsB2M2bk++eeUlT5C/w6TJ8QxTlcWEVdsqHbnrTTwUeU/s3EZJREwQ
+         vz9ebxujUXuZPxkwjDmh45JnUTNAOsh6QgzIMILNDcRqrVURkI75NvEvHq0RMj7K4etr
+         PevPKnVPUQXSkiwaBr1C8NkgfhIYiMEcg77e78qhI9pZ5mF8LtDKZeNErJDulCMYsk4q
+         62/Fhyk5Pc3R6YSq8BzBkUxAbD6dM3rPXfV+iHgXBsHecd37xPL98lsIWlMNeS99nYSJ
+         hSCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793829048; x=1794433848;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dFChQ0mLr2TKcvvcevcbTzUnz/dF2dQnZUL2ZukNc7M=;
+        b=LwMSLfYkW3f3rT8Ctl3PJHrfGhWKD5RCVLjKGWW2sRRwGeHelO7tIS4H29ufQeUoSB
+         /9Pgm9a55K13wHdzkApsK90dto62jQZjN93aJmKAePhjMs8u5YWlA2dPhhK92vBDbcWj
+         6bzj7E9lcd6np0Xuh/SLjBO+FrHEN9W06ya+5JUBRYF1RJuuIP8/faUrfsjqaJbIMl4n
+         xwlLxhQx4RUzhYmBzngs8KikQpftYR1j/C39b2bXaH1e5wF1pnifNIcQ3g6xoAC9HhK5
+         5+7gdFC8NcSNoaOOR4Mo7G7i5dDWEEkp0qdF4RDNXYR/BVoI0MUi4CGWCHv7VjcbOlrN
+         Hp5A==
+X-Forwarded-Encrypted: i=1; AKwUvBzpNCoJyRRUZcmvB61f4Jwd1o7/ClHWKXH+4WhJ7O6ciy5/evPU+xswUgaDqv0MugQaeRgnjXJQe6pTL7LECnw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+EtPDrfGwWdkzElkUqdClQEKA+9MMTkIrW/ee1JU8SemegMh73
+	R9GRUklQezx2sl7IfrPW59uatTT8ZZmQ9HHCAIhLIad0ojhp/VqdVJP3cB2UPg4PNNJI+9oowHg
+	4ZZrnrQ==
+X-Received: from pleo5.prod.google.com ([2002:a17:903:2105:b0:2eb:15a2:31f2])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ef03:b0:2d9:216a:cdd3
+ with SMTP id d9443c01a7336-2eb3649be94mr173739735ad.18.1793829047606; Wed, 04
+ Nov 2026 13:50:47 -0800 (PST)
+Date: Wed, 4 Nov 2026 13:50:46 -0800
+In-Reply-To: <auue7S_vdnGtTM3c@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,104 +78,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 16:26:50 -0500
-Message-Id: <DMMQTFS3ULM2.3HSJGB1UT085M@gmail.com>
-Cc: "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki"
- <jakub@cloudflare.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Willem de
- Bruijn" <willemb@google.com>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH net v2 2/2] selftests/net: psp: test bidirectional data
- transfer
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Wei Wang" <weiwan@google.com>, "David S . Miller"
- <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "Shuah Khan"
- <shuah@kernel.org>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261030043145.2185700-1-weiwan@google.com>
- <20261030043145.2185700-3-weiwan@google.com>
-In-Reply-To: <20261030043145.2185700-3-weiwan@google.com>
+References: <20261103002205.3348519-1-dmatlack@google.com> <20261103002205.3348519-6-dmatlack@google.com>
+ <autHA6aNrg4s5PkV@google.com> <auue7S_vdnGtTM3c@google.com>
+Message-ID: <auuotv1vFpocCSeW@google.com>
+Subject: Re: [PATCH v2 5/5] KVM: selftests: List the known IOMMU modes in
+ irq_test's help output
+From: Sean Christopherson <seanjc@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Alex Williamson <alex@shazbot.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri Oct 30, 2026 at 12:31 AM EDT, Wei Wang wrote:
-> _data_basic_send() and _data_basic_send_netkit_psp_assoc() currently
-> only verify unidirectional data transmission from the test socket to
-> psp_responder. As a result, they do not exercise the receive path for
-> PSP-encrypted TCP data segments arriving at the test socket (such as
-> packets redirected across a netkit interface associated via dev-assoc,
-> which relies on SKB_EXT_PSP surviving packet scrubbing).
->
-> Use the existing "data echo" command in psp_responder to verify that the
-> test socket can also receive PSP-encrypted data from the peer in both
-> _data_basic_send() and _data_basic_send_netkit_psp_assoc().
->
-> Signed-off-by: Wei Wang <weiwan@google.com>
-> ---
->  tools/testing/selftests/drivers/net/psp.py | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/s=
-elftests/drivers/net/psp.py
-> index 473500901879..e507951b440b 100755
-> --- a/tools/testing/selftests/drivers/net/psp.py
-> +++ b/tools/testing/selftests/drivers/net/psp.py
-> @@ -120,6 +120,12 @@ def _check_data_rx(cfg, exp_len):
->      ksft_eq(read_len, exp_len)
-> =20
-> =20
-> +def _check_data_echo(cfg, s):
-> +    _send_with_ack(cfg, b'data echo\0')
-> +    s.settimeout(1.0)
+On Wed, Nov 04, 2026, David Matlack wrote:
+> On 2026-11-04 06:53 AM, Sean Christopherson wrote:
+> > const char *iommu_mode_names(void)
+> > {
+> > 	return __iommu_mode_names(false);
+> > }
+> 
+> How about listing both? That keeps -h consistent with how other KVM
+> selftests list the options for their arguments (e.g. backing_src_help()
+> lists every backing src type), while also showing which modes can
+> actually be used. e.g. on a system with only the legacy VFIO container:
+> 
+>   # ./irq_test -h
+>   ...
+>   -t	Override the IOMMU mode to use
+>   	Options: iommufd, vfio_type1v2_iommu, vfio_type1_iommu, iommufd_compat_type1v2, iommufd_compat_type1
+>   	Available: vfio_type1v2_iommu, vfio_type1_iommu
 
-I'm not a huge fan of setting the blocking timeout here. If we are going
-to set a timeout it should be when the socket is created. Otherwise this
-function has an unexpected side-effect. Another option is to use non
-blocking reads with timeout like:
+That'd be awesome!
 
-def _recv_careful(s, target, timeout=3D2):
-    """Read exactly target bytes, tolerating short reads"""
-    data =3D b''
-    end =3D time.monotonic() + timeout
-    while time.monotonic() < end:
-        try:
-            data +=3D s.recv(target - len(data), socket.MSG_DONTWAIT)
-            if len(data) =3D=3D target:
-                return data
-        except BlockingIOError:
-            time.sleep(0.001)
-    raise KsftFailEx(f"short read, got {len(data)} of {target} bytes")
-
-
-def _req_echo(cfg, s):
-    """Ask the peer to echo, and check the reply arrives intact"""
-    _send_with_ack(cfg, b'data echo\0')
-    ksft_eq(_recv_careful(s, 5), b'echo\0')
-
-> +    ksft_eq(s.recv(5), b'echo\0')
-> +
-> +
->  def _check_data_outq(s, exp_len, force_wait=3DFalse):
->      outq =3D 0
->      for _ in range(10):
-> @@ -478,6 +484,7 @@ def _data_basic_send(cfg, version, ipver):
-> =20
->      data_len =3D _send_careful(cfg, s, 100)
->      _check_data_rx(cfg, data_len)
-> +    _check_data_echo(cfg, s)
->      _close_psp_conn(cfg, s)
-> =20
-> =20
-> @@ -726,6 +733,7 @@ def _data_basic_send_netkit_psp_assoc(cfg, version, i=
-pver):
-> =20
->          data_len =3D _send_careful(cfg, sock, 100)
->          _check_data_rx(cfg, data_len)
-> +        _check_data_echo(cfg, sock)
->          _close_psp_conn(cfg, sock)
-> =20
-> =20
-
-I'm ok with the approach overall. The coverage is sufficient for the
-purposes of the series.
+> The available modes also get printed when the requested mode is not
+> available, i.e. when the __TEST_REQUIRE() fails:
+> 
+>   # ./irq_test -d 0000:01:00.0 -t iommufd
+>   1..0 # SKIP - IOMMU mode 'iommufd' is not available.  Available modes: vfio_type1v2_iommu, vfio_type1_iommu.
+> 
+> libvfio exposes iommu_mode_names_all() and iommu_mode_names_available()
+> for this, built on your helper for juggling all vs. available.
