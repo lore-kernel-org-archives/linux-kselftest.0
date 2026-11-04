@@ -1,80 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.131
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793792281;
-	b=ePvYPSskbqv5tBJDjOGULzcERHf7DvtpsHW/yZTEPq5Eup/YPxDeEGpuTib7nRgeTI1C
-	 eqwHlt53jBJc/MTUr3J54Ui8WlP37Y8abif6MQumbZgC3JC6UC8XoA3hwJDGxsob3gY5R
-	 PlR8qCwsbyaLc+O7Pm5Y06jFm5s3cryBd92Yi7WGbfnXMCuzO2SJVThqJ2HRG2XedMyb1
-	 Y4HpqkQx/fV3DXVi4oHDbKTBuAKRLU7OtqgL1WqqvvTAb+tWbWgA9piQ2Fd/SNyEIOS3e
-	 5aagbBsIiMHv3xYG/dRI2/AxuYCE1UFcfKAHbHjAow1bnhB72FhvrkKD6R9o8id/bow==
+	t=1793792428;
+	b=QvdBdOJ5Rdm5QWdUJOUcT1oqAFWyH4XQKy019NIC6iMA8eoM1GICyIxjNui+arD2BDwZ
+	 h8rg75VG0AUsIrYUCxEMG9bHTVeOHwHec4whacnYpjiwY7mj/pSaH5mBsWIPE9rddfiX2
+	 wTmaFi+8n77XJRZqkN10PHVeXFdtLtrQjJTiV8C/wMVckT6be5O7RWiXhuK2UloGAfHiw
+	 44+TcU29rqPkx0Ek2ptw90YvOdXhxkyhJYPGMwpnMZ0jKvUPOOCNtku/Gw2seLFcfgH5d
+	 +ND4Vd38mPONZtGg+0YEeOKqhshX6wrhtpxDjs3pZSUA2F/rQSAGpjtD56u5RqhCIRA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793792281;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=i4o/1Ov+Rk4PSAZfblqY+qRYIgcMzFlXPluPXC1UsjY=;
-	b=zmWYK6okbBVdYHo+pR5oomYQmlTxoeuXqqQl2QvM7Y6BFNRNuQleY5nI8gyxMSqX8Y3p
-	 YIncDOpH3XiUzMNX9si6fFo/vecaRsweABcCPjMkrxzskn+KgntmnsqsvwQxWihdFTRpU
-	 m8rtsZI6SpKbeL3b7jymxQM5slrO25iHdD9RYlgLwp2U1Zz1jL9FKIwdbMBj4IplhO01m
-	 Dp5S/vhEXIgpcGfJM4BqKTlHLSs4FO1hCCWU+1x9CPVjI8wgH4opYlIbqIyAdOoVjxtsL
-	 yyxCnCs0kV/11CISeV/JIO3oijoOFwNOvZR36S+3sjjL0OrzXF5dF0J2Xt/3LAfNluQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793792428;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=tEpyqlnZnD5VvYTqFQOq2w5jDINj/Ab94LVMAq5qpNk=;
+	b=vmW5Jz/A/LSh12S2z+x06LUuRz2crDq3Tn/U3xRDo68UmZMlkYPpfsnvYLLnIe8yO/rr
+	 pXuz2378Arcthh7BVzWIjt2NxPds7QCUTdZngv57jBB8vyY/dGzZZYi88Cp8Vpsb2YCKT
+	 OaVEwnnSwIuCZRZatxXYZFAMUK787+uMSuNzseUymkazcGJCVsBBGaMOBkTe2Mt8heyLX
+	 0yG8gU34M9ZmMO7004Bva3TaHmG7kzFkx+x7gv0dHuxhBcZMIc6wH/EZSrJvb7nhhqFjQ
+	 LachcHX4A2kvkyAVDn4vZh5LRvY6HsnkkfBfhlIV8mfYbBICF7F8fXx8yVanqFplRiw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nBxr1yhv;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=virtuozzo.com;
+	spf=pass smtp.mailfrom=virtuozzo.com;
+	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=VZpptrcm;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.131
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023131.outbound.protection.outlook.com [40.107.162.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A36606A332;
-	Wed,  4 Nov 2026 11:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A012606A328;
+	Wed,  4 Nov 2026 11:40:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A012606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nBxr1yhv
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793792281;
-	b=jWQpCriwAskY/KjBg5g5XhDo3wzqodGqf1GmHkdA/0fWU9ByL1fjlqAHmcLSL74Y7xMh
-	 iZEtAoxtuJyoqbD+AwirUI/kcTTGVtE3oBc+qj2CUHURFlW7zrDNY54qqRKCtnrOPTbZL
-	 g9lBJfFVrhxXOVHBXcGtk9qduKqd6Pu0/4IdzVe6j0PzL9VYnwvf1HrQ0O3qAf7zlbAGD
-	 54hyFjhEXR/AqSh3dqSzVaSIzhhJDYO5CujYJT7Tf4lsiRNVGMo1al4ytfmWAwIq73xVt
-	 0NXeDnaI0ZvCzk5OMqTcEWqly837MubYbsW3j6/L88bpKJJupt52mjXpkLaBdcJZ69w==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793792281;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=i4o/1Ov+Rk4PSAZfblqY+qRYIgcMzFlXPluPXC1UsjY=;
-	b=nUKLNZ40qcq6i+GpxrLJL3HKlIABNCLaF6iMD5IiF3hPSIv0ykxD2qyvdBBquLcxakeL
-	 4W6Y1alk/mVi2H1vOoAsg+ZZpPGCrykj+L7n5UxsZUDr0KuG3AxFWPcAFLW41y0QQo8zY
-	 7d6IhuxPwDMqXSjO//NgK3keZK4Y47OIYYBqiDuszrtjbMO/MoaG8m86WXpfPWMRAGHjm
-	 3G+b/nDHAgiz29g0D7JodvEzg2ZlMFIBT9F0Z4C+AEOl0GkU9znz0tL3M5bwZTVcrpEIJ
-	 bKZ6mywLljPaTK8qoD09jlA5scbGykYbtJZae2m0zObmNHFQydN/TdSC5jdQ6osSDxQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A5E111F00919;
-	Wed,  4 Nov 2026 11:38:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793792281;
-	bh=i4o/1Ov+Rk4PSAZfblqY+qRYIgcMzFlXPluPXC1UsjY=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=nBxr1yhvpdWcKBD0Gmn6Hehj3DhnKK3TvpmTj+16u6NhviH1GEh9zF7C7KCD5XFuM
-	 b8v4DhCGJJvzUpVyVc/2ZKVg4Wp0+o77OsNpuvuSbsFQCxW8qTALDXvb4n1nxloxwh
-	 ttunfDURxhhNaAV/IrYqqkb/bYZgjDFaOY5Sbu+yGLCdPtQLHYF1hjHAC3gh0FlsM9
-	 haSY63xH4MrOdthC6WNDjHQJWcLjfhjreRCnuHKsFmAUocrHYdp0f+/S4TsLvbz+XH
-	 2kETG401XNvYGGHtrOUfA4cgvBqW+uOiHK9I7+gwNszY8mrqsDScTypcT0ze1gDM/r
-	 DNPY/yd8DTWYg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id F352246DEF;
-	Wed,  4 Nov 2026 11:37:59 +0000 (UTC)
-From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
-Subject: [PATCH bpf-next 0/2] Limit local storage value size to max
- kmalloc_nolock() allocation
-Date: Wed, 04 Nov 2026 18:37:56 +0700
-Message-Id: <20261104-local-storage-max-v1-0-c836731bd184@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=VZpptrcm
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AhoMmdRUJj5P+qSS5cR9UvmWtU5iYiwbeXLlEYOX55c9hiZCNh8cOSflqf1Ywj5+0PzRFKAoQLEthJQwYVPXm7YYu8uxwYzTQpFLhGzUpigjwc6Vi7xE+VJdbtHTGWngGt3nv4u9VoXkw3qCJAQUDqTGfLNA6Omo8ax/2fhM0t++CJgz2LL1dh8oO3vV59+HoqOZ/My61xSWZqyLTIv4EDChg2E2J+rqC+vhZLwxkyprY1LmNKGguTr2xZw1cnBZQoBg7uK4FoSwQAVbNIYRTWcUbuSRILQKCWzuG5PDnRpGTOLVcpPRuL3hamtzHDGbR3qwhIRF3LPcSxfIK7LEug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tEpyqlnZnD5VvYTqFQOq2w5jDINj/Ab94LVMAq5qpNk=;
+ b=IC9x1mzEFdcqMo0KwWvxRHxj5kOIiOIFrMI+Wg3o3Fu2r31wakKFHckSrB3JOLkqrtUBJokogxT6sZCcRhhPeBkvdppJyWFlmVDTnM1DkZa49CvrQoMwjKdeRZ39uYBm93EQ9VfkNRgwN3WHNxsn05HJ+WZyombsK9Fz2LKw25fir1II4XCGoJbEmug2ec7X95YZf3VQs9iML/wGlIl1LE0nEY7m7GjzL2rwtYsknbU1EaZNjvMJBLezmvN67/EqpwXjIDbdgAkgxMnW6DZ4Zw17Ik9Z+VsSeoLfCM8omB9WGZuUGUiN75L6sn7or4vv5s0Ijfx8UDxdXd3kSgeKnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tEpyqlnZnD5VvYTqFQOq2w5jDINj/Ab94LVMAq5qpNk=;
+ b=VZpptrcmUdbrmRO2IagexqilVSYUFvzNYNK0TFUwk3+8HOtV5sdPwr9TANwpxj3j3nl+KQVxO9OGRZh5ZSp/Eo/n8FXhZXxMfMZ0WZF/1U7WFRI7ajbj6Ut/ISg0zd6xbg5vzL8Rw0rxUtc6r8ov04vHBuF6360nwPegpBT7p4Ibq58ZZaUgwoHQ+hFKMnAOm3L10PsW2nFgmzqvHCkCFrxrJogQuO75V6bB30eP9MO55VLO2XHaow47y3VHx+sPx1yjvvRK7pV3ZCCa17l0h+bEw6wPyjVzYPJmqjDMvPlv+npAPaEthMb6P/1fOCViDQfGaXBpBI8KAXatQ6jBFA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com (2603:10a6:20b:5ff::9)
+ by AM8PR08MB5698.eurprd08.prod.outlook.com (2603:10a6:20b:1c6::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.569.9; Wed, 4 Nov 2026
+ 11:40:23 +0000
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8]) by AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8%4]) with mapi id 15.21.0592.007; Wed, 4 Nov 2026
+ 11:40:23 +0000
+Message-ID: <dd966816-a83d-47ea-8faf-bf80d3b2642e@virtuozzo.com>
+Date: Wed, 4 Nov 2026 12:40:21 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/4] mm/huge_memory: copy file THPs at fork like
+ copy_present_ptes() does
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Peter Xu <peterx@redhat.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+ =?UTF-8?Q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+ linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
+ <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-2-66f00b7a564c@virtuozzo.com>
+ <8c164738-8025-482f-828a-3f919150a930@kernel.org>
+Content-Language: en-US, ru, sr
+From: Konstantin Khorenko <khorenko@virtuozzo.com>
+In-Reply-To: <8c164738-8025-482f-828a-3f919150a930@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P251CA0020.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d3::9) To AS2PR08MB9075.eurprd08.prod.outlook.com
+ (2603:10a6:20b:5ff::9)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,67 +113,119 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvxJ7bkErivpKdLBtrYXS0Agh+nvSc
- RhmHogchCMMxQOBb4niXQZdFkCbcSujLJmhUlWrtWpw92R2jJcPJsvDJKS6U72lpbUzQe7OwFb
- S/xxhPi06ThdM7/sB9RsjSm0AAAA=
-X-Change-ID: 20261104-local-storage-max-c3709fcd6fbc
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Amery Hung <ameryhung@gmail.com>, 
- Slava Imameev <slava.imameev@crowdstrike.com>, 
- Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793792278; l=1220;
- i=thamrinjonathan@gmail.com; s=20261102; h=from:subject:message-id;
- bh=7tD517TNGR3Xl9ZhLbA/MFMMtT5aaAkfnZnVLX73hmk=;
- b=BTjv2wvo5BWzwx918zqZt/0lRYf+OY3GGArIhxuadr66khkgWOYChCNRIt5GSWBeo9az5Vlkq
- IzS0MoJgwM/C1N4drlaatguxem7qKp38vJMK7tgaLY+YI/6rDQzFvAJ
-X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
- pk=mr0q5PZVaUIrv8WvTxIfK7QVcAiRSYI8hOByBQL1ZRo=
-X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261102
- with auth_id=1383
-X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-Reply-To: thamrinjonathan@gmail.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS2PR08MB9075:EE_|AM8PR08MB5698:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2c75a77a-1e0c-41b7-7d78-08df3a6869b2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|23010399003|1800799024|366016|921020|261028144727099003|261022075727099003|261026121527099003|261009223027099003|4143699003|56012099006|261022105027099003|261026140227099003|10067099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	du0WDII6tD1QtRG4Es493qUpdO0KTSKmDc83kboGkEgcTaXsuDczK5pjicAldwOk8vOIxDHCyeHcHbrQCl0LS8urebhLUuO8L5qu8+GCPmy0TMPJ4jOZZfR6ywf/7aQLofJ2OZSxqe8rg10UIeCAIoyvHhsFRZhT103KHHtYfDKK/yRl11xLpMNQIvwfdxeYBTaEfjCIpO+ksVoXUNteIuLXSIsAQ0gcA3VAx33HX7Rl4IR6mNOwbKZJ2h1LE7owuAQOR0LPMCZUUqs10of8RvQWTdOc/wsMEMCbpfZFcTaafeJzZLr7vzF4N7+pVOgPjBJwgig+9FguzuaHPX72/M+exZbswMIu2Rh4S72TXnwaGnMB8l/jLBgoL/44hxBzx3dRYjW3AZ9UdoyUYihutvwpyU6rYVMUYXpAA3x6F1OoCiwXXLnfaoL2kTV5tEnhZyjIF+WDx5WUE2eAiBwXwONzcieXOR8UquqGll0cOqB52op09OqO46JNmzSKYb6rB5RO+se4KzRkeI0nZEWXgFFA68ngaIZB7sZfjZUeBXc1C56UOl2cPHyDJmEmt+yMvxnK4jW79nQyFYlav9sZDuvPPsexKoq2KYNqRksrlbOPliDXatu3WDaCysvdiphDD+hpsjMeu6qG91s3+bk5zlJ2fXiVbkyobnjiLwMjYlSqVd0pR+khBi8dxik9TiT8t+dSAKIsyERwMlRap3RuYQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9075.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(1800799024)(366016)(921020)(261028144727099003)(261022075727099003)(261026121527099003)(261009223027099003)(4143699003)(56012099006)(261022105027099003)(261026140227099003)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Smw5V1RNTnVUa0sxTkQ1VytJQkdtaFBpemZVOGNaemZhMEl6RjZZdTlnV1Yv?=
+ =?utf-8?B?aUZyWFpYcEFqOUxtb3ZjcTc3Vkt1dHF1UENTM3JJSTNoaEg4akU0VDVpZGhY?=
+ =?utf-8?B?QmxQVm5yY1ByNzkyOFNFaCtBV3Y5RytTaER1Q3VhMUhMcFV2R0ZKTjI5ZEh3?=
+ =?utf-8?B?S1FLdjBxR000Z2p3NU5xd3h2cEpPUXgvc2ZWMlhRUjdEZndpU0w2Z2pRa3hn?=
+ =?utf-8?B?NFYzOXF0YzRRU2VoaEZrNkFRSzVMN3JRZ1V3Z0gxdGx6dU1KKzJSYitwWmI2?=
+ =?utf-8?B?eUU5SzFTcm9UbE1iOTFzODhEZThOVTBGb0hybUE4cWh4UEYzTVZlNTRiNzYr?=
+ =?utf-8?B?ZGVsbGdyS2t0a1M5TjVZSHVobGRmcXFMUFBkaGJSaU1JZ3pEK3FMQnRTVnEv?=
+ =?utf-8?B?RjQ4djEvRUtNZVJ2blFuUlZxVDZ6WGoxdXM4LzhVakp5RVU0MlZvaUVPbUN3?=
+ =?utf-8?B?b1VYZE9BQ3RRVEZvMWlyNDYrSXIzTTA4WWxGN3hSb2p3RmZhQWZ2WkxMSlJW?=
+ =?utf-8?B?SUp5NklYOXJhY0lNMVRTcUM3MXFLcVZyOGdaZzdsbFNDOVRxdkt3c0dydmlP?=
+ =?utf-8?B?S3l1QVRTZW1BQnIxUENBYXA4SGsycHZpY2RBcS9WclRhcDhlbkIwS0tKVjAy?=
+ =?utf-8?B?dEk5SEtxWkpScVdKanJ0V3FvWU1MNkNFenVCdzM3MUhUQThpQmZra21xQjNQ?=
+ =?utf-8?B?NkRHS20wZHhuODJWZTQvaFIySDhCaWs4enQwL1U4dUdtbVpqcjNSdDdZKzVz?=
+ =?utf-8?B?NmFSeEZhbHAvTTV2bER4eWgxYTVBckpyQ2xRRjBFRDh2aEREVTFQTEZkd2VT?=
+ =?utf-8?B?UkhKWDRNQlFLbDU5cDRXVjg3TS9Lc2lHR0MwcVJHR3puQmlvVGQ2Q1ZKOEUv?=
+ =?utf-8?B?S0l3NGZpcEh0Z1J4UlN4L0NaWGpFeGdjOUhqSUxIdlBtR1BQS1FYU1AyekdW?=
+ =?utf-8?B?UWprcDRLbmYxYjhjNXlnUUEyTXMrMHlPMHgrcHkrT2lKbDhaaHc2RmNvUlFY?=
+ =?utf-8?B?bVk4OG81ZTdqcFBRNytpYVUvc25ReUdOY3htMm9pTSs5SUE4RHVTMTFsNndV?=
+ =?utf-8?B?TFZUdXlWTUdlWjFJQnNsSWVOZ1NPOTArOHluMndYODQrdTdZNFFzcmZtdmdR?=
+ =?utf-8?B?SjlRekpCRnZOT2tucUdMMDlCYlYwV1Z3SDlYRTZHYkZtZkZyNUhZZ1RMSjEx?=
+ =?utf-8?B?eXBUOEluU25YNlpVS2I5WTYxcDdORzBrWFpmZ3ZxSStpOERIOEozb29WclhN?=
+ =?utf-8?B?MGg5U1VjV0lzbTk0Y3p1THNGSHMwd1hMQk9YeC91YXltd2JGaEJocXBCTFRn?=
+ =?utf-8?B?RnhPaCtpMEN1WDZSUzFKSmJVdUxTOVhaNUtuWXZXUWdpYTVZVk1aYitMdW1m?=
+ =?utf-8?B?c0lXQ0FuNzlzYXBpNUhuSEtJWFBObUJzNFVCU3VtRitLOXpDUTFCMzJ5Zllh?=
+ =?utf-8?B?bmxNWDZxQ3pNRlo2SExKTTRkWTZJRXhlaXd3NW5WZVBsRXljMHpYVVJENlo2?=
+ =?utf-8?B?OEp6M0lRak1Va2Q0dkFuTTFhMU5paUZSM2pPd09hNlFwdDFjOElpNTl0RmFq?=
+ =?utf-8?B?Wm1iWjhFbkxERENTSmVRTFVxVFNFdjdwVXBSNy9TMHBkQ2szNFkyZytDNnlU?=
+ =?utf-8?B?Z2xBTVhBYlIrRzZqYlIyZmhOZXRicnl6VXpXbkU5V1I1L1lFWnNaeURCQ3pv?=
+ =?utf-8?B?eXhwdmk0T2gydk1PaUU4OEsydzJuY210eDBIOTdURHRCd00xaFJsMnczaFcv?=
+ =?utf-8?B?eGhlcnFyQXlRWUMzVURubW94V2xDVkFNWXIwT1I5eVhRQXJJbnl0azRrNVFE?=
+ =?utf-8?B?eFBNc2JkaHFaUXVPa3N1T3oyMUVKSmMxNlV4bnZwUG9WZUNDMHRvK3BMQ0ZR?=
+ =?utf-8?B?Wjl1dFNzVXRiL2M1dGlVWmxJUnNxR2ZFcVdQYmM2RElJdndhZGlnTWpjLzNr?=
+ =?utf-8?B?SU5zZEVOYnFmOWQ5bm1vVXMzOENSNEdYVlA0WWVBZVRzazh6SzFUWnY5Ylo3?=
+ =?utf-8?B?S0Z0UW51cEs2bEx5alZuQnpDUGR0U1RiTzgxMUJtQ2JSTG1aVmtQMk9EeVF2?=
+ =?utf-8?B?ZlFacXY2cDFvM2U5eTdPRkNmeHRBa09jaGpoK1lWK0taUVJyeVR2WVhvRVp0?=
+ =?utf-8?B?RzJQSXpGU1RDeEsyRng1YUhRR0kvTm5rdldxbU55S3NndEp2NzlFYzA2a0ZN?=
+ =?utf-8?B?RndLOHlTZUlYL3BURWhLYVJQMnBKMGNtR1p4V2I2ZlZqcWNoZ3ZoUVdSQmRJ?=
+ =?utf-8?B?cXl6SzRJbmh4dTdXei8xRENnYjlmeEc0aGxTQjJNQkhyRnFOSlhoK2lhbWx0?=
+ =?utf-8?B?VkFjQkh5bVpNRTVwMVpxZUhHOGdMbEtOZWVFenhMOGhhRGZHUzhxZz09?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c75a77a-1e0c-41b7-7d78-08df3a6869b2
+X-MS-Exchange-CrossTenant-AuthSource: AS2PR08MB9075.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2026 11:40:23.5671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P3eSZaW3NPD/Cs6l241/n5QE/ciGrsPY7UyL0q7Y7hd+U4YcOmwUhdzmRxXvq+3EqPEfjCb6Wcstp1mYUw5ziQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB5698
 
-BPF local storage elements are allocated using kmalloc_nolock()
-but map creation is still allowed with values up to kmalloc()'s
-larger limit. BPF_LOCAL_STORAGE_MAX_VALUE_SIZE is changed to be
-based on KMALLOC_MAX_CACHE_SIZE instead and maps with larger
-values fail on creation with E2BIG. Cgroup storage
-(BPF_MAP_TYPE_CGROUP_STORAGE) uses the previous limit since it
-allocates with kmalloc().
+On 10/27/26 15:39, David Hildenbrand (Arm) wrote:
+> Any reason we're not adding the vma_is_cow_mapping() check on the
+> softleaf_is_device_private_write() path as well?
+>
+> (I think they are all anonymous ... just for consistency)
 
-A selftest is also added to both find the largest task storage
-size and test that this value can be stored. It also checks
-that the size is at least 4096 to check that the limit isn't too
-low.
+No reason, copy_nonpresent_pte() has it there too. Will add in v5.
 
----
-Jonathan Bastari Thamrin (2):
-      bpf: Limit local storage value size to max kmalloc_nolock() allocation
-      selftests/bpf: Test local storage max value size
+> Is the fallthrough:
+>
+>       add_mm_counter(dst_mm, MM_ANONPAGES, HPAGE_PMD_NR)
+>
+> really expected?
 
- include/linux/bpf_local_storage.h                  | 10 +--
- kernel/bpf/local_storage.c                         | 13 +++-
- .../selftests/bpf/prog_tests/task_local_storage.c  | 87 ++++++++++++++++++++++
- 3 files changed, 103 insertions(+), 7 deletions(-)
----
-base-commit: d346f59069676eda84b3313cbd2c2ab21045d3ee
-change-id: 20261104-local-storage-max-c3709fcd6fbc
+Yes: copy_nonpresent_pte() counts migration and device private entries
+in the child's RSS as well. File folios reach it now, so the hunk below
+switches it to mm_counter(src_folio), as the PTE path does.
+zap_huge_pmd_folio() subtracts a file folio from mm_counter_file(), so
+MM_ANONPAGES there would leave the child's counters unbalanced.
 
-Best regards,
--- 
-Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+>> +    bool writable;
+>
+> Why do we need this variable?
 
+It copies __copy_present_ptes(), which snapshots pte_write() before
+the uffd-rwp branch. Looking at it again, that branch only rewrites an
+RWP marker, which is PAGE_NONE and never writable, and vm_page_prot of
+a CoW mapping has no write bit either. So the snapshot looks redundant
+both here and in __copy_present_ptes().
 
+I'd keep it in this series so the PMD path matches the PTE one, and
+drop it from both in the cleanup together with the gotos.
+
+Kiryl, does that match your understanding of the PTE path?
+
+>> +            goto copy_pmd;
+>>      }
+>
+> Likely we should clean this up later to avoid the gotos.
+
+No problem, but let's do it later, on top of this series.
+
+And on your stable question in 3/4: v5 will carry Cc: stable on patches
+1-3.
+The backport to 6.12 won't apply as is, so I'll do the backports once we
+get a failure mail on stable re-apply attempt.
+(or I need to do backports in advance? Need an advice here.)
+
+Thanks for the review!
+
+--
+Konstantin Khorenko
