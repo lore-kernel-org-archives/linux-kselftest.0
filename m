@@ -1,53 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.6
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793776261;
-	b=wnBNl+fcm04tYR6es6jp3WiTltDIKj7xdM0JYjdO/9B5Rds46gBByjriPY1jwEAL3FKS
-	 /G3ZZxhmFpg2oTHIwwEik2OlbZk5gWzMNBhfc+QFk8z3P2vf7xz2rZoiWPf8imQDR1o1u
-	 1ETDQe/YDM0WrrqYwNhBxTDbnPHWehL8h5u57T9dVTdXi/GQJQltO3met3SGD6dDpCMrT
-	 ObCS/X9F6iazZi2fYzojbu8WqkYFh9fgrqT760nDOnXMenWgPKbKkHfX8Plm4PubEOmgE
-	 83T2yY4AHFxpdOsizvOdicZ6t5MC1JiotnbcOSBPPnd8d0xxgD90UK12ztkdgocdcRA==
+	t=1793776583;
+	b=SC0kbs8dU+OEQMhASG9awfMFTkBocvRP4gF2YSnFUi9XRtjEG+0zXpdKqvEguv6FqpOq
+	 zNcRHCSlUsoSm6cV54V+8UTNyDYv5Fgag+u8w+m+F5YLnIIheZVgruvOVTALAsAYUE0Qw
+	 fSApYYASQyYQnczDeZBmJrBktf81A4ESfhpP0r5XOyKj7mgFdxvrtRAOlpg5EoUbB7tdZ
+	 UN5GMv63GDAptRnMVnzYZTSUHz/mx/kEIej0uaohrfQlLXrUgiAFOnD6TjJ3Twc1nM3M2
+	 pJNMSvS4rkro1fg+AJI8Dpf95sq/kd7refvBoARk0l4qjqi9XywYUGsGQWCsMwMDoAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793776261;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=C+vbzFKGTlVpkBIKBwPEdUJ4AufpMTAgx2he1ofb6TE=;
-	b=DKGIBYUzxqNp4aPpiK2+JmCk1EryAYVBV+oxv8/dEBkoK1nqegDkmvYQU1qFfQxsXCzm
-	 mOqwc9D66AT1hNZC2AHbwyBMu9MCu516zf8M+RslK+6Y0oO/O7WioJ06+GQwq+JPLkV5K
-	 XZb34NxpWfyzF1vLIiz/t/IljEFsG+c+fhN77xJBX1TDbDZcK9H8+gHf872XfDPepnbmb
-	 WxmXSPoR7OJnm7jJMlBfyCO5x74M0AwbGu6EafFigisfON8ZoLT4bkOQNI9EigEuEEqSW
-	 zX4kuDmfxYBJHX2HUq57NMXvyyTmqznWSCHc9KeGBBvVUy/zrom9DcYrfpztByKrp0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793776583;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=sq8GeUPUbWD5/l9webTykYpDaibNcYX0trvCELNClDY=;
+	b=EvWv998iqOtIrd87NrldaKwfRS+QRVCkG3wiKYHMawYM2rKMW5v2exM/ghzHfYH+A6bC
+	 E9KjEPOg5yPUb8OWf4+WQfjgr2zLg4JDSgibTEYVBKRK7Kz93kCfzx2AUxTcnmtwiVzrF
+	 qnb0VPeJaM1KnfBm20Wpktya9+CaIdS4D9TqnHIUuY+QD9qyIsqJIIcpeAPOSc1NFI5tO
+	 55/dHKHwOPJxN72jXRXhJKXVbH6sdU5xKgv53OmNZvhA1x85Q7wsQUCIdRyRILdXo6Djb
+	 9E0z8dn0pOaaOSSJQXSi8/iKnk461qBia4wtm3o5Cy0KZLmYTd8cvtDiFEBRjVf5kqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UeWnKH0N;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ASCmtkw1;
+	arc=none smtp.remote-ip=95.215.58.6
+Received: from mta1.migadu.com (out-6.mta1.migadu.com [95.215.58.6])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AB1606A31B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 07:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10921606D81B
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 07:16:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10921606D81B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UeWnKH0N
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2061F00919;
-	Wed,  4 Nov 2026 07:11:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793776261;
-	bh=C+vbzFKGTlVpkBIKBwPEdUJ4AufpMTAgx2he1ofb6TE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UeWnKH0NAlErZjgteXpfFKD65QFnELfVSPr7Cvnz4Vng9W4py33DZAbrrhVt4kvPq
-	 eNekfLO+s4jM+N+UJuoo2jb1P7Xx22SpOdZnodmRbhn+/fcc/PyaaAjCoZSgHCtDrP
-	 7S3ewLV3ZOTmzLB7PyH+1YTuUtd6IZUCHBWp9to210VcnfHMYCMV4XGTb7DxLeGSR5
-	 bgSIF6AbKjuWfq5Av9SDHUQBWuptGceLlWV7zwJefuiaRh7R/cSMb1AwQsX2B0/th0
-	 SIwjjGztHz4GmZF1PeEiCEjKAfDo2SVGdSrurnGfKObkGOlFe4Ckx6GtDS/imo1ARM
-	 YwLcNG0qX7c6w==
-Date: Wed, 4 Nov 2026 08:10:57 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Wentao Liang <vulab@iscas.ac.cn>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>
-Subject: Re: [PATCH] kunit: free the resource when adding it fails
-Message-ID: <20261104-rustling-spirited-basilisk-e2fe7c@quoll>
-References: <20261104025340.1527390-1-vulab@iscas.ac.cn>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ASCmtkw1
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=0NMn6LfHJXdY0del5TIwB9PNJWC94DBmPcplZLgt9NE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793776580; v=1; x=1794381380;
+ b=ASCmtkw1exsVpYkJRoJjNg4dJnicckKvkH2fYjpv1OQqOu28dB3sx5qYIMPS9Od72Sj5aPDW
+ 0odhTPBfbPSoRST5AEhwSeAbi1oKIVvxrhisrw7ubpXuFGH2B14F1FUpRjqPpyxyPSc0dT4x3jW
+ IP3ZxRAwVye9NoljUFGR/4s4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3f4a2e5a750a33d9;
+	Wed, 04 Nov 2026 07:16:20 +0000
+X-Mizu-Trace-ID: 3f4a2e5a750a33d9
+X-Migadu-Flow: FLOW_OUT
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+To: longman@redhat.com
+Cc: ridong.chen@linux.dev,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: [PATCH] cgroup/cpuset: Fail if isolated CPUs don't leave any boot domain housekeeping CPU
+Date: Wed,  4 Nov 2026 15:16:00 +0800
+Message-ID: <20261104071600.474587-1-guopeng.zhang@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -57,69 +70,156 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261104025340.1527390-1-vulab@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
 
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-On Wed, 04 Nov 2026 02:53:40 +0000, Wentao Liang wrote:
-> kunit_alloc_resource() and kunit_alloc_and_get_resource() allocate a
-> struct kunit_resource before handing it to __kunit_add_resource(). That
-> helper returns an error without linking the resource into the test's
-> resource list when the user supplied init callback fails, so nobody owns
-> the allocation and it is leaked.
-> 
-> Free the resource on that error path in both helpers. The init callback
-> is expected to unwind its own partial state, so only the resource object
-> itself needs to be released.
-> 
-> Fixes: ad69172ec930 ("kunit: Rework kunit_resource allocation policy")
-> Cc: stable@vger.kernel.org
-> Assisted-by: DeepSeek-V4.1-Flash and OpenAI Codex
-> Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
-> ---
->  include/kunit/resource.h | 26 +++++++++++++++-----------
->  1 file changed, 15 insertions(+), 11 deletions(-)
-> 
+With the "domain" flag of the isolcpus= boot option, the CPUs isolated
+at boot are excluded from the sched domains and the remaining CPUs
+become the boot domain housekeeping CPUs. An isolated partition is
+allowed to use the boot isolated CPUs, but it must not take over all
+the boot domain housekeeping CPUs.
 
-Multiple things here:
-1. Your team ignored completely previous feedback. Multiple times.
+prstate_housekeeping_conflict() checks that rule for root partitions
+only. The 2nd check covers the nohz_full case as it is gated by
+housekeeping_enabled(HK_TYPE_KERNEL_NOISE) which is not enabled by
+isolcpus=domain. So on an isolcpus=domain,<cpus> boot, an isolated
+partition can claim all the remaining boot domain housekeeping CPUs.
+The state is committed, but the sched domain rebuild at the end of
+the write finds no housekeeping CPU left for the boot domain and
+hits WARNs and an OOPS in partition_sched_domains().
+housekeeping_update() cannot accept the configuration either as it
+cannot empty the boot domain housekeeping mask.
+With an "isolcpus=domain,10-31" boot where CPUs 0-9 are the boot
+domain housekeeping CPUs, for example:
 
-2. You use multiple identities with this email address, thus I doubt that we
-   speak with an actual person.
+  # echo 0-9 > A/cpuset.cpus
+  # echo isolated > A/cpuset.cpus.partition
+  WARNING: kernel/sched/topology.c:3089 at build_sched_domains+...
+  WARNING: kernel/cgroup/cpuset.c:1478 at cpuset_update_sd_hk_unlock+...
+  RIP: 0010:partition_sched_domains+0x3b8
 
-3. Your bot does not even bother running checkpatch, right?
+Fix that by extending prstate_housekeeping_conflict() to reject an
+isolated partition update that would leave no active boot domain
+housekeeping CPU outside the isolated CPUs. The CPUs released back
+to the boot domain by the same update are taken into account, so
+replacing one of the last housekeeping CPUs with another one in a
+single update remains allowed. The new check is only performed when
+housekeeping_enabled(HK_TYPE_KERNEL_NOISE) is disabled so that the
+existing nohz_full behavior is unchanged.
 
-4. Nothing of this was reproduced nor tested.
+Add test cases in test_cpuset_prs.sh to verify that taking over all
+the boot domain housekeeping CPUs is rejected while swapping one of
+them with another one is allowed.
 
-5. Finally, the same feedback:
-You sent multiple independent patches, to multiple independent
-subsystems. The amount of these patches clearly suggest this was
-AI generated and most likely not tested.
+Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+---
+ kernel/cgroup/cpuset.c                        | 36 +++++++++++++++++++
+ .../selftests/cgroup/test_cpuset_prs.sh       | 30 ++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
-More importantly, you sent all this work without properly organizing
-relevant patches into patchsets. This makes reviewing difficult
-and might cause multiple reviewers to address the same issue.
-Replying to the entire set is impossible and requires handling each
-patch independently, instead of applying or discarding the set.
-Maintainers also won't see the bigger picture of your work. Quite
-worrying.
-
-This is on the verge of hostile patch: bomb us with so many
-contributions, we won't be able to handle them in efficient manner,
-like responding ONCE to ask you to slow down.  Considering all this
-is untested and LLM generated, I have even more doubts whether this
-should be considered for review.
-
-Please read kernel documentation BEFORE posting more work. It will
-explain you how to identify subsystems, how to organize your work per
-subsystem (so a patchset grouping multiple patches with a short cover
-letter), how to document the issue discovery method and what was
-or was not tested.
-
-Best regards,
-Krzysztof
-
-
-
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 6e136888fc8e..c1ed556ddb1a 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1403,6 +1403,42 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
+ 	if (del_cpus && cpumask_empty(del_cpus))
+ 		del_cpus = NULL;
+ 
++	/*
++	 * With boot time domain isolation (isolcpus= with the domain flag),
++	 * the CPUs that are not isolated at boot become the boot domain
++	 * housekeeping CPUs. An isolated partition must not take over all
++	 * of them. Otherwise housekeeping_update() will fail later when
++	 * the isolated CPUs are handed over, leaving the sched domains in
++	 * an inconsistent state. This case isn't covered by the 2nd check
++	 * below which requires nohz_full to be enabled.
++	 */
++	if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE) &&
++	    housekeeping_enabled(HK_TYPE_DOMAIN_BOOT) && (new_prs == PRS_ISOLATED)) {
++		cpumask_var_t boot_hk_cpus;
++
++		if (!alloc_cpumask_var(&boot_hk_cpus, GFP_KERNEL))
++			return true;
++
++		/*
++		 * Compute the isolated CPUs after this update: the CPUs
++		 * released by it (@del_cpus) leave the isolated set and
++		 * become available to the boot domain again, unless they
++		 * are returned to an isolated parent instead.
++		 */
++		if (del_cpus && parent_prs != PRS_ISOLATED)
++			cpumask_andnot(boot_hk_cpus, isolated_cpus, del_cpus);
++		else
++			cpumask_copy(boot_hk_cpus, isolated_cpus);
++		cpumask_andnot(boot_hk_cpus,
++			       housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT),
++			       boot_hk_cpus);
++		cpumask_andnot(boot_hk_cpus, boot_hk_cpus, new_cpus);
++		res = !cpumask_intersects(boot_hk_cpus, cpu_active_mask);
++		free_cpumask_var(boot_hk_cpus);
++		if (res)
++			return true;
++	}
++
+ 	/*
+ 	 * Exit 2nd check early and return false if
+ 	 * 1) there is no boot time isolated nohz_full CPU
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index bdca6c471f87..8c7af34b51c8 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -133,6 +133,17 @@ LAST_PRESENT_CPU=$(cat /sys/devices/system/cpu/present | sed -e "s/.*[,-]//")
+ [[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" = 8 &&
+    "$LAST_NOHZ_FULL_CPU" = $LAST_PRESENT_CPU ]] && RUN_NOHZ_FULL_TESTS=1
+ 
++# The isolcpus domain test matrix assumes that the boot domain
++# housekeeping CPUs are exactly 0-9, i.e. an
++# "isolcpus=domain,10-<last>" boot.
++RUN_ISOLCPUS_DOMAIN_TESTS=
++if grep -q "isolcpus=.*domain" /proc/cmdline 2>/dev/null &&
++	[[ -z "$(cat /sys/devices/system/cpu/nohz_full 2>/dev/null)" ]]
++then
++	[[ "$(cat /sys/devices/system/cpu/isolated)" = "10-$LAST_PRESENT_CPU" ]] &&
++		RUN_ISOLCPUS_DOMAIN_TESTS=1
++fi
++
+ #
+ # If isolated CPUs have been reserved at boot time (as shown in
+ # /sys/devices/system/cpu/isolated), these isolated CPUs should be outside of
+@@ -602,6 +613,24 @@ ISOLCPUS_TEST_MATRIX=(
+ 	" CX1-2,I:X1,I:P1 . .      .     X1,2,I  .      .      .     0 A1:1-2,I|XA1:1-2,I A1:P-1 ."
+ )
+ 
++# Test matrix to be run when the system is booted with
++# "isolcpus=domain,10-<last>" so that CPUs 0-9 are the boot domain
++# housekeeping CPUs.
++ISOLCPUS_DOMAIN_TEST_MATRIX=(
++	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
++	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
++	# Using all the boot domain housekeeping CPUs in an isolated
++	# partition is not allowed
++	" C0-9      .      .      .     P2      .      .      .     0 A1:0-9  A1:P-2  ."
++
++	# Replacing some of the boot domain housekeeping CPUs with other
++	# ones in a single update is allowed
++	" C2-9:P2   .      .      .    C0-4     .      .      .     0 A1:0-4  A1:P2   0-4"
++
++	# Taking over the last housekeeping CPU by an update is not allowed
++	" C0-8:P2   .      .      .    C0-9     .      .      .     0 A1:0-9  A1:P-2  ."
++)
++
+ # Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 0-7
+ # This also means that CPU 8 is available and is a nohz_full CPU.
+ NOHZ_FULL_TEST_MATRIX=(
+@@ -1472,6 +1501,7 @@ test_inotify()
+ run_state_test TEST_MATRIX
+ run_remote_state_test REMOTE_TEST_MATRIX
+ TEST_ISOLCPUS=1 run_state_test ISOLCPUS_TEST_MATRIX
++[[ -n "$RUN_ISOLCPUS_DOMAIN_TESTS" ]] && run_state_test ISOLCPUS_DOMAIN_TEST_MATRIX
+ [[ -n "$RUN_NOHZ_FULL_TESTS" ]] && run_state_test NOHZ_FULL_TEST_MATRIX
+ test_isolated
+ test_boot_isolated
+-- 
+2.43.0
 
