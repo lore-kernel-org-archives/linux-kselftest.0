@@ -1,107 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793792451;
-	b=pjV07i6sb+FybM6T3EpwpWa/17YHhDeZWdRjMAxOFh8zpFkyUCqZHxsYV0Ts3PvrYHM8
-	 9crBTPZWjeBBZzaMW8jzZZDoc6ynd8sbUBTV6B4Mm0Yu45y7xtwsSvsbpADzuwZBZc2Mh
-	 zTLp7lT94O+hRP7RLHnKV1r+FW6bjwmu4gaXdk4vabqnB9ovmXZYyJAAOhR+zY3pQ/OAJ
-	 Q8EufBpW7WjmBdfC3RU2KYMqnElalV4xCTujjXziiTi+YINdWDpW6n6btB3ipeFEFBy56
-	 QiNqKKDFOhEHStmEkdX7rOaKffhOSa7qyJ53ra6XeeLbMPkG17N79OMPydiWpEjFGcQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793792451;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
-	b=iXsmfnXYbfeYQwhF0PMh3VtvLRPS/90Nlg9VUEuGRcX5dJzfUrF10JN5Z8GkL9XcqhYC
-	 pg7TUwyuyFK1zQYZhc015xmAlpYGYZZT6isQUW1VIyOZHhHivwaVaJlvk9uaS2AfSWe5X
-	 +JO9roJ1/tSYZI5Z4/8NSvmgoXD8AkLXWuV7k3ZRUVGUSddqXMkL9nQtipywpD5qx37uP
-	 fvgJOx1bh3LD91Z6lBoQ2Bodl6elqBjtrd+iknrtAZWbYFYcijgP1/76+RDRHN5+6uZf4
-	 5QNLzIArspJuzfktS1Hy5C9sA41twpCYQCgI1aFlEWXa+xGngYvZvZuw7F/lOd+H6yw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBwm9xd+;
-	arc=none smtp.remote-ip=209.85.221.54
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.66.90
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793793690;
+	b=cLYCaBTDMQyrpDcgNPR3V6BuadeBqBmP6TvVutts1EJlDVWmtx6/Dhe/pvuiByxFL31Q
+	 f5DgZPPQ1rbKfuf1COpHzg80c6IBpZYnqu5X2jstFYqJZmjj8Xz3Ax+D0k1H9QcwjVkFQ
+	 WIRMksGLmQLtCNTlGN7UjlCvf+TuMwcFPGyn0p2rLCVZHdCvtjKC0uIzep3vU0v5oZIwS
+	 9cwxHc2EbXQiHZ9eoqnAOkb9OYkD0e2XtP1HngRqflgAmxTSHZuBgxnvlr0bZTYvLypSu
+	 m0ZvVsDPKhDzkNWTR4yGhHOWheGzY46t4fiv10tS/jrJRZGy201xew0RfrCwpOqCK7w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793793690;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=NkhsPTWded1eSTF0X+YMyw2xIxsyUU8cDM+BAy/OvQM=;
+	b=oKWxaFlYsPSDHUnlgJuZZ8MtHzsPkaX/ICXWqV2HDfbcBO20jXohKOIJzJ/sXINUv01b
+	 xVWBSfk6DM5+yFNy0sA5NqYtAH6peRrekQBgiVYJMtfbXYDBxLAO9slv3axy2AJXHEF6a
+	 fKpMemfmm7EZtOKdMvbATZHRp9fZN44zxTUnklTItsGN2AeyHYjtsGbagDpJsrXLfWk/7
+	 OFJLROTqSPJl+DZqmMBZRtHrVx4Pdob8b3ZTPXOsaxiHRIDoJ3bCtKtjU7MaJDOVkaaGR
+	 tUX0Z/xYiE5UzujK3uz+M3sSb6d8pH7s+tFPcuzjATSh6pkwMBo92nEsVLmqhkes/2g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=virtuozzo.com;
+	spf=pass smtp.mailfrom=virtuozzo.com;
+	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=bDt8cX+P;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.66.90
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022090.outbound.protection.outlook.com [52.101.66.90])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F84B606D819
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 11:40:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F84B606D819
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947C9606A328;
+	Wed,  4 Nov 2026 12:01:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 947C9606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBwm9xd+
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48c45111bebso276615f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 03:40:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793792448; x=1794397248; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
-        b=hBwm9xd+NzrXQ15nvYc7IXZyKTbKyi+gZB+RBYF7H4NhnJiOL7kOYbTV5GizeYbRBN
-         TGaK7jYFhDREKzFjICLIdgsNrugXo+AoBC7ERADoEhuiFlXRUaMxH1M+cxqgZNmiKIvx
-         jK4515YqOMdwfhKjMIySFjnkcteq9y0ZLL/RpuZ/UtxQdmp81oSM3sdSvrq2QolInnEJ
-         sBCuu4intpYACXDvlA0okHE/AVfzLJb/JDfcDEpEjJIAvaBz3pU1iwVa2Eh5W8L6MhNK
-         O0+5R5r140YrTo7yRdgmrRLKfgyspIGnSXHHlWuwy+ATSKnS8rKrExTnpk9TSep2b2Ah
-         u8kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793792448; x=1794397248;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
-        b=KW6JGBUK0ZjSFM4ml4ShiXW0tDKYm6ryTCFBMOkIJ5Cyw5h+gdbITGXQUNADoN0WTW
-         D1Wo3ku7e6NQT/RvUwic8LhkVWCauhPGQtzu8W4UeKNRbsqnc0S4vvF0qlLozs38FqRh
-         MMxxr5+quVAj5ST6slhcd1OzCLB7ljeRX98o2sdORxHKUCyALJk9z/BKg3KWuSFjHd4y
-         gVprInd97PnGYs7B9c3qPILyK0RYrBB5kPcRjp4TPhtSG4J/nRyV9fhpOo/Pca5yvSfg
-         2fEu8tU+JOK8lShqQo7W4WNOa35z400+jcTb+U3nAh4ncZEpLlxyUy9ORCI75JacQK7X
-         dm7g==
-X-Forwarded-Encrypted: i=1; AKwUvBwiVoue/icTzeI912HrJ8H8GX2g/rzk+8bgJSVb8nWX5w+rqog4sOheNmj7Jv9el8uBgp6hgfDdZs49v8CbT1g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+aHO2/WF8QpfOmXP30tRGZA6V3KHBBgMjZ3JfYmP3B1PWd9w8v
-	znwmoY2NgyV/Qas4u7B+NhSGFUBQf5dTJvIh+b5V54b0jhSYKVOMCI/F
-X-Gm-Gg: AYBFou0InvKFIhsY+4W8ffqfM/pDZDqjbCxKyQGMwqTATWGqpDg9QvmcGadDGl44dHm
-	6qkVEFa1ZiuCClCaRxPY8SqNMEvvS0q4YerNk2keVRI9Kh4aOdAZLj0e+DneOB0bkUOS3H7LohW
-	nkce+kPgCf8SsRykBBuCsusjlUCDS2lLoMPRmsSPfX63rPx9gnXS8eB1cMS/fs2TK0kn+TEZFMJ
-	khdvXuKlTW3nJGkRvoVoR8mXMEos/ajVXXAEeSjUYL7xML1wFo9i0R3Iuufk9Sddk+aRoW+/reS
-	F4OJxhk8iet1dKgQndxKjMRXQxqOazoNDE1yVwOqj8tL1+nr+K97TBF2ykS41hrgEoXbDJ7RVCR
-	z66nBC6K4YXpMUDPh4Ry7ISkBOuJgcyiFVIkQT/cVlQndRaNOKQyriozKs9h+WlIGYB7yLF0Ymk
-	B5H7OmssxkEYTs2T2yTe4jy4IJtRejwT1NEKLDq+C4JVIglrrX/fiNS2Y2Bxp4ijSz4kt9uh8OQ
-	VCm1PcCFIomjIPJJgxkjcoZ4fANPtkb8Soeu6hHaQ1arw5l94XuKV5Hd6D00IWYrmnYzoK/4rlQ
-	q4s=
-X-Received: by 2002:a05:6000:248a:b0:490:411a:1eed with SMTP id ffacd0b85a97d-490411a20c3mr2322400f8f.39.1793792448263;
-        Wed, 04 Nov 2026 03:40:48 -0800 (PST)
-Received: from krava ([2a02:8308:a00c:e200::25dc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48feda1f100sm3457605f8f.46.2026.11.04.03.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 03:40:47 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 4 Nov 2026 12:40:45 +0100
-To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Cc: ebpf@linuxfoundation.org,
-	Bastien Curutchet <bastien.curutchet@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: port test_ftrace.sh to
- test_progs
-Message-ID: <ausZvdHfmevg3mMZ@krava>
-References: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
+	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=bDt8cX+P
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AdK3o+pxNalZwAoxmkVnqECOccVHZ3ljqezswQVM7gTu4+hOBGIkcpKKLXqW3b27xukh8UeMQJJG1W8cnq0DsjyjK0A6v7EKNMn73lIntXCUzUbWmj9YqTyNLOJl+1X/aDD+57ElwEz4WqspQzzsM3yzvUa/G+PIdrzdsTh+p4iGDdfVrmWzTXTAPtzl287qL5Ud075K1+R75F4ubAVg+lMNPIGAowr/1KX1PIbF6U4Qc6Lz4+sp6d6Ts9qvfBpRFXRun2vHIlMJrGRsPvusV2w5OxdgstW6HXe7vHBT8RMQhwb/gLPM9dcu+GHgtoOoRBEUxv+OVv4q6vzRXyiQXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NkhsPTWded1eSTF0X+YMyw2xIxsyUU8cDM+BAy/OvQM=;
+ b=JSjLD8I2YC1GzvIZaEgY8kGuvgogrI9cznDC6tKR2Ste6CsWYd7F/ExB2ZoBe1LOmdKIPzQNFjyhM+Z27zGqxcozS64RHiaOLKZmwyUV2OiB+lkFDQb3S5mnxcliNmcvZVwYZh28VFvc4SYDktyt8uKE+RFWh7JB7z3jVtDpyAOw3tciIz3FUBV5WAzHJJwvA7ligaHaB2pzt5hkGQ8I2v1lUhHmz2yHx+DsvsR+FtkOYcTF9H9gMojumCk7UFRsd4IS2kN7u28w8bhweWqFv5ZglanZd7x2xozomMa2UarQNP3e/xTHruPvPDBxS5jSjis3HlV8DiQwdOqMpglDpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NkhsPTWded1eSTF0X+YMyw2xIxsyUU8cDM+BAy/OvQM=;
+ b=bDt8cX+PaRAb+lbAjTuVrvQoC0TxJXlPLsjA/l1gERtw3IAW3G08jIw7SfSV9e/e41twuCdX4DOjjhun2RhwKwsuF5fHBED4IYKpdt+yWCHRmcnoDtk1+fBWylGDLLHpF5MU/NsHA0Ih96JbiX43+D4JldDS02LxInUJ85RTAk7j5MIrwMd0DHHrbh7PjFQcXKsCJOzQsD11oEIfvU4ttpHgbWAQP10nIPQScIyWgDjAr6ZfqjOKWJJY5uXc1+2s/hAoxRMaBxFE/CrZBTglIpoyUbibjqclb1hCvJe8qa+KL6KVcyIJS+CHgdrs4QLc99I1R1bpGpZMXq5oBaP/BQ==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com (2603:10a6:20b:5ff::9)
+ by AS2PR08MB9871.eurprd08.prod.outlook.com (2603:10a6:20b:594::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Wed, 4 Nov
+ 2026 12:01:25 +0000
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8]) by AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8%4]) with mapi id 15.21.0592.007; Wed, 4 Nov 2026
+ 12:01:25 +0000
+Message-ID: <7e5a6819-9e29-4187-96ed-f716befc2bc9@virtuozzo.com>
+Date: Wed, 4 Nov 2026 13:01:23 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/4] selftests/mm: test fork of PMD-mapped shmem THPs
+To: Kiryl Shutsemau <kas@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Peter Xu <peterx@redhat.com>,
+ Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+ =?UTF-8?Q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+ linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
+ <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-4-66f00b7a564c@virtuozzo.com>
+ <auC4eUEN52PJF1bM@thinkstation>
+Content-Language: en-US, ru, sr
+From: Konstantin Khorenko <khorenko@virtuozzo.com>
+In-Reply-To: <auC4eUEN52PJF1bM@thinkstation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P251CA0023.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d3::20) To AS2PR08MB9075.eurprd08.prod.outlook.com
+ (2603:10a6:20b:5ff::9)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,153 +112,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS2PR08MB9075:EE_|AS2PR08MB9871:EE_
+X-MS-Office365-Filtering-Correlation-Id: 02b321d7-78bb-4d9b-b60d-08df3a6b59d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|23010399003|376014|7416014|1800799024|18002099003|22082099003|261102123227099003|4143699003|10067099003|261021121427099003|261022075727099003|56012099006|261022105027099003|261026140227099003|261028144727099003;
+X-Microsoft-Antispam-Message-Info:
+	9X6/ebo1Cyv1x5w6+PrF1KkjdYac1aMASsA6MRFeRzpRyZMBXQUmXM93wPAznWSlqePxXhqnTJ74yIiSEEgvBFbcC+a2uJGTSwYFNCwTH7J0PjVhW4nW5fwiQRyV6wn/q1EpGmTXzyORXWtcjq0XiEaLMa0xDJJdzmZvwuOaShTh5L1hXEETyF3eAQr2teeklkDmxY5CggCE6MV+onL+EBvTPE+HHwRskeisolk3gL/MjkYd/7aOrWdtGhgONHqLljcz9f8LURysAFlWclBSlC/ZJV1PaQRYlvypgQYQ+LR5zaw4qQhWVAvtfqIzwM2bgkB8rfmppe5t3JvoF5l4KwMpH2a/7psK+jHI3mNWGrrvHMMXfrQmyID+HjwG8kvzF84MncP6mKgfM5ahSUdBZn74aAEavukD/QvWzf2Fe2xvzOR3O3vqyGVIJj6qHn5HzlNm8OFsNtxxKkT+O1RZNVgjpNN5IpQaHwgGHfTbB7m2TWifCyhpe3rve10z9JmO15tN5YyspKVdx8zk9DPn8lgtSFr1TCV7RYevmQ/+DAfONqmvT8z4eB0ch5439v4mnyzIfrLgH8Km8tvJaCc/BTnx35w75QeC2ppSTCCguurvkpvjCTsDJ9Vr5gz5S5cGgPqqfB4nuXT5HccGH6BrecBpbxNWxwujpkqurlYdoeQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9075.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(7416014)(1800799024)(18002099003)(22082099003)(261102123227099003)(4143699003)(10067099003)(261021121427099003)(261022075727099003)(56012099006)(261022105027099003)(261026140227099003)(261028144727099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?V2FzeEEyb0hnYUc3TExoMUJTV0dEdDRISllpY1NLNzc0b0dOUFRrSVp1TXVP?=
+ =?utf-8?B?d1J3LzBadjZ2OHFnNFYrMzlteVNJd01LbmNKMVJ5eENhMXN4VXJHc3VBZE9p?=
+ =?utf-8?B?V0pjK0ZrWjJPZmVhWEVtN2luT21FMEJnSEk4T1RCUmtDVXZwMUpVWTd6a3kw?=
+ =?utf-8?B?NGl1aDVzT2lGOTN4cjNMQnJ5Q2o1ajV1b3NUVmVhaHBjckFGN012ZXlYRmVt?=
+ =?utf-8?B?cVZVTXFLUU8vSW1MNDF5bVJtSy9CVnU0VHgyM3o1Z1V5ZWEzWWMwNGtJUXNa?=
+ =?utf-8?B?YjNndE9QeWl5SG9oUmV2WjRTUzlMaDBCSjQzSVdVZThGWEt2Rm1pQXZjTDJV?=
+ =?utf-8?B?VGJ0ZzhRdjNNM29yYzJzdS9WcEVXL3JjYkZlK21EUnlRdHJTdDBRamoyUzM5?=
+ =?utf-8?B?ZE4wYnQ0Rm1EdGRjMUdiNWJkM0NCZUVRMXJNOTlVdC84ZHZqckl1ZlhYWGxB?=
+ =?utf-8?B?TllvVXhDV3Rubi8ycUdrTkJmejI0WVBFSXlrSExXeTNac3VQZlVWNjZUTXYv?=
+ =?utf-8?B?WHBSMDF4cEQyeUtKNWtKNEp2UGhsWlZIR2RhdTBHbVlCNUdjZmt6Mk9KcEVi?=
+ =?utf-8?B?SGpYY252K1ZNajZVRllqazhZNUFuakNjOVdFSXk1UElncmtCekZxV0xER1pH?=
+ =?utf-8?B?cXF3aGtvOVk4WWF5SHRUSFhWVTBDdnpDZU5NaXBkNnlKYmZ0bEpJelhkaVRk?=
+ =?utf-8?B?MW5JcStsNnkwaHVVYWdidlpSc1FsNEg0dmx4NkNsYlRnMzlmSDV1OCtJbHlp?=
+ =?utf-8?B?dWtMOEc2ak85aWJhOW8vdHdFMldwQXVleUhPalY4Ukpad0l2a3AxclM2RTdi?=
+ =?utf-8?B?L2tiM2pYdTNhYTZDcmlwN1c4TTlKNkNwQXNCWDZQYlFmcWx1akIzTjNIUkhm?=
+ =?utf-8?B?UTBKbzJNR1UxZnNZbGZ6KzRJRDdXK25UOEEzbWZkZjArTVEzS2x3ZzdEMzZL?=
+ =?utf-8?B?WHBUQjJ0UWQ1ZnZwbEI3VEpjZlEvblhHc1ozZDdPamMrdUVITno1d3VzcFBn?=
+ =?utf-8?B?bzQ4NnJZTkpXZWVyQlRISjIyZmlEZytZSmNSeVpzSTRnelRUK0dZRGRzYmlO?=
+ =?utf-8?B?RlNDVWNIMzNmVTQrWS9kRnUveCszcWFCeE1BV0VTZ0RWU0ZOVHFIdjdzb3h1?=
+ =?utf-8?B?U05PRHRlNWNOZVNXUVFJRUxud1FkaDV6ZlNMUTEvM05pWDRPcTNoeGVTSGI0?=
+ =?utf-8?B?cDhwT3RRVnk2WnJvekdDTkJJZ2RQOUJ5NVBFZzF6U1dUU2NnWFBqVDFJcU9G?=
+ =?utf-8?B?RkZuVlVVci90eUx0a2lGd2FmNldzQUtMdm50ZHBEQ3FIYkMwUlNQaUxXUEVT?=
+ =?utf-8?B?LzdwMVRNOHFVUHhhMWJlZHg1RGY2Zmo1TExydlljM2lPZGZ1YlBqMEVmNC9S?=
+ =?utf-8?B?WThObDBKMXVobk1YemQ2c2RCbGJOMDBwWXVXcGpDYmt3VEtFZG5WNGtQbVVp?=
+ =?utf-8?B?cVJIU1dTaWprMG1aRzZtMDFjSXAxM3ZIb0trOU12OW1wRXpxNThYV2J1d3VI?=
+ =?utf-8?B?NTVSVWNRSHh0Umx2QWREVHBCVElIdnNCWCtKUVNMQzBQSHNxZGRZSjhNY1oz?=
+ =?utf-8?B?eGN3NGJCTnVEdVlZa1ZETlhCb3VBNm9Bc3FuVzc0U29sMElRZTNaR0FGbith?=
+ =?utf-8?B?SU1hZ2svZy9TK0tJTDVmWFdwMXZaSmRYaUdOLzhaL0pGTjVlOXlBdFNzZDBT?=
+ =?utf-8?B?cE5GeFlHd2R1VllEWUZQSmxxTnppdWhkTHM0MW14M1Z4djlOQ3JxNnpRaUhP?=
+ =?utf-8?B?bVpOQmNYNHRLL2RMcWo4T2ZZYlQrMFRDTUhnaURJKy9ZUjlDdDhpang3VkZp?=
+ =?utf-8?B?SW55L3J4STlCWFZ0NEZSc0NEdTcwZ2dYOHNoM3BSN05MQ2lDNHg2cmhzY0RU?=
+ =?utf-8?B?L0h2NjRqYzRCRE45bkhHTXdhTWtLTmhpeWJQdkdFbUd0Qkh3d1RaQ1VkNlpP?=
+ =?utf-8?B?aGIxcnNFd0tWTytuWDYyeFR3VFJFbzdiK0lTaGM1T2ttQlByUjdCS2hvVEYv?=
+ =?utf-8?B?V0sxTDJ5T3BjRnFvTmJvRndGWHM4RVFWSjFXd2NRT0M5RFpxYThTQXhKZm5M?=
+ =?utf-8?B?STFTc09hUHRabHMvRjgxc2VPdWpiTlkvZEY0VFI0SHVQcERpTUc5OHZIMkJB?=
+ =?utf-8?B?UjZuSEZ1SXROa0MxM2hoTzVsSzk2Q3czcXd6OXUySGNRMTd5cGJLN3ZuU2JM?=
+ =?utf-8?B?N0R1a3hHTTFXSkd3cHBaZGRkS0dEQndVcjB5c3FDeFFTSUV6elhxVnZwK0Qy?=
+ =?utf-8?B?clFKajl5YUdqQmo4eW02NzZMOVRaZU5QQS8wbmp1L3lzSktnRjVMeUdSWnFv?=
+ =?utf-8?B?bERqVjlxbHBhaU45TStTelh6dlJzckc4SnhvZGlxMFhPdXUyd3Mwdz09?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02b321d7-78bb-4d9b-b60d-08df3a6b59d5
+X-MS-Exchange-CrossTenant-AuthSource: AS2PR08MB9075.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2026 12:01:25.4049
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cjJN4N2vaHqRMIuNpuGwpTBNC3tVp1MI2lliGmq0U09d4/MtAoUx64gNYaCqRlfun+cOuofKxXtji08vMaCIrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9871
 
-On Wed, Nov 04, 2026 at 10:59:33AM +0100, Alexis Lothoré (eBPF Foundation) wrote:
-> Commit ff205766dbbe ("ftrace: Fix function_graph tracer interaction with
-> BPF trampoline") made sure that trampolines generated for tracing
-> programs did not collide with the function graph when we are returning
-> from the hooked function. The series bringing this commit also came with
-> a new test ensuring that the kernel does not crash when executing BPF
-> programs handled by trampolines while the function graph trace is
-> enabled, but this test is a standalone shell script, hence not executed
-> in CI.
-> 
-> Convert the script to the test_progs runner so it can be executed
-> automatically by the CI infrastructure. There are two main options to
-> port this test:
->   - just enable ftrace during some existing trampoline-related tests
->     (eg: fentry/fexit tests)
->   - create a dedicated, minimal test with function graph
-> 
-> The new test adopts the latter approach, with a smaller scope to keep
-> execution time reasonable, while reusing an existing
-> fentry/fexit/fmod_ret test. Despite the few asserts in the new test, the
-> actual goal is to make sure that the kernel does not crash because of
-> some incorrect stack frame skipping when both the function graph and
-> tracing programs are running.
-> 
-> ftrace is configured through a dedicated ftrace instance which is
-> dropped at the end of the test.
-> 
-> With the new test integrated into test_progs, drop test_ftrace.sh.
-> 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
-> Hello,
-> this is v2 of a small series aiming to port the test_ftrace.sh script
-> (testing that trampolines and function graph behave correctly when both
-> are enabled) into the test_progs framework. The test is heavily
-> simplified following Alexei's review and suggestions.
-> ---
-> Changes in v2:
-> - use a ftrace instance rather than global ftrace
-> - drop fgraph filters
-> - drop custom ftrace helpers in favor of direct manipulation in test
-> - drop custom bpf prog, reuse test_modify_return directly
-> - move test in existing test file (modify_return.c)
-> - make the test parallel (drop serial_)
-> - Link to v1: https://patch.msgid.link/20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com
+On 10/27/26 15:51, Kiryl Shutsemau wrote:
+> ShmemPmdMapped is system-wide. A drop of 'own' or more from another
+> process between the two reads fails the test instead of being retried
+> as CHANGED.
 
-lgtm, it might be worth to add something like this also for
-tracing-multi (maybe also kprobe-multi) and run some tests
-with function or function_graph enabled
+Right. I'll send a new version where only a drop of exactly 'own'
+fails: that is the parent's share the bug takes off the counter when
+the child exits. Any other change will be retried.
 
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
+> The parent's THPs can also lose their PMDs during the test: reclaim can
+> swap one out, and NUMA balancing can migrate one, which leaves the
+> counter low while the migration entry is in place. That gives
+> FAIL_COUNTER, or FAIL_PARENT from the exact count in check_huge_shmem().
 
-jirka
+Right as well. In the new version the parent will check its own PMDs
+before it looks at the counter, and a missing one will mean a retry,
+not a failure. The same will go for a child that finds no PMDs because
+the parent has lost them. Only wrong data in the parent will stay
+FAIL_PARENT.
 
-SNIP
+Each retry will start over with a fresh file and mapping, since the old
+THPs may not come back as PMDs. The test will make three attempts. If
+all three are disturbed, it will skip and say which way: the counter
+kept changing, or the parent kept losing its PMDs.
 
-> +void test_modify_return_graph(void)
-> +{
-> +	char instance[MAX_INSTANCE_PATH_LEN];
-> +	char *ftrace_dir;
-> +	int ret;
-> +
-> +	ftrace_dir = access(TRACE_FTRACE_DEFAULT, F_OK) ? TRACEFS_IN_DEBUGFS :
-> +							  TRACEFS_DEFAULT;
-> +
-> +	ret = snprintf(instance, MAX_INSTANCE_PATH_LEN,
-> +		       "%s/instances/bpf-XXXXXX", ftrace_dir);
-> +	if (ret < 0)
-> +		return;
-> +
-> +	if (!ASSERT_OK_PTR(mkdtemp(instance), "mkdtemp"))
-> +		return;
-> +
-> +	SYS(out, "echo 'bpf_modify_return_test*' > %s/set_ftrace_filter",
-> +	    instance);
+Thanks for the review!
 
-nit, no need for new line
-
-> +	SYS(out, "echo function_graph > %s/current_tracer", instance);
-> +
-> +	test_modify_return();
-> +
-> +	SYS(out, "grep -q bpf_modify_return_test2 %s/trace", instance);
-> +out:
-> +	ASSERT_OK(rmdir(instance), "rmdir");
-> +}
-> diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
-> deleted file mode 100755
-> index f5109eb0e951..000000000000
-> --- a/tools/testing/selftests/bpf/test_ftrace.sh
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -#!/bin/bash
-> -
-> -if [[ -e /sys/kernel/tracing/trace ]]; then
-> -    TR=/sys/kernel/tracing/
-> -else
-> -    TR=/sys/kernel/debug/tracing/
-> -fi
-> -
-> -clear_trace() { # reset trace output
-> -    echo > $TR/trace
-> -}
-> -
-> -disable_tracing() { # stop trace recording
-> -    echo 0 > $TR/tracing_on
-> -}
-> -
-> -enable_tracing() { # start trace recording
-> -    echo 1 > $TR/tracing_on
-> -}
-> -
-> -reset_tracer() { # reset the current tracer
-> -    echo nop > $TR/current_tracer
-> -}
-> -
-> -disable_tracing
-> -clear_trace
-> -
-> -echo "" > $TR/set_ftrace_filter
-> -echo '*printk* *console* *wake* *serial* *lock*' > $TR/set_ftrace_notrace
-> -
-> -echo "bpf_prog_test*" > $TR/set_graph_function
-> -echo "" > $TR/set_graph_notrace
-> -
-> -echo function_graph > $TR/current_tracer
-> -
-> -enable_tracing
-> -./test_progs -t fentry
-> -./test_progs -t fexit
-> -disable_tracing
-> -clear_trace
-> -
-> -reset_tracer
-> -
-> -exit 0
-> 
-> ---
-> base-commit: b0e67f50519538b1b4c6364edc7811f482703f75
-> change-id: 20261027-ftrace_in_test_progs-d5f70a2330ac
-> 
-> Best regards,
-> --  
-> Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> 
+--
+Konstantin Khorenko
