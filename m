@@ -1,47 +1,110 @@
-Received: from out-2uec-a100.jellyfish.systems (out-2uec-a100.jellyfish.systems [63.250.43.100])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793822104;
+	b=EK0xEZIwgo7+CDSNhWs79kEUy1qJO2kBZdwpAxpKiG5p/0wSPESS/FLxbCwusTJNf/UV
+	 GM9uGlr6BP7qJKfxbjQugt27UZn3ol2WrrhnwCozqIJkV6O7MbJLvYqHrJ3NnRQAPa9bu
+	 BUQxPfo5U/SQHemqO4IZhF8mCqRQhcTAX/jt+iG+gTrRuj1YCvkZEZxwQnuew9GlQGNzn
+	 fY7qEcMmuSBwQPsZudEV9kbwEyCH25+Z75O4rsYX/BU3JZV2J2xBX5YPTz44w8uZ5MIfN
+	 uURtnFuruBscmigZX6BZh3UcbAYWJi9izC4wx7CfQconPyfx0Wjtn8mxwFb2FYqHyIw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822104;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=R1VqjUGL5+J0t5hj5seZeRe1Maiv3S9hp7Jj5OG0/0s=;
+	b=3SPSzTSKxaNaUtepQ25YNGO4bzPgM41gEfDCXxd9korwpqtcm81ui2qGd+GzrHNl+NRR
+	 8Dna2gfayDe51ucia+5m0S/XK/7DYeEWyw0Eup/0/HXORN5K0WzP+u9UK7BbTrwnHLYMA
+	 dTqxpSfo2+7yyBMUZQg4Ux3CsxsluEU8tvmTXd3bw8yJqVSiL2XH82ygjH2eWogOHXYhp
+	 FpuJrQFvN7CmYgjpTZIt0pHeVXqaDO7MvYXSiy0TzH5rxvZvgO/mARejSnarnwISVS3Pi
+	 s1Q0xo4grivYC4UdOqLQLXQ8ha/ZSmwWBzyxVJFaGMir8sx0xUOawasrV2DYlOjiV9w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JrdQsd6G;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947726098F7C
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 19:55:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 947726098F7C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D5D6098F70;
+	Wed,  4 Nov 2026 19:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=Kds8R4nd
-Received: from [10.18.116.108] (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbkP659hz8sWS;
-	Wed, 04 Nov 2026 19:54:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1793822082;
-	bh=WGGGdGC355BKZ7pTGFjLIU9XKUJbrb0oDfm9CXS0DUc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kds8R4ndXbBgsKAZlR9dijXgu+HbKEqrKR7HiWXOjSrOaIKlNSqacqMA+BuMzvNrm
-	 4ZYTqUOViFe82WiztmwBONdPb9bDbsaY917+q4HRshmOT9+3m94AX5MbfTIyEQcAMq
-	 uQ8YAgTH5tUwjO3evEbbD55uXfZF5XRFGJAbVEbZb4jB0Wg6m03Iu/Ucwi7AgZHdur
-	 E9gLetRKg+m9miML6rytaqxTW5AghckPKsemu/rQuw6qweHtlUAp/He8PX+Kmz/pMo
-	 xkSnXkokMvKwhNOtGu7pI4INuSGQMWuS2fZaHDyNK8/GZhVapDT6eUdTJrWVzG8p6G
-	 mf4EPMskOcZyA==
-From: Tianyi Chen <hi@tychen.cc>
-To: bot+bpf-ci@kernel.org
-Cc: hi@tychen.cc, bpf@vger.kernel.org, qmo@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ihor.solodrai@linux.dev, linux-kselftest@vger.kernel.org,
- shuah@kernel.org, daniel@iogearbox.net, ast@kernel.org,
- alexei.starovoitov@gmail.com, martin.lau@kernel.org, yonghong.song@linux.dev,
- mason@kernel.org
-Subject:
- Re: [PATCH bpf-next v8 2/2] selftests/bpf: Check bpftool batch map dumps
-Date: Thu, 05 Nov 2026 04:54:13 +0900
-Message-ID:
- <179382205321.440318.6667723439394018790.bpftool-batch-v9-review@tychen.cc>
-In-Reply-To: <8397ab89d713edcda68bf7dfa564b3a6f2c7d4c420a9a1a9a49fa2dfc8833233@mail.kernel.org>
-References:
- <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc> <8397ab89d713edcda68bf7dfa564b3a6f2c7d4c420a9a1a9a49fa2dfc8833233@mail.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JrdQsd6G
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BDF51F00A16;
+	Wed,  4 Nov 2026 19:54:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793822104;
+	bh=R1VqjUGL5+J0t5hj5seZeRe1Maiv3S9hp7Jj5OG0/0s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=JrdQsd6GTay34FYuGXCa8EK220wd8dcVKmmCUL2H6AN8qybgYu3VWX8QWdUPAcmTQ
+	 k7Hh4kIxo+HBWYfqIhyCM4t5TutFpDBfRkmXCuGDnrCDs2kRigWisxosjbx2JTilsl
+	 pRLqKsHm9QtEr1md47IXW0nBzRwFYpbJ+AsEXB9Aw5/BASW5ehNYPMEN3WtGHRfiwA
+	 OzbZlgAyMFwrKZD+fvajfs9VLVkX7k/jZfqjP/IWM7eHh8GU1TOBliTxs7YYEjoU7C
+	 tTvFESzDRyM4Rii2YLzF38phnQomDRBM6gq5STKW4qtXTlnb0Rqa4901faLCQGhySy
+	 mMgweD+fFjsdQ==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Jann Horn <jannh@google.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Chris Mason <mason@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Christoph Hellwig <hch@lst.de>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	Joel Granados <joel.granados@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jan Kara <jack@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	coreteam@netfilter.org,
+	kexec@lists.infradead.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	ibm-acpi-devel@lists.sourceforge.net,
+	jfs-discussion@lists.sourceforge.net,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-cifs@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-sh@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	sparclinux@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-doc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	Takashi Iwai <tiwai@suse.de>,
+	linux-input@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-debuggers@vger.kernel.org,
+	"Christian Brauner (Amutable)" <brauner@kernel.org>,
+	Chuck Lever <cel@kernel.org>
+Subject: [PATCH RESEND v2 21/30] kallsyms: let procfs own the seq_file of /proc/kallsyms
+Date: Wed,  4 Nov 2026 20:54:49 +0100
+Message-ID: <20261104-work-procfs-fs-v2-21-319e0f9a8aae@kernel.org>
+In-Reply-To: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
+References: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -51,16 +114,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Envelope-From: hi@tychen.cc
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1331; i=brauner@kernel.org; h=from:subject:message-id; bh=X1hXUo+P6dAEkQI4HVxBka/iuP3neD063cymPGxvXEU=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS97nH59Orc+7n3eLifScgo8Jj8qyzNWnT19Mol2qc4a 58vWjHboqOUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAiPWcZ/nCKtL2fd32F2F95 vx9SGZf0t36r5ma6o/N8y3elH9e2NU1l+F8fo55wKcT3fXtS7NoKxUWhugwWHOV/0+b/kah+n3N uBjcA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-> The test still works, because dump_map_batch() in bpftool treats any error
-> other than -ENOENT the same way.
+Declare the seq_operations and the size of the iterator and let procfs
+open and free the seq_file. ->proc_open() only initializes the iterator
+now.
 
-Correct. v9 removes the bucket-lock errno claim from the commit message
-and clarifies the comment. The injected -EBUSY still exercises non-ENOENT
-fallback; the test behavior is unchanged.
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ kernel/kallsyms.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-v9: https://lore.kernel.org/r/cover.1793821981.git.hi@tychen.cc
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index aec2f06858af..2d309fcee730 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -888,10 +888,9 @@ static int kallsyms_open(struct inode *inode, struct file *file)
+ 	 * s_start from where we left off, so we avoid doing
+ 	 * using get_symbol_offset for every symbol.
+ 	 */
+-	struct kallsym_iter *iter;
+-	iter = __seq_open_private(file, &kallsyms_op, sizeof(*iter));
+-	if (!iter)
+-		return -ENOMEM;
++	struct seq_file *m = file->private_data;
++	struct kallsym_iter *iter = m->private;
++
+ 	reset_iter(iter, 0);
+ 
+ 	/*
+@@ -923,10 +922,9 @@ const char *kdb_walk_kallsyms(loff_t *pos)
+ #endif	/* CONFIG_KGDB_KDB */
+ 
+ static const struct proc_ops kallsyms_proc_ops = {
++	.proc_seq_ops	= &kallsyms_op,
++	.proc_state_size = sizeof(struct kallsym_iter),
+ 	.proc_open	= kallsyms_open,
+-	.proc_read	= seq_read,
+-	.proc_lseek	= seq_lseek,
+-	.proc_release	= seq_release_private,
+ };
+ 
+ static int __init kallsyms_init(void)
 
-Thanks,
-Tianyi
+-- 
+2.53.0
+
