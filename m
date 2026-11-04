@@ -1,87 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793753033;
-	b=kwP2oEw9pV5NV/feBuoPYnuovIWnSVD3lPpKsaUuFdf9ZdcP9eVdOuwzc5WDRC0Z7gvc
-	 Nlz0HTfI+Mv+FhqvLk8jWl3uR5XjZfsviO3quL//hLMVgo0JoiGkR0ZjL1iN+oZNSopjS
-	 bcR5Wgz2HMgGS3JrZpyRTq2fQaOQ7xn8cHEv0UX5IDqp4qMug3gW+6DGhFJlZlhHkmF1H
-	 AKHOZ4Sav6TH9S3Nl+//ZBxP/krechJfaZTLMby5bLhIJvJshLRo1m5d9s9+2OASe/udH
-	 SJDyeFXpu+WoWE0h1IF4RWrxrUC8eJ2ubKUuzjos9MFxnXW2qSGc28YGDIkfwcSPPSw==
+	t=1793753035;
+	b=X+y5ISeq3nS3Avf1szprmUOhMXibnyXd9bYxLaObKj3BRwN4fiNc/wa8LRK5rN/7zrUN
+	 KpmyvGJW952Rka+yiMEOJjpgvJ8jSB4WYn6ujfoEPTY4S8JEbko6TJO2WYHAAXqhDXBgd
+	 ty8xsMBzZy7vGvZsLullOVKhYJgxf4sh/dsVgaDmMm5z33tMyGWOkLdUTYuNOWbN3xWKw
+	 6jTRIoq8xGr8scnujQqialTl1sRxbdkN/5Q8v7caupXmfvR7Ko9ma7zfww6+SPdEmucWd
+	 m83kIG2D9wuRLwojd/7eTCe93GeDStJNc7cpQbr2E/LP0pPxW+PedLAVZq/vkYjBA9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793753033;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793753035;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:To:
 	 Cc:In-Reply-To:References:Date:Message-Id:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key;
-	bh=KRXI5AlbB9KpB+65wVIGCYZD4BhZazr9WIMOqzWe5bM=;
-	b=KrNqyin0OPPyGeFiRhqIhwVpsNqNXWCaLUv9iALp9l6jKUPz0/YGz4dJ1BO4I638Ajil
-	 bmfdkKN8oN7nOoV+8cyXI36HNcSzUOd7fq0FfHZDjRrY6yXBaAxzpoWSUbilN7XLwF66p
-	 kUQvUOM43KOPT01a69UQTm2vtlLeklo8nKOv6CvTLjxkQgZeSPw8W9czKwHQDYwph8MtX
-	 9Mq/rawvNTJ8ItUPv8uoF2TOUGaJRSDnQGQP/VzMlOtkJYpQZ/2D5n+YwrX1hL6NO7VkV
-	 D404acNCskfhpVlfu0kO1HPeMbNTBi1Vobrp/px3WCQafHMJFS6gNHcENXH7tqg0E9w==
+	bh=EyfJTg/htaOWoI7HDaUiAyqJ6hW+/dz/pp1CnZqfneQ=;
+	b=agXQvoieTdkQ474jU6GMFquSv16lOu3lVgUhbP4R0R5uHEBg1Rv/q+ZdrR9ANmg6jez6
+	 pGRPtrXhfUVxuFqsyy1kbl/ZOBqUA8PhOzHayEWotYss/ezWO2e3tngCdutf7P+qDFoMg
+	 gT/xa6nTeWvN/i3qyjYqs+jeAu8z5N2ldhzbUsK1OR7g12ohA4IDjIqPRwYf/okM1/b6L
+	 awE856v/ZxhLQ2twsTXbrE+yj0dqJcKxBteKb4qI3yBpar8/35F4vyzEHYKqnKERQsQQQ
+	 ssJlhDrgRmj3I9zg9A42gZ4skO8ARQ6rAJ/CFN6cuA7103/fyeNEbFItlro8JDvlZTg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=soleen.com;
 	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b="byuKBb6/";
-	arc=none smtp.remote-ip=209.85.222.49
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=h3mcXPHY;
+	arc=none smtp.remote-ip=209.85.222.46
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87C4606A31B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 00:43:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D87C4606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CFF3606A339
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 00:43:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7CFF3606A339
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=byuKBb6/
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-98301b325c4so47474241.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 16:43:52 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=h3mcXPHY
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-98301b325c4so47486241.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 16:43:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1793753032; x=1794357832; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1793753034; x=1794357834; darn=vger.kernel.org;
         h=message-id:date:references:in-reply-to:cc:to:from:subject
          :content-transfer-encoding:content-type:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=KRXI5AlbB9KpB+65wVIGCYZD4BhZazr9WIMOqzWe5bM=;
-        b=byuKBb6/8WaYdK9ZN5JosQguOh0zfqttOB9yRf0V4UuM1awfQ2TVzBP96+ASY1APxu
-         qIXdn/+Ihqq3ANCZus/7buB+EvxOAxJafkes9lTBv8qjXlOXBS6R8wtL4p8emNJ07JRB
-         yCIkOaT7t5KVyBqVJwgfL5ImUqDzfu4Ehf28G4leLzrbbQbd9mBIglO0OwL0+FVGXosV
-         XKKBTNqN30hc6Mkenrapw3TRZnwIJkEtginPUKUoB02DNWsCmX3tOTBvlZCWvNkq3iYk
-         ZYUxHQGR9NENxo0jOZmJ5x1dIxKdufKn/6LKvI7Qto4bzWHPCq72NVS0ytaf1nGsbX3+
-         ov2g==
+        bh=EyfJTg/htaOWoI7HDaUiAyqJ6hW+/dz/pp1CnZqfneQ=;
+        b=h3mcXPHYsHpxwiszFdBIpuE/flz9IDhM/9DaI6EB2pg4YTvSN2tt6Y+NiBMw7P1wN5
+         XmWdr5jWVCbMiRNCnZTAoKEm2CmiLvRy6pNTk7JVEnTs0x7ZEfMXq4sbEH6D86Yiz+mh
+         qpoqEdrQj5II0uDraGcWQZR4FLH+81f5ac2mYnCvNbMnNjzsUNEWsHnf377qKRybNmqt
+         dx6LKR8hMgR/YkJDrsPHhA8cE3AJaTBcqILHFfYrWk49LSamYHGmAA0Lfsvk46aDNL/X
+         GPwcD6+x5lznexTmwTdzE+bhFjDEMsC+96fj9/DcgAmMJiIK7C7BmZf5pThgRjBjRocu
+         kmFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793753032; x=1794357832;
+        d=1e100.net; s=20260707; t=1793753034; x=1794357834;
         h=message-id:date:references:in-reply-to:cc:to:from:subject
          :content-transfer-encoding:content-type:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KRXI5AlbB9KpB+65wVIGCYZD4BhZazr9WIMOqzWe5bM=;
-        b=S9CLk6ns9GuyRxis6t/HXLyO1tRaiM2+EXeQHnXgGwt2smmYWgkirG3z0SsEXmf6/T
-         OCW4rz7t2MbrGM3B4/Mcy9xVA1eVpwhY6BJM+0/eY1Chu87YTRYAkrIYBGc0wRzju8Z8
-         SzVi4TcnG32/3gZNkDsgLdyHiANAr38seAQQbcJWv/Uf7Hxl1e0bIcZ+HksO9wclHl2V
-         1a3Scy+LwRl58BIe/KGp/AEtpVC8gTiZ32o5tzG9ZSdUyyC4CtFPRC7DsskHF5m3X7NL
-         dk2OexuMkWgcXYZpkNnaoqCA/BjX5tZo/iLYWqVyrQNKZqdV0+iq9t6vXI3QInjObhxc
-         UnHw==
-X-Forwarded-Encrypted: i=1; AKwUvBz04lv7RdlGtRYSccuvACLrvIzz9EX5B2TxLNC7FXAPrrCZgm5KQWXLX83v0dtKh8Ij0J4pu7hBtgVnQNNJa0A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9lZdvJDFWiKvK6wBsrNB1m7ZqmgZtRc5yETnsF4l/AAZ/Sejvg
-	etpZuAdlIOm9BRB2LJ8kkku2FrjI0SGAxaF8DvYDbbjUXw8Qot+oyfjwV1qijeI1s5wive0ab5M
-	TCeQq
-X-Gm-Gg: AYBFou2VGlMMTTxjfiPELgE/ZDkhdbBNKUFbzTlh3ZH9Jmk4bm11jPPVvVHlc01GHoY
-	gTE4LnAKSVHto4uzjHD8jIEAWYhCn6m6umAgDhzVhD+agU1EHvPbRpTbnVuIKxSwAuFbdkBIHWA
-	FxvbwIjtdebISI1g+1d25GQPa7Mjg4lo6Kk8Wa7vi5gT+NoYoh0KOZiOBdcY0rvl8jiAkqlftAy
-	mgd/tI3Jt6uykkJNnduzszdvEkABeerOJ6MGiv9FqVo9QBxKZIdJVBPnF6Wh/YyCrn8iGNWJZue
-	OpElXgXTs5pa0/EzrlM80mEsDP2UxrpQKq+GovGrGkH19npD97eZE9FKu5iEb7oet0F0/NJxDPf
-	ODH+sY1rwkmyPeHKY6eJjTSf7pD++FV+2gZzZuipnq3MIKFk1cSKhUoHFkGYZc9UvprLHc7LOxs
-	TDkEef7eeNm2taD/fouuz3K4eZ6a1q6RBw8jvgk+D0OvCITorwBiMI2ReIcOy3EyecrHnI5RcPZ
-	iauRnv8Cd7SalUslODK8tH4y2rGMohl4+HXz9txcwLbe2jrfCp/Gs4xxn6Erf92dC7pK14JkZ2b
-	dk38wTVr48kvFxSUh5tuzBqwPTzg48Rc/m9hnOjx+bnymW74bGD6lJj2/xk8q5b2/itDjQQlAQU
-	PVyMejm+4kzfjoQQDqAC0zKjsCNRCjcGE8QLIc13+43w8
-X-Received: by 2002:a05:6102:4a53:b0:7d2:76af:fcce with SMTP id ada2fe7eead31-7d276b006bamr791137.9.1793753031752;
-        Tue, 03 Nov 2026 16:43:51 -0800 (PST)
+        bh=EyfJTg/htaOWoI7HDaUiAyqJ6hW+/dz/pp1CnZqfneQ=;
+        b=sdeIVpv0bdGZOYxgAYTkOoWRfT2jiYan1Uellxk8yX0NyMjonoZAiSM83bJZUajepd
+         TVOt03kLnDejrzM4qVb8Hye5fAlufw98YIDrjuRePT3MHOaiJTEh4vtmKqjItsGY+l2+
+         NW01DrnPuzYq+ISBDZWGwbPh0nI9qq8I50RLhstarXZQ7jNS2claxNrOtsq6P8WUo2ju
+         BQLLSgfisTyv4e/Ro3lkA8/rdkkS1QmpbhIFrGeJsNmTl/zkr3jPvuaC62haU5ya8poQ
+         4VW7lF9vrArhAHCGWBm6vhIGzMwKFP4uEY+XstR88O2lNZ1D9rc1CLd/zRL6T7K8bqMY
+         zpfQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx0bqhV1nxmI6h/gYhlaQ69xAk5vVlITPl/w8iikMd1asHyAvmBWS8mSIiBeL0CJyCC4/2gKl4q5RjFFiaN/9k=@vger.kernel.org
+X-Gm-Message-State: APuU4Z99FiU4HopYgIpUv4VNL79zjadE/3C+DO+NaHpCxFFjOhTT87P8
+	XNjnPAzPssrlUSS9R81YLuVfQ1siOhXzubWSKet41YUHOH07lxK6nby6vk9py3EgSEA=
+X-Gm-Gg: AYBFou2QwCjrcXiZJdtcqcOOCRwe8CyN0iJ83esgBfHoC74hLhfUusvuxJpmMwgrnyE
+	rla4mIb4Gx/KmeJPgarnM+QRoyxKmpk7Lopkfqs1DwnBUSIb46gtvIdEgJx3bZMfepxjjbUGdwF
+	pln7mVfP8sxzBEtRAl73C9NiRmxkrW72EALCYgdvojSWNnov3B1VFWZex9+mLxA7JJ3Ku15dLZ4
+	Ygn+4Yv2kYJzSspSYgKV50kD4yMyO2kJBNlfB9wQOU8NMYH2Gm7TtS8sGNGuin1pN8A3g2ScGwK
+	fwzAfB4+9gjm+AT688gxJtcxIrVePWQNg+QnG6FLlMQxptICtLplz3WZQshtO+zd3lLQKcujpsk
+	Sj5vS76tCLDZHaVA2wycGMUiH2f2zjAmz5y736FsPN1dkguAN6aoIqoSnk1XUibnu+OjiYvyYhQ
+	oAzvMOENTltJ1RDfagGCak1DwB17AtFzBhrYhwfVdHapQaaAuX7CrptDR3QiDoJ05LLQDNR5X1y
+	RZdI89djZG5VhwRuIRg03a+HhwpT7aLaYByGlF4vh77joQBMunJEeoVTumHCvaCxVYLTjRYjlI8
+	78fktFc0RLNXYVcj8K7wkE/kSVwYCtykX5A6lbVtfeWRfmGvJP4B8MH581o0eb3LEvwUWXlgWFG
+	9Mq8nfjskZrygbywvBcmbuLNMXAxuxIwCZsRDs4v2ZOMkeQ==
+X-Received: by 2002:a05:6102:950:b0:7b3:8f0a:f76c with SMTP id ada2fe7eead31-7d072bb3726mr5566509137.13.1793753034167;
+        Tue, 03 Nov 2026 16:43:54 -0800 (PST)
 Received: from soleen.c.googlers.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d26fef4ed3sm527432137.11.2026.11.03.16.43.50
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d26fef4ed3sm527432137.11.2026.11.03.16.43.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 16:43:51 -0800 (PST)
+        Tue, 03 Nov 2026 16:43:53 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,8 +92,8 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 07/10] mm/shmem_luo: Retrieve tmpfs files onto a
- tmpfs mount chosen by userspace
+Subject: Re: [PATCH v3 08/10] mm/shmem_luo: Allow preserving tmpfs files
+ that are still linked
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: David Matlack <dmatlack@google.com>
 Cc: kexec@lists.infradead.org, linux-doc@vger.kernel.org, 
@@ -111,72 +110,72 @@ Cc: kexec@lists.infradead.org, linux-doc@vger.kernel.org,
  Samiullah Khawaja <skhawaja@google.com>, 
  Shuah Khan <skhan@linuxfoundation.org>, 
  Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>
-In-Reply-To: <20261103010216.3447716-8-dmatlack@google.com>
+In-Reply-To: <20261103010216.3447716-9-dmatlack@google.com>
 References: <20261103010216.3447716-1-dmatlack@google.com>
- <20261103010216.3447716-8-dmatlack@google.com>
+ <20261103010216.3447716-9-dmatlack@google.com>
 Date: Tue, 03 Nov 2026 19:43:45 -0500
-Message-Id: <179375302574.727293.14537040566857910268.b4-review@b4>
+Message-Id: <179375302574.727293.677909304544098007.b4-review@b4>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2542;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2473;
  i=pasha.tatashin@soleen.com; h=from:subject:message-id;
- bh=vqAe2yDDLEwKgdF25FVv1O+wpJlIipaSEL5hDK2VqOY=;
- b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq6n/ET4OO45vZ6StOR902DLzVLY6Bj7770P8sb
- nnjgwQuckuJAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCaup/xAAKCRC7dyhM23N6
- 3jnJEAC0kky9VSu9xkI04nj8RiMbjwZNaipgbM8c84yf/wc4An6yU8htiqArYikDHsF3LbfOPIu
- ZJUI96h+M87DI496Gg92JK+uzFrY3uJjoyYr6us6+nUjcMcRYRWUS14WbhTxF7LoVgCU7SpDi1V
- MK7oieNjQXNfVgW/NL+Slwq5olNJUkvSgPFiAU8xQjVJxJHLYJmIJIXxc5vrbOVfL7YzAy7OxvD
- NuTg0ha8GM19+ZVxhZjYxkwGpmHD/eqTqJKoDVST6z17DZBoHHTbkpvXEHEsHmPCJhdTnBwejzX
- hbQEnk5/nzD5A3xC2edrsjyws0b8KclIaBJ4mNo4RtHUlelIO/ETzlvNcSmgpx/32KI74IwNr0z
- V4G6BxZrPeQ2TvjDEOTsCOP/lKsVlCx5YHTZYdhgmlBgR//QxXA76UCWPPpy0P1U4kNlZyNH6XV
- e3oMwZs1iPhhtd9+roQtAfbc6IPf+TbFCwI0KxQyxKaJvIxQQl98TA9L1QxJK3Eu32Hg8sqs8ED
- afWk9iPUD+ACfrf9HgHLFHlyw6RWtNm1UGEI9lvbzR1iPJesYxMSuVxfAANKfyZIR1g/hjH50H+
- OTddQgi8QtOA6wOiO+tOIvWJWdjD706Y4+8m7qxO6a0u8szavw1N/NXcclT2ViuQIaOrPcVya3z
- 1YbZ7UGOm90VVsA==
+ bh=1h1grQaxg7q4T9eJCUz9ZsqoACadg1b5gQXNPrb1T4s=;
+ b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq6n/EU+OcPsgUfVgNKKD+WCk3F+OtwPL5xys0P
+ a20L7buUNWJAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCaup/xAAKCRC7dyhM23N6
+ 3sphEACiRjymhOf/11oc2wbD8SRoiRXnFKXUYIkVDNP2l3c3tTjP+YijRPjhr/brHhBpu6LOFQc
+ qfP6dwNcaAcZx2LZPoXKS+0boalahbWnjrkPNCikh/U6wyunhVlh+urHjZkJwOwmQJ5pfkpLY//
+ dy2NLWahrBsKcIQKycF4895PqmSLnx2ztARj+Q8Jr25/ug9GyeTlHFdXnqjMjvuoHAN7ZSVQnXp
+ Mnc6QtURb7fjRoNwkBJyiC6zjGlDtqt6MKKQ/CplargM5cyEXQxT8qWPkxk2gglkSlNMfxY3gE3
+ 6gf0D4WejMbWxcRdueHqdZl+rdZ5nTKsXsqupCnANMS72X30/7lcpRSB/hRl1BpV/3jrhNSqcqA
+ ze3csLEhuDcrp/lXRRVYLsDh6Is9PJ6tPDb9T1Knyi/VrMGkTSUC8u2tpROYgkC1/Zoe9jaLkW4
+ moEhvwwEAxKDXQ148kswxGlnCaJvzyfWXjJtBEz4c6bSmfLPzjwTEnmC3Sa6qrPvyZwTgCp8snp
+ iv3/fx/KILbSbVJG5LO13Pb17QNFYUEp3fo/kzhxB3xJRZ3i18F1v8T9pkbnx1v+CTMTd4+6nAe
+ GZs9Ru4nEGOFHIKVBBNu+E0FUeUcaa6a3sBAtbEVawHXo2Ny69+lzr1hTwZzARstZy7A8PKfVmJ
+ H2RTjBl+HEU2E5g==
 X-Developer-Key: i=pasha.tatashin@soleen.com; a=openpgp;
  fpr=CAAAB722DD22A081F0D49F35633A6A993D43B569
 
-> Retrieve files that were preserved from a tmpfs mount onto a tmpfs mount
-> chosen by userspace, instead of as memfds on the internal tmpfs mount.
-> Add struct liveupdate_shmem_retrieve_arg, which userspace passes as the
-> retrieve argument of LIVEUPDATE_SESSION_RETRIEVE_FD to choose the mount.
-> Record which mount a file was on with a new SHMEM_LUO_FLAG_TMPFS flag in
-> struct shmem_luo_ser, based on the superblock of the file.
+> Allow preserving tmpfs files that are still linked. To preserve any
+> file, require permission to write to it and the file to be opened for
+> reading, and reject append-only files.
 > 
-> shmem_luo already accepts unlinked tmpfs files, such as files created
-> with O_TMPFILE, and a following commit also accepts linked ones. The
-> mount such a file was on doesn't exist in the new kernel, and userspace
-> may want to put the file elsewhere anyway.
+> shmem_luo already accepts any shmem file without links, which includes
+> unlinked tmpfs files and files created with O_TMPFILE. Accepting linked
+> files means that userspace doesn't have to unlink files to preserve them
+> and can keep using them by path until the live update.
 > 
-> Model struct liveupdate_shmem_retrieve_arg on open(): The kernel creates
-> a new file as if by openat(dirfd, ".", O_TMPFILE | flags, mode), so the
-> file gets the owner, permission checks and security labels of any new
-> file in that directory, and is charged to that mount. The kernel then
-> fills the file with the preserved contents, size, position and seals
-> before returning it, so nothing else can access the file before it is
-> complete. Userspace links the file at the path it wants with linkat(),
-> or passes O_EXCL to keep it unlinked. Neither the path nor any other
-> inode attribute of the file is part of the preserved state, which keeps
-> them out of the KHO ABI.
+> The path of the file isn't preserved. Like other files from tmpfs
+> mounts, a linked file is retrieved onto a tmpfs mount chosen by
+> userspace, which can then link it at the path it wants.
 > 
-> Pass the flags from userspace to file_open_root(), so that the VFS
-> checks them like for open(). file_open_root() silently ignores unknown
-> flags and mode bits, so reject those like openat2() does. Also reject
-> O_PATH, with which file_open_root() would ignore O_TMPFILE and open the
-> directory.
+> While a file is preserved, its size is frozen, so truncating it,
+> fallocate() and writes past its end fail with -EPERM. For a linked file,
+> this affects everyone who opens the file by its path, so a caller that
+> can only read the file, e.g. a world-readable file in /dev/shm, could
+> use it to break the owner of the file. So require permission to write to
+> the file to preserve it, for all files. Like FS_IOC_ENABLE_VERITY, don't
+> require a file opened for writing, so that binaries that are being
+> executed can still be preserved through read-only fds. Also don't
+> require a writable mount, since preserving a file doesn't write to the
+> filesystem. If the size of the file can't change anyway, because it is
+> immutable or on a read-only superblock, also let its owner preserve it.
+> Don't let others do that, since the size could change again once the
+> file is made writable. Like FS_IOC_ENABLE_VERITY, reject append-only
+> files, since their writers can only append to them, and freezing their
+> size would stop all appends.
 > 
-> Keep the type of the file: memfds can only be retrieved as memfds, and
-> files on tmpfs mounts only onto tmpfs mounts, so that e.g. a file
-> can't be moved off the mount whose size limit and quotas it was subject
-> to. Passing the argument when retrieving a memfd, or not passing it when
-> retrieving a file from a tmpfs mount, fails with -EINVAL. Unlinked tmpfs
-> files were retrieved as memfds until now, but nothing relies on that, as
-> the LUO uAPI is not stable yet.
+> Also like FS_IOC_ENABLE_VERITY, require the file to be opened for
+> reading. The retrieved file can be read, so otherwise a caller that can
+> only write to a file could preserve it to read its contents.
 > 
-> Like the other failures before the folios are restored, problems with
-> the argument and with creating the file can be retried.
+> Preserving a file also fills its holes, but don't require any permission
+> for that. Anyone who can read a tmpfs file can already fill its holes by
+> faulting them in through a read-only mapping, also on read-only mounts
+> and for immutable files.
+> 
+> Document the frozen size and the permission requirements.
 > 
 > Signed-off-by: David Matlack <dmatlack@google.com>
-> Link: https://patch.msgid.link/20261103010216.3447716-8-dmatlack@google.com
+> Link: https://patch.msgid.link/20261103010216.3447716-9-dmatlack@google.com
 
 Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
