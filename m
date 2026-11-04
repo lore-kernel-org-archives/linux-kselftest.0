@@ -1,49 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793812172;
-	b=sTlzIkLm9a6jhCvShorOwbp3TO4urJJ6STXuBP4Z/mUB5J6GLR45YjF2tRAMPgWDIcV0
-	 AmDJY+cxnj/k8wCu6b+zb8e533WwLypzOjHWvgmjY90YKIzSKFw6nGf95paq4yCBRAQBk
-	 ltnSYzYQ5l2WtSjGNU46vD8aKJoKipRLiUpClSHcuARjb52F+Ch3u/+Qfz0bvcrcBK1lh
-	 wiTpNdusP8qIyGPIERq7pQ7ZBB7UZ4MwhVdyZ0NLorKPAwoMa+NZHrZrEcEs94BxN5r2n
-	 qebcnvOrPpNueOqnsEBxM5f+wvYuEq4kkwaz0zmbIsFSLLzgMyK0+jejvZIaJqBUWyw==
+	t=1793813235;
+	b=VT+CHFjcvPEAgNJ6+VqvZusDNtCjBnBGgwpv4f0cJK+pdQN3vof5C7ILJ9reT9wAiQwU
+	 +vO1gnWTBrg3VD5nlPisj15euTKml7sU997i0ReM6UB5HTUA83QaVC02/1xcrLCOwUHDq
+	 RJPC0bS70e1YyHRhKj0ZPeVbmbFlJB3r/fAqO3HeEObW69Y4S/y4uk8xXlgXbVpLwjamN
+	 6RXntyvIwEwdtfdQd72Wu3LmS83BnUpfIJKse+sYCl+a3J+TpZl3jY4O/358SPSuXrj/F
+	 xi+umOGvddyKs17GSj9y8dPToeuEW6MjTUhfgUxGhuDlGxXRIJoM09nkvWS/EoPKQEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793812172;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=w6j/ofOeuk31Oj1ML+7lFGAIrAFbRvVDC3r8vSxWcPM=;
-	b=IlsIg7r3Th/ZO5yhR6BY9RqXuMmPq3LRb7SM1cd1HOEazPYBBg9rfeDiPpzRo3GoVKX2
-	 svszEs2c1HOc3ZaLQ56AEB9kMockgwQ16WFTcqWK2+oaeYsQ2yumHAyPZmvc4/0dupz9J
-	 kChSbix1umpNsOa6dnPIey5dWQ3Jlt4jCRY9gyr6QEunsm1DuJFvQKK1kBl4zCMvvvwZq
-	 MoxhqhYOqpc0Bk2M7VU2YieiC2kRbxj0gWAI/QdSWAhTHzo3pQDYEEkiPwdYfzLsiVMHa
-	 FXr/KsOvrd1TwvbtDooTJQUEtvTGFEgFToDt1JJXd54K60ir7tnYxTafAaAF2+DN0Xg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793813235;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:X-Developer-Signature:X-Developer-Key:
+	 Content-Transfer-Encoding;
+	bh=lAdqJZq7DckAfewXRPAVCUONZuQAofOCOPOWHFZTOPQ=;
+	b=fIb3GrfxEMAb3J/TzQgMWEuqnTwJve6bWH10eKuv5MqyXyYRZQr76yC+ok+64mA1ndL0
+	 l3WZzVQYkB6SAS2NIhuuEQ8eH0mfseAieh3DkOHgxfUTSL4b5PVCsljQ8fk5pmILOz7su
+	 JJ8GyKRk8pgO6+W9ZcnFp6m7/lNOozjAJW/hkNfREyU4TmBmTSJkvhvUD+Ei/tJZgLGj6
+	 XOQQEcnhQLa5JCF1y1RcxAv/S10jf5lw/10/4hNdp75bC39qL4LI1Ba+3hrP+gkLZQRbJ
+	 VancSZ4eBI2GoUNnoNMTyiNUwh+Oaxh3yTPHwJxMFBqh0c2OImeH2+TGCiHrg1qgfMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=rvxD7NHz;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24CF8606A31B;
-	Wed,  4 Nov 2026 17:09:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24CF8606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QnqKLYh2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07F6606A31B;
+	Wed,  4 Nov 2026 17:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=rvxD7NHz
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 782F21BB2;
-	Wed,  4 Nov 2026 09:09:28 -0800 (PST)
-Received: from [10.2.212.8] (e134344.arm.com [10.2.212.8])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7D7D3F673;
-	Wed,  4 Nov 2026 09:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793812171; bh=kF89wKeD7kZ/O+6Dyki9XICH0urGPiXkcSyqCzbI8Po=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rvxD7NHzAOCz8jOJZ6FLg6gSC+ni1/PJaxeOI5/h5oadEWYXrNMhF4KkeXbXdPIDg
-	 l2fIZz3J/aPh1MMZCEaBxELio4vNNrzft8C9dEgDZd9rM+8/oX/G2DAzms4TPevrzw
-	 MBP8TziYfCkcqXcpVysDANR4LsPfMnht+Sz0vuUo=
-Message-ID: <b94aa5e5-a4ab-4b61-a864-d10ff1ff2b63@arm.com>
-Date: Wed, 4 Nov 2026 17:09:28 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QnqKLYh2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F031F00A02;
+	Wed,  4 Nov 2026 17:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793813234;
+	bh=lAdqJZq7DckAfewXRPAVCUONZuQAofOCOPOWHFZTOPQ=;
+	h=From:To:Cc:Subject:Date;
+	b=QnqKLYh2fAMD+U5HTXeOnACd1cOBaWr2au0sexyO6Tega8pNFvJ3KwBqyWlewJUso
+	 MIi2fzXRHEQROZC9gLvS1bZZ/9/KcmfDhERzkLaXXdIl+Qf8wPegziV2OdOn/5z79r
+	 3iTqL/OK9DAdbhv97um4MytPwotOejrYkLFgVhoshHzNg842ittp+lNu4zRCpPsoG2
+	 KqhP8Ng8p49cNRXsXj5NGkMfzBM+kKXiniguFgYtTFtMwPvnenK73TWNMd887NGQbI
+	 1pG3OChIWDhqEolCKBiLCVppfrBMevoWgaGWalA6fc1c1Jt43H5RxZZPnk2L1SezgW
+	 Bq+TYnLLsbzyA==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jann Horn <jannh@google.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Chris Mason <mason@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Christoph Hellwig <hch@lst.de>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	Joel Granados <joel.granados@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jan Kara <jack@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	coreteam@netfilter.org,
+	kexec@lists.infradead.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	ibm-acpi-devel@lists.sourceforge.net,
+	jfs-discussion@lists.sourceforge.net,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-cifs@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-sh@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	sparclinux@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-doc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Takashi Iwai <tiwai@suse.de>,
+	linux-input@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-debuggers@vger.kernel.org
+Subject: [PATCH v2 0/7] proc: move procfs to what kernfs does
+Date: Wed,  4 Nov 2026 18:26:54 +0100
+Message-ID: <20261104-trompete-gejagt-raddampfer-9fb5640a6102@brauner>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,195 +113,141 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] selftests/resctrl: Implement cl_flush() and sb()
- for aarch64
-To: Richard Cheng <icheng@nvidia.com>
-Cc: tony.luck@intel.com, reinette.chatre@intel.com, x86@kernel.org,
- shuah@kernel.org, fenghuay@nvidia.com, Dave.Martin@arm.com,
- james.morse@arm.com, babu.moger@amd.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kaihengf@nvidia.com, kobak@nvidia.com,
- newtonl@nvidia.com, kristinc@nvidia.com
-References: <20261012074729.40042-1-icheng@nvidia.com>
- <20261012074729.40042-2-icheng@nvidia.com>
- <847af89d-7b79-44b4-8273-243dfb51ef5e@arm.com>
- <9cccea63-397c-4913-95bc-eed38f0ebd66@arm.com> <aurOz7iGKInyjddW@MWDK4CY14F>
-Content-Language: en-US
-From: Ben Horgan <ben.horgan@arm.com>
-In-Reply-To: <aurOz7iGKInyjddW@MWDK4CY14F>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6699; i=brauner@kernel.org; h=from:subject:message-id; bh=vwrWu4QhJtoloSbOepgjr6FTno3vPTd4Ym/VDTikOkw=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS9zrofyGH5UuGlf8QM041zGftlZmtyqi7/2jv5suCKX cadvXNTOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACaSkMjI8PXT/ahLzms2tG95 p/y6Wd4h+MQHNf/VL1dGn7i1utyl/SQjw+WcTXp/Xn+/v4hxooZnZYRWmPKsDU2ur9N2RKRMsj5 7gh0A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Hi Richard,
+This series aims to get rid of copying to and from userspace while pinning
+procfs entries allowing userspace to delay removal as long as it wants.
 
-On 04/11/2026 06:43, Richard Cheng wrote:
-> On Wed, Oct 21, 2026 at 10:55:35AM +0800, Ben Horgan wrote:
->> Hi Richard,
->>
->> On 20/10/2026 17:30, Ben Horgan wrote:
->>> Hi Richard,
->>>
->>> Thanks for having a look at the arm64 side of the resctrl selftests. That hasn't had much love but
->>> it would be good to have them working properly.
->>>
->>> On 12/10/2026 08:47, Richard Cheng wrote:
->>>> cl_flush() and sb() compile to empty functions on aarch64, making
->>>> mem_flush() a silent no-op and leaving CMT/CAT tests operating on
->>>> unflushed state.
->>>>
->>>> Add "dsb sy" for sb(), ARM requires a DSB whose access type covers both
->>>> loads and stores.
->>>
->>> I guess this is referring to the synchronization required for the cache maintenance instruction but
->>> that's not what you are using in this patch.
->>>
->>>>
->>>> For cl_flush(), "dc civac" only reaches the Point of Coherency, on
->>>> ARM MPAM systems the SLC lies past the PoC and may be a NOP on coherent
->>>> platforms. Instead, dirty each cacheline with a store so that
->>>> mem_flush's full-buffer sweep evicts lines from the SLC via LRU
->>>> pressure.
->>>>
->>>> Signed-off-by: Richard Cheng <icheng@nvidia.com>
->>>> ---
->>>>  tools/testing/selftests/resctrl/fill_buf.c | 11 +++++++++++
->>>>  1 file changed, 11 insertions(+)
->>>>
->>>> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
->>>> index b9fa7968cd6e..eae0262fe265 100644
->>>> --- a/tools/testing/selftests/resctrl/fill_buf.c
->>>> +++ b/tools/testing/selftests/resctrl/fill_buf.c
->>>> @@ -27,6 +27,9 @@ static void sb(void)
->>>>  #if defined(__i386) || defined(__x86_64)
->>>>  	asm volatile("sfence\n\t"
->>>>  		     : : : "memory");
->>>> +#elif defined(__aarch64__)
->>>> +	asm volatile("dsb sy\n\t"
->>>> +		     : : : "memory");
->>>>  #endif
->>>>  }
->>>>  
->>>> @@ -35,6 +38,14 @@ static void cl_flush(void *p)
->>>>  #if defined(__i386) || defined(__x86_64)
->>>>  	asm volatile("clflush (%0)\n\t"
->>>>  		     : : "r"(p) : "memory");
->>>> +#elif defined(__aarch64__)
->>>> +	/*
->>>> +	 * Dirty the cache line with a store. As mem_flush() sweeps
->>>> +	 * the full test buffer (sized larger than the SLC), cache pressure
->>>> +	 * evicts lines from the SLC via LRU replacement.
->>>> +	 */
->>>> +	asm volatile("strb wzr, [%0]\n\t"
->>>> +		     : : "r"(p) : "memory");
->>>>  #endif
->>
->> One more thing that occurred to me is that if this is intended to evict all existing data in the
->> cache then it would require that the cache portions bitmap for the control group (PARTID) in use is
->> set to all 1s. E.g. 'L3:0=0xffff'. Otherwise, you may not affect the whole cache. This likely means
->> that the cl_flush() function isn't the right abstraction for MPAM and the test needs a bit of
->> restructuring to get this to fit in elegantly. Similarly, to the limbo handler in resctrl you could
->> then check the llc_occupancy() to check it's under a "low enough" threshold.
->>
->> Thanks,
->>
->> Ben
->>
-> 
-> Hi Ben,
-> 
-> Thanks for the feedback. I checked the code and ran some tests.
-> You're right, my implementation writes into the benchmark's own buffer using
-> the same PARRID/PMG, and the buffer isn't always larger than the SLC.
-> 
-> I can't claim that it produces an eviction sweep 100%.
-> 
-> I think what are want to do is to check whether reducing a group's cache
-> allocation causes more cache misses, thus the data left in cache from the
-> previous allocation must not affect the next measurement. That is also
-> why I want to reuse the concept of Intel's test with CLFLUSH before
-> warming the buffer under the new allocation.
-> 
-> I'm thinking maybe the assumption can't be achieve on ARM, I ran tests to
-> measure occupancy before and after each preparation method.
-> 
-> I tried this patch's implement, and "DC CIVAC" since I think it can affectively
-> invalidate cacheline without throwing old data away, which should left
-> occupancy almost unchanged.
-> And one more method with a separate large buffer in another group.
-> 
-> The result turns out like the following
-> 
-> Preparation                     Before (MiB)   After (MiB)
-> DC CIVAC + DSB SY                     51.19         50.47
-> zero-byte stores + DSB SY          53.12         56.43
-> Separate-buffer pressure             53.25          7.14
-> 
-> 
-> The current method increased the benchmark group's occupancy instead of
-> reducing it. "DC CIVAC" left occupancy almost unchanged.
-> The separate buffer method reduced occupancy very much, but still left data
-> behind.
-> 
-> It makes me think we should reconsider the test method. I think the goal is
-> to check whether the MPAM allocation limit works, clearing the cache is only
-> how the Intel RDT test prepares for that check.
-> 
-> How about we set a group's mask before its worker initialize the buffer and
+In essence, it aligns procfs with what kernfs is already doing. That
+gets rid of a big attack surface and a whole bug class in one go. The
+bounce buffer will come with some costs but luckily some codepaths (like
+readdir) have been so criminally slow and buggy that massaging them ends
+up speeding things up or at least leaving them on par with mainline even
+with a bounce buffer in the mix.
 
-We'll still need to make sure that the PARTID used for the test hasn't got high occupancy in the
-cache before running the benchmark.
+There was a hackish and very narrow AI solution to a small part of this
+bug class which was sent off-list. In essence, it used a second
+buffering mechanism on top of seqfiles which was really nasty. It also
+didn't address any of the non-seqfile users.
 
-> then run sustained cache traffic and measure occupancy after it settles?
+If we want to get rid of the this whole bug class we need a bigger
+hammer. That means reworking how procfs handles data. So I tried to work
+through all of that. The series is now in a decent shape (I'm not saying
+"glorious" as there's so so many warts. If they were ironed out it could
+be a lot nicer but that's for another day.).
 
-I assume the occupancy is measured via resctrl, llc_occupancy.
+I understand it's big but I think it is nicer to be able to look at the
+end result since we have some transitory states that are gone at the end
+of the series.
 
-> Maybe compare full, half and quarter masks to see whether the allocation limits take effect.
-> 
-> Does that sound like a useful direction for MPAM test for you ?
+I have polished this a bit more and have sorted out a few more bugs and
+tried to clean up some codepaths given the current constraints. Again, I
+think we could go a lot further there if we wanted to but I think that
+blows this out of proportion and at some point it becomes difficult to
+grasp the scope.
 
-Yes, I think so.
+So, remove_proc_entry() waits until every call into the procfs entry has
+returned. Most of those calls copy to or from userspace with the entry
+pinned.
 
-Would it end up like this?
+A reader or writer can induce a page fault in that copy take as long as
+it wants. For example, with userfaultfd or by punching holes into a
+memfd over and over. Plus, the callers of remove_proc_entry() like to
+hold locks while they wait. For example, addrconf holds RTNL when it
+removes /proc/net/dev_snmp6/<dev> and xt_hashlimit holds a mutex that
+all network namespaces share.
 
-1. Choose a test control group and ensure that it doesn't have high cache occupancy using llc_occupancy
-(If it does have high cache occupancy then clean it. Probably by using separate buffer with a
-separate control group)
-2. Configure the L3 cache bitmap for the test control group
-3. Run a benchmark
-4. Check that the llc_occupancy is as expected
-5. Repeat 1-4 with different cache bitmaps.
+So every network device with IPv6 gets a /proc/net/dev_snmp6/<dev> that
+everyone can read, and addrconf_ifdown() removes it with RTNL held. So
+any local user can keep RTNL for as long as their read stays stalled.
+Until then no device can be registered, removed or renamed and no
+network namespace can be created or torn down.
 
-However, it doesn't sound specific to MPAM but more like a general test for the cache portion
-bitmap. Possibly it can be a separate cross-architecture resctrl selftest that compliments the
-(somewhat) intel specific cat_test. (There isn't a platform independent way of measuring slc cache
-misses on arm64.) This depends of the resctrl selftest maintainers view.
+If the caller lacks privileges for userfaultfd a FUSE mount in a user
+namespace whose daemon never answers is enough to stall the copy.
+Killing the reader ends it, but until then whoever removes the file sits
+in D state.
 
-Thanks,
+xt_hashlimit removes the proc file of a table with hashlimit_mutex
+held. Every rule insert in every network namespace takes that mutex and
+so does network namespace cleanup. cleanup_net() runs on a single
+workqueue with pernet_ops_rwsem held, so a stalled reader also stops
+every later network namespace teardown and every module load that
+registers pernet operations. xt_recent does the same with recent_mutex.
 
-Ben
+And of course, it's not specific to networking. remove_proc_entry(),
+proc_remove() and remove_proc_subtree() have over 200 callers and plenty
+of them hold locks. For example, a stalled reader of
+/proc/fs/ext4/<dev>/options holds up the unmount of that filesystem with
+s_umount held, and every sync(2) with it. The same goes for PCI
+hot-removal, for freeing IRQ descriptors, which CPU bring-up waits on,
+and for unplugging a USB sound card.
 
-> 
-> Best regards,
-> Richard Cheng.
-> 
-> 
->  
->>>
->>> Isn't this cl_flush() used without changing the resctrl control and monitor group (PARTID/PMG)?
->>> Hence, I expect you are ending up making the cache full of data associated with the identifiers that
->>> the benchmark runs with. Is that the case?
->>>
->>> I'm also unclear how this the cat_test will detect any performance differences on arm/MPAM as the
->>> perf events would need to specific to the system level cache implementation.
->>>
->>> Thanks,
->>>
->>> Ben
->>>
->>>
->>>
->>>>  }
->>>>  
->>>
->>
+And btw, syzbot has hit removal under locks before (cf. [1]), and the
+xt_recent deadlock fixed in (1) below is another one.
 
+Stalling the kernel in a copy to or from userspace is a well-known
+exploitation primitive. It's why unprivileged userfaultfd can't do it
+by default anymore since v5.11 (d0d4730ac2e4), and FUSE has been used
+the same way.
+
+This series touches just about every ->proc_read(), ->proc_write() and
+->proc_ioctl() in the tree, so I've split it up into seven series. They
+go out as replies to this mail:
+
+Part 1/7: proc: fix a few old bugs in /proc handlers (51 patches)
+
+    Bugs in the handlers and in procfs itself that are a lot older than
+    the conversion and that reviewing it turned up. Most of them are for
+    stable. They come first so they can go there on their own and the
+    conversion doesn't have to bother with that crap.
+
+Part 2/7: proc: let procfs own the data path (23 patches)
+
+    The procfs side. procfs owns the seq_file of an entry, copies in
+    writes, copies out reads and copies ioctl arguments in and out, and
+    only calls into an entry with it pinned. The open files procfs has
+    to know and the wait queue a pollable entry is polled on live in an
+    open node that only those entries get, the entry is pinned around
+    the vm_operations of its mappings, and lockdep checks the pin.
+    proc_create_seq() and friends and the plain seq_file users are
+    switched over here too.
+
+Part 3/7: proc: convert the arch and platform entries (23 patches)
+Part 4/7: proc: convert the driver entries (26 patches)
+Part 5/7: proc: convert the fs, kernel and mm entries (30 patches)
+Part 6/7: proc: convert the net entries and the kfifo samples (13 patches)
+
+Part 7/7: proc: drop the __user methods (6 patches)
+
+    Drops the old methods. kcore, kmsg and the kpage files, which are
+    never removed and keep reading straight into userspace, get
+    file_operations of their own, so nothing in struct proc_ops takes a
+    __user pointer anymore, and the new methods get the names kernfs
+    uses, ->proc_read(), ->proc_write() and ->proc_ioctl(). The last
+    patch takes the poll_table away from ->proc_poll(). This needs all
+    four conversion series.
+
+Parts 1 and 2 are the base. Parts 3 to 6 go on top of part 2 in any
+order and don't depend on each other. Part 7 needs all four.
+
+The series should all indicate cleanly what dependencies they have so b4
+should be able to pull it for review.
+
+With all of it on a KASAN and lockdep kernel the removal selftests of
+every part pass, the proc, pktgen and allocinfo selftests behave like
+without it and the bugs from (1) that reproduce in a VM are gone. Every
+patch builds on its own on x86_64 and i386, and with W=1 on the
+architectures it touches.
+
+[1]: https://lore.kernel.org/r/000000000000f24f4705b6988f3e@google.com
+[2]: https://lore.kernel.org/r/20231109212251.213873-7-johannes@sipsolutions.net
+
+---
+Link to v1: https://patch.msgid.link/20261102-defizit-jobaussicht-kurios-7016c6e67442@brauner
+
+-- 
+Christian Brauner <brauner@kernel.org>
