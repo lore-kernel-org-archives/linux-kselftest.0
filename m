@@ -1,56 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793803586;
-	b=ZecSLmMNnxRkTn8bQIFj835YN13agpGL/WqFKWhACBSyVGsOmWNG/4PR/0kQ8r/MOIUb
-	 qJ3r0CtOJyNTsLqWPpUPq8JkZQjzFyk/AV6nJjci9AxvVWt5dWWspBwNKQfcQMYWwKKFw
-	 zL4TGAsc425ebtpDp5+RRrCzacIvPm/OacQpxuWVE7KBT+376vPi9hnc6JYNVX6EUZhRh
-	 dxIGL6+7NRljpT8P8+PfchqRDQ6jwM++iupVykHbrwOvpIZ8X3R9akdLu/31tMGIYh7uo
-	 Hxb3bMrVd9E/2U8UreZrOPwNWME1Ub4nlK8QrxonJXDLgWNy0l7Odu5piai0vSNuKng==
+	t=1793803883;
+	b=wxBARkWG7nSDk6j0Xs24OI9dAGnxERmGeaf2fcxKAv1Egp7u4OGSwTC9DAMvCZlNcUNV
+	 jmtD09RO9vpZQJ5uL75l+LRezkB5T4qaA3WXn/AbP7146j8oe6GGNYyp/oPgqrL8/zs1Z
+	 bXOfZbnYRPjIAi45nxLd+sXhr8beucEhQICSFupXV1Zd3hfqVKvxKOP1XJp3bB4WOND8G
+	 P7ZEmaeA9TQzZhGQA2MDidUfTnlp1LxQUTojVKXYjkIruLh8pPYYsXsq+7gVZEXI0vOB5
+	 BSPX08kWBc+m5JiNHal8fENmRgnDxuEzxRwGAfA4spQVIUkEUXsEiBhCSd629JKAZLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793803586;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793803883;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=ZmB0cOk9CeDJ4AVUd+j92L9AZOJTIyuo4so8WOnVl9E=;
-	b=1dM+gHR9wDeZukbo9kM9tNItfIgIW3svMPV+YqIYDrhP3gfuyFQp4qylg3JJfwpBOHCt
-	 z9QrlhAMe84B1HmKdh4RGH3+9uuR2Yw8G5knn7JoKyOTDz8AhcU5m3CWBZT5tNWU6O14o
-	 2h6yS3UhBrfDBArg75+JGBH4+o9R1lZ2t9G5QzeBtSKZMMC5VbVeHmHXyuYV00KOxOoRi
-	 qDBYf+K0PCYCmMwEkp6DwIDH1SOLuUpuk2YT5UJZTK+w0fZnxwQgrbwEx0UR/H3O839PM
-	 5AvDdNiQ0vpIqCEtwF70WoMeorV2KD2Ip1v+vLYsklVKskBxxkWCMP81bvdCKLZZgqg==
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=G02WW4a+pnsj4Xew0EG1BLUmC46o+u7VzGgK76hwDrM=;
+	b=kMRxB4UIxi9vtKb+JilH9WtrSXXFeaMRcl0FXkvZbjk1ZOdd1kXOotasvpJDj4p/b8YW
+	 s5fDWEuh6G8bAs4kY5BrxxnCsV+kt5WL3K9sjdXx81gIp6FbaxTQEi9O1huXHAhvvklmh
+	 guAP0rfx18kn1jSV4fpfkOWxS5EbgoGfDfjaJyyA5g9CbWZy5Lao2gAZRa1gsnstglVn7
+	 4/XX8e5nYt0LtJTwtSleSg5/338YQYAD8nkJL0YKaRFMmBXB1jSQ/O30oCElrHvu/AiOu
+	 gxWsBptESX9xhk74tDYO1AHXbOjLYZXVy5s5mYU4tcumB+qVn8eOfv/b+a8GKsuVXJg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nFjjaOIF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y54fUfDF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BB8606A32E;
-	Wed,  4 Nov 2026 14:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAD6606A31B;
+	Wed,  4 Nov 2026 14:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nFjjaOIF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7901F000C1;
-	Wed,  4 Nov 2026 14:46:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y54fUfDF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860061F000C1;
+	Wed,  4 Nov 2026 14:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793803585;
-	bh=ZmB0cOk9CeDJ4AVUd+j92L9AZOJTIyuo4so8WOnVl9E=;
-	h=From:To:Cc:Subject:Date;
-	b=nFjjaOIFMBRsegOkw3+2nao5ayTBeNTVAr5+T460q1LEQa8fCE3nu+f/nkZv7jMwO
-	 6gODodh3kL9NphnW5LcXXCa6U5arTCYp2VzDWFOl31kZoSxHlFQ185ZvY2Xvoszf2/
-	 yF+ULoSHW+8H88impaRvlV8B/k0Nvs90zsg4TlgLj1z+cz33oIdn1N5qNBN2h0ZuHh
-	 Z2Hk3uhj9JhbzVYP3/lY9NxqdRjofRKSS7o5UUc07quDN2eW4gimxnQIWfTBpkuiMC
-	 zzhiAHX26uzL+CaSpvvUabCkhWNkNHr2irYj06YQUFVdOcm1VrgAO+611HHgotPhMJ
-	 vQrPpA31pe70w==
+	s=k20260515; t=1793803882;
+	bh=G02WW4a+pnsj4Xew0EG1BLUmC46o+u7VzGgK76hwDrM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Y54fUfDFAQrOERrbEmmDGyONtEjxV7NTUFGA4jt0noaGH1QxTVGPopcQ5mZ8qDWUK
+	 By1vSyiX2o7SFTzrey5CiXT3eZvr2jSfz9Gki3PrdwZOBpi+Q1BAgMNWrBv8IGzio3
+	 cN441jq2bIQ9zp7H47Jr3vVCExi9HFu1mJM0HXs6IDibH3KpyAdMMV19Qx135qk2zi
+	 qozlbpiYZiZO1NiAmAo/RPonKUo2fPR+3nv82kaePMtoNin11it4cIfs4efSU5fXYd
+	 BQdYu/Y0fBxfp7LyFZmt1zZzxpxqKMfTaYlyJANnBugtho8oE3zOJxmDNQPlDoIKyc
+	 BG5dIrKL4OQfA==
 From: Sasha Levin <sashal@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Breno Leitao <leitao@debian.org>,
-	io-uring@vger.kernel.org,
+To: Tao Cui <cui.tao@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/io_uring: cast optval through uintptr_t in mini_liburing.h
-Date: Wed,  4 Nov 2026 09:46:23 -0500
-Message-ID: <20261104144623.3803717-1-sashal@kernel.org>
+Subject: Re: [PATCH] selftests/cgroup: test_zswap: use the total RAM in bytes
+Date: Wed,  4 Nov 2026 09:51:20 -0500
+Message-ID: <20261104145120.3806026-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <0fd8f5aa-2636-4171-9300-3e04ab98d393@linux.dev>
+References: <20261103163919.641249-1-sashal@kernel.org> <0fd8f5aa-2636-4171-9300-3e04ab98d393@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -60,50 +68,20 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-io_uring_prep_cmd() puts the optval pointer into the 64-bit optval field
-of the SQE with a plain cast, which warns on 32-bit architectures:
+On Wed, Nov 04, 2026 at 09:22:31PM +0800, Tao Cui wrote:
+> One small thing: could you add a Fixes tag? The issue seems to date
+> back to a549f9f31561a ("selftests: cgroup: add test_zswap with no kmem
+> bypass test"), which introduced the sysinfo block, and 6f615890b848
+> later reshaped it into the current GB(4) comparison with the warning.
 
-  mini_liburing.h:272:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+Yes, the original check against 5000000000 could never be true on
+32-bit either, and it already used totalram as bytes:
 
-Cast through uintptr_t, and include <stdint.h> for it.
+Fixes: a549f9f31561 ("selftests: cgroup: add test_zswap with no kmem bypass test")
 
-Reviewed-by: Breno Leitao <leitao@debian.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-v2: include <stdint.h> for uintptr_t (Breno).
-v1: https://lore.kernel.org/r/20261103163926.641431-1-sashal@kernel.org
-
-Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
--m32, with and without -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
-KernelCI's 32-bit arm builds show the same warnings. The changed files
-build without them now, and the x86_64 builds don't change.
-
- tools/include/io_uring/mini_liburing.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/include/io_uring/mini_liburing.h b/tools/include/io_uring/mini_liburing.h
-index 44be4446feda5..6afe7efb44978 100644
---- a/tools/include/io_uring/mini_liburing.h
-+++ b/tools/include/io_uring/mini_liburing.h
-@@ -3,6 +3,7 @@
- #include <linux/io_uring.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
-+#include <stdint.h>
- #include <stdio.h>
- #include <string.h>
- #include <unistd.h>
-@@ -269,7 +270,7 @@ static inline void io_uring_prep_cmd(struct io_uring_sqe *sqe, int op,
- 
- 	sqe->level = level;
- 	sqe->optname = optname;
--	sqe->optval = (unsigned long long)optval;
-+	sqe->optval = (unsigned long long)(uintptr_t)optval;
- 	sqe->optlen = optlen;
- }
- 
--- 
-2.53.0
-
+--
+Thanks,
+Sasha
