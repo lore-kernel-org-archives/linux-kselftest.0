@@ -1,54 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.201
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793798561;
-	b=kM/0rBied2lyoFTBngdDOOT7RHhconpR2+4PwzUTfaRyaKNhNym9PCoW89ET5oqfQPme
-	 kAcDn0WsvBsfu8ea41Av8IHElnBQ/SE5xhSPtypZ/59qhaaMl5r0L8DxRZwPcnXuwF+cx
-	 QW5NmSa65zrpbCbenFs4W7/mZZBppaFfTsIMg6kpTuIkOUDHeSPJPGQSStYC5F27hu9JJ
-	 DKL8A0teMWD4HB72PyCJ06lFEisrFxZGJOjLXpcp6Jwf4rEDjyljh0t7NyvPm8HmMt59b
-	 fH5qVJHBXLx2HpXffKZ55tRiulrkgYKA/4QzjGHmkLGyG1QQHHe1yOwjlzWZU4HjBXg==
+	t=1793798795;
+	b=DI/goxnMzxqlLyW4bswFB3s6s56g/I/LoD0A7cWFaxp7/3Mv9twmoQhZbREM36O2i5YQ
+	 tRwfFvFXks4rJGejcxMj5aPoENwct37k/rTjEPKQrAdQdLP+x5IuGdEGTBtt9oAY8jrSX
+	 ubXu+9NYmYzZax5xrRjpnb5Lm4A+/o4o5QVlhlcIKl4+DLkpoSYRTsp39sj+GJJelDyTA
+	 fqt17ZRR95Jk1NEceNy+lRfya7/E/p5bemZI/EuWkOcyAR6iJRR5iIX7hdT6+nahIh757
+	 WVdY7t4M0tzfr1Av+W/aVzQ9vOFpH12kntFEpt1wUK78r+Qasrak6kSTUYEOlGNlUlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793798561;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=YJLp1C61ZMTzYyDI1094DXPw0QeoLZ9TuClqgP3WcCo=;
-	b=r7icoPTDeGmuDd4IRe6zmzSYti1OraBKNLYaFHpkooBhqy7TYC/1nJkFEn4Hqa96zLlA
-	 1nd0mn1MOrCkIKzJw0T8T8oC5fsWEdktYWe3NRSYD+F59lh5p5jgKTBKylLvgE+R0cRh7
-	 kjxzL7qpRVu2NNUZqr7l91h7eoy1FpwahukntDNi4R0mEcBGQJrKa9CLzgW9MyR1fh6ZU
-	 Vl3Glhf08SkxH8YUd1tHn2BKL0p9KkNDX9pCNGGFABXJ+J4hybnnnLX1RlBENgFctTHmD
-	 N9pwn9AA7KWcT9/CGqBdArzsDtM9DzVFZfc1IC+tUz6ZW6NhQAe49woq/41heN9XpsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793798795;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=pvQk7gkgjyECtllSEXxMYHx9i1xSAVAK6APJPPvCqm0=;
+	b=rLkcPk7LQHfyatL708vsutixMqJ9wBsJf0co+S1hHRX+48ci3/GhYpUHmjuS9DBI9uth
+	 gwJvf3y9aBuMGyH9I7H0B4o5tQeuBiTA+Fcm4kzxqTYIiVhRlXVYI5H7/E17EzXezu7K2
+	 QGSbEE9AxewaaVsTv1nHgjeusvBc8KlWpsXkn12vF32xrJJravsY5bPo1PHHv3hhT+uVv
+	 sWvb+QMeVqGXGwU5SMw2wqkgk/xblYJDy+QvLByJPdEi/hxZEo2KDhR9OqM8DqOTF9RUC
+	 WZk/DpQyswX2PgK+TauQWGH8D8cvQ3E57GYOLZuJdxEgESK9N4JHC4buxFozs2IuzZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xeRQDtml;
-	arc=none smtp.remote-ip=91.218.175.201
-Received: from mta0.migadu.com (out-201.mta0.migadu.com [91.218.175.201])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AAQeB94N;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F82606A33B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 13:22:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3F82606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6ED606A31B;
+	Wed,  4 Nov 2026 13:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xeRQDtml
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=jUJDOuWPwhfc5ioY6VwjRsiAmlQlmYoBB1u+kPlxRXw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793798558; v=1; x=1794403358;
- b=xeRQDtmlQWyfLPfmAyq2/c/j715HB5HtOQHH6h5RFPtHbrR8D0QfolUIf44z8+J3bDxFyI3T
- 4dnoLaxH7QfmLRz4MGMW7fxYxTjnzAO08EI9+BEsLlRcwLBXJ/ANQ2SMSaQZ6TawAdQf8Na0oeP
- 8acjarK+F8KL/3s31DQu6e3A=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9af1b8cea7f251b8;
-	Wed, 04 Nov 2026 13:22:37 +0000
-X-Mizu-Trace-ID: 9af1b8cea7f251b8
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <0fd8f5aa-2636-4171-9300-3e04ab98d393@linux.dev>
-Date: Wed, 4 Nov 2026 21:22:31 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AAQeB94N
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE9C61F000C1;
+	Wed,  4 Nov 2026 13:26:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793798794;
+	bh=pvQk7gkgjyECtllSEXxMYHx9i1xSAVAK6APJPPvCqm0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=AAQeB94NpsdVxdbYF50v7JrxTJ1MLmAG6T5ILf5+I7BHKtmTQeMeLUsVdV9aAKJVb
+	 F8aobQ2oDHgTUEkO+hLUrZO2Fs6BLUEX9y/S/oqQY7sF61wAP95BBkBCz+S2kZIm7M
+	 2qygBxvGCen/9kY8WP5FXnqVn2NYpENQNyoFzj6xasHx04ktg3N7JTbponsO+FBA8O
+	 MTq59fCOT+AWqw7PxNNGuzK5yvxfXmIt6oNkjBUWq3LDHFJtB9aJHmvFZQAf7pBYf5
+	 Ai+VKaIUMG/mOwbCQu68+3iEQ7bkX8G/U0l1OHYMA92ntsVjriWAeYkIvkV0ZemmzI
+	 mqKBfJJ0rQ/1g==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
+  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
+ <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
+ <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
+ Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
+ <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
+ Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
+  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
+  Vlastimil Babka <vbabka@kernel.org>
+Subject: Re: [PATCH v3 02/10] selftests: liveupdate: Add tests for preserve
+ and retrieve user argument
+In-Reply-To: <20261103010216.3447716-3-dmatlack@google.com> (David Matlack's
+	message of "Tue, 3 Nov 2026 01:02:08 +0000")
+References: <20261103010216.3447716-1-dmatlack@google.com>
+	<20261103010216.3447716-3-dmatlack@google.com>
+Date: Wed, 04 Nov 2026 14:26:29 +0100
+Message-ID: <2vxzzevok9ru.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,101 +72,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, Chengming Zhou <chengming.zhou@linux.dev>,
- Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/cgroup: test_zswap: use the total RAM in bytes
-To: Sasha Levin <sashal@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Yosry Ahmed <yosry@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
- Tejun Heo <tj@kernel.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-References: <20261103163919.641249-1-sashal@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20261103163919.641249-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi Sasha,
+On Tue, Nov 03 2026, David Matlack wrote:
 
-在 2026/11/4 00:39, Sasha Levin 写道:
-> test_no_kmem_bypass() uses the totalram field of struct sysinfo as a
-> byte count, but it is in units of mem_unit, which can be larger than 1
-> on 32-bit architectures. There totalram also can't exceed GB(4), so the
-> size check never triggers:
-> 
->   test_zswap.c:609:24: warning: result of comparison of constant 4294967296 with expression of type '__kernel_ulong_t' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-> 
-> Multiply totalram by mem_unit as an unsigned long long and use that for
-> the check and the values derived from it. Nothing changes on 64-bit,
-> where mem_unit is 1.
-> 
-Built test_zswap before and after on next-20261103 and ran both on a 4G
-VM, identical results, no change on 64-bit as claimed.
+> From: Pasha Tatashin <pasha.tatashin@soleen.com>
+>
+> Verify the user argument support in LIVEUPDATE_SESSION_PRESERVE_FD and
+> LIVEUPDATE_SESSION_RETRIEVE_FD. Add luo_session_preserve_fd_arg() and
+> luo_session_retrieve_fd_arg() helpers to libliveupdate so tests can pass
+> a handler-specific argument.
+>
+> Add a preserve_memfd_with_arg test case to verify that memfd
+> preservation rejects a non-zero argument with -EOPNOTSUPP, accepts an
+> explicit zero argument, and remains compatible with callers passing the
+> legacy struct size up to the token field.
+>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
 
-One small thing: could you add a Fixes tag? The issue seems to date
-back to a549f9f31561a ("selftests: cgroup: add test_zswap with no kmem
-bypass test"), which introduced the sysinfo block, and 6f615890b848
-later reshaped it into the current GB(4) comparison with the warning.
+Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 
-Reviewed-by: Tao Cui <cuitao@kylinos.cn>
-Tested-by: Tao Cui <cuitao@kylinos.cn>
+[...]
 
-Thanks,
-Tao
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
-> -m32, with and without -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
-> KernelCI's 32-bit arm builds show the same warnings. The changed files
-> build without them now, and the x86_64 builds don't change.
-> 
->  tools/testing/selftests/cgroup/test_zswap.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-> index d50acc1b83ac8..223e2eb1329ab 100644
-> --- a/tools/testing/selftests/cgroup/test_zswap.c
-> +++ b/tools/testing/selftests/cgroup/test_zswap.c
-> @@ -597,6 +597,7 @@ static int test_no_kmem_bypass(const char *root)
->  	size_t trigger_allocation_size;
->  	int wait_child_iteration = 0;
->  	long stored_pages_threshold;
-> +	unsigned long long totalram;
->  	struct sysinfo sys_info;
->  	int ret = KSFT_FAIL;
->  	int child_status;
-> @@ -606,10 +607,11 @@ static int test_no_kmem_bypass(const char *root)
->  	/* Read sys info and compute test values accordingly */
->  	if (sysinfo(&sys_info) != 0)
->  		return KSFT_FAIL;
-> -	if (sys_info.totalram > GB(4)) {
-> +	totalram = (unsigned long long)sys_info.totalram * sys_info.mem_unit;
-> +	if (totalram > GB(4)) {
->  		ksft_print_msg(
-> -			"requires less than 4GB total ram, sys_info.totalram: %.1fGB\n",
-> -			(double)sys_info.totalram / GB(1));
-> +			"requires less than 4GB total ram, total ram: %.1fGB\n",
-> +			(double)totalram / GB(1));
->  		return KSFT_SKIP;
->  	}
->  	if (access(PATH_ZSWAP_STORED_PAGES, R_OK)) {
-> @@ -622,12 +624,12 @@ static int test_no_kmem_bypass(const char *root)
->  		return KSFT_FAIL;
->  	if (read_min_free_kb(&min_free_kb_original))
->  		return KSFT_FAIL;
-> -	min_free_kb_high = sys_info.totalram / 2000;
-> -	min_free_kb_low = sys_info.totalram / 500000;
-> -	values->target_alloc_bytes = (sys_info.totalram - min_free_kb_high * 1000) +
-> -		sys_info.totalram * 5 / 100;
-> -	stored_pages_threshold = sys_info.totalram / 5 / page_size;
-> -	trigger_allocation_size = sys_info.totalram / 20;
-> +	min_free_kb_high = totalram / 2000;
-> +	min_free_kb_low = totalram / 500000;
-> +	values->target_alloc_bytes = (totalram - min_free_kb_high * 1000) +
-> +		totalram * 5 / 100;
-> +	stored_pages_threshold = totalram / 5 / page_size;
-> +	trigger_allocation_size = totalram / 20;
->  
->  	/* Set up test memcg */
->  	test_group = cg_name(root, "kmem_bypass_test");
-
+-- 
+Regards,
+Pratyush Yadav
