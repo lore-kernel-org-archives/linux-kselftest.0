@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.241
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.89
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793772358;
-	b=2Gzi2XmbaefCWTlF4J2KqA79u3LjNsullHu2flYgTvvZYtIEOro50EQ68qEBnoqt7eSo
-	 Z/T7P/m6986G7w+8XCH7yPN7QSGjDcbbmyOeZaLehZRZZRpPYzXn+SdY9vOo8SNXvU5mf
-	 YhVfO8+L4NuXiizq/jO5r3OYewMdfbq50fJD1CXeBEZEfnl6JJPeQZiTH4pHB4oIb79eN
-	 0MsruUHONnMe+Ir7HqiLAjMVkA2JD6L0dNQCoIVzZDgnBwfevEFGJNCPjPRKVZmRC3BIn
-	 yIxwEerxH+Voez37zTcwK3KND9Js7D7kYXf19E/VUH84D9xIU8JwyB1k3mcmVBGsQzg==
+	t=1793772457;
+	b=xHKlbQSO8vJ27pBiylVpecE2XYFF1qeBcf+MPR4+JfMUdgP0zlmJcEk95sRGvxFq3hkm
+	 TaBf7N9dhdwyxqVfpY30GDYCbt5NfslXr1WbMmpCdTmNDIwHMxJMD0gqexfGMh02IQZGb
+	 rVXoZ1B9w7b9mgAFm+DcRnK0kbgEzJL50QOWYMebYD8Yt026KTHHX8oXwi90w84VpoyNu
+	 b65daIEXtKNF3ZKv/La1WU9byvkmvGAKd8IxDYW+U4GpS0fqfRoZ7FQvVeOZ1XUfvs7Tx
+	 H3m7zeL/bZGVofZz+mdB7aW2n2b5WyO6175lcP+jCVK9bLpB4jP6y/uaEOxhfmfmQHQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793772358;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793772457;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=AYliQvvoP9t2xBU+MfGX2zhe1ZgquUqopej93F/CQ4Q=;
-	b=f4HfXbagpVu+vyL4Uak3x+qt/WuGG5PnClUnbRP0OeSEnBAfshq8+Sgv4tH+UJMGt7ia
-	 +EH5ePZmdu6DZvn9XGEwEobjbvyez8Trkhg1pDhNcPBe4XF9NDuKeBCcR08eRImLQPenx
-	 29HyQ44GyQV+shsUH9b4+ilIe0RxOgnwb894Krf4Htx3aH1B1y1ucsAMpugcIrz06QIAi
-	 2LBwXqb32UAgZcS2qhXdTzcjPdyp7ryru8RCazGM/NMSX1pd1kn1F4lKh8VFJaK5Lx3Br
-	 c3gKAmMQPWuguB3ydWSqjdOBMV7G4L/LIuvYd7Mlj62rPZY7nPUKZUQw9fvcakQX9ug==
+	bh=9kJziegiXF9ceVnU6QWNYLm7UZNmpZIr3z6LjOuG5MM=;
+	b=H2asaKdU0LOkxc/clNROJDeurVL3a8GfaqjYNi8RIBqqrgoCIevE7r6qmgwhRxkrX6Jn
+	 grsLxBkOEfwLCjkebf3Tt/wzb+HG5chKceUHhw4qOypERSoVKHPmivNsx8Q39d9Sn6liE
+	 23NOYJJ2knnx1sWYKL8YkUl0wTbpaxGiG3OPWsVceN8pKjq7dX918KM4+wvkkXny6cmSd
+	 UEamMBRvcqe17NTvMXOZelvme3soMtKvIx8Ie8BHxKOZ95LEuB5Eu5g1OOVTwgXj5wiOY
+	 OAv76sqe3CbQbPNSW7Nz4ft+PQEbHslszS4u4uKlN8KeWV1ef03z+1WzBzE11OzQXeg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tG0OTtk0;
-	arc=none smtp.remote-ip=95.215.58.241
-Received: from mta1.migadu.com (out-241.mta1.migadu.com [95.215.58.241])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fxLDSgIc;
+	arc=none smtp.remote-ip=91.218.175.89
+Received: from mta0.migadu.com (out-89.mta0.migadu.com [91.218.175.89])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA34A606A328
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 06:05:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA34A606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0CD606A329
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 06:07:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C0CD606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tG0OTtk0
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fxLDSgIc
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=AYliQvvoP9t2xBU+MfGX2zhe1ZgquUqopej93F/CQ4Q=;
+DKIM-Signature: a=rsa-sha256; bh=9kJziegiXF9ceVnU6QWNYLm7UZNmpZIr3z6LjOuG5MM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793772354; v=1; x=1794377154;
- b=tG0OTtk0f8ZcYcb+ozibhuTIE8MGWeWV43lqRPVcurrDR1RPMyw+7dPAjB2cpk+w+/sPh3WS
- H+cFhr11CppQ5DHLndMniEipQaOax5wvG23fFvUUerj5ERLXqGc+CrFbyriCPuNDOwogw40Z5mT
- Yx1TxtPR9oycfNTCLEH74xAA=
+ t=1793772454; v=1; x=1794377254;
+ b=fxLDSgIcA/NKQEZVdQe+c+tZv9EJm4A97xmG7kksyzEFVSz1LPqD6ZLfddWwZttwpHGHJqj4
+ WbQ7rw50MpXacTQu7jIuS4iaZzy+L9FleibBF8vwLdpgPYzOHwg0ZgIAi1EWmIEfe5+1EFdSjZu
+ tIaweSpziELawiYNIfJrbgZU=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ba0b2edfcf9ab841;
-	Wed, 04 Nov 2026 06:05:54 +0000
-X-Mizu-Trace-ID: ba0b2edfcf9ab841
+Received: by smtp.migadu.com with ESMTPS id a8b4b12a133bf9ce;
+	Wed, 04 Nov 2026 06:07:34 +0000
+X-Mizu-Trace-ID: a8b4b12a133bf9ce
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <b0e5f200-1860-4222-afc3-8d67161ea1c1@linux.dev>
-Date: Wed, 4 Nov 2026 14:05:38 +0800
+Message-ID: <3f0c43dd-532f-4bef-afec-76b2ca6df0a3@linux.dev>
+Date: Wed, 4 Nov 2026 14:07:11 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,7 +59,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 5/7] ipv4: convert do_ip_getsockopt() to
+Subject: Re: [PATCH net-next v4 3/7] ipv6: mcast: convert ip6_mc_msfget() to
  sockopt_t
 To: Breno Leitao <leitao@debian.org>, David Ahern <dsahern@kernel.org>,
  Ido Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
@@ -79,37 +79,38 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  david.laight.linux@gmail.com, kernel-team@meta.com
 References: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
- <20261103-sockopt_expand_out_v2-v4-5-2d36da923578@debian.org>
+ <20261103-sockopt_expand_out_v2-v4-3-2d36da923578@debian.org>
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261103-sockopt_expand_out_v2-v4-5-2d36da923578@debian.org>
+In-Reply-To: <20261103-sockopt_expand_out_v2-v4-3-2d36da923578@debian.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 On 11/3/26 7:01 PM, Breno Leitao wrote:
-> Convert the SOL_IP switch and ip_mroute_getsockopt() to sockopt_t, its
-> last leaf on a sockptr_t pair. The IP_MSFILTER and MCAST_MSFILTER
-> bridges go away.
+> MCAST_MSFILTER reads its reply through ip6_mc_msfget(), reached from
+> do_ipv6_getsockopt() and from nowhere else. Convert it, and build the
+> sockopt_t at the call site for as long as the caller still carries a
+> sockptr_t pair.
 >
-> ip_getsockopt() builds the sockopt_t with sockopt_init_user() and
-> writes optlen back unconditionally, because IP_OPTIONS and others
-> report a length and can then fail. ip_mc_msfget() therefore stores its
-> length only after its last copy, so a copy failure can't report a
-> changed one.
+> optlen only has to cover the fixed part, and the real reply size comes
+> from the gf_numsrc field inside it. Userspace relies on that, so
+> sockopt_expand_out() grows optval past optlen, for a user address only
+> and only far enough for the sources the socket has.
 >
-> The write-back also happens before the netfilter fallback, so an
-> unwritable optlen turns any error into -EFAULT and skips the fallback.
-> Likewise optlen is now read before the level check and the MRT_*
-> dispatch, so an unreadable or negative one wins over -EOPNOTSUPP.
+> ip6_mc_msfget() now advances over the fixed part and writes the source
+> list through iter_out. Its callers rewind by the reply length they
+> already compute, which is exactly what the callee consumed, and land
+> back where they used to write: offset 0 for the native reply, gf_fmode
+> for the compat one.
 >
-> IP_OPTIONS with no options set and IP_PKTOPTIONS used to return the
-> result of copy_to_sockptr(), the number of bytes not copied, so an
-> unwritable optlen made getsockopt() return 4. They now return -EFAULT.
+> ipv6_get_msfilter() and compat_ipv6_get_msfilter() only store *optlen
+> after their own copy succeeds, so a copy failure can't report a
+> changed length: -EINVAL, -EADDRNOTAVAIL and -EFAULT all leave the
+> caller's optlen word unchanged.
 >
-> sol_ip_sockopt() builds the sockopt_t with sockptr_to_sockopt() and
-> stores optlen back as well. This extra code will go away when we
-> convert sol_ip_sockopt() to talk sockopt as well, but for now we are
-> converting the leaves.
+> The old code stored *optlen before writing the fixed part, so an
+> unwritable optlen word stopped the fixed part from being written. Now
+> the fixed part is written first.
 >
 > Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 > Acked-by: Ido Schimmel <idosch@nvidia.com>
