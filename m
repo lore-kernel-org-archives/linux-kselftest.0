@@ -1,66 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793757268;
-	b=Xc9um7Z3ZcZVFGKYi5Hx61+CkkNMaHXMjNeWCuBkTHEwGKsKP+1Ljg8/880Xu5ZMSOSO
-	 4hIC+4++iUHqWmp2Neha9SbXeqYHh4EQXkYz7zDDUpCaT8Zd9WvFrnrWrQIBO2Sc++v+N
-	 eHUgHn87gFLocNW1xu/kwXbmTpszXyME1W2b2BN9/QgMwTMzM/ayxT9p12AzvhXxPykgQ
-	 MbguI0td7V6LMwor+C3MtQwX7cBcVTFCsEsHvL2AdAHXOPEkwoyCFi/AFUyhOcC7+4AVD
-	 CmdBsC4J+Fo1aiBoMnlZlhI2qZJzpijvedW3akpaIRRWWUc/eQVyOU+bHO/Yq5fQ2Hg==
+	t=1793758803;
+	b=F8QWgeeAPCxTNAHRH/RDfJmr6p9zI2qhImVa78g+/C917PI5chjOGNXqXzGl7nEfMxn/
+	 GFueWpJc11glJ/HyQv6YcNtgImsrXHvOjr4Z/Bh08X6WI2ANhfwtee5BxnN0q7ulW3jv3
+	 bj5b9FVZcagnicPpGj6f2fKq5JZI4OGWtduzvje53xUCvhOUl5QC4VbB6YWblle1U7hrH
+	 T6AsbscAKpBxtCUUpFELSiJABeWUSd0n1dKEwHxijBRecC++aBCYo1HN8qPuP0UYMdPAl
+	 ZBDB8scxybpjz8sDgUeSNSnRJ6NqFULRPrPj/5chr10HhSkL/X9NGC0yTxk73k15haw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793757268;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-ID:References:In-Reply-To:To:CC:X-Mailer:X-Originating-IP:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:X-Authority-Analysis:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=GxkdG/Dl3xWarXPL1wkKFiT3BqGEfgSBRQnLy3BPbNo=;
-	b=Zi9c3A/UdYw+Y6h70tOPH7k48NIyTrl9iBF7XAO6zIv78mHgwrQLFwFR9xQqVXHIfBWu
-	 qZVX0gH5JG+55sHG1v7388XY23Foj2E9eYy/xF6DtRJXumtQ6O8VO1Xuz5JG8I1cLfu/V
-	 0rg190gT4OKVgNxVmq42Urgje4E8WUNZH4LfBWQjE+Fu65DiVvXLhM9umJPuwPsrZPuD4
-	 3yU6TurvztDa7q5+y28tWldbZTUxsV1PYdaNaO2mYvp+dgNomGQIRLrErgmi2E2Njiy0L
-	 rHIkHWas9EeDOT5rvDvhLI3kokmODn6zV+zoOlvPA7a6vo1DnQpkDK6DOTq48jnF6Kg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793758803;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
+	bh=rXti7mY5F0P/rsGwIECfqLmvwSGUaMqT4P5dq57Cx/E=;
+	b=ZVGfZYMuTloyMpUEIwjCZtpK+CixjYE5Bna98wxE8hWFQyw5WlqATImNdwmbVSMc6mQo
+	 pCnGG5PKOXMblgsb4zXi/ueQtQ9dNZTQi3o0hylGZo3e+zIB+p72s9cMIsQe2wPyENGz0
+	 XLYPJfC9P7mgli/v7cPHp1ZEzfPDm/ImhJ8YScDcevC6Fx6MB3HzGyiYUD+IYPc5KLU2s
+	 736UGeoz2QM8H2QdBPOWSlFRAJrfMMhfAOLTm6zMFQRBptML5WR9+gnIj/68KlCwvVy5r
+	 PUkuIqwJP+MP/OIENA9Nk7NDvW3U6h7kiXsUSzsO5zu3/P+Nl4uo/H134Pyl02JH+wQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=apj00lgk;
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PBzi9TIP;
+	arc=none smtp.remote-ip=209.85.221.172
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B47D606A33A;
-	Wed,  4 Nov 2026 01:54:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B47D606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD7D606A326
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 02:20:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4DD7D606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=apj00lgk
-Received: from pps.filterd (m0528006.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A40T5RK2662374;
-	Tue, 3 Nov 2026 17:54:09 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=GxkdG/Dl3xWarXPL1wkKFiT3BqGEfgSBRQnLy
-	3BPbNo=; b=apj00lgk1l4t497TVZOOiAUGyhFhVebkivUEUtTnPLEN+csm0pqZI
-	w4HFKbRFXZtGowSz6BrvwjVMQOiRE3AXxyLpsWeNjZeCI1vyxPuUiO9PYTM5MDoh
-	b4lFPvDJDkkxQM9vdEG6SDmGV80hx1bk+tkXy1a8/3NJV9Z1TD5lJXnJPBi1L9Zi
-	/c0curquiGV9d3/YCP5eP5+defLXXrEtQN6PYttkLSAhMuw4JiGVJRhqPzVisRKm
-	U40/SYrKxwVnTMT7t2ySCRTqqeo5/EeIIZyr6YLJcKyD9zlJvAtUOeWqNT0Kwyqk
-	DtLzeh/PZg6yzwGjmHs0BULYiy9r+8Lbg==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hqmyv2s9m-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 03 Nov 2026 17:54:08 -0800 (PST)
-Received: from localhost (2620:10d:c0a8:fe::f072) by mail.thefacebook.com
- (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Wed, 4 Nov
- 2026 01:54:07 +0000
-From: Bobby Eshleman <bobbyeshleman@meta.com>
-Date: Tue, 3 Nov 2026 17:53:22 -0800
-Subject: [PATCH net-next v5 7/7] selftests/vsock: test the netns assign
- privilege checks
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PBzi9TIP
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5eafb65e169so109693e0c.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 18:20:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1793758802; x=1794363602; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rXti7mY5F0P/rsGwIECfqLmvwSGUaMqT4P5dq57Cx/E=;
+        b=PBzi9TIPsFLl2TMl7s8o/VQCNOJaYL9ZQIfaatArXX0Yipg0kgF/Q22Qxg0e3TPsPj
+         G7J5AJvAyRg+QuPemaLMBmz6UI38bZuLnlIfZYYpFqa5YR1W6GxX+JipDVu1Xaryz7Jp
+         k2+Gl5Ck3VPZOS86WtvarxWRgseghf/K5zcs1wx8wzvPIWVHkTsFgg2rCb90zdrXX5i8
+         Ds3R7tBrV4eXU4udYmaeWPJijUI4+OoqZkO1SCRkivf4ScPXBZaw7j5L9EvUJv4VQsk4
+         2ntuTVc8jkaDg/zQ90kByToA9Q/IyV3j59zMBVNp6RnNa3aOIQnzIXfu3Vcq26X2VFqq
+         usRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793758802; x=1794363602;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rXti7mY5F0P/rsGwIECfqLmvwSGUaMqT4P5dq57Cx/E=;
+        b=T31+HiH5hZto3vxCK8PqBvgnhO0l/JLmikH2QGNS/+pOJpkTu3/AFh8GN/YKSSDqDl
+         bLtYN41o3fijmjvhOG+vSj8vImXKwcGyaEryTTRXUzYdGsuqVj+fSasl4XsVrnopJims
+         eoDk5BVPm9RIzQSBfx+oYVEWrHcgg0viu0IrZ+LU/Qz7ZlNoO6NNbMi31IGya+AUsQkX
+         BXMQCvkZSRpM/TicV8fqfGI58ylDnVkOfpzk2PkMhDeWkFVdkX6O6anV3MjRB7wo//Ui
+         dEEk+2gUTichOm2QEzDZPXLzClTiC58Ppcf25eZpkfrSi3wJ2ipALd8fKNX5Qo81mtQN
+         t+NA==
+X-Forwarded-Encrypted: i=1; AKwUvBxTyfsX64vn6Hu1yL/gDGZxBJCRD3QuNB9L1Jqx4WBYpuBBYQpOQdDouQgBML+XePh1ZJIHxstNfuBYVhqR0nM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/jmZwQvcjcHcnn4g9qKe8PQFyxMz4ae48IwMVmG3IfTRXGjfeL
+	C3VpgG56f7mytQ9VpGX+E9ZeE4ZXikM4hwSRPRH7PZgCpuKEk/IN4UOa/1FITylHfrZr2GwAjdm
+	sFk0/
+X-Gm-Gg: AYBFou1JKpLIPIdazDuE9qQzV7bOvlHdvufTUYMYomo98LDTkhWyyfea/4xWEUTVTF2
+	xM/tFXiJ3AhvIL+7o0APAhDIqRSnWCgBiCll0MtE8CSMq6gidZOoBBo+LmlHbWWWno2/hzi40FH
+	3EKLsdVqMSFhETvP+u0jb6dGpvSDpkq06uJ9YcQcyEtPEM3lT03l9pDSDjdLdr099Dt803cM623
+	KUgr51xfNluGJ+7Ig3XIpWQVUYhtjkK8floBPfZV+X380DhULmCP5sm+QdfX0av50sCqvjjnQIM
+	7/v8MEUbbTMIF12vNNUiU3FQwvXF7PcMOncYV019wIeP6OFPZlPTJbMMX+vdpjUYYvXWfk4eZFa
+	VmCYdbkYAj3/K1qs9827j4w4nRgr0GXPgRahwGvFUncsLyrOFf4d46FW4b7WfWN0U0zE1hloAdt
+	Zy67SQKjbPT8/PNRulCpC7rggf+KlZsOryXHUhgXfCJnb4ECJKGmEjjAKX219SZFBfDRVHV/++V
+	G4MNJj1ep07ocUQFqNurv0oP5eJCc86m1ckar+qo2jtQ35jD60lNmjpuBB+p3W+7ladW0hUZLEF
+	NzokaPkIYWg0XaB1uYGI3YHypnNWQWIpqF0vXXsDnkuxxW9dXmp6ychtoWvdygMRottU8d/8p0V
+	Y32rsuYT93olsHcpXzBTsN/UWfkv8AbBWw5FiZ3i2lEO0
+X-Received: by 2002:a05:6122:130e:b0:5ca:f811:25ac with SMTP id 71dfb90a1353d-5ec6895c285mr6125913e0c.14.1793758802245;
+        Tue, 03 Nov 2026 18:20:02 -0800 (PST)
+Received: from soleen.c.googlers.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eca89b6568sm658959e0c.1.2026.11.03.18.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 18:20:01 -0800 (PST)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: rppt@kernel.org, pratyush@kernel.org, shuah@kernel.org, 
+ George Guo <dongtai.guo@linux.dev>
+Cc: guodongtai@kylinos.cn, kexec@lists.infradead.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20261029090542.13283-1-dongtai.guo@linux.dev>
+References: <20261029090542.13283-1-dongtai.guo@linux.dev>
+Subject: Re: [PATCH] selftests/liveupdate: Preserve VM workspaces with
+ run-vmtests.sh -k
+Message-Id: <179375880152.1029434.132459394322366594.b4-ty@b4>
+Date: Tue, 03 Nov 2026 21:20:01 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,188 +103,27 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20261103-vsock-guest-ns-v5-7-48179b9b66b8@meta.com>
-References: <20261103-vsock-guest-ns-v5-0-48179b9b66b8@meta.com>
-In-Reply-To: <20261103-vsock-guest-ns-v5-0-48179b9b66b8@meta.com>
-To: Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller"
-	<davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>,
-        Simon Horman <horms@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Stefan Hajnoczi
-	<stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang
-	<jasowangio@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
-        Shuah Khan
-	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Donald Hunter
-	<donald.hunter@gmail.com>,
-        Eric Dumazet <edumazet@kernel.org>,
-        Eric Dumazet
-	<edumazet@kernel.org>
-CC: <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <sargun@sargun.me>, <jlinbox@meta.com>,
-        Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman
-	<bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
-X-Proofpoint-ORIG-GUID: g_Khp4yoyHnOrq95vI6ikEayXZLLDvJQ
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA0MDAwNyBTYWx0ZWRfX5R9ymhi7InlR
- ml/giaOY81l93eAOvw64w4pY6LP9dof/3fyefeRlby3QAEMgXaoPh7H5ZEMCPHNfff6HZXRisyv
- LuSzgpMYrQSb4nnTB50NgNRdPKBAHbY=
-X-Authority-Analysis: v=2.4 cv=VcFir1p9 c=1 sm=1 tr=0 ts=6aea9040 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=kkcUborcUVj0H7zxAXTl:22 a=VabnemYjAAAA:8
- a=ehl-fRECcIfF51WkWLIA:9 a=QEXdDO2ut3YA:10 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-GUID: g_Khp4yoyHnOrq95vI6ikEayXZLLDvJQ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA0MDAwNyBTYWx0ZWRfX7PsGX/WNNqKd
- q/JdnZ01mBQsB0xmeajxB12TeiCis8LTnuKeTTgD5aP+wkS7O+kA8+VFbratg1tb30Iv/QOvfUn
- 9ZcHJfRKd0x29Wl9jibZJgmp1ljZX4rIYffiwWWhtaIbgOR3FU2HuXrzYrT/phoi7JMvnthRwAH
- y1J7AYj2+M96VRC7hA4z192k3sMAmxWOh8YUn/90rjZbjg7HSMkmSGiVvBG02uLfGpDe63slrj6
- 6tMri1ppmgSxTyOKeQiiuynUnpf6gOBsG3tuiMXNFSaXmFB4uix3K2k5DE02VjtSNH8x5t6DpM1
- An2lRBFIKGB1D62kQ1Qi/zwPgl4DehWN6gua1m6c9Kr+kXZXkkEYWjeJQXyYq/3OfqGPoLbe446
- oCohXE9WwAw60mXJRkJWXpP6VGyDYRWJPEtsbgHeZ9j6KFEVnAR7Cz9/l3zCCtWRHE0qar0jW3j
- ZYruxuhhXG//bidKefA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-04_01,2026-11-03_04,2025-10-01_01
+X-Mailer: b4 0.16.0
 
-VSOCK_CMD_DEV_NETNS_SET refuses callers without CAP_NET_ADMIN in the
-init user namespace.
+On Thu, 29 Oct 2026 18:05:42 +0900, George Guo wrote:
+> run-vmtests.sh -k keeps the test output logs, but vmtest.sh still
+> removes its workspace and qemu.serial, losing the guest output needed
+> to debug failures.
+> 
+> Forward -k to vmtest.sh when keeping logs and update the help texts to
+> match.
+> 
+> [...]
 
-Add two tests: one confirms that CAP_NET_ADMIN is required even by a
-privileged user and the other confirms that CAP_NET_ADMIN in an
-unprivileged user ns alone is insufficient.
+Applied, thanks!
 
-CONFIG_USER_NS is needed to test the CAP_NET_ADMIN + unprivileged user
-ns case.
+https://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git/log/?h=fixes
 
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
-Changes in v4:
-- Require EPERM in the privilege tests, cli.py does print the errno, and
-  probe unshare -Urn so a setup failure skips (Sashiko)
+[1/1] selftests/liveupdate: Preserve VM workspaces with run-vmtests.sh -k
+      commit: 654efa9a6c4c455aca6f034f321c013f5b784157
 
-Changes in v3:
-- Require setpriv only for the ns_guest_ tests, not the whole script
-
-Changes in v2:
-- Assert only that the command fails, not EPERM: ynl's cli.py does not
-  report the errno (Sashiko)
-- Use ynl cli.py for the assign
----
- tools/testing/selftests/vsock/config    |  1 +
- tools/testing/selftests/vsock/vmtest.sh | 50 ++++++++++++++++++++++++++++++++-
- 2 files changed, 50 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vsock/config b/tools/testing/selftests/vsock/config
-index 5f0a4f17dfc9..4b31085558fa 100644
---- a/tools/testing/selftests/vsock/config
-+++ b/tools/testing/selftests/vsock/config
-@@ -109,3 +109,4 @@ CONFIG_FS_DAX=y
- CONFIG_MEMORY_HOTPLUG=y
- CONFIG_MEMORY_HOTREMOVE=y
- CONFIG_ZONE_DEVICE=y
-+CONFIG_USER_NS=y
-diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-index f8aee1336a09..5bd90a0c2380 100755
---- a/tools/testing/selftests/vsock/vmtest.sh
-+++ b/tools/testing/selftests/vsock/vmtest.sh
-@@ -93,6 +93,8 @@ readonly TEST_NAMES=(
- 	ns_guest_assign_g2h_netns_host_connect_ok
- 	ns_guest_assign_g2h_netns_pins_ns_ok
- 	ns_guest_assign_g2h_netns_old_conn_send_fails
-+	ns_guest_assign_g2h_netns_no_cap_net_admin_fails
-+	ns_guest_assign_g2h_netns_unpriv_user_ns_fails
- )
- readonly TEST_DESCS=(
- 	# vm_server_host_client
-@@ -187,6 +189,12 @@ readonly TEST_DESCS=(
- 
- 	# ns_guest_assign_g2h_netns_old_conn_send_fails
- 	"Check connections made before the assign stop sending once they lose the device."
-+
-+	# ns_guest_assign_g2h_netns_no_cap_net_admin_fails
-+	"Check assigning the guest's vsock device to a namespace needs CAP_NET_ADMIN."
-+
-+	# ns_guest_assign_g2h_netns_unpriv_user_ns_fails
-+	"Check an unprivileged user cannot claim the guest's vsock device via a user ns."
- )
- 
- readonly USE_SHARED_VM=(
-@@ -199,6 +207,8 @@ readonly USE_SHARED_VM=(
- 	ns_guest_assign_g2h_netns_host_connect_ok
- 	ns_guest_assign_g2h_netns_pins_ns_ok
- 	ns_guest_assign_g2h_netns_old_conn_send_fails
-+	ns_guest_assign_g2h_netns_no_cap_net_admin_fails
-+	ns_guest_assign_g2h_netns_unpriv_user_ns_fails
- )
- readonly NS_MODES=("local" "global")
- 
-@@ -368,7 +378,7 @@ check_ns_guest_deps() {
- 		return 0
- 	fi
- 
--	for dep in unshare python3; do
-+	for dep in unshare setpriv python3; do
- 		if [[ ! -x $(command -v "${dep}") ]]; then
- 			log_host "no ${dep} for test ${tname}"
- 			return 1
-@@ -1909,6 +1919,44 @@ test_ns_guest_assign_g2h_netns_pins_ns_ok() {
- 	return "${KSFT_PASS}"
- }
- 
-+check_assign_g2h_eperm() {
-+	local wrapper=$1
-+	local out
-+
-+	if out=$(vm_ssh "init_ns" -- "${wrapper}" python3 /root/ynl/cli.py \
-+		--no-schema --spec /root/ynl/vsock.yaml \
-+		--do dev-netns-set 2>&1); then
-+		log_host "assign unexpectedly succeeded under '${wrapper}'"
-+		return "${KSFT_FAIL}"
-+	fi
-+
-+	if [[ "${out}" != *"Operation not permitted"* ]]; then
-+		log_host "no EPERM under '${wrapper}': [${out}]"
-+		return "${KSFT_FAIL}"
-+	fi
-+
-+	return "${KSFT_PASS}"
-+}
-+
-+test_ns_guest_assign_g2h_netns_no_cap_net_admin_fails() {
-+	check_assign_g2h_eperm "unshare -n setpriv --bounding-set=-net_admin"
-+}
-+
-+test_ns_guest_assign_g2h_netns_unpriv_user_ns_fails() {
-+	local unpriv_uid=65534
-+	local unpriv
-+
-+	unpriv="setpriv --reuid=${unpriv_uid} --regid=${unpriv_uid}"
-+	unpriv="${unpriv} --clear-groups"
-+
-+	if ! vm_ssh "init_ns" -- "${unpriv} unshare -Urn true"; then
-+		log_host "unprivileged user namespaces unavailable, skipping"
-+		return "${KSFT_SKIP}"
-+	fi
-+
-+	check_assign_g2h_eperm "${unpriv} unshare -Urn"
-+}
-+
- shared_vm_test() {
- 	local tname
- 
-
+Best regards,
 -- 
-2.53.0-Meta
+Pasha
+
 
