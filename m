@@ -1,81 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793809071;
-	b=NX7+RzvioeHuROl0tsbtFnm0LajBGyFl8YHLV6PbOjKdyzUCgatKjtMtiWKpGYSIshSI
-	 9kxarXBhgxc4/sKAr9a30gd3JctjKfZ/ROYeeKelHTd1lnDUk660BKgPadf4gJJRgnFQR
-	 8PPKhkJl7QMyHmfxGqlUk6Q0ixpaHx6Ycsl1AgKlCMGqWuiPcz8UcBvE4tQ0VfChJApit
-	 ct/vJ5cbeP/sQQqj3c+LFePY/A/QxLIatOnPsrFDGeS9JWBRbRD9SX/+PA4j//Bw+Ah0r
-	 zKQYyO2Wo/ap/n1FDyzFWVbTGn0ZDWqNeASxQV/ixbCe8bY9OhLHz+sH2Y3D+DMDGTw==
+	t=1793809074;
+	b=FMEnjN7ftup9UD9NJHWHvrBBFL+qgULtJPljmNSJQfMl19j0pkEBtxT2k9YFj10Ik3Rw
+	 ENCcIZSLIbhtMF3gR0HMEPRPYsxblUvr5pWEbvUryyv8TYPW1RJrgnBJm3HAfqc6JYVug
+	 15aAk5u31wc8pUkmCI59dzExvIHjxjRXKX11gnhWEcdaxcZeJjUFKLm/Gj+pS/LTPwC3r
+	 AoGKVucCweHe+U0P8DIq+fdDZWZ2aHUZISba2imMGc0BQi5XKdNjU2ljJjUaDM4avflpj
+	 ScT/Bq+OfII7zoSzz22wa3hsGOy/HPGpOBqaGeFrP/FpCfJ8q6b6RuETww/nJ4/Th3Q==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793809071;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:From:Subject:Date:
-	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=2+e6jmBb3TVAtQIbMVPpJ4SCqoWrTTlHVV0w8149whQ=;
-	b=P6q+HXrMjpyVS2wmiU+N7kzSqF/T4UMuBRbM4SchfhDAWUKkW+boFFXGlp7Pxm3Nfq2Z
-	 Ggt6dZwaIi3zYoqXFrvvTia9dzRXMCdshiP2WjSLW8vSPkMRuabQ0H7BXlgNgZ7lzxjn8
-	 Oxuj9LROxB/ylmcFHoNU/azG2grx+MEX8+xuSx8oXJZ0+4QCZ+zDmGsZIyGL1fSyLJwxl
-	 crntyLKl3DZonDFEoZF/KrjgWNW7qpPGQfKu13qOq46mm5QmxHtlO/ZAPuLaPvVQCGU9M
-	 MqNHFbQwRLniy2xnZghsoW2qtlZWeevTwyXzvse4jbbTgeQyaGyKEo4LWWACIkEwG/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793809074;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 References:In-Reply-To:To:Cc:X-Mailer;
+	bh=y+lTQyYIfVW3Ue/mz6MQSC6N/KACcxMJqlOvQ07BN8w=;
+	b=CQe0xbaxARQ4XlR3palbfTTEezCeL4Sjmng2/vm52Jsk7+AzcPg3eDZh25IZkUIUil2F
+	 o6t+5jTFclIdXpd8Rm5AZN0HBit21ouxNuTWdEKrIC7bLTArLwR5xeBQyK2ARGgdvQUvd
+	 P66jz7P155vyl0Ogx60pQDYe/zkeEFm8nLDg4mpyaPuZa7H6SIjI13BVMLJFSVsi5pNkY
+	 sWADReNs1OHnmQP45xa5aSvm8Y8hNkHaycdPZawKKN4u5jcgYeaB0RuBrVX/laUyoRJGZ
+	 qcdiOO7BwMMYCllETAYDMSYuSiePe2zXzkjG15v4Oo+bxv2jEEgrdatxDQJAve9+Zng==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=none header.from=pengutronix.de;
 	spf=pass smtp.mailfrom=pengutronix.de;
-	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=Ea5ZAnKu;
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=ACZWM1hx;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
 Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FCA606A33D;
-	Wed,  4 Nov 2026 16:17:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70FCA606A33D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFA1606EE9C;
+	Wed,  4 Nov 2026 16:17:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5AFA1606EE9C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=Ea5ZAnKu
-Received: from dude04.red.stw.pengutronix.de (dude04.red.stw.pengutronix.de [IPv6:2a0a:edc0:0:1101:1d::ac])
+	dkim=pass (2048-bit key, unprotected) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=ACZWM1hx
+Received: from dude04.red.stw.pengutronix.de (dude04.red.stw.4.pengutronix.de [10.17.1.12])
 	(Authenticated sender: relay-from-dude04.red.stw.pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 5DFC4202BA2;
-	Wed, 04 Nov 2026 17:17:43 +0100 (CET)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id B3655202BC1;
+	Wed, 04 Nov 2026 17:17:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1793809063;
+	s=20260414; t=1793809067;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2+e6jmBb3TVAtQIbMVPpJ4SCqoWrTTlHVV0w8149whQ=;
-	b=Ea5ZAnKupVbAKq9YSh4Vc3zojGCRB4gIlkZwaHBeF7xqrIm3e83yGelAAd+aq7Msnqox9m
-	U6rTH4UZrToCeJ1NDpL7wj0/W44QUM4GFBeRoD3CHG2TjCiZ9GyKgIjOTLsu1auK8BQkUD
-	ykwZ5ytoO1GezZvISliylsKd2QkFazB21qKQcNT3QhUyBFrs0k+ecNNFntokK4Za6bSytV
-	Y0e/fKdOoDhJFPCQSPxQGfz5fjlV0L5wWwPdww6NQWRoZCeFjU9Jnf31yqXddj9gypX0Ko
-	oXenHV7CEEI5zXj7lKX1OTB0X8xJUG9yMyvZJ9H4hs1jgI78x3I2oUlpKhFxhw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y+lTQyYIfVW3Ue/mz6MQSC6N/KACcxMJqlOvQ07BN8w=;
+	b=ACZWM1hxWwE09X27cHvyOV8UrmT2kOiQKNM3KAnYNVMmWQ4dcpgEsUHFXhiHrdD87zqx+Z
+	8QO2/yf8od0gIXN7MqDWKUIvemzfkN3JScfjHrr9pmA8cCj5YyY2FscqVwIAey5DKqdimE
+	xmc+mwUPMj0tLBMRi5IWduW9NsTv75UEs3TfAcd3ikoyRy7dysODBz9yyLPEAdlDBQzksh
+	W24gmY5O2ZrAmVOs4sCzdP/0kYR9DDFBENkgqNp+OOZZNWS6lYqi3gT7YaC9tEiSUr39Uq
+	YyaoS+zIaSH4xhVk5Cy1Yd8Mq6KQJAZG2uA+tPcOlkW5Z79ZpQHLpjYtuNW0gA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1793809063;
+	s=20260414; t=1793809067;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2+e6jmBb3TVAtQIbMVPpJ4SCqoWrTTlHVV0w8149whQ=;
-	b=S8m7YD1OnjY0TQzHn5x5rcvSBcBatsvWoia3uYTO9SKANZGY/GY+81lIUSNtc9J1TSGYvA
-	jItB1N2MQRV08ejxfcO47cunUWsejpwlwsnNF19yADmhHe6H8691LqakvRNGAi+2As1hPY
-	7n4R2L4bqESfP1Zx8v6kEdeOgnGVRYrObn7Ybrdq5xJrQb4CIchnr5JoRRN5AKx+iQZdIo
-	3uQg0WjDvsNqg8pDAvTnXK6enBwLRpww+PjTcIkpwFWCz5xMXRgmNJc0ICractcRIwKipq
-	V0Nvbj3dycRMEJSA+Thg8IM446o13ytNmkZirUX8EHLW9t9HatZ7n1r/dcIzNg==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y+lTQyYIfVW3Ue/mz6MQSC6N/KACcxMJqlOvQ07BN8w=;
+	b=GdG+2DkLV7s0AQSaUBvFb/jLc5OdRX9VxwU+2pZwbEVS35W6jVEAXKJUiozL6pLkKJQbFI
+	6IKP5ajFgvtuW6WidcRcU3WUudOtTOgArNEvko4v8q0zfv3+XQCSIGQxswPLLhGUJdi/W6
+	0pjYZOnKh5zcWNlAUREnLBiA/ti5pMmXN8DpxHyJ8sw5TdR16hQEpqvCcaSCQPGjaEFOYl
+	1+nl2/q4R6zhPcBoA09uXLLAEk9a5jCrRUuFWdVDTpJE16HpzcToZ5nkKPgRjjvEUAuKHN
+	zHXcP5eoAFYoX3go7EJMyEQ7d+YT1y9BHch/sDXrVFsyuy0AS3FxBCMs2jBTqw==
 ARC-Authentication-Results: i=1;
 	ORIGINATING;
 	auth=pass smtp.auth=relay-from-dude04.red.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
-ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1793809063; a=rsa-sha256;
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1793809067; a=rsa-sha256;
 	cv=none;
-	b=QIOTFnMSibkQ59jeQVOw/I+lDinSMgahICUJmla7KOMm2ChPfURPqEtnO9PvYm9S4UG6fF
-	hwQvB/vv0NulUxAJJfRjBfOUwISA9Y60h7ryts5Cv1KX8vvsd/m9PRNpI5lrv2PKvuCypL
-	ylDxkXZuw82TW1jMQ8rucaAuCVDq9KhK/L517t4F9VcazYQZhq3iyvp0zbNXjlH/IvufwE
-	6xewzK4Hx3yiLSAOV0yIwWOI3IYf+FrQbltK5MiICusPZHEuLGhEZnVW7E2NglpkbENLLQ
-	9lxfE0vypkIjffEap6uthmDD/3ecESwwbhgnHRtOh/+V1O2c0OFnggdvjR4HJA==
+	b=ZLxkULCcOOJ9f7ahna8sTnOuj727D2N4s53rpoEUQRJWIRHZy5e1eYSa8jIJytUMk7azMf
+	e5A9WEMuK2PFyXaLwn+3zyBIa6jVDi0r0zP0zxYN2JYRtdVmIRdF7Gq1+anYT9jE5vIkqE
+	8DPmqAEGbmttZTkLCynThfZpQBhyJDbI7Q8rocecUBeWyB1DEAF7ShS3OsGwYHmO6NtGZh
+	of2pdwP4FS9ao6CY29EBF6zYDVkfAZ3opTxmyuirKg/f2i5cBqvlxzAVHeRgTc5oeEUsom
+	yNPkvz7qh/ptdosc28UMYVLuyQVup72DR5deoV6/76ieb1v4rtro0rAakEGMYA==
 Received: by dude04.red.stw.pengutronix.de (Postfix, from userid 1058)
-	id 49B813805CB; Wed, 04 Nov 2026 17:17:43 +0100 (CET)
+	id 5ACE3381442; Wed, 04 Nov 2026 17:17:43 +0100 (CET)
 From: Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH can-next v2 0/9] selftests: can: add J1939 socket and
- transport tests
-Date: Wed, 04 Nov 2026 17:17:15 +0100
-Message-Id: <20261104-j1939-selftests-v2-0-cf797c83317b@pengutronix.de>
+Date: Wed, 04 Nov 2026 17:17:24 +0100
+Subject: [PATCH can-next v2 9/9] selftests: can: check SO_J1939_PROMISC
+ receive effect
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,10 +88,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIta62oC/x2MQQrCMBBFr1Jm7WASJTReRVxM04mN2FEyoRRK7
- 27s8vH+fxsol8wKt26DwkvW/JEG7tRBnEiejHlsDM44b6254suGS0Dld6qsVdG6FHtvfOijgfb
- 6Fk55PYp3iCQovFZ4NDOQMg6FJE7/4kgLz83WY3GeKQvs+w8lNLfakQAAAA==
-X-Change-ID: 20261104-j1939-selftests-12fc860698c0
+Message-Id: <20261104-j1939-selftests-v2-9-cf797c83317b@pengutronix.de>
+References: <20261104-j1939-selftests-v2-0-cf797c83317b@pengutronix.de>
+In-Reply-To: <20261104-j1939-selftests-v2-0-cf797c83317b@pengutronix.de>
 To: Robin van der Gracht <robin@protonic.nl>, 
  Oliver Hartkopp <socketcan@hartkopp.net>, 
  Marc Kleine-Budde <mkl@pengutronix.de>, Shuah Khan <shuah@kernel.org>
@@ -103,60 +103,115 @@ Cc: kernel@pengutronix.de, linux-can@vger.kernel.org,
  Oleksij Rempel <o.rempel@pengutronix.de>
 X-Mailer: b4 0.14.2
 
-net/can/j1939 has had no in-tree selftests. This series adds a kselftest
-suite for the J1939 socket layer and the TP/ETP transport, run on vcan with
-a CAN_RAW socket as an independent on-the-wire peer.
+Add a test that SO_J1939_PROMISC changes what the RX path delivers. The
+existing coverage only round-trips the flag through set/getsockopt, so a
+kernel that stores the flag but never acts on it still passes.
 
-The timer checks are relaxed by default, for slow CI machines;
-J1939_STRICT_TIMING selects tight bounds. Not covered yet: the ETP abort
-and timeout paths, and a received Connection Abort on a kernel TX
-session, which the stack currently ignores.
+It sends two frames, once before and once after enabling the flag. Each
+misses one of the socket's filters, the bound address or the bound PGN.
+Only the frames sent after enabling the flag must arrive.
 
-Known issue: the stack updates a session from the loopback echo of its
-own CTS, RTS and DT frames, and a CAN_RAW peer can see that echo before
-the stack does. A peer frame that follows quickly can then cancel the
-session and fail a multi test. I have not seen this in QEMU runs. The fix
-belongs in the stack, not in these tests.
-
-I used an LLM coding assistant to write most of the test code and to
-review it. I have read, edited and run all of it myself, on vcan under
-QEMU.
-
-v1: https://lore.kernel.org/all/20261014154435.3577983-1-o.rempel@pengutronix.de/
-
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
-Oleksij Rempel (9):
-      selftests: can: install net/lib.sh with the CAN tests
-      selftests: can: add J1939 test helper header and library
-      selftests: can: add J1939 base functional tests
-      selftests: can: add J1939 socket option and metadata tests
-      selftests: can: add J1939 addressing and concurrency tests
-      selftests: can: add J1939 wire-format tests against CAN_RAW
-      selftests: can: add J1939 TP/ETP multi-frame tests against CAN_RAW
-      selftests: can: cover J1939 transport abort and timeout paths
-      selftests: can: check SO_J1939_PROMISC receive effect
-
- tools/testing/selftests/net/can/.gitignore         |   5 +
- tools/testing/selftests/net/can/Makefile           |  18 +-
- tools/testing/selftests/net/can/config             |   2 +
- tools/testing/selftests/net/can/j1939_lib.sh       |  86 ++
- tools/testing/selftests/net/can/j1939_tests.h      | 804 +++++++++++++++++++
- tools/testing/selftests/net/can/test_j1939_addr.c  | 679 ++++++++++++++++
- tools/testing/selftests/net/can/test_j1939_addr.sh |   4 +
- tools/testing/selftests/net/can/test_j1939_base.c  | 180 +++++
- tools/testing/selftests/net/can/test_j1939_base.sh |   4 +
- tools/testing/selftests/net/can/test_j1939_multi.c | 869 +++++++++++++++++++++
- .../testing/selftests/net/can/test_j1939_multi.sh  |   4 +
- tools/testing/selftests/net/can/test_j1939_opts.c  | 326 ++++++++
- tools/testing/selftests/net/can/test_j1939_opts.sh |   4 +
- tools/testing/selftests/net/can/test_j1939_wire.c  | 186 +++++
- tools/testing/selftests/net/can/test_j1939_wire.sh |   4 +
- 15 files changed, 3173 insertions(+), 2 deletions(-)
+Changes in v2:
+- drop the Assisted-by trailer; the cover letter says how an LLM was used
+- wrap at 80 columns and fix the checkpatch warnings (Marc)
+- name all constants and avoid casts
+- check the address and the PGN filter each on its own
 ---
-base-commit: 734bef548a96e8774d6eef5dfa2026c6edc4e80b
-change-id: 20261104-j1939-selftests-12fc860698c0
+ tools/testing/selftests/net/can/test_j1939_opts.c | 64 ++++++++++++++++++++++-
+ 1 file changed, 62 insertions(+), 2 deletions(-)
 
-Best regards,
+diff --git a/tools/testing/selftests/net/can/test_j1939_opts.c b/tools/testing/selftests/net/can/test_j1939_opts.c
+index 10d0e379840277cddbe9d1f5090f900ce7dd65dc..bbf2698de7d9491fca4881ade4c63284926ef9eb 100644
+--- a/tools/testing/selftests/net/can/test_j1939_opts.c
++++ b/tools/testing/selftests/net/can/test_j1939_opts.c
+@@ -6,8 +6,9 @@
+  * and addressing: the SO_J1939_FILTER PGN whitelist, the SO_J1939_SEND_PRIO
+  * send priority seen in the CAN id (via a CAN_RAW peer, including the kernel's
+  * default), unconnected sendto(2), a wrong-family bind rejection,
+- * SO_J1939_ERRQUEUE TX-completion notifications, and set/getsockopt
+- * round-trips of SO_J1939_SEND_PRIO, SO_J1939_PROMISC and SO_J1939_ERRQUEUE.
++ * SO_J1939_ERRQUEUE TX-completion notifications, the SO_J1939_PROMISC receive
++ * effect, and set/getsockopt round-trips of SO_J1939_SEND_PRIO,
++ * SO_J1939_PROMISC and SO_J1939_ERRQUEUE.
+  *
+  * Run by test_j1939_opts.sh, see j1939_tests.h.
+  */
+@@ -20,6 +21,9 @@
+ /* arbitrary addresses */
+ #define SA_TX			0x80
+ #define SA_RX			0x90
++#define SA_OTHER		0x50	/* neither SA_TX nor SA_RX */
++_Static_assert(SA_OTHER != SA_TX && SA_OTHER != SA_RX && SA_TX != SA_RX,
++	       "test addresses overlap");
+ 
+ /* two different destination-specific PGNs, otherwise arbitrary */
+ #define PGN_A			0x0ab00
+@@ -130,6 +134,62 @@ TEST_F(j1939_opts, filter_pgn)
+ 		TH_LOG("PGN_B was received but should have been filtered out");
+ }
+ 
++/*
++ * Frames that a socket bound to (SA_RX, PGN_A) must not get without
++ * SO_J1939_PROMISC: each misses one of the two, so each filter is tested on
++ * its own.
++ */
++static const struct {
++	uint8_t da;
++	pgn_t pgn;
++} promisc_probes[] = {
++	{ SA_RX, PGN_B },	/* the bound address, another PGN */
++	{ SA_OTHER, PGN_A },	/* another address, the bound PGN */
++};
++
++/* SO_J1939_PROMISC delivers frames that do not match the bound (addr, pgn). */
++TEST_F(j1939_opts, promisc_receive)
++{
++	uint8_t tx_buf[CAN_MAX_DLEN];
++	uint8_t rx_buf[CAN_MAX_DLEN];
++	int enable = 1;
++	size_t i;
++
++	fill_pattern(tx_buf, sizeof(tx_buf));
++
++	self->rx = j1939_open(self->ifindex, SA_RX, PGN_A);
++	ASSERT_GE(self->rx, 0);
++	self->tx = j1939_open(self->ifindex, SA_TX, J1939_NO_PGN);
++	ASSERT_GE(self->tx, 0);
++
++	for (i = 0; i < ARRAY_SIZE(promisc_probes); i++) {
++		ASSERT_TRUE(j1939_sendto_ok(self->tx, tx_buf, sizeof(tx_buf),
++					    self->ifindex, J1939_NO_NAME,
++					    promisc_probes[i].da,
++					    promisc_probes[i].pgn))
++			TH_LOG("sendto probe %zu failed: %d", i, errno);
++		EXPECT_EQ(recv_timeout(self->rx, rx_buf, sizeof(rx_buf),
++				       J1939_NEG_RECV_TIMEOUT_MS), -1)
++			TH_LOG("probe %zu was received without promisc", i);
++	}
++
++	/* SO_J1939_PROMISC returns the flag value (1), not 0, on success. */
++	ASSERT_GE(setsockopt(self->rx, SOL_CAN_J1939, SO_J1939_PROMISC,
++			     &enable, sizeof(enable)), 0)
++		TH_LOG("SO_J1939_PROMISC failed: %d", errno);
++
++	for (i = 0; i < ARRAY_SIZE(promisc_probes); i++) {
++		ASSERT_TRUE(j1939_sendto_ok(self->tx, tx_buf, sizeof(tx_buf),
++					    self->ifindex, J1939_NO_NAME,
++					    promisc_probes[i].da,
++					    promisc_probes[i].pgn))
++			TH_LOG("sendto probe %zu failed: %d", i, errno);
++		EXPECT_TRUE(recv_verify_ok(self->rx, tx_buf, sizeof(tx_buf),
++					   J1939_RECV_TIMEOUT_MS))
++			TH_LOG("probe %zu not received despite promisc", i);
++	}
++}
++
+ /* Without SO_J1939_SEND_PRIO the kernel's default priority is used. */
+ TEST_F(j1939_opts, send_prio_default)
+ {
+
 -- 
-Oleksij Rempel <o.rempel@pengutronix.de>
+2.47.3
 
