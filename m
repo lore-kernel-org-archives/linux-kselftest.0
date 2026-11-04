@@ -1,97 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793758803;
-	b=F8QWgeeAPCxTNAHRH/RDfJmr6p9zI2qhImVa78g+/C917PI5chjOGNXqXzGl7nEfMxn/
-	 GFueWpJc11glJ/HyQv6YcNtgImsrXHvOjr4Z/Bh08X6WI2ANhfwtee5BxnN0q7ulW3jv3
-	 bj5b9FVZcagnicPpGj6f2fKq5JZI4OGWtduzvje53xUCvhOUl5QC4VbB6YWblle1U7hrH
-	 T6AsbscAKpBxtCUUpFELSiJABeWUSd0n1dKEwHxijBRecC++aBCYo1HN8qPuP0UYMdPAl
-	 ZBDB8scxybpjz8sDgUeSNSnRJ6NqFULRPrPj/5chr10HhSkL/X9NGC0yTxk73k15haw==
+	t=1793758816;
+	b=EhDbfqcZv/YbhxYT/cjyNXiSX6mYndnOhLxe9uuciFrNLEOOMWJimVD1On2Q/0KcalC1
+	 Wni68zONHLy3eX0CXSe3Dy1ZUPRQIJ0pCUMDzuz4sDE1V+5+ugvcBGNOCuSld2B0CPY06
+	 EEQWi0XaPQrgiMLxwtjjHKgUZSVJ44wHRear92BZ+8xNm2WSLLRQw5QtVU2uSRTGD8RC5
+	 80byCIMoYMnA66HZryl8nTEQPJIlAR37deYc5ej8szKaUx2cQzqFXGL4NPQKrDJfDBwXg
+	 IB09/2UtiLY/om5HEX3bYdDcznYh+jA2aO1ln2oH8NyvpY9MobUfDp6vGal7gI0H9cA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793758803;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793758816;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
-	bh=rXti7mY5F0P/rsGwIECfqLmvwSGUaMqT4P5dq57Cx/E=;
-	b=ZVGfZYMuTloyMpUEIwjCZtpK+CixjYE5Bna98wxE8hWFQyw5WlqATImNdwmbVSMc6mQo
-	 pCnGG5PKOXMblgsb4zXi/ueQtQ9dNZTQi3o0hylGZo3e+zIB+p72s9cMIsQe2wPyENGz0
-	 XLYPJfC9P7mgli/v7cPHp1ZEzfPDm/ImhJ8YScDcevC6Fx6MB3HzGyiYUD+IYPc5KLU2s
-	 736UGeoz2QM8H2QdBPOWSlFRAJrfMMhfAOLTm6zMFQRBptML5WR9+gnIj/68KlCwvVy5r
-	 PUkuIqwJP+MP/OIENA9Nk7NDvW3U6h7kiXsUSzsO5zu3/P+Nl4uo/H134Pyl02JH+wQ==
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=xCk3/rz0DOELcqiOfP0DbefR1Tzq2eC/yEUTX368PGI=;
+	b=j14OpgJZEg4EwJdrOu2Ug/gp3gBJlYCxiwp8gUOZuXYdati1mo7kdYrQxgeIehHax1Qi
+	 tjfNcsrs8hytMSZers9f8eOL3dvk00bicIcehmdTKg/QZoy6WHeJDg/l5JT/x+l9vUTF8
+	 gkuyA7vIyUpCCZ3UZlhO2fnQ5R1Yzs51na/BSUNHW18GXJMmx/q1eazLoM5nj6aTAbL6M
+	 td5DhdbquYwiZAMzT1lv0ojC2xO6TW8HMVx0aXsMMHeyzNACqrIk0F6auEcehwClZx7ve
+	 HDX4NDU9rLfep2eygHE2SEQPcRKGQKRjyf852/gd8xyVt5mpUqrs1shB0UfDUAjqZgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=soleen.com;
-	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PBzi9TIP;
-	arc=none smtp.remote-ip=209.85.221.172
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=knxxNkEU;
+	arc=none smtp.remote-ip=209.85.214.173
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD7D606A326
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 02:20:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4DD7D606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F9C606A335
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 02:20:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9F9C606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=PBzi9TIP
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5eafb65e169so109693e0c.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 18:20:03 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=knxxNkEU
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2e5fb79ce82so839825ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 18:20:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1793758802; x=1794363602; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=rXti7mY5F0P/rsGwIECfqLmvwSGUaMqT4P5dq57Cx/E=;
-        b=PBzi9TIPsFLl2TMl7s8o/VQCNOJaYL9ZQIfaatArXX0Yipg0kgF/Q22Qxg0e3TPsPj
-         G7J5AJvAyRg+QuPemaLMBmz6UI38bZuLnlIfZYYpFqa5YR1W6GxX+JipDVu1Xaryz7Jp
-         k2+Gl5Ck3VPZOS86WtvarxWRgseghf/K5zcs1wx8wzvPIWVHkTsFgg2rCb90zdrXX5i8
-         Ds3R7tBrV4eXU4udYmaeWPJijUI4+OoqZkO1SCRkivf4ScPXBZaw7j5L9EvUJv4VQsk4
-         2ntuTVc8jkaDg/zQ90kByToA9Q/IyV3j59zMBVNp6RnNa3aOIQnzIXfu3Vcq26X2VFqq
-         usRA==
+        d=gmail.com; s=20260707; t=1793758815; x=1794363615; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xCk3/rz0DOELcqiOfP0DbefR1Tzq2eC/yEUTX368PGI=;
+        b=knxxNkEUj3H/maGy1vZXbPObigq0Lw5pTZSJ5WLraaakJIetgxF5pQYW9ISHAV4Yu7
+         w162WqmqRsmINLrlMKRhnZsEHYO5Ny+wPBhy4p0NmmPaptph09DN4lxLAeeEuwXrsUSY
+         YA2Tos0G/jghorJ0jf8BLfBbx0GuRKnlfFmLMd3pbUxvI/HsgYLfGKvwHp8wbcVUU7ag
+         oOuFW0i9TJDGNHJdy4zkSIpWViNpdB0yyBVd3t1+otpHke60espzZqQv6Zk+UbcqwikY
+         qh4yMRQkM7HQg5CFfuxNswKhZrrESU1bxxElr508pMjB7kwYJ0H1M0xHLrOae2rweqnC
+         hDfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793758802; x=1794363602;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1793758815; x=1794363615;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rXti7mY5F0P/rsGwIECfqLmvwSGUaMqT4P5dq57Cx/E=;
-        b=T31+HiH5hZto3vxCK8PqBvgnhO0l/JLmikH2QGNS/+pOJpkTu3/AFh8GN/YKSSDqDl
-         bLtYN41o3fijmjvhOG+vSj8vImXKwcGyaEryTTRXUzYdGsuqVj+fSasl4XsVrnopJims
-         eoDk5BVPm9RIzQSBfx+oYVEWrHcgg0viu0IrZ+LU/Qz7ZlNoO6NNbMi31IGya+AUsQkX
-         BXMQCvkZSRpM/TicV8fqfGI58ylDnVkOfpzk2PkMhDeWkFVdkX6O6anV3MjRB7wo//Ui
-         dEEk+2gUTichOm2QEzDZPXLzClTiC58Ppcf25eZpkfrSi3wJ2ipALd8fKNX5Qo81mtQN
-         t+NA==
-X-Forwarded-Encrypted: i=1; AKwUvBxTyfsX64vn6Hu1yL/gDGZxBJCRD3QuNB9L1Jqx4WBYpuBBYQpOQdDouQgBML+XePh1ZJIHxstNfuBYVhqR0nM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/jmZwQvcjcHcnn4g9qKe8PQFyxMz4ae48IwMVmG3IfTRXGjfeL
-	C3VpgG56f7mytQ9VpGX+E9ZeE4ZXikM4hwSRPRH7PZgCpuKEk/IN4UOa/1FITylHfrZr2GwAjdm
-	sFk0/
-X-Gm-Gg: AYBFou1JKpLIPIdazDuE9qQzV7bOvlHdvufTUYMYomo98LDTkhWyyfea/4xWEUTVTF2
-	xM/tFXiJ3AhvIL+7o0APAhDIqRSnWCgBiCll0MtE8CSMq6gidZOoBBo+LmlHbWWWno2/hzi40FH
-	3EKLsdVqMSFhETvP+u0jb6dGpvSDpkq06uJ9YcQcyEtPEM3lT03l9pDSDjdLdr099Dt803cM623
-	KUgr51xfNluGJ+7Ig3XIpWQVUYhtjkK8floBPfZV+X380DhULmCP5sm+QdfX0av50sCqvjjnQIM
-	7/v8MEUbbTMIF12vNNUiU3FQwvXF7PcMOncYV019wIeP6OFPZlPTJbMMX+vdpjUYYvXWfk4eZFa
-	VmCYdbkYAj3/K1qs9827j4w4nRgr0GXPgRahwGvFUncsLyrOFf4d46FW4b7WfWN0U0zE1hloAdt
-	Zy67SQKjbPT8/PNRulCpC7rggf+KlZsOryXHUhgXfCJnb4ECJKGmEjjAKX219SZFBfDRVHV/++V
-	G4MNJj1ep07ocUQFqNurv0oP5eJCc86m1ckar+qo2jtQ35jD60lNmjpuBB+p3W+7ladW0hUZLEF
-	NzokaPkIYWg0XaB1uYGI3YHypnNWQWIpqF0vXXsDnkuxxW9dXmp6ychtoWvdygMRottU8d/8p0V
-	Y32rsuYT93olsHcpXzBTsN/UWfkv8AbBWw5FiZ3i2lEO0
-X-Received: by 2002:a05:6122:130e:b0:5ca:f811:25ac with SMTP id 71dfb90a1353d-5ec6895c285mr6125913e0c.14.1793758802245;
-        Tue, 03 Nov 2026 18:20:02 -0800 (PST)
-Received: from soleen.c.googlers.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eca89b6568sm658959e0c.1.2026.11.03.18.20.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 18:20:01 -0800 (PST)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: rppt@kernel.org, pratyush@kernel.org, shuah@kernel.org, 
- George Guo <dongtai.guo@linux.dev>
-Cc: guodongtai@kylinos.cn, kexec@lists.infradead.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261029090542.13283-1-dongtai.guo@linux.dev>
-References: <20261029090542.13283-1-dongtai.guo@linux.dev>
-Subject: Re: [PATCH] selftests/liveupdate: Preserve VM workspaces with
- run-vmtests.sh -k
-Message-Id: <179375880152.1029434.132459394322366594.b4-ty@b4>
-Date: Tue, 03 Nov 2026 21:20:01 -0500
+        bh=xCk3/rz0DOELcqiOfP0DbefR1Tzq2eC/yEUTX368PGI=;
+        b=b9qUrbszdCkG+5BKBzfrDg8ARgt80JMbZVOc+bwKCiDkkbSmG41bQFKmG4X3h6yRpR
+         Mtj5EHwMjXG/uIxaNO5d7Hg8oF22n01BeUn0FZhVk6pQPU3rIBdfOlorujVYeeWlXC0c
+         Xt/JcOquKeIuAUHozy3FeedW4hqACD8PYzuIZ3X+ue6Qg327qeam3mLolxRynJGuBN87
+         4a47ZuCrgnD1Qjn6GfHEmZSw8AZ8Q1J4rwh0xQROVTXEhoVkWSTo5dFB0YN9U6Xfbiv5
+         31HpYYV4Z2tWzj1j5Zz8kVaXmdJZ7+JY2IGCra3IXFTc5NEwvibyrt5NF6JOiA8zuqAe
+         r2tQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxImvFqYizSiO77SaZg81dtSwgHrG2ZgQFx79tpglttlnnImTdsOwncBM3XDHL0ymjNb7H+HPnhXp6ziu+tHVI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+KP/rdjrMjV9ckDQ3tNTfJkk1xU29tlbfyvynYyOaPPkqiOiMB
+	kTrn7dDeS3inxhT3WDxWgiIN9lHBayhXy1E4yOP3CLcFqTm8Htt5Diq1
+X-Gm-Gg: AYBFou1p+CN2Y5Cr5N+y0INm0fCl/lnvTgEjw9El7QnKen97OR0nK6VqifUhFySTKlq
+	b2rqmTq4njVmfoht+2dlcUY6LMYwFFEta4Oe/g+9WX6tuRtCQ8VafICBv7tX9gcI+2JvipqjShC
+	HZHJ5wOHsNz+UHLFe9LlYeUnUqiPalrBoCZPU+U87dCH3IjOTbS8fyjwj/rTGBzdqSxsyH4sRFd
+	CBT+YjZKbYbi+Dn3Va4m3rhYRwHK+rWq9GpsF6oVYREcZqAfX24HmFZhDI6KzoYxN+2W7NYhIqD
+	VWva+CYNuqt/sfTe2Dbg7a+TcjzWDyW7SNqwnd4Shj+h9UKFjxkns2M/nvs95WRCQLWNZVRjy8A
+	YMFGxR2h+84Fml20PWplap2Tq2Pajg9oFZlwJdbLH3vhhAi96S58MZ2t1RYTSLGKp/gurT5yTmS
+	u7OBwo+rEAPkXzHEI7LS0VnliRNZrzFemxBY/xOmDN5yCdSIvDXjiTgozw0jbPJbBu5/1zaJUEP
+	7WKdEpFrsfEOKZkFkP6jCHLhmUTf5D+jsSepYo++avniVCMXT636XMi0LB8aB3r0PbJ5duir/zJ
+	qQCGAPiHvlj9yKQqMzqGAM75UoBP5tE61fJM29cKBDM0GW8rxiUSF8vFAGu4RL79otYKEHxpWyG
+	sPRPo2Dngix4zql/crEOOpZF2tqys49Tjmg==
+X-Received: by 2002:a17:902:e5c1:b0:2e8:1929:c8e4 with SMTP id d9443c01a7336-2eb36527d99mr133638285ad.60.1793758815155;
+        Tue, 03 Nov 2026 18:20:15 -0800 (PST)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed08fe4dd2sm1063965ad.25.2026.11.03.18.20.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Nov 2026 18:20:14 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Nov 2026 02:20:13 +0000
+Message-Id: <DMM2FJ2SNYYO.24TEJ05OOR08E@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let
+ preemption cause false recursion drops in trampoline progs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Mike Bazov" <mikeba@sentinelone.com>
+In-Reply-To: <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com> <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com> <DML75890DWIX.EYB690LPBM1O@gmail.com> <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,29 +107,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.16.0
 
-On Thu, 29 Oct 2026 18:05:42 +0900, George Guo wrote:
-> run-vmtests.sh -k keeps the test output logs, but vmtest.sh still
-> removes its workspace and qemu.serial, losing the guest output needed
-> to debug failures.
-> 
-> Forward -k to vmtest.sh when keeping logs and update the help texts to
-> match.
-> 
-> [...]
+On Tue, Nov 03, 2026 at 01:28 PM Mike Bazov <mikeba@sentinelone.com> wrote:
+> Thanks! fsession does keep entry and exit consistent. It doesn't recover
+> the skipped runs though. I ran the selftest scenario with an fsession
+> prog on __set_task_comm (7.0 kernel, lazy preemption, 20 rounds): Task
+> B's entry and exit runs were both skipped in every round (entry_b=0,
+> exit_b=0, recursion_misses=40), since each run still goes through
+> prog->active while Task A is preempted mid-program.
 
-Applied, thanks!
+Right.
+fsession fixes the pairing. It doesn't fix the miss.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git/log/?h=fixes
+> What is the main obstacle to per-task tracking?
 
-[1/1] selftests/liveupdate: Preserve VM workspaces with run-vmtests.sh -k
-      commit: 654efa9a6c4c455aca6f034f321c013f5b784157
+Today a fentry prog never runs twice at the same time on one cpu.
+Existing progs rely on that for their per-cpu maps.
 
-Best regards,
--- 
-Pasha
+  task A, cpu 0                     task B, cpu 0
+  buf = lookup(&percpu_scratch)
+  fill buf
+  <preempted>
+                                    buf = lookup(&percpu_scratch)
+                                    fill buf
+                                    output(buf)
+  output(buf)   <- data of B
 
+A plain (*cnt)++ in a per-cpu map loses updates the same way.
+Today B is skipped and recursion_misses counts it.
+With the per-task check A sends a corrupted event and nothing counts it.
 
+> And if per-task is not an option, do you have another approach
+> in mind so that runs of unrelated tasks are not skipped?
+
+Add bpf_preempt_disable().
+Your test forces the preemption in the middle of the prog.
+Explicit bpf_preempt_disable() will fix it.
+And you'll have an easy way to see why disabling preemtion
+for the whole program might hurt your own production.
+
+What are run_cnt and recursion_misses of your progs on inet_sendmsg()
+and inet_recvmsg() in production?
