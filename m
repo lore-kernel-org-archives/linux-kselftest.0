@@ -1,95 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793823249;
-	b=ORaw54Al5bOPhXIvJbcWf2A55wC7Q+5KzDAj75npy2gY2Ik5WA1YWnyrPyJFJwVInkTU
-	 5iQh3LimsxBNmMEgy2BzBcWy1jYt4eMDIICk486vhklsVvTBIpwJZVd60ec1GhqSCJKQ8
-	 hO2kLyWOppWBW8GQBB5S6aOAtIh9d0yM/x21rbFgaThIrQ1P938FfY9qDG+c3On4uIE3D
-	 Hc4uAwNXrcga91P6TzLtUzxGZChE2cdejJQ4vIkrUw6/Ay/kGFsXLm5rtxF2XVgFWSyE3
-	 ubkU7km9hX18zx+pnd+vt69ZDjv1EsylegyxQmXM+OGW+HJsGiOeXcJYSwbhFpUVqTQ==
+	t=1793823298;
+	b=5XPwObjmhTx2M4LXGSBUeB3e4CBKbBMYu2iXNVUYj8Qz49qP03FS8nbqyqCmw+EeC8F5
+	 SDMqjDGVU5EZnfE3zyojonFKSNkEyzPbvusT+Nw1CFU4thw9CkMF4T2W2bI8yvqawc0lc
+	 tTux+C7bnxxAYa5uLU2ijCEgEdnbQaeCnACv3Ravbjv2Oy1DxYK9zqrbcroxnSk+fISwJ
+	 YvfF3DNZoRmmC9YaVWGvXQAgYGJkm1z22IVZsQg8C4FnqMO0RfSPdZzRQQpOeWqVVwn/d
+	 tbZYxi4biiIeP7j5sowWbYrIYaYPHUbl6E9u/Hb1PgFsoAvDomBTVSiXcNoiYWFJi0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793823249;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:Date:
-	 From:To:Cc:Subject:Message-Id:In-Reply-To:References:X-Mailer:
-	 Mime-Version:Content-Type:Content-Transfer-Encoding:X-Virus-Scanned:
-	 X-Virus-Status;
-	bh=7jJ7rZhR/RZuRnAPG07TM1AxcQZjBAxPgS58g9my108=;
-	b=bcRhFumaVQt9Ik64SiDwlyEQ4+UOF97gfVYUsizLKWH4xJBxN4Zw5E9S047qe2aLT06Y
-	 oiLoRBJHj52w/LJVakOcpZdJZY3Sflfzf+2NaDycvIbAlGTTcd4IY/hXT9UY+S6VvuyBM
-	 8jGza/68bRjJc9PGKDmVDfClDjcrVmuyy3oQmKubz7GooyHy+XlTul3EjkgKH2fBgd1M6
-	 B6mUoyvD6HFSzEKUhT71Elw7jMnelra1BgLkwzVCvDeAqHIXnMc1PfbPlfj0ZRnRsUXFx
-	 WxVx6ox/WMa6wsb9k7WS6WDJO1P06ktvXivOfd5FSE4OeF272i9GyzK5htA89pPQUdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793823298;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:MIME-Version:X-Received:
+	 In-Reply-To:References:Message-ID:Date:Subject:From:To:Cc:
+	 Content-Type;
+	bh=AS/luxCxZZ4IKfwOyJu4Ue765u+vBG+6P6QAZr4AiP8=;
+	b=IvuRCToidWziIXee23N1n5fXUWPS2dk6qlig6MGQn62o+906zIH7J+DG/I2cG+n1T+LT
+	 IMXg/6x6kt5XBBN1RVHsVCroqG2Vrx5NstbbpLbH31gZVem/e6lVu8YUkTelFht36nBwv
+	 AaDClr8z3rrXpFhteef9MWZtuvp+Auw531Eb2b2aVROI2UI9uJVZCG6l0vSvhvfx6rmza
+	 A0ogIgRjMS+92p5x3tK0M6WoNnbUOBNniJPJWsjmqWDuRstNAR4U7bb7sx5XY6ojJuRMi
+	 VPlIwiLeFfgvrZDXmntuEgBqBNzatYdJ7lN3mzCDU/weG1fA/YouYWaAS6bKYRqzAMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=uniroma2.it;
-	spf=pass smtp.mailfrom=uniroma2.it;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=QaUScylS;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=Rvkz0H3z;
-	arc=none smtp.remote-ip=160.80.4.35
-Received: from smtp.uniroma2.it (smtp-2015.uniroma2.it [160.80.4.35])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C884F606A331;
-	Wed,  4 Nov 2026 20:14:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C884F606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--jeffxu.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WOmd94Mh;
+	arc=none smtp.remote-ip=74.125.82.200
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3586060841B6
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 20:14:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3586060841B6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jeffxu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=QaUScylS;
-	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=Rvkz0H3z
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6A4KDOvu025984;
-	Wed, 4 Nov 2026 21:13:29 +0100
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 4C52D121681;
-	Wed,  4 Nov 2026 21:13:20 +0100 (CET)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1793823200; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7jJ7rZhR/RZuRnAPG07TM1AxcQZjBAxPgS58g9my108=;
-	b=QaUScylS77oxqOdjv+06mPgody1sZJqj0PaFfLendc0FDJFxaUO1pUpCpFvxTCWCGow81v
-	GpWHWo0epkj4dPBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1793823200; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7jJ7rZhR/RZuRnAPG07TM1AxcQZjBAxPgS58g9my108=;
-	b=Rvkz0H3zARBQLYxOnoA9dQ7RX/gUWZckCSmEdP9HrjFdj4g7J66mpWNril99QK2brJEEcc
-	cwyWvSqMbzD6ttP3VnT4yzOz7Q+4OpoR0Mo+G1nYgV7mjpTe0yvYX6sY6VsZDzKoFsmXR8
-	dc2TDvZCquLESvG+VBAIzvsXd+SExvckp3N+us3hlR/uOpJ0k1TN+Nqkm+ck7YPP5/luEE
-	BkxWtsxknhnu55CDrrqMFMlrqWmrzOssUEZaMNSXMqzc+nP6glojr7E1hXTXpMVX53mlC3
-	T0idyUSgb2OSdvRaCSW4Brxiht6x/+7l3WC+4TMRe6Ue3px9RbBdUTlMZPG0iA==
-Date: Wed, 4 Nov 2026 21:13:20 +0100
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        David Ahern
- <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
-        Shuah Khan
- <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, David Lebrun
- <david.lebrun@uclouvain.be>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Mathieu Xhonneux <m.xhonneux@gmail.com>,
-        David Lebrun <dlebrun@google.com>,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Andrea Mayer
- <andrea@common-net.org>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net 4/6] seg6: discard CHECKSUM_COMPLETE after the
- End.BPF program
-Message-Id: <20261104211320.8ad5cbc7408d3229e4f34693@uniroma2.it>
-In-Reply-To: <aulG5DJroKs6BuzS@fedora>
-References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
- <20261031225033.64-5-andrea.mayer@uniroma2.it>
- <aulG5DJroKs6BuzS@fedora>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WOmd94Mh
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-36d69ab3c2bso772505eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 12:14:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793823296; x=1794428096; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:date:message-id:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=AS/luxCxZZ4IKfwOyJu4Ue765u+vBG+6P6QAZr4AiP8=;
+        b=WOmd94Mh+1IsHCPkayZDec6JPAxqUizBUQICw7d1GTvFYhvGyIcRDUYVGA4mrhJ2Gw
+         LlwBfvWxf6C/dkbd/wYeCVyGFNqSQNTNemKeHNozM+B3thODy6YTQUG8zPI+Zc0fLAsc
+         ywPjVR6u2U7pkPrIYEEEE7pR/Fv2GUmpGF5C6hZYbFhN+xzjvjlTlZgt1yXCOuMk8ZV8
+         7dgvN0RspKuuDt9X8QL4OxxBptYW7RdbVtxUU3AipSC6ioGA6dVwnv5HTegyIPEZQbol
+         lNJjqnZui4CPRajfzE+ydyWOkaI+BYJB/fWwmMyfr6ch4/bN/0JzLGDra0aJW3LNaEPF
+         9UKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793823296; x=1794428096;
+        h=content-type:cc:to:from:subject:date:message-id:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=AS/luxCxZZ4IKfwOyJu4Ue765u+vBG+6P6QAZr4AiP8=;
+        b=1bhAVZzuOr1wNizYCjOYZaWYHGXehChpyCi6Zrfce5UvQHnVu2UEUSe9FNapKAC4Wk
+         KBOUU/vwW8wI8f9ezONGti9UcxVVNocSwIqXDr+253adiLW1p8tvKK3ar6v0GPXejOHU
+         puGYwSqoLXycE7j2iCKXbwr6Vympzwa3ic7S5HiqsFPO+R4Llis46gqFuEOi/xJupUdD
+         sUVJgv1d3CY3zU5I8tKbjQB5gBeqEs29rn2kzcbNYGXbJuMiQPrFWVF9ndHK1pK7jz1J
+         Tb45nC6KWJPGC2QtRDyejW1nwHo4XR1KpWvznYGFA+SsW/rpljnJcthndYRj7O3syV1i
+         TW9Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwooZI1UjtzxpKOAhIR7aPINNHrWbrw/WO11GBm3Jux/UVJJT4WHNjRO4Hb4nKm4ZydfJDsjJX1amHPvgCC97Q=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8ykGKuHnC2VF3N5gFPmmWQz0sQBRRJWwBHZ5wmi+UmMAuYiUZM
+	x0Hz7kB+VEjjGIZ6bW1xKft2gVDykRq7uDsySuZ7nMGcUA6n/SjfZLwmnHsDGDXS8B0/79Iue9W
+	DYpw3QQ==
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -98,36 +72,53 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+X-Received: from dybkf8.prod.google.com ([2002:a05:7301:3a88:b0:36a:e67:fbc2])
+ (user=jeffxu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:1608:b0:185:4ad4:3d15
+ with SMTP id a92af1059eb24-1ac56302329mr19203878c88.1.1793823295901; Wed, 04
+ Nov 2026 12:14:55 -0800 (PST)
+In-Reply-To: <cover.1793718940.git.chris@chrisdown.name>
+References: <cover.1793718940.git.chris@chrisdown.name>
+Message-ID: <18e4f0c895c8d2ed.3137322e32382e342e3434.27cc5b.0000sendgmr@google.com>
+Date: Wed, 04 Nov 2026 20:14:55 +0000
+Subject: Re: [PATCH v2 0/8] mseal sysmap: Choose system mapping sealing at boot
+From: Jeff Xu <jeffxu@google.com>
+To: Chris Down <chris@chrisdown.name>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>
+Cc: Jeff Xu <jeffxu@google.com>, David Hildenbrand <david@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Kees Cook <kees@kernel.org>, Andrey Vagin <avagin@gmail.com>, 
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>, Shuah Khan <shuah@kernel.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	x86@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	loongarch@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Tue, 3 Nov 2026 10:28:52 +0800
-Hangbin Liu <hangbin.liu@linux.dev> wrote:
+On Tue, Nov 3, 2026 at 11:17:43PM +0800, Chris Down wrote:
+> System mapping sealing is currently a build time choice. Hosts which
+> want it and hosts which need to move or unmap these mappings therefore
+> need separate kernels, which is not ideal. Let's allow the administrator
+> to choose at boot time.
 
-> [snip]
-> > +	/* The program may have changed the packet and seg6_bpf_has_valid_srh()
-> > +	 * may rewrite the SRH Hdr Ext Len below.
-> > +	 * skb->csum may then no longer be the checksum of the full packet.
-> > +	 */
-> > +	skb_checksum_complete_unset(skb);
-> > +
-> 
-> Should we move this a bit later?
-> 
-> >  	if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
-> >  		goto drop;
-> >  	local_unlock_nested_bh(&seg6_bpf_srh_states.bh_lock);
-> > -- 
-> 
-> e.g. after this. As there is not need to do the setting if the skb is dropped.
-> [snip]
+Thanks Chris for the updates and for adding the unsealed boot parameter
+test coverage! The v2 series looks good to me.
 
-Hi Hangbin,
-
-Right, I will move it there in v2.
-
-Thanks,
-Andrea
+Reviewed-by: Jeff Xu <jeffxu@google.com>
