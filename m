@@ -1,101 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793785141;
-	b=C33f7uyEHKM1eA2uVjnNnmbfVBQ1N4zgukFb55eiJPltx2vcFN2Nd4MDY0GzFGjtWl62
-	 zuLR/xaEvh/Y2b4/jBj8/uTqr4PsNeHSdHox4KjVXzREgwG+iWJmucj/nCwYn5bloUBt4
-	 gaQ/jSKczHPXblNSqKPXWDra/m5MPwKOjlCysTM3+RwjRtyI4d2dmgWu+jJ13mUwrQTkg
-	 gPdnc7n5+DZazCYUxibvoi2McWCQ3CMlv6EMDhw1x3zg5R/c1UNqeszFzi0RhPuq3XLrn
-	 BpDJQXfVLavyVKsFl8JTMJw0BRNLirvUDh6NTpY/E2V4aSJqD361htxdAo7Bqz9YYDA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793785141;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=wyMFhiKAtvEArgIfEIeRhVp7bZV2wi7+c/PirP/xKIQ=;
-	b=HreLvtef7PkoNWyKtMu2IsEQE22WjyQWk85Eglv5HtepRpe5UWPBMYS5APRuRV0XjHZs
-	 yliODHIEbzvihilMmUDvkWcjXurCEqUvv+ASaugeYfSH6PJNOKfx+5oDfrTjShInf/ria
-	 P0aVULsn5vzU/5oEyGlINWw7U/rgdU/CqMmxh7ttlGzRyF4yeTzvLxYu9NqTYJh0G6zOy
-	 zFOQE9eZxEfyV2OrYt0+DBIKR1tIlbdaOqUJY3566Rns7OSSbabEC7l1v6YENAifCYcuz
-	 EJiiAaidN5QVEIdNDDgjJ07peU5IMBttbd+spYsVybyw1QBYjFD1eBXbw5uMef5MeUw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MWcuwFVU;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.45
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CBC606A328
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 09:39:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10CBC606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793785317;
+	b=MEbUeroKuewtg/nHc04mHjuq86mNeBSr+05uRyyq//d0ihfKrBcGwoYlKW1o4lTCqmR4
+	 ud217GJHfcLPq0+MBVwmavkrAOBLo30cD7rGVAdORMKPQREwkAP2D6WU3nsi82jk5UjdA
+	 lx76arbiFEDTIxAEoJyVsx+xmie3EcEzqW7TJXgNyD81hYbTvaHUDvrfdXrY7qtr8lGL6
+	 qu6G/RYX+849d9R+/2LUFcwBUVwy7i9+ORazDW2Q/XyEGd10yFgUFcxwcPHLgac1ffezD
+	 qrXkotLmXFS3ezQy5Xb2XQGChxxoN96Mr0MwhREcz8oILaU3r8l/iJmsGkz5jYtBJeA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793785317;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=i9f4/D8qb9HDyCMKjqmdspRjwlPIs06U9VQOHDxE7bQ=;
+	b=ZK+NIXzxFA9/gzsAN/GX9QME7l+y3KSwPPImb3eiK82CNDjYvdw1FFxBVrepjz04tnHR
+	 uZGHiIBFKOcQjdE6GEz9ysLxjq3zwBiQ56plGWsYrFuzD5+FmA6J7Ew0YLenG2/W7P2rT
+	 ToBR9C25NVZ/czmWER/Zl4yrNgCoC/xUI83oS+Z7uPUjtoyRYBKozxIxIhe38S721ReUn
+	 zANK531tIVFBwaq2cFpbWJZVNRziNY7S/gUzNqYE6qbH7g4Dmo7WQdVe0Vb2VC0OSpPc1
+	 DVwaFzue5OxafQWcSi3A51zP25NdC7kJepCVD1eBIExGe44WwRUfkw92+Z5xM5REF+Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=zEAqlhug;
+	arc=none smtp.remote-ip=111.22.67.135
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E590606A328;
+	Wed,  4 Nov 2026 09:41:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E590606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MWcuwFVU
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-8479f46ecd8so187622a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 01:39:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793785140; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GIpuitUudA2rHd+nghUBlt2ghQoU6yU+5f++1W559o8WEVOkPsvaNDHTkPhWteh6z1
-         R3ZT+h5kxsk1ElEvcfNgPYW3bBb+/GboaUUDw+NR2PpdD9gXX9vBvv8DRqb/N3nj/rBG
-         q2Bv55xlos4+Z9v7ddNgNv5AIV19tbPb2VO8S03HFUmn0NINox69sv5IgN6CJ5eCjaOB
-         cp7mctCghLkGUaEbxkViXmX5vQo4nlLXCnjSOGZxY3soQPVa3g2Ca1VEo+KaNgYgmZSS
-         uXaK04rtXoyaliXzfzGnMoblVqBe/47EIZuVnInpzswUxwnBQvR/1n8Czq1nb/Na1HwL
-         qbxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wyMFhiKAtvEArgIfEIeRhVp7bZV2wi7+c/PirP/xKIQ=;
-        fh=D6oXdLH/nUc7astsE3YkDbyHmUe2+V/AF73HQP6k/6Q=;
-        b=DjXAcg8U0hiH5trjMd44zPmjmPLrd8YYvbJXJYw04uNNOW9lv/kQiXczdURjjSKf3X
-         2yhZSC4JIv06y9ZpLOYF0aOpATYXsaKFwGIctSIwYsuqIFpNZctl+r1e6jKHQn6xizZ+
-         NnXa89gR2pVeIm6TC028Z6VoOa/qBTzXLkeE64wDTQBdpzDfRkjYUiq9GQ8AvUi6ZCWv
-         vm6CGhubHzqLzqmM18AKzwhIKCWfdlzbmppyuCoFoA8JhHSRo3XMHRljMMq7CSWpNTmg
-         av/lowr66d/t/i0weezpXoryqBabIw7DlHuTk2bKbv0tcaN7yYDYbgv7ixuusvXhasuA
-         XJsw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=zEAqlhug
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793785140; x=1794389940; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wyMFhiKAtvEArgIfEIeRhVp7bZV2wi7+c/PirP/xKIQ=;
-        b=MWcuwFVU34g06UlUcqUa5sYEJmikRLRjgphlE29xhKOD4TvHCz42xKRoY64u6NKHes
-         xjt2Kmn/+YdToNLJkWPcGxIGbaaJ0wY1ZJbTTTZQD3IF/wRS+fSSROUlI3wyd+yxnKYc
-         GQPSHj1gm3g/8wCHIXZ3oe5us6mBgP1dC2jQP5aBVk8OhZCVs1sZkIcMVJMecAjJXasI
-         Og2OaHXi7Q0Zb2oFPTlydcj73h3lDupKulNOH88sy8HBskjJam3fsiYqJeYOxJqCxyVJ
-         TnTTf5Y7SydEjaXW/BvIYuv/FteX8czVREzaVxsDiMkx0vrx0ASemIuFyUYLSKPjT3Bg
-         Bkow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793785140; x=1794389940;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wyMFhiKAtvEArgIfEIeRhVp7bZV2wi7+c/PirP/xKIQ=;
-        b=TKhJV5wMdyU3rwxoMO1ne6ARGLvYLUUak3CfzykLXOh2VZqV6L17E5i8PHyKwZOqgI
-         cqjiIPnOzqCGgQ0CtTe/sy9IlAC2cqBSh8bg5rk/zgEzP3oRN4KPr1SSWZsULMs9gFec
-         NR6uWWmu35Bjw23g6k+k9fcO8eONMrgtEPDmHx8pw4EtZLclcu1f0dDoSiha1k0H8b4h
-         u2fNqSBwlU36kXP9tMcYy/2jhXQsxUgvgKCA6B6K1TPdhjveszFbjy/NfVF8uTqeHjI4
-         L0O3qjpoxMS/d/rMADPIk+QRKorVpRetWeq5hwBP37DebpihU/m9R8RWzftAKsh2I4hN
-         S8zA==
-X-Forwarded-Encrypted: i=1; AKwUvBwvWnaxrdNpMzvDLvP706Xu454KLj0v5Dbfa+NbaPu9QweVcyLRri4e88LeltW79R+FI4Met0xYcIF1+HD2lQg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8UL8ICjXfBekkXl7vTOKCBDobwzE3tcTsZhgAe94xM+mjeQpEe
-	AWaVvqZ8QKwPuiJkV/j24J+ZFwXonxRhqwKVkkaQQJb67EwFEMzFD7onxWj4luq4Hok9v9Ddnje
-	LhWiXkwWo0WcYBwSNm59dOLxHXYYRQZM=
-X-Gm-Gg: AYBFou0dmW2VVhUro7Q/JPyUMzX9vWmL3kI0vtMyx4FsXw00Vviw7nBJEF+AAni3TVk
-	aKi2H0JDxCL+2wQ0JK+2fJEN09TEgTNWdenWRpwpuoqkiJyRUPtEI03InTJHgbIod3ASvTlzzCi
-	o4W/KFrzFUZj361qXVgR0t7Q0IJLo1sGxQcaB+v3kVAMflzHUX/QZYOhIPKE3Ve714zGzqixWZ0
-	rZyTmpshXL6fl7BR7JBqzk6jICqKwpU1gWkxsn/SReY3nvB54QjR9plu0kqj9f9UatDnKA4DVeG
-	ux66pQxT6mHqOk6LNgtHVDhVTqRFMRn/E535XJYaKXKf8waNFw/5EcQjQ64v3k+EiI7KH07ckw1
-	0Jf8TND14ZNRvO1M3RK1vLk9kYt/y748FNa5a4AcleyVRvNov81BdzrH8VVBgSJjfNulGzZMmth
-	bqAldHw87bZhMnIlkEYBMRLkyT0+2KQPoFew5S
-X-Received: by 2002:a05:6808:16a7:b0:4d6:92b3:5c85 with SMTP id
- 5614622812f47-5640de991f8mr9890887b6e.66.1793785139973; Wed, 04 Nov 2026
- 01:38:59 -0800 (PST)
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=zEAqlhugg/Erujm437DOximgHfbI6Uyp8Z8rNTW5DVEICar6aZpPbAqDOU8wXtYAdut9lOXnCdmFJ
+	 XRE9YNNTph8/AQhoi4A1PUglPuSsAHu/+3pY77WMcSLfO6a/DY4bFQO7NbF1upt7CwYyIBulbNs01L
+	 K/X1wEYDxKdCU0FA=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app03-12003 (RichMail) with SMTP id 2ee36aeafde29bd-68d59;
+	Wed, 04 Nov 2026 17:41:54 +0800 (CST)
+X-RM-TRANSID:2ee36aeafde29bd-68d59
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from desktop-eb75daa8a6be458c-20260816004526035 (unknown[10.55.1.72])
+	by rmsmtp-syy-appsvr05-12005 (RichMail) with SMTP id 2ee56aeafde040e-1d94a;
+	Wed, 04 Nov 2026 17:41:54 +0800 (CST)
+X-RM-TRANSID:2ee56aeafde040e-1d94a
+From: zhangchujun <zhangchujun@cmss.chinamobile.com>
+To: oupton@kernel.org,
+	maz@kernel.org
+Cc: fuad.tabba@linux.dev,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	zhangchujun <zhangchujun@cmss.chinamobile.com>
+Subject: [PATCH] selftests/kvm: arm64: get-reg-list: fix format specifiers
+Date: Wed,  4 Nov 2026 17:41:46 +0800
+Message-ID: <20261104094147.2252-1-zhangchujun@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,42 +71,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261103163928.641519-1-sashal@kernel.org>
-In-Reply-To: <20261103163928.641519-1-sashal@kernel.org>
-From: Ming Lei <tom.leiming@gmail.com>
-Date: Wed, 4 Nov 2026 03:38:47 -0600
-X-Gm-Features: AclHuK-ajlXUEOlDoBUIXIcZPeq0dPA_3c3hkn84_pIOTF1sCe9cDuF4iuz_gxU
-Message-ID: <CACVXFVNJp-aWqLDR+Vy=VyNzHzPjGiTppYBYYGb=bGs5CvNRZQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: ublk: fix the build and file offsets on 32-bit
-To: Sasha Levin <sashal@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 3, 2026 at 10:39=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
-te:
->
-> kublk puts pointers into 64-bit UAPI and SQE fields with a plain (__u64)
-> cast. ublk builds with -Werror, so it fails to build on 32-bit
-> architectures:
->
->   batch.c:379:42: error: cast from pointer to integer of different size [=
--Werror=3Dpointer-to-int-cast]
->
-> Cast through uintptr_t. kublk also passes 64-bit user copy offsets,
-> which start at UBLKSRV_IO_BUF_OFFSET (2 GB), to pread() and pwrite(),
-> and with glibc those are truncated to a 32-bit off_t there. Build with
-> -D_FILE_OFFSET_BITS=3D64 as well.
->
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
-> -m32, with and without -D_TIME_BITS=3D64 -D_FILE_OFFSET_BITS=3D64);
-> KernelCI's 32-bit arm builds show the same warnings. The changed files
-> build without them now, and the x86_64 builds don't change.
->
+The core_id_to_str(), sve_id_to_str() and print_reg() functions
+print __u64 values (idx, n and masked id) with the %lld
+conversion, which expects a signed long long. Use %llu
+instead, matching the unsigned type of the arguments and
+silencing the -Wformat warnings.
 
- Reviewed-by: Ming Lei <tom.leiming@gmail.com>
+Signed-off-by: zhangchujun <zhangchujun@cmss.chinamobile.com>
 
-Thanks,
+diff --git a/tools/testing/selftests/kvm/arm64/get-reg-list.c b/tools/testing/selftests/kvm/arm64/get-reg-list.c
+index 912590f9b0c2..2b85189862e5 100644
+--- a/tools/testing/selftests/kvm/arm64/get-reg-list.c
++++ b/tools/testing/selftests/kvm/arm64/get-reg-list.c
+@@ -145,8 +145,8 @@ static const char *core_id_to_str(const char *prefix, __u64 id)
+ 	case KVM_REG_ARM_CORE_REG(regs.regs[0]) ...
+ 	     KVM_REG_ARM_CORE_REG(regs.regs[30]):
+ 		idx = (core_off - KVM_REG_ARM_CORE_REG(regs.regs[0])) / CORE_REGS_XX_NR_WORDS;
+-		TEST_ASSERT(idx < 31, "%s: Unexpected regs.regs index: %lld", prefix, idx);
+-		return strdup_printf("KVM_REG_ARM_CORE_REG(regs.regs[%lld])", idx);
++		TEST_ASSERT(idx < 31, "%s: Unexpected regs.regs index: %llu", prefix, idx);
++		return strdup_printf("KVM_REG_ARM_CORE_REG(regs.regs[%llu])", idx);
+ 	case KVM_REG_ARM_CORE_REG(regs.sp):
+ 		return "KVM_REG_ARM_CORE_REG(regs.sp)";
+ 	case KVM_REG_ARM_CORE_REG(regs.pc):
+@@ -160,13 +160,13 @@ static const char *core_id_to_str(const char *prefix, __u64 id)
+ 	case KVM_REG_ARM_CORE_REG(spsr[0]) ...
+ 	     KVM_REG_ARM_CORE_REG(spsr[KVM_NR_SPSR - 1]):
+ 		idx = (core_off - KVM_REG_ARM_CORE_REG(spsr[0])) / CORE_SPSR_XX_NR_WORDS;
+-		TEST_ASSERT(idx < KVM_NR_SPSR, "%s: Unexpected spsr index: %lld", prefix, idx);
+-		return strdup_printf("KVM_REG_ARM_CORE_REG(spsr[%lld])", idx);
++		TEST_ASSERT(idx < KVM_NR_SPSR, "%s: Unexpected spsr index: %llu", prefix, idx);
++		return strdup_printf("KVM_REG_ARM_CORE_REG(spsr[%llu])", idx);
+ 	case KVM_REG_ARM_CORE_REG(fp_regs.vregs[0]) ...
+ 	     KVM_REG_ARM_CORE_REG(fp_regs.vregs[31]):
+ 		idx = (core_off - KVM_REG_ARM_CORE_REG(fp_regs.vregs[0])) / CORE_FPREGS_XX_NR_WORDS;
+-		TEST_ASSERT(idx < 32, "%s: Unexpected fp_regs.vregs index: %lld", prefix, idx);
+-		return strdup_printf("KVM_REG_ARM_CORE_REG(fp_regs.vregs[%lld])", idx);
++		TEST_ASSERT(idx < 32, "%s: Unexpected fp_regs.vregs index: %llu", prefix, idx);
++		return strdup_printf("KVM_REG_ARM_CORE_REG(fp_regs.vregs[%llu])", idx);
+ 	case KVM_REG_ARM_CORE_REG(fp_regs.fpsr):
+ 		return "KVM_REG_ARM_CORE_REG(fp_regs.fpsr)";
+ 	case KVM_REG_ARM_CORE_REG(fp_regs.fpcr):
+@@ -195,13 +195,13 @@ static const char *sve_id_to_str(const char *prefix, __u64 id)
+ 		n = (id >> 5) & (KVM_ARM64_SVE_NUM_ZREGS - 1);
+ 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_ZREG(n, 0),
+ 			    "%s: Unexpected bits set in SVE ZREG id: 0x%llx", prefix, id);
+-		return strdup_printf("KVM_REG_ARM64_SVE_ZREG(%lld, 0)", n);
++		return strdup_printf("KVM_REG_ARM64_SVE_ZREG(%llu, 0)", n);
+ 	case KVM_REG_ARM64_SVE_PREG_BASE ...
+ 	     KVM_REG_ARM64_SVE_PREG_BASE + (1ULL << 5) * KVM_ARM64_SVE_NUM_PREGS - 1:
+ 		n = (id >> 5) & (KVM_ARM64_SVE_NUM_PREGS - 1);
+ 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_PREG(n, 0),
+ 			    "%s: Unexpected bits set in SVE PREG id: 0x%llx", prefix, id);
+-		return strdup_printf("KVM_REG_ARM64_SVE_PREG(%lld, 0)", n);
++		return strdup_printf("KVM_REG_ARM64_SVE_PREG(%llu, 0)", n);
+ 	case KVM_REG_ARM64_SVE_FFR_BASE:
+ 		TEST_ASSERT(id == KVM_REG_ARM64_SVE_FFR(0),
+ 			    "%s: Unexpected bits set in SVE FFR id: 0x%llx", prefix, id);
+@@ -259,7 +259,7 @@ void print_reg(const char *prefix, __u64 id)
+ 	case KVM_REG_ARM_DEMUX:
+ 		TEST_ASSERT(!(id & ~(REG_MASK | KVM_REG_ARM_DEMUX_ID_MASK | KVM_REG_ARM_DEMUX_VAL_MASK)),
+ 			    "%s: Unexpected bits set in DEMUX reg id: 0x%llx", prefix, id);
+-		printf("\tKVM_REG_ARM64 | %s | KVM_REG_ARM_DEMUX | KVM_REG_ARM_DEMUX_ID_CCSIDR | %lld,\n",
++		printf("\tKVM_REG_ARM64 | %s | KVM_REG_ARM_DEMUX | KVM_REG_ARM_DEMUX_ID_CCSIDR | %llu,\n",
+ 		       reg_size, id & KVM_REG_ARM_DEMUX_VAL_MASK);
+ 		break;
+ 	case KVM_REG_ARM64_SYSREG:
+@@ -275,12 +275,12 @@ void print_reg(const char *prefix, __u64 id)
+ 	case KVM_REG_ARM_FW:
+ 		TEST_ASSERT(id == KVM_REG_ARM_FW_REG(id & 0xffff),
+ 			    "%s: Unexpected bits set in FW reg id: 0x%llx", prefix, id);
+-		printf("\tKVM_REG_ARM_FW_REG(%lld),\n", id & 0xffff);
++		printf("\tKVM_REG_ARM_FW_REG(%llu),\n", id & 0xffff);
+ 		break;
+ 	case KVM_REG_ARM_FW_FEAT_BMAP:
+ 		TEST_ASSERT(id == KVM_REG_ARM_FW_FEAT_BMAP_REG(id & 0xffff),
+ 			    "%s: Unexpected bits set in the bitmap feature FW reg id: 0x%llx", prefix, id);
+-		printf("\tKVM_REG_ARM_FW_FEAT_BMAP_REG(%lld),\n", id & 0xffff);
++		printf("\tKVM_REG_ARM_FW_FEAT_BMAP_REG(%llu),\n", id & 0xffff);
+ 		break;
+ 	case KVM_REG_ARM64_SVE:
+ 		printf("\t%s,\n", sve_id_to_str(prefix, id));
+-- 
+2.50.1.windows.1
+
+
+
