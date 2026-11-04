@@ -1,55 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.168
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793764770;
-	b=Y5KB0JFJ5NR99N6VP5eVJe3V48mIaJiTDr0qyWSzOV8wrcJ3/h0pUqDDEUc9zUUyE1D4
-	 i0Gi/iuiNZqCFPCBBfIlKtcsl79N27bwFnWv56QOuaYX1m6/5DlmlljMsf5EqIM3kuq/i
-	 /UceQK5in5Sh3gPG3hrQ1x4ASsitiKTXJkA/WZvrfwQOlRYKUSvmqlMg2zc08+9f3oSq7
-	 AbbtYzb5UOXij9HW1AdfTU0msz5L4IPTql6OG6ChHsEVbwnklomprQvzK/DkPk+UEoTcK
-	 DQB1QX18Ye9moYGzqkKB7upKcGtVae9IZlBF2nMgw3TMiwUjo54+YCYIvuyDVCAK27A==
+	t=1793765739;
+	b=q60b9QRzwvafWECJ17Az7nqjt3g9U7d0GASY+03wO+phJHLEqs8EmxPTKXtqDaqUD03h
+	 JM6QHZZJeJsVP20jBpVdl7kMz9wSeuKdgpYLikXpaJc4qAOId4qtrOvO8ehbISDwLJupF
+	 DHL5iOVGp0BH516r9sQA8Zo0+5Ymo0rSrxTWSIVp6gxFZYDzvxkOIblf8v2CrNf6EP+j1
+	 cAVeBPBKeaSFwiPrqnc7YWrR82hdHd3z9B+6PUuod8E0mYndce+2KgQH85UbxHVoPLId7
+	 WnPvTVFbtrfQ7PnLjfTj1gLFtA9g7KHqAGPnkTMU0ox0B8Qsz2eDzHSjxJp08oOx4vw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793764770;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=aVD57Vyoa++azfiqBAhfzngOl8QvU9DsGw/NobLJvHM=;
-	b=r8bJGTt6d/smkNoJWOanO4S7Na9SKsZQL2j5+mozb/y3vQcJYrVicNvDDQUlbuueeyk9
-	 7VzM2R7x0zmHGYEc4rYJFzyW8c+rgP9bpYN8Jd1Uzm5kOx2hsZBXYpbGJL9DcLGdu8CMJ
-	 i/o305esn6V1EMlH4jbTR2GBWR8Wo3ntoEY3oqVP2NHEpBRu8UJshMzIHKJC7bw8y3VUM
-	 z0fMymJdylXu+z1Pg5wq42FJ/v0Fg7EbCSufA8K3GF/cm4rTh5QJOifP99t733L1B4N59
-	 sK/zCPlhlGaYHZfpGQK8gsNYwf/hvODJod3CI5M7R+FYqouYO4qNAvJedF4LH3Wd3bw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793765739;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=t33hTerwq+aQ3mBUBeIWL6pRcgQAoxI6zsMD8gzG6mU=;
+	b=A3jZQ9R1lrJjyu7tG+K8yYwtjJ6KDFAxMmNIIO5m+tK+7HJ5pQI8uuI6fRSyP2/KSDul
+	 U/LRg6BHkt3AMbFD8821tV07qnW/98lunjJW8xq2E2zmdgm/HtAV/rimYhc/a/ZlKOhWh
+	 dM08PnzM99Yj/aUNFhxXCFIr1PZdZdjAY6VhoUBcblJycIeB34+5MD4epiahmj6mUUQLG
+	 y+WqLSiTeo9TSryA5w8uStaoPdZZ1bQjOPzd5yLqVulTMQKgwvKVcP8FrvJjoqUPB+pss
+	 QAwpthS92pQxLrtpvLIC0I1YFhrFzb1uEPGB/Oo9Wfuto6j8Ti4yGu1npKx5VdBuRUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MD8HHl2V;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Nm5tWPga;
+	arc=none smtp.remote-ip=95.215.58.168
+Received: from mta1.migadu.com (out-168.mta1.migadu.com [95.215.58.168])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD01606A331
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 03:59:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC95606A329
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 04:15:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2AC95606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MD8HHl2V
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 186AC1F000C1
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 03:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793764770;
-	bh=aVD57Vyoa++azfiqBAhfzngOl8QvU9DsGw/NobLJvHM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=MD8HHl2V9nd3qEjuMbvRrBTZH2bsLxioMX7oFVjfHv6Tesnt0q7hLLNSr/m+49jT8
-	 lSaMljX+4CfG6xelFsRF1fxldkH8GVcb5JOkwpvBTB6C904Npj4yaJEsjO6nsYj8ky
-	 PiTyHb3iLt9aZhE4hj5wbXMfIg2RSBp5ev3N2fC5Zj1mxwDiJy86cQwRZb4AVliw3Q
-	 RwP5uHM1C6vmwTxZCfbm+Pbg1xxqSdX9YQI/nAp+Zkv4z5kDyaFy/li/WcsfKzh4sk
-	 2fq9e0+Qa+LlcBpy/2sOS5dBim+3SbmMjvx243pGgrt4PUVTbroGo+xDHS+eYE2LqK
-	 T53xBvgdG3ILQ==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6b1a86c0316so290463a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 19:59:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBwWCsBEQoXp+ORtEdqwWSIKLJEceDleRT7nw7CNFhDUQzCHYnlu1zz110EnDohQrgnT5POh4XtZ4s7CeWPBFAE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/9L9uO/5F3hch6wZPMAUOizHEUsth+C33NY2BkzKpTUMo3SC8W
-	q/8jCFG3syXjt5nEx2yBdllMXm1AxVbtrvq7teUxJUSDEdeZvwuyFLtlnFG1pAGQHRDSVHncS/W
-	9s/rbYshHFD3jJKepMOWyjDYNfalKGf4=
-X-Received: by 2002:a05:6402:270f:b0:6ac:934e:a9ca with SMTP id
- 4fb4d7f45d1cf-6b4d3289b13mr10634683a12.0.1793764768813; Tue, 03 Nov 2026
- 19:59:28 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Nm5tWPga
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=NxfwJu25c702HsG2QS65lReEnsmm0Rh4tGfKZ6I/Ny4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793765736; v=1; x=1794370536;
+ b=Nm5tWPgalX68xFEfNNc38YSABIskZs6IG3VHTQJSocIT9xy+bmmlyDrpey5dO0uaTtE3Dxg2
+ FlByApCrm5HoyBCjsWmgB3rQSOmlqx8bwsHCmfr5IN1jMcByvHN5l+GVTlUDRCh840ayfel0S83
+ 2LguG0x76ctHm9JLCq0RQ8t4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4202d724f29ea87b;
+	Wed, 04 Nov 2026 04:15:23 +0000
+X-Mizu-Trace-ID: 4202d724f29ea87b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ea399c85-c775-47a7-b42a-80a645ae16b9@linux.dev>
+Date: Wed, 4 Nov 2026 12:15:08 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,51 +58,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <2382a0ee-cb6d-4572-be6e-ce3cf4d006e5@app.fastmail.com> <20261103102941.11087-1-dongtai.guo@linux.dev>
-In-Reply-To: <20261103102941.11087-1-dongtai.guo@linux.dev>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 4 Nov 2026 11:59:14 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5Vse=pKC3Beqhqxa7fqadiGVNqkSy_06HZ3Luw2Pmj5Q@mail.gmail.com>
-X-Gm-Features: AclHuK_D5CUCusV0Gl1o9MYw2oMRSISAj8jwmHzHqtDwF9y7DdV5NfyDMepEVEM
-Message-ID: <CAAhV-H5Vse=pKC3Beqhqxa7fqadiGVNqkSy_06HZ3Luw2Pmj5Q@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] efi: Pass KHO state to the next kernel in a
- configuration table
-To: George Guo <dongtai.guo@linux.dev>
-Cc: ardb@kernel.org, pratyush@kernel.org, rppt@kernel.org, 
-	pasha.tatashin@soleen.com, shuah@kernel.org, ilias.apalodimas@linaro.org, 
-	akpm@linux-foundation.org, baoquan.he@linux.dev, ruirui.yang@linux.dev, 
-	guodongtai@kylinos.cn, kernel@xen0n.name, graf@amazon.com, 
-	liukexin@kylinos.cn, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 1/7] ipv6: treat a negative optlen as 4 in
+ do_ipv6_getsockopt()
+To: Breno Leitao <leitao@debian.org>, David Ahern <dsahern@kernel.org>,
+ Ido Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Eric Dumazet <edumazet@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ david.laight.linux@gmail.com, kernel-team@meta.com
+References: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
+ <20261103-sockopt_expand_out_v2-v4-1-2d36da923578@debian.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261103-sockopt_expand_out_v2-v4-1-2d36da923578@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 3, 2026 at 6:29=E2=80=AFPM George Guo <dongtai.guo@linux.dev> w=
-rote:
->
-> Hi Ard, Pratyush,
->
-> On Thu, Oct 29 2026, Ard Biesheuvel wrote:
-> > Can we handle this as an arch table then, and handle everything in
-> > the LoongArch arch code?
->
-> Ard, LoongArch is currently the only user, so I understand the suggestion
-> to keep the handling in the architecture code.
->
-> My preference is to keep the table definition and handling common, given
-> the potential for x86 to use it as Pratyush described in his reply, to
-> replace setup_data once x86 gains EFI support. The table contains no
-> LoongArch-specific fields, and only the LoongArch stub installs it. On
-> systems without the table, the common code does nothing.
->
-> Would that be acceptable, or would you prefer to keep the handling in
-> LoongArch until a second architecture adopts it?
-I prefer to keep it in LoongArch until a second architecture, and I
-think Ard is the same. But this is not a strong objection to Pratyush.
 
-Huacai
-
+On 11/3/26 7:01 PM, Breno Leitao wrote:
+> do_ipv6_getsockopt() reads optlen into an int and never checks its
+> sign. Most of what consumes len compares it as unsigned, so a negative
+> optlen reads as a huge buffer, and the reply depends on the option.
 >
-> Thanks,
-> George
+> The int options clamp it to their own size:
+>
+> 	len = min_t(unsigned int, sizeof(int), len);
+>
+> so getsockopt(fd, SOL_IPV6, IPV6_TCLASS, buf, &len) with len set to -1
+> answers 4 bytes and reports 4, rather than failing.
+>
+> The other options see a huge buffer. The sticky options reply with
+> their whole header, IPV6_2292PKTOPTIONS writes every pending control
+> message without a limit, and IPV6_PATHMTU and IPV6_FLOWLABEL_MGR pass
+> their length check.
+>
+> do_ip_getsockopt() rejects a negative optlen, but doing that here would
+> turn a call that works today into an error for a caller that passes an
+> uninitialized length. Answer it as 4, as the int options do, for every
+> option this function handles itself.
+>
+> That leaves the int options as they are. The sticky headers are cut to
+> 4 bytes, IPV6_2292PKTOPTIONS gets a 4 byte control buffer, and
+> IPV6_PATHMTU and IPV6_FLOWLABEL_MGR fail with -EINVAL, as they do for
+> any other undersized buffer.
+>
+> MRT6_* is dispatched earlier and keeps rejecting a negative optlen, and
+> the netfilter fallback still sees the caller's value.
+>
+> This changes what callers that pass a negative length see. It is a
+> behaviour change, not a fix, so there is no Fixes: tag.
+>
+> The conversion of this function to sockopt_t builds its buffers from
+> optlen, which the standard helpers reject when negative, so the answer
+> has to be settled before that.
+>
+> Suggested-by: David Laight <david.laight.linux@gmail.com>
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> Acked-by: Ido Schimmel <idosch@nvidia.com>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+
+> ---
+>  net/ipv6/ipv6_sockglue.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+> index 4b3536571c9804..700133e2fd11c2 100644
+> --- a/net/ipv6/ipv6_sockglue.c
+> +++ b/net/ipv6/ipv6_sockglue.c
+> @@ -1002,6 +1002,11 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+>  
+>  	if (copy_from_sockptr(&len, optlen, sizeof(int)))
+>  		return -EFAULT;
+> +	/* Historic bug compatibility: take a negative optlen as 4, as the
+> +	 * int options always did.
+> +	 */
+> +	if (len < 0)
+> +		len = 4;
+>  	switch (optname) {
+>  	case MCAST_MSFILTER:
+>  		if (in_compat_syscall())
+>
