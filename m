@@ -1,54 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.78
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793799974;
-	b=KWxm+24WNHc5YVkscTSYJqXI1vR5vAQxGvFdd/S3KADorZOU8dEQrCJ3sFmKnqF67ewX
-	 FJ0vIus0TgJia8d4zGg1rdMaXeSw+5g0EqYRFJ3D+zvieEBKrKvNv3jQF4KezPq9OF6cU
-	 h01Sr1vI2zIs3zOwZ6gaqA3Nb3/J1oXbUpW7HxxnMXPB6k7WpbOrMfoKy7xhvWR1L+71/
-	 FIEQPPjxQcCDtK3L40nTFpu346XGyIMfBOmvKa4osRxQMvBflSNrgfgdRvjlm9NZLu/vk
-	 p1B0sgnBbXXM14QlIfu+9k1q0fPcb4aaQP/sy3MOLrNzmA6pQQesjXtgF2T2g4EOq8A==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793799974;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=Q4tWgwLTiI8SPma50NL+69gW2A8l1tsl3NgQNJG9OZI=;
-	b=XUDgQJEtcSdDFrNG6TAmAs0IuNUrJ81ZMK7GumUo7xxbISHfgB/ltIqIm5wjE7rCaHEV
-	 CoZCgsCemsjPZ8/wGMvtEruYZ/9P0W09DoN16ykwyk6kg6OqosWf2o2ABEgzqRvVky1QC
-	 aOdJYFWyq+kKXHF2JS6YEz1VAjNIG3uedI+Ifkn6/jNUlWKo78kuaNN510lb77wybq6cV
-	 /bKTziukFnufwinpNG7nH51N12EVFw8umFkbcIwQE7oAPNcm6D/h/wqhuffflR0bOKGoQ
-	 uIJik9ab5hWyodQW/qPguXqNzMeXSvGUp8ipmw9VzP1D9AUIF+NgtyLGBjFcLIwYxvQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=D7zAy89x;
-	arc=none smtp.remote-ip=95.215.58.78
-Received: from mta1.migadu.com (out-78.mta1.migadu.com [95.215.58.78])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.178
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793800013;
+	b=iZKA3vkRkyaEVMHpU6LCZFZGnMSQEB4NOMfAkBec2Rm2avVZtwlOyK+1DLheMz7Z7yFo
+	 SFSR8cS2ygYuwALdKXw9UXj6+M/d2Yty2Ejusg7vV9+MpiB50/ehaMzyCbllKMNVByCtF
+	 T4NG4i2f3TuWz7yQIOavODIH/5PdwXDvuXCgESIXvcVKVPCC4q2P0P5BqMeXy9/0PhjEj
+	 LZxEBWq1wqozQjTyVs0AeLXXPYrVmpWO7oKzpf/ZWZoL06iydXaTbtpTrE36vM3BNa/x6
+	 ILJuFeFNDgrxhpmxYSd6HFl3bqfn8ka7w5itPTi6FACHoO8b2nlZbOi+1CJp1atxBaA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793800013;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=s2YgA9eXRC7gTaeTWC5JF61ATLOugSgGfmlk7hXTAN4=;
+	b=pNsFyIU1tDDdy+g5v8fqjVXntO715lZPRNotlO7QCBXKmjNtR99BCi3LR4p//W8D8u5+
+	 Fwwo0fvrChoEa1+PrmeRwzBllBJqWw/nXO1jGMP9xoQsTbHaAh34/PLTKapmboatyroLa
+	 qdB/IFEnSjIW8E86TIZNQhoz/gA4jRoYW8df9WhozL724TjCmclTZb3OA0E8MGSCfDPwr
+	 dnPSygDxbLGecAKXKQhwtZwEHesoRK5/XarrsVsQ0Z2ncdvwJT3O1NF5OTDORXESqHRxY
+	 GpPi3MOqutoO+s9EhVQtrvYelHTtwioQ/3o9HnYX1q3D2pgzm2bDwK3UnlMkEIwyAyQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YikxubsO;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.178
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44895606A31B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 13:46:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44895606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C1D606A32C
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 13:46:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28C1D606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=D7zAy89x
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=r1v3gaHbye2LaSteE/Y0pgAbJSvJ3a9oWoFvgk1atq8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793799969; v=1; x=1794404769;
- b=D7zAy89xQ+cQiauu/mlV4T0WBr50R4C4ILX9ymomytcDXFkiBS4UVvNG7y1R25caNGhAhmeR
- nqvK3Uq9pIWOKykMLxCpvdOgF2uyeMAfZAdlhprcdqnxbcIxeS9Msnjh0oTCFSIyitXGmzaQjhx
- aOVNqreRnnYm4RYROF6+qGPI=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9497cdf413eb9ab1;
-	Wed, 04 Nov 2026 13:46:09 +0000
-X-Mizu-Trace-ID: 9497cdf413eb9ab1
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a8be8f5f-fb9c-46da-a1b6-eea68ae07006@linux.dev>
-Date: Wed, 4 Nov 2026 21:46:03 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YikxubsO
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-353804b591eso1309117eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 05:46:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793800012; cv=none;
+        d=google.com; s=arc-20260327;
+        b=X+X3SnDysg6bNW6D85Emw6Oe+j3Y+oe8tjLSQ8PaEZ7aVD4BER44LXJCPB3Ws/QZDS
+         MWnLo9pNSuF9DRD41Nm5r5uet8U1eUh8SbxguScuX43ZlkfSiv3lIKhLFUgTsO42R8sf
+         2ooia5Fb37bqcHnlI+EYYsRtYMrTKrIAQXFABF/C5u1tKn6zMASUGt83BzsirJB/6eQC
+         sso0RnOIvnQkmYTW9WKdZK2T7k0f3fOhxCzxkIZb0dVQmqzfK0DCB6KO6F5Dp2rOsDB3
+         NGelEeL5PJVJMuUvXB/cwYJzrE8vECocgW7vtDDoyYqT98h5qish0awovcjKfZukSW8d
+         X4qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=s2YgA9eXRC7gTaeTWC5JF61ATLOugSgGfmlk7hXTAN4=;
+        fh=OV3GFspywl0dE+cx4lfTyElsccuqyILx5+xFDGWZslE=;
+        b=iZFLiFYSN0m2nPFARi45rtO7O6rc2Aw/649KNZqkirTePevkpeEJF8mxFzj9FWfZBM
+         lPLvUcmPIYtLIbrqqZiJDEaKFYRffdNwUIQJBqiphKqTJbSu3ZPdkN00Z/rDVR+/xq7C
+         yoYz082eVJDQzrQqnyXhrp5AxieP1X6H5M+PDXMEDV4fm1jYR7KRou7F33+sW9Pb+srd
+         nL2OBEXzXEnsiESFh2FcAUnPlxlS+zFCGl5fDSEn1tLWmjPbh4Oq3QCE/BvKWdPB80EF
+         7pYZB7Ua6iD4HIFnaEGSml1tLC3WdC6Usd78queF4cPL4WYdZ4zftsarsoETd3hyAIaE
+         UqMQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793800012; x=1794404812; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=s2YgA9eXRC7gTaeTWC5JF61ATLOugSgGfmlk7hXTAN4=;
+        b=YikxubsO8EW9n9tgtdFn4dkvgSt2iwtCQEraYsgw8D71xlFrgPfYSMq1hxz+s/Yjg1
+         zqBWBjR3tpfKTJp3ibtGGOsdlGdO0fIg/Fw75u5adVIyd6nT4MrAqrkqBttWuq2QIRUE
+         QR0dtqTzhMsrcJDTYQeID3xZ46xXUUzKBbuN4ovMfy3AYPsFwO+kXzFOEOmV9oyNcJjX
+         Eb195TYG9btwnRBpGYtGMBQWm0+FVOndqpHbUzqCF42cbCIB3MWYtCGL2WXEEh/Hlgij
+         MgvY/5roDMeqGTyW2sjfSHVfdevj4KaI4HdK0CHCLq23WasgWMnFBeuYHVQ+E3fdsfSF
+         jGJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793800012; x=1794404812;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=s2YgA9eXRC7gTaeTWC5JF61ATLOugSgGfmlk7hXTAN4=;
+        b=i9J+4DfiHV3GedYgV5VSWvSH3iyKDpngyD9XvUyhI+GzssyLhiCrBFK863xAtW8MUs
+         obswq8Ea1zisMtqpd06kG2bOkCJ0Lo2Yod5MAuVebtdIogD0I3JKr4ZZITFo7pI9sCxK
+         4Ck1BEus+g9TAEZXf8dFz+Z1+fx3/qWrJz8up35Wdxz/RkLOPXNmvG8dH8ZG3x8FyOOV
+         Gzq1TMseCmzTl1kZsff8BrmCrsmrXvpKRKHczT1WjXJ5qx9XYRSkjr9etpAlWURX3epK
+         rlAEYzTtP2G/3Zv1KeChLm2jKJCJ6HPGPBS6b6xfGsOJsx8NSpiFhIjVZNjnuJ2a4rng
+         bj2Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwINsK8QJAKcrJMqIi8OGwvB4KXGZI2nk6I3g2i9NE+8qAwZwB3AjXfKKTPtthusrLIotas2m2ec5sAjbYjd9k=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/kUDAZJiH2DAD9EPN4LuTnFSvbAZXK4Yk3gLFVFKHwBbV/C4j9
+	lEtgWhFnmvEQQo84vaRz3zWkdhWbXeIWWqfC/iKEcaBTQ0c+lyb7RKyVv62BBCYELyLk0XI82+D
+	v6Jds+98MKY/GN7ES5DwCUeLzHNppQQg=
+X-Gm-Gg: AYBFou0YFZECrFnkFmVCJgaE15kIn2WqlBZF1MCmG9AK5kQ0NZ20UxQnPeI/RxkZO7w
+	0Pd/6qr7/NHa5cer9DfHtltuKhA9sg8Ty9N6ovi496UmTyj/hkLFmSGJvf7JHxsiwns87fZ7f96
+	dFnREodFikBtPfB1/T2NJTLMzd/Wb9jchncfCNnoNDZaxxK0rgAh6D9ZAgLymqrm63vUdTxscvr
+	VAlkbEVWfKk0hNeLibj+7Rdb7u43wWqIlMETgnI90XgFIRyrIuHVOrA4rO+fkq1u1kN4W3GrprF
+	V4xv5bDBOhIcnt78wMnPGQSPhvROacWTwEdaUGGVj5K44gi7UnPf/Zw1tZ9as/Xhl4BHfu3iWgb
+	0NblW5PLQcjF8TIyoND3Kg3jjSoHENElx1edy7jpqjaMphRdd0D43EUblI7rE8uKXzaqJxzWUQt
+	jjGC71tPTXcZzEuahBZ7cx4XKmZVv969mYtNkXHY1QJ/U1FFZ9kxdKUz7aXbL0cUzHFtnTjMiou
+	LafTk0=
+X-Received: by 2002:a05:693c:835c:20b0:36a:30b:5dc0 with SMTP id
+ 5a478bee46e88-36a423c338dmr23659532eec.24.1793800012108; Wed, 04 Nov 2026
+ 05:46:52 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,199 +105,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cgroup/cpuset: Fail if isolated CPUs don't leave any boot
- domain housekeeping CPU
-To: Ridong Chen <ridong.chen@linux.dev>, longman@redhat.com
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20261104071600.474587-1-guopeng.zhang@linux.dev>
- <cbe741a9-fd0c-4c8f-8591-55ecc70f222a@linux.dev>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <cbe741a9-fd0c-4c8f-8591-55ecc70f222a@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20261103165419.687806-1-sashal@kernel.org> <20261103165419.687806-6-sashal@kernel.org>
+In-Reply-To: <20261103165419.687806-6-sashal@kernel.org>
+From: Dmitry Safonov <0x7f454c46@gmail.com>
+Date: Wed, 4 Nov 2026 13:46:39 +0000
+X-Gm-Features: AclHuK90WkhgmJhmU6xdUm7mCsob0Cru4i_Y_AMzLhb5jcxjClGipAhE9WgIpYg
+Message-ID: <CAJwJo6Z9qvw4Mig8Hs=dhMyjnZ5UPS6sRbKvnfFVqkoX1iFXgg@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests: net: tcp_ao: make the netstat column
+ pointer const
+To: Sasha Levin <sashal@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+
+On Tue, 3 Nov 2026 at 16:54, Sasha Levin <sashal@kernel.org> wrote:
+>
+> lookup_get_column() stores the result of strchr() on a const string in
+> a plain char pointer. Since glibc 2.43, strchr() returns a const char
+> pointer for a const argument when C23 features are enabled, as they
+> are with _GNU_SOURCE, so gcc and clang warn:
+>
+>   lib/proc.c:61:16: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+>
+> The pointer is only used to compute the length, so make it const.
+>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 
+Acked-by: Dmitry Safonov <0x7f454c46@gmail.com>
 
-在 2026/11/4 20:58, Ridong Chen 写道:
-> 
-> 
-> On 11/4/2026 3:16 PM, Guopeng Zhang wrote:
->> From: Guopeng Zhang<zhangguopeng@kylinos.cn>
->>
->> With the "domain" flag of the isolcpus= boot option, the CPUs isolated
->> at boot are excluded from the sched domains and the remaining CPUs
->> become the boot domain housekeeping CPUs. An isolated partition is
->> allowed to use the boot isolated CPUs, but it must not take over all
->> the boot domain housekeeping CPUs.
->>
->> prstate_housekeeping_conflict() checks that rule for root partitions
->> only. The 2nd check covers the nohz_full case as it is gated by
->> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) which is not enabled by
->> isolcpus=domain. So on an isolcpus=domain,<cpus> boot, an isolated
->> partition can claim all the remaining boot domain housekeeping CPUs.
->> The state is committed, but the sched domain rebuild at the end of
->> the write finds no housekeeping CPU left for the boot domain and
->> hits WARNs and an OOPS in partition_sched_domains().
->> housekeeping_update() cannot accept the configuration either as it
->> cannot empty the boot domain housekeeping mask.
->> With an "isolcpus=domain,10-31" boot where CPUs 0-9 are the boot
->> domain housekeeping CPUs, for example:
->>
->>    # echo 0-9 > A/cpuset.cpus
->>    # echo isolated > A/cpuset.cpus.partition
->>    WARNING: kernel/sched/topology.c:3089 at build_sched_domains+...
->>    WARNING: kernel/cgroup/cpuset.c:1478 at cpuset_update_sd_hk_unlock+...
->>    RIP: 0010:partition_sched_domains+0x3b8
->>
->> Fix that by extending prstate_housekeeping_conflict() to reject an
->> isolated partition update that would leave no active boot domain
->> housekeeping CPU outside the isolated CPUs. The CPUs released back
->> to the boot domain by the same update are taken into account, so
->> replacing one of the last housekeeping CPUs with another one in a
->> single update remains allowed. The new check is only performed when
->> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) is disabled so that the
->> existing nohz_full behavior is unchanged.
->>
->> Add test cases in test_cpuset_prs.sh to verify that taking over all
->> the boot domain housekeeping CPUs is rejected while swapping one of
->> them with another one is allowed.
-> 
-> Hi Guopeng,
-> 
+Thanks!
 
-Hi Ridong,
-
-Thanks a lot for the analysis and the patch. 
-
-> Thanks for the report and the reproducer. I can reproduce the WARN and
-> the OOPS in partition_sched_domains() here.
-> 
-> However, I don't think prstate_housekeeping_conflict() is the right
-> place to fix it, and the fix doesn't seem complete. The same problem
-> can be triggered with a root partition, which this patch doesn't cover.
-> With an "isolcpus=domain,4-7" boot on an 8-CPU VM:
-> 
->   # echo 0-3 > A/cpuset.cpus
->   # echo root > A/cpuset.cpus.partition
->   WARNING: kernel/sched/topology.c:3111 at build_sched_domains+0x2b96/0x5500
->   Oops: general protection fault, ... [#1] SMP KASAN NOPTI
->   RIP: 0010:partition_sched_domains+0x10a3/0x1a10
-> 
-
-You are right. The sashiko review also reported this issue. I can
-reproduce the WARN and the OOPS here as well.
-
-> The faulting address is in build_perf_domains(), where cpumask_first()
-> on the empty cpu_map returns nr_cpu_ids and cpu_rq() goes out of
-> bounds.
-> 
-> The root cause looks like it isn't a housekeeping conflict. Boot time
-> isolated CPUs stay in top_cpuset.effective_cpus by design, and they are
-> only filtered out of the top_cpuset sched domain in
-> generate_sched_domains(). But the checks that make sure the parent
-> still has CPUs left, i.e. tasks_nocpu_error() for local partitions and
-> the cpumask_subset(top_cpuset.effective_cpus, ...) checks in
-> remote_partition_enable()/remote_cpus_update(), only look at
-> top_cpuset.effective_cpus. So any partition, root or isolated, local
-> or remote, can take away all the boot domain housekeeping CPUs as long
-> as some boot isolated CPUs are still left in top_cpuset, which leaves
-> the top_cpuset sched domain empty.
-> 
-> So I think the check should be done at the "parent has no CPU left"
-> level instead. Something like the diff below. It is not tested yet;
-> could you give it a try with your reproducer and the test cases?
-> Note that the root partition and remote partition cases should be
-> added to the selftest as well.
-> 
-
-That's a great idea, thanks for your guidance. I will test it and add
-the relevant test cases.
-
-Best regards,
-Guopeng
-
-> Without isolcpus=domain, HK_TYPE_DOMAIN_BOOT is cpu_possible_mask and
-> the new check is equivalent to the existing one, so no extra
-> housekeeping_enabled() gating is needed.
-> 
 > ---
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 3219f927c35e..fb3e81405f5b 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1180,12 +1180,51 @@ static void update_partition_sd_lb(struct cpuset *cs, int old_prs)
->                 cpuset_force_rebuild();
->  }
-> 
-> +/*
-> + * top_cpuset_sd_nocpu - Check if top_cpuset will have no sched domain CPU
-> + * @add_cpus: CPUs to be taken away from top_cpuset
-> + * @del_cpus: CPUs to be given back to top_cpuset, can be NULL
-> + * Return: true if no active CPU will be left in the top_cpuset sched domain
-> + *
-> + * Boot time isolated CPUs stay in top_cpuset.effective_cpus, but they are
-> + * excluded from the sched domain of top_cpuset in generate_sched_domains().
-> + * So checking top_cpuset.effective_cpus alone is not enough to ensure that
-> + * the top_cpuset sched domain won't become empty after @add_cpus are taken
-> + * away from it. The sched domain of top_cpuset must keep at least one
-> + * active boot domain housekeeping CPU.
-> + */
-> +static bool top_cpuset_sd_nocpu(const struct cpumask *add_cpus,
-> +                               const struct cpumask *del_cpus)
-> +{
-> +       const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
-> +       int cpu;
-> +
-> +       for_each_cpu_and(cpu, hk_mask, cpu_active_mask) {
-> +               if (cpumask_test_cpu(cpu, add_cpus))
-> +                       continue;
-> +               if (cpumask_test_cpu(cpu, top_cpuset.effective_cpus) ||
-> +                   (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
-> +                       return false;
-> +       }
-> +       return true;
-> +}
-> +
->  /*
->   * tasks_nocpu_error - Return true if tasks will have no effective_cpus
->   */
->  static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
->                               struct cpumask *xcpus)
->  {
-> +       /*
-> +        * The top_cpuset always has tasks (kthreads at least), so its sched
-> +        * domain can't be empty. The current effective_xcpus of a valid
-> +        * partition will be given back to top_cpuset if not in @xcpus.
-> +        */
-> +       if ((parent == &top_cpuset) &&
-> +           top_cpuset_sd_nocpu(xcpus, is_partition_valid(cs)
-> +                                      ? cs->effective_xcpus : NULL))
-> +               return true;
-> +
->         /*
->          * A populated partition (cs or parent) can't have empty effective_cpus
->          */
-> @@ -1724,7 +1763,7 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
->          */
->         compute_excpus(cs, tmp->new_cpus);
->         if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
-> -           cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
-> +           top_cpuset_sd_nocpu(tmp->new_cpus, NULL))
->                 return PERR_INVCPUS;
->         if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
->                 return PERR_NOCPUS;
-> @@ -1828,7 +1867,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
->                 if (!capable(CAP_SYS_ADMIN))
->                         WRITE_ONCE(cs->prs_err, PERR_ACCESS);
->                 else if (cpumask_intersects(tmp->addmask, subpartitions_cpus) ||
-> -                        cpumask_subset(top_cpuset.effective_cpus, tmp->addmask))
-> +                        top_cpuset_sd_nocpu(tmp->addmask, tmp->delmask))
->                         WRITE_ONCE(cs->prs_err, PERR_NOCPUS);
->                 else if (prstate_housekeeping_conflict(prs, PRS_ROOT,
->                                                        excpus, tmp->delmask))
-> 
-
+> Found with gcc 16 and clang 21 on glibc 2.43; KernelCI's gcc 15 builds
+> show the same warning.
+>
+>  tools/testing/selftests/net/tcp_ao/lib/proc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/net/tcp_ao/lib/proc.c b/tools/testing/selftests/net/tcp_ao/lib/proc.c
+> index 8b984fa042869..50062b527a393 100644
+> --- a/tools/testing/selftests/net/tcp_ao/lib/proc.c
+> +++ b/tools/testing/selftests/net/tcp_ao/lib/proc.c
+> @@ -56,7 +56,7 @@ static struct netstat *lookup_get(struct netstat *ns,
+>
+>  static struct netstat *lookup_get_column(struct netstat *ns, const char *line)
+>  {
+> -       char *column;
+> +       const char *column;
+>
+>         column = strchr(line, ':');
+>         if (!column)
+> --
+> 2.53.0
+>
