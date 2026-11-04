@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793753086;
-	b=qmdkJok+LBzNrcWtO+k0OT436dHlEudbEfeTtAo7E4R01xfF31uXPIHTkQOt4VO3zOrM
-	 X5WdQyVyqycMubhW74REgC0AffsFTFP756M2T5mXcMJqot7V5qo5owl6wX+udm47J/yyw
-	 qDzOu8h5fiif/F1rGhpLmt0bPz3zCca9ViT87TgSEfRhu4xvqUStcBzy5+on9/lpx3bR7
-	 8M+9qLFhNkm8Gsc9DH+ei+LdXMLTLI9uja08m27oncSVx4v5uoXwUN7tFp2DOwQUC9RgK
-	 MvInqyiPv5tYyYb0fC8o0NbuX+A5S4b/jbe2H0kJp4OSfkNHSGKeu/U6IXf1CmGsWgg==
+	t=1793753088;
+	b=UP5/kgwWgLVtR5A/RGRwiKYrOUyfsLo9H30mml8e0tXG16KDMsU69BIPDm2/qgnHW/PS
+	 SyrZSOvfqhol6Ag2Ha1GslMv0xTXUDF/4XjBm5iaPBmr8raTZQeb0zM5/ukcjxcof+W8a
+	 Ij+d/aCtJhGnOEBD3knDH2skVcCGl8f2AcE5s6W0+p8Vrpav2/0dYkbm76zRs3SbheWVs
+	 kBWoMXFrxty7VJ0zt46FHsboju1b5uCmXJW2SAzkPSomF1hN69riPvXNIz6TcKCi8IbO3
+	 bZjsi/cVQhrE8nlcfh7TiAWLf5EhX3znvEX8q7E9JCLVk04q+JbxbY5Nl7Axo6U1i6A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793753086;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793753088;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=PsrR4FNwWm2q0q+FvHbe5ukz7x1WrcxMmzLcTOmpAuk=;
-	b=TA0H+7Sc2QBNU+0T6tO5WMrQ0CiOXlXrRt6USHi2dtJ6Y5zQ5OAjdVyWhkZfYDAMGVqh
-	 a0i4DzKOP+eGi2DkltC5tEa50Amh65d6tO5NR8swtl2B8RCFgp1CB6HpjRJjuReHgW/G4
-	 lpIDNAqnXPustl4+FANPDY0Bh+LIdaRS8RnYARTXsaMmxlkGb/XZE5nvECTX/ECkxXvhk
-	 ks+C4iSgxE+80ZD9jCjfA77wsPZ+1X2Z2y34GgnxWFDB4+lSAQ5XsUVxxZeYVtTM7eNpT
-	 KWjL5RksGNQ7hvnrN46DmwJ6hAbmHLpTjzFQpJvln/aLz+ffGmjfIYjqAsIadA++1FQ==
+	bh=c35T3kU6/qhinEdzbeAC7pzjMrrfVOHaMqt5ai5YUPI=;
+	b=wEhZPrgXElbNAZYkdhNGLkU9/UcCcEHnGCCnPRm6L9tDjESUyTQGjvNAz12uSWx6bxF2
+	 A8lHbxV+TUq9S8DKyu05MnglYvoklohh94054L3/DiuPFBFCIPnOtBCNQxFHZqRQ2JlOz
+	 HJTwKkichK+4ZPb+wSRGPaVThA7E1CaZDmi6hXiYftRy0RsW/FS/Frftv6KDRhIM06HZh
+	 MjZTtre3sJh1A0CyPzxeKauhPFAuEL45CtoPKmJoGrwFUuZlEr4XQkKdmgsN8X2nbROrt
+	 By5U6h5q7eyskcRIGpjnL+IBBlD2fpLNX4mPGaPR5Ccp53PPLzJULza2jIXPsuIugwQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D1TVuWUY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CvUeAFcH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF4A606A333;
-	Wed,  4 Nov 2026 00:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DE6606A338;
+	Wed,  4 Nov 2026 00:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D1TVuWUY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECC61F00919;
-	Wed,  4 Nov 2026 00:44:45 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CvUeAFcH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED9A51F00A16;
+	Wed,  4 Nov 2026 00:44:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793753085;
-	bh=PsrR4FNwWm2q0q+FvHbe5ukz7x1WrcxMmzLcTOmpAuk=;
+	s=k20260515; t=1793753088;
+	bh=c35T3kU6/qhinEdzbeAC7pzjMrrfVOHaMqt5ai5YUPI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=D1TVuWUYLFQPh1wsmnj80WFmV4A4YU7pSShUEpnkp5ttEiK8nA8XAMPIzqnXNowoO
-	 gmSscsGS+bh/MqBzV1JTx9QTDKM7uxC/7vSrhhFPPziZz4dxWSL1nTVzS4Vv2B840X
-	 +xWAC2YqkyHLsTt4SrffX/wEec13Qe24KG8tS07S+6hqBus+2WsXuzECDkpQHJS90k
-	 UpSH/n3GIyajyHXe7oblci0IqFc6uvN+LOYezzskSviwjnh4NobLSGadfiI171QVBD
-	 bxZC8jk9PX3izfx2T6ADtqbQAv9v6wR+9EiZPW1NQT7/xEOKp58rLj18URpAKwowdF
-	 /OjWFsGyqeHUQ==
-Subject: Re: [PATCH net v4 3/7] ipv4: icmp: don't quote decrypted payload in
- icmp errors
+	b=CvUeAFcHHcVCUq6HZBEHdgEg/1GmpEdfRPTVzmnEMjGtVaS5PQ5RuzE+vrA0h8FZO
+	 FB5cJSkUfold601UkR450pZDG/bt3KHVo7DgoSeCfmqj+uUA58ZbOV4T73Ut7f+DNu
+	 bAPLI+G/MOayXAzR2P4UY/2aRj7DUWyyc99JLNAhFDYCr86CyF2MJFdnENxHLvpPuA
+	 T3kc+iSIZT9CXgiS5geV+83eYQgS8a1jZcwZ2NchqquZTo2fg+gXq+hpe3DN9ZzUlh
+	 RgS5m7nlonSmqabPRFCpOrJwF6OhZiznCxj71UyJ/qciPQNeOrMKrKH0xUhl2n35hQ
+	 Y7S/kL3U7giAw==
+Subject: Re: [PATCH net v4 6/7] selftests: drv-net: psp: test that ipv4 psp
+ packets aren't fragmented
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  sashiko-bot@kernel.org, kuba@kernel.org, bjorn@kernel.org
-Date: Wed, 04 Nov 2026 00:44:44 +0000
-Message-ID: <179375308460.488856.510323858739771391@kernel.org>
-In-Reply-To: <20261103001143.246081-4-toddfreed@meta.com>
-References: <20261103001143.246081-4-toddfreed@meta.com>
+Date: Wed, 04 Nov 2026 00:44:47 +0000
+Message-ID: <179375308755.488856.948082964372253216@kernel.org>
+In-Reply-To: <20261103001143.246081-7-toddfreed@meta.com>
+References: <20261103001143.246081-7-toddfreed@meta.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,10 +63,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -74,129 +74,86 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] In net/ipv4/icmp.c:__icmp_send(), the PSP-vs-kTLS check fails
-  open.
-- [Low] Concern: icmp6_send() in net/ipv6/icmp.c has no
-  skb_is_decrypted()/SKB_EXT_PSP handling, so ICMPv6 errors would still…
+- [Medium] In data_send_ipv4_frags()
+  (tools/testing/selftests/drivers/net/psp.py), the remote leak detector…
 
 --
 
-ipv4: icmp: don't quote decrypted payload in icmp errors
+selftests: drv-net: psp: test that ipv4 psp packets aren't fragmented
 
-This patch changes __icmp_send() so it no longer quotes device-decrypted
-data in ICMP errors. For kTLS rx offload skbs, the quote is cut off at the
-end of the TCP header and the RFC 4884 extension is skipped. For received
-skbs with SKB_EXT_PSP, no error is sent at all.
+This adds data_send_ipv4_frags() to the PSP selftest. It raises the route
+MTU on both ends above the device MTU and sets IP_PMTUDISC_OMIT on a PSP
+socket, so that its IPv4 packets would need fragmenting. It then checks
+that no fragments reach the peer and that IpFragFails increases.
 
-> diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
-> index 90c0e22c29bea..d522488475b61 100644
-> --- a/net/ipv4/icmp.c
-> +++ b/net/ipv4/icmp.c
+> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+> index c9a725cc89a27..f6888f93cb937 100755
+> --- a/tools/testing/selftests/drivers/net/psp.py
+> +++ b/tools/testing/selftests/drivers/net/psp.py
 
 [ ... ]
 
-> @@ -979,6 +981,32 @@ void __icmp_send(struct sk_buff *skb_in, int type, int code, __be32 info,
->  	if (rt->rt_flags & (RTCF_BROADCAST | RTCF_MULTICAST))
->  		goto ende;
->  
-> +	/* Don't send the decrypted part of an skb onto the network */
-> +	if (unlikely(skb_is_decrypted(skb_in))) {
-
-[Severity: Low]
-This only covers IPv4. In this patch, icmp6_send() in net/ipv6/icmp.c
-still has no skb_is_decrypted() or SKB_EXT_PSP check. An ICMPv6 error
-about a kTLS or PSP decrypted skb would still quote the decrypted payload
-and the RFC 4884 extension.
-
-The next patch in the series, "ipv6: icmpv6: don't quote decrypted
-payload in icmpv6 errors", seems to add the same handling to icmp6_send().
-So the series as a whole closes this gap.
-
-If this patch is backported to stable without the IPv6 one, ICMPv6 stays
-uncovered. Should the two be kept together for backports, or should this
-commit mention the IPv6 follow-up?
-
-> +		if (!skb_in->skb_iif) {
-> +			/* A locally originated skb to be encrypted. Permit
-> +			 * the packet to be quoted, if its source address is
-> +			 * local. otherwise skip.
-> +			 */
-> +			if (!(rt->rt_flags & RTCF_LOCAL))
-> +				goto ende;
-> +		} else if (psp_skb_is_decrypted(skb_in)) {
-> +			/* PSP encrypts the transport header too, so it should
-> +			 * not be quoted. But an error whose quote is truncated
-> +			 * to fewer than 8 bytes of the transport header won't
-> +			 * be processed, so just skip it.
-> +			 */
-> +			goto ende;
-> +		} else {
-> +			/* TLS offload leaves the tcp header in the clear and
-> +			 * so can be quoted up to its end. A psp skb whose inner
-> +			 * tunnel was decapsulated also ends up here, since
-> +			 * skb_scrub_packet() drops SKB_EXT_PSP.
-> +			 */
-> +			decrypted = true;
-> +		}
-> +	}
+> +def data_send_ipv4_frags(cfg):
+> +    """ Test that IPv4 packets of a PSP TCP socket aren't fragmented """
+> +    cfg.require_ipver("4")
+> +    _init_psp_dev(cfg)
+> +
+> +    # Fragments which get out reach the remote. Set up the count before
+> +    # connecting, so a skip doesn't leave the responder mid key exchange.
+> +    loc, rem = cfg.addr_v["4"], cfg.remote_addr_v["4"]
+> +    remote_frags = _remote_count(cfg, "ip",
+> +                                 f"src_ip {loc} dst_ip {rem} ip_flags frag")
 
 [Severity: Medium]
-Can PSP traffic fall through to the kTLS branch in more cases than the
-tunnel decap case named in the comment?
+Is loc guaranteed to be the source address the PSP socket actually uses?
 
-psp_skb_is_decrypted() only checks for SKB_EXT_PSP. skb_scrub_packet()
-resets the extensions but leaves skb->decrypted set:
+loc is LOCAL_V4 from the environment. NetDrvEpEnv only checks that it is
+set. It does not check that it is the address the kernel prefers toward
+REMOTE_V4.
 
-net/core/skbuff.c:skb_scrub_packet() {
-	skb->pkt_type = PACKET_HOST;
-	skb->skb_iif = 0;
-	skb->ignore_df = 0;
-	skb_dst_drop(skb);
-	skb_ext_reset(skb);
-	...
-}
+The socket is not bound to loc either. _make_psp_conn() does:
 
-bpf_redirect_peer() at tc ingress goes through skb_scrub_packet() in
-skb_do_redirect():
+    s = socket.create_connection((remote_addr, cfg.comm_port), )
 
-net/core/filter.c:skb_do_redirect() {
-	...
-	if (flags & BPF_F_PEER) {
-		...
-		skb_scrub_packet(skb, false);
-		...
-		skb->dev = dev;
-		dev_sw_netstats_rx_add(dev, skb->len);
-		return -EAGAIN;
-	}
-	...
-}
+The local /32 route that _ipv4_route_mtu(rem, mtu) adds pins the source to
+whatever "ip route get" returned:
 
-Receive then runs again in the peer netns, so skb_iif is non-zero again.
-An ingress bpf_redirect() looks similar:
+    ip(f"route add {dst}/32 dev {route['dev']} src {route['prefsrc']} "
+       f"mtu {mtu}", host=host)
 
-__bpf_rx_skb()->____dev_forward_skb()->skb_scrub_packet()
+So the socket's source is route['prefsrc'], and nothing compares it with
+loc. Using a secondary address on NETIF as LOCAL_V4 would be enough to make
+the two differ.
 
-On those paths, a PSP decrypted skb reaches __icmp_send() with skb_iif
-set but without SKB_EXT_PSP. It takes the decrypted = true branch. The
-quote then holds the IP header plus max(th->doff * 4, 8) bytes of L4
-header.
+When they differ, the remote route added by
+_ipv4_route_mtu(loc, mtu, host=cfg.remote) does not apply to this
+connection. With equal device MTUs, the peer's MSS clamps ours. The test
+then skips with "mss N needs no fragmenting" and never exercises the path.
 
-That is up to 60 bytes of TCP header (ports, seq/ack, window, options)
-that PSP encrypted on the wire, sent back in a cleartext ICMP error. For
-a non-TCP inner protocol it is 8 bytes of L4 header.
+If the remote device MTU is larger, the test does run. Without the fix in
+"net: don't fragment decrypted skbs", though, the cleartext fragments carry
+src=prefsrc. The flower filter would not match them, so this check passes
+trivially:
 
-A netfilter REJECT, TTL exceeded or frag needed in the target netns could
-trigger this. Host routed or bridged forwarding doesn't seem affected,
-because sk_validate_xmit_skb() drops decrypted skbs that have no socket.
-The BPF redirect and tunnel decap paths skip that check.
+    ksft_eq(remote_frags(), 0, comment="fragments reached the remote")
 
-The commit message says "don't send the error at all for psp", but these
-paths still quote the encrypted transport header. Would it be safer to
-fail closed, for example by quoting only when the skb is known to be
-kTLS, instead of whenever SKB_EXT_PSP is missing?
+Only the netns-wide FragFails delta is left, and the test's own comment
+says that one only confirms the drop. Any unrelated FragFails increment
+during the 3 second send window would then make the test pass falsely.
 
-The IPv6 patch later in the series appears to have the same fallback.
+data_send_ipv6_exthdr() avoids this by building its filter from
+_src_addr(peer). Could this test do the same? Some options:
+
+  - use route['prefsrc'] (or s.getsockname()[0]) for both the filter and
+    the remote route
+  - bind the socket to loc
+  - skip when loc and the chosen source differ
+
+A related, smaller point: the skip check compares mss against
+cfg.dev['mtu'], but fragmentation uses the MTU of route['dev']. Nothing
+checks that route['dev'] is cfg.ifname. Should that be checked as well?
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261103001143.246081-1-toddfreed%40meta.com
