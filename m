@@ -1,54 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793762034;
-	b=eHkMElNy4+5f283bsBr6C2bEeg78wakmChlti50CszpwCUznEiyVU0ZIUtVe75EPLD/o
-	 ZVDly8GHlYkRCSPU7C+aXonSpWNROXDBa11+wQBxQX9PKqCYYN8nTaJsc5tMmTS9NeOZg
-	 JZyczoXMEjjkwLI61Q3Ivhpwt6er16sqR1lw88KP6KmpECZs0riB1gmPRD7ECljmI0R7P
-	 om+XpV74Xiqj5RfxpSqGGzaPWErh4i2pFK48IFgnU5VQdRicveABL+sboS9AfrBGnuaHO
-	 LogVomZVAxD5ntKOog/7DeMyP2l30uE35dslgQ8JdGm5kouBpvEG2op27uEuPQp6QvA==
+	t=1793762843;
+	b=ctf2SP5DiGYwWmlF4TSvr2RyOJWk4iu2NUZw01OIvdfev1LOL4wmhP47995eAjVH7BGk
+	 +at+j/7HZGL0r/TPo3p2WGL52D1+a081/DqDIpfdfqzrLk+IPOInVbIBC43r9YiEHIFTv
+	 aW2HTVEam3lgLf6S+uom5FwrA4x7wSPpE1FFNNH0RovlNs9qlkuaxB4DHBvUtbbkSW++c
+	 t3QZDuSzwWzHRscrSAoJDsOQpxThgk1S6fj/1xqtutNNX0YKki4wAvWQulH/amST4ayCr
+	 XkOd0gqNK/etHYDqPNfj0Assr3i2nKK6N4jEOorRJBQa8zV38Zo8BSbU4Jxz42PDCMA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793762034;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793762843;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=kHvvjVvMo3Ca31l9qkMMt0Ug776gEiMiHXHw+6Z3x3Q=;
-	b=czm4AcR2aRiaDrCrIXBxl7xQRbnfqp95ahUim7mN7sc4Acf/4dBaKF/eABnLY5yNzfCp
-	 OxS+fRRNefI+PEtYf36doBBm5rrIU4Ths6LNW94CYOqKbGtq9zLW2mXmJacZlk6lF9nMb
-	 r8vOxtDPNKTkyqtJeAUSVoQU0KkaBdXVITX2zL81CDi+WQfLRHfig85QMVqY0TKg6jnX8
-	 2xGXGt8OpV3AykfeGrUGv1LSRGL2d9rlLjZ6nouVcITfbVBiVAFWZCyUe8RHHvLSau54q
-	 3UmBX/8Sogf/EYSBCVN1AQSFLNBdJ9NNeOQL+m90S/jOnJ1+xkoFFhKb6IsM0zee+8g==
+	bh=BFr+2EFgu1Nhb0O0fEPP4E9HWvVTMR4rapiR13PNnbM=;
+	b=VXQ0rVYon5cdsuonF4AmRwD6hX93FqI+MeyIqCpCAy6AMhlV3+mJKV5mBx+Ey8FID8VK
+	 2gFXgLM66gEFgHf45UEbacbQD7hjZDjHK9sgttQzaV6Soke+uHxHyE1jGCQp2YwZTbojQ
+	 RS2a4NLvXCqPLwEfsp/Jzel7PYDUhRuSo2iMxptGary6FULZwBlUoX+ttPAkZXReHDwhQ
+	 X8EGbPHLnPq0nPS1n6dBkPJF2Lhwf+Cf2Tz3QNAAMuRywwv1Vm4VlL2QaKqRcZtQZsAim
+	 h/fG79uBebAxxGAhTMsdlx2kfzXvrtuVjp0dqUAN9yAZnAsyDTJ21pDkgzdAwc/tcZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=uMs5JuPw;
-	arc=none smtp.remote-ip=91.218.175.2
-Received: from mta0.migadu.com (out-2.mta0.migadu.com [91.218.175.2])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TPkM8k9+;
+	arc=none smtp.remote-ip=74.125.229.5
+Received: from mail-dy2-f5.google.com (mail-dy2-f5.google.com [74.125.229.5])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815CD606A32C
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 03:13:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 815CD606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BDC606D809
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 03:27:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2BDC606D809
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=uMs5JuPw
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7nc5JHefYXpoNimiJuHhH8coWhmIm/8dKZMtkpclPOg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793762031; v=1; x=1794366831;
- b=uMs5JuPwslCBc4PlhALlMeFoRJYTPbPeatDmzlAyuTfJZDKO7hf8Z2zaRsg74S+BJ5cBjv/T
- 34sMO3rTQdan63VlG5KcVZ3nTbMfDSUysVx9L6igYlWh257IjBwNU1gaMa1c99M8zx1kOUDsBVN
- 98Y/FZoRyC8Qn721dUozMN2g=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f93b0f4fb90c99d5;
-	Wed, 04 Nov 2026 03:13:51 +0000
-X-Mizu-Trace-ID: f93b0f4fb90c99d5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <73bad331-8495-4b74-8bf6-ac5d07000d99@linux.dev>
-Date: Wed, 4 Nov 2026 11:13:42 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TPkM8k9+
+Received: by mail-dy2-f5.google.com with SMTP id 5a478bee46e88-3535a54c09bso111843eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 19:27:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793762842; x=1794367642; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BFr+2EFgu1Nhb0O0fEPP4E9HWvVTMR4rapiR13PNnbM=;
+        b=TPkM8k9+c67hAid6Zd+6QpWcr2wBU43iV09DyDAJjer2cCS1BBUg8u4DYr3EIiihVq
+         LyltlVq3FNxn69cYkcbTZfbl2IXcxwzmOEzr/6ld4+daTSaC7e6U5KDBpQUZmBhVWhV2
+         YantVUmta5PgKluUMCOVjJHrvIJZbXvmBvFa+HatSLo+NoQ41G/jDUB6TaYfcL95C/J2
+         YOp97EfwGUn9J6N0ikEstVZ4eJoJERg8RwJ/zu0Ftkfy9hQU5Jj6U1EJ4zitujOFAgzM
+         lbGKIMOxgc5tGW8hSVSJo1oEjioTOohBb0/wCeDDw6aA78Ddu1OsWd4KTOlws8miYld1
+         DShA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793762842; x=1794367642;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BFr+2EFgu1Nhb0O0fEPP4E9HWvVTMR4rapiR13PNnbM=;
+        b=OLs4ao6C5gOZoVBPukucyH5vraxEHWoLKwNzTv5pzCshPhMmowV9FHzuTjOr2Xhz/l
+         DQV5j7YSl3ShlFWjK5L1ldq6+Q/G2viGradToX7BZZjSPGRzPj5p9o8lkET2/syxZW+d
+         bVE3POvV99dVl0wMc83rrWtC/DFtZCvIHh01Z4lAe3GCc4sDXl6082pja5XAf1ncDvl9
+         dwwrsFwL8iRcU5hXuHfoV2iiLVSYbwhOX8vM5OYgfrySfF8Wo1kqKUGXkDbayI1Oe+mN
+         T293FtbHo/ZleN76Nq5uIITX57Dvpi48VQ/YOtfmZqTqOJ+zH2ZBEGekavI4ngcRn/Ec
+         bbww==
+X-Forwarded-Encrypted: i=1; AKwUvBwvSBl3wO3By2wr+wf1Dz6MytGqSJXF+x2TbRucV9roqtkid4rxQl2B43BFpkTd3OwA07K09NYCeUgZsb3OKwI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9YVzY9Xs51sjRyaMftGbZkR8wdx320bYyZUQKIaI71tQkmQUUT
+	X6Uj2ESh5ZvNOVT3xujaeV6t2YzUMDTxfKIU1wH1Bi//ki9qYyqaVhxdT9fsXP+wvvA=
+X-Gm-Gg: AYBFou1X1UiIS+wYCMOVvf7ikvpc6QDbej+eZosEAzS/CTYzwgcOfjFRzGqT9QTq+cX
+	y/M5scCw+fAlfQZsfmY7UFhUEEHwtK8VsZhCPlTD/2aRRHQPqKrmu3kP5S8vMigdk+ebb2ZrqTb
+	LhdHosbhW6noVseCztmXW/T1a5HlgKU4x2IUmQcdxtfDfyynQ2kpCOQJsWKK4l6tyVI57sa9bQi
+	mGlSxRDKO/37xHlnRcZ30IzVGamVsE5NDO7YzMFrySYtTTpDuZbmJIBcayCHrUjwhTJTGkon16L
+	1YdibMozcjq3oWFdSP01ZHUNKUHYpw6K7fYjO2LDbCPwfemP9PHugKxKdLaS+/K+9vhDtVZwcvY
+	FzdOExJw9WpA7rkDUSlwzaneCpxk1yIlehdSQkrSAf7fga2cmQWT59nQqru0ytmM+sV6b2IwEGh
+	OHP5h2MhznXGgTTbzRbP/OZzM3EvubqaA7ooTGPTxHjNVIJmgBKFiB2oTlVfpAmkgMThfP+1hX2
+	wmI6t9df70DyIgX0mIADUlpojn3IGVjvuwDjs+XJAT2Qaq5ihPYIdJ8eJK2S7x3xKxy+4w4BtbL
+	fWSGIYnH4sHCfpEbxe3xJZ/ONtaEsCLDgcQzfGXRwyt04DqBAGkcOrryZpMelv5cl2Bmh/SUTcA
+	cXw7l/E9eRZa1cahTolBQt4EJBBeU1o3socIALg==
+X-Received: by 2002:a05:701b:2806:b0:159:2c6d:fcc3 with SMTP id a92af1059eb24-1ac5d2c5b1cmr22007721c88.33.1793762841634;
+        Tue, 03 Nov 2026 19:27:21 -0800 (PST)
+Received: from localhost.localdomain ([98.148.34.5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b245c1c127sm3574613c88.6.2026.11.03.19.27.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 19:27:21 -0800 (PST)
+From: Hungyu Lin <dennylin0707@gmail.com>
+To: ast@kernel.org,
+	bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hungyu Lin <dennylin0707@gmail.com>
+Subject: [PATCH bpf-next] bpf: Use 64-bit writes when inlining bpf_loop
+Date: Wed,  4 Nov 2026 03:27:00 +0000
+Message-ID: <20261104032700.55296-1-dennylin0707@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,100 +108,116 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
- martin.lau@kernel.org, yonghong.song@linux.dev, mason@kernel.org,
- ihor.solodrai@linux.dev
-Subject: Re: [RFC PATCH v12 3/4] selftests/bpf: add iocost cost model test
-To: bot+bpf-ci@kernel.org, tj@kernel.org, josef@toxicopanda.com,
- axboe@kernel.dk, alexei.starovoitov@gmail.com
-References: <20261103132613.1952975-4-cui.tao@linux.dev>
- <cdb4a70a69306fb920d52c3e5511bb1cbac094d4f47b1b89ae56b674853c287d@mail.kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <cdb4a70a69306fb920d52c3e5511bb1cbac094d4f47b1b89ae56b674853c287d@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello,
+The error path in inline_bpf_loop() writes -E2BIG with BPF_MOV32_IMM(),
+zero-extending it to 0x00000000fffffff9 instead of the 64-bit negative
+value returned by the helper. A caller keeping the result in a long
+therefore misses the error when testing ret < 0.
 
-在 2026/11/3 22:07, bot+bpf-ci@kernel.org 写道:
->> selftests/bpf: add iocost cost model test
-> 
-> TL;DR: Selftest cgroup names "iocost_pairing" and "iocost_ms" lack a leading
-> '/', so the cgroups are likely created outside the work directory and not
-> removed by cleanup_cgroup_environment(), leaving empty cgroups on the host.
-> 
-Confirmed. The missing leading '/' places both cgroups alongside the
-per-test work directory instead of inside it, so
-cleanup_cgroup_environment() never visits them. The test itself still
-works because every helper builds the same path.
+Use BPF_MOV64_IMM() for the error return and loop-counter initialization.
+Neither write needs truncation, and this avoids the extra zero extensions
+required by the s390 and RISC-V JITs.
 
-I'll switch every use to "/iocost_pairing" and "/iocost_ms", so the
-cgroups live under the work directory and are removed by the existing
-cleanup.
+Keep the helper result in a long before checking it in the existing
+bpf_loop test, so its over-limit case catches the wrong upper bits.
+Drop the now redundant architecture-specific expectations from
+patch_list_insert_in_front().
 
-Thanks,
-Tao
->> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
->> new file mode 100644
-> 
-> [ ... ]
-> 
->> +	/*
->> +	 * cgroup_setup_and_join() creates the priced-IO cgroup with the
->> +	 * available controllers enabled, so the cgroup has
->> +	 * io.weight/io.stat and the iocg activates.
->> +	 * cleanup_cgroup_environment() removes it from every exit path
->> +	 * below. io.cost.qos and io.cost.model are root-only cgroupfs
->> +	 * files: they are written at the hierarchy root and reverted on
->> +	 * exit.
->> +	 */
->> +	cg = cgroup_setup_and_join("iocost_pairing");
-> 
-> [ ... ]
-> 
->> +		cg = cgroup_setup_and_join("iocost_ms");
-> 
-> Will these cgroups actually be removed by cleanup_cgroup_environment()?
-> 
-> The name has no leading '/', and format_cgroup_path() in cgroup_helpers.c
-> joins the pieces with no separator:
-> 
->     #define format_cgroup_path_pid(buf, path, pid) \
->         snprintf(buf, sizeof(buf), "%s%s%d%s", CGROUP_MOUNT_PATH, \
->         CGROUP_WORK_DIR, pid, path)
-> 
-> So cgroup_setup_and_join("iocost_pairing") ends up doing mkdir on
-> "/mnt/cgroup-test-work-dir<pid>iocost_pairing".  That is a sibling of the
-> work directory directly under the cgroup2 root, not a child of it.
-> join_cgroup(), write_cgroup_file() and read_cgroup_file() build the same
-> path, so the test itself works.
-> 
-> But __cleanup_cgroup_environment() only walks the work directory:
-> 
->     format_cgroup_path(cgroup_workdir, "");
->     join_cgroup_from_top(CGROUP_MOUNT_PATH);
->     nftw(cgroup_workdir, nftwfunc, WALK_FD_LIMIT, FTW_DEPTH | FTW_MOUNT);
-> 
-> so the sibling directory is never visited.  The empty cgroup remains on the
-> host as /sys/fs/cgroup/cgroup-test-work-dir<pid>iocost_pairing, which also
-> contradicts the comment above ("cleanup_cgroup_environment() removes it from
-> every exit path below").  serial_test_iocost_model_streams() has the same
-> problem with "iocost_ms", including the matching write_cgroup_file() and
-> read_cost_usage() calls.
-> 
-> Other callers that use a fixed name pass a leading slash, for example
-> "/skb_cgroup_test" and "/cgroup_iter_memcg_test".  Would "/iocost_pairing"
-> and "/iocost_ms" at every place they are passed put the cgroups under the
-> work directory where the existing cleanup removes them?
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41646836440
+Fixes: 1ade23711971 ("bpf: Inline calls to bpf_loop when callback is known")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/DMM0E6AA3KB6.28SYB9X6ZYIHL@gmail.com/
+Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
+---
+ kernel/bpf/fixups.c                            |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_loop.c   |  8 +++++---
+ .../selftests/bpf/progs/verifier_patch_list.c  | 18 ------------------
+ 3 files changed, 7 insertions(+), 23 deletions(-)
+
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 6b719a28be68..321624a4b2b3 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -2783,7 +2783,7 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
+ 	 * expected number of iterations is too big.
+ 	 */
+ 	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JLE, BPF_REG_1, BPF_MAX_LOOPS, 2);
+-	insn_buf[cnt++] = BPF_MOV32_IMM(BPF_REG_0, -E2BIG);
++	insn_buf[cnt++] = BPF_MOV64_IMM(BPF_REG_0, -E2BIG);
+ 	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JA, 0, 0, 16);
+ 	/* spill R6, R7, R8 to use these as loop vars */
+ 	insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, r6_offset);
+@@ -2791,7 +2791,7 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
+ 	insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_8, r8_offset);
+ 	/* initialize loop vars */
+ 	insn_buf[cnt++] = BPF_MOV64_REG(reg_loop_max, BPF_REG_1);
+-	insn_buf[cnt++] = BPF_MOV32_IMM(reg_loop_cnt, 0);
++	insn_buf[cnt++] = BPF_MOV64_IMM(reg_loop_cnt, 0);
+ 	insn_buf[cnt++] = BPF_MOV64_REG(reg_loop_ctx, BPF_REG_3);
+ 	/* loop header,
+ 	 * if reg_loop_cnt >= reg_loop_max skip the loop body
+diff --git a/tools/testing/selftests/bpf/progs/bpf_loop.c b/tools/testing/selftests/bpf/progs/bpf_loop.c
+index 1d194455b109..7a8ae1110c0a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_loop.c
++++ b/tools/testing/selftests/bpf/progs/bpf_loop.c
+@@ -66,14 +66,16 @@ SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+ int test_prog(void *ctx)
+ {
+ 	struct callback_ctx data = {};
++	long ret;
+ 
+ 	if (bpf_get_current_pid_tgid() >> 32 != pid)
+ 		return 0;
+ 
+-	nr_loops_returned = bpf_loop(nr_loops, callback, &data, 0);
++	ret = bpf_loop(nr_loops, callback, &data, 0);
++	nr_loops_returned = ret;
+ 
+-	if (nr_loops_returned < 0)
+-		err = nr_loops_returned;
++	if (ret < 0)
++		err = ret;
+ 	else
+ 		g_output = data.output;
+ 
+diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+index a9ad1dc56c3a..581b75b7b5c5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
++++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+@@ -298,23 +298,6 @@ __arch_arm64
+ __arch_riscv64
+ __arch_loongarch
+ __success
+-/* The verifier adds two zero extensions for these JITs. */
+-#if defined(__TARGET_ARCH_s390) || defined(__TARGET_ARCH_riscv)
+-__xlated("25: call pc+7")
+-__xlated("...")
+-__xlated("32: exit")
+-__xlated("33: r0 = ")
+-__xlated("35: r0 = &(void __percpu *)(r0)")
+-__xlated("36: r0 = *(u64 *)(r0 +0)")
+-__xlated("37: if r0 != 0x0 goto pc+2")
+-__xlated("38: r0 = 1")
+-__xlated("39: exit")
+-__xlated("40: r1 += -1")
+-__xlated("...")
+-__xlated("51: if r1 != 0x0 goto pc-12")
+-__xlated("52: r0 = 0")
+-__xlated("53: exit")
+-#else
+ __xlated("23: call pc+7")
+ __xlated("...")
+ __xlated("30: exit")
+@@ -329,7 +312,6 @@ __xlated("...")
+ __xlated("49: if r1 != 0x0 goto pc-12")
+ __xlated("50: r0 = 0")
+ __xlated("51: exit")
+-#endif
+ __naked void patch_list_insert_in_front(void)
+ {
+ 	asm volatile (
+
+base-commit: 8fb43ffc3327d12d57d3fbe6f4820b5a522de0d1
+-- 
+2.43.0
 
