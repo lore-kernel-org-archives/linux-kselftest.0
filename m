@@ -1,58 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.232
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793755312;
-	b=rKPjd0uyW2fXLnszvS1zjXNd1sV9/tAzlxlmtdlGfxe93bHWVNDe6tMpNuPZHNqiVYrr
-	 KH4C1qfAsMTO9mvL9Jr6rGlFR+2hRiujtIHv4OZLs9GUSvePtkUiJIXkMxe0ZCqxzgOVB
-	 Gg1XwB/Ao15IDcEg+TI2BXdZzV/bAv0nOLE0803Pm8SxxWY7oxzffKs4QY+MwsZhN3KcA
-	 ud2OjdXkc3wydqUj9sdY0ZMRaLkyDsNknlj68Vgp3vE3DK7cIOmWkpcBUT0DYVq+GZWi8
-	 4+D4UGthCbB785pXS8OfZCs0+iIQvR8CNKqN4+8WKdgqBuko2rErS/Vs9jlgSOK/GmA==
+	t=1793756233;
+	b=gXLtmJ85QbbY45a5ioNbkHKQ4bW9ibVRDd0CSbJG1nz/N4ZFEYns5XsNZFRmo7aCvtDP
+	 v6XF1/2GtsQXx8N1ESVMcR0b/gGJnlfUidjrm2+A0DZlI0vTtS/0akC18N5ljtSKfavr/
+	 XlfAzJzP6hmFVatTRT8Pl5VtpwMP3SEbZG2ODQVcnO7uTxDHzzznt/wL3UPNsiR2FBVSH
+	 exB35TbUwJ7dpsKjWzpfdXOgtJoOnmk/EiFkucyvdfUT4o2bA02aIbdUq1Ayq7tNDK5pj
+	 GAstH2oJ2yKQjNoPtmLIIMqiQhETkCmJxDLzNPEidrXfJlb1/YyMbJwxKb2iC9gY93A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793755312;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
-	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=3Q5/n+lMO8hXflt+/fw8C33ZJeW4TIpqo/+mXVJXPEc=;
-	b=cg2V35Yp1iGJsTknFAuOPgzi96t44Iw5q5fDcFIuu+o/EwcWGPlRiCQmhZ9BgTKQDcFs
-	 xub/RIYUnALA2lDSWr3HQC8RwHrJwc+HDND+iyU8mfDSOFNzwjBtqOH2dnh26UNRQBAOD
-	 uhvlnEyYoQpHjcTYDMqETBtg0VhHNrW8Xs3aauMTLluOXTbUqJ0JxmC3fNOBBqy8vA5XJ
-	 tvhZY6aGsrWghuhrXTsCCxXwmt6h5sb2t0UmW6lsCI0s7KY/1iMqfETGHseDXOgt67aUy
-	 3BBW0BxE3HXtGnJppzOQTaDFI6UUG2WqTkkEMf3nmLFfvtrhR7QxuHm6jyFYa/bzSyg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793756233;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=UO7Z5tsn7txdFCLAXrnod+ml4wDdbMy6SVmjOROOIxY=;
+	b=ntmesuq/xB9FSF4SW2/xCneQ34WEcYRpdtvonMtnUIPryijlvttQBOE4Hs8M/7L8f9zS
+	 QD1nTaRJgjT7ggu26IbR3JUB7kTd78cOAgraxFJZToZLUJ3uAL50gNW2b7Xzac2lvqg9S
+	 VjTkq24eg2Oj17AYA7fkzIsZHKmVDrkpUlYWUdcvaWLghrtUyLa9TcGHxc22P/AIzdmOm
+	 Abp+5plB1Wf0TXw1TQOskYLcqRM9LrqHTKLsXFjzo24Bh+INLUM1wCVxXYf9qgiv5MAL6
+	 4L/H7H4gW/N5EdqzJJiki0roQXsxbpK6TsVDNkW7t5BYh6LGIStZNzDR9VtrdzUVrDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=UjGpG3oB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l1zduyM3;
+	arc=none smtp.remote-ip=95.215.58.232
+Received: from mta1.migadu.com (out-232.mta1.migadu.com [95.215.58.232])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7E1606A31B;
-	Wed,  4 Nov 2026 01:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4D0606A330
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 01:37:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C4D0606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=UjGpG3oB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914531F000C1;
-	Wed,  4 Nov 2026 01:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1793755311;
-	bh=3Q5/n+lMO8hXflt+/fw8C33ZJeW4TIpqo/+mXVJXPEc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=UjGpG3oBmG7swsK9ZzyPdqaDfK2bSJXx673GJ32yahnXtcyErEZd5uEkYt1QyYNJb
-	 dupMFGFBaex2t7vP8gfvw5utKKJTtTzI3wtIt7K8G9XXC3hsWIWTgSCioRoPJ7PYv8
-	 HL95CDgWBQrE0B3pFRJgpmGyFguBp5Pq+B2LuOIo=
-Date: Tue, 3 Nov 2026 17:21:50 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=l1zduyM3
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ffKLXdFUxdazV2FKiPThxW70uDTjU2urA0VpiC9e5/c=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793756230; v=1; x=1794361030;
+ b=l1zduyM3a16NRzkhHAex74mVxwZjso2sza56O6C4oTVeHHcMTUFwd9kEzTU8pcLi+U0URmhQ
+ rypucibmqL2HnxUkL1pSuYAFCRN+uHZ5txJjBhKaFtQcLFlhT2QFNiAro8JFAfq4t9zKPi4kRWL
+ JYHI+xmlq2GRSYc0FhE/9jEU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 6af974aafe6e345e;
+	Wed, 04 Nov 2026 01:37:10 +0000
+X-Mizu-Trace-ID: 6af974aafe6e345e
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 4 Nov 2026 09:36:58 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
 To: Sasha Levin <sashal@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, David
- Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
- <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
- <shuah@kernel.org>, Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/mm: fix pointer width warnings on 32-bit
+Cc: Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jason Xing <kerneljasonxing@gmail.com>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: fix format warnings on 32-bit
  architectures
-Message-Id: <20261103172150.3753dfa00f3106b6014e4d2c@linux-foundation.org>
-In-Reply-To: <20261103212805.1537354-1-sashal@kernel.org>
-References: <20261103212805.1537354-1-sashal@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Message-ID: <auqMOoEVdX805ZE7@fedora>
+References: <20261103155503.534876-1-sashal@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,69 +70,87 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261103155503.534876-1-sashal@kernel.org>
 
-On Tue,  3 Nov 2026 16:28:05 -0500 Sasha Levin <sashal@kernel.org> wrote:
-
-> Several mm tests convert between pointers and 64-bit integers with a
-> plain cast, which warns on 32-bit architectures, and hugetlb-mremap
-> passes 47-bit mmap() hints that don't fit in an unsigned long:
+On Tue, Nov 03, 2026 at 10:55:03AM -0500, Sasha Levin wrote:
+> On 32-bit architectures ssize_t is an int, tv_sec is a long long with a
+> 64-bit time_t, and uint64_t is not a size_t, so ipsec, txtimestamp and
+> the tcp_ao library warn when printing them with %ld, %lu and %zu:
 > 
->   uffd-unit-tests.c:344:31: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+>   txtimestamp.c:191:42: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type '__time64_t' {aka 'long long int'} [-Wformat=]
 > 
-> Add ptr_to_u64() and u64_to_ptr() to vm_util.h, which cast through
-> uintptr_t, and use them where pointers meet the 64-bit UAPI fields and
-> the 64-bit address arithmetic in mremap_test. The hugetlb-mremap hints
-> don't fit in a 32-bit address space, so only pass them when long is 64
-> bits.
-
-lgtm, thanks.  I used this as the first test case for my shiny new
-kernel testing bunnybot,
-
-Turns out, you accidentally fixed a bug!
-
-: I compiled all six affected C files with GCC 13.3 for i386 and x86-64.
-: The patch eliminated all 40 targeted warnings on i386. In a Debian VM,
-: both ABIs passed checks for pointer round trips and high-bit addresses.
-: All three hugepage mmap hints were NULL on i386 and retained their
-: requested values on x86-64.
-: 
-: There's also a runtime fix worth mentioning in the changelog. In the
-: unpatched i386 wp-unpopulated test, UFFDIO_REGISTER successfully
-: registered 0xf3f7a000. The test then passed the sign-extended address
-: 0xfffffffff3f7a000 to UFFDIO_WRITEPROTECT and got EINVAL. With the
-: cast through uintptr_t, wp-unpopulated passed on every run.
-: 
-: With userfaultfd enabled, hugetlb-mremap and the userfaultfd case in
-: mremap_test passed on both ABIs, with and without the patch.
-: 
-: Separately, mremap_test cases 10-13 failed with EINVAL on i386 both
-: before and after the patch. Each tries to move a 2 GiB mapping from a
-: 1 GiB-aligned source to a nonoverlapping destination. Only the
-: destination alignment varies: 4 KiB, 1 MiB, 2 MiB or 1 GiB. The two
-: ranges alone would fill a 32-bit address space. As a follow-up, I'd
-: make these four cases report SKIP for 32-bit userspace and keep the
-: existing coverage on 64-bit.
-: 
-: Tested-by: Andrew Morton <akpm@linux-foundation.org>
-
-
-By my count, we have 15 implementations of ptr_to_u64() splattered all
-over the tree. 
-
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -59,6 +59,16 @@ static inline unsigned int pshift(void)
->  	return __page_shift;
->  }
+> Print ssize_t with %zd, tv_sec as long long, and the net namespace
+> cookies with PRIu64 as the rest of ftrace-tcp.c already does. While at
+> it, print tv_nsec, a long, with %ld instead of %lu, and cast it to long,
+> as it is a long long on x32.
+> 
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+> Found with a 32-bit build of the selftests with a 64-bit time_t (gcc 16
+> and clang 21 with -m32 -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
+> KernelCI's 32-bit arm builds show the same warnings. The changed files
+> build without format warnings there now, and the x86_64 builds don't
+> change. The other selftests get the same kind of fix in separate
+> patches.
+> 
+>  tools/testing/selftests/net/ipsec.c                 | 2 +-
+>  tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c | 2 +-
+>  tools/testing/selftests/net/txtimestamp.c           | 9 +++++----
+>  3 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+> index 89c32c354c008..ba8c36a93f176 100644
+> --- a/tools/testing/selftests/net/ipsec.c
+> +++ b/tools/testing/selftests/net/ipsec.c
+> @@ -2030,7 +2030,7 @@ static int __write_desc(int test_desc_fd, struct xfrm_desc *desc)
+>  	if (ret == sizeof(*desc))
+>  		return 0;
 >  
-> +static inline uint64_t ptr_to_u64(const void *ptr)
-> +{
-> +	return (uintptr_t)ptr;
-> +}
+> -	pr_err("Writing test's desc failed %ld", ret);
+> +	pr_err("Writing test's desc failed %zd", ret);
+>  
+>  	return -1;
+>  }
+> diff --git a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+> index 27403f8750547..cd93ff8965dda 100644
+> --- a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+> +++ b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+> @@ -504,7 +504,7 @@ static int setup_tcp_trace_events(struct test_ftracer *tracer)
+>  	size_t i;
+>  	int ret;
+>  
+> -	filter = test_sprintf("net_cookie == %zu || net_cookie == %zu",
+> +	filter = test_sprintf("net_cookie == %" PRIu64 " || net_cookie == %" PRIu64,
+>  			      ns_cookie1, ns_cookie2);
+>  	if (!filter)
+>  		return -ENOMEM;
+> diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
+> index f7bdf30b78d9f..be1452d73b303 100644
+> --- a/tools/testing/selftests/net/txtimestamp.c
+> +++ b/tools/testing/selftests/net/txtimestamp.c
+> @@ -188,12 +188,13 @@ static void __print_timestamp(const char *name, struct timespec *cur,
+>  		return;
+>  
+>  	if (cfg_print_nsec)
+> -		fprintf(stderr, "  %s: %lu s %lu ns (seq=%u, len=%u)",
+> -				name, cur->tv_sec, cur->tv_nsec,
+> +		fprintf(stderr, "  %s: %lld s %ld ns (seq=%u, len=%u)",
+> +				name, (long long)cur->tv_sec, (long)cur->tv_nsec,
+>  				key, payload_len);
+>  	else
+> -		fprintf(stderr, "  %s: %lu s %lu us (seq=%u, len=%u)",
+> -				name, cur->tv_sec, cur->tv_nsec / NSEC_PER_USEC,
+> +		fprintf(stderr, "  %s: %lld s %ld us (seq=%u, len=%u)",
+> +				name, (long long)cur->tv_sec,
+> +				(long)(cur->tv_nsec / NSEC_PER_USEC),
+>  				key, payload_len);
+>  
+>  	if (cur != &ts_usr) {
+> -- 
+> 2.53.0
+> 
 
-16!
-
-
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
