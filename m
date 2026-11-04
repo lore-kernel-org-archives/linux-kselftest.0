@@ -1,110 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.78
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793822075;
-	b=yXaPkleNL0gfwywqyESbLoiVXqBbagJJOrXSr5+BUXMVmoIYpqulNlkXBSnNMvIGWoz8
-	 T+PsZ9JDqlc1CwOBA1lsA+30AZBQ1Oy/kd9K60Vs20cWHRyTBg4H1VyidCNpuW6bzQMI1
-	 qbD2wvBUZPXpECE8BE1+ly365OQOHDArBXQ9hwhdL32128Oaa72p6EnNgBZq2RGwdIzro
-	 msTUuOufpzH0emdzDcfJX93hM12uZBJ+VBojooojo8msQfARMr5OR/ov24R8XpGCGja4o
-	 /JosSB5eKtXNRFRmGvozYRgJOYTDHcJEDQMtq8AojrgapVCyquKw+f5aHdMuvJr5rcA==
+	t=1793822081;
+	b=JUq65YEpSdPHyqzdSoHksYWC3LrLU3551PhuDRfyr3hzsundpZrAtvuQBJpQ14FkbvGx
+	 vr3EU6p+w8KPO8kFN+cZoJDswLI8iVhko/HErpfLT5xLE/J6mjeZUv8UkyrOIqdI3n+qp
+	 Gw7jt0L80mW9lub+QzR960RWO1VATktAe96R8LGAmjw8u/dWZUKWeWbZOr9upk3XP5IXm
+	 /zyoSj0v8xgi868uWtN8a7f+pFEmiXhvQQck6b2VdhYRB80uhyBrgk9AvjTe3e/pdLjhg
+	 RdZny2FrAdLTbLHMm4Nr6ilk1o3niHDqb7B6w0l8kp3yvnJO0SSPD59xyGA1jfmswPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793822075;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=MznRqphvtEZQp5npCZI4V0Q6Ll7VzqUvC+SM21Py/Cg=;
-	b=rjA6373da6kigFVWKi97o8WujZneNvOd2wDLxFksgAHvHpcBQ2J7qYi6p7eU3Gz2GvOg
-	 M10APes13aqrnReba9/vpsO7XdYkkyTA2nYG8CACKg84vD95glOD3Ty745KEOVFcnd43h
-	 lGEf+15bTels1N0x/AsXxiAqUQ+MlbxvQCLJgsKWWMrdSF1AN14um0o7d5nKxP287SMuZ
-	 9KWz7F0qaR+rfFdybC8sqKA4/1UOKRn4CIp5dJcLA/Ex/b7B8avfg87YkPQmRE8tZU3gT
-	 dwpQqGVh7p0vgYDW/OmyOfDob3EAukU4Y0CY+80+P5k/Rzb/r6p8Mfug8OpPxIaMdqA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822081;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Envelope-From;
+	bh=DRYW9LsOkwqorjTVMq50L2691tSj2pAGda8sueNbSfA=;
+	b=utybYz9bUjPq/e6mAXXfvCBMTUleFw8bMKqznGltLfm0fe6FfTBoQNBXKHOEG4cD/GfC
+	 HLo0ZLjM0d+SNNQ1fqzD18Oz/LUUJpCaZkxJutH4X/hH0MRJOBCJh7g74aKlspCbF8bD/
+	 5b7h53o/urvQI8sKY4jxp8K5/TyYfqXRaaGdPCuEQOUfDdeBbQ0W3Fk5ZzuM3eDOyUNHj
+	 /9hCZ7qXaGcbA0F+6GbxCMYBkdj8QoSwVc/DQp26xsG7a5FAmPgjbg+ozSXZrpFNC30Ho
+	 8tZ4Q6in7kPAvHU78vc0djlnp2wEB44PIwbMq3mroN021bpXJ/4GoR2LlOyLrrm4/Mg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HAw6s8BB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=tychen.cc;
+	spf=pass smtp.mailfrom=tychen.cc;
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=XIZi8HV+;
+	arc=none smtp.remote-ip=198.54.127.78
+Received: from out-zbxj-a78.jellyfish.systems (out-zbxj-a78.jellyfish.systems [198.54.127.78])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1768C606C59D;
-	Wed,  4 Nov 2026 19:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1286098F58
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 19:54:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AD1286098F58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HAw6s8BB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA34F1F00919;
-	Wed,  4 Nov 2026 19:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793822074;
-	bh=MznRqphvtEZQp5npCZI4V0Q6Ll7VzqUvC+SM21Py/Cg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HAw6s8BBQpMyHhrBN/asRF3MyBAYmvDQG77oX4IdbQ/Fvo+Dc9HrA+ohRms91kTq1
-	 tGhNQ04Nlq/t5AfIo9I0c2aXY/M5rtDTWUuPNd15k0EftQU6IZz/1TwoK5ymzaduHR
-	 KvYeTEdLCNXdmy5ayLOGUZDs71r+gh7UBQKBI6RxE/xvbUti6reVcmIlIBukQg/oVZ
-	 3GplheA6ivbtF04reRE084gkHonlgWY7/SEBNKSZb4CeUx9EDq8ilSbzdKz6xramV4
-	 xWoLAYuCOzLrRq2otfJd3P7rRpoURXvc8stKQzocl2lC26pljUbnGmCOVptz3/wPze
-	 zCe5glH7FfhIg==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Jann Horn <jannh@google.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Chris Mason <mason@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Christoph Hellwig <hch@lst.de>,
-	Greg Kroah-Hartman <gregkh@suse.de>,
-	Joel Granados <joel.granados@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jan Kara <jack@suse.com>,
-	linux-kernel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=XIZi8HV+
+Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbkB495jz2x9C;
+	Wed, 04 Nov 2026 19:54:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1793822070;
+	bh=DRYW9LsOkwqorjTVMq50L2691tSj2pAGda8sueNbSfA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XIZi8HV+6YGfXJGlt2uRhfhkE80/hLaOfpdhsHDtI7lYuYeovpm/JHOYlediTxP/Z
+	 6qPcmpVCehJAEy2pXnXXHXWo/wYfRGCra0dvNCfkWTTP2RHWyHOq+uSnvAY8q6aLDT
+	 DH+QnqqD6e0dsypbjp23SxAKUhTYR0x94J0TOV4qy8pudC0jcOczjE4Vil84z8tQCU
+	 eS1HRbc0tvkBemCdNKzOeRpm8XRJ3eKeKlCAt77IHMr0MnvwrO259rJMCC+abKeOGr
+	 Q3nRFdoeqdmvBMH63yzdJxncy56xb0BvCjeerzAyjjTa4f6dQh2PIWuRrH6NS4CIhO
+	 UwfkvKVgOS4lA==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: Tianyi Chen <hi@tychen.cc>,
+	qmo@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org,
-	coreteam@netfilter.org,
-	kexec@lists.infradead.org,
-	linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	ibm-acpi-devel@lists.sourceforge.net,
-	jfs-discussion@lists.sourceforge.net,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-cifs@vger.kernel.org,
-	linux-fbdev@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-sh@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	sparclinux@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-doc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	Takashi Iwai <tiwai@suse.de>,
-	linux-input@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-debuggers@vger.kernel.org,
-	"Christian Brauner (Amutable)" <brauner@kernel.org>,
-	Chuck Lever <cel@kernel.org>
-Subject: [PATCH RESEND v2 19/30] sched/psi: mark the pressure files permanent
-Date: Wed,  4 Nov 2026 20:54:20 +0100
-Message-ID: <20261104-work-procfs-fs-v2-19-319e0f9a8aae@kernel.org>
-In-Reply-To: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
-References: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
+	shuah@kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	alexei.starovoitov@gmail.com
+Subject: [PATCH bpf-next v9 1/2] bpftool: Use batch lookups for map dumps
+Date: Thu,  5 Nov 2026 04:54:12 +0900
+Message-ID: <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <cover.1793821981.git.hi@tychen.cc>
+References: <cover.1793821981.git.hi@tychen.cc>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -114,66 +76,176 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2074; i=brauner@kernel.org; h=from:subject:message-id; bh=Q4lGavm4ZGBXo39Ieuspgksaf3Gh3Wa2s1ilX3Hj4ok=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS97nE6m3h911tVzfl3TOQ+HGv+VCMdmrs1riUii6Fn/ h6jaTe6O0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACbyOoXhv3tM6SuHq3u6jjOp iTG8jZr+w3t5XtOCK765Bxxfv0uo9GVkmHSW9bDFvZMHG36nuv3fEtB3J4a7ZO+RCd52Z7kzO6s y+AA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-/proc/pressure/* are created when psi initializes and never removed.
-Say so with PROC_ENTRY_PERMANENT, procfs then calls into them without
-pinning them, like it does for /proc/profile.
+Dumping a map takes two BPF syscalls per element: one to get the next
+key and one to look it up. Use BPF_MAP_LOOKUP_BATCH instead, with keys
+and values bounded to 1 MiB and per-CPU value strides accounted for.
+The output is unchanged.
 
-That also takes care of a rule the files bent. psi_write() takes the
-seq_file's lock to serialize the triggers. A reader holds that lock
-while it copies to userspace, and now that procfs owns the seq_file it
-does that with the entry unpinned. So nothing that runs with the entry
-pinned may wait for that lock, and psi_write() ran pinned. Nothing ever
-waited for it since the files are never removed, but with the files
-permanent nothing runs pinned at all.
+For a hash map with 100,000 4-byte keys and values, a plain dump takes 5
+BPF syscalls instead of 200,005. With output to /dev/null, the median of
+15 runs in an x86-64 KVM guest on Linux 7.3 dropped from 86 ms to 52 ms
+(JSON: 78 ms to 42 ms). Printing to a terminal dominates either way.
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+If a batch lookup fails, discard its output and continue with individual
+lookups after the last printed key. bpf_map_get_next_key() walks the map
+in the same order. This covers maps without batch support, and hash
+maps whose bucket lock cannot be taken, which individual lookups do not
+need.
+
+Link: https://github.com/libbpf/bpftool/issues/63
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- kernel/sched/psi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/bpf/bpftool/map.c | 97 ++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 82 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 9b99099017e1..cdb7a832333a 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -1622,6 +1622,7 @@ static int psi_fop_release(struct inode *inode, struct file *file)
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 4b65edf74859b..c0bd9bf846492 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -59,13 +59,16 @@ static int map_type_from_str(const char *type)
+ 	return -1;
  }
  
- static const struct proc_ops psi_io_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
- 	.proc_show	= psi_io_show,
- 	.proc_write_buf	= psi_io_write,
- 	.proc_poll	= psi_fop_poll,
-@@ -1629,6 +1630,7 @@ static const struct proc_ops psi_io_proc_ops = {
- };
- 
- static const struct proc_ops psi_memory_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
- 	.proc_show	= psi_memory_show,
- 	.proc_write_buf	= psi_memory_write,
- 	.proc_poll	= psi_fop_poll,
-@@ -1636,6 +1638,7 @@ static const struct proc_ops psi_memory_proc_ops = {
- };
- 
- static const struct proc_ops psi_cpu_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
- 	.proc_show	= psi_cpu_show,
- 	.proc_write_buf	= psi_cpu_write,
- 	.proc_poll	= psi_fop_poll,
-@@ -1655,6 +1658,7 @@ static ssize_t psi_irq_write(struct file *file, char *buf, size_t nbytes,
+-static void *alloc_value(struct bpf_map_info *info)
++static size_t map_value_size(struct bpf_map_info *info)
+ {
+ 	if (map_is_per_cpu(info->type))
+-		return malloc(round_up(info->value_size, 8) *
+-			      get_possible_cpus());
+-	else
+-		return malloc(info->value_size);
++		return (size_t)round_up(info->value_size, 8) * get_possible_cpus();
++	return info->value_size;
++}
++
++static void *alloc_value(struct bpf_map_info *info)
++{
++	return malloc(map_value_size(info));
  }
  
- static const struct proc_ops psi_irq_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
- 	.proc_show	= psi_irq_show,
- 	.proc_write_buf	= psi_irq_write,
- 	.proc_poll	= psi_fop_poll,
-
+ static int do_dump_btf(const struct btf_dumper *d,
+@@ -741,15 +744,10 @@ static int do_show(int argc, char **argv)
+ 	return errno == ENOENT ? 0 : -1;
+ }
+ 
+-static int dump_map_elem(int fd, void *key, void *value,
+-			 struct bpf_map_info *map_info, struct btf *btf,
+-			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++static void print_map_elem(void *key, void *value,
++			   struct bpf_map_info *map_info, struct btf *btf,
++			   json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
+ {
+-	if (bpf_map_lookup_elem(fd, key, value)) {
+-		print_entry_error(map_info, key, errno);
+-		return -1;
+-	}
+-
+ 	if (json_output) {
+ 		print_entry_json(map_info, key, value, btf, cpu_ids, cpu_cnt);
+ 	} else if (btf) {
+@@ -763,10 +761,74 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 	} else {
+ 		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
+ 	}
++}
+ 
++static int dump_map_elem(int fd, void *key, void *value,
++			 struct bpf_map_info *map_info, struct btf *btf,
++			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++{
++	if (bpf_map_lookup_elem(fd, key, value)) {
++		print_entry_error(map_info, key, errno);
++		return -1;
++	}
++
++	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
+ 	return 0;
+ }
+ 
++#define MAP_DUMP_BATCH_BYTES (1U << 20)
++
++/*
++ * Print the elements returned by batched lookups, leaving the last one in
++ * @key. Return true at the end of the map. After any error, the caller
++ * continues with bpf_map_get_next_key(), which walks the map in the same order.
++ */
++static bool dump_map_batch(int fd, void *key, void *value,
++			   struct bpf_map_info *info, struct btf *btf,
++			   json_writer_t *wtr, const int *cpu_ids, int cpu_cnt,
++			   unsigned int *num_elems)
++{
++	size_t value_size = map_value_size(info);
++	void *keys, *values, *batch, *in_batch = NULL;
++	__u32 capacity, count, i;
++	bool done = false;
++	int err;
++
++	capacity = min(MAP_DUMP_BATCH_BYTES / (info->key_size + value_size),
++		       (size_t)info->max_entries);
++	if (!capacity)
++		return false;
++
++	/* Hash table batch cursors are u32 bucket indices; other maps use keys. */
++	batch = malloc(max(info->key_size, 4U));
++	keys = malloc((size_t)capacity * info->key_size);
++	values = malloc((size_t)capacity * value_size);
++	if (!batch || !keys || !values)
++		goto out;
++
++	do {
++		count = capacity;
++		err = bpf_map_lookup_batch(fd, in_batch, batch, keys, values,
++					   &count, NULL);
++		if (err && err != -ENOENT)
++			goto out;
++		for (i = 0; i < count; i++) {
++			/* Preserve alignment for odd-sized BTF keys and values. */
++			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
++			memcpy(value, values + (size_t)i * value_size, value_size);
++			print_map_elem(key, value, info, btf, wtr, cpu_ids, cpu_cnt);
++		}
++		*num_elems += count;
++		in_batch = batch;
++	} while (!err);
++	done = true;
++out:
++	free(batch);
++	free(keys);
++	free(values);
++	return done;
++}
++
+ static int maps_have_btf(int *fds, int nb_fds)
+ {
+ 	struct bpf_map_info info = {};
+@@ -836,7 +898,8 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 	struct btf *btf = NULL;
+ 	int *cpu_ids = NULL;
+ 	int cpu_cnt = 0;
+-	int err;
++	bool done = false;
++	int err = 0;
+ 
+ 	key = malloc(info->key_size);
+ 	value = alloc_value(info);
+@@ -895,7 +958,11 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 		p_info("Warning: cannot read values from %s map with value_size != 8",
+ 		       map_type_str);
+ 	}
+-	while (true) {
++	done = dump_map_batch(fd, key, value, info, btf, wtr, cpu_ids, cpu_cnt,
++			      &num_elems);
++	if (num_elems)
++		prev_key = key;
++	while (!done) {
+ 		err = bpf_map_get_next_key(fd, prev_key, key);
+ 		if (err) {
+ 			if (errno == ENOENT) {
 -- 
-2.53.0
+2.56.0
 
