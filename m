@@ -1,108 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793797700;
-	b=sNhIMdJe6aI1R0FwCzlYQU4jm1UTZxq6oNIOb78Kk4PjQ1QS1iHqKp/rewV1Kf1hcd5H
-	 3VyYJe6CE+aikD9GuUy4w0ff+6pWZTlGgOe/xmpo6ZkQISh632DaqDHNS6JBqUUBTb/9Z
-	 xU2c0hDnoCnEpRvFqADwBPHE+phvZcw8qP2A0ui9f9pAWVyrsElcgUmfSxrrc3D7nGa+y
-	 9pwtgIf7X2CSZp+F+h1EU62LzM5B7Jytr9xsbVPjRXk2KDnhf43qBOsHXbVZa9MeHyS8t
-	 9pFEXniYOSFtzns03YsgMTo70OUQSAnHH23KWffgE7x31uwlzaTf6sKb19A8oA8lEmA==
+	t=1793798229;
+	b=2h/B0jHGgOeorZNlBTQA8gd6v/Blu/ZczJUZdVQyjyXoboWz4g0f6YmgHD4pQVhaprIa
+	 sdXaEy4HCsJ7jEQMnOUeRmeFEsDue1d3UgSc0hzRvEf59AoHDUg2yykpCikIzp5b/6RB8
+	 5N+lO7wAtXmsVol3eTMPvgDw4tW7bzxE5CN+BubAvQVOfCYmLPJiuByWRJTQQHWtftDHL
+	 KqezitQu9D6PZ5GqL626OZDq9nPpWvsio7I2E+eJw0ciddUVf85icM/Bkjwd+UCGFyse0
+	 0VJ4TrWiqLhf8GGR6UiLyMsOpMom+85a8C2MPBxWhibDsfF0453KWRXCBELsV93wEWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793797700;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=A7YzyxBWY9wbzw+KD8hz8nrn6W5RkfNtClvS0wwnDGY=;
-	b=dWZdOLGikShbdMt8Fs7j++D3zPBw4jotScSrbrgdTbvyXRhXNl7dUcbGM9TaiHEAyEm0
-	 xejGfPpDM5zlalP6FnIU0kPlNftWNW5v5Zkgr8KkVnkhsM/nefE7HiziaFdjc1Pybwfkb
-	 gtIc9Ve0sK9dMcCDrJk4RQq9S8dgGCrlp8x4yPeVRv/2miF3E7EHmAuaOJq2JC486jHX1
-	 FBPrua7KzldPrZwsfRDuezCZGcQDj7p2XHbM7BXZezFoyoz87J7ZF0p7+TBU3ynJ633Po
-	 UNgMCQ4H/mPTJ+V1DsoOID6bqW897c6+CanX0cS285N2DzNo3tX9EQ1lMt1eFgmzFWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793798229;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=3H/gLjqgtzADma/hPoTM38pVJFvPU8bwDzlEhV95qGo=;
+	b=0W6Ql/f+IkNRgrO0dU35S2XUrBoG1WXZuPs2WSn+KXctcw3wEENyhdOLO/n4h42twDE8
+	 HcvPZnFrDdSfro4DBFOF/NG7Fy5GrxQr1i6Mz0zActOPJtcbcwv5s59xXnyyPp8uuLqcR
+	 Gxg9o0cR8ryVurpKKF5oM1/jm/gyGlCEP/Q8E0P/1MccSRoLcO5sD/YSEMrbBTLYxt4rB
+	 tAiS7EMThGO1pFO/SLqhFQ5Ps5bcKmvD+Yhq0mtnyY3PzdXiThzRN8fkSt2HI7r2f53Yv
+	 PsgEENI9JOSVwF5ZtFR1ZneDVpdPwvQuDJYzG47tgjBPpqMB8M/0q04tMlj2FtC3oVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Nr01w05D;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=QC2h765l;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HE2Tpn85;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA63606A329
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 13:08:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3CA63606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655A1606A31B;
+	Wed,  4 Nov 2026 13:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Nr01w05D;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=QC2h765l
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793797699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=A7YzyxBWY9wbzw+KD8hz8nrn6W5RkfNtClvS0wwnDGY=;
-	b=Nr01w05DBfV3OHfU9P5TtV/FU0EBFCf93g3wGeFeCAHFmUtDEEBFyTGYmgI3/Nk5eUa2bX
-	FMclrz+3V0TclMR2OUnI0KCdvD4TFiWU7u+e8+HRqMCSIemGUA7oCauqUlCrp9jTZtag2J
-	nSYaZ4BXFdP+UvH/budBf3A3ecmiEmU=
-Received: from mail-yx1-f70.google.com (mail-yx1-f70.google.com
- [74.125.224.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-607-hOxXrTnJNzuaMBvfJ-dSVA-1; Wed, 04 Nov 2026 08:08:18 -0500
-X-MC-Unique: hOxXrTnJNzuaMBvfJ-dSVA-1
-X-Mimecast-MFC-AGG-ID: hOxXrTnJNzuaMBvfJ-dSVA_1793797697
-Received: by mail-yx1-f70.google.com with SMTP id 956f58d0204a3-67a6eb09b1eso874344d50.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 05:08:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793797697; x=1794402497; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A7YzyxBWY9wbzw+KD8hz8nrn6W5RkfNtClvS0wwnDGY=;
-        b=QC2h765l7V6y9NndNV1+vcSqONzFE5QQmyB+eOB1Dh8EVGVLtY6ePf2OjMrH68ivbR
-         FOAKvEhLahKGKx7qgy8ZlzBKSePbuDuYjfCAzsRdINrL8bGN+TuRPca9GBLoIysx31tP
-         AKj8kLX+JlePdrKypJYINSi3VCUgq9kWARKx1d0hQoz4VT+dPQlismJOZ2yqwnMQbnWh
-         VYpzHD45MldRwJ9gf2W/rLF8z2WvfiCPXdxFLsenlpo76IAzzqyyg4IMSGUH9w+CfMzC
-         qlkIm/zEBos+kS2WA2SRB7OGL4QY/CCYxxyWbRHPiyWT50L0HgJRAkhFX5FKnMEMw5na
-         d6fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793797697; x=1794402497;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=A7YzyxBWY9wbzw+KD8hz8nrn6W5RkfNtClvS0wwnDGY=;
-        b=mHZ0gUyuM84DdslNjlnerbMuugdeYN/Rupq9LtGe4sqP9nukvT4YqjYOpKZ8BU0Qeh
-         QdctAvP6xlIGLB55p0EkhZIbEL4KdDgVZQqhVvQA1uVnJEgR+ovuoCNfY3td7JqZwGUW
-         JO+LQN3ztft9juNsP8YmBwfxaobALt3B8DAP/UCJwVlMd/EHuSABUWIRWL67D2BRPGOG
-         3WEccm0X8GPnY/RKXy2JUiMMHrvS5JXNohnVjf/KgwEPVejUeobIFcWBJW9EJnznb1bN
-         d+Lt6j4wYHl2fZunlDaOTcNRyUZw5ge5vq+FJKgStM8mCUfbgxLjnWXDLEhIsF0GlocS
-         QElQ==
-X-Gm-Message-State: APuU4Z/vHYpcKQfcJ2Pu1c/ax8C4Aqshg8PK4+3Jv22WpMvm4tkIS1Qi
-	LnPLjtM9dKVN4DIarUvD0O6H2/22pjnXR3YLMEtVpdlFbSjl/RGV5AmeIgNJwKoeDWWULa9ALUR
-	voy4o0spLWSjjZOduzBXnd89Hpom6g/Fc/5PLkN3UwbVlJbX7zUIYlF2HcV7yr9NB6qHZirxqNx
-	9vGa3uyQ8PrNwYcko0/tnv2tV/aSfdMeGsCP9GmoIbtIbQs+aO/rDrQg==
-X-Gm-Gg: AYBFou1m20OnKzp7Jy3pCiJrl/iDFEwjAtTaVAhaAnmj9eGcRNEAI4TdpOftGbKSD6n
-	3iy3h2umcRo0APxUMYxVhC4roeWRACQabHGvdxkM1Cy1+sXmj5LqE1MZeO6tJnjELRKZio/7TwZ
-	SVgzWYyOkrT+i3cOOqmhejojMRsm4iZHT2hDAFFI7I2sSEfbzXzOyRRkirFY5vT+1NQ8du23LI1
-	+B9WNW6clQAWRDQgX/FFVHD+148cHI5ULCCOoZrCeqikwMnfO6ZaEeOOVQq3QoPBp6Ms3qtTKCz
-	vzDuzzENVXSmTfZN6snPHQEIb2970rhZ1W19h/FEiMYIoVsjNIhtNgwlFgkMgM+lwfs1cnoomE+
-	cinsYyTmtWisB282KLFnEQ5d6pvV3YpkLD4nQi9h+krpf7B+ERHwzLJnRdlh5bkD4fRs93B9q4A
-	==
-X-Received: by 2002:a05:690e:144b:b0:67b:e78c:43ee with SMTP id 956f58d0204a3-67be78c44dcmr1832068d50.116.1793797697511;
-        Wed, 04 Nov 2026 05:08:17 -0800 (PST)
-X-Received: by 2002:a05:690e:144b:b0:67b:e78c:43ee with SMTP id 956f58d0204a3-67be78c44dcmr1832050d50.116.1793797696768;
-        Wed, 04 Nov 2026 05:08:16 -0800 (PST)
-Received: from sbertram-thinkpadp1gen5.bos.csb ([67.189.222.97])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67bee2d0473sm1361957d50.23.2026.11.04.05.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 05:08:16 -0800 (PST)
-From: "Stephen Bertram" <sbertram@redhat.com>
-To: linux-kselftest@vger.kernel.org
-Cc: Stephen Bertram <sbertram@redhat.com>
-Subject: [PATCH v1] accept03/tst_fd: Harden parallel runs against shared path races
-Date: Wed,  4 Nov 2026 08:08:01 -0500
-Message-ID: <20261104130805.356900-1-sbertram@redhat.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HE2Tpn85
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A701F000C1;
+	Wed,  4 Nov 2026 13:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793798229;
+	bh=3H/gLjqgtzADma/hPoTM38pVJFvPU8bwDzlEhV95qGo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=HE2Tpn85fZMvn0+DJkYUDDR3jn5ssQG2Eg7aG5vFhVPpRV1s3R+3WJBlk7TTjy7x4
+	 pZsV3SR6ixdLdbJYGtXX4sGRinDgIuoe7jrOgEo6H/XoULroAaHXYnmepfg1Pmoy3T
+	 gsppAx8YM6H9D4OWt74plOz9XYcZrIH2wMjveDKgKoVSDmBpM+HP4cBEaL+Nx6RsLD
+	 pL4J6YPdDrFzvy0I9nTJViPT9GvF5vCHLYQZn3uN9/SrHgUxOvfm8gzjQLrPmy7pgE
+	 ApvfvNTHjEFSKLtdxVCBWYA1FOnJUxipVPYl4iaIKuZPc+HND7ewVf/ObCmGnSvSkh
+	 PnFVazMO0ayQg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
+  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
+ <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
+ <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
+ Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
+ <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
+ Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
+  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
+  Vlastimil Babka <vbabka@kernel.org>
+Subject: Re: [PATCH v3 01/10] liveupdate: Pass user argument to file
+ preserve and retrieve
+In-Reply-To: <20261103010216.3447716-2-dmatlack@google.com> (David Matlack's
+	message of "Tue, 3 Nov 2026 01:02:07 +0000")
+References: <20261103010216.3447716-1-dmatlack@google.com>
+	<20261103010216.3447716-2-dmatlack@google.com>
+Date: Wed, 04 Nov 2026 14:17:03 +0100
+Message-ID: <2vxz4idwlos0.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,86 +72,142 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Stephen Bertram <sbertram@redhat.com>
+Hi David,
 
-Concurrent syscall runs can TBROK in tst_fd when multiple processes
-race on fixed fd_file/fd_dir names (unlink ENOENT). Use pid-unique
-paths with O_EXCL, distinct names for the file and O_PATH cases, and
-give accept03 a private tmpdir.
+On Tue, Nov 03 2026, David Matlack wrote:
 
-Signed-off-by: Stephen Bertram <sbertram@redhat.com>
----
- lib/tst_fd.c                                | 29 +++++++++++++++------
- testcases/kernel/syscalls/accept/accept03.c |  1 +
- 2 files changed, 22 insertions(+), 8 deletions(-)
+> From: Pasha Tatashin <pasha.tatashin@soleen.com>
+>
+> Allow userspace to pass a file-handler-specific argument structure when
+> preserving or retrieving an FD via LUO. File handlers may need
+> additional context during preservation or retrieval, such as a target
+> FD, device location, or handler-specific parameters, without introducing
+> separate ioctls for each file type. Whether the argument is required,
+> optional, or unused is defined by the file handler.
+>
+> Extend struct liveupdate_session_preserve_fd and
+> struct liveupdate_session_retrieve_fd with a 64-bit arg field pointing
+> to a handler-defined argument structure that begins with a 32-bit size
+> field. Because IOCTL_OP validates a minimum size up to the token field,
+> existing callers passing the 16-byte struct remain compatible and have
+> arg zero-filled by copy_struct_from_user().
+>
+> Add parg and rarg (struct liveupdate_arg_spec) to
+> struct liveupdate_file_ops, initialized via LIVEUPDATE_ARG(_struct,
+> _min_last), which records the full struct size and minimum required size
+> while enforcing at compile time that handler argument structures begin
+> with a 32-bit size field. When arg is non-zero, LUO validates the
+> minimum size and copies the user argument via copy_struct_from_user() up
+> to the handler's expected size and passes the kernel copy in
+> struct liveupdate_file_op_args, or returns -EOPNOTSUPP if the handler
+> does not accept an argument.
+>
+> The argument only applies to the retrieve that restores the file.
+> Retrieving a token that was already retrieved returns the existing file,
+> so fail with -EBUSY if a non-zero argument is passed then, instead of
+> silently ignoring it.
+>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
 
-diff --git a/lib/tst_fd.c b/lib/tst_fd.c
-index 6538a098c..5d4430cf8 100644
---- a/lib/tst_fd.c
-+++ b/lib/tst_fd.c
-@@ -30,29 +30,42 @@ struct tst_fd_desc {
- 	const char *desc;
- };
- 
-+static void fd_path(char *buf, size_t len, const char *prefix)
-+{
-+	snprintf(buf, len, "%s_%d", prefix, getpid());
-+}
-+
- static void open_file(struct tst_fd *fd)
- {
--	fd->fd = SAFE_OPEN("fd_file", O_RDWR | O_CREAT, 0666);
--	SAFE_UNLINK("fd_file");
-+	char path[64];
-+
-+	fd_path(path, sizeof(path), "fd_file");
-+	fd->fd = SAFE_OPEN(path, O_RDWR | O_CREAT | O_EXCL, 0666);
-+	SAFE_UNLINK(path);
- }
- 
- static void open_path(struct tst_fd *fd)
- {
-+	char path[64];
- 	int tfd;
- 
--	tfd = SAFE_CREAT("fd_file", 0666);
-+	fd_path(path, sizeof(path), "fd_path");
-+	tfd = SAFE_OPEN(path, O_RDWR | O_CREAT | O_EXCL, 0666);
- 	SAFE_CLOSE(tfd);
- 
--	fd->fd = SAFE_OPEN("fd_file", O_PATH);
-+	fd->fd = SAFE_OPEN(path, O_PATH);
- 
--	SAFE_UNLINK("fd_file");
-+	SAFE_UNLINK(path);
- }
- 
- static void open_dir(struct tst_fd *fd)
- {
--	SAFE_MKDIR("fd_dir", 0700);
--	fd->fd = SAFE_OPEN("fd_dir", O_DIRECTORY);
--	SAFE_RMDIR("fd_dir");
-+	char path[64];
-+
-+	fd_path(path, sizeof(path), "fd_dir");
-+	SAFE_MKDIR(path, 0700);
-+	fd->fd = SAFE_OPEN(path, O_DIRECTORY);
-+	SAFE_RMDIR(path);
- }
- 
- static void open_dev_zero(struct tst_fd *fd)
-diff --git a/testcases/kernel/syscalls/accept/accept03.c b/testcases/kernel/syscalls/accept/accept03.c
-index bc472397d..dea4988cf 100644
---- a/testcases/kernel/syscalls/accept/accept03.c
-+++ b/testcases/kernel/syscalls/accept/accept03.c
-@@ -55,4 +55,5 @@ static void verify_accept(void)
- 
- static struct tst_test test = {
- 	.test_all = verify_accept,
-+	.needs_tmpdir = 1,
- };
+LGTM for the most part, only a couple nitpicks below.
+
+[...]
+> @@ -173,12 +178,17 @@ struct liveupdate_session_preserve_fd {
+>   * attempts to retrieve the token fail with the same error code. Failed
+>   * retrieves are not retried.
+>   *
+> + * Retrieving a token that was already retrieved successfully returns a new file
+> + * descriptor for the same file. The @arg only applies to the retrieve that
+> + * restores the file, so passing a non-zero @arg then fails with -EBUSY.
+> + *
+
+Hmm, let's see how that plays out in practice. I would guess that code
+which does multiple retrieves isn't smart enough to know the file was
+already retrieved by someone else.
+
+Anyway, that's not really a kernel problem, so no need to change
+anything. Just thinking out loud.
+
+[...]
+>  /**
+>   * luo_preserve_file - Initiate the preservation of a file descriptor.
+>   * @file_set: The file_set to which the preserved file will be added.
+>   * @token:    A unique, user-provided identifier for the file.
+>   * @fd:       The file descriptor to be preserved.
+> + * @arg:      User-space pointer to the handler argument structure, or 0.
+>   *
+>   * This function orchestrates the first phase of preserving a file. Upon entry,
+>   * it takes a reference to the 'struct file' via fget(), effectively making LUO
+> @@ -222,9 +257,11 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
+>   *    (allocates if needed).
+>   * 3. Iterates through registered handlers, calling can_preserve() to find one
+>   *    compatible with the given @fd.
+> - * 4. Calls the handler's .preserve() operation, which saves the file's state
+> + * 4. Copies the user argument structure (if @arg is non-zero) according to the
+> + *    handler's parg specification.
+> + * 5. Calls the handler's .preserve() operation, which saves the file's state
+>   *    and returns an opaque private data handle.
+> - * 5. Adds the new instance to the file_set's internal list.
+> + * 6. Adds the new instance to the file_set's internal list.
+
+TBH, I think this whole list is pointless. There is no reason to list
+what the code does in a comment. It's only purpose would be to go stale.
+The comment should be a high level description of the function, and the
+details are already in the code.
+
+It would be very nice if you add a preparatory patch deleting the whole
+thing, but since it isn't something added by your patch, I won't insist
+on it. It's optional for this series.
+
+>   *
+>   * On success, LUO takes a reference to the 'struct file' and considers it
+>   * under its management until it is unpreserved or finished.
+> @@ -239,10 +276,12 @@ static bool luo_token_is_used(struct luo_file_set *file_set, u64 token)
+>   *         -EBADF if the file descriptor is invalid.
+>   *         -ENOSPC if the file_set is full.
+>   *         -ENOENT if no compatible handler is found.
+> + *         -EOPNOTSUPP if @arg is non-zero and the handler does not accept an arg.
+>   *         -ENOMEM on memory allocation failure.
+>   *         Other erros might be returned by .preserve().
+>   */
+[...]
+> diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+> index f48e9a4185f9..ed9d53c7db77 100644
+> --- a/kernel/liveupdate/luo_session.c
+> +++ b/kernel/liveupdate/luo_session.c
+> @@ -267,7 +267,8 @@ static int luo_session_preserve_fd(struct luo_session *session,
+>  	int err;
+>  
+>  	guard(mutex)(&session->mutex);
+> -	err = luo_preserve_file(&session->file_set, argp->token, argp->fd);
+> +	err = luo_preserve_file(&session->file_set, argp->token, argp->fd,
+> +				argp->arg);
+
+Nit: I would prefer to start marking this as __user from here on out,
+instead of keeping it u64 and hiding the fact that this is a user
+pointer.
+
+So luo_preserve_file() should take a "const void __user *arg" as
+argument, instead of "u64 arg". And here we should pass
+u64_to_user_ptr(argp->arg). Same for retrieve.
+
+>  	if (err)
+>  		return err;
+>  
+> @@ -290,7 +291,8 @@ static int luo_session_retrieve_fd(struct luo_session *session,
+>  		return argp->fd;
+>  
+>  	mutex_lock(&session->mutex);
+> -	err = luo_retrieve_file(&session->file_set, argp->token, &file);
+> +	err = luo_retrieve_file(&session->file_set, argp->token, argp->arg,
+> +				&file);
+>  	mutex_unlock(&session->mutex);
+>  	if (err < 0)
+>  		goto err_put_fd;
+
 -- 
-2.55.0
-
+Regards,
+Pratyush Yadav
