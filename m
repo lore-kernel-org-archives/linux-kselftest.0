@@ -1,78 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793784234;
-	b=HbNrHBrH4nZfI3UvDIF5CN2Adq5/XxfKQ4ln2/Fb9giSVRlqZzjl8TOEs/iUtw5TGyw4
-	 A0DQv6OPtcygNMyyFyb03MV6SRof5HvRhntLUE97jN+d52Ny5w2SEtygdaU5oAezvN6FP
-	 h7R1k1G2V6CCWu/7HoOP2jBPWkF3J3S20yRhFsO0NS/pCmOj2IDwBaTCUw6t0FQpAwWUV
-	 UPGtvlfRoFG8UZD/G4EqVk0xrFpc7DI18zCMoCz9D4syYLyNU6hpcqhE0pQc+GuPwt09E
-	 At3rZqKvTuw4v4i/LFbdmZdmOjqE5QjBM4a+ntBnrg2npJ62hHQFa2TNoqfKwhZOWaw==
+	t=1793784242;
+	b=W2zD0lZDp3k9GMV3YFPkU4q4CE6WL8AovBibu6D5Gd5pY/747/vHgNcwSIl+Ro2JYMMe
+	 iadPU7U1g+mw0T4GYS8cS6lYsobRzzBhPtOL2OmkRP1dWpayDHMeb21XhCTIuDL/CbWnU
+	 thME5U6KxKf58lbX3UstLIbiQ+ZcoR6vTGEgOw/h8QIpxKUVK4rd1Ktrhi1BwMABnB6xp
+	 bPmfIbe/ylucI01Rp6K6R/v2voW8ayaeZoSEfYiRp8KFTCyi+l75uHMSKbVcE7yjlK0CN
+	 zsdKzNAxcR2jMDKUruhsRXH3OJUi/EhfRK3ksTONkfy89zF81RpuwwY0MwTnRX0cafw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793784234;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=bmXVSSlN45L+rv4ubBxKKCnM10XnTPIhgH058pVIBqk=;
-	b=tKuSVqy8fSTLxqPrZHNQnWPQnwA9RoDYusZSphsXoI9t2wH5Mlu9bqU7hAfDurWIg6y2
-	 7hcoHz6k78bPyKAXxbVFf9wy1JZTMdlw5VVSzNZfI0eVKXBkGW8j86N4pyWl3nJxJwJ/j
-	 uM9nr87OJnwYEQJ2vtlO9UMPDiyz7Dzlz/hX9vOlaAbduGWyk0rcehePfmx5QUHPg6W/9
-	 VRvBHR6xf38Uifx375KhGmXWlmfKy/zeJndoQ7OxGWhrDwAzrzHPi1evWQmSDkvLhwvbi
-	 5Ti99Ck4uQIOm8PSoOhzyelqOmPUvKKXr7yOhxXtKzb5WfM+hUkAgMUF0cr41ENw9TQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793784242;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=L+88iVde34Oo/REFSbiXXB2pfC0goIHj3cRCJ8dtLrU=;
+	b=McfK//GT65r6C5vzrNxKdQFPI5gdX1XV6fUvFLUw74C3QUjF+sTXTvZ++rzpgM8qIxON
+	 iacBszPbt0NRxyQba8XTXmXhbePeWjXe7A4m+3w25N29/R/7LRAiMor7RQxlFdqifUpjP
+	 wKNBXa9kaBiZljAW5ws09/zm7LXc1X0VbRv4APc6NDiCzkIrjFaQO+1nsZ35nlFdDaWKe
+	 hCMDZzVxvc5DrE7bVZZr2S2gxA/8OTNUYg7w9izoqCe89v84RHLY2Zd/p5OQv0h38PFxE
+	 qWTkGtB2Yvn55sNJ2g9xS52byiaflIH4cfXfadu0H3gcTt1utgL6b1mCc+6Mx2Arznw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Yuo2h5l8;
-	arc=none smtp.remote-ip=111.22.67.151
-Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 581CC606A32C;
-	Wed,  4 Nov 2026 09:23:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 581CC606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=chhb0SxH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45047606D815;
+	Wed,  4 Nov 2026 09:24:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=Yuo2h5l8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=Yuo2h5l87UV4o0gWUa4o4VALrLc2KJegur7qOWc388cIJSMKpjFWL5lxnL+0VXf3JWNG5dqOQPsbB
-	 jWY8eVH1YouWxbIGPD9RMwFiNshML03+1XazcuXhLWjjGMMDTHNiY8FMzR5blCS7CpCEe7OYuPIPSY
-	 JU7RXOmrOnVkLqBk=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66aeaf9a7b38-69342;
-	Wed, 04 Nov 2026 17:23:52 +0800 (CST)
-X-RM-TRANSID:2ee66aeaf9a7b38-69342
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.97])
-	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6aeaf9a699c-c8aff;
-	Wed, 04 Nov 2026 17:23:52 +0800 (CST)
-X-RM-TRANSID:2eea6aeaf9a699c-c8aff
-From: Xia Yan <yanxia@cmss.chinamobile.com>
-To: netdev@vger.kernel.org
-Cc: dsahern@kernel.org,
-	idosch@nvidia.com,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	willemdebruijn.kernel@gmail.com,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	yana06070@163.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	willemb@google.com
-Subject: [PATCH net v2 2/2] selftests: net: exercise SO_MARK on connected sockets
-Date: Wed,  4 Nov 2026 17:23:38 +0800
-Message-ID: <20261104092252.15712-1-yanxia@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261104092240.15649-1-yanxia@cmss.chinamobile.com>
-References: <20261104092240.15649-1-yanxia@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=chhb0SxH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5324B1F00A15;
+	Wed,  4 Nov 2026 09:24:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793784241;
+	bh=L+88iVde34Oo/REFSbiXXB2pfC0goIHj3cRCJ8dtLrU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=chhb0SxH0sRbIv41mbOf1XZzsDh5nHsJ50zTY4PkoO1yQtIvHjVbtn+pLJfpCBHCs
+	 +9MhlAB5wHCgD6qrbUILMO0w2u6B/W+81//0tVoc1PLbWmbsE0FyZL2CG9BPK3Xmk1
+	 g2tQOYQMxGxVcqqHbKNRsju9m4F0gjZk2ADBNFqcvq5i3MdM134yb8TaAkel6/fvR9
+	 uw2a9tPF+FJQgcvWxIxCcrUOzOsMTe/Sw/QGKnq0pbGoSpbMP6EQhsQfyZrI/qWazg
+	 uw4aD+U6g3WkUhgqGc+RXNE0Jz5ETnmRawSdh8RVrM+8KEQqxUGIzFPD29TJMjOqxJ
+	 qRYThYIYTKVwA==
+Content-Type: multipart/mixed; boundary="===============0075720949142317520=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,130 +49,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Message-Id: <1653a9b2f3190fc956341a7cce09701b03b7fcafa3aa02d1fba34c29136053d0@mail.kernel.org>
+In-Reply-To: <20261104083833.971911-2-yangfeng59949@163.com>
+References: <20261104083833.971911-2-yangfeng59949@163.com>
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,kpsingh@kernel.org,matt@bobrowski.net,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  4 Nov 2026 09:24:01 +0000 (UTC)
+
+--===============0075720949142317520==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-ID: <20261104092338.XOrybbEKBLb6klfzqqsK6fd7HULA9jXrDYm2aPLiZuQ@z>
 
-cmsg_so_mark.sh sends to an explicit destination without connecting the
-socket, so it does not exercise the route cached by connect(). This left
-the IPv6 SO_MARK cache bug uncovered.
+> selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
 
-Add a cmsg_sender option to connect before sending and omit msg_name in
-that mode. Keep the existing cases and add connected IPv4 and IPv6 UDP,
-ping and raw sends with a per-message mark equal to the socket mark,
-prohibited by a policy rule, or explicitly zero.
+TL;DR:
+- Test issue: raise() may call getpid again, so the BPF programs may overwrite
+  the stack the test inspects; results may depend on libc
+- Nit: usage message omits the new uprobe-paged-out-stop mode
 
-On UML, the added IPv6 UDP and ping cases with the prohibited mark fail
-before the kernel fix. With the fix, all 54 cases pass.
+> diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing/selftests/bpf/uprobe_multi.c
+> --- a/tools/testing/selftests/bpf/uprobe_multi.c
+> +++ b/tools/testing/selftests/bpf/uprobe_multi.c
 
-Signed-off-by: Xia Yan <yanxia@cmss.chinamobile.com>
+[ ... ]
+
+> +int __attribute__((weak)) trigger_stop(void)
+> +{
+> +	int err = prep_build_id_page(false /* page-out build ID */);
+> +
+> +	if (err)
+> +		return err;
+> +
+> +	/*
+> +	 * Make one syscall that the BPF program under test filters on, then
+> +	 * stop this process so that the recorded stack cannot be overwritten
+> +	 * by another syscall while the caller inspects it.
+> +	 */
+> +	(void)syscall(SYS_getpid);
+> +	raise(SIGSTOP);
+
+With glibc, raise() goes through pthread_kill() which calls __getpid() to
+get the tgid for tgkill().  So rawtp_nofault and rawtp_sleepable can match
+a second time on id == SYS_getpid, from inside raise(), before SIGSTOP
+takes effect.
+
+That second match overwrites stack_rawtp_* and res_rawtp_*, so the stack
+that subtest_raw_tp() inspects comes from the getpid stub called by
+__pthread_kill_implementation(), not from the explicit syscall(SYS_getpid).
+In the sleepable case, that stack is also captured after the first match
+has already faulted the build ID page back in.
+
+Whether a uprobe_multi frame shows up then depends on how libc compiles
+raise()/pthread_kill().
+
+Could the BPF programs keep only the first match, for example by returning
+early once res_rawtp_* is non-zero?  Or could the comment and commit
+message mention that raise() issues a matching getpid() as well?
+
+[ ... ]
+
+> +	if (!strcmp("uprobe-paged-out-stop", argv[1]))
+> +		return trigger_stop();
+>  
+>  error:
+>  	fprintf(stderr,
+
+This isn't a bug, but main() now accepts "uprobe-paged-out-stop" while the
+usage message that follows still lists only
+<bench|usdt|uprobe-paged-out|uprobe-paged-in>.  Should the new mode be
+added there?
+
+
 ---
-v2:
-  - New patch; add 18 connected-socket cases alongside the existing 36.
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-The test gap was noted during automated review of v1:
-https://lore.kernel.org/netdev/179371875338.488856.4546363285391899557@kernel.org/
-
-Tested the same selftest on baseline, v1 and v2 UML kernels: baseline
-fails 2/54 cases; v1/v2 pass all 54. Both versions of cmsg_sender build
-with GCC 12.3.1. ShellCheck 0.11.0 reports the same 13 existing SC2086
-diagnostics before and after the change.
-
- tools/testing/selftests/net/cmsg_sender.c   | 21 ++++++++++++++++++---
- tools/testing/selftests/net/cmsg_so_mark.sh | 16 ++++++++++++++++
- 2 files changed, 34 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -34,6 +34,7 @@
- 	ERN_CMSG_RD,
- 	ERN_CMSG_RCV,
- 	ERN_SEND_MORE,
-+	ERN_CONNECT,
- };
- 
- struct option_cmsg_u32 {
-@@ -48,6 +49,7 @@
- 	unsigned int size;
- 	unsigned int num_pkt;
- 	bool msg_more;
-+	bool connected;
- 	struct {
- 		unsigned int mark;
- 		unsigned int dontfrag;
-@@ -93,6 +95,7 @@
- 	printf("Usage: %s [opts] <dst host> <dst port / service>\n", bin);
- 	printf("Options:\n"
- 	       "\t\t-s      Silent send() failures\n"
-+	       "\t\t-k      Connect before sending\n"
- 	       "\t\t-S      send() size\n"
- 	       "\t\t-4/-6   Force IPv4 / IPv6 only\n"
- 	       "\t\t-p prot Socket protocol\n"
-@@ -121,8 +124,12 @@
- {
- 	int o;
- 
--	while ((o = getopt(argc, argv, "46sS:p:P:m:M:n:d:tf:F:c:C:l:L:H:Q:")) != -1) {
-+	while ((o = getopt(argc, argv,
-+			   "46ksS:p:P:m:M:n:d:tf:F:c:C:l:L:H:Q:")) != -1) {
- 		switch (o) {
-+		case 'k':
-+			opt.connected = true;
-+			break;
- 		case 's':
- 			opt.silent_send = true;
- 			break;
-@@ -521,6 +528,12 @@
- 
- 	ca_set_sockopts(fd);
- 
-+	if (opt.connected && connect(fd, ai->ai_addr, ai->ai_addrlen)) {
-+		fprintf(stderr, "Can't connect socket: %s\n", strerror(errno));
-+		err = ERN_CONNECT;
-+		goto err_out;
-+	}
-+
- 	if (clock_gettime(CLOCK_REALTIME, &time_start_real))
- 		error(ERN_GETTIME, errno, "gettime REALTIME");
- 	if (clock_gettime(CLOCK_MONOTONIC, &time_start_mono))
-@@ -530,8 +543,10 @@
- 	iov[0].iov_len = opt.size;
- 
- 	memset(&msg, 0, sizeof(msg));
--	msg.msg_name = ai->ai_addr;
--	msg.msg_namelen = ai->ai_addrlen;
-+	if (!opt.connected) {
-+		msg.msg_name = ai->ai_addr;
-+		msg.msg_namelen = ai->ai_addrlen;
-+	}
- 	msg.msg_iov = iov;
- 	msg.msg_iovlen = 1;
- 
-diff --git a/tools/testing/selftests/net/cmsg_so_mark.sh b/tools/testing/selftests/net/cmsg_so_mark.sh
---- a/tools/testing/selftests/net/cmsg_so_mark.sh
-+++ b/tools/testing/selftests/net/cmsg_so_mark.sh
-@@ -68,6 +68,22 @@
-     done
- done
- 
-+# Check per-message marks after connect() has populated the route cache.
-+for i in 4 6; do
-+    [ "$i" = 4 ] && TGT=$TGT4 || TGT=$TGT6
-+
-+    for p in u i r; do
-+	for mark in "$((MARK + 1))" "$MARK" 0; do
-+	    expected=0
-+	    [ "$mark" -eq "$MARK" ] && expected=1
-+
-+	    ip netns exec "$NS" ./cmsg_sender -"$i" -p "$p" -k \
-+		-M "$((MARK + 1))" -m "$mark" -s "$TGT" 1234
-+	    check_result "$?" "$expected" "IPv$i $p connected mark $mark"
-+	done
-+    done
-+done
-+
- # Summary
- if [ $BAD -ne 0 ]; then
-     echo "FAIL - $BAD/$TOTAL cases failed"
-
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41802507259
+--===============0075720949142317520==--
