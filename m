@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793831314;
-	b=ElGTUGlsDUXI3Wk4wRh4bQ7gjrwtdsB83WkM17uyRYMNdRfCrTBdL5tU3Y12LhMOD4kk
-	 leDEGGUNxU7KHh7VOD6skgSbz0OCbsjTFoIHS/7RGNsT7qtoMefCMdxts+zeMr/w69fYJ
-	 WYews/Vfy4ZLTNtYitzhWLDCcnkCBjxHCWuL/izFubD4XMkx7kPsXu3beB+0/bSd1R0Qm
-	 KpIrHLQLKqRBGH5K6pNmSekmnZ+lQ/papf2uhH2QtKdjfHEL7qqgwBmcbLJ0SN7rjmkn7
-	 nWCGVk31Y1j+DYbiMvAoFBUmC8JJdv7cbLZzfUq3etYdolE3eXVyfpMOD8QdmOqCu5Q==
+	t=1793831432;
+	b=L8smpfTJhQ90aycWSl+1FwTwJivLclf+a+WIYONgwZ8k2/JG3hwLVOAqXQfAf+PYSSh+
+	 LYSNI+KFl5UpZi3UaU3nq2b5Orp3vhPJXcLclqKqK6Dj07Ly4O9iWt4mflgJsxO+KVhNp
+	 Prg3YfB18YaDJIaiJPsuP6cjFG8kS6KYoWUX113SjIx4n7VtvXP8tIF+yOv0Z3QjA5wGF
+	 zS/d0nsw3ixWVQdOtkcR/k10PTGsYwJhTiuBjz6pY7YR3ZF0oWQ7yx+JpdSceShW46/rr
+	 I8m3OD66pUujbTEVQ+Bx/d7uLVPfe8vn/qczQfrDbSxtomxIGxhTyEaWN0PGmplty7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793831314;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793831432;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=ngSI9f0kiDWl+YO8rRXsU2IRSVNvxIMeC8SrK3o9F8Q=;
-	b=sJrxORSQ/jhQ5kmtZZ4EqP3RxMJmRdbzBFxh+Fx0XME8RSxZwlXvtk1BhTn4Qd+y+V/7
-	 nI62dx6L707Bd/EVI1o/oOP3NEnbjNAxcLMkn53B+Jw7JOo6NC3sgTPD8JibDcl9VTRCp
-	 YQrv2l7PZM0OjimtxNtStst73C/cau8GSmtyqtnVOik6UVowQSUeDezhD0x9gmv5dB2y2
-	 IZfmnOETz5tACKZUMJ8+sdUnr3e3pVMRqT4gO4e1xxqlg+ADaj/6Alz4N5ztJEBsZYt8B
-	 6Nnj9AolU+URn0e4AGmFSVYhhu48oYaX1x9Sdm+dS9IkkHF3ypxw4o1r4xjtB61r+0g==
+	bh=45IHMvHuNfQHmQp3e/l7ZQyBPSv/bWU1s+/SnIhe5+k=;
+	b=e37xF2GqNHj5IHDSmKMb2IGl/+/Fg4fwXck2UkAgFHh2JqhPfjdHcxv3DNWTks0k9tn8
+	 LItCwKDuRYVUCqqivRpp2Pa0woaqs2AmY/qzQSXhlKEJQ5zeqtJi9nSKUlS7oOUXRO8hX
+	 mJjxpEGimyBswBY/oc9NTLmhmL4fu/erSxfzeroFnB6tup+8GgTluvn9j9gyAP+1/E31p
+	 jnkAQHthWDledMC6NjpP/3vKp8Owbm2lCTdejMWlVJ/I+dphOUGQ6nG6GIemUuiGe8ToO
+	 C5Ugn7YGPYUquId9TEpOSvZ7mDUJ+8MhYb9AVE3ZGatIkXMa4/ikD7gxKIiT8oPvcdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Q4r8YYWn;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GSTNqouf;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BDB606B2F8
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 22:28:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2BDB606B2F8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E45C606B381
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 22:30:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E45C606B381
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Q4r8YYWn
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b0ae87069dso223720a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 14:28:33 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GSTNqouf
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b0accf6229so348824a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 14:30:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793831313; x=1794436113; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1793831431; x=1794436231; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ngSI9f0kiDWl+YO8rRXsU2IRSVNvxIMeC8SrK3o9F8Q=;
-        b=Q4r8YYWnN8sCaY/ODs1yIT8lq7b5mwAQjudMxrtoqP6vQcq4r+8STrumanbHpf3ain
-         o6PYhcUcEJyR5K9TdjhA0RThU3nkwkKvSPhI1I3sb6m6/bn99QLYDdHOBBgYhIzt/G7S
-         6PEogm7tkiRTcGX6whDNCNlWIqQ4g3wtpZphRlTdhJX0CmT03/EwQAjRVEgRM5xivqIG
-         WPBCZ4DNx4AnZh8vOqJJzXqtusiL9soWcNfDPSbZvbAwqQZiMkXKBmENLW4xUr7syquV
-         2ViGz3ZyZhv+D/9/+6ir2dfvTYhKdqq0CkpekiE/gW0Sj8Lf+WfBG1fxNZHI43AK0A5G
-         EDVQ==
+        bh=45IHMvHuNfQHmQp3e/l7ZQyBPSv/bWU1s+/SnIhe5+k=;
+        b=GSTNqoufmOCpxSxB6DIpnTk/eG5C/2yBvhJutiJie6deAzBZ820GjEL0CwYPGLbU12
+         EGLHaicSIjyD5q59jnIYNF/yUOO0e7lkkX4gor5VSz4qsPiv1W68/jSR9STrKAh/pYtD
+         rnge8JQSnBOwRVZw85l6zX2S2zaRLkfH0DzEs+F8IRPdZP+8NAT2VOD4XZNQuhBu9eUL
+         MKWZ5opKy6BtnPv3UuxcBNcMz/E85flXa/LbKJD+lWdihEadWL1HmlWmyuxUseRN+ZP6
+         0jBi7LZgNJcl5EC8H4nxpA4XIVD0kGDgTjMHs54S6JHs5tUFCaTzvLOmGRUZ6MrG2+gw
+         PSJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793831313; x=1794436113;
+        d=1e100.net; s=20260707; t=1793831431; x=1794436231;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ngSI9f0kiDWl+YO8rRXsU2IRSVNvxIMeC8SrK3o9F8Q=;
-        b=KDV8hhhUmtqnjIBpXxjb1yLcArz9XVdu5joCPy8VG20Jkt4R8/32LO/Ae8m0E419hD
-         uEsk+K5disSH9td1FduFeho/9WT2zpqiDML4si4c0q37PTyAFvM7NspLX9wraHgE1uWK
-         W/hwJ5esuXkR7VaKz78WCnopXAFtexaTDY0z4cBaLN8FRLaEM2Ye2aHTHqOsnyLJ6Kzp
-         dDE83LCoUaKxb7yEY92MUyV/ib4H93aKgEg+a25EGlLMgLFBH1I+LP6hQ2biBvvPx0b0
-         mh1ghuSEYQq/7oVF/xa+UZAk28/oA7fQKlVVYtlJYsNEIZGA0tUAxsVWylJG6zILo+cE
-         UgYA==
-X-Forwarded-Encrypted: i=1; AKwUvByU2vs/bcBhm29Q9poLaNNbFBY1akH6rhrNiP16dnfsfsp+AVpkzcFTkKLZguC3wvUzKLyXGtIu1GWkeA+cB3Q=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+aQvKHABc/LYXftk028v/yHMiSsBobY8sDc9dlomh1vo2EKFlF
-	ubIdyLHuP3sbZH2aAq92NdKOISzWFRpjZxloVUypfdYMur38cv5iAcw7M5C5aGe/Pg==
-X-Gm-Gg: AYBFou1Gs2onS7KnsKoxZUZEa0qijeiXbVBxkYEwH8g6pNXPNeiJdEkZW21SsHf33eG
-	ile9Td28K6kQTjoTs/kdMk5Ayh3vlUG6wVkY+BnGoukdLZe9G7sp+xfsjaO0DZO6cRlE+B7RFhZ
-	qzWYkv/zeukgJbIa9XS9OidUGHpVJ1um6lk9JVUKlj4Ztd2iIQZpBdefPoj6csP9tOgmwvlgPQs
-	ufhhyjQ2yFyf4PzmzIe2ArvUDuQR/AkLytyuaiZo8v2HmZsWdzLOMhoWfSqr1tD8ZEOZyDodGHK
-	lm3EW1VPSwZHDaAdy9+75O6wbaKjLnZ6fjQYL/Z7fdhUc9kYdDusOX4xQN9rCazse2Jv9ui4J8h
-	9y+ZdJ/EnOyWg0zXRv5tsM/w5o3woKVHiGjNSz5RbA4A5R15jKS4JRwHJmm/z9ecbhkUksPLoxI
-	2VyNX2qWaza9KoBPgnd0KrdfNEPwOkNzbs8AiwLkrwdL5Jbbbyl0ehCPm9tXijhxghYA4FD1YgR
-	3Fui4pCtkNs61frNvGKJwmTYlmR+mLOVlw1RixdueDoZ57CUyHKQekHH9R7cCZg/t+BrGssnE7K
-	+aM4VhDV3us17zgwCJ91jXKVs/uvAEP8sDCiXdEcYHmn+dCwOqUkxTBIO46R6p5K
-X-Received: by 2002:a17:90b:4c04:b0:3ad:8a14:bc73 with SMTP id 98e67ed59e1d1-3ae897b519bmr13057533a91.50.1793831312185;
-        Wed, 04 Nov 2026 14:28:32 -0800 (PST)
+        bh=45IHMvHuNfQHmQp3e/l7ZQyBPSv/bWU1s+/SnIhe5+k=;
+        b=GqolS54znXJN1LZHBEci/wHNmrE/E0HL0u9qXfTlpyjOkhKzKaNVpZj0707HyNmq5P
+         8kOTZmWLSN3fXz/Q9yWSR3vjs4DVXo220czsZe6vnS9FahokDv0zFsIXFXay4wNj+q/p
+         Y4f6RWxVVgB6pzjNpLCABEFdziiLnmhFX01n1lbpWaDx1tmIvF/nYe0HqnTVXJ/NrtEG
+         9V0tnmHvs7DIQqNxgFo8+pAr8Ko5AeNu4vzSV0wWRR+voMydMadkle7b/b4NrR/F1urX
+         5k8xGq6fvy3RIEPvYdJjuYu+wO4xwyGCjIUbLBnaEg50ASpd26UYJbZvmclgKZUCSN1r
+         MiNQ==
+X-Forwarded-Encrypted: i=1; AKwUvByplKcKjO3aXzlbT9STpE7DYIgAtGuxYHr17+wkzvJwQEExsFDmRQ/muMMtGFrUhNTuQfkJzzhxxqYeSzfzFPE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+0LV3LMqRJJlcL8OCF1kd2XS2j0TKA6iMHsPMh5iTsZnRFA60c
+	+3RBxASWT0kP/GBCgfI6x521xcyG0ekcrzUFWhEbfMu6xMBMgwUh/adTIpIALsotfA==
+X-Gm-Gg: AYBFou0MtPydRs8nDVuULQ1U9g/DMEuaIZKgFmMHChahRTnZ2ngkGfTb6VQ77YOBDHU
+	BoWbguwRVz663NmuSyv3jVdWfAKvjMHLbfdgMilf4WKqX8n74nSy+PFK+Fh98ir9H52zFS1yTDf
+	9UuET3qc8CjdUjUEklWl+hKNF9jt87NwK+BKso8S2BD5m50B7FYTONFl9yzgRiX4vHd3VLM/W46
+	DRXwus4vw5iPYd0Epkv1MeboOj46iHtouPHK9PYH4+1HEJqDzQCR/QDkKAC/t7DYYct9IcLRs06
+	pYXwKsWd473LbTWq9kKbfVhKq0SHqnCcDXY/cx+/vOgcP2+5a8DAYQPowjCfxfS1rRGdtt2l84n
+	RKraeZn4W2COvlS7VDknn/W3vZXT3z0Q5+ktvoUTtA9b5Gi21vkC55ffA67jHveALv8O50dQRwH
+	XLGDjztT356rcj6g/aN7BxoDLxd7ywVCmiuq7D28Bz+iJhaeEywfT+lfg09FGvLMR+92RgyCFAt
+	2cxccnWkIhjUe0nDP0pn2nZYMuvJu6qPBQZdb8ZbKcJrzX5JeRWlye7eIY+Jg0WCd5wv2RuIkyZ
+	NP8jcw7Ll7inmnUI5CLjOog9qXnlzfz0c62T7Mg8pHnFAX3QYqHYIukY6y7mu1hG
+X-Received: by 2002:a17:90b:3d8e:b0:3ac:8897:7baa with SMTP id 98e67ed59e1d1-3ae8979a140mr13152373a91.40.1793831430846;
+        Wed, 04 Nov 2026 14:30:30 -0800 (PST)
 Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b31cf4b6sm710454a91.14.2026.11.04.14.28.31
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b31638fdsm743618a91.8.2026.11.04.14.30.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 14:28:31 -0800 (PST)
-Date: Wed, 4 Nov 2026 22:28:27 +0000
+        Wed, 04 Nov 2026 14:30:29 -0800 (PST)
+Date: Wed, 4 Nov 2026 22:30:26 +0000
 From: David Matlack <dmatlack@google.com>
 To: Pratyush Yadav <pratyush@kernel.org>
 Cc: kexec@lists.infradead.org, linux-doc@vger.kernel.org,
@@ -99,12 +99,12 @@ Cc: kexec@lists.infradead.org, linux-doc@vger.kernel.org,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Vlastimil Babka <vbabka@kernel.org>
-Subject: Re: [PATCH v3 06/10] mm/shmem_luo: Don't make early retrieve
- failures permanent
-Message-ID: <auuxi10mmCQrq-y2@google.com>
+Subject: Re: [PATCH v3 07/10] mm/shmem_luo: Retrieve tmpfs files onto a tmpfs
+ mount chosen by userspace
+Message-ID: <auuyAseOISaOWwbO@google.com>
 References: <20261103010216.3447716-1-dmatlack@google.com>
- <20261103010216.3447716-7-dmatlack@google.com>
- <2vxzik2ck5dp.fsf@kernel.org>
+ <20261103010216.3447716-8-dmatlack@google.com>
+ <2vxzecd0k1dg.fsf@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,41 +116,24 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2vxzik2ck5dp.fsf@kernel.org>
+In-Reply-To: <2vxzecd0k1dg.fsf@kernel.org>
 
-On 2026-11-04 04:01 PM, Pratyush Yadav wrote:
-> On Tue, Nov 03 2026, David Matlack wrote:
-> 
-> > Mark failures in shmem_luo_retrieve() before it starts restoring the
-> > folios as retryable, and return the error without freeing the serialized
-> > state. If no retrieve succeeds, finish() frees the preserved folios,
-> > like it does for a file that was never retrieved.
-> >
-> > Nothing has consumed the preserved state before the folios are
-> > restored, so the retrieve can be tried again.
-> >
-> > This also fixes leaking the preserved folios when one of these early
-> > steps fails, e.g. because the file has seals that this kernel doesn't
-> > support. The retrieve freed the serialized state but not the folios, and
-> > finish() then skipped the file because its retrieve had failed. There is
-> > no Fixes tag, since the fix relies on args->retryable, which was only
-> > added earlier in this series.
-> 
-> If the seals don't match, the retrieve is not retryable. It will always
-> fail.
-> 
-> I think the only retriable part is memfd_alloc_file(), although even
-> that is quite unlikely to fail. But I think that also fits pretty well
-> with the most important type of error you want to retry on, which is bad
-> arguments. In later patches, you check the argument on
-> shmem_luo_create_tmpfs_file() or shmem_luo_create_memfd(), so perhaps
-> set retriable in those functions?
+On 2026-11-04 05:27 PM, Pratyush Yadav wrote:
 
-When retryable is set, LUO leaves the file unretrieved and finish()
-frees the preserved folios. If the seal failure did not set retryable,
-finish() would skip the file and the folios would leak.
+> > + * If @flags contains unknown flags or O_PATH, if @mode contains unknown mode
+> > + * bits, or if @dirfd is not on a tmpfs mount, the retrieve fails with -EINVAL.
+> > + * If the file can't be created, the retrieve fails with the same errors as
+> > + * open(). A retrieve that fails before the preserved contents are restored can
+> > + * be retried.
+> 
+> How is userspace supposed to tell if preserved contents were restored?
 
-In v4 I can move the seal checks into shmem_luo_create_memfd() and
-shmem_luo_create_tmpfs_file(), since the valid seals differ between the
-two, and reword the commit message so it doesn't suggest that a bad seal
-can be fixed by retrying.
+Through the error code, like Pasha said on patch 3. I'll reword this in
+v4 in terms of errors instead of kernel internals: errors from checking
+the argument and creating the file, e.g. -EINVAL, -EBADF and the errors
+that open() returns, can be retried after fixing the argument. Errors
+while restoring the contents, e.g. -ENOMEM, or -ENOSPC when the contents
+don't fit on the mount, are permanent, and retrieving the token again
+returns the same error.
+
+Thanks for the review. I'll address the rest in v4.
