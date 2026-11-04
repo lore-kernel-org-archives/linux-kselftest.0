@@ -1,68 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793774593;
-	b=EQ6ph067FYTdXlBQgcEuo+0c/8SCDsRrXAcy+MZilEkt2Cj/Jr357d7LhBkLnnxLct82
-	 2kF3ygb3CMaz8vRZG+QD6RUiHIqdRv9SR0BuzilhGdl9zIEpceW1SMbfFl707ZlQeQ17f
-	 7EJ8Kwgs5Auq0nHdRL8zH3kE2LpN1UVfgObG7BzRm1JGWdA2OPEjlCt5unAlqztzG9rxK
-	 pbcF6q18yIGfWFApkPR8uilLIObWECz4x1t05BaKAfjSbGCrJzI/2tU95sef1gzqLjSjy
-	 x2u54vHhy7OB793nQDyUsQvyN7sH0W+gbhV6211lRGN0Tk1BymNmQUw5rDb/PacJ1xw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793774593;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=1GluMcGX6o9K3FgWN3ADvIyhvh+rKWD5APNzg1dV1gQ=;
-	b=QNA2JdpNJd2F6MGkfVwYHyukJC83x3kq7L9uuswNdDxMgDdL+ZrKI3OQPu5rd71nQOcc
-	 0hiuJF0fCtRyhelYHXfxFRSxeAaEspKgXfiIxIKKzFI+C5uH/w+gEgOLfhs5wI7VKZfNg
-	 pomHjKtIC65t0ILDlM1rPE+BFMk6BNPjwOJhVr5Qs3MhD/UH2dg9SFcqqN84MmzPHDmbC
-	 d91Y/rWqlr5MZSCtPRD52hO1SbbE0BEbp1x+oVDoq1OSA/fz4RGSd/cizDDHHHvdDWk+L
-	 iNyLgxcmyq+X5o6ZWfSc8hm181fmQUCnHJbGvaMsnUViiSdmk0sUOjlH90tTcris9uQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=aI0RBTrn;
-	arc=none smtp.remote-ip=198.175.65.15
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.2
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793774620;
+	b=I+loy0uHsBq40pmhNqgO/jp3pjcWrG9o8t1QtUD/cPf39kuJI+zCuyc7HF0Qhxp8+6w6
+	 kuIxfqUsbvK4fXrQ91mrICRLS1YzOnQT6laRsfBa3K/f1VhiRENtvymp4aoS0HdZtbDqN
+	 S1zmzD1LSeYSzp/cvlRgFCmTlWXD+9DMFEXYb78KFWY3nEEn1zeDKXi2/MckKfYr8/U8V
+	 u+e84ycOAnK/ocaV+TexNohlOM5Krf2KFKd6ocG5FQdszhPCJksX+uVZpNXpgNe6LzPVA
+	 gLMCrz5n19eIXM9fqZxqNSzXiPUQNK7jfCWtZzRfmP+s8ShhA9fnSwiL0I/3lVSbT4A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793774620;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:Content-Type:Content-Disposition:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=gk/R5tmFv7vgYLjTuAhZDjXsqJ45dnNcQGG9EMaymaE=;
+	b=CRiHyx/I66hpuHHamzF9MwEu60tvU41+C3w/k4HQg+Ik4Uv4xBByA1p0Xwr/Oy1GmvFx
+	 Uwx+UhjSq7R9WZz6y4VMWSBv2J07opEinSm02HuNaVpu2M1kMbfFS0Zx6sRb4+BO1M8jr
+	 hAxa/Au1pvTn40dN/Y3uRsstnhAroxPnX4h0iz0sN40koF8xBaeja3OBcV0Yg0nBsE57O
+	 wMadFzJLbapZf0XTJF45y4skg3TC4Vrw2CURxh8kcfqwaHoS2jFhcM/rDGt1RZBZ4WUXq
+	 XYAgmJoxEPUmKSPlPfCaR/O6PSeZFaIqInkWKg6Nr6Piyjx4APxoyKqMZnSujWP+xxg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BW4plhnb;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.2
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013002.outbound.protection.outlook.com [40.93.201.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A0E606A31B;
-	Wed,  4 Nov 2026 06:43:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67A0E606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2705606A31B;
+	Wed,  4 Nov 2026 06:43:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2705606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=aI0RBTrn
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793774592; x=1825310592;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4MiPbWa9MovakwQvojXUWB5s/cO4I/EWBWhE5UD5mvE=;
-  b=aI0RBTrnTKMCrs8htx7mRdeOedoa64vbGChiSZc1D1AXZD+fL2GNB3O5
-   ABZCaOKnbvCxIjbp1lCdJI0X4ufU2M6ytv4+F9Ak9RtgGSumI5Ytymg1b
-   KI2iZ9fS8a0wvaZaPoBZ8OOnjjHHJNDT++dO9cXOdwX37oEES1Ih1KWhH
-   0Hpxc+5XLuWH00Fdpz+VLTOZAoeJGzaT/G+aVT+drBdi4afjTWfY/QQap
-   MCUnHJeU5ixL2FoUeD1GRfMjfvTH0KB6gDuyIHkSQJhjWpY1fEBIs0i6L
-   HEH6iO2WFk54RurIO7AKROp4l1JedMsbhwICOFtIwVB9cFG3Z492wt5i8
-   A==;
-X-CSE-ConnectionGUID: mYTLMje7QoqtNbazqsH9yQ==
-X-CSE-MsgGUID: vQsbC7NXTU2AXiQMAgdLDw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11955"; a="2527380"
-X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="2527380"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 22:43:11 -0800
-X-CSE-ConnectionGUID: al9pqcoxRbCbgtR9ZvDqvw==
-X-CSE-MsgGUID: 61kfdNpUSsSQ5hWJ5lJTNQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,194,1787036400"; 
-   d="scan'208";a="8433789"
-Received: from unknown (HELO [10.238.2.205]) ([10.238.2.205])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 22:43:06 -0800
-Message-ID: <508329e9-a3b1-4143-830c-44439d459fe4@linux.intel.com>
-Date: Wed, 4 Nov 2026 14:43:03 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=BW4plhnb
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NivHNl4Fvdcpgf0YQ4AB+lT+EOcOdiNkVSXWngy9zvdUQ0wGJDem3VdCZ5OAMfSvZ421/v485QeiO32gEuvKe3pFtBZOpGSYAAxlCXDsyQwmi21Jx18wBCHjQH6t+HYEjmfnLB6k5jiw+3dm4X2izd1XB5N6MWxa9/+/v4VfifXJYRXKFnlViALHVFhp1bKzpkf+9Z7ehakaaPP0xQt3mhtmrPwks2wZN6nE80KS8Rpfj+xmG6xPtHZGpeZKfnQD6Bt699KLIYIvwfv72UOV0sn/UVLYR2Ut248Repjy4TNP2BJ6zkMfIxFrOYaE2CiF2FeQpSkhuM6lNWfxO5Rr6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gk/R5tmFv7vgYLjTuAhZDjXsqJ45dnNcQGG9EMaymaE=;
+ b=GjnbO6gwkaAuw+ksa9CQC/vae6bj7nES0k4uh8f277bxrSECr+nji68Igugo1l1n5VuZ+lVhLmCBzDA+bqEv6xA3XZ+cfsMS58mDXWealDX0QPhx3NUAORSRlCijjhCB4bGepnWlTcuaCrsQCi4CAzBa9wfP9hdJvH+uxNHzHHTNW9VJf2buRWx+bOV0PFXWjw+VbYse+Nb0KTmnQhLQn7SD6uBmgsytdxKduXid8KLVsuo5TXWKNIyKNUBo5SaEoLUxo+3DZOHz5GfnUM5mx/1qfoAjSbEbyM03Gx2tXboP2PfjFtn6vYWTNbu5qdoqPfVURiFCnbVsfn7+ppBr2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gk/R5tmFv7vgYLjTuAhZDjXsqJ45dnNcQGG9EMaymaE=;
+ b=BW4plhnbKPoVZxzejTxVR1INNKKKhneHiRvSB1VrqfXgbX8bBR4UcBKEmvlTJtht70GzVFdQVhJQLbOMr8sc8GXRi+xZ7r0XZkF6bgi89CnNxv0Y0LuRsntvWqMX4gmVgtfMhXnN4DIVYF9u/UabZJfox8ku5Fw/wq4lTlQihXvRMxFQzSbLXj9E3Zbjiq+9HzCM45MxIG2oey75Ab3rMgoAcv9PfsX4aAmByexX7KDOOn9+r201qoXg7S/Zpuw1Fl9BHDy6/jQsl7ObFvPE6yDQKm59pSCsXo+HCkkG4HZd9p4db02gtN8aWpRm+bUaBKiPzZ+hCvd+nEEmYiNLJw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
+ by MN2PR12MB4157.namprd12.prod.outlook.com (2603:10b6:208:1db::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.8; Wed, 4 Nov 2026
+ 06:43:37 +0000
+Received: from BL0PR12MB2370.namprd12.prod.outlook.com
+ ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
+ ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0592.007; Wed, 4 Nov 2026
+ 06:43:37 +0000
+Date: Wed, 4 Nov 2026 14:43:27 +0800
+From: Richard Cheng <icheng@nvidia.com>
+To: Ben Horgan <ben.horgan@arm.com>
+Cc: tony.luck@intel.com, reinette.chatre@intel.com, x86@kernel.org, 
+	shuah@kernel.org, fenghuay@nvidia.com, Dave.Martin@arm.com, james.morse@arm.com, 
+	babu.moger@amd.com, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kaihengf@nvidia.com, kobak@nvidia.com, newtonl@nvidia.com, kristinc@nvidia.com
+Subject: Re: [PATCH v5 1/2] selftests/resctrl: Implement cl_flush() and sb()
+ for aarch64
+Message-ID: <aurOz7iGKInyjddW@MWDK4CY14F>
+References: <20261012074729.40042-1-icheng@nvidia.com>
+ <20261012074729.40042-2-icheng@nvidia.com>
+ <847af89d-7b79-44b4-8273-243dfb51ef5e@arm.com>
+ <9cccea63-397c-4913-95bc-eed38f0ebd66@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9cccea63-397c-4913-95bc-eed38f0ebd66@arm.com>
+X-ClientProxiedBy: SG2P153CA0032.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::19)
+ To BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,114 +100,198 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 21/28] KVM: nVMX: Handle FRED VMCS fields in nested
- VMX context
-To: Sohil Mehta <sohil.mehta@intel.com>
-Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
- <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Andrew Cooper <andrew.cooper3@citrix.com>,
- Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
- Shivansh Dhiman <shivansh.dhiman@amd.com>,
- David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
- Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
- David Matlack <dmatlack@google.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260911213659.2025974-1-sohil.mehta@intel.com>
- <20260911213659.2025974-22-sohil.mehta@intel.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <20260911213659.2025974-22-sohil.mehta@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|MN2PR12MB4157:EE_
+X-MS-Office365-Filtering-Correlation-Id: 58fe8459-b688-4079-89b7-08df3a3ef3f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|1800799024|23010399003|7416014|261022075727099003|4143699003|5023799004|11063799006|261021121427099003|261009223027099003|261022105027099003|56012099006|261102123227099003|261028144727099003|261026121527099003|261026140227099003|10067099003|20046099003|21026099003|18002099003|22082099003|5123799003|6133799003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	mjCPDS1ny80QSnU8XjOpSe96G2/U/zegOs7Ig8iS2BQcvn17YTnr1u+J1xx27PH9ClxlLW/iQVQAYR/UjzTFJEXTtpLZdoBpEqlMdT4WwwuwR/0XCrBjBFr554/ZuSGXewZoRs6Xt3iHLfvztNKq93KNJAJ6m7/PFIWJaA0Xc4xugUE3u2tJ1MulS6CsB+Iialj4vV5OuREbV05eIpfQUoCv4jZowqcYW3pstv/f8si3ls85ZKclVjVRb/I2iwEp3/lhRK+PUk2zNVulg7p6VRj5UdtUaFu1QKMOmxMOz0LZcaS2JyQMMoWv53A4d5vG4KeJdyFa4p5b/UXswNv2VvGkEL3u7Zdou/ASn2yOHh2qfSxhIVZKLm8DWuKYWmaO4CtiWVdPPOs2NoY+qslyZ+c4l/vZSFXZEZDvC7pQ5wS/vHX+ucUEa0vUCaDg+fiF458Jxweu+hYljZlZ9WcdxH7Z9KLSCM3KWOo1HhDVaWss7owZ1ZF8Aox7YIoTZaXN77LoqZzdSu/SCaaP3k7ydvrPk5FwG8WdQ3a3/ooUP+6G7i8EbralZ/gj5w9AxvuHvwclbFjlBYQ3tKeBDunZ2oJmo740oUQDkV1OBKO5hf6Z0BvnIdqQqz0tpET/CBIJFVhGSl9z4F51xDtEZXsZLcBlOiIB8jmkjRvE0ASXRZ0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(23010399003)(7416014)(261022075727099003)(4143699003)(5023799004)(11063799006)(261021121427099003)(261009223027099003)(261022105027099003)(56012099006)(261102123227099003)(261028144727099003)(261026121527099003)(261026140227099003)(10067099003)(20046099003)(21026099003)(18002099003)(22082099003)(5123799003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?O+x2M48QHPNo3vLUc17jhIiHF78WwblvbTg0/bPtitvcfxxUpua/0YTGBqab?=
+ =?us-ascii?Q?Od4QZcmeo4IcuxyQaMnRPeN4/rxSBA7Y8kL+ixOuZYUNDPGBNCJc33gtWmn3?=
+ =?us-ascii?Q?UZG3X6JgC5EfzAQZAWQFPTMgQ07LiEUWeFyQqVMGcr14mfxGD1m7oPRfLcNf?=
+ =?us-ascii?Q?A4jwd5+yZCUv+EpFKtoplN9rLwiWkufCrMNsd7Grw1ioc0gMvWrp8G1voLI7?=
+ =?us-ascii?Q?60yNg51iwAQ0q4/42uK/DySVb37DRXBr0Y0493JxmQ8FMtuq9bfiTfRUZxKO?=
+ =?us-ascii?Q?7Gss130sT/8OfQfZzEcHfCZgQnJV1kVg0TeD7kOvzB8RjTirFZSWBbzO9YAK?=
+ =?us-ascii?Q?mhchm5FDYxlPgp2GOpgl8Jg/DPLHP20q44+zdu64Ig8/wPLHfXvObScN/wJq?=
+ =?us-ascii?Q?Xy58zjixOR8ygy5mBPKdVs8wRsMgtgUP7CW7dP6mNjf/wdgEx1of6lhOwLOY?=
+ =?us-ascii?Q?f0axF/XQhwzvoXJ57t0SM8mZ3IiFMZ933WYHRxC1sqMwqw0/Yq1T9wmOALCK?=
+ =?us-ascii?Q?SfC984/aItDrCh0avpF2QMusKh4nHBaCyn+qhe1hg7711gS6R9ZQRt0DMcQ1?=
+ =?us-ascii?Q?EZ9h7AqBM0WNcyTzMufHFu101qX5di7/G//SYiydKWSUQijAIuH881+cE43/?=
+ =?us-ascii?Q?ZgDXl1tpPu8OzsGfTAortsLgvFVSLZAtAgL/rrxNSmeZFGww0WuG42wibECV?=
+ =?us-ascii?Q?PcSFsa7tNOJhIjALOWkTLcOP9iAKVq7GhrGmd7gbpTnIo+nWaKuRgOrk50k7?=
+ =?us-ascii?Q?FSTa8+jPX/EyIsr5/SwfeK5hn1bE7Xtk6bbw5FJpBIBTuR4bBahWFpJyAKp6?=
+ =?us-ascii?Q?L50NeqJlbqoibdTvcYzSU1k6TURWfx1poofV1hRX5reMVT5+FxrRXtH711Fo?=
+ =?us-ascii?Q?fd8HVgWCzVVyzS0lZVpSTeTUjtQgMARY9Dohb2MLZ+hRBJsZqgrh7bShzTk6?=
+ =?us-ascii?Q?Ql8mvCAPPx6luJ07TgNFxIFEtnkUQIrfxmax2eE8X5Ery1Kq1QaoXRIlYsqv?=
+ =?us-ascii?Q?Gx5Fge/TQqfh4WEXe1xDxXEv0cI5yYcE6HDtYxwwcQTDVwOPi/9B2EGGBpG0?=
+ =?us-ascii?Q?XBZWMakKkP0ODfleVGF3EnR+RTTnOouPWFKnouzLmhQHQ7SV/vBA59VNbM8U?=
+ =?us-ascii?Q?iqb9DBRyW96Fnh8izGH8H7Al16qRuLDI5vLzcBD/Lupex+OpOnQYPWbyw3DL?=
+ =?us-ascii?Q?qLgVmwkqTGpszeXJ1G1el57oTcsgo/t+TGqyi34FzmLHrlPKZUULSuFS7wN9?=
+ =?us-ascii?Q?0kIZjqirO7+3x7I5dMq/2NomOyu4We8g+QzCsbItPGZyfTjT3+S30dJ4wctK?=
+ =?us-ascii?Q?OWZSMtRNTnVijMtSwdGs5lHD00TrcqDZxpZEkLTCMdbdTluK5oKaTdEYlC31?=
+ =?us-ascii?Q?59ft7he7JKDfZGE4clyX7vg8Y3a65QVSn/bQ1RPKXDbaojyTghLCj7akftEE?=
+ =?us-ascii?Q?gjhY/WfvKc+F+UV1vmkVvEFAvJP80sNqFY6b29X3m/tT0/UFm6gSBHYP9W+p?=
+ =?us-ascii?Q?wpRfgz6bZBtjm5wI9iWnFvfYop4Bl4wQ+pT+BetPngwwOZ0cR7CpQ3gNRMml?=
+ =?us-ascii?Q?ZPj1KwpGsVttdhchlrrIxGFxe8vQkZ2t92Ovmj9sEci5xTwvCqfePpBbI0nu?=
+ =?us-ascii?Q?CQHK5TmjnJs9TE2uyxrAVI2ULbluSVRtxUODqa1mcRxIlpmvdy6iL6fdTKTc?=
+ =?us-ascii?Q?UdBbiMpFZHFsYhn7rPtc0+bxOv4GWk8K4ZEKcwZmXcr04poQIPgzrli2/lkn?=
+ =?us-ascii?Q?koI59YrtDw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58fe8459-b688-4079-89b7-08df3a3ef3f0
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2026 06:43:36.9584
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nJCijDGeqN+OjxdHtEVSj7sQvwrHV2obenE+0xB/BY+4wk509AqvAJmcV1nBvB6cM3aUGUuY0pgjSvfjrY/Wzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4157
 
-On 9/12/2026 5:36 AM, Sohil Mehta wrote:
-> From: "Xin Li (Intel)" <xin@zytor.com>
+On Wed, Oct 21, 2026 at 10:55:35AM +0800, Ben Horgan wrote:
+> Hi Richard,
 > 
-> Extend nested VMX context management to include FRED-related VMCS fields,
-> enabling proper handling of FRED state during nested virtualization.
-
-No strong preference, but for me this is a bit too thin to describe the
-overall change of this patch.
-
+> On 20/10/2026 17:30, Ben Horgan wrote:
+> > Hi Richard,
+> > 
+> > Thanks for having a look at the arm64 side of the resctrl selftests. That hasn't had much love but
+> > it would be good to have them working properly.
+> > 
+> > On 12/10/2026 08:47, Richard Cheng wrote:
+> >> cl_flush() and sb() compile to empty functions on aarch64, making
+> >> mem_flush() a silent no-op and leaving CMT/CAT tests operating on
+> >> unflushed state.
+> >>
+> >> Add "dsb sy" for sb(), ARM requires a DSB whose access type covers both
+> >> loads and stores.
+> > 
+> > I guess this is referring to the synchronization required for the cache maintenance instruction but
+> > that's not what you are using in this patch.
+> > 
+> >>
+> >> For cl_flush(), "dc civac" only reaches the Point of Coherency, on
+> >> ARM MPAM systems the SLC lies past the PoC and may be a NOP on coherent
+> >> platforms. Instead, dirty each cacheline with a store so that
+> >> mem_flush's full-buffer sweep evicts lines from the SLC via LRU
+> >> pressure.
+> >>
+> >> Signed-off-by: Richard Cheng <icheng@nvidia.com>
+> >> ---
+> >>  tools/testing/selftests/resctrl/fill_buf.c | 11 +++++++++++
+> >>  1 file changed, 11 insertions(+)
+> >>
+> >> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+> >> index b9fa7968cd6e..eae0262fe265 100644
+> >> --- a/tools/testing/selftests/resctrl/fill_buf.c
+> >> +++ b/tools/testing/selftests/resctrl/fill_buf.c
+> >> @@ -27,6 +27,9 @@ static void sb(void)
+> >>  #if defined(__i386) || defined(__x86_64)
+> >>  	asm volatile("sfence\n\t"
+> >>  		     : : : "memory");
+> >> +#elif defined(__aarch64__)
+> >> +	asm volatile("dsb sy\n\t"
+> >> +		     : : : "memory");
+> >>  #endif
+> >>  }
+> >>  
+> >> @@ -35,6 +38,14 @@ static void cl_flush(void *p)
+> >>  #if defined(__i386) || defined(__x86_64)
+> >>  	asm volatile("clflush (%0)\n\t"
+> >>  		     : : "r"(p) : "memory");
+> >> +#elif defined(__aarch64__)
+> >> +	/*
+> >> +	 * Dirty the cache line with a store. As mem_flush() sweeps
+> >> +	 * the full test buffer (sized larger than the SLC), cache pressure
+> >> +	 * evicts lines from the SLC via LRU replacement.
+> >> +	 */
+> >> +	asm volatile("strb wzr, [%0]\n\t"
+> >> +		     : : "r"(p) : "memory");
+> >>  #endif
 > 
-> Because KVM always sets SECONDARY_VM_EXIT_SAVE_IA32_FRED, FRED MSRs are
-> always saved to vmcs02.  However an L1 VMM may choose to clear this bit,
-> i.e., not to save FRED MSRs to vmcs12.  This is not a problem when the L1
-> VMM sets SECONDARY_VM_EXIT_LOAD_IA32_FRED, as KVM then immediately loads
-> host FRED MSRs of vmcs12 to guest FRED MSRs of vmcs01.  However if the L1
-> VMM clears SECONDARY_VM_EXIT_LOAD_IA32_FRED, KVM should retain FRED MSRs
-> to run the L1 VMM.
+> One more thing that occurred to me is that if this is intended to evict all existing data in the
+> cache then it would require that the cache portions bitmap for the control group (PARTID) in use is
+> set to all 1s. E.g. 'L3:0=0xffff'. Otherwise, you may not affect the whole cache. This likely means
+> that the cl_flush() function isn't the right abstraction for MPAM and the test needs a bit of
+> restructuring to get this to fit in elegantly. Similarly, to the limbo handler in resctrl you could
+> then check the llc_occupancy() to check it's under a "low enough" threshold.
 > 
-> To propagate guest FRED MSRs from vmcs02 to vmcs01, save them in
-> sync_vmcs02_to_vmcs12() regardless of whether
-> SECONDARY_VM_EXIT_SAVE_IA32_FRED is set in vmcs12.  Then, use the saved
-> values to set guest FRED MSRs in vmcs01 within load_vmcs12_host_state()
-> when !nested_cpu_load_host_fred_state().
+> Thanks,
 > 
-> Signed-off-by: Xin Li (Intel) <xin@zytor.com>
-> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
-> ---
-> v10:
->  - Simplify nested FRED MSRs update with read/write helpers (Chao).
->  - Add other FRED MSRS to MSR bitmap nested filtering (Chao).
->  - Add {ORIGINAL,INJECTED}_EVENT_DATA to shadow fields in a separate
->    patch (Sean).
->  - Add a new parameter to load_vmcs12_host_state() to indicate the call
->    is from a failed VM entry.
->  - Update exception status member variable nested to is_nested (Sean).
+> Ben
+>
+
+Hi Ben,
+
+Thanks for the feedback. I checked the code and ran some tests.
+You're right, my implementation writes into the benchmark's own buffer using
+the same PARRID/PMG, and the buffer isn't always larger than the SLC.
+
+I can't claim that it produces an eviction sweep 100%.
+
+I think what are want to do is to check whether reducing a group's cache
+allocation causes more cache misses, thus the data left in cache from the
+previous allocation must not affect the next measurement. That is also
+why I want to reuse the concept of Intel's test with CLFLUSH before
+warming the buffer under the new allocation.
+
+I'm thinking maybe the assumption can't be achieve on ARM, I ran tests to
+measure occupancy before and after each preparation method.
+
+I tried this patch's implement, and "DC CIVAC" since I think it can affectively
+invalidate cacheline without throwing old data away, which should left
+occupancy almost unchanged.
+And one more method with a separate large buffer in another group.
+
+The result turns out like the following
+
+Preparation                     Before (MiB)   After (MiB)
+DC CIVAC + DSB SY                     51.19         50.47
+zero-byte stores + DSB SY          53.12         56.43
+Separate-buffer pressure             53.25          7.14
+
+
+The current method increased the benchmark group's occupancy instead of
+reducing it. "DC CIVAC" left occupancy almost unchanged.
+The separate buffer method reduced occupancy very much, but still left data
+behind.
+
+It makes me think we should reconsider the test method. I think the goal is
+to check whether the MPAM allocation limit works, clearing the cache is only
+how the Intel RDT test prepares for that check.
+
+How about we set a group's mask before its worker initialize the buffer and
+then run sustained cache traffic and measure occupancy after it settles?
+Maybe compare full, half and quarter masks to see whether the allocation limits take effect.
+
+Does that sound like a useful direction for MPAM test for you ?
+
+Best regards,
+Richard Cheng.
+
+
+ 
+> > 
+> > Isn't this cl_flush() used without changing the resctrl control and monitor group (PARTID/PMG)?
+> > Hence, I expect you are ending up making the cache full of data associated with the identifiers that
+> > the benchmark runs with. Is that the case?
+> > 
+> > I'm also unclear how this the cat_test will detect any performance differences on arm/MPAM as the
+> > perf events would need to specific to the system level cache implementation.
+> > 
+> > Thanks,
+> > 
+> > Ben
+> > 
+> > 
+> > 
+> >>  }
+> >>  
+> > 
 > 
-> v9:
->  - Rebase to kvm-x86/next.
->  - Guard FRED state save/restore with guest_cpu_cap_has(vcpu,
->    X86_FEATURE_FRED) (syzbot & Chao).
-> ---
-
-[...]
-
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index 14fd3f57d5c1..cc1e4038cd44 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -182,6 +182,29 @@ struct nested_vmx {
->  	u64 pre_vmenter_ssp;
->  	u64 pre_vmenter_ssp_tbl;
->  
-> +	/*
-> +	 * Used to snapshot FRED MSRs that may NOT be saved to vmcs12 as specified
-> +	 * in the VM-Exit controls of vmcs12 configured by L1 VMM.
-> +	 *
-> +	 * FRED MSRs are *always* saved into vmcs02 because KVM always sets
-> +	 * SECONDARY_VM_EXIT_SAVE_IA32_FRED.  However an L1 VMM may choose to clear
-> +	 * this bit, resulting in FRED MSRs not being propagated to vmcs12 from
-> +	 * vmcs02.  When the L1 VMM sets SECONDARY_VM_EXIT_LOAD_IA32_FRED, this is
-> +	 * not a problem, since KVM then immediately loads the host FRED MSRs of
-> +	 * vmcs12 to the guest FRED MSRs of vmcs01.
-> +	 *
-> +	 * But if the L1 VMM clears SECONDARY_VM_EXIT_LOAD_IA32_FRED, KVM should
-> +	 * retain the FRED MSRs, i.e., propagate the guest FRED MSRs of vmcs02 to
-> +	 * the guest FRED MSRs of vmcs01.
-> +	 *
-> +	 * This structure stores guest FRED MSRs that an L1 VMM opts not to save
-> +	 * during VM-Exits from L2 to L1.  These MSRs may still be retained for
-> +	 * running the L1 VMM if SECONDARY_VM_EXIT_LOAD_IA32_FRED is cleared in
-> +	 * vmcs12.
-> +	 */
-> +	struct vmcs_fred_msrs pre_vmenter_fred_msrs;> +	struct vmcs_fred_msrs at_vmexit_fred_msrs;
-
-I understand that the two fields are both belong to FRED, but the comment blocks
-are for at_vmexit_fred_msrs, not for pre_vmenter_fred_msrs.
-
-Should pre_vmenter_fred_msrs be put together with the other pre_vmenter_xxx,
-since the comments above the pre_vmenter_xxx explains why these fields are
-needed.
-> +
->  	u16 vpid02;
->  	u16 last_vpid;
->  
-
