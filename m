@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793826736;
-	b=axCoo9SiXCkVwwSwxgl2wfhjSKIiiYn29th7YeCt66D6PZFeWPZ8aLafRT099tnJmYCF
-	 v2+h0hjTzqswhnPLMoMg4p+0sGG81ShlcLN44L1NydnfxvL2VcMS9I0RMZ0CvkK2E74aF
-	 M2ZBfDyLCaXcXnj25SgNPJCiwbGRRPpnXp84Eysvcy0rZfg+tGlGsTrHn2+fADDxONm/S
-	 PbprOLvd7vaoEf0wqwwe0V4qntO/eCCEpzRE/l+yYKTmi0I6hRITwj2CFPgaWxryTlqrY
-	 JbxVSebHVUacbBE3bpwA4FLytibKXjIbs/wyZFzSB3tGaLJkTSgymrbRg93TAvrE9uA==
+	t=1793826737;
+	b=pKucY8bwyWDdTITaoMVY4ZYgxaaP3zm+4ltd1s017TJqwjk5SAVA+9/QdRl4+hdQWT5T
+	 7u+iGyNfzRYQCI1vpbU+lY/dMTOkUSjHaGu1mtTQJ1/IvGNSa5Hv2XL+0HUlayDYcJcPI
+	 KehYKTLJHK+/8IuyMoKGqCIgkKe+XDWiLcemR1sPcdlbfpH9oPEQ7tndDyPIbrRivEV2n
+	 kqxysokheECjs7OsywRI7vbZPtTytjQiZMJBr8l2vYdJ67Jd+wCzJyt7Fu62O/YdbjbPa
+	 n6LcyffYMkz9wKbNHPwgkugVrbD4N30TOCl7PJDbSNExBe5Fn7wMaYhGwVxKa0jGRBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793826736;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793826737;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=cfOcF97jHkKlaiKcmGOzXcuD/Kgd1cPFYgWKy969srU=;
-	b=tU5mgdaLGdV/eqTBjn/WtfvaysWgL0x0iWlOTnrnxSdzsMfooYLjt11yxRnDl7NkN8rz
-	 jrLPXupn5tyZpHm7kNWhrohXwqO4VpNrqPh+fqtPn1bM7VcbhKb+Ecw+85hH23WVZdRR5
-	 iBT6uY5Ej7/6jbjqN1Z9R9FTE3YRT5iFRPfwvQI1XDSg0OmtjjN6LU7RQ54O37UFeLlh/
-	 dM5LQBz05EBeb/UXg/n8SOJMI/AIrYfwJFT+qy3gZgutnhuOEp2++Lttv++bkLp4wkosT
-	 3ROJYRAaPw7fA0n0Wl59CLrIoK4A6QP21NcjVZjO4MWX0ZmoiaeRxoArDaz3M8khYQg==
+	bh=ntpA+m6DJ01doX9aY3FKcBjSCGpfdIjb06X7YPYzvKQ=;
+	b=G0iq0g4DYe8dEthrqs8Z3yELCjWI1EFUFxIYIx01qaOzXnDBCKend8AmE11K0GYuD3Wx
+	 9dWl82Rn/63iPv31leYN4i0yiiqjdLFF6y+8/M8AWDKOhLOkxenq/1N57irW0678L3TBf
+	 3zIur+MssOmeocbUHdcRkL/fr0qsaIu086vU4E0EKFjXh4ulSqh7eDIkAHoMiAd3lWxQk
+	 zLvb8bQfh24shWt9gk1k0iyNFuuiH6alZDxQab1eiR3VI7LP7AeUNfpjVFQ2sNSko4Kz1
+	 aC+ZBGiYDVbG4fk5jXSOIWnfJ5nsj3/DIfqFoq+HjSijrRB4hm75RdTa4tSUnAVbHNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=el00BTNN;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=UpR3XfX6;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD716082085;
-	Wed,  4 Nov 2026 21:12:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ABD716082085
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2847660820A9;
+	Wed,  4 Nov 2026 21:12:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2847660820A9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=el00BTNN
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=UpR3XfX6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1793826734;
-	bh=cfOcF97jHkKlaiKcmGOzXcuD/Kgd1cPFYgWKy969srU=;
+	s=smtpout1; t=1793826735;
+	bh=ntpA+m6DJ01doX9aY3FKcBjSCGpfdIjb06X7YPYzvKQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=el00BTNN0C5crOQZHXvMFdSRsJg6ZfIS56pEeyTGJ0JCxsbdzDrkXyL0oz5O7o7Hr
-	 kQpRz8nbI9VM+WT9ib+wd8u5KBH9ZhuBgAgSUvW/oH1iAaEqfF22551+P1ILK427WI
-	 hsNTggl/m0CodSEdkxD5SwNw5zJ4WL7bP7Zkox7g3RzA+NPMmAjOpFEW1bFwtPZiXt
-	 Y4I536OlDg9rNpqCxMlDYpWoyxBMaudANc4Pf+eTBDWgjlBw0rmGM51EO3lomq6iEc
-	 ed2P/xmII7n90pd0Ev8gL6ShVDf27dcRxS5Yjc3DeJKUpTf5TpObmTEa1GspDb+sy+
-	 DKu2AZTxNpZkA==
+	b=UpR3XfX6yjfw4aL41CZLVdmi58f6Fs1YSoolzsZX19BySkadPlFfNPHPsWQlQs11H
+	 jZ8zkSCC8r4vn5ocITfZC/OiD6VAt7ZsiDIMBtZA24J6ifdXa2om7fjqEkMndapeMl
+	 U7PMrr01b8QxEG4QR3GSvJP53swQk7FF2hm3Odh1QhRs10TvKaZz4n3xtZKJHOmvJH
+	 kId2J9l+WrpwsjQOiglJFyM3/4A8S02dVeHnNyP2IQndEOQwQno+L06QcC50QRLLur
+	 rrqOVho2hw/QL0JwWdl7ugtxkr8fZYNJ2VCbxRCAt7TEK90b+KTRxMYGZW0Z6tmQCu
+	 Z/DVsbBBfdo8Q==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jKdRy2810zLXZ;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jKdRy6tw3zLXf;
 	Wed, 04 Nov 2026 16:12:14 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Juri Lelli <juri.lelli@redhat.com>,
@@ -72,9 +72,9 @@ Cc: linux-kernel@vger.kernel.org,
 	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: [PATCH v2 11/21] sched/deadline: Do not take a waking task's bandwidth off a runqueue it left
-Date: Wed,  4 Nov 2026 16:11:57 -0500
-Message-Id: <20261104211207.1392343-12-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v2 15/21] sched/deadline: Record the root domain holding a task's bandwidth
+Date: Wed,  4 Nov 2026 16:12:01 -0500
+Message-Id: <20261104211207.1392343-16-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
 References: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
@@ -89,156 +89,451 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A deadline task that wakes on another CPU has its bandwidth taken off
-the runqueue it slept on by migrate_task_rq_dl(), from set_task_cpu(),
-and charged to the one it wakes on by the enqueue that follows. That
-enqueue can be left to the target CPU through the wake list, and
-try_to_wake_up() returns before it runs: the task's task_cpu() is then
-the CPU it wakes on while its bandwidth is on no runqueue at all.
+Three answers to "which root domain counts this task's bandwidth" live
+side by side:
 
-Whatever happens to the task in that window takes its bandwidth from a
-runqueue that does not have it, or gives it to one that already does:
+ - admission takes the root domain of the CPU the task is on,
+   sched_dl_overflow() through dl_bw_of(task_cpu(p));
+ - a rebuild of the accounting takes the one of the task's cpuset,
+   dl_add_task_root_domain() through dl_get_task_effective_cpus();
+ - a release and a move take the one of the first active CPU of the
+   task's own mask, dl_task_root_domain_cpu().
 
- - sched_setattr() finds it off the runqueues, and
-   dl_change_utilization() takes its old bandwidth off the runqueue of
-   task_cpu(), which never held it. this_bw of that CPU underflows,
-   which costs every other task and the fair server there their own, for
-   good. switched_from_dl() leaves the class through the same hole;
- - a switch out of SCHED_DEADLINE and back in that window has
-   switched_to_dl() charge the runqueue of task_cpu(), and the enqueue
-   that lands later charges it a second time, since task_contending()
-   goes by ENQUEUE_MIGRATED. this_bw of that CPU then counts the task
-   twice, and the release of one of the two underflows it later.
+They agree while the task's mask, its cpuset and the CPU it last ran on
+belong to one root domain, and part ways where they do not: a task
+pinned to a CPU that goes offline, which admission control off allows,
+has its bandwidth put by the rebuild in the root domain of its cpuset
+while its mask has no active CPU and the CPU it is on belongs to the
+default root domain; a sleeping task moved to another partition has it
+in the destination's root domain while the CPU it last ran on is in the
+one it left. The release then takes the bandwidth from a root domain
+that never had it, which underflows, and leaves it in the one that has
+it.
 
-Say in the entity whether a runqueue counts its bandwidth, as
-dl_bw_oncpu, and have add_rq_bw() and sub_rq_bw() put it there and take
-it away once each: an add on a runqueue that counts it already, and a
-subtraction from one that does not, then change nothing, and
-dl_change_utilization() has a runqueue to act on only while one counts
-it. The servers keep their own tally, dl_bw_attached, and go through
-__add_rq_bw() and __sub_rq_bw() directly.
+Record the CPU instead. Every site that hands bandwidth to a task
+records a CPU of the root domain that counts it, in the entity:
+admission, the rebuild, the move between root domains of
+set_cpus_allowed_dl() (whose room was made by cpuset_can_attach()), and
+the move of dl_task_offline_migration(). Every site that takes it back
+or moves it reads that CPU, and the release clears it. Where dl_bw_gen
+says a rebuild dropped the bandwidth of a task, a change of its
+parameters and a move take nothing back, and record where the new
+bandwidth is for the next rebuild. The mask is no longer consulted, so
+dl_task_root_domain_cpu() has nothing left to guess and nothing to fall
+back on but the CPU of a task whose bandwidth is counted nowhere.
 
-Reaching the first needs a deadline task whose wakeup migrates, which
-asks for more than one CPU in its root domain and for them to be taken.
-It is easier to reach with CONFIG_SCHED_PROXY_EXEC=y, where a task
-blocked on a mutex is migrated to the CPU of its owner and wakes back on
-its own.
+The record is also what the departed list of "sched/deadline: Keep
+departing bandwidth across a root domain rebuild" needs, which carried
+a CPU of its own until here, and a task boosted back into the class
+keeps it now, where dropping it left the release to the mask again.
 
-In 8 VMs of 8 vCPUs, a task of 10ms every 100ms that sleeps and wakes in
-a partition root of two CPUs, both taken by deadline tasks of an earlier
-deadline, its runtime changed between 10ms and 20ms from a CPU outside,
-warns in all 8 within a second, and the warnings spread to the idle
-task's accounting of both CPUs:
+Found by the Sashiko AI review of the first posting of this series,
+which pointed at the fallback of "sched/deadline: Do not BUG() on a
+deadline task with no active CPU allowed" pointing at a root domain that
+rebuild had not credited. A review of this patch found the two sites
+that kept taking the root domain of the CPU the task is on: the change
+of parameters of sched_dl_overflow(), and the move of
+dl_task_offline_migration().
 
-  WARNING: kernel/sched/deadline.c:352 at dl_rq_change_utilization+0x71/0x2e0, CPU#0: wake_race/109
-   __sub_rq_bw(): this_bw underflow
-  WARNING: kernel/sched/deadline.c:316 at task_contending+0x244/0x260, CPU#6: swapper/6/0
-   __add_running_bw(): running_bw overflow
-
-The 8 VMs above warn no more with this change. deadline_bw_test, added
-later in this series, has params_waking for it: without this change it
-fails on every one of those VMs, and random_mix on one of three.
-
-The double charge of the second case was found by the Sashiko AI review
-of the first posting of this series, which also pointed out that the
-first version of this patch left its bit set for an entity with no
-bandwidth of its own; a bit that says where the bandwidth is, rather
-than where it is not, has neither fault.
-
-Fixes: 8fd27231c330 ("sched/deadline: Track the "total rq utilization" too")
+Fixes: b4a61fdc19c5 ("sched/deadline: Fix stale root domain in cpuset bandwidth transfer")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- include/linux/sched.h   |  1 +
- kernel/sched/deadline.c | 35 +++++++++++++++++++++++++++++++----
- 2 files changed, 32 insertions(+), 4 deletions(-)
+ include/linux/sched.h   |  20 +++--
+ kernel/sched/deadline.c | 167 +++++++++++++++++++++++++++-------------
+ 2 files changed, 124 insertions(+), 63 deletions(-)
 
 diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 0633a73579db..6803df5ab13c 100644
+index 6803df5ab13c..da3a3a4f7246 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
-@@ -718,6 +718,7 @@ struct sched_dl_entity {
- 	unsigned int			dl_defer_running  : 1;
- 	unsigned int			dl_defer_idle     : 1;
- 	unsigned int			dl_bw_attached    : 1;
-+	unsigned int			dl_bw_oncpu       : 1;
+@@ -736,17 +736,21 @@ struct sched_dl_entity {
+ 	struct hrtimer			inactive_timer;
  
  	/*
- 	 * Bandwidth enforcement timer. Each -deadline task has its
++	 * @dl_bw_cpu is a CPU of the root domain that counts @dl_bw, -1
++	 * where none does: every site that hands that bandwidth out records
++	 * it, and every site that takes it back or moves it reads it.
++	 * @dl_bw_gen is the rebuild of the root domains' accounting that
++	 * last counted it: one since then dropped it, and there is nothing
++	 * to take back.
++	 *
+ 	 * A task that leaves SCHED_DEADLINE, or dies, before its "0-lag
+-	 * time" keeps its bandwidth in its root domain until the inactive
+-	 * timer removes it. @dl_departed_cpu is then a CPU of the root domain
+-	 * that counts that bandwidth, and @dl_departed_node links it on the
+-	 * list that a rebuild of the root domains' accounting puts that
+-	 * bandwidth back from; -1 otherwise. @dl_bw_gen is the
+-	 * rebuild that last counted the task's bandwidth: one since then
+-	 * dropped it, and nothing is to be removed.
++	 * time" keeps its bandwidth until the inactive timer removes it:
++	 * @dl_departed_node links it meanwhile on the list that a rebuild
++	 * puts that bandwidth back from, and tells of that by not being
++	 * empty.
+ 	 */
+ 	struct list_head		dl_departed_node;
+-	int				dl_departed_cpu;
++	int				dl_bw_cpu;
+ 	unsigned int			dl_bw_gen;
+ 
+ 	/*
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 2729c108b24b..cbcc00ea46d3 100644
+index 85df2b0044be..1dbde0fd199b 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -355,18 +355,31 @@ void __sub_rq_bw(u64 dl_bw, struct dl_rq *dl_rq)
- 	WARN_ON_ONCE(dl_rq->running_bw > dl_rq->this_bw);
- }
- 
-+/*
-+ * @dl_bw_oncpu tells whether this_bw of a runqueue counts @dl_se's
-+ * bandwidth, so that these two put it there and take it away once each:
-+ * a wakeup takes it off the runqueue the task slept on and the enqueue on
-+ * the one it wakes on puts it back, and what happens to the task in
-+ * between must not count it twice, nor take it from a runqueue that does
-+ * not have it. The servers keep their own tally, dl_bw_attached, and go
-+ * through __add_rq_bw() and __sub_rq_bw() directly.
-+ */
- static inline
- void add_rq_bw(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)
+@@ -252,15 +252,14 @@ static unsigned int dl_bw_gen;
+  * @p leaves SCHED_DEADLINE, or dies, its bandwidth kept for now in the root
+  * domain of @cpu. Under its rq lock.
+  */
+-static void dl_task_depart(struct task_struct *p, int cpu)
++static void dl_task_depart(struct task_struct *p)
  {
--	if (!dl_entity_is_special(dl_se))
--		__add_rq_bw(dl_se->dl_bw, dl_rq);
-+	if (dl_entity_is_special(dl_se) || dl_se->dl_bw_oncpu)
+ 	struct sched_dl_entity *dl_se = &p->dl;
+ 
+ 	lockdep_assert_irqs_disabled();
+-	if (dl_se->dl_departed_cpu >= 0)
+-		return;
+ 	guard(raw_spinlock)(&dl_departed_lock);
+-	dl_se->dl_departed_cpu = cpu;
++	if (!list_empty(&dl_se->dl_departed_node) || dl_se->dl_bw_cpu < 0)
 +		return;
-+	__add_rq_bw(dl_se->dl_bw, dl_rq);
-+	dl_se->dl_bw_oncpu = 1;
+ 	list_add(&dl_se->dl_departed_node, &dl_departed_list);
  }
  
- static inline
- void sub_rq_bw(struct sched_dl_entity *dl_se, struct dl_rq *dl_rq)
+@@ -273,9 +272,10 @@ static void dl_task_undepart(struct task_struct *p)
+ 	struct sched_dl_entity *dl_se = &p->dl;
+ 
+ 	lockdep_assert_irqs_disabled();
++	if (list_empty(&dl_se->dl_departed_node))
++		return;
+ 	guard(raw_spinlock)(&dl_departed_lock);
+-	dl_se->dl_departed_cpu = -1;
+-	list_del(&dl_se->dl_departed_node);
++	list_del_init(&dl_se->dl_departed_node);
+ }
+ 
+ /*
+@@ -284,24 +284,25 @@ static void dl_task_undepart(struct task_struct *p)
+  * when a rebuild of the accounting has dropped it; and no rebuild running
+  * counts it again. Under @p's rq lock.
+  */
+-static void dl_task_release_bw(struct task_struct *p, int cpu)
++static void dl_task_release_bw(struct task_struct *p)
  {
--	if (!dl_entity_is_special(dl_se))
--		__sub_rq_bw(dl_se->dl_bw, dl_rq);
-+	if (dl_entity_is_special(dl_se) || !dl_se->dl_bw_oncpu)
-+		return;
-+	__sub_rq_bw(dl_se->dl_bw, dl_rq);
-+	dl_se->dl_bw_oncpu = 0;
- }
+ 	struct sched_dl_entity *dl_se = &p->dl;
+ 	struct dl_bw *dl_b;
++	int cpu;
  
- static inline
-@@ -435,6 +448,14 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
- 	if (task_on_rq_queued(p))
- 		return;
- 
-+	/*
-+	 * Waking up on another CPU, the task has its bandwidth on no
-+	 * runqueue: the enqueue to come charges the new one, with the new
-+	 * parameters, which __setparam_dl() sets right after this.
-+	 */
-+	if (!p->dl.dl_bw_oncpu)
-+		return;
-+
- 	dl_rq_change_utilization(task_rq(p), &p->dl, new_bw);
- }
- 
-@@ -2790,6 +2811,11 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
- 		 */
- 		cancel_inactive_timer(&p->dl);
+ 	lockdep_assert_irqs_disabled();
+ 	guard(raw_spinlock)(&dl_departed_lock);
+-	if (dl_se->dl_departed_cpu >= 0) {
+-		cpu = dl_se->dl_departed_cpu;
+-		dl_se->dl_departed_cpu = -1;
+-		list_del(&dl_se->dl_departed_node);
+-	}
+-	if (dl_se->dl_bw_gen == dl_bw_gen) {
++	if (!list_empty(&dl_se->dl_departed_node))
++		list_del_init(&dl_se->dl_departed_node);
++	cpu = dl_se->dl_bw_cpu;
++	WARN_ON_ONCE(dl_se->dl_bw && cpu < 0);
++	if (cpu >= 0 && dl_se->dl_bw_gen == dl_bw_gen) {
+ 		dl_b = dl_bw_of(cpu);
+ 		raw_spin_lock(&dl_b->lock);
+ 		__dl_sub(dl_b, dl_se->dl_bw, dl_bw_cpus(cpu));
+ 		raw_spin_unlock(&dl_b->lock);
  	}
-+	/*
-+	 * Until the enqueue on the CPU it wakes on charges it there, this
-+	 * bandwidth is on no runqueue: the rq of task_cpu() is not the one
-+	 * it was taken from, which dl_bw_oncpu now says.
-+	 */
- 	sub_rq_bw(&p->dl, &rq->dl);
- 	rq_unlock(rq, &rf);
++	dl_se->dl_bw_cpu = -1;
+ 	dl_se->dl_bw_gen = dl_bw_gen;
  }
-@@ -4214,6 +4240,7 @@ static void __dl_clear_params(struct sched_dl_entity *dl_se)
- 	dl_se->dl_defer			= 0;
- 	dl_se->dl_defer_running		= 0;
- 	dl_se->dl_defer_armed		= 0;
-+	dl_se->dl_bw_oncpu		= 0;
  
- #ifdef CONFIG_RT_MUTEXES
- 	dl_se->pi_se			= dl_se;
+@@ -460,6 +461,7 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
+ }
+ 
+ static void __dl_clear_params(struct sched_dl_entity *dl_se);
++static unsigned int dl_task_root_domain_cpu(struct task_struct *p);
+ 
+ /*
+  * The utilization of a task cannot be immediately removed from
+@@ -560,7 +562,7 @@ static void task_non_contending(struct sched_dl_entity *dl_se, bool dl_task)
+ 			if (!dl_task || READ_ONCE(p->__state) == TASK_DEAD) {
+ 				if (READ_ONCE(p->__state) == TASK_DEAD)
+ 					sub_rq_bw(dl_se, &rq->dl);
+-				dl_task_release_bw(p, task_cpu(p));
++				dl_task_release_bw(p);
+ 				__dl_clear_params(dl_se);
+ 			}
+ 		}
+@@ -579,7 +581,7 @@ static void task_non_contending(struct sched_dl_entity *dl_se, bool dl_task)
+ 		 * SCHED_DEADLINE.
+ 		 */
+ 		if (READ_ONCE(p->__state) == TASK_DEAD)
+-			dl_task_depart(p, task_cpu(p));
++			dl_task_depart(p);
+ 	}
+ 
+ 	hrtimer_start(timer, ns_to_ktime(zerolag_time), HRTIMER_MODE_REL_HARD);
+@@ -817,19 +819,30 @@ static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p
+ 	}
+ 
+ 	/*
+-	 * And we finally need to fix up root_domain(s) bandwidth accounting,
+-	 * since p is still hanging out in the old (now moved to default) root
+-	 * domain.
++	 * And we finally need to fix up root_domain(s) bandwidth accounting:
++	 * the bandwidth of @p is counted in the root domain that took it,
++	 * which is not the one of the runqueue it leaves if it was moved
++	 * asleep. A rebuild that dropped it has nothing here to move, and
++	 * the record left behind is what makes the next one count it.
+ 	 */
+-	dl_b = &rq->rd->dl_bw;
+-	raw_spin_lock(&dl_b->lock);
+-	__dl_sub(dl_b, p->dl.dl_bw, cpumask_weight(rq->rd->span));
+-	raw_spin_unlock(&dl_b->lock);
+-
+-	dl_b = &later_rq->rd->dl_bw;
+-	raw_spin_lock(&dl_b->lock);
+-	__dl_add(dl_b, p->dl.dl_bw, cpumask_weight(later_rq->rd->span));
+-	raw_spin_unlock(&dl_b->lock);
++	scoped_guard (raw_spinlock, &dl_departed_lock) {
++		if (p->dl.dl_bw_gen == dl_bw_gen) {
++			struct rq *src_rq = cpu_rq(dl_task_root_domain_cpu(p));
++
++			dl_b = &src_rq->rd->dl_bw;
++			raw_spin_lock(&dl_b->lock);
++			__dl_sub(dl_b, p->dl.dl_bw,
++				 cpumask_weight(src_rq->rd->span));
++			raw_spin_unlock(&dl_b->lock);
++
++			dl_b = &later_rq->rd->dl_bw;
++			raw_spin_lock(&dl_b->lock);
++			__dl_add(dl_b, p->dl.dl_bw,
++				 cpumask_weight(later_rq->rd->span));
++			raw_spin_unlock(&dl_b->lock);
++		}
++		p->dl.dl_bw_cpu = later_rq->cpu;
++	}
+ 
+ 	set_task_cpu(p, later_rq->cpu);
+ 	double_unlock_balance(later_rq, rq);
+@@ -2312,7 +2325,7 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
+ 			dl_se->dl_non_contending = 0;
+ 		}
+ 
+-		dl_task_release_bw(p, task_cpu(p));
++		dl_task_release_bw(p);
+ 		__dl_clear_params(dl_se);
+ 
+ 		goto unlock;
+@@ -3475,11 +3488,14 @@ static void task_woken_dl(struct rq *rq, struct task_struct *p)
+  */
+ static unsigned int dl_task_root_domain_cpu(struct task_struct *p)
+ {
+-	unsigned int cpu;
++	int cpu = p->dl.dl_bw_cpu;
+ 
+-	cpu = cpumask_first_and(&p->cpus_mask, cpu_active_mask);
+-	if (cpu >= nr_cpu_ids)
+-		cpu = task_cpu(p);
++	/*
++	 * No bandwidth of @p's counted anywhere: nothing to take back or to
++	 * move, and the CPU it is on answers for its root domain.
++	 */
++	if (cpu < 0)
++		return task_cpu(p);
+ 	return cpu;
+ }
+ 
+@@ -3497,15 +3513,28 @@ static void set_cpus_allowed_dl(struct task_struct *p,
+ 	if (dl_task_needs_bw_move(p, ctx->new_mask)) {
+ 		unsigned int src_cpu = dl_task_root_domain_cpu(p);
+ 		struct dl_bw *src_dl_b = &cpu_rq(src_cpu)->rd->dl_bw;
++		unsigned int cpu;
+ 
+ 		/*
+ 		 * We now free resources of the root_domain we are migrating
+ 		 * off. In the worst case, sched_setattr() may temporary fail
+-		 * until we complete the update.
++		 * until we complete the update. A rebuild that dropped the
++		 * bandwidth of @p leaves nothing to free.
++		 */
++		if (p->dl.dl_bw_gen == dl_bw_gen) {
++			raw_spin_lock(&src_dl_b->lock);
++			__dl_sub(src_dl_b, p->dl.dl_bw, dl_bw_cpus(src_cpu));
++			raw_spin_unlock(&src_dl_b->lock);
++		}
++
++		/*
++		 * The room in the root domain of the mask to come was made
++		 * by cpuset_can_attach(): that one counts the bandwidth from
++		 * here on.
+ 		 */
+-		raw_spin_lock(&src_dl_b->lock);
+-		__dl_sub(src_dl_b, p->dl.dl_bw, dl_bw_cpus(src_cpu));
+-		raw_spin_unlock(&src_dl_b->lock);
++		cpu = cpumask_any_and(ctx->new_mask, cpu_active_mask);
++		p->dl.dl_bw_cpu = cpu < nr_cpu_ids ? (int)cpu : -1;
++		p->dl.dl_bw_gen = dl_bw_gen;
+ 	}
+ 
+ 	set_cpus_allowed_common(p, ctx);
+@@ -3614,10 +3643,12 @@ void dl_add_task_root_domain(struct task_struct *p)
+ 	 */
+ 	if (p->dl.dl_bw_gen == dl_bw_gen)
+ 		goto unlock;
+-	if (p->dl.dl_departed_cpu >= 0) {
+-		cpu = p->dl.dl_departed_cpu;
+-		if (!cpu_active(cpu))
++	if (!list_empty(&p->dl.dl_departed_node)) {
++		int recorded = p->dl.dl_bw_cpu;
++
++		if (recorded < 0 || !cpu_active(recorded))
+ 			goto unlock;
++		cpu = recorded;
+ 	}
+ 	rq = cpu_rq(cpu);
+ 	dl_b = &rq->rd->dl_bw;
+@@ -3625,6 +3656,7 @@ void dl_add_task_root_domain(struct task_struct *p)
+ 	raw_spin_lock(&dl_b->lock);
+ 	__dl_add(dl_b, p->dl.dl_bw, cpumask_weight(rq->rd->span));
+ 	raw_spin_unlock(&dl_b->lock);
++	p->dl.dl_bw_cpu = cpu;
+ 	p->dl.dl_bw_gen = dl_bw_gen;
+ unlock:
+ 	raw_spin_unlock(&dl_departed_lock);
+@@ -3754,7 +3786,7 @@ void dl_clear_root_domains(void)
+ 			dl_clear_root_domain(cpu_rq(cpu)->rd);
+ 	}
+ 	list_for_each_entry(dl_se, &dl_departed_list, dl_departed_node) {
+-		cpu = dl_se->dl_departed_cpu;
++		cpu = dl_se->dl_bw_cpu;
+ 		/*
+ 		 * Counted in the generation that ends here, and nowhere
+ 		 * since: one a rebuild dropped, for want of an active CPU to
+@@ -3763,7 +3795,7 @@ void dl_clear_root_domains(void)
+ 		 */
+ 		if (dl_se->dl_bw_gen != dl_bw_gen - 1)
+ 			continue;
+-		if (!cpu_active(cpu))
++		if (cpu < 0 || !cpu_active(cpu))
+ 			continue;
+ 		dl_b = dl_bw_of(cpu);
+ 		raw_spin_lock(&dl_b->lock);
+@@ -3820,7 +3852,7 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+ 			 * nor for a special one: neither has bandwidth in
+ 			 * total_bw.
+ 			 */
+-			dl_task_release_bw(p, dl_task_root_domain_cpu(p));
++			dl_task_release_bw(p);
+ 			released = true;
+ 		}
+ 		sub_rq_bw(&p->dl, &rq->dl);
+@@ -3861,7 +3893,7 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+ 	 */
+ 	if (p->dl.dl_non_contending) {
+ 		p->dl.dl_non_contending = 0;
+-		dl_task_depart(p, dl_task_root_domain_cpu(p));
++		dl_task_depart(p);
+ 	}
+ 
+ 	/*
+@@ -3890,8 +3922,7 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
+ 	 * the task then removes the bandwidth from that one, as it did
+ 	 * before departures were recorded.
+ 	 */
+-	if (p->dl.dl_departed_cpu >= 0)
+-		dl_task_undepart(p);
++	dl_task_undepart(p);
+ 
+ 	/*
+ 	 * In case a task is setscheduled to SCHED_DEADLINE we need to keep
+@@ -4104,9 +4135,10 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ 	u64 period = attr->sched_period ?: attr->sched_deadline;
+ 	u64 runtime = attr->sched_runtime;
+ 	u64 new_bw = dl_policy(policy) ? to_ratio(period, runtime) : 0;
+-	int cpus, err = -1, cpu = task_cpu(p);
+-	struct dl_bw *dl_b = dl_bw_of(cpu);
++	int cpus, err = -1, cpu;
++	struct dl_bw *dl_b;
+ 	unsigned long cap;
++	bool counted;
+ 
+ 	if (attr->sched_flags & SCHED_FLAG_SUGOV)
+ 		return 0;
+@@ -4115,6 +4147,19 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ 	if (new_bw == p->dl.dl_bw && task_has_dl_policy(p))
+ 		return 0;
+ 
++	/*
++	 * The bandwidth of a task of the class is counted in the root
++	 * domain that took it, which the CPU the task is on does not tell:
++	 * moved asleep, it has not run there yet. Change it where it is
++	 * counted; a rebuild that dropped it, and a task that enters the
++	 * class, have the root domain of that CPU take the new one. The
++	 * caller holds cpuset_mutex, so no rebuild runs meanwhile.
++	 */
++	counted = task_has_dl_policy(p) && p->dl.dl_bw_cpu >= 0 &&
++		  p->dl.dl_bw_gen == dl_bw_gen;
++	cpu = counted ? p->dl.dl_bw_cpu : task_cpu(p);
++	dl_b = dl_bw_of(cpu);
++
+ 	/*
+ 	 * Either if a task, enters, leave, or stays -deadline but changes
+ 	 * its parameters, we may need to update accordingly the total
+@@ -4129,7 +4174,8 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ 		__dl_add(dl_b, new_bw, cpus);
+ 		err = 0;
+ 	} else if (dl_policy(policy) && task_has_dl_policy(p) &&
+-		   !__dl_overflow(dl_b, cap, p->dl.dl_bw, new_bw)) {
++		   !__dl_overflow(dl_b, cap, counted ? p->dl.dl_bw : 0,
++				  new_bw)) {
+ 		/*
+ 		 * XXX this is slightly incorrect: when the task
+ 		 * utilization decreases, we should delay the total
+@@ -4137,7 +4183,8 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ 		 * But this would require to set the task's "inactive
+ 		 * timer" when the task is not inactive.
+ 		 */
+-		__dl_sub(dl_b, p->dl.dl_bw, cpus);
++		if (counted)
++			__dl_sub(dl_b, p->dl.dl_bw, cpus);
+ 		__dl_add(dl_b, new_bw, cpus);
+ 		dl_change_utilization(p, new_bw);
+ 		err = 0;
+@@ -4157,11 +4204,20 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ 	 * domain that keeps it (dl_task_release_bw()). A rebuild cannot
+ 	 * run meanwhile: the caller holds cpuset_mutex.
+ 	 */
+-	if (!err && dl_policy(policy) && !task_has_dl_policy(p)) {
+-		lockdep_assert_cpuset_lock_held();
+-		lockdep_assert_dl_accounting_held();
+-		if (p->dl.dl_departed_cpu >= 0)
+-			dl_task_release_bw(p, -1);
++	if (!err && dl_policy(policy)) {
++		if (!task_has_dl_policy(p)) {
++			lockdep_assert_cpuset_lock_held();
++			lockdep_assert_dl_accounting_held();
++			/*
++			 * Whatever bandwidth the task still has counted
++			 * somewhere, the new one replaces: on the departed
++			 * list, or taken off it by a boost into the class
++			 * (switched_to_dl()), the record says where.
++			 */
++			if (p->dl.dl_bw_cpu >= 0)
++				dl_task_release_bw(p);
++		}
++		p->dl.dl_bw_cpu = cpu;
+ 		p->dl.dl_bw_gen = dl_bw_gen;
+ 	}
+ 
+@@ -4301,7 +4357,8 @@ void init_dl_entity(struct sched_dl_entity *dl_se)
+ 	init_dl_task_timer(dl_se);
+ 	init_dl_inactive_task_timer(dl_se);
+ 	__dl_clear_params(dl_se);
+-	dl_se->dl_departed_cpu = -1;
++	dl_se->dl_bw_cpu = -1;
++	INIT_LIST_HEAD(&dl_se->dl_departed_node);
+ }
+ 
+ bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr)
 -- 
 2.47.3
 
