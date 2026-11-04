@@ -1,58 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793789884;
-	b=xZXBzTBIDIKtjVFmYDKXjOvDQIg7hWdNMVrNSoupEzhlBNhC/iiAw+YrbwuKSwpo4KKt
-	 L0nOIZljtrMDGO9OYPhKhNMEQO/mHP97J8eYvgMKwrbqMPiXkIj+1h1uj3z32J1CJ9zdm
-	 MIvrv3ES7cHUgI3MVeO+MSn6+wKTey1yWoBsDZMYeFNrE5rkcTKG0Y+RFQyyEOAvfE3XU
-	 oXbPZJDRBiEqcvloqmUwdi1ruM36P1BRndyEokNYs2Vd5PtJ9dlKS1bSWBzrcA5ZbB0+/
-	 YjpVu+IAQnRS9Vb4THEPxUfTtG+uLU5iAQ+gN75Q/rp6pktGCXkFvP/afoIbv8KEgbg==
+	t=1793790578;
+	b=z1SzApAj8G/fLIh+QQj9kDjiK5011dn3yis1ivvjli1O11KEZxK2LSKqvu7B494brb38
+	 6/0SCWNvVePs/8FHqLALDfOIw+Sb89t9TcEzx23drniQHmLimgO+L5YAB4tC8Opyqe+nG
+	 yFFYRx+Z1EyjznRv/ezRT9P2MWuS6yR5QmdeFm8wgDC7BirJECG315Cq7CaIR9JgRRe3W
+	 O3gwHtok+Bpph7Ccbe+veEfcXhCYy8aeJZXq1IhoYSv41MY7IY/pv9xwBAhXzdzOzyOwb
+	 Dd/g3rhGMIHgrl7+6FfEdH1ISmATOBrj7crLtsB+G2qoROL3L+83++rJbm9YbbeSS8g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793789884;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
-	bh=tlh7smLTj2XLazLcq0xResbpXj4b1ZAUzr/0lOmTKLk=;
-	b=mwaC57ioNCOdaiNdJ1UZgYPJpp+h7fqLY8fLhkDo3rKK5Q1/Nx90cXExlJbZdgtEMCJ3
-	 kxXW7TKwfmw97eGiZaYtEJD/X6WziIJVgn4WgIofl+AZCrdkvoMbvVF+KCeBKU0TANv6b
-	 Lt21G3dyvtqK6rZYrQ/I853cEwGWzSVdS1FYWdu5SfpLdDO+pD5yyfqMGLyS7IgRO1phD
-	 IYt6eiePoPD9S3VLU9hqU41+CNX6fGdB9VknYETnxf0knP9kcZCynoOUtB7L7/Jwv/ay/
-	 qKA20bY9O7h5vh+YRqt+14Y1jjWDabbGt9tA1npe3vrlNdwatVslxXCcYFN/4oegkgQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793790578;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Developer-Signature:X-Developer-Key:X-Scanned-By;
+	bh=y/j5QPLW6jpzCD3GV5JpZq3Ngo4fRQoXZZ90Dm8OkWQ=;
+	b=gZaEJoeiIf9P6KAFgeEZ1yStOjf0eOBiM1U4rfBZLZzgJY30Mv8l4vuYX+oZnv5hezKf
+	 rS2KvrwO9ImIofNWJJ/F0bF6CeOzANsstQ2Chu+r6LP8jTB2zUvCrM5QONaurEViVjCo9
+	 y96kAF7/tpP5CBt4XxY+a2mgEh5grRCfRpeaNKUlWDxky52VyihwO7Astidz3t+kaX8Cj
+	 OUZosQtBoCFecab8s0mRnHi5ozqlzOkF5gpwmIiZvRHwvQIpLj3Qol5RFnFtxLm0naRmK
+	 nYP2D0YQjCWit9FZsQlkhXUT+hHa+mDTV2txCD2a9GwoFuDEL5r+XdzanS/td4vMJTA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=aDkra9DG;
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UtfNtUVo;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46860606A326;
-	Wed,  4 Nov 2026 10:58:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46860606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D540606A32F
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 11:09:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D540606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=aDkra9DG
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 963C64E413F7;
-	Wed,  4 Nov 2026 10:58:01 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6316460770;
-	Wed,  4 Nov 2026 10:58:01 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A13CE103291D2;
-	Wed,  4 Nov 2026 11:57:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793789880; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=tlh7smLTj2XLazLcq0xResbpXj4b1ZAUzr/0lOmTKLk=;
-	b=aDkra9DGoFBO7g3eEfaFzJrcP1KCVRRWmvm+qHRR0gxjUaLwJc9hntUxHL3YmMBh1Wmoil
-	i3Q7gzfbWJpr3cXdD9OKHAW/17OnE8LsODNWJZJ/shPobzDDCGwgU8iWgUTTOQoV5XErkT
-	yQpub/sKDYiaQkhn+r+K9BF+vg7YJkFcDye4cQGeERu3ayRTNXLLTt3qZ5ml1Ph4GfpAbi
-	/vro7GFFzspmlfQkfeKTVvDY3k5HQRJYmnaRfYsWXLtGVRrSVDIxvZYnj19AH3uQsJouk7
-	06aZXObrtpBh/pSCazPouXeiMoY2TOdQuUU1dnEH5rcv4ZyF0JoHYwpkAzxFSQ==
-Message-ID: <4f90c4b1-98d3-4e98-bcfc-d9f2d17b4391@bootlin.com>
-Date: Wed, 4 Nov 2026 11:57:54 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UtfNtUVo
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793790576;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=y/j5QPLW6jpzCD3GV5JpZq3Ngo4fRQoXZZ90Dm8OkWQ=;
+	b=UtfNtUVoyBpbKwmTPvZcL0Elfq6Jx3BZFKISmGOEkAeD5l4G1xvC5uKhQDT/OUGqljaetQ
+	nBU6ffqbdLLrytwApuUoZQkgkzSLqj5SP25HP1ok35ve7gOmybbytcS0oywgQHUVdYxuWO
+	thwGIoHcCbZVPlQqjb3abG2mOWd2EjE=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-47-95zgtnEUO52YN059qEpIoQ-1; Wed,
+ 04 Nov 2026 06:09:30 -0500
+X-MC-Unique: 95zgtnEUO52YN059qEpIoQ-1
+X-Mimecast-MFC-AGG-ID: 95zgtnEUO52YN059qEpIoQ_1793790566
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E1CA1956088;
+	Wed,  4 Nov 2026 11:09:24 +0000 (UTC)
+Received: from aesteve-thinkpadp1gen8.rmtes.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 27CE0195608D;
+	Wed,  4 Nov 2026 11:09:14 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v4 0/8] memcg: dma-buf cgroup accounting and charge
+ transfer
+Date: Wed, 04 Nov 2026 12:09:09 +0100
+Message-Id: <20261104-v2_20230123_tjmercier_google_com-v4-0-1819a017000b@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,151 +73,186 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2] selftests: drv-net: pause: Avoid cleanup failures
- for unsupported link settings
-To: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org
-References: <20261103190622.3981970-1-mohsin.bashr@gmail.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20261103190622.3981970-1-mohsin.bashr@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43N0YrCMBAF0F+RPBvJTNK0+uR/iJQ6mbRZViNpC
+ buU/rtRlkXZh/Vt7lw4dxYjp8Cj2K1mkTiHMcRLCWa9EjR0l55lcCULVGhVpRqZsS23VoC6nT7
+ OnChwavsY+09uKZ6lN8aTP4GttBKFuSb24esxcTiWPIRxiun7sZjh/v3BAf/HM0glrUZbKyBtt
+ 7BP7IZu2pRS3PWMvyIohDdELCJ7y4zONVTRH1E/i/Uboi5i3TgkQ6fGmvpFXJblBjmZGH11AQA
+ A
+X-Change-ID: 20260508-v2_20230123_tjmercier_google_com-f44fcfb16530
+To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>, 
+ Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>, 
+ "T.J. Mercier" <tjmercier@google.com>, 
+ Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+ =?utf-8?q?Ondrej_Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>, 
+ Jens Wiklander <jenswi@kernel.org>, Sumit Garg <sumit.garg@kernel.org>, 
+ =?utf-8?q?Ondrej_Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+ linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ op-tee@lists.trustedfirmware.org, Albert Esteve <aesteve@redhat.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793790554; l=7204;
+ i=aesteve@redhat.com; s=20260827; h=from:subject:message-id;
+ bh=X4BZFXAHZjeZ5G+n6xJuzSu1l1U0TCSBOdNO5egLRKM=;
+ b=Km+AqlhWRTv/KXXv4GRbT2llTohKS+mIBYai0uvK0MKieulAtBqFdb+ot4kS5rHtLOoLqnwgW
+ ykX9usEkQGUD0PWls5MHmfgY0UQayrDXDRMYunnztg3zl598W8CS8z6
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=zI2RBeZgocwYm3AkJW4CtjoJnKoDZrfBl1xe5Ed6h+U=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Hi,
+Shared-memory allocator services (e.g., Android's gralloc)
+allocate dma-bufs on behalf of client processes in different
+cgroups. Today those allocations are charged to the allocator's
+own cgroup, leaving client cgroups with no visibility into their
+actual memory consumption and defeating resource limits.
 
-On 11/3/26 20:06, Mohsin Bashir wrote:
-> From: Mohsin Bashir <hmohsin@meta.com>
-> 
-> pause_setup() saves the initial link settings and queues a deferred
-> restore. For devices that report forced link settings but do not support
-> changing link settings, this can queue a restore even when setup never
-> changes the link. On fbnic, the deferred restore returns EOPNOTSUPP and
-> turns pause tests that use pause_setup() into cleanup failures.
-> 
-> Fix this by queuing the forced-link restore only after setup successfully
-> enables link autonegotiation. Keep pause_test_support coverage for devices
-> that cannot change link settings by falling back to forced MAC pause on the
-> current link. Run the extra link autoneg on/off checks only when those link
-> setting requests are accepted.
-> 
-> Results on fbnic:
-> 
->   Before: # Totals: pass:0 fail:4 xfail:0 xpass:0 skip:24 error:0
->   After:  # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:24 error:0
-> 
-> Fixes: cbd8a536cd6d ("selftests: drv-net: Introduce a selftest for ethtool flow control")
-> Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
+This series adds memory cgroup accounting for dma-buf allocations,
+building on T.J. Mercier's earlier series [1] and incorporating
+feedback from previous versions and LPC discussions [2].
 
-That looks better, this patch ran on the netdev CI and no regressions on
-stmmac,
+Patch 1 introduces the MEMCG_DMABUF stat and reserve/cancel
+and uncharge helpers in mm/memcontrol.c
 
-Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Patch 2 wires up the charging policy: dma_buf_export() stores
+exp_info.memcg and updates the stat, a new charge_fd field in
+DMA_HEAP_IOCTL_ALLOC accepts a pidfd or cgroupfd to identify
+the target cgroup, and __GFP_ACCOUNT is removed from system-heap
+allocations to avoid double counting.
 
-Maxime
+Patch 3 adds DMA_BUF_IOCTL_XFER_CHARGE, a general ioctl on any
+dma-buf fd to transfer charges post-allocation. This covers the
+double-hop allocator case (SurfaceFlinger -> gralloc -> kernel)
+and works for buffers from any exporter (DRM, V4L2, etc.). Charging
+is gated by dmabuf->memcg being set at export time, ensuring that
+transfer is only applied for buffers backed by system memory where
+size reflects actual bytes. If the receiving cgroup lacks capacity
+for the charge, the ioctl returns -ENOMEM and the original charge
+is preserved.
 
-> ---
-> v2:
-> - Drop the require_link_autoneg() approach from v1.
-> - Move the cleanup fix into pause_setup() so all pause tests avoid
->   restoring unchanged forced-link settings.
-> - Keep pause_test_support() coverage on devices without link setting
->   support by falling back to forced MAC pause on the current link.
-> 
-> v1: https://lore.kernel.org/netdev/20261030173516.1002250-1-mohsin.bashr@gmail.com
-> ---
->  .../testing/selftests/drivers/net/hw/pause.py | 40 +++++++++++--------
->  1 file changed, 23 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
-> index ca4a55e59c30..99ce6a59dfcd 100755
-> --- a/tools/testing/selftests/drivers/net/hw/pause.py
-> +++ b/tools/testing/selftests/drivers/net/hw/pause.py
-> @@ -404,14 +404,14 @@ def pause_setup(cfg):
->  
->      if link["auto-negotiation"]:
->          defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
-> -    elif "speed" in link and "duplex" in link:
-> -        defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
-> -                   f"duplex {link['duplex'].lower()}")
->  
->      # Local interface admin up, link aneg on
->      ip(f"link set {cfg.ifname} up")
->      if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
->          ethtool(f"-s {cfg.ifname} autoneg on")
-> +        if "speed" in link and "duplex" in link:
-> +            defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
-> +                       f"duplex {link['duplex'].lower()}")
->  
->      # Get remote pause params
->      ret, params = ethtool_ret(f"-a {cfg.remote_ifname}", host=cfg.remote)
-> @@ -429,15 +429,15 @@ def pause_setup(cfg):
->      if link["auto-negotiation"]:
->          defer(cmd, f"ethtool -s {cfg.remote_ifname} autoneg on",
->                host=cfg.remote)
-> -    elif "speed" in link and "duplex" in link:
-> -        defer(cmd, f"ethtool -s {cfg.remote_ifname} autoneg off "
-> -                   f"speed {link['speed']} duplex {link['duplex'].lower()}",
-> -                   host=cfg.remote)
->  
->      # Remote interface admin up, link aneg on
->      ip(f"link set {cfg.remote_ifname} up", host=cfg.remote)
->      if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
->          ethtool(f"-s {cfg.remote_ifname} autoneg on", host=cfg.remote)
-> +        if "speed" in link and "duplex" in link:
-> +            defer(cmd, f"ethtool -s {cfg.remote_ifname} autoneg off "
-> +                       f"speed {link['speed']} duplex {link['duplex'].lower()}",
-> +                       host=cfg.remote)
->  
->      wait_for_link(cfg)
->  
-> @@ -470,9 +470,12 @@ def pause_test_support(cfg, pauseparams):
->  
->      forced = forced_link_settings(cfg)
->      _, supported = get_local_pause_supported(cfg)
-> +    tested = False
->  
->      # We check that what we can configure in the pause params matches what we
-> -    # support under various contditions : Link aneg on/off, pause aneg on/off
-> +    # support under various conditions: link aneg on/off, and pause aneg
-> +    # on/off. If no link configuration change is supported, fall back to
-> +    # checking forced MAC pause on the current link.
->      ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg on", is_get = False)
->      if ret != 0:
->          ksft_pr("link autoneg on refused, not tested")
-> @@ -481,18 +484,21 @@ def pause_test_support(cfg, pauseparams):
->                                 "link autoneg on")
->          expect_pauseparams_set(cfg, pauseparams, True, supported,
->                                 "link autoneg on")
-> +        tested = True
->  
->      if not forced:
->          ksft_pr("link speed unknown, the forced link is not tested")
-> -        return
-> -
-> -    ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
-> -    if ret != 0:
-> -        ksft_pr(f"link autoneg off {forced} refused, not tested")
-> -        return
-> -
-> -    expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
-> -    expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
-> +    else:
-> +        ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
-> +        if ret != 0:
-> +            ksft_pr(f"link autoneg off {forced} refused, not tested")
-> +        else:
-> +            expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
-> +            expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
-> +            tested = True
-> +
-> +    if not tested:
-> +        expect_pauseparams_set(cfg, pauseparams, False, supported, "current link")
->  
->  @ksft_variants(pauseparams_variants)
->  @ksft_disruptive
+Patches 4-7 add access control for cross-cgroup charging. Letting
+userspace decide who to charge needs to be a privileged operation
+because it has material impact on OOM decission and resource limits.
+We gate it via LSM hooks for the two charge_fd flavours:
+security_dma_buf_charge_task() gates the pidfd path (target
+identified by task credentials) and security_dma_buf_charge_cgroup()
+gates the cgroupfd path (target identified by cgroup directory label),
+with SELinux implementations under a dma_buf object class.
+
+Patch 8 adds selftests.
+
+Known limitations:
+
+- Single-owner model: a dma-buf carries one memcg charge regardless
+  of how many processes share it.
+- Only memcg accounting. CMA heaps would additionally need dmem
+  controller integration.
+- If a transfer of an uncharged buffer fails, the buffer remains
+  charged to the original cgroup. The allocator (userspace) is
+  expected to handle this (retry, free, ...).
+- The LSM hooks are intentionally narrow. Broader cgroup access controls
+  (e.g. for the memfd/kexec handover case [2]) could be a separate effort
+  reusing the same pattern.
+- Only system heap sets exp_info.memcg today. Other exporters
+  (DRM, V4L2, etc.) can opt in by setting it, but are not
+  covered by this series.
+- Related to the above: lazy backing-store allocation is not supported.
+  This can be extended later, e.g., by adding a flag on the dma-buf
+  struct for explicitly marking when memory is committed.
+
+[1] https://lore.kernel.org/cgroups/20230109213809.418135-1-tjmercier@google.com/
+[2] https://lpc.events/event/20/contributions/2416/
+
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
+---
+Changes in v4:
+- Remove memcg_account flag; exp_info.memcg != NULL is the opt-in
+- Centralize memcg bookkeeping in dma_buf_export()
+- Drop mem_cgroup_commit_dmabuf()
+- Make mem_cgroup_transfer_charge() generic (not dma-buf specific)
+- Add EXPORT_SYMBOL_GPL for reserve/cancel (system_heap is tristate)
+- Reorder: move xfer ioctl before LSM patches
+- Serialize dmabuf->memcg updates with the dma-buf resv lock instead of cmpxchg
+- Link to v3: https://lore.kernel.org/r/20261027-v2_20230123_tjmercier_google_com-v3-0-78d2c4cb8647@redhat.com
+
+Changes in v3:
+- Split mem_cgroup_charge_dmabuf() into reserve/commit/cancel three-phase API
+- Extract mem_cgroup_get_from_fd() helper shared by allocate and xfer paths
+- Rename __padding to flags in struct dma_buf_transfer_charge
+- Fix UAF race: move mod_memcg_state() before cmpxchg in transfer
+- Add memcg_account opt-in flag; xfer returns -EOPNOTSUPP if unset
+- Wrap dma_buf_charge_cgroup hook in #ifdef CONFIG_CGROUPS
+- Fix TOCTOU in SELinux charge_cgroup xattr length handling
+- Link to v2: https://lore.kernel.org/r/20261021-v2_20230123_tjmercier_google_com-v2-0-ef6ee2dd8c5c@redhat.com
+
+Changes in v2:
+- Move charge_pid_fd to charge_fd, accepting cgroupfd in addition
+  to pidfd per Christian König.
+- New DMA_BUF_IOCTL_XFER_CHARGE ioctl for post-allocation charge
+  transfer on any dma-buf, not just dma-heap buffers per Christian König
+  and T.J. Mercier.
+- Moved __GFP_ACCOUNT removal to patch 1 per Barry Song.
+- dma-buf charge/uncharge helpers take struct dma_buf * directly
+  to avoid the need for caller to manage size calculations.
+- Added test_xfer_charge_cgroupfd_self to dmabuf-heap selftests.
+- Added LSM and SELinux hooks for cgroupfd-based charging.
+- Rebased to v7.3-rc7.
+- Link to v1: https://lore.kernel.org/r/20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com
+
+---
+Albert Esteve (7):
+      dma-heap: charge dma-buf memory via explicit memcg
+      dma-buf: transfer memcg charges via DMA_BUF_IOCTL_XFER_CHARGE
+      security: dma-buf: Add dma_buf_charge_task LSM hook
+      security: dma-buf: Add dma_buf_charge_cgroup LSM hook
+      selinux: Restrict cross-cgroup dma-buf charging
+      selinux: Restrict dma-buf direct cgroup charging
+      selftests/dmabuf-heaps: Add dma-buf memcg accounting tests
+
+T.J. Mercier (1):
+      memcg: Add MEMCG_DMABUF accounting infrastructure
+
+ Documentation/admin-guide/cgroup-v2.rst            |   5 +
+ drivers/dma-buf/dma-buf.c                          |  50 ++++
+ drivers/dma-buf/dma-heap.c                         |  28 +-
+ drivers/dma-buf/heaps/cma_heap.c                   |   3 +-
+ drivers/dma-buf/heaps/system_heap.c                |  21 +-
+ drivers/tee/tee_heap.c                             |   3 +-
+ include/linux/dma-buf.h                            |   9 +
+ include/linux/dma-heap.h                           |   3 +-
+ include/linux/lsm_hook_defs.h                      |   4 +
+ include/linux/memcontrol.h                         |  47 ++++
+ include/linux/security.h                           |  18 ++
+ include/uapi/linux/dma-buf.h                       |  26 ++
+ include/uapi/linux/dma-heap.h                      |   7 +
+ mm/memcontrol.c                                    | 176 +++++++++++++
+ security/security.c                                |  34 +++
+ security/selinux/hooks.c                           |  44 ++++
+ security/selinux/include/classmap.h                |   1 +
+ tools/testing/selftests/cgroup/Makefile            |   2 +-
+ tools/testing/selftests/cgroup/test_memcontrol.c   | 290 ++++++++++++++++++++-
+ tools/testing/selftests/dmabuf-heaps/config        |   1 +
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 227 +++++++++++++++-
+ tools/testing/selftests/dmabuf-heaps/vmtest.sh     | 226 ++++++++++++++++
+ 22 files changed, 1210 insertions(+), 15 deletions(-)
+---
+base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+change-id: 20260508-v2_20230123_tjmercier_google_com-f44fcfb16530
+
+Best regards,
+-- 
+Albert Esteve <aesteve@redhat.com>
 
