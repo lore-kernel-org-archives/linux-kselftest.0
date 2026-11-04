@@ -1,86 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793753037;
-	b=sdVNGvWeOQkzu3Oznz0Zr2lCd+RvelmQwKo6YDMXvnlbba3quaDdvMwq5Gktuzu9rhbj
-	 t8W+XhIyl0NEdFB0wFzgyNliOFmDrLT2z8csmyDz+XydQ3kiE90StIIWogGbCM+CrnA2Y
-	 UgCYU03zei+FBDpMdEknkPIJTI+iqDQyZ97B0ctGSOAnqSP4Sh2t6plDuAJZOSEl3ltbb
-	 N8ngbpd+X+er4qbSAMgCJ5ce+M5Jl4PQ0W730Alpnu6XJcV03gAokdsw7YO+h6uHYlTwb
-	 jgGKmZrnkKP/uvSDwISRr4dzIvsXbfQEdBVCHGd6PFud0AchurGVe7movczJvsS6gHg==
+	t=1793753039;
+	b=SC7s/0TGtxZJ+VtcNIsHsKdLmkeJb+2OX0+9X8uKOwtayhSiOXvMoujmEnLuvs35t5rd
+	 Hl04kQtlLQ33W1SGOk2tq09p9/pypIB0ANcBnuREKRZXOGHVbFdVbnWMXqx380e4mHzjF
+	 dTbEJr8TRQt1uEAgN2pgEAiO2dWyBAmEL0waFcaXzddWNirYaB8gcMhSRIplohCPgH+d6
+	 /SfEGuQmcgFMct28g1l8iFkvNU5sAuXNH1+xczp79zYM3/Q0lS5OfU3VMPduwurtCZJqh
+	 GAx3rd26Jt7fCPs5EWhvWZTVSYUSNlb77gQtwzl9Ukx07YgkqFujJF/AaXRX2HBo59g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793753037;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793753039;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:To:
 	 Cc:In-Reply-To:References:Date:Message-Id:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key;
-	bh=8qRp/BwQBEaKjJByyj+gyRQztnD96+imNxep8e/AfWM=;
-	b=ReT+Y3Obgsx6fQhR4yzY49y8If/KTSEhnDtm8266XlPqrVcWme8qK1mulnprhFTGZeU1
-	 ysX3nSrNJbskZMwBdEXBsZIy1ww1hAeP4w/Zw06anxUi0Sava5qpAcAlfyBJgLR67UwUT
-	 FSHCDGfz9aop+1XIBOPQpQzdakwp/6hZTyZ6VynWWI2itUHo9RfTYYeQA18wq5kM3trnY
-	 GikC2AsZFYi93LP7lrthTvApIWgqAbrVooeCeqB9rt39isuy0IkdvoOzC++mX+2uGlUmQ
-	 TN5zFE9WrrITzxX3vkGgrRpAw5o56Ja2uNxeMV5dRfUqxxyuGqx2Y21wJejzPyOYk+A==
+	bh=1jCvTwZL8MS+SjFAQ29LXN2yWrpb5Y2gngTvzYEqhZ4=;
+	b=YLT+LdJa0LFb5S1W/TvJuK8zM9xQegGjqB/viHl7db7GvaWIkVn7MAyt9uvFcXyYQ8zT
+	 i7GK0JaQSJyH7fW2pcAd8pdB505fO2uV1qwrtk1ZBhOJ+rj3j++UC0JwO4qi8yr4GbgXg
+	 JM1yxaaj8eUEMgNwScZxarmcfOOm5yreA6I/VPDbGYUO41ZC4w2pNe619aubTtvjGD3mK
+	 vbnJDf7vMJZMsRZ1hlM8xEukhn0KN8L/faWlykg4mt5TyPpvwNqC6vNTsI+M0WrDaF7tZ
+	 7GLS1luXnd7ZLGajMq8P2SJPgclwPEhV+HDQQTgRxviWbBW0M5q0Jc/XTG60hKQojlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=soleen.com;
 	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=jO07yc6n;
-	arc=none smtp.remote-ip=209.85.217.46
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b="g5NDz/C1";
+	arc=none smtp.remote-ip=209.85.222.43
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE10606A335
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 00:43:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AEE10606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D8A606A324
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 00:43:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7D8A606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=jO07yc6n
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-7cc1cf48a39so28004137.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 16:43:56 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=g5NDz/C1
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-9908e3cd939so52263241.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 16:43:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1793753036; x=1794357836; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1793753038; x=1794357838; darn=vger.kernel.org;
         h=message-id:date:references:in-reply-to:cc:to:from:subject
          :content-transfer-encoding:content-type:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=8qRp/BwQBEaKjJByyj+gyRQztnD96+imNxep8e/AfWM=;
-        b=jO07yc6nRLiWKhwl44KUm1HjezR0c806TH1txeu+TkAiuBJZUYTjCvm2Gu4+X8IXDK
-         anrgepMJzdixRVLz0b5bIMCkjKTTt6jyeh97YUwRSizjY69pF7gkSQRQg3oZxemSV2/Y
-         9m/US1Jy8Ko0/u7N7X0gECl9Z/+yNeP8EWQ2a1tna/LdJd58H3Gw51xyWnwFPgHhYdoN
-         3ixtPYcEhdDsEqmpfJ7CJq2MXvB/mMGobXnJ2vK9XO205dqGYiIm2etbPC+pDWmD3Xqe
-         ChidxTH2uNDSVAGdKcS51hPU07jUl9UxxC53kkBk+hUDmpJU5Wyn0guM4i/fF86H8eE3
-         ee0g==
+        bh=1jCvTwZL8MS+SjFAQ29LXN2yWrpb5Y2gngTvzYEqhZ4=;
+        b=g5NDz/C1NgO7qdNHV0g6Pc+ihYOYw6llkbuPyOfMiLLrRIbZ4/7girC5Al70pkJVcM
+         lKM0GU+iyym0MtqjHoRZCQ0kh96fMfT7cZmZqgrUyWjsS42hqfBrz//rm7OFdqSTLJBI
+         ztDbzt6y7Fn7HGj8W8pJh0lW4DvoTQOjrBJ1pgllXShYT6fLc6snFBCpYwEGiOqHSY1S
+         fpzfVJpRg14CX3n/mqn9RGi5hL7bzJPAqNKntI/PN93FkPr1DMJeYLQZ29YO/7sRnwOR
+         X0zYunmlA05MRfOY1Phjkf3CwFzB5Cj/HFyYEMVOOjfOEy8baTgC68zW5TPuSysRQ18k
+         7y9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793753036; x=1794357836;
+        d=1e100.net; s=20260707; t=1793753038; x=1794357838;
         h=message-id:date:references:in-reply-to:cc:to:from:subject
          :content-transfer-encoding:content-type:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8qRp/BwQBEaKjJByyj+gyRQztnD96+imNxep8e/AfWM=;
-        b=QGQPYU83GRJ+Z2d9pZP0z0sRtLAF/wkzTnpL01Ue22OrviiRLpK4RL8KimR7+aTIk7
-         OFJ6lQpK/ft/cVMRB+SOk4RTAn0PG7xasCOvm+g0FGm8M+jYeuKMZ/g6db//lbFlYrLR
-         RK45ECXKwLrHPXCUBe7hx3H8Qvb6s6LmN22pTOledT5EL3xLyz5k4xfkZoIP4Md6MxsO
-         kBSJdDIx5JIvY+Q0M7leyNHggX9cocruXLzjCceP53nqMV4IZrI+2VVwjHa/73qSeBUw
-         71FSA3HST9a2yma+crxvrX9U+alNWi3X5Np/Ptues2r2U7GGUzUHOvWQ8mvonOJ5YOfV
-         +Nmw==
-X-Forwarded-Encrypted: i=1; AKwUvBzxAvBv57xJ9OJMg1fFi6kQn+eQZRFqFIFOmSN52bX4qw8phT/c9ZvI8by2F6/CFYyXogX4YZvK5qvBxpUAowc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8GODK8lait1m6i8DEYYRZdsKvHdcfsvzLUwEXQVMaZoVD5FIYo
-	l4YIp1Wbl2o143gPC+36eEx5Dyjhvk4x2pwqTX/Ckj2Kbdxilo1lyJFRR2aIHZPr/dg=
-X-Gm-Gg: AYBFou3fo8H5hew3TUhNEUe6pi0exZUIgICsS+5ge5OEOIyMzB4EIZ41+tbBtiQiMDU
-	q91XqilQg56d02x+orMfFHOPoBqgQdmkodk3Cf+ogjqn+qhZmJCQGB8Odc4/ALJ75Yb+qBdT/Fn
-	Ds3sC8aKh2PKeIMwrHumjJPYnqU2sEdVJPCT1YI/hZhg5qhxrPZW8mLCHY9FNIty9el7FIPcCn9
-	PqhutqmTd11cEUF438rj42SAebmtec90n773yGY/qtJ/MaR4qTsrMJgIYDebq4TSFzRzYtuTQ6/
-	rLxI8+vlSjB08OdBLmfmvLDow6szhyF6S96nhXrKEVyrjmboneYyh5/8Dil763K1Qdn7Glk03QT
-	AwG0amyFPSiwtcDwfZ6DQtNXKShf9fkiv3jYL4B3btaOze3sOolMuDAgOrFbwOdE/W6oLUtxcP3
-	hL6moChFUzVQflEaL8kkfAjGzk66eyHnmw1TVnIo2Hmgx/63ECKRI1C8SToIY7mpIONExZZicfa
-	zEnkvhkHRIjqrCvuFg+avqktG6vfc6v5fkrU20J29gx0RxV08NN8kQWAr+nVYZmEI+kTXJYPfDF
-	jsSlxrib+4wmGfbVUpHEOLCV9cNE0oP2hw7HnfJiEzsYhV/GMW8jgg8jtIvhzV3wUUJlIAXP3hb
-	hXx26RNERkW7WwIRCoVLuBDnCMsRkOmJzt7cac8e2zu6rlj+Xy3d6W+4qkCFcJ5H2uA==
-X-Received: by 2002:a05:6102:5126:b0:7cc:9f01:1378 with SMTP id ada2fe7eead31-7d07227aa1bmr5468508137.1.1793753035777;
-        Tue, 03 Nov 2026 16:43:55 -0800 (PST)
+        bh=1jCvTwZL8MS+SjFAQ29LXN2yWrpb5Y2gngTvzYEqhZ4=;
+        b=ypXQjs2NGSr+adNxbAAdMgo/sC6DQcUmk8EPcNWHcsV7cXUmzhMDo3baadxb0eNjqz
+         iR4g0/tv63mhawJqJgRpeallcxJg0ggvVxKiexbxqJ55dm4kHrG1k2aeZTQnJZMPQZ3+
+         VxmdiSw7pmp7MCnixfseCKuOGIYv8G7kI/UxqQvXyP0LwUZfrmZvtEdXLcpbPKiSj0Fo
+         UEIapbWrNxFJ2hCsiCcW8a2Ahk3HrtkM1WmjxSChqrTbn6mOwd52UqLn9oTlYSE4VoZc
+         ik5/oncRsG7eMBukhZarmDeAVpyDzidSvoIOmBpJhnln4KnJI3bZ2P6C4rERb89SJA6t
+         AiKA==
+X-Forwarded-Encrypted: i=1; AKwUvBwOQhGWQreqfzQd4z8QcPDhWQBWtpsgLAmtJvEPuitygGjYtjAieQBpNvTrmbV1d3SYH4F1+QHVJDdWFW8xoW8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+OtZuCbfpbsJVmsHZ6WBMgbSu/ecGo5YXXOAsbays+SwJFwia8
+	SuJ3xHVNXpUFzPCSl9yNLvm5hqhPx2+sgEShwGFOaX4AplYaOlsLdz3JqL7m4LqvfHg=
+X-Gm-Gg: AYBFou2QGl+ICj+8BcCjOncQwgtWVVAS3Cb29MRk1alWy1Zs+GiLMhKPCnuWz0OQ2Vu
+	L365nO84XKS66mBmSlaXHgDgvmiIOWvyj1idzbYvRdgmTX9B8EjN9BMXW2JprcTySWHpOFitrNi
+	0YLWxRU76s963KTRaH1bQVeauD1rHPUORqOVGeniXjkHSDxGI2Pei44xWmLhpVv6aEQalfsgC4z
+	jh3o6Ax9xmXU9gD0qB+CZzXD9t/neMnJeo+tpJCQlbnM7Kyp0U9o1cDx/3o5zAl8IYkiNWpRcUy
+	3r9R+ZrZJ+r+4SqsgxePHrg3UOznNkTb3QHSMUDep0Zt3Z7Z/vucBRm1c3wJ6QevXjyuBPFCLmf
+	iE06fQJO8e7jCpyY4u7EL3awcPt4CmwY127y7OO02v/eM/e7IIFpbfJgrqmx7T0a0D9HcJhTjOX
+	Ryn7TkRxo/UA+4lrGub7SPXV3QTZT2lT1ixK3z/oBCtE8P6oE6iqIFk9S+qRK2t45nBXlVY20fT
+	mgJBdSGZwh8qu9t7Sq2Q4yePtHRaaSMk3H9elfXrdnj8j4BiYUPYGesCW+RIMobDd+gNL+dmqOr
+	Mib/kVTxgZSUFpZiQaJ9Ugs9En7Ftohw5Eq/YJe9OGeZmnONU53V3wViXgJ3UGvEwYpppls5xFo
+	P5YCZr2fC0AGmckxXdd2dcP+9OlU21WjPU5gTrbuIDjLw
+X-Received: by 2002:a05:6102:358a:b0:7c3:a6f0:99cb with SMTP id ada2fe7eead31-7d072719913mr4878960137.33.1793753037717;
+        Tue, 03 Nov 2026 16:43:57 -0800 (PST)
 Received: from soleen.c.googlers.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d26fef4ed3sm527432137.11.2026.11.03.16.43.54
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d26fef4ed3sm527432137.11.2026.11.03.16.43.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 16:43:54 -0800 (PST)
+        Tue, 03 Nov 2026 16:43:57 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,8 +92,8 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 09/10] mm/shmem_luo: Allow retrieving tmpfs files
- with O_RDONLY
+Subject: Re: [PATCH v3 10/10] selftests/liveupdate: Add a test for
+ preserving tmpfs files
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: David Matlack <dmatlack@google.com>
 Cc: kexec@lists.infradead.org, linux-doc@vger.kernel.org, 
@@ -110,49 +110,92 @@ Cc: kexec@lists.infradead.org, linux-doc@vger.kernel.org,
  Samiullah Khawaja <skhawaja@google.com>, 
  Shuah Khan <skhan@linuxfoundation.org>, 
  Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>
-In-Reply-To: <20261103010216.3447716-10-dmatlack@google.com>
+In-Reply-To: <20261103010216.3447716-11-dmatlack@google.com>
 References: <20261103010216.3447716-1-dmatlack@google.com>
- <20261103010216.3447716-10-dmatlack@google.com>
+ <20261103010216.3447716-11-dmatlack@google.com>
 Date: Tue, 03 Nov 2026 19:43:45 -0500
-Message-Id: <179375302574.727293.7162114309691231709.b4-review@b4>
+Message-Id: <179375302575.727293.18102345692701869647.b4-review@b4>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1135;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3188;
  i=pasha.tatashin@soleen.com; h=from:subject:message-id;
- bh=YJNHuLpjxIokzzpeqa7IUF5TSeIz4RUMcZp7xbSVc0o=;
- b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq6n/F6EDZbzsbaVPLjMR9sGnRAbDjC1Ciq/AWa
- k9NfuYfEceJAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCaup/xQAKCRC7dyhM23N6
- 3lCsEACbXM9A4HxMiLl0Hu2iZsdE1Zmu0oXPj7p9V/8TudGtpt1T3tZNzMqRg6mcMoIdIXCEIg2
- JGGNbNtFurmX2M5+0ioNMR5zbXreBE6AuMkYyEhsz9mLhC6GBjKjgPj2jwt+KnOABcJebeqvRKd
- y4Ya+Yp8Es0cpw17FEDkCzUKbK3//D/WIsWKUn6UM7hucv2w/fAkxpXo5BN543+YBaI8xkMMVRn
- n2g2UW/55sOqpWCgyLP5hKC7O0nH80i67ccDx51adPqeWorKXdA8tAiJGEPA1HvKWrQDq1M5XiV
- TL4ToZhvaP2cDPZOzpWQ+SgM8RR5rEbNjx9HbRyEDqVkGL4ewRKR51X3p3i1MjK/Icggu6iRZCV
- pQA4W2yUN0jd8+lNPUAiYVySmSCxilvwg6NSyXvMmni81dEPk1fNTTLz0RXPakYv7ZOo3Msi6nl
- 7tFk0/DrvNUKZ0r6ofwz0pJr2y99tYr9lo1aH+1zucM2oxgldSBR4CeGzDL5Qw+ht5ewGuRtCiB
- ipQP2XasfAbUcUZS6qWGqKtqHwJTzTNR0SpjLgOb1maNy6iJzZa9Ft7S02FAM7S0MoEuYDPga+D
- 8lVnnR8pCfP6Vv6S/s9t7rUIlGpD3nal/TBbtUq5aGwpDr8N80Ks9Ddzg29Xk+EE4VtpUcJ5HMk
- PbRmcH5B06b972g==
+ bh=1Sz+eMhTI1TOTbxgSk7ZOC8CrCJdIfx3Ze9Zg3ES4c8=;
+ b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq6n/FzIqSwYCXrxsnr7zksMS5TfAEmFOQUj9PS
+ 7XxUL7XYFyJAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCaup/xQAKCRC7dyhM23N6
+ 3nTOEACAI6TfigjjQvteQKuwVbfhXqGx6bxoozDfCeoenFpsOHHU2tRSPDHrF2LinhmG2pyX3Q8
+ IdNQ59F6clZBMmDb/eOe07rYUzfUWj1TUdh5D/SLuP13olwOUmaakHONOrG2Uaporgy7rW/JvCo
+ H2L7Jk9k9ONnqREnNjgeAzTwu/zmxI3kBLYcpoEe4e/qloHN2LAqn6iVZB5b6I/duQg+0sSKEgp
+ qF4OBNh/aIA1foatwzOu597LOjO9yQGRV3iBJJYo51P6K86O3J78ymlKWGJLCLMOMPk2DZUnR8M
+ jLp931wUPz3YeNyDlYE5pYInd4W0IpRLQkJs6piLRVQ/conGIWbGkL4KSSoQd/2jep3AT+iLZxT
+ nQX3w7DUGKtNX41lNlBN5hBRLIL7IBK7aadPhrKz90SJNGH9ZPSeFVaGtwJRjGCWrPppwaO06yR
+ VysyPyy9uNhOKJSHmwBYeXEJddw81NZYJIjeslUtu59vWS+R+q3usDK/yK5jNy6E0h6vvuwyhuI
+ gmJeftNu95dEGsoOiTdU/+eZlCgissKpCpGEEx1LCEbcoV5iULkM6cczYHziRUNy4WEnse6TYs5
+ JiM5brFJchE2M/+FwTTI00ZLZVJRSQ+PZmsg6nEdtwTUZDUhsHCd0cXftsjhObL8a8SsH7szZ7X
+ ktyDeGGGs1LNQ6Q==
 X-Developer-Key: i=pasha.tatashin@soleen.com; a=openpgp;
  fpr=CAAAB722DD22A081F0D49F35633A6A993D43B569
 
-> Allow userspace to pass O_RDONLY in struct liveupdate_shmem_retrieve_arg
-> to retrieve a tmpfs file read-only.
+> Add luo_tmpfs, a kexec test for preserving tmpfs files and memfds, and
+> for retrieving tmpfs files onto a tmpfs mount with struct
+> liveupdate_shmem_retrieve_arg.
 > 
-> open() requires write access for O_TMPFILE, so create the file writable
-> like before, then reopen it read-only with dentry_open() using the flags
-> of the writable file, which file_open_root() normalized, and drop the
-> writable file. Like open(), which grants the requested access to a new
-> file regardless of its mode, don't check permission for the read-only
-> open.
+> Stage 1 preserves the source files of each test case. Stage 2 runs
+> each test case in its own directory, with its own tmpfs mounts, so that
+> block usage can be checked exactly with statfs() and st_blocks. The test
+> cases cover:
 > 
-> Retrieving a file read-only allows a restored binary to be executed
-> before the session is finished. LUO keeps the retrieved file open until
-> then, and executing a binary that is open for writing fails with
-> -ETXTBSY. Being able to execute restored binaries right away matters
-> when they are needed to finish restoring the system, e.g. to bring up
-> the services that retrieve and finish the remaining sessions.
+>  - The restored file: contents, size, position, seals and holes, for
+>    linked and unlinked source files.
+> 
+>  - Creating the file: it is created like with open(O_TMPFILE), with the
+>    requested mode minus the umask, owned by the caller, and not linked
+>    until userspace links it, unless it asked for O_EXCL. Also O_RDONLY
+>    and O_WRONLY files, other open() flags such as O_APPEND, O_NONBLOCK
+>    and O_CLOEXEC, read-only mounts, and directories that the caller
+>    can't write to.
+> 
+>  - Preserving files that can't be written to: a binary while it is
+>    executed, through a read-only fd, files on read-only mounts and
+>    superblocks, and immutable files, including sparse ones, whose holes
+>    are filled. Preserving someone else's file that the caller can't
+>    write to fails, and so does preserving a file through a write-only
+>    fd or an append-only file.
+> 
+>  - Executing restored binaries: a restored binary can be executed
+>    before the session is finished if it was retrieved with O_RDONLY, but
+>    not if it was retrieved for writing, since LUO keeps the file open
+>    until then. These test cases execute copies of the test binary.
+> 
+>  - Block accounting: the file fits a mount of exactly its size, and a
+>    large folio that extends past the end of the file is charged in full.
+>    Running out of space, or hitting the memcg limit, fails permanently,
+>    and leaves nothing charged to the mount or the memcg. The session can
+>    still be finished.
+> 
+>  - memfds: they are only retrieved as memfds, with their seals, and
+>    files from tmpfs mounts only onto a tmpfs mount.
+> 
+>  - Interactions with LUO: invalid arguments, which can be retried,
+>    retrieving a token twice, and outgoing sessions.
+> 
+> Also check that the size of a preserved file is frozen, and that the
+> test doesn't trigger kernel warnings.
+> 
+> Enable CONFIG_TRANSPARENT_HUGEPAGE for the large folio test cases,
+> CONFIG_MEMCG for the memcg test case and CONFIG_TMPFS_XATTR for
+> FS_IOC_SETFLAGS. Those test cases are skipped without them.
+> 
+> tmpfs quotas are not tested, since the test runs as root, which is not
+> subject to quota limits.
 > 
 > Signed-off-by: David Matlack <dmatlack@google.com>
-> Link: https://patch.msgid.link/20261103010216.3447716-10-dmatlack@google.com
+> Link: https://patch.msgid.link/20261103010216.3447716-11-dmatlack@google.com
+
+Overall, I like the series. As a follow-up, it would also be nice to add 
+non-kexec tests to liveupdate.c covering preserve/unpreserve/freeze and 
+restrictions on various tmpfs files without rebooting. 
+While that won't test retrieval, liveupdate.c runs as part 
+of regular kselftest by pretty much everyone, unlike the much heavier 
+vmtest.sh run.
 
 Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
