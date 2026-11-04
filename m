@@ -1,51 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.101
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793761714;
-	b=O9Qx8iEARC+xwun0xck9usTIidHMPrU5+D4+VPB2boRSlHBXLSJWm/icw08p/i60zpu8
-	 GKiVqrnGfEIoDZmOaTiqi6xcI7iXyPwECWsolWIdGsGCSrfkaJ8KDP/Iz+Ja2KKL1SVLP
-	 EBXDfSEtJT4cIMughKAgTyMQuZo23mNGeJsth9i8AIdvDpQ2V8PHPYcZ+hjHF9vj/rJ6J
-	 kymA9NHLpHbfbxztTIuyiwi5U9HI28W7MLrngz2/BgWsk83Pxm4pc00TpCykxY3fwbTo9
-	 dvWmiLJbqR/rHVADzkZI5VkFLkZFwDLEMBamG953aC20VXGz8NtTCeQDNjdb1VPhTdw==
+	t=1793761981;
+	b=BnVY7jh4OYhTaqBgHu/mAuZddtNm1G2lZ750EFHE3q7loFKToQ5wc5E27T9Qgj6vNq7K
+	 Oi64FWsY6kTknjtfla3PGgipKCrGvstetHmodI+DkzrG9LDmgILceeRWv5AeHM3tG7Wg0
+	 7mOd/4gWLsSvRQYeRzXkcqiGbbgGRjnICCCQ/m1ksizw0z3vIvFW0XA/G16uZ8XXfLN/J
+	 O9s7w6NDzuH6WKy7/awUmVQRkPGu4KGSAojIjrIj8ojCp9q+YGpILpYFGnI7dWPG75lzS
+	 FYWLBmIUcVTX+zowQ7T1Gd1/BKnQ7wWzVft5dc4WVaLlfC9HlEXvm0tr359JhY74O7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793761714;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793761981;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=28TICR5om8gEAA17u0Mkh2XWQT59vv9alAkSUCUqe0U=;
-	b=2RwEhj33W8VfLjT6mumjh8UHdL+mHkQTV4rdCVjoebODa5H6fcpe+U6NLP0wB5TDKfkq
-	 RrU7DpgT0MXLWsQpEodGSEQeWpuA27Vl/GHl7eYTvhDqHd6+ZlcwihDvGsoWusIcSixxS
-	 HbVLydD16Tt/SxdTwDLWNmtiO60xJ+Ex7ooFC2QL7v0L7wn38TDyufYCt8Bug895XFlWL
-	 /0hq9f9fpc6QJCNrCpB5tX68LTw+bP51wr0iBTgMaOel+3Muww44/XUqz4p513V+Oxiu9
-	 gpp1xkU8ZfLiTZ9Oy5P1O7om0U0KEuDnRwfFvzuJqwNuaR9L3KZHF2nFaBMvWWUsoeg==
+	bh=LveW7nDiawWEYIXu5pfVPlNN/304vQfJ88DUg/zm9Lw=;
+	b=ohLm2Oo+F9rqmpwm3XTr7gNvFMkq3Dl0AAl4k+m2okD2bPkwKve8mH8Z+h1I2Z3c9cHT
+	 JpNQtMz4JVk520WvLYr5wX0cwGpWrZzSApl0Z94l1gRuPQyubqy3s3zRFHIM7hr0BXwde
+	 R1gHV8lQFzLuePArp8pMPMF2Wbcfi4kRLe1LQXxF22CSKJcmejQDMYK4kWhImbMMNFbWd
+	 x9/esrXCiRjAKHPVr8A4NeXJpKCD3cWLfMhLJwz2xzxflGF4mG/i2JZDjvVHUJFbz/1ET
+	 1g5u6c6IdxEB0irSrOhS1jr4zaZe0JJmfv4DWlAMvFypsOsmjgEhS2mi5aHpp7QuM+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=91.218.175.189
-Received: from mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="doLWrA/N";
+	arc=none smtp.remote-ip=95.215.58.101
+Received: from mta1.migadu.com (out-101.mta1.migadu.com [95.215.58.101])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E911606A32E
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 03:08:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E911606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F7D606A330
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 03:13:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69F7D606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=doLWrA/N
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZvICwksGFdvGheOHbOECoxnMVa3CC+IOa71TpIVxlVo=;
+DKIM-Signature: a=rsa-sha256; bh=9OEa3fPovPlD+MXI2KeoqPySDCpv+FwfnIb8O3AdQek=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793761710; v=1; x=1794366510;
- b=sJGdFMO/1wRKo4GYdURwIYpO5u0qXaUqYZjCIgqeg432nHuAX2K2jiiapWbd6g2PXiqB9qtD
- cRB3NtLbgzC5w2Ie5Zm+9ludyRlTx7CeaPCXu4sPEZBGLuK0tpep+SL6aJKoip41nL6adGvPF+H
- yHSmAxoj4f9NWpwvZTR3RPmE=
+ t=1793761978; v=1; x=1794366778;
+ b=doLWrA/NIRHhmJJQPBEF9xi9oB4Z6q+zIdHcHgpVILcXpSryYLgtLAq/sQ5fHPKSvP4rqua5
+ yKeklQ9P7XrD2ri185Mau/iUYSJ2sd7zRVsKoI0bse29ZMKNV3+IQHx18tTS0HCioyHUhUYV/IR
+ pbidK5X/k8TMETKPezDUr5ws=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b902d48028398e0a;
-	Wed, 04 Nov 2026 03:08:29 +0000
-X-Mizu-Trace-ID: b902d48028398e0a
+Received: by smtp.migadu.com with ESMTPS id 6043c9df7e23f1de;
+	Wed, 04 Nov 2026 03:12:58 +0000
+X-Mizu-Trace-ID: 6043c9df7e23f1de
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <0e226208-57ab-4311-9a83-5b13adf768d1@linux.dev>
-Date: Wed, 4 Nov 2026 11:08:24 +0800
+Message-ID: <b48c1374-0136-4da8-b696-3f31c052dad4@linux.dev>
+Date: Wed, 4 Nov 2026 11:12:44 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,38 +61,92 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
- cuitao@kylinos.cn, ameryhung@gmail.com
-Subject: Re: [RFC PATCH v12 1/4] blk-iocost: add BPF struct_ops cost model
- support
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, tj@kernel.org,
- josef@toxicopanda.com, axboe@kernel.dk
-References: <20261103132613.1952975-1-cui.tao@linux.dev>
- <20261103132613.1952975-2-cui.tao@linux.dev>
- <DMLQC758A2C3.175VOTFQ2Z8HD@gmail.com>
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
+ martin.lau@kernel.org, yonghong.song@linux.dev, mason@kernel.org,
+ ihor.solodrai@linux.dev
+Subject: Re: [RFC PATCH v12 2/4] blk-iocost: add iocost_ioc_tick tracepoint
+ for per-period device summary
+To: bot+bpf-ci@kernel.org, tj@kernel.org, josef@toxicopanda.com,
+ axboe@kernel.dk, alexei.starovoitov@gmail.com
+References: <20261103132613.1952975-3-cui.tao@linux.dev>
+ <04adc0407868a7876c12e46e0637e13b3bb8f549e6f47a1d0a9bfe29d144e29b@mail.kernel.org>
 From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <DMLQC758A2C3.175VOTFQ2Z8HD@gmail.com>
+In-Reply-To: <04adc0407868a7876c12e46e0637e13b3bb8f549e6f47a1d0a9bfe29d144e29b@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello Alexei,
+Hello,
 
-在 2026/11/4 00:51, Alexei Starovoitov 写道:
-> On Tue, Nov 03, 2026 at 05:26 AM Tao Cui <cui.tao@linux.dev> wrote:
->> @@ -3223,7 +3306,6 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
->>  	return 0;
->>  }
->>
->> -
->>  static int ioc_weight_show(struct seq_file *sf, void *v)
+在 2026/11/3 22:07, bot+bpf-ci@kernel.org 写道:
+>> blk-iocost: add iocost_ioc_tick tracepoint for per-period device summary
 > 
-> Unrelated change. Tejun pointed at this hunk in v11.
+> TL;DR: In iocost_ioc_tick, the tracepoint call sits outside its enabled()
+> check, so a probe attached in between may log a bogus active count of 0, which
+> consumers could read as dormancy.
+Confirmed. `nr_active` is only consumed by this tracepoint, so there
+is no reason for `trace_iocost_ioc_tick()` to sit outside the
+`trace_iocost_ioc_tick_enabled()` block. The split was simply an
+oversight when the active count was made conditional on the tracepoint
+being enabled.
 > 
-Right, Tejun already pointed this out in v11, but I missed it when
-preparing v12. I'll restore the blank line in the next revision.
-> Overall makes sense to me:
-> Acked-by: Alexei Starovoitov <ast@kernel.org>
-Thanks for reviewing and for the ack.
+>> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+>> --- a/block/blk-iocost.c
+>> +++ b/block/blk-iocost.c
+> 
+> [ ... ]
+> 
+>> @@ -2478,6 +2479,22 @@ static void ioc_timer_fn(struct timer_list *timer)
+>>  
+>>  	ioc->busy_level = clamp(ioc->busy_level, -1000, 1000);
+>>  
+>> +	/*
+>> +	 * busy_level, cur_period, nr_active and usage_us_sum are complete
+>> +	 * here. usage is wall time over wall time, summed over iocgs, and
+>> +	 * is not capped at 100. vrate and period_us reflect the current
+>> +	 * controller state, which an io.cost.qos write may have changed
+>> +	 * mid-period. Emit before the refresh and the period transition.
+>> +	 */
+>> +	if (trace_iocost_ioc_tick_enabled()) {
+>> +		struct ioc_gq *active_iocg;
+>> +
+>> +		list_for_each_entry(active_iocg, &ioc->active_iocgs,
+>> +				     active_list)
+>> +			nr_active++;
+>> +	}
+>> +	trace_iocost_ioc_tick(ioc, &now, nr_active, usage_us_sum);
+>> +
+> 
+> Can this record a bogus nr_active of 0?
+> 
+> trace_iocost_ioc_tick() is called outside the
+> trace_iocost_ioc_tick_enabled() block, so the two static key tests are
+> independent.  If a probe is attached on another CPU between them, the first
+> test sees the key disabled and skips the count, while the tracepoint itself
+> then fires with nr_active still 0 even though ioc->active_iocgs is non-empty.
+> 
+> Documentation/trace/tracepoints.rst says the tracepoint call should always
+> be within the block of the if (trace_<tracepoint>_enabled()) check to avoid
+> this race.
+I'll move `trace_iocost_ioc_tick()` inside the enabled() block in the
+next posting.
 
+Thanks,
 Tao
+> 
+> Since the commit message describes active=0 as the marker for the transition
+> to dormancy, a consumer could read this spurious record as that transition,
+> alongside a non-zero usage value.
+> 
+> Would moving the trace_iocost_ioc_tick() call inside the enabled block
+> work?  Alternatively, nr_active could be counted in the existing
+> list_for_each_entry() walk over ioc->active_iocgs earlier in
+> ioc_timer_fn().
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41646836440
 
