@@ -1,100 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.48
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793809864;
-	b=OiN9jNjPjLhnUIrXr9CmYgMDNDHNFPFe4c31KjxZQiYxI/cvuggrBI/3vD5jb8ilLmDh
-	 2/woNip3JFPJAbWn3Os+9mTf3hhae/qiY0Zuyj6ntfIHT2639USk7kMKnuJnZR/t1fOyI
-	 4eFubs8thwLg7nvBXoZjV4+vEhdngZ/LcGOcpwgai18MRJA5rEoFEbBdJO69U/erKZfNx
-	 kLoeoT3O9j/KjGZ8kWGuSTtklfbXJ8QfoFWeDC9rawQl1Rrbx3xHlFVKL78aiGWrh46EK
-	 q/WaSYgCSlrStVYPh2z53pUmff8yse7N/V6fEZ2ceh92utXU55HXw3bTnaYFA+DokIA==
+	t=1793810113;
+	b=Wh5Yu64zmP9UeYxV30ZmAUSdG+4+lzigPrzULf4kcuyVyFTlxmSTZ+IPcqIul8Ev39m2
+	 V4lRJoz0n7XBF6C0igV214XWive6DysqR8FLbgScEM8DrPC4o/NaJFMqxJuNQms6dH5BX
+	 /UVyB2xw/8tT+F3THYiiDVAh93GKoRxfkQOQ4CuqXul71RSNAqtaPiT6UdbRFM/09M2U+
+	 /wduI5RgcG2IThw/O2qLbJPAfC7l+FiVtwoVkTpXCt1G1e33NYXBzS/IlMMxPsWKcqFYL
+	 eOnOk5y/bNXdxuFWcg+p+jbWEWVNx5bhUwWw1Qq0UJYOVhyBVUvew81zy9uWWlUPVzw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793809864;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793810113;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=NyjRNFEeE3nmYhNk8vaSRwH7n51z01zX9N7rg1mXM0E=;
-	b=omdOLb7GzHtswWIEIJhzgFrSbK7aAzmgCY98AtPA5+W4chuBXLlv3UDp0VEpmSycwqNx
-	 a1ZHthlKIIDO6SLD2rH4jT8wFocQAxqmhytuYG30o7u5Fk5KEeZyWo3oCtElEs5uVcTuT
-	 fssm1Peiwdupvge3uH5b1cBLz8aTTfKAVVVi0W1rvxBqyPOVWgcyvsVP27DEykjxuadEO
-	 CLN4evkZjz4t3vPOBJgRKAGn4GGL2YAcOVUSOkHlN27BFfVlhJELsuF3Jc03zo74Qhwgm
-	 +2brmqfDGlv/fx04nKbi4p0lLok3fzHPSF5PYMiPlLuoMFUmuVp2mrGIxFeHL+DLYlg==
+	bh=r1Dhv/Jl1KwjwSgeC5h/yWHauZP92LHd9bdUwOqpNVM=;
+	b=CvSCt8ZHYqdwo5HGWDnlscyyCfOk0fs/to2KtMIwGfM4ydXZ4GCDT/KZey1MLplXQdQT
+	 w8HPb5MzULOBvevf0CDOtEvS/9payVmGOHewW0ftQbiMSjJ3lD2p3CgX7308vWxeO+Gbp
+	 +mp36M2VzwSuW9IMgl4qyMBHgJExxeewtGHBfYQh+997KmbczOKJDdMcku0Jn2kCa7JG8
+	 TbdCiVTbsj9yovuVvN0/YoT9gXL12Lb4nFXCc/UQHY5i2EXhoq/0K5M/TPRl2k3Vg4spq
+	 ilpJ9OTZO1utgmVEXUa4uYN5KOdCk/U9O6MSZEjAFwwo4le9M4kctUEQhGCh4OpRgyg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OdxaJB4E;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.50
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="k/Ap2ipi";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04139606A31B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 16:31:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04139606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773E2606A32D
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 16:35:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 773E2606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OdxaJB4E
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6ae14cdc63aso12245a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 08:31:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793809862; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=k/Ap2ipi
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a3517554f7so7422055e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 08:35:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793810112; cv=none;
         d=google.com; s=arc-20260327;
-        b=YewH9p1Z4zw714S4+k5iyraDCHYp7BMkgQHJndqCA85eBgWkdtZwUr/HslEKmDWqN2
-         i0nStMmXO9P257AL2LGPDYbGjD4Rx6TrRmLKh2hITXVQAHbXt3WDC6Fp+U8JcUno+TOm
-         kFtIaCrl4OTDw8A5Qah2RpFV5/hbHKED6h/CKW3Xbp5VA8noeOhRDUd48Av6/ZSRVkzo
-         fu3RysJ5ivKSSFGuIAIUK5DQbxLiofa7BiPF621aPVpexbJyY/BdcfnFaQzu+XQSU2ak
-         XUN0vwfqSXuJbkr4tSLqGmxP2jRAPzi0VyWPFvdxj1LRz9AsJrDhQ4KiDHWY9makNdaS
-         qmPQ==
+        b=oAsHIKUe8RrnEZwgOZzajk4qsuXs/xfQgLcwBodgYdEqtvp+MDxXeaTT23shEV1Hdb
+         BAETLW/OgdBLcD5GEJ9KgGLknEZPKBV48YpCriFqouIPzDj+IJ4zHLaP98Rn50viyG91
+         A0+VQegsdBDWeOjuHsXhMmbehPOq8Aq1vu7Dw0RtH36Rlxg8VEeInpIU2ED9oc0/xMLH
+         fPoQRPubBtb5f1YE1R/yxZKL3FE1UdETV13TmctycV45Fe4vyS3jHSINoGy2Bt3wVdiy
+         tJkarvG+hxvLvG0Sq9Z5I6eSFS2V0mtBp7CT+fNmWAvk7Lj891cvgHiYXnk2bYF7cHcX
+         6V9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=NyjRNFEeE3nmYhNk8vaSRwH7n51z01zX9N7rg1mXM0E=;
-        fh=xfg4nwzxGwdNLL9gW5F4KYh0fKrBgwwpBblCgr16Ll4=;
-        b=f8Luoir+VBaS8+pllryXfXj9ae92cegZlHRQfO7zoMGxlJcuavXSt+P/tw0z7OczpU
-         j4Eo6ZvnPI4tUnwHkAvFOHIecmGusJzGQDBWyEH5otTtUtcq7mE4lI0f26LDb2qcNDRd
-         ljsrGTmOnDH/dAKaS7Vs2WVMZhhvjbisqFLYiG3CMehnRREQALrNo+e913KWPJx/37rc
-         i4t8MPxWW/BB3lJjjJvzaVwckEYp8i5T5e8kT52isnB1HZijjIeaSV6/nBoT9133Ys0O
-         DF+ohlo6wCCCO8qr+he7IsBCelbcmv9zak2hyiS72o7T+m7jCSV+7m5v+F17eiKUJG8Q
-         Edcw==;
+        bh=r1Dhv/Jl1KwjwSgeC5h/yWHauZP92LHd9bdUwOqpNVM=;
+        fh=ldwTh9X/QYowLUKRPk2JzGEADVNpqUifpm3VKIDy6Yo=;
+        b=asQyc1yNmwrPiofr1NZvWH/ATcSFJOhJtP3VEH4ww6Furvvdfvklzg5e4Aixsgh9Vu
+         QV2JzIYlwT2fDtki/VkXI5KEK/+G3sXEMYI2Dqy/6ZEY6yPR4rTyYLP3zlXLxBS2GQ5o
+         7voo7xQrUfi736O6vV0NnKB5T0Wvfz/bF/B/NFSt6rcngXGQWukDtHM34OK2nce/DFNG
+         jstS3GCKfskJIDoKPdYAyAUlU1d2Buww07RyOBaDcmt9Cm24bM8LBNP2A8ed5KtOx7QU
+         5RitNxcn4JrNz1sS6bDQ6ObaNqfUoIY059OvTgIukvQW8qQdtLq0dn7jRko6MDz3KMrS
+         Y5dQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793809862; x=1794414662; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793810112; x=1794414912; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NyjRNFEeE3nmYhNk8vaSRwH7n51z01zX9N7rg1mXM0E=;
-        b=OdxaJB4EnDuV4Hidcru6kJitmdCqTBvMRu1+/AxM8mR29nxWHSzf1TGPtq08Q/FyeM
-         BqiQ5UWsRtRzykRX9dHeDcMk+iJsYuP0Kdmb/FZTBnu31lJYAGiEwb2qv4bwAIm5qaGL
-         IAHFIVaAlQ6RQHbPq3KVPxtIMj+aqGjGQz6ZxauYWKTClbyEeG1+dphKJcJLdKuhRKSF
-         u+0Tycys46CnLNZ0EObmu0V61pUHh0NUS71EPx9l3Ys2ZgQT5SXC5pwkna3a5yBsZ+cn
-         xLnBUt5xe4nNJKHPDJ61g3w9xSDjOZtQz1k8hoiXujknHw3C9rCYb8zZUkZTFkbh4cdD
-         ADBg==
+        bh=r1Dhv/Jl1KwjwSgeC5h/yWHauZP92LHd9bdUwOqpNVM=;
+        b=k/Ap2ipio1jUCr7hxSrGcd8xb0Gq8lTypwNjw1lqjro0NRz18F8YlDsM7HiNnCrFEi
+         /vm6jltU94UiorOMls9tUOhiUmC4AOyQfjobjB6JZxrLT1KXhNJJcpT+qX+61OC+1IKN
+         YAqzR3UE7fxjTamB8udMYWWXXeLdPyEeqkXh49Q+FEMhJKIYZBmZOkJbU8vDdg2QWP5I
+         csSN0oDtIczRxv7wm16bMx6N1/xbT81ZIvFLsaJOO+xoahN/0wl0B6TUIie1cR/TXVsc
+         FHsluw456OtPMGxM39SdrU8hon8fOyA3tC4Na01Tp6YGM/spTgpi2gRXAZ2JlBC47rEZ
+         k3zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793809862; x=1794414662;
+        d=1e100.net; s=20260707; t=1793810112; x=1794414912;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NyjRNFEeE3nmYhNk8vaSRwH7n51z01zX9N7rg1mXM0E=;
-        b=HP5fyW9SCyQTHZil7hqubHSJoYEvFDBjXyC4epBKfYEdFl43qLsttR197oBWkpXuJG
-         lFcn2gxIEA8GzdZiHL7I4t/wSSYfLHs+yWZGoZkYZ5VTECxNRz5HaUoqQRP0tbx4OQPV
-         7lxpYvPglbP/eMd2R7teyW9DS+yWx7OAtD/jN4VCGsqHaRR7yGtQ2SpKe8tNdsE3g/Bi
-         Ikj+wor3HkSkMfxD2i7j0eovbsplk0Y/VdF3/7g98O/TThM7zluy1pwMfCVRsLdW2ySt
-         18fXopyps1ITYC0hlIemfLVT4NFNmr4EMzciShfwPsY2XyNiTmYdNr/dsZpyB7M0ZMY8
-         gs4g==
-X-Forwarded-Encrypted: i=1; AKwUvBw80O05WuOPyfiOvPLxLUyOi9S/+thRma0Nw5Kb45YcGA0IZjvmkMTFjb81iq3Xx3fiU1Jcw2pYQiLjXQwysgs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8ej5D/1NmtKcVDsPa2EfJVlihp8gBTygvuYu1BLRxJGzNXsBS6
-	+twjl9dUqnLI8tmvsUC07RBKYk7eXjrpUJxKGw4FYE9e+DVPVI6ZYothcUva78GWbSRg1BUIqyM
-	fFZ0QxkF1M8YqXRG08afvRD8tAdsJ6IyGi2UwzIqt
-X-Gm-Gg: AYBFou0E88R8GLams1R3Kiu/+WErdRoW0SYP5FWYUk+O1CYZ8tZDgkc2lJn+1Bt7Du7
-	Is1WvyUA5KvXZyqQfgvf5C/lsXc1u0aVbJkLWuUOdKJA2eokpzK/wjmK8b8lzge8CBmhdbzAb5X
-	M5szVCiOSAOln4M+a6iqCtOSWK6E7OuLcXGRJjOUmYu/y64jw7MnoT+Rntqb25vFl8cg0TUDlpY
-	eQRBDKhc7JfqU6a3qag9pdwOos1sRou82h7LBM5oGYCyMacImVOHIq4F8Jz9uXufJ3vhmulMKAM
-	LSeKr3g21MIxmxVxaTgLq/woxptMZQvjfloUiN4aeJwpAV1rXpa6l6qSvpm/Y4yfIULHoVTHwqk
-	H6QFP6NgoTFw0ICDnRzsh0H4rsXH+611LRBTogas0ps0LBM3XyaxTc2E/XAPU8Yiaig==
-X-Received: by 2002:aa7:d647:0:b0:6b4:629a:6352 with SMTP id
- 4fb4d7f45d1cf-6b556219774mr85656a12.5.1793809861709; Wed, 04 Nov 2026
- 08:31:01 -0800 (PST)
+        bh=r1Dhv/Jl1KwjwSgeC5h/yWHauZP92LHd9bdUwOqpNVM=;
+        b=uwqfFQgqF0OOOmzNj/ntp8oDiarwvwkfnLvfx1yvu2pYlLXAvQKv046nqQzS0Klqtj
+         Zv/wun/1VNVh18hVMHFcrK9lM57L731vMyAHYFYMGV10G8VsFRrdqqRP1aO8iBKBz51B
+         kb8Mr8TVnGMJIFJSGP97y7o99qtbk1YbTCAWTx6iRCFx45/JvnJuSGxAxnBqIvD1P7Hj
+         zLb0qOvoOnxNXJVEWVz2PLFAvRlZ9Qq6fhPRyLauL184hijDk8H8F8KZodfwJEB3fbwC
+         hKKErSkPCLmk/Y0ecRewv2Rcl6qkinfHeXb7NNF6rB048AKwWbQ1329t7dAQDN4xkrcp
+         HaZg==
+X-Forwarded-Encrypted: i=1; AKwUvBwgHKStoE9twF6ox1jzaW17dJJQgl1NdRYanaVRHTUyGKE7bAwVWmsbhuhARvVbaPgz4MMK2WQoSV6b0xBfPoA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+QepNUXhG/esfqhC3xYQ0CB+Wr22W0r9kWjIHyMmqlPIU1kJaJ
+	PUUbR1rr4bo7xnOCqSsqoFrnFs9ztIKAcwG1sAMaiVIjqPZ6RmAV8UBgpsf/5rYY/VLGiLNpnB2
+	skDcsyITeZ+SCoGvLIreHx+5OP0mXg3U=
+X-Gm-Gg: AYBFou17qDdi1UV3493f3ZJ9n4xmxgwCPyARpa3WGFJbS/xHwAGWIfqdRpXz27MBr1y
+	q8JwTIfNCPmEb6KmrKlQwn0dt+B2N9QJQcTXiL/cVJFqBLGNc70c6frkr4mxzI8XgvSYedQN4Hm
+	Y1B6aiZTLhe+Ko2YVOdEA8gYQ2udRo9DnYZxBH5cPIpth2/4wrPv+JyiHFNpAS68jOPNQzH3ZhW
+	ZQVDUPQqvkNXyrGGo/RpmJQ1IHpGO57QholgOS1QvDC3PHTYcn+Y7BAwYfHvvWNXXGS0RtLSfso
+	tpezsw0fmOkWSEs9c6xhTZnWRY9PhUrN+Vdv+7lYNPe6ag44xJpbLauW97jvVqDwVQzqBQpOTGN
+	jB/t13QEHgl4Vr5z+ybhaGjhd20E2jBaKqe/+MyjnmVB62MDgGAwF35G4OVdcbnaVnCpEGldbnp
+	0J3NNusOWe/zjXsqfkG47lUXwk0IzUbd90dn48mV6ig8TCaedhtx3MGWP0+gKauLe3Hu2MW5lUq
+	g==
+X-Received: by 2002:a05:600c:4715:b0:4a6:eca1:7d5c with SMTP id
+ 5b1f17b1804b1-4ac182dca82mr384625265e9.32.1793810111530; Wed, 04 Nov 2026
+ 08:35:11 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,137 +106,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261102230445.3993629-1-almasrymina@google.com>
- <20261102230445.3993629-4-almasrymina@google.com> <20261103102721.5d76c471@shazbot.org>
-In-Reply-To: <20261103102721.5d76c471@shazbot.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 4 Nov 2026 08:30:50 -0800
-X-Gm-Features: AclHuK-9GylVYqo-TMtSosiXb5Ui2K5HFBRmFtb7498f4BCUrjDMBqO1v8NJ_60
-Message-ID: <CAHS8izPfFpNQWLFW4Xgf_=vF5j37_Z7XDcuPMJXHj-KQzo=8jQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] vfio: selftests: Test BAR write faults after clear_refs
-To: Alex Williamson <alex@shazbot.org>
-Cc: Peter Xu <peterx@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Kevin Tian <kevin.tian@intel.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>, Alex Mastro <amastro@fb.com>, 
-	Matt Evans <matt@ozlabs.org>
+References: <20261104095315.2326-1-zhangchujun@cmss.chinamobile.com>
+In-Reply-To: <20261104095315.2326-1-zhangchujun@cmss.chinamobile.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Wed, 4 Nov 2026 09:35:00 -0700
+X-Gm-Features: AclHuK9XCOvhLBDiROBbZxHR84Wbx48lhNSlCdNeopT450arvK86EzOe3nZed14
+Message-ID: <CAKEwX=MyLZ12jtwWOYWvf+KK5dyOOG=RWJb9Q8-DEFy4-twNgg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/cgroup: test_zswap: check malloc() return value
+To: zhangchujun <zhangchujun@cmss.chinamobile.com>
+Cc: hannes@cmpxchg.org, yosry@kernel.org, chengming.zhou@linux.dev, 
+	linux-mm@kvack.org, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 3, 2026 at 9:27=E2=80=AFAM Alex Williamson <alex@shazbot.org> w=
-rote:
+On Wed, Nov 4, 2026 at 2:53=E2=80=AFAM zhangchujun
+<zhangchujun@cmss.chinamobile.com> wrote:
 >
-> On Mon,  2 Nov 2026 23:04:45 +0000
-> Mina Almasry <almasrymina@google.com> wrote:
+> test_no_invasive_cgroup_shrink() uses zw_allocation immediately
+> after malloc() without checking for allocation failure.
 >
-> > Add a regression test in vfio_pci_device_test to verify that huge_fault
-> > on writable MAP_SHARED VFIO PCI BAR mappings handles write faults after
-> > soft-dirty tracking clears VM_SOFTDIRTY and downgrades vma->vm_page_pro=
-t
-> > to read-only via /proc/self/clear_refs ("4").
-> >
-> > Use vfio_pci_find_mem_bar() to locate a memory-backed BAR of at least
-> > 2 MiB that is safe to read and write, and zap existing BAR mappings via
-> > PCI_COMMAND_MEMORY before each sub-test to verify both:
-> >
-> > 1. Read-then-write fault sequence after clear_refs, exercising in-place
-> >    huge PMD/PUD write-protection upgrade via wp_huge_pmd()/wp_huge_pud(=
-).
-> > 2. Direct initial write fault on an unpopulated BAR VMA after clear_ref=
-s,
-> >    exercising vmf_insert_pfn_pmd()/vmf_insert_pfn_pud() with
-> >    FAULT_FLAG_WRITE set.
-> >
-> > Skip gracefully when the device has no known memory-backed BAR >=3D 2 M=
-iB
-> > or when /proc/self/clear_refs soft-dirty tracking (CONFIG_MEM_SOFT_DIRT=
-Y)
-> > is unavailable.
-> >
-> > Suggested-by: Alex Williamson <alex@shazbot.org>
-> > Cc: David Matlack <dmatlack@google.com>
-> > Cc: Matt Evans <matt@ozlabs.org>
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> > ---
-> >  .../selftests/vfio/vfio_pci_device_test.c     | 65 +++++++++++++++++++
-> >  1 file changed, 65 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/vfio/vfio_pci_device_test.c b/tool=
-s/testing/selftests/vfio/vfio_pci_device_test.c
-> > index 93c11fd5e081..323a316f59e7 100644
-> > --- a/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> > +++ b/tools/testing/selftests/vfio/vfio_pci_device_test.c
-> > @@ -1,10 +1,13 @@
-> >  // SPDX-License-Identifier: GPL-2.0-only
-> > +#include <errno.h>
-> >  #include <fcntl.h>
-> >  #include <stdlib.h>
-> > +#include <unistd.h>
-> >
-> >  #include <sys/ioctl.h>
-> >  #include <sys/mman.h>
-> >
-> > +#include <linux/compiler.h>
-> >  #include <linux/limits.h>
-> >  #include <linux/pci_regs.h>
-> >  #include <linux/sizes.h>
-> > @@ -102,6 +105,68 @@ TEST_F(vfio_pci_device_test, validate_bars)
-> >       }
-> >  }
-> >
-> > +static void zap_bar_mappings(struct vfio_pci_device *device)
-> > +{
-> > +     vfio_pci_cmd_clear(device, PCI_COMMAND_MEMORY);
-> > +     vfio_pci_cmd_set(device, PCI_COMMAND_MEMORY);
-> > +}
-> > +
-> > +static int clear_soft_dirty_refs(void)
-> > +{
-> > +     ssize_t ret;
-> > +     int fd;
-> > +
-> > +     fd =3D open("/proc/self/clear_refs", O_WRONLY);
-> > +     if (fd < 0)
-> > +             return -errno;
-> > +
-> > +     ret =3D write(fd, "4\n", 2);
-> > +     if (ret < 0)
-> > +             ret =3D -errno;
-> > +     else
-> > +             VFIO_ASSERT_EQ(ret, 2);
-> > +
-> > +     VFIO_ASSERT_EQ(close(fd), 0);
-> > +     return ret < 0 ? ret : 0;
-> > +}
-> > +
-> > +TEST_F(vfio_pci_device_test, bar_write_fault_after_clear_refs)
-> > +{
-> > +     struct vfio_pci_mem_bar mem_bar;
-> > +     int ret;
-> > +     u32 val;
-> > +
-> > +     if (!vfio_pci_find_mem_bar(self->device, SZ_2M, &mem_bar))
-> > +             SKIP(return, "No memory-backed BAR >=3D 2M on %s\n", devi=
-ce_bdf);
-> > +
-> > +     zap_bar_mappings(self->device);
-> > +
-> > +     ret =3D clear_soft_dirty_refs();
-> > +     if (ret =3D=3D -ENOENT || ret =3D=3D -EINVAL)
-> > +             SKIP(return, "soft-dirty clear_refs unsupported (%d)\n", =
-ret);
+> Check for NULL before accessing the buffer and use the existing
+> cleanup path to report test failure, matching the handling of
+> wb_allocation later in the function.
 >
-> My comment on v2 that this doesn't accurately test whether soft-dirty
-> is supported, potentially leading to a false pass still stands.
->
-> Please also have the courtesy to give reasonable time for review before
-> a respin.  Personally I would expect self review and testing to take
-> longer than the 80 minutes between David's feedback and v3.  Thanks,
->
+> Signed-off-by: zhangchujun <zhangchujun@cmss.chinamobile.com>
 
-Ack, my apologies. Will do.
-
---=20
-Thanks,
-Mina
+Acked-by: Nhat Pham <nphamcs@gmail.com>
