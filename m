@@ -1,97 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793826546;
-	b=djK0oacPgerkkKJUbm1U68zuIJy/VrvcDmqiyURL637RljLeYjf/o3qczcbLe+JRLdGT
-	 rSZGZr4e7L/NzQNYyemiGTbsGHweczNRkqcGMdj5DJGbblveztV+75fI2/d8cpgu/QzJ2
-	 iACEIQeNfwFT5dbSUvCbw3D+xiIhSjiP6DxO/VauNWgmy9cBYFoctAn9iPQ7Wi/3Y+Wq6
-	 8gJ7sKCn8pf/Y8G/Ql7V53HuwrPqgiXJN6t2Q4dEocVg+x+5CC/L3v4M01QXsejTRniJK
-	 Uyd7cLbStfHXlisPLKhUWlNBkeoRRGp0MlxgtWtsAyM4zkKMyQyDsSwbALcG3rp6PRw==
+	t=1793826548;
+	b=OI1o17XiRiq8HypX1S1R91Ly3WtUk+T+evH7UFFJs+HRgu2FCO5rdZySSRTD4n0oAGJ/
+	 gvdGWIlT0Ft/h8sP73yhDEqtkQvEY6moQo6EBYBlqQqY8wH24KFmzlUVtEnsS4iYEmmau
+	 o5Wqy0r2Gc1szCk4vXoyblpu+WOciL2M+KSt2UBuTqqDwKe5wjThJywjiqHR5AKpfXpYv
+	 fNCEY8vJ6YKI+6SACNb7QEAlyjTjIeHOyUj6T97rL2AoeTUg5cGJovvW9p3hb9LbRFljg
+	 3tG5zB1jy75YEJLqueiJc3QToQrfmzq7NtS3NkCpM4JfklLL38ZdK1U/jUQdORRhfIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793826546;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793826548;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=yDPvcxyyAFu2o0bBlGBxdTvgOqGA8W9gBnR8fryqjt4=;
-	b=Yrs/i1GBKmiuGIkzMS8fLLVKIpBOu8jjaxykPmUQubvanvIfz50JKh+AvcREeA0942Xu
-	 /beXnxo0Ua+DELHibP2TU5k84+kTmrbf2Yr0iADbNKM64GraNWOP94dGqtx+HX4mcoDYY
-	 tiCXmHuaENv5UG4pJB9R3l+xJgAVDSP+Biotc0Stg4GRMvY0nOQ0KRi6dEUnSBS9sOSrN
-	 /WPEesjnC6r/y70tuUPVFdV7/c1NIG6FjkTgHtGT22yCk0XVgBIRqrXYaMR0rnN2/uBXJ
-	 QIQBCvgj89y237y2uYD6NhrqPbjWOY1AYjDoSu9sHEXcUwhbN+QKuJEY46uAQNR6qqQ==
+	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
+	bh=irqZ6/3MyiMekC4JKIQxGO3/LPhRZcckOlSBTK+F8dQ=;
+	b=X0KrSMHnYMeI161nsJeOFRZtOibaJXTaFnfOTUgxmpeXKhPlimXiL4+ncGxNrPJrYFd+
+	 +xJw6BUD5Vh27hT3dhLTh444hvzhcaB+ybeqPkrys8AEv5qpfJqSUl6QL5hWAtIRUPjgD
+	 uJIJgFXU0lJiZLsYSYBll8BoJoTmungYZFoEurGyN63dc8zJF2WO9k4L+iFBYZPCiXQA6
+	 uM6FKDKZ+JokL066KeiVqw6wl1i6ifAOQG+AZM9YPj8xDPXQIy1a7NMhTnfSB5iIQdvYR
+	 QE5jXadewCijjF6l5nUDgaSX1ruRwedduqFO6fu72l7V3QO5tI5BN3+bXopoNC5ALSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pr6A0HKM;
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UEg7oruh;
+	arc=none smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7715A60A16C9
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:09:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7715A60A16C9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6123560A16DB
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:09:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6123560A16DB
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Pr6A0HKM
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b09a83d12aso607381a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:09:06 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UEg7oruh
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a35d5d4a20so12771205e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:09:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793826546; x=1794431346; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yDPvcxyyAFu2o0bBlGBxdTvgOqGA8W9gBnR8fryqjt4=;
-        b=Pr6A0HKMR+uacVoDnXqObCt7qtZxWvHFtdVrtZp/Hzd2nIVLH9iN4ZoAMZQJx452RL
-         yb1CrGhUxcRSrysdnqKgt+cJcwB1t9GaqEu+plJDv9PLO/k9h6aaFGOb+XpuyMZCmbxz
-         u9tVCymVpq3MZFEfnyb04nwaJd8pMf5vCSIKrzRCh5gl8LPnKig9qdtExSW+JGSavch6
-         SVwYcqt8THLnEU7mpwJPtPzxGwqCkdzVZwBlQx+sIWghElVmdyWN9sa/htWBxJuJAyLr
-         AjI4n96YJJ0FeU6f/5rDHlght4AY5M7c0WHNXkEMeMTW2BYhGAtay3zKpI9aJdNvpjci
-         8njw==
+        d=gmail.com; s=20260707; t=1793826546; x=1794431346; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=irqZ6/3MyiMekC4JKIQxGO3/LPhRZcckOlSBTK+F8dQ=;
+        b=UEg7oruhJEBaj6ZB2neW6iSWvxxOKi0Wv37wuZBin/3EppB4M0EOSjSnRf5+lMJzSF
+         X3P0nqm/4cMEfx0KlrClvKbM/Br7UFji3TzrxtfCC6Sf9mx1UcopnkK728VVYbQ7l7OX
+         STE6EC0EJCt/njfoPJMnCO4ZZfskJpaN+ztgkQ7RBbF0WND7fy88qzn8aFXXW6EvyQ0n
+         8HXhyxkVdFJVfOo6DuR/NPDbLrepl6n3wm155kLXN1VajbJvz4Jbtbk6i1DsW+G/WlYx
+         m9IiGgWz/pn+oFCfwTzgKhP/zqzUvvajiIth+ab3ZxiZki6c7lvTaDKWuEfwHw0Axw0A
+         D6NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1793826546; x=1794431346;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yDPvcxyyAFu2o0bBlGBxdTvgOqGA8W9gBnR8fryqjt4=;
-        b=pSaOx4aPVxJH26V6Q5BALC7I/ghoWbNhbZnBBfd5vAf+bcRkBDMNjTOFQbUhHWEbtl
-         +GJpZVM94lHNKP98jAcjkep71FjS/glzBOIPCyZXA32ED1jN8c+ZNoKBd9x9mBzmXR+g
-         r7H8LNL0F1ab/9jFvZ95slSu0xTebLY6ZiLMyiLSmhePVSBd3rTBW8MNLXYbIBCR5zJ4
-         52mO8qFy9P40dRa7tYi/9lOPPfHaBSAaEWV+ZvrGZTTgxC1Q5c1Jgq7oOoA7gue9wKeD
-         yY/RcEm0qgIJw1irkId5L4feBl0Hzvxp2w9ZoG/xlWtwEMYRDE18GDhX/0kB7flX2oKI
-         jatA==
-X-Forwarded-Encrypted: i=1; AKwUvBwG5mJRX5A151QAulsq5TAHfjE0zCVcYHptawf36FOokjwqu21bLTvni7hupfg7uwEgNW8Yf3r9Np1Ck8vqHCE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+71ZCZTHeLWEWsmrBnjLX3OtsPEEvQex9vF49+ERoY/SCfWeye
-	/YwnYYD1P8qVkRabRdQJ0IQQhDC4zYIDhA2UztvRE6ZxkTT6GP3S5KhNgahwA8OvURS16S1Ouyd
-	rUDj6uw==
-X-Gm-Gg: AYBFou1esdRUhqePBWWG+35Z38MKgs0tg4aeLNX8ZEvNBK2C/ywJb+D+Fqo6hhr1aaJ
-	dJ0eXOAu528/DFXX632LQZbcDLKcFGB90P8azAWy3hEzbMDWGX2jGqD2HnTOz56UGrMol/1a233
-	FQ1difnhEjglVgDubJTUobcYMh/6tOkMsvtF8NvGfupGiBhOpK7U8fyoXEX935Da2hTB05ROXJ3
-	WFY76SLxmstZcii6AvxzLcewj9wBqZOmfMFvT48kKDAH0LtMb/WDsdrUqi18+WUJXD0XTdF4dRv
-	eAOxRvEj6/+RZtmX4bNmUZ6M2BGEk2kNUbnSiz1USfsL9MwJDuLF7IVoFvIqFgFo+++ld6WslTv
-	KdGagfFzcrnZLcW6xqKAf287LxK73lBt17qEs7rCtXTjkWSaz37NbWS0wMtSEsmU/BbtJ5d/1in
-	p5sN2xGq/POUtljQu5ME421djCVmmCTsQsTEeuqCa/rVpHKQToPev88PeEXNzgd3P2xsnGOlyiF
-	rc9ocmcQAjK54wv2m56tKok20294mDat1pyo6dHjPOxheUWVzD9MxuzmZyHgmnmBXhbSraRTehk
-	YZD1p6AsJn9U9RvyWeSkh0jBb6XQpBFa3fzz0RxPXqIO7C3trLomJv16gwj2p9Fp
-X-Received: by 2002:a17:90b:4c81:b0:3ab:188b:c5bf with SMTP id 98e67ed59e1d1-3ae897c85e6mr14503462a91.18.1793826545271;
+        bh=irqZ6/3MyiMekC4JKIQxGO3/LPhRZcckOlSBTK+F8dQ=;
+        b=hJTL854KJZtD7r+OeivT+4so2kvSe2J2eV0brwNcvEHOGPGcxoq6EtRRAe/G00W+Wf
+         Vi+q5nXfolrwCOEqEBKEDXZrb7MPAXGWnXCopPZwbHczRl3TMcngUW56x4JfENDI/eBW
+         +5bcVWkCSDOOhXlSimZFS7619Psrp7DCAcvwO4qApvHqt8J0fsDqZtBcGhY0cbkUXgjX
+         NRmAHsguDsihMnNj5ZgcB0ynd82/hR/xb5Nfkvy7W3fGf5b8JdumFCSbJWDCmR865foH
+         64j7sqpAfEoRrOc+ytP7GteVK8OSkUmhz/wvibCmdqaHy5oZvZPM3xqcZub84OOHlGod
+         sDzw==
+X-Forwarded-Encrypted: i=1; AKwUvBzyXady2VGZjVhXsUqdQMuZ6iMBtftiihujSbAINn0gtLvEdOcWVWGF0ysse4tr5VHslYBXMOL9dAs6m4/DXyM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Z1D/HjKKSf/vqny6YlIxA1y2c9A5QWuFRn7SB6464W0jogjSm
+	MGBo5JOmDZr79DERXeM12JhPIEnwT/D9wckZb8DujWZwkn5o4xVICQ69
+X-Gm-Gg: AYBFou0/8Dba/L9wwWh/HlJSw/HwZCKFte2yOipI2xn8V6Jrlf1eQC42RG0rx45ZguW
+	lHL7g5DDsgGI6uXw50JW4g9nxIEG2bsTue4g/G4QzXq4ym/46RfOnB8PdIwArZCfue571Yev+0b
+	IWgbcrESZQJVbIeBbqqeSB2DLvBYbpI9yMao+kAtvMunq+m+gtW34Eh/NfoO9zJOwG3FWzx9IIy
+	gsTZ8Ibv7nIJNxRhedyK58h9HuZmGY2YQf9xhrhG1A4+iTRF+pTDTYoBeeFdcL2QT7GNHqjmHgA
+	c+Gz/hRcOFluw8XeSOLMFF4M4tkl8pmS/U5W6iN8lp7x9lNcG/g7l6ubwDumxkyrXVbl4uWaHXv
+	lHaavN3jrDbWMUjK7ZswSUk5bhCEkc7I2xFRrvl0/iHbVpcQ8SzLmJNYYDJq885lBBk/R4xR7nH
+	suO/tg0nsLGzwh9NGAbiEK19b6YoJ0wamgawTQ0/ydL8+z8ssRSqlQ7KBz20rszV/5ykgkVMp30
+	c8nGVBvmbprWv+RRp1x5YC1EcQzycItFfPxamG/nXuRXO8gpBAAZ/psrmSVaN8Cs1I1KAMLFiZw
+	ujrr3HqPKjgrDSexVib3gGtUGM18qa2hPBWcgRrunMd9/XOpVqBNWQ==
+X-Received: by 2002:a05:600c:1d07:b0:4a0:23f:8b0d with SMTP id 5b1f17b1804b1-4ac150b229cmr403893635e9.2.1793826545784;
         Wed, 04 Nov 2026 13:09:05 -0800 (PST)
-Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b312e45dsm668723a91.3.2026.11.04.13.09.04
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b433ebd278sm70399275e9.3.2026.11.04.13.09.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 13:09:04 -0800 (PST)
-Date: Wed, 4 Nov 2026 21:09:01 +0000
-From: David Matlack <dmatlack@google.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Alex Williamson <alex@shazbot.org>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2 5/5] KVM: selftests: List the known IOMMU modes in
- irq_test's help output
-Message-ID: <auue7S_vdnGtTM3c@google.com>
-References: <20261103002205.3348519-1-dmatlack@google.com>
- <20261103002205.3348519-6-dmatlack@google.com>
- <autHA6aNrg4s5PkV@google.com>
+        Wed, 04 Nov 2026 13:09:05 -0800 (PST)
+From: =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+Date: Wed, 04 Nov 2026 22:08:53 +0100
+Subject: [PATCH v2 07/27] selftests/landlock: Fix the ruleset_fd check in
+ empty_or_same_ruleset
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,100 +92,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <autHA6aNrg4s5PkV@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261104-selftests-refactor-v2-7-c52f23f7ce33@gmail.com>
+References: <20261104-selftests-refactor-v2-0-c52f23f7ce33@gmail.com>
+In-Reply-To: <20261104-selftests-refactor-v2-0-c52f23f7ce33@gmail.com>
+To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+X-Mailer: b4 0.15.2
 
-On 2026-11-04 06:53 AM, Sean Christopherson wrote:
-> On Tue, Nov 03, 2026, David Matlack wrote:
-> > @@ -159,7 +159,8 @@ static void help(const char *name)
-> 
-> If you're going to do s/type/mode below, then the initial help lines should also
-> use iommu_mode.
+ASSERT_LE(-1, ruleset_fd) is always true, so the test does not check
+that creating a ruleset with an empty handled_access_fs fails.  Check
+for -1 instead.
 
-Will do. I'll also rename the iommu_type variable in main() to
-iommu_mode.
+Signed-off-by: Günther Noack <gnoack3000@gmail.com>
+---
+ tools/testing/selftests/landlock/fs_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > -	printf("-t	Override the IOMMU type to use (vfio_type1_iommu or iommufd)\n");
-> > +	printf("-t	Override the IOMMU mode to use instead of auto-detecting it (%s)\n",
-> 
-> IMO, the "auto-detecting" blurb does more harm than good.  It makes the code harder
-> to read, and for me at least it's just extra noise in understanding what the '-t'
-> option does.  It also makes the line reaaaaaaally long.
-> 
-> I know the parentheses are pre-existing, but that was somewhat ok when there were
-> only two options.  With a big list, it's again noisy to reach the end and have to
-> think about that the closing ')' is terminating.
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index f725882fa4a7..7d399c097c93 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -1456,7 +1456,7 @@ TEST_F_FORK(layout1, empty_or_same_ruleset)
+ 	/* Tests empty handled_access_fs. */
+ 	ruleset_fd =
+ 		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
+-	ASSERT_LE(-1, ruleset_fd);
++	ASSERT_EQ(-1, ruleset_fd);
+ 	ASSERT_EQ(ENOMSG, errno);
+ 
+ 	/* Enforces policy which denies read access to all files. */
 
-Agreed that the auto-detect blurb and the parentheses are just noise.
-I went with a slight variation, see below.
+-- 
+2.56.0
 
-> This really should spit out only the available modes.  For the internal assert,
-> it makes sense to print all modes since that's just doing a lookup, but it's
-> annoying to have to manually probe to see what's available.
-> 
-> Juggling all vs. available is mildly tricky to avoid having to dynamically
-> allocate, but not that hard in the end.  And IMO, it's totally ok to print a
-> misleading message if a mode becomes (un)available mid-test, especially since
-> this helper is unlikely to be used except in terminal situations.
-> 
-> E.g.
-> 
-> static const char *__iommu_mode_names(bool include_unavailable)
-> {
-> 	static char all_names[256];
-> 	static char avl_names[sizeof(all_names)];
-> 	char *names = include_unavailable ? all_names : avl_names;
-> 	int i, len = 0;
-> 
-> 	if (names[0])
-> 		return names;
-> 
-> 	for (i = 0; i < ARRAY_SIZE(iommu_modes); i++) {
-> 		if (!include_unavailable && !iommu_mode_probe(&iommu_modes[i]))
-> 			continue;
-> 
-> 		len += snprintf(names + len, sizeof(all_names) - len, "%s%s",
-> 				names[0] ? ", " : "", iommu_modes[i].name);
-> 		VFIO_ASSERT_LT(len, (int)sizeof(all_names));
-> 	}
-> 
-> 	if (!names[0])
-> 		return NO_IOMMU_MODE_AVAILABLE_MSG;
-> 
-> 	return names;
-> }
-> 
-> const char *iommu_mode_names(void)
-> {
-> 	return __iommu_mode_names(false);
-> }
-
-How about listing both? That keeps -h consistent with how other KVM
-selftests list the options for their arguments (e.g. backing_src_help()
-lists every backing src type), while also showing which modes can
-actually be used. e.g. on a system with only the legacy VFIO container:
-
-  # ./irq_test -h
-  ...
-  -t	Override the IOMMU mode to use
-  	Options: iommufd, vfio_type1v2_iommu, vfio_type1_iommu, iommufd_compat_type1v2, iommufd_compat_type1
-  	Available: vfio_type1v2_iommu, vfio_type1_iommu
-
-The available modes also get printed when the requested mode is not
-available, i.e. when the __TEST_REQUIRE() fails:
-
-  # ./irq_test -d 0000:01:00.0 -t iommufd
-  1..0 # SKIP - IOMMU mode 'iommufd' is not available.  Available modes: vfio_type1v2_iommu, vfio_type1_iommu.
-
-libvfio exposes iommu_mode_names_all() and iommu_mode_names_available()
-for this, built on your helper for juggling all vs. available.
-
-> Coupled with the above, how about this:
-> 
-> 	VFIO_FAIL("Unrecognized IOMMU mode '%s'.  Known modes: %s.\n",
-> 		  iommu_mode, __iommu_mode_names(true));
-
-Will do.
-
-Thanks!
