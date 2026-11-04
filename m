@@ -1,110 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=63.250.43.119
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793822090;
-	b=OCwSnkUDZ4iFOssXTWSOzvHLQ2I5uk8keW/gcPVF7uW1C7750pxG2zXf6hHxD1ThjSb/
-	 6oi+eV8cPYW75U//5yeR8KdZL3VBHnN2cM4WBrscBRK0NMd9I/qav0ETF/qQHzf/7MW+z
-	 8zaUftvJSc9OrX4gAmD+dJgn1w3HcsXbzPvgO5/MFZaN2mAXur5qf6Z9UsMRBSXXk7jyQ
-	 5hq9+uyOQmg4DYFLRcUVT6X6dcfMPmcO8vV+jUUb0mdnXsxno/eWwwPNnmKiFw2AFI+9P
-	 EqERpXoLsZmPMjO6zPoMlRDjWW8lGDihpvweYMliphResO/GtkuNzPjqy5/pzBsNgrQ==
+	t=1793822091;
+	b=MU7uKnEvyw9wuEF+/vRlhtXNRepST5j5gmNMhHmo8WdsGAzAI5xMg+X9PEt2z8WPXcws
+	 kZRRR/DlgANUMfQdY13keoJ85I9yXNSAuim0pmqppVa0yWQiD/akw840Nc39Gcht/PkWX
+	 EOJmCzY4ijXDtz7+gRjBBUvSquwE8SMPxLu6eq0J54JLOMfkgQRVPSttypRliraPpC7vZ
+	 tVsdnBnvr7d+FQG6qwRHQHVBxSdxw/jW3BHBR6L6NafkhJ6dM/xS+VTq2k8yfnwH8J3X4
+	 bd/nRzWt62o108mW/KZKkQxqExqaNE+T0fIZzmMbXs/5avi5ey6eFJ+JHWdj7plF0Xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793822090;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=LwOyQmkvG4TrYSsjhoNvmU1CfgZA+V6RV4LLe+r+cHk=;
-	b=BEYbgCXGxeE8MQQ/bdPu3aJIqIAsQcIAEh3Ij4ZtkrfEcMT/4Yq3ajLTjmjdXQWl9BAV
-	 pIucu3TVLNBM253Wg45MtgS9KAB25y836JrLvhZBtu6JCwuMYSqXx8bdbmRiOzkSK4+Mx
-	 xCsfGl2OXYuW2/ci9M9MXTp1fhS58UIIHL1zhA+QuS8xEq34gXGMxAk2S+ahmNw7bL3C6
-	 OvC5lLTMkAMm0iG47ohMS7FJ5jQXtb/lLcRUzAdZO/gcR0HjaSDjGnU/Fj5g/ekvUmH5f
-	 YcaxjjebjLniF6YdNRlHK5ahiyzJOHnQB/PvTSa6kyoOBjsFkc+8S9K69J9RsSxePsA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822091;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Envelope-From;
+	bh=RuJing33sTSyr8nNw0srFM/fQ8v9tfQcK7zb7jIdo2o=;
+	b=OYpVvA3ASG1xPbQjnfgadvbVLyw14x36RdAvbJACGRtQFSFIW4qPWf0WzIOQ1fIF/nNv
+	 /6N7OlldE6hY7xawUjtONPd+vYFqg6vjgXdLuHCx5aMbWRAdVeVpKUFA86gLshoutkFRS
+	 S3Qj4c1KyCmHNh5XjxrUa5uxEUSXcOGcWwSK0R8Y/cQ8Kk6/pn2h5wTPYLO0dLRCBtpvF
+	 qqi2biAQX+b0Hu31QUxsQuBjeraWIDbOECHDIAFlwlKlKobTfPb6cFfYCw/AMbjs9JuXG
+	 VbY3A06aP4fKzoY+pfJ8XTalDvreak8DCtnlGsYLjiugC4A6G6wIrL+RjTi9iElUfRw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mJyOhlQt;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=tychen.cc;
+	spf=pass smtp.mailfrom=tychen.cc;
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=er5WBXSy;
+	arc=none smtp.remote-ip=63.250.43.119
+Received: from out-2uec-a119.jellyfish.systems (out-2uec-a119.jellyfish.systems [63.250.43.119])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F646098F56;
-	Wed,  4 Nov 2026 19:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32BE6099A39
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 19:54:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C32BE6099A39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mJyOhlQt
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2B01F0093A;
-	Wed,  4 Nov 2026 19:54:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793822089;
-	bh=LwOyQmkvG4TrYSsjhoNvmU1CfgZA+V6RV4LLe+r+cHk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=mJyOhlQt7v/yUeJe2KxDzjfIgCPFjEFsKvYVx2A3N/ozpWFiPJU0KUhNdF3Wnx++v
-	 sI9BCBWIdMMiP0QcpAXFpZsOn0jW7NrHt4r2cB6NkOMsL6mxo8rFKgvE84hLglCx66
-	 OqQujMha7035TQ4ZwwiVUfu7SbYHZU96GqKi/rxAVkSUfLy231e9TMVVFOEYebJCby
-	 NOwJ0wLy1EviZyidaxTUbqL58HBSyhB/XKNBxXObC0roAJt5FLGPIUnCJuWzz6FbgG
-	 K3Yv0a5upmIEZWtQAvIYMc9ZxBopPWyj6ON1cpCflNYuRijpKAoniKAIZEUIsRrLGe
-	 wTSzOu7fuS0uw==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Jann Horn <jannh@google.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Chris Mason <mason@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Christoph Hellwig <hch@lst.de>,
-	Greg Kroah-Hartman <gregkh@suse.de>,
-	Joel Granados <joel.granados@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jan Kara <jack@suse.com>,
-	linux-kernel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=er5WBXSy
+Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbkG5Bhnz2x98;
+	Wed, 04 Nov 2026 19:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1793822074;
+	bh=RuJing33sTSyr8nNw0srFM/fQ8v9tfQcK7zb7jIdo2o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=er5WBXSyGmiKEQR/BTtSMOXH+NQs+g+DYl1HoZqC0FqPcVu34FaUFXnr6p+IMbJLM
+	 MUQCYqCboZieI6+uCzM3VBHlsP5rMZcgp5MsImxMrAKhNERDzQV3v5hmvvXNI6OjYw
+	 /gtkNSyRkyR8yCirOaEBUQtbeZvQqk3PAlkBBgPbJrLO7UseVwF4UQr1DVmyt1Q8UK
+	 AXhKa0xwB9E1Srch4MDhgXsKa1g8j+c5SEjki5LPhnVzyJ3FTIyCf607lN7v1/KOKO
+	 Wk9dWwK8Koaj1vRBCX6qojFsYeZXTfwzqVxIVBOn1tVSrCpCe2Z7PCfxH+pdmabwrY
+	 RXeHgXRmvqV+g==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: Tianyi Chen <hi@tychen.cc>,
+	qmo@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
 	linux-kselftest@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org,
-	coreteam@netfilter.org,
-	kexec@lists.infradead.org,
-	linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	ibm-acpi-devel@lists.sourceforge.net,
-	jfs-discussion@lists.sourceforge.net,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-cifs@vger.kernel.org,
-	linux-fbdev@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-sh@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	sparclinux@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-doc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	Takashi Iwai <tiwai@suse.de>,
-	linux-input@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-debuggers@vger.kernel.org,
-	"Christian Brauner (Amutable)" <brauner@kernel.org>,
-	Chuck Lever <cel@kernel.org>
-Subject: [PATCH RESEND v2 20/30] sched/psi: let procfs own the wait queue of the pressure files
-Date: Wed,  4 Nov 2026 20:54:35 +0100
-Message-ID: <20261104-work-procfs-fs-v2-20-319e0f9a8aae@kernel.org>
-In-Reply-To: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
-References: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
+	shuah@kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	alexei.starovoitov@gmail.com
+Subject: [PATCH bpf-next v9 2/2] selftests/bpf: Check bpftool batch map dumps
+Date: Thu,  5 Nov 2026 04:54:13 +0900
+Message-ID: <e4cd18723b893385d66232276f44049bb86c8e51.1793821981.git.hi@tychen.cc>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <cover.1793821981.git.hi@tychen.cc>
+References: <cover.1793821981.git.hi@tychen.cc>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -114,180 +76,317 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6098; i=brauner@kernel.org; h=from:subject:message-id; bh=CeHhvuLOJ2DxGx1mSjted70KaKApRIjx6GoOIAUH5Kc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS97nEOnuN4eKv7y+UynWu9t7p/P/D2dPOuOt7MtW4RY cbN7Z4KHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABPZtpnhnzqLca7vmStVc8on LzvQtZvr1cV7Wl6vAr9Pan8zzeRX1XOG/zVVv26edFdZ+WTuhnfLRZpsnu+SuzP1+Nxz33L9reT Tf/MDAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-A trigger on one of the /proc/pressure files has a wait queue of its
-own for its poller, the cgroup pressure files use the queue of their
-kernfs node through kernfs_generic_poll() and kernfs_notify(). procfs
-owns the queue of its pressure files now, so use it the same way: the
-poll_wait() is procfs', and a trigger that fires wakes the pollers of
-its file with proc_poll_notify(). Like for the cgroup files every
-poller of the file is woken when any trigger on it fires, and each
-reports the state of its own trigger. psi_trigger_poll() doesn't need
-the file anymore.
+Batched dumps must print the same output as individual lookups. Use an
+fmod_ret program on security_bpf() to count the map lookups made by
+bpftool children of the test, and to fail batch lookups with -EBUSY.
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+For each map type with batched lookups, compare plain and JSON dumps
+with a dump whose batch lookups all fail, and check that no individual
+lookups were needed. Cover BTF and per-CPU output, an empty map, 1-byte
+keys and unaligned values. With 4 KiB values, check dumps that need
+several batches, and that failing the first or second batch lookup
+continues with individual lookups without restarting the dump.
+
+Pre-size RHASH maps so asynchronous growth does not race with the
+order-sensitive dump comparisons.
+
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- include/linux/psi.h       |  3 +--
- include/linux/psi_types.h |  8 +++++---
- kernel/cgroup/cgroup.c    |  2 +-
- kernel/sched/psi.c        | 30 +++++++++++++++++-------------
- 4 files changed, 24 insertions(+), 19 deletions(-)
+ .../bpf/prog_tests/bpftool_map_batch.c        | 231 ++++++++++++++++++
+ .../selftests/bpf/progs/bpftool_map_batch.c   |  42 ++++
+ 2 files changed, 273 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpftool_map_batch.c
 
-diff --git a/include/linux/psi.h b/include/linux/psi.h
-index 7966e3ac03b9..c6f536631411 100644
---- a/include/linux/psi.h
-+++ b/include/linux/psi.h
-@@ -30,8 +30,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group, char *buf,
- int psi_trigger_create_rtpoll_worker(struct psi_group *group);
- void psi_trigger_destroy(struct psi_trigger *t);
- 
--__poll_t psi_trigger_poll(void **trigger_ptr, struct file *file,
--			poll_table *wait);
-+__poll_t psi_trigger_poll(void **trigger_ptr, poll_table *wait);
- 
- #ifdef CONFIG_CGROUPS
- static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index dd10c22299ab..ce772575c5da 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -8,6 +8,8 @@
- #include <linux/kref.h>
- #include <linux/wait.h>
- 
-+struct proc_dir_entry;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+new file mode 100644
+index 0000000000000..4cca77f410a06
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+@@ -0,0 +1,231 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <arpa/inet.h>
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include "bpftool_helpers.h"
++#include "bpftool_map_batch.skel.h"
 +
- #ifdef CONFIG_PSI
- 
- /* Tracked task states */
-@@ -132,12 +134,12 @@ struct psi_trigger {
- 	/* Backpointer needed during trigger destruction */
- 	struct psi_group *group;
- 
--	/* Wait queue for polling */
--	wait_queue_head_t event_wait;
--
- 	/* Kernfs file for cgroup triggers */
- 	struct kernfs_open_file *of;
- 
-+	/* /proc/pressure file for system triggers, see proc_poll_notify() */
-+	struct proc_dir_entry *pde;
++/* Fits the plain and JSON dumps of the multi-batch cases below. */
++#define OUTPUT_SIZE (8U << 20)
 +
- 	/* Pending event flag */
- 	int event;
- 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index a284225f8dc9..c5da33495ae3 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -4232,7 +4232,7 @@ static __poll_t cgroup_pressure_poll(struct kernfs_open_file *of,
- {
- 	struct cgroup_file_ctx *ctx = of->priv;
- 
--	return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
-+	return psi_trigger_poll(&ctx->psi.trigger, pt);
- }
- 
- static void cgroup_pressure_release(struct kernfs_open_file *of)
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index cdb7a832333a..97b5e2488106 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -514,7 +514,7 @@ static void update_triggers(struct psi_group *group, u64 now,
- 			if (t->of)
- 				kernfs_notify(t->of->kn);
- 			else
--				wake_up_interruptible(&t->event_wait);
-+				proc_poll_notify(t->pde);
- 		}
- 		t->last_event_time = now;
- 		/* Reset threshold breach flag once event got generated */
-@@ -1327,6 +1327,9 @@ int psi_trigger_create_rtpoll_worker(struct psi_group *group)
- 	return 0;
- }
- 
-+/* the /proc/pressure files, see psi_proc_init() */
-+static struct proc_dir_entry *psi_proc_entry[NR_PSI_RESOURCES];
++struct dump_case {
++	const char *name;
++	enum bpf_map_type type;
++	__u32 key_size;
++	__u32 value_size;
++	__u32 entries;
++	bool btf;
++	/* Values large enough that the 1 MiB budget needs several batches. */
++	bool multi_batch;
++};
 +
- struct psi_trigger *psi_trigger_create(struct psi_group *group, char *buf,
- 				       enum psi_res res, struct file *file,
- 				       struct kernfs_open_file *of,
-@@ -1392,8 +1395,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group, char *buf,
- 	t->event = 0;
- 	t->last_event_time = 0;
- 	t->of = of;
--	if (!of)
--		init_waitqueue_head(&t->event_wait);
-+	t->pde = of ? NULL : psi_proc_entry[res];
- 	t->pending_event = false;
- 	t->aggregator = privileged ? PSI_POLL : PSI_AVGS;
- 
-@@ -1441,7 +1443,7 @@ void psi_trigger_destroy(struct psi_trigger *t)
- 	if (t->of)
- 		kernfs_notify(t->of->kn);
- 	else
--		wake_up_interruptible(&t->event_wait);
-+		proc_poll_notify(t->pde);
- 
- 	if (t->aggregator == PSI_AVGS) {
- 		mutex_lock(&group->avgs_lock);
-@@ -1495,8 +1497,7 @@ void psi_trigger_destroy(struct psi_trigger *t)
- 	kfree(t);
- }
- 
--__poll_t psi_trigger_poll(void **trigger_ptr,
--				struct file *file, poll_table *wait)
-+__poll_t psi_trigger_poll(void **trigger_ptr, poll_table *wait)
- {
- 	__poll_t ret = DEFAULT_POLLMASK;
- 	struct psi_trigger *t;
-@@ -1508,10 +1509,9 @@ __poll_t psi_trigger_poll(void **trigger_ptr,
- 	if (!t)
- 		return DEFAULT_POLLMASK | EPOLLERR | EPOLLPRI;
- 
-+	/* a /proc/pressure file is polled on the queue procfs owns for it */
- 	if (t->of)
- 		kernfs_generic_poll(t->of, wait);
--	else
--		poll_wait(file, &t->event_wait, wait);
- 
- 	if (cmpxchg(&t->event, 1, 0) == 1)
- 		ret |= EPOLLPRI;
-@@ -1610,7 +1610,7 @@ static __poll_t psi_fop_poll(struct file *file, poll_table *wait)
- {
- 	struct seq_file *seq = file->private_data;
- 
--	return psi_trigger_poll(&seq->private, file, wait);
-+	return psi_trigger_poll(&seq->private, wait);
- }
- 
- static int psi_fop_release(struct inode *inode, struct file *file)
-@@ -1670,11 +1670,15 @@ static int __init psi_proc_init(void)
- {
- 	if (psi_enable) {
- 		proc_mkdir("pressure", NULL);
--		proc_create("pressure/io", 0666, NULL, &psi_io_proc_ops);
--		proc_create("pressure/memory", 0666, NULL, &psi_memory_proc_ops);
--		proc_create("pressure/cpu", 0666, NULL, &psi_cpu_proc_ops);
-+		psi_proc_entry[PSI_IO] = proc_create("pressure/io", 0666, NULL,
-+						     &psi_io_proc_ops);
-+		psi_proc_entry[PSI_MEM] = proc_create("pressure/memory", 0666,
-+						      NULL, &psi_memory_proc_ops);
-+		psi_proc_entry[PSI_CPU] = proc_create("pressure/cpu", 0666, NULL,
-+						      &psi_cpu_proc_ops);
- #ifdef CONFIG_IRQ_TIME_ACCOUNTING
--		proc_create("pressure/irq", 0666, NULL, &psi_irq_proc_ops);
-+		psi_proc_entry[PSI_IRQ] = proc_create("pressure/irq", 0666, NULL,
-+						      &psi_irq_proc_ops);
- #endif
- 	}
- 	return 0;
-
++static bool is_percpu(enum bpf_map_type type)
++{
++	return type == BPF_MAP_TYPE_PERCPU_HASH ||
++	       type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
++	       type == BPF_MAP_TYPE_PERCPU_ARRAY;
++}
++
++static int run_dump(struct bpftool_map_batch *skel, __u32 id, bool json,
++		    int fail_batch, char *output)
++{
++	char command[64];
++	int err;
++
++	snprintf(command, sizeof(command), "%smap dump id %u",
++		 json ? "-j " : "", id);
++	skel->bss->fail_batch = fail_batch;
++	skel->bss->batch_calls = 0;
++	skel->bss->elem_calls = 0;
++	output[0] = '\0';
++	err = get_bpftool_command_output(command, output, OUTPUT_SIZE);
++	if (!ASSERT_LT(strlen(output), OUTPUT_SIZE - 1, "output_fits"))
++		return -1;
++	return err;
++}
++
++static void check_same(const char *output, const char *expected, const char *name)
++{
++	size_t i;
++
++	for (i = 0; output[i] && output[i] == expected[i]; i++)
++		;
++	if (!ASSERT_EQ(output[i], expected[i], name))
++		printf("%s: first difference at offset %zu\n", name, i);
++}
++
++/* Failing every batch lookup gives the dump of individual lookups. */
++static void check_dump(struct bpftool_map_batch *skel, const struct dump_case *test,
++		       __u32 id, bool json, char *expected, char *output)
++{
++	int fail;
++
++	if (!ASSERT_OK(run_dump(skel, id, json, -1, expected), "individual_dump") ||
++	    !ASSERT_EQ(skel->bss->elem_calls, test->entries, "individual_lookups"))
++		return;
++
++	if (!ASSERT_OK(run_dump(skel, id, json, 0, output), "batch_dump"))
++		return;
++	ASSERT_GE(skel->bss->batch_calls, test->multi_batch ? 2 : 1, "batch_calls");
++	ASSERT_EQ(skel->bss->elem_calls, 0, "batch_only");
++	check_same(output, expected, "batch_output");
++
++	if (!test->multi_batch)
++		return;
++	/* Fail before and after a batch has been printed. */
++	for (fail = 1; fail <= 2; fail++) {
++		if (!ASSERT_OK(run_dump(skel, id, json, fail, output), "fallback_dump"))
++			return;
++		ASSERT_EQ(skel->bss->batch_calls, fail, "fallback_batch_calls");
++		if (fail == 1) {
++			ASSERT_EQ(skel->bss->elem_calls, test->entries, "fallback_lookups");
++		} else {
++			ASSERT_GT(skel->bss->elem_calls, 0, "resumed_lookups");
++			ASSERT_LT(skel->bss->elem_calls, test->entries, "not_restarted");
++		}
++		check_same(output, expected, "fallback_output");
++	}
++}
++
++static void fill_bytes(void *buf, __u32 size, __u32 seed)
++{
++	__u8 *bytes = buf;
++	__u32 i;
++
++	for (i = 0; i < size; i++)
++		bytes[i] = seed * 37 + i;
++}
++
++static void run_case(struct bpftool_map_batch *skel, const struct dump_case *test,
++		     char *expected, char *output)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts);
++	int fd = -1, inner_fd = -1, cpus = 1, cpu;
++	struct bpf_map_info info = {};
++	__u32 len = sizeof(info);
++	__u32 i, max_entries, stride;
++	struct btf *btf = NULL;
++	__u8 key[8] = {};
++	void *values = NULL;
++
++	if (is_percpu(test->type)) {
++		cpus = libbpf_num_possible_cpus();
++		if (!ASSERT_GT(cpus, 0, "possible_cpus"))
++			return;
++	}
++	stride = is_percpu(test->type) ? (test->value_size + 7) & ~7U : test->value_size;
++	values = calloc(cpus, stride);
++	if (!ASSERT_OK_PTR(values, "values"))
++		return;
++
++	if (test->btf) {
++		btf = btf__new_empty();
++		if (!ASSERT_OK_PTR(btf, "btf_new") ||
++		    !ASSERT_EQ(btf__add_int(btf, "unsigned int", 4, 0), 1, "btf_int") ||
++		    !ASSERT_OK(btf__load_into_kernel(btf), "btf_load"))
++			goto out;
++		opts.btf_fd = btf__fd(btf);
++		opts.btf_key_type_id = 1;
++		opts.btf_value_type_id = 1;
++	}
++	if (test->type == BPF_MAP_TYPE_ARRAY_OF_MAPS ||
++	    test->type == BPF_MAP_TYPE_HASH_OF_MAPS) {
++		inner_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "batch_inner", 4, 4, 1, NULL);
++		if (!ASSERT_OK_FD(inner_fd, "inner_map"))
++			goto out;
++		opts.inner_map_fd = inner_fd;
++	}
++	if (test->type == BPF_MAP_TYPE_LPM_TRIE || test->type == BPF_MAP_TYPE_RHASH)
++		opts.map_flags = BPF_F_NO_PREALLOC;
++	max_entries = test->entries ?: 1;
++	/* Leave room for per-CPU LRU free lists instead of testing eviction. */
++	if (test->type == BPF_MAP_TYPE_LRU_HASH ||
++	    test->type == BPF_MAP_TYPE_LRU_PERCPU_HASH)
++		max_entries *= 4;
++	/* Avoid asynchronous growth during dump comparisons. */
++	if (test->type == BPF_MAP_TYPE_RHASH)
++		opts.map_extra = max_entries;
++
++	fd = bpf_map_create(test->type, "batch_dump", test->key_size,
++			    test->value_size, max_entries, &opts);
++	if (!ASSERT_OK_FD(fd, "map_create"))
++		goto out;
++	for (i = 0; i < test->entries; i++) {
++		if (test->type == BPF_MAP_TYPE_LPM_TRIE) {
++			__u32 prefix[] = { 32, htonl(i) };
++
++			memcpy(key, prefix, sizeof(prefix));
++		} else if (test->key_size == 1) {
++			key[0] = (__u8)i;
++		} else {
++			/* Array map indices use native byte order. */
++			memcpy(key, &i, sizeof(i));
++		}
++		if (inner_fd >= 0)
++			memcpy(values, &inner_fd, sizeof(inner_fd));
++		else
++			for (cpu = 0; cpu < cpus; cpu++)
++				fill_bytes(values + cpu * stride, test->value_size,
++					   i + cpu * 101);
++		if (!ASSERT_OK(bpf_map_update_elem(fd, key, values, BPF_ANY), "map_update"))
++			goto out;
++	}
++	if (!ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &len), "map_info"))
++		goto out;
++
++	check_dump(skel, test, info.id, false, expected, output);
++	check_dump(skel, test, info.id, true, expected, output);
++out:
++	if (fd >= 0)
++		close(fd);
++	if (inner_fd >= 0)
++		close(inner_fd);
++	btf__free(btf);
++	free(values);
++}
++
++void test_bpftool_map_batch(void)
++{
++	static const struct dump_case cases[] = {
++		{ "hash", BPF_MAP_TYPE_HASH, 4, 4, 100 },
++		{ "empty", BPF_MAP_TYPE_HASH, 4, 4, 0 },
++		/* The hash cursor is wider than the key; values are unaligned. */
++		{ "odd_sizes", BPF_MAP_TYPE_HASH, 1, 3, 100 },
++		{ "btf", BPF_MAP_TYPE_HASH, 4, 4, 100, true },
++		{ "lru_hash", BPF_MAP_TYPE_LRU_HASH, 4, 4, 100 },
++		{ "percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 3, 100 },
++		{ "lru_percpu_hash", BPF_MAP_TYPE_LRU_PERCPU_HASH, 4, 4, 100 },
++		{ "btf_percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 4, 100, true },
++		{ "rhash", BPF_MAP_TYPE_RHASH, 4, 4, 100 },
++		{ "array", BPF_MAP_TYPE_ARRAY, 4, 4, 100 },
++		{ "percpu_array", BPF_MAP_TYPE_PERCPU_ARRAY, 4, 3, 100 },
++		{ "lpm_trie", BPF_MAP_TYPE_LPM_TRIE, 8, 4, 100 },
++		{ "array_of_maps", BPF_MAP_TYPE_ARRAY_OF_MAPS, 4, 4, 100 },
++		{ "hash_of_maps", BPF_MAP_TYPE_HASH_OF_MAPS, 4, 4, 100 },
++		/* Bucket and key cursors, up to 255 entries per batch. */
++		{ "multi_batch_hash", BPF_MAP_TYPE_HASH, 4, 4096, 256, false, true },
++		{ "multi_batch_array", BPF_MAP_TYPE_ARRAY, 4, 4096, 256, false, true },
++	};
++	struct bpftool_map_batch *skel;
++	char *expected = NULL, *output = NULL;
++	unsigned int i;
++
++	skel = bpftool_map_batch__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		return;
++	skel->bss->test_tgid = getpid();
++	if (!ASSERT_OK(bpftool_map_batch__attach(skel), "skel_attach"))
++		goto out;
++	expected = malloc(OUTPUT_SIZE);
++	output = malloc(OUTPUT_SIZE);
++	if (!ASSERT_OK_PTR(expected, "expected") || !ASSERT_OK_PTR(output, "output"))
++		goto out;
++
++	for (i = 0; i < ARRAY_SIZE(cases); i++)
++		if (test__start_subtest(cases[i].name))
++			run_case(skel, &cases[i], expected, output);
++out:
++	free(expected);
++	free(output);
++	bpftool_map_batch__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpftool_map_batch.c b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
+new file mode 100644
+index 0000000000000..0ca6f7973e880
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++#define EBUSY 16
++
++char _license[] SEC("license") = "GPL";
++
++/* The test process; bpftool runs as its child or grandchild via popen(). */
++int test_tgid;
++/* 1-based batch lookup to fail, -1 to fail all of them, 0 for none. */
++int fail_batch;
++int batch_calls;
++int elem_calls;
++
++static bool is_test_bpftool(void)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++
++	return BPF_CORE_READ(task, real_parent, tgid) == test_tgid ||
++	       BPF_CORE_READ(task, real_parent, real_parent, tgid) == test_tgid;
++}
++
++SEC("fmod_ret/security_bpf")
++int BPF_PROG(count_bpftool_lookups, int cmd, union bpf_attr *attr,
++	     unsigned int size, bool kernel)
++{
++	if (kernel || !is_test_bpftool())
++		return 0;
++
++	if (cmd == BPF_MAP_LOOKUP_ELEM) {
++		elem_calls++;
++	} else if (cmd == BPF_MAP_LOOKUP_BATCH) {
++		batch_calls++;
++		/* Trigger fallback rather than end-of-iteration (-ENOENT). */
++		if (fail_batch < 0 || fail_batch == batch_calls)
++			return -EBUSY;
++	}
++	return 0;
++}
 -- 
-2.53.0
+2.56.0
 
