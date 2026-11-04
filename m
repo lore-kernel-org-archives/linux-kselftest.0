@@ -1,55 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793753084;
-	b=zQCwA7xKKsokyK+PmU5vd4JFP6FVSCwjCC5eKsGjtHmOrO4BQQ4DpGBTu+AHj3fmVr5V
-	 HOQpDrEIlDhwL9gDu19lZ5r3prAJxxdWmuz+uwMubemdxUG+P46g4SJyE7ptuQoDqzTx1
-	 t62ZdWkfhKq7jyzDDLpDPLsRx3n6+HPfPYDHDdxHi71UJXpOlK2Ioptoyy2yktCCTJZfk
-	 E6GJZXvhRj6DHCwD7agJXa2hWQ9tuke8fdaY5Ql7S5LwoIk2UvKNU07DabRzNo3wKNnBD
-	 6mNV8MEsKkGP4NzPxNcfRjoJDq9QlqCxSePaUquXNWuAaDNgsDOf9XzbEhc3LjGT/sg==
+	t=1793753085;
+	b=s5q8/eaSKeW8+WY2qKVolhjAZulZx892WBe64tUPWXuHxec1ZtU1J8JNS0oYqYtW18de
+	 KfZHGiEkCmq0me9bVIWxr2CSddzPXqWnAFLESrk1aQzOeAOyAxmhrjo5R+8sHkfQPq/nG
+	 bz/SWCdmsDX21Dvp6qvs0dSRWfebzog7WHHz4aib2HZ4Bw4fucWdRqy+KmmOJmORGqGZw
+	 EpTTCcf4I0/H3pBNaeZRV4JQIdI1oT1WNQucuDZsjDu7mDKBjQTH86I9/cRNfUk6oEgas
+	 hT3j446FaUmLJfpqvAWdKp1T8t6cpIVLAtMr/1B3NyVW03HnfPU5Lxoo8Eor1IamSOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793753084;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793753085;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=Ped2xn6GpwSUqsZ+O4fRYGiZsrjuxF7xbLOr6gCO5yk=;
-	b=Q4jOhn6UjBYr5vvFI/XHlIMgrRHPNmPB7ppji0NdXEVVY3TXF2y1QnFCqrFFTBoY7vzv
-	 3KZlqH1Z9EyGjLIZk0uUeOeUI1U+c0xyAzWUaKD4ECa3ebzYfsOE5Kr8xl8Q9LVCcI0Ec
-	 xtO+JgWX25MDZNrtau2BBzbihKCQ0ibSge78Bfp8P70suy5eXZvpHcoXyJCa3IsysvNiY
-	 LPrZcNfIfamSSvIySYaPX0e6vT+O+c7/SmvSPtsLFeAn9eNmttQMRpniF7+A57o4R3o52
-	 HyRVK5yEZoNrNg9DGf2VcCrL3OSU98VMJLq2FXaV9442Em/uL6AX6eEXXPFRYOXxAFg==
+	bh=Jre6mNlia4lO0vOgzXU982il6damrPS9ITgvm+XnwMk=;
+	b=oKgpmUX2w31uHqicG0eZGwMH8JBUO1fLEsDFg8rOAObKaiHdv5Vfoha2kZ8AzGkGmbRg
+	 p379DqlalYt110qS8Dxj5pdgcZmzEvLeEoDBVZGnyjCZEMMQLkyUl2VUIXzc3ufPbjPzn
+	 64p5QES7Znp4TAofOzGmFHoVRVADKA5gkKsx/+jAaOiG/XFRxQV+q1SVWfjel5Q+2jh4y
+	 KScXC+Ov5PZvvb+N1SO4kqoYuWfuS4HLarbfnSc8Z6Oict6tlucUYZYMdsA8vNwt4Zcl+
+	 nLKBs76aIYBMB+i0NTaFxUozESkcC2VssXHGiiUc1SI74Wib7t1MkgghX67AB8+So1w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="m+I/V2PT";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TDxA0ZLg;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9951606A31B;
-	Wed,  4 Nov 2026 00:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C203B606A328;
+	Wed,  4 Nov 2026 00:44:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m+I/V2PT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DC11F00919;
-	Wed,  4 Nov 2026 00:44:43 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TDxA0ZLg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133171F000C1;
+	Wed,  4 Nov 2026 00:44:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793753083;
-	bh=Ped2xn6GpwSUqsZ+O4fRYGiZsrjuxF7xbLOr6gCO5yk=;
+	s=k20260515; t=1793753084;
+	bh=Jre6mNlia4lO0vOgzXU982il6damrPS9ITgvm+XnwMk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=m+I/V2PTBOm9X/Ekvvy9TISlLwWPoZMj6Lo1J60okmN58SIWLmCmQ7WhZL8e3UPhK
-	 oz7G0QaZ6Dy+ycyAu8lFoPheIVMHH7dlVLhTSw8a44bbzCuSN+dzWHMW0wvXqVNeEc
-	 DeRTL4r+y597I7qIkicsp8uOGkW6XFnn48oL+UhFbjgtFI77goUReBf4gWh+vqtDvN
-	 kYjkZ8fBhvvtUbQ8AFQYCsx9+6/q5Jlo9E59QE1U+fackdE/cuBYqE1Ua7+K05mNbz
-	 WMCUQ44JgtpfMCA5NvWsPwlI3QGh9H/BV8ndmpRC4/qiLWlRdHy48af4bk8xFHKYhs
-	 3lQdCZVt4hKbQ==
-Subject: Re: [PATCH net v4 1/7] net/mlx5e: psp: drop ipv6 packets with
- extension headers
+	b=TDxA0ZLgZvMhZGIe4+NRxPSflwTeRfXZmIkAoBASu5bFwd1qoY5Hl8WNfB/VgAa6u
+	 uc25kIjyq8JMVAfVEd6l79mr57XA39BV/LXCRIZty71u/SYS60BZh5R3WZwZIuCXYr
+	 MsqTqSM1Gd2UsCMuds5/MShl8ImO7R/22yO2TaraWj5GoBXba8tAUCHC1HGjMy2cqh
+	 d1h3nERtJIeusUFylsjfB1MrqX9hg8Vq+PJ4i7dLD6O1Amu1ElU+Pww4kh91nYmd90
+	 p22lulppZKAHoBvq0weQ/KBmugS0yMFZ+q+/COmfSdBy15vrjOjMUL0FFHVfxOT8ZL
+	 QwDp8X1M2CnKg==
+Subject: Re: [PATCH net v4 2/7] net: don't fragment decrypted skbs
 From: netdev-bot+sashiko@kernel.org
 To: toddfreed@meta.com
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  sashiko-bot@kernel.org, kuba@kernel.org, bjorn@kernel.org
-Date: Wed, 04 Nov 2026 00:44:42 +0000
-Message-ID: <179375308260.488856.17581878664897272479@kernel.org>
-In-Reply-To: <20261103001143.246081-2-toddfreed@meta.com>
-References: <20261103001143.246081-2-toddfreed@meta.com>
+Date: Wed, 04 Nov 2026 00:44:43 +0000
+Message-ID: <179375308359.488856.7259635335257893530@kernel.org>
+In-Reply-To: <20261103001143.246081-3-toddfreed@meta.com>
+References: <20261103001143.246081-3-toddfreed@meta.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,7 +65,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 0 (1) · Low: 0
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -74,147 +73,105 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] The patch rejects only some packets, and it does so in mlx5.
-
-Pre-existing issues:
-- [Medium] This problem wasn't introduced by this patch, but the patch
-  adds a new, user-triggerable way to reach it.
+- [High] The patch is titled "net: don't fragment decrypted skbs", but
+  the check it adds lives only in the IPv4 fragmenter, ip_do_fragment()…
 
 --
 
-net/mlx5e: psp: drop ipv6 packets with extension headers
+net: don't fragment decrypted skbs
 
-This adds an mlx5 check, mlx5e_psp_l4_is_tcp(), that drops PSP-associated
-TX packets when TCP does not directly follow the fixed L3 header. IPv6
-packets with extension headers are now dropped instead of going out
-malformed and unencrypted. It also adds a comment to
-psp_dev_encapsulate() saying the helper assumes there are no IPv6
-extension headers.
+This patch makes ip_do_fragment() drop skbs that have skb->decrypted set
+and return -EMSGSIZE. Without it, fragments of a kTLS offload or PSP
+packet lose the decrypted mark and can be sent unencrypted. The commit
+message says IPv6 needs no change, because ip6_fragment() refuses
+oversized skbs unless ignore_df is set.
 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-> index 348fd7a962615..c9829a124c533 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-
-[ ... ]
-
-> @@ -170,8 +183,9 @@ bool mlx5e_psp_handle_tx_skb(struct net_device *netdev,
->  	if (!mlx5e_psp_set_state(priv, skb, psp_st))
->  		return true;
+> diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+> index eaa6fabda347e..415bc4d524b58 100644
+> --- a/net/ipv4/ip_output.c
+> +++ b/net/ipv4/ip_output.c
+> @@ -770,6 +770,14 @@ int ip_do_fragment(struct net *net, struct sock *sk, struct sk_buff *skb,
+>  	struct ip_frag_state state;
+>  	int err = 0;
 >  
-> -	/* psp_encap of the packet */
-> -	if (!psp_dev_encapsulate(net, skb, psp_st->spi, psp_st->ver, 0)) {
-> +	/* psp_encap of the packet. only tcp right after the ip header */
-> +	if (unlikely(!mlx5e_psp_l4_is_tcp(skb)) ||
-> +	    !psp_dev_encapsulate(net, skb, psp_st->spi, psp_st->ver, 0)) {
->  		kfree_skb_reason(skb, SKB_DROP_REASON_PSP_OUTPUT);
->  		atomic_inc(&priv->psp->tx_drop);
->  		return false;
-
-[Severity: Medium]
-This is a pre-existing issue, but this patch gives userspace a new
-and predictable way to hit it.
-
-When this returns false, mlx5e_accel_tx_begin() fails, and mlx5e_xmit()
-returns without flushing the SQ:
-
-drivers/net/ethernet/mellanox/mlx5/core/en_tx.c:mlx5e_xmit() {
-    ...
-	/* May send SKBs and WQEs. */
-	if (unlikely(!mlx5e_accel_tx_begin(dev, sq, skb, &accel)))
-		return NETDEV_TX_OK;
-    ...
-}
-
-Suppose the previous packet on the same SQ was posted with
-xmit_more=true. Its doorbell was then deferred in
-mlx5e_txwqe_complete():
-
-	send_doorbell = __netdev_tx_sent_queue(sq->txq, attr->num_bytes, xmit_more);
-	if (send_doorbell)
-		mlx5e_notify_hw(wq, sq->pc, sq->uar_map, cseg);
-
-In the MPWQE path, the session can also be left open by
-mlx5e_sq_xmit_mpwqe().
-
-The DMA error paths in mlx5e_sq_xmit_wqe() and mlx5e_sq_xmit_mpwqe() call
-mlx5e_tx_flush() for this reason. The accel drop path does not call it.
-
-Before this patch, the PSP part of this path was only reached when
-psp_dev_encapsulate() failed, for example when skb_cow_head() ran out of
-memory. With mlx5e_psp_l4_is_tcp(), every PSP-associated IPv6 packet with
-an extension header takes this path. Such headers can come from
-IPV6_RTHDR, IPV6_DSTOPTS or IPV6_HOPOPTS on the socket, or from a route.
-
-If such a packet is the last one in a qdisc bulk dequeue batch, the
-earlier descriptors are not announced to the NIC. They stay that way
-until the next successful transmit on that SQ. Since the queue is not
-stopped, the TX watchdog will not fire either.
-
-Should the accel drop path in mlx5e_xmit() call mlx5e_tx_flush() like the
-other drop paths do?
-
-[ ... ]
-
-> diff --git a/net/psp/psp_main.c b/net/psp/psp_main.c
-> index c9c1a8826b7f9..5049ed400be07 100644
-> --- a/net/psp/psp_main.c
-> +++ b/net/psp/psp_main.c
-> @@ -272,6 +272,7 @@ bool psp_dev_encapsulate(struct net *net, struct sk_buff *skb, __be32 spi,
->  		ip_hdr(skb)->check =
->  			ip_fast_csum((u8 *)ip_hdr(skb), ip_hdr(skb)->ihl);
->  	} else {
-> +		/* assumes there are no ipv6 extension headers */
->  		ipv6_hdr(skb)->nexthdr = IPPROTO_UDP;
->  		be16_add_cpu(&ipv6_hdr(skb)->payload_len, PSP_ENCAP_HLEN);
->  	}
+> +	/* psp and tls offload need the packet's l4 header, which non-initial
+> +	 * fragments do not have
+> +	 */
+> +	if (unlikely(skb_is_decrypted(skb))) {
+> +		err = -EMSGSIZE;
+> +		goto fail;
+> +	}
+> +
 
 [Severity: High]
-Should this assumption be enforced in psp_dev_encapsulate() rather than
-only documented?
+Does ip6_fragment() need the same check? The commit message says:
 
-The malformed packet is built here, in the shared helper. bufflen
-includes skb_network_header_len(), so udp+psp is inserted after any
-extension headers. Then only the fixed header's nexthdr is rewritten to
-UDP, and psp_write_headers() sets the PSP nexthdr to TCP.
+  an ipv6 tcp socket does not ever emit fragments. ip6_fragment() refuses
+  skbs bigger than the mtu unless ignore_df is set, which tcp doesn't set.
 
-The new check, mlx5e_psp_l4_is_tcp(), only covers mlx5. The other caller,
-nsim_do_psp() in drivers/net/netdevsim/psp.c, has no such check:
+TCP doesn't set ignore_df itself, but IPVS sets it on locally generated
+IPv6 skbs, for example in ip_vs_bypass_xmit_v6() and ip_vs_dr_xmit_v6():
 
-drivers/net/netdevsim/psp.c:nsim_do_psp() {
+net/netfilter/ipvs/ip_vs_xmit.c:ip_vs_dr_xmit_v6() {
     ...
-	net = sock_net(skb->sk);
-	if (!psp_dev_encapsulate(net, skb, pas->tx.spi, pas->version, 0)) {
-		rc = SKB_DROP_REASON_PSP_OUTPUT;
-		goto out_unlock;
-	}
+	/* Another hack: avoid icmp_send in ip_fragment */
+	skb->ignore_df = 1;
     ...
 }
 
-So with netdevsim, a PSP-associated IPv6 TCP socket that has IPV6_RTHDR,
-IPV6_DSTOPTS or IPV6_HOPOPTS set, or uses a route that adds extension
-headers, still sends the malformed packet to the peer.
+When ignore_df is set, the only size check in ip6_fragment() does not
+fire:
 
-The selftest patch in this series ("selftests: drv-net: psp: test ipv6
-tcp socket with extension headers") says that netdevsim encapsulates
-these packets "in a malformed way". It skips netdevsim instead of fixing
-it:
+net/ipv6/ip6_output.c:ip6_fragment() {
+    ...
+	mtu = ip6_skb_dst_mtu(skb);
+    ...
+	if (unlikely(!skb->ignore_df && skb->len > mtu))
+		goto fail_toobig;
+    ...
+}
 
-    # netdevsim doesn't drop them: it sends them malformed
-    cfg.require_nsim(nsim_test=False)
+IPVS has its own MTU check in __ip_vs_get_out_rt_v6() ->
+ensure_mtu_is_adequate(), but that check uses dst_mtu(&rt->dst).
 
-psp_dev_encapsulate() already validates its input and returns false for
-a non-IP skb->protocol:
+ip6_skb_dst_mtu() switches to the device MTU when the socket has
+IPV6_PMTUDISC_PROBE or higher set:
 
-	if (skb->protocol != htons(ETH_P_IP) &&
-	    skb->protocol != htons(ETH_P_IPV6))
-		return false;
+	if (np && READ_ONCE(np->pmtudisc) >= IPV6_PMTUDISC_PROBE) {
+		mtu = READ_ONCE(dst_dev(dst)->mtu);
 
-Both callers treat false as a drop with SKB_DROP_REASON_PSP_OUTPUT.
+ip_metrics_convert() caps RTAX_MTU at 65520, not at the device MTU, so a
+route MTU above the device MTU is accepted.
 
-Could the "TCP directly follows the fixed L3 header" check go next to
-that existing check instead? That would fix both callers, protect any
-future users of the helper, and make mlx5e_psp_l4_is_tcp() unnecessary.
+That seems to open this path for an IPv6 kTLS offload or PSP socket that
+uses IPV6_PMTUDISC_PROBE, INTERFACE or OMIT and connects to an IPVS
+service over such a route:
+
+ip6_xmit()
+  NF_INET_LOCAL_OUT hook
+    ip_vs_dr_xmit_v6()          /* passes dst_mtu() check, sets ignore_df */
+      ip_vs_send_or_cont()
+        ip6_output()
+          __ip6_finish_output() /* skb->len > dev->mtu */
+            ip6_fragment()
+              ip6_frag_next()   /* alloc_skb() + ip6_copy_metadata() */
+
+ip6_copy_metadata() doesn't copy ->decrypted, so every fragment reaches
+the device with decrypted == 0.
+
+Wouldn't the TLS or PSP payload then go out in cleartext, as it does in
+the IPv4 case without this patch?
+
+The setup is similar to the IPv4 reproducer in the commit message: a
+manipulated route MTU plus a PMTU socket option. Later patches in the
+series don't touch net/ipv6/ip6_output.c.
+
+Could the same skb_is_decrypted() check be added at the top of
+ip6_fragment(), and the ipv6 paragraph of the commit message updated?
+
+>  	/* for offloaded checksums cleanup checksum before fragmentation */
+>  	if (skb->ip_summed == CHECKSUM_PARTIAL) {
+>  		err = ip_check_csum_start(skb);
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261103001143.246081-1-toddfreed%40meta.com
