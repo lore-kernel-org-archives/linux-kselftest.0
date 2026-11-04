@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793822671;
-	b=eKDICg6g30jcHP5cBVUc7qVGmmiryOwrr5AWx5iiltDwujJWdRW3nDqaxipbn1ZUuXMM
-	 lnMBGJH/NUXrxpdV1JJs577g2FzHpP+ttx99IH2iJPOF5sbv3QB3E+JGgCvWq56rFHMu7
-	 W9Xji3At4ozT8BJQeJDy5dmXTnAT+DDpd0vfljgaNt3KjOANiKz2sM0Q7L8BOKNtXSeK1
-	 b80gU2oXaoHJb5eXSVfJnEpXo7SunQ1sfWVGHlGfvpfiuDuYVXwdwIgj9RwOiVxcV2pJ6
-	 bOF1Vf6GpYANEjKd0E/LTpNnU39EnCEJNv9P9AGxFBRCFk4amSIc+R/4HDypP59Yp8Q==
+	t=1793822679;
+	b=hY+qVyzx+g5M4uljlJW4ogTvm7yLm/qAlCP7bm6XdPJf07lrzr+rZzKybxbIbuNDFxsE
+	 VQAzgtzJEkhCtqi7sBX+c7vocqiqWMnliIQW9yE7KnOCXlL7nUXl0OMx0V3XfEJ5O4Q5m
+	 cC9TiIkBhzOYJqWziGz7k8QYux+8aaKBIWUUxtwiWcwoyxXYjH0IKqn6hiRJTATY6YCV0
+	 4S3S9vOmQq3anX6WZqJhXmiGx1ytqvSXfLSlgtcZgqFrxeNidf+MkggpbfTu8nGdxfhRi
+	 y8wag4z8o+TLq9ht0bzcMdCAjK300xZR/fq1sLISGS8et5H4ZS7IsSb8H80qJze+bzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793822671;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822679;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=mAUYa7DsnYJVWK5uXvFQ0zTldnyeSGGQ67HR5sn+wb4=;
-	b=ifNRGmeoKeyesw2OUnddv55hcTJkBqzfft193ehRaQuibQ8WUPCoQthR5v90RZ9aDMw2
-	 DuW6U+n24fXRBB7QzOixRttIpaaLGkdPlMNpDjm+ixKi9Z714E3q3S3B0UzcPnosnO1R1
-	 dcDW5NSHTh/uRt/hqiqQD6a8jjaaoHH9fHTHWdJAMu6/iSRMXd3LX7iYehHLq557x31yt
-	 6pNghaI7F/Bo7mpSCSGPMn1CJ9rQUL7kPQMoP52JGcnVBM7fL5G2QFfmJYac19o1T+pJc
-	 gLJT2B6EuuC6lqa0P8yrpwqMJ44Hm5vaCvpGyeWxUEfVyXHLHyj8C0pB0C/D63SbqwA==
+	bh=pYSTU5X3UuzczYg/8E5OrEwi5CakiKvwqjCVOhWzWq4=;
+	b=kMLX3kTiXRqKxmS7hyyuPRWGVVaRZcuyEST8ra5uo38ZDTE9x5NGVIBdTJWyOGD2AU7u
+	 DVGOpyf4Bs6ZpT9iESeFej965XBuzTE8rBI//3eNPq2YM9OqaqPiqF5g6EK0TKfGHSDod
+	 RC5Wo6lR4V1X05Biwuvd33Ly8gLa05aeVp4ZKUig8lKeCq5zXcj/1b4syAuCyYP/L3PaG
+	 /LH03uyDFcD0Rck8rLpo9jaDEv5mM/hZfZqjYsUylfSg9G7onoI1fgPc02JMHdAGgvGRq
+	 nGs15w7IU4jUmO3Bj34q6pAkDQ/byVvXoXCPL8qNlz7Qy0Fvby0QIIQzUKxJ6vHWP5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iIGQtM82;
-	arc=none smtp.remote-ip=209.85.208.171
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0DCecO28;
+	arc=none smtp.remote-ip=209.85.208.175
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0E1606E839
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 20:04:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F0E1606E839
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25180607A96D
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 20:04:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25180607A96D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iIGQtM82
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3ab53a99771so9594291fa.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 12:04:31 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0DCecO28
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3ab35e31f6dso20535341fa.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 12:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793822670; x=1794427470; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793822677; x=1794427477; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mAUYa7DsnYJVWK5uXvFQ0zTldnyeSGGQ67HR5sn+wb4=;
-        b=iIGQtM82BiNLyonv+Vl1VspuOaMrUC9/Ps8jkarVh6KbuKTW0cgRyFG3800Y8PBh94
-         0O1TWzSF/QTQci3Jk8AyntkfwTrPK+ONyfVuEcW5cRCww6IwspuYxE6yDuZO/To2EWNB
-         SExxL0YrZIYwTAFcBxjHG/uRDjSNW/mA7AME+Q3Z7c7217QIh1j0Ie9cf+jgYRxX6wn3
-         0CP8WkGxtJawP+paRtQYxDz+iqhcbKsDOFdDCIiSrryfAUVwYa7zt0xC2AbpU3KnJCHW
-         P9MGnd0HI+2n2KJKUS6Mvd95vktqGYhifeMI/55MUHToq+3/nMCk15kwgFdTtDAF0d0k
-         l3RQ==
+        bh=pYSTU5X3UuzczYg/8E5OrEwi5CakiKvwqjCVOhWzWq4=;
+        b=0DCecO28ue16+Xp/dZw6oCOTeArtgudPtEJi038NWajCPUMgU+Ncyxu1f3gg+8QXA7
+         C1Spupb+fbH0LTCgmxLcbp8gu+6eZ5jgq+lUt01LuoXFHduSdD3G5dot5vAFB6bEoGX0
+         dzuPJ6EW1pJtHs2dz74RHB0/n9EPaWFkAg87oeS34ikgMMxqR3aXriVN9S0fIcvRo1uC
+         aJ9MebCz9V4uzJP6kXoEhg5koqBie0S39kGxx3jwWFgHPIg8YRQNjrk/ML1V66p+F4Gp
+         YtdaARu0mRcX1qdSMX9JahtX7Y94FMcRv9IWCTS+DPucCSLYFjOJmra10kzvl/eXE62/
+         YnbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793822670; x=1794427470;
+        d=1e100.net; s=20260707; t=1793822677; x=1794427477;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mAUYa7DsnYJVWK5uXvFQ0zTldnyeSGGQ67HR5sn+wb4=;
-        b=ymiGziYp3gwELLUZQWvzJlrqhGruuFyll1BeUTsFEA2HNGAc1RTJPt/QP2AbRgJYqb
-         97jhC2+I6AuegCgRIfLD+xEnfjw2w+2npol9hoN2cDXPSz8XJUF3aCK66u9sBHHvKxco
-         8gSerPRq8li6YkQ/+zJK1EnwzBlgP9TodwAabNpemOpyVFMIs8qnOrU6T6jVqF8XqDvZ
-         V3BuF4t0T1zTR34Oc6hHEaKZBpUaXWpYpSCfmSUDQakrxekdSKM8+Gy9ENhJkEstl+Xl
-         KmY5Lfpr+csQ06Wo25YDbwTMQecauDdytByyLv+Zy8TnAakOziykaNExNt9ntVH9LiSf
-         olUw==
-X-Forwarded-Encrypted: i=1; AKwUvByrxwfjGhnwaSVOnl5WBVYlpo6NavhbCsxEAC0p90lq3KX6R95IkBA1dtMq9/7OWm+AC9caeFEQp5j20P2A4dg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9KRPVf9by5w1pcNf6P2Kgtx+D6Fx+DT8yV3K/wr9fHj/nt+YvD
-	rm59IgtfDTF6aRwEsnz/jDXmC8nq0Fomh2AGlwLVcHg4shooJvfc/znh
-X-Gm-Gg: AYBFou1uIYXrsaVJpvosvHFn9L/KWTYj95WmhvNHA+QN0HxlOzbdlpB73CIyvlsQwKz
-	3G1dr5LmyAvrnfWcd58HIgb8OZkEdxyVj+2r49lYd5rc4+iOibIQaoKy/OsvENf+Hgapm/Na7MR
-	qFHtoTbj/mqjvJuIpjwHA+gThsMSbol+YjXeCnBzhN8kkjsr9oMmd1swEt/GTN24us1vsol/dgv
-	wL86Vh36y6shEsyli2cZn8lvAjIqvu/hYzCDBeFIxz8CAoZNhs6OTAojgISQj+Q/GUysxPt4vck
-	rrdmBOaBxqwALsKlxVuxLhGjXdbvW74R1I4bocmsDr5JlxCjmiSuwrX8jF3ANDZJ+xZ8t3uLbym
-	jxGARhuHLj0dptxlkt3WvNeFvGxsxAALlBpNM4tEuSlEyfV768KASvXjwa9FlMs22WyrQo+vQ7J
-	4pc6+9BnCf2Q/JTbkA6EG8ZlynBnxf5oRTnNOpom6eD9RLiL6ZNhYr2paGXuE7Cz27k5y3qZJz/
-	7ZA4UFtis7y5ycu29S7C6Tr+CE/TD5KJdbBXSiHMN/G41IIXrndO5ybjihhGTzJAIoo4aOQnqnH
-	Av/zF6O++A6YQNketCt6oAKpXGM/ak6uORn+RF/YNxy21FkxAR0=
-X-Received: by 2002:a05:651c:43d1:10b0:3ac:cf09:d6ff with SMTP id 38308e7fff4ca-3accf09d9c0mr17250161fa.24.1793822669498;
-        Wed, 04 Nov 2026 12:04:29 -0800 (PST)
+        bh=pYSTU5X3UuzczYg/8E5OrEwi5CakiKvwqjCVOhWzWq4=;
+        b=VKfF/UGEWfjl3dB2p+QexVg1qddFURLfJ/lbzaAjAlWz15pUlF6YnO9lzkTZlKPjca
+         oPc88aw7YF6n5c7tVu4ejIgjjor7DIZUa3jJZsqEB3zzqh+TgciS7Jn2EUiHNdBg6kf9
+         lAjjBvFJhplButSvztPnUpV/pJWr/lmc2j9afxqLyTl4Ym6bBlXz30JQMdqVrLySkpWx
+         D+XCHMjDNt2CLO2BZkt8rCwaK96+jix879333Wi2mgxr3HOmGYFEka8Pn2us2aysAwIJ
+         k8+Rl+NxsL4G+04HBqHOk4waPlqhZQ7WBxBSKwzPgaxa+P3KgKmbmB4B49LEgtKjiYqO
+         YgnA==
+X-Forwarded-Encrypted: i=1; AKwUvByojdF4L80KySvZXo2tbNobZVkX6POmKhjRj8bAyTqMrtzdQNKD7iyikkmFRu13o8RPYsZocEmhWkNoKpEtbjg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/BPyC9Pd6LrMay/ueq0vXjitzKdV8QSDCJfR5WVBwG2vS2r4+5
+	gA0zLdnpebfJjY14PDcoGS2IQmTHo1M9vcg+61C2f/iR6kUqkqyY5KtX
+X-Gm-Gg: AYBFou1NVAUPNinUkxkKo2v2p+QvKrcF1mAr9gMTDSzYAzcGSn5dJdb+3iG7AlN9Rov
+	gl+2MRuuv5KrBDaDVFe/+uZ9oVqg55HdNc3qD7RuzUogTlSOkyntzYKxoQ07tsHVZqP4+of/g0c
+	6roBYHkixcVOUe4qn+4LFumcr5zcRi4eV3oVfPe0oiEP4k5AQoZ97hCaa6ussYst7Tbza5KH6N0
+	gZ51yEg77vkbiHpYJYWCVMG0UU/qPmirCyZFJhCyxpX7JWMwnpEstgaaoNR+WTI1NbXCa/B2Hpi
+	lfoeYPTRr1TbRhgJn28ww65MxAyc7QMGWKT58lfoK//e+1zCMN6AnhwhpK4puER6JpiTPu4kppE
+	yhhSIWhtHh2uxb4af5w3PnyTqLCCAp524h7cFSqEwzYZ4DgD6tEs95LHEMU8ME2vGdM8svane4s
+	yQqkNJBUJ8AnFV5SMdpGL5en0PjyQSUn9vJod+Zhk9v2URXD+fA7p9mVOfy28ICRDEbITxdGfhc
+	znlrKCYvf9+n2IKYSqdvFoGi51x8dmTHWfF7Gr7rG8dR/zWlrE4vuZyFrJTaAsiML3LMuapBHRK
+	0wpxjuz9gBcrn4wKvBOUByuEAoJ8vw==
+X-Received: by 2002:a05:651c:b07:b0:3ab:4b4b:fab with SMTP id 38308e7fff4ca-3ace2f7fca9mr994011fa.2.1793822677045;
+        Wed, 04 Nov 2026 12:04:37 -0800 (PST)
 Received: from gentoo ([95.55.209.127])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3acdc6e9b60sm5848021fa.35.2026.11.04.12.04.26
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3acdc6e9b60sm5848021fa.35.2026.11.04.12.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 12:04:28 -0800 (PST)
+        Wed, 04 Nov 2026 12:04:36 -0800 (PST)
 From: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
 To: netdev@vger.kernel.org
 Cc: dsahern@kernel.org,
@@ -92,9 +92,9 @@ Cc: dsahern@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Yaroslav Dudkov <aroslavdudkov622@gmail.com>
-Subject: [PATCH net v2 1/2] ipv6: ignore link state in gateway check
-Date: Wed,  4 Nov 2026 19:56:54 +0000
-Message-ID: <20261104195655.1406837-2-aroslavdudkov622@gmail.com>
+Subject: [PATCH net v2 2/2] selftests: fib_tests: Add carrier gateway test
+Date: Wed,  4 Nov 2026 19:56:55 +0000
+Message-ID: <20261104195655.1406837-3-aroslavdudkov622@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261104195655.1406837-1-aroslavdudkov622@gmail.com>
 References: <20261104195655.1406837-1-aroslavdudkov622@gmail.com>
@@ -109,92 +109,97 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-IPv6 route cannot be added in table when all
-following conditions are true:
-- gateway is not link-local address
-- ignore_routes_with_linkdown=1 on device
-- nexthop has no carrier
-- gateway is not present or covered by any route in table already
-Also multipath routes addition is invalidated by kernel even
-if only one of added nexthops satisfies all above conditions.
+Test adds routes with a gateway while the nexthop device
+has no carrier and ignore_routes_with_linkdown is enabled on it. The
+routes are added to the main table and to a non-main table, with and
+without a device, for both IPv4 and IPv6. Routes are expected to be
+accepted disregarding the link state.
 
-Reproducer:
+Without the previous patch, the IPv6 non-main table cases fail:
 
-  ip netns add t
-  ip -n t link add va type veth peer name vb
-  ip -n t link set va up
-  ip -n t addr add fd00::1/64 dev va nodad
-  ip netns exec t sysctl -w \
-    net.ipv6.conf.va.ignore_routes_with_linkdown=1
-  ip -n t -6 route add 2001:db8::/64 via fd00::2 dev va
-  # added
-  ip -n t -6 route add 2001:db8::/64 table 100 via fd00::2 dev va
-  # RTNETLINK answers: No route to host
-  ip -n t -6 route show table all
-  ip netns del t
+Without fix:
+Gateway validation with carrier down
+    TEST: IPv4 route in main table                                [ OK ]
+    TEST: IPv6 route in main table                                [ OK ]
+    TEST: IPv4 route in non-main table                            [ OK ]
+    TEST: IPv6 route in non-main table                            [FAIL]
+    TEST: IPv4 route in non-main table without device             [ OK ]
+    TEST: IPv6 route in non-main table without device             [FAIL]
+    TEST: IPv4 linkdown flag set                                  [ OK ]
+    TEST: IPv6 linkdown flag set                                  [FAIL]
 
-Route should be added because:
-- RT6_LOOKUP_F_IGNORE_LINKSTATE in commit d5d32e4b7668
-("net: ipv6: Do not consider link state for nexthop validation")
-was added for this
-- the same route is valid in main table (when no specifying table id
-while adding route)
-- fib6_nh_init() initializes nexthops with no carrier
-- IPv4 already does this (fib_check_nh_v4_gw() ignores link state
-using the FIB_LOOKUP_IGNORE_LINKSTATE flag)
+With fix:
+Gateway validation with carrier down
+    TEST: IPv4 route in main table                                [ OK ]
+    TEST: IPv6 route in main table                                [ OK ]
+    TEST: IPv4 route in non-main table                            [ OK ]
+    TEST: IPv6 route in non-main table                            [ OK ]
+    TEST: IPv4 route in non-main table without device             [ OK ]
+    TEST: IPv6 route in non-main table without device             [ OK ]
+    TEST: IPv4 linkdown flag set                                  [ OK ]
+    TEST: IPv6 linkdown flag set                                  [ OK ]
 
-Before commit b2c709cce682 ("ipv6: Convert gateway validation to
-use fib6_info") rt6_lookup() was used for checking if nexthop is
-valid, rt6_lookup called rt6_device_match() which does not check the
-link state. After change rt6_lookup() to fib6_lookup()
-find_match() under fib6_lookup() started to invalidate linkdown
-devices, because RT6_LOOKUP_F_IGNORE_LINKSTATE is not passed to it.
-
-Adding RT6_LOOKUP_F_IGNORE_LINKSTATE to flags for ip6_route_check_nh()
-solves the problem. RT6_LOOKUP_F_IGNORE_LINKSTATE is already used
-inside the first search ip6_nh_lookup_table() and fixes the
-bug in second search fib6_lookup(). Also RT6_LOOKUP_F_IGNORE_LINKSTATE
-isn't read inside fib6_select_path().
-
-Fixes: b2c709cce682 ("ipv6: Convert gateway validation to use fib6_info")
+Suggested-by: Ido Schimmel <idosch@nvidia.com>
 Signed-off-by: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
 ---
-IPv4 example of this situation:
-  ip netns add t
-  ip -n t link add va type veth peer name vb
-  ip -n t link set va up
-  ip -n t addr add 192.168.0.1/24 dev va
-  ip netns exec t sysctl -w \
-    net.ipv4.conf.va.ignore_routes_with_linkdown=1
-  ip -n t route add 192.0.2.0/24 table 100 via 192.168.0.2 dev va
-  # added
-  ip -n t route show table all
-  ip netns del t
+ tools/testing/selftests/net/fib_tests.sh | 40 ++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-Also when adding RT6_LOOKUP_F_IGNORE_LINKSTATE to flags of
-ip6_route_check_nh() makes adding this flag inside of
-ip6_nh_lookup_table() unnecessary for this call, making another call in
-ip6_route_check_nh_onlink() with flags=0 the only place where it is
-needed.
----
- net/ipv6/route.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 94e5ef1c4f83..73d8a2c95602 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -3424,9 +3424,9 @@ static int ip6_route_check_nh(struct net *net,
- 			      netdevice_tracker *dev_tracker,
- 			      struct inet6_dev **idev)
- {
-+	int flags = RT6_LOOKUP_F_IFACE | RT6_LOOKUP_F_IGNORE_LINKSTATE;
- 	const struct in6_addr *gw_addr = &cfg->fc_gateway;
- 	struct net_device *dev = _dev ? *_dev : NULL;
--	int flags = RT6_LOOKUP_F_IFACE;
- 	struct fib6_result res = {};
- 	int err = -EHOSTUNREACH;
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index 7c47d7fe250d..d7ac3c727f70 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -406,10 +406,50 @@ fib_carrier_unicast_test()
+ 	cleanup
+ }
  
++fib_carrier_gw_test()
++{
++	echo
++	echo "Gateway validation with carrier down"
++
++	setup
++
++	set -e
++	$NS_EXEC sysctl -qw net.ipv4.conf.dummy0.ignore_routes_with_linkdown=1
++	$NS_EXEC sysctl -qw net.ipv6.conf.dummy0.ignore_routes_with_linkdown=1
++	$IP link set dev dummy0 carrier off
++	sleep 1
++	set +e
++
++	$IP route add 203.0.113.0/25 via 198.51.100.2 dev dummy0 &> /dev/null
++	log_test $? 0 "IPv4 route in main table"
++	$IP -6 route add 2001:db8:10::/64 via 2001:db8:1::2 dev dummy0 &> /dev/null
++	log_test $? 0 "IPv6 route in main table"
++
++	$IP route add 203.0.113.0/25 table 100 via 198.51.100.2 dev dummy0 &> /dev/null
++	log_test $? 0 "IPv4 route in non-main table"
++	$IP -6 route add 2001:db8:10::/64 table 100 via 2001:db8:1::2 dev dummy0 &> /dev/null
++	log_test $? 0 "IPv6 route in non-main table"
++
++	$IP route add 203.0.113.128/25 table 100 via 198.51.100.2 &> /dev/null
++	log_test $? 0 "IPv4 route in non-main table without device"
++	$IP -6 route add 2001:db8:11::/64 table 100 via 2001:db8:1::2 &> /dev/null
++	log_test $? 0 "IPv6 route in non-main table without device"
++
++	$IP route show table 100 203.0.113.0/25 | \
++		grep -q "linkdown"
++	log_test $? 0 "IPv4 linkdown flag set"
++	$IP -6 route show table 100 2001:db8:10::/64 | \
++		grep -q "linkdown"
++	log_test $? 0 "IPv6 linkdown flag set"
++
++	cleanup
++}
++
+ fib_carrier_test()
+ {
+ 	fib_carrier_local_test
+ 	fib_carrier_unicast_test
++	fib_carrier_gw_test
+ }
+ 
+ fib_rp_filter_test()
 -- 
 2.54.0
 
