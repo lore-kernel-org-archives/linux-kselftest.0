@@ -1,83 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793826735;
-	b=xkbG3QubSCGyD2GHOW5gOSA4IS0OMSaJvzOnV2Gh6ISnH2INSl2f7jM9ShitsaVYsanf
-	 uxXUgzgIIxm2+Fqv75ri01SjIH5+uMbU1NMeHaye+4wEcqlT4Y1oZrWTvS1Fypf4aQIHY
-	 uv/d7B+DF4BsgifmRVzsEXfkZJxiSO6mI0I2jOQcMxSeSfnb6wv/xMF8KrilZWC1q3HX9
-	 sRcPF825API4OUPpITUo4W+6VrIIWM3xNS5CBIuH7zojFvCucuXz0FVDxlbW2DdbssTKU
-	 4NcuJ6zpeyyurc5CWpoyvyyELtYxSFu/Yf3nE7Wcwvz6fxUACKIkckAjPkopUyaGvaw==
+	t=1793826818;
+	b=iqnGXupxUviPY33zD1FStVk1VbklsJlNPmE2dcB5ghAM/EayDDG484DcqZ145NmQUzc5
+	 SvKHFiI/usLpwrK3ASDLRNgOlB5Ko6IbrvKGWJzjV26Bx4IEMrRNLwNavinG1q3IPCFmT
+	 hPxdQGv0MiQihLfOTbXL+P+HFXfdEhz7rkytigDiWh4ZEGQLHoVpvteMZKdgVLbkO5xvQ
+	 P5KloNFQfebP8yaVQMezRc0kML+Alylswhg1URIKfGXvYfUZEhJoo59PkLRuD/ynO9WRu
+	 FryAhV8Ndu489sXcgEJfrOi+fZUcxlFTf1dVshtTWmFIQnLFmCVq7E5tq3JK/lxPEBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793826735;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=IOgn3ctLBE8a6sSlOdKZ1KbLeEdy9wt0omNXDn9Tcg8=;
-	b=wCEGMvrWWGVJ+RGceP1RYS1VonFetN/Shql8SSih0hqIj1ZNj2AXp8rbJeFbrPdjFP2H
-	 qarQnQvB2cOmh664xWtpdSV0RZFnhhJx/sQFnuO/mY4GhBo0SthkJ2Q+rU3FDNG36RpnB
-	 Tulnu1tpjC7VSr5dqHzrD0ks27vSOTdWn77mxVrtnPfVVSLSD1uMjRR9JS/f+jpjBjNVb
-	 TBdp0DE8P63pdX/+4yqG8BlX0UCmdw7ZqUd0sfujNXlPs0jliB1H55PddXybLN3WIATSd
-	 qs7wrZ2DWwjmFdvr4gfsisIXHk2mNNirgO0/VTmmlays+CDPF63kRnbCfd16LUcJmjw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793826818;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=jcn7jVvcEygiBPhKNySOIoE9F539N91xJ4TgqDQUCP0=;
+	b=xce7UO9Ek68T2WDZy46lxQ9ZbL/7rTxo9NcksIk0g2NIiPdKgfb4kPS8aG/r+M4iCs+A
+	 x0bXNcoqWn6cxxtBQPBlXDFOIFdlH1AnmLj9047bXZvOIfx5+A3xKkGhKkhogD9jUwiwi
+	 g9fKVtx0bFI4CXN8xBt3KwB5/jifga0mVw77MkD36djqDo91rH+4yCwV5afE2dx+63od9
+	 Y4J4HBEkUFCgwpZo1EqHoruz3VXAmXVsAxfLvA1oRlIdHatl86FDD8vNWfSZuyVdn0j4k
+	 jhCJYe0eLpjjM4QAcMC9v9A4m8bmPdmumA5DzPimuFHzjrdJHEJf21D3KTEnsUmPNBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b="d/Y5HTZu";
-	arc=none smtp.remote-ip=158.69.130.18
-Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V7uflGoo;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0076A6081741;
-	Wed,  4 Nov 2026 21:12:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0076A6081741
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963DD6070300;
+	Wed,  4 Nov 2026 21:13:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=d/Y5HTZu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1793826733;
-	bh=IOgn3ctLBE8a6sSlOdKZ1KbLeEdy9wt0omNXDn9Tcg8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d/Y5HTZuHVnoC0pSyJpQYiYzAyckNRQWBx7Gp1MzT+xuLz1Xz+3Lu//g5+tSLwiEP
-	 0WvuHrdyYbK0hGnsawsvhWRgV7lccTF7x36rItEMXc7i8u4ec8Q1Xx6r/X/rrP1/v1
-	 FWudHieZmRS0QunSRUXr+lrlkXl+uI5X+bpKc51a4BRNKG1BGkQScsdfIhkjAkOLSg
-	 XmPhYkde9tvidvlzD4AjiMogG19xpMeYCc67lGx5vx5auwOuImpYQjKRGYCGvJrb9/
-	 LkONcb3mamxjibwtejP7wuDzY1Fw3RFXVKuHYHzOJdJB8DkPzc/rb7WKmAcsyqiLnT
-	 YELnQsBJSOjvw==
-Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jKdRx15JkzKqZ;
-	Wed, 04 Nov 2026 16:12:13 -0500 (EST)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Juri Lelli <juri.lelli@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Luca Abeni <luca.abeni@santannapisa.it>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Waiman Long <longman@redhat.com>,
-	Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	cgroups@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V7uflGoo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890731F000C1;
+	Wed,  4 Nov 2026 21:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793826817;
+	bh=jcn7jVvcEygiBPhKNySOIoE9F539N91xJ4TgqDQUCP0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=V7uflGoo2J6W0Pkam2p2NQ2ygDWILS85YrEGrtDhRX9LSpjax7FTdN9yNxg/1nr/F
+	 V+6mFIzh3/JJOAXY6DVlJDG4EpV1IqKbiDMaZqe2+mP/VD4uYvDHSHZdC+YPnvDk4p
+	 B+fx/mBspdALJuO5S6++QQQg+yaKZfyhFe96p7DkhDOmjrSDCUkzL7D2l6jIRx9hog
+	 t02UJbdl2o8LcfstRp/uZbtHAIBJlVxjfK6tVrDPho366mZ6VCIHILqfMZVkkl7EFn
+	 VcPqHyjXoZJ1/HnO4R2TW6BDouO7Vr2s8cHixo92YGxXCqi5rLrqQLQrblFCpmhTUC
+	 1HY2L3LLxnrag==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Jann Horn <jannh@google.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Chris Mason <mason@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Christoph Hellwig <hch@lst.de>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	Joel Granados <joel.granados@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jan Kara <jack@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: [PATCH v2 04/21] sched/deadline: Do not divide by zero active CPUs of a root domain
-Date: Wed,  4 Nov 2026 16:11:50 -0500
-Message-Id: <20261104211207.1392343-5-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
-References: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	coreteam@netfilter.org,
+	kexec@lists.infradead.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	ibm-acpi-devel@lists.sourceforge.net,
+	jfs-discussion@lists.sourceforge.net,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-cifs@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-sh@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	sparclinux@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-doc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	Takashi Iwai <tiwai@suse.de>,
+	linux-input@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-debuggers@vger.kernel.org,
+	"Christian Brauner (Amutable)" <brauner@kernel.org>,
+	Chuck Lever <cel@kernel.org>
+Subject: [PATCH RESEND v2 09/13] SUNRPC: drop the ioctl of the procfs channel files
+Date: Wed,  4 Nov 2026 22:13:23 +0100
+Message-ID: <20261104-work-procfs-net-v2-9-221e2437fed1@kernel.org>
+In-Reply-To: <20261104-work-procfs-net-v2-0-221e2437fed1@kernel.org>
+References: <20261104-work-procfs-net-v2-0-221e2437fed1@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,91 +114,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1562; i=brauner@kernel.org; h=from:subject:message-id; bh=I+ev37oI2qOnQB50E4hs4C0vKquyHn0mn+uzhhuE9es=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS97tO7MzO6bl7rnYiJS+98LnRI2rB8SW+2zhcm6VmdL mnzZE2COkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACaimsHIsCL/pkeQ2tMV86Sm GCnwci6xzri2a8OqYh1BgwP67+/djmP4Z6MoeGKi/4+z3/fFeyZzP/p6Min5j4995fEbyvr+l0+ ZMwEA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 
-__dl_sub() and __dl_add() spread a change of a root domain's total_bw
-over the extra_bw of its active CPUs, dividing it by their number, which
-their callers take from dl_bw_cpus(). That number is 0 for a root domain
-whose CPUs all went offline, such as the default root domain, which
-holds the offline CPUs: the division then traps.
+do_vfs_ioctl() answers FIONREAD for regular files with i_size - f_pos
+before it gets to the file's ->unlocked_ioctl(). The channel files are
+regular files, so cache_ioctl_procfs() has never seen FIONREAD and only
+ever failed other commands with -EINVAL. Drop it. Other commands fail
+with -ENOTTY now.
 
-A debugfs write of a fair server's runtime or period reaches it while
-its CPU goes offline or comes online. From the rebuild of the root
-domains in sched_cpu_deactivate() until the CPU is offline, and from the
-CPU online until sched_cpu_activate(), the CPU sits in the default root
-domain, with no active CPU. A write that leaves the server's bandwidth
-as it is passes admission there, __dl_overflow() comparing that root
-domain's capacity, 0, with total_bw less the old bandwidth plus the new,
-0 as well, and dl_server_apply_params() divides. Any other value is
-refused with EBUSY, higher directly, lower through the unsigned
-subtraction. Once the CPU is offline the write is refused, since
-commit 4043f5498416 ("sched/deadline: Reject debugfs dl_server writes
-for offline CPUs").
+The rpc_pipefs channel files are regular files as well.
 
-Writing a fair server's own runtime back in a loop while its CPU goes
-offline and online oopses on the first round, in 8-CPU VMs of v7.4-rc1
-with the four deadline fixes of sched/urgent:
-
-  Oops: divide error: 0000 [#1] SMP NOPTI
-  CPU: 6 UID: 0 PID: 110 Comm: dl_server_div0
-  RIP: 0010:dl_server_apply_params+0x335/0x380
-  Call Trace:
-   <TASK>
-   sched_server_write_common.isra.0+0x1c0/0x260
-   full_proxy_write+0x58/0x90
-   vfs_write+0xcb/0x550
-   ksys_write+0x6c/0xe0
-   do_syscall_64+0x109/0x5d0
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-inactive_task_timer() can reach it too, found by reading: it releases
-the bandwidth of a task that left SCHED_DEADLINE, or died, before its
-0-lag time from the root domain of the CPU the task is on, and that CPU
-may go offline before the timer fires. With admission control off, so
-may sched_setattr() to SCHED_DEADLINE of a task asleep on an offline
-CPU.
-
-With no active CPU there is no extra_bw to update: change total_bw
-alone. 20 rounds of the reproducer leave no warning then.
-
-Fixes: daec57983670 ("sched/deadline: Reclaim bandwidth not used by dl tasks")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Acked-by: Chuck Lever <cel@kernel.org>
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- kernel/sched/deadline.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ net/sunrpc/cache.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 963fda6ddb7f..dadda1a528ec 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -189,18 +189,25 @@ void __dl_update(struct dl_bw *dl_b, s64 bw)
- 	}
+diff --git a/net/sunrpc/cache.c b/net/sunrpc/cache.c
+index 81a3f0068f36..d242b6f33cbc 100644
+--- a/net/sunrpc/cache.c
++++ b/net/sunrpc/cache.c
+@@ -1596,15 +1596,6 @@ static __poll_t cache_poll_procfs(struct file *filp, poll_table *wait)
+ 	return cache_poll(filp, wait, cd);
  }
  
-+/*
-+ * @cpus is the number of active CPUs of the root domain, whose extra_bw
-+ * shares the change: none once they all went offline, and total_bw alone
-+ * changes then.
-+ */
- static inline
- void __dl_sub(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
+-static long cache_ioctl_procfs(struct file *filp,
+-			       unsigned int cmd, unsigned long arg)
+-{
+-	struct inode *inode = file_inode(filp);
+-	struct cache_detail *cd = pde_data(inode);
+-
+-	return cache_ioctl(inode, filp, cmd, arg, cd);
+-}
+-
+ static int cache_open_procfs(struct inode *inode, struct file *filp)
  {
- 	dl_b->total_bw -= tsk_bw;
--	__dl_update(dl_b, (s32)tsk_bw / cpus);
-+	if (cpus)
-+		__dl_update(dl_b, (s32)tsk_bw / cpus);
- }
- 
- static inline
- void __dl_add(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
- {
- 	dl_b->total_bw += tsk_bw;
--	__dl_update(dl_b, -((s32)tsk_bw / cpus));
-+	if (cpus)
-+		__dl_update(dl_b, -((s32)tsk_bw / cpus));
- }
- 
- static inline bool
+ 	struct cache_detail *cd = pde_data(inode);
+@@ -1624,7 +1615,6 @@ static const struct proc_ops cache_channel_proc_ops = {
+ 	.proc_write_buf	= cache_write_procfs,
+ 	.proc_write_size = CACHE_DOWNCALL_MAX,
+ 	.proc_poll	= cache_poll_procfs,
+-	.proc_ioctl	= cache_ioctl_procfs, /* for FIONREAD */
+ 	.proc_open	= cache_open_procfs,
+ 	.proc_release	= cache_release_procfs,
+ };
+
 -- 
-2.47.3
+2.53.0
 
