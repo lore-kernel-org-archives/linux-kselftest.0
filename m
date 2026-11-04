@@ -1,76 +1,117 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793791834;
-	b=zOtOw63CFNsxzon3UaJ/1BbWmjbCbG3t+4HNneIVWqkmcnI/0ZRvmCZ6LRqllewCUwUw
-	 eVnQUWNvux5vP6GU7ZTp6AoqNxmDcq9JD69W9N3HBDs5VWlW16RyWfCXZnrAd7dkEMlGW
-	 Bekc0aqRmegAeSl5xcqkq3ItZy1Iy966peezmcYk3zE1t5UrHGU6xLaIuAFWLAQxq5pgK
-	 LEwcqh9QqT4tpUxLtexFi+ieR8VKHx70xdkj0DZDJsLIRzixtZ0wQwkUYCPV3CZ/3Dwei
-	 F/GdZn7TEC3VtvDL4dWHUiNo+Qsyx+SoktdiGimgFxFoz/wVIHzZOaaweHx5as1tI2A==
+	t=1793791943;
+	b=Y+8YhNVqG5tsCFEKYjkuNQywCIEd2S9ymRqaZhiCmqqNaR7XEdYnKREod54I6GQmYNKC
+	 7x9kLyto4lUZ/iRkQth8sClwpIaqgP3FjS1QCwZTM8sVVq45n9PucKaCXO7fmf4ATxS2Z
+	 zp0plX7aTsrTYIpybujxx4GnRUnav55t+oZu7fAhjSa/rx1AIdFCODt5b6k4opJuCO6Sr
+	 jYesekvkklgeQ2+Y7e//q0uPWLTssVp+LgzKlY4TJWPkToFVYc4ZLtu7508e2bdHtlAvL
+	 Jn4GwZB5cy4aIlESzTOBcRxP82PpClyPRW3Rn0OrFvFjJB34V/srsyX2vjjCm2q+dzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793791834;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=12Z4lOF0jQfTB4x6+mhkZ27w3B4gOwwYBosLZfWaVjk=;
-	b=cE6zM5WcGCvOCElNKn+yREM/IUUPxl/LaUENmflfKpqubumAMasFEHW8EaKpe173mdLW
-	 U3THVE/41lZJ87x6wy9Ty1oE9/P2NBfHCqvbbaeMa0RqK9vsrIPeZE4PNpTowGdne873j
-	 UIbH/0yat9EVxQa4YHIQSipvMDQZJqL9Y+xgZlLE4rqCh+Tx6ydaVd5BEHu36LIevakJ8
-	 krBHAJkFUVHPwsZ58BTqVKjFaiUTLdLx8n87EgKWtiFXktziHOx4/Dw45CyTWt0EYpKVR
-	 d2F5h1YT4qF9AzxmFnNchjRtpvDyguQ50hygZ3oVZCnAwP1jnhBawhBUUzOq3KJdAIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793791943;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
+	 References:MIME-Version:Content-Type;
+	bh=Sn3eSe67w3OleW5NGD87sSVusifSp8lGeY/kfZic8AY=;
+	b=BE4cj22YFiJRMtxNi12Sx4hjPBevzLxgvmL4E9RFB+1ditbE2WXDkfasGFyX1A6LFlpP
+	 27NraHmpo07/0kyPzIa+3dBN2qV0PpHzDMoOlBInoex0hiU8ovzt4be38uWw3PXjjyv5i
+	 3NBOVPcuKEd9oA9GJvRpRNhrBm9SU4eBprWX2tHFem8RJbj3P+DtZJQWX2vgRj1dUZl1V
+	 wuuquaaIHpFooFYgO1kOKEsWO3O3gHYAkhBgMILQUi2E5T/L6snv9VYYnOuHQGxppj+Xb
+	 WUI8p3HkqQg3zQKAThxVFaj9iDcmms+OmSZEFqTOdjaBdfrm+mUv99fN04AxcPUI8cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OxFwYHpZ;
-	arc=none smtp.remote-ip=209.85.218.69
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=hnaGrckW;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Kmiu6QeM;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C6A606A32D
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 11:30:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0C6A606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7704E606A32C
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 11:32:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7704E606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OxFwYHpZ
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c49b95262a5so53192666b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 03:30:33 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=hnaGrckW;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Kmiu6QeM
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793791941;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Sn3eSe67w3OleW5NGD87sSVusifSp8lGeY/kfZic8AY=;
+	b=hnaGrckWRQ5XfRnUO5uII6yiMJabXlmUhVnruw0jL6Xm+PNoNt6PHpXFIn00bbPC3rnAO1
+	skc+sxKcq6uLK2QEynoccIdYeHpwnGZcV66N6J+FzCckO1spsC8/B9p9I42k2hUbO2FpUB
+	Eggy7yolZRcVQS2ecQUOl65oY+ai3Oc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-423-3iDlVOSvMMy6EBccawDHEA-1; Wed, 04 Nov 2026 06:32:20 -0500
+X-MC-Unique: 3iDlVOSvMMy6EBccawDHEA-1
+X-Mimecast-MFC-AGG-ID: 3iDlVOSvMMy6EBccawDHEA_1793791939
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4ad3d35e899so6931835e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 03:32:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793791832; x=1794396632; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=12Z4lOF0jQfTB4x6+mhkZ27w3B4gOwwYBosLZfWaVjk=;
-        b=OxFwYHpZryXJb9enpLN87kRHPhZ5WBZA/67/YXzaPEYjTTLlymCutEI1uecBPE/BvN
-         huqf7toSWyGVex91ZAogh6DgqKGuOt0mMBn6kABO9B6FhqYW8AjjUa4VQ+ayHjfaXA/R
-         wVlA1/oiUvTChrgsjjjL1YCgMQUeI38CqG2EEPykNUfu1ppbl/V8SEu51MEg8KAcQzwy
-         phahP5oTOjD8rnSCmk6+y6VkWQadghfC1gEExWqEMbyPplT2lqJDDTPGTuZpBEv3iy6d
-         FfsAnJqioiB+zVM0HXxdHfTfpaK/euZmoaLFFdj+oIPkYpGlH4YM41240bEq7B4gWTTM
-         E3lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793791832; x=1794396632;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1793791939; x=1794396739; darn=vger.kernel.org;
+        h=content-type:mime-version:references:message-id:in-reply-to:subject
+         :cc:to:from:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=12Z4lOF0jQfTB4x6+mhkZ27w3B4gOwwYBosLZfWaVjk=;
-        b=uxomS/m2NydqRdN6iDJbPCzAbWWR9/WHBaFi2tPULBLPxC6xHiSAm8bdRDpdiEHJ63
-         hEmBgu3K91sausVgshITvr5BeZxn1Q/zoYKJ2UwyTt8+D+RK3bhC6c50XXC7tj3gv2Bi
-         UTHzvwVMPHvCU4duSM5+EoA21lb3LcqgEUWqLTBYlq7TipDzffSppymqvw/Ylwgv/JNS
-         YEU+i4CLULMbmAbpOxggSOwQ9lBO3yf8iK1yvolD28uBe9As9uq/XibAIkZyZM8Of3Vp
-         txEjuMCmVcpV8yVE/wTg9cNHbr7T+brkBa7kGDhTPCyvmJ1Ph+n3P0EEtp8XDuAFhb0v
-         yWNQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxPIk8fptz8K2gM3sz6MVw+lW1MkKUgARz+SawHud5NlhiN2QFGV1W7050KyTlgGYjxuxJf8GbrLn02MIZX4Cw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/CHqJJ+flAKehfgFKXcMZx4WlUn0Ui4ow6TMBBgoEyM5ZrKdQH
-	ZU8DVZW9rfJEFrdb8y61a6XGv7uuuzU5YNxjzAdWmrtPJt1o9eSh/vIdIhldAyyKJLbM0n1BlA=
-	=
-X-Received: from ejbgw4.prod.google.com ([2002:a17:906:f144:b0:c3f:7129:4c10])
- (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:18c3:b0:c26:22ae:b66b
- with SMTP id a640c23a62f3a-c4ca7aee966mr1382566266b.15.1793791831732; Wed, 04
- Nov 2026 03:30:31 -0800 (PST)
-Date: Wed, 4 Nov 2026 11:30:31 +0000
-In-Reply-To: <CALCETrUD4vh_iSHV7G0bprUFU8=c+ECo701-tXcbQ3UXBWC1ig@mail.gmail.com>
+        bh=Sn3eSe67w3OleW5NGD87sSVusifSp8lGeY/kfZic8AY=;
+        b=Kmiu6QeMLUsGlfnpigZik9Kqb33N5OTMRMusjT4I3PPN97mFuIPWR9tKcCVH4QJD9Q
+         PTXlPF32K3wO3c+fEWwSkU7I5atSdFhslxoVoeYKfDUv6b1ch4UbwryW7UTk0lwubeEl
+         lADRMHj+xnH9orRTaGmcwAdluhOJkYGAf9nLAjH84z4vFrQiTYuN+6YpGjQob/W0cgWh
+         IWrgQAApkSlgSNWFPLXwa4urf7WqyKFUE+/EM6i3TolcGBBt7kYLCsxjc3bYSQ/lJLbu
+         j7sc60y24+bWH/4vGxQEzMOuwqDrNg+kBhwtASABIVV3Vfw6CHBkIoW18+7EoN/MhZnz
+         I4ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793791939; x=1794396739;
+        h=content-type:mime-version:references:message-id:in-reply-to:subject
+         :cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Sn3eSe67w3OleW5NGD87sSVusifSp8lGeY/kfZic8AY=;
+        b=bhQRCtGRbUvz2+KfIMlMqn+RI84BeIyLCYicxeKAUOdDKHjyFwAlxdsgw0sbK9Sl7P
+         LjZVW/YuLJ0HG2uMLoQ7Sc6osrjyiOhmbyGTLaliPdSMMEuW/raOx9lfovW5aL7797jF
+         NFtBR8cskhm5QKtJta1wTFr98sqwSf06xwT7xVA3X7owLhjE8p+uwq2YrmxduKj9kkMQ
+         TS0+6D0M7SphmaAQfELISn92AVAisZRBbwak0eoK+raTqtYbFKIBTxcNAknQF++S6qJG
+         8bexdJcz+lKAO+hChjyCcQsgXHY+t6MINp3mUed3JCzX+n+NCB1eLGmehhgiRbggx/tg
+         sVuA==
+X-Forwarded-Encrypted: i=1; AKwUvBz6lUXJvVqdMYyV9rmPidTP2tuugohW5T08lJG6kVgKepUU+qOQn8c8aXrGcsB0TiwlZbyUji/KGuufGk//sb0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8SIURJeXqxwuobHw0QMSun7dkMkv4wmTCkePXt7s2XoQixjNkk
+	lkz+VClSCqkeCu+qo1nUhFD1DxKNdBqiaL1bsSi4WJbdm4m8j+gb0uMKrta/u3o7UhnT1pWsjb1
+	N3XtUwnfkKMFPF8qxw0Ea14Yecp+MaY/9+1Y8rKF8e3clS/zAUomM8sxNflolpYYiAsqrRw==
+X-Gm-Gg: AYBFou18gV+rJnh5rvI60R2kQalWh9MBQYX5fvShrJDC9bi/oNNO9gOPomlIcqb+DD9
+	95SjKN+73kZ1a/5z5O2TTEwUw75QLlaySK6BJ0W4ynYSn0EKeW3Ct3o7YJOmoIKwn+mjrOvNF3o
+	fXv9arNB6rcPPTq93n9LI8iHhktP+4ICp19Ixnkfs4fIxzXuL81rAuEFIckHGCyGQRIrkqSj9xe
+	x0TtEp0v+OD+4rdzLaVEaNxQh7ABpotgCdnPYrJi6Ld1duR2SLbliMlAq4zvwJIvCehFiXgLSfu
+	nQ/1WmK9yFIXtdNVR9wweU+/rPwPacuaZTOSECAHVMkfem3CQ7YgadwdSfe7F87KALRAcWyaXl2
+	amMty3CRyZ35BmJ61JQSsqJk+iSGpwAdzQy41s6yYF81kxfokWMg4Q6pB2NGMGnUzf/PMdCkT4M
+	KleBNObN4OQhvHqtDylgSyS/6OvISjsfPDrWzIKA==
+X-Received: by 2002:a05:600c:4e02:b0:4a3:59c9:a758 with SMTP id 5b1f17b1804b1-4ac19705e02mr339637905e9.32.1793791939102;
+        Wed, 04 Nov 2026 03:32:19 -0800 (PST)
+X-Received: by 2002:a05:600c:4e02:b0:4a3:59c9:a758 with SMTP id 5b1f17b1804b1-4ac19705e02mr339637545e9.32.1793791938760;
+        Wed, 04 Nov 2026 03:32:18 -0800 (PST)
+Received: from seott-rh (p200300f6af1574019b2c5947d8ec139e.dip0.t-ipconnect.de. [2003:f6:af15:7401:9b2c:5947:d8ec:139e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b4527fed5bsm60945795e9.3.2026.11.04.03.32.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 03:32:18 -0800 (PST)
+Date: Wed, 4 Nov 2026 12:32:17 +0100 (CET)
+From: Sebastian Ott <seott@redhat.com>
+To: Mark Brown <broonie@kernel.org>
+cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+    Suzuki K Poulose <suzuki.poulose@arm.com>, 
+    Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+    Oliver Upton <oupton@kernel.org>, Ben Horgan <ben.horgan@arm.com>, 
+    linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+    kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Subject: Re: [PATCH v9 1/3] KVM: selftests: arm64: Report set_id_reg reads
+ of test registers as tests
+In-Reply-To: <20261103-kvm-arm64-set-id-regs-aarch64-v9-1-ab32bc79fa9c@kernel.org>
+Message-ID: <4df3cceb-0d07-d787-b5b6-0a28433116f3@redhat.com>
+References: <20261103-kvm-arm64-set-id-regs-aarch64-v9-0-ab32bc79fa9c@kernel.org> <20261103-kvm-arm64-set-id-regs-aarch64-v9-1-ab32bc79fa9c@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,122 +120,47 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
- <auM32mOlBLu6ZUlt@google.com> <CALCETrUD4vh_iSHV7G0bprUFU8=c+ECo701-tXcbQ3UXBWC1ig@mail.gmail.com>
-Message-ID: <ausXFWLgHabezE7R@google.com>
-Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
- opt-in netns loopback
-From: "Hallgrimur H. Gunnarsson" <halg@google.com>
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
-	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Jann Horn <jannh@google.com>, "=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
-	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
-	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-api@vger.kernel.org, containers@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-On Tue, Nov 03, 2026 at 10:37:48AM -0800, Andy Lutomirski wrote:
-> On Thu, Oct 29, 2026 at 5:11=E2=80=AFAM Hallgrimur H. Gunnarsson
-> <halg@google.com> wrote:
-> >
-> > On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
->=20
-> > >
-> > > Why should the task's cap masks affect this?  *Maybe* cap_bset makes
-> > > sense, but I'm struggling a bit to see why cap_permitted and
-> > > cap_effective should matter.
-> >
-> > Sorry, the phrasing here may have been misleading. Just to clarify:
-> > none of the creating task's capability sets (cap_bset, cap_permitted
-> > or cap_effective) are used to restrict the new user namespace.
-> >
-> > When I wrote "reusing the existing task cap_bset, cap_permitted and
-> > cap_effective sets on namespace entry", I was contrasting this with
-> > the prior series from 2024 [1], which proposed adding a 6th per-thread
-> > capability set to struct cred.
-> >
-> > In this series, when a task creates or enters a user namespace, we
-> > simply initialize its new cred->cap_{bset,permitted,effective} in
-> > that namespace to user_ns->cap_bset instead of CAP_FULL_SET.
-> >
->=20
-> Okay, this makes *more* sense, but I think it's too weak.
->=20
-> I have a sort-of goal of having the creation of unprivileged
-> namespaces be allowed in most contexts by default, *even in Docker*
-> (which would involve the Docker team changing their default seccomp
-> rules, but that bridge can be crossed later).  (In furtherance of this
-> goal, I fixed an ancient bug in newuidmap that gets us quite a bit
-> closer a couple weeks ago.)
->=20
-> But tying this mitigation to a parent userns means that it's
-> completely unusable in the single-deep case.
+On Tue, 3 Nov 2026, Mark Brown wrote:
+> Currently when we run guest code to validate that the values we wrote to
+> the registers are seen by the guest we assert that these values match using
+> a KVM selftests level assert, resulting in unclear diagnostics if the test
+> fails. Replace this assert with reporting a kselftest test per register.
+>
+> In order to support getting the names of the registers we repaint the array
+> of ID_ registers to store the names and open code the rest.
+>
+> Reviewed-by: Ben Horgan <ben.horgan@arm.com>
+> Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+[...]
+> @@ -684,11 +719,20 @@ static void test_guest_reg_read(struct kvm_vcpu *vcpu)
+> 			REPORT_GUEST_ASSERT(uc);
+> 			break;
+> 		case UCALL_SYNC:
+> -			val = test_reg_vals[encoding_to_range_idx(uc.args[2])];
+> -			val = reset_mutable_bits(uc.args[2], val);
+> +			expected_val = test_reg_vals[encoding_to_range_idx(uc.args[2])];
+> +			expected_val = reset_mutable_bits(uc.args[2], expected_val);
+>
+> 			/* Make sure the written values are seen by guest */
+> -			TEST_ASSERT_EQ(val, reset_mutable_bits(uc.args[2], uc.args[3]));
+> +			reg_id = uc.args[2];
+                         ^
+Minor nit: this could be moved above and be used in 3 more places.
 
-To clarify, this mitigation isn't exclusively tied to the parent userns.
-If a system administrator wants a host-wide policy, like trimming
-CAP_NET_ADMIN for all unprivileged user namespaces, including
-single-deep Docker containers, then the host-wide sysctl handles this
-seamlessly. Any unprivileged process in init_user_ns calling CLONE_NEWUSER
-is subjected to the sysctl ceiling, effectively stripping CAP_NET_ADMIN
-upon creation.
+> +			guest_val = reset_mutable_bits(uc.args[2], uc.args[3]);
+> +
+> +			match = expected_val == guest_val;
+> +			if (!match)
+> +				ksft_print_msg("%lx != %lx\n",
+> +					       expected_val, guest_val);
+> +			ksft_test_result(match,
+> +					 "%s value seen in guest\n",
+> +					 get_reg_name(reg_id));
+> 			break;
+> 		case UCALL_DONE:
+> 			done = true;
 
-Where the single-deep case falls short in this series is per-container
-granularity. For flexible configuration on a per-container basis, this
-patch series assumes that containers run in their own user namespace,
-allowing the runtime to bound capabilities at creation time via clone3()
-and have that bound persist down the namespace hierarchy across any nested
-userns creation.
-
-If a container runs in init_user_ns (as in standard Docker) and we want
-to restrict userns capabilities for that specific container without
-relying on a host-wide sysctl, then you are exactly right. We would need
-some kind of cred-based mechanism to pre-configure a restriction for any
-future CLONE_NEWUSER calls within that container.
-
-> I do have a question about this whole scheme, though: are we talking
-> *just* about CAP_NET_ADMIN?  That is, is there any other bit that has
-> anywhere near enough security relevance to make this kind of thing
-> worthwhile?  Because if it's really just a single bit control, maybe
-> we can come up with a nicer scheme.
-
-Yes, primarily CAP_NET_ADMIN, and to a lesser extent CAP_NET_RAW.
-
-If we look at submissions to Google's kernelCTF VRP [1], 90% of the
-exploit submissions in 2026 require CAP_NET_ADMIN (and about 70%
-across all submissions since the program started in 2023).
-
-Restricting these network capabilities when they are not strictly needed
-(e.g. for sandboxing) is the primary motivation behind the series.
-However, I wrote the userns capability bounding as a generic mask so it
-could restrict arbitrary capabilities down the hierarchy, but if the
-preference is to narrow the scope more specifically to trimming
-CAP_NET_ADMIN and CAP_NET_RAW, that's completely fine by me.
-
-If we go that route and want to support the single-deep Docker case, a
-per-task inheritable securebit might be one way to do it, e.g.
-SECBIT_NO_USERNS_NET and SECBIT_NO_USERNS_NET_LOCKED. Docker could then
-set and lock that bit on a container in init_user_ns without needing a
-parent userns.
-
-On userns creation, create_user_ns() could record this restriction on
-struct user_namespace. That could either feed into the userns capability
-bounding set proposed in this series (clearing CAP_NET_ADMIN and
-CAP_NET_RAW from user_ns->cap_bset when the bit is set on the creator),
-or be stored as a single boolean in struct user_namespace if we want to
-keep the mechanism minimal and drop the generic capability mask UAPI.
-In the latter case, we would still need to replicate some of the
-userns capability bounding functionality, e.g. strip CAP_NET_ADMIN and
-CAP_NET_RAW in set_cred_user_ns() on namespace entry, and bound the
-parent-owner check in cap_capable_helper().
-
-[1] https://github.com/google/security-research/tree/master/pocs/linux/kern=
-elctf
