@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793811468;
-	b=znsoMjvDP2zEdy71wfBj2WPEq5WsJ4zyXtVv9SNcgwdmEQKVVQ2UUJoYZJAwl3Vl7/NK
-	 dE3hyFYmlfu/RDasAhFvNIPe+N8PpVjsiMUlRLegxsjFbVqB04RGwz/dyzAR0Z3XLtp9X
-	 urpOstRFGeStKNJgkXTGWwBm/xPP4dJ70r+tMI0FBrlAIq9tfU2rPCsm9d2rOySyJkDnA
-	 q31W7y32iHRSmw43uB9GE/Obre0pLC4y2BBqCF6g8c4RS/fva7/e65BAyFXsBaO9CsXfk
-	 KkJI/tn+upXT2ohrdv0pScKqVBujooNSSgnvepKVLr1LNhcgDVsCSsujxFb45sOmAow==
+	t=1793811478;
+	b=JEGUY/8Ih3XFvDa2qOXrwK76kj1jwsKp1FAOodW2m5sm4KiBDFJWGUr6C4ZoIsGUG6++
+	 szfsJ4PyfiZgBwYxR+xTO7kikQ6HrTGBSvWvh4rUpsUhjF+1ONpEjmzgxf/9KZVO/6who
+	 bqg31wC3VtuAXfE9c0WFxFuQPm/3vnFEAh+67p22dE5m2d/SczgJU93LnVhXY450UDzEp
+	 u5e0UYZV9ZnQ2MhoNFbeOX1wrYw8uXErQHH9EoWRdtJGgUfcPaTwbC3w6b9MEAucwHS5Y
+	 TsbJOc/+8MKWhsCjeZWhX4+S09xTHq5TjrPiI7IL6t54UUhrcdB8K8V1jwiCGe5TRCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793811468;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793811478;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=HYFy8sOOELLyqP//oMKFGSpOITyv86S+D257oV2UNCY=;
-	b=xoxbztqNv8nNdXxXbW6jZOi/IubPWLugJvsXX3oT+J6b4cTWu/J48JCHppdelADn0TbW
-	 jLQ+7dKa1lrASkjBqGgmhlFiM4nMsjnu+u1LiXpwREl+JU2d1QFIVFI9Eo+rgWxzeKQB6
-	 Mypftoh9w2Zz8YE/zkFj49GVnWUiFuHPK8aQSyCuQiN8oXty1hIVd999Y4iAbyqLXp99o
-	 jT7fDqLp+g3hUbAnDolvkqf1cZH8Z/Sp/SOw6JdFBh4Vbb7IFc6RtFYpTwv6KJmmuRruy
-	 fwPMLfmyIsYPNMcZOZl29ITfmPjQMv9gpUoxNnQerPa2m6sPCbfYwUUumyatHIqeGQA==
+	bh=vZX2J2F6ScsUN9tYZ3R0cEhAjGjvMCPd+3MYzWgyxI0=;
+	b=GJICV0hXOcnOg7Uc8rDbEEIeSE2B7smuVGMBCjq2Duq3qY7ITlIpUHkLItRYVlyKTmTc
+	 mkU+G8YWLR/Exgaw6N0MiF8w9zSzoQgIhFT/TZemvHLejFH5V4IavFkM5MEIKQJQHPKv7
+	 ZUF3yB7VC1fiTVYbZGeDTxowkgwhruNoJ+/HyHxKbIiKWDy0NyXlXzaNduKKXFQqVFqMR
+	 5qzKLiRNG8ppqLMZzo+IO/4Yi7WOpuL1oQB4nkTGIlS30YV76fLcZUiOIMmFnoWFlRcVB
+	 P4vExR9m0qLVe/6MMN2KDLiZQnjMyhwUl7BDr41ucGFDdVTCnKFBeU6y9XSePjUv3sg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+yZfRyu;
-	arc=none smtp.remote-ip=74.125.82.175
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lpDOW6AD;
+	arc=none smtp.remote-ip=74.125.82.174
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF99606D80C
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 16:57:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EF99606D80C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3408606A335
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 16:57:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3408606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+yZfRyu
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-35c76e9614aso1208586eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 08:57:48 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lpDOW6AD
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-3535a54bed9so1230848eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 08:57:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793811468; x=1794416268; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793811477; x=1794416277; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HYFy8sOOELLyqP//oMKFGSpOITyv86S+D257oV2UNCY=;
-        b=H+yZfRyu1YpjAqnbnHiKh5xNTmCDYDOnNqBVbKlooMK+sxvVJEQXqGJdt2ppEr1oHx
-         t435KiYlxJLi6R2A+7xJQKVHU0bpd0p4PwvDNarn62o3341CZREK7JiPVkwmMKTVkZNz
-         BPuL/XdarsAwqfDbJv8Ra0M5t2G1eDT8Op+OY5grEIwd/imbjAuY5jPGa59Euw6GYLM9
-         GX5rT/byFl19eCTBAowU9TiUfPVTY8CrphI0yYByVAzBDZsS9lwj0htyPQuwfm1cCYSJ
-         jFIBEzQv/l9itvS6ELOYrAx7w4GDmZWPFyGVpIPncbIFaiHeSVl0GE9j3rCjCkbMz4Zs
-         sfyA==
+        bh=vZX2J2F6ScsUN9tYZ3R0cEhAjGjvMCPd+3MYzWgyxI0=;
+        b=lpDOW6ADYu851lyuivuLo7QwlZhzKTNs3PLF10Rp8myOxE5BpOBWhjm7Q4MqLXHeCx
+         J52PFqv0AaxfoECHtzUpZMoovnjGHZgtZkxUez8M9SYQzp1jWB3MSam8LxY2TDtwtYM4
+         i3YsZK1YrUlfkTefb9OYyeuUQ2dajq19tol+OtKNoLQ+MTKFu1lkw68gpHISoAjLNrX5
+         GeRbxOyi04N5JeHjXQ+yP+UlpAEd/NKnQVYCH+cBYLKUSrSb3q/aJt4+3rxkSRyjQBnC
+         YQ/20uVwMzwVNPsexHWcF+BUwyqNK40THR9TTrc2B1//qZ3wuMYu1M/+MQKh2WT/05Xl
+         Q+wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793811468; x=1794416268;
+        d=1e100.net; s=20260707; t=1793811477; x=1794416277;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HYFy8sOOELLyqP//oMKFGSpOITyv86S+D257oV2UNCY=;
-        b=GB2AZ4HOBfW1MgQFyUvPRdXYUq83m5Fh8t1aF3vyIq9GC5YxQb4TrSTH4cIV0nEfvS
-         22bWRVK+hNW2lK+ScV6Rz3j/wszoVFGlcfcisLGo2A1RdENZwkcUyueSWit5qoDXLeX1
-         fb62rWlzk5UPkUKRYGaFyFqqiNueo4TK0T7qiEm2Gj50LQkRo/M96N6L0njtVfdomd7S
-         yb6C2DVXcAhcvHSqAJQJ2EAJYnqTlOPZLzVf+v529JxgjwxSZjMCZShAUOza9NeXwMmQ
-         K4nOG4sBIAn6R2YCbN6uQc4osy+jjOxnpRHhHj02m8zMuSG2XDjhl4qEF2rBlgtehG0s
-         c6MQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwVLTw6+RhtHUtYEcbhLyFbsKBlrunFDuMVtFnmNh3PWwL63IRqup+NR3AZv6GAJgkxzuFPiE3bjSvboRw+EcQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9PH4tf9TA/kRYkSSfNaNCJMp+Y1xB+Bu/1QiBEtnvyJjKEK35f
-	EYPbO70s/NISYSebGDT1e/o4QyEo9RbLDkPWX76ezGt+giMHy4IBmvYv
-X-Gm-Gg: AYBFou39vRFonW5G44ehw2Mp7qErBt9BtBCeLZ+GHvmgCpCslc59vBJwmXDBHYYtpEa
-	NBmXBos6s+WUTls26ajXsVQ4kD5cjyRDsvtIer05u5VKk8YVAHWW1zNHaNktsSFjQg5g273CR7L
-	BOP6OvrY5u/HE77lUO+ZLy7Edt68jQGO/4OuGCkrvJiDlUBJH3DH2vHmkMu7wX9pQsrL+0XGTbK
-	HhjDTwc/IBBeQIEyFEWZxoi6EcHe+mdRaAntGyfJoWNt2DhdKHn4DS8l2EZBpuTApOgdXWKUnlX
-	/SIIqiCeDoOvS2oMQbF+lAUZfCXk51bAwg1P2K1Of5MDkw7CZ5dNuCyWWnwI+nNkKeZowA1+OkA
-	EdN7lZm/Mvg6DZ0XU4W8t4tbymbS3GV/JJ01VuCOrIWEKpNQD+BEmWzVZIjjkOCSHhm87JKNtKT
-	oiXaCUy3oVbTJseueruqySKsfOKIJmEq/Je5ilzwTZJVute9Ct0ZuZ8WwpyzwmYbFWO3hLIxQfI
-	GDyuPiPmVWBU0OyLyhfXF8OXuCi/GFG44RtbScoaFRgzpvuDYrqlyUIK7ENdDcq5iODC7T7eeqg
-	TPCvIDa0ZYaxQo8HUPtSzCeAbp+LWH7rsJB78zg=
-X-Received: by 2002:a05:693c:87d5:20b0:35e:7bfd:4613 with SMTP id 5a478bee46e88-36a42425470mr24210020eec.40.1793811467022;
-        Wed, 04 Nov 2026 08:57:47 -0800 (PST)
+        bh=vZX2J2F6ScsUN9tYZ3R0cEhAjGjvMCPd+3MYzWgyxI0=;
+        b=s5vDce/kX7suITkwS18tzupb+ZaaMTBIF75hJ1VPC+MKbK9w2ldAqObGo4mIsUf/5q
+         eWisW1xUx+BvpyVK86NtMpKmmli7e3EvEFs5XiLK10GKRwBuZKo2x1WpPdid/XESzbb8
+         u8sbVc7hYKx8akJvPp7PivdnUGubcH2s+vst7KF6Zy07QHfBIGu2FsX1w2jxdtiwXo+D
+         6BaffHVWtsjfN1CGC2qTl4nQIDTnxsm2+ZUE62wyakQo7CptM5eC1didkFDouKdBUNpR
+         zXSdRGys5gYagqZMp4NCcoiqyQ7f8ayW/H55JhfaY3p0tKl4SawjTA56MSSztyF/ZtTV
+         L88w==
+X-Forwarded-Encrypted: i=1; AKwUvBx15l4sRgKQnfIwP+wZU8QkJRAxux7cBOOu5ycE3BA3JRqJPiiJi3KD1oFNzhPDeRVMiVXPJwUUNhfls+GAFZI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/17kuklwX9aWkWIaMNStPTJD/sTL/9vzdu56qt21lR7uAFFHmp
+	wLaEgFC9i5YcUe3mUFkqSFH0z356ohWlfAhpeUZnOIGfW6VauauuOFxE
+X-Gm-Gg: AYBFou2VW+LJEYr0IkjrLkCw+Ihef1NG7HrVIBCrw9Nsjk6ow7OlqpEkcixv0JxhWzl
+	P1hX5gkLaoqUTaN2fKbYbiyoPhCkmRHWjEfSF7FEsYbSWFNh4OzHmSP88KlYDrita0chZdJcFJY
+	D6DjepZ0XCUsnLjpFPwrbS/Q26d6rzhwzEKgzXoZTBcmghfVBhkG2K69zb9Q3C5jh6WL+3+5yvk
+	OJqylZYqnvvsDiGofpYyHJ7+YJThPJNPh6hhzAV0fZizjrh33FBAkjYRBvbcxalieMEuP4tr30z
+	tmRkedCQx5/9XEmBA8dxPQkj+wFbupoAWKpn0y0r62ofMxoK7dpqzUosG/zf9jtPOVISj6OECJ7
+	JNVawQZ4rdpDzZxjBqrvyOKgRfR08DmJp2AE/YH0OXEJcDcDqiAXJijRT08ib0MS/I2OXC6Z5jj
+	X4Y38nLawK7GlnhXnLBHvCSAO3uqpyLw4NEeJP3JQXf5LVPUmTBUwUQjDMq43O3EuzimMq3xAbL
+	bAANdur807ljSre7CIgRADA9ZN+yAo7xBQBOSMEkUps+xenTJXjqJkGjQwERcewKVR+awLX3HQ5
+	HT5uYGLohGF2C5JdvIJtjTtp7PBTFDNi4sfv5pd6W3pfDo6GZKUsGNE1V6TV
+X-Received: by 2002:a05:693c:42d3:b0:36a:1452:8dad with SMTP id 5a478bee46e88-36a4244dbfcmr24088619eec.20.1793811476479;
+        Wed, 04 Nov 2026 08:57:56 -0800 (PST)
 Received: from kernel.. ([216.195.201.23])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca38d46fcsm9019567eec.13.2026.11.04.08.57.38
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca38d46fcsm9019567eec.13.2026.11.04.08.57.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 08:57:46 -0800 (PST)
+        Wed, 04 Nov 2026 08:57:55 -0800 (PST)
 From: Kunwu Chan <kunwu.chan@gmail.com>
 To: paulmck@kernel.org,
 	boqun@kernel.org,
@@ -112,9 +112,9 @@ Cc: stern@rowland.harvard.edu,
 	linux-doc@vger.kernel.org,
 	rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 16/28] Documentation/litmus-tests: Add hazptr drain engage-wildcard test
-Date: Thu,  5 Nov 2026 00:54:34 +0800
-Message-ID: <20261104165504.2430480-17-kunwu.chan@gmail.com>
+Subject: [PATCH 17/28] Documentation/litmus-tests: Add hazptr drain resnapshot-slot-race test
+Date: Thu,  5 Nov 2026 00:54:35 +0800
+Message-ID: <20261104165504.2430480-18-kunwu.chan@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261104165504.2430480-1-kunwu.chan@gmail.com>
 References: <20261104165504.2430480-1-kunwu.chan@gmail.com>
@@ -129,83 +129,73 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Model the drain engage's wildcard defer: if the engage reads a
-slot holding a wildcard (an in-flight slow-path acquire), the
-engage must not complete for the target address.  The smp_mb()
-pairing between the reader's wildcard publication and the
-engage's slot read forbids the completion interleaving
-(herd7: Never).
+Model the marker consumption race between the resnapshot
+recovery path and a reader release: only one path may consume
+the drain_gen marker (the cmpxchg in the implementation).  The
+Sometimes result confirms the race window exists
+(herd7: Sometimes).
 
 Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
 ---
- Documentation/litmus-tests/README             |  5 +++
- .../hazptr-drain-engage-wildcard.litmus       | 44 +++++++++++++++++++
- 2 files changed, 49 insertions(+)
- create mode 100644 Documentation/litmus-tests/hazptr/hazptr-drain-engage-wildcard.litmus
+ Documentation/litmus-tests/README             |  4 +++
+ .../hazptr-drain-resnapshot-slot-race.litmus  | 36 +++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 Documentation/litmus-tests/hazptr/hazptr-drain-resnapshot-slot-race.litmus
 
 diff --git a/Documentation/litmus-tests/README b/Documentation/litmus-tests/README
-index c2bf20fa4092..daab126e45a2 100644
+index daab126e45a2..02c26d6bea50 100644
 --- a/Documentation/litmus-tests/README
 +++ b/Documentation/litmus-tests/README
-@@ -110,3 +110,8 @@ hazptr-wildcard-flip-escape.litmus
-     Test the in-flight wildcard window of the single-pass wildcard-flip
-     scan: a straggling acquire that published the old wildcard after
-     the final walk cannot still load the unpublished object.
+@@ -115,3 +115,7 @@ hazptr-drain-engage-wildcard.litmus
+     Test the drain engage's wildcard defer: an engage that reads a
+     slot holding a wildcard (an in-flight slow-path acquire) must
+     not complete for the target address.
 +
-+hazptr-drain-engage-wildcard.litmus
-+    Test the drain engage's wildcard defer: an engage that reads a
-+    slot holding a wildcard (an in-flight slow-path acquire) must
-+    not complete for the target address.
-diff --git a/Documentation/litmus-tests/hazptr/hazptr-drain-engage-wildcard.litmus b/Documentation/litmus-tests/hazptr/hazptr-drain-engage-wildcard.litmus
++hazptr-drain-resnapshot-slot-race.litmus
++    Test the marker consumption race between the resnapshot recovery
++    path and a reader release: only one path may consume the marker.
+diff --git a/Documentation/litmus-tests/hazptr/hazptr-drain-resnapshot-slot-race.litmus b/Documentation/litmus-tests/hazptr/hazptr-drain-resnapshot-slot-race.litmus
 new file mode 100644
-index 000000000000..0cee89893dad
+index 000000000000..699cbf0e3d7a
 --- /dev/null
-+++ b/Documentation/litmus-tests/hazptr/hazptr-drain-engage-wildcard.litmus
-@@ -0,0 +1,44 @@
-+C hazptr-drain-engage-wildcard
++++ b/Documentation/litmus-tests/hazptr/hazptr-drain-resnapshot-slot-race.litmus
+@@ -0,0 +1,36 @@
++C hazptr-drain-resnapshot-slot-race
 +
 +(*
-+ * Result: Never
++ * Result: Sometimes
 + *
-+ * Models the engage's wildcard defer: if the slot holds a
-+ * wildcard (transient value 1) at the time the engage reads
-+ * it, the engage must not complete for the target address.
++ * Models the marker consumption race between the resnapshot
++ * recovery path (P0) and a reader release (P1).  The shared
++ * slot_gen represents drain_gen; only one path may consume
++ * the marker (cmpxchg in the implementation).
 + *
-+ * P0 (reclaimer): unpublishes head, then reads the slot.
-+ * P1 (reader): publishes wildcard (1), then replaces with
-+ *              the target address (2).
-+ *
-+ * The smp_mb() pair ensures the engage cannot observe the
-+ * target (2) while the reader still sees the pre-unpublish
-+ * head.  This verifies the publication ordering that the
-+ * engage relies on to defer when it sees a wildcard.
++ * The Sometimes result confirms the race window exists; the
++ * cmpxchg ensures only one of the release hook, resnapshot,
++ * or unchain path decrements backup_outstanding.
 + *)
 +
 +{
-+	head = 1;
-+	slot = 0;
++	slot_addr = 3;
++	slot_gen = 1;
 +}
 +
-+P0(int *head, int *slot)
++P0(int *slot_addr, int *slot_gen)
 +{
 +	int r0;
 +
-+	WRITE_ONCE(*head, 0);
-+	smp_mb();
-+	r0 = READ_ONCE(*slot);
++	r0 = READ_ONCE(*slot_addr);
++	if (r0 != 3)
++		WRITE_ONCE(*slot_gen, 0);
 +}
 +
-+P1(int *slot, int *head)
++P1(int *slot_addr, int *slot_gen)
 +{
-+	int r1;
-+
-+	WRITE_ONCE(*slot, 1);
-+	smp_mb();
-+	WRITE_ONCE(*slot, 2);
-+	r1 = READ_ONCE(*head);
++	WRITE_ONCE(*slot_addr, 0);
++	smp_store_release(slot_gen, 0);
 +}
 +
-+exists (0:r0=0 /\ 1:r1=1)
++exists (0:r0=3 /\ slot_gen=0)
 -- 
 2.43.0
 
