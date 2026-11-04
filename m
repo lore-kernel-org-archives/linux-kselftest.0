@@ -1,54 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793825719;
-	b=HJgXn1UKCix/y3XXXNDBYxmveGrcW4i1dX987hFXVBkH0jP/B6KZkTsYK7Z7j6yvvDWU
-	 MekIlNgTPibYitYm1zOx437pByMjHR/ih4eYZLKAjgOnKt3SJWkQ+4RHp/aFBhOXsvBsa
-	 +39DqEwBE4a7ohXXNFMDWQk19r3Az/mKNBXoG3u04YlD0o2hkOw8naoJ2l8AaN9eM+d0q
-	 I+oCzlxjvjACpSae+rp7VsEBtZJcn0ax1M4h/d0k5W+WybY6dO4IwhTbAWn0gGAmQQYe4
-	 YoLPbKGyLiq65Gg14ypjnddN08XYRApmpBbBYMYMNWj9XopV4xM1FUDzMwFUGkIpWHw==
+	t=1793826536;
+	b=ZP6eUO/SXf88NPJTDNkM/kl3I8BKAy315xavfyjkrJJghkgGaRkr9BXKNVL443Ni/LEP
+	 9FDoaRFpzATeGdCDJLzBBXh6p7NBXFkLjDtZv9RrtASgqXEi3tiY7aIilrlwi+Tzd/Dm7
+	 /GtU5lNDeQa84sr2UX6tL6AlX36yF/KPkm2qz3VOX6u3bAE0uq7YkYDENQyq7WtcTWleA
+	 WcBjn4OW+7aNMlruG5oAJh1mpFkp4arUqp4CHY8GcadNYWBwdoZ9Y4tL1Hzxeb8AMu7S9
+	 yrkQv9KssruVT+3aNY1Q+r6NnM4LuhInZI9h0OjrYVUVa+fSNO+mhmpDqetiMBfmbnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793825719;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=MT1dhAso7qHFLq0iaAatVFL/NEYT/vU7az8cSYFYlWo=;
-	b=CihzEMhj8Z9wZf6+r//8FxIZzPtw9d1zGF5tiXAliMqf0bWO+Mu5spNU405e0D/q+kQE
-	 BxeoSnOROgajvIRSvDD9hNZee95W5AnGkFKsElJPgS3ibd0TVBScPj7mCbGYhosziFzTU
-	 MgjI1/4/UAJO5AmrVY7jOK2P5Idb7ALU3U+ygfKlMzP7BIPPffYLL1sLZXTq5S2VV0Ylv
-	 zLW2GWpVDTMsa+KxqqhUePKlvRlgqVFb1PQ6L2laLeGWqBnHVfGjf+n3KAni1AMoLpkVn
-	 wNfT1FjU/yNNnFD1go4yu4PtlrBmo1IYk4gO3YdorpcDlSvecmvsD2UdrnkszQS6qug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793826536;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
+	bh=4OSWRtRd+V91Vqwy50g3O6DPEqRmvPxAQw2Z2wGJO2E=;
+	b=PxhlsYc3qbDOZFHzLfH//lVxXWPXDn11X4ooSy3R1eiiVce8RishS7jDD1acmyzuFSEO
+	 vKpwDaNPHziAsyBUsCfjIWd8Dfv74cb0NFrq5XaQxTOq4DUnNT1WG4RlhkbOt4Tw/NLn7
+	 +XmJS06Zqwi+oN6elgAMwAPZAiKtpD7BtiEW7Rg59D/JvH7sDNoAX+DG+5YqxcMzqJPX8
+	 vZ1zL7Qrdvfu9DwUErpYKR+7dYl18l5TyKZQPCiZHBEuzplxv69YGb+jDLtyyigXwzpMq
+	 7l0/2peWDeSBblmjrqb4CuV7NXZTAyPQGBZtt8L12utCrz8aMk/t3FooONvaz8PsGgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AGjp0GgY;
-	arc=none smtp.remote-ip=95.215.58.16
-Received: from mta1.migadu.com (out-16.mta1.migadu.com [95.215.58.16])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gRxGPTfT;
+	arc=none smtp.remote-ip=209.85.128.42
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419A7607873B
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 20:55:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 419A7607873B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BC4607C094
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:08:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 18BC4607C094
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AGjp0GgY
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=2wHMPTNxJIGUJZhji4UnCl9+7oU4WjoytLuAWQg1w+c=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793825716; v=1; x=1794430516;
- b=AGjp0GgY2fjHDNP0ww5fk78cTUV9tQRQLb0s2XkFRLG8JEGvB4xvY/7fSI/259Bk4hpW7QmH
- pDdNHkN3dbN6WT+OfO6J1o6AIauNSvU7N+20bmGBft5xrxuiKhd+6lePbDG9iUBZile2pYIfx17
- U9nR8ia6tGBhcjNsY3AAW9sQ=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e97d27abcf91b971;
-	Wed, 04 Nov 2026 20:55:12 +0000
-X-Mizu-Trace-ID: e97d27abcf91b971
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <1bb8be94-400c-4c81-a4ce-84e4f78387c8@linux.dev>
-Date: Wed, 4 Nov 2026 12:55:08 -0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gRxGPTfT
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so9734255e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:08:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793826534; x=1794431334; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=4OSWRtRd+V91Vqwy50g3O6DPEqRmvPxAQw2Z2wGJO2E=;
+        b=gRxGPTfTWalo994sN1tcM8Gk6GH7B3u/3u+F1Kga5xftUlTlJ+u+1yOwZSLEM7R7aJ
+         FROykiffhUmwAaJBOn0r3S4I4IVM6erRuf77jUBCj/eO3FvlzgriebXvlaf/6V2eH3Mo
+         fsMxDzITqnq6BNLn+6zyyLxMSXv7hPNPgabFJN6NqxKx1PMIqDF5W7vE0IYAhha9OD9C
+         RwADQixSQl4Dp1d85S/d/e7/WsvZ4wtQS09FmQnCTMi3VFAuLTPeKr8rK/93/TJ5UHSy
+         SiwtgOkxGsRhFm9044+37iy+D+5GlNp64v4HTtASP34RoGpoImJsKaN9+aBo3owFhhJY
+         Gf1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793826534; x=1794431334;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=4OSWRtRd+V91Vqwy50g3O6DPEqRmvPxAQw2Z2wGJO2E=;
+        b=zjI5vBnbO2mCOVuOGHI/ERLPe0SyafArfCYe8X8D5YqKlWGyHcQtW3EUrfbg6G8CcC
+         W7/UEXKXDD/dHT75SYHcgWhpjBov6bYeIqrb4M+YD11jcd5o5mbqPtMEikLPjkPXiKhz
+         O5DEnm/qjUYEwg2c15GOb6E4eF4DpWEYIJVYDYOsLjn4+P0bKRSOUWUuBuCkEy7yRSVj
+         +ljqAfRc0fB0lD9rUFuWG7fCXherGaz1UA1vrbtcnjzemh64/gLABsoXlSO6V92PB5Dn
+         bevA1zgxEiHAYqzHgYbReeBRyKqueSOiTM2w7r5dgR8QaTXieICAQBI+/wRaxaVS3il6
+         N8Zg==
+X-Forwarded-Encrypted: i=1; AKwUvBz71GmvM6FMozp79RinMW++frnGBb+M0kPW/oT2ChvF2uwdkBXlSlFyRmv5VxCegHXdQz+Krz3MT1BdrVOX+H4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8w4LajlTEh8KIpgQUFmmsQUGjUpvC2nJMT67s0xMEmkPwy5Doa
+	tOqcbQs7luR9BFIVhv1W45CG4CeNhxyrRL+oZJow+Cxs4olBMmLoefWH
+X-Gm-Gg: AYBFou0WpQqjcnQQ8rrPX+V0Fam+TThP5VTPjzd6zjisbePNHkDOF6Lya6yl+6lth8T
+	50+9AhrHO4yyxk/7HSeFxTX4b+7WCnsM9Ldf3zkQ3/gKE8+PNJR1+PwLObQWuLVnjO8vRAWizTy
+	zcDSIws0aSA6A8eEFCJROtWpEMPJrbT+7XaVmgxmzO3hcpwUIGXYLb7ePp73MAGsPlJcUH4soun
+	LIWwlBHTXR8guXodxBaES0KFoXVdccln7ZOs65yiSEPg89Sg9XlTs2KMNdJA9tFsv32xgMzzm+6
+	Jlw1iB+R8pGRDzLegolEc/owIsjwOFV1y7hxFIr7enDy4EZ3t2hVQ7T1iRuTVjApcRwrAXuZWsz
+	cp7SvkFSpnEYrwHWB5XTtnNGWTATDoHRFt2dTRdtSk0Ei1mY5ksNi/b5fyYMZKdlApk5XE7hxSW
+	IH91wGlpcOQ/4cq1GSPrQrNOrtfP+rrh8xAh/j6sj2eG/oDu35SqpZEfkYD/b5kBulJjZWLAaGr
+	xOfwwr/A8ITsA8kGZT4GsYtFZabwZ33sC6yH7u83yaCf5eJkZkY3UP4053VOZbzacdE58i1aYLs
+	TL4uT7slVVRf90isuFDi8b+Gnl2P/PWRNODmjVy3Be5AD7+hUZ6XXg==
+X-Received: by 2002:a05:600c:8b04:b0:4a1:fb01:13 with SMTP id 5b1f17b1804b1-4ac17a3683bmr391930765e9.18.1793826533442;
+        Wed, 04 Nov 2026 13:08:53 -0800 (PST)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48fed0844c8sm6227254f8f.26.2026.11.04.13.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 13:08:53 -0800 (PST)
+From: =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+Subject: [PATCH v2 00/27] landlock: Selftest fixes and cleanups
+Date: Wed, 04 Nov 2026 22:08:46 +0100
+Message-Id: <20261104-selftests-refactor-v2-0-c52f23f7ce33@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,144 +91,132 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 03/12] bpf: Prepare linked scalars for
- relations narrower than 64 bits
-To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
- <20261020161907.2115379-4-vineet.gupta@linux.dev>
- <49019042b63d5718a9419e8fac035cf9104ae8bf.camel@gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <49019042b63d5718a9419e8fac035cf9104ae8bf.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/5WOQQ6CMBBFr0K6tmRaGlBX3sOwKHUKVaGmU4mGc
+ HdbXLh2+fLnvz8LIwwOiR2LhQWcHTk/JZC7gplBTz1yd0nMJMhaCFCc8G4jUiQe0GoTfeCqUaJ
+ DUBKVZan4SIl7bdJz+2V6dlc0MZvyhQ1+5HEIqH9ygL1QsgZVVgcBDZe8n7w2twoATv2o3b00f
+ sztwVGafW8/zyKv/GVo13X9ACDHseb4AAAA
+X-Change-ID: 20261104-selftests-refactor-4741be042e4f
+To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
+X-Mailer: b4 0.15.2
 
-On 10/29/26 3:51 PM, Eduard Zingerman wrote:
-> On Tue, 2026-10-20 at 09:18 -0700, Vineet Gupta wrote:
->> Two scalars sharing an ->id are always related by full 64-bit equality
->> today: reg == base + delta over all 64 bits (this is true for
->> BPF_ADD_CONST32 as well, which implies upper bits to be all zero).
->> Sign-extension needs a genuinely low32 equal only relationship kind
->> with bit 31 supplying upper 32-bits.
->>
->> Today the following 2 relationships exist
->>
->>    #define BPF_ADD_CONST64 (1U << 31)
->>    #define BPF_ADD_CONST32 (1U << 30)
->>
->> Model them differently as
->>
->>    enum bpf_reg_link_kind { BPF_REG_LINK_NONE, BPF_REG_LINK_FULL,
->>                             BPF_REG_LINK_ZEXT, BPF_REG_LINK_SEXT };
->>
->> So BPF_ADD_CONST64 becomes BPF_REG_LINK_FULL and BPF_ADD_CONST32 becomes
->> BPF_REG_LINK_ZEXT with the exact same semantics as today. But this paves
->> the way for a future BPF_REG_LINK_SEXT in the same framework.
->>
->> The implementation needs to change as well. Today the above 2 bits are
->> shoe-horned into ->id, needing masking and OR'ing to get ->id and kind
->> bits: with more types and bits needed, move them out into an enum
->> bitfield of its own. To avoid growing the storage (and stay within the
->> 1K allocator bucket), borrow 2 bits out of ->map_uid, 31 -> 29, which is
->> still far more ids than a program can generate.
->>
->> ->id becomes a plain identifier, so check_scalar_ids() loses its "compare
->> the compound id, then the base id" dance in favour of one check_ids().
->>
->> With the kind out of ->id it also leaves the idmap key, so regs_exact()
->> and regsafe()'s explore_alu_limits arm have to compare it explicitly.
->>
->> One case changes behaviour -- old {r2.id=A+delta32} against
->> cur {r2.id=B+delta64} was accepted and is now rejected, correctly, since
->> alu32 and alu64 deltas diverge in sync_linked_regs().
->>
->> Clearing a link is no longer just ->id = 0: any stale ->link_kind needs
->> to be cleared out as well. And given this needs to be done in the newly
->> added kernel/bpf/scev.c, it is moved into bpf_verifier.h as
->> bpf_clear_scalar_id().
->>
->> The helper also zeroes ->delta, which the open-coded clear left behind.
->> Unlike ->id that field is inside the memcmp() prefix state comparison
->> uses, so a leftover value could keep two otherwise-identical states
->> apart; clearing it can only help pruning.
->>
->> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
->> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
->> ---
-> Nice refactoring.
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+A collection of Landlock Selftest fixes
+=======================================
 
-Thx.
+This patch set is bundled together to be slightly less spammy,
+but the patches are mostly independent.  The commits are ordered
+such that the simpler and more orthogonal patches come earlier.
 
-> ...
->
->> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
->> index 5432c0fc442b..a6f205653a9e 100644
->> --- a/kernel/bpf/log.c
->> +++ b/kernel/bpf/log.c
->> @@ -651,8 +651,8 @@ static void print_reg_state(struct bpf_verifier_env *env,
->>   		verbose(env, "%s", btf_type_name(reg->btf, reg->btf_id));
->>   	verbose(env, "(");
->>   	if (reg->id)
->> -		verbose_a("id=%d", reg->id & ~BPF_ADD_CONST);
->> -	if (reg->id & BPF_ADD_CONST)
->> +		verbose_a("id=%d", reg->id);
->> +	if (reg->link_kind)
->>   		verbose(env, "%+d", reg->delta);
-> Nit: it would be nice to see if the link is full or zext.
+The patch set is LLM-assisted (and that turned out to be very useful
+for spotting errors).  Needless to say, I have verified all commits by
+hand, and reworked them where necessary.
 
-Done in v4.
+The last few patches are a bit more cross-cutting and probably more
+prone to merge conflicts, as they correct cases where we have been
+using EXPECT and ASSERT in the wrong way (details in the commit
+messages).  I believe that the rationale for each of these is
+reasonable, but I am happy to discuss.
 
->>   	if (reg->parent_id)
->>   		verbose_a("parent_id=%d", reg->parent_id);
->> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
->> index 48500d73105a..f0aa314233c8 100644
->> --- a/kernel/bpf/scev.c
->> +++ b/kernel/bpf/scev.c
->> @@ -2285,7 +2285,7 @@ static void scratch_widened_reg_id(struct bpf_verifier_env *env, struct bpf_reg_
->>   {
->>   	switch (base_type(reg->type)) {
->>   	case SCALAR_VALUE:
->> -		reg->id = 0;
->> +		bpf_clear_scalar_id(reg);
->>   		break;
->>   	case PTR_TO_PACKET:
->>   	case PTR_TO_PACKET_META:
->> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
->> index 953700822fa7..a1b90a31747a 100644
->> --- a/kernel/bpf/states.c
->> +++ b/kernel/bpf/states.c
-> ...
->
->> @@ -574,13 +561,14 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
->>   		 * Linked register tracking uses rold->id to detect relationships.
->>   		 * When rold->id == 0, the register is independent and any linking
->>   		 * in rcur only adds constraints. When rold->id != 0, we must verify
->> -		 * id mapping and (for BPF_ADD_CONST) offset consistency.
->> +		 * id mapping and that the link kinds agree, along with any delta
->> +		 * they carry.
->>   		 *
->>   		 * +------------------+-----------+------------------+---------------+
->> -		 * |                  | rold->id  | rold + ADD_CONST | rold->id == 0 |
->> +		 * |                  | rold->id  | rold linked kind | rold->id == 0 |
->>   		 * |------------------+-----------+------------------+---------------|
->>   		 * | rcur->id         | range,ids | false            | range         |
->> -		 * | rcur + ADD_CONST | false     | range,ids,off    | range         |
->> +		 * | rcur linked kind | false     | range,ids,delta  | range         |
->>   		 * | rcur->id == 0    | range,ids | false            | range         |
->>   		 * +------------------+-----------+------------------+---------------+
-> Nit: "linked kind" -> "link_kind".
->       also, the table should show when link_kind equality is required.
-> ...
+Motivation
+==========
 
-Done as well. I'll carry the Ack.
+LLMs (and humans ;-)) have an unfortunate tendency to pick up and
+replicate bad coding style patterns, so I hope that a broader cleanup
+of the test style will avoid this spreading further.
 
-Thx,
--Vineet
+–Günther
+
+---
+Changes in v2:
+- Rebased onto master (v7.4-rc1-132-g05441d697f7f).
+- Dropped the "Assisted-by: LLM" trailers (not required any more).
+- Applied the same ASSERT/EXPECT rules to the test code that was added
+  in the meantime (cap_test.c and ns_test.c, plus new checks in
+  base_test.c and trace_test.c):
+  - "Assert tracefs_extract_field() results that are used": also the
+    new handled_permissions check in trace.create_ruleset.
+  - "Assert audit initialization in fixture setups": also the
+    cap_audit, ns_audit and ns_proc_open fixtures.
+  - "Assert audit_count_records() before using its result": also in
+    cap_test.c and ns_test.c.
+  - "Use ASSERT for syscall failures before errno checks": also in
+    cap_test.c and ns_test.c.
+  - "Use EXPECT for checks that later steps do not need": also the
+    errno and WEXITSTATUS() checks in cap_test.c and ns_test.c, and the
+    errno check in base_test.c's ruleset_with_unknown_permission.
+- Dropped the note about depending on Wang Yan's snprintf() fix, which
+  has landed as commit 8e4c736cffdd ("selftests/landlock: Fix snprintf
+  truncation checks in test files").
+- Link to v1: https://patch.msgid.link/20261008142604.39107-2-gnoack3000@gmail.com
+
+To: Mickaël Salaün <mic@digikod.net>
+To: Günther Noack <gnoack@google.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-security-module@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+---
+Günther Noack (27):
+      selftests/landlock: Propagate grandchild failures in unix_scoping
+      selftests/landlock: Propagate EXPECT failures from forked children
+      selftests/landlock: Check the thread result in audit.thread
+      selftests/landlock: Zero-initialize the buffer in inconsistent_attr
+      selftests/landlock: Fix the openat() success check in fs_bench
+      selftests/landlock: Fix the reported clock tick rate in fs_bench
+      selftests/landlock: Fix the ruleset_fd check in empty_or_same_ruleset
+      selftests/landlock: Handle a missing control message in recv_fd()
+      selftests/landlock: Assert tracefs_extract_field() results that are used
+      selftests/landlock: Assert audit initialization in fixture setups
+      selftests/landlock: Assert helper results that are used afterwards
+      selftests/landlock: Assert audit_count_records() before using its result
+      selftests/landlock: Fix memory leak in audit_init_filter_exe()
+      selftests/landlock: Make audit_message large enough for any exe filter
+      selftests/landlock: Close leaked file descriptors
+      selftests/landlock: Check errno for combined VERSION and ERRATA flags
+      selftests/landlock: Fix SIGURG handler setup in scoped_signal_test
+      selftests/landlock: Fix regex_escape() error handling in matches_log_fs_extra()
+      selftests/landlock: Fix off-by-one in regex_escape()
+      selftests/landlock: Fix the snprintf() error check in matches_log_fs_extra()
+      selftests/landlock: Use _exit() in the named_pipe_ioctl child
+      selftests/landlock: Fix messages and comments in helper programs
+      selftests/landlock: Fix stale comments in common.h and audit.h
+      selftests/landlock: Use ASSERT for syscall failures before errno checks
+      selftests/landlock: Assert WIFEXITED() before checking the exit status
+      selftests/landlock: Use EXPECT for closing FDs and stopping threads
+      selftests/landlock: Use EXPECT for checks that later steps do not need
+
+ tools/testing/selftests/landlock/audit.h           |   20 +-
+ tools/testing/selftests/landlock/audit_test.c      |   56 +-
+ tools/testing/selftests/landlock/base_test.c       |  192 +--
+ tools/testing/selftests/landlock/cap_test.c        |   70 +-
+ tools/testing/selftests/landlock/common.h          |   32 +-
+ tools/testing/selftests/landlock/fs_bench.c        |    5 +-
+ tools/testing/selftests/landlock/fs_test.c         | 1300 ++++++++++----------
+ tools/testing/selftests/landlock/net_test.c        |   64 +-
+ tools/testing/selftests/landlock/ns_test.c         |  124 +-
+ tools/testing/selftests/landlock/ptrace_test.c     |   44 +-
+ .../selftests/landlock/sandbox-and-launch.c        |    6 +-
+ .../selftests/landlock/scoped_abstract_unix_test.c |   45 +-
+ .../selftests/landlock/scoped_signal_test.c        |   23 +-
+ tools/testing/selftests/landlock/scoped_test.c     |    2 +-
+ tools/testing/selftests/landlock/trace_fs_test.c   |    8 +-
+ tools/testing/selftests/landlock/trace_test.c      |   28 +-
+ tools/testing/selftests/landlock/tsync_test.c      |   22 +-
+ .../testing/selftests/landlock/wait-pipe-sandbox.c |   16 +-
+ tools/testing/selftests/landlock/wait-pipe.c       |    2 +-
+ 19 files changed, 1051 insertions(+), 1008 deletions(-)
+---
+base-commit: 05441d697f7f9a927264f4058cbbc6a03dfcac9d
+change-id: 20261104-selftests-refactor-4741be042e4f
+
+Best regards,
+--  
+Günther Noack <gnoack3000@gmail.com>
+
