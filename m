@@ -1,117 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793792244;
-	b=MDbKTqXitTBsgsRtVH+8LIkAnZNEsQpNMBf89iZRp3TUHBycgj93B+CJKauf57PW+LRZ
-	 LqXG4Vqir0X392e2lun54guU6XEQy9ZqBW7qHQTCXoCogIwXfHCZaq2HQ/Q7wns5KFLmQ
-	 aSajj949yZKrb130bG9kQHg6f8W7tfH8Z6Mmyhnfj501cTxlZtj+AcSc3dpkn2OWxOPsF
-	 eWCeu0Fi5wWQGd18V1sS0ZnqepNsHO1FVa02niwarfogOsjhuMC6674ejW/KD7RWKtde+
-	 9GHqIodiBFqibuvgK0wVxROW0kkPeBCdGDV5HfrundCnoLieLMlOsliixaSxzUW0eYw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793792244;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
-	 References:MIME-Version:Content-Type;
-	bh=ozSGf2zyuVYYLVzmKkiurYsLvvrqYzVSGZ8tHSkd2EU=;
-	b=1ILLD3DtLitgc7dJcd3qbnIVLgSSwNzU1TBqxaLPPGPkENzPfIWlcwTwL8bc3ClyUCsV
-	 k3WWhxHQ0PK2cuik52vettIQ2wN1rmkmK4+AkVMEVuOHanJElt15TbeCjlQgBd+Sm37tA
-	 d6VdB3u9ThXXIMHeKpbuLM2yAF2ceibQv0JQI5VT0/otebIeySE1LbPXbSTC89snt61PA
-	 U+PsFFCXJMlQZl6FEAcqIUcP944FjKYotyU1ReMGLke349IOctvdam/yq+lagXhinXUGy
-	 Cf0I739/ZOW/o7bqtfGX8f2C/Z0D9dMnyfe6zIHngze4qnnS/rfPEpFWl4u9aZbxHYQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=gaBmgHR4;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=e+BJ19sX;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793792282;
+	b=COVI0doK8sD5SfK/Anws+X0I2VdQA4TdIQZ0yS0MdKyfBqsvwgfP8IfCaQacBS3EfTih
+	 Chr6DDfMg980N29Pr4KWEQieAHjou5hONzxTIZG6YdZ2OHDrxlnPyAzEfjGTDLZaxsWTe
+	 0LjVnmU2zYbEVuvhWB18y7wm4DqgAFKSZo+SFj46TuT5UDzEAlQt/hRYowFV0ulnZGbfr
+	 kKk8inVbv/bDtip/CqL9t96uQls6CI7ROABl2KfLqtN82fHnBSWxyww/D5mEGZH33XL9t
+	 hfOD5rVpeq/Yt3GzmQJguzvz/aPFnYmTCOqITkINNf2SyzTgrJUXTIt3dDYWxL+6xCw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793792282;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=LC6o94h33PMpBSRX2oT9zIzB0iubJnPS2+w0Nf9vLoM=;
+	b=idvptYh8Mqfb2+LZdfjkrd3uNI2kG8APHSQz8h+UslDmjqrA9u8yZjyklX3kksdto9T4
+	 b9wCw9tvwUGe0jY+McytukyiYbYklCbtvoKvzpQfhbEb8+IjMYSFdWfiop8GcQklsEdA1
+	 Vq2+l7QuTNcxYmjeIX1KQ8ySi/o5Jxybaogi79UigGT3DFSnxLVcLgLakq3am40SiitFx
+	 yOmlVQtaMMmji4fQBahUQW+H1cOw2P6M9957J3kyIUcasnPWXBFMXQ6a/wlyYEorxT6L0
+	 Ia266j30s26zXAH/E9aVVqnsSIPTnWkN9Krfa7GWd7gHYVDjSVy/kFj6c/PgOPd8TWg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="UC6X/1jn";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23450606D803;
+	Wed,  4 Nov 2026 11:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UC6X/1jn
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793792281;
+	b=s4xEzx4PNDVgcIK/2w/pqnPsK6PehLv+WfMBJx26MPTUdB25B1C7pF481XMU6LS7UE+J
+	 vkvREbAr3LHNaTvojOxSwglwsAIrD+o2TdjEOf5eYy2RoxpCiTWSsWwSmvmw9ErPyaX2Z
+	 8Hc+WB3enCPGWIf0zd/FRBGQ/nFDYgM+6Wuo+zmzcNz9ylvq80SuzXGiNLt7yRJCvcM2E
+	 qIJntiSVJXl0wtUkbVEkeVMwd8AHUlbg4RiGNZvAA7sf//jqXF98cWw/DkIXzmOy0RvmU
+	 x2bkvdJjg3BODafhaZVUnGdUAenqnPJdsFEiZzXTJeqEC56Y1WtbatyKBpmRtdPhusg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793792281;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=LC6o94h33PMpBSRX2oT9zIzB0iubJnPS2+w0Nf9vLoM=;
+	b=URTvLy8t6QnwDT2GxSAb2JzYeuUWFbMq/rTBOJv5srPLbmyveYh8QadlCvNp/jlIfbeG
+	 NgZhrPfPN9XSnrX3UX6AqZZLlxExhESk+RsEKUPcv5Z/7XVwCTjGT/+gzoSPcaMcDddgT
+	 iBpNgxijnAjcgLq+7sL+y2H4M/kW1nxcCgCOS7ScOWjn6aVm5XtbtEYN+Z3s4SnjkneDj
+	 PS80/OXor0OxAEPkqds5n9H56BQwGmIG6pdcqMS56Ol6LUjoQfzxdqRQu9mvU8r4wHqR9
+	 FrMgwjazgxe6M3gsDChQsEaoPpLnsQfB9RLPk63nr3p4iAP6hhQQyElderJjm7lpd3w==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FB9606EE9C
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 11:37:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31FB9606EE9C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=gaBmgHR4;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=e+BJ19sX
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793792243;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ozSGf2zyuVYYLVzmKkiurYsLvvrqYzVSGZ8tHSkd2EU=;
-	b=gaBmgHR4BR5KhzzjedYykjxmp5nDN7co/1bCU/XsQdNXpGylT5z6TuJdOJovX9JFETJ2hA
-	7srHc3RDZnBORBpQSg8XIzy8aJqZW63WmXXxJifinADfNHVLH94TrCVBLltR5VfRi7U5fW
-	2+PvGYQGc2LRBen0zkH+NWF9s30KFQ4=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-689-UB1jZxKfMtqq_hmlgQEEfw-1; Wed, 04 Nov 2026 06:37:22 -0500
-X-MC-Unique: UB1jZxKfMtqq_hmlgQEEfw-1
-X-Mimecast-MFC-AGG-ID: UB1jZxKfMtqq_hmlgQEEfw_1793792241
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48e011829easo393218f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 03:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793792241; x=1794397041; darn=vger.kernel.org;
-        h=content-type:mime-version:references:message-id:in-reply-to:subject
-         :cc:to:from:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ozSGf2zyuVYYLVzmKkiurYsLvvrqYzVSGZ8tHSkd2EU=;
-        b=e+BJ19sXHDIDQjJBttZD1l6dXkUHVjAVK2T0XmUuCboYncRhk6ePDwuI1Le2S0r+h1
-         HH39dH9YuLl5WU9+YAx9kglkF4CcWHnLqnLCiprDMCtj6eMDzQSqy84qcszXflg8X8yO
-         rol2ivdA+/hk2CTosF3o3SBTyXOBqmSpd2nHSwNM6wOGnG3JBcjss+XD234R1GLsD9uO
-         dwMq9QtK4oaFuC+EB2OFdi9WKTZ8fRiJSbOcocfT2qkv50Y+IgKwNOqyT4lQ/IzX+xhJ
-         hVd1AwCvfDdWqdd8aRmGRlzZp9WrHvtKZung5IFO7kxhex2j6A4urhYsuLMxo321t/Jz
-         42Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793792241; x=1794397041;
-        h=content-type:mime-version:references:message-id:in-reply-to:subject
-         :cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ozSGf2zyuVYYLVzmKkiurYsLvvrqYzVSGZ8tHSkd2EU=;
-        b=oykozkF01UL1/AQTf44hGvAqkA51aQsTcNoLiRYi4w1RYM6mxPUdVro6cKz1LHHnGo
-         Jx8idyF0k5EYddXQ9TeWrhlWQNTa1TLQXFrq87s8arD/k7Mp8mLtH+6es2VSuCp8aaM1
-         h/vTukAWU71Ru4OGx0rkgsbLjNaYEuY/qxjtnBMDFjPAWLRnUgyaGTQsDATApq4l+Iwm
-         jcehZGiAZULaKzWcvh/mwnSZFScJnzH1+LnT0hSWd/O+IPD+vCThjpiaojcOEduOM1gN
-         7/uCmsQE00cE4LKkMaoRBLtbU3dZZNQmVxBcGyTLnHKq9eaOGhei2q1V/J8LefPK2C0o
-         bo5w==
-X-Forwarded-Encrypted: i=1; AKwUvBwmJsgs5xL1TUestjXWhblwsT21/wimpLzvF3qaYK+kyScGM+0IOa8K7AQc5CS1riJ/4wun4ROBSejIaZ0KYzI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8/RxoBfB6SJ9wgTwKzIHrPTZADjSdZCONcqhX+vUS9aKcb3BrV
-	YNR2BlIE5hXuzoY8o4xsqbXjnCKvSH32HASskPgaxRBeXvkk88TqenUjHFrk/D9tjiIw1HuKOBP
-	ZQbPCZnM181bQJfn0OhGo9dsLq4NbitXNMBtBFbvID9qpwf1crzEOm9EJKu+JbY/eWF7AGg==
-X-Gm-Gg: AYBFou1YruyRvbocQtzvvC6jB0GXirlkfq0oJJwRrpXKKcqLggwEMsiuWzkwKZd+YC5
-	suuDn657wArmnhEp6QY4OXB2pBBfg7YhR7+/mzqoy6XXuMbvrTxPjiGkhUIYh/NoCBKC3niwrcc
-	GIUoMGGjWOuYTPn59icOq9rWQlEFE5zUz0ePJdJ0ae/TM2QLihEIFFbPSxCG1waNb7stasaeGKM
-	cnsdcW7KRRUUdlvGkWGbbCQc+Fbr/iBDPfPu6iii/uZ87GUJhGguxkPrhDeNZA944oRz9hdukul
-	EpCRMMx08nEI8vwkklIDjdKuGRr9IXwyQKqWdUErNUyVDrGyt0UjTMjDpc6LV488orFmr9ZhPKG
-	CIhPxK354RlA15EduOjOwbB0g5R7lFJxKG6rxaMrjuRr2tvZLs+JLmUkMWTEnRXweVlc4ZIm7Xk
-	Itk6EJlmJTZ/8+HvHsIMcbQytl6boCZVloOBOLmg==
-X-Received: by 2002:a05:6000:260b:b0:48c:4553:790b with SMTP id ffacd0b85a97d-48e6e50075cmr31750644f8f.48.1793792240845;
-        Wed, 04 Nov 2026 03:37:20 -0800 (PST)
-X-Received: by 2002:a05:6000:260b:b0:48c:4553:790b with SMTP id ffacd0b85a97d-48e6e50075cmr31750621f8f.48.1793792240514;
-        Wed, 04 Nov 2026 03:37:20 -0800 (PST)
-Received: from seott-rh (p200300f6af1574019b2c5947d8ec139e.dip0.t-ipconnect.de. [2003:f6:af15:7401:9b2c:5947:d8ec:139e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48fece99d67sm3430641f8f.24.2026.11.04.03.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 03:37:20 -0800 (PST)
-Date: Wed, 4 Nov 2026 12:37:19 +0100 (CET)
-From: Sebastian Ott <seott@redhat.com>
-To: Mark Brown <broonie@kernel.org>
-cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-    Suzuki K Poulose <suzuki.poulose@arm.com>, 
-    Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-    Oliver Upton <oupton@kernel.org>, Ben Horgan <ben.horgan@arm.com>, 
-    linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-    kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Subject: Re: [PATCH v9 0/3] KVM: selftests: arm64: Improve diagnostics from
- set_id_regs
-In-Reply-To: <20261103-kvm-arm64-set-id-regs-aarch64-v9-0-ab32bc79fa9c@kernel.org>
-Message-ID: <7db30970-dc9c-702a-2f1a-f52c2e253494@redhat.com>
-References: <20261103-kvm-arm64-set-id-regs-aarch64-v9-0-ab32bc79fa9c@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id A5FB71F0093A;
+	Wed,  4 Nov 2026 11:38:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793792281;
+	bh=LC6o94h33PMpBSRX2oT9zIzB0iubJnPS2+w0Nf9vLoM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=UC6X/1jnj0FBJzHgDXczgjhxylwC36AVJd0eP0+9P7HGvyBdEcG5ypnEK8neLXk/p
+	 zItQtP6Br1ixCJ8cbt1aTrWNRouchiEjozPKPKyWWVraz74JLi06NE/udio3A1rc4s
+	 NMeiS1fBO+ac5kRgLZccXMpO5bsj9POdgQPTKPJ050KKcWG7K4QFSrFvM5GCLm8viW
+	 4qsSSYd6qP9M8LADnJFM79Zv4iTYKfcwl14iTFOYcOuUzIjU/xgylSSPm70wPouiSK
+	 dT33cZSDjCAu/19KYk/DgSHxJQ5G17ChaI6vi6aa+0xXeLXlRbxWo0XL1xSHkUBnMC
+	 LiB10kWWBkWXQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 1DC5746DF3;
+	Wed,  4 Nov 2026 11:38:00 +0000 (UTC)
+From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
+Date: Wed, 04 Nov 2026 18:37:58 +0700
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Test local storage max value
+ size
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -121,23 +83,157 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261104-local-storage-max-v1-2-c836731bd184@gmail.com>
+References: <20261104-local-storage-max-v1-0-c836731bd184@gmail.com>
+In-Reply-To: <20261104-local-storage-max-v1-0-c836731bd184@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Amery Hung <ameryhung@gmail.com>, 
+ Slava Imameev <slava.imameev@crowdstrike.com>, 
+ Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793792278; l=3581;
+ i=thamrinjonathan@gmail.com; s=20261102; h=from:subject:message-id;
+ bh=sbS2w6xefcyYIn4G7cqCv6ZgI7XpeANsGRjBwSGkGqU=;
+ b=rQNa/Dfm/Af0QN97+0IUJCG2LTuk806TrnWh4gLHs4MVZbOhOj4RJN8w/7QgzeYew77aLlQPF
+ kYTu0cA8q9fCKNr6Vm+AFguOlIPuDj7IYejHwIMbyRCNFfTsEYdjb4y
+X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
+ pk=mr0q5PZVaUIrv8WvTxIfK7QVcAiRSYI8hOByBQL1ZRo=
+X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261102
+ with auth_id=1383
+X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Reply-To: thamrinjonathan@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Tue, 3 Nov 2026, Mark Brown wrote:
-> While debugging issues related to aarch64 only systems I ran into
-> speedbumps due to the lack of detail in the results reported when the
-> guest register read and reset value preservation tests were run, they
-> generated an immediately fatal assert without indicating which register
-> was being tested. Update these tests to non-fatally report a standard
-> kselftest result per register, making it much easier to see what the
-> problem being reported is.
->
-> A similar issue exists with the validation of the individual bitfields
-> in registers due to the use of immediately fatal asserts. Update those
-> asserts to be standard kselftest reports.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 
-For the series:
-Reviewed-by: Sebastian Ott <sebott@redhat.com>
+Add a test that finds the largest value size accepted for a task
+storage map using binary search, then checks that a value of this
+size can be stored. It also checks the size is >=4096 to make sure
+the limit is not set too low. This test fails without the previous
+patch with ENOMEM.
+
+Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+---
+ .../selftests/bpf/prog_tests/task_local_storage.c  | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+index 5b2b56cc3a4f..c7e9fa6743b9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+@@ -495,6 +495,91 @@ static void test_uptr_map_failure(const char *map_name, int expected_errno)
+ 	uptr_map_failure__destroy(skel);
+ }
+ 
++static int create_task_storage_map(__u32 value_size)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, create_attr);
++	struct btf *btf;
++	int int_id, char_id, arr_id, err, saved_errno;
++	int map_fd = -1;
++
++	btf = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf, "btf__new"))
++		goto done;
++
++	int_id = btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
++	char_id = btf__add_int(btf, "char", 1, 0);
++	arr_id = btf__add_array(btf, int_id, char_id, value_size);
++	err = btf__load_into_kernel(btf);
++	if (!ASSERT_OK(err, "btf__load_into_kernel"))
++		goto done;
++
++	create_attr.map_flags = BPF_F_NO_PREALLOC;
++	create_attr.btf_fd = btf__fd(btf);
++	create_attr.btf_key_type_id = int_id;
++	create_attr.btf_value_type_id = arr_id;
++	map_fd = bpf_map_create(BPF_MAP_TYPE_TASK_STORAGE, "big_ls_map",
++				sizeof(int), value_size, 0, &create_attr);
++
++done:
++	saved_errno = errno;
++	btf__free(btf);
++	errno = saved_errno;
++	return map_fd;
++}
++
++/* Return the largest value_size the kernel accepts for a local storage
++ * map, or -1 on an unexpected error.
++ */
++static int find_max_value_size(void)
++{
++	int lo = 1, hi = 65535, mid, map_fd;
++
++	while (lo < hi) {
++		mid = lo + (hi - lo + 1) / 2;
++
++		map_fd = create_task_storage_map(mid);
++		if (map_fd >= 0) {
++			close(map_fd);
++			lo = mid;
++		} else {
++			if (!ASSERT_EQ(errno, E2BIG, "create_task_storage_map errno"))
++				return -1;
++			hi = mid - 1;
++		}
++	}
++	return lo;
++}
++
++static void test_local_storage_max_value_size(void)
++{
++	int map_fd, task_fd = -1, max_size, err;
++	void *buf = NULL;
++
++	max_size = find_max_value_size();
++	if (!ASSERT_GE(max_size, 4096, "find_max_value_size"))
++		return;
++
++	map_fd = create_task_storage_map(max_size);
++	if (!ASSERT_OK_FD(map_fd, "create_task_storage_map"))
++		return;
++
++	task_fd = sys_pidfd_open(getpid(), 0);
++	if (!ASSERT_OK_FD(task_fd, "sys_pidfd_open"))
++		goto out;
++
++	buf = calloc(1, max_size);
++	if (!ASSERT_OK_PTR(buf, "calloc"))
++		goto out;
++	err = bpf_map_update_elem(map_fd, &task_fd, buf, 0);
++	ASSERT_OK(err, "bpf_map_update_elem");
++
++out:
++	free(buf);
++	if (task_fd >= 0)
++		close(task_fd);
++	close(map_fd);
++}
++
+ void test_task_local_storage(void)
+ {
+ 	if (test__start_subtest("sys_enter_exit"))
+@@ -521,5 +606,7 @@ void test_task_local_storage(void)
+ 		test_uptr_map_failure("empty_uptr_map", EINVAL);
+ 	if (test__start_subtest("uptr_map_failure_kstruct"))
+ 		test_uptr_map_failure("kstruct_uptr_map", EINVAL);
++	if (test__start_subtest("local_storage_max_value_size"))
++		test_local_storage_max_value_size();
+ 	RUN_TESTS(uptr_failure);
+ }
+
+-- 
+2.56.0
+
 
