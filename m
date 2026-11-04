@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793826577;
-	b=t357OHko7lAwSy5tADc78chL44hYD/p2QFuaKzUIERlNqaOKj4hEvq8S/JKIaRXdZhuH
-	 QWfnkgrmM/4QobE3CXF3Ml9Mw9Sdv3LYKOAPKrGegigLT2mkOPFcHHbxBLExjn8g3wM0S
-	 r5bx0q9nzJwA5aW9IcuwGOea7hThinN34nXHXVAjW6tnG9tcUFNGhBQGZKs2wIYOX//TF
-	 kKbMRXMB8brcPOlmaNDrQ9eaM8qAaRmlIstpMZLNUnMR909nFOMWwgdDbl1Ytod/+WT9I
-	 aZ6A47euvX/NmE7e53qeV6n0+2dxRMqRS2hw4lzaQP4jC727Vf0SEtlsyy65P+k/xWA==
+	t=1793826578;
+	b=PzqXyJWY3P/y/+if4A7NtcmdxqQEd6UJdTwhDoSpLNNrLypRfAxyJKxm+TtCdB6truXz
+	 lh9wXGFcicOGgYZM+wSPrVSSaY7Oc00JWY/eaTq+5DJyS8Fl86qN+yWNpLRx/LubSKOKm
+	 c0ioq7fHSJxyS22mACefnODcxusb0GkbiMI6WPAtpDfS27DjAa4+O9S7GN85gxVa6D94W
+	 +oc48RXxpCFjdPQaNnvP+YtppcwJTOZvLBLVfUACrqrt/H1dHGdUcoBLzAcAE23WYut3Y
+	 DgHbIhlsx2gTLMMfgRFZQnk7bcvgOq6qqaWThuMtKCFiPF0tLiy0NaLNu+hiTo4f9pA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793826577;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793826578;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=3194YaOP0F+FMB6I5klv6B2ufzZSORnnEQ/EVm90CVQ=;
-	b=1HL/LBTq4q8Um20TGstzLmTRG3gPv68BE9oc89hkY22oG7DMgCZG1/3E9wM2dFuUkIkD
-	 juAgJr0EX3/Vn/4VMhtyWbhKJ+34lJBIQn9Yjcb1nmyHw2yhcDTPNCtWN4oUN5L3mPO9p
-	 pJLXmVqvxprHvmqmIUd5TPIKvmHeXJ+GuE1jnfDUH9SAPjxmvOxtDlaisG22/+TTnTCur
-	 ht1GDJPJBZ40cEOPmJp5rcvFM2+zi06YC//rDPYLHWkyLLmjyU/d5Wk+zIReOd4KhLLtI
-	 feovoLpyvqkEDg1qYpELiu4r2oqTck/seKERUDQhNzPDR1Oti10ZUtReTkLO0vK5B/g==
+	bh=N6jISF9e7oc9q51mTvyRG0JtdU4PgALd10HFJdmI+R4=;
+	b=vDtGO6EQeudNL3DrmbQ/Mp6yMf/UK5jKxJXh76zqyO4tZKMomLqCtCrHmSwIP3WL2Z30
+	 5PnsSuhd16jw2rfu4sY9w2x25Y09dIvBvpWPPWvtBR/YIilR6BFNne3Y5U31ksiA6gXC8
+	 jvsxJEubsO2dF9UKse+UEuQj6cySzvBGHWI7yXTY/WOXbfU0p0NiH91sLkaTnbEtXnK6G
+	 hZIPoWYT/zuyxChhitCJsYz9jCpN1ktgidL4sJaB96CNHzFnPbTMDLZwxM4kNvgf6KYhH
+	 TBVYAgIbmUXpAHs85q5OS1HHq6lN+zKcMhY/I2dRtY4z6mbpNZu0fKOxN0w6DEY0oMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3CiICk1;
-	arc=none smtp.remote-ip=209.85.221.46
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Fk3jDwHG;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6BD607E916
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:09:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA6BD607E916
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73796607F2AB
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 21:09:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73796607F2AB
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3CiICk1
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4910b863b84so10495f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:09:36 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Fk3jDwHG
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a207b02a2cso8132225e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 13:09:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793826575; x=1794431375; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793826577; x=1794431377; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3194YaOP0F+FMB6I5klv6B2ufzZSORnnEQ/EVm90CVQ=;
-        b=D3CiICk1IU3LYOkkUsP513zcLWLMA5i0GRg6LkkHP7BB1EcQ9D0tGOHgvlqQic9CyG
-         V9De65zZ6pPKCjXt8CLX8huiMGmVM8Inj2UUFzrZY0nCvugX/vvz5/2JWSXbVIrBdXTU
-         Re0JRKL42TnXy9iCrvGCJI5MoqYTj730qvHIH19f9+ROUvad/DUzXDNEgITCVKtx2Qp+
-         oYXgOh34bDIWWKeKUvRqnI7wBV449fL2F+7jYT9no/Z00SI4itNxQLWOv/DNusGaCG45
-         /SHfXt9/FBavBlhJuvypvpJYwYR0aHSalFMIqYLv5/ghs3VUk1YWys0LyB9z38PfEY45
-         JGuw==
+        bh=N6jISF9e7oc9q51mTvyRG0JtdU4PgALd10HFJdmI+R4=;
+        b=Fk3jDwHGWZfkbPvav9AHgef12S97zgUen80Hgkty1sjNmjONAWViqROOwt1cyBEFNi
+         zD4dObV4UBbKU8lpf1GM7P4nPZNbRI690PqHxxcA0GZsAobckxCPzjbm5JTmhhASHA7A
+         hFOwxp+5X+c+sUbS0KAiZWf58KZ6bhPtMho2Dh8syFSigFZLCIiRfGbyk+V3p1S4V6IT
+         forb7NOfgWes9OPPHVgpDoJzgXY+xlf/XKazwsSv2sY/gQDkoVWGx7Px3VKoUXfjQMB0
+         0ByEl7qTLXAjWJOhr6GY0c7YJ9ff0S/i5v6kWrfl7UWdVUZJeE6Nz+Nv/cE7qHlMSURF
+         q39Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793826575; x=1794431375;
+        d=1e100.net; s=20260707; t=1793826577; x=1794431377;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3194YaOP0F+FMB6I5klv6B2ufzZSORnnEQ/EVm90CVQ=;
-        b=VEXyfCAM1V6idwhljxY9xJelPeqPuzgjOMhk6yo+1bfpZaoXFYsswOdthCvfwMhVEd
-         Y2bMJ+e18E8/JjMnVjuxYFzsKvasG3nCuVMrZPAq1l+1YXOUj5sB6QjXRxWHbOlq2BZz
-         wbphaBrhcHY0IQ+mDpu3a2MBqc/8E0eKwj68wjNfPRmj6uhM/0o0SB02SB3aypu8o6SQ
-         DN8N8CFoR2PoF5QCm/gB2RxMrTwsyjfKOr/FFEWXGzIA1eyebJUOjcGrD0MD/3TOzlos
-         tSStMXKK0DWAXUAmfyKv3HkrNQ8BCjReLOxmzbxMR8ZGmLZA2UeUZMUDxvMuVf7K5Ob2
-         YvzA==
-X-Forwarded-Encrypted: i=1; AKwUvByikPgpwn4q1YbZvWJKm9fCkkhHdebzUNKKjYswbi9Hn17JdG71qQBAA4ymEJyGeWNCP7zkepP3WMrJPP3Ltd8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z90QFXr6PTmDbfL3Uy0C1z99mV+bByT0X/dPj5c5JjL5XoQsDQn
-	+cP8raaVLK+Etr+LVGoYZ7jKtjos6ruB5CCsPNA/4q/A8rMj3TG/8NDA
-X-Gm-Gg: AYBFou2GbvLd+OONxy5LsDyDYYhlTX3jFGW+KqVeZR/efcwj6G6StAxIDjfUe56DLg3
-	UyNRglysiQLnCImA0ggol7ynVBfco2xnRDX1T1l4P++wu2ULQSqnTiY/IUXKwou0Uon6luf0zsi
-	MIcRGlOcxNeqrWYNmdNyxs7PNkZ0kaB/NEECRIhVWtP62mctLYecCmJx9H7jFHKLQUCNqdy7d7T
-	lBqd9QTfFx7uyHjFQ6sMYZ5sOvWJL5+SWmKdt5gHpJUu1PCWOgJqPqLMXXeJIWqEmOGOTREt108
-	BRe8thoVLHgV/VfXcdv3xOHP55flEYpGVdEY5qX0Qro0OcX+FvUdx2N3UrEolBMeEG0ZOsFUMvz
-	6C9XhBppsZHxYtrzC3vI2/k5O14Tk+3ppkHujgLB5Qr72TSzbkOiud9X5hiyl1h2PeyN5jLY7C5
-	+rWJ7q1rNGQq+DUne+o0uhE/DM8hIAa5uNT5PaX2OtSHckueVabZ7FwUE0Ltq+stGUBCjIi1qWN
-	HoXDXal6PYC5BkAj9+bvp5r6giZnnbw6Gk3v6pkHpBdu7T2Zg0VTtTOn2ys+fkZmygWZRYEYL+O
-	JB/NYuXUmWMtS5QC/8LPwRhvmx4h7SsgMYeeBor1cEqMKo2gYgUSfA==
-X-Received: by 2002:a05:600c:46cf:b0:4b0:b9ff:1e7c with SMTP id 5b1f17b1804b1-4b55e07e569mr10214435e9.15.1793826575088;
-        Wed, 04 Nov 2026 13:09:35 -0800 (PST)
+        bh=N6jISF9e7oc9q51mTvyRG0JtdU4PgALd10HFJdmI+R4=;
+        b=FOEzPLGe5mBenQcAE8A4KU+yRHnlpOpKGHZHafXq4j1/EsoGCtu0ZMMilt1GAmcQm2
+         wTrtJO/dswHq8yUro0utRmfIcHejMjLVGm1QC2JLCvKDcVWbxmo+cdX88wfTEHakkgGN
+         71zDnnkDI5leSkNHRj0PMUpAsTBpRwAjJPm/iot35sl6+chN4p0ymw3fZb4+y7Q/qzsH
+         z7n5FmpKVvFXmbJ8dqK2seX3QueKL5P60Z3nbb1NOta/n6vGiJDJ7RSGpyV91qAJmmDG
+         nxMyWKJ1IAewXpcGM7Im+5aZ85tmvOVFFi9YHbEKY7dAymUbtF7ZOWfyuEYstwkIhMJv
+         qumw==
+X-Forwarded-Encrypted: i=1; AKwUvByzLKg+Ekc/3b45FjgbdIUtqjJXgpAcxlKWPB7B+Ewur4VqDSwoRa0c3puHJaSht9njMSOINrAOh+2ztaQhE6c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8k3AXY/YIaNIeNn2VHDJyR1aKckKIhpGWgC8yX736FHyQhbCxk
+	BWML1bsqJ6P/YT+KLGdr32S+2DGV6BPC42ABjscI0Ztf1/7IL7UrksNeV0jlBK5V
+X-Gm-Gg: AYBFou2EdUXDGFW6XNmjeuR1fBaiQZ8u515DanyduZpOzQwoHBta00yCDYC4cnXR1Vq
+	ZV0Qy2t+SL/Z+L34d+38fRnbypVqVid/PN0RnKJ7G0Y5ppesTWLcKo5ZHuL4s0qBdo99HQx8SV3
+	IIBBZA2NVXwqIg3nSB0Zzphg+nUKBVzaO/t5DdMlxs/r6j850K2OAx09F/UpoFavexsMSNvFS9N
+	wv2MdkVnQ6RXfiQeBukYQJs9z+7MsH5xRv039JF+sXiigalNSxmpcmIkD+p/QpaFtjbeFCNNxVT
+	rMt6dufIHdxmLayCVEY8W1a6Y7eRwOV7oPvNpYhciLiNlx2W9+slUDFvwrB9fF4JDIv44k+i9Kp
+	UtFeeAzgnlLrVbsyVrSkcorBSYz44HwHCbD2IYPPlyUJFWtoC6D+ywPCtPeBvYlnCtlSB8icU3+
+	aXs8Gtk6J73vDnFgRA+j2eR/EdsTEAymcAqjpBZ1vBVjpfFSaJ2InW6H4xnFKBctgMI+zfvbBCk
+	KsrYjtd8NpOaZElrm8xfZprc7JzeAEnFkygUSeW41h+oy+s4eTeIiw8zS/Vj2w2vvU85iGmK/8U
+	rn6GBbTS8KA90sYwbDkMNPdgEzvr+tTan9sIS14PjpCv9tpuQvCGoA==
+X-Received: by 2002:a05:600c:8b46:b0:4a0:4a8:d444 with SMTP id 5b1f17b1804b1-4ac18c73238mr397433925e9.33.1793826576862;
+        Wed, 04 Nov 2026 13:09:36 -0800 (PST)
 Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b4533873f0sm77710365e9.4.2026.11.04.13.09.32
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b4533873f0sm77714765e9.4.2026.11.04.13.09.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 13:09:34 -0800 (PST)
+        Wed, 04 Nov 2026 13:09:36 -0800 (PST)
 From: =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
-Date: Wed, 04 Nov 2026 22:09:03 +0100
-Subject: [PATCH v2 17/27] selftests/landlock: Fix SIGURG handler setup in
- scoped_signal_test
+Date: Wed, 04 Nov 2026 22:09:04 +0100
+Subject: [PATCH v2 18/27] selftests/landlock: Fix regex_escape() error
+ handling in matches_log_fs_extra()
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -94,7 +94,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261104-selftests-refactor-v2-17-c52f23f7ce33@gmail.com>
+Message-Id: <20261104-selftests-refactor-v2-18-c52f23f7ce33@gmail.com>
 References: <20261104-selftests-refactor-v2-0-c52f23f7ce33@gmail.com>
 In-Reply-To: <20261104-selftests-refactor-v2-0-c52f23f7ce33@gmail.com>
 To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
@@ -105,88 +105,101 @@ Cc: linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
  =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>
 X-Mailer: b4 0.15.2
 
-Drop SA_SIGINFO, and rename the function to setup_sigurg_handler()
-without the parameter.
+Use a more conventional error handling interface in regex_escape():
+Return a ssize_t, which is either the number of bytes in the output,
+or return -1 and set errno.
 
-* Drop the SA_SIGINFO flag: This flag implies that we use the
-  three-argument sa_sigaction signal handlers, which is not the case
-  here. (c.f. sigaction(2))
-* Remove the "int signal" argument and rename the function:
-  The function was already specific to SIGURG and this is better
-  communicated through a different name.
+Before this change, the (log_match_cursor < 0) check in the call site
+was never true because log_match_cursor is a pointer.
 
 Signed-off-by: Günther Noack <gnoack3000@gmail.com>
 ---
- tools/testing/selftests/landlock/scoped_signal_test.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/landlock/common.h  | 20 ++++++++++++--------
+ tools/testing/selftests/landlock/fs_test.c | 12 +++++++-----
+ 2 files changed, 19 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
-index 0f88a6af9c72..66fec3822812 100644
---- a/tools/testing/selftests/landlock/scoped_signal_test.c
-+++ b/tools/testing/selftests/landlock/scoped_signal_test.c
-@@ -392,7 +392,7 @@ static void handle_sigurg(int sig)
- 		signal_received = -1;
- }
- 
--static int setup_signal_handler(int signal)
-+static int setup_sigurg_handler(void)
+diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
+index a662a68bee7b..dcfdcfecde86 100644
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -277,11 +277,11 @@ static void __maybe_unused set_unix_address(struct service_fixture *const srv,
+  * Escapes characters that have special meaning in POSIX Basic Regular
+  * Expressions: $ * . [ \ ] ^
+  *
+- * Returns a pointer to the NUL terminator in @dst (cursor-style API for
+- * chaining), or (char *)-ENOMEM if the buffer is too small.
++ * Returns the length of the escaped string (excluding the NUL terminator), or
++ * -1 with errno set to ENOMEM if the buffer is too small.
+  */
+-static __maybe_unused char *regex_escape(const char *const src, char *dst,
+-					 size_t dst_size)
++static __maybe_unused ssize_t regex_escape(const char *const src, char *dst,
++					   size_t dst_size)
  {
- 	struct sigaction sa = {
- 		.sa_handler = handle_sigurg,
-@@ -401,7 +401,7 @@ static int setup_signal_handler(int signal)
- 	if (sigemptyset(&sa.sa_mask))
- 		return -1;
+ 	char *d = dst;
  
--	sa.sa_flags = SA_SIGINFO | SA_RESTART;
-+	sa.sa_flags = SA_RESTART;
- 	return sigaction(SIGURG, &sa, NULL);
+@@ -295,21 +295,25 @@ static __maybe_unused char *regex_escape(const char *const src, char *dst,
+ 		case ']':
+ 		case '^':
+ 			if (d >= dst + dst_size - 2)
+-				return (char *)-ENOMEM;
++				goto err_nomem;
+ 
+ 			*d++ = '\\';
+ 			*d++ = *s;
+ 			break;
+ 		default:
+ 			if (d >= dst + dst_size - 1)
+-				return (char *)-ENOMEM;
++				goto err_nomem;
+ 
+ 			*d++ = *s;
+ 		}
+ 	}
+ 	if (d >= dst + dst_size - 1)
+-		return (char *)-ENOMEM;
++		goto err_nomem;
+ 
+ 	*d = '\0';
+-	return d;
++	return d - dst;
++
++err_nomem:
++	errno = ENOMEM;
++	return -1;
  }
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 100ef02b5d1a..10a386a573dd 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -7450,6 +7450,7 @@ static int matches_log_fs_extra(struct __test_metadata *const _metadata,
+ 	char log_match[log_match_remaining];
+ 	char *log_match_cursor = log_match;
+ 	size_t chunk_len;
++	ssize_t escaped_len;
  
-@@ -506,7 +506,7 @@ TEST_F(fown, sigurg_socket)
- 		EXPECT_EQ(0, close(pipe_parent[1]));
- 		EXPECT_EQ(0, close(pipe_child[0]));
+ 	chunk_len = snprintf(log_match_cursor, log_match_remaining,
+ 			     REGEX_LANDLOCK_PREFIX " blockers=%s path=\"",
+@@ -7467,13 +7468,14 @@ static int matches_log_fs_extra(struct __test_metadata *const _metadata,
  
--		ASSERT_EQ(0, setup_signal_handler(SIGURG));
-+		ASSERT_EQ(0, setup_sigurg_handler());
- 		client_socket = socket(AF_UNIX, SOCK_STREAM, 0);
- 		ASSERT_LE(0, client_socket);
+ 	log_match_remaining -= chunk_len;
+ 	log_match_cursor += chunk_len;
+-	log_match_cursor = regex_escape(absolute_path, log_match_cursor,
+-					log_match_remaining);
++	escaped_len = regex_escape(absolute_path, log_match_cursor,
++				   log_match_remaining);
+ 	free(absolute_path);
+-	if (log_match_cursor < 0)
+-		return (long long)log_match_cursor;
++	if (escaped_len < 0)
++		return -errno;
  
-@@ -612,7 +612,7 @@ TEST(sigio_to_pgid_members)
- 	ASSERT_EQ(0, setpgid(0, 0));
- 
- 	/* The non-sandboxed parent is the protected (out-of-domain) target. */
--	ASSERT_EQ(0, setup_signal_handler(SIGURG));
-+	ASSERT_EQ(0, setup_sigurg_handler());
- 	signal_received = 0;
- 
- 	ASSERT_EQ(0, pipe2(trigger, O_CLOEXEC));
-@@ -629,7 +629,7 @@ TEST(sigio_to_pgid_members)
- 		EXPECT_EQ(0, close(sync_child[0]));
- 
- 		/* In-domain positive control: the child must be signaled. */
--		ASSERT_EQ(0, setup_signal_handler(SIGURG));
-+		ASSERT_EQ(0, setup_sigurg_handler());
- 		signal_received = 0;
- 
- 		create_scoped_domain(_metadata, LANDLOCK_SCOPE_SIGNAL);
-@@ -737,7 +737,7 @@ TEST(sigio_to_pgid_self)
- 	ASSERT_EQ(0, setpgid(0, 0));
- 
- 	/* The non-sandboxed thread-group leader is the SIGIO target. */
--	ASSERT_EQ(0, setup_signal_handler(SIGURG));
-+	ASSERT_EQ(0, setup_sigurg_handler());
- 	signal_received = 0;
- 
- 	ASSERT_EQ(0, pipe2(trigger, O_CLOEXEC));
-@@ -1062,7 +1062,7 @@ TEST_F(trace_fown, deny_scope_fown)
- 		EXPECT_EQ(0, close(pipe_parent[1]));
- 		EXPECT_EQ(0, close(pipe_child[0]));
- 
--		ASSERT_EQ(0, setup_signal_handler(SIGURG));
-+		ASSERT_EQ(0, setup_sigurg_handler());
- 		client_socket = socket(AF_UNIX, SOCK_STREAM, 0);
- 		ASSERT_LE(0, client_socket);
- 
+-	log_match_remaining -= log_match_cursor - log_match;
++	log_match_remaining -= escaped_len;
++	log_match_cursor += escaped_len;
+ 	chunk_len = snprintf(log_match_cursor, log_match_remaining,
+ 			     "\" dev=\"[^\"]\\+\" ino=[0-9]\\+%s$",
+ 			     extra ?: "");
 
 -- 
 2.56.0
