@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.208
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793781583;
-	b=weeW/GjMZWclkCHs1KcQAscf6rQsofkJUyWdtVpv8F0gip7Is4x626eRpsOU7huTEG9k
-	 vCeecDYRSUAd2JOKTDZ+j9kgePYQ0uanC6t2teaXieGfBDhTyxPRt87BhE2rSnGL45xZf
-	 tf6oiQrKXoEBZbeMJfF2T5nMEVa2Tf0QbKA6iudcn4UZU2YsvFX2qpOy7qwiy9TFcPvCN
-	 U+VgCv9r25G07AT6oNfArSvggqh+XXH1M36phgwg1RDqG54g3cAvhZNHP5aAr5F6GFcpf
-	 u1Te8nfhSRHmMsXnAibmCzHcOqJ8ubyhE/Jy7kxjmVz+sh3W5wszXBXwdbxJuIwMCwg==
+	t=1793782130;
+	b=gJ27kJeboQH8GsNN4VzisH6Xa/WjS34hpWPt5p339AhBPsG2zxlNT3GWWxtGBFRFnujn
+	 u3jrKkmazEvaRfQOSjs9CR+/7Cerzal+OW4Uv9lQvuQAeVnS/eyiCTHhsegmKsZePAyio
+	 xm0lZvM+TD4rjKz/radtfjecivVT/ZMri03t4j1jKH5pldBekxBzPMHyI5ZyZWqQPDx3k
+	 FP3mUp67e4pCwEWkz4GWXZ0+KAOgBzW/zPIPl5YYYz39pfCs20J4IAVixg5/mH/ubojtH
+	 d3Iv6V1TaQ6bg0/1eJZsitFU5xG1PmDN6clMA058vayRpdd2u39C5levvWI5T+tRSVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793781583;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=hWspUsi6qY4l04i5YVyJ9OGNkdZBfBmZDkAUG/jAooc=;
-	b=Qe0pIyX2s/9+p8eIbbITV3GT2b9D7kJZP8O/oomRdnkBPU3pJuqbCOH99p4zlDnPk2w6
-	 ztvTJtM3oXJtNRqXq82am1hQs6XG7AcWIlzdz/zotdTas3z+L5UJgz5nnu0RmXkSL7F0h
-	 m51xDEt/jAr0m4qNEt3VKgMABFO9PBcq9c5ON8oxFifc/HqtxnxyI+Hqp62Uh33rZbBg3
-	 6fVz/DL2sOKfLR2pK+h6safIlBQJrR7qoT9w2Gv2ZRwY7fJ5DNj76/ecKHRnrTFmBAoxb
-	 FCtXmBnLSS9c3xO1omEVm6R+eltt82spB4cLlYhP3jUzBl7dQ04VfDIhStMtJDCjRGQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793782130;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=tVLelWtOiKs5gOhdKa6hRa5lDxrUmzH5vqTxLffuKAk=;
+	b=qFCzC9WawL1sMtE7FOCZaDz8FYc7ydVGIfgwFLzKwiaTyb7l+JOy6kOnyYnFsL7prh0x
+	 ZMM8Zh0WrfhxTHvvV1bBV7OCAUNAeDSvnus+vmBwfXfbl2jAF+fYwnEylPMU2d/lHjpmw
+	 /vRyd62v+fmrXIhGE8gD4VRughHq2DV3fmRmywxtYFnkcvNLIH78YbL/lUh7w27gbu4qp
+	 kmJ+Fn8ywozRlOuZ06fnx/rxD37yDVnkISEzXkJHdFVijid1plrjx60Jf0BR3d2R1cXOo
+	 ltIboQq/BTZcoMEWemh6wkXhq/LyM8D2PKiDU917OSDc28Ck8e1PZKXcPKGp0FHAdXg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b="I5XUh/z3";
-	arc=none smtp.remote-ip=220.197.31.3
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YFufWwhi;
+	arc=none smtp.remote-ip=91.218.175.208
+Received: from mta0.migadu.com (out-208.mta0.migadu.com [91.218.175.208])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B84606A31B;
-	Wed,  4 Nov 2026 08:39:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 30B84606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3346E606A31B
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 08:48:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3346E606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=I5XUh/z3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=hW
-	spUsi6qY4l04i5YVyJ9OGNkdZBfBmZDkAUG/jAooc=; b=I5XUh/z3Hkj1gzo1k8
-	QbkO+l6hJjOWFvSK83VXxC0TK092gCgSumwt3cB7xzHTzuj6xptcFiokyir5h0MV
-	QsJWlwB3K7hTnp6z4RiKpjKukMEFYc/yc403cDqB19inbaOQNdwKGEH+BRv5Jn7O
-	XI/P3GNMnmAuKCmX5wG2MjdgU=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3vy8J7+pqdSeZFQ--.24622S3;
-	Wed, 04 Nov 2026 16:38:37 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: song@kernel.org,
-	jolsa@kernel.org,
-	ihor.solodrai@linux.dev,
-	kpsingh@kernel.org,
-	matt@bobrowski.net,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	yonghong.song@linux.dev,
-	emil@etsalapatis.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com
-Cc: bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
-Date: Wed,  4 Nov 2026 16:38:33 +0800
-Message-Id: <20261104083833.971911-2-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20261104083833.971911-1-yangfeng59949@163.com>
-References: <20261104083833.971911-1-yangfeng59949@163.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YFufWwhi
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Le2HnV1cWaxWKIp2IUyJdv0RZTylQe/ImxfQDvmHubg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793782127; v=1; x=1794386927;
+ b=YFufWwhil8zG4Fa3kITYq+rKwV4Ack7CtQ+xPrM9cvVg58wzeiLIp5Lo1qFw/deOO5V6JwDz
+ XJZz9vt5rSdTSLc4dkVk7ylGm5Q4ZosUvNWaIgf/OGq46+uLf41F1APHXRyRixWipHxHv/2fahj
+ edGLy5mExidRDZqzasyUF760=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 293ca65f55a86fc9;
+	Wed, 04 Nov 2026 08:48:47 +0000
+X-Mizu-Trace-ID: 293ca65f55a86fc9
+X-Migadu-Flow: FLOW_OUT
+From: Fuad Tabba <fuad.tabba@linux.dev>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>
+Cc: Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Fuad Tabba <tabba@google.com>,
+	kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 00/16] KVM: arm64: selftests: Tests for protected VMs
+Date: Wed,  4 Nov 2026 08:48:26 +0000
+Message-ID: <20261104084842.132944-1-fuad.tabba@linux.dev>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,324 +79,96 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3vy8J7+pqdSeZFQ--.24622S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW3AF18WrWrtw47ZFy3tw4fKrg_yoWfWF4fpa
-	s2kryYyr4fGr4FvF4xG3yDXFyFvw4kXa47CayfKr9xAw12yry5KF4xKF4UXFnxJrZ5Wws0
-	9rZ5t3y5ArW7ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jIa0PUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8g1UzGrq7w0KHwAA3Q
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Hi folks,
 
-Extend the test with a sleepable raw tracepoint on sys_enter.  A helper
-process pages out the build ID page, issues a getpid() syscall and then
-stops itself, so that the recorded stack cannot be overwritten.  The BPF
-program filters on the target tgid and syscall id, captures the user
-stack with BPF_F_USER_BUILD_ID, and the test asserts that one of the
-frames carries uprobe_multi's build ID.  A non-sleepable raw tracepoint
-is used as a control: the same frame must be reported as IP, which also
-proves that the page was really evicted.
+This series adds selftests for protected VMs. A test skips on a host
+without pKVM, and so does any case where the host doesn't have the
+required feature, e.g., PtrAuth, SVE or hugetlb pages.
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../selftests/bpf/prog_tests/build_id.c       | 138 ++++++++++++++++++
- .../selftests/bpf/progs/test_build_id.c       |  38 +++++
- tools/testing/selftests/bpf/uprobe_multi.c    |  37 ++++-
- 3 files changed, 210 insertions(+), 3 deletions(-)
+A couple of points:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/build_id.c b/tools/testing/selftests/bpf/prog_tests/build_id.c
-index aec9c8d6bc96..885dc3da5900 100644
---- a/tools/testing/selftests/bpf/prog_tests/build_id.c
-+++ b/tools/testing/selftests/bpf/prog_tests/build_id.c
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
-+#include <signal.h>
-+#include <sys/syscall.h>
- #include <test_progs.h>
- 
- #include "test_build_id.skel.h"
-@@ -104,6 +106,138 @@ static void subtest_sleepable(void)
- 	test_build_id__destroy(skel);
- }
- 
-+static bool stack_has_build_id(const struct bpf_stack_build_id *stack, int frame_cnt,
-+			       const char *id, int id_sz)
-+{
-+	int i;
-+
-+	for (i = 0; i < frame_cnt; i++)
-+		if (stack[i].status == BPF_STACK_BUILD_ID_VALID &&
-+		    !memcmp(stack[i].build_id, id, id_sz))
-+			return true;
-+
-+	return false;
-+}
-+
-+/*
-+ * Run uprobe_multi, let it page out the build ID page and stop itself on
-+ * SIGSTOP, so that the recorded stack cannot be overwritten by a later
-+ * syscall while the caller inspects it.  target_tgid is set before the
-+ * child is released, so only its syscalls are recorded.
-+ */
-+static int run_uprobe_multi_stopped(const char *mode, struct test_build_id *skel,
-+				    pid_t *pid_out)
-+{
-+	char c = 'x';
-+	int pfd[2], status, err;
-+	pid_t pid;
-+
-+	*pid_out = -1;
-+
-+	if (pipe(pfd))
-+		return -errno;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		err = -errno;
-+		close(pfd[0]);
-+		close(pfd[1]);
-+		return err;
-+	}
-+	if (pid == 0) {
-+		close(pfd[1]);
-+		if (read(pfd[0], &c, 1) != 1)
-+			_exit(127);
-+		close(pfd[0]);
-+		execl("./uprobe_multi", "uprobe_multi", mode, NULL);
-+		_exit(127);
-+	}
-+
-+	close(pfd[0]);
-+	skel->bss->target_tgid = pid;
-+	skel->bss->target_syscall = SYS_getpid;
-+	if (write(pfd[1], &c, 1) != 1) {
-+		err = -errno;
-+		close(pfd[1]);
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+		return err;
-+	}
-+	close(pfd[1]);
-+
-+	if (waitpid(pid, &status, WUNTRACED) < 0) {
-+		err = -errno;
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+		return err;
-+	}
-+
-+	if (WIFSTOPPED(status)) {
-+		*pid_out = pid;
-+		return 0;
-+	}
-+	if (WIFEXITED(status))
-+		return WEXITSTATUS(status);
-+	return -1;
-+}
-+
-+static void subtest_raw_tp(bool sleepable)
-+{
-+	struct test_build_id *skel;
-+	struct bpf_stack_build_id *stack;
-+	int frame_cnt, err, res;
-+	pid_t pid = -1;
-+
-+	skel = test_build_id__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	if (sleepable) {
-+		skel->links.rawtp_sleepable = bpf_program__attach(skel->progs.rawtp_sleepable);
-+		if (!ASSERT_OK_PTR(skel->links.rawtp_sleepable, "attach_rawtp_sleepable"))
-+			goto cleanup;
-+	} else {
-+		skel->links.rawtp_nofault = bpf_program__attach(skel->progs.rawtp_nofault);
-+		if (!ASSERT_OK_PTR(skel->links.rawtp_nofault, "attach_rawtp_nofault"))
-+			goto cleanup;
-+	}
-+
-+	err = run_uprobe_multi_stopped("uprobe-paged-out-stop", skel, &pid);
-+	if (err == 2) {
-+		/* could not evict the build ID page, nothing to test */
-+		test__skip();
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(err, "trigger_uprobe_multi"))
-+		goto cleanup;
-+
-+	if (sleepable) {
-+		res = skel->bss->res_rawtp_sleepable;
-+		stack = skel->bss->stack_rawtp_sleepable;
-+	} else {
-+		res = skel->bss->res_rawtp_nofault;
-+		stack = skel->bss->stack_rawtp_nofault;
-+	}
-+	frame_cnt = res / sizeof(struct bpf_stack_build_id);
-+	if (env.verbosity >= VERBOSE_NORMAL)
-+		print_stack(stack, frame_cnt);
-+
-+	ASSERT_GT(frame_cnt, 0, "frames");
-+	if (sleepable)
-+		ASSERT_TRUE(stack_has_build_id(stack, frame_cnt, build_id, build_id_sz),
-+			    "sleepable_build_id");
-+	else
-+		ASSERT_FALSE(stack_has_build_id(stack, frame_cnt, build_id, build_id_sz),
-+			     "nofault_build_id");
-+
-+cleanup:
-+	if (pid > 0) {
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+	}
-+	test_build_id__destroy(skel);
-+}
-+
- void serial_test_build_id(void)
- {
- 	build_id_sz = read_build_id("uprobe_multi", build_id, sizeof(build_id));
-@@ -115,4 +249,8 @@ void serial_test_build_id(void)
- 		subtest_nofault(true /* resident */);
- 	if (test__start_subtest("sleepable"))
- 		subtest_sleepable();
-+	if (test__start_subtest("raw-tp-nofault-paged-out"))
-+		subtest_raw_tp(false /* non-sleepable */);
-+	if (test__start_subtest("raw-tp-sleepable-paged-out"))
-+		subtest_raw_tp(true /* sleepable */);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_build_id.c b/tools/testing/selftests/bpf/progs/test_build_id.c
-index 32ce59f9aa27..a6d6712888dc 100644
---- a/tools/testing/selftests/bpf/progs/test_build_id.c
-+++ b/tools/testing/selftests/bpf/progs/test_build_id.c
-@@ -3,6 +3,7 @@
- 
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
- 
- struct bpf_stack_build_id stack_sleepable[128];
- int res_sleepable;
-@@ -28,4 +29,41 @@ int uprobe_sleepable(struct pt_regs *ctx)
- 	return 0;
- }
- 
-+struct bpf_stack_build_id stack_rawtp_sleepable[128];
-+int res_rawtp_sleepable;
-+
-+struct bpf_stack_build_id stack_rawtp_nofault[128];
-+int res_rawtp_nofault;
-+
-+int target_tgid;
-+int target_syscall;
-+
-+SEC("raw_tp/sys_enter")
-+int BPF_PROG(rawtp_nofault, struct pt_regs *regs, long id)
-+{
-+	if ((u32)(bpf_get_current_pid_tgid() >> 32) != (u32)target_tgid ||
-+	    id != target_syscall)
-+		return 0;
-+
-+	res_rawtp_nofault = bpf_get_stack(ctx, stack_rawtp_nofault,
-+					  sizeof(stack_rawtp_nofault),
-+					  BPF_F_USER_STACK | BPF_F_USER_BUILD_ID);
-+
-+	return 0;
-+}
-+
-+SEC("raw_tp.s/sys_enter")
-+int BPF_PROG(rawtp_sleepable, struct pt_regs *regs, long id)
-+{
-+	if ((u32)(bpf_get_current_pid_tgid() >> 32) != (u32)target_tgid ||
-+	    id != target_syscall)
-+		return 0;
-+
-+	res_rawtp_sleepable = bpf_get_stack(ctx, stack_rawtp_sleepable,
-+					    sizeof(stack_rawtp_sleepable),
-+					    BPF_F_USER_STACK | BPF_F_USER_BUILD_ID);
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing/selftests/bpf/uprobe_multi.c
-index 0af330b6c364..ef44d86962c1 100644
---- a/tools/testing/selftests/bpf/uprobe_multi.c
-+++ b/tools/testing/selftests/bpf/uprobe_multi.c
-@@ -4,7 +4,9 @@
- #include <string.h>
- #include <stdbool.h>
- #include <stdint.h>
-+#include <signal.h>
- #include <sys/mman.h>
-+#include <sys/syscall.h>
- #include <unistd.h>
- #include <sdt.h>
- 
-@@ -95,12 +97,12 @@ static int usdt(void)
- extern char build_id_start[];
- extern char build_id_end[];
- 
--int __attribute__((weak)) trigger_uprobe(bool build_id_resident)
-+/* Returns 2 if the build ID page could not be evicted. */
-+static int prep_build_id_page(bool build_id_resident)
- {
- 	int page_sz = sysconf(_SC_PAGESIZE);
--	void *addr;
--
- 	unsigned char vec[1];
-+	void *addr;
- 	int poll = 0;
- 
- 	/* page-align build ID start */
-@@ -123,12 +125,39 @@ int __attribute__((weak)) trigger_uprobe(bool build_id_resident)
- 			poll++;
- 			usleep(100);
- 		} while (poll < 500);
-+		if (vec[0] & 1)
-+			return 2;
- 	}
-+	return 0;
-+}
-+
-+int __attribute__((weak)) trigger_uprobe(bool build_id_resident)
-+{
-+	(void)prep_build_id_page(build_id_resident);
-+
- 	(void)uprobe();
- 
- 	return 0;
- }
- 
-+int __attribute__((weak)) trigger_stop(void)
-+{
-+	int err = prep_build_id_page(false /* page-out build ID */);
-+
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * Make one syscall that the BPF program under test filters on, then
-+	 * stop this process so that the recorded stack cannot be overwritten
-+	 * by another syscall while the caller inspects it.
-+	 */
-+	(void)syscall(SYS_getpid);
-+	raise(SIGSTOP);
-+
-+	return 0;
-+}
-+
- int main(int argc, char **argv)
- {
- 	if (argc != 2)
-@@ -142,6 +171,8 @@ int main(int argc, char **argv)
- 		return trigger_uprobe(false /* page-out build ID */);
- 	if (!strcmp("uprobe-paged-in", argv[1]))
- 		return trigger_uprobe(true /* page-in build ID */);
-+	if (!strcmp("uprobe-paged-out-stop", argv[1]))
-+		return trigger_stop();
- 
- error:
- 	fprintf(stderr,
+- Each area gets its own test rather than cases folded into existing
+  tests such as psci_test, hypercalls, set_id_regs, etc. A protected
+  guest requires its own boot path, and has to share the ucall pool
+  before its first ucall. On top of that, a protected guest gets the
+  opposite result for many of those tests' checks.
+
+- pkvm_exceptions skips its breakpoint, watchpoint and single-step cases
+  while a protected guest's ID_AA64DFR0_EL1.DebugVer is 0. pkvm_id_regs
+  reads the same field to choose between the hidden and the exposed
+  debug view. With the patch that adds self-hosted debug to protected
+  guests [1], both tests run the debug cases with no change.
+
+The series is structured as follows:
+
+  01:     external_aborts: an abort injected before a vCPU's first run.
+  02-04:  Generic selftest changes: creating a protected VM, the pKVM
+          function IDs and the ucall pool's address.
+  05-06:  Protected-VM library: boot trampoline and helpers.
+  07-16:  The tests, one per area.
+
+Based on Linux 7.4-rc1 (6628e7d4c6b25).
+
+Cheers,
+/fuad
+
+[1] https://lore.kernel.org/all/20261102093950.2922035-1-fuad.tabba@linux.dev/
+
+Fuad Tabba (16):
+  KVM: arm64: selftests: Inject an abort before a vCPU's first run
+  KVM: selftests: Allow arm64 tests to create protected VMs
+  tools: arm-smccc: Add the pKVM memory sharing function IDs
+  KVM: selftests: Export the ucall pool's guest physical address
+  KVM: arm64: selftests: Add protected-VM boot trampoline
+  KVM: arm64: selftests: Add protected-VM library helpers
+  KVM: arm64: selftests: Add pkvm_host_abi host-interface test
+  KVM: arm64: selftests: Add pkvm_psci multi-vCPU PSCI test
+  KVM: arm64: selftests: Add pkvm_mem_share hypercall test
+  KVM: arm64: selftests: Add pkvm_smccc hypercall test
+  KVM: arm64: selftests: Add pkvm_id_regs register and trap test
+  KVM: arm64: selftests: Add pkvm_vcpu_regs register-state test
+  KVM: arm64: selftests: Add pkvm_irq interrupt test
+  KVM: arm64: selftests: Add pkvm_isolation host-access test
+  KVM: arm64: selftests: Add pkvm_lifecycle teardown test
+  KVM: arm64: selftests: Add pkvm_exceptions debug and SError test
+
+ tools/include/linux/arm-smccc.h               |  22 +
+ tools/testing/selftests/kvm/Makefile.kvm      |  12 +
+ .../selftests/kvm/arm64/external_aborts.c     |  21 +
+ .../selftests/kvm/arm64/pkvm_exceptions.c     | 261 ++++++++
+ .../selftests/kvm/arm64/pkvm_host_abi.c       | 428 ++++++++++++
+ .../selftests/kvm/arm64/pkvm_id_regs.c        | 306 +++++++++
+ tools/testing/selftests/kvm/arm64/pkvm_irq.c  | 268 ++++++++
+ .../selftests/kvm/arm64/pkvm_isolation.c      | 225 +++++++
+ .../selftests/kvm/arm64/pkvm_lifecycle.c      | 110 +++
+ .../selftests/kvm/arm64/pkvm_mem_share.c      | 394 +++++++++++
+ tools/testing/selftests/kvm/arm64/pkvm_psci.c | 632 ++++++++++++++++++
+ .../testing/selftests/kvm/arm64/pkvm_smccc.c  | 117 ++++
+ .../selftests/kvm/arm64/pkvm_vcpu_regs.c      | 221 ++++++
+ .../selftests/kvm/include/arm64/pkvm.h        |  74 ++
+ .../selftests/kvm/include/ucall_common.h      |   1 +
+ tools/testing/selftests/kvm/lib/arm64/pkvm.c  | 245 +++++++
+ .../selftests/kvm/lib/arm64/pvm-entry.S       |  58 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   5 +-
+ .../testing/selftests/kvm/lib/ucall_common.c  |   9 +-
+ 19 files changed, 3406 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_exceptions.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_host_abi.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_id_regs.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_irq.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_isolation.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_lifecycle.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_mem_share.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_psci.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_smccc.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_vcpu_regs.c
+ create mode 100644 tools/testing/selftests/kvm/include/arm64/pkvm.h
+ create mode 100644 tools/testing/selftests/kvm/lib/arm64/pkvm.c
+ create mode 100644 tools/testing/selftests/kvm/lib/arm64/pvm-entry.S
+
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
 -- 
-2.25.1
+2.47.3
 
