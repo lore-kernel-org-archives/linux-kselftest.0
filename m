@@ -1,86 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793753039;
-	b=SC7s/0TGtxZJ+VtcNIsHsKdLmkeJb+2OX0+9X8uKOwtayhSiOXvMoujmEnLuvs35t5rd
-	 Hl04kQtlLQ33W1SGOk2tq09p9/pypIB0ANcBnuREKRZXOGHVbFdVbnWMXqx380e4mHzjF
-	 dTbEJr8TRQt1uEAgN2pgEAiO2dWyBAmEL0waFcaXzddWNirYaB8gcMhSRIplohCPgH+d6
-	 /SfEGuQmcgFMct28g1l8iFkvNU5sAuXNH1+xczp79zYM3/Q0lS5OfU3VMPduwurtCZJqh
-	 GAx3rd26Jt7fCPs5EWhvWZTVSYUSNlb77gQtwzl9Ukx07YgkqFujJF/AaXRX2HBo59g==
+	t=1793753067;
+	b=W+fMosA6FDbMMnt+Q4mKHW3TRSCe2XxupmFME7R7eR7X4+xxLO7ZYr/+aui6vFismmUl
+	 p2MoNmFsviLrKpoptjVzEXN+4fYvZG/PhbJ5mxaVMPKWTqXv5AtAk7kFdE31zNG85gLaU
+	 GYaOlK91F8TaVMVqXyL80xTqZBIdwrLGCeFqf/lNJ0PhcgxlE1681PI3A5KdEi6RA0r+Y
+	 jrYpZGUMYKHo92wd0agwOZvLSWubXoIC6/BXnGm1vXnk/d1v0Ctc1BcNT7LQTXC3ONH4z
+	 W6AAmF3pYNMmm2iimQByRt2mutQt5OUs54UdjCKjJFAuhM9uJNss2ckLZnd+skDOZFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793753039;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793753067;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:To:
-	 Cc:In-Reply-To:References:Date:Message-Id:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key;
-	bh=1jCvTwZL8MS+SjFAQ29LXN2yWrpb5Y2gngTvzYEqhZ4=;
-	b=YLT+LdJa0LFb5S1W/TvJuK8zM9xQegGjqB/viHl7db7GvaWIkVn7MAyt9uvFcXyYQ8zT
-	 i7GK0JaQSJyH7fW2pcAd8pdB505fO2uV1qwrtk1ZBhOJ+rj3j++UC0JwO4qi8yr4GbgXg
-	 JM1yxaaj8eUEMgNwScZxarmcfOOm5yreA6I/VPDbGYUO41ZC4w2pNe619aubTtvjGD3mK
-	 vbnJDf7vMJZMsRZ1hlM8xEukhn0KN8L/faWlykg4mt5TyPpvwNqC6vNTsI+M0WrDaF7tZ
-	 7GLS1luXnd7ZLGajMq8P2SJPgclwPEhV+HDQQTgRxviWbBW0M5q0Jc/XTG60hKQojlQ==
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=EXDY9w4RlOwbfIpRjyMCCd2SiyWv43JxMOCKrc3iaW8=;
+	b=Oqx2SkUKtoSfhg+dlnu54s/o97q4a0Wo5q3I81WUI8SaPTTJZrAyFT942wUC3tb36/mJ
+	 URfoL5XkVoMUiu3uuaz1kvi9FITvhgJkNeuuzXQclsyxYMYVyh24Nz4ZHrq/YxPOLJ+m5
+	 viG/GtYCySPVBQ3f8+75nLkgd/EqvX/L54Oq+WXHYK+ho9X3uQtwH8kZniACTYsilK/NH
+	 rdJQUhzrAJk0Jm5fz3bMaK959weNeVy2Kq8Mxx6EkmSFUxZMtF7j4yOplgbyAEXNR7XMl
+	 XyTLBtohkL4iGiasOW8niclr4eFbylkyKPOlQMGONaf3Rzu6O3xvJQ15LaadO61JnkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=soleen.com;
-	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b="g5NDz/C1";
-	arc=none smtp.remote-ip=209.85.222.43
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ngl98GbZ;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D8A606A324
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 00:43:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7D8A606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E63606A324
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 00:44:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12E63606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=g5NDz/C1
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-9908e3cd939so52263241.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 16:43:58 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ngl98GbZ
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3b08cf16decso150307a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2026 16:44:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1793753038; x=1794357838; darn=vger.kernel.org;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1jCvTwZL8MS+SjFAQ29LXN2yWrpb5Y2gngTvzYEqhZ4=;
-        b=g5NDz/C1NgO7qdNHV0g6Pc+ihYOYw6llkbuPyOfMiLLrRIbZ4/7girC5Al70pkJVcM
-         lKM0GU+iyym0MtqjHoRZCQ0kh96fMfT7cZmZqgrUyWjsS42hqfBrz//rm7OFdqSTLJBI
-         ztDbzt6y7Fn7HGj8W8pJh0lW4DvoTQOjrBJ1pgllXShYT6fLc6snFBCpYwEGiOqHSY1S
-         fpzfVJpRg14CX3n/mqn9RGi5hL7bzJPAqNKntI/PN93FkPr1DMJeYLQZ29YO/7sRnwOR
-         X0zYunmlA05MRfOY1Phjkf3CwFzB5Cj/HFyYEMVOOjfOEy8baTgC68zW5TPuSysRQ18k
-         7y9A==
+        d=gmail.com; s=20260707; t=1793753066; x=1794357866; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EXDY9w4RlOwbfIpRjyMCCd2SiyWv43JxMOCKrc3iaW8=;
+        b=Ngl98GbZWvNp9KhithH0kX4jd3+dZnpMCeIFB+t85NCm271/mMF0fbRM4Mdf1r79jD
+         g1AW9F15+84oH2lsdNfLTHD+JPME6Zp/9cO6z2r3QYVx1uoPF5jCSXmstXi7P+zxfVJk
+         hWVOnUb2UIPIHAZL9unt2/Fnlw9PB2pgXeyKggwdtCsqHKyKIgKMmhpE06+Q4xzHzG3V
+         YOPj/VPOWjkcfQPxAjEnJltGIDXPYrdzgLIRm5598V1Ur3yE7xZRQqFAbtajb+0L2vTD
+         JUtGD6RO401EaI7b8ed08LEGDXgy+ms8UzAMBzxC+xFu0OhMvTqEVxbGGUJE8yVuHR0s
+         zutw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793753038; x=1794357838;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793753066; x=1794357866;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1jCvTwZL8MS+SjFAQ29LXN2yWrpb5Y2gngTvzYEqhZ4=;
-        b=ypXQjs2NGSr+adNxbAAdMgo/sC6DQcUmk8EPcNWHcsV7cXUmzhMDo3baadxb0eNjqz
-         iR4g0/tv63mhawJqJgRpeallcxJg0ggvVxKiexbxqJ55dm4kHrG1k2aeZTQnJZMPQZ3+
-         VxmdiSw7pmp7MCnixfseCKuOGIYv8G7kI/UxqQvXyP0LwUZfrmZvtEdXLcpbPKiSj0Fo
-         UEIapbWrNxFJ2hCsiCcW8a2Ahk3HrtkM1WmjxSChqrTbn6mOwd52UqLn9oTlYSE4VoZc
-         ik5/oncRsG7eMBukhZarmDeAVpyDzidSvoIOmBpJhnln4KnJI3bZ2P6C4rERb89SJA6t
-         AiKA==
-X-Forwarded-Encrypted: i=1; AKwUvBwOQhGWQreqfzQd4z8QcPDhWQBWtpsgLAmtJvEPuitygGjYtjAieQBpNvTrmbV1d3SYH4F1+QHVJDdWFW8xoW8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+OtZuCbfpbsJVmsHZ6WBMgbSu/ecGo5YXXOAsbays+SwJFwia8
-	SuJ3xHVNXpUFzPCSl9yNLvm5hqhPx2+sgEShwGFOaX4AplYaOlsLdz3JqL7m4LqvfHg=
-X-Gm-Gg: AYBFou2QGl+ICj+8BcCjOncQwgtWVVAS3Cb29MRk1alWy1Zs+GiLMhKPCnuWz0OQ2Vu
-	L365nO84XKS66mBmSlaXHgDgvmiIOWvyj1idzbYvRdgmTX9B8EjN9BMXW2JprcTySWHpOFitrNi
-	0YLWxRU76s963KTRaH1bQVeauD1rHPUORqOVGeniXjkHSDxGI2Pei44xWmLhpVv6aEQalfsgC4z
-	jh3o6Ax9xmXU9gD0qB+CZzXD9t/neMnJeo+tpJCQlbnM7Kyp0U9o1cDx/3o5zAl8IYkiNWpRcUy
-	3r9R+ZrZJ+r+4SqsgxePHrg3UOznNkTb3QHSMUDep0Zt3Z7Z/vucBRm1c3wJ6QevXjyuBPFCLmf
-	iE06fQJO8e7jCpyY4u7EL3awcPt4CmwY127y7OO02v/eM/e7IIFpbfJgrqmx7T0a0D9HcJhTjOX
-	Ryn7TkRxo/UA+4lrGub7SPXV3QTZT2lT1ixK3z/oBCtE8P6oE6iqIFk9S+qRK2t45nBXlVY20fT
-	mgJBdSGZwh8qu9t7Sq2Q4yePtHRaaSMk3H9elfXrdnj8j4BiYUPYGesCW+RIMobDd+gNL+dmqOr
-	Mib/kVTxgZSUFpZiQaJ9Ugs9En7Ftohw5Eq/YJe9OGeZmnONU53V3wViXgJ3UGvEwYpppls5xFo
-	P5YCZr2fC0AGmckxXdd2dcP+9OlU21WjPU5gTrbuIDjLw
-X-Received: by 2002:a05:6102:358a:b0:7c3:a6f0:99cb with SMTP id ada2fe7eead31-7d072719913mr4878960137.33.1793753037717;
-        Tue, 03 Nov 2026 16:43:57 -0800 (PST)
-Received: from soleen.c.googlers.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d26fef4ed3sm527432137.11.2026.11.03.16.43.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 16:43:57 -0800 (PST)
+        bh=EXDY9w4RlOwbfIpRjyMCCd2SiyWv43JxMOCKrc3iaW8=;
+        b=qyFShTfOi8yKs1m065k8Aa3cwytGJEuxVLg8XjHg5wetbWbiYVdukf4HQEjvcseenN
+         JcmZ9oR8SORpTUTpeBWC6ANyQm5ZSWZJgb/GSPIm/vyNAA1b/WLwPpJmX7M5mfOXgkFn
+         JNKoEjEQxPQbSZmjwcOMHxU6iipnM4vb4ejWgmLxFpWvilozIPktZz9raMUVo9w0Ntlq
+         T+PGNwLH+reUUrttWu8rJEvI68dBFEEOUbs6RN/zU6OxVh+r0otFZ6lkW/VKiRHsb6oq
+         2DTWPpWBp5/8F+zlFHyiF6L0nOyjWaKG8k3fSd/1WWGYtsNYPDB9VhBV4EDAzEGEf3N+
+         EB6w==
+X-Forwarded-Encrypted: i=1; AKwUvBwG/lz8WlKM6AEiHj7DmkCgDYClJwORYFcgcOl//PguwAjroRCuiaO/7kfB8ao7QIpANSnl4D+mnhaV3YymgiE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z82v8pwnROhabPBYbMkVdXV6wecnZNrssbzCkLX4/YqLS8L/RwB
+	T5JVn3i5NV366/GpRiX8nAwG4PaTn3OnagjxeqKh5zQUCFHHeO5EWrrP
+X-Gm-Gg: AYBFou13XfSGlSiQdkvE0lEVdEajTfxMf6X1mgDCBgDTtwseAN1m82LOuTSUG/heOZE
+	CO/R4dzjLqnyCRuTf1XGHuDRHwaN01VZF9y7DnuVjQIzr+hnNG6dPr3ZOM+V5GfAVf8mo4H7oUH
+	M6hT7xVl6pqYOdjXLjvTGNYwXPsBNa4wHG0SkQWj8EOA5A2UUEFM/LnIEYAVgbUlhnzmw0E9WV3
+	ygfnPWDleN8DwNGg0mikhIJw02MtFVRDmIbB/djGfcUrrrZV0eyHH2IJVDyLRaB5xPARr0bAvs5
+	dHPZjjvGOq3qSNMCw+WJEzw/xyxIaANqucwtrmoloLhQ6QJTyDveGtS8YwSDBjgXEyIc4vRJYal
+	B9KcZLwvP+lEhjA8Sa2aqL7FP8FKKyVLSaryEu/jPR93QYcCTlFpS+NkU6vjTUCWf8NR+Nl0t6i
+	H2VangS/fO4hNcEwaaHEsX+xzYy1ui0/ILyW+dUjEgxCLfCVBB8AzP4lxUeE33llPBTdpESLqhV
+	A6faiXEyuhvAXpd/HJx3OPtpy5U3PLFo2cEd25H500fK8N6jlShRpiebCEjXdQcBy0A5ujxf0rD
+	pE+qgN0vOBBLHW2Cosjsn5NMCmNCoB20nqYeh+MAj+KmyGp1TDPo3iqWsIEFHpfnBquRmpWM9eO
+	Bua/l+4QhD1kfvqGlwzx0TB7vugDXp48vO1c=
+X-Received: by 2002:a17:90b:1845:b0:3a5:133:ca5f with SMTP id 98e67ed59e1d1-3ae89787ea2mr10693463a91.46.1793753066335;
+        Tue, 03 Nov 2026 16:44:26 -0800 (PST)
+Received: from localhost ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b094d572e7sm567255a91.1.2026.11.03.16.44.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Nov 2026 16:44:25 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Nov 2026 00:44:25 +0000
+Message-Id: <DMM0E6AA3KB6.28SYB9X6ZYIHL@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Account for zero extensions in
+ patch list expectations
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Hungyu Lin" <dennylin0707@gmail.com>, <bpf@vger.kernel.org>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <ihor.solodrai@linux.dev>, <iii@linux.ibm.com>, <bjorn@kernel.org>,
+ <pulehui@huawei.com>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+In-Reply-To: <20261103215309.19950-1-dennylin0707@gmail.com>
+References: <20261103215309.19950-1-dennylin0707@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,115 +103,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 10/10] selftests/liveupdate: Add a test for
- preserving tmpfs files
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: David Matlack <dmatlack@google.com>
-Cc: kexec@lists.infradead.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-mm@kvack.org, Alexander Graf <graf@amazon.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Christian Brauner <brauner@kernel.org>, 
- David Hildenbrand <david@kernel.org>, Hugh Dickins <hughd@google.com>, 
- Jonathan Corbet <corbet@lwn.net>, "Liam R. Howlett" <liam@infradead.org>, 
- Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Mike Rapoport <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
- Pratyush Yadav <pratyush@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
- Samiullah Khawaja <skhawaja@google.com>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>
-In-Reply-To: <20261103010216.3447716-11-dmatlack@google.com>
-References: <20261103010216.3447716-1-dmatlack@google.com>
- <20261103010216.3447716-11-dmatlack@google.com>
-Date: Tue, 03 Nov 2026 19:43:45 -0500
-Message-Id: <179375302575.727293.18102345692701869647.b4-review@b4>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3188;
- i=pasha.tatashin@soleen.com; h=from:subject:message-id;
- bh=1Sz+eMhTI1TOTbxgSk7ZOC8CrCJdIfx3Ze9Zg3ES4c8=;
- b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq6n/FzIqSwYCXrxsnr7zksMS5TfAEmFOQUj9PS
- 7XxUL7XYFyJAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCaup/xQAKCRC7dyhM23N6
- 3nTOEACAI6TfigjjQvteQKuwVbfhXqGx6bxoozDfCeoenFpsOHHU2tRSPDHrF2LinhmG2pyX3Q8
- IdNQ59F6clZBMmDb/eOe07rYUzfUWj1TUdh5D/SLuP13olwOUmaakHONOrG2Uaporgy7rW/JvCo
- H2L7Jk9k9ONnqREnNjgeAzTwu/zmxI3kBLYcpoEe4e/qloHN2LAqn6iVZB5b6I/duQg+0sSKEgp
- qF4OBNh/aIA1foatwzOu597LOjO9yQGRV3iBJJYo51P6K86O3J78ymlKWGJLCLMOMPk2DZUnR8M
- jLp931wUPz3YeNyDlYE5pYInd4W0IpRLQkJs6piLRVQ/conGIWbGkL4KSSoQd/2jep3AT+iLZxT
- nQX3w7DUGKtNX41lNlBN5hBRLIL7IBK7aadPhrKz90SJNGH9ZPSeFVaGtwJRjGCWrPppwaO06yR
- VysyPyy9uNhOKJSHmwBYeXEJddw81NZYJIjeslUtu59vWS+R+q3usDK/yK5jNy6E0h6vvuwyhuI
- gmJeftNu95dEGsoOiTdU/+eZlCgissKpCpGEEx1LCEbcoV5iULkM6cczYHziRUNy4WEnse6TYs5
- JiM5brFJchE2M/+FwTTI00ZLZVJRSQ+PZmsg6nEdtwTUZDUhsHCd0cXftsjhObL8a8SsH7szZ7X
- ktyDeGGGs1LNQ6Q==
-X-Developer-Key: i=pasha.tatashin@soleen.com; a=openpgp;
- fpr=CAAAB722DD22A081F0D49F35633A6A993D43B569
 
-> Add luo_tmpfs, a kexec test for preserving tmpfs files and memfds, and
-> for retrieving tmpfs files onto a tmpfs mount with struct
-> liveupdate_shmem_retrieve_arg.
-> 
-> Stage 1 preserves the source files of each test case. Stage 2 runs
-> each test case in its own directory, with its own tmpfs mounts, so that
-> block usage can be checked exactly with statfs() and st_blocks. The test
-> cases cover:
-> 
->  - The restored file: contents, size, position, seals and holes, for
->    linked and unlinked source files.
-> 
->  - Creating the file: it is created like with open(O_TMPFILE), with the
->    requested mode minus the umask, owned by the caller, and not linked
->    until userspace links it, unless it asked for O_EXCL. Also O_RDONLY
->    and O_WRONLY files, other open() flags such as O_APPEND, O_NONBLOCK
->    and O_CLOEXEC, read-only mounts, and directories that the caller
->    can't write to.
-> 
->  - Preserving files that can't be written to: a binary while it is
->    executed, through a read-only fd, files on read-only mounts and
->    superblocks, and immutable files, including sparse ones, whose holes
->    are filled. Preserving someone else's file that the caller can't
->    write to fails, and so does preserving a file through a write-only
->    fd or an append-only file.
-> 
->  - Executing restored binaries: a restored binary can be executed
->    before the session is finished if it was retrieved with O_RDONLY, but
->    not if it was retrieved for writing, since LUO keeps the file open
->    until then. These test cases execute copies of the test binary.
-> 
->  - Block accounting: the file fits a mount of exactly its size, and a
->    large folio that extends past the end of the file is charged in full.
->    Running out of space, or hitting the memcg limit, fails permanently,
->    and leaves nothing charged to the mount or the memcg. The session can
->    still be finished.
-> 
->  - memfds: they are only retrieved as memfds, with their seals, and
->    files from tmpfs mounts only onto a tmpfs mount.
-> 
->  - Interactions with LUO: invalid arguments, which can be retried,
->    retrieving a token twice, and outgoing sessions.
-> 
-> Also check that the size of a preserved file is frozen, and that the
-> test doesn't trigger kernel warnings.
-> 
-> Enable CONFIG_TRANSPARENT_HUGEPAGE for the large folio test cases,
-> CONFIG_MEMCG for the memcg test case and CONFIG_TMPFS_XATTR for
-> FS_IOC_SETFLAGS. Those test cases are skipped without them.
-> 
-> tmpfs quotas are not tested, since the test runs as root, which is not
-> subject to quota limits.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> Link: https://patch.msgid.link/20261103010216.3447716-11-dmatlack@google.com
+On Tue, Nov 03, 2026 at 01:53 PM Hungyu Lin <dennylin0707@gmail.com> wrote:
+> patch_list_insert_in_front() checks the translated instructions around
+> the call of an inlined bpf_loop() and its callback. On s390, the verifier
+> adds zero extensions after the two 32-bit register writes in the loop.
 
-Overall, I like the series. As a follow-up, it would also be nice to add 
-non-kexec tests to liveupdate.c covering preserve/unpreserve/freeze and 
-restrictions on various tmpfs files without rebooting. 
-While that won't test retrieval, liveupdate.c runs as part 
-of regular kselftest by pretty much everyone, unlike the much heavier 
-vmtest.sh run.
+Thanks a bunch. Applied.
 
-Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+But could you follow up to
+remove the two 32-bit writes from inline_bpf_loop().
+'w7 = 0' and 'r7 = 0' do the same thing.
+'w0 = -E2BIG' is an old bug. bpf_loop() returns long.
+The helper returns 0xfffffffffffffff9.
+The inlined code returns 0xfffffff9.
+So 'long ret = bpf_loop(...); if (ret < 0)' misses the error.
+The "over max limit" check in prog_tests/bpf_loop.c doesn't see it.
+The prog keeps the result in an int.
 
--- 
-Pasha
+No other insn of this prog writes 32 bits.
+With 64-bit writes the xlated code is the same on all five archs.
+Then no need for the #if and the second copy of the expectations.
+
+Something like this (compile tested only):
+
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 6b719a2..321624a 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -2783,7 +2783,7 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
+ 	 * expected number of iterations is too big.
+ 	 */
+ 	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JLE, BPF_REG_1, BPF_MAX_LOOPS, 2);
+-	insn_buf[cnt++] = BPF_MOV32_IMM(BPF_REG_0, -E2BIG);
++	insn_buf[cnt++] = BPF_MOV64_IMM(BPF_REG_0, -E2BIG);
+ 	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JA, 0, 0, 16);
+ 	/* spill R6, R7, R8 to use these as loop vars */
+ 	insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, r6_offset);
+@@ -2791,7 +2791,7 @@ static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
+ 	insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_8, r8_offset);
+ 	/* initialize loop vars */
+ 	insn_buf[cnt++] = BPF_MOV64_REG(reg_loop_max, BPF_REG_1);
+-	insn_buf[cnt++] = BPF_MOV32_IMM(reg_loop_cnt, 0);
++	insn_buf[cnt++] = BPF_MOV64_IMM(reg_loop_cnt, 0);
+ 	insn_buf[cnt++] = BPF_MOV64_REG(reg_loop_ctx, BPF_REG_3);
+ 	/* loop header,
+ 	 * if reg_loop_cnt >= reg_loop_max skip the loop body
 
