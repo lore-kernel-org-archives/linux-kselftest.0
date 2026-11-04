@@ -1,110 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793822120;
-	b=FagU+XA9f4I4Ul/iMI8gpekl5t09Ud5Dw6DvlMm/wLjA43Y4paxUsawt2rAxBKgvz1IZ
-	 yotCJi/KMqkG0o+eojuJsRuavTAa/vVbP1cDDMrGtAo5uLdot2kalfYXBQliKOVDl0lOM
-	 6h0R7do4PtCCvazayLoqwo0jcoaxGL+c4EnBxSYjAN4XIAQwjgYSBnCc/U1pTmNKjNjoT
-	 lxaImqiU7EQ0vfVh6+9e4z10w2pcLYVoeJ4HkEVcziDyV6/iVBXIxamIUkLZm1n3KeRHm
-	 MSvsI/Ns4YUb33umSMCQEN6+NQ0ManoaWIEUgW0X3hlKs4cIQqbHqt0SSTgvt1adOiw==
+	b=I7PvOttsAquwgwqQR9yM6V4w3buYL6i29ZTGxmVADpe4t8OXfWyGh4+Bkc5+DaJ5CFUi
+	 8B+EfrMxE7twhnkCgNcgE2W3SwYgYew7kdI5zsSOVlUj6yjFgALM46zCVf7KsKDmq/l7l
+	 CYnyUEBBqxRGEgoPcgwvE1ahJx5Pqsf6LgdwNILoCYw1PH/E7VhO/SLTUxrJ0B6z44jra
+	 VzgHmXQuzpblVUF/bS49KnANkEO7b/NHlhONC+MBE1ERJ5/WQv962zZyAEdWvLYfT9Z3T
+	 8fi2ZUDk1Ih3WGA263ipmSH6LdAERU2fiRgtRv4MReUXcnaqEQl9smw95rIICRIgODg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793822120;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=5GRAUZH2kX1HsIdPeFBozE83iEr60/LUxZUEqoYcqBA=;
-	b=GIElB+CcBgXxXd+L8Z/pruo6uZuGsRYYTzx3lMQt5tf2aE4QaKRHT8wITyoSaYwTpkW3
-	 Fj1A9T/qdTVU2rHZmvS+tvSBJM+84b/h4Kc9R7UVfD32cL7Y4OCDgougcHn6SPdno8lqu
-	 1fAjnmzw5iF5NqlWXn/GImC8wvwqTSbS3Lr0G7Ty8uGogieZ6njgPbSeNkLOn+j2s6ux+
-	 Wj0dR+CgCMGeD6+j2Uejbpd9MC02VBT3lEhaTvg4aKi+Pcc7GQh4iRE1KMJMASMLZtpqY
-	 /dF0VR1SLSevGRenXpiOKabXnRfv1duDIdBu7QtdEPYrGZoMtvNRYeHsdioey3ESbdA==
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=xIP0152tlzbCKzuF2/YHtRaLIY4BcChV/EzqFd0BfRg=;
+	b=KTJMBgTGzdlUL++Ixs38NHKqFLdbJzgxN68GjRq04PdnvFN0SwFL61R3V434AekkkOZJ
+	 jg3u/zWDiPI5zB8TVW9HmZbmPl+rPevuJkBf0B8z+CmrqUOePyn+MSDVqaCx5oyFaGB8d
+	 96/bcaTfbUnQnxDWp4bO1RoLek1hZNHOg3iVPiKh1xMQILghXI/kEzcrBTz76B2Kx0L8Z
+	 SPJ+M5y81fCOSTc8awVZJ4l8/LPWeKBfxWh3B6gubDGI1Sw0SDJ1HcMKjwCk43RN545Tu
+	 RT+0saAhIq1kUdBsPDQBWua90laKjStW+SHNEIE8Px0/jx76bm7YNQXRpE6PyhDL17g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K6D8wYD2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kbE2wqxY;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310B1606C59D;
-	Wed,  4 Nov 2026 19:55:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D8E607844C
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 19:55:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53D8E607844C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K6D8wYD2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A33681F0093A;
-	Wed,  4 Nov 2026 19:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793822118;
-	bh=5GRAUZH2kX1HsIdPeFBozE83iEr60/LUxZUEqoYcqBA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=K6D8wYD2MHxLc1A6I8beamV0pObJvicvKCtgWawx7vbSi7zLo3j2ctn3RCT02IH2B
-	 cs/tE+wlgkfJiw8pdoz1fsAs6shdk6/KKU+Vqvvu6Kw7dZYVL6fYJJWHQ8SIn7iNdF
-	 TnUIjUB+uZ3A9X1DPGPnTdZdNrZ1/73uYR+WVppUld9IugsG6rBtfC8gP3fTmrRMj9
-	 qYaYgJLjjARtox7+0nxjwIaOsw0/fuBmnCeO6C0HS1fLvltm4b8P3C8jv1U+rPQ0ON
-	 GxEtqpsz5ApwsZslZD+5hRjMG1muJ5LkH0aAOA6g+jUkHI3osPUl5ugHlGAfBvXM5P
-	 CPyCC7CRsX/ag==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Jann Horn <jannh@google.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Chris Mason <mason@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Christoph Hellwig <hch@lst.de>,
-	Greg Kroah-Hartman <gregkh@suse.de>,
-	Joel Granados <joel.granados@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jan Kara <jack@suse.com>,
-	linux-kernel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org,
-	coreteam@netfilter.org,
-	kexec@lists.infradead.org,
-	linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	ibm-acpi-devel@lists.sourceforge.net,
-	jfs-discussion@lists.sourceforge.net,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-cifs@vger.kernel.org,
-	linux-fbdev@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-sh@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	sparclinux@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-doc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	Takashi Iwai <tiwai@suse.de>,
-	linux-input@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-debuggers@vger.kernel.org,
-	"Christian Brauner (Amutable)" <brauner@kernel.org>,
-	Chuck Lever <cel@kernel.org>
-Subject: [PATCH RESEND v2 22/30] module: procfs: let procfs own the seq_file of /proc/modules
-Date: Wed,  4 Nov 2026 20:55:04 +0100
-Message-ID: <20261104-work-procfs-fs-v2-22-319e0f9a8aae@kernel.org>
-In-Reply-To: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
-References: <20261104-work-procfs-fs-v2-0-319e0f9a8aae@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kbE2wqxY
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2e9d52f684fso10830605ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 11:55:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793822120; x=1794426920; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=xIP0152tlzbCKzuF2/YHtRaLIY4BcChV/EzqFd0BfRg=;
+        b=kbE2wqxYpPOPvYLN6MYCwEHXLGNtfvFJPaftsxTsX58YJ+WwlbYrRZU1Dwwhwqg7rG
+         lM5Fp6Krsm5Op3vdTLXGy0CT8n4LybobKyn+d1usLVBR4BBTbtBim9anmarJFKeFCxhc
+         0j2+cJDkBOhY6ZDzhtgpeOaZkWi4shDSut+XcoU/susJkqCJnwadsXKC7xl/lS9BSzxl
+         TFUmYZCKGkT0q/Ole95F4e8QrRPsvSnObR/RZIO3RUOy3rGqkKb/CFyfAoOV0G5Nqjhc
+         E/YNW3bA8aIGuWKVS2EXpUexSP3TeRv+ip++rD/OBtECH6XZfQ4O8JUrpc9ha2dN/nTs
+         JmfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793822120; x=1794426920;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xIP0152tlzbCKzuF2/YHtRaLIY4BcChV/EzqFd0BfRg=;
+        b=g5A9lbxbehRDRb6Eiq8d/WEBo1mAKWc/8wxGVCVu9/v2CiDKjH8JFIFD8Earr5/3hV
+         mF3/D8ZhdBKsRku0PC3Zpa/0xQJpxOtrB4P59djTEf7d+uwgxUAa+BC7zh/Ce5adI80v
+         tSL/ec3NhSnkl2AEDNldLwtzl2KUQyBBa4wgrx00BjQ7JFN/DLm0+RETk6eR4kxnqYdN
+         rMZ9hsKs3E9FmAv0OrVm6z3/jGZh+ITNn7gg+5RjRPwzaapUT//i5E8GZp1bK6RAfi+4
+         VKItcgXj4DmVUcXWpM2itZWtM2Hhllm9kUfnUpOcRHo1tdV46K1sEaldbAz4EUT8WSgf
+         FYVg==
+X-Forwarded-Encrypted: i=1; AKwUvBym9q93wmvvLiOp1wK5D6VlxtGVTsTw00wfFYT4aYhn6TJnUQ6ico98nkQabT//T/uhiBSLxb2amCOUlkxQwuY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8ZqDGzW2DIpwtJWHRinJvWOBSt8Lb8qze89t2GwNcQQce7wFiR
+	quX9MHZerFGgiMsiQsyJb52IN1/1mhWDqZTRdFV37zz+hUHIYae9e6lERszi9CfyiKEKnUIsRdn
+	PSTgPgA==
+X-Received: from plwg3.prod.google.com ([2002:a17:902:f743:b0:2ea:a5c1:240f])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ebcb:b0:2ed:18cc:d3b3
+ with SMTP id d9443c01a7336-2ed18cce0demr13596215ad.6.1793822119521; Wed, 04
+ Nov 2026 11:55:19 -0800 (PST)
+Date: Wed, 4 Nov 2026 11:55:18 -0800
+In-Reply-To: <ac6b1891d6bdf3a855a5b840c462a6e7d464a146.camel@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,64 +79,57 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20261019162445.37219-1-dwmw2@infradead.org> <ac6b1891d6bdf3a855a5b840c462a6e7d464a146.camel@infradead.org>
+Message-ID: <auuNplHvOT0XL1fZ@google.com>
+Subject: Re: [PATCH v4 00/12] KVM: x86/xen: Don't drop event deliveries which
+ race memslot updates
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Paul Durrant <paul@xen.org>, Vitaly Kuznetsov <vkuznets@redhat.com>, Fred Griffoul <fgriffo@amazon.co.uk>
 Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1665; i=brauner@kernel.org; h=from:subject:message-id; bh=flwsY9W3AwD1el1fvMS4MRjAzw7empBDyCTwiYsv/MA=; b=kA0DAAoWkcYbwGV43KIByyZiAGrrjEahTK6pLNLSh47T+LUN95C9eqt3XPPOGWBkVwXBxoDAb Ih1BAAWCgAdFiEEQIc0Vx6nDHizMmkokcYbwGV43KIFAmrrjEYACgkQkcYbwGV43KJwLQD9FSDg Bzu78LkPNN8YTsitZGfMvsvgXjVHC0ovLkYyc60BAKlpMERm5dXxCOBigxteDNBXTI9lWTa/zws AB9/l+qwF
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-Declare the seq_operations and let procfs open and free the seq_file.
-->proc_open() only decides whether to hide the addresses now.
+On Tue, Nov 03, 2026, David Woodhouse wrote:
+> On Mon, 2026-10-19 at 17:24 +0100, David Woodhouse wrote:
+> > From: David Woodhouse <dwmw@amazon.co.uk>
+> >=20
+> > Sashiko analysis and torture testing of the upcoming conversion of the
+> > gfn_to_pfn_cache from rwlock to atomic SRCU=C2=B9 highlighted a pre-exi=
+sting
+> > problem: refreshing a cache can fail while a memslot is briefly marked
+> > KVM_MEMSLOT_INVALID during a memslot update, causing kvm_gpc_refresh() =
+to
+> > return -EFAULT. The Xen event channel and timer delivery paths silently
+> > dropped events when this happened.
+>=20
+> Meh, it isn't even just GPC that's affected by this =E2=80=94 anything th=
+at
+> uses kvm_write_guest() can get a spurious -EFAULT if it happens during
+> a memslot update.
+>=20
+> I just think that until I started torture-testing the GPC SRCU
+> conversion, nobody ever cared because in practice we *don't* delete or
+> split the memslots which KVM is actually trying to write to.
+>=20
+> I'm tempted to drop the whole -EAGAIN part of the series and the retry
+> attempts, and continue our historical stance of not caring.
+>=20
+> I'll just keep the other incidental bugfixes I've found along the way
+> (especially the SCHEDOP_poll vs. srcu one).
+>=20
+> The Xen use case is actually the easy one, as userspace really ought to
+> be using KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA for that anyway and
+> shouldn't be affected by memslots at all. I can update the GPC-SRCU
+> torture testing to do that, and pretend I never spotted the transient
+> invalidity...
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- kernel/module/procfs.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+Apparently I suck extra hard at reading today.  I responded to the cover le=
+tter
+with basically the same response, and _then_ I saw this.  /facepalm
 
-diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
-index 90712aa9dd13..a759bd916df7 100644
---- a/kernel/module/procfs.c
-+++ b/kernel/module/procfs.c
-@@ -117,31 +117,24 @@ static const struct seq_operations modules_op = {
- };
- 
- /*
-- * This also sets the "private" pointer to non-NULL if the
-- * kernel pointers should be hidden (so you can just test
-+ * procfs opens the seq_file. This sets the "private" pointer to non-NULL
-+ * if the kernel pointers should be hidden (so you can just test
-  * "m->private" to see if you should keep the values private).
-  *
-  * We use the same logic as for /proc/kallsyms.
-  */
- static int modules_open(struct inode *inode, struct file *file)
- {
--	int err = seq_open(file, &modules_op);
-+	struct seq_file *m = file->private_data;
- 
--	if (!err) {
--		struct seq_file *m = file->private_data;
--
--		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
--	}
--
--	return err;
-+	m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
-+	return 0;
- }
- 
- static const struct proc_ops modules_proc_ops = {
- 	.proc_flags	= PROC_ENTRY_PERMANENT,
-+	.proc_seq_ops	= &modules_op,
- 	.proc_open	= modules_open,
--	.proc_read	= seq_read,
--	.proc_lseek	= seq_lseek,
--	.proc_release	= seq_release,
- };
- 
- static int __init proc_modules_init(void)
-
--- 
-2.53.0
-
+At least we're in general agreement.  I've got patch 1 earmarked, so no nee=
+d to
+resend that one.
