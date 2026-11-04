@@ -1,109 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.131
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793792428;
-	b=QvdBdOJ5Rdm5QWdUJOUcT1oqAFWyH4XQKy019NIC6iMA8eoM1GICyIxjNui+arD2BDwZ
-	 h8rg75VG0AUsIrYUCxEMG9bHTVeOHwHec4whacnYpjiwY7mj/pSaH5mBsWIPE9rddfiX2
-	 wTmaFi+8n77XJRZqkN10PHVeXFdtLtrQjJTiV8C/wMVckT6be5O7RWiXhuK2UloGAfHiw
-	 44+TcU29rqPkx0Ek2ptw90YvOdXhxkyhJYPGMwpnMZ0jKvUPOOCNtku/Gw2seLFcfgH5d
-	 +ND4Vd38mPONZtGg+0YEeOKqhshX6wrhtpxDjs3pZSUA2F/rQSAGpjtD56u5RqhCIRA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793792428;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=tEpyqlnZnD5VvYTqFQOq2w5jDINj/Ab94LVMAq5qpNk=;
-	b=vmW5Jz/A/LSh12S2z+x06LUuRz2crDq3Tn/U3xRDo68UmZMlkYPpfsnvYLLnIe8yO/rr
-	 pXuz2378Arcthh7BVzWIjt2NxPds7QCUTdZngv57jBB8vyY/dGzZZYi88Cp8Vpsb2YCKT
-	 OaVEwnnSwIuCZRZatxXYZFAMUK787+uMSuNzseUymkazcGJCVsBBGaMOBkTe2Mt8heyLX
-	 0yG8gU34M9ZmMO7004Bva3TaHmG7kzFkx+x7gv0dHuxhBcZMIc6wH/EZSrJvb7nhhqFjQ
-	 LachcHX4A2kvkyAVDn4vZh5LRvY6HsnkkfBfhlIV8mfYbBICF7F8fXx8yVanqFplRiw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=virtuozzo.com;
-	spf=pass smtp.mailfrom=virtuozzo.com;
-	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=VZpptrcm;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.162.131
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023131.outbound.protection.outlook.com [40.107.162.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793792451;
+	b=pjV07i6sb+FybM6T3EpwpWa/17YHhDeZWdRjMAxOFh8zpFkyUCqZHxsYV0Ts3PvrYHM8
+	 9crBTPZWjeBBZzaMW8jzZZDoc6ynd8sbUBTV6B4Mm0Yu45y7xtwsSvsbpADzuwZBZc2Mh
+	 zTLp7lT94O+hRP7RLHnKV1r+FW6bjwmu4gaXdk4vabqnB9ovmXZYyJAAOhR+zY3pQ/OAJ
+	 Q8EufBpW7WjmBdfC3RU2KYMqnElalV4xCTujjXziiTi+YINdWDpW6n6btB3ipeFEFBy56
+	 QiNqKKDFOhEHStmEkdX7rOaKffhOSa7qyJ53ra6XeeLbMPkG17N79OMPydiWpEjFGcQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793792451;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
+	b=iXsmfnXYbfeYQwhF0PMh3VtvLRPS/90Nlg9VUEuGRcX5dJzfUrF10JN5Z8GkL9XcqhYC
+	 pg7TUwyuyFK1zQYZhc015xmAlpYGYZZT6isQUW1VIyOZHhHivwaVaJlvk9uaS2AfSWe5X
+	 +JO9roJ1/tSYZI5Z4/8NSvmgoXD8AkLXWuV7k3ZRUVGUSddqXMkL9nQtipywpD5qx37uP
+	 fvgJOx1bh3LD91Z6lBoQ2Bodl6elqBjtrd+iknrtAZWbYFYcijgP1/76+RDRHN5+6uZf4
+	 5QNLzIArspJuzfktS1Hy5C9sA41twpCYQCgI1aFlEWXa+xGngYvZvZuw7F/lOd+H6yw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBwm9xd+;
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A012606A328;
-	Wed,  4 Nov 2026 11:40:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A012606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F84B606D819
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 11:40:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F84B606D819
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=VZpptrcm
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AhoMmdRUJj5P+qSS5cR9UvmWtU5iYiwbeXLlEYOX55c9hiZCNh8cOSflqf1Ywj5+0PzRFKAoQLEthJQwYVPXm7YYu8uxwYzTQpFLhGzUpigjwc6Vi7xE+VJdbtHTGWngGt3nv4u9VoXkw3qCJAQUDqTGfLNA6Omo8ax/2fhM0t++CJgz2LL1dh8oO3vV59+HoqOZ/My61xSWZqyLTIv4EDChg2E2J+rqC+vhZLwxkyprY1LmNKGguTr2xZw1cnBZQoBg7uK4FoSwQAVbNIYRTWcUbuSRILQKCWzuG5PDnRpGTOLVcpPRuL3hamtzHDGbR3qwhIRF3LPcSxfIK7LEug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tEpyqlnZnD5VvYTqFQOq2w5jDINj/Ab94LVMAq5qpNk=;
- b=IC9x1mzEFdcqMo0KwWvxRHxj5kOIiOIFrMI+Wg3o3Fu2r31wakKFHckSrB3JOLkqrtUBJokogxT6sZCcRhhPeBkvdppJyWFlmVDTnM1DkZa49CvrQoMwjKdeRZ39uYBm93EQ9VfkNRgwN3WHNxsn05HJ+WZyombsK9Fz2LKw25fir1II4XCGoJbEmug2ec7X95YZf3VQs9iML/wGlIl1LE0nEY7m7GjzL2rwtYsknbU1EaZNjvMJBLezmvN67/EqpwXjIDbdgAkgxMnW6DZ4Zw17Ik9Z+VsSeoLfCM8omB9WGZuUGUiN75L6sn7or4vv5s0Ijfx8UDxdXd3kSgeKnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tEpyqlnZnD5VvYTqFQOq2w5jDINj/Ab94LVMAq5qpNk=;
- b=VZpptrcmUdbrmRO2IagexqilVSYUFvzNYNK0TFUwk3+8HOtV5sdPwr9TANwpxj3j3nl+KQVxO9OGRZh5ZSp/Eo/n8FXhZXxMfMZ0WZF/1U7WFRI7ajbj6Ut/ISg0zd6xbg5vzL8Rw0rxUtc6r8ov04vHBuF6360nwPegpBT7p4Ibq58ZZaUgwoHQ+hFKMnAOm3L10PsW2nFgmzqvHCkCFrxrJogQuO75V6bB30eP9MO55VLO2XHaow47y3VHx+sPx1yjvvRK7pV3ZCCa17l0h+bEw6wPyjVzYPJmqjDMvPlv+npAPaEthMb6P/1fOCViDQfGaXBpBI8KAXatQ6jBFA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from AS2PR08MB9075.eurprd08.prod.outlook.com (2603:10a6:20b:5ff::9)
- by AM8PR08MB5698.eurprd08.prod.outlook.com (2603:10a6:20b:1c6::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.569.9; Wed, 4 Nov 2026
- 11:40:23 +0000
-Received: from AS2PR08MB9075.eurprd08.prod.outlook.com
- ([fe80::3f57:9ced:7a37:1bd8]) by AS2PR08MB9075.eurprd08.prod.outlook.com
- ([fe80::3f57:9ced:7a37:1bd8%4]) with mapi id 15.21.0592.007; Wed, 4 Nov 2026
- 11:40:23 +0000
-Message-ID: <dd966816-a83d-47ea-8faf-bf80d3b2642e@virtuozzo.com>
-Date: Wed, 4 Nov 2026 12:40:21 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] mm/huge_memory: copy file THPs at fork like
- copy_present_ptes() does
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Peter Xu <peterx@redhat.com>
-Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
- =?UTF-8?Q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>,
- Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
- linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-References: <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-0-66f00b7a564c@virtuozzo.com>
- <20261021-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v4-2-66f00b7a564c@virtuozzo.com>
- <8c164738-8025-482f-828a-3f919150a930@kernel.org>
-Content-Language: en-US, ru, sr
-From: Konstantin Khorenko <khorenko@virtuozzo.com>
-In-Reply-To: <8c164738-8025-482f-828a-3f919150a930@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4P251CA0020.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d3::9) To AS2PR08MB9075.eurprd08.prod.outlook.com
- (2603:10a6:20b:5ff::9)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBwm9xd+
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48c45111bebso276615f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 03:40:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793792448; x=1794397248; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
+        b=hBwm9xd+NzrXQ15nvYc7IXZyKTbKyi+gZB+RBYF7H4NhnJiOL7kOYbTV5GizeYbRBN
+         TGaK7jYFhDREKzFjICLIdgsNrugXo+AoBC7ERADoEhuiFlXRUaMxH1M+cxqgZNmiKIvx
+         jK4515YqOMdwfhKjMIySFjnkcteq9y0ZLL/RpuZ/UtxQdmp81oSM3sdSvrq2QolInnEJ
+         sBCuu4intpYACXDvlA0okHE/AVfzLJb/JDfcDEpEjJIAvaBz3pU1iwVa2Eh5W8L6MhNK
+         O0+5R5r140YrTo7yRdgmrRLKfgyspIGnSXHHlWuwy+ATSKnS8rKrExTnpk9TSep2b2Ah
+         u8kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793792448; x=1794397248;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
+        b=KW6JGBUK0ZjSFM4ml4ShiXW0tDKYm6ryTCFBMOkIJ5Cyw5h+gdbITGXQUNADoN0WTW
+         D1Wo3ku7e6NQT/RvUwic8LhkVWCauhPGQtzu8W4UeKNRbsqnc0S4vvF0qlLozs38FqRh
+         MMxxr5+quVAj5ST6slhcd1OzCLB7ljeRX98o2sdORxHKUCyALJk9z/BKg3KWuSFjHd4y
+         gVprInd97PnGYs7B9c3qPILyK0RYrBB5kPcRjp4TPhtSG4J/nRyV9fhpOo/Pca5yvSfg
+         2fEu8tU+JOK8lShqQo7W4WNOa35z400+jcTb+U3nAh4ncZEpLlxyUy9ORCI75JacQK7X
+         dm7g==
+X-Forwarded-Encrypted: i=1; AKwUvBwiVoue/icTzeI912HrJ8H8GX2g/rzk+8bgJSVb8nWX5w+rqog4sOheNmj7Jv9el8uBgp6hgfDdZs49v8CbT1g=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+aHO2/WF8QpfOmXP30tRGZA6V3KHBBgMjZ3JfYmP3B1PWd9w8v
+	znwmoY2NgyV/Qas4u7B+NhSGFUBQf5dTJvIh+b5V54b0jhSYKVOMCI/F
+X-Gm-Gg: AYBFou0InvKFIhsY+4W8ffqfM/pDZDqjbCxKyQGMwqTATWGqpDg9QvmcGadDGl44dHm
+	6qkVEFa1ZiuCClCaRxPY8SqNMEvvS0q4YerNk2keVRI9Kh4aOdAZLj0e+DneOB0bkUOS3H7LohW
+	nkce+kPgCf8SsRykBBuCsusjlUCDS2lLoMPRmsSPfX63rPx9gnXS8eB1cMS/fs2TK0kn+TEZFMJ
+	khdvXuKlTW3nJGkRvoVoR8mXMEos/ajVXXAEeSjUYL7xML1wFo9i0R3Iuufk9Sddk+aRoW+/reS
+	F4OJxhk8iet1dKgQndxKjMRXQxqOazoNDE1yVwOqj8tL1+nr+K97TBF2ykS41hrgEoXbDJ7RVCR
+	z66nBC6K4YXpMUDPh4Ry7ISkBOuJgcyiFVIkQT/cVlQndRaNOKQyriozKs9h+WlIGYB7yLF0Ymk
+	B5H7OmssxkEYTs2T2yTe4jy4IJtRejwT1NEKLDq+C4JVIglrrX/fiNS2Y2Bxp4ijSz4kt9uh8OQ
+	VCm1PcCFIomjIPJJgxkjcoZ4fANPtkb8Soeu6hHaQ1arw5l94XuKV5Hd6D00IWYrmnYzoK/4rlQ
+	q4s=
+X-Received: by 2002:a05:6000:248a:b0:490:411a:1eed with SMTP id ffacd0b85a97d-490411a20c3mr2322400f8f.39.1793792448263;
+        Wed, 04 Nov 2026 03:40:48 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::25dc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48feda1f100sm3457605f8f.46.2026.11.04.03.40.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 03:40:47 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 4 Nov 2026 12:40:45 +0100
+To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: ebpf@linuxfoundation.org,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: port test_ftrace.sh to
+ test_progs
+Message-ID: <ausZvdHfmevg3mMZ@krava>
+References: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,119 +111,153 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS2PR08MB9075:EE_|AM8PR08MB5698:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c75a77a-1e0c-41b7-7d78-08df3a6869b2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|23010399003|1800799024|366016|921020|261028144727099003|261022075727099003|261026121527099003|261009223027099003|4143699003|56012099006|261022105027099003|261026140227099003|10067099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	du0WDII6tD1QtRG4Es493qUpdO0KTSKmDc83kboGkEgcTaXsuDczK5pjicAldwOk8vOIxDHCyeHcHbrQCl0LS8urebhLUuO8L5qu8+GCPmy0TMPJ4jOZZfR6ywf/7aQLofJ2OZSxqe8rg10UIeCAIoyvHhsFRZhT103KHHtYfDKK/yRl11xLpMNQIvwfdxeYBTaEfjCIpO+ksVoXUNteIuLXSIsAQ0gcA3VAx33HX7Rl4IR6mNOwbKZJ2h1LE7owuAQOR0LPMCZUUqs10of8RvQWTdOc/wsMEMCbpfZFcTaafeJzZLr7vzF4N7+pVOgPjBJwgig+9FguzuaHPX72/M+exZbswMIu2Rh4S72TXnwaGnMB8l/jLBgoL/44hxBzx3dRYjW3AZ9UdoyUYihutvwpyU6rYVMUYXpAA3x6F1OoCiwXXLnfaoL2kTV5tEnhZyjIF+WDx5WUE2eAiBwXwONzcieXOR8UquqGll0cOqB52op09OqO46JNmzSKYb6rB5RO+se4KzRkeI0nZEWXgFFA68ngaIZB7sZfjZUeBXc1C56UOl2cPHyDJmEmt+yMvxnK4jW79nQyFYlav9sZDuvPPsexKoq2KYNqRksrlbOPliDXatu3WDaCysvdiphDD+hpsjMeu6qG91s3+bk5zlJ2fXiVbkyobnjiLwMjYlSqVd0pR+khBi8dxik9TiT8t+dSAKIsyERwMlRap3RuYQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9075.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(1800799024)(366016)(921020)(261028144727099003)(261022075727099003)(261026121527099003)(261009223027099003)(4143699003)(56012099006)(261022105027099003)(261026140227099003)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Smw5V1RNTnVUa0sxTkQ1VytJQkdtaFBpemZVOGNaemZhMEl6RjZZdTlnV1Yv?=
- =?utf-8?B?aUZyWFpYcEFqOUxtb3ZjcTc3Vkt1dHF1UENTM3JJSTNoaEg4akU0VDVpZGhY?=
- =?utf-8?B?QmxQVm5yY1ByNzkyOFNFaCtBV3Y5RytTaER1Q3VhMUhMcFV2R0ZKTjI5ZEh3?=
- =?utf-8?B?S1FLdjBxR000Z2p3NU5xd3h2cEpPUXgvc2ZWMlhRUjdEZndpU0w2Z2pRa3hn?=
- =?utf-8?B?NFYzOXF0YzRRU2VoaEZrNkFRSzVMN3JRZ1V3Z0gxdGx6dU1KKzJSYitwWmI2?=
- =?utf-8?B?eUU5SzFTcm9UbE1iOTFzODhEZThOVTBGb0hybUE4cWh4UEYzTVZlNTRiNzYr?=
- =?utf-8?B?ZGVsbGdyS2t0a1M5TjVZSHVobGRmcXFMUFBkaGJSaU1JZ3pEK3FMQnRTVnEv?=
- =?utf-8?B?RjQ4djEvRUtNZVJ2blFuUlZxVDZ6WGoxdXM4LzhVakp5RVU0MlZvaUVPbUN3?=
- =?utf-8?B?b1VYZE9BQ3RRVEZvMWlyNDYrSXIzTTA4WWxGN3hSb2p3RmZhQWZ2WkxMSlJW?=
- =?utf-8?B?SUp5NklYOXJhY0lNMVRTcUM3MXFLcVZyOGdaZzdsbFNDOVRxdkt3c0dydmlP?=
- =?utf-8?B?S3l1QVRTZW1BQnIxUENBYXA4SGsycHZpY2RBcS9WclRhcDhlbkIwS0tKVjAy?=
- =?utf-8?B?dEk5SEtxWkpScVdKanJ0V3FvWU1MNkNFenVCdzM3MUhUQThpQmZra21xQjNQ?=
- =?utf-8?B?NkRHS20wZHhuODJWZTQvaFIySDhCaWs4enQwL1U4dUdtbVpqcjNSdDdZKzVz?=
- =?utf-8?B?NmFSeEZhbHAvTTV2bER4eWgxYTVBckpyQ2xRRjBFRDh2aEREVTFQTEZkd2VT?=
- =?utf-8?B?UkhKWDRNQlFLbDU5cDRXVjg3TS9Lc2lHR0MwcVJHR3puQmlvVGQ2Q1ZKOEUv?=
- =?utf-8?B?S0l3NGZpcEh0Z1J4UlN4L0NaWGpFeGdjOUhqSUxIdlBtR1BQS1FYU1AyekdW?=
- =?utf-8?B?UWprcDRLbmYxYjhjNXlnUUEyTXMrMHlPMHgrcHkrT2lKbDhaaHc2RmNvUlFY?=
- =?utf-8?B?bVk4OG81ZTdqcFBRNytpYVUvc25ReUdOY3htMm9pTSs5SUE4RHVTMTFsNndV?=
- =?utf-8?B?TFZUdXlWTUdlWjFJQnNsSWVOZ1NPOTArOHluMndYODQrdTdZNFFzcmZtdmdR?=
- =?utf-8?B?SjlRekpCRnZOT2tucUdMMDlCYlYwV1Z3SDlYRTZHYkZtZkZyNUhZZ1RMSjEx?=
- =?utf-8?B?eXBUOEluU25YNlpVS2I5WTYxcDdORzBrWFpmZ3ZxSStpOERIOEozb29WclhN?=
- =?utf-8?B?MGg5U1VjV0lzbTk0Y3p1THNGSHMwd1hMQk9YeC91YXltd2JGaEJocXBCTFRn?=
- =?utf-8?B?RnhPaCtpMEN1WDZSUzFKSmJVdUxTOVhaNUtuWXZXUWdpYTVZVk1aYitMdW1m?=
- =?utf-8?B?c0lXQ0FuNzlzYXBpNUhuSEtJWFBObUJzNFVCU3VtRitLOXpDUTFCMzJ5Zllh?=
- =?utf-8?B?bmxNWDZxQ3pNRlo2SExKTTRkWTZJRXhlaXd3NW5WZVBsRXljMHpYVVJENlo2?=
- =?utf-8?B?OEp6M0lRak1Va2Q0dkFuTTFhMU5paUZSM2pPd09hNlFwdDFjOElpNTl0RmFq?=
- =?utf-8?B?Wm1iWjhFbkxERENTSmVRTFVxVFNFdjdwVXBSNy9TMHBkQ2szNFkyZytDNnlU?=
- =?utf-8?B?Z2xBTVhBYlIrRzZqYlIyZmhOZXRicnl6VXpXbkU5V1I1L1lFWnNaeURCQ3pv?=
- =?utf-8?B?eXhwdmk0T2gydk1PaUU4OEsydzJuY210eDBIOTdURHRCd00xaFJsMnczaFcv?=
- =?utf-8?B?eGhlcnFyQXlRWUMzVURubW94V2xDVkFNWXIwT1I5eVhRQXJJbnl0azRrNVFE?=
- =?utf-8?B?eFBNc2JkaHFaUXVPa3N1T3oyMUVKSmMxNlV4bnZwUG9WZUNDMHRvK3BMQ0ZR?=
- =?utf-8?B?Wjl1dFNzVXRiL2M1dGlVWmxJUnNxR2ZFcVdQYmM2RElJdndhZGlnTWpjLzNr?=
- =?utf-8?B?SU5zZEVOYnFmOWQ5bm1vVXMzOENSNEdYVlA0WWVBZVRzazh6SzFUWnY5Ylo3?=
- =?utf-8?B?S0Z0UW51cEs2bEx5alZuQnpDUGR0U1RiTzgxMUJtQ2JSTG1aVmtQMk9EeVF2?=
- =?utf-8?B?ZlFacXY2cDFvM2U5eTdPRkNmeHRBa09jaGpoK1lWK0taUVJyeVR2WVhvRVp0?=
- =?utf-8?B?RzJQSXpGU1RDeEsyRng1YUhRR0kvTm5rdldxbU55S3NndEp2NzlFYzA2a0ZN?=
- =?utf-8?B?RndLOHlTZUlYL3BURWhLYVJQMnBKMGNtR1p4V2I2ZlZqcWNoZ3ZoUVdSQmRJ?=
- =?utf-8?B?cXl6SzRJbmh4dTdXei8xRENnYjlmeEc0aGxTQjJNQkhyRnFOSlhoK2lhbWx0?=
- =?utf-8?B?VkFjQkh5bVpNRTVwMVpxZUhHOGdMbEtOZWVFenhMOGhhRGZHUzhxZz09?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c75a77a-1e0c-41b7-7d78-08df3a6869b2
-X-MS-Exchange-CrossTenant-AuthSource: AS2PR08MB9075.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2026 11:40:23.5671
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P3eSZaW3NPD/Cs6l241/n5QE/ciGrsPY7UyL0q7Y7hd+U4YcOmwUhdzmRxXvq+3EqPEfjCb6Wcstp1mYUw5ziQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB5698
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
 
-On 10/27/26 15:39, David Hildenbrand (Arm) wrote:
-> Any reason we're not adding the vma_is_cow_mapping() check on the
-> softleaf_is_device_private_write() path as well?
->
-> (I think they are all anonymous ... just for consistency)
+On Wed, Nov 04, 2026 at 10:59:33AM +0100, Alexis Lothoré (eBPF Foundation) wrote:
+> Commit ff205766dbbe ("ftrace: Fix function_graph tracer interaction with
+> BPF trampoline") made sure that trampolines generated for tracing
+> programs did not collide with the function graph when we are returning
+> from the hooked function. The series bringing this commit also came with
+> a new test ensuring that the kernel does not crash when executing BPF
+> programs handled by trampolines while the function graph trace is
+> enabled, but this test is a standalone shell script, hence not executed
+> in CI.
+> 
+> Convert the script to the test_progs runner so it can be executed
+> automatically by the CI infrastructure. There are two main options to
+> port this test:
+>   - just enable ftrace during some existing trampoline-related tests
+>     (eg: fentry/fexit tests)
+>   - create a dedicated, minimal test with function graph
+> 
+> The new test adopts the latter approach, with a smaller scope to keep
+> execution time reasonable, while reusing an existing
+> fentry/fexit/fmod_ret test. Despite the few asserts in the new test, the
+> actual goal is to make sure that the kernel does not crash because of
+> some incorrect stack frame skipping when both the function graph and
+> tracing programs are running.
+> 
+> ftrace is configured through a dedicated ftrace instance which is
+> dropped at the end of the test.
+> 
+> With the new test integrated into test_progs, drop test_ftrace.sh.
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+> Hello,
+> this is v2 of a small series aiming to port the test_ftrace.sh script
+> (testing that trampolines and function graph behave correctly when both
+> are enabled) into the test_progs framework. The test is heavily
+> simplified following Alexei's review and suggestions.
+> ---
+> Changes in v2:
+> - use a ftrace instance rather than global ftrace
+> - drop fgraph filters
+> - drop custom ftrace helpers in favor of direct manipulation in test
+> - drop custom bpf prog, reuse test_modify_return directly
+> - move test in existing test file (modify_return.c)
+> - make the test parallel (drop serial_)
+> - Link to v1: https://patch.msgid.link/20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com
 
-No reason, copy_nonpresent_pte() has it there too. Will add in v5.
+lgtm, it might be worth to add something like this also for
+tracing-multi (maybe also kprobe-multi) and run some tests
+with function or function_graph enabled
 
-> Is the fallthrough:
->
->       add_mm_counter(dst_mm, MM_ANONPAGES, HPAGE_PMD_NR)
->
-> really expected?
+Reviewed-by: Jiri Olsa <jolsa@kernel.org>
 
-Yes: copy_nonpresent_pte() counts migration and device private entries
-in the child's RSS as well. File folios reach it now, so the hunk below
-switches it to mm_counter(src_folio), as the PTE path does.
-zap_huge_pmd_folio() subtracts a file folio from mm_counter_file(), so
-MM_ANONPAGES there would leave the child's counters unbalanced.
+jirka
 
->> +    bool writable;
->
-> Why do we need this variable?
+SNIP
 
-It copies __copy_present_ptes(), which snapshots pte_write() before
-the uffd-rwp branch. Looking at it again, that branch only rewrites an
-RWP marker, which is PAGE_NONE and never writable, and vm_page_prot of
-a CoW mapping has no write bit either. So the snapshot looks redundant
-both here and in __copy_present_ptes().
+> +void test_modify_return_graph(void)
+> +{
+> +	char instance[MAX_INSTANCE_PATH_LEN];
+> +	char *ftrace_dir;
+> +	int ret;
+> +
+> +	ftrace_dir = access(TRACE_FTRACE_DEFAULT, F_OK) ? TRACEFS_IN_DEBUGFS :
+> +							  TRACEFS_DEFAULT;
+> +
+> +	ret = snprintf(instance, MAX_INSTANCE_PATH_LEN,
+> +		       "%s/instances/bpf-XXXXXX", ftrace_dir);
+> +	if (ret < 0)
+> +		return;
+> +
+> +	if (!ASSERT_OK_PTR(mkdtemp(instance), "mkdtemp"))
+> +		return;
+> +
+> +	SYS(out, "echo 'bpf_modify_return_test*' > %s/set_ftrace_filter",
+> +	    instance);
 
-I'd keep it in this series so the PMD path matches the PTE one, and
-drop it from both in the cleanup together with the gotos.
+nit, no need for new line
 
-Kiryl, does that match your understanding of the PTE path?
-
->> +            goto copy_pmd;
->>      }
->
-> Likely we should clean this up later to avoid the gotos.
-
-No problem, but let's do it later, on top of this series.
-
-And on your stable question in 3/4: v5 will carry Cc: stable on patches
-1-3.
-The backport to 6.12 won't apply as is, so I'll do the backports once we
-get a failure mail on stable re-apply attempt.
-(or I need to do backports in advance? Need an advice here.)
-
-Thanks for the review!
-
---
-Konstantin Khorenko
+> +	SYS(out, "echo function_graph > %s/current_tracer", instance);
+> +
+> +	test_modify_return();
+> +
+> +	SYS(out, "grep -q bpf_modify_return_test2 %s/trace", instance);
+> +out:
+> +	ASSERT_OK(rmdir(instance), "rmdir");
+> +}
+> diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
+> deleted file mode 100755
+> index f5109eb0e951..000000000000
+> --- a/tools/testing/selftests/bpf/test_ftrace.sh
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -#!/bin/bash
+> -
+> -if [[ -e /sys/kernel/tracing/trace ]]; then
+> -    TR=/sys/kernel/tracing/
+> -else
+> -    TR=/sys/kernel/debug/tracing/
+> -fi
+> -
+> -clear_trace() { # reset trace output
+> -    echo > $TR/trace
+> -}
+> -
+> -disable_tracing() { # stop trace recording
+> -    echo 0 > $TR/tracing_on
+> -}
+> -
+> -enable_tracing() { # start trace recording
+> -    echo 1 > $TR/tracing_on
+> -}
+> -
+> -reset_tracer() { # reset the current tracer
+> -    echo nop > $TR/current_tracer
+> -}
+> -
+> -disable_tracing
+> -clear_trace
+> -
+> -echo "" > $TR/set_ftrace_filter
+> -echo '*printk* *console* *wake* *serial* *lock*' > $TR/set_ftrace_notrace
+> -
+> -echo "bpf_prog_test*" > $TR/set_graph_function
+> -echo "" > $TR/set_graph_notrace
+> -
+> -echo function_graph > $TR/current_tracer
+> -
+> -enable_tracing
+> -./test_progs -t fentry
+> -./test_progs -t fexit
+> -disable_tracing
+> -clear_trace
+> -
+> -reset_tracer
+> -
+> -exit 0
+> 
+> ---
+> base-commit: b0e67f50519538b1b4c6364edc7811f482703f75
+> change-id: 20261027-ftrace_in_test_progs-d5f70a2330ac
+> 
+> Best regards,
+> --  
+> Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> 
