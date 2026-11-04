@@ -1,101 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.174
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793799965;
-	b=XZ11yiDvBpPErLdCsGDzaJSMqWG+RhP1Uk8bGGtEk+ZFiuYIwtRusrznYLIJr6NZpogB
-	 Su5aTeN+SBUA9hv/eDpnPwHJV07N4XXgBJu0V5gFFqiTlIrxqPNCX/iT74sjR0K/sPJrc
-	 EJqxLxqTSd75SQkPXy2YdCQrQmuGzE0eAK4JwbTdpfOhgi9sGCRcUeoJyT+iN33uNE8ws
-	 wBqnVeci/vBfwdG9A/YdQxdYfwwLsAauFRwyoPmr5QL88WFw0FBmbh8JLO5scJGdAJWNc
-	 2VT8u9h0FYRiZHKQjrckmk+5mU5u8XgZZPT6gc5Ym/L6t3OwVfBVhVRyLUyP203gwzA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793799965;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=D0ZsOE+K1pTcz9yTwLm9GxhoridjE+gXv16hTadQYPM=;
-	b=Ka9iCQnw2jLQLpBDHfQ3mVxTlY9/CC9E+PazLGnXYBVWWhVupJyJbXoUmABP+4JYYq4x
-	 ZXrLGglizA2KR6COs34kvTCGSjHMeW/L5mSwQ1InASJFpz4EqV+Q52geepQeUl90vp5ql
-	 v5HBPOJUaVjMLfhjhCJcHAJEAMuT36K1aOAKQzkzfNwAO0hbnWpcSfCFUDt6o9oUu54dy
-	 A661a9Ck3PxUudBbyeFJ/V+mvMLOU+TJuCe65jNi5mT4HPlwQc1siD85gdT4tyd6eBc2m
-	 IafrkCCTEsRsCU7xn+lfetikr1cSz42V0A0S8j6T5Z7z283AGBLw0KgGDePg8TxvOXQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GWnrTbvS;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.174
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.78
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793799974;
+	b=KWxm+24WNHc5YVkscTSYJqXI1vR5vAQxGvFdd/S3KADorZOU8dEQrCJ3sFmKnqF67ewX
+	 FJ0vIus0TgJia8d4zGg1rdMaXeSw+5g0EqYRFJ3D+zvieEBKrKvNv3jQF4KezPq9OF6cU
+	 h01Sr1vI2zIs3zOwZ6gaqA3Nb3/J1oXbUpW7HxxnMXPB6k7WpbOrMfoKy7xhvWR1L+71/
+	 FIEQPPjxQcCDtK3L40nTFpu346XGyIMfBOmvKa4osRxQMvBflSNrgfgdRvjlm9NZLu/vk
+	 p1B0sgnBbXXM14QlIfu+9k1q0fPcb4aaQP/sy3MOLrNzmA6pQQesjXtgF2T2g4EOq8A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793799974;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Q4tWgwLTiI8SPma50NL+69gW2A8l1tsl3NgQNJG9OZI=;
+	b=XUDgQJEtcSdDFrNG6TAmAs0IuNUrJ81ZMK7GumUo7xxbISHfgB/ltIqIm5wjE7rCaHEV
+	 CoZCgsCemsjPZ8/wGMvtEruYZ/9P0W09DoN16ykwyk6kg6OqosWf2o2ABEgzqRvVky1QC
+	 aOdJYFWyq+kKXHF2JS6YEz1VAjNIG3uedI+Ifkn6/jNUlWKo78kuaNN510lb77wybq6cV
+	 /bKTziukFnufwinpNG7nH51N12EVFw8umFkbcIwQE7oAPNcm6D/h/wqhuffflR0bOKGoQ
+	 uIJik9ab5hWyodQW/qPguXqNzMeXSvGUp8ipmw9VzP1D9AUIF+NgtyLGBjFcLIwYxvQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=D7zAy89x;
+	arc=none smtp.remote-ip=95.215.58.78
+Received: from mta1.migadu.com (out-78.mta1.migadu.com [95.215.58.78])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D30C606A326
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 13:46:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D30C606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44895606A31B
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 13:46:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44895606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GWnrTbvS
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-3514b90bb89so1320605eec.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 05:46:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793799964; cv=none;
-        d=google.com; s=arc-20260327;
-        b=bMCgFQKA6XtG/GpNgO9PjjuU7JOmlwEfEyNf9i+p6GXkyldSJA7LLia7zbCR04MA0m
-         sT4zs/aD2vZAkdCZJCVnAE7jFCPzUdZWc+YjHF8r8yIjxr4S6pBkh4abGoAze4Tf0hZE
-         a42uxhsjBi/Yxnj6k6qoUj5hzRcwvXpzJyo7dcbw7T0djXm8KeQwE6Et2cWrXalCRVaq
-         WjPXZk7rhluUr10bQSCMevQg/tBWeDxl5FnX+96HUN2qXCHX0rQmuUb/mgRjyRVf0ev6
-         2egzGRMdWHsRNAKtvm2DOGq8MpqRRcjoZqtcxWSDc3NGjEhmj34F/8MVhgcRrZ/dWrr+
-         MJ9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=D0ZsOE+K1pTcz9yTwLm9GxhoridjE+gXv16hTadQYPM=;
-        fh=mn6nQxPHACiLSEfU+z+QfJoNmCLxnYp3i1ns6MPjaZA=;
-        b=sC2CyGXs8Pf8dUdhvYgIAmv/w0hSq+w59xFoYmKslTnlr2/p4w+5HA5yZmGzidcdLh
-         HZW3WjNmMyJZbrxqLLM8xnfgYzhnV/cXvMe2zEyuOdRZN8OIm0FaC4l2BGeVzEgVkOaC
-         nOUeYIJM9xcdQ1HYvrGhfpdJsBrYdTMM4H11ZvZujAbwPhw7Zh5qMIunaobgwtxRw857
-         OA1Zuhv3HhEZDXBcZW6hPIgkKuV+II45yFjbNaE9PL8inGHNlN2oWlUSJY3e/AYmx8Dd
-         Yz68LBNDng+V5T1WlBMCByKXBClAcKeme/DlF0TnQ/dMun673I+RLPBtpGgWLqi9Ebz7
-         PFiw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793799964; x=1794404764; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=D0ZsOE+K1pTcz9yTwLm9GxhoridjE+gXv16hTadQYPM=;
-        b=GWnrTbvS0F9bkzFJf2YKx2DDnNs+0A1dHAWUjES1lhkTBtV9QDnEi8sSDNDKgZPDIK
-         7v2jIJ3TXFbkvjS8dNnV/U9d0chBoDIlAD8hefNyFrl3FAW/IT285psEyhx7VYr7hJmo
-         VjHW6gmKDMXjunXTyuFWf+1YrfETdOi4Cj2lW+rhV+L7i/EZr9aa+gBWkJqBaI66+bar
-         XZHSydiJQGoS0TRYPKJQEw56ivHiy+j4xOrLSCAcxrN6paJJ6z6Hm0g/cKSubnG0YV2v
-         IAdNpWaA36s8MIFqY1Q4nmfAfZWgcL9n2+YpIySavEqqke2iA2YUwU84UVoR2kv3SbvQ
-         nAFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793799964; x=1794404764;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=D0ZsOE+K1pTcz9yTwLm9GxhoridjE+gXv16hTadQYPM=;
-        b=L6vAoQxcQBIgGnMd/fZlhDTC0wV4huNBsPc5I4QrXndutukypaGQ+OVxYqMPfG0RoJ
-         wTdQr97Y1hgjtHGDtc6yOaakr6s3Jea2nfL+eV7kU/D/JrKpSd33BPWD9e8cIyuQuFhL
-         l5VIEvxy3+JSjH0FAhmSNDWtuyjWt7dv4KO+DqcttQ4097PVBEF+uqCnmkMK66azSE5q
-         MDDTXEH/2u1kzgEXuG9NxAf9vsFhnhf5cm5NwpMBGMWNDzGGdfaLyc85IJVq7R7WufM1
-         a+j5E3X7DIirN1drKSer79Q4wu1h5QNQmNhPBrRDADhbjvNNREh6GBuw/sdGJ/SOlttD
-         eFTw==
-X-Forwarded-Encrypted: i=1; AKwUvBxrrQw4/21kIrVaNhNdrWpw+IgFBNaGeVMg1O4WCebInUcnIdg6cyw8uPjI21FgxyiB6kbdJxyJ2NmIJME90cQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z88F7NBzXgM56KNXxAHhSj08QE91tImH+MEA0VN3zYXOqbxZSxl
-	vsJOpvn57xC0Q95JOE+VKuZKQtJLeEdI30yh8UZxpsyddH/eBOp+n8AvbrrgqnssUa2sHLnCgf3
-	ca09s4l7AcPQjBqbnheYCy6Ecz6YDE1ZM6w==
-X-Gm-Gg: AYBFou0BwB/lHwI/YUY8FGjDyOo+pT/46uKkTKRR6XUVswtvgdGMz/28ex1ICLvR26q
-	tXCciwm12zyB9Pt5IMCulP/IJDBRiNOZLXvLV6NSI5W6p+h8JT5MXfq7R2bqd9u0O1HCTD/A6Qu
-	h43E2HZIDv0zh+Twy98wYhfl82VhF8jdITiq8X8VV/Ox3frNCjMn9kfZr5EJen01IW3ngFMZu0S
-	cK75GlO4BhkW26f2yab/Ddh6p33Q564sel06s+YLGMvsNr8PKtGSzZQhf/mZLQl4m5ZvolM8dA/
-	AzPVyBjpdVPDQetFkD/njQHTvGolphH85c0DG3q5BQfBBtyiXWMa1jOHnNkdRRmrVJ5oVwb3v+z
-	r+DYs/UwnUmnUnuxx0bPQ4T+OD1hChBgn792Yf9mC/5hvo6uK9hSj9MfzY6ZRiKyR47DcNzHoHO
-	1XNb0JlN+92FEtF/11peTvaEfcPO86/EZLlusmwyUXb+JyBxahlUg2Ujg8tpmsckeNo5bp99DZY
-	g9dFv4=
-X-Received: by 2002:a05:693c:88cb:20b0:36a:1e50:e45 with SMTP id
- 5a478bee46e88-36a423624d5mr22803491eec.9.1793799964016; Wed, 04 Nov 2026
- 05:46:04 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=D7zAy89x
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=r1v3gaHbye2LaSteE/Y0pgAbJSvJ3a9oWoFvgk1atq8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793799969; v=1; x=1794404769;
+ b=D7zAy89xQ+cQiauu/mlV4T0WBr50R4C4ILX9ymomytcDXFkiBS4UVvNG7y1R25caNGhAhmeR
+ nqvK3Uq9pIWOKykMLxCpvdOgF2uyeMAfZAdlhprcdqnxbcIxeS9Msnjh0oTCFSIyitXGmzaQjhx
+ aOVNqreRnnYm4RYROF6+qGPI=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9497cdf413eb9ab1;
+	Wed, 04 Nov 2026 13:46:09 +0000
+X-Mizu-Trace-ID: 9497cdf413eb9ab1
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a8be8f5f-fb9c-46da-a1b6-eea68ae07006@linux.dev>
+Date: Wed, 4 Nov 2026 21:46:03 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,60 +58,199 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261103163921.641347-1-sashal@kernel.org>
-In-Reply-To: <20261103163921.641347-1-sashal@kernel.org>
-From: Dmitry Safonov <0x7f454c46@gmail.com>
-Date: Wed, 4 Nov 2026 13:45:52 +0000
-X-Gm-Features: AclHuK9zoI5ijuNEFX4IBI1jXKyfQ9YWFXRsUdy_iBMcms1sD0iTaUorTso-rIM
-Message-ID: <CAJwJo6bgZKyU5zWzTG7-zvFCVbh=A4bd_qCmHEj9NTOMJ+_5EA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: tcp_ao: don't shift a size_t by 32
-To: Sasha Levin <sashal@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cgroup/cpuset: Fail if isolated CPUs don't leave any boot
+ domain housekeeping CPU
+To: Ridong Chen <ridong.chen@linux.dev>, longman@redhat.com
+Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20261104071600.474587-1-guopeng.zhang@linux.dev>
+ <cbe741a9-fd0c-4c8f-8591-55ecc70f222a@linux.dev>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <cbe741a9-fd0c-4c8f-8591-55ecc70f222a@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 3 Nov 2026 at 16:39, Sasha Levin <sashal@kernel.org> wrote:
->
-> gen_tcp_addr() shifts the size_t n right by 32 and masks it with BIT(32)
-> - 1. On 32-bit architectures both shifts are as wide as the type, which
-> is undefined:
->
->   aolib.h:230:40: warning: right shift count >= width of type [-Wshift-count-overflow]
->
-> Convert n to uint64_t first and mask with 0xffffffff.
->
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Acked-by: Dmitry Safonov <0x7f454c46@gmail.com>
 
-Thanks!
+在 2026/11/4 20:58, Ridong Chen 写道:
+> 
+> 
+> On 11/4/2026 3:16 PM, Guopeng Zhang wrote:
+>> From: Guopeng Zhang<zhangguopeng@kylinos.cn>
+>>
+>> With the "domain" flag of the isolcpus= boot option, the CPUs isolated
+>> at boot are excluded from the sched domains and the remaining CPUs
+>> become the boot domain housekeeping CPUs. An isolated partition is
+>> allowed to use the boot isolated CPUs, but it must not take over all
+>> the boot domain housekeeping CPUs.
+>>
+>> prstate_housekeeping_conflict() checks that rule for root partitions
+>> only. The 2nd check covers the nohz_full case as it is gated by
+>> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) which is not enabled by
+>> isolcpus=domain. So on an isolcpus=domain,<cpus> boot, an isolated
+>> partition can claim all the remaining boot domain housekeeping CPUs.
+>> The state is committed, but the sched domain rebuild at the end of
+>> the write finds no housekeeping CPU left for the boot domain and
+>> hits WARNs and an OOPS in partition_sched_domains().
+>> housekeeping_update() cannot accept the configuration either as it
+>> cannot empty the boot domain housekeeping mask.
+>> With an "isolcpus=domain,10-31" boot where CPUs 0-9 are the boot
+>> domain housekeeping CPUs, for example:
+>>
+>>    # echo 0-9 > A/cpuset.cpus
+>>    # echo isolated > A/cpuset.cpus.partition
+>>    WARNING: kernel/sched/topology.c:3089 at build_sched_domains+...
+>>    WARNING: kernel/cgroup/cpuset.c:1478 at cpuset_update_sd_hk_unlock+...
+>>    RIP: 0010:partition_sched_domains+0x3b8
+>>
+>> Fix that by extending prstate_housekeeping_conflict() to reject an
+>> isolated partition update that would leave no active boot domain
+>> housekeeping CPU outside the isolated CPUs. The CPUs released back
+>> to the boot domain by the same update are taken into account, so
+>> replacing one of the last housekeeping CPUs with another one in a
+>> single update remains allowed. The new check is only performed when
+>> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) is disabled so that the
+>> existing nohz_full behavior is unchanged.
+>>
+>> Add test cases in test_cpuset_prs.sh to verify that taking over all
+>> the boot domain housekeeping CPUs is rejected while swapping one of
+>> them with another one is allowed.
+> 
+> Hi Guopeng,
+> 
 
+Hi Ridong,
+
+Thanks a lot for the analysis and the patch. 
+
+> Thanks for the report and the reproducer. I can reproduce the WARN and
+> the OOPS in partition_sched_domains() here.
+> 
+> However, I don't think prstate_housekeeping_conflict() is the right
+> place to fix it, and the fix doesn't seem complete. The same problem
+> can be triggered with a root partition, which this patch doesn't cover.
+> With an "isolcpus=domain,4-7" boot on an 8-CPU VM:
+> 
+>   # echo 0-3 > A/cpuset.cpus
+>   # echo root > A/cpuset.cpus.partition
+>   WARNING: kernel/sched/topology.c:3111 at build_sched_domains+0x2b96/0x5500
+>   Oops: general protection fault, ... [#1] SMP KASAN NOPTI
+>   RIP: 0010:partition_sched_domains+0x10a3/0x1a10
+> 
+
+You are right. The sashiko review also reported this issue. I can
+reproduce the WARN and the OOPS here as well.
+
+> The faulting address is in build_perf_domains(), where cpumask_first()
+> on the empty cpu_map returns nr_cpu_ids and cpu_rq() goes out of
+> bounds.
+> 
+> The root cause looks like it isn't a housekeeping conflict. Boot time
+> isolated CPUs stay in top_cpuset.effective_cpus by design, and they are
+> only filtered out of the top_cpuset sched domain in
+> generate_sched_domains(). But the checks that make sure the parent
+> still has CPUs left, i.e. tasks_nocpu_error() for local partitions and
+> the cpumask_subset(top_cpuset.effective_cpus, ...) checks in
+> remote_partition_enable()/remote_cpus_update(), only look at
+> top_cpuset.effective_cpus. So any partition, root or isolated, local
+> or remote, can take away all the boot domain housekeeping CPUs as long
+> as some boot isolated CPUs are still left in top_cpuset, which leaves
+> the top_cpuset sched domain empty.
+> 
+> So I think the check should be done at the "parent has no CPU left"
+> level instead. Something like the diff below. It is not tested yet;
+> could you give it a try with your reproducer and the test cases?
+> Note that the root partition and remote partition cases should be
+> added to the selftest as well.
+> 
+
+That's a great idea, thanks for your guidance. I will test it and add
+the relevant test cases.
+
+Best regards,
+Guopeng
+
+> Without isolcpus=domain, HK_TYPE_DOMAIN_BOOT is cpu_possible_mask and
+> the new check is equivalent to the existing one, so no extra
+> housekeeping_enabled() gating is needed.
+> 
 > ---
-> Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
-> -m32, with and without -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
-> KernelCI's 32-bit arm builds show the same warnings. The changed files
-> build without them now, and the x86_64 builds don't change.
->
->  tools/testing/selftests/net/tcp_ao/lib/aolib.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-> index 53be1744237ee..71ff975533089 100644
-> --- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-> +++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
-> @@ -226,8 +226,8 @@ static inline union tcp_addr gen_tcp_addr(union tcp_addr net, size_t n)
->         union tcp_addr ret = net;
->
->  #ifdef IPV6_TEST
-> -       ret.a6.s6_addr32[3] = htonl(n & (BIT(32) - 1));
-> -       ret.a6.s6_addr32[2] = htonl((n >> 32) & (BIT(32) - 1));
-> +       ret.a6.s6_addr32[3] = htonl((uint64_t)n & 0xffffffff);
-> +       ret.a6.s6_addr32[2] = htonl((uint64_t)n >> 32);
->  #else
->         ret.a4.s_addr = htonl(ntohl(net.a4.s_addr) + n);
->  #endif
-> --
-> 2.53.0
->
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3219f927c35e..fb3e81405f5b 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1180,12 +1180,51 @@ static void update_partition_sd_lb(struct cpuset *cs, int old_prs)
+>                 cpuset_force_rebuild();
+>  }
+> 
+> +/*
+> + * top_cpuset_sd_nocpu - Check if top_cpuset will have no sched domain CPU
+> + * @add_cpus: CPUs to be taken away from top_cpuset
+> + * @del_cpus: CPUs to be given back to top_cpuset, can be NULL
+> + * Return: true if no active CPU will be left in the top_cpuset sched domain
+> + *
+> + * Boot time isolated CPUs stay in top_cpuset.effective_cpus, but they are
+> + * excluded from the sched domain of top_cpuset in generate_sched_domains().
+> + * So checking top_cpuset.effective_cpus alone is not enough to ensure that
+> + * the top_cpuset sched domain won't become empty after @add_cpus are taken
+> + * away from it. The sched domain of top_cpuset must keep at least one
+> + * active boot domain housekeeping CPU.
+> + */
+> +static bool top_cpuset_sd_nocpu(const struct cpumask *add_cpus,
+> +                               const struct cpumask *del_cpus)
+> +{
+> +       const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
+> +       int cpu;
+> +
+> +       for_each_cpu_and(cpu, hk_mask, cpu_active_mask) {
+> +               if (cpumask_test_cpu(cpu, add_cpus))
+> +                       continue;
+> +               if (cpumask_test_cpu(cpu, top_cpuset.effective_cpus) ||
+> +                   (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
+> +                       return false;
+> +       }
+> +       return true;
+> +}
+> +
+>  /*
+>   * tasks_nocpu_error - Return true if tasks will have no effective_cpus
+>   */
+>  static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
+>                               struct cpumask *xcpus)
+>  {
+> +       /*
+> +        * The top_cpuset always has tasks (kthreads at least), so its sched
+> +        * domain can't be empty. The current effective_xcpus of a valid
+> +        * partition will be given back to top_cpuset if not in @xcpus.
+> +        */
+> +       if ((parent == &top_cpuset) &&
+> +           top_cpuset_sd_nocpu(xcpus, is_partition_valid(cs)
+> +                                      ? cs->effective_xcpus : NULL))
+> +               return true;
+> +
+>         /*
+>          * A populated partition (cs or parent) can't have empty effective_cpus
+>          */
+> @@ -1724,7 +1763,7 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
+>          */
+>         compute_excpus(cs, tmp->new_cpus);
+>         if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
+> -           cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
+> +           top_cpuset_sd_nocpu(tmp->new_cpus, NULL))
+>                 return PERR_INVCPUS;
+>         if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
+>                 return PERR_NOCPUS;
+> @@ -1828,7 +1867,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
+>                 if (!capable(CAP_SYS_ADMIN))
+>                         WRITE_ONCE(cs->prs_err, PERR_ACCESS);
+>                 else if (cpumask_intersects(tmp->addmask, subpartitions_cpus) ||
+> -                        cpumask_subset(top_cpuset.effective_cpus, tmp->addmask))
+> +                        top_cpuset_sd_nocpu(tmp->addmask, tmp->delmask))
+>                         WRITE_ONCE(cs->prs_err, PERR_NOCPUS);
+>                 else if (prstate_housekeeping_conflict(prs, PRS_ROOT,
+>                                                        excpus, tmp->delmask))
+> 
+
