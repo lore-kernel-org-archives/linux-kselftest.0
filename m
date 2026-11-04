@@ -1,110 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793821509;
-	b=gif8pX/VoY0JWjo1K89fhsSm1Izer69SIJ120LsihNa6zohwZTPrPZKWjvqZVIueKKnI
-	 SPmm9tpmWr10rv6l/sf1bOC6SY/lCmhfzmPSZMusVn3on8aGV+U7N3HE6QdB+eDWDKXI8
-	 ZCH6ylHX8paI5IPYN8d3xrwJdry29YiEOW87wHpzkM5wKFNoRdgksIsHiIpKj3wl/M2ZO
-	 BROOl7MpQoDMSuNt/azIWhClpO+pYArZCj9MmFTmWCcAAX2RXRLCQaPoD28HRm4Yi39Ek
-	 Xgcrp8rdrbbHSbZGft+Dt/ijAe2D6XaboytbuWfXeP/ruoh+hcre7rFCo5Jo9hDUfVQ==
+	t=1793821525;
+	b=uwQIHKBY162+TTNuHEvcviKZq/fh7sKgNSO12x5jiFootQL6IZO7oiF1FDLcuMw+3AWY
+	 NWdNRcvfGNy2idcHRawJ7cKVMj5BTbWDb8/cgQue2JD16sHzkhjB3XCGe2wfQw30QwcT0
+	 uKpznHiRdDvdHAkbsl5kNVqHNUDQ98LfASSOzviaoNs2txOOlJN4/sp2J4VpmBXZ9PB8J
+	 /KxPEEcL+fjIab1Zz4f/7GBSmEW3AFy3oLWFq5EB87cvijmw+/D6KU1uX+dqvsyy8kfu1
+	 tEVSYotRiQHIhnk2KOcI2qxnY835qx7kuYehgcJnmNWo0OlyyW1a5PpDMygT/FFML6A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793821509;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=Rp3cBypvlPCLWQcsEgZutivLH7EPpJBFO75qhCW/oJM=;
-	b=2iIKSobq7thuC+RaXguVBcKoQBPYoDIWeM6CRwNFD0V6TGBG0GOI3vvR5+lXwinUCAc9
-	 6pccVGv4FyE3wDJoCDSsMm1iDjMQpN8LnrpPdZRfqMCodWYZSCwpq9h7OVDtLhfwG3TgZ
-	 mJUG4L2+Z6BaFrqUw9zq8wxlnvVswyz2nb6QOS1p3YzRioC8HGLTSAdccj+WWa/k+EUlc
-	 ybQZkPlVDbDHuZ/0hjQLkICdNlSyClv45L7OotJddVAOSbIy5fZwB5CI/0w/ONTuFjXoN
-	 LYhVOI51uFltvCF9prn4fW32/uMdYLBqFl77mEPa1T2DEWWruf7kSn5Eg/DxbDIifAQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793821525;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=AhauLcYrkNfZ4d386lPMrnU0qCgiFUOVmgX6lCm/lmo=;
+	b=cKxViXlRPiqW9QywTo4rI4Bhe/CwZEaNDkyUM9U/u0iAINGf0LcmlcREcLpv3IZqlo0m
+	 xAZ+usWwrH+x/2zo1ObfoWsgO8VLumaPL3OiH/bgR1bj7nEZ0gxxR4ljJ+Nx4Nt8EvsKI
+	 +G9tkOaHNiuvrTxP4n+tRh/q/I50eKn3kuhTCWppurPIEjVvj4uZk0+bPg5aqxU+I4lVE
+	 cLP1mEZTuPRi9D1cOrtF6df2f+PxDyfmcMmRGMBMIxtCBjxEcJA5wL12J28acnDqFcZij
+	 APqRYLe37yaRHk8A5he5ZILIDYGeLFJpuy/hWAaJKks0WbBnUDOaMYnkUFSDDHj6tjA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HQZZk22I;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=WC5ocPUo;
+	arc=none smtp.remote-ip=209.85.221.179
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0C36073D1B;
-	Wed,  4 Nov 2026 19:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF46608B6E8
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 19:45:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7AF46608B6E8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HQZZk22I
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F041F000C1;
-	Wed,  4 Nov 2026 19:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793821509;
-	bh=Rp3cBypvlPCLWQcsEgZutivLH7EPpJBFO75qhCW/oJM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HQZZk22IBDSdlRg9+GChLXhspu7iunkZLLfTPZExTpVWSZ10XMRGmnTYlf4TG3XAH
-	 1cwjSXYkmlC+l/hnbMTY6YP/Kzl3udvQ65e0OecgcsLuWkW0rAc2mS+7lsMTsFJwex
-	 5Mm7xmU/jLtpvu5WcV/D7gF7UYlkqWEYw175OcfKq5UOR7IVWPNSq4SA6IFaxtf5na
-	 9paORCG9sxlWn9HEykiPNg6mhlzTVo5kiuDStPCb0diMzwScMmB/UEKOmuTvYKKKer
-	 rmzoLKe6KegT6EasDc6fEzLXRRh89qOwFDegOrU9dPoQb3yaDpwnk6UqQg5okye4vV
-	 YLTrXAZzXjLgw==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Jann Horn <jannh@google.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Chris Mason <mason@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Christoph Hellwig <hch@lst.de>,
-	Greg Kroah-Hartman <gregkh@suse.de>,
-	Joel Granados <joel.granados@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jan Kara <jack@suse.com>,
-	linux-kernel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linux-wireless@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org,
-	coreteam@netfilter.org,
-	kexec@lists.infradead.org,
-	linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	ibm-acpi-devel@lists.sourceforge.net,
-	jfs-discussion@lists.sourceforge.net,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-cifs@vger.kernel.org,
-	linux-fbdev@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-sh@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	sparclinux@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-doc@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	Takashi Iwai <tiwai@suse.de>,
-	linux-input@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-debuggers@vger.kernel.org,
-	"Christian Brauner (Amutable)" <brauner@kernel.org>,
-	Chuck Lever <cel@kernel.org>
-Subject: [PATCH RESEND v2 11/26] scsi: core: let procfs copy in writes
-Date: Wed,  4 Nov 2026 20:44:54 +0100
-Message-ID: <20261104-work-procfs-drivers-v2-11-245e54e87116@kernel.org>
-In-Reply-To: <20261104-work-procfs-drivers-v2-0-245e54e87116@kernel.org>
-References: <20261104-work-procfs-drivers-v2-0-245e54e87116@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=WC5ocPUo
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5eab93a9862so272060e0c.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 11:45:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1793821524; x=1794426324; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AhauLcYrkNfZ4d386lPMrnU0qCgiFUOVmgX6lCm/lmo=;
+        b=WC5ocPUo+tlRFkU95XGXMDbL6gRJ3pR33pHcTZQ3vEvWYmERsJIIiWabyoYjJkVHib
+         mDPBAtqGztGVDEwx2Txbp9/W5N0yj7Tm9YQjy13e/5KVnFje3EitBqJiJGhfo5yo2r68
+         0dw2J2R1tLuPWx0dNr/hkp4Fko/46f0EcQzLLqYW/VDsPDjPYysiohYaTScRueqQDXq3
+         Z+aLzvLwt7Egd7UsVvUgENoXVcgqi6ljJNxX6GTEuEGhLFWXuzWMujlT7b9iuQ6slD7U
+         wtDOUYuXcmHlCjxC2MpCiRjvOiJfbs5DWFxpPBVgbMcZMvEJXFdkKlPj6LjAzhPdwPSU
+         TuFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793821524; x=1794426324;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AhauLcYrkNfZ4d386lPMrnU0qCgiFUOVmgX6lCm/lmo=;
+        b=cfDJqpOdopXMR+bjcZnr5Toljac0BMi+96oBR6uFjxxx7LCbnTzm8J+Mrr4TbATRVf
+         NtlCydx93PlQnTalx41sMJrFRxqF/sDj430XiEdn7UqhPtwJTzMHJMXEKZLKEZDMzMje
+         hhffYU2zdX/Rksy+zTx4VsoPGjor5xtKoPISiAcZeikAnhL8PFPsdawl1GOxNuSZphCV
+         25m7y79wN8tejWPWajrl8dYTiavVnoyUXzEJjynLEc7tsroFgBz+8v2xI7gFxWrbyebx
+         iqWXW2AC1anGaeDPN9YHU3GFiaOPEFfccjhjnHRcrEaJX9XgX4WdPdx8g17647fk77lB
+         O3Ng==
+X-Forwarded-Encrypted: i=1; AKwUvByiHdVSS08jLWI/vOSVYya/A4Nrpa4bWwvAj08ju76S2pH4rfTE3NxL2NfYaDbm3q1DI1QvBxKv+96/BGbRqtY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9jZck7BLmt/Y4UB+JgPJLNRnrXiUHqHhtIKeSNM/Yv1BITdIWy
+	ZA4dqNMXgVT6UqRsn42W0NJWQSQCEqZJUjPMLd0SHkKTDOVD1ma2UYLh5qRD5it7vlM=
+X-Gm-Gg: AYBFou0YRsqyfMIhb7zFqLo8EfqIgpSjQ7nPFqpeuvn7JmA6qfUjaALQJcHttVUnpHy
+	cpvKEtq8mEWwCuew5VEuFaxIaeiAHnIUWqN5iS0LghaJ9qjAG97LYAb1hLHNDK475XGKvCvboNc
+	PsXlJY0AZ2WjNVAp5i9v3VBMuLRNkHXQ8EidydNzD2zMtJHtDPgxHV/iCjqbnpa/D2wM92MmUl/
+	4NlPr98151Bl0T5GaFJUi32ZhFy65fkKf4OdqpE3RK+lTVCu+PTcU8/HrxKoOBLsgvES/MFpdiJ
+	iu7x+K+XvSk7LEBBGsDtKLUygbg362bU9qEaGsXbfGhv1wuIH9BeAFFQ3IRMkFjjiRk9MLuhNO8
+	nmVBrsktqijNbj0hDBxIyOvu4CC4pA5s9SHa2xSAubM80zOrkCVUR8G0Xw1EwSknJHS8aSPLupQ
+	GQQRzzFt2cQLgM0yGGmenpUFGxiEevlVf3DxLOxEJkUn8qkeaZpaw7t2r+d0VJB6c4shEQDvy7Y
+	iCYe55TeoHJ0zJdhSO07jVgKpWSiaKRM9hdp9OH7+YT/c5LnC1voHdMHAshJEBBZcRajn857uYp
+	wRgH87Ii8AvDCSN3pjQ3JJ4SCe7wXOgBc/DHNnj9oq3R95dKKbiIwu1jPp5Fac95N8yVD/tX94K
+	8Dq0V0VOQwteOw+6YARSbTyCsfKXs
+X-Received: by 2002:a05:6122:54e:b0:5e5:29f7:489 with SMTP id 71dfb90a1353d-5ec6899f507mr7074700e0c.22.1793821524335;
+        Wed, 04 Nov 2026 11:45:24 -0800 (PST)
+Received: from google.com (16.49.199.35.bc.googleusercontent.com. [35.199.49.16])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eca889381asm2496927e0c.0.2026.11.04.11.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 11:45:23 -0800 (PST)
+Date: Wed, 4 Nov 2026 14:45:23 -0500
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: David Matlack <dmatlack@google.com>, kexec@lists.infradead.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, Alexander Graf <graf@amazon.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Christian Brauner <brauner@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	Hugh Dickins <hughd@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	"Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Mike Rapoport <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Vlastimil Babka <vbabka@kernel.org>
+Subject: Re: [PATCH v3 09/10] mm/shmem_luo: Allow retrieving tmpfs files with
+ O_RDONLY
+Message-ID: <auuJ4msatqzoOrjN@google.com>
+References: <20261103010216.3447716-1-dmatlack@google.com>
+ <20261103010216.3447716-10-dmatlack@google.com>
+ <2vxz5wyck08d.fsf@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -114,188 +109,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5090; i=brauner@kernel.org; h=from:subject:message-id; bh=vGFrM/mDJbel5Ek/YnwRAY7y8jtd20EKftAALqu9TzI=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS97mpQbTp/83Hlrc1+rz/OurT8HMOG96arD+w4Gdd2K pr9ek/Lho5SFgYxLgZZMUUWh3aTcLnlPBWbjTI1YOawMoEMYeDiFICJBMUz/E+Jqow63i4ukh/z NaPAjPXzm42+O7RrV1sb6zj3n/W84cXwV7CJ58e5Hsv5XGU5lw4fTp7zeKbnjYq6WmGe/zMumlX 84gQA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2vxz5wyck08d.fsf@kernel.org>
 
-Implement ->proc_write_buf() for /proc/scsi/scsi, /proc/scsi/device_info
-and the host files so procfs copies in what is written before it pins
-the entry, and parse what was written from that copy. /proc/scsi/scsi
-and device_info take up to PAGE_SIZE bytes like before. The host files
-pass the copy to ->write_info(), writes to them that are larger than
-PAGE_SIZE - 1 bytes fail with -EINVAL from procfs instead of -EOVERFLOW.
+On 11-04 17:52, Pratyush Yadav wrote:
+> On Tue, Nov 03 2026, David Matlack wrote:
+> 
+> > Allow userspace to pass O_RDONLY in struct liveupdate_shmem_retrieve_arg
+> > to retrieve a tmpfs file read-only.
+> >
+> > open() requires write access for O_TMPFILE, so create the file writable
+> > like before, then reopen it read-only with dentry_open() using the flags
+> > of the writable file, which file_open_root() normalized, and drop the
+> > writable file. Like open(), which grants the requested access to a new
+> > file regardless of its mode, don't check permission for the read-only
+> > open.
+> >
+> > Retrieving a file read-only allows a restored binary to be executed
+> > before the session is finished. LUO keeps the retrieved file open until
+> > then, and executing a binary that is open for writing fails with
+> > -ETXTBSY. Being able to execute restored binaries right away matters
+> > when they are needed to finish restoring the system, e.g. to bring up
+> > the services that retrieve and finish the remaining sessions.
+> 
+> Can't you put all your binaries in a separate session, retrieve it as
+> the very first thing, and then finish the session? Then you can execute
+> those and retrieve all the other sessions.
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- drivers/scsi/scsi_devinfo.c | 29 +++++-----------------------
- drivers/scsi/scsi_proc.c    | 47 +++++++++++----------------------------------
- 2 files changed, 16 insertions(+), 60 deletions(-)
+This is a good workaround. I am not opposed to this patch for 
+completeness of functionality, but if we decide to keep it, perhaps it 
+should simply be squashed into an earlier patch. The current diffstat
+looks bad, as it mostly deletes code that was introduced earlier in this 
+series.
 
-diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
-index 0b8f5ff40543..d9093851b23e 100644
---- a/drivers/scsi/scsi_devinfo.c
-+++ b/drivers/scsi/scsi_devinfo.c
-@@ -678,39 +678,20 @@ static const struct seq_operations scsi_devinfo_seq_ops = {
-  * To use, echo "vendor:model:flag" > /proc/scsi/device_info
-  */
- static ssize_t proc_scsi_devinfo_write(struct file *file,
--				       const char __user *buf,
-+				       char *buffer,
- 				       size_t length, loff_t *ppos)
- {
--	char *buffer;
--	ssize_t err = length;
--
--	if (!buf || length>PAGE_SIZE)
-+	if (length == PAGE_SIZE && buffer[PAGE_SIZE-1])
- 		return -EINVAL;
--	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
--	if (!buffer)
--		return -ENOMEM;
--	if (copy_from_user(buffer, buf, length)) {
--		err =-EFAULT;
--		goto out;
--	}
--
--	if (length < PAGE_SIZE)
--		buffer[length] = '\0';
--	else if (buffer[PAGE_SIZE-1]) {
--		err = -EINVAL;
--		goto out;
--	}
- 
- 	scsi_dev_info_list_add_str(buffer);
--
--out:
--	kfree(buffer);
--	return err;
-+	return length;
- }
- 
- static const struct proc_ops scsi_devinfo_proc_ops = {
- 	.proc_seq_ops	= &scsi_devinfo_seq_ops,
--	.proc_write	= proc_scsi_devinfo_write,
-+	.proc_write_buf	= proc_scsi_devinfo_write,
-+	.proc_write_size = PAGE_SIZE,
- };
- #endif /* CONFIG_SCSI_PROC_FS */
- 
-diff --git a/drivers/scsi/scsi_proc.c b/drivers/scsi/scsi_proc.c
-index 59229bf9938e..5962e671cc83 100644
---- a/drivers/scsi/scsi_proc.c
-+++ b/drivers/scsi/scsi_proc.c
-@@ -62,30 +62,18 @@ struct scsi_proc_entry {
- 	unsigned int		present;
- };
- 
--static ssize_t proc_scsi_host_write(struct file *file, const char __user *buf,
-+static ssize_t proc_scsi_host_write(struct file *file, char *buf,
-                            size_t count, loff_t *ppos)
- {
- 	struct Scsi_Host *shost = pde_data(file_inode(file));
--	ssize_t ret = -ENOMEM;
--	char *page;
--    
-+
- 	if (count > PROC_BLOCK_SIZE)
- 		return -EOVERFLOW;
- 
- 	if (!shost->hostt->write_info)
- 		return -EINVAL;
- 
--	page = kmalloc(PAGE_SIZE, GFP_KERNEL);
--	if (page) {
--		ret = -EFAULT;
--		if (copy_from_user(page, buf, count))
--			goto out;
--		page[count] = '\0';
--		ret = shost->hostt->write_info(shost, page, count);
--	}
--out:
--	kfree(page);
--	return ret;
-+	return shost->hostt->write_info(shost, buf, count);
- }
- 
- static int proc_scsi_show(struct seq_file *m, void *v)
-@@ -142,7 +130,7 @@ EXPORT_SYMBOL_GPL(scsi_template_proc_dir);
- static const struct proc_ops proc_scsi_ops = {
- 	.proc_show	= proc_scsi_show,
- 	.proc_open	= proc_scsi_host_open,
--	.proc_write	= proc_scsi_host_write
-+	.proc_write_buf	= proc_scsi_host_write
- };
- 
- /**
-@@ -386,8 +374,8 @@ static int scsi_remove_single_device(uint host, uint channel, uint id, uint lun)
- /**
-  * proc_scsi_write - handle writes to /proc/scsi/scsi
-  * @file: not used
-- * @buf: buffer to write
-- * @length: length of buf, at most PAGE_SIZE
-+ * @buffer: buffer to write
-+ * @length: length of buffer, at most PAGE_SIZE
-  * @ppos: not used
-  *
-  * Description: this provides a legacy mechanism to add or remove devices by
-@@ -402,32 +390,20 @@ static int scsi_remove_single_device(uint host, uint channel, uint id, uint lun)
-  */
- 
- 
--static ssize_t proc_scsi_write(struct file *file, const char __user *buf,
-+static ssize_t proc_scsi_write(struct file *file, char *buffer,
- 			       size_t length, loff_t *ppos)
- {
- 	int host, channel, id, lun;
--	char *buffer, *end, *p;
-+	char *end, *p;
- 	int err;
- 
--	if (!buf || length > PAGE_SIZE)
--		return -EINVAL;
--
--	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
--	if (!buffer)
--		return -ENOMEM;
--
--	err = -EFAULT;
--	if (copy_from_user(buffer, buf, length))
--		goto out;
--
- 	err = -EINVAL;
- 	if (length < PAGE_SIZE) {
- 		end = buffer + length;
--		*end = '\0';
- 	} else {
- 		end = buffer + PAGE_SIZE - 1;
- 		if (*end)
--			goto out;
-+			return err;
- 	}
- 
- 	/*
-@@ -466,8 +442,6 @@ static ssize_t proc_scsi_write(struct file *file, const char __user *buf,
- 	if (!err)
- 		err = length;
- 
-- out:
--	kfree(buffer);
- 	return err;
- }
- 
-@@ -521,7 +495,8 @@ static const struct seq_operations scsi_seq_ops = {
- 
- static const struct proc_ops scsi_scsi_proc_ops = {
- 	.proc_seq_ops	= &scsi_seq_ops,
--	.proc_write	= proc_scsi_write,
-+	.proc_write_buf	= proc_scsi_write,
-+	.proc_write_size = PAGE_SIZE,
- };
- 
- /**
+In any case, given Pratyush's suggestion, we could also drop it.
+
+> 
+> Why do we need to support this in the kernel?
+> 
+> Also, please put the motivation as on the top-ish of the commit message,
+> and the mechanics later. For example, your second paragraph should
+> likely come below this one.
+> 
+> [...]
+> 
+> -- 
+> Regards,
+> Pratyush Yadav
 
 -- 
-2.53.0
-
+Pasha
