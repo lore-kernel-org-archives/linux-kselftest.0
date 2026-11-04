@@ -1,100 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.44
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793805891;
-	b=POeAeRtb4SDFDwn/jX9+a3nuOAQ5g3OJnMhlWixGoVf6dqlhBzUymqErzaam653PMAyH
-	 Xa/PJlWfQNvxMkaDrNwzMY8akEdkYg0EDgwB1gu7EEaXH3pqepdhnRX83ATaQA+MR81tR
-	 4l5bJwvLpaGTolvojOUmGttAUHAuBB0Org600Ax2XMhvaWD3PfZpiyRLSz8Y5BVYxMbVk
-	 txcqQD7RiBrCzZt+6ymm6MqnYvN15u08FES22jqoNHHOV4O55i/EFf+wP5F9fgpU2vrVx
-	 w4hO8r8ZlPSrPkii0Df3lPMxTom/OZK7/zVsrIT5y4n8vTh8VkKwmkrmbtR8U4SZXSw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793805891;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793806883;
+	b=JxR9X6GTKcmfd0ktC91Hv4hxZcff7CyUa2zGw5XfmYg4drXH7hK9fS/inQKA1oLl6Xv1
+	 AwRiAyknyPd3IhdLoALNrvt+gRhHXkwUObfrt9Ln0XMtCJd3NukSIgrMHf6V/C//dZNrV
+	 iATvChi3TdxogcXtJfqUT0MT/ahVugCgnYqQjAz/QEv220aN3nHIx4osiJLuaavmgWGa5
+	 Tzi6GzO/PjkEj3fckthPuFnBRUeaPG84E7JWbu0t7EBTPM+OXhoOVYr9OIfGTKDRMiZcQ
+	 xrnh3eIU0nwllR8eqqhkdGH2+ghwdr+XA2ER/cbAMiWAk784htdDmRJzGh1lJT/OGUg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793806883;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=flDP2peFOVzNvXwcnvbCxj5AquiDajQXF7kcyM2P/Mo=;
-	b=LGNPwe4bPtwgO/Y0txbaDQb5mnDJLlAemW6AxixyanFUIXyKbBpsWnNeB7d8uovIkmXT
-	 PhiCSsEDH9yPzeqLYjrOpvPbOyjDJFcbATlmbHZ1c+KTxlvrR/RY8eoceKLgeaJCI6LU3
-	 Z9KFMdsAvUaNd7yoGbzpjn1lpxyEDMnEosn3u1sTD7pwmmCtLhXWwuZN7RKoZHo18rQw1
-	 5e2PWEgiTKJ3mxjMAVcc85BMgnsfOsICaKO0iLfa9oOSnLFgJrNpFYK1vCgbZfaCWZQtG
-	 6/zLE5CnvyNMYKKvY+89ZZnepKZwSqIjmOyxmQT2wGr/TaiXn4UFVwUWZapoL6A6IDA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=purestorage.com;
-	spf=pass smtp.mailfrom=purestorage.com;
-	dkim=pass header.d=purestorage.com header.i=@purestorage.com header.a=rsa-sha256 header.s=google2022 header.b=F2FlsQEw;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.44
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:In-Reply-To:
+	 Mime-Version:References:Message-ID:Date:Subject:From:To:Cc:
+	 Content-Type;
+	bh=o/kOhyN2ooFYx8Pst2gddYQu9Aw2TL0sBUfCDuxPOOQ=;
+	b=I7SZcZjbV2ExzAfEtxynpTYvO7raoSk2gzhV8MSHXfKuxaAgUM5dMSpkjwbwEYcbxTFH
+	 JLHfeSpZjsxtfOEdEEcb5AJ0Xf8QU/HkYgEq5WsQ0uYODz3iPwHxV+E6f5pRGNhb7CUmH
+	 pjhs1bGu2V+aNlxc/2WZftPceGiI4wUa0/bYy2MMiE4FFfCScx82/+sqQCTHhAJvC8o8O
+	 ICGEf7+2jEXruGLLnPH0GJQ29okc/nEplrLF1OoSKAw8nH/kvFed7S1UnFaikS8TgmEje
+	 qdDOMzgnUpyOxHN2Gh+VItuzC4vZIPeJdiDbeFo5e3zdDe5FO/2h9n1dZAIszYVsjHQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HjMV6rni;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1EE9606A326
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 15:24:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1EE9606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4400C606A32E
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 15:41:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4400C606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=purestorage.com header.i=@purestorage.com header.a=rsa-sha256 header.s=google2022 header.b=F2FlsQEw
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-4a6d1c66dfcso40231fac.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 07:24:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793805884; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RuRicrY44AcpiM42BwiRoFKTZ1aZQ1wlwDX2Lnohcs/oFyiY71PgGX5Tmr+kcnF5Ah
-         5TjuRkd8WFWUaNcdjWGGbBuB6oMgbifQe2zbi7+MnOO5ICOKXgLuDTF2pidXKmI2/y8n
-         3jTKR8jkklwZcWx+omtySSMtzijpYRU2iAfzitcqYqrY037NDumiInqpeUDzCMyXQYe6
-         X5D7j1sYviTFVEARXMDnTdlkPJSiZXpfbYBITWpqAVofktJR2klZgIhVzLZpnxw257Mn
-         AGfSD8JQZs8zcA9cDwFNOi6qDKNsbMn3a/4Y8XAm1zAeGugTo3vU4k2cDV4UOcZVIa5c
-         9Jtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=flDP2peFOVzNvXwcnvbCxj5AquiDajQXF7kcyM2P/Mo=;
-        fh=J0cJzA9aDsZ2t6a7kPWI/wENSCfzzY0MWG/bsnNOuxY=;
-        b=akInVuIFtaMnJKMr1hYI1i4bjakzg0uiL6jxZpAmkPfK7YrMxyxyRbnNySuGddNZ2f
-         +3jiGkrJqiDcW9CYBTyvU/KyKLryt4fOQ3+HotiUFX1yXNKJ5H7yKojO26ZiElBLJfc2
-         RrBE5VktwrlMKNIPZBfKAF8b8cXzRmUBfxW3aKQz0uUbDbZ0HHxJwyHx8cN5GTgFJOUa
-         ZW3vrtYSnPV2CjEWsAXtTqaxJOHQLv+LstIoEp4APedEq/S4nVt5PFqbNZxqUz3a9IMU
-         ET/DGanRxtBQ8Gx/485W1iTl1VUjfVb3l5Kt8hD560vGOR6/sqvfoh2w0JeKbSbbyZZI
-         a60w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=HjMV6rni
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-3662e7a9299so2918368eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 07:41:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1793805884; x=1794410684; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=flDP2peFOVzNvXwcnvbCxj5AquiDajQXF7kcyM2P/Mo=;
-        b=F2FlsQEwuvngD0Cs3xUh/uc9NpdhUow1/QhCVrIX6rEcw4PgpCGa6Qy7QfVlZOf8eJ
-         2ELX/a1fHRXZyGSXTaDoC0QtbeCd5xbShvqfew/jAuwifMw+Zf742BHoCyqeTTiaMCOJ
-         UbT5ILvHZpsOCOcp0aKMIGxYBpY9OMXYlo6qL4WaZsaFHuPPKKICpVYqN5b8GDz5XBj+
-         /XjT8VpWUEw7P35P2OF4ep/XAtv9MPJxxz/NL3AJhJBrLY7YyqAi5eUP9zfG1dWy33SI
-         /3FKa7cAs/q+meWYCL9PdjVcA/+uZHYBHh0C5woYIDdVkZfKjTcCR1jchUfA+LouX4gg
-         5pOQ==
+        d=google.com; s=20260707; t=1793806881; x=1794411681; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:date:message-id:references
+         :mime-version:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=o/kOhyN2ooFYx8Pst2gddYQu9Aw2TL0sBUfCDuxPOOQ=;
+        b=HjMV6rnirPdJA5id8UtVqWjrEqOxCFYgbInEUndmQBG9IGwqDf4eKd2nUhUcDuBa3W
+         naoBjcrkRW9gQf1MgmsEvth6cdjetKsDsXk5XwDhxNum0s1qFMPG5+ilvaSzEQ+xZYwY
+         Tv84bFqfYa5rKy+gTZBe0bSqag2Uj/m70AJqsib5x6i3m9jVMzOnLwUHLDlB5N/Yy0bM
+         XL/iW1TkDGelxrI33iHoh2+RTycqt68eYKdYqnBam82nBZdAnsI5QqyOYER9lr7Q8Uol
+         5fCr82D46xBT1klUloOTTCg1G6OOxhv2vXv4GNihAsw8nlvpL4SA20uZbSuQ4dPVuriQ
+         4jHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793805884; x=1794410684;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=flDP2peFOVzNvXwcnvbCxj5AquiDajQXF7kcyM2P/Mo=;
-        b=Drc2VCTPIo/Br1EkVKrQrEwNK45vNAxirnCLf39uY/o3WgQCkT0yY8SpMcly6LYIHa
-         cEIOWH9QWWg/ZgWrFWDEOaYMj8K6LosaQu2kPSVyK87l9k26WYt69bdvkiq9ePsh9UMq
-         3Kay5mcB3d/1fmSSHduX6RgpWARZ0ns6pWsQzmyQXlGM6z5Ee2BPncAS6iA7tno4WBYr
-         vrrNGqKG2T2UckHIv+csFQERW2scOY7wdKmY1rRY5R8VFexAqNW1cT3B0nyK38MzTime
-         qoTS0glE+Yk9xhy+Z5AEvqD6DZnRsvdGRq4PussNAyK99ajqqHalmZROy3HotMNGVRDW
-         Zswg==
-X-Forwarded-Encrypted: i=1; AKwUvBy2gvw5h9Kq70H2R2hhwQBgDQPvAUHA5ZdUw6MuhYtDtXezUp8QDtdVddGfENZlqlKOhBMfSKYTNnCN2vaeiQI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/jn1OijluiTMMqKLUxkX2sK6cuV71gDchEtOHOQoD8fdXELGpC
-	FXprvSmEA79WqVlHyOTjGZxcE+gTHVHdlu3Xf8uF8MMy1Yk5kn1gViXu6Wjn+kcOeymMXlU7NhP
-	YdCQjc4l7HJn798+J5FLWeLaAhrd2XPAKq27kN+yIYA==
-X-Gm-Gg: AYBFou2cbk9TusTvl1MM+hmHV7nJE7rlJ0VHXySjkPApXmaA23tQUaRC8T1YNxbCV+f
-	wDLjQc5LCD2g5SZumlp1pkOJb9IyRRjuD3GqUDxCGFZNYY6aDEzpORT2mUWB2Ppo6PW6fkaRkg1
-	KDnuoxdDnaaq/h0nCr0+RG5kbnq99ZlpqCskOC7H5xrSqVzkWyRjyhiRIu2UFhavDQotmb1GJLF
-	fJr4mIC73lKIIUBJPS24Wu0+sfSx17ODn2lE17ATZWT5E+SJEndYnv/RWPMsVIS3pXdF/7WdkWP
-	gVsngbnUbQdxQE4gg1jCxpIOE/Dj5Ob5ZPy1Dg2xq7EfCkDwJwV+vnjM0yx0Dwfert4RSAijAJj
-	vFCEj+xsVyDNCx3OVsaeHt8yQx0fC8jC5bqKw
-X-Received: by 2002:a05:687c:40c9:10b0:4a7:fe04:7dfa with SMTP id
- 586e51a60fabf-4a906c5ce81mr12210477fac.0.1793805883319; Wed, 04 Nov 2026
- 07:24:43 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793806881; x=1794411681;
+        h=content-type:cc:to:from:subject:date:message-id:references
+         :mime-version:in-reply-to:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=o/kOhyN2ooFYx8Pst2gddYQu9Aw2TL0sBUfCDuxPOOQ=;
+        b=MqiQz0UdbhneL7fS/JlnFamSUYaQtzIN1AY/W+P4E/rqrPZuu1ZXHvilhWcTistuxr
+         KoXz6/h8FjpjDVWQnYuaNar9YvpBuiiSJdLMliwYe9vkd01DbFrOEiPOYp7n9dqftlvk
+         Dpf9EPGVO1Em16FMmRVhAdcUrApxjIyZGkZ7DfBoXUaoyeYzeX1kiMt3LVLFjhPJnbmx
+         linhJjF1/7INt6n/SB1/XJOqbGQLPdYOqLSVmsKDZIl9I3zB5BFlGkpS2DoXtOAR+kTo
+         y/UoLNnRv1IjyZJVMhC1+1YKyYVR84FzXkcHGht9dMje4mmXmWko4XVQabaklUHhwdm8
+         xeCw==
+X-Forwarded-Encrypted: i=1; AKwUvByYp1b90lEPet8k8GN8BSbe+dbcYl+eQ+ALrY+tbEYQRBHA8AdCXyZk3y1Kkf9Qa3n+39GlCUDsWTU0KEUZzh8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+um62toQQSIJotCm4D28viI1Y69Ce+3IfOSnG9PZ8ktFrCQCEd
+	PM3yt7ypXuGXoariqgZT+4uUBcJvsVVqt1sbIUjW9zZ656jVzqhBO86Yp6Uyd6bpqwoQVizB7C6
+	AKykmE3NbuowZkSO9jjSK3qyh4A==
+X-Received: from dycmb18-n2.prod.google.com ([2002:a05:693c:20d2:20b0:359:198a:8046])
+ (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7301:3d06:b0:358:eccb:af7c with SMTP id 5a478bee46e88-36a42404840mr35928950eec.33.1793806880735;
+ Wed, 04 Nov 2026 07:41:20 -0800 (PST)
+In-Reply-To: <20261103235152.1904727-5-sdf@fomichev.me>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,66 +77,63 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261104104909.129656-1-thuth@redhat.com>
-In-Reply-To: <20261104104909.129656-1-thuth@redhat.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Wed, 4 Nov 2026 07:24:31 -0800
-X-Gm-Features: AclHuK9voeX4CroBKewKkDb-TCTAm3mHMofh5zqgIby-6JO5pA3M1-VHQAtqXLY
-Message-ID: <CADUfDZrwgy38Nt4bFeZd=nfHAOTScy=1PKjanTAoUFzUkydkbQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: ublk: Fix include path for out-of-tree builds
-To: Thomas Huth <thuth@redhat.com>
-Cc: Ming Lei <tom.leiming@gmail.com>, Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Mime-Version: 1.0
+References: <20261103235152.1904727-1-sdf@fomichev.me> <20261103235152.1904727-5-sdf@fomichev.me>
+Message-ID: <18e4e1daa184cadc.3137322e32382e36372e3935.ceab9.0000sendgmr@google.com>
+Date: Wed, 04 Nov 2026 15:41:20 +0000
+Subject: Re: [PATCH net-next v2 4/7] net: devmem: add a per-device netmem TX
+ frag size limit
+From: Mina Almasry <almasrymina@google.com>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, andrew+netdev@lunn.ch, edumazet@kernel.org, 
+	horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org, 
+	rdunlap@infradead.org, michael.chan@broadcom.com, pavan.chebbi@broadcom.com, 
+	sdf@fomichev.me, almasrymina@google.com, bobbyeshleman@meta.com, 
+	asml.silence@gmail.com, razor@blackwall.org, daniel@iogearbox.net, 
+	leitao@debian.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 4, 2026 at 2:49=E2=80=AFAM Thomas Huth <thuth@redhat.com> wrote=
-:
+On Tue, Nov 3, 2026 at 3:51 PM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
 >
-> When building the seltests out of tree with "make kselftest-all",
-> the compilation of the ublk tests can currently fail since they
-> are using the headers from the distro instead the headers from the
-> kernel source. For example, I'm getting:
+> Devmem TX frags are bounded only by the net_iov size, which is about
+> to grow up to 2MB, more than some devices can describe in a single TX
+> descriptor.
 >
->  kublk.c: In function =E2=80=98ublk_ctrl_dump=E2=80=99:
->  kublk.c:190:27: error: =E2=80=98UBLK_F_IO_DESC_SIZE=E2=80=99 undeclared =
-(first use in
->   this function); did you mean =E2=80=98UBLK_F_UPDATE_SIZE=E2=80=99?
->    190 |         if (info->flags & UBLK_F_IO_DESC_SIZE)
->        |                           ^~~~~~~~~~~~~~~~~~~
->        |                           UBLK_F_UPDATE_SIZE
->  kublk.c:190:27: note: each undeclared identifier is reported only once
->   for each function it appears in
->  kublk.c:191:53: error: =E2=80=98struct ublksrv_ctrl_dev_info=E2=80=99 ha=
-s no member
->   named =E2=80=98io_desc_size=E2=80=99
->    191 |             ublk_log("\tio_desc_size %u\n", info->io_desc_size);
->        |                                                 ^~
->  ... etc ...
+> Add netmem_tx_max_frag_size, U32_MAX by default, and cap devmem TX
+> frags to the limit of the device the binding is attached to.
 >
-> Fix it by using the KHDR_INCLUDES from the main selftest Makefile that
-> should contain the right include path in either case.
->
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 > ---
->  tools/testing/selftests/ublk/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/networking/net_cachelines/net_device.rst | 1 +
+>  Documentation/networking/netmem.rst                    | 6 ++++++
+>  include/linux/netdevice.h                              | 2 ++
+>  net/core/datagram.c                                    | 1 +
+>  net/core/dev.c                                         | 1 +
+>  net/core/devmem.c                                      | 1 +
+>  net/core/devmem.h                                      | 1 +
+>  7 files changed, 13 insertions(+)
 >
-> diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selfte=
-sts/ublk/Makefile
-> index fc64b8f028332..ba6df7c0b530b 100644
-> --- a/tools/testing/selftests/ublk/Makefile
-> +++ b/tools/testing/selftests/ublk/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->
-> -CFLAGS +=3D -O3 -Wl,-no-as-needed -Wall -I $(top_srcdir)/usr/include
-> +CFLAGS +=3D -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+...
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 3ac700d37e59..ba2f887dcd39 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -12350,6 +12350,7 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
+>         dev->gro_ipv4_max_size = GRO_LEGACY_MAX_SIZE;
+>         dev->tso_max_size = TSO_LEGACY_MAX_SIZE;
+>         dev->tso_max_segs = TSO_MAX_SEGS;
+> +       dev->netmem_tx_max_frag_size = U32_MAX;
 
-Sasha Levin already sent a patch for this:
-https://lore.kernel.org/linux-block/20261103130131.4069212-7-sashal@kernel.=
-org/
+I wonder if netmem_tx_max_frag_size should default to PAGE_SIZE instead
+of U32_MAX, and have drivers opt in by raising it after verification
+(e.g. SZ_32K for bnxt and U32_MAX for mlx5 in this series)?
 
-Best,
-Caleb
+With U32_MAX as the default, large frags are enabled on all NETMEM_TX
+drivers unless they opt out. For example, fbnic also has a 16-bit TX
+descriptor length (FBNIC_TWD_LEN_MASK) and only avoids hitting
+dma_error here because its tso_max_size happens to be 64KB today, and
+gve hasn't been tested with >PAGE_SIZE devmem TX frags yet. Defaulting
+to PAGE_SIZE (similar to tso_max_size = TSO_LEGACY_MAX_SIZE above) seems
+safer for existing and future drivers.
