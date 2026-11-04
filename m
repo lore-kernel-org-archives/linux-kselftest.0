@@ -1,64 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793801459;
-	b=fYUUt2CLfeKmKbRORK+yhw7WcnD+TD2ZtxZKVqhedOJb9EYPxNtRd+KS7f7aSmJep52u
-	 lC3pmIIuKwvex5yHvbeywdtrs/Rf3GwR9xceB/Kx9i5SgN+KxWxZN536UV5aHRiuA81yS
-	 vWlqfU9ChDwG71sd4NVtW75hGwAgoaOJ+Qi4vt3O3n634aADHJL7S7IYpK0rzar0nZxLB
-	 zwMgzzWuNOf9e+XzQgi6KU/+DqSe2gnyz+P3aKxr8rnAlZY4CxdnQ+k08QT2hUenII8he
-	 j/IerNFIb8pIzSOZas6xxJrAhKru8+wBzeqvaLFEYS+KVQ1Fxii/v7Gbb6Uy8mTdQXQ==
+	t=1793801552;
+	b=RW/LktQKImQiWoZd5k6+YVdx0altHAIRtV/49yRKD7XV3LzyMeauywuZyUlArCdoSp3X
+	 WGTRHdL9qGTfZ0w11sGul50Ycv4JsAbgCorq57TzaSsGsJYReDPuMKBJf87sn0cm9HJ6v
+	 Vb0jDks6z9cTmxH1og8NAkMj0LjDpsIcs7TYwEYpXvOyy7CHx4PBzDLgIJJUyrSXkRw2f
+	 YPd2G0lrUGOzZu4n1UbSgLJawsXUpeXfUGhXV2S7y8uXGdVUjGAQVRxeFv1h2uPACYDkv
+	 y4LoNQU5lytvIaNU/Bm15LjL5ii1wPdiozIMGNxiOUGrZ+/Pro71Ks5el3v8Rt7JUxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793801459;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=bVcACiTZbNDhVU6xhENZ6o8aAhkqXOgSLVPaqMsdjow=;
-	b=CXktM9dT34BolYCBRDRtQ4eo1x099cTsZP0wFlnQMiXcjN3pcddDlMn4j5tI+STkBO8Z
-	 4C6fVsaXgnDJ5+qsbx4IA0c8JNl5yFPnoq/rLbwLyrg99yvHAbOgviXr2CnVnNr+XtItK
-	 Qw1imnKs9Ax9ILmR8tyYHEtRRvHSo1gsfLp7l6fz5qB775Oy5xLpP5e9aj9jt7UqotLPK
-	 zGNnWg9wFXQiiWVm1VdUA811urm232wKlpcBl7okoFY5ykMWh80sd9c0pJl4sqv4wKHK7
-	 SRLmM3tfg6l07nDZ/Ocx2Q5Unb1eWpsxRvGFUkp6jlA4iRcQdVC6zsNsW+ubCBAKupw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793801552;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:User-Agent:MIME-Version:Content-Type;
+	bh=onQfzVmJC7HohmP0cLeGwtdRODbHCJknVIWGqjziqDY=;
+	b=MklAjtYLmFkyuSMC1Nu8bY43xFgYegx+8MZy36up3IWo9laU9jyYlyxgJqojHWuXCERW
+	 x7F7fZnsAKAcW/xWpo9KLFbM0tIRR4miE2cUJP096MmRsfe20N/EFYE5N33It8E/P8bB0
+	 qP24MOr7TUy9ExzADWYxUALbZ06sY9IJiWgvx19dyfshhDxnM9+jBALGwWQEuOuCDIh6R
+	 iFKXU/L8ypLnpCJNAANA8mTLyGJdVmyosCy6LCVH3hFPouVYTW79EoxLseqMwjxVUpGww
+	 R3t/gbW2st8amTfIP8mm+d5YjRj0u7YwIJQQK/r6AB2FsU5SEQZJ6febzRorRu75OkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=WULk1VAc;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B88EE606A31B;
-	Wed,  4 Nov 2026 14:10:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B88EE606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YL0mHBdN;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA8E606D80F;
+	Wed,  4 Nov 2026 14:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=WULk1VAc
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C13492247;
-	Wed,  4 Nov 2026 06:10:53 -0800 (PST)
-Received: from e143914.arm.com (e143914.arm.com [10.2.213.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C8EE3F628;
-	Wed,  4 Nov 2026 06:10:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793801456; bh=sDhQxKPD1vSwIgQ2ErCUWBV8m6RtnHjEWH3mc/dFqzQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WULk1VAc+HzOBfaTnepFre3WCClsuYTx9JkrYFxlufYmpigJKEj8cwoxge34L9nKc
-	 SSd7nZLFd4dmbIGocT7OBeFFhvnXku+zHo4BXN766Ceqc0j6GajB4vi08PBW2hv+yt
-	 2XevTCqECkAH3RgQMYSwvjv75HxW68Q2ydhOHW+k=
-Date: Wed, 4 Nov 2026 14:10:45 +0000
-From: Joey Gouly <joey.gouly@arm.com>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	Quentin Perret <qperret@google.com>, Fuad Tabba <tabba@google.com>,
-	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/16] KVM: arm64: selftests: Tests for protected VMs
-Message-ID: <aus8xb_xT64WKHDu@e143914.arm.com>
-References: <20261104084842.132944-1-fuad.tabba@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YL0mHBdN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432C31F0093A;
+	Wed,  4 Nov 2026 14:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793801552;
+	bh=onQfzVmJC7HohmP0cLeGwtdRODbHCJknVIWGqjziqDY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=YL0mHBdNDiunlG8rrAEkkTaGCj1hrgX75U4z1Ml7hTgNdeY1G7/Lqev+aLVQR+Qpn
+	 TdKK4Vzx6TtBRwXZ0bt3OeqzYSVcAzAuv0DOqjLJZibnLWMQIU/66PYdTMkEiIBUUg
+	 oj0qzD5GM57Kb7BUN+tcdPhyVuRQ5maPjgC4q1aYirAW4HGo5HdtYvdCLd2VdgR5bZ
+	 xrKT2Zx3kw/mDTMaP3mQK8OQ527/ncS5Cy74zMQDkUzrend2XgDr7ldd3EqnS2iipS
+	 eCkX7zd4zq9sxqWgYQwz2VRR/vrIFIjwhVNMy7fdS2JG63WulEzNoe96K2ooNFMRV5
+	 mw0Ektf6TZZCQ==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: David Matlack <dmatlack@google.com>
+Cc: kexec@lists.infradead.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  Alexander Graf <graf@amazon.com>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Baolin Wang <baolin.wang@linux.alibaba.com>,
+  Christian Brauner <brauner@kernel.org>,  David Hildenbrand
+ <david@kernel.org>,  Hugh Dickins <hughd@google.com>,  Jonathan Corbet
+ <corbet@lwn.net>,  "Liam R. Howlett" <liam@infradead.org>,  Lorenzo
+ Stoakes <ljs@kernel.org>,  Michal Hocko <mhocko@suse.com>,  Mike Rapoport
+ <rppt@kernel.org>,  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush
+ Yadav <pratyush@kernel.org>,  Randy Dunlap <rdunlap@infradead.org>,
+  Samiullah Khawaja <skhawaja@google.com>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  Suren Baghdasaryan <surenb@google.com>,
+  Vlastimil Babka <vbabka@kernel.org>
+Subject: Re: [PATCH v3 03/10] liveupdate: Allow file handlers to mark
+ retrieve failures as retryable
+In-Reply-To: <20261103010216.3447716-4-dmatlack@google.com> (David Matlack's
+	message of "Tue, 3 Nov 2026 01:02:09 +0000")
+References: <20261103010216.3447716-1-dmatlack@google.com>
+	<20261103010216.3447716-4-dmatlack@google.com>
+Date: Wed, 04 Nov 2026 15:12:26 +0100
+Message-ID: <2vxzv76ck7n9.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,129 +72,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261104084842.132944-1-fuad.tabba@linux.dev>
+Content-Type: text/plain
 
-On Wed, Nov 04, 2026 at 08:48:26AM +0000, Fuad Tabba wrote:
-> Hi folks,
-> 
-> This series adds selftests for protected VMs. A test skips on a host
-> without pKVM, and so does any case where the host doesn't have the
-> required feature, e.g., PtrAuth, SVE or hugetlb pages.
-> 
-> A couple of points:
-> 
-> - Each area gets its own test rather than cases folded into existing
->   tests such as psci_test, hypercalls, set_id_regs, etc. A protected
->   guest requires its own boot path, and has to share the ucall pool
->   before its first ucall. On top of that, a protected guest gets the
->   opposite result for many of those tests' checks.
-> 
-> - pkvm_exceptions skips its breakpoint, watchpoint and single-step cases
->   while a protected guest's ID_AA64DFR0_EL1.DebugVer is 0. pkvm_id_regs
->   reads the same field to choose between the hidden and the exposed
->   debug view. With the patch that adds self-hosted debug to protected
->   guests [1], both tests run the debug cases with no change.
-> 
-> The series is structured as follows:
-> 
->   01:     external_aborts: an abort injected before a vCPU's first run.
->   02-04:  Generic selftest changes: creating a protected VM, the pKVM
->           function IDs and the ucall pool's address.
->   05-06:  Protected-VM library: boot trampoline and helpers.
->   07-16:  The tests, one per area.
-> 
-> Based on Linux 7.4-rc1 (6628e7d4c6b25).
+On Tue, Nov 03 2026, David Matlack wrote:
 
-Hi!
+> From: Pasha Tatashin <pasha.tatashin@soleen.com>
+>
+> When luo_retrieve_file() invokes a handler's .retrieve() callback and it
+> returns an error, LUO currently records the error in
+> luo_file->retrieve_status and blocks any subsequent retrieve attempts.
+> This is necessary when the handler has already partially consumed or
+> freed the preserved KHO state.
+>
+> However, with user arguments passed to .retrieve(), a handler may fail
+> early while validating caller-supplied parameters (such as a missing
+> argument, an invalid or read-only target file descriptor, or a non-empty
+> target file) before touching any preserved KHO state. In such cases,
+> userspace should be able to fix the argument and retry
+> LIVEUPDATE_SESSION_RETRIEVE_FD, and if the file is never retrieved,
+> .finish() must still run to release the preserved KHO state.
+>
+> Add a retryable output flag to struct liveupdate_file_op_args. When a
+> handler sets args->retryable = true on error, luo_retrieve_file() leaves
+> luo_file->retrieve_status at 0 so the retrieve operation can be retried
+> and .finish() will still clean up the unconsumed preserved state if the
+> session is finished without retrieving the file.
 
-I started to also write some realm tests a bit, you can check it out
-here:
-	https://gitlab.arm.com/linux-arm/linux-jg/-/tree/cca-kselftest
+Should we give some sort of signal to userspace whether the error is
+retriable or not? How would it know it can or should try again?
 
-It's WIP/prototype, but it may be good to have some sharing, if
-possible.
-For example I also added a 'pre-boot' stub, which looks like your
-pvm-entry.S:
+>
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+[...]
 
-	https://gitlab.arm.com/linux-arm/linux-jg/-/commit/cd3ae35d89974b02b7051a0c45cc68b4df8f9d3e
-
-However I extracted the registers needed for the stub like this:
-
-	https://gitlab.arm.com/linux-arm/linux-jg/-/commit/f559d5b61fa1a37e2d7b23704bd367e079cf8eae
-
-This is because the current Realm branch I'm working on top of rejects
-writes to those system registers (TCR_EL1, CPACR_EL1 etc). Which is why
-I had to modify these functions, along with __aarch64_vcpu_add() and
-some others.
-
-I'm not sure how much there is to gain by sharing overall, but good to
-bring it up early!
-
-Thanks,
-Joey
-
-> 
-> Cheers,
-> /fuad
-> 
-> [1] https://lore.kernel.org/all/20261102093950.2922035-1-fuad.tabba@linux.dev/
-> 
-> Fuad Tabba (16):
->   KVM: arm64: selftests: Inject an abort before a vCPU's first run
->   KVM: selftests: Allow arm64 tests to create protected VMs
->   tools: arm-smccc: Add the pKVM memory sharing function IDs
->   KVM: selftests: Export the ucall pool's guest physical address
->   KVM: arm64: selftests: Add protected-VM boot trampoline
->   KVM: arm64: selftests: Add protected-VM library helpers
->   KVM: arm64: selftests: Add pkvm_host_abi host-interface test
->   KVM: arm64: selftests: Add pkvm_psci multi-vCPU PSCI test
->   KVM: arm64: selftests: Add pkvm_mem_share hypercall test
->   KVM: arm64: selftests: Add pkvm_smccc hypercall test
->   KVM: arm64: selftests: Add pkvm_id_regs register and trap test
->   KVM: arm64: selftests: Add pkvm_vcpu_regs register-state test
->   KVM: arm64: selftests: Add pkvm_irq interrupt test
->   KVM: arm64: selftests: Add pkvm_isolation host-access test
->   KVM: arm64: selftests: Add pkvm_lifecycle teardown test
->   KVM: arm64: selftests: Add pkvm_exceptions debug and SError test
-> 
->  tools/include/linux/arm-smccc.h               |  22 +
->  tools/testing/selftests/kvm/Makefile.kvm      |  12 +
->  .../selftests/kvm/arm64/external_aborts.c     |  21 +
->  .../selftests/kvm/arm64/pkvm_exceptions.c     | 261 ++++++++
->  .../selftests/kvm/arm64/pkvm_host_abi.c       | 428 ++++++++++++
->  .../selftests/kvm/arm64/pkvm_id_regs.c        | 306 +++++++++
->  tools/testing/selftests/kvm/arm64/pkvm_irq.c  | 268 ++++++++
->  .../selftests/kvm/arm64/pkvm_isolation.c      | 225 +++++++
->  .../selftests/kvm/arm64/pkvm_lifecycle.c      | 110 +++
->  .../selftests/kvm/arm64/pkvm_mem_share.c      | 394 +++++++++++
->  tools/testing/selftests/kvm/arm64/pkvm_psci.c | 632 ++++++++++++++++++
->  .../testing/selftests/kvm/arm64/pkvm_smccc.c  | 117 ++++
->  .../selftests/kvm/arm64/pkvm_vcpu_regs.c      | 221 ++++++
->  .../selftests/kvm/include/arm64/pkvm.h        |  74 ++
->  .../selftests/kvm/include/ucall_common.h      |   1 +
->  tools/testing/selftests/kvm/lib/arm64/pkvm.c  | 245 +++++++
->  .../selftests/kvm/lib/arm64/pvm-entry.S       |  58 ++
->  tools/testing/selftests/kvm/lib/kvm_util.c    |   5 +-
->  .../testing/selftests/kvm/lib/ucall_common.c  |   9 +-
->  19 files changed, 3406 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_exceptions.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_host_abi.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_id_regs.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_irq.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_isolation.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_lifecycle.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_mem_share.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_psci.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_smccc.c
->  create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_vcpu_regs.c
->  create mode 100644 tools/testing/selftests/kvm/include/arm64/pkvm.h
->  create mode 100644 tools/testing/selftests/kvm/lib/arm64/pkvm.c
->  create mode 100644 tools/testing/selftests/kvm/lib/arm64/pvm-entry.S
-> 
-> 
-> base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-> -- 
-> 2.47.3
-> 
+-- 
+Regards,
+Pratyush Yadav
