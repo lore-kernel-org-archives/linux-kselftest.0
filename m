@@ -1,45 +1,111 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793820291;
-	b=tJatMjGBHte+QYMPDJgFGjSM93/w7svjxT/VoOBNRjk0FeSufeUhzh1+rJwWdPDE0b3u
-	 EDUhWuWuHNSUOrXTOluhtrvBFmmiAdFiNPYw8KmWvVM+L3WyzTETMWiQTz8FfPn3UQ1V5
-	 OKzDuNPHajVYPYIfeUtdivVMkdAwf5mP8B36q7SBl2luVgeP04H+q3LlfZQdzOzmcNyHL
-	 LOFJ1wAp6HdekHdhpQSJe8Ro5lUMqNJSUsAGvN8rxgPdlHoocmQEKsZZU9K9Xa0KY9Lgq
-	 nB3MHJaGuMbXgN+nE6f7hGFLc8WKt2d2HBgrFLjygn5268rVthmbabOLxnMVk/elPkw==
+	t=1793820303;
+	b=HM3dHblq8X9vJ+zjynIvNU8FB4Tc/YHUlPaTCultAL7Rm/3FuohnC57gsYuXnYmxi9c+
+	 fhedPV2oM+JOQAnywpOA6ibH6337WbbxxIeTAst89/oKB9YwH+kQGysmXQcvtfnUdO3J/
+	 8E9ijTv6dHZ315muc+Y9tpMViouI1VauCBZLGnjzSbxqUXg26cM1zp4OLyPeJEdq6wzvR
+	 43wniRfbdmpl8W3JM2V49HZfAwD15QG1dVuITVGjR+AJesYfagH7FSydFYj0FK8/ydPBP
+	 I30JI5i4Nj7CNicFb0Pwg1pEG+cJfJjx0NdEa6kNF9opC8ekyrcEInwOMiVwhG5k/cQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793820291;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=2cl+IPVJlClBxWQlKHZKipsDZ6QUPUvr34kW14M+CmU=;
-	b=mYvdsDYLCkeeOCHc9GJfYivqbUbCUpCnJYzSLpl3fE74RqtQG/v7Opx8T/jq8DAo1qFR
-	 tF3NzEtcmGRj3eN1lKaUG2l7MaQnXuYCG9Xeb3bpNNl2Mj4bcB54sv/uMDdsdhi6aohU1
-	 2QshW2F9c+N8tFEGHMGBC2/C514+ejm1kP2r4ma7FMVkL+bRbregtDDs0Hi/R9GFI0z4/
-	 Skb8wjDrNqp4eMKLtr62AseJuTbQjCO18E3xp8cJUbQVL73UEZ8qHkNJIQMo6517JduN+
-	 um/3hwVWtt+9Duur2+kI21aSJCQOXnHRj256KDEFpTETyteItqzyMeUzNQB9s6mMatA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793820303;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=x8nH5QJkKiZNUTowDxB/hMOFyVkHqFnuwosL7qreMAM=;
+	b=GMhTOkKudtWhb2SH7SfztQlvqSzpnB5XAH7uJ025GjNrJ98L+a5ykBeoLxCCoi9xVWDQ
+	 vMkz57B4IfIC5R8T8chcrzpkgFgkKshndAp49ww0q+GmQ1igvkaFbSSzqWv5u+sfTwb02
+	 o0GIcWXPQlDa+EEw2ItnGusB2S8ws4zcDaPXvEy0viH2YzPO4z1qVGrKkF9yOqtXLsMOP
+	 WmW0FPsvWZ9efUBJzcmciyLJ9LZveo7P6uro61c2G3vK4NPnq/+/OvYWpvuFf9uIm4b9b
+	 AAyebH7yQAXrIXMxAp5XzLAO+1O0032uuAPTDiaQBRX3xTA25yCbId0oMReVvHGo2zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtrEJpci;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AOGtv8Mf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0276070E66;
-	Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2E3607E903;
+	Wed,  4 Nov 2026 19:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtrEJpci
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099821F000C1;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AOGtv8Mf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A96E1F0093A;
 	Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793820290;
-	bh=2cl+IPVJlClBxWQlKHZKipsDZ6QUPUvr34kW14M+CmU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LtrEJpciasdBqwJR7UCMuE83mRgAsfJd95YrCqYDxstR7kmS5ie32cqCleSTDaaCj
-	 pexMT53rH6JeiIckRf0FsyXlrrE+LmvbXYfuGgwrJ9QPN53f8MGC3wC9jB8Opil/hz
-	 +Dak9Jl6Z3ddnrQdc+DPJsB4sxbMYun4d684ySUDTkELbuu3V+izKiSvG7iv/3D+x1
-	 DmlScfuNYdb11YV+fQcAO/1jy0IkS7fwbrVy1W0sZxmkjQ5thaQ6uyZ0oIAeIdSH8p
-	 kKCjSgeRdYQ7pYEcfxnH2g2P61xxHmHUbAOzIVTBmQO6BMl9lsjtXDCwt6OF/NfOcL
-	 X2cGv/8LrLzVQ==
-Content-Type: multipart/mixed; boundary="===============2959817077743352993=="
+	s=k20260515; t=1793820302;
+	bh=x8nH5QJkKiZNUTowDxB/hMOFyVkHqFnuwosL7qreMAM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=AOGtv8MfSvpV7/N3SPQdxO34HN0jitae0lUNpVEJDAU9XLw0mdF8nEKatSbYah4D4
+	 pJnFyEpZO1zbMa9uji/9OWzr8wEr6lfii12mf0iU2Lh2VjsLavJMVeCqDZp/52sjZ8
+	 3Go4KV6nkkS39oFoJGSvgQnMVnncUKXYL8Mx162m4aQQqRHIlpeUtyYZQRcyHTHG+m
+	 F6SJS7Gx3owS0zf+1GA3KxpXJd3wQWd0E3FPh1GuNLid6UQ0pR28EaGxERe/wN3pMg
+	 +vSX7Zm5D1718tOrlyhaV4OrQ07V2BymOcNC4cPME/yryrTT1k2SVGUu6wuwzfR22j
+	 +9kSochp+NapA==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Jann Horn <jannh@google.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Chris Mason <mason@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Christoph Hellwig <hch@lst.de>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	Joel Granados <joel.granados@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Jan Kara <jack@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	coreteam@netfilter.org,
+	kexec@lists.infradead.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	ibm-acpi-devel@lists.sourceforge.net,
+	jfs-discussion@lists.sourceforge.net,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-cifs@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-sh@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	sparclinux@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-doc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-atm-general@lists.sourceforge.net,
+	Takashi Iwai <tiwai@suse.de>,
+	linux-input@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-debuggers@vger.kernel.org,
+	"Christian Brauner (Amutable)" <brauner@kernel.org>,
+	Chuck Lever <cel@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH RESEND v2 36/51] proc: don't let NOMMU map procfs files
+Date: Wed,  4 Nov 2026 20:24:48 +0100
+Message-ID: <20261104-work-procfs-bugfixes-v2-36-021c84d852e0@kernel.org>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
+References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,76 +115,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <8397ab89d713edcda68bf7dfa564b3a6f2c7d4c420a9a1a9a49fa2dfc8833233@mail.kernel.org>
-In-Reply-To: <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
-References: <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
-Subject: Re: [PATCH bpf-next v8 2/2] selftests/bpf: Check bpftool batch map dumps
-From: bot+bpf-ci@kernel.org
-To: hi@tychen.cc,bpf@vger.kernel.org
-Cc: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,shuah@kernel.org,daniel@iogearbox.net,ast@kernel.org,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3847; i=brauner@kernel.org; h=from:subject:message-id; bh=JTUUxaAv8g+OiylD/jB4kSfUdacg86Bjtrwx1fOwQ90=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS9bvzxcvsOxp23JLZfCWya6MPaPHGnRYPLhkVvf4fHB W9U5hb431HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRyk+MDK+PBU/le8dv0ftD 839XV15oaNPWrTw8hs1fHTLi/wid+Mbwv6CPOeDfzSePDj+a/VD2SORxlTWdy84uUOARvTIlTdD JgRcA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
---===============2959817077743352993==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Every procfs file has a ->mmap since commit 786d7e1612f0 ("Fix
+rmmod/read/write races in /proc entries"), whether the entry has a
+->proc_mmap or not. On NOMMU validate_mmap_request() takes that to mean
+the file can be mapped. procfs has no ->mmap_capabilities so a regular
+file gets NOMMU_MAP_COPY, and a private mapping never calls ->mmap at
+all. Instead do_mmap() takes nommu_region_sem for writing and
+do_mmap_private() reads the file into the copy with kernel_read().
 
-> selftests/bpf: Check bpftool batch map dumps
+Reading /proc/maps takes nommu_region_sem as well:
 
-TL;DR: Commit message and comment say the selftest's injected -EBUSY mimics a
-hash bucket lock failure, but rqspinlock apparently returns -EDEADLK or
--ETIMEDOUT; test still works, so only wording (or the errno) needs fixing.
+  mmap(NULL, 4096, PROT_READ, MAP_PRIVATE, open("/proc/maps", O_RDONLY), 0)
 
->     Batched dumps must print the same output as individual lookups. Use an
->     fmod_ret program on security_bpf() to count the map lookups made by
->     bpftool children of the test, and to fail batch lookups with -EBUSY as
->     a hash bucket lock failure would.
->
->     For each map type with batched lookups, compare plain and JSON dumps
->     with a dump whose batch lookups all fail, and check that no individual
->     lookups were needed. Cover BTF and per-CPU output, an empty map, 1-byte
->     keys and unaligned values. With 4 KiB values, check dumps that need
->     several batches, and that failing the first or second batch lookup
->     continues with individual lookups without restarting the dump.
->
->     Assisted-by: LLM
->     Signed-off-by: Tianyi Chen <hi@tychen.cc>
+  do_mmap()                          // down_write(&nommu_region_sem)
+  -> do_mmap_private()
+     -> kernel_read()
+        -> seq_read_iter()
+           -> nommu_region_list_start()   // down_read()
 
-> diff --git a/tools/testing/selftests/bpf/progs/bpftool_map_batch.c b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-> new file mode 100644
+The task hangs for good, holding nommu_region_sem and its own mmap_lock,
+and every mmap(), munmap() and exit after that hangs behind it.
+/proc/maps is 0444 so any user can do that.
 
-[ ... ]
+Give the procfs files a ->mmap_capabilities on NOMMU that allows
+nothing. That covers every entry and not just /proc/maps, procfs can't
+know which entry's read takes nommu_region_sem. Mapping a procfs file
+then fails with -ENODEV, like mapping a file without ->mmap did before
+786d7e1612f0. NOMMU never called ->proc_mmap() for a regular file
+anyway, procfs never offered NOMMU_MAP_DIRECT.
 
-> +	} else if (cmd == BPF_MAP_LOOKUP_BATCH) {
-> +		batch_calls++;
-> +		/* Same error as a hash bucket lock failure. */
-> +		if (fail_batch < 0 || fail_batch == batch_calls)
-> +			return -EBUSY;
-> +	}
-
-The commit message says batch lookups fail "with -EBUSY as a hash bucket
-lock failure would", and this comment says the same.  Is that accurate?
-
-Since commit 4fa8d68aa53e ("bpf: Convert hashtab.c to rqspinlock"),
-htab_lock_bucket() returns whatever raw_res_spin_lock_irqsave() returns:
-
-    ret = raw_res_spin_lock_irqsave(&b->raw_lock, flags);
-    if (ret)
-        return ret;
-
-and rqspinlock only fails with -EDEADLK or -ETIMEDOUT.
-__htab_map_lookup_and_delete_batch() passes that value back to user space
-via "goto after_loop", so no BPF_MAP_LOOKUP_BATCH path returns -EBUSY for a
-lock failure.
-
-The test still works, because dump_map_batch() in bpftool treats any error
-other than -ENOENT the same way.  Could the comment and the changelog say
-"an error other than -ENOENT" instead, or could this return -EDEADLK?
-
-
+Reported-by: Chris Mason <mason@kernel.org>
+Fixes: 786d7e1612f0 ("Fix rmmod/read/write races in /proc entries")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ fs/proc/inode.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41893799307
---===============2959817077743352993==--
+diff --git a/fs/proc/inode.c b/fs/proc/inode.c
+index b7634f975d98..9933f03ab9fb 100644
+--- a/fs/proc/inode.c
++++ b/fs/proc/inode.c
+@@ -466,6 +466,18 @@ proc_reg_get_unmapped_area(struct file *file, unsigned long orig_addr,
+ 	return rv;
+ }
+ 
++#ifndef CONFIG_MMU
++/*
++ * NOMMU never calls ->proc_mmap() for a regular file. It reads the file into
++ * a private copy instead, with nommu_region_sem held for writing, which
++ * reading /proc/maps takes as well. Don't map procfs files at all.
++ */
++static unsigned int proc_reg_mmap_capabilities(struct file *file)
++{
++	return 0;
++}
++#endif
++
+ static int proc_reg_open(struct inode *inode, struct file *file)
+ {
+ 	struct proc_dir_entry *pde = PDE(inode);
+@@ -559,6 +571,9 @@ static const struct file_operations proc_reg_file_ops = {
+ 	.unlocked_ioctl	= proc_reg_unlocked_ioctl,
+ 	.mmap		= proc_reg_mmap,
+ 	.get_unmapped_area = proc_reg_get_unmapped_area,
++#ifndef CONFIG_MMU
++	.mmap_capabilities = proc_reg_mmap_capabilities,
++#endif
+ 	.open		= proc_reg_open,
+ 	.release	= proc_reg_release,
+ };
+@@ -572,6 +587,9 @@ static const struct file_operations proc_iter_file_ops = {
+ 	.unlocked_ioctl	= proc_reg_unlocked_ioctl,
+ 	.mmap		= proc_reg_mmap,
+ 	.get_unmapped_area = proc_reg_get_unmapped_area,
++#ifndef CONFIG_MMU
++	.mmap_capabilities = proc_reg_mmap_capabilities,
++#endif
+ 	.open		= proc_reg_open,
+ 	.release	= proc_reg_release,
+ };
+@@ -586,6 +604,9 @@ static const struct file_operations proc_reg_file_ops_compat = {
+ 	.compat_ioctl	= proc_reg_compat_ioctl,
+ 	.mmap		= proc_reg_mmap,
+ 	.get_unmapped_area = proc_reg_get_unmapped_area,
++#ifndef CONFIG_MMU
++	.mmap_capabilities = proc_reg_mmap_capabilities,
++#endif
+ 	.open		= proc_reg_open,
+ 	.release	= proc_reg_release,
+ };
+@@ -600,6 +621,9 @@ static const struct file_operations proc_iter_file_ops_compat = {
+ 	.compat_ioctl	= proc_reg_compat_ioctl,
+ 	.mmap		= proc_reg_mmap,
+ 	.get_unmapped_area = proc_reg_get_unmapped_area,
++#ifndef CONFIG_MMU
++	.mmap_capabilities = proc_reg_mmap_capabilities,
++#endif
+ 	.open		= proc_reg_open,
+ 	.release	= proc_reg_release,
+ };
+
+-- 
+2.53.0
+
