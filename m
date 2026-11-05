@@ -1,71 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793893030;
-	b=SqvAt/vjAwYHoDGMID4HLKSzx/YDErLpyZu0SN0YCsQy0oM488jtJOMpIJTNAXbG6nJY
-	 NQDrtq13p5Z1nOdD2QL5sWBbSKGkOhmkd5Elp8nfsQD4PYEyNIqC7ujYwuE9mfk4A1e3C
-	 s/0s0mXoaLc2mRIDtCwi6s6k8JEHbWG4Yw2+QRiwXci6daFRyNmj5sHu8wbM2TmCb4Dcj
-	 sdB/s8xXzz100ZT/99yNn/2cgMWArvzrZKgPEYgZebdL7YvtixFg27WNAQlxkajTrxFa6
-	 6taogncnHK05AZLtJVoT2ShiO48Hrjhx2q7rFCp8JutouscrpBijgjXYG5AnUggatdg==
+	t=1793893066;
+	b=K3QZwlXJ70WDgMluvccIfPTs3aSBHi2oZn4IlGlqB5P8sqAMUO9W6tURfN15OmDyKRwb
+	 U5rMiF9u9SZLM47IpUNRyhloXzX1vvkroeb7z+cp/CcQCWdGp5Xf8kuNFa9J2VLEpw+C0
+	 aYRvLYd0GcC3INdRUTcZ9QSPeNnXePl6V/C3qhXrYTh1xvuAdrmFEjajZWFMDsSaMh5BM
+	 cskBFo7uWSGM80J3AQcXf88+XM1Kbr193+v/5ui5ENFtpZbtfEVt6OXnFAXX2nc38Xsij
+	 S7C1FH6y1fCgFhv/S4dI5P8QzG3Ib6RiBmEWNfn++ggDil4vWhu26iY40wLtxqSzC1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793893030;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793893066;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=kvailjwqfOmhbJJjcy8TbvowePxzON+06QO6Up9gGT0=;
-	b=Y0SH8b7t3GruBL7RqDcm8CsrrsKGtNXKN0dsLDi0BJKkXIfDvFr1G5AznCNTg5baRQpy
-	 TJpC3VAqOSMejEWzqVrNn6ZmmhFpoKxez9eNrOuwMTX2IE+dHVnSn+YSA/pyBNArzUdM6
-	 sijboqiQgZrS9exyMUolebvlP8GuhupPl/LCjw4VzdC8eSP2FBup0xhkFtkFyKCxYUWMe
-	 pd4HmpMWMVhmOeeqKrgmhY1wDGffEN0CiGaAuJVa4LkxHsszLAlJOEsOFHZGc+9+lA8l8
-	 f7Zc8FN/u2gtAp81AXQOId0RnPpSbwkkCjpxeYhh4xe2E4yXpUGX3jzYMVO4X9Ud8hQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=fet26sVrxKqTmXFV5z0zr0pfRaJkw61an1sCfVShooQ=;
+	b=sZQhtq7iFrBX9mQnftEfyc2HTO+XQKeGU1AgkAJ0RIt0F5wcERYsq+Y2I6J5h14IUptW
+	 79UZxVhh17U2/Rt65m5rUZwx+Hv5HMnZh8K5RL9bbwGMh3E01wK3excY8J2enLFb2913U
+	 LgT6e9z94cHn3+sxKTPtQPaXOcyWpD+r92wojxF8itqmyY4F+Bk5DQ0viDoTtRJr3GIMQ
+	 9fzA/YXnRjii5hKcGJrDe8D6C03CKzlWrfZ1SaJdmOnOftBe41nOgbLTSnLY8lbQRr1lT
+	 gMdGM4qeqkKhy1KlP2njTWM3rwunS5mpub/0edz+FzxYpPoJTrfoxgh3XUwqeiWAS8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
-	arc=none smtp.remote-ip=209.85.218.69
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MI7FeziX;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4681E606A32E
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:37:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4681E606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c40285df2a0so159597966b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 07:37:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B7C606A331
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:37:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9B7C606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MI7FeziX
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a549cd7fd2so8870835e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 07:37:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793893024; x=1794497824; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kvailjwqfOmhbJJjcy8TbvowePxzON+06QO6Up9gGT0=;
-        b=Gxle+Ke/ft0qPJDBX0JQWzA1ZLmQgVZzBrWyEVoNZxTcMrrajfo1O4ASCBG23EIcjq
-         cUy28QM3QPVKkqYviAKt4UuDyzpJABmNQR4JRuUY/9J9Hkfes1ObSbTFJBTMv0xgyn36
-         I605vsADiFHcxXf4eX61I0j4Gi+kKyS6oNG5NvaDGMqTtAbtArrAfHjtJRgz0KAQXT73
-         KzZfmQgJwuEWSDCZ0Dz1NtIeuRDvR+OePZg4x0U3S37xPzoaWN3MauXtR0KYCrK+pAhq
-         rsIk4Yf8fmIvbb2p7AhpUlOpetxQvv3G4Qgr9XZcKOy2pWy+dVo2136CYJcH164SwW/n
-         pIAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793893024; x=1794497824;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793893064; x=1794497864; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kvailjwqfOmhbJJjcy8TbvowePxzON+06QO6Up9gGT0=;
-        b=h9nbodxnTDXwpwZGA0CdAa7/mmtXaYkoKLE6IR7iWr8tMikrYHUCjHnmvosMwC7V7G
-         +wqufEx2e52j7nQ/uzRrPI+v3S4igWf5caDWp8ros9BHYq6O8LXKm37jHSgH49CSicJC
-         kbBc1d4Pdl6z8gZdRuxwyzH0GAWEQN1GPiXJKaMg4pQ4ciPwbOsxITZ+XojatoLa4LPC
-         3UFibc3ZIxENwKouzOVgcX3u3KkIVInEpH0pPkxiAwi2491iYzobw0PCUZ4MNetL3S5z
-         +WgHfeB7XIiDLlgLsItemeh0sleFHMAaf0kCxbIA22Q35johGYumtOcolG4yCce44VRO
-         2iJg==
-X-Forwarded-Encrypted: i=1; AKwUvBx1ZRlShdNe3NtagkW/Uf/hz/z3gcYaWvcq4scKpGREUcBT0eV4OAbn3VZ/wsiWrH95BZL3tgxe/UWRGnMZrBM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9sA0Q4f/ZrAFWuHbvLOLiRBKHqsZCd3xJiPX6kVi5R4xe46R1u
-	CYa9HDfi8aGtsUudppes+0bGOwQrVP8HvSUfFthFRVz66qd/n46xfKvMAEgC66ZK6/QodYje4g=
-	=
-X-Received: from ejcwz8-n2.prod.google.com ([2002:a17:907:b048:20b0:c4d:23d9:b0d9])
- (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:cb88:b0:c26:19e3:e98d
- with SMTP id a640c23a62f3a-c4ca7af17a5mr1750569566b.45.1793893023363; Thu, 05
- Nov 2026 07:37:03 -0800 (PST)
-Date: Thu, 5 Nov 2026 15:37:02 +0000
-In-Reply-To: <aunVmg42/S2uUDWR@hallyn.com>
+        bh=fet26sVrxKqTmXFV5z0zr0pfRaJkw61an1sCfVShooQ=;
+        b=MI7FeziX2e+PiUMoRCZ1LaVg8Ln7yDJ5UrS1YIsru6G3Vz6euXAONYeEpVryTIQrcF
+         hukPnwTDZoGv0MG2l34dSNeapvlrO+NSQXuQenpe4A2lbX6LBo0Dx7oENYMZuvTOXtBc
+         h3dPRN3mL5q1gHJYHQOJzI9l6uvbhyqui/Fe47QvccQEvupfXKAVC4CG+xfKQj7lKYvQ
+         14CK/TzKtYYhNWrAWI+EG2hRBoIMZpjcHXY4et7icjQJFvtcBOhcuFrO1VYzwR8uWvb9
+         Gm0sLXjwCX7C9J4JTm4vTwqm36Ky5zg9AN+IxYdue4DbWTQHG1PlqB3zvoxH8mbF4q74
+         iI2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793893064; x=1794497864;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fet26sVrxKqTmXFV5z0zr0pfRaJkw61an1sCfVShooQ=;
+        b=uQWh+i9dvVr8s1Zsxd5ee/6YK2vknA/9mx6nYiu8fjJvXE0M3fLqa+30SCFtz6FD8/
+         dSLRo/rck6B0Wgt0Z2yQnQ00BAGpgiu0J9GecrnpdN3k7PzJf6TORbkpM00xV71sI1a4
+         QipX//abOqHDiRTYGZNbHMEBJ9haxh1d3ZSwrx3vEOSIUmqz1u2osmA81Uf6y82WTGp3
+         W/AdmSOSus2uuRDGBInaaeom7L9PE7sOH6ejGOJHtu4YoGq3v8a2gi9kO3fQTP7+dEgq
+         Jr2Nn+J5KN6rO/5vf3qYTeuBVRvWY9nyZUp9SyFXZ03zWw8BLSTt7bL6xsE0FSz2SuAF
+         ZLKw==
+X-Forwarded-Encrypted: i=1; AKwUvBx3F75x59fObbUWqjGRZ+2IuO/SStj0EeXXoOfJL5uqfhTZWz1cOC7y/JdLD2vlkKEbd4SbhRzlE41Qv6s7oc4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/GLntdz1DwdV9kD1WIde0GNi6u5GJdFfE1EFdUnXQ5tieT4bih
+	paLbjj/i5zSkpoHE8dWMkKbL0Ys9qcs1ks9nygcKJxtEQxLWhWhCuHb3
+X-Gm-Gg: AYBFou1LSb0G45Yp3skk4RA5TDZJmcRbvp9yEmq4l0ra1EyVN4m2WuB3IeEITqI6TGQ
+	MIHwZ7ZWkm7CJ/ec4ChYqfMwSwHiyso18NgAlDDu50LQhvk+4+0dgx+xhX1gEEWfsLpDFULcqRK
+	jMjcr8R8uWCtOhwwqL4cNfyFX1t+nI86ZaDWB83q6S3sM+hJKvlFIWItu4tNH59cj8KUrQyu2Sm
+	FsMhMGH07DyKbfj6nsdVWKRCEp61o6kzsA9VRfMWdT3YjvntCK1kDLemPcLvRdCjMneyZK/94Bu
+	3h5mAXzaEyUCjgbsyh+I7h/3e4kRWpr+SW5OqeEQ69NDZtuhyEbm35df666v74VwPPdA0Qt2Daq
+	l3V48V8rYfAjnLM0yLhDFIqelMOYy+AjXT9A9i7HY8r66s8cM1Y/9YYsMvV+t5v4GNPsU2mM/2f
+	cXc1sjIQ+hfn0c9DWFts6KaQChO3ugweFuYRhbg5sG6I+MyeD7IDXvToCWTgXQaXfDbca+6DdQP
+	DeSb6bVAuJf05twlIDrQBed9zAigdVmIPHRXayedhe2sJEkXMavgAKgYvyoz2JHdddb4MNREAyV
+	IRZEUO+LRI2Z1q155PSvKAwh1JxvxjVVuWD/lEK8gyYTMGdBz2XD+t5pdh98Owkv4dA9loZRwU/
+	ehJ119gaOvt9XXPir6tbXWNMc2RRPOQ==
+X-Received: by 2002:a05:600d:82e2:b0:4a1:c27d:e1a8 with SMTP id 5b1f17b1804b1-4b55d7d7a2amr57882865e9.10.1793893063915;
+        Thu, 05 Nov 2026 07:37:43 -0800 (PST)
+Received: from andreayoga.localdomain ([151.43.242.194])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56f5e59d3sm79741485e9.10.2026.11.05.07.37.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 07:37:43 -0800 (PST)
+From: Andrea Parri <parri.andrea@gmail.com>
+To: Tycho Andersen <tycho@kernel.org>
+Cc: Andrea Parri <parri.andrea@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Sargun Dhillon <sargun@sargun.me>,
+	Hui Peng <benquike@gmail.com>,
+	Bradley Morgan <brads@mainlining.org>,
+	Cong Wang <cwang@multikernel.io>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 1/4] seccomp: wake poll waiters after failed addfd send
+Date: Thu,  5 Nov 2026 16:37:34 +0100
+Message-ID: <20261105153735.5368-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <autZ5kL0S5MkX_8l@tycho.pizza>
+References: <20261104103736.71956-1-parri.andrea@gmail.com> <20261104103736.71956-2-parri.andrea@gmail.com> <autZ5kL0S5MkX_8l@tycho.pizza>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,110 +108,33 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261028221705.3915340-1-halg@google.com> <aunVmg42/S2uUDWR@hallyn.com>
-Message-ID: <auyink594bxptAPN@google.com>
-Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
- opt-in netns loopback
-From: "Hallgrimur H. Gunnarsson" <halg@google.com>
-To: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
-	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Jann Horn <jannh@google.com>, "=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
-	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
-	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-api@vger.kernel.org, containers@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 03, 2026 at 06:37:46AM -0600, Serge E. Hallyn wrote:
-> Generally, if I, or some users I support, need to use unprivileged containers
-> or user namespaces, then when an 0day comes along, I can hopefully trust them
-> not to exploit it.  The biggest danger comes from the fact that, right now, if
-> they can use them, anyone can.  So if someone can trigger some other code running
-> as user nginx or something, that can become a root vector.
-> 
-> So what if we had a built-in feature or LSM which implemented a credential based
-> whitelist, entered at firstboot?  Something like
-> 
-> ```
-> # Default deny
-> uid == 1000  # approved
-> 1005 < uid < 1010  # approved
-> gid == 1005
-> security_label = lxc_user_t  # Not sure how far we want to go with this
-> tty # must have a session
-> ```
-> 
-> Now, if you want to use user namespaces for generic sandboxes for all
-> users, e.g. to confine browser activity or nginx modules, then this model
-> may not fit.  Or rather, it might need a few tweaks.
+On Wed, Nov 04, 2026 at 09:19:10AM -0700, Tycho Andersen wrote:
+> Hm, don't we return success or failure from
+> ioctl(SECCOMP_IOCTL_NOTIF_ADDFD) via kaddfd.ret in
+> seccomp_notify_addfd()?
+>
+> I don't really understand why this is necessary unless you're ignoring
+> the return value from that call.
 
-Thanks for taking a look and sharing the credential-based allowlist.
+Right, the issuing thread gets the error and can recover directly.  The
+edge-triggered example demonstrates the missing wakeup, but does not
+establish that a supervisor needs it to recover.
 
-The latter scenario (generic sandboxes for all users) is actually the
-primary use case that I'm targeting. I want to allow unprivileged users to
-create user namespaces, e.g. for sandboxing, but without granting them
-security-sensitive network capabilities (CAP_NET_ADMIN/CAP_NET_RAW) when
-they are not strictly needed, given the historically high risk of local
-privilege escalation associated with them.
+The wakeup matters for other waiters on the listener.  A thread or
+process waiting for EPOLLOUT while another one issues the request can
+see no EPOLLOUT while the request is pending, and nothing wakes it when
+the failure moves the notification back to SENT.  seccomp_notify_recv()
+wakes EPOLLOUT on its transition to SENT, so the two addfd paths are the
+odd ones out.
 
-The two approaches target complementary layers of the problem. A credential
-allowlist at creation time controls who can create a user namespace, while
-this patch series controls what capabilities are available inside that
-namespace (and its descendants) once it is created.
+I don't know of a supervisor that waits for EPOLLOUT from a thread other
+than the one replying, so the motivation is to report EPOLLOUT
+consistently when a notification becomes SENT again, not to fix a
+reported hang.  I'll revise the changelogs to make that distinction
+clear, and drop the stable tags from patches 1 and 2.
 
-Gating creation works well when there is a clear boundary between trusted
-and untrusted users. However, in a multi-tenant environment (like a large
-container fleet), we generally treat workloads as untrusted by default.
-Because we still want to allow these untrusted workloads to use unprivileged
-user namespaces for sandboxing, it is essential to keep the attack surface
-small and follow the principle of least privilege whenever possible.
-
-More specifically, this patch series enables that model of safe sandboxing
-across three key use cases:
-
-1. Configurable capability stripping: Administrators can enable unprivileged
-   user namespaces for all users to support sandboxing, but configure the
-   system to strip CAP_NET_ADMIN and CAP_NET_RAW by default in new user
-   namespaces created by unprivileged users. Basic sandboxing rarely needs
-   these (except to bring up loopback, which Patch 1 addresses via
-   CLONE_NEWNET_LOOPBACK).
-
-   The per-namespace bounding set can enforce this either globally via the
-   sysctl, or explicitly via clone3() at the container manager level. This
-   restriction is monotonic and persists down the namespace hierarchy.
-
-2. Selectively granting CAP_NET_ADMIN: Some containerized workloads
-   legitimately need CAP_NET_ADMIN to configure advanced networking for
-   sub-containers. Because an unprivileged creator's child namespace is
-   bounded by:
-
-     parent_bset & (sysctl_ceiling | creator_effective)
-
-   a container that is explicitly granted CAP_NET_ADMIN in its own user
-   namespace automatically propagates that capability into the bounding
-   set of any child namespace it creates (unless it is explicitly
-   dropped).
-
-3. Dropping capabilities for nested namespaces: If a container with
-   CAP_NET_ADMIN needs to spawn an inner user namespace to run untrusted
-   code in a nested sandbox, it can use CLONE_NEWUSER_BSET to voluntarily
-   drop CAP_NET_ADMIN from the inner namespace's bounding set. This
-   guarantees the nested sandbox cannot access the capability and the
-   restriction persists for all further descendants.
-
-As a quick clarification on how this interacts with the hierarchy: the
-bounding set restricts tasks inside the namespace and parent tasks
-relying purely on the parent-ownership check. It does not restrict
-tasks in an ancestor userns that inherently hold the capability.
-Therefore, in the nested sandbox scenario above (#3), the parent
-container with CAP_NET_ADMIN can still configure the sandbox's network
-from the outside (by using setns() to enter the nested netns directly)
-even though CAP_NET_ADMIN is stripped inside the sandbox userns.
-
+Thanks,
+  Andrea
