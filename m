@@ -1,59 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793847768;
-	b=Nq0gfD76YCXiZEom9ZU056lK6Nl4/HpEpxXrgxiwissE4oaV0K/3ey90j013tgV4blVb
-	 x6AFXxiCwrWVOCSkK6ddlgtC6RpW1dSNbNxn3P+QQxaAThCwd4pOJvJsnpqTI5I/R1KDv
-	 Lx7NKblaTS1UbU3/O/eGrue40k8YH0Go3sxByqKq7Cjkdz2vQZrKvGmo49YcvxE/AV92L
-	 IV9sYuKD8q+3cwVbmCxhUc/hWKuS5G8eiug8Yko4JuizeTOt7ajoBtVA9l/+u2I3yAcxV
-	 tnNWD8LyVnRSvi3X1EP40zuDKX1S0Ial/OFHjGNGOG4JJc/CL3jgazavY5JjgJ1zjfw==
+	t=1793848118;
+	b=w507EVLrjcRZ9c/5iG39KqqoRyQPqWY9vHf2UM3iFahHXB3gri29z+WIteIRpJKZ+kGq
+	 d/IOZ/ObdRz+EvWdsRODUcv3vdSCMS/Pg1Arisue2cQ+17CqmG2bVuHk1pxCZ/ULjv3dE
+	 e2ufKfK6ulcMVm/9jZXMNYFqdVsmmaRLjB/VbJ6f2258/m6izJN/p3IjOkL+tduTd8BSu
+	 bruIyyrhsG5wq2zeP+eDCPbFlSWcFI1ZR0MWXCJgC4hYorjIsqYwBRz3WbpSK2A15KjDk
+	 JbOdgm90lbQ9izvpNXaFbL7LOogW84oMeju4++itiSt5j4UggxD4IjGu54UlO5NLOPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793847768;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=WdKOtzvnJNMkGMT9C06CE/i0pxoSQC4W+nBE12HQ728=;
-	b=Wg2tFjj5q2Rx8qoXH5S3gGnS7OpsSe6TPPjyEx8czUJRdwrKDygIbiDiYAshVgb+bA6j
-	 9qcNCuWmW+idhwr8MbxU1B7QPbqarKQnr5necaEkNBGBo0p5FWy67lbw4I60IbOIRGhE1
-	 6qzcRsTN+7XAiX3D/kd7oQp25CA8E5OxqWr/AedANI+SpnjDYrELFXhxdS6kJMnKnDoe/
-	 Y17n6+kul48KPE4cI6UK6GZc7BtvNXgWilqXtSrUzZ/oXn0lrvBmjwZumh/Ez46HTGWBd
-	 LuyYt8tOxRy42vMg2m6SHVtqfGtEqq94bepGhTPFO/yjVAZQXNBIOapNiPaKbn/+6hg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793848118;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=+hTcrw2qlCHhO70X54WC3Z16qJoO8Le0y8rhZa3WBPA=;
+	b=KuDhn850FseqK+zPUZTCF8Y4KtN4UXZ/MfetFy3qvnt43Xop1zYOcJKWPdxhYznjBhXl
+	 5yEn00O7o30dodhaaJNpnT0SFIwt40H1iruxA6lsCVsaZNxWVG3/ewcvoPhJdkfFWsNVp
+	 cQDO1KQGRM/yFU061XcyEVFAcK0CxWSu2sKFYEfXrrT0XHMFY1O+JZ73ib3DkwwyKQiH3
+	 i0VTthtEu9th6irXJTDYZ2PQBjYLdNcHq7NeAw+KwQ25U1HJpNMFn9fsf3dy04Y/vdi+e
+	 DdBGz6fMucyHk7JpnxwyGtgas3P+nh5ATJ39d/fY7u5E2AYEkyUKAVTwjgCFFz32eBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dPFoeNED;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--wakel.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XhKUI6Xq;
+	arc=none smtp.remote-ip=209.85.214.200
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CE3606A329;
-	Thu,  5 Nov 2026 03:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC1D606A32C
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 03:08:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAC1D606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dPFoeNED
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52FB1F0093A;
-	Thu,  5 Nov 2026 03:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793847767;
-	bh=WdKOtzvnJNMkGMT9C06CE/i0pxoSQC4W+nBE12HQ728=;
-	h=From:To:Cc:Subject:Date;
-	b=dPFoeNEDP5/Vl/yIotbD3gBHZrXY9GIMk+nm3fnXG+/f3hvyXzBD6vLfrFEgBE3hP
-	 A79vQGKy4T9/m+sM/sdzrFq04cBqOvaEEtmsJrduruHAmYIXQAhOzLLhKheB7GANBu
-	 3pbovby8a7eJY0hkw6B4eEqc8reCEt2bEtfJVSYzZTURCBMsfTfR6HpFYHB08j0dJF
-	 WACeoxM0Ov/N5MOXaIWq6Mm1r/233UfZB0KGK3VIEDcr30Yfr1kPLUnag2MlqbWpL0
-	 fZa+bDenXLAS3D0DubgVlux9LLucV/2E4vhTF6Tl7HwVHb2DQrPwj7TdZiDehRaWmk
-	 sTCc9CYEr/ZOg==
-From: Sasha Levin <sashal@kernel.org>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/x86: report a skip when shadow stack cannot be enabled
-Date: Wed,  4 Nov 2026 22:02:45 -0500
-Message-ID: <20261105030245.1241500-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XhKUI6Xq
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2eaae8d29e0so12561115ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 19:08:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793848117; x=1794452917; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+hTcrw2qlCHhO70X54WC3Z16qJoO8Le0y8rhZa3WBPA=;
+        b=XhKUI6XqNxb34vhkv7Xp1GhTqJ/8iFS/JNQCI+ZjY1NqHajvZqgZxCFZrDUwYMwvE6
+         BP3hw1pJEKqMfWHwNp4VFifFDntIMLzANbnT39cBRcH2bcpyXKvyGeh/g2k6i4WZ+1DM
+         waphUfBfdMgHKwUp0jio826vFDu9gAZOm5JagNhghm9vpnKVlVA3xf/GKx/Isqbl8W4+
+         yoxLa6+9ZH3GPn0TmquzEUxOlC9dKnWE/YbAWz/aZGxDK9lov4bf9BhqFksAazbDyvQj
+         0ELyOh6vCKlysmai1zFRysjZHoQ3AuJkQPY3bHNWaybinsO5k/NqxRmSG7+RkICE/i2J
+         YWmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793848117; x=1794452917;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+hTcrw2qlCHhO70X54WC3Z16qJoO8Le0y8rhZa3WBPA=;
+        b=vCC+4WrDW0lvqefUI8VWrskq5uORW/0SPVkX3EJiRiaUNlpmiqOaaSDOjondzB+3GI
+         DR0f5WI6tZeZNBL8kzLL7nrTtEEEXI/sVcvApt00mlEWfkrma8EvutszO/v43u/btc4x
+         k4iD5Oml0H1SeQCXXXeMaJ11FvADUU2p5l7Bu2fle50P5pGS0cD3E1cSe0guHnNc0u/g
+         pAclz6wLcTtthIhirh41Xw8iVLi3smUrNhQIh86nBj3m+88aLPlcRRXpAZZNILv/yG4+
+         LdfgCL6XIfR3KokhfOCfEuoEC0pIBmL9hN/dVk9aCLqofwswoePz+KtxvBMPXTY6BdnH
+         IUhA==
+X-Forwarded-Encrypted: i=1; AKwUvByUGNYigeFA5hwC0HbCt8uNVKI9ugB+o1xC52HUHHHMOUMMv/txIoKrIiLesSIqoFWqR9eyYnkTzCA19w4oOhk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+bCIQzFKWAYjflO50Xtrfzg+PdfdLjGhGG/868ZxSyt+w1XK/d
+	iD3rTHioDbLb9ErSwHvIX1LrnBEDV4DUdfQZ2XOQ825SIyL8LyMqk1Pd99Unx+PmjLQ2SkJbxPK
+	S7g==
+X-Received: from plof6.prod.google.com ([2002:a17:902:8606:b0:2e2:f305:e980])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3b8b:b0:2e9:7ff5:544c
+ with SMTP id d9443c01a7336-2eb3642fe87mr148706835ad.25.1793848116599; Wed, 04
+ Nov 2026 19:08:36 -0800 (PST)
+Date: Thu,  5 Nov 2026 03:08:34 +0000
+In-Reply-To: <20260910034821.2935214-1-wakel@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,49 +78,113 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260910034821.2935214-1-wakel@google.com>
+X-Mailer: git-send-email 2.56.0.398.g882cbad275-goog
+Message-ID: <20261105030834.3318480-1-wakel@google.com>
+Subject: [PATCH v2] selftests: rtc: Support harness test filtering and arguments
+From: Wake Liu <wakel@google.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Shuah Khan <shuah@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-rtc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Wake Liu <wakel@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-test_shadow_stack prints "[SKIP] Could not enable Shadow stack" when
-ARCH_SHSTK_ENABLE fails, as it does on CPUs without shadow stack support
-and on kernels built without CONFIG_X86_USER_SHADOW_STACK, but then exits
-with 1, so the kselftest runner reports a failure.
+rtctest implements its own main() function with a rigid switch (argc)
+check that only accepts an optional single argument for the RTC device
+node path. This prevents kselftest_harness standard arguments from
+working properly:
 
-Exit with KSFT_SKIP instead.
+1. Passing filter options like -t <name> or -T <name> triggers a usage
+   error because argc is greater than 2.
+2. Passing -l or -h causes rtctest to treat "-l" or "-h" as the device
+   node path and fail with access() errors before ever reaching the
+   harness argument checker.
 
-Fixes: 81f30337ef4f ("selftests/x86: Add shadow stack test")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Parse command line arguments with getopt() to pass all kselftest harness
+options (such as -t, -T, -v, -V, -f, -F, -r, -d, -h, and -l) through to
+test_harness_run(), while preserving the ability to specify an optional
+RTC device node path as a non-option argument. Also ensure optind is
+reset before invoking test_harness_run() so the harness can inspect the
+options, and bypass device accessibility checks when help or test
+listing is requested.
+
+Signed-off-by: Wake Liu <wakel@google.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
-Found with KernelCI's x86 builds, which leave
-CONFIG_X86_USER_SHADOW_STACK unset. Tested on an AMD EPYC 9655P with
-KernelCI's x86_64 build of next-20261104: the test now exits with 4
-instead of 1.
+v2:
+- Rebased onto v7.4-rc1, no code changes.
+- Added Alexandre's Acked-by.
 
- tools/testing/selftests/x86/test_shadow_stack.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Alexandre, the other rtctest changes for v7.4 went through the RTC
+tree. Would you be willing to queue this one there as well? Shuah,
+please let me know if you would rather take it via kselftest.
 
-diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-index 3d6ca33edba42..f7051ea525d4e 100644
---- a/tools/testing/selftests/x86/test_shadow_stack.c
-+++ b/tools/testing/selftests/x86/test_shadow_stack.c
-@@ -36,6 +36,8 @@
- #include <linux/elf.h>
- #include <linux/perf_event.h>
- 
-+#include "kselftest.h"
+v1: https://lore.kernel.org/all/20260910034821.2935214-1-wakel@google.com/
+
+ tools/testing/selftests/rtc/rtctest.c | 44 +++++++++++++++++++++------
+ 1 file changed, 35 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 552191fe1ca0..eb26d957835d 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -487,18 +487,44 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+ int main(int argc, char **argv)
+ {
+ 	int ret = -1;
++	int opt, i;
++	int non_opt = 0;
 +
- /*
-  * Define the ABI defines if needed, so people can run the tests
-  * without building the headers.
-@@ -1061,7 +1063,7 @@ int main(int argc, char *argv[])
++	while ((opt = getopt(argc, argv, "dhlF:f:V:v:t:T:r:")) != -1) {
++		switch (opt) {
++		case 'h':
++			fprintf(stderr,
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name] [rtcdev]\n\n",
++				argv[0]);
++			optind = 1;
++			return test_harness_run(argc, argv);
++		case 'l':
++			optind = 1;
++			return test_harness_run(argc, argv);
++		case '?':
++			fprintf(stderr,
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name] [rtcdev]\n",
++				argv[0]);
++			return KSFT_FAIL;
++		default:
++			break;
++		}
++	}
  
- 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
- 		printf("[SKIP]\tCould not enable Shadow stack\n");
+-	switch (argc) {
+-	case 2:
+-		rtc_file = argv[1];
+-		/* FALLTHROUGH */
+-	case 1:
+-		break;
+-	default:
+-		fprintf(stderr, "usage: %s [rtcdev]\n", argv[0]);
 -		return 1;
-+		return KSFT_SKIP;
++	for (i = optind; i < argc; i++) {
++		if (non_opt == 0) {
++			rtc_file = argv[i];
++			non_opt++;
++		} else {
++			fprintf(stderr,
++				"Usage: %s [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name] [rtcdev]\n",
++				argv[0]);
++			return KSFT_FAIL;
++		}
  	}
  
- 	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
++	optind = 1;
++
+ 	/* Run the test if rtc_file is accessible */
+ 	if (access(rtc_file, R_OK) == 0)
+ 		ret = test_harness_run(argc, argv);
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
 -- 
-2.53.0
+2.56.0.398.g882cbad275-goog
 
