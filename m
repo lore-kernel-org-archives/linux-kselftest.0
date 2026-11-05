@@ -1,129 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881017;
-	b=ljlfIxlYHrLjdN12JYZvm15+CyDA2hydyG+p13Ww7+zXBSqTEp4AnVKJq7Mn75f1r8DB
-	 +9O31RfBfVBYuiYXxHrooGz2s2la/h5RLiVhnqrJvBM0i0+xGYlquhPS6c3x9m6TABfgA
-	 KatCB12rLNO3MF4A/7BEXgfYyLalBya0/kVBzyArs8Qdx42Uwq/3AWYkGqZzlL1/+cuW9
-	 NNpk0GPZOQDsJz8LeT5MmpYDLcAhGHlTrq+O80m4vuBQUUO+rrAUNt2gXBYjxf0VvRfYA
-	 zhN/iBN8Y+88lOfAE0PS7/GAZSQ4Dr7Z/2jHuzyP3cOJeB+dFlj2wrB1LtzdiZRGXFQ==
+	t=1793881029;
+	b=GUYXRnoCg5GdUEFWEIXBFNdU8yXyXGwgMHHcQQCKgf2piK9c3IqJglDowqgMCTfnxezy
+	 zP5WkiCOlwkHBdTaZlKGcNSVpm4N598uIMgrnlCb3ROHDTrxHyvqSgcASoVSLy1/ZPjLo
+	 eiIV7Nu3hUQ0dMEH003030b+ly+Nh7dMVm7YLhKAQ5/twX6fAoyVQ8Lu8ApIDADBlEO9M
+	 sPkGP00ZptDXgNmn2cM6y1pz963sqZTSzir9OCKyQII8Pe/ZWBSSaF3VnHYiuesTdiMsx
+	 slvKbeSlkbic5z6Nbx8jl5qDxiw1ZfqM5i/eyXW2wP/+kywlJi1MjEy5v/XqZMmHr6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881017;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Spamd-Result:X-Rspamd-Server:X-Rspamd-Action:
-	 X-Spam-Flag:X-Spam-Score:X-Spam-Level:X-Rspamd-Queue-Id;
-	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
-	b=LsnINoozfAegRNqL8gA539tnQZBRx0I0sYN02EaYQ0MGx1SZfOHyrxTFDCbESVGRWGb2
-	 bx0s4p0Zsfy3zDTZ6Co5m815DWIIvwEPs7JrUbEnnmNJHNkSzy4CmsrBsvtOO+Lpsf/FL
-	 k0ZXURbvm/095R7sSrhrtU/qhsFemcaGSAifrj4kUNuIIgavpXiqML47OZ0Xs3DUHVnQG
-	 Y2IMNSJwX3mZ5R0HqIqc3zlc7aRVdDvLpff5rQ+aKRPPTKYIztbQpflcJGnyghrBk4NYY
-	 cNnhCjZaW/Qmvf9pms0QXnwLHCF7ldBCKfMF3es/th7JWID5zy+/mcTckfXJZuKHa/w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881029;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=f96Pxu+FTpHnnidUC9kHsSvMST/qKtUp9MInF1FSebU=;
+	b=exmNYh8Uy8cYmOnzCnMBmZ+26fsheESAveEHOg0cYU5sKmhDvnW90UWBOHshMN/dPFke
+	 3Hnwm4DbpaKqqcFqpNzcKT0Tj3W4URytbpRXesyj5M1P+Uc6MnTgxNhUahcWyx+jLRtPK
+	 w+n+EAsA1RxC8R21iMFY6srfh4oIn9htywQwCQv7dYwU8ha444g/nW7wYXGhll0ov01xs
+	 WFQLAq438dZz1Re/xC7XVjDDU/Pu7E6mM2kKFZ7w6zBr086r4YsM+GbbZxp/PTA5inz1Y
+	 udoudut4UChkQXdDGWOfWSJwJV7xtEgIbnHeivWTUZPEhYQnrP7nNbLjnusVi1WLgQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=suse.cz;
-	spf=pass smtp.mailfrom=suse.cz;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=cYe8TYsk;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=QIbMvVJs;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=qcWXmYyb;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=YQFOqDtq;
-	arc=none smtp.remote-ip=195.135.223.131
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PubjUOZF;
+	arc=none smtp.remote-ip=74.125.82.180
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F656606A329;
-	Thu,  5 Nov 2026 12:16:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F656606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D08606EEBB
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 12:17:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5D08606EEBB
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=cYe8TYsk;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=QIbMvVJs;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=qcWXmYyb;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=YQFOqDtq
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 58A511F458;
-	Thu,  5 Nov 2026 12:16:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793881014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
-	b=cYe8TYskNgcCDl9X/k1KW8A+of6s9HPRYsn3eNTPIV5RsFlT7AWS/MQE3Ksi3uh3QV4KD5
-	Hi2guTuJU7x2qqFFTRs6JOAz8i6Q55GuiUnI2xO+KTPomgEeNxSjhoYwnOYxznNqbm63Mo
-	5qtfkmh5zv/NMPGB0+8MSe7zifKcXmA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793881014;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
-	b=QIbMvVJsr8XvPWk78XYqkteMct1dWNms40BmNTEwa1LXYhQgAGTS+dajwGjNJCINSsxxSt
-	HemSrC/mVhMQ9jBA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=qcWXmYyb;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=YQFOqDtq
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793881013; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
-	b=qcWXmYyb5+mCW0254eM18Rdi4r0I1vVFScoBAC1JoCDgbQr+JVrkM2hgqEp84Kj2sVZnX6
-	yOxI9PyPOhb6xWYpHefOBtPtMSEL6Mz2dqvUxPwKWIeCnNhnabJauUjOIrpt/Ne/cxy6NC
-	ZAMNOvP3NI2+Dh4POTu44wQ8ZjW2uSA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793881013;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
-	b=YQFOqDtq+4SGdkOEWqs8BsjsIPs8cBY5Z7x8DRzRezIETmSxSypiEkth9ev7JNqvuGFopt
-	jijBqci6GEVKGZDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1F927133F6;
-	Thu,  5 Nov 2026 12:16:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 8uYuO7Rz7GpKHAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 05 Nov 2026 12:16:53 +0000
-Received: by quack.suse.cz (Postfix, from userid 1000)
-	id A35F0B6D5; Thu, 05 Nov 2026 13:16:52 +0100 (CET)
-Date: Thu, 5 Nov 2026 13:16:52 +0100
-From: Jan Kara <jack@suse.cz>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
-	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
-	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
-	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
-	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
-	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH RFC 31/38] proc: sysctl: resume readdir after the last
- name it returned
-Message-ID: <ba3zz2mphlmojth4kk3gvistj555c2sos6ft4ofb6cm5xfcsnp@3xas2kz2irvu>
-References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
- <20261102-work-procfs-bugfixes-v1-31-59422ed3e465@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PubjUOZF
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-36dbde64409so1417472eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 04:17:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793881028; x=1794485828; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=f96Pxu+FTpHnnidUC9kHsSvMST/qKtUp9MInF1FSebU=;
+        b=PubjUOZFIn6TfI8TFWd91gu5q+QFWOqi+Jh7QZAj/WHj8T1Fc4B9ftZue814hmpVB2
+         oxctTwvoS51/bTaBj3/EWaP7m2u/u6UFlfuao4p0OrG8NtvD1Y93AprVwSg/28QFyb1S
+         BgAoXwHkNHdiKh4po2KJOXc4m7Q1xHBfUio0wfleIEojSi0hWJpsSv/f5TgneiRzwOQO
+         EppY0eds20AbNdCpYqlxBJFLuXjdTjqyIunAR7bbwGRTYuEATbNkP1RLt7nBN7hajp5W
+         vZzLjuci5xFVsMslBiUpFYfhUljoERnRf8PrBNxlzdLmisrl5trDcDgWNyqszM01wzd3
+         WXNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793881028; x=1794485828;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=f96Pxu+FTpHnnidUC9kHsSvMST/qKtUp9MInF1FSebU=;
+        b=B12HsDsS4Mr++w1x42SxO2yFOwTK084tlTZBacvvP7NYo3q/rSlffJp95uaDZgSXDS
+         x5qHGQXw+OTDbGLl23UZ6jUytAhWRSFodXrOUsoroD22JvZUcp6HDjioKWe8R0YqiU1o
+         Gro0SMEhi0Md/06jZqsM+l1LiIEiltgVKV9Q5IjNkAlZe95DPtl/A6Gjm/icXtpCpVfG
+         Va3kJe6Vs05Pk/s1BznL9iq8MfCYC96gvc7PniqiHh5RU/HG6yBXUx9zBuLWMdIEOjT1
+         /VAft2v2wcM3k0mYZUwssFG1/S9+sXW8IsqrBrxmXBoLU1i10sArhEaZMyzqlm92Warc
+         4nqw==
+X-Forwarded-Encrypted: i=1; AKwUvBzZmvYF809m7tIdLEks0UqUGIzyai8CQNfhxUDgyaZAJn6nyBL7nRnO/YE+zssfBZfwb7tcKQJsIaSharB9680=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/uRuhuUrta2TPFEeR17g3VSWLtcFKGZiH/JpJe5BTLDh7HaLBO
+	U7WB/O2Ar7C3xiEJhuV57t+UmeZStEF3CvnELb+O1r458JDWBgrMOQoR
+X-Gm-Gg: AYBFou04ZVkYjPIlgRaE4D9g0M/+vV6c7S+3Bu4VpQynCKGaiI6UIE9edrk3hBQZyO8
+	vVyV3ZjYq1e3Vnl1GgplfXvUY8ai/z55DKeDdbogpkhx/lSz2V021pkzw1fc2EUVefTT/wMb7xp
+	5b6ybgXgiFiwn4gA5c1i076BCdK435G4nh/z75v5o/csMjz7bPYSc0alr18qw02FXQJfApXMF/N
+	/NRG9bZKijp93tYqiMW30b1lInCEY8B5/ymLjN2KCL3pZkRcGROcbBqLQNkfAPA38XURfk3wUj/
+	5iB7FKpWgbQato0o48b6tfIRvzQbhsGMT/B/qGlJi757mxs67vPgu58rUe8IS+cVgFJMtUjXr36
+	1mu5B4Mp1r6HwNRrU+GIavj2qnlaI3QVRKMdRz1JdeD/JAHPXg9s9EVl1CA4jkfj+PB3T3THJd+
+	+W1Y4YHFuXk/zbIlwNqVjdA2T3Ral+og/zczPKKN7ug41NnsUyTReGtxDm00QpZq92HhyhSVUsA
+	+k4/4Diek/E1PDAzlmDSlc/1qlZ/EcyZRLaVWkbiUcnwvbfA+fkwnipLO14GhvnUHKDhb8p0Jzb
+	R5PV4yOHJCigIjmABU9ym883FMwOy1mfzFcOPz5+AH3xTexZrdCJXhOERCOtjVXzJkc=
+X-Received: by 2002:a05:7300:ec89:b0:36e:97b4:1071 with SMTP id 5a478bee46e88-36e97b4317emr1464294eec.14.1793881027670;
+        Thu, 05 Nov 2026 04:17:07 -0800 (PST)
+Received: from boogieman ([2409:40c0:28:cf7f:a8e0:3d30:1c1a:630f])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca3966daasm21534841eec.23.2026.11.05.04.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 04:17:07 -0800 (PST)
+From: Abhishek Khade <abhishekkhade69@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Abhishek Khade <abhishekkhade69@gmail.com>
+Subject: [PATCH] bpf: Add network namespace boundary inspection kfuncs
+Date: Thu,  5 Nov 2026 17:46:42 +0530
+Message-ID: <20261105121642.38019-1-abhishekkhade69@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -133,85 +98,297 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102-work-procfs-bugfixes-v1-31-59422ed3e465@kernel.org>
-X-Spamd-Result: default: False [-11.51 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	R_RATELIMIT(0.00)[to_ip_from(RLpnapcpkwxdkc5mopt1ezhhna)];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[60];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:email,suse.cz:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -11.51
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 58A511F458
+Content-Transfer-Encoding: 8bit
 
-On Mon 02-11-26 15:21:46, Christian Brauner wrote:
-> proc_sys_readdir() counts the entries of a directory and resumes a
-> listing at the number getdents64() stopped at. The entries are sorted
-> by name, so one that is registered or unregistered in between shifts
-> everything behind it by one. Listing /proc/sys/net/ipv4/conf with a
-> buffer that holds ".", ".." and "all" and registering a device whose
-> name sorts before "all" makes the next call return "all" a second time.
-> Unregistering one that sorted before the position makes it skip an
-> entry instead. So a listing that takes more than one call shows a name
-> twice, or not at all. Even the 64k buffer of ls needs a second call to
-> find the end of the directory, so a device that comes up right then
-> repeats the last entry.
-> 
-> So remember the name of the last entry a call emitted in the file and
-> resume at the first usable entry after it, like kernfs resumes after
-> the node it stopped at. The entry itself can't be pinned across calls,
-> unregistering waits for that. If the position was moved by a seek in
-> between the listing counts from the start like before, seeking to an
-> arbitrary position has never been better than that.
-> 
-> That also takes one walk down the tree to resume instead of a walk over
-> every entry in front of the position with a round trip through
-> sysctl_lock for each of them.
-> 
-> Fixes: 77b14db502cb ("[PATCH] sysctl: reimplement the sysctl proc support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+eBPF tracing and networking programs frequently need to determine whether
+an execution event originates from the initial host network namespace
+(init_net) or an isolated container namespace, as well as extract the
+namespace inode identifier for correlation.
 
-Just one coding style nit below. Otherwise feel free to add:
+Currently, dereferencing task->nsproxy->net_ns directly via BPF CO-RE
+presents safety and architectural challenges:
+1. nsproxy can be NULL during concurrent unshare or task exit teardown.
+2. Direct comparison against &init_net exposes host kernel addresses,
+   complicating verification and KASLR safety.
+3. Reading deep pointer chains without RCU synchronization can trigger
+   verifier rejections or race against namespace cleanup.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Introduce three BPF kfuncs to safely inspect network namespace boundaries:
+- bpf_task_is_init_net(struct task_struct *task): Returns 1 if the task
+  belongs to the initial host network namespace, 0 otherwise.
+- bpf_task_get_netns_inum(struct task_struct *task): Returns the inode
+  number of the task's network namespace, or 0 on failure.
+- bpf_sock_is_init_net(struct sock *sk): Returns 1 if the socket belongs
+  to init_net, 0 otherwise.
 
-> +	if (!name) {
-> +		after = rb_first(&dir->root);
-> +	} else for (node = dir->root.rb_node; node;) {
+These helpers are registered under generic_btf_ids with the KF_RCU flag,
+allowing safe invocation within RCU read-side critical sections across
+tracing, LSM, and socket programs.
 
-This indentation looks too inventive to me :) I'd just use
-	} else {
-		for (...) {
+Add automated selftests under tools/testing/selftests/bpf validating host
+detection and container isolation via unshare(CLONE_NEWNET).
 
-								Honza
+Signed-off-by: Abhishek Khade <abhishekkhade69@gmail.com>
+---
+ kernel/bpf/helpers.c                          |  79 +++++++++++++
+ .../selftests/bpf/prog_tests/netns_kfunc.c    | 104 ++++++++++++++++++
+ .../selftests/bpf/progs/test_netns_kfunc.c    |  32 ++++++
+ 3 files changed, 215 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/netns_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_netns_kfunc.c
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 6788489a2..3584703d1 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -18,6 +18,9 @@
+ #include <linux/pid_namespace.h>
+ #include <linux/poison.h>
+ #include <linux/proc_ns.h>
++#include <linux/nsproxy.h>
++#include <net/net_namespace.h>
++#include <net/sock.h>
+ #include <linux/sched/task.h>
+ #include <linux/security.h>
+ #include <linux/btf_ids.h>
+@@ -2991,6 +2994,77 @@ __bpf_kfunc long bpf_task_under_cgroup(struct task_struct *task,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_NET
++/**
++ * bpf_task_is_init_net - check whether task belongs to initial network namespace
++ * @task: the task to be tested
++ *
++ * Returns true if @task belongs to the initial network namespace (init_net),
++ * or false otherwise (or if @task or its nsproxy is NULL).
++ */
++__bpf_kfunc bool bpf_task_is_init_net(const struct task_struct *task)
++{
++	struct nsproxy *nsproxy;
++	struct net *net;
++	bool ret = false;
++
++	if (!task)
++		return false;
++
++	rcu_read_lock();
++	nsproxy = rcu_dereference(task->nsproxy);
++	if (nsproxy) {
++		net = READ_ONCE(nsproxy->net_ns);
++		ret = (net == &init_net);
++	}
++	rcu_read_unlock();
++
++	return ret;
++}
++
++/**
++ * bpf_task_get_netns_inum - get inode number of task's network namespace
++ * @task: the task to inspect
++ *
++ * Returns the inode number (inum) of @task's network namespace, or 0 if
++ * @task, its nsproxy, or net_ns is NULL.
++ */
++__bpf_kfunc u32 bpf_task_get_netns_inum(const struct task_struct *task)
++{
++	struct nsproxy *nsproxy;
++	struct net *net;
++	u32 inum = 0;
++
++	if (!task)
++		return 0;
++
++	rcu_read_lock();
++	nsproxy = rcu_dereference(task->nsproxy);
++	if (nsproxy) {
++		net = READ_ONCE(nsproxy->net_ns);
++		if (net)
++			inum = net->ns.inum;
++	}
++	rcu_read_unlock();
++
++	return inum;
++}
++
++/**
++ * bpf_sock_is_init_net - check whether socket belongs to initial network namespace
++ * @sk: the socket to be tested
++ *
++ * Returns true if @sk belongs to init_net, or false otherwise (or if @sk is NULL).
++ */
++__bpf_kfunc bool bpf_sock_is_init_net(const struct sock *sk)
++{
++	if (!sk)
++		return false;
++
++	return net_eq(sock_net(sk), &init_net);
++}
++#endif /* CONFIG_NET */
++
+ BPF_CALL_2(bpf_current_task_under_cgroup, struct bpf_map *, map, u32, idx)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+@@ -5151,6 +5225,11 @@ BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ #endif
++#ifdef CONFIG_NET
++BTF_ID_FLAGS(func, bpf_task_is_init_net, KF_RCU)
++BTF_ID_FLAGS(func, bpf_task_get_netns_inum, KF_RCU)
++BTF_ID_FLAGS(func, bpf_sock_is_init_net, KF_RCU)
++#endif
+ BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_throw)
+diff --git a/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c b/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c
+new file mode 100644
+index 000000000..3072f7ede
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Abhishek Khade */
++
++#define _GNU_SOURCE
++#include <sched.h>
++#include <sys/wait.h>
++#include <unistd.h>
++#include <test_progs.h>
++#include "test_netns_kfunc.skel.h"
++
++void test_netns_kfunc(void)
++{
++	struct test_netns_kfunc *skel;
++	int pipefd[2];
++	pid_t pid;
++	int status = 0;
++	u32 host_inum;
++
++	skel = test_netns_kfunc__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	if (!ASSERT_OK(test_netns_kfunc__attach(skel), "attach"))
++		goto cleanup;
++
++	/* Test 1: Process running in initial network namespace */
++	if (!ASSERT_OK(pipe(pipefd), "pipe_init"))
++		goto cleanup;
++
++	pid = fork();
++	if (!ASSERT_GE(pid, 0, "fork_host")) {
++		close(pipefd[0]);
++		close(pipefd[1]);
++		goto cleanup;
++	}
++
++	if (pid == 0) {
++		close(pipefd[1]);
++		if (read(pipefd[0], &status, sizeof(status)) < 0)
++			exit(1);
++		close(pipefd[0]);
++		execlp("true", "true", NULL);
++		exit(1);
++	}
++
++	skel->bss->target_pid = pid;
++	close(pipefd[0]);
++	if (write(pipefd[1], &status, sizeof(status)) < 0) {
++		close(pipefd[1]);
++		waitpid(pid, NULL, 0);
++		goto cleanup;
++	}
++	close(pipefd[1]);
++	waitpid(pid, &status, 0);
++
++	ASSERT_EQ(skel->bss->inv_is_init_net, 1, "host_task_is_init_net");
++	ASSERT_GT(skel->bss->inv_netns_inum, 0, "host_netns_inum_valid");
++	host_inum = skel->bss->inv_netns_inum;
++
++	/* Reset state */
++	skel->bss->inv_is_init_net = -1;
++	skel->bss->inv_netns_inum = 0;
++
++	/* Test 2: Process running in a new network namespace */
++	if (!ASSERT_OK(pipe(pipefd), "pipe_netns"))
++		goto cleanup;
++
++	pid = fork();
++	if (!ASSERT_GE(pid, 0, "fork_netns")) {
++		close(pipefd[0]);
++		close(pipefd[1]);
++		goto cleanup;
++	}
++
++	if (pid == 0) {
++		close(pipefd[1]);
++		if (read(pipefd[0], &status, sizeof(status)) < 0)
++			exit(1);
++		close(pipefd[0]);
++
++		if (unshare(CLONE_NEWNET) != 0)
++			exit(1);
++
++		execlp("true", "true", NULL);
++		exit(1);
++	}
++
++	skel->bss->target_pid = pid;
++	close(pipefd[0]);
++	if (write(pipefd[1], &status, sizeof(status)) < 0) {
++		close(pipefd[1]);
++		waitpid(pid, NULL, 0);
++		goto cleanup;
++	}
++	close(pipefd[1]);
++	waitpid(pid, &status, 0);
++
++	ASSERT_EQ(skel->bss->inv_is_init_net, 0, "netns_task_not_init_net");
++	ASSERT_GT(skel->bss->inv_netns_inum, 0, "child_netns_inum_valid");
++	ASSERT_NEQ(skel->bss->inv_netns_inum, host_inum, "netns_inum_different");
++
++cleanup:
++	test_netns_kfunc__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_netns_kfunc.c b/tools/testing/selftests/bpf/progs/test_netns_kfunc.c
+new file mode 100644
+index 000000000..3ad49f8ba
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_netns_kfunc.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Abhishek Khade */
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++#include "bpf_misc.h"
++
++bool bpf_task_is_init_net(const struct task_struct *task) __ksym;
++u32 bpf_task_get_netns_inum(const struct task_struct *task) __ksym;
++
++pid_t target_pid;
++int inv_is_init_net = -1;
++u32 inv_netns_inum;
++
++SEC("tp_btf/sched_process_exec")
++int BPF_PROG(on_exec, struct task_struct *task, u64 old_pid,
++	     struct linux_binprm *bprm)
++{
++	pid_t pid = task->tgid;
++
++	if (pid != target_pid)
++		return 0;
++
++	inv_is_init_net = bpf_task_is_init_net(task) ? 1 : 0;
++	inv_netns_inum = bpf_task_get_netns_inum(task);
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.53.0
+
