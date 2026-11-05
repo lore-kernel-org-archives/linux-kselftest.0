@@ -1,63 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793843999;
-	b=Q5ZT+HImrrO5DSm9pNrQHg8Sb3e8EKI4g80a+HjsM/Q4tFIW2Q325iu+mDDKrCRIhO+N
-	 oOftC6r0eXuZniv9g2Ph4qsjZdPAlKspd+nSiwt4+BWainyM/1Nepq8wCe82541obSwbf
-	 Dag2wI22uZOY9YNaSHjXmfDknl2Y/VNhCAcQlL+hrn0fuUA8RFvoxrlvf7On80COq4vHK
-	 3iUQoy5jW1pQeT+A7KuG2e/xgLVt3QtTHpWaENqH+a+cOTlxj2kZe+PHMr2QiQ3pVPoeV
-	 8SsUtva/ZABFzCJzuP2UqEa55/kvhkSoU7YdpXc4oYPCamrt1BzDAFz/hxfMTevvwEg==
+	b=jNW2vblxIoXHRuWJZ063dmBCcjOnxiVJAg0sCFuBx7TzwpphKp+NPBc7gZ5SfGNNijJ6
+	 WXjkN1X2oNdtc9eoOom3G/Dh0uj40f5IdxRJYMm8ZUtb1WPMk2H32n7uN+1/yqMaH1tkr
+	 bikj9TZh0oLQU3BUVcBVa+cO1K61m7SNU0jpoAXNzc6q9cYVPI6Fzh2EIZmQM5UVLgFcA
+	 66kYmAGjfzhyo+qtGH0b91C2/1PYu+Wxobjs4oteADL4dxTiyoJhq+KCr4SAzjBjku1+O
+	 qYkMIb4xIBls5b2kFszmMzMC0U+1BBRQzC+f1jNMwOQE7JF0DMTM32APo1XTfZTiGtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793843999;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:From:To:
 	 Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding:X-Virus-Scanned:
 	 X-Virus-Status;
-	bh=Wh3rkeiAMAtqT0dyAzB3R9VY7PKWSU32hBfsSb84LpA=;
-	b=xeMP/y9KLHKKPJitGrSCkiYPNzYhgjCGAvTNkCzUkBUPpDmMwsaAM96v0ExIz1d2e0Ai
-	 OqD3Gqz726BzAH2d3MpHUkEEkbzSWhwu4+g2eoasatESM79EnbFP37E+51oqldsapODvC
-	 CR/zaHzzAH0oqb6VAJ7bgDpWpr+4LJKgf3gohIc2ojI/s/ILWUkO5QNBYDj8bVcFl31uI
-	 kgNuy3mIDh0bNrCrl16PpCQkvmzGSspKubCsIe7joj6RdR7JC5NgtB+ZZb5JgVJkPzgtC
-	 GLH/spCMZxFN5c/rStm8s7FMK6Se22S4qz2jEaPxWMaWc0qO1mg68eacLRKUcxHEZAQ==
+	bh=Z/qvuCNxH+jptjge853VfySBFYPTsWP1Hkt7muobr8U=;
+	b=oyg4VF940GIGRsbCFfmzSXQa0knvEL+5obukP26kPyS40bBJ9QZhFO1ZkrcNLWaPDKLI
+	 0OO0FT2DyoZZSg4OpX4UHjf7mIYqwAPA8LShZ+iC5bxT26uIRyKXkzzn9R/szFGPCuSHY
+	 L9SPbsOY/GVwWS06MaGDbU1kwvqJp97OVCG/P3bRF48YD4fDJ0ldmIYTVPAjnPkhKWQGq
+	 scqK5L5COwn+55wetJoOdoh7iaUDaUWXxJbxD7xSwmeLDEr6eK8n2E1lKts3/gZRJXf6b
+	 BZyqrevfnYR3mzihb0xH8Z/G2f+PFBPjolfd74ryxFaqJXbrhol3RND9OqITjTtChZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=uniroma2.it;
 	spf=pass smtp.mailfrom=uniroma2.it;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=DwAoBuMU;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=UsGimAXk;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=V6HEmneq;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=hHBbgK78;
 	arc=none smtp.remote-ip=160.80.4.35
 Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.35])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D571A606A326;
-	Thu,  5 Nov 2026 01:59:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D571A606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863EB606A328;
+	Thu,  5 Nov 2026 01:59:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 863EB606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=DwAoBuMU;
-	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=UsGimAXk
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6A51xN1d001510;
-	Thu, 5 Nov 2026 02:59:28 +0100
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=V6HEmneq;
+	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=hHBbgK78
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6A51xDLb001499;
+	Thu, 5 Nov 2026 02:59:18 +0100
 Received: from localhost.localdomain (unknown [160.80.105.87])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 30318122955;
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 15946122954;
 	Thu,  5 Nov 2026 02:59:08 +0100 (CET)
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
 	s=ed201904; t=1793843948; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Wh3rkeiAMAtqT0dyAzB3R9VY7PKWSU32hBfsSb84LpA=;
-	b=DwAoBuMUg/7owbjvenV/a33F1ywEjtRIhVyvbrAI+wJHQM0T1N8ubqCRcOBwGja6eVIzzy
-	/xSfasdCK4zgEoDw==
+	bh=Z/qvuCNxH+jptjge853VfySBFYPTsWP1Hkt7muobr8U=;
+	b=V6HEmneq4kjzhR/UHqtjwz/k19A2f4x7Fb2XCADjq6jh1Co35kNVavpH3ctkgeXdnKjnGs
+	qFd4CWfidJDMeiDA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
 	t=1793843948; h=from:from:sender:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Wh3rkeiAMAtqT0dyAzB3R9VY7PKWSU32hBfsSb84LpA=;
-	b=UsGimAXk9n8HJFpt/EaoK+SQjyGBCstYaGPl6wDrhxdlYHEsuMUkufTpc64mKfQSTKoYDg
-	4bK/csN3xQ3uRIpdOcYDtH7YjV6ShPoCWpnd4u78XxbX+QtgXvA1UKlQdbnIQrCbarEUZb
-	Z38azWDvTJ1gkkpWjtc4b3kuv+rmqYxAVQHTV55uMOvamqD4zfG6lazzBMl+780136j6Ri
-	/ThwmZfCbWBi0AVEJkuS5yALusYWsSpflB9JfsxxTyEsRNtzSjgx+jVntmw7/OoejoNru0
-	+t7l7dfxNHYGSd3iqEA3R3yNeXa38Y+ARgBqMr/Pmdr7psbrLqde57yebzYc8g==
+	bh=Z/qvuCNxH+jptjge853VfySBFYPTsWP1Hkt7muobr8U=;
+	b=hHBbgK78a8Wl5MIMQylDbxLSoFzkEaolY5xpa18moohERsh7jvK6gqYULuz5j8ks1nRsT1
+	/Q6ucp/MOy3OSIV89qhFqFy4tb64wEbLyVEQa8Nkvlma+H+2d5+Im9CINx5Er+3mUf7hkT
+	kmtRLugwj4aYz7k19VhbJYnykiPqWgpFOWX2m5TEM4nJH59QeZ4Zk315eFVICo+okFo6Rv
+	CMmrcb6Cs27cG+LcRAHotExEwqnbXxsktSSEPZb3bQ4JmPmJaWegbzZCXyCasEGLtNJTry
+	lyirCJDXHx+EEzKd5keJBhVOD8VwlbfCRUVniuHBR7Ys17IKBzan78HFqjMQXQ==
 From: Andrea Mayer <andrea.mayer@uniroma2.it>
 To: "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
@@ -71,9 +71,9 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ahmed Abdelsalam <ahabdels@cisco.com>,
         Stefano Salsano <stefano.salsano@uniroma2.it>,
         Andrea Mayer <andrea.mayer@uniroma2.it>, andrea@common-net.org
-Subject: [PATCH net-next v2 5/5] selftests: seg6: add tests for PSP with a consumed SRH
-Date: Thu,  5 Nov 2026 02:57:15 +0100
-Message-Id: <20261105015715.57-6-andrea.mayer@uniroma2.it>
+Subject: [PATCH net-next v2 4/5] selftests: seg6: add tests for PSP together with NEXT-C-SID
+Date: Thu,  5 Nov 2026 02:57:14 +0100
+Message-Id: <20261105015715.57-5-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261105015715.57-1-andrea.mayer@uniroma2.it>
 References: <20261105015715.57-1-andrea.mayer@uniroma2.it>
@@ -91,389 +91,542 @@ X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
 X-Virus-Status: Clean
 
 Extend srv6_end_flavors_test.sh with tests for the SRv6 End behavior
-with the PSP flavor, alone and together with NEXT-C-SID, on packets that
-carry a consumed SRH in front of the SRH to process.
+with both the NEXT-C-SID and PSP flavors.
 
-Each test sends a ping along an existing SRv6 Policy, and a router on
-the path inserts an extra SRH in front of the Policy's SRH. An End
-behavior on another router consumes the extra SRH, and the router
-connected to the host must then remove only the Policy's SRH.
-
-These tests set seg6_enabled to 1 on the hosts, which must accept the
-extra SRH, and set it back to 0 at the end. With seg6_enabled set to 1,
-a host also accepts the packet when the Policy's SRH is not removed, or
-when the extra SRH is removed in its place. For this reason, the
-receiving host accepts the echo request only when its first SRH is the
-extra SRH, with Segments Left 0 and followed by the ICMPv6 header. Any
-other echo request is dropped, including one without any SRH. The extra
-SRH is recognized by its last segment, which is the SID that triggered
-its insertion.
-
-The check on the receiving host uses the ip6tables srh match. Without
-it, these tests are skipped. A test fails if the route that inserts the
-extra SRH, or the rules on the receiving host, cannot be added.
+The tests use two SRv6 Policies with C-SID containers, where every
+router after the ingress one applies End with the NEXT-C-SID and PSP
+flavors. To check PSP, set net.ipv6.conf.all.seg6_enabled to 0 on the
+hosts in setup_hs(). The hosts then drop any packet that still carries
+an SRH, and a ping to an address on the loopback of a host succeeds
+only if the router connected to that host has removed the SRH. The tests
+fail when PSP is not applied together with NEXT-C-SID.
 
 Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- tools/testing/selftests/net/config            |   1 +
- .../selftests/net/srv6_end_flavors_test.sh    | 280 +++++++++++++++++-
- 2 files changed, 279 insertions(+), 2 deletions(-)
+ .../selftests/net/srv6_end_flavors_test.sh    | 344 +++++++++++++++++-
+ 1 file changed, 326 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 7a89e2618d4c..d5d2382b0b01 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -27,6 +27,7 @@ CONFIG_IP6_NF_IPTABLES=m
- CONFIG_IP6_NF_IPTABLES_LEGACY=m
- CONFIG_IP6_NF_MANGLE=m
- CONFIG_IP6_NF_MATCH_RPFILTER=m
-+CONFIG_IP6_NF_MATCH_SRH=m
- CONFIG_IP6_NF_NAT=m
- CONFIG_IP6_NF_RAW=m
- CONFIG_IP6_NF_TARGET_REJECT=m
 diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-index 0355149bb7d6..157baa8ecb0b 100755
+index 30a939392eea..0355149bb7d6 100755
 --- a/tools/testing/selftests/net/srv6_end_flavors_test.sh
 +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-@@ -22,8 +22,7 @@
+@@ -16,8 +16,9 @@
+ #
+ # The End, End.X, and End.T behaviors can support these flavors either
+ # individually or in combinations.
+-# Currently in this selftest we consider only the PSP flavor for the SRv6 End
+-# behavior. However, it is possible to extend the script as soon as other
++# Currently in this selftest we consider the PSP flavor for the SRv6 End
++# behavior, both alone and combined with the NEXT-C-SID flavor defined in
++# RFC9800 [2]. However, it is possible to extend the script as soon as other
  # flavors will be supported in the kernel.
  #
  # The purpose of the PSP flavor consists in instructing the penultimate node
--# listed in the SRv6 policy to remove (i.e. pop) the outermost SRH from the IPv6
--# header.
-+# listed in the SRv6 policy to remove (i.e. pop) the SRH from the IPv6 header.
- # A PSP enabled SRv6 End behavior instance processes the SRH by:
- #  - decrementing the Segment Left (SL) value from 1 to 0;
- #  - copying the last SID from the SID List into the IPv6 Destination Address
-@@ -263,6 +262,68 @@
- # the hosts). The loopback address of a host is reached only through the
- # router connected to that host: the ping succeeds only if the SRH is removed
- # by that router.
+@@ -47,7 +48,20 @@
+ #    "standard" End packet processing, ignoring the configured PSP flavor at
+ #    all.
+ #
++# The NEXT-C-SID flavor (referred to as NEXT-CSID in RFC9800 [2]) and the
++# C-SID containers are described in srv6_end_next_csid_l3vpn_test.sh, which
++# also tests this flavor for the SRv6 End behavior.
 +#
-+# Traffic with a consumed SRH
-+# ---------------------------
++# When the NEXT-C-SID flavor is combined with the PSP, USP or USD flavors, these
++# flavors are left unchanged [2]. The NEXT-C-SID processing comes first: with a
++# non-zero Argument, the IPv6 DA is updated with the next C-SID and the packet
++# is forwarded without changing the SRH, if any. The packet goes through the End
++# behavior with the other flavors only when the Argument is zero, i.e. when the
++# IPv6 DA carries no further C-SID. For example, the PSP operation takes place
++# only for a C-SID container with a zero Argument and SL=1.
 +#
-+# A packet can carry more than one SRH. The SRv6 End behavior skips an SRH with
-+# SL=0 and processes the next header [1].
+ # [1] RFC8986: https://datatracker.ietf.org/doc/html/rfc8986
++# [2] RFC9800: https://datatracker.ietf.org/doc/html/rfc9800
+ #
+ # Network topology
+ # ================
+@@ -115,12 +129,35 @@
+ #   +---------------------------------------------------------------------+
+ #   |fcff:x::e is associated with the SRv6 End behavior                   |
+ #   |fcff:x::ef1 is associated with the SRv6 End behavior with PSP flavor |
++#   |fcbb:0:xpyy::/48 is associated with the SRv6 behavior and flavors    |
++#   |   given by the Function yy, and with parameter p of the behavior    |
+ #   +---------------------------------------------------------------------+
+ #
+ # The fcff::/16 prefix is reserved by the operator for the SIDs. Reachability of
+ # SIDs is ensured by proper configuration of the IPv6 operator's network and
+ # SRv6 routers.
+ #
++# Similarly, the fcbb:0::/32 prefix is reserved by the operator for the C-SID
++# containers and it is used as their Locator-Block.
++# A C-SID (16 bits) is written as xpyy, where:
++#  - x is the Locator-Node (4 bits), i.e. the ID of the router;
++#  - p is a parameter of the behavior (4 bits), 0 for End, which has none;
++#  - yy is the Function (8 bits). Its first digit selects the SRv6 behavior
++#    (e for End, as in fcff:x::e). Its second digit is the set of flavors, as
++#    a bit mask: 1 for PSP, 2 for USP, 4 for USD and 8 for NEXT-C-SID (as the
++#    f1 of fcff:x::ef1 for PSP).
++# In the terms of RFC9800 [2], p and yy together are the Function of the C-SID
++# (12 bits), and p is not part of the Argument:
 +#
-+# The traffic of this section reuses the Policies (i.a), (i.b), (i.c) and (i.d).
-+# A router on the path inserts an extra SRH in front of the Policy's SRH, and
-+# another router then consumes the extra SRH.
++#   +----------+----------+--------------------+
++#   | Function | behavior | flavors            |
++#   +----------+----------+--------------------+
++#   | e9       | End      | NEXT-C-SID and PSP |
++#   +----------+----------+--------------------+
 +#
-+# The Policy (i.a) has SID List=fcff:3::e,fcff:4::ef1,fcff:2::ef1,cafe::2. A
-+# packet from hs-1 to hs-2 goes as follows:
++# For example, fcbb:0:40e9:20e9:: is a C-SID container carrying the C-SID of
++# rt-4 followed by the C-SID of rt-2, both with the NEXT-C-SID and PSP flavors.
 +#
-+#  - rt-1 applies the Policy and sends the packet to rt-3:
-+#      IPv6 DA=fcff:3::e | Policy's SRH, SL=3 | Payload
+ #
+ # SRv6 Policies
+ # =============
+@@ -193,6 +230,39 @@
+ # set with the last SID; iii) the SRH is removed from the extension headers
+ # after the IPv6 header. At this point, the packet with IPv6 DA=cafe::1 is sent
+ # to the destination, i.e. hs-1.
 +#
-+#  - rt-3 (End) processes the Policy's SRH and sends the packet to rt-4:
-+#      IPv6 DA=fcff:4::ef1 | Policy's SRH, SL=2 | Payload
++# Traffic to the loopback addresses of the hosts
++# ----------------------------------------------
 +#
-+#  - rt-4 (End with PSP and SL>1, acting as End) processes the Policy's SRH.
-+#    The new DA is fcff:2::ef1:
-+#      IPv6 DA=fcff:2::ef1 | Policy's SRH, SL=1 | Payload
-+#    On rt-4, the route added by the test for fcff:2::ef1 then inserts the
-+#    extra SRH, with SID List=fcff:3::e,fcff:2::ef1, and the packet goes back to
-+#    rt-3:
-+#      IPv6 DA=fcff:3::e | extra SRH, SL=1 | Policy's SRH, SL=1 | Payload
++# Each host has an address on its loopback, cafe::x:e9. The traffic from the
++# other host towards this address is steered with C-SID containers: after the
++# ingress router, every router crossed applies the SRv6 End behavior with the
++# NEXT-C-SID and PSP flavors. The following SRv6 Policies are applied by rt-1
++# to the traffic towards cafe::2:e9 (i.c) and by rt-2 to the traffic towards
++# cafe::1:e9 (i.d):
 +#
-+#  - rt-3 (End) consumes the extra SRH and sets the DA back to fcff:2::ef1:
-+#      IPv6 DA=fcff:2::ef1 | extra SRH, SL=0 | Policy's SRH, SL=1 | Payload
++#   i.c) IPv6 traffic, SID List=fcbb:0:30e9::,fcbb:0:40e9:20e9::,cafe::2:e9
++#   i.d) IPv6 traffic, SID List=fcbb:0:40e9:30e9:10e9::,cafe::1:e9
 +#
-+#  - rt-2 (End with PSP) skips the extra SRH, processes the Policy's SRH and
-+#    removes it. The Next Header of the extra SRH now indicates the payload
-+#    instead of the Policy's SRH:
-+#      IPv6 DA=cafe::2 | extra SRH, SL=0 | Payload
++# In the Policy (i.c), rt-3 receives a zero Argument with SL=2 and applies the
++# "standard" End processing. rt-4 receives a non-zero Argument with SL=1: it
++# advances to the next C-SID and does *NOT* apply the PSP operation. rt-2
++# receives a zero Argument with SL=1 and applies the PSP operation.
 +#
-+# The extra SRH reaches hs-2, which skips it as its SL is 0. The other
-+# Policies work in the same way:
++# In the Policy (i.d), a single C-SID container carries three C-SIDs. rt-4 and
++# rt-3 receive a non-zero Argument with SL=1: they advance to the next C-SID and
++# do *NOT* apply the PSP operation. rt-1 receives a zero Argument with SL=1
++# and applies the PSP operation.
 +#
-+#   (i.b) hs-2 -> hs-1: on the packets with DA=fcff:1::ef1, rt-2 inserts the
-+#         extra SRH with SID List=fcff:3::e,fcff:1::ef1, and rt-3 consumes it.
-+#   (i.c) hs-1 -> hs-2: on the packets with DA=fcbb:0:20e9::, rt-4 inserts the
-+#         extra SRH with SID List=fcff:3::e,fcbb:0:20e9::, and rt-3 consumes it.
-+#   (i.d) hs-2 -> hs-1: on the packets with DA=fcbb:0:10e9::, rt-3 inserts the
-+#         extra SRH with SID List=fcff:4::e,fcbb:0:10e9::, and rt-4 consumes it.
++# The hosts use cafe::x as the source address, not the loopback address. The
++# replies are sent to cafe::x and follow the Policies (i.a) and (i.b), which
++# are tested first. This way, each ping checks a single Policy with the
++# NEXT-C-SID flavor, and a failure points directly to that Policy.
 +#
-+# The Policy (i.b) has no router between rt-2 and rt-1. For this reason, rt-2
-+# applies the Policy, inserts the extra SRH and sends the packet to rt-3:
-+#      IPv6 DA=fcff:3::e | extra SRH, SL=1 | Policy's SRH, SL=1 | Payload
-+# rt-3 consumes the extra SRH, and rt-1 removes the Policy's SRH.
-+#
-+# The hosts need seg6_enabled set to 1 to accept the extra SRH, and it is set
-+# back to 0 at the end. With seg6_enabled set to 1, a host also accepts the
-+# packet when the Policy's SRH is not removed, or when the extra SRH is removed
-+# in its place, as it skips every SRH with SL=0. For this reason, the receiving
-+# host accepts the echo request only when its first SRH is the extra SRH, with
-+# SL=0 and followed by the ICMPv6 header. Any other echo request is dropped,
-+# including one without any SRH. The extra SRH is recognized by its last segment
-+# (Segment List[0]), which is the SID that triggered its insertion (e.g.
-+# fcff:2::ef1 for the Policy (i.a)).
-+# These tests need ip6tables with the srh match, and they are skipped without
-+# it.
++# The hosts drop the packets that carry an SRH (seg6_enabled is set to 0 on
++# the hosts). The loopback address of a host is reached only through the
++# router connected to that host: the ping succeeds only if the SRH is removed
++# by that router.
  
  # shellcheck source=lib.sh
  source lib.sh
-@@ -302,19 +363,35 @@ HOSTS=''
- 
- SETUP_ERR=1
- 
-+# set by check_srh_match_support
-+HAS_SRH_MATCH=false
+@@ -207,6 +277,20 @@ readonly IPv6_TESTS_ADDR=2001:db8::1
+ readonly LOCATOR_SERVICE=fcff
+ readonly END_FUNC=000e
+ readonly END_PSP_FUNC=0ef1
++readonly END_CSID_PSP_FUNC=e9
 +
- ret=${ksft_skip}
- nsuccess=0
- nfail=0
-+nskip=0
++readonly LCBLOCK_ADDR=fcbb:0
++readonly LCBLOCK_BLEN=32
++# do not add ':' as separator. The Locator-Node is followed by the parameter
++# of the behavior, 0 for End.
++readonly LCNODE_FMT="%x0"
++readonly LCNODE_BLEN=4
++readonly LCNODEFUNC_BLEN=16
++
++readonly LCBLOCK_NODE_BLEN=$((LCBLOCK_BLEN + LCNODE_BLEN))
++readonly LCBLOCK_NODEFUNC_BLEN=$((LCBLOCK_BLEN + LCNODEFUNC_BLEN))
++# lengths of Locator-Block and C-SID of the NEXT-C-SID flavor
++readonly CSID_CFG="lblen ${LCBLOCK_BLEN} nflen ${LCNODEFUNC_BLEN}"
  
- log_test()
- {
- 	log_test_expected "$1" "$2" "$3"
+ PING_TIMEOUT_SEC=4
+ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+@@ -397,6 +481,45 @@ __get_srv6_rtcfg_op()
+ 		xargs | sed 's/ /,/g'
  }
  
-+# Log a test that is not run (same format as log_test_expected of lib.sh).
-+log_test_skipped()
++# Return the C-SID of a router: the Locator-Node (4 bits), i.e. the ID of the
++# router, followed by the parameter of the behavior (4 bits, 0) and the
++# Function (8 bits).
++# args:
++#  $1 - router
++#  $2 - Function (e.g. "e9")
++# e.g. input: "4" "e9"
++#      output: "40e9"
++build_csid()
 +{
-+	local msg="$1"
++	local nodeid="$1"
++	local func="$2"
 +
-+	nskip=$((nskip+1))
-+	printf "    TEST: %-60s  [SKIP]\n" "${msg}"
++	printf "${LCNODE_FMT}%s" "${nodeid}" "${func}"
 +}
 +
- print_log_test_results()
++# Return the C-SID container with the C-SIDs of the routers listed in a
++# "next-csid,<flavors>" element, in the same order.
++# args:
++#  $1 - <nodeid> of the element: a comma-separated list of routers
++#  $2 - Function (e.g. "e9")
++# e.g. input: "4,2" "e9"
++#      output: "fcbb:0:40e9:20e9::"
++build_csid_container()
++{
++	local nodeids="$1"
++	local func="$2"
++	local csids=''
++	local nodes
++	local node
++
++	nodes="$(echo "${nodeids}" | sed 's/,/ /g')"
++	for node in ${nodes}; do
++		csids="${csids}:$(build_csid "${node}" "${func}")"
++	done
++
++	echo "${LCBLOCK_ADDR}${csids}::"
++}
++
+ # Setup the basic networking for the routers
+ setup_rt_networking()
  {
- 	printf "\nTests passed: %3d\n" "${nsuccess}"
- 	printf "Tests failed: %3d\n"   "${nfail}"
-+	if [ "${nskip}" -gt 0 ]; then
-+		printf "Tests skipped: %2d\n" "${nskip}"
-+	fi
+@@ -439,6 +562,7 @@ setup_rt_local_sids()
+ 	local devname
+ 	local nsname
+ 	local neigh
++	local csid
  
- 	# when a test fails, the value of 'ret' is set to 1 (error code).
- 	# Conversely, when all tests are passed successfully, the 'ret' value
-@@ -1052,6 +1129,181 @@ host_srv6_end_flv_next_csid_psp_tests()
- 	check_and_log_hs_lo_addr_connectivity 2 1 "${END_CSID_PSP_FUNC}"
+ 	nsname="$(get_rtname "${rt}")"
+ 
+@@ -452,6 +576,15 @@ setup_rt_local_sids()
+ 			add "${LOCATOR_SERVICE}:${neigh}::/32" \
+ 			table "${LOCALSID_TABLE_ID}" \
+ 			via "${net_prefix}::${neigh}" dev "${devname}"
++
++		# set underlay network routes to reach the C-SID containers
++		# that start with a C-SID of the neighbor, for any parameter and
++		# Function.
++		csid="$(build_csid "${neigh}" 00)"
++		ip -netns "${nsname}" -6 route \
++			add "${LCBLOCK_ADDR}:${csid}::/${LCBLOCK_NODE_BLEN}" \
++			table "${LOCALSID_TABLE_ID}" \
++			via "${net_prefix}::${neigh}" dev "${devname}"
+ 	done
+ 
+ 	# Local End behavior (note that "dev" is a dummy interface chosen for
+@@ -461,30 +594,135 @@ setup_rt_local_sids()
+ 		table "${LOCALSID_TABLE_ID}" \
+ 		encap seg6local action End dev "${DUMMY_DEVNAME}"
+ 
+-
+ 	# all SIDs start with a common locator. Routes and SRv6 Endpoint
+ 	# behavior instances are grouped together in the 'localsid' table.
+ 	ip -netns "${nsname}" -6 rule \
+ 		add to "${LOCATOR_SERVICE}::/16" \
+ 		lookup "${LOCALSID_TABLE_ID}" prio 999
+ 
++	# the C-SID containers use their own Locator-Block. Their routes and
++	# SRv6 Endpoint behavior instances are in the 'localsid' table too.
++	ip -netns "${nsname}" -6 rule \
++		add to "${LCBLOCK_ADDR}::/${LCBLOCK_BLEN}" \
++		lookup "${LOCALSID_TABLE_ID}" prio 999
++
+ 	# set default routes to unreachable
+ 	ip -netns "${nsname}" -6 route \
+ 		add unreachable default metric 4278198272 \
+ 		dev "${DUMMY_DEVNAME}"
  }
  
-+# On a router, add a route for a SID with seg6 encap in inline mode. The packets
-+# that the router forwards to that SID get an extra SRH with the End SID of the
-+# router that consumes it.
++# Return success if the operation <op> of an element contains the NEXT-C-SID
++# flavor, i.e. the SIDs of the element are C-SIDs.
++# e.g. input: "next-csid,psp" -> success; "psp" -> failure
++op_has_next_csid()
++{
++	local op_type="$1"
++
++	case ",${op_type}," in
++	*,next-csid,*)
++		return 0
++		;;
++	esac
++
++	return 1
++}
++
++# Return the SID to which the SRv6 Endpoint behavior of a router is bound.
++# With NEXT-C-SID, it is the C-SID of the router as a prefix: on rt-4,
++# fcbb:0:40e9::/48 also matches the DA fcbb:0:40e9:20e9::.
 +# args:
-+#  $1 - router on which the route is added
-+#  $2 - SID of the route
-+#  $3 - router with the SRv6 End behavior that consumes the extra SRH
-+setup_rt_consumed_srh()
++#  $1 - router
++#  $2 - operation <op> of the element (e.g. "next-csid,psp")
++#  $3 - Function (e.g. "0ef1", or "e9" with NEXT-C-SID)
++# e.g. input: "4" "psp" "0ef1"
++#      output: "fcff:4::0ef1"
++#      input: "4" "next-csid,psp" "e9"
++#      output: "fcbb:0:40e9::/48"
++get_rt_sid()
++{
++	local rt="$1"
++	local op_type="$2"
++	local func="$3"
++	local csid
++
++	if op_has_next_csid "${op_type}"; then
++		csid="$(build_csid "${rt}" "${func}")"
++		echo "${LCBLOCK_ADDR}:${csid}::/${LCBLOCK_NODEFUNC_BLEN}"
++		return
++	fi
++
++	echo "${LOCATOR_SERVICE}:${rt}::${func}"
++}
++
++# Add an SRv6 Endpoint behavior to a router, bound to a SID. Nothing is added
++# if the router already has a route for that SID.
++# args:
++#  $1 - router
++#  $2 - SID, or C-SID of the router as a prefix
++#  $3 - SRv6 Endpoint behavior and flavors (e.g. "End flavors psp")
++setup_rt_endpoint()
 +{
 +	local rt="$1"
 +	local sid="$2"
-+	local end_rt="$3"
++	local behavior_cfg="$3"
 +	local nsname
 +
 +	nsname="$(get_rtname "${rt}")"
++
++	# the prefix length is part of the SID: two SIDs can have the same
++	# address and different lengths.
++	if [ -n "$(ip -netns "${nsname}" -6 route show \
++		table "${LOCALSID_TABLE_ID}" exact "${sid}")" ]; then
++		return
++	fi
 +
 +	ip -netns "${nsname}" -6 route \
 +		add "${sid}" table "${LOCALSID_TABLE_ID}" \
-+		encap seg6 mode inline \
-+		segs "${LOCATOR_SERVICE}:${end_rt}::${END_FUNC}" \
++		encap seg6local action ${behavior_cfg} \
 +		dev "${DUMMY_DEVNAME}"
 +}
 +
-+cleanup_rt_consumed_srh()
++# Add an SRv6 Endpoint behavior to each router of a Policy element <nodeid:op>.
++# args:
++#  $1 - <nodeid> of the element: one router, or a comma-separated list
++#  $2 - operation <op> of the element (e.g. "next-csid,psp")
++#  $3 - Function (e.g. "0ef1", or "e9" with NEXT-C-SID)
++#  $4 - SRv6 Endpoint behavior and flavors (e.g. "End flavors psp")
++# e.g. input: "4,2" "next-csid,psp" "e9"
++#             "End flavors next-csid,psp lblen 32 nflen 16"
++#      result: the behavior is added on rt-4, bound to fcbb:0:40e9::/48, and
++#              on rt-2, bound to fcbb:0:20e9::/48
++setup_rt_endpoints()
 +{
-+	local rt="$1"
-+	local sid="$2"
-+	local nsname
++	local node="$1"
++	local op_type="$2"
++	local func="$3"
++	local behavior_cfg="$4"
++	local sid
++	local rt
 +
-+	nsname="$(get_rtname "${rt}")"
-+
-+	ip -netns "${nsname}" -6 route \
-+		del "${sid}" table "${LOCALSID_TABLE_ID}"
-+}
-+
-+set_hs_seg6_enabled()
-+{
-+	local val="$1"
-+	local hsname
-+	local hs
-+
-+	for hs in ${HOSTS}; do
-+		hsname="$(get_hsname "${hs}")"
-+
-+		ip netns exec "${hsname}" \
-+			sysctl -wq net.ipv6.conf.all.seg6_enabled="${val}"
-+		ip netns exec "${hsname}" \
-+			sysctl -wq net.ipv6.conf.veth0.seg6_enabled="${val}"
++	for rt in $(echo "${node}" | sed 's/,/ /g'); do
++		sid="$(get_rt_sid "${rt}" "${op_type}" "${func}")"
++		setup_rt_endpoint "${rt}" "${sid}" "${behavior_cfg}"
 +	done
 +}
 +
-+# In a network namespace, accept the echo requests whose first SRH has the given
-+# SID as last segment (Segment List[0]), SL=0 and the ICMPv6 header after it,
-+# and drop any other echo request, including one without any SRH.
-+# args:
-+#  $1 - network namespace in which the rules are added
-+#  $2 - expected last segment of the first SRH
-+add_srh_check_rules()
-+{
-+	local nsname="$1"
-+	local sid="$2"
+ # This helper function builds and installs the SID List (i.e. SRv6 Policy)
+ # to be applied on incoming packets at the ingress node. Moreover, it
+ # configures the SRv6 nodes specified in the SID List to process the traffic
+ # according to the operations required by the Policy itself.
+ # args:
+-#  $1 - destination host (i.e. cafe::x host)
++#  $1 - destination host x (i.e. the cafe::x host), or x:yy for the address
++#       cafe::x:yy on the loopback of the host (e.g. 2:e9)
+ #  $2 - SRv6 router configured for enforcing the SRv6 Policy
+ #  $3 - compact way to represent a list of SRv6 routers with their operations
+ #       (i.e. behaviors) that each of them needs to perform. Every <nodeid:op>
+ #       element constructs a SID that is associated with the behavior <op> on
+ #       the <nodeid> node. The list of such elements forms an SRv6 Policy.
++#       For "next-csid,psp", <nodeid> is a comma-separated list of node IDs.
++#       The element constructs a C-SID container with the C-SIDs of these
++#       nodes, e.g. "4,2:next-csid,psp" gives fcbb:0:40e9:20e9::.
+ __setup_rt_policy()
+ {
+ 	local dst="$1"
+@@ -492,10 +730,9 @@ __setup_rt_policy()
+ 	local policy_rts="$3"
+ 	local behavior_cfg
+ 	local in_nsname
+-	local rt_nsname
+ 	local policy=''
++	local container
+ 	local function
+-	local fullsid
+ 	local op_type
+ 	local node
+ 	local n
+@@ -505,7 +742,6 @@ __setup_rt_policy()
+ 	for n in ${policy_rts}; do
+ 		node="$(__get_srv6_rtcfg_id "${n}")"
+ 		op_type="$(__get_srv6_rtcfg_op "${n}")"
+-		rt_nsname="$(get_rtname "${node}")"
+ 
+ 		case "${op_type}" in
+ 		"noflv")
+@@ -520,22 +756,22 @@ __setup_rt_policy()
+ 			behavior_cfg="End flavors psp"
+ 			;;
+ 
++		"next-csid,psp")
++			container="$(build_csid_container "${node}" \
++				"${END_CSID_PSP_FUNC}")"
++			policy="${policy}${container},"
++			function="${END_CSID_PSP_FUNC}"
++			behavior_cfg="End flavors next-csid,psp ${CSID_CFG}"
++			;;
 +
-+	ip netns exec "${nsname}" ip6tables -A INPUT \
-+		-p ipv6-icmp --icmpv6-type echo-request \
-+		-m srh --srh-lsid "${sid}" --srh-segs-left-eq 0 \
-+		--srh-next-hdr 58 -j ACCEPT &&
-+	ip netns exec "${nsname}" ip6tables -A INPUT \
-+		-p ipv6-icmp --icmpv6-type echo-request -j DROP
-+}
-+
-+# On a host, check that the echo requests carry the extra SRH alone.
+ 		*)
+ 			break
+ 			;;
+ 		esac
+ 
+-		fullsid="${LOCATOR_SERVICE}:${node}::${function}"
+-
+-		# add SRv6 Endpoint behavior to the selected router
+-		if ! ip -netns "${rt_nsname}" -6 route get "${fullsid}" \
+-			&>/dev/null; then
+-			ip -netns "${rt_nsname}" -6 route \
+-				add "${fullsid}" \
+-				table "${LOCALSID_TABLE_ID}" \
+-				encap seg6local action ${behavior_cfg} \
+-				dev "${DUMMY_DEVNAME}"
+-		fi
++		# add SRv6 Endpoint behavior to the selected routers
++		setup_rt_endpoints "${node}" \
++			"${op_type}" "${function}" "${behavior_cfg}"
+ 	done
+ 
+ 	# we need to remove the trailing comma to avoid inserting an empty
+@@ -571,6 +807,7 @@ setup_hs()
+ 
+ 	ip netns exec "${hsname}" sysctl -wq net.ipv6.conf.all.accept_dad=0
+ 	ip netns exec "${hsname}" sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip netns exec "${hsname}" sysctl -wq net.ipv6.conf.all.seg6_enabled=0
+ 
+ 	ip -netns "${hsname}" link add veth0 type veth \
+ 		peer name "${RT2HS_DEVNAME}" netns "${rtname}"
+@@ -590,6 +827,32 @@ setup_hs()
+ 		sysctl -wq net.ipv6.conf."${RT2HS_DEVNAME}".proxy_ndp=1
+ }
+ 
++# Set up an address on the loopback of a host, and the route towards it on the
++# router connected to the host.
 +# args:
-+#  $1 - host on which the rules are added
-+#  $2 - expected last segment of the first SRH
-+setup_hs_srh_check()
++#  $1 - host
++#  $2 - router connected to the host
++#  $3 - suffix of the address (i.e. cafe::<host>:<suffix>)
++setup_hs_lo_addr()
 +{
 +	local hs="$1"
-+	local sid="$2"
++	local rt="$2"
++	local suffix="$3"
 +	local hsname
++	local rtname
++	local addr
 +
 +	hsname="$(get_hsname "${hs}")"
++	rtname="$(get_rtname "${rt}")"
++	addr="${IPv6_HS_NETWORK}::${hs}:${suffix}"
 +
-+	add_srh_check_rules "${hsname}" "${sid}"
++	ip -netns "${hsname}" addr add "${addr}/128" dev lo nodad
++
++	ip -netns "${rtname}" -6 route \
++		add "${addr}" \
++		via "${IPv6_HS_NETWORK}::${hs}" dev "${RT2HS_DEVNAME}"
 +}
 +
-+cleanup_hs_srh_check()
+ setup()
+ {
+ 	local i
+@@ -622,6 +885,11 @@ setup()
+ 	setup_hs 1 1
+ 	setup_hs 2 2
+ 
++	# set up the loopback addresses of the hosts used by the Policies (i.c)
++	# and (i.d).
++	setup_hs_lo_addr 1 1 "${END_CSID_PSP_FUNC}"
++	setup_hs_lo_addr 2 2 "${END_CSID_PSP_FUNC}"
++
+ 	# set up default SRv6 Endpoints (i.e. SRv6 End behavior)
+ 	setup_rt_local_sids 1 "2 3 4"
+ 	setup_rt_local_sids 2 "1 3 4"
+@@ -645,6 +913,21 @@ setup()
+ 	setup_rt_policy_ipv6 2 1 "3:noflv 4:psp 2:psp"
+ 	setup_rt_policy_ipv6 1 2 "1:psp"
+ 
++	# Direction hs-1 -> hs-2 (cafe::2:e9, NEXT-C-SID and PSP flavors)
++	#  - rt-1 (SRv6 H.Insert policy)
++	#  - rt-3 (Argument=0 and SL>1, acting as an End behavior)
++	#  - rt-4 (Argument!=0 and SL=1, advancing the C-SID)
++	#  - rt-2 (Argument=0 and SL=1, PSP)
++	#
++	# Direction hs-2 -> hs-1 (cafe::1:e9, NEXT-C-SID and PSP flavors)
++	#  - rt-2 (SRv6 H.Insert policy)
++	#  - rt-4 (Argument!=0 and SL=1, advancing the C-SID)
++	#  - rt-3 (Argument!=0 and SL=1, advancing the C-SID)
++	#  - rt-1 (Argument=0 and SL=1, PSP)
++	setup_rt_policy_ipv6 "2:${END_CSID_PSP_FUNC}" 1 \
++		"3:next-csid,psp 4,2:next-csid,psp"
++	setup_rt_policy_ipv6 "1:${END_CSID_PSP_FUNC}" 2 "4,3,1:next-csid,psp"
++
+ 	# testing environment was set up successfully
+ 	SETUP_ERR=0
+ }
+@@ -710,6 +993,20 @@ check_and_log_hs_connectivity()
+ 	check_and_log_hs_ipv6_connectivity "${hssrc}" "${hsdst}"
+ }
+ 
++check_and_log_hs_lo_addr_connectivity()
 +{
-+	local hs="$1"
-+	local hsname
++	local hssrc="$1"
++	local hsdst="$2"
++	local suffix="$3"
++	local dst
 +
-+	hsname="$(get_hsname "${hs}")"
++	dst="${IPv6_HS_NETWORK}::${hsdst}:${suffix}"
 +
-+	ip netns exec "${hsname}" ip6tables -F INPUT
++	check_hs_ipv6_connectivity "${hssrc}" "${hsdst}:${suffix}"
++	log_test $? 0 \
++		"IPv6 Hosts connectivity: hs-${hssrc} -> hs-${hsdst} (${dst})"
 +}
 +
-+# Test a Policy with a consumed SRH: a router inserts the extra SRH on the
-+# packets towards a SID, and another router consumes it. The destination host
-+# accepts only the echo requests that carry the extra SRH alone.
-+# args:
-+#  $1 - router that inserts the extra SRH
-+#  $2 - SID that triggers the insertion
-+#  $3 - router with the SRv6 End behavior that consumes the extra SRH
-+#  $4 - source host
-+#  $5 - destination host
-+#  $6 - suffix of the address on the loopback of the destination host
-+#       (i.e. cafe::<host>:<suffix>), if any
-+check_and_log_consumed_srh()
+ router_tests()
+ {
+ 	local i
+@@ -747,6 +1044,14 @@ host_srv6_end_flv_psp_tests()
+ 	check_and_log_hs_connectivity 2 1
+ }
+ 
++host_srv6_end_flv_next_csid_psp_tests()
 +{
-+	local rt="$1"
-+	local sid="$2"
-+	local end_rt="$3"
-+	local hssrc="$4"
-+	local hsdst="$5"
-+	local suffix="$6"
-+	local msg
++	log_section "SRv6 connectivity test hosts (h1 <-> h2, NEXT-C-SID,PSP)"
 +
-+	if ! ${HAS_SRH_MATCH}; then
-+		msg="IPv6 Hosts connectivity: hs-${hssrc} -> hs-${hsdst}"
-+		if [ -n "${suffix}" ]; then
-+			msg="${msg} (${IPv6_HS_NETWORK}::${hsdst}:${suffix})"
-+		fi
-+		log_test_skipped "${msg}"
-+		return
-+	fi
-+
-+	if ! setup_rt_consumed_srh "${rt}" "${sid}" "${end_rt}"; then
-+		log_test 1 0 "Extra SRH on rt-${rt} for ${sid}"
-+		return
-+	fi
-+
-+	if ! setup_hs_srh_check "${hsdst}" "${sid}"; then
-+		log_test 1 0 "SRH check on hs-${hsdst} for ${sid}"
-+	elif [ -n "${suffix}" ]; then
-+		check_and_log_hs_lo_addr_connectivity "${hssrc}" "${hsdst}" \
-+			"${suffix}"
-+	else
-+		check_and_log_hs_connectivity "${hssrc}" "${hsdst}"
-+	fi
-+
-+	cleanup_hs_srh_check "${hsdst}"
-+	cleanup_rt_consumed_srh "${rt}" "${sid}"
-+}
-+
-+host_srv6_end_flv_consumed_srh_tests()
-+{
-+	local sid
-+
-+	log_section \
-+		"SRv6 connectivity test hosts (h1 <-> h2, PSP with a consumed SRH)"
-+
-+	if ! ${HAS_SRH_MATCH}; then
-+		echo "SKIP: ip6tables srh match not available"
-+	fi
-+
-+	set_hs_seg6_enabled 1
-+
-+	# Policy (i.a): rt-4 inserts the extra SRH consumed by rt-3
-+	sid="${LOCATOR_SERVICE}:2::${END_PSP_FUNC}"
-+	check_and_log_consumed_srh 4 "${sid}" 3 1 2
-+
-+	# Policy (i.b): rt-2 inserts the extra SRH consumed by rt-3
-+	sid="${LOCATOR_SERVICE}:1::${END_PSP_FUNC}"
-+	check_and_log_consumed_srh 2 "${sid}" 3 2 1
-+
-+	# Policy (i.c): rt-4 inserts the extra SRH consumed by rt-3
-+	sid="$(build_csid_container 2 "${END_CSID_PSP_FUNC}")"
-+	check_and_log_consumed_srh 4 "${sid}" 3 1 2 "${END_CSID_PSP_FUNC}"
-+
-+	# Policy (i.d): rt-3 inserts the extra SRH consumed by rt-4
-+	sid="$(build_csid_container 1 "${END_CSID_PSP_FUNC}")"
-+	check_and_log_consumed_srh 3 "${sid}" 4 2 1 "${END_CSID_PSP_FUNC}"
-+
-+	set_hs_seg6_enabled 0
++	check_and_log_hs_lo_addr_connectivity 1 2 "${END_CSID_PSP_FUNC}"
++	check_and_log_hs_lo_addr_connectivity 2 1 "${END_CSID_PSP_FUNC}"
 +}
 +
  test_iproute2_supp_or_ksft_skip()
  {
  	local flavor="$1"
-@@ -1102,6 +1354,28 @@ test_kernel_supp_or_ksft_skip()
- 	ip netns del "${test_netns}"
- }
+@@ -836,6 +1141,8 @@ test_command_or_ksft_skip sort
+ test_command_or_ksft_skip xargs
  
-+# Before enabling the tests with a consumed SRH, make sure that the rules they
-+# use can be added.
-+check_srh_match_support()
-+{
-+	local srhm_ns
-+
-+	if [ ! -x "$(command -v ip6tables)" ]; then
-+		return
-+	fi
-+
-+	if ! setup_ns srhm_ns; then
-+		return
-+	fi
-+
-+	if add_srh_check_rules "${srhm_ns}" "${IPv6_TESTS_ADDR}" \
-+		&>/dev/null; then
-+		HAS_SRH_MATCH=true
-+	fi
-+
-+	cleanup_ns "${srhm_ns}"
-+}
-+
- test_dummy_dev_or_ksft_skip()
- {
- 	local test_netns
-@@ -1145,6 +1419,7 @@ test_dummy_dev_or_ksft_skip
- # supports PSP also supports NEXT-C-SID.
+ test_dummy_dev_or_ksft_skip
++# NEXT-C-SID is not checked: every kernel and iproute2 version that
++# supports PSP also supports NEXT-C-SID.
  test_iproute2_supp_or_ksft_skip psp
  test_kernel_supp_or_ksft_skip psp
-+check_srh_match_support
  
- set -e
- trap cleanup EXIT
-@@ -1156,5 +1431,6 @@ router_tests
+@@ -848,5 +1155,6 @@ set +e
+ router_tests
  host2gateway_tests
  host_srv6_end_flv_psp_tests
- host_srv6_end_flv_next_csid_psp_tests
-+host_srv6_end_flv_consumed_srh_tests
++host_srv6_end_flv_next_csid_psp_tests
  
  print_log_test_results
 -- 
