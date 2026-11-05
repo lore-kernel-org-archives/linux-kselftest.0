@@ -1,81 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793888020;
-	b=E/QLQ1twABiOC+4QbCe3oGF2l9ymc+q3kZDdtjQm8TqW2MuRsId5lztKRFEX03a+unEP
-	 K1gxnycVpZe4zNsdVye0ZtZxRY4GOf/oLX9/JWlMRYhvLUEHUsqPt3p20Nx7B8ym1W91S
-	 qTNJlPHOus/GYDUFHU1CCJpo8JbjM+k55lRS34C9A4SzEtapFj7AojiOzK18PsB1n2lzo
-	 /blMBR8JV2HyQCYMVKuNUJ4QvGi088mqVC+OzYOhJrE8+358CWmg7HnzGF1v22chWIYuf
-	 niGEwwJrk8jmkUCBbHW1TdPwgDff/ILl+LNYkABIVCTMhCl8mD8wPm4WPZkbr00Vi7g==
+	t=1793888048;
+	b=nVMHsdFyDQTamP+Ei22r2yjlObgNmBnlLiAtr0pDgGqHJUTOrntZy1LTn7Gdvx+Jqq+g
+	 6Qy3AYizjZQFDJI7MS0m+0rtWFvW+rSwbHUaq47IjhifuQRZr8zmH8qbmLiYGkosQaH13
+	 olpO+20VkEtrL0rYtXQkkj0300ZFDsyOMECE6SqksJ+EAYa4sR9dJXc0oV03f0oTC8syW
+	 7YEtIY1ynni8dP4V5ldrtkzaMdKuF/G+WuBuNVgkRKO6FGcn4lwcAaXMnzozOncwVppS2
+	 JmMpl5crWa8xGu5RGyzJARtOGxEN1arJdalyRy/Ru62dn1F9PK3aM9GZsPJ40BgHjgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793888020;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=Gr+NUEMjau+xl2lP4NDpYm7f/Dhs1l8XcQKj5Nk+OLA=;
-	b=fjABvCFplHsXXoEUNa1+Hu5Gxmge0HxGdPjJFRqUEQLUVifp9TILWjpfnRnvKc6qADre
-	 wCIWpcAaReRnO896zNFdjZWMBBaTOMzIVPDU7sYz7GFt8B3oK6GtvqclBWUliFMa5as+Z
-	 n4kuEQxmIyVGlAPQM/WrZC12nr6m3Os3fI1qqEnBH67rLxRcx0wf8MUqE3Qmqol9MZrau
-	 eLA2gWWjHoXkvBH+Qyd0T4g2hr+Fbj2Jl6Fkl615c0lgKod6TkbMzVmIWwwExn/Pfes9Q
-	 xPyWB/4UgrzFxQ0+Hrza/jrl7O7SXk0g2/GQNIo1Q2B9JBpuvr3TjwV/K8/ie4RgBLw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793888048;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=1eNs2HQmPLiDjSiZ3s0FNJwEwtww+7IyFoHujvnoR4M=;
+	b=f1gIuqiQy/2OstClEoyRR19Rfxop2avegnsEdBQyrR7XsJ2bo6mS22n13nIpJzqms2wr
+	 DtBZ5SFaRT6A82WoZQ4lwkBke1cxYKNTMGBhrhkAtfHWinX4HiMWJcWPLsJiIY2BzPG8P
+	 V+aA2vzDmOxEBzqKxRQuPfo39nOxr83Xf/Wn8vvPjLnyz+Djdfyob4OTV4CKc4///UjXm
+	 XKDwEtX63IrnA35lY1DUgwWj3nIAqxlqRREF7/LxEjp0euKlceLRHRFqDaf52wCnaaSsA
+	 FFDi+KbtKxM75lDn6C3Huw+8Z1/lokzmAbGwn/j04Vd8tycmKalU8y8rIb1gliE7RRQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=NdI7v+wR;
-	arc=none smtp.remote-ip=148.163.158.5
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dd7Sla9k;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B043606A31B;
-	Thu,  5 Nov 2026 14:13:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B043606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A7B606A331;
+	Thu,  5 Nov 2026 14:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=NdI7v+wR
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5AESJd2060070;
-	Thu, 5 Nov 2026 14:13:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Gr+NUE
-	Mjau+xl2lP4NDpYm7f/Dhs1l8XcQKj5Nk+OLA=; b=NdI7v+wRtIodvKWFkACcuw
-	KqCZ4vapNr37oyPTZ1gSHsz7YQKQbadWIwKyGT+pUqFy7XZqbm/B2yYwwXYEDXaq
-	MskmGrVat8CndN3gclZyXS0KnvO+H//zaYvXlY57iMEFBd4y/tHMsx/b5s0FuLxu
-	fJzfsmhIVB7ML25bjnoyfpICYwUvs9Pji+gUvHxK7y7WlBkm6U5VzEl2PBAbubBh
-	+lKcBMj9b68SZuBUQOpq9YvUhNgSs5gSJKiRaO3sjs5CV+orIaHwU/JbRHBIk9jo
-	q9K15Y00eDxAlDlmZgMQsiFqwnFs0gSFJbIdHw7upZSVOyorcn6wf8rTmKjbEy9Q
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4hn6rdj8q7-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 05 Nov 2026 14:13:37 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5DeBpA1509508;
-	Thu, 5 Nov 2026 14:13:36 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4hrdd7krjc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Nov 2026 14:13:36 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6A5EDWwk46203372
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 5 Nov 2026 14:13:32 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B494B2004B;
-	Thu,  5 Nov 2026 14:13:32 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3A2AF20043;
-	Thu,  5 Nov 2026 14:13:32 +0000 (GMT)
-Received: from [9.68.16.159] (unknown [9.68.16.159])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  5 Nov 2026 14:13:32 +0000 (GMT)
-Message-ID: <60da9bc6-eaae-4aff-85d3-63da3b83a6ac@linux.ibm.com>
-Date: Thu, 5 Nov 2026 15:13:32 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dd7Sla9k
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFF01F000C1;
+	Thu,  5 Nov 2026 14:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793888047;
+	bh=1eNs2HQmPLiDjSiZ3s0FNJwEwtww+7IyFoHujvnoR4M=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=dd7Sla9k/M51jfVSL6DdmbOgXz246kcXWwyrecE/1nULnakRnhleRokQO48/Aq/X3
+	 ZqnMqsLKtocQ50yvrabfbOrUxtWq/AjL0p3XUEHGEHAPmD6yno919h6pghhnSXKUtA
+	 D2xGNrEe5dt7f9/Diq6Vds3WghQuE7lH0k90Bnz/8p8Qb2Ntsgut/uR+CKBse4qb2/
+	 SC1MaUspAeCY4OXsvPcQJwt2Zbv/61YtiEe5iG9ZWIN5NcJ+4zDZ+SeIXTl/+G+7sb
+	 ElfIZLJE/m0HubPCkihkVnutcOSgj9XVTMIGu/qMSv9X2y/j0w0THibYKnv61iInl0
+	 N7VUkDrVUKynw==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 05 Nov 2026 14:01:14 +0000
+Subject: [PATCH v2 01/11] kselftest/arm64: Factor Linux syscalls out of
+ asm-utils.S
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,59 +53,189 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: drivers/s390x: select uvdevice tests using the
- target architecture
-To: Sasha Levin <sashal@kernel.org>, Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: David Hildenbrand <david@kernel.org>,
-        Steffen Eiden
- <seiden@linux.ibm.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261014200149.1365017-1-sashal@kernel.org>
- <20261103130131.4069212-3-sashal@kernel.org>
-Content-Language: en-US
-From: Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20261103130131.4069212-3-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qEyc5Vq2YMukiGxTB4LaH3WuC3jNWR4i
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA1MDA1NCBTYWx0ZWRfX9HsualfMzmPh
- q3J/NklJh8YCChVU0SbLfBaNaZwOw8W+ITPykCkPwzWTbWabmnP2BxrqtQ2NXvNrv4D4yeY23rA
- xE5Li3CHHON09SVDRnvTqCTC0YOVVoASN6fs+YGQ3u58BcNnPU6/6p93cGxq6U8+aQGkQPLGCtk
- Iw7CkQrSziQ6MKlR0/m8AQAPG0nDAWppL+iiZD0txtIMpmkYq8SWhLtWDnVTqZaDGGDzgcMIL9v
- EkDukkAAVh29qJMZHDt+RXzk6inA4JkjWYohKPXCwH0fj5/e+YI3VL8ILBeAeV33uDqQenVkLgw
- boXfLXH8kTwquveviAIWKVuvjvUo3Jd6LFGPQ2txpm8dj2AKYbUxK7oMO680FhqL/VMF7g+O/vf
- IHKjCrvNuFVIncknGjnDiThPDGfYRAeeIhFvWuiFCTEinm/6R7BvdVB4u9rMtQQeBOToXJ1Fchn
- 5phaixi5vIpvQTJCE+Q==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA1MDA1NCBTYWx0ZWRfXxOhrwzD/V6hj
- 5nL2C64p3oiJ9jApbF3fyJO9q2cb73nZCRwjBlFuZBeUVylwm9HWVk7e6GlUCzP7po60rBgyjX7
- Qr1lyudDZwrPWkPhgac31vRm6dY+EfE=
-X-Authority-Analysis: v=2.4 cv=QK391QLL c=1 sm=1 tr=0 ts=6aec8f11 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8
- a=RhU_m4-V-8PcAr7x2KIA:9 a=QEXdDO2ut3YA:10 a=QYH75iMubAgA:10
-X-Proofpoint-ORIG-GUID: qEyc5Vq2YMukiGxTB4LaH3WuC3jNWR4i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-05_03,2026-11-04_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
- impostorscore=0 clxscore=1011 lowpriorityscore=0 adultscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610300000
- definitions=main-2611050054
+Message-Id: <20261105-arm64-fp-stress-kvm-v2-1-81a5172468f0@kernel.org>
+References: <20261105-arm64-fp-stress-kvm-v2-0-81a5172468f0@kernel.org>
+In-Reply-To: <20261105-arm64-fp-stress-kvm-v2-0-81a5172468f0@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+ Fuad Tabba <fuad.tabba@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
+ Lorenzo Stoakes <ljs@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5000; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=Y+BTJzhHc/37sRLFKtDWKMLORopVyDJW0jaxke4d/qg=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLe9Gt4/J+8+US56wOzAs4Xywr4Yxal8RhqrNjxNeXw0
+ gTDa11SHaUsDGJcDLJiiixxWdwv60ter+E7uLANZg4rE8gQBi5OAZhI2ROGfwbHbjlFvzbs9l+g
+ +iw+0/5D8E4Nr1C9M7OtnHc8Vtw2ZQ/D//zEjB7mhfWOdu94twprTPlX/e31YeGi5y8y++RPcpr
+ osQMA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Am 03.11.26 um 14:01 schrieb Sasha Levin:
-> Ping. Steffen reviewed this and it still applies on 7.4-rc1.
-> 
-> The uvdevice tests still never get built when s390 is cross compiled
-> (KernelCI builds on x86, so uname -m never says s390x). Could one of you
-> pick it up, or should it go through Shuah's tree?
+In preparation for building versions of the load programs for fp-stress
+that run as bare metal KVM guests move the functions that perform
+syscalls out of the shared code assembly code in asm-utils.S into a new
+Linux specific file asm-utils-linux.S.
 
-Applied and queued for kvms390/master https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git/commit/?id=fdbf9b6e8faf00b7bbfc6c87de09676c971d2fe7
-Thank you and sorry for the delay. 
+No functional change.
+
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/Makefile          | 17 +++++----
+ tools/testing/selftests/arm64/fp/asm-utils-linux.S | 43 ++++++++++++++++++++++
+ tools/testing/selftests/arm64/fp/asm-utils.S       | 36 ------------------
+ 3 files changed, 53 insertions(+), 43 deletions(-)
+
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index d171021e4cdd..d92a755837ff 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -22,21 +22,24 @@ TEST_GEN_PROGS_EXTENDED := fp-pidbench fpsimd-test \
+ 	vlset
+ TEST_PROGS_EXTENDED := fpsimd-stress sve-stress ssve-stress za-stress
+ 
+-EXTRA_CLEAN += $(OUTPUT)/asm-utils.o $(OUTPUT)/rdvl.o $(OUTPUT)/za-fork-asm.o
++EXTRA_CLEAN += $(OUTPUT)/asm-utils.o $(OUTPUT)/asm-utils-linux.o \
++	$(OUTPUT)/rdvl.o $(OUTPUT)/za-fork-asm.o
++
++ASM_UTILS_LINUX := $(OUTPUT)/asm-utils.o $(OUTPUT)/asm-utils-linux.o
+ 
+ # Build with nolibc to avoid effects due to libc's clone() support
+-$(OUTPUT)/fp-pidbench: fp-pidbench.S $(OUTPUT)/asm-utils.o
++$(OUTPUT)/fp-pidbench: fp-pidbench.S $(ASM_UTILS_LINUX)
+ 	$(CC) -nostdlib $^ -o $@
+ $(OUTPUT)/fp-ptrace: fp-ptrace.c fp-ptrace-asm.S
+-$(OUTPUT)/fpsimd-test: fpsimd-test.S $(OUTPUT)/asm-utils.o
++$(OUTPUT)/fpsimd-test: fpsimd-test.S $(ASM_UTILS_LINUX)
+ 	$(CC) -nostdlib $^ -o $@
+ $(OUTPUT)/rdvl-sve: rdvl-sve.c $(OUTPUT)/rdvl.o
+ $(OUTPUT)/rdvl-sme: rdvl-sme.c $(OUTPUT)/rdvl.o
+ $(OUTPUT)/sve-ptrace: sve-ptrace.c
+ $(OUTPUT)/sve-probe-vls: sve-probe-vls.c $(OUTPUT)/rdvl.o
+-$(OUTPUT)/sve-test: sve-test.S $(OUTPUT)/asm-utils.o
++$(OUTPUT)/sve-test: sve-test.S $(ASM_UTILS_LINUX)
+ 	$(CC) -nostdlib $^ -o $@
+-$(OUTPUT)/ssve-test: sve-test.S $(OUTPUT)/asm-utils.o
++$(OUTPUT)/ssve-test: sve-test.S $(ASM_UTILS_LINUX)
+ 	$(CC) -DSSVE -nostdlib $^ -o $@
+ $(OUTPUT)/vec-syscfg: vec-syscfg.c $(OUTPUT)/rdvl.o
+ $(OUTPUT)/vlset: vlset.c
+@@ -45,10 +48,10 @@ $(OUTPUT)/za-fork: za-fork.c $(OUTPUT)/za-fork-asm.o
+ 		-include ../../../../include/nolibc/nolibc.h -I../..\
+ 		-static -ffreestanding -Wall $^ -o $@
+ $(OUTPUT)/za-ptrace: za-ptrace.c
+-$(OUTPUT)/za-test: za-test.S $(OUTPUT)/asm-utils.o
++$(OUTPUT)/za-test: za-test.S $(ASM_UTILS_LINUX)
+ 	$(CC) -nostdlib $^ -o $@
+ $(OUTPUT)/zt-ptrace: zt-ptrace.c
+-$(OUTPUT)/zt-test: zt-test.S $(OUTPUT)/asm-utils.o
++$(OUTPUT)/zt-test: zt-test.S $(ASM_UTILS_LINUX)
+ 	$(CC) -nostdlib $^ -o $@
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/fp/asm-utils-linux.S b/tools/testing/selftests/arm64/fp/asm-utils-linux.S
+new file mode 100644
+index 000000000000..e6c22b41dc5e
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/asm-utils-linux.S
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2015-2021 ARM Limited.
++// Original author: Dave Martin <Dave.Martin@arm.com>
++//
++// Utility functions for assembly code which use Linux syscalls.
++
++#include <asm/unistd.h>
++#include "assembler.h"
++
++// Print a single character x0 to stdout
++// Clobbers x0-x2,x8
++function putc
++	str	x0, [sp, #-16]!
++
++	mov	x0, #1			// STDOUT_FILENO
++	mov	x1, sp
++	mov	x2, #1
++	mov	x8, #__NR_write
++	svc	#0
++
++	add	sp, sp, #16
++	ret
++endfunction
++.globl	putc
++
++// Print a NUL-terminated string starting at address x0 to stdout
++// Clobbers x0-x3,x8
++function puts
++	mov	x1, x0
++
++	mov	x2, #0
++0:	ldrb	w3, [x0], #1
++	cbz	w3, 1f
++	add	x2, x2, #1
++	b	0b
++
++1:	mov	w0, #1			// STDOUT_FILENO
++	mov	x8, #__NR_write
++	svc	#0
++
++	ret
++endfunction
++.globl	puts
+diff --git a/tools/testing/selftests/arm64/fp/asm-utils.S b/tools/testing/selftests/arm64/fp/asm-utils.S
+index 4b9728efc18d..6d43eb10e01f 100644
+--- a/tools/testing/selftests/arm64/fp/asm-utils.S
++++ b/tools/testing/selftests/arm64/fp/asm-utils.S
+@@ -4,44 +4,8 @@
+ //
+ // Utility functions for assembly code.
+ 
+-#include <asm/unistd.h>
+ #include "assembler.h"
+ 
+-// Print a single character x0 to stdout
+-// Clobbers x0-x2,x8
+-function putc
+-	str	x0, [sp, #-16]!
+-
+-	mov	x0, #1			// STDOUT_FILENO
+-	mov	x1, sp
+-	mov	x2, #1
+-	mov	x8, #__NR_write
+-	svc	#0
+-
+-	add	sp, sp, #16
+-	ret
+-endfunction
+-.globl	putc
+-	
+-// Print a NUL-terminated string starting at address x0 to stdout
+-// Clobbers x0-x3,x8
+-function puts
+-	mov	x1, x0
+-
+-	mov	x2, #0
+-0:	ldrb	w3, [x0], #1
+-	cbz	w3, 1f
+-	add	x2, x2, #1
+-	b	0b
+-
+-1:	mov	w0, #1			// STDOUT_FILENO
+-	mov	x8, #__NR_write
+-	svc	#0
+-
+-	ret
+-endfunction
+-.globl	puts
+-
+ // Print an unsigned decimal number x0 to stdout
+ // Clobbers x0-x4,x8
+ function putdec
+
+-- 
+2.47.3
 
