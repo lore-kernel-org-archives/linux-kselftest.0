@@ -1,77 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793844079;
-	b=y8ElK9gPtWJmvTj+MsbhO9l738ikOpUTBySGMoKkT+8X5RatNY4G7V9JaTxZSwzOoS+n
-	 gBUxTB6QvIaunUcGarVktcihag2UdaMqR/gZutBpQAR+g7m/oZUV+5uRfIdVeDFXiTsoe
-	 172oadm8Av5/kYVJbokcxyoet6qdT3rQ7ZVQFacX0zZXEwJ6lYSCsTihTqTQTzHrj3A+m
-	 COpIzd8tAPm9NH/ASJ5Deh1pngat5r77AvMXiPBiNrsVrhenVYlsvuB2iivOGfUoAhap7
-	 NSR8Q0glhAZqXU0pZ42Psp1kVplEyi+W3lD/sbNIJj4bkea9cAkOxel3YwA/0drA6rw==
+	t=1793844753;
+	b=uYVRiqkQgSwFPjpfgdvnBsEfjjyO4STsfqv47Ta3djlwrc+y3Hy1xip2evzUR0SIiTu9
+	 NNrPz/vXW5aANOiYMzcznQZrAcN9A5BvITPPXAnLh4rmH4qcnlupyDmZtcgRHpiXFNbAh
+	 TtXTbyZ5+uWQ1Svg7ji9NADfr61QdaZL/jfB2GbRnt2qbpPakR1vUwUL6/l8Du4Y/EqS2
+	 YYjEuvMkeQuiDTuTsn3kkS4I2E4yaVA1Uj+0d6iqSsWsSkKWfP0BbJEnEAgUOsxH64XBf
+	 G84mAVlzV29An/bXXfS4xisZGig6EXqRZUD3vLXIMd7bt8LgOGTOjjH66rb2szrpqEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793844079;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=HHbMXrntQTOJ5IPdESBOGZVApcYK5UI5lu9oMqvobYE=;
-	b=XuZbXpuUTXvPaiCY86dXynbJdTRqSr/Wyh01zFaVjrynEXt5gybKPfsO+NL9eLY+wnrt
-	 r/lMFqOhwkDgzuNpOSpU30nMnnecbGWOvEtrwbkY8X+dOnA2rHOXm+qwEPfnoOLyuFMN8
-	 ReFdnusBOXfj0I1NXfLlTIehxyOegcUnMX1r0Q/LD+jDICaKSFZNHjp5F11ZUMjo0JZgP
-	 VruAjkJumwhYhyhY1i8ZHmebDKJU1enkA4rrc0IK0n92L7d76k/GkpiU+4UtvQuc081N2
-	 1+ugoYmMw4g4jvHV7Sq2U0wV0PRysBkjrU0186NS2ngSf3DLDpwaJxbQeh6Bab3XkJQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793844753;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=QaEwYVK0QRwa1prVIMD7IJ4FVuOtJkVN57HHtraLvXc=;
+	b=m0Xj2UCEEVIfLwoD1oNy7EsJBXwoGQJXPk7IMjEgSP8M5WOeKYwy60tBywdr/IGP9/OA
+	 mhiEOz+3bMVn3Ld8SmEs5ZgtLqyYGHHB3ImlqFOuWx/VL6CuVJW3Xm7Kt8SQ4hdCt9oC7
+	 jw6QSTkYS5h/T3miur21iRSaszDTKNusuCo1F09mc9g1e2LYAGFAwdznS2JmwxNlNWSgh
+	 S9MyNqb79rGH2Om7QptCNKgQj5LuoAJgJkPypxm8MqsMiwVsta35VyJ1vMzw3Kfuwyeu2
+	 J/5d3BNBffphpYIK7e/sN2ov/ukFZq98CpLlSEEHtyM0qpEifJuJehAyvhNq4n6snPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=desiato.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=Ae+tqrD0;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UsUqcTDX;
+	arc=none smtp.remote-ip=91.218.175.177
+Received: from mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC99606EEA6;
-	Thu,  5 Nov 2026 02:01:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EC99606EEA6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A530A606A31B
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:12:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A530A606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=Ae+tqrD0
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
-	To:From:Reply-To:Content-ID:Content-Description;
-	bh=HHbMXrntQTOJ5IPdESBOGZVApcYK5UI5lu9oMqvobYE=; b=Ae+tqrD0A5cIWp9q1MmrdrlOhm
-	x0DHa/HcBOUb8qpxiTZNQGso0gaFp60cS1T4G+k/gU+stshu3i38AotQfBfdAfTVoIaZt0GKHNtOv
-	1xIrt0/A/Qf433sSC8WDNBQT5CQu86Qs6LujeOtqo2kml1k9vlrsI1Rg8cJ4epb3o0SVHtLo10tDb
-	Bka/PNm22PqSLTkTcgJD7DwCbNWBvP1QbHQqVFnV/PQuKz76uTOKf+3XHGmyNLeMcSPI5oWqY05ar
-	DAuaXhf8/SNlQ9InzAkjGLZ4o4PRxsduxy4SN91W/GhAxZ7O3Ywe6d3KPGYt9qFII5v9FQYyj21e0
-	vIZZreKg==;
-Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOmmo-00000002ROR-265C;
-	Thu, 05 Nov 2026 02:01:08 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xOmmm-0000000AWE6-3u0A;
-	Thu, 05 Nov 2026 02:01:04 +0000
-From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paul Durrant <paul@xen.org>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Fred Griffoul <fgriffo@amazon.co.uk>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Kunwu Chan <kunwu.chan@linux.dev>,
-	Kunwu Chan <kunwu.chan@gmail.com>,
-	syzbot+208f7f3e5f59c11aeb90@syzkaller.appspotmail.com,
-	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v2 17/20] KVM: nSVM: Cache L1's IO permissions map pages
-Date: Thu,  5 Nov 2026 02:00:59 +0000
-Message-ID: <20261105020104.2507083-18-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261105020104.2507083-1-dwmw2@infradead.org>
-References: <20261105020104.2507083-1-dwmw2@infradead.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UsUqcTDX
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pBrfotY9+XE+xLOo6ESNM23xl8EfAZ2RsF5WJxQ1HQg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793844749; v=1; x=1794449549;
+ b=UsUqcTDXiUIUDjy7EsYATTiTE4U6RjuH70yVSspKepTCWFqrC/x3yt0UZgU75x1/nKu1mAnD
+ Hk9Ko34P03qH2vXk1TZ87alHQ0PdewiOAmMEK2PuaqC4at6pOlyIV1CTYIBiQUivv/pbCKiY32n
+ ScIr6xmD26QRN+0a3WoBlGEQ=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id d7e254c367df15f0;
+	Thu, 05 Nov 2026 02:12:29 +0000
+X-Mizu-Trace-ID: d7e254c367df15f0
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 5 Nov 2026 10:12:15 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	weiwan@google.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] ipv6: ignore link state in gateway check
+Message-ID: <auvl_644NtfQVWrW@fedora>
+References: <20261104195655.1406837-1-aroslavdudkov622@gmail.com>
+ <20261104195655.1406837-2-aroslavdudkov622@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,190 +67,99 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104195655.1406837-2-aroslavdudkov622@gmail.com>
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Wed, Nov 04, 2026 at 07:56:54PM +0000, Yaroslav Dudkov wrote:
+> IPv6 route cannot be added in table when all
+> following conditions are true:
+> - gateway is not link-local address
+> - ignore_routes_with_linkdown=1 on device
+> - nexthop has no carrier
+> - gateway is not present or covered by any route in table already
+> Also multipath routes addition is invalidated by kernel even
+> if only one of added nexthops satisfies all above conditions.
+> 
+> Reproducer:
+> 
+>   ip netns add t
+>   ip -n t link add va type veth peer name vb
+>   ip -n t link set va up
+>   ip -n t addr add fd00::1/64 dev va nodad
+>   ip netns exec t sysctl -w \
+>     net.ipv6.conf.va.ignore_routes_with_linkdown=1
+>   ip -n t -6 route add 2001:db8::/64 via fd00::2 dev va
+>   # added
+>   ip -n t -6 route add 2001:db8::/64 table 100 via fd00::2 dev va
+>   # RTNETLINK answers: No route to host
+>   ip -n t -6 route show table all
+>   ip netns del t
+> 
+> Route should be added because:
+> - RT6_LOOKUP_F_IGNORE_LINKSTATE in commit d5d32e4b7668
+> ("net: ipv6: Do not consider link state for nexthop validation")
+> was added for this
+> - the same route is valid in main table (when no specifying table id
+> while adding route)
+> - fib6_nh_init() initializes nexthops with no carrier
+> - IPv4 already does this (fib_check_nh_v4_gw() ignores link state
+> using the FIB_LOOKUP_IGNORE_LINKSTATE flag)
+> 
+> Before commit b2c709cce682 ("ipv6: Convert gateway validation to
+> use fib6_info") rt6_lookup() was used for checking if nexthop is
+> valid, rt6_lookup called rt6_device_match() which does not check the
+> link state. After change rt6_lookup() to fib6_lookup()
+> find_match() under fib6_lookup() started to invalidate linkdown
+> devices, because RT6_LOOKUP_F_IGNORE_LINKSTATE is not passed to it.
+> 
+> Adding RT6_LOOKUP_F_IGNORE_LINKSTATE to flags for ip6_route_check_nh()
+> solves the problem. RT6_LOOKUP_F_IGNORE_LINKSTATE is already used
+> inside the first search ip6_nh_lookup_table() and fixes the
+> bug in second search fib6_lookup(). Also RT6_LOOKUP_F_IGNORE_LINKSTATE
+> isn't read inside fib6_select_path().
+> 
+> Fixes: b2c709cce682 ("ipv6: Convert gateway validation to use fib6_info")
+> Signed-off-by: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
+> ---
+> IPv4 example of this situation:
+>   ip netns add t
+>   ip -n t link add va type veth peer name vb
+>   ip -n t link set va up
+>   ip -n t addr add 192.168.0.1/24 dev va
+>   ip netns exec t sysctl -w \
+>     net.ipv4.conf.va.ignore_routes_with_linkdown=1
+>   ip -n t route add 192.0.2.0/24 table 100 via 192.168.0.2 dev va
+>   # added
+>   ip -n t route show table all
+>   ip netns del t
+> 
+> Also when adding RT6_LOOKUP_F_IGNORE_LINKSTATE to flags of
+> ip6_route_check_nh() makes adding this flag inside of
+> ip6_nh_lookup_table() unnecessary for this call, making another call in
+> ip6_route_check_nh_onlink() with flags=0 the only place where it is
+> needed.
+> ---
+>  net/ipv6/route.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> index 94e5ef1c4f83..73d8a2c95602 100644
+> --- a/net/ipv6/route.c
+> +++ b/net/ipv6/route.c
+> @@ -3424,9 +3424,9 @@ static int ip6_route_check_nh(struct net *net,
+>  			      netdevice_tracker *dev_tracker,
+>  			      struct inet6_dev **idev)
+>  {
+> +	int flags = RT6_LOOKUP_F_IFACE | RT6_LOOKUP_F_IGNORE_LINKSTATE;
+>  	const struct in6_addr *gw_addr = &cfg->fc_gateway;
+>  	struct net_device *dev = _dev ? *_dev : NULL;
+> -	int flags = RT6_LOOKUP_F_IFACE;
+>  	struct fib6_result res = {};
+>  	int err = -EHOSTUNREACH;
+>  
+> -- 
+> 2.54.0
+> 
 
-The per-intercept IOPM check on every trapped L2 IO instruction reads
-L1's IO permissions map with kvm_vcpu_read_guest() — a
-memremap/memunmap cycle per access with unmanaged guest memory. Cache
-the three IOPM pages in gfn_to_pfn_caches keyed on iopm_base_pa, as
-for the MSR permissions map.
-
-Unlike the MSRPM accesses, an IOPM read is not naturally aligned: a
-two-byte read for a port range straddling a page boundary (e.g. ports
-0x7ff8-0x7fff at bytes 0xfff-0x1000) spans two pages, so read byte by
-byte, each from its own page's cache.
-
-Failure semantics are preserved: an unreadable IOPM reflects the
-intercept to L1 (NESTED_EXIT_DONE).
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/x86/kvm/svm/nested.c | 71 +++++++++++++++++++++++++++++----------
- arch/x86/kvm/svm/svm.c    |  2 ++
- arch/x86/kvm/svm/svm.h    |  7 ++++
- 3 files changed, 63 insertions(+), 17 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 4e22cd7a38e1..a682b7446c3e 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -1519,10 +1519,36 @@ static void nested_svm_triple_fault(struct kvm_vcpu *vcpu)
- 	nested_svm_simple_vmexit(to_svm(vcpu), SVM_EXIT_SHUTDOWN);
- }
- 
-+/*
-+ * Initialize the nested gfn_to_pfn_caches, once per vCPU. Unlike the
-+ * allocations in svm_allocate_nested(), the caches persist across
-+ * EFER.SVME toggles: svm_free_nested() only deactivates them, and
-+ * reuse goes through kvm_gpc_activate() without re-init.
-+ */
-+void svm_init_nested_caches(struct vcpu_svm *svm)
-+{
-+	int i;
-+
-+	kvm_gpc_init(&svm->nested.vmcb12_cache, svm->vcpu.kvm);
-+
-+	/*
-+	 * KVM only ever reads the MSR and IO permissions maps, which L1 may
-+	 * keep in memory that its VMM maps read-only: map the caches
-+	 * read-only (which also means never marking them dirty), matching
-+	 * the read semantics of the kvm_vcpu_read_guest() calls they
-+	 * replace.
-+	 */
-+	for (i = 0; i < ARRAY_SIZE(svm->nested.msrpm12_cache); i++)
-+		__kvm_gpc_init(&svm->nested.msrpm12_cache[i], svm->vcpu.kvm,
-+			       false, true, NULL, 0);
-+	for (i = 0; i < ARRAY_SIZE(svm->nested.iopm12_cache); i++)
-+		__kvm_gpc_init(&svm->nested.iopm12_cache[i], svm->vcpu.kvm,
-+			       false, true, NULL, 0);
-+}
-+
- int svm_allocate_nested(struct vcpu_svm *svm)
- {
- 	struct page *vmcb02_page;
--	int i;
- 
- 	if (svm->nested.initialized)
- 		return 0;
-@@ -1539,18 +1565,6 @@ int svm_allocate_nested(struct vcpu_svm *svm)
- 
- 	svm->nested.vmcb02.cpu = -1;
- 
--	kvm_gpc_init(&svm->nested.vmcb12_cache, svm->vcpu.kvm);
--
--	/*
--	 * KVM only ever reads the MSR permissions map, which L1 may keep in
--	 * memory that its VMM maps read-only: map the cache read-only
--	 * (which also means never marking it dirty), matching the read
--	 * semantics of the kvm_vcpu_read_guest() calls it replaces.
--	 */
--	for (i = 0; i < ARRAY_SIZE(svm->nested.msrpm12_cache); i++)
--		__kvm_gpc_init(&svm->nested.msrpm12_cache[i], svm->vcpu.kvm,
--			       false, true, NULL, 0);
--
- 	svm->nested.initialized = true;
- 	return 0;
- 
-@@ -1575,6 +1589,8 @@ void svm_free_nested(struct vcpu_svm *svm)
- 	kvm_gpc_deactivate(&svm->nested.vmcb12_cache);
- 	for (i = 0; i < ARRAY_SIZE(svm->nested.msrpm12_cache); i++)
- 		kvm_gpc_deactivate(&svm->nested.msrpm12_cache[i]);
-+	for (i = 0; i < ARRAY_SIZE(svm->nested.iopm12_cache); i++)
-+		kvm_gpc_deactivate(&svm->nested.iopm12_cache[i]);
- 
- 	__free_page(virt_to_page(svm->nested.vmcb02.ptr));
- 	svm->nested.vmcb02.ptr = NULL;
-@@ -1654,7 +1670,7 @@ static int nested_svm_intercept_ioio(struct vcpu_svm *svm)
- 	unsigned port, size, iopm_len;
- 	u16 val, mask;
- 	u8 start_bit;
--	u64 gpa;
-+	int i;
- 
- 	if (!(vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_IOIO_PROT)))
- 		return NESTED_EXIT_HOST;
-@@ -1662,14 +1678,35 @@ static int nested_svm_intercept_ioio(struct vcpu_svm *svm)
- 	port = svm->vmcb->control.exit_info_1 >> 16;
- 	size = (svm->vmcb->control.exit_info_1 & SVM_IOIO_SIZE_MASK) >>
- 		SVM_IOIO_SIZE_SHIFT;
--	gpa  = svm->nested.ctl.iopm_base_pa + (port / 8);
- 	start_bit = port % 8;
- 	iopm_len = (start_bit + size > 8) ? 2 : 1;
- 	mask = (0xf >> (4 - size)) << start_bit;
- 	val = 0;
- 
--	if (kvm_vcpu_read_guest(&svm->vcpu, gpa, &val, iopm_len))
--		return NESTED_EXIT_DONE;
-+	/*
-+	 * Read byte by byte: a two-byte read at the end of a page (e.g.
-+	 * ports 0x7ff8-0x7fff spanning bytes 0xfff-0x1000) crosses into
-+	 * the next page of the IOPM, i.e. the next cache.
-+	 */
-+	for (i = 0; i < iopm_len; i++) {
-+		unsigned long offset = port / 8 + i;
-+		struct gfn_to_pfn_cache *gpc;
-+		gpa_t gpa;
-+		int idx;
-+
-+		if (WARN_ON_ONCE(offset >= IOPM_SIZE))
-+			return NESTED_EXIT_DONE;
-+
-+		gpc = &svm->nested.iopm12_cache[offset >> PAGE_SHIFT];
-+		gpa = svm->nested.ctl.iopm_base_pa + (offset & PAGE_MASK);
-+
-+		idx = kvm_gpc_lock_page(gpc, gpa);
-+		if (idx < 0)
-+			return NESTED_EXIT_DONE;
-+
-+		val |= *(u8 *)(gpc->khva + offset_in_page(offset)) << (i * 8);
-+		kvm_gpc_unlock(gpc, idx);
-+	}
- 
- 	return (val & mask) ? NESTED_EXIT_DONE : NESTED_EXIT_HOST;
- }
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index b78727cca9b1..f601e0650c36 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1382,6 +1382,8 @@ static int svm_vcpu_create(struct kvm_vcpu *vcpu)
- 	svm->vmcb01.pa = __sme_set(page_to_pfn(vmcb01_page) << PAGE_SHIFT);
- 	svm_switch_vmcb(svm, &svm->vmcb01);
- 
-+	svm_init_nested_caches(svm);
-+
- 	svm->guest_state_loaded = false;
- 
- 	return 0;
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 8a5dff5a9ee3..256eefb27a83 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -229,6 +229,12 @@ struct svm_nested_state {
- 	 */
- 	struct gfn_to_pfn_cache msrpm12_cache[MSRPM_SIZE / PAGE_SIZE];
- 
-+	/*
-+	 * Cached mappings of the three pages of L1's IO permissions map,
-+	 * keyed on ctl.iopm_base_pa, for the per-intercept checks.
-+	 */
-+	struct gfn_to_pfn_cache iopm12_cache[IOPM_SIZE / PAGE_SIZE];
-+
- 	/*
- 	 * The MSR permissions map used for vmcb02, which is the merge result
- 	 * of vmcb01 and vmcb12
-@@ -904,6 +910,7 @@ int __init nested_svm_init_msrpm_merge_offsets(void);
- 
- int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb_gpa, bool from_vmrun);
- void svm_leave_nested(struct kvm_vcpu *vcpu);
-+void svm_init_nested_caches(struct vcpu_svm *svm);
- void svm_free_nested(struct vcpu_svm *svm);
- int svm_allocate_nested(struct vcpu_svm *svm);
- int nested_svm_vmrun(struct kvm_vcpu *vcpu);
--- 
-2.43.0
-
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
