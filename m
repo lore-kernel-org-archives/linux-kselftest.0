@@ -1,190 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.8
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793905753;
-	b=CYkhpEjJorpJ8wgs95C4xjSMZvEXj8Hpzo4u04J3lF4rF+rfdraJJoozJDLH8gfFC77y
-	 +Cv9Aqm62JX3gJ9FhZlTnqKki0ZO6XZLA+/RpVkX8OwTk7Tz4R3tzoVlwEsg6qYeo3nai
-	 kyl2w2Z73Cw0Nh8XAn8zDDJcvaxX1m548DiEH5DURe47SAIvySQiLpbKs6wDI41plsoEy
-	 GKyB305d4M6OdPvIG7KjFkZ/V1xUFOXsVijn+zsPDz5abDfoWNmAmAMawfGn3gkT1alY8
-	 InsMaMvHd22iXOOTAOzyG2J5adCKk5EZxcvV+1U3ZgZ2iB8IBEbfQ8dgBk9E48NPJ1Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793905753;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
-	 Received:Received:Received:From:To:CC:Subject:Thread-Topic:
-	 Thread-Index:Date:Message-ID:References:In-Reply-To:Accept-Language:
-	 Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:user-agent:
-	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:Content-ID:
-	 Content-Transfer-Encoding:MIME-Version:
-	 X-Exchange-RoutingPolicyChecked:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
-	bh=IMHvZVYq67S9ojkMiIZEHLdeJxq1HHwnR4NMsLB51Ys=;
-	b=InP4xs2JAKgAonp6S7R15PbZcOLg+6fo3JNMcMIWaIEuhi4eYac5nS6UiTm7oJ9rRYn/
-	 aubcEhhoC2qz15eZHx1EuaSuIDN/JZX4xInblP2au9sdhfvdapBKJmA1nMzFKHEuVoYRR
-	 IaP2YuS8K0K9ZDw8AmyCdVMSWs2tGXCEynWkjsoqb7EnwgAeluTlofEgXsZAfZwYPwjFu
-	 5HUPzXXdUWVNsRBfwsDJHQkNjp0aSYfpXAuJkhM0svo/ulZLrXr3I5AcUvl1oLG2o+u5K
-	 Rr8eYHWWJXdeUi8SlXY9X1lxb5SvvPKYWWqEtzlnVLBKN9lBnyvsUE3nw0QAqCf5/Bw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XI6fwf6C;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=192.198.163.8
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793905944;
+	b=bZiyCPTjthcoAeWs0LbfHy8yk03M4tm905RXWDvLsUdRtVX90IFHVYs5QZNO4aboh8Vb
+	 xChsDl/plcPw+Y6amljKJ9yhz/zUFXA0XTv4Uzwqm65k5C5BbeUVBHa+Uo9ow+3K8GuGh
+	 4pd61qJjuJAJMatoYjsm34UdXh0L4wdiqOwPj4W/ZjhyF2eHxIU5fUJsqCmVOhbvrNSgP
+	 OHrCHhijkw6XDL9RaICTvB0CSoQ7n6rhbdK3VQzQO6LiALMzJroqtZ45Q/A9saZY+YGGZ
+	 sTLjvkC9x2NYhGvtRtHJ+mFz8WX170NenGmyvcjujrnIo2agy7EiWf4tIBQQwHgR0Jw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793905944;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=QH8EWm3WpJvKmm+3SH11RyockHxBeCCGhqou8vP+rPk=;
+	b=O3Ax6f9O8YK7dGnsmehNDCM99iSRfSKbrpXPtYfLOtnrmoubgE/RvjQFzoJusOa+XM0F
+	 NmVX/eZX6z2SrztwVgHcCmrZ/ckuoc+BdtBS+K/lcuJMyMDO0cyYJxeSAvfmqZsORlrjn
+	 tCERxOHnBM1VI+vqG45gziNZtZJ9ZaTEXS7IRMREE2KEPYpVKB1S3yWTKO6GtBFbODGXL
+	 8aks+Wg1AtsHnjlLVkVSJDc5w99rti466Thae4zT2av0h59vbcDjf0ATEHvjKJDahZxAn
+	 dEVbdifnrsjf38By9qPaK4MPeJHbGwkevK9izKbJhJJJ/ZUqoVq2eiygfAEBh5gs+9A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B0MNLtWQ;
+	arc=none smtp.remote-ip=209.85.216.52
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EC9606A31B;
-	Thu,  5 Nov 2026 19:09:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 17EC9606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D00606A326
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 19:12:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3D00606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=XI6fwf6C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793905752; x=1825441752;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=IMHvZVYq67S9ojkMiIZEHLdeJxq1HHwnR4NMsLB51Ys=;
-  b=XI6fwf6CyQ2grSPG3+/0Naf595hN4srglmyaAKEh4pEvCDsFN5Nh3+B5
-   QcaLiiYiQAW6KsjzP7W66PDb4A1Q1QgbBrA3tkhSTpIJudXPG+ni4zgMx
-   HgJI1SwvpC6J4ZvNdaF7P4oIr96TUHAWrbgMGLwiIso5Pe4/2r19m6Bzu
-   VdQkC9bgYP8KJ5NV7gkvRHvZBlXAoRxm5U6Uj/Z8V2CI+hnhx3SizkPh3
-   YOxEXVMtl4QW6mrwI5eWNPn6+H2YXzFpyXSad6FN/Lx/HTZiTy9O675c2
-   oCBFbVTwyLCfer0w7vsokF4SLT7UBZrATEUo5Icu2IQ4Drezclj8wk4dW
-   A==;
-X-CSE-ConnectionGUID: WBy28H/nSF69ZhjbSmctLg==
-X-CSE-MsgGUID: hSumXVLLQ7ycUQnQUZKftg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2595574"
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="2595574"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 11:09:11 -0800
-X-CSE-ConnectionGUID: 4I8UMxPBT662PAs+Fu3OBg==
-X-CSE-MsgGUID: +bA331hdRa+jmHq3TZbeaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="7257091"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 11:09:11 -0800
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Thu, 5 Nov 2026 11:09:10 -0800
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56 via Frontend Transport; Thu, 5 Nov 2026 11:09:10 -0800
-Received: from BYAPR05CU005.outbound.protection.outlook.com (52.101.85.25) by
- edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Thu, 5 Nov 2026 11:09:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=K2ubqxnl6XGcQNp2DE7fRX6GkgFCzUCxqmyt2PC+sUcc9oKV0evkkALyg3AMi9Z2fG5emiY4ZKZ+DqSOvFyAZ0nYPUVK1ycGBczFMJWDGCtbf6IKsfl4rnDz6k4vVGU8q3xA95XNiA9YZZEHCLvGUKQT6p9I/d8Rzlvl4zufngxACDwTwdVM4L1ql9iVQ90z8NiMmuZrUior+6UIbZvwwdmgn6AFT04QE7Erj7MOACTuRNz6NBvTLgZqTyFGOzu6ur9QztYVfBHBE1j4IaLK1RzIMP6nFipWcVnuswZ2LEZ+hXt9vSW7jyKTXNUTydAb2+8W44YRw/Bc0pWZAk4WQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IMHvZVYq67S9ojkMiIZEHLdeJxq1HHwnR4NMsLB51Ys=;
- b=nYonJPFvgU+8ajze687U5LWLbMX1VWiiyykpaC24IYtvx7XUZyiCXVMQwJokXibGcJ6WmMwuO2qmBOIoaxmvrqLOxPyR1kpbR24ea33iDrbF8VAudQD8xBch2YeXzgmZKqPo04B6KtVr39YXT5N3gdML5NZV7kiq9M/iNUgigte339bvqVoaoZoZNG44jn6PNsCLOy2U2CzK0R+LEVbc1+HXB68EnpegBqnMmPwYykDsLVhM+0NpsJMCHBlm1sq+oBTsL2RuXqX7V8kOWAi1m8cnQcC68yb7Au2aZi3b6rWWODrq4neF5VEzxlb6PeS+DbO8k6WLz+4RtpEcQPDjtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA3PR11MB634048.namprd11.prod.outlook.com
- (2603:10b6:208:549::23) by SAVPR11MB9549.namprd11.prod.outlook.com
- (2603:10b6:806:4e9::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.10; Thu, 5 Nov
- 2026 19:08:56 +0000
-Received: from IA3PR11MB634048.namprd11.prod.outlook.com
- ([fe80::760f:f0a4:7417:6e57]) by IA3PR11MB634048.namprd11.prod.outlook.com
- ([fe80::760f:f0a4:7417:6e57%5]) with mapi id 15.21.0592.009; Thu, 5 Nov 2026
- 19:08:56 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "sashal@kernel.org" <sashal@kernel.org>, "mingo@redhat.com"
-	<mingo@redhat.com>, "tglx@kernel.org" <tglx@kernel.org>, "bp@alien8.de"
-	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC: "hpa@zytor.com" <hpa@zytor.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH] selftests/x86: report a skip when shadow stack cannot be
- enabled
-Thread-Topic: [PATCH] selftests/x86: report a skip when shadow stack cannot be
- enabled
-Thread-Index: AQHdbNIsmx0qyW/3YUawWVAG6Z4GRLcf2JCA
-Date: Thu, 5 Nov 2026 19:08:56 +0000
-Message-ID: <4bc04525a02fd3fbc39b010acba59c4ac53c01b0.camel@intel.com>
-References: <20261105030245.1241500-1-sashal@kernel.org>
-In-Reply-To: <20261105030245.1241500-1-sashal@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.44.4-0ubuntu2.1 
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA3PR11MB634048:EE_|SAVPR11MB9549:EE_
-x-ms-office365-filtering-correlation-id: 538bc771-d14e-4ef4-83ef-08df3b703d6b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|23010399003|376014|366016|1800799024|18002099003|22082099003|38070700021|56012099006|11063799006|261026140227099003|10067099003|261028144727099003|261022105027099003|261009223027099003|261026121527099003;
-x-microsoft-antispam-message-info: za2as1fpXw4QnFXCW4TNhTft+SZrDce2AmIlQgOVuyPbvqttmCyRLmvfjSmD+6XcF4TBlNWEglGsF99LBccA43odgJgMqkRd3KoM+UiN4jYqTdJ67ylMtnjvKgjnHS/akrZD0YooSQDRGnJaq5D0AA4vZM3UFTg/bcVWfkKoHSajJbeSQ3IdQ+Xs7h2IIlAPuGqLbM2FtbFvnAC1rVJxt/jbQQqDjyJ2b16db/FnFPN6XuJlC9TCv+DOta3T7cqlD/0vmFvc4rTb45/ODRAHZPa8FivoDDwCmStiQojSrPFXGuglHn95tj7ogcec7gdtJMPPLDHwDA0MMD9DbsTOCpVumUC3ODq4/yENsVbAqoQOTU56eZrXhBvzaKk7WHy7DHCKbjFRwnqXFA1U/XUK430fDwVm2NeQEPdzHXCMVbtuwEHgBiMZzacT66M+QtBSkeTRYhurxnIrQJWcBQDima0uIsxsKmmGtKVr9+XzZyEccSs7nmeehlgF007/BYKFTPk/5RT8zK0JxBSCIl5kDuOz0N3U+t9Ugx/3epYvs/QMkNU22zr/vf9vPOqk3vzLjttnyB/AJemqRpMnaAT9CjYZRzSzuw8dIS+FGFIl9l7e/sqq/gsZSV5nd+n6evlXpoSFKFU+7CrNetUiCGoPeU+JWJovDENFMvLsJRse1YwPDtoLm9m9SeSq/cyLgcuuHZfORQkNsKZ7H0MhpgZZFYW5HhbirXPZTLCC9cQQuMs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB634048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(23010399003)(376014)(366016)(1800799024)(18002099003)(22082099003)(38070700021)(56012099006)(11063799006)(261026140227099003)(10067099003)(261028144727099003)(261022105027099003)(261009223027099003)(261026121527099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlIyNGpaNnZuUDFHekVkbjgya3Y1RUthQXNheWh2bjZEUlUwbGRmaVVrRGtk?=
- =?utf-8?B?MTBNMEVPc3dvenBpWTd0bytVekJOcHY2V3VQa01hS2FRblpYa2hmTlk4Vy9m?=
- =?utf-8?B?aFBmWFpvQVBIOEc4SytXcFFKUWVCRWF2bmJxUVlyay9Xbng4MGU1c1NJTDdU?=
- =?utf-8?B?a3k2cTluNXl1N3lvTmFndGN0VjNJY3FkMzZJSmpYTjl6MW1BQkMwZGhvdjdH?=
- =?utf-8?B?NXdWUFBrOHdVNjlucDFzM2o4aU9tQ01iSzZtN0RTdUNjSURaVUFTVGJWalRk?=
- =?utf-8?B?dkR4MVhWTDllRnJwR1MrWjExMThnR1BJRElqK05IZEFKNS82YlYrUWRaSEZY?=
- =?utf-8?B?Y25qV0JiSG5qNENmWTBPblJwZjBYT0huajl6bjFEUUpXcU10T2xCYUFNVTBJ?=
- =?utf-8?B?OTRMUGcxQlNaTzJZcEVoZ2NVcWQxU3JRSlN6R0pzQUw0VWJEODZwdVNHTFZs?=
- =?utf-8?B?bzNPZ2xvb2xucEYvOElzanpoQVU2aStrVWdGVnlOOGJqNTBjSU9oRnJ3NmpG?=
- =?utf-8?B?S1Y3RG11dzdKVndaNlRXTkY3Y2VudGVnbVZaMWNEU0VrZ0laRWpzQXE1NmFK?=
- =?utf-8?B?aGZmc2FnK2VpNHFPSmVrUkZOcWdiZk5ESnZHUDNmcVJ2SjA5T1pHVDZQbGpq?=
- =?utf-8?B?dE5xVEo4Nlh6MjZQdFBqUTBLSmRPeEtuSmVqRjVJZDlxTVRNd0ViTEpEb1JC?=
- =?utf-8?B?U1Z4MG5uQ1BrSnRwYlhpMGFDSFNCYTNBTzhxeE5oeTlBV1lTdzFZMytFQXRT?=
- =?utf-8?B?UXV4enc0QWl1T3pJQmxzbzNFM0l3R3dIRXdweXE1WGRoeTJPWHcwYnJ3UHp6?=
- =?utf-8?B?VG9yM2tWT2twUHZyYTVzRU9xTHJ4bE5iWEFaQml6cDloL1R3UlN3Wi90UENJ?=
- =?utf-8?B?N3R4YmtaYnFwVUo3SmRlSUUxU1o0WTVoUlpNYkErUVFHeVdISnhjMDlwVkdM?=
- =?utf-8?B?UTNiU1VOMVJKWTdNaktDWmc5dHljcnZLdG16YjBQWmpmV2thczZVUnAvMG1Z?=
- =?utf-8?B?UG5VK1Iva2RTemRBZEJrR3NhWDFnRkx4UFBFMHhadGFYQVAyRnlZUytpdFd5?=
- =?utf-8?B?cG4vUEE3OE9QR0lqYkNYUnc4VTBYWlZaOURHd2tOenJSWnVGQkxvWjhCdjMz?=
- =?utf-8?B?dDFLdjZ4U3d5blFnVnRQWVErMzYrS09MTnVwVEFHdnZ3bVpxcHM5SWYyNXNR?=
- =?utf-8?B?SkFVZjNiL3FiRkxIN0ZFTkpwajlkK0orWDB5MUlGR1VxWjVrYlVnalVRL0gv?=
- =?utf-8?B?ZE1aS0V6eFgxcTBRNnBiU0IydFhjdXhnSTNQeXNSNWk0Z3FPQ3oyNWtFVW1R?=
- =?utf-8?B?Rk02VDkxUFZrWGhsTE1DZ0R1d3hnN3B3dElTc1FrSlE4MHR5N1FrdHl4bm1Q?=
- =?utf-8?B?MFVpWjJXMjkwNzlFVDFXbmFhUCthVnJiZHBrYWRYbEZuKy95YVFmdnYxVEhL?=
- =?utf-8?B?RVRuNmt3b3ZqWU4wQko3SHZ0Q3AvQUZmY29YK3ZqdmthcVIzcGxEUUpZT3hP?=
- =?utf-8?B?eXBOUS91d2NSLzlyWjVTbTVweXloVW1vZHZSQTI2SUc4MkdneUpxV1VNWVhk?=
- =?utf-8?B?VjRsZ3hoM3p5T1FzT1ZIY1MxcHNKMVZJMmZOV2x0a0o2ak44MlZKWWNoNWV4?=
- =?utf-8?B?ejRydDlqSjFDV25QM0Y4UE9KMFZ3RXBCaUdmVnJ0MmJ6RU5Ha1FMaEo1TitM?=
- =?utf-8?B?RnkyUXh1ZXJNUkpIdGxESm9ENjUxSWdKUWZHcTV4MFpwS0lwMlJqRnBRTjhE?=
- =?utf-8?B?NlV4N010OXYyRmFtdW15cm43SUMvRk5aZ3g0UEZwOEtzOVNhQkdqMldRcHJN?=
- =?utf-8?B?MmtDUG9Qc2tia3ZPOVh0b1IrOXQ0N3N1NzZEZmxBN09GMmUxUi9zKzZJd0Na?=
- =?utf-8?B?U0VlUHdSMjRrQ0dncE5GNWdaNmxTT0hVUW1aVFdVUFM1a09FcENSTklSQVgy?=
- =?utf-8?B?L2tkMkk1TGoxQ3NUdDkwdms4TTBHa3hSWmpxRDI4ZnlmeCtqdk8zZE5nWWNq?=
- =?utf-8?B?N0s0Zk1zTUdBMDhQaEhhZmF5QWJsVGluU3A5c0dOMmNpS050aDN4eDBteHA0?=
- =?utf-8?B?ZUQvMEpOemZ6WXdhNGsvZktXWnhBaFhjaXpLRzFOenp2ZGZxa3ZIbG1JcUZS?=
- =?utf-8?B?VzhyV0NvWWd3RW9wVEozTVowM0QzN2VMRTNKZVVkdmdMZTlPd0tIVUdEYlFq?=
- =?utf-8?B?dWxNdGhaN3Y2VVJ6OXBiZUY0ejNEdUJUOGZlclhaQ0ZwMFdRejBQTXBTUnBQ?=
- =?utf-8?B?czBYM0RxcFArcVB3NFJla2pEU1F0RVA2RGZERGFKblBhRGEvVnMrMUlBVG9S?=
- =?utf-8?B?cmhMWjIza2VEZU1kR1NkYWdRczBKQkJGdlFJZFZEVUNLbWt1MXVoa0llajBk?=
- =?utf-8?Q?KRcbV+sKTKsLqFpY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <547B15953EFAA247AC50A985E50DDF2B@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B0MNLtWQ
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3b09c07b3d2so1349942a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 11:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793905942; x=1794510742; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QH8EWm3WpJvKmm+3SH11RyockHxBeCCGhqou8vP+rPk=;
+        b=B0MNLtWQGjDmicRxY8nTu69DmYdME/D2jJN8rX+nGAlTMa5/iKX0Zivd7mhh+flPfs
+         xy3ZoNN4HgIKW4K4+mbAoNWhsSmDgb1P3WgIZCjZvecSakD2rB4XrTL8WwonQtbvNgZ8
+         h8p2WNu5k95YFljALG1jMJJ03s4qGmEUPwOwManEDxZ+GcL/xuiqjJVeLqmp+5UyzAW6
+         9EH7p2MmwcpUJDnOC5R25PxQkZi+0TuqQnMBjToaTQ/j5/LnlqaqNQd3J93XCaF2MN6H
+         E7WHw7qCt48+ehLyUoviWDEPPA7ju+e/24ge/Nj8T6fML4Ui3s4IgQMHHYqUJVnOXFuq
+         B5Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793905942; x=1794510742;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QH8EWm3WpJvKmm+3SH11RyockHxBeCCGhqou8vP+rPk=;
+        b=No3sg8j0584GQuGJ0wI+4X+n1chqe1+C5a8twn9TmEfm38mRGKuy77oOF0dJ/S2VxI
+         t7avf+8ToWIjOnRlbO2NeWogmiMRGEfTW4hdWDUhEtZT/K70sfTIR+HLdQtaTTpvkAFM
+         L1Oz2N9VAaqHSKQnwuzlkE5o7WwBjdSYtvAtCisf+A5EgDdnXowkarTwVrhD1GP16BQY
+         XuraT6TpXLPqvXhBlFbRNwVtUrTd1iN7BqFHeJDQYwE5Br+8RUaLHLeKkvGNZbpt4LQQ
+         1tahRSHdzk/CEmeuGXsFCivE78IPuCjLOjp9DTgx3b3769MqHDXLyg6oJyuLnJWz5ajs
+         zYZA==
+X-Forwarded-Encrypted: i=1; AKwUvBwS+9Tv2hYRM/rx4zC6TLfwm+rpUd80esth3N9337+c4IYY6wQyjeSyhodkeYw9x4JQ2Bi+hImwkITXSGzXdag=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8bxzVylIf1EHcatNDbh4yLt+yXbuWGwLe5LIgvdglsBQ4SnxZ9
+	V8nBbsJHYL5gJoFv/xzf2xc85fVwh6TzPFYMtFZZ3zyWCH5D//ARSRMTjiE+sYYSZA==
+X-Gm-Gg: AYBFou3E6g8kzWCwHUsZPsvvk4YeEMmxBfqBbmqATf/dyMPF8fvL54FjLklzVmWkH1O
+	qLK0V6x6Kkr1gQ/z3aaz7UnmQKMqCEW2ECTMmxsRHMs4G1EYINUoljjrSlUrK8diyJ65sSgzXqK
+	jZFUJZKKciDCzu+KIU4vBDjbB/nSjADW8zLpJDPAfhy/0leXFin0WM+yVz2HJdkfytN5mUG3WB7
+	nO+Yo2eefcR3dsFk7S9JKNjtvcfU5CRiEnLBnJJnHc5wqVJVS2aYEBtLw31WG7uJUQq055haQdt
+	XAhDOz9hLiANrJxVIk25ctaMOEqQYZjaVDs5hrAmzCcHMYx9eJBV0zFyxo0EucCj5tySC8LMhzR
+	pbOFL4ZeXyOjSgRFJgQVx2VKAYm7oINeg/pFShhYFh2UTVUuXDhVKxFGo+G9+/+CcxzmeYwg+tH
+	XAxVvD6HY302dCOvXbCZUXYNcsTmEUUQOio9m+LleDJnZeoe/USmtbXxLkfSEwJdJ+o8JJII+MM
+	61eFGoceKr2cAWwU/L8ByCa1n/0gEalvgDAEUAHOzCjznjsziToCHCm7JbkaUI1wBU4Ney1bjne
+	74rmdsGfk37kTa6Ct9YPF5f/BbFctZhNzF+xFR6o+8YhQcNjfLSa/EyMi1lOwVnu
+X-Received: by 2002:a17:90b:268a:b0:3ac:7c52:faeb with SMTP id 98e67ed59e1d1-3ae89769d66mr17879218a91.41.1793905941532;
+        Thu, 05 Nov 2026 11:12:21 -0800 (PST)
+Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0944eb1d1sm5401592a91.0.2026.11.05.11.12.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 11:12:20 -0800 (PST)
+Date: Thu, 5 Nov 2026 19:12:17 +0000
+From: David Matlack <dmatlack@google.com>
+To: Vipin Sharma <vipinsh@google.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+	ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com,
+	ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com,
+	chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net,
+	graf@amazon.com, jacob.pan@linux.microsoft.com, jgg@nvidia.com,
+	jgg@ziepe.ca, jrhilke@google.com, julianr@linux.ibm.com,
+	kees@kernel.org, kevin.tian@intel.com, leon@kernel.org,
+	leonro@nvidia.com, lukas@wunner.de, mattev@meta.com,
+	michal.winiarski@intel.com, parav@nvidia.com,
+	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org,
+	rananta@google.com, rdunlap@infradead.org, rientjes@google.com,
+	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com,
+	schnelle@linux.ibm.com, skhan@linuxfoundation.org,
+	skhawaja@google.com, vivek.kasireddy@intel.com, witu@nvidia.com,
+	yanjun.zhu@linux.dev, yi.l.liu@intel.com
+Subject: Re: [PATCH v6 07/27] vfio/pci: Preserve vfio-pci device files across
+ Live Update
+Message-ID: <auzVEUpFEoWltpVg@google.com>
+References: <20261102153656.1431701-1-vipinsh@google.com>
+ <20261102153656.1431701-8-vipinsh@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -194,33 +113,116 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: pVC0C2B3h9XmeLryVQWcz376ad1OvYuHYy06cY61nhG8LlReVa4AtVXBfEmqyJfksQQ0voqUgsJTesGX0r9VRedYN+oMnaCeL0YMdqi9NUOf4WGrxhmaEpYn3ktdmVZKAYbNIVXE+fKGaigsgQSll5d2Y8OoTugpb2jhEKOQ+n0gEczSCSiddSm5x433PJv8S2aSjAtUQybtMAqMH3hlb6RNEBjPE66uLZMpcogrwGRX49V0de1r/ucUA0xGnplugs8IPJz6j0bueDI4yBgiAkj50qBeoLGcBiFkCUWKLl2Fz3/ma29ovS7tMDh3bfFrbGYRic1BCVd6CfjTxThpvw==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB634048.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 538bc771-d14e-4ef4-83ef-08df3b703d6b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2026 19:08:56.2238
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9/fB3ZAg0SuDwtPEVCKEMH/hXyJBiwG6uHWZtMzu9YSVcRzpV86E0VpUxAaKLWAX31ly5JLenV35PAh+lk5r8jdAaHZS2LOe9R2fqJUA/JM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SAVPR11MB9549
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102153656.1431701-8-vipinsh@google.com>
 
-T24gV2VkLCAyMDI2LTExLTA0IGF0IDIyOjAyIC0wNTAwLCBTYXNoYSBMZXZpbiB3cm90ZToNCj4g
-dGVzdF9zaGFkb3dfc3RhY2sgcHJpbnRzICJbU0tJUF0gQ291bGQgbm90IGVuYWJsZSBTaGFkb3cg
-c3RhY2siIHdoZW4NCj4gQVJDSF9TSFNUS19FTkFCTEUgZmFpbHMsIGFzIGl0IGRvZXMgb24gQ1BV
-cyB3aXRob3V0IHNoYWRvdyBzdGFjayBzdXBwb3J0DQo+IGFuZCBvbiBrZXJuZWxzIGJ1aWx0IHdp
-dGhvdXQgQ09ORklHX1g4Nl9VU0VSX1NIQURPV19TVEFDSywgYnV0IHRoZW4gZXhpdHMNCj4gd2l0
-aCAxLCBzbyB0aGUga3NlbGZ0ZXN0IHJ1bm5lciByZXBvcnRzIGEgZmFpbHVyZS4NCj4gDQo+IEV4
-aXQgd2l0aCBLU0ZUX1NLSVAgaW5zdGVhZC4NCj4gDQo+IEZpeGVzOiA4MWYzMDMzN2VmNGYgKCJz
-ZWxmdGVzdHMveDg2OiBBZGQgc2hhZG93IHN0YWNrIHRlc3QiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBT
-YXNoYSBMZXZpbiA8c2FzaGFsQGtlcm5lbC5vcmc+DQo+IC0tLQ0KPiBGb3VuZCB3aXRoIEtlcm5l
-bENJJ3MgeDg2IGJ1aWxkcywgd2hpY2ggbGVhdmUNCj4gQ09ORklHX1g4Nl9VU0VSX1NIQURPV19T
-VEFDSyB1bnNldC4gVGVzdGVkIG9uIGFuIEFNRCBFUFlDIDk2NTVQIHdpdGgNCj4gS2VybmVsQ0kn
-cyB4ODZfNjQgYnVpbGQgb2YgbmV4dC0yMDI2MTEwNDogdGhlIHRlc3Qgbm93IGV4aXRzIHdpdGgg
-NA0KPiBpbnN0ZWFkIG9mIDEuDQoNClJldmlld2VkLWJ5OiBSaWNrIEVkZ2Vjb21iZSA8cmljay5w
-LmVkZ2Vjb21iZUBpbnRlbC5jb20+DQoNClRoZXJlIGFyZSBzb21lIG90aGVyIHRoaW5ncyBsYWJl
-bGVkIFNLSVAgaW4gdGhlIHNhbWUgZnVuY3Rpb24uIEJ1dCB0aGV5IHNob3VsZA0KcHJvYmFibHkg
-YWN0dWFsbHkgYmUgRkFJTCwgc28gdGhlIG9uZSB1cGRhdGUgZG9uZSBpbiB0aGlzIHBhdGNoIHNl
-ZW1zDQphcHByb3ByaWF0ZS4NCg==
+On 2026-11-02 07:36 AM, Vipin Sharma wrote:
+>  * TOCTOU synchronization: vfio_pci_dev_is_frozen() is checked locklessly
+>    on entry to the ioctl, read/write and mmap paths, and re-checked under
+>    a lock that freeze() holds before any operation that could change the
+>    device or vconfig: under vdev->igate in vfio_pci_ioctl_set_irqs() and
+>    around every config-space write in vfio_pci_config_rw_single(), under
+>    vdev->memory_lock in vfio_pci_runtime_pm_entry(),
+>    vfio_pci_ioctl_reset() and the SR-IOV enable path of
+>    vfio_pci_core_sriov_configure(), and under dev_set->lock in
+>    vfio_pci_dev_set_hot_reset(). A racing operation thus either completes
+>    before freeze() takes its snapshot or fails, while existing BAR mmaps,
+>    ioeventfds and dma-bufs keep working. Serializing config writes on
+>    igate covers the PCI_COMMAND, INTx disable emulation, power state and
+>    FLR paths at one point (the INTx disable emulation now uses the
+>    igate-held __vfio_pci_intx_mask() and __vfio_pci_intx_unmask()
+>    helpers), and also serializes the irq_type and virq_disabled accesses
+>    of config writes with VFIO_DEVICE_SET_IRQS.
+
+I think there's a simpler way to do this. Checking the frozen flag
+locklessly and then re-checking it under whichever lock covers each
+path spreads the synchronization across igate, memory_lock and
+dev_set->lock. That makes it hard to convince yourself every path that
+can change the device is covered. It also makes every config space
+write take igate, for all vfio-pci users, even when
+CONFIG_VFIO_PCI_LIVEUPDATE=n.
+
+Instead, I suggest adding a per-device rw_semaphore to struct
+vfio_device in the VFIO core, e.g. liveupdate_rwsem, that protects a
+liveupdate_frozen flag:
+
+ - vfio_device_fops_unl_ioctl(), vfio_device_fops_read() and
+   vfio_device_fops_write() take liveupdate_rwsem for read and fail
+   with -EIO if the device is frozen. That covers every device ioctl in
+   one place, including the ones handled by the VFIO core
+   (VFIO_DEVICE_FEATURE, VFIO_DEVICE_GET_REGION_INFO and
+   VFIO_DEVICE_{ATTACH,DETACH}_IOMMUFD_PT). This patch doesn't block
+   the last two at all today.
+
+ - freeze() and unfreeze() take liveupdate_rwsem for write, before any
+   other lock, and flip the flag. preserve() doesn't need it since it
+   only serializes state that doesn't change after the device is
+   opened.
+
+Putting this in the VFIO core also means other VFIO drivers can reuse
+it if they add Live Update support in the future.
+
+The lock order then becomes:
+
+  liveupdate_rwsem -> dev_set->lock -> igate -> memory_lock
+
+freeze() can still take igate and memory_lock to check irq_type,
+pm_runtime_engaged and sriov_active. But the ioctl, read and write
+paths no longer need to re-check anything under those locks. So you
+can drop the igate change in vfio_pci_config_rw_single(), the
+open-coded vfio_pci_zap_and_down_write_memory_lock() in
+vfio_pci_runtime_pm_entry() and vfio_pci_ioctl_reset(), and the
+smp_load_acquire()/smp_store_release() pair.
+
+Two paths still need their own handling because they don't go through
+the device's file:
+
+ - vfio_pci_core_sriov_configure() is reached through sysfs. Take
+   liveupdate_rwsem for read around the frozen check and the
+   sriov_active update.
+
+ - VFIO_DEVICE_PCI_HOT_RESET issued on one device also resets the other
+   devices in its dev_set. Keep the check in
+   vfio_pci_dev_set_hot_reset() under dev_set->lock. freeze() sets the
+   flag while holding both liveupdate_rwsem and dev_set->lock, so
+   holding either one is enough to read it. Please don't take the other
+   devices' liveupdate_rwsem there, since that would invert the lock
+   order relative to freeze().
+
+I don't think mmap needs to be blocked at all. Creating a new mapping
+doesn't change the device or any of the state that gets preserved, and
+existing mappings already keep working while the device is frozen.
+Leaving mmap alone also avoids taking liveupdate_rwsem under mmap_lock,
+which could deadlock: the ioctl, read and write paths can fault on user
+memory (taking mmap_lock) while holding liveupdate_rwsem for read, and
+freeze() may be waiting for the write lock. Please update the comment
+in freeze() and the DOC section to match.
+
+> diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
+> index 9914f3ac69ae..1f1ac7a798aa 100644
+> --- a/drivers/vfio/pci/vfio_pci_config.c
+> +++ b/drivers/vfio/pci/vfio_pci_config.c
+> @@ -644,10 +644,10 @@ static int vfio_basic_config_write(struct vfio_pci_core_device *vdev, int pos,
+>  
+>  		if (virt_intx_disable && !vdev->virq_disabled) {
+>  			vdev->virq_disabled = true;
+> -			vfio_pci_intx_mask(vdev);
+> +			__vfio_pci_intx_mask(vdev);
+>  		} else if (!virt_intx_disable && vdev->virq_disabled) {
+>  			vdev->virq_disabled = false;
+> -			vfio_pci_intx_unmask(vdev);
+> +			__vfio_pci_intx_unmask(vdev);
+>  		}
+>  	}
+
+With the rwsem, config writes no longer need igate, so this change
+isn't needed. If config writes and VFIO_DEVICE_SET_IRQS really do race
+on irq_type and virq_disabled today, that's unrelated to Live Update.
+Please send it as a separate fix.
+
+Lastly, please add the freeze infrastructure and the checks in their
+own commit ahead of this one, e.g. "vfio: Add infrastructure to freeze
+devices for Live Update". Then this patch only has to implement
+freeze() and unfreeze() on top of it, which will make both easier to
+review.
