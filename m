@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881356;
-	b=huyklPqbbFGkaGvJjHAiaPjC3t2ljlgxVzSoa3iqZFejd3MJ7VBuwvM/z6urcDhw2nC2
-	 uMyiPuE07NchrPzIIXyLtJoHtdCn1IhXiZBr9IumXVnV9Q5SwRKLkKgfFsWx3EcFVbkjX
-	 a9FQUXYQv6c2qDbz4lpeyiLX78oMYgR69PanO4yLuDPL3a3tHbhQu2Uche9myAFG9INes
-	 hOr//f/IRAlIb+k6v+IEXQttK5s52QL1eLFAINYgn0FBbqEimiw/wb8nKzC9B8t9+Tdmm
-	 ed4nUvZ2zEq+izsRdCfcrGrmJXWeL1nSpRWRiXyZN0GeZN5dF+p9D0A0im5PI0mBXog==
+	t=1793881358;
+	b=IL0AlQPpMGiLro0NghOc8f0Ikde7kr0AJ8hUzI7infpP7VThxuLbM4/Oz1NuHHrncTtf
+	 MupMHxHQ1TeZpWC3mIIG7Ox6oxQ26/T1F3xzdr6+FPsTiBCQoP4xp0HfGwbcxC0DpRQ18
+	 pZ6GdxQJF4dbPrqZGNVwzZm1iefzcPqGWiEzQiN8f+66kJbi2LaV6w4PEW6fx7a/8gK1c
+	 NQg4CKvCgP9QCIn2eGuz3YjodL2fgJgu1jSdFINmnfcJZAoqHJukKOVNufiieGp41LtCg
+	 aaHdDB/NKudw3q9S/BXPz/CoYjmz0fzm6qGYmjqvgpsKilwjPpG0XReWIOCJ55UOq2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881356;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881358;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=51XuEKp7AvViCgMvOr9QbMagrxSSSGv9BFPwFm9pL4U=;
-	b=QR6S5GvN+Bwdvqg/9VOkU2EGav4geeNzHFUwiel2XyJrlSuHHl8Oje/kjNXUVUyniKSs
-	 /Cm/gcfabaLZGoU4OvJtTO43i/gtBgSe2LbeIjox4XKbrJTPI3TWRBgwQwdI8TeOc6UTl
-	 3ZWkbOk8grDBYEiKE4T/0rjVwQKh81z3iS2JpHjsiR3doRpodSZnM4yLsmZ59EzmSiKax
-	 Ai/nr8FUtHqHEvPquZty7BeO5xYkg2UW9FnerD7Ew55SjTvkG0Nw2Z/bm1EFt2Tepdhvc
-	 TWM6cS49lhyRC9fn54Wr/cvhWjNkhFn8iMq4vBmtxnjJAzcmw/5IOsDle/3Ug2t6CyQ==
+	bh=1EU7UaZlGv3MYPyW1OJGQPqiReGZO/NDUPkcBrKmkuM=;
+	b=tY0WoYp/vk3Q7c5dSk2WolOq3aAYxZKXB6ljvi6Za4iHJajddCGmGWUQjO+cxrHJKxN6
+	 C9rdqT9evv9IB3NXihtsMEWgurPzaHRY5nNcovsjlLQpSnKntyN7LT4hTuJASIhpYR7GI
+	 j6Sm7HtKIXYb1EsExP4jevEpH01vgXBOz7gtGWIiAZsSkyhDtylqfn2Dti4us6XWzhFpC
+	 Ap0ylcXxz+LJJMyDRuO/VZI//Eq60xRGPA8GwpYV7Oy45M07yHLGuYqkjWAK9Vx9YoQqi
+	 3+dNhWQrYNn4x4CzhIV4eX3hs97WvrMhv6go7UM6yrbCC37q06Zs5eJmI3i8TFWD+LA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lQcXh16L;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="g2Mz9/0T";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504F0606A33A;
-	Thu,  5 Nov 2026 12:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E0A606D80C;
+	Thu,  5 Nov 2026 12:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lQcXh16L
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C8A1F0093A;
-	Thu,  5 Nov 2026 12:22:35 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g2Mz9/0T
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E201F00A02;
+	Thu,  5 Nov 2026 12:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793881356;
-	bh=51XuEKp7AvViCgMvOr9QbMagrxSSSGv9BFPwFm9pL4U=;
+	s=k20260515; t=1793881357;
+	bh=1EU7UaZlGv3MYPyW1OJGQPqiReGZO/NDUPkcBrKmkuM=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=lQcXh16Lpg0844yiIjRtLPM4PEXa9WWGQvf0+lRRHdF/9GXkCv4RXgFGvVYYtpSRl
-	 /mHhTjEKdVNupz+11bj1o+CofU6DYK0IcSOOVbDuwSc/jTh5VLKz58R40kXrwc9j62
-	 a/fXGwSJm+GZzOLO68tBVJBURMxZyIUC2LeHBD1H6KXmLSWH2J4CMCD2H8b3KmlBds
-	 pLdICoTiHpYQEkuCwUbjwJQuk8l5Jxi41jtREFtGrzCRPXBoLss8Mrazu0JmpUUwax
-	 XkhZbaRP1cEgddxa2Oi5fBe0iFyxECKQpKzCMgXiSbnTlj0NvVPsQI2GEpXAweK2+I
-	 3UQKF9pAYukkA==
-Subject: Re: [PATCH net v2 2/3] ipv6: ioam6: use transformed packet nexthdr
- for ECMP re-lookup
+	b=g2Mz9/0TtXe1zBF1uxpxNKmwbjIeT+8WUB/2nmEDfPQlSFa1bmX01qkd3cgKoR/d6
+	 SPOvmUbAqHy5Y/k0uaujNjJHfK7+RtTKf1rtRNBRUpR/Day9UZM+5bB6KEhR3+sgGN
+	 b5/SbL2sDtPHSHFqedyrmAGkL7vXBrIPtIVBBL0EJHnCj47hV7xvpO2VN3vZlfZu5m
+	 9rSy83XyBMpv4K+6IuVLRfi2PLv1nerSo21Uc6gAnxRWd/7t3MLCMjc/4SLp2ntV4V
+	 3uMRtqKY4R/KWSmAElM1hzHUIEs/GMU08+nlT/INtP7JErxq3uoY9mI/XNyVGrmT0r
+	 ofeIJoU7xbAwA==
+Subject:
+ Re: [PATCH net v2 3/3] selftests: net: add ioam6 ECMP test (RFC 9486 C2)
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
@@ -49,11 +49,11 @@ Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  justin.iurman@gmail.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  liuhangbin@kylinos.cn
-Date: Thu, 05 Nov 2026 12:22:34 +0000
-Message-ID: <179388135485.488856.15442544337186327982@kernel.org>
-In-Reply-To: <20261103-ipv6_ioam_ecmp-v2-2-6ef0318bdb5e@kylinos.cn>
-References: <20261103-ipv6_ioam_ecmp-v2-2-6ef0318bdb5e@kylinos.cn>
-X-sashiko-severity: High
+Date: Thu, 05 Nov 2026 12:22:36 +0000
+Message-ID: <179388135633.488856.7838660673411502138@kernel.org>
+In-Reply-To: <20261103-ipv6_ioam_ecmp-v2-3-6ef0318bdb5e@kylinos.cn>
+References: <20261103-ipv6_ioam_ecmp-v2-3-6ef0318bdb5e@kylinos.cn>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -69,7 +69,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 2 · Medium: 1 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -77,195 +77,158 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] The encap cache-miss path in ioam6_output()
-  (net/ipv6/ioam6_iptunnel.c:439) now sets `fl6.mp_hash =…
-- [High] In IOAM6_IPTUNNEL_MODE_AUTO, local packets (inline, !skb->dev)
-  and forwarded packets (encap, skb->dev set) share one per-CPU…
-- [Medium] The new call `rt6_multipath_hash(net, &fl6, skb, NULL)` in
-  ioam6_output() (net/ipv6/ioam6_iptunnel.c:439) passes an output-path…
+- [Medium] check_tunnel() (lines 276-281) decides whether ip6_tunnel is
+  available from two checks: `lsmod | grep ip6_tunnel`, and `ip a | grep…
+- [Low] The header of tools/testing/selftests/net/ioam6_ecmp.sh (lines
+  8-9) says there are "Two scenarios, matching the two places where IOAM…
+- [Low] The header (line 44) says "The filters match the exact
+  measurement packets".
 
 --
 
-ipv6: ioam6: use transformed packet nexthdr for ECMP re-lookup
+selftests: net: add ioam6 ECMP test (RFC 9486 C2)
 
-This commit changes the dst_cache miss path in ioam6_output(). For inline
-insertion it now reuses orig_dst and caches the fake null_rt. For
-encapsulation it re-looks up the route with flowi6_proto taken from the
-HBH next header and with fl6.mp_hash precomputed from the skb, so that
-the ECMP hash matches the identical packet without IOAM (RFC 9486 C2).
+This adds ioam6_ecmp.sh. Under hash policy 0, it checks that a packet
+carrying IOAM options takes the same ECMP nexthop as the same packet
+without them. It covers transit input hashing after inline IOAM
+insertion, and the re-lookup on a node that encapsulates with IOAM over a
+multipath route, with a plain ip6ip6 tunnel as the baseline.
 
-> diff --git a/net/ipv6/ioam6_iptunnel.c b/net/ipv6/ioam6_iptunnel.c
-> index cfb2c41634a0b..246533276be82 100644
-> --- a/net/ipv6/ioam6_iptunnel.c
-> +++ b/net/ipv6/ioam6_iptunnel.c
-> @@ -405,34 +405,61 @@ static int ioam6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
->  
->  	if (unlikely(!dst)) {
->  		struct ipv6hdr *hdr = ipv6_hdr(skb);
-> -		struct flowi6 fl6;
+> diff --git a/tools/testing/selftests/net/ioam6_ecmp.sh b/tools/testing/selftests/net/ioam6_ecmp.sh
+> new file mode 100755
+> index 0000000000000..35a11f94c4223
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/ioam6_ecmp.sh
+> @@ -0,0 +1,348 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0+
+> +#
+> +# Verify RFC 9486 C2 for ECMP: with hash policy 0 (the default), the ECMP
+> +# nexthop chosen for a packet carrying IOAM options must be the same as for
+> +# the identical packet without them.
+> +#
+> +# Two scenarios, matching the two places where IOAM changed the hashed
+> +# IPv6 nexthdr:
+
+[Severity: Low]
+Is "the two places" accurate here? The series patch "ipv6: ioam6: use
+transformed packet nexthdr for ECMP re-lookup" changes a third place too:
+the inline path (and the AUTO path with !skb->dev) of ioam6_output() on
+the node that inserts the IOAM option.
+
+net/ipv6/ioam6_iptunnel.c:ioam6_output() {
+    ...
+		if (ilwt->mode == IOAM6_IPTUNNEL_MODE_INLINE ||
+		    (ilwt->mode == IOAM6_IPTUNNEL_MODE_AUTO && !skb->dev)) {
+			dst = orig_dst;
+    ...
+}
+
+Before that change, a dst cache miss re-ran ip6_route_output() with
+fl6.flowi6_proto = hdr->nexthdr. After inline insertion that is
+NEXTHDR_HOP, so the inserting node itself could pick a different ECMP
+sibling.
+
+In this test the inserting node is alpha (set_alpha_ioam()). Alpha only
+gets single-path routes from setup_topology():
+
+	ip -netns "$ns_alpha" -6 route add 2001:db8:2:1::/64 \
+		via 2001:db8:1::1 dev veth0
+
+Wouldn't this test still pass if the orig_dst reuse branch regressed?
+Could a scenario with an ECMP route on the inserting node be added? If
+not, could the comment be reworded so it doesn't suggest every affected
+place is covered?
 
 [ ... ]
 
-> +		if (ilwt->mode == IOAM6_IPTUNNEL_MODE_INLINE ||
-> +		    (ilwt->mode == IOAM6_IPTUNNEL_MODE_AUTO && !skb->dev)) {
-> +			dst = orig_dst;
-> +			dst_hold(dst);
-> +
-> +			local_bh_disable();
-> +			dst_cache_set_ip6(&ilwt->cache, &ilwt->null_rt.dst,
-> +					  &hdr->saddr);
-> +			local_bh_enable();
-
-[Severity: High]
-In AUTO mode, can local and forwarded packets end up using each other's
-cached dst? The miss path is now mode aware. The hit path at the top of
-ioam6_output() still reads one per-CPU cache, whatever the mode:
-
-	dst = dst_cache_get(&ilwt->cache);
-	...
-	if (dst == &ilwt->null_rt.dst) {
-		dst_release(dst);
-
-		dst = orig_dst;
-		/* keep refcount balance: dst_release() is called at the end */
-		dst_hold(dst);
-	}
-
-Suppose a local packet misses first, so null_rt is cached. A later
-forwarded packet on that CPU then gets dst = orig_dst and is encapsulated
-with daddr = tundst. Because dst is non-NULL, it skips the tundst
-re-lookup. Because the lwtstates match, it leaves through
-orig_dst->lwtstate->orig_output(). That uses the inner destination's
-route and nexthop, not the route for tundst.
-
-Now suppose a forwarded packet misses first. The encap branch caches the
-tundst route:
-
-	dst_cache_set_ip6(&ilwt->cache, dst, &fl6.saddr);
-
-Later local packets on that CPU hit this entry and are processed inline.
-They are then sent through the tundst route instead of orig_dst:
-
-	if (orig_dst->lwtstate != dst->lwtstate) {
-		skb_dst_drop(skb);
-		skb_dst_set(skb, dst);
-		return dst_output(net, sk, skb);
-	}
-
-The shared cache existed before this patch. However, the commit message
-says inline will "reuse orig_dst and cache the fake null_rt, keeping the
-sibling from the original lookup", and that encapsulation "still
-re-looks up". In AUTO mode with mixed traffic, neither seems to hold.
-null_rt is DST_OBSOLETE_NONE, so the stale entry stays until the cache is
-reset.
-
-Does the hit path need to be mode aware too, for example with separate
-caches for the inline and encap cases?
-
-> +		} else {
-> +			/* Encapsulation may change the destination (tundst);
-> +			 * re-lookup with the transformed packet keys so the
-> +			 * outer hash matches the identical packet without IOAM.
-> +			 */
-> +			const struct ipv6_opt_hdr *hhdr;
-> +			struct flowi6 fl6;
-> +
-> +			hhdr = (const struct ipv6_opt_hdr *)skb_transport_header(skb);
-> +
-> +			memset(&fl6, 0, sizeof(fl6));
-> +			fl6.daddr = hdr->daddr;
-> +			fl6.saddr = hdr->saddr;
-> +			fl6.flowlabel = ip6_flowinfo(hdr);
-> +			fl6.flowi6_mark = skb->mark;
-> +			fl6.flowi6_proto = hhdr->nexthdr;
-> +			fl6.mp_hash = rt6_multipath_hash(net, &fl6, skb, NULL);
-
-[Severity: High]
-Does computing mp_hash from the skb break the C2 equivalence that the
-comment above claims? When fl6->mp_hash is non-zero, fib6_select_path()
-uses it as is, so this skb-based value chooses the sibling.
-
-The comment says the outer hash "matches the identical packet without
-IOAM". A plain ip6ip6 tunnel, ip6_tnl_xmit(), routes with
-ip6_route_output(net, NULL, fl6) and no skb, so it hashes the outer fl6
-keys. With an skb, rt6_multipath_hash() behaves differently for each
-policy.
-
-Policy 1 returns the inner flow's hash early. ioam6_do_encap() never
-clears that hash:
-
-	if (skb->l4_hash)
-		return skb_get_hash_raw(skb) >> 1;
-
-Policy 2 dissects through the ip6ip6 header and hashes the inner
-addresses, flowlabel and proto:
-
-	skb_flow_dissect_flow_keys(skb, &keys, 0);
-
-Policy 3 calls rt6_multipath_custom_hash_skb(), which returns
-jhash_2words(mhash, mhash_inner, 0). Plain ip6ip6 goes through
-rt6_multipath_custom_hash_fl6() instead.
-
-For policy 0 with flowi6_proto = 41, the skb result looks the same as
-the fl6-only hash, so the precompute appears to do nothing there.
-Without the companion patch "ipv6: route: consider IOAM options in ECMP
-hash policy 0", it would hash ip_proto = NEXTHDR_HOP and undo the
-flowi6_proto = 41 change. That matters for backports of this
-Fixes:-tagged patch.
-
-Setting fl6.flowi6_proto = hhdr->nexthdr on its own, without the
-precompute, seems to match plain ip6ip6 under every policy. Would it be
-better to drop the mp_hash precompute?
-
-The commit message also says:
-
-    precompute fl6.mp_hash from the packet, since ip6_route_output()
-    carries no skb and would otherwise drop ICMPv6 quoted-flow and L4
-    keys.
-
-Can the ICMPv6 quoted-flow case happen here? ioam6_do_encap() always sets
-tuninfo->eh.nexthdr = NEXTHDR_IPV6, so the header after the HBH is
-always 41.
+> +check_tunnel()
+> +{
+> +	if ! lsmod 2>/dev/null | grep -q "ip6_tunnel" && \
+> +		! ip a 2>/dev/null | grep -q "ip6tnl0"; then
+> +		modprobe ip6_tunnel &>/dev/null
+> +		lsmod 2>/dev/null | grep -q "ip6_tunnel" || \
+> +			ip a 2>/dev/null | grep -q "ip6tnl0" || return 1
 
 [Severity: Medium]
-Can this call run the flow dissector without a netns? Under policy 2,
-policy 3, and policy 1 when skb->l4_hash is clear, rt6_multipath_hash()
-calls skb_flow_dissect_flow_keys(), which passes net = NULL.
-__skb_flow_dissect() then takes the netns only from skb->dev or skb->sk:
+Can this heuristic skip scenario 2 even when ip6ip6 tunnels work?
 
-	if (skb) {
-		if (!net) {
-			if (skb->dev)
-				net = dev_net_rcu(skb->dev);
-			else if (skb->sk)
-				net = sock_net(skb->sk);
-		}
-	}
+With CONFIG_IPV6_TUNNEL=y, ip6_tunnel never appears in lsmod.
 
-	DEBUG_NET_WARN_ON_ONCE(!net);
+The ip6tnl0 fallback device is also missing from the runner's netns in
+two cases: net.core.fb_tunnels_only_for_init_net=2, or the sysctl is 1
+and the runner is not in init_net.
 
-In ENCAP mode, locally generated packets can reach this branch with both
-fields NULL. One example is an RST sent for a closed port:
+include/linux/netdevice.h:net_has_fallback_tunnels() {
+    ...
+	return !fb_tunnels_only_for_init_net ||
+		(net_eq(net, &init_net) && fb_tunnels_only_for_init_net == 1);
+    ...
+}
 
-tcp_v6_send_reset(NULL, ...)
-  tcp_v6_send_response()
-    ip6_xmit(ctl_sk, buff, ...)
-      NF_HOOK(..., dst_output)
-        lwtunnel_output()
-          ioam6_output()
-            rt6_multipath_hash(net, &fl6, skb, NULL)
+In that setup modprobe ip6_tunnel does nothing and both greps fail again.
+check_tunnel() then returns 1 before it reaches the ip link add probe
+below, which would work (and would also autoload a modular ip6_tunnel).
 
-When sk is NULL, buff comes from alloc_skb() with no socket attached.
-ip6_xmit() sets skb->dev only on the EMSGSIZE path, after NF_HOOK has
-returned.
+Main then calls log_test_skip() for scenario 2. ksft_exit_status_merge()
+ranks skip above pass, so the whole test exits with SKIP even after
+scenario 1 passed.
 
-On CONFIG_DEBUG_NET kernels this warns on the first cache miss on each
-CPU. On all kernels, an attached netns BPF flow dissector is skipped for
-these packets. Before this patch, ioam6_output() never passed an skb to
-the multipath hash.
+Could check_tunnel() rely on the ip link add probe instead?
 
+> +		ip6tnl_loaded=1
+> +	fi
 > +
-> +			dst = ip6_route_output(net, NULL, &fl6);
+> +	ip -netns "$ns_beta" link add name ip6tun0 type ip6tnl \
+> +		mode ip6ip6 encaplimit none \
+> +		local 2001:db8:2:1::1 remote 2001:db8:2:1::2 \
+> +		2>/dev/null || return 1
+> +	set_beta_ioam_encap || return 1
+> +}
+
+[ ... ]
+
+> +if check_tunnel; then
+> +	# Scenario 2 counts the outer ip6ip6 packets: the echo request is
+> +	# not visible to flower (outer headers only), so match the pinned
+> +	# tunnel addresses instead. No need to check return value again as
+> +	# we have done it at scenario 1
+> +	set_measure_filters "src_ip 2001:db8:2:1::1 dst_ip 2001:db8:2:1::2"
+
+[Severity: Low]
+The header comment says "The filters match the exact measurement
+packets". Does this filter match only the ip6ip6 packets, though?
+
+It matches any IPv6 packet from beta's veth1 address to gamma's veth0
+address. Beta's unicast NUD probes use that same pair, because
+ndisc_solicit() takes the source address from the queued skb:
+
+net/ipv6/ndisc.c:ndisc_solicit() {
+    ...
+	if (skb && ipv6_chk_addr_and_flags(dev_net(dev), &ipv6_hdr(skb)->saddr,
+					   dev, false, 1,
+					   IFA_F_TENTATIVE|IFA_F_OPTIMISTIC))
+		saddr = &ipv6_hdr(skb)->saddr;
+    ...
+		ndisc_send_ns(dev, target, target, saddr, 0);
+    ...
+}
+
+Beta's Neighbor Advertisements to gamma also match. Gamma sends
+solicitations when it has traffic for 2001:db8:2:1::1, for example
+ICMPv6 errors for ip6ip6 packets it cannot decapsulate.
+
+These packets add to the veth0 count in measure_link():
+
+	if [ $((da + db)) -lt "$PKTS" ]; then
+		echo "LOST:$da:$db"
+
+With PKTS=3, two tunnel packets plus one ND packet already reach the
+threshold, so a lost tunnel packet goes unreported. The stray packets
+also count in the A/B majority vote.
+
+Could the filter also match the encapsulated protocol, or otherwise
+exclude ICMPv6/ND, so it is as exact as the comment says?
 
 [ ... ]
 
