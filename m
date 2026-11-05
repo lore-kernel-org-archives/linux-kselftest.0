@@ -1,110 +1,129 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793889245;
-	b=AT9hWrTEnSXAHWLa5pSqt+ZDEm98rJAf5N5mi7TiwtX+B9cVgAiy2XKcEdPJlpa74Rlm
-	 xBHIjcSm+txZbdXPDHL6te4pulpWB/SOS5Wb4H1sI7juU6ADROV6UAxkXiS7/Cl/k61A6
-	 PLfe71eNnJgU6ReK1M5ScQfQRI8nNhARvlAngxvTZp2TCzamcKRDL1zJUzbF0oC8cX15G
-	 dSjZUcu2XI9C09WvgJgTAlRbVEs0iIal9D4mc5m4FX4eZnECU4bYo6dfSD1eZnfB8YgAp
-	 y9Un9+tiYXxdelkgyXCSagTMQC5EMdx2yB6hebALRFBx7OcbWc8zzxwr3IWx0hAWBJQ==
+	t=1793890146;
+	b=RCDfWQmtSSk47oMQXU/Cs76MC2gf3qhFpB1NXfFrRm+0lpgbXjaPmqoIRIZa98ht4QWE
+	 E9mp3piZVovTYYlY6qFvaZj+55AQuMNuJvswd4EVxd6zd88ZH5srcVx+1IQ+pWEc2hH4z
+	 o5fixqa6Anu+zMw/61xCydXqUrPXjG1h7N4LGvuukaZzG20634p6UoJ7ym4p/rJBH16Ak
+	 mLpBOhyGc3dJ1z2J/euj69x88vFJY8XdjTjtNpaqwtDNIg5FKZ7lV+vjZBuRwAEWgxmDU
+	 JRYK1uIkNnMxF/LzwD5e76WXKdFeVXFCOhv/gvOB717zSd0qlJOfjhIyF/u5xZ5VwUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793889245;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=my9OBy1bBkluWAYUioairn9napGH+N/4+ZlIeEPaY8c=;
-	b=Hhm9Vn6nuYEvkrLsNCQMrQdIDtJsLi4WHZb6+Af1wZfLFI0Bq6ODpnmYv8EVz09fl8dp
-	 wmGlxWe8xLKwpgy6tS9D4vyKZVlEcFKbL+GfADDESxlYpZwqinyTHjVIurWL5gKT+4AGK
-	 Ugi/Ji7iK9pvzzhp44RaxkOjKsRABN0NjQmrAgqKquVaKMHNRZiDSN+MF5le48NoU9nt9
-	 Q3sBXEvKpOk1yqmV+dTIzkz36IG8rMIAxLOXZMp+UjhtYk2DZcki/rcAQQvh5+tws49RV
-	 lbhIVvyUCtsJmR29zl3B/oquMgG1d/1W1Gl55aKiCcDdpFO+ZOujXFbHM1ipn5ia8bg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793890146;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=0oZXaqilvDmJS1hNMgdeAwWlpvrdojNG02VoZz9o0R0=;
+	b=JeINwko1h7uAsJe5y5xiPWTknxS41MCjjLd0XrAIrhX+5zyoFwPtGZKdWLNsXia84XIW
+	 h2eVobd98wDpqbF0eBmUYGsQvm7utB0P/lin/B/tG2h+gJ/FBR5jr2fq9XWyTCodMxoPg
+	 PI132nnutvBiwfb4VAyehnPIiqpUWY5GQH+i7EZtNO7iqRQ8h5bBFdWTddHIcH5T8nGeU
+	 3lDEeaEIAGFShzyerdP8lIhqTqINV/hRHQH/h1TJUprmJ9bW7WwxZTv4dV96UYIqtwNy7
+	 +IZm2aKFP4QX/9JKaRNIy3+nUytEQVJ6oJhRmqcw9ne5a+k5ygfj6LYg3agn7afuTKg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b="e/BKoors";
-	arc=none smtp.remote-ip=209.85.218.45
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dkq0QiMr;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=pcORwHkx;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBBF606A33D
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 14:34:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BBBF606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882E4606A32E
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 14:49:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 882E4606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=e/BKoors
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c4203bbb1e9so303429966b.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 06:34:05 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dkq0QiMr;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=pcORwHkx
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793890144;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0oZXaqilvDmJS1hNMgdeAwWlpvrdojNG02VoZz9o0R0=;
+	b=dkq0QiMrECsJKdQe3voh/qleY5HlHBx8Y1/14T65hTY2mJbfv+OFnfQWSpjsIRWz/Y/4pT
+	UPqyS/hoXTF+dX7Bt+N9Lj7jjs3Ar++C4EvB27O5s0kkehaNo4MADSETY1Eotz8rJeulsz
+	efzOBABpXj4ROEd4SCHHsVuQDFdCo3Y=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-664-Hsu0s3amPeexgvYJYi9MHA-1; Thu, 05 Nov 2026 09:49:03 -0500
+X-MC-Unique: Hsu0s3amPeexgvYJYi9MHA-1
+X-Mimecast-MFC-AGG-ID: Hsu0s3amPeexgvYJYi9MHA_1793890142
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4a204f135ffso11745315e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 06:49:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1793889244; x=1794494044; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=my9OBy1bBkluWAYUioairn9napGH+N/4+ZlIeEPaY8c=;
-        b=e/BKoorsJFShcC8l88V2dJXe8612SlmcCnK41t7jRCWKK4eDqHPbYBXK3Dr3Z545N0
-         yM+WASdRiPoPoA95bBpkfuTeUH74OTCCYJLwj7cVgLHrZpOnqg1u1w1hTsArDThQqRho
-         f0EyI3NUPOaf8wW96n4tYhmikxR8ZCJf6VwS7ZGkMwlZwzY0oFyIAvcm+Yh+a/SZ7quf
-         kOqxek4Ske891KPElKAH1lrjoLt/S2O/LqifV0eAheZwxNAVTggE1nXlCY8sexsq+dj3
-         43RCqOIJXhaTCRb8kgW0vs33xVe5t6UNTMpJwtEdP2E4mcfykW8kOUGhyygWlW5NXwx5
-         k/8A==
+        d=redhat.com; s=google; t=1793890142; x=1794494942; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0oZXaqilvDmJS1hNMgdeAwWlpvrdojNG02VoZz9o0R0=;
+        b=pcORwHkx8ESY7disZ1BO7voLsR2k6eWKMwao+wjRO9/6DnGPJKl0JPlhiMY7WQusKb
+         6cP5KAqeH71olbmhp86RYTkMfGZAyks5eyjntU8ODRLuHJ4RlH/J1VsCbrMNf4mqME/a
+         D0QK5VIQTr/CSeN23lyN85om9W91nAVOyJPDY6ePxh0nfB1BTu9FEGVv6n265R4Qrr7x
+         0Egh5xeXqjjxsFm3vUoF4Q/+TO+u//625zxy3SGkuN3zWK8SN/PKGdzFcW0rcOSvHx+j
+         ZEhLoNqCVZiG6f15q/iujZZVXwZkMrdgoxH+HjZB9MENSVUWUMgniHG5IPeHCyGhcp5w
+         jLXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793889244; x=1794494044;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=my9OBy1bBkluWAYUioairn9napGH+N/4+ZlIeEPaY8c=;
-        b=bOIz6fLf5Bf8LlYcduKZCzIglFFz0v+D9b7kv5UXP7sZ0wwnXf4zpWMbcuWNrqYWzw
-         /TcbBmtXq3HI9dwoZ/NpMDWDeGp2DW+2IY0D7RCIUOwxPW8QqFlC6a7w2aR2OK09a75m
-         532QzOE0X8C6kCz4jtqpCjNZIA+l0+S+pwoj4Ox5xxLGwVvYk3m4zQIe0VeXiKlZgalU
-         IJEfzrnvSj41NbmWp7Xv7u9cLlW628mkmR9g8SOEcDrIE+EsWUBkmB5e1tA0JFzgi6l8
-         2V4lNDstY+hBVdmmF9RS0BvxXLDiCdDGeaShsjJW6r8TS1ZnAbtRiJcpIV1BJAzgOJVi
-         30KA==
-X-Forwarded-Encrypted: i=1; AKwUvBxO5pzkVqooPxYBctXiP+GF0kjqdCeqxWIwlMOUFqNfItmCUcxZZZXqbGFYTDdoTraXYRf6BT1+JAdRbp1xlOE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8rLTSk3AP2P0h8XPHYjl0F+DeHLbly9I2/5mZzNjss2nfwBkOA
-	9C+mzW3jzDCPvOlXqt7iHmoGCh6xQiDUfxoIgAGG3AIkxuDaa6k9DS9PQhde1Cwsi8M=
-X-Gm-Gg: AYBFou2mdnMwUQO3m9CiZNLo6Wd4NbL7zYzy1aZvylMG11l7ZiHfunBJC2ZKLztvEZx
-	duivL5zE6JWEAEUpUL4JK6no4e0D0T2J6/yJbsIbGo0Y3/QP+HmSB+uEs8r0mue1aWl+nZNkblT
-	kMCHcOIM7h44RlmDxRbocGnY3BDLkrozi33EUZ6pAoM7jDujNoLpEmxR1/1rgr/P4WNjL4iXVZt
-	UDCHG+SJAsJfcadezp+R90L86TLvN/wgEegWuWG+Aok2bZ2mD7XWjLi6n9Rdazb7x5kopewLGlO
-	75sG2YJp96F/3Y1nh9fz5Urf1S6kQgOUoIt1cIyoIpgTlKXuu9lhSJ8NZYwjx7QCIZHyUjrBX+9
-	uxd/I5ucptNfvlciTMjR6Kh/xDNFk/h63x2HysR3NwTtcZeEIxekssSEoYTkWIIY3wCWNyCPpsI
-	rInbz7JUuHYhYK1rqfnDjTc0hj9Ks4LzyDRM5tccU9pMl8vR8UIIcWoZadVp1CWDnaP8QYB07we
-	CG+rqNpMQ6LxjcnIbF9hMZVzs89N7rBxv/ZHvkN/yimYDw3Wv1Dk31GkTfmUEzL/eYi7P22u7mA
-	6//xq2ZepcDoMfVQ2M4CQy7gdh6G59nQ
-X-Received: by 2002:a17:907:f20b:b0:c4c:eb16:4014 with SMTP id a640c23a62f3a-c4ceb1640e5mr896680666b.1.1793889243799;
-        Thu, 05 Nov 2026 06:34:03 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:b])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4d0e466be0sm178671066b.54.2026.11.05.06.34.02
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 05 Nov 2026 06:34:03 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	toke@redhat.com,
-	lorenzo@kernel.org,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	shuah@kernel.org,
-	hawk@kernel.org,
-	kernel-team@cloudflare.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	jiayuan.chen@linux.dev,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next 3/3] selftests: net: veth: test RX queue NAPI links
-Date: Thu,  5 Nov 2026 14:33:56 +0000
-Message-ID: <20261105143356.17062-4-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261105143356.17062-1-tianyi@cloudflare.com>
-References: <20261105143356.17062-1-tianyi@cloudflare.com>
+        d=1e100.net; s=20260707; t=1793890142; x=1794494942;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0oZXaqilvDmJS1hNMgdeAwWlpvrdojNG02VoZz9o0R0=;
+        b=igBynXusPmCoUzzsaiu/miNDUVhHdih5AHuOa5ssGby+2bRqG2Nw1Eq/USgEKaMFdA
+         dEfsecZA/1qdKm8BgkwNwGkO+jD7EXwv6ypTxZTqkfD/hfZ81tKBvtcAyNkVke9bJ9Wd
+         dvLFTElZCTqrgv8q3xg8IwpJvzC/XiRrkQ1Kc0oGJrXlMDmpa9+C6j/e6uKF7DeqMtCq
+         ujnKCAcPwFJHmnaux5cKWh2BjUFcwzjjv1WG90HfMmNDiwnYg2tpodS1qLVz0cvXSwXT
+         YduomBy63dijw9qgUNbpEbm2ew9d/kL5DLcYyAX9hPRTSskryiwyEWikxj/LI7ILq/1u
+         zL0w==
+X-Forwarded-Encrypted: i=1; AKwUvBzo6zBQ5RntbSkN0VA8WaVxJstKUieLKCcjL+0J07JGRbfHEKj6sfHyLqNp67HHtQVKIKhRjU36BDSzESMt+8Y=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ivEgh5yq6wau7H8wiCd2OUagkwclcgejad1mvKX/Q+QMJBNxa
+	/r86d8wZZ5a7t77XUy3y1xdywpbgNCN0oaKYkiwFWLcUZia/EA6VuWOR8sFwFqW5+Tf3UKvUQWx
+	UIHuViY6OpaR8ldnZUWYV8rJAggC9jTJiHEKxqunaZmbq+KvXUS+rfslsYI1kixFb8GOKQw==
+X-Gm-Gg: AYBFou0KL7skUAu8mXOHycPuSOTVvkPaciisw6RdsSkNqNoaS2MGDdM5nPOq+ObBvbP
+	zP23zDe+DTGejpLLbEEHexjzGC5E8QBKKAbzhYttqDsfqaWcUy6lgR9fI5bLpd07xpAlNb6FBQ9
+	/QnKrPxLvAqSDQcAmTCa9VxB4TgDV/AHpktOj4XSCn2mMSIr13/vrAMXMCURFgm/OYnX4C+siVb
+	P2/ghwgWspW9IZYpI2uBwdsK6u7LYVNG5+obink9GWpNuG/S2lZMH/X1vndolmZ/Vmm6guum3s6
+	7RSfnX/guvHekms0CFP5QCdHoPF7fUG9e1CMzD+hwQrCFPN0R8BoNCOVoCDFeY0VUVsZRsWfQY7
+	t8qO3YXZZPKWYj/tJiFcr1m8BppM3F7R0nur7rs4xp/tS8cwxL9N8vitdvtLF1NBRu4iyXU3itD
+	ogPg==
+X-Received: by 2002:a05:600c:1f93:b0:49f:ce78:356d with SMTP id 5b1f17b1804b1-4ac180f2fd3mr448853995e9.30.1793890141823;
+        Thu, 05 Nov 2026 06:49:01 -0800 (PST)
+X-Received: by 2002:a05:600c:1f93:b0:49f:ce78:356d with SMTP id 5b1f17b1804b1-4ac180f2fd3mr448853555e9.30.1793890141421;
+        Thu, 05 Nov 2026 06:49:01 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56f5e65b0sm79732955e9.11.2026.11.05.06.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 06:49:00 -0800 (PST)
+Date: Thu, 5 Nov 2026 15:48:57 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Luca Abeni <luca.abeni@santannapisa.it>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Waiman Long <longman@redhat.com>,
+	Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v2 06/21] sched/deadline: Do not lose a throttled task
+ switched out and back
+Message-ID: <auyXWR01Lqb_yam3@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
+ <20261104211207.1392343-7-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -114,126 +133,101 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104211207.1392343-7-mathieu.desnoyers@efficios.com>
 
-Check that the napi-id of every RX queue matches a NAPI instance of the
-device. Also check that the queues are linked only while NAPI is
-enabled. Run the checks with GRO on and with XDP attached, and across RX
-channel changes and link down/up.
+Hello,
 
-queue-get and napi-get are only visible through netlink. Read them with
-the ynl CLI, as the ndo-xmit checks do. Compare the results with jq.
-Skip the checks if the ynl CLI or jq is not found.
+On 04/11/26 16:11, Mathieu Desnoyers wrote:
+> A SCHED_DEADLINE task that is throttled, switched to another policy and
+> switched back before its 0-lag time can be left throttled with nothing
+> to replenish it: runnable, queued as far as the core is concerned, but
+> on no dl_rq and with no timer pending. It never runs again, and a fatal
+> signal cannot make it run; only another switch out of SCHED_DEADLINE
+> requeues it.
+> 
+>  1. the task exhausts its runtime: dl_throttled is set, and the
+>     replenishment timer armed for the start of its next period;
+>  2. sched_setscheduler() switches it to SCHED_OTHER: switched_from_dl()
+>     calls task_non_contending(), which arms the inactive timer for the
+>     0-lag time; the parameters are kept until then, so that leaving and
+>     reentering SCHED_DEADLINE gains no bandwidth;
+>  3. the replenishment timer fires: dl_task_timer() finds a task that is
+>     not a deadline task and returns, dl_throttled still set;
+>  4. sched_setattr() switches it back before the 0-lag time:
+>     switched_to_dl() cancels the inactive timer, and enqueue_dl_entity()
+>     leaves a throttled task to its replenishment timer, which has fired
+>     already.
+> 
+> The window between the deadline and the 0-lag time is the overrun
+> scaled by period/runtime: about 100us for an overrun of 20us at 20%
+> bandwidth. The replenishment timer cleared the parameters, dl_throttled
+> included, of a task it found out of SCHED_DEADLINE until
+> commit 209a0cbda7a0 ("sched/deadline: Improve the tracking of active
+> utilization") moved that reset to the inactive timer, at the 0-lag
+> time.
+> 
+> Give the task the replenishment the timer owes it, as the timer already
+> does for one that is throttled and not queued: the overrun comes off the
+> periods that follow, the deadline moves past it, and dl_throttled and
+> dl_yielded are cleared. A return before the 0-lag time then finds an
+> entity it can run on, and a return after it finds the parameters reset
+> by the inactive timer, as before.
+> 
+> Clearing dl_throttled alone would leave the overrun in the runtime, for
+> the new period of the enqueue to forgive, the deadline behind, for
+> dl_check_constrained_dl() to throttle the task on again, and a yield of
+> that period set, for update_curr_dl_se() to throttle it at once. The
+> first version of this patch did, and the Sashiko AI review of the first
+> posting of this series pointed the three out.
+> 
+> The selftest added two patches later fails its throttled_round_trip
+> case 8 times out of 8, on v7.3 as on v7.4-rc1 with the four deadline
+> fixes of sched/urgent, and passes it 8 times out of 8 with this change.
+> It was found by a cgroup selftest under development,
+> test_concurrency_deadline, which hung about once in 1350 runs.
+> 
+> Fixes: 209a0cbda7a0 ("sched/deadline: Improve the tracking of active utilization")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+>  kernel/sched/deadline.c | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index 30a52e42c26d..b646063a7b0d 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -1232,10 +1232,23 @@ static enum hrtimer_restart dl_task_timer(struct hrtimer *timer)
+>  
+>  	/*
+>  	 * The task might have changed its scheduling policy to something
+> -	 * different than SCHED_DEADLINE (through switched_from_dl()).
+> +	 * different than SCHED_DEADLINE (through switched_from_dl()). It
+> +	 * keeps its parameters until its 0-lag time and may come back to
+> +	 * SCHED_DEADLINE before then, switched_to_dl() cancelling the
+> +	 * inactive timer: give it the replenishment this timer owes it, as
+> +	 * the !queued case below does, and leave the enqueue to its return.
+> +	 * A throttle left behind would never be lifted; an overrun left in
+> +	 * its runtime would be forgiven by the new period its enqueue
+> +	 * starts; and a yield left set would throttle it again at once.
+>  	 */
+> -	if (!dl_task(p))
+> +	if (!dl_task(p)) {
+> +		if (dl_se->dl_throttled && !is_dl_boosted(dl_se)) {
+> +			sched_clock_tick();
+> +			update_rq_clock(rq);
+> +			replenish_dl_entity(dl_se);
+> +		}
+>  		goto unlock;
+> +	}
 
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
----
- tools/testing/selftests/net/veth.sh | 79 ++++++++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 1 deletion(-)
+This should fix the subject issue. Sashiko points out a follow-up
+re-entry case that looks problematic (and I think I'm now seeing more),
+but that should all only concern limited bandwidth overruns. This change
+fix an actual hang, so we might want to take it and work on the
+remaining issues separately.
 
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 17cfe412a266..affcdbf772b3 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -107,6 +107,44 @@ chk_xdp_feature() {
- 	fi
- }
- 
-+chk_queue_napi() {
-+	local msg="$1"
-+	local target=$2
-+	local expected=$3
-+	local ns=$BASE$target
-+	local ifindex
-+	local queues
-+	local napis
-+	local st
-+	local linked
-+
-+	ifindex=`ip netns exec $ns cat /sys/class/net/veth$target/ifindex`
-+	queues=`ip netns exec $ns "$YNL" --family netdev --dump queue-get \
-+		--output-json --json "{\"ifindex\": $ifindex}" 2>&1`
-+	st=$?
-+	napis=`ip netns exec $ns "$YNL" --family netdev --dump napi-get \
-+		--output-json --json "{\"ifindex\": $ifindex}" 2>&1` || st=$?
-+
-+	printf "%-60s" "$msg"
-+	if [ $st -ne 0 ]; then
-+		echo " fail - ynl cli error: $queues $napis"
-+		ret=1
-+		return
-+	fi
-+
-+	queues=`echo "$queues" | \
-+		jq -c 'map(select(.type == "rx") | ."napi-id" // empty) | sort'`
-+	napis=`echo "$napis" | jq -c 'map(.id) | sort'`
-+	linked=`echo "$queues" | jq length`
-+
-+	if [ "$queues" = "$napis" ] && [ "$linked" = "$expected" ]; then
-+		echo " ok "
-+	else
-+		echo " fail - expected $expected found $queues napis $napis"
-+		ret=1
-+	fi
-+}
-+
- chk_channels() {
- 	local msg="$1"
- 	local target=$2
-@@ -255,7 +293,8 @@ fi
- 
- [ $CPUS -lt 2 ] && echo "Only one CPU available, some tests will be skipped"
- [ $STRESS -gt 0 -a $CPUS -lt 3 ] && echo " stress test will be skipped, too"
--[ ! -f "$YNL" ] && echo "ynl cli not found, ndo-xmit tests will be skipped"
-+[ ! -f "$YNL" ] && echo "ynl cli not found, ndo-xmit/napi tests will be skipped"
-+[ ! -x "$(command -v jq)" ] && echo "jq not found, napi tests will be skipped"
- 
- create_ns
- chk_gro_flag "default - gro flag" $SRC off
-@@ -364,6 +403,44 @@ else
- fi
- cleanup
- 
-+if [ -f "$YNL" ] && [ -x "$(command -v jq)" ]; then
-+	create_ns
-+	RXQ=1
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		RXQ=2
-+	fi
-+	chk_queue_napi "queue napi - default" $DST 0
-+	ip netns exec $NS_DST ethtool -K veth$DST gro on
-+	chk_queue_napi "           - with gro on" $DST $RXQ
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 1
-+		chk_queue_napi "           - fewer rx channels with gro" $DST 1
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		chk_queue_napi "           - more rx channels with gro" $DST 2
-+	fi
-+	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
-+	chk_queue_napi "           - with gro and xdp on" $DST $RXQ
-+	ip -n $NS_DST link set dev veth$DST xdp off
-+	chk_queue_napi "           - after xdp off with gro on" $DST $RXQ
-+	ip netns exec $NS_DST ethtool -K veth$DST gro off
-+	chk_queue_napi "           - after gro off" $DST 0
-+	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
-+	chk_queue_napi "           - with xdp on" $DST $RXQ
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 1
-+		chk_queue_napi "           - fewer rx channels with xdp" $DST 1
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		chk_queue_napi "           - more rx channels with xdp" $DST 2
-+	fi
-+	ip -n $NS_DST link set dev veth$DST down
-+	ip -n $NS_DST link set dev veth$DST up
-+	chk_queue_napi "           - after down and up" $DST $RXQ
-+	ip -n $NS_DST link set dev veth$DST xdp off
-+	chk_queue_napi "           - after xdp off" $DST 0
-+	cleanup
-+fi
-+
- create_ns
- 
- CUR_TX=1
--- 
-2.56.0
+Thanks,
+Juri
 
