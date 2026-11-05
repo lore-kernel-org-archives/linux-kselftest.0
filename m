@@ -1,129 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.227
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793862953;
-	b=J+w9klNSBnyT4l9jgY11fHojC01K01BywfDqv9JAIcS15pjcUmdBDj5AxdSydbZWoPMP
-	 aOqDJ2UaeDv8sB7SgGW99dbwhnRQz3WI9+4JkPncMAzyh3ZCRqXNrAFaKMusJQ8EoNPvF
-	 byqwXDUInjhHaHl8m42u+VMn+KQiZsIrNSeu/X6LQjFi/pY8fSDmhMz0wMFCIYHn7YVxt
-	 M12Z+ZV7ioGNx90De9b+08jSn9tUIPXTV5BDPh2wxD2X5W9h6yMwcLo3fYetPaeTbEHVr
-	 frUvD93NQ22KbxtQ8qzPfltZ4KHVBR8VzIdujSFlhBMDR4iAzon5WoWJVuy4ziJpmyQ==
+	t=1793864980;
+	b=5E9hcmQ7384qqDJOVAEdL4Oc0ZbTMMG3btBO4MAYH//UMqBzHpr2P5IiGM3jfvWsEDFn
+	 hOJV4zSt1RcxMnzrDIx+x35DbZ5pWXxros+65W3HWOE5GyiuPgsqPRKnFq0wabgDVoVXg
+	 jiFMWZEt7xzVMpPedGFaQrK3/YBL2GQz+UyvFO63z7Jej+mUkvbkbRJ+EPAitx7DybLxp
+	 WfKiUCnZ32KRJR/5ITsbsKHsKmdltrJj2z22wlkBNDkx9eTTNWNkZ0RLG8V7LiyvsBhiZ
+	 tFDbuDs/NkOsYI8JEEOY7kch03dUXkMAd4qlLifsGOGb+1kbrwAyTYeNNk2qAGG67lg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793862953;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
-	b=DBM/yDlqhGZkhpQBtwEma/eFLaAlPWr78QcEtN3Jg2c3jT8N3QUl3ilduIdRuESQKJt6
-	 5wSQsJ+oL+LDXx67d+0/GuyJpwomoNuULIz7Qabk7XTC4Ra1TkCLOKbYD9IJqijTiKefe
-	 /8CSOHz5hW55TJF9N9cyENbXaadx1vOC7yUJJtY+0HjMPSI4fvUDA3um06VHJRpl1iNiW
-	 Fok5MUrwazTa1e19xJnsvXJfbxJ9N8B2oD64a+n7s6Scnvdal737n4I4JoWmaVXUFwFFp
-	 Ed453hFLY09jgUYWyOyOgLR2SVjpROZgbK9LS+ZwEzRTc9fHFqziCtskrJ6WSdBtWIQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793864980;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=e+3EkuIwBIYa/pzYl4lmmZvtc2fUKvaNoTpHxcQ8xL0=;
+	b=13wmToZQ+EDlA3ioS4yzK2rSgQz/mlzNFdSD6IxZKGnp1tj1fB2qqZiB7abBIBWtJTui
+	 odYbLTdo5uZ/MTcnd6o68KuV0DViKXRM7cLCwgUSjAEIOWttfUdx60YVt3XEiu81FOZuJ
+	 q+JIqIcIhGuy2HuOOJ5fXfljNCd4Er9pc8wAn2J2vBKm2KHqxocR3CdHY7wm74khEb1j2
+	 ygHitTHvx5Dczi7w/ZX4wPFP2EnPclOUWnFfiMU5ZGSj6ZnhUU4IgxyIxV6oWHWuDGIDN
+	 DVGdif8uTxmoayzOjux1F07b0pSYtOO05UUbKvbQgdWbFwPAkjgZQ/MXAMNuwpyn1vQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UpCupRSt;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=a0Uz7Pmf;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=VVZcxHIM;
+	arc=none smtp.remote-ip=113.46.200.227
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254FA606A31B
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 07:15:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 254FA606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED2D606A329;
+	Thu,  5 Nov 2026 07:49:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4ED2D606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UpCupRSt;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=a0Uz7Pmf
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793862952;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
-	b=UpCupRStGTKdg7B7YlB41BNskmU1W/sNMsDCUS2glDMpU3+XjxxGt8C031tAkmswQZaKbI
-	m+waC29h34dcg2+DdVUcPms7xie7OY4yL9GY3II7wfqfoY43Xw9uHoUHocIs2NVXhZTT4Q
-	9DWW0vUH777z0EJw5C1cLeH8X4ZlzyE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-655-3z758PMuODWMR-SrUD-gjg-1; Thu, 05 Nov 2026 02:15:50 -0500
-X-MC-Unique: 3z758PMuODWMR-SrUD-gjg-1
-X-Mimecast-MFC-AGG-ID: 3z758PMuODWMR-SrUD-gjg_1793862950
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4a009f82bedso13339845e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 23:15:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793862949; x=1794467749; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
-        b=a0Uz7Pmfw5rB2Dl//vtHdDkxjvTW9BtBgxiqYA8xC1Mgi3tG1/RsPaBEb68FlyG859
-         gxHaDGcvdB9pvZDgAkaoj3ZBcEyrH46ozJIzoqq2dsyC3W3jQlPOgElgmFTuns9WZXKn
-         9fUo2YADkCkV/Ec9R2CtGAxBGawhpsz3Qv1nG5LP/6FGfuvnRjNV46XGF5HnfPb1PYZJ
-         XeB5ifgjoSo2qkCiKFy0IeDLskO8rd/L+/ys7bfsVO7ygR9ML1r2v1pnRPwDqykVXY3Z
-         dRM1Q4ED+Gi4lxvJxpA5sXWXOfVMQzFUcj7MU/IKqppwo4MG8dHDzkHrgmFtFQHpMQVA
-         DGwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793862949; x=1794467749;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
-        b=RI+pCqk/iiBGgqcZzT+hXQciU4nw9jIF8jlwIcb/AfhWMKNw3GY9CAS3Byuv+q4Apg
-         IWJqUhCOJx14xDJ9VyxmEPzErlNuXDZzOnwNrLEhhqlmPFs5f/iVGAsEIrCT0Y1lMVQy
-         A4syKyq6TeB3hVHhpIoLXVmk5ehASV5IMmAd+7mfvc4ZIGlJBoOxynxnSepELxUugHrN
-         4wFbL80gC2nU/MRg4V9YplPTm9m/cOoT029SUoCIZM/7w/FB5Ojmn/jz1INjOcicuG7n
-         13qH2x32aAqr5WYqK/e6c2L218ur+5JeCd+0h//8tTP+0MiDatYV0DVyVBQwB8HXlj9g
-         +n0Q==
-X-Forwarded-Encrypted: i=1; AKwUvBysUV/+m/bMFucbskJsEenmzSxSX1OlXtEr59mrE2kGaaeqwz2eBisTQLc3dzjvYsRd8qqhDgwoBgnfkOt3+zk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8PkoHGp0DPpJbVg/XoYFNpSh7vV4QUnzjgFhwpnVCjBfJCcotw
-	8vyFc5T267W33mU/kh+H40vKIg0KOSpEzhJaIhpaO2xXzLMqRg7VMhPRdcb6F8kD3HUg8nfcHJ0
-	2WaOmKPaxVO1Y5vtCz5YhSPsS66eX5HxaB0bSKV1AmCloXtdQ6K7KRHdp62QIs4Q1SExsNQ==
-X-Gm-Gg: AYBFou0X66YUH877oSemcEjItUq7Gra2zYyeI1s0gk7MVNXqDHTnSnsiNzccFkt65JS
-	sisgTY3qJGiERwd4FWA4hppPaSes7csS+UVp36HL7wO9T/7pZQE5cBODjsiyOuYvxg0Xg74Kl1/
-	3IL2LXhec4VlLEWSvBTfpYxJ7iN2Jr6Yyyfhsy8U6M5tndn9PGUqMhDFdxffhCcZLjUbjK7FZtA
-	lm3Q5/1cWFWkMp6+v90ohIIWZXUl17o47PGjNljvOga+d1ZSEpV4yZaO9bYbI4IUuRahqmLAbyo
-	U3aPhZ2NfZE1QIbe9BaO4UsLI30p46kA46wDmHnUbBHH8nQJ34F8wDhtC2OSZ896ZyPERNXc08n
-	T9CQHD6RPoAYPeoDZI49tDIECXcGBLiTw7LiSs6S6NvHPBcAlINvrRHd7foJd1inI6a6kkiEQ89
-	ERCA==
-X-Received: by 2002:a05:600c:1f8d:b0:4a2:c9b:9b98 with SMTP id 5b1f17b1804b1-4ac177539f6mr393038765e9.17.1793862949730;
-        Wed, 04 Nov 2026 23:15:49 -0800 (PST)
-X-Received: by 2002:a05:600c:1f8d:b0:4a2:c9b:9b98 with SMTP id 5b1f17b1804b1-4ac177539f6mr393038455e9.17.1793862949360;
-        Wed, 04 Nov 2026 23:15:49 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56f5e65c8sm42015295e9.12.2026.11.04.23.15.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 23:15:48 -0800 (PST)
-Date: Thu, 5 Nov 2026 08:15:46 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Luca Abeni <luca.abeni@santannapisa.it>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Waiman Long <longman@redhat.com>,
-	Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v2 02/21] sched: Refuse SCHED_FLAG_KEEP_PARAMS that would
- change the policy
-Message-ID: <auwtIqa4H4Fqjq6V@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
- <20261104211207.1392343-3-mathieu.desnoyers@efficios.com>
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=VVZcxHIM
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=e+3EkuIwBIYa/pzYl4lmmZvtc2fUKvaNoTpHxcQ8xL0=;
+	b=VVZcxHIM9PhL67RrigzJjiiTvnlifhcQKpZh2ZIYjbvoILjNOMHnpknk30+AUjRhECxp10Tl7
+	OuNuCy8gYf2I5pyKB7WQ9O/k2zDT3SQAW8WCnBASqCopILpkVXXglmR+xtyHcor/vILUfQPO4hi
+	W+bWnlp0mQxMXGmEWUeqBCo=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4jKvbG10qhznTVh;
+	Thu,  5 Nov 2026 15:49:30 +0800 (CST)
+Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6F30B40572;
+	Thu,  5 Nov 2026 15:49:28 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemk200008.china.huawei.com
+ (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Thu, 5 Nov
+ 2026 15:49:27 +0800
+Message-ID: <4831fb24-85f2-4273-9cf8-9ac60dd6555f@huawei.com>
+Date: Thu, 5 Nov 2026 15:49:26 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -133,50 +62,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261104211207.1392343-3-mathieu.desnoyers@efficios.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v20 00/15] arm64: entry: Convert to Generic Entry
+To: Linus Walleij <linusw@kernel.org>
+CC: <catalin.marinas@arm.com>, <will@kernel.org>, <mark.rutland@arm.com>,
+	<oleg@redhat.com>, <shuah@kernel.org>, <kees@kernel.org>,
+	<luto@amacapital.net>, <wad@chromium.org>, <peterz@infradead.org>,
+	<ada.coupriediaz@arm.com>, <kevin.brodsky@arm.com>, <yeoreum.yun@arm.com>,
+	<james.morse@arm.com>, <thuth@redhat.com>, <tglx@kernel.org>,
+	<vladimir.murzin@arm.com>, <broonie@kernel.org>, <ryan.roberts@arm.com>,
+	<liqiang01@kylinos.cn>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20260930101805.1770358-1-ruanjinjie@huawei.com>
+ <88c40977-28f1-4f01-aa5c-6dedac822d21@huawei.com>
+ <CAD++jLnX2ptZnOHWvU6QR+4VKeM+kPfjShkB0DQZpr3hnG0DOQ@mail.gmail.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <CAD++jLnX2ptZnOHWvU6QR+4VKeM+kPfjShkB0DQZpr3hnG0DOQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemk200008.china.huawei.com (7.202.194.74)
 
-Hello,
 
-On 04/11/26 16:11, Mathieu Desnoyers wrote:
-> SCHED_FLAG_KEEP_PARAMS keeps the parameters of a task: it skips
-> __setscheduler_params(), which is what sets p->policy. A request that
-> asks for another policy is then carried out by half, and succeeds:
-> SCHED_OTHER to SCHED_BATCH with SCHED_FLAG_KEEP_PARAMS returns 0 and
-> leaves the task where it was.
-> 
-> For SCHED_DEADLINE it costs bandwidth. A task that priority inheritance
-> boosted into the deadline class is of that class already, so
-> prev_class == next_class and the class check of
-> commit 8a70415351ba ("sched: Reject SCHED_FLAG_KEEP_PARAMS when it would
-> change scheduling class") lets the request through: sched_dl_overflow()
-> admits it and adds
-> its bandwidth, which the skipped __setscheduler_params() never gives to
-> the task. It keeps SCHED_NORMAL and a dl_bw of 0, so nothing releases
-> that bandwidth, and total_bw of the root domain holds it for good.
-> 
-> Refuse a policy change as well, where the class change was refused
-> alone.
-> 
-> A SCHED_OTHER owner of a PTHREAD_PRIO_INHERIT mutex with a slice of
-> 40ms, boosted by a deadline waiter blocked on it, leaves 0.4 of a CPU
-> behind at every such call: total_bw 419424 -> 838854 and there to stay,
-> in 8-CPU VMs of v7.4-rc1 with the four deadline fixes of sched/urgent,
-> and of this series up to here. With this change the call is refused and
-> total_bw is as it was. The selftest added later in this series has the
-> case, params_keep_boosted.
-> 
-> Found by the Sashiko AI review of the first posting of this series.
-> 
-> Fixes: a509a7cd7974 ("sched/uclamp: Extend sched_setattr() to support utilization clamping")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
 
-Makes sense to me.
+在 2026/11/4 21:38, Linus Walleij 写道:
+> On Mon, Oct 26, 2026 at 9:52 AM Jinjie Ruan <ruanjinjie@huawei.com> wrote:
+> 
+>> Hi Mark and all,
+>>
+>> Ping.
+>>
+>> Are there any further review comments or new suggestions for changes?
+>> I’m happy to address anything that comes up.
+> 
+> You're pinging in the middle of the merge window, people are busy!
 
-Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Hi Linus,
 
-Thanks,
-Juri
+Sorry for pinging during the merge window.
+
+> 
+> Now that v7.4-rc1 is out, rebase on v7.4-rc1 and resend please.
+
+No problem. Will rebase on v7.4-rc1, retest and resend. Thank you!
+
+> 
+> Sorry that this requires constant rebasing and resending, generic
+> entry is so intrusive that we need to take baby steps... maybe we
+
+System calls path seem to be more deterministic than the interrupt path.
+However, considering that arm64 is widely used and this is in a critical
+system path, it is indeed necessary to think twice before proceeding.
+
+> can merge some of the patches and not yet all? I.e. a trickle-in
+> method?
+Ensure there are no functional changes, a trickle-in works for me.
+And it may give me more confidence to move forward 😂
+
+> 
+> Yours,
+> Linus Walleij
+
+-- 
+Best regards,
+Jinjie
 
