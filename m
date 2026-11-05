@@ -1,109 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793905944;
-	b=bZiyCPTjthcoAeWs0LbfHy8yk03M4tm905RXWDvLsUdRtVX90IFHVYs5QZNO4aboh8Vb
-	 xChsDl/plcPw+Y6amljKJ9yhz/zUFXA0XTv4Uzwqm65k5C5BbeUVBHa+Uo9ow+3K8GuGh
-	 4pd61qJjuJAJMatoYjsm34UdXh0L4wdiqOwPj4W/ZjhyF2eHxIU5fUJsqCmVOhbvrNSgP
-	 OHrCHhijkw6XDL9RaICTvB0CSoQ7n6rhbdK3VQzQO6LiALMzJroqtZ45Q/A9saZY+YGGZ
-	 sTLjvkC9x2NYhGvtRtHJ+mFz8WX170NenGmyvcjujrnIo2agy7EiWf4tIBQQwHgR0Jw==
+	t=1793906943;
+	b=tevzQZ+n2y7TFYYhu5wm1ExRtWerpwZrND4WScmpY9/O6DeBheLxrj8slxe57NWKQ3Ce
+	 McI74HeXs8kHGmDY1t2ePw4M7ybHZwzjn0lHyViDa/Zo8JbZ6OSTs3Dt739wL5x5ER2Nl
+	 H1NjEDNJBxYN46uuZsm8+qxF1J79HWjdRbCq1R0YFcPsScKGq+rcDEWaO75Hz4rXRkmHR
+	 iBE1tcYxb3Go9buuFgafx3s5ZxT9CLVrkLL6S6KkBmAhx5wH5Ndd6BTo2b5DKOF0ffzVF
+	 mOikwI51uOlpsALI+WvZcYOl8m+K4zMaQ3fk5L3U4kl/ncJ/KHdrYIrnxV8SQMxxX0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793905944;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=QH8EWm3WpJvKmm+3SH11RyockHxBeCCGhqou8vP+rPk=;
-	b=O3Ax6f9O8YK7dGnsmehNDCM99iSRfSKbrpXPtYfLOtnrmoubgE/RvjQFzoJusOa+XM0F
-	 NmVX/eZX6z2SrztwVgHcCmrZ/ckuoc+BdtBS+K/lcuJMyMDO0cyYJxeSAvfmqZsORlrjn
-	 tCERxOHnBM1VI+vqG45gziNZtZJ9ZaTEXS7IRMREE2KEPYpVKB1S3yWTKO6GtBFbODGXL
-	 8aks+Wg1AtsHnjlLVkVSJDc5w99rti466Thae4zT2av0h59vbcDjf0ATEHvjKJDahZxAn
-	 dEVbdifnrsjf38By9qPaK4MPeJHbGwkevK9izKbJhJJJ/ZUqoVq2eiygfAEBh5gs+9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793906943;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=UknNxIDX0xm3f3sWMXk0B1mzbk0SggFrNXwmrmf6Ci4=;
+	b=WCSo7bwWmrbJ1XfHxuPezA3mk+9coBLkg7SZoa1liMojry7GHJfSXhcH4ZDWnOHfBu5e
+	 4y6GEXoZWIrdOekcmRwfQR88JmdPXebyYRleg149DQflwimd4rkH5q4EqfEtDXSwCFhbN
+	 CVzH7O7xMTTsSx9zYxkv78JMsEYdTnTYzrM+Mdt0n9WMzbvmYTRvIwOxSZ706tretnCmE
+	 CFbz4nwCTYcbxzntXL2k+w9lzgYBlUS8LCycSBuqX1sjHWNbIOmXe8ZfxJSQTIY/8QVR6
+	 xgmUwkr2ucg2eHsv33L5b7nOiNLCbrNT3G7WKEnyDEOTfRe9fML8IU2bUNrxYfG1uXg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B0MNLtWQ;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NNDOELm4;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D00606A326
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 19:12:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D3D00606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAAD606A330;
+	Thu,  5 Nov 2026 19:29:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=B0MNLtWQ
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3b09c07b3d2so1349942a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 11:12:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793905942; x=1794510742; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=QH8EWm3WpJvKmm+3SH11RyockHxBeCCGhqou8vP+rPk=;
-        b=B0MNLtWQGjDmicRxY8nTu69DmYdME/D2jJN8rX+nGAlTMa5/iKX0Zivd7mhh+flPfs
-         xy3ZoNN4HgIKW4K4+mbAoNWhsSmDgb1P3WgIZCjZvecSakD2rB4XrTL8WwonQtbvNgZ8
-         h8p2WNu5k95YFljALG1jMJJ03s4qGmEUPwOwManEDxZ+GcL/xuiqjJVeLqmp+5UyzAW6
-         9EH7p2MmwcpUJDnOC5R25PxQkZi+0TuqQnMBjToaTQ/j5/LnlqaqNQd3J93XCaF2MN6H
-         E7WHw7qCt48+ehLyUoviWDEPPA7ju+e/24ge/Nj8T6fML4Ui3s4IgQMHHYqUJVnOXFuq
-         B5Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793905942; x=1794510742;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QH8EWm3WpJvKmm+3SH11RyockHxBeCCGhqou8vP+rPk=;
-        b=No3sg8j0584GQuGJ0wI+4X+n1chqe1+C5a8twn9TmEfm38mRGKuy77oOF0dJ/S2VxI
-         t7avf+8ToWIjOnRlbO2NeWogmiMRGEfTW4hdWDUhEtZT/K70sfTIR+HLdQtaTTpvkAFM
-         L1Oz2N9VAaqHSKQnwuzlkE5o7WwBjdSYtvAtCisf+A5EgDdnXowkarTwVrhD1GP16BQY
-         XuraT6TpXLPqvXhBlFbRNwVtUrTd1iN7BqFHeJDQYwE5Br+8RUaLHLeKkvGNZbpt4LQQ
-         1tahRSHdzk/CEmeuGXsFCivE78IPuCjLOjp9DTgx3b3769MqHDXLyg6oJyuLnJWz5ajs
-         zYZA==
-X-Forwarded-Encrypted: i=1; AKwUvBwS+9Tv2hYRM/rx4zC6TLfwm+rpUd80esth3N9337+c4IYY6wQyjeSyhodkeYw9x4JQ2Bi+hImwkITXSGzXdag=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8bxzVylIf1EHcatNDbh4yLt+yXbuWGwLe5LIgvdglsBQ4SnxZ9
-	V8nBbsJHYL5gJoFv/xzf2xc85fVwh6TzPFYMtFZZ3zyWCH5D//ARSRMTjiE+sYYSZA==
-X-Gm-Gg: AYBFou3E6g8kzWCwHUsZPsvvk4YeEMmxBfqBbmqATf/dyMPF8fvL54FjLklzVmWkH1O
-	qLK0V6x6Kkr1gQ/z3aaz7UnmQKMqCEW2ECTMmxsRHMs4G1EYINUoljjrSlUrK8diyJ65sSgzXqK
-	jZFUJZKKciDCzu+KIU4vBDjbB/nSjADW8zLpJDPAfhy/0leXFin0WM+yVz2HJdkfytN5mUG3WB7
-	nO+Yo2eefcR3dsFk7S9JKNjtvcfU5CRiEnLBnJJnHc5wqVJVS2aYEBtLw31WG7uJUQq055haQdt
-	XAhDOz9hLiANrJxVIk25ctaMOEqQYZjaVDs5hrAmzCcHMYx9eJBV0zFyxo0EucCj5tySC8LMhzR
-	pbOFL4ZeXyOjSgRFJgQVx2VKAYm7oINeg/pFShhYFh2UTVUuXDhVKxFGo+G9+/+CcxzmeYwg+tH
-	XAxVvD6HY302dCOvXbCZUXYNcsTmEUUQOio9m+LleDJnZeoe/USmtbXxLkfSEwJdJ+o8JJII+MM
-	61eFGoceKr2cAWwU/L8ByCa1n/0gEalvgDAEUAHOzCjznjsziToCHCm7JbkaUI1wBU4Ney1bjne
-	74rmdsGfk37kTa6Ct9YPF5f/BbFctZhNzF+xFR6o+8YhQcNjfLSa/EyMi1lOwVnu
-X-Received: by 2002:a17:90b:268a:b0:3ac:7c52:faeb with SMTP id 98e67ed59e1d1-3ae89769d66mr17879218a91.41.1793905941532;
-        Thu, 05 Nov 2026 11:12:21 -0800 (PST)
-Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0944eb1d1sm5401592a91.0.2026.11.05.11.12.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 11:12:20 -0800 (PST)
-Date: Thu, 5 Nov 2026 19:12:17 +0000
-From: David Matlack <dmatlack@google.com>
-To: Vipin Sharma <vipinsh@google.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
-	ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com,
-	ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com,
-	chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net,
-	graf@amazon.com, jacob.pan@linux.microsoft.com, jgg@nvidia.com,
-	jgg@ziepe.ca, jrhilke@google.com, julianr@linux.ibm.com,
-	kees@kernel.org, kevin.tian@intel.com, leon@kernel.org,
-	leonro@nvidia.com, lukas@wunner.de, mattev@meta.com,
-	michal.winiarski@intel.com, parav@nvidia.com,
-	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org,
-	rananta@google.com, rdunlap@infradead.org, rientjes@google.com,
-	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com,
-	schnelle@linux.ibm.com, skhan@linuxfoundation.org,
-	skhawaja@google.com, vivek.kasireddy@intel.com, witu@nvidia.com,
-	yanjun.zhu@linux.dev, yi.l.liu@intel.com
-Subject: Re: [PATCH v6 07/27] vfio/pci: Preserve vfio-pci device files across
- Live Update
-Message-ID: <auzVEUpFEoWltpVg@google.com>
-References: <20261102153656.1431701-1-vipinsh@google.com>
- <20261102153656.1431701-8-vipinsh@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NNDOELm4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F771F000C1;
+	Thu,  5 Nov 2026 19:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793906942;
+	bh=UknNxIDX0xm3f3sWMXk0B1mzbk0SggFrNXwmrmf6Ci4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=NNDOELm4Hz4N7CmdMhpohkpVr08q/PWYgov7+1gVAQr7+hSjjyLzwt+gc5JDB9zG5
+	 EhQmvVv8/sV5hwSbQvW0eWj5i/tlTCKYhTXrjtBL9j/Pfg3nNa/7kieX07YgfOp0Oo
+	 LZzp3hshTb3g3POqFSESr/VE7XC+DpFbf9BW/5f4rsslUVmQ2N4aoyOtnIPOE+OzAq
+	 VfV0DVzFkIDjNw333I4qs6PsuH9SoLTSVH3+4+EwX5G6mLFMcvcj6S0xziDqU02Awk
+	 4NoEyPx8h0+b1TBbewzfPHjJ1UavJLvFlKiB3/T2Uo0tSH0Clevgj2BnKuR8WUuKaQ
+	 r6DiIWtj4SmIg==
+Message-ID: <8a3827cb-187d-4c4f-84aa-5ad811abef20@kernel.org>
+Date: Thu, 5 Nov 2026 20:28:57 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,116 +51,102 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102153656.1431701-8-vipinsh@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] mm/huge_memory: take a reference on a folio PUD
+ copied by fork
+To: Konstantin Khorenko <khorenko@virtuozzo.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Alistair Popple <apopple@nvidia.com>,
+ Dan Williams <djbw@kernel.org>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20261105-vstor-150143-copy_huge_pud-folio-refcount-v2-0-2828fe5a51ed@virtuozzo.com>
+ <20261105-vstor-150143-copy_huge_pud-folio-refcount-v2-1-2828fe5a51ed@virtuozzo.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261105-vstor-150143-copy_huge_pud-folio-refcount-v2-1-2828fe5a51ed@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2026-11-02 07:36 AM, Vipin Sharma wrote:
->  * TOCTOU synchronization: vfio_pci_dev_is_frozen() is checked locklessly
->    on entry to the ioctl, read/write and mmap paths, and re-checked under
->    a lock that freeze() holds before any operation that could change the
->    device or vconfig: under vdev->igate in vfio_pci_ioctl_set_irqs() and
->    around every config-space write in vfio_pci_config_rw_single(), under
->    vdev->memory_lock in vfio_pci_runtime_pm_entry(),
->    vfio_pci_ioctl_reset() and the SR-IOV enable path of
->    vfio_pci_core_sriov_configure(), and under dev_set->lock in
->    vfio_pci_dev_set_hot_reset(). A racing operation thus either completes
->    before freeze() takes its snapshot or fails, while existing BAR mmaps,
->    ioeventfds and dma-bufs keep working. Serializing config writes on
->    igate covers the PCI_COMMAND, INTx disable emulation, power state and
->    FLR paths at one point (the INTx disable emulation now uses the
->    igate-held __vfio_pci_intx_mask() and __vfio_pci_intx_unmask()
->    helpers), and also serializes the irq_type and virq_disabled accesses
->    of config writes with VFIO_DEVICE_SET_IRQS.
+On 11/5/26 18:00, Konstantin Khorenko wrote:
+> Device DAX maps its memory with vmf_insert_folio_pud(), which takes a
+> folio reference, adds a PUD rmap and accounts the pages to the mm.
+> zap_huge_pud() drops all three, but copy_huge_pud() copies the PUD into
+> the child without taking any of them. Each child's unmap then drops
+> what the parent took:
+> 
+> - the folio is a reference short, so with two children its refcount
+>   drops to zero and free_zone_device_folio() runs while the parent
+>   still maps it;
+> - the child's file counter goes negative, "Bad rss-counter state" when
+>   its mm is freed;
+> - the parent's unmap drives the entire mapcount below zero.
+> 
+> fork copies the page tables of a device DAX mapping that has a guard
+> region, and commit f807123d578d ("mm: allow guard regions in file-backed
+> and read-only mappings") allowed MADV_GUARD_INSTALL there.
+> 
+> Take the reference, the rmap and the counter for a PUD that
+> vm_normal_page_pud() resolves to a page, as copy_present_ptes() does for
+> a PTE, with a new folio_dup_file_rmap_pud() helper. copy_huge_pud() now
+> needs both VMAs, so pass only them and take the mms from them.
+> 
+> Fixes: aed877c2b425 ("device/dax: properly refcount device dax pages when mapping")
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
+> ---
 
-I think there's a simpler way to do this. Checking the frozen flag
-locklessly and then re-checking it under whichever lock covers each
-path spreads the synchronization across igate, memory_lock and
-dev_set->lock. That makes it hard to convince yourself every path that
-can change the device is covered. It also makes every config space
-write take igate, for all vfio-pci users, even when
-CONFIG_VFIO_PCI_LIVEUPDATE=n.
+Thanks, I'll wait a couple of days and then queue this.
 
-Instead, I suggest adding a per-device rw_semaphore to struct
-vfio_device in the VFIO core, e.g. liveupdate_rwsem, that protects a
-liveupdate_frozen flag:
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
- - vfio_device_fops_unl_ioctl(), vfio_device_fops_read() and
-   vfio_device_fops_write() take liveupdate_rwsem for read and fail
-   with -EIO if the device is frozen. That covers every device ioctl in
-   one place, including the ones handled by the VFIO core
-   (VFIO_DEVICE_FEATURE, VFIO_DEVICE_GET_REGION_INFO and
-   VFIO_DEVICE_{ATTACH,DETACH}_IOMMUFD_PT). This patch doesn't block
-   the last two at all today.
+-- 
+Cheers,
 
- - freeze() and unfreeze() take liveupdate_rwsem for write, before any
-   other lock, and flip the flag. preserve() doesn't need it since it
-   only serializes state that doesn't change after the device is
-   opened.
-
-Putting this in the VFIO core also means other VFIO drivers can reuse
-it if they add Live Update support in the future.
-
-The lock order then becomes:
-
-  liveupdate_rwsem -> dev_set->lock -> igate -> memory_lock
-
-freeze() can still take igate and memory_lock to check irq_type,
-pm_runtime_engaged and sriov_active. But the ioctl, read and write
-paths no longer need to re-check anything under those locks. So you
-can drop the igate change in vfio_pci_config_rw_single(), the
-open-coded vfio_pci_zap_and_down_write_memory_lock() in
-vfio_pci_runtime_pm_entry() and vfio_pci_ioctl_reset(), and the
-smp_load_acquire()/smp_store_release() pair.
-
-Two paths still need their own handling because they don't go through
-the device's file:
-
- - vfio_pci_core_sriov_configure() is reached through sysfs. Take
-   liveupdate_rwsem for read around the frozen check and the
-   sriov_active update.
-
- - VFIO_DEVICE_PCI_HOT_RESET issued on one device also resets the other
-   devices in its dev_set. Keep the check in
-   vfio_pci_dev_set_hot_reset() under dev_set->lock. freeze() sets the
-   flag while holding both liveupdate_rwsem and dev_set->lock, so
-   holding either one is enough to read it. Please don't take the other
-   devices' liveupdate_rwsem there, since that would invert the lock
-   order relative to freeze().
-
-I don't think mmap needs to be blocked at all. Creating a new mapping
-doesn't change the device or any of the state that gets preserved, and
-existing mappings already keep working while the device is frozen.
-Leaving mmap alone also avoids taking liveupdate_rwsem under mmap_lock,
-which could deadlock: the ioctl, read and write paths can fault on user
-memory (taking mmap_lock) while holding liveupdate_rwsem for read, and
-freeze() may be waiting for the write lock. Please update the comment
-in freeze() and the DOC section to match.
-
-> diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-> index 9914f3ac69ae..1f1ac7a798aa 100644
-> --- a/drivers/vfio/pci/vfio_pci_config.c
-> +++ b/drivers/vfio/pci/vfio_pci_config.c
-> @@ -644,10 +644,10 @@ static int vfio_basic_config_write(struct vfio_pci_core_device *vdev, int pos,
->  
->  		if (virt_intx_disable && !vdev->virq_disabled) {
->  			vdev->virq_disabled = true;
-> -			vfio_pci_intx_mask(vdev);
-> +			__vfio_pci_intx_mask(vdev);
->  		} else if (!virt_intx_disable && vdev->virq_disabled) {
->  			vdev->virq_disabled = false;
-> -			vfio_pci_intx_unmask(vdev);
-> +			__vfio_pci_intx_unmask(vdev);
->  		}
->  	}
-
-With the rwsem, config writes no longer need igate, so this change
-isn't needed. If config writes and VFIO_DEVICE_SET_IRQS really do race
-on irq_type and virq_disabled today, that's unrelated to Live Update.
-Please send it as a separate fix.
-
-Lastly, please add the freeze infrastructure and the checks in their
-own commit ahead of this one, e.g. "vfio: Add infrastructure to freeze
-devices for Live Update". Then this patch only has to implement
-freeze() and unfreeze() on top of it, which will make both easier to
-review.
+David
