@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.100
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793844824;
-	b=mID5wgvuiLqMx1sOyCMeSU/AkN82W/qoLi+DRxqIxfZm7oFrnze+NjXlPrO4qH35nFPu
-	 Wu/UeMbU/lksS+8qNMpOULhYI8Pc4ho03F676XfEQOBp52OpAw4pSvY6MnKddG/Zy6wiF
-	 ZkHp8CSd5nC2ooEM7EHQSgLmlvNIEOYQDzZzoGzFuxAwupyiiwTvetOhB1zXmhEX4IrVS
-	 O481l+WCTodMOk48u2qcuwo1EqxI3G0+vFCosbA0/3tkLXhui59zMeCBmBh0klO+Zcab+
-	 nOvkCikJHHZA4JOftOycPz6aK1pI69Z6rNlJvULl/8n2NiiiTftZ1xPvnK9FZ2V+5Rg==
+	t=1793844847;
+	b=cIFlboE9kJfoAtvCZQ0mdhDfL1FFusvOYxIXjctRLcB0GR2sCMxPHIf5PtLzkK/rnlbW
+	 w0WuQbETpEu9VaI5P2O7bk0TLgGy67znIF0j5Ws0ix4umFDlWeHdWp7xbAg1SwHoPwhXf
+	 6GWR3p+JvyCLNKgQOk0dYXPByedsaS2VWJgTkw2g7xg2GHAR7YeF85dcezk/q2Cn/0p5s
+	 h4wfpoQ7/UeUnfomkbUh0FhAcj2nJQEXwSVKXQ0ssLO5ojMhXq72epyC8/0J9DToDtRzO
+	 nm6lZU/qXAmAeOLa0wDGLwd78ketXEyEYQSegGVKjdkIVoefqYik+BvTI0iKdHY4hQQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793844824;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793844847;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=hNDLSFapUDH5zg85s2N1cWnGesB/dC3nKW1Zdod/mJM=;
-	b=1KdVhsi9t8tcI6vyhIjF69I6Lh4WeA7pgoMhpM7HTn+dW3VClS0IIouLwvI0OrMrsid0
-	 s/CZTSTh68satlSR7YiOzWF5SSnNxgK7dw+ynARZgY997OztVSBwxNpibnAliNHxu4hUt
-	 RKknElxhRyafDKi4gSjVHTxGbkcxvu7RtWceBwHbcXtTFxmCfJgEcFkRXAtx9hx/3ozV1
-	 /toM6Pkb68oe/HD0VTJwD7NtEcthveIFQ2Z983yVNEAc8ljADvueDnN+mE5aUmNbLBEmg
-	 otY1gZmW0YN+k2fF6toxLnMw6X+jTne0LAwX1zgbNrJElTeDPIsMGcoYJNvxBooUtyA==
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=tXeq94tKXH8bHOz1amsH5XRU51n2PYOOTkgxfF1PjyI=;
+	b=qBIzlxnV7gZNO7Swk9x+H/160BbMNad2v4B6JsFx4OxxN72c4pCoyPTrRtf6suBbX+rm
+	 9CIfhorFFGlTNVu2fZrhTOsQSFeVmbvX+PRiiimCFFHXve+LAAaxljLKSTD4Bmq3vd2f1
+	 Qp6dqMDjrjbJXMRIWgDOpSspXYnfdHLQQtFQXRJwOR4lcG15gkxKeWQvmINGf6TjAHwAA
+	 qZYnBpGxuSzGHwQlh5q4loMgymWECerFBy41qbEUavOfCMCtap59LvMJNeZd1mxjIYNQ/
+	 C6yE5G23eCBmF514HGXGH9wD5kDU6zq1qWH+XybY0iNNwtTzMmEMvzAf4ZbJ0ja4JFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GTN47C24;
-	arc=none smtp.remote-ip=91.218.175.189
-Received: from mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=j2sTp789;
+	arc=none smtp.remote-ip=95.215.58.100
+Received: from mta1.migadu.com (out-100.mta1.migadu.com [95.215.58.100])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4492B606A326
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:13:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4492B606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E900606A331
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:14:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E900606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GTN47C24
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=j2sTp789
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8I/giyMs0wqeew5AfRUUOtj+4dlC5TxPYe3tjop4G7Q=;
+DKIM-Signature: a=rsa-sha256; bh=l5hRS8qgzR0WOCPLF0tQbQ+of37lp1oZsgw+XUQqwhg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793844821; v=1; x=1794449621;
- b=GTN47C242OTjxoETwRoDA4BNNMBb96ebNpD8Fs7hcBOuXEfB4UY9tjCqMCMULvNYzHbZTVs9
- rF0xm7EfvvrHIlO+8uqH39Q+2TJFSVheoWh0KNsIYT29D3R3Sxt3FqEfBpj54Vs8kS3zteYOtL/
- UaYoLjy6PfYWWvgx9bN5zOwc=
+ t=1793844844; v=1; x=1794449644;
+ b=j2sTp789TAzH4+lGZ7lYWfaDwj4tzc9cwnz9VymVYz+93eIx1j2P1wIewQP0NcIfVbJQKLyf
+ 0DO8NIIghKzDouBSBnDym1wAnQyGpqJsD9irj2dQSZrGObeDZJB96QtjMGxheDIwPErfv1cfpzT
+ zdnAQ3fG/Xx2Ge3hDWonFfXo=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8fb82eb1ffacc0da;
-	Thu, 05 Nov 2026 02:13:41 +0000
-X-Mizu-Trace-ID: 8fb82eb1ffacc0da
+Received: by smtp.migadu.com with ESMTPS id 7ce234fbb2517b84;
+	Thu, 05 Nov 2026 02:14:03 +0000
+X-Mizu-Trace-ID: 7ce234fbb2517b84
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <d683135f-e0da-4f1e-b4b4-084931582a24@linux.dev>
-Date: Thu, 5 Nov 2026 10:13:33 +0800
+Message-ID: <fc4939cc-84ec-4c5c-88a7-658ca800377d@linux.dev>
+Date: Thu, 5 Nov 2026 10:15:13 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,206 +59,188 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cgroup/cpuset: Fail if isolated CPUs don't leave any boot
- domain housekeeping CPU
-To: Waiman Long <longman@redhat.com>, Guopeng Zhang <guopeng.zhang@linux.dev>
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20261104071600.474587-1-guopeng.zhang@linux.dev>
- <cbe741a9-fd0c-4c8f-8591-55ecc70f222a@linux.dev>
- <21cfe1b7-be80-4f3b-8366-cd77afd113b0@redhat.com>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <21cfe1b7-be80-4f3b-8366-cd77afd113b0@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH RESEND v2 01/51] alloc_tag: don't remove /proc/allocinfo
+ under the codetag module lock
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>,
+ Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+ NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+ Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
+ Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados
+ <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>,
+ Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>,
+ linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org,
+ coreteam@netfilter.org, kexec@lists.infradead.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net,
+ linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org,
+ linux-usb@vger.kernel.org, samba-technical@lists.samba.org,
+ sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-doc@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>,
+ linux-input@vger.kernel.org, linux-raid@vger.kernel.org,
+ linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>,
+ stable@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ Suren Baghdasaryan <surenb@google.com>
+References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-1-021c84d852e0@kernel.org>
+Content-Language: en-US
+From: Hao Ge <hao.ge@linux.dev>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-1-021c84d852e0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Cc Suren
 
+Hi Christian
 
-On 11/5/2026 2:54 AM, Waiman Long wrote:
-> On 11/4/26 7:58 AM, Ridong Chen wrote:
->>
->>
->> On 11/4/2026 3:16 PM, Guopeng Zhang wrote:
->>> From: Guopeng Zhang<zhangguopeng@kylinos.cn>
->>>
->>> With the "domain" flag of the isolcpus= boot option, the CPUs isolated
->>> at boot are excluded from the sched domains and the remaining CPUs
->>> become the boot domain housekeeping CPUs. An isolated partition is
->>> allowed to use the boot isolated CPUs, but it must not take over all
->>> the boot domain housekeeping CPUs.
->>>
->>> prstate_housekeeping_conflict() checks that rule for root partitions
->>> only. The 2nd check covers the nohz_full case as it is gated by
->>> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) which is not enabled by
->>> isolcpus=domain. So on an isolcpus=domain,<cpus> boot, an isolated
->>> partition can claim all the remaining boot domain housekeeping CPUs.
->>> The state is committed, but the sched domain rebuild at the end of
->>> the write finds no housekeeping CPU left for the boot domain and
->>> hits WARNs and an OOPS in partition_sched_domains().
->>> housekeeping_update() cannot accept the configuration either as it
->>> cannot empty the boot domain housekeeping mask.
->>> With an "isolcpus=domain,10-31" boot where CPUs 0-9 are the boot
->>> domain housekeeping CPUs, for example:
->>>
->>>    # echo 0-9 > A/cpuset.cpus
->>>    # echo isolated > A/cpuset.cpus.partition
->>>    WARNING: kernel/sched/topology.c:3089 at build_sched_domains+...
->>>    WARNING: kernel/cgroup/cpuset.c:1478 at cpuset_update_sd_hk_unlock+...
->>>    RIP: 0010:partition_sched_domains+0x3b8
->>>
->>> Fix that by extending prstate_housekeeping_conflict() to reject an
->>> isolated partition update that would leave no active boot domain
->>> housekeeping CPU outside the isolated CPUs. The CPUs released back
->>> to the boot domain by the same update are taken into account, so
->>> replacing one of the last housekeeping CPUs with another one in a
->>> single update remains allowed. The new check is only performed when
->>> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) is disabled so that the
->>> existing nohz_full behavior is unchanged.
->>>
->>> Add test cases in test_cpuset_prs.sh to verify that taking over all
->>> the boot domain housekeeping CPUs is rejected while swapping one of
->>> them with another one is allowed.
->>
->> Hi Guopeng,
->>
->> Thanks for the report and the reproducer. I can reproduce the WARN and
->> the OOPS in partition_sched_domains() here.
->>
->> However, I don't think prstate_housekeeping_conflict() is the right
->> place to fix it, and the fix doesn't seem complete. The same problem
->> can be triggered with a root partition, which this patch doesn't cover.
->> With an "isolcpus=domain,4-7" boot on an 8-CPU VM:
->>
->>   # echo 0-3 > A/cpuset.cpus
->>   # echo root > A/cpuset.cpus.partition
->>   WARNING: kernel/sched/topology.c:3111 at build_sched_domains+0x2b96/0x5500
->>   Oops: general protection fault, ... [#1] SMP KASAN NOPTI
->>   RIP: 0010:partition_sched_domains+0x10a3/0x1a10
->>
->> The faulting address is in build_perf_domains(), where cpumask_first()
->> on the empty cpu_map returns nr_cpu_ids and cpu_rq() goes out of
->> bounds.
->>
->> The root cause looks like it isn't a housekeeping conflict. Boot time
->> isolated CPUs stay in top_cpuset.effective_cpus by design, and they are
->> only filtered out of the top_cpuset sched domain in
->> generate_sched_domains(). But the checks that make sure the parent
->> still has CPUs left, i.e. tasks_nocpu_error() for local partitions and
->> the cpumask_subset(top_cpuset.effective_cpus, ...) checks in
->> remote_partition_enable()/remote_cpus_update(), only look at
->> top_cpuset.effective_cpus. So any partition, root or isolated, local
->> or remote, can take away all the boot domain housekeeping CPUs as long
->> as some boot isolated CPUs are still left in top_cpuset, which leaves
->> the top_cpuset sched domain empty.
->>
->> So I think the check should be done at the "parent has no CPU left"
->> level instead. Something like the diff below. It is not tested yet;
->> could you give it a try with your reproducer and the test cases?
->> Note that the root partition and remote partition cases should be
->> added to the selftest as well.
->>
->> Without isolcpus=domain, HK_TYPE_DOMAIN_BOOT is cpu_possible_mask and
->> the new check is equivalent to the existing one, so no extra
->> housekeeping_enabled() gating is needed.
->>
->> ---
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 3219f927c35e..fb3e81405f5b 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -1180,12 +1180,51 @@ static void update_partition_sd_lb(struct cpuset *cs, 
->> int old_prs)
->>                 cpuset_force_rebuild();
->>  }
->>
->> +/*
->> + * top_cpuset_sd_nocpu - Check if top_cpuset will have no sched domain CPU
->> + * @add_cpus: CPUs to be taken away from top_cpuset
->> + * @del_cpus: CPUs to be given back to top_cpuset, can be NULL
->> + * Return: true if no active CPU will be left in the top_cpuset sched domain
->> + *
->> + * Boot time isolated CPUs stay in top_cpuset.effective_cpus, but they are
->> + * excluded from the sched domain of top_cpuset in generate_sched_domains().
->> + * So checking top_cpuset.effective_cpus alone is not enough to ensure that
->> + * the top_cpuset sched domain won't become empty after @add_cpus are taken
->> + * away from it. The sched domain of top_cpuset must keep at least one
->> + * active boot domain housekeeping CPU.
->> + */
->> +static bool top_cpuset_sd_nocpu(const struct cpumask *add_cpus,
->> +                               const struct cpumask *del_cpus)
->> +{
->> +       const struct cpumask *hk_mask = 
->> housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
->> +       int cpu;
->> +
->> +       for_each_cpu_and(cpu, hk_mask, cpu_active_mask) {
->> +               if (cpumask_test_cpu(cpu, add_cpus))
->> +                       continue;
->> +               if (cpumask_test_cpu(cpu, top_cpuset.effective_cpus) ||
->> +                   (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
->> +                       return false;
->> +       }
->> +       return true;
->> +}
->> +
->>  /*
->>   * tasks_nocpu_error - Return true if tasks will have no effective_cpus
->>   */
->>  static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
->>                               struct cpumask *xcpus)
->>  {
->> +       /*
->> +        * The top_cpuset always has tasks (kthreads at least), so its sched
->> +        * domain can't be empty. The current effective_xcpus of a valid
->> +        * partition will be given back to top_cpuset if not in @xcpus.
->> +        */
->> +       if ((parent == &top_cpuset) &&
->> +           top_cpuset_sd_nocpu(xcpus, is_partition_valid(cs)
->> +                                      ? cs->effective_xcpus : NULL))
+On 2026/11/5 03:06, Christian Brauner wrote:
+> codetag_alloc_module_section() takes the codetag type's mod_lock for
+> writing and calls reserve_module_tags() with it held. When that can't
+> reserve the tags, because the section's alignment doesn't fit, because
+> there are too many tags for the page flag bits or because the memory
+> for them can't be allocated, it shuts memory allocation profiling down
+> and removes /proc/allocinfo, still with mod_lock held.
 > 
-> The del_cpus should normally be (cs->effective_xcpus & ~xcpus), but the 
-> top_cpuset_sd_nocpu() helper will skip CPUs that are in xcpus. So it will work 
-> in this case. It should be noted in the functional comment of 
-> top_cpuset_sd_nocpu() that @del_cpus can include common CPUs that will stay in 
-> the partition which will be skipped in the helper so that future change won't 
-> accidentally change that behavior.
+> remove_proc_entry() waits until every reader of the entry has let go of
+> it, and a reader of /proc/allocinfo takes mod_lock for reading in
+> allocinfo_start() while it holds the entry. So a module load that hits
+> one of those paths while /proc/allocinfo is being read waits for the
+> reader and the reader waits for the module load, for good.
 > 
-
-Thank you for your reply.
-
-Yes, perhaps Guopeng could make the code and comments more readable.
-
+> Let a work item remove the entry in that case. The profiling is shut
+> down right away like before, the file just goes a moment later.
 > 
->> + return true;
->> +
->>         /*
->>          * A populated partition (cs or parent) can't have empty effective_cpus
->>          */
->> @@ -1724,7 +1763,7 @@ static int remote_partition_enable(struct cpuset *cs, 
->> int new_prs,
->>          */
->>         compute_excpus(cs, tmp->new_cpus);
->>         if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
->> -           cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
->> +           top_cpuset_sd_nocpu(tmp->new_cpus, NULL))
->>                 return PERR_INVCPUS;
->>         if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
->>                 return PERR_NOCPUS;
->> @@ -1828,7 +1867,7 @@ static void remote_cpus_update(struct cpuset *cs, struct 
->> cpumask *xcpus,
->>                 if (!capable(CAP_SYS_ADMIN))
->>                         WRITE_ONCE(cs->prs_err, PERR_ACCESS);
->>                 else if (cpumask_intersects(tmp->addmask, subpartitions_cpus) ||
->> -                        cpumask_subset(top_cpuset.effective_cpus, tmp->addmask))
->> +                        top_cpuset_sd_nocpu(tmp->addmask, tmp->delmask))
->>                         WRITE_ONCE(cs->prs_err, PERR_NOCPUS);
->>                 else if (prstate_housekeeping_conflict(prs, PRS_ROOT,
->>                                                        excpus, tmp->delmask))
->>
+> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+
+Thanks.
+
+is this a problem you have hit in practice?
+Sashiko discovered this issue earlier and reported it as follows:
+
+> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+> index 2070e682fe106..112a014d4b890 100644
+> --- a/mm/alloc_tag.c
+> +++ b/mm/alloc_tag.c
+> @@ -950,10 +950,12 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  		int grow_res;
+>  
+>  		module_tags.size = offset + size;
+> -		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
+> +		if (!tags_addressable()) {
+>  			shutdown_mem_profiling(true);
+This is a pre-existing issue, but does this shutdown_mem_profiling(true) call
+introduce an AB-BA deadlock between /proc/allocinfo file readers (pde->in_use)
+and module loading (cttype->mod_lock)?
+A user reading /proc/allocinfo acquires the procfs in_use reference in
+use_pde(), then blocks on down_read(&alloc_tag_cttype->mod_lock) in
+allocinfo_start().
+Concurrently, if a module loads and tags_addressable() fails,
+codetag_alloc_module_section() holds down_write(&cttype->mod_lock) and calls
+shutdown_mem_profiling(true), which removes the proc entry. This removal waits
+indefinitely for the in_use reference to drop to zero, hanging both procfs
+reads and module loading.
+> -			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
+> -				mod->name, NR_UNUSED_PAGEFLAG_BITS);
+> +			pr_warn_once("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
+> +				     mod->name, NR_UNUSED_PAGEFLAG_BITS);
+> +			release_module_tags(mod, false);
+> +			return ERR_PTR(-EAGAIN);
+>  		}
+>  
+>  		grow_res = vm_module_tags_populate();
+
+I previously sent a patch with a comparable idea, though Sashiko remained unconvinced.
+
+[patch]: https://lore.kernel.org/all/20260817062726.106511-3-hao.ge@linux.dev/
+
+[Sashiko's objections]: https://sashiko.dev/#/patchset/20260817062726.106511-1-hao.ge@linux.dev
+
+Could this patch perhaps wait for mine? No worries if this is inconvenient.
+
+Best regards                                                                                                                                                                                                                                                                  
+Hao
+
+> ---
+>  mm/alloc_tag.c | 27 ++++++++++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
 > 
-
--- 
-Best regards
-Ridong
-
+> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
+> index 82e2c3448dcf..7d7ad6704953 100644
+> --- a/mm/alloc_tag.c
+> +++ b/mm/alloc_tag.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/seq_file.h>
+>  #include <linux/string_choices.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/workqueue.h>
+>  #include <linux/kmemleak.h>
+>  #include <uapi/linux/alloc_tag.h>
+>  
+> @@ -604,6 +605,26 @@ static void shutdown_mem_profiling(bool remove_file)
+>  	mem_profiling_support = false;
+>  }
+>  
+> +static void remove_allocinfo_file(struct work_struct *work)
+> +{
+> +	remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
+> +}
+> +static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
+> +
+> +/*
+> + * A module's tags are reserved with the codetag module lock held for
+> + * writing, and a reader of /proc/allocinfo takes that lock with the entry
+> + * pinned. Removing the entry there would wait for that reader for good, so
+> + * let a work item do it.
+> + */
+> +static void shutdown_mem_profiling_async(void)
+> +{
+> +	if (!mem_profiling_support)
+> +		return;
+> +	shutdown_mem_profiling(false);
+> +	schedule_work(&remove_allocinfo_work);
+> +}
+> +
+>  void __init alloc_tag_sec_init(void)
+>  {
+>  	struct alloc_tag *last_codetag;
+> @@ -855,7 +876,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  		align = 1;
+>  
+>  	if (!ensure_alignment(align, &prepend)) {
+> -		shutdown_mem_profiling(true);
+> +		shutdown_mem_profiling_async();
+>  		pr_err("%s: alignment %lu is incompatible with allocation tag indexing. Memory allocation profiling is disabled!\n",
+>  			mod->name, align);
+>  		return ERR_PTR(-EINVAL);
+> @@ -905,14 +926,14 @@ unlock:
+>  
+>  		module_tags.size = offset + size;
+>  		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
+> -			shutdown_mem_profiling(true);
+> +			shutdown_mem_profiling_async();
+>  			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
+>  				mod->name, NR_UNUSED_PAGEFLAG_BITS);
+>  		}
+>  
+>  		grow_res = vm_module_tags_populate();
+>  		if (grow_res) {
+> -			shutdown_mem_profiling(true);
+> +			shutdown_mem_profiling_async();
+>  			pr_err("Failed to allocate memory for allocation tags in the module %s. Memory allocation profiling is disabled!\n",
+>  			       mod->name);
+>  			return ERR_PTR(grow_res);
+> 
