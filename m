@@ -1,57 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.66
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793841510;
-	b=t3uezNlAqyNUhpgb1xGPyqppMpyyL1fCzUqpedl35Zj7dqEC0hvO0PLXOz9B/7I3NaiC
-	 s0fP+1xn0dvB/9jR1f5T4yJnm7MEtvI7BdRDxQJOYLQGpJCHa8rwxyLgND76tWwwS77+y
-	 j9V0SCE3ceYJn1fChNPGeojYlvs8a5NT8uUu7S4WzvWvN/l4hGC+lN/FpDT5qEU8r8Xe7
-	 Ma8z/warOdP3BW6JtD8Mtq5wcq+NAGlvntf7kWERAsOe026NdIWyKCvcvmxIpqFN2hjLs
-	 wckIpzJXsC089rw3DtPDJmIy22jsIglB7cbXkfl8rILmqUsZ1QvDhUpIcCwSKYVH7tA==
+	t=1793843505;
+	b=L+kWQ9ZanxzVN4syDn7zNADMmwHpI6wcAQKAsTSR/IicpmgstgVrXNqczSMjI2jr4M2f
+	 I7d/t0d9intdaUNtXUZ8rGr29tk49LgpSuZFMZjRG792Npwbjwl4MDHYBI7QCZCb0bgrO
+	 OZmYpnlUJexd7dBen2v4zeh71MlIGoVIPnJwN5Eg2xxll+EbV1YLztJsARUH3gKS4gafs
+	 FUT3DNL20BDQgQMCzkd9NNvpic2ABIYsyweJa0bpCoLOpuSVjfiNT9Rmh63PwDFppa1rd
+	 i8yIvXZlxyhOk+K4I5bbni2myFpWTp5xKvn8l2db8W0JpPfpnYq7qFAasBwKdWDzpOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793841510;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=6uEnGaOIenA5eydcCh3cJrgCw/m8lMhIgSChXVe85sM=;
-	b=xm0Dy1Wz+Kf7D9K8Ii5I/jiaNn34YLJOAcPEXqFzMJTpvfz9wDD+gqM9JlOHVxDH+UZd
-	 EqhEOw4e8M1blg1FfD2f8EaGhLQNsbw0CV/NAOLs1NuUd5DA1imIx9VjYQDUvATWOZ/oc
-	 G71J5SfBAbdRXpaa2/hBSbUEqFyWVU8CgyJVCZqw5RfuqOQgMyJIvA3TKz0RSRoujWE7G
-	 7rq6ZKwI4znNnB1HtSXcuvxTTRuskcVVBKKGgVYOzlgIlL4FbStduy6rBXRKuf1jWRHis
-	 mVMB41Me9tNgFDhpKOQvCcdFpoVEo7a1usTIwC4koml9wYfGFYgTLUd6r5xUz9BXKJg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793843505;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=ky38IXx52DEGULXMrnA5tjdm39nZcAMBNJmvwXh3cTI=;
+	b=Pxx5kK4lX+OqaR/9uoSWok0b+wCFQ6xkv7iEHFqjDNEXHDBIxe7nmkYSyHFv3zGXoyYu
+	 D6bTnny2DERAJjWtJrC2d1MNBqSM7OvWczUk0snYK7F2S5uEgu4eRY2XJaUzdeUUhdEQp
+	 l8ep3bNGsAiN3hj8er0r1xC6+pQ1+YOZ1+InA5rAZNcqFchy74iQ0gUbOB8paMUVsUeQB
+	 rcwZl5PMaAU4BBIBeENfYbmFu5SydkWTdmMXbW9FUP9kofNNqA2rcPAHZvhwP9jiMPnco
+	 rFOfQqZhWDz1wYD4GpSUIT/LNBznJb02Umgk3uE3U7/BH+xqYPiq79SoUjUhSyq1reQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QNytI8or;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PbgEo1at;
+	arc=none smtp.remote-ip=95.215.58.66
+Received: from mta1.migadu.com (out-66.mta1.migadu.com [95.215.58.66])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E2B606A32F;
-	Thu,  5 Nov 2026 01:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F361606A328
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 01:51:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F361606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QNytI8or
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D36A1F00A21;
-	Thu,  5 Nov 2026 01:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793841509;
-	bh=6uEnGaOIenA5eydcCh3cJrgCw/m8lMhIgSChXVe85sM=;
-	h=From:To:Cc:Subject:Date;
-	b=QNytI8orpl2T6IdtqZ7UwDe2tMu/Md9OiMt0rM0MQFfG5cmmY3kMO8PhrDV3OW0Mp
-	 SAbZYNbFbETl9czaiRlHp0tREwZevuCKsh5eYI8hQv0FsoGcSSSMsDTYO27QjWW2j7
-	 +hQllQmgcx3mhAZrYf4c1eZg4rhuQyugaR3UdJ22FhkcqnX2huYLlC7lgIXUuwojRa
-	 eQ4hjQaropjE9u/XfEbwDWXHC3DxS59KxQgB1/YhlYiZxSDIh5xp1xs4dum6Bs5h2l
-	 ETIZX1VWIgF3MQUzCGjlz+yqGVJzZaDgwgBgEw3ZvzVJOgPp4coiNlmj4OcOuuB6Gn
-	 RYcpBSaxMdaNQ==
-From: Sasha Levin <sashal@kernel.org>
-To: Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Vernet <void@manifault.com>,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: cgroup: skip the cpu.max tests without CFS bandwidth control
-Date: Wed,  4 Nov 2026 20:18:27 -0500
-Message-ID: <20261105011827.1143972-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PbgEo1at
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=DW+azq6/SBvy/V6tvbvsVQb5ifMLNmZz6ayEqb3qh9w=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793843501; v=1; x=1794448301;
+ b=PbgEo1atnLArh5Odi3UeSK0+CEj2+3t5Y+yIK8VJYNNdvRv6APy7KfWiFgN0ubfwkQ6oes67
+ pRALqBo63uJo/BNF9mI/bLb5wqdhCT7DdSsH5nl/1tT/ne8MFdbuCYDFGNQ3+PHPD7Exi5mnEGM
+ dyBSzprJkBN9bMShLwlG3wXY=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 3f261ba619c0a795;
+	Thu, 05 Nov 2026 01:51:41 +0000
+X-Mizu-Trace-ID: 3f261ba619c0a795
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 5 Nov 2026 09:51:30 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	weiwan@google.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] selftests: fib_tests: Add carrier gateway test
+Message-ID: <auvhInnH7ESZj5Xr@fedora>
+References: <20261104195655.1406837-1-aroslavdudkov622@gmail.com>
+ <20261104195655.1406837-3-aroslavdudkov622@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,65 +67,105 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104195655.1406837-3-aroslavdudkov622@gmail.com>
 
-cpu.max only exists when the kernel is built with CONFIG_CFS_BANDWIDTH,
-which arm64's defconfig does not enable. test_cpucg_max and
-test_cpucg_max_nested then fail to write it and report a failure.
+On Wed, Nov 04, 2026 at 07:56:55PM +0000, Yaroslav Dudkov wrote:
+> Test adds routes with a gateway while the nexthop device
+> has no carrier and ignore_routes_with_linkdown is enabled on it. The
+> routes are added to the main table and to a non-main table, with and
+> without a device, for both IPv4 and IPv6. Routes are expected to be
+> accepted disregarding the link state.
+> 
+> Without the previous patch, the IPv6 non-main table cases fail:
+> 
+> Without fix:
+> Gateway validation with carrier down
+>     TEST: IPv4 route in main table                                [ OK ]
+>     TEST: IPv6 route in main table                                [ OK ]
+>     TEST: IPv4 route in non-main table                            [ OK ]
+>     TEST: IPv6 route in non-main table                            [FAIL]
+>     TEST: IPv4 route in non-main table without device             [ OK ]
+>     TEST: IPv6 route in non-main table without device             [FAIL]
+>     TEST: IPv4 linkdown flag set                                  [ OK ]
+>     TEST: IPv6 linkdown flag set                                  [FAIL]
+> 
+> With fix:
+> Gateway validation with carrier down
+>     TEST: IPv4 route in main table                                [ OK ]
+>     TEST: IPv6 route in main table                                [ OK ]
+>     TEST: IPv4 route in non-main table                            [ OK ]
+>     TEST: IPv6 route in non-main table                            [ OK ]
+>     TEST: IPv4 route in non-main table without device             [ OK ]
+>     TEST: IPv6 route in non-main table without device             [ OK ]
+>     TEST: IPv4 linkdown flag set                                  [ OK ]
+>     TEST: IPv6 linkdown flag set                                  [ OK ]
+> 
+> Suggested-by: Ido Schimmel <idosch@nvidia.com>
+> Signed-off-by: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
+> ---
+>  tools/testing/selftests/net/fib_tests.sh | 40 ++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+> index 7c47d7fe250d..d7ac3c727f70 100755
+> --- a/tools/testing/selftests/net/fib_tests.sh
+> +++ b/tools/testing/selftests/net/fib_tests.sh
+> @@ -406,10 +406,50 @@ fib_carrier_unicast_test()
+>  	cleanup
+>  }
+>  
+> +fib_carrier_gw_test()
+> +{
+> +	echo
+> +	echo "Gateway validation with carrier down"
+> +
+> +	setup
+> +
+> +	set -e
+> +	$NS_EXEC sysctl -qw net.ipv4.conf.dummy0.ignore_routes_with_linkdown=1
+> +	$NS_EXEC sysctl -qw net.ipv6.conf.dummy0.ignore_routes_with_linkdown=1
+> +	$IP link set dev dummy0 carrier off
+> +	sleep 1
+> +	set +e
+> +
+> +	$IP route add 203.0.113.0/25 via 198.51.100.2 dev dummy0 &> /dev/null
+> +	log_test $? 0 "IPv4 route in main table"
+> +	$IP -6 route add 2001:db8:10::/64 via 2001:db8:1::2 dev dummy0 &> /dev/null
+> +	log_test $? 0 "IPv6 route in main table"
+> +
+> +	$IP route add 203.0.113.0/25 table 100 via 198.51.100.2 dev dummy0 &> /dev/null
+> +	log_test $? 0 "IPv4 route in non-main table"
+> +	$IP -6 route add 2001:db8:10::/64 table 100 via 2001:db8:1::2 dev dummy0 &> /dev/null
+> +	log_test $? 0 "IPv6 route in non-main table"
+> +
+> +	$IP route add 203.0.113.128/25 table 100 via 198.51.100.2 &> /dev/null
+> +	log_test $? 0 "IPv4 route in non-main table without device"
+> +	$IP -6 route add 2001:db8:11::/64 table 100 via 2001:db8:1::2 &> /dev/null
+> +	log_test $? 0 "IPv6 route in non-main table without device"
+> +
+> +	$IP route show table 100 203.0.113.0/25 | \
+> +		grep -q "linkdown"
+> +	log_test $? 0 "IPv4 linkdown flag set"
+> +	$IP -6 route show table 100 2001:db8:10::/64 | \
+> +		grep -q "linkdown"
+> +	log_test $? 0 "IPv6 linkdown flag set"
+> +
+> +	cleanup
+> +}
+> +
+>  fib_carrier_test()
+>  {
+>  	fib_carrier_local_test
+>  	fib_carrier_unicast_test
+> +	fib_carrier_gw_test
+>  }
+>  
+>  fib_rp_filter_test()
+> -- 
+> 2.54.0
+> 
 
-Skip both tests when cpu.max does not exist, and add CONFIG_CFS_BANDWIDTH
-to the cgroup selftests' config.
-
-Fixes: 889ab8113ef1 ("cgroup: Add test_cpucg_max() testcase")
-Fixes: a79906570f96 ("cgroup: Add test_cpucg_max_nested() testcase")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-Tested on a 144-CPU Grace with KernelCI's arm64 defconfig build of
-05441d697f7f9, which has CONFIG_CFS_BANDWIDTH unset: both tests now skip.
-
- tools/testing/selftests/cgroup/config     |  1 +
- tools/testing/selftests/cgroup/test_cpu.c | 10 ++++++++--
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selftests/cgroup/config
-index 39f979690dd3b..aaf5872c71410 100644
---- a/tools/testing/selftests/cgroup/config
-+++ b/tools/testing/selftests/cgroup/config
-@@ -1,3 +1,4 @@
-+CONFIG_CFS_BANDWIDTH=y
- CONFIG_CGROUPS=y
- CONFIG_CGROUP_CPUACCT=y
- CONFIG_CGROUP_FREEZER=y
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 3456e3e988c68..7119aa1db496c 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -694,8 +694,11 @@ static int test_cpucg_max(const char *root)
- 	if (cg_create(cpucg))
- 		goto cleanup;
- 
--	if (cg_write(cpucg, "cpu.max", quota_buf))
-+	if (cg_write(cpucg, "cpu.max", quota_buf)) {
-+		if (errno == ENOENT)
-+			ret = KSFT_SKIP;
- 		goto cleanup;
-+	}
- 
- 	struct cpu_hog_func_param param = {
- 		.nprocs = 1,
-@@ -768,8 +771,11 @@ static int test_cpucg_max_nested(const char *root)
- 	if (cg_create(child))
- 		goto cleanup;
- 
--	if (cg_write(parent, "cpu.max", quota_buf))
-+	if (cg_write(parent, "cpu.max", quota_buf)) {
-+		if (errno == ENOENT)
-+			ret = KSFT_SKIP;
- 		goto cleanup;
-+	}
- 
- 	struct cpu_hog_func_param param = {
- 		.nprocs = 1,
--- 
-2.53.0
-
+Tested-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
