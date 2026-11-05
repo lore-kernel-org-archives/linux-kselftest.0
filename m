@@ -1,76 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793872872;
-	b=1UlXhVH1eXiMvus76c4fknxeY/W3N73FduckiA2WQ2UUTf9GbUuNQ7iQ0Tfk8eRyrl7S
-	 7Uy9xlNpv+BTNMEjdxVtwYDPAXjXced7Pz0jZR1kKYSjurNXEYHy0mPghvgecL2MwJZ3/
-	 oBojBrdxMeT2plywACbN4xKcowr4Eu/am6lzBz9Ppc7HZFbH0UvifYHHXnifO8LvG08jh
-	 IlP5w+wVwXp5DGzTZq+mrP2vjIKPDlL4ovC/r5s9HngI9gBe9UxWGUphHnhd30Pn9K2k1
-	 mrJjlz8dp2w69HKtDhG/Nu/0dIEKUb9WrDiZcWgg/+Uzc52AOG2xEzKi6MkZpfNOCjQ==
+	t=1793872990;
+	b=SwbTPwv1lO7ww0Pa3lFansi3ThIBjwgwpQGtdY6SDfmCIOEDVmTh5X3et4Fv1ARL3mIN
+	 YMnt80XBbE4vWttprLsfJLYmG1IDMsbt+/BZpR5LwxzRm1Zr6Gkdnnjt35pUi4HVciYKx
+	 LcF85m0zuxsV1MhHsfWkfYqJ7E4vcn3FhRUa7pX2M6YiotewmKEz5PlzJ0tJgPDvMzW3r
+	 AemVv6R87LUeb2+Wqz4Mn+PmOOW0TdbZjedpO8YCgpJG1p4YXaGIe/vHN8JmiWa9wCg24
+	 5v8IUGktPb5jFu/RXjmkFk/oxC4fozCkFU7s3bn05DIZ4plaIPDNEWV4LtGWfkMI5xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793872872;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:
-	 X-Forwarded-Encrypted:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type;
-	bh=n+1lmuZTLENNkpqKh8T8PUriZ63OKZ7RGcjsYNzzAGM=;
-	b=Jx9jSCIc481IY0H34mpAfRAVLc05DUnDCEp8x4P1ZPKyFPHVbFTIUw93MjPslSPfJ4o8
-	 CJpTymfPTYno8nd3kA3AJaxSSNp/ZsYStJQlERbK2c2vCoIY9Z2+/jY+1GUP6WzCuQmDf
-	 R2VvIYOtCqMhzIfyVNsoMGV+u9p8vn0SdNb35lDBbbYye39k54JM4sQjwuiw6F0Uh7hDA
-	 pGJWivfL7xgqegkz7yDTutLg8Z8i5+qovMCFgeUSEy2NZDFVvsx/XCAbkESS0Y0e2Bqxt
-	 vIM5eL6SmionB4t0SGqLPHBs7b3o734c+R9+6hBhNrH8IhVMqItEIz4VxzOLws6c2/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793872990;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=YGxMLGOpmO21KJ2mjD9khBg9SC63tjkRy41YsLQwOKA=;
+	b=mzI8+UFvPD7ATnEnk/SbrJOkjzc7HXb7DfD/WGEaz4tfNiMtttRzw/3kK2vGrL+9SEdY
+	 O4YQrVCgdm0fzuE9dEtIPjSRyOCJM47COFT+k3DcYz0PjyMIddEe4k/p8Yy43QIwBolBj
+	 BkCbUoGezJmmeYZ9oomQZ+s7qi7UcnsIXurdvfLnvX8ENsK58M/Q2bxBMM4cryP3V3Fh6
+	 vyvA8Uz7gDTbAXUkPPW0xqK4bNj42rIW6aW33BOnYxJ4i/jgQ2RvJALkVWgVWzch/Wjsz
+	 JdVDYD7ykhgrpclP6kreLLmyujyoYEcrYk0w6sIxeN4rxiELS6Z9ORlTwQlSbuFW3nw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=linux-m68k.org;
-	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=209.85.160.179
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X23c9kWV;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D38606A31B
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 10:01:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37D38606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-53c4b82919fso21114921cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 02:01:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793872871; x=1794477671;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=n+1lmuZTLENNkpqKh8T8PUriZ63OKZ7RGcjsYNzzAGM=;
-        b=eGmMbGPB91ya4C721toveDyhaRb0kB5AHjueaLFE1hiEJMSmvfJlRE/9ZAMpJtrFvM
-         /8QMCQzddKSJNPvhRVGVsgPJhU2jqVIUHx91eU1x8KpKXGUza9eqZ14MWBSinZXzCphp
-         a5HxqY1khsn+/3VEjIROvsRMY6o+W3r3f09YiPcob2OW/MfuXr0TtuQ0GxWvk46JwHFu
-         Rn9prHmCOJmNlGDKIXJRaBHnIJKgmOkIiuMvFE/U+ncIynpPKYEQSRpm+KxcLquWvJPs
-         g/P2OhMo6SlwFbSq1m4X6cl7w8hln6P3zQ/uLQMCGOHTL1SB+bnfhGT/PMVCdTAoNuap
-         zVPg==
-X-Forwarded-Encrypted: i=1; AKwUvBzofRsInA/8FryX80l5pBJ7Py8na1Q2ayn6i0A24WGkwsWoV+gNcPaXH8LrmLr6GStN1PSMIWf03D9c2ptncxk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9aL079owUc/S4GNwL8fD2/duNNpALz/QYwRVIBcEfqY/4qreKg
-	BjUFvfkSW5r+nlZ6lLT4GHUEkLT7Nqw7wSU4rr5KicxnO3ZSSPGbouYAM4TXaz5vlRA=
-X-Gm-Gg: AYBFou1Rxps4RQ54OKOKq3LGKn4hUk4L1e+HS/aLUIz4pTKL2cncH5wFO+UZ95jFsuU
-	uVFePJpkZSDfgoiJLOuWu8D17GM25BiQaal7VOpmf/fJxXlUD64pKH8KwNNOltWW8xN4SR2Sl94
-	JVSi9w5Bq8Nx2t+5uBQ3hXu6Igfvo9iPkVk2Pp/JVmjityznmlmrvtoDqphvctOYDTRkE4uELzD
-	Ytxd8Ed8kAIHSH8Zw9t9g+91OpeJxTCVzmx9gB+SFE1hy0lqwoeAO6AEuzxcrlsTlmLsw3shzf9
-	lQrFBZpL3lVYyNpvTwrMS9GYyMQYBymL7V4SMSIzS/yRPL4f6C0h+/e2g8B7d/1bUratPonQ0my
-	VG69G+1bQWlHWEbSbkepBrWJHPClEd5jMUiJuzur7z0RoIeF+N7PW8KYaXxj0YesgK22reTYGM7
-	lxnsqTHL/akA7E2XlGsp9tR0PzOI06H8KcRUbALt7A+HgPWmd7WkZCGqCbqh+T7XNQSReZ6Tdcq
-	8iIYv5d2ipTQ/IPRBjRbAi1OT2wj5rqU06+TyU+zLfYWUapcLAvWu9qyAYomtqjUcYSDumw5Szk
-	iGCX0rXsFKfKnKWWyplAqCVdwOlIIcVRxE9H7lJe/88udg246+2VWgFeaqRAmFNzlA==
-X-Received: by 2002:a05:622a:514b:b0:536:6ef3:105 with SMTP id d75a77b69052e-542b639cb56mr293067171cf.21.1793872871032;
-        Thu, 05 Nov 2026 02:01:11 -0800 (PST)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-54b10a6ca24sm48655761cf.14.2026.11.05.02.01.10
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2026 02:01:10 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-91c1f548f87so26529126d6.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 02:01:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvByHiCGacgapwVGRyNUYUhfGcTILl1cxConPSfvOniv5syR0j0Va768s6hv45Chsqi8dh0v+JCCElK3DxDwML1g=@vger.kernel.org
-X-Received: by 2002:a05:6102:6449:b0:7cb:bc5e:7dad with SMTP id
- ada2fe7eead31-7d072baa450mr7614890137.10.1793872492413; Thu, 05 Nov 2026
- 01:54:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5138F606A31B;
+	Thu,  5 Nov 2026 10:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X23c9kWV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8C11F000C1;
+	Thu,  5 Nov 2026 10:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793872989;
+	bh=YGxMLGOpmO21KJ2mjD9khBg9SC63tjkRy41YsLQwOKA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=X23c9kWVkPgMqf9QyBhUBCMJnR9wXAEOhBgM4zA+aaLN25UZaS72McMQVN0/qvLUj
+	 gyk5MOm29CmrgYJH9yay9R0doiqzvqabiwazIkyDlhKcCIJ8plw01qp3O1I61UTMb2
+	 4sDnNnTwzudp4tadLZyxoi3npf+TTtP02nBBVgnX6ZEX+80DAIf/GFQwwsOf2R8b+Z
+	 hlvrM8pjyLZtfwgzHKBPb+KT/mu5ORHSRwxL/NWD+/twyME/sINzijVNN8QeVMy0SY
+	 SkJJrq4ukXNq1AAh4nbKw54nZ/nmzNeR2PTlSjc9shb0e57kDG9CxL0ftVLrYYgdTM
+	 MLp33ObuR7rRg==
+Message-ID: <e6be27d9-6cf1-476e-9d8c-8e91664b95e2@kernel.org>
+Date: Thu, 5 Nov 2026 11:03:03 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,60 +51,148 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261104-work-procfs-arch-v2-0-2aeb952c9597@kernel.org> <20261104-work-procfs-arch-v2-4-2aeb952c9597@kernel.org>
-In-Reply-To: <20261104-work-procfs-arch-v2-4-2aeb952c9597@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 5 Nov 2026 10:54:40 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUNBs_NyhFpXonirMXkYptUWsAizMvVpGHUDLzto1LGJg@mail.gmail.com>
-X-Gm-Features: AclHuK_RsrcE7hVRjmpZezBV5tMd490Mza2XAQiqUTgUNqAiHAzRP5z7NIbtMh8
-Message-ID: <CAMuHMdUNBs_NyhFpXonirMXkYptUWsAizMvVpGHUDLzto1LGJg@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 04/23] m68k/bootinfo: let procfs copy out reads
- of /proc/bootinfo
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, 
-	Josef Bacik <josef@toxicpanda.com>, Chris Mason <mason@kernel.org>, 
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, Greg Kroah-Hartman <gregkh@suse.de>, 
-	Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	platform-driver-x86@vger.kernel.org, coreteam@netfilter.org, 
-	kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net, 
-	jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, 
-	samba-technical@lists.samba.org, sparclinux@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] selftests/mm: cover merging KSM pages aged by
+ smart scan
+To: Qiliang Yuan <odys.yuan@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Xu Xin <xu.xin@linux.dev>,
+ Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-0-8a9780b6844e@gmail.com>
+ <20261105-bug-mm-ksm-smart-scan-align-skips-v2-2-8a9780b6844e@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-2-8a9780b6844e@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 4 Nov 2026 at 20:36, Christian Brauner <brauner@kernel.org> wrote:
-> Implement ->proc_read_buf() so procfs copies what is read to userspace
-> after it unpinned the entry.
->
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+On 11/5/26 10:36, Qiliang Yuan wrote:
+> ksm_functional_tests checks merging and unmerging with ksmd's default
+> settings, but nothing there exercises smart scan, which skips pages KSM
+> has failed to merge for a while.
+> 
+> Smart scan used to time those skips per page, so two identical pages
+> that became mergeable some scans apart could end up never being looked
+> at in the same scan, and were never merged. "mm/ksm: align smart scan
+> skips with the scan number" fixed that.
+> 
+> Add a case that lets sixteen unique pages age for a dozen scans, then
+> makes a duplicate of each mergeable one scan apart, and expects every
+> pair to be merged 32 scans later:
+> 
+>   kernel               failures, two boots
+>   before the fix       20/20, 20/20
+>   with the fix          0/20,  0/20
+> 
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> ---
+>  tools/testing/selftests/mm/ksm_functional_tests.c | 108 +++++++++++++++++++++-
+>  1 file changed, 107 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+> index 31c06c72203fd..71d9b3cbdb8c1 100644
+> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+> @@ -695,6 +695,111 @@ static void test_fork_ksm_merging_page_count(void)
+>  	munmap(map, size);
+>  }
+>  
+> +static int ksm_wait_full_scans(long nr)
+> +{
+> +	long start, cur;
+> +
+> +	start = ksm_get_full_scans();
+> +	if (start < 0)
+> +		return start;
+> +	do {
+> +		cur = ksm_get_full_scans();
+> +		if (cur < 0)
+> +			return cur;
+> +	} while (cur < start + nr);
+> +
+> +	return 0;
+> +}
+> +
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+This looks a lot like the logic we have in ksm_start().
 
-Gr{oetje,eeting}s,
+Likely that logic there should be factored out into a common helper.
 
-                        Geert
+> +static void test_merge_aged_pairs(void)
+> +{
+> +	const unsigned int pairs = 16;
+> +	const unsigned long size = 2 * pairs * pagesize;
+> +	char *map, old_smart_scan = '1';
+> +	int smart_scan_fd;
+> +	unsigned int i;
+> +
+> +	ksft_print_msg("[RUN] %s\n", __func__);
+> +
+> +	smart_scan_fd = open("/sys/kernel/mm/ksm/smart_scan", O_RDWR);
+> +	if (smart_scan_fd < 0) {
+> +		ksft_test_result_skip("smart_scan not supported\n");
+> +		return;
+> +	}
+> +	if (pread(smart_scan_fd, &old_smart_scan, 1, 0) != 1 ||
+> +	    pwrite(smart_scan_fd, "1", 1, 0) != 1) {
+> +		ksft_test_result_fail("Enabling smart_scan failed\n");
+> +		goto close_fd;
+> +	}
+
+Can we have a helper to enable/disable smart scan? Likely belongs into utils as
+well.
+
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Cheers,
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+David
