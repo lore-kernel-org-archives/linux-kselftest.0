@@ -1,112 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793892745;
-	b=BXZiaWzxF1NyQMKFMmz8VCHje3sEpXJEWQNnTD/9OF/ej03Sd/CH7sA5Iv1A8UDSZ/D3
-	 pzPYCSSR0LqkvRH6U40ylJbVKgwEpLJSgDzlwuQYZ9DE0cqY/pBZz8Kc7XrFRo8sW99gt
-	 +EFuo2y+bhJKtTMqt3RpdutOEtjokvA/fkZH2epqRFORfw4sSGUXUVJVgz6JGPpSoTS2c
-	 CoigSs+caHcAChV5l1Z5CXvbhYd9+qm6KRRsKYMqpII+MUFkawvrmF8TrvZU8ist+fB87
-	 B4KdTKkBIDZkyJ77v4S8nxgjNCa+ZKjiOYx6/I5IrC8smLIK+MImjT/gjjeciWeHoww==
+	t=1793893030;
+	b=SqvAt/vjAwYHoDGMID4HLKSzx/YDErLpyZu0SN0YCsQy0oM488jtJOMpIJTNAXbG6nJY
+	 NQDrtq13p5Z1nOdD2QL5sWBbSKGkOhmkd5Elp8nfsQD4PYEyNIqC7ujYwuE9mfk4A1e3C
+	 s/0s0mXoaLc2mRIDtCwi6s6k8JEHbWG4Yw2+QRiwXci6daFRyNmj5sHu8wbM2TmCb4Dcj
+	 sdB/s8xXzz100ZT/99yNn/2cgMWArvzrZKgPEYgZebdL7YvtixFg27WNAQlxkajTrxFa6
+	 6taogncnHK05AZLtJVoT2ShiO48Hrjhx2q7rFCp8JutouscrpBijgjXYG5AnUggatdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793892745;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=o9aybnm6z6uCy7Z3S2M1SU/Xzgy17fe/G/KhASnMe+U=;
-	b=Kj4ZGmVDDjUdadNSo5cSLu2e1/dThIy0enBoUyfhICkeydhXwguApHwRIEK94GLmnzQv
-	 gQfU/VhwKgYYMOutwUdCVDONhjyqStAReNo3QL9B6Xu6PE/yWTXndoY/wS9Sj/z9pNBSn
-	 xsmCAyQSN63owxjE+CgTJdg2+9rfhdrEVYbYZgJ56bgtt5AQKmUZo2LipRbLHncKQNG1+
-	 7ZcdPJWu1HdhrTrmAVtgD1yXa+wg6dS/DEf33cHXf4PUhzHOFYMPgDRvPFvkLqSp+8ly7
-	 NPW4ur6SawseCxogLfJ2o3KeMbXU6Y1+hB2grefGYS4VXCxFd3lekX+xob9ic+oth1A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793893030;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=kvailjwqfOmhbJJjcy8TbvowePxzON+06QO6Up9gGT0=;
+	b=Y0SH8b7t3GruBL7RqDcm8CsrrsKGtNXKN0dsLDi0BJKkXIfDvFr1G5AznCNTg5baRQpy
+	 TJpC3VAqOSMejEWzqVrNn6ZmmhFpoKxez9eNrOuwMTX2IE+dHVnSn+YSA/pyBNArzUdM6
+	 sijboqiQgZrS9exyMUolebvlP8GuhupPl/LCjw4VzdC8eSP2FBup0xhkFtkFyKCxYUWMe
+	 pd4HmpMWMVhmOeeqKrgmhY1wDGffEN0CiGaAuJVa4LkxHsszLAlJOEsOFHZGc+9+lA8l8
+	 f7Zc8FN/u2gtAp81AXQOId0RnPpSbwkkCjpxeYhh4xe2E4yXpUGX3jzYMVO4X9Ud8hQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=p1ILuSim;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=iUsEEJqA;
-	arc=none smtp.remote-ip=205.220.168.131
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
+	arc=none smtp.remote-ip=209.85.218.69
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87179606EE80
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:32:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87179606EE80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=p1ILuSim;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=iUsEEJqA
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5EPrSi2081285
-	for <linux-kselftest@vger.kernel.org>; Thu, 5 Nov 2026 15:32:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	o9aybnm6z6uCy7Z3S2M1SU/Xzgy17fe/G/KhASnMe+U=; b=p1ILuSim5deoO8ja
-	3wphI/7Nsrgrqxx/+9uzSfHc6ihiO0isa17zG0dIcmjBGWCIGX3RU5A3vPW0Of+Z
-	zSGCJNAB4ydNwylGt4IqRlyIdK772pN6VFyPJf+TIvRvvzawMEqD48Zufsy500lU
-	VubhVlKSarv8F6EkCPH872vYZ3cSJoY89UoYVSApubdcnd6RDJO2UnKeGFvYYICp
-	CuKFeG0Ccl/lQpZv6Fm8y6DNZpuRQfpmwRav889WXfIwZFdWPmmFg7moo53X1wDB
-	OTdiorrPAVhsTwtpr+ft+Tf/Jg4bdcg9+1ooCmuyqK2aaebKn8G69z80h1MuY+9P
-	Sgg0Gw==
-Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com [209.85.221.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hrraas70u-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 15:32:24 +0000 (GMT)
-Received: by mail-vk1-f198.google.com with SMTP id 71dfb90a1353d-5eac4de614aso1731279e0c.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 07:32:24 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4681E606A32E
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:37:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4681E606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c40285df2a0so159597966b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 07:37:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793892744; x=1794497544; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1793893024; x=1794497824; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=o9aybnm6z6uCy7Z3S2M1SU/Xzgy17fe/G/KhASnMe+U=;
-        b=iUsEEJqAEQ/1hYUc1sK1t45AlgNgX4bjkphvJjO01DQCT6acITHmMj0md6xEKoCZas
-         uK7NDeTE2VIcycrkpkj5meWzPhLKE4SPp53B/gCvWovvqwUpOo4/ZJP15skC6tUY0mmR
-         cjuIvYXg3LrCXWFRncgriN9gaOhy0gKCKCMf6jGW8rDR7jIKUpZHZQLwv+i/N+r51FOD
-         kK9gfTKhoxPrMhQC3mQ+XlXshbAgCF5xFmXqAXc4QvCSKj+xkDcwAIbnmCx3lIieu0/t
-         zMeAXMH7KHCUXam/0rSxx/3wn6On+YlSQdhdoQ6EhTON1VTF8ZUgDjim2SZQafAEpkTc
-         NwTQ==
+        bh=kvailjwqfOmhbJJjcy8TbvowePxzON+06QO6Up9gGT0=;
+        b=Gxle+Ke/ft0qPJDBX0JQWzA1ZLmQgVZzBrWyEVoNZxTcMrrajfo1O4ASCBG23EIcjq
+         cUy28QM3QPVKkqYviAKt4UuDyzpJABmNQR4JRuUY/9J9Hkfes1ObSbTFJBTMv0xgyn36
+         I605vsADiFHcxXf4eX61I0j4Gi+kKyS6oNG5NvaDGMqTtAbtArrAfHjtJRgz0KAQXT73
+         KzZfmQgJwuEWSDCZ0Dz1NtIeuRDvR+OePZg4x0U3S37xPzoaWN3MauXtR0KYCrK+pAhq
+         rsIk4Yf8fmIvbb2p7AhpUlOpetxQvv3G4Qgr9XZcKOy2pWy+dVo2136CYJcH164SwW/n
+         pIAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793892744; x=1794497544;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1793893024; x=1794497824;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=o9aybnm6z6uCy7Z3S2M1SU/Xzgy17fe/G/KhASnMe+U=;
-        b=aYQlQKWBNugE4IU6pFaOVWpKvB8y3/PFYtHfs9BmoVeumUzfKC80T5hLRlMiYBPeTd
-         SLeMca99AUvnLH8YLm2emXyYARlQGVsqRtm4RoJ9A+y+dnMymuB8UwqnH8RJw2/ndctU
-         +D2Kmw+gccA2kLO1Ttma5LpsA8xzVjcrm9r5CJVFuAbpTe1eW7Ojv4tH8A7GGOXnw+3y
-         d4a1XVJj3/lOnB5gHMn3hm3vw9r7uw34Ht8FSdUsXKv2IYGlbzdlGerU6Kq1xgSq4s+a
-         6n5QZGFhKsL/qErDHQtbckR0K92JQL2uNcMTR6fmUpcfRHqWRaHzdABlPCd5LfinbwUU
-         RQuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxvVn2mhBSQtFJh/hlMBWDlVgQXOpGWUrpD5QM1fmGO9smLMSeMK3dxWWDduLC0vZ6EjvSNDzs83oT54mVJk50=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/tBJv8qonmoO7AiERc5Bgt23+clM4OjcH+6jI1p7rk9MfmtG1S
-	vbheMDnUYmbf7VPzVSCUOwDoabRPz+H1XN4043wvqIutePvj/BeNm0HAIpNJFG9zov2vmA4teCj
-	y/SpqwjXmjLjXyHIKT2EZHMSC40jaGy+hz9KIMm7YFBa0rNiUxzaIjPDnc+83uQNrkdl/xaI=
-X-Gm-Gg: AYBFou3FFFqCI4NxXwrT12bOPsgAacO8D1nYkHkJvKHda+oXySLO4bPo2AE4JZoTg8M
-	l3jZyVUVp/UJ7EEjuSkNPi9G4KPzbfC4ccvzonR7WM5MZzGdpqUaep0UGYFJBR8SIV93ZWWE+O9
-	B5hdFIgXnbNP5NGeFSgX0OKxHExSnr8GNMu8CibhaZkfz81XutiEUCdvSPCOhAxRg0HMH6tQ8Ac
-	A6TvFeCbd8tvDn1EI1IAx+6YRxyrsEhnG4UNbDMRnA3oEUQb2q6N1kUn96QxtNmypVgrT/aRB0e
-	RUvFJxZF+YhpyBsRFQQqMtk20IljyaZn8UjDyyzbBEV8k9jQOoCLv/3eTQ2ZiIYf1M4cc4gky2H
-	J/Yj+y3nYacvp93gsA4scIvSTNLeqdUarh5VhkSi5Z64BFnlDLIG/UOcba91pZ+fpki4q0QxcE8
-	cMOg==
-X-Received: by 2002:a05:6122:469b:b0:5ea:b972:1403 with SMTP id 71dfb90a1353d-5ec68539420mr9780601e0c.3.1793892743672;
-        Thu, 05 Nov 2026 07:32:23 -0800 (PST)
-X-Received: by 2002:a05:6122:469b:b0:5ea:b972:1403 with SMTP id 71dfb90a1353d-5ec68539420mr9780528e0c.3.1793892743105;
-        Thu, 05 Nov 2026 07:32:23 -0800 (PST)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56e58fcb8sm70424915e9.1.2026.11.05.07.32.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2026 07:32:22 -0800 (PST)
-Message-ID: <6740e6e8-6b77-47dc-8b9a-b81efb557664@oss.qualcomm.com>
-Date: Thu, 5 Nov 2026 16:32:17 +0100
+        bh=kvailjwqfOmhbJJjcy8TbvowePxzON+06QO6Up9gGT0=;
+        b=h9nbodxnTDXwpwZGA0CdAa7/mmtXaYkoKLE6IR7iWr8tMikrYHUCjHnmvosMwC7V7G
+         +wqufEx2e52j7nQ/uzRrPI+v3S4igWf5caDWp8ros9BHYq6O8LXKm37jHSgH49CSicJC
+         kbBc1d4Pdl6z8gZdRuxwyzH0GAWEQN1GPiXJKaMg4pQ4ciPwbOsxITZ+XojatoLa4LPC
+         3UFibc3ZIxENwKouzOVgcX3u3KkIVInEpH0pPkxiAwi2491iYzobw0PCUZ4MNetL3S5z
+         +WgHfeB7XIiDLlgLsItemeh0sleFHMAaf0kCxbIA22Q35johGYumtOcolG4yCce44VRO
+         2iJg==
+X-Forwarded-Encrypted: i=1; AKwUvBx1ZRlShdNe3NtagkW/Uf/hz/z3gcYaWvcq4scKpGREUcBT0eV4OAbn3VZ/wsiWrH95BZL3tgxe/UWRGnMZrBM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9sA0Q4f/ZrAFWuHbvLOLiRBKHqsZCd3xJiPX6kVi5R4xe46R1u
+	CYa9HDfi8aGtsUudppes+0bGOwQrVP8HvSUfFthFRVz66qd/n46xfKvMAEgC66ZK6/QodYje4g=
+	=
+X-Received: from ejcwz8-n2.prod.google.com ([2002:a17:907:b048:20b0:c4d:23d9:b0d9])
+ (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:cb88:b0:c26:19e3:e98d
+ with SMTP id a640c23a62f3a-c4ca7af17a5mr1750569566b.45.1793893023363; Thu, 05
+ Nov 2026 07:37:03 -0800 (PST)
+Date: Thu, 5 Nov 2026 15:37:02 +0000
+In-Reply-To: <aunVmg42/S2uUDWR@hallyn.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -115,75 +74,110 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/6] powercap: Add generic zone hierarchy creation
- helpers
-To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
-        rafael@kernel.org
-Cc: Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, Shuah Khan <shuah@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <cover.1793666444.git.daniel.lezcano@oss.qualcomm.com>
- <d33ddfe789ee42a00d3ff3df55e0c4011e69debc.1793666444.git.daniel.lezcano@oss.qualcomm.com>
- <f018a2c1-2618-458d-a95f-a0cfdef9ac39@oss.qualcomm.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-In-Reply-To: <f018a2c1-2618-458d-a95f-a0cfdef9ac39@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA1MDA2MSBTYWx0ZWRfX+VOS0lr0quuF
- zuHNVss6UZMbgASc4SIAlUkESbzc9N0AzLRuFrLVOP5aOf3WpzujbGcNzBrG9o5ikxlJPFD8dKT
- sxpGhJc0+8Nma6NpmOLaygfiInB3Z4I=
-X-Proofpoint-ORIG-GUID: 4mRwqtEreqoeOhIE32DnlhZDLcWd19Ik
-X-Authority-Analysis: v=2.4 cv=U54Hnuru c=1 sm=1 tr=0 ts=6aeca188 cx=c_pps
- a=1Os3MKEOqt8YzSjcPV0cFA==:117 a=uw/3876vWhRnNVL35W6mqQ==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22
- a=EUspDBNiAAAA:8 a=49fcMjTkyU320Q8Jtn8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=hhpmQAJR8DioWGSBphRh:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA1MDA2MSBTYWx0ZWRfX2C2yi3JIM3Qs
- Vr7cV17bV9iIIjOFRvdLxmv48VdW+rHbYYGT3GLT+x3RQH7kfUcqyQM0pbbi7YVr7FYjeBcFbMn
- gzYzF6ZxYJFsnyUBLNzPXb7E48EAQtrQdQmFXu6j60D9kCuGC+9MWohNYviIgPVnM2h5I7yGEL5
- VdhTcuSS9SgsI7TPxVz4x67yPzJoJo50fZfQjeqn9KqEIqHvR7kD1Q0I3FxkDdvG9DEwWvPHRSA
- Iff2PZNcsAuyCAzsITCbSXxcuGtfcjcj2RduFy87l/UBxfJYs/mH7jJpBOqHyYP/FhL5rSQiKGb
- 0jBt0C9ZC+HrgZLS3zzm08YNLarWAgXgQno25FEwWnbFx/QJMFoEXAzbxi9FygyXphrgvbVUF8t
- yRfUu0YlpY7kParY6IGEm2JFT5K57juI1mmqWr3gGkQyvuWAYSU21ryqZBQPOfGsfWqauNgSw6o
- NuBBbOuIzVaZ5t1x4RA==
-X-Proofpoint-GUID: 4mRwqtEreqoeOhIE32DnlhZDLcWd19Ik
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-05_04,2026-11-04_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- adultscore=0 spamscore=0 clxscore=1015 suspectscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611050061
+Mime-Version: 1.0
+References: <20261028221705.3915340-1-halg@google.com> <aunVmg42/S2uUDWR@hallyn.com>
+Message-ID: <auyink594bxptAPN@google.com>
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+From: "Hallgrimur H. Gunnarsson" <halg@google.com>
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
+	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Jann Horn <jannh@google.com>, "=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-api@vger.kernel.org, containers@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-
-Hi Manaf,
-
-
-On 11/5/26 10:35, Manaf Meethalavalappu Pallikunhi wrote:
-> Hi Daniel,
+On Tue, Nov 03, 2026 at 06:37:46AM -0600, Serge E. Hallyn wrote:
+> Generally, if I, or some users I support, need to use unprivileged containers
+> or user namespaces, then when an 0day comes along, I can hopefully trust them
+> not to exploit it.  The biggest danger comes from the fact that, right now, if
+> they can use them, anyone can.  So if someone can trigger some other code running
+> as user nginx or something, that can become a root vector.
 > 
+> So what if we had a built-in feature or LSM which implemented a credential based
+> whitelist, entered at firstboot?  Something like
 > 
-> On 11/3/2026 10:18 AM, Daniel Lezcano wrote:
-
-[ ... ]
-
->>   drivers/powercap/powercap_sys.c | 204 +++++++++++++++++++++++++++++++
->>   include/linux/powercap.h        | 205 ++++++++++++++++++++++++++++++++
->>   2 files changed, 409 insertions(+)
+> ```
+> # Default deny
+> uid == 1000  # approved
+> 1005 < uid < 1010  # approved
+> gid == 1005
+> security_label = lxc_user_t  # Not sure how far we want to go with this
+> tty # must have a session
+> ```
 > 
-> I rebased my Qualcomm SPEL powercap driver series on top of this series 
-> and migrated the series without any issues.
-> 
-> Tested-by: Manaf Meethalavalappu Pallikunhi 
-> <manaf.pallikunhi@oss.qualcomm.com>
+> Now, if you want to use user namespaces for generic sandboxes for all
+> users, e.g. to confine browser activity or nginx modules, then this model
+> may not fit.  Or rather, it might need a few tweaks.
 
-Thanks for testing !
+Thanks for taking a look and sharing the credential-based allowlist.
 
+The latter scenario (generic sandboxes for all users) is actually the
+primary use case that I'm targeting. I want to allow unprivileged users to
+create user namespaces, e.g. for sandboxing, but without granting them
+security-sensitive network capabilities (CAP_NET_ADMIN/CAP_NET_RAW) when
+they are not strictly needed, given the historically high risk of local
+privilege escalation associated with them.
+
+The two approaches target complementary layers of the problem. A credential
+allowlist at creation time controls who can create a user namespace, while
+this patch series controls what capabilities are available inside that
+namespace (and its descendants) once it is created.
+
+Gating creation works well when there is a clear boundary between trusted
+and untrusted users. However, in a multi-tenant environment (like a large
+container fleet), we generally treat workloads as untrusted by default.
+Because we still want to allow these untrusted workloads to use unprivileged
+user namespaces for sandboxing, it is essential to keep the attack surface
+small and follow the principle of least privilege whenever possible.
+
+More specifically, this patch series enables that model of safe sandboxing
+across three key use cases:
+
+1. Configurable capability stripping: Administrators can enable unprivileged
+   user namespaces for all users to support sandboxing, but configure the
+   system to strip CAP_NET_ADMIN and CAP_NET_RAW by default in new user
+   namespaces created by unprivileged users. Basic sandboxing rarely needs
+   these (except to bring up loopback, which Patch 1 addresses via
+   CLONE_NEWNET_LOOPBACK).
+
+   The per-namespace bounding set can enforce this either globally via the
+   sysctl, or explicitly via clone3() at the container manager level. This
+   restriction is monotonic and persists down the namespace hierarchy.
+
+2. Selectively granting CAP_NET_ADMIN: Some containerized workloads
+   legitimately need CAP_NET_ADMIN to configure advanced networking for
+   sub-containers. Because an unprivileged creator's child namespace is
+   bounded by:
+
+     parent_bset & (sysctl_ceiling | creator_effective)
+
+   a container that is explicitly granted CAP_NET_ADMIN in its own user
+   namespace automatically propagates that capability into the bounding
+   set of any child namespace it creates (unless it is explicitly
+   dropped).
+
+3. Dropping capabilities for nested namespaces: If a container with
+   CAP_NET_ADMIN needs to spawn an inner user namespace to run untrusted
+   code in a nested sandbox, it can use CLONE_NEWUSER_BSET to voluntarily
+   drop CAP_NET_ADMIN from the inner namespace's bounding set. This
+   guarantees the nested sandbox cannot access the capability and the
+   restriction persists for all further descendants.
+
+As a quick clarification on how this interacts with the hierarchy: the
+bounding set restricts tasks inside the namespace and parent tasks
+relying purely on the parent-ownership check. It does not restrict
+tasks in an ancestor userns that inherently hold the capability.
+Therefore, in the nested sandbox scenario above (#3), the parent
+container with CAP_NET_ADMIN can still configure the sandbox's network
+from the outside (by using setns() to enter the nested netns directly)
+even though CAP_NET_ADMIN is stripped inside the sandbox userns.
 
