@@ -1,134 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.156
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793836518;
-	b=4j2fxAstd3Rhqer5Prfz/BeFPHxeEdkAK+skKsb3s+LA/OjVCsoe0FMrnqu5hBn0/zqk
-	 mgRn7cxwEkfrlzKXFeFRCiiDz8z8FZa8PstyCnoAaziKalQ6/GQ5YgFlnYhaH2h0HoVGJ
-	 0qMQr3o8+VgZE0iPqKltp9ioGT2fjgh7kfhAOD1HvfZ+jl/si3I5A9vfzbkCxfWUMGDVZ
-	 IjAIIVYK48ONjg12psBW1tTfLVukllFrLvXG1n1TVbs2zqZev/q63TPvqM89RHksOxpW7
-	 P2z/HiliR/xEbBH9EcXq8gFFLGzim4wGMOYyKPJQGmuaUT83qonVm3C9sZxezokRJUA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793836518;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=jyOh8dtZhFwam1bQ7aHKxAcq0MWjfq11be7F4YuWx0E=;
-	b=itQOVOjXqx42ZtcGtp5KJapatM0p1ygpwghdXI6o6pT9496n8q2JwbvUvtMtX7Y5dHcg
-	 4GOef6bOhWOkR0mfCkObRlLV9gVOfAdoaasUxDBHXZ9cFXGP0syCRzWdu5Vnk1tWVVsHl
-	 TTZe/2ig1fVH/GgMxkzDO79DAxTyYHDtLlz4B26kvpcrugwPEKOE6ZsFpebb/sK+qQqFz
-	 DcZf+bjg4CqCnkZENM7tU2DXFACBwkQ43vHhF4byyHLCfawG7q3QstosBCVrAqheu1bNY
-	 gOnHPB1VhV0h6XVqu0a57hyjyV5wJbO8bkaBb04MPmbWrnu0HMID1dvjOEBIrB60cog==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=shazbot.org;
-	spf=pass smtp.mailfrom=shazbot.org;
-	dkim=pass header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=nIvW5eIH;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=HueqMRZi;
-	arc=none smtp.remote-ip=103.168.172.156
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793837167;
+	b=SIC2qjmMkvYSmbMver1wt94xQhYgcQJZqvWBq3WyHfx3T42QBsrriPlOR+Djf3WQsd89
+	 BZQc13BVuxUXGoBXlg8hCQtFvA5K0hlmmPUzP2/7R1WnSYbEujSjH1BJEDPqQzJ7zFRJi
+	 S6yrosgiCaBvdLCRBRhb/64c0pjkElXR+SRtY2k+Q7a3LaJZo22o0bIu+0A2yrEe0nzGr
+	 1ZbqB8gSnl/yj25fjIqbC9otPLxchduRatIcl7ICsFSRgGZdUHyVyv8R4tC3cu8CV9VtC
+	 fQmPozTOLcfZiGhj/qkzNU9dhVfLP+zRKQ6OFdF2hCwyEq3vR0q/8EdW59yKAMWzoFQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793837167;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+	b=d2MjER45Hh8Ws2FcY+QcynaYJzU+1roCqDyPKQ0AKmYkZktGSMIcGKo7PKNDdQyxhPl0
+	 mrBHXt/Xwbo2dtM1G38KM6TARQlut3s7sMywJhETQjBJJrldtlzk9sjoSwx9vftV0bZ5C
+	 ftQkYxKHJr/CLcAowzkcY5eFyu38xr4w48PsLehGIoDSTckN1fpe1b5POQbBLwxIEbtAi
+	 c+WNooBuci91HFmSwRhsEqj3oVSCk02olrjIJmnYSrYY8imSU1qWES0spEnC/hyIcWohr
+	 MQyn/qcSJ2KruqXu0WC10cQL4vo19kyQ5otEOC9w8fDaBB8JCqH/Eoqpn7FBf+IhCVA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UW7+Lg7r;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF58606EEB7
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 23:55:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5DF58606EEB7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0518606A32C
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 00:06:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0518606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=nIvW5eIH;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=HueqMRZi
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 7306614001DB
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2026 18:55:16 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 04 Nov 2026 18:55:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793836516;
-	 x=1793922916; bh=jyOh8dtZhFwam1bQ7aHKxAcq0MWjfq11be7F4YuWx0E=; b=
-	nIvW5eIHOZhzwNl5EFOzhFc6zjWytDOSASJvlKK3+3mIwepFYaqTcVy0KHg8YssM
-	rUd9pwz4VWi0JAxSMvsK5PlZNAngoOUJ+bBS4Jgrjy1yK+NgksH8cUOnJmXtVoBw
-	H3bjxo9k8Mqs7UIB9q/htMH23QUrTXHSSUtkenQ3+EDlUZwQWPJ1GiIKFWNufWZR
-	6wdFsn3LiH5X0uThxURwJGo5L+1hb3rd28WHgxCCdP5z6FhrRYpnbG9Q1xTrQGZW
-	dZT1Njjt4gq1r4VYuA7vccZ32HC3fKFLmr+lPIufY8/gqM3RwUzCYdk3e9d1ZTK9
-	JvfgxfuJBiQUFZ4dl5QjmA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1793836516; x=
-	1793922916; bh=jyOh8dtZhFwam1bQ7aHKxAcq0MWjfq11be7F4YuWx0E=; b=H
-	ueqMRZixSxWFjZu5EugKdjetrleb2x3HDz75Pc4BinYEr6CG+jxKygGzx6FRz2n9
-	/yvQHxPoZr4j4SVbg00xz0VVz2K03X1vN4KcdUPyVtX8/84gGDbcneSZp9okFYG5
-	dwtOXxQjH82CWSmwpbJsrgpSbZ0nxvFvcZ0FpVGDNciDhC0Xum7KmNGwLkR0iTrv
-	rsnr9ReU5H+fHUsQAjDw6nb//qfsFnoBkNeBr1WL2PxACIFI3mbyusj80S5jjnrP
-	7Qh+1qnx0XV79Lpsy1GrWk/aVtRsQ6fumWWmQkS5ybt6oopq1KoKGw4g5bQacKri
-	EX7YN10kBZ4N4gA3fo/bA==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=sign d=shazbot.org a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793836516; d=shazbot.org;
-	mf=PGFsZXhAc2hhemJvdC5vcmc+;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:uQe9V7B8K4ToEVNnKqDmsjkse3jdSlF0NhHNQQ64CBEfDdF
-	CRi22K7d+k7sqOR8NSRbECYn4nbJWkd9p5jVvnchrR5eIkFzB3mdN7fnC1Lx1kTn
-	BQ24H0mB/DswD1wF2YdkFmoxLHA+/9fCgW4Dld7K4Ie4p3dpEEIHQukl82Ljo2cs
-	+xPNq2BHczNKJvbwcHmjMmTC3flUZNbgzmat2+KLmH4KKdu0/pJ8VdKRW1DOhDwH
-	l/6G4jJUJrU0sRjIu/9KcFPFrkES+U1sfbBawyJKiKb5guqCHFagObAEsAVMUSv/
-	o471VLeSK/2FtN1gneXMwK6xPjNAEbhEfhH5eJQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
-	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:/2yLtb0lmHljW4hWUpUt6pzuYG/NjVKkup+ztfiLlII=:JwSsDL9+hpoBnefcwHqgokHOrrIkqH+gAAjxEIACT0g=;
-X-ME-Sender: <xms:5MXravOdBY4STcaIdyv908OnLMk7LG1vRiCbr1uWEWEcYJLkxUrGyw>
-    <xme:5MXrakwkiammKf5WxrdqopDOVdf-nlgAcke3pqWQSriFaF4h-gA0Ewrz1MWLIVIUg
-    mpYIvrxxxJaFAn26qEDfKXTtsrk7EhNYvmQDw7q64gqsJdq-hQW>
-X-ME-Received: <xmr:5MXrasiIOJa_eZEc_hzzjuBmYUIPH4ZPoRRo1oDnqVEJ3U7_BgIrBAg1oTCw9A>
-X-ME-Proxy-Cause: dmFkZTG4FYuvZQ8OKmh8SxPpSxFmNX1nEZQbXphDSfzzHzAlc2MER1INxCOQ8ioQDOLSqj
-    I1J5zCHbWI6FBxNlzNQLTNQSnlCUlwwphJo/pu8XArSbdA4Ni0obfntvgtOtkOVBNwetlV
-    bMJgK9onu3dmOMmfOPZ4+y0a5pkqOK0b4gbgM3rL0NUyZ3bUwFePMC7fr20AQZulFyoaxC
-    8n2SIP8sHCkz9WtgPer+7UYjbsFsL8a2bS/6zWjf8AyXuy8yXVn3TL3Nz9OaD4UIyDwBDB
-    SY1wk2MHyzJunerzJ8Z+CamAY0fsFExRiKHjQNG41SIr6RTph7A2ETmq/kOvDwQe29bHhL
-    n5ocRvmGPyFRljf3Qo62VxDoSLiGsBnOovUztkkBp50TtARwghYPJgDAfzSfCjMXn/FlYH
-    kFIrhNHcp8cEPcC00vuEAWeAPFMyggNnERoRxujS8IIq3qOdQ44t6J+VNx9UAmvv3BkLtI
-    ZX33pFJ71IfXai9X4V2/mF8pgXeBqY960hA5/Rfh8Yk9T+tvNyjaMaQXjtzk/uzwTrVOpi
-    SNMhKiBfqNZNpWaN2k1HzBHUwnrF+/wGpeljfS8EhvC7QAz/3ecx5m+5/jHMtwvTRcvl3B
-    iy6VAazlxu2j909ugxbrpkUry00PTO6/RmB4jTGTh3lx1zMLhldtwDMyfa5A
-X-ME-Proxy: <xmx:5MXrajSlPVPBJVlHc6p7x4fWti4uEH6aQIHR-v9AouqkOzcnmcaYRA>
-    <xmx:5MXrahOQKxvpqdCbMH27I3dVQ8y4IRkY7D_FYkWEqw17SEKikA0o1A>
-    <xmx:5MXragG1Xwt4n8WJBRhYtFI2ikTPJUqomOndok5F91CbEWChwMgcww>
-    <xmx:5MXrapgToEx5AYtHv4dBBDwdiWaJYCm10Y7l1tRCpnv8j2en28XL7w>
-    <xmx:5MXrajccpjpBoglgV8fA73y2VYoxNJv4GexxBh-JIQ7oN_uyJXh9bz58>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 4 Nov 2026 18:55:13 -0500 (EST)
-Date: Wed, 4 Nov 2026 16:53:23 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: <mhonap@nvidia.com>
-Cc: <jgg@ziepe.ca>, <ankita@nvidia.com>, <jic23@kernel.org>,
- <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
- <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <dave@stgolabs.net>, <alison.schofield@intel.com>,
- <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
- <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
- <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
- <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
- <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
- <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
- alex@shazbot.org
-Subject: Re: [PATCH v6 05/31] PCI: Refuse bus and slot reset below a CXL
- port with SBR masked
-Message-ID: <20261104165323.78b45467@shazbot.org>
-In-Reply-To: <20261016161839.2765592-6-mhonap@nvidia.com>
-References: <20261016161839.2765592-1-mhonap@nvidia.com>
-	<20261016161839.2765592-6-mhonap@nvidia.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UW7+Lg7r
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c247f6687dcso218045466b.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 16:06:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793837165; cv=none;
+        d=google.com; s=arc-20260327;
+        b=E8BAAhOo4MIk4vaXxizUenSvE7sAhCcasReu8udlc9YETPZavlZnjBKhIVBkKrchA4
+         sbecWpQgFidi8+hpXH6TVbbTUzfZqpxRPj0MX57/rjvZ3uE2/KR9yFqTuUKGn9HgiRZ5
+         2WnWARtBHL+W+0i/DFZTskBtDV9M7UzDZbe0SNxbCdIJwcpxRWmRNe8rJfPknkPRuFTQ
+         3oYcPPocc+969dXIBy9O+QBSq8irn4pUTeXSnKkAZ86Dfnla7JWNkWv/87YaBt34wPrl
+         w2fc+trjMlHaWEjNU/PVq3llGzTCiQ7jOfGCQWn0L4y5vrYr+PzBCm801fOzOTA0FbuE
+         hAnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        fh=GdhI3zGLpzXsDe4aY5L9UliuMSnAfou9sCj90FD8xPA=;
+        b=NcU2UyG6KlLbplb38oAy+ZmXiMXg2/RUfDrHg8VGdJAoCFwTJ878DH5MZwB2Ui6/cj
+         OyFoz60/dAJDdIuiJmOoLJbffSfnE+33OzWniNGDG+uiKwA9JTFlGJ1XSQLd0DFqd7+q
+         G13BifC9wJ3kGhMDTvFgUHu717Zx1quw63CamXzu2IOQ9mADplGlr9LGlTCg8Has2B7W
+         MeQsjTJI63qIGfVY2+azdfC0kO3F767oxZNyp5Hzao0W+rvUpCM1OgeWIjgesZTDdozT
+         dqsumgXyob4HeDiimUOYIfMFMSXMPGm8Nr3+/R/UbIQnJzpYnwfqCXhFAXNyu3SAaTFD
+         tFJw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793837165; x=1794441965; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        b=UW7+Lg7rFdK2cPOSHdibyhfqd0mNfE52oRphbaahRpCOHjIZJidko9tTbllyzCryjy
+         siNubT2yNT8UsddMzx39cRlaaf4u9pnE+6dIm/dTOyiVwyDFMyx/T503O/SAkgV4IgXs
+         efUG5InyQPdPjXkVj3FyrgQw8Tp3Uwud4aaLkD2TGlBzm2pE66Yo0XieOJu07M7lI+DV
+         gUkNX9hygDXotIY7g19Ob5YY4jcsnCTMlsFTY/Azp5LW+ukD9CKA5AAnTO8zpTJXxWqx
+         5Vgp8TB7FfNb2pRMsONUAcd0wfnBxqAeiMrEDvVnn/35z4BZWsrn2RkRHETiQqHGP/C3
+         KXdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793837165; x=1794441965;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        b=nKtBNFKGhQoCns4bpXglzLiR2L9vORXMM2AFbbpxBnbHL8MXCTyv4SMKevjg4O+SnJ
+         uuNV4JcSmRPXXBBau14s+kHLrJq6J57VOXnZjSG7RZdxdQLzeQdFSoM2+rVizduPwulT
+         nauA/O/LPnR8ApuV4Rpli3fGJ4q2cKlA6i/ZjrcTjmi/Hndsqk2pXjba7TF5HpJEN6Qq
+         tBR69FK1qeg6L2ixpBX58y6ksZcumRHoSFqY2Gg45cWjkj4XK9K1te1i51LJn8BB2ugy
+         HfyII+V6WZTBimLdkoREsspPZDGFdi0ZjzdGGMS3c4YCC5ogMZHoicOMCskJv7IV4tQD
+         gJbg==
+X-Forwarded-Encrypted: i=1; AKwUvByhE8eQad3nQYi3THiSlU4664uO4E39yiezoIrJcxbTCUHycTko7FOPY/t9DJD7tc+qI6s/4ZtGWczN7Sbx1fE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Q2DucRAZ8grw6jP5RjmmeKPLfkbWLJkS9CalMLt3n0reg7Wge
+	0iL+pDookt3/DtA0n9WNjU1/VEw4VnPPXWiPPOJ7CTwpoHSX/QmBSzodeiMFDLzoYEJZZsPyk0J
+	9BmK/xpRp9TVl1FQKxJoGt95RDlbUnNoEpuxQdGap
+X-Gm-Gg: AYBFou1TYczT47xp6Ubqb15Vj5F90qrkgZdwMl4ZinPmJDvWaJe3qvxyvQXYoHTZ+vz
+	IiX9iNUHFdrYgg7/ljANBsyXq+KfLA6y1VJbbNij7zpNZAIdPj0wfs3Hq+dSQBoND06VmOtsSlo
+	3Tr7NXjsH+Zq3EjMca90SEmNQEqcsKO/K3jOIFd4f8Ft7ujHi3N6dzKiHg39NxLnXfi9G/zCh2A
+	5csZ9VTVesSPHDEqvXuUjC7D/nArjzXSt/Mu2KJXB47P+/puS2rEh5byP5ABEFTVRyS1B+9hKeD
+	26WIfSrd25HzjlODNJAt1j7UqgDn5rFx1TRKBH4XkUint71fKHOqHp1k45h5daoSV872P8U09we
+	3FYtNoH5AhENthNRulDCtBFwZDC/ATpHX4zYwG2s5kEFU0UiXAAFVGRj3ggOVoEP/ux2nW+A=
+X-Received: by 2002:a17:907:3351:b0:c4c:b560:2a71 with SMTP id
+ a640c23a62f3a-c4cb5603d9emr979541566b.36.1793837164883; Wed, 04 Nov 2026
+ 16:06:04 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -138,150 +104,80 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
+ <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
+ <20261030100215.6f8e0d4f@pumpkin> <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
+ <20261104142307.431fc12f@pumpkin>
+In-Reply-To: <20261104142307.431fc12f@pumpkin>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 4 Nov 2026 16:05:52 -0800
+X-Gm-Features: AclHuK8Z7yNuvzdyvQXTyXXmXbvszi-XVmOSWc_IPj379xX-z3zgWWYR8Kt4UgU
+Message-ID: <CAG2KctrY6GmVqsKP+fXYCsL6wDR4zp1kdRd7a7uOdCgg_JcMdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 16 Oct 2026 21:48:12 +0530
-<mhonap@nvidia.com> wrote:
+On Wed, Nov 4, 2026 at 6:23=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> On Tue, 3 Nov 2026 17:14:26 -0800
+> Samuel Wu <wusamuel@google.com> wrote:
+>
+> > On Fri, Oct 30, 2026 at 3:02=E2=80=AFAM David Laight
+> > <david.laight.linux@gmail.com> wrote:
+> > >
+> > > On Thu, 29 Oct 2026 15:05:45 -0700
+> > > Samuel Wu <wusamuel@google.com> wrote:
+> > [...]
+> > > > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
+> > > > would be different symbols at different addresses. Please correct m=
+e
+> > > > if I'm missing something here!
+> > >
+> > > Only that the user might really want one of the copies.
+> > > Sometimes there is only the copy.
+> >
+> > Good point. I'll have v3 add KALLSYMS_F_PREFIX + pos/next_pos
+> > pagination to cover these. A prefix query for "foo." also finds the
+> > copies when plain foo does not exist (expanded on this in my reply to
+> > Andrii's Oct 30 mail in this thread).
+>
+> I'm busy rebasing my patches - they got stamped all over :-(
+> I should get a v3 that applies by the end of the week.
+>
+> I will add a 'prefix' variant for you.
+> The 'next symbol matches' flag is exactly that (actually it is a
+> this symbol is a duplicate to avoid issues at the start of the array).
+> So in this case that application would always need to read
+> the next symbol (by name).
 
-> From: Manish Honap <mhonap@nvidia.com>
-> 
-> A CXL port ignores the Secondary Bus Reset bit in Bridge Control unless
-> Unmask SBR is set in its CXL Port DVSEC (CXL r4.0 sec 8.1.5.2).
-> pci_reset_bus_function() already returns -ENOTTY in that case.
-> pci_reset_bus(), pci_probe_reset_bus() and the slot variants do not, so
-> they report success for a reset that reached no device below the port.
-> 
-> vfio-pci uses these for VFIO_DEVICE_GET_PCI_HOT_RESET_INFO and
-> VFIO_DEVICE_PCI_HOT_RESET. A user is then told a hot reset happened while
-> a CXL device below a masked port kept its state.
-> 
-> Return -ENOTTY from pci_probe_reset_slot() and pci_probe_reset_bus()
-> when the bridge above the bus is a CXL port with SBR masked.
-> pci_reset_bus() and pci_try_reset_bridge() probe before they reset, so
-> they refuse too.
-> 
-> Users see this in three places:
-> - the vfio hot reset ioctls fail (vfio reports -ENODEV when neither probe
->   succeeds),
-> - the reset_subordinate sysfs attribute returns -ENOTTY,
-> - vfio-pci groups a device in a hotplug slot below such a port by bus
->   instead of by slot.
-> 
-> Every other pci_reset_bus() caller, including the vfio bus reset at
-> close, is refused the same way. With one device per CXL port both
-> groupings have the same members.
-> 
-> Leave pci_bus_error_reset() as it is. AER and host bridge error recovery
-> call it without saving or restoring state and only map its result to
-> recovered or disconnect. Failing it below a masked port would turn
-> recovery of every CXL device there, memory expanders included, into a
-> disconnect; that is a CXL error handling decision, not part of this fix.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Manish Honap <mhonap@nvidia.com>
-> ---
->  drivers/pci/pci.c | 31 ++++++++++++++++++++++++++++---
->  1 file changed, 28 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index cecf8e681e69..87fe9de81acf 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -4984,6 +4984,20 @@ static bool cxl_sbr_masked(struct pci_dev *dev)
->  	return true;
->  }
->  
-> +/*
-> + * A secondary bus reset below a CXL port with SBR masked does not reach the
-> + * devices on the bus, so a bus or slot reset there would report success for
-> + * a reset that did not happen. The probes and the save/restore resets that
-> + * pci_reset_bus() and reset_subordinate use refuse it; error recovery
-> + * (pci_bus_error_reset()) keeps its existing behavior.
-> + */
+Thanks, that would be helpful. For my v3, I'll keep the lower_bound()
+approach so the two series stay independent, but I can switch over
+once your series lands, so there is only one search over the name
+table.
 
-Reads like AI over-explaining a fairly obvious concept.
+> I think it might be more sensible (less pitfalls later on) to return
+> the symbol number - not that of the next one.
 
-> +static bool pci_bus_cxl_sbr_masked(struct pci_bus *bus)
-> +{
-> +	struct pci_dev *bridge = bus->self;
-> +
-> +	return bridge && pcie_is_cxl(bridge) && cxl_sbr_masked(bridge);
-> +}
-> +
->  static int pci_reset_bus_function(struct pci_dev *dev, bool probe)
->  {
->  	struct pci_dev *bridge = pci_upstream_bridge(dev);
-> @@ -5615,6 +5629,9 @@ static int pci_slot_reset(struct pci_slot *slot, bool probe)
->   */
->  int pci_probe_reset_slot(struct pci_slot *slot)
->  {
-> +	if (slot && pci_bus_cxl_sbr_masked(slot->bus))
-> +		return -ENOTTY;
+What pitfalls were you anticipating? If the current symbol's position
+is returned, userspace needs another ioctl() call and an -ENOENT
+check, to learn that there are no more matches. Alternatively,
+returning the next position means every call pays for a look-ahead,
+which for an unfiltered query walks the module symbols even when
+userspace only wants the first match.
 
-Why would this be open coded here instead of pci_slot_resettable()?
-
-> +
->  	return pci_slot_reset(slot, PCI_RESET_PROBE);
->  }
->  EXPORT_SYMBOL_GPL(pci_probe_reset_slot);
-> @@ -5638,7 +5655,7 @@ static int pci_try_reset_slot(struct pci_slot *slot)
->  {
->  	int rc;
->  
-> -	rc = pci_slot_reset(slot, PCI_RESET_PROBE);
-> +	rc = pci_probe_reset_slot(slot);
-
-Also suggests it's tested in the wrong place.
-
->  	if (rc)
->  		return rc;
->  
-> @@ -5685,7 +5702,7 @@ static int pci_try_reset_bus(struct pci_bus *bus)
->  {
->  	int rc;
->  
-> -	rc = pci_bus_reset(bus, PCI_RESET_PROBE);
-> +	rc = pci_probe_reset_bus(bus);
-
-And again.
-
->  	if (rc)
->  		return rc;
->  
-> @@ -5726,8 +5743,13 @@ static int pci_reset_bridge(struct pci_dev *bridge, bool restore)
->  	if (list_empty(&bus->slots))
->  		goto bus_reset;
->  
-> +	/*
-> +	 * Probe without the CXL SBR mask check: error recovery keeps its
-> +	 * reset path below a masked CXL port, and pci_try_reset_slot() and
-> +	 * pci_try_reset_bus() refuse the restore path there.
-> +	 */
-
-More AI?  This function is not designated as exclusive to error
-recovery.  If sbr is masked, slot reset doesn't generate an error and
-doesn't effect a reset, regardless of who called it.  If we're including
-a new condition for a bus/slot reset to be effective, it needs to be
-applied universally.
-
->  	list_for_each_entry(slot, &bus->slots, list)
-> -		if (pci_probe_reset_slot(slot))
-> +		if (pci_slot_reset(slot, PCI_RESET_PROBE))
->  			goto bus_reset;
->  
->  	list_for_each_entry(slot, &bus->slots, list) {
-> @@ -5773,6 +5795,9 @@ int pci_try_reset_bridge(struct pci_dev *bridge)
->   */
->  int pci_probe_reset_bus(struct pci_bus *bus)
->  {
-> +	if (pci_bus_cxl_sbr_masked(bus))
-> +		return -ENOTTY;
-> +
->  	return pci_bus_reset(bus, PCI_RESET_PROBE);
->  }
->  EXPORT_SYMBOL_GPL(pci_probe_reset_bus);
-
-Redux, pci_bus_resettable().  Thanks,
-
-Alex
+Andrii, do you have a preference between the two?
