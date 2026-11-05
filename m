@@ -1,55 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793872455;
-	b=SOHkCmyGQvW6SE5gToMWN20VfJufr1kdgqdtgRbEM4tNETa44jvkOjZrE4+JQ3qCLWo+
-	 H/2AevsEHV3xVm90ghlTRwlh8160ZQQmygDE7tH3r+EIaAcvPKxF4Jz0KUV3ebtetcANv
-	 BUQVevB1EqrsrCr9JmPKOeXrlNmvjDqCHM1kB7pJB4pkHCTuKoJpo+3dIGdG1NtXKJ5Gg
-	 3+owcV0Rb1cNXC0dFSMUmFcDvhKG94vPQZz3KBtOKNXEhdvWxKb2zvcLmOXQ9XudZLqv7
-	 ox5pOytK7puts99LnT2FrFPdX+DuTZ4sOn4x+pzMTEf4J1tCrFM5IOXIPtA1Kg3UKOQ==
+	t=1793872533;
+	b=knJKibWgUlc/nhi0k9p0ewttVjh9Pb8xa6Gxflnzk/Kxh4R+P3i7HbgUZAblAUcP8e0Z
+	 7QM8llYtWP0/P3CNdPlEGWvybDappo177AIDb76cIRl4domjHUYYx9KT2lZUxkB6E67i+
+	 05EVQ0ap4ySp20tfJjDuFvSN+2Jf/9tO7uVkMKFT+TppOznzZQmvaH5eUMhj6qUFURyq7
+	 6XPyZYpFTJGtcbe4RspCEYRRX0JIRiekH1DdEN0Nm++jJtaPWxja1x3FVqzcIdtr6Hdmm
+	 zu3ZITh2SQ/X9MWaC8aWJvlRtZM34m4BhePqw3Ocv2veIercXTODDOMd7QUSvVuUITw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793872455;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Subject:Cc:
-	 From:To:X-Mailer:References:In-Reply-To:X-Last-TLS-Session-Version;
-	bh=V6R4Z5QNn1TmY3Fb9b2cmHECgOA3rdSKsC6p62jeDtk=;
-	b=w4sRwHZG3aeIwjzRX9tyJW+OMCRv46ci1p/sUKtScaDLyhzw/Bjl3AZmogbOC+VRQhiq
-	 wBU3k3YlVnk8mx0HvSZ4/yu2cRUy9T0jy+lQxqqqkDPv5qP7MfLoVVx93KeBJkLBBLrge
-	 CM0CTr7j3fHgLjwl+GYIRAr/E8TxVUaGiwSRuGxBn73bXr9NdMt7xVko9PKSI1R/4Sq9i
-	 DWj3W2O63xyAULfKLbmr1TuhIBc7vztsuERRFP0kRkAMf1nJGrGJwRwDYE2R9TzPVLclq
-	 rkpAHOhcPnxsYpjN7+e0Wf6ff5W9Po1K6NF6ju1G62sE2AXtlf2NWYSuoA4igwiqZAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793872533;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:
+	 X-Forwarded-Encrypted:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type;
+	bh=LrgDMUrSYXpYgkAhfsYKg0ebb/uLgOfOMhqzX4yL0j4=;
+	b=xieoFQamxecSMff7wGyuaIKRa6ujtRNTThmA0KLOi5T7GGnc6Skw+jrfd4qiS/PTF0mn
+	 VQ1BfxH4KSZ1NW/CpE33U8xMnOK9H8RQ0s2Xi+4WprVg8CPz3SZdZFI+jejtlqeKKSzCM
+	 tJIyZXOIvv8avYcx3JI5rae6M6qXuM8vTDb+7DOTgaimSJNV2+NhUZyEl6yfC2ureuaWm
+	 HEpYNOOiTKSM8Lb68t5hWxHjtrM0vt3Np1NN8nSupJtDj6174Hw1OAQx65Iy6YtVkrYuw
+	 GGqseeigYjZ2OAG2vgaunx+3Yz56o2nBLozi8VS3DNgl0Gs4pBdwwKjjoZzuH6PDKBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Drud5Bh2;
-	arc=none smtp.remote-ip=185.246.84.56
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=none header.from=linux-m68k.org;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=none smtp.remote-ip=209.85.222.41
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2763606A330
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 09:54:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2763606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Drud5Bh2
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 9EA701A0830;
-	Thu,  5 Nov 2026 09:54:11 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 72EC15FF85;
-	Thu,  5 Nov 2026 09:54:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4A14A10328E77;
-	Thu,  5 Nov 2026 10:54:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793872446; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=V6R4Z5QNn1TmY3Fb9b2cmHECgOA3rdSKsC6p62jeDtk=;
-	b=Drud5Bh2kSmQFCtnnvVRBf9Bpw/2pvB6u2mFtC6kIBwe6l/lvVAABTN9MUisRt8dR8oay5
-	aYfk922o/+l+N+kukaDg+AwrL/pFqsQs0Hly8htVtM9x/9bO9YlofGTYafqV5KorPhIT5Z
-	+FiLICdmBKFIaOjNtXH+XT9IRaNw9xl7+YR1Mfqg7dqPAeGnz1mocGfIcbakHMLN4vKHPF
-	4q7PyuN7EsmOTeVhc43D0a1MC9+Hg1WjQBZZywg9EDJpLnBaPnDgqwXztVmcizl/XElOKF
-	4HRY5RITniyt7rrY097BUozGfWDDfcWlyiyPU+wkHICAd2wy5UYte9HbAUICmA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904C9606A339
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 09:55:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 904C9606A339
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-980c4258105so913278241.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 01:55:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793872532; x=1794477332;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=LrgDMUrSYXpYgkAhfsYKg0ebb/uLgOfOMhqzX4yL0j4=;
+        b=W7JFbO+nvc4qzrlg40+jQYogeMYSf7RpwV+r5u56F77Z/obJOwl34CumdAPn//W7Pr
+         zA0cDCRJRIXpzJJk37K52JWszohPQYIGiO6ovjmRb7OoH1gPZPBQZ3n40ctk8dsccF72
+         6YNGfbBjI+1NCJ7y1i81rB7txfWY90acaeInV5M355SBFhm7gbXZZOAoly4eeD95cJiF
+         FbBGuuKyVqj114oRCatYZ4lwuyp1aJA0dLt+pwFrzU8dkiXprimdllZWi5NfrSauPHl4
+         rvWfWhbTJPPL7HEIQ598eyjUEnSXELf24fR0vESKKKbSx51u6CtxmmZ5YSuPDNcNizK9
+         qTiA==
+X-Forwarded-Encrypted: i=1; AKwUvByNq4Zs02plxSQRW9elJhaPyiN4DOIYG5zX3116nGd/nbR9UPQ9Y14fTWJzr+CTJEq72BXhBJPW0ga2C/gFHaM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Etf1X5KUrdd9U1XbZHg2EBtzm++V8/a/20bArUXd54Wzq3iiv
+	aAF3sTh8tas6XGkDTRzK6ySXmwaRAYz4Ca9opNCvc5oo78Vzn1sxB1yymSdzsLyHZ5E=
+X-Gm-Gg: AYBFou1nWTHgxeh7TruHQB/fOXgASYKC+t8sDCr84YbA9N2N/tWIMMBf06pokGrK6rU
+	EByhiFROkmQijilOzPua7z6jOZ4lO0p7Zf6j69bj8n9+hIiySDIrjhU6L6b3dF1K1KDACe3Cqwk
+	1c1uTOR/gdVDL37NDsZA3MnRzc9odd83t1ZIOrCql2LTAs4ntIY/wAmVXbW2hVKq5zKzFpFVZhq
+	qCOcuxHWAB3OUneNoZSM59U6GwOLziZJs6Oc84KDhdvrYic1+m/zyzR7IWDgoWYAF/YVFiD6PJ8
+	WXqmIg5VCqRD1dVcnSYUvvBpXzV89At3/7CjnND/v1XbDTshmQtzDFcB447BKjFTPBXcyUsNGx4
+	dengV9k5U4+96sI2c1TEiGg8cqEPC4WWwgQbZICf6u9ZN+ocJC/GYC7MYSZlhsZrysT4uJwkCm7
+	qpA2zUldhsXhxg1JfXah7TMMhqANyNKMPDvuNAJMibabkky29T7uunI4It+Hke4RbVfJKuqY+eZ
+	lROUaPJNk387gGDHk5v7cJnuPKfv6f5CS8w0x2cz52kuq4pch/2G/TFWI9Roowywh79ze4EQ18d
+	NkZbFc8EOvy9LDVkzSP3sBdSnhgqQbEwtK/zpmcnalCHvoZr/M/ksaX+fKZ3N+A2hEdd0MoF3bM
+	zpGMwXvrAsf0=
+X-Received: by 2002:a05:6102:1623:b0:7a7:b6a:b022 with SMTP id ada2fe7eead31-7d072ca6f38mr8919597137.22.1793872532523;
+        Thu, 05 Nov 2026 01:55:32 -0800 (PST)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eca8dc1e75sm3840704e0c.14.2026.11.05.01.55.26
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Nov 2026 01:55:29 -0800 (PST)
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-99071945aa7so874583241.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 01:55:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBzfYQaeDn1yJUvlIFrzvb1z+k94P/RBM0cOrztSjc7NpHw8J7U8yOvCipvWZMtkqPOT2wt5OMVTgX6ZXDLM8Ck=@vger.kernel.org
+X-Received: by 2002:a05:6102:5108:b0:7cc:56a:58e5 with SMTP id
+ ada2fe7eead31-7d072d84a58mr8269567137.37.1793872526219; Thu, 05 Nov 2026
+ 01:55:26 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,62 +80,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Nov 2026 10:54:02 +0100
-Message-Id: <DMN6PJC05X2R.2PXWV13VGT156@bootlin.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Look up unpinned maps by ID in
- bpftool_maps_access
-Cc: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- <qmo@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <ihor.solodrai@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Tianyi Chen" <hi@tychen.cc>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.22.0-0-gc2f86b7abde3
-References: <20261104183323.409412-1-hi@tychen.cc>
-In-Reply-To: <20261104183323.409412-1-hi@tychen.cc>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+References: <20261104-work-procfs-drivers-v2-0-245e54e87116@kernel.org> <20261104-work-procfs-drivers-v2-2-245e54e87116@kernel.org>
+In-Reply-To: <20261104-work-procfs-drivers-v2-2-245e54e87116@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 5 Nov 2026 10:55:15 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVHxQvKnJyKHrOZhaOg9Rn2hMeRU1JnMFFEEi31FPZaGg@mail.gmail.com>
+X-Gm-Features: AclHuK_UsJ1nGicdWEWcMLQAICTi1A7pGF3yhNkxXkXRPqohle17eXAHHNBsR6k
+Message-ID: <CAMuHMdVHxQvKnJyKHrOZhaOg9Rn2hMeRU1JnMFFEEi31FPZaGg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2 02/26] zorro: let procfs copy out reads
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, 
+	Josef Bacik <josef@toxicpanda.com>, Chris Mason <mason@kernel.org>, 
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, Greg Kroah-Hartman <gregkh@suse.de>, 
+	Joel Granados <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
+	platform-driver-x86@vger.kernel.org, coreteam@netfilter.org, 
+	kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net, 
+	jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, 
+	samba-technical@lists.samba.org, sparclinux@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Tianyi,
-
-On Wed Nov 4, 2026 at 7:33 PM CET, Tianyi Chen wrote:
-> The unpinned subtests pass "name prot_map" or "name not_prot_map" to
-> bpftool. Both maps are used by programs attached through trampolines,
-> which are freed only after RCU grace periods and hold their map
-> references until then. A run's maps therefore stay in the map ID table
-> after its skeleton is destroyed, for about 300 ms in an x86-64 VM.
+On Wed, 4 Nov 2026 at 20:43, Christian Brauner <brauner@kernel.org> wrote:
+> Implement ->proc_read_buf() so procfs copies what is read from
+> /proc/bus/zorro/<slot> to userspace after it unpinned the entry.
 >
-> If the test runs again within that window, the name matches maps from
-> both runs, bpftool fails with "several maps match this handle", and
-> the unpinned subtests fail.
->
-> Look up these maps by ID instead and drop the now unused map names.
->
-> Fixes: 2d96bbdfd3b5 ("selftests/bpf: convert test_bpftool_map_access.sh i=
-nto test_progs framework")
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-I've reproduced locally in my VM the mentioned issue (and saw the
-"Error: several maps match this handle") with:
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-  while true; do ./test_progs -a bpftool_maps_access/unprotected_unpinned; =
-done
+Gr{oetje,eeting}s,
 
-With your patch applied, I don't see the error anymore. The fix
-looks sane to me.
+                        Geert
 
-Tested-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.co=
-m>
-Reviewed-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.=
-com>
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Thanks, Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
