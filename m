@@ -1,54 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.100
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.27
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793844847;
-	b=cIFlboE9kJfoAtvCZQ0mdhDfL1FFusvOYxIXjctRLcB0GR2sCMxPHIf5PtLzkK/rnlbW
-	 w0WuQbETpEu9VaI5P2O7bk0TLgGy67znIF0j5Ws0ix4umFDlWeHdWp7xbAg1SwHoPwhXf
-	 6GWR3p+JvyCLNKgQOk0dYXPByedsaS2VWJgTkw2g7xg2GHAR7YeF85dcezk/q2Cn/0p5s
-	 h4wfpoQ7/UeUnfomkbUh0FhAcj2nJQEXwSVKXQ0ssLO5ojMhXq72epyC8/0J9DToDtRzO
-	 nm6lZU/qXAmAeOLa0wDGLwd78ketXEyEYQSegGVKjdkIVoefqYik+BvTI0iKdHY4hQQ==
+	t=1793845166;
+	b=NApkXx5Mu6Y1M/rqGydICNjFfN01w6kbLXuz8uZPmftd00kiJSrpLeLazfj/fIek/rqJ
+	 irsSrT1JuBobNnlpZLJV0wcJUKBnYK3cEgeI21fJjkOD7pJcno0Zih7jXRzk/CKFVJVjy
+	 HHKSusAPWWEblNs9EXvN0KGRrJDjZrTpofdZIAB+xecDrujdI4vuAGas5QubfOD7cMY0K
+	 LP/rVfizdDcQcj6cfciaG0+zQXO2VTZ9L1lfHp0iU1JVYTMvi3/6yjM3YSfQWbQwLIWaI
+	 R9DlZMMb0F55FkunoUDKSAhoT8ZAEqzGUaEYWv2sC7uiRoiJ0P9/HZ6wF1NG7L8A41Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793844847;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793845166;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=tXeq94tKXH8bHOz1amsH5XRU51n2PYOOTkgxfF1PjyI=;
-	b=qBIzlxnV7gZNO7Swk9x+H/160BbMNad2v4B6JsFx4OxxN72c4pCoyPTrRtf6suBbX+rm
-	 9CIfhorFFGlTNVu2fZrhTOsQSFeVmbvX+PRiiimCFFHXve+LAAaxljLKSTD4Bmq3vd2f1
-	 Qp6dqMDjrjbJXMRIWgDOpSspXYnfdHLQQtFQXRJwOR4lcG15gkxKeWQvmINGf6TjAHwAA
-	 qZYnBpGxuSzGHwQlh5q4loMgymWECerFBy41qbEUavOfCMCtap59LvMJNeZd1mxjIYNQ/
-	 C6yE5G23eCBmF514HGXGH9wD5kDU6zq1qWH+XybY0iNNwtTzMmEMvzAf4ZbJ0ja4JFA==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=vCAogybCaVTsP1wOzLL4HrNOiDNKINH4T30RdYUbjCY=;
+	b=rYLERiz2vKIg3Xi8VIY3CAKOFioMeIlG8jQGlDdFv7uqSsqQXgLFLk0GXYFoGFBp/YJx
+	 SLrnpwrnEC/kBywnsok0+VrnsBLe7kOF/MevbGNlc0xTZoW/rk1mpKIJBzjdmPr8fBPMe
+	 KPg/hc46u6d3Kse5QbA2OlspvVzyyIk4B8PR7+MUBck4rJCEgp7kZt1O+Uz1FpErifqkC
+	 sy6FdUXDQCNCRCNDRRJMKL3xhDnKHyBavcmPU3zvI5Nmwt/Odn7jtmj6OLQdz+A/uAjsT
+	 b3MVEx9on/bXy94pC/CR4Z7znqV96PCHVfy30YUgVGMSObP8bySe1vLU5Bz1rlheD6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=j2sTp789;
-	arc=none smtp.remote-ip=95.215.58.100
-Received: from mta1.migadu.com (out-100.mta1.migadu.com [95.215.58.100])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cMjLdVAx;
+	arc=none smtp.remote-ip=95.215.58.27
+Received: from mta1.migadu.com (out-27.mta1.migadu.com [95.215.58.27])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E900606A331
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:14:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E900606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E577D606A328
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:19:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E577D606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=j2sTp789
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cMjLdVAx
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=l5hRS8qgzR0WOCPLF0tQbQ+of37lp1oZsgw+XUQqwhg=;
+DKIM-Signature: a=rsa-sha256; bh=vq/2PwFpnYdqp7NYMLzjiV/QsikQgp5SP9E8rhZNyQ0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793844844; v=1; x=1794449644;
- b=j2sTp789TAzH4+lGZ7lYWfaDwj4tzc9cwnz9VymVYz+93eIx1j2P1wIewQP0NcIfVbJQKLyf
- 0DO8NIIghKzDouBSBnDym1wAnQyGpqJsD9irj2dQSZrGObeDZJB96QtjMGxheDIwPErfv1cfpzT
- zdnAQ3fG/Xx2Ge3hDWonFfXo=
+ t=1793845164; v=1; x=1794449964;
+ b=cMjLdVAxCh4bj12YhMneUevGO4LeZ2PZgAyGoGtwCTtP5NJjPjxFrzCUCxgh22GA115GIjCL
+ Tg6vaRK9+GALurt6WErLFeq7mGRQaZ7c4MzSaTj8lm6ccEOKt7eBiWKqha+5EZD7MQCCcwT8dUB
+ /OMrLFFcpV/HTBG4UykurtLE=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7ce234fbb2517b84;
-	Thu, 05 Nov 2026 02:14:03 +0000
-X-Mizu-Trace-ID: 7ce234fbb2517b84
+Received: by mta10.migadu.com with ESMTPS id 1851632e6d4801f8;
+	Thu, 05 Nov 2026 02:19:23 +0000
+X-Mizu-Trace-ID: 1851632e6d4801f8
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <fc4939cc-84ec-4c5c-88a7-658ca800377d@linux.dev>
-Date: Thu, 5 Nov 2026 10:15:13 +0800
+Date: Thu, 5 Nov 2026 10:19:08 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Bjoern Doebel <doebel@amazon.de>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
+	Liang Li <liali@redhat.com>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] selftests: bonding: feed link monitor to deflake
+ prio_test
+Message-ID: <auvnnIXQV2zufxtF@fedora>
+References: <20261104142018.552135-1-doebel@amazon.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,189 +69,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v2 01/51] alloc_tag: don't remove /proc/allocinfo
- under the codetag module lock
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>,
- Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>,
- NeilBrown <neil@brown.name>, Eric Dumazet <edumazet@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
- Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>,
- Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados
- <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>,
- Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>,
- linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-um@lists.infradead.org, linux-wireless@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
- ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org,
- coreteam@netfilter.org, kexec@lists.infradead.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net,
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-cifs@vger.kernel.org, linux-fbdev@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-mm@kvack.org, linux-sh@vger.kernel.org,
- linux-usb@vger.kernel.org, samba-technical@lists.samba.org,
- sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-doc@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-atm-general@lists.sourceforge.net, Takashi Iwai <tiwai@suse.de>,
- linux-input@vger.kernel.org, linux-raid@vger.kernel.org,
- linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-debuggers@vger.kernel.org, Chuck Lever <cel@kernel.org>,
- stable@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- Suren Baghdasaryan <surenb@google.com>
-References: <20261104-work-procfs-bugfixes-v2-0-021c84d852e0@kernel.org>
- <20261104-work-procfs-bugfixes-v2-1-021c84d852e0@kernel.org>
-Content-Language: en-US
-From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <20261104-work-procfs-bugfixes-v2-1-021c84d852e0@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104142018.552135-1-doebel@amazon.de>
 
-Cc Suren
-
-Hi Christian
-
-On 2026/11/5 03:06, Christian Brauner wrote:
-> codetag_alloc_module_section() takes the codetag type's mod_lock for
-> writing and calls reserve_module_tags() with it held. When that can't
-> reserve the tags, because the section's alignment doesn't fit, because
-> there are too many tags for the page flag bits or because the memory
-> for them can't be allocated, it shuts memory allocation profiling down
-> and removes /proc/allocinfo, still with mod_lock held.
+Hi Bjoern,
+On Wed, Nov 04, 2026 at 02:20:18PM +0000, Bjoern Doebel wrote:
+> With the bond idle between test steps, the arp/ns link monitor can
+> declare a healthy slave down (~300ms without RX/TX). If this hits a
+> failover step, the bond picks a different active slave than expected,
+> and primary_reselect=failure/better never reverts it:
 > 
-> remove_proc_entry() waits until every reader of the entry has let go of
-> it, and a reader of /proc/allocinfo takes mod_lock for reading in
-> allocinfo_start() while it holds the entry. So a module load that hits
-> one of those paths while /proc/allocinfo is being read waits for the
-> reader and the reader waits for the module load, for good.
+>   TEST: prio (active-backup ns_ip6_target primary_reselect 2) [FAIL]
+>       Current active slave is eth0 but not eth2
+
+
+Thanks for the fix. I also saw this issue but haven't checked it yet.
+
 > 
-> Let a work item remove the entry in that case. The profiling is shut
-> down right away like before, the file just goes a moment later.
+> Reproducible when running tests under load (2-4 / 100 runs).
 > 
-> Fixes: 4835f747d3ed ("alloc_tag: support for page allocation tag compression")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-
-Thanks.
-
-is this a problem you have hit in practice?
-Sashiko discovered this issue earlier and reported it as follows:
-
-> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> index 2070e682fe106..112a014d4b890 100644
-> --- a/mm/alloc_tag.c
-> +++ b/mm/alloc_tag.c
-> @@ -950,10 +950,12 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
->  		int grow_res;
->  
->  		module_tags.size = offset + size;
-> -		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
-> +		if (!tags_addressable()) {
->  			shutdown_mem_profiling(true);
-This is a pre-existing issue, but does this shutdown_mem_profiling(true) call
-introduce an AB-BA deadlock between /proc/allocinfo file readers (pde->in_use)
-and module loading (cttype->mod_lock)?
-A user reading /proc/allocinfo acquires the procfs in_use reference in
-use_pde(), then blocks on down_read(&alloc_tag_cttype->mod_lock) in
-allocinfo_start().
-Concurrently, if a module loads and tags_addressable() fails,
-codetag_alloc_module_section() holds down_write(&cttype->mod_lock) and calls
-shutdown_mem_profiling(true), which removes the proc entry. This removal waits
-indefinitely for the in_use reference to drop to zero, hanging both procfs
-reads and module loading.
-> -			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
-> -				mod->name, NR_UNUSED_PAGEFLAG_BITS);
-> +			pr_warn_once("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
-> +				     mod->name, NR_UNUSED_PAGEFLAG_BITS);
-> +			release_module_tags(mod, false);
-> +			return ERR_PTR(-EAGAIN);
->  		}
->  
->  		grow_res = vm_module_tags_populate();
-
-I previously sent a patch with a comparable idea, though Sashiko remained unconvinced.
-
-[patch]: https://lore.kernel.org/all/20260817062726.106511-3-hao.ge@linux.dev/
-
-[Sashiko's objections]: https://sashiko.dev/#/patchset/20260817062726.106511-1-hao.ge@linux.dev
-
-Could this patch perhaps wait for mine? No worries if this is inconvenient.
-
-Best regards                                                                                                                                                                                                                                                                  
-Hao
-
+> Fix by pinging a non-existent neighbor for the duration of the test to
+> keep traffic coming. 100 runs under the same load with the patch
+> applied: 0 failures.
+> 
+> Fixes: 42a8d4aaea84 ("selftests: bonding: add bonding prio option test")
+> Signed-off-by: Bjoern Doebel <doebel@amazon.de>
 > ---
->  mm/alloc_tag.c | 27 ++++++++++++++++++++++++---
->  1 file changed, 24 insertions(+), 3 deletions(-)
+>  .../selftests/drivers/net/bonding/bond_options.sh   | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> diff --git a/mm/alloc_tag.c b/mm/alloc_tag.c
-> index 82e2c3448dcf..7d7ad6704953 100644
-> --- a/mm/alloc_tag.c
-> +++ b/mm/alloc_tag.c
-> @@ -15,6 +15,7 @@
->  #include <linux/seq_file.h>
->  #include <linux/string_choices.h>
->  #include <linux/vmalloc.h>
-> +#include <linux/workqueue.h>
->  #include <linux/kmemleak.h>
->  #include <uapi/linux/alloc_tag.h>
+> diff --git a/tools/testing/selftests/drivers/net/bonding/bond_options.sh b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+> index 187b478d0ddf2..f599a2a8ef156 100755
+> --- a/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+> +++ b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+> @@ -74,6 +74,16 @@ prio_test()
 >  
-> @@ -604,6 +605,26 @@ static void shutdown_mem_profiling(bool remove_file)
->  	mem_profiling_support = false;
->  }
->  
-> +static void remove_allocinfo_file(struct work_struct *work)
-> +{
-> +	remove_proc_entry(ALLOCINFO_FILE_NAME, NULL);
-> +}
-> +static DECLARE_WORK(remove_allocinfo_work, remove_allocinfo_file);
+>  	# create bond
+>  	bond_reset "${param}"
 > +
-> +/*
-> + * A module's tags are reserved with the codetag module lock held for
-> + * writing, and a reader of /proc/allocinfo takes that lock with the entry
-> + * pinned. Removing the entry there would wait for that reader for good, so
-> + * let a work item do it.
-> + */
-> +static void shutdown_mem_profiling_async(void)
-> +{
-> +	if (!mem_profiling_support)
-> +		return;
-> +	shutdown_mem_profiling(false);
-> +	schedule_work(&remove_allocinfo_work);
-> +}
+> +	# Keep the arp/ns link monitor fed for the duration of the test:
+> +	# ping a non-existent neighbor, which generates steady broadcast
+> +	# ARP requests sourced from the bond's own address. These egress on
+> +	# the active slave and are flooded onto the backup slaves' links,
+> +	# where they validate as RX activity. Without traffic, idle slaves
+> +	# are declared down by the monitor between test steps and the
+> +	# failover checks below race with the monitor.
+> +	ip netns exec ${s_ns} ping -i 0.1 -W 1 192.0.2.99 &> /dev/null &
+> +	local ping_pid=$!
+>  	# set active_slave to primary eth1 specifically
+>  	ip -n ${s_ns} link set bond0 type bond active_slave eth1
+>  
+> @@ -157,6 +167,9 @@ prio_test()
+>  		check_active_slave "eth0"
+>  		bond_check_connection "change slave prio"
+>  	fi
 > +
->  void __init alloc_tag_sec_init(void)
->  {
->  	struct alloc_tag *last_codetag;
-> @@ -855,7 +876,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
->  		align = 1;
->  
->  	if (!ensure_alignment(align, &prepend)) {
-> -		shutdown_mem_profiling(true);
-> +		shutdown_mem_profiling_async();
->  		pr_err("%s: alignment %lu is incompatible with allocation tag indexing. Memory allocation profiling is disabled!\n",
->  			mod->name, align);
->  		return ERR_PTR(-EINVAL);
-> @@ -905,14 +926,14 @@ unlock:
->  
->  		module_tags.size = offset + size;
->  		if (mem_alloc_profiling_enabled() && !tags_addressable()) {
-> -			shutdown_mem_profiling(true);
-> +			shutdown_mem_profiling_async();
->  			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory allocation profiling is disabled!\n",
->  				mod->name, NR_UNUSED_PAGEFLAG_BITS);
->  		}
->  
->  		grow_res = vm_module_tags_populate();
->  		if (grow_res) {
-> -			shutdown_mem_profiling(true);
-> +			shutdown_mem_profiling_async();
->  			pr_err("Failed to allocate memory for allocation tags in the module %s. Memory allocation profiling is disabled!\n",
->  			       mod->name);
->  			return ERR_PTR(grow_res);
-> 
+> +	kill $ping_pid 2>/dev/null
+> +	wait $ping_pid 2>/dev/null
+
+If the kill fails for some reason, will we wait here forever and hang the
+entire test?
+
+Thanks
+Hangbin
