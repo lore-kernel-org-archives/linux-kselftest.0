@@ -1,50 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793894513;
-	b=16ab9pmczjvQ4MqZeAF4SQ4MSFwAEAuNpsC0bpOChfCAglywy8yufF+W45t50RpF1j/a
-	 +A73pjlH0mlpGHBhIF2tTo3UNnVXhwr9OGV/gnJ7VbYvOushLtcbxmLGhP5atkn5Hjbt5
-	 nXYggtJW0irZJ38W+fKdNBmv7qdmEjtxluyeHQsTZ+pP0FSyKwM8tXbHMfRgHuUjQAj+y
-	 hPs5tqoiRRV3SRPtBFVd0VOvRLnQc2erA40NVLgucTzlZ9SIg0G+KQIkh4bJVfJaS3SA6
-	 MIawVlvDiAF5KFF/omdyU39hkwXToBp939CMRPmfXpHqa1T5Q5yFJ12TsxgLf54wjnA==
+	t=1793894524;
+	b=NU7QW1JZdk4KJXwHfDfvjgxbaTnvRqtQlRJ9/foDoLluSbFB/06DUjjgij0XmX6NJp6U
+	 CXKCA4MzzUQ+EN78gsloi8mcx5m2i+VPJEfu2wGpetbkmsSBM9x9cZNlTCuXwPw4LG4EY
+	 33vqEhvDn6zRDPL0ruKfhoxHU7GotdX9KJQ6qGjq4bqPP+YVy1VP40AKEFdsXTIugRLNe
+	 ItxMXeSt3LsGPO66a+cka0i7uBhVhe9O1ovi8Wtk3oqrwXdfbM6tv4iqRpTjhywXcvCQs
+	 f9bIQptZXS82mZKHSvTcwCeokXcOWAu8EGk/fyolvpkCcmD7PRtRcsH11XBku6OFWag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793894513;
-	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=4VelVPMVxE7skvZV+t/dDAKOEE6lwzzBgv28kRT0Ubk=;
-	b=hRnJVr3boxWjnqxTexiU01Swesb02o+XVjm9hF/ToX5UpZG44DXnllhrJv04T+rFEQwB
-	 Ts/Lu40Lbsh/aWY/FPk9eoTCErSxbV1Ai+GthuXI6tE8pgBmcgytNvk8d+MXzJ8UoaNzH
-	 AcR+pYQQhKmsB2wU5+zK1hvD68gph5siiB2k71V2b38Y4sFr7jWs+tf5pHCL52kFMIL6K
-	 SA5OnAuvHLcaQ1NfO3QmKNkZypjPMIMJSrcZPp+ki0C7TIGMsXwrM19VcO9AAJ/DUWDVJ
-	 u4PO5YStTrknw1BkPmgw+HjUBL64rE1Qxj/g2knQdVo9lUobI8EbcvXHk8oTe4EVKow==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793894524;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=x1SCDPxmnNKrNbsHBv5YzrQ8i1IWDNs80oPwvUXJALY=;
+	b=B5yoHUEHSkCvmS4ENa27TuzVpc0NC4hxb0xQhZ4d7y22Jr/C2SPIgj2bfg0PbZc4m6a2
+	 AKKpyjJ7cxKVoQUkREqv1tboixbfPjKKhem4j1EJAFBiy5Bo3qS4ZWFqz88kYwlYH0xKU
+	 epQ4o5LHQR6i1L2fvSvKgw1ltN+u4hXXPUoJFo54iSBKafG/11MfnzWOvVVTpgJHjcvf6
+	 6dTsYNMsqb0uYC2+TMcq1zjnv/gFgJrU2VVWwpYV6uLbXaUhGy0pMDlijakmmd5frvZ1e
+	 rPBU4s0xMCh2psxHbKqoE14Fz8hFj8jXCtcnz3FprV4+bDZU/eE9dSdsMwhwPUq/kSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DQOm1YJH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsjoRVhL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DB6606B45C;
-	Thu,  5 Nov 2026 16:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FAED606B45C;
+	Thu,  5 Nov 2026 16:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DQOm1YJH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A1C01F000C1;
-	Thu,  5 Nov 2026 16:01:48 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsjoRVhL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157131F00A27;
+	Thu,  5 Nov 2026 16:01:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793894513;
-	bh=4VelVPMVxE7skvZV+t/dDAKOEE6lwzzBgv28kRT0Ubk=;
-	h=From:Subject:Date:To:Cc;
-	b=DQOm1YJHfPm0v/dLeX+XAQitvcUgNmsRePnWyLGO6bQ1h7mTPBBwMcAFJ/zylkp6x
-	 JRSvS6x2PxHBQsNb/u8MQKHzOvOm8IIek6H13FQEo5WnomxQtacBL6ZdOTagLV0Us/
-	 8MEjtRHH8GOha7MIaWgrfOnrRSZEDiFYtGzXlfovCOTmzacIhMIFTKXndgH0SaTFOd
-	 l0Bc059PPlKXuS0nuonAXvjDjQjQPb8+m+axQDqp25tJl/70i8yHj7ucErATfhcqvI
-	 1XnJskLP2DXG6TQtrW6C81etXnTtmeAvYcpVQl/e/P8igcYBQaSam4mqrQuYm1C0dr
-	 /ZBkyLilhWMLw==
+	s=k20260515; t=1793894524;
+	bh=x1SCDPxmnNKrNbsHBv5YzrQ8i1IWDNs80oPwvUXJALY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=dsjoRVhLEuJyuNewSOtGL5g3UJlt1Ox0FKy17ZkJLWP90V71bgfBalr+cCncOOrkQ
+	 192HINuwj+jJYu32w+l1cNw+/+sFFRKWGucVdnVFPqtQya3X/d+Cxwy+3mZja4Crta
+	 F/sBgTJ4NnUYipE1D+jIIVf3giYsVhsOEgPfhyDxmfF0nFYaJSYDAfixLT+zKRNo2U
+	 cqONTFVKUhy5BA3KAbCzmuk2nVCDHagc/e/xZUVM3jYvRPytL1p+J07rnp3TP8hOzq
+	 tzFBAeIsadkvdMtvYO91QmWuyC9mCYyVnd7goqdFMQEo8VVe5u4hy+wAzCZ5ogrkHv
+	 VXjXj2dc/TMRg==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 0/9] kunit: Add KUNIT_CASE_PARAM_UNIQUE() and
+Date: Thu, 05 Nov 2026 16:00:29 +0000
+Subject: [PATCH v2 2/9] kunit: Add KUNIT_CASE_PARAM_UNIQUE() and
  KUNIT_CASE_PARAM_WITH_INIT_UNIQUE()
-Date: Thu, 05 Nov 2026 16:00:27 +0000
-Message-Id: <20261105-kunit-param-names-v2-0-765b3d5275d2@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -56,11 +55,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAB2o7GoC/22Nyw6CMBBFf4XM2jFteURd+R+GRVtGqEhLpkA0h
- H8XMO5cnuTcc2eIxI4iXJIZmCYXXfArqEMCttG+JnTVyqCEKqSQCtvRuwF7zbpDrzuKWBXWyCw
- XNrUE665nurvX3ryVX46jeZAdttBmNC4Ogd/76SQ379dP//QniQIzoxTZ3Jxyc762xJ6ex8A1l
- MuyfADbwZgBxQAAAA==
-X-Change-ID: 20261012-kunit-param-names-d6cb1450c3ce
+Message-Id: <20261105-kunit-param-names-v2-2-765b3d5275d2@kernel.org>
+References: <20261105-kunit-param-names-v2-0-765b3d5275d2@kernel.org>
+In-Reply-To: <20261105-kunit-param-names-v2-0-765b3d5275d2@kernel.org>
 To: Simon Trimmer <simont@opensource.cirrus.com>, 
  Charles Keepax <ckeepax@opensource.cirrus.com>, 
  Richard Fitzgerald <rf@opensource.cirrus.com>, 
@@ -80,12 +77,12 @@ Cc: patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-ext4@vger.kernel.org, 
  linux-sound@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3315; i=broonie@kernel.org;
- h=from:subject:message-id; bh=wulIPaLUroDjaKiDD9mihUIfKXwA5W+VsQnKLwr9e6M=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLerEjtOnFs5eQDOeGt5QlfmR8tmV/9tUD6/J6wz7rvb
- 6+qDPIt7ChlYRDjYpAVU2SJy+J+WV/yeg3fwYVtMHNYmUCGMHBxCsBE1P4wMtzhSdCSeT1fZMaz
- 5oO+Zc+69+ySqBI22Wh4nrFCPJujYQIjww7WzdYBaoKuviYqwh/rLBOm2PKnuchINEQcUxYQXMH
- MBwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5762; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=5TkRHF05z35VbZg0OCADibXZSxGx7uxiMfI1FA4xabA=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLerEjdFH9/pm54vIV+V9+pZRdeWCzOvWYn/VFVo/fiu
+ hsyP0997ihlYRDjYpAVU2SJy+J+WV/yeg3fwYVtMHNYmUCGMHBxCsBERCoYGZ7tbOD0OySy6f5l
+ M8H9S1+tlnv1I3CWMveVioU8Ikvl9f0YGdbd3j59VueZ2xNU+U88u1da6WA+49yRPYqHpr6beWN
+ t621+AA==
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
@@ -111,45 +108,92 @@ param_init() function is used for the WITH_INIT variant since currently
 all the tests which register parameter arrays from param_init() all
 share the generic kunit_array_gen_params() generator.
 
-The series also includes a fix for what looks like a cut'n'paste
-issue in the cs_dsp code that overlaps with the main set of changes.
-Most of the affected tests are in ASoC, though there are some ext4 tests
-too.
-
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Changes in v2:
-- Rebase onto v7.4-rc1.
-- Link to v1: https://patch.msgid.link/20261013-kunit-param-names-v1-0-4b22ec5b85b9@kernel.org
+ Documentation/dev-tools/kunit/usage.rst |  9 ++++++++
+ include/kunit/test.h                    | 41 +++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
----
-Mark Brown (9):
-      firmware: cs_dsp: Run the wmfw payload error tests with invalid block types
-      kunit: Add KUNIT_CASE_PARAM_UNIQUE() and KUNIT_CASE_PARAM_WITH_INIT_UNIQUE()
-      ext4: Give the extents KUnit cases distinct names
-      firmware: cs_dsp: Give the control read/write KUnit cases distinct names
-      firmware: cs_dsp: Give the control cache KUnit cases distinct names
-      firmware: cs_dsp: Give the wmfw block error KUnit cases distinct names
-      firmware: cs_dsp: Give the bin file KUnit cases distinct names
-      ASoC: cs35l56: Give the speaker ID pad config KUnit cases distinct names
-      ASoC: wm_adsp: Give the firmware search order KUnit cases distinct names
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 1c78dfff94e8..193233fd2925 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -662,6 +662,15 @@ Custom Parameter Generator Function:
+    You can pass the generator function to the ``KUNIT_CASE_PARAM``
+    or ``KUNIT_CASE_PARAM_WITH_INIT`` macros.
+ 
++   These macros name the test case after the test function. If the same test
++   function is listed in a suite with more than one generator (or, for
++   ``KUNIT_CASE_PARAM_WITH_INIT``, more than one ``param_init()`` function)
++   use ``KUNIT_CASE_PARAM_UNIQUE`` or ``KUNIT_CASE_PARAM_WITH_INIT_UNIQUE``
++   instead. These also include the name of the generator or ``param_init()``
++   function in the test case name, for example ``sha1_test-sha1_gen_params``,
++   so that each case has a distinct name which can be selected with
++   ``kunit.filter_glob=``.
++
+    The function receives the previously generated parameter as the ``prev`` argument
+    (which is ``NULL`` on the first call) and can also access the parameterized
+    test context passed as the ``test`` argument. KUnit calls this function
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 31d549578f8e..b2d969c93855 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -209,6 +209,24 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
+ 		{ .run_case = test_name, .name = #test_name,	\
+ 		  .generate_params = gen_params, .module_name = KBUILD_MODNAME}
+ 
++/**
++ * KUNIT_CASE_PARAM_UNIQUE - A helper for creating a parameterized &struct
++ * kunit_case named after both the test and its parameter generator
++ *
++ * @test_name: a reference to a test case function.
++ * @gen_params: a reference to a parameter generator function.
++ *
++ * Identical to KUNIT_CASE_PARAM() except that the case is named
++ * "test_name-gen_params" rather than "test_name". Use this when the same
++ * test function is listed in a suite with more than one parameter generator,
++ * where KUNIT_CASE_PARAM() would give every instance the same name. Test
++ * names must be unique within a suite for the results to be unambiguous and
++ * for filters such as kunit.filter_glob= to be able to select a single case.
++ */
++#define KUNIT_CASE_PARAM_UNIQUE(test_name, gen_params)				\
++		{ .run_case = test_name, .name = #test_name "-" #gen_params,	\
++		  .generate_params = gen_params, .module_name = KBUILD_MODNAME}
++
+ /**
+  * KUNIT_CASE_PARAM_ATTR - A helper for creating a parameterized &struct
+  * kunit_case with attributes
+@@ -248,6 +266,29 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
+ 		  .param_init = init, .param_exit = exit,			\
+ 		  .module_name = KBUILD_MODNAME}
+ 
++/**
++ * KUNIT_CASE_PARAM_WITH_INIT_UNIQUE - Define a parameterized KUnit test case
++ * with custom param_init() and param_exit() functions, named after both the
++ * test and its param_init() function.
++ * @test_name: The function implementing the test case.
++ * @gen_params: The function to generate parameters for the test case.
++ * @init: A reference to the param_init() function to run before a parameterized test.
++ * @exit: A reference to the param_exit() function to run after a parameterized test.
++ *
++ * Identical to KUNIT_CASE_PARAM_WITH_INIT() except that the case is named
++ * "test_name-init" rather than "test_name". Use this when the same test
++ * function is listed in a suite with more than one param_init() function,
++ * where KUNIT_CASE_PARAM_WITH_INIT() would give every instance the same
++ * name. The param_init() function is used rather than the generator since
++ * tests registering parameter arrays in param_init() all share the generic
++ * kunit_array_gen_params() generator.
++ */
++#define KUNIT_CASE_PARAM_WITH_INIT_UNIQUE(test_name, gen_params, init, exit)	\
++		{ .run_case = test_name, .name = #test_name "-" #init,		\
++		  .generate_params = gen_params,				\
++		  .param_init = init, .param_exit = exit,			\
++		  .module_name = KBUILD_MODNAME}
++
+ /**
+  * struct kunit_suite - describes a related collection of &struct kunit_case
+  *
 
- Documentation/dev-tools/kunit/usage.rst            |   9 +
- drivers/firmware/cirrus/test/cs_dsp_test_bin.c     | 222 ++++++++++-----------
- .../cirrus/test/cs_dsp_test_control_cache.c        | 143 ++++++-------
- .../firmware/cirrus/test/cs_dsp_test_control_rw.c  |  50 ++---
- .../firmware/cirrus/test/cs_dsp_test_wmfw_error.c  |  72 ++++---
- fs/ext4/extents-test.c                             |  12 +-
- include/kunit/test.h                               |  41 ++++
- sound/soc/codecs/cs35l56-shared-test.c             |   8 +-
- sound/soc/codecs/wm_adsp_fw_find_test.c            |  24 +--
- 9 files changed, 329 insertions(+), 252 deletions(-)
----
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-base-tree: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm master
-change-id: 20261012-kunit-param-names-d6cb1450c3ce
-
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+-- 
+2.47.3
 
