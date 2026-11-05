@@ -1,101 +1,137 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793851750;
-	b=NnujP5cMmKAm0otiR/9eB7Lu3lKPdw3BcV4MeVihuCZRcIZVOssqVxFdWIwTYRSGe8TV
-	 GYD71U3B/27FRXtgDNlyf16kTCo+aHaEake/Eu+pF1z45HyubcqEK+xoB1Q9GwRdqsdB7
-	 fHRj1D+u0NEnWsyvhfL/o6XUq+OhiC3uF0HfCaU/qvVCdS+++BRB3NfyBVzBF6CCuRrEF
-	 ny3zRBeJU+4gIqVbrG0/snl7hKNT9+G728a2s/FtBfpY07pfm+1nbJWPlTiNacy6nX/+q
-	 3UbejbTCnCSFPV67PKoiYMT/XKyuFwDdfO4tDReG/QPL0bsduQFa2PiBHO05pYvlgCg==
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=198.175.65.20
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793852177;
+	b=SsEGvlRm91FH0AxZKwWl4iWy+NjIfIXTeKW8HaoAbo5A2TJWci5K+/PdhjTUqmKUjmz8
+	 rZu0QrIgPCosP/TDOK+hQ3tOeCNJixVeCBb4SkvXX5+nn/dTgwKiaOu3X5ebTKSyT8hyl
+	 PoVvO1tcC8TXwh4aZ4z/MMQ5ipX67eJ6Nx9vOHpW74nSFK3H7jtJmRg7O6SH4KOspSnz+
+	 4AtxVuOBexRHyk/gpIpRjh+/891P532t4N/FxFOvuJl/pHDeq6r+Aid3n/jII6l+afS4w
+	 6WsO9k2eEBfXpY+souCcbhOd5MhID7qgTL0W6c7VYTAVSC4w5zMUzAYNl0Gn7dw/MAg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793851750;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:
-	 CC:References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-EOPAttributedMessage:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793852177;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:Received:Received:Message-ID:Date:User-Agent:Subject:To:CC:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
 	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Office365-Filtering-Correlation-Id:X-LD-Processed:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
 	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
 	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=4Kt7NP28QAHCzdtXi06iAupmrqCwsGKJfkFBzn9LMh8=;
-	b=E7y1/XBq5Rd43gLKhSviQRqSFCYtp/KsYfvaKeUi26p4EaailAwxyLormyOMH05C6ddr
-	 ZrYQYCoYJoccQDIGcPpcCX6km61XrtoRKXxrFuPyhNMdwmAMCEy5mrIwBjZ/cWZ5a5Agp
-	 NjFa0uJFfd59ppRNDF/iSTc36qTyixzuddJf/jKb8zbGq0vG72mebyqrIIZwfu9US7Gla
-	 oMukTPTLqV2QpMTFfCdWoba+RJDQUuinF/nNCY6oLLTiZ1xntTJuYBAdNUAZp81ND/fTv
-	 ieW2hJbukep6UtALN8r7f+40OVAfUVLCRCAbHQHa2q68bu9jAFDKzPHr/E6kc9xJpDQ==
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=psycsy1aTDaTbHGWKYPiAKWGnJgC+yCsi9uYfVUI2Ag=;
+	b=Sg4k04MfQ2taWLf9YeaINV3lnOmAkJ0iZ+IeITcDdhEr7DAltfEHzHogRWHz06A4yeh1
+	 vr4lxkFW8BUduyBk33C9/TkjkUU9TDWIH6fkM6GFaEMgnyiLQce2T53gqrNRLnijn5do1
+	 IkSP1ZYUL4/fnhs+ASRrTkX3lyhTpQiWHBFhm0mkjN/yZ70u5f0XVyxs/PZhPcfghmVtM
+	 biZxQu1yxzQ4in6UKR4t2W2DjIFR+4mvOSeffhtm7yryCiXJVtU395MCJ5K3TNKv26+kY
+	 hXWvdbELJfTKsi0i3BbfWciu6y38Y+WH5Psb6JxGbFTAIVQenHwdV+18bTE0englBHw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amd.com;
-	spf=fail smtp.mailfrom=amd.com;
-	dkim=pass header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=kQaZ3mUJ;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.43
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013043.outbound.protection.outlook.com [40.107.201.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=L6p6fN7e;
+	arc=fail smtp.remote-ip=198.175.65.20
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA81606A326;
-	Thu,  5 Nov 2026 04:09:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EA81606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CBC7606A328;
+	Thu,  5 Nov 2026 04:16:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CBC7606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256 header.s=selector1 header.b=kQaZ3mUJ
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=L6p6fN7e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793852175; x=1825388175;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Xr7tkDqxd7XayxpXkT7+qSyc5eLl3MN7vpioFLlgJcQ=;
+  b=L6p6fN7e7RXoG9KyUSV07jjaKz0LWXyZXIfOz1reyZxFmSfuw7wLVnNc
+   w+QPLmpkBw16e74XZqTIzfnQAgR7hY1oYT0BDFVHiT0tV8Kp1iMi56OQp
+   6DHARumY8Qo5UyLwAi7vxUSpU+ILoOdEBkLlaWSOxEMZV4FgyeBQxWGvj
+   sKFWLo7uNVGv8Unjv620spBkotYhJ/yzNmTYiVlPTmbo67LOeAomf+lAv
+   VmeM796yvq/A8LBGWdCif9D2yTsjWqFNwLp2FV557+6kw470IvCG+eBPz
+   qT5oOhnuvSB46UqHcyZ1p4kn0gRYUGLFKIC4FohgCnwLgobRcUCtlRfPY
+   A==;
+X-CSE-ConnectionGUID: ihYzMQVSSsKSiNaFtJ1fMg==
+X-CSE-MsgGUID: 2OUYNEY/QzePZuUKlQ0HPQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2661947"
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="2661947"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 20:16:14 -0800
+X-CSE-ConnectionGUID: Emgvm6HXThaRfd7yjCdsPg==
+X-CSE-MsgGUID: VdC9XYXxTmSO9rMhcFXx2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="6776954"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 20:16:14 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Wed, 4 Nov 2026 20:16:13 -0800
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56 via Frontend Transport; Wed, 4 Nov 2026 20:16:13 -0800
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.45) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Wed, 4 Nov 2026 20:16:13 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YxiIFeCT5qZKrVzT9woOE1zQHwXRefvljqkk4oJizfZ36Quv3W7TuxGGqulYrUzkPCNYgzz5ZSLvzMzM1H0nV5FdAPdv/asbiLiXmnd38In4f3xn+sed+2oM45pXOp06kOwgqW2mJucFyKFSP2Qb6w4ZdbuTtO3meLFbE+FrHTGLEu4kH1lmEnDg65ol/fbP9UeOmlx9SgWXx10wQW1MHI+0FzdAKoB4twHfyV7ZC6M+3kALKxJzRMoQgqTp4evjzcN2PWdsUl8yLEJP6iPQDyZNVHm+7ODwXATunTqN7J9pMNPJx9ErVo+WpeI4pBq1udOOUfkc0KkxW4kmNk9l7A==
+ b=Rs4EiA48Jw87qdoOgVu2WCzQ6ShwlJKulmbs6L1Z7m/XGewu9gsoyiGiyOxD1/cqLSXqXXJguvDu32xo9W5SZkrSj8rEgGAnMwE+ETszpwDU1SnJnF+ILGkUOShHTDUj5qmwZnkDNrR6uvw6qErfToxIRg5GOsSqUioLxBPwBDbhZfimBkrVEWigZaH8e9SOboHPIRr/TzJIBwK/kZvA5D6Vex7/UjQRgKXQ4DByMbrMMux3ql9TmYW6ebKMaV7zQ2PCcpAioB2Gc4/ZBnk0NAivNNLpB/7GyZqCW8lnUr3GRxn1+2eEn+p4N6cysNiVPtLYvJeAxkOEyuKWYnH0Dw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4Kt7NP28QAHCzdtXi06iAupmrqCwsGKJfkFBzn9LMh8=;
- b=GsHsFCtzjjIQuqiQwyCVmWMC1pkpGVhugRr4eUXRpwxkuD1fJpfCpo6kKkb2muOMcVy997cKz80R1L+NflDT7xMYG9vKGx0M7bvyNDBjihMZnTkVvLtg7WKtOUDEGt+44lZY2vxJU/3b107S8Y9v3TE4KQ7x2kld4OgUfLZTnsJbD6aax4JKP7yrnwsfDduEHhMPp/T3wMvuI6E6gFnPCHfEatpU7foMCAEYijQxLZzwrFeXsN3fSnHxopp6RbdHfbtqPVYMlaQNXawPlI0q35DmiOyhXyaXO0SGVbcSWu+CwvLTdJk3STAzFYRBfTmS3eCSouT2uQbOcj7QS3pEnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4Kt7NP28QAHCzdtXi06iAupmrqCwsGKJfkFBzn9LMh8=;
- b=kQaZ3mUJUMSp+amFpPupz8cj/HYA8zhlr1tn0CXbaPl5HCfAzPoh0B0aUTjhDPtKdAoUA6pLOyfuuINIZKnHuK7NFIRtL4PvzcZR1iUwdgu3/vLiOGm3OtXuySdsSmIE3wGCe/B1oQu/X4i8ZPTXXh05OhvFSkONXtC8oMIIiRY=
-Received: from SJ0PR05CA0012.namprd05.prod.outlook.com (2603:10b6:a03:33b::17)
- by SA3PR12MB043340.namprd12.prod.outlook.com (2603:10b6:806:517::20) with
+ bh=psycsy1aTDaTbHGWKYPiAKWGnJgC+yCsi9uYfVUI2Ag=;
+ b=idpKpIcvDHcgXt36lUDhOWUUF8sC2nM1y440dvQ/P/oReRLDxGg7JIA5x8tsHFWksBipY0aRJbA9N36JjU0cMlEHN8x+puF6mBpXLEg+HFa7CnfEES06t7ddzTlpMaFPHmT/nE5ZK90weaGSNtIKSPExL71kvczTruFXGNIpR2sdsc1+tdyvNqoL1XVz4IalQZiU4l3FXBIi7cC6zjvDx3kARQo0KFmWvFG/ULemV/071HxdcSHeGZhej3a0thkGKVSNAJHlAC0EIyUrxog6XW3l+jwEWAg+IvLUyb6ZPseb1BjDg252D73xJ8qz4wMSZeXvge89pM8zGv9u8+VdZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA0PR11MB8379.namprd11.prod.outlook.com (2603:10b6:208:488::20)
+ by DM4PR11MB7759.namprd11.prod.outlook.com (2603:10b6:8:10e::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.10; Thu, 5 Nov
- 2026 04:09:05 +0000
-Received: from MWH0EPF000C6194.namprd02.prod.outlook.com
- (2603:10b6:a03:33b:cafe::36) by SJ0PR05CA0012.outlook.office365.com
- (2603:10b6:a03:33b::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.4 via Frontend Transport; Thu, 5
- Nov 2026 04:09:05 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- MWH0EPF000C6194.mail.protection.outlook.com (10.167.249.104) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.592.5 via Frontend Transport; Thu, 5 Nov 2026 04:09:04 +0000
-Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.53; Wed, 4 Nov
- 2026 22:09:04 -0600
-Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb09.amd.com
- (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.53; Wed, 4 Nov
- 2026 22:09:04 -0600
-Received: from [192.168.0.103] (10.180.168.240) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.53 via Frontend
- Transport; Wed, 4 Nov 2026 22:09:00 -0600
-Message-ID: <14ee8c78-93f8-4881-bea6-403c43082891@amd.com>
-Date: Thu, 5 Nov 2026 09:38:59 +0530
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.569.12; Thu, 5 Nov
+ 2026 04:16:08 +0000
+Received: from IA0PR11MB8379.namprd11.prod.outlook.com
+ ([fe80::549f:e4b3:e10d:aaa6]) by IA0PR11MB8379.namprd11.prod.outlook.com
+ ([fe80::549f:e4b3:e10d:aaa6%6]) with mapi id 15.21.0592.007; Thu, 5 Nov 2026
+ 04:16:08 +0000
+Message-ID: <4f656f59-9f2c-4774-9d9b-3a4d7b7b509d@intel.com>
+Date: Wed, 4 Nov 2026 20:16:05 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/5] selftests/resctrl: Use bandwidth values for AMD
+ MBA schemata
+To: Swapnil Sapkal <swapnil.sapkal@amd.com>, <tony.luck@intel.com>,
+	<babu.moger@amd.com>, <fenghua.yu@intel.com>, <shuah@kernel.org>
+CC: <Dave.Martin@arm.com>, <james.morse@arm.com>, <peternewman@google.com>,
+	<eranian@google.com>, <tan.shaopeng@fujitsu.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<x86@kernel.org>
+References: <20261022132517.46805-1-swapnil.sapkal@amd.com>
+ <20261022132517.46805-5-swapnil.sapkal@amd.com>
+ <b250f681-5726-403c-86af-cb4bc35b9d1d@intel.com>
+ <e30b8e81-938c-4426-8b4a-2a3a8d5163ad@amd.com>
+Content-Language: en-US
+From: Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <e30b8e81-938c-4426-8b4a-2a3a8d5163ad@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW4PR03CA0306.namprd03.prod.outlook.com
+ (2603:10b6:303:dd::11) To IA0PR11MB8379.namprd11.prod.outlook.com
+ (2603:10b6:208:488::20)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,64 +141,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/5] selftests/resctrl: Use bandwidth values for AMD
- MBA schemata
-To: "Moger, Babu" <bmoger@amd.com>, Reinette Chatre
-	<reinette.chatre@intel.com>, <tony.luck@intel.com>, <babu.moger@amd.com>,
-	<fenghua.yu@intel.com>, <shuah@kernel.org>
-CC: <Dave.Martin@arm.com>, <james.morse@arm.com>, <peternewman@google.com>,
-	<eranian@google.com>, <tan.shaopeng@fujitsu.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<x86@kernel.org>
-References: <20261022132517.46805-1-swapnil.sapkal@amd.com>
- <20261022132517.46805-5-swapnil.sapkal@amd.com>
- <b250f681-5726-403c-86af-cb4bc35b9d1d@intel.com>
- <13ea712d-116f-42bd-86b7-a1ac6cb40b7f@amd.com>
-Content-Language: en-GB
-From: Swapnil Sapkal <swapnil.sapkal@amd.com>
-In-Reply-To: <13ea712d-116f-42bd-86b7-a1ac6cb40b7f@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000C6194:EE_|SA3PR12MB043340:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e2e1d98-5b29-4eb1-cdc5-08df3af28805
+X-MS-TrafficTypeDiagnostic: IA0PR11MB8379:EE_|DM4PR11MB7759:EE_
+X-MS-Office365-Filtering-Correlation-Id: c05bd084-aa00-47d7-6276-08df3af38480
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|7416014|1800799024|36860700016|82310400026|261022075727099003|4143699003|11063799006|56012099006|261021121427099003|261009223027099003|261026121527099003|261028144727099003|261102123227099003|261022105027099003|261026140227099003|22082099003|18002099003|6133799003|10067099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	c4swDyaRfaj8IiSE+Q5RfRCN74eiqCccIekr3SWOHxz/gOuNMpJW1paoHUsXtxmJtfzPlJrW1rLsJddQzoa5GVbmR4biokvd/qfOAevLrwQxdPMUSDp5gsznv+cCNmF8PfAX1W/e7VEudgPGtEumOo2lGoMJ8ag69uA9DMoEVusoHcbmyg0zbwSmEE/e/u51T0y0Bpg2C+Tx9e2WvZICNs282wIqCmwgZo7tvo4nmd3oLv9GD83u9UD38TC6fyOrxkjQNkVvsFuIjyi96/JJFXJFGixU1SaZ+/0fSdJA6m4DnReQBzHZCJgiODVyT/ZF1BTYOWUZxMW/V/GKQQ+X53ARO7tObixmvHoVGsImmwUHzG7+6yhp5qBzPwfOV/LbWdoPs94bT36n0e3e3gQyU3CqEKz9OReevtonlNYZWaiktPYAhNuj2llHTNIv3xV4ghViT02VNebKRlz1gqLxDMStKeuwLX4gpxWX8puF2KeDeS/xuHHu534QEITO+e6+Ct6ne1L821l4FRu+FtdMRASk2EAtcVQWZo9xW9LRINea85fTP7TTyp9VyuNqSAsUplxRE+HDg2CJHLc+ybJwD1U5Sx8Zcc7/wfCbp+APFMmxGDiiqUSFN65zTPIEBbPpuQwWYcOTnbUNR6dFVBn9mEyRnGG3q/EJyY5QFgvoLg1X88vSBxzRxc/ZxwVR2TM92wsJB9IBLWC0OnGl90SCjQ==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(1800799024)(36860700016)(82310400026)(261022075727099003)(4143699003)(11063799006)(56012099006)(261021121427099003)(261009223027099003)(261026121527099003)(261028144727099003)(261102123227099003)(261022105027099003)(261026140227099003)(22082099003)(18002099003)(6133799003)(10067099003)(3023799007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|23010399003|1800799024|6133799003|10067099003|22082099003|18002099003|3023799007|56012099006|11063799006|4143699003|261021121427099003|261026121527099003|261009223027099003|261102123227099003;
+X-Microsoft-Antispam-Message-Info: eTpnYgt+gaH0mbsjjgyeHKtNCtosh+j6CprAzb9o70msAdBLb4xvrMCcBv8jd3oC1rFKSzZOr3Zchf3HUI39lXhCTh2OCy60ib9KL1N+B+jbTVRDSZiWL6ejY5qLysIu2gKXsbsTV05e2adZIdEsBDXS/SaAPgXdjqsGeEWDPcKwePoAqxJTmsFvb+kIaIcsTn8MD3fs1QkEQPlBpFkupUW6UNSuLZZ5yy4jNgT/pVbmXNMKbk9Iw9CdM59TZWJ53G4fGLhDFylQF4/iYOOG0fdYji66RR8xbPCw0SneADiddk/KOcshc/EupwONJFKMlN5ClkuA4MV60Hbv/sLjClx1/jXMh/ITz+3miLOGuqfSqpVxdcODtMiHheFhhwxcj+iAZCmahi4SsY2ZmH3fuC0bO/nwKfYiBpimbEPz0+175ehxkDO3ZNj5MzegOzxCuUbXkFDa+l7PEMJDoPAlecFHf194VkQE6nIUfG/BCWxm+mnw13u3xXfLP5B9poRxX0Z7zVVAgIYK5W81dKf76gVWLiqrFHJDfrRre/J+EXXdyGcSL0zp5zMkqn6CQkIR7lPHJHuTWCqtjyCX00laTFRndA2JijH/eLi07Vzax5TBt4f/lQLMYurvGi0Zz+VWqHdPLUIguX0HsjwSkXvjR4zDPjxpIvqA5yMolEOxUao=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR11MB8379.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(23010399003)(1800799024)(6133799003)(10067099003)(22082099003)(18002099003)(3023799007)(56012099006)(11063799006)(4143699003)(261021121427099003)(261026121527099003)(261009223027099003)(261102123227099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	vaTf2A0r3uvMJ9nx4ZkMCwu5X+JaqLX0JP22l3sxVnV42xQgkrTbC7xiRw8bchldTCHYOMv3smFaNiMGDX9A5Js+6rqsh30oR6ULe2P+Gwm92JlnBpwwgCec9BG+pgcFJmrXvoewjItYW1QygVJeaEuv0Ogl4ady4sw0NBCcRBT8NchC3+8Qj8j6p7sssvlH04jIMW3sPWvsnvECwFadUC8x/ajUV9+SMiXxiTuhsMrT9rHIMtIssX70ao/KWBZIff32q+iD2fkh9jDGL5lhfRxverVZsmAlWwdRHf2wMJioiiucMcJopl3Y24sn2IuKGBmY89efrVzD1dlbL03oRqopXOt21Ca0Qv+EOt9VDAcNHqc1G9D5V9YbTClrHUyN29EehtWaZ9+Y1vcBw7hR9VLXO0iWGXWsq4TNh+5XEX3ZMLdTdI60nzuYrJcWtkz+
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2026 04:09:04.7744
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFZYSFdIYWEremZ4dkkwTU5jbGFxbFpIS0RrZ2xSOHBsRmRGUzh4L2Rqdjg1?=
+ =?utf-8?B?TmpyZFh2MTN3a1gzNktDbnhwUTlBNjY1djlJQys3eExBbGd1Z3VuWjl5QUhm?=
+ =?utf-8?B?NU5oNGtoQnYwWndJMnlobm5LUnJvUHhwOWVrT0szVFlEaGVxZU40N0xrSXJT?=
+ =?utf-8?B?VkFnSURvVERsYW1mVHNrY2tyeWludW5mNjVVcjMzSHZKbTRUVFpueGpvZThu?=
+ =?utf-8?B?eXovazVDRE1vTmYvTzZxa1ZpNFpTVi82TCtzNlo4a28wTW4zTUVNTFNGNGZS?=
+ =?utf-8?B?K0h5cG5pTnNPcnBxWWRZMDMraXYzUkc1ZWplQkNYMXNrcHVXWjJHNXlMeGIv?=
+ =?utf-8?B?ejdDd0d0cmdmbmQ4OEw4V284MjBEVTh5dUFsNDRhUmxXQSt5VUg2dnFHcmtm?=
+ =?utf-8?B?ODVQK3VMNWVkbkNQQ3FqUFNJTEllK3JWQVJMQlJaZG14OEFXc09yUHpDenZm?=
+ =?utf-8?B?bnlhY0Z4RFhVc0xYVTVVOW94bkRseFpIUEZBS1BLcEVYcTdMQ3RJVkduRkNE?=
+ =?utf-8?B?bGlSSnc0dEVRcEdMYTNJWE9YMjcwbTAxNkljcnRjS0ZzOVVvdm5Vbm9EK1Ur?=
+ =?utf-8?B?eWVmTHQ5NFBBTGpiRmpKN0dEUmpmQk1HVWh3SzkrRTRQU1dxa0V1RWJMMnVQ?=
+ =?utf-8?B?T1JZOE1SV3lZL1ZBNFc3cTNZZW0rY0RKU3ZiYng1ZndIbXErYzZIOHl3STFm?=
+ =?utf-8?B?ZUFuVjl2U0YwNkZBc05MVkV2M3F2M0tLTWkvbnExLzRYenFYUno5ckRlbTF2?=
+ =?utf-8?B?dDRIcit2dGE0YUgra1o3ZjVhWStKTm5XOGp4b2V0V0Rza0prUzJyQUo0S1Ba?=
+ =?utf-8?B?TkZVaFpWWHNZNmFsRXc4SVBXb3ZFQkdzZFJTY2hvZmJkdW5hQkNHUmxVOHlw?=
+ =?utf-8?B?aUFmeWkyRFVUQnZvd0JuSVByYlRwTUNzS2tHNHdDSjcwd2VUZW1uRTJ2ZGtY?=
+ =?utf-8?B?ak83OVVRa1RRM0NFemZodGJlMDVzK1BBeG92MktyNFUwVU93Qjg2aE5yQU1m?=
+ =?utf-8?B?ckZPVjkzRkZsOXVhek8yWjc1QUNDMmNXM0huQVpmLzNJOUJIZEpDZUhGU0Va?=
+ =?utf-8?B?RmpCMENybkk4THZpMVkxNzVmZ21ObEdqd1pwNmhmU3hWMFVFOS9qTmQ4dm80?=
+ =?utf-8?B?NHlTSUFjemVTbTlrR2tWT2srZnN4a3RvbkNtUXZtZDBxai9QZmRpQ1JoMU1I?=
+ =?utf-8?B?Vzhtc1IxejFBcmxmRmlwZGJFcHdPNGVmN0M5VVZsMEQxd3IvL0thU0p1VStT?=
+ =?utf-8?B?ajJmb0VLZitLdk9rQk9kOUtGZHVNRnU3UXV0dnN1ZkN3eTVRQXZraDA0VDVS?=
+ =?utf-8?B?VWNXZlIrNFRTeU93RmpzT0R6dWU3dEpERFJEOWhHNDJQYTFVVVExLzZURWlh?=
+ =?utf-8?B?c0wxZkRWZ2RGWXRGT1dDd1FwMXozS0xjWnk2MHVyNUpSdXA3N3hnQXV5Slda?=
+ =?utf-8?B?QyttNVA1ekFoSGRMSmJ3OVpmVUpjQ2tGS3pZTU9zWjAyY25LMGEyUnRRT3E4?=
+ =?utf-8?B?M3l6NSsyZ0pudDh2RURmRTdNOWRBUEhOVm5acWdKc1Rhckh6ZHFablhMRk5L?=
+ =?utf-8?B?R2dGRDFUaFRuMWU1ZWZEZzE3NU9LTldzc3ROWmx6MElobjVQNWprZTdIZkd1?=
+ =?utf-8?B?emlIMlZBdnhIT3ZZbDM0RlhsZkdQSXphSmZuaU9GK3BHRThpS1lLcWlnUlVK?=
+ =?utf-8?B?K2k1azViVGEvUFVyU2g4cXZvSWJDbnMvMlZGNnQyT01kd0JvMHdpSlNjbWlF?=
+ =?utf-8?B?OXJGeGgwUzlXV1QzcTFHUE00d1o2MGdIb0JhUUxEeW1IdUFSbzhtRExCRVJH?=
+ =?utf-8?B?NXdleHBEWWpBSmpGd2dhb2V6L3FlNU1pZ2JIWjd2UFpiSkJabHZEUU1sL3Vo?=
+ =?utf-8?B?SGFiZXFlUVl4QjdBQmk0MTdIb2FqSU5MRGlLaW1mWVV5ejlrS0Z3bVFjb3p2?=
+ =?utf-8?B?aTdzTEUxbzFTSmhMNHI1TE5CeHVuOVdOZmxOa1VBVUVqRUpUVjdPZ1JaY2pw?=
+ =?utf-8?B?NkxaYllLa3lkYVRrQU0wYjBNZTNaRENPYmVTZEtKTDkwN0QvSHp2a0RNSStv?=
+ =?utf-8?B?emhUN3JBVVo2QVBDbmN2ZHE0aWdYc3NBazAyU0ZaYXd5ZTVZbGt2NXN0NjdV?=
+ =?utf-8?B?TlV0S3F5bE4yMHY1QjVVb0I3UWV2QjhNdXlYaXNabUhheWdkaE8xWnhrNVZ5?=
+ =?utf-8?B?V21MUkpkTjR4Z3JQOFFsSkJDUjREZnBLcUpGclpRQS9LUUxwNWlyWlNoNjEz?=
+ =?utf-8?B?OWxSV0hpUUZ2ZXdvdTVHcm0xTzhGdVRIaVpkNWNQbjVtQmxQQjI2L2RvbE1l?=
+ =?utf-8?B?aUQwRkNkMTg0MGdQTGtLNE43R0pWdWh1U0w4L09LcnNtVG94eEZpdUI4cmZX?=
+ =?utf-8?Q?CZL8pFsk4vUIKQWg=3D?=
+X-Exchange-RoutingPolicyChecked: BhTlvbYzdrU/Iq9l5FxZsgst484N/Mrae4PkaF0Hn4DWBwCusZIPY7xIlxAAzrj2dEVGd+MF9SU5lQtRhKL4F+Y6Zha59B6KXDxONAs1lnUyV+2eyNsNbK2KJLe2As3Niv43EwjmcZwzrX50BaGTLnHTPHXFy7v+uU6odREWbWAh8hjeXjAnzej5lQLMZe3Wbiy+A7JfjC+LxBzuqOnR/IhDEfzxuTdPptyXRkEc/mooVBn6aPsS26vXOZMifycyCaQB5lSU9Er38xkd9sHTWys5UHgM9U/F/ti7Ahby6y3OR1gC+P88vYQv90FrDjXlDBD9BOzIqA8x3tJIFNQpcQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: c05bd084-aa00-47d7-6276-08df3af38480
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR11MB8379.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2026 04:16:08.6001
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e2e1d98-5b29-4eb1-cdc5-08df3af28805
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000C6194.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB043340
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d5vplTSmcYytb7bjAgeUwJXh25PTDZwBTQG63HoJSePBKtkdZO31aZqXkKG3s8zOf3FNDztyjUCVd8kQevkI95wpYqFM2V+7+VW04L5dZ18=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7759
+X-OriginatorOrg: intel.com
 
-Hi Babu,
+Hi Swapnil,
 
-On 03-11-2026 06:45, Moger, Babu wrote:
-> Hi Reinette,
-> 
-> On 10/28/2026 1:45 PM, Reinette Chatre wrote:
->> Hi Swapnil,
->>
+On 11/4/26 8:05 PM, Swapnil Sapkal wrote:
+> On 29-10-2026 00:15, Reinette Chatre wrote:
 >> On 10/22/26 6:25 AM, Swapnil Sapkal wrote:
 >>
->>> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/ 
->>> testing/selftests/resctrl/mba_test.c
+>>> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
 >>> index 17ae73d3476c..947735e26099 100644
 >>> --- a/tools/testing/selftests/resctrl/mba_test.c
 >>> +++ b/tools/testing/selftests/resctrl/mba_test.c
@@ -173,177 +221,39 @@ On 03-11-2026 06:45, Moger, Babu wrote:
 >>> +
 >>> +/* Intel MBA is specified as a percentage: 10%, 20% ... 100%. */
 >>
->> The percentage based interface is the generic interface and not Intel 
->> specific.
+>> The percentage based interface is the generic interface and not Intel specific.
 >> You can drop "Intel" from references to this interface.
 >>
+> 
+> Sure, will do.
+> 
 >>>   #define ALLOCATION_MAX        100
 >>>   #define ALLOCATION_MIN        10
 >>>   #define ALLOCATION_STEP        10
->>> +/*
->>> + * AMD MBA is not a percentage but an absolute memory bandwidth 
->>> value. The
+>>>   +/*
+>>> + * AMD MBA is not a percentage but an absolute memory bandwidth value. The
 >>> + * test sweeps the bandwidth from 4 GB/s to 40 GB/s in steps of 4 GB/s,
->>> + * which the hardware represents in units of 1/8 GB/s (i.e. 4 GB/s - 
->>> > 32,
+>>> + * which the hardware represents in units of 1/8 GB/s (i.e. 4 GB/s -> 32,
 >>> + * 8 GB/s -> 64, ... 40 GB/s -> 320).
 >>> + */
 >>> +#define AMD_ALLOCATION_MAX    320
 >>
->> The AMD maximum is enumerated from hardware. How can it be ensured 
->> this is
+>> The AMD maximum is enumerated from hardware. How can it be ensured this is
 >> the appropriate maximum for all AMD systems?
+>>
 > 
-> You are right.
-> 
-> The hardware reports a maximum bandwidth of 4096 (512 GB/s), but a 
-> single-threaded workload may not be able to achieve it. So, we cannot 
-> use the reported maximum bandwidth.
-> 
+> As Babu mentioned, it's difficult for a single-threaded workload to
+> reach the hardware-reported value. For that reason, I used these
+> values to verify whether throttling takes effect.
 
-Thank you for the clarification.
+Just to confirm, my question was not about needing this value to be the actual
+maximum of a system. Instead, I just wanted to confirm that this "320" value that
+is hardcoded here for all AMD systems is a _valid_ value. Since the actual maximum
+value is enumerated from  hardware it is not obvious to me that all systems will support
+this hardcoded maximum.
 
-> 
->>
->>> +#define AMD_ALLOCATION_MIN    32
->>> +#define AMD_ALLOCATION_STEP    32
->>> +
->>> +/* Number of MBA schemata allocations to sweep (same for both 
->>> vendors). */
->>> +#define NUM_OF_ALLOCS        (ALLOCATION_MAX / ALLOCATION_STEP)
->>> +
->>> +/*
->>> + * The fixed-size result arrays in check_results() and the 
->>> aggregation loop in
->>> + * show_mba_info() are sized and driven by NUM_OF_ALLOCS, so each 
->>> vendor's sweep
->>> + * must produce exactly NUM_OF_ALLOCS allocations. Enforce this at 
->>> build time so
->>> + * that changing a vendor's min/max/step can never overflow those 
->>> arrays.
->>> + */
->>> +_Static_assert((ALLOCATION_MAX - ALLOCATION_MIN) / ALLOCATION_STEP + 
->>> 1 == NUM_OF_ALLOCS,
->>> +           "Intel MBA sweep must yield NUM_OF_ALLOCS allocations");
->>
->> Considering how NUM_ALLOCS is defined, could this ever be encountered?
->> Could this instead be
->>     #define NUM_ALLOCS 10
->> to ensure the sanity checks is accurate in both scenarios without 
->> deriving a
->> architecture neutral count from Intel counts?
->>
->>> +_Static_assert((AMD_ALLOCATION_MAX - AMD_ALLOCATION_MIN) / 
->>> AMD_ALLOCATION_STEP + 1 == NUM_OF_ALLOCS,
->>> +           "AMD MBA sweep must yield NUM_OF_ALLOCS allocations");
->>
->> Could _Static_assert be the more flexible static_assert() (and include 
->> assert.h)?
->>
->>> +
->>> +static unsigned int mba_alloc_min(void)
->>> +{
->>> +    return get_vendor() == ARCH_AMD ? AMD_ALLOCATION_MIN : 
->>> ALLOCATION_MIN;
->>> +}
->>> +
->>> +static unsigned int mba_alloc_max(void)
->>> +{
->>> +    return get_vendor() == ARCH_AMD ? AMD_ALLOCATION_MAX : 
->>> ALLOCATION_MAX;
->>> +}
->>> +
->>> +static unsigned int mba_alloc_step(void)
->>> +{
->>> +    return get_vendor() == ARCH_AMD ? AMD_ALLOCATION_STEP : 
->>> ALLOCATION_STEP;
->>> +}
->>> +
->>>   static int mba_init(const struct resctrl_test *test,
->>>               const struct user_params *uparams,
->>>               const struct resctrl_val_param *param, int domain_id)
->>> @@ -33,15 +74,17 @@ static int mba_init(const struct resctrl_test *test,
->>>   }
->>>   /*
->>> - * Change schemata percentage from 100 to 10%. Write schemata to 
->>> specified
->>> - * con_mon grp, mon_grp in resctrl FS.
->>> + * Sweep the MBA schemata from the minimum to the maximum 
->>> allocation. On
->>> + * Intel the allocation is a percentage (10% .. 100%); on AMD it is an
->>> + * absolute memory bandwidth value (4 GB/s .. 40 GB/s). Write 
->>> schemata to
->>> + * the specified con_mon grp, mon_grp in resctrl FS.
->>>    * For each allocation, run 5 times in order to get average values.
->>>    */
->>>   static int mba_setup(const struct resctrl_test *test,
->>>                const struct user_params *uparams,
->>>                struct resctrl_val_param *p)
->>>   {
->>> -    static unsigned int allocation = ALLOCATION_MIN;
->>> +    static unsigned int allocation;
->>>       static int runs_per_allocation;
->>>       char allocation_str[64];
->>>       int ret;
->>> @@ -53,16 +96,20 @@ static int mba_setup(const struct resctrl_test 
->>> *test,
->>>       if (runs_per_allocation++ != 0)
->>>           return 0;
->>> -    if (allocation > ALLOCATION_MAX)
->>> +    /* Set the initial allocation once the vendor is known. */
->>> +    if (allocation == 0)
->>> +        allocation = mba_alloc_min();
->>
->> This does not look right. "once the vendor is known" does not look to 
->> be the
->> real reason here since vendor is known at this point. This just seems 
->> to be
->> a workaround to assign a function return to a static? It seems risky 
->> though since
->> 0 is a valid minimum for AMD and that would cause problems if ever 
->> used with this
->> implementation.
->>
->> show_mba_info() already treats the allocation as an index as opposed 
->> to an
->> accumulated value. Could this be simplified by using an index while 
->> also making
->> it consistent with show_mba_info()?
->>
->> Consider, for example, something like:
->>
->>        static int runs_per_allocation;
->>        static unsigned int alloc_idx;
->>        char allocation_str[64];
->>        unsigned int allocation;
->>        int ret;
->>    ...
->>        if (alloc_idx >= NUM_OF_ALLOCS)
->>            return END_OF_TESTS;
->>
->>        allocation = mba_alloc_min() + mba_alloc_step() * alloc_idx;
->>        alloc_idx++;
->>
->>        sprintf(allocation_str, "%u", allocation);
->>
->> I think having everything bounded by NUM_ALLOCS instead of mba_setup()
->> bounded on accumulated allocation would make this overall easier to
->> understand.
->>
->> This would make mba_alloc_max() unnecessary.
-> 
-> This sounds good to me. We don't need to depend on mba_alloc_max().
-> 
-> Start with a minimum bandwidth for AMD (say, 4 GB/s), then increase it 
-> in 4 GB/s increments and repeat the test for NUM_OF_ALLOCS.
-> 
+Reinette
 
-Sure, I will update this accordingly in the next version.
 
-> I have not tested this, but it should work.
-> 
-> Thanks,
-> Babu
---
-Thanks and Regards,
-Swapnil
+
+ 
