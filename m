@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907259;
-	b=3YDUks8lsM/utOfGeULMjjqoBc9t8orID30/BCuSJIbe+D4weHNVghulxZjDd5+By2+t
-	 ODSp/zEhidFVIrI0Yg0vsdEmEg8wmVQoPjNve0NM1SBBp0VZ3HBSl4Q/TpfldwsuE435A
-	 Y2EHNGO0nLzaB67kz1yOBAbU9aEiSTuTsIqlE/YIk+cdJsBUhU2o6p491KH4uLkUmhNSC
-	 agDGz79pLfa2Smc6ABnj4si3bXnISm88ZCgNQJLoH4Irj+skZm8VYPA1hHSkvkurhkXFB
-	 N0f/L1lgpgbYesXp3QTYSX4zzmka2RIf0RNy4FxHl0HQIz6uF0+mZmEdW0yLIJ/KCkA==
+	t=1793907264;
+	b=rsg/4xqhwsx7sK3/KR2j4/iiWBIe8/56HC4edA2c0q1BFupA39h0XPI1Rjddl/PFajeH
+	 Y/J7TUE59TzsQMTNPDis+sJkE6X7ovnf1x0KmbAEK9xPV5zan9XKsa1kAvjfGGnn03FOh
+	 KmW6EZJbtm/OW0cJbTCkPE2YcEW8wpZDup9tlJomql5+wLbMfZnGYkChAOidrYF74V2bk
+	 kU/CrmxxJc3nmv44LaLT583MmV9Yghx2xuvX7qbAdarMSODZwOD9z436wKO9ZCLXtW4HT
+	 9+5n5iso7sClaCNKDd3z0x2U01CWYyWpVAga0Rnr7urk/SF1EtpV0IfTVf0MLd4n31A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907259;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907264;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=GT7dekXcYnD31vqjRelA7RyNED54YgcxHpxVUycqC2I=;
-	b=O8wjI7puHVAdI7Ot6Rndc5C1eYVklt64thWzLDpb18Gf1GHpC/BF94zULkcRr2sPGcOb
-	 24VyjJD1xlD2uh/DhW6N8sGH7K8YOFy6T3BHGY8jgXObgwbFwg119BYxLXTwfFriXb0wG
-	 s8VGdVbihwgmA05QGUcsx8M7DR3bVDJmmRvFRslnoNp9F3HV3jdRduyEaDqRO3frDc+I7
-	 HlrsApEJnnWGM8HbhZs4SZIJaYCCVhtHJNml99SdAe2OMLYSyAkx5RArNK0WvtrO/8hsu
-	 0mypC1X1xZbIL2juKKYBPZm+HXsz90SM6y4Fyf/ea1AhAWuSYM5MRTSyKAqdYaNyTyA==
+	bh=af+4ajGlgtX+ITY+QAIEdN5bCJZjAJgGwtyaF8TMBHU=;
+	b=nG3D5xSMlrvnEEvCiG30jH2VvvrQXUnzbGIn+ETiCROpI3cn2KnpaljnJLH3zM89e80J
+	 waQKGPcPC9EetjY7T6WccGgWFadSBdPaOUc41FzdiwRs/LYe6dVpkiDYNxIObdikcRmcM
+	 pT66Hgtug27sNiGJnvXfzZpdMAejiBVtVNVzzqcK+l6FVD/ScRYUKKTMZFZ/J3wxgwLSE
+	 7OBoM0V0PaJJg4F6uLmEh+ZzvhKEA7KqVNCzatspn4eFuo41eTmw2QcipjZZ6QbScYxjQ
+	 nD3505JBEPJvIihesIPUqgi1kNOLZGUQJeJof5E5TURv4/QmGVwV39jQu7p/Sj0JNXQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=C4sJsqsf;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=OQLVdqta;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0610606F59D;
-	Thu,  5 Nov 2026 19:34:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0610606F59D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDFF6082BD6;
+	Thu,  5 Nov 2026 19:34:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDDFF6082BD6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=C4sJsqsf
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=OQLVdqta
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1793907250;
-	bh=GT7dekXcYnD31vqjRelA7RyNED54YgcxHpxVUycqC2I=;
+	s=smtpout1; t=1793907251;
+	bh=af+4ajGlgtX+ITY+QAIEdN5bCJZjAJgGwtyaF8TMBHU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C4sJsqsfxahZ/F13HcnLIvp2wiFnnIa2pdWNYMma3D8IS5aQXjztSr62RsLwEaL+4
-	 bXCHoI0NxWaVf21CFTzUZwkJ+ZfL+Uo69hYOCv1suk0sfWmUrF2nkG2iibNVd19O4s
-	 AhozLwexIruIVH0MxyoII5sG5DctWrfkuBWIRP8JEnuI9JYOgfNx5QjqWyOPMZWSR4
-	 v2sg7I6WI/VTLQ1Xr19XeB49TF9iREH/qAZa0z60Opvxs4PDr72TyQijMIf/SHK0Kq
-	 lcDmK5UUGuDLRpbf+W+n9TV+GW9iLZbdNvcc7vWWXGo9Nfy+vvc9W+VTq3X3l7kyEX
-	 iXwa2LDubFuIg==
+	b=OQLVdqtawSXJY1GnRjdy1hBUsjTfNYsg6Mf9B3zNX9pkhLhbNZuRr3HvRN6I1VG+/
+	 CZbej3v5BYhj06exYBPCc1MlBDplBuTh+o8Ru47xnV5Y7J5LbsxpdBr7TE2BnBAs84
+	 fqw0ltBEnZkvu3/S45eG+eN4AJCKNL2fedvETi1hAT0geMKpNmWoviUtg+Sa0LFWht
+	 1nl6T0vWePw3YvioHw3Y6Wc+4fs9d8Dov8L93XITj3/aogx9fxSMkSOcpR3uTcB38j
+	 08jZ1QGNtXxleCWhDW4Ub9CfmlBzBFpj/hber+Zynj1cYZ+rAH1ZOCycsOlfEYHPEp
+	 sqnxrvIgyby4w==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLCDL2kzhzLJt;
-	Thu, 05 Nov 2026 14:34:10 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLCDM3kywzLPT;
+	Thu, 05 Nov 2026 14:34:11 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
 	peterz@infradead.org,
@@ -77,9 +77,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: [PATCH v3 09/24] sched/deadline: Reject SCHED_DEADLINE on exited tasks
-Date: Thu,  5 Nov 2026 14:33:44 -0500
-Message-Id: <20261105193359.1450487-10-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v3 16/24] cgroup/cpuset: Wait for an attach before rebuilding the sched domains
+Date: Thu,  5 Nov 2026 14:33:51 -0500
+Message-Id: <20261105193359.1450487-17-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261105193359.1450487-1-mathieu.desnoyers@efficios.com>
 References: <20261105193359.1450487-1-mathieu.desnoyers@efficios.com>
@@ -94,63 +94,65 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Juri Lelli <juri.lelli@redhat.com>
+cpuset_can_attach() sets aside, in the root domain of the destination,
+the bandwidth of the deadline tasks it is about to move, and drops
+cpuset_mutex until cpuset_attach() moves them. A rebuild of the sched
+domains in between, rebuild_sched_domains() from a write of
+sched_rt_runtime_us or from the energy model, takes cpuset_mutex and
+runs: dl_rebuild_rd_accounting() clears the root domains and counts
+each task where its cpuset says, and the reservation is gone. The
+attach then moves the bandwidth of each task out of the root domain it
+left, on the strength of a reservation that is no longer there, and the
+destination's total_bw ends short of what its tasks hold: it admits
+deadline tasks beyond its capacity, and underflows when they leave.
 
-sched_setattr(SCHED_DEADLINE) on a zombie task succeeds and charges
-total_bw via sched_dl_overflow(), but the task has already done its
-final schedule() and will never run again. Nothing releases the reserved
-bandwidth. Repeating this fills total_bw to the admission cap, after
-which sched_setattr(SCHED_DEADLINE) and CPU offline fail with -EBUSY.
+The writes of a cpuset's files wait for an attach in progress before
+taking cpuset_mutex, wait_attach_done_lock(), since
+commit 75f7a25ec6bb ("cgroup/cpuset: Prevent race between task attach
+and cpuset state change"), and CPU hotplug holds cpus_write_lock, which
+an attach holds for reading throughout. Wait in
+rebuild_sched_domains_cpuslocked() as well: a rebuild from the hotplug
+path finds no attach in progress, and one from the sysctl or the energy
+model lets the attach complete first.
 
-Reject sched_setattr(SCHED_DEADLINE) on exited tasks with -ESRCH.
+The deadline_bw_test selftest added later in this series has the case,
+move_vs_rebuild: a process of 2049 threads, one of them a deadline task
+asleep, moved in and out of a one-CPU partition root while a writer of
+sched_rt_runtime_us rebuilds the sched domains 20 times, six rounds.
+With the patches of this series before this one, a round leaves a root
+domain short of the task's bandwidth, the root domain of the other CPUs
+admitting 3 more tasks of 10% in three 8-CPU VMs and the partition root
+none at all in a fourth, in 4 VMs of 4; with this change the six rounds
+pass, in 2 VMs of 2.
 
-A task of the class that exited, switched to another policy, runs
-switched_from_dl(), which decrements the count of deadline tasks of its
-cpuset that cgroup_task_dead() decremented already: at 0 with a deadline
-task left in it, the cpuset is skipped by the next rebuild of the root
-domains' accounting, and that task's bandwidth with it. Reject that as
-well. The deadline_bw_test selftest added later in this series has the
-case, death_zombie_switched: on v7.4-rc1 the switch is accepted, and
-the one-CPU partition root the zombie ran in admits 9 tasks of 10% after
-a rebuild, with a task of 30% still in it, where 6 are due.
+Found by the Sashiko AI review of the second posting of this series.
 
-Fixes: 332ac17ef5bf ("sched/deadline: Add bandwidth management for SCHED_DEADLINE tasks")
-Reported-by: Weiheng Qiu <weihengqiuu@gmail.com>
-Closes: https://lore.kernel.org/all/3f6e6c87-645b-45fd-8fc6-8da5bc5b82d8@gmail.com/
-Link: https://lore.kernel.org/all/20261103-b4-sched-dl-bw-fixes-v1-4-dd761fe005b4@redhat.com/
+Fixes: 2ef269ef1ac0 ("cgroup/cpuset: Free DL BW in case can_attach() fails")
 Cc: stable@vger.kernel.org
-Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-[mathieu: reject a task of the class leaving it too, found by the
- Sashiko AI review of the patch]
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- kernel/sched/syscalls.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ kernel/cgroup/cpuset.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index bffeb4143161..c143b7d02efc 100644
---- a/kernel/sched/syscalls.c
-+++ b/kernel/sched/syscalls.c
-@@ -584,6 +584,19 @@ int __sched_setscheduler(struct task_struct *p,
- 	if (retval)
- 		goto unlock;
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 5b8f1d9552a6..aa946baeb4b9 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1067,7 +1067,13 @@ void rebuild_sched_domains_locked(void)
  
+ static void rebuild_sched_domains_cpuslocked(void)
+ {
+-	mutex_lock(&cpuset_mutex);
 +	/*
-+	 * Reject SCHED_DEADLINE on exited tasks. A zombie will never be
-+	 * scheduled again, so sched_dl_overflow() would charge total_bw
-+	 * that nothing will ever release. And reject a change of policy of
-+	 * one in the class: cgroup_task_dead() took it off the count of
-+	 * deadline tasks of its cpuset, which switched_from_dl() would
-+	 * decrement a second time.
++	 * An attach in progress has set aside, in the root domain its tasks
++	 * move to, the deadline bandwidth it moves once it takes
++	 * cpuset_mutex again: the rebuild of the accounting would drop that
++	 * reservation, and the move would go through on its strength.
 +	 */
-+	if ((dl_policy(policy) || dl_task(p)) && p->exit_state) {
-+		retval = -ESRCH;
-+		goto unlock;
-+	}
-+
- 	/*
- 	 * If not changing anything there's no need to proceed further,
- 	 * but store a possible modification of reset_on_fork.
++	wait_attach_done_lock();
+ 	rebuild_sched_domains_locked();
+ 	mutex_unlock(&cpuset_mutex);
+ }
 -- 
 2.47.3
 
