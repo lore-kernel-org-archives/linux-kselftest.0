@@ -1,62 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793885419;
-	b=nZfdqJDVONgn/+VJY0mJxMPqppHpBMYwvZP2gxh0HISmeJeoTuHg/2r/uyAxVLgqUWco
-	 s/h9HbHmM3orIFBAlp9EtCwWTpNO9T1Cspc6amILdPpFKqWonsYVVk6puKh+BgC0jfGIF
-	 DKZ9btgxE7LZOk2G9QFL6mkojQbykI9E6KzHqsaTVy6Ar30I73f6P5sBirrjkVh/U0Kp3
-	 CliPlL4TJ9zYtD6ZTQAQ6o0tuGW7bKO/uCc9S3ZdXVIh4ALtawhKImyPmMjPPZUxnSXXt
-	 Xp0SIMP/N1N6QPzdo5JYLta1TbS8aQ84OlVimYQ8zZ4sYsMVpgfPZvgRAM5+GL/6dCg==
+	t=1793885656;
+	b=OXr5th9sWHkC6wgFViHEM+2qklIP8q18fu7b72wU4AaVO06b8thNtfAnV93MIZAXWqfW
+	 XyLi+tqaMq8V7npqDJ1eZyFiF+lidZst3shI12gV9MhpUCwRK2AAiTluCpay69tKvLKbc
+	 n64xZfH9bwkf/Pyo14/GdenZ0xGVm7oo39eWNAyyGcwf4S4seBQCMcFq0a4RcuVt0Yj+y
+	 V65Hg1av8McGQMS4plOYTem8NkQfII6A0rtlzlatuFZheagCiD4tUzmxcPfxIfzh+UxW6
+	 O66ZtcuZzL0EUm2zlYswBNYfGL+trU1bfHBd+GZbpMuubzGVI0fJivYFueLL1P5b1Sw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793885419;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:To:
-	 CC:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy;
-	bh=XBahw6M146sZLugvzmS/iUpJqDvqvUDfx3QgY4OtwYg=;
-	b=22izUsJ0H0qzqLQysUHMbTXTW0/+Fj8zQKkQMs6/witp0WIVse7Fy+P9GS9JK0VRitlV
-	 StYZANQKnocxxbAU2mnlSYF533pyk664heVxtWxsKL/+QMFIk2NKQhlSRNe02Sb2Jj9cX
-	 dVxJz6PsOWC5+1z/QN/N4MY2qU9JtA3QuwwglaNTDXqe1K8ioddKYAyF2d/KxhETHZ1XA
-	 iGX5uUN8UaYFQADNaNorqHxhpPG0/ttECTzyPRc+64CBvoCoYeWZRz/b1U1KKygGk1b2e
-	 lfiZKv6yP3C5ifkvg0SXT1Edm2BqfKJXIsvQEKduDYWvfctH27A4g+7bXEuGL1hCwLw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793885656;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=xtG6fIgcVTzyv91/g3gp13PkyR5FUez629otMerYOAs=;
+	b=nWudy0uYrc2YIUq9+A1NotxnfXOV2ZtMkbMJkX7/TVeojoXh4unn2euC8QIjcpWa0Y+l
+	 i1D+HzCn26fO6cwMeVjp4N2ro0mYEGQ7xla55u09b8onYsCNj+GCpk4181gSH5W2YyzUF
+	 6XfOD0Q0TQ+l4spKwj9JKWP0fzPnYXZg4obz79jH14/CIahkvbhCjWSi0uvlwT36fmeZJ
+	 CSZXSFtmgguRVSg9CF9TMC5y34X9NatLIxeVrDvSAKNBDmMLEAahxzkvZXfFbfjX252Fo
+	 gL7/lbXEU1eZauyAt8rfvwjdqj/uahY6QEse2yVZKSw6urRfqpdypOE9Re4UKtV3iHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=RN4YfyjO;
-	arc=none smtp.remote-ip=113.46.200.226
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1481606A329;
-	Thu,  5 Nov 2026 13:30:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1481606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=AJAD0adZ;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B997606A32D;
+	Thu,  5 Nov 2026 13:34:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B997606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=RN4YfyjO
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=XBahw6M146sZLugvzmS/iUpJqDvqvUDfx3QgY4OtwYg=;
-	b=RN4YfyjOyS5ooaP/OoqlyjO4HSTgKglyVRvAwmVEwiinlbqINXY/ET1GFZdNx+ACF7CF2K21b
-	GMltJwbdS6v8FwT2TBpiUpUas65+TPBMyv5V86ZErLqrrSu9ZrtVQWRF4bHHh0PeyPh1Liu3Cid
-	DMPq+7XD1GxnaxoccEs+z30=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4jL38G5xVrzKm6Y;
-	Thu,  5 Nov 2026 21:30:06 +0800 (CST)
-Received: from dggpemr500012.china.huawei.com (unknown [7.185.36.140])
-	by mail.maildlp.com (Postfix) with ESMTPS id 33A2E40586;
-	Thu,  5 Nov 2026 21:30:13 +0800 (CST)
-Received: from whupemq100006.china.huawei.com (7.152.184.206) by
- dggpemr500012.china.huawei.com (7.185.36.140) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 5 Nov 2026 21:30:12 +0800
-Received: from [10.67.110.154] (10.67.110.154) by
- whupemq100006.china.huawei.com (7.152.184.206) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Thu, 5 Nov 2026 21:30:10 +0800
-Message-ID: <ad060270-6e32-4dcf-9830-6d2ffbfc0783@huawei.com>
-Date: Thu, 5 Nov 2026 21:30:09 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=AJAD0adZ
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4776152B;
+	Thu,  5 Nov 2026 05:34:11 -0800 (PST)
+Received: from e143914.arm.com (e143914.arm.com [10.2.213.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A10D3F628;
+	Thu,  5 Nov 2026 05:34:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1793885654; bh=l14vhx5E/VbDt8tx/DC7VJgj77lpt87vUA3lRCAIukc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AJAD0adZM+HCYJxY7MSwwM7ewupYaBK7MHtAFWoJGwaLsy9a2Z3j0hqOYyLCD7h9l
+	 uZQcELPuN4SgmB/pGNNyGyoik9JIl7sAoIqln4XYNWCG+mWzdqV5Zl3w/eOB4igDB/
+	 a7d1AJeMDvSeVAgYKmR7bolgYmyGdI2IYsVoMx3k=
+Date: Thu, 5 Nov 2026 13:34:09 +0000
+From: Joey Gouly <joey.gouly@arm.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>, Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	Quentin Perret <qperret@google.com>, Fuad Tabba <tabba@google.com>,
+	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/16] KVM: arm64: selftests: Add protected-VM boot
+ trampoline
+Message-ID: <auyF0ePpUlJKZgNo@e143914.arm.com>
+References: <20261104084842.132944-1-fuad.tabba@linux.dev>
+ <20261104084842.132944-6-fuad.tabba@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,316 +70,168 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 bpf-next 1/3] riscv: bpf: Add BPF private stack support
-Content-Language: en-US
-To: Chen Pei <cp0613@linux.alibaba.com>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<memxor@gmail.com>, <bjorn@kernel.org>, <puranjay@kernel.org>,
-	<eddyz87@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
-	<ihor.solodrai@linux.dev>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <alex@ghiti.fr>, <luke.r.nels@gmail.com>,
-	<xi.wang@gmail.com>, <shuah@kernel.org>, <rgbi3307@gmail.com>,
-	<guoren@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20261104100411.997-1-cp0613@linux.alibaba.com>
- <20261104100411.997-2-cp0613@linux.alibaba.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20261104100411.997-2-cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemq100006.china.huawei.com (7.152.184.206)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104084842.132944-6-fuad.tabba@linux.dev>
 
-Hi Pei,
+On Wed, Nov 04, 2026 at 08:48:31AM +0000, Fuad Tabba wrote:
+> EL2 takes only PC and X0 from the host when it boots a protected vCPU,
+> and resets everything else. So the registers the selftest library sets
+> before the first run never reach the guest.
+> 
+> Boot a protected guest through a trampoline that restores X0-X7, seven
+> EL1 system registers and the stack pointer from a block X0 points to,
+> then enables the MMU and branches to the guest's entry point.
+> 
+> Co-developed-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-On 2026/11/4 18:04, Chen Pei wrote:
-> A program on a private stack keeps its BPF frames in a per-CPU area of
-> its own rather than on the kernel stack of whichever context entered it.
-> bpf_enable_priv_stack() grants that mode only once the JIT reports
-> bpf_jit_supports_private_stack(), which riscv64 did not: programs there
-> always ran on the kernel stack, and a struct_ops program that requires
-> one was rejected with -EACCES.
-> 
-> Allocate a per-CPU area of the verifier calculated depth plus a 16 byte
-> guard region at each end, and point BPF_REG_FP (S5) at the top of it
-> while leaving SP on the kernel stack. Every BPF stack access already
-> goes through S5, and S5 is callee-saved with each subprog deriving its
-> own, so nothing else in the JIT has to know about the private stack.
-> 
-> The outgoing stack argument area stays in the kernel frame: callers
-> write it relative to SP, callees relative to RV_REG_FP, which the
-> prologue sets to the caller's SP.
-> 
-> The per-CPU lookup is emitted after the tail call entry point: a program
-> using a private stack can still be entered as a tail call target, and
-> RV_TAILCALL_OFFSET is a constant added to the target's bpf_func, so what
-> is in front of it must be the same size in every program.
-> 
-> The base is materialized with absolute moves, as on arm64, x86-64 and
-> powerpc64: the vmalloc'd per-CPU area is beyond an auipc pair from the
-> JIT region, and riscv64 has no register holding the per-CPU offset, so
-> the address of __per_cpu_offset is loaded too. emit_imm() is a choice
-> there, not a requirement; emit_addr() as used by
-> insn_is_mov_percpu_addr() would need an extra_pass argument and an error
-> return in bpf_jit_build_prologue(), touching bpf_jit_comp32.c too. Both
-> constants are fixed before the offset convergence loop, so the prologue
-> length is stable across passes.
-> 
-> The guard value follows arm64, x86-64 and powerpc64, and the 16 byte
-> two-copy region at each end follows arm64 and powerpc64, since x86-64
-> uses an 8 byte guard with a single copy. A jited program has them
-> checked when it is freed, reporting the first corrupted CPU only;
-> failure paths release the area unchecked since the image never ran,
-> which also clears priv_stack_ptr for the later bpf_jit_free().
-> 
-> RV32 does not declare support and keeps the existing kernel stack
-> behaviour.
-> 
-> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+Similar idea to the 'realm-boot' I added, and mentioned previously. I
+think it should work for Realms too.
+
+Reviewed-by: Joey Gouly <joey.gouly@arm.com>
+
 > ---
->   arch/riscv/net/bpf_jit.h        |  1 +
->   arch/riscv/net/bpf_jit_comp64.c | 42 +++++++++++++++--
->   arch/riscv/net/bpf_jit_core.c   | 84 +++++++++++++++++++++++++++++----
->   3 files changed, 115 insertions(+), 12 deletions(-)
+>  tools/testing/selftests/kvm/Makefile.kvm      |  1 +
+>  .../selftests/kvm/include/arm64/pkvm.h        | 50 ++++++++++++++++
+>  .../selftests/kvm/lib/arm64/pvm-entry.S       | 58 +++++++++++++++++++
+>  3 files changed, 109 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/include/arm64/pkvm.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/arm64/pvm-entry.S
 > 
-> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-> index 21a190a6a6d9..efab2b6803e4 100644
-> --- a/arch/riscv/net/bpf_jit.h
-> +++ b/arch/riscv/net/bpf_jit.h
-> @@ -14,6 +14,7 @@
->   
->   #define RV_MAX_REG_ARGS		8
->   #define RV_EXTRA_STK_ARGS	(RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS)
-> +#define PRIV_STACK_GUARD_SZ	16
->   
->   /* verify runtime detection extension status */
->   #define rv_ext_enabled(ext) \
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 371405598faa..a7a7d2f9da85 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -2134,12 +2134,34 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   	return 0;
->   }
->   
-> +static void emit_priv_stack_frame(struct rv_jit_context *ctx)
-> +{
-> +	u64 fp = (__force u64)ctx->prog->aux->priv_stack_ptr + PRIV_STACK_GUARD_SZ;
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+> index 17a4256e90819..c254e82f9a786 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -35,6 +35,7 @@ LIBKVM_arm64 += lib/arm64/gic_v3.c
+>  LIBKVM_arm64 += lib/arm64/gic_v3_its.c
+>  LIBKVM_arm64 += lib/arm64/handlers.S
+>  LIBKVM_arm64 += lib/arm64/processor.c
+> +LIBKVM_arm64 += lib/arm64/pvm-entry.S
+>  LIBKVM_arm64 += lib/arm64/spinlock.c
+>  LIBKVM_arm64 += lib/arm64/ucall.c
+>  LIBKVM_arm64 += lib/arm64/vgic.c
+> diff --git a/tools/testing/selftests/kvm/include/arm64/pkvm.h b/tools/testing/selftests/kvm/include/arm64/pkvm.h
+> new file mode 100644
+> index 0000000000000..6ef769b8ff977
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/arm64/pkvm.h
+> @@ -0,0 +1,50 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2025 Google LLC
+> + * Author: Fuad Tabba <fuad.tabba@linux.dev>
+> + * Author: Will Deacon <will@kernel.org>
+> + */
 > +
-> +	fp += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
-> +	emit_imm(RV_REG_S5, fp, ctx);
-> +#ifdef CONFIG_SMP
-> +	emit_lw(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP, ctx);
-> +	emit_imm(RV_REG_T2, (u64)__per_cpu_offset, ctx);
-> +	emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
-> +	emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
-> +	emit_add(RV_REG_S5, RV_REG_S5, RV_REG_T1, ctx);
+> +#ifndef SELFTEST_KVM_ARM64_PKVM_H
+> +#define SELFTEST_KVM_ARM64_PKVM_H
+> +
+> +#ifndef __ASSEMBLER__
+> +/*
+> + * Register state the boot trampoline (pvm-entry.S) restores. Only PC and X0
+> + * survive to a protected guest's first run, so X0 points at this block.
+> + */
+> +struct pvm_boot_args {
+> +	u64	jump_tgt;
+> +
+> +	u64	regs[8];
+> +	u64	cpacr_el1;
+> +	u64	sctlr_el1;
+> +	u64	tcr_el1;
+> +	u64	mair_el1;
+> +	u64	ttbr0_el1;
+> +	u64	vbar_el1;
+> +
+> +	u64	tpidr_el1;
+> +	u64	sp_el1;
+> +};
 > +#endif
-> +}
 > +
->   void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->   {
-> +	bool priv_stack = ctx->prog->aux->priv_stack_ptr;
->   	int i, stack_adjust = 0, store_offset, bpf_stack_adjust = ctx->stack_arg_sz;
->   
-> -	bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
-> -	if (bpf_stack_adjust)
-> +	/*
-> +	 * With a private stack only the outgoing stack argument area is left in
-> +	 * this frame. It has to stay: the caller writes it relative to SP while
-> +	 * the callee reads it relative to RV_REG_FP, the caller's SP set below.
-> +	 */
-> +	if (!priv_stack)
-> +		bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
-> +	if (bpf_stack_adjust || priv_stack)
->   		mark_fp(ctx);
->   
->   	if (seen_reg(RV_REG_RA, ctx))
-> @@ -2217,7 +2239,16 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->   
->   	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
->   
-> -	if (bpf_stack_adjust)
-> +	/*
-> +	 * Point BPF_REG_FP at the top of this CPU's private stack. A program
-> +	 * with one can still be entered as a tail call target, at
-> +	 * RV_TAILCALL_OFFSET, so this has to come after that entry point; the
-> +	 * offset is a constant added to the target's bpf_func, so everything in
-> +	 * front of it must also be the same size in every program.
-> +	 */
-> +	if (priv_stack)
-> +		emit_priv_stack_frame(ctx);
-> +	else if (bpf_stack_adjust)
->   		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
->   
->   	ctx->stack_size = stack_adjust;
-> @@ -2320,3 +2351,8 @@ bool bpf_jit_supports_hmul(void)
->   {
->   	return true;
->   }
+> +#define PVM_BOOT_ARGS_OFF_JUMP_TGT	0
+> +#define PVM_BOOT_ARGS_OFF_X0		(PVM_BOOT_ARGS_OFF_JUMP_TGT + 8)
+> +#define PVM_BOOT_ARGS_OFF_X1		(PVM_BOOT_ARGS_OFF_X0 + 8)
+> +#define PVM_BOOT_ARGS_OFF_X2		(PVM_BOOT_ARGS_OFF_X1 + 8)
+> +#define PVM_BOOT_ARGS_OFF_X3		(PVM_BOOT_ARGS_OFF_X2 + 8)
+> +#define PVM_BOOT_ARGS_OFF_X4		(PVM_BOOT_ARGS_OFF_X3 + 8)
+> +#define PVM_BOOT_ARGS_OFF_X5		(PVM_BOOT_ARGS_OFF_X4 + 8)
+> +#define PVM_BOOT_ARGS_OFF_X6		(PVM_BOOT_ARGS_OFF_X5 + 8)
+> +#define PVM_BOOT_ARGS_OFF_X7		(PVM_BOOT_ARGS_OFF_X6 + 8)
+> +#define PVM_BOOT_ARGS_OFF_CPACR_EL1	(PVM_BOOT_ARGS_OFF_X7 + 8)
+> +#define PVM_BOOT_ARGS_OFF_SCTLR_EL1	(PVM_BOOT_ARGS_OFF_CPACR_EL1 + 8)
+> +#define PVM_BOOT_ARGS_OFF_TCR_EL1	(PVM_BOOT_ARGS_OFF_SCTLR_EL1 + 8)
+> +#define PVM_BOOT_ARGS_OFF_MAIR_EL1	(PVM_BOOT_ARGS_OFF_TCR_EL1 + 8)
+> +#define PVM_BOOT_ARGS_OFF_TTBR0_EL1	(PVM_BOOT_ARGS_OFF_MAIR_EL1 + 8)
+> +#define PVM_BOOT_ARGS_OFF_VBAR_EL1	(PVM_BOOT_ARGS_OFF_TTBR0_EL1 + 8)
+> +#define PVM_BOOT_ARGS_OFF_TPIDR_EL1	(PVM_BOOT_ARGS_OFF_VBAR_EL1 + 8)
+> +#define PVM_BOOT_ARGS_OFF_SP_EL1	(PVM_BOOT_ARGS_OFF_TPIDR_EL1 + 8)
 > +
-> +bool bpf_jit_supports_private_stack(void)
-> +{
-> +	return true;
-> +}
-> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-> index f2497ec7d378..f2021088e447 100644
-> --- a/arch/riscv/net/bpf_jit_core.c
-> +++ b/arch/riscv/net/bpf_jit_core.c
-> @@ -9,6 +9,7 @@
->   #include <linux/bpf.h>
->   #include <linux/filter.h>
->   #include <linux/memory.h>
-> +#include <linux/percpu.h>
->   #include <asm/text-patching.h>
->   #include <asm/cfi.h>
->   #include "bpf_jit.h"
-> @@ -44,6 +45,62 @@ bool bpf_jit_needs_zext(void)
->   	return true;
->   }
->   
-> +#define PRIV_STACK_GUARD_VAL	0xEB9F12345678eb9fULL
-
-a nit, let move it with the PRIV_STACK_GUARD_SZ	macro.
-
-others, looks good.
-
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
-
+> +#endif /* SELFTEST_KVM_ARM64_PKVM_H */
+> diff --git a/tools/testing/selftests/kvm/lib/arm64/pvm-entry.S b/tools/testing/selftests/kvm/lib/arm64/pvm-entry.S
+> new file mode 100644
+> index 0000000000000..a0974cde78da6
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/arm64/pvm-entry.S
+> @@ -0,0 +1,58 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2025 Google LLC
+> + * Author: Fuad Tabba <fuad.tabba@linux.dev>
+> + * Author: Will Deacon <will@kernel.org>
+> + */
 > +
-> +static u32 priv_stack_size(struct bpf_prog *prog)
-> +{
-> +	return round_up(prog->aux->stack_depth, STACK_ALIGN) +
-> +	       2 * PRIV_STACK_GUARD_SZ;
-> +}
+> +#include "pkvm.h"
 > +
-> +static int alloc_priv_stack(struct bpf_prog *prog)
-> +{
-> +	u32 size = priv_stack_size(prog);
-> +	u32 end = (size - PRIV_STACK_GUARD_SZ) / sizeof(u64);
-> +	void __percpu *ptr;
-> +	int cpu, i;
+> +	.text
+> +	.balign 16
+> +	.globl	pvm_entry_start
+> +pvm_entry_start:
+> +	mov	x30, x0
 > +
-> +	ptr = __alloc_percpu_gfp(size, STACK_ALIGN, GFP_KERNEL);
-> +	if (!ptr)
-> +		return -ENOMEM;
+> +	ldr	x0, [x30, #PVM_BOOT_ARGS_OFF_X0]
+> +	ldr	x1, [x30, #PVM_BOOT_ARGS_OFF_X1]
+> +	ldr	x2, [x30, #PVM_BOOT_ARGS_OFF_X2]
+> +	ldr	x3, [x30, #PVM_BOOT_ARGS_OFF_X3]
+> +	ldr	x4, [x30, #PVM_BOOT_ARGS_OFF_X4]
+> +	ldr	x5, [x30, #PVM_BOOT_ARGS_OFF_X5]
+> +	ldr	x6, [x30, #PVM_BOOT_ARGS_OFF_X6]
+> +	ldr	x7, [x30, #PVM_BOOT_ARGS_OFF_X7]
 > +
-> +	for_each_possible_cpu(cpu) {
-> +		u64 *stack = per_cpu_ptr(ptr, cpu);
+> +	ldr	x8, [x30, #PVM_BOOT_ARGS_OFF_JUMP_TGT]
 > +
-> +		for (i = 0; i < PRIV_STACK_GUARD_SZ / sizeof(u64); i++) {
-> +			stack[i] = PRIV_STACK_GUARD_VAL;
-> +			stack[end + i] = PRIV_STACK_GUARD_VAL;
-> +		}
-> +	}
-> +	prog->aux->priv_stack_ptr = ptr;
-> +	return 0;
-> +}
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_CPACR_EL1]
+> +	msr	cpacr_el1, x9
 > +
-> +static void priv_stack_check_guard(struct bpf_prog *prog)
-> +{
-> +	u32 end = (priv_stack_size(prog) - PRIV_STACK_GUARD_SZ) / sizeof(u64);
-> +	int cpu;
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_TCR_EL1]
+> +	msr	tcr_el1, x9
 > +
-> +	for_each_possible_cpu(cpu) {
-> +		u64 *stack = per_cpu_ptr(prog->aux->priv_stack_ptr, cpu);
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_MAIR_EL1]
+> +	msr	mair_el1, x9
 > +
-> +		if (stack[0] != PRIV_STACK_GUARD_VAL ||
-> +		    stack[1] != PRIV_STACK_GUARD_VAL ||
-> +		    stack[end] != PRIV_STACK_GUARD_VAL ||
-> +		    stack[end + 1] != PRIV_STACK_GUARD_VAL) {
-> +			pr_err("bpf-jit: private stack overflow/underflow guard of prog %s corrupted on CPU %d\n",
-> +			       bpf_jit_get_prog_name(prog), cpu);
-> +			return;
-> +		}
-> +	}
-> +}
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_TTBR0_EL1]
+> +	msr	ttbr0_el1, x9
 > +
-> +static void free_priv_stack(struct bpf_prog *prog)
-> +{
-> +	free_percpu(prog->aux->priv_stack_ptr);
-> +	prog->aux->priv_stack_ptr = NULL;
-> +}
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_VBAR_EL1]
+> +	msr	vbar_el1, x9
 > +
->   struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
->   {
->   	unsigned int prog_size = 0, extable_size = 0;
-> @@ -84,12 +141,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->   			    round_up((stack_arg_cnt - RV_EXTRA_STK_ARGS) * 8, STACK_ALIGN) : 0;
->   
->   	ctx->prog = prog;
-> +	if (prog->aux->jits_use_priv_stack && alloc_priv_stack(prog))
-> +		goto out_free_hdr;
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_TPIDR_EL1]
+> +	msr	tpidr_el1, x9
 > +
->   	ctx->offset = kvzalloc_objs(int, prog->len);
->   	if (!ctx->offset)
-> -		goto out_offset;
-> +		goto out_free_hdr;
->   
->   	if (build_body(ctx, extra_pass, NULL))
-> -		goto out_offset;
-> +		goto out_free_hdr;
->   
->   	for (i = 0; i < prog->len; i++) {
->   		prev_ninsns += 32;
-> @@ -104,7 +164,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->   		ctx->prologue_len = ctx->ninsns;
->   
->   		if (build_body(ctx, extra_pass, ctx->offset))
-> -			goto out_offset;
-> +			goto out_free_hdr;
->   
->   		ctx->epilogue_offset = ctx->ninsns;
->   		bpf_jit_build_epilogue(ctx);
-> @@ -124,7 +184,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->   							  bpf_fill_ill_insns,
->   							  bpf_prog_was_classic(prog));
->   			if (!jit_data->ro_header)
-> -				goto out_offset;
-> +				goto out_free_hdr;
->   
->   			/*
->   			 * Use the image(RW) for writing the JITed instructions. But also save
-> @@ -190,10 +250,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->   			ctx->offset[i] = ctx->offset[i - 1];
->   		ctx->offset[0] = ninsns_rvoff(ctx->prologue_len);
->   		bpf_prog_update_insn_ptrs(prog, ctx->offset, jit_data->ro_image);
-> -out_offset:
-> -		kvfree(ctx->offset);
-> -		kfree(jit_data);
-> -		prog->aux->jit_data = NULL;
-> +		goto out_free_ctx;
-
-happy to see this, this place was indeed very confusing before.
-
->   	}
->   
->   	return prog;
-> @@ -209,7 +266,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->   				   sizeof(jit_data->header->size));
->   		bpf_jit_binary_pack_free(jit_data->ro_header, jit_data->header);
->   	}
-> -	goto out_offset;
-> +	free_priv_stack(prog);
-> +out_free_ctx:
-> +	kvfree(ctx->offset);
-> +	kfree(jit_data);
-> +	prog->aux->jit_data = NULL;
-> +	return prog;
->   }
->   
->   u64 bpf_jit_alloc_exec_limit(void)
-> @@ -261,6 +323,10 @@ void bpf_jit_free(struct bpf_prog *prog)
->   		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
->   		hdr = bpf_jit_binary_pack_hdr(prog);
->   		bpf_jit_binary_pack_free(hdr, NULL);
-> +		if (prog->aux->priv_stack_ptr) {
-> +			priv_stack_check_guard(prog);
-> +			free_priv_stack(prog);
-> +		}
->   		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
->   	}
->   
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_SP_EL1]
+> +	mov	sp, x9
+> +
+> +	/* No stale TLB entries, and the writes above in effect, before the MMU is on. */
+> +	tlbi	vmalle1
+> +	dsb	nsh
+> +	isb
+> +	ldr	x9, [x30, #PVM_BOOT_ARGS_OFF_SCTLR_EL1]
+> +	msr	sctlr_el1, x9
+> +	isb
+> +
+> +	br	x8
+> +	.globl	pvm_entry_end
+> +pvm_entry_end:
+> -- 
+> 2.47.3
+> 
