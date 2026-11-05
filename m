@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793893883;
-	b=FiP/y4cIFYyOOkYUk+hA59yu9MzEwc68VUTXzT7hMaNITgvhPALg6Sx1P1yejcJLjvYo
-	 aaIgkz57npOWmQPIV4xLT7cldIAOr9R4SG6IRFMDJ2V3GdrQhwPHiU6dlg4fJRbzCpdcN
-	 L7SG5BRVcuxdsrmZNY0qI6DOiDYF5kBOFyX7nKaqujt+cxzsy0M1YlC2Yf4YbA1ulX0to
-	 i8E7UGyLhHN2yht1TOwSr6yVAdDeKIKow920VQc79HODZoHyaLeYo0ArWNtqDF0596S4Y
-	 8ZPJ9iB8bieRn1fhcm26tHec81RRo5bV+Tc6v/wGaKAXvGA0LW+K123qxmDsD1phm8g==
+	t=1793894087;
+	b=NuUQoEMI3enEG/zy3wiQt0EDcYODu+apL38vb2+d3W8gvX80trbwltZqjGXxSeBlOROK
+	 XfVcH32c5gxP3ZqLoJ5MNbD9bi3d7322sOH2LVdcC+qdHD0gEJ1menx+zbOOKmhk+KYdo
+	 PJqGrI07+goVVcunqsxEh0q4+srtM1UlePGenV6Rxjz38AyT5nV5wC/r2sGCmune6GXWC
+	 D9N2suaZNXtKtbtQRBCG7vvsVqvS3gfVURCp1w0CkFe0R0XOsxwhn18zv6zDk9iqK76i0
+	 tGIgeAJn3VDKwJ9xRTpIPJZu+T/P3Rwt/1BDps44Y76ltUpu3wp09V1FKvXYCpBKOkw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793893883;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793894087;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=vcoQZXzUSKAjGDFyua49S/KsemIMXjn1uFYHAPFPdCI=;
-	b=FmeCHjN9bTdKL7PdR2nknuhKF0mSDTV/cwV3HTj9oIokprIQZm/lmUKo2MKCNGU4Nbna
-	 r9lPQuIHQIY5j5IEv7Yx95g30OJ0aVqo7VYkcxdjp2rCXeQkLfYxQbvYHURVd8+ggKKdL
-	 E8BS8NxW30SL8XnZb14OUQy1AGwxd2g35mduFKeArBtZ321y0MJzN9aGxWK9yCedVPdjF
-	 g8MRwrpKEwNKpMrQJ5/L0anESP4tHCVVGnkejpklnMeKAUYW1icZ7kDG7dQ2fnqEjc7aJ
-	 ZHafuREp1PaH8mdg7aMENvp2OuN3/rR9RF1px+3QMJ4xyNYEPnsu9fN9bO5WmbOtmng==
+	bh=ylOj/sHLM/J8LsUi+7lfY/iGOYIA2kXtXExHrYGKdI0=;
+	b=4usUpCyKqBfAgv5BwqxCs0lJyBoym8smhbVBiu3/3vqscbHnjXiPsgT19zDXk0OjGHBj
+	 SkryZvC92OajvfHSABTx2fuf3WHlir36w9aNvo32Vo1wzr3bz2iI3ae7/zbPt9uM/yODp
+	 vRsSKjRYYsx9abkouXJNjs6EFL12jTeQVlci0wTcycxZ8UCERIOyT1jqgLLI2z09E2g+c
+	 vTrxEENAYWGuQCsdASOVjJSg9u0EcW+HhfJh3qPcQJkh7OESwVy3pagpo7zL2xOgLC0lr
+	 iT5JHRBTuo+PppXGwPgVeJ10nEcuupNqLVQ/pu7O2LFuvpLtZe7nY7iizaGskUzy+tw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eh4uz2E8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kuAc3Ioi;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC504606A330;
-	Thu,  5 Nov 2026 15:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADBD606BE8F;
+	Thu,  5 Nov 2026 15:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eh4uz2E8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0F11F0093A;
-	Thu,  5 Nov 2026 15:51:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kuAc3Ioi
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27BE21F00A1A;
+	Thu,  5 Nov 2026 15:54:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793893882;
-	bh=vcoQZXzUSKAjGDFyua49S/KsemIMXjn1uFYHAPFPdCI=;
+	s=k20260515; t=1793894087;
+	bh=ylOj/sHLM/J8LsUi+7lfY/iGOYIA2kXtXExHrYGKdI0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=eh4uz2E8DxtizBT/qw3y4t094WXgVTrlelAfeVdHut710Alzy8V538PI4x5YiPXtx
-	 dUZN/TLFUPezR/ZFZdb8a2vqFcYiL+xJSsb5A/WXzlmAW6IW/6W33uWRMz72HjFxBN
-	 UuvaPkB475995+O8hLONeDFXuN1nPYMooDLgiPBV+tdTqyS2Bp/Ms2HEwag44Xy/ak
-	 E6rLjZoD9W40NZ/US2DZe2ptZO2+8eIQVgeETJrjQkLVMgd54Nx2NeTYDtghhq1i9P
-	 P505FsGRfhntdBL8X4cU+bTOsiZx9vW4qVZJoiM2on8vYmFykyrh6gy2Yakd1tVc4e
-	 qZ442+tMryYTg==
-Message-ID: <e135e15d-6a93-4856-a7ac-30977a2a2b5d@kernel.org>
-Date: Thu, 5 Nov 2026 16:51:14 +0100
+	b=kuAc3Ioi/qwDnV15Z9C4aP62dVQFe+TuOpqiRxJnyC2rmCo8+4hvpGzigjEUGeqhk
+	 6Eh3nbCcJ7Emyc/isrygR+z6bKIlNdRis4XZL+B1xH+CDudtI85iXDi0oS3JNC4LHx
+	 IMAav9xQFTEPeAqSXBCDu2pYUOXk3lZNIhaMtTX85QMSn/exiSdUJqWmTXkMSFMJQK
+	 vBGT+NotVD+sufMIYZwu+fxhaUXXO8Y1+A6Q+JAANLI6boLtY9IYKV7kiliy8G3757
+	 ZZzfsyn1nJgUops01v1xFiARUCYU6dGtbAACrHrSrsjrS1EvgLgX5dQveajOdg9EZK
+	 w0M6+vFfb3/tQ==
+Message-ID: <bc91b6e5-ae31-4403-aee9-34b60ac83631@kernel.org>
+Date: Thu, 5 Nov 2026 16:54:41 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,20 +52,18 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: skip split_huge_page_test without the
- split_huge_pages file
-To: Zi Yan <ziy@nvidia.com>, Sasha Levin <sashal@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Lorenzo Stoakes
- <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261105030242.1241448-1-sashal@kernel.org>
- <4B926B36-D797-4861-B6D6-27E8D7870287@nvidia.com>
+Subject: Re: [PATCH 1/2] mm/huge_memory: take a reference on a folio PUD
+ copied by fork
+To: Konstantin Khorenko <khorenko@virtuozzo.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Alistair Popple <apopple@nvidia.com>, Dan Williams <djbw@kernel.org>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20261021-vstor-150143-copy_huge_pud-folio-refcount-v1-0-8bd88551f9be@virtuozzo.com>
+ <20261021-vstor-150143-copy_huge_pud-folio-refcount-v1-1-8bd88551f9be@virtuozzo.com>
+ <26862633-c3d1-4b82-8ca2-346cb78570d7@kernel.org>
+ <cfd786eb-4ae5-4dcc-a9f2-3eb4b7e7962c@virtuozzo.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -112,39 +110,21 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <4B926B36-D797-4861-B6D6-27E8D7870287@nvidia.com>
+In-Reply-To: <cfd786eb-4ae5-4dcc-a9f2-3eb4b7e7962c@virtuozzo.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/5/26 16:19, Zi Yan wrote:
-> On 4 Nov 2026, at 22:02, Sasha Levin wrote:
+On 11/5/26 15:19, Konstantin Khorenko wrote:
+>> Introducing folio_dup_file_rmap_pud() is better. But please see how I move
+>> the comment and how passing mm+vma to the helper is not really reasonable.
 > 
->> Every case in split_huge_page_test goes through
->> /sys/kernel/debug/split_huge_pages. When that file does not exist,
->> because debugfs is not mounted or the kernel has no CONFIG_DEBUG_FS, the
->> first write bails out of the whole test and it is reported as a failure:
->>
->>   Bail out! write_file(/sys/kernel/debug/split_huge_pages): No such file or directory
->>
->> Skip the test in that case.
->>
->> Fixes: fa6c02315f74 ("mm: huge_memory: a new debugfs interface for splitting THP tests")
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->> Found with KernelCI's NVIDIA lab, which runs the tests in a chroot
->> without debugfs. Tested on an AMD EPYC 9655P with KernelCI's x86_64
->> build of next-20261104: without debugfs the test now skips, and with
->> debugfs mounted it still passes all 62 cases.
->>
->>  tools/testing/selftests/mm/split_huge_page_test.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
+> Thanks, agreed on both. v2 will pass only the VMAs, with the mms taken
+> from them as in your patch, drop src_mm from copy_pud_range() and move
+> the TODO next to the rmap duplication. folio_dup_file_rmap_pud() stays.
 > 
-> Thanks. But I do think we need a way of specifying the necessary
-> Kconfig options for selftests. Oh, we do have one:
-> https://elixir.bootlin.com/linux/v7.3.1/source/tools/testing/selftests/mm/config. Can you add CONFIG_DEBUG_FS=y to it while at it?
+> Could v2 then replace your 01/36, so you can drop it from your series?
 
-Just what I was thinking.
+I dropped my version already, so please resend and I'll queue that one.
 
 -- 
 Cheers,
