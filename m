@@ -1,70 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.128
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793870666;
-	b=wvrseJnIi/XM7QLQF3PYEFuT9TF38LABiBIFQrEHFDOh/DH0kiCCejgT1HMtvVBa05zn
-	 Dy7XRFUxm1tuHmO8d0AwqX0L5uhqwfIuvRtAPxLKsMn3BpTdrdWpSPtcwi4z+6/xXt8o2
-	 UzJbq8fyrPJiiMPzPsBfErNeZNSp7Y8NROvIGcODrxJL3NDKguhmRjIdOpIzaNBkPYxjx
-	 vm6LWWiJ22nDT+DXIqkeQ6/L43SZIpseuNfjvNYssF5rke7GteYiO+cwWzs+s+4xwMtpU
-	 YbQAESW4wWb45Xqpc6OluRpuKnHVrXrLgIc10RGDQajuiHg+/BcL0l/fjahjxGf4UKw==
+	t=1793871204;
+	b=b6Ff9VGD5/p2A/gR5qz68YODgqCDSh6IiRi37ehyGkc1NdxCO1ziwxEKVveRCFYoG8UF
+	 mXaoFRQJcIpO0FCespzMXzu1G+RSj9JaH5AtzPt9ZSl70vuJMuhwcOpVYmVMi5xKsKXuS
+	 6ZAQaOyO1wDL+crw8w2ZGRxB0kzNJQSB7JqDsTzMmlIX8pbAfxg+++BfFheVCT03GJae4
+	 DWXcLTxXfBPpkXGAj6a/4egih5zambWzEEqbVW3JaCiYKUUcM7b5Q54QhLijo2OYYNyeA
+	 D3A1DwU40fCxft2wgcXeO+gW0PBuIguiApQpAw9eUgDHWSL7dYROIG8i66+/yggP6+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793870666;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=47z7brSo33mlypnLaxbaxwk/bykGGQ/mpDgwuXRnuwQ=;
-	b=Ci+riLgKAkKgyQdjM9jBXtG1iR9j4CbNHNO96FQhGzrehYon6cad7Oae93CpO0NDpdZz
-	 QXDOvgLbb/bKZ7wz5avM0RwpKx8fhudqJo57FXX5rJEmCYPS6Tt8B9VmVI8eklS8pRp1X
-	 EEsBp+MbbATzboEnERBvLRM35pBNt3E6fbC2zlu5VrnOqXpKWSBEFqv1/1zwDMexRF7sZ
-	 a/7z48l3M33LAxC9HuFiC4GaCSsOc9WMqB5emk9huxgipME1WmotSX2HG8rozTSiGUkDS
-	 XMgjUwZFf7gCmCQe9S9afR7rvQ/p4kkMw1sxErykGBTje4CSd4YPR8gj/FIlAqaY2zA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793871204;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=Dm3dgTuQGaoDU0dTrd0Cq8Teann1h5cYynTUQ71j/ik=;
+	b=cBEZ3Bi73khphTYF1Q1Bf3LHoLqmTx/BVBJDnLf1QY5S85r0Y7619kdEsH2kWG3ZghZw
+	 K6V1DpqEGPG9st2NaOo5gy1QxWdYi/CROLH2VKYbH8P+Ka5lP+PkRuMZIcAf4R2S9tg26
+	 DLFSq3IDmX39LvaoWs2XuxR3S9TfxKIYH9W3PcoOdai09Af972EPGAQiQ+hkYdyeq88PC
+	 1YZdfAhRJ82E1J1WLH3+uTcaTR/lJL9f5m88MLL0NwqpyVKOatBUsaOZdd0Khdz0+xAW9
+	 uUquwWfra8F86+JjyrjRU1fHVraulzIkbX4i8UrXlLsJyYNEjXHPVr0amvZFu0ZfHGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="fGwM2W/j";
-	arc=none smtp.remote-ip=91.218.175.128
-Received: from mta0.migadu.com (out-128.mta0.migadu.com [91.218.175.128])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BrA1Yzh4;
+	arc=none smtp.remote-ip=220.197.31.3
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572C9606A326
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 09:24:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 572C9606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D585606A31B;
+	Thu,  5 Nov 2026 09:33:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D585606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fGwM2W/j
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7RHOYddhHtUsTVy8AhY3X82ztUTMixuxCKf0uz2Jqk4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793870663; v=1; x=1794475463;
- b=fGwM2W/j9kP0lpvLeqQs+swxCGFHVVeLE2G6FhV+GAI6Lseae1T/pmTo/Oc/KAmho42/Zlv0
- RPDTUxeD/zC27iq3iI8IFMqrlH5dscMSA6Hd/NRVZ6cioTfE3D4b4jy6QsaONeDyEhxGm79VMEO
- 5QIzAVHzsTTdadsYzO8OOPo4=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 19424a7b2f638b1c;
-	Thu, 05 Nov 2026 09:24:23 +0000
-X-Mizu-Trace-ID: 19424a7b2f638b1c
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 5 Nov 2026 17:24:10 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	Justin Iurman <justin.iurman@gmail.com>,
-	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-	Ahmed Abdelsalam <ahabdels@cisco.com>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	andrea@common-net.org
-Subject: Re: [PATCH net-next v2 5/5] selftests: seg6: add tests for PSP with
- a consumed SRH
-Message-ID: <auxLOoW97AQ55QdH@fedora>
-References: <20261105015715.57-1-andrea.mayer@uniroma2.it>
- <20261105015715.57-6-andrea.mayer@uniroma2.it>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BrA1Yzh4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Dm
+	3dgTuQGaoDU0dTrd0Cq8Teann1h5cYynTUQ71j/ik=; b=BrA1Yzh4vp2SlBFaO1
+	Uxf68SUyWso3cH4MTzjytFNzq9586raozVoLE4Pyt78e9J4sLJrQl1g0PCnc1diT
+	cbPunZlhfO8GbVFrqwWtJsjPsvZK/nJVCS9XmgQ5h/SLfVPwnIkcWA113eQlG1Ah
+	0DWWqrRSaVutXi6K+lzyJoRqQ=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCXnyQcTexqw6hoFQ--.43864S2;
+	Thu, 05 Nov 2026 17:32:14 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: song@kernel.org,
+	jolsa@kernel.org,
+	ihor.solodrai@linux.dev,
+	kpsingh@kernel.org,
+	matt@bobrowski.net,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	yonghong.song@linux.dev,
+	emil@etsalapatis.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com
+Cc: bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v4 1/2] bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
+Date: Thu,  5 Nov 2026 17:32:11 +0800
+Message-Id: <20261105093212.826479-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,132 +75,155 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261105015715.57-6-andrea.mayer@uniroma2.it>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCXnyQcTexqw6hoFQ--.43864S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gr1fKw4kKF1kZFW3uF43Awb_yoW7try3pF
+	9IyF1akrs5X3ySqrZxGw1qvFy5W3ykX3y8KFyxC34Y9r1UZr18tFy7KF4agF1rur97W342
+	93W0qrsFkw40va7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ja4E_UUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0B8wqGrsTR9daQAA33
 
-Hi Andrea,
-On Thu, Nov 05, 2026 at 02:57:15AM +0100, Andrea Mayer wrote:
-> Extend srv6_end_flavors_test.sh with tests for the SRv6 End behavior
-> with the PSP flavor, alone and together with NEXT-C-SID, on packets that
-> carry a consumed SRH in front of the SRH to process.
-> 
-> Each test sends a ping along an existing SRv6 Policy, and a router on
-> the path inserts an extra SRH in front of the Policy's SRH. An End
-> behavior on another router consumes the extra SRH, and the router
-> connected to the host must then remove only the Policy's SRH.
-> 
-> These tests set seg6_enabled to 1 on the hosts, which must accept the
-> extra SRH, and set it back to 0 at the end. With seg6_enabled set to 1,
-> a host also accepts the packet when the Policy's SRH is not removed, or
-> when the extra SRH is removed in its place. For this reason, the
-> receiving host accepts the echo request only when its first SRH is the
-> extra SRH, with Segments Left 0 and followed by the ICMPv6 header. Any
-> other echo request is dropped, including one without any SRH. The extra
-> SRH is recognized by its last segment, which is the SID that triggered
-> its insertion.
-> 
-> The check on the receiving host uses the ip6tables srh match. Without
-> it, these tests are skipped. A test fails if the route that inserts the
-> extra SRH, or the rules on the receiving host, cannot be added.
-> 
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  tools/testing/selftests/net/config            |   1 +
->  .../selftests/net/srv6_end_flavors_test.sh    | 280 +++++++++++++++++-
->  2 files changed, 279 insertions(+), 2 deletions(-)
-> 
+From: Feng Yang <yangfeng@kylinos.cn>
 
-[...]
+bpf_get_stack() has two implementations.  bpf_get_stack() passes
+may_fault == false and resolves build IDs with build_id_parse_nofault(),
+so an IP whose backing file page is not resident falls back to
+BPF_STACK_BUILD_ID_IP.  bpf_get_stack_sleepable() passes may_fault == true
+and uses build_id_parse_file(), which faults the page in and returns a real
+build ID.
 
-> +
-> +# Test a Policy with a consumed SRH: a router inserts the extra SRH on the
-> +# packets towards a SID, and another router consumes it. The destination host
-> +# accepts only the echo requests that carry the extra SRH alone.
-> +# args:
-> +#  $1 - router that inserts the extra SRH
-> +#  $2 - SID that triggers the insertion
-> +#  $3 - router with the SRv6 End behavior that consumes the extra SRH
-> +#  $4 - source host
-> +#  $5 - destination host
-> +#  $6 - suffix of the address on the loopback of the destination host
-> +#       (i.e. cafe::<host>:<suffix>), if any
-> +check_and_log_consumed_srh()
-> +{
-> +	local rt="$1"
-> +	local sid="$2"
-> +	local end_rt="$3"
-> +	local hssrc="$4"
-> +	local hsdst="$5"
-> +	local suffix="$6"
-> +	local msg
-> +
-> +	if ! ${HAS_SRH_MATCH}; then
-> +		msg="IPv6 Hosts connectivity: hs-${hssrc} -> hs-${hsdst}"
-> +		if [ -n "${suffix}" ]; then
-> +			msg="${msg} (${IPv6_HS_NETWORK}::${hsdst}:${suffix})"
-> +		fi
-> +		log_test_skipped "${msg}"
-> +		return
-> +	fi
-> +
-> +	if ! setup_rt_consumed_srh "${rt}" "${sid}" "${end_rt}"; then
-> +		log_test 1 0 "Extra SRH on rt-${rt} for ${sid}"
-> +		return
-> +	fi
-> +
-> +	if ! setup_hs_srh_check "${hsdst}" "${sid}"; then
-> +		log_test 1 0 "SRH check on hs-${hsdst} for ${sid}"
-> +	elif [ -n "${suffix}" ]; then
-> +		check_and_log_hs_lo_addr_connectivity "${hssrc}" "${hsdst}" \
-> +			"${suffix}"
-> +	else
-> +		check_and_log_hs_connectivity "${hssrc}" "${hsdst}"
-> +	fi
-> +
-> +	cleanup_hs_srh_check "${hsdst}"
-> +	cleanup_rt_consumed_srh "${rt}" "${sid}"
-> +}
-> +
-> +host_srv6_end_flv_consumed_srh_tests()
-> +{
-> +	local sid
-> +
-> +	log_section \
-> +		"SRv6 connectivity test hosts (h1 <-> h2, PSP with a consumed SRH)"
-> +
-> +	if ! ${HAS_SRH_MATCH}; then
-> +		echo "SKIP: ip6tables srh match not available"
-> +	fi
+Only kprobe/uprobe programs are routed to the sleepable implementation
+today, so the other program types that can be sleepable keep losing
+build IDs for non-resident pages:
 
-Ah, forgot to say. We can return directly here if srh match not available.
-There is no need to check $HAS_SRH_MATCH again in each
-check_and_log_consumed_srh() testing.
+ - tracing_prog_func_proto() serves BPF_TRACE_ITER, fentry/fexit/fmod_ret
+   and BPF_TRACE_RAW_TP programs, and falls back to
+   raw_tp_prog_func_proto() for BPF_FUNC_get_stack, which is also the
+   get_func_proto() of BPF_PROG_TYPE_RAW_TRACEPOINT and is reached by
+   BPF_PROG_TYPE_LSM and BPF_PROG_TYPE_SYSCALL through the default cases
+   of bpf_lsm_func_proto() and syscall_prog_func_proto().
 
-Not need to update for another version if you don't plan to change other
-stuff.
+ - tp_prog_func_proto() serves BPF_PROG_TYPE_TRACEPOINT programs.
 
-Thanks
-Hangbin
+Route them to bpf_get_stack_sleepable() as well and mark the new
+prototypes might_sleep, as
+commit 9d02927fdf4e ("bpf: Mark faultable stack helpers as sleepable")
+did for the faultable stack helper prototypes.
 
-> +
-> +	set_hs_seg6_enabled 1
-> +
-> +	# Policy (i.a): rt-4 inserts the extra SRH consumed by rt-3
-> +	sid="${LOCATOR_SERVICE}:2::${END_PSP_FUNC}"
-> +	check_and_log_consumed_srh 4 "${sid}" 3 1 2
-> +
-> +	# Policy (i.b): rt-2 inserts the extra SRH consumed by rt-3
-> +	sid="${LOCATOR_SERVICE}:1::${END_PSP_FUNC}"
-> +	check_and_log_consumed_srh 2 "${sid}" 3 2 1
-> +
-> +	# Policy (i.c): rt-4 inserts the extra SRH consumed by rt-3
-> +	sid="$(build_csid_container 2 "${END_CSID_PSP_FUNC}")"
-> +	check_and_log_consumed_srh 4 "${sid}" 3 1 2 "${END_CSID_PSP_FUNC}"
-> +
-> +	# Policy (i.d): rt-3 inserts the extra SRH consumed by rt-4
-> +	sid="$(build_csid_container 1 "${END_CSID_PSP_FUNC}")"
-> +	check_and_log_consumed_srh 3 "${sid}" 4 2 1 "${END_CSID_PSP_FUNC}"
-> +
-> +	set_hs_seg6_enabled 0
-> +}
+The verifier then rejects bpf_get_stack() from these program types
+marked sleepable whenever in_sleepable_context() is false:
+inside bpf_rcu_read_lock(), bpf_preempt_disable(), and so on. This also
+covers calls that do not pass BPF_F_USER_BUILD_ID and would not sleep;
+such programs load today. This is consistent with the existing constraints.
+
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+---
+v4: Update commit messages. Test modification: limit capture to one hit, add s390 flags.
+
+v3: Add selftest. Update commit messages.
+https://lore.kernel.org/all/20261104083833.971911-1-yangfeng59949@163.com/
+
+v2: Move regs onto the stack.
+https://lore.kernel.org/all/20261102073714.1103088-1-yangfeng59949@163.com/
+
+v1: https://lore.kernel.org/all/20261028093548.790977-1-yangfeng59949@163.com/
+---
+ kernel/trace/bpf_trace.c | 54 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 2aec56d7f3d3..1229ee06dd71 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -84,6 +84,7 @@ static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const char *name)
+ 
+ u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
++u64 bpf_get_stack_sleepable(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ 
+ static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
+ 				  u64 flags, const struct btf **btf,
+@@ -1477,6 +1478,26 @@ static const struct bpf_func_proto bpf_get_stack_proto_tp = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
++BPF_CALL_4(bpf_get_stack_tp_sleepable, void *, tp_buff, void *, buf, u32, size,
++	   u64, flags)
++{
++	struct pt_regs *regs = *(struct pt_regs **)tp_buff;
++
++	return bpf_get_stack_sleepable((unsigned long) regs, (unsigned long) buf,
++				       (unsigned long) size, flags, 0);
++}
++
++static const struct bpf_func_proto bpf_get_stack_proto_tp_sleepable = {
++	.func		= bpf_get_stack_tp_sleepable,
++	.gpl_only	= true,
++	.might_sleep	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
++	.arg4_type	= ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1486,7 +1507,8 @@ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stackid:
+ 		return &bpf_get_stackid_proto_tp;
+ 	case BPF_FUNC_get_stack:
+-		return &bpf_get_stack_proto_tp;
++		return prog->sleepable ? &bpf_get_stack_proto_tp_sleepable
++				       : &bpf_get_stack_proto_tp;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return &bpf_get_attach_cookie_proto_trace;
+ 	default:
+@@ -1716,6 +1738,33 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
++BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_args *, args,
++	   void *, buf, u32, size, u64, flags)
++{
++	/*
++	 * Don't take a per-CPU bpf_raw_tp_regs slot here: those slots are a
++	 * LIFO nest counter and are vulnerable to slot overwrite and
++	 * corruption across sleep.  Sleepable programs never run in
++	 * IRQ/NMI context, so a local pt_regs is sufficient.
++	 */
++	struct pt_regs regs = {};
++
++	perf_fetch_caller_regs(&regs);
++	return bpf_get_stack_sleepable((unsigned long) &regs, (unsigned long) buf,
++				       (unsigned long) size, flags, 0);
++}
++
++static const struct bpf_func_proto bpf_get_stack_proto_raw_tp_sleepable = {
++	.func		= bpf_get_stack_raw_tp_sleepable,
++	.gpl_only	= true,
++	.might_sleep	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
++	.arg4_type	= ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1725,7 +1774,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stackid:
+ 		return &bpf_get_stackid_proto_raw_tp;
+ 	case BPF_FUNC_get_stack:
+-		return &bpf_get_stack_proto_raw_tp;
++		return prog->sleepable ? &bpf_get_stack_proto_raw_tp_sleepable
++				       : &bpf_get_stack_proto_raw_tp;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return &bpf_get_attach_cookie_proto_tracing;
+ 	default:
+-- 
+2.25.1
+
