@@ -1,101 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.174
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793902417;
-	b=LlJnZ+6Aty78I5/KFG8lZ/tBndQc64ZT8keigIDnTVz7ANVl4OeV99mJ7J+luYUh7S6x
-	 UMF4qHseuv0OqUzp3eVoL3DwySJCZ7nZHtzkw7SqAp/nQwYzkGnQJCd33qklICJDGIYXQ
-	 0l9NpZuyi27NFPuOEHEruK33GY7QdNGfeX1c+7Lo9c90nXsuwO3WlcHknPEVj10jqa4Gh
-	 BBL1XAr+M/PYyIjDNwmDrdBYG3Es7D65Yf/F1ugDyOX6KKvMwucWFDSCgYx99EEuSynmq
-	 9joX7uy+Ityi101styi9r7bajCvPdzLoP4u6Q5RA4dgFfjg1b5WlajnTKQp3zF4qqiA==
+	t=1793902483;
+	b=UTHEmdyURlgA1rCsMvViMFNwMWm0XUgzQ7NhtCYpuMUQCgvltWdYUNd35neE7krP2rp/
+	 Dcsnxateb03tgj5ZK/YSHBNQrkQ27bnUjsha9iayZad7jz84c7DB5hqeHtcNqI7VHQTc6
+	 buwNkL0msy/a9vjfUGbjV8m5KKG11Txc8azfJupRmjXgL12nz+s9mimW6nek5AxSnhSma
+	 kQ6jrRhQkARwBRr5OeHIvEVPbBjAKGV5VtNB+MbO0nI6pHF0Md8CTacMBG9UHvYQrZpWP
+	 u+suD9faBPkNBXxLviF02r1D1IDVv89y2IEYKsiMlM4uJIeQ2vqS7edbmKFG3lbKdkQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793902417;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793902483;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:MIME-Version:From:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:Content-Type;
-	bh=098pJ/mjCtdUXxQuc1quST9UBoetMnmWWS/d/SLNK1c=;
-	b=cXDWkE3ibD1VjMgjs8iv4+LPG9af8GcVQ/Pdj5oPpBhQskDnIQZJbaF5BJojTdlQOVXi
-	 YU0oaItInKiaP0HwBxwkgfQGwCfuMA6gyaO1cSqS18PCIXf1se8nlk1bgOZRdKpLvwycS
-	 uFe58Pdi94S7geTLAxnFL1PPDKnyVce9drBV43IxnOkZMeaVpZo9iyI2o6Tiy1rp1Edi2
-	 G2PvNq87LsUhmPu3Xe9T9kmEJAnv6vFLLvBwLBqLucOb2WSDAUInXp3mt27nVjJPNKkdO
-	 ehaep73lhAEFaj3fkuzELuoPm9y+P6L2Trwp8PS7fSAAK5P/IjqimL18KVPjgpu1i6A==
+	 Received:MIME-Version:Received:From:In-Reply-To:References:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
+	bh=k69fxDmtmmF6Y3dZct9TP630KoCBBlkteFGCi7Y2r6o=;
+	b=XhGapYC5CtvFLQLfiYctNv/GynkjgnR5bv1+zywK6E8VMDvIzhgpV/aX3MpHVYbmG1/U
+	 OmvEA36w1H01n+xkBGDqJslbSGJB9MSiWWusLdmSDYDG+IAeJZImtJ/zzcEYZlPcSD3Af
+	 b+1O+NtT/fSsnJdh2OJk95WcSMME3qjqIGLJtJMdK8Kn/8GIA4M/gZwOvAH5mwRMk5wNM
+	 Hlqxv9In6nF6sdCsI31c+46MYeamR41COZZLMTCpSxBDgfDpS65T14Lm/2dqB+vdhIniv
+	 vt/mKhO6WHzcj3rVmfMfUl9I+G0UM8RiJHbWM0Ya0RddjecgyCULcISrqn1yfxyvZeQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=student.oaklandcc.edu;
 	spf=pass smtp.mailfrom=student.oaklandcc.edu;
-	dkim=pass header.d=student.oaklandcc.edu header.i=@student.oaklandcc.edu header.a=rsa-sha256 header.s=google header.b=L6TU1sYs;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.179
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	dkim=pass header.d=student.oaklandcc.edu header.i=@student.oaklandcc.edu header.a=rsa-sha256 header.s=google header.b=Kvwr0N3w;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.174
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C5C606A31B
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 18:13:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47C5C606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5556606A31B
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 18:14:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5556606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=student.oaklandcc.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=student.oaklandcc.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=student.oaklandcc.edu header.i=@student.oaklandcc.edu header.a=rsa-sha256 header.s=google header.b=L6TU1sYs
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-8b31ca7e0bcso22156587b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 10:13:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793902410; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=student.oaklandcc.edu header.i=@student.oaklandcc.edu header.a=rsa-sha256 header.s=google header.b=Kvwr0N3w
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-8b0d91601bdso8031687b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 10:14:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793902482; cv=none;
         d=google.com; s=arc-20260327;
-        b=MJIMFum/R2WQv2re36Q44U10JByjA6kBoGRZpwtYsXYQ4hpXOJWanQ9jea4NkqQqKo
-         UKvuXtD7MGKeXURgKe2IZor8cR3/UsN4n+7Qs1bcVjcg6o3LI7iM7pqBqPR2hROmT/CG
-         XfPAcy2+S4O691rKiGECaaEgWu/B6Azm17ijLkFgpS6g5+2Rr5emDUwEVdbozb85/9+g
-         jOCLRS6NNi8SUmZtIy3oheLj7cEvphyHfvHPJ2lc0IQF4YB//WH2vF8J4fC64w1KdczS
-         GRcagjmeDa6C+FN+I2EUjBzCNPlxGOC04QkNVKw3nzHOPKj6uJxMpRGBGv/9IaQKFa9w
-         E/yw==
+        b=Hke9lPXOStEc1tfUIGVhOlBXikZQpJ0r2J/hGTuzo8566O7yXen8fbdwR40qDLlUU/
+         N/TO4Mk2SSYpiLagha+hnXQ0dWH5UihlnvZ6d6FDpGh+jveiUsbaMLe/ZXb5W26+vO2B
+         F2TFoEFoVjJSUOothNZO5nJjMWb0p1eK6CuF0PzDudSdYK72Zit6egbOOl+1+8MDrVyK
+         cwxiqqP5QRi84CGPiLKHq7TOwyfu8LIONR5d9qYTGtvOPANEQvccQmg30E7lEU/YdYrK
+         1QxQ23E5bhemMGNOTnQ/wskzfcBqoVJyhQHzLrcgMvnQqu2ha4AjtIuUnmemsG1BlONm
+         RhHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=098pJ/mjCtdUXxQuc1quST9UBoetMnmWWS/d/SLNK1c=;
-        fh=flZDCUGhAYz0BNXLsZnx1dUgGRiGU7UpbYRoXTThOoE=;
-        b=qRWkejqYxSwiC/B2QcmyzQqcJCCFke+aIGRjE06dFvxGJISg6zK60OXncxOa+6CWZC
-         7XG9wkVJRDv37H3Otv6bA7RoS9K8ptBLwqJwclXLVDsRW8MBCI7f+osZQzThqSl8YO8w
-         rR3Ivvi1uLnrzrCPVwYq/qZW+8iAHsq0sm00oD1dAQBozcSolr39iqyfUpyNOw+OPKV5
-         1+1E6RwUSZ9gbJeySpPV/ZL78OW/wJLsKM6qVeHl5QygfyjbWUelGwAr+MtBFwTvFGc8
-         MAbCFqhqAqaZ842/Yuo1VqhSRk7wj3LTXnzNTdnQc4uR7ZQp17kdVLoUJaqBD7beMfxn
-         l6pA==;
+        h=cc:to:subject:message-id:date:references:in-reply-to:from
+         :mime-version:dkim-signature;
+        bh=k69fxDmtmmF6Y3dZct9TP630KoCBBlkteFGCi7Y2r6o=;
+        fh=+AFjarDfSm/c7Lr/oIfacyrt2WJMTBkq3r85m5iTl2g=;
+        b=BaKRrCAbyu3u1BJgezHL23WZsBJGlwCn5Fd30aQEJS5AYgRLCFDy4V7B16qgmxIq+Z
+         +xj1o7VE/xXdLQRInaKoHCb0iN/yoSpWjelOkIWaJ80sC/ZNYg8PfrTZ4QOKBVodzaQ1
+         fW4agN6QE531x8x/YrpR5Os//ldgqbazKiN7Wyum6pI/NMd4l+Bol1iYuzv8NNd1A12/
+         FPh/5LGAboPk2fmpI/uHK1wVTzeNQJH8EjIncw4gqORv7Q7aJkY2/yLWD/t9dxKufCjP
+         1xfpLnwAgI5xMPUk34KUVbZnFdGln+WvSWB6u4hJGDRFuRiWAE701oK/pbPphgpJrHcv
+         Claw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=student.oaklandcc.edu; s=google; t=1793902410; x=1794507210; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=098pJ/mjCtdUXxQuc1quST9UBoetMnmWWS/d/SLNK1c=;
-        b=L6TU1sYs2Py+1Gm3B7HjgxQllc30Pdo9NZiMwe5bW4b96/wYLcAngHynXLRisbOe5f
-         MUKBU8F8eFWJELnaETJsBcr7NUqpcZUo6yj0XF7Eu6qANVuiY0FELfwMZtyMWXjJDlj2
-         X5lODsb+v6tzUaBb/OeihlWXlVjml8Yrl10cJwIOY4/zmD/dFItCXulgTv2Ieg/qRM2S
-         2KJYzSqkGR90c8CDHcjbrFRS/2tDV0atiYuQbgQs/cftTL7DcUu9OHgWRU9xW/IlNmRe
-         /XKM/LXkqGrx5gJbQOWBhM4Np+v153Sw7WiYR/czMdPwNm6oe3h0KxTATypFICzBocg+
-         hPoA==
+        d=student.oaklandcc.edu; s=google; t=1793902482; x=1794507282; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=k69fxDmtmmF6Y3dZct9TP630KoCBBlkteFGCi7Y2r6o=;
+        b=Kvwr0N3wJcuMs7cGXUZBxJtEaOzeSX2XPoDoVeZS8hq++Ke6HbWvywy2wThr+XW+P8
+         U1AMiClyMZPXUgzBUARJ7EBZnsm75rovNxs1CNIC+GVfF+nfrOqT5jCVAMsITy7aCxmS
+         Kk8Qb4p4wwzx0xZP9rVj8MtBvc1O89NlNWoGHdI5YHasV0y3Z0TIzPVC/4H5LJ6ic0B9
+         h4I6X5Num32/yzBi6uWSoiHPXc+4wMsZ5jYcxnTQPjUGfTeSrO3j/owjROA9XpeFbhMc
+         VYe+x7L+PvSn3SvjABWpIXpoI1DOQk9B0EC32AXeZ7FC0G4zizNJkwTgS19VYJ2Rxr0V
+         EcrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793902410; x=1794507210;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=098pJ/mjCtdUXxQuc1quST9UBoetMnmWWS/d/SLNK1c=;
-        b=GAPv21+SzkMhf7W+bXjkWZR9mSKt7+W4HTOOzXeMUtRjs+8mtIym37FZ27rNi/7hkv
-         AfvRFefjrzGhU30CfyhbJai+z0RQN3wUVamHxigRdrvvRtqso53S+RBcZRRlR6usERmG
-         XATQvvsq6TMVwsl12FlzfN+oNjyH9CWmeE+657yW/8JoxvUNk1ZxEFHFJfWg/Jj8k0qu
-         4ndDksCsXax4fVpc9YxeGBCPy7/HxUaXkPaLgP20mYJ/kAZB1VwT+7tCV7DQwXDibdmI
-         mFU3AtCruoVMUVLZEVdRxEm2bjRHdDePFLiSWunU4QVCk+6SxJp8MaWo51qOpRhY9sxe
-         x+VQ==
-X-Forwarded-Encrypted: i=1; AL+hErGpZgzKJGV7v5g+7zWPOr1DD7Sd8ulwZqzaLzqCTbLrsXOKemIaj+ycSbrM39J7m04eAYmjSUNXwUScv+kgPys=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/d/rpuLUTvbOvvcq0Hv6Vy5aO96BCzNheVQFxGhMCUuPoeQuKs
-	PPILkeXfVCM4j43PttGzZTvm7iHzfurxB8Vn/zAqSSjPTBs4E3yaiPmRpw2U3DpyTZfXN152QIz
-	//EiHUEDdw1Pt6sjzHzCKmE46+WeiuCWeTRm2SfVHMQ==
-X-Gm-Gg: AYBFou18kEBcBdsoV4ZQ3U+Fd4OXIeV2DB/L6aOVVEr+RXmWSZL6uBN44vMOjTOy7Hl
-	hsh/4oKTi3Qw2rmzey8Zo70UTr3cI5w2nerp5vjmuYMZzHtwSongHh56jhkF3K+Fj6DwHDZnvk8
-	9vsBMrHwbzvEtcpWvLV27K+Ahhix0fbkOwxSFh9IJFk3BpaJYw1bpmDX+AdyH7oGR+GlYtf8ioN
-	Xb1h5mvG+SnPa+KNVsbFOJGMeKu21yFvKrRabR6cVaMJNc+0XnkiZAmyN6bpuzkl3dqOk4nL/W6
-	paVNjXc25/xUVwolQQAqAMgdm8O9MTw4rgG5ooZrsgarMeux7wEyN7ZhPW5FK4dFgZRWwO18BV+
-	0vNn4dpVTi0G1ZfskxOP2q03E1xRHc2g9lw==
-X-Received: by 2002:a05:690c:e3c9:b0:8b0:e348:2586 with SMTP id
- 00721157ae682-8b2b6738e32mr154837347b3.25.1793902410239; Thu, 05 Nov 2026
- 10:13:30 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793902482; x=1794507282;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=k69fxDmtmmF6Y3dZct9TP630KoCBBlkteFGCi7Y2r6o=;
+        b=uTB1SZUBJuv0SPuL8Od5vdrfzMsV2E1t7h9fUeGRNe8bm9dTqxy55CG4+mrd45CQY6
+         0Ljc2BWyaXfG8iYRNFwFarboct8Oh5IwAgMgz/OHlFnQyY9SL78hdwExbrsbzt1MABDV
+         6dYiNS9pntdvDQYkAOz/xn88Ta9Po2pWQJE9KSo5TscEDggMfrPOg09dxFpDd2xJ7xJi
+         2C39MfamVPROgj7TMLvB8qBNrN+RJkaiAZU2kv+K1JHtLxF1baMktBOC3sI+dQhMeE5v
+         ClTSzGd/fEv0MU/wimlwxcQs4tlYOdoLXOjM+6NUha6CPDZTwWX28zyR0GAQihuSWCUc
+         rJVg==
+X-Forwarded-Encrypted: i=1; AL+hErGK/4bND+5qJkaR/5INqbE560HedqvrVSgZgyEVlckDa24hJnZmrHpE/hdGnoL8Pgx8c5YjTjcyK1fp7pBz9e4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8efL0hUgVWT0kAw9kwbGIMQHaudFwUUYrJFSj6/c7OGC328gmC
+	0bZJefuf/4s80Fncgie0rD5JzIcZYy+8YKOMvd4OXgC0G2gaHaDP4rlCKFhFWXPH/ekA1TQZ3B+
+	rJdp4gBgdmnEUxqHWoBvFiK1HncFVVo+rz6p8+4nCSw==
+X-Gm-Gg: AYBFou0j6NOe/aJMhASQfLLyPLf2Yme1ohIz5HGNSc3F9XUD2lgz65ZKcluZFRgH/pS
+	EwjNTpLR9Y81ZsFACn9ruQ0XsQV6276DX4wN1xIWDc+HvUVLV94mHxXY9hIBcKpU+5y8t4eoIJn
+	Gxp7GeC490fTYiKldiQNCU6mNOHLkf91ohySTeou+Y3AV9Wnr0TUKcHF/DLseSTkCeam2pZA0y0
+	CFIpfzLiosMaZS5Rw4Pt1xWT2VHOzovKjfHmZe9yPaukdbpkQYA69ZnN2TlLitpMPflBk070UeK
+	xMKjGSGgYtF++z5nuNhw37HXHcN9KzUoKpbg6I89RoR3m0lJXWFlJPP+bx5wtZX3tbe53gkHME0
+	ca6rKWoAEntGs7gvWLy3Z4ALmIebm/r2CCw==
+X-Received: by 2002:a05:690c:a012:b0:8b0:e13c:2852 with SMTP id
+ 00721157ae682-8b328db53bfmr18059617b3.7.1793902481851; Thu, 05 Nov 2026
+ 10:14:41 -0800 (PST)
 Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 5 Nov 2026 13:13:29 -0500
+ Thu, 5 Nov 2026 10:14:40 -0800
 Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 5 Nov 2026 13:11:32 -0500
+ Thu, 5 Nov 2026 12:14:22 -0600
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,45 +107,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Received: from 77377267392	named unknown	by gmailapi.google.com	with HTTPREST;
+ Thu, 5 Nov 2026 12:13:40 -0600
 From: "Louis H. Poulin II" <poulin.louis@student.oaklandcc.edu>
-Date: Thu, 5 Nov 2026 13:13:29 -0500
-X-Gm-Features: AclHuK-HkL__-odPAdZTujQIEQgQe1lLyEI3SQMyBF-rOk0k-MqpTUFrExyNMec
-Message-ID: <CAGQButum4PYb4A+hmqg-bJZbf4L3KkH6rT9tn-0_NTs3xLhGYw@mail.gmail.com>
-Subject: [PATCH 0/2] kunit: tool: Preserve failures in parsed KTAP results
+In-Reply-To: <CAGQButum4PYb4A+hmqg-bJZbf4L3KkH6rT9tn-0_NTs3xLhGYw@mail.gmail.com>
+References: <CAGQButum4PYb4A+hmqg-bJZbf4L3KkH6rT9tn-0_NTs3xLhGYw@mail.gmail.com>
+Date: Thu, 5 Nov 2026 10:14:40 -0800
+X-Gm-Features: AclHuK-pWE1BEpdoomXA8eGheOMWNCk027wBT3itki_9ei4qUXSDyfyqr1wzuzc
+Message-ID: <CAGQButurzJT6fQqqxO9xD0GABME=AtGeYS0kQf-jDFSqKH6GaA@mail.gmail.com>
+Subject: [PATCH 1/2] kunit: tool: Count failed suites with only skipped tests
 To: brendan.higgins@linux.dev, david@davidgow.net
 Cc: raemoar63@gmail.com, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The KUnit tool's saved-log parser does not consistently propagate two
-failure conditions. A suite reporting not ok with only skipped children
-leaves the run SKIPPED. A result with an out-of-sequence number can
-still be counted as successful, so kunit.py parse may exit 0 for that
-malformed log.
+A suite can report not ok while all its child cases are skipped.
+The parser retains the suite status as FAILURE but counts only the
+skipped children. The run status is then derived from those counts and
+incorrectly reports SKIPPED.
 
-Patch 1 preserves the suite's reported failure in aggregate counts.
-Patch 2 marks out-of-sequence result records as failed. It depends on
-patch 1 for a malformed parent suite whose child tests are all skipped.
+When a suite reports failure and the child aggregate is SKIPPED, add
+a failed count for the suite, as is already done when child aggregate
+is SUCCESS. Cover a correctly numbered failing suite with a skipped
+child.
 
-The KTAP specification requires result numbers to start at 1 and
-increase by one at each nesting level. The numbering change treats a
-malformed result record as failed even when its keyword is ok. It
-leaves the status policy for other parse diagnostics unchanged,
-including a late TAP plan and truncated logs.
+Fixes: d65d07cb5b01 ("kunit: tool: improve compatibility of
+kunit_parser with KTAP specification")
 
-Tested locally: ./kunit_tool_test.py (100 tests), saved-log parsing
-tests, Python syntax and strict checkpatch with the sign-off check
-excluded. No live kernel run was performed.
+Signed-off-by: Louis H. Poulin II <poulin.louis@student.oaklandcc.edu>
+---
+ tools/testing/kunit/kunit_parser.py    |  4 +++-
+ tools/testing/kunit/kunit_tool_test.py | 13 +++++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-Louis H. Poulin II (2):
-  kunit: tool: Count failed suites with only skipped tests
-  kunit: tool: Fail on out-of-sequence test numbers
+diff --git a/tools/testing/kunit/kunit_parser.py
+b/tools/testing/kunit/kunit_parser.py
+index d722874b..dce365d1 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -694,7 +694,9 @@ def bubble_up_test_results(test: Test) -> None:
+ 	elif test.counts.get_status() == TestStatus.TEST_CRASHED:
+ 		test.status = TestStatus.TEST_CRASHED
 
- tools/testing/kunit/kunit_parser.py    | 15 +++--
- tools/testing/kunit/kunit_tool_test.py | 92 +++++++++++++++++++++++++-
- 2 files changed, 98 insertions(+), 9 deletions(-)
+-	if status == TestStatus.FAILURE and test.counts.get_status() ==
+TestStatus.SUCCESS:
++	# Preserve a failing suite result when its children all pass or skip.
++	if (status == TestStatus.FAILURE and
++			test.counts.get_status() in (TestStatus.SUCCESS, TestStatus.SKIPPED)):
+ 		counts.add_status(status)
 
+ def parse_test(lines: LineStream, expected_num: int, log: List[str],
+is_subtest: bool, printer: Printer) -> Test:
+diff --git a/tools/testing/kunit/kunit_tool_test.py
+b/tools/testing/kunit/kunit_tool_test.py
+index 85ae2175..5fd386d0 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -265,6 +265,19 @@ class KUnitParserTest(unittest.TestCase):
+ 		self.assertEqual(kunit_parser.TestStatus.SKIPPED, result.status)
+ 		self.assertEqual(result.counts, kunit_parser.TestCounts(skipped=5))
 
-base-commit: 05441d697f7f9a927264f4058cbbc6a03dfcac9d
++	def test_failed_suite_with_skipped_child_fails(self):
++		output = ['KTAP version 1', '1..1',
++			'    KTAP version 1', '    # Subtest: suite', '    1..1',
++			'    ok 1 - case # SKIP reason', 'not ok 1 - suite']
++		result = kunit_parser.parse_run_tests(output, stdout)
++		suite = result.subtests[0]
++		self.assertEqual(kunit_parser.TestStatus.SKIPPED, suite.subtests[0].status)
++		self.assertEqual(kunit_parser.TestStatus.FAILURE, suite.status)
++		self.assertEqual(suite.counts,
++			kunit_parser.TestCounts(failed=1, skipped=1))
++		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
++		self.assertEqual(result.counts, suite.counts)
++
+ 	def test_ignores_hyphen(self):
+ 		hyphen_log = _test_data_path('test_strip_hyphen.log')
+ 		with open(hyphen_log) as file:
 -- 
 2.53.0
