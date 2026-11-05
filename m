@@ -1,55 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793891239;
-	b=iuDiiefl4/V+/VOoRqlCCG+UrHhq2vDr0H8PzR9zUT5MxLXL5T9yAlp/tjaicYVLloqi
-	 O1RWi08lvublHIlUEWsCOdLCA4XcrLtZMUycCRTYKcdsZpR/XqmKnLKj6+meTKrwK+6By
-	 bRHYeQLvQqfdpcRYWo8sIxwny2S1cG7lVR9I1BBjW+eCbu1qh53536IfGUgp0h0ohjMVr
-	 9JSO1cz0iuvduiAlhIddv8VukbaXt5j8utqL3fxuNaHdEdJ6MXWLawnSI2avDHvkme4Yl
-	 9Tst3c72t3KKXjD9Lez6hhXJc1TLVhdhODv6dEJ77nYO/7mXxWo9/nm5yErJcQDSxbw==
+	t=1793891950;
+	b=BTyXHlMuwW04dTtpNBo9HAkylu/RNbdY1Zg92f51XMBFKv45xhIQWQBJ/UXp0TUCK9Xv
+	 0M2xHmunG28i7T2hL/Byj+fyiHr2tTegnqDzT6pm6j1THAoty03gdQJeJzdhZN0bl/tr1
+	 A3dXWWI7JId95Yo5XU+QL/yFQBK6zwtve5Wbp4jSqpc9I9XwlACAUTldXLTJDnACRMF6g
+	 Rq5GuDgZ27TGZ9dB5TP5LtpetkQMIReRH5GWbXocNR8M/ArDdKJYlZ/Q1EIm1Jr7iwsGY
+	 hLaGS7FPRVG4dZTxSP575hDpPNwwzDvZ4UVeaCKP1h+SVJbEmZT5t9J/uH4mSGgsuZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793891239;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=6LZ+1+Vvz+jfm5vRHAeunaTxWBAAAXS8a4MaB1JvOmw=;
-	b=se8jSKWbZ+xn5Uhk03wWoAspj7aX8KQlz/ctk7DK+8fKlYkmIJhocthVY4B5eK2UIet7
-	 reFEUPa8Hxip5mwWLu88hRBSuDmOABzvWulA9lHZCL+gW/bm+NiIOKBO1ck4GKFpRWxVB
-	 w7hAE7iAP7Y2cKjGIMrrRf3zry3DbQlnBE3GeXmDm3a7tN/ph+3Jl/UdY1A6s5M3Wy4QV
-	 zFlAWGKgQ3bNlE7PiWSv/c/eLRGcwYfl7xBT4DAWKaYQzWZolQm6Yza1a7SWnoyC34AOP
-	 FBV4qKcxirjR7st9WJCdrRAh0MlaQfOc0u+St/JgYj4RxPUzEbKvLAPzAZri4dvcEnw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793891950;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Transfer-Encoding:X-Scanned-By;
+	bh=aRQh8dS+XR3vQe5ltm+KXlmY2JqIDhKFiUkIbtcENcY=;
+	b=gzh8v/rqFhyYWgH8BlZREiBnlnAisBGtrZqFldocECchrcun+/7T7iHJduI5jis1BP/V
+	 GrRvGXxyKHKBe/HnbaD0GRO+xm/xKSGUWAiCva6YBH6i7CUs8bqHkrNSACH6LUUnHLwdp
+	 hDpqS9Br5EZa4HYdk1+XuZinKlDZ2iW32ORVxsXTHFrC+vYQ5kacLBh1JiKGcp4lp7iZN
+	 M/cvfzYy9l6HGABsLKKVAnUh2/SbIQlCkCVGz7/wApDhrfwkjp0qCVGVnj4uyZmZwbQne
+	 PL927Al9wRpf7tPktfDjdKstL2RbhekeRPdY57wmAj7o7tw4gHHo3wO4NxDNo9vjrZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="EO2BJ/6+";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=US+YJR4s;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562B3606A326
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:07:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E992C606EEA6
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:19:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E992C606EEA6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EO2BJ/6+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A4E51F000C1
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793891234;
-	bh=6LZ+1+Vvz+jfm5vRHAeunaTxWBAAAXS8a4MaB1JvOmw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=EO2BJ/6+M7a0iVK+i0E4JAgIf0guklGRku6bWT0XQ+WcRveIX2swjjcEIo80eGySO
-	 Zxwzw8nUep52BHRGVFDCqzj8MkwArw/D/cG+4k9VHdAUSkeTKyuVvrWfqL9HngrE+b
-	 fctXZ9EOEIb2b2BwXoMxVj1b3kwiSyO3Te/F20K90NaAQvczD7ROuj9T2Wh7m9zwx4
-	 qoffAGSr4/I8IVNzmJCJDgjFqm14vbHAlpFE4Ddpq+2dosEMN65pDabHtkLRweRqSF
-	 FKXUAGogl5giMaahe7YMTTTl4OLkvYcSN4TZEU9UC4zNJKQ6bMkXRDwPZkGTMDpUh6
-	 Yi0+lZbT1/B/w==
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b56c428212so214085a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 07:07:14 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBzPdiQVlpyZZEOf62ew1hnm+BFtZwIO9gZJbF8XIoYKLUHFlSwQuGBAX955uTYx7oGwFe0OazYRHN+K//08wm4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+95WKrL0UGk/RSsUeXHTBAFh6+HO4KoOazePJOT3dRI7z69aGb
-	ciwlTl9U0fwK1eco0htr3WP89gAuYmhgHYf83G6/G3zOsTAQPnUxYyRnVoWz8q6OLDOK4lKEgGX
-	aIDzUL972V8k11LyTR16nbi5XnwebCyE=
-X-Received: by 2002:a05:6402:27cb:b0:6b5:685a:aa29 with SMTP id
- 4fb4d7f45d1cf-6b5685aabaemr3342720a12.30.1793891232594; Thu, 05 Nov 2026
- 07:07:12 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=US+YJR4s
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793891949;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aRQh8dS+XR3vQe5ltm+KXlmY2JqIDhKFiUkIbtcENcY=;
+	b=US+YJR4skcck34Ps2FS99ZNUUuPkDFDFhJD1rP9aZ992sVfyTd0XiAngjx5coKjFJXxuAb
+	EoD0CEJIhCp0wdv8IusjI09tzhYQsPKseDk+yLKWfdfQruWzXPtDnnG5lpAACHQfnXa+P6
+	21WxiOor/evP9kzzwuWkeKynIFI87Lw=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-211-ps5Y5IFtP2CKd5FELX8ghg-1; Thu,
+ 05 Nov 2026 10:19:04 -0500
+X-MC-Unique: ps5Y5IFtP2CKd5FELX8ghg-1
+X-Mimecast-MFC-AGG-ID: ps5Y5IFtP2CKd5FELX8ghg_1793891942
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 483EA1955F0E;
+	Thu,  5 Nov 2026 15:19:01 +0000 (UTC)
+Received: from poros-thinkpadp16vgen1.tpbc.com (unknown [10.44.32.42])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A1CC01956089;
+	Thu,  5 Nov 2026 15:18:55 +0000 (UTC)
+From: Petr Oros <poros@redhat.com>
+To: netdev@vger.kernel.org
+Cc: Petr Oros <poros@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Ivan Vecera <ivecera@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v2 00/14] dpll: add a simulated DPLL device driver
+Date: Thu,  5 Nov 2026 16:18:38 +0100
+Message-ID: <20261105151852.1844305-1-poros@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,54 +89,120 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261029172956.20791-1-dongtai.guo@linux.dev> <20261029172956.20791-6-dongtai.guo@linux.dev>
- <aux9Hm0QFJLUDPWv@kernel.org>
-In-Reply-To: <aux9Hm0QFJLUDPWv@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 5 Nov 2026 23:07:01 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7Dsnz03iXChzE6nYM2cs+D6fdDFiWrDxX5jM13kYL6HA@mail.gmail.com>
-X-Gm-Features: AclHuK-7ZT562FqR8Q8-CsL50vorYou5ohB9VqtWfcaV8ssgwEH9NV-xDdP2-NM
-Message-ID: <CAAhV-H7Dsnz03iXChzE6nYM2cs+D6fdDFiWrDxX5jM13kYL6HA@mail.gmail.com>
-Subject: Re: [PATCH v6 5/8] LoongArch: Allow memblock arrays to resize
-To: Mike Rapoport <rppt@kernel.org>
-Cc: George Guo <dongtai.guo@linux.dev>, pasha.tatashin@soleen.com, pratyush@kernel.org, 
-	ardb@kernel.org, shuah@kernel.org, ilias.apalodimas@linaro.org, 
-	akpm@linux-foundation.org, baoquan.he@linux.dev, ruirui.yang@linux.dev, 
-	guodongtai@kylinos.cn, kernel@xen0n.name, graf@amazon.com, 
-	liukexin@kylinos.cn, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hi, Mike,
+The DPLL subsystem has no in-tree driver that can run without real
+hardware, so core changes and userspace tooling are hard to exercise in
+CI, and the pin-on-pin and reference sync paths see almost no coverage
+outside the vendors' labs. This series adds dpllsim, a simulated DPLL
+device driver, together with selftests that run against it.
 
-On Thu, Nov 5, 2026 at 8:57=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wrot=
-e:
->
-> On Fri, Oct 30, 2026 at 02:29:52AM +0900, George Guo wrote:
-> > From: George Guo <guodongtai@kylinos.cn>
-> >
-> > LoongArch never calls memblock_allow_resize(), so the reserved region
-> > array cannot grow beyond INIT_MEMBLOCK_RESERVED_REGIONS entries
-> > (INIT_MEMBLOCK_REGIONS + NR_CPUS).
->
-> This might be something to fix independent of KHO.
->
-> Huacai,
->
-> What's the reason LoongArch never enables memblock resizing and why it
-> defines INIT_MEMBLOCK_RESERVED_REGIONS to include NR_CPUS?
-At first we didn't define INIT_MEMBLOCK_RESERVED_REGIONS, then we got
-boot failures on a 128-cores machine, so define it, and the value is
-similar to arm64.
+The driver is controlled through configfs, following gpio-sim. Writing a
+clock ID into a device directory and setting "live" to 1 registers a
+DPLL device with the core. Pins are directories under pins/ with their
+type, frequency, direction and priority as attributes, and all of them
+are registered when the device goes live. The split between creating
+the configuration and going live keeps the register and unregister
+paths reachable from userspace, so they can be exercised repeatedly
+without reloading the module. Nothing in the simulator is a stable ABI.
 
-The reason LoongArch never enables memblock resizing is because the mm
-code is derived from MIPS, and MIPS never enables it.
+The patches follow the shape of the zl3073x introduction. The
+driver starts with the device alone, then gains pins and the static pin
+operations one at a time (state, priority, frequency, phase adjustment),
+and every feature patch is followed by the selftest that covers it. The
+last two patches add concurrency stress tests and reference tracker
+leak tests for the lifecycle paths.
 
-Huacai
+The simulation loop (lock state machine, phase and frequency
+measurements, monitoring features), the topology features (MUX pin
+hierarchies, reference sync, media failure injection), netdevsim
+integration and device mode setting follow in two further series once
+this one is in, to stay within the 15 patch limit.
 
->
-> --
-> Sincerely yours,
-> Mike.
+The driver and the selftests were developed with an LLM coding
+assistant (Claude Code) working under my direction. I chose the
+configfs design, the split into one feature per patch and the test
+scenarios, and I reviewed every line. The assistant wrote most of the
+code and the first drafts of the changelogs, and it found and fixed
+bugs by running the suite on the lab host. The series then went
+through several rounds of an LLM based patch reviewer whose findings
+were fixed, and through a mutation test in which deliberately broken
+driver and core code was caught by the tests.
+
+The selftests live in tools/testing/selftests/drivers/net/dpll and run
+with "make -C tools/testing/selftests TARGETS=drivers/net/dpll
+run_tests". By default they create dpllsim devices; with
+DPLL_DEV_ID=<id> the basic and feature scripts run against an existing
+device instead, so the same suite exercises real hardware. The whole
+suite was run through the kselftest runner on an ice E810 host with
+CONFIG_KASAN, CONFIG_PROVE_LOCKING and CONFIG_DPLL_REFCNT_TRACKER
+enabled, against the simulator and, with DPLL_DEV_ID, against the ice
+DPLL, where the tests that need a simulator skip and the pin state and
+priorities of the hardware are left as they were. All pass with no
+warnings in dmesg.
+
+---
+v2:
+- sort tools/testing/selftests/drivers/net/dpll/config alphabetically
+  and make the scripts clean under the shellcheck run of the netdev CI
+  (quoted exit and return values, shellcheck directives for the globals
+  shared between the library and the scripts and for the optional
+  argument of dpllsim_setup_standard_device())
+
+v1: https://lore.kernel.org/all/20261103093910.596225-1-poros@redhat.com/
+---
+Petr Oros (14):
+  dpll: dpllsim: Add simulated DPLL device driver
+  selftests: dpll: add test library and device lifecycle tests
+  dpll: dpllsim: Add configurable pins
+  selftests: dpll: add pin enumeration and property tests
+  dpll: dpllsim: Add support to set input pin state
+  selftests: dpll: add pin state tests
+  dpll: dpllsim: Add support to get/set priority on input pins
+  selftests: dpll: add pin priority test
+  dpll: dpllsim: Add support to set frequency on pins
+  selftests: dpll: add pin frequency test
+  dpll: dpllsim: Add support to adjust phase
+  selftests: dpll: add pin phase adjust test
+  selftests: dpll: add concurrency stress tests
+  selftests: dpll: add reference leak tests
+
+ Documentation/driver-api/dpllsim.rst          |  72 ++
+ Documentation/driver-api/index.rst            |   1 +
+ MAINTAINERS                                   |   9 +
+ drivers/dpll/Kconfig                          |   1 +
+ drivers/dpll/Makefile                         |   1 +
+ drivers/dpll/dpllsim/Kconfig                  |  16 +
+ drivers/dpll/dpllsim/Makefile                 |   4 +
+ drivers/dpll/dpllsim/core.c                   | 471 ++++++++++
+ drivers/dpll/dpllsim/dpll.c                   | 475 ++++++++++
+ drivers/dpll/dpllsim/dpllsim.h                |  99 ++
+ tools/testing/selftests/Makefile              |   1 +
+ .../selftests/drivers/net/dpll/Makefile       |  16 +
+ .../testing/selftests/drivers/net/dpll/config |   6 +
+ .../selftests/drivers/net/dpll/dpll_basic.sh  | 221 +++++
+ .../drivers/net/dpll/dpll_features.sh         | 397 ++++++++
+ .../drivers/net/dpll/dpll_reftrack.sh         | 184 ++++
+ .../selftests/drivers/net/dpll/dpll_stress.sh | 562 ++++++++++++
+ .../selftests/drivers/net/dpll/settings       |   1 +
+ .../selftests/drivers/net/lib/sh/dpll_lib.sh  | 850 ++++++++++++++++++
+ 19 files changed, 3387 insertions(+)
+ create mode 100644 Documentation/driver-api/dpllsim.rst
+ create mode 100644 drivers/dpll/dpllsim/Kconfig
+ create mode 100644 drivers/dpll/dpllsim/Makefile
+ create mode 100644 drivers/dpll/dpllsim/core.c
+ create mode 100644 drivers/dpll/dpllsim/dpll.c
+ create mode 100644 drivers/dpll/dpllsim/dpllsim.h
+ create mode 100644 tools/testing/selftests/drivers/net/dpll/Makefile
+ create mode 100644 tools/testing/selftests/drivers/net/dpll/config
+ create mode 100755 tools/testing/selftests/drivers/net/dpll/dpll_basic.sh
+ create mode 100755 tools/testing/selftests/drivers/net/dpll/dpll_features.sh
+ create mode 100755 tools/testing/selftests/drivers/net/dpll/dpll_reftrack.sh
+ create mode 100755 tools/testing/selftests/drivers/net/dpll/dpll_stress.sh
+ create mode 100644 tools/testing/selftests/drivers/net/dpll/settings
+ create mode 100644 tools/testing/selftests/drivers/net/lib/sh/dpll_lib.sh
+
+-- 
+2.56.0
+
