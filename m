@@ -1,66 +1,129 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881058;
-	b=yvnyZF7gKOPxBygFxs9J1Ro6Y0OW6O0lIq+thZbGkAdFM4SosfK5jJ4A9xDHMAL7vbCq
-	 Fbl6rQKADiLTXzElvbF7YNdDs6FD+U6ceByB2bdIUCv9GY4Zmy8TdIvHcUSNqETo+Km9a
-	 jIdlYLM91MNGenoUMxh7bZP2iIRB+V7NUVXRcf0H1RQ/dw43Ulc3oYSjTV013pC44n7xf
-	 B37ynZCTfxVOsSGFvecd3MWpMXbVxJzMjMWfNl0XrM5paEPI0MMBiOP5qOnVqPSnH8Ir7
-	 cMwZEn7b13N1iWLC1ZWeZuQHv7NT7xiePQdPt7TXHeJ3QEzsa4vNgzX84IkDFvXE1bQ==
+	t=1793881272;
+	b=GrOilbdOtQpmJCYD6zNmiS8orXdDCEPoLswcwsVKFmSMBHUFfgJ83MKwydAZbT+lDwWw
+	 0RxnFaDbR1CuBVCjNeWq5gmZ/y6jjjqSWAZGAB6bmNAbZM7loOCi9gyI4dSY+mJnf+ruT
+	 wu6qKyYCINgXMiL3XoKxQ0+O19cvrlrl/ctLY61I8qZSUoh2wShoW3DuGO7I9Ha6oSigs
+	 RhK0e+sp6plgZdoFbG9q01qRI/f3USNwedPGEVqWo5BOm9077E6dW/nOcevnFwJkuD2e2
+	 AAiFVGo3uvfCs0/15sU1m53Em8TZYZdKyHQrGTAkUE+wzJJm8lCUL/ztXF0i1XNdTyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881058;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ShM/LzYh15H1VmyFk0yd5n30U2OKlMZRrk7dfYFeEYg=;
-	b=wMlx1RaMQcOpiVh1T7EX7Y69P4d5LIeiQ2VrST43VERBGwLcEwyx1V8gjBaIMAGfpvjO
-	 7w+Soy5w6q2+IdvVhMs+5rr1Kz8ki1JzWDyQlha+e/QR3Aq1a3ev3hI8TYvA+WQ7CoMgk
-	 i714iZh42khAmFX6LPlkwb+H7/sjLK2W139zHub0S8ZsARna92v5wtdU0Jjr4kHCrAtaC
-	 ha6miSBeWZLIeQU1Jn2GSBGsS/ad950nddlRaLm9QzFN85BZJm8PEUdBEYmXgmVlodc2n
-	 o1jp3AQ60YrKE+v/ajXca0Os6MUyC3ki0W1rGX47w8VckazH0dwgSfpVfRzawSvWckA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881272;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Rspamd-Server:X-Rspamd-Action:
+	 X-Spam-Flag:X-Spam-Score:X-Spam-Level:X-Rspamd-Queue-Id;
+	bh=qLuvYgtpasAKkOVBQjswAHWXysKN7cRsF9p74hK2S2g=;
+	b=x8A8egmCVprwVmaP6TKoEbHQSkWxE7ch1EwooTyriKIl4Byn10U6dVfI31J0M0vyMVwg
+	 qLpuzorHjFoCa6kXdaBvvvxBhDZxoX8SfBwT+V53TkzXUdgEFhf2vGkbSc2UnWGeTuY8h
+	 ToOtyAispZrhKd+j4kZhaqCswWDLrgX3QGj0CgEEfUTy/sSXEHl5xUp9amYpTbarkLOSN
+	 xwDg+HMMuDuB47QutlciT58uDhygQ27wCgK0ZgI/OhusTpi5DZaEOXkbAqCiBkV18p4GY
+	 yccKCnhR5L/S7QNi/EbNSKWPbvB/fAMPIk1XyzTrQYZwO9nen/Bv6wZN0EZdLXc5RpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=C49j3ekR;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3893A6083612;
-	Thu,  5 Nov 2026 12:17:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3893A6083612
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KhcIIhhy;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=6n5z2yLa;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=TFuQlAZ+;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=IYRGa8XW;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93B4606D804;
+	Thu,  5 Nov 2026 12:21:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C93B4606D804
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=C49j3ekR
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4FE3B1E8D;
-	Thu,  5 Nov 2026 04:17:33 -0800 (PST)
-Received: from e143914.arm.com (e143914.arm.com [10.2.213.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BA9E03F673;
-	Thu,  5 Nov 2026 04:17:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1793881056; bh=j+lMJnSylQrD0+1OcivdSJ9GghFhWY5EWMq7YDes8RE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C49j3ekRRJi4RIZjd+tLIQL0aAmav4TKv+fDqpVmVSA7o8pP12o3qsbmQl66Eb4FY
-	 tQI06CfIEa3l1jEqjC3YJhdwOtLwH3CynzRnTXSLrkf7RMRpk6qz0ijy7jhJ4s4dKt
-	 jGgdNxarCNp7z1j7cgVPoLV+lKnkKnPIz2rEzrhI=
-Date: Thu, 5 Nov 2026 12:16:09 +0000
-From: Joey Gouly <joey.gouly@arm.com>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>, Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	Quentin Perret <qperret@google.com>, Fuad Tabba <tabba@google.com>,
-	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/16] KVM: selftests: Allow arm64 tests to create
- protected VMs
-Message-ID: <auxziQ6yLOW5dhKv@e143914.arm.com>
-References: <20261104084842.132944-1-fuad.tabba@linux.dev>
- <20261104084842.132944-3-fuad.tabba@linux.dev>
+	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KhcIIhhy;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=6n5z2yLa;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=TFuQlAZ+;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=IYRGa8XW
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D5C3D1F458;
+	Thu,  5 Nov 2026 12:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793881270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qLuvYgtpasAKkOVBQjswAHWXysKN7cRsF9p74hK2S2g=;
+	b=KhcIIhhyXURXrxsFKNrS5/KQBWOxVAoWljoB38cQtiYrDrFV8sed3xw/zXNPMim53TtxIA
+	7ZbhM5diXv9jAcO7L3DVJNrAZi+K4lsRTnJWaMYMlYugOK16bRU+y/fGzxnSLhmlcVsvyG
+	csbL8slrND45GD1FIeOECoj0f7hJMwQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793881270;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qLuvYgtpasAKkOVBQjswAHWXysKN7cRsF9p74hK2S2g=;
+	b=6n5z2yLaHgAEN7/Tcd0WzA7lHAxJSKkismyyu/ILXPkdtd7h0WOyyJxNx+8962qMQ9rlAn
+	/2Drg5p7a9P7WmBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=TFuQlAZ+;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=IYRGa8XW
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793881269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qLuvYgtpasAKkOVBQjswAHWXysKN7cRsF9p74hK2S2g=;
+	b=TFuQlAZ+5WF2YAdSPtrseTWbdG8rKLEqW19DJvUMZa96SoqlsHphdrzQTVaeQPeOfbKMve
+	vRvg45whLPGgBVqZinymhyPdhVasORALEjL7ZX6GmXX/o3Zhkt8KhhIcC5N1tdRheYHdXR
+	b1H4KWKbL93llPPXVmqHJ4S/SUjD100=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793881269;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qLuvYgtpasAKkOVBQjswAHWXysKN7cRsF9p74hK2S2g=;
+	b=IYRGa8XWDYOBq7+hiG0V0rUlmwe1TyUTdwZG614Lw3QLxr1E6xwKO0uuM9xtMm5Wn4Th8n
+	Jk1SsJkUbIlOijDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9880B133F6;
+	Thu,  5 Nov 2026 12:21:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 38udGrV07Gp0IAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 05 Nov 2026 12:21:09 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 1B713B6D8; Thu, 05 Nov 2026 13:21:05 +0100 (CET)
+Date: Thu, 5 Nov 2026 13:21:05 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH RFC 33/38] proc: sysctl: copy to and from userspace
+ without holding the table
+Message-ID: <cbocsd4qe254dc7mgzk3jkieahrp5kfxpnfh5owopkulg5oo6l@jd5sw3l4nw5c>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+ <20261102-work-procfs-bugfixes-v1-33-59422ed3e465@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,45 +135,165 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261104084842.132944-3-fuad.tabba@linux.dev>
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-33-59422ed3e465@kernel.org>
+X-Spamd-Result: default: False [-11.51 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLpnapcpkwxdkc5mopt1ezhhna)];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[60];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.cz:email,suse.cz:dkim]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -11.51
+X-Spam-Level: 
+X-Rspamd-Queue-Id: D5C3D1F458
 
-On Wed, Nov 04, 2026 at 08:48:28AM +0000, Fuad Tabba wrote:
-> On arm64, the VM type passed to KVM_CREATE_VM carries the IPA size,
-> which the selftest library fills in. The library rejects any type a test
-> provides in vm_shape.type. A protected VM is created by setting
-> KVM_VM_TYPE_ARM_PROTECTED in that type, so a test can't create one.
+On Mon 02-11-26 15:21:48, Christian Brauner wrote:
+> proc_sys_call_handler() grabs the table, copies in what is written,
+> calls the handler and copies what it produced out to userspace before
+> it lets go of the table again. Unregistering a table waits until nobody
+> uses it anymore. So a reader or writer whose copy faults for as long as
+> it wants, with userfaultfd or a stalled FUSE mapping, keeps
+> unregister_sysctl_table() waiting, and its callers like to hold locks
+> while they do that. addrconf unregisters the ipv6 sysctls of a device
+> with RTNL held, so a stalled read of /proc/sys/net/ipv6/conf/<dev>/mtu
+> holds up every RTNL user until the reader gives up.
 > 
-> Accept KVM_VM_TYPE_ARM_PROTECTED from the test, and add the IPA size to
-> it as for any other VM.
+> Copy in before grabbing the table and copy out after letting go of it,
+> like procfs and kernfs do for their files. The buffer is ours, nothing
+> needs the table for the copies.
 > 
-> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+> That moves the allocation and the copy in before the permission check.
+> A write that can't be copied in, or a request that is too large, now
+> fails with -EFAULT or -ENOMEM where it used to fail with -EPERM.
+> 
+> Fixes: 330d57fb98a9 ("[PATCH] Fix sysctl unregistration oops (CVE-2005-2709)")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-Similar to what I did for realms locally, and will have to expand to
-support KVM_VM_TYPE_ARM_REALM.
+Looks good. Feel free to add:
 
-Reviewed-by: Joey Gouly <joey.gouly@arm.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
 
 > ---
->  tools/testing/selftests/kvm/lib/kvm_util.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  fs/proc/proc_sysctl.c | 50 ++++++++++++++++++++++++++++----------------------
+>  1 file changed, 28 insertions(+), 22 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index d42e201eba763..96c1e70dba3d3 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -400,9 +400,10 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
->  	}
+> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> index 38b61887b59c..2150cf842919 100644
+> --- a/fs/proc/proc_sysctl.c
+> +++ b/fs/proc/proc_sysctl.c
+> @@ -602,14 +602,36 @@ static ssize_t proc_sys_call_handler(struct kiocb *iocb, struct iov_iter *iter,
+>  		int write)
+>  {
+>  	struct inode *inode = file_inode(iocb->ki_filp);
+> -	struct ctl_table_header *head = grab_header(inode);
+>  	const struct ctl_table *table = PROC_I(inode)->sysctl_entry;
+> +	struct ctl_table_header *head;
+>  	size_t count = iov_iter_count(iter);
+>  	char *kbuf;
+>  	ssize_t error;
 >  
->  #ifdef __aarch64__
-> -	TEST_ASSERT(!vm->type, "ARM doesn't support test-provided types");
-> +	TEST_ASSERT(!(vm->type & ~KVM_VM_TYPE_ARM_PROTECTED),
-> +		    "ARM supports only KVM_VM_TYPE_ARM_PROTECTED as a test-provided type");
->  	if (vm->pa_bits != 40)
-> -		vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
-> +		vm->type |= KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
->  #endif
+> -	if (IS_ERR(head))
+> -		return PTR_ERR(head);
+> +	/* don't even try if the size is too large */
+> +	if (count >= KMALLOC_MAX_SIZE)
+> +		return -ENOMEM;
+> +	kbuf = kvzalloc(count + 1, GFP_KERNEL);
+> +	if (!kbuf)
+> +		return -ENOMEM;
+> +
+> +	/*
+> +	 * Copy in before grabbing the table and copy out after letting go of
+> +	 * it. Unregistering the table waits for us and a copy that faults can
+> +	 * take as long as userspace wants.
+> +	 */
+> +	if (write) {
+> +		error = -EFAULT;
+> +		if (!copy_from_iter_full(kbuf, count, iter))
+> +			goto out_free_buf;
+> +		kbuf[count] = '\0';
+> +	}
+> +
+> +	head = grab_header(inode);
+> +	if (IS_ERR(head)) {
+> +		error = PTR_ERR(head);
+> +		goto out_free_buf;
+> +	}
 >  
->  	vm_open(vm);
+>  	/*
+>  	 * At this point we know that the sysctl was not unregistered
+> @@ -624,28 +646,15 @@ static ssize_t proc_sys_call_handler(struct kiocb *iocb, struct iov_iter *iter,
+>  	if (!table->proc_handler)
+>  		goto out;
+>  
+> -	/* don't even try if the size is too large */
+> -	error = -ENOMEM;
+> -	if (count >= KMALLOC_MAX_SIZE)
+> -		goto out;
+> -	kbuf = kvzalloc(count + 1, GFP_KERNEL);
+> -	if (!kbuf)
+> -		goto out;
+> -
+> -	if (write) {
+> -		error = -EFAULT;
+> -		if (!copy_from_iter_full(kbuf, count, iter))
+> -			goto out_free_buf;
+> -		kbuf[count] = '\0';
+> -	}
+> -
+>  	error = BPF_CGROUP_RUN_PROG_SYSCTL(head, table, write, &kbuf, &count,
+>  					   &iocb->ki_pos);
+>  	if (error)
+> -		goto out_free_buf;
+> +		goto out;
+>  
+>  	/* careful: calling conventions are nasty here */
+>  	error = table->proc_handler(table, write, kbuf, &count, &iocb->ki_pos);
+> +out:
+> +	sysctl_head_finish(head);
+>  	if (error)
+>  		goto out_free_buf;
+>  
+> @@ -658,9 +667,6 @@ static ssize_t proc_sys_call_handler(struct kiocb *iocb, struct iov_iter *iter,
+>  	error = count;
+>  out_free_buf:
+>  	kvfree(kbuf);
+> -out:
+> -	sysctl_head_finish(head);
+> -
+>  	return error;
+>  }
+>  
+> 
 > -- 
-> 2.47.3
+> 2.53.0
 > 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
