@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793893812;
-	b=oiSILYDY9yR6qhRvXLXlPrZUfFphX5G0HCe55TIl1tCA5IkJ89HBxJUtlapkkt/qv0M5
-	 p7bF+UxGan3W2HYksRgr2lpRcPN8YnOHY88bR7eOJQzyOEEcZsnia+MTxcYgiVhzn0pJr
-	 7HQVHGrkpCK82khpXTQJFRSt4GLJd0jiUpXmHeYcMOfP59GVh3bQ9AxMQlzOmJrPfU9Nf
-	 MrU7HcXFkmXfxZdTPe8eDrziEoqMr5KuLQulbmJLw8d4deY1qZh9AoL1wEb0LlBWbhRD/
-	 SmxqnBQpywii/9ErCMGvn8ETFkg4NyngaNbgjRJbqQ/P1DUa936JRrAME7FdsgJIsxQ==
+	t=1793893807;
+	b=XRDhMDlJO//ixlELWKSsmTvwfkF/B/bj0MEQakIIPIgQ1zPz8/ftnbZDIN+R6Wfa7jV+
+	 xv36V8BQZ4z8zJ8K0OCAnCEbad0rbYV4hpiJ9JgEBbjeBmSuAOFURdRuc8bYc1X3nd0Bl
+	 9blHtVPMdcepBCLOyn6XQ0ZhZ5fMsH2OMco5o0R2BdrBV8QYsKqv5i2vodG/sj9hEA7kN
+	 RsxUqVznupiClZeIn45MyeMt01b95g0lPToRQhWugfsKj5AbcyJwR10+eoDNEt9YsMnKV
+	 gYTYXiOlLGt4ZLYIkB8rxN+NhCHBbEM6itSF7zNmle/9SyaTGrJRAod3VbzkhxPYntw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793893812;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793893807;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=OwFdVC1DY43M8jJzrqstmWIxLmeowgW7V9g/IXt3zfQ=;
-	b=NMal/W6XKANqxnvm3Toi4xoCqsyDCDkaqquXPj9kylEJMFxX3ufhVGlf+LrkV5urVkDn
-	 MU1D0eMMPze9bxVAK/upLh0exCg+MbzGhO41sW/uCxEVmcd6v4G++8bq1sD1mdVyoHM2p
-	 XaYDKo2tB9fqxpQcp9ShRL+5x73SgPIIwRkv8v7gvEQ/u3yxBdYjQMc0a6IDlBYpZ041p
-	 HDMM14Ix0iUWf5NYoDNjW02wFD7JYECreodYiIlwXrBmraGAb6g8cGRuRCG5x2nwviwJZ
-	 pRuKeKzojokILax5cXQuuMWDXy497Yt+UvYZhJ+VDRMScLWGSxXWmn0nA80PpWC1aMw==
+	bh=h7IHIRRM4XFq6GwXgluit19dquWavUx85ZLuD079Loc=;
+	b=kx2ePbraC/AwYjD6EcuxFHuB3dLfROc4fZv5jFiQqaxQ5tVFuXXwfc7nSpPCk5PQ/hn7
+	 HyRU9eT7I5kkuB3NCulr9ycjBCqH8MloAlzOJHZkWb2c6DhrF9egEhsZGi0qbhCkIExzJ
+	 3trQANSMsUGIndfbFtFoPIOXMw+uG2YqoS1wU0HbZKMT73lCQBJ3nPw/w77OE7XU9rylZ
+	 WE7eaI9Fn1ZejV1b8+twJMcyiuDPssWmkXAWK6gwZwCwjfUFBZ3d6XoVtMSfJuPSaWNr7
+	 vkWZ674qf/UohcT9u9Yy66YchxQSjqMrbLx6OoA6//dphGgJGT62URCQD8ye8vPNxnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
 	spf=none smtp.mailfrom=casper.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b="Z7DS/iZd";
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=wJOQVik5;
 	arc=none smtp.remote-ip=90.155.50.34
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C87606BE89;
-	Thu,  5 Nov 2026 15:50:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5C87606BE89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B826075F41;
+	Thu,  5 Nov 2026 15:50:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3B826075F41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=Z7DS/iZd
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=wJOQVik5
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
 	To:From:Reply-To:Content-ID:Content-Description;
-	bh=OwFdVC1DY43M8jJzrqstmWIxLmeowgW7V9g/IXt3zfQ=; b=Z7DS/iZdyXJaoXvPMN417Pc5ji
-	DHKrXeNfgpKd5fcwEH9YRfJMuaRj0AmmjOBJOFcZ6Eq4x8bXdCwiKKFDMAF2JiLYXXTGqfWHBylf0
-	+h2WVLI/IZ+31YkTbNNx1Opz3mKaalZntbfZ+nNI82dV6ubDw2ZKFuvl+w/NA++rluDGNdn2Dxs/g
-	WkxIBmwv3VhUn0OQO4GkQWc4oKwoaHHBvzHgaStPcUEmtgr3D5JxjPHa1/maZN2geJug48K0Sxcgb
-	0UTL53M1Wq92Pa+Jsy9WkD7Ncr1Rj6VGTTS5tMn3Z/M5rj3k+1HjDVbKvf9MKLkG5OI2grGdLemHC
-	yzyqOGbA==;
+	bh=h7IHIRRM4XFq6GwXgluit19dquWavUx85ZLuD079Loc=; b=wJOQVik5uP7OzAC5hZCitvfvF0
+	4Thd8CLgIpOlwvCfnb6BOX4rc0TukNFuOPsOx3/UrpS3NUXN7vhvsItwvt0Xb4rXkNUC2TNWc043u
+	T3eK2BL1xtTetnGeKdhOWYxTPWpTwt5iXQxe278C36OP6PNO88vmYSoUJUPdrTc6/DXtYrkXNBsnV
+	RR3YzmQg+ZLuJpAXGELumrxRv3mTGdnI0JTdKCRxVgOKpeVEckfVd52Hy/PV0awnb2xCWs0pRd+bP
+	OkmqqbnTzNpxquMdiwgJ5cVsywOvGE9TeLptWJMVexyFIU0ltrJdza9vVbytkS9z0OjrVR+iZV1b9
+	PJDxaiVw==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOziu-00000009ap1-3QP3;
-	Thu, 05 Nov 2026 15:49:56 +0000
+	id 1xOzit-00000009aog-3EQm;
+	Thu, 05 Nov 2026 15:49:55 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xOziu-0000000Ab0D-2TMJ;
-	Thu, 05 Nov 2026 15:49:56 +0000
+	id 1xOzit-0000000Aays-2HEO;
+	Thu, 05 Nov 2026 15:49:55 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -78,9 +78,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Dongli Zhang <dongli.zhang@oracle.com>,
 	joe.jin@oracle.com,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v11 21/23] KVM: selftests: Test that the first user TSC write is honoured exactly
-Date: Thu,  5 Nov 2026 07:49:52 -0800
-Message-ID: <20261105154955.2525419-22-dwmw2@infradead.org>
+Subject: [PATCH v11 03/23] KVM: x86: Replace nr_vcpus_matched_tsc count with all_vcpus_matched_tsc bool
+Date: Thu,  5 Nov 2026 07:49:34 -0800
+Message-ID: <20261105154955.2525419-4-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105154955.2525419-1-dwmw2@infradead.org>
 References: <20261105154955.2525419-1-dwmw2@infradead.org>
@@ -100,133 +100,98 @@ X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-The 1-second "slop" heuristic in kvm_synchronize_tsc() is only
-supposed to apply between successive userspace TSC writes, i.e. once
-kvm->arch.user_set_tsc has been set by a previous write. The kernel's
-own internal TSC synchronization on vCPU creation (and frequency
-changes) must not arm it, otherwise the first genuine userspace write
-falling within 1 second of virtual cycle time of the kernel's default
-generation is "corrected" back to that generation instead of being
-honoured — breaking the restore of a guest with less than one second
-of runtime.
+Using a count and comparing with kvm->online_vcpus was always racy
+because a new vCPU could be created while kvm_track_tsc_matching() was
+running and comparing with kvm->online_vcpus. That variable is only
+atomic with respect to itself; kvm_arch_vcpu_create() runs before
+kvm->online_vcpus is incremented for the new vCPU.
 
-Add a test which creates a vCPU and immediately performs a first
-host-initiated write of a TSC value corresponding to ~500ms of guest
-runtime, then verifies the value reads back exactly (modulo elapsed
-time) rather than being snapped back to the kernel's default
-generation near zero.
+Replace the count with a boolean that is set in kvm_track_tsc_matching()
+after comparing the count, and cleared when a new TSC generation starts.
+The boolean is consumed by pvclock_update_vm_gtod_copy() under the
+tsc_write_lock, which serializes against __kvm_synchronize_tsc().
+
+Keep the count for now as it's still used in the trace event.
+
+Note that the explicit clear of the flag when a new generation starts
+is currently overwritten by the unconditional recompute in
+kvm_track_tsc_matching() under the same lock; it is preparation for
+subsequent patches which consume the previous value of the flag.
+
+Initialize the flag to true at VM creation: a VM whose vCPUs never
+reach kvm_track_tsc_matching() — notably with a protected guest TSC
+(TDX, SNP Secure TSC), where __kvm_synchronize_tsc() returns early —
+would otherwise never be eligible for PVCLOCK_TSC_STABLE_BIT, where
+the old read-time computation gave 0 + 1 == 1 for a single-vCPU VM.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |  1 +
- .../selftests/kvm/x86/tsc_user_set_test.c     | 86 +++++++++++++++++++
- 2 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/tsc_user_set_test.c
+ arch/x86/include/asm/kvm_host.h |  1 +
+ arch/x86/kvm/x86.c              | 18 ++++++++++++++----
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 1edc78845fd3..fd063806a7fb 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -151,6 +151,7 @@ TEST_GEN_PROGS_x86 += x86/xcr0_cpuid_test
- TEST_GEN_PROGS_x86 += x86/xss_msr_test
- TEST_GEN_PROGS_x86 += x86/debug_regs
- TEST_GEN_PROGS_x86 += x86/tsc_msrs_test
-+TEST_GEN_PROGS_x86 += x86/tsc_user_set_test
- TEST_GEN_PROGS_x86 += x86/vmx_pmu_caps_test
- TEST_GEN_PROGS_x86 += x86/xen_cpuid_timing_test
- TEST_GEN_PROGS_x86 += x86/xen_migration_test
-diff --git a/tools/testing/selftests/kvm/x86/tsc_user_set_test.c b/tools/testing/selftests/kvm/x86/tsc_user_set_test.c
-new file mode 100644
-index 000000000000..6ab76e817f9f
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/tsc_user_set_test.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test that the first userspace write to MSR_IA32_TSC takes effect
-+ * precisely, and is not subjected to the 1-second "slop" heuristic
-+ * which is only supposed to apply between successive *userspace*
-+ * writes (kvm->arch.user_set_tsc).
-+ *
-+ * The kernel synchronizes the TSC internally when a vCPU is created
-+ * (and when its frequency is set). If any of those kernel-internal
-+ * paths incorrectly sets user_set_tsc, then the first genuine write
-+ * from userspace which happens to fall within 1 second of virtual
-+ * cycle time of the kernel's default generation is "corrected" to
-+ * match that generation instead of being honoured exactly. That
-+ * breaks the restore of a guest which has genuinely been running
-+ * for less than one second.
-+ *
-+ * Simulate exactly that: create a vCPU (kernel establishes a default
-+ * TSC generation starting near zero), then perform the first
-+ * host-initiated write with a value corresponding to ~500ms of guest
-+ * runtime. If the slop heuristic fires, the written value is snapped
-+ * back to the kernel's generation (near zero) and the TSC reads back
-+ * hundreds of milliseconds low.
-+ */
-+#include "kvm_util.h"
-+#include "processor.h"
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index ea48b1949316..1efca01647d2 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1242,6 +1242,7 @@ struct kvm_arch {
+ 	u64 cur_tsc_write;
+ 	u64 cur_tsc_offset;
+ 	u64 cur_tsc_generation;
++	bool all_vcpus_matched_tsc;
+ 	int nr_vcpus_matched_tsc;
+ 
+ 	u32 default_tsc_khz;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 90f9b07ef749..ec8693f4827f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1125,8 +1125,10 @@ static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool new_generation)
+ 	 * and all vCPUs must have matching TSCs.  Note, the count for matching
+ 	 * vCPUs doesn't include the reference vCPU, hence "+1".
+ 	 */
+-	bool use_master_clock = (ka->nr_vcpus_matched_tsc + 1 ==
+-				 atomic_read(&vcpu->kvm->online_vcpus)) &&
++	ka->all_vcpus_matched_tsc = (ka->nr_vcpus_matched_tsc + 1 ==
++				     atomic_read(&vcpu->kvm->online_vcpus));
 +
-+int main(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	u64 freq_khz, t_write, t_read, slack_cycles, mono_ns;
-+	struct timespec ts;
-+	int r;
-+
++	bool use_master_clock = ka->all_vcpus_matched_tsc &&
+ 				gtod_is_based_on_tsc(gtod->clock.vclock_mode);
+ 
+ 	/*
+@@ -1367,6 +1369,7 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
+ 		kvm->arch.cur_tsc_write = tsc;
+ 		kvm->arch.cur_tsc_offset = offset;
+ 		kvm->arch.nr_vcpus_matched_tsc = 0;
++		kvm->arch.all_vcpus_matched_tsc = false;
+ 	} else if (vcpu->arch.this_tsc_generation != kvm->arch.cur_tsc_generation) {
+ 		kvm->arch.nr_vcpus_matched_tsc++;
+ 	}
+@@ -1591,8 +1594,7 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
+ 	bool host_tsc_clocksource, vcpus_matched;
+ 
+ 	lockdep_assert_held(&kvm->arch.tsc_write_lock);
+-	vcpus_matched = (ka->nr_vcpus_matched_tsc + 1 ==
+-			atomic_read(&kvm->online_vcpus));
++	vcpus_matched = ka->all_vcpus_matched_tsc;
+ 
+ 	/*
+ 	 * If the host uses TSC clock, then passthrough TSC as stable
+@@ -10007,6 +10009,14 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+ 	ratelimit_set_flags(&kvm->arch.kvmclock_update_rs, RATELIMIT_MSG_ON_RELEASE);
+ 	kvm->arch.kvmclock_offset = -get_kvmclock_base_ns();
+ 
 +	/*
-+	 * Start the measured window before vCPU creation: a snapped-back
-+	 * value tracks time since the kernel's default generation (i.e.
-+	 * since creation), so the window the slack is derived from must
-+	 * include everything from creation onwards.
++	 * Start with all (zero) vCPUs considered matched, so that a VM whose
++	 * vCPUs never reach kvm_track_tsc_matching() — notably when the guest
++	 * TSC is protected (TDX, SNP Secure TSC) and __kvm_synchronize_tsc()
++	 * returns early — is still eligible for PVCLOCK_TSC_STABLE_BIT.
 +	 */
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-+	mono_ns = ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++	kvm->arch.all_vcpus_matched_tsc = true;
 +
-+	vm = vm_create_with_one_vcpu(&vcpu, NULL);
-+
-+	r = __vcpu_ioctl(vcpu, KVM_GET_TSC_KHZ, NULL);
-+	TEST_ASSERT(r > 0, "KVM_GET_TSC_KHZ failed");
-+	freq_khz = r;
-+
-+	/*
-+	 * The first user write: a guest TSC corresponding to 500ms of
-+	 * runtime. This is within 1s (of virtual cycle time) of the
-+	 * kernel's default generation, so it is exactly the case that
-+	 * the slop heuristic would destroy if it were (incorrectly)
-+	 * armed by the kernel's own internal TSC synchronization.
-+	 */
-+	t_write = freq_khz * 500ULL;		/* khz * ms = cycles */
-+
-+	vcpu_set_msr(vcpu, MSR_IA32_TSC, t_write);
-+
-+	t_read = vcpu_get_msr(vcpu, MSR_IA32_TSC);
-+
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-+	mono_ns = (ts.tv_sec * 1000000000ULL + ts.tv_nsec) - mono_ns;
-+
-+	/*
-+	 * The TSC advances between the write and the read; bound the
-+	 * difference by the measured elapsed time around the two ioctls
-+	 * plus 10ms of slop, so a descheduled test cannot flake. If the
-+	 * write was snapped to the kernel's default generation, the
-+	 * value read back is ~500ms low (i.e. below t_write), which is
-+	 * unambiguous.
-+	 */
-+	slack_cycles = freq_khz * (mono_ns / 1000000ULL + 10);
-+
-+	TEST_ASSERT(t_read >= t_write,
-+		    "TSC went backwards from explicit write: wrote %lu, read %lu"
-+		    " (first userspace write was subjected to 1-second slop?)",
-+		    t_write, t_read);
-+	TEST_ASSERT(t_read - t_write < slack_cycles,
-+		    "TSC read back too far from written value: wrote %lu, read %lu",
-+		    t_write, t_read);
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+ 	raw_spin_lock_irqsave(&kvm->arch.tsc_write_lock, flags);
+ 	pvclock_update_vm_gtod_copy(kvm);
+ 	raw_spin_unlock_irqrestore(&kvm->arch.tsc_write_lock, flags);
 -- 
 2.43.0
 
