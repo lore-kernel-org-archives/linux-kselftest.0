@@ -1,49 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793888068;
-	b=1IjX29dWv7JykWTYS3KjcN0Q8lgClEVhMsLVJqoCnDnOpH5EVvPn661B4NyJGOJP//Lb
-	 qvZmriq1mtaxQe+wf76eojNvuY5z2Fl5qd40feky1ctcb0mb/BworWxj59mGJ/PUJ5gCX
-	 R4EVK8s2Qdqr8SY+hMPVYDXBF1a029r1LPmJtxHl8kyxDmGGLVQOluZlO77wVUeYFyTy3
-	 VRR720Kw4OzpHkEJcdY33Wi7gvt8DN/qWae5jgBLQKMvIHO34QSc9YEmTTcqX3IqCSIIk
-	 fdwUln05iOGtiYH/anoOwgBT0Oo4kOxAW7S0zGK/KQn5xtTMB9yTn0jS+BHVbUZMVJg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793888068;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=VAmS04xeYV1OsMCZLWdQe0EQeZQvg91KfjTAgajmxx0=;
-	b=YeQM1IjCObYS71lVfLco0XlOJsZc2XLTkwJoywxJXfofDN6J7d9AN+ORppuWR2IPDT+1
-	 akbWqstRYJZOO37taBuoaKVHSIM5QBqsNM0tExMKIbvU91PnbptpS5kkRITHkNP9A2H5C
-	 wb0Ny2s3zfneBBGIRKERvgmuMr22RaYZav+/0zeQVDN5JTBVIKl86OGwF0N6M26R2JhmP
-	 YlcvcjFl/eOv/GYwAOyov9rYXyoP5vXBMp6MLtdC3bMvcbWH24iud4hXm6VVlgVHabzPk
-	 wJ9HJYXd6gpuiiIgvsRaBIJWGiqo4crije5VODmQXtT/bKQHgokN1ok+P8QC8rMqDCw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MfAZgIL7;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.86
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793888394;
+	b=XH+LcG71dqiiOtTKf0v5Ink8NYo/RqYcKhm+N2Fur0gcYUVROrIQ9gz3iG3GcjwjCVG6
+	 s/sYeH9UENqUdfHhUwCrvSsF+EUTob1E7dcqb+59fuIIt3A8ifnKAxmNSCW+bi8QGfXv2
+	 8731s5efhLG6sWz3v6Qbt1ZhqyBmX6HkouY87fnMlXVV9AggXhTlu6YjusqWX9XUIBdb8
+	 SRnuLeLBr/VyMA3WlmINTmMfIZHqGQQpEvSy5H64rDwQUkfC05v06fQdY1hBh7TxpMfvN
+	 dOd7OiBnHbkvSa6KgpzSf9bKH/gMJ5Uz59M+1Z5WsqHbV4b5ZG9NiixlwKPD75waXtg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793888394;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=rcqapZK4HikxcI6gUSn63l3r0+uMxP4pSS7qzcwvrgc=;
+	b=GOQtnNSnmGQGWUfHpG4Wcs9dBo02tBOR8r4t9wVELi5VJvqhkbeoBpUb+gS1KFx0kMJ5
+	 8cYabQLutBy/lAw1YJf6FfH4jy4dgyZk6S4u0XjrUIBvkYUCh6yBg5stGpJ/TIwWPjkEF
+	 h4pBhq1v2mCiAb2U7jSIaCaR8bVUtq0Kv27UUxJnphsIVITMc8CJ2O3ffbMFteQSV6s5e
+	 vrsFcDLK5iL6JrYhrL4IedCvmZH84xWJi0lLM9IV7JTBkD9L47FDgX/di2OnYlAuE+xGJ
+	 PnYsQoZ0Yhy2ut/H3YkNLi6Gm1z683C9DCaX1vTGTlI9eklWDrESCx0yUv5Mn/IAMgQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=virtuozzo.com;
+	spf=pass smtp.mailfrom=virtuozzo.com;
+	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=L5mHv++v;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.86
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11021086.outbound.protection.outlook.com [40.107.130.86])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFCB606EEA7;
-	Thu,  5 Nov 2026 14:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAD7606A329;
+	Thu,  5 Nov 2026 14:19:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9EAD7606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MfAZgIL7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005231F00A18;
-	Thu,  5 Nov 2026 14:14:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793888068;
-	bh=VAmS04xeYV1OsMCZLWdQe0EQeZQvg91KfjTAgajmxx0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=MfAZgIL7ValIpKvgHV7umEFNW95xE9tRBhAEKwaARwLRHLELckSJPgpDFza8hpjqO
-	 qgxq0hiedervbrmkCl3gr0DMNu3PASdzyDfLlPzgWBpSr10FURYlHx/TVlAhHi9EIA
-	 JQ5IlG19fYSg3FgmtWoxboRo5S2K+w43LWxHjrFSU6W3cfh7k5m0EKPrDfBtzEajg7
-	 uGFj2CIFr/2oHM/21hf/sma1y9RQOIj09FMWXYDg5D4xd+Tlc7NcNB4CI2V8doV+vK
-	 x9lnxjUfJO86g3oxEmq/t2bvlUJgKzeW2JgrOucKy6uR63JZ57ZYi6VP9e50atS8AU
-	 prCrq3ThoNFMg==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 05 Nov 2026 14:01:22 +0000
-Subject: [PATCH v2 09/11] kselftest/arm64: Build KVM guest versions of the
- fp-stress loads
+	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=L5mHv++v
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AQ43JB8HXBOi1oNitutTLBzPgSLHEX38J2R+I6YIUjRSnSdm5JeCwU6eU4b/3P/63uu+IWeUat+J+Yb0VE2Ut7J5I7eIck1pMlKOda551IW77nTbraqhjsifI9VD0Xf/OBT0sOi+nfAZvCed41XiXt2ALbdjBc/7QWvJdX1mS2e70sXb31WELi2LUXYMkIqJGAKmts88ClwWMCDeASZMRN1kNWCk+ZtZ40MSNWYMM4wBQmdUt+MBKsOaU17LlaaJPN4VQpbcYEQsHtykC0YxoWk7WI4OA6LohnEk4oG0iWcYOV3Kg1ak2hYSQILKGuUaQ7gelZvXS6Sh7GfC583TmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rcqapZK4HikxcI6gUSn63l3r0+uMxP4pSS7qzcwvrgc=;
+ b=WK+VTcbbedcRUThve3JZx5pGHGydWChRrGh5WHC3lR9hk65DLmBQUfdoX1OxPqvLSWp8JNObuo/EF37vgIKaivKvy8jprh8QarXtQ0uRiW4MG2Llvb4q1qHihkJ/PNl8Ur+j49yAQmb9euvxbRXZNstnt6UmpPZefYwGhbUUfFXmCCopNIIbWM6gTi97A3Z0xEaygrtmZzmW8mgoO2vOegkpCZEITS/SbyJPautCYTurQLUwwRKs20H60u5+jcRuT24nDTFlr3PwhjrreDcnKLv3QcQ9P3ZXwsG7EHAjDrBZC1PzrBLBi6o23A7KonvtkBEctlzHqCazbuoK8zFiNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rcqapZK4HikxcI6gUSn63l3r0+uMxP4pSS7qzcwvrgc=;
+ b=L5mHv++v4pI1hJ/DVKCCA8V+N1broE4hlzHpBVwG0IfHv9KQgKg98oUhk6etRdDFcBkRh6KfRV7IVs3MLmnWT4rmGsktd/NgCbPkP81Usy34e5KPqXxr6VcGla5ZJUO09XWPTjH2HyfrVcgYKelfsvgjvijaqawOmHgWgPJOArfDdQt5J8R2dZ559BzFjO/LW6T78Sgmj1V12dfNtWwv/44EaYbgS7SmHaegShCJVM9hjogmY1TVwJI5OoZQ//HMIuqdSovYXoWWw48WSU06Se+EIrsRSRt5kKMSe9LqmF2UdgoUPgwkQ4n9ttiFtSEqFVEbJF7BNld8WFtczx9K4w==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com (2603:10a6:20b:5ff::9)
+ by CPHPR08MB665563.eurprd08.prod.outlook.com (2603:10a6:380:107::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.10; Thu, 5 Nov
+ 2026 14:19:50 +0000
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8]) by AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8%4]) with mapi id 15.21.0592.007; Thu, 5 Nov 2026
+ 14:19:50 +0000
+Message-ID: <cfd786eb-4ae5-4dcc-a9f2-3eb4b7e7962c@virtuozzo.com>
+Date: Thu, 5 Nov 2026 15:19:48 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm/huge_memory: take a reference on a folio PUD
+ copied by fork
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Alistair Popple <apopple@nvidia.com>, Dan Williams <djbw@kernel.org>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20261021-vstor-150143-copy_huge_pud-folio-refcount-v1-0-8bd88551f9be@virtuozzo.com>
+ <20261021-vstor-150143-copy_huge_pud-folio-refcount-v1-1-8bd88551f9be@virtuozzo.com>
+ <26862633-c3d1-4b82-8ca2-346cb78570d7@kernel.org>
+Content-Language: en-US, ru, sr
+From: Konstantin Khorenko <khorenko@virtuozzo.com>
+In-Reply-To: <26862633-c3d1-4b82-8ca2-346cb78570d7@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P250CA0017.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e3::6) To AS2PR08MB9075.eurprd08.prod.outlook.com
+ (2603:10a6:20b:5ff::9)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,323 +103,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261105-arm64-fp-stress-kvm-v2-9-81a5172468f0@kernel.org>
-References: <20261105-arm64-fp-stress-kvm-v2-0-81a5172468f0@kernel.org>
-In-Reply-To: <20261105-arm64-fp-stress-kvm-v2-0-81a5172468f0@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Fuad Tabba <fuad.tabba@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
- Lorenzo Stoakes <ljs@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8803; i=broonie@kernel.org;
- h=from:subject:message-id; bh=W8nCS+dbnEBwk5Ir7p2TWTVjhzMA+eDc+af9TPLIz0o=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLe9GtuMe4Qn7rmYuDu+M2HXq2N2+xR6hlYd3pvZuUHm
- Yff471dO0pZGMS4GGTFFFnisrhf1pe8XsN3cGEbzBxWJpAhDFycAjCR1SsYGd6f9bgot8T//pZL
- r30XKvG8E+DvXjurWkNyk+Alj0PKN9UZ/um7BsYG720TmL76EOsRLv+9bPfnBEUvvh3BP+9A3ua
- uWfwA
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS2PR08MB9075:EE_|CPHPR08MB665563:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a638dd7-04eb-4f81-3449-08df3b47da40
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|261022075727099003|4143699003|56012099006|261021121427099003|261026121527099003|261102123227099003|10067099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	4mbVQP7szRDhTgt8QcFu8P7I1EWzjN8KQd0o3W5qre0yyz96y6Jm7uke0wRTAH0k9HOhJUx/GV9KDU2F+nIsoUDSnQFNQIhDVcUZX+VDPGNuSGVXZWhhbJrZHAe0cJwwXQC81HBMdYOinoUgCVZsfUM2kmvMEy+sbPBOTjkKklakhNV2furrpNuL+rDzSPLTM9L5n8nFamiQuwlTi8aHNwZNTpWmh0pWeQUtVi+GcIh9xJh/Na6tnoaD++3fL75fiZTwlHBRrV0aCuzr7Yd0MnPOcTdElnYnjqMR2tUEhlkLUDWHo9h1f20GFip4wtJTsX1U9EtW1ybfX1VFdPmP7yW7gi/T6cEH/pzqOdt7EHvsScLr/Bv0nQjo/CAGU4mkUPN3mrPUZae+Zgt2nufbtssGtargKGIvpWaBbHRmFVdxVM9CJqg5T/gDM+WeWL/uIH8yWZmAkbWCBbewPibKID6K7429LnLdA39jK5v7QdQcBA3pzLGD578imYk3ZyKvYcPD8E8bB6FI0VF5eXHgX1Rm/q9xrzNGgie9tdrDs3FhLvtygpLsBS4UYjG00Wn7rPaqm2qwOepZjua3E6B7UkAcGaz8ggRaGFlGP59/PGiZ5kW1OSGHRwUTTcQsGc84LhMpoCbfKzg6vX5UKQHjKAhRuGBdAnUQqok16sEPDko=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9075.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(261022075727099003)(4143699003)(56012099006)(261021121427099003)(261026121527099003)(261102123227099003)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NTJQOWxKYWx4TVNhd0s1U3lERUU3ZjJsUCtTbkk1VWFIUWRXSXZSaURjeWNs?=
+ =?utf-8?B?V3plWkhCb0p3ZTIyMmE3NTF5SktDODJpMEFkQjQzdGtvNlYzMTZaVnZaK3FX?=
+ =?utf-8?B?ZklrNTdTNUhXKzlzOEE5Z2txcGFMalFFWk50ejJBaGFhSFhBL3A2M3ZvYXh1?=
+ =?utf-8?B?Nk8yYnNPRlVrb016SFcrdHhheG1JUDFuc1BwbzE5S1VuUk5TWjdXZW52Y05O?=
+ =?utf-8?B?eVZWd2pVSjZLV2VHcXpxVzRYKy81Z2V6VEo4Rk1Gc0xsNjFGZmd4b1F3d1Q5?=
+ =?utf-8?B?SUJVUVBMN2pqYk9WTDFiZ3JnQjBaalJoZTQ2UVFrQUdUSlFhQm1IUHc2S2tL?=
+ =?utf-8?B?MkM1ZCtzUFhGaFZrMjE1bk1zNi9zWVQ1MHRHOTR0OUFGN1ROMlMzbTdkSU82?=
+ =?utf-8?B?K2ZYVERPREdXN1FpZEowZnZLNlBiK0hCZ2hkU0krNVRiUCsrM3BtbEFRWWVE?=
+ =?utf-8?B?VW8zTW1TaVZwUnExbm5KRW5ycTBHUEVOd3V6aGh4OS9UVG9LN0dRc2IyeXpC?=
+ =?utf-8?B?d24xbWxIS1JJK2xOZXJIa08zUDVnd1M1VVE3YnMzdDVsUWNibm1aMnF1eTJr?=
+ =?utf-8?B?WVNkQnNwVmtTUjFicWltaUdVY2tYQ1NlWXdTMHdHcHB3ZENvMVJONWFWYlp3?=
+ =?utf-8?B?NXlWMUp1dlRVaVNKNURpUFE2OVJrUnAwU0t6d1ZzeWJMMHMwR2tBVE5SSnE5?=
+ =?utf-8?B?VTByeUx5NlFoZzk4VzBhdVNWaDZzMFBrQXpJWGpHL2xuTjJMTFJwOTZOSTFH?=
+ =?utf-8?B?azJrdSttb2JVdHlDNEFHRGJmZE5mK0dhMFM4WTZ0RER6VlZrVFQ5aWlVZCtu?=
+ =?utf-8?B?NEJqUmhSRjVyYjROQjdzaFkxTDhyYjd4UVZJVzZNSUFudU9MUC84ejRxc1JH?=
+ =?utf-8?B?c2VCci9kYTNhcnZ2Q3BBUDV0MENMUEcwS0p2cjVSeXF1cTVIRzU1RldKa2tZ?=
+ =?utf-8?B?TmtXMXNYNEd4V0oybnhZaHllaGJhYnhpencwR3N4UjlPZThQS2ZZc2dmTTVB?=
+ =?utf-8?B?WVdLSnlNaW9ZeDIxN2tzd1lpTTUwTDVqSVpxeENHMWJuVlgzOGozRm41c2w0?=
+ =?utf-8?B?NnN0MU02eUx2eld3dHNKL3NVNnVwN2FSTTkrbmdKYVc1dHhwQTI4aDBMQXcr?=
+ =?utf-8?B?ZTI2bEhocXpFY0RoQm9KUWMyQy90TDdLSm4ySlF4RXhsb01yNzVBYitRYzlk?=
+ =?utf-8?B?TzJmVHYrcGFqby9vUFdjMWFqQVpMT3pic3pSa0QrZWtLU0JEWjY3cXpBNHUr?=
+ =?utf-8?B?c3FmT2lGd0FxWFptNnRrbHhoUjYzeTFlNGZiekxBc014OHBrMk1VTlNBS280?=
+ =?utf-8?B?KzBOc2Y4Uy94T3FEanRyT3lkQjhYaDRzc25iTFd1WjIwUFE2dDZTUGUwUjJt?=
+ =?utf-8?B?ZHFJeHR3dkZveko3T2tUZHRDOTBDeE9HWklWVTRNWTRzOXJ2OFcxS3ZGRTFq?=
+ =?utf-8?B?YTBmOUZjUUlCek5WMEV4eURlb01mSFNUVGdWWk50NHFqd2J2bitKdVErcUJt?=
+ =?utf-8?B?cEQzdmhXV0xIZFZueklWMkU0VnZGL01CZlhaVEVGaWlVMXVMQ3BJWlpmWEJS?=
+ =?utf-8?B?eXg0U2laa28zVzNxRXlwSnpTYVF6NERGRWhXZTBKeVROdHY5NWE0dEVMdjIw?=
+ =?utf-8?B?MkRmWk4rd0lDYk11RkkyZzQ0bEFydXdCa1B6clAzUm5HTkhuRFFhNDBxZUs3?=
+ =?utf-8?B?VFZ3SFBhSHRiOWMvbXpESjkyeElXVS9oYXhWMTRQUzhFM3hsQmUxM3JzMVpz?=
+ =?utf-8?B?alR2cDBJOXJKekpQSklpZnhKbENXTHVoTk9GQmxLLyt4MU5OaWZVUmQwVzZN?=
+ =?utf-8?B?R1Rzb2NDN3RsMFdLL2J3cnB3RXF6R09SOVFERHVwNllyRlpocmRmNmRHUTBE?=
+ =?utf-8?B?VUNTNVFvZG1xdkZtanZMTEtsQ08ycFNTb1JGb2hWQVMwZDgvZHhFcGR0VWhY?=
+ =?utf-8?B?aVErYjY0aVljVUlQQ2s1NEM5WGZjMFMvbDMxejlhNURNcG52R0o1cWoxN2NX?=
+ =?utf-8?B?bXlYRk9zUTBoNlZTNis1QkFleTNEMHVOM2cxV3RyS3BXUnBrN3MrcVZmUUNV?=
+ =?utf-8?B?N3lZMktydC82d1JkSUFoSXlDQXJBMXRiaU1KdDNLOW52MU5QSHh2OUdSR004?=
+ =?utf-8?B?VGZQYjJVdnNwSS82ZXBGWDYyei91N3pKSXJDQU8zQlRYbnVxM2pkR0Z0VEpj?=
+ =?utf-8?B?TmJZMG1velhDYzEyem9WUUM0V1ZORUYyK1dhZllZNlR6RWJKcVRML0JPY2do?=
+ =?utf-8?B?ZzlOa3o5bm5HWTNqMFRJZzdMeHdKdlVheHBhYlZ1d1cwckc1MVBYRzFTa0Zp?=
+ =?utf-8?B?WnhmSVJoZG93UzZUMUZDb0hTK2M2eDRHaWluWGhwR2xoaEQ3QU12dz09?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a638dd7-04eb-4f81-3449-08df3b47da40
+X-MS-Exchange-CrossTenant-AuthSource: AS2PR08MB9075.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2026 14:19:50.1535
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YYODJbz8DWmpT6cGWkxXhZKnrkVu0i9DP5xd39hoz7zTB/NiovprwcZC9tLVvWKQOrot1j1zDABrIq58asOaAA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CPHPR08MB665563
 
-Now that all the Linux specifics have been factored out of the load
-programs that fp-stress uses and we have a simple VMM we can build
-versions for running with that VMM.  Provide an asm-utils-kvm.S with
-startup code that's easier in the guest and implementations of the
-functions that the programs call, writing output to the fixed address
-expected by the VMM and using PSCI to shut down on error.
+> Introducing folio_dup_file_rmap_pud() is better. But please see how I move
+> the comment and how passing mm+vma to the helper is not really reasonable.
 
-The programs are built into flat binaries to simplify the VMM, this is a
-bit more Makefile effort but it's all fairly standard for bare metal
-programming.
+Thanks, agreed on both. v2 will pass only the VMAs, with the mms taken
+from them as in your patch, drop src_mm from copy_pud_range() and move
+the TODO next to the rmap duplication. folio_dup_file_rmap_pud() stays.
 
-We install single instruction BRK handlers for all exceptions with the
-expectation that the VMM will trap BRKs and log exception state, we do
-not expect to trigger any exceptions in normal operation.
+Could v2 then replace your 01/36, so you can drop it from your series?
+I'd add your Suggested-by; if you prefer Co-developed-by with your
+Signed-off-by from the patch above, I'll use that instead.
 
-We log the current EL to help with diagnostics.
-
-Since we're constantly reading and writing the contents of the floating
-point registers to and from memory there is fairly heavy memory traffic.
-We do not currently turn the MMU on so on hardware the number of
-iterations a test does will be very much lower that that seen on the
-host, this can be addressed in future.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/.gitignore        |  3 +
- tools/testing/selftests/arm64/fp/Makefile          | 42 +++++++++-
- tools/testing/selftests/arm64/fp/asm-utils-kvm.S   | 93 ++++++++++++++++++++++
- .../testing/selftests/arm64/fp/fp-stress-kvm.lds.S | 65 +++++++++++++++
- 4 files changed, 202 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 229a5c65b65f..7a788b23ae76 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -1,6 +1,7 @@
- fp-pidbench
- fp-ptrace
- fp-stress
-+fp-stress-kvm.lds
- fp-stress-vmm
- fpsimd-test
- kernel-test
-@@ -17,3 +18,5 @@ za-ptrace
- za-test
- zt-ptrace
- zt-test
-+*-kvm.bin
-+*-kvm.elf
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 3c4e17a34776..dbe0fcd4a722 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -3,6 +3,8 @@
- # A proper top_srcdir is needed by KSFT(lib.mk)
- top_srcdir = $(realpath ../../../../../)
- 
-+include ../../../../build/Build.include
-+
- CFLAGS += $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS := \
-@@ -21,17 +23,41 @@ TEST_GEN_PROGS_EXTENDED := fp-pidbench fp-stress-vmm fpsimd-test \
- 	zt-test \
- 	vlset
- TEST_PROGS_EXTENDED := fpsimd-stress sve-stress ssve-stress za-stress
-+TEST_GEN_FILES := \
-+	fpsimd-test-kvm.bin \
-+	sve-test-kvm.bin \
-+	ssve-test-kvm.bin \
-+	za-test-kvm.bin \
-+	zt-test-kvm.bin
- 
- EXTRA_CLEAN += $(OUTPUT)/asm-utils.o $(OUTPUT)/asm-utils-linux.o \
--	$(OUTPUT)/rdvl.o $(OUTPUT)/za-fork-asm.o
-+	$(OUTPUT)/rdvl.o $(OUTPUT)/za-fork-asm.o \
-+	$(patsubst %.bin,%.elf,$(TEST_GEN_FILES)) \
-+	$(KVM_LDS)
- 
- ASM_UTILS_LINUX := $(OUTPUT)/asm-utils.o $(OUTPUT)/asm-utils-linux.o
-+ASM_UTILS_KVM := asm-utils.S asm-utils-kvm.S
-+
-+ifneq ($(LLVM),)
-+OBJCOPY ?= $(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX)
-+else
-+OBJCOPY ?= $(CROSS_COMPILE)objcopy
-+endif
- 
- # For sysreg definitons
- ARCH_INCLUDES := $(KHDR_INCLUDES) -I$(top_srcdir)/tools/arch/arm64/include \
- 	-I$(top_srcdir)/tools/include \
- 	-I$(top_srcdir)/tools/include/generated
- 
-+# The guests run with no OS under them at all, link them as flat binaries
-+# with the link script placing them where fp-stress-vmm puts their RAM.
-+KVM_LDS := $(OUTPUT)/fp-stress-kvm.lds
-+KVM_LDFLAGS := -nostdlib -static $(ARCH_INCLUDES) -D__ASSEMBLY__ \
-+	-Wl,-T,$(KVM_LDS)
-+
-+$(KVM_LDS): fp-stress-kvm.lds.S fp-stress-vmm.h
-+	$(CC) -E -P -x c $< -o $@
-+
- $(OUTPUT)/fp-stress-vmm: CFLAGS += $(ARCH_INCLUDES)
- 
- # Build with nolibc to avoid effects due to libc's clone() support
-@@ -61,4 +87,18 @@ $(OUTPUT)/zt-ptrace: zt-ptrace.c
- $(OUTPUT)/zt-test: zt-test.S $(ASM_UTILS_LINUX)
- 	$(CC) -nostdlib $^ -o $@
- 
-+$(OUTPUT)/fpsimd-test-kvm.elf: fpsimd-test.S $(ASM_UTILS_KVM) $(KVM_LDS)
-+	$(CC) $(KVM_LDFLAGS) $(filter %.S,$^) -o $@
-+$(OUTPUT)/sve-test-kvm.elf: sve-test.S $(ASM_UTILS_KVM) $(KVM_LDS)
-+	$(CC) $(KVM_LDFLAGS) $(filter %.S,$^) -o $@
-+$(OUTPUT)/ssve-test-kvm.elf: sve-test.S $(ASM_UTILS_KVM) $(KVM_LDS)
-+	$(CC) -DSSVE $(KVM_LDFLAGS) $(filter %.S,$^) -o $@
-+$(OUTPUT)/za-test-kvm.elf: za-test.S $(ASM_UTILS_KVM) $(KVM_LDS)
-+	$(CC) $(KVM_LDFLAGS) $(filter %.S,$^) -o $@
-+$(OUTPUT)/zt-test-kvm.elf: zt-test.S $(ASM_UTILS_KVM) $(KVM_LDS)
-+	$(CC) $(KVM_LDFLAGS) $(filter %.S,$^) -o $@
-+
-+$(OUTPUT)/%-kvm.bin: $(OUTPUT)/%-kvm.elf
-+	$(OBJCOPY) -O binary $< $@
-+
- include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/fp/asm-utils-kvm.S b/tools/testing/selftests/arm64/fp/asm-utils-kvm.S
-new file mode 100644
-index 000000000000..89a6385a5768
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/asm-utils-kvm.S
-@@ -0,0 +1,93 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Utility functions for assembly code programs run under fp-stress-vmm.
-+//
-+// Copyright 2026, Arm Ltd
-+
-+#include <asm/sysreg.h>
-+
-+#include "assembler.h"
-+#include "asm-offsets.h"
-+#include "fp-stress-vmm.h"
-+
-+#define PSCI_0_2_FN_SYSTEM_OFF		0x84000008
-+
-+// Print a single character x0 to the console
-+// Clobbers x1
-+function putc
-+	movz	x1, #(CONSOLE_BASE >> 16), lsl #16
-+	strb	w0, [x1]
-+	ret
-+endfunction
-+.globl	putc
-+
-+// Print a \0 terminated string starting at address x0 to the console.
-+// Doesn't use putc as a slight optimisation.
-+// Clobbers x0-x3
-+function puts
-+	mov	x2, x0
-+	movz	x3, #(CONSOLE_BASE >> 16), lsl #16
-+
-+0:	ldrb	w0, [x2], #1
-+	cbz	w0, 1f
-+	strb	w0, [x3]
-+	b	0b
-+
-+1:	ret
-+endfunction
-+.globl	puts
-+
-+// Report errors to the host by shutting down, there is no other reason one
-+// of these test programs should exit.
-+function exit_error
-+	movz	x0, #(PSCI_0_2_FN_SYSTEM_OFF >> 16), lsl #16
-+	movk	x0, #(PSCI_0_2_FN_SYSTEM_OFF & 0xffff)
-+
-+	// PSCI uses SMC at EL2 and HVC at EL1.
-+	mrs	x1, CurrentEL
-+	cmp	x1, #(2 << 2)
-+	b.eq	1f
-+	hvc	#0
-+	b	2f
-+
-+1:	smc	#0
-+2:	b	2b		// PSCI should not have returned
-+endfunction
-+.globl	exit_error
-+
-+// Exception vectors.  We have no handlers for anything so each entry
-+// just BRKs with its own number.
-+	.balign	2048
-+vectors:
-+	.irp	vector, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
-+	.balign	0x80
-+	brk	#\vector
-+	.endr
-+
-+// Main program entry point.
-+//
-+// The VMM starts us at the very start of the image so the link script
-+// places .text.boot first.
-+	.section .text.boot, "ax"
-+.globl _start
-+function _start
-+	// Vectors that report any exception we take to the VMM.
-+	adr	x0, vectors
-+	msr	VBAR_EL1, x0
-+
-+	// The VMM sizes our RAM as the image plus GUEST_EXTRA_RAM, put the
-+	// stack at the top of that so it grows down away from the image.
-+	ldr	x0, =_end
-+	ldr	x1, =GUEST_EXTRA_RAM
-+	add	x0, x0, x1
-+	and	x0, x0, #~15
-+	mov	sp, x0
-+
-+	// Log the current EL for diagnostic purposes.
-+	puts	"EL:\t\tEL"
-+	mrs	x0, CurrentEL
-+	ubfx	x0, x0, #2, #2
-+	bl	putdecn
-+
-+	b	main
-+endfunction
-diff --git a/tools/testing/selftests/arm64/fp/fp-stress-kvm.lds.S b/tools/testing/selftests/arm64/fp/fp-stress-kvm.lds.S
-new file mode 100644
-index 000000000000..ecb904bbf4ec
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/fp-stress-kvm.lds.S
-@@ -0,0 +1,65 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Link script for the flat binary builds of the fp-stress loads which run
-+ * as guests under fp-stress-vmm.
-+ *
-+ * The VMM loads the image at the start of the guest RAM and starts the
-+ * guest there so the startup code has to be first in the image, it is in
-+ * .text.boot for that.
-+ */
-+
-+#include "fp-stress-vmm.h"
-+
-+OUTPUT_ARCH(aarch64)
-+ENTRY(_start)
-+
-+PHDRS
-+{
-+	text PT_LOAD FLAGS(5); /* PF_R | PF_X */
-+	rodata PT_LOAD FLAGS(4); /* PF_R */
-+	data PT_LOAD FLAGS(6); /* PF_R | PF_W */
-+}
-+
-+SECTIONS
-+{
-+	. = GUEST_RAM_BASE;
-+
-+	.text : {
-+		*(.text.boot)
-+		*(.text)
-+		*(.text.*)
-+	} :text
-+
-+	.rodata : {
-+		*(.rodata)
-+		*(.rodata.*)
-+	} :rodata
-+
-+	.data : {
-+		*(.data)
-+		*(.data.*)
-+	} :data
-+
-+	.bss : {
-+		*(.bss)
-+		*(.bss.*)
-+		*(COMMON)
-+	} :data
-+
-+	. = ALIGN(16);
-+	_end = .;
-+
-+	/DISCARD/ : {
-+		*(.note*)
-+		*(.comment)
-+		*(.eh_frame*)
-+	}
-+}
-+
-+/*
-+ * The VMM sizes the guest RAM from the size of the image file and the
-+ * guest puts its stack immediately above _end, anything allocated but not
-+ * present in the file would leave the two disagreeing about where the RAM
-+ * ends.
-+ */
-+ASSERT(SIZEOF(.bss) == 0, "fp-stress guests must not have a .bss")
-
--- 
-2.47.3
+--
+Best regards,
+Konstantin Khorenko
 
