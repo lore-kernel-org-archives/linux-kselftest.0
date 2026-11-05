@@ -1,61 +1,127 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881358;
-	b=IL0AlQPpMGiLro0NghOc8f0Ikde7kr0AJ8hUzI7infpP7VThxuLbM4/Oz1NuHHrncTtf
-	 MupMHxHQ1TeZpWC3mIIG7Ox6oxQ26/T1F3xzdr6+FPsTiBCQoP4xp0HfGwbcxC0DpRQ18
-	 pZ6GdxQJF4dbPrqZGNVwzZm1iefzcPqGWiEzQiN8f+66kJbi2LaV6w4PEW6fx7a/8gK1c
-	 NQg4CKvCgP9QCIn2eGuz3YjodL2fgJgu1jSdFINmnfcJZAoqHJukKOVNufiieGp41LtCg
-	 aaHdDB/NKudw3q9S/BXPz/CoYjmz0fzm6qGYmjqvgpsKilwjPpG0XReWIOCJ55UOq2g==
+	t=1793881462;
+	b=5JW2Wde9QMkIHT7C+PzKgc4B6u9vYCsM+TpmMhCMzWDt/nW6vuKWquA7ywYnSj/hjEuR
+	 fOaBf507Dh34evZedsc/dT+qVu66Qvk9DajWFyU1rPqLUBswNAlE+v13zcQJXIOpqyQma
+	 kXYxUn4RXA4i60QCesqY3U9yTEuc1ZiJyi6xbtr1AkTpvpCPvbn8xQhNG838syux3CpvZ
+	 7ekND5yx7H0N0rkaqurDXxJIaNDjfYX4+7rJk8KOwOrqF9pNoT03Jwysfv/aXaJlChJqF
+	 aY9Rh0JBdsZioWNNkHfz86wJW8Y1LlOvr4nrJ/Es/gByoyUh/PfD/MlYZ8PHXib5TYw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881358;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=1EU7UaZlGv3MYPyW1OJGQPqiReGZO/NDUPkcBrKmkuM=;
-	b=tY0WoYp/vk3Q7c5dSk2WolOq3aAYxZKXB6ljvi6Za4iHJajddCGmGWUQjO+cxrHJKxN6
-	 C9rdqT9evv9IB3NXihtsMEWgurPzaHRY5nNcovsjlLQpSnKntyN7LT4hTuJASIhpYR7GI
-	 j6Sm7HtKIXYb1EsExP4jevEpH01vgXBOz7gtGWIiAZsSkyhDtylqfn2Dti4us6XWzhFpC
-	 Ap0ylcXxz+LJJMyDRuO/VZI//Eq60xRGPA8GwpYV7Oy45M07yHLGuYqkjWAK9Vx9YoQqi
-	 3+dNhWQrYNn4x4CzhIV4eX3hs97WvrMhv6go7UM6yrbCC37q06Zs5eJmI3i8TFWD+LA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881462;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Spam-Score:X-Spam-Level:X-Spam-Flag;
+	bh=qZ2SbYk3GrokaaO0nBX/KKA3dRohO53XWjNLOWBHmzM=;
+	b=v6bWeXDUwWFs9mrhAfmJiSd7sbsGejmLVWx6QwIxApw+C5KK6crS1f3i//R/pFbvIAt9
+	 MqdV9lQQhdEnVq+9vr04dhualGK3TFB0rhBzN5v4jjOzsLkfcjqKko7ZIQF2KF2I5iIFJ
+	 4jZlOmllQQ9glBuV3dmTWHe1mt8yLmBSIVaHODDXMkLy5Hq3sezYXvjJ0BcLyCliNZPqO
+	 0XswLb87ctsvnGzl1g9u3lI8zFJgyHDYKb3hdVIK5VUWSxSxqiSMrK/lRxQHfkDi9dyo/
+	 5xhDgYdUFRv55shmgApRYfrURiqFxW33zFdgnGqZ/XMn4kRinBeK3EuY9dYqEK6qJxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="g2Mz9/0T";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=x9Zosn4E;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OA7rJSNx;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=x9Zosn4E;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OA7rJSNx;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E0A606D80C;
-	Thu,  5 Nov 2026 12:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6B3606A326;
+	Thu,  5 Nov 2026 12:24:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E6B3606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g2Mz9/0T
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E201F00A02;
-	Thu,  5 Nov 2026 12:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793881357;
-	bh=1EU7UaZlGv3MYPyW1OJGQPqiReGZO/NDUPkcBrKmkuM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=g2Mz9/0TtXe1zBF1uxpxNKmwbjIeT+8WUB/2nmEDfPQlSFa1bmX01qkd3cgKoR/d6
-	 SPOvmUbAqHy5Y/k0uaujNjJHfK7+RtTKf1rtRNBRUpR/Day9UZM+5bB6KEhR3+sgGN
-	 b5/SbL2sDtPHSHFqedyrmAGkL7vXBrIPtIVBBL0EJHnCj47hV7xvpO2VN3vZlfZu5m
-	 9rSy83XyBMpv4K+6IuVLRfi2PLv1nerSo21Uc6gAnxRWd/7t3MLCMjc/4SLp2ntV4V
-	 3uMRtqKY4R/KWSmAElM1hzHUIEs/GMU08+nlT/INtP7JErxq3uoY9mI/XNyVGrmT0r
-	 ofeIJoU7xbAwA==
-Subject:
- Re: [PATCH net v2 3/3] selftests: net: add ioam6 ECMP test (RFC 9486 C2)
-From: netdev-bot+sashiko@kernel.org
-To: hangbin.liu@linux.dev
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- justin.iurman@gmail.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- liuhangbin@kylinos.cn
-Date: Thu, 05 Nov 2026 12:22:36 +0000
-Message-ID: <179388135633.488856.7838660673411502138@kernel.org>
-In-Reply-To: <20261103-ipv6_ioam_ecmp-v2-3-6ef0318bdb5e@kylinos.cn>
-References: <20261103-ipv6_ioam_ecmp-v2-3-6ef0318bdb5e@kylinos.cn>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=x9Zosn4E;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OA7rJSNx;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=x9Zosn4E;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OA7rJSNx
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 9F5B121F9C;
+	Thu,  5 Nov 2026 12:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793881459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qZ2SbYk3GrokaaO0nBX/KKA3dRohO53XWjNLOWBHmzM=;
+	b=x9Zosn4EbchHGeE5udevL1r29rgPf9Y02dysOElisjHj+VO5UilfwMafmPydaCNnTjwNzv
+	UF86KGWPiD1Le7Ah5EEn+d+JCboYs72l6yBZbRCo6mTyh4eKiPufQjAAHaHoFJVIZkad7k
+	Ds8jF1cavCxTYhTDUloFMVoekboGBwY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793881459;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qZ2SbYk3GrokaaO0nBX/KKA3dRohO53XWjNLOWBHmzM=;
+	b=OA7rJSNxuyCmeklmiqZ15Mq0PWDdCAvs2gjXUAdfvq+IV2EYP6LI9FD76bFqQPglYJgSmh
+	0coVcjc/QUeRzhDA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793881459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qZ2SbYk3GrokaaO0nBX/KKA3dRohO53XWjNLOWBHmzM=;
+	b=x9Zosn4EbchHGeE5udevL1r29rgPf9Y02dysOElisjHj+VO5UilfwMafmPydaCNnTjwNzv
+	UF86KGWPiD1Le7Ah5EEn+d+JCboYs72l6yBZbRCo6mTyh4eKiPufQjAAHaHoFJVIZkad7k
+	Ds8jF1cavCxTYhTDUloFMVoekboGBwY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793881459;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qZ2SbYk3GrokaaO0nBX/KKA3dRohO53XWjNLOWBHmzM=;
+	b=OA7rJSNxuyCmeklmiqZ15Mq0PWDdCAvs2gjXUAdfvq+IV2EYP6LI9FD76bFqQPglYJgSmh
+	0coVcjc/QUeRzhDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6CAA4133F6;
+	Thu,  5 Nov 2026 12:24:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HDRiEnN17Gp/IwAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 05 Nov 2026 12:24:19 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 0060FB6DF; Thu, 05 Nov 2026 13:24:18 +0100 (CET)
+Date: Thu, 5 Nov 2026 13:24:18 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	Chuck Lever <cel@kernel.org>
+Subject: Re: [PATCH RFC 34/38] proc: sysctl: look at the table under
+ sysctl_lock when creating an inode
+Message-ID: <tmxt2djcskr7qa6a2ewpelbhnyxtd4xp6dabc2uq5cdea5xdex@qn7wcwyjf5ah>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+ <20261102-work-procfs-bugfixes-v1-34-59422ed3e465@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,172 +131,123 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-34-59422ed3e465@kernel.org>
+X-Spamd-Result: default: False [-11.30 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RL63fqwwx8ot6gmekemcs76f9d)];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_GT_50(0.00)[59];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -11.30
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+On Mon 02-11-26 15:21:49, Christian Brauner wrote:
+> proc_sys_make_inode() checks under sysctl_lock that @head isn't being
+> unregistered, lets go of the lock, and then reads the mode of @table
+> and calls ->set_ownership() with @head. That's fine as long as the
+> caller holds @head in use, which keeps unregistering from getting past
+> that check. The next patch has a caller that only pins the memory of
+> @head. For that one the table, and whatever the owner of the header
+> keeps behind it, is only there for as long as nobody unregisters the
+> header, which happens under sysctl_lock. So read the mode and set the
+> ownership before letting go of the lock. The ->set_ownership()
+> callbacks only look up ids in a user namespace.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Looks good to me. Feel free to add:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-- [Medium] check_tunnel() (lines 276-281) decides whether ip6_tunnel is
-  available from two checks: `lsmod | grep ip6_tunnel`, and `ip a | grep…
-- [Low] The header of tools/testing/selftests/net/ioam6_ecmp.sh (lines
-  8-9) says there are "Two scenarios, matching the two places where IOAM…
-- [Low] The header (line 44) says "The filters match the exact
-  measurement packets".
+								Honza
 
---
-
-selftests: net: add ioam6 ECMP test (RFC 9486 C2)
-
-This adds ioam6_ecmp.sh. Under hash policy 0, it checks that a packet
-carrying IOAM options takes the same ECMP nexthop as the same packet
-without them. It covers transit input hashing after inline IOAM
-insertion, and the re-lookup on a node that encapsulates with IOAM over a
-multipath route, with a plain ip6ip6 tunnel as the baseline.
-
-> diff --git a/tools/testing/selftests/net/ioam6_ecmp.sh b/tools/testing/selftests/net/ioam6_ecmp.sh
-> new file mode 100755
-> index 0000000000000..35a11f94c4223
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ioam6_ecmp.sh
-> @@ -0,0 +1,348 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0+
-> +#
-> +# Verify RFC 9486 C2 for ECMP: with hash policy 0 (the default), the ECMP
-> +# nexthop chosen for a packet carrying IOAM options must be the same as for
-> +# the identical packet without them.
-> +#
-> +# Two scenarios, matching the two places where IOAM changed the hashed
-> +# IPv6 nexthdr:
-
-[Severity: Low]
-Is "the two places" accurate here? The series patch "ipv6: ioam6: use
-transformed packet nexthdr for ECMP re-lookup" changes a third place too:
-the inline path (and the AUTO path with !skb->dev) of ioam6_output() on
-the node that inserts the IOAM option.
-
-net/ipv6/ioam6_iptunnel.c:ioam6_output() {
-    ...
-		if (ilwt->mode == IOAM6_IPTUNNEL_MODE_INLINE ||
-		    (ilwt->mode == IOAM6_IPTUNNEL_MODE_AUTO && !skb->dev)) {
-			dst = orig_dst;
-    ...
-}
-
-Before that change, a dst cache miss re-ran ip6_route_output() with
-fl6.flowi6_proto = hdr->nexthdr. After inline insertion that is
-NEXTHDR_HOP, so the inserting node itself could pick a different ECMP
-sibling.
-
-In this test the inserting node is alpha (set_alpha_ioam()). Alpha only
-gets single-path routes from setup_topology():
-
-	ip -netns "$ns_alpha" -6 route add 2001:db8:2:1::/64 \
-		via 2001:db8:1::1 dev veth0
-
-Wouldn't this test still pass if the orig_dst reuse branch regressed?
-Could a scenario with an ECMP route on the inserting node be added? If
-not, could the comment be reworded so it doesn't suggest every affected
-place is covered?
-
-[ ... ]
-
-> +check_tunnel()
-> +{
-> +	if ! lsmod 2>/dev/null | grep -q "ip6_tunnel" && \
-> +		! ip a 2>/dev/null | grep -q "ip6tnl0"; then
-> +		modprobe ip6_tunnel &>/dev/null
-> +		lsmod 2>/dev/null | grep -q "ip6_tunnel" || \
-> +			ip a 2>/dev/null | grep -q "ip6tnl0" || return 1
-
-[Severity: Medium]
-Can this heuristic skip scenario 2 even when ip6ip6 tunnels work?
-
-With CONFIG_IPV6_TUNNEL=y, ip6_tunnel never appears in lsmod.
-
-The ip6tnl0 fallback device is also missing from the runner's netns in
-two cases: net.core.fb_tunnels_only_for_init_net=2, or the sysctl is 1
-and the runner is not in init_net.
-
-include/linux/netdevice.h:net_has_fallback_tunnels() {
-    ...
-	return !fb_tunnels_only_for_init_net ||
-		(net_eq(net, &init_net) && fb_tunnels_only_for_init_net == 1);
-    ...
-}
-
-In that setup modprobe ip6_tunnel does nothing and both greps fail again.
-check_tunnel() then returns 1 before it reaches the ip link add probe
-below, which would work (and would also autoload a modular ip6_tunnel).
-
-Main then calls log_test_skip() for scenario 2. ksft_exit_status_merge()
-ranks skip above pass, so the whole test exits with SKIP even after
-scenario 1 passed.
-
-Could check_tunnel() rely on the ip link add probe instead?
-
-> +		ip6tnl_loaded=1
-> +	fi
-> +
-> +	ip -netns "$ns_beta" link add name ip6tun0 type ip6tnl \
-> +		mode ip6ip6 encaplimit none \
-> +		local 2001:db8:2:1::1 remote 2001:db8:2:1::2 \
-> +		2>/dev/null || return 1
-> +	set_beta_ioam_encap || return 1
-> +}
-
-[ ... ]
-
-> +if check_tunnel; then
-> +	# Scenario 2 counts the outer ip6ip6 packets: the echo request is
-> +	# not visible to flower (outer headers only), so match the pinned
-> +	# tunnel addresses instead. No need to check return value again as
-> +	# we have done it at scenario 1
-> +	set_measure_filters "src_ip 2001:db8:2:1::1 dst_ip 2001:db8:2:1::2"
-
-[Severity: Low]
-The header comment says "The filters match the exact measurement
-packets". Does this filter match only the ip6ip6 packets, though?
-
-It matches any IPv6 packet from beta's veth1 address to gamma's veth0
-address. Beta's unicast NUD probes use that same pair, because
-ndisc_solicit() takes the source address from the queued skb:
-
-net/ipv6/ndisc.c:ndisc_solicit() {
-    ...
-	if (skb && ipv6_chk_addr_and_flags(dev_net(dev), &ipv6_hdr(skb)->saddr,
-					   dev, false, 1,
-					   IFA_F_TENTATIVE|IFA_F_OPTIMISTIC))
-		saddr = &ipv6_hdr(skb)->saddr;
-    ...
-		ndisc_send_ns(dev, target, target, saddr, 0);
-    ...
-}
-
-Beta's Neighbor Advertisements to gamma also match. Gamma sends
-solicitations when it has traffic for 2001:db8:2:1::1, for example
-ICMPv6 errors for ip6ip6 packets it cannot decapsulate.
-
-These packets add to the veth0 count in measure_link():
-
-	if [ $((da + db)) -lt "$PKTS" ]; then
-		echo "LOST:$da:$db"
-
-With PKTS=3, two tunnel packets plus one ND packet already reach the
-threshold, so a lost tunnel packet goes unreported. The stray packets
-also count in the A/B majority vote.
-
-Could the filter also match the encapsulated protocol, or otherwise
-exclude ICMPv6/ND, so it is as exact as the comment says?
-
-[ ... ]
-
+> ---
+>  fs/proc/proc_sysctl.c | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> index 2150cf842919..a1242247f492 100644
+> --- a/fs/proc/proc_sysctl.c
+> +++ b/fs/proc/proc_sysctl.c
+> @@ -500,6 +500,7 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
+>  	struct ctl_table_root *root = head->root;
+>  	struct inode *inode;
+>  	struct proc_inode *ei;
+> +	umode_t mode;
+>  
+>  	inode = new_inode(sb);
+>  	if (!inode)
+> @@ -509,12 +510,22 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
+>  
+>  	ei = PROC_I(inode);
+>  
+> +	inode->i_uid = GLOBAL_ROOT_UID;
+> +	inode->i_gid = GLOBAL_ROOT_GID;
+>  	spin_lock(&sysctl_lock);
+>  	if (unlikely(head->unregistering)) {
+>  		spin_unlock(&sysctl_lock);
+>  		iput(inode);
+>  		return ERR_PTR(-ENOENT);
+>  	}
+> +	/*
+> +	 * The table, and whatever the owner of the header keeps behind it,
+> +	 * is only there for as long as nobody unregisters the header, which
+> +	 * happens under sysctl_lock. So look at them before letting go of it.
+> +	 */
+> +	mode = table->mode;
+> +	if (root->set_ownership)
+> +		root->set_ownership(head, &inode->i_uid, &inode->i_gid);
+>  	ei->sysctl = head;
+>  	ei->sysctl_entry = table;
+>  	hlist_add_head_rcu(&ei->sibling_inodes, &head->inodes);
+> @@ -522,8 +533,8 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
+>  	spin_unlock(&sysctl_lock);
+>  
+>  	simple_inode_init_ts(inode);
+> -	inode->i_mode = table->mode;
+> -	if (!S_ISDIR(table->mode)) {
+> +	inode->i_mode = mode;
+> +	if (!S_ISDIR(mode)) {
+>  		inode->i_mode |= S_IFREG;
+>  		inode->i_op = &proc_sys_inode_operations;
+>  		inode->i_fop = &proc_sys_file_operations;
+> @@ -535,11 +546,6 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
+>  			make_empty_dir_inode(inode);
+>  	}
+>  
+> -	inode->i_uid = GLOBAL_ROOT_UID;
+> -	inode->i_gid = GLOBAL_ROOT_GID;
+> -	if (root->set_ownership)
+> -		root->set_ownership(head, &inode->i_uid, &inode->i_gid);
+> -
+>  	return inode;
+>  }
+>  
+> 
+> -- 
+> 2.53.0
+> 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261103-ipv6_ioam_ecmp-v2-0-6ef0318bdb5e%40kylinos.cn
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
