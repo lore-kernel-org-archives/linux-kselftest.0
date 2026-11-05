@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907264;
-	b=rsg/4xqhwsx7sK3/KR2j4/iiWBIe8/56HC4edA2c0q1BFupA39h0XPI1Rjddl/PFajeH
-	 Y/J7TUE59TzsQMTNPDis+sJkE6X7ovnf1x0KmbAEK9xPV5zan9XKsa1kAvjfGGnn03FOh
-	 KmW6EZJbtm/OW0cJbTCkPE2YcEW8wpZDup9tlJomql5+wLbMfZnGYkChAOidrYF74V2bk
-	 kU/CrmxxJc3nmv44LaLT583MmV9Yghx2xuvX7qbAdarMSODZwOD9z436wKO9ZCLXtW4HT
-	 9+5n5iso7sClaCNKDd3z0x2U01CWYyWpVAga0Rnr7urk/SF1EtpV0IfTVf0MLd4n31A==
+	t=1793907260;
+	b=QyBQ7zsqEtR3y+HUCW1kWflie//YmZZJgP64KNnRcF+YZPy8NWXTN9GKR+FGD0ONDA8u
+	 niZu2w6uXQuEZAttGfxr2rzwvNWy4mfe53Gt6k9RJ5QkzXwzW4JuJhgKgWOjeRtVqQKM3
+	 dKV2sv1qSX5bl2qWw+KcUfS3yHUSYYR23zS6OWVs85Ou/+ckr38dQAAS/F7CuZRUve+uC
+	 9MKzZ0d0kyOrOQu+5c0jMphIT3fzRfbKZpIQx1F8xSva+CDVmFMRAFngBjtGVi8/dC3pg
+	 MkH4alcsSuQ3YfAs7QCcfU9xANJktWEd8InwvHnYJQ8e4D+b49Kj2bzAUEUXFtPmWfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907264;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907260;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=af+4ajGlgtX+ITY+QAIEdN5bCJZjAJgGwtyaF8TMBHU=;
-	b=nG3D5xSMlrvnEEvCiG30jH2VvvrQXUnzbGIn+ETiCROpI3cn2KnpaljnJLH3zM89e80J
-	 waQKGPcPC9EetjY7T6WccGgWFadSBdPaOUc41FzdiwRs/LYe6dVpkiDYNxIObdikcRmcM
-	 pT66Hgtug27sNiGJnvXfzZpdMAejiBVtVNVzzqcK+l6FVD/ScRYUKKTMZFZ/J3wxgwLSE
-	 7OBoM0V0PaJJg4F6uLmEh+ZzvhKEA7KqVNCzatspn4eFuo41eTmw2QcipjZZ6QbScYxjQ
-	 nD3505JBEPJvIihesIPUqgi1kNOLZGUQJeJof5E5TURv4/QmGVwV39jQu7p/Sj0JNXQ==
+	bh=ZDauTg8gKMEyI5TlSf5nU88RVwmY9xMl46WsxT/Kql0=;
+	b=g+p2bCGXyVP8vvXI34ApqIv0WjImNwrpGiGYSThyHEiTLsU/8zTlSI8+imGJ7vJHtwrr
+	 abaVg5BnCSw7myGcGymXCoQrJ2t6wKOlRrwy5lNFm3PvRG5gRekTtCxmuprHWJB9NdQXw
+	 i9Rc3hzpmBguhZD/91CBo/gbVJ8/QbGfIF0spoFp78aII+qWubGDbR8meQNU8n3tRDr4d
+	 0EkB3lYXpEnetmGlXP7bmmxoLPtleEI9TtBh8GmYXhLR2kM84p6gEBhFMiYHeHjo02j3W
+	 IYj2Eywy/SyAGXXX7hjXd5OZXQUdA8fViX9sBtmxctDznik50q6MvpQCVOYZ1bZcbBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=OQLVdqta;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=MxUMWdVd;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDFF6082BD6;
-	Thu,  5 Nov 2026 19:34:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDDFF6082BD6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585A36082BFB;
+	Thu,  5 Nov 2026 19:34:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 585A36082BFB
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=OQLVdqta
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=MxUMWdVd
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1793907251;
-	bh=af+4ajGlgtX+ITY+QAIEdN5bCJZjAJgGwtyaF8TMBHU=;
+	s=smtpout1; t=1793907252;
+	bh=ZDauTg8gKMEyI5TlSf5nU88RVwmY9xMl46WsxT/Kql0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OQLVdqtawSXJY1GnRjdy1hBUsjTfNYsg6Mf9B3zNX9pkhLhbNZuRr3HvRN6I1VG+/
-	 CZbej3v5BYhj06exYBPCc1MlBDplBuTh+o8Ru47xnV5Y7J5LbsxpdBr7TE2BnBAs84
-	 fqw0ltBEnZkvu3/S45eG+eN4AJCKNL2fedvETi1hAT0geMKpNmWoviUtg+Sa0LFWht
-	 1nl6T0vWePw3YvioHw3Y6Wc+4fs9d8Dov8L93XITj3/aogx9fxSMkSOcpR3uTcB38j
-	 08jZ1QGNtXxleCWhDW4Ub9CfmlBzBFpj/hber+Zynj1cYZ+rAH1ZOCycsOlfEYHPEp
-	 sqnxrvIgyby4w==
+	b=MxUMWdVd6/pklGok+d+2pr8LCG7Da1OkwGinGCiulCKd2hIdDh9TYu869i232OIsm
+	 QdKAOQmhoUCNREpVKOM0ou8rcvk9vdRxSPl98kMQp3XrcLIZcZ90q5jBl1w0NsPgRO
+	 to4ktXfkemmarOGDrXL7JxL/2QPnKEeOoiEoXRI+CBL94il8CDG7nmBEQabTEYsVXK
+	 L1igVVVzrBrAhUujjYwEDOf+HFvCXsU6Zv/5F+zTRcioAjncQYQDjjVOLnK3xIijMB
+	 KHzk1RICiwEueDWTftboNrNr/G1CFucBXhPFLPKWuVgjYBBHpYDjVaEddru2vaDTr0
+	 ll+ugCNo1C7VA==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLCDM3kywzLPT;
-	Thu, 05 Nov 2026 14:34:11 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLCDN1NXpzKVJ;
+	Thu, 05 Nov 2026 14:34:12 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
 	peterz@infradead.org,
@@ -77,9 +77,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: [PATCH v3 16/24] cgroup/cpuset: Wait for an attach before rebuilding the sched domains
-Date: Thu,  5 Nov 2026 14:33:51 -0500
-Message-Id: <20261105193359.1450487-17-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v3 20/24] sched/deadline: Count the bandwidth a boosted task is given
+Date: Thu,  5 Nov 2026 14:33:55 -0500
+Message-Id: <20261105193359.1450487-21-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261105193359.1450487-1-mathieu.desnoyers@efficios.com>
 References: <20261105193359.1450487-1-mathieu.desnoyers@efficios.com>
@@ -94,65 +94,110 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-cpuset_can_attach() sets aside, in the root domain of the destination,
-the bandwidth of the deadline tasks it is about to move, and drops
-cpuset_mutex until cpuset_attach() moves them. A rebuild of the sched
-domains in between, rebuild_sched_domains() from a write of
-sched_rt_runtime_us or from the energy model, takes cpuset_mutex and
-runs: dl_rebuild_rd_accounting() clears the root domains and counts
-each task where its cpuset says, and the reservation is gone. The
-attach then moves the bandwidth of each task out of the root domain it
-left, on the strength of a reservation that is no longer there, and the
-destination's total_bw ends short of what its tasks hold: it admits
-deadline tasks beyond its capacity, and underflows when they leave.
+The runqueue a sleeping deadline task is on counts the bandwidth of
+that task in this_bw, which switched_to_dl() hands it as the task
+enters the class. A task that priority inheritance boosted into the
+class is in it already: __sched_setscheduler() neither dequeues it nor
+enqueues it back, so switched_to_dl() does not run, and sched_setattr()
+of SCHED_DEADLINE on such a task leaves this_bw without the bandwidth
+the task now has. Its wake-up gives that bandwidth to running_bw alone:
 
-The writes of a cpuset's files wait for an attach in progress before
-taking cpuset_mutex, wait_attach_done_lock(), since
-commit 75f7a25ec6bb ("cgroup/cpuset: Prevent race between task attach
-and cpuset state change"), and CPU hotplug holds cpus_write_lock, which
-an attach holds for reading throughout. Wait in
-rebuild_sched_domains_cpuslocked() as well: a rebuild from the hotplug
-path finds no attach in progress, and one from the sysctl or the energy
-model lets the attach complete first.
+	WARN_ON_ONCE(dl_rq->running_bw > dl_rq->this_bw);
 
-The deadline_bw_test selftest added later in this series has the case,
-move_vs_rebuild: a process of 2049 threads, one of them a deadline task
-asleep, moved in and out of a one-CPU partition root while a writer of
-sched_rt_runtime_us rebuilds the sched domains 20 times, six rounds.
-With the patches of this series before this one, a round leaves a root
-domain short of the task's bandwidth, the root domain of the other CPUs
-admitting 3 more tasks of 10% in three 8-CPU VMs and the partition root
-none at all in a fourth, in 4 VMs of 4; with this change the six rounds
-pass, in 2 VMs of 2.
+and the two sums GRUB reclaims from disagree by the bandwidth of the
+task until it migrates, where the enqueue adds it (add_rq_bw()).
 
-Found by the Sashiko AI review of the second posting of this series.
+Change the bandwidth the runqueue counts where the parameters change,
+in __setparam_dl(), which every task that gains deadline parameters
+goes through, rather than in sched_dl_overflow(), which only a task of
+the class reaches that way. A runqueue that counts nothing of the task
+takes the new bandwidth, where the previous patch left it to the
+enqueue to come: that enqueue finds the bandwidth there and leaves it
+(add_rq_bw() of a task a runqueue counts), and a task waking up has
+task_cpu() pointing at the runqueue it wakes on. The bandwidth of a
+special entity stays counted nowhere, and the request tells one, since
+the flags of the entity are those of the parameters it had: a sugov
+kthread given a reservation of its own gets that one counted.
 
-Fixes: 2ef269ef1ac0 ("cgroup/cpuset: Free DL BW in case can_attach() fails")
+Fixes: 8fd27231c330 ("sched/deadline: Track the "total rq utilization" too")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- kernel/cgroup/cpuset.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ kernel/sched/deadline.c | 37 ++++++++++++++++++++++++++++++-------
+ 1 file changed, 30 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 5b8f1d9552a6..aa946baeb4b9 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1067,7 +1067,13 @@ void rebuild_sched_domains_locked(void)
- 
- static void rebuild_sched_domains_cpuslocked(void)
- {
--	mutex_lock(&cpuset_mutex);
-+	/*
-+	 * An attach in progress has set aside, in the root domain its tasks
-+	 * move to, the deadline bandwidth it moves once it takes
-+	 * cpuset_mutex again: the rebuild of the accounting would drop that
-+	 * reservation, and the move would go through on its strength.
-+	 */
-+	wait_attach_done_lock();
- 	rebuild_sched_domains_locked();
- 	mutex_unlock(&cpuset_mutex);
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index f772a944a3e5..746bffb03b7c 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -440,22 +440,32 @@ void cancel_inactive_timer(struct sched_dl_entity *dl_se)
+ 	cancel_dl_timer(dl_se, &dl_se->inactive_timer);
  }
+ 
++/*
++ * The runqueue a sleeping task is on counts the bandwidth the task has:
++ * give it @new_bw in place of what it counts of the task's.
++ */
+ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
+ {
+-	WARN_ON_ONCE(p->dl.flags & SCHED_FLAG_SUGOV);
++	struct sched_dl_entity *dl_se = &p->dl;
++	struct rq *rq = task_rq(p);
+ 
+ 	if (task_on_rq_queued(p))
+ 		return;
+ 
+ 	/*
+-	 * Waking up on another CPU, the task has its bandwidth on no
+-	 * runqueue: the enqueue to come charges the new one, with the new
+-	 * parameters, which __setparam_dl() sets right after this.
++	 * No runqueue counts bandwidth of the task's: this one takes the
++	 * new one, and the enqueue to come leaves it there (add_rq_bw() of
++	 * a task a runqueue counts). A task waking up on another CPU has
++	 * none of its bandwidth on a runqueue, and task_cpu() points at the
++	 * one it wakes on.
+ 	 */
+-	if (!p->dl.dl_bw_oncpu)
++	if (!dl_se->dl_bw_oncpu) {
++		__add_rq_bw(new_bw, &rq->dl);
++		dl_se->dl_bw_oncpu = 1;
+ 		return;
++	}
+ 
+-	dl_rq_change_utilization(task_rq(p), &p->dl, new_bw);
++	dl_rq_change_utilization(rq, dl_se, new_bw);
+ }
+ 
+ static void __dl_clear_state(struct sched_dl_entity *dl_se);
+@@ -4234,7 +4244,6 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ 		if (counted)
+ 			__dl_sub(dl_b, p->dl.dl_bw, cpus);
+ 		__dl_add(dl_b, new_bw, cpus);
+-		dl_change_utilization(p, new_bw);
+ 		err = 0;
+ 	} else if (!dl_policy(policy) && task_has_dl_policy(p)) {
+ 		/*
+@@ -4283,6 +4292,20 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+ void __setparam_dl(struct task_struct *p, const struct sched_attr *attr)
+ {
+ 	struct sched_dl_entity *dl_se = &p->dl;
++	u64 period = attr->sched_period ?: attr->sched_deadline;
++
++	/*
++	 * The bandwidth of a special entity is counted on no runqueue, and
++	 * the request tells one, the flags of the entity being those of the
++	 * parameters it had. The rest have theirs changed here, where their
++	 * parameters are:
++	 * switched_to_dl() hands it to the runqueue of a task that enters
++	 * the class, and a task that priority inheritance boosted into the
++	 * class is in it already, so nothing dequeues it and enqueues it
++	 * back for that.
++	 */
++	if (!(attr->sched_flags & SCHED_FLAG_SUGOV))
++		dl_change_utilization(p, to_ratio(period, attr->sched_runtime));
+ 
+ 	dl_se->dl_runtime = attr->sched_runtime;
+ 	dl_se->dl_deadline = attr->sched_deadline;
 -- 
 2.47.3
 
