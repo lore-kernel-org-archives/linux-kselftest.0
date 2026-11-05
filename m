@@ -1,60 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793882900;
-	b=S0Fv1yTkBEpcW1yAarnAU4o/fEAtX8qSSYZR3XpTaeqgQ1fjGvxBbS8q9KLUmQXeBwZS
-	 7XB3zOxsWCTc+LM+Er2/+xHXVgfB9hHYM1yJ29YSDfmUhquwV7rYX/4FmWicbB+A50etK
-	 Fkm2YKspzrpIebn5L4Ar1BgekLo+FXUJ7QozTibgnFmJFEWI3qHDC4IsL8NXopqJ2Bino
-	 SiOEXZeEB7n1F2OwINJzGS0ZVAZj36OfzGXyjIBu17drFVMuVrXgSmG4oNEq5eM36STml
-	 iVu7NHEjBc7CocJyV/Nv6o0rzY4q7DEJaiXwS6zKKIBT9COPoGqB28vacuPL5rtWRmw==
+	t=1793882902;
+	b=mj5ZRetN9sL4mTxu9t/tONKOJczoRoVxa8rrpMh3TAUX0/h+owhOhH+8MiYetKDn6xOs
+	 b+i6YojsrdNtCP3kaktEQKe29WA7ccaXDu1Wr07tEw9vaDB5lEOjpz5bqweWeKBr8qhdG
+	 jCQYpF5Ve5P0//4yi4k0A4J3zE2/URC47G0Ze1a5zZHZ8dCuiTF28QCgud1dXhNgPC38A
+	 1Nc6axO43vm0Xidqm5ewU9Il2oBhLEI0GSiQI+xaA+GwkoBRA3hTKgCUGrN3mUpDj8aRM
+	 C/4XAuDqHVq7QF6VCm93+5NkATpeqmS4W4D6Dub4/vc2xbLTDU69xhItHWlJF5tJawA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793882900;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793882902;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=CeBw+s2LvMeqG/vb2nuXePt6wR8Y9lUm4clWyu7tZNY=;
-	b=4VzngWyIsfhNbuJU7/R28Ww5aTn6xxEn8brJWiwnAZ1g5DVx9hNZdBClYL7yTM8QrECB
-	 9QcmI6yPrCfQsGzKQCVzLDNczMNV9bm5Nz20ySzuEpbBJ6qgp7MX98FxK311L2iA+k5WZ
-	 44x+ZbZ/zuzrRxAn51zeCHTPjTQM/t9Ljrh/5LLEflwmUzXnz/QFoNqSR7Ur59B8dFfaT
-	 gImlPBwsyYO5NfnBabSwWRHobLPAmosCORBafK7TCOXKO+OMhv10qar0aPxsLWWI+HOzd
-	 fiN0wod41l80D/kXWlw5HpkuzsE/DZ1e0P41a6x6WStQhWZY3y4G40GU24Si6RjrlxQ==
+	bh=QY8lCwmkmind44M0So4KIeiIQuRudzX0HtJ/2Z9V0Ew=;
+	b=joYZpnxEXxBeOt5mc2jmhEzruGPDY0/7tkCGEorRLB6iVVChtapfcXVRheUx/v76UXMN
+	 xKs1Nmh+DXmX7HM1ws089JiHJuiMXghZm71vgK2n5TBbRHXnB2J1AOEu6DWFpjTB5OVvE
+	 yxExU4Mn5Cvg02OGKOFPYiuqwYKmhTFqTVSOJNiSMOGzNfqaC3G0apMs0Sf0Q6NgQ3/RI
+	 uq0MieG2yUFkyuZqE+bNCgjdLE+emvvllUnMAOckfyrN81Hz43J+OvZ5hZLsJlj8VtVJP
+	 Jxgakzty/myisq4LTgrfPPR28pc98d4kdCWgdIWvLqGVH53JDFkag/w7IIJYvbndW2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AIldk2Cs;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ASExXGBv;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A5F606A32D;
-	Thu,  5 Nov 2026 12:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C11606A326;
+	Thu,  5 Nov 2026 12:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AIldk2Cs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A1F11F00919;
-	Thu,  5 Nov 2026 12:48:18 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ASExXGBv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9F911F00A21;
+	Thu,  5 Nov 2026 12:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793882899;
-	bh=CeBw+s2LvMeqG/vb2nuXePt6wR8Y9lUm4clWyu7tZNY=;
+	s=k20260515; t=1793882902;
+	bh=QY8lCwmkmind44M0So4KIeiIQuRudzX0HtJ/2Z9V0Ew=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AIldk2CsQlorkpHASsofuj2utGYZeupCKR07f2JeNTZhwNllI0w3n4vBScSUWISUR
-	 kWvqw0mbm73nc7U5eGM3r4OZz4iEO8RcMgt2Ytx6TVAyQxKP6Yc9P55jGHy0CWFQA3
-	 pGeETt5FIAJXShO5uaEoh9wHbn9TgCRVRA/nT+yTAYj0yizEVok3BI6q74VXDmp+hE
-	 0J4YcTRvwPNnx3VC1DZ0R/t8K1hzumaozg/yMf1fWht9tsHcpW2J7uKScggTfISm0d
-	 PJfhyy5a8yrXHGHk8RMCgpvJEhIrfM2SM5FQWmaBX5YMeygPOfOt8Y+P47M1dphDCK
-	 Lvrjgoj8y8VcQ==
+	b=ASExXGBvEOYAz2bb/LUlqbCHgdW/CLfiA4bmdMGdDzOvFZwqheIdS65o8NFSROpgR
+	 4hzxoYHIzaPWHwoxv8j96U4JRBUbwWg+l/ROA17/euuErxG1CbzC8kt81izsXGgsBl
+	 eSB0XZIo8H+PmIKumciFK7rcAnEAf1+NwfsvEGy2Gfm3uu6Oy2dQMDmcYXdVkk9VXb
+	 fqd7N8WJT1XYSaRD+UWEOYrSa4h37BVM3/8y3AcIh+vrkuRV4m5mswTbuLOXBHsxy9
+	 cCLScHsxa3vC0Aq4HyHM5Wv902zFZXT8VV4zJ4aDr7lm00QAGywUrm0aprBoq5vDft
+	 JTGal4r2g72oQ==
 From: Sasha Levin <sashal@kernel.org>
 To: David Laight <david.laight.linux@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Beau Belgrave <beaub@linux.microsoft.com>,
-	linux-trace-kernel@vger.kernel.org,
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Dmitry Safonov <0x7f454c46@gmail.com>,
+	Hangbin Liu <hangbin.liu@linux.dev>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/user_events: cast pointers through uintptr_t
-Date: Thu,  5 Nov 2026 07:48:17 -0500
-Message-ID: <20261105124817.1532094-1-sashal@kernel.org>
+Subject: Re: [PATCH] selftests: net: tcp_ao: don't shift a size_t by 32
+Date: Thu,  5 Nov 2026 07:48:19 -0500
+Message-ID: <20261105124819.1532111-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261105110333.0fa21741@pumpkin>
-References: <20261103163913.640876-1-sashal@kernel.org> <20261105110333.0fa21741@pumpkin>
+In-Reply-To: <20261105110856.2dc9f08c@pumpkin>
+References: <20261103163921.641347-1-sashal@kernel.org> <20261105110856.2dc9f08c@pumpkin>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,19 +71,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 05, 2026 at 11:03:33AM +0000, David Laight wrote:
->On Tue,  3 Nov 2026 11:39:13 -0500
+On Thu, Nov 05, 2026 at 11:08:56AM +0000, David Laight wrote:
+>On Tue,  3 Nov 2026 11:39:21 -0500
 >Sasha Levin <sashal@kernel.org> wrote:
 >
->>  	reg.size = sizeof(reg);
->> -	reg.name_args = (__u64)full_args;
->> +	reg.name_args = (__u64)(uintptr_t)full_args;
+>>  #ifdef IPV6_TEST
+>> -	ret.a6.s6_addr32[3] = htonl(n & (BIT(32) - 1));
+>> -	ret.a6.s6_addr32[2] = htonl((n >> 32) & (BIT(32) - 1));
+>> +	ret.a6.s6_addr32[3] = htonl((uint64_t)n & 0xffffffff);
 >
->I'm sure you can't need both casts.
+>You don't need a cast or mask there.
+>
+>> +	ret.a6.s6_addr32[2] = htonl((uint64_t)n >> 32);
+>
+>That can also be n >> 16 >> 16
+>
+>Also see upper_32_bits() and lower_32_bits() in wordpart.h
+>which might not be available for selftests?
 
-It works as is, but you're right, the assignment widens the uintptr_t on its
-own and the (__u64) isn't needed. Happy to respin without it if the maintainers
-prefer.
+They aren't, tools/include has no copy of wordpart.h.
+
+It works as is, but you're right, htonl(n) and htonl(n >> 16 >> 16) are enough.
+Happy to respin with those if the maintainers prefer.
 
 -- 
 Thanks,
