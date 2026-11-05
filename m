@@ -1,72 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793883197;
-	b=j4m+wJ+pbLgeDqKpG8tYho5sXnuhM2XyiFqITxV5DxTV+F1WzqhV+aM7dMFESO/9gZtt
-	 0WZ3hPrVuLdYAxWLam/Ad7xoyX/VZVv6g2ngykxTTefdkSWrZibrCCGh8tftYSzyQiM2z
-	 b1a5TT7yxlfCX+dkvAEiW+pb74gvjRWxkQq/KGhEsGqF5jeM5NpA93UQsvIU87JJoLTxi
-	 o/Nb89IR6pfgFWVb+hngruXwphSy9ln3nqmk+oDIlt75bm/UMRmNLAAuVAeHtdfEqtDl+
-	 jHwrI1hwL15dEfDE5BX4Z1d7lZWDA17f3ebrSYjPTaIyRFuazbG6amiTSRzddONxBig==
+	t=1793883249;
+	b=CjeGwZER2YQY1X6AkZ0GrI2DX6tBmAgY1DMOJofC0B6DVMZfgY7WeH8U1wYkm7rHNfHv
+	 NlgaH7ZitG0kQ9o1rPuNH4Q8C6uz/aGmMM7qMVzfprIjXRUmF6/p+G2MyaVgEW5ciCwzw
+	 r+xKY2/KDu95q5KiuANyKPsLjNoo7pjse26cHYtQCa+jezcQ+4VqKsncUHRrmk7qFivvE
+	 4pYLhwGFa1pNF+lIQZklytjL42tUi7kkb14+4ouIMSi4N98+A6YYhbAAqJis61oMWnyB9
+	 SSMQ+o6WfRMBdoTkzdG3hGwcNpoW4A0lOri66PAsAP+17RTwfxt6hs6kbz+ewBQs/jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793883197;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Jx2tP2QL2uXCi2X7v5m4S6ginsf9Omslqrj4gKOESdc=;
-	b=AiyOtVDbdkc07vurFwXaKvL6BUBpWQdsLCld6k4DMk891ur66GtrY3rQuyWYtN0xFdHb
-	 Mk/4Q3uJ7VPkRFwduurbvB7dkxVu7aDfB6LthNCxn+7yGnZEMJ02L1spMNtKSednImeO7
-	 r1eV5GgmHTfm2VMVmPTjrNpyLHzhJNEqIZ0grIPvdnUB6HkVy9SsBQswJPF3uk4UxkxiM
-	 4UNZm0PQAm9OQ/e3CgDz5MSsKdpQXqfnGVEcnrZE4bvbxOcQOb5a2QygUhPrpxoovuzOx
-	 oPqmh409kKgnPTk+yp264+K44H/p+Q7r58zrql9GOeCSK0j6Yt6m2p1qZ42QX6jVlxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793883249;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=iXsYh5eKf2FQ1EzlHzZPVEQunxEDxjb2JXoXRWEV9kE=;
+	b=TQOAVVUeXa+2ICFJZ0mvo4XholD8sRZW0g2pGNsw74OoTzamuJcyRnjT8D4Jm9EA/eF6
+	 askhrcusYRP2Gkxta/Kcwi9jV3Fc/b5WtYwNLudeYD8OsLnMg0dfaSUG3zzI/Zju8hghT
+	 RxEk6ICMer40ME9Yo+9okwCALGdFcoWjJmEKxhBffp+Vlb3eSrwIJeFBZjb9tbfleZPpV
+	 A1QVMOHs6pAjky4EfEtrGvRmHQZgpeprV8oSd/H62/Bii+qUwmNub7x4/smMgXSqRr8zv
+	 xLNrEc2l/9fbP7R1CvbueAusZ+jJ+asz7xAxkK1veM6pkCvR31M34Anw953CIGHrVJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=k7I2rDdM;
-	arc=none smtp.remote-ip=95.215.58.18
-Received: from mta1.migadu.com (out-18.mta1.migadu.com [95.215.58.18])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lW+GzrJ2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277A1606A33F
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 12:53:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 277A1606A33F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F11A606A332;
+	Thu,  5 Nov 2026 12:54:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=k7I2rDdM
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gLVcleB6+rxV+cpjYYEJDtNTDp7yUhynMivltpNPF1M=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793883195; v=1; x=1794487995;
- b=k7I2rDdMBGm27bwo26WP6rfKMfPgitCqTZEAKk//77/1FLhz0OaVsmEObn82iV6cS9xKaXmA
- TTMnPlHMSBh9Ru6IL/mYOygKMl/4EBlwzwRsQ7Jp2JL8pDtJuRwSnVBSN+mRoSB/ZvKp8nzEBhz
- ttR/um1ZR9ji/wakRtJrxhKk=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3f9f8a954c09294a;
-	Thu, 05 Nov 2026 12:53:15 +0000
-X-Mizu-Trace-ID: 3f9f8a954c09294a
-X-Migadu-Flow: FLOW_OUT
-From: Ridong Chen <ridong.chen@linux.dev>
-To: Waiman Long <longman@redhat.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Ridong Chen <ridong.chen@linux.dev>,
-	cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Sashiko <sashiko-bot@kernel.org>,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>,
-	Chen Ridong <chenridong@huawei.com>,
-	Ridong Chen <chenridong@xiaomi.com>
-Subject: [PATCH 4/4] cpuset: generalize the validate_partition() interface
-Date: Thu,  5 Nov 2026 20:52:15 +0800
-Message-Id: <20261105125215.2205892-5-ridong.chen@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261105125215.2205892-1-ridong.chen@linux.dev>
-References: <20261105125215.2205892-1-ridong.chen@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lW+GzrJ2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75101F000C1;
+	Thu,  5 Nov 2026 12:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793883249;
+	bh=iXsYh5eKf2FQ1EzlHzZPVEQunxEDxjb2JXoXRWEV9kE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lW+GzrJ2hExjQcQuQGvfimJnDYhZHsGJ7nMKh/LQgmxa8KDt2UzGcBBKSw9vDfzoP
+	 I7G5AODeFf0OpbUJclCJwMELS3HcHd/atBLCXHFEU/FxNEUPLvyBnn45dcIzl/RWgD
+	 sDjlojgksQi60VftrZIrS9bYi79vsoirNmmrh+TMqnz8o/4CMvvizmjI6tiJO+f4YX
+	 IlSzesfAhCQ1b9C7LjyRcI2mL4snYlCdPgNC4Uc0lcQN97pGj5SLvKk0Sb/8MdrcfW
+	 8nqWNVhozaXQzvrPLa5VG3F1Ap2G0rh4IsLmThV+PnGHF5JGZ8ZfLQ3EfXq4Zp4QJI
+	 /nHeDBB7l8shg==
+Content-Type: multipart/mixed; boundary="===============5493733059592945753=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,182 +49,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <c49c7edc3d7c652c11ffbf19c76c3daf33427252cd007a9304c749453af47b8d@mail.kernel.org>
+In-Reply-To: <20261105121642.38019-1-abhishekkhade69@gmail.com>
+References: <20261105121642.38019-1-abhishekkhade69@gmail.com>
+Subject: Re: [PATCH] bpf: Add network namespace boundary inspection kfuncs
+From: bot+bpf-ci@kernel.org
+To: abhishekkhade69@gmail.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,abhishekkhade69@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  5 Nov 2026 12:54:08 +0000 (UTC)
 
-From: Chen Ridong <chenridong@huawei.com>
+--===============5493733059592945753==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Refactor validate_partition() to take the parent partition, the new
-partition root state, the new effective exclusive CPUs and the CPUs to
-be deleted, instead of a trial cpuset. A NULL parent stands for a
-remote partition, whose CPUs come from top_cpuset. This makes the
-interface flexible enough to handle both local and remote partition
-validation.
+> bpf: Add network namespace boundary inspection kfuncs
 
-The housekeeping conflict check is folded into validate_partition(). It
-is skipped when the parent is not a valid partition root, as @cs can't
-be a valid local partition in that case.
+TL;DR: The new kfuncs sit inside the CONFIG_CGROUPS block but their
+BTF_ID_FLAGS entries don't. With CONFIG_NET=y and CONFIG_CGROUPS=n,
+resolve_btfids may fail the link or kfunc registration may abort, possibly
+dropping other kfuncs.
 
-Use the new interface for local partition enablement in
-update_parent_effective_cpumask() and in partition_cpus_change(),
-replacing the open-coded checks there. The order of the checks is now
-the same for both paths: empty CPUs, housekeeping conflict, then no CPU
-left for tasks.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-Signed-off-by: Chen Ridong <chenridong@huawei.com>
-Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+[ ... ]
+
+> @@ -2991,6 +2994,77 @@ __bpf_kfunc long bpf_task_under_cgroup(struct task_struct *task,
+>  	return ret;
+>  }
+>  
+> +#ifdef CONFIG_NET
+> +/**
+> + * bpf_task_is_init_net - check whether task belongs to initial network namespace
+
+[ ... ]
+
+> +__bpf_kfunc bool bpf_sock_is_init_net(const struct sock *sk)
+> +{
+> +	if (!sk)
+> +		return false;
+> +
+> +	return net_eq(sock_net(sk), &init_net);
+> +}
+> +#endif /* CONFIG_NET */
+> +
+
+[ ... ]
+
+> @@ -5151,6 +5225,11 @@ BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
+>  BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+>  #endif
+> +#ifdef CONFIG_NET
+> +BTF_ID_FLAGS(func, bpf_task_is_init_net, KF_RCU)
+> +BTF_ID_FLAGS(func, bpf_task_get_netns_inum, KF_RCU)
+> +BTF_ID_FLAGS(func, bpf_sock_is_init_net, KF_RCU)
+> +#endif
+
+Are these three kfunc definitions compiled when CONFIG_CGROUPS is not set?
+
+The definitions sit inside the existing CONFIG_CGROUPS block, which is
+closed by the "#endif /* CONFIG_CGROUPS */" after bpf_task_get_cgroup1()
+and friends, but the BTF_ID_FLAGS() entries are guarded only by
+CONFIG_NET and come after the CONFIG_CGROUPS #endif.
+
+With CONFIG_NET=y, CONFIG_CGROUPS=n and CONFIG_DEBUG_INFO_BTF=y, the
+functions are not built but generic_btf_ids still names them.  Then
+resolve_btfids prints "unresolved symbol bpf_task_is_init_net" for each
+of them, and the vmlinux link can fail when CONFIG_WERROR is set.
+
+Without CONFIG_WERROR, the set8 entries keep BTF id 0.  At boot,
+kfunc_init() calls register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
+&generic_kfunc_set), and btf_check_kfunc_protos() sees btf_type_by_id(btf, 0)
+as the void type and returns -EINVAL:
+
+    if (!btf_type_is_func(func))
+        return -EINVAL;
+
+The "ret ?:" chain in kfunc_init() then skips every later registration
+(SCHED_CLS, XDP, STRUCT_OPS, SYSCALL, CGROUP_SKB, the dtors and
+common_kfunc_set).  Could that drop kfuncs such as bpf_obj_new(),
+bpf_task_acquire() and bpf_rcu_read_lock() on such configs?
+
+Should the new definitions be moved after the CONFIG_CGROUPS #endif, so
+they match the scope of the BTF_ID_FLAGS() entries?
+
+
 ---
- kernel/cgroup/cpuset.c | 112 +++++++++++++++++++----------------------
- 1 file changed, 52 insertions(+), 60 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 02823b0c4a41..4f58bb71f305 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1434,6 +1434,41 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
- 	return res;
- }
- 
-+/**
-+ * validate_partition - Validate a cpuset partition configuration
-+ * @cs: The cpuset to validate
-+ * @parent: Parent partition of @cs, NULL for remote partition
-+ * @new_prs: The proposed new partition root state
-+ * @new_excpus: The new effective exclusive CPUs mask to validate
-+ * @del: exclusive CPUs to be deleted from @cs, can be NULL
-+ *
-+ * The housekeeping check is skipped if @parent is not a valid partition
-+ * root as @cs can't be a valid local partition in that case.
-+ *
-+ * Return: PRS error code (0 if valid, non-zero error code if invalid)
-+ */
-+static enum prs_errcode validate_partition(struct cpuset *cs,
-+		struct cpuset *parent, int new_prs,
-+		struct cpumask *new_excpus, struct cpumask *del)
-+{
-+	int parent_prs = parent ? parent->partition_root_state : PRS_ROOT;
-+
-+	if (new_prs == PRS_MEMBER)
-+		return PERR_NONE;
-+
-+	if (cpumask_empty(new_excpus))
-+		return PERR_INVCPUS;
-+
-+	if ((parent_prs > 0) &&
-+	    prstate_housekeeping_conflict(new_prs, parent_prs, new_excpus, del))
-+		return PERR_HKEEPING;
-+
-+	if (tasks_nocpu_error(parent_cs(cs), cs, new_excpus))
-+		return PERR_NOCPUS;
-+
-+	return PERR_NONE;
-+}
-+
- /*
-  * cpuset_update_sd_hk_unlock - Rebuild sched domains, update HK & unlock
-  *
-@@ -1954,18 +1989,10 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
- 		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
- 
--		/*
--		 * Enabling partition root is not allowed if its
--		 * effective_xcpus is empty.
--		 */
--		if (cpumask_empty(tmp->delmask))
--			return PERR_INVCPUS;
--
--		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
--			return PERR_HKEEPING;
--
--		if (nocpu)
--			return PERR_NOCPUS;
-+		part_error = validate_partition(cs, parent, new_prs,
-+						tmp->delmask, NULL);
-+		if (part_error)
-+			return part_error;
- 
- 		/*
- 		 * This function will only be called when all the preliminary
-@@ -2444,32 +2471,6 @@ static int parse_cpuset_cpulist(const char *buf, struct cpumask *out_mask)
- 	return 0;
- }
- 
--/**
-- * validate_partition - Validate a cpuset partition configuration
-- * @cs: The cpuset to validate
-- * @trialcs: The trial cpuset containing proposed configuration changes
-- *
-- * If any validation check fails, the appropriate error code is set in the
-- * cpuset's prs_err field.
-- *
-- * Return: PRS error code (0 if valid, non-zero error code if invalid)
-- */
--static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *trialcs)
--{
--	struct cpuset *parent = parent_cs(cs);
--
--	if (cs_is_member(trialcs))
--		return PERR_NONE;
--
--	if (cpumask_empty(trialcs->effective_xcpus))
--		return PERR_INVCPUS;
--
--	if (tasks_nocpu_error(parent, cs, trialcs->effective_xcpus))
--		return PERR_NOCPUS;
--
--	return PERR_NONE;
--}
--
- /**
-  * partition_cpus_change - Handle partition state changes due to CPU mask updates
-  * @cs: The target cpuset being modified
-@@ -2483,33 +2484,24 @@ static void partition_cpus_change(struct cpuset *cs, struct cpuset *trialcs,
- 				  struct tmpmasks *tmp)
- {
- 	enum prs_errcode prs_err;
--	int parent_prs = is_remote_partition(cs)
--		       ? PRS_ROOT : parent_cs(cs)->partition_root_state;
-+	struct cpuset *parent = is_remote_partition(cs) ? NULL : parent_cs(cs);
- 
- 	if (cs_is_member(cs))
- 		return;
- 
--	prs_err = validate_partition(cs, trialcs);
--	if (!prs_err && (parent_prs > 0) &&
--	    !cpumask_empty(trialcs->effective_xcpus)) {
--		int prs = cs->partition_root_state;
--
--		/*
--		 * Check for housekeeping conflict by passing the whole
--		 * effective_xcpus as well as those CPUs that are to be
--		 * removed from cs as delmask.
--		 */
--		if (prs > 0)
--			cpumask_andnot(tmp->delmask, cs->effective_xcpus,
--				       trialcs->effective_xcpus);
--		else
--			cpumask_clear(tmp->delmask);
--
--		if (prstate_housekeeping_conflict(prs, parent_prs,
--						  trialcs->effective_xcpus, tmp->delmask))
--			prs_err = PERR_HKEEPING;
--	}
-+	/*
-+	 * Check for housekeeping conflict by passing the whole
-+	 * effective_xcpus as well as those CPUs that are to be
-+	 * removed from cs as delmask.
-+	 */
-+	if (is_partition_valid(cs))
-+		cpumask_andnot(tmp->delmask, cs->effective_xcpus,
-+			       trialcs->effective_xcpus);
-+	else
-+		cpumask_clear(tmp->delmask);
- 
-+	prs_err = validate_partition(cs, parent, trialcs->partition_root_state,
-+				     trialcs->effective_xcpus, tmp->delmask);
- 	if (prs_err) {
- 		WRITE_ONCE(cs->prs_err, prs_err);
- 		trialcs->prs_err = prs_err;
--- 
-2.34.1
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42028225169
+--===============5493733059592945753==--
