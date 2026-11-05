@@ -1,70 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793883858;
-	b=1fpubC9NKOY12JPVMQ/BAHE+/ON5F331sb9HMjpUkNP0ZTpx/vjO1QNmsRKi1NCpG5iN
-	 6JLCnTb5LoE0oW1bCXrDtWKHxmQB7Ye7NEg3gCwJ8sKRo5LGqOjnLorMqIk0FfNUVVsO7
-	 Gb/wVhli+bXy+x7N0KPldpcN1Xh99kBEWYg82Z6uQIQo1sVGoL7vbDkD9dUguq1ecalE6
-	 QNNlx9kSl1RjR7ivNhyai2fTUKy+v3NtJnz5UWSJ+h90WSMEXnh8Rkmo/cA0OpoSHZpfG
-	 5vzqUgVJ9hkyxnFhNfsrOOiK9UaQLUH/Hja4RNgIWiiQRrT2YZtN6Bmf7Bl0A3rSQxQ==
+	t=1793884027;
+	b=3zUANucqoZ7m3LIRF3aV/X+lHs7WHb1Swgzn8jkrw1dcLa4l/2x+wQ8JMsum91ECJ+e5
+	 vpgB/ULCwkzzOaaZUds+za38KnLwRMorIdkzgb4x93Fvl5qxZbPK+2FLBqhuNRmEW0dYB
+	 VsRilCwaD0zdGTmURYkGKmXZbq8WBd/j1GldCaG1hlK/2owD7V4GGX10BYS7ZFgOMMv5W
+	 IjPp033K3ZKP6Hh1wrHJKJ5tDRw8iSh8XtTH4QCcFAFcGwRGBQoZMR/VUj3vu7bbdg70S
+	 cuOt2u77GeeKzr0VqDWmuAP1pKcYGuBV2/55AnTY1HdNPmAP568fnxn/bxjvMUShYjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793883858;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=ljVZDzVIXJjcd9Ou8caC5YIrs7Owo+UZn82NsoYNtFI=;
-	b=W97QKpJc0TIhV7rCr052F8DMrdbPZERH/0/EZ+DLPEF97oAcSXu6XGG+Kg7TiLU2An1n
-	 Nb0QHo+qclPXX1n7ubZnhwP6lXXXhLSm7cKS4Kv1UHWo4uXeVFvmd4j0waKXlG64E1ktd
-	 IAWVXVprw1PthDvFCT8UvSkcGOzcF8UA66W/FwwslQz99WCQ3Watcfl+AdfYS3Asu6xZ8
-	 RfRCQp3J+jGjVR0wSlOmyN7/HSnZ0w46qNNmo5c5xEn6LpXcc4JhjjkIswqSjU2lVNfk0
-	 R36lH2D3nQIt08GAEbmD2DIDc15bannT6+iqCfrKcGcUt4F6clw9hDVGLRhaajZjonQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793884027;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=1jOK42kEV/R7k8n51sIGLXDORmkNj62Y+kfJMXSo5Mc=;
+	b=NLq/773ctLnGZrxinzXZ1zM2DVSCONdcJIAiNVYvTwzC8RGgLF2MbW6ZO8WbUziQDjVV
+	 L3On/++q2c24d45gCUYQvG6Sy4qX2mORRGxlcawh/ggq799nXRzlegNu7f7ANrTLjwGDL
+	 YQTLMIIFlyaWvnZAcoaPpgKRB53valGN5IuOWbExUrsoHqdd8udo0yV+Qvz80mdiTsLqu
+	 DnvuPzi8wFAuPWSaZEOQ6OuxB9sHOVyxbtakvzPyZh18zacT/orcKu3oqnlIjVmWasxxn
+	 /rXPITIEE+bozo3w6YEtbaEDFTU3bHY4I9DMK7fH4++Q9a40wUF7FhxMJcfaBd1dyzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=KmDJwRsB;
-	arc=none smtp.remote-ip=95.215.58.48
-Received: from mta1.migadu.com (out-48.mta1.migadu.com [95.215.58.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XFuaSYbA;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC524606A32C
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 13:04:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC524606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDD0606A328;
+	Thu,  5 Nov 2026 13:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=KmDJwRsB
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RdjxbMsSdN+BD16PpNIf6U9zDl/xhZz69PMzEzEBZV8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793883855; v=1; x=1794488655;
- b=KmDJwRsBKprnFPcDORCicIJiAY9nl8/3fGVAlrwAOfOdq4opTQyBx5FBqq63tBwz6jxa1UH0
- UhewUSJjK0EDYlcaWBsILIBq3dYfq9Pbep9OFyuCM87RhvyUAOF19OhOjpDfSzo0FVtREig6yic
- ym8fvIRB53sk8YliBbb9wrBQ=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f4856373a4f80b9b;
-	Thu, 05 Nov 2026 13:04:15 +0000
-X-Mizu-Trace-ID: f4856373a4f80b9b
-X-Migadu-Flow: FLOW_OUT
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-To: longman@redhat.com,
-	tj@kernel.org,
-	ridong.chen@linux.dev
-Cc: guopeng.zhang@linux.dev,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH v2 3/3] cgroup/cpuset: Release isolated CPUs when the parent is invalid
-Date: Thu,  5 Nov 2026 21:03:44 +0800
-Message-ID: <20261105130344.664336-4-guopeng.zhang@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261105130344.664336-1-guopeng.zhang@linux.dev>
-References: <20261105130344.664336-1-guopeng.zhang@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XFuaSYbA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805411F000C1;
+	Thu,  5 Nov 2026 13:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793884027;
+	bh=1jOK42kEV/R7k8n51sIGLXDORmkNj62Y+kfJMXSo5Mc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XFuaSYbAn6Wzfg2xYzR2T2rOKC0XDbDYhBWedM5J/RUQvjbBWRjzNw4K4Dn/iQ0pF
+	 dSQ+7RvtRYpBTa099A8orQ6Eoq0V5fe9WiOoUXLjtRgOgAQfU0xXOlZ0vTQXkEkXgu
+	 KhEdHwOq6KB2VVmaJviQHb2UVnhjNnwRasKvHuuLi/RCLBovWXTXG2Kzg30H2E/hBR
+	 jaktqUPHCfXxQqnxAnd3VasCNIvl5thBnv+GSakC2ip8kbNsnxNBgqP9PzvcDFP+aR
+	 ocLUpRelVHZhyx0N/goW4szRfWco2GGXiVwl+gLHV7g/U/TuyWb0AGwAN3fy0m7uJe
+	 vaUjtb8+88F9Q==
+Date: Thu, 5 Nov 2026 15:07:00 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Chen Pei <cp0613@linux.alibaba.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, alex@ghiti.fr,
+	pasha.tatashin@soleen.com, pratyush@kernel.org, graf@amazon.com,
+	shuah@kernel.org, guoren@kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	kexec@lists.infradead.org
+Subject: Re: [PATCH v2 1/5] kho: Do not translate the handover FDT address in
+ is_kho_boot()
+Message-ID: <aux_dPnvXk3LYDxs@kernel.org>
+References: <20261103080926.2079-1-cp0613@linux.alibaba.com>
+ <20261103080926.2079-2-cp0613@linux.alibaba.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,69 +62,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261103080926.2079-2-cp0613@linux.alibaba.com>
 
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Hi Chen,
 
-An isolated partition can be invalidated after its parent has already
-become invalid. update_parent_effective_cpumask() then skips returning
-CPUs to the parent, but also skips removing them from isolated_cpus.
-The invalid child continues to isolate CPUs that no longer belong to
-any valid isolated partition.
+On Tue, Nov 03, 2026 at 04:09:22PM +0800, Chen Pei wrote:
+> is_kho_boot() only has to say whether a handover FDT was recorded, but
+> it asks kho_get_fdt() for one and so converts kho_in.fdt_phys with
+> phys_to_virt() just to throw the pointer away. Both callers use it as a
+> boolean and never dereference the result.
+> 
+> On riscv64 that conversion is not valid yet when efi_init() reaches it:
+> setup_vm() leaves kernel_map.va_pa_offset at 0 and setup_bootmem()
+> assigns it later, so a handover boot that came through UEFI panics in
+> linear_mapping_pa_to_va(). Only debug builds fail -- without
+> CONFIG_DEBUG_VIRTUAL __va() degenerates to "phys + 0" and the boolean
+> stays correct -- but the panic also goes unnoticed without an earlycon.
+> 
+> Check the physical address instead. Nothing needs the translation, and
+> architectures stay free to bring their linear mapping up whenever they
+> like.
+> 
+> Fixes: d6d511639185 ("kexec: introduce is_kho_boot()")
+> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+> ---
 
-For example, on a 32-CPU system with all CPUs online and without
-isolcpus= or nohz_full= boot parameters:
+There was very similar patch: 
 
-  cd /sys/fs/cgroup
-  echo +cpuset > cgroup.subtree_control
-  mkdir A
-  echo 0,2-31 > A/cpuset.cpus
-  echo root > A/cpuset.cpus.partition
-  echo +cpuset > A/cgroup.subtree_control
-  mkdir A/B
-  echo 2-3 > A/B/cpuset.cpus
-  echo isolated > A/B/cpuset.cpus.partition
-  cat cpuset.cpus.isolated
-  2-3
-  echo 0 > /sys/devices/system/cpu/cpu1/online
-  cat A/B/cpuset.cpus.partition
-  isolated invalid
-  cat cpuset.cpus.isolated
-  2-3
+https://lore.kernel.org/all/20261023054518.3258350-1-gthelen@google.com
 
-Release the invalidated child's isolated CPUs when its parent is no
-longer a valid partition. Use isolated_cpus_release() to preserve CPUs
-still covered by a valid isolated ancestor and by boot isolation.
-
-After this fix, cpuset.cpus.isolated is empty for this reproducer.
-
-Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
-Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
----
- kernel/cgroup/cpuset.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index fc5454c2740f..f3b808cea51c 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1976,10 +1976,15 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 		/*
- 		 * Make the current partition invalid.
- 		 */
--		if (is_partition_valid(parent))
-+		if (is_partition_valid(parent)) {
- 			adding = cpumask_and(tmp->addmask,
- 					     cs->effective_xcpus,
- 					     parent->effective_xcpus);
-+		} else if (old_prs == PRS_ISOLATED) {
-+			/* No valid parent will release these isolated CPUs. */
-+			cpumask_copy(tmp->addmask, cs->effective_xcpus);
-+			isolated_cpus_release(cs, tmp->addmask);
-+		}
- 		if (old_prs > 0)
- 			new_prs = -old_prs;
+and while both Greg's and your patch are correct they both have that wall
+of text with too many details commit messages that I don't like.
  
--- 
-2.43.0
+> Tested on qemu-system-riscv64 (virt, -cpu max, TCG): edk2
+> RISCV_VIRT_CODE.fd/VARS.fd on pflash with OpenSBI fw_dynamic.bin below
+> it, and a GPT disk holding an ESP with grub plus the kernel and an ext4
+> partition as rootfs.  Kernel config is riscv defconfig plus
+> DEBUG_KERNEL, DEBUG_VIRTUAL, KEXEC_FILE, KEXEC_HANDOVER and the kho
+> selftest fragment; the outgoing kernel gets "kho=on" and the kho
+> selftest init does kexec_file_load() followed by reboot(RB_KEXEC).
+> 
+> Before, the first handover panics.  earlycon= is needed to see it: the
+> BUG precedes console registration, so without an earlycon the machine
+> goes silent right after kexec.
+> 
+>   KHO: found kexec handover data.
+>   efi: EFI v2.7 by EDK II
+>   kernel BUG at arch/riscv/mm/physaddr.c:47!
+>   epc : linear_mapping_pa_to_va+0x1c/0x1e
+>    ra : is_kho_boot+0x18/0x28
+> 
+> After, the same setup keeps handing over until the window closes, 29
+> consecutive boots and no BUG.
+> 
+>   KHO: found kexec handover data.
+>   KHO: exec from: 7.4.0-rc1-next-20261102-00005-gfca49e548231 (count 29)
+> 
+>  kernel/liveupdate/kexec_handover.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec_handover.c
+> index 6f1f55fe3181..6ab181de345c 100644
+> --- a/kernel/liveupdate/kexec_handover.c
+> +++ b/kernel/liveupdate/kexec_handover.c
+> @@ -1643,7 +1643,7 @@ EXPORT_SYMBOL_GPL(kho_restore_free);
+>   */
+>  bool is_kho_boot(void)
+>  {
+> -	return !!kho_get_fdt();
+> +	return kho_in.fdt_phys != 0;
+>  }
+>  EXPORT_SYMBOL_GPL(is_kho_boot);
+>  
+> -- 
+> 2.50.1
+> 
 
+-- 
+Sincerely yours,
+Mike.
