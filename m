@@ -1,100 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.42
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793919412;
-	b=M9kIKXpAwajrjgpR4DYRaXoFN2GhrZ6XWLCCnqTpc7r0sRhYXrEhc7AHRK9+rTvA+xKR
-	 TavH35VHtl+SxmxgFsm/ww/cPw/TbckqdF3/pNGNhDJNr6eAYAitYWAbJ4MGQL9bxMSmw
-	 EFQHk/E7KyLoH2bgWNlouuXDbNXCWOxWzI9yFixRHFExGq8JMY6YbOdvRYveczqIYpkZK
-	 KNY/ikg90jF1j688WSu4835zeh2NkqERZtJ0Kodk8JSPlKFWNoTuexSPBghfVz6sfEjdI
-	 tX127fQxYvVLLJMdvBlsGND7sI5WZQHj2WjVhoihtVsDJHtOaOshsaKZLLqLZwZ/cAQ==
+	t=1793921752;
+	b=g52YseotZH/1pELrF19V3IqlyU+r031HBP1IzVFVf83Rk67OccMF5xAbGiSb4iP6VQRO
+	 ivdZ5ffBWx3VOw0Z0y6YWJDjbT/Yyzdq24N80VGFYR2oqmA3hBdV8QvdMCPq5/6noyM73
+	 Nnh2iPHVMtleaNroOjZmjul1vnzHag0uPSdjmbbNZQUBLV1h0my2riT8k2CvAcu3Rt50K
+	 fIct4shmyBJuq/jWZatnam/LxdJ/aeNmaDSLiPBXdHMe9VZJbSPCjEMEDin4A8hrsnKdF
+	 WLKT7To1uUgp/MP9KGJo8V33PuvwtAe1zrtkj2srohtWnadi47Jd0ymEZMA6/w3+YAQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793919412;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793921752;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=beWRPlgAl/peRVZEkF/oGc+heGWLz/peIuKHHlXmZvg=;
-	b=wYqNpVkjy7Q0kHq7o0jxo1x/JHLqhmuGFnVNpITjKBS49S13Ca2KLggNZ/4xd+MEzlVm
-	 Chm+st8lrqK0sYBeglwqJnXurJNgZ4dJ74Js0Ne6gMXanoWLwKTYmdgbR13SoeylLQi14
-	 oXT32swZDSWycwkB7QXLH8kcFH1xHq9uFgTZmXM+mdi/WCsEXrRZ3ATzfUtNcvkZM8IIB
-	 gS7aQfDKqu8doUzndCvyCz/9Eo0s8HN4cWM82Nydw3ziaWO3P5AmGV1YYpzw+KPLlLUAn
-	 D5KB9NaOeo6A6pN1SeTRG/fEyO6g6g/AuUYIurAsai52QztRtRFxHoFKYX8CEgB/YiQ==
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=GCw0Dw3/6zz6nZRQ9tZkZQrpsY84tJiBfsLr+6sG1As=;
+	b=PNWG5hSbjp36eK/lsFHnfjPS4mKkLoF+jubt/H3+W3A5IutoTqCGppkcDah40XQ6CjtC
+	 BN1uIc2gR6dc7rf9INFkYDVpSDBx+qcDHjazaqZJbuZVSd8aymE7ES+rCmS5e+Vn8N7Hj
+	 j7vtty6PcSt84eAfqX8jQoWjuWRMR84GKVj1XRLsEAPVdJmFpbBWJDOkaB95TsT7s3tYv
+	 0XofPLRfxU+CclEtj1ceaBXZQt8vJCYSYH5YyiCecHp+DgYlIauKhn5+kFYcTIi33SiyG
+	 8vSvlxFwT4nHuEpCnodsZns53CjxStyoXN1PQPbqnxhMa9paBYybMHDfbIjy8b3aEww==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XwnFB3pE;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.52
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	dmarc=pass header.from=sentinelone.com;
+	spf=pass smtp.mailfrom=sentinelone.com;
+	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=KsafWJik;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD8B606A326
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 22:56:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1AD8B606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52976606A31B
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 23:35:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52976606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XwnFB3pE
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c4395d31228so5654966b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 14:56:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793919410; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=KsafWJik
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ae1a9e187aso10127a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 15:35:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793921752; cv=none;
         d=google.com; s=arc-20260327;
-        b=DXcazAvI3SutZbR3B/te43gsGztZDDmN3gEpVjlBv4zdTH3kKbFbINQAycaLy4sZQ+
-         OJ5Ayyzm46lZCie3kI2gBO/Vrv3emVXKFSgaFwnzmZwIuTy70H35Cni9gFTrUU7/1Z+l
-         MPz5GOsBlOIkdgpdm0RHzN1w+D+B38kcFG1bcGTXOF5HPweInLhQFlIg1wIqaYGn+F2q
-         UtUVuyzYFl5sBNteo+p+0dI+WQo9X9EKaLokzNq2SCO/3JnwHuTBA/WmXlKCP8KthOtF
-         nvcSbDeEi3NmjkQ7XmvwXy7ZLmT4tlMgeW/UgBtOPIdaQPV/wDUEAerr1g7kZZMjG09r
-         LnvQ==
+        b=ICo1hqdsEAtDlrazej4mXS6Jayd8FUgLJTmmjZX26VEIJmHhlGROhB37bYPiIQM8Ka
+         L8stoefVCcCz4iq1RIyJb3CBc0dKjyBdGoF/7BbLCwSxGX8ePG+K2G/FS+Wn+kdcn43h
+         fgonrr6AhKNtV3kFXpLv6WIXbvTAFGt8B0CnOPLm8niaH4aHM7EiG0cGJUZyExUJTwgS
+         S1I/b6ygyN7olh33HkquWQIUAKHDAu7r3LPF7gGE6X/uyLarpZVYat2sFZOdQNMaGDKZ
+         DEacmX/kjN8lJArqHciJO3Ui8TKi/DaPv8pIbjryVpLYcl6s72yKXP9jCNztrNfTBOY3
+         5Ymw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=beWRPlgAl/peRVZEkF/oGc+heGWLz/peIuKHHlXmZvg=;
-        fh=DBj09r7iJZLqfs2f8sS/z7ctzFPzH5ZEt4RkbPEXs1Q=;
-        b=XfA7YckYxAqRG629CWVhaF5F5xajMXVcbv7BNq2lgrSTDoF8KKEA3vBEw5buAgX38g
-         skTZqutTvWvG8Nvt1GPBkz4i7NZRPIEqIGoLCf8d+NUVpwIm/XlfL9WZc8kvLjz4NHhO
-         ZQD6UHcHC8LzbSnD4ckx52sEWla8OnrDCj9Xx5jl3APZBXnBjwxeypRn06d0kKPoXKB4
-         oGAfYNwebFj80Y/Q0jJBvWbDQVy344APEmlAj92qHX28YW/79gdo8RSanT0uvgwrlrQN
-         +Id4MriyBoF4TcvUtUwlT5XcS+l6HWQeQ/ThDmQn/NaWFq59cRFshTWVxyW71tTH4mjK
-         nwSQ==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=GCw0Dw3/6zz6nZRQ9tZkZQrpsY84tJiBfsLr+6sG1As=;
+        fh=mDn8h8WERfL0dOuidJf5TpgoIUM+RLC8m8k/lp6Hae0=;
+        b=nSIW/ylOwl7jYiP0Zu4wpK6jZZveUGk+hyN5HQYKXCz3hzDkb0MIdZXLxmvPmygfnj
+         1P6RHIcJvPSQzQAQhJcXJ0wq8mYeaTXnpnfVfMNjl/sgL2InG23TiEQCA489r0ZfrwSo
+         3FL/hMNOJ05K1OXVGY5vemIUQ10uMrVJJYkMzyYHuu0Ooln9rhQ0BxBj2MQswdoMeZ9j
+         9cry7zybMjeOCP/GVRMsizL6fjzW29MI/lMUvSptJGYUq+106/nJQi7Mk2ankt/Jkl47
+         Un/lUbJeGCaW9BQlXQDP6bCxEE8grLo4uA8K//9iBu8ZkkSqSPuJ9lWk7W3ZboqhpLLP
+         l0QQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793919410; x=1794524210; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=beWRPlgAl/peRVZEkF/oGc+heGWLz/peIuKHHlXmZvg=;
-        b=XwnFB3pETFUMoUj/6KBzwkdVdkbnR/jrtLE29gyRh8FQEeJ3BBs0+EBi40SfVeS6Mr
-         0BOcZcKLKfjoeZYIQqbPO5EX9XAqc4M7jznEVvkiRNLn34aP6iSY2gxHWZVswUhOJQlz
-         1poM9X8uv0KXQIbJEt5Cwld+Zkm5mcQdxg3w6nyhOobhXtUC4/Sv819zuAqqVpYT3dg0
-         CBe8O8GAB3xUDzHoU5YIXE+PoPjSgZZmjmpiU2F9OXCsze29bNMiFh0g28yX55wdVXNO
-         jbEXQDpUkT12V9VnskV3kAY6RcxRqq6qCSFFWoERQ9LcHtXbhfcOCOR9tEZOoViKsxkg
-         OHIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793919410; x=1794524210;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=sentinelone.com; s=google; t=1793921752; x=1794526552; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=beWRPlgAl/peRVZEkF/oGc+heGWLz/peIuKHHlXmZvg=;
-        b=DWMu9KlHmgHpb6a9+5bTPBaLrpLQzeZyCc48sjTx6PpRqn5itTbmsIIisOpFxcFII1
-         4WRfoUe0jzDDx553cygcFhJXL2FQbVGHUq0GKcisT/sCEbw6Yzzt9Auk58kB1jJVf1c7
-         LkW5HELbIaGNoyW7AOPdmW0tR3c23KPPMdUu7X/E9DVYTLcLJOYkmoN1a/IZGZd9O94N
-         mZpMwaMRj3FbrRnPiVNIw0A4Q1GWiwJ4jhAHGnJN0HZbV4vYmAEWnIdZZcC20QBgD8Q5
-         sVFAg7439oCY+Q2HRLiRq0KUQ/iqVNFAxFAnJaTxFWX+tAipm1YkrqnZHQm8IjDJSwIW
-         heyg==
-X-Forwarded-Encrypted: i=1; AKwUvBxdkCq8rjS1DI3biATTtG/PkP63pgNsULtkRM8xydtwrup1Vz3QWFrZf2oI6LSRv+N+bQf6w3YK4lXaKdPaK14=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9hTVJO0E6a/nNfCgHobo/79estG2OMjps1LPleTazqa9iu2c6Y
-	pxOjSAWfb3o/HpVdFByX69B9wHh7HRNqdpkWuaX3/NWbSJw3qWGFQ7b1s7auBWYomduH4XH7/zl
-	dzphw0TBJEO4GEiNMSHAl6XfPuwHozSgiY2HYdAGA
-X-Gm-Gg: AYBFou2Md7flp0uTlGfwju2Wu4RFisFQjUONzkrtryDxHmnFXAcswOSf8C/fmnLCH8D
-	V/Xn190lyG2cUhSmlsThr5mEBBKTKBi7C7cjyhYS81YlysZmxJNHNofKjPHIhlPofhNC2sYwohb
-	MJqu28p4V9oNyDa2GesfZeX0zRiFBUpy2L9A49j0mZDWSdInLrL9uXku9k2gC17xaojBoAhsVpq
-	H4UbLFsZfTNi9//pITqblUvnQThA+SbP5KH4JlWSvybmHrUDMRC7gKgfwV+wANjbxp2HhPTWJ2k
-	7HDT8Q4g44bhYcn3jZGf3+93oHRfpaHHPofrLFgHZqvJ7E1sMmAxDSZkZthNCk/tijd3qw/zhoq
-	Zy+AHvEhRPDbVQnOc58VjO7dl8xrDenDP0z+TUw==
-X-Received: by 2002:a17:907:9811:b0:c40:36ca:9d1b with SMTP id
- a640c23a62f3a-c4d354fc327mr75827366b.40.1793919410007; Thu, 05 Nov 2026
- 14:56:50 -0800 (PST)
+        bh=GCw0Dw3/6zz6nZRQ9tZkZQrpsY84tJiBfsLr+6sG1As=;
+        b=KsafWJikuo8FptLtf1RAxBqfXSGGJ/r8dS8Az671M1Xt4RUwVxO7wVepvIlQnOFBBf
+         /MzkoiTn08xLX5LP+ahx8pNdH/6ukulK1QEWgZPxxWAEft9c9IsiuX+R0D0I4uOLWlvN
+         h6pHrdaWzf4HfMYbaqATPgSoUqq3x78g0hsNakpCOrJKeWKkirPTnilEf/VFX37U2BZr
+         89ylElyZXLuhv8PJRcTSqT2qOarnFkl+Z7Efa0cGxSAtBsmcQDPO5MCpc6I7B3NkdWmc
+         LN/wvlS4dg9PvAVF4tguXMFlLKQb7alfujZj1CKStebBAsAb55nxUXfk5nOT3kw9FSZM
+         ItDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793921752; x=1794526552;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GCw0Dw3/6zz6nZRQ9tZkZQrpsY84tJiBfsLr+6sG1As=;
+        b=c61Yxta3L0M8CDoJ9lgA5thHfT98DDdG3KWM9S5UkrmMQc+fRP+enledhRFJjPdgaz
+         FS7hy6Uap1iwT1/wczyrDSsLzYwX2OIwR2FpETwoFG9V3qibFKlsl4OBUxS7kuxylnBj
+         rkOT1C4fAswwa8+fiH6nVXp+IjZ2LgDpxA6Dv3QjtME8GRS+zZ0gy3Ki5UMV7ldhHjIN
+         /divzH8eTR65kDINEI1Tof6rshB89l4vSMMQ838h8WP0TWAj28K9ya6zIsfWF/Nj3pTV
+         FL3xp/B2TzfhsHm6Gd4Lp3V4mHb19nqAbfLvknqZiV/foMsQ0XHKzRYSukVYDkslL+ch
+         JKkA==
+X-Forwarded-Encrypted: i=1; AKwUvBzG0wOMXpfXQEJDt1b5KJOkkuSkzaI+qgOizdjOXx7OnG/hSKyDiGvNHaQOBQk43RfSeFIRr2PbTEJ9EpOxy0k=@vger.kernel.org
+X-Gm-Message-State: APuU4Z83g6Aiyhyc+YnoqOBuHch/xxsN7puEDQ9zO7fZzWmmx6jcqa1e
+	kkl2I0GYLn4ArdifFPyWTZron4Ukt0meIv2kJnKudQJd6YJ70sXgOv+vE6BWv/OSOwT8/7nUUyq
+	r3vUtRe8WMt5a5bfivCjyL8PjBASbKPcNN4ZAWmiZDg==
+X-Gm-Gg: AYBFou0E1rwirrsdOkSJAjEVSCUX0a1X7PH3iCFwBPer1PYTMvsv3PiuJhNbAzZ1b+A
+	WeZsidJUcEJt3RQBKED5mNZEgHhDoWNiwycF3HbmsvH44/0IB8yeHBxELLF5ygLTZMWnyJWhK5D
+	DKo4pay2Qn2E0Y8JQIDKMNmLaoK7LTfKlskM7q4g2tdKen+1gAwGU9alJHE8kLQJ6ZCGYFS9MLf
+	PdKlOglmElF99d3+ldaG6L6A/OesUkunvfB6BkVXHX4cYsGCaR3NmjGC3rNuxt+NuYaqM3C0Io3
+	05vdu3x7AgcCG2ZXrzSEoXwV4iLXC+K8Id67+ULbm3YFa4+G31RUoVbpDMFZis4LWl90Bvl0W6V
+	i8dGOb6RofSYDB/DZTony2/29Hf3jIdt7lA==
+X-Received: by 2002:a17:90a:d883:b0:3ac:9e5e:d1a5 with SMTP id
+ 98e67ed59e1d1-3b0db70872bmr1109408a91.6.1793921751683; Thu, 05 Nov 2026
+ 15:35:51 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,49 +103,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261102230445.3993629-1-almasrymina@google.com>
- <20261102230445.3993629-3-almasrymina@google.com> <20261103115926.39e092b8@shazbot.org>
-In-Reply-To: <20261103115926.39e092b8@shazbot.org>
-From: David Matlack <dmatlack@google.com>
-Date: Thu, 5 Nov 2026 14:56:22 -0800
-X-Gm-Features: AclHuK8Ff2i-kZKWxjfqjpz2XvgyET4nKGr7VQwICZxEIxfoafnklYeCqUTiYZA
-Message-ID: <CALzav=fXeOTXXhxmQKidmO+vrxZDDeecvg2qrPAs6KEWLWPA_Q@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] vfio: selftests: Add vfio_pci_find_mem_bar() helper
-To: Alex Williamson <alex@shazbot.org>
-Cc: Mina Almasry <almasrymina@google.com>, Peter Xu <peterx@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, Kevin Tian <kevin.tian@intel.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>, Alex Mastro <amastro@fb.com>, 
-	Matt Evans <matt@ozlabs.org>
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+ <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
+ <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
+ <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
+In-Reply-To: <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
+From: Mike Bazov <mikeba@sentinelone.com>
+Date: Fri, 6 Nov 2026 01:35:55 +0200
+X-Gm-Features: AclHuK89NvSJapqCJ93P1wxW7lFPP0JUgKVanIyU8NMBiBOqz8MX0h4pCCAe_No
+Message-ID: <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
+ cause false recursion drops in trampoline progs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: JP Kobryn <jp.kobryn@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 3, 2026 at 10:59=E2=80=AFAM Alex Williamson <alex@shazbot.org> =
-wrote:
->
-> On Mon,  2 Nov 2026 23:04:44 +0000
-> Mina Almasry <almasrymina@google.com> wrote:
->
-> > Add vfio_pci_find_mem_bar() to libvfio to locate a BAR (or range within
-> > a BAR) of at least min_size bytes that behaves like ordinary memory and
-> > can be safely read and written without device-specific side effects.
-> >
-> > Detection is backed by a table of known devices, starting with QEMU's
-> > pci-testdev (1b36:0005) BAR 2 when configured with membar=3D<size> and
-> > membar-backed=3Don.
->
-> Should we test for this?
->
-> We could toggle memory decode around writing a short, unique pattern
-> with read-back verification.  This might be unnecessary for a physical
-> device, but per the definition of this function it should also be
-> harmless.  For the pci-testdev, which is our only match in this
-> proposal, it validates the BAR is backed by real memory and not handled
-> as an unimplemented memory range.
->
-> For the use case in patch 3/ it doesn't matter, but for future use
-> cases I'd rather see that we generate a skip or failure based on the
-> test here rather than debug failures in the test case consumers.
+On Thu Nov 5, 2026 at 5:14 AM UTC, Alexei Starovoitov wrote:
+   > Also try NO_HRTICK in /sys/kernel/debug/sched/features.
+   > That may be decent workaround for now.
 
-Sounds good to me.
+   The 7.0 numbers I posted were already with NO_HRTICK, and either way
+   our agent runs on customer machines, so changing scheduler settings
+   there isn't an option for us.
+
+   > hmm. you really cannot tolerate that small drop? it's tracing at the end.
+
+   For security monitoring each skip is an event we never see, and the one
+   we miss can be exactly the one that shows an attack. For stateful
+   protocol parsing, one skipped sendmsg/recvmsg can desync the parser for
+   the rest of that connection.
+
+   > let's try to think how per-task counter would work.
+   > I'm guessing 128 connections is 128 threads servicing them,
+   > so 200 cpus will be hammering the same per-task counter which will
+   > cause real perf loss.
+   > Gotta do better than per-task.
+   > Also it needs to be per-task + per-prog. How will it look like?
+
+   On Thu, Nov 05, 2026 at 01:26 PM Peter Zijlstra wrote:
+   > I would strongly prefer all BPF programs that attach to known
+   > preemptible sites to use a per-task recursion counter or something of
+   > that sort.
+
+   This is what I have in mind for v2:
+
+   - Every trampoline and raw_tp run already has a run ctx on the running
+     task's stack. Add the prog pointer to it, and link the task's active
+     run ctxs through one new pointer in task_struct (other prog types
+     don't touch it), so each task has a short list of the progs it is
+     currently inside.
+   - On entry, walk only the current task's list. If the prog is already
+     there, it's real recursion (the same task, or an irq/nmi on top of it,
+     since current doesn't change there): skip it, as today. Otherwise push
+     the entry, run the prog, and pop it on exit.
+   - A preempted task's entry stays on its own list, so another task on
+     the same cpu is no longer blocked by it.
+   - Cost: the list is empty unless the task is genuinely nested, so the
+     check is one load and one predictable branch, with no atomics and
+     nothing shared between tasks or cpus. The walk is capped (e.g. 8),
+     which also bounds nesting depth. It also works across sleep for
+     sleepable progs.
+
+   To keep the per-cpu guarantee for existing progs:
+   - Make it opt-in: a prog load flag for fentry/fexit and raw_tp progs
+     (like BPF_F_SLEEPABLE) saying the prog may run concurrently on one
+     cpu, and that it doesn't rely on per-cpu exclusivity for its own data
+     (per-cpu scratch buffers etc.).
+   - Flagged progs get no private stack. The verifier could also enforce
+     parts of the per-cpu promise if you prefer.
+   - Unflagged progs keep today's prog->active check, so existing progs
+     see no change.
+
+   What do you think?
+
+   Mike
