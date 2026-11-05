@@ -1,100 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.0
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793901356;
-	b=M80eNx7nbe4DtpplKqw/FsJUuJmJx2aNtFq+tg/K82qhsyEPvsn09Nv8RJsyxK7yvEvD
-	 QUU1wmOw+P88JhdddO4E2Ia/OMUMX1JgK3/i5nmYGwElk1nQ8J07Vw6Ay1+jhS7nuJhLx
-	 frQZaIj97XEey1o3qpaFrD6qMKfBUu6UKvmi3id6zu32LsptDeSt/g2Krbcgw/IJpOJj7
-	 qzSNDePJ4QaNvCP9J9TugAu4xvcQh+JIxMemWXsdRUDzwQgWHZQG9nn0igC1yK/Dncxyw
-	 bSxivy/q2ArfS8Czt9iNwyN2/XdPKUdBGQ7NWo9k1FSjIt+KPHVeOa+SeAcM7ajPcRg==
+	t=1793901547;
+	b=OR+M1b1rmOFE7+gRj7hTpohVvrk8IgUQUPBKz5E8W2wt/mWw5FAZu3Yo5CQWZI1b/nRt
+	 DDnkO3Jn5EO/iy4mhvcnppJWyj8KcXCxjDnq0xdWrWF6Of+cMVPri9kEHgeJr3qXgS119
+	 tzFn21K+xfPQJaj1xn0JWMj1wzf5mSbgWTeB11Zou6DVVr4uXBcx6Iafq4Ea/6Rfnhi3M
+	 xV8FASKd8Gah2TNn5/o1jhQnENy+6qVhKMJ0CfH/sv1clqpPI+Iwlt4Hof2RiN5plHYq/
+	 pNvG8s/wIA+cYs/qVMARILo2Fp9f+QcVH92NpOVi6GbX/FKdSQong53XlQj1wmlX50g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793901356;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793901547;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=KJPkIDOAYDK93RB/9c0VDv3wKCD+7XkZXq4Nusu/JJ0=;
-	b=Pnq/odNMm99dOXkOu9SVq2FzDhXCYjgwvaFLh1ih4XxTZhM25gSwtIwusjXB5CuZ4fsC
-	 xIGcToXwDCLIwR2DGKkoHeJNqb0DNVcl1dS2MQOosSUqX3n3PIC7yoTzNTRrj3fS0WsgZ
-	 z/al7HjaKWR1O9l5PnTBbxIg8qnvTWmL+s71lSCBum3qkNSg1SNUIoPRtceiRyeT6HH4i
-	 nelygdI3DQwgyyLpJUA5oR1Tq/UuzWsp8Nu05XVvneJXcUCRwftzHwoS9YSwnDqsoqSKU
-	 +Iuj5BUJcmevcebWp9FC/m9T4lxAbwBiHy8Pry8v08lKoaK6nY/Za5a6laQFwMwu8vw==
+	bh=Y7xeTFp5Z0R3BfvoCv14UiADEzEqwyyGG4Zubwum7Zo=;
+	b=wcdFmUfnGZEtIwiLQvnItmeV9qePe0iui4xGujFKMxqvCvn3GUo/QhxN7+ObBTrEIe6l
+	 jxLMm2Z9gmKoJ6QnKWUpSNZvRDxtXJrYzLaTNsuugsr9HBJz3C80Tg02u0yQll4UYtbJ7
+	 ZDkqftGSmf4jMj3ca6UdIAfVJwpkZJL6o63TFHQVvLU3sYvm+q2Rt7om9a7feUSf7n8ZC
+	 JXRFx7wxvQS3fFfWTMNBbKraSClcLugPEJLwxom8xprLuaTSDaf5+9QsFdzjB18U51kiI
+	 /z34yZ3m6ve+Zod5c8qH7sbBzzJAwYobAfxlwZCYO33B11Jgp9IZyqdc0/JI8pIj74A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N1kTwUwv;
-	arc=none smtp.remote-ip=74.125.229.0
-Received: from mail-dy2-f0.google.com (mail-dy2-f0.google.com [74.125.229.0])
+	dmarc=pass header.from=tenstorrent.com;
+	spf=pass smtp.mailfrom=tenstorrent.com;
+	dkim=pass header.d=tenstorrent.com header.i=@tenstorrent.com header.a=rsa-sha256 header.s=google header.b=dqJ44NkJ;
+	arc=none smtp.remote-ip=209.85.210.46
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E596F606A338
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 17:55:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E596F606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A21606A326
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 17:59:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 06A21606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N1kTwUwv
-Received: by mail-dy2-f0.google.com with SMTP id 5a478bee46e88-3117f9b9e64so275654eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 09:55:55 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=tenstorrent.com header.i=@tenstorrent.com header.a=rsa-sha256 header.s=google header.b=dqJ44NkJ
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-854b6e2e41fso1237005a34.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 09:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793901355; x=1794506155; darn=vger.kernel.org;
+        d=tenstorrent.com; s=google; t=1793901546; x=1794506346; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=KJPkIDOAYDK93RB/9c0VDv3wKCD+7XkZXq4Nusu/JJ0=;
-        b=N1kTwUwvpB9XGiNqY3oRRDkzMFpGtl/3/7auXAzY2if4gWRYBUHuPntVBU4+TUujkG
-         W7jJELMjM/8dRVIN8nB3i2Rq/SIHnr6VLrFzvLb7rxQHGkwUoZZY33BfAt41D5M89+jH
-         hxgRIA2vm1sRoXNbc5lwnZBzfH/NSIr0NAITPAVv7u5S7aeArsy8IefaR/+uMyx3XMBq
-         mLyXgvolIQ8QbxRTvlRYD2RpHFWsFLg502wzz0gs2+mflVzlv1OyU2xJSxhpqsRql6JQ
-         lzH3vQurUPNHdCD4wqRjKVppVCXRrwDctcJyqVt8TV+Bp7zj6pzbUE4ZfVvOb1N06HOI
-         0JWw==
+        bh=Y7xeTFp5Z0R3BfvoCv14UiADEzEqwyyGG4Zubwum7Zo=;
+        b=dqJ44NkJPiwGo2V96AHNwnQBndqAun+3UlTEsRT5Q7d+2bWxgD7zUbx4MAcSW3OVLv
+         CpBI53xmJwrpxIDNzDkdWDhm46YxXpkmMEcMoo21KCOT6WzLpQ1jaVjd/wbajl90/xrS
+         yFU5mkfQmPn1aCJBfCzRgxAhqy/lV6uDGRUtgtL4MRshxyqUrJ/Z1QGVUMk5qhT60yIM
+         3mueNUrasfH/oVVd4ADB7ZQ4HcaGDYdEsKHNoy1BJK/tdieMGN9OOtYaSBZXcnbErdNJ
+         YzSdAA2Dcnj4lQPwhMNUDyr3pYllAFHoZKHXfH4LsR6RfDYP+QDWA3gCThLqLMeChKPD
+         teSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793901355; x=1794506155;
+        d=1e100.net; s=20260707; t=1793901546; x=1794506346;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KJPkIDOAYDK93RB/9c0VDv3wKCD+7XkZXq4Nusu/JJ0=;
-        b=gQ2/uUxmCuFBLdKdL2dbvAWOg/NNaeM4On3A/Jsa7GHUyd9tvf1dNKN4/m07v1eXYO
-         bZdoJnffMLbY2sGMDz/+wtoYsTVB8ZMCs5/RbIt8wJLSaEBzcayHqHvzy1FM4SHf3mpH
-         frsEcPBmSEnajz38U+dGHgXHTJI61yx0zR6EZSjbjXdQelCXej66i7ruNZqMsizfKfsp
-         G77AWxDVIbbOiPW9lBF6MZrud/P112lPmY9bxcvhyeBEzQ3odHkj4fNOII4QUXcE6Ugs
-         r/xxtwwHnlcdt8m4uHQVXMaj7PjFEbr1gDh8xyE8qqaDm07xrEjMi3mb8vg2GD7HY38d
-         lYVA==
-X-Forwarded-Encrypted: i=1; AKwUvByUdHUr6RdHozHIrNc2Xc7lgRwoCZh/58CHkgxx/wAmawD1ekIZSpsZtKD16vdNSn7VFunAdP5ka0gw871YOdQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8zkh6MahYz6C8NCG68EjJqzM1byhbJopqzxmvVMI1fOL4+0qFm
-	FPa1euJ+WjBRFhCkNJDaQIEje4aF4LNzDwI6t5xcEsXV70iMXfgkbOiU
-X-Gm-Gg: AYBFou1HVwGgtwKYmgLO2Ku7BfPsB+BDX/w1C7Vpe1RKdTI5ia+pqQRpPu9LRL60icw
-	T8+2n+owpGR0EVhBlPNuzHQtWFqIIH/6+u4XXEKNCZr3U0HpIMBT2KUvwjSOQcuiPEZLoKT3kkl
-	7QtlsMTUaAE+wqegGyhN7zpDmKtEZ+UtalmtZeh/aBZt9VmbeZdPRx3qWfksN47iWdaVkkj4ioj
-	jj1MDKYhVL7M4XjRNXXdCxYWUJJkcxvp4Oo58eZzNkwFI/T6jJ3tGIWtddDKLZ4VaLtGVkAsbVV
-	uEO6o/oFPBm4zyE4iiMH/+i0qNUZ/NfID4dnWujVwvlFyxExqVeGz81AiwDlc7ux5IAwFpx5YWG
-	bmgJJm5S4XBFwcCZdOc0sQV7DYBDBpF/sqFCEYuv1wA6wOQ/TShIpmVzCW/LzPH6atBtCDPJQS3
-	3tcCmto+8lHkJFA0W9TPyTBkpmOjNhzwi5TLpuazChImDQtXieDNBOV2WO72859yZFtQJ4idGH3
-	qL3bPoJmagr8n/JU66B94kmlrKHSayLkdg0zGv/gaX2kADivQfXWL7zOuYy8Ufk6yv9to0efXZ/
-	tPcmo2nfNUy/qsyNmkfYKg==
-X-Received: by 2002:a05:7023:a5c:10b0:1a9:4d51:8c33 with SMTP id a92af1059eb24-1b24f460f1dmr4221448c88.18.1793901354912;
-        Thu, 05 Nov 2026 09:55:54 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:65::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b245b86fbesm18947609c88.1.2026.11.05.09.55.54
+        bh=Y7xeTFp5Z0R3BfvoCv14UiADEzEqwyyGG4Zubwum7Zo=;
+        b=VSmyNrqboo3qV/WLwdiqO8i1OlWri5ENYkxNUqsXV2avoFsT3L8qSA3HHJRb+6tTIg
+         bifDi1LrmpqdjxguxMnYsz+jJq1sWLBfmOjiEAdYc2fzQ+NM2PePKrSnT99FC2q8oXoo
+         givFW6OHt8Bfbobl2cVxfh8yJ85z+qsB5sHblX5cDn8gk61B8UkcD1a4dF23fV3AmSdK
+         4crmDSxo7yQg8G/0+taueAMJMO5yCYsjtL2o7JqA0+EgFYTOYJ5Q1F5zG3mJHTZ4HZqj
+         4js79fkjFxYIJXhdJLDt/lod+ZDrNc2+LuNfxcJmYQO3exto6n+1Muvomfx4O09anqc4
+         oJEA==
+X-Forwarded-Encrypted: i=1; AKwUvByI4dLGGWQnUa+dYGlyIlPMVMOHPIVtq2qqQoOx1+tBUmDh/YUGFxPsSKD9uIBcTHjC6BcY+XZRfYmOmquloM0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8R0uDUbkP2Q6RXoDuTGX9B8smzppTTmhVSvoxJ10dQVn4exqLY
+	8VYDV70k7yniWHt8Sqfw64g3knJWWJzeXPEn2PhlIS+6K47Th9HdedXfZCA2bEzQcog=
+X-Gm-Gg: AYBFou3I7seLlxJAFYcbRw1jFR2tBp16VNeh3cuzbaWqnAcrjStHO9NTYIcC4HKxys2
+	ZGbiCjAM+likL08Z1I9Fm3MJLAE5E/JKHMk1xkSboEFhzZTSmmT/rD4pW9xwOP8uT+uXIVL3uN9
+	WDczNrZw1GkEi/Qj2YvGrptwhxcHAL1V+os73eKcuHIccbTlW71zbY6y7Er5vuP0GSKKYKule4w
+	LW70VoKhKW8xuNuHd3PdD4piQ/CeaMj5i13E8Yy9l3nElUKrnwpeSiWnfP9YRKWUSYnHkD++7yo
+	9bP2K+TWR85lFEtXyjSRL07+zYuZJ1RCVWdV8iAoKkqtaaUqtasdULAtYnA5VGl0TumS2RvZO0l
+	5gu1JOzIX4/+b0/PLTgylHD+Tww6eSliVBqpLpm9FCxXYD3HgeJME8lRw0taV1tRH7x84kTYw4R
+	K+xPkBPyH5UhfsN6smgvGXFuq7q5CLJm3i8LD8pRdlMwp2c3qJPoV1kaRhksYzJe5yLRMimknXo
+	RqlNKcwdoTj7nTGncOrg7mwMtARMvdi882akqhVeXFxzRqy5FMMsGwJmGqoXNbf9L7kMLH62jIk
+	gCCpP6j3JjbeqUFMTvROcavwyJb05yc8lqwyvjs=
+X-Received: by 2002:a05:6830:2b0e:b0:85c:4897:f2ff with SMTP id 46e09a7af769-85f1d0de43bmr99174a34.25.1793901545806;
+        Thu, 05 Nov 2026 09:59:05 -0800 (PST)
+Received: from localhost ([12.55.13.134])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85ef3e603b9sm5021990a34.20.2026.11.05.09.59.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 09:55:54 -0800 (PST)
-Date: Thu, 5 Nov 2026 09:53:41 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch, edumazet@kernel.org, 
-	horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org, 
-	michael.chan@broadcom.com, pavan.chebbi@broadcom.com, sdf@fomichev.me, 
-	bobbyeshleman@meta.com, asml.silence@gmail.com, razor@blackwall.org, 
-	daniel@iogearbox.net, leitao@debian.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 4/7] net: devmem: add a per-device netmem TX
- frag size limit
-Message-ID: <auzCRJidvMSIOcKc@devvm16445.scu0.facebook.com>
-References: <20261103235152.1904727-1-sdf@fomichev.me>
- <20261103235152.1904727-5-sdf@fomichev.me>
- <18e4e1daa184cadc.3137322e32382e36372e3935.ceab9.0000sendgmr@google.com>
+        Thu, 05 Nov 2026 09:59:05 -0800 (PST)
+Date: Thu, 5 Nov 2026 11:59:04 -0600
+From: Andy Chiu <tchiu@tenstorrent.com>
+To: Nickolai Zeldovich <nickolai@csail.mit.edu>
+Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Andy Chiu <andybnac@gmail.com>,
+	Guobin Zhang <guobin.zhang@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Shuah Khan <shuah@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] selftests: riscv: test FP state restore when
+ rt_sigreturn() faults
+Message-ID: <auzD6JgYSnW186Bb@Tao-Chiu's-Mac>
+References: <20261031161826.858908-1-nickolai@csail.mit.edu>
+ <20261031161826.858908-3-nickolai@csail.mit.edu>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,53 +103,210 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <18e4e1daa184cadc.3137322e32382e36372e3935.ceab9.0000sendgmr@google.com>
+In-Reply-To: <20261031161826.858908-3-nickolai@csail.mit.edu>
 
-On 11/04, Mina Almasry wrote:
-> On Tue, Nov 3, 2026 at 3:51 PM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> >
-> > Devmem TX frags are bounded only by the net_iov size, which is about
-> > to grow up to 2MB, more than some devices can describe in a single TX
-> > descriptor.
-> >
-> > Add netmem_tx_max_frag_size, U32_MAX by default, and cap devmem TX
-> > frags to the limit of the device the binding is attached to.
-> >
-> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> > ---
-> >  Documentation/networking/net_cachelines/net_device.rst | 1 +
-> >  Documentation/networking/netmem.rst                    | 6 ++++++
-> >  include/linux/netdevice.h                              | 2 ++
-> >  net/core/datagram.c                                    | 1 +
-> >  net/core/dev.c                                         | 1 +
-> >  net/core/devmem.c                                      | 1 +
-> >  net/core/devmem.h                                      | 1 +
-> >  7 files changed, 13 insertions(+)
-> >
-> ...
-> > diff --git a/net/core/dev.c b/net/core/dev.c
-> > index 3ac700d37e59..ba2f887dcd39 100644
-> > --- a/net/core/dev.c
-> > +++ b/net/core/dev.c
-> > @@ -12350,6 +12350,7 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
-> >         dev->gro_ipv4_max_size = GRO_LEGACY_MAX_SIZE;
-> >         dev->tso_max_size = TSO_LEGACY_MAX_SIZE;
-> >         dev->tso_max_segs = TSO_MAX_SEGS;
-> > +       dev->netmem_tx_max_frag_size = U32_MAX;
-> 
-> I wonder if netmem_tx_max_frag_size should default to PAGE_SIZE instead
-> of U32_MAX, and have drivers opt in by raising it after verification
-> (e.g. SZ_32K for bnxt and U32_MAX for mlx5 in this series)?
-> 
-> With U32_MAX as the default, large frags are enabled on all NETMEM_TX
-> drivers unless they opt out. For example, fbnic also has a 16-bit TX
-> descriptor length (FBNIC_TWD_LEN_MASK) and only avoids hitting
-> dma_error here because its tso_max_size happens to be 64KB today, and
-> gve hasn't been tested with >PAGE_SIZE devmem TX frags yet. Defaulting
-> to PAGE_SIZE (similar to tso_max_size = TSO_LEGACY_MAX_SIZE above) seems
-> safer for existing and future drivers.
+Hi Nickolai,
 
-Hmm, I did not see fbnic :-/ That sounds fair, let me switch to an opt in,
-should be safer, agreed... Will only option mlx/bnxt and most likely fbnic.
+On Sat, Oct 31, 2026 at 12:18:26PM -0400, Nickolai Zeldovich wrote:
+> Add a test for the previous patch: the signal frame sits on a
+> userfaultfd page that the handler drops after dirtying the FP
+> registers, so rt_sigreturn() sleeps in the middle of copying the FP
+> registers from the frame. The interrupted code must get its own
+> registers back.
+> 
+> The test is skipped without the D extension or when userfaultfd is not
+> available to the caller.
+>
+
+The test is failing on qemu, with or without the patch applied.
+
+> Signed-off-by: Nickolai Zeldovich <nickolai@csail.mit.edu>
+> ---
+>  .../selftests/riscv/sigreturn/.gitignore      |   1 +
+>  .../selftests/riscv/sigreturn/Makefile        |   5 +-
+>  .../selftests/riscv/sigreturn/fp_restore.c    | 146 ++++++++++++++++++
+>  3 files changed, 151 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/riscv/sigreturn/fp_restore.c
+> 
+> diff --git a/tools/testing/selftests/riscv/sigreturn/.gitignore b/tools/testing/selftests/riscv/sigreturn/.gitignore
+> index 35002b8ae780..8ed282ecb618 100644
+> --- a/tools/testing/selftests/riscv/sigreturn/.gitignore
+> +++ b/tools/testing/selftests/riscv/sigreturn/.gitignore
+> @@ -1 +1,2 @@
+> +fp_restore
+>  sigreturn
+> diff --git a/tools/testing/selftests/riscv/sigreturn/Makefile b/tools/testing/selftests/riscv/sigreturn/Makefile
+> index 8c77508641f3..ac7ae7a7c2ae 100644
+> --- a/tools/testing/selftests/riscv/sigreturn/Makefile
+> +++ b/tools/testing/selftests/riscv/sigreturn/Makefile
+> @@ -4,9 +4,12 @@
+>  
+>  CFLAGS += -I$(top_srcdir)/tools/include
+>  
+> -TEST_GEN_PROGS := sigreturn
+> +TEST_GEN_PROGS := sigreturn fp_restore
+>  
+>  include ../../lib.mk
+>  
+>  $(OUTPUT)/sigreturn: sigreturn.c
+>  	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
+> +
+> +$(OUTPUT)/fp_restore: fp_restore.c
+> +	$(CC) -static -pthread -o $@ $(CFLAGS) $(LDFLAGS) $^
+> diff --git a/tools/testing/selftests/riscv/sigreturn/fp_restore.c b/tools/testing/selftests/riscv/sigreturn/fp_restore.c
+> new file mode 100644
+> index 000000000000..1a56684c5f28
+> --- /dev/null
+> +++ b/tools/testing/selftests/riscv/sigreturn/fp_restore.c
+> @@ -0,0 +1,146 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Check that rt_sigreturn() restores the FP registers from the signal
+> + * frame when the copy of the frame sleeps on a page fault while the
+> + * handler's FP state is dirty.  The frame is placed on a userfaultfd
+> + * page that the handler drops, so the copy faults after f0-f15.
+> + */
+> +#include <fcntl.h>
+> +#include <pthread.h>
+> +#include <signal.h>
+> +#include <stdint.h>
+> +#include <string.h>
+> +#include <sys/auxv.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/mman.h>
+> +#include <sys/syscall.h>
+> +#include <ucontext.h>
+> +#include <unistd.h>
+> +#include <asm/hwcap.h>
+> +#include <linux/userfaultfd.h>
+> +#include "kselftest_harness.h"
+> +
+> +#define PAGE		4096UL
+> +#define STACK_SIZE	65536UL
+> +/* the page boundary falls this far into the FP image, after f0-f15 */
+> +#define SPLIT		128
+> +
+> +#define F0_15	"0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15"
+> +/* caller-saved only, so the handler's epilogue does not reload them */
+> +#define HANDLER_REGS	"0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15"
+> +
+> +static uint64_t pattern[16], handler_pattern[16];
+> +static void *saved;
+> +static int placed;
+> +
+> +static void handler(int sig, siginfo_t *si, void *context)
+> +{
+> +	ucontext_t *uc = context;
+> +	unsigned long split = (unsigned long)&uc->uc_mcontext.__fpregs + SPLIT;
+> +
+> +	placed = !(split & (PAGE - 1));
+> +	if (placed) {
+> +		/* rt_sigreturn() will fault on this page and wait for serve() */
+> +		memcpy(saved, (void *)split, PAGE);
+> +		if (madvise((void *)split, PAGE, MADV_DONTNEED))
+> +			_exit(1);
+> +	}
+> +	asm volatile(".irp i, " HANDLER_REGS "\n"
+> +		     "fld f\\i, \\i * 8(%[h])\n"
+> +		     ".endr\n"
+> +		     : : [h] "r" (handler_pattern)
+> +		     : "memory", "ft0", "ft1", "ft2", "ft3", "ft4", "ft5",
+> +		       "ft6", "ft7", "fa0", "fa1", "fa2", "fa3", "fa4", "fa5");
+> +}
+> +
+> +static void *serve(void *arg)
+> +{
+> +	struct uffdio_copy copy = { .src = (unsigned long)saved, .len = PAGE };
+> +	struct uffd_msg msg;
+> +	int fd = (long)arg;
+> +
+> +	while (read(fd, &msg, sizeof(msg)) == sizeof(msg)) {
+> +		copy.dst = msg.arg.pagefault.address & ~(PAGE - 1);
+> +		copy.copy = 0;
+> +		ioctl(fd, UFFDIO_COPY, &copy);
+> +	}
+> +	return NULL;
+> +}
+> +
+> +TEST(fp_restore_frame_fault)
+> +{
+> +	struct sigaction sa = {
+> +		.sa_sigaction = handler,
+> +		.sa_flags = SA_SIGINFO | SA_ONSTACK,
+> +	};
+> +	struct uffdio_api api = { .api = UFFD_API };
+> +	struct uffdio_register reg = { .mode = UFFDIO_REGISTER_MODE_MISSING };
+> +	stack_t ss = { .ss_size = STACK_SIZE };
+> +	long pid = getpid(), tid = syscall(__NR_gettid);
+> +	uint64_t out[16];
+> +	unsigned long fcsr, shift;
+> +	pthread_t thread;
+> +	int fd, i;
+> +
+> +	if (!(getauxval(AT_HWCAP) & COMPAT_HWCAP_ISA_D))
+> +		SKIP(return, "no D extension");
+> +
+> +	fd = syscall(__NR_userfaultfd, O_CLOEXEC);
+> +	if (fd < 0)
+> +		SKIP(return, "userfaultfd not available");
+> +	ASSERT_EQ(0, ioctl(fd, UFFDIO_API, &api));
+> +
+> +	for (i = 0; i < 16; i++) {
+> +		pattern[i] = 0x4010000000000000ULL + i;
+> +		handler_pattern[i] = 0xbff0000000000000ULL + i;
+> +	}
+> +
+> +	saved = mmap(NULL, PAGE, PROT_READ | PROT_WRITE,
+> +		     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	ASSERT_NE(MAP_FAILED, saved);
+> +	ss.ss_sp = mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE,
+> +			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	ASSERT_NE(MAP_FAILED, ss.ss_sp);
+> +	/* populate it, so only the page the handler drops faults */
+> +	memset(ss.ss_sp, 0, STACK_SIZE);
+> +	reg.range.start = (unsigned long)ss.ss_sp;
+> +	reg.range.len = STACK_SIZE;
+> +	ASSERT_EQ(0, ioctl(fd, UFFDIO_REGISTER, &reg));
+> +	ASSERT_EQ(0, pthread_create(&thread, NULL, serve, (void *)(long)fd));
+> +	ASSERT_EQ(0, sigaction(SIGUSR1, &sa, NULL));
+> +
+> +	/* lower the frame until the FP image crosses a page at SPLIT */
+> +	for (shift = 0; shift < PAGE && !placed; shift += 16) {
+> +		register long a0 asm("a0") = pid;
+> +		register long a1 asm("a1") = tid;
+> +		register long a2 asm("a2") = SIGUSR1;
+> +		register long a7 asm("a7") = __NR_tgkill;
+> +
+> +		ss.ss_size = STACK_SIZE - shift;
+> +		ASSERT_EQ(0, sigaltstack(&ss, NULL));
+> +		fcsr = 0x1f;
+> +		asm volatile(".irp i, " F0_15 "\n"
+> +			     "fld f\\i, \\i * 8(%[in])\n"
+> +			     ".endr\n"
+> +			     "csrw fcsr, %[fcsr]\n"
+> +			     "ecall\n"
+> +			     "csrr %[fcsr], fcsr\n"
+> +			     ".irp i, " F0_15 "\n"
+> +			     "fsd f\\i, \\i * 8(%[out])\n"
+> +			     ".endr\n"
+> +			     : "+r" (a0), [fcsr] "+r" (fcsr)
+> +			     : "r" (a1), "r" (a2), "r" (a7),
+> +			       [in] "r" (pattern), [out] "r" (out)
+> +			     : "memory", "ft0", "ft1", "ft2", "ft3", "ft4", "ft5",
+> +			       "ft6", "ft7", "fs0", "fs1", "fa0", "fa1", "fa2",
+> +			       "fa3", "fa4", "fa5");
+> +	}
+> +	ASSERT_TRUE(placed);
+> +
+> +	for (i = 0; i < 16; i++) {
+> +		EXPECT_EQ(pattern[i], out[i]) TH_LOG("f%d", i);
+> +	}
+> +	EXPECT_EQ(0x1fUL, fcsr);
+> +}
+> +
+> +TEST_HARNESS_MAIN
+> -- 
+> 2.53.0
+> 
