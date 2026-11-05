@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793922478;
-	b=zwtbk0kyxiOddHZN0kaC1UZtv1kWcDpZF2OQgb7v4dP3niJHfWBkJupMMmI/HCIGBYsU
-	 BmB4NeFRMo6l7cmj6cPJ7RPQUxD74eUNSf68GXwbuKcDo/uCPEoJ3lELRXc889NHPsSyX
-	 8J/08AaU4cO+TS+CF3h+Ps76M4UxJ/rA5Fzi3oAs0WhblYQaZit7VOZbgH+L5Q6PD8TP4
-	 gCNQPaJ6Nqc7m/wcJrkqOuK5R/nvt8weLSOOoBoXRtb1mZtIUIyKuFNZk3JXcy9R9GgpD
-	 YGR02q5+nTqFwqhZ0+OyjFh6lBkL3lADOLVahm6mPDi4e2jEqj1q7cTDAcS412uMgQg==
+	t=1793922479;
+	b=OjYoS/YVv0tpPmqgp1HlecXsQCCGPgNusA6DRgLhsfSt+voB4ysZzQSaTLYjfAxXSMGe
+	 1t06HXn+balgj5Lqjs9paavDjS9oUYfWVrCvbj9xZso1tu66GfQrZmHkvdryo7n4wY5Kh
+	 ibB1EwFNTfJRD7lgHqwQnPJxFroH9uIQfbZaDfswhuJFngKNSXKQKodgdgN0nWT6BuEO7
+	 5zt6DmNWFmhJYdPKNp/fYTZN3x9aBU/zJUKZyFaZOtMcCmLddiPLetGQd/LX5Rxq6Dz3g
+	 BCAs3hKtLpPn43GG7I4bic+9HSphVhaIP4/rcflTg3JCTO2cTHeD4omRC3fI2IlXySg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793922478;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793922479;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Developer-Key:X-Developer-Signature:
 	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=fgvB7ryGI+VP1vEYkbqY8JtJCAmW2BQXzqaW/kbu2G8=;
-	b=mfmpMUBsH+sG2ORQ/FEsMeXKe03zeKL1xghEtg/bye7nRagmM2PbiInw5kNFxnOg/JWN
-	 pllipCXGVVzYWAtK1gGsi4QO0vRb0rDEEURw4kOdtfYBcI+n4QrRaLTH3Dsj5RAhkP92i
-	 ramHX6QVwoIXtywkiOqf+eWFCn3I3VEsfdeiXj257vWKTIB2nKTNYm5BEmZA+YRUr1V+d
-	 FH8YAVrdUskybHN8UUdarLDFWu9izwQJn5DD1aUtk3tbtn8yO4koiy/nQOc+/zj5WK2Jd
-	 ihe1RVKn/ByrEyjBVGTwIOTqDR+iN+lgnFIn0XD9q1FYVHBaUeV5UK0ole+TOTpJPpQ==
+	bh=HCScXw0AOAFb2Q/P8mOW04jv5uFJRFpztNdUDqAY+J4=;
+	b=3cbxCFBrflP9Zza/7LSfC7mMbpVwbRMW2i6uA/tIigVXfZ9WosOjNGn2EXFiQBsjkGAM
+	 ieW2ol9P/vwyZH+8h3fqqf7J5vF63IcywcPCuQQds1+bZX0oUJuNz4ybP6E5BSljHkQkE
+	 fDdZOd3/QCRWfdDDk8cq4r++Aklb9m1Zsu5D+EEUFOkwtaQAS7v84+kkGxFpidhpHllVf
+	 uCiXy3sZ0TgmakkiuNdaIiZexKsKimV20xmGarkVUqjAvyZHLJRBTcwd7etuZIztN+0Wp
+	 G6wAwhlvf4d4Rq5TJ6ITP249P2KlZtZBSEJJGBN6JZD0cJT44YBWyIhk11o3v3kqfgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="I8Ib/Wky";
-	arc=none smtp.remote-ip=209.85.214.197
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GfzRYJhT;
+	arc=none smtp.remote-ip=209.85.216.69
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43715608361E
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 23:47:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43715608361E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346EE60A2600
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 23:47:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 346EE60A2600
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=I8Ib/Wky
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ed05900df7so688445ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 15:47:58 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GfzRYJhT
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3b0afbf532eso96725a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 15:47:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20260707; t=1793922478; x=1794527278; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fgvB7ryGI+VP1vEYkbqY8JtJCAmW2BQXzqaW/kbu2G8=;
-        b=I8Ib/WkyfgcAU2VdIaoBU4qUeZBEglKmk+X5n8rQP3GxoDsCKUkOuUaZe1R09RnUPP
-         mbxMxw8EhegROGAA7S1O+pDUbzl9y8upL5sZCF+LikEBSmMRpBinwdJp14GVI+PU0N13
-         c1Ao12g2ckrJ7WZ1VMNhk3G4fs7x79mCDOdESF8BqTtnx6CRhl5FIC75ui9zEcU4bI43
-         hcZd15GOd9UnC+JMk3xI3UoJMOwebUUWAw9J33GaOrg9jcXfM3j9464npUxj8woLqF9U
-         MmdYZHj3Od5owtooe7Wqt41M4Xg1RRPh0yjaZM8DfYLWU/5Xcu3jccCgeXg37XtB+58I
-         G2ZQ==
+        bh=HCScXw0AOAFb2Q/P8mOW04jv5uFJRFpztNdUDqAY+J4=;
+        b=GfzRYJhTGr8pkzGOyBRRpOrmHBUxS2SXco1vPK5WflLd+LZEUJjuqUuKUwSNRBhtSB
+         mTo6QqbGM7Guoh7L05Q0F1ZTP/UxB73rEewKfSS/7DC4oEwMw+W5wdC6uJzihspYkKDk
+         cU97c7hryE6fvSEQFMHSrQwLaR2P0gXNgp8OIH7y4/CNn31+G+u4p6IVYdgastUvrZtm
+         lV5fzN0Gq9ixgpXcS3nN7X5VjptMucQ4VY155YABqYsk2V/Jt5sPkcP+nyKVM3Tjg1IM
+         kk1qhqageDeAJbRY1QJj8l8y9ZzsRQRUrTpc7E6v4yPQ7IpGTOOdhDUc66TzkK6peiMf
+         HFzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1793922478; x=1794527278;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fgvB7ryGI+VP1vEYkbqY8JtJCAmW2BQXzqaW/kbu2G8=;
-        b=2ydCgo4+yAybiHaiIl3R/iov3G2qe2PUGsWyyyH1Pa0sFVWNddvjQpm3PD4nMApXUm
-         PikTM97oe3wCy50lowJdpt4chxNr8RVScZdqlITmqPat/N8a/d5XZ62mtZrD+CUcYANm
-         EdX0ivAtNR7PHY4Ic8ko/nGVuVGhiABT8bxLDSAG5iwDrBBl9RgIBltOe78elfdD0kjv
-         LwXf5IMsNUB/qN6aROkNmFh1iT13BfFKrA/azDBMoQMveGuL3MC/OS7cp/kIq0k4jBZv
-         JSkcwMKjkOtjZvlD46IWR23mjp3GL1c0SaiX8toOFLweiAM+zZGQUQ98G9soPGq0rsQc
-         XaJQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwf5zyHx+iPe7YYuEnX7C+D+Eout4QUtyniYXdOfoOB+uGEIfZ6YF97IdKsFXYHe8+8apNNPkT3zPWmSrFQSUg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8eEAJlnXAOdjSKPQRLrl2efSVCvdmESvK9n2P0rh8HaLytP949
-	PHuSa567vcwqsDPoY+AK7/cRghb6Mpy2r3OXqj4o5bpGtREnsllV0FRY36N16FI/dc0SQczvZGh
-	hoAj41w==
-X-Received: from plic13.prod.google.com ([2002:a17:903:370d:b0:2eb:153c:2391])
- (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3d05:b0:2ec:ed58:2062
- with SMTP id d9443c01a7336-2ed4197e542mr11947205ad.35.1793922477243; Thu, 05
- Nov 2026 15:47:57 -0800 (PST)
-Date: Thu, 05 Nov 2026 23:47:00 +0000
+        bh=HCScXw0AOAFb2Q/P8mOW04jv5uFJRFpztNdUDqAY+J4=;
+        b=E+RPu9yut1SgLQNEKYLMZcllUqjmFc5DFrMaFK3f/DaB8thwJWPenq1/K5EkNesb3n
+         Ukjc5dMfve6QjYY98K9QTAijiWPfcF1gkhSbcjAk0Ejov/jTNG9mYsp1KdL2k383pVAq
+         /bInSpL9faDCVojdZoTDyo+jkEf1FBb7/0x5R20pCOm2ygv80AJCwh/ZAbUAb9/LemqP
+         Dm25Ac4eKveC0UmoDfK30eF9/0pvWIqhjbZEwHEu2xvyoJwq13Eu0LUWmXsgcoS+OAD9
+         DFif7+iBG47BT8fz3Wbo4oaA0b9+feGkk1+nrPYKDRLdi87ztDB369cJ5ZTZaEZkBNaC
+         8VgA==
+X-Forwarded-Encrypted: i=1; AKwUvBxjACVtr0HgwZ9t+wJlpDQfgHHPLM9bwTd4ZxERkF5sW/dZeZeLBOUy+xeTHt07Duz2Dpc8Nz1r1mg4OALdtdU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9qsRlSAZEgnIqvutXaD/wrg63jQLPF47ebXuZEZhk8dqKjqcpZ
+	Jko/DuROo6WMYU2nDtyeG4dm0ZEJ7gTdQhSeGqisjshRyT4sXP7w2A8bPg/fONLWnLio+ey9YMC
+	o7Blf8g==
+X-Received: from pjyr7.prod.google.com ([2002:a17:90a:e187:b0:3b0:9c59:c0e2])
+ (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3b8f:b0:3b0:ad42:dcb3
+ with SMTP id 98e67ed59e1d1-3b0db6e4166mr543934a91.14.1793922478146; Thu, 05
+ Nov 2026 15:47:58 -0800 (PST)
+Date: Thu, 05 Nov 2026 23:47:01 +0000
 In-Reply-To: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,14 +81,14 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
 X-Developer-Key: i=wyihan@google.com; a=ed25519; pk=cRi0fKzS5BMxlHyHY2pJv3w/1zcgfYKr6EYGYppdMYc=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793922452; l=1655;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793922452; l=3068;
  i=wyihan@google.com; s=20260319; h=from:subject:message-id;
- bh=eAuK6mynjXU4g9scBsf8osxDUNluz16TtjfwP534Mqw=; b=fuDGD8mFk2kezyisI0w6vD9nLF5EHCz8DYL5IKWXrWQlJD+wmgeWQ+Y1ZGY0oFpDoZ71oILr3
- SeqLs8WgWFBAZOWuMvl9z1pOG4vWv/UANcVEKdCrJXru2JQpc/g3Wzv
+ bh=blx9Hfl3VSYTcBkvVxCVP+EDfWWPj/zgZHQF+Xi/tns=; b=kQ33hQvPJ0lv05IJFYC0jL5F4lpRe+uOyUMUF5+VLhVu8PNgulou/sSgAx2Q6ZABhXYba4lpO
+ KbQIZDtbGxtCi7skcdldvYrdSGgr6Px/DoNYKFBrFXe6nuzTi5HlbmS
 X-Mailer: b4 0.14.3
-Message-ID: <20261105-tdx-selftests-v16-16-2024e8fa517a@google.com>
-Subject: [PATCH v16 16/20] KVM: selftests: Load private memory and finalize
- TDX VM in kvm_arch_vm_finalize_vcpus()
+Message-ID: <20261105-tdx-selftests-v16-17-2024e8fa517a@google.com>
+Subject: [PATCH v16 17/20] KVM: selftests: Add a helper to issue TDVMCALLs
+ from the TDX vm
 From: Lisa Wang <wyihan@google.com>
 To: Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng <ackerleytng@google.com>, 
 	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
@@ -102,53 +102,105 @@ To: Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng <ackerleytng@google.com
 	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>, 
 	Oliver Upton <oupton@kernel.org>
 Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, x86@kernel.org, Lisa Wang <wyihan@google.com>, 
-	Ira Weiny <iweiny@kernel.org>
+	linux-kernel@vger.kernel.org, x86@kernel.org, Lisa Wang <wyihan@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-From: Sagi Shahar <sagis@google.com>
+From: Erdem Aktas <erdemaktas@google.com>
 
-Initialize TDX private memory and finalize the TDX VM after VM and VCPU
-creation.
+TDX VMs need to notify the host, e.g. ucall. Add __tdvmcall() to allow VMs
+to issue TDG.VP.VMCALL with a single function call instead of
+open-coding TDVMCALL registers setup at every call site.
 
-Hook tdx_load_private_memory() and tdx_vm_finalize() into
-kvm_arch_vm_finalize_vcpus() to avoid the need for every TDX selftest to
-manually load initial private memory and finalize the VM. While this
-prevents TDX selftests that use vm_create() helpers from customizing
-memory before it is locked, no current selftests require this.
+The helper makes standard GHCI TDVMCALLs: the caller passes the GHCI
+sub-function and up to four arguments and returns the TDVMCALL status
+from R10.
 
-In TDX, finalization is a mandatory step to make the TD runnable. It
-also finalizes the MRTD of the VM's initial memory and state, locking
-them in for future attestation and preventing any further modifications.
-
+Co-developed-by: Sagi Shahar <sagis@google.com>
 Signed-off-by: Sagi Shahar <sagis@google.com>
+Co-developed-by: Lisa Wang <wyihan@google.com>
 Signed-off-by: Lisa Wang <wyihan@google.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+Reviewed-by: Ackerley Tng <ackerleytng@google.com>
 Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 ---
- tools/testing/selftests/kvm/lib/x86/processor.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm          |  1 +
+ tools/testing/selftests/kvm/include/x86/tdx/tdx.h |  9 ++++++
+ tools/testing/selftests/kvm/lib/x86/tdx/tdx.S     | 39 +++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-index 11db6a3b0366..ee8a1715d844 100644
---- a/tools/testing/selftests/kvm/lib/x86/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-@@ -1503,6 +1503,14 @@ bool kvm_arch_has_default_irqchip(void)
- 	return true;
- }
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 5136f49c502b..ab797c8dd497 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -33,6 +33,7 @@ LIBKVM_x86 += lib/x86/tdx/tdx_util.c
+ LIBKVM_x86 += lib/x86/ucall.c
+ LIBKVM_x86 += lib/x86/vmx.c
+ LIBKVM_x86 += lib/x86/tdx/td_boot.S
++LIBKVM_x86 += lib/x86/tdx/tdx.S
  
-+void kvm_arch_vm_finalize_vcpus(struct kvm_vm *vm)
-+{
-+	if (is_tdx_vm(vm)) {
-+		tdx_load_private_memory(vm);
-+		tdx_vm_finalize(vm);
-+	}
-+}
+ LIBKVM_arm64 += lib/arm64/gic.c
+ LIBKVM_arm64 += lib/arm64/gic_v3.c
+diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+new file mode 100644
+index 000000000000..d41a1efc8a63
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef SELFTEST_KVM_TDX_TDX_H
++#define SELFTEST_KVM_TDX_TDX_H
 +
- void setup_smram(struct kvm_vm *vm, struct kvm_vcpu *vcpu, gpa_t smram_gpa,
- 		 const void *smi_handler, size_t handler_size)
- {
++#include <linux/types.h>
++
++u64 __tdvmcall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15);
++
++#endif /* SELFTEST_KVM_TDX_TDX_H */
+diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx.S b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.S
+new file mode 100644
+index 000000000000..517727d35e75
+--- /dev/null
++++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx.S
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++
++.globl __tdvmcall
++/*
++ * u64 __tdvmcall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
++ */
++__tdvmcall:
++	push %r12
++	push %r13
++	push %r14
++	push %r15
++
++	/*
++	 * Map C ABI fast arguments to TDX GHCI payload registers
++	 * RDI=fn, RSI=r12, RDX=r13, RCX=r14, R8=r15
++	 */
++	mov %rdi, %r11
++	mov %rsi, %r12
++	mov %rdx, %r13
++	mov %rcx, %r14
++	mov %r8,  %r15
++
++	xorl %eax, %eax		/* TDCALL leaf 0: TDG.VP.VMCALL */
++	mov $0xFC00, %rcx	/* Expose R10-R15 */
++	xorl %r10d, %r10d	/* Standard GHCI call */
++
++	/* TDCALL instruction */
++	.byte 0x66, 0x0f, 0x01, 0xcc
++
++	/* Extract status */
++	mov %r10, %rax
++
++	pop %r15
++	pop %r14
++	pop %r13
++	pop %r12
++	ret
++
++.section .note.GNU-stack,"",%progbits
 
 -- 
 2.56.0.455.g6c5a503b38-goog
