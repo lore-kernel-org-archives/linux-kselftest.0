@@ -1,85 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793855658;
-	b=fvUuIhQgI4qmP4ocEWVdMUFn+Pi3pY7ZWXONUZSm90thhity7M95s6lCMseQrI3P+ofq
-	 TZoolPZJK8RiEdPGWwbozOV1BlXTQ4rj0r2peW2k7S4xwa9+IbqOXwPXBsEmLnAA4zQO2
-	 o1aZ7f3L35YG77G01g8LIuVk+Z5Drh/NSE6R5r+ASa90QopHf+DtUMgC1eWTlS6sLFeHm
-	 I9Vt+86mx7GrQAYkFw64LcbnbgA85+dBm2NFb2C4bpVIq/w/FtWnm+afh12kVMstsIWv+
-	 PABCwCtx2JssTcZswFY3Ne0EqJ52aHpZKt13cfwMMP9DX21RoCHHkyeHRXLaIBQwsYQ==
+	t=1793855800;
+	b=OLXuwRgp9WxqpuyQOJtUeLDTiOYGsvogKsyEZiwQE9gWdlHJJx1ckbwHphWJV0NwadsL
+	 FZQx2WWhW1zrdFttTtuAXozezQ0xbiF4mRGbCPBW7Kmrghh9s/lRoXnaOuRJ9LjozMp33
+	 NfHNQHp4Z3UkJNa4LoQpcQdrtx2OHWp2nvnoBkjU+se/yUSHVUxOcJEbaFICYzlMLAhDQ
+	 cKIu6fqeqtehcdGXaVJbrPk7UucCWDNDMx4mB7PKtfUN81EnVTnJZGQOC3GiJavyAuYWU
+	 htbBnOMJXzRB7mwaJ5Eu8hiwrDy5ZqZzfCxh1uwRT8TpQKv/LEkEJSH6iJprVioAcWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793855658;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
-	bh=/dNLoK8eolfJkj1an88i/VPdEv8gehRvTnLhDc4kaqU=;
-	b=hRQj9Y428/h0QYOdgGzpf7WlKpKEb9q9+x8YMFbCUCphEBfnw6mEsuvrSATTR3c2O0uq
-	 t3Ez2RrF55P5kQzHfFqIW16/hfQKID+UdbIn/4RUlyAvjVNxdsQ8VLqRCEJN0hXsP29vH
-	 W2VEs1KayIyGCftpkq7KDXS1+0YwvE8DSlkLElw/eEU6c8tqhsks6Mjid5ai9EKoMnPVh
-	 qPqE3PTFMYZRv2IeP+YAVQrPx5CLkWGKXUkplSpRFX+kcuow9VsZd436iISUpgzXPxDLg
-	 8LK8bRbQgAlYZ2pW821h2pk1zdYGEXL4kwz1Gvvd03mEBiSSfkikCMxHnkEznOL9pdA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793855800;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=7T4yHCCp457ZSKeJuycOZpdN2Q/hAUKNLPVO2oSYggo=;
+	b=ZyJhn5bMPO4lnRsP5nYeher3eB+P512JPLQPxxCaaz3tOwLkHi7jH4CVdfz/vZU+TFUv
+	 LbPcGKcydI34wFu9ThYe8ZnHvXCUdLOKlBaQemGF30HLSABHyIKejLl7fscn/6Q8UD0/F
+	 xPieO3rNApMptVDc1gy38TdECweQW8K1q2dg/TSgrAChDrJv9IprebIDMYbhykLwe7bIw
+	 3QvvaA8XZiFMslY4naApcKkf5Or0wxOts+9NE3cixSlTXub4Jb1YioHf5YVvYr304Ai++
+	 k+eT3HfqJdUYxLFjbBzWU0G2TvA8yN539uTEmskVHZ/EWRSY9gGxzpCYFRjPZPccuXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wmpmO1aN;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PMqwSwT1;
+	arc=none smtp.remote-ip=192.198.163.12
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84652606A32F
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 05:14:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84652606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9641D606A326;
+	Thu,  5 Nov 2026 05:16:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9641D606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wmpmO1aN
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e96502e447so12405625ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 21:14:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793855658; x=1794460458; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=/dNLoK8eolfJkj1an88i/VPdEv8gehRvTnLhDc4kaqU=;
-        b=wmpmO1aNcXZo6fYqQBuOI8WyNSidCMIjF0MAWyjOg45Ff9KVA85lXzdGf8TT2kIwnA
-         nwq+Flrd6vzgzgcbVpSkwymojlv9nCXBLVP7Bn18JFDCMW5BrDjyR4b4ectKrsExjfFb
-         X7Kx5aqb8xzIa+/BR7GpBv/cO7hhWp/zvbd9KiowAV1LZ4H2zIrh2LCMjKngCTKDAJR8
-         aPoLtBo8QPyyZi8JNfITn5/0XGy3xijE8aceN5ANa3znno7CqkydXB1RzsPmz/XTy2l6
-         RnET+OvMMZImCKwBJD1w3TmIiR3x1utzV1CpNECmK0ygR123cwPnzKxU1SR2tLhvNRBs
-         KjGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793855658; x=1794460458;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/dNLoK8eolfJkj1an88i/VPdEv8gehRvTnLhDc4kaqU=;
-        b=s5H52TfXzkl1x0BWjnO5m+R60+6y3ODxSHBT3Uk8ERvdmFWWHfx3ngQpl3TFdYR78+
-         EoYLb3MPQrZvNneU6nAvSmyiHnfaIWzy91FanZpduF+0JA68m+EDtjIPZ1vl/Q+TFaY/
-         7gDZ2+RlMm+RkaABXhoqPon6F4p8638hLSpw51L+WYdSFdC3h9vospZt9N3Lblwr2UfN
-         kswU42d+CGFDVp9CMHzQAir2L0oUNnJZQy2tyAjuUMi3iEcBAdMoWBFAT5vYzTMN2UZJ
-         f9ZZPWvgIFDo9YSRlOwIZ4q3aZAclPKq6NVyiRnnC7R9XDLttLEIJEVdrRAfpqNpoRtl
-         6FDQ==
-X-Forwarded-Encrypted: i=1; AKwUvByXrd1iYYLqL9m+CeMhjfPKodBTqLbRLfppX3RQJDhJleDiCsljaDGUqV86CNrJM3D1VAT2BV+IfHFqxXob128=@vger.kernel.org
-X-Gm-Message-State: APuU4Z92T0qSG3u2yzo3VMfkRem8st3haG0p/mV3ANWOHbE7To4mHKKg
-	wxdIjj9zVdQjT/0+8JZ9g8osrpEp/zIXwZX9fnZZBdsdSibw+n+EPHVZ
-X-Gm-Gg: AYBFou2U1c/VXUeMkINNXoO1eSQied/rTrvPzRchsKxLQg/KDqnCd6bOU5jhMLEJUS2
-	cpmo8lkG8ZjO916Ah+ygL+dWch9s0TJp3dNCM9J5fBFw5xS3cxnwceFSMyqGhmbKy7mZ15S7Pz/
-	WHKgNsqBT/iUivC60++jTumviyViAM2sbtXKMZnFoPXV9Gob2IwjyWQtqstIIaVasglVpA5nktJ
-	tbDV4dbNNdt5MKbYcgtwDjkkh6eBBpJAEx+0SQPcIGY7fX3oFAOMgb6FV54eamzuPmcABzgScm0
-	LQWuICDelvYI+iT1M7myLf0LlQMiBextjlxsFjKgr+CXpdAuzFGX4cV8EIDnN8UVPpZcCsHcs7l
-	VPxPmZkkdESAINB2xIrbvPw6Y5R5fgvNrMkwvplTnfTjrUueVwibGUP42SE77WFyKv5QWEh5fg/
-	uvsDT9IAwpotUF+kEmX36Lzsm8eHX3AxqjJHCJ+Gw07d+slRm2IyCarND7JOYvtOsoQAcGJQyoL
-	m1WiuAoaY+nQ2YaXSqXXyPlSMgL72D9TBSrwiWEuNCLYnId64tttTJVe6u2/z5qX3gWxbUYCpGl
-	Wjlii9V+6TXcCuk6U+Bhiy22VI/b0L5HOZIAESZejthy28e2qZsAPiYrNl/F/t4GgzXqmq7u4f3
-	kDdctr3pyAYfksRGXOH9+ztIwj2GejCx3yMc=
-X-Received: by 2002:a17:902:d485:b0:2dd:c053:a6ee with SMTP id d9443c01a7336-2eb364ce5e3mr166128155ad.32.1793855657678;
-        Wed, 04 Nov 2026 21:14:17 -0800 (PST)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed0910faaasm13103375ad.47.2026.11.04.21.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2026 21:14:17 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=PMqwSwT1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793855799; x=1825391799;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iqOwHCYP9RY0nl5Y1J3CpFGbCCNkCkf7pz8yuuWp1rg=;
+  b=PMqwSwT1eiCd+nVG0Eu0N9t+M7BW947IJqO8LoD+bRqc4NMKB1fWgPz0
+   hYD5/KATp9dSS405cHF2b/mBWSAhS33APf8JUPbyHrbXCrwrwXNU/Bd8w
+   p8D+kBanaoNYUC0iUato8pPOZopb180TKAugx5XVBBVlaYr51qs4Z1r6A
+   7S27RWMZ8ksusCnIyf7XchpvyjdfvHAxgw0C8XjMq1pyk7bJ8r9hDG1yc
+   ibxub38eEcDMBwWizmVSCwgeNF80+LWhqUnQ7+RTnPGpYEG8920gK8YBY
+   VuNhN0O6ULDIx8fXibm+Qr6LMDc2r/OoKZp4vCB8Lh1SvErKPn+X6mZWd
+   A==;
+X-CSE-ConnectionGUID: Oq01XyhURwSxWozHKrAu7Q==
+X-CSE-MsgGUID: tjH6AACMTnywhRi1k4UJBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11956"; a="2532886"
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="2532886"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 21:16:39 -0800
+X-CSE-ConnectionGUID: 1vUCQSjAREmGCZBFc2L9Hw==
+X-CSE-MsgGUID: VYrNVF0/TjuLDSZIFZvvgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,196,1787036400"; 
+   d="scan'208";a="6810132"
+Received: from unknown (HELO [10.238.2.205]) ([10.238.2.205])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2026 21:16:32 -0800
+Message-ID: <e4faa073-9cb6-4809-bf00-c4c4f669dbd0@linux.intel.com>
+Date: Thu, 5 Nov 2026 13:16:30 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,85 +71,99 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 11/28] KVM: x86: Add a helper to detect if FRED is
+ enabled for a vCPU
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: kvm@vger.kernel.org, x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Xin Li <xin@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Shivansh Dhiman <shivansh.dhiman@amd.com>,
+ David Woodhouse <dwmw@amazon.co.uk>, Chao Gao <chao.gao@intel.com>,
+ Zhao Liu <zhao1.liu@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+ David Matlack <dmatlack@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20260911213659.2025974-1-sohil.mehta@intel.com>
+ <20260911213659.2025974-12-sohil.mehta@intel.com>
+ <f7f84b44-e2fc-4d8c-b2e5-e5327086d026@linux.intel.com>
+ <60f7934b-5271-4207-b071-6240b5d36cc5@intel.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <60f7934b-5271-4207-b071-6240b5d36cc5@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Nov 2026 05:14:16 +0000
-Message-Id: <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
-To: "Mike Bazov" <mikeba@sentinelone.com>
-Cc: "JP Kobryn" <jp.kobryn@linux.dev>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Shuah Khan"
- <shuah@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let
- preemption cause false recursion drops in trampoline progs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com> <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev> <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
-In-Reply-To: <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 
-On Thu Nov 5, 2026 at 12:12 AM UTC, Mike Bazov wrote:
-> On Wed, Nov 04, 2026 at 02:20 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->    > Add bpf_preempt_disable().
->    > Your test forces the preemption in the middle of the prog.
->    > Explicit bpf_preempt_disable() will fix it.
->
->    I tried it, and with the whole prog body wrapped in bpf_preempt_disabl=
-e() /
->    bpf_preempt_enable(), Task B is still skipped in every round (on a 7.0
->    kernel, 20 rounds, fentry and fexit: runs_b=3D0, recursion_misses=3D20=
-).
->
->    perf record -e sched:sched_switch -g shows where Task A is switched ou=
-t
->    now, 20 of 20 (Task A, SCHED_OTHER, preempted by Task B, SCHED_FIFO):
->
->      __schedule+0x48f
->      preempt_schedule+0x59
->      preempt_schedule_thunk+0x16
->      bpf_preempt_enable+0x1c
->      bpf_trampoline_6442539626+0x105
->      bpf_prog_7dd04eadc26e277d_on_fentry+0x11
->      bpf_trampoline_6442539626+0x192
->      __set_task_comm+0x5
->
->    That is still inside the prog, while prog->active is held.
+On 11/5/2026 4:01 AM, Sohil Mehta wrote:
+> On 10/23/2026 2:21 AM, Binbin Wu wrote:
+>> On 9/12/2026 5:36 AM, Sohil Mehta wrote:
+>>> +/*
+>>> + * It's enough to check just CR4.FRED (X86_CR4_FRED) to tell if
+>>> + * a vCPU is running with FRED enabled, because:
+>>> + * 1) CR4.FRED can be set to 1 only _after_ IA32_EFER.LMA = 1.
+>>> + * 2) To leave IA-32e mode, CR4.FRED must be cleared first.
+>>
+>> It seems KVM doesn't enforce it in kvm_set_cr0() for 2).
+>>
+> 
+> I think the comment is slightly misleading. The spec doesn't directly
+> enforce leaving IA-32e mode with CR4.FRED. It is just expected to be
+> unreachable.
+> 
+> 1) Based on FRED spec section 4.2 Enabling in CR4, setting CR4.FRED
+> prevents compatibility mode entry while CPL = 0.
+> 
+> 2) But leaving IA-32e can only happen when CR0.PG is cleared which can
+> only be done in compatibility mode while CPL = 0.
+> 
 
-Right. Pls hack bpf_preempt_enable() to use preempt_enable_no_resched().
-I think recursion misses may disappear or become single digit.
-If it's good enough we can quickly add bpf_preempt_enable_no_resched() kfun=
-c.
+Right, on bare metal, if CR4.FRED = 1, it is impossible to enter compatibility
+mode while CPL = 0. 
 
-Also try NO_HRTICK in /sys/kernel/debug/sched/features.
-That may be decent workaround for now.
+> Currently, for KVM, the CPU enforces the first one and the second one is
+> enforced by kvm_set_cr0().
+> 
+> Is the suggestion to add an explicit check in kvm_set_cr0() that
+> mirrors the PCIDE one? But there isn't a fault specified by the spec for
+> this case.
 
->    > What are run_cnt and recursion_misses of your progs on inet_sendmsg(=
-)
->    > and inet_recvmsg() in production?
->
->    We hit this while testing new distros with 7.0 kernels, so we don't
->    have fleet numbers for these counters yet. For our inet_sendmsg/recvms=
-g
->    progs, in testing: fentry/fexit on inet[6]_{send,recv}msg, Ubuntu 24.0=
-4
->    with its stock 7.0 HWE kernel (7.0.0-38-generic, default lazy
->    preemption, 4 vCPUs), behind nginx -> gunicorn -> redis, with wrk from
->    another machine (128 keep-alive connections, ~1.07M requests over 10
->    minutes, ~62% CPU):
->
->      run_cnt 38040015, recursion_misses 4063
+Had a second thought. As you mentioned below, if em_{jmp,call,ret}_far() is
+triggered and CS.L is cleared on ring 0, even KVM doesn't check FRED status on
+far transitions, the next VM entry would fail.  So I think it's not needed
+to mirror the PCIDE for FRED in kvm_set_cr0().
 
-hmm. you really cannot tolerate that small drop? it's tracing at the end.
-It would be a different story if such drops were on lsm hook.
+> 
+> Sean also requested negative tests for things like leaving 64-bit mode
+> with FRED=1. But, I am not sure how to test this.
 
-let's try to think how per-task counter would work.
-I'm guessing 128 connections is 128 threads servicing them,
-so 200 cpus will be hammering the same per-task counter which will
-cause real perf loss.
-Gotta do better than per-task.
-Also it needs to be per-task + per-prog. How will it look like?
+Maybe it can use KVM_FEP to force the instruction emulation in kvm sefltest
+when force_emulation_prefix for KVM.
+
+> 
+> AI tells me such a mode change can happen with emulated far transfer
+> through an MMIO far pointer. "em_jmp_far(), em_call_far(), em_ret_far()
+> and __load_segment_descriptor() have no FRED checks, so none of them
+> raise the #GP that FRED spec 8.2 requires."
+> 
+> Chao had brought up enhancing emulator code and making it FRED aware
+> [1]. I am wondering if we should revisit it?
+
+Without the check the next VM-entry fails the guest-state check according to
+FRED spec 11.5.2.3 ("If the DPL value in the SS attributes field is 0, the L
+bit in the CS attributes field (bit 13) must be 1") VS. With the check, raise
+#GP instead.
+
+Not sure about the maintainers' preference. But a check on FRED in
+__load_segment_descriptor() looks simple though.
+
+> 
+> [1]: https://lore.kernel.org/all/aapnI6KN7Flal8kg@intel.com/
+> 
+> Please let me know if I misunderstood something.
+
