@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.157
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793883853;
-	b=PwLHAbPFh+MBgZfNkqwVl079PoVHbuK1zMfPSYRQT9/XaCgiNXOvgS9PVDxt3fvpGZtm
-	 eq3hu1NjLXVMOEOIjvrye0ueVrNgJ4EobzlPYoaaiHI580NPpqcTkiw8Il26sVO0/r1ys
-	 Xn5+pI2loklrraWKvhiTr9ify1ibllEJZdYFEEPeHnaRr8fRzl9pf57VoNuqMXsawoaaD
-	 Jmto61y+mOpA7y7MLWAMdVidvoiNMB1PllVDbUTts1U21vlJNmvSKCDsjazbdYO6W9NW5
-	 /mLWSll4TlBcSF+1UqLMt+6cjo2gEHp3dYD9S2CM5p7z1UNGslN3iNNUfxctlKdx53g==
+	t=1793883858;
+	b=1fpubC9NKOY12JPVMQ/BAHE+/ON5F331sb9HMjpUkNP0ZTpx/vjO1QNmsRKi1NCpG5iN
+	 6JLCnTb5LoE0oW1bCXrDtWKHxmQB7Ye7NEg3gCwJ8sKRo5LGqOjnLorMqIk0FfNUVVsO7
+	 Gb/wVhli+bXy+x7N0KPldpcN1Xh99kBEWYg82Z6uQIQo1sVGoL7vbDkD9dUguq1ecalE6
+	 QNNlx9kSl1RjR7ivNhyai2fTUKy+v3NtJnz5UWSJ+h90WSMEXnh8Rkmo/cA0OpoSHZpfG
+	 5vzqUgVJ9hkyxnFhNfsrOOiK9UaQLUH/Hja4RNgIWiiQRrT2YZtN6Bmf7Bl0A3rSQxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793883853;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793883858;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=FoSHuLGxpig1CAQC21sK890uLqq0mHMPZCaaAfT9pSg=;
-	b=RF4nR8KHeQ5cnIH3qNznnxf3vlh4KAA3hOSvF7qH/lTDPoNdPWd4LLsW8/T3Uo9qodii
-	 oZpkJawqxkA+IopVkh8brGQgKucd7RFwFpTXcBBgw7fM7HXB4whprOAhYbKTvwCSwgbUo
-	 AgVbU57d+qE47Yh2IZdNEPs+hwEsnXIkMxGYXiwUdIReyHuyXrG8PnZYsr5vunsZDIJ2T
-	 32LWr4cuzz1f1WTnI3FZJEHnpZayCzr4JMNncOn7J0OA2JlAvSiymRQ9BIcBsqhj06eZm
-	 j7yZtRt9QSmGmRrk7V7X9bXhqrJrzN/nEMR/6EOZIelBJFsilcu5q3n5qav7McZuIFg==
+	bh=ljVZDzVIXJjcd9Ou8caC5YIrs7Owo+UZn82NsoYNtFI=;
+	b=W97QKpJc0TIhV7rCr052F8DMrdbPZERH/0/EZ+DLPEF97oAcSXu6XGG+Kg7TiLU2An1n
+	 Nb0QHo+qclPXX1n7ubZnhwP6lXXXhLSm7cKS4Kv1UHWo4uXeVFvmd4j0waKXlG64E1ktd
+	 IAWVXVprw1PthDvFCT8UvSkcGOzcF8UA66W/FwwslQz99WCQ3Watcfl+AdfYS3Asu6xZ8
+	 RfRCQp3J+jGjVR0wSlOmyN7/HSnZ0w46qNNmo5c5xEn6LpXcc4JhjjkIswqSjU2lVNfk0
+	 R36lH2D3nQIt08GAEbmD2DIDc15bannT6+iqCfrKcGcUt4F6clw9hDVGLRhaajZjonQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mw7MMl6m;
-	arc=none smtp.remote-ip=91.218.175.157
-Received: from mta0.migadu.com (out-157.mta0.migadu.com [91.218.175.157])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=KmDJwRsB;
+	arc=none smtp.remote-ip=95.215.58.48
+Received: from mta1.migadu.com (out-48.mta1.migadu.com [95.215.58.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C9B606A328
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 13:04:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88C9B606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC524606A32C
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 13:04:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC524606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mw7MMl6m
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=KmDJwRsB
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8F+i2JLSDFi9B3hp21d4Qgjha4YEyOCj8MaTbrk2+bo=;
+DKIM-Signature: a=rsa-sha256; bh=RdjxbMsSdN+BD16PpNIf6U9zDl/xhZz69PMzEzEBZV8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793883850; v=1; x=1794488650;
- b=mw7MMl6mN0opWVu6uRzE4+IJa8ap6RNpYKmj3rkEvduIycjkJ6/FSwgqLkgAndW2Yx//K2PC
- ofTqsHjsyTOHVRkPSgde1djAvvBcU//ZWCRfyub0VOj9PSM4ADAu9TYNBkdpkyVl0eqPPa+L3Od
- Em/hn+EGzzWxiHiulmUGMA30=
+ t=1793883855; v=1; x=1794488655;
+ b=KmDJwRsBKprnFPcDORCicIJiAY9nl8/3fGVAlrwAOfOdq4opTQyBx5FBqq63tBwz6jxa1UH0
+ UhewUSJjK0EDYlcaWBsILIBq3dYfq9Pbep9OFyuCM87RhvyUAOF19OhOjpDfSzo0FVtREig6yic
+ ym8fvIRB53sk8YliBbb9wrBQ=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2f00fc6fe78d17f4;
-	Thu, 05 Nov 2026 13:04:10 +0000
-X-Mizu-Trace-ID: 2f00fc6fe78d17f4
+Received: by smtp.migadu.com with ESMTPS id f4856373a4f80b9b;
+	Thu, 05 Nov 2026 13:04:15 +0000
+X-Mizu-Trace-ID: f4856373a4f80b9b
 X-Migadu-Flow: FLOW_OUT
 From: Guopeng Zhang <guopeng.zhang@linux.dev>
 To: longman@redhat.com,
@@ -59,9 +59,9 @@ Cc: guopeng.zhang@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH v2 2/3] cgroup/cpuset: Keep the top sched domain non-empty on CPU hotplug
-Date: Thu,  5 Nov 2026 21:03:43 +0800
-Message-ID: <20261105130344.664336-3-guopeng.zhang@linux.dev>
+Subject: [PATCH v2 3/3] cgroup/cpuset: Release isolated CPUs when the parent is invalid
+Date: Thu,  5 Nov 2026 21:03:44 +0800
+Message-ID: <20261105130344.664336-4-guopeng.zhang@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261105130344.664336-1-guopeng.zhang@linux.dev>
 References: <20261105130344.664336-1-guopeng.zhang@linux.dev>
@@ -78,89 +78,65 @@ Content-Transfer-Encoding: 8bit
 
 From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-Configuration updates must leave an active boot domain housekeeping CPU
-in the top cpuset, but CPU hotplug can still empty its scheduling domain.
+An isolated partition can be invalidated after its parent has already
+become invalid. update_parent_effective_cpumask() then skips returning
+CPUs to the parent, but also skips removing them from isolated_cpus.
+The invalid child continues to isolate CPUs that no longer belong to
+any valid isolated partition.
 
-For a local partition with child partitions, cpuset_hotplug_update_tasks()
-passes the partition's own effective CPUs to tasks_nocpu_error(). The
-embedded top_cpuset_sd_nocpu() check credits the old exclusive CPUs not
-in that mask as CPUs being returned to the top cpuset. Those CPUs may
-still belong to child partitions, so no such return takes place.
-For example, with isolcpus=domain,10-31 on a 32-CPU system:
+For example, on a 32-CPU system with all CPUs online and without
+isolcpus= or nohz_full= boot parameters:
 
-  echo 0,2-9 > A/cpuset.cpus
+  cd /sys/fs/cgroup
+  echo +cpuset > cgroup.subtree_control
+  mkdir A
+  echo 0,2-31 > A/cpuset.cpus
   echo root > A/cpuset.cpus.partition
-  echo 5-9 > A/B/cpuset.cpus
-  echo root > A/B/cpuset.cpus.partition
+  echo +cpuset > A/cgroup.subtree_control
+  mkdir A/B
+  echo 2-3 > A/B/cpuset.cpus
+  echo isolated > A/B/cpuset.cpus.partition
+  cat cpuset.cpus.isolated
+  2-3
   echo 0 > /sys/devices/system/cpu/cpu1/online
-  Oops: general protection fault
-  RIP: 0010:build_perf_domains+...
+  cat A/B/cpuset.cpus.partition
+  isolated invalid
+  cat cpuset.cpus.isolated
+  2-3
 
-Remote partition hotplug checks also miss the empty top scheduling
-domain because they only examine the remote partition's own CPUs.
+Release the invalidated child's isolated CPUs when its parent is no
+longer a valid partition. Use isolated_cpus_release() to preserve CPUs
+still covered by a valid isolated ancestor and by boot isolation.
 
-Check the local partition's full exclusive mask without crediting any
-returned CPUs. For remote partitions, check the top scheduling domain
-with all partition grants still excluded. Invalidate a partition through
-its existing path to return its CPUs. Once an active boot domain
-housekeeping CPU is returned, subsequent partitions no longer fail this
-check.
+After this fix, cpuset.cpus.isolated is empty for this reproducer.
 
-Add hotplug test cases to test_cpuset_prs.sh to verify that the top
-cpuset sched domain stays non-empty when the last housekeeping CPU
-goes away.
-
-Fixes: 9b496a8bbed9 ("cgroup/cpuset: Prevent leakage of isolated CPUs into sched domains")
+Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
 Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 ---
- kernel/cgroup/cpuset.c                            | 4 ++++
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 8 ++++++++
- 2 files changed, 12 insertions(+)
+ kernel/cgroup/cpuset.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index c405719ccd12..fc5454c2740f 100644
+index fc5454c2740f..f3b808cea51c 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -4053,6 +4053,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 		goto update_tasks;
+@@ -1976,10 +1976,15 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 		/*
+ 		 * Make the current partition invalid.
+ 		 */
+-		if (is_partition_valid(parent))
++		if (is_partition_valid(parent)) {
+ 			adding = cpumask_and(tmp->addmask,
+ 					     cs->effective_xcpus,
+ 					     parent->effective_xcpus);
++		} else if (old_prs == PRS_ISOLATED) {
++			/* No valid parent will release these isolated CPUs. */
++			cpumask_copy(tmp->addmask, cs->effective_xcpus);
++			isolated_cpus_release(cs, tmp->addmask);
++		}
+ 		if (old_prs > 0)
+ 			new_prs = -old_prs;
  
- 	if (is_remote_partition(cs) && (cpumask_empty(subpartitions_cpus) ||
-+				       top_cpuset_sd_nocpu(subpartitions_cpus, NULL) ||
- 				       (cpumask_empty(&new_cpus) &&
- 					partition_is_populated(cs, NULL)))) {
- 		WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
-@@ -4067,9 +4068,12 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 	 * 2) parent is invalid or doesn't grant any cpus to child
- 	 *    partitions.
- 	 * 3) subpartitions_cpus is empty.
-+	 * 4) top_cpuset has no active boot domain housekeeping CPU left.
- 	 */
- 	if (is_local_partition(cs) &&
- 	    (!is_partition_valid(parent) ||
-+	     (parent == &top_cpuset &&
-+	      top_cpuset_sd_nocpu(cs->effective_xcpus, NULL)) ||
- 	     tasks_nocpu_error(parent, cs, &new_cpus) ||
- 	     cpumask_empty(subpartitions_cpus)))
- 		partcmd = partcmd_invalidate;
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index e813ea9959f4..f03fffeab034 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -646,6 +646,14 @@ ISOLCPUS_DOMAIN_TEST_MATRIX=(
- 
- 	# An invalid partition can recover once it leaves a top-level HK CPU.
- 	" C0-9:P1   .      .      .    C0-8     .      .      .     0 A1:0-8 A1:P1 ."
-+
-+	# Offlining CPU 1 leaves only boot-isolated CPUs in the top cpuset.
-+	# A local root must not count its child's CPUs as already returned.
-+	# In 1|, offline CPU 1 has no sched domain but is not cpuset-isolated.
-+	" C0,2-9:P1 C5-9:P1 . . O1=0 . . . 0 A1:0,2-9|A2:5-9 A1:P-1|A2:P-1 1|"
-+
-+	# A remote root must return CPUs when the top domain loses its last HK CPU.
-+	" X0,2-9 CX0,2-9:P1 . . O1=0 . . . 0 A2:0,2-9 A2:P-1 1|"
- )
- 
- # Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 0-7
 -- 
 2.43.0
 
