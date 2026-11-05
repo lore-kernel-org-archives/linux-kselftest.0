@@ -1,127 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793880669;
-	b=tLYSY0SUJzN+LFIcF/eCuFqswcRiVKnWD0+01da9MZq6W5ZF2Fw4IqasJ26iLyV+mt12
-	 twKuJqlzTHRMQ94FtJL9jmRuVhb9dmiqfGemuApB+e1UtMFRrmC7/CL/7A8xX0Ymz/jSB
-	 ZICE7C/rlWF0pMIygNCuq524UYyaB3WMftR/MypHM/ZPytY8Nq7811Q+P6HxocZj1Megb
-	 Shr01O/y71SJtbK+jp82KO+l97utcaZ/WtljwpCB8kZQyU96b+Sn94N9Bugb2ZNXLrwSK
-	 J+UzDJGlZlEROYwNfgCkbLxNpTUawj3lVymnOgFCB1vnaXdT6XYgw+J0BQsGZYNEXuQ==
+	t=1793880906;
+	b=LhtZ7FK1Bv/+YropBpG2ZX3Xga7+T4bVy/04KNAmMafeqXDyUD2MIUDbzU30BG8WF0sF
+	 +EwdemqQVnXNvlFy0seiC8JfAfGxax+1+rtGGuL5k1UuXyq63+TKJQ2cf0GjJjOov7RfE
+	 hrvw0ZeWUDLcByJodXM9bkOyyTz2oGpuAXROHxTNsi2pe3dlkG9MiAMKhDCsppeT8dCuc
+	 D6lf62pHDa2BEgZZWLqFBa0d6ACXY9xJZVR9BSZC21PfLmQOYv8WGNik1eg6/P5uxW65e
+	 8iCK50N+qRWXVoVH9f0DGag9i3nuumgjpdskjh+4AFgKstVbUOggdIsD5YkCe2h9MaA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793880669;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Spam-Flag:X-Spam-Level:X-Spamd-Result:X-Spam-Score;
-	bh=Tiu8/sTPNEplZjLK9CvT6QJBjBM6O2zkosy8TKudNwI=;
-	b=z3K0UL7u2rrbnldcUn45kfBBICN9zhqUf4SBBETEGC482FAu0yS1ERlP2KzwaDGaGG/L
-	 GygVpbng+sVwYrHbJ79bpDsosiIsLCIKxt1+2L6WQ3QUJLVN5UvE/G6S9deHiBVbEQ1/L
-	 hFkc33mLYmGss3xZCqMp+pnPD2Slw/9nlJkUpZJY3QHBjYv1Xw2bgMQpxCDmmk2F6zs2B
-	 Wa6+QNgZapdMEdNrI0+jD2bYKpVo3Id4Za38wxcwr+XRaebreWtaEshofJOXaB8umuuO+
-	 uVkgg/nrrxnrBSmiCklQ0TTaJ0pfXkIHwRsUjWwegnoNfMTl08S08ScMeNfW1IyOBLQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793880906;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=LwBXqwHoOGI50IkmfmuD/vtXnhABlbS2mlsg3C2//RA=;
+	b=ZoleW+zvwblyg5gZWgPvi3Zck3yz+JgpY5hQ7SvZw2RSapKzc3CwpEICuUqREZpGTxWA
+	 U2SR8OQWCPnjTInRsRSmkQZJkTJ4YHz6F5ZcP14Fwv+rFf3Ej1Sp/BOhwxe2PHSAGqYHJ
+	 z4aMyJWC+kHZLkwtokjcGcNTTAaDqZcgHNO/JQOEXx8wLOciq9VPWXh2sCgmxmceAkhYo
+	 dYr25xgnrN0YjiYRTRhS74guQIaNcNQD/zdZDK8tSy7bT76JBQb44AuK7l/egGbtOyJNT
+	 aDF0zzxAguKeTmKDelSM7Byw/CUMj6Hl2jpPBeYg1fhXVMGFJeFvLI+BSzyUb/kWH7g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=suse.cz;
-	spf=pass smtp.mailfrom=suse.cz;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=AF0vBzVY;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=7JoiF1X7;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=AF0vBzVY;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=7JoiF1X7;
-	arc=none smtp.remote-ip=195.135.223.130
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Go/RiaDC";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2C1606A326;
-	Thu,  5 Nov 2026 12:11:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB2C1606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB9C606D80A;
+	Thu,  5 Nov 2026 12:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=AF0vBzVY;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=7JoiF1X7;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=AF0vBzVY;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=7JoiF1X7
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2B33A21FA1;
-	Thu,  5 Nov 2026 12:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793880667; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tiu8/sTPNEplZjLK9CvT6QJBjBM6O2zkosy8TKudNwI=;
-	b=AF0vBzVY3zQ6Vdtyzlnd2GX1KnIr1XJT3SFmA54tWfPHGy6ECYuTRMeTFFLnasIgVme0YZ
-	PThupxuU6qmedBWykcq8T+6m0PpaGSoqpA2H5zGIK2sKtK6eDiPUzWRwILl2WLIL1NXKQk
-	HTqj2KBB6e0dR9olXjD094Hc8YjLNc8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793880667;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tiu8/sTPNEplZjLK9CvT6QJBjBM6O2zkosy8TKudNwI=;
-	b=7JoiF1X7I2Iguu9nV9GXjnaaMmyPjs8fCUlps77JZ5omTCl+PEQZZxIADuFQG05WHYF+cK
-	CBi4Cau1ROf8pYCA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793880667; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tiu8/sTPNEplZjLK9CvT6QJBjBM6O2zkosy8TKudNwI=;
-	b=AF0vBzVY3zQ6Vdtyzlnd2GX1KnIr1XJT3SFmA54tWfPHGy6ECYuTRMeTFFLnasIgVme0YZ
-	PThupxuU6qmedBWykcq8T+6m0PpaGSoqpA2H5zGIK2sKtK6eDiPUzWRwILl2WLIL1NXKQk
-	HTqj2KBB6e0dR9olXjD094Hc8YjLNc8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793880667;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tiu8/sTPNEplZjLK9CvT6QJBjBM6O2zkosy8TKudNwI=;
-	b=7JoiF1X7I2Iguu9nV9GXjnaaMmyPjs8fCUlps77JZ5omTCl+PEQZZxIADuFQG05WHYF+cK
-	CBi4Cau1ROf8pYCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F14FC133F6;
-	Thu,  5 Nov 2026 12:11:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id RrhmMVpy7GoeFgAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 05 Nov 2026 12:11:06 +0000
-Received: by quack.suse.cz (Postfix, from userid 1000)
-	id 6CB91B6CE; Thu, 05 Nov 2026 13:11:06 +0100 (CET)
-Date: Thu, 5 Nov 2026 13:11:06 +0100
-From: Jan Kara <jack@suse.cz>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
-	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
-	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
-	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
-	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
-	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH RFC 24/38] proc/vmcore: don't let vmcore_cleanup() run
- twice at once
-Message-ID: <6deqqw2vjfaot34sgogukcsbdh2vngvu2ewmsjzb2h53zo7mwn@zofl4rxl2nnb>
-References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
- <20261102-work-procfs-bugfixes-v1-24-59422ed3e465@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Go/RiaDC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CAE1F000C1;
+	Thu,  5 Nov 2026 12:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793880906;
+	bh=LwBXqwHoOGI50IkmfmuD/vtXnhABlbS2mlsg3C2//RA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=Go/RiaDCjnitljKY9hChsi2K9rd+amQQ4J7+VzabKenrgKh/YowB7TQz/+1y7h4Rz
+	 wJOGuSgK6MeWUuAVmKVBkOKa946LIUCL9AteHHeQDARC2oa+QCloqbLGNXbeB1bkF0
+	 cBM3nMlcwwQlynmtn8iknLspkt+r983Yu4Xe2Sbt4cKWA+Y8vnG5R8Fwrum2DN6YMg
+	 LUZipJ/ZWI6J03dLouOwKyq5gMkm4pqmpRSgMR/7CGaC/9E2M+6yUylIVA6ROMndj7
+	 rJTORXTHnwDkU3/ZeDKxbONAAztweLFc5yzyVcKh6R4hwNfUK9FZAuDoeYCJG/qgeB
+	 DQ7mxc1uHhkOg==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 05 Nov 2026 11:47:20 +0000
+Subject: [PATCH v10 2/3] KVM: selftests: arm64: Report register reset tests
+ individually
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -131,88 +53,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102-work-procfs-bugfixes-v1-24-59422ed3e465@kernel.org>
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spamd-Result: default: False [-11.30 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RL63fqwwx8ot6gmekemcs76f9d)];
-	MISSING_XM_UA(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[60];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,suse.cz:email]
-X-Spam-Score: -11.30
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261105-kvm-arm64-set-id-regs-aarch64-v10-2-d5a6aba69d19@kernel.org>
+References: <20261105-kvm-arm64-set-id-regs-aarch64-v10-0-d5a6aba69d19@kernel.org>
+In-Reply-To: <20261105-kvm-arm64-set-id-regs-aarch64-v10-0-d5a6aba69d19@kernel.org>
+To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Oliver Upton <oupton@kernel.org>
+Cc: Ben Horgan <ben.horgan@arm.com>, linux-arm-kernel@lists.infradead.org, 
+ kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, 
+ Sebastian Ott <sebott@redhat.com>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2606; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=M8ccLSUmMl/2YCdNvTWoufobRy8bJ7EzYBruWb7nFtA=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLeFNs/mddfcab+rb/uG84O6fsXTpjcsp3iNnEzw+bbG
+ tXVZ7vjO0pZGMS4GGTFFFnisrhf1pe8XsN3cGEbzBxWJpAhDFycAjARV1tGhuvnN8u6i+4psry9
+ osSA/bd5tGAu+2yOR6cL3j09n/G30pnhf/3EeXJ1G34x2Oz5knTkjp18z7frmYp1WrviVBW0S2/
+ FMgMA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Mon 02-11-26 15:21:39, Christian Brauner wrote:
-> vmcore_cleanup() has a single caller, fadump's release_mem_store() on
-> powerpc. That checks fw_dump.dump_active without a lock and calls
-> vmcore_cleanup() without one, and kernfs only serializes the writers of
-> one open file. So two tasks that write to
-> /sys/kernel/fadump/release_mem through different files run
-> vmcore_cleanup() at the same time.
-> 
-> The first one removes /proc/vmcore and waits for its readers in
-> proc_remove(). The second one finds the entry already unlinked, returns
-> from proc_remove() right away and frees vmcore_list, the ELF headers
-> and the device dumps while those readers still walk them. Or both of
-> them free the same lists at once.
-> 
-> Serialize vmcore_cleanup() with a mutex of its own. It can't be
-> vmcore_mutex, removing /proc/vmcore calls release_vmcore() which takes
-> it. The second caller then finds nothing left to free.
-> 
-> Reported-by: Chris Mason <mason@kernel.org>
-> Fixes: b500afff11f6 ("fadump: Invalidate registration and release reserved memory for general use.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+set_id_regs tests that registers have their values preserved over reset.
+Currently it reports all registers in a single test with an instantly fatal
+assert which isn't great for diagnostics, it's hard to tell which register
+failed or if it's just one register. Change this to report each register as
+a separate test so that it's clear from the program output which registers
+have problems.
 
-Looks good. Feel free to add:
+Reviewed-by: Ben Horgan <ben.horgan@arm.com>
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Reviewed-by: Sebastian Ott <sebott@redhat.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/kvm/arm64/set_id_regs.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+index ef833ab3e6ce..69aebb3a28f4 100644
+--- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
++++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+@@ -821,13 +821,21 @@ static void test_vcpu_non_ftr_id_regs(struct kvm_vcpu *vcpu)
+ static void test_assert_id_reg_unchanged(struct kvm_vcpu *vcpu, u32 encoding)
+ {
+ 	size_t idx = encoding_to_range_idx(encoding);
+-	u64 observed;
++	u64 observed, expected;
++	bool pass;
+ 
+ 	observed = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(encoding));
+-	TEST_ASSERT_EQ(reset_mutable_bits(encoding, test_reg_vals[idx]),
+-		       reset_mutable_bits(encoding, observed));
++	observed = reset_mutable_bits(encoding, observed);
++	expected = reset_mutable_bits(encoding, test_reg_vals[idx]);
++	pass = expected == observed;
++	if (!pass)
++		ksft_print_msg("%lx != %lx\n", expected, observed);
++	ksft_test_result(pass, "%s unchanged by reset\n",
++			 get_reg_name(encoding));
+ }
+ 
++#define ID_REG_RESET_UNCHANGED_TEST (ARRAY_SIZE(test_regs) + NUM_EXTRA_REGS)
++
+ static void test_reset_preserves_id_regs(struct kvm_vcpu *vcpu)
+ {
+ 	/*
+@@ -845,8 +853,6 @@ static void test_reset_preserves_id_regs(struct kvm_vcpu *vcpu)
+ 	test_assert_id_reg_unchanged(vcpu, SYS_MIDR_EL1);
+ 	test_assert_id_reg_unchanged(vcpu, SYS_REVIDR_EL1);
+ 	test_assert_id_reg_unchanged(vcpu, SYS_AIDR_EL1);
+-
+-	ksft_test_result_pass("%s\n", __func__);
+ }
+ 
+ /*
+@@ -986,7 +992,8 @@ int main(void)
+ 
+ 	ksft_print_header();
+ 
+-	test_cnt = 4 + MPAM_IDREG_TEST + MTE_IDREG_TEST + GUEST_READ_TEST;
++	test_cnt = 3 + MPAM_IDREG_TEST + MTE_IDREG_TEST + GUEST_READ_TEST +
++		ID_REG_RESET_UNCHANGED_TEST;
+ 	for (i = 0; i < ARRAY_SIZE(test_regs); i++)
+ 		for (j = 0; test_regs[i].ftr_bits[j].type != FTR_END; j++)
+ 			test_cnt++;
 
-								Honza
-
-> ---
->  fs/proc/vmcore.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-> index 1fe70c4ecc54..ccb795b85509 100644
-> --- a/fs/proc/vmcore.c
-> +++ b/fs/proc/vmcore.c
-> @@ -1764,6 +1764,11 @@ fs_initcall(vmcore_init);
->  /* Cleanup function for vmcore module. */
->  void vmcore_cleanup(void)
->  {
-> +	/* Not vmcore_mutex, removing /proc/vmcore calls release_vmcore(). */
-> +	static DEFINE_MUTEX(vmcore_cleanup_mutex);
-> +
-> +	/* Two writers of fadump's release_mem can get here at once. */
-> +	guard(mutex)(&vmcore_cleanup_mutex);
->  	if (proc_vmcore) {
->  		proc_remove(proc_vmcore);
->  		proc_vmcore = NULL;
-> 
-> -- 
-> 2.53.0
-> 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.47.3
+
