@@ -1,82 +1,129 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881573;
-	b=kHofzyQHmPSbcGXVGAsHcZbJIGXPHIfQOePk898Y+n0M8KuuZd9HbVt24ofXYIV0VrW9
-	 F/SKJ4gmY8lbu9Riv+AfUp0ulP0/ao5Yy0Nr3jfwWmu11bgIGI0sFqTOp/6Qm0RBqCF9N
-	 7gvCaCoJPrq9KryT7KkRRO+pV9XO+7WPwyVgX9cE1/YRKh+g89uG2L2sXyFngS8+H7nsQ
-	 jD91NtFOGd42I1whBuPKSttTfwl+U56K5lB2sL9mIFuD5iOLIt1jIAUCUKyBkpLmMX/fH
-	 Me9lBs1xFHY0z+Qq5o/yvc28kJsdgFA8oX3bLDLF6LCr+lpwWoJEqy1uqED0zZ2mHLQ==
+	t=1793882195;
+	b=Ou+2wGsVzn7Z6SNv9XPpgKZIcN4U1wCJG1VpAOKi1SmWp5onJbrGNZdJEvozkLm2NwVJ
+	 NpHGpQsTMZGRHi4ADPfAKQvrcEhKQbFjGBaVmg1JUtGEWMo2zu+h7AxBN+gLL1mWAtDDT
+	 169ZyhpNwZYSCnh9w9AiiHBx6AM90dRM8ZOFb7WcqSSKl7PemKOC32SkSFDGSU3Jxuf1h
+	 voH4dC8CwY92b2w589oImM1bTcipbX2SpeFWKVYazstzKprfDt/nRMwE2QKBXGWoiSoHQ
+	 DPDcrbPHjRjb+VR/9vTr7B4zZVy8Af+/UEMlBYa8Fk8LBTLMI2aHlZYbImZez4Fkj8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881573;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=SOhMdo0S3VoEznsmoM+S40XpUm7IcJEEZYZHmhkEm3g=;
-	b=Yp4PQWzKXc531xG5tB4d5MPqBI6X0I5E213uh+XDb7ATVWq76eN6JSejiGJG19C2H+T6
-	 NMrnANri3cywILqhyWtauS+sCItelBGKqIJ2W+rc1brRvIr+Vptn/u6PK/9cBaY2Q83bR
-	 /Sm8JxlyjSZfUX/TIkwqIIVdlq93bajxQTA8CYgE/1JwKN1mMe1eiMaHRwNseSFTriLH0
-	 NkuYY9+Qnoo8MSz0m/mbMbhgAD/PrjAmT3sPPN/28hpoDZdIhpNnnD9KTX9L/Pxr+wgQ+
-	 NMbc3CrfRvaO79d1H5sD7vc31ut1Nq03lB1ddwUTIapRxav1oRT3kxxXuyv0mXjEBmA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793882195;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Rspamd-Server:X-Rspamd-Action:
+	 X-Spam-Flag:X-Spam-Score:X-Spam-Level:X-Rspamd-Queue-Id;
+	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
+	b=RbwwUhaA/Pii3DB2MbvmPooi4HQozb4wv93GyhL9w+1mnuIb53SNMAUg1+J7Ub9sdHaz
+	 pKeQzuU9CADjko+4nANGHQ+oWT1OMVqSmE/H8rCk/pQbYNq2eh8m6mBcktqa35lqVWxU2
+	 HVATF+zwWkgiWxoBSE9V06eqXPQaE3KdYT0l53Kigfxn7K4fBiLDDn8NTPA3fOgsOhUBn
+	 2lKQgpfotvuXrQW3D/mdYxVIawB0R2ayTyO0b865LzEdAMWEa0BKdq7QlcUZqqUj8yBim
+	 JLj5dZhvsnMzJlrvWJ6eVT9JgUbWlKqPC8I9E8pOYhvCiV1AjB5e8AQj49ftC74O7cQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=GfFR9ZA3;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=JZx76L+g;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="8/5XD6W9";
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=T3Jse+8w;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BYgAZw+U;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979FB606A32C;
-	Thu,  5 Nov 2026 12:26:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 979FB606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212C9606A32F;
+	Thu,  5 Nov 2026 12:36:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 212C9606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=GfFR9ZA3
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=SOhMdo0S3VoEznsmoM+S40XpUm7IcJEEZYZHmhkEm3g=; b=GfFR9ZA3ZvPtPrpOktrGrpr2Bt
-	Nagr/IUr79PbLpTffvL0MrTMEavQra/op0vcEdvs1RByq9F77mvbQeA7wmSkHnYu7LI8IhkCwNIR6
-	+Rd0oPvbNImVxLFxX+v5G+TzzJuBKZNqYKCwjj0hhDLOrlswWRZKr+bHOaMvrUilqvTMVtgL+KdUD
-	0hh30vc+UcZwPq1reYlXZ9uyYH1Z8qGZLeMaim33Jx2WpodO/P3oza8r/Cwko9ass/6xpo+QLgoMP
-	M2+UUunbRr0diO2fG6jL0y1S28WUJ9Zvgtal7hXk9CmtyRgBRQCXg87gtXiAe7YZBe0CAJ0Gsyq5F
-	iuAhPVjQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOwXd-000000086ip-3VmT;
-	Thu, 05 Nov 2026 12:26:05 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A547D3002F0; Thu, 05 Nov 2026 13:26:04 +0100 (CET)
-Date: Thu, 5 Nov 2026 13:26:04 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Martin Kelly <martin.kelly@crowdstrike.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Mike Bazov <mikeba@sentinelone.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
-	Thomas Gleixner <tglx@kernel.org>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let
- preemption cause false recursion drops in trampoline progs
-Message-ID: <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
- <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
- <DML75890DWIX.EYB690LPBM1O@gmail.com>
- <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
- <DMM2FJ2SNYYO.24TEJ05OOR08E@gmail.com>
- <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=JZx76L+g;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=8/5XD6W9;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=T3Jse+8w;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=BYgAZw+U
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2C5F621E5A;
+	Thu,  5 Nov 2026 12:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793882193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
+	b=JZx76L+ggOq++v50JrM+txlftOOqxJaKF/tK8uhPwld5Q9GnNQfLXM1whyLb1DsMeHXH/C
+	/uTr5WEx4MoDADem0Lt2IRl8UnJCEvNjej74YyT5VZBSM782Vk2aNTEZTgyxnuBLnPZ/fS
+	Mhf/U17g3frl5lC6gN/6C/6ftmbFF2E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793882193;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
+	b=8/5XD6W9JBZBD7IT0Gng8T7errG+mfSR55zIjyH58gQPHLQ3a+6mBXLPeQK6OumZ9O/ASJ
+	a0+wPfZoC8vZgnDQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=T3Jse+8w;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=BYgAZw+U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793882192; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
+	b=T3Jse+8wWvU2m0agalLdcO3u4gc4aSPygpqteqhLhNd/aBjFrhyiDCC1i0Lv+iYh3z1s6e
+	fnA2+Jf6Yg0jKvkbvYGo3ERh6eFq09U2ijwb8SlUT+DSbyddzL3tu06qm3Tz++uFh8zr+9
+	+TrYzUca/b6bladItMQ0Kk0+pK0H3fw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793882192;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DpjKnWhAHhajlU0N8yPm40hOORTtvriSHlYmNC33ga8=;
+	b=BYgAZw+Ujm4L/dnuxqWK1yrVNISlV/1cL+J702exe7XcXF17FVJLhwkbWz39x0ZpRyHhhI
+	iDaH9TFqNTx9SSCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 05AD3133F6;
+	Thu,  5 Nov 2026 12:36:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id AKP0Nk947Go1MAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 05 Nov 2026 12:36:32 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 9532FB6E6; Thu, 05 Nov 2026 13:36:31 +0100 (CET)
+Date: Thu, 5 Nov 2026 13:36:31 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH RFC 37/38] proc: don't pin a symlink's entry while
+ readlink() copies it out
+Message-ID: <krgvwwpug6brspfpubssohr6cknwd2wtkrxo6uqaoalfi2ay4v@3dtbsctwca3n>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+ <20261102-work-procfs-bugfixes-v1-37-59422ed3e465@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,180 +133,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-37-59422ed3e465@kernel.org>
+X-Spamd-Result: default: False [-11.51 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLpnapcpkwxdkc5mopt1ezhhna)];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[60];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -11.51
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 2C5F621E5A
 
-On Wed, Nov 04, 2026 at 05:12:15PM -0800, Martin Kelly wrote:
-> We have noticed this issue independently in testing of our own security
-> agent and have hit the same false recursion skips on 7.0 and 7.1
-> kernels. More details and measurements below.
+On Mon 02-11-26 15:43:28, Christian Brauner wrote:
+> proc_get_link() pins the entry with use_pde() and the delayed call
+> unpins it. vfs_readlink() copies the link to userspace in between. So a
+> page fault in that copy holds up remove_proc_entry() just like the
+> copies of reads and writes do, and the callers hold locks while they
+> wait. /proc/asound/<id> is removed with snd_card_mutex and info_mutex
+> held when a card changes its id.
 > 
-> On Tue, Nov 3, 2026 at 6:24 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> > Today a fentry prog never runs twice at the same time on one cpu.
-> > Existing progs rely on that for their per-cpu maps.
-> >
-> >   task A, cpu 0                     task B, cpu 0
-> >   buf = lookup(&percpu_scratch)
-> >   fill buf
-> >   <preempted>
-> >                                     buf = lookup(&percpu_scratch)
-> >                                     fill buf
-> >                                     output(buf)
-> >   output(buf)   <- data of B
-> >
-> > A plain (*cnt)++ in a per-cpu map loses updates the same way.
-> > Today B is skipped and recursion_misses counts it.
-> > With the per-task check A sends a corrupted event and nothing counts it.
+> The pin doesn't keep anything alive. proc_symlink() copies the target
+> and pde_free() frees it with the entry, and the inode holds a reference
+> to the entry. What the pin does is keep a removed symlink from being
+> followed. So check ->in_use instead and drop the delayed call. That
+> also takes an atomic pair off every traversal of /proc/net and
+> /proc/mounts.
 > 
-> Our programs avoid writing to per-CPU arrays because of corruption on
-> PREEMPT_RT kernels, where trampolines have always been preemptible and
-> thus can corrupt these structures. So for us, an opt-in flag that allows
-> preemption (instead of skipping) would work well and not regress current
-> programs that don't opt in. A verifier scan for per-CPU arrays could
-> also work, but it would need to distinguish read-only vs write access to
-> those maps.
+> Fixes: 7e0e953bb0cf ("procfs: fix race between symlink removals and traversals")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-This seems weird; your task-B bpf prog would never run due to the
-prog_active thing.
+Looks good. Feel free to add:
 
-> In a process-heavy workload on a 2-vCPU VM (~1M fork+exec of
-> short-lived processes, ~606/second) we recorded the following number of
-> recursion_misses on a 7.0.9 and a 7.1.5 kernel. Both kernels use lazy
-> preemption with PREEMPT_RCU enabled. The miss rate has increased
-> significantly, which we suspect is due to the HRTICK change.
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/proc/inode.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
->                                   7.0.9 (HRTICK off) 7.1.5 (HRTICK on)
->                                   ================== =================
-> security_file_permission fentry   1 in 61,580        1 in 1,568
-> security_inode_getattr fentry     1 in 59,242        1 in 1,707
-> do_file_open fexit                1 in 813,983       1 in 2,503
-> sched_process_exec raw_tracepoint 1 in 1,000,816     1 in 500,408
+> diff --git a/fs/proc/inode.c b/fs/proc/inode.c
+> index 9933f03ab9fb..2d65f3c8ec03 100644
+> --- a/fs/proc/inode.c
+> +++ b/fs/proc/inode.c
+> @@ -629,19 +629,19 @@ static const struct file_operations proc_iter_file_ops_compat = {
+>  };
+>  #endif
+>  
+> -static void proc_put_link(void *p)
+> -{
+> -	unuse_pde(p);
+> -}
+> -
+>  static const char *proc_get_link(struct dentry *dentry,
+>  				 struct inode *inode,
+>  				 struct delayed_call *done)
+>  {
+>  	struct proc_dir_entry *pde = PDE(inode);
+> -	if (!use_pde(pde))
+> +
+> +	/*
+> +	 * No pin. The link lives with the entry, which the inode holds, and a
+> +	 * reader could fault while vfs_readlink() copies it out. Just don't
+> +	 * follow a removed one.
+> +	 */
+> +	if (unlikely(atomic_read(&pde->in_use) < 0))
+>  		return ERR_PTR(-EINVAL);
+> -	set_delayed_call(done, proc_put_link, pde);
+>  	return pde->data;
+>  }
+>  
 > 
-> The sched_process_exec raw_tp had few misses (1-2) but is included just
-> to show that raw_tp can have misses as well since tracepoints became
-> preemptible.
-
-So HRTICK will still only set RESCHED_LAZY, which should not tickle
-preempt_enable() into a reschedule. RESCHED_LAZY is acted upon in only 2
-distinct spots:
-
- - return to userspace; it will reschedule.
- - the periodic tick; it will upgrade RESCHED_LAZY to RESCHED.
-
-This would suggest you're seeing a lot of tick driven promotion. One
-reason could be due to HRTICK setting LAZY and the normal tick happening
-very shortly after it. 
-
-You've not mentioned your CONFIG_HZ setting? Anyway, something daft like
-the below would make promotion less aggressive (also, clearly I couldn't
-come up with a decent name for the intermediate step :-).
-
-
-> Possible approaches
-> ===
-> We don't have a preferred mechanism and are generally open to any
-> approach that would help reduce these recursion_misses. Whatever the
-> mechanism, it would be ideal to cover raw_tp programs too, since
-> a46023d5616e made those preemptible.
+> -- 
+> 2.53.0
 > 
-> We'd be happy to help test or develop patches if needed.
-
-I would strongly prefer all BPF programs that attach to known
-preemptible sites to use a per-task recursion counter or something of
-that sort.
-
-This per-cpu active count stuff is quite mad; and I think I've told
-Alexei that plenty of times.
-
-
----
-diff --git a/include/asm-generic/thread_info_tif.h b/include/asm-generic/thread_info_tif.h
-index 528e6fc7efe9..feed08b51a62 100644
---- a/include/asm-generic/thread_info_tif.h
-+++ b/include/asm-generic/thread_info_tif.h
-@@ -22,33 +22,35 @@
- #define _TIF_NEED_RESCHED	BIT(TIF_NEED_RESCHED)
- 
- #ifdef HAVE_TIF_NEED_RESCHED_LAZY
--# define TIF_NEED_RESCHED_LAZY	5	// Lazy rescheduling needed
-+# define TIF_NEED_RESCHED_MEH	5
-+# define _TIF_NEED_RESCHED_MEH	BIT(TIF_NEED_RESCHED_MEH)
-+# define TIF_NEED_RESCHED_LAZY	6	// Lazy rescheduling needed
- # define _TIF_NEED_RESCHED_LAZY	BIT(TIF_NEED_RESCHED_LAZY)
- #endif
- 
- #ifdef HAVE_TIF_POLLING_NRFLAG
--# define TIF_POLLING_NRFLAG	6	// idle is polling for TIF_NEED_RESCHED
-+# define TIF_POLLING_NRFLAG	7	// idle is polling for TIF_NEED_RESCHED
- # define _TIF_POLLING_NRFLAG	BIT(TIF_POLLING_NRFLAG)
- #endif
- 
--#define TIF_USER_RETURN_NOTIFY	7	// notify kernel of userspace return
-+#define TIF_USER_RETURN_NOTIFY	8	// notify kernel of userspace return
- #define _TIF_USER_RETURN_NOTIFY	BIT(TIF_USER_RETURN_NOTIFY)
- 
--#define TIF_UPROBE		8	// breakpointed or singlestepping
-+#define TIF_UPROBE		9	// breakpointed or singlestepping
- #define _TIF_UPROBE		BIT(TIF_UPROBE)
- 
--#define TIF_PATCH_PENDING	9	// pending live patching update
-+#define TIF_PATCH_PENDING	10	// pending live patching update
- #define _TIF_PATCH_PENDING	BIT(TIF_PATCH_PENDING)
- 
- #ifdef HAVE_TIF_RESTORE_SIGMASK
--# define TIF_RESTORE_SIGMASK	10	// Restore signal mask in do_signal()
-+# define TIF_RESTORE_SIGMASK	11	// Restore signal mask in do_signal()
- # define _TIF_RESTORE_SIGMASK	BIT(TIF_RESTORE_SIGMASK)
- #endif
- 
--#define TIF_RSEQ		11	// Run RSEQ fast path
-+#define TIF_RSEQ		12	// Run RSEQ fast path
- #define _TIF_RSEQ		BIT(TIF_RSEQ)
- 
--#define TIF_HRTIMER_REARM	12       // re-arm the timer
-+#define TIF_HRTIMER_REARM	13       // re-arm the timer
- #define _TIF_HRTIMER_REARM	BIT(TIF_HRTIMER_REARM)
- 
- #endif /* _ASM_GENERIC_THREAD_INFO_TIF_H_ */
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 1c93da75226e..d5f9176e1a75 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2117,7 +2117,9 @@ static inline void set_tsk_need_resched(struct task_struct *tsk)
- 
- static inline void clear_tsk_need_resched(struct task_struct *tsk)
- {
--	atomic_long_andnot(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY,
-+	atomic_long_andnot(_TIF_NEED_RESCHED |
-+			   _TIF_NEED_RESCHED_MEH |
-+			   _TIF_NEED_RESCHED_LAZY,
- 			   (atomic_long_t *)&task_thread_info(tsk)->flags);
- }
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 04b62c16fa8c..f8e225dc2504 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5854,8 +5854,17 @@ void sched_tick(void)
- 	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
- 	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
- 
--	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
--		resched_curr(rq);
-+	/*
-+	 * Two-stage promotion of LAZY to RESCHED, ensuring there is at least
-+	 * one full tick of respite.
-+	 */
-+	if (dynamic_preempt_lazy()) {
-+		if (tif_test_bit(TIF_NEED_RESCHED_MEH))
-+			resched_curr(rq);
-+
-+		else if (tif_test_bit(TIF_NEED_RESCHED_LAZY))
-+			 set_thread_flag(TIF_NEED_RESCHED_MEH);
-+	}
- 
- 	donor->sched_class->task_tick(rq, donor, 0);
- 	if (sched_feat(LATENCY_WARN))
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
