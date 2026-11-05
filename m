@@ -1,106 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.178
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793897088;
-	b=cXDv4XtX2FQmt5QyC+moKqeQ4DhcZ1m92Rd8AvXhOymS2BKugTzbJEybaOYZH5MhTjhe
-	 qjgM85LWCNijmQgOQsCOCOmmbwJFk0QLfPRB7dHPex9IIVJRyjBwvoZUjWg6XZfEAucXC
-	 /Rc+jj3GhfS2EJ5HjrKhL20t7CLLN+hxsX6tcnMZZyApraEBucSIoDFIhUmGB9/rjGls2
-	 tK90970cLkiplZGMtJAVRZnmEZ1XwcUL0wBoUEdN1Nfxq0aZKD5HDJGy8e2MFLwL08KBb
-	 0Bc9saYbJhisc8MkJpSgz091u4vnKQwswHWs0YXjmtGuv1XaPK8/Poke6CmHM9UwsKA==
+	t=1793897301;
+	b=U07xNJHFrrVhRATD8lmLRp19gabG461W8pn66e+8lEZdX/D1T4u7cFFnFCYsvLYzmMZ+
+	 Xpe37R0rYslhFmLc3xdh77SWcdSpjlF1LsMhah9Q/M8rZjfQl1z/nBc9f7Cz0amRLE9Uq
+	 j+rIzq0CugI7vmO0llCDhTgKyhOY5Gq7Ke5aC1Aqm2M0xOt+FA4WVpdlQgwCeW4LYTDPZ
+	 O42jxs98ZlTPzAcudirAsVIU+/2NJh+ayNVla1WnzmESbv0GH4O0E9MAW6rwKeSrcemgT
+	 FOS41u5tC6mvZDH7eSrsfYLDtUKOUerMUAXdSJvx/uV1kI1535kYnnuJUzPITXzOwlg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793897088;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793897301;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Received:MIME-Version:From:In-Reply-To:References:Date:X-Gm-Features:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZqMiJDrBp9dqyb3cO42U+9O+NQ7NWtABCad+4xnCfR4=;
-	b=Cj/nVNDmqxCE89A8bQXqmTHwBTxA2maMmbc7Yizefh2/q9Ow1OJlfWLuqCo2ZkFgIG8Y
-	 dyqhM1yxErZjWTuYYG4kFgKeTDfWSsW7eQ3lcMj1SvMunIX9zzMF2KLd1WWsoJwvt7OSN
-	 ab+kMumM9vaBe6GWNIQojg92HK5+dkDCJlMl5Fok1LV6S5xg1YekFcXSBWxtDYFAuztsl
-	 L+Ai/Ugsv1NTIG44OzcesH6r2Ye75DfCmele/fyBips4Oly4NaFkY88TlD8H1wssIcM9U
-	 IDK/hp00aK0tixgogxCJBk9BFrBu5pjG5LBcP0OiZD3AuiLRLr/U+ngfjUdEo49Ayvw==
+	bh=VqiTrc04lJztf2dyTmHN89oGm1bJ8PUHM0btmGHDZmI=;
+	b=XOXSPIp4DP2W0jKGG18l8eThpi3x9DjcrLhP+TN0uOYbIQ6CpERbwQKHQs9Z3+YZVI4i
+	 7WQXDUsxCWtsVsX4U6ZwpPdOx8VRjeWAwO8q5JoTHSLVFLJtGJ6PYxkSXalUYypbmKaXY
+	 fAt49DCeG9L2rkgfFZQXMjlmE2UedlsJlRXhOfWG+Vkld7ZA5o5hTCGkpz201yy9dmYTn
+	 Wv8KKnMgWytTCnHtmCB7v9rTnDArVLtdP0TsUtQpb9TeuKbrKOZEAjVqi70UYjhWQ+f7l
+	 sGoyMWkO7vaWSAU2E1u0XUXwd6MpCBryAnp+dzIChpkJ6GiYngKlSbp3SkwtRjNH7+g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b01Rcwgg;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.50
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	dmarc=none header.from=amacapital.net;
+	spf=pass smtp.mailfrom=amacapital.net;
+	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=PD82jKo7;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.178
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00965606A902
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 16:44:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 00965606A902
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5F3606A32F
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 16:48:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F5F3606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b01Rcwgg
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c40e30c26a4so181642666b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 08:44:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793897086; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=PD82jKo7
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-93ece7a73b9so237282085a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 08:48:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793897300; cv=none;
         d=google.com; s=arc-20260327;
-        b=rsL6lCVkMsbejqIyFm4pHhKcf36uvaK2odNY9Oe9rMyDf4wx1RT3ylmkMpDTceVi9g
-         2ja519+2hFcjrwzOnylZ7fhiengx4icJ8pDGwMv29VRLF3RqM0miqFWlnjxDQAsvHwaj
-         mSzpIL9mwSvtcnQlIsvv0w6O91tMnRnRvx4xMZuZzg8UhhywSw94qrHmEIqYgWZcdLoI
-         zjmhzsTB2cWFhIH+KaN0R2qUdKEzCj+YTQvvt0iQQPswKtRaXi4wvbpvgjWpdJLAhj52
-         qZPHkk7pk/obVeXXLxoqf2oefu7SvrMolT7K1dO2CSz9HPc/gtE5AKpG3p4ML3BD32HF
-         pvLQ==
+        b=aV6xbhaqZelz11WGUglSSBE41ncjHfMCHOXYIPbNnI0s8G/V17u35mWs+hcglJDnE8
+         JtJvPdiVHrIE+uOYJ1eEWjLPsXTm/MpCtuZecd2OgYgzbdx1W4xhRO0ILZXcQuwWa0As
+         DuMYc0brBHAu27CVufznHtZ9CTy7aEaA8SmKwvKUawR2d0pOs4ldhsNTzl1UZkwRBQrL
+         3A27O2Qg64KznKo0ToBlqJcoKMJw+IWep7QPR2+eqDhjr7ZZbznyMyYZnIq/AV/VQWj5
+         hPpoSm/K6C/ofon8h89tDu2W84KDEFtHug7mm6uD1XVsH/4B0+qTS53ElhFmp2OSqpn8
+         8qVw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :in-reply-to:from:mime-version:dkim-signature;
-        bh=ZqMiJDrBp9dqyb3cO42U+9O+NQ7NWtABCad+4xnCfR4=;
-        fh=6A5bh2Qea5ShgOQmgG+yCRkfvIh82kKv4si4VLPCRWQ=;
-        b=mhtQ5ecmaUj0RrTGdDyWNoG6eCNJzdN2CxC0Iv+CMx0yobRh2dOWgXYBAS5SB7pe1K
-         xu6UtKltHhWnPHt9uOp1pvsqXfjP769nYYCcB5FutnW/wbXXqrBIycMYCfJlG/Uhl51c
-         BIcc4tCsrT09NZrhfpht2qScRQRV8WYBdHb5DO2Q4GeQP30iUi7h9txrXr0UpZmvLVx5
-         ra+Hlf8OHJSp/0o/SO84KHOcssD6rHlKWOedg1SdVU2cCx4YM1X4BLA8w/1vYft4RUmP
-         c7bS2JNmEFvIhq1AdPM9GXiMW4sj7L9MBa0nMIedUCw14ajRIsWZ2mw6xa/3AnLrlV3f
-         yiTg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VqiTrc04lJztf2dyTmHN89oGm1bJ8PUHM0btmGHDZmI=;
+        fh=wUtnDMzQ+B74vPipRe0CwCurDzcf3K9p0IB6T1rOcco=;
+        b=a+YmR6l1w9bM3B3RGda0uP2aTu4Ma3Iub0Y9EAJ+WG9nYL3DFpDw0ffDy0aWcg0z/H
+         zdLy6XsLkZ8O+OzEiUsBirPoz0AifWzKIT4IiiGsk/qdnerEQ7JudMpBMN3bwSEl1wKa
+         T3xnjITp2CNsjBcDq4whR53sRMOTkFEbpaRI3eDkmNTjn4Ik8RS5UjZH/y1OHQjBjWgP
+         y7AIIHsoTMZFvgwofZ0j+ZwKfoXQVxy4cV1G9Cr/EkNh8KBMIKq2/k8e3TzFR7nohSNS
+         XcdhBOpSQROAb5fGBzukBaKsUmSZqaj7ZWroDRhiMqOHfraA4MvdKNIsXVNpdrGpKTNN
+         J1qA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793897086; x=1794501886; darn=vger.kernel.org;
+        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1793897300; x=1794502100; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:mime-version:from:to:cc:subject
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ZqMiJDrBp9dqyb3cO42U+9O+NQ7NWtABCad+4xnCfR4=;
-        b=b01Rcwgg4xzxHkoGJsC9MswRqBWrzkxTQNBAVtIkQfYjPLLvI2QKHgosecpsHrTcn7
-         PI8eXrcMKe0WT3HnhXDNHZit3ibYF1yx0BNyXAd8u0UqPg3XtBYsJQ/5CF6/utvJrC+2
-         V02saf/O3u2/Qyor9iPiSwa0zGX9TZYQFBfIR5sHVlzcxG1i6eAfa3wLJLzPu+OCJRQJ
-         9voFjAokw76fxBV2dnOXVZDaNbm0KYp5/dSdjPDMlORXFdzzLk+WHXYdgsqXwd18jLv3
-         ATgv17clGJnQmIyBQfYC0hSCMQq0Gr9gCoc7h6P/ST8O8rfRw3aitX7oDWM8U09hekDx
-         mcJw==
+        bh=VqiTrc04lJztf2dyTmHN89oGm1bJ8PUHM0btmGHDZmI=;
+        b=PD82jKo7jigK4yo/BsC4mL9gzNaCyQCuN/kPVJGkjQjdLI8tYXff0Yq6V8OcVaJvNy
+         weurqZPZmulH0qGSg5NbPVImgWJ+FnTdb3j3Ry4nbirmi+Rj3QFivs4ORBwQaFRqCGqf
+         QEUbVI/SqDEMT+7UGhcd921nGG7eTyZrIMcUrpbYcHWgfkjlc4bKSqYZEDRPXgz7lXtH
+         DqeNW77psjBaqljc2mahGE9h0G2f7KashF5X4+pB5RTZgitOtmNbn03q4nK6XwgY7JUH
+         dHKc7aq+4G8SSRybkD5tRl+j5GVa6fgvquMcqs4nqsv6V0mQuY3Plyf9y99pCk1OO04q
+         xdcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793897086; x=1794501886;
+        d=1e100.net; s=20260707; t=1793897300; x=1794502100;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:mime-version:x-gm-gg
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZqMiJDrBp9dqyb3cO42U+9O+NQ7NWtABCad+4xnCfR4=;
-        b=ygDy66aEertf6aiePez6Vp6uiPdAVg+SNlh3c+kKV7VzEyiV9wlHYjNeSC+T2kFG5z
-         nSh9pg2y5WBr9O1kNS6Eo3+UWXlptZQJX28P+epI2c+QWVSi/qcPjIeb0TxSaKg7/eOL
-         5dPns1ES4u81ShgOhKvae/y2wh3/OGvD6A0ep0/zU2z+s06/bD87bDqJKmAKN2waJadI
-         YDRM8IoxfULKnpGM2c/GldpaRnBjQS96R/6IC/9UDs9iJRAqqFplWjHRpYeEQJktuP99
-         jHOp0B0RbKd6I6Ugo72oy1KFR+8KUTRT9UGse9AJHjlT1G4qBIRU+Z+wo/CJDgGQJkW1
-         64dg==
-X-Forwarded-Encrypted: i=1; AKwUvBx7hjYUv3ohK1h+jwuoTUgoLoppkZrdDPPP8Unt6WHbvNGIbHuBc5t2j2/4kTiWRwVEs3uyRHcpgEbSGHGSEuE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/irHtUIsw4kpWuGQRA0DGwMnZai9izUIB7cyKCDXPRMFyW5+qL
-	sI4e0YOLQ5uGohD/G1yq3BuazZHW7YH5I7nk+IFjydFo/iswzo6x21P6DBSYpYn40UHxh6eni4a
-	a99/2JiZIWym+aKjroAztd+xE8W9muCk=
-X-Gm-Gg: AYBFou1FB3rF99FhnVPmqzxkE/RpehARKzT5CzL+WyFcrrm4rmyIdMNBbY2dHq+4moM
-	6fb8mvrD9nR9WIo3XHVbXLcCtWyqwsJac3dhwdSE7tDD9e3Jw8c8vW7BP03n+asuEMzNAstLk0+
-	9QpEZ5slib0L6+cMmeceWvIPVcMs3z8OoNcFNSzZzTj6wUIZzqOTOUo3A03hBov/T4yQGy+FLYn
-	Z1A6Vy02ypk9IBL4AQ+gfEMMm9h6m3z+jQRz9wv9ATFIKk6sczryt1u4aZqcewFEyzTl94Ofurv
-	F/gdqySYx1XCnG+q9oBHdkizdqFpW1WkztRKK3iiKb8geszIEMRAwglXGtWkNox84R1b4GQz+By
-	0kOBlwF3nc81Flo1WjXFlveMFkfH76chibgj9kNTsKxNQIDd2pCObOMA63UH11KQQiR50H7xQyn
-	DcB61y2FM65DTJ0NP7LajkZpA1h0BYiLdvYB+lL6hX4Ne3LixWCZhifgAkynrDqtPz83/TWa7ND
-	EoZXW4o6hqnTY/dhw==
-X-Received: by 2002:a17:907:6d20:b0:c2e:204d:9490 with SMTP id
- a640c23a62f3a-c4d206eeb04mr289874166b.17.1793897086336; Thu, 05 Nov 2026
- 08:44:46 -0800 (PST)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 5 Nov 2026 08:44:43 -0800
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Thu, 5 Nov 2026 08:44:43 -0800
+        bh=VqiTrc04lJztf2dyTmHN89oGm1bJ8PUHM0btmGHDZmI=;
+        b=dpnn5pu7jaV62ZxJWelExvbirygLL53JCHsZrEeGW0JDl3fyrTcrLPMxAru6rgn8L5
+         NB/krvcyBuRYUTDpYi3JYfNNeNbaqkOg01Rt96/AjEIMN8UcdC+3jEqGcWgZTYSYXObs
+         f2nwfCjDL4gOS7NkVPjdTMwK+hEAVEDlhdy38p8pNQ0g5GodrMK/Rb900fvC4n4b3U4P
+         ALnkWyjatJYBWuk+PUyz0aAPFNY9vwQ/QXVWV7QDxebtWkjiq+7sBqMkQgLlGgIkAQOK
+         1XLuIxoHTXNJd04RdpIMY901PQJoQQyzXfzWedB5rtCJTsHLiltlzy4jOlD1LBUI1TQs
+         tAAw==
+X-Forwarded-Encrypted: i=1; AKwUvBzEwc4E7B262psOZCtZ2yLbDpG9YxdXfC9k+ABFlcsK6e4+3pIxQYzsYQmNpEGCmfIXDGQzgcX2Mh20/DPB//o=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9yhL18L5f3EiYJ5WSCx7PuRfLWQNMHozQO6DdW8dvSCe998Drc
+	eaD0NGUum0ral5b49A/zVcptqwpN0uHPg5VQ4wcYLucUS/KEaiEvNHGBtw4vzRg6C++ZgJrR4Qr
+	f/6Cbtfln15nc5PP+sZUDhEQRsbWZSqUwmCBvk5e5
+X-Gm-Gg: AYBFou3aK1FmARKAVqgQFkKQ2e76aR9q1VFpAeN4Dd1p15bVjni8wa5SFPWsMkPbxYQ
+	y8vPX9c192psIB6/nE0J6ai6aINK5wbuixUve1ELG5+QIWZuw0lQtLbFCahHyTrqiObZ/SoHsQe
+	du50d58ZZwy7eLXwOXL8z77aeRuaC+y3nvXZKjTNQJJF6lbR8WPV8oiN7GOWvvX9idgAJ25SlTe
+	KuZ71GllwbF1rR8cDJxL1FIetXs9cc0df+OXR7CprewkESgi+NjfR7uc6hpUuE26laGWtUHYl6G
+	bFal3yxiGLoZyLReGh9b6s1KymKQEgBWqbPAIUfqoAxzzmgKY+fX4riXdTkP8ibGMTeGM0aKqQA
+	Y3OxL3WtSlO2KH/PDXW3L2fMdJNuh/QlW+d76mgQG1oYsPRzwbIIrUH4=
+X-Received: by 2002:a05:620a:29c1:b0:93f:334e:df25 with SMTP id
+ af79cd13be357-9442175b2f6mr3556460685a.41.1793897300081; Thu, 05 Nov 2026
+ 08:48:20 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,140 +104,154 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: Florin Badita-Nistor <baditaflorin@gmail.com>
-In-Reply-To: <CAL4WiirS2n23vb9qHUHX+xBWqjiiM2KzCoFR2dysEzdXrcFQpg@mail.gmail.com>
-References: <CADnh+D0zSzAyYCLo5cXU56o9X-P3RG3N2ix7ARPrP95d8sBXmg@mail.gmail.com>
- <CADnh+D3nz5aehxjvurK+Fv7gF6n4csMm-dFatvdMmg1fWdGSQg@mail.gmail.com> <CAL4WiirS2n23vb9qHUHX+xBWqjiiM2KzCoFR2dysEzdXrcFQpg@mail.gmail.com>
-Date: Thu, 5 Nov 2026 08:44:43 -0800
-X-Gm-Features: AclHuK8kDXY8JI8yzjWMA1cEKLPpuiBD7I5EcwcGty_AjuJnIHOuzNY_Tlbm3_g
-Message-ID: <CADnh+D3faqV0QBm5tnqpTCoU9ugX_5j0mbkzKae7GT0hhgOU4Q@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] tcp: avoid false bind exhaustion with odd-sized
- port ranges
-To: Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, 
-	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
+ <auM32mOlBLu6ZUlt@google.com> <CALCETrUD4vh_iSHV7G0bprUFU8=c+ECo701-tXcbQ3UXBWC1ig@mail.gmail.com>
+ <ausXFWLgHabezE7R@google.com>
+In-Reply-To: <ausXFWLgHabezE7R@google.com>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Thu, 5 Nov 2026 08:48:07 -0800
+X-Gm-Features: AclHuK8CUFetL3KNjWElY9pamqV4vOzKRAOdGaRShI4zykg0vul-u3a1dyx4v8I
+Message-ID: <CALCETrXrdQRWTVdCq-V_AVpZG7g=1aCpeyNP3jLXT7VDW=OaVw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+To: "Hallgrimur H. Gunnarsson" <halg@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
+	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Jann Horn <jannh@google.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Jonathan Calmels <jcalmels@3xx0.net>, 
+	Casey Schaufler <casey@schaufler-ca.com>, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Eric,
-
-> Please mention the side effect: with an odd @remaining, the wrap
-> (port -=3D remaining) flips parity, so the first scan is no longer
-> restricted to odd offsets.
-
-Agreed. I will state that wrapping an odd-sized range can select ports
-of the parity preferred by __inet_hash_connect(), while even-sized
-candidate sequences remain unchanged.
-
-> Also note that __inet_hash_connect() has the same rounding for
-> netns-wide ranges, so connect() still misses a port there.
-
-Understood. I will make the scope explicitly bind() allocation only.
-The netns-wide connect() behavior remains unchanged; I will not suggest
-that odd-sized namespace ranges are fully handled.
-
-> This has been there since 2016 and needs an odd-sized range, I would
-> target net-next and drop the stable Cc.
-
-I will retarget both patches to net-next and remove the stable Cc.
-
-> Both patches are mangled by your mailer [...] Please use
-> git send-email for v2.
+On Wed, Nov 4, 2026 at 3:30=E2=80=AFAM Hallgrimur H. Gunnarsson <halg@googl=
+e.com> wrote:
 >
-> Also, please trim the cover letter to the problem and the test
-> results.
-
-Sorry for the malformed patches. The raw Sent copies applied locally,
-but that did not establish that the copies received by the list were
-intact. I will use git send-email for v2 and verify the received copies.
-I will also shorten the cover letter to the problem and test results.
-
-I will allow at least 24 hours from v1 for further feedback before
-posting v2 as a new thread, with a link to v1.
-
-Thanks for reviewing the change.
-
-Florin
-
-
-On Thu, 05 Nov 2026 12:17:56 +0100, Eric Dumazet <edumazet@kernel.org> wrot=
-e:
-> Le jeu. 5 nov. 2026 =C3=A0 12:04, Florin Badita-Nistor
-> <baditaflorin@gmail.com> a =C3=A9crit :
+> On Tue, Nov 03, 2026 at 10:37:48AM -0800, Andy Lutomirski wrote:
+> > On Thu, Oct 29, 2026 at 5:11=E2=80=AFAM Hallgrimur H. Gunnarsson
+> > <halg@google.com> wrote:
+> > >
+> > > On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
 > >
-> > inet_csk_find_open_port() rounds the range length down to an even
-> > number but keeps the original exclusive upper bound for wrapping.
-> > For an odd-sized range, the two scans can therefore miss a valid port
-> > and return EADDRINUSE while an eligible port remains free.
+> > > >
+> > > > Why should the task's cap masks affect this?  *Maybe* cap_bset make=
+s
+> > > > sense, but I'm struggling a bit to see why cap_permitted and
+> > > > cap_effective should matter.
+> > >
+> > > Sorry, the phrasing here may have been misleading. Just to clarify:
+> > > none of the creating task's capability sets (cap_bset, cap_permitted
+> > > or cap_effective) are used to restrict the new user namespace.
+> > >
+> > > When I wrote "reusing the existing task cap_bset, cap_permitted and
+> > > cap_effective sets on namespace entry", I was contrasting this with
+> > > the prior series from 2024 [1], which proposed adding a 6th per-threa=
+d
+> > > capability set to struct cred.
+> > >
+> > > In this series, when a task creates or enters a user namespace, we
+> > > simply initialize its new cred->cap_{bset,permitted,effective} in
+> > > that namespace to user_ns->cap_bset instead of CAP_FULL_SET.
+> > >
 > >
-> > For example, restrict a TCP socket to IP_LOCAL_PORT_RANGE [40000, 40002=
-]
-> > and hold explicit binds on 40000 and 40001. bind(..., 0) always fails,
-> > although an explicit bind to 40002 succeeds. Both IPv4 and IPv6 TCP and
-> > MPTCP are affected. A namespace-wide odd-sized ip_local_port_range can
-> > also trigger the failure without a per-socket range setting.
+> > Okay, this makes *more* sense, but I think it's too weak.
 > >
-> > Keep the full length for the scan bound and wrapping. The two scans
-> > then cover every candidate in an odd-sized range, with at most one
-> > repeated candidate when exhausted. Even-sized candidate sequences
-> > remain unchanged.
+> > I have a sort-of goal of having the creation of unprivileged
+> > namespaces be allowed in most contexts by default, *even in Docker*
+> > (which would involve the Docker team changing their default seccomp
+> > rules, but that bridge can be crossed later).  (In furtherance of this
+> > goal, I fixed an ancient bug in newuidmap that gets us quite a bit
+> > closer a couple weeks ago.)
 > >
+> > But tying this mitigation to a parent userns means that it's
+> > completely unusable in the single-deep case.
 >
-> Please mention the side effect: with an odd @remaining, the wrap
-> (port -=3D remaining) flips parity, so the first scan is no longer
-> restricted to odd offsets. For odd-sized ranges, bind() will now pick
-> ports of the parity __inet_hash_connect() prefers.
+> To clarify, this mitigation isn't exclusively tied to the parent userns.
+> If a system administrator wants a host-wide policy, like trimming
+> CAP_NET_ADMIN for all unprivileged user namespaces, including
+> single-deep Docker containers, then the host-wide sysctl handles this
+> seamlessly. Any unprivileged process in init_user_ns calling CLONE_NEWUSE=
+R
+> is subjected to the sysctl ceiling, effectively stripping CAP_NET_ADMIN
+> upon creation.
+
+Seems reasonable, but see below.
+
 >
-> I think this is fine: same-parity netns ranges already trigger
-> "ip_local_port_range: prefer different parity for start/end values",
-> and __inet_hash_connect() ignores parity (step =3D=3D 1) for per-socket
-> IP_LOCAL_PORT_RANGE. But the changelog should say so.
+> Where the single-deep case falls short in this series is per-container
+> granularity. For flexible configuration on a per-container basis, this
+> patch series assumes that containers run in their own user namespace,
+> allowing the runtime to bound capabilities at creation time via clone3()
+> and have that bound persist down the namespace hierarchy across any neste=
+d
+> userns creation.
+
+There are plenty of cases of *privileged* user namespaces (i.e.
+created by privileged users) that would nonetheless want this.  Or
+unprivileged user namespaces on systems that will not have this
+restriction set that still want to apply it in their own container.
+
+
+
 >
-> Also note that __inet_hash_connect() has the same rounding for
-> netns-wide ranges, so connect() still misses a port there. This is
-> fine since the sysctl already warns about this setup, but the
-> changelog should not suggest netns-wide odd ranges are now fully
-> handled.
+> If a container runs in init_user_ns (as in standard Docker) and we want
+> to restrict userns capabilities for that specific container without
+> relying on a host-wide sysctl, then you are exactly right. We would need
+> some kind of cred-based mechanism to pre-configure a restriction for any
+> future CLONE_NEWUSER calls within that container.
 >
+> > I do have a question about this whole scheme, though: are we talking
+> > *just* about CAP_NET_ADMIN?  That is, is there any other bit that has
+> > anywhere near enough security relevance to make this kind of thing
+> > worthwhile?  Because if it's really just a single bit control, maybe
+> > we can come up with a nicer scheme.
 >
-> > The issue was triggered while developing port-range selftests with
-> > Codex assistance, then confirmed using userspace reproducers on
-> > unmodified kernels. No kernel instrumentation or fault injection was
-> > needed. Booted x86-64 KVM kernels were tested against the regression
-> > selftest, the full ip_local_port_range suite, and a Go net.Listen
-> > reproducer. The Go reproducer fails 100/100 times per IP version before
-> > the fix and 0/100 afterwards with a three-port namespace range and two
-> > listeners occupying its first two ports.
-> >
-> > Fixes: ea8add2b1903 ("tcp/dccp: better use of ephemeral ports in bind()=
-")
-> > Cc: stable@vger.kernel.org
+> Yes, primarily CAP_NET_ADMIN, and to a lesser extent CAP_NET_RAW.
 >
-> This has been there since 2016 and needs an odd-sized range, I would
-> target net-next and drop the stable Cc.
+> If we look at submissions to Google's kernelCTF VRP [1], 90% of the
+> exploit submissions in 2026 require CAP_NET_ADMIN (and about 70%
+> across all submissions since the program started in 2023).
 >
-> > Signed-off-by: Florin Badita-Nistor <baditaflorin@gmail.com>
-> > ---
-> >  net/ipv4/inet_connection_sock.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection=
-_sock.c
-> > index e56beec43..755fcea35 100644
-> > --- a/net/ipv4/inet_connection_sock.c
-> > +++ b/net/ipv4/inet_connection_sock.c
-> > @@ -343,8 +343,6 @@ inet_csk_find_open_port(const struct sock *sk,
-> > struct inet_bind_bucket **tb_ret,
+> Restricting these network capabilities when they are not strictly needed
+> (e.g. for sandboxing) is the primary motivation behind the series.
+> However, I wrote the userns capability bounding as a generic mask so it
+> could restrict arbitrary capabilities down the hierarchy, but if the
+> preference is to narrow the scope more specifically to trimming
+> CAP_NET_ADMIN and CAP_NET_RAW, that's completely fine by me.
 >
-> Both patches are mangled by your mailer (wrapped hunk header here,
-> wrapped diff --git line in 2/2), they do not apply. Please use
-> git send-email for v2.
+> If we go that route and want to support the single-deep Docker case, a
+> per-task inheritable securebit might be one way to do it, e.g.
+> SECBIT_NO_USERNS_NET and SECBIT_NO_USERNS_NET_LOCKED. Docker could then
+> set and lock that bit on a container in init_user_ns without needing a
+> parent userns.
+
+This seems perhaps better.  But maybe a bit that applies the
+restriction to a userns created by someone who doesn't have
+CAP_NET_ADMIN in their own userns?
+
+IMO what we really want is a generic mechanism for sysctl-like
+settings that are scoped to a userns.  And we would want the API not
+to be filesystem-based (or at least not require *mounting* a
+filesystem) because then we would just make everything messier.  This
+would solve many problems.
+
 >
-> Also, please trim the cover letter to the problem and the test
-> results.
+> On userns creation, create_user_ns() could record this restriction on
+> struct user_namespace. That could either feed into the userns capability
+> bounding set proposed in this series (clearing CAP_NET_ADMIN and
+> CAP_NET_RAW from user_ns->cap_bset when the bit is set on the creator),
+> or be stored as a single boolean in struct user_namespace if we want to
+> keep the mechanism minimal and drop the generic capability mask UAPI.
+> In the latter case, we would still need to replicate some of the
+> userns capability bounding functionality, e.g. strip CAP_NET_ADMIN and
+> CAP_NET_RAW in set_cred_user_ns() on namespace entry, and bound the
+> parent-owner check in cap_capable_helper().
 >
-> The code change itself looks good to me.
->
-> pw-bot:cr
+> [1] https://github.com/google/security-research/tree/master/pocs/linux/ke=
+rnelctf
