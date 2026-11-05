@@ -1,49 +1,129 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793880909;
-	b=uPWnTOVn/z4lZ+0GeezocSfXMIUtv7yDG705EJ2jlcDNAPZ+ejpb7ej2u4Ow65fla5Yo
-	 pUgykc/T+JwbHMjukQc/hGGcflPLn8gZOuQWcQD5Dt8zHCy5pKJ5rTzQcXb2EqWbS1r4p
-	 N1hRlZekN0ZEczUhsyckOd5/YGa98vhA7DbNqsLbzq2Hmk6qIpVV19n50aODKUES38pSM
-	 nc8GB4Qoya0XGWjLyd9lIMw+pbLWEGK7OrAveL4SRDtQx7enMNJ8kJUd9aoAR8tKf8M1j
-	 /jRqH2jn7BJVI0gdkN37iL7aghmQhi8LqwnbuhMRfOxLbYqlRRQ43VALSSP5+GZy1fg==
+	t=1793881017;
+	b=ljlfIxlYHrLjdN12JYZvm15+CyDA2hydyG+p13Ww7+zXBSqTEp4AnVKJq7Mn75f1r8DB
+	 +9O31RfBfVBYuiYXxHrooGz2s2la/h5RLiVhnqrJvBM0i0+xGYlquhPS6c3x9m6TABfgA
+	 KatCB12rLNO3MF4A/7BEXgfYyLalBya0/kVBzyArs8Qdx42Uwq/3AWYkGqZzlL1/+cuW9
+	 NNpk0GPZOQDsJz8LeT5MmpYDLcAhGHlTrq+O80m4vuBQUUO+rrAUNt2gXBYjxf0VvRfYA
+	 zhN/iBN8Y+88lOfAE0PS7/GAZSQ4Dr7Z/2jHuzyP3cOJeB+dFlj2wrB1LtzdiZRGXFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793880909;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=EjHHerbQtH8PkJVTm5A4n/paGtt5ATnY9+Koe88/4LE=;
-	b=4UQLTIga0vONSU6f3Z05ZQ/bXxkGvekiJXamLVoIISQJAHIuRiWzDEdu88Yx7/+KxPwv
-	 OWd7K7tDmUcTIjMwJWyIm9bW/E/cppVPci6QkdPmS1bx47oIZCKudVoGbcpeHnaucJRGH
-	 I7P56bp8nJJvSvBbxh5qg1MEKFVcQBV+cBTSQiGODS9mXtzO0pb6CWWIaNiQxbP/hHT7b
-	 N4Ea+FNjQUW9JSzZvlcsdP6feXL10gOZDkamoKlhcAcdO390Oc9oOSm3gxIUBkFB0dFGf
-	 HHVtEn2mFr/0JTbo4O8qDiIWA5V+7+4wTq/d03MtiTm2q0MELpzy9EtpiZaTB84w85g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881017;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Rspamd-Server:X-Rspamd-Action:
+	 X-Spam-Flag:X-Spam-Score:X-Spam-Level:X-Rspamd-Queue-Id;
+	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
+	b=LsnINoozfAegRNqL8gA539tnQZBRx0I0sYN02EaYQ0MGx1SZfOHyrxTFDCbESVGRWGb2
+	 bx0s4p0Zsfy3zDTZ6Co5m815DWIIvwEPs7JrUbEnnmNJHNkSzy4CmsrBsvtOO+Lpsf/FL
+	 k0ZXURbvm/095R7sSrhrtU/qhsFemcaGSAifrj4kUNuIIgavpXiqML47OZ0Xs3DUHVnQG
+	 Y2IMNSJwX3mZ5R0HqIqc3zlc7aRVdDvLpff5rQ+aKRPPTKYIztbQpflcJGnyghrBk4NYY
+	 cNnhCjZaW/Qmvf9pms0QXnwLHCF7ldBCKfMF3es/th7JWID5zy+/mcTckfXJZuKHa/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mA8OGImI;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=cYe8TYsk;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=QIbMvVJs;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=qcWXmYyb;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=YQFOqDtq;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F3A606A331;
-	Thu,  5 Nov 2026 12:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F656606A329;
+	Thu,  5 Nov 2026 12:16:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F656606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mA8OGImI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0E11F00A02;
-	Thu,  5 Nov 2026 12:15:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793880908;
-	bh=EjHHerbQtH8PkJVTm5A4n/paGtt5ATnY9+Koe88/4LE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=mA8OGImIAM2oSGIP6F5xMkpDWUGpMztlncn928slbRyyhHGiBi/3BaNJRuXq1Y/Cb
-	 +GEX6MG5wvXI8aWsGMw4fevZeZdXBTz8CZUp894GolHb3rHvMRsVDmy+JJkMGuWgtW
-	 v9/LchHxd26rFXUQ5+O8apewCW34AGL2TqroGTZDw0tz0KNGJUKyUAuede4TIaGCGV
-	 E7Q2sWoRDtDSDNPcacMmJegj8QcxOvzkMd+7akCRkYbkeA+IhKX1Llkmy8GLVEQPkM
-	 O/riGsnRp3QtG9sc2QGQcYq4GlDGaZYiUZUVzZsoJL5eSu2Nyr2N8lT3G+0witrb1L
-	 4XlwTsCh0xUjQ==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 05 Nov 2026 11:47:21 +0000
-Subject: [PATCH v10 3/3] KVM: selftests: arm64: Make set_id_regs bitfield
- validity checks non-fatal
+	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=cYe8TYsk;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=QIbMvVJs;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=qcWXmYyb;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=YQFOqDtq
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 58A511F458;
+	Thu,  5 Nov 2026 12:16:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793881014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
+	b=cYe8TYskNgcCDl9X/k1KW8A+of6s9HPRYsn3eNTPIV5RsFlT7AWS/MQE3Ksi3uh3QV4KD5
+	Hi2guTuJU7x2qqFFTRs6JOAz8i6Q55GuiUnI2xO+KTPomgEeNxSjhoYwnOYxznNqbm63Mo
+	5qtfkmh5zv/NMPGB0+8MSe7zifKcXmA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793881014;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
+	b=QIbMvVJsr8XvPWk78XYqkteMct1dWNms40BmNTEwa1LXYhQgAGTS+dajwGjNJCINSsxxSt
+	HemSrC/mVhMQ9jBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=qcWXmYyb;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=YQFOqDtq
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1793881013; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
+	b=qcWXmYyb5+mCW0254eM18Rdi4r0I1vVFScoBAC1JoCDgbQr+JVrkM2hgqEp84Kj2sVZnX6
+	yOxI9PyPOhb6xWYpHefOBtPtMSEL6Mz2dqvUxPwKWIeCnNhnabJauUjOIrpt/Ne/cxy6NC
+	ZAMNOvP3NI2+Dh4POTu44wQ8ZjW2uSA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1793881013;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ADzlvyamTQU4UnQoclm/eaQzV+qRhdj3W0LtVIZccYw=;
+	b=YQFOqDtq+4SGdkOEWqs8BsjsIPs8cBY5Z7x8DRzRezIETmSxSypiEkth9ev7JNqvuGFopt
+	jijBqci6GEVKGZDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1F927133F6;
+	Thu,  5 Nov 2026 12:16:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 8uYuO7Rz7GpKHAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 05 Nov 2026 12:16:53 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id A35F0B6D5; Thu, 05 Nov 2026 13:16:52 +0100 (CET)
+Date: Thu, 5 Nov 2026 13:16:52 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH RFC 31/38] proc: sysctl: resume readdir after the last
+ name it returned
+Message-ID: <ba3zz2mphlmojth4kk3gvistj555c2sos6ft4ofb6cm5xfcsnp@3xas2kz2irvu>
+References: <20261102-work-procfs-bugfixes-v1-0-59422ed3e465@kernel.org>
+ <20261102-work-procfs-bugfixes-v1-31-59422ed3e465@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,160 +133,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261105-kvm-arm64-set-id-regs-aarch64-v10-3-d5a6aba69d19@kernel.org>
-References: <20261105-kvm-arm64-set-id-regs-aarch64-v10-0-d5a6aba69d19@kernel.org>
-In-Reply-To: <20261105-kvm-arm64-set-id-regs-aarch64-v10-0-d5a6aba69d19@kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Oliver Upton <oupton@kernel.org>
-Cc: Ben Horgan <ben.horgan@arm.com>, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, 
- Sebastian Ott <sebott@redhat.com>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4751; i=broonie@kernel.org;
- h=from:subject:message-id; bh=sCUDXK5zt6Sullbao2LmXhfh5JZy+wCGZCip8JVi8Mo=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLeFNv3bWz8fi7ymNTlDDbb398jIkX+MRu+WKO++IRtw
- obI3z5hHaUsDGJcDLJiiixxWdwv60ter+E7uLANZg4rE8gQBi5OAZjIdCmGP9x98gumb0799vhh
- v8CKitCpDMuT0szuqHd8fvhRIIPFfhMjw4GZbDNzTgqIftv2q1ieO37lqa8LbuxczDSdX8zFLum
- 5OwsA
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102-work-procfs-bugfixes-v1-31-59422ed3e465@kernel.org>
+X-Spamd-Result: default: False [-11.51 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLpnapcpkwxdkc5mopt1ezhhna)];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[60];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:email,suse.cz:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -11.51
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 58A511F458
 
-Currently when set_id_regs encounters a problem checking validation of
-writes to feature registers it uses an immediately fatal assert to report
-the problem. This is not idiomatic for kselftest, and it is also not great
-for usability. The affected bitfield is not clearly reported and further
-tests do not have their results reported.
+On Mon 02-11-26 15:21:46, Christian Brauner wrote:
+> proc_sys_readdir() counts the entries of a directory and resumes a
+> listing at the number getdents64() stopped at. The entries are sorted
+> by name, so one that is registered or unregistered in between shifts
+> everything behind it by one. Listing /proc/sys/net/ipv4/conf with a
+> buffer that holds ".", ".." and "all" and registering a device whose
+> name sorts before "all" makes the next call return "all" a second time.
+> Unregistering one that sorted before the position makes it skip an
+> entry instead. So a listing that takes more than one call shows a name
+> twice, or not at all. Even the 64k buffer of ls needs a second call to
+> find the end of the directory, so a device that comes up right then
+> repeats the last entry.
+> 
+> So remember the name of the last entry a call emitted in the file and
+> resume at the first usable entry after it, like kernfs resumes after
+> the node it stopped at. The entry itself can't be pinned across calls,
+> unregistering waits for that. If the position was moved by a seek in
+> between the listing counts from the start like before, seeking to an
+> arbitrary position has never been better than that.
+> 
+> That also takes one walk down the tree to resume instead of a walk over
+> every entry in front of the position with a round trip through
+> sysctl_lock for each of them.
+> 
+> Fixes: 77b14db502cb ("[PATCH] sysctl: reimplement the sysctl proc support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-Switch to using standard kselftest result reporting for the asserts we
-do, these are non-fatal asserts so allow the program to continue and the
-test names include the affected field.
+Just one coding style nit below. Otherwise feel free to add:
 
-Reviewed-by: Ben Horgan <ben.horgan@arm.com>
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-Reviewed-by: Sebastian Ott <sebott@redhat.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/arm64/set_id_regs.c | 52 +++++++++++++++++--------
- 1 file changed, 35 insertions(+), 17 deletions(-)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-index 69aebb3a28f4..8c484db65484 100644
---- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-@@ -417,12 +417,14 @@ u64 get_invalid_value(const struct reg_ftr_bits *ftr_bits, u64 ftr)
- 	return ftr;
- }
- 
--static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
--				const struct reg_ftr_bits *ftr_bits)
-+static void test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
-+				 const struct reg_ftr_bits *ftr_bits)
- {
- 	u8 shift = ftr_bits->shift;
- 	u64 mask = ftr_bits->mask;
- 	u64 val, new_val, ftr;
-+	bool pass;
-+	int ret;
- 
- 	val = vcpu_get_reg(vcpu, reg);
- 	ftr = (val & mask) >> shift;
-@@ -433,11 +435,17 @@ static u64 test_reg_set_success(struct kvm_vcpu *vcpu, u64 reg,
- 	val &= ~mask;
- 	val |= ftr;
- 
--	vcpu_set_reg(vcpu, reg, val);
--	new_val = vcpu_get_reg(vcpu, reg);
--	TEST_ASSERT_EQ(new_val, val);
--
--	return new_val;
-+	ret = __vcpu_set_reg(vcpu, reg, val);
-+	if (ret == 0) {
-+		new_val = vcpu_get_reg(vcpu, reg);
-+		pass = new_val == val;
-+		if (!pass)
-+			ksft_print_msg("%lx != %lx\n", new_val, val);
-+	} else {
-+		ksft_print_msg("Write of 0x%lx failed: %d\n", val, ret);
-+		pass = false;
-+	}
-+	ksft_test_result(pass, "%s valid write succeeded\n", ftr_bits->name);
- }
- 
- static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
-@@ -447,6 +455,7 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
- 	u64 mask = ftr_bits->mask;
- 	u64 val, old_val, ftr;
- 	int r;
-+	bool match;
- 
- 	val = vcpu_get_reg(vcpu, reg);
- 	ftr = (val & mask) >> shift;
-@@ -459,11 +468,19 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, u64 reg,
- 	val |= ftr;
- 
- 	r = __vcpu_set_reg(vcpu, reg, val);
--	TEST_ASSERT(r < 0 && errno == EINVAL,
--		    "Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d", r, errno);
-+	if (r >= 0 || errno != EINVAL) {
-+		ksft_print_msg("Unexpected KVM_SET_ONE_REG error: r=%d, errno=%d (%s)\n",
-+			       r, errno, strerror(errno));
-+		ksft_test_result_fail("%s invalid write rejected\n",
-+				      ftr_bits->name);
-+		return;
-+	}
- 
- 	val = vcpu_get_reg(vcpu, reg);
--	TEST_ASSERT_EQ(val, old_val);
-+	match = val == old_val;
-+	if (!match)
-+		ksft_print_msg("%lx != %lx\n", val, old_val);
-+	ksft_test_result(match, "%s invalid write rejected\n", ftr_bits->name);
- }
- 
- static u64 test_reg_vals[KVM_ARM_FEATURE_ID_RANGE_SIZE];
-@@ -503,7 +520,11 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
- 		for (int j = 0;  ftr_bits[j].type != FTR_END; j++) {
- 			/* Skip aarch32 reg on aarch64 only system, since they are RAZ/WI. */
- 			if (aarch64_only && sys_reg_CRm(reg_id) < 4) {
--				ksft_test_result_skip("%s on AARCH64 only system\n",
-+				ksft_print_msg("%s on AARCH64 only system\n",
-+					       ftr_bits[j].name);
-+				ksft_test_result_skip("%s invalid write rejected\n",
-+						      ftr_bits[j].name);
-+				ksft_test_result_skip("%s valid write succeeded\n",
- 						      ftr_bits[j].name);
- 				continue;
- 			}
-@@ -512,11 +533,8 @@ static void test_vm_ftr_id_regs(struct kvm_vcpu *vcpu, bool aarch64_only)
- 			TEST_ASSERT_EQ(masks[idx] & ftr_bits[j].mask, ftr_bits[j].mask);
- 
- 			test_reg_set_fail(vcpu, reg, &ftr_bits[j]);
--
--			test_reg_vals[idx] = test_reg_set_success(vcpu, reg,
--								  &ftr_bits[j]);
--
--			ksft_test_result_pass("%s\n", ftr_bits[j].name);
-+			test_reg_set_success(vcpu, reg, &ftr_bits[j]);
-+			test_reg_vals[idx] = vcpu_get_reg(vcpu, reg);
- 		}
- 	}
- }
-@@ -996,7 +1014,7 @@ int main(void)
- 		ID_REG_RESET_UNCHANGED_TEST;
- 	for (i = 0; i < ARRAY_SIZE(test_regs); i++)
- 		for (j = 0; test_regs[i].ftr_bits[j].type != FTR_END; j++)
--			test_cnt++;
-+			test_cnt += 2;
- 
- 	ksft_set_plan(test_cnt);
- 
+> +	if (!name) {
+> +		after = rb_first(&dir->root);
+> +	} else for (node = dir->root.rb_node; node;) {
 
+This indentation looks too inventive to me :) I'd just use
+	} else {
+		for (...) {
+
+								Honza
 -- 
-2.47.3
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
