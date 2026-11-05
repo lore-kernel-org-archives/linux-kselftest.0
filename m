@@ -1,65 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793891969;
-	b=wbmJrzdtMmyjUTZ0TeS/5AvQBlhkAAOfsO7e2hcDU3TUowjUfUX1NCF2QHSVFp0BO7bM
-	 alilqrHiXtq2l/IN4U53hHGFBLW/t7GGjIYA8/U0CJdAbDELKqWJ1wknyuoP1lToqTWZA
-	 XHefMQRORpc9DATeNlwDdpTOd5iBGAB/20fZndilb2Sl4mlN11ZTI5sodkE2u1jTnwXXN
-	 3tMXDxZQcA7w+dNZErEq9A1Shj8tmmBgzlzxW1aKJ43bRGLEP985Ysr+lKXWtYbn7YWr2
-	 mChYp5s4s08Q0WFaI4JiiNpf5pF70Y7Rm4/xcEiz/1gPKXveNFMedvwig331nt0ObiQ==
+	t=1793891972;
+	b=ZmPNdvzZdkSeqApgV/wtD1dlxHZzfl9DYwVh5RnTcY+hEdXuyJUlTq1hdyXxV0vIWAJD
+	 LJD3rCqg5swm6N6hJ0OWEIet0l+WY3IamCYmtkLert52nkPy6Ct9NbUa0wD2eBNbaeLKe
+	 xt9xMiDP18zX/ducWUsWTHrYQkXBq7Zc0GhxNlnw+bFRXO1J5adXixUOXsqBEoTK8X/ac
+	 OCS/q+BfmxWDcg5oXkbdDuZS4eg5pBBFZ+mltO7kJlyeWQOZGWLGFK5uIcXnCXisUllxZ
+	 nm5eKZFOufG4g6ZkZjHgJpXZRIQEWeDaDUrmtT3qEXYT2rIYRI+M9N/R0eF0ARv9q5A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793891969;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793891972;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=/JpKhuRcXEQ35ABg9hpHRmXRj8rkyqBDRvfAMQTAiqA=;
-	b=iuZVx6YzL1e0QvY2k2dShOQdxhrOE6BFQswx3p5oxo44fzI2EejZvcc7LAb0Wx3I7gQo
-	 pFtoNK9Qyvses7vf0lGbxa2sDXU2IRrZdMTMEeO2J1iJUec+qdJ3/3j3F2r9Z9JtfSkLK
-	 x/ypg/34BYN2eRuZ5zc0Rd7a3I1RujLpdbIBaJwxjIV7L1KKiMdhH2boHMLP12xMpKq7k
-	 IvNRqwO5xVqxAtSaXPMA0dTX0K5xeddBQOS0qDccUZRz84YCZUicZmoUTgGLnNSBma9UJ
-	 6xu5XfuTuamJkxA4Z0KtG2M6sZOycF7diqODAdxEhIg+BuOXm9Ox5zdK1cLLOBcaomg==
+	bh=vInqNfGpm8mF0iHZjosVBo3FdRXN75okHFBMY7jdKHE=;
+	b=CV1fcwZkvLZd5ZQSmEvZnBdtQ0O/v6S27IJvahowaRR9CNhNeeKwHBV5grH4buiPJzg7
+	 Hhrmb/alSOBdDzQ2yUokdoGtZmdou00FAnJCM3a7sVEAN9iTJUIFyxECAcUIgpDgeQeVA
+	 mdDV4UYZBLPDCShbKEfQwxK7Q40ZwsIkSzRvDc7c1eii+7skCZuIrubwJZplmkfv+WYYq
+	 E2wgIGXzHuIyUpR0jQrCbNdnM+jfPD6U1GT/G0myU7ab000xXiME5DbVmHwFkx5j26k/Z
+	 8oJVC0mgXXcr7iDGm3hHj+qfYjAGkF6+BNnCobU3hCcnflxi5KwIx1j011lhRNN2C2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NHRNFAZz;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Q58y0EgS;
 	arc=none smtp.remote-ip=170.10.133.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D791A606D81B
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:19:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D791A606D81B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE91606D81B
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 15:19:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BE91606D81B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NHRNFAZz
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Q58y0EgS
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793891966;
+	s=mimecast20190719; t=1793891970;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/JpKhuRcXEQ35ABg9hpHRmXRj8rkyqBDRvfAMQTAiqA=;
-	b=NHRNFAZzKU5CpG5PdiA5PFNW2mlRChGIKHWAMSrAne7VJ8TgQY7F44AH8hHn94m1B0k7mE
-	KFVeGLAz+sfEVys/2YbB6aeJVx+HPTmwM+IWlKBWsGV8T/CIvKkV+J3Y5Qwn1RdPJhXCPq
-	yV2mHCb7fVfS+OW5aVNL434ONVUBc6E=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=vInqNfGpm8mF0iHZjosVBo3FdRXN75okHFBMY7jdKHE=;
+	b=Q58y0EgS+vbc08pHb+BFzrAY85rmGjWILZFvV/DFcnugshGyL0H3p7Q2oSGss+ByQEreIF
+	ASW38lFaS3xzUjJEw5Pp58tROq8KD+8FTB7tDGfixqwrtiAym+mdPmzuDFpY/RY81ukczu
+	KexnA7OihmPweVQjSLO6xy5/llhdt8s=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-468-9X9xu2bUMCqWp7j49jrR2g-1; Thu,
- 05 Nov 2026 10:19:22 -0500
-X-MC-Unique: 9X9xu2bUMCqWp7j49jrR2g-1
-X-Mimecast-MFC-AGG-ID: 9X9xu2bUMCqWp7j49jrR2g_1793891959
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-604-QjRu1sZNOeamJroYjfV7aQ-1; Thu,
+ 05 Nov 2026 10:19:26 -0500
+X-MC-Unique: QjRu1sZNOeamJroYjfV7aQ-1
+X-Mimecast-MFC-AGG-ID: QjRu1sZNOeamJroYjfV7aQ_1793891964
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 276D41955DE0;
-	Thu,  5 Nov 2026 15:19:19 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E4B2D1802179;
+	Thu,  5 Nov 2026 15:19:23 +0000 (UTC)
 Received: from poros-thinkpadp16vgen1.tpbc.com (unknown [10.44.32.42])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 21CAE1956089;
-	Thu,  5 Nov 2026 15:19:13 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 926821956044;
+	Thu,  5 Nov 2026 15:19:19 +0000 (UTC)
 From: Petr Oros <poros@redhat.com>
 To: netdev@vger.kernel.org
 Cc: Petr Oros <poros@redhat.com>,
@@ -79,9 +79,9 @@ Cc: Petr Oros <poros@redhat.com>,
 	Paolo Abeni <pabeni@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 03/14] dpll: dpllsim: Add configurable pins
-Date: Thu,  5 Nov 2026 16:18:41 +0100
-Message-ID: <20261105151852.1844305-4-poros@redhat.com>
+Subject: [PATCH net-next v2 04/14] selftests: dpll: add pin enumeration and property tests
+Date: Thu,  5 Nov 2026 16:18:42 +0100
+Message-ID: <20261105151852.1844305-5-poros@redhat.com>
 In-Reply-To: <20261105151852.1844305-1-poros@redhat.com>
 References: <20261105151852.1844305-1-poros@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -96,784 +96,583 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Pins are the unit of most DPLL netlink interaction, so let a device
-instance carry an arbitrary set of them. Each directory created under
-the pins/ group of an instance is one pin with type, frequency and
-direction attributes. The type takes the names of the DPLL pin type
-enum as iproute2 prints them, the direction is input or output and the
-frequency must be one of the frequencies the driver advertises as
-supported for the type. The pin directory name becomes the board label
-of the pin, which gives tests a stable handle to find a pin by. The
-attributes are writable only while the instance is not live and return
-EBUSY otherwise.
+Extend the library with pin queries. Pins of a device are collected
+from the full pin dump with jq, since older iproute2 lacks the device
+filter of "pin show", and the fields that live in the parent-device
+nest are read through a helper that selects the nest of the device
+under test. The helpers that work on the full dump normalize its shape
+the same way the id-based ones do, so that a tool printing a flat
+object instead of the dump wrapper works with all of them. Like the
+device queries, every pin query runs the tool first and jq on what it
+printed, so that a query which fails returns the status of the tool
+instead of the empty output a missing attribute produces too. The
+prerequisite check now also requires a tool that knows "pin show", so
+that a tool too old for the pin queries is a skip up front rather than
+a failed query in every test. The dpllsim helpers gain
+dpllsim_add_pin, which creates a pin directory and writes its type,
+frequency and direction, and the standard device grows a GNSS input,
+an external input and an external output.
 
-At live=1 the pins are ordered as created and each pin records its
-index in that order, which is the pin index it is registered under.
-Their frequencies are validated against the per type tables, a MUX pin
-configured as output is rejected since a MUX pin stands for an input
-selector, and all pin handles are obtained up front, so that a failure
-leaves nothing half visible. The device is registered first and the
-pins after it, so that every pin registration event reaches userspace
-with a valid device, and a failure unwinds exactly what was registered
-in reverse order. While the instance is live the pin items are held
-with configfs_depend_item_unlocked(), which makes rmdir of a pin fail
-with EBUSY until the instance is taken down.
-
-The pins register with the mandatory callbacks only, direction_get and
-state_on_dpll_get, plus frequency_get since the frequency is known from
-the configuration. The input and output ops tables are identical here
-and diverge when input pins gain their setters in the next patches. The
-state is always reported as disconnected for now, the settable pin
-features follow in separate patches.
+dpll_basic.sh checks that the enumeration yields a numeric id for every
+pin of the device, the ids are taken from the dump as they are and jq
+prints null for a pin without one, that every pin has an id and a type
+and carries the direction in the parent-device nest, and that an input
+pin reports a valid state. The property test does not go on to query
+pins by an id that is not one, and reports a pin it cannot query at all
+as one failure rather than as one per attribute. The frequency is not
+required, a pin without a frequency callback does not report one. The
+device the script created has the standard pins, so an empty pin list
+or a missing input pin on it means a failed query or broken tooling
+rather than a pinless device. The library gains
+dpll_log_test_skip_or_fail for such conditions, which fails on the
+device the script created, recorded in DPLL_CREATED_DEVICE next to
+DPLL_DEV_ID, and skips on a device the user provided. The stress script
+creates its devices with a random set of pins of every type and both
+directions, MUX pins always as inputs, and the deploy cycle test runs
+with the standard pin set.
 
 Signed-off-by: Petr Oros <poros@redhat.com>
 ---
- Documentation/driver-api/dpllsim.rst |  40 +++-
- drivers/dpll/dpllsim/core.c          | 225 ++++++++++++++++++++-
- drivers/dpll/dpllsim/dpll.c          | 280 ++++++++++++++++++++++++++-
- drivers/dpll/dpllsim/dpllsim.h       |  32 +++
- 4 files changed, 565 insertions(+), 12 deletions(-)
+v2:
+- quote the ksft_skip and ret expansions (netdev CI shellcheck)
 
-diff --git a/Documentation/driver-api/dpllsim.rst b/Documentation/driver-api/dpllsim.rst
-index 86a5d523534055..e7c5ee93392c21 100644
---- a/Documentation/driver-api/dpllsim.rst
-+++ b/Documentation/driver-api/dpllsim.rst
-@@ -12,10 +12,12 @@ Configuration interface
- =======================
+v1: https://lore.kernel.org/all/20261103093910.596225-5-poros@redhat.com/
+---
+ .../selftests/drivers/net/dpll/dpll_basic.sh  | 146 +++++++++++++-
+ .../selftests/drivers/net/dpll/dpll_stress.sh |  46 ++++-
+ .../selftests/drivers/net/lib/sh/dpll_lib.sh  | 189 ++++++++++++++++--
+ 3 files changed, 357 insertions(+), 24 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/dpll/dpll_basic.sh b/tools/testing/selftests/drivers/net/dpll/dpll_basic.sh
+index 0d823fbc943a84..d83eac86551347 100755
+--- a/tools/testing/selftests/drivers/net/dpll/dpll_basic.sh
++++ b/tools/testing/selftests/drivers/net/dpll/dpll_basic.sh
+@@ -1,10 +1,10 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ #
+-# Basic DPLL subsystem test. Read-only validation of the device properties
+-# exposed over netlink. Runs against a hardware DPLL device when one is
+-# present (or when DPLL_DEV_ID is set), otherwise against a freshly
+-# created dpllsim device.
++# Basic DPLL subsystem test. Read-only validation of device and pin
++# enumeration and of the properties exposed over netlink. Runs against a
++# hardware DPLL device when one is present (or when DPLL_DEV_ID is set),
++# otherwise against a freshly created dpllsim device.
+ #
+ # Copyright (c) 2026 Red Hat, Inc.
  
- Devices are described in configfs under ``/sys/kernel/config/dpllsim/``.
--A directory created there is a device instance. Attributes are written
--while the instance is not live, then ``live`` is set to 1 to register
--the device with the DPLL subsystem. Writing 0 unregisters it again.
--Structural attributes return ``EBUSY`` while the instance is live.
-+A directory created there is a device instance, a directory created in
-+its ``pins/`` subdirectory is a pin. Attributes are written while the
-+instance is not live, then ``live`` is set to 1 to register the device
-+and its pins with the DPLL subsystem. Writing 0 unregisters everything
-+again. Structural attributes return ``EBUSY`` while the instance is live
-+and pins of a live instance cannot be removed.
+@@ -15,8 +15,29 @@ source "$SCRIPTDIR/../lib/sh/dpll_lib.sh"
  
- Device directory ``/sys/kernel/config/dpllsim/<dev>/``:
+ ALL_TESTS="
+ 	test_device_properties
++	test_pin_enumeration
++	test_pin_properties
++	test_pin_state
+ "
  
-@@ -25,17 +27,41 @@ Device directory ``/sys/kernel/config/dpllsim/<dev>/``:
- ``live``                 1 registers the device, 0 unregisters it
- =======================  =====================================================
- 
-+Pin directory ``/sys/kernel/config/dpllsim/<dev>/pins/<pin>/``:
++# Fail on every entry of a pin id list that is not a number. The ids are
++# taken from the dump as they are, so a pin without one shows up as the
++# "null" jq prints for a missing field, not as an empty line. Return 1
++# when any entry is invalid.
++check_pin_ids()
++{
++	local id ret=0
 +
-+=============  ===============================================================
-+``type``       ``gnss``, ``int-oscillator``, ``ext``, ``synce-eth-port`` or
-+               ``mux`` (default ``ext``)
-+``frequency``  Frequency in Hz, must be supported by the pin type
-+               (default 0, which is rejected)
-+``direction``  ``input`` or ``output`` (default ``input``), a ``mux`` pin
-+               must be an input
-+=============  ===============================================================
++	for id in "$@"; do
++		if ! [[ "$id" =~ ^[0-9]+$ ]]; then
++			check_err 1 "invalid pin id '$id'"
++			ret=1
++		fi
++	done
 +
-+The pin directory name becomes the board label of the pin. Pins are
-+registered in the order the directories were created.
++	return "$ret"
++}
 +
- Example
- =======
- 
--Create a device and make it live::
-+Create a device with a GNSS input, an external input and an external
-+output, then make it live::
- 
-     cd /sys/kernel/config/dpllsim
-     mkdir dev0 && cd dev0
-     echo 100 > clock_id
-+    mkdir pins/gnss0
-+    echo gnss > pins/gnss0/type
-+    echo 1 > pins/gnss0/frequency
-+    mkdir pins/ext0
-+    echo 10000000 > pins/ext0/frequency
-+    mkdir pins/out0
-+    echo 10000000 > pins/out0/frequency
-+    echo output > pins/out0/direction
-     echo 1 > live
- 
-     dpll device show
-+    dpll pin show
- 
--To remove the device, write 0 to ``live`` and remove the device
--directory.
-+To remove the device, write 0 to ``live``, remove the pin directories
-+and finally the device directory.
-diff --git a/drivers/dpll/dpllsim/core.c b/drivers/dpll/dpllsim/core.c
-index 0772f409d013b7..97b3cf48772e7f 100644
---- a/drivers/dpll/dpllsim/core.c
-+++ b/drivers/dpll/dpllsim/core.c
-@@ -6,12 +6,14 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/array_size.h>
- #include <linux/cleanup.h>
- #include <linux/configfs.h>
- #include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/slab.h>
-+#include <linux/string.h>
- #include <linux/sysfs.h>
- 
- #include "dpllsim.h"
-@@ -23,6 +25,182 @@ static struct dpllsim_dev *to_dpllsim_dev(struct config_item *item)
- 	return container_of(to_config_group(item), struct dpllsim_dev, group);
+ test_device_properties()
+ {
+ 	local json
+@@ -42,6 +63,114 @@ test_device_properties()
+ 	log_test "DPLL device properties"
  }
  
-+static struct dpllsim_pin *to_dpllsim_pin(struct config_item *item)
++test_pin_enumeration()
 +{
-+	return container_of(item, struct dpllsim_pin, item);
++	local pin_ids
++
++	RET=0
++
++	mapfile -t pin_ids < <(dpll_pin_get_ids "$DPLL_DEV_ID")
++	if [ "${#pin_ids[@]}" -eq 0 ]; then
++		dpll_log_test_skip_or_fail "DPLL pin enumeration" \
++		    "no pins found"
++		return
++	fi
++	check_pin_ids "${pin_ids[@]}"
++
++	log_test "DPLL pin enumeration (${#pin_ids[@]} pins)"
 +}
 +
-+static const struct {
-+	const char *name;
-+	enum dpll_pin_type type;
-+} dpllsim_pin_types[] = {
-+	{ "gnss", DPLL_PIN_TYPE_GNSS },
-+	{ "int-oscillator", DPLL_PIN_TYPE_INT_OSCILLATOR },
-+	{ "ext", DPLL_PIN_TYPE_EXT },
-+	{ "synce-eth-port", DPLL_PIN_TYPE_SYNCE_ETH_PORT },
-+	{ "mux", DPLL_PIN_TYPE_MUX },
-+};
-+
-+static ssize_t dpllsim_pin_type_show(struct config_item *item, char *page)
++check_pin_properties()
 +{
-+	struct dpllsim_pin *pin = to_dpllsim_pin(item);
-+	int i;
++	local pin_id=$1
++	local json field
 +
-+	guard(mutex)(&pin->dev->lock);
-+	for (i = 0; i < ARRAY_SIZE(dpllsim_pin_types); i++)
-+		if (dpllsim_pin_types[i].type == pin->type)
-+			return sysfs_emit(page, "%s\n",
-+					  dpllsim_pin_types[i].name);
-+	return -EINVAL;
++	# A pin that cannot be queried at all would be reported as one
++	# that misses every attribute, so bail out on that first.
++	if ! json=$(dpll_pin_json "$pin_id") || [ -z "$json" ]; then
++		check_err 1 "pin $pin_id query failed"
++		return
++	fi
++
++	# Frequency is optional, a pin without a frequency callback such
++	# as a recovered clock pin does not report it.
++	for field in '.id' '.type'; do
++		if ! jq -e "$field" <<< "$json" &> /dev/null; then
++			check_err 1 \
++			    "pin $pin_id is missing the $field attribute"
++		fi
++	done
++
++	# The parent-device nest is not present for all pin types, but when
++	# the device under test is in it, that entry must carry the
++	# direction. A pin can be registered on more than one device, so
++	# match on parent-id instead of taking the first entry.
++	if jq -e --argjson dev "$DPLL_DEV_ID" \
++		'[.["parent-device"][]? | select(.["parent-id"] == $dev)] |
++		 length > 0' <<< "$json" &> /dev/null; then
++		if ! jq -e --argjson dev "$DPLL_DEV_ID" \
++			'.["parent-device"][]? |
++			 select(.["parent-id"] == $dev) | .direction' \
++			<<< "$json" &> /dev/null; then
++			check_err 1 \
++			    "pin $pin_id parent-device is missing direction"
++		fi
++	fi
 +}
 +
-+static ssize_t dpllsim_pin_type_store(struct config_item *item,
-+				      const char *page, size_t count)
++test_pin_properties()
 +{
-+	struct dpllsim_pin *pin = to_dpllsim_pin(item);
-+	int i;
++	local pin_ids pin_id
 +
-+	for (i = 0; i < ARRAY_SIZE(dpllsim_pin_types); i++)
-+		if (sysfs_streq(page, dpllsim_pin_types[i].name))
-+			break;
-+	if (i == ARRAY_SIZE(dpllsim_pin_types))
-+		return -EINVAL;
++	RET=0
 +
-+	guard(mutex)(&pin->dev->lock);
-+	if (dpllsim_dev_frozen(pin->dev))
-+		return -EBUSY;
-+	pin->type = dpllsim_pin_types[i].type;
-+	return count;
-+}
-+CONFIGFS_ATTR(dpllsim_pin_, type);
++	mapfile -t pin_ids < <(dpll_pin_get_ids "$DPLL_DEV_ID")
++	if [ "${#pin_ids[@]}" -eq 0 ]; then
++		dpll_log_test_skip_or_fail "DPLL pin properties" "no pins found"
++		return
++	fi
++	if ! check_pin_ids "${pin_ids[@]}"; then
++		log_test "DPLL pin properties"
++		return
++	fi
 +
-+static ssize_t dpllsim_pin_direction_show(struct config_item *item, char *page)
-+{
-+	struct dpllsim_pin *pin = to_dpllsim_pin(item);
++	for pin_id in "${pin_ids[@]}"; do
++		check_pin_properties "$pin_id"
++	done
 +
-+	guard(mutex)(&pin->dev->lock);
-+	return sysfs_emit(page, "%s\n",
-+			  pin->direction == DPLL_PIN_DIRECTION_INPUT ?
-+			  "input" : "output");
++	log_test "DPLL pin properties (${#pin_ids[@]} pins)"
 +}
 +
-+static ssize_t dpllsim_pin_direction_store(struct config_item *item,
-+					   const char *page, size_t count)
++test_pin_state()
 +{
-+	struct dpllsim_pin *pin = to_dpllsim_pin(item);
-+	enum dpll_pin_direction direction;
++	local pin_id state
 +
-+	if (sysfs_streq(page, "input"))
-+		direction = DPLL_PIN_DIRECTION_INPUT;
-+	else if (sysfs_streq(page, "output"))
-+		direction = DPLL_PIN_DIRECTION_OUTPUT;
++	RET=0
++
++	pin_id=$(dpll_pin_find_by_direction "$DPLL_DEV_ID" input | head -1)
++	if [ -z "$pin_id" ]; then
++		dpll_log_test_skip_or_fail "DPLL pin state" "no input pin"
++		return
++	fi
++
++	# The pin was found through its parent-device nest for this device
++	# and the state is mandatory there, so an empty value is a failed
++	# query rather than a state.
++	state=$(dpll_pin_get_state "$DPLL_DEV_ID" "$pin_id")
++	case "$state" in
++	"")
++		check_err 1 "cannot read the state of pin $pin_id"
++		;;
++	connected|disconnected|selectable)
++		;;
++	*)
++		check_err 1 "pin $pin_id reports invalid state '$state'"
++		;;
++	esac
++
++	log_test "DPLL pin state"
++}
++
+ ##############################################################################
+ 
+ cleanup()
+@@ -49,9 +178,9 @@ cleanup()
+ 	# A second signal must not abort the teardown half way.
+ 	trap '' INT TERM
+ 
+-	if [ -n "$CREATED_DEVICE" ]; then
+-		dpllsim_delete_device "$CREATED_DEVICE" ||
+-			log_info "cannot delete device $CREATED_DEVICE"
++	if [ -n "$DPLL_CREATED_DEVICE" ]; then
++		dpllsim_delete_device "$DPLL_CREATED_DEVICE" ||
++			log_info "cannot delete device $DPLL_CREATED_DEVICE"
+ 	fi
+ 	# The device whose creation a signal interrupted is recorded by the
+ 	# library alone, a double delete of a tracked one is harmless.
+@@ -68,7 +197,6 @@ dpll_lib_check_prereqs
+ dpll_lib_lock
+ dpll_lib_init
+ 
+-CREATED_DEVICE=""
+ # The module check may mount configfs, so the exit trap that unmounts it
+ # again has to be in place before. INT and TERM exit through it as well,
+ # so that a timeout imposed by the harness still removes the device.
+@@ -81,8 +209,8 @@ if [ -z "$DPLL_DEV_ID" ]; then
+ 		echo "SKIP: cannot create dpllsim device"
+ 		exit "$ksft_skip"
+ 	fi
+-	CREATED_DEVICE=$DPLLSIM_CREATED_NAME
+ 	DPLL_DEV_ID=$DPLLSIM_DEV_ID
++	DPLL_CREATED_DEVICE=$DPLLSIM_CREATED_NAME
+ 	DPLL_MODULE_NAME="dpllsim"
+ fi
+ 
+diff --git a/tools/testing/selftests/drivers/net/dpll/dpll_stress.sh b/tools/testing/selftests/drivers/net/dpll/dpll_stress.sh
+index 74bb6e8b3a8ed4..e5a1c4d88da580 100755
+--- a/tools/testing/selftests/drivers/net/dpll/dpll_stress.sh
++++ b/tools/testing/selftests/drivers/net/dpll/dpll_stress.sh
+@@ -58,15 +58,47 @@ cleanup()
+ 	dpll_lib_cleanup
+ }
+ 
+-# Create a device named after the given clock-id and deploy it. Sets
+-# DPLLSIM_CREATED_NAME.
++# Pin type and a frequency the simulator supports for it.
++STRESS_PIN_KINDS=(
++	"gnss 1"
++	"ext 10000000"
++	"ext 25000000"
++	"synce-eth-port 10000000"
++	"int-oscillator 25000000"
++	"mux 2048000"
++)
++
++# Create a device named after the given clock-id with the given pin count
++# and deploy it. Sets DPLLSIM_CREATED_NAME.
+ create_stress_device()
+ {
+ 	local clock_id=$1
++	local num_pins=$2
+ 	local name="st$clock_id"
++	local i type freq dir
++	local dirs=(input output)
+ 
+ 	dpllsim_create_device "$name" "$clock_id" || return 1
+ 
++	# Always have at least one plain input pin, then random ones
++	if ! dpllsim_add_pin "$name" ext0 ext 10000000 input; then
++		dpllsim_delete_device "$name"
++		return 1
++	fi
++	for i in $(seq 1 $((num_pins - 1))); do
++		read -r type freq <<< \
++			"${STRESS_PIN_KINDS[RANDOM % ${#STRESS_PIN_KINDS[@]}]}"
++		# A MUX pin is an input selector, the simulator rejects an
++		# output one
++		dir=${dirs[RANDOM % 2]}
++		[ "$type" = mux ] && dir=input
++		if ! dpllsim_add_pin "$name" "pin$i" "$type" "$freq" \
++				     "$dir"; then
++			dpllsim_delete_device "$name"
++			return 1
++		fi
++	done
++
+ 	if ! dpllsim_deploy "$name"; then
+ 		dpllsim_delete_device "$name"
+ 		return 1
+@@ -84,7 +116,7 @@ test_rapid_create_delete()
+ 	for i in $(seq 1 "$STRESS_ITERATIONS"); do
+ 		dpllsim_alloc_clock_id; clock_id=$DPLLSIM_CLOCK_ID
+ 
+-		if ! create_stress_device "$clock_id"; then
++		if ! create_stress_device "$clock_id" 5; then
+ 			check_err 1 "failed to create device (iteration $i)"
+ 			break
+ 		fi
+@@ -116,6 +148,14 @@ test_deploy_cycle()
+ 	fi
+ 	track_device "$name"
+ 
++	if ! dpllsim_add_pin "$name" gnss0 gnss 1 input ||
++	   ! dpllsim_add_pin "$name" ext0 ext 10000000 input ||
++	   ! dpllsim_add_pin "$name" out0 ext 10000000 output; then
++		check_err 1 "cannot add pins"
++		log_test "DPLL deploy/undeploy cycling"
++		return
++	fi
++
+ 	for i in $(seq 1 "$STRESS_ITERATIONS"); do
+ 		if ! dpllsim_deploy "$name"; then
+ 			check_err 1 "deploy failed (iteration $i)"
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/dpll_lib.sh b/tools/testing/selftests/drivers/net/lib/sh/dpll_lib.sh
+index fc81f149d1d0b7..ade1ac65f98b46 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/dpll_lib.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/dpll_lib.sh
+@@ -44,6 +44,10 @@ dpll_lib_check_prereqs()
+ 		echo "SKIP: dpll tool too old, missing 'device show'"
+ 		exit "$ksft_skip"
+ 	fi
++	if ! dpll pin help 2>&1 | grep -q "show"; then
++		echo "SKIP: dpll tool too old, missing 'pin show'"
++		exit "$ksft_skip"
++	fi
+ }
+ 
+ # The scripts that create dpllsim devices share the one dpllsim directory
+@@ -108,14 +112,39 @@ dpll_lib_init()
+ 	fi
+ }
+ 
++# Name of the dpllsim device a script created as the device under test,
++# set by the script next to DPLL_DEV_ID. Empty when the user provided
++# the device.
++DPLL_CREATED_DEVICE=""
++
++# The layout and the capabilities of the device a script created are
++# known, so a missing pin, attribute or capability on it can only mean a
++# failed query or broken tooling. Report such a condition as a failure
++# on the created device and as a skip on a device the user provided,
++# where it is a property of the hardware.
++# $1: test name, $2: reason
++dpll_log_test_skip_or_fail()
++{
++	local name=$1
++	local reason=$2
++
++	if [ -n "$DPLL_CREATED_DEVICE" ]; then
++		check_err 1 "$reason on the device created by the test"
++		log_test "$name"
 +	else
-+		return -EINVAL;
-+
-+	guard(mutex)(&pin->dev->lock);
-+	if (dpllsim_dev_frozen(pin->dev))
-+		return -EBUSY;
-+	pin->direction = direction;
-+	return count;
-+}
-+CONFIGFS_ATTR(dpllsim_pin_, direction);
-+
-+static ssize_t dpllsim_pin_frequency_show(struct config_item *item, char *page)
-+{
-+	struct dpllsim_pin *pin = to_dpllsim_pin(item);
-+
-+	guard(mutex)(&pin->dev->lock);
-+	return sysfs_emit(page, "%llu\n", pin->frequency);
++		log_test_skip "$name" "$reason"
++	fi
 +}
 +
-+static ssize_t dpllsim_pin_frequency_store(struct config_item *item,
-+					   const char *page, size_t count)
-+{
-+	struct dpllsim_pin *pin = to_dpllsim_pin(item);
-+	u64 val;
-+	int err;
-+
-+	err = kstrtou64(page, 10, &val);
-+	if (err)
-+		return err;
-+
-+	guard(mutex)(&pin->dev->lock);
-+	if (dpllsim_dev_frozen(pin->dev))
-+		return -EBUSY;
-+	pin->frequency = val;
-+	return count;
-+}
-+CONFIGFS_ATTR(dpllsim_pin_, frequency);
-+
-+static struct configfs_attribute *dpllsim_pin_attrs[] = {
-+	&dpllsim_pin_attr_type,
-+	&dpllsim_pin_attr_direction,
-+	&dpllsim_pin_attr_frequency,
-+	NULL,
-+};
-+
-+static void dpllsim_pin_release(struct config_item *item)
-+{
-+	struct dpllsim_pin *pin = to_dpllsim_pin(item);
-+
-+	kfree(pin);
-+}
-+
-+static const struct configfs_item_operations dpllsim_pin_item_ops = {
-+	.release	= dpllsim_pin_release,
-+};
-+
-+static const struct config_item_type dpllsim_pin_type = {
-+	.ct_item_ops	= &dpllsim_pin_item_ops,
-+	.ct_attrs	= dpllsim_pin_attrs,
-+	.ct_owner	= THIS_MODULE,
-+};
-+
-+static struct config_item *dpllsim_pins_make_item(struct config_group *group,
-+						  const char *name)
-+{
-+	struct dpllsim_dev *sim = container_of(group, struct dpllsim_dev,
-+					       pins_group);
-+	struct dpllsim_pin *pin;
-+
-+	lockdep_assert_held(&dpllsim_subsys.su_mutex);
-+
-+	if (dpllsim_dev_frozen(sim))
-+		return ERR_PTR(-EBUSY);
-+	if (list_count_nodes(&sim->pin_list) >= DPLLSIM_MAX_PINS)
-+		return ERR_PTR(-ENOSPC);
-+
-+	pin = kzalloc_obj(*pin);
-+	if (!pin)
-+		return ERR_PTR(-ENOMEM);
-+
-+	config_item_init_type_name(&pin->item, name, &dpllsim_pin_type);
-+	pin->dev = sim;
-+	pin->type = DPLL_PIN_TYPE_EXT;
-+	pin->direction = DPLL_PIN_DIRECTION_INPUT;
-+	list_add_tail(&pin->list, &sim->pin_list);
-+
-+	return &pin->item;
-+}
-+
-+/* Pin mkdir and rmdir run under the subsystem mutex like live transitions */
-+static void dpllsim_pins_drop_item(struct config_group *group,
-+				   struct config_item *item)
-+{
-+	list_del(&to_dpllsim_pin(item)->list);
-+	config_item_put(item);
-+}
-+
-+static const struct configfs_group_operations dpllsim_pins_group_ops = {
-+	.make_item	= dpllsim_pins_make_item,
-+	.drop_item	= dpllsim_pins_drop_item,
-+};
-+
-+static const struct config_item_type dpllsim_pins_type = {
-+	.ct_group_ops	= &dpllsim_pins_group_ops,
-+	.ct_owner	= THIS_MODULE,
-+};
-+
- /* The clock id is checked at live=1, so both share the subsystem mutex */
- static ssize_t dpllsim_dev_clock_id_show(struct config_item *item, char *page)
+ ##############################################################################
+ # Device queries
+ #
+ # "dpll device show id X -j" may print either a flat object or a dump-style
+ # {"device":[...]} wrapper depending on the iproute2 version, so normalize
+-# with (.device[0]? // .) before extracting fields. The tool is run first
+-# and jq only on what it printed, so that a failed query returns its
+-# status instead of the empty output a missing field produces too.
++# with (.device[0]? // .) before extracting fields, same for pins. The
++# device helpers run the tool first and jq only on what it printed, so
++# that a failed query returns its status instead of the empty output a
++# missing field produces too.
+ 
+ dpll_device_json()
  {
-@@ -82,9 +260,39 @@ static bool dpllsim_clock_id_in_use(struct dpllsim_dev *sim)
- 	return false;
+@@ -197,12 +226,110 @@ dpll_device_wait_gone_by_clock_id()
+ 	busywait "$BUSYWAIT_TIMEOUT" __dpll_device_absent_by_clock_id "$@"
  }
  
-+/* Pins of a live device cannot be removed */
-+static void dpllsim_dev_undepend_pins(struct dpllsim_dev *sim,
-+				      struct dpllsim_pin *last)
-+{
-+	struct dpllsim_pin *pin;
++##############################################################################
++# Pin queries
++#
++# Attributes of the pin itself are read by pin id alone. Attributes that
++# live in the parent-device nest (state, prio, ...) take the device id in
++# addition, to select the nest of the device under test. The helpers
++# that work on the full pin dump normalize its shape like the id-based
++# ones do, with (.pin? // [.]), so that a flat object would work too.
++# Like the device queries, every helper runs the tool first and jq only
++# on what it printed, and returns 1 when the tool failed.
 +
-+	list_for_each_entry(pin, &sim->pin_list, list) {
-+		if (pin == last)
-+			break;
-+		configfs_undepend_item_unlocked(&pin->item);
-+	}
++dpll_pin_json()
++{
++	local pin_id=$1
++	local out
++
++	out=$(dpll pin show id "$pin_id" -j 2>/dev/null) || return 1
++	jq '(.pin[0]? // .)' <<< "$out"
 +}
 +
-+static int dpllsim_dev_depend_pins(struct dpllsim_dev *sim)
++__dpll_pin_field()
 +{
-+	struct dpllsim_pin *pin;
-+	int err;
++	local pin_id=$1; shift
++	local out
 +
-+	list_for_each_entry(pin, &sim->pin_list, list) {
-+		err = configfs_depend_item_unlocked(&dpllsim_subsys,
-+						    &pin->item);
-+		if (err) {
-+			dpllsim_dev_undepend_pins(sim, pin);
-+			return err;
-+		}
-+	}
-+
-+	return 0;
++	out=$(dpll pin show id "$pin_id" -j 2>/dev/null) || return 1
++	jq -r "(.pin[0]? // .) | $1 // empty" <<< "$out"
 +}
 +
- /*
-- * The subsystem mutex excludes the live transitions of the other
-- * instances for the whole deploy sequence.
-+ * The subsystem mutex excludes pin mkdir and rmdir and the live
-+ * transitions of the other instances for the whole deploy sequence.
-  */
- static ssize_t dpllsim_dev_live_store(struct config_item *item,
- 				      const char *page, size_t count)
-@@ -104,6 +312,7 @@ static ssize_t dpllsim_dev_live_store(struct config_item *item,
- 
- 	if (!live) {
- 		dpllsim_dev_undeploy(sim);
-+		dpllsim_dev_undepend_pins(sim, NULL);
- 		return count;
- 	}
- 
-@@ -112,10 +321,16 @@ static ssize_t dpllsim_dev_live_store(struct config_item *item,
- 	if (dpllsim_clock_id_in_use(sim))
- 		return -EEXIST;
- 
--	err = dpllsim_dev_deploy(sim);
-+	err = dpllsim_dev_depend_pins(sim);
- 	if (err)
- 		return err;
- 
-+	err = dpllsim_dev_deploy(sim);
-+	if (err) {
-+		dpllsim_dev_undepend_pins(sim, NULL);
-+		return err;
-+	}
++# Fields living in the parent-device nest matching the given device
++__dpll_pin_dev_field()
++{
++	local dev_id=$1
++	local pin_id=$2; shift 2
++	local out
 +
- 	return count;
++	out=$(dpll pin show id "$pin_id" -j 2>/dev/null) || return 1
++	jq -r --argjson dev "$dev_id" \
++	   "(.pin[0]? // .) | .[\"parent-device\"][]? |
++	    select(.[\"parent-id\"] == \$dev) | $1 // empty" <<< "$out"
++}
++
++# Print ids of all pins belonging to the device, one per line: pins
++# registered on the device directly plus pins registered on those pins
++# (MUX children), followed recursively so that children of children are
++# included too. Older iproute2 lacks the "pin show device <id>" filter,
++# so filter the full dump with jq.
++dpll_pin_get_ids()
++{
++	local dev_id=$1
++	local out
++
++	out=$(dpll pin show -j 2>/dev/null) || return 1
++	jq -r --argjson dev "$dev_id" '
++		(.pin? // [.]) as $pins |
++		def children($ids):
++			[$pins[] | select(any(.["parent-pin"][]?;
++					     .["parent-id"] as $p |
++					     $ids | index($p))) | .id];
++		def closure($ids):
++			(($ids + children($ids)) | unique) as $n |
++			if ($n | length) == ($ids | length) then $ids
++			else closure($n) end;
++		closure([$pins[] |
++			 select(any(.["parent-device"][]?;
++				    .["parent-id"] == $dev)) | .id])
++		as $all |
++		$pins[] | select(.id as $i | $all | index($i)) | .id' \
++		<<< "$out"
++}
++
++# Print ids of all non-MUX pins of the device with the given direction
++# (input/output), one per line. Direction lives in the parent-device nest.
++dpll_pin_find_by_direction()
++{
++	local dev_id=$1
++	local dir=$2
++	local out
++
++	out=$(dpll pin show -j 2>/dev/null) || return 1
++	jq -r --argjson dev "$dev_id" --arg dir "$dir" \
++	   '(.pin? // [.])[] | select(.type != "mux") |
++	    select(.["parent-device"][]? |
++		   (.["parent-id"] == $dev and .direction == $dir)) |
++	    .id' <<< "$out"
++}
++
++dpll_pin_get_frequency()
++{
++	__dpll_pin_field "$1" '.frequency'
++}
++
++dpll_pin_get_state()
++{
++	__dpll_pin_dev_field "$1" "$2" '.state'
++}
++
+ ##############################################################################
+ # dpllsim configfs interface
+ #
+-# Each directory under $DPLLSIM_CFG is one simulated device. Writing 1 to
+-# <dev>/live registers the device with the DPLL core, writing 0
+-# unregisters it. The structure (clock_id) can only be changed while the
++# Each directory under $DPLLSIM_CFG is one simulated device; its pins are
++# directories under <dev>/pins/. Writing 1 to <dev>/live registers the
++# device and its pins with the DPLL core, writing 0 unregisters them. The
++# structure (pins, clock_id, pin attributes) can only be changed while the
+ # device is not live.
+ #
+ # dpllsim_available mounts configfs when nothing else did, which is the
+@@ -275,6 +402,28 @@ dpllsim_create_device()
+ 	fi
  }
- CONFIGFS_ATTR(dpllsim_dev_, live);
-@@ -154,11 +369,15 @@ static struct config_group *dpllsim_make_group(struct config_group *group,
- 		return ERR_PTR(-ENOMEM);
  
- 	mutex_init(&sim->lock);
-+	INIT_LIST_HEAD(&sim->pin_list);
- 	sim->mode = DPLL_MODE_AUTOMATIC;
- 	sim->lock_status = DPLL_LOCK_STATUS_UNLOCKED;
- 	sim->lock_status_error = DPLL_LOCK_STATUS_ERROR_NONE;
- 
- 	config_group_init_type_name(&sim->group, name, &dpllsim_dev_type);
-+	config_group_init_type_name(&sim->pins_group, "pins",
-+				    &dpllsim_pins_type);
-+	configfs_add_default_group(&sim->pins_group, &sim->group);
- 
- 	return &sim->group;
- }
-diff --git a/drivers/dpll/dpllsim/dpll.c b/drivers/dpll/dpllsim/dpll.c
-index ae2c8fcf238c68..a1d5921fb8d017 100644
---- a/drivers/dpll/dpllsim/dpll.c
-+++ b/drivers/dpll/dpllsim/dpll.c
-@@ -4,12 +4,39 @@
-  * Copyright (c) 2026 Red Hat, Inc.
-  */
- 
-+#include <linux/array_size.h>
- #include <linux/cleanup.h>
- #include <linux/dpll.h>
- #include <linux/module.h>
-+#include <linux/slab.h>
- 
- #include "dpllsim.h"
- 
-+static struct dpll_pin_frequency dpllsim_freq_1pps[] = {
-+	DPLL_PIN_FREQUENCY_RANGE(1, 1),
-+};
-+
-+static struct dpll_pin_frequency dpllsim_freq_synce[] = {
-+	DPLL_PIN_FREQUENCY_RANGE(1544000, 1544000),
-+	DPLL_PIN_FREQUENCY_RANGE(2048000, 2048000),
-+	DPLL_PIN_FREQUENCY_RANGE(10000000, 10000000),
-+	DPLL_PIN_FREQUENCY_RANGE(25000000, 25000000),
-+};
-+
-+static struct dpll_pin_frequency dpllsim_freq_ext[] = {
-+	DPLL_PIN_FREQUENCY_RANGE(1, 1),
-+	DPLL_PIN_FREQUENCY_RANGE(10000000, 10000000),
-+	DPLL_PIN_FREQUENCY_RANGE(19440000, 19440000),
-+	DPLL_PIN_FREQUENCY_RANGE(25000000, 25000000),
-+	DPLL_PIN_FREQUENCY_RANGE(77760000, 77760000),
-+	DPLL_PIN_FREQUENCY_RANGE(125000000, 125000000),
-+	DPLL_PIN_FREQUENCY_RANGE(156250000, 156250000),
-+};
-+
-+static struct dpll_pin_frequency dpllsim_freq_int_osc[] = {
-+	DPLL_PIN_FREQUENCY_RANGE(25000000, 25000000),
-+};
-+
- static int dpllsim_mode_get(const struct dpll_device *dpll, void *priv,
- 			    enum dpll_mode *mode,
- 			    struct netlink_ext_ack *extack)
-@@ -39,6 +66,229 @@ static const struct dpll_device_ops dpllsim_dpll_ops = {
- 	.lock_status_get = dpllsim_lock_status_get,
- };
- 
-+static int dpllsim_pin_frequency_get(const struct dpll_pin *pin,
-+				     void *pin_priv,
-+				     const struct dpll_device *dpll,
-+				     void *dpll_priv, u64 *frequency,
-+				     struct netlink_ext_ack *extack)
++# $1: device name, $2: pin name (becomes the board-label), $3: type (gnss,
++# int-oscillator, ext, synce-eth-port, mux), $4: frequency in Hz,
++# $5: direction (input/output)
++dpllsim_add_pin()
 +{
-+	struct dpllsim_pin *sim_pin = pin_priv;
++	local dev=$1
++	local pin=$2
++	local type=$3
++	local frequency=$4
++	local direction=$5
++	local pin_path="$DPLLSIM_CFG/$dev/pins/$pin"
 +
-+	guard(mutex)(&sim_pin->dev->lock);
-+	*frequency = sim_pin->frequency;
-+	return 0;
++	mkdir "$pin_path" 2>/dev/null || return 1
++
++	if ! echo "$type" 2>/dev/null > "$pin_path/type" ||
++	   ! echo "$frequency" 2>/dev/null > "$pin_path/frequency" ||
++	   ! echo "$direction" 2>/dev/null > "$pin_path/direction"; then
++		rmdir "$pin_path" 2>/dev/null
++		return 1
++	fi
 +}
 +
-+static int dpllsim_pin_direction_get(const struct dpll_pin *pin,
-+				     void *pin_priv,
-+				     const struct dpll_device *dpll,
-+				     void *dpll_priv,
-+				     enum dpll_pin_direction *direction,
-+				     struct netlink_ext_ack *extack)
-+{
-+	struct dpllsim_pin *sim_pin = pin_priv;
-+
-+	*direction = sim_pin->direction;
-+	return 0;
-+}
-+
-+static int dpllsim_pin_state_get(const struct dpll_pin *pin, void *pin_priv,
-+				 const struct dpll_device *dpll,
-+				 void *dpll_priv, enum dpll_pin_state *state,
-+				 struct netlink_ext_ack *extack)
-+{
-+	struct dpllsim_pin *sim_pin = pin_priv;
-+
-+	guard(mutex)(&sim_pin->dev->lock);
-+	*state = sim_pin->state;
-+	return 0;
-+}
-+
-+static const struct dpll_pin_ops dpllsim_input_pin_ops = {
-+	.frequency_get = dpllsim_pin_frequency_get,
-+	.direction_get = dpllsim_pin_direction_get,
-+	.state_on_dpll_get = dpllsim_pin_state_get,
-+};
-+
-+static const struct dpll_pin_ops dpllsim_output_pin_ops = {
-+	.frequency_get = dpllsim_pin_frequency_get,
-+	.direction_get = dpllsim_pin_direction_get,
-+	.state_on_dpll_get = dpllsim_pin_state_get,
-+};
-+
-+static const struct dpll_pin_ops *
-+dpllsim_pin_select_ops(const struct dpllsim_pin *pin)
-+{
-+	if (pin->direction == DPLL_PIN_DIRECTION_INPUT)
-+		return &dpllsim_input_pin_ops;
-+	return &dpllsim_output_pin_ops;
-+}
-+
-+static void dpllsim_pin_props(struct dpllsim_pin *pin,
-+			      struct dpll_pin_properties *prop)
-+{
-+	prop->type = pin->type;
-+	prop->board_label = config_item_name(&pin->item);
-+
-+	switch (pin->type) {
-+	case DPLL_PIN_TYPE_GNSS:
-+		prop->freq_supported = dpllsim_freq_1pps;
-+		prop->freq_supported_num = ARRAY_SIZE(dpllsim_freq_1pps);
-+		break;
-+	case DPLL_PIN_TYPE_INT_OSCILLATOR:
-+		prop->freq_supported = dpllsim_freq_int_osc;
-+		prop->freq_supported_num = ARRAY_SIZE(dpllsim_freq_int_osc);
-+		break;
-+	case DPLL_PIN_TYPE_MUX:
-+	case DPLL_PIN_TYPE_SYNCE_ETH_PORT:
-+		prop->freq_supported = dpllsim_freq_synce;
-+		prop->freq_supported_num = ARRAY_SIZE(dpllsim_freq_synce);
-+		break;
-+	default:
-+		prop->freq_supported = dpllsim_freq_ext;
-+		prop->freq_supported_num = ARRAY_SIZE(dpllsim_freq_ext);
-+		break;
-+	}
-+}
-+
-+static bool dpllsim_pin_frequency_valid(struct dpllsim_pin *pin)
-+{
-+	struct dpll_pin_properties prop = {};
-+	int i;
-+
-+	dpllsim_pin_props(pin, &prop);
-+	for (i = 0; i < prop.freq_supported_num; i++)
-+		if (pin->frequency >= prop.freq_supported[i].min &&
-+		    pin->frequency <= prop.freq_supported[i].max)
-+			return true;
-+
-+	return false;
-+}
-+
-+/* A MUX pin stands for an input selector, so it is an input itself */
-+static bool dpllsim_pin_direction_valid(const struct dpllsim_pin *pin)
-+{
-+	return pin->type != DPLL_PIN_TYPE_MUX ||
-+	       pin->direction == DPLL_PIN_DIRECTION_INPUT;
-+}
-+
-+static void dpllsim_pin_reset(struct dpllsim_pin *pin)
-+{
-+	pin->ops = dpllsim_pin_select_ops(pin);
-+	pin->state = DPLL_PIN_STATE_DISCONNECTED;
-+}
-+
-+/* Build sim->pins in registration order, the order the pins were created */
-+static int dpllsim_order_pins(struct dpllsim_dev *sim)
-+{
-+	struct dpllsim_pin *pin;
-+	int count = 0, i;
-+
-+	list_for_each_entry(pin, &sim->pin_list, list) {
-+		if (!dpllsim_pin_frequency_valid(pin) ||
-+		    !dpllsim_pin_direction_valid(pin))
-+			return -EINVAL;
-+		count++;
-+	}
-+
-+	sim->pins = kzalloc_objs(*sim->pins, count);
-+	if (!sim->pins)
-+		return -ENOMEM;
-+
-+	sim->num_pins = 0;
-+	list_for_each_entry(pin, &sim->pin_list, list) {
-+		pin->idx = sim->num_pins;
-+		sim->pins[sim->num_pins++] = pin;
-+	}
-+
-+	for (i = 0; i < sim->num_pins; i++)
-+		dpllsim_pin_reset(sim->pins[i]);
-+
-+	return 0;
-+}
-+
-+static void dpllsim_put_pins(struct dpllsim_dev *sim)
-+{
-+	int i;
-+
-+	for (i = sim->num_pins - 1; i >= 0; i--) {
-+		struct dpllsim_pin *pin = sim->pins[i];
-+
-+		if (pin->dpll_pin) {
-+			dpll_pin_put(pin->dpll_pin, &pin->tracker);
-+			pin->dpll_pin = NULL;
-+		}
-+	}
-+}
-+
-+static int dpllsim_get_pins(struct dpllsim_dev *sim)
-+{
-+	int i, err;
-+
-+	for (i = 0; i < sim->num_pins; i++) {
-+		struct dpllsim_pin *pin = sim->pins[i];
-+		struct dpll_pin_properties prop = {};
-+		struct dpll_pin *dpll_pin;
-+
-+		dpllsim_pin_props(pin, &prop);
-+		dpll_pin = dpll_pin_get(sim->clock_id, pin->idx, THIS_MODULE,
-+					&prop, &pin->tracker);
-+		if (IS_ERR(dpll_pin)) {
-+			err = PTR_ERR(dpll_pin);
-+			goto err_put_pins;
-+		}
-+		pin->dpll_pin = dpll_pin;
-+	}
-+
-+	return 0;
-+
-+err_put_pins:
-+	dpllsim_put_pins(sim);
-+	return err;
-+}
-+
-+static void dpllsim_unregister_pins(struct dpllsim_dev *sim)
-+{
-+	int i;
-+
-+	for (i = sim->num_pins - 1; i >= 0; i--) {
-+		struct dpllsim_pin *pin = sim->pins[i];
-+
-+		if (pin->registered)
-+			dpll_pin_unregister(sim->dpll, pin->dpll_pin, pin->ops,
-+					    pin);
-+		pin->registered = false;
-+	}
-+}
-+
-+static int dpllsim_register_pins(struct dpllsim_dev *sim)
-+{
-+	struct dpllsim_pin *pin;
-+	int i, err;
-+
-+	for (i = 0; i < sim->num_pins; i++) {
-+		pin = sim->pins[i];
-+
-+		err = dpll_pin_register(sim->dpll, pin->dpll_pin, pin->ops,
-+					pin);
-+		if (err)
-+			goto err_unregister;
-+		pin->registered = true;
-+	}
-+
-+	return 0;
-+
-+err_unregister:
-+	dpllsim_unregister_pins(sim);
-+	return err;
-+}
-+
-+/*
-+ * Registration order matters: the device must be registered before pins
-+ * so that pin registration events reach userspace with a valid device,
-+ * while pin handles must be obtained up front so that a failure leaves
-+ * nothing half-visible.
-+ */
- int dpllsim_dev_deploy(struct dpllsim_dev *sim)
+ dpllsim_deploy()
  {
- 	struct dpll_device *dpll;
-@@ -48,15 +298,27 @@ int dpllsim_dev_deploy(struct dpllsim_dev *sim)
- 	if (IS_ERR(dpll))
- 		return PTR_ERR(dpll);
- 
--	/* From here on the configuration is frozen */
-+	/* From here on the pin configuration is frozen */
- 	mutex_lock(&sim->lock);
- 	sim->dpll = dpll;
- 	mutex_unlock(&sim->lock);
- 
-+	err = dpllsim_order_pins(sim);
-+	if (err)
-+		goto err_put_dpll;
-+
-+	err = dpllsim_get_pins(sim);
-+	if (err)
-+		goto err_free_pins;
-+
- 	err = dpll_device_register(sim->dpll, DPLL_TYPE_PPS,
- 				   &dpllsim_dpll_ops, sim);
- 	if (err)
--		goto err_put_dpll;
-+		goto err_put_pins;
-+
-+	err = dpllsim_register_pins(sim);
-+	if (err)
-+		goto err_unregister_device;
- 
- 	mutex_lock(&sim->lock);
- 	sim->registered = true;
-@@ -64,6 +326,14 @@ int dpllsim_dev_deploy(struct dpllsim_dev *sim)
- 
- 	return 0;
- 
-+err_unregister_device:
-+	dpll_device_unregister(sim->dpll, &dpllsim_dpll_ops, sim);
-+err_put_pins:
-+	dpllsim_put_pins(sim);
-+err_free_pins:
-+	kfree(sim->pins);
-+	sim->pins = NULL;
-+	sim->num_pins = 0;
- err_put_dpll:
- 	dpll_device_put(sim->dpll, &sim->tracker);
- 	mutex_lock(&sim->lock);
-@@ -77,8 +347,14 @@ void dpllsim_dev_undeploy(struct dpllsim_dev *sim)
- 	scoped_guard(mutex, &sim->lock)
- 		sim->registered = false;
- 
-+	dpllsim_unregister_pins(sim);
- 	dpll_device_unregister(sim->dpll, &dpllsim_dpll_ops, sim);
-+	dpllsim_put_pins(sim);
- 	dpll_device_put(sim->dpll, &sim->tracker);
- 	scoped_guard(mutex, &sim->lock)
- 		sim->dpll = NULL;
-+
-+	kfree(sim->pins);
-+	sim->pins = NULL;
-+	sim->num_pins = 0;
+ 	echo 1 2>/dev/null > "$DPLLSIM_CFG/$1/live"
+@@ -285,17 +434,22 @@ dpllsim_undeploy()
+ 	echo 0 2>/dev/null > "$DPLLSIM_CFG/$1/live"
  }
-diff --git a/drivers/dpll/dpllsim/dpllsim.h b/drivers/dpll/dpllsim/dpllsim.h
-index 5667f8827c98c1..73b846b66f79c7 100644
---- a/drivers/dpll/dpllsim/dpllsim.h
-+++ b/drivers/dpll/dpllsim/dpllsim.h
-@@ -9,10 +9,39 @@
  
- #include <linux/configfs.h>
- #include <linux/dpll.h>
-+#include <linux/list.h>
- #include <linux/mutex.h>
+-# Take the device offline and remove it. Every step is attempted even
+-# when an earlier one failed, the return value is non-zero when any did.
+-# A device that does not exist counts as deleted.
++# Take the device offline and remove it together with all its pins.
++# Every step is attempted even when an earlier one failed, the return
++# value is non-zero when any did. A device that does not exist counts as
++# deleted.
+ dpllsim_delete_device()
+ {
+ 	local dev_path="$DPLLSIM_CFG/$1"
+-	local ret=0
++	local pin_path ret=0
  
-+#define DPLLSIM_MAX_PINS			128
-+
-+struct dpllsim_dev;
-+
-+struct dpllsim_pin {
-+	struct config_item item;
-+	struct list_head list;
-+	struct dpllsim_dev *dev;
-+
-+	/* Configuration, writable only until dpllsim_dev_frozen() */
-+	enum dpll_pin_type type;
-+	enum dpll_pin_direction direction;
-+	u64 frequency;
-+
-+	/* Resolved at live=1 */
-+	int idx;
-+	struct dpll_pin *dpll_pin;
-+	const struct dpll_pin_ops *ops;
-+	dpll_tracker tracker;
-+	bool registered;
-+
-+	/* Simulated state, guarded by dev->lock */
-+	enum dpll_pin_state state;
-+};
-+
- struct dpllsim_dev {
- 	struct config_group group;
-+	struct config_group pins_group;
-+	/* Pin items, guarded by the configfs subsystem mutex */
-+	struct list_head pin_list;
+ 	[ -d "$dev_path" ] || return 0
  
- 	/*
- 	 * Set from the start of a live transition until the device is
-@@ -27,6 +56,9 @@ struct dpllsim_dev {
- 	 * the live attribute reports, see dpllsim_dev_live().
- 	 */
- 	bool registered;
-+	/* Pins in registration order, valid while @dpll is set */
-+	struct dpllsim_pin **pins;
-+	int num_pins;
+ 	dpllsim_undeploy "$1" || ret=1
++	for pin_path in "$dev_path"/pins/*/; do
++		[ -d "$pin_path" ] || continue
++		rmdir "$pin_path" || ret=1
++	done
+ 	rmdir "$dev_path" || ret=1
  
- 	/* Guarded by the subsystem mutex */
- 	u64 clock_id;
+ 	return "$ret"
+@@ -309,8 +463,12 @@ dpllsim_alloc_clock_id()
+ 	DPLLSIM_CLOCK_ID=$((DPLLSIM_NEXT_CLOCK_ID++))
+ }
+ 
+-# Create a device, deploy it and resolve the netlink device id. Sets
+-# DPLLSIM_CREATED_NAME, DPLLSIM_CLOCK_ID and DPLLSIM_DEV_ID.
++# Create a device with the standard 3-pin layout, deploy it and resolve
++# the netlink device id. Sets DPLLSIM_CREATED_NAME, DPLLSIM_CLOCK_ID and
++# DPLLSIM_DEV_ID.
++#   gnss0: GNSS, 1 Hz, input
++#   ext0: EXT, 10 MHz, input
++#   out0: EXT, 10 MHz, output
+ # shellcheck disable=SC2120 # the argument is optional
+ dpllsim_setup_standard_device()
+ {
+@@ -321,6 +479,13 @@ dpllsim_setup_standard_device()
+ 	name="std$clock_id"
+ 	dpllsim_create_device "$name" "$clock_id" || return 1
+ 
++	if ! dpllsim_add_pin "$name" gnss0 gnss 1 input ||
++	   ! dpllsim_add_pin "$name" ext0 ext 10000000 input ||
++	   ! dpllsim_add_pin "$name" out0 ext 10000000 output; then
++		dpllsim_delete_device "$name"
++		return 1
++	fi
++
+ 	if ! dpllsim_deploy "$name"; then
+ 		dpllsim_delete_device "$name"
+ 		return 1
 -- 
 2.56.0
 
