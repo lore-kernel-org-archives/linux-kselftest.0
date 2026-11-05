@@ -1,104 +1,104 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793862889;
-	b=ibDrFzsRTUrXUMOZ2M6pDdBh2GX6jdAyteQbTSCXfCRTLsOgXkE2nOR9hkIwDSJ5KQhz
-	 N72fiHzWHXyPhPalI2QmuGglznenXHt8i22puWn71uSzZCL1spZriExz99VeR8UdxUw1B
-	 9hFkq4DRCL0Jzj9c9l0xKaBjgwNS0BrnmIwP1a0nTwXjojZZLUBXfaKetoRvCAN4LvmDV
-	 LspPD3Q0w3CKnvO2mRVZAaYG4SBz4LwlTR/TsGbRCinda44SkqgJDHXMIOILD/p+iggIF
-	 Hegu7inWx9sGo3FwYkD1bDSIvg2J+YIl0zS4s71SEk+5lscIQvjvX5VgkuC1TwptcNw==
+	t=1793862953;
+	b=J+w9klNSBnyT4l9jgY11fHojC01K01BywfDqv9JAIcS15pjcUmdBDj5AxdSydbZWoPMP
+	 aOqDJ2UaeDv8sB7SgGW99dbwhnRQz3WI9+4JkPncMAzyh3ZCRqXNrAFaKMusJQ8EoNPvF
+	 byqwXDUInjhHaHl8m42u+VMn+KQiZsIrNSeu/X6LQjFi/pY8fSDmhMz0wMFCIYHn7YVxt
+	 M12Z+ZV7ioGNx90De9b+08jSn9tUIPXTV5BDPh2wxD2X5W9h6yMwcLo3fYetPaeTbEHVr
+	 frUvD93NQ22KbxtQ8qzPfltZ4KHVBR8VzIdujSFlhBMDR4iAzon5WoWJVuy4ziJpmyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793862889;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793862953;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
 	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=cZkitsX+DewrI5AYsqUlHktt4nU0q8Qh/L8/eegqT0M=;
-	b=Geclz6gEEPIQwS0N0RrOExD74oCULmcw/WWtpq1bGlnOQSMBQ+3DiKQkZIlazIX1CHcR
-	 3lrbXoVt47TDThtXH+pG4vVJc/EeyDmK+C/Hp0uePtL/EYOsyFqoLTBYsUi4XlTuEWVM2
-	 p4TE6LqBOoAjH8UBEYe/vW2CZNZPa6dELlcn6Nd2p5saOMWveayvV6SqEdkTZlGgU+WbB
-	 pdBS/c6+gIvwma6nmyn7mfnRt6DwvcndhKBFphxXLp/cPTSxL23yUNMZvNLmJCnsWeAXt
-	 YgLKqvvxyf0YhkNnO81F5xZGK3y2rHdzOVLktZjf9ra6boRR1zbnfAClOrWnxH1ZAxw==
+	bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
+	b=DBM/yDlqhGZkhpQBtwEma/eFLaAlPWr78QcEtN3Jg2c3jT8N3QUl3ilduIdRuESQKJt6
+	 5wSQsJ+oL+LDXx67d+0/GuyJpwomoNuULIz7Qabk7XTC4Ra1TkCLOKbYD9IJqijTiKefe
+	 /8CSOHz5hW55TJF9N9cyENbXaadx1vOC7yUJJtY+0HjMPSI4fvUDA3um06VHJRpl1iNiW
+	 Fok5MUrwazTa1e19xJnsvXJfbxJ9N8B2oD64a+n7s6Scnvdal737n4I4JoWmaVXUFwFFp
+	 Ed453hFLY09jgUYWyOyOgLR2SVjpROZgbK9LS+ZwEzRTc9fHFqziCtskrJ6WSdBtWIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VAAtYU2R;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XumuW6oi;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UpCupRSt;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=a0Uz7Pmf;
 	arc=none smtp.remote-ip=170.10.129.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56343606A326
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 07:14:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56343606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254FA606A31B
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 07:15:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 254FA606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VAAtYU2R;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XumuW6oi
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UpCupRSt;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=a0Uz7Pmf
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793862887;
+	s=mimecast20190719; t=1793862952;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cZkitsX+DewrI5AYsqUlHktt4nU0q8Qh/L8/eegqT0M=;
-	b=VAAtYU2RgYH6pQzcks5y24LAZUYSV56hDWarr8l094ODjAnp8V1cuOURn6ywczROCOympa
-	WveQ1JOJ8guwZ7ZDZMWMN0FKJCg4DOZ5Os5d85+LeIDPq9/IND3IAx3owZjauqdLiyj1m1
-	bGpdYFf8bCLQ10xsqShdxjoYOqmGyMw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
+	b=UpCupRStGTKdg7B7YlB41BNskmU1W/sNMsDCUS2glDMpU3+XjxxGt8C031tAkmswQZaKbI
+	m+waC29h34dcg2+DdVUcPms7xie7OY4yL9GY3II7wfqfoY43Xw9uHoUHocIs2NVXhZTT4Q
+	9DWW0vUH777z0EJw5C1cLeH8X4ZlzyE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-623-tqs4srmpP2ex-WJvlY8Y7A-1; Thu, 05 Nov 2026 02:14:45 -0500
-X-MC-Unique: tqs4srmpP2ex-WJvlY8Y7A-1
-X-Mimecast-MFC-AGG-ID: tqs4srmpP2ex-WJvlY8Y7A_1793862885
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a214a5f8a1so18645795e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 23:14:45 -0800 (PST)
+ us-mta-655-3z758PMuODWMR-SrUD-gjg-1; Thu, 05 Nov 2026 02:15:50 -0500
+X-MC-Unique: 3z758PMuODWMR-SrUD-gjg-1
+X-Mimecast-MFC-AGG-ID: 3z758PMuODWMR-SrUD-gjg_1793862950
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4a009f82bedso13339845e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2026 23:15:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793862885; x=1794467685; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1793862949; x=1794467749; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=cZkitsX+DewrI5AYsqUlHktt4nU0q8Qh/L8/eegqT0M=;
-        b=XumuW6oiQTXigEVxC3UHVAwrKCYL1EEn7E32m48Ko4QP2cFWCAPjnLrKEFWy1rwBuB
-         ilv43E/3WOJglVkTMZ8l9v9liW8tY3OlgCmZ29DVHm03/IHV1oIW8hkl1b8HvgOpvWXh
-         KFaHEgQS+si5j4Uy596RWbLGsBamCmT8NpgDPcpow6JCsAqObeoeni1PM6AaOvJ/xc+D
-         kTVcKRqvjzgn0dK1GmLzCBxvkbB6/35y7Cd0SmiSHSVaIIv72nnu/acXSa8NrpciVV2E
-         6Rr/CtKL5wxX06v/SeZxJ+Wsmb79j55O3RF9Lm6iJ56+6kDGPokO95FXaR2OvXPGglU9
-         OBFw==
+        bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
+        b=a0Uz7Pmfw5rB2Dl//vtHdDkxjvTW9BtBgxiqYA8xC1Mgi3tG1/RsPaBEb68FlyG859
+         gxHaDGcvdB9pvZDgAkaoj3ZBcEyrH46ozJIzoqq2dsyC3W3jQlPOgElgmFTuns9WZXKn
+         9fUo2YADkCkV/Ec9R2CtGAxBGawhpsz3Qv1nG5LP/6FGfuvnRjNV46XGF5HnfPb1PYZJ
+         XeB5ifgjoSo2qkCiKFy0IeDLskO8rd/L+/ys7bfsVO7ygR9ML1r2v1pnRPwDqykVXY3Z
+         dRM1Q4ED+Gi4lxvJxpA5sXWXOfVMQzFUcj7MU/IKqppwo4MG8dHDzkHrgmFtFQHpMQVA
+         DGwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793862885; x=1794467685;
+        d=1e100.net; s=20260707; t=1793862949; x=1794467749;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cZkitsX+DewrI5AYsqUlHktt4nU0q8Qh/L8/eegqT0M=;
-        b=SwMbe7N9lwyCn5kBKY50n2zoiKgCAEI9nhrM1UGRBYkYuUz/CBkNjK5B+2pO6iK5eP
-         K7rsKBsKZ6nOZeHtY5dGnL9bMva+3iuQq3uKx3Asyd+vBYExgrf3hz3KviJyW9hAIOIv
-         HAD8ndI+MrVV5vOsMAI/cfKl2mkDbZw4bvP0XmWPYQhubYrLIqlOHHKLzyVRLg/Jucor
-         XTszOpFmz5PSh+tzLP7GgaTNpSicTFAisYs5MXrUntPoXBNU6bx2JZigO1mPWW8dOw3A
-         OaXC2PwmFHPdpu9APR0C7KNeD2Wu1aXgQLunbs3Z1fGSjTY0zi0l37yqa6RvyYDOHHIj
-         W0qA==
-X-Forwarded-Encrypted: i=1; AKwUvBznUC1Pd/pIsr9STU0rIt6CIVRQ7LGquMAKhXTrxeyxZB2jldfRK3uJXZxCfvwjVTdDUnc9kiYSbAfcLPa1AoQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9P8pHNEMQrKGpepD+YuOMBO6cuFtT+BM5QK3hPqX/fCbL0SBJk
-	GNeNmMrnsHF6OxBEUQiKT4L2Mu3Q+B145pzotJLlnio/I3YjenSRWggchmJPOI6CtzMAw1thcIm
-	OC0JNQzi7KahKTnmDGg55nO4hee/67Q7T9bHJ/L1/Ph+zfBDNFpfDV1a2oepSAIHUKUjsDw==
-X-Gm-Gg: AYBFou0r4wlgWLDUzX3VZr/ie9ahA0e4HTmULzpmw1u5G6bLkTiyCQHMOXjsqoTfjUR
-	v4w15QPEudW7QXQoEFy2DdE7+0qOQhs90E07GwLKvZWrV2HUh10QnaBbyZNNw6KsR5EreMKU8tR
-	b9/o8dG7CRh2+8e7NFrcxvo41RPOOMkY3aQ7FxySwRm/qKEJCxJ0kdFWdS4P3u2B5uEqnF/eoyA
-	MABdyQk0EvxzJ70DbbnVBzv2Oy3ByxB5R+4gbVVrus1b33WngdHnzMexIWwzgZitClYjtLpjtBx
-	N7aYb/McrIQyjjJWZ9xI4/bqs5n38kMQv4e0h9bS5zPCjNwsMv3SUF5mwDULP0qYyoJb9lE4T0u
-	yQ8Wr4jqhcpfR1L1LRoLhR2NFH+Qt3ogkWGc41ct7aoaPq9RNtu2l7pQ8/b8BTVi6/wsdqgG7Bs
-	2/yQ==
-X-Received: by 2002:a05:600c:a012:b0:4a3:59c9:a747 with SMTP id 5b1f17b1804b1-4ac1793fb0fmr400160365e9.17.1793862884829;
-        Wed, 04 Nov 2026 23:14:44 -0800 (PST)
-X-Received: by 2002:a05:600c:a012:b0:4a3:59c9:a747 with SMTP id 5b1f17b1804b1-4ac1793fb0fmr400159945e9.17.1793862884464;
-        Wed, 04 Nov 2026 23:14:44 -0800 (PST)
+        bh=OhNvDsZJpE4KS30+qaZ5e8X21eLLhO3Q56fZ1Ek8d2I=;
+        b=RI+pCqk/iiBGgqcZzT+hXQciU4nw9jIF8jlwIcb/AfhWMKNw3GY9CAS3Byuv+q4Apg
+         IWJqUhCOJx14xDJ9VyxmEPzErlNuXDZzOnwNrLEhhqlmPFs5f/iVGAsEIrCT0Y1lMVQy
+         A4syKyq6TeB3hVHhpIoLXVmk5ehASV5IMmAd+7mfvc4ZIGlJBoOxynxnSepELxUugHrN
+         4wFbL80gC2nU/MRg4V9YplPTm9m/cOoT029SUoCIZM/7w/FB5Ojmn/jz1INjOcicuG7n
+         13qH2x32aAqr5WYqK/e6c2L218ur+5JeCd+0h//8tTP+0MiDatYV0DVyVBQwB8HXlj9g
+         +n0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBysUV/+m/bMFucbskJsEenmzSxSX1OlXtEr59mrE2kGaaeqwz2eBisTQLc3dzjvYsRd8qqhDgwoBgnfkOt3+zk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8PkoHGp0DPpJbVg/XoYFNpSh7vV4QUnzjgFhwpnVCjBfJCcotw
+	8vyFc5T267W33mU/kh+H40vKIg0KOSpEzhJaIhpaO2xXzLMqRg7VMhPRdcb6F8kD3HUg8nfcHJ0
+	2WaOmKPaxVO1Y5vtCz5YhSPsS66eX5HxaB0bSKV1AmCloXtdQ6K7KRHdp62QIs4Q1SExsNQ==
+X-Gm-Gg: AYBFou0X66YUH877oSemcEjItUq7Gra2zYyeI1s0gk7MVNXqDHTnSnsiNzccFkt65JS
+	sisgTY3qJGiERwd4FWA4hppPaSes7csS+UVp36HL7wO9T/7pZQE5cBODjsiyOuYvxg0Xg74Kl1/
+	3IL2LXhec4VlLEWSvBTfpYxJ7iN2Jr6Yyyfhsy8U6M5tndn9PGUqMhDFdxffhCcZLjUbjK7FZtA
+	lm3Q5/1cWFWkMp6+v90ohIIWZXUl17o47PGjNljvOga+d1ZSEpV4yZaO9bYbI4IUuRahqmLAbyo
+	U3aPhZ2NfZE1QIbe9BaO4UsLI30p46kA46wDmHnUbBHH8nQJ34F8wDhtC2OSZ896ZyPERNXc08n
+	T9CQHD6RPoAYPeoDZI49tDIECXcGBLiTw7LiSs6S6NvHPBcAlINvrRHd7foJd1inI6a6kkiEQ89
+	ERCA==
+X-Received: by 2002:a05:600c:1f8d:b0:4a2:c9b:9b98 with SMTP id 5b1f17b1804b1-4ac177539f6mr393038765e9.17.1793862949730;
+        Wed, 04 Nov 2026 23:15:49 -0800 (PST)
+X-Received: by 2002:a05:600c:1f8d:b0:4a2:c9b:9b98 with SMTP id 5b1f17b1804b1-4ac177539f6mr393038455e9.17.1793862949360;
+        Wed, 04 Nov 2026 23:15:49 -0800 (PST)
 Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b572bba207sm39679165e9.10.2026.11.04.23.14.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56f5e65c8sm42015295e9.12.2026.11.04.23.15.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 23:14:43 -0800 (PST)
-Date: Thu, 5 Nov 2026 08:14:41 +0100
+        Wed, 04 Nov 2026 23:15:48 -0800 (PST)
+Date: Thu, 5 Nov 2026 08:15:46 +0100
 From: Juri Lelli <juri.lelli@redhat.com>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -119,11 +119,11 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Clark Williams <clrkwllms@kernel.org>, cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v2 01/21] sched: Reject SCHED_FLAG_KEEP_PARAMS before
- reserving deadline bandwidth
-Message-ID: <auws4cpKvQnmNM4f@jlelli-thinkpadt14gen4.remote.csb>
+Subject: Re: [PATCH v2 02/21] sched: Refuse SCHED_FLAG_KEEP_PARAMS that would
+ change the policy
+Message-ID: <auwtIqa4H4Fqjq6V@jlelli-thinkpadt14gen4.remote.csb>
 References: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
- <20261104211207.1392343-2-mathieu.desnoyers@efficios.com>
+ <20261104211207.1392343-3-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -135,24 +135,41 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261104211207.1392343-2-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20261104211207.1392343-3-mathieu.desnoyers@efficios.com>
 
 Hello,
 
 On 04/11/26 16:11, Mathieu Desnoyers wrote:
-> __sched_setscheduler() returns -EINVAL for a SCHED_FLAG_KEEP_PARAMS
-> request that would change scheduling class, after sched_dl_overflow()
-> has reserved the bandwidth of the request, and nothing gives it back.
-> Switching a SCHED_OTHER task to SCHED_DEADLINE that way fails and leaks
-> the runtime that sched_setattr() filled in from the task's slice, up to
-> 100ms with a custom one, into the root domain's total_bw. Repeated, it
-> makes the root domain refuse every deadline task, and refuse to offline
-> its last CPU.
+> SCHED_FLAG_KEEP_PARAMS keeps the parameters of a task: it skips
+> __setscheduler_params(), which is what sets p->policy. A request that
+> asks for another policy is then carried out by half, and succeeds:
+> SCHED_OTHER to SCHED_BATCH with SCHED_FLAG_KEEP_PARAMS returns 0 and
+> leaves the task where it was.
 > 
-> Reserve the bandwidth after that check, last of the checks. A refused
-> request also leaves sched_reset_on_fork as it was again.
+> For SCHED_DEADLINE it costs bandwidth. A task that priority inheritance
+> boosted into the deadline class is of that class already, so
+> prev_class == next_class and the class check of
+> commit 8a70415351ba ("sched: Reject SCHED_FLAG_KEEP_PARAMS when it would
+> change scheduling class") lets the request through: sched_dl_overflow()
+> admits it and adds
+> its bandwidth, which the skipped __setscheduler_params() never gives to
+> the task. It keeps SCHED_NORMAL and a dl_bw of 0, so nothing releases
+> that bandwidth, and total_bw of the root domain holds it for good.
 > 
-> Fixes: 8a70415351ba ("sched: Reject SCHED_FLAG_KEEP_PARAMS when it would change scheduling class")
+> Refuse a policy change as well, where the class change was refused
+> alone.
+> 
+> A SCHED_OTHER owner of a PTHREAD_PRIO_INHERIT mutex with a slice of
+> 40ms, boosted by a deadline waiter blocked on it, leaves 0.4 of a CPU
+> behind at every such call: total_bw 419424 -> 838854 and there to stay,
+> in 8-CPU VMs of v7.4-rc1 with the four deadline fixes of sched/urgent,
+> and of this series up to here. With this change the call is refused and
+> total_bw is as it was. The selftest added later in this series has the
+> case, params_keep_boosted.
+> 
+> Found by the Sashiko AI review of the first posting of this series.
+> 
+> Fixes: a509a7cd7974 ("sched/uclamp: Extend sched_setattr() to support utilization clamping")
 > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
 
