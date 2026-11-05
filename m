@@ -1,57 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793884121;
-	b=5kmHIRFfIj+e5fbDeNU6FkRewDE/Zv+8lhK3LXDjupSrQvOV4dZWPY3KTFUG32UCJgA7
-	 XxiJi+iYmteVnR4YNd9YUnxTWlZZkEzbtSbRaMjPbNXc3lUpC4f5DcGmBzMCBkTS6ElB4
-	 F4lL0XTq6CZuFdt0Aje4Fwr+rghVI8PUPzYSuf/ZI6WkiNMicspHSPqq2RU+e1Z6hiQgt
-	 FB1VSsnty61EB3pwkoWRmuMvN9YD6algOe5A+4rMopQCTjQzH4kbU0/f6umylGPZE8Mrz
-	 ldCXLGEiU7Uj/2T49fVctCGwHscTB3N7lyaFI/T1A2COF48aKPOKlLB/9cq6wjG1P9Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793884121;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=IUFbDY3pG95AdUR3ZaQpG0DNzZe45Lp61GslC9VgxTQ=;
-	b=qstC7X4OwgblFWWyqqsE2s7AppfVpy15S7UVAti9fSu4JQkPMrUUV0Yz5cLhfqJDnfTE
-	 k0iGfPnDj9wproOh35pfdv7mAurHhJ4ePnUil3W1OQNwT77mQDVIc3KewqdyV8NJ6kVxC
-	 Q7wHOuIr1GCb96yDhRsDNGAYX13pNm3yPnho8n6dz39qDhz+KPrK40DvyKwlZlgARkZ2X
-	 b5oTxAPhjwl/Sekc/1hSlN+leRGfNX8TT4nfsSyyW+m4SMQryAx2r4x7dYhBCb9dq+70b
-	 z/jMNtN/63k9nzTcNXpe/Pq4RimcQay/ml9GIgNuB6YpCBHswGUi4CI/+1uGfYA2ffw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z3imFrBR;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.70.101
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793884522;
+	b=dupf9tzYHIBhiVl9TCu7DADDDpNZWHQWUzTzTX+DRXSnBhhA+88MU+b62ER+cQldPGFT
+	 qjx5l6bhD24ii5JlJTnwXzDZQJ7qz8CCkO8pOxLWnLkkt5/c1ToPkQUIWZtHL4/0mrtks
+	 OLaMxHwwzJYVw4RUcL90zL8P/lNF4/rI9lX2AvC3WnQZqenBJIIF5lALP6Jaj+0UDvpSq
+	 cPOqVhSg0ASb/wtQZ1DKAvvETTdEHhDZQdfa/tqqcSta8RB+T70Mt5io+E4dznzPfplt8
+	 cYHOwVjJa1tA3dHtxOda21xmyxquyhMsuFEQNrf77mvbmSmzRwgrItChhS52HxW4Jww==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793884522;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=H7SG9w/r52br65U3O9apzJvPdoY0E0NdQOv4AkgFZZM=;
+	b=AqPVOy9VfhVkB+UC2Um+mEMp4Q+Y6Oo7Kxr+fhapAl9YEec0GJ+1NmLlo3oTJL5OLRnj
+	 u8CHcjjg6iAJpcsahIlmJxTbtRZ8auBXL4jeOISWySA1WaOXPiQ2ZKfSQqPtqJLyh1uC/
+	 GaLxVQxKJTIFCvRBF8nv2jPrAJa/TwpK1vJdZtIZd0Id9Wq3aaR1PTqc4qwrHMQx6Dfmh
+	 WpvqEK2JMyaG6xWHTP4kWpzEeM/4t6p9hpF8S4DC83VJRFistlCcd03eNe1s4wWUuGrQ5
+	 pi28pdESlMF2EmP8QmkjZRUKoHXMku2uEPPXkPuUfxZ40CeeRbJlPhiButbbENA+bKQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=virtuozzo.com;
+	spf=pass smtp.mailfrom=virtuozzo.com;
+	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b="fXmxL/RA";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.70.101
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11021101.outbound.protection.outlook.com [52.101.70.101])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6FF606A338;
-	Thu,  5 Nov 2026 13:08:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0444D606A326;
+	Thu,  5 Nov 2026 13:15:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0444D606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z3imFrBR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD87E1F000C1;
-	Thu,  5 Nov 2026 13:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793884121;
-	bh=IUFbDY3pG95AdUR3ZaQpG0DNzZe45Lp61GslC9VgxTQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Z3imFrBRIo9t9Yz/Ltm7Ff8+nHDcN7NYtOjGSxZGcWd897KE8A/Sq4V/CqIvLv871
-	 H/suoek4i9utHo9fCiOZgX5jaG/9bkM/yZutRwIroOlp2K38ZKl+oGX6EH9lJE5rb2
-	 qyaG6ck7YoNqmzqlqBJJ2EB3YtU1lXrPG6aLcUGtmaBTvTkgZuM4WZuNdNu7GNXoCq
-	 lIsMQMLpqj7ajlDCYv9m00MsHmhetq3I0LQH4pQ/fE27QcvxpOU9zJ8JKezGyYKO9t
-	 793Cmut5YeoKWxEEZNvI/v6a9jEhC/D5rTokAWBTazmFQuTVVjvv0idbbMPJXJwj1j
-	 pUOqQiynQ7iIA==
-Date: Thu, 5 Nov 2026 15:08:33 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Chen Pei <cp0613@linux.alibaba.com>
-Cc: pjw@kernel.org, palmer@dabbelt.com, alex@ghiti.fr,
-	pasha.tatashin@soleen.com, pratyush@kernel.org, graf@amazon.com,
-	shuah@kernel.org, guoren@kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	kexec@lists.infradead.org
-Subject: Re: [PATCH v2 4/5] selftests: kho: Add riscv support
-Message-ID: <aux_0Ye5Ny2GjPB5@kernel.org>
-References: <20261103080926.2079-1-cp0613@linux.alibaba.com>
- <20261103080926.2079-5-cp0613@linux.alibaba.com>
+	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=selector2 header.b=fXmxL/RA
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=H5s+IByKAPn+P/4/PsoRwp30BB8netdwamvr/Hh3lAdvD0C4Uo0N7aTYDej4HNTyLXTbmSe0qBl2cHtyKY/SsWmPodN9W5Gv3SCCSDv3L4H1cgCxCelIfPOaQFmV7YG9IJoEAmYtF30tBc9QvUaakVIfrNrJ1hDynh+Y5ekde4iNmCv2frXr0gC/fuBTyWSA7qEifF7vgxUkSkMOVaorUqmvAEjnoLib7dhzVZAZWz+O8WztpvvcU9/15jMaJpskzcM4q1ACBzb5GnEwfhlruVpLq6aAFtZZ3VoNqK2hJBGnbOZbkbduHpVsbJFtOg32gIlQ9f8UwHz/299nihA9MA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H7SG9w/r52br65U3O9apzJvPdoY0E0NdQOv4AkgFZZM=;
+ b=EEco/6LMfdCJlPbKBmKzoaiq8CIUSO1YuzMAup37QXzcWwP3Hhon5kmVHfqXMI9eCR100gTk0viJoaCYc3uoTY/EnjJWYFKT0q8CSH1gJo71O3kvXlVqAdMt/cfEwrE2Woz0HD9V6cW+9cCxfNC/6zea/7qf8I2uiboBxqlf6EAYW2kd3sZvo3nocHnV3GcDFgKICLtUpO2yQYrmRPXSv7cR3ZVvF/7DwFAD3R/602KHcNyvpamgkbW8dKt8ovyjhUDutJDdgYsc+uCGGdVXQnW8hxzfkNg/JWPxh1GgnTcfGs7rgO2L2RAYSmaC+bJ3NJFaKiFzCoU2UompGRnDEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H7SG9w/r52br65U3O9apzJvPdoY0E0NdQOv4AkgFZZM=;
+ b=fXmxL/RAOBMlPJWaD4PvFNDOwwGbMApLmwWdC5XdTtbHpSdIKSPLoqVJOElL5jjTryUx1EPR/9hMIA5+ZMBWVnzUfkFo391MlEr75jY1s81Ht6TV8tKUcM2bCe5flU71hZj2gTd85yDDrEkacTkyT2ISqTZVAYdI0gWeGxRT+4KhDlYJty6o4sX01nSlOA778lbqXKWa2LJKGnSvB2AxArQN/I5L4syk54C8Zf6mwfoaoa3QqZOoUTxP9GrYq38VjSlHX+Xh0mq9XpnrkxxqfsGY452ERhMoENPdzqMOJu/SJO6QMVgAyOhRrIUxeaFPDEmELB4kRwk+QQbNJpibMA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com (2603:10a6:20b:5ff::9)
+ by PAVPR08MB8893.eurprd08.prod.outlook.com (2603:10a6:102:321::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.569.8; Thu, 5 Nov 2026
+ 13:15:16 +0000
+Received: from AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8]) by AS2PR08MB9075.eurprd08.prod.outlook.com
+ ([fe80::3f57:9ced:7a37:1bd8%4]) with mapi id 15.21.0592.007; Thu, 5 Nov 2026
+ 13:15:16 +0000
+Message-ID: <7a7ae5ba-a57d-4024-b642-7b9798aa6311@virtuozzo.com>
+Date: Thu, 5 Nov 2026 14:15:14 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/4] selftests/mm: test fork of PMD-mapped shmem THPs
+To: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Peter Xu <peterx@redhat.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+ =?UTF-8?Q?Lo=C3=AFc_Molinari?= <loic.molinari@collabora.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+ linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20261104-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v5-0-c56d0d26f970@virtuozzo.com>
+ <20261104-b4-prep-vstor-149847-copy_huge_pmd-recheck-special-pmd-v5-4-c56d0d26f970@virtuozzo.com>
+ <ad6e93c7-203e-470f-804b-fbf7ac9890f2@gmail.com>
+Content-Language: en-US, ru, sr
+From: Konstantin Khorenko <khorenko@virtuozzo.com>
+In-Reply-To: <ad6e93c7-203e-470f-804b-fbf7ac9890f2@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM9P193CA0015.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::20) To AS2PR08MB9075.eurprd08.prod.outlook.com
+ (2603:10a6:20b:5ff::9)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -61,43 +113,86 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261103080926.2079-5-cp0613@linux.alibaba.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS2PR08MB9075:EE_|PAVPR08MB8893:EE_
+X-MS-Office365-Filtering-Correlation-Id: beebff2b-16fc-4dae-a729-08df3b3ed56f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|1800799024|366016|376014|7416014|921020|10067099003|4143699003|56012099006|261009223027099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	WFP/hKWZhOvZRNMRpWsRHDzOR7Wsx8nRBgzBIOLmlT0C9VThG6TT+PRxCTZpCQhlzC1AbmPivQ8TwgvRnoLYl9AZZvX7M6U45SMna8Tu76i7z5lNZP35FBLKkV1VKto/8HDF7Iowfrz7y6k/dJhGUFj18QJCjyPo2QAutP6SbSYMuxm5bFQcS4yl7TvbLB3UToXjcePYbRN6Rwck0UBcUMr8yGVjG5vhNcUH8UzCKLzlTP6LmeTdJNf1OrPsI53/zDVAGTe6SZ+T2lrNUK3ouuIsNjHy6EpTPguNFyJSpkdlir7szYcp6ajFRCI9yVbeWb3Z1URpY3IclbDyunkT8hLd8regD5+tfGuuPYq52DZJX9ouZ0fMbzxYjFNR9ODe4U6xOc9jlOgXu+0Bk2dpTvGEQfi/2wbeeTqD+oWAAQHupZSRkl6OUOInaCjqvKQ5iI4BF9Tme7jSyhCvJ5yEAOzPnqNJjGf1K72e8OcbNTkZJwN/3qah3QRjG5s2ElA1zZLW5gxcT/zyHz/7XEfy2RLpGYKjJyP+eJ0OrwsFPjBkHzLb/dHOhp6Mc0jQM9O5RkhT5z+kCsmDLtZaowFNpu1ncfkbD7RBUWJE33rONqVXdqpx7tBbjpcqg3yLtori9qJYcvrZUgb9xWj7QxlbPlcqpYc2ujrwY1TOT69gyNx6XCANAndRg2aqBgAEsOj5ZT8whTOimFi2rYp0ZuTH4g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9075.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(376014)(7416014)(921020)(10067099003)(4143699003)(56012099006)(261009223027099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?V29SaE1oOXlaMjMxY3ZTbVFPQ2xhT3dTSjJnSnZCOG55K0NKTlJBdmpTSEla?=
+ =?utf-8?B?S2g5TG0vRmdBbEhMMDhpZEh0VWUwQXVGQ0ZnWWFlOFM2YnZqOUxPa0xPc3Zj?=
+ =?utf-8?B?aC9mRmF6UWxwMDBOblpWU1hZbTIyVHFrU240TVVPZmNTR1EvaUozajl3b1My?=
+ =?utf-8?B?UjhsS3JvejZSREFxTWtXWmFQZW1NSC9hbWZyVFA0a3lFUFdSUlhqM1IzR3hT?=
+ =?utf-8?B?NnZNdXBnTWNhand1czNRc0dDOURBdTZnS1hLZks5TXdsc1pDbGROcGwwaXJO?=
+ =?utf-8?B?ZVRuNExXYjFLOUpkWW1ISXFBUEU3M25Wb3BGc0hXWHJrUEd0TDVNZnZJbitP?=
+ =?utf-8?B?bS9zeExsblVzMlZxWXNoYnhGMENMMjhoQlI4SkwrcUNQMXhjMFpCdHIrUlo4?=
+ =?utf-8?B?WGNjM0FZbU81enNCYWI3RFNhbUo0USs2U05kbDFQbGNuTXFZenV4L0tXTU5U?=
+ =?utf-8?B?ekJmZHRCL05JUzRrdzVUM2Q5dU5RS0p0SGRRZ1BEQTJ2dlA5cStxZk1Bdnh0?=
+ =?utf-8?B?d2RhMU4rdG5ZV2hMT3BlK3YrSjUzbzVKcTkrMkxMc2tPeDdLZ0FMYzRlcFNl?=
+ =?utf-8?B?NW8wTVRaaEJLMEZtZncwRVQwazdtVmtyeHRHUzZwcWQwN3dnb2xoanYxbHR3?=
+ =?utf-8?B?Qk1hWk1iZ1h1QURGbWhIQ0ovdmJHemVGQnpVdkdybUR5S21GRTg3eWt6cDUw?=
+ =?utf-8?B?aDdCVSszWDU2bjV5NWNGclhkYldOYytBWVRSc0xTVXdlQW94YjRTVFBkdnFT?=
+ =?utf-8?B?ZHlyQzdzTGF5cE54c0hRTVhPWkFZMHhLRHZqakllUXFhczROYzFKRGNsdURV?=
+ =?utf-8?B?bGp4R0I3UDArcW9NWEFOVXcxNmZmbzd3QzkzSDIrMzRQeC9xMTY5ODVPdnI0?=
+ =?utf-8?B?S29pM2xLeTcrdmRrQTB1UG91Y1QzK1U2WUxPM1VUWXpNMCtsb2w5TTIyV3hG?=
+ =?utf-8?B?MGRpTmlsd0pwdEkyeHBUNnJabjlwQmNkV2Z1WlA5T1RZTDJHbVZqci9CcW9r?=
+ =?utf-8?B?V2NwNTIvSFRUdWNkMXVPMk9RQUNVeXY3blAvSklieFpKUzBmTjBIVmVycGpu?=
+ =?utf-8?B?eWt3SGtJKzZpbk4weFJYeEpsNmhpeUs3Vm9pMXVvQW9hZm1UN3lqcmJtOS9l?=
+ =?utf-8?B?NnVTaHBCb0NYVWtxUlFyODh5Z2lvMVRBbEdOaFBQbC9KNXF2V2pkRXBCTXhh?=
+ =?utf-8?B?RGp1cWpiV0xBUXN4RHhIcmFtQjlQd2FMR0kvMGtWMXVYRGJIT3hsT1VKRllF?=
+ =?utf-8?B?YWp3RDd5NUloRmx2REh3V1p2V3kvbjFtR2c0NXdlQklZdUxzUVRFVzFnSWNy?=
+ =?utf-8?B?M091c2hWdFErR1dpTXZFbjhQTXkxdmtCMVBvT2lHcWUxZHF6bHpKYjN1UVAy?=
+ =?utf-8?B?NTREdzBsMkRWWlNMK0t1VldabmhNclN0eVVLTHFGd3pCYnRPOXQzaVI4bEl5?=
+ =?utf-8?B?SE52MXQ3ZnFDWXRTbHl3UW5ONHpIaFVYYkpSRHRLOTIwUUhGdmpOa3BwVUhD?=
+ =?utf-8?B?WXFOVVBOTis1dlVvWXZuNFBkV3k0eGFVeFViTHlPRW9XZE1UdFZhRFlSSk4w?=
+ =?utf-8?B?OVpJNWNTSURiWnZNTmNpaW13RlhnVHJLR0JPVktmUEJLMXhMaHRJT0hOakNE?=
+ =?utf-8?B?WlgzM3dFcW5Ec0lSemo3WmpQNVJUeE9qbG1Za0YvdDJLL0E1R0gwckJKTXFT?=
+ =?utf-8?B?R1BaUW5JYTFCZXlnK0tmZHc5TTJiZ3V1RkFjQ0prZjlLRSt4RGRNRWpycUgv?=
+ =?utf-8?B?RkJ6NXlOeWpYL21DMTBTdlVvQ1lQTnIxSG1pQVhNM09HZnUvYU1BQ1RDYlN3?=
+ =?utf-8?B?cDlKZzRENXM5N0NoY1dzcjZMbHp4dnFTVXlralplRFR2U1pXL0xoWjlDdlk3?=
+ =?utf-8?B?VUdYYTB3aFpIM3Q4NjFITWUvQVgrYUpLK3F1bHRiazlpZ2dmdTNHejJKamVn?=
+ =?utf-8?B?M2xzQU9EenczTU1YcmZUQjVwZERzYzVTS1ovQjlCRnhZWk10cGsvTysxc0sr?=
+ =?utf-8?B?L1d0MVpwRkhhRFREWjhlT2I5Q0RGWEpoTS8wZVk4RTVUZzJhem1DWHA5aFo0?=
+ =?utf-8?B?TndKMWpXVVRLcDVvcDFHcDQrRlp2ZFJBQmtNVE85c3BGem5TQWtCOFo3SC9C?=
+ =?utf-8?B?RzdpdjU4OXFRNkxmMXNhUVJwOStZcGs1SWRhb0l5Nk1qeEYvNWczRmYzajNZ?=
+ =?utf-8?B?V25CTkFKNXdGcDFNcnpSZGhlNHJUeHNQSUZMeFoxMVo5VDFDNUhLbmhOUlAz?=
+ =?utf-8?B?RGdRYWxwdk94TzMzUWlnaEVnVHM3Nm02MjdJeTV3WlJLK25raFZzUmV1QTJH?=
+ =?utf-8?B?OC90NElibzBJTHRESjJZLzNrTDhNdTE1MkRUbkhGOUg0b2xmaWZpUT09?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: beebff2b-16fc-4dae-a729-08df3b3ed56f
+X-MS-Exchange-CrossTenant-AuthSource: AS2PR08MB9075.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2026 13:15:16.7384
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GY/GM1gca1yOw4lXEgMb+tx39FFTQ/7adYjNhbw14C/Ecm9Ds2ApZAeJDLmF5cJOfrhSXFVTv+zFyfx6bfkdkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB8893
 
-Hi Chen,
+On 11/5/26 00:15, Jose A. Perez de Azpillaga wrote:
+> On 11/4/26 9:40 PM, Konstantin Khorenko wrote:
+>> +	pmdsize = read_pmd_pagesize();
+> 
+> read_pmd_pagesize() is pmd_psize() in mm-new since 5d123bb07b18
+> ("kselftest: mm: rename read_pmd_pagesize() to pmd_psize()"), so this
+> won't build there, will it?
 
-On Tue, Nov 03, 2026 at 04:09:25PM +0800, Chen Pei wrote:
-> Teach the KHO vmtest runner about riscv64: map the target to ARCH
-> riscv and describe the QEMU virt machine, the kernel image and its
-> console -- a 16550A port probed from the device tree on virt, hence
-> the SERIAL_8250{,_CONSOLE} and SERIAL_OF_PLATFORM symbols.  Also
-> select CONFIG_SPARSEMEM_MANUAL: the runner requires
-> CONFIG_DEFERRED_STRUCT_PAGE_INIT, which depends on SPARSEMEM, while
-> riscv falls back to FLATMEM (no ARCH_SPARSEMEM_DEFAULT), so without
-> it the test would just be skipped.
+Right, my fault: I based all the versions on Linus' tree, which still
+has read_pmd_pagesize(). On mm-new this patch needs a one-line
+s/read_pmd_pagesize/pmd_psize/, patches 1-3 apply as they are.
 
-We can read the patch, no need to list everything here.
-The changelog should focus on "why" rather than "how".
- 
-> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-> ---
-> 
-> Test: qemu-system-riscv64 (virt, -cpu max, TCG), in-tree runner
-> "tools/testing/selftests/kho/vmtest.sh -t riscv64" (boots the Image
-> and kexec'es into the same Image).
-> 
->   KHO: found kexec handover data.
->   KHO: exec from: 7.4.0-rc1-next-20261102-00005-gfca49e548231 (count 1)
->   test_kho: KHO restore succeeded
->   ok 1 KHO succeeded
->   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
->  tools/testing/selftests/kho/riscv.conf | 9 +++++++++
->  tools/testing/selftests/kho/vmtest.sh  | 3 ++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/kho/riscv.conf
+If a new version is needed, I'll base it on mm-new.
+
+Thanks for the review!
 
 -- 
-Sincerely yours,
-Mike.
+Cheers,
+ Konstantin.
