@@ -1,109 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793908668;
-	b=o7G8mZAUUjV0xWXMwwEeeuFGcKQIo6pJ7qDbtjudnK/jV/uRr/YEQ6QvPRMiFpuiLSAe
-	 mgWjCxig0KldN9611LUKAHl2ELDqZPHtTk1b8XCzNx/dDpoBMQylI8CsrccrDy/w7uEiI
-	 6mbFyWEwaqeP+WVDmGP/NboNrMXMKFWNz7iEopdkhVdcmRmrsrMt5KVqyEObHFZbWLZbc
-	 NBXf1iZv3xibA0WrlRPNPSieAJcUyYrfBz5wVRMgKB7eDvH4n3hWTQMknt6ykw9y8qhpY
-	 zXM84tE8IlbpTA9XG/sth1ZQwP5mNFr93hkViKPwsY4T2L50CiqiDBSbJdhlYPPPQGA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793908668;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=5M1pVxSHRgoftylSS6+7dytfFVlWyjkEZ+vlzow5Ync=;
-	b=mNCDy3E2QA6Cs0QYmykmwl3J0CaXWDqKi5wKady54SvqmWhnCD4kKUtfdO3tVcwfTmbe
-	 OvD9Umc1xrlhj+utMRf16z06Uy+TR3rd1NPSCrCeTy5O3uLsm+xBahELctWiZQ2XUmURY
-	 bcCf28d4ZsdpyEFFKEkQqgJMjg13wgnWnjhDzi5COpwm5yRkQip+MQWBoKtP5d/ju7S+m
-	 ON4paMqfFUuXv6Ai7RuAtRIPCeamVrTtJVPMZ2nUpSUAaXr1pKs8G1UqiaWHSDtDbapid
-	 cIhGkywB6GDWvm5EG7zFuMuN9XPl0KE/CXWmhoghGtSRqCYMLOVjKIsElsq4GrqreWw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=FvZGj512;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.83
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793908779;
+	b=u1lwjFyBQb/ZtMosfElxrrh3DFt+YsWfmF0uoeRks+cQYn1vApGyHH+r0qGwamElP/gZ
+	 A3WMx6apKcU4EZHg8iFvwAJNlZoCxWYtDzAZ33EWMJ6BK1VyHwhzNGp50Edah1krIHmmf
+	 eBi0A/lBy9eamlxiEe94pquFozAr6eiBVbUvlzbpnsvJTaKfITZFYwZiFMiuXjVKvMUsx
+	 hUrwpnxgUFD6Skfvf+YNZ4Sl6q/eajI2kPwiyuVqfpPH0cm94c7MMKch41cACua2/sc9m
+	 6uHaYoJKq27XvelXNpdeuWGISwoNrLG8GgXM3upFUs+dVHsFMtooT88uMXRqwlrezIA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793908779;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:From:To:Cc:References:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=/cFdn1mj72YHkfK5RI6WBaxcWTfO7XpK3ID50uaKFGY=;
+	b=TbBSjGmrkCcawzriFJe/1i9Jf4Dp+z+SzvYhaeMCBTncBWnSuJ6+IaTO3sgh1sJGov4B
+	 3eXFG12muZ/zPuTwSsRg/l4Vop5jMlEkS4IX6xdFHapZcNkrSL1ndeXyRXnfg7YGtxvdx
+	 Gdu9vtLTc02/BcqnKNq2nM78FaxNjkKCD5FvK+AF1NqvVt8glQsOm6RVdwOS/G4yBgFyh
+	 lLNkYy1MufvvL9QqSfwYHl3a7zom8GNdotp1Z3tWoNyBClCxqo4CAvCOeF/rmKVXFI/OW
+	 w6u2xY0JQg7T52IQyRC2G0wOMIlRSILQJqGqIdQxBZnhn7Sf9qFAMi97kn3REFWHIZw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=Z5lHfTFJ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.83
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020083.outbound.protection.outlook.com [52.101.189.83])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4F2606B9EA
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 19:57:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C4F2606B9EA
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750EC606A32C;
+	Thu,  5 Nov 2026 19:59:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 750EC606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=FvZGj512
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b0afe09854so784089a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 11:57:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793908667; x=1794513467; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5M1pVxSHRgoftylSS6+7dytfFVlWyjkEZ+vlzow5Ync=;
-        b=FvZGj5121a1NtgHB6chRnlzy241vze8erM8dB9mPTaymnUBZxnIKHYbDizc+tsNdMC
-         9xXANnArwrAe4jM1L+kNwZVsWwHaxd8DC+kdYh2zfwJxDx5a3S+NZg+dpjKFQC+je0eu
-         8cpyXra2NEA7/SJPFX44jlSYBGwL8JIEBGjujrV92PVab4E4xGy+h/VASb+A1piazcv0
-         1GpbgW1c3t4cnKg5ljJ9HbCKe+cSfQ69Q9QSygs0vmFzk4hJuLt6M5NQJkreV4AZvog3
-         3UOCCtMHKTzbO1wNZaNos6J/Z9k8iE1aMgZz9sd1DYfmk6DbXLVI0GFisrrpGoC5KxZS
-         4mlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793908667; x=1794513467;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5M1pVxSHRgoftylSS6+7dytfFVlWyjkEZ+vlzow5Ync=;
-        b=osh3dPYGGXnfakV8MOmFCyd8BP4CpHHkz1FWJiCzTlSN68QFbl47IdJ7kTgvKxZ64M
-         /DKN1LWyOER8TUJo1f0X4iXXeVEmokdE3oJ/lK53r5lDfR6gIwmFvGngFgtrsyxoUvR9
-         YJPMG2X++ILp1SaLB8/9D9HFgPjUlHA8sk7/NVJpmzdf2fRx04SWCnV17ubeG+ax/pmM
-         7J+BscODfYW3rJTOniGiWHHoU6vh3+O0vOpPzXtsbj3A6GBHbpJv63hQ4XNFAA2+NobP
-         0yprmYuzBeecCrUJBa/GkdVEmHkHGtkfZZYnE65cx4yEzd8X5Z3Fio+Je4+Cg3wI90zC
-         Uj4w==
-X-Forwarded-Encrypted: i=1; AKwUvBz0jd2kEsXZjF79m466p1wKzimeLtBpJkvYgnlcZ027ndE4beDkapNhD1DRAHyaKSlhkuDzZrweH1tB112csZ8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/mVFUrpM+kKqb3L1a4ckn0rpNrt3EaqrQ/vTofBn7HQTfq2aOm
-	Wr8FKSOnbqvI1tXvevfZwI8v3X5OuWvvOceXArW7yXit7p2oe1l3noaEDyPqlF0cVg==
-X-Gm-Gg: AYBFou2s7rjbCm057PbUTJOeDMxEZ7f1wNPcS8imM3bmfgvr4E0J4IrJWY3ivk1cewW
-	an2v/t+KThEAV+ThDt9vcURk6pAdAbrMNpLrhrpBy+ss1ki2urXYeSMH2/3rqqVSjojJQ+vef8s
-	E44BvSJ8VTLmJD0FbR7kjJVQvBGfoVuYHX4NCRkbAjdEsX5sLv2PykiWAbTdOVdP2CPC9VjaPxr
-	/80ZYGk+n7uk8UlydavQfLPHyHgqWRpxAkI50mJWLgWO1g70+E8n0jW8ZZyv+ErOJ9LU4dYNPou
-	7KmY6djJ59EWGKpfwTmggsIdTwzzTv0mf/Tgj3K99eLax/ZL7sqirrBnSdHsFziZeDmezMo6K2U
-	kHSyIoJyg5l5bg5X4fazBwTnHPt6dca1ynUfEOctFUUDuAlpf6tJa2dfNw4bTuxV2NW4WcJBVnv
-	RVnqxCR1wwydZoxNTZnuf/lnYAB8yvR3YVvvZJ6rfZCmzU/4oDbHGB917wPVkgQ+NLNOh9zRm6C
-	r5vIIaY8HR5rzJXywLU7Qg1gr4HyqBquuAB6Lga8oiyAR/oOgBgjmS+HYo5j27OlTZXLpd26DIj
-	m1Ikw4YWoAPurIj5cvSDqjzDE51wTr6G2deyDZMG+lpFlEnCLaSL/y3kQCiU7cCn
-X-Received: by 2002:a17:90b:3c04:b0:3b0:968f:fdee with SMTP id 98e67ed59e1d1-3b0db7190d8mr58712a91.55.1793908665982;
-        Thu, 05 Nov 2026 11:57:45 -0800 (PST)
-Received: from google.com (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b326add7sm4962363a91.8.2026.11.05.11.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 11:57:43 -0800 (PST)
-Date: Thu, 5 Nov 2026 19:57:41 +0000
-From: David Matlack <dmatlack@google.com>
-To: Vipin Sharma <vipinsh@google.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
-	ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com,
-	ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com,
-	chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net,
-	graf@amazon.com, jacob.pan@linux.microsoft.com, jgg@nvidia.com,
-	jgg@ziepe.ca, jrhilke@google.com, julianr@linux.ibm.com,
-	kees@kernel.org, kevin.tian@intel.com, leon@kernel.org,
-	leonro@nvidia.com, lukas@wunner.de, mattev@meta.com,
-	michal.winiarski@intel.com, parav@nvidia.com,
-	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org,
-	rananta@google.com, rdunlap@infradead.org, rientjes@google.com,
-	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com,
-	schnelle@linux.ibm.com, skhan@linuxfoundation.org,
-	skhawaja@google.com, vivek.kasireddy@intel.com, witu@nvidia.com,
-	yanjun.zhu@linux.dev, yi.l.liu@intel.com
-Subject: Re: [PATCH v6 07/27] vfio/pci: Preserve vfio-pci device files across
- Live Update
-Message-ID: <auzftbPFO_6XBYVw@google.com>
-References: <20261102153656.1431701-1-vipinsh@google.com>
- <20261102153656.1431701-8-vipinsh@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=Z5lHfTFJ
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZUL0nwZ1I5YrW1gRNl9xnfeSRNo5c/mziUC29JKb3lCkRExKPu06HBSSlIoeNgdawSdF7dQ7MuppdzzVWRTf1V4WVNvwN3iCEyl89LrJdbAN3pdeCD5v5pX+gpx8zznCdznismtv4+oFyzQkpRWvFrPQKL19PooF/PQT+Mp+oBMVMGo32j2XQc20EZZECWk3JXmcl4YacHnxYcAZ7t6Nn3eCKC0O20lJ4x7tSGO9NFgqubJF7QIOaftjpd/Ng4i0C+F91TFteMyRWbu1gzEz2XGBr7ZKgTMTRze4d8qLjULVbBpQ3kFTi+YtE0azqGNunR7xsq/kgbVz8iawL07s2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/cFdn1mj72YHkfK5RI6WBaxcWTfO7XpK3ID50uaKFGY=;
+ b=F+NxrN+A4JhHwHCUiYA1ExZfMwZcaFjwCJiIGVcFnnDb/qbv7lRinDLvVkr18ocI4ww5ERzv0Aq3t39/TaY4xC1f0SdCdDXsGCiC/Od3TbI8kgjq25h7sk1Job5wOM1UHDCFK7Q4fV26+VB73LidEs9YGT0VpB1PjaUDA49vCnaUqQOAiWdNFeIk59D8IDqA1eZ6z1+yMvE6JGNxXVEWlscGK4lUdK8Eg4BoL35tsrl97JZ1FqieMDEQDfOcLFG43/ITTA2EyGowoHdW++LCCB6nQ1c7aXjVdOPwT+ruov34Q/HfXcKDreWaLp0bO68lSaHMhHJ2J/OBgbHHdJ/fbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/cFdn1mj72YHkfK5RI6WBaxcWTfO7XpK3ID50uaKFGY=;
+ b=Z5lHfTFJxxOrPg8au8O4eFUpSsX4H1L6kOwbfzOYWKwhu6HqZRiV2S1DknyFDQ8PuQLP3rK/wt4Xd92or5Z+/PMosIdXlA8UvGAI07pjcrr9vH4+T9a53Qp9RfCTnGQO1OMuPflYpzaZEG573f1dtF4/VdmfDmdVHSIZw5SsHAiiO496U0gvcyJlHewAIdZUTV66uLDNMZBbYjZJiFe0SfEqSW7swiS2l5iYabwDV6u2co8JCFtAVv07+uy5udvtTaDKA9w4Q77xreTm9vPG4e5pW2YrTWDnr4cFm5orbR6kJujWfN4D9cYmAaqTLrIW6jsMu4fPxuBgaFybGavrZw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YQ1PR01MB11773.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:be::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.10; Thu, 5 Nov
+ 2026 19:59:35 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0592.009; Thu, 5 Nov 2026
+ 19:59:35 +0000
+Message-ID: <9dc16f18-a387-4d76-8a20-e2e61b848781@efficios.com>
+Date: Thu, 5 Nov 2026 14:59:33 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 01/24] sched: Fix cpuset_mutex double unlock in
+ __sched_setscheduler()
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Kayra Cizmeci <kayracizmeci@gmail.com>
+Cc: juri.lelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
+ vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
+ luca.abeni@santannapisa.it, mathieu.poirier@linaro.org, longman@redhat.com,
+ ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com,
+ shuah@kernel.org, bigeasy@linutronix.de, clrkwllms@kernel.org,
+ parri.andrea@gmail.com, m.szyprowski@samsung.com, weihengqiuu@gmail.com,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, Sashiko <sashiko-bot@kernel.org>,
+ stable@vger.kernel.org
+References: <20261105193359.1450487-1-mathieu.desnoyers@efficios.com>
+ <20261105193359.1450487-2-mathieu.desnoyers@efficios.com>
+ <auzdzi_ZIqmYFV-Z@scheduler.schedules>
+ <9307bef8-80bb-4b27-b7e8-9a63fe98326a@efficios.com>
+Content-Language: en-US
+In-Reply-To: <9307bef8-80bb-4b27-b7e8-9a63fe98326a@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0260.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:68::34) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,202 +110,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261102153656.1431701-8-vipinsh@google.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YQ1PR01MB11773:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1b28820-c0ac-420a-6024-08df3b7750cf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|366016|376014|7416014|1800799024|261022105027099003|261028144727099003|261021121427099003|261026121527099003|261009223027099003|261026140227099003|261102123227099003|4143699003|10067099003|56012099006|22082099003|18002099003|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	UhwCKx5ZhC2dNbHq91/MAKsfO0IGyQqAsJpmwCjdxNb+gGCux8WbjFRPVOh2cd6BcOLyBgIIhwBpfSnC8CB9eH0U7sndDsCpgB7dfVRd+WU6+CnHMf6VatEa8/iVD60E1US35P4c/+3PhKnVKZaCEhGBzoKa2uX/KiWqpRv6BuwWat75WOxsdGp6syPnnvPmhjuikAwQiV17wh2SWckQGncRP7180gbeQH4kbNs/FDyQCpdJN//GpmMFRUyovvRZR7LY+os7yysJUpDLYRQIFLXJpz2wADr4OFSASVE+nXi2eMD2PR6Z5XJZmBlUwdOPb6JS46pplX2gun3XDh7cmyoB0nYZNZ6WOraibgZaZ1l06ghtVch7k/PaQ58YGul5OOfFB5YoSnGovxQgSZDg53v8vfYr+L0/cLdf//+sz4cAT2fIjTBNHJIfQbcktmAfPUknFtRN3jlp/vKbxHRFVsTF2d7UzctZkeaMSVF0yPKxrJdG7xzTypWWkLIg/N1EJy6OIHS++m3LiiexNR/d8zzhyQt4Db2+0gfHg5ASP27lKlunsg0ovQ7jgQ0jdZpXOepJuDb7witPkHSRLzoeNLwJbJ944CNpu78T9inCNWw=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(7416014)(1800799024)(261022105027099003)(261028144727099003)(261021121427099003)(261026121527099003)(261009223027099003)(261026140227099003)(261102123227099003)(4143699003)(10067099003)(56012099006)(22082099003)(18002099003)(6133799003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZEdPUVZ2SGNaYlMvbW9scUVjWmZmaUd6aWRmbUJYRjNkWm0ranJnWE9weU1P?=
+ =?utf-8?B?cmhwYXowTTRQSWJhcXNLaU9UVTVxc2l3S1RBUTNUL1JqeGQ0Zy9RbjJ3dFk5?=
+ =?utf-8?B?VGdncDlWdmFQLzJNMHpmYnNaVjNzMmN4WjZRdkhVcUxrSXNXUm11THFuWnRT?=
+ =?utf-8?B?azljUkhRREY5c3lsOUsrRlhwMW9QUkthR2EyaGxxa3JVd1Z6dXV3WTBJNkpt?=
+ =?utf-8?B?eHhWVjdGenhmKy8xRlBlbm5KZTJWNjRFUGNMd3ZuQUwreTFHV3lJQW5sSzRL?=
+ =?utf-8?B?MURPZWhUZWxqQmxBTDNVWGRrWEhFSGtsaEpPV1R6QzVLT1pLelg4WnpPc00r?=
+ =?utf-8?B?NzF6T0R3MGdobXk1cisrNy9RZDBibVhXMFg0SWpZVFRSakhpd3AyNmwzdVRZ?=
+ =?utf-8?B?ODE0ZVZVZlJ1SzNCckFZc2FvWDJVTHBxWFc5Ly9ORWJvdVY4Q2k2M1lNMHd0?=
+ =?utf-8?B?TU9SU3pGLzJyU3AxRldQZWxjblJITHR3a1V1cm4xdFo2bUppTU5oUGltYVFI?=
+ =?utf-8?B?TFhvcko3SnMybHZmVGpIemlqamlEZzc2OGRmU3FKYmhrMXFXU1B2c2ZPeVNM?=
+ =?utf-8?B?VlpSTGFWTHpXODJJZk5ZRHhURFRWaXlYeFRiMUNTWm5ES1dkZnRHdGNMcU1X?=
+ =?utf-8?B?TXd5d3plcUt0UTAya3Qyb3B6bG1iZU9WRktXZllvcWg0Uy9YWk9jU2dGbGFp?=
+ =?utf-8?B?Mml2YlJEellYaDdVTW1BVCtGQlZuMG8wdmNtSUlUSmxOanVjLzJkZnVtRjRI?=
+ =?utf-8?B?MUkxZ3UzcmRscEN3R29tOStjcjM3b1lKQXNUdnd4TnNwQVlRQStwSFQ1aFRk?=
+ =?utf-8?B?VEsxMkhWWjk4YmRGK0hPOCtuRjM1VXMzd0JrcVl3b20vUGpEQnc3M0NHQXlS?=
+ =?utf-8?B?SlltQXZ4Tm9rc0lYQTVjOEZyY3BHRWYxWXpTanJXZkZ4Nm95K2ovSm4zQTFi?=
+ =?utf-8?B?bUF2Nyt3TmFxS3pxWkIrcWd0d3pXdm1JaW95TUZjM2lDZ2ZlUXhxMVQ0TEhq?=
+ =?utf-8?B?V05YSUtUVjBBaUp4bEpCQnlkU0NuVmJJUXFoOEFxeTI4Z1F5MCtvQVpWbXZ5?=
+ =?utf-8?B?L3YwTUdKUnU4bmNoZlJ3WDlPdkxJQ0F5bS93bXdVbmRqcW5PQ1dpK2NzTUlJ?=
+ =?utf-8?B?Yzk5Kys2VDFrblBkMTFqY0Q4ZGNienZjMGFRZXArMDM3cHlqY0hxaTZpV01k?=
+ =?utf-8?B?dVQra1BYVGo2bkVydjVwbVFSQS9Fci9VZjhOdWhLRzNDZ2RWdllCTjdxUnFP?=
+ =?utf-8?B?Ni9MU1MzclBldmthVys4UEhtNHhOUkFmc3NKSDhkd0JvdlcyVThUYzVhNE5h?=
+ =?utf-8?B?KzFNL0w3c083d2ZEeTVzMHlJWmZMWXBxUWdMY0d2T3orSXlSUGM1Y2I5TGVS?=
+ =?utf-8?B?aFdkWDgvdnAwdUhLZm1BN3Zab0NTZTQ0eUVxbFcwa0xUWkdjNjNiRXJWV3lY?=
+ =?utf-8?B?cDRMdEhyL1U1K1BPR2EvNFAvSzh2TnMvUzBHNHJ1RUprbUNDbWk3MnRrZDlJ?=
+ =?utf-8?B?V0E3RzJLOWlTZDY2QnNVOUJvNmw1NFRHMGFtNjNRbHZKSVdISmtGR3ZyRnQy?=
+ =?utf-8?B?MFlSUDlJYXJ2dlRhWXcybjhQVGtSNVhCZjM4UXhTSVFabmZTYjRSRW9SeW1W?=
+ =?utf-8?B?cis4M0UyVEkreW0zejNUOU44bFJjelNRT093WlhjZmtjMDFBT1NSZ1VtVHpz?=
+ =?utf-8?B?OUpmQUduSjJPYlF3ejIzR2dRRWJ5eFBzWVRQWTRSV3JKdWlKY2MrQTVUZ3NX?=
+ =?utf-8?B?cHIwNkU3NXczVkw0T1pEWjNjWkdObXhhbnIxNFFhN2FJT3RBdExPVCttWldw?=
+ =?utf-8?B?RHpWVS9EYXl3OHh0dERNcWNLbUVPeDE0T1FFblJCcVVySGR5Z0JqUjhlcnl5?=
+ =?utf-8?B?aGUyYVpUaHJjekVueGNiUFEyZCs2MUpsUnhKVDcyOVV3QU1LZzBVdG5WUDkw?=
+ =?utf-8?B?bXpFV1NSVVFLcnJTc0dUZFV2TUFmWWJqUXJaRC9UNXJJclVPKzJpRVMybjg0?=
+ =?utf-8?B?b3lGUTIwS054S1lRRXV4MXo3MXhpNDRzZ1JlOGhLYWxIZHFTWUV4UFpzWUw1?=
+ =?utf-8?B?cDZjVm85ME5ZOG5XY0ZuSWlsOWlXYjhxNjlPRXNZdExVSjZtRUlqd0F6L0o1?=
+ =?utf-8?B?RXhoL1hlQlRndEJna3IyL0lqTWkxd2tyZmNRNGxoZXdRc3hERWhxMEdFci9i?=
+ =?utf-8?B?Wi8wSW1QVFhDbTNFRmpaZVBZTHNBYmNCSWFLSkVoa3ovMGx3V3ltOEdCS3RM?=
+ =?utf-8?B?V09OK2hsalMvalJDTVA5a3JTbVVGaVc2UTlJTzUwdStwdkhtQTdqcjRQa1U4?=
+ =?utf-8?B?TG9wVjEyUVZjdS85Rkh5bHMyMDAwc2hSSkRwSmxXM0dRaWlzbWZHM3VCZWU2?=
+ =?utf-8?Q?QuWGTtVZ4dGYSvDiAJqEsQCOLvB9GN23eF/NO?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1b28820-c0ac-420a-6024-08df3b7750cf
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2026 19:59:35.3473
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3EFAnl2iKHNP/QrZ+D3D3dB4aB9s5VNR/yEhO1jNEsxMP0QrnbsOjF6QRS3lfqK4Iz2G9HonhJryjwunaIu0CGmUUK/CujGXmQ54BY1c4Gs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQ1PR01MB11773
 
-On 2026-11-02 07:36 AM, Vipin Sharma wrote:
-> + * DMA Memory Ordering Contract
-> + * ============================
-> + *
-> + * Because a preserved noiommu device continues performing DMA using physical
-> + * addresses across kexec, any memory buffer targeted by device DMA must remain
-> + * at the same physical address in both kernels and must not be freed to the
-> + * page allocator while the device can still access it:
-> + *
-> + *  * When using a LUO-preserved ``memfd``, userspace **must** preserve the
-> + *    ``memfd`` in the **same** LUO session as the VFIO device and **before**
-> + *    preserving the VFIO device. LUO finishes files within a session in reverse
-> + *    preservation order (LIFO), guaranteeing that if the device is not taken
-> + *    over in the new kernel, VFIO's ``finish()`` callback stops bus mastering
-> + *    and resets the device before the ``memfd``'s ``finish()`` callback releases
-> + *    its folios. Cross-session ordering is the responsibility of userspace.
-> + *
-> + *  * After retrieving a preserved ``memfd`` in the new kernel, its folios are
-> + *    ordinary unpinned shmem page cache until pinned again; userspace must keep
-> + *    the ``memfd`` alive and re-pin/map it before finishing the session, and
-> + *    must not rely on a ``memfd`` whose ``LIVEUPDATE_SESSION_RETRIEVE_FD`` call
-> + *    failed (failed ``memfd`` retrieval frees its folios immediately).
+On 2026-11-05 14:54, Mathieu Desnoyers wrote:
+> On 2026-11-05 14:51, Kayra Cizmeci wrote:
+>> On Thu, Nov 05, 2026 at 02:33:36PM -0500, Mathieu Desnoyers wrote:
+>>> From: Andrea Parri <parri.andrea@gmail.com>
+>>
+>>> Fixes: 111cd11bbc54 ("sched/cpuset: Bring back cpuset_mutex")
+>>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>>> Link: https://sashiko.dev/#/patchset/20261016062629.2102883-1- 
+>>> sh_def%40163.com
+>>> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+>>> Cc: stable@vger.kernel.org
+>>> Reviewed-by: Waiman Long <longman@redhat.com>
+>>> Reviewed-by: Kayra Cizmeci <kayracizmeci@gmail.com>
+>>> Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+>>
+>> You gotta add your own SoB, no?
+> I'm just relaying the patch and did not touch it, I'm really unsure.
+> In any case it can be picked up by the maintainers through their
+> preferred route.
+> 
+> What's the process for this scenario ?
+> 
+After review of the DCO documentation, I indeed should have added
+my SoB in this case:
 
-Most of this section documents LUO and memfd behavior (finish ordering
-within and across sessions, what happens to memfd folios after
-retrieval), which belongs in the LUO and memfd documentation rather than
-here. The VFIO documentation should just state what VFIO requires of
-userspace and what happens if userspace violates it. Something like:
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-  DMA Memory
-  ==========
+Thanks for the heads up!
 
-  A preserved device keeps performing DMA across kexec to the physical
-  addresses it was programmed with before kexec. VFIO does not know
-  which memory the device accesses and does not preserve it. Userspace
-  must ensure that all memory the device can access stays allocated at
-  the same physical address in both kernels until the device is stopped,
-  either by userspace after taking it over or by VFIO when the session
-  is finished. If userspace violates this, the device can corrupt memory
-  that has been freed and reused by either kernel. VFIO cannot detect
-  this.
+Mathieu
 
-VFIO doesn't stop the device when the session is finished until
-PATCH 11, so either add this section there or drop that clause here and
-add it in PATCH 11.
-
-> +	cfg_size = pdev->cfg_size;
-> +
-> +	if (cfg_size != PCI_CFG_SPACE_SIZE && cfg_size != PCI_CFG_SPACE_EXP_SIZE)
-> +		return -EINVAL;
-
-pdev->cfg_size isn't limited to these two values. PCI quirks set other
-sizes, e.g. quirk_citrine() (0xA0) and quirk_nfp6000() (0x600), and
-vfio-pci handles those devices fine since vconfig is just pdev->cfg_size
-bytes. This check only seems to exist to bound the variable-length
-layout of struct vfio_pci_core_device_ser, which goes away with the
-changes suggested below. Please drop it.
-
-> +	total_size = size_add(sizeof(*ser),
-> +			      size_add(size_mul(2, cfg_size), saved_size));
-> +	if (total_size > U32_MAX)
-> +		return -EOVERFLOW;
-> +
-> +	ser = kho_alloc_preserve(total_size);
-> +	if (IS_ERR(ser))
-> +		return PTR_ERR(ser);
-> +
-> +	if (saved_size) {
-> +		void *dst = ser->data + 2 * (size_t)cfg_size;
-> +
-> +		err = pci_liveupdate_serialize_saved_state(vdev->pci_saved_state,
-> +							   dst, saved_size);
-> +		if (err) {
-> +			kho_unpreserve_free(ser);
-> +			return err;
-> +		}
-> +	}
-
-Please don't embed struct pci_saved_state_ser in VFIO's serialized
-struct. Variable-length serialized structs should be preserved in their
-own allocation, and VFIO should just store the physical address (0 if
-there is no saved state). That way the PCI core owns the size, flags and
-validation of its own ABI, either struct can grow without changing the
-layout of the other, and the offset math here and in PATCH 11 goes away.
-struct pci_ser already references its devices array the same way.
-
-I plan to structure the PCI core helpers for serializing and
-deserializing struct pci_saved_state to require this. The PCI core will
-do the allocation and just return a pointer to the serialized saved
-state. But I just wanted to call it out here.
-
-> +	ser->flags = vdev->reset_works ? VFIO_PCI_SER_RESET_WORKS : 0;
-
-reset_works shouldn't be serialized. Alex's series replaces
-vdev->reset_works with pci_reset_supported() [1], which only looks at
-pdev->reset_methods. Those are set up at enumeration without resetting
-the device, so the next kernel can answer the question itself. And the
-next kernel's answer is the one that matters, since it's the kernel that
-will reset the device.
-
-Please base on that series (or cherry-pick that patch) and drop
-VFIO_PCI_SER_RESET_WORKS, along with the incoming reset_works copy and
-the reset_works argument to vfio_pci_core_liveupdate_reset() in PATCH
-11, and the copy in vfio_pci_liveupdate_take_over() in PATCH 14. flags
-then has no defined bits, but please keep it (and keep rejecting unknown
-bits) for future features, see below.
-
-> +	if (!vdev->vconfig || !vdev->pci_config_map ||
-> +	    ser->cfg_size != pdev->cfg_size)
-> +		return -EINVAL;
-
-ser->cfg_size was set from pdev->cfg_size in preserve(), and
-pdev->cfg_size doesn't change after enumeration, so the cfg_size check
-can't fail.
-
-> +	memcpy(ser->data, vdev->vconfig, ser->cfg_size);
-> +	memcpy(ser->data + ser->cfg_size, vdev->pci_config_map, ser->cfg_size);
-
-pci_config_map doesn't need to be preserved. PATCH 14 already rebuilds
-it with vfio_config_init() in the next kernel and only uses the
-preserved copy to check that the two are identical.
-
-I assume the intent is to detect changes to vfio-pci's config emulation
-between the two kernels, but the map isn't a good proxy for that. It
-changes for differences that don't matter (e.g. hiding a capability or
-learning the length of a new extended capability), which would fail
-take-over and lose the Live Update on exactly the kernel upgrades Live
-Update is meant for. And it doesn't change for differences that do
-matter, like which bits are virtualized or writable within a capability.
-
-Preserving vconfig makes vfio-pci's config emulation part of the
-contract between kernels either way. I think changes to the config
-emulation that affect how a preserved vconfig is interpreted need to be
-tied to a userspace opt-in, recorded as a flag in struct
-vfio_pci_core_device_ser. A kernel that doesn't understand the flag then
-rejects the preserved device, and userspace shouldn't opt in while it
-can still roll back to a kernel without the new emulation.
-
-> +	pci_read_config_word(pdev, PCI_COMMAND, &cmd);
-> +	vdev->liveupdate_intx_disabled = !!(cmd & PCI_COMMAND_INTX_DISABLE);
-> +	if (!vdev->liveupdate_intx_disabled)
-> +		pci_intx(pdev, 0);
-
-This doesn't mask INTx on devices with pdev->broken_intx_masking set,
-either because PCI_COMMAND_INTX_DISABLE isn't writable or because a
-quirk marks INTx masking as broken. vfio-pci normally masks INTx for
-those devices at the interrupt controller, but nothing does that across
-kexec, so the device can still assert INTx in the next kernel before
-anything is ready to handle it. If the line is shared, that can get the
-line disabled as spurious and break the other device.
-
-Please reject those devices in preserve() if they have an INTx pin and
-!pci_intx_mask_supported(pdev), and add that to the Restrictions in the
-DOC. Check the PCI core flag rather than vdev->pci_2_3, since
-vfio_pci.nointxmask=1 clears pci_2_3 even when INTx masking works.
-
-> +struct vfio_pci_core_device_ser {
-> +	u32 domain;
-> +	u16 bdf;
-> +	u16 cfg_size;
-> +	u32 size;
-> +	u32 flags;
-> +	u32 saved_state_size;
-> +	u32 reserved;
-> +	u8 data[];
-> +} __packed;
-
-Once config_map and the saved state are gone, vconfig is the only
-variable-length part left. Please either make it a fixed-length array
-sized for the largest config space (PCI_CFG_SPACE_EXP_SIZE), or preserve
-it in a separate allocation like the saved state. Either way this struct
-becomes fixed-size and data[] goes away.
-
-cfg_size should stay, to record how much of vconfig is valid. The next
-kernel computes pdev->cfg_size on its own and could come up with a
-different value, so it needs to check that ser->cfg_size matches (and
-fits in the vconfig buffer) before using the preserved vconfig. Doing
-that once in retrieve() should be enough.
-
-I understand this will waste some memory today, since each KHO
-allocation must be a multiple of a PAGE_SIZE. But that is a KHO problem
-that can be fixed later.
-
-> +#ifdef CONFIG_VFIO_PCI_LIVEUPDATE
-> +	bool			liveupdate_frozen;
-> +	bool			liveupdate_intx_disabled;
-> +#endif
-
-nit: liveupdate_intx_disabled reads like "INTx is disabled for Live
-Update", but it actually records whether INTx was already disabled
-before freeze(). Inverting it to something like liveupdate_masked_intx
-(i.e. freeze() masked INTx, so unfreeze() needs to unmask it) would make
-freeze() and unfreeze() easier to follow.
-
-[1] https://lore.kernel.org/kvm/20260812045325.2733631-6-alex.williamson@nvidia.com/
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
