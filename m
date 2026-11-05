@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793872990;
-	b=SwbTPwv1lO7ww0Pa3lFansi3ThIBjwgwpQGtdY6SDfmCIOEDVmTh5X3et4Fv1ARL3mIN
-	 YMnt80XBbE4vWttprLsfJLYmG1IDMsbt+/BZpR5LwxzRm1Zr6Gkdnnjt35pUi4HVciYKx
-	 LcF85m0zuxsV1MhHsfWkfYqJ7E4vcn3FhRUa7pX2M6YiotewmKEz5PlzJ0tJgPDvMzW3r
-	 AemVv6R87LUeb2+Wqz4Mn+PmOOW0TdbZjedpO8YCgpJG1p4YXaGIe/vHN8JmiWa9wCg24
-	 5v8IUGktPb5jFu/RXjmkFk/oxC4fozCkFU7s3bn05DIZ4plaIPDNEWV4LtGWfkMI5xw==
+	t=1793873046;
+	b=FRbAG4CFV/ccfjBvUE+MoklW2PSz2xuO9VY64otouK8YoEd7KPYpGZvk6RjSusivhy6J
+	 u4Q/oM8PZHQS6Ki5lHTr+JhO7ybxIXeTXUF4OECS1UIEVFN0H8m44oHvqf494VgaXM8B0
+	 hFH2aijoFXg9DnUYp5JC1eQQzyAMqeTR/OrygzcGIsveTeIfEexuXLld+28tDv6hLvMV2
+	 A0SJpnhTOTNUb0vD+60fF7LnTy0Pw2iw2Oo9lR5R9WKkLnsamwSfbcNiGiGHOTbv0AhR+
+	 mtG5SUj/Clfr8yFn/TbLsk+AgekpL1Ed0RHapCyJAJ6Yq1o5b+Gr58ul6VHqWYYvGdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793872990;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793873046;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=YGxMLGOpmO21KJ2mjD9khBg9SC63tjkRy41YsLQwOKA=;
-	b=mzI8+UFvPD7ATnEnk/SbrJOkjzc7HXb7DfD/WGEaz4tfNiMtttRzw/3kK2vGrL+9SEdY
-	 O4YQrVCgdm0fzuE9dEtIPjSRyOCJM47COFT+k3DcYz0PjyMIddEe4k/p8Yy43QIwBolBj
-	 BkCbUoGezJmmeYZ9oomQZ+s7qi7UcnsIXurdvfLnvX8ENsK58M/Q2bxBMM4cryP3V3Fh6
-	 vyvA8Uz7gDTbAXUkPPW0xqK4bNj42rIW6aW33BOnYxJ4i/jgQ2RvJALkVWgVWzch/Wjsz
-	 JdVDYD7ykhgrpclP6kreLLmyujyoYEcrYk0w6sIxeN4rxiELS6Z9ORlTwQlSbuFW3nw==
+	bh=4sAOTQijm0unkHuug1Z8C+1HeeNtpwsDrUWnMkqB5cE=;
+	b=pmf851fd1vL52UeTKsSmr4kB4KpwRHuBOOPuO+IhXzv7Lih7QRK5Is/viivL75MFJl8+
+	 OF15B0RH6/dQCLWgBaliHgC1UERc9IgJLLqUIwZmNo4uohXEPpu2TzXWpCmvz3mI+zkvq
+	 pyeX+VbCFGbFOmd3a12RehUc6SDWKu/Ci5xVXDZLse50Td+dC1qx5/X5BVJZZjGSZACTg
+	 bmlDbJc8dh6dL7uj2tWve7DQ1f/EmeCIffeLLKM6LScanbi+ABVyWnFLDaXOritblUcyv
+	 BOFJrRlfgqgNwCa5t7QnIVzX7ydqd4moe13czzw8mLh85bEAouDit9YTR1dAxgw4Ggw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X23c9kWV;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PPeTuCJW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5138F606A31B;
-	Thu,  5 Nov 2026 10:03:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA5B606A333;
+	Thu,  5 Nov 2026 10:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X23c9kWV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8C11F000C1;
-	Thu,  5 Nov 2026 10:03:06 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PPeTuCJW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F641F000C1;
+	Thu,  5 Nov 2026 10:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793872989;
-	bh=YGxMLGOpmO21KJ2mjD9khBg9SC63tjkRy41YsLQwOKA=;
+	s=k20260515; t=1793873046;
+	bh=4sAOTQijm0unkHuug1Z8C+1HeeNtpwsDrUWnMkqB5cE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=X23c9kWVkPgMqf9QyBhUBCMJnR9wXAEOhBgM4zA+aaLN25UZaS72McMQVN0/qvLUj
-	 gyk5MOm29CmrgYJH9yay9R0doiqzvqabiwazIkyDlhKcCIJ8plw01qp3O1I61UTMb2
-	 4sDnNnTwzudp4tadLZyxoi3npf+TTtP02nBBVgnX6ZEX+80DAIf/GFQwwsOf2R8b+Z
-	 hlvrM8pjyLZtfwgzHKBPb+KT/mu5ORHSRwxL/NWD+/twyME/sINzijVNN8QeVMy0SY
-	 SkJJrq4ukXNq1AAh4nbKw54nZ/nmzNeR2PTlSjc9shb0e57kDG9CxL0ftVLrYYgdTM
-	 MLp33ObuR7rRg==
-Message-ID: <e6be27d9-6cf1-476e-9d8c-8e91664b95e2@kernel.org>
-Date: Thu, 5 Nov 2026 11:03:03 +0100
+	b=PPeTuCJWAkflarn1lLbfkXeQH5EsCZzh76zu/pXKzFV0qNLrDhBw8QqE06mMTRHRo
+	 JrqaKJNfFY7/gsK6h6b3b9FKcjZT+YlwLE/NgP+j6rdiLpDelAc+uHd6Kirj9HuHS9
+	 6fVjp63JPPJPND6a7fbz2kTI9UW2H4IubtgH1r+NmWpihjoSGHC7FKhBqDx2QDukQ3
+	 GFWdGH9dXCuRr30RK60LfnSAga1t4i19RY6AMwXddsbHmZmnQy7wjGJf6xPbXla3H0
+	 /CnCdkTVPV00PxMk+PHxR66JPJf86k20NCVwcgBYGNIRnggGZbxvgbtuEG2tCvo7iH
+	 /2LABFxL2v/cA==
+Message-ID: <eda01b72-c88f-4a75-ac5b-7f849a7a1fa0@kernel.org>
+Date: Thu, 5 Nov 2026 11:03:59 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,8 +52,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] selftests/mm: cover merging KSM pages aged by
- smart scan
+Subject: Re: [PATCH v2 1/2] mm/ksm: align smart scan skips with the scan
+ number
 To: Qiliang Yuan <odys.yuan@gmail.com>,
  Andrew Morton <akpm@linux-foundation.org>, Xu Xin <xu.xin@linux.dev>,
  Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>,
@@ -64,7 +64,7 @@ To: Qiliang Yuan <odys.yuan@gmail.com>,
 Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-0-8a9780b6844e@gmail.com>
- <20261105-bug-mm-ksm-smart-scan-align-skips-v2-2-8a9780b6844e@gmail.com>
+ <20261105-bug-mm-ksm-smart-scan-align-skips-v2-1-8a9780b6844e@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -111,86 +111,45 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-2-8a9780b6844e@gmail.com>
+In-Reply-To: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-1-8a9780b6844e@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/5/26 10:36, Qiliang Yuan wrote:
-> ksm_functional_tests checks merging and unmerging with ksmd's default
-> settings, but nothing there exercises smart scan, which skips pages KSM
-> has failed to merge for a while.
+> Smart scan skips pages that KSM has failed to de-duplicate for a while.
+> Once a page is three scans old, its rmap_item counts down its own number
+> of scans to skip, 1, 2, 4 and then 8 as it ages, so an old page is looked
+> at every ninth scan.
 > 
-> Smart scan used to time those skips per page, so two identical pages
-> that became mergeable some scans apart could end up never being looked
-> at in the same scan, and were never merged. "mm/ksm: align smart scan
-> skips with the scan number" fixed that.
+> The unstable tree is rebuilt on every scan, so two identical pages that
+> are not in the stable tree yet can only be merged in a scan that looks
+> at both. Each countdown runs from when its own page became mergeable, so
+> two pages that became mergeable at different times end up on different
+> phases and, once both are old, may never be looked at in the same scan
+> again. They then stay unmerged for as long as they live. Making a page
+> mergeable, waiting for 0 to 20 full scans before doing the same with an
+> identical page, 20 times for each wait, and checking the pair after
+> another 64 full scans shows this, on two boots per kernel:
 > 
-> Add a case that lets sixteen unique pages age for a dozen scans, then
-> makes a duplicate of each mergeable one scan apart, and expects every
-> pair to be merged 32 scans later:
+>                                 before            after
+>   pairs merged (of 420)         329 / 317         420 / 420
+>   64M of unique pages skipped   89.0% / 89.1%     87.5% / 87.5%
+>   ksmd CPU time per scan        6.25 / 6.25 ms    6.88 / 7.03 ms
 > 
->   kernel               failures, two boots
->   before the fix       20/20, 20/20
->   with the fix          0/20,  0/20
+> Pick the skipped scans by the global scan number instead, with periods
+> of 2, 4 and 8 scans. The periods being powers of two, every old page is
+> looked at on each scan that is a multiple of 8, whatever its age, so any
+> two pages meet at least every eighth scan. The longest period goes from
+> nine scans to eight, which costs 10-12% more ksmd time on memory that
+> never merges.
 > 
+> Fixes: 5e924ff54d08 ("mm/ksm: add "smart" page scanning mode")
 > Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 > ---
->  tools/testing/selftests/mm/ksm_functional_tests.c | 108 +++++++++++++++++++++-
->  1 file changed, 107 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-> index 31c06c72203fd..71d9b3cbdb8c1 100644
-> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
-> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-> @@ -695,6 +695,111 @@ static void test_fork_ksm_merging_page_count(void)
->  	munmap(map, size);
->  }
->  
-> +static int ksm_wait_full_scans(long nr)
-> +{
-> +	long start, cur;
-> +
-> +	start = ksm_get_full_scans();
-> +	if (start < 0)
-> +		return start;
-> +	do {
-> +		cur = ksm_get_full_scans();
-> +		if (cur < 0)
-> +			return cur;
-> +	} while (cur < start + nr);
-> +
-> +	return 0;
-> +}
-> +
 
-This looks a lot like the logic we have in ksm_start().
+Makes sense to me, without looking to closely into the details.
 
-Likely that logic there should be factored out into a common helper.
-
-> +static void test_merge_aged_pairs(void)
-> +{
-> +	const unsigned int pairs = 16;
-> +	const unsigned long size = 2 * pairs * pagesize;
-> +	char *map, old_smart_scan = '1';
-> +	int smart_scan_fd;
-> +	unsigned int i;
-> +
-> +	ksft_print_msg("[RUN] %s\n", __func__);
-> +
-> +	smart_scan_fd = open("/sys/kernel/mm/ksm/smart_scan", O_RDWR);
-> +	if (smart_scan_fd < 0) {
-> +		ksft_test_result_skip("smart_scan not supported\n");
-> +		return;
-> +	}
-> +	if (pread(smart_scan_fd, &old_smart_scan, 1, 0) != 1 ||
-> +	    pwrite(smart_scan_fd, "1", 1, 0) != 1) {
-> +		ksft_test_result_fail("Enabling smart_scan failed\n");
-> +		goto close_fd;
-> +	}
-
-Can we have a helper to enable/disable smart scan? Likely belongs into utils as
-well.
-
+Maybe Stefan can give some input?
 
 -- 
 Cheers,
