@@ -1,65 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.27
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793845166;
-	b=NApkXx5Mu6Y1M/rqGydICNjFfN01w6kbLXuz8uZPmftd00kiJSrpLeLazfj/fIek/rqJ
-	 irsSrT1JuBobNnlpZLJV0wcJUKBnYK3cEgeI21fJjkOD7pJcno0Zih7jXRzk/CKFVJVjy
-	 HHKSusAPWWEblNs9EXvN0KGRrJDjZrTpofdZIAB+xecDrujdI4vuAGas5QubfOD7cMY0K
-	 LP/rVfizdDcQcj6cfciaG0+zQXO2VTZ9L1lfHp0iU1JVYTMvi3/6yjM3YSfQWbQwLIWaI
-	 R9DlZMMb0F55FkunoUDKSAhoT8ZAEqzGUaEYWv2sC7uiRoiJ0P9/HZ6wF1NG7L8A41Q==
+	t=1793847766;
+	b=KzIU5md4S/BZl8RIk1U6LgLFJTcjmvXPmSKP2PasnXSbjeSCffX/xeSYT4cDUdnksGTn
+	 m7t3Ce1PUiE/hf6NoWKdhxkCmi1hPPkGyCEhoD7WGZMLHfYtPM4eDeYCwLXwytwy7WYee
+	 Cr4kYc6TOg/nG8a+O0qd7jDmV9dlUynn1/WApVJApqlNLysIVp1gpZsVtZ84xlV+QAI/x
+	 IaDkkHiFjXGiswx8YtLLbeHbYo4ElHk10o/xOETAYXDylD22jIOp/OBbNtPZx5PGTdPwH
+	 txbg/MsnCYFBund56suyeIVjl95HaopPIRSnIt7c3q/q7TqjUQhgln/HD0zczCQGYFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793845166;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=vCAogybCaVTsP1wOzLL4HrNOiDNKINH4T30RdYUbjCY=;
-	b=rYLERiz2vKIg3Xi8VIY3CAKOFioMeIlG8jQGlDdFv7uqSsqQXgLFLk0GXYFoGFBp/YJx
-	 SLrnpwrnEC/kBywnsok0+VrnsBLe7kOF/MevbGNlc0xTZoW/rk1mpKIJBzjdmPr8fBPMe
-	 KPg/hc46u6d3Kse5QbA2OlspvVzyyIk4B8PR7+MUBck4rJCEgp7kZt1O+Uz1FpErifqkC
-	 sy6FdUXDQCNCRCNDRRJMKL3xhDnKHyBavcmPU3zvI5Nmwt/Odn7jtmj6OLQdz+A/uAjsT
-	 b3MVEx9on/bXy94pC/CR4Z7znqV96PCHVfy30YUgVGMSObP8bySe1vLU5Bz1rlheD6g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793847766;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=zGZfT70XyONJWUn47AyDJ+cOnVzmjtxiZaxG/uXFuOA=;
+	b=KZIzzpB5WmNROLqA/gUIq5jQE+/agkdUuXEuaHuvnW2Q0XWs2HGdEvfaFWseacAacfYc
+	 QtqDTOpizOmbvXzOe24/z7ojRvoYJ4fpLzclT1ZszUNFgXT84g/i1lMgsWSuxGuzbdWxA
+	 DA1dd9OyZd/Xy8TFx8t3Sx0O3uighk6yxjsqlMKMjtT6V+VDgqMA6iDecPyQdP08B3X3J
+	 82xupFOiDpMHtFIV7jXsD0KnrXOn8Uwlq2DSBF+/bLiBGFVw6ZMCSI7Zdx0rSSj9OKt35
+	 0ZHVp+38Ir2LxIcHYmaMgEZ3QBWxmwgNP82kyewvMFb3zbWzWRMxNrM5vqNoRo5A/Sw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cMjLdVAx;
-	arc=none smtp.remote-ip=95.215.58.27
-Received: from mta1.migadu.com (out-27.mta1.migadu.com [95.215.58.27])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZRQbI+t8;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E577D606A328
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:19:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E577D606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC767606A328;
+	Thu,  5 Nov 2026 03:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cMjLdVAx
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vq/2PwFpnYdqp7NYMLzjiV/QsikQgp5SP9E8rhZNyQ0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793845164; v=1; x=1794449964;
- b=cMjLdVAxCh4bj12YhMneUevGO4LeZ2PZgAyGoGtwCTtP5NJjPjxFrzCUCxgh22GA115GIjCL
- Tg6vaRK9+GALurt6WErLFeq7mGRQaZ7c4MzSaTj8lm6ccEOKt7eBiWKqha+5EZD7MQCCcwT8dUB
- /OMrLFFcpV/HTBG4UykurtLE=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 1851632e6d4801f8;
-	Thu, 05 Nov 2026 02:19:23 +0000
-X-Mizu-Trace-ID: 1851632e6d4801f8
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 5 Nov 2026 10:19:08 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Bjoern Doebel <doebel@amazon.de>
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
-	Liang Li <liali@redhat.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] selftests: bonding: feed link monitor to deflake
- prio_test
-Message-ID: <auvnnIXQV2zufxtF@fedora>
-References: <20261104142018.552135-1-doebel@amazon.de>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZRQbI+t8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E8B1F000C1;
+	Thu,  5 Nov 2026 03:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793847765;
+	bh=zGZfT70XyONJWUn47AyDJ+cOnVzmjtxiZaxG/uXFuOA=;
+	h=From:To:Cc:Subject:Date;
+	b=ZRQbI+t817mQXZkNttd+gHuqAA44iJMUXeDiQIUSXTrPFP/K3YlmPF8OMp6wcehz7
+	 ep2l76pxw6rI5FPtzNemsq9Zt8Hvxmlyc/AzpjxVhZd1LZPQFBHkHxxBrF2j49WNCu
+	 chDRbIiobEPaUNLWEW2Cmiqj9CtGnquQ5XqSCMUjkVXLQrk5Ti5HFaeBssFD5eneWt
+	 z14re8NUk/JAaGvdNg3DWwS3abUODHWy0aAKWNxIeRRGh6dv+a/T6LqWlLEwXQvHVl
+	 kbK340AdP6KM/rcyPE46Pbj3IYRNHz0RZ5Mvi30G0+W9t3pWd1V976WurCIiLdIquF
+	 LtgHowtaWKWRQ==
+From: Sasha Levin <sashal@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Kiryl Shutsemau <kas@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/mm: skip split_huge_page_test without the split_huge_pages file
+Date: Wed,  4 Nov 2026 22:02:42 -0500
+Message-ID: <20261105030242.1241448-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,67 +70,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261104142018.552135-1-doebel@amazon.de>
+Content-Transfer-Encoding: 8bit
 
-Hi Bjoern,
-On Wed, Nov 04, 2026 at 02:20:18PM +0000, Bjoern Doebel wrote:
-> With the bond idle between test steps, the arp/ns link monitor can
-> declare a healthy slave down (~300ms without RX/TX). If this hits a
-> failover step, the bond picks a different active slave than expected,
-> and primary_reselect=failure/better never reverts it:
-> 
->   TEST: prio (active-backup ns_ip6_target primary_reselect 2) [FAIL]
->       Current active slave is eth0 but not eth2
+Every case in split_huge_page_test goes through
+/sys/kernel/debug/split_huge_pages. When that file does not exist,
+because debugfs is not mounted or the kernel has no CONFIG_DEBUG_FS, the
+first write bails out of the whole test and it is reported as a failure:
 
+  Bail out! write_file(/sys/kernel/debug/split_huge_pages): No such file or directory
 
-Thanks for the fix. I also saw this issue but haven't checked it yet.
+Skip the test in that case.
 
-> 
-> Reproducible when running tests under load (2-4 / 100 runs).
-> 
-> Fix by pinging a non-existent neighbor for the duration of the test to
-> keep traffic coming. 100 runs under the same load with the patch
-> applied: 0 failures.
-> 
-> Fixes: 42a8d4aaea84 ("selftests: bonding: add bonding prio option test")
-> Signed-off-by: Bjoern Doebel <doebel@amazon.de>
-> ---
->  .../selftests/drivers/net/bonding/bond_options.sh   | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/bonding/bond_options.sh b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-> index 187b478d0ddf2..f599a2a8ef156 100755
-> --- a/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-> +++ b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-> @@ -74,6 +74,16 @@ prio_test()
->  
->  	# create bond
->  	bond_reset "${param}"
-> +
-> +	# Keep the arp/ns link monitor fed for the duration of the test:
-> +	# ping a non-existent neighbor, which generates steady broadcast
-> +	# ARP requests sourced from the bond's own address. These egress on
-> +	# the active slave and are flooded onto the backup slaves' links,
-> +	# where they validate as RX activity. Without traffic, idle slaves
-> +	# are declared down by the monitor between test steps and the
-> +	# failover checks below race with the monitor.
-> +	ip netns exec ${s_ns} ping -i 0.1 -W 1 192.0.2.99 &> /dev/null &
-> +	local ping_pid=$!
->  	# set active_slave to primary eth1 specifically
->  	ip -n ${s_ns} link set bond0 type bond active_slave eth1
->  
-> @@ -157,6 +167,9 @@ prio_test()
->  		check_active_slave "eth0"
->  		bond_check_connection "change slave prio"
->  	fi
-> +
-> +	kill $ping_pid 2>/dev/null
-> +	wait $ping_pid 2>/dev/null
+Fixes: fa6c02315f74 ("mm: huge_memory: a new debugfs interface for splitting THP tests")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+Found with KernelCI's NVIDIA lab, which runs the tests in a chroot
+without debugfs. Tested on an AMD EPYC 9655P with KernelCI's x86_64
+build of next-20261104: without debugfs the test now skips, and with
+debugfs mounted it still passes all 62 cases.
 
-If the kill fails for some reason, will we wait here forever and hang the
-entire test?
+ tools/testing/selftests/mm/split_huge_page_test.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thanks
-Hangbin
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 33a2473327bb7..deabb7db06192 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -610,6 +610,9 @@ int main(int argc, char **argv)
+ 	if (!thp_is_enabled())
+ 		ksft_exit_skip("Transparent Hugepages not available\n");
+ 
++	if (access(SPLIT_DEBUGFS, W_OK))
++		ksft_exit_skip("%s: %s\n", SPLIT_DEBUGFS, strerror(errno));
++
+ 	if (argc > 1)
+ 		optional_xfs_path = argv[1];
+ 
+-- 
+2.53.0
+
