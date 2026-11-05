@@ -1,50 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793907256;
-	b=5pM7Yiewx8YTht7AfSLpNl4tn1/W+GHxjmchZ7yrMtbv/452AkhZ6oTEbRi873c5Sm8S
-	 AGRbQ4c1xAj7IKZXz01K2NU5znB5YE5hL5AyXYDUe7H0DdVsYQe0iUJzSfG+B6qIN+xYQ
-	 EH8GiLBh1+k+uLWm4QqyvEZDRoSQMoBRC3Vcpqn5gUeedeTYiAmNwnhldgXMCL4EJxDe0
-	 wF48P/ijjhNCAkWzG3lKrs0D0PMnSS7NatcYp12vz+vtjP0ZzEGCL716CzLKaXb6D1M3x
-	 w/pjmg3BNu4GTnyFHL4OmtvphsYz3tpXoRMa2FWDgDGpQqcTqYcIUI8Vh69by+ecnRA==
+	t=1793907257;
+	b=TuIApe7ksYErn4j7nJxJUfHQBzNfZ8OiKbkrnpT49O1cSlh+MiLy0hDvDoHIkLrnu+Dk
+	 wP9/gEzBOnD4aZ6UwoaHeUb+gRCPES15cwFeBbLhcYPeAK5/wGtv+v9wAIJF8fv3vUhCv
+	 3oTZ6J1sFQ6G4SuGKEKeEnKtFSm/aZsHp7cd8jfEzCJ0rF0Oy1Eh5RmgYPm2pvlURLeZ5
+	 1wscjFGY95RJNnGfmiCOVrusF41wz2C2XKuNUICiiz18crCqGrGgAnliCrUVXzq6BCurS
+	 rBe4URCpmzFkWVYRXJk/EUKg/3UqGStOVUzT5fUYr/KrDY1WCAxuOEnPLzjYHHJrG8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793907256;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907257;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=UgrZOSXgcIR7ewws5Wtl/aD7cavaVZd53IcOP/KOXkE=;
-	b=1/2HUS3wC8dpH4Bn0CAdYePxGc/f8A4FY+oUdDHGnyGPd3ntZHwvrOfgZI+Tltcp9too
-	 4MKk/yGCgFjvyCM4qXY9TebvuI0CrEPxAeivin8As4Mp3hBw4nSio+UxDaz6xl9elN0UD
-	 gTjg5st5yoe555xTsfIpf9/yZyX3qjofSRMjObw9kN69mcMsQd/MZ7sPFDk+PYa/1uy43
-	 NHtV7oBW0KxGcBQNba3BRnmfw9RhQf0ZnbMsxnMu1fixTBPxyyZwjswjdxuUI7FErnxS7
-	 mfDlEYPuv/+TDENlYpZebxOAJFHD8y/UCmIgkxcvmrJsGXGxwtaJTJgoOibFBPxHUFg==
+	bh=oJrZ/XR2HiFstwx5GpsmznXLz0IyXlH94OZ3vU0MTyc=;
+	b=couxrKvtIvZCHGtU8N1eE8DY2rKxFc8gDlDezG77j2etCpHDyVge2ptATpAy1ZStJxuv
+	 PzFlPy4QtAItj7MabJSG4hEw5jxkgIWx6Zq0SZ69pW7G9oB7wREN7zLVuTvKyU0c+OY67
+	 SKYMWVY2Lq+IJ41/Y+OMXMqQ4CDeljH1mb3n8zOq3zqGE+ArXOvwG9E1ZaadhQgCWen6e
+	 loXG3u03T82fk7G6wwF4Wf6rl8br0WSsqON5nUidl8i4JqpcOGrrpoInWnd5sKfnVKWM9
+	 LFpEZvET82tuTX2U/WTkIZLGPT8h3bkxGIB9w5LeemUnlGuGT3yGUqzFGWXY0Ht6Fvg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=wfUNz3ai;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=JTiOGuD9;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1086D606B056;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11622606B059;
 	Thu,  5 Nov 2026 19:34:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1086D606B056
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11622606B059
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=wfUNz3ai
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=JTiOGuD9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
 	s=smtpout1; t=1793907249;
-	bh=UgrZOSXgcIR7ewws5Wtl/aD7cavaVZd53IcOP/KOXkE=;
+	bh=oJrZ/XR2HiFstwx5GpsmznXLz0IyXlH94OZ3vU0MTyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wfUNz3ai7Y58tnwvg1X98+jEC4IVm8uKj/gJTQ/Sp4733zg52AZNaIj5RB0SMKRWk
-	 ywcxvSHd3zd3LTeTEYOaC0M8kyXrb7Fekr3soVdSnjPSUlPQrQHPEpL6Ae9E9fP6sP
-	 uVjJgeEiPBVLjjiN3OTCAhGcgiPEozjRKO5EHfHgKBL3oxXg5fRSrhs/qt6nXV+aXM
-	 8gCaT2kNyUJLMXQuony0BpxnTlqlbnmVlM5ViFK/XWYmGkKjs+fVmT/WDAqR9ShAnO
-	 Tn8IwalGGgjAZ/UdVfjDYoI1g0ByUFSMOwnHAcBNyYPASPmp5Bo514hrHEwsfxGBge
-	 GWKDEcetfIU6w==
+	b=JTiOGuD9bar7nm1s93oqkxDmTgnAmbp1xzHTd08DPkdG3ostkX6lP8UUBvyECtGJg
+	 CHXkKJOAgaWtX4MNkE8iZT3vx9j3EHZD0ByH6bN0o0i+fFb6JsiVO85zz69QdOp3qJ
+	 qPemlP1Udwm0oTLMF/3giZil2HfDCxNU1ZCFsZiNWrS4vHRORMcIBMI45MuGmaIhno
+	 /8VsCs3Rx5LSAgcU71XIvWPzVfJa08Xb5lB3zlca9/zsTEFyT8WHQL5GtqHXV5jbte
+	 4pZniahWsIlPbrLWN39tQ2UWNdmmnwVZ0Htw8LdV05Kn7MM4petou9CfdSHORFw7CJ
+	 QL55zP+r678Qg==
 Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLCDK0NNszLDS;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLCDK1fyjzLfH;
 	Thu, 05 Nov 2026 14:34:09 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
@@ -76,11 +76,10 @@ Cc: linux-kernel@vger.kernel.org,
 	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,
-	Sashiko <sashiko-bot@kernel.org>,
 	stable@vger.kernel.org
-Subject: [PATCH v3 01/24] sched: Fix cpuset_mutex double unlock in __sched_setscheduler()
-Date: Thu,  5 Nov 2026 14:33:36 -0500
-Message-Id: <20261105193359.1450487-2-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v3 02/24] sched: Refuse SCHED_FLAG_KEEP_PARAMS that would change the policy or the class
+Date: Thu,  5 Nov 2026 14:33:37 -0500
+Message-Id: <20261105193359.1450487-3-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261105193359.1450487-1-mathieu.desnoyers@efficios.com>
 References: <20261105193359.1450487-1-mathieu.desnoyers@efficios.com>
@@ -95,162 +94,115 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Andrea Parri <parri.andrea@gmail.com>
+SCHED_FLAG_KEEP_PARAMS keeps the parameters of a task:
+__sched_setscheduler() skips __setscheduler_params(), which is what sets
+p->policy, and the sched_class assignment with it. A request that asks
+for another policy is then carried out by half, and succeeds:
 
-A sched_setattr() with SCHED_FLAG_KEEP_POLICY on a SCHED_DEADLINE task
-unlocks cpuset_mutex twice if the task's policy changes concurrently:
+ - a class change, SCHED_DEADLINE to SCHED_OTHER, sets DEQUEUE_CLASS:
+   sched_change_begin() runs switched_from_dl() on a task that stays in
+   the class, and sched_change_end() switched_to_dl(). A sleeping task
+   has its bandwidth taken off its runqueue there, and taken off again
+   when it does leave: this_bw underflows;
+ - a policy change within the class, SCHED_OTHER to SCHED_BATCH, returns
+   0 and leaves the task where it was;
+ - a task that priority inheritance boosted into the deadline class is
+   of that class already, and a request for SCHED_DEADLINE finds
+   prev_class == next_class: sched_dl_overflow() admits it and adds its
+   bandwidth, which the skipped __setscheduler_params() never gives to
+   the task. It keeps SCHED_NORMAL and a dl_bw of 0, so nothing releases
+   that bandwidth, and total_bw of the root domain holds it for good.
 
-  WARNING: bad unlock balance detected!
-  7.4.0-rc1 #1 Not tainted
-  -------------------------------------
-  repro/126 is trying to release lock (cpuset_mutex) at:
-  [<ffffffff9a17cacc>] __sched_setscheduler+0x9cc/0xc40
-  but there are no more locks to release!
-  ...
-  Call Trace:
-   print_unlock_imbalance_bug.part.0+0xfb/0x110
-   lock_release+0x286/0x2e0
-   __mutex_unlock_slowpath+0x1a/0x400
-   __sched_setscheduler+0x9cc/0xc40
-   __x64_sys_sched_setattr+0xa3/0x1b0
-   do_syscall_64+0x106/0x5f0
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+Refuse a request for another policy or another class, before
+sched_dl_overflow() reserves bandwidth, since nothing gives back what it
+reserves: a refusal after it would leak the runtime that sched_setattr()
+fills in from the task's slice, up to 100ms with a custom one, into
+total_bw. A refused request also leaves sched_reset_on_fork as it was.
 
-__sched_setscheduler() samples p->policy before taking any lock, and
-restarts from the recheck label if p->policy differs under the rq lock.
-The restart drops cpuset_mutex but leaves cpuset_locked set, so a pass
-that no longer needs the mutex still unlocks it on its way out:
+A SCHED_OTHER owner of a PTHREAD_PRIO_INHERIT mutex with a slice of
+40ms, boosted by a deadline waiter blocked on it, leaves 0.4 of a CPU
+behind at every such call: total_bw 419424 -> 838854 and there to stay,
+in 8-CPU VMs of v7.4-rc1. With this change the call is refused and
+total_bw is as it was. The selftest added later in this series has the
+case, params_keep_boosted.
 
-  CPU 1                                CPU 2
-  __sched_setscheduler(KEEP_POLICY)
-    policy = p->policy /* DEADLINE */
-                                       __sched_setscheduler(SCHED_OTHER)
-                                         p->policy = SCHED_OTHER
-    cpuset_locked = true
-    cpuset_lock()
-    rq = task_rq_lock(p)
-    oldpolicy != p->policy
-      cpuset_unlock()
-      goto recheck
-    /* no cpuset_lock() this time */
-    ...
-    if (cpuset_locked)
-      cpuset_unlock()
+The class change was found by Juri Lelli from a report of Tejun Heo, and
+refused, after the reservation, by his "sched: Reject
+SCHED_FLAG_KEEP_PARAMS when it would change scheduling class", since
+dropped from tip. The policy change and the boosted case were found by
+the Sashiko AI review of the first posting of this series.
 
-Without CONFIG_DEBUG_MUTEXES, or CONFIG_DEBUG_RT_MUTEXES on PREEMPT_RT,
-nothing warns. The second unlock still clears the owner field regardless
-of who holds the mutex, so another task can lose cpuset_mutex inside its
-critical section. Entering SCHED_DEADLINE needs CAP_SYS_NICE, but a
-racing caller that owns the task does not need it if it samples a policy
-other than SCHED_DEADLINE.
-
-Clear cpuset_locked when dropping the mutex for the restart. This should be
-safe because the flag is only tested on the paths leaving the next pass,
-after that pass has set it again if it took the mutex.
-
-The following program, run as root, reproduces the splat, which no longer
-appears with this applied. On PREEMPT_RT it crashes the kernel within
-seconds, which this also fixes:
-
-  #define _GNU_SOURCE
-  #include <pthread.h>
-  #include <stdint.h>
-  #include <sys/syscall.h>
-  #include <unistd.h>
-
-  struct attr {
-      uint32_t size, policy;
-      uint64_t flags;
-      int32_t nice;
-      uint32_t prio;
-      uint64_t runtime, deadline, period;
-  };
-
-  static volatile int stop;
-  static volatile pid_t target;
-
-  static void set(struct attr a)
-  {
-      a.size = sizeof(a);
-      syscall(SYS_sched_setattr, target, &a, 0);
-  }
-
-  static void *sleeper(void *arg)
-  {
-      target = syscall(SYS_gettid);
-      while (!stop)
-          usleep(1000);
-      return arg;
-  }
-
-  static void *switcher(void *arg)
-  {
-      while (!stop) {
-          /* SCHED_DEADLINE, 2us every 1s */
-          set((struct attr){ .policy = 6, .runtime = 2000,
-                             .deadline = 1000000000,
-                             .period = 1000000000 });
-          set((struct attr){ .policy = 0 }); /* SCHED_OTHER */
-      }
-      return arg;
-  }
-
-  static void *racer(void *arg)
-  {
-      /* KEEP_POLICY | KEEP_PARAMS */
-      while (!stop)
-          set((struct attr){ .flags = 0x18 });
-      return arg;
-  }
-
-  int main(void)
-  {
-      pthread_t t[5];
-      int i;
-
-      pthread_create(&t[0], NULL, sleeper, NULL);
-      while (!target)
-          usleep(100);
-      pthread_create(&t[1], NULL, switcher, NULL);
-      for (i = 2; i < 5; i++)
-          pthread_create(&t[i], NULL, racer, NULL);
-      sleep(30);
-      stop = 1;
-      for (i = 0; i < 5; i++)
-          pthread_join(t[i], NULL);
-      return 0;
-  }
-
-An LLM helped find the PREEMPT_RT crash and write this patch and its test.
-
-Fixes: 111cd11bbc54 ("sched/cpuset: Bring back cpuset_mutex")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://sashiko.dev/#/patchset/20261016062629.2102883-1-sh_def%40163.com
-Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Waiman Long <longman@redhat.com>
-Reviewed-by: Kayra Cizmeci <kayracizmeci@gmail.com>
+Link: https://lore.kernel.org/all/2b5fb3f22bca6aa383be8f4781923392@kernel.org/
+Link: https://lore.kernel.org/all/20261103-b4-sched-dl-bw-fixes-v1-3-dd761fe005b4@redhat.com/
+Fixes: a509a7cd7974 ("sched/uclamp: Extend sched_setattr() to support utilization clamping")
 Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- kernel/sched/syscalls.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/sched/syscalls.c | 40 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 11 deletions(-)
 
 diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index 45a127deeadd..2af550f92ac6 100644
+index 2af550f92ac6..6819f0fea3c5 100644
 --- a/kernel/sched/syscalls.c
 +++ b/kernel/sched/syscalls.c
-@@ -640,8 +640,10 @@ int __sched_setscheduler(struct task_struct *p,
- 	if (unlikely(oldpolicy != -1 && oldpolicy != p->policy)) {
- 		policy = oldpolicy = -1;
- 		task_rq_unlock(rq, p, &rf);
--		if (cpuset_locked)
-+		if (cpuset_locked) {
- 			cpuset_unlock();
-+			cpuset_locked = false;
-+		}
+@@ -647,17 +647,6 @@ int __sched_setscheduler(struct task_struct *p,
  		goto recheck;
  	}
  
+-	/*
+-	 * If setscheduling to SCHED_DEADLINE (or changing the parameters
+-	 * of a SCHED_DEADLINE task) we need to check if enough bandwidth
+-	 * is available.
+-	 */
+-	if ((dl_policy(policy) || dl_task(p)) && sched_dl_overflow(p, policy, attr)) {
+-		retval = -EBUSY;
+-		goto unlock;
+-	}
+-
+-	p->sched_reset_on_fork = reset_on_fork;
+ 	oldprio = p->prio;
+ 
+ 	newprio = __normal_prio(policy, attr->sched_priority, attr->sched_nice);
+@@ -677,9 +666,38 @@ int __sched_setscheduler(struct task_struct *p,
+ 	prev_class = p->sched_class;
+ 	next_class = __setscheduler_class(policy, newprio);
+ 
++	/*
++	 * SCHED_FLAG_KEEP_PARAMS prevents the policy and the class change
++	 * from actually happening: it skips __setscheduler_params() and the
++	 * sched_class assignment. Reject the contradictory requests that
++	 * ask for either, rather than carry out half of what they ask.
++	 *
++	 * A class change with the policy kept is one of them: the class of a
++	 * policy depends on the priority that priority inheritance leaves,
++	 * and on whether a BPF scheduler is in charge.
++	 */
++	if ((attr->sched_flags & SCHED_FLAG_KEEP_PARAMS) &&
++	    (policy != p->policy || prev_class != next_class)) {
++		retval = -EINVAL;
++		goto unlock;
++	}
++
+ 	if (prev_class != next_class)
+ 		queue_flags |= DEQUEUE_CLASS;
+ 
++	/*
++	 * If setscheduling to SCHED_DEADLINE (or changing the parameters
++	 * of a SCHED_DEADLINE task) we need to check if enough bandwidth
++	 * is available. Last of the checks: nothing gives back the
++	 * bandwidth it reserves.
++	 */
++	if ((dl_policy(policy) || dl_task(p)) && sched_dl_overflow(p, policy, attr)) {
++		retval = -EBUSY;
++		goto unlock;
++	}
++
++	p->sched_reset_on_fork = reset_on_fork;
++
+ 	scx_prepare_setscheduler(p, policy);
+ 
+ 	scoped_guard (sched_change, p, queue_flags) {
 -- 
 2.47.3
 
