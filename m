@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793886402;
-	b=YnH2kVvdFjlA0QTJ0r6GAPD21QeHuRF9aY3/Y/usidnSI+NLWgy1M6Kxfkt+7q7vyssN
-	 u65wGHNynWW4QwJjYRYysR+YzQ1qgSuBNXIBD1EtZQQnf2ukgh4WB1l4K+/0BnddzfRt/
-	 I+d9eB4W2mth7bCg5958rWA+CodVS50lI6qmzRkt7nU8Nj86OXDtFLWahsMsnRF6PiEw0
-	 4UBSIy7/Z5F93Rq5bo9XXbGJfoKQ7GraWZQUjH+D0/qZcX/4Cj1/AxbiMs+MXj6SsYTji
-	 9+DV+es/W2jie0CLxLHQOeDAqteJZd0QzgQCp1yuBvkaXofijK8ERwukh1XHJkYzN9w==
+	t=1793887775;
+	b=X9twioPOLtY2z+A9+XoieqvaXhoWDvsJytWI8yeF6ZhxkvqzMhPb6GmA9Yc6kgeDM6Kj
+	 E+jJmH26VfUoP5xzi1zxqNJXHWtUa0X2Jdkwu15jT67yYTvEk0yJu+eG0mFRpexpB+5gf
+	 EdGxJw7lGGLL9vobB7/XDxZXeYGaTRmjWWtGKi/jOEaM3JjluS+fMFbxe6krk1HTr/TOm
+	 SfBBpnSRVtyPTdjPNOdC2JoZtaXFOuh6olKUUrxxZTHqRoz/saTHMgCfzMrvlrSLWLi+a
+	 sCNti1wC+cVaq9ivO64HueMsKaHuZzuKVKdgtX/QfB3pirEd/M35ta5TWsHIRyZjThw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793886402;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793887775;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
-	bh=/vPSGzrcpdRS3fICM7ap8IknGi3mQqqFBaTOgviuKOc=;
-	b=vo2/uCbAt4xRNy9bNbQAIpij7eU1QyFDiQL1OhulexWiRKARRqY1sA6S8qIXiUUWvvb7
-	 9xLMF+ua14AEwn498KdojVQhrK62R1cDh4CsmYIo+GpFZzH8oWvQvDNb6gsoHKKLCFw7u
-	 JDCUXCgeSDbWLpHQyoa9S0v+MmcsU8cy5Im+s3XwjI6Frzj6CUCg8ImusbbLdKQknXOM+
-	 skWbMiYGod6VHhotnp9sy0T7xSHpes0BE0Vmo11RCWTzX3aFzJ9u5wHxhZUIqfYihR+iW
-	 gF5JMhY9tDDrtJS8TDyVSGKVFG+THt+28j8tWyeBMIfW/S7opE5IKjL1ZRJF9LIyqmQ==
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=jzTzN1xi3wWq3rkQo05baaXe4YaAa7XUzbwyEbAc0TE=;
+	b=UF4O0euHPTlMHEBWWBHVQHWq9CdaLFg+T6qjq35vYoXsIdFdG3F3U6zcFr3SkUn4jEi+
+	 husaGsj7/2GV54XOARgxW3DkhR4twJxMfzCIBcws16rkXmCoiVK3/qQMIvsVoZVB7LYGu
+	 DL9pzt0c8uXg4MkJ6U9o14J+qoYRelYqUJ0/o1VrMDOEUCNUx+xR8rQnqw6mtc6ghT56y
+	 MmavGdWYj+0vLJMWQ6XvxllWQK+8t/l92cxDqeMTTgSArJLsviLdc3fhObeTycWz8evyP
+	 0t6QLdh6WhR00T8MMw13iLkMb0mEaUUL7Kc8lj6w2xcwPHiSqbhBagQ5IbQCj0cKv1w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IH+RVuwx;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0cDOXOJ7;
+	arc=none smtp.remote-ip=74.125.224.50
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF0C606A32C
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 13:46:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CBF0C606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B081606A32C
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 14:09:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B081606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IH+RVuwx
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e8da6ef7ddso11157685ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 05:46:41 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0cDOXOJ7
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-67be5d0e9cbso1474610d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 06:09:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793886401; x=1794491201; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=gmail.com; s=20260707; t=1793887773; x=1794492573; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=/vPSGzrcpdRS3fICM7ap8IknGi3mQqqFBaTOgviuKOc=;
-        b=IH+RVuwxIGYS+ptSubw3zVuKvxCYD5OLNL1eP0s4El01U4kCzmI0TYmQmuDZAe4xMM
-         f2d35D08HOFyL+mRi6TnLDpLiuXbPGwdZ++KWgxANFGtdG+EinywYtq5FhY66LVupRUX
-         Y6gL44mwhnIgJ+5T9cV8DQc3YFppkRcKIiAglBePWlab+gM9AUYg5ewyu4sQ4DFHidcK
-         EQLpsRq64uaKaDg8jJ88xiFX74Q3oxcxrIst5wUI3JDf+rbXxnicXd5dEr9pIzLaTFPJ
-         xt/TjL6jB3JmrH4BXyGqEDZewz1nAjoh/JTHKSWdyOeGBcYH1zKV+ojfP4pQ7Hjhjt+p
-         AdrQ==
+        bh=jzTzN1xi3wWq3rkQo05baaXe4YaAa7XUzbwyEbAc0TE=;
+        b=0cDOXOJ7kU44pN3CSsJC7LBttdhxXbKwXqvZzda7pHXStgvvBzFoKR4rfQ6uRpzano
+         LqGpNPg3W+CWu4WnyQkkbdSjRVXu+jvbvdx7LlzpaLxR3UBCncfBpxp7F1bVC1zR+7KP
+         tOpqvK21hn3041JvnCXOIHZ1DQ5S6efh+xzD106W6QtWm527wUoE+KbI3Pdx4pboCUeH
+         J7c0+EJi+hdBXYKg14ZCJ4Ab8oTgUC5Gw4DUJ4Tani6wz1FCcrxCBb2CybU5Tt8NB3w9
+         r7i4x3Fi0TP87AzY+Xgmvr0Itmnv4T5QoEgJdD1/ShixhE8u4yftXQKAkHFGDsmbERx0
+         3s4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793886401; x=1794491201;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20260707; t=1793887773; x=1794492573;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/vPSGzrcpdRS3fICM7ap8IknGi3mQqqFBaTOgviuKOc=;
-        b=p7QFBI8UsSK8jCcxcaGw8mryEsh5RogeEe67Z0fEW23Qs7sUc3eo6wFwtfjZFbe23I
-         lXbfGxzExXfHeu6B3xe2U8MUGCeYpFZrkhk3W3FnvefJlk6nqF/Gzju8ORqplVcJYrBH
-         KL3AnLQZok1wGXAmF73L22bmtz9fQPvIzXU4oNHQaJ5li5YKjukUDisUtVvOA3V944dF
-         KTTLibEawbTZTJSVMwt4aZrqxYFNCRVZpv4vlyTzEqeJKIeTffQ1qB1Ot/eSkWcBvv35
-         KYNXNIHl708klRANcjyrBq0yQ3Gi8Wel6/8baiF+vw48MC8vfHNh7pg3pmKRSfFemw/B
-         r6lQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzdhAorcLGU/eGxMa/MFowaUUnj+mX5JCFWpR4+x9wERibGk5RDb8EJYbqKxIiy2WQ5BViSELM946nBMQsjXss=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/DLtDeAEB8O1mphVgAWQ044y5e0dskmJHPP82lWjFMJy5Yw6ev
-	GosFpTmeg7AnDfe4Zt3kpX0YnWk7bl9NdErg1tht5/3e8mopJ9w1f/E=
-X-Gm-Gg: AYBFou3XmOic3NdmYINmRZRGbU2/rN1pAx24Jsb3DTsSoKyo8Mswgig+ChbGEEK1NDg
-	7qcKdDb0Bd2/87GX41whb8pciYpaZ5cXznJL7SbdgmGZBA6UfLFK2YIfqh+BeASPiaiG+dWwGXX
-	gMepUH91oMEZALkF3fwBBORb3zNJKgHZVx7HSRtKRoEJPvK+b5vYoarC3uG2LdGOTUZt8qTPIYe
-	DOCoMjY7QXlSJx6aFvhlrvnR2MktbBsDdMvFNoWtVzMizc9m/ev2EAbwqIspCpEmsBjAcfhXBW7
-	ka/RgPdgzTE5Jz97lGJCuSAoc5MaL3rBLAeDaoPEZY9BJ8QxJVkbkoyzEhApn/z68I0k+Jg6QF4
-	c0Yk4jVxAB6umjOAfBZVZl/zoJeSHG860dlRqvCFP9Mx33CUCcB2M7rZQMrEV2VuNZHMZY1/Add
-	2e++dZmZLeY/68nUFcVl8xcNy4ZW4pHm2x+fhMjGT4dlx9tTioLQlnp0VTZpsDftm1OHjrl7XfX
-	gmzR5m3Kt0h/4pZFW8gaA9PwBjs7VqM6nTUnYqP/OKa2CU7UXi+BONcNXbXz2zb7ffoqfv768hU
-	kp8Q0wVxkPErVb8j2xtVFCIAIk9nkYD33P2ABuzCj4IivDVsNt3goMKKd3DwY3Be
-X-Received: by 2002:a17:903:3c27:b0:2e9:670f:d080 with SMTP id d9443c01a7336-2eb36450a4fmr182650275ad.32.1793886401061;
-        Thu, 05 Nov 2026 05:46:41 -0800 (PST)
-Received: from localhost ([186.158.238.108])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed091cf87fsm17710175ad.67.2026.11.05.05.46.36
+        bh=jzTzN1xi3wWq3rkQo05baaXe4YaAa7XUzbwyEbAc0TE=;
+        b=JgNbUPAbouZKufHtE3StZ+C9znn2X0qE0g7VcW2Udy8U7IdBJoMaMSng496QoRs2Ot
+         r0uX9bfEx8YFRH2iPuTJSPvMrRUMX7r8J4M7R1+o1dbStt1v5wd+dhm5M/5QIp56W//I
+         JstejcWWn63fnypVlK/qhZrKj8xDXgaMvIY9enGRvKk3h9WJORdqetuBcRI63GtxNweu
+         /gnhArbNmfGIiNmwvjWe5NiCJWlInQQ01tXlFQTIas9AFdOk96kuONSeS0axmvf+sPGW
+         /NQ+LD50Rk/pvYER5W0Dr4eT9WmFcZuq6qKuzqbG9MXUs1cwFgrRRueewh0hKx1V3ws+
+         lR/A==
+X-Forwarded-Encrypted: i=1; AKwUvByqiWRXy+LK400+3GYDC79YuvpxiBDgnZa5jQz+fb5Y7nukRJAHRDX0kzbr3EAPMXwVL0HVbDbNhCznTFXvKfA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/EfKZn2j/luLGq6HlmgdfIY3rLH8pEBurqspsBUxwxPhX2Ss3G
+	Z/n2n6tgmc0MmGCuryVsHW8BE87ZK4s9rS9JIdfgKi0oNDyfCTWiQS9A
+X-Gm-Gg: AYBFou3crNSYoEfnju1eZV+xqKPsioi5k8ZT4YwaZEjZFVrVC9CCiqpC8f4YfSg34E5
+	SzQE6TqQmd1GcTieFVQHAouHgFWUf7ePkXKvH2ycouxD3XQQLbhWkKiBem33ZU82Pf2gyoiqsml
+	LdD5wFJbnoc/q6J5AD85LpEfFwjpp8jWOnB454ehkQY4vbwJV6WEgSKxmlI3Rob0p7NMcOvhhoE
+	UM9cvzaXj5pZh30LcCOtnEYdO/ZVfQ5MtoTI6wF18pQiWWO3zrBBleFZhOSDwORfCiXq5ZKjWdB
+	euj2QPosF4H2hy0p3FR0uu7SzY3BYFGiU9lO096iTlJ+WsR7NMUbVwCBXL1XV8BiOMgJhpDwCOJ
+	hOe3zKO9TNlVCp133C3h2HcGp/kYiydJuZxY7M5WX8vD48G6IkwRmPv3AnlbdbxCbprZvCUzp42
+	l4pT1pegZDP77Zezo9464Ang0tXTKmQzj8zOsXSVMODmli9/wLbf7/y9rf53nE6wU74bZ8vCGJJ
+	+AXmb+8Y7Dv/IzNiJIgurai0NJmByHqiyT3CvsZO/i00nzPw056VTB58kXtcIDsj/v+UPykK/cy
+	qGmpZq+UkJVoP+zjs3ave7/KN/n9IDRYNQ==
+X-Received: by 2002:a05:690e:1444:b0:679:b98d:9b7f with SMTP id 956f58d0204a3-67ba4c82e34mr11758102d50.11.1793887773314;
+        Thu, 05 Nov 2026 06:09:33 -0800 (PST)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b309712e33sm40372397b3.4.2026.11.05.06.09.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2026 05:46:40 -0800 (PST)
+        Thu, 05 Nov 2026 06:09:32 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,116 +90,138 @@ Precedence: list
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Nov 2026 10:46:34 -0300
-Message-Id: <DMNBNKKPHI0H.EZQ7YA2CSMEA@gmail.com>
-To: "David Gow" <david@davidgow.net>, "Alice Ryhl" <aliceryhl@google.com>,
- "Benno Lossin" <lossin@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Danilo Krummrich" <dakr@kernel.org>, "Gary
- Guo" <gary@garyguo.net>, "Miguel Ojeda" <ojeda@kernel.org>,
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: "Alexandre Courbot" <acourbot@nvidia.com>, "Andreas Hindborg"
- <a.hindborg@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Burak Emir" <burak.emir@gmail.com>, "Rae Moar"
- <raemoar63@gmail.com>, "Tamir Duberstein" <tamird@kernel.org>, "Trevor
- Gross" <tmgross@umich.edu>, "Yury Norov" <yury.norov@gmail.com>,
- <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] rust: kunit: support #[should_panic] and same
- test name with different #[cfg(...)]
-From: =?utf-8?q?Nicol=C3=A1s_Antinori?= <nico.antinori.7@gmail.com>
-X-Mailer: aerc 0.20.0
-References: <20261029-rust_kunit_v6_send-v2-0-5ce551efc48e@gmail.com>
- <35284b5b-bf0c-4585-ad3e-a76bae4be7df@davidgow.net>
-In-Reply-To: <35284b5b-bf0c-4585-ad3e-a76bae4be7df@davidgow.net>
+Date: Thu, 05 Nov 2026 09:09:26 -0500
+Message-Id: <DMNC538FF7AS.2JZQJXNEZG6P6@gmail.com>
+Cc: "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Willem de
+ Bruijn" <willemb@google.com>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH net v2 1/2] net: Make PSP skb extension survive packet
+ scrubbing
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Wei Wang" <weiwan@google.com>, "David S . Miller"
+ <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "Shuah Khan"
+ <shuah@kernel.org>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261030043145.2185700-1-weiwan@google.com>
+ <20261030043145.2185700-2-weiwan@google.com>
+In-Reply-To: <20261030043145.2185700-2-weiwan@google.com>
 
-On Tue Nov 3, 2026 at 11:45 AM -03, David Gow wrote:
-> Thanks very much, Nicol=C3=A1s.
+On Fri Oct 30, 2026 at 12:31 AM EDT, Wei Wang wrote:
+> skb_scrub_packet() drops all skb extensions unconditionally via
+> skb_ext_reset(). It runs on tunnel encap/decap (ip_tunnel_rcv, vxlan_rcv,
+> etc.) and virtual device forwarding/redirection (dev_forward_skb,
+> netkit_xmit, skb_do_redirect).
 >
-> I've had a closer look at the new version of this, and have a few=20
-> comments. Ultimately, I think a mix of this version and the original RFC=
-=20
-> is probably best, and in particular, using a panic_handler instead of=20
-> modifying kunit_try_catch, and removing the special-case assert!()=20
-> handling would be ideal.
+> When a virtual device such as netkit is associated with a PSP device in
+> another network namespace via PSP_CMD_DEV_ASSOC, incoming PSP packets
+> decapsulated by psp_dev_rcv() lose their SKB_EXT_PSP extension when
+> scrubbed during redirection into the peer netns. Without SKB_EXT_PSP,
+> __psp_sk_rx_policy_check() rejects incoming TCP data segments at the
+> socket layer with SKB_DROP_REASON_PSP_INPUT.
 >
-> Le 30/10/2026 =C3=A0 00:59, Nicol=C3=A1s Antinori via B4 Relay a =C3=A9cr=
-it=C2=A0:
->> This patch series intends to implement two features for KUnit tests
->> written in Rust. The work is based on a TODO comment made in the
->> `bitmap.rs` module [1].
->>=20
->> Changelog:
->>=20
->> v2:
->> - Added more tests in `rust/kernel/kunit.rs` testing Sashiko findings
->>    and changes.
->> - Solved Sashiko: "[Low] kunit: spurious "try faulted" error logs for
->>    successful #[should_panic] tests": Solved by adding
->>    `rust_should_panic` in `kunit_try_catch` C struct to check if the tes=
-t
->>    is expected to panic and act accordingly. Dismissed what I first talk=
-ed
->>    about in [3].
+> Introduce a static skb_ext_scrub() helper in net/core/skbuff.c to
+> preserve SKB_EXT_PSP across skb_scrub_packet() while dropping all other
+> extensions. If SKB_EXT_PSP is not active, skb_ext_scrub() simply calls
+> skb_ext_reset(). If SKB_EXT_PSP is the only extension in the skb_ext
+> buffer, nothing needs to be scrubbed. Otherwise, save the PSP metadata,
+> reset the extension block, and re-add a fresh SKB_EXT_PSP extension (or
+> clear skb->decrypted if the allocation fails).
 >
-> I think if we only handle Rust panics, this should go away, right?
-
-Yes, it should. Since we won't `BUG()` anymore in case a test should
-panic, the test thread won't exit with `-EINTR`. Because of this we
-won't need to shield the feature behind a Kconfig symbol either, since
-we won't have error logs in successful tests.
-
-Here's the raw output from the panic handler version:
-
-KTAP version 1
-1..1
-    KTAP version 1
-    # Subtest: rust_kernel_kunit
-    # speed: normal
-    1..1
-    # rust_test_kunit_panic_in_kunit_test.speed: normal
-    ok 1 rust_test_kunit_panic_in_kunit_test
-ok 1 rust_kernel_kunit
-
-for test:
-
-#[test]
-#[should_panic]
-fn rust_test_kunit_panic_in_kunit_test() {
-    panic!("This test should panic and pass");
-}
-
->> - Now the tests that have an inactive #[cfg(..)] do not appear un the
->>    KUnit execution summary as ignored, they just do not run.
->> Link to v1: https://lore.kernel.org/all/20260930-rust_kunit_v4-v1-0-e3b0=
-d45311dd@gmail.com/
->>=20
->> - RFC patch: https://lore.kernel.org/rust-for-linux/cover.1789500084.git=
-.nico.antinori.7@gmail.com/
->>=20
->> 1. Supporting `#[should_panic]` [2]:
->>=20
->> KUnit tests in Rust follow the user-space syntax, but at the moment
->> `#[should_panic]` is not supported. The first patch of this series adds
->> support for the attribute (only in its basic form, `#[should_panic =3D
->> "message"]` is not supported yet).
->>=20
->> The way it is supported is by adding a new boolean property called
->> `rust_should_panic` to `kunit_attributes` struct in kunit/test.h and in
->> `kunit_attributes` in kunit/try-catch.h and check for the
->> `try_catch->try_result` code and the named flag to detect if there was a
->> panic in `kunit_try_catch_run` function.
+> Fixes: 06c2dce2d0f6 ("psp: add new netlink cmd for dev-assoc and dev-disa=
+ssoc")
+> Link: https://lore.kernel.org/r/20260910-bpf-meta-inside-skb-ext-v2-3-0b2=
+1e42180b0@cloudflare.com
+> Reported-by: Daniel Zahka <daniel.zahka@gmail.com>
+> Closes: https://lore.kernel.org/netdev/DLODSKPY6ON6.1G6SP3CFFLCPJ@gmail.c=
+om/
+> Co-developed-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Wei Wang <weiwan@google.com>
+> ---
+>  net/core/skbuff.c | 31 +++++++++++++++++++++++++++++--
+>  1 file changed, 29 insertions(+), 2 deletions(-)
 >
-> I think rust_should_panic as an attribute is good, but it should just be=
-=20
-> checked from a panic_handler. If it supports more than just rust panics,=
-=20
-> it probably shouldn't be called *rust_*should_panic (and again, should=20
-> probably be based on the warning suppression instead).
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 93c2f440b9ec..5c4a2e982ebc 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -6369,6 +6369,32 @@ bool skb_try_coalesce(struct sk_buff *to, struct s=
+k_buff *from,
+>  }
+>  EXPORT_SYMBOL(skb_try_coalesce);
+> =20
+> +static void skb_ext_scrub(struct sk_buff *skb)
+> +{
+> +#if IS_ENABLED(CONFIG_INET_PSP)
+> +	struct psp_skb_ext *pse =3D skb_ext_find(skb, SKB_EXT_PSP);
+> +
+> +	if (pse) {
+> +		struct skb_ext *ext =3D skb->extensions;
+> +		struct psp_skb_ext tmp =3D *pse;
 
-If we consider failed `assert!` from outside a #[test] function panics,
-then I'll leave it like this, otherwise I am thinking of
-`rust_should_fail`.
+I would move the copy just before skb_ext_reset(skb), but it probably
+won't make a difference in the generated code.
 
-Thank you!
-Nicol=C3=A1s
+> +
+> +		/* Nothing else to scrub if PSP is the only extension in ext. */
+> +		if (ext->chunks =3D=3D SKB_EXT_CHUNKSIZEOF(*ext) +
+> +				   skb_ext_type_len[SKB_EXT_PSP])
+> +			return;
+> +
+> +		skb_ext_reset(skb);
+> +		pse =3D skb_ext_add(skb, SKB_EXT_PSP);
+> +		if (pse)
+> +			memcpy(pse, &tmp, sizeof(*pse));
+> +		else
+> +			skb->decrypted =3D 0;
+
+Agree with sashiko not to clear decrypted. It would at least prevent the
+skb from being forwarded cleartext back onto the network.
+
+> +		return;
+> +	}
+> +#endif
+> +	skb_ext_reset(skb);
+> +}
+> +
+>  /**
+>   * skb_scrub_packet - scrub an skb
+>   *
+> @@ -6380,7 +6406,8 @@ EXPORT_SYMBOL(skb_try_coalesce);
+>   * operations.
+>   * skb_scrub_packet can also be used to clean a skb before injecting it =
+in
+>   * another namespace (@xnet =3D=3D true). We have to clear all informati=
+on in the
+> - * skb that could impact namespace isolation.
+> + * skb that could impact namespace isolation. Note that PSP skb extensio=
+n is
+> + * preserved across packet scrubbing by design.
+>   */
+>  void skb_scrub_packet(struct sk_buff *skb, bool xnet)
+>  {
+> @@ -6388,7 +6415,7 @@ void skb_scrub_packet(struct sk_buff *skb, bool xne=
+t)
+>  	skb->skb_iif =3D 0;
+>  	skb->ignore_df =3D 0;
+>  	skb_dst_drop(skb);
+> -	skb_ext_reset(skb);
+> +	skb_ext_scrub(skb);
+>  	nf_reset_ct(skb);
+>  	nf_reset_trace(skb);
+> =20
+
+The only thing I would say is that skb_ext_scrub() won't scale if a
+second extension comes along and wants the same treatment as PSP. In
+that case, either we could make a bitmap of "no scrub" extensions and
+then use the same approach of allocating a new ext block and copying
+them over, or the original approach of skb_ext_del() could be used after
+changing the reference counting scheme for the special extensions in the
+release path of __skb_ext_put(), but that is a more intrusive change.
+
+I'm ok with the approach from a PSP perspective:
+
+Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
