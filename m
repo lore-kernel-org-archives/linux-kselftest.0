@@ -1,63 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.189
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793844753;
-	b=uYVRiqkQgSwFPjpfgdvnBsEfjjyO4STsfqv47Ta3djlwrc+y3Hy1xip2evzUR0SIiTu9
-	 NNrPz/vXW5aANOiYMzcznQZrAcN9A5BvITPPXAnLh4rmH4qcnlupyDmZtcgRHpiXFNbAh
-	 TtXTbyZ5+uWQ1Svg7ji9NADfr61QdaZL/jfB2GbRnt2qbpPakR1vUwUL6/l8Du4Y/EqS2
-	 YYjEuvMkeQuiDTuTsn3kkS4I2E4yaVA1Uj+0d6iqSsWsSkKWfP0BbJEnEAgUOsxH64XBf
-	 G84mAVlzV29An/bXXfS4xisZGig6EXqRZUD3vLXIMd7bt8LgOGTOjjH66rb2szrpqEg==
+	t=1793844824;
+	b=mID5wgvuiLqMx1sOyCMeSU/AkN82W/qoLi+DRxqIxfZm7oFrnze+NjXlPrO4qH35nFPu
+	 Wu/UeMbU/lksS+8qNMpOULhYI8Pc4ho03F676XfEQOBp52OpAw4pSvY6MnKddG/Zy6wiF
+	 ZkHp8CSd5nC2ooEM7EHQSgLmlvNIEOYQDzZzoGzFuxAwupyiiwTvetOhB1zXmhEX4IrVS
+	 O481l+WCTodMOk48u2qcuwo1EqxI3G0+vFCosbA0/3tkLXhui59zMeCBmBh0klO+Zcab+
+	 nOvkCikJHHZA4JOftOycPz6aK1pI69Z6rNlJvULl/8n2NiiiTftZ1xPvnK9FZ2V+5Rg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793844753;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793844824;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=QaEwYVK0QRwa1prVIMD7IJ4FVuOtJkVN57HHtraLvXc=;
-	b=m0Xj2UCEEVIfLwoD1oNy7EsJBXwoGQJXPk7IMjEgSP8M5WOeKYwy60tBywdr/IGP9/OA
-	 mhiEOz+3bMVn3Ld8SmEs5ZgtLqyYGHHB3ImlqFOuWx/VL6CuVJW3Xm7Kt8SQ4hdCt9oC7
-	 jw6QSTkYS5h/T3miur21iRSaszDTKNusuCo1F09mc9g1e2LYAGFAwdznS2JmwxNlNWSgh
-	 S9MyNqb79rGH2Om7QptCNKgQj5LuoAJgJkPypxm8MqsMiwVsta35VyJ1vMzw3Kfuwyeu2
-	 J/5d3BNBffphpYIK7e/sN2ov/ukFZq98CpLlSEEHtyM0qpEifJuJehAyvhNq4n6snPw==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=hNDLSFapUDH5zg85s2N1cWnGesB/dC3nKW1Zdod/mJM=;
+	b=1KdVhsi9t8tcI6vyhIjF69I6Lh4WeA7pgoMhpM7HTn+dW3VClS0IIouLwvI0OrMrsid0
+	 s/CZTSTh68satlSR7YiOzWF5SSnNxgK7dw+ynARZgY997OztVSBwxNpibnAliNHxu4hUt
+	 RKknElxhRyafDKi4gSjVHTxGbkcxvu7RtWceBwHbcXtTFxmCfJgEcFkRXAtx9hx/3ozV1
+	 /toM6Pkb68oe/HD0VTJwD7NtEcthveIFQ2Z983yVNEAc8ljADvueDnN+mE5aUmNbLBEmg
+	 otY1gZmW0YN+k2fF6toxLnMw6X+jTne0LAwX1zgbNrJElTeDPIsMGcoYJNvxBooUtyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UsUqcTDX;
-	arc=none smtp.remote-ip=91.218.175.177
-Received: from mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GTN47C24;
+	arc=none smtp.remote-ip=91.218.175.189
+Received: from mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A530A606A31B
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:12:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A530A606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4492B606A326
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 02:13:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4492B606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UsUqcTDX
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GTN47C24
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=pBrfotY9+XE+xLOo6ESNM23xl8EfAZ2RsF5WJxQ1HQg=;
+DKIM-Signature: a=rsa-sha256; bh=8I/giyMs0wqeew5AfRUUOtj+4dlC5TxPYe3tjop4G7Q=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793844749; v=1; x=1794449549;
- b=UsUqcTDXiUIUDjy7EsYATTiTE4U6RjuH70yVSspKepTCWFqrC/x3yt0UZgU75x1/nKu1mAnD
- Hk9Ko34P03qH2vXk1TZ87alHQ0PdewiOAmMEK2PuaqC4at6pOlyIV1CTYIBiQUivv/pbCKiY32n
- ScIr6xmD26QRN+0a3WoBlGEQ=
+ t=1793844821; v=1; x=1794449621;
+ b=GTN47C242OTjxoETwRoDA4BNNMBb96ebNpD8Fs7hcBOuXEfB4UY9tjCqMCMULvNYzHbZTVs9
+ rF0xm7EfvvrHIlO+8uqH39Q+2TJFSVheoWh0KNsIYT29D3R3Sxt3FqEfBpj54Vs8kS3zteYOtL/
+ UaYoLjy6PfYWWvgx9bN5zOwc=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id d7e254c367df15f0;
-	Thu, 05 Nov 2026 02:12:29 +0000
-X-Mizu-Trace-ID: d7e254c367df15f0
+Received: by smtp.migadu.com with ESMTPS id 8fb82eb1ffacc0da;
+	Thu, 05 Nov 2026 02:13:41 +0000
+X-Mizu-Trace-ID: 8fb82eb1ffacc0da
 X-Migadu-Flow: FLOW_OUT
-Date: Thu, 5 Nov 2026 10:12:15 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
-	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	weiwan@google.com, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 1/2] ipv6: ignore link state in gateway check
-Message-ID: <auvl_644NtfQVWrW@fedora>
-References: <20261104195655.1406837-1-aroslavdudkov622@gmail.com>
- <20261104195655.1406837-2-aroslavdudkov622@gmail.com>
+Message-ID: <d683135f-e0da-4f1e-b4b4-084931582a24@linux.dev>
+Date: Thu, 5 Nov 2026 10:13:33 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,99 +58,207 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261104195655.1406837-2-aroslavdudkov622@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cgroup/cpuset: Fail if isolated CPUs don't leave any boot
+ domain housekeeping CPU
+To: Waiman Long <longman@redhat.com>, Guopeng Zhang <guopeng.zhang@linux.dev>
+Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20261104071600.474587-1-guopeng.zhang@linux.dev>
+ <cbe741a9-fd0c-4c8f-8591-55ecc70f222a@linux.dev>
+ <21cfe1b7-be80-4f3b-8366-cd77afd113b0@redhat.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <21cfe1b7-be80-4f3b-8366-cd77afd113b0@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 04, 2026 at 07:56:54PM +0000, Yaroslav Dudkov wrote:
-> IPv6 route cannot be added in table when all
-> following conditions are true:
-> - gateway is not link-local address
-> - ignore_routes_with_linkdown=1 on device
-> - nexthop has no carrier
-> - gateway is not present or covered by any route in table already
-> Also multipath routes addition is invalidated by kernel even
-> if only one of added nexthops satisfies all above conditions.
+
+
+On 11/5/2026 2:54 AM, Waiman Long wrote:
+> On 11/4/26 7:58 AM, Ridong Chen wrote:
+>>
+>>
+>> On 11/4/2026 3:16 PM, Guopeng Zhang wrote:
+>>> From: Guopeng Zhang<zhangguopeng@kylinos.cn>
+>>>
+>>> With the "domain" flag of the isolcpus= boot option, the CPUs isolated
+>>> at boot are excluded from the sched domains and the remaining CPUs
+>>> become the boot domain housekeeping CPUs. An isolated partition is
+>>> allowed to use the boot isolated CPUs, but it must not take over all
+>>> the boot domain housekeeping CPUs.
+>>>
+>>> prstate_housekeeping_conflict() checks that rule for root partitions
+>>> only. The 2nd check covers the nohz_full case as it is gated by
+>>> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) which is not enabled by
+>>> isolcpus=domain. So on an isolcpus=domain,<cpus> boot, an isolated
+>>> partition can claim all the remaining boot domain housekeeping CPUs.
+>>> The state is committed, but the sched domain rebuild at the end of
+>>> the write finds no housekeeping CPU left for the boot domain and
+>>> hits WARNs and an OOPS in partition_sched_domains().
+>>> housekeeping_update() cannot accept the configuration either as it
+>>> cannot empty the boot domain housekeeping mask.
+>>> With an "isolcpus=domain,10-31" boot where CPUs 0-9 are the boot
+>>> domain housekeeping CPUs, for example:
+>>>
+>>>    # echo 0-9 > A/cpuset.cpus
+>>>    # echo isolated > A/cpuset.cpus.partition
+>>>    WARNING: kernel/sched/topology.c:3089 at build_sched_domains+...
+>>>    WARNING: kernel/cgroup/cpuset.c:1478 at cpuset_update_sd_hk_unlock+...
+>>>    RIP: 0010:partition_sched_domains+0x3b8
+>>>
+>>> Fix that by extending prstate_housekeeping_conflict() to reject an
+>>> isolated partition update that would leave no active boot domain
+>>> housekeeping CPU outside the isolated CPUs. The CPUs released back
+>>> to the boot domain by the same update are taken into account, so
+>>> replacing one of the last housekeeping CPUs with another one in a
+>>> single update remains allowed. The new check is only performed when
+>>> housekeeping_enabled(HK_TYPE_KERNEL_NOISE) is disabled so that the
+>>> existing nohz_full behavior is unchanged.
+>>>
+>>> Add test cases in test_cpuset_prs.sh to verify that taking over all
+>>> the boot domain housekeeping CPUs is rejected while swapping one of
+>>> them with another one is allowed.
+>>
+>> Hi Guopeng,
+>>
+>> Thanks for the report and the reproducer. I can reproduce the WARN and
+>> the OOPS in partition_sched_domains() here.
+>>
+>> However, I don't think prstate_housekeeping_conflict() is the right
+>> place to fix it, and the fix doesn't seem complete. The same problem
+>> can be triggered with a root partition, which this patch doesn't cover.
+>> With an "isolcpus=domain,4-7" boot on an 8-CPU VM:
+>>
+>>   # echo 0-3 > A/cpuset.cpus
+>>   # echo root > A/cpuset.cpus.partition
+>>   WARNING: kernel/sched/topology.c:3111 at build_sched_domains+0x2b96/0x5500
+>>   Oops: general protection fault, ... [#1] SMP KASAN NOPTI
+>>   RIP: 0010:partition_sched_domains+0x10a3/0x1a10
+>>
+>> The faulting address is in build_perf_domains(), where cpumask_first()
+>> on the empty cpu_map returns nr_cpu_ids and cpu_rq() goes out of
+>> bounds.
+>>
+>> The root cause looks like it isn't a housekeeping conflict. Boot time
+>> isolated CPUs stay in top_cpuset.effective_cpus by design, and they are
+>> only filtered out of the top_cpuset sched domain in
+>> generate_sched_domains(). But the checks that make sure the parent
+>> still has CPUs left, i.e. tasks_nocpu_error() for local partitions and
+>> the cpumask_subset(top_cpuset.effective_cpus, ...) checks in
+>> remote_partition_enable()/remote_cpus_update(), only look at
+>> top_cpuset.effective_cpus. So any partition, root or isolated, local
+>> or remote, can take away all the boot domain housekeeping CPUs as long
+>> as some boot isolated CPUs are still left in top_cpuset, which leaves
+>> the top_cpuset sched domain empty.
+>>
+>> So I think the check should be done at the "parent has no CPU left"
+>> level instead. Something like the diff below. It is not tested yet;
+>> could you give it a try with your reproducer and the test cases?
+>> Note that the root partition and remote partition cases should be
+>> added to the selftest as well.
+>>
+>> Without isolcpus=domain, HK_TYPE_DOMAIN_BOOT is cpu_possible_mask and
+>> the new check is equivalent to the existing one, so no extra
+>> housekeeping_enabled() gating is needed.
+>>
+>> ---
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 3219f927c35e..fb3e81405f5b 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -1180,12 +1180,51 @@ static void update_partition_sd_lb(struct cpuset *cs, 
+>> int old_prs)
+>>                 cpuset_force_rebuild();
+>>  }
+>>
+>> +/*
+>> + * top_cpuset_sd_nocpu - Check if top_cpuset will have no sched domain CPU
+>> + * @add_cpus: CPUs to be taken away from top_cpuset
+>> + * @del_cpus: CPUs to be given back to top_cpuset, can be NULL
+>> + * Return: true if no active CPU will be left in the top_cpuset sched domain
+>> + *
+>> + * Boot time isolated CPUs stay in top_cpuset.effective_cpus, but they are
+>> + * excluded from the sched domain of top_cpuset in generate_sched_domains().
+>> + * So checking top_cpuset.effective_cpus alone is not enough to ensure that
+>> + * the top_cpuset sched domain won't become empty after @add_cpus are taken
+>> + * away from it. The sched domain of top_cpuset must keep at least one
+>> + * active boot domain housekeeping CPU.
+>> + */
+>> +static bool top_cpuset_sd_nocpu(const struct cpumask *add_cpus,
+>> +                               const struct cpumask *del_cpus)
+>> +{
+>> +       const struct cpumask *hk_mask = 
+>> housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
+>> +       int cpu;
+>> +
+>> +       for_each_cpu_and(cpu, hk_mask, cpu_active_mask) {
+>> +               if (cpumask_test_cpu(cpu, add_cpus))
+>> +                       continue;
+>> +               if (cpumask_test_cpu(cpu, top_cpuset.effective_cpus) ||
+>> +                   (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
+>> +                       return false;
+>> +       }
+>> +       return true;
+>> +}
+>> +
+>>  /*
+>>   * tasks_nocpu_error - Return true if tasks will have no effective_cpus
+>>   */
+>>  static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
+>>                               struct cpumask *xcpus)
+>>  {
+>> +       /*
+>> +        * The top_cpuset always has tasks (kthreads at least), so its sched
+>> +        * domain can't be empty. The current effective_xcpus of a valid
+>> +        * partition will be given back to top_cpuset if not in @xcpus.
+>> +        */
+>> +       if ((parent == &top_cpuset) &&
+>> +           top_cpuset_sd_nocpu(xcpus, is_partition_valid(cs)
+>> +                                      ? cs->effective_xcpus : NULL))
 > 
-> Reproducer:
-> 
->   ip netns add t
->   ip -n t link add va type veth peer name vb
->   ip -n t link set va up
->   ip -n t addr add fd00::1/64 dev va nodad
->   ip netns exec t sysctl -w \
->     net.ipv6.conf.va.ignore_routes_with_linkdown=1
->   ip -n t -6 route add 2001:db8::/64 via fd00::2 dev va
->   # added
->   ip -n t -6 route add 2001:db8::/64 table 100 via fd00::2 dev va
->   # RTNETLINK answers: No route to host
->   ip -n t -6 route show table all
->   ip netns del t
-> 
-> Route should be added because:
-> - RT6_LOOKUP_F_IGNORE_LINKSTATE in commit d5d32e4b7668
-> ("net: ipv6: Do not consider link state for nexthop validation")
-> was added for this
-> - the same route is valid in main table (when no specifying table id
-> while adding route)
-> - fib6_nh_init() initializes nexthops with no carrier
-> - IPv4 already does this (fib_check_nh_v4_gw() ignores link state
-> using the FIB_LOOKUP_IGNORE_LINKSTATE flag)
-> 
-> Before commit b2c709cce682 ("ipv6: Convert gateway validation to
-> use fib6_info") rt6_lookup() was used for checking if nexthop is
-> valid, rt6_lookup called rt6_device_match() which does not check the
-> link state. After change rt6_lookup() to fib6_lookup()
-> find_match() under fib6_lookup() started to invalidate linkdown
-> devices, because RT6_LOOKUP_F_IGNORE_LINKSTATE is not passed to it.
-> 
-> Adding RT6_LOOKUP_F_IGNORE_LINKSTATE to flags for ip6_route_check_nh()
-> solves the problem. RT6_LOOKUP_F_IGNORE_LINKSTATE is already used
-> inside the first search ip6_nh_lookup_table() and fixes the
-> bug in second search fib6_lookup(). Also RT6_LOOKUP_F_IGNORE_LINKSTATE
-> isn't read inside fib6_select_path().
-> 
-> Fixes: b2c709cce682 ("ipv6: Convert gateway validation to use fib6_info")
-> Signed-off-by: Yaroslav Dudkov <aroslavdudkov622@gmail.com>
-> ---
-> IPv4 example of this situation:
->   ip netns add t
->   ip -n t link add va type veth peer name vb
->   ip -n t link set va up
->   ip -n t addr add 192.168.0.1/24 dev va
->   ip netns exec t sysctl -w \
->     net.ipv4.conf.va.ignore_routes_with_linkdown=1
->   ip -n t route add 192.0.2.0/24 table 100 via 192.168.0.2 dev va
->   # added
->   ip -n t route show table all
->   ip netns del t
-> 
-> Also when adding RT6_LOOKUP_F_IGNORE_LINKSTATE to flags of
-> ip6_route_check_nh() makes adding this flag inside of
-> ip6_nh_lookup_table() unnecessary for this call, making another call in
-> ip6_route_check_nh_onlink() with flags=0 the only place where it is
-> needed.
-> ---
->  net/ipv6/route.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index 94e5ef1c4f83..73d8a2c95602 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-> @@ -3424,9 +3424,9 @@ static int ip6_route_check_nh(struct net *net,
->  			      netdevice_tracker *dev_tracker,
->  			      struct inet6_dev **idev)
->  {
-> +	int flags = RT6_LOOKUP_F_IFACE | RT6_LOOKUP_F_IGNORE_LINKSTATE;
->  	const struct in6_addr *gw_addr = &cfg->fc_gateway;
->  	struct net_device *dev = _dev ? *_dev : NULL;
-> -	int flags = RT6_LOOKUP_F_IFACE;
->  	struct fib6_result res = {};
->  	int err = -EHOSTUNREACH;
->  
-> -- 
-> 2.54.0
+> The del_cpus should normally be (cs->effective_xcpus & ~xcpus), but the 
+> top_cpuset_sd_nocpu() helper will skip CPUs that are in xcpus. So it will work 
+> in this case. It should be noted in the functional comment of 
+> top_cpuset_sd_nocpu() that @del_cpus can include common CPUs that will stay in 
+> the partition which will be skipped in the helper so that future change won't 
+> accidentally change that behavior.
 > 
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Thank you for your reply.
+
+Yes, perhaps Guopeng could make the code and comments more readable.
+
+> 
+>> + return true;
+>> +
+>>         /*
+>>          * A populated partition (cs or parent) can't have empty effective_cpus
+>>          */
+>> @@ -1724,7 +1763,7 @@ static int remote_partition_enable(struct cpuset *cs, 
+>> int new_prs,
+>>          */
+>>         compute_excpus(cs, tmp->new_cpus);
+>>         if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
+>> -           cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
+>> +           top_cpuset_sd_nocpu(tmp->new_cpus, NULL))
+>>                 return PERR_INVCPUS;
+>>         if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
+>>                 return PERR_NOCPUS;
+>> @@ -1828,7 +1867,7 @@ static void remote_cpus_update(struct cpuset *cs, struct 
+>> cpumask *xcpus,
+>>                 if (!capable(CAP_SYS_ADMIN))
+>>                         WRITE_ONCE(cs->prs_err, PERR_ACCESS);
+>>                 else if (cpumask_intersects(tmp->addmask, subpartitions_cpus) ||
+>> -                        cpumask_subset(top_cpuset.effective_cpus, tmp->addmask))
+>> +                        top_cpuset_sd_nocpu(tmp->addmask, tmp->delmask))
+>>                         WRITE_ONCE(cs->prs_err, PERR_NOCPUS);
+>>                 else if (prstate_housekeeping_conflict(prs, PRS_ROOT,
+>>                                                        excpus, tmp->delmask))
+>>
+> 
+
+-- 
+Best regards
+Ridong
+
