@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793844073;
-	b=XBqs+kaQEOJ9Dus7moelKRa2pPpj1dVo0d5PR+boNYGjRPXbstSRt+2vBgn8bXguE7uk
-	 RbYdukguhqFOYntrTgE7WTphpekSfUdHmlE1APk0Uy51OFPydnFJEQc+u/B2Rfakw1EqT
-	 dF/GDZB2EqrnDIyomAAjHN5gxhmFgpn0ry5N7/zTF6nvlAAI9Qf/C3WoEO4A7/95Ya5g9
-	 8AzjexV8QsP8wc3AQALZv7GhdseDgXbU0jTwhgBpr9au2Os1gzY9J1tBmD5eRtkBXH+bW
-	 4Pumpi9JHn+JlgcCwP7bNUFtN+a1aTewvfE5TLX9bJoYhxrZC8W5yii9UDuHljDpV2w==
+	t=1793844071;
+	b=O3tLJPt4lAg3qbJDwctoQ3Py9Su/r/E+lwsUEVJ75T43YeiANWfGr9YtPo983id603rd
+	 8/LGsyppiQy42lbj6z0+g0m8PtU2o+Q0OWt59MMc4xYfy16hvvohmbjWW39joruswlb72
+	 Cxd7oQSW58D+BXJqNdTuOg1Z6gCd+D3cLzv9BwB6QvHRt1jBFRe1aQGdl/ToDSduQGg7k
+	 pgZeIv0bKBw5zfIMcrPneRbKN8bR/6qMDJ1NslVtsL9tE5vyvOGTqPwDI3hyoyP/vCsA4
+	 ocVksfhlJc/NPDOkBojusIIpkQa1MDa67DUH1vyi5g5Tk80PYW73lKaCYbhMM9Qdatw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793844073;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793844071;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=pphF2Gry51KkjraDv3DbKbxipU/YNYO4YsKlt2HijlE=;
-	b=AvpTNI+NSMReB7CQ46Mq2bOPnHtTeidxkB2gpB1jKgnPUWQgLc2dUB+7wvqUWLeeIsJr
-	 c+NaTopr8HBpNEVLrIAWzM4kOV9wrlDbLVvqxW9oVkEAGZFx3HLkj6pvq1PrG4cUyg43/
-	 Rdi/EBtQK1S/ec2tqfPB31LUxF7fK/ylwi6AKMlKp71SKnePIse/7YF1WTJKHEo/vejPV
-	 psYKYOwBPzXc0KVGU/lggbhE84J77M1AEJCMNYBRVXTrCnOQAgI8Rqm9x93PJRQY8GVhC
-	 y8kEjYburZKDTLKyblKnFa1M5+tCg95XFnYSBn4E0ugRv7UuH7wxl/cFAHzSxfUvAww==
+	bh=8OScpE0FBH4jzhyM8NQfWUyjdAAqoPLioveXmLb2kcA=;
+	b=t2OCp+pzaAfXLmX3Jdpbsi4KnDvYIXREho3Y2fAnAi54XOeEuU6tH0vlJnGg4z1RqN3X
+	 Pv6Mxh4wHWiXbMATWoZaoG5myIAxuALPWCJpsRQFp9+n819RImQHCO1Yp9HldcnlnuXVA
+	 oPbX7nni+zAHtiInAmAHqohKq2ebZyakgSg9EOIYV+qq18o5jfDKRppz+o1vmperjWcoG
+	 QOCvf0eGz0lTj2ya+W8hEh6QWUvgTdmt+KHgrWXXJZiBgp3trwzJYSFGLsGyERm6jk4xj
+	 p8auZNSRLaQgAKkMCPrwHENmuoepE1L1/nsin1in1nYcalQtig4k/XYMP0LiieVhIIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
 	spf=none smtp.mailfrom=casper.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=W0697dEo;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=pdGLH5Os;
 	arc=none smtp.remote-ip=90.155.50.34
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73C0606EE8A;
-	Thu,  5 Nov 2026 02:01:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B73C0606EE8A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAAA606A334;
+	Thu,  5 Nov 2026 02:01:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAAAA606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=W0697dEo
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=pdGLH5Os
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
 	To:From:Reply-To:Content-ID:Content-Description;
-	bh=pphF2Gry51KkjraDv3DbKbxipU/YNYO4YsKlt2HijlE=; b=W0697dEoJqJFNkTbdno7tSxg8G
-	ryaiNpDrSQQ35mK6NawV27thPKFt0wfyyzkBPAsPnhLMa2+Eupz6srh4Ox0LFNxPCbpsiB78Ac83t
-	1LjqqOktxFG7baANhZHISm+eT5QS9ADz5a9+rlEcE8Ijp8Ik664gJ3UZ1NqW2anAl29T2YrA7zHCM
-	fWPgveNZhaN9uj8iDSgjwRQU6Dr9381q5jYKSUBPRG5H6k9YqsbkJQI8eFhiF0+h0E5HyzEVCN4eG
-	X5RLEagfvhmb07LoZa0QIPu+BlMtf6GxLPaxqMBC+OK70ln83PM0NoheGP6U0PXyG8DcwCGbFs8IY
-	fAcvXPWQ==;
+	bh=8OScpE0FBH4jzhyM8NQfWUyjdAAqoPLioveXmLb2kcA=; b=pdGLH5OsdZr8EtyKIJmt5IQH7C
+	HMAP0xrE9eMwFFAslFyxq52n7DdB0E65EfRvLuAPgDE7AZ8V99ljYb9ygdzUze1U92MQb4DIn00Fv
+	g57J0EjspdfGGvZ60oGWTIqEdK3IyrKcZYyW2JxPfpSypMIFtEScrsZSZR8TP+x0m4WmrcCR28c4H
+	YUkVVN8HM2jBMYF88K73U/GDjdav1dpqrYqwDWnmf7vR1bKcvq0ZYNa80JBshkz1OCf3UTMLgMtOR
+	kEawzuAu3mHxoEKInA6AfDPTLvlJkAtx8R+afzLFvkmHO4PZxJ+fKY3cIBhEngveKkcfDNHUY2KIs
+	B2jIzEeg==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOmmn-000000037jU-292l;
+	id 1xOmmn-000000037jB-0EFY;
 	Thu, 05 Nov 2026 02:01:05 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xOmmn-0000000AWEE-056f;
-	Thu, 05 Nov 2026 02:01:05 +0000
+	id 1xOmmm-0000000AWDS-1oI4;
+	Thu, 05 Nov 2026 02:01:04 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -66,9 +66,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Kunwu Chan <kunwu.chan@gmail.com>,
 	syzbot+208f7f3e5f59c11aeb90@syzkaller.appspotmail.com,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v2 19/20] KVM: selftests: Add Xen evtchn vs memslot-update race test
-Date: Thu,  5 Nov 2026 02:01:01 +0000
-Message-ID: <20261105020104.2507083-20-dwmw2@infradead.org>
+Subject: [PATCH v2 09/20] KVM: x86: Use gfn_to_pfn_cache for steal time / preempted status
+Date: Thu,  5 Nov 2026 02:00:51 +0000
+Message-ID: <20261105020104.2507083-10-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105020104.2507083-1-dwmw2@infradead.org>
 References: <20261105020104.2507083-1-dwmw2@infradead.org>
@@ -86,277 +86,336 @@ Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+From: Carsten Stollmaier <stollmc@amazon.com>
 
-Race a guest EVTCHNOP_send loop against a host thread which deletes
-and recreates the shared_info memslot. The delivery path runs in the
-vCPU's exit-handling context, under vcpu_run's kvm->srcu read
-section; if it ever waited there for the memslot update to complete,
-it would deadlock against kvm_swap_active_memslots() waiting out that
-very read section in synchronize_srcu(), and this test livelocks
-within seconds. The deadlock is the one claim the test pins: a send
-which races the update legitimately fails (the hypercall bounces to
-userspace, which completes it with an error), so the test makes no
-assertion about delivery counts beyond "the churn did not starve
-delivery entirely".
+This largely reverts commit 7e2175ebd695 ("KVM: x86: Fix recording of
+guest steal time / preempted status"), which dropped the use of the
+gfn_to_pfn_cache because it was not integrated with the MMU notifiers
+at the time. That shortcoming has long since been addressed, making
+the GPC work correctly for this use case.
 
+Aside from cleaning up the last open-coded assembler access to user
+addresses and associated explicit asm exception fixups, moving back
+to the now-functional GPC also resolves an issue with contention on
+the mmap_lock with userfaultfd. The contention issue is as follows:
+
+On vcpu_run, before entering the guest, the update of the steal time
+information causes a page-fault if the page is not present. In our
+scenario, this gets handled by do_user_addr_fault() and successively
+handle_userfault() because the region is registered to that.
+
+Since handle_userfault() uses TASK_INTERRUPTIBLE, it is interruptible
+by signals. But do_user_addr_fault() then busy-retries if the pending
+signal is non-fatal, which leads to heavy contention of the mmap_lock.
+
+By restoring the use of GPC for accessing the guest steal time, the
+contention is avoided and refreshing the GPC happens when the vCPU is
+next scheduled.
+
+Since the gfn_to_pfn_cache gives a kernel mapping rather than a
+userspace HVA, accesses are now plain C instead of unsafe_put_user()
+et al. READ_ONCE()/WRITE_ONCE() and an smp_wmb() before the final
+version increment replace the ordering the old inline assembly
+provided implicitly.
+
+kvm_steal_time_set_preempted(), called from the scheduler path, just
+takes the atomic SRCU read lock (unconditionally safe there) and
+bails if the cache is not currently valid: setting the preempted
+flag is best-effort anyway — the old code used
+copy_to_user_nofault(), which could equally silently fail — and
+kvm_arch_vcpu_load() raises KVM_REQ_STEAL_UPDATE, so the cache is
+refreshed from task context before the vCPU next enters the guest.
+
+MSR disable (kvm_steal_time_reset()) leaves last_steal alone: it is
+the baseline against the vCPU task's monotonic run_delay, and zeroing
+it would dump the task's lifetime run_delay into the guest's steal
+counter when the MSR is next enabled (e.g. after INIT-SIPI or kexec).
+
+[dwmw2: Port to the SRCU-protected GPC. The original was written
+        against a gpc->lock rwlock and needed a read_trylock() dance
+        to be safe from the scheduler path on PREEMPT_RT; the atomic
+        SRCU read lock is unconditionally safe there, so all of that
+        goes away.]
+
+Signed-off-by: Carsten Stollmaier <stollmc@amazon.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Co-developed-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |   1 +
- .../kvm/x86/xen_evtchn_memslot_race_test.c    | 232 ++++++++++++++++++
- 2 files changed, 233 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86/xen_evtchn_memslot_race_test.c
+ arch/x86/include/asm/kvm_host.h |   2 +-
+ arch/x86/kvm/msrs.c             |   7 +-
+ arch/x86/kvm/x86.c              | 140 ++++++++++++++++----------------
+ 3 files changed, 76 insertions(+), 73 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 65639e54b554..c17408f8d61f 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -149,6 +149,7 @@ TEST_GEN_PROGS_x86 += x86/xss_msr_test
- TEST_GEN_PROGS_x86 += x86/debug_regs
- TEST_GEN_PROGS_x86 += x86/tsc_msrs_test
- TEST_GEN_PROGS_x86 += x86/vmx_pmu_caps_test
-+TEST_GEN_PROGS_x86 += x86/xen_evtchn_memslot_race_test
- TEST_GEN_PROGS_x86 += x86/xen_shinfo_test
- TEST_GEN_PROGS_x86 += x86/xen_vmcall_test
- TEST_GEN_PROGS_x86 += x86/sev_dbg_test
-diff --git a/tools/testing/selftests/kvm/x86/xen_evtchn_memslot_race_test.c b/tools/testing/selftests/kvm/x86/xen_evtchn_memslot_race_test.c
-new file mode 100644
-index 000000000000..c9448df52a6e
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86/xen_evtchn_memslot_race_test.c
-@@ -0,0 +1,232 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * xen_evtchn_memslot_race_test
-+ *
-+ * A guest EVTCHNOP_send whose delivery races a DELETE/re-CREATE of the
-+ * memslot holding the shared_info page. The delivery path runs in the
-+ * vCPU's exit-handling context, under vcpu_run's kvm->srcu read
-+ * section; if it waits there for the memslot update to complete, it
-+ * deadlocks against kvm_swap_active_memslots()'s
-+ * synchronize_srcu_expedited() waiting out that very read section.
-+ * Regression test for that deadlock: KVM must leave the hypercall
-+ * uncompleted so the guest re-executes it, rather than wait in exit
-+ * context.
-+ *
-+ * The guest sends events in a tight loop; a host thread deletes and
-+ * recreates the shared_info slot in a tight loop. On a broken host
-+ * this livelocks within a second or two (the test then dies by
-+ * timeout); on a fixed host the guest completes all N
-+ * iterations (sends which hit the no-slot gap between DELETE and
-+ * re-CREATE legitimately fail; most deliver).
-+ */
-+#include <pthread.h>
-+#include <stdatomic.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+
-+#include <stdint.h>
-+
-+#define SHINFO_REGION_GPA	0xc0000000ULL
-+#define SHINFO_REGION_SLOT	10
-+
-+#define EVTCHN_PORT		15
-+#define TEST_ITERATIONS		4000
-+
-+#define EVTCHNOP_send		4
-+#define __HYPERVISOR_event_channel_op	32
-+
-+#define XEN_HYPERCALL_MSR	0x40000000
-+
-+#define EVTCHNSTAT_ipi		5
-+
-+struct evtchn_send {
-+	uint32_t port;
-+};
-+
-+static void guest_code(void)
-+{
-+	struct evtchn_send s = { .port = EVTCHN_PORT };
-+	int delivered = 0;
-+	int i;
-+
-+	for (i = 0; i < TEST_ITERATIONS; i++) {
-+		/*
-+		 * The delivery may legitimately fail while the shared_info
-+		 * slot is mid-churn (between DELETE and re-CREATE there is
-+		 * no slot at all, which is -EFAULT, not a transient). The
-+		 * failure mode under test is the vCPU never coming back at
-+		 * all (deadlock -> timeout), not the hypercall rc.
-+		 */
-+		if (!__xen_hypercall(__HYPERVISOR_event_channel_op,
-+				     EVTCHNOP_send, &s))
-+			delivered++;
-+		GUEST_SYNC(i);
-+	}
-+
-+	/*
-+	 * The churn must not have starved delivery entirely. Every
-+	 * iteration exits to userspace for the GUEST_SYNC, so the slot
-+	 * spends real wall time present between churn cycles; empirically
-+	 * a few hundred of the sends deliver.
-+	 */
-+	GUEST_ASSERT(delivered);
-+
-+	/*
-+	 * Report the delivered count. The value is always at least
-+	 * TEST_ITERATIONS + 1, so the host can distinguish it from the
-+	 * in-loop syncs, whose values are below TEST_ITERATIONS.
-+	 */
-+	GUEST_SYNC(TEST_ITERATIONS + delivered);
-+
-+	GUEST_DONE();
-+}
-+
-+static atomic_bool churn_stop;
-+
-+static void *memslot_churn(void *arg)
-+{
-+	struct kvm_vm *vm = arg;
-+
-+	while (!atomic_load(&churn_stop)) {
-+		vm_mem_region_delete(vm, SHINFO_REGION_SLOT);
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+					    SHINFO_REGION_GPA,
-+					    SHINFO_REGION_SLOT, 2, 0);
-+	}
-+	return NULL;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	pthread_t thread;
-+	struct ucall uc;
-+	int bounced = 0;
-+	int done = 0;
-+
-+	int xen_caps = kvm_check_cap(KVM_CAP_XEN_HVM);
-+
-+	TEST_REQUIRE(xen_caps & KVM_XEN_HVM_CONFIG_SHARED_INFO);
-+	TEST_REQUIRE(xen_caps & KVM_XEN_HVM_CONFIG_EVTCHN_SEND);
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    SHINFO_REGION_GPA, SHINFO_REGION_SLOT, 2, 0);
-+
-+	struct kvm_xen_hvm_config hvmc = {
-+		.flags = KVM_XEN_HVM_CONFIG_INTERCEPT_HCALL |
-+			 KVM_XEN_HVM_CONFIG_EVTCHN_SEND,
-+		.msr = XEN_HYPERCALL_MSR,
-+	};
-+	vm_ioctl(vm, KVM_XEN_HVM_CONFIG, &hvmc);
-+
-+	struct kvm_xen_hvm_attr lm = {
-+		.type = KVM_XEN_ATTR_TYPE_LONG_MODE,
-+		.u.long_mode = 1,
-+	};
-+	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &lm);
-+
-+	struct kvm_xen_hvm_attr ha = {
-+		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
-+		.u.shared_info.gfn = SHINFO_REGION_GPA / PAGE_SIZE,
-+	};
-+	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &ha);
-+
-+	struct kvm_xen_vcpu_attr vi = {
-+		.type = KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO,
-+		.u.gpa = SHINFO_REGION_GPA + 0x40,
-+	};
-+	vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &vi);
-+
-+	/* Loop the port back to this vCPU as an IPI. */
-+	struct kvm_xen_hvm_attr evt = {
-+		.type = KVM_XEN_ATTR_TYPE_EVTCHN,
-+		.u.evtchn.send_port = EVTCHN_PORT,
-+		.u.evtchn.type = EVTCHNSTAT_ipi,
-+		.u.evtchn.flags = 0,
-+		.u.evtchn.deliver.port.port = EVTCHN_PORT,
-+		.u.evtchn.deliver.port.vcpu = vcpu->id,
-+		.u.evtchn.deliver.port.priority = KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL,
-+	};
-+	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &evt);
-+
-+	kvm_pthread_create(&thread, NULL, memslot_churn, vm);
-+
-+	/*
-+	 * Self-guard: on a kernel with the deadlock under test, the vCPU
-+	 * never returns from KVM_RUN. Die with SIGALRM rather than hang
-+	 * when run standalone. Deliberately no SIGALRM handler: in the
-+	 * deadlock, no thread ever returns to userspace to run one, and a
-+	 * handled signal is no longer fatal, so only the default
-+	 * disposition can kill the process (exit by SIGALRM is the
-+	 * failure signature). One budget for the whole run — a healthy
-+	 * kernel finishes in seconds, and a per-iteration bound would
-+	 * impose a KVM_RUN latency claim this test doesn't make.
-+	 * (On a CONFIG_DEBUG_LOCK_ALLOC kernel which has regressed, the
-+	 * wait degrades to a transient failure instead of deadlocking,
-+	 * and this test cannot see that; the WARN it fires can.)
-+	 */
-+	alarm(90);
-+
-+	while (!done) {
-+		vcpu_run(vcpu);
-+
-+		/*
-+		 * In the window where the shared_info slot is fully deleted
-+		 * (between the churn thread's DELETE and re-CREATE), the
-+		 * delivery fails with -EFAULT and the hypercall bounces to
-+		 * userspace as KVM_EXIT_XEN. Complete it with an error
-+		 * result and keep going; the failure mode under test is
-+		 * the vCPU never coming back (deadlock -> timeout), not
-+		 * the hypercall rc.
-+		 */
-+		if (vcpu->run->exit_reason == KVM_EXIT_XEN &&
-+		    vcpu->run->xen.type == KVM_EXIT_XEN_HCALL) {
-+			TEST_ASSERT(vcpu->run->xen.u.hcall.input ==
-+					__HYPERVISOR_event_channel_op &&
-+				    vcpu->run->xen.u.hcall.params[0] ==
-+					EVTCHNOP_send,
-+				    "Unexpected hypercall bounce: input %llu params[0] %llu",
-+				    vcpu->run->xen.u.hcall.input,
-+				    vcpu->run->xen.u.hcall.params[0]);
-+			vcpu->run->xen.u.hcall.result = -EFAULT;
-+			bounced++;
-+			continue;
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 1ee4b127004d..4b0c18c77771 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -872,7 +872,7 @@ struct kvm_vcpu_arch {
+ 		u8 preempted;
+ 		u64 msr_val;
+ 		u64 last_steal;
+-		struct gfn_to_hva_cache cache;
++		struct gfn_to_pfn_cache cache;
+ 	} st;
+ 
+ 	u64 l1_tsc_offset;
+diff --git a/arch/x86/kvm/msrs.c b/arch/x86/kvm/msrs.c
+index e91650af44c2..23407f8c441d 100644
+--- a/arch/x86/kvm/msrs.c
++++ b/arch/x86/kvm/msrs.c
+@@ -1728,8 +1728,13 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 
+ 		vcpu->arch.st.msr_val = data;
+ 
+-		if (!(data & KVM_MSR_ENABLED))
++		if (!(data & KVM_MSR_ENABLED)) {
++			kvm_gpc_deactivate(&vcpu->arch.st.cache);
+ 			break;
 +		}
 +
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++		kvm_gpc_activate(&vcpu->arch.st.cache, data & ~KVM_MSR_ENABLED,
++				 sizeof(struct kvm_steal_time));
+ 
+ 		kvm_make_request(KVM_REQ_STEAL_UPDATE, vcpu);
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index f5f3459ed4a5..321f29789f9f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2058,12 +2058,11 @@ EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_service_local_tlb_flush_requests);
+ 
+ static void record_steal_time(struct kvm_vcpu *vcpu)
+ {
+-	struct gfn_to_hva_cache *ghc = &vcpu->arch.st.cache;
+-	struct kvm_steal_time __user *st;
+-	struct kvm_memslots *slots;
+-	gpa_t gpa = vcpu->arch.st.msr_val & KVM_STEAL_VALID_BITS;
++	struct gfn_to_pfn_cache *gpc = &vcpu->arch.st.cache;
++	struct kvm_steal_time *st;
+ 	u64 steal;
+ 	u32 version;
++	int idx;
+ 
+ 	if (kvm_xen_msr_enabled(vcpu->kvm)) {
+ 		kvm_xen_runstate_set_running(vcpu);
+@@ -2076,55 +2075,41 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
+ 	if (WARN_ON_ONCE(current->mm != vcpu->kvm->mm))
+ 		return;
+ 
+-	slots = kvm_memslots(vcpu->kvm);
++	/* We rely on the fact that it fits in a single page. */
++	BUILD_BUG_ON((sizeof(*st) - 1) & KVM_STEAL_VALID_BITS);
+ 
+-	if (unlikely(slots->generation != ghc->generation ||
+-		     gpa != ghc->gpa ||
+-		     kvm_is_error_hva(ghc->hva) || !ghc->memslot)) {
+-		/* We rely on the fact that it fits in a single page. */
+-		BUILD_BUG_ON((sizeof(*st) - 1) & KVM_STEAL_VALID_BITS);
++	idx = srcu_read_lock_atomic(&vcpu->kvm->gpc_srcu);
++	while (!kvm_gpc_check(gpc, sizeof(*st))) {
++		srcu_read_unlock_atomic(&vcpu->kvm->gpc_srcu, idx);
+ 
+-		if (kvm_gfn_to_hva_cache_init(vcpu->kvm, ghc, gpa, sizeof(*st)) ||
+-		    kvm_is_error_hva(ghc->hva) || !ghc->memslot)
++		if (kvm_gpc_refresh(gpc, sizeof(*st)))
+ 			return;
 +
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_SYNC:
-+			/*
-+			 * The final sync reports how many of the sends were
-+			 * delivered: purely a diagnostic for how much of the
-+			 * churn the guest actually raced with.
-+			 */
-+			if (uc.args[1] >= TEST_ITERATIONS)
-+				pr_info("%lu of %u sends delivered, %d bounced\n",
-+					uc.args[1] - TEST_ITERATIONS,
-+					TEST_ITERATIONS, bounced);
-+			break;
-+		case UCALL_DONE:
-+			done = 1;
-+			break;
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+			/* NOT REACHED */
-+		default:
-+			TEST_FAIL("Unexpected ucall %lu", uc.cmd);
-+		}
++		idx = srcu_read_lock_atomic(&vcpu->kvm->gpc_srcu);
+ 	}
+ 
+-	st = (struct kvm_steal_time __user *)ghc->hva;
++	st = gpc->khva;
++
+ 	/*
+ 	 * Doing a TLB flush here, on the guest's behalf, can avoid
+ 	 * expensive IPIs.
+ 	 */
+ 	if (guest_pv_has(vcpu, KVM_FEATURE_PV_TLB_FLUSH)) {
+-		u8 st_preempted = 0;
+-		int err = -EFAULT;
+-
+-		if (!user_access_begin(st, sizeof(*st)))
+-			return;
+-
+-		asm volatile("1: xchgb %0, %2\n"
+-			     "xor %1, %1\n"
+-			     "2:\n"
+-			     _ASM_EXTABLE_UA(1b, 2b)
+-			     : "+q" (st_preempted),
+-			       "+&r" (err),
+-			       "+m" (st->preempted));
+-		if (err)
+-			goto out;
+-
+-		user_access_end();
++		u8 st_preempted = xchg(&st->preempted, 0);
+ 
+ 		vcpu->arch.st.preempted = 0;
+ 
+ 		trace_kvm_pv_tlb_flush(vcpu->vcpu_id,
+ 				       st_preempted & KVM_VCPU_FLUSH_TLB);
+ 		/*
+-		 * Request the flush instead of performing it inline. With
+-		 * shadow paging kvm_vcpu_flush_tlb_guest() can reschedule
+-		 * (via mmu_sync_children()), so it could not be called while
+-		 * the user access above was open. Requesting is just a bit
+-		 * set on the running vCPU, and the request is serviced
+-		 * before the vCPU enters the guest; nothing requires the
+-		 * flush to have completed any earlier than that.
++		 * Request the flush instead of performing it inline. This
++		 * runs inside an atomic gpc_srcu read-side section, with
++		 * preemption disabled, and with shadow paging
++		 * kvm_vcpu_flush_tlb_guest() can reschedule (via
++		 * mmu_sync_children()). Requesting is just a bit set on the
++		 * running vCPU, and the request is serviced before the vCPU
++		 * enters the guest; nothing requires the flush to have
++		 * completed any earlier than that.
+ 		 *
+ 		 * Note the xchg above must remain as-is: it atomically
+ 		 * consumes any KVM_VCPU_FLUSH_TLB the guest set, as required
+@@ -2133,39 +2118,33 @@ static void record_steal_time(struct kvm_vcpu *vcpu)
+ 		 */
+ 		if (st_preempted & KVM_VCPU_FLUSH_TLB)
+ 			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+-
+-		if (!user_access_begin(st, sizeof(*st)))
+-			goto dirty;
+ 	} else {
+-		if (!user_access_begin(st, sizeof(*st)))
+-			return;
+-
+-		unsafe_put_user(0, &st->preempted, out);
++		WRITE_ONCE(st->preempted, 0);
+ 		vcpu->arch.st.preempted = 0;
+ 	}
+ 
+-	unsafe_get_user(version, &st->version, out);
++	version = READ_ONCE(st->version);
+ 	if (version & 1)
+ 		version += 1;  /* first time write, random junk */
+ 
+ 	version += 1;
+-	unsafe_put_user(version, &st->version, out);
++	WRITE_ONCE(st->version, version);
+ 
+ 	smp_wmb();
+ 
+-	unsafe_get_user(steal, &st->steal, out);
++	steal = READ_ONCE(st->steal);
+ 	steal += current->sched_info.run_delay -
+ 		vcpu->arch.st.last_steal;
+ 	vcpu->arch.st.last_steal = current->sched_info.run_delay;
+-	unsafe_put_user(steal, &st->steal, out);
++	WRITE_ONCE(st->steal, steal);
++
++	smp_wmb();
+ 
+ 	version += 1;
+-	unsafe_put_user(version, &st->version, out);
++	WRITE_ONCE(st->version, version);
+ 
+- out:
+-	user_access_end();
+- dirty:
+-	mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
++	kvm_gpc_mark_dirty_in_slot(gpc);
++	srcu_read_unlock_atomic(&vcpu->kvm->gpc_srcu, idx);
+ }
+ 
+ static inline bool kvm_can_mwait_in_guest(void)
+@@ -2640,11 +2619,8 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+ 
+ static void kvm_steal_time_set_preempted(struct kvm_vcpu *vcpu)
+ {
+-	struct gfn_to_hva_cache *ghc = &vcpu->arch.st.cache;
+-	struct kvm_steal_time __user *st;
+-	struct kvm_memslots *slots;
+-	static const u8 preempted = KVM_VCPU_PREEMPTED;
+-	gpa_t gpa = vcpu->arch.st.msr_val & KVM_STEAL_VALID_BITS;
++	struct gfn_to_pfn_cache *gpc = &vcpu->arch.st.cache;
++	struct kvm_steal_time *st;
+ 
+ 	/*
+ 	 * The vCPU can be marked preempted if and only if the VM-Exit was on
+@@ -2669,20 +2645,37 @@ static void kvm_steal_time_set_preempted(struct kvm_vcpu *vcpu)
+ 	if (unlikely(current->mm != vcpu->kvm->mm))
+ 		return;
+ 
+-	slots = kvm_memslots(vcpu->kvm);
+-
+-	if (unlikely(slots->generation != ghc->generation ||
+-		     gpa != ghc->gpa ||
+-		     kvm_is_error_hva(ghc->hva) || !ghc->memslot))
+-		return;
+-
+-	st = (struct kvm_steal_time __user *)ghc->hva;
+-	BUILD_BUG_ON(sizeof(st->preempted) != sizeof(preempted));
+-
+-	if (!copy_to_user_nofault(&st->preempted, &preempted, sizeof(preempted)))
++	/*
++	 * This is called from the scheduler path (via kvm_sched_out), so
++	 * the cache cannot be refreshed here.  Setting 'preempted' is
++	 * best-effort anyway; the old HVA-based code used
++	 * copy_to_user_nofault(), which could also silently fail.  If the
++	 * cache is invalid, it will be refreshed from task context by
++	 * record_steal_time() before the vCPU next enters the guest, since
++	 * kvm_arch_vcpu_load() unconditionally raises KVM_REQ_STEAL_UPDATE.
++	 */
++	guard(srcu_atomic)(&vcpu->kvm->gpc_srcu);
++	if (kvm_gpc_check(gpc, sizeof(*st))) {
++		st = gpc->khva;
++		WRITE_ONCE(st->preempted, KVM_VCPU_PREEMPTED);
+ 		vcpu->arch.st.preempted = KVM_VCPU_PREEMPTED;
+ 
+-	mark_page_dirty_in_slot(vcpu->kvm, ghc->memslot, gpa_to_gfn(ghc->gpa));
++		kvm_gpc_mark_dirty_in_slot(gpc);
 +	}
-+
-+	atomic_store(&churn_stop, true);
-+	kvm_pthread_join(thread, NULL);
-+	alarm(0);
-+
-+	kvm_vm_free(vm);
-+	return 0;
 +}
++
++static void kvm_steal_time_reset(struct kvm_vcpu *vcpu)
++{
++	kvm_gpc_deactivate(&vcpu->arch.st.cache);
++	vcpu->arch.st.preempted = 0;
++	vcpu->arch.st.msr_val = 0;
++	/*
++	 * Leave last_steal alone: it is the baseline against the vCPU
++	 * task's cumulative sched_info.run_delay, which is never reset.
++	 * Zeroing it here would cause the first record_steal_time() after
++	 * a vCPU reset (INIT-SIPI, kexec) to account the task's entire
++	 * lifetime run_delay as steal time in one jump.
++	 */
+ }
+ 
+ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+@@ -9460,6 +9453,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+ 
+ 	kvm_gpc_init(&vcpu->arch.pv_time, vcpu->kvm);
+ 
++	kvm_gpc_init(&vcpu->arch.st.cache, vcpu->kvm);
++
+ 	if (!irqchip_in_kernel(vcpu->kvm) || kvm_vcpu_is_reset_bsp(vcpu))
+ 		kvm_set_mp_state(vcpu, KVM_MP_STATE_RUNNABLE);
+ 	else
+@@ -9569,6 +9564,8 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
+ 	kvm_clear_async_pf_completion_queue(vcpu);
+ 	kvm_mmu_unload(vcpu);
+ 
++	kvm_steal_time_reset(vcpu);
++
+ 	kvmclock_reset(vcpu);
+ 
+ 	for_each_possible_cpu(cpu)
+@@ -9689,7 +9686,8 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+ 	kvm_make_request(KVM_REQ_EVENT, vcpu);
+ 	vcpu->arch.apf.msr_en_val = 0;
+ 	vcpu->arch.apf.msr_int_val = 0;
+-	vcpu->arch.st.msr_val = 0;
++
++	kvm_steal_time_reset(vcpu);
+ 
+ 	kvmclock_reset(vcpu);
+ 
 -- 
 2.43.0
 
