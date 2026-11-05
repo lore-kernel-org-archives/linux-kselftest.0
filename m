@@ -1,129 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793876014;
-	b=Lr/THIm7A1Wbb/OsxdrfO9wQ6W1UAWraYe1TrzwxpH4zr9foya0AmrqbyYzFpG8jWxsK
-	 KOe90HOt1WeNWPZWGrOoIO1xZQ8EdSS0KbYrrQRHTFW+ga4fs3rFay3VXR6er8Ql1ZWr5
-	 Ioz9xb3Pzqk+sS4jekxo28JSoDkNXKRFSN2/wJECDEKGI4+imAAZ51w8Mcj2IFi1jpILW
-	 hHDjc7hw39oDSapUfvWWwzAaIey4uhjPOvfmRzo8KaBwYIpeOmnkAQS95vtOQRJNcJaFK
-	 5NNvfw4Q3D7KZLZEV0L6L78aPNDBFR3WqXkLJX8COHXEllwb/8uccGbs64/dx54ZnMA==
+	t=1793876027;
+	b=qHZJQ6rInju1DLcw9kyOQ8hVtyTVYwYxtkMqkbA5uUpEo1EXEPooud5RSVmURQxdGCLW
+	 5vHHFNP3QWS0kzN84aq2zxRr81UQm8qR7x8tuscrjhAAwHI4Zly+cU0BJos/9Jr/Sa8O5
+	 rLDAXg8uFr0J2Ja4qDuWRTob+LrYsl9L9P9CY6CiAoHcux00pyrHZPKu64QiYKcrABGYk
+	 q3jOrBJp8TcLP2Qa2kbKYiu4eLcYqt/4HSni8+ja6+rB2AGJR66Y1ojs/m64BgL+D68TC
+	 XmCqm4TWOdG+mjN2SA8yx3AFgqOjXm8ZQndpy1Zj2FovuDhkZIcXkARMy/qxna5J5Mg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793876014;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=oydf0WShTzs9KXsUGEwBFf3FiP0jpqy13hriGlAhxmA=;
-	b=L3GdGnwa889jg+/a0hpc8hW1Z7LRNTLUqvIy9+DWn8El8IHzUmThyi1aTQR80M4SbrK+
-	 50A4M5C6qjMSTvKcYvxe4MVgdfR9NttWSTPhx68hfndNcIEPoA/EHHwiyLzz5MmjIuKhH
-	 6OfaisRvdHn1CWCiLuU4H31zBudOnRpg8op9fLAbqDA1gg33HQzPENAx/bIaFRKQAbKtg
-	 nhlDLUEjjOv1/j7iEkhiW9R1Qovu604GmqvAxkZ8WKZTPvBdniLsS5HFoirumw8m1bJQ4
-	 DwYiG/Pk+L1cWg4tOyNzfgBvpoVOhmXPQzkaNzz3XuCzgJH+VZprmRllLcN/8Z3M9xQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793876027;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=xXR60u8P/JzdVcE1JiWVcB2i68AunH9ExxgZ3/2aEs0=;
+	b=PApdgSlxxuHfPV+dX48/xzseC1irzjVdHaqpAjP9lVWa78iEz7NengN/7hK6pPLSS+y4
+	 45K/mwz5aEHVv4S7ZX9REF50COe6vxCQgLBCnq2oFhUWFjdhvSTIWhW4nkbeXho7RrxZj
+	 PhlCTSk5q/HV++O0wSduYmYZsbx7i0kIwkHO4/UFQLoE8zDth69g7JbhFbNc6iS9n7K/K
+	 rAfZwhwTPhVzkrdkHanF8ne0KNrL+ivbqfG/gBeGHhUIYDiIjXSFT+io6KZahACzWures
+	 Gb5Q1HFCJzS6Zu0U/owjtYuZlFuVyEbRf2p9SIxQ6OFMSvmuU4tKVSBcXrEAdMEk+Vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b="L/5Ix1nm";
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=S1OsPTBy;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5190A606A338
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 10:53:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5190A606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=IOiyvv+V;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A55606A31B;
+	Thu,  5 Nov 2026 10:53:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8A55606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=L/5Ix1nm;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=S1OsPTBy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793876013;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oydf0WShTzs9KXsUGEwBFf3FiP0jpqy13hriGlAhxmA=;
-	b=L/5Ix1nmmbPPC4D0gWalKYKBB++M25taHWzvVQMmgRQUKS5mKjroctpU4ZYSV3laq6iYS8
-	JX0Nglx5LcHZxKdOD7mmlKXO5hG5/yp1yveiRtozh56XCtLHdys4Tj8UjN4yL46YKq2SQO
-	q/3/CfSKosKliRJ6r7pi+PWDBJiRZXY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-503-mAPlVUNPN_etC4PLEkOYgQ-1; Thu, 05 Nov 2026 05:53:32 -0500
-X-MC-Unique: mAPlVUNPN_etC4PLEkOYgQ-1
-X-Mimecast-MFC-AGG-ID: mAPlVUNPN_etC4PLEkOYgQ_1793876011
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a318cd95e8so5774415e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 02:53:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793876011; x=1794480811; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=oydf0WShTzs9KXsUGEwBFf3FiP0jpqy13hriGlAhxmA=;
-        b=S1OsPTByJTbRLrKHdMGTdTmTlpv9n+/9C54Tti7YoqWpSY6U/A9+hOVHvrdv2P/uwb
-         p9F0s0+MYbFvlJQSL2wQOxpFJUVVVKM13exzubPT78i39t06KOquNikeEsAXS1UD593T
-         +paZu1YCbLV8CF1nebrRbge/+rr3C5mIgfi0tY3heJw+CwRVOJtzJgPE8pd/WOPh69hB
-         CJoruC7tgIDkEn2lPnYlqpxesu3wpwe5tJ0fPr/h9O//XMBE/ulrAXFZjLu+eyWZuzGv
-         22tmBu/yvfYNUtOuDtKPEqLeDxZZPahDofkpnjyeL9SDGzthr+jkavHsyeDlAggO4z+B
-         MbbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793876011; x=1794480811;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oydf0WShTzs9KXsUGEwBFf3FiP0jpqy13hriGlAhxmA=;
-        b=L69JnA8LlLn9DuYBFZxirYv2Spq3ShtQruJmg4d806uK6onqySEYgGX/teH4W3NJen
-         3P0yUpVW0K5Th+b6WwAZtbRwmN6dN8wN/CScZHFuh3priXwMa365W1IIIBTfhIUcEVZ+
-         fc31wwGafKHQ1SpQBmyVvmdP9KPvyJHTW+3vUSXbjtyurqCeiIEAfHu+iGCEzIdAeaSI
-         lF1z0xo0yqQ0TaS1mmHU893FClzhQi3sTqHKpUqxfdTNOJv9iZe53QYQpkjFeyNqbBXV
-         0KIzJBniXn5g0YX6vrE48Dxi+au4ijXG4sjwm99sz9gX4Fk+XGS1nmLFj/lweqf5Fdk0
-         CoFg==
-X-Forwarded-Encrypted: i=1; AKwUvBxNS+ht8hx/y8/bN+M6elLUuy91/LXd9o7bJ5aHOPQj8m77/n3iiPETp6FTpJXEdjAbJMGHAGzJtcF8nMLIFuA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Xtjc1NWXegYZ+qONFTd0gM0sm1zrNuwczN94YRayB8JWWgJhF
-	O7NHyGrjxkCvLt9m2xQXcn894O6YenJ3geROMDDJ7bDaknmDmdYMyM0J8O4TDZN3qOGVi7h7SPH
-	w3VzSj4+2Nxp/JinHhDwMiG+XJG1/W3QNA1mjlrRo+kD+HfnUL787z8TRj9BIe9CikDTJuQ==
-X-Gm-Gg: AYBFou0E45VIxdySg1efx9MxFh88l3QJT4b2zvTRmjaVqPHDDgEKNTouM43SMB207xB
-	oKebSufPVvuSiQ/tjfqI2w4U7YJSOHdxdjUPGqxKiC42JLrZb2C5Wg0lCZ3jFoRdxdOR6o+pvGw
-	eTSdvAG2n/1mLeJwddPLSQBteIio5sCFw8/hhqH+8ePREBFCgXbLFzJRoNnvoSXxP40hFoCbrj5
-	aXAluf6dVy6EoGPqxL+uAkozsvBAuxn32ykfpMBIij4Ipa8WfwGWLwl8QZ7aB/uGVKflQlbAWXn
-	+LslD631c3RCTxlD71vMIgV54j+3T5HJnDB0CEEINq6jeGp3Lpoi6MHJQqAej+qrP6/jPLuWmVH
-	1eZtYF5/36dlZ9oD/HPJYkOuOnbV1vZ08y/PNG52IZYZZC2V8/Vr5XAkQwc2/zrpPIlMe4YMac8
-	r+1g==
-X-Received: by 2002:a05:600c:1989:b0:4a1:88df:8a2a with SMTP id 5b1f17b1804b1-4b55dbb09dfmr39301535e9.13.1793876002248;
-        Thu, 05 Nov 2026 02:53:22 -0800 (PST)
-X-Received: by 2002:a05:600c:1989:b0:4a1:88df:8a2a with SMTP id 5b1f17b1804b1-4b55dbb09dfmr39281275e9.13.1793875986470;
-        Thu, 05 Nov 2026 02:53:06 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56eb4da1esm94641375e9.6.2026.11.05.02.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 02:53:05 -0800 (PST)
-Date: Thu, 5 Nov 2026 11:53:02 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Luca Abeni <luca.abeni@santannapisa.it>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Waiman Long <longman@redhat.com>,
-	Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v2 04/21] sched/deadline: Do not divide by zero active
- CPUs of a root domain
-Message-ID: <auxgDv4hE-MLnM4b@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com>
- <20261104211207.1392343-5-mathieu.desnoyers@efficios.com>
+	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=IOiyvv+V
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9AE2F1516;
+	Thu,  5 Nov 2026 02:53:42 -0800 (PST)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A76103F673;
+	Thu,  5 Nov 2026 02:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1793876025; bh=KkBPEsNue1fKQaofoCh3LGcr31D++n/sVcyzCD79kGI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IOiyvv+VwnwkNBeglnvXW8PD3DxxS8OCvAWDO/fSx3kfzgqFdExu2S4/VOltTziDS
+	 1MRx+WopdQ4wRgjQJbYP6a8SAAtMfKBr4N65RbXV2dgm5SEycwbtmhdpnY2IiMyT+E
+	 CZwSgeW6BrA5nRSZUdmHZdiSScpU86JzRlbnx7Vg=
+Date: Thu, 5 Nov 2026 10:53:40 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
+	Shubhang Kaushik <shubhang@os.amperecomputing.com>,
+	"Christoph Lameter (Ampere)" <cl@gentwo.org>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] futex: Canonicalize arm64 tagged user addresses
+Message-ID: <auxgNACRQVqTuqd3@arm.com>
+References: <20261030-futex-tagged-uaddr-v2-prep-v2-1-131eb7414bda@gentwo.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -135,97 +70,52 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261104211207.1392343-5-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20261030-futex-tagged-uaddr-v2-prep-v2-1-131eb7414bda@gentwo.org>
 
-Hello,
-
-On 04/11/26 16:11, Mathieu Desnoyers wrote:
-> __dl_sub() and __dl_add() spread a change of a root domain's total_bw
-> over the extra_bw of its active CPUs, dividing it by their number, which
-> their callers take from dl_bw_cpus(). That number is 0 for a root domain
-> whose CPUs all went offline, such as the default root domain, which
-> holds the offline CPUs: the division then traps.
+On Fri, Oct 30, 2026 at 03:39:59PM -0700, Shubhang Kaushik (Ampere) wrote:
+> On arm64, a thread that enables the tagged address ABI can pass valid
+> top-byte-tagged user pointers to futex syscalls. Such a pointer must
+> have the same syscall behaviour as its untagged form.
 > 
-> A debugfs write of a fair server's runtime or period reaches it while
-> its CPU goes offline or comes online. From the rebuild of the root
-> domains in sched_cpu_deactivate() until the CPU is offline, and from the
-> CPU online until sched_cpu_activate(), the CPU sits in the default root
-> domain, with no active CPU. A write that leaves the server's bandwidth
-> as it is passes admission there, __dl_overflow() comparing that root
-> domain's capacity, 0, with total_bw less the old bandwidth plus the new,
-> 0 as well, and dl_server_apply_params() divides. Any other value is
-> refused with EBUSY, higher directly, lower through the unsigned
-> subtraction. Once the CPU is offline the write is refused, since
-> commit 4043f5498416 ("sched/deadline: Reject debugfs dl_server writes
-> for offline CPUs").
+> get_futex_key() validates the user address with access_ok(), but uses
+> the raw address when constructing private and shared-anonymous futex
+> keys. A waiter using a tagged address and a waker using the untagged
+> form can therefore access the same futex word while hashing to distinct
+> keys, causing FUTEX_WAKE to miss the waiter.
 > 
-> Writing a fair server's own runtime back in a loop while its CPU goes
-> offline and online oopses on the first round, in 8-CPU VMs of v7.4-rc1
-> with the four deadline fixes of sched/urgent:
+> Keep access_ok() on the original pointer so that arm64 retains its
+> per-thread tagged-address ABI enforcement. Canonicalize the address
+> afterwards, before it is used for futex key construction and shared
+> mapping lookup.
 > 
->   Oops: divide error: 0000 [#1] SMP NOPTI
->   CPU: 6 UID: 0 PID: 110 Comm: dl_server_div0
->   RIP: 0010:dl_server_apply_params+0x335/0x380
->   Call Trace:
->    <TASK>
->    sched_server_write_common.isra.0+0x1c0/0x260
->    full_proxy_write+0x58/0x90
->    vfs_write+0xcb/0x550
->    ksys_write+0x6c/0xe0
->    do_syscall_64+0x109/0x5d0
->    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> Add an arm64 64-bit selftest for a tagged private waiter woken through
+> the corresponding untagged address.
 > 
-> inactive_task_timer() can reach it too, found by reading: it releases
-> the bandwidth of a task that left SCHED_DEADLINE, or died, before its
-> 0-lag time from the root domain of the CPU the task is on, and that CPU
-> may go offline before the timer fires. With admission control off, so
-> may sched_setattr() to SCHED_DEADLINE of a task asleep on an offline
-> CPU.
-> 
-> With no active CPU there is no extra_bw to update: change total_bw
-> alone. 20 rounds of the reproducer leave no warning then.
-> 
-> Fixes: daec57983670 ("sched/deadline: Reclaim bandwidth not used by dl tasks")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Fixes: 63f0c6037965 ("arm64: Introduce prctl() options to control the tagged user addresses ABI")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
 > ---
->  kernel/sched/deadline.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
+> Changes in v2:
+> - Add the generated tagged-address test binary to .gitignore.
+> - Compile the arm64-specific test implementation only for arm64 64-bit
+>   builds.
+> - Avoid relying on /proc/<tid>/wchan to detect that the waiter has
+>   queued; retry the untagged wake for a bounded interval instead.
 > 
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index 963fda6ddb7f..dadda1a528ec 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -189,18 +189,25 @@ void __dl_update(struct dl_bw *dl_b, s64 bw)
->  	}
->  }
->  
-> +/*
-> + * @cpus is the number of active CPUs of the root domain, whose extra_bw
-> + * shares the change: none once they all went offline, and total_bw alone
-> + * changes then.
-> + */
->  static inline
->  void __dl_sub(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
->  {
->  	dl_b->total_bw -= tsk_bw;
-> -	__dl_update(dl_b, (s32)tsk_bw / cpus);
-> +	if (cpus)
-> +		__dl_update(dl_b, (s32)tsk_bw / cpus);
->  }
->  
->  static inline
->  void __dl_add(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
->  {
->  	dl_b->total_bw += tsk_bw;
-> -	__dl_update(dl_b, -((s32)tsk_bw / cpus));
-> +	if (cpus)
-> +		__dl_update(dl_b, -((s32)tsk_bw / cpus));
->  }
+> Link to v1: https://lore.kernel.org/r/20261022-futex-arm64-tagged-uaddr-v1-1-84d8afbe7668@gentwo.org
+> ---
+>  kernel/futex/core.c                                |  2 +
+>  .../testing/selftests/futex/functional/.gitignore  |  1 +
+>  tools/testing/selftests/futex/functional/Makefile  |  1 +
+>  .../selftests/futex/functional/futex_tagged_addr.c | 61 ++++++++++++++++++++++
+>  tools/testing/selftests/futex/functional/run.sh    |  3 ++
+>  5 files changed, 68 insertions(+)
 
-I wonder if it makes sense to add/sub from total_bw when cpus == 0.
+Since this is a cc stable, I'd separate the actual fix from the
+kselftest with the latter not cc'ed to stable.
 
-Wouldn't be better, if possible, to avoid calls with 0 cpus?
+Thanks.
 
-Thanks,
-Juri
-
+-- 
+Catalin
