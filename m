@@ -1,49 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793894524;
-	b=NU7QW1JZdk4KJXwHfDfvjgxbaTnvRqtQlRJ9/foDoLluSbFB/06DUjjgij0XmX6NJp6U
-	 CXKCA4MzzUQ+EN78gsloi8mcx5m2i+VPJEfu2wGpetbkmsSBM9x9cZNlTCuXwPw4LG4EY
-	 33vqEhvDn6zRDPL0ruKfhoxHU7GotdX9KJQ6qGjq4bqPP+YVy1VP40AKEFdsXTIugRLNe
-	 ItxMXeSt3LsGPO66a+cka0i7uBhVhe9O1ovi8Wtk3oqrwXdfbM6tv4iqRpTjhywXcvCQs
-	 f9bIQptZXS82mZKHSvTcwCeokXcOWAu8EGk/fyolvpkCcmD7PRtRcsH11XBku6OFWag==
+	t=1793894530;
+	b=N7j2DUGImidB/+2ovYfd7S0ehPOQg0TChWuTleE33U1GXHXOGySFBLw0GkARwHNsy9dd
+	 /yRADZaVmzTGbOw7JC6BreQsNP65jmzatgQw/p2K2pOye46ocQP/6uajiER+sfyjb+zZf
+	 4zLmvQTjtYFqb0XKxYp/5nGEhxjMBiUY44ZTRsNLi5BKrV/GwGS3gUb4467QDYnyoUuAD
+	 A1W1chIafkonc+SW8Pv7TzH+xtV+9zEl8/TYX735w3mKP9pPefMACQwKMDBF++MOGXKIh
+	 edo/kHJRzPUPiRrCCIzi7QD15FbEzjzqYl4gX3twhZJTv4lKskUyLKza0t0nmfP9lRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793894524;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793894530;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=x1SCDPxmnNKrNbsHBv5YzrQ8i1IWDNs80oPwvUXJALY=;
-	b=B5yoHUEHSkCvmS4ENa27TuzVpc0NC4hxb0xQhZ4d7y22Jr/C2SPIgj2bfg0PbZc4m6a2
-	 AKKpyjJ7cxKVoQUkREqv1tboixbfPjKKhem4j1EJAFBiy5Bo3qS4ZWFqz88kYwlYH0xKU
-	 epQ4o5LHQR6i1L2fvSvKgw1ltN+u4hXXPUoJFo54iSBKafG/11MfnzWOvVVTpgJHjcvf6
-	 6dTsYNMsqb0uYC2+TMcq1zjnv/gFgJrU2VVWwpYV6uLbXaUhGy0pMDlijakmmd5frvZ1e
-	 rPBU4s0xMCh2psxHbKqoE14Fz8hFj8jXCtcnz3FprV4+bDZU/eE9dSdsMwhwPUq/kSA==
+	bh=BWIabCatnm0I4ZmqOGDEzF/gdu86BjrxsEXrZ9IZU90=;
+	b=FT7i3HhNtDCZaHSb9B2Qqmo7LstJycI+nv1TZGwtTiY8NxgYsGZ6wRijDJIJHIxT7GfA
+	 IkfulTZk5nXhuHSVac5UrdCTBb3HE8K8V5sec/s2prD0BLtLdorLQevuN0w47zYeZy1Vg
+	 yFfJ+5vD0N4hIRyZYPbzrBWtfR2Mkb74S+lF5ZuQaPoL5RvHGike4Z3wUFFfc2HJ8wgEw
+	 QxsPVEk0MPgl73+uiYBUY+HG3OUAHd0DxIiNtz74/hmp5T5LU+LVpZjEMumh+md0ydBwS
+	 5Y6ELzpvzzyRynQyG+uJbJ0ytPezs6krjO0/JQdw5vkV5ni3E+JzSOaqQJaDI+bLI/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsjoRVhL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qa+Xkj7n;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FAED606B45C;
-	Thu,  5 Nov 2026 16:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21A6606CF8B;
+	Thu,  5 Nov 2026 16:02:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dsjoRVhL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157131F00A27;
-	Thu,  5 Nov 2026 16:01:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qa+Xkj7n
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C7F01F000C1;
+	Thu,  5 Nov 2026 16:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793894524;
-	bh=x1SCDPxmnNKrNbsHBv5YzrQ8i1IWDNs80oPwvUXJALY=;
+	s=k20260515; t=1793894529;
+	bh=BWIabCatnm0I4ZmqOGDEzF/gdu86BjrxsEXrZ9IZU90=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=dsjoRVhLEuJyuNewSOtGL5g3UJlt1Ox0FKy17ZkJLWP90V71bgfBalr+cCncOOrkQ
-	 192HINuwj+jJYu32w+l1cNw+/+sFFRKWGucVdnVFPqtQya3X/d+Cxwy+3mZja4Crta
-	 F/sBgTJ4NnUYipE1D+jIIVf3giYsVhsOEgPfhyDxmfF0nFYaJSYDAfixLT+zKRNo2U
-	 cqONTFVKUhy5BA3KAbCzmuk2nVCDHagc/e/xZUVM3jYvRPytL1p+J07rnp3TP8hOzq
-	 tzFBAeIsadkvdMtvYO91QmWuyC9mCYyVnd7goqdFMQEo8VVe5u4hy+wAzCZ5ogrkHv
-	 VXjXj2dc/TMRg==
+	b=Qa+Xkj7nov4v9n9FdMB1BZdEApYeSmIPEXynp2XdGevDEvZwecGTFb7ldclWARk5f
+	 Ly6vZ+V9CSI0W3X2+ne0N+FIKoSuCQw/ENczHqlyXvrUCaF7X8I+FZHLrDA3tusjer
+	 YMb1yyHYd3NcklG27ur3J+mzxhyvo0IuQwEtLGVWul/Im2xA1bI5ZQU973zcez9WCV
+	 FO29ABj6NmCmg95A0Vtsc1GOMk+tfLjcLnKcnMx7g9mdJpIuYXdnU7EKes2fCSQBoZ
+	 QNYIcawCCTHtPvRfeAnqRygzqjDTd6OeI5QXavTXg0gpq81nDSJw8VBTa7fNlN8/D1
+	 yMehxEre/UxHg==
 From: Mark Brown <broonie@kernel.org>
-Date: Thu, 05 Nov 2026 16:00:29 +0000
-Subject: [PATCH v2 2/9] kunit: Add KUNIT_CASE_PARAM_UNIQUE() and
- KUNIT_CASE_PARAM_WITH_INIT_UNIQUE()
+Date: Thu, 05 Nov 2026 16:00:30 +0000
+Subject: [PATCH v2 3/9] ext4: Give the extents KUnit cases distinct names
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261105-kunit-param-names-v2-2-765b3d5275d2@kernel.org>
+Message-Id: <20261105-kunit-param-names-v2-3-765b3d5275d2@kernel.org>
 References: <20261105-kunit-param-names-v2-0-765b3d5275d2@kernel.org>
 In-Reply-To: <20261105-kunit-param-names-v2-0-765b3d5275d2@kernel.org>
 To: Simon Trimmer <simont@opensource.cirrus.com>, 
@@ -77,122 +76,54 @@ Cc: patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-ext4@vger.kernel.org, 
  linux-sound@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5762; i=broonie@kernel.org;
- h=from:subject:message-id; bh=5TkRHF05z35VbZg0OCADibXZSxGx7uxiMfI1FA4xabA=;
- b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLerEjdFH9/pm54vIV+V9+pZRdeWCzOvWYn/VFVo/fiu
- hsyP0997ihlYRDjYpAVU2SJy+J+WV/yeg3fwYVtMHNYmUCGMHBxCsBERCoYGZ7tbOD0OySy6f5l
- M8H9S1+tlnv1I3CWMveVioU8Ikvl9f0YGdbd3j59VueZ2xNU+U88u1da6WA+49yRPYqHpr6beWN
- t621+AA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1883; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=k3UM1wQrhw9YL8SQ1FJnX9EABkWgqGMKgGOXA8o6i88=;
+ b=owGbwMvMwCWm/754w+YLFp2Mp9WSGLLerEgtLmAoOizPWz1ZWIo5OsQu+8P8/c1pEoWBUr5r5
+ 39I+djbUcrCIMbFICumyBKXxf2yvuT1Gr6DC9tg5rAygQxh4OIUgIl8lGD4n+vPtf/DB1GWqxu/
+ 5IRq+YW4NJewOs+q/Lk2Tsvy5+ckYUaGm5c8yjvZpNmtut2jmt4pF6izfZXvrmnX684oErQPX84
+ CAA==
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-KUNIT_CASE_PARAM() and KUNIT_CASE_PARAM_WITH_INIT() name the test case
-after the test function. Several suites reuse one test function with
-more than one parameter generator or param_init() function, listing it
-once per set of parameters, which leads to multiple tests being created
-with the same name. Same-named cases cannot be told apart in the results
-and cannot be selected individually with kunit.filter_glob=, so kunit.py
---run_isolated=test boots a kernel for every entry and each kernel runs
-all of the same-named cases.
+The ext4_extents_test suite runs test_split_convert() against three
+different parameter arrays by listing it three times with
+KUNIT_CASE_PARAM_WITH_INIT(), which names each case after the function.
+All three cases are therefore called test_split_convert, so they cannot
+be told apart in the results.
 
-We could fix this by having the KUNIT_CASE_PARAM() macros always include
-the parameter name but this would not only rename all existing users but
-also result in some awkwardly named tests. Instead introduce some new
-macros for use in cases where we need to disambiguate.
-
-Add KUNIT_CASE_PARAM_UNIQUE() and KUNIT_CASE_PARAM_WITH_INIT_UNIQUE()
-which behave identically to the existing macros but include the name of
-the parameter generator or the param_init() function in the name of
-the case, giving names such as sha1_test-sha1_gen_params. The
-param_init() function is used for the WITH_INIT variant since currently
-all the tests which register parameter arrays from param_init() all
-share the generic kunit_array_gen_params() generator.
+Use KUNIT_CASE_PARAM_WITH_INIT_UNIQUE() for these entries so that each
+case is also named for the param_init() function which registers its
+parameter array, for example
+test_split_convert-test_convert_initialized_param_init.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/dev-tools/kunit/usage.rst |  9 ++++++++
- include/kunit/test.h                    | 41 +++++++++++++++++++++++++++++++++
- 2 files changed, 50 insertions(+)
+ fs/ext4/extents-test.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 1c78dfff94e8..193233fd2925 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -662,6 +662,15 @@ Custom Parameter Generator Function:
-    You can pass the generator function to the ``KUNIT_CASE_PARAM``
-    or ``KUNIT_CASE_PARAM_WITH_INIT`` macros.
+diff --git a/fs/ext4/extents-test.c b/fs/ext4/extents-test.c
+index 2e997f228330..ebef078e292f 100644
+--- a/fs/ext4/extents-test.c
++++ b/fs/ext4/extents-test.c
+@@ -1045,12 +1045,12 @@ static int test_handle_unwritten_init(struct kunit *test)
+  * https://lore.kernel.org/linux-kselftest/aULJpTvJDw9ctUDe@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com/
+  */
+ static struct kunit_case extents_test_cases[] = {
+-	KUNIT_CASE_PARAM_WITH_INIT(test_split_convert, kunit_array_gen_params,
+-				   test_split_convert_param_init, NULL),
+-	KUNIT_CASE_PARAM_WITH_INIT(test_split_convert, kunit_array_gen_params,
+-				   test_convert_initialized_param_init, NULL),
+-	KUNIT_CASE_PARAM_WITH_INIT(test_split_convert, kunit_array_gen_params,
+-				   test_handle_unwritten_init, NULL),
++	KUNIT_CASE_PARAM_WITH_INIT_UNIQUE(test_split_convert, kunit_array_gen_params,
++					  test_split_convert_param_init, NULL),
++	KUNIT_CASE_PARAM_WITH_INIT_UNIQUE(test_split_convert, kunit_array_gen_params,
++					  test_convert_initialized_param_init, NULL),
++	KUNIT_CASE_PARAM_WITH_INIT_UNIQUE(test_split_convert, kunit_array_gen_params,
++					  test_handle_unwritten_init, NULL),
+ 	{}
+ };
  
-+   These macros name the test case after the test function. If the same test
-+   function is listed in a suite with more than one generator (or, for
-+   ``KUNIT_CASE_PARAM_WITH_INIT``, more than one ``param_init()`` function)
-+   use ``KUNIT_CASE_PARAM_UNIQUE`` or ``KUNIT_CASE_PARAM_WITH_INIT_UNIQUE``
-+   instead. These also include the name of the generator or ``param_init()``
-+   function in the test case name, for example ``sha1_test-sha1_gen_params``,
-+   so that each case has a distinct name which can be selected with
-+   ``kunit.filter_glob=``.
-+
-    The function receives the previously generated parameter as the ``prev`` argument
-    (which is ``NULL`` on the first call) and can also access the parameterized
-    test context passed as the ``test`` argument. KUnit calls this function
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 31d549578f8e..b2d969c93855 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -209,6 +209,24 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
- 		{ .run_case = test_name, .name = #test_name,	\
- 		  .generate_params = gen_params, .module_name = KBUILD_MODNAME}
- 
-+/**
-+ * KUNIT_CASE_PARAM_UNIQUE - A helper for creating a parameterized &struct
-+ * kunit_case named after both the test and its parameter generator
-+ *
-+ * @test_name: a reference to a test case function.
-+ * @gen_params: a reference to a parameter generator function.
-+ *
-+ * Identical to KUNIT_CASE_PARAM() except that the case is named
-+ * "test_name-gen_params" rather than "test_name". Use this when the same
-+ * test function is listed in a suite with more than one parameter generator,
-+ * where KUNIT_CASE_PARAM() would give every instance the same name. Test
-+ * names must be unique within a suite for the results to be unambiguous and
-+ * for filters such as kunit.filter_glob= to be able to select a single case.
-+ */
-+#define KUNIT_CASE_PARAM_UNIQUE(test_name, gen_params)				\
-+		{ .run_case = test_name, .name = #test_name "-" #gen_params,	\
-+		  .generate_params = gen_params, .module_name = KBUILD_MODNAME}
-+
- /**
-  * KUNIT_CASE_PARAM_ATTR - A helper for creating a parameterized &struct
-  * kunit_case with attributes
-@@ -248,6 +266,29 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
- 		  .param_init = init, .param_exit = exit,			\
- 		  .module_name = KBUILD_MODNAME}
- 
-+/**
-+ * KUNIT_CASE_PARAM_WITH_INIT_UNIQUE - Define a parameterized KUnit test case
-+ * with custom param_init() and param_exit() functions, named after both the
-+ * test and its param_init() function.
-+ * @test_name: The function implementing the test case.
-+ * @gen_params: The function to generate parameters for the test case.
-+ * @init: A reference to the param_init() function to run before a parameterized test.
-+ * @exit: A reference to the param_exit() function to run after a parameterized test.
-+ *
-+ * Identical to KUNIT_CASE_PARAM_WITH_INIT() except that the case is named
-+ * "test_name-init" rather than "test_name". Use this when the same test
-+ * function is listed in a suite with more than one param_init() function,
-+ * where KUNIT_CASE_PARAM_WITH_INIT() would give every instance the same
-+ * name. The param_init() function is used rather than the generator since
-+ * tests registering parameter arrays in param_init() all share the generic
-+ * kunit_array_gen_params() generator.
-+ */
-+#define KUNIT_CASE_PARAM_WITH_INIT_UNIQUE(test_name, gen_params, init, exit)	\
-+		{ .run_case = test_name, .name = #test_name "-" #init,		\
-+		  .generate_params = gen_params,				\
-+		  .param_init = init, .param_exit = exit,			\
-+		  .module_name = KBUILD_MODNAME}
-+
- /**
-  * struct kunit_suite - describes a related collection of &struct kunit_case
-  *
 
 -- 
 2.47.3
