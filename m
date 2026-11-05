@@ -1,118 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793899757;
-	b=wZATLMd7YB94YfrZABw6yhmGmzg8XI0//MJc499g0vuCywtZIq6OAbshDFHWePZDv+y5
-	 ZxiHx522IJwOfZidXq3B1BtdGP+P6nVamN4WjQGpYwvNI8YQiuex9ezDxJ/0yNnyjnJ59
-	 Z0ZH+6BHCBAki1aNJFdUHlJxBSuwUHsnEqt89+sr6OE9XffSZX6RN8ElTlN/8Ib4HGZ8U
-	 6cGP5CaBoTU51QgDQ1AFq66/nLbEsuQYBmrqne14iG985JcS4Xil+gZiazpziN768of2A
-	 v+khAjHjLDnRqMQqPAFWyPSmTAowZXvwnvE1ebw5vK4XzQpxm6pIvZBkLSS7/hAnsnw==
+	t=1793900139;
+	b=nPg/6jP+ClS+xn7BohJR4zB4ByjHQ741dYDHBmo89pqYKJEmTJ9GPDprT7LVIzv3hFsu
+	 3qCNlryxL0FCSGrk/YR1qjIg1R+s1XGotfSXKzlb30WRcfkMoDtrfaT8dzKXsV1HZbUzD
+	 tbhRBb6J87f4f6xTPaw2nGVLhhrNkgkRDMmvqjRRIFRaqWt6fDXQbEuO1cjdOYnsrSrC2
+	 Atyun4XrG7mJ00A4IGe9ni5J/tJ9TBH/a1SZ1XhXHDc2kdTNMPNhD4c2J+tZOXNWC0XZn
+	 HNw/HBCXNZRkpku+Pz6XLrxUWJVNy5/KNiB2bUV+i1ikA6+yDGp4+4C3o9GfhBbAKgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793899757;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793900139;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=1OnqzRsvitQ4MyI4f27p0X1rJF88pgVycPeFzHfgJT8=;
-	b=YSPiK8I/Yr0fdM54F/h69u5vFGqyFNkpJXQ+bwfEXuZ3XHmcoxqlTcg8e1Ai1giMoCKD
-	 pk8mYlBze4H3JHk6RO7pd5o+JknplDdkoALIbYo+69U+H9t7Oh3RcKqNmXXmAWKGGJmR+
-	 SYLfLNDYeT0b45dUaMSqlUvIg+Vkx8cBdC0wi52yzCicZLhzcKfRGZJcszNL0QYIvIkNC
-	 aGalD+J2wohKrJs6CoF4QPjVfuvei8Bcyq+v+0InEUpCwkF4QsWqLsAQWDG8XlgkAI70f
-	 i3yWHVcS1oshKkPiw6DbJX/TPdQXSCv8jFizARXIMavnqlxSJZ07DzrQ3heKZVka+MQ==
+	bh=jbBB2AggVWN99JYUC8jE6NqBElHdygyw3qN7Wg/49mI=;
+	b=HnufDiUrQFCHuAzPg19ewXWvMg/LaR1GhvdM+gtXp2pY2f7lLp+owG2gnzQGZluIGL3B
+	 AyHF4yjlwCcXbHe5EAcslwcqKTRA9cKE6QZNeNYNlfw9kGZfOLeMBQK33Yh3R8FSVL3ab
+	 BcB44Y/yMxrdGm6/ZPubKksLd3t/hI+qQk303hN3oQiNvK3UOu94vtUkHXnK4Y6j9p9+a
+	 HmdcmNEUOsIX5A75cupWHYs9Ex4r81ESCgq8FYvDtXK1rYQugizpT1mXQ1zr8dd891FWH
+	 Z2ciOq4vOxEK8DSMDl2LtldTC4CZIfwVwA1jaurt1qHEHnTQpOSp8vp/zVt74xiNW1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AiicqOKo;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n5nnzc4H;
+	arc=none smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EAEE606A31B
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 17:29:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EAEE606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95664606A32C
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2026 17:35:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95664606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AiicqOKo
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4ac95761c85so16029575e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 09:29:16 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n5nnzc4H
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4919a880834so536747f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 09:35:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793899755; x=1794504555; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793900137; x=1794504937; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1OnqzRsvitQ4MyI4f27p0X1rJF88pgVycPeFzHfgJT8=;
-        b=AiicqOKoHaR/wnplxh7tZic5GCFf0bJjuSByayhefFdUTwR3Y4+QtRcQt6KpCMS/4F
-         li9JeUxeq92jDKHOKaByhLGOHb1g+x6GxI7jIE3Ld6cTNtguk41MNsSf9O6sXIe2b4j8
-         pzeMdtVlRx2lZK3VoCHpgOHelRygmREIl4RVFF2aitFAf9dTDgTNgbZK3cTW8y2L9O89
-         X2/eeBAyFe06+RK/MH+eSrAx/z2TBiYpsRZ7WaEbsK2RcG+gJqwmdK5TPPwaiosgYniL
-         3ignaZsdRrO8jGFuqekY57xrHNTp6XvHtyWUO18DnsVw1ArJf29ytn121FYVbbwtOPHS
-         tJLA==
+        bh=jbBB2AggVWN99JYUC8jE6NqBElHdygyw3qN7Wg/49mI=;
+        b=n5nnzc4HTVp02Yi1ph9LI3YnM5HgC8uVW2GeiUQadCxo9704l1ZItXkY2QP8kGf6zA
+         RqFyfyJy1E18YMDvobl4Go0N7g+M584NANE5uRPqDy6ZHSuCIgGVuoWB0KpsRZ653T8n
+         a5C5EESnUWETubsdG+44Hlt/6S9KfppEo7u6nYwCk4l9Ji1EjAInZcWrXJ5y0f08zeut
+         HzKxEEqdje8USHdD4N69MdSZoZnK4VlcMWlx344bfnaRvsYQ5EGHMr8xXmClNsHYF2ED
+         ILAnNX4cyeheq3XoraKYYPoDJ3nNCNfmf9kCZ6X87IXyjdgOoq4dIErCr23Ok/1ngK5Z
+         57vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793899755; x=1794504555;
+        d=1e100.net; s=20260707; t=1793900137; x=1794504937;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1OnqzRsvitQ4MyI4f27p0X1rJF88pgVycPeFzHfgJT8=;
-        b=z6Jn/yM10mjQjEocvIb9ZJE/7Pkic2Gx55eNVrXPAwOfSuWhBt7NUWkR4OMPNWzJLa
-         97Il4IbwP3nFGpZ2ApPDkmtS1ix6xORY22/1OpEhr6cJ+gMVVQAJfaO7OLhAVh4TlxPn
-         U+UhYH0C4E6br/G0ntR0DvSXeGbFR6y2YcTZG81h1yRuWESdPCzRwdAClRdpytOXDnkd
-         V0J5XTI9uzS9CDPl3G8hO1e/GKx+mpGjfDmd6D0mLn1ceHXDdpptY/e8s90+Ld6y2QUO
-         9h9wL5VJ8P6Qr7XMorwob4x6ecFQHgcm/hIY9nRk7zoogY7XIvdcYoBX/iSXeG5IIjP/
-         NDyw==
-X-Forwarded-Encrypted: i=1; AKwUvBwXwtA6qAAty1M12pPuL20n47jo5V6uwji1IhJCj2UxXElKzGc56ZIq+krYGDWaSaIUKBQgmlkxyrSmV6Sobss=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Pe0OuxvXVGJQsTjf/uNvvwxuwTm4j7/1/QRgskgo+y5KlUb80
-	4x0bhYdMqK4H8GE2aqIZAV+Qu4gpIvtpN7Mxl0IXfTn6b5Mz+0pcYIQr
-X-Gm-Gg: AYBFou08yNp+6gA7TTVDJjzkWaSWegG7IbmTTuCXuO100ONy0lN9/iHSgt3m5zhiDW0
-	hblt/WXwc8qV5ED8nI0KfnB4dtbqVNS0xU9dx+gaiAn0Ws6cvw0qlHe1vEgMmt8HUpuwGSGsMp2
-	7zEbh/6C10hPPkp3pTF63eCy/2+Zut8SIp8HtTON5Lj6PYFmuD/VrZWATlZh4O4Uryx/GL7pXnT
-	YpmfG9I+9EdXG0dYZ/GSMf4I2Q9f0kusfO+55+xfT5n1PmayBc1MaovdTaXmAlStOqA925pjpR6
-	IUB6WdWxSq8oClGaB0Pw2aqHYmTzL5QJygV2ZcIUJRn3Tc+MINPyZxv94wmv08Ipgd0nkGTqE7F
-	UYBX/LltNwc0bwBDzuyeGwUrCaL6wankc3JfaJewBiMj8LnEBqg8Ie4cKHfUJvWBKrR5hIkj/DM
-	JWqlfSVzijBdBh6ltLRBTLf0WUS606Ms28lfpJechBPAm9xoaxYqecPM/LgLdKOhm3J2/2r51vN
-	GopUup6dhV4sd0p+YivwtZyYJ7KMnsAwWy3dCAs+2XFPP3TWHjBASF+Mf9TsqMqmr9Z7U/uHPQR
-	4wXifI0bh+MLbqY9VxrzIaL7M3p5dXN63+rd8RGymm8lIrmnbVWowYtqVayISmbrMJmkPk6ltIW
-	cCHdmf9U=
-X-Received: by 2002:a05:600c:3b29:b0:4a2:167a:c939 with SMTP id 5b1f17b1804b1-4ac17d19aeamr401115205e9.21.1793899755121;
-        Thu, 05 Nov 2026 09:29:15 -0800 (PST)
+        bh=jbBB2AggVWN99JYUC8jE6NqBElHdygyw3qN7Wg/49mI=;
+        b=OkUCfQ9u7TAwi9jJ07SOuAiyh6YNChmIBnlEl6NmSYxO2901MIRGZoKv89OGsQPqjU
+         brsKgnRpd+GECtA0G4HU4gOykDuqPssQfsRYD7psLnxqncPwWp1JtMuoNna7C7LosbTC
+         DffZuN2QOH2VjdS3dLDCsTaX5WmRT7ywZT1my1iSI8BFUcl9sC8Hrf3a+vG/jy9snt6Q
+         SYLLh675AI+vUX+cXi5E5aqI8YWn/E2KhW5ScYen9TCUSEai5sN2t7LSgd7kaRz1ywtX
+         VWDGkJKhdtBS33FCHcUv/eyPvoTU/BWEx8vi+0t1lWGEAPgT3tMXm9zc5kaB+s1//fM7
+         cBvw==
+X-Forwarded-Encrypted: i=1; AKwUvBx+NP/ZTZTbIimD7+SEbT6KcaXXHxiwgm004Egyr9+XPeW5w9obaJoboirlhG9XW6xU43DQeOEc0KybJ2yvgfU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+j0RBuE0QYWei0ZOBrDPY35RscFVKpGqwVUj9CwiUCGcnN7aGJ
+	iW8NsoI9BTD+tw3SS5bE7+nBxs9JiuVjYNXhvpGnQKVQ3CDA6BG1pUeK
+X-Gm-Gg: AYBFou3gns+xfyFuyBGrP0V2wu9dsOd7GLAzhp6/273F+/PnIt5g55m5zekkNvL1l5G
+	qPJjO54A5Wc6vFCsGJ68LTbkRGIiquPsHJ7LRRkhRsWZnwwF2+v/kRMk2bR50N0vCPdfgdxd2GO
+	fnC1Hctv3sZzH1st9VRsxzb1hB9D/tsecAchIzEJEXNUzKoGlsrDrN7ZoNLijm9UmcYAbcRE2Kf
+	CMGLTeky30WANONrGubRw0mm83mUgt405Fv7IBRV/ggH7RP1Us5T7346P+cympJKCQUbVVNCgRy
+	z9/boyGGTIhrISM5HfNh4xCGRyLV7qOLnPCc5U/elvwDpzNpy3lG/umFTzGPZwdwH58GBlsUyoz
+	H8RB6myeRxGY4inTRvJz7RJ/1bH3tqnOCh6dXP0mTQw6QuF5UJ7gNs/LYJtCxZtQNbGkDHIMTQT
+	Fi4NZB4t4PFlCAWL8Tw617dbwITkwy4eib60Y/9I4aQiJ0Rr1AVuNgWkeFlrpy8+X/MTY1rbGXe
+	jPyhfQRkmp52pTwQ6hFheprHLpnvVRop1TE9HC49v45g2n3+UDkOqvZACk6LwO0lHMBqcCzbFkL
+	Tr6OkQaG3TTgMTticP6SlvHtfSrO+MWvSLvsa0cqN6JaONtUvHX65Npw0K38iBd85bQOE2DPSsT
+	FVh38VVCXwoNnmFF+1Ei7Xq7UsRC+
+X-Received: by 2002:a05:6000:2484:b0:491:4ab7:fe9f with SMTP id ffacd0b85a97d-49276f3801cmr659303f8f.57.1793900136939;
+        Thu, 05 Nov 2026 09:35:36 -0800 (PST)
 Received: from andreayoga.localdomain ([151.43.242.194])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56e2ae72dsm131080675e9.3.2026.11.05.09.29.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48fed552aaesm11722895f8f.40.2026.11.05.09.35.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 09:29:14 -0800 (PST)
+        Thu, 05 Nov 2026 09:35:36 -0800 (PST)
 From: Andrea Parri <parri.andrea@gmail.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Tycho Andersen <tycho@kernel.org>
 Cc: Andrea Parri <parri.andrea@gmail.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Luca Abeni <luca.abeni@santannapisa.it>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Waiman Long <longman@redhat.com>,
-	Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Kayra Cizmeci <kayracizmeci@gmail.com>,
-	cgroups@vger.kernel.org,
+	Christian Brauner <brauner@kernel.org>,
+	Sargun Dhillon <sargun@sargun.me>,
+	Hui Peng <benquike@gmail.com>,
+	Bradley Morgan <brads@mainlining.org>,
+	Cong Wang <cwang@multikernel.io>,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v2 19/21] sched: Clear cpuset_locked where the policy check retries
-Date: Thu,  5 Nov 2026 18:28:58 +0100
-Message-ID: <20261105172900.38029-1-parri.andrea@gmail.com>
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 1/4] seccomp: wake poll waiters after failed addfd send
+Date: Thu,  5 Nov 2026 18:35:28 +0100
+Message-ID: <20261105173530.39081-1-parri.andrea@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <a63396b0-9b0c-4d4b-9754-f503cdb84098@efficios.com>
-References: <20261104211207.1392343-1-mathieu.desnoyers@efficios.com> <20261104211207.1392343-20-mathieu.desnoyers@efficios.com> <20261105164356.28913-1-parri.andrea@gmail.com> <a63396b0-9b0c-4d4b-9754-f503cdb84098@efficios.com>
+In-Reply-To: <auysN9YTg8Ih8QLZ@tycho.pizza>
+References: <20261104103736.71956-1-parri.andrea@gmail.com> <20261104103736.71956-2-parri.andrea@gmail.com> <autZ5kL0S5MkX_8l@tycho.pizza> <20261105153735.5368-1-parri.andrea@gmail.com> <auysN9YTg8Ih8QLZ@tycho.pizza>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -124,17 +111,27 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 05, 2026 at 12:08:50PM -0500, Mathieu Desnoyers wrote:
+On Thu, Nov 05, 2026 at 09:25:17AM -0700, Tycho Andersen wrote:
+> Seems like a solution in search of a problem to me.
+>
+> Is there a sane action a supervisor can take on failure here besides
+> killing the thread that made the syscall? If so, perhaps it's
+> worthwhile. Or maybe it's worth it "for completeness" and I'm just
+> being grumpy :)
 
-[...]
+There is: seccomp_handle_addfd() puts the notification back in SENT on
+failure, so the supervisor can still reply.
 
-> Thanks for pointing this out! I'll pick the preexisting patch into my
-> series instead for v3 if that's OK. Then maintainers can feel free to
-> pick it up from whatever route they prefer.
+For example, if injecting a descriptor for an emulated open() fails with
+EMFILE, the supervisor can reply with error = -EMFILE, and the target
+sees an ordinary syscall failure.  After an interrupted request, it can
+simply retry.
 
-Fine with me, thanks.  Please keep it unchanged, with its tags, and
-ahead of dl_accounting_unlock() if you can, so it still backports
-cleanly.
+But the issuing thread does that from the ioctl result, without an
+additional poll wakeup, so patches 1-3 would only add completeness.
+
+I'll drop them and send v2 with just the RECV fix (patch 4 here), unless
+Kees would rather keep them.
 
 Thanks,
   Andrea
