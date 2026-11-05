@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793893809;
-	b=N8bA+w3+eJSScFsiOnCqWZLDKbi0Van5+65HypfVI1vKQLAwLvyXmVV9nP+1/OC8XyRD
-	 d0Xfz+Apn4wu7ahyzY8IY/WbC1Q95QJyjD397gaZ5dU0JB13GQby2C7kXmkokbwAgPUsC
-	 9LWgYGRoXYoZL/XyqYMNfu4l6sokY2lSjIypDRpozUn6JBM+oHKRkOGq6Y8K6pJOaJxnG
-	 CkkhAUYnWrkWSRA+4m1BV4/q15i38Sj+3MCxui5I8nGDQtYhHbOEbIwQEYxXuc32o1JAH
-	 wlHfFNlyDZ4qywGHIRTHrUncoN25ed7UzaRNrK8YOefdOZxmwOXobD2MxfuKZm70Ojg==
+	b=ZbR+YiOOq1vD/UUN+Yh2KjgIIwhMWiYGRSDYDOpfo+oSYJdiJmwWi+S8rdCRYEGApXrK
+	 G+8EcuhJEZnxvU1nm9/C5QvMYPhl8aWFH8mvfuWWMtlxYO0WKqPcjTHauNQw5GONbDABS
+	 QQZI+dpNBcxFCM/pB3So1C+6Po5VW5esfzT6BleCES75wb1m/bj9bikuizdPPw/Mns4VU
+	 4DV15HXR9rWzfKftWjBnFE7J+VKno+5kmmyiWjJ9z3NaxaenY2qgsZTDDLteaXxzHfpMV
+	 1FzwuJctEZ+5vP+3ywwaJUAnSi2cdUU/YLDypDi2zr4uNhi2ncInoFX5cfE7zXhzm7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793893809;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=g4JrrC8CXxAVCwMpD677FP/zgaKLwH1jqXxuO1KGNO4=;
-	b=wTqqDZ6LMS5h1koWK2OXzQ0n4JAUQdXougZdex6OyXcQNxcaKVAfwRcMQ6oFLNj0StCI
-	 ocB0qNufBCSufSghxs13CwqvUV12NZSMC3p67N0mqSFIs/6RJFhpSipZ+q73Roy1vB080
-	 rvE23q+6xH7WDtKsstsn8MyEnqkilfYgfCChYgKW0C69zKz/ZbF8X97ZDWZZyb+SR7jKT
-	 g38KhKpoLBUuQFTuDZs0Bhwili6wavgT083oDDDYHRMOZ/yvbTxMHuhSFHmtJf1Bkv4hJ
-	 COzWtZdkFuhFwzEUJL0U3g5hm0Iq4rYG297LFCV1vMIYEFLWKMrfrszlZtZDjHG9bpg==
+	bh=4v0rDhUMKy7kQmc3QfZi0l6L+ftlrEv1HxH6keOFZdY=;
+	b=F82+el9KijdLS8eW52vlys/7ClUzZWIAK2IK1g+du7kx1AXB/N8ga1a+DZBnFtbKAezN
+	 6FRc9cJCBA75BNTN0i3yqKhNeQ35gZUG6RCZen/unhCRXwk3eFlHW4LSn6PT7MlG27H+9
+	 DuZ3ibWX19OdFny/Xoc2j7l+1cSFR7cI0uaW/bYweb46dwJH1RI0BUPwoZBDUOlsvTNzJ
+	 qAohuM/jUN+N4T8p0nAwOR6jjjGadezyUux2YyJv236o7WmPSZyB/8wNLrv8KgFcRjani
+	 7nJ9nFc7iXYKGN93JD6SoPiiiaYQmui86yFzvRbjjJ9Bb+I2VUoPngC/KmE3AD8HSgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=casper.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=kWaXj1qW;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	spf=none smtp.mailfrom=desiato.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=IBFpOFMs;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B216460A6F7F;
-	Thu,  5 Nov 2026 15:50:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B216460A6F7F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526DD6075F60;
+	Thu,  5 Nov 2026 15:50:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 526DD6075F60
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=kWaXj1qW
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=IBFpOFMs
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=g4JrrC8CXxAVCwMpD677FP/zgaKLwH1jqXxuO1KGNO4=; b=kWaXj1qWvUaOw0hNDCygBmKS1q
-	K4x/XgGfqV1DVd9theLgpetcA5eckMwSt79lnDyhjAxtTsbYGNMFFiG3EeHXxNtVJZyf0R0XA0iqV
-	TMh5OHPG0uTH9cp76KMrlbkAT1h1IhXnLfOdWF4S2sHAZwg7I1zxMdWlzayqJFvfIfXJKKqmYk6K3
-	+x5YJbjcSX0nQUEry1LjqLlKWXOcYYOIbF+ATAWjDlywsZu3PI3Y8FTm7ZoWEcKXeCpKREwUqYHYM
-	nJx78wIyYh/Uz0UyZiZwgNXPSrw6LrrJThCGA+U4rPevxsy0QWzf7QpflFuILzEQNV5fxnyHe3fCS
-	0vxBljtg==;
+	bh=4v0rDhUMKy7kQmc3QfZi0l6L+ftlrEv1HxH6keOFZdY=; b=IBFpOFMsi6NlpMtYPKpOTju9Rz
+	DYt/dOI0xTywoqJg1je/Aw5UehdLHfwZCvA0+U5UlA2LBReC+cQSkLu4+D5f90OBL5AVgaudHdcLX
+	gJ+jCHLLz+g+poLxU6cXjbFtieCFYlWjnUfP11hqf4DC7n5OruYyfGEGtBVWMwXAe1kUCN/IRoqFT
+	NzTkyrdbZuveCj0AvhWlaRdNaNP2jaTHjlr+vD4lm064zduWBZyvPu0vzyXehISJuSN/1ufQyC/Mq
+	PiwB6dgoGAntbeAaStGhq6VtTIJnDTCN/HbGxju7Swe50SzsLrfygMn/KhS6IpodjzVgs5HuhFMsx
+	zpwckCnA==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOzit-00000009aok-3qxv;
-	Thu, 05 Nov 2026 15:49:56 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xOziw-00000003Bnx-29gN;
+	Thu, 05 Nov 2026 15:50:02 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xOzit-0000000Aaz6-2zW0;
+	id 1xOzit-0000000AazA-3F3l;
 	Thu, 05 Nov 2026 15:49:55 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
@@ -78,9 +78,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Dongli Zhang <dongli.zhang@oracle.com>,
 	joe.jin@oracle.com,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v11 06/23] KVM: x86: Avoid gratuitous global clock updates
-Date: Thu,  5 Nov 2026 07:49:37 -0800
-Message-ID: <20261105154955.2525419-7-dwmw2@infradead.org>
+Subject: [PATCH v11 07/23] KVM: x86: Avoid redundant masterclock updates from multiple vCPUs
+Date: Thu,  5 Nov 2026 07:49:38 -0800
+Message-ID: <20261105154955.2525419-8-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105154955.2525419-1-dwmw2@infradead.org>
 References: <20261105154955.2525419-1-dwmw2@infradead.org>
@@ -95,75 +95,193 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-Eliminate two sources of unnecessary KVM_REQ_GLOBAL_CLOCK_UPDATE:
+When a masterclock update is triggered (e.g. by the clocksource change
+notifier), KVM_REQ_MASTERCLOCK_UPDATE is set on all vCPUs. Without this
+fix, each vCPU independently processes the request and redundantly
+re-executes the entire pvclock_update_vm_gtod_copy() sequence, serialized
+only by tsc_write_lock. Each redundant re-snapshot of the master clock
+reference point introduces potential clock drift.
 
-1. kvm_write_system_time(): The global clock update was a workaround for
-   ever-drifting clocks based on the host's CLOCK_MONOTONIC subject to
-   NTP skew. Now that the KVM clock uses CLOCK_MONOTONIC_RAW, the clock
-   does not drift with NTP corrections and there is no need to
-   synchronize all vCPUs on boot or resume. Use KVM_REQ_CLOCK_UPDATE on
-   the vCPU itself, and only when the clock is being enabled, not
-   disabled.
+Fix this by having __kvm_start_pvclock_update() check, after acquiring
+the lock, whether the requesting vCPU's KVM_REQ_MASTERCLOCK_UPDATE is
+still set. If another vCPU already did the update and cleared it, bail
+out. Otherwise, clear the request on all other vCPUs before proceeding.
 
-2. kvm_arch_vcpu_load(): In master clock mode, migration between pCPUs
-   does not require any clock update since the master clock reference is
-   shared. Only request a local KVM_REQ_CLOCK_UPDATE for the vCPU's
-   first-ever load (vcpu->cpu == -1) to generate initial pvclock params.
-   In non-master-clock mode, keep the global update to synchronize all
-   vCPUs.
+The caller in vcpu_enter_guest() now uses kvm_test_request() (non-clearing)
+since the clearing is done inside __kvm_start_pvclock_update() under the
+lock.
 
+kvm_end_pvclock_update() now broadcasts KVM_REQ_CLOCK_UPDATE and clears
+KVM_REQ_MCLOCK_INPROGRESS while still inside the interrupts-off lock
+section with the seqcount held open. That ordering is load-bearing for
+the bail-out path: a vCPU whose request was consumed by another updater
+must be guaranteed to observe either the open seqcount or its pending
+KVM_REQ_CLOCK_UPDATE before it can enter the guest.
+
+Since the update now consumes pending KVM_REQ_MASTERCLOCK_UPDATE
+requests, the Hyper-V reenlightenment notifier must invalidate the
+Hyper-V TSC page itself; previously a pending request survived the
+notifier and refreshed the page via kvm_update_masterclock() later.
+
+Suggested-by: Dongli Zhang <dongli.zhang@oracle.com>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Tested-by: Dongli Zhang <dongli.zhang@oracle.com>
 ---
- arch/x86/kvm/msrs.c | 7 ++++---
- arch/x86/kvm/x86.c  | 4 +++-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ arch/x86/kvm/msrs.c | 11 ++++++--
+ arch/x86/kvm/x86.c  | 67 +++++++++++++++++++++++++++++++++++----------
+ 2 files changed, 61 insertions(+), 17 deletions(-)
 
 diff --git a/arch/x86/kvm/msrs.c b/arch/x86/kvm/msrs.c
-index e91650af44c2..a2dffa1c706f 100644
+index a2dffa1c706f..26eb30f10c43 100644
 --- a/arch/x86/kvm/msrs.c
 +++ b/arch/x86/kvm/msrs.c
-@@ -1285,14 +1285,15 @@ static void kvm_write_system_time(struct kvm_vcpu *vcpu, gpa_t system_time,
+@@ -1278,10 +1278,15 @@ static void kvm_write_system_time(struct kvm_vcpu *vcpu, gpa_t system_time,
+ 	struct kvm_arch *ka = &vcpu->kvm->arch;
+ 
+ 	if (vcpu->vcpu_id == 0 && !host_initiated) {
+-		if (ka->boot_vcpu_runs_old_kvmclock != old_msr)
++		/*
++		 * Store the flag before requesting the masterclock update:
++		 * the update may now be performed by another vCPU (which
++		 * consumes this request), and it must observe the new value.
++		 */
++		if (ka->boot_vcpu_runs_old_kvmclock != old_msr) {
++			ka->boot_vcpu_runs_old_kvmclock = old_msr;
+ 			kvm_make_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu);
+-
+-		ka->boot_vcpu_runs_old_kvmclock = old_msr;
++		}
  	}
  
  	vcpu->arch.time = system_time;
--	kvm_make_request(KVM_REQ_GLOBAL_CLOCK_UPDATE, vcpu);
- 
- 	/* we verify if the enable bit is set... */
--	if (system_time & 1)
-+	if (system_time & 1) {
- 		kvm_gpc_activate(&vcpu->arch.pv_time, system_time & ~1ULL,
- 				 sizeof(struct pvclock_vcpu_time_info));
--	else
-+		kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
-+	} else {
- 		kvm_gpc_deactivate(&vcpu->arch.pv_time);
-+	}
- 
- 	return;
- }
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4c3fce29e2af..e3618d82c099 100644
+index e3618d82c099..77bd3e4bfdcd 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -2702,11 +2702,13 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- 		 * On a host with synchronized TSC, there is no need to update
- 		 * kvmclock on vcpu->cpu migration
- 		 */
--		if (!vcpu->kvm->arch.use_master_clock || vcpu->cpu == -1) {
-+		if (!vcpu->kvm->arch.use_master_clock) {
- 			if (__ratelimit(&vcpu->kvm->arch.kvmclock_update_rs))
- 				kvm_make_request(KVM_REQ_GLOBAL_CLOCK_UPDATE, vcpu);
- 			else
- 				kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
-+		} else if (vcpu->cpu == -1) {
-+			kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
- 		}
+@@ -1712,10 +1712,39 @@ static void kvm_make_mclock_inprogress_request(struct kvm *kvm)
+ 	kvm_make_all_cpus_request(kvm, KVM_REQ_MCLOCK_INPROGRESS);
+ }
  
- 		if (vcpu->cpu != cpu)
+-static void __kvm_start_pvclock_update(struct kvm *kvm)
++static void kvm_clear_mclock_inprogress_request(struct kvm *kvm)
+ {
++	struct kvm_vcpu *vcpu;
++	unsigned long i;
++
++	kvm_for_each_vcpu(i, vcpu, kvm)
++		kvm_clear_request(KVM_REQ_MCLOCK_INPROGRESS, vcpu);
++}
++
++static bool __kvm_start_pvclock_update(struct kvm *kvm, struct kvm_vcpu *requesting_vcpu)
++{
++	struct kvm_vcpu *vcpu;
++	unsigned long i;
++
+ 	raw_spin_lock_irq(&kvm->arch.tsc_write_lock);
++
++	/*
++	 * If another vCPU already did the update while we were waiting
++	 * for the lock, our request will have been cleared. Bail out.
++	 */
++	if (requesting_vcpu &&
++	    !kvm_test_request(KVM_REQ_MASTERCLOCK_UPDATE, requesting_vcpu)) {
++		kvm_clear_mclock_inprogress_request(kvm);
++		raw_spin_unlock_irq(&kvm->arch.tsc_write_lock);
++		return false;
++	}
++
++	/* The update is VM-wide; prevent other vCPUs from redoing it. */
++	kvm_for_each_vcpu(i, vcpu, kvm)
++		kvm_clear_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu);
++
+ 	write_seqcount_begin(&kvm->arch.pvclock_sc);
++	return true;
+ }
+ 
+ static void kvm_start_pvclock_update(struct kvm *kvm)
+@@ -1723,7 +1752,7 @@ static void kvm_start_pvclock_update(struct kvm *kvm)
+ 	kvm_make_mclock_inprogress_request(kvm);
+ 
+ 	/* no guest entries from this point */
+-	__kvm_start_pvclock_update(kvm);
++	__kvm_start_pvclock_update(kvm, NULL);
+ }
+ 
+ static void kvm_end_pvclock_update(struct kvm *kvm)
+@@ -1732,22 +1761,25 @@ static void kvm_end_pvclock_update(struct kvm *kvm)
+ 	struct kvm_vcpu *vcpu;
+ 	unsigned long i;
+ 
+-	write_seqcount_end(&ka->pvclock_sc);
+-	raw_spin_unlock_irq(&ka->tsc_write_lock);
+ 	kvm_for_each_vcpu(i, vcpu, kvm)
+ 		kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
+ 
+ 	/* guest entries allowed */
+-	kvm_for_each_vcpu(i, vcpu, kvm)
+-		kvm_clear_request(KVM_REQ_MCLOCK_INPROGRESS, vcpu);
++	kvm_clear_mclock_inprogress_request(kvm);
++
++	write_seqcount_end(&ka->pvclock_sc);
++	raw_spin_unlock_irq(&ka->tsc_write_lock);
+ }
+ 
+-static void kvm_update_masterclock(struct kvm *kvm)
++static void kvm_update_masterclock(struct kvm *kvm, struct kvm_vcpu *vcpu)
+ {
+ 	kvm_hv_request_tsc_page_update(kvm);
+-	kvm_start_pvclock_update(kvm);
+-	pvclock_update_vm_gtod_copy(kvm);
+-	kvm_end_pvclock_update(kvm);
++	kvm_make_mclock_inprogress_request(kvm);
++
++	if (__kvm_start_pvclock_update(kvm, vcpu)) {
++		pvclock_update_vm_gtod_copy(kvm);
++		kvm_end_pvclock_update(kvm);
++	}
+ }
+ 
+ /*
+@@ -6848,7 +6880,14 @@ static void kvm_hyperv_tsc_notifier(void)
+ 	kvm_caps.max_guest_tsc_khz = tsc_khz;
+ 
+ 	list_for_each_entry(kvm, &vm_list, vm_list) {
+-		__kvm_start_pvclock_update(kvm);
++		/*
++		 * Invalidate the Hyper-V TSC page explicitly: the update
++		 * below consumes any pending KVM_REQ_MASTERCLOCK_UPDATE,
++		 * which would otherwise have refreshed the page from
++		 * kvm_update_masterclock().
++		 */
++		kvm_hv_request_tsc_page_update(kvm);
++		__kvm_start_pvclock_update(kvm, NULL);
+ 		pvclock_update_vm_gtod_copy(kvm);
+ 		kvm_end_pvclock_update(kvm);
+ 	}
+@@ -8254,8 +8293,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 			kvm_mmu_free_obsolete_roots(vcpu);
+ 		if (kvm_check_request(KVM_REQ_MIGRATE_TIMER, vcpu))
+ 			__kvm_migrate_timers(vcpu);
+-		if (kvm_check_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
+-			kvm_update_masterclock(vcpu->kvm);
++		if (kvm_test_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
++			kvm_update_masterclock(vcpu->kvm, vcpu);
+ 		if (kvm_check_request(KVM_REQ_GLOBAL_CLOCK_UPDATE, vcpu))
+ 			kvm_gen_kvmclock_update(vcpu);
+ 		if (kvm_check_request(KVM_REQ_CLOCK_UPDATE, vcpu)) {
+@@ -9628,7 +9667,7 @@ void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
+ 	vcpu_load(vcpu);
+ 	kvm_synchronize_tsc(vcpu, NULL);
+ 	if (kvm_check_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
+-		kvm_update_masterclock(vcpu->kvm);
++		kvm_update_masterclock(vcpu->kvm, NULL);
+ 	vcpu_put(vcpu);
+ 
+ 	/* poll control enabled by default */
 -- 
 2.43.0
 
