@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793893804;
-	b=bYdXBiqNes3uK8PR6bb0emOaZK0dY1FZJoeUqiQFZCMN18YHirfxm6iMtB+NW1FFC6YZ
-	 JWM+PjnnDyjURzGRt/0PR9s6bfRnhj1YGjJ2HQ/7cxaMvimYXpb/QDmRE30B5Sux43c7g
-	 r4O93JSJo0/hCBbsYS/pSxLUmotng7KPKFmKURPBUIjZeaAb/sGwbVg8ohTmTSNZud0Yp
-	 vWUieU7YIDD8L4q9nypJ4ftefmpHFMKmO5JW4zE7LH3Tb+wMYnEcK8ni4+wqs46AVPjgx
-	 U3kIG+/lsWpLUU69kNEOdt0N2cSYQ+8Ejqm0IYvn00Skd5QQINqkQGWJKat8+saOX8g==
+	b=jER8LLU4IjAdIFjicYILDo7Jw9zKleJwrmBeG0RfPqA/R5f7YdQSezEPipOPE+UWGqT2
+	 4HXLAzr4WEsgQe/fpk20WtMeDceTcXCamo+q+SQvAus7Me8vl95Xn7WybVexR/JUg+9YU
+	 ei3bHkrb6VdJHZWsUWzSRAUZLgYb35k6rzmV5P2jSnfzPe1mSRK93A0XOHW4Gc4C9Lnbw
+	 iw9kVs29MXZv/WwNEbgi476FC8vf+rUl2GnC3CN4qDLw0RGiMGpfmU/o6d0wPTvGj6bx1
+	 qVYBiiT+B3cLBss9by0/KHOQ4SfwEmpoa4ElVQW3qHOYdvBj5mZMEv3t5WB/4mdfiwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793893804;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=H+VBL9OJwUW+IzdV5LCITp9ezCq4N+iWOV0zwHTcOS8=;
-	b=Ffxg4r4h4EHonKM4+Kw4LStRpx/x3yT6TgI5kezwm3mNptlJ72a58rfd0c/absgc1Qrv
-	 v3F/B//m27jrRuZxxyqBPAVniPxzD8WaNUCN/CBqNOtidqlsl8hnd1Eu3dI2n4zX+v+En
-	 G4GjIXW/K1X3T2571oOTo0qVHilNCJscPz6oRQ/77rCO1YADCTV3wnD80RD4Cs1ot+Cph
-	 qHCWwKSj+NrtoDApuSm4pZiACr+MzlV1c2IVIMYajQZO7KJ4OQSJaW39h9+TjK9QuFw7r
-	 e5Pg3UwyZLR8RO2+nbOHSlK448F4oh73FEnHUQ6LAr5ZqHCYPyVbae1mukRytCn+YOg==
+	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
+	bh=172rW2csVgIW8w3rofrqDqPbG51uDxT7XAZeT+28lqg=;
+	b=q1bL+8tHXZ3saZJa7i0o6Ak0jEzdk1MAwIazZPTEvSD+z6gQNGldAJu2CtbvasGi73K9
+	 WlRNN3fMuXPIBPNbJy6p+EdYvesID9Oa4KzJWnG2ON8s/mBcUdtwEXXC85Q/ksc/uSFSD
+	 vD6E9o/OwrUsulBfBrsgWrBMGi3PLeY+gnitwcaSRo41G82+I6nnSQLZEeUYywoyw4dZ3
+	 ZUsXWK2YBTYgdMt1EuXsl50fzsS3QmYvxjTE5fX2oPLoGL6qFMa4m3gQrXLWPgQhhA3hg
+	 EyGHV1W+hiHwORfZAx0z9MJebF+kRl3gqY2zXoizXkk0f1FOhSoM0PFsh2ZibFH5DDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
 	spf=none smtp.mailfrom=desiato.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=pazvH9hx;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=HKDJZu1h;
 	arc=none smtp.remote-ip=90.155.92.199
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4018606A332;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B412E606D824;
 	Thu,  5 Nov 2026 15:50:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4018606A332
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B412E606D824
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=pazvH9hx
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=HKDJZu1h
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
-	To:From:Reply-To:Content-ID:Content-Description;
-	bh=H+VBL9OJwUW+IzdV5LCITp9ezCq4N+iWOV0zwHTcOS8=; b=pazvH9hxp0r4Z7x2fzidl01Hpa
-	P7wfwrljfAb/Lw918WuBSOv8YJshJq6pYjO3ssKu6okTF0iVV4XBQo+hZWgnwccv2CAjUTg++/O6Y
-	Jm2FJhdd0LjBfDn6z+gpiQ7ClNXBgG9Poghhm3yZCt1FB2xFVkglSXP0QcmT4kein89a6m/hOUpvk
-	jk3/j6J3kuSXBe1DzWg3+zWyKqdsG0RfdrU4gcHp5P2uVquu7KgCbdQ8L0+cl8lzsmZF8PvXSLATO
-	iufzdzQ/Qvg8teerPslEYc8jhRp0IoetEIfgOU3N7yYN4/Bp2VoYQUubQtE7tZqOt3eCF4K3wEAXD
-	6OWPWcsw==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=172rW2csVgIW8w3rofrqDqPbG51uDxT7XAZeT+28lqg=; b=HKDJZu1hdZbYfVaBOCLlBavSnA
+	V2TA2mcvmVf58eYsqLUFUe/O1HGkUqDYLxh7hKC0/beriyKNx406TAdR+fxUIJcCicJj7ZtRPdrtg
+	v8U493D/1ozG5g5huFss99LV35zEJpMn6tuWI09mTXLpEQ5Tkei6UNAMShpEzmscf56d7cdvFq/p+
+	Ksz6ArXcuNDw5K5SZXmX7tFDttCVGoC5tVmwb7Ba6a9NZrikijNdZcNKb+evRsYgyACCcJmSPLv5W
+	0lu5QwNNyDOXiYQxOlYu0jqSLRPANM9R1+TZ2jL2lYB1L7JC3SFawOmzoOiCNQvXHWfoV9swqj02n
+	vfbX3PwQ==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOziw-00000003BoB-28TF;
+	id 1xOziw-00000003Bo2-28cD;
 	Thu, 05 Nov 2026 15:49:58 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xOziu-0000000Ab0H-2luc;
+	id 1xOziu-0000000Aaza-0bAa;
 	Thu, 05 Nov 2026 15:49:56 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
@@ -78,9 +78,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Dongli Zhang <dongli.zhang@oracle.com>,
 	joe.jin@oracle.com,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v11 22/23] KVM: x86/xen: Drop open-coded fallback clock read in kvm_xen_start_timer()
-Date: Thu,  5 Nov 2026 07:49:53 -0800
-Message-ID: <20261105154955.2525419-23-dwmw2@infradead.org>
+Subject: [PATCH v11 13/23] KVM: selftests: Use UAPI pvclock-abi.h in xen_shinfo_test
+Date: Thu,  5 Nov 2026 07:49:44 -0800
+Message-ID: <20261105154955.2525419-14-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105154955.2525419-1-dwmw2@infradead.org>
 References: <20261105154955.2525419-1-dwmw2@infradead.org>
@@ -93,108 +93,123 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-When no coherent (CLOCK_MONOTONIC, TSC) pair was available,
-kvm_xen_start_timer() computed one from separate ktime_get() and
-rdtsc() calls rather than using get_kvmclock_ns(), with a comment
-explaining that the latter had a systemic error from scaling host TSC
-directly to nanoseconds instead of scaling to the guest TSC first.
+Now that pvclock-abi.h is a UAPI header, use it in xen_shinfo_test.c
+instead of locally duplicating the struct definitions.
 
-Commit abdef42276d8 ("KVM: x86: Fix KVM clock precision in
-get_kvmclock() with TSC scaling") removed that systemic error: in
-master clock mode, get_kvmclock_ns() now scales the host TSC delta to
-the guest TSC and converts it with the guest's own mul/shift,
-computing precisely what the guest would.
-
-The fallback is also nearly unreachable. It sits behind the
-use_master_clock check, so on 32-bit (where the master clock is never
-active) it is dead code, and on 64-bit kvm_get_monotonic_and_clockread()
-can only fail there if the host clocksource changed after the last
-master clock update, in the window before the resulting masterclock
-update is processed. In exactly that window get_kvmclock_ns() takes
-its raw-clock fallback path rather than the guest TSC computation,
-which is continuous with the last valid snapshot and tolerable for
-the one timer that can be started before the pending masterclock
-update lands.
-
-Drop it and fall back to the existing get_kvmclock_ns() path.
+Sync the tools/ mirror of the header to the UAPI content: the KVM
+selftests include path puts tools/arch/x86/include ahead of the
+installed kernel headers, so the mirror is what actually gets used.
+That makes the struct fields __u64 (unsigned long long), so switch
+the verbose printfs away from PRIu64, which is "lu" on 64-bit.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- arch/x86/kvm/xen.c | 40 +++++++++++++++++++---------------------
- 1 file changed, 19 insertions(+), 21 deletions(-)
+ tools/arch/x86/include/asm/pvclock-abi.h      | 27 +++++++++-------
+ .../selftests/kvm/x86/xen_shinfo_test.c       | 31 ++++++-------------
+ 2 files changed, 24 insertions(+), 34 deletions(-)
 
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 6aa00f746cba..dbac3d2c04d7 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -230,22 +230,19 @@ static void kvm_xen_start_timer(struct kvm_vcpu *vcpu, u64 guest_abs,
- 		if (r)
- 			break;
+diff --git a/tools/arch/x86/include/asm/pvclock-abi.h b/tools/arch/x86/include/asm/pvclock-abi.h
+index b9fece5fc96d..6d70cf640362 100644
+--- a/tools/arch/x86/include/asm/pvclock-abi.h
++++ b/tools/arch/x86/include/asm/pvclock-abi.h
+@@ -1,6 +1,9 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+ #ifndef _ASM_X86_PVCLOCK_ABI_H
+ #define _ASM_X86_PVCLOCK_ABI_H
++
++#include <linux/types.h>
++
+ #ifndef __ASSEMBLER__
  
-+		/*
-+		 * With use_master_clock set, the clocksource was TSC-based
-+		 * when the master clock was last updated. The clockread can
-+		 * only fail here if the clocksource has changed since, in
-+		 * which case a masterclock update is already pending and
-+		 * get_kvmclock_ns() returns the raw-clock fallback value —
-+		 * continuous with the last valid snapshot, which is as good
-+		 * as it gets in that transient window.
-+		 */
- 		if (!IS_ENABLED(CONFIG_64BIT) ||
- 		    !kvm_get_monotonic_and_clockread(&kernel_now, &host_tsc)) {
--			/*
--			 * Don't fall back to get_kvmclock_ns() because it's
--			 * broken; it has a systemic error in its results
--			 * because it scales directly from host TSC to
--			 * nanoseconds, and doesn't scale first to guest TSC
--			 * and *then* to nanoseconds as the guest does.
--			 *
--			 * There is a small error introduced here because time
--			 * continues to elapse between the ktime_get() and the
--			 * subsequent rdtsc(). But not the systemic drift due
--			 * to get_kvmclock_ns().
--			 */
--			kernel_now = ktime_get(); /* This is CLOCK_MONOTONIC */
--			host_tsc = rdtsc();
-+			r = -EOPNOTSUPP;
-+			break;
- 		}
+ /*
+@@ -24,20 +27,20 @@
+  */
  
- 		/* Calculate the guest kvmclock as the guest would do it. */
-@@ -255,18 +252,19 @@ static void kvm_xen_start_timer(struct kvm_vcpu *vcpu, u64 guest_abs,
+ struct pvclock_vcpu_time_info {
+-	u32   version;
+-	u32   pad0;
+-	u64   tsc_timestamp;
+-	u64   system_time;
+-	u32   tsc_to_system_mul;
+-	s8    tsc_shift;
+-	u8    flags;
+-	u8    pad[2];
++	__u32   version;
++	__u32   pad0;
++	__u64   tsc_timestamp;
++	__u64   system_time;
++	__u32   tsc_to_system_mul;
++	__s8    tsc_shift;
++	__u8    flags;
++	__u8    pad[2];
+ } __attribute__((__packed__)); /* 32 bytes */
  
- 	if (r) {
- 		/*
--		 * Without CONSTANT_TSC, get_kvmclock_ns() is the only option.
-+		 * Without CONSTANT_TSC and the master clock,
-+		 * get_kvmclock_ns() is the only option.
- 		 *
- 		 * Also if the guest PV clock hasn't been set up yet, as is
- 		 * likely to be the case during migration when the vCPU has
- 		 * not been run yet. It would be possible to calculate the
- 		 * scaling factors properly in that case but there's not much
--		 * point in doing so. The get_kvmclock_ns() drift accumulates
--		 * over time, so it's OK to use it at startup. Besides, on
--		 * migration there's going to be a little bit of skew in the
--		 * precise moment at which timers fire anyway. Often they'll
--		 * be in the "past" by the time the VM is running again after
--		 * migration.
-+		 * point in doing so. Without the master clock, the
-+		 * get_kvmclock_ns() drift accumulates over time, so it's OK
-+		 * to use it at startup. Besides, on migration there's going
-+		 * to be a little bit of skew in the precise moment at which
-+		 * timers fire anyway. Often they'll be in the "past" by the
-+		 * time the VM is running again after migration.
- 		 */
- 		guest_now = get_kvmclock_ns(vcpu->kvm);
- 		kernel_now = ktime_get();
+ struct pvclock_wall_clock {
+-	u32   version;
+-	u32   sec;
+-	u32   nsec;
++	__u32   version;
++	__u32   sec;
++	__u32   nsec;
+ } __attribute__((__packed__));
+ 
+ #define PVCLOCK_TSC_STABLE_BIT	(1 << 0)
+diff --git a/tools/testing/selftests/kvm/x86/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86/xen_shinfo_test.c
+index aaa414c677ad..c48c0bf44257 100644
+--- a/tools/testing/selftests/kvm/x86/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86/xen_shinfo_test.c
+@@ -98,22 +98,7 @@ struct sched_poll {
+ 	u64 timeout;
+ };
+ 
+-struct pvclock_vcpu_time_info {
+-	u32   version;
+-	u32   pad0;
+-	u64   tsc_timestamp;
+-	u64   system_time;
+-	u32   tsc_to_system_mul;
+-	s8    tsc_shift;
+-	u8    flags;
+-	u8    pad[2];
+-} __attribute__((__packed__)); /* 32 bytes */
+-
+-struct pvclock_wall_clock {
+-	u32   version;
+-	u32   sec;
+-	u32   nsec;
+-} __attribute__((__packed__));
++#include <asm/pvclock-abi.h>
+ 
+ struct vcpu_runstate_info {
+ 	u32 state;
+@@ -987,12 +972,14 @@ int main(int argc, char *argv[])
+ 
+ 	if (verbose) {
+ 		printf("Wall clock (v %d) %d.%09d\n", wc->version, wc->sec, wc->nsec);
+-		printf("Time info 1: v %u tsc %" PRIu64 " time %" PRIu64 " mul %u shift %u flags %x\n",
+-		       ti->version, ti->tsc_timestamp, ti->system_time, ti->tsc_to_system_mul,
+-		       ti->tsc_shift, ti->flags);
+-		printf("Time info 2: v %u tsc %" PRIu64 " time %" PRIu64 " mul %u shift %u flags %x\n",
+-		       ti2->version, ti2->tsc_timestamp, ti2->system_time, ti2->tsc_to_system_mul,
+-		       ti2->tsc_shift, ti2->flags);
++		printf("Time info 1: v %u tsc %llu time %llu mul %u shift %u flags %x\n",
++		       ti->version, (unsigned long long)ti->tsc_timestamp,
++		       (unsigned long long)ti->system_time,
++		       ti->tsc_to_system_mul, ti->tsc_shift, ti->flags);
++		printf("Time info 2: v %u tsc %llu time %llu mul %u shift %u flags %x\n",
++		       ti2->version, (unsigned long long)ti2->tsc_timestamp,
++		       (unsigned long long)ti2->system_time,
++		       ti2->tsc_to_system_mul, ti2->tsc_shift, ti2->flags);
+ 	}
+ 
+ 	TEST_ASSERT(wc->version && !(wc->version & 1),
 -- 
 2.43.0
 
