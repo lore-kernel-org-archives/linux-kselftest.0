@@ -1,58 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793955740;
-	b=vacOvzzMK25DMelQ+z4p1dpGch+q7MqYT9LluZht4vvdCu6/X6aCrcM2ouA59NxMzrF3
-	 imCsIZx2tK8s/devS0Oa0u8hct1S5At/ZAQJjtvb0PCKeuc1MTjW5T5GvnucoKSdZ5TIC
-	 +zVCUobTXNcYRsvwOyTkjexle8eFnJuSydeaNHrhrnZ2I75yzoklak7FDU44fBtCLNDuR
-	 gpdqdn+vSO+oeLv0/rTa8FrzlZJipTVPgJzmfOcsoc68MR9BnN+bTKcZpGEmBdnhL+HWD
-	 fqJpeuL0cscrZrUwIlnrCbkMACay3mGIlqTaQqRcPUzbrasxZC7uRTGxDvQhL3U9u8A==
+	t=1793955920;
+	b=QslAtVg8k012F9h7lILIyb4/GdIl+TCOH6UGJgHdY2Qgup1/O8Jf2/oMF2hyXAzy4t/W
+	 ITTcG1gWdcnQX3AkQ5S0qWN1mpp6zn+d5iMcGpgLfSZIxshXMyACG+GCjghrOnVzUNhaP
+	 ugEkjIHlDZjTgA9NB0tFKvY0V248re+87G+eHgJA21Gw1ju64P/Wr56uoZcqaqL0Skc+1
+	 5tRqt/fAQoiw9HCBfivZMwqEL7PFC3xmY1NS7JnMJS5pto3Q442u0E1rWKWFGktASK2YP
+	 GuRXC12+5uL08nro4EBFtN0fdIqiUiQd0jNcTuwlDaPptLmglppFPjumL+8SYPhGyhg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793955740;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=IZO9hHewpI1vF88rTpwvcS4eIwOhB3E4KR10OH18Zcs=;
-	b=FcmX39wV2MfuBEqRi6U1wc749muX9vezdhlC7/FC6o3krMKzGcR/9GBEN1Erka8B9F0i
-	 F7Yd5BN352IjP+dpkUa+C5/AFULX5qowHu1RYQc51oD16K8z9CE4OBCaIP+chfY83MtI4
-	 D3hIQiljxtq8v52SvywnwHdKiTa14vFh+2HN6P9yJ6DNIB51JORArLsJ5SfyfiWrKmi6/
-	 lOLeqC4S+xdv6Fy74pYIYp4eVmxJjQn506xG06TvawEK0FeI8pA8sivK5vOvktoDsWcRa
-	 03d7RiyqL4Z271V1R/dN+1txULLa0wVj2vBZuN4NaCSBLxP86NMoYUeSbcuzbKr0vZA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793955920;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=sTFwFHk0E64AYEEUcX8t7DWdOvQ6PLUQ/fthkL753Io=;
+	b=co3HGuB1ydbjedHMG5rirmR+goTF/au2ACxaLnTdW8qaXLngHNdgmEIanEbwwUx5nZQD
+	 IC/36H7XT/Qap51CtoS4lwUzEKk9pjAt5qxwpgIHPC2lqZaL7TZToLBnOPX2FmYFiq1Vq
+	 IlEAhNh8HDuIN2diHPLer3lBqvV0TQ4+ibT2ffQ/Q+6Ff595bh3l1tvqHO1S83zQOEX+i
+	 TBws8thjLpnrIemWglyC9dZKwiege9q2Pbt8H6hRzMLpIycCcAZmGyErkMLbVFibYJhG1
+	 LI0QDT6Ajyi1/+EdD4g0MWVVkm4QddlNrdKZ48pb0GQJ5jUEzb5clKoYduK0vxdC76g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=hjRU7vzd;
-	arc=none smtp.remote-ip=113.46.200.217
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NxG4Yq28;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E47E606A326;
-	Fri,  6 Nov 2026 09:02:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E47E606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A18606A326;
+	Fri,  6 Nov 2026 09:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=hjRU7vzd
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=IZO9hHewpI1vF88rTpwvcS4eIwOhB3E4KR10OH18Zcs=;
-	b=hjRU7vzdg/I2Nu9I0mN5sdbYT0kFey2K901ZDMBOjEImYw2ZNl0YCPz2n08l6gN5gzgjTEDT3
-	UiWdRSGdcbRhhJ9fuEMPeptb2aUqQ3ozspnVmQbHxAY4Ba+SCZepn1a1YX+RspQ6suiHa9Yi8uf
-	CMPGrMQwBtz8FudL0/tAjF4=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jLY843ZlNzcb3y;
-	Fri,  6 Nov 2026 17:01:40 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id D977A40561;
-	Fri,  6 Nov 2026 17:02:10 +0800 (CST)
-Received: from [10.67.120.103] (10.67.120.103) by
- kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 6 Nov 2026 17:02:09 +0800
-Message-ID: <75b0ebcb-023a-4889-98b1-bf1d8b6327dd@huawei.com>
-Date: Fri, 6 Nov 2026 17:02:09 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NxG4Yq28
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C19F1F0089F;
+	Fri,  6 Nov 2026 09:05:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793955920;
+	bh=sTFwFHk0E64AYEEUcX8t7DWdOvQ6PLUQ/fthkL753Io=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NxG4Yq28SBZ5pvwkOA2iAYG11qXpnj0/U/4mz8TRCJco0CmfcWsGatdxSJUI7EvJS
+	 APt/LCv5vmGrIstmtMDjefq9lAL6ZUkRdKAesed25zP6/6QYUzdu5k/UIsj8cOqjKW
+	 wxJgUyASJmfcUYRwu5Yxh+FSnuQu58iHYvNrMYjFgkGWoEygoLgJZz4v5OwDareFN7
+	 P1KpTDQ5mDTNlKcKNH37py/9Td+Amts88a/QdlKwM1JOBVjQm39I3NT1MlE26jZJHR
+	 WNphDN7M+CtPeL4Zq1+PqjL231Yj7MhdwF3uERuy/5ORsvDjS8hh73L5dk+n2nQwZV
+	 4H79poaACgWhg==
+Date: Fri, 6 Nov 2026 01:05:16 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Hannes Reinecke <hare@suse.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <20261106090516.GA1973@sol>
+References: <20261105031401.956609-1-jarkko@kernel.org>
+ <20261105031401.956609-3-jarkko@kernel.org>
+ <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,169 +86,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 08/15] KVM: arm64: Flush the HDBSS buffer on VM exit
-To: Leonardo Bras <leo.bras@arm.com>
-CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
-	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
-	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
-	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
-	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
-	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
-	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
- <20260929103655.85107-9-zhengtian10@huawei.com> <auDpyRNpeDNzIk3W@LeoBrasDK>
- <5bbd0d3b-1026-43f3-bc45-245472603144@huawei.com>
- <auTLOIafIq4cjRho@LeoBrasDK>
-From: Tian Zheng <zhengtian10@huawei.com>
-In-Reply-To: <auTLOIafIq4cjRho@LeoBrasDK>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemr100010.china.huawei.com (7.202.195.125)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
 
+On Fri, Nov 06, 2026 at 09:21:32AM +0100, Hannes Reinecke wrote:
+> While I am pretty much in favour with this approach, is there a specific
+> reason why siphash has been chosen?
 
+SipHash is the preferred choice for secure hash tables.  It is secure,
+performs well on short inputs, and doesn't require special instructions.
+See Documentation/security/siphash.rst
 
-On 10/31/2026 12:52 AM, Leonardo Bras wrote:
-> On Fri, Oct 30, 2026 at 12:57:06PM +0800, Tian Zheng wrote:
->>
->>
->> On 10/28/2026 2:13 AM, Leonardo Bras wrote:
->>> On Tue, Sep 29, 2026 at 06:36:48PM +0800, Tian Zheng wrote:
->>>> From: Eillon <yezhenyu2@huawei.com>
->>>>
->>>> HDBSS entries accumulate in the per-vCPU buffer while the guest runs,
->>>> and must be drained into the dirty bitmap or dirty ring before
->>>> userspace can observe them.
->>>>
->>>> Drain the buffer at a single point: kvm_arch_vcpu_ioctl_run() flushes
->>>> it on every VM exit, before the exit reason is handled. Flushing
->>>> inside the run loop keeps the dirty-ring feedback timely: when a flush
->>>> pushes the ring past its soft limit, kvm_dirty_ring_push() raises
->>>> KVM_REQ_DIRTY_RING_SOFT_FULL, which check_vcpu_requests() observes at
->>>> the top of the next loop iteration, so the vCPU exits to userspace for
->>>> the harvest before re-entering the guest.
->>>>
->>>> kvm_arch_sync_dirty_log() relies on the exit path to flush: it kicks
->>>> vCPUs out of guest mode, and the GET/CLEAR protocol tolerates
->>>> concurrent bitmap writes, so the snapshot is complete without extra
->>>> synchronization.
->>>>
->>>> Signed-off-by: Eillon <yezhenyu2@huawei.com>
->>>> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
->>>> ---
->>>>    arch/arm64/include/asm/kvm_dirty_bit.h | 15 +++++++++
->>>>    arch/arm64/kvm/arm.c                   | 20 ++++++++++++
->>>>    arch/arm64/kvm/dirty_bit.c             | 45 ++++++++++++++++++++++++++
->>>>    3 files changed, 80 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/include/asm/kvm_dirty_bit.h b/arch/arm64/include/asm/kvm_dirty_bit.h
->>>> index fe703f02626b..d828e6b43fe9 100644
->>>> --- a/arch/arm64/include/asm/kvm_dirty_bit.h
->>>> +++ b/arch/arm64/include/asm/kvm_dirty_bit.h
->>>> @@ -13,6 +13,9 @@
->>>>    #include <asm/sysreg.h>
->>>>    #include <linux/sizes.h>
->>>>
->>>> +#define HDBSS_ENTRY_VALID	BIT(0)
->>>> +#define HDBSS_ENTRY_IPA	GENMASK_ULL(55, 12)
->>>> +
->>>>    #define KVM_ARM_HDBSS_DEFAULT_SIZE  PAGE_SIZE
->>>>    #define KVM_ARM_HDBSS_MAX_SIZE      SZ_2M
->>>>
->>>> @@ -22,7 +25,19 @@ static inline u32 kvm_hdbss_buffer_size(struct kvm *kvm)
->>>>    	return kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
->>>>    }
->>>>
->>>> +static inline bool kvm_hdbss_enabled(struct kvm *kvm)
->>>> +{
->>>> +	return kvm->arch.mmu.vtcr & VTCR_EL2_HDBSS;
->>>> +}
->>>> +
->>>> +static inline bool vcpu_hdbss_enabled(struct kvm_vcpu *vcpu)
->>>> +{
->>>> +	return vcpu->arch.hw_mmu &&
->>>> +		(vcpu->arch.hw_mmu->vtcr & VTCR_EL2_HDBSS);
->>>> +}
->>>> +
->>>
->>> IIUC, arch.mmu is always the canonical s2_mmu, while hw_mmu can be the
->>> nested s2_mmu, if enabled.
->>>
->>> Was that your intend here?
->>> If not, we could use only kvm* version, which can be called with vcpu->kvm.
->>>
->>> If it was, then I would like to understand the logic here, as IIUC the
->>> buffer is accessible only for the non-nested guest, as it's
->>> allocated in a per-vcpu structure. (vcpu->arch)
->>>
->>
->> Hi leo,
->>
->> Yes, that was the intent. The shadow MMU never carries VTCR_EL2.HDBSS,
->> so the flush is naturally skipped when running nested.
-> 
-> Ah, right. If we always test the kvm one, we may enable it for the nested
-> guest, which is undesired.
-> 
-> [...]
->>
->>>
->>>> @@ -2017,7 +2025,19 @@ long kvm_arch_vcpu_unlocked_ioctl(struct file *filp, unsigned int ioctl,
->>>>
->>>>    void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
->>>>    {
->>>> +	unsigned long i;
->>>> +	struct kvm_vcpu *vcpu;
->>>>
->>>> +	if (!kvm_hdbss_enabled(kvm))
->>>> +		return;
->>>> +
-> 
-> And then here you check for the L1 VM because during migration the host
-> could have dirtied memory, and you want to track that as well.
-> 
-> Makes sense
-> 
->>>> +	/*
->>>> +	 * The buffer is drained on every VM exit, so kicking running
->>>> +	 * vCPUs is enough to flush them; the dirty-log GET/CLEAR
->>>> +	 * protocol tolerates bits set concurrently with the snapshot.
->>>> +	 */
->>>> +	kvm_for_each_vcpu(i, vcpu, kvm)
->>>> +		kvm_vcpu_kick(vcpu);
->>>>    }
->>>>
->>>>    static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
->>>> diff --git a/arch/arm64/kvm/dirty_bit.c b/arch/arm64/kvm/dirty_bit.c
->>>> index f9aeb9f34ad0..be0d12555c84 100644
->>>> --- a/arch/arm64/kvm/dirty_bit.c
->>>> +++ b/arch/arm64/kvm/dirty_bit.c
->>>> @@ -13,6 +13,7 @@
->>>>    #include <linux/kconfig.h>
->>>>    #include <linux/log2.h>
->>>>    #include <linux/mm.h>
->>>> +#include <linux/srcu.h>
->>>>
->>>
->>> Out of curiosity, could you please explain you reasoning on selecting srcu
->>> as locking here?
->>>
->>> (Like, what are you protecting against, and why srcu is a good choice)
->>>
->>
->> kvm_vcpu_mark_page_dirty() resolves the memslot under SRCU
->> (kvm_vcpu_gfn_to_memslot), and the flush loop calls it for each entry,
->> so the whole loop needs the read lock held.
-> 
-> Oh, right, it's just about getting the memslot... now I see it :)
-> 
-> Thanks!
-> Leo
+> Would there be a chance to make this configurable?
+> I do see slight complications when running in secure environments
+> (ie FIPS-certified environments) where most of the hash functions
+> might not be available ...
 
-Awesome!
+SipHash support is available even when the kernel is booted with fips=1,
+so there's no issue there.  It's already widely used in the kernel for
+hash tables, and that hasn't blocked FIPS certifications either.
 
+Side note: fips=1 actually has little do with security, and in some
+cases it actually decreases security.  See for example
+https://lore.kernel.org/linux-crypto/20261026183332.11402-1-ebiggers@kernel.org/
+where I'm fixing a vulnerability caused by fips=1.
+
+- Eric
