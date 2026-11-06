@@ -1,58 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.218
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793960861;
-	b=yDTbj+dV5LD/SJufzOklD75+Xq/y34elCTuAcx2+gnCtjXf5iu+ScohjT1omkoTlY5tS
-	 mZDl1UuZ7ILhtRKup7VFVdky+UT8N7unaZNiBOv0/U8bZmzY1grMnyIgF57aiKZcZnroZ
-	 iI5o3DSHQvVc6xGyx1dkSy6B48siR5JbxgZbMSfocKCqOZHdMlcNgQQV0ZG+qDW67ze+d
-	 37adKWiSgNRpUTbucfkgwwMB23kswdcv1zyr4YwXR3YVTZ4b8zN4FYaU7jrBnj2aWc4AE
-	 uHSM7H7QwhPM/GgpWGAAuFcI8t4GBs/l43xKLuomOzRj5CroTfha5ZAYHhkxUKEF7tg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793960861;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=SxUZdl1nxNmZdMNHl/mAId5VPOOSyhyBaIunfeJwQ5s=;
-	b=k+mctIpF8SzeCDRbuJ1KMTEIgijLh/is/+rficm/qzy1b2mTq6ilqqGr3x8YqRZbMrYS
-	 pFLVIMzZh5Q1x2RDtkKuP9pD5LyOH/DkqDBOM7H/zj8rFkKnwi0jwiJK5koftayX280bG
-	 ICmrvO4/3oomXoE4uYUz3jqPqh+hVSxdSYLfe98WYFOuBWondNT1A9Itu0bLODt03LGhT
-	 FSk6odgrf/SxHTBNMhsNF+KYZlruUST2SKtZLy6fU9V2CMQO5kezOxzJtUYuHZNDgk323
-	 pFBu83bFJI0ZAtmNinjOjx0WnE0rTEAt7OKh0pB0IxGvbnOXIoXcZMv3JS2vsxaBc/Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=h53tQAGQ;
-	arc=none smtp.remote-ip=113.46.200.218
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793961045;
+	b=ufDuCJz7viSC7bjZqgNyjhe1jrmr/sgCmfZ5/8CSytDOV9HpOuYl2gDZ8hzzziukhDrG
+	 wvUrTrAtEYnTFRy0Nu2uVprZnHpf0ta7b74w20ZvYV9Usb7LyALyJ07GljcX7JFNukzig
+	 e4x5GEvNlaV4GZewZQUfptXXZGI4lWp1JOPAqjo1kT6pmmeozVc7V3/YGOM913Rb1kiv4
+	 0okD2r41AhsCQaO7OMuS1f/sPHJ7oTyim0EPWViejvJE6HcvMfA8+CDltAd1zc1diMzyb
+	 B2lCL100B+3ZL9Zjp+jYp++j1WvYHTafya/5m/AMJCbKRvXGqVDZXpWaBSJqTaQPfRg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793961045;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Sent-From:X-URL:X-Accept-Language:
+	 X-Accept-Content-Type;
+	bh=alorjCB2vLHR6tDixDHf4C5Wx5SHAKCg+N4icCofI2g=;
+	b=Tc/3+RP7E0lpWWbb7Eaw7FkJ+Vg6vUuZR5WONJIDRxQVvkHMLZe0GD32Pub0SreMqITX
+	 eon43ZSSRVLFiuoeZ7WR68NC0TTFTGHD4FiR9lxg961nVH1JC64JdX7L6y3qcmQb7bhp8
+	 na6uezrq+StUTeiTWGPMO8PnMWZNAyLgosvQfj12g05L9X3C9RloIQfbcVRlF5e2+kvD2
+	 1V435OZwoyVtcpS2MG0QQCqC0rvRflH3i+jDuYOJxs+cvMaKcguJxZ4sWXto1FK9zmw/t
+	 MgPWAXCf0HnS9C8bhngWYQB7X0f2fw/AP5jAOAn9rh6HDpsClzd8YwWUAxeAV2OYddg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=pengutronix.de;
+	spf=pass smtp.mailfrom=pengutronix.de;
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=MTm4++4z;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C6E606A32E;
-	Fri,  6 Nov 2026 10:27:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1C6E606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78715606A32F;
+	Fri,  6 Nov 2026 10:30:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78715606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=h53tQAGQ
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=SxUZdl1nxNmZdMNHl/mAId5VPOOSyhyBaIunfeJwQ5s=;
-	b=h53tQAGQkAc6oUDOj1QWs7jrAmp3A7l4aeZkvG4ny3FjBaa0BPtLnE9b1YH4Wi3QdvU+wQqJU
-	R/iZycLsdkiiUeQ73aC4bqFkUWlwU65f0HQ+xed9nr0AW0Rx9rnG98M0+I7MjNm+oGkad21luYh
-	jTSKQsEtgoATxj4BULMkQB0=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4jLb2X2gsXzpSwn;
-	Fri,  6 Nov 2026 18:27:00 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0467B4063F;
-	Fri,  6 Nov 2026 18:27:29 +0800 (CST)
-Received: from [10.67.120.103] (10.67.120.103) by
- kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 6 Nov 2026 18:27:27 +0800
-Message-ID: <5a096cca-713a-4449-83dc-c763dc06c085@huawei.com>
-Date: Fri, 6 Nov 2026 18:27:27 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=MTm4++4z
+Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
+	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 6BC0F201899;
+	Fri, 06 Nov 2026 11:30:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1793961041;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=alorjCB2vLHR6tDixDHf4C5Wx5SHAKCg+N4icCofI2g=;
+	b=MTm4++4zZE3cF1bOPL3ASaUqGTo6ro/Xt7aV+HqQGT6TDPKKzxILbk8w5srELvLTixOUby
+	UhPQ9j60INfrSW3vWEMME9G1Kv0QV8Qaa2j7VYk/KKcId5SzJa0RO6m4ztdCvFNziUpNT6
+	oaD8H4fEWOgg9QObT5Up0AyTryqAWUVTkVS06rLfOaU4QeylEacQm/HBrOysiovbzhjxhi
+	fhPkwRIGVUKICC1iEPvKdbfD9GYVzpNDRokt4/fQR3YTFHvWRoabchTCXFxXJRyElNjSJx
+	KfMLhXduKjP3U4KTJUsFqJxpd6WvjAC86YeGNrXCzdJarCEEiCACt2AObJ23dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1793961041;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=alorjCB2vLHR6tDixDHf4C5Wx5SHAKCg+N4icCofI2g=;
+	b=PosyiYm7UHZONqYtYGXHZm4XWtbr6hTilcrjnEBL8USdD+m5gVkucQFToAOOhoPOwuV+X6
+	iEunG9y3l5L+aOud9I+RKHOjFM1djR+vFlew9lspfc0yjQgaW/WqT75HrJoeVk28u80C8o
+	S04Jdo2wtg7d4g0glc2Ml7ISuNMWGj2b1a07Sn5RNVuie6/IpI5cgRoTw4Hxe4aZmL1ffV
+	YrYojE+u26I9rGuAyBjctSLJoalm3V0u9xqalR2h2a4QypvAqioZ8bZUbnYU/sTAD5sJwH
+	zMb/FLgcx2iAzXMkJoMTQ8nufrN1ttACC3k6jUZDi7RkLKOMF1NsMDloQqjcfw==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=relay-from-drehscheibe.grey.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1793961041; a=rsa-sha256;
+	cv=none;
+	b=gbDjEEhNkPCdFqLdqwmi71d8wOvqb9Ehq1DFF5jYeATA9ZPue/hOPLv5OPOvR2KlmUS1yR
+	rWDdbPpa7NrbfaikMOZBpNJiVS+wKG6trDig7k43wJsJJASUuZfeRZ90JC3UlBUvd5Fk0c
+	ikJvLlQ6HZ73dCh+fgMFyC2A5tYWLieCDBHbKKLPGz11brvPoGloc/ndc4t0vPp8TadL0n
+	rAyPvOGk9KkV0LoHN+xCIBEyhmDrJJrK61tcehksvnq/gkUZItz68pWDQoPdsHPeZmR49F
+	aUWRyrL8ewoOWblQQrrXdXkI9rashonzWQlfH3taSbrSvy33u/lZDtHKBdGZeQ==
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1xPHDV-002tDr-1A;
+	Fri, 06 Nov 2026 11:30:41 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1xPHDV-00000000JsL-12s1;
+	Fri, 06 Nov 2026 11:30:41 +0100
+Date: Fri, 6 Nov 2026 11:30:41 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Robin van der Gracht <robin@protonic.nl>,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Shuah Khan <shuah@kernel.org>
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Felix Maurer <fmaurer@redhat.com>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Alexander =?utf-8?B?SMO2bHps?= <alexander.hoelzl@gmx.net>,
+	Quchaosheng <quchaosheng000406@163.com>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Subject: Re: [PATCH can-next v2 0/9] selftests: can: add J1939 socket and
+ transport tests
+Message-ID: <au2sUdymftKrvVEv@pengutronix.de>
+References: <20261104-j1939-selftests-v2-0-cf797c83317b@pengutronix.de>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,126 +106,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 13/15] KVM: arm64: Add HDBSS buffer size ioctl for
- dirty-bitmap mode
-To: Leonardo Bras <leo.bras@arm.com>
-CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
-	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
-	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
-	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
-	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
-	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
-	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
- <20260929103655.85107-14-zhengtian10@huawei.com> <auioRICO9Frhk-zT@LeoBrasDK>
-From: Tian Zheng <zhengtian10@huawei.com>
-In-Reply-To: <auioRICO9Frhk-zT@LeoBrasDK>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr100010.china.huawei.com (7.202.195.125)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261104-j1939-selftests-v2-0-cf797c83317b@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
 
-
-
-On 11/2/2026 11:12 PM, Leonardo Bras wrote:
-> On Tue, Sep 29, 2026 at 06:36:53PM +0800, Tian Zheng wrote:
->> In dirty-bitmap mode, a larger HDBSS buffer lets the guest dirty more
->> pages between VM exits, at the cost of memory. The default of one page
->> per vCPU is a reasonable starting point, so allow userspace to opt
->> into a larger buffer via KVM_CAP_ARM_HDBSS_BUFFER_SIZE.
->>
->> The size is specified in bytes through KVM_ENABLE_CAP and must be a
->> power of two in [PAGE_SIZE, SZ_2M]: the upper bound is the largest
->> HDBSSBR_EL2.SZ encoding, and the power-of-two requirement matches the
->> buddy allocator. It must be set before any vCPU is created: -EINVAL
->> after vCPUs exist, -EBUSY if already set.
->>
->> The capability is rejected in dirty-ring mode, where the size is
->> pinned by kvm_arch_dirty_ring_size_updated().
->>
->> KVM_CHECK_EXTENSION returns the configured size for a VM, or SZ_2M
->> when queried globally with a NULL kvm.
->>
->> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
->> ---
->>   arch/arm64/kvm/arm.c     | 34 ++++++++++++++++++++++++++++++++++
->>   include/uapi/linux/kvm.h |  1 +
->>   2 files changed, 35 insertions(+)
->>
->> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->> index 5a7046acb62e..eadbf3a88d31 100644
->> --- a/arch/arm64/kvm/arm.c
->> +++ b/arch/arm64/kvm/arm.c
->> @@ -19,6 +19,7 @@
->>   #include <linux/kvm.h>
->>   #include <linux/kvm_irqfd.h>
->>   #include <linux/irqbypass.h>
->> +#include <linux/log2.h>
->>   #include <linux/sched/stat.h>
->>   #include <linux/psci.h>
->>   #include <trace/events/kvm.h>
->> @@ -203,6 +204,31 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->>   		r = 0;
->>   		set_bit(KVM_ARCH_FLAG_EXIT_SEA, &kvm->arch.flags);
->>   		break;
->> +	case KVM_CAP_ARM_HDBSS_BUFFER_SIZE: {
->> +		u64 size = cap->args[0];
->> +
->> +		if (!system_supports_hdbss())
->> +			break;
->> +		if (kvm->dirty_ring_size)
->> +			break;
->> +		if (size < KVM_ARM_HDBSS_DEFAULT_SIZE ||
->> +		    size > KVM_ARM_HDBSS_MAX_SIZE)
->> +			break;
->> +		if (!is_power_of_2(size))
->> +			break;
->> +
->> +		mutex_lock(&kvm->lock);
->> +		if (kvm->created_vcpus) {
->> +			r = -EINVAL;
->> +		} else if (kvm->arch.hdbss_buffer_size) {
->> +			r = -EBUSY;
->> +		} else {
->> +			kvm->arch.hdbss_buffer_size = size;
->> +			r = 0;
->> +		}
->> +		mutex_unlock(&kvm->lock);
->> +		break;
->> +	}
->>   	default:
->>   		break;
->>   	}
->> @@ -500,6 +526,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->>   		else
->>   			r = KVM_ARM_EAGER_SPLIT_CHUNK_SIZE_DEFAULT;
->>   		break;
->> +	case KVM_CAP_ARM_HDBSS_BUFFER_SIZE:
->> +		if (!system_supports_hdbss())
->> +			r = 0;
->> +		else if (kvm)
->> +			r = kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
+On Wed, Nov 04, 2026 at 05:17:15PM +0100, Oleksij Rempel wrote:
+> net/can/j1939 has had no in-tree selftests. This series adds a kselftest
+> suite for the J1939 socket layer and the TP/ETP transport, run on vcan with
+> a CAN_RAW socket as an independent on-the-wire peer.
 > 
-> This whole thing of allowing hdbss_buf_size to be set only once makes
-> everything more complex. Why do we have this limitation again?
+> The timer checks are relaxed by default, for slow CI machines;
+> J1939_STRICT_TIMING selects tight bounds. Not covered yet: the ETP abort
+> and timeout paths, and a received Connection Abort on a kernel TX
+> session, which the stack currently ignores.
 > 
-> I mean, if we want to restrict size changes after the first hdbss buffer
-> gets allocated, it makes sense, other than that, I would like to understand
-> the reason for that.
+> Known issue: the stack updates a session from the loopback echo of its
+> own CTS, RTS and DT frames, and a CAN_RAW peer can see that echo before
+> the stack does. A peer frame that follows quickly can then cancel the
+> session and fail a multi test. I have not seen this in QEMU runs. The fix
+> belongs in the stack, not in these tests.
 > 
-> Thanks!
-> Leo
+> I used an LLM coding assistant to write most of the test code and to
+> review it. I have read, edited and run all of it myself, on vcan under
+> QEMU.
+> 
+> v1: https://lore.kernel.org/all/20261014154435.3577983-1-o.rempel@pengutronix.de/
 
-Hi Leo,
+pw-bot: cr
 
-You're right, I re-examined the whole flow and the "set once"
-restriction isn't actually needed. I'll remove it.
+Changes requested by both sashiko instances
 
-Thanks,
-Tian
+Thank you!
 
+Best Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
