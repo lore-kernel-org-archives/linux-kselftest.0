@@ -1,75 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793989213;
-	b=St0rmgmejQxMS8Ojm9QftNEYNKKDjfLftC3IjoVhff02u4Tdx2RzIIiZRBD9upPl/AuW
-	 2IJMxUyb8GXlTihxCroo4nln5WAKoqSBy4BJe4B8SpZIa9bSARwfsu7RsPzEAbmhgWCC6
-	 IKB/GBlbkqVT7CH4cIeTHW6q2g5GxrCzdQxmUkkIUEo66xAoI0Ku6EdngDgT63Weuq0VC
-	 CpViLmSsOVwV5g5JN3CEfEXKybaFkVAayhyf4eKD6OszIJq5oYx5fM8fJsIhpRwXe/5CG
-	 UH/gdIZdSBqAXigI9By78eyQTsgJgSglCsxU5FZGE1AhJ5KbMQEoem/lV3IMeAlslqw==
+	t=1793989816;
+	b=kjeh3aQ5cs2IxWM2xQo9bhcdY+bVkyvZYpxlzHqT76onABBymBp8+uDJ455OsNDVoJdf
+	 1sUvzt7yvwhJO86pgT0C0oykYssSx0coemVU/pl2ac0JdzshbkloLJ0WyYH/Sj99IUXx1
+	 QIFLzf64OOd1TJYYcNIiYXAL/rlc4ULayZPBTd5ZdG4/kvN89GxVRQ2o5aJg2Gevt0hiQ
+	 1nO8z6ioGupay/87WLE/i9DXq+pzjV0Df9dXwJBBbKe77UNW6NQe0Az5lStwSbPy7QCsY
+	 YYWLdGnHy3Q6HyTXjWp0e9vu8en157c/bls7z0evxJy223Ri6HbXggo5j26qaXoKDtQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793989213;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=H159Xsa5W2BfDgkwuWPP8unE3udyJHNIucLctlJNBk4=;
-	b=cK2CaSI2qReu/bilT7WxrxUNlLUA9BsNWbvX3iovcMDVVplA8Fcl1zPphecmHRhNhgXL
-	 gOFw60rTaOzrdFetTZDeKnQdVpKkReRdCgh9FReWHIeqeb9uB1YWT9EVwWK/LmV8ryQ8s
-	 vcsrbbbIDbE5TpQhUVI8qirJVznG4JKSUy80OejAfbIxePhgoQ7ZscHICayu3iwVniTKn
-	 +ac1jLASUIJr+nBstxNnxKDBRehFtAIcXaNrzvKN+FbeRDfXZ7i42b4nazZ41kPDMPY4Q
-	 W1kJQm55OoSEu3lyqp0UVUm4kBLmHTfaaM9ouE7pMAzSxsKlOpVv4bN43i8Wtt5WWtQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793989816;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Received:
+	 X-Forwarded-Encrypted:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=UliTkuKSwijkprFnPvplR6mcOQUjgocutB6yCvWNZyo=;
+	b=xPjcsIareB8XsJ9UnFj2iLuwoTlKW/L8NEaSAIxrpU5LIVX7XaI0HRYh0xeodh8/020P
+	 xwXRjgwAJNECZ8qCAeAeMnbE9zUXAX7iiDBOiLgLh9ASlLSQtThulA2mb4fOKHdphLhUp
+	 W89oLwZ1ynw21WUMKx5UeWnouQ00L1k6NkuKiGgkqM1G5HN6n0GfgF5Xn5NhIF5ZEsmmV
+	 +bxpAu6i4jFRHkT1ax1j6aVOPDc8iwg4wQYEdfniz2l95ISwdWF5F19ybnfKw53EGv9rp
+	 xH6zh0bDQDUyqZObvdbybe2iODRiYFYvkyjJeduxarwilxbAg4JVu+3YdeNGUNNhlqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jf8lg6tR;
-	arc=none smtp.remote-ip=209.85.214.200
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	dmarc=none header.from=linux.win;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=none smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64644606D812
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 18:20:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64644606D812
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=jf8lg6tR
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2ed08904845so12980615ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 10:20:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793989213; x=1794594013; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=H159Xsa5W2BfDgkwuWPP8unE3udyJHNIucLctlJNBk4=;
-        b=jf8lg6tRKj8Cf4mSHKweKXugKQRn/iIxaNqq6B2eYUTaHtOB+9f3Qgi0Cnq33bENp8
-         freiKyov0PE6W9ME/vD8QynoxV55wnYeeq292+F9py7yM5yujU/Pg4BX3Z/nwab12EdP
-         yAccXoL7um3wnzJqeeXgLiCEsrke3j/9EQELBhZRbNwoLROj6qHrHyX6zu3u8SNaKMp9
-         rF/OHvbF16/r9g6cZuZpGjC+5BV7wE4crWydLJNgaOn1vB3W4w2+o0/yZtsDmLObTGLt
-         e8GS9h6ZMkz4Zj0Q/Dim89H33Lab/SvI35oIkF4Ilc7duScABKwvNiuuiXYi7pnCTCUj
-         l2ZQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDC9606A32F
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 18:30:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BDC9606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.win
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c4c9abc1824so139706366b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 10:30:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793989213; x=1794594013;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=H159Xsa5W2BfDgkwuWPP8unE3udyJHNIucLctlJNBk4=;
-        b=n8ljQq2ypQdrg5bdikXFo7N4f1sn1H/czODoYvauGRjj17cIoVv9toW6RCl6RGO6xS
-         9X97oWSQAMFmnXEGL2//xFsamLNnw0qwmNCg93ZL/ct3Of/zNYt9R6Fb2GhudYjY/WTF
-         5z7vFjH3LQmQRI42rqMbu0kZoiCGwZiybUViubXi9FWGW5trSLMb1yd1IdsipIkc0nQl
-         VbuYKEkjKwzkVSmfVstn7zsls1vC3wktVx5kqCHaN/xkNpvWZc4AZk15snhvaf0bz9Y+
-         62ennzJ24GXoVii6jLDjAaxuHp5FTd7u20x7vWN7ukxbP44/8guuoFilqhdSz5kllUCZ
-         u1sQ==
-X-Forwarded-Encrypted: i=1; AL+hErHEqgbTGF5AnPXzhKD2+UIvrhb7q1HJ1y2EV8utEK7A6T0KWfOMxM64y51HeNTVTlVqCLyQ11r2rogl2mJSqlc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/RXEiLAvt8CrEOiNQB0rcy/dWjIW/punQAV3OZvzyV7wUasi3N
-	M3ZVwfEWTkqE5nibnyyG2LKHUwQ2a6Cb1fuWx13qzUhiwm6kxlI9K3wWcsuALUi3yhbBdCW9Is1
-	Ib/JeYw==
-X-Received: from plfn14.prod.google.com ([2002:a17:902:e54e:b0:2ea:874c:627b])
- (user=weiwan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f541:b0:2e2:c283:354f
- with SMTP id d9443c01a7336-2ed41854318mr39247615ad.28.1793989212559; Fri, 06
- Nov 2026 10:20:12 -0800 (PST)
-Date: Fri,  6 Nov 2026 18:20:07 +0000
-In-Reply-To: <20261106182007.374660-1-weiwan@google.com>
+        d=1e100.net; s=20260707; t=1793989815; x=1794594615;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UliTkuKSwijkprFnPvplR6mcOQUjgocutB6yCvWNZyo=;
+        b=LFkwY73cPWlF4EBlX1LEzX/C+hMSL6CVVbC0tXg6tVy2aXXcgz6vAyCL6a1Kuz6j5A
+         U2+0s8SXqlSAezIDNk6slcARj1HLICWvFMNcyNA27wb39SlMxtcH1X9AO0+QQhrHStyi
+         3CWRA00iyqIwbuurpkYqn8pFBoL9YY3+3iE0zG4wprekt22WhNPySB1XvwgJvKl6yikF
+         l3N9HXmVoi0wtFd1FnlijYroCcI+dk1iGO2ajTHSvXBE2MV6Fp2j17nUaugMLnf3PHVM
+         aLmxMTf20/88eMkYzkF60Hpy7uQTNh9RDZJ0Gt/itvW3jnviS87z/c+8XY4vX7wUanWq
+         ZNMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxDm6DterPRUpLVmrBfufP03rCjS3JfmEc/4j8IW/eAqUzfvhCVVVdcfndYFsdeS+oiAhtUjtXCKMvc/Yb0Q+4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9PdCQQShtvwqePABwkGDTlA39MysDkRV5Y3kyCvLYBe/1SRAng
+	tbVXUlbd/+JpVDWnuHr88LDRrqpAirj3izrGyE4x3TBnKxuKToH7ldv9IX2Nr2lTipc=
+X-Gm-Gg: AYBFou2/d9kMz2T/l0dfkVm2XQEc5d0dhVrYMKskPmahOwobufipQGleMRwNo2D3As9
+	sUUuhJzNjElaJfUeBEFaKrsBHuG8sEqzOD+xhUsOaME76KGAI7SU7+DgSC4xDJaDSdEwqjvtTZb
+	dO6Rm2c6ici+QvswYFsJAivueufMMhjRt5NR4NAqH1mid7YMAzFuFDq5uQxsL8f6g2wzHkXdkR1
+	YvqCu2qRZx6gBQheomzM9tBQghP0MRl5NbgR+XKpTSK7kFr/PKKkJAq7JNumj2vTa+bYFh0c00A
+	dR7OT/mqgwJtKgGardN6A6ZlnaJZ/b+aLwQAi0NmbXNOxX0zqrEZpZZzr3crmTgCEBYbraDMfLR
+	Qq7McnyYdnELxtHJdLbObPrEFHWhgxyGg+cqe9X8lx+1t0whKlRlOU2QcNXjsFFLXWCpqoB1OJ3
+	3xf/rgkmP3wRDrXUgL1pOid/+1Bgokx2ZLDT7Kdyj85r4KT0RaFe92C8r9y5sw8LTDicwYMdnYw
+	S8QJQCDvMYxIkyL/idVvM9gql9hB/QsZh0wb+8x2OnaojkbCwtlQlJNb4t9wswtLjyBxKroTp6n
+	XkHeRHvQxAGIzZye8p5V1vwVN4tt1+WhZyu06n3m2cKN9P7fs3qDswpr9uQ=
+X-Received: by 2002:a17:907:930e:b0:c41:960c:8c62 with SMTP id a640c23a62f3a-c4d3531642amr262748666b.30.1793989814245;
+        Fri, 06 Nov 2026 10:30:14 -0800 (PST)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4d35670910sm97225166b.40.2026.11.06.10.30.08
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Nov 2026 10:30:09 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c450ab1483cso148254866b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 10:30:08 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErFdoVjJC1YsiJACWc1X/lKC9vYCKSJZDwUXHz1+F/wiyJIY/q9n5A7mcFCRIICp5t/SZMu9+qgmSbrHmUt0eUE=@vger.kernel.org
+X-Received: by 2002:a17:907:ea89:b0:c4c:bff4:200c with SMTP id
+ a640c23a62f3a-c4d3531f031mr283547466b.32.1793989808075; Fri, 06 Nov 2026
+ 10:30:08 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,83 +80,152 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261106182007.374660-1-weiwan@google.com>
-X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261106182007.374660-3-weiwan@google.com>
-Subject: [PATCH net v3 2/2] selftests/net: psp: test bidirectional data transfer
-From: Wei Wang <weiwan@google.com>
-To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
-Cc: Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Daniel Zahka <daniel.zahka@gmail.com>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Wei Wang <weiwan@google.com>
+MIME-Version: 1.0
+References: <20261029232437.2581640-1-jarkko@kernel.org> <20261029232437.2581640-2-jarkko@kernel.org>
+In-Reply-To: <20261029232437.2581640-2-jarkko@kernel.org>
+From: Ignat Korchagin <ignat@linux.win>
+Date: Fri, 6 Nov 2026 18:29:56 +0000
+X-Gmail-Original-Message-ID: <CAOs+rJVNyJwqp4CR-d_T4GVjNMjgbaDL78_mZCVGGvN1xpd33w@mail.gmail.com>
+X-Gm-Features: AclHuK8TGNjpH-aL7rdb3WJ8RwrdjoKcrJ52VddwbSIE-hld3YHoMNkMBO-NFbA
+Message-ID: <CAOs+rJVNyJwqp4CR-d_T4GVjNMjgbaDL78_mZCVGGvN1xpd33w@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] KEYS: Introduce keyring_is_empty()
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org, 
+	Eric Biggers <ebiggers@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+	Mikulas Patocka <mpatocka@redhat.com>, Benjamin Marzinski <bmarzins@redhat.com>, 
+	"Theodore Y. Ts'o" <tytso@mit.edu>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, 
+	"open list:ASYMMETRIC KEYS" <linux-crypto@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:DEVICE-MAPPER (LVM)" <dm-devel@lists.linux.dev>, 
+	"open list:FSVERITY: READ-ONLY FILE-BASED AUTHENTICITY PRO..." <fsverity@lists.linux.dev>, 
+	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>, 
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-_data_basic_send() and _data_basic_send_netkit_psp_assoc() currently
-only verify unidirectional data transmission from the test socket to
-psp_responder. As a result, they do not exercise the receive path for
-PSP-encrypted TCP data segments arriving at the test socket (such as
-packets redirected across a netkit interface associated via dev-assoc,
-which relies on SKB_EXT_PSP surviving packet scrubbing).
+On Thu, Oct 29, 2026 at 11:25=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org=
+> wrote:
+>
+> Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
+> fs-verity how keyring internally manages the keys.
+>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Use the existing "data echo" command in psp_responder to verify that the
-test socket can also receive PSP-encrypted data from the peer in both
-_data_basic_send() and _data_basic_send_netkit_psp_assoc().
+Reviewed-by: Ignat Korchagin <ignat@linux.win>
 
-Signed-off-by: Wei Wang <weiwan@google.com>
----
- tools/testing/selftests/drivers/net/psp.py | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index 473500901879..c114d2245135 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -120,6 +120,26 @@ def _check_data_rx(cfg, exp_len):
-     ksft_eq(read_len, exp_len)
- 
- 
-+def _recv_careful(s, target, timeout=2):
-+    """Read exactly target bytes, tolerating short reads"""
-+    data = b''
-+    end = time.monotonic() + timeout
-+    while time.monotonic() < end:
-+        try:
-+            data += s.recv(target - len(data), socket.MSG_DONTWAIT)
-+            if len(data) == target:
-+                return data
-+        except BlockingIOError:
-+            time.sleep(0.001)
-+    raise KsftFailEx(f"short read, got {len(data)} of {target} bytes")
-+
-+
-+def _req_echo(cfg, s):
-+    """Ask the peer to echo, and check the reply arrives intact"""
-+    _send_with_ack(cfg, b'data echo\0')
-+    ksft_eq(_recv_careful(s, 5), b'echo\0')
-+
-+
- def _check_data_outq(s, exp_len, force_wait=False):
-     outq = 0
-     for _ in range(10):
-@@ -478,6 +498,7 @@ def _data_basic_send(cfg, version, ipver):
- 
-     data_len = _send_careful(cfg, s, 100)
-     _check_data_rx(cfg, data_len)
-+    _req_echo(cfg, s)
-     _close_psp_conn(cfg, s)
- 
- 
-@@ -726,6 +747,7 @@ def _data_basic_send_netkit_psp_assoc(cfg, version, ipver):
- 
-         data_len = _send_careful(cfg, sock, 100)
-         _check_data_rx(cfg, data_len)
-+        _req_echo(cfg, sock)
-         _close_psp_conn(cfg, sock)
- 
- 
--- 
-2.56.0.455.g6c5a503b38-goog
-
+> ---
+>  drivers/md/dm-verity-verify-sig.c                      |  2 +-
+>  fs/verity/signature.c                                  |  2 +-
+>  include/linux/key.h                                    |  1 +
+>  kernel/bpf/keys.c                                      |  2 +-
+>  security/keys/keyring.c                                | 10 ++++++++++
+>  .../selftests/dm-verity/test-dm-verity-keyring.sh      |  2 +-
+>  6 files changed, 15 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-ver=
+ify-sig.c
+> index aadcf5e4a47c..cad21e9144ed 100644
+> --- a/drivers/md/dm-verity-verify-sig.c
+> +++ b/drivers/md/dm-verity-verify-sig.c
+> @@ -153,7 +153,7 @@ int verity_verify_root_hash(const void *root_hash, si=
+ze_t root_hash_len,
+>         if (ret !=3D -ENOKEY && ret !=3D -EKEYREJECTED)
+>                 return ret;
+>
+> -       if (dm_verity_keyring->keys.nr_leaves_on_tree &&
+> +       if (!keyring_is_empty(dm_verity_keyring) &&
+>             dm_verity_keyring->restrict_link)
+>                 ret =3D verify_pkcs7_signature(root_hash, root_hash_len,
+>                                              sig_data, sig_len,
+> diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+> index 0302a4e506ec..890d33b9d812 100644
+> --- a/fs/verity/signature.c
+> +++ b/fs/verity/signature.c
+> @@ -67,7 +67,7 @@ int fsverity_verify_signature(const struct fsverity_inf=
+o *vi,
+>                 return 0;
+>         }
+>
+> -       if (fsverity_keyring->keys.nr_leaves_on_tree =3D=3D 0) {
+> +       if (keyring_is_empty(fsverity_keyring)) {
+>                 /*
+>                  * The ".fs-verity" keyring is empty, due to builtin sign=
+atures
+>                  * being supported by the kernel but not actually being u=
+sed.
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index c4486e938a06..20ca43f5eab1 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -439,6 +439,7 @@ extern int restrict_link_reject(struct key *keyring,
+>                                 struct key *restriction_key);
+>
+>  extern int keyring_clear(struct key *keyring);
+> +bool keyring_is_empty(const struct key *keyring);
+>
+>  extern key_ref_t keyring_search(key_ref_t keyring,
+>                                 struct key_type *type,
+> diff --git a/kernel/bpf/keys.c b/kernel/bpf/keys.c
+> index bffc356839ac..24e0416abc99 100644
+> --- a/kernel/bpf/keys.c
+> +++ b/kernel/bpf/keys.c
+> @@ -29,7 +29,7 @@ struct bpf_key *bpf_lookup_keyring(void)
+>
+>         if (!bpf_keyring)
+>                 return NULL;
+> -       if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+> +       if (keyring_is_empty(bpf_keyring) ||
+>             !READ_ONCE(bpf_keyring->restrict_link))
+>                 return NULL;
+>
+> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+> index 5281da9d5bf7..ac48d6204915 100644
+> --- a/security/keys/keyring.c
+> +++ b/security/keys/keyring.c
+> @@ -443,6 +443,16 @@ static void keyring_destroy(struct key *keyring)
+>         assoc_array_destroy(&keyring->keys, &keyring_assoc_array_ops);
+>  }
+>
+> +/**
+> + * keyring_is_empty - Check whether a keyring is empty
+> + * @keyring: The keyring to check.
+> + */
+> +bool keyring_is_empty(const struct key *keyring)
+> +{
+> +       return READ_ONCE(keyring->keys.nr_leaves_on_tree) =3D=3D 0;
+> +}
+> +EXPORT_SYMBOL(keyring_is_empty);
+> +
+>  /*
+>   * Describe a keyring for /proc.
+>   */
+> diff --git a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh =
+b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+> index 1f9601ef22f8..792449d356cf 100755
+> --- a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+> +++ b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+> @@ -746,7 +746,7 @@ test_keyring_inactive_when_empty() {
+>      log_info "TEST: Verify dm-verity keyring is inactive when sealed emp=
+ty"
+>
+>      # When keyring_unsealed=3D0, the keyring is sealed immediately while=
+ empty
+> -    # This means it should NOT be used for verification (nr_leaves_on_tr=
+ee=3D0)
+> +    # An empty keyring should NOT be used for verification.
+>
+>      log_info "Keyring state (should be empty and sealed):"
+>      list_keyring_keys
+> --
+> 2.47.3
+>
+>
