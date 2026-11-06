@@ -1,55 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793998667;
-	b=oXUFzfQiG9FNZ9dth2KhoOWO00d/EWhMTGe7eekYApSdhOWU4PWOuKkvazDmXMSpyv0m
-	 lh/6/djYpLG93dH/1TqPT9sq+l7ose9DdTRUYt8P+fuXGqsDR6PP4qudOeYZYfMMeERWV
-	 mxoaZYpp1+W7t5lziFT8St5F4tfgaS/ib7hhIrk+l/7AkZKO5Uzgrgt4K/WEn/ZF8mUOu
-	 tBQhAOMtKUAvtUVe2r96wD2JBDdPvLDqXqTfPL0GINND1zQuMM6/zvxpspfvuOI3PtTT8
-	 UBXlcAnZMBIHvPWiZqFfAh/4sL4DDR9bsZvpdNwDh7LYYFE/oPjZEhHVVzVx7jGdzcg==
+	t=1793999052;
+	b=OKx/Jhd3vLz2TXN4FYk58HRPlB9Bel2XhLgmlLXnw0BZEp6Yq3fgM5LJRzTLyQ8zxQjB
+	 L6wEClqvATcULUkmP24xWoE7OFNb7G03XcQYnGZSW0scRXQZjFmsGI4lJW4SGrMftAlOg
+	 I2sjflRCLF2B7HF7dlGRWZQ8T76VDbRMCCSWUIZTHR3eoWR2gpYreFiOlECh9AA5CgbIj
+	 3XMVzxLi0yyO0fIrenRVVLrMKyfAEkTmxDbYTh8OzOv0Hi2iCviXbXzdFejK7j2BytDY+
+	 beKe9mW7bCEJpJ16Z5WNfD2hhyyTvf0tV5quuFTok9HFxvQ7AxtbCD5qMjkHgF7F2Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793998667;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=nBmoOdVLhjxzW9Kafv3OvCDFQruGaI/hx6SsyCcZev8=;
-	b=ODCuxoosjAT6ViMlcRFml1APChfKpJ5JBGvOzChJ7EugTx49fll8DJIQy9KD75fYL/lI
-	 vwquT2vibgkpE8CPvvPvaaS5qXPv1mD757XyQbQIJHxZgx/LLfEM36wLkXl4b05UEq4JS
-	 NYYE95O2RuiqW63etFOAwFeDyVuyR9nnyRnR220b7BN3ZAM32qiAdFwfAJa4S2hDT/CJ6
-	 HCRWRbTjuNTvD1lr7mTcQm10/iwlyTI37Uv65hhJhxNJW2lWOKBnCZ77a4AFOuuqvm8y4
-	 n4hkVaHxJ6AhFptQND9OasgldXdbOaE2nw98EDMGI4j4WRON2GjeiE0zddTupfQ8L5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793999052;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=9rbAT6HOHtgTNmvUZ4uTgxskj8ClF6GOt0gfNlKXaVw=;
+	b=hwkjHEvuLw/c15HqdKqza+oFoq31ehTI3L8sypyr/SAvtcwzfrm7qSwcv342PZgi2uAw
+	 JwEpGPcpcHmbj1GHM9/kakbpWieYSqHayC44v/3xK4vigpFLNBMVe0OhXoxxMgB2JWjXo
+	 B/YC73AYvB36ETcSiEytp32O2PkNOBsREKTeMvxZGWmPSuyry/WEsNQgG1+3CrWdsDl7E
+	 A3/efvJ1VotxGQd+kzS6Xc3UobLejs3eSRkzgahYenjl4UBSyPy924lJ/3+3/97TW66hv
+	 8wiqK7zl0A48FOrkuyXYhoJmFC99F9GBJpsDA9xbgPeF2Oetnd9tqJ55d/1x5bV1ffw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=virtuozzo.com;
-	spf=pass smtp.mailfrom=virtuozzo.com;
-	dkim=pass header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=DA+zqU77;
-	arc=none smtp.remote-ip=130.117.225.111
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="t1/mf1WZ";
+	arc=none smtp.remote-ip=209.85.217.46
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66A2606A329;
-	Fri,  6 Nov 2026 20:57:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D66A2606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8C3606A334
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 21:04:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A8C3606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=virtuozzo.com header.i=@virtuozzo.com header.a=rsa-sha256 header.s=relay header.b=DA+zqU77
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=Message-Id:Content-Type:MIME-Version:Subject:Date
-	:From; bh=nBmoOdVLhjxzW9Kafv3OvCDFQruGaI/hx6SsyCcZev8=; b=DA+zqU77k8p0jFgv6g7
-	01srGmpcj97AEgA8B4oU+0ViZRy9ctkLJmncbwxOCw94wTnUg6jW8LlwuNkNd0/8b3aPHRK1vyFUV
-	iP1rL+761svdtn94+zqSiYJnMeg4vI0/D6WPPQaI5KzCvHTHUqeD2ymcG2V4lh7TBf/WNf9Q8rwcI
-	k8ptJOqGLGoMktwudi32EskkA8AN3s/XDBTLNTF0lycQZEycGWI/Kflb6OiSZYooMBAerOyNQsR85
-	AWycnYNJgtBBr/ki6vL0ThdqkWFtYIe0tVbbQj6brzv9F78QtL3dV140H4Enxi032mIcszl5pR6Be
-	1gSnaTB7BXfINQA==;
-Received: from ch-demo-asa.virtuozzo.com ([130.117.225.8] helo=f0.sw.ru)
-	by relay.virtuozzo.com with esmtp (Exim 4.96)
-	(envelope-from <khorenko@virtuozzo.com>)
-	id 1xPQwI-001xD7-2m;
-	Fri, 06 Nov 2026 21:57:38 +0100
-From: Konstantin Khorenko <khorenko@virtuozzo.com>
-Date: Fri, 06 Nov 2026 21:57:37 +0100
-Subject: [PATCH v2 1/2] binfmt_elf: return the real error when program
- headers cannot be loaded
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t1/mf1WZ
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-7cc603a168fso374215137.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 13:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793999050; x=1794603850; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9rbAT6HOHtgTNmvUZ4uTgxskj8ClF6GOt0gfNlKXaVw=;
+        b=t1/mf1WZtDOY6xsxvbLgGh7Fl/B241jNd4o6SRR+DSGM3Qn8Z8hgRMxBdx6qS/B4O4
+         jd+PIRn6UhDzsgliJbg/eTLmSBNGrue6dr0DsjT+toQcnXnhodCkHM8rri94AYwdPfYN
+         OEmIXEtcQQvs47lmBVRuss0zJQUz/fnCMOtLgjcGZK/oqPuafSDfdouJ+S1Rgy/hdDKd
+         xBMcFUVlazFIwNb9Y/Kp5OpjBVUIWNPQrlcBukd+GG93e61WSea4YWfKOQnC7yWwE8uL
+         PL0TM3AdFljr7vVEfdM1FoYsK+2AeuehG4niLoQERAF5Jw0To+tIw3fdM5+iXie8L3+r
+         f4vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793999050; x=1794603850;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9rbAT6HOHtgTNmvUZ4uTgxskj8ClF6GOt0gfNlKXaVw=;
+        b=IEl2LMLnF2NygcM+X4GorT83y4Zv2UjeP5/18RAo4OohzHgJ1sk8QL+jYT0IsZQBzX
+         nE163o3/STE4OvDY0hU0O9MD7GAcDuhRuw2alkZwZQYN4I3DjopCgxCLWxo/o7ad4vEo
+         0BZ7q/cBFSbO+qPR9Eq9vSwgnnXe7W5zYdgtNca/76uFvZl0Iw/6vI1M0APQ/suBFjMM
+         5i65YswrGXp1IbBL53HQ5YQjTc3PwixElKvxpKwX6/3y4zbXhSuvS6QAgzgpMuhT704v
+         ThZJgKwydzDO4AzYwfg7IrYWncXZSBvz6GZZDIQICAKrBJDywuVPnY8Pw0OED7nRm4Mf
+         6PXg==
+X-Forwarded-Encrypted: i=1; AL+hErGRL3YeAGYrF3FAiRaxni0ByuwfmRNb+Xpp76tvf0hBRnGcNq7iY7V65eTmiUOO8+Q+817mOLx7YXKXhkjt58E=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8UqdBcyEgI8fN1OuqVbvpbJ0kVaJEHrbS8RpQZ4JT2s7kLI0QK
+	uDUkRcH2HBVDJBLQY3CzCC8D3cjuRTB34NYtSjhSn4jaasVdq4ux1XnIuN31Gw==
+X-Gm-Gg: AYBFou3/TkW8qJniZqWty1tJDpDTZic2/c613dIFwgzAQExWz5vN0Ch2mut0pWC2zvg
+	u3RP/scf56l89ateUUi3K4B1TTXZhhaGfrgeCpQ9FxQ+XBxcJjVu1SC4oRGMcbhlNhfPqVBtHrS
+	a4og2sWXS+yGqr7WMMk7FgM5W8lm5g7hpY91EHIsGmps0NI9xQ+b+qMZ5iHt32ZASueM3KqCTHv
+	2I1y2sK8cpR2MjxfB7Dbekfc+N5ak3j0V51/EWCYWs/+wYXZ4DnJ74x6CUE1MJgLJ43BAT8GQZX
+	B4CuppFX7upgva4bVJWXHKsKX8Uz3nnMwtji5mZBX9Jg0Lk0p4WVd1ZlcU9fvoaq3rJ1HymjW2h
+	CvuzBiTcQbhycBvnXzkwcr37KEEgXLblQepWuiMGea3o6pZde8vpDBKnkybRXot6RyWSSF7OgqP
+	cJOz8kCksYpoSslhB1gxTs4uR3au79i1Yf/TtV+jD39RvUCfwNPH4FvSd+dElmYVW9sA+iUTfYz
+	X/bcNzkrfdhBmmL4I1lfzwL0TGmti9z2EtvCuvVkziETZFSB/Qp/fyD8+QGeF8nEUaOhc6vGT/z
+	auqkop7Qf8tsw6sxj000eMaq4WscBFbiQ23ti0SZMlOVUANW3+1AE+J0HiEsRILORKTCfpu7VYn
+	jEKAY0MB8VyCBl2SQLuK/ybls9osXTi8SpiyaKO3Xr1N7s9CxrrLCajZPR9N844D4t+ffjBQ=
+X-Received: by 2002:a05:6102:6cc:b0:7d2:7c63:59fd with SMTP id ada2fe7eead31-7d2a169a84amr1938421137.34.1793999050220;
+        Fri, 06 Nov 2026 13:04:10 -0800 (PST)
+Received: from gmail.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d2a89a75b2sm2222405137.5.2026.11.06.13.04.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2026 13:04:09 -0800 (PST)
+Date: Fri, 06 Nov 2026 16:04:08 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Antonio Quartulli <antonio@mandelbit.com>, 
+ willemdebruijn.kernel@gmail.com, 
+ jasowangio@gmail.com
+Cc: Antonio Quartulli <antonio@mandelbit.com>, 
+ andrew+netdev@lunn.ch, 
+ davem@davemloft.net, 
+ edumazet@kernel.org, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ horms@kernel.org, 
+ mst@redhat.com, 
+ eperezma@redhat.com, 
+ shuah@kernel.org, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ hawk@kernel.org, 
+ john.fastabend@gmail.com, 
+ sdf@fomichev.me, 
+ maheshb@google.com, 
+ peterpenkov96@gmail.com, 
+ netdev@vger.kernel.org, 
+ virtualization@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.20268598d87e6@gmail.com>
+In-Reply-To: <20261103142232.1869185-2-antonio@mandelbit.com>
+References: <20261103142232.1869185-1-antonio@mandelbit.com>
+ <20261103142232.1869185-2-antonio@mandelbit.com>
+Subject: Re: [PATCH net v4 1/2] tun: bound the NAPI receive queue
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,149 +120,248 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261106-b4-prep-vstor-149847-binfmt_elf-enomem-load-elf-phdrs-v2-1-1c8b7b1dae5c@virtuozzo.com>
-References: <20261106-b4-prep-vstor-149847-binfmt_elf-enomem-load-elf-phdrs-v2-0-1c8b7b1dae5c@virtuozzo.com>
-In-Reply-To: <20261106-b4-prep-vstor-149847-binfmt_elf-enomem-load-elf-phdrs-v2-0-1c8b7b1dae5c@virtuozzo.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Kees Cook <kees@kernel.org>, Paul Burton <paulburton@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Konstantin Khorenko <khorenko@virtuozzo.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4140;
- i=khorenko@virtuozzo.com; h=from:subject:message-id;
- bh=8ytuiULsyJ8GCK6BkCTcVg0Z22pwFQJoQSqUN4jBPwo=;
- b=owEBbQKS/ZANAwAKAVGWCkf5YVwqAcsmYgBq7j9FY6+VFr8UYcnA53WtID4/c39wnuObpLQLG
- xhEUW5OItOJAjMEAAEKAB0WIQRWD23IPcXT0GO9CCxRlgpH+WFcKgUCau4/RQAKCRBRlgpH+WFc
- KhN1D/9zSWJWURpegXxA67uIcvpjYExl0kS8iPabm4rqY97wMLh1JA8y7V6A2jX3rqIIUxwTA/r
- Pq/LdLGg772JYqnvmyqfmbbgKBpiTh6ZbT3P9kPD5dOFP4hxVANmGBZi3eRsdU80UuVIHb+6y3Q
- qFYCAXliEb0PppssyXMyUpZIX8Gqw8SvzhQK72AA2NgEmNgkoqBKxxIOtZRaT8ikkWPB2FaX1mD
- h8Ygg27nLDTQpCEZpqMVctCcvM4B6pX7MBMmjavPy8CkqC3RkZzqFvvpuT0AAINcT/FM6w/Szfj
- 7wGZ+dz2mnLr7NrEocHTgrm4oHXI/vlq+5wZCk0ZrzxixkcSq0nUpph5itTOIDvQVNDXyUMDS90
- 9VLc5aCza7Hjggtl9xidiU6AFN1tgHFjiJlDsM+4gfDSDv1F3ckutuqCPDxomSErS/2/uuKy7qB
- W7ZHpclZO1a2v8VDQgqpDFqXsJuAYbXF7c+r5x2bvpR39onCQEde6pfA3h7FzTdgnfRtHXBK94B
- rLsEutGcInb0qSzSpoSZyi859fGPSLngq6nF9l5j6PL3bWMfm4SspA/snxe5k+HSuDTtjEbYRou
- 05e0fpYwm78AlMyDZxy/aQZr6GKU8ZFILSUJJFq+/+63HdMKcWU/KifjyQOTXCvUbH2+8cylbrL
- V43JacsTV1QE3XQ==
-X-Developer-Key: i=khorenko@virtuozzo.com; a=openpgp;
- fpr=560F6DC83DC5D3D063BD082C51960A47F9615C2A
 
-load_elf_phdrs() returns NULL on any failure, and load_elf_binary()
-turns that into -ENOEXEC for the executable and -ELIBBAD for its
-interpreter. So a failed allocation or read of the program headers
-makes glibc's execvp() run the ELF file with /bin/sh, and for the
-interpreter reports a healthy ld.so as a corrupted shared library.
+Antonio Quartulli wrote:
+> With IFF_NAPI, tun_get_user() queues every written packet for NAPI on
+> an unbounded list. When the poll runs asynchronously (threaded NAPI)
+> and is slower than the writer, the queue grows until the system runs
+> out of memory. An unprivileged user can do this from its own user and
+> network namespaces, and the queued skbs are not charged to its memcg:
+> in a test VM, a uid 1000 process limited to 128 MB caused a global OOM
+> in ~6 seconds. The socket send buffer cannot bound this: tun sets it to
+> INT_MAX, and the build_skb() and XDP batch paths do not check it.
+> 
+> Drop packets once more than netdev_max_backlog of them are queued, like
+> enqueue_to_backlog() does, and count them as rx_dropped: before
+> allocating and copying them where possible, and again under the queue
+> lock before queueing. This covers write(), sendmsg() and the batches of
+> XDP buffers vhost-net passes to tun_sendmsg(), which share the queue.
+> Zerocopy buffers of packets dropped early are completed.
+> 
+> The NAPI poll moves the whole queue out, processes up to its budget and
+> puts the rest back: while it runs, the queue looks empty to writers, so
+> with the poll on another CPU the backlog still grows without limit. Keep
+> the leftovers on a queue of their own and take the next batch only once
+> it is empty, like process_backlog() does, so that neither queue holds
+> more than the limit.
+> 
+> Dropping because the queue is full also schedules NAPI, in all three
+> places. vhost-net sends with MSG_MORE while it has more packets, and
+> tun_get_user() schedules NAPI only after the last one or once more than
+> NAPI_POLL_WEIGHT are queued. With a netdev_max_backlog below that, the
+> queue would not drain until vhost-net ran out of packets; with zerocopy,
+> vhost-net never would, as it stops sending when too many queued buffers
+> are pending.
+> 
+> Reproducer, as an unprivileged user in a new user and network
+> namespace, without kernel modifications or fault injection:
+>   ip tuntap add t0 mode tun; ip addr add 10.11.0.1/24 dev t0
+>   ip link add d0 type dummy; ip addr add 10.20.0.1/24 dev d0
+>   ip link set t0 up; ip link set d0 up; sysctl net.ipv4.ip_forward=1
+>   install ~500 iptables FORWARD rules and a MASQUERADE rule on d0
+>   open t0 with IFF_TUN | IFF_NO_PI | IFF_NAPI
+>   echo 1 > /sys/class/net/t0/threaded
+>   write() 1400-byte IPv4 packets for 10.20.0.2 in a loop
+> 
+> Tested in an x86-64 VM with 1 and 2 vCPUs: with the reproducer running
+> for 15 seconds, memory use stays flat and the forwarding rate is
+> unchanged; the tun kselftest passes, as it does without the patch; and
+> the tun_vhost kselftest added by the next patch, which drives the
+> vhost-net batch, copy and zerocopy paths, passes, while it fails without
+> the patch.
+> 
+> Still open: the limit counts packets rather than bytes and applies per
+> queue, up to about twice the limit can be in flight (queued plus taken
+> by the poll), and the queued skbs are still not charged to the writer's
+> memcg.
+> 
+> Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
+> Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
 
-Return an ERR_PTR instead:
+This is quite a complex solution.
 
-  +------------+------------------------------------------------------+
-  | error      | when                                                 |
-  +------------+------------------------------------------------------+
-  | -ENOEXEC   | bad e_phentsize, e_phnum or e_phoff, or a short read |
-  | -ENOMEM    | the allocation fails                                 |
-  | read error | kernel_read() fails                                  |
-  +------------+------------------------------------------------------+
+Can we perhaps simplify it a bit? For instance:
 
-Malformed files and short reads keep getting -ENOEXEC and -ELIBBAD.
-The table is read with kernel_read() directly, as elf_read() turns a
-short read into -EIO. An e_phoff past LLONG_MAX - size is rejected up
-front, so that rw_verify_area() does not turn it into -EINVAL.
+On tx only keep the lockless check. Number of packets that can bypass
+that is bounded, by the number of competing threads.
 
-Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
----
- fs/binfmt_elf.c | 38 +++++++++++++++++++++++---------------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+On rx avoid the new queue, by not temporary presenting an empty queue:
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index bf7f8f47548d3..ee44a354c7243 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -512,39 +512,41 @@ static unsigned long maximum_alignment(struct elf_phdr *cmds, int nr)
-  *
-  * Loads ELF program headers from the binary file elf_file, which has the ELF
-  * header pointed to by elf_ex, into a newly allocated array. The caller is
-- * responsible for freeing the allocated data. Returns NULL upon failure.
-+ * responsible for freeing the allocated data. Returns an ERR_PTR upon failure:
-+ * -ENOEXEC for a malformed header or a short read, the allocation or read
-+ * error otherwise.
-  */
- static struct elf_phdr *load_elf_phdrs(const struct elfhdr *elf_ex,
- 				       struct file *elf_file)
- {
--	struct elf_phdr *elf_phdata = NULL;
--	int retval = -1;
-+	struct elf_phdr *elf_phdata;
- 	unsigned int size;
-+	loff_t pos;
-+	ssize_t rv;
- 
- 	/*
- 	 * If the size of this structure has changed, then punt, since
- 	 * we will be doing the wrong thing.
- 	 */
- 	if (elf_ex->e_phentsize != sizeof(struct elf_phdr))
--		goto out;
-+		return ERR_PTR(-ENOEXEC);
- 
- 	/* Sanity check the number of program headers... */
--	/* ...and their total size. */
-+	/* ...their total size and their offset. */
- 	size = sizeof(struct elf_phdr) * elf_ex->e_phnum;
--	if (size == 0 || size > 65536)
--		goto out;
-+	if (size == 0 || size > 65536 || elf_ex->e_phoff > LLONG_MAX - size)
-+		return ERR_PTR(-ENOEXEC);
- 
- 	elf_phdata = kmalloc(size, GFP_KERNEL);
- 	if (!elf_phdata)
--		goto out;
-+		return ERR_PTR(-ENOMEM);
- 
- 	/* Read in the program headers */
--	retval = elf_read(elf_file, elf_phdata, size, elf_ex->e_phoff);
--
--out:
--	if (retval) {
-+	pos = elf_ex->e_phoff;
-+	rv = kernel_read(elf_file, elf_phdata, size, &pos);
-+	if (rv != size) {
- 		kfree(elf_phdata);
--		elf_phdata = NULL;
-+		return ERR_PTR(rv < 0 ? rv : -ENOEXEC);
- 	}
- 	return elf_phdata;
- }
-@@ -864,8 +866,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 		goto out;
- 
- 	elf_phdata = load_elf_phdrs(elf_ex, bprm->file);
--	if (!elf_phdata)
-+	if (IS_ERR(elf_phdata)) {
-+		retval = PTR_ERR(elf_phdata);
- 		goto out;
-+	}
- 
- 	elf_ppnt = elf_phdata;
- 	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
-@@ -968,8 +972,12 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 		/* Load the interpreter program headers */
- 		interp_elf_phdata = load_elf_phdrs(interp_elf_ex,
- 						   interpreter);
--		if (!interp_elf_phdata)
-+		if (IS_ERR(interp_elf_phdata)) {
-+			if (PTR_ERR(interp_elf_phdata) != -ENOEXEC)
-+				retval = PTR_ERR(interp_elf_phdata);
-+			interp_elf_phdata = NULL;
- 			goto out_free_dentry;
-+		}
- 
- 		/* Pass PT_LOPROC..PT_HIPROC headers to arch code */
- 		elf_property_phdata = NULL;
+        spin_lock(&queue->lock);
+        if (skb_queue_len(queue) <= budget) {
+            skb_queue_splice_tail_init(queue, &process_queue);
+        } else {
+            while (skb_queue_len(&process_queue) < budget &&
+                   (skb = __skb_dequeue(queue)))
+                __skb_queue_tail(&process_queue, skb);
+        }
+        spin_unlock(&queue->lock);
 
--- 
-2.43.0
+
+
+
+> ---
+>  drivers/net/tun.c | 82 +++++++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 68 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 770b8fe085c3..ea99ee0aee2b 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -58,6 +58,7 @@
+>  #include <linux/nsproxy.h>
+>  #include <linux/virtio_net.h>
+>  #include <linux/rcupdate.h>
+> +#include <net/hotdata.h>
+>  #include <net/net_namespace.h>
+>  #include <net/netns/generic.h>
+>  #include <net/rtnetlink.h>
+> @@ -140,6 +141,8 @@ struct tun_file {
+>  		unsigned int ifindex;
+>  	};
+>  	struct napi_struct napi;
+> +	/* NAPI poll only: skbs taken off sk_write_queue, not yet received */
+> +	struct sk_buff_head napi_process_queue;
+>  	bool napi_enabled;
+>  	bool napi_frags_enabled;
+>  	struct mutex napi_mutex;	/* Protects access to the above napi */
+> @@ -227,31 +230,40 @@ struct veth {
+>  static void tun_flow_init(struct tun_struct *tun);
+>  static void tun_flow_uninit(struct tun_struct *tun);
+>  
+> +/* In IFF_NAPI mode written packets wait in the tfile's sk_write_queue for the
+> + * NAPI poll, which may run later in a kthread or ksoftirqd. Bound that queue
+> + * like the per-CPU backlog of netif_rx().
+> + */
+> +static bool tun_napi_queue_full(const struct sk_buff_head *queue)
+> +{
+> +	return skb_queue_len_lockless(queue) >
+> +	       READ_ONCE(net_hotdata.max_backlog);
+> +}
+> +
+>  static int tun_napi_receive(struct napi_struct *napi, int budget)
+>  {
+>  	struct tun_file *tfile = container_of(napi, struct tun_file, napi);
+> +	struct sk_buff_head *process_queue = &tfile->napi_process_queue;
+>  	struct sk_buff_head *queue = &tfile->sk.sk_write_queue;
+> -	struct sk_buff_head process_queue;
+>  	struct sk_buff *skb;
+>  	int received = 0;
+>  
+> -	__skb_queue_head_init(&process_queue);
+> -
+> -	spin_lock(&queue->lock);
+> -	skb_queue_splice_tail_init(queue, &process_queue);
+> -	spin_unlock(&queue->lock);
+> -
+> -	while (received < budget && (skb = __skb_dequeue(&process_queue))) {
+> +	while (received < budget) {
+> +		/* Refill only when empty: leftovers are not put back on the
+> +		 * queue writers check, so neither queue exceeds the limit.
+> +		 */
+> +		if (skb_queue_empty(process_queue)) {
+> +			spin_lock(&queue->lock);
+> +			skb_queue_splice_tail_init(queue, process_queue);
+> +			spin_unlock(&queue->lock);
+> +			if (skb_queue_empty(process_queue))
+> +				break;
+> +		}
+> +		skb = __skb_dequeue(process_queue);
+>  		napi_gro_receive(napi, skb);
+>  		++received;
+>  	}
+>  
+> -	if (!skb_queue_empty(&process_queue)) {
+> -		spin_lock(&queue->lock);
+> -		skb_queue_splice(&process_queue, queue);
+> -		spin_unlock(&queue->lock);
+> -	}
+> -
+>  	return received;
+>  }
+>  
+> @@ -572,6 +584,8 @@ static void tun_queue_purge(struct tun_file *tfile)
+>  		tun_ptr_free(ptr);
+>  
+>  	skb_queue_purge(&tfile->sk.sk_write_queue);
+> +	/* NAPI is disabled by now */
+> +	__skb_queue_purge(&tfile->napi_process_queue);
+>  	skb_queue_purge(&tfile->sk.sk_error_queue);
+>  }
+>  
+> @@ -1856,6 +1870,23 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+>  			zerocopy = true;
+>  	}
+>  
+> +	/* NAPI queue full: drop before allocating, and schedule NAPI, which a
+> +	 * MSG_MORE sender may not have done yet. Rechecked under the lock.
+> +	 */
+> +	if (tfile->napi_enabled &&
+> +	    unlikely(tun_napi_queue_full(&tfile->sk.sk_write_queue))) {
+> +		local_bh_disable();
+> +		napi_schedule(&tfile->napi);
+> +		local_bh_enable();
+> +		if (msg_control) {
+> +			struct ubuf_info *uarg = msg_control;
+> +
+> +			uarg->ops->complete(NULL, uarg, false);
+> +		}
+> +		dev_core_stats_rx_dropped_inc(tun->dev);
+> +		return total_len;
+> +	}
+> +
+>  	if (!frags && tun_can_build_skb(tun, tfile, len, noblock, zerocopy)) {
+>  		/* For the packet that is not easy to be processed
+>  		 * (e.g gso or jumbo packet), we will do it at after
+> @@ -2045,6 +2076,17 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+>  			goto free_skb;
+>  		}
+>  
+> +		/* NAPI queue full: drop, as above */
+> +		if (unlikely(tun_napi_queue_full(queue))) {
+> +			spin_unlock(&queue->lock);
+> +			napi_schedule(&tfile->napi);
+> +			local_bh_enable();
+> +			rcu_read_unlock();
+> +			dev_core_stats_rx_dropped_inc(tun->dev);
+> +			drop_reason = SKB_DROP_REASON_FULL_RING;
+> +			goto free_skb;
+> +		}
+> +
+>  		__skb_queue_tail(queue, skb);
+>  		queue_len = skb_queue_len(queue);
+>  		spin_unlock(&queue->lock);
+> @@ -2649,6 +2691,17 @@ static int tun_xdp_one(struct tun_struct *tun,
+>  			return -EBUSY;
+>  		}
+>  
+> +		/* NAPI queue full: drop, and schedule NAPI so that it drains
+> +		 * even if nothing in this batch gets queued
+> +		 */
+> +		if (unlikely(tun_napi_queue_full(queue))) {
+> +			spin_unlock(&queue->lock);
+> +			napi_schedule(&tfile->napi);
+> +			kfree_skb_reason(skb, SKB_DROP_REASON_FULL_RING);
+> +			dev_core_stats_rx_dropped_inc(tun->dev);
+> +			return 0;
+> +		}
+> +
+>  		__skb_queue_tail(queue, skb);
+>  		spin_unlock(&queue->lock);
+>  		ret = 1;
+> @@ -3571,6 +3624,7 @@ static int tun_chr_open(struct inode *inode, struct file * file)
+>  	}
+>  
+>  	mutex_init(&tfile->napi_mutex);
+> +	__skb_queue_head_init(&tfile->napi_process_queue);
+>  	RCU_INIT_POINTER(tfile->tun, NULL);
+>  	tfile->flags = 0;
+>  	tfile->ifindex = 0;
+> -- 
+> 2.56.0
+> 
+
 
