@@ -1,84 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793985573;
-	b=qvLBCUaSac0D9iTAu6Zq8UXXGQ+a32AMiz5vdGfI7xneIna3Oyf511T/BlKVDQlBg1lw
-	 u9i4+iQfdcEPoms4BJ79ETKSk94rKQexfxKzB+aM4GUJUps+50Hpl6FeRS17ERlVeoRYM
-	 TMgYdbNK1Dku55kz41uR3smrtf2LGbFjYXnQhEi9fcep+60GLCZPJIg2DAq5tF8DVOKPT
-	 N32U+2JlAyi8qGkkZeIEH6OaNr9SjndIvWbJJ35WpuHIf3Z6y0zqWIxxKzjZ3VZ+rw7SG
-	 gujzpmPGmVCThvzUrkj6H5jZZaWvV93ccCK85WP+YQbhznfuY32QH0UNwfrrImlcb4Q==
+	t=1793985778;
+	b=mxsGnhyPvv0BGFv4kJeoRl/n1WnBb0UpOvZMFPrgaiI9yGHcYgLnJgqdjEAM9pbTAGCc
+	 AdoiyyGsI9nL0r0iXAzM/18a5QuV6bJ9cFvufwrMjeRj947BbVxzo3DCJ3WXEkqGbkkEU
+	 SuEeKz/zTdC8IPfcB1DTBbnGu6gSLB5+qMSPPocmmElEdhx7iiHbc7HV0RXRi3tH/50A2
+	 Binsa5xi2Hv+Wvy2b86KMbQQDsDdQbMaiLE7D10j5UT2/m7nK8g/kmPlQhHklLrPo8wHl
+	 xtH3fmv4rhnTe4booY73Ds5gMew4ky5kekschlVMkwCIJszyqa+pipCyfsViB5SmJEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793985573;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
-	bh=tEaeh2MQM8Yqh+InUxWcP/c3Ugn8r1gCgilB/e+XZTU=;
-	b=oojdli/5+u0blN9h/vEmTnPRi/ieUYez3yjKZlTyb6I++PbCjc6zCA82+tF3Q/kKEekY
-	 sR2Ua2tkCQRWifYbyfCCj30IQG+Zipqdb3d+PJckLABMNs3If6X3FAkerUD9JCMboPELL
-	 jJ8QAj8vrxO+iYvxUYfUIRNmf134gfB0R2rkVebfR3a7evchre5nIuJmbxkCBj8u4uCRR
-	 exRRWEYEIjKAsWKCK9OKe10+TSDLw4FpJbzKooWCi3SMqm5hYdnYNDF84osWKFxS1QA/z
-	 XKatAwi9+j75UBJJJgLe7kYlNTlsBXqdSfaqPFZ5UHfq0TAlF0oECLI662zNHs8MT0A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793985778;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=nphGN6OafuQK+POULyX/FaBPk98YaajW2Mt6MczH2qo=;
+	b=yUpfaOb4gaEGGHPaWCN1m36+KDaOrNooP6jbWN4QxxT/+FzmffBc0Gl98AnOQsDK/hqm
+	 933dYpsYFCD0Gm1itZIeAVC1gLK3EHQCFY3Yyq0xYqjlcaQu/Gi9rYrsZrDTTfQPqYwX3
+	 SCZWi8QSlj+RF/EiRbbIM/9cru6YtaqaY/T/8VhdtoUiiW5nPr+ececVNhUFfdoZAml0B
+	 50upYfsBax18viP93PL3zUH4nxcmtbNzJoVLCCAbAsve076u1TRiM7vQOnqJvZSE9h32q
+	 EB4to1mJcPB/AMJTk+EJrzSUUTpbQRmehDGlAmC7txp1LdrIBqTV2KHABkkPpt8B9Xw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V3vuG2QG;
-	arc=none smtp.remote-ip=209.85.216.47
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b="LY5nII/K";
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDFA606A32D
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 17:19:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDDFA606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BC2606A332
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 17:22:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16BC2606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V3vuG2QG
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3b0d0b80fb9so551629a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 09:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793985572; x=1794590372; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=tEaeh2MQM8Yqh+InUxWcP/c3Ugn8r1gCgilB/e+XZTU=;
-        b=V3vuG2QGjhL8r2VuA4Y+96OnzymPavm7o7EgEyvr170YdIQ6DRl7oV53qhL1GcFHq9
-         pAuFDTumBKjC04cfsqiF/s9mzLQ7MxMB33+iWjjD6M/c6YfzXCbLDc+N7vG+f5wRPHnt
-         YGfusFO0BTgDqxJC3GAGWNZSjKJIGzOR0waqOm65uqs4mfbkFPtcjPreR4HJO5uzAwIM
-         aZJqv3Eu06A17GOsAL38uxdtzasGV3QnNWGft1JdKGB0XYClaHm6eqK5tjUpWsaDDnGv
-         L3j4WwyzVfe0Q7LrBT5u/+m8/nbkT0KO2eRt94r5hQOTgl8rRxeGomxzWEId9K33GS3u
-         IwQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793985572; x=1794590372;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=tEaeh2MQM8Yqh+InUxWcP/c3Ugn8r1gCgilB/e+XZTU=;
-        b=s7kgc5guZGMthUJTUX9BDp8iRu/VFXiSHsX1fd2SSZUIRCoMOKoOBVkGKtEMIt/hOV
-         z0le9HxfKuh6rMsZam+XcIycuBwyv2dDrkWA2g3oNueGXmDyBJyqIgOt2LTNdviFAoKR
-         e1Nk2fppvPEH+BtYe4l8GBW/Q2Izm+89V6dZ+c+4U5+dWpIEF+Vm27QLOQ8z5GiaI7Nu
-         wLp3qvG/SPK9w+Sc1tNsfc5fa3VL7QKzapYPu4uvR5kJuHnC98BAnvWNO3jDVxD0rlAH
-         NGJMYR+x177rZ2tBnHDiy7sbF4QUeEprHucL9ARorE90lOhuXXbnf1bRE7gH5/g61Mf/
-         +3Jg==
-X-Forwarded-Encrypted: i=1; AL+hErFWfvuGaR+9nbv+JPABs0Vnkm0GMIX06GizAwCbdn+GEn6b5XL6+wyKy+D4InTs20nUiV8RfThLiRRJhyWHs0M=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+zRvCYuhSLgEAFm1QF1YYrHxw08RXn+x5uadHYAnVsLF5lwPid
-	BIEkp2eYsaUDwd9rbdrxrq6XijexMZTKNVaoe5oKHXG79fObyGxB7xxeEKQ2ffvtlA==
-X-Gm-Gg: AYBFou37qNWnhOiKnd6oY/bTf2Wv22MfxOtF2eQQc0+QLuC8e2GUUmLiRFT0T2o8RtC
-	tjjVeyCFck4WfIYfJezHmcG8/U9CURpSMeXftWtX+eavLFSzqM4PAthcOeUZz6wckrSuus3XPKU
-	dyO2ZCrF/JqJC/iCKRXSckEH3Cz9fXL7GbDzkQ8SwLzYVB2PU3VrUcKPjsMviZd3lBszDmrDB6O
-	i1+HLv3FPZ/PLcIebhverL1TbUwqEBuHF5ANNj0DC7T7vtbIWWMC2V5qx/C8j94zvj+6x1bW4Kl
-	rCEr2/NlhCDXaP38zFrX1RoEA7aq+Po77tmmHn94dtMj2H6Q+3or23TnZyTWNqjqQO2hz4VjAKf
-	D5Judzx11VM2e1QIJqJTLoCoqAkOVnbGvPdwEa+jIhxSngMyA2Igbgb0bPXsLUHGxloBMc5zPLD
-	RzzKUBBhqrf9pfheQBvJv7phrL49/EiL6ftwxSG2GdiDcLxZqwX96PftMmNSM+oTfMaijEtroiJ
-	OOXeWqPcFmy+AHwF/fKIxBXVaufJ+/KSobfb6f73qaQPLDNC3jrUa2odkWODF+EvYMHq3YRZmXj
-	mO6yd9ZeYVJRde2BuE02GASa9XtyFseaiebZVwPIMdUw/3BUrxmWiGZGi9NlMLh4
-X-Received: by 2002:a17:90b:554d:b0:3ac:bfa7:b079 with SMTP id 98e67ed59e1d1-3b0db5edb73mr3411640a91.7.1793985571464;
-        Fri, 06 Nov 2026 09:19:31 -0800 (PST)
-Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb70a7fbcbsm795231a12.25.2026.11.06.09.19.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Nov 2026 09:19:29 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=LY5nII/K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793985776;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nphGN6OafuQK+POULyX/FaBPk98YaajW2Mt6MczH2qo=;
+	b=LY5nII/KgV2r5uMo2Snmz5Tfv1Iq6z9g4BeiEyfPkNE8xjjgmX/5+93KJwMtPen+vGjtKc
+	FSIPueB1nAcvPILpXzDeG81skP7GpRjNONDnO8sS3hi1xB9/iD1EIvGjgr5S69kUBvEJx2
+	ldZ+WuTZeb2LzrWLr6yVuVE61+pcbps=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-692-WZc44TjbPKWnGjewcGzfsw-1; Fri,
+ 06 Nov 2026 12:22:52 -0500
+X-MC-Unique: WZc44TjbPKWnGjewcGzfsw-1
+X-Mimecast-MFC-AGG-ID: WZc44TjbPKWnGjewcGzfsw_1793985771
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BA6831800559;
+	Fri,  6 Nov 2026 17:22:50 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 72A2B39209;
+	Fri,  6 Nov 2026 17:22:48 +0000 (UTC)
+Message-ID: <ccdab485-e1d1-4055-bb0b-f8f712fc0a9b@redhat.com>
+Date: Fri, 6 Nov 2026 12:22:47 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,113 +70,225 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 06 Nov 2026 17:19:28 +0000
-Message-Id: <DMOAT4VV939P.2DI8CEOMMSKMY@google.com>
-Subject: Re: [PATCH v6 11/27] vfio/pci: Retrieve preserved device files
- after Live Update
-From: "David Matlack" <dmatlack@google.com>
-To: "Vipin Sharma" <vipinsh@google.com>, <kexec@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <kvm@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-kselftest@vger.kernel.org>, <linux-pci@vger.kernel.org>
-Cc: <ajayachandra@nvidia.com>, <alex@shazbot.org>, <amastro@fb.com>,
- <ankita@nvidia.com>, <apopple@nvidia.com>, <bhelgaas@google.com>,
- <chrisl@kernel.org>, <christian.koenig@amd.com>, <corbet@lwn.net>,
- <dmatlack@google.com>, <graf@amazon.com>, <jacob.pan@linux.microsoft.com>,
- <jgg@nvidia.com>, <jgg@ziepe.ca>, <jrhilke@google.com>,
- <julianr@linux.ibm.com>, <kees@kernel.org>, <kevin.tian@intel.com>,
- <leon@kernel.org>, <leonro@nvidia.com>, <lukas@wunner.de>,
- <mattev@meta.com>, <michal.winiarski@intel.com>, <parav@nvidia.com>,
- <pasha.tatashin@soleen.com>, <praan@google.com>, <pratyush@kernel.org>,
- <rananta@google.com>, <rdunlap@infradead.org>, <rientjes@google.com>,
- <rodrigo.vivi@intel.com>, <rppt@kernel.org>, <saeedm@nvidia.com>,
- <schnelle@linux.ibm.com>, <skhan@linuxfoundation.org>,
- <skhawaja@google.com>, <vivek.kasireddy@intel.com>, <witu@nvidia.com>,
- <yanjun.zhu@linux.dev>, <yi.l.liu@intel.com>
-X-Mailer: aerc 0.21.0
-References: <20261102153656.1431701-1-vipinsh@google.com>
- <20261102153656.1431701-12-vipinsh@google.com>
-In-Reply-To: <20261102153656.1431701-12-vipinsh@google.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] cgroup/cpuset: Reject updates that empty the top
+ sched domain
+To: Guopeng Zhang <guopeng.zhang@linux.dev>, tj@kernel.org,
+ ridong.chen@linux.dev
+Cc: hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20261105130344.664336-1-guopeng.zhang@linux.dev>
+ <20261105130344.664336-2-guopeng.zhang@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20261105130344.664336-2-guopeng.zhang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-On Mon Nov 2, 2026 at 3:36 PM UTC, Vipin Sharma wrote:
-> During retrieve():
->  * Validate the handed-over struct vfio_pci_core_device_ser header,
->    sizes, and flags.
->  * Locate the registered vfio-pci device matching the serialized domain
->    and BDF (requiring device->ops =3D=3D &vfio_pci_ops) under the device
->    lock. vfio-pci registers the vfio device before its probe completes,
->    and the probe holds that lock, so a device that is still being probed
->    is not returned.
-[...]
->  * Open and return an anonymous VFIO cdev file via
->    vfio_device_liveupdate_cdev_open().
+On 11/5/26 8:03 AM, Guopeng Zhang wrote:
+> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>
+> Boot-isolated CPUs remain in top_cpuset.effective_cpus, but are excluded
+> from its scheduling domain by generate_sched_domains(). Checking only
+> effective_cpus when distributing CPUs to partitions can therefore allow
+> all boot domain housekeeping CPUs to be taken from the top cpuset.
+>
+> The resulting empty domain triggers a warning in build_sched_domains()
+> and can cause an out-of-bounds CPU access in build_perf_domains(). Both
+> root and isolated partitions can trigger this, whether local or remote.
+> For example, on a 32-CPU system booted with isolcpus=domain,10-31:
+>
+>    echo 0-9 > A/cpuset.cpus
+>    echo root > A/cpuset.cpus.partition
+>    Oops: general protection fault
+>    RIP: 0010:build_perf_domains+...
+>
+> Require local and remote partition creation and CPU mask updates to
+> leave an active boot domain housekeeping CPU in the top cpuset,
+> accounting for CPUs returned by the same update.
+>
+> Add test cases to test_cpuset_prs.sh to verify that every partition
+> update leaves an active boot domain housekeeping CPU in the top cpuset.
+>
+> Fixes: 9b496a8bbed9 ("cgroup/cpuset: Prevent leakage of isolated CPUs into sched domains")
+> Co-developed-by: Ridong Chen <ridong.chen@linux.dev>
+> Signed-off-by: Ridong Chen <ridong.chen@linux.dev>
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> ---
+>   kernel/cgroup/cpuset.c                        | 48 ++++++++++++++++++-
+>   .../selftests/cgroup/test_cpuset_prs.sh       | 47 ++++++++++++++++++
+>   2 files changed, 93 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3052413e41e7..c405719ccd12 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1180,12 +1180,56 @@ static void update_partition_sd_lb(struct cpuset *cs, int old_prs)
+>   		cpuset_force_rebuild();
+>   }
+>   
+> +/*
+> + * top_cpuset_sd_nocpu - Check if top_cpuset will have no sched domain CPU
+> + * @add_cpus: CPUs to be taken away from top_cpuset
+> + * @del_cpus: CPUs to be given back to top_cpuset, can be NULL
+> + * Return: true if no active CPU will be left in the top_cpuset sched domain
+> + *
+> + * Note that @del_cpus may include CPUs that are also in @add_cpus and
+> + * will stay in the partition. They are skipped by the @add_cpus check,
+> + * so callers can pass the current effective_xcpus of a partition
+> + * without masking it first.
+> + *
+> + * Boot time isolated CPUs stay in top_cpuset.effective_cpus, but they are
+> + * excluded from the sched domain of top_cpuset in generate_sched_domains().
+> + * So checking top_cpuset.effective_cpus alone is not enough to ensure that
+> + * the top_cpuset sched domain won't become empty after @add_cpus are taken
+> + * away from it. The sched domain of top_cpuset must keep at least one
+> + * active boot domain housekeeping CPU.
+> + */
+> +static bool top_cpuset_sd_nocpu(const struct cpumask *add_cpus,
+> +				const struct cpumask *del_cpus)
+> +{
+> +	const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
+> +	int cpu;
+> +
+> +	for_each_cpu_and(cpu, hk_mask, cpu_active_mask) {
+> +		if (cpumask_test_cpu(cpu, add_cpus))
+> +			continue;
+> +		if (cpumask_test_cpu(cpu, top_cpuset.effective_cpus) ||
+> +		    (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
+> +			return false;
+> +	}
+> +	return true;
+> +}
+> +
+>   /*
+>    * tasks_nocpu_error - Return true if tasks will have no effective_cpus
+>    */
+>   static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
+>   			      struct cpumask *xcpus)
+>   {
+> +	/*
+> +	 * The top_cpuset always has tasks (kthreads at least), so its sched
+> +	 * domain can't be empty. The current effective_xcpus of a valid
+> +	 * partition will be given back to top_cpuset if not in @xcpus.
+> +	 */
+> +	if (parent == &top_cpuset &&
+> +	    top_cpuset_sd_nocpu(xcpus, is_partition_valid(cs)
+> +				     ? cs->effective_xcpus : NULL))
+> +		return true;
+> +
+>   	/*
+>   	 * A populated partition (cs or parent) can't have empty effective_cpus
+>   	 */
+> @@ -1724,7 +1768,7 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
+>   	 */
+>   	compute_excpus(cs, tmp->new_cpus);
+>   	if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
+> -	    cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
+> +	    top_cpuset_sd_nocpu(tmp->new_cpus, NULL))
+>   		return PERR_INVCPUS;
+>   	if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
+>   		return PERR_NOCPUS;
+> @@ -1828,7 +1872,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
+>   		if (!capable(CAP_SYS_ADMIN))
+>   			WRITE_ONCE(cs->prs_err, PERR_ACCESS);
+>   		else if (cpumask_intersects(tmp->addmask, subpartitions_cpus) ||
+> -			 cpumask_subset(top_cpuset.effective_cpus, tmp->addmask))
+> +			 top_cpuset_sd_nocpu(tmp->addmask, tmp->delmask))
+>   			WRITE_ONCE(cs->prs_err, PERR_NOCPUS);
+>   		else if (prstate_housekeeping_conflict(prs, PRS_ROOT,
+>   						       excpus, tmp->delmask))
+The code change above looks good to me.
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index bdca6c471f87..e813ea9959f4 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -133,6 +133,15 @@ LAST_PRESENT_CPU=$(cat /sys/devices/system/cpu/present | sed -e "s/.*[,-]//")
+>   [[ -n "$FIRST_NOHZ_FULL_CPU" && "$FIRST_NOHZ_FULL_CPU" = 8 &&
+>      "$LAST_NOHZ_FULL_CPU" = $LAST_PRESENT_CPU ]] && RUN_NOHZ_FULL_TESTS=1
+>   
+> +# These tests require boot domain housekeeping CPUs to be exactly 0-9.
+> +# Check the actual masks to cover isolcpus= with or without explicit flags.
+> +DOMAIN_ISOLCPUS="10-$LAST_PRESENT_CPU"
+> +[[ "$LAST_PRESENT_CPU" = 10 ]] && DOMAIN_ISOLCPUS=10
+I think you should use "==", not "=".
+> +RUN_ISOLCPUS_DOMAIN_TESTS=
+> +[[ -z "$NOHZ_FULL_CPUS" &&
+> +	"$(cat /sys/devices/system/cpu/isolated)" = "$DOMAIN_ISOLCPUS" ]] &&
+> +	RUN_ISOLCPUS_DOMAIN_TESTS=1
 
-Here's an idea for how the device file could be created on retrieve,
-which I'd like to hear your thoughts on.
+Why there shouldn't be any nohz_full CPUs? Domain isolated CPUs and 
+nohz_full CPUs don't need to be exclusive.
 
-The patches from Pasha at [1] lets userspace pass a
-file-handler-specific argument to LIVEUPDATE_SESSION_RETRIEVE_FD. In the
-next version of the tmpfs series, I'm planning to use that to have
-userspace create the file and pass it in the argument, and the kernel
-then restores the preserved file into it.
+Maybe you can move the new testing code below the ISOLCPUS section as 
+the value of /sys/devices/system/cpu/isolated would have been read into 
+the BOOT_ISOLCPUS variable which you can use instead of reading the 
+sysfs file again.
 
-I wonder if VFIO should work the same way, e.g.:
+> +
+>   #
+>   # If isolated CPUs have been reserved at boot time (as shown in
+>   # /sys/devices/system/cpu/isolated), these isolated CPUs should be outside of
+> @@ -602,6 +611,43 @@ ISOLCPUS_TEST_MATRIX=(
+>   	" CX1-2,I:X1,I:P1 . .      .     X1,2,I  .      .      .     0 A1:1-2,I|XA1:1-2,I A1:P-1 ."
+>   )
+>   
+> +# Test matrix for isolcpus=domain,10-<last> or isolcpus=10-<last> boots.
+> +# The top cpuset must retain an active boot domain housekeeping CPU.
+> +ISOLCPUS_DOMAIN_TEST_MATRIX=(
+> +	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+> +	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+> +	# Neither a root nor an isolated partition may take all boot HK CPUs.
+> +	" C0-9      .      .      .     P1      .      .      .     0 A1:0-9 A1:P-1 ."
+> +	" C0-9      .      .      .     P2      .      .      .     0 A1:0-9 A1:P-2 ."
+> +
+> +	# Growing cpuset.cpus must not take the last top-level HK CPU.
+> +	" C0-8:P1   .      .      .    C0-9     .      .      .     0 A1:0-9 A1:P-1 ."
+> +
+> +	# CPUs returned by the same update can keep the top sched domain alive.
+> +	" C2-9:P2   .      .      .    C0-4     .      .      .     0 A1:0-4 A1:P2 0-4"
+> +
+> +	# Root and isolated partitions together must leave a top-level HK CPU.
+> +	" C0-4:P1   .      .     C5-9    .      .      .     P2    0 A1:0-4|B1:5-9 A1:P1|B1:P-2 ."
+> +
+> +	# Remote partition creation must enforce the same constraint.
+> +	" X0-9    CX0-9    .      .      .     P1      .      .     0 A2:0-9 A2:P-1 ."
+> +
+> +	# Growing a remote partition through cpuset.cpus.exclusive is rejected.
+> +	" X0-9 C0-9:X0-8:P1 .     .      .    X0-9     .      .     0 A2:0-9 A2:P-1 ."
+> +
+> +	# Remote CPU replacements must account for the CPUs being returned.
+> +	" X0-9 C0-9:X2-9:P2 .     .      .    X0-4     .      .     0 A2:0-4 A2:P2 0-4"
+> +
+> +	# Local exclusive CPU updates must not consume the last top-level HK CPU.
+> +	" C0-9:X0-8:P2 .   .      .    X0-9     .      .      .     0 A1:0-9 A1:P-2 ."
+> +
+> +	# Ancestor updates must not grow a remote partition over the last HK CPU.
+> +	" X0-8 CX0-9:P1    .      .    X0-9     .      .      .     0 A2:0-9 A2:P-1 ."
+> +
+> +	# An invalid partition can recover once it leaves a top-level HK CPU.
+> +	" C0-9:P1   .      .      .    C0-8     .      .      .     0 A1:0-8 A1:P1 ."
+> +)
+> +
 
-  struct liveupdate_vfio_retrieve_arg {
-          __u32 size;
-          __s32 fd;
-  };
+Could you also put this new test matrix together with the other test 
+matrices?
 
-Userspace would open /dev/vfio/devices/noiommu-vfioX itself and pass
-the fd. retrieve() would check that it's an unbound vfio-pci cdev file
-for the preserved device (domain/BDF, noiommu, incoming, cfg_size),
-attach the incoming state to that file, and LUO would track that file
-as the retrieved file. VFIO_DEVICE_BIND_IOMMUFD would then take over the
-device as it does now. Since VFIO preservation is new, the argument
-could simply be required.
+Thanks,
+Longman
 
-I think this could get rid of some of the special handling:
+>   # Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 0-7
+>   # This also means that CPU 8 is available and is a nohz_full CPU.
+>   NOHZ_FULL_TEST_MATRIX=(
+> @@ -1472,6 +1518,7 @@ test_inotify()
+>   run_state_test TEST_MATRIX
+>   run_remote_state_test REMOTE_TEST_MATRIX
+>   TEST_ISOLCPUS=1 run_state_test ISOLCPUS_TEST_MATRIX
+> +[[ -n "$RUN_ISOLCPUS_DOMAIN_TESTS" ]] && run_state_test ISOLCPUS_DOMAIN_TEST_MATRIX
+>   [[ -n "$RUN_NOHZ_FULL_TESTS" ]] && run_state_test NOHZ_FULL_TEST_MATRIX
+>   test_isolated
+>   test_boot_isolated
 
- - There'd be no need to fake a cdev open with an anonymous inode, so
-   PATCH 09 and PATCH 10 could probably be dropped.
-
- - retrieve() wouldn't need to look up the device by BDF, or reason
-   about racing with probe under the device lock. If userspace was able
-   to open the cdev, the device is registered and probed.
-
- - The device file would be opened through the normal cdev path, so the
-   usual permission and LSM checks on the device node would apply.
-
- - It would be the same model across file types.
-
-A few things I think would need care if you go this way. The file check
-and the attach would need to happen under dev_set->lock so they can't
-race with a concurrent VFIO_DEVICE_BIND_IOMMUFD on the same fd. And the
-incoming state should probably be tied to that specific
-vfio_device_file rather than just the vdev, so only the file passed to
-RETRIEVE_FD can take over the device.
-
-It would also change PATCH 12. Opening the cdev of an incoming device
-would have to succeed, so the check would move to the first open of the
-device instead: fail with -EBUSY if the device is incoming and the file
-being bound doesn't have the incoming state attached. That one check in
-vfio-pci would also cover VFIO_GROUP_GET_DEVICE_FD, which opens the
-device right away, so vfio_liveupdate_incoming_is_preserved() and its
-dev_is_pci() special case could be dropped from the VFIO core.
-
-The next tmpfs version will also add a way for a file handler to say a
-failed retrieve can be retried, and a helper to claim an existing file
-before restoring into it (so a file LUO already manages, e.g. one that
-is preserved in an outgoing session, is rejected). Both seem useful
-here too, e.g. so that a mistake in the argument (wrong fd, an fd for
-another device, an already bound fd) doesn't make the device
-unretrievable. I'll Cc you when I send it, and I'm happy to share the
-branch before then.
-
-What do you think?
-
-[1] https://lore.kernel.org/kexec/20261103010216.3447716-1-dmatlack@google.=
-com/
