@@ -1,129 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.133.124
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793961283;
-	b=ra6YwGGQPoAl+rRAvguBnUdpTGCOy+0dGIEBje5IKE2TuwrgiaEDBZhfVsUl2NhoI5UP
-	 91Tsvg9q7kQDzeAeNp2FQ0USpaQTHZdVXgVvYjh0WDKCxsgPe4PUH2hxXwbj8+tT/2gOB
-	 rzSY8F/yNUhLWjVjp3f3BzgvzA8I0DadSdu/EjrbNHSy8eYq/Kdusfdury+iO0O2DEgxr
-	 4UlvBNBNxciqjZCkmRwMulXyNzwAFIgudF+AY0YNKQ52+HsxrW0DdwsuDr0fw7LclvWJC
-	 lXfZli3fynSSebRrycGFuslDuOlwCix/XHnxB1l7N7RcioU7IYIAPlGS5HswUx9kA7w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793961283;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Received:From:In-Reply-To:References:
-	 X-Clacks-Overhead:MIME-Version:Date:X-Gm-Features:Message-ID:Subject:
-	 To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=yijtZQeMS2T2vulJllEh08u8WzAHH7tCqzIkmdxxHRc=;
-	b=u+VQaeoINIvr2chbmd8yJ/4rvXa32MSBiNpXIvwa9L72/ZF+vk67vAEVD0EOqxX6TVVW
-	 q0RpDJmBCqov6/fOaPS6XmKrNUIhj8WRYa1Q0TuZus/pnxtHVQFMsuakiD/IPeDClfj0l
-	 sc/nzMkmWxGgDvD8w2dMmXDM9t/hB2S1mQi7/uptIbV0nPBKez+PEhOulKV9V57Hi1urP
-	 FMtPXHmbfow86/kEgbFUyf4g8AxanTz1toih7JUCllWB+b9FjRAiR8akEmYdXMQVRrtKg
-	 /Zarq/4F+Kk8GwOdFwxgc1Jl/Tl2wUpnjUrLTvwT1EqOsdb/Tta5cSFXgpEPr73v2rA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VxVhr6U8;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=nY+13RRz;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793961377;
+	b=ZXNOfK2zgWORrAZ0lRyVeEjOaGyJCo8cxC0O6M6arP6I+1ltVh6VOpHLQEIRwidrfbZq
+	 j9wn1NbwfkW7My3Ad3NXVnes553U9wftPnRpHCs47yG7yAHY/W+DRYYXmu5nNlJs2v55S
+	 NCvQANZtibzcUqnA/y2rk3gwtPQdbhbqrSkGjl8UpASwgF3vOar2xNV2n1Pmtc0n+9EiX
+	 OventsuixGVDL2Cw5aFlO4W/POPboLcG0cR6i3IhIAJa+TeHtZrsUVcihFu3/qM2h7nTs
+	 sUISgQMIwx5NXIWuocCbPhhx7VezQzoCXrESPny+dLfZJgCeP8OGATecjosdNDcdEAA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793961377;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=zdiuVcrqXSCDP0HxvY49AL+onTI13fHzCVdhY2/D93w=;
+	b=5M5xvgKVHzVYnqQI15oF7ovaotV9WEpPtm389p7nxtNXsyeEQ+ALNrVd2vecdK6rPQuq
+	 Fq3mLtnrYzi0WIPosnNy/AE46pfmTC5bMfl1aDQddiUlwTNLU3NdDgPM06zIkpvYllXeJ
+	 M31OvAPbvyovwOAsa2HRAbCdCmFzdWZWnbVRPEVt3dEtMWcBy/p94Y3SxHCH5som87rdc
+	 LXei9+LNlc0kbztVGG5kUsr8cb9BW51fTLuOJ8dNgnMzLpDP3w6kXTgpGZ6tou2KiNuM/
+	 fdP0oUlEMSgibxmW+9XlFijdnKySYCxmFeTMTwIw37hQ2YBRjFhDmvqBw3+e4Pgu1Wg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=j+8jP0t3;
+	arc=none smtp.remote-ip=113.46.200.224
+Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE0C606A326
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 10:34:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AAE0C606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B252606A326;
+	Fri,  6 Nov 2026 10:36:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B252606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VxVhr6U8;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=nY+13RRz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793961279;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yijtZQeMS2T2vulJllEh08u8WzAHH7tCqzIkmdxxHRc=;
-	b=VxVhr6U8jqZ8O2hfP4Xk6lXxddeOziBNArDHip9oFy5frY4tDtxSFE/yASnGd4TFz2dV/u
-	wn+8h8Df0NeTjQM0pcxIExxEHjpkTd7gPX9XAxG+E37AIs4hCYatefe0HNDgJOejgDTjXd
-	a2vQzPmE/GUk4hP0qZcYcmW6ZhUxGkc=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-462-yyXRfkHRMqG0w4FNpXXFFA-1; Fri, 06 Nov 2026 05:34:35 -0500
-X-MC-Unique: yyXRfkHRMqG0w4FNpXXFFA-1
-X-Mimecast-MFC-AGG-ID: yyXRfkHRMqG0w4FNpXXFFA_1793961274
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-86c3a053d9bso5670337b3.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 02:34:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793961274; cv=none;
-        d=google.com; s=arc-20260327;
-        b=f9pM+BK0sLWhEI6exF8PY2lTSgLlawrZ5xgkhB8IVHbUaaW55oW+O4/xCk6himx6ml
-         LAiRA14OrOQ/7g86cseaFo3kGFWAKxYN44xXeucgQjnoKdjKVZTqbHTIqjzCs5W0haf0
-         QyYCYbCalp8UULb7VtrUYmv2FGm0pC1f6klxzwgcQtMV552qXzhFHnrB2j9ufS04X1pv
-         woS6+AmnQUc4zOMr0t1bv6qx4k7hmMYupIB44jSgUB0CubkJJcTODc0MxRscLImMLR1m
-         iEwEWlqQbJjBv8k6hnl1jM+9b88yjmtuQSpmaniY4EcPmP47QU1yLx3Yz76tStwGPsSb
-         iFIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date
-         :mime-version:references:in-reply-to:from:dkim-signature;
-        bh=yijtZQeMS2T2vulJllEh08u8WzAHH7tCqzIkmdxxHRc=;
-        fh=VflCiIF3jOr+Rl5IzqBvIPOAZ9ZzSsqmPrx0ZEM+Mh0=;
-        b=PcpWckAVjo+u4Nb/t0iItqXN5tYfQ5T2vCW4j0UWoQvUjnDqlOGMEZjX/hESsqpeV8
-         vnASfOEg5oMTmrDES4enpBEHJDz8FR07UlqRvwbHzVPVTumxfD02Qk41JtbFa36rXN6M
-         jkJijbZsrxnMSCeqXciu3M+SQCr57ZSoSKkTY9iDkC57j9ZwM+uakgcLCB4f4uz45S9q
-         aL135xWUpSX5CPd2H5bIG+nr3+84RoAFOaUjeb3Fljbe4xrl+FI4hyGghOBpNT+jSPPM
-         O3BF9OqZeTsWOGlXVF/v4f5YRX5/zEfkYowyN7VuRalUgL2At/y71W+Lc+6vb7zf7ucD
-         VsvQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793961274; x=1794566074; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:mime-version:references:in-reply-to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yijtZQeMS2T2vulJllEh08u8WzAHH7tCqzIkmdxxHRc=;
-        b=nY+13RRzMwW3aHEjVnE2AsXfVQ2cosgeOK1nSC+J6/dPqHoB16kmOM1tBd8jLBwchc
-         65LPvURhWz6Be2rIHIg1WTsFR1wFoKLmvgEIoW+5NduYGcrZ/8iXkJJvzrfw6LNzfGaX
-         Y9ur7+V1zBqvmTiySWFZFCwupNGTikm+lhyrlffEazn+O8efytCnksLxPuxMX+o2WJvH
-         RTGhZAKeqcyPm9Td8gHt0hqx9NJ4fp1zrS0TJSivtys7qxBhsLzLDkG0S6ku6QgD5gTa
-         sfN4ccFzdab5vG8nS2V0lhRMtMEqq7fDU/acatAmWSMnKbUmQWVg2KWErDlgUFgk5T5d
-         1pGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793961274; x=1794566074;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:mime-version:references:in-reply-to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yijtZQeMS2T2vulJllEh08u8WzAHH7tCqzIkmdxxHRc=;
-        b=yMfa2JkBMDZqK2XaHkO8fMdRV+AolQloNWW8fcbyMeqbN3AsSdNc+f6gILgunfW8k3
-         3ZVzQEUNKgWSMbokYOivS8t4j98RWptwTGze1GA07xKIENnZ9+uzUGrp8k9ARTmcgx2R
-         eP+HIilV5u6AirX0d0G7f9Bw29Wl2M38DLOKMN+W8uuGnV5FA6tRRN86bHIzv81ee17i
-         95wDjficUWt7J3R0HZYOvuDv8M8WFb4W/sMbXthv+YOLJuHk+B/HI6oNPaPG/mAYIk8i
-         Iyx/E3o7l6BMWOTHRQIdBmEF3dYOjYW8wEYeEmyO77n/akPymqfTLnuUun09SDFgtBOb
-         bdNA==
-X-Forwarded-Encrypted: i=1; AL+hErESLyKzbjuJDKnRFs+/xxx922kO7fNbi4GZh8fYs7UQwP3I+opsoqOdhlHfI09dGyHWAXPFqZgAnUr9BGvzRVY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/xG+XFT41QrOrxRSBSqoD2fXQegjIRLRGJgfrI1DNOzAGjxOiO
-	1+DN1XQ3AjE+VJCkD3q+3exVovilK5PDaqLN25h2JGIWYRELcNSG6QomOVBqIJt2QW1C9OxTteD
-	9NVQeULwzrAExQTXIyu1zf3OHpmylhN45oPPxASPmtGaC6Fo79mpG+KfM3cNpycxFMjRYxR64UZ
-	TB9cZOIzBp/rTcPSkJCCn8s4dror6tROexpWcOfYpAyvaC
-X-Gm-Gg: AYBFou0mF48tcC8cXUHRUwK25/ZyWedTQqmP4YdIggeX18g+hEFHEK/HZ/I5OZOeuM0
-	LcTdBgK+0/2DeLGmWMbqpJRVhUHPufSwIyCoWOlhijujFucpSz4YXatjxvv/nBXkMlXF/nCTcb+
-	O3htu1nBHHrW0Zrxz1e/1qKXxJAr+gGw0FIGW4iNuOzo/ozuixSCWZPbkNyy/smmgtcEON6626h
-	ympKsrmNMczwRHG
-X-Received: by 2002:a05:690c:e3ea:b0:8b3:5037:5023 with SMTP id 00721157ae682-8b350375381mr15907b3.15.1793961269461;
-        Fri, 06 Nov 2026 02:34:29 -0800 (PST)
-X-Received: by 2002:a05:690c:e3ea:b0:8b3:5037:5023 with SMTP id
- 00721157ae682-8b350375381mr15717b3.15.1793961269050; Fri, 06 Nov 2026
- 02:34:29 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 6 Nov 2026 04:34:24 -0600
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 6 Nov 2026 04:34:24 -0600
-From: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-In-Reply-To: <20261103200036.65764-3-tianyi@cloudflare.com>
-References: <20261103200036.65764-2-tianyi@cloudflare.com> <20261103200036.65764-3-tianyi@cloudflare.com>
-X-Clacks-Overhead: GNU Terry Pratchett
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=j+8jP0t3
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=zdiuVcrqXSCDP0HxvY49AL+onTI13fHzCVdhY2/D93w=;
+	b=j+8jP0t38yPoKZ3rHG/+O5xTmerw3/KNXeVSTgSVzHHPrxh0MWE1JX//C58bEdjJB+4X83pL+
+	l5I1LHMJE2ZS202tfaKPcP5cOsxK88iotFDrJG+IjX6VS1DprsCNiQNWN21cQ3Ssbz0D8YMGqVD
+	dpxxDOKtE/7splKn8XQRRc0=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jLbDn4QNMz1cypH;
+	Fri,  6 Nov 2026 18:35:53 +0800 (CST)
+Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0748140565;
+	Fri,  6 Nov 2026 18:36:06 +0800 (CST)
+Received: from [10.67.120.103] (10.67.120.103) by
+ kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Fri, 6 Nov 2026 18:36:04 +0800
+Message-ID: <afcbf19b-bd13-4afc-ab56-8bc50c793e50@huawei.com>
+Date: Fri, 6 Nov 2026 18:36:04 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -133,37 +62,99 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Fri, 6 Nov 2026 04:34:24 -0600
-X-Gm-Features: AclHuK-sJ3dqIJeSdHUNf0o0AjI3dtm9DPHkP7CfN-2qlw2BH-a46hIByak0TW4
-Message-ID: <CAPB2EArNk4KzPSGD8DXjb0o=pUZ8RFUm=U3ZVU9GRNMzj0OVkg@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] net: fix mac_len of skbs copied by generic XDP
-To: Tianyi Gao <tianyi@cloudflare.com>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, kernel-team@cloudflare.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 11/15] KVM: arm64: Reserve dirty ring space for the
+ HDBSS buffer
+To: Leonardo Bras <leo.bras@arm.com>
+CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
+	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
+	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
+	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
+	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
+	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
+	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
+	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
+References: <20260929103655.85107-1-zhengtian10@huawei.com>
+ <20260929103655.85107-12-zhengtian10@huawei.com> <auikG0clmr19sAjh@LeoBrasDK>
+From: Tian Zheng <zhengtian10@huawei.com>
+In-Reply-To: <auikG0clmr19sAjh@LeoBrasDK>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemr100010.china.huawei.com (7.202.195.125)
 
-Tianyi Gao <tianyi@cloudflare.com> writes:
 
-> skb_pp_cow_data() copies the header fields of the old skb with
-> skb_copy_header(). skb_copy_header() does not copy mac_len.
->
-> Generic XDP uses skb_pp_cow_data() for programs with frags support.
-> After such a program, the skb can have mac_len 0.
-> cpu_map_generic_redirect() and tc ingress then get the position of the
-> Ethernet header wrong.
->
-> Copy mac_len in skb_pp_cow_data(), as dev_map_generic_redirect() does
-> after skb_copy().
->
-> Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in gene=
-ric mode")
-> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+On 11/2/2026 10:54 PM, Leonardo Bras wrote:
+> On Tue, Sep 29, 2026 at 06:36:51PM +0800, Tian Zheng wrote:
+>> The dirty ring reserves room for CPU-side dirty buffers via
+>> kvm_cpu_dirty_log_size(). Report the HDBSS buffer entry count
+>> through it, so a full buffer flush always fits in the ring.
+>>
+>> Pin the HDBSS buffer size to PAGE_SIZE when dirty-ring is enabled,
+>> via kvm_arch_dirty_ring_size_updated(): a larger buffer only
+>> shrinks the soft_limit and forces more frequent userspace drains.
+>>
+>> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
+>> ---
+>>   arch/arm64/kvm/arm.c | 8 ++++++++
+>>   arch/arm64/kvm/mmu.c | 8 ++++++++
+>>   2 files changed, 16 insertions(+)
+>>
+>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+>> index 9d7bdece149a..5a7046acb62e 100644
+>> --- a/arch/arm64/kvm/arm.c
+>> +++ b/arch/arm64/kvm/arm.c
+>> @@ -215,6 +215,14 @@ static int kvm_arm_default_max_vcpus(void)
+>>   	return vgic_present ? kvm_vgic_get_max_vcpus() : KVM_MAX_VCPUS;
+>>   }
+>>
+>> +void kvm_arch_dirty_ring_size_updated(struct kvm *kvm)
+>> +{
+>> +	if (!system_supports_hdbss())
+>> +		return;
+>> +
+>> +	kvm->arch.hdbss_buffer_size = KVM_ARM_HDBSS_DEFAULT_SIZE;
+>> +}
+>> +
+> 
+> On the same subject as a previous patch:
+> I don't think this is the best approach, on top of adding a new weak
+> function to take care.
+> 
+> Maybe during the dirty-ring allocation, on vcpu creation, we could take
+> into account the requested dirty-ring size, and just allocate the HDBSS
+> buffer taking that into account. That would make it simpler, don't you
+> agree?
+> 
+> Thanks!
+> Leo
 
+Hi Leo,
+
+The "set once" guard we're discussing comes from the patch that adds the
+ioctl, and it isn't really needed. We discussed this earlier [1]: we can
+just initialize hdbss_buffer_size to PAGE_SIZE at VM creation and let
+the ring reservation use it directly. **That also means
+kvm_arch_dirty_ring_size_updated() can be removed.** Thanks for your 
+suggestion.
+
+As for why PAGE_SIZE is the right value in ring mode: the HDBSS buffer
+is flushed on every VM exit, so a larger buffer doesn't reduce the flush
+frequency. It only inflates the ring reservation (64 + size/
+sizeof(u64)), which shrinks the soft_limit and forces more frequent
+exits to userspace for the ring to be drained. Draining the dirty ring
+from QEMU is more expensive than draining the HDBSS buffer from the
+kernel, so the smallest buffer gives the best performance. In this mode,
+a larger buffer provides no benefit to users.
+
+In my tests, I also saw performance degrade when more space is reserved.
+
+[1] 
+https://lore.kernel.org/all/5a096cca-713a-4449-83dc-c763dc06c085@huawei.com/
+
+Thanks,
+Tian
