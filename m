@@ -1,87 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793973719;
-	b=sC9PObMIwoDml4AA3G4wHpY7wOsxmKLq1c/+b445v6ORDhzV1yRtM2226mvY8L7VmGiO
-	 D66WfDkX6lP5PuFb5Tyfqv35v0HtM1x7OwXtFEHit6a/rzW2+JlO1Im3d+0lQ8cUjoEuZ
-	 DGCDrOoT0sRogWNsDR5qVbYlMSNu+N6xnmpZWAx57f5GvJl8Hyqc2T7cds0Bg/vw8HFNY
-	 2lmquG3j1Evy8EVJ6AsxbrZW1HmJcFjalihI1jWrHxt0pCLzvJttFe7vQlF43Nh5W3NeD
-	 mpt0NITjCGsTh0geBC+bjlwrCkvwn/Er6xXBQmaEzbfoLirwJ3Xihz8nLnxvTfCaMAQ==
+	t=1793973736;
+	b=ITjBFIIfzElGI7V1OG2LNUcQfStze+3nAVYDQo1qKYwGy2Xm93Gb1Cb+JHHguLPGiShF
+	 1mEL6BDXuhD0Nb7Rbf6/tbs+sYHAkyDOTmwQ31+TEkhdkRXmauMue6ec5pdYW+3SUfSE8
+	 2B2ufuSyglBPmYaagnhVw16fWGBhUIobrCT1U0COVG2htZziv7Wx5rTkw0ihS6hEsAe0L
+	 H0a8zbMhCv9uXQIx6FlUo7gqwK9T5wVJUJ+wwyZ/EZzYxrKacYsFsTr3s4Ymu3e0WrX1e
+	 BTwQkALK3SePHKYyUTl0ewYUr+HJNmeH+bhN7AdCkM60X8uWho4SACu1WoLQcsiJG2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793973719;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793973736;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=gVr/Wyc2uyQROsmCt+IKCFC14ShR0qGLck6PYeMVB7k=;
-	b=OL5mIEkU80S/ieIZJx0b8zCmNEDYhQhV+54E3NrOCwfBOUgrEoxSmOXdI/0UiXGECxfU
-	 JtUaKnfCj+UwJpmvuN9+XBaZZktEPUAwLBiif1D5Km4kJBAOVtRYujT2i+MGs14Cv9jYY
-	 HyLPGDnd7/0p5zA9OUO7Tf8tHZZQjLa1xiyqZbJHaDayQ6aePF+4XCQkNJcrT0/faAWJm
-	 iOtE7a2qMKbPWi03l2tNSaaGV6eR69d0v2btoRnqjon06I6iZr/RIITSXN7i5biToVBmz
-	 ohX2lGAypTWwh314rzi5VM00hn8SUCSLa6gO6uqYEklOflZGqGry2sYjNoCZLqIKgZA==
+	bh=BV7SBAPBE1+ZyxEmQ1zLwKaZE5gOIoHWad6+8dfnrbs=;
+	b=TXSFMcXM6ecWTKCndH8T1ZpMtVM1Gq8jHfS8lAhBan0hUKgwztU3ktXsqp1352j97VmA
+	 kUguUowPPbLhc/njWkn+N9l/wOrwlnv+hZbPaaw9yn088SUyA+Ql7HgMA/oOxAFI2EAW2
+	 UHO6M1zjEC4YDe/q/HvIcvzOkiB6ndgbSsiq7m7E8vzSOOFwuzm9dAIT9S8H4V0EJPQ5c
+	 t1HhJMU/1It7/DM+QHmlR4SxnfKMR7DLyNsymbak5CZC7l0ApUlNfCqRJR1lyHT5qOpUq
+	 lbQtwYLS9npr+koSoBjL/D3cQLJwmqhplhg5jGeA2qKM4tisDkKA32tTwJ/KOKZ4BgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Puk1wQy2;
-	arc=none smtp.remote-ip=209.85.128.169
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yqaoFYkr;
+	arc=none smtp.remote-ip=209.85.128.179
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505BE606A32C
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 14:01:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 505BE606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8721C606EEB5
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 14:02:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8721C606EEB5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Puk1wQy2
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-8871ada1a26so5010967b3.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 06:01:59 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yqaoFYkr
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-8b32bbd39d5so4029927b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 06:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793973718; x=1794578518; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793973734; x=1794578534; darn=vger.kernel.org;
         h=cc:to:message-id:content-transfer-encoding:content-type
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=gVr/Wyc2uyQROsmCt+IKCFC14ShR0qGLck6PYeMVB7k=;
-        b=Puk1wQy2NGJOVR8mv8OjMDEDY0mDVzTOlVqDWwMiSIyfOooiPo75OKwp7sKA9UgQoj
-         MCFq0NqjMZ49oSeBKicD9/ao7EUEV4UULw605NrW9YD72dJqQG4ZvYKVkQzLjTpBy+8G
-         bcXNYFfWCfdHQC8ARlVBLmodCD208j1NaiGhPD7RceTeNB9UC12EYNxYpsGHM+3DaJPp
-         vIiwvKl8u2bBJdqPJsKuorbsu5ZCyduGhXa7A45ZEwGpmR2to46AEzzeFVlla31eUfXR
-         6Mpb0oopyJBrtXB90fpQacXnxqeUQbmMH2ybbfFobJbCgsblnB/7gAEg0+wXpo1o221X
-         anuQ==
+        bh=BV7SBAPBE1+ZyxEmQ1zLwKaZE5gOIoHWad6+8dfnrbs=;
+        b=yqaoFYkr/EgsIZj9Dkvg194mVo9k+dft6NEiLyTxULUnD41jCy8l65UTXWCPrI+f3A
+         9aNKOs7U4BiOk7fiii2EOw7eQSf52ViyrCQXSxRQYNQsbkQIBHUCj61P4lGzsMq+6Wb6
+         sJUiLhfE3q5YRp0LAnXVYSeoK1NPsDTvjdGTZYe9jFwDihiOtU9juXDwdbVq8T3cf54F
+         spzysnZrR9T+ikdIQosUB/LPT/9wBPcGyUo3+Fk2rN9BE4QXmqp9yuMeoL4TqW7HRobH
+         /2ofdu+2l6UvslLJUbkzDSUP73sF61WrtsA9HOo7DvIcRJ3rhNjhe4VebTzHJMsaUgFu
+         W8vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793973718; x=1794578518;
+        d=1e100.net; s=20260707; t=1793973734; x=1794578534;
         h=cc:to:message-id:content-transfer-encoding:content-type
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=gVr/Wyc2uyQROsmCt+IKCFC14ShR0qGLck6PYeMVB7k=;
-        b=UhraboHZLYYw5aDcozrmmrDamy4KV3sydW9UZP4+z7bLHbMfyzywEzIRr6VZ3DiCML
-         VqpNY9mnvScyadQ3AWRz6kGHR1sFtXmtpE+1kGQS9JxdwP+JJNHvnjCBfPuFSyJT/wHr
-         s7HS6YrdSvEHLsqTWzba7EC+gH4q3gUngdGooAt9VoEl0JgWECxoNA9sKPYzHfFKqUKO
-         Fl/YjeqFZdR7NcGvHoVtRYtsyne1G+QWMbXSjMtFG8FifMaXn7HWYiOdDN78GuwrtmLv
-         eAJQmvEsAdCFHp1R1ARGaDbRB4gtLshcGkEvBTwDnOyGJIdFTYVpIPthvktXg1NZDc1A
-         i7eA==
-X-Forwarded-Encrypted: i=1; AL+hErGKOLFkWt+7K5P34d07VO9fh4JjZXDxlNgUVanf7o5cY6hSe6I4bqtyy2R+ByrXSMykVBbfaCYSPb8/ViY8JBY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+BvHylbuixDjp2Gxu+W2Z/IW20ze3pu7jS3R1bjzMOJZoeuC8c
-	HKzj22khhFkb7Am9pe/kh3ii54LQpngsdGFoKHQk5jrr6rbCsdLYJ0WU
-X-Gm-Gg: AYBFou2YwKD4rRIji8P/BfMR2aYQK3IQaa/YQXmklTKFYGFGSUh+F4gr69EmqGkrF/Z
-	D3fpJSXkXlVrRN088+IJkuKJr6SA+66y8tbs3kz/PFODAPj2NW5qTtKJA+Emnn1V7mpKfFv9nq3
-	gclhSQDyDU94osfUclVti9vyLNLXEo6HaYWjixwr7A9ZeQctXcZNdVS1jIbJAWqIWGqATTtKAiv
-	NUIWfu4bJk7voFxNEFK+o2AJj7MMmgso6+O0DfmrmuX5IapBpf9jtVxHCU6x963DCG1X+1NCTJi
-	fNVdOWD3BEYaYGLOCaNW/ePYXzLt+9WFEpEz3yqcS22K4WGEwUbkReG9bbAsL57NZ4OB7aN8q1Y
-	QIcmpWkas3isGttsYVs8/T1uuksm9hLijqT2AeaWWgGTT31/+YWqDjMzCQB8B3kC27IzaSXxpuW
-	rD24RELrI33eDeCsX9tfG/00XLkL6sQllNvUKL3mJ3nv0QSTxP+kTUBAD5rY7tLZIVMN9a2Pf6O
-	3w9HdZ6llthH+CySd7XJKdSo29r5B/1ZZ+fHqowpZwC4ARM+/D1Ur4+tq6VdagwmHtJTgCJshNP
-	Q9m1CyDBFfUFJNZipKg/5Gg15jPmOr3UTP6n0+JEUu4d13HSN93DWc7PbIIxlr5DWdJGdCD8qJC
-	OVfAwTslqb6Q2o5xU2UX2kFod4GL75+Mo/ossoQKrPCOqn02yADV3lH8X6Hww
-X-Received: by 2002:a05:690c:86:b0:8b1:bd8a:9588 with SMTP id 00721157ae682-8b3419b9bbemr11152827b3.86.1793973711902;
-        Fri, 06 Nov 2026 06:01:51 -0800 (PST)
+        bh=BV7SBAPBE1+ZyxEmQ1zLwKaZE5gOIoHWad6+8dfnrbs=;
+        b=FYvTLpDlpY9o2S/2G9iPc4eEOQG4aqNmHjInM48ZekuPtc6skeCcPBvfQxaQs9tW0E
+         mrfq4yCKNGaHDO9gAtHC+0DzYK9WJNGjJUa8GxPo+c7QmcicWRot5Y2WZO6hlKC/tiLU
+         GQzj+CgmayufEon3HAdohsif66ruNOYU827pvAoA68+ymij5n8DJ3k5W2YmEyQFemLHc
+         zihNL8I6vBK6chj0s6ecFDjzGhzDk/tClr6P0ucDdWY5H3RTI13y0+lHpj9ptmkfbE8C
+         wbTdDBvU03mKc+NVShAUEQHSvAoeGLoCRcHpVcqg2OrkojzGNgPUjL9Jo+eCV3V6SqP2
+         7Q1A==
+X-Forwarded-Encrypted: i=1; AL+hErF2xTiHpRBYxqbUNI39ScrQFphGDgENebL2xwbJuGcGaRwXpjlyAyOgEvPLpECOX2EAJxeH9bT9s+yqTASd4LU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+2hra58wfjPsg6naEC2HqkMBTWT96H72wN+qGbocKEdO/MCr76
+	u9xMvTMt6grB0yviYOLvrQesNZXe2wQXOBvrKB3XwdxUwGv2/N4X2pgL
+X-Gm-Gg: AYBFou3giaFC7C2hgB2w8aTOe4O6cnecvBG0QwVRnbgO/0DBLKVr7DEdt4NfH3U4EqD
+	cSrzX8Z9byl8I3KtJLaP5NpmmbZLUwwg9uKD1OhuIUPSMI2X7CmENiOkK82b0GL65kBwQWtp3ro
+	nSFYFh9wLlV2xSN2/vD0+zwWeJ3As/coY8sp+XuCyse0SgmvM7IHTWuzAZhEVG2XZsHuizAI8KO
+	aRyRa03G+CEhjfAoNM4C3wGpdlp64JdE7m7sEXpWVZryJq04NwBJnSnhWR91dhnDEMkYU1vB4TS
+	bJF831xHaotw2C7j/SVl4Jq9CrAy+MdU58I+7iWPtkvYM5U0xopiwGITF3OQ27YmyQr8E2MWLxO
+	1PU8zOcUuHQzbJ6Vq/LYSan2vF9P9GccB8IvBg0CvFZbN7gg4nQt3Pq2LN+FzK3b/svgT0jGGVz
+	1OT6LBA7PM0MAQAIADON8AmjXfmTXIG3R0IkQGFWZ0tBHfqtlpmhjaGfj3Xo/ujhVTYy/31Mfnm
+	Rvs9s+9+X1iYaGo0vfjAiWMB7kEBt7Czbybc7l99nIZiCBnRbB2yVb2OqAIsFl2Y2CZnKgGL0V4
+	1+IrWibzIrorMp/CD02TVd+JM/fczaRpZOpwbcDTGlMYp0nHnC2FaxZr15jw/DdNOCfXKQ27OqW
+	LqhJKzDpOJOXVP5asHlKCr0LLLmrOJGyatKwFRFtvG0PEjvuoBtNKFtabgGUW
+X-Received: by 2002:a05:690c:e3ea:b0:8ab:a473:fde8 with SMTP id 00721157ae682-8b341aca2ffmr15038617b3.54.1793973734029;
+        Fri, 06 Nov 2026 06:02:14 -0800 (PST)
 Received: from lab01.myowncloud.network ([2601:cb:4000:1c5:5396:7ba1:d08a:ebca])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f88c62dsm18956827b3.43.2026.11.06.06.01.50
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f852e80sm19184507b3.32.2026.11.06.06.02.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 06:01:50 -0800 (PST)
+        Fri, 06 Nov 2026 06:02:13 -0800 (PST)
 From: Amit Patole <amit.patole@gmail.com>
-Date: Fri, 06 Nov 2026 09:01:48 -0500
-Subject: [PATCH] lib/tests: add KUnit tests for the timerqueue
+Date: Fri, 06 Nov 2026 09:02:11 -0500
+Subject: [PATCH] lib/tests: add KUnit tests for xxHash
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,78 +93,78 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261106-kunit-timerqueue-v1-1-1913a0bf2d45@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAMvd7WoC/yXMOw6DMBBF0a2gqWPJNuAiW0EUYB5hQDHEHxQJs
- fcYUp7i3oMCPCPQszjIY+fAq8tQj4Ls1LkXBA/ZpKU2SkkjluQ4ishv+E9CgtBSmqqzZd3rgXK
- 2eYz8vZdN+3dI/Qwbrw+d5w/8JXnNdAAAAA==
-X-Change-ID: 20261106-kunit-timerqueue-20064ac35b2d
+Message-Id: <20261106-kunit-xxhash-v1-1-7b79cb6a8998@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOLd7WoC/yXMQQqDMBBA0avIrBsw0Sp4FeliOo7NKKSS0RIQ7
+ 26qy7f4fwflKKzQFTtE/onKN2TYRwHkMXzYyJANrnSNtWVj5i3IalLyqN64J9ZE2NYVEuRkiTx
+ Kunb967Zu74lp/T/gOE7tqwZocAAAAA==
+X-Change-ID: 20261106-kunit-xxhash-25a4cca743ac
 To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Thomas Gleixner <tglx@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, 
- Anna-Maria Behnsen <anna-maria@linutronix.de>, 
- Frederic Weisbecker <frederic@kernel.org>, 
+Cc: Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>, 
  Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
  Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
  kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
  Amit Patole <amit.patole@gmail.com>
 X-Mailer: b4 0.15.2
 
-lib/timerqueue.c is the time-ordered queue behind hrtimers, POSIX CPU
-timers and the alarm timers, and since commit 1339eeb73d6b
-("timerqueue: Provide linked timerqueue") it also has a linked variant
-that keeps prev/next pointers for hrtimer rearming. Neither has unit
-tests.
+lib/xxhash.c provides xxh32() and xxh64(), used by zstd (frame
+checksums and long-distance matching), btrfs and erofs, where the
+values end up on disk. The crypto self-tests cover xxh64() through the
+"xxhash64" shash, but nothing tests xxh32() or the library interface
+directly.
 
-Add a KUnit suite that covers:
+Add a KUnit suite with known answers from the reference xxHash
+implementation. The input is generated the same way as in xxHash's own
+sanity check, so the lengths 1, 14 and 222 reproduce the values
+published there. It covers:
 
-- an empty queue, and timerqueue_iterate_next(NULL);
-- timerqueue_add() returning true only when the node becomes the
-  first, and timerqueue_del() returning true while nodes remain;
-- iteration in expiry order, and nodes with the same expiry time
-  staying in the order they were added;
-- a deleted node being queued again;
-- 256 nodes with pseudo-random expiry times (fixed seed): order and
-  count after inserting, deleting from the middle and draining from
-  the front;
-- the linked variant: prev/next links in both directions after
-  inserts, deletes from the middle and the front, and re-adding; and
-  the same pseudo-random stress with every prev link checked.
+- xxh32() with two seeds and xxh64() with three, for lengths around
+  the 4, 8, 16 and 32 byte boundaries of the algorithms;
+- the xxh64 streaming interface, split into two updates at every
+  possible point and fed one byte at a time, and repeated
+  xxh64_digest() calls;
+- xxh64_update() rejecting a NULL input with -EINVAL;
+- input at every offset from 1 to 7 bytes, which must not change
+  the result.
 
-An AI coding assistant (Claude Opus 5.5) was used to draft the tests.
-They were run with "tools/testing/kunit/kunit.py run" on UML (6/6
-pass), built with W=1 without warnings, and checked against
-deliberately broken versions of the two comparison functions and of
-timerqueue_del()'s return value, which the suite catches.
+An AI coding assistant (Claude Opus 5.5) was used to draft the tests,
+and the expected values were generated with the reference
+implementation (python-xxhash 3.7.0) after checking it against the
+published sanity values. The tests were run with
+"tools/testing/kunit/kunit.py run" on UML (146/146 pass), built with
+W=1 without warnings, and checked against off-by-one changes to the
+length checks in xxh32(), xxh64() and xxh64_update(), which the suite
+catches.
 
 Signed-off-by: Amit Patole <amit.patole@gmail.com>
 ---
 Tested on UML with a kunitconfig of CONFIG_KUNIT=y and
 
-CONFIG_TIMERQUEUE_KUNIT_TEST=y: 6/6 pass.
+CONFIG_XXHASH_KUNIT_TEST=y: 146/146 pass.
 ---
- lib/Kconfig.debug            |  13 ++
- lib/tests/Makefile           |   1 +
- lib/tests/timerqueue_kunit.c | 293 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 307 insertions(+)
+ lib/Kconfig.debug        |  14 +++
+ lib/tests/Makefile       |   1 +
+ lib/tests/xxhash_kunit.c | 260 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 275 insertions(+)
 
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2d22638ec13a..5707ed622d5d 100644
+index 2d22638ec13a..d88fab338d4b 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -3461,6 +3461,19 @@ config RATELIMIT_KUNIT_TEST
+@@ -3461,6 +3461,20 @@ config RATELIMIT_KUNIT_TEST
  
  	  If unsure, say N.
  
-+config TIMERQUEUE_KUNIT_TEST
-+	tristate "KUnit test for the timerqueue" if !KUNIT_ALL_TESTS
++config XXHASH_KUNIT_TEST
++	tristate "KUnit test for xxHash" if !KUNIT_ALL_TESTS
 +	depends on KUNIT
++	select XXHASH
 +	default KUNIT_ALL_TESTS
 +	help
-+	  This option enables the KUnit test suite for lib/timerqueue.c,
-+	  the time-ordered queue behind hrtimers and POSIX CPU timers.
-+	  The tests cover ordering, the return values of the add and
-+	  delete helpers, equal expiry times and the prev/next links of
-+	  the linked timerqueue.
++	  This option enables the KUnit test suite for lib/xxhash.c, the
++	  xxh32() and xxh64() hashes used by zstd, btrfs and erofs. The
++	  tests check known answers from the reference xxHash
++	  implementation, the xxh64 streaming interface and unaligned
++	  input.
 +
 +	  If unsure, say N.
 +
@@ -172,319 +172,286 @@ index 2d22638ec13a..5707ed622d5d 100644
  	tristate "KUnit test for UUID" if !KUNIT_ALL_TESTS
  	depends on KUNIT
 diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index df0537e1b91f..1d18cfdca256 100644
+index df0537e1b91f..8828efce4412 100644
 --- a/lib/tests/Makefile
 +++ b/lib/tests/Makefile
 @@ -58,5 +58,6 @@ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
  obj-$(CONFIG_UTIL_MACROS_KUNIT) += util_macros_kunit.o
  obj-$(CONFIG_RATELIMIT_KUNIT_TEST) += test_ratelimit.o
  obj-$(CONFIG_UUID_KUNIT_TEST) += uuid_kunit.o
-+obj-$(CONFIG_TIMERQUEUE_KUNIT_TEST) += timerqueue_kunit.o
++obj-$(CONFIG_XXHASH_KUNIT_TEST) += xxhash_kunit.o
  
  obj-$(CONFIG_TEST_RUNTIME_MODULE)		+= module/
-diff --git a/lib/tests/timerqueue_kunit.c b/lib/tests/timerqueue_kunit.c
+diff --git a/lib/tests/xxhash_kunit.c b/lib/tests/xxhash_kunit.c
 new file mode 100644
-index 000000000000..2499626126ef
+index 000000000000..5575c3ec9662
 --- /dev/null
-+++ b/lib/tests/timerqueue_kunit.c
-@@ -0,0 +1,293 @@
++++ b/lib/tests/xxhash_kunit.c
+@@ -0,0 +1,260 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * KUnit tests for the timerqueue in lib/timerqueue.c, both the cached
-+ * rbtree variant and the linked variant used by hrtimers.
++ * KUnit tests for the xxHash implementation in lib/xxhash.c
++ *
++ * The expected values come from the reference xxHash implementation. The
++ * input is generated the same way as in xxHash's own sanity check, so the
++ * entries for lengths 1, 14 and 222 match the values published there.
 + */
 +
 +#include <kunit/test.h>
 +#include <linux/module.h>
-+#include <linux/prandom.h>
-+#include <linux/timerqueue.h>
++#include <linux/string.h>
++#include <linux/xxhash.h>
 +
-+#define TQ_STRESS_NODES	256
++#define XXH_TEST_LEN	222
 +
-+static void timerqueue_empty_test(struct kunit *test)
++static const u32 xxh_prime32 = 2654435761U;
++static const u64 xxh_prime64 = 11400714785074694797ULL;
++
++struct xxh32_case {
++	unsigned int len;
++	u32 seed;
++	u32 hash;
++};
++
++struct xxh64_case {
++	unsigned int len;
++	u64 seed;
++	u64 hash;
++};
++
++static const struct xxh32_case xxh32_cases[] = {
++	{   0, 0x00000000, 0x02cc5d05 },
++	{   1, 0x00000000, 0xcf65b03e },
++	{   3, 0x00000000, 0xc23884f5 },
++	{   4, 0x00000000, 0xa9de7ce9 },
++	{   5, 0x00000000, 0xeb1734bb },
++	{   8, 0x00000000, 0xa3f6f44b },
++	{  14, 0x00000000, 0x1208e7e2 },
++	{  15, 0x00000000, 0x6b859e14 },
++	{  16, 0x00000000, 0x93ba3759 },
++	{  17, 0x00000000, 0x89fdc23e },
++	{  31, 0x00000000, 0x5f40e562 },
++	{  32, 0x00000000, 0xd89829ec },
++	{  33, 0x00000000, 0x31a427e5 },
++	{  63, 0x00000000, 0xf1d48fdb },
++	{  64, 0x00000000, 0x02e95dbb },
++	{  65, 0x00000000, 0x16992b3d },
++	{ 100, 0x00000000, 0x96ad8143 },
++	{ 222, 0x00000000, 0x5bd11dbd },
++	{   0, 0x9e3779b1, 0x36b78ae7 },
++	{   1, 0x9e3779b1, 0xb4545aa4 },
++	{   3, 0x9e3779b1, 0x1a269947 },
++	{   4, 0x9e3779b1, 0x2baafe83 },
++	{   5, 0x9e3779b1, 0x5874dab0 },
++	{   8, 0x9e3779b1, 0xc2a8e239 },
++	{  14, 0x9e3779b1, 0x6af1d1fe },
++	{  15, 0x9e3779b1, 0xad53090d },
++	{  16, 0x9e3779b1, 0xa94fc1e1 },
++	{  17, 0x9e3779b1, 0xc9910739 },
++	{  31, 0x9e3779b1, 0x5c0c3350 },
++	{  32, 0x9e3779b1, 0xa5c44467 },
++	{  33, 0x9e3779b1, 0x0de5b1f9 },
++	{  63, 0x9e3779b1, 0x956b3d77 },
++	{  64, 0x9e3779b1, 0xcf82f830 },
++	{  65, 0x9e3779b1, 0x428eec5f },
++	{ 100, 0x9e3779b1, 0x83d48124 },
++	{ 222, 0x9e3779b1, 0x58803c5f },
++};
++
++static const struct xxh64_case xxh64_cases[] = {
++	{   0, 0x0000000000000000ULL, 0xef46db3751d8e999ULL },
++	{   1, 0x0000000000000000ULL, 0xe934a84adb052768ULL },
++	{   3, 0x0000000000000000ULL, 0xff7e1959cb50794aULL },
++	{   4, 0x0000000000000000ULL, 0x9136a0dca57457eeULL },
++	{   5, 0x0000000000000000ULL, 0x9b046fb1397f09a5ULL },
++	{   8, 0x0000000000000000ULL, 0xcdbcf538e71d1348ULL },
++	{  14, 0x0000000000000000ULL, 0x8282dcc4994e35c8ULL },
++	{  15, 0x0000000000000000ULL, 0x180719316d622d84ULL },
++	{  16, 0x0000000000000000ULL, 0x98c90b57fdfcb55cULL },
++	{  17, 0x0000000000000000ULL, 0x0d39a2d051a30c2cULL },
++	{  31, 0x0000000000000000ULL, 0x299b39a290e6d783ULL },
++	{  32, 0x0000000000000000ULL, 0x18b216492bb44b70ULL },
++	{  33, 0x0000000000000000ULL, 0x55c8dc3e578f5b59ULL },
++	{  63, 0x0000000000000000ULL, 0xa9efbe0fa0f3f4e7ULL },
++	{  64, 0x0000000000000000ULL, 0xef558f8acac2b5cdULL },
++	{  65, 0x0000000000000000ULL, 0xde0f20dc2631af7aULL },
++	{ 100, 0x0000000000000000ULL, 0x4bfe019cd91d9ea4ULL },
++	{ 222, 0x0000000000000000ULL, 0xb641ae8cb691c174ULL },
++	{   0, 0x000000009e3779b1ULL, 0xac75fda2929b17efULL },
++	{   1, 0x000000009e3779b1ULL, 0x5014607643a9b4c3ULL },
++	{   3, 0x000000009e3779b1ULL, 0xaa8584e83660f7d1ULL },
++	{   4, 0x000000009e3779b1ULL, 0xcaab286bd8e9fdb5ULL },
++	{   5, 0x000000009e3779b1ULL, 0x2af5249930f984ecULL },
++	{   8, 0x000000009e3779b1ULL, 0xfe0c047a5353cdacULL },
++	{  14, 0x000000009e3779b1ULL, 0xc3bd6bf63deb6df0ULL },
++	{  15, 0x000000009e3779b1ULL, 0xd61105c20e91f99fULL },
++	{  16, 0x000000009e3779b1ULL, 0xc900ad2d536b607eULL },
++	{  17, 0x000000009e3779b1ULL, 0x495cd68a647c7a22ULL },
++	{  31, 0x000000009e3779b1ULL, 0xda673d5feb5c1d79ULL },
++	{  32, 0x000000009e3779b1ULL, 0xb3f33bdf93ade409ULL },
++	{  33, 0x000000009e3779b1ULL, 0xe92c292f64bc3071ULL },
++	{  63, 0x000000009e3779b1ULL, 0x6c911fadb05b6fc2ULL },
++	{  64, 0x000000009e3779b1ULL, 0xb5eeba99264cc44fULL },
++	{  65, 0x000000009e3779b1ULL, 0xd3f6ff3941e310caULL },
++	{ 100, 0x000000009e3779b1ULL, 0x4853706dc9625caeULL },
++	{ 222, 0x000000009e3779b1ULL, 0x20cb8ab7ae10c14aULL },
++	{   0, 0x9e3779b97f4a7c15ULL, 0xc4349fc93c010000ULL },
++	{   1, 0x9e3779b97f4a7c15ULL, 0x126bb57a12364aa5ULL },
++	{   3, 0x9e3779b97f4a7c15ULL, 0xe23f055f9113033dULL },
++	{   4, 0x9e3779b97f4a7c15ULL, 0xf6337e5fb526b92eULL },
++	{   5, 0x9e3779b97f4a7c15ULL, 0x3fe27fb9d0eb8e4cULL },
++	{   8, 0x9e3779b97f4a7c15ULL, 0x4fe88e05b3a5bfd8ULL },
++	{  14, 0x9e3779b97f4a7c15ULL, 0xbdd0f167d252e0bbULL },
++	{  15, 0x9e3779b97f4a7c15ULL, 0xb0298e00622d8613ULL },
++	{  16, 0x9e3779b97f4a7c15ULL, 0xb37a43269a32566aULL },
++	{  17, 0x9e3779b97f4a7c15ULL, 0xfd7e04ed256c9413ULL },
++	{  31, 0x9e3779b97f4a7c15ULL, 0xb9fa34ecbf9b57ffULL },
++	{  32, 0x9e3779b97f4a7c15ULL, 0xe65ea5f4eff5d5deULL },
++	{  33, 0x9e3779b97f4a7c15ULL, 0xf166a3272cadc4abULL },
++	{  63, 0x9e3779b97f4a7c15ULL, 0x0a36d884436efe01ULL },
++	{  64, 0x9e3779b97f4a7c15ULL, 0xe7bd5052c0d2145eULL },
++	{  65, 0x9e3779b97f4a7c15ULL, 0xfea9a8f0561339ddULL },
++	{ 100, 0x9e3779b97f4a7c15ULL, 0x8dd80a6ef6296bf7ULL },
++	{ 222, 0x9e3779b97f4a7c15ULL, 0x8cdf13ba7f241d67ULL },
++};
++
++static u8 *xxh_test_buf(struct kunit *test)
 +{
-+	struct timerqueue_head head;
-+	struct timerqueue_node node;
-+
-+	timerqueue_init_head(&head);
-+	timerqueue_init(&node);
-+
-+	KUNIT_EXPECT_NULL(test, timerqueue_getnext(&head));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_node_queued(&node));
-+	KUNIT_EXPECT_NULL(test, timerqueue_iterate_next(NULL));
-+}
-+
-+static void timerqueue_add_del_test(struct kunit *test)
-+{
-+	struct timerqueue_head head;
-+	struct timerqueue_node a, b, c;
-+
-+	timerqueue_init_head(&head);
-+	timerqueue_init(&a);
-+	timerqueue_init(&b);
-+	timerqueue_init(&c);
-+	a.expires = 20;
-+	b.expires = 10;
-+	c.expires = 30;
-+
-+	/* timerqueue_add() returns true when the new node is the first. */
-+	KUNIT_EXPECT_TRUE(test, timerqueue_add(&head, &a));
-+	KUNIT_EXPECT_TRUE(test, timerqueue_node_queued(&a));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), &a);
-+
-+	KUNIT_EXPECT_TRUE(test, timerqueue_add(&head, &b));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), &b);
-+
-+	KUNIT_EXPECT_FALSE(test, timerqueue_add(&head, &c));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), &b);
-+
-+	/* Iteration is in expiry order. */
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_iterate_next(&b), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_iterate_next(&a), &c);
-+	KUNIT_EXPECT_NULL(test, timerqueue_iterate_next(&c));
-+
-+	/* timerqueue_del() returns true while the queue is not empty. */
-+	KUNIT_EXPECT_TRUE(test, timerqueue_del(&head, &b));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_node_queued(&b));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), &a);
-+
-+	/* Deleting a node that is not the first leaves the first alone. */
-+	KUNIT_EXPECT_TRUE(test, timerqueue_del(&head, &c));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), &a);
-+	KUNIT_EXPECT_NULL(test, timerqueue_iterate_next(&a));
-+
-+	KUNIT_EXPECT_FALSE(test, timerqueue_del(&head, &a));
-+	KUNIT_EXPECT_NULL(test, timerqueue_getnext(&head));
-+
-+	/* A deleted node can be queued again. */
-+	KUNIT_EXPECT_TRUE(test, timerqueue_add(&head, &b));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), &b);
-+	KUNIT_EXPECT_FALSE(test, timerqueue_del(&head, &b));
-+}
-+
-+static void timerqueue_equal_expiry_test(struct kunit *test)
-+{
-+	struct timerqueue_head head;
-+	struct timerqueue_node n[3];
++	u64 gen = xxh_prime32;
++	u8 *buf;
 +	int i;
 +
-+	timerqueue_init_head(&head);
-+	for (i = 0; i < ARRAY_SIZE(n); i++) {
-+		timerqueue_init(&n[i]);
-+		n[i].expires = 100;
++	buf = kunit_kmalloc(test, XXH_TEST_LEN, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, buf);
++
++	for (i = 0; i < XXH_TEST_LEN; i++) {
++		buf[i] = gen >> 56;
++		gen *= xxh_prime64;
 +	}
-+
-+	/*
-+	 * Nodes with the same expiry time stay in the order they were added,
-+	 * and only the first one added reports itself as the new first.
-+	 */
-+	KUNIT_EXPECT_TRUE(test, timerqueue_add(&head, &n[0]));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_add(&head, &n[1]));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_add(&head, &n[2]));
-+
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), &n[0]);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_iterate_next(&n[0]), &n[1]);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_iterate_next(&n[1]), &n[2]);
-+
-+	for (i = 0; i < ARRAY_SIZE(n); i++)
-+		timerqueue_del(&head, &n[i]);
-+	KUNIT_EXPECT_NULL(test, timerqueue_getnext(&head));
++	return buf;
 +}
 +
-+/* Check that the queue holds exactly @count nodes, in expiry order. */
-+static void timerqueue_check_order(struct kunit *test,
-+				   struct timerqueue_head *head,
-+				   unsigned int count)
++static void xxh32_case_desc(const struct xxh32_case *t, char *desc)
 +{
-+	struct timerqueue_node *node, *prev = NULL;
-+	unsigned int seen = 0;
-+
-+	for (node = timerqueue_getnext(head); node;
-+	     node = timerqueue_iterate_next(node)) {
-+		if (prev)
-+			KUNIT_EXPECT_LE(test, prev->expires, node->expires);
-+		prev = node;
-+		seen++;
-+	}
-+	KUNIT_EXPECT_EQ(test, seen, count);
++	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "len %u seed %#x",
++		 t->len, t->seed);
 +}
 +
-+static void timerqueue_stress_test(struct kunit *test)
++static void xxh64_case_desc(const struct xxh64_case *t, char *desc)
 +{
-+	struct timerqueue_head head;
-+	struct timerqueue_node *nodes;
-+	struct rnd_state rnd;
-+	unsigned int i, left;
-+
-+	nodes = kunit_kcalloc(test, TQ_STRESS_NODES, sizeof(*nodes), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, nodes);
-+
-+	prandom_seed_state(&rnd, 42);
-+	timerqueue_init_head(&head);
-+
-+	for (i = 0; i < TQ_STRESS_NODES; i++) {
-+		struct timerqueue_node *first = timerqueue_getnext(&head);
-+		bool expect_first;
-+
-+		timerqueue_init(&nodes[i]);
-+		/* A small range, so that some expiry times are equal. */
-+		nodes[i].expires = prandom_u32_state(&rnd) % 64;
-+		expect_first = !first || nodes[i].expires < first->expires;
-+		KUNIT_EXPECT_EQ(test, timerqueue_add(&head, &nodes[i]),
-+				expect_first);
-+	}
-+	timerqueue_check_order(test, &head, TQ_STRESS_NODES);
-+
-+	/* Remove the odd nodes, then drain the queue from the front. */
-+	left = TQ_STRESS_NODES;
-+	for (i = 1; i < TQ_STRESS_NODES; i += 2) {
-+		left--;
-+		KUNIT_EXPECT_EQ(test, timerqueue_del(&head, &nodes[i]),
-+				left != 0);
-+	}
-+	timerqueue_check_order(test, &head, left);
-+
-+	while (left) {
-+		struct timerqueue_node *first = timerqueue_getnext(&head);
-+		struct timerqueue_node *next;
-+
-+		KUNIT_ASSERT_NOT_NULL(test, first);
-+		next = timerqueue_iterate_next(first);
-+		left--;
-+		KUNIT_EXPECT_EQ(test, timerqueue_del(&head, first), left != 0);
-+		KUNIT_EXPECT_PTR_EQ(test, timerqueue_getnext(&head), next);
-+	}
-+	KUNIT_EXPECT_NULL(test, timerqueue_getnext(&head));
++	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "len %u seed %#llx",
++		 t->len, t->seed);
 +}
 +
-+static void timerqueue_linked_test(struct kunit *test)
++KUNIT_ARRAY_PARAM(xxh32, xxh32_cases, xxh32_case_desc);
++KUNIT_ARRAY_PARAM(xxh64, xxh64_cases, xxh64_case_desc);
++
++static void xxh32_test(struct kunit *test)
 +{
-+	struct timerqueue_linked_head head;
-+	struct timerqueue_linked_node a, b, c;
++	const struct xxh32_case *t = test->param_value;
++	u8 *buf = xxh_test_buf(test);
 +
-+	timerqueue_linked_init_head(&head);
-+	timerqueue_linked_init(&a);
-+	timerqueue_linked_init(&b);
-+	timerqueue_linked_init(&c);
-+	a.expires = 20;
-+	b.expires = 10;
-+	c.expires = 30;
-+
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_first(&head));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_linked_node_queued(&a));
-+
-+	KUNIT_EXPECT_TRUE(test, timerqueue_linked_add(&head, &a));
-+	KUNIT_EXPECT_TRUE(test, timerqueue_linked_node_queued(&a));
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_prev(&a));
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_next(&a));
-+
-+	KUNIT_EXPECT_TRUE(test, timerqueue_linked_add(&head, &b));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_linked_add(&head, &c));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_first(&head), &b);
-+
-+	/* The prev/next links follow expiry order in both directions. */
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_prev(&b));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_next(&b), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_prev(&a), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_next(&a), &c);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_prev(&c), &a);
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_next(&c));
-+
-+	/* Deleting from the middle relinks the neighbours. */
-+	KUNIT_EXPECT_TRUE(test, timerqueue_linked_del(&head, &a));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_linked_node_queued(&a));
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_prev(&a));
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_next(&a));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_next(&b), &c);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_prev(&c), &b);
-+
-+	/* Deleting the first node moves the head to the next one. */
-+	KUNIT_EXPECT_TRUE(test, timerqueue_linked_del(&head, &b));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_first(&head), &c);
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_prev(&c));
-+
-+	/* Re-adding a deleted node with a later expiry links it last. */
-+	a.expires = 40;
-+	KUNIT_EXPECT_FALSE(test, timerqueue_linked_add(&head, &a));
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_next(&c), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_prev(&a), &c);
-+
-+	KUNIT_EXPECT_TRUE(test, timerqueue_linked_del(&head, &c));
-+	KUNIT_EXPECT_FALSE(test, timerqueue_linked_del(&head, &a));
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_first(&head));
++	KUNIT_EXPECT_EQ(test, xxh32(buf, t->len, t->seed), t->hash);
 +}
 +
-+static void timerqueue_linked_stress_test(struct kunit *test)
++static void xxh64_test(struct kunit *test)
 +{
-+	struct timerqueue_linked_head head;
-+	struct timerqueue_linked_node *nodes, *node, *prev;
-+	struct rnd_state rnd;
-+	unsigned int i, seen;
++	const struct xxh64_case *t = test->param_value;
++	u8 *buf = xxh_test_buf(test);
 +
-+	nodes = kunit_kcalloc(test, TQ_STRESS_NODES, sizeof(*nodes), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, nodes);
-+
-+	prandom_seed_state(&rnd, 7);
-+	timerqueue_linked_init_head(&head);
-+
-+	for (i = 0; i < TQ_STRESS_NODES; i++) {
-+		struct timerqueue_linked_node *first;
-+		bool expect_first;
-+
-+		first = timerqueue_linked_first(&head);
-+		timerqueue_linked_init(&nodes[i]);
-+		nodes[i].expires = prandom_u32_state(&rnd) % 64;
-+		expect_first = !first || nodes[i].expires < first->expires;
-+		KUNIT_EXPECT_EQ(test, timerqueue_linked_add(&head, &nodes[i]),
-+				expect_first);
-+	}
-+
-+	/* Remove every third node to exercise relinking. */
-+	for (i = 0; i < TQ_STRESS_NODES; i += 3)
-+		timerqueue_linked_del(&head, &nodes[i]);
-+
-+	/* Walk forward checking order and that each prev link points back. */
-+	seen = 0;
-+	prev = NULL;
-+	for (node = timerqueue_linked_first(&head); node;
-+	     node = timerqueue_linked_next(node)) {
-+		KUNIT_EXPECT_PTR_EQ(test, timerqueue_linked_prev(node), prev);
-+		if (prev)
-+			KUNIT_EXPECT_LE(test, prev->expires, node->expires);
-+		prev = node;
-+		seen++;
-+	}
-+	KUNIT_EXPECT_EQ(test, seen, TQ_STRESS_NODES - (TQ_STRESS_NODES + 2) / 3);
-+
-+	for (i = 0; i < TQ_STRESS_NODES; i++)
-+		if (timerqueue_linked_node_queued(&nodes[i]))
-+			timerqueue_linked_del(&head, &nodes[i]);
-+	KUNIT_EXPECT_NULL(test, timerqueue_linked_first(&head));
++	KUNIT_EXPECT_EQ(test, xxh64(buf, t->len, t->seed), t->hash);
 +}
 +
-+static struct kunit_case timerqueue_test_cases[] = {
-+	KUNIT_CASE(timerqueue_empty_test),
-+	KUNIT_CASE(timerqueue_add_del_test),
-+	KUNIT_CASE(timerqueue_equal_expiry_test),
-+	KUNIT_CASE(timerqueue_stress_test),
-+	KUNIT_CASE(timerqueue_linked_test),
-+	KUNIT_CASE(timerqueue_linked_stress_test),
++/*
++ * The streaming interface must give the same result as xxh64() however the
++ * input is split. Try every split into two updates, and one byte at a time.
++ */
++static void xxh64_streaming_test(struct kunit *test)
++{
++	const struct xxh64_case *t = test->param_value;
++	u8 *buf = xxh_test_buf(test);
++	struct xxh64_state state;
++	unsigned int split, i;
++
++	for (split = 0; split <= t->len; split++) {
++		xxh64_reset(&state, t->seed);
++		KUNIT_ASSERT_EQ(test, xxh64_update(&state, buf, split), 0);
++		KUNIT_ASSERT_EQ(test, xxh64_update(&state, buf + split,
++						   t->len - split), 0);
++		KUNIT_EXPECT_EQ_MSG(test, xxh64_digest(&state), t->hash,
++				    "split at %u", split);
++	}
++
++	xxh64_reset(&state, t->seed);
++	for (i = 0; i < t->len; i++)
++		KUNIT_ASSERT_EQ(test, xxh64_update(&state, buf + i, 1), 0);
++	KUNIT_EXPECT_EQ(test, xxh64_digest(&state), t->hash);
++
++	/* xxh64_digest() does not change the state, so it can be repeated. */
++	KUNIT_EXPECT_EQ(test, xxh64_digest(&state), t->hash);
++}
++
++static void xxh64_update_null_test(struct kunit *test)
++{
++	struct xxh64_state state;
++
++	xxh64_reset(&state, 0);
++	KUNIT_EXPECT_EQ(test, xxh64_update(&state, NULL, 0), -EINVAL);
++	/* A rejected update leaves the state as it was. */
++	KUNIT_EXPECT_EQ(test, xxh64_digest(&state), xxh64(NULL, 0, 0));
++}
++
++/* The result does not depend on the alignment of the input. */
++static void xxh_unaligned_test(struct kunit *test)
++{
++	u8 *buf = xxh_test_buf(test);
++	u32 h32 = xxh32(buf, XXH_TEST_LEN, 0);
++	u64 h64 = xxh64(buf, XXH_TEST_LEN, 0);
++	u8 *copy;
++	int off;
++
++	copy = kunit_kmalloc(test, XXH_TEST_LEN + 8, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, copy);
++
++	for (off = 1; off < 8; off++) {
++		struct xxh64_state state;
++
++		memcpy(copy + off, buf, XXH_TEST_LEN);
++		KUNIT_EXPECT_EQ_MSG(test, xxh32(copy + off, XXH_TEST_LEN, 0),
++				    h32, "offset %d", off);
++		KUNIT_EXPECT_EQ_MSG(test, xxh64(copy + off, XXH_TEST_LEN, 0),
++				    h64, "offset %d", off);
++
++		xxh64_reset(&state, 0);
++		xxh64_update(&state, copy + off, 5);
++		xxh64_update(&state, copy + off + 5, XXH_TEST_LEN - 5);
++		KUNIT_EXPECT_EQ_MSG(test, xxh64_digest(&state), h64,
++				    "offset %d", off);
++	}
++}
++
++static struct kunit_case xxhash_test_cases[] = {
++	KUNIT_CASE_PARAM(xxh32_test, xxh32_gen_params),
++	KUNIT_CASE_PARAM(xxh64_test, xxh64_gen_params),
++	KUNIT_CASE_PARAM(xxh64_streaming_test, xxh64_gen_params),
++	KUNIT_CASE(xxh64_update_null_test),
++	KUNIT_CASE(xxh_unaligned_test),
 +	{}
 +};
 +
-+static struct kunit_suite timerqueue_test_suite = {
-+	.name = "timerqueue",
-+	.test_cases = timerqueue_test_cases,
++static struct kunit_suite xxhash_test_suite = {
++	.name = "xxhash",
++	.test_cases = xxhash_test_cases,
 +};
 +
-+kunit_test_suite(timerqueue_test_suite);
++kunit_test_suite(xxhash_test_suite);
 +
-+MODULE_DESCRIPTION("KUnit tests for the timerqueue");
++MODULE_DESCRIPTION("KUnit tests for xxHash");
 +MODULE_LICENSE("GPL");
 
 ---
 base-commit: 05441d697f7f9a927264f4058cbbc6a03dfcac9d
-change-id: 20261106-kunit-timerqueue-20064ac35b2d
+change-id: 20261106-kunit-xxhash-25a4cca743ac
 
 Best regards,
 --  
