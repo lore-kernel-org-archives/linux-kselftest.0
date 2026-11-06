@@ -1,67 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.220
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793961704;
-	b=wP9QgL6SSLFRH+QVjsNdRp/fCJBkirnWnIuhi0L18SWLc4QwZxhmhKRKjt5hcZL+DatQ
-	 vqV5wEiFJ4qS2hw4cEF7Q31Ta1Max3xN6YbkDu9SaXXbMneQhcbKoyKc+qSx3hocZ50ID
-	 ChCjTHkQhgv+VsfugRDpzPoxbQNy+SyrOlf/WZEduQpRgZaiwzdBXm41AKlNpCNeqbTWH
-	 LrPENO48gDIpKihw7AyJbfB27Z1vZ/cOnzO3MxmCnBFXC0gG63SlbLmVayjaqJbE9ThXe
-	 boPOcYuTOWtiGUp1JZrGkE2B77huixrw2i8qU2Fwi3H1VYdeB6G5WpiuflrHnTStWKA==
+	t=1793962015;
+	b=G17DkAcWN6gm7wGzmV52UnLIqrTHWt3LlKzY/c5iU75iQcv8DOanVt+xqxUP8617M/na
+	 zCtkvw1VSqjQ8/QovMRItqz+VHCQn1CCvmpsabkKIctZ+ksXWcyZyTsud350eMi2Q3iMg
+	 8b+CtFv0y2mQBMi7PT+kMviFvLmD1W32UayCZzNGGmVe+m/djAMrEJ9Ad7ZZxQL9yrqyr
+	 +9zeCj7Zfy4L12WW1H8Nzqtz41vRbGaV/ixaSi3CsJoEmn1NImO/fk9TRosZtkZmJB+Rr
+	 rkEF+dIlLzPQqxf1E2FSXMDnxgiN85JocTgfeEtg5exvGI4DzVQ2XEhj+mAkdzRraGg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793961704;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=48kbfMmF1DBLzILk4zDW1A3oIaLkRb6C5LUr4+SlxNY=;
-	b=cVazu0OOd3TjslR2P8BAohirVuwMuJW7U52AyEyvz6A16pMjdPwNAVeuYxncw0qxRTea
-	 rEUQI4HomUycPKXxfpLRF8kW5H1INBtNwn9pt+7Da542GRl6noIxxx+lMizbfwS0nhTwk
-	 FXd/juElVsf4eHRQbfEsgrZ7aB7meHZKo5Ro0qwPbAPeD53jgi2futZCpld/anggT3B2j
-	 B4BhWG9Ju3XviFWEPtNgEo79+mFX5dvhBXxuABpqoltWHeRjLpSfJR6oIIo1INOo/p64m
-	 D/iqUO36t2SOg/qYV/wFM2NgVQQism8rnlxcXNenK9cOjucy7bOKobs6K5Iu3ZY2KWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793962015;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=chII47/1+ntpuddMK/yMlIxPkKF4NybCV4vRHvKCUco=;
+	b=vDk1fOWj72jgh/p11JCxdAxOVbxHCzNk9S486rHHt1S0gNnZ+eoBSUabTZLacwKH3wdh
+	 UyuP8nYQkhYsbxPyqUlgKamdLVuG9UewBI3bMYsWKvdiJmDaSPlMWldEhmKzUmsDe2Dn7
+	 9UJOdxkhMByJ8s4mpgI28kOo5oTZD3Z5Kkk0b46TqoPe7oYWx5sDF/Ocj2IQ+ZP45e9EQ
+	 V5dGYdO6/gdc2ol/7YcZyhKFrWAzTLHCS8i5JkdYHEfGOtf+5LMxQUqzAyOwFCMr0GFFF
+	 9gwyHg+udGI5eKJdD4PRfUEgb9t5dCx5e1lLuLT39Y/zvDB2V9tK9KjVuQWpUOhuSow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HoP8hkVd;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=BqDcONYA;
+	arc=none smtp.remote-ip=113.46.200.220
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FF2606A32D
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 10:41:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67FF2606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34D3606D80C;
+	Fri,  6 Nov 2026 10:46:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D34D3606D80C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HoP8hkVd
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793961702;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=48kbfMmF1DBLzILk4zDW1A3oIaLkRb6C5LUr4+SlxNY=;
-	b=HoP8hkVdMAscFTF76L4nxr5LcmUtuSo93JQbNMkJc4Des1zejCMwXoRoEhL+HnR7b5OIaQ
-	Yu8atS92clAAZRQFIl9dS51SZgEnx4mnEUUrl8wVU6E8Ysnwkxo0UjzYT7a7rddFjL1Swf
-	jew52CSJlBl0RGJVUtwpM2nWKSRuI8s=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-401-VPPX5bDRP_KLO3nismGbdA-1; Fri,
- 06 Nov 2026 05:41:39 -0500
-X-MC-Unique: VPPX5bDRP_KLO3nismGbdA-1
-X-Mimecast-MFC-AGG-ID: VPPX5bDRP_KLO3nismGbdA_1793961697
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4232E1955F3C;
-	Fri,  6 Nov 2026 10:41:36 +0000 (UTC)
-Received: from [100.91.101.41] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5B6BA30000E3;
-	Fri,  6 Nov 2026 10:41:31 +0000 (UTC)
-Message-ID: <588acb18-7a42-4c92-9898-46ee4160e1a2@redhat.com>
-Date: Fri, 6 Nov 2026 11:41:29 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=BqDcONYA
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=chII47/1+ntpuddMK/yMlIxPkKF4NybCV4vRHvKCUco=;
+	b=BqDcONYAZxAgTfJDTYNrFs6jHSYv6zk/Vd9HVV9Gc4jpKk7bHF5wANGASsXqZVJsiqlHE7zfM
+	jkl7XbQ6nTxZpuQ5UxUo8xnTgQeizL5KZOpQI5eiSVryAQzZMBifNqfgeIuUFacPt72iGoSAs/C
+	4bcCsxjE+JkUlaZv6zym+x4=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4jLbTQ6VTTz12Lc0;
+	Fri,  6 Nov 2026 18:46:50 +0800 (CST)
+Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
+	by mail.maildlp.com (Postfix) with ESMTPS id DC11D2011D;
+	Fri,  6 Nov 2026 18:46:48 +0800 (CST)
+Received: from [10.67.120.103] (10.67.120.103) by
+ kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Fri, 6 Nov 2026 18:46:47 +0800
+Message-ID: <191ab0e3-9913-4927-9f84-c861c8f3bcd5@huawei.com>
+Date: Fri, 6 Nov 2026 18:46:46 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,123 +63,56 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 05/14] dpll: dpllsim: Add support to set input
- pin state
-To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Jani Nikula <jani.nikula@intel.com>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
- Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261105151852.1844305-1-poros@redhat.com>
- <20261105151852.1844305-6-poros@redhat.com>
-Content-Language: en-US
-From: Ivan Vecera <ivecera@redhat.com>
-In-Reply-To: <20261105151852.1844305-6-poros@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v5 12/15] KVM: arm64: Derive the VM hardware dirty mode
+ from dirty logging
+To: Leonardo Bras <leo.bras@arm.com>
+CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
+	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
+	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
+	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
+	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
+	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
+	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
+	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
+References: <20260929103655.85107-1-zhengtian10@huawei.com>
+ <20260929103655.85107-13-zhengtian10@huawei.com> <auimPtktqZ1cwk3-@LeoBrasDK>
+From: Tian Zheng <zhengtian10@huawei.com>
+In-Reply-To: <auimPtktqZ1cwk3-@LeoBrasDK>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemr100010.china.huawei.com (7.202.195.125)
 
-On 11/5/26 16:18, Petr Oros wrote:
-> Add support for setting the state of input pins on the device.
-> Implement the state_on_dpll_set callback for input pins and advertise
-> the state-can-change capability for them, so that userspace can move a
-> pin between connected, disconnected and selectable. The driver stores
-> the requested state and reports it back unchanged, it does not act on it
-> yet. Output pins keep reporting their state only.
+
+
+On 11/2/2026 11:03 PM, Leonardo Bras wrote:
+> On Tue, Sep 29, 2026 at 06:36:52PM +0800, Tian Zheng wrote:
+>> Both HAFDBS and HDBSS flip VTCR_EL2.HD at memslot-update time. Two
+>> independent toggles allow an intermediate HDBSS-set/HD-clear state,
+>> an illegal combination, and need locking against concurrent updates.
+>>
+>> Replace both with kvm_arch_update_hw_dirty_mode(), a pure function
+>> of the static capabilities and the number of logging memslots:
+>>
+>>    - logging && HDBSS-capable  -> HD|HA|HDBSS
+>>    - logging, no HDBSS         -> off
+>>    - !logging && HAFDBS-cap.   -> HD|HA
 > 
-> Signed-off-by: Petr Oros <poros@redhat.com>
-> ---
->   drivers/dpll/dpllsim/dpll.c | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
+> This last one is gone now, so I guess most of this patch has to be
+> reworked, right?
 > 
-> diff --git a/drivers/dpll/dpllsim/dpll.c b/drivers/dpll/dpllsim/dpll.c
-> index a1d5921fb8d017..2b0c053a7b6087 100644
-> --- a/drivers/dpll/dpllsim/dpll.c
-> +++ b/drivers/dpll/dpllsim/dpll.c
-> @@ -104,10 +104,23 @@ static int dpllsim_pin_state_get(const struct dpll_pin *pin, void *pin_priv,
->   	return 0;
->   }
->   
-> +static int dpllsim_pin_state_set(const struct dpll_pin *pin, void *pin_priv,
-> +				 const struct dpll_device *dpll,
-> +				 void *dpll_priv, enum dpll_pin_state state,
-> +				 struct netlink_ext_ack *extack)
-> +{
-> +	struct dpllsim_pin *sim_pin = pin_priv;
-> +
-> +	guard(mutex)(&sim_pin->dev->lock);
-> +	sim_pin->state = state;
-> +	return 0;
-> +}
+> Thanks!
+> Leo
 
-Should DPLL_PIN_STATE_CONNECTED be accepted here?
+Hi Leo,
 
-The device always reports automatic mode, which dpllsim_make_group() sets
-and nothing changes:
+Yes, the last one is no longer needed as we discussed earlier in [1], so
+I'll rework this patch.
 
-	sim->mode = DPLL_MODE_AUTOMATIC;
-
-Documentation/driver-api/dpll.rst limits what a user can request in that
-mode:
-
-     In automatic mode (``DPLL_MODE_AUTOMATIC``) the user can request one of
-     following pin states:
-
-     - ``DPLL_PIN_STATE_SELECTABLE`` - the pin shall be considered as valid
-       input for automatic selection algorithm
-     - ``DPLL_PIN_STATE_DISCONNECTED`` - the pin shall be not considered as
-       a valid input for automatic selection algorithm
-
-     Pins that have the ``DPLL_PIN_CAPABILITIES_STATE_CONNECTED_OVERRIDE``
-     capability can additionally be set to ``DPLL_PIN_STATE_CONNECTED`` in
-     automatic mode, overriding the active input selection.
-
-dpll_pin_state_set() in the core only checks state-can-change, so the
-driver has to refuse the state. zl3073x does that for its automatic mode
-in zl3073x_dpll_input_pin_state_on_dpll_set():
-
-	case ZL_DPLL_MODE_REFSEL_MODE_AUTO:
-		if (state == DPLL_PIN_STATE_SELECTABLE) {
-			...
-		} else if (state == DPLL_PIN_STATE_DISCONNECTED) {
-			...
-		} else {
-			goto invalid_state;
-		}
-
-[ ... ]
-> @@ -149,6 +162,12 @@ static void dpllsim_pin_props(struct dpllsim_pin *pin,
->   		prop->freq_supported_num = ARRAY_SIZE(dpllsim_freq_ext);
->   		break;
->   	}
-> +
-> +	/* Capabilities follow the ops the pin is served by */
-> +	if (dpllsim_pin_select_ops(pin) == &dpllsim_input_pin_ops)
-> +		prop->capabilities = DPLL_PIN_CAPABILITIES_STATE_CAN_CHANGE;
-> +	else
-> +		prop->capabilities = 0;
->   }
-The input pins advertise state-can-change only. If connected is meant to
-be settable on this automatic-only device, should
-DPLL_PIN_CAPABILITIES_STATE_CONNECTED_OVERRIDE be advertised here as well?
-
-If not, should dpllsim_pin_state_set() return -EINVAL with an extack
-message for it?
-
-The commit message says "so that userspace can move a pin between
-connected, disconnected and selectable", and the stress test added by the
-next patch, 70a4dcf52b9c ("selftests: dpll: add pin state tests"), relies
-on it. test_pin_state_flooding() cycles through
-
-	local states=(connected disconnected selectable)
-
-and fails when one of the sets is refused.
+[1] https://lore.kernel.org/all/attMtUqxNsuPooix@LeoBrasDK/
 
 Thanks,
-Ivan
-
+Tian
