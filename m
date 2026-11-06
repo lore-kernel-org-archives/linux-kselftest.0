@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793974652;
-	b=wV+kPG4IjvtJMgrjWzJomSDu+A5bQhYfeqqR+sGnWK0hHPzOTGpfq6qS/2g4Cl276pno
-	 dLlOws7qp/zePPAQslLocjxJBjh9KYMJ2UG/lcyes/iM4W8T4xADRWOKTGi4Hn63mnxWL
-	 EV8yQqrUBzJvzyRN8HHOP+evQYYlWGeiUGCKPJRKQfvmLVk+SZ01jPvHEk7UFdGGH1ebB
-	 aoyRAQ5UyM47RH3FjTcA+DpaLj8r1GtCeQMsOxG3jakjNe3Vnd4l99j7EXc3E6JxmjWpu
-	 /Op5trZpVw2bkhHPv2PbGncPyEki4j/Cpwzf5vTBWVWhPvzl08bxDMH1F3ixODfiz4Q==
+	t=1793974681;
+	b=hBN+j8dzPX/mXiGV+xIQ1MIWWnk/VIX7f8SPn1FA/BQdDkZpYrN535S/A/AUvtwfHyop
+	 y9AR0YP28l+rwiKkZN52l54GHUfmzLeZwosJqMRifFeSdzYxY8x91Dz8q1gx+hbwGw/1l
+	 sq5Bxavrq8zxWEYVu5dOSYRbtk0ESwt5Wagxy3LHSysW4wlgzzzjbMy0fph3G5nDsntf+
+	 Yf0B+cakfUIZtJLhNKYDpDoq5o0SDLDq+QfJ3Vgl33XzOBLIg9GiwJier8Rc2/P7ML8kc
+	 FHWh1Fx1rWJ9qLOsfDzcJSaRdEMhZM0LiuvKCDf+eIl7eMvqZrTiknpZgIYUohPPR9w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793974652;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793974681;
 	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
 	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 X-Mailer;
-	bh=C6998j54hMzCksQFziWwL93rZ04Tbfc01l4jxthA7xg=;
-	b=tk1Xpq3i0yMEQR87aQSpYN4KaAiniA0g/6qQ3W4EHqYGKG39l6iLJHDrrX/KgDR4uGyR
-	 YAkAk0RvmGzUu8sNocSGYMcaN79OqwGuaoeAXPNJafeampSiiN8io80GgByR+7Sjoye8I
-	 eO3rWT7n3MIoFcV8j+FVN3uj5NxYp2KNCZ4/vn6p34pHy09CqpPaHO/kJhX7+7/O1gDWw
-	 ZFOk2UOUl1Uurje2r90tYltRuC0nhjCwdE30X3zqjGE+XIocl91tw1LUidlpmqHMFHxHl
-	 c/CYvp8C0P1++iVYdsSdDygH/iw/1aKsPhbN72BAHzW7Kcv32CMRWXWWmG3yo//bZbw==
+	bh=CKIHf3OuOvVhhpjIT2Z7Y0q/g50O7bhUDTdoEBDp0pM=;
+	b=4KJkfQhh1Gkl/VAQAOEEsjzxZTo+vAS403YnZmB7/uHTK/E5kymcRjAV5p9dfH27X1Cy
+	 A5p0fN4l6VRueBnmkJuXjSGLJXLNSuRedS2cQ1KmDdi749RZWAR77eJH5yvDHcau5Ustt
+	 W9Owot3n2wNZjRQhDBApXx4vckzyim4BUJW2vVdinn+IrwK+TXtA0rz83Cm/+poRu4Gxq
+	 X70DSKcC+qq0XoMatrBaoo8ilDUJda8cd3io+M5/30UPWd3c8/EhWByRd+HTMdGr6+QBS
+	 4M1vA0ROc4HyCzsF3T9OAH01p7GdPQM7FDSPOxXDeX7/owGql+i48sFqAldsBlTsIug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkbDgXa9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wk+SZxiM;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5C0606A326;
-	Fri,  6 Nov 2026 14:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4493F606A329;
+	Fri,  6 Nov 2026 14:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dkbDgXa9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A25F51F0089F;
-	Fri,  6 Nov 2026 14:17:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wk+SZxiM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880DA1F0089F;
+	Fri,  6 Nov 2026 14:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793974651;
-	bh=C6998j54hMzCksQFziWwL93rZ04Tbfc01l4jxthA7xg=;
+	s=k20260515; t=1793974680;
+	bh=CKIHf3OuOvVhhpjIT2Z7Y0q/g50O7bhUDTdoEBDp0pM=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=dkbDgXa9u3oj+08Vl8kuBq+lpN1QTdOG+sLOcpaAGzlRd4w5evIO7OWT3Ow38XZN5
-	 j4yVAXCZOuJ2Todjle2ykecaDL9Q1QzvDw3wcQiB6TxYBDULHGEFsOFIj0vZSXdSth
-	 C5AblNYqXlnfe0VXm2AY7wUZ6NBr6wSym04VoSyB3KlzxSjBTeUfXZROojnEkBVlqx
-	 F8ykkf8PnlExPRA2G4uGTUHcgglQDXcoz6uPHBc/znhq+9WH9AM2P05bvWGPvvaWNH
-	 fZnDWd28yZQNBAg83dLkgy7C+iw5pu/mwLtgehBdmDU4aDZyy1owZ6mGJIwuVtdZ4Q
-	 1cqLG39PLKq3Q==
+	b=Wk+SZxiMm5gTpWtlAhHjoOQe/HhgStlQ9toblskRjXi8q7qfd6NHBiNw6XchB2NsU
+	 0wlsp0v2HXwnkk+X5Tw7V1imz/B/XsJwAR2HOyZxWq8MHX8WfX63KY6OVx2WrJDrUg
+	 bJou11opbt4I0rq2CxLnQBFEYk4rTVlVv1Ub0NGpEvsnMkuvTqjlcQF4H94fJaSVIy
+	 BjrAKPAD0Md+/eJJK3i1A/S8qr/EpUFNrUO6kQTqPKTFwx4i6iD6KNBP0xWRotz7Ad
+	 TE+DyscmrEDjGiKUft4vu5tloisCvjpC1tsGPE2K4UyIIYPpmTkOySzCIaBW6K6oGO
+	 ZIfppdults0OA==
 From: David Hildenbrand <david@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>, 
  Sasha Levin <sashal@kernel.org>
@@ -58,8 +58,8 @@ In-Reply-To: <20261105171801.2189772-1-sashal@kernel.org>
 References: <20261105171801.2189772-1-sashal@kernel.org>
 Subject: Re: [PATCH] selftests/mm: add CONFIG_DEBUG_FS to the config
  fragment
-Message-Id: <179397464426.9151.10517393467431591853.b4-ty@b4>
-Date: Fri, 06 Nov 2026 15:17:24 +0100
+Message-Id: <179397467526.9397.17872200045070830000.b4-ty@b4>
+Date: Fri, 06 Nov 2026 15:17:55 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,7 +80,7 @@ On Thu, 05 Nov 2026 12:18:01 -0500, Sasha Levin wrote:
 Applied, thanks!
 
 tree: mm/core.git
-branch: thp-7.5.misc
+branch: core-7.5.misc
 
 Applied patches will appear soon in mm-next, followed by linux-next.
 
@@ -96,7 +96,7 @@ trailer updates or similar. Further, this is not a guarantee that the
 patches will go upstream. If in doubt, please check the listed branch.
 
 [1/1] selftests/mm: add CONFIG_DEBUG_FS to the config fragment
-      https://git.kernel.org/mm/core/c/31ea5515
+      https://git.kernel.org/mm/core/c/194b6319
 
 -- 
 Cheers,
