@@ -1,47 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.98
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793988974;
-	b=ocm+a6dpgf3kdMdcqIyQPuTrusXhfMp6Sp9Mh80gXj5T/Qj++7VK2A5qtfh8pAN6LxxJ
-	 n6iQi+5QV4y23+pumwJ8HSaVSDhnrxnT66HAfd3tt4svInAShSTEs+5pnZBV7Htqczi3k
-	 ZjoGpPDwHYXb9zc3pH1fNThQenEtx3vZR8mS9Fqt0rLV51SLc3doZaGdWJxok8rleHB4h
-	 WXwngXrwq1lnPDdOY3CxeQ+GDx934pzjr/lg4fiip0K5J3PzP0KYettF6iLpl6vA5WsIA
-	 By1tcI4traDf2T1X00JqBpNBKixiK73ChcHdX7y9YeOS8ayOdmNnz8MPf5AfAFIfGlA==
+	t=1793988975;
+	b=q7hDRRLXqNk3z1/Xpxrc+1yV7MF69bd5Yy8XNdovNakX5SnY9T/Ax/1/E0DQU3XeolJu
+	 4pOL6QGO7USCVClfRVbSmhxSvCxnfGUl3dR+JI1u41crMzSMlforZPQx6r3tddj7g2OOD
+	 4R9+8AjIqKrnP/6Tl2Ks5oVYtohrxaQJuwQJV+TUA1PgVcHD6dByFbmsv7QHBQYEUUV61
+	 TMypN89LMI5J/zc3Y4kJIUAp0j2B9tc0Q70C4v4nry3Z3nVeQ0E4yx73f/eF+E1xF7gfE
+	 eNAykLP+5C3Yba/idES2GcZM7QvwCuHOP2R+ifhtO1lb4oYhkkr+tbvXSLkYByFTWaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793988974;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793988975;
 	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=bdqlIDpO1Rbh7tY3234Rn/68H01qvnrPvCer2ASmJqg=;
-	b=VvNhlBOX+9CvIvX8BQtpvdK46eTfH8hDcFe66nTlEsmmDYn9BWXQJ3sNEZ/9H9NSioHp
-	 8MJisezQxmXx+t11mbOIP4tHLa5TT0gQvZ3TxIDQ/9exUH0N0znsQ195aJjYm6muPnYOg
-	 Gc31GJsdkI0vieTYr36VYe6biCQpnSuAdSLWcdnuotllTPa+J25xedw6hPtUapc3UIgpx
-	 oyVcwcBQg6EbVunzFGmi7Eg/GYjPDUfQgH6lqUqo651RL4/QZejF1kcF8hg8kRAZrj+5d
-	 ewq7SB3W+PjN3HNZcezkw51XwN46CKIjMKkvvf3sPdYVTuffczXX9orXFg8i8+UikaA==
+	bh=Z6xIF9DHq6VFbu+5doxEig+9nQ+rB8oTNPXSiectAtI=;
+	b=gvEdBAM458BVNWLZo14Ia5tFxEwl/HXMyMkJLRnB6U07Bdrfv/DIECU3L64eDohgAxBT
+	 bAB4fE5wzOIzRWSMFTfNV/owakylXCn03Uix0qXAXsjCKJeEboKA+7ZAjzFIFRTn9nWoz
+	 eUsA9tbFlKoTGOCspML3ftzmF8EPqEyaS63InCOoKpeCk2jfNYjYmHWnikohuXNMw4do7
+	 icC6+5bnsDvfex9BxANMF9DOwBNQ7fyNW6w9DT1o1DQZRRTnlGLxJ96Etk0I6t6DGys8u
+	 8kkdBqAMvjWxkMjArSYgwqLG7k8q/O7pXwdltESfY6+L83Fi4lSZ1Flt/QE0+cubNwg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.alibaba.com;
 	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=tEKY+hhu;
-	arc=none smtp.remote-ip=115.124.30.113
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=Rfj5wSUY;
+	arc=none smtp.remote-ip=115.124.30.98
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FF9606A326;
-	Fri,  6 Nov 2026 18:16:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81FF9606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F22D606A32C;
+	Fri,  6 Nov 2026 18:16:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F22D606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=tEKY+hhu
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=Rfj5wSUY
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1793988969; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=bdqlIDpO1Rbh7tY3234Rn/68H01qvnrPvCer2ASmJqg=;
-	b=tEKY+hhuPc0tL5xvWZEmqsSFY/2OUfFFDxP90TvT9CZ7QtG9nP8tNmYL4tb+qkLrpmhgn7XMRUcu3vAMZ2v9lMzxwhj2dnuxeTW6kSP4PhIeml6wi31v7NBLcyqRPYOpapkU4S28EhEhwcX2EB0uqtI/PNcRC60SzxENqvGvxMA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---0XECMC01_1793988959;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XECMC01_1793988959 cluster:ay36)
+	t=1793988970; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=Z6xIF9DHq6VFbu+5doxEig+9nQ+rB8oTNPXSiectAtI=;
+	b=Rfj5wSUYS27Pwbkr9EXiQNhmZZwYLt/DPkI+gYy7phy0J+TOMUjnMcjVFfTnaiDhgEIcDKjoPEG8d/4MKGCkKWRFaG2PXIf/BI94GphFZJoPccyNzWw1/ReBZOBdElQ/ZCG7HxWcYCfzpspaVk3eSUvmfcUie4+B4lE49E2tuq4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---0XECMC2K_1793988968;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XECMC2K_1793988968 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Sat, 07 Nov 2026 02:16:07 +0800
+          Sat, 07 Nov 2026 02:16:09 +0800
 From: Chen Pei <cp0613@linux.alibaba.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -71,10 +71,12 @@ Cc: eddyz87@gmail.com,
 	linux-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 bpf-next 0/3] riscv: bpf: Add BPF private stack support
-Date: Sat,  7 Nov 2026 02:15:55 +0800
-Message-ID: <20261106181558.1564-1-cp0613@linux.alibaba.com>
+Subject: [PATCH v3 bpf-next 1/3] riscv: bpf: Add BPF private stack support
+Date: Sat,  7 Nov 2026 02:15:56 +0800
+Message-ID: <20261106181558.1564-2-cp0613@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261106181558.1564-1-cp0613@linux.alibaba.com>
+References: <20261106181558.1564-1-cp0613@linux.alibaba.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,93 +88,283 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series adds private-stack support to the RV64 BPF JIT.
+A program on a private stack keeps its BPF frames in a per-CPU area of
+its own rather than on the kernel stack of whichever context entered it.
+bpf_enable_priv_stack() grants that mode only once the JIT reports
+bpf_jit_supports_private_stack(), which riscv64 did not: programs there
+always ran on the kernel stack, and a struct_ops program that requires
+one was rejected with -EACCES.
 
-The verifier rejects a struct_ops program that requests a private stack
-with -EACCES when the JIT does not report
-bpf_jit_supports_private_stack(), and sched_ext requests one for its
-dispatch callback, so no sched_ext scheduler can load on riscv64 today.
+Allocate a per-CPU area of the verifier calculated depth plus a 16 byte
+guard region at each end, and point BPF_REG_FP (S5) at the top of it
+while leaving SP on the kernel stack. Every BPF stack access already
+goes through S5, and S5 is callee-saved with each subprog deriving its
+own, so nothing else in the JIT has to know about the private stack.
 
-Allocation, the guard value and the lifetime handling follow arm64,
-x86-64 and powerpc64; the 16 byte two-copy guard layout follows arm64
-and powerpc64, since x86-64 uses an 8 byte guard with a single copy.
-What is specific to riscv64 is where the pointers end up:
+The outgoing stack argument area stays in the kernel frame: callers
+write it relative to SP, callees relative to RV_REG_FP, which the
+prologue sets to the caller's SP.
 
- - Every BPF stack access goes through BPF_REG_FP (S5), so pointing S5
-   at the top of the per-CPU area and leaving SP on the kernel stack is
-   all the JIT has to do. S5 is callee-saved and each subprog derives
-   its own, so bpf2bpf calls need no extra save and restore.
- - The outgoing stack argument area stays in the kernel frame: callers
-   write it relative to SP while callees read it relative to RV_REG_FP.
-   Unlike x86-64, no register here is shared with the private-stack
-   frame pointer, so no verifier-side exclusion is needed and stack
-   arguments keep working together with a private stack. arm64 already
-   does the same, and patch 3 tests that combination.
- - The per-CPU lookup is emitted after the tail call entry point. A
-   program using a private stack can still be entered as a tail call
-   target, at RV_TAILCALL_OFFSET, so it has to set up its own S5 there;
-   and since that offset is a constant added to the target's bpf_func,
-   everything in front of it must be the same size in every program.
+The per-CPU lookup is emitted after the tail call entry point: a program
+using a private stack can still be entered as a tail call target, and
+RV_TAILCALL_OFFSET is a constant added to the target's bpf_func, so what
+is in front of it must be the same size in every program.
 
-The base address is materialized with absolute moves, as on arm64,
-x86-64 and powerpc64, which reach the per-CPU offset through gs:, TPIDR
-or r13; riscv64 has no such register, so the address of __per_cpu_offset
-is loaded too. Patch 1 has the detail, including why emit_imm() is a
-choice there and why the prologue length stays fixed across passes.
+The base is materialized with absolute moves, as on arm64, x86-64 and
+powerpc64: the vmalloc'd per-CPU area is beyond an auipc pair from the
+JIT region, and riscv64 has no register holding the per-CPU offset, so
+the address of __per_cpu_offset is loaded too. emit_imm() is a choice
+there, not a requirement; emit_addr() as used by
+insn_is_mov_percpu_addr() would need an extra_pass argument and an error
+return in bpf_jit_build_prologue(), touching bpf_jit_comp32.c too. Both
+constants are fixed before the offset convergence loop, so the prologue
+length is stable across passes.
 
-RV32 does not declare support and keeps the existing behaviour; the
-prologue signature is unchanged, so bpf_jit_comp32.c needs no edit.
+The guard value follows arm64, x86-64 and powerpc64, and the 16 byte
+two-copy region at each end follows arm64 and powerpc64, since x86-64
+uses an 8 byte guard with a single copy. A jited program has them
+checked when it is freed, reporting the first corrupted CPU only;
+failure paths release the area unchecked since the image never ran,
+which also clears priv_stack_ptr for the later bpf_jit_free().
 
-Changes since v2:
- - Patch 1: PRIV_STACK_GUARD_VAL moved to bpf_jit.h.
- - Patch 3: The test redone as two asm programs in
-   progs/verifier_stack_arg.c.
+RV32 does not declare support and keeps the existing kernel stack
+behaviour.
 
-Changes since v1:
- - Patch 1 commit message: guard layout credited to arm64 and powerpc64,
-   value alone to x86-64; __per_cpu_offset described as a choice.
- - Patch 3: test_private_stack_runtime() renamed to
-   serial_test_private_stack_runtime(), and the stack argument skip
-   prints a reason.
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit.h        |  2 +
+ arch/riscv/net/bpf_jit_comp64.c | 42 +++++++++++++++--
+ arch/riscv/net/bpf_jit_core.c   | 82 +++++++++++++++++++++++++++++----
+ 3 files changed, 114 insertions(+), 12 deletions(-)
 
-Testing
-=======
-QEMU virt rv64, an 8 vCPU SMP kernel and a 1 vCPU UP kernel, both built
-on the base commit below, source tree clean at the head of this series,
-selftests built from these patches. There are no private-stack related
-failures, and the private-stack suites logged no BUG, WARNING, unknown
-opcode or guard corruption. On UP, kfunc_call/subprog,
-kfunc_call/subprog_lskel and scx_simple are not run: all three fail on
-the unpatched base as well.
-
- - verifier_private_stack, struct_ops_private_stack.
- - tailcalls, stack_arg, subprogs, fentry_fexit, kfunc_call,
-   percpu_alloc, async_stack_depth, arena_atomics, arena_ldsx.
- - verifier_stack_arg, stack_arg_precision.
- - may_goto_priv_stack, may_goto_far, verifier_may_goto_1,
-   verifier_may_goto_2.
- - scx_simple.
- - sched_ext runner sweep on SMP: 40 cases, 39 pass. enable_cmask fails
-   because its ops.enable() takes a struct scx_cmask __arena pointer and
-   riscv64 does not implement bpf_jit_supports_arena_args().
- - patch 3's test again on x86-64 and arm64, so all three
-   architectures it is gated on have run it.
-
-Chen Pei (3):
-  riscv: bpf: Add BPF private stack support
-  selftests/bpf: Enable private stack tests for riscv64
-  selftests/bpf: Test a private stack together with stack arguments
-
- arch/riscv/net/bpf_jit.h                      |  2 +
- arch/riscv/net/bpf_jit_comp64.c               | 42 +++++++++-
- arch/riscv/net/bpf_jit_core.c                 | 82 +++++++++++++++++--
- .../bpf/prog_tests/struct_ops_private_stack.c |  3 +-
- .../bpf/progs/verifier_private_stack.c        | 41 +++++++++-
- .../selftests/bpf/progs/verifier_stack_arg.c  | 49 +++++++++++
- 6 files changed, 205 insertions(+), 14 deletions(-)
-
-
-base-commit: a3c8813409f13779fec225468aba7d4067a66468
+diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+index 21a190a6a6d9..dbe1ac8cd0de 100644
+--- a/arch/riscv/net/bpf_jit.h
++++ b/arch/riscv/net/bpf_jit.h
+@@ -14,6 +14,8 @@
+ 
+ #define RV_MAX_REG_ARGS		8
+ #define RV_EXTRA_STK_ARGS	(RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS)
++#define PRIV_STACK_GUARD_SZ	16
++#define PRIV_STACK_GUARD_VAL	0xEB9F12345678eb9fULL
+ 
+ /* verify runtime detection extension status */
+ #define rv_ext_enabled(ext) \
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 371405598faa..a7a7d2f9da85 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -2134,12 +2134,34 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	return 0;
+ }
+ 
++static void emit_priv_stack_frame(struct rv_jit_context *ctx)
++{
++	u64 fp = (__force u64)ctx->prog->aux->priv_stack_ptr + PRIV_STACK_GUARD_SZ;
++
++	fp += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
++	emit_imm(RV_REG_S5, fp, ctx);
++#ifdef CONFIG_SMP
++	emit_lw(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP, ctx);
++	emit_imm(RV_REG_T2, (u64)__per_cpu_offset, ctx);
++	emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
++	emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
++	emit_add(RV_REG_S5, RV_REG_S5, RV_REG_T1, ctx);
++#endif
++}
++
+ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+ {
++	bool priv_stack = ctx->prog->aux->priv_stack_ptr;
+ 	int i, stack_adjust = 0, store_offset, bpf_stack_adjust = ctx->stack_arg_sz;
+ 
+-	bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
+-	if (bpf_stack_adjust)
++	/*
++	 * With a private stack only the outgoing stack argument area is left in
++	 * this frame. It has to stay: the caller writes it relative to SP while
++	 * the callee reads it relative to RV_REG_FP, the caller's SP set below.
++	 */
++	if (!priv_stack)
++		bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
++	if (bpf_stack_adjust || priv_stack)
+ 		mark_fp(ctx);
+ 
+ 	if (seen_reg(RV_REG_RA, ctx))
+@@ -2217,7 +2239,16 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+ 
+ 	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+ 
+-	if (bpf_stack_adjust)
++	/*
++	 * Point BPF_REG_FP at the top of this CPU's private stack. A program
++	 * with one can still be entered as a tail call target, at
++	 * RV_TAILCALL_OFFSET, so this has to come after that entry point; the
++	 * offset is a constant added to the target's bpf_func, so everything in
++	 * front of it must also be the same size in every program.
++	 */
++	if (priv_stack)
++		emit_priv_stack_frame(ctx);
++	else if (bpf_stack_adjust)
+ 		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+ 
+ 	ctx->stack_size = stack_adjust;
+@@ -2320,3 +2351,8 @@ bool bpf_jit_supports_hmul(void)
+ {
+ 	return true;
+ }
++
++bool bpf_jit_supports_private_stack(void)
++{
++	return true;
++}
+diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+index f2497ec7d378..138e9fa90963 100644
+--- a/arch/riscv/net/bpf_jit_core.c
++++ b/arch/riscv/net/bpf_jit_core.c
+@@ -9,6 +9,7 @@
+ #include <linux/bpf.h>
+ #include <linux/filter.h>
+ #include <linux/memory.h>
++#include <linux/percpu.h>
+ #include <asm/text-patching.h>
+ #include <asm/cfi.h>
+ #include "bpf_jit.h"
+@@ -44,6 +45,60 @@ bool bpf_jit_needs_zext(void)
+ 	return true;
+ }
+ 
++static u32 priv_stack_size(struct bpf_prog *prog)
++{
++	return round_up(prog->aux->stack_depth, STACK_ALIGN) +
++	       2 * PRIV_STACK_GUARD_SZ;
++}
++
++static int alloc_priv_stack(struct bpf_prog *prog)
++{
++	u32 size = priv_stack_size(prog);
++	u32 end = (size - PRIV_STACK_GUARD_SZ) / sizeof(u64);
++	void __percpu *ptr;
++	int cpu, i;
++
++	ptr = __alloc_percpu_gfp(size, STACK_ALIGN, GFP_KERNEL);
++	if (!ptr)
++		return -ENOMEM;
++
++	for_each_possible_cpu(cpu) {
++		u64 *stack = per_cpu_ptr(ptr, cpu);
++
++		for (i = 0; i < PRIV_STACK_GUARD_SZ / sizeof(u64); i++) {
++			stack[i] = PRIV_STACK_GUARD_VAL;
++			stack[end + i] = PRIV_STACK_GUARD_VAL;
++		}
++	}
++	prog->aux->priv_stack_ptr = ptr;
++	return 0;
++}
++
++static void priv_stack_check_guard(struct bpf_prog *prog)
++{
++	u32 end = (priv_stack_size(prog) - PRIV_STACK_GUARD_SZ) / sizeof(u64);
++	int cpu;
++
++	for_each_possible_cpu(cpu) {
++		u64 *stack = per_cpu_ptr(prog->aux->priv_stack_ptr, cpu);
++
++		if (stack[0] != PRIV_STACK_GUARD_VAL ||
++		    stack[1] != PRIV_STACK_GUARD_VAL ||
++		    stack[end] != PRIV_STACK_GUARD_VAL ||
++		    stack[end + 1] != PRIV_STACK_GUARD_VAL) {
++			pr_err("bpf-jit: private stack overflow/underflow guard of prog %s corrupted on CPU %d\n",
++			       bpf_jit_get_prog_name(prog), cpu);
++			return;
++		}
++	}
++}
++
++static void free_priv_stack(struct bpf_prog *prog)
++{
++	free_percpu(prog->aux->priv_stack_ptr);
++	prog->aux->priv_stack_ptr = NULL;
++}
++
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
+ {
+ 	unsigned int prog_size = 0, extable_size = 0;
+@@ -84,12 +139,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 			    round_up((stack_arg_cnt - RV_EXTRA_STK_ARGS) * 8, STACK_ALIGN) : 0;
+ 
+ 	ctx->prog = prog;
++	if (prog->aux->jits_use_priv_stack && alloc_priv_stack(prog))
++		goto out_free_hdr;
++
+ 	ctx->offset = kvzalloc_objs(int, prog->len);
+ 	if (!ctx->offset)
+-		goto out_offset;
++		goto out_free_hdr;
+ 
+ 	if (build_body(ctx, extra_pass, NULL))
+-		goto out_offset;
++		goto out_free_hdr;
+ 
+ 	for (i = 0; i < prog->len; i++) {
+ 		prev_ninsns += 32;
+@@ -104,7 +162,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 		ctx->prologue_len = ctx->ninsns;
+ 
+ 		if (build_body(ctx, extra_pass, ctx->offset))
+-			goto out_offset;
++			goto out_free_hdr;
+ 
+ 		ctx->epilogue_offset = ctx->ninsns;
+ 		bpf_jit_build_epilogue(ctx);
+@@ -124,7 +182,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 							  bpf_fill_ill_insns,
+ 							  bpf_prog_was_classic(prog));
+ 			if (!jit_data->ro_header)
+-				goto out_offset;
++				goto out_free_hdr;
+ 
+ 			/*
+ 			 * Use the image(RW) for writing the JITed instructions. But also save
+@@ -190,10 +248,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 			ctx->offset[i] = ctx->offset[i - 1];
+ 		ctx->offset[0] = ninsns_rvoff(ctx->prologue_len);
+ 		bpf_prog_update_insn_ptrs(prog, ctx->offset, jit_data->ro_image);
+-out_offset:
+-		kvfree(ctx->offset);
+-		kfree(jit_data);
+-		prog->aux->jit_data = NULL;
++		goto out_free_ctx;
+ 	}
+ 
+ 	return prog;
+@@ -209,7 +264,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 				   sizeof(jit_data->header->size));
+ 		bpf_jit_binary_pack_free(jit_data->ro_header, jit_data->header);
+ 	}
+-	goto out_offset;
++	free_priv_stack(prog);
++out_free_ctx:
++	kvfree(ctx->offset);
++	kfree(jit_data);
++	prog->aux->jit_data = NULL;
++	return prog;
+ }
+ 
+ u64 bpf_jit_alloc_exec_limit(void)
+@@ -261,6 +321,10 @@ void bpf_jit_free(struct bpf_prog *prog)
+ 		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
+ 		hdr = bpf_jit_binary_pack_hdr(prog);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
++		if (prog->aux->priv_stack_ptr) {
++			priv_stack_check_guard(prog);
++			free_priv_stack(prog);
++		}
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
+ 	}
+ 
 -- 
 2.50.1
 
