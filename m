@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793996417;
-	b=oaUwmo+czsA7xkkf5u21ki5Geap80aQX46m/obhSdBfSgjnWj6A0CS1kKNi6+QfZDqNb
-	 96iXm7nc2fQ4muPAPCSF4rL2aquRiciac9nKZS33b2OVQfEzIWxRowAU8Gpllq5xhsL61
-	 gTtZcZlPd3mNpmXD8fT2vjHgzvMI7/RNZ5ylemJ06cJm13EDmh0b8EM8V7uGuLsNMvCah
-	 skzeDvsKND45pdreJhjyfa2ylTVNI2GziCs6udQjqGUMY4hRWXDeO2aRCg0QFG8uBHM12
-	 2blaVfm0cmBEL6adJQg0SLC+peele2EXGoHZm7/CWRQSC6PM9Lpx7y/8ZHK3rjxkTjQ==
+	t=1793996414;
+	b=uTo7nHrZCkuthNT8qKnqdlnIiLRMrcZqjURC7iW51KGd/t5Q3xsCVZKApMcSTMtsD2OQ
+	 9/scKxWomn5WJrV/MNkmPtMpA51y4vhdPjvbWAgXts2KBvfQ+liQeHvwx9HzXii4c4PQm
+	 v52vPZt9Gssf9rJslJ3ekkHyh1ewYa1sAlEF6xjIqU9tsJ4+rF6mILS1oP5VFIbRE50XC
+	 X/BuZ0iggvlRXQDR00yUe/6IDt7wpt7zYIpCmNQ9C2OWLhTaxiT72myFee8uRb/UeO6/k
+	 U6lewG6sp3i4F1+cBPG7JfCssgt3lIJhHGTwsMHQVdttj1STFnoaJVRrM2k6op/gPUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793996417;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793996414;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=O/OfCfxyOncz9XMEK2pGYU9OBecubSevjBgc45WNx7E=;
-	b=1W7GTo6ntOhj1V+j9rBzmZyvaMOAG6dNPkmbBhU8phYpa0aG47oojQLxGr4TQrbcwCBh
-	 jnnvZ2T7Ext+rtaDum6mHdHSUskE0Y40oQ/bDY0vWgqHIK9Gpxnde5RucQZZGcvtHi/HE
-	 FeeP/ZjbQLXAZLGmkiX6IHotuXahNStajHM5QUb2IxC2dFDSSiuszVtQDzio0IuNG+40C
-	 8uXqekhyV0wXjmyJW2bOzczq0K1tuSRdlRJNePbfyx0BOM/l4pfzrGaAjiNPj4gXCaQBp
-	 YdmKRFAInZGdFwZFSx8VUlb1tgFSBdLYtIxY9M/uIK8HySjiWsfTtRHoKaOTM53ibZw==
+	bh=v1K3WFaaxXIY1YG+wT7d7rSFJH79cYXrlV1wWh3xm5M=;
+	b=vNt2aAb8f7TXJJoGBslAi7YNDBSfyMTrWFRpmr1VVp1iIFMcITabp5MmdCmRcV6VrV0K
+	 KsLPSxP5CVedjn4s30c4w17Cb/w1BG5etYnTOm8BUjrBE0Nz/RI0SqTTitilxHfsak3Dr
+	 eklYt4tABmPTwJKMStuG6Q7wWXWFAOM72a9V2tftntGKv1ntROEeU2ld5L/8OYW5LWzBz
+	 hH6s28n08E6OeYbw28a8XwfasD5QeWTtYgAsMJ8DYfI2bkMi6ebYIl3b0kvFjfROsLWGc
+	 AdzJN11LGgdjdJtYEfuikjn1PGLK+zy6to3rloPoOGY3K+ZR/f/sGTOiPpMOgdauDDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gfxJNW0v;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=feZwjoGg;
 	arc=none smtp.remote-ip=209.85.216.69
 Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CE5606D803
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 20:20:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28CE5606D803
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3449C606A32E
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 20:20:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3449C606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gfxJNW0v
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3adeba76cadso694531a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 12:20:11 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=feZwjoGg
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3ac8f449d1bso989765a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 12:20:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793996411; x=1794601211; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1793996413; x=1794601213; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=O/OfCfxyOncz9XMEK2pGYU9OBecubSevjBgc45WNx7E=;
-        b=gfxJNW0vIjmakOTuAft0d+gexf80yfCemvo5kBz07zS27cJGPQ6DmIq5DK5V0u40M/
-         +h4MRXFbXJnFCQkz6YR38jM6/ZB5ER6ldnqk17Afpc8l0aWE/fBRYfy1/MoVN8Sn/mov
-         dAcEcVXIZzKvtMByEcwRPn+vuG1kMQMeYBQU/mBVABDiOhZ4/Ds6aDwMPuMkewrDwVM0
-         W2NFqPYmROie7linjJcuoCISbII++EqjPsKrZ1MH4ASZefP5raDb42KVMBm0+oTklY3E
-         ni9XOTr3vlCM8eUMzEEb+iisiNxJmvCZWv/AfDfgHw3e2k85JM/YLJ26A7GEa0dC7pDZ
-         MQtg==
+        bh=v1K3WFaaxXIY1YG+wT7d7rSFJH79cYXrlV1wWh3xm5M=;
+        b=feZwjoGgZvGjnvAisqizVGEX7FwYxeX/flqBPhC1rp6tU5CK/e1YOUcxdojAZ9VjW0
+         WdZlIaJ7E3hwE7nXWH5vVRjyGHUT4DRSHpAU7tBVB2qSoFeghnKkJz9VFsWBfEPGtBRv
+         uwVNYhhDt0a60x4KP+5VsWVAKxdYTXuYlfoXdQ3vix84NjZ+RwFJWJmId2AD3VtroGW0
+         uYdusyoUuEh1VwXyS/06VhXTaOWps2U7VktiU3QDi3cblL5JWS6nT07QMe4pLXxgCwLJ
+         2/AbYTL8qvubkbvKZjFJzGFluu2LadCh7pdbG4iIZWmvLMnoN4Ify38svTa4fJsLHacD
+         ykRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793996411; x=1794601211;
+        d=1e100.net; s=20260707; t=1793996413; x=1794601213;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=O/OfCfxyOncz9XMEK2pGYU9OBecubSevjBgc45WNx7E=;
-        b=Sy0y5gMnBfGL+zBOGAMLvMrVgO8WjNix5EKKYuoYNj0P5azIHEn6AtiACizhonJIcE
-         tokB0M1tUm0tZNf0NIblhXndAjxy+fu/nR86Kx/vGNWV4j80NphE2aKec70Og6bml75i
-         tM6/T4H/5cTFsYkULBjmKccvbwS8f+/106zDF6iA5OIjBpazm67Y5YPwvUnL0ndcbVN7
-         i+twiMWWjoAKE0SXao2FyurnhXxaXc8ZcySRHYBczi2NEUzWPLXzOHPhQwzxHoQLwb7B
-         0qRvrCu6rhWBaZ8p2MJgmO0z5rQV0Vi6LwREenUesMrsbQPFYP9YCo85jkGXSLoLr0+e
-         VtVA==
-X-Forwarded-Encrypted: i=1; AL+hErHwkP1IHjb/Irxss1xXpjU1p7N2uqgcyoNOEtfPGxmkY35i7atxWb7GqaXsmCa9jCEDAYmw7Udc9OdWaSJcx3k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qSupHwT0/7hHKD1M+/1uCD5uX7dMnxT485OgVMCh2iwbRBJuA
-	58sFvKp3mEYZfrG8kbuP+A0NH7XSNJTiyXuLVQQk79yYQyp+g8h37T2Jwu9Kehz+21ezBa92j78
-	TZr6PLRJ2qYZOfxKOWQ==
-X-Received: from pjbcx2.prod.google.com ([2002:a17:90a:fd82:b0:3ac:c43b:e307])
+        bh=v1K3WFaaxXIY1YG+wT7d7rSFJH79cYXrlV1wWh3xm5M=;
+        b=nzbu3+1yxbiXZXU0pdgqfeWOzFOIJ217mAJgskrlT1VGxQN03jAV+2HjRNqjgaVCNh
+         AmqIS0Kgsf8zi79SQpdf3uCEJKmew0vCiXBYr5enpJ9MH8BmGcS1vYHzTcxvlpesecG0
+         5yOLA3VMUvMWBC0GXlxsCKudu4tgAnSIJ8uz/Cbg/eSBw8V7h43ek/G6K3f6jPfsOpCg
+         ftc4ubYJBhuH/1A6fR+ujPXuyk58YsD01VhT3xPILQRhgrxCh8AHglQhTfhb4E5IE+T6
+         sqBH2G7JKtowEulFGDsX717y717SNFpjmRz3qrK6VxUSPUqhzGYyfcua0QHA5StBhTNN
+         gjag==
+X-Forwarded-Encrypted: i=1; AL+hErF0ZKz6W49vNL5eiopzPA76ayIG4uLambcEzR80f29lW94i4rblnoNTIfAx53CKUV8F0aN5IejdP++vGXvXFoY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+O6fMu7cleFwr2BabvWF7UGZKBwKMvPUIB+DmmuxQXsI37HB8D
+	foDOkbPomeiOFl3NPsiyCMM6ArPwHaoZybi4FUWEzZBfPYYz6whngk9C0UYF/jevtscZ/48t/Gu
+	joClODnkGtGPxd0r4cQ==
+X-Received: from pjqt7.prod.google.com ([2002:a17:90a:ae07:b0:3ae:7abe:56ae])
  (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:4f4c:b0:3a4:acde:1e3b with SMTP id 98e67ed59e1d1-3b0db6d42b7mr3688936a91.13.1793996411133;
- Fri, 06 Nov 2026 12:20:11 -0800 (PST)
-Date: Fri, 06 Nov 2026 20:19:48 +0000
+ 2002:a17:90b:4fd0:b0:3a4:945e:bc33 with SMTP id 98e67ed59e1d1-3b0db705ccbmr3457348a91.47.1793996412941;
+ Fri, 06 Nov 2026 12:20:12 -0800 (PST)
+Date: Fri, 06 Nov 2026 20:19:49 +0000
 In-Reply-To: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
 X-Mailer: b4 0.14.3
-Message-ID: <20261106-lskel-struct-ops-v1-1-a4486ffc79cb@google.com>
-Subject: [PATCH RFC bpf-next 1/7] bpf: Add bpf_btf_get_struct_member_info() helper
+Message-ID: <20261106-lskel-struct-ops-v1-2-a4486ffc79cb@google.com>
+Subject: [PATCH RFC bpf-next 2/7] libbpf: Implement bpf_gen__init_kern_struct_ops()
+ for light skeletons
 From: Siddharth Nayyar <sidnayyar@google.com>
 To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -97,201 +98,363 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Maxime Ripard <mripard@kernel.org>, Siddharth Nayyar <sidnayyar@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Add a new BPF helper bpf_btf_get_struct_member_info() for
-BPF_PROG_TYPE_SYSCALL programs to query struct member offset and index
-(or the struct size when the member name is NULL) from vmlinux or
-module BTF.
+Add bpf_gen__init_kern_struct_ops() in gen_loader.c and wire it up in
+bpf_object__init_kern_struct_ops_maps() when generating a light
+skeleton.
 
-Given a struct's BTF type ID and an optional BTF object FD (0 for
-vmlinux BTF), the helper returns a 64-bit value with the member's byte
-offset in the lower 32 bits and the member's index in the upper 32 bits
-when a member name is provided, or the byte size of the struct when the
-member name is NULL.
-
-This helper will be used by BPF light skeletons (gen_loader) to
-initialize struct_ops maps and programs against kernel and module BTF
-at load time.
+At runtime, the generated loader program:
+1. Resolves the BTF ID and module BTF FD of the wrapper struct
+   bpf_struct_ops_<tname> via bpf_btf_find_by_name_kind().
+2. Queries the wrapper struct's size and "data" member offset using
+   bpf_btf_get_struct_member_info().
+3. Resolves the BTF ID and module BTF FD of the target interface struct
+   <tname> for program attach_btf_id resolution.
+4. Allocates a 4 KB kern_vdata buffer in the loader data blob and
+   populates non-zero scalar/array fields and per-program member offsets
+   and attach indices.
 
 Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 ---
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       | 13 ++++++++
- kernel/bpf/btf.c               | 73 ++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/syscall.c           |  2 ++
- tools/include/uapi/linux/bpf.h | 13 ++++++++
- 5 files changed, 102 insertions(+)
+ tools/lib/bpf/bpf_gen_internal.h |   4 +
+ tools/lib/bpf/gen_loader.c       | 197 +++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c           |  43 ++++-----
+ tools/lib/bpf/libbpf_internal.h  |  24 +++++
+ 4 files changed, 245 insertions(+), 23 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b011acc22c50..ab4d995b529c 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -4206,6 +4206,7 @@ extern const struct bpf_func_proto bpf_task_storage_delete_recur_proto;
- extern const struct bpf_func_proto bpf_task_storage_delete_proto;
- extern const struct bpf_func_proto bpf_for_each_map_elem_proto;
- extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
-+extern const struct bpf_func_proto bpf_btf_get_struct_member_info_proto;
- extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
- extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
- extern const struct bpf_func_proto bpf_sk_setsockopt_nodelay_proto;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 62de0919db72..3a630411b920 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6065,6 +6065,18 @@ union bpf_attr {
-  *		0 on success.
-  *
-  *		**-ENOENT** if the bpf_local_storage cannot be found.
-+ *
-+ * long bpf_btf_get_struct_member_info(u32 btf_id, int btf_obj_fd, const char *name, int name_sz)
-+ *	Description
-+ *		Find a struct member with given *name* in the struct type identified
-+ *		by *btf_id* in the BTF object referenced by *btf_obj_fd* (or in
-+ *		vmlinux BTF if *btf_obj_fd* is 0). If *name* is **NULL** (and
-+ *		*name_sz* is 0), return the size of the struct instead.
-+ *	Return
-+ *		Returns the member's byte offset in the lower 32 bits and the
-+ *		member's index in the upper 32 bits when *name* is non-**NULL**,
-+ *		or the byte size of the struct when *name* is **NULL**. On error, a
-+ *		negative error code is returned.
-  */
- #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
- 	FN(unspec, 0, ##ctx)				\
-@@ -6279,6 +6291,7 @@ union bpf_attr {
- 	FN(user_ringbuf_drain, 209, ##ctx)		\
- 	FN(cgrp_storage_get, 210, ##ctx)		\
- 	FN(cgrp_storage_delete, 211, ##ctx)		\
-+	FN(btf_get_struct_member_info, 212, ##ctx)	\
- 	/* This helper list is effectively frozen. If you are trying to	\
- 	 * add a new helper, you should add a kfunc instead which has	\
- 	 * less stability guarantees. See Documentation/bpf/kfuncs.rst	\
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 228b93d4f8c9..8d9188dda34e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -9682,6 +9682,79 @@ const struct bpf_func_proto bpf_btf_find_by_name_kind_proto = {
- 	.arg4_type	= ARG_ANYTHING,
- };
+diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
+index 206adf28793d..b424410e8839 100644
+--- a/tools/lib/bpf/bpf_gen_internal.h
++++ b/tools/lib/bpf/bpf_gen_internal.h
+@@ -84,5 +84,9 @@ void bpf_gen__record_extern(struct bpf_gen *gen, const char *name, bool is_weak,
+ 			    bool is_typeless, bool is_ld64, int kind, int insn_idx);
+ void bpf_gen__record_relo_core(struct bpf_gen *gen, const struct bpf_core_relo *core_relo);
+ void bpf_gen__populate_outer_map(struct bpf_gen *gen, int outer_map_idx, int key, int inner_map_idx);
++void bpf_gen__init_kern_struct_ops(struct bpf_gen *gen, struct btf *btf,
++				   struct bpf_struct_ops *st_ops,
++				   __u32 *vtype_id_off,
++				   unsigned int *val_sz_off);
  
-+BPF_CALL_4(bpf_btf_get_struct_member_info, u32, btf_id, int, btf_obj_fd,
-+	   const char *, name, int, name_sz)
+ #endif
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 555d4757a898..09713c39f71e 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -14,11 +14,14 @@
+ #include "hashmap.h"
+ #include "bpf_gen_internal.h"
+ #include "skel_internal.h"
++#include "relo_core.h"
+ 
+ #define MAX_USED_MAPS	64
+ #define MAX_USED_PROGS	32
+ #define MAX_KFUNC_DESCS 256
+ #define MAX_FD_ARRAY_SZ (MAX_USED_MAPS + MAX_KFUNC_DESCS)
++#define STRUCT_OPS_VALUE_PREFIX "bpf_struct_ops_"
++#define KERN_VDATA_MAX_SIZE 4096
+ 
+ /* The following structure describes the stack layout of the loader program.
+  * In addition R6 contains the pointer to context.
+@@ -1338,3 +1341,197 @@ void bpf_gen__map_freeze(struct bpf_gen *gen, int map_idx)
+ 	debug_ret(gen, "map_freeze");
+ 	emit_check_err(gen);
+ }
++
++/* Expects:
++ * BPF_REG_8 - (btf_obj_fd << 32) | btf_id
++ *
++ * Overwrites BPF_REG_{0, 1, 2, 3, 4, 7}
++ * Returns result in BPF_REG_7
++ */
++static void emit_bpf_get_struct_member_info(struct bpf_gen *gen, const char *mname)
 +{
-+	const struct btf_member *member;
-+	const struct btf_type *t;
-+	struct btf *btf;
-+	long ret = -EINVAL;
-+	u32 i;
++	emit(gen, BPF_MOV32_REG(BPF_REG_1, BPF_REG_8));
++	emit(gen, BPF_MOV64_REG(BPF_REG_2, BPF_REG_8));
++	emit(gen, BPF_ALU64_IMM(BPF_RSH, BPF_REG_2, 32));
++	if (mname) {
++		int mname_len = strlen(mname) + 1;
++		int mname_off = add_data(gen, mname, mname_len);
 +
-+	if (!name) {
-+		if (name_sz)
-+			return -EINVAL;
-+	} else if (name_sz <= 1 || !*name || name[name_sz - 1]) {
-+		return -EINVAL;
-+	}
-+
-+	if (btf_obj_fd) {
-+		btf = btf_get_by_fd(btf_obj_fd);
-+		if (IS_ERR(btf))
-+			return PTR_ERR(btf);
++		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_3, BPF_PSEUDO_MAP_IDX_VALUE,
++						 0, 0, 0, mname_off));
++		emit(gen, BPF_MOV64_IMM(BPF_REG_4, mname_len));
 +	} else {
-+		btf = bpf_get_btf_vmlinux();
-+		if (IS_ERR(btf))
-+			return PTR_ERR(btf);
-+		if (!btf)
-+			return -EINVAL;
-+		btf_get(btf);
++		emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
++		emit(gen, BPF_MOV64_IMM(BPF_REG_4, 0));
 +	}
-+
-+	t = btf_type_by_id(btf, btf_id);
-+	if (!t || !__btf_type_is_struct(t))
-+		goto out;
-+
-+	if (!name) {
-+		ret = t->size;
-+		goto out;
-+	}
-+
-+	ret = -ENOENT;
-+	for_each_member(i, t, member) {
-+		const char *mname = btf_name_by_offset(btf, member->name_off);
-+
-+		if (!mname || !*mname)
-+			continue;
-+		if (!strcmp(mname, name)) {
-+			u32 moff;
-+
-+			if (__btf_member_bitfield_size(t, member)) {
-+				ret = -EOPNOTSUPP;
-+				goto out;
-+			}
-+			moff = __btf_member_bit_offset(t, member) / 8;
-+			ret = moff | (((u64)i) << 32);
-+			goto out;
-+		}
-+	}
-+
-+out:
-+	btf_put(btf);
-+	return ret;
++	emit(gen, BPF_EMIT_CALL(BPF_FUNC_btf_get_struct_member_info));
++	emit(gen, BPF_MOV64_REG(BPF_REG_7, BPF_REG_0));
++	debug_ret(gen, "get_struct_member_info(%s)", mname ?: "NULL");
++	emit_check_err(gen);
 +}
 +
-+const struct bpf_func_proto bpf_btf_get_struct_member_info_proto = {
-+	.func		= bpf_btf_get_struct_member_info,
-+	.gpl_only	= false,
-+	.might_sleep	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_ANYTHING,
-+	.arg2_type	= ARG_ANYTHING,
-+	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY | PTR_MAYBE_NULL,
-+	.arg4_type	= ARG_MEM_SIZE_OR_ZERO,
++/* Expects:
++ * BPF_REG_8 - (btf_obj_fd << 32) | kern_type_id
++ * BPF_REG_9 - kern_data_off
++ */
++static void emit_st_ops_member_val(struct bpf_gen *gen, const char *mname,
++				   const void *mdata, __u32 msize,
++				   int kern_vdata_off)
++{
++	int mdata_off;
++
++	if (libbpf_is_mem_zeroed(mdata, msize))
++		return;
++
++	if (msize > KERN_VDATA_MAX_SIZE) {
++		gen->error = -E2BIG;
++		return;
++	}
++
++	mdata_off = add_data(gen, mdata, msize);
++	emit_bpf_get_struct_member_info(gen, mname);
++
++	/* Extract member byte offset (lower 32 bits of R7), add kern_data_off, and bound it */
++	emit(gen, BPF_MOV32_REG(BPF_REG_2, BPF_REG_7));
++	emit(gen, BPF_ALU32_REG(BPF_ADD, BPF_REG_2, BPF_REG_9));
++	emit(gen, BPF_JMP_IMM(BPF_JLE, BPF_REG_2, KERN_VDATA_MAX_SIZE - msize, 2));
++	emit(gen, BPF_MOV64_IMM(BPF_REG_7, -E2BIG));
++	emit_check_err(gen);
++
++	/* Copy msize bytes from mdata_off into kern_vdata_off + offset */
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, kern_vdata_off));
++	emit(gen, BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_2));
++	emit(gen, BPF_MOV64_IMM(BPF_REG_2, msize));
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_3, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, mdata_off));
++	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
++}
++
++/* Expects:
++ * BPF_REG_8 - (btf_obj_fd << 32) | kern_type_id
++ * BPF_REG_9 - kern_data_off
++ */
++static void emit_st_ops_member_prog(struct bpf_gen *gen, const char *mname,
++				    struct bpf_struct_ops *st_ops, __u32 member_idx,
++				    struct bpf_program *prog)
++{
++	int attach_type_off;
++
++	if (st_ops->progs[member_idx] && st_ops->progs[member_idx] != prog)
++		bpf_program__set_autoload(st_ops->progs[member_idx], false);
++	st_ops->progs[member_idx] = prog;
++
++	if (!prog)
++		return;
++
++	st_ops->kern_func_off[member_idx] = add_data(gen, NULL, sizeof(__u32));
++	attach_type_off = add_data(gen, NULL, sizeof(__u32));
++	bpf_program__set_expected_attach_type(prog, attach_type_off);
++
++	emit_bpf_get_struct_member_info(gen, mname);
++
++	/* 1. Store member byte offset (lower 32 bits of R7 + kern_data_off)
++	 * into st_ops->kern_func_off[member_idx]
++	 */
++	emit(gen, BPF_MOV32_REG(BPF_REG_2, BPF_REG_7));
++	emit(gen, BPF_ALU32_REG(BPF_ADD, BPF_REG_2, BPF_REG_9));
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, st_ops->kern_func_off[member_idx]));
++	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_2, 0));
++
++	/* 2. Store member index (upper 32 bits of R7) into attach_type_off */
++	emit(gen, BPF_MOV64_REG(BPF_REG_2, BPF_REG_7));
++	emit(gen, BPF_ALU64_IMM(BPF_RSH, BPF_REG_2, 32));
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, attach_type_off));
++	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_2, 0));
++}
++
++void bpf_gen__init_kern_struct_ops(struct bpf_gen *gen, struct btf *btf,
++				   struct bpf_struct_ops *st_ops,
++				   __u32 *vtype_id_off,
++				   unsigned int *val_sz_off)
++{
++	struct ksym_relo_desc relo = { .kind = BTF_KIND_STRUCT };
++	const struct btf_member *member;
++	const struct btf_type *type;
++	char tname[192], stname[256];
++	const char *tname_raw;
++	__u32 i;
++
++	type = btf__type_by_id(btf, st_ops->type_id);
++	tname_raw = btf__name_by_offset(btf, type->name_off);
++	snprintf(tname, sizeof(tname), "%.*s",
++		 (int)bpf_core_essential_name_len(tname_raw), tname_raw);
++	snprintf(stname, sizeof(stname), "%s%s", STRUCT_OPS_VALUE_PREFIX, tname);
++
++	/* 1. Resolve BTF ID of struct bpf_struct_ops_<tname> */
++	*vtype_id_off = add_data(gen, NULL, sizeof(__u64));
++	relo.name = stname;
++	emit_bpf_find_by_name_kind(gen, &relo);
++	emit_check_err(gen);
++	emit(gen, BPF_MOV64_REG(BPF_REG_8, BPF_REG_7));
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, *vtype_id_off));
++	emit(gen, BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_7, 0));
++
++	/* 2. Use the BTF ID to find the struct_ops value struct size and "data" offset */
++	*val_sz_off = add_data(gen, NULL, sizeof(__u32));
++	emit_bpf_get_struct_member_info(gen, NULL);
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, *val_sz_off));
++	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_7, 0));
++
++	emit_bpf_get_struct_member_info(gen, "data");
++	emit(gen, BPF_MOV32_REG(BPF_REG_9, BPF_REG_7));
++
++	/* 3. Resolve BTF ID of struct <tname> */
++	st_ops->type_id_off = add_data(gen, NULL, sizeof(__u64));
++	relo.name = tname;
++	emit_bpf_find_by_name_kind(gen, &relo);
++	emit_check_err(gen);
++	emit(gen, BPF_MOV64_REG(BPF_REG_8, BPF_REG_7));
++	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
++					 0, 0, 0, st_ops->type_id_off));
++	emit(gen, BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_7, 0));
++
++	/* 4. Allocate and populate space in the data blob for kern_vdata */
++	st_ops->kern_vdata_off = add_data(gen, NULL, KERN_VDATA_MAX_SIZE);
++	member = btf_members(type);
++	for (i = 0; i < btf_vlen(type); i++, member++) {
++		const struct btf_type *mtype;
++		const char *mname;
++		void *mdata;
++		__s64 msize;
++		__u32 moff;
++
++		mname = btf__name_by_offset(btf, member->name_off);
++		if (btf_member_bitfield_size(type, i)) {
++			pr_warn("struct_ops init_kern: bitfield %s is not supported\n",
++				mname);
++			gen->error = -ENOTSUP;
++			return;
++		}
++
++		moff = member->offset / 8;
++		mdata = st_ops->data + moff;
++		msize = btf__resolve_size(btf, member->type);
++		if (msize < 0) {
++			pr_warn("struct_ops init_kern: failed to resolve the size of member %s\n",
++				mname);
++			gen->error = msize;
++			return;
++		}
++
++		mtype = skip_mods_and_typedefs(btf, member->type, NULL);
++		if (btf_is_ptr(mtype)) {
++			struct bpf_program *prog = *(void **)mdata;
++
++			emit_st_ops_member_prog(gen, mname, st_ops, i, prog);
++		} else {
++			emit_st_ops_member_val(gen, mname, mdata, msize,
++					       st_ops->kern_vdata_off);
++		}
++	}
++}
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0e2a93a42908..7754d6640167 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -523,25 +523,6 @@ struct bpf_program {
+ 	__u32 subprog_cnt;
+ };
+ 
+-struct bpf_struct_ops {
+-	struct bpf_program **progs;
+-	__u32 *kern_func_off;
+-	/* e.g. struct tcp_congestion_ops in bpf_prog's btf format */
+-	void *data;
+-	/* e.g. struct bpf_struct_ops_tcp_congestion_ops in
+-	 *      btf_vmlinux's format.
+-	 * struct bpf_struct_ops_tcp_congestion_ops {
+-	 *	[... some other kernel fields ...]
+-	 *	struct tcp_congestion_ops data;
+-	 * }
+-	 * kern_vdata-size == sizeof(struct bpf_struct_ops_tcp_congestion_ops)
+-	 * bpf_map__init_kern_struct_ops() will populate the "kern_vdata"
+-	 * from "data".
+-	 */
+-	void *kern_vdata;
+-	__u32 type_id;
+-};
+-
+ #define DATA_SEC ".data"
+ #define PERCPU_SEC ".percpu"
+ #define BSS_SEC ".bss"
+@@ -1462,7 +1443,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+ static int bpf_object__init_kern_struct_ops_maps(struct bpf_object *obj)
+ {
+ 	struct bpf_map *map;
+-	size_t i;
++	size_t i, j;
+ 	int err;
+ 
+ 	for (i = 0; i < obj->nr_maps; i++) {
+@@ -1474,9 +1455,25 @@ static int bpf_object__init_kern_struct_ops_maps(struct bpf_object *obj)
+ 		if (!map->autocreate)
+ 			continue;
+ 
+-		err = bpf_map__init_kern_struct_ops(map);
+-		if (err)
+-			return err;
++		if (obj->gen_loader) {
++			const struct btf_type *type;
++
++			bpf_gen__init_kern_struct_ops(obj->gen_loader, obj->btf,
++						      map->st_ops,
++						      &map->btf_vmlinux_value_type_id,
++						      &map->def.value_size);
++			map->mod_btf_fd = -1;
++			type = btf__type_by_id(obj->btf, map->st_ops->type_id);
++			for (j = 0; j < btf_vlen(type); j++) {
++				if (map->st_ops->progs[j])
++					map->st_ops->progs[j]->attach_btf_id =
++						map->st_ops->type_id_off;
++			}
++		} else {
++			err = bpf_map__init_kern_struct_ops(map);
++			if (err)
++				return err;
++		}
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index e90b5336bac0..845d6557c922 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -293,6 +293,30 @@ struct btf_map_def {
+ 	__u64 map_extra;
+ };
+ 
++struct bpf_struct_ops {
++	struct bpf_program **progs;
++	__u32 *kern_func_off;
++	/* e.g. struct tcp_congestion_ops in bpf_prog's btf format */
++	void *data;
++	/* e.g. struct bpf_struct_ops_tcp_congestion_ops in
++	 *      btf_vmlinux's format.
++	 * struct bpf_struct_ops_tcp_congestion_ops {
++	 *	[... some other kernel fields ...]
++	 *	struct tcp_congestion_ops data;
++	 * }
++	 * kern_vdata-size == sizeof(struct bpf_struct_ops_tcp_congestion_ops)
++	 * In standard mode, bpf_map__init_kern_struct_ops() will populate the
++	 * "kern_vdata" buffer from "data".
++	 * In gen_loader mode, bpf_gen__init_kern_struct_ops() will allocate
++	 * space for "kern_vdata" in the loader data blob and record its offset
++	 * in "kern_vdata_off".
++	 */
++	void *kern_vdata;
++	int kern_vdata_off;
++	int type_id_off;
++	__u32 type_id;
 +};
 +
- BTF_ID_LIST_GLOBAL(btf_tracing_ids, MAX_BTF_TRACING_TYPE)
- #define BTF_TRACING_TYPE(name, type) BTF_ID(struct, type)
- BTF_TRACING_TYPE_xxx
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 9004f2673ccf..6e7b6b10603e 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -6756,6 +6756,8 @@ syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		       ? NULL : &bpf_sys_bpf_proto;
- 	case BPF_FUNC_btf_find_by_name_kind:
- 		return &bpf_btf_find_by_name_kind_proto;
-+	case BPF_FUNC_btf_get_struct_member_info:
-+		return &bpf_btf_get_struct_member_info_proto;
- 	case BPF_FUNC_sys_close:
- 		return &bpf_sys_close_proto;
- 	case BPF_FUNC_kallsyms_lookup_name:
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 62de0919db72..3a630411b920 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6065,6 +6065,18 @@ union bpf_attr {
-  *		0 on success.
-  *
-  *		**-ENOENT** if the bpf_local_storage cannot be found.
-+ *
-+ * long bpf_btf_get_struct_member_info(u32 btf_id, int btf_obj_fd, const char *name, int name_sz)
-+ *	Description
-+ *		Find a struct member with given *name* in the struct type identified
-+ *		by *btf_id* in the BTF object referenced by *btf_obj_fd* (or in
-+ *		vmlinux BTF if *btf_obj_fd* is 0). If *name* is **NULL** (and
-+ *		*name_sz* is 0), return the size of the struct instead.
-+ *	Return
-+ *		Returns the member's byte offset in the lower 32 bits and the
-+ *		member's index in the upper 32 bits when *name* is non-**NULL**,
-+ *		or the byte size of the struct when *name* is **NULL**. On error, a
-+ *		negative error code is returned.
-  */
- #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
- 	FN(unspec, 0, ##ctx)				\
-@@ -6279,6 +6291,7 @@ union bpf_attr {
- 	FN(user_ringbuf_drain, 209, ##ctx)		\
- 	FN(cgrp_storage_get, 210, ##ctx)		\
- 	FN(cgrp_storage_delete, 211, ##ctx)		\
-+	FN(btf_get_struct_member_info, 212, ##ctx)	\
- 	/* This helper list is effectively frozen. If you are trying to	\
- 	 * add a new helper, you should add a kfunc instead which has	\
- 	 * less stability guarantees. See Documentation/bpf/kfuncs.rst	\
+ int parse_btf_map_def(const char *map_name, struct btf *btf,
+ 		      const struct btf_type *def_t, bool strict,
+ 		      struct btf_map_def *map_def, struct btf_map_def *inner_def);
 
 -- 
 2.56.0.455.g6c5a503b38-goog
