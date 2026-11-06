@@ -1,67 +1,67 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793962169;
-	b=v+czV0D3s2UWNu0hlrccirFTRdyikZPe6/Ucjnhc6wYIm+xW2orytrRJNpBX7dXg2IBz
-	 ZREUpxMvkmIMhWY2OtMEXhsm5K95Jtk1ryagyduqm2+SqWVWQH2QQGi08J3nEVzHAQ0zI
-	 kIi/jXqLKwdFt+rtsORhzxK7BUhbUgkt+WIGNwj3yEaODXEUjwyHQjwyzvQlry2cNYUgf
-	 2/o6nwmzd5xu1FF+cbGVfgbkpKd9sCCbp7eBtz1UUeOUK0K8Fer4Sp4V5UbXh+sJEngzW
-	 xw4Qr0M19Wc8szwV5wuH2uMsA3uIm0Fyajv4iH7SD+piDhDa+btKciIQOG9+zovPYaA==
+	t=1793962187;
+	b=AAI20qioJfMl0Bi/aP9dWX9yhBCzY35hTVexixZVtax0BaXeoJMrWQt2FvhbbiG+W3Z/
+	 wMyLDr7Dm51y/ub4iRJQXsstkm6BlwNNyg5ykHAswtv62S23PELr78k3dx/QynhUWDbHi
+	 dyUwdj7UcyBpVI6tIgEFxR1SMbhYBuOS4dSeNcsnds5hqoF0YzMAoCd0btyc0yvKMX8H2
+	 CLCk1FoZXR687Zfhto8Z8DGKY6K9nN7z9NHV0U/O2F4eDPHC5WThELga3dpJ/VMuuavqE
+	 qbpvt9FQYFfXMwLT2YFXVbSw4ssCM8jkVFIrkRAqs0WhuJP5ED7h9W2DHFqC6G3C2Ig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793962169;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793962187;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
 	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=8JKWuexccA6BFXNilr1htSwlQxoOPuIv3awSa5Dwgpw=;
-	b=rssZna115A0QPvqz6yhHmBao4g0HJgH0B4fMN4rdGB3yM00S8wlMvnis3ERKomzkXlps
-	 ZIxivqY3H8ekBFWzlyQyzbzq/aVTWA6/QTHHv15XtoLZSv2bPpN6ysb+x8p1Oz8tIc9TN
-	 HXV5aA83HRb8UnjrI+I/eSrpPuy4PkoWMDjSurnreJ479csyrjqNLhRyqWzeH7DGscnPn
-	 l9HWSGW+401kJ5KjDJ+qrxsM6MU4jz1hYLBhrRxC35fvoXWAA0SkJTMkhN1IjWulfCs7t
-	 HtRobozUTjpAJCNMlYzWwT6edOSut8h0dALFxKRSLCyDLpanutummWtMPTky+NS8NZQ==
+	bh=SELXEfX9ebCtzIS5tRc2uRvMLnzGkjG+xyKR95hZo5c=;
+	b=2IvsKOe1k5tcJ9EZOBHE2Xni7fItwjm23NTzihFqsYatI0W2OPc3/usgpDaUs74Gcew3
+	 BJQNs8nMwpDMHV4q2gXu3iXwNo5hqvYSrsga/05T0Bc94dmVChQoCp5eEa6lPcz2MePcD
+	 Jvatpser84E2kA035f+q5QGY9j5jKftxKzH503NN6RZXW3L6j4+N9tfbyYSCPVV4JV/Cy
+	 Q6Xiq7LAQrbJAeztTO1B9P6KYCuF5xHMNiK4cZy+VIkJ9xHFXzAN1nRgII/n1DiYXq1/x
+	 GBMohSqq422JxvlwChKr5hjVVf9RSiln5mn9VjCW5n112CMwPfHtoBX38AwKVXHcm3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UXZSXbei;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=QwEoBc7P;
 	arc=none smtp.remote-ip=170.10.133.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B1F606D812
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 10:49:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 26B1F606D812
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6117606D811
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 10:49:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6117606D811
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UXZSXbei
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=QwEoBc7P
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793962168;
+	s=mimecast20190719; t=1793962185;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8JKWuexccA6BFXNilr1htSwlQxoOPuIv3awSa5Dwgpw=;
-	b=UXZSXbeiFRdDRgcGmaJhz36zMEArs1EvmWQOI1sAg9siulM2Z4KiptWRy/Y4QJycTWKBf+
-	2X4/PmKCGs5zBVEolAiFXANrl+TZyGDvaLTAnQPkWQR6XBPe5ZFFoDhlckxaYeVXpsJN2a
-	kPTiX6Q8gJ2Elozcsrzd8wptiKs5Tm0=
+	bh=SELXEfX9ebCtzIS5tRc2uRvMLnzGkjG+xyKR95hZo5c=;
+	b=QwEoBc7PHd2TXN1zP7MXeyTNAQ7yD5pr2ysginA3Oqso5r0YcEFcHtAFyC20hygNlVLAN6
+	qt6DZ+0aF88fBRm6mzERgTTl4DJHGzZ9a9+8vG1WyJtmcu41YzawD1hjldmT71svbo9OCw
+	Ixg01nmsaOyPSwWGPYLCuDHTD8SNR9M=
 Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-76-eUGb9oCONyq46v7mn-krmA-1; Fri,
- 06 Nov 2026 05:49:23 -0500
-X-MC-Unique: eUGb9oCONyq46v7mn-krmA-1
-X-Mimecast-MFC-AGG-ID: eUGb9oCONyq46v7mn-krmA_1793962161
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-22-5xgCKugKN8qXrVce3uZIlw-1; Fri,
+ 06 Nov 2026 05:49:42 -0500
+X-MC-Unique: 5xgCKugKN8qXrVce3uZIlw-1
+X-Mimecast-MFC-AGG-ID: 5xgCKugKN8qXrVce3uZIlw_1793962180
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 516E218004DF;
-	Fri,  6 Nov 2026 10:49:21 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3CD75180054E;
+	Fri,  6 Nov 2026 10:49:40 +0000 (UTC)
 Received: from [100.91.101.41] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5D7DC447;
-	Fri,  6 Nov 2026 10:49:17 +0000 (UTC)
-Message-ID: <b0bd368b-6c63-4269-98ee-34f3e1638be6@redhat.com>
-Date: Fri, 6 Nov 2026 11:49:16 +0100
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E14FB1956047;
+	Fri,  6 Nov 2026 10:49:35 +0000 (UTC)
+Message-ID: <6e6a0f97-7db6-4b4f-be78-08adce9a0192@redhat.com>
+Date: Fri, 6 Nov 2026 11:49:34 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,7 +72,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 06/14] selftests: dpll: add pin state tests
+Subject: Re: [PATCH net-next v2 07/14] dpll: dpllsim: Add support to get/set
+ priority on input pins
 To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
 Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
  Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
@@ -84,40 +85,31 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20261105151852.1844305-1-poros@redhat.com>
- <20261105151852.1844305-7-poros@redhat.com>
+ <20261105151852.1844305-8-poros@redhat.com>
 Content-Language: en-US
 From: Ivan Vecera <ivecera@redhat.com>
-In-Reply-To: <20261105151852.1844305-7-poros@redhat.com>
+In-Reply-To: <20261105151852.1844305-8-poros@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
 On 11/5/26 16:18, Petr Oros wrote:
-> Add dpll_features.sh, a script that exercises individual device and pin
-> callbacks with get/set roundtrips over netlink. It creates a dpllsim
-> device with the standard pin layout by default or runs against the
-> device named by DPLL_DEV_ID, and picks the pin to reconfigure up front,
-> the first input pin that is not connected on the device, so that no
-> test touches the reference the device is locked to. The first test
-> moves that pin between the disconnected and selectable states, reads
-> the state back after each step and restores the original state at the
-> end. It never connects the pin, which could make it the reference.
+> Add support for getting and setting the priority of input pins.
+> Implement the prio_get and prio_set callbacks and advertise the
+> priority-can-change capability for input pins, which includes the MUX
+> type pins since those are always inputs.
 > 
-> A driver may refuse a state the capability promises, for a constraint
-> the interface does not tell. That is a skip on a device provided by
-> the user, with the reason the tool reported, and a failure on the
-> device the script created, whose simulator accepts both states. The
-> restore is deferred right after the original state is read, and the
-> cleanup handler of every script that defers runs the pending restores
-> before it removes the devices the script created, so that an
-> interrupted run puts the device back as well.
-> 
-> The stress script gains a test that floods one input pin of a fresh
-> device with state changes. The library gains the state setter both
-> use, which keeps the extack line of the tool in DPLL_LAST_ERR so that
-> a test can tell a refusal from a failure, and a check whether the pin
-> set usage of the tool knows a keyword, so that a test skips on a tool
-> too old for it rather than every script requiring a newer tool.
+> The initial priority of a pin is configured through a new prio
+> attribute of the pin directory, which takes a value between 0 and 255
+> and defaults to 128, so that a test can lay out the reference order
+> before the device goes live. Like the other pin attributes it is
+> writable only while the device is not live. Priority changes made over
+> netlink are stored and reported back, they will drive the automatic
+> reference selection once the simulation loop exists. The setter
+> rejects a value above 255 with EINVAL and an extack message. A priority
+> is meaningful for input pins only, so live fails with EINVAL when an
+> output pin was given a priority other than the default, next to the
+> frequency validation.
 > 
 > Signed-off-by: Petr Oros<poros@redhat.com>
 
