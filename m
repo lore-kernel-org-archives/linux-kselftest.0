@@ -1,65 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.68
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793950708;
-	b=l/yvwacRMYfBfL2R0/VODRT547Bg4KpaKy7+WddogwUI4OtX7ZkrjVcp6FXZD3W/Nl1G
-	 2U7lZ57mAAdYVwYoFckQzqbynOdobWSxtGHzx1FnmZLUbEAu2anP/6FhmcNXWBdFoh9ZN
-	 9uvJ3iLtw6qz8jd5m7aCHWyo9hrwiDbBirZ3C//ijj3MTQWeYa4n3tehY6rvTLv4LTgpv
-	 INwhQh9ibZWvITGo4l9KHbAf/KLKUI3n1O+8inb9AtSvBx5lvBMOp64j02kzIAmkvxsB8
-	 iZNwqzruuf+HYhOTbwPG+kajuz2JL6qm6NInUa1/t2BnmM0CvL4zn8OhuS79BWkus0Q==
+	t=1793952554;
+	b=zU/MPHS+PQPuS8UqDV1PdOBtyi99mfM+36o6DYvv807y56o+wQX/Zh6Z2o69QHfh4dDy
+	 tAmj+qm3P0v6/j4YYQ1JjE+e/4AwGZrUF4KtBnMIwEV8Pc1SR/rFyyCaLoI+HQswYf5IV
+	 DsC4TGA1X/5+dwEU3hWqfQ+YFhuaMau77QDAtr2NVydJUxXIa7k0zky3Ouo44rZ3/KVtW
+	 FW3xcOD25WHhqqSEFC/HbsChuveZE+gtqCWIX/DODq5bGZ1pgau1JG1UXacyVU/mxcDPP
+	 PHcAEiWT95UBdc/FRFgy4pcHGxGzsNbnw+g+PE84iLx1QIPR+T4Mf79bA8V3FE2fCqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793950708;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=yqj2X60t6GkEB0Hd3slamrcdw7uuMt8wIZvLf0iaHgw=;
-	b=QOOsCv1mE8a4y4YAKyxgs25fnAUEHx9sA5/yqBrHz3s0N75NtR+Oy4NyVP+aM7oVpByL
-	 LyajF6M/oLiG5OlxOaX4rDeNn0fMyJRT8GbDX2EmIJMvAT9vGUfIv5tcN+cI6/7nr3XyV
-	 uf/p71qUkYEkI+kKA5GUBRZY0Sse9KBzVNzfgVTaVkDebXQcHi1UQmXNqqYw3TQQwpHf6
-	 YgOpD7zC5gkJGxhOtuj1/Q6qECvS2thcfY7oR3tUsyy6KvN2GvOFW8jiL9i63Vnay9B77
-	 Py/4HzzevAb1TP4ZKseocUzWW16d/jw4sDl7wLN03uhHfyGrjiuwEewMd9N2xnZZRNw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793952554;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=4B0+96Ua9JUPRUU6V7nXApJ0tB80K/PeVAZmqbV7vJI=;
+	b=21vAbv6qcGqwCccpIJNkJ0ApC2wuBikCk2yZ2HUvSNZvCgEW2I4ATio4vr3QxN4lPJ3h
+	 MxQqP6Y9O/batCxtK15qW0+t9jBgUaS1a87FokzWezEpjWJuPgCZ3pMvaytJ/FiiG2SaA
+	 Qp8RvHoMwZ+gmMNqdjsvxcEUHJNqj0/QkQAVzAuHpmyxK87j7oueU4E0/iB/1adv2WK0s
+	 XrrRGOU9CoO6pa4ER+sVZUyZAQltS231qMAiKZyP+ow+rBmPf0AGf37NICAbi5h719Uch
+	 Bta16gbsaBO8KAlU0BYElV0DdhTZ8XiOrN8QqI1nDvADY6LPfgkEpVQAArvsDHXgxvA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tH0ObvQ3;
-	arc=none smtp.remote-ip=91.218.175.68
-Received: from mta0.migadu.com (out-68.mta0.migadu.com [91.218.175.68])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=H6CvvIYg;
+	arc=none smtp.remote-ip=220.197.31.3
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6C5606A334
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 07:38:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED6C5606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F508606A331;
+	Fri,  6 Nov 2026 08:09:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F508606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tH0ObvQ3
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vxGWNLncSlcQs4swV+6nfyQ5Qh5FfXbxSfHWmDFVw98=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793950705; v=1; x=1794555505;
- b=tH0ObvQ3DbFZNgYhD58A1r3joh7DYzbyq4OiGkSuCFTqclMOsVruo3MDEVMb/Zo26y+DDasD
- LtuQLIAhVuby9stJeel9e+Q8keyCsV2cULbgZ+u2eH6trynM1duQEfE0ICZs7OoFyrZ1JngDrtA
- OmoEorLIQV2H9Gy/q8A/vQeA=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 288db3607269e5ae;
-	Fri, 06 Nov 2026 07:38:24 +0000
-X-Mizu-Trace-ID: 288db3607269e5ae
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 6 Nov 2026 15:38:14 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: netdev-bot+sashiko@kernel.org
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, justin.iurman@gmail.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, liuhangbin@kylinos.cn
-Subject: Re: [PATCH net v2 2/3] ipv6: ioam6: use transformed packet nexthdr
- for ECMP re-lookup
-Message-ID: <au2D5hjp0U1ilXEI@fedora>
-References: <20261103-ipv6_ioam_ecmp-v2-2-6ef0318bdb5e@kylinos.cn>
- <179388135485.488856.15442544337186327982@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=H6CvvIYg
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=4B
+	0+96Ua9JUPRUU6V7nXApJ0tB80K/PeVAZmqbV7vJI=; b=H6CvvIYgt8gjIIm6SE
+	3AuJwyZCjX4/cCemQ4J6irtPXCNGpnMudZgC+cTfnByMiL4RjsUTNZuHtyf2eceJ
+	ySHm0VzXRul9DIZs7yP3H9RCe6Rm5ZybD6Nq/cLsMM2SPktxfTAo2jSoipJQaNLa
+	eZOx6zvo/pUgo92RiU79Nw4kY=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3v47Siu1qAmURFg--.23264S2;
+	Fri, 06 Nov 2026 16:07:48 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: song@kernel.org,
+	jolsa@kernel.org,
+	ihor.solodrai@linux.dev,
+	kpsingh@kernel.org,
+	matt@bobrowski.net,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	yonghong.song@linux.dev,
+	emil@etsalapatis.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com
+Cc: bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v5 1/2] bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
+Date: Fri,  6 Nov 2026 16:07:45 +0800
+Message-Id: <20261106080746.661431-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,174 +75,159 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <179388135485.488856.15442544337186327982@kernel.org>
+X-CM-TRANSID:_____wD3v47Siu1qAmURFg--.23264S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gr1fKw4kKF1kZFW3uF43Awb_yoW7KFyDpF
+	9IyF1akrs5X3ySqrZxGw1qvFy5G3ykX3y8KryxC34a9r1UZr18tFy7KF4agF1rur97W342
+	v3W0qrsFkw40va7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ja4E_UUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RXtZmrtitVdHAAA32
 
-On Thu, Nov 05, 2026 at 12:22:34PM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 2 · Medium: 1 · Low: 0
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [High] The encap cache-miss path in ioam6_output()
->   (net/ipv6/ioam6_iptunnel.c:439) now sets `fl6.mp_hash =…
-> - [High] In IOAM6_IPTUNNEL_MODE_AUTO, local packets (inline, !skb->dev)
->   and forwarded packets (encap, skb->dev set) share one per-CPU…
-> - [Medium] The new call `rt6_multipath_hash(net, &fl6, skb, NULL)` in
->   ioam6_output() (net/ipv6/ioam6_iptunnel.c:439) passes an output-path…
-> 
-> --
-> 
-> ipv6: ioam6: use transformed packet nexthdr for ECMP re-lookup
-> 
-> This commit changes the dst_cache miss path in ioam6_output(). For inline
-> insertion it now reuses orig_dst and caches the fake null_rt. For
-> encapsulation it re-looks up the route with flowi6_proto taken from the
-> HBH next header and with fl6.mp_hash precomputed from the skb, so that
-> the ECMP hash matches the identical packet without IOAM (RFC 9486 C2).
-> 
-> > diff --git a/net/ipv6/ioam6_iptunnel.c b/net/ipv6/ioam6_iptunnel.c
-> > index cfb2c41634a0b..246533276be82 100644
-> > --- a/net/ipv6/ioam6_iptunnel.c
-> > +++ b/net/ipv6/ioam6_iptunnel.c
-> > @@ -405,34 +405,61 @@ static int ioam6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
-> >  
-> >  	if (unlikely(!dst)) {
-> >  		struct ipv6hdr *hdr = ipv6_hdr(skb);
-> > -		struct flowi6 fl6;
-> 
-> [ ... ]
-> 
-> > +		if (ilwt->mode == IOAM6_IPTUNNEL_MODE_INLINE ||
-> > +		    (ilwt->mode == IOAM6_IPTUNNEL_MODE_AUTO && !skb->dev)) {
-> > +			dst = orig_dst;
-> > +			dst_hold(dst);
-> > +
-> > +			local_bh_disable();
-> > +			dst_cache_set_ip6(&ilwt->cache, &ilwt->null_rt.dst,
-> > +					  &hdr->saddr);
-> > +			local_bh_enable();
-> 
-> [Severity: High]
-> In AUTO mode, can local and forwarded packets end up using each other's
-> cached dst? The miss path is now mode aware. The hit path at the top of
-> ioam6_output() still reads one per-CPU cache, whatever the mode:
-> 
-> 	dst = dst_cache_get(&ilwt->cache);
-> 	...
-> 	if (dst == &ilwt->null_rt.dst) {
-> 		dst_release(dst);
-> 
-> 		dst = orig_dst;
-> 		/* keep refcount balance: dst_release() is called at the end */
-> 		dst_hold(dst);
-> 	}
-> 
-> Suppose a local packet misses first, so null_rt is cached. A later
-> forwarded packet on that CPU then gets dst = orig_dst and is encapsulated
-> with daddr = tundst. Because dst is non-NULL, it skips the tundst
-> re-lookup. Because the lwtstates match, it leaves through
-> orig_dst->lwtstate->orig_output(). That uses the inner destination's
-> route and nexthop, not the route for tundst.
-> 
-> Now suppose a forwarded packet misses first. The encap branch caches the
-> tundst route:
-> 
-> 	dst_cache_set_ip6(&ilwt->cache, dst, &fl6.saddr);
-> 
-> Later local packets on that CPU hit this entry and are processed inline.
-> They are then sent through the tundst route instead of orig_dst:
-> 
-> 	if (orig_dst->lwtstate != dst->lwtstate) {
-> 		skb_dst_drop(skb);
-> 		skb_dst_set(skb, dst);
-> 		return dst_output(net, sk, skb);
-> 	}
-> 
-> The shared cache existed before this patch. However, the commit message
-> says inline will "reuse orig_dst and cache the fake null_rt, keeping the
-> sibling from the original lookup", and that encapsulation "still
-> re-looks up". In AUTO mode with mixed traffic, neither seems to hold.
-> null_rt is DST_OBSOLETE_NONE, so the stale entry stays until the cache is
-> reset.
-> 
-> Does the hit path need to be mode aware too, for example with separate
-> caches for the inline and encap cases?
-> 
-> > +		} else {
-> > +			/* Encapsulation may change the destination (tundst);
-> > +			 * re-lookup with the transformed packet keys so the
-> > +			 * outer hash matches the identical packet without IOAM.
-> > +			 */
-> > +			const struct ipv6_opt_hdr *hhdr;
-> > +			struct flowi6 fl6;
-> > +
-> > +			hhdr = (const struct ipv6_opt_hdr *)skb_transport_header(skb);
-> > +
-> > +			memset(&fl6, 0, sizeof(fl6));
-> > +			fl6.daddr = hdr->daddr;
-> > +			fl6.saddr = hdr->saddr;
-> > +			fl6.flowlabel = ip6_flowinfo(hdr);
-> > +			fl6.flowi6_mark = skb->mark;
-> > +			fl6.flowi6_proto = hhdr->nexthdr;
-> > +			fl6.mp_hash = rt6_multipath_hash(net, &fl6, skb, NULL);
-> 
-> [Severity: High]
-> Does computing mp_hash from the skb break the C2 equivalence that the
-> comment above claims? When fl6->mp_hash is non-zero, fib6_select_path()
-> uses it as is, so this skb-based value chooses the sibling.
-> 
-> The comment says the outer hash "matches the identical packet without
-> IOAM". A plain ip6ip6 tunnel, ip6_tnl_xmit(), routes with
-> ip6_route_output(net, NULL, fl6) and no skb, so it hashes the outer fl6
-> keys. With an skb, rt6_multipath_hash() behaves differently for each
-> policy.
-> 
-> Policy 1 returns the inner flow's hash early. ioam6_do_encap() never
-> clears that hash:
-> 
-> 	if (skb->l4_hash)
-> 		return skb_get_hash_raw(skb) >> 1;
-> 
-> Policy 2 dissects through the ip6ip6 header and hashes the inner
-> addresses, flowlabel and proto:
-> 
-> 	skb_flow_dissect_flow_keys(skb, &keys, 0);
-> 
-> Policy 3 calls rt6_multipath_custom_hash_skb(), which returns
-> jhash_2words(mhash, mhash_inner, 0). Plain ip6ip6 goes through
-> rt6_multipath_custom_hash_fl6() instead.
-> 
-> For policy 0 with flowi6_proto = 41, the skb result looks the same as
-> the fl6-only hash, so the precompute appears to do nothing there.
-> Without the companion patch "ipv6: route: consider IOAM options in ECMP
-> hash policy 0", it would hash ip_proto = NEXTHDR_HOP and undo the
-> flowi6_proto = 41 change. That matters for backports of this
-> Fixes:-tagged patch.
-> 
-> Setting fl6.flowi6_proto = hhdr->nexthdr on its own, without the
-> precompute, seems to match plain ip6ip6 under every policy. Would it be
-> better to drop the mp_hash precompute?
-> 
-> The commit message also says:
-> 
->     precompute fl6.mp_hash from the packet, since ip6_route_output()
->     carries no skb and would otherwise drop ICMPv6 quoted-flow and L4
->     keys.
-> 
-> Can the ICMPv6 quoted-flow case happen here? ioam6_do_encap() always sets
-> tuninfo->eh.nexthdr = NEXTHDR_IPV6, so the header after the HBH is
-> always 41.
+From: Feng Yang <yangfeng@kylinos.cn>
 
-Thanks for the report. This part touch all the policies. I need to think
-if I should drop this patch until there is a better fix.
+bpf_get_stack() has two implementations.  bpf_get_stack() passes
+may_fault == false and resolves build IDs with build_id_parse_nofault(),
+so an IP whose backing file page is not resident falls back to
+BPF_STACK_BUILD_ID_IP.  bpf_get_stack_sleepable() passes may_fault == true
+and uses build_id_parse_file(), which faults the page in and returns a real
+build ID.
 
-pw-bot: cr
+Only kprobe/uprobe programs are routed to the sleepable implementation
+today, so the other program types that can be sleepable keep losing
+build IDs for non-resident pages:
+
+ - tracing_prog_func_proto() serves BPF_TRACE_ITER, fentry/fexit/fmod_ret
+   and BPF_TRACE_RAW_TP programs, and falls back to
+   raw_tp_prog_func_proto() for BPF_FUNC_get_stack, which is also the
+   get_func_proto() of BPF_PROG_TYPE_RAW_TRACEPOINT and is reached by
+   BPF_PROG_TYPE_LSM and BPF_PROG_TYPE_SYSCALL through the default cases
+   of bpf_lsm_func_proto() and syscall_prog_func_proto().
+
+ - tp_prog_func_proto() serves BPF_PROG_TYPE_TRACEPOINT programs.
+
+Route them to bpf_get_stack_sleepable() as well and mark the new
+prototypes might_sleep, as
+commit 9d02927fdf4e ("bpf: Mark faultable stack helpers as sleepable")
+did for the faultable stack helper prototypes.
+
+The verifier then rejects bpf_get_stack() from these program types
+marked sleepable whenever in_sleepable_context() is false:
+inside bpf_rcu_read_lock(), bpf_preempt_disable(), and so on. This also
+covers calls that do not pass BPF_F_USER_BUILD_ID and would not sleep;
+such programs load today. This is consistent with the existing constraints.
+
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+---
+v5: selftest: Remove fork-related code, use getpgid. Thanks, Andrii
+Nakryiko.
+
+v4: Update commit messages. Test modification: limit capture to one hit, add s390 flags.
+https://lore.kernel.org/all/20261105093212.826479-1-yangfeng59949@163.com/
+
+v3: Add selftest. Update commit messages.
+https://lore.kernel.org/all/20261104083833.971911-1-yangfeng59949@163.com/
+
+v2: Move regs onto the stack.
+https://lore.kernel.org/all/20261102073714.1103088-1-yangfeng59949@163.com/
+
+v1: https://lore.kernel.org/all/20261028093548.790977-1-yangfeng59949@163.com/
+---
+ kernel/trace/bpf_trace.c | 54 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 2aec56d7f3d3..1229ee06dd71 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -84,6 +84,7 @@ static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const char *name)
+ 
+ u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
++u64 bpf_get_stack_sleepable(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ 
+ static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
+ 				  u64 flags, const struct btf **btf,
+@@ -1477,6 +1478,26 @@ static const struct bpf_func_proto bpf_get_stack_proto_tp = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
++BPF_CALL_4(bpf_get_stack_tp_sleepable, void *, tp_buff, void *, buf, u32, size,
++	   u64, flags)
++{
++	struct pt_regs *regs = *(struct pt_regs **)tp_buff;
++
++	return bpf_get_stack_sleepable((unsigned long) regs, (unsigned long) buf,
++				       (unsigned long) size, flags, 0);
++}
++
++static const struct bpf_func_proto bpf_get_stack_proto_tp_sleepable = {
++	.func		= bpf_get_stack_tp_sleepable,
++	.gpl_only	= true,
++	.might_sleep	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
++	.arg4_type	= ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1486,7 +1507,8 @@ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stackid:
+ 		return &bpf_get_stackid_proto_tp;
+ 	case BPF_FUNC_get_stack:
+-		return &bpf_get_stack_proto_tp;
++		return prog->sleepable ? &bpf_get_stack_proto_tp_sleepable
++				       : &bpf_get_stack_proto_tp;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return &bpf_get_attach_cookie_proto_trace;
+ 	default:
+@@ -1716,6 +1738,33 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
++BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_args *, args,
++	   void *, buf, u32, size, u64, flags)
++{
++	/*
++	 * Don't take a per-CPU bpf_raw_tp_regs slot here: those slots are a
++	 * LIFO nest counter and are vulnerable to slot overwrite and
++	 * corruption across sleep.  Sleepable programs never run in
++	 * IRQ/NMI context, so a local pt_regs is sufficient.
++	 */
++	struct pt_regs regs = {};
++
++	perf_fetch_caller_regs(&regs);
++	return bpf_get_stack_sleepable((unsigned long) &regs, (unsigned long) buf,
++				       (unsigned long) size, flags, 0);
++}
++
++static const struct bpf_func_proto bpf_get_stack_proto_raw_tp_sleepable = {
++	.func		= bpf_get_stack_raw_tp_sleepable,
++	.gpl_only	= true,
++	.might_sleep	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
++	.arg4_type	= ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1725,7 +1774,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stackid:
+ 		return &bpf_get_stackid_proto_raw_tp;
+ 	case BPF_FUNC_get_stack:
+-		return &bpf_get_stack_proto_raw_tp;
++		return prog->sleepable ? &bpf_get_stack_proto_raw_tp_sleepable
++				       : &bpf_get_stack_proto_raw_tp;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return &bpf_get_attach_cookie_proto_tracing;
+ 	default:
+-- 
+2.25.1
+
