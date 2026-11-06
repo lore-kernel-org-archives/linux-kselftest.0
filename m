@@ -1,58 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.164
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793958277;
-	b=lnD0BT6z6bUz3L8J8FIk44JuuVj7bvqgt70wkO1IXmYK/oFLYvtlF4LpNyOIEgFqov1C
-	 ZKzq8s/virCDbo6Z+Q7O8K2khQ2UFDoSFGRV17+hcLGdCy81uGtF4/gDqh+IUjlaggzag
-	 9zFMyRHBLZPwZXNXTRNjvgOsI99guKYbaZPuPwM56CHDrvAE1MX102bh/j2R0CQ66LiEL
-	 ClmL+sSNrfWOT/ziQ9mlFJFfBns10hmLkfOG0vuXTbRRgFD5p+OEnNCTYh87t4UglHoPW
-	 RjsHIEGS6ifMStIp644E/I5PvJL1O/W42xNsTBu2cdEthf5Fs66/uuIiy8I/CoeMcow==
+	t=1793958346;
+	b=KxDEKw+bmoYzT9z4kz63UhXq9LySGaTbq/h+tpi++VV/FUY1cuTLwZlnU+StJbSemd7v
+	 1LTHhsz3qZi/4Znc8hmZ0kCqafwy2K+AbBx135agdwJRpJwsZByM5PIg9T94C4fb+H0SK
+	 qmMtkOZw5B0XDCmzVA/0mrQIRySUIHbqioV17krt0rkAp6/DEFE0RrlsH7yOrjTcwJdUp
+	 nXR0xPbqyYuUdTmHI+TOPBrr1w5E0DbcfecobbPWmWHRnfHKPAKNwi8/OP6V/XLy3yeoy
+	 V06UT1cfDdS2v3kJiPY/elprfRVQVq++OSCldOi9VH8vV6If4JJeH8cEaJhzxZS0E6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793958277;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=3x30TCVHI6HA+CeHvlHb/+H3RtIDMYmugjilEli4TFo=;
-	b=487SjTH4vEmBEg04iSULCqgy4n8OwgQsmLcRAsK2pLqvNiVyTgTNGG3Yjn4hDb2sb8K6
-	 bksW8a31qk/CiRn+YCQEnjLKIkBO+aF+ql7qCEc715Y3/DBC8DAGIKzTE3pXWQ+w/+t7X
-	 DcTbzjhZpx3EM3MzUols8t9j7zeb8TLqMpWMyl8/fIYCj/CnQdxt0sw05gTnEk/GnIVFb
-	 8ukFyVhqdWvVHtm2cZ3CXWpAu80ay9IBCFlTOBuj5j3JPtv8VdPp/RTAnb+MaUEq32P3r
-	 KSoVdsffIU9bWBNfcDAY6sKMbgerPd9Nq4l7oB6C0ZP1LceVtsoyqJUKNkl0qdif5Yw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793958346;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=AfPzSFcW+pZH2QIPZRbefoHN3/d9BoE116jyqEDVh6Y=;
+	b=iV94kCk02zGJNsI6ZVDBBQlzRZUq3TsB/NwVotlkbieaZOUAcvKwQva1AJBFCE4n8WPa
+	 CcP5aiYDr0Xnk7psW9GwM/iQWAwWDAoG/aybUiJ4GCIEZwE6HLI6RVl/77FWG0PMtSzeD
+	 zWme1PkA5yHQ/6aNaCtlN17pr5r/D5fMkTinSnUImXDNmAM7WuaZ8sruIZY4ovgNybOcN
+	 7v5prj4MJpbgHZAD13cAWUpJoIKCavCMbSc8eCYDAHROq3D28Xls0PsD+84SNxmjqZ+uZ
+	 nWhsBO8u3KUQCyQhFvLgHq2RqJf0ARNJxp12R/Mqcob77rK9U3p3b1byQ9SUqmKgEhw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=gAIJS6Ha;
-	arc=none smtp.remote-ip=113.46.200.217
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=prb5BBLD;
+	arc=none smtp.remote-ip=95.215.58.164
+Received: from mta1.migadu.com (out-164.mta1.migadu.com [95.215.58.164])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7719C606A906;
-	Fri,  6 Nov 2026 09:44:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7719C606A906
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E481606A326
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 09:45:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E481606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=gAIJS6Ha
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=3x30TCVHI6HA+CeHvlHb/+H3RtIDMYmugjilEli4TFo=;
-	b=gAIJS6HaMixK13xBJxngCizzqXaVwAQAylIRB1e8UBqkX8JYSzj7oCVsGuI+kD0FtyWqrZCeO
-	SRzsBCWQ6s7XTmyTWAmwPM+7+5Py8e2Lb/uMdsEta20vaiUGFwE64ocIONy5XOZzbTgI29bU1q2
-	5fnLV0zl5K5XePyypLSDHUI=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jLZ4w0RgBzcb0q;
-	Fri,  6 Nov 2026 17:44:00 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id 76A0540577;
-	Fri,  6 Nov 2026 17:44:30 +0800 (CST)
-Received: from [10.67.120.103] (10.67.120.103) by
- kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 6 Nov 2026 17:44:29 +0800
-Message-ID: <3bc53520-0d1c-4fdf-88f3-d88295aa8a75@huawei.com>
-Date: Fri, 6 Nov 2026 17:44:28 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=prb5BBLD
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=yMrWApyqMY/NnNDcpTl9xLlqLBpfLw5OYLGgqZXQ1tU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793958342; v=1; x=1794563142;
+ b=prb5BBLDzBRhDL1dFgS1P9R5uf5nZMEpJiPJBpQZdVdr7tYQdfZaQl7dXQdIPuujdVBUI9SH
+ 0IPy8H/s6R/2hutUvkJ1qSlk75e+LGkBRWULDzv5CSZ0l8O+yUvxkayJhn5SsAWoa2ugbJnBdDq
+ F20apksvpJr/Z+iR8g3FCjPU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 2f2b68f79f65d7c9;
+	Fri, 06 Nov 2026 09:45:25 +0000
+X-Mizu-Trace-ID: 2f2b68f79f65d7c9
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 6 Nov 2026 17:45:15 +0800
+From: "Xu Xin (vivo)" <xu.xin@linux.dev>
+To: Qiliang Yuan <odys.yuan@gmail.com>, david@kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Stefan Roesch <shr@devkernel.io>, Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/ksm: align smart scan skips with the scan
+ number
+Message-ID: <au2hqxeIz0l/DusZ@dgvxl46587.localhost.localdomain>
+References: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-0-8a9780b6844e@gmail.com>
+ <20261105-bug-mm-ksm-smart-scan-align-skips-v2-1-8a9780b6844e@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,162 +75,130 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/15] KVM: arm64: Handle HDBSS faults
-To: Leonardo Bras <leo.bras@arm.com>
-CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
-	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
-	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
-	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
-	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
-	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
-	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
- <20260929103655.85107-10-zhengtian10@huawei.com> <auifWrY1u72afXfJ@LeoBrasDK>
-From: Tian Zheng <zhengtian10@huawei.com>
-In-Reply-To: <auifWrY1u72afXfJ@LeoBrasDK>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemr100010.china.huawei.com (7.202.195.125)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-1-8a9780b6844e@gmail.com>
 
-
-
-On 11/2/2026 10:34 PM, Leonardo Bras wrote:
-> On Tue, Sep 29, 2026 at 06:36:49PM +0800, Tian Zheng wrote:
->> From: Eillon <yezhenyu2@huawei.com>
->>
->> Once the buffer is full, hardware stops promoting writable-clean
->> descriptors and raises a stage-2 Permission fault with
->> ESR_EL2.ISS2.HDBSSF instead. Failed HDBSS accesses, such as external
->> aborts and granule protection faults, are reported the same way.
->>
->> Dispatch from kvm_handle_guest_abort() via the new esr_iss2_is_hdbssf()
->> helper. FSC == OK means the exit path already flushed, so resume the
->> guest; any other FSC is an error - clear it and report -EFAULT.
->>
->> Signed-off-by: Eillon <yezhenyu2@huawei.com>
->> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
->> ---
->>   arch/arm64/include/asm/esr.h           |  5 +++++
->>   arch/arm64/include/asm/kvm_dirty_bit.h |  1 +
->>   arch/arm64/kvm/dirty_bit.c             | 29 ++++++++++++++++++++++++++
->>   arch/arm64/kvm/mmu.c                   |  4 ++++
->>   4 files changed, 39 insertions(+)
->>
->> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
->> index f816f5d77f1a..4b3ccd407faa 100644
->> --- a/arch/arm64/include/asm/esr.h
->> +++ b/arch/arm64/include/asm/esr.h
->> @@ -437,6 +437,11 @@
->>   #ifndef __ASSEMBLER__
->>   #include <asm/types.h>
->>
->> +static inline bool esr_iss2_is_hdbssf(unsigned long esr)
->> +{
->> +	return !!(ESR_ELx_ISS2(esr) & ESR_ELx_HDBSSF);
->> +}
->> +
->>   static inline unsigned long esr_brk_comment(unsigned long esr)
->>   {
->>   	return esr & ESR_ELx_BRK64_ISS_COMMENT_MASK;
->> diff --git a/arch/arm64/include/asm/kvm_dirty_bit.h b/arch/arm64/include/asm/kvm_dirty_bit.h
->> index d828e6b43fe9..eb2039820777 100644
->> --- a/arch/arm64/include/asm/kvm_dirty_bit.h
->> +++ b/arch/arm64/include/asm/kvm_dirty_bit.h
->> @@ -39,5 +39,6 @@ static inline bool vcpu_hdbss_enabled(struct kvm_vcpu *vcpu)
->>   int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu);
->>   void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu);
->>   void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu);
->> +int kvm_handle_hdbss_fault(struct kvm_vcpu *vcpu);
->>
->>   #endif /* __ARM64_KVM_DIRTY_BIT_H__ */
->> diff --git a/arch/arm64/kvm/dirty_bit.c b/arch/arm64/kvm/dirty_bit.c
->> index be0d12555c84..893a8c4248bc 100644
->> --- a/arch/arm64/kvm/dirty_bit.c
->> +++ b/arch/arm64/kvm/dirty_bit.c
->> @@ -98,3 +98,32 @@ void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu)
->>   	vcpu->arch.hdbss.hdbssprod_el2 = prod;
->>   	isb();
->>   }
->> +
->> +int kvm_handle_hdbss_fault(struct kvm_vcpu *vcpu)
->> +{
->> +	u64 prod;
->> +	u64 fsc;
->> +
->> +	if (WARN_ON_ONCE(!system_supports_hdbss()))
->> +		return -EFAULT;
->> +
->> +	if (WARN_ON_ONCE(!vcpu_hdbss_enabled(vcpu)))
->> +		return -EFAULT;
->> +
->> +	prod = read_sysreg_s(SYS_HDBSSPROD_EL2);
->> +	fsc = FIELD_GET(HDBSSPROD_EL2_FSC_MASK, prod);
->> +
->> +	if (fsc == HDBSSPROD_EL2_FSC_OK)
->> +		/* Buffer full: the exit path drained it before handle_exit. */
->> +		return 1;
->> +
->> +	if (fsc != HDBSSPROD_EL2_FSC_ExternalAbort &&
->> +	    fsc != HDBSSPROD_EL2_FSC_GPF)
->> +		WARN_ONCE(1,
->> +			  "Unexpected HDBSS fault type, FSC: 0x%llx (prod=0x%llx, vcpu=%d)\n",
->> +			  fsc, prod, vcpu->vcpu_id);
+On Thu, Nov 05, 2026 at 04:36:14AM -0500, Qiliang Yuan wrote:
+> Smart scan skips pages that KSM has failed to de-duplicate for a while.
+> Once a page is three scans old, its rmap_item counts down its own number
+> of scans to skip, 1, 2, 4 and then 8 as it ages, so an old page is looked
+> at every ninth scan.
 > 
-> Any reason for using if() before warn_once, given the first parameter is a
-> condition? I mean, why not use, instead:
+> The unstable tree is rebuilt on every scan, so two identical pages that
+> are not in the stable tree yet can only be merged in a scan that looks
+> at both. Each countdown runs from when its own page became mergeable, so
+> two pages that became mergeable at different times end up on different
+> phases and, once both are old, may never be looked at in the same scan
+> again. They then stay unmerged for as long as they live. Making a page
+> mergeable, waiting for 0 to 20 full scans before doing the same with an
+> identical page, 20 times for each wait, and checking the pair after
+> another 64 full scans shows this, on two boots per kernel:
 > 
-> +	WARN_ONCE(fsc != HDBSSPROD_EL2_FSC_ExternalAbort &&
-> +		  fsc != HDBSSPROD_EL2_FSC_GPF,
-> +		  "Unexpected HDBSS fault type, FSC: 0x%llx (prod=0x%llx, vcpu=%d)\n",
-> +		  fsc, prod, vcpu->vcpu_id);
+>                                 before            after
+>   pairs merged (of 420)         329 / 317         420 / 420
+>   64M of unique pages skipped   89.0% / 89.1%     87.5% / 87.5%
+>   ksmd CPU time per scan        6.25 / 6.25 ms    6.88 / 7.03 ms
 > 
-
-Right, this is a syntax style closer to the Linux kernel. I will modify
-it.
-
->> +
->> +	/* Clear FSC so hardware dirty state updates can resume. */
->> +	write_sysreg_s(prod & ~HDBSSPROD_EL2_FSC_MASK, SYS_HDBSSPROD_EL2);
->> +	return -EFAULT;
->> +}
->> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
->> index 85a98d2c23a9..7bf82d65041c 100644
->> --- a/arch/arm64/kvm/mmu.c
->> +++ b/arch/arm64/kvm/mmu.c
->> @@ -15,6 +15,7 @@
->>   #include <asm/pgalloc.h>
->>   #include <asm/cacheflush.h>
->>   #include <asm/kvm_arm.h>
->> +#include <asm/kvm_dirty_bit.h>
->>   #include <asm/kvm_mmu.h>
->>   #include <asm/kvm_pgtable.h>
->>   #include <asm/kvm_pkvm.h>
->> @@ -2315,6 +2316,9 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
->>
->>   	is_iabt = kvm_vcpu_trap_is_iabt(vcpu);
->>
->> +	if (esr_iss2_is_hdbssf(esr))
->> +		return kvm_handle_hdbss_fault(vcpu);
->> +
->>   	if (esr_fsc_is_translation_fault(esr)) {
->>   		/* Beyond sanitised PARange (which is the IPA limit) */
->>   		if (fault_ipa >= BIT_ULL(get_kvm_ipa_limit())) {
+> Pick the skipped scans by the global scan number instead, with periods
+> of 2, 4 and 8 scans. The periods being powers of two, every old page is
+> looked at on each scan that is a multiple of 8, whatever its age, so any
+> two pages meet at least every eighth scan. The longest period goes from
+> nine scans to eight, which costs 10-12% more ksmd time on memory that
+> never merges.
 > 
-> I did not get the criteria used to positioning it here:
-> Why placed before is_abt, if not using the result before returning?
-> What is the rationale to putting it here?
+> Fixes: 5e924ff54d08 ("mm/ksm: add "smart" page scanning mode")
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> ---
+>  mm/ksm.c | 24 ++++++++++--------------
+>  1 file changed, 10 insertions(+), 14 deletions(-)
+
+Brilliant design.
+By using the global ksm_scan.seqnr as a unified time base, this patch eliminates
+the out-of-sync problem of the original per-page skip counters.
+
+It guarantees that any two pages will be processed in the same scan at least once
+every 8 scans — the least common multiple of all scan periods — which completely
+resolves the permanent de-duplication failure.
+
+Admittedly, this comes at the cost of shrinking the longest scan interval from 9
+to 8 scans, raising the scan frequency for aged pages by roughly 12.5%. But I
+believe this is a very reasonable trade-off for correctness. So
+
+Reviewed-by: Xu Xin (vivo) <xu.xin@linux.dev>
+
+
+Besides, can we add a extra description about new smart_scan algorithm that we
+missed in Documentation/mm/ksm.rst?
+
 > 
-> Thanks!
-> Leo
-
-Ah, I'm sorry, there's no particular reason. I'll move it so it's placed
-before is_abt.
-
-Thanks!
-Tian
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index dbfb8f98b1892..a97d7563c2124 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -196,7 +196,6 @@ struct ksm_stable_node {
+>   * @head: pointer to stable_node heading this list in the stable tree
+>   * @hlist: link into hlist of rmap_items hanging off that stable_node
+>   * @age: number of scan iterations since creation (unstable node)
+> - * @remaining_skips: how many scans to skip (unstable node)
+>   * @linear_page_index: the original page's index before merged by KSM (stable node)
+>   */
+>  struct ksm_rmap_item {
+> @@ -213,7 +212,6 @@ struct ksm_rmap_item {
+>  		struct {
+>  			unsigned int oldchecksum;
+>  			rmap_age_t age;
+> -			rmap_age_t remaining_skips;
+>  		};			/* when unstable */
+>  		unsigned long linear_page_index;    /* for reverse mapping, when stable */
+>  	};
+> @@ -2446,16 +2444,14 @@ static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+>  }
+>  
+>  /*
+> - * Calculate skip age for the ksm page age. The age determines how often
+> - * de-duplicating has already been tried unsuccessfully. If the age is
+> - * smaller, the scanning of this page is skipped for less scans.
+> + * Calculate how often a page of the given ksm page age is scanned. The age
+> + * determines how often de-duplicating has already been tried
+> + * unsuccessfully. The older the page, the fewer scans look at it.
+>   *
+>   * @age: rmap_item age of page
+>   */
+> -static unsigned int skip_age(rmap_age_t age)
+> +static unsigned int scan_period(rmap_age_t age)
+>  {
+> -	if (age <= 3)
+> -		return 1;
+>  	if (age <= 5)
+>  		return 2;
+>  	if (age <= 8)
+> @@ -2505,17 +2501,17 @@ static bool should_skip_rmap_item(struct folio *folio,
+>  		return false;
+>  
+>  	/*
+> -	 * Are we still allowed to skip? If not, then don't skip it
+> -	 * and determine how much more often we are allowed to skip next.
+> +	 * The unstable tree is rebuilt on every scan, so two identical pages
+> +	 * can only be merged if both are looked at in the same scan. Pick the
+> +	 * scans by the global scan number rather than per page: the periods
+> +	 * are powers of two, so pages of any age meet on every scan that is a
+> +	 * multiple of the longest one.
+>  	 */
+> -	if (!rmap_item->remaining_skips) {
+> -		rmap_item->remaining_skips = skip_age(age);
+> +	if (!(ksm_scan.seqnr & (scan_period(age) - 1)))
+>  		return false;
+> -	}
+>  
+>  	/* Skip this page */
+>  	ksm_pages_skipped++;
+> -	rmap_item->remaining_skips--;
+>  	remove_rmap_item_from_tree(rmap_item);
+>  	return true;
+>  }
+> 
+> -- 
+> 2.43.0
+> 
