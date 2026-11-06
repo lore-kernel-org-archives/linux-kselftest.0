@@ -1,83 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793977725;
-	b=tXrU4MUjO+lVCzUkI7VSc47ZEQnbRb8/PmzVQv81hKIcTevbuJxBVeMkIa6pG+Oikb+F
-	 YELZB/Fv1WI2KwdZs3IP/cByArUqM2Rg61mUAvqT7R5bbzr0LatBKpc3cHdsXQ1GsMrHT
-	 jagaaOEPXSJ6MVnKGf01wT6H45Cxl1H5fznqcKbCOE8lyYk+qtYnaLSNR9PLBYe5Vhpku
-	 HfpC2U3r/r7OhQThh118blrTnDvqT/kxhsGiC61hlTfgTIM9rbrtEMaa6WfTcjMj/v12r
-	 J2MkQOgTsbWA0ZRoimqUd0FRqhnsOhGZd/2ZVKjPsrwhxqP5OLB3vqGyxsKcDLK7FYg==
+	t=1793978494;
+	b=gdi6T+946djiZgckITG/uV/exv7/NiR2vdUO9Vl8ROrmMqlO1q3v/G6UVRZuRBYpN5a/
+	 cKcad7XqNYxmIcJdysHyutY4BnEgXwHH/2VKBg+GKqJFqscQ6SP44Dw7TAuvOQYbRm/sy
+	 4lQBxaGfZISG54moW0cdQc2a7GPfez/NJfqHihiSd7AZeIasWjZ/A1lFttNakYjAPFKT0
+	 JvGM7PVMSOfYsFBIsZbYKdY1oRvs/7ZWE2dmTCMb0mwNXwYwqlm1gV6Ryao0Sdlx7+st9
+	 qgNflfzbWJPtAuFlPA2ecz9qXDlS8Roz80fo9fzAsEK62xeD5I+Yn5JOmRtM2eO0etA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793977725;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=v7luENhdcXtYyU0R/Y6sABRqCwShaCT3Ig7woROEwb4=;
-	b=Qk7dD3ex24Sro034JNMrNktroD4zvDt6Yvw/GF/AGuLmxRWqSabPAo5ibMxUEs/OyNFq
-	 MAc89GST2M5n/0RVOA65YjwK4/vI8uodmupCYeccmdAHrWX7bGdb1hX4+Z1S+JdNDAqt9
-	 Kng7Mfgvv95LsgCsipwP2Iu3qs8PR65wvVfJpnuUax+GhGRnQU0XOQaCOOZWG7zODOPeY
-	 q36psc7rrt8WI9lnWJ8cS41ralaxUDkQtKmZkGYS2mpW9AzHYgrZyVieYwwMSOX0zDjQm
-	 c9qKxwP8S7p4TrUNTmxROicoDb90LWpEldz/rrvGGxim75jcp3YaSU1wrPDzR4Lt0mw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793978494;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=20WJXw38AL/aG6uUNEDMZKsUL7v/Bv5b+vJstxx3tDY=;
+	b=mfEDk9JJREl86PgE4wvhSlK2EVIV4Y535Rat48jRyl8hi8RHRIfSx/qwb+M9Tz1sFjjc
+	 aWE2Yd/PNH5rJMQPG7yKZgkblcBQaXDuUMhSumgenOVMG6h97POWFEaZJ8BjTatW1JI8N
+	 paZUNRXeCpdSwd6YLROnih9HTnDurufQCmB+uBhinyPdMNLCYlM1B4HBKK88ngXy1uYd4
+	 vlFTrHMlhaUj4Zlmh3q1abguQ/fyGnOK68kghRwZxaDu1g+FVP2V72+n5lvnWltoIkMJ1
+	 32cil4ZOY449icDPItNFCbwYbmkTwErbzetFOec1PblpptVdKZu7tp8wqaH5I4+YGYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXvCipBJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RRk0RvRi;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 36CB9606A326;
-	Fri,  6 Nov 2026 15:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63906606D809
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 15:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXvCipBJ
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 109811F0089F;
-	Fri,  6 Nov 2026 15:08:44 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RRk0RvRi
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E2B1F008A6
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 15:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793977724;
-	bh=v7luENhdcXtYyU0R/Y6sABRqCwShaCT3Ig7woROEwb4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fXvCipBJm/D+UzqzI+MRQ3AzYnnEfS3G7Jm3VFG6y9hXucyt1KRKi5KM85qYZuv6a
-	 LIxIt1Y19buaYSXf+ts2NicK+/DJ+jGQnrgLJjUO3PSmW2m5NSJhvFxmTcoc8S/PUO
-	 22FE8ziTtDiLbjwcWIa/X3Cg0tdYClmThVazhigDEmCWO/NpnPEGPcw7NPfVBzqb+5
-	 YzcbbGj19nYvlG61eoIbFCpzjrDYo0MbbJ9E7jk9rw7A+ZFqQvx34/8bQ241pCGfFf
-	 nzzO1rOy+1V9dHDJLTKLPdnzAMEmdYwGXiHuDvMmkItozOcSzss64p746xDw5ywOSy
-	 Wr8zW71lRhMKg==
-Date: Fri, 6 Nov 2026 17:08:40 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Hannes Reinecke <hare@suse.de>
-Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
-	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <au3teLK-KHmBW6Wo@kernel.org>
-References: <20261105031401.956609-1-jarkko@kernel.org>
- <20261105031401.956609-3-jarkko@kernel.org>
- <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
+	s=k20260515; t=1793978494;
+	bh=20WJXw38AL/aG6uUNEDMZKsUL7v/Bv5b+vJstxx3tDY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=RRk0RvRihoxZqHpctLHHcNOKlSd2iofY2mIJL+faUV77ANc29rjxBfL9wpJWi+ON4
+	 t713DAw53wCBWO1uOMHb7aqkA7U4Dwm/WJ4IGINWYngxpoqBYKpQ4ayQzeA7qq0STN
+	 NFPIBkGE7sEvGMJsKpoMREWiGjD17Tgj/wgjokdsPEfrkLaA5UlN9Zxg+7vlCRTcXj
+	 zuk7o9WcHtdX06WyevEifYOTFuZlnbQWfsZE6zKjhtaNzPXYIABl/tqYb6fr7HSLVI
+	 Qwd+1bef9F/KcYfDMDLbhE1HCpf8p/lfpHcR3Fr0QBrhHufmp/zGEd5Fb+dj7Q1jQP
+	 D2uQYpHHqLttw==
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5ead4026fe6so280911e0c.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 07:21:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBzFFugq3Rh7QODRwXYN0EJ67sK/SAf1DCV+G9kURSaVovenPAOAgC/b3zykO94yPbzk5bzqZan7Vs8nDACZQRQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ydh/Ib5jy6zHMu7l7Xg/tKjzTouu5LV//uP0qSJLh489cU7HV
+	HaCcgi0Q5rfT/bDR1Fsoz5g6Rr/BhtmUMYXMWWbcJ9zT2InwIOQsQDzt4Jlpzkv1+/zAWh7cq23
+	w80ntwfEd+yGoSV2N2Uw/AWsjcVBmTM8=
+X-Received: by 2002:a05:6122:4201:b0:5ec:3e18:a8da with SMTP id
+ 71dfb90a1353d-5ecc441b1fcmr1433555e0c.17.1793978493365; Fri, 06 Nov 2026
+ 07:21:33 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,33 +59,172 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
+References: <cover.1793666444.git.daniel.lezcano@oss.qualcomm.com>
+In-Reply-To: <cover.1793666444.git.daniel.lezcano@oss.qualcomm.com>
+From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Date: Fri, 6 Nov 2026 16:21:17 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gZg7YK3=3b1F=XkCCivLgdh8VsrcTPjtJ-OWD5xrPiLg@mail.gmail.com>
+X-Gm-Features: AclHuK9CCZ7WvonglwGof9bjwwoUGS_sVdGWjdzjKqYplP9ZkfDSqeee2sQdvos
+Message-ID: <CAJZ5v0gZg7YK3=3b1F=XkCCivLgdh8VsrcTPjtJ-OWD5xrPiLg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] powercap: Add generic hierarchy support and
+ convert DTPM
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: rafael@kernel.org, Daniel Lezcano <daniel.lezcano@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Shuah Khan <shuah@kernel.org>, 
+	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 06, 2026 at 09:21:32AM +0100, Hannes Reinecke wrote:
-> reason why siphash has been chosen?
-> Would there be a chance to make this configurable?
-> I do see slight complications when running in secure environments
-> (ie FIPS-certified environments) where most of the hash functions
-> might not be available ...
+On Tue, Nov 3, 2026 at 5:48=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@oss.qualcomm.com> wrote:
+>
+> Powercap controllers may expose trees of power zones, such as packages,
+> clusters and CPUs. This series adds generic helpers to duplicate a static
+> hierarchy description, create its zones through backend callbacks, and
+> destroy them in reverse order. Parents must precede their children in the
+> node array; the helpers validate that ordering rather than sorting nodes.
+>
+> Drivers supporting multiple platforms can place each platform's hierarchy
+> description and node array in initdata. powercap_hierarchy_dup() creates =
+a
+> working copy of the selected hierarchy and rebases its parent pointers.
+> All original descriptions, including those for unused platforms, can then
+> be reclaimed automatically with init memory. Names and backend-private
+> data are not duplicated and must remain valid for the working hierarchy.
+>
+> The controller supplies creation and destruction callbacks to connect the
+> generic hierarchy traversal to its backend. The creation callback receive=
+s
+> the control type, node name, private data and parent zone, registers the
+> zone with its operations and constraints, and returns it to the helper.
+> The destruction callback unregisters it during rollback or teardown.
+>
+> The API supports both fatal creation errors, which roll back previously
+> created zones, and optional nodes: a NULL callback result skips a node an=
+d
+> its descendants while allowing independent branches to be created.
+>
+> The helpers were motivated by the SPEL work and also let DTPM share the
+> same hierarchy infrastructure:
+> https://lore.kernel.org/lkml/20260702-qcom_spel_driver_upstream-v3-0-434d=
+50f0c5b0@oss.qualcomm.com/
+>
+> A kselftest exercises static and duplicated hierarchies, skipped branches=
+,
+> reuse after partial destruction, and rejection of repeated creation. Its
+> userspace script checks the 16 exported zones and selected attribute
+> values, then removes the module with a sysfs attribute descriptor open.
+>
+> DTPM is converted to the generic helpers while preserving best-effort
+> creation when individual backends are unavailable. The CPU backend finds
+> an online sibling when a hierarchy's representative CPU is offline.
+> Entirely offline policies remain unavailable during initialization.
+>
+> The RK3399 description is reduced to one CPU entry per cpufreq policy.
+> The old backend already suppressed duplicate registration; the extra
+> entries were redundant descriptions, not additional registered zones.
+> Finally, a shared Rockchip virtual descriptor and an RK3588 CPU hierarchy
+> are added. RK3588's three frequency domains are represented by cpu@0,
+> cpu@400 and cpu@600 below a virtual package node; no GPU zone is added
+> for RK3588 in this series.
+>
+> Changes in v5 (since v4):
+> - Address Lukasz Luba's review of patch 4: reject a DTPM DT node with a
+>   NULL path before calling of_find_node_by_path(). Treat the missing path
+>   as an invalid descriptor (-EINVAL), rather than skipping it as an
+>   unavailable backend.
+> - Collect Reviewed-by tags from Lukasz Luba for patches 1, 3, 5 and 6.
+> - Keep the v7.3 base and the six-patch organization.
+>
+> Changes in v4 (since v3):
+> - Rebase on v7.3.
+> - Address the selftest issues reported by Sashiko:
+>   - Add a kselftest config fragment requesting CONFIG_POWERCAP,
+>     CONFIG_MODULES and CONFIG_MODULE_UNLOAD, guard the module build with
+>     CONFIG_POWERCAP, and skip building when prerequisites or Module.symve=
+rs
+>     are missing instead of failing at modpost.
+>   - Resolve the kernel output directory and pass absolute O=3D,
+>     KBUILD_OUTPUT and module-output paths to Kbuild so cleanup works when
+>     a relative O=3D is inherited from the parent selftest make invocation=
+.
+>   - Keep the statically initialized mutex in permanent module data so its
+>     lockdep key does not point into freed module init memory. Retain a
+>     separate init-only description for the hierarchy duplication test.
+>   - Return KSFT_SKIP when powercap sysfs support or the test module is
+>     unavailable, while retaining failures for actual module-load errors.
+>
+> Changes in v3 (since v2):
+> - Rebase on v7.3-rc7.
+> - Add POWERCAP_HIERARCHY_INIT() and document static versus duplicated
+>   hierarchy ownership and lock initialization.
+> - Explain how duplication retains the selected platform hierarchy while
+>   init memory containing the original descriptions is reclaimed, and
+>   describe the controller callbacks and their arguments.
+> - Reject populated hierarchies with -EBUSY before invoking callbacks.
+> - Validate names and parent ordering before zone creation, including for
+>   static hierarchies; document the accepted hierarchy structure.
+> - Use explicit mutex locking, a signed reverse-loop index, and the cleare=
+r
+>   powercap_node.zone member name.
+> - Define NULL creation results as skipped branches and retain rollback fo=
+r
+>   error pointers, preserving DTPM's best-effort behavior.
+> - Handle offline CPU representatives through an online policy sibling
+>   while holding the CPU hotplug read lock.
+> - Fix selftest output-directory handling and module cleanup, use
+>   powercap-owned zone allocations, and keep shell validation/counting in
+>   the main shell so failures propagate.
+> - Extend and document selftest coverage for static creation, skipped
+>   branches, hierarchy reuse, -EBUSY, and an open descriptor at teardown.
+> - Fix indentation, __initdata placement, unnamed setup callback arguments=
+,
+>   and whitespace-only lines reported by checkpatch and patch application.
+> - Correct descriptions of redundant CPU entries and actual sysfs checks.
+>
+> Earlier generic hierarchy API and selftest submission:
+> https://lore.kernel.org/all/20260806110159.69690-1-daniel.lezcano@oss.qua=
+lcomm.com/
+>
+> Daniel Lezcano (6):
+>   powercap: Add generic zone hierarchy creation helpers
+>   selftests/powercap: Add powercap hierarchy creation API tests
+>   powercap: dtpm: Remove duplicate RK3399 CPU hierarchy nodes
+>   powercap: dtpm: Use generic powercap hierarchy helpers
+>   powercap: dtpm: Rename Rockchip virtual node descriptor
+>   powercap: dtpm: Add RK3588 hierarchy
+>
+>  drivers/powercap/dtpm.c                       | 180 +++++-----
+>  drivers/powercap/dtpm_cpu.c                   |  62 +++-
+>  drivers/powercap/dtpm_devfreq.c               |  22 +-
+>  drivers/powercap/powercap_sys.c               | 204 ++++++++++++
+>  drivers/soc/rockchip/dtpm.c                   | 129 +++++--
+>  include/linux/dtpm.h                          |   6 +-
+>  include/linux/powercap.h                      | 205 ++++++++++++
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/powercap/Kbuild       |   5 +
+>  tools/testing/selftests/powercap/Makefile     |  46 +++
+>  tools/testing/selftests/powercap/config       |   3 +
+>  .../selftests/powercap/powercap_hierarchy.c   | 314 ++++++++++++++++++
+>  .../selftests/powercap/powercap_hierarchy.sh  | 128 +++++++
+>  13 files changed, 1153 insertions(+), 152 deletions(-)
+>  create mode 100644 tools/testing/selftests/powercap/Kbuild
+>  create mode 100644 tools/testing/selftests/powercap/Makefile
+>  create mode 100644 tools/testing/selftests/powercap/config
+>  create mode 100644 tools/testing/selftests/powercap/powercap_hierarchy.c
+>  create mode 100755 tools/testing/selftests/powercap/powercap_hierarchy.s=
+h
+>
+>
+> base-commit: c03c1a14507dfaf8b856c2608f9ac216021fc222
+> --
 
-SipHash came originall along with [1].
+Since Likasz is happy with the first patch and the majority of the
+others, and Sashiko doesn't complain either, please feel free to send
+a pull request to me for 7.5 including this series when you consider
+it as ready.
 
-If we retracted back a step back i.e., use the assigned indices then the
-security properties of SipHash would not be relevant.
-
-> 
-> Cheers,
-> 
-> Hannes
-> -- 
-> Dr. Hannes Reinecke                  Kernel Storage Architect
-> hare@suse.de                                +49 911 74053 688
-> SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-> HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
-
-[1] https://lore.kernel.org/keyrings/20261013231251.56170-1-kylebot@openai.com/
-
-Br, Jarkko
+Thanks!
