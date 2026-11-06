@@ -1,103 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793985301;
-	b=hTek3Fb2AAscPEpkIxMG8r2sLfQT2Mhfgxrt5mhHaNqBL35B4LEYpxXcvrUpt7RZ1djs
-	 /oS9IAbtl7k0s+1UiriO2QjLTGZTlc86BdbwjLDLJ58eDdhhlvZxbsYCBCWydF9iBEQnP
-	 cIrQwr3j7JygBtaIuilh8WPF3PpOWUCN1VF3lKXbL3V7QiayQCOCxQYckpOQ27sViYgzF
-	 EnOYD7qsRU/iiiwjzFJybhDu3PeiNqW0/PRiGYMJMrX33E3tL/GSrUkJpBFN3KnsumkX8
-	 YzKeM0mHcI3rhQ+QJRNjGB9kKxaY8qtE4mZgt9KTQxpqG4TjUHhrXTNHycflYA4ZvKQ==
+	t=1793985573;
+	b=qvLBCUaSac0D9iTAu6Zq8UXXGQ+a32AMiz5vdGfI7xneIna3Oyf511T/BlKVDQlBg1lw
+	 u9i4+iQfdcEPoms4BJ79ETKSk94rKQexfxKzB+aM4GUJUps+50Hpl6FeRS17ERlVeoRYM
+	 TMgYdbNK1Dku55kz41uR3smrtf2LGbFjYXnQhEi9fcep+60GLCZPJIg2DAq5tF8DVOKPT
+	 N32U+2JlAyi8qGkkZeIEH6OaNr9SjndIvWbJJ35WpuHIf3Z6y0zqWIxxKzjZ3VZ+rw7SG
+	 gujzpmPGmVCThvzUrkj6H5jZZaWvV93ccCK85WP+YQbhznfuY32QH0UNwfrrImlcb4Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793985301;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793985573;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=1S4mR0QPoC6nO8yYpDVgFwSwnBHCQTPEsHvUyW429Rc=;
-	b=JKBAbLXVxnc4ftclZsG3H8nQYp+OuoD+DNkJYXX/BpA1NjXAj84xflFkcI+AWUL5BDO4
-	 mO6ScUnI58B3XCnwCeVDXqv0PJth8RX5CuaWBRRmdXGELhbOrJRT4wAHlnfTBjR0nd3xJ
-	 GyGBoMC/1cVaaz+hfnKMc+esnGVzzdjkKJKik85wXjVFHPXOx0N8lgNSPt1FarPI2jKJB
-	 c/Hov+xwOt6dz4Hkl0txgINlP0goaPtQcjEtiqP6DSpcjCgww2NAjR5EfQuyyqIQgl+Ai
-	 eusuvaJOGC4x8XvsJtRvTIQaM62hgbkfdkUpV7ZLyRjv9VzFkljwKmVW/VyNHn5x/Uw==
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
+	bh=tEaeh2MQM8Yqh+InUxWcP/c3Ugn8r1gCgilB/e+XZTU=;
+	b=oojdli/5+u0blN9h/vEmTnPRi/ieUYez3yjKZlTyb6I++PbCjc6zCA82+tF3Q/kKEekY
+	 sR2Ua2tkCQRWifYbyfCCj30IQG+Zipqdb3d+PJckLABMNs3If6X3FAkerUD9JCMboPELL
+	 jJ8QAj8vrxO+iYvxUYfUIRNmf134gfB0R2rkVebfR3a7evchre5nIuJmbxkCBj8u4uCRR
+	 exRRWEYEIjKAsWKCK9OKe10+TSDLw4FpJbzKooWCi3SMqm5hYdnYNDF84osWKFxS1QA/z
+	 XKatAwi9+j75UBJJJgLe7kYlNTlsBXqdSfaqPFZ5UHfq0TAlF0oECLI662zNHs8MT0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WCX3loN9;
-	arc=none smtp.remote-ip=209.85.221.41
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V3vuG2QG;
+	arc=none smtp.remote-ip=209.85.216.47
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB59B606D803
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 17:14:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB59B606D803
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDFA606A32D
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 17:19:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDDFA606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WCX3loN9
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-49376eb635fso316365f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 09:14:48 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V3vuG2QG
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3b0d0b80fb9so551629a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 09:19:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793985287; x=1794590087; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1S4mR0QPoC6nO8yYpDVgFwSwnBHCQTPEsHvUyW429Rc=;
-        b=WCX3loN9CbTwZTJ3fT8dhK2OpMhEDhmrTp2p+I4v9aNr8BkWSbNAPaDAUFis2zb37H
-         dAg0nJlkO8mtwFqgAobQdD1+1LDKdkMmwY2Xy2kyV1wrMDBaSyTWnaV12noKRyXcayzM
-         WoKEEMwtX6aHJa8pQJiw7uM2lxsuZdxDwtS8OaFod3k1RtJsOtNq5Hr3jmcFL3Ldkp9j
-         Kqyryy0Vy2FSm0KC5CJ3PdExVN+4OSRHdWUtAAILX+McR+hr1Wrxw1xAXGR1wDY9x9aW
-         xLYnyP8RhwYUD4/tepKFDph2R7AAzbhsiND64uLFXv1mUCOMIOgc5fcPD/HooHX+68o0
-         KR8Q==
+        d=google.com; s=20260707; t=1793985572; x=1794590372; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=tEaeh2MQM8Yqh+InUxWcP/c3Ugn8r1gCgilB/e+XZTU=;
+        b=V3vuG2QGjhL8r2VuA4Y+96OnzymPavm7o7EgEyvr170YdIQ6DRl7oV53qhL1GcFHq9
+         pAuFDTumBKjC04cfsqiF/s9mzLQ7MxMB33+iWjjD6M/c6YfzXCbLDc+N7vG+f5wRPHnt
+         YGfusFO0BTgDqxJC3GAGWNZSjKJIGzOR0waqOm65uqs4mfbkFPtcjPreR4HJO5uzAwIM
+         aZJqv3Eu06A17GOsAL38uxdtzasGV3QnNWGft1JdKGB0XYClaHm6eqK5tjUpWsaDDnGv
+         L3j4WwyzVfe0Q7LrBT5u/+m8/nbkT0KO2eRt94r5hQOTgl8rRxeGomxzWEId9K33GS3u
+         IwQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793985287; x=1794590087;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1S4mR0QPoC6nO8yYpDVgFwSwnBHCQTPEsHvUyW429Rc=;
-        b=ryX9t0R0fKYY/DONtGRLBuQq8Ez99Mxh4RYWt7a+03eD/fkpHCc/iwmBSuqDNa1rT4
-         ipmzmoYNbUNmSgNFqswLRJzaPJr8JCNhmuqNvXBV0P1RJMwQieoLNgXER3ICLEnMM+ii
-         fa48YJP7tM40PAH+kb/wh/HuJrc7myZINQcH42JBk0r4Xw4fYNgMSeJ9nHX1RUQMvB/g
-         NVK+WOq8wxIlbXPU9v0keEeV9zFFdPILJqxPT3nC+nOm9csjda8OrxpA5syOupT8ygHH
-         XWOwMzPz2TAyBFTc543nWv4U3BIAVfvoD9gxwbH0rki2SzmFT2KG8Mt+/utqCnE1ldWK
-         AUSw==
-X-Forwarded-Encrypted: i=1; AKwUvBxOmZCM+sDOrS5nMG+cHD6iT38SJlm8fhha9mEhUexH4NTA6BHBJ66jPV9ndVOdOnnl+c+DS0DeN5v2bmaDXJ0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9kIaXwJTSYTgQOmBTuSgd7bN6T4yjX0t8Bodk8zGIyx5QiEbfs
-	bDR66qI0uMBMJRqs1sGyz3ZY2VLIGI5ZKFXREztGcBsBFp3TrM1rwPSA
-X-Gm-Gg: AYBFou1JyMbamTHMLoI53Ddp7WKTw5y8MxjLGUAlHoT641KK20tOEC4qOV/1eMEUSnq
-	OXaY++DYIRKlGaDHqXRzCo/OViAojTSll9y0CbWnYME+ukmGtjaK4Hr5nyTA8JYgAxJcxKcX3cr
-	stlWNDHC3QLgNHDR0xxDdtGBTMDNTe+HdvMpkQn4N12TznbpyWjWX6OCro8GYzKjtihJMgTFyQp
-	246vyyZRxfm0Adlc3xV2RkQMKZfnQF/cXCEonxK/5lzHXDb4VWTIp+povAdj3zFaLhEWD8gigiN
-	AsyThthYI2TMkFYMxaSDWa+ZTnbDLHkLWnSURTEU2FNr8cy30Qnw+VC6zntsAQpyw6ggB+K9rHF
-	jW/S8RvsnbBOWoiJK3J/uQ9CJbEyZR2cFthrtns8Q95mpe9KhQ4zyStmZd+bcIHcPy6KkDJD+Im
-	MEOuwuzsXHppZQId8MtMmmrV5yvGCWCe4cfMP2Ho5ySELu06wSmqkAvqqVgPwfJmzXdKiz26s01
-	idpK/VOgJw1s7al3BLS9Fa4fb7Omvrkl0UO3QQOHw5r1xYkQg7UGaCJu8pLIyEOKjI/HG4WwasN
-	kp/+jaKf4XBihq1egRUq1/8ElD+OubJxTRxcarGjNLvnDJ8zyOoOHM0o4e9sTUA5v+pdqEFHAxl
-	ZxkkCuHGuKyrsTftBw8uq+c8jwBolixyevgXDxuS/paRaHuqM0pjqPXIOXkiZtb416ySD+uwMsf
-	wra8PaYmreLPkJOJM/zrtt8JlhMGUNB4bukRh08NLK
-X-Received: by 2002:a05:600c:818e:b0:4b3:9540:47a6 with SMTP id 5b1f17b1804b1-4b6dff86e38mr52698025e9.28.1793985287188;
-        Fri, 06 Nov 2026 09:14:47 -0800 (PST)
-Received: from localhost.localdomain ([90.95.39.175])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b571f46489sm148071985e9.3.2026.11.06.09.14.45
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 06 Nov 2026 09:14:46 -0800 (PST)
-From: Florin Badita-Nistor <baditaflorin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: edumazet@kernel.org,
-	ncardwell@google.com,
-	kuniyu@google.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] selftests/net: cover odd-sized local port ranges with one free port
-Date: Fri,  6 Nov 2026 19:14:42 +0200
-Message-ID: <20261106171442.31811-3-baditaflorin@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20261106171442.31811-1-baditaflorin@gmail.com>
-References: <20261106171442.31811-1-baditaflorin@gmail.com>
+        d=1e100.net; s=20260707; t=1793985572; x=1794590372;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tEaeh2MQM8Yqh+InUxWcP/c3Ugn8r1gCgilB/e+XZTU=;
+        b=s7kgc5guZGMthUJTUX9BDp8iRu/VFXiSHsX1fd2SSZUIRCoMOKoOBVkGKtEMIt/hOV
+         z0le9HxfKuh6rMsZam+XcIycuBwyv2dDrkWA2g3oNueGXmDyBJyqIgOt2LTNdviFAoKR
+         e1Nk2fppvPEH+BtYe4l8GBW/Q2Izm+89V6dZ+c+4U5+dWpIEF+Vm27QLOQ8z5GiaI7Nu
+         wLp3qvG/SPK9w+Sc1tNsfc5fa3VL7QKzapYPu4uvR5kJuHnC98BAnvWNO3jDVxD0rlAH
+         NGJMYR+x177rZ2tBnHDiy7sbF4QUeEprHucL9ARorE90lOhuXXbnf1bRE7gH5/g61Mf/
+         +3Jg==
+X-Forwarded-Encrypted: i=1; AL+hErFWfvuGaR+9nbv+JPABs0Vnkm0GMIX06GizAwCbdn+GEn6b5XL6+wyKy+D4InTs20nUiV8RfThLiRRJhyWHs0M=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+zRvCYuhSLgEAFm1QF1YYrHxw08RXn+x5uadHYAnVsLF5lwPid
+	BIEkp2eYsaUDwd9rbdrxrq6XijexMZTKNVaoe5oKHXG79fObyGxB7xxeEKQ2ffvtlA==
+X-Gm-Gg: AYBFou37qNWnhOiKnd6oY/bTf2Wv22MfxOtF2eQQc0+QLuC8e2GUUmLiRFT0T2o8RtC
+	tjjVeyCFck4WfIYfJezHmcG8/U9CURpSMeXftWtX+eavLFSzqM4PAthcOeUZz6wckrSuus3XPKU
+	dyO2ZCrF/JqJC/iCKRXSckEH3Cz9fXL7GbDzkQ8SwLzYVB2PU3VrUcKPjsMviZd3lBszDmrDB6O
+	i1+HLv3FPZ/PLcIebhverL1TbUwqEBuHF5ANNj0DC7T7vtbIWWMC2V5qx/C8j94zvj+6x1bW4Kl
+	rCEr2/NlhCDXaP38zFrX1RoEA7aq+Po77tmmHn94dtMj2H6Q+3or23TnZyTWNqjqQO2hz4VjAKf
+	D5Judzx11VM2e1QIJqJTLoCoqAkOVnbGvPdwEa+jIhxSngMyA2Igbgb0bPXsLUHGxloBMc5zPLD
+	RzzKUBBhqrf9pfheQBvJv7phrL49/EiL6ftwxSG2GdiDcLxZqwX96PftMmNSM+oTfMaijEtroiJ
+	OOXeWqPcFmy+AHwF/fKIxBXVaufJ+/KSobfb6f73qaQPLDNC3jrUa2odkWODF+EvYMHq3YRZmXj
+	mO6yd9ZeYVJRde2BuE02GASa9XtyFseaiebZVwPIMdUw/3BUrxmWiGZGi9NlMLh4
+X-Received: by 2002:a17:90b:554d:b0:3ac:bfa7:b079 with SMTP id 98e67ed59e1d1-3b0db5edb73mr3411640a91.7.1793985571464;
+        Fri, 06 Nov 2026 09:19:31 -0800 (PST)
+Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb70a7fbcbsm795231a12.25.2026.11.06.09.19.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Nov 2026 09:19:29 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,138 +87,113 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Nov 2026 17:19:28 +0000
+Message-Id: <DMOAT4VV939P.2DI8CEOMMSKMY@google.com>
+Subject: Re: [PATCH v6 11/27] vfio/pci: Retrieve preserved device files
+ after Live Update
+From: "David Matlack" <dmatlack@google.com>
+To: "Vipin Sharma" <vipinsh@google.com>, <kexec@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <kvm@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Cc: <ajayachandra@nvidia.com>, <alex@shazbot.org>, <amastro@fb.com>,
+ <ankita@nvidia.com>, <apopple@nvidia.com>, <bhelgaas@google.com>,
+ <chrisl@kernel.org>, <christian.koenig@amd.com>, <corbet@lwn.net>,
+ <dmatlack@google.com>, <graf@amazon.com>, <jacob.pan@linux.microsoft.com>,
+ <jgg@nvidia.com>, <jgg@ziepe.ca>, <jrhilke@google.com>,
+ <julianr@linux.ibm.com>, <kees@kernel.org>, <kevin.tian@intel.com>,
+ <leon@kernel.org>, <leonro@nvidia.com>, <lukas@wunner.de>,
+ <mattev@meta.com>, <michal.winiarski@intel.com>, <parav@nvidia.com>,
+ <pasha.tatashin@soleen.com>, <praan@google.com>, <pratyush@kernel.org>,
+ <rananta@google.com>, <rdunlap@infradead.org>, <rientjes@google.com>,
+ <rodrigo.vivi@intel.com>, <rppt@kernel.org>, <saeedm@nvidia.com>,
+ <schnelle@linux.ibm.com>, <skhan@linuxfoundation.org>,
+ <skhawaja@google.com>, <vivek.kasireddy@intel.com>, <witu@nvidia.com>,
+ <yanjun.zhu@linux.dev>, <yi.l.liu@intel.com>
+X-Mailer: aerc 0.21.0
+References: <20261102153656.1431701-1-vipinsh@google.com>
+ <20261102153656.1431701-12-vipinsh@google.com>
+In-Reply-To: <20261102153656.1431701-12-vipinsh@google.com>
 
-Leave each port in three- and five-port socket-local ranges as the only
-available candidate and verify that bind(..., 0) can allocate it. Cover
-both lower-bound parities and repeat allocation to vary the random
-starting offset. Use the existing IPv4/IPv6 TCP, UDP, SCTP and MPTCP
-fixture variants.
+On Mon Nov 2, 2026 at 3:36 PM UTC, Vipin Sharma wrote:
+> During retrieve():
+>  * Validate the handed-over struct vfio_pci_core_device_ser header,
+>    sizes, and flags.
+>  * Locate the registered vfio-pci device matching the serialized domain
+>    and BDF (requiring device->ops =3D=3D &vfio_pci_ops) under the device
+>    lock. vfio-pci registers the vfio device before its probe completes,
+>    and the probe holds that lock, so a device that is still being probed
+>    is not returned.
+[...]
+>  * Open and return an anonymous VFIO cdev file via
+>    vfio_device_liveupdate_cdev_open().
 
-This catches the false EADDRINUSE caused by rounding an odd-sized range
-down during TCP port allocation. Without the preceding fix, the TCP
-and MPTCP variants fail on both IP versions when the last port in a
-three-port range is the only free one. With the fix, all eight variants
-pass.
+Here's an idea for how the device file could be created on retrieve,
+which I'd like to hear your thoughts on.
 
-Allow the loopback bind helper to take a port so the test can hold
-explicit binds on every other candidate. Retain the existing helper for
-automatic binding and run under the existing isolated-network-namespace
-wrapper.
+The patches from Pasha at [1] lets userspace pass a
+file-handler-specific argument to LIVEUPDATE_SESSION_RETRIEVE_FD. In the
+next version of the tmpfs series, I'm planning to use that to have
+userspace create the file and pass it in the argument, and the kernel
+then restores the preserved file into it.
 
-The regression test was developed with Codex assistance and exercised
-on booted x86-64 KVM kernels before and after the fix.
+I wonder if VFIO should work the same way, e.g.:
 
-Signed-off-by: Florin Badita-Nistor <baditaflorin@gmail.com>
----
- .../selftests/net/ip_local_port_range.c       | 67 ++++++++++++++++++-
- 1 file changed, 64 insertions(+), 3 deletions(-)
+  struct liveupdate_vfio_retrieve_arg {
+          __u32 size;
+          __s32 fd;
+  };
 
-diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools/testing/selftests/net/ip_local_port_range.c
-index 3d32b33cb..c17d95045 100644
---- a/tools/testing/selftests/net/ip_local_port_range.c
-+++ b/tools/testing/selftests/net/ip_local_port_range.c
-@@ -44,7 +44,7 @@ static int get_so_domain(int fd)
- 	return domain;
- }
- 
--static int bind_to_loopback_any_port(int fd)
-+static int bind_to_loopback_port(int fd, __u16 port)
- {
- 	union {
- 		struct sockaddr sa;
-@@ -57,13 +57,13 @@ static int bind_to_loopback_any_port(int fd)
- 	switch (get_so_domain(fd)) {
- 	case AF_INET:
- 		addr.v4.sin_family = AF_INET;
--		addr.v4.sin_port = htons(0);
-+		addr.v4.sin_port = htons(port);
- 		addr.v4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
- 		addr_len = sizeof(addr.v4);
- 		break;
- 	case AF_INET6:
- 		addr.v6.sin6_family = AF_INET6;
--		addr.v6.sin6_port = htons(0);
-+		addr.v6.sin6_port = htons(port);
- 		addr.v6.sin6_addr = in6addr_loopback;
- 		addr_len = sizeof(addr.v6);
- 		break;
-@@ -74,6 +74,11 @@ static int bind_to_loopback_any_port(int fd)
- 	return bind(fd, &addr.sa, addr_len);
- }
- 
-+static int bind_to_loopback_any_port(int fd)
-+{
-+	return bind_to_loopback_port(fd, 0);
-+}
-+
- static int get_sock_port(int fd)
- {
- 	union {
-@@ -301,6 +306,62 @@ TEST_F(ip_local_port_range, single_port_range)
- 	}
- }
- 
-+/* Leave each port in turn as the only available one. An odd-sized range
-+ * must not report exhaustion while a port at either end is still free.
-+ */
-+TEST_F(ip_local_port_range, odd_port_range)
-+{
-+	const struct {
-+		__u16 low;
-+		__u16 high;
-+	} ranges[] = {
-+		{ 40000, 40002 },
-+		{ 40001, 40003 },
-+		{ 40000, 40004 },
-+		{ 40001, 40005 },
-+	};
-+	int i, j, port, free_port, fd, err;
-+	__u32 range;
-+	int fds[5];
-+
-+	for (i = 0; i < ARRAY_SIZE(ranges); i++) {
-+		range = pack_port_range(ranges[i].low, ranges[i].high);
-+		for (free_port = ranges[i].low; free_port <= ranges[i].high; free_port++) {
-+			for (port = ranges[i].low; port <= ranges[i].high; port++) {
-+				j = port - ranges[i].low;
-+				fds[j] = -1;
-+				if (port == free_port)
-+					continue;
-+				fd = socket(variant->so_domain, variant->so_type,
-+					    variant->so_protocol);
-+				ASSERT_GE(fd, 0) TH_LOG("socket failed");
-+				fds[j] = fd;
-+				err = bind_to_loopback_port(fd, port);
-+				ASSERT_EQ(err, 0) TH_LOG("bind(%d) failed", port);
-+			}
-+
-+			/* Exercise different random starting offsets. */
-+			for (j = 0; j < 16; j++) {
-+				fd = socket(variant->so_domain, variant->so_type,
-+					    variant->so_protocol);
-+				ASSERT_GE(fd, 0) TH_LOG("socket failed");
-+				err = setsockopt(fd, SOL_IP, IP_LOCAL_PORT_RANGE,
-+						 &range, sizeof(range));
-+				ASSERT_EQ(err, 0) TH_LOG("setsockopt(IP_LOCAL_PORT_RANGE) failed");
-+				err = bind_to_loopback_any_port(fd);
-+				ASSERT_EQ(err, 0) TH_LOG("range %d-%d, free port %d",
-+						       ranges[i].low, ranges[i].high, free_port);
-+				ASSERT_EQ(get_sock_port(fd), free_port);
-+				ASSERT_EQ(close(fd), 0);
-+			}
-+
-+			for (j = 0; j <= ranges[i].high - ranges[i].low; j++)
-+				if (fds[j] >= 0)
-+					ASSERT_EQ(close(fds[j]), 0);
-+		}
-+	}
-+}
-+
- #define REUSEADDR	0x1
- #define REUSEPORT	0x2
- 
--- 
-2.51.0
+Userspace would open /dev/vfio/devices/noiommu-vfioX itself and pass
+the fd. retrieve() would check that it's an unbound vfio-pci cdev file
+for the preserved device (domain/BDF, noiommu, incoming, cfg_size),
+attach the incoming state to that file, and LUO would track that file
+as the retrieved file. VFIO_DEVICE_BIND_IOMMUFD would then take over the
+device as it does now. Since VFIO preservation is new, the argument
+could simply be required.
 
+I think this could get rid of some of the special handling:
+
+ - There'd be no need to fake a cdev open with an anonymous inode, so
+   PATCH 09 and PATCH 10 could probably be dropped.
+
+ - retrieve() wouldn't need to look up the device by BDF, or reason
+   about racing with probe under the device lock. If userspace was able
+   to open the cdev, the device is registered and probed.
+
+ - The device file would be opened through the normal cdev path, so the
+   usual permission and LSM checks on the device node would apply.
+
+ - It would be the same model across file types.
+
+A few things I think would need care if you go this way. The file check
+and the attach would need to happen under dev_set->lock so they can't
+race with a concurrent VFIO_DEVICE_BIND_IOMMUFD on the same fd. And the
+incoming state should probably be tied to that specific
+vfio_device_file rather than just the vdev, so only the file passed to
+RETRIEVE_FD can take over the device.
+
+It would also change PATCH 12. Opening the cdev of an incoming device
+would have to succeed, so the check would move to the first open of the
+device instead: fail with -EBUSY if the device is incoming and the file
+being bound doesn't have the incoming state attached. That one check in
+vfio-pci would also cover VFIO_GROUP_GET_DEVICE_FD, which opens the
+device right away, so vfio_liveupdate_incoming_is_preserved() and its
+dev_is_pci() special case could be dropped from the VFIO core.
+
+The next tmpfs version will also add a way for a file handler to say a
+failed retrieve can be retried, and a helper to claim an existing file
+before restoring into it (so a file LUO already manages, e.g. one that
+is preserved in an outgoing session, is rejected). Both seem useful
+here too, e.g. so that a mistake in the argument (wrong fd, an fd for
+another device, an already bound fd) doesn't make the device
+unretrievable. I'll Cc you when I send it, and I'm happy to share the
+branch before then.
+
+What do you think?
+
+[1] https://lore.kernel.org/kexec/20261103010216.3447716-1-dmatlack@google.=
+com/
