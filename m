@@ -1,58 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793961377;
-	b=ZXNOfK2zgWORrAZ0lRyVeEjOaGyJCo8cxC0O6M6arP6I+1ltVh6VOpHLQEIRwidrfbZq
-	 j9wn1NbwfkW7My3Ad3NXVnes553U9wftPnRpHCs47yG7yAHY/W+DRYYXmu5nNlJs2v55S
-	 NCvQANZtibzcUqnA/y2rk3gwtPQdbhbqrSkGjl8UpASwgF3vOar2xNV2n1Pmtc0n+9EiX
-	 OventsuixGVDL2Cw5aFlO4W/POPboLcG0cR6i3IhIAJa+TeHtZrsUVcihFu3/qM2h7nTs
-	 sUISgQMIwx5NXIWuocCbPhhx7VezQzoCXrESPny+dLfZJgCeP8OGATecjosdNDcdEAA==
+	t=1793961704;
+	b=wP9QgL6SSLFRH+QVjsNdRp/fCJBkirnWnIuhi0L18SWLc4QwZxhmhKRKjt5hcZL+DatQ
+	 vqV5wEiFJ4qS2hw4cEF7Q31Ta1Max3xN6YbkDu9SaXXbMneQhcbKoyKc+qSx3hocZ50ID
+	 ChCjTHkQhgv+VsfugRDpzPoxbQNy+SyrOlf/WZEduQpRgZaiwzdBXm41AKlNpCNeqbTWH
+	 LrPENO48gDIpKihw7AyJbfB27Z1vZ/cOnzO3MxmCnBFXC0gG63SlbLmVayjaqJbE9ThXe
+	 boPOcYuTOWtiGUp1JZrGkE2B77huixrw2i8qU2Fwi3H1VYdeB6G5WpiuflrHnTStWKA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793961377;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=zdiuVcrqXSCDP0HxvY49AL+onTI13fHzCVdhY2/D93w=;
-	b=5M5xvgKVHzVYnqQI15oF7ovaotV9WEpPtm389p7nxtNXsyeEQ+ALNrVd2vecdK6rPQuq
-	 Fq3mLtnrYzi0WIPosnNy/AE46pfmTC5bMfl1aDQddiUlwTNLU3NdDgPM06zIkpvYllXeJ
-	 M31OvAPbvyovwOAsa2HRAbCdCmFzdWZWnbVRPEVt3dEtMWcBy/p94Y3SxHCH5som87rdc
-	 LXei9+LNlc0kbztVGG5kUsr8cb9BW51fTLuOJ8dNgnMzLpDP3w6kXTgpGZ6tou2KiNuM/
-	 fdP0oUlEMSgibxmW+9XlFijdnKySYCxmFeTMTwIw37hQ2YBRjFhDmvqBw3+e4Pgu1Wg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793961704;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=48kbfMmF1DBLzILk4zDW1A3oIaLkRb6C5LUr4+SlxNY=;
+	b=cVazu0OOd3TjslR2P8BAohirVuwMuJW7U52AyEyvz6A16pMjdPwNAVeuYxncw0qxRTea
+	 rEUQI4HomUycPKXxfpLRF8kW5H1INBtNwn9pt+7Da542GRl6noIxxx+lMizbfwS0nhTwk
+	 FXd/juElVsf4eHRQbfEsgrZ7aB7meHZKo5Ro0qwPbAPeD53jgi2futZCpld/anggT3B2j
+	 B4BhWG9Ju3XviFWEPtNgEo79+mFX5dvhBXxuABpqoltWHeRjLpSfJR6oIIo1INOo/p64m
+	 D/iqUO36t2SOg/qYV/wFM2NgVQQism8rnlxcXNenK9cOjucy7bOKobs6K5Iu3ZY2KWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=j+8jP0t3;
-	arc=none smtp.remote-ip=113.46.200.224
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HoP8hkVd;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B252606A326;
-	Fri,  6 Nov 2026 10:36:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B252606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FF2606A32D
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 10:41:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67FF2606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=j+8jP0t3
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=zdiuVcrqXSCDP0HxvY49AL+onTI13fHzCVdhY2/D93w=;
-	b=j+8jP0t38yPoKZ3rHG/+O5xTmerw3/KNXeVSTgSVzHHPrxh0MWE1JX//C58bEdjJB+4X83pL+
-	l5I1LHMJE2ZS202tfaKPcP5cOsxK88iotFDrJG+IjX6VS1DprsCNiQNWN21cQ3Ssbz0D8YMGqVD
-	dpxxDOKtE/7splKn8XQRRc0=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jLbDn4QNMz1cypH;
-	Fri,  6 Nov 2026 18:35:53 +0800 (CST)
-Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0748140565;
-	Fri,  6 Nov 2026 18:36:06 +0800 (CST)
-Received: from [10.67.120.103] (10.67.120.103) by
- kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 6 Nov 2026 18:36:04 +0800
-Message-ID: <afcbf19b-bd13-4afc-ab56-8bc50c793e50@huawei.com>
-Date: Fri, 6 Nov 2026 18:36:04 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HoP8hkVd
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793961702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=48kbfMmF1DBLzILk4zDW1A3oIaLkRb6C5LUr4+SlxNY=;
+	b=HoP8hkVdMAscFTF76L4nxr5LcmUtuSo93JQbNMkJc4Des1zejCMwXoRoEhL+HnR7b5OIaQ
+	Yu8atS92clAAZRQFIl9dS51SZgEnx4mnEUUrl8wVU6E8Ysnwkxo0UjzYT7a7rddFjL1Swf
+	jew52CSJlBl0RGJVUtwpM2nWKSRuI8s=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-401-VPPX5bDRP_KLO3nismGbdA-1; Fri,
+ 06 Nov 2026 05:41:39 -0500
+X-MC-Unique: VPPX5bDRP_KLO3nismGbdA-1
+X-Mimecast-MFC-AGG-ID: VPPX5bDRP_KLO3nismGbdA_1793961697
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4232E1955F3C;
+	Fri,  6 Nov 2026 10:41:36 +0000 (UTC)
+Received: from [100.91.101.41] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5B6BA30000E3;
+	Fri,  6 Nov 2026 10:41:31 +0000 (UTC)
+Message-ID: <588acb18-7a42-4c92-9898-46ee4160e1a2@redhat.com>
+Date: Fri, 6 Nov 2026 11:41:29 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,98 +72,123 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 11/15] KVM: arm64: Reserve dirty ring space for the
- HDBSS buffer
-To: Leonardo Bras <leo.bras@arm.com>
-CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
-	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
-	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
-	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
-	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
-	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
-	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
-References: <20260929103655.85107-1-zhengtian10@huawei.com>
- <20260929103655.85107-12-zhengtian10@huawei.com> <auikG0clmr19sAjh@LeoBrasDK>
-From: Tian Zheng <zhengtian10@huawei.com>
-In-Reply-To: <auikG0clmr19sAjh@LeoBrasDK>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: [PATCH net-next v2 05/14] dpll: dpllsim: Add support to set input
+ pin state
+To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Jani Nikula <jani.nikula@intel.com>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+ Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261105151852.1844305-1-poros@redhat.com>
+ <20261105151852.1844305-6-poros@redhat.com>
+Content-Language: en-US
+From: Ivan Vecera <ivecera@redhat.com>
+In-Reply-To: <20261105151852.1844305-6-poros@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr100010.china.huawei.com (7.202.195.125)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-
-
-On 11/2/2026 10:54 PM, Leonardo Bras wrote:
-> On Tue, Sep 29, 2026 at 06:36:51PM +0800, Tian Zheng wrote:
->> The dirty ring reserves room for CPU-side dirty buffers via
->> kvm_cpu_dirty_log_size(). Report the HDBSS buffer entry count
->> through it, so a full buffer flush always fits in the ring.
->>
->> Pin the HDBSS buffer size to PAGE_SIZE when dirty-ring is enabled,
->> via kvm_arch_dirty_ring_size_updated(): a larger buffer only
->> shrinks the soft_limit and forces more frequent userspace drains.
->>
->> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
->> ---
->>   arch/arm64/kvm/arm.c | 8 ++++++++
->>   arch/arm64/kvm/mmu.c | 8 ++++++++
->>   2 files changed, 16 insertions(+)
->>
->> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->> index 9d7bdece149a..5a7046acb62e 100644
->> --- a/arch/arm64/kvm/arm.c
->> +++ b/arch/arm64/kvm/arm.c
->> @@ -215,6 +215,14 @@ static int kvm_arm_default_max_vcpus(void)
->>   	return vgic_present ? kvm_vgic_get_max_vcpus() : KVM_MAX_VCPUS;
->>   }
->>
->> +void kvm_arch_dirty_ring_size_updated(struct kvm *kvm)
->> +{
->> +	if (!system_supports_hdbss())
->> +		return;
->> +
->> +	kvm->arch.hdbss_buffer_size = KVM_ARM_HDBSS_DEFAULT_SIZE;
->> +}
->> +
+On 11/5/26 16:18, Petr Oros wrote:
+> Add support for setting the state of input pins on the device.
+> Implement the state_on_dpll_set callback for input pins and advertise
+> the state-can-change capability for them, so that userspace can move a
+> pin between connected, disconnected and selectable. The driver stores
+> the requested state and reports it back unchanged, it does not act on it
+> yet. Output pins keep reporting their state only.
 > 
-> On the same subject as a previous patch:
-> I don't think this is the best approach, on top of adding a new weak
-> function to take care.
+> Signed-off-by: Petr Oros <poros@redhat.com>
+> ---
+>   drivers/dpll/dpllsim/dpll.c | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
 > 
-> Maybe during the dirty-ring allocation, on vcpu creation, we could take
-> into account the requested dirty-ring size, and just allocate the HDBSS
-> buffer taking that into account. That would make it simpler, don't you
-> agree?
-> 
-> Thanks!
-> Leo
+> diff --git a/drivers/dpll/dpllsim/dpll.c b/drivers/dpll/dpllsim/dpll.c
+> index a1d5921fb8d017..2b0c053a7b6087 100644
+> --- a/drivers/dpll/dpllsim/dpll.c
+> +++ b/drivers/dpll/dpllsim/dpll.c
+> @@ -104,10 +104,23 @@ static int dpllsim_pin_state_get(const struct dpll_pin *pin, void *pin_priv,
+>   	return 0;
+>   }
+>   
+> +static int dpllsim_pin_state_set(const struct dpll_pin *pin, void *pin_priv,
+> +				 const struct dpll_device *dpll,
+> +				 void *dpll_priv, enum dpll_pin_state state,
+> +				 struct netlink_ext_ack *extack)
+> +{
+> +	struct dpllsim_pin *sim_pin = pin_priv;
+> +
+> +	guard(mutex)(&sim_pin->dev->lock);
+> +	sim_pin->state = state;
+> +	return 0;
+> +}
 
-Hi Leo,
+Should DPLL_PIN_STATE_CONNECTED be accepted here?
 
-The "set once" guard we're discussing comes from the patch that adds the
-ioctl, and it isn't really needed. We discussed this earlier [1]: we can
-just initialize hdbss_buffer_size to PAGE_SIZE at VM creation and let
-the ring reservation use it directly. **That also means
-kvm_arch_dirty_ring_size_updated() can be removed.** Thanks for your 
-suggestion.
+The device always reports automatic mode, which dpllsim_make_group() sets
+and nothing changes:
 
-As for why PAGE_SIZE is the right value in ring mode: the HDBSS buffer
-is flushed on every VM exit, so a larger buffer doesn't reduce the flush
-frequency. It only inflates the ring reservation (64 + size/
-sizeof(u64)), which shrinks the soft_limit and forces more frequent
-exits to userspace for the ring to be drained. Draining the dirty ring
-from QEMU is more expensive than draining the HDBSS buffer from the
-kernel, so the smallest buffer gives the best performance. In this mode,
-a larger buffer provides no benefit to users.
+	sim->mode = DPLL_MODE_AUTOMATIC;
 
-In my tests, I also saw performance degrade when more space is reserved.
+Documentation/driver-api/dpll.rst limits what a user can request in that
+mode:
 
-[1] 
-https://lore.kernel.org/all/5a096cca-713a-4449-83dc-c763dc06c085@huawei.com/
+     In automatic mode (``DPLL_MODE_AUTOMATIC``) the user can request one of
+     following pin states:
+
+     - ``DPLL_PIN_STATE_SELECTABLE`` - the pin shall be considered as valid
+       input for automatic selection algorithm
+     - ``DPLL_PIN_STATE_DISCONNECTED`` - the pin shall be not considered as
+       a valid input for automatic selection algorithm
+
+     Pins that have the ``DPLL_PIN_CAPABILITIES_STATE_CONNECTED_OVERRIDE``
+     capability can additionally be set to ``DPLL_PIN_STATE_CONNECTED`` in
+     automatic mode, overriding the active input selection.
+
+dpll_pin_state_set() in the core only checks state-can-change, so the
+driver has to refuse the state. zl3073x does that for its automatic mode
+in zl3073x_dpll_input_pin_state_on_dpll_set():
+
+	case ZL_DPLL_MODE_REFSEL_MODE_AUTO:
+		if (state == DPLL_PIN_STATE_SELECTABLE) {
+			...
+		} else if (state == DPLL_PIN_STATE_DISCONNECTED) {
+			...
+		} else {
+			goto invalid_state;
+		}
+
+[ ... ]
+> @@ -149,6 +162,12 @@ static void dpllsim_pin_props(struct dpllsim_pin *pin,
+>   		prop->freq_supported_num = ARRAY_SIZE(dpllsim_freq_ext);
+>   		break;
+>   	}
+> +
+> +	/* Capabilities follow the ops the pin is served by */
+> +	if (dpllsim_pin_select_ops(pin) == &dpllsim_input_pin_ops)
+> +		prop->capabilities = DPLL_PIN_CAPABILITIES_STATE_CAN_CHANGE;
+> +	else
+> +		prop->capabilities = 0;
+>   }
+The input pins advertise state-can-change only. If connected is meant to
+be settable on this automatic-only device, should
+DPLL_PIN_CAPABILITIES_STATE_CONNECTED_OVERRIDE be advertised here as well?
+
+If not, should dpllsim_pin_state_set() return -EINVAL with an extack
+message for it?
+
+The commit message says "so that userspace can move a pin between
+connected, disconnected and selectable", and the stress test added by the
+next patch, 70a4dcf52b9c ("selftests: dpll: add pin state tests"), relies
+on it. test_pin_state_flooding() cycles through
+
+	local states=(connected disconnected selectable)
+
+and fails when one of the sets is refused.
 
 Thanks,
-Tian
+Ivan
+
