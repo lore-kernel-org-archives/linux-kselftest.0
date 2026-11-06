@@ -1,82 +1,72 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793955920;
-	b=QslAtVg8k012F9h7lILIyb4/GdIl+TCOH6UGJgHdY2Qgup1/O8Jf2/oMF2hyXAzy4t/W
-	 ITTcG1gWdcnQX3AkQ5S0qWN1mpp6zn+d5iMcGpgLfSZIxshXMyACG+GCjghrOnVzUNhaP
-	 ugEkjIHlDZjTgA9NB0tFKvY0V248re+87G+eHgJA21Gw1ju64P/Wr56uoZcqaqL0Skc+1
-	 5tRqt/fAQoiw9HCBfivZMwqEL7PFC3xmY1NS7JnMJS5pto3Q442u0E1rWKWFGktASK2YP
-	 GuRXC12+5uL08nro4EBFtN0fdIqiUiQd0jNcTuwlDaPptLmglppFPjumL+8SYPhGyhg==
+	t=1793957325;
+	b=3fVUAiURTS44TjoGQ1pv7Aah/a8VEbAoBZOvCycNWlZ7OS8BJnUrrie5ZBrScP0hMF0p
+	 21zxSlKDIN8nbmfH1cwHmKY9uhWV3hDvnQbYRtwEk/WeQ9bxn7w+Qg4LdUvUB9HQ1hMHT
+	 kR3xtJJDPXCM2Xe0OYOWPR0HCm19hnKOht/swRQRtld0VOqdOJNFZS3u6Gvnbn8z/7YTX
+	 Z2+2dQK2BRqdEOAYdQeGZbFClZq+zLnqnPGEJvAw8Jpl00vWjnV5roS0ZBYIa0r5Vduwr
+	 LGGGEYsINPWjWnjQHYAAlFLdxMd9YRUkQ2LPIwi3dOT/bsb/9JG1joYP7HdZTCLO38g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793955920;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=sTFwFHk0E64AYEEUcX8t7DWdOvQ6PLUQ/fthkL753Io=;
-	b=co3HGuB1ydbjedHMG5rirmR+goTF/au2ACxaLnTdW8qaXLngHNdgmEIanEbwwUx5nZQD
-	 IC/36H7XT/Qap51CtoS4lwUzEKk9pjAt5qxwpgIHPC2lqZaL7TZToLBnOPX2FmYFiq1Vq
-	 IlEAhNh8HDuIN2diHPLer3lBqvV0TQ4+ibT2ffQ/Q+6Ff595bh3l1tvqHO1S83zQOEX+i
-	 TBws8thjLpnrIemWglyC9dZKwiege9q2Pbt8H6hRzMLpIycCcAZmGyErkMLbVFibYJhG1
-	 LI0QDT6Ajyi1/+EdD4g0MWVVkm4QddlNrdKZ48pb0GQJ5jUEzb5clKoYduK0vxdC76g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793957325;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=VC16RfQ/Ch74ykYoajUZJ+R1KFdW7fHzBmB94MytVlk=;
+	b=WzQxChkHI14oFq4yEbBaoozusuAfMETEJqHgsvIlbbrk3f7FJMyKM0h0ede1zTF2wlNW
+	 tPdrK3zRAHQnUUaHigveEg5wBUFkPF8iMzTIFCABBZfq0zm3T3FZj+jIkGjxYZUtFZaCX
+	 W7v5YMGtmIOevBz4VVk1l18Xfj3sKMz+K/AnlFyMQFaTf7V1KRgfvFL+bNwPJxxra0WvX
+	 3rDyoKisrYk0d63aKxIdNezjdauRpVXfh3viFfcJUHrNXINP7TwO8D52bIJzEbZVsHZOC
+	 LQkd3+5+VkpH+w5+o7L0fPzhMuQqVMR4z4+VgzaN1tWoqXO/l910xeghKnN2lvUgqkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NxG4Yq28;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kqeWePhs;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A18606A326;
-	Fri,  6 Nov 2026 09:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1504606A326;
+	Fri,  6 Nov 2026 09:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NxG4Yq28
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C19F1F0089F;
-	Fri,  6 Nov 2026 09:05:19 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kqeWePhs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C551F0089F;
+	Fri,  6 Nov 2026 09:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793955920;
-	bh=sTFwFHk0E64AYEEUcX8t7DWdOvQ6PLUQ/fthkL753Io=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=NxG4Yq28SBZ5pvwkOA2iAYG11qXpnj0/U/4mz8TRCJco0CmfcWsGatdxSJUI7EvJS
-	 APt/LCv5vmGrIstmtMDjefq9lAL6ZUkRdKAesed25zP6/6QYUzdu5k/UIsj8cOqjKW
-	 wxJgUyASJmfcUYRwu5Yxh+FSnuQu58iHYvNrMYjFgkGWoEygoLgJZz4v5OwDareFN7
-	 P1KpTDQ5mDTNlKcKNH37py/9Td+Amts88a/QdlKwM1JOBVjQm39I3NT1MlE26jZJHR
-	 WNphDN7M+CtPeL4Zq1+PqjL231Yj7MhdwF3uERuy/5ORsvDjS8hh73L5dk+n2nQwZV
-	 4H79poaACgWhg==
-Date: Fri, 6 Nov 2026 01:05:16 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Hannes Reinecke <hare@suse.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
-	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <20261106090516.GA1973@sol>
-References: <20261105031401.956609-1-jarkko@kernel.org>
- <20261105031401.956609-3-jarkko@kernel.org>
- <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
+	s=k20260515; t=1793957324;
+	bh=VC16RfQ/Ch74ykYoajUZJ+R1KFdW7fHzBmB94MytVlk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=kqeWePhskc8HNNCmYcdAWgvx59rFaItJGQOF/OyXIt/sCZd7S07yg+8aS/fnB0zNp
+	 VZWmUIjL5yONrrC/I3jiwH2+dnKikXHjGeTuLUGr0j0eRPY5SO/KWrCGOFcgNA3ZZL
+	 HdLccbtIl2+rB52+gfXthzuEXvhI4yjsjlV4x4GCkb7bizD6hCKSxpyMWCje9+/s6U
+	 4d4hYcIqy+tap693g+yX6oZ4XvZL7fnGPKzTviF5CpGIRYQ1kG01IAXQpkl7+VYCF1
+	 E9JusScvtWLyNrSjSK8j0HDA6lphKi+qTFh2GDRYyMedmYzEVbuuhiiS7jnOcasf3z
+	 PDOC78hNF61Zw==
+From: Christian Brauner <brauner@kernel.org>
+To: me@bobcopeland.com,
+	Hungyu Lin <dennylin0707@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	willy@infradead.org,
+	viro@zeniv.linux.org.uk,
+	jack@suse.cz,
+	akpm@linux-foundation.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	geert@linux-m68k.org,
+	tsbogend@alpha.franken.de,
+	maddy@linux.ibm.com,
+	linux-karma-devel@lists.sourceforge.net,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] omfs: remove the filesystem
+Date: Fri,  6 Nov 2026 10:28:33 +0100
+Message-ID: <20261106-vortrag-exotisch-pelzmantel-66235662f81f@brauner>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261105044046.52180-1-dennylin0707@gmail.com>
+References: <20261105044046.52180-1-dennylin0707@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,30 +76,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1286; i=brauner@kernel.org; h=from:subject:message-id; bh=i3zpqEJ74dna9za+0x2JJjtzgM6lB6eRNkY0jcS+yfg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS9nXv4bfPNlUcWTPn4uXNLgONU2auKFum3j/m/yNjO3 u7/4QGPcEcpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBEkjYzMkw6HKYfmszBsTjg nQ9D0/sLfp1fF166+WGPjq32xIUV3GcZfrMKhXHuzlJ3P5KXsnvXZd3mx77RJ1add2gs+WygyOB fzwsA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 06, 2026 at 09:21:32AM +0100, Hannes Reinecke wrote:
-> While I am pretty much in favour with this approach, is there a specific
-> reason why siphash has been chosen?
+On Thu, 05 Nov 2026 04:40:45 +0000, Hungyu Lin wrote:
+> OMFS supports the on-disk format used by the long-discontinued Rio Karma
+> music player and ReplayTV DVR. While reviewing a fix for incorrect block
+> mapping on writes starting beyond EOF, Matthew suggested removing the
+> filesystem instead of continuing to maintain it.
+> 
+> Existing OMFS media can still be accessed using an older kernel with OMFS
+> support.
+> 
+> [...]
 
-SipHash is the preferred choice for secure hash tables.  It is secure,
-performs well on short inputs, and doesn't require special instructions.
-See Documentation/security/siphash.rst
+I agree. It's great to see that we are are able to shed a whole bunch of
+legacy tech.
 
-> Would there be a chance to make this configurable?
-> I do see slight complications when running in secure environments
-> (ie FIPS-certified environments) where most of the hash functions
-> might not be available ...
+---
 
-SipHash support is available even when the kernel is booted with fips=1,
-so there's no issue there.  It's already widely used in the kernel for
-hash tables, and that hasn't blocked FIPS certifications either.
+Applied to the vfs-7.5.omfs branch of the vfs/vfs.git tree.
+Patches in the vfs-7.5.omfs branch should appear in linux-next soon.
 
-Side note: fips=1 actually has little do with security, and in some
-cases it actually decreases security.  See for example
-https://lore.kernel.org/linux-crypto/20261026183332.11402-1-ebiggers@kernel.org/
-where I'm fixing a vulnerability caused by fips=1.
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-- Eric
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-7.5.omfs
+
+[1/1] omfs: remove the filesystem
+      https://git.kernel.org/vfs/vfs/c/b4d257187fe7
