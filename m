@@ -1,85 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.113
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793988499;
-	b=i2kMMWtPZiF1cxBH130wOSZ4YQUr7k/5ZHoVj8C13ltbbSP+iUlJRikjPL+RIJKv9W2f
-	 KxDN7j2s060UvPwgSCshTbnnOTWQ2QRt4Km5+JqJT7oBIHgESuJTD862xMsOygnOO07jv
-	 X6z3+/H/Fj8M6m0r9GNpieMZdQQnNZ59eHlC2jVD/cSCIx/ZmeDO0SYOd+5I87pPBhLLs
-	 //7AMMdF871bILiQrdFhsojzmx034QYljXmGyzW4FGWpKzI9QSYVbamph7ROSioN+3a32
-	 Asge7A1/9xG4tpiiQOCfBIBbuG2Gi9Amy1AHvUljRBZt0RYV8vIcZd40Om3TvbAqnBw==
+	t=1793988974;
+	b=ocm+a6dpgf3kdMdcqIyQPuTrusXhfMp6Sp9Mh80gXj5T/Qj++7VK2A5qtfh8pAN6LxxJ
+	 n6iQi+5QV4y23+pumwJ8HSaVSDhnrxnT66HAfd3tt4svInAShSTEs+5pnZBV7Htqczi3k
+	 ZjoGpPDwHYXb9zc3pH1fNThQenEtx3vZR8mS9Fqt0rLV51SLc3doZaGdWJxok8rleHB4h
+	 WXwngXrwq1lnPDdOY3CxeQ+GDx934pzjr/lg4fiip0K5J3PzP0KYettF6iLpl6vA5WsIA
+	 By1tcI4traDf2T1X00JqBpNBKixiK73ChcHdX7y9YeOS8ayOdmNnz8MPf5AfAFIfGlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793988499;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793988974;
+	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=+D9ErcY1cg1H93A7kgsl3DQ/jvK3dao4218hxA++MOQ=;
-	b=SNTHL+GrrYZDqCMDtsTmV/L1yxp176/JkFIeTJ7eyBOrbnqCgDlfip46cwCBPpy9L7OC
-	 MujFfeHru0txBM3+53R3p1lfjZN8y9LhUON7Dp+ETDjSjtvA1Yq+wjl0kQT6Bgv9jjm57
-	 h17bfWtPolPF/CyKSLKe6sw//xB7APAbqo8uRMfPIxFxHkRRjSJ7+VBrgnxZfpQW6PXnR
-	 5DjB4EgUjjG34QOVpMNiIvKBqoynsl6ljF4205OCX4Pg9p7lo0bViaW8xZUdE6tHcN1rN
-	 U/Dfb0DT/VmyZaG7RUM13MiwzTmvNZMKHjl0ZT8ujgGDUzMHDw7DA1L5qXYifJbsMxw==
+	bh=bdqlIDpO1Rbh7tY3234Rn/68H01qvnrPvCer2ASmJqg=;
+	b=VvNhlBOX+9CvIvX8BQtpvdK46eTfH8hDcFe66nTlEsmmDYn9BWXQJ3sNEZ/9H9NSioHp
+	 8MJisezQxmXx+t11mbOIP4tHLa5TT0gQvZ3TxIDQ/9exUH0N0znsQ195aJjYm6muPnYOg
+	 Gc31GJsdkI0vieTYr36VYe6biCQpnSuAdSLWcdnuotllTPa+J25xedw6hPtUapc3UIgpx
+	 oyVcwcBQg6EbVunzFGmi7Eg/GYjPDUfQgH6lqUqo651RL4/QZejF1kcF8hg8kRAZrj+5d
+	 ewq7SB3W+PjN3HNZcezkw51XwN46CKIjMKkvvf3sPdYVTuffczXX9orXFg8i8+UikaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linuxfoundation.org;
-	spf=pass smtp.mailfrom=linuxfoundation.org;
-	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=UblIupfw;
-	arc=none smtp.remote-ip=209.85.161.52
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linux.alibaba.com;
+	spf=pass smtp.mailfrom=linux.alibaba.com;
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=tEKY+hhu;
+	arc=none smtp.remote-ip=115.124.30.113
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979D760A263E
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 18:08:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 979D760A263E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FF9606A326;
+	Fri,  6 Nov 2026 18:16:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81FF9606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=google header.b=UblIupfw
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-6aa9606ddadso582284eaf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 10:08:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1793988492; x=1794593292; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+D9ErcY1cg1H93A7kgsl3DQ/jvK3dao4218hxA++MOQ=;
-        b=UblIupfwewWm3kbODGTK7uih8CzS+q5+ojxUuK1I60tKEFRzBfCgfcUWTuilVxIV7z
-         S9VxA1D83HVQooY3QRaaNcpMD03JMWzjkDtFSoVBM3pYBYCZj0Ft5ENi3M1P3QpjesXO
-         q7Olvp5hYauvaoCT3QrTRrFmlpTx+pJeDKtS8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793988492; x=1794593292;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+D9ErcY1cg1H93A7kgsl3DQ/jvK3dao4218hxA++MOQ=;
-        b=oYyGz3Aq0YozgEfUWx699A3tUe17j1nY3sMcpqCGahZUB4JNR/stvpursnvbv96l3G
-         KK1mHCdb7GkwuupDrAIIk1/tQALy/Ta4nHzvw+FguehVatU3PvDdUM2XHlaA+vSDsxm2
-         0qey06DKz4MozvUJty+BK7SWh3kGb2ba1yllfj5vJfPU/d/MbDT+fitxGuSW6vSmTrWy
-         atfylul29i6OSm7tbx9fH6ghsLE0geeflbc+pMn2OAy4v5n4G8xA+Hvso2c1GZQcM9kn
-         xDv7WfjNEs1OvmaWSgzdh3v+DB8W3yaPTIH+aF7hLVHMzfGwoAKeuwBAATtjBg5hCx7k
-         PyMA==
-X-Forwarded-Encrypted: i=1; AKwUvBwL4RCvRHFCPL1du57xuTqfOIiz60H5LLq3FLrjJ8dVpKE8v3nc5uOjEBwW+pivURZdfXrPvZsHQ56UC6aOU6c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+uxhT0Wxme2FMWWk9GUsMC5MbhcgzEOD2GYVMtykIijQVy5IV+
-	T1W+pym97kS8mRGOvQv/oqUJqpEVMeDVoozApYECQUUcMCOwddhdPVx7WGBy3Do/ovo=
-X-Gm-Gg: AYBFou0M/DW9lH7B7b2MBxilILpmvZdN+wfEWPrjhaud85cr9qCUmtRdQSjyv9QHb5a
-	OzlyePfu/3tudx+YrquPSWF84l7Ex927Wjbuj3IgtNFUlCB9pPlDo0UJzVp7wWB8L4ue2zsTl4r
-	Mtof4wMTrDpqUesI+utc2B2eXDTebjX/7Rd9iileKOwYo00xNNZ24Ep4xYi3SBG+AbIXr2nHSco
-	btMyvc4v0p/JqCY6J4r5r5AI+cXPNIMErqdcbRdW+fsNqRmZI/8H7XNUmWY1fCRrA2zek3flQCM
-	vaqM/v96om1H9hYH3mRrbJe32olIARer8h6vmMVX4VqzCzsglN5/HNXQRpNXDdXOpFZsaMyROpK
-	pkoDYqZg0jGXltDfLXEPsJkGK7VMeoNBMzeeH6vj2Efp2x/eGQlkxJLm4MCGyXVFqAzazU065G5
-	2JO1DUcaQeoXc5Kj5pPv+i+L09eybLhf8qlT4Rc+k5nKbFv6Zb8KGEDo1J9VPKXRjGbOn0+0Xr9
-	4V5Yb8CRgTnQeRsB7ZU0haQJE+Py93Fpy6oSnn29QsyQeKjFHEhpKLe6mDuUv/D1iWI4Qxv7SKF
-	GkSpzpHkDvYXUUR+ASsdLyK/yCQ7EUh8i7g8jFI=
-X-Received: by 2002:a05:6820:2088:b0:6e0:1599:a4b with SMTP id 006d021491bc7-716e7913562mr2314159eaf.18.1793988492496;
-        Fri, 06 Nov 2026 10:08:12 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85f1dbb29acsm2301463a34.4.2026.11.06.10.08.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Nov 2026 10:08:11 -0800 (PST)
-Message-ID: <b6468c17-46ba-476b-9182-0826df6bb9c4@linuxfoundation.org>
-Date: Fri, 6 Nov 2026 11:08:08 -0700
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=tEKY+hhu
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1793988969; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=bdqlIDpO1Rbh7tY3234Rn/68H01qvnrPvCer2ASmJqg=;
+	b=tEKY+hhuPc0tL5xvWZEmqsSFY/2OUfFFDxP90TvT9CZ7QtG9nP8tNmYL4tb+qkLrpmhgn7XMRUcu3vAMZ2v9lMzxwhj2dnuxeTW6kSP4PhIeml6wi31v7NBLcyqRPYOpapkU4S28EhEhwcX2EB0uqtI/PNcRC60SzxENqvGvxMA=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---0XECMC01_1793988959;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XECMC01_1793988959 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sat, 07 Nov 2026 02:16:07 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	puranjay@kernel.org,
+	alexei.starovoitov@gmail.com
+Cc: eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	pulehui@huawei.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	shuah@kernel.org,
+	rgbi3307@gmail.com,
+	guoren@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 bpf-next 0/3] riscv: bpf: Add BPF private stack support
+Date: Sat,  7 Nov 2026 02:15:55 +0800
+Message-ID: <20261106181558.1564-1-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,45 +84,95 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/2] Start removing X86_X32_ABI
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>, "Maciej W. Rozycki"
- <macro@orcam.me.uk>, Bill Wendling <morbo@google.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Ingo Molnar <mingo@redhat.com>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Jonathan Corbet <corbet@lwn.net>, Justin Stitt <justinstitt@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Neal Gompa <neal@gompa.dev>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Richard Purdie <richard.purdie@linuxfoundation.org>,
- Sam James <sam@gentoo.org>, Shuah Khan <shuah@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>, Tomas Glozar <tglozar@kernel.org>,
- Willy Tarreau <w@1wt.eu>, x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20261015-x32_removal-v5-0-2bfef9151fad@linutronix.de>
- <20261106113147.iCEmPCOW@linutronix.de>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20261106113147.iCEmPCOW@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/6/26 04:31, Sebastian Andrzej Siewior wrote:
-> On 2026-10-15 20:47:13 [+0200], To linux-kernel@vger.kernel.org wrote:
->> Patch #2 prepares the removal of the X32 ABI and has the broader
->> reasoning. Patch #1 removes x32 from the selftests because it does not
->> have a depends on and assumes x32 to be always available on x64 and so
->> it breaks.
-> 
-> Can this be merged, please?
-> That (syscall) test fallout mentioned later in the thread is fixed in tip.
-> 
-> Sebastian
+This series adds private-stack support to the RV64 BPF JIT.
 
-I gave my Ack for selftests - I am assuming these will go through x86 tree.
+The verifier rejects a struct_ops program that requests a private stack
+with -EACCES when the JIT does not report
+bpf_jit_supports_private_stack(), and sched_ext requests one for its
+dispatch callback, so no sched_ext scheduler can load on riscv64 today.
 
-thanks,
--- Shuah
+Allocation, the guard value and the lifetime handling follow arm64,
+x86-64 and powerpc64; the 16 byte two-copy guard layout follows arm64
+and powerpc64, since x86-64 uses an 8 byte guard with a single copy.
+What is specific to riscv64 is where the pointers end up:
+
+ - Every BPF stack access goes through BPF_REG_FP (S5), so pointing S5
+   at the top of the per-CPU area and leaving SP on the kernel stack is
+   all the JIT has to do. S5 is callee-saved and each subprog derives
+   its own, so bpf2bpf calls need no extra save and restore.
+ - The outgoing stack argument area stays in the kernel frame: callers
+   write it relative to SP while callees read it relative to RV_REG_FP.
+   Unlike x86-64, no register here is shared with the private-stack
+   frame pointer, so no verifier-side exclusion is needed and stack
+   arguments keep working together with a private stack. arm64 already
+   does the same, and patch 3 tests that combination.
+ - The per-CPU lookup is emitted after the tail call entry point. A
+   program using a private stack can still be entered as a tail call
+   target, at RV_TAILCALL_OFFSET, so it has to set up its own S5 there;
+   and since that offset is a constant added to the target's bpf_func,
+   everything in front of it must be the same size in every program.
+
+The base address is materialized with absolute moves, as on arm64,
+x86-64 and powerpc64, which reach the per-CPU offset through gs:, TPIDR
+or r13; riscv64 has no such register, so the address of __per_cpu_offset
+is loaded too. Patch 1 has the detail, including why emit_imm() is a
+choice there and why the prologue length stays fixed across passes.
+
+RV32 does not declare support and keeps the existing behaviour; the
+prologue signature is unchanged, so bpf_jit_comp32.c needs no edit.
+
+Changes since v2:
+ - Patch 1: PRIV_STACK_GUARD_VAL moved to bpf_jit.h.
+ - Patch 3: The test redone as two asm programs in
+   progs/verifier_stack_arg.c.
+
+Changes since v1:
+ - Patch 1 commit message: guard layout credited to arm64 and powerpc64,
+   value alone to x86-64; __per_cpu_offset described as a choice.
+ - Patch 3: test_private_stack_runtime() renamed to
+   serial_test_private_stack_runtime(), and the stack argument skip
+   prints a reason.
+
+Testing
+=======
+QEMU virt rv64, an 8 vCPU SMP kernel and a 1 vCPU UP kernel, both built
+on the base commit below, source tree clean at the head of this series,
+selftests built from these patches. There are no private-stack related
+failures, and the private-stack suites logged no BUG, WARNING, unknown
+opcode or guard corruption. On UP, kfunc_call/subprog,
+kfunc_call/subprog_lskel and scx_simple are not run: all three fail on
+the unpatched base as well.
+
+ - verifier_private_stack, struct_ops_private_stack.
+ - tailcalls, stack_arg, subprogs, fentry_fexit, kfunc_call,
+   percpu_alloc, async_stack_depth, arena_atomics, arena_ldsx.
+ - verifier_stack_arg, stack_arg_precision.
+ - may_goto_priv_stack, may_goto_far, verifier_may_goto_1,
+   verifier_may_goto_2.
+ - scx_simple.
+ - sched_ext runner sweep on SMP: 40 cases, 39 pass. enable_cmask fails
+   because its ops.enable() takes a struct scx_cmask __arena pointer and
+   riscv64 does not implement bpf_jit_supports_arena_args().
+ - patch 3's test again on x86-64 and arm64, so all three
+   architectures it is gated on have run it.
+
+Chen Pei (3):
+  riscv: bpf: Add BPF private stack support
+  selftests/bpf: Enable private stack tests for riscv64
+  selftests/bpf: Test a private stack together with stack arguments
+
+ arch/riscv/net/bpf_jit.h                      |  2 +
+ arch/riscv/net/bpf_jit_comp64.c               | 42 +++++++++-
+ arch/riscv/net/bpf_jit_core.c                 | 82 +++++++++++++++++--
+ .../bpf/prog_tests/struct_ops_private_stack.c |  3 +-
+ .../bpf/progs/verifier_private_stack.c        | 41 +++++++++-
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 49 +++++++++++
+ 6 files changed, 205 insertions(+), 14 deletions(-)
+
+
+base-commit: a3c8813409f13779fec225468aba7d4067a66468
+-- 
+2.50.1
+
