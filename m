@@ -1,87 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793973736;
-	b=ITjBFIIfzElGI7V1OG2LNUcQfStze+3nAVYDQo1qKYwGy2Xm93Gb1Cb+JHHguLPGiShF
-	 1mEL6BDXuhD0Nb7Rbf6/tbs+sYHAkyDOTmwQ31+TEkhdkRXmauMue6ec5pdYW+3SUfSE8
-	 2B2ufuSyglBPmYaagnhVw16fWGBhUIobrCT1U0COVG2htZziv7Wx5rTkw0ihS6hEsAe0L
-	 H0a8zbMhCv9uXQIx6FlUo7gqwK9T5wVJUJ+wwyZ/EZzYxrKacYsFsTr3s4Ymu3e0WrX1e
-	 BTwQkALK3SePHKYyUTl0ewYUr+HJNmeH+bhN7AdCkM60X8uWho4SACu1WoLQcsiJG2Q==
+	t=1793973757;
+	b=NSpLD/sX0RQc6B2jzbDu9+CfDNCt81IkaSV7LMEDkNW75X9ZBVDT4e5U7gXEj31z06JF
+	 Zgsp2OG5Xf7k7Ht7okwOrNAYtaaRkXASpg6qYFI8+Cv6SMtsaMDo5UDQNDIBvGtRgEos9
+	 Sd/CkZ7ovf3fcyMjay3lMdd1705U+0U3M1MRawBjtwNGTXRzpTcf7f9tzO4TVPAF4HbPE
+	 dH2szl5ArepcWqk/UpsmcrYUtwDhO73xA/UrTdZUKbhvq2nr6Rf9SaTYD3adc7PVrwp9h
+	 Cm0Zphri5ly4hPRai/MzxQvVxcf14N80uqp5mPFctnXvI3Z9qqvQGtWAt48B5Fd6Q1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793973736;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793973757;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=BV7SBAPBE1+ZyxEmQ1zLwKaZE5gOIoHWad6+8dfnrbs=;
-	b=TXSFMcXM6ecWTKCndH8T1ZpMtVM1Gq8jHfS8lAhBan0hUKgwztU3ktXsqp1352j97VmA
-	 kUguUowPPbLhc/njWkn+N9l/wOrwlnv+hZbPaaw9yn088SUyA+Ql7HgMA/oOxAFI2EAW2
-	 UHO6M1zjEC4YDe/q/HvIcvzOkiB6ndgbSsiq7m7E8vzSOOFwuzm9dAIT9S8H4V0EJPQ5c
-	 t1HhJMU/1It7/DM+QHmlR4SxnfKMR7DLyNsymbak5CZC7l0ApUlNfCqRJR1lyHT5qOpUq
-	 lbQtwYLS9npr+koSoBjL/D3cQLJwmqhplhg5jGeA2qKM4tisDkKA32tTwJ/KOKZ4BgA==
+	 From:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
+	bh=vGm/xArpN2sgty7GnQuGQKeyskq2+L7m2dfbTLksAPY=;
+	b=DspABNHfeJJJV+1ZakVOitX/dIdMFDgFGo1w35CP+GJFKn/C+1M0VtPS1x6MO/E8SMVa
+	 fLmvBQyHcV+RY9sLMFozHj3W1LUI9UeHh6R70pnqU0laF2Dp/ZztbysezbG6r98cPlLw5
+	 PasQ0BnJIsvZF2tW0XglRuOY4mVyqud8fI+f5jSFo6nEevhLPn414Lwoi+HIuThcM3uav
+	 6Sws9zFzVVVBwRq8rsKUx/NZ/LbnkYIHdeiMp39CcAowwPtvgb/91GScGj67KmvVhrhN2
+	 tR2rNFKcj7OV6A/bvtKFwoVUjiuCv7h2Eno35VcK1NUYnQz3NAp/yvTE6YwSfjkHqEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yqaoFYkr;
-	arc=none smtp.remote-ip=209.85.128.179
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BvyjVhGD;
+	arc=none smtp.remote-ip=209.85.128.175
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8721C606EEB5
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 14:02:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8721C606EEB5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C52606A33D
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 14:02:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92C52606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yqaoFYkr
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-8b32bbd39d5so4029927b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 06:02:15 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BvyjVhGD
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8b315dd057bso3890977b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 06:02:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793973734; x=1794578534; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20260707; t=1793973756; x=1794578556; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=BV7SBAPBE1+ZyxEmQ1zLwKaZE5gOIoHWad6+8dfnrbs=;
-        b=yqaoFYkr/EgsIZj9Dkvg194mVo9k+dft6NEiLyTxULUnD41jCy8l65UTXWCPrI+f3A
-         9aNKOs7U4BiOk7fiii2EOw7eQSf52ViyrCQXSxRQYNQsbkQIBHUCj61P4lGzsMq+6Wb6
-         sJUiLhfE3q5YRp0LAnXVYSeoK1NPsDTvjdGTZYe9jFwDihiOtU9juXDwdbVq8T3cf54F
-         spzysnZrR9T+ikdIQosUB/LPT/9wBPcGyUo3+Fk2rN9BE4QXmqp9yuMeoL4TqW7HRobH
-         /2ofdu+2l6UvslLJUbkzDSUP73sF61WrtsA9HOo7DvIcRJ3rhNjhe4VebTzHJMsaUgFu
-         W8vQ==
+        bh=vGm/xArpN2sgty7GnQuGQKeyskq2+L7m2dfbTLksAPY=;
+        b=BvyjVhGDfWBI/TE/LM29fTHwd3KQaAP/hRA+JL81IhzSMYw9sExBjuiN7/iPLr++gy
+         SFO6N54FxOjXBluQRHShQTl37hr91VNz+C5F+sLfqFjmAS2CM4rTxVJuwk95/lGxhfCc
+         lufIwR5/n64DlbsMp7l7cZNaGDAUFCEcaN2ZhfFhafD+8kbiAe0qmzmWg9NkXGxyOj7F
+         kHHFgOwf1l+GpmGwfwik9k7+886om9HlMzUcNdl2CTOEa2VGAq/4f2u8DDNIVglJMkZ1
+         ybwaPXTdkWwvgW+X4p0UNpOZxk0oMJ72boKFWLIjS265pUTXt3ZfudYocV7cFShVAgyM
+         xvnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793973734; x=1794578534;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=BV7SBAPBE1+ZyxEmQ1zLwKaZE5gOIoHWad6+8dfnrbs=;
-        b=FYvTLpDlpY9o2S/2G9iPc4eEOQG4aqNmHjInM48ZekuPtc6skeCcPBvfQxaQs9tW0E
-         mrfq4yCKNGaHDO9gAtHC+0DzYK9WJNGjJUa8GxPo+c7QmcicWRot5Y2WZO6hlKC/tiLU
-         GQzj+CgmayufEon3HAdohsif66ruNOYU827pvAoA68+ymij5n8DJ3k5W2YmEyQFemLHc
-         zihNL8I6vBK6chj0s6ecFDjzGhzDk/tClr6P0ucDdWY5H3RTI13y0+lHpj9ptmkfbE8C
-         wbTdDBvU03mKc+NVShAUEQHSvAoeGLoCRcHpVcqg2OrkojzGNgPUjL9Jo+eCV3V6SqP2
-         7Q1A==
-X-Forwarded-Encrypted: i=1; AL+hErF2xTiHpRBYxqbUNI39ScrQFphGDgENebL2xwbJuGcGaRwXpjlyAyOgEvPLpECOX2EAJxeH9bT9s+yqTASd4LU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+2hra58wfjPsg6naEC2HqkMBTWT96H72wN+qGbocKEdO/MCr76
-	u9xMvTMt6grB0yviYOLvrQesNZXe2wQXOBvrKB3XwdxUwGv2/N4X2pgL
-X-Gm-Gg: AYBFou3giaFC7C2hgB2w8aTOe4O6cnecvBG0QwVRnbgO/0DBLKVr7DEdt4NfH3U4EqD
-	cSrzX8Z9byl8I3KtJLaP5NpmmbZLUwwg9uKD1OhuIUPSMI2X7CmENiOkK82b0GL65kBwQWtp3ro
-	nSFYFh9wLlV2xSN2/vD0+zwWeJ3As/coY8sp+XuCyse0SgmvM7IHTWuzAZhEVG2XZsHuizAI8KO
-	aRyRa03G+CEhjfAoNM4C3wGpdlp64JdE7m7sEXpWVZryJq04NwBJnSnhWR91dhnDEMkYU1vB4TS
-	bJF831xHaotw2C7j/SVl4Jq9CrAy+MdU58I+7iWPtkvYM5U0xopiwGITF3OQ27YmyQr8E2MWLxO
-	1PU8zOcUuHQzbJ6Vq/LYSan2vF9P9GccB8IvBg0CvFZbN7gg4nQt3Pq2LN+FzK3b/svgT0jGGVz
-	1OT6LBA7PM0MAQAIADON8AmjXfmTXIG3R0IkQGFWZ0tBHfqtlpmhjaGfj3Xo/ujhVTYy/31Mfnm
-	Rvs9s+9+X1iYaGo0vfjAiWMB7kEBt7Czbybc7l99nIZiCBnRbB2yVb2OqAIsFl2Y2CZnKgGL0V4
-	1+IrWibzIrorMp/CD02TVd+JM/fczaRpZOpwbcDTGlMYp0nHnC2FaxZr15jw/DdNOCfXKQ27OqW
-	LqhJKzDpOJOXVP5asHlKCr0LLLmrOJGyatKwFRFtvG0PEjvuoBtNKFtabgGUW
-X-Received: by 2002:a05:690c:e3ea:b0:8ab:a473:fde8 with SMTP id 00721157ae682-8b341aca2ffmr15038617b3.54.1793973734029;
-        Fri, 06 Nov 2026 06:02:14 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793973756; x=1794578556;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=vGm/xArpN2sgty7GnQuGQKeyskq2+L7m2dfbTLksAPY=;
+        b=zCTCzkMzNn5Futg7HAjg1RFttwI7ESrTr10ET55gEEptgLeEkFqeawDRUqo7AYY1o2
+         UC4Ms1LwwH8Nro82LAsK/ECc2rry7oktCoM8/dAR07y4iXjl0uJ1U6A6aEvzTb5KcFzL
+         o9EIsezAl8D9dCqet19aA2qOva9B4qzXQX4ReyI8WcylCS7QlxN5oDjWrMOL77gFvFAX
+         Lv5LZdpKGCH99j9k5ifWirG0i5uAwtQQzzbj9dvShMglLSgsvoIwxJW/Lc5TBcWJD81K
+         /p3Ell5v0JE8qsOcxxykJkl6Km/0Vhjyn1epWPFW3RVEjQWZcwGvLup3WEZPCQMaiC8p
+         LW/Q==
+X-Forwarded-Encrypted: i=1; AL+hErHpgIAdgOX/lUU5nFbIwJXrUHIa1FGLdl2myefLbKfLeHArjaPxfmUo69NLGPRZIe/LE5dcO3ncmJaqolSUCbI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9vtu/+2xS+VMjFRkv1vycyX5QmO1wcqiMDJPDQDMoOFO9wVu7H
+	AAMtFHv1f+hiEi6Y9VZfsrTk3/yTqf11whBCvoEoU9SVdfkDzGyfz/L3
+X-Gm-Gg: AYBFou2lvuul1PNm38s6tZHMN/qPDi+xiTxqwovqNsXw0GX8IV0rdkLj6gTOesmVXcc
+	8IC+7iqBhFf4zODJjkrkSMy6ttk6G4wUbk+ReTo+5GQ3M4lLz6NkuCXxBk/hHadE92EAV07Irjz
+	0In2M4L4MfDcBRmT6pugIoq8vT5I5MmDHXEBul9Y3qzzWZjF/m+J7DfM6KmQzVkqJJ96tfpxG3g
+	ryj91jcnuxB89EltWd6o9ZTCmSh3v3VwclZZFvnZML3VBQAijMv9yp2VVVH/fI+lbhExqXMYLgo
+	CGUcTrrUSpfwHckPWfcj8BUc4XMX6vu/wLDDIL4obwRtYrockFV5h208zAmZMxtKslHnXYtlF4J
+	rrUuqe4dQlPoK4FhCPWieLnblpsobkTfyW9drVvy9kVEbtJp3qDQO0tzb4WxzJXi+Vwg8Z5Y69W
+	ngTmoQpOwh/gCCB1rJcKxHlqrAvBuwSX+ZQQDe6gcXiCp1ITyabTfefLU3CCGFLecymXfk3lFRt
+	JWQ6Egx3MbJU0x50BQTvy80ILGvKxD2E1/iozTwQiri76Wd7fRNeuBD1hK/wGQ7pC0eFOtcyzU9
+	KDEFPJg+GrTnVkLIty5aBgVUy9HMZxp7c5sVyJijV6DtpAZ+ug9tX0xw3fIAhvX+7qaEUJ6emo5
+	N5f6B2RbLbvaFETiuatjKVRnWYBXhVoXqEb9EuAxN+kMokiQRBTce0nTjP3E3
+X-Received: by 2002:a05:690c:c4f1:b0:8b3:416:b1a7 with SMTP id 00721157ae682-8b3419b5bf8mr14445747b3.41.1793973756132;
+        Fri, 06 Nov 2026 06:02:36 -0800 (PST)
 Received: from lab01.myowncloud.network ([2601:cb:4000:1c5:5396:7ba1:d08a:ebca])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f852e80sm19184507b3.32.2026.11.06.06.02.12
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f5f525fsm19090677b3.5.2026.11.06.06.02.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 06:02:13 -0800 (PST)
+        Fri, 06 Nov 2026 06:02:35 -0800 (PST)
 From: Amit Patole <amit.patole@gmail.com>
-Date: Fri, 06 Nov 2026 09:02:11 -0500
-Subject: [PATCH] lib/tests: add KUnit tests for xxHash
+Subject: [PATCH 0/2] lib/genalloc: fix a NULL pool check and add KUnit
+ tests
+Date: Fri, 06 Nov 2026 09:02:31 -0500
+Message-Id: <20261106-kunit-genalloc-v1-0-ba1ea397dfd8@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,365 +95,42 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261106-kunit-xxhash-v1-1-7b79cb6a8998@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAOLd7WoC/yXMQQqDMBBA0avIrBsw0Sp4FeliOo7NKKSS0RIQ7
- 26qy7f4fwflKKzQFTtE/onKN2TYRwHkMXzYyJANrnSNtWVj5i3IalLyqN64J9ZE2NYVEuRkiTx
- Kunb967Zu74lp/T/gOE7tqwZocAAAAA==
-X-Change-ID: 20261106-kunit-xxhash-25a4cca743ac
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>, 
+X-B4-Tracking: v=1; b=H4sIAPfd7WoC/yXMQQ5AMBBA0avIrDVpK6lwFbGoMRikpEUk4u6K5
+ Vv8f0EgzxSgTC7wdHDgxUWoNAEcrOtJcBsNWmqjlDRi2h1voidn53lBkWnERsuuyK2BGK2eOj6
+ /YVX/DnszEm7vBe77AU4sYxNyAAAA
+X-Change-ID: 20261106-kunit-genalloc-32ccb20f97a6
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Fredrik Noring <noring@nocrew.org>
+Cc: Christoph Hellwig <hch@lst.de>, 
  Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
  Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
  kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
  Amit Patole <amit.patole@gmail.com>
 X-Mailer: b4 0.15.2
 
-lib/xxhash.c provides xxh32() and xxh64(), used by zstd (frame
-checksums and long-distance matching), btrfs and erofs, where the
-values end up on disk. The crypto self-tests cover xxh64() through the
-"xxhash64" shash, but nothing tests xxh32() or the library interface
-directly.
+genalloc has no unit tests, so patch 2 adds a KUnit suite. Writing it
+turned up that gen_pool_dma_alloc() and gen_pool_dma_zalloc() crash on
+a NULL pool, while the other DMA helpers return NULL as
+gen_pool_dma_alloc() originally did. Patch 1 restores the check; no
+in-tree caller passes a NULL pool, so it is not marked for stable.
 
-Add a KUnit suite with known answers from the reference xxHash
-implementation. The input is generated the same way as in xxHash's own
-sanity check, so the lengths 1, 14 and 222 reproduce the values
-published there. It covers:
-
-- xxh32() with two seeds and xxh64() with three, for lengths around
-  the 4, 8, 16 and 32 byte boundaries of the algorithms;
-- the xxh64 streaming interface, split into two updates at every
-  possible point and fed one byte at a time, and repeated
-  xxh64_digest() calls;
-- xxh64_update() rejecting a NULL input with -EINVAL;
-- input at every offset from 1 to 7 bytes, which must not change
-  the result.
-
-An AI coding assistant (Claude Opus 5.5) was used to draft the tests,
-and the expected values were generated with the reference
-implementation (python-xxhash 3.7.0) after checking it against the
-published sanity values. The tests were run with
-"tools/testing/kunit/kunit.py run" on UML (146/146 pass), built with
-W=1 without warnings, and checked against off-by-one changes to the
-length checks in xxh32(), xxh64() and xxh64_update(), which the suite
-catches.
-
-Signed-off-by: Amit Patole <amit.patole@gmail.com>
----
 Tested on UML with a kunitconfig of CONFIG_KUNIT=y and
+CONFIG_GENALLOC_KUNIT_TEST=y: 12/12 pass with patch 1, and
+genalloc_dma_test crashes without it.
 
-CONFIG_XXHASH_KUNIT_TEST=y: 146/146 pass.
 ---
- lib/Kconfig.debug        |  14 +++
- lib/tests/Makefile       |   1 +
- lib/tests/xxhash_kunit.c | 260 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 275 insertions(+)
+Amit Patole (2):
+      lib/genalloc: don't dereference a NULL pool in gen_pool_dma_[z]alloc()
+      lib/tests: add KUnit tests for genalloc
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2d22638ec13a..d88fab338d4b 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -3461,6 +3461,20 @@ config RATELIMIT_KUNIT_TEST
- 
- 	  If unsure, say N.
- 
-+config XXHASH_KUNIT_TEST
-+	tristate "KUnit test for xxHash" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	select XXHASH
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables the KUnit test suite for lib/xxhash.c, the
-+	  xxh32() and xxh64() hashes used by zstd, btrfs and erofs. The
-+	  tests check known answers from the reference xxHash
-+	  implementation, the xxh64 streaming interface and unaligned
-+	  input.
-+
-+	  If unsure, say N.
-+
- config UUID_KUNIT_TEST
- 	tristate "KUnit test for UUID" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index df0537e1b91f..8828efce4412 100644
---- a/lib/tests/Makefile
-+++ b/lib/tests/Makefile
-@@ -58,5 +58,6 @@ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
- obj-$(CONFIG_UTIL_MACROS_KUNIT) += util_macros_kunit.o
- obj-$(CONFIG_RATELIMIT_KUNIT_TEST) += test_ratelimit.o
- obj-$(CONFIG_UUID_KUNIT_TEST) += uuid_kunit.o
-+obj-$(CONFIG_XXHASH_KUNIT_TEST) += xxhash_kunit.o
- 
- obj-$(CONFIG_TEST_RUNTIME_MODULE)		+= module/
-diff --git a/lib/tests/xxhash_kunit.c b/lib/tests/xxhash_kunit.c
-new file mode 100644
-index 000000000000..5575c3ec9662
---- /dev/null
-+++ b/lib/tests/xxhash_kunit.c
-@@ -0,0 +1,260 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit tests for the xxHash implementation in lib/xxhash.c
-+ *
-+ * The expected values come from the reference xxHash implementation. The
-+ * input is generated the same way as in xxHash's own sanity check, so the
-+ * entries for lengths 1, 14 and 222 match the values published there.
-+ */
-+
-+#include <kunit/test.h>
-+#include <linux/module.h>
-+#include <linux/string.h>
-+#include <linux/xxhash.h>
-+
-+#define XXH_TEST_LEN	222
-+
-+static const u32 xxh_prime32 = 2654435761U;
-+static const u64 xxh_prime64 = 11400714785074694797ULL;
-+
-+struct xxh32_case {
-+	unsigned int len;
-+	u32 seed;
-+	u32 hash;
-+};
-+
-+struct xxh64_case {
-+	unsigned int len;
-+	u64 seed;
-+	u64 hash;
-+};
-+
-+static const struct xxh32_case xxh32_cases[] = {
-+	{   0, 0x00000000, 0x02cc5d05 },
-+	{   1, 0x00000000, 0xcf65b03e },
-+	{   3, 0x00000000, 0xc23884f5 },
-+	{   4, 0x00000000, 0xa9de7ce9 },
-+	{   5, 0x00000000, 0xeb1734bb },
-+	{   8, 0x00000000, 0xa3f6f44b },
-+	{  14, 0x00000000, 0x1208e7e2 },
-+	{  15, 0x00000000, 0x6b859e14 },
-+	{  16, 0x00000000, 0x93ba3759 },
-+	{  17, 0x00000000, 0x89fdc23e },
-+	{  31, 0x00000000, 0x5f40e562 },
-+	{  32, 0x00000000, 0xd89829ec },
-+	{  33, 0x00000000, 0x31a427e5 },
-+	{  63, 0x00000000, 0xf1d48fdb },
-+	{  64, 0x00000000, 0x02e95dbb },
-+	{  65, 0x00000000, 0x16992b3d },
-+	{ 100, 0x00000000, 0x96ad8143 },
-+	{ 222, 0x00000000, 0x5bd11dbd },
-+	{   0, 0x9e3779b1, 0x36b78ae7 },
-+	{   1, 0x9e3779b1, 0xb4545aa4 },
-+	{   3, 0x9e3779b1, 0x1a269947 },
-+	{   4, 0x9e3779b1, 0x2baafe83 },
-+	{   5, 0x9e3779b1, 0x5874dab0 },
-+	{   8, 0x9e3779b1, 0xc2a8e239 },
-+	{  14, 0x9e3779b1, 0x6af1d1fe },
-+	{  15, 0x9e3779b1, 0xad53090d },
-+	{  16, 0x9e3779b1, 0xa94fc1e1 },
-+	{  17, 0x9e3779b1, 0xc9910739 },
-+	{  31, 0x9e3779b1, 0x5c0c3350 },
-+	{  32, 0x9e3779b1, 0xa5c44467 },
-+	{  33, 0x9e3779b1, 0x0de5b1f9 },
-+	{  63, 0x9e3779b1, 0x956b3d77 },
-+	{  64, 0x9e3779b1, 0xcf82f830 },
-+	{  65, 0x9e3779b1, 0x428eec5f },
-+	{ 100, 0x9e3779b1, 0x83d48124 },
-+	{ 222, 0x9e3779b1, 0x58803c5f },
-+};
-+
-+static const struct xxh64_case xxh64_cases[] = {
-+	{   0, 0x0000000000000000ULL, 0xef46db3751d8e999ULL },
-+	{   1, 0x0000000000000000ULL, 0xe934a84adb052768ULL },
-+	{   3, 0x0000000000000000ULL, 0xff7e1959cb50794aULL },
-+	{   4, 0x0000000000000000ULL, 0x9136a0dca57457eeULL },
-+	{   5, 0x0000000000000000ULL, 0x9b046fb1397f09a5ULL },
-+	{   8, 0x0000000000000000ULL, 0xcdbcf538e71d1348ULL },
-+	{  14, 0x0000000000000000ULL, 0x8282dcc4994e35c8ULL },
-+	{  15, 0x0000000000000000ULL, 0x180719316d622d84ULL },
-+	{  16, 0x0000000000000000ULL, 0x98c90b57fdfcb55cULL },
-+	{  17, 0x0000000000000000ULL, 0x0d39a2d051a30c2cULL },
-+	{  31, 0x0000000000000000ULL, 0x299b39a290e6d783ULL },
-+	{  32, 0x0000000000000000ULL, 0x18b216492bb44b70ULL },
-+	{  33, 0x0000000000000000ULL, 0x55c8dc3e578f5b59ULL },
-+	{  63, 0x0000000000000000ULL, 0xa9efbe0fa0f3f4e7ULL },
-+	{  64, 0x0000000000000000ULL, 0xef558f8acac2b5cdULL },
-+	{  65, 0x0000000000000000ULL, 0xde0f20dc2631af7aULL },
-+	{ 100, 0x0000000000000000ULL, 0x4bfe019cd91d9ea4ULL },
-+	{ 222, 0x0000000000000000ULL, 0xb641ae8cb691c174ULL },
-+	{   0, 0x000000009e3779b1ULL, 0xac75fda2929b17efULL },
-+	{   1, 0x000000009e3779b1ULL, 0x5014607643a9b4c3ULL },
-+	{   3, 0x000000009e3779b1ULL, 0xaa8584e83660f7d1ULL },
-+	{   4, 0x000000009e3779b1ULL, 0xcaab286bd8e9fdb5ULL },
-+	{   5, 0x000000009e3779b1ULL, 0x2af5249930f984ecULL },
-+	{   8, 0x000000009e3779b1ULL, 0xfe0c047a5353cdacULL },
-+	{  14, 0x000000009e3779b1ULL, 0xc3bd6bf63deb6df0ULL },
-+	{  15, 0x000000009e3779b1ULL, 0xd61105c20e91f99fULL },
-+	{  16, 0x000000009e3779b1ULL, 0xc900ad2d536b607eULL },
-+	{  17, 0x000000009e3779b1ULL, 0x495cd68a647c7a22ULL },
-+	{  31, 0x000000009e3779b1ULL, 0xda673d5feb5c1d79ULL },
-+	{  32, 0x000000009e3779b1ULL, 0xb3f33bdf93ade409ULL },
-+	{  33, 0x000000009e3779b1ULL, 0xe92c292f64bc3071ULL },
-+	{  63, 0x000000009e3779b1ULL, 0x6c911fadb05b6fc2ULL },
-+	{  64, 0x000000009e3779b1ULL, 0xb5eeba99264cc44fULL },
-+	{  65, 0x000000009e3779b1ULL, 0xd3f6ff3941e310caULL },
-+	{ 100, 0x000000009e3779b1ULL, 0x4853706dc9625caeULL },
-+	{ 222, 0x000000009e3779b1ULL, 0x20cb8ab7ae10c14aULL },
-+	{   0, 0x9e3779b97f4a7c15ULL, 0xc4349fc93c010000ULL },
-+	{   1, 0x9e3779b97f4a7c15ULL, 0x126bb57a12364aa5ULL },
-+	{   3, 0x9e3779b97f4a7c15ULL, 0xe23f055f9113033dULL },
-+	{   4, 0x9e3779b97f4a7c15ULL, 0xf6337e5fb526b92eULL },
-+	{   5, 0x9e3779b97f4a7c15ULL, 0x3fe27fb9d0eb8e4cULL },
-+	{   8, 0x9e3779b97f4a7c15ULL, 0x4fe88e05b3a5bfd8ULL },
-+	{  14, 0x9e3779b97f4a7c15ULL, 0xbdd0f167d252e0bbULL },
-+	{  15, 0x9e3779b97f4a7c15ULL, 0xb0298e00622d8613ULL },
-+	{  16, 0x9e3779b97f4a7c15ULL, 0xb37a43269a32566aULL },
-+	{  17, 0x9e3779b97f4a7c15ULL, 0xfd7e04ed256c9413ULL },
-+	{  31, 0x9e3779b97f4a7c15ULL, 0xb9fa34ecbf9b57ffULL },
-+	{  32, 0x9e3779b97f4a7c15ULL, 0xe65ea5f4eff5d5deULL },
-+	{  33, 0x9e3779b97f4a7c15ULL, 0xf166a3272cadc4abULL },
-+	{  63, 0x9e3779b97f4a7c15ULL, 0x0a36d884436efe01ULL },
-+	{  64, 0x9e3779b97f4a7c15ULL, 0xe7bd5052c0d2145eULL },
-+	{  65, 0x9e3779b97f4a7c15ULL, 0xfea9a8f0561339ddULL },
-+	{ 100, 0x9e3779b97f4a7c15ULL, 0x8dd80a6ef6296bf7ULL },
-+	{ 222, 0x9e3779b97f4a7c15ULL, 0x8cdf13ba7f241d67ULL },
-+};
-+
-+static u8 *xxh_test_buf(struct kunit *test)
-+{
-+	u64 gen = xxh_prime32;
-+	u8 *buf;
-+	int i;
-+
-+	buf = kunit_kmalloc(test, XXH_TEST_LEN, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, buf);
-+
-+	for (i = 0; i < XXH_TEST_LEN; i++) {
-+		buf[i] = gen >> 56;
-+		gen *= xxh_prime64;
-+	}
-+	return buf;
-+}
-+
-+static void xxh32_case_desc(const struct xxh32_case *t, char *desc)
-+{
-+	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "len %u seed %#x",
-+		 t->len, t->seed);
-+}
-+
-+static void xxh64_case_desc(const struct xxh64_case *t, char *desc)
-+{
-+	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "len %u seed %#llx",
-+		 t->len, t->seed);
-+}
-+
-+KUNIT_ARRAY_PARAM(xxh32, xxh32_cases, xxh32_case_desc);
-+KUNIT_ARRAY_PARAM(xxh64, xxh64_cases, xxh64_case_desc);
-+
-+static void xxh32_test(struct kunit *test)
-+{
-+	const struct xxh32_case *t = test->param_value;
-+	u8 *buf = xxh_test_buf(test);
-+
-+	KUNIT_EXPECT_EQ(test, xxh32(buf, t->len, t->seed), t->hash);
-+}
-+
-+static void xxh64_test(struct kunit *test)
-+{
-+	const struct xxh64_case *t = test->param_value;
-+	u8 *buf = xxh_test_buf(test);
-+
-+	KUNIT_EXPECT_EQ(test, xxh64(buf, t->len, t->seed), t->hash);
-+}
-+
-+/*
-+ * The streaming interface must give the same result as xxh64() however the
-+ * input is split. Try every split into two updates, and one byte at a time.
-+ */
-+static void xxh64_streaming_test(struct kunit *test)
-+{
-+	const struct xxh64_case *t = test->param_value;
-+	u8 *buf = xxh_test_buf(test);
-+	struct xxh64_state state;
-+	unsigned int split, i;
-+
-+	for (split = 0; split <= t->len; split++) {
-+		xxh64_reset(&state, t->seed);
-+		KUNIT_ASSERT_EQ(test, xxh64_update(&state, buf, split), 0);
-+		KUNIT_ASSERT_EQ(test, xxh64_update(&state, buf + split,
-+						   t->len - split), 0);
-+		KUNIT_EXPECT_EQ_MSG(test, xxh64_digest(&state), t->hash,
-+				    "split at %u", split);
-+	}
-+
-+	xxh64_reset(&state, t->seed);
-+	for (i = 0; i < t->len; i++)
-+		KUNIT_ASSERT_EQ(test, xxh64_update(&state, buf + i, 1), 0);
-+	KUNIT_EXPECT_EQ(test, xxh64_digest(&state), t->hash);
-+
-+	/* xxh64_digest() does not change the state, so it can be repeated. */
-+	KUNIT_EXPECT_EQ(test, xxh64_digest(&state), t->hash);
-+}
-+
-+static void xxh64_update_null_test(struct kunit *test)
-+{
-+	struct xxh64_state state;
-+
-+	xxh64_reset(&state, 0);
-+	KUNIT_EXPECT_EQ(test, xxh64_update(&state, NULL, 0), -EINVAL);
-+	/* A rejected update leaves the state as it was. */
-+	KUNIT_EXPECT_EQ(test, xxh64_digest(&state), xxh64(NULL, 0, 0));
-+}
-+
-+/* The result does not depend on the alignment of the input. */
-+static void xxh_unaligned_test(struct kunit *test)
-+{
-+	u8 *buf = xxh_test_buf(test);
-+	u32 h32 = xxh32(buf, XXH_TEST_LEN, 0);
-+	u64 h64 = xxh64(buf, XXH_TEST_LEN, 0);
-+	u8 *copy;
-+	int off;
-+
-+	copy = kunit_kmalloc(test, XXH_TEST_LEN + 8, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, copy);
-+
-+	for (off = 1; off < 8; off++) {
-+		struct xxh64_state state;
-+
-+		memcpy(copy + off, buf, XXH_TEST_LEN);
-+		KUNIT_EXPECT_EQ_MSG(test, xxh32(copy + off, XXH_TEST_LEN, 0),
-+				    h32, "offset %d", off);
-+		KUNIT_EXPECT_EQ_MSG(test, xxh64(copy + off, XXH_TEST_LEN, 0),
-+				    h64, "offset %d", off);
-+
-+		xxh64_reset(&state, 0);
-+		xxh64_update(&state, copy + off, 5);
-+		xxh64_update(&state, copy + off + 5, XXH_TEST_LEN - 5);
-+		KUNIT_EXPECT_EQ_MSG(test, xxh64_digest(&state), h64,
-+				    "offset %d", off);
-+	}
-+}
-+
-+static struct kunit_case xxhash_test_cases[] = {
-+	KUNIT_CASE_PARAM(xxh32_test, xxh32_gen_params),
-+	KUNIT_CASE_PARAM(xxh64_test, xxh64_gen_params),
-+	KUNIT_CASE_PARAM(xxh64_streaming_test, xxh64_gen_params),
-+	KUNIT_CASE(xxh64_update_null_test),
-+	KUNIT_CASE(xxh_unaligned_test),
-+	{}
-+};
-+
-+static struct kunit_suite xxhash_test_suite = {
-+	.name = "xxhash",
-+	.test_cases = xxhash_test_cases,
-+};
-+
-+kunit_test_suite(xxhash_test_suite);
-+
-+MODULE_DESCRIPTION("KUnit tests for xxHash");
-+MODULE_LICENSE("GPL");
-
+ lib/Kconfig.debug          |  15 ++
+ lib/genalloc.c             |   6 +
+ lib/tests/Makefile         |   1 +
+ lib/tests/genalloc_kunit.c | 508 +++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 530 insertions(+)
 ---
 base-commit: 05441d697f7f9a927264f4058cbbc6a03dfcac9d
-change-id: 20261106-kunit-xxhash-25a4cca743ac
+change-id: 20261106-kunit-genalloc-32ccb20f97a6
 
 Best regards,
 --  
