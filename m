@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793943326;
-	b=nMZAsIG+fgFS0y7oXMZZ5l/8Trel1O0PEi6wN7Xc17HWx5ftN95yLYQGNXQ15JlQfGeF
-	 rRlDH/X+uirXmKvnWGScHQxbfMPISRVav0aZ1vBIAaW4C5Haxpj30pW9Vj2/9ZTKvKZ3c
-	 Ke0j3idnrnIPGN5wwvBt/CoH0yaL+p3UkWHsXgYnaHT0fJ8s5EF9bqQIX19kWoMEup361
-	 3Cm9iTI8SJ7vzL7Wxi+1BDoMJ8CpMzDjQw6bGsaG7OyZp/eH5GqDybLs7IcllPsO21TAf
-	 oPogB3+/lN28wLm7bw/L0+tM71NZVx4+5jj6X7ghwf/DM3wYbjnGpwPZM+QXc+Rv+Lg==
+	t=1793943322;
+	b=np8VL0SgT5E+l+9NzPG93IC82yIIWrR4UUE7W54ANKbA3khfLHPAb+dld2AMvolSW7Gv
+	 AbjsTeGnxGIIt0whsRnU+DKAs8wYaPbitlYkAfKknO74ImsrmRPS14z7oun16Brzflogi
+	 JAQPoTSQt8xlQS82UptN7OVTaM7Z6F/Pslrah3mZLQxJwl+yQiLAHtUPw1dCy1qiDpHIH
+	 9gu8n4Q1FPh+AqCy3sj88EvLSEwyKjXizj0wunFXwhz2XX8PU5GjcJJLDJehjLz+6osIu
+	 L3xj+fZwKQsFRKayVaarofbjFJwxuUjaI8V1w6MXkfeHtatj97TrTb/cvWcibi1NDNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793943326;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793943322;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=YCHcH3lkHIgik8hu8mF2f17aavQpAFUHasd7ssYZfFE=;
-	b=ZEfOe03h3IIGQyf3izs6yEvjJLDXkRICv/OiPQ/FMDQ5e1vaFCjlbPXP1zPajgz60wNK
-	 6Xi9xejZhIK2IhJr/10fDHU6hgIZDkrxjfBDvfV0qgOc4hFhFTn59tIpEunWKOHrjfQ0O
-	 5bGGA5w9sQlOG/O/eQhB7hnVOD0BB8SXDtEIMYD9CtQqp9u6UPEKl17mjM6AHgM0WHgbr
-	 WuUWO7r1NaYVpusqWmNZ9bwBe/XL39IAPWfdx/V31rv7y0Nk9gdycS9RsKGWwhL6Luw93
-	 waarVA/goN3G1AUoHgByk9zyPAtkoi8uy5bgZGREITAx6AQ1mMANaXzxMhI1sqGDz8g==
+	bh=OOYVP+JrH/MejRBr0U9Q78+J6izmVGQ8vTbVJwy+l48=;
+	b=Vt86yN67YgwfjtjznafOORIbPoczmliXHnEn/u31EG7NMIO97Qu12mZNF+rPjWhUj62H
+	 Mtg6sGxcFTO+owKu32lcBYCntC4WezWQBtTPup2Ah0oTxEda9JB203XyTRC7CShILhiv0
+	 ljSGRIs0j7WgF82oG0EUonv1QMpPfp0dGYfRO5j2dFtWMi/qadrvJbmXw/JtnwJbBCArw
+	 74I9rH0kabP43HxUSfQ1nrh53pLTssLpZkdAUwfZcvkIB5paXg1pzPJqVF4ZpqT29c2Fa
+	 0yxrW2ALzKyUJE4iTPXlR+POBbD6hqSQnerGE0BWVItq0eB0HtmwADIfGDzrZky/xkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AY6mPXb8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TXm23sMh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADD9606D802;
-	Fri,  6 Nov 2026 05:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F45606A32D;
+	Fri,  6 Nov 2026 05:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AY6mPXb8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E35F1F008BE;
-	Fri,  6 Nov 2026 05:35:25 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TXm23sMh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1361F008A2;
+	Fri,  6 Nov 2026 05:35:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793943326;
-	bh=YCHcH3lkHIgik8hu8mF2f17aavQpAFUHasd7ssYZfFE=;
+	s=k20260515; t=1793943321;
+	bh=OOYVP+JrH/MejRBr0U9Q78+J6izmVGQ8vTbVJwy+l48=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=AY6mPXb8olaBowfCmzvfSO7eJEzkEa3MaVcowUdTgvejT3t7Jx8RWrz7fK4jOh8Mp
-	 vKDX2um6aer25YWP1Im8vo8iUCXySghyaVtbf6xxFqyQ7hUETtW6Ze904+OwE3M+yP
-	 6BI8vL9DEPH/K0h3E9PJkApcuy3JIcXI3Mz1JUo832H+SlNuck+OdqbKkb+YyLU361
-	 Tc6b2RhuwdKyyhVZbrEjTJyDHecyugM4MHIQtLXsEk+srAVlFaPL85jDxflVxxRaNq
-	 S6vDPtIj+H4e1gpe9LgRf7qnT1N3mqQOZG5ovfQytCeQ+p1cop2mLjIbG3230m4YA0
-	 wyvrgKUY6tJEA==
-Subject: Re: [PATCH can-next v2 7/9] selftests: can: add J1939 TP/ETP
- multi-frame tests against CAN_RAW
+	b=TXm23sMhPxscBoivAtrSVdhSx00uXma35aHFlXf91bv5PyiOUPNv5tuvzqk6YuI5j
+	 vtcVuUpkvL5Yy87pt0ikeQ2EAyYCfaepah0LMHbDlEEOJY2QDNnDx95sAMbTDsRl2A
+	 LXvm3TmBnEVJks18YQM9Lx7/SxCnXiuZYld8RY+tMgUfoACyBoRkPrdtMXS36lZu2r
+	 7/Lzix2aXglvjULH7mk1+bRaz3HqyW9UhbsAPfQ+vXHtzwqAW+SwjtiIub3M2U6swK
+	 MAd8XpoWGwBjlw/J5aLujsdqGkPfWqIp7oB9gsPNvY68h57wXLz/DOMNYoOAAsoKIB
+	 pn0T0WKd0hdcQ==
+Subject: Re: [PATCH can-next v2 4/9] selftests: can: add J1939 socket option
+ and metadata tests
 From: netdev-bot+sashiko@kernel.org
 To: o.rempel@pengutronix.de
 Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
@@ -50,11 +50,11 @@ Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
  fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
  quchaosheng000406@163.com, penguin-kernel@I-love.SAKURA.ne.jp,
  kuba@kernel.org
-Date: Fri, 06 Nov 2026 05:35:24 +0000
-Message-ID: <179394332470.488853.6816602469055239073@kernel.org>
-In-Reply-To: <20261104-j1939-selftests-v2-7-cf797c83317b@pengutronix.de>
-References: <20261104-j1939-selftests-v2-7-cf797c83317b@pengutronix.de>
-X-sashiko-severity: Medium
+Date: Fri, 06 Nov 2026 05:35:20 +0000
+Message-ID: <179394332064.488853.14819383071528044530@kernel.org>
+In-Reply-To: <20261104-j1939-selftests-v2-4-cf797c83317b@pengutronix.de>
+References: <20261104-j1939-selftests-v2-4-cf797c83317b@pengutronix.de>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -67,123 +67,100 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] All four new tests in
-  tools/testing/selftests/net/can/test_j1939_multi.c (tp_rx_from_raw,…
+- [Low] The new selftest treats a kernel setsockopt contract violation as
+  expected behaviour, so the test can never catch it.
 
 --
 
-selftests: can: add J1939 TP/ETP multi-frame tests against CAN_RAW
+selftests: can: add J1939 socket option and metadata tests
 
-This adds TP and ETP round-trip selftests in both directions. A CAN_RAW
-socket acts as the transport peer, so the frames are checked as they
-appear on the wire. The TX tests also check that the TX-completion ACK
-reaches the error queue only after the peer's EOMA.
+This adds a kselftest for J1939 socket options and send metadata. It
+covers the SO_J1939_FILTER whitelist, SO_J1939_SEND_PRIO as seen on the
+wire via a CAN_RAW peer, unconnected sendto(), a wrong-family bind,
+SO_J1939_ERRQUEUE TX completion, and set/getsockopt round-trips of
+several options.
 
-> diff --git a/tools/testing/selftests/net/can/test_j1939_multi.c b/tools/testing/selftests/net/can/test_j1939_multi.c
-> new file mode 100644
-> index 0000000000000..88a283a3394e0
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/can/test_j1939_multi.c
+> diff --git a/tools/testing/selftests/net/can/j1939_tests.h b/tools/testing/selftests/net/can/j1939_tests.h
+> index 78eb35f5b6b06..639e000ac5e86 100644
+> --- a/tools/testing/selftests/net/can/j1939_tests.h
+> +++ b/tools/testing/selftests/net/can/j1939_tests.h
 
 [ ... ]
 
-> +static bool tp_serve_cts_ok(int raw, const uint8_t *payload, size_t size,
-> +			    unsigned int num_pkts, unsigned int cts_limit)
+> @@ -671,6 +673,71 @@ static inline bool recv_cm_cmd_ok(int raw, uint8_t want_pf, uint8_t want_da,
+>  	return frame->data[J1939_CM_CMD_OFF] == want_cmd;
+>  }
+>  
+> +/*
+> + * Enable the error queue of s with SOF_TIMESTAMPING_TX_ACK only: a finished
+> + * send then queues one TX-completion ACK, or an abort entry if the session
+> + * fails (__j1939_sk_errqueue() in net/can/j1939/socket.c). The kernel reads
+> + * these flags when the session ends, so this may come after the send.
+> + */
+> +static inline bool errqueue_enable_ack_ok(int s)
 > +{
-> +	unsigned int sent = 0;
-> +	struct can_frame frame;
+> +	int tstamp_flags = SOF_TIMESTAMPING_TX_ACK;
+> +	int enable = 1;
 > +
-> +	while (sent < num_pkts) {
-> +		unsigned int cts_pkts, next;
-> +
-> +		if (!recv_kernel_cm_ok(raw, TP_CM, TP_CMD_CTS, &frame,
-> +				       J1939_RECV_TIMEOUT_MS))
-> +			return false;
-> +
-> +		cts_pkts = frame.data[TP_CTS_PKTS_OFF];
-> +		next = frame.data[TP_CTS_NEXT_OFF];	/* 1-based */
-> +		if (!cts_accept_ok(cts_pkts, next, sent, num_pkts, cts_limit))
-> +			return false;
-> +
-> +		if (!send_tp_dt_burst_ok(raw, SA_LOCAL, SA_PEER, next, cts_pkts,
-> +					 payload, size))
-> +			return false;
+> +	/* setsockopt(SO_J1939_ERRQUEUE) returns the flag value, not 0 */
+> +	if (setsockopt(s, SOL_CAN_J1939, SO_J1939_ERRQUEUE, &enable,
+> +		       sizeof(enable)) < 0)
+> +		return false;
 
-[Severity: Medium]
-Can this DT burst reach the j1939 stack before the stack has handled the
-loopback echo of its own CTS?
+[Severity: Low]
+Should the test accept this as expected behaviour, or is this a kernel bug
+the test should catch?
 
-can_rcv_filter() delivers to the raw socket's RX_ALL filter before
-j1939_can_recv() runs. So the raw socket can see the kernel's CTS before
-j1939 has handled the echo.
+The comment matches what j1939_sk_setsockopt_flag() in
+net/can/j1939/socket.c does today:
 
-The DT frames sent here go through raw_sendmsg()->can_send()->netif_rx()
-on the test thread's CPU. They can be processed before the echo.
+net/can/j1939/socket.c:j1939_sk_setsockopt_flag() {
+    ...
+	lock_sock(&jsk->sk);
+	if (tmp)
+		jsk->state |= flag;
+	else
+		jsk->state &= ~flag;
+	release_sock(&jsk->sk);
+	return tmp;
+}
 
-j1939_xtp_rx_cts_one() sets the session state from the echoed CTS:
+It returns the int that userspace passed in, not 0. For SO_J1939_PROMISC
+and SO_J1939_ERRQUEUE that value goes back to userspace unchanged, so a
+successful setsockopt() returns 1 instead of 0. A caller that checks
+if (setsockopt(...)) will treat that success as a failure.
 
-	session->last_cmd = dat[0];
+A negative optval such as -1 also sets the flag and then returns -1. The
+caller then sees errno EPERM even though the state has changed.
 
-If a DT arrives while last_cmd is still TP_CMD_RTS,
-j1939_xtp_rx_dat_one() cancels the session:
+This kernel behaviour dates back to 2018 (9d71dd0c700999), so this patch
+did not introduce it. However, the check above only tests for < 0, and the
+comment presents the positive return value as normal.
 
-	switch (session->last_cmd) {
-	...
-	default:
-		netdev_info(priv->ndev, "%s: 0x%p: last %02x\n", __func__,
-			    session, session->last_cmd);
-		goto out_session_cancel;
-	}
+sockopt_roundtrip() in test_j1939_opts.c does the same:
 
-The ETP tests seem to follow the same pattern.
+	if (setsockopt(s, SOL_CAN_J1939, optname, &val, sizeof(val)) < 0)
+		return -1;
 
-In etp_rx_serve_cts_ok(), the peer's DPO can be handled before the echo
-of the kernel's ETP.CTS. The echo then sets last_cmd to ETP_CMD_CTS, and
-the DT frames that follow cancel the session.
+As a result, getsockopt_promisc and getsockopt_errqueue cannot detect the
+wrong return value on the set side. The file header still says they cover
+"set/getsockopt round-trips" of these options.
 
-In etp_tx_serve_block_ok(), the next ETP.CTS goes out as soon as the
-last DT of the previous block is read from the raw socket:
+The last patch in the series, "selftests: can: check SO_J1939_PROMISC
+receive effect", repeats the pattern in promisc_receive. It uses
+ASSERT_GE(setsockopt(...), 0) with a comment saying SO_J1939_PROMISC
+returns the flag value (1) on success. No patch in the series changes
+net/.
 
-	cm_dat_init(dat, ETP_CMD_CTS);
-	dat[ETP_CTS_PKTS_OFF] = cts_pkts;
-	put_le24(&dat[ETP_CTS_NEXT_OFF], next);
-	if (!peer_send_cm_ok(self->raw, ETP_CM, dat))
-
-If that CTS is handled before the echo of the last DT, the echo hits the
-default case in j1939_xtp_rx_dat_one() and cancels the session. This
-window opens at every block boundary in etp_tx_to_raw.
-
-The notes below the "---" line describe this:
-
-  "can a multi test fail against a correct kernel?
-   Yes, through one known race in the stack ... The fix belongs in the
-   stack, not in these tests."
-
-git drops that text when the patch is applied. Neither the commit log
-nor test_j1939_multi.c mentions the race.
-
-No patch in the series changes net/can/j1939/. test_j1939_multi.sh is
-added to TEST_PROGS, so default kselftest runs can fail at random with
-no explanation in the tree.
-
-The later patch "selftests: can: cover J1939 transport abort and timeout
-paths" adds tp_rx_cts_block_limit. It reuses tp_rx_roundtrip_ok() with
-more CTS windows, which means more chances to hit the race.
-
-Could the race be documented in the commit message or in a comment in
-test_j1939_multi.c? Alternatively, could these tests wait until the
-stack fix lands?
+Could j1939_sk_setsockopt_flag() return 0 instead, with the tests checking
+for == 0? If not, could the commit message at least say this is a known
+deviation from the setsockopt() contract?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261104-j1939-selftests-v2-0-cf797c83317b%40pengutronix.de
