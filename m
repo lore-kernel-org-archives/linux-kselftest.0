@@ -1,87 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793995958;
-	b=txuT/avDgsHAMbqrnjwSCo1RBJBjKCrcZtwQeVt3WSEpufVTuf50AfvAMkheOjAjQwEe
-	 Z/5jhYcnXW+vFSZeAA60C3GzvSdDnGoNFLiDSp/+tPrkIzC3UbbQ5LNp1+AGeqPInFyrP
-	 N4cxgCnIJvIK5YGioLTqQ08TEX1h3e8xnqw4VmlQVg2NmBr2ibWylnVniq+fhSjQ4fgfj
-	 JUgZ1orJ7KW25xpnk5DqEsYL76lDtRwVvDsNXa1CsE9Tcx4HTfrRn/4BF5XFjHnWSwdXL
-	 b4CfxIfNlzugSq2TYCJaSUTE4CgTqHmceC7Msk6TE7QjG3qYpTk3TJ6jUq768MasUQg==
+	t=1793996410;
+	b=glv3zAfk4gB3dNQbFnaRp1GA//XpmV77kx6L7RNkL0BnU7MmQbH/JnvgDPvFerd0UIZr
+	 jjpLCC2HypJ/szr0SSoKoFENNCi+ldsnIJnuD/KWOw6miYzpvpfqti0i53hYCvgz8Mfor
+	 eKlGTpHSHmYRFyGah9dlWOgMdTcLURRkhz3qSNs8Uc4KQRRM8narN4/HxQ5t8Oo0Ht8wD
+	 GHjTA2x33nbTv1fKflNXGJm+dt3RQXd2UKpY1s+b+qyFqyCygxk25lKk0R+yqXbwtoF6c
+	 I9eVHrdY5gx3QLnxUsSwGx2t/UGq1z/j3Indn6a3682LJ4bw0Vf2QJR6buPCNdeSo5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793995958;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793996410;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=AGC2UHq5fYfZGjr2L7smHUkvw2QF9M347vvqRSv/vzY=;
-	b=ZnrRkTjGs2QxIoeoYDMoI4lWF00kW8jLPT85O+9qVzG76IZECEkTpDaKt78Yvv6gfBsN
-	 YguDkKpKRfeD4xVunzxe2MH+TCiC+pQeHUWKoEHleXjpO1kTMDQ/V+Q3giu11jsFEGea7
-	 DFpLPsQ0eUhT4T348/M7Tbjtty82i+eahyjAAtH40A/OL0+rTTgOpxJW8dMZkdOkCAE6M
-	 BEyzLyiRxWA7bmSWEDvgiwlyyae6rjNAE6XBVk/MHlzAeIzdsqjPSiXSop6XqWH/sys+V
-	 iI2RRFueAIlFhW7ecKA6ZX3bNq9Abtw45QzBw6DSl3mxGaUVXIINJrh4hXQz86zv8aw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-B4-Tracking:X-Change-Id:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=2YbFKs9nRA6MfgMEJuRTCHwLHgaje7B0LRpZLEgpNVg=;
+	b=ac5bYirz26EtiQUo/JLDW8McxQlqsO/0hDSCpTx5T7Bh3Ezyc3gYP3hqrVXOU9yyTrqT
+	 Gww9gPK6lNO7NqrGUzkCCl40RYfnUWFukuTAqyj1g/a94toDnjQ83qkLekqIWSAtduz5W
+	 oei5TeYDvbbV+ciAFb5cRB1nowLXQMl7Wr+bEoFKKq20+leXSwz7n+hM2QZ6ivQljdMdX
+	 y3XDNQ1EOImQakBpMUXJ/HOF9ClzMhxXSV0mJPnZUIhOcR1uDFqeOUrXD/N8MiHvGb+WI
+	 aHtr8sioKjvg9Xc85EJc0x/Oc4eXqF6KaMFd5SDSQ0X/xWG0Sh8r+5o2kBl72WD9g+g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tHUUoCfz;
-	arc=none smtp.remote-ip=209.85.128.170
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oQqnp485;
+	arc=none smtp.remote-ip=209.85.210.198
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE75606A335
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 20:12:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FE75606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAAB606A32E
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 20:20:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EEAAB606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tHUUoCfz
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8b30ff12f84so7493127b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 12:12:37 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oQqnp485
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8a030e0f9c1so1058279b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 12:20:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793995957; x=1794600757; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=AGC2UHq5fYfZGjr2L7smHUkvw2QF9M347vvqRSv/vzY=;
-        b=tHUUoCfzY8ka5P269++VcDVl1mFjFyJSbCb6i9e08XBAgWn+fcm6EoF3Brwp/OGMzY
-         76u4QVhlItzX2fps2FNqekcWoankK+InNUCxJcDVe5sQGTk7ufe4+9CGL92b3j9jQawS
-         ogv3uKvJf3FmD3l+ehEF+nCdI+oLPI55xf/NQ+6TeCT+OXy1W9kLzrfsmKYD5gBTLAyh
-         fi6QUr//9gC31Y/aaxOxVqVLDgtMQd6f1KLWffD9QUfD7xzmenDBTsix1CzIOsEO4soR
-         4neYb5wv7rYebBxI3GEqWrheUIvR3CMBVavWWDr4iNUQ28QkF+P/VB3zxWTugU8p8U9C
-         JGLw==
+        d=google.com; s=20260707; t=1793996409; x=1794601209; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2YbFKs9nRA6MfgMEJuRTCHwLHgaje7B0LRpZLEgpNVg=;
+        b=oQqnp48505ul8fce1kiykiCLp2RBCB0id+7wMmH30erQLzA8JQmunrOmBs4cSNdOnp
+         2iNKZqJWYUFQZ47unpZxxxX0f/iH/7ULrKTrrYMEEjQsDlWVORyHPyVBhvS8rCmZ/fhN
+         o7jT9adJGO14Qrl6r6L2xIM8t5Xg5yR/AaxTHGoKVbTTau2on1yr7YC6/P2TG8xvPXoC
+         FEMJZeADDOVyBg6XKdFgSjHTGG3FBAt4N4dQGuCI2/yuf2umK2hUZCoKNeGRw0pPFTnS
+         bcVkwTCIxGxdl78z4+gT0PSaYM3vIYomHZeF4LisCxXaNA4K5aqLiA0ut714gukBKsye
+         MUgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793995957; x=1794600757;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1793996409; x=1794601209;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AGC2UHq5fYfZGjr2L7smHUkvw2QF9M347vvqRSv/vzY=;
-        b=yngUc2Es8JRZ/7yUHKwIfQDzu6tXEit5CvYKexR1HxD+u8ZxfNLDKTLTXZAq2B0VaM
-         DI0HhdDskGYhnJfVc10juoWnaH1OqdodzrMZz47ht+HNdZXNze/Nt6FOqRlpc3cSunjb
-         WncXmHrfDr/dx5zvI8pz7lWBzEsIFWjQ2M/dUoqNK8P2+bc/vWBbWTTYDfMeI5EgH0UK
-         VoU79F5cLD2uhDW0zt/5v8znuOZkOc14DNGbtJC74vnxTGcAS+ts9DtFhVn8hqnmAmTi
-         nRtoA4FKW5kSjL8dMmEoUNqCqaJPElsB3k0s6OEJcfIG/rwD1n8dwjXM3u7D2hTCK7EU
-         wE5A==
-X-Forwarded-Encrypted: i=1; AL+hErHrih3FqKXPEtDCmxiVcgp3oQS84I8JeGsFOgoz4zcMJ9ysyin/BEMtSrQV8zqF75hlO/13IV1xyZxhUsMFYt4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/IoH9Hiu2NNwOsm8yuJtyPOcSfomX5Cbqm7XbetZ//AdUExprd
-	q2Rq/bfIpIvZJmsZtMV9GJc0NNqosWZsAkdvW80bBQWf8+NOrOfUM5Md
-X-Gm-Gg: AYBFou0bz44emb9putvsgcRNTIFLm0HAsyfHP8dy0KYpLCUTXgynWL8gIiGHcEHCAWi
-	/4zQXK5LQ71lPfAUP3y1CXn5cvVfxfit+HZugdC1t7ceDBhhFakMnkXyAIawVCH8ma56JgoThJV
-	1+IwCT42hPvgrcaOCnG6vNhvBDgSQQJa1IRL4oNNg0ZP9vgwa1o4c2iZ8hw245p3KXI0YsBgm21
-	r9HXlQNrq3zkXsNBy1FE/nXJO6W5kuMzdD4McGHAf7qyKhhoLOpF4EcGWhqWZeZWRXyesJiJf3r
-	veG6rbYRrlbY/ARuUjh4Q+MBAEzVVFx306twi5Aj5XwdINfkHhMbyxlnEWpSVUlDD6ByoehVXv3
-	qVgMcYrNIl0oL7x1dSeSkr450H5mdcCFbY9DEdMdihmN8uPcuR1O13xci1DCurl1ALzCYKf/83J
-	3oNQDCdLWzy6Kyl3ZFpsqIL1UaAEj39IhV8QTzU5TE/8AFeZ3nZMDoHVFe6PVWXd1koYCZP4+OA
-	ZtLwZSbvG86MKrEb4MykksIkXCacFZinPbTIXeZg5H0trPink0xj3/DzOxDKUEoYCHsm/16Aknq
-	FVJ2kbekMwxASGlPF3a47463hfiG/mx1q4atKopkARopLf6v
-X-Received: by 2002:a05:690c:c354:b0:8b3:40ae:9720 with SMTP id 00721157ae682-8b341adc8cbmr18864637b3.47.1793995956700;
-        Fri, 06 Nov 2026 12:12:36 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:42::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f884790sm26771217b3.41.2026.11.06.12.12.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 12:12:36 -0800 (PST)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Fri, 06 Nov 2026 12:12:13 -0800
-Subject: [PATCH net-next v3 5/5] selftests: drv-net: psp: add rekey tests
+        bh=2YbFKs9nRA6MfgMEJuRTCHwLHgaje7B0LRpZLEgpNVg=;
+        b=A6R+VrwR73/7yYfQ/OpxK9PurCZp+xJyyp/baRLHOXtsUnWVIs8ec4H/csZ4bp+34g
+         DyDMkaKm4jkRFFqLyMzRht+lwqJ7yKxCvUA6njpIucY9Xwktq0qVWSMJMxWArOXCo+8M
+         nFI5XOrMfLADit4IOaf5AOU59nB6Tyurtvjml+niYS2jregHy+GH+at5wbN81fSEVlDO
+         G7RhUj0soz7zRu7RqKqwJTm9Kj+PHOVPyep+C+CdNDMtdonvq5EJwsO/q3D7nEJ2Dbu7
+         p8BdqZxS/P1uQfhtb6hNR/2Pjbvz35yzO1/FdOsgIxXFhNs4epX6dAx6IUsHEaFSo1MT
+         aSIQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzSW2NOWbO1j1YoSoaJerXLmKsGvTH1bylp8I9CIdm0UsM1ZODJ+Z3h/oRu9PLdsWRr5nj2B7Tq59Uof0sDFxY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/KESOMBlNfZbRaKl9IPh3iVF4xVmzMd1yl4ddQS0GTqaNA9iBq
+	ETgeUK4aKAs264TQXf9a4pDxA9sisjE5MwMDvOCe6ybqKKaEXT045Mi/5/6sSCcWeCMmgKKG92a
+	6dWN4ULYA8AjwVLNiRw==
+X-Received: from pfhx2.prod.google.com ([2002:a05:6a00:1882:b0:89f:5522:3f42])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:139c:b0:8a6:58cb:eeaa with SMTP id d2e1a72fcca58-8b37bb5f095mr3365577b3a.36.1793996408786;
+ Fri, 06 Nov 2026 12:20:08 -0800 (PST)
+Date: Fri, 06 Nov 2026 20:19:47 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,526 +76,150 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAGM27moC/x2MQQrCMBAAv1L27MJmLQW9Cn2AV/FQ040uljRko
+ xRK/27qcQZmVjDJKgbnZoUsXzWdYwV3aMC/hvgU1LEyMHHnHDFO9pYJreSPLzgnQzrSiVpufRg YapayBF3+yxtc+8vuHilglKXAfdt+OM0/UHMAAAA=
+X-Change-Id: 20261102-lskel-struct-ops-03090424cfa2
+X-Mailer: b4 0.14.3
+Message-ID: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
+Subject: [PATCH RFC bpf-next 0/7] bpf: Support struct_ops in light skeletons
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Giuliano Procida <gprocida@google.com>, 
+	Neill Kapron <nkapron@google.com>, "=?utf-8?q?Thi=C3=A9baud_Weksteen?=" <tweek@google.com>, 
+	Maxime Ripard <mripard@kernel.org>, Siddharth Nayyar <sidnayyar@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261106-psp-v3-5-a8dd38f5a727@gmail.com>
-References: <20261106-psp-v3-0-a8dd38f5a727@gmail.com>
-In-Reply-To: <20261106-psp-v3-0-a8dd38f5a727@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Donald Hunter <donald.hunter@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.13.0
 
-Add testcases for rekeying psp connections.
+BPF light skeletons (bpftool gen skeleton -L) compile BPF object loading
+into a self-contained BPF_PROG_TYPE_SYSCALL loader program (gen_loader)
+embedded in a C header, removing any runtime dependency on libbpf or
+userspace BTF parsing. Currently, light skeletons do not support
+BPF_MAP_TYPE_STRUCT_OPS maps or BPF_PROG_TYPE_STRUCT_OPS programs
+because preparing a struct_ops map normally relies on libbpf parsing the
+target vmlinux or kernel module BTF in userspace to resolve type IDs,
+struct sizes, member byte offsets, and member indices.
 
-Tests include coverage for different cases where rx-assoc and tx-assoc
-should fail based on mismatched psp version and psp state.
+This series adds BPF_MAP_TYPE_STRUCT_OPS support for link-based
+(SEC(".struct_ops.link")) maps in light skeletons across both vmlinux
+and kernel module BTF targets:
 
-Add rpc endpoints for tx-assoc, rx-assoc, and key-rotate netlink calls
-to the psp_responder.
+- Patch 1 adds a new bpf_btf_get_struct_member_info() helper for
+  BPF_PROG_TYPE_SYSCALL programs to query a struct's byte size (when the
+  member name is NULL) or a named member's byte offset and member index
+  from vmlinux or module BTF at load time.
+- Patches 2-5 wire up struct_ops initialization, map creation, program
+  loading, and map update in libbpf's gen_loader. At runtime, the loader
+  program resolves the kernel wrapper type bpf_struct_ops_<name> and
+  target <name> struct BTF IDs (and module BTF FDs) via
+  bpf_btf_find_by_name_kind(), queries struct sizes and member
+  offsets/indices via bpf_btf_get_struct_member_info(), constructs the
+  kernel vdata buffer in the loader data blob, passes the resolved BTF
+  metadata to BPF_MAP_CREATE and BPF_PROG_LOAD, and populates the
+  callback program FDs before issuing BPF_MAP_UPDATE_ELEM.
+- Patch 6 teaches bpftool to generate per-map skel_link_create() attach
+  functions and skel__attach() / skel__detach() plumbing for BPF_F_LINK
+  struct_ops maps in light skeletons, skips gen_st_ops_shadow() so the
+  light skeleton ctx layout is preserved, and rejects non-link
+  struct_ops maps.
+- Patch 7 adds light skeleton struct_ops selftests covering both vmlinux
+  (tcp_congestion_ops) and bpf_testmod (bpf_testmod_ops, including a
+  subset struct with reordered members, scalar fields, detach, and
+  re-attachment).
 
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+Adding a new BPF helper and alternative kfunc approach
+======================================================
+I am aware that BPF helpers have been frozen for several years in favor
+of kfuncs. I propose adding bpf_btf_get_struct_member_info() as a BPF
+helper (restricted exclusively to BPF_PROG_TYPE_SYSCALL loader programs,
+alongside bpf_btf_find_by_name_kind()) because, to my knowledge, there
+is no better way to enable struct_ops support in light skeletons.
+
+Before settling on a BPF helper, I explored an alternative approach
+using a kfunc, which hit a roadblock. Calling a kfunc directly from the
+light skeleton loader program is not possible because kfunc calls
+(BPF_PSEUDO_KFUNC_CALL) require the target kfunc's BTF ID in insn->imm
+when the loader program itself is loaded, whereas light skeletons ship
+pre-generated loader bytecode without userspace BTF resolution. Although
+I was able to resolve a kfunc's BTF ID at runtime via
+bpf_btf_find_by_name_kind() and patch and load a separate BPF program to
+run the kfunc and gather struct_ops member info, running that program
+from the light skeleton loader required re-enabling BPF_PROG_TEST_RUN in
+bpf_sys_bpf(). Calling BPF_PROG_TEST_RUN from BPF programs was
+explicitly disabled in commit 86f44fcec22c ("bpf: Disallow bpf programs
+call prog_run command.") because the verifier cannot perform sufficient
+validation of the bpf_attr->test.ctx_in pointer.
+
+Non-link struct_ops support
+===========================
+I have not enabled non-link struct_ops programs/maps (SEC(".struct_ops")
+without BPF_F_LINK) in this series, though I intend to enable them in
+the future and can extend this series to support them if maintainers
+deem it necessary.
+
+I left non-link struct_ops out for now because in light skeletons,
+BPF_MAP_UPDATE_ELEM runs inside the loader program during skel__load().
+For non-link struct_ops maps, BPF_MAP_UPDATE_ELEM immediately registers
+and activates the struct_ops callbacks in the kernel before
+skel__attach() is called, prevents re-attaching after detach, and would
+leak an active registration if a later step in the loader program fails
+(since loader cleanup only closes FDs via bpf_sys_close() rather than
+issuing BPF_MAP_DELETE_ELEM). Supporting non-link struct_ops will
+require deferring BPF_MAP_UPDATE_ELEM to userspace skel__attach().
+
+AI assistance and testing
+=========================
+This series (code, selftests, commit messages, and cover letter) was
+developed interactively with an AI coding assistant (Google Gemini),
+with me guiding the design step by step across each patch and reviewing
+all changes.
+
+The series was built with clang/LLVM and tested in a QEMU x86_64 VM
+using test_progs (covering the new struct_ops_lskel selftests for both
+vmlinux tcp_congestion_ops and bpf_testmod_ops, as well as existing
+struct_ops and light skeleton tests), along with manual verification of
+loading and inspecting a struct_ops light skeleton via bpftool.
+
+Feedback on the overall approach and on introducing this
+BPF_PROG_TYPE_SYSCALL helper is very welcome.
+
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 ---
-v3:
-- drop test for rx rekey rejected without a device key rotation
-- fail fast in _recv_careful() if the peer closes the connection
-- in the basic rekey tests, run traffic across a rotation before the
-  rekey, and rotate again after it to verify the new key is in use
-- drop unneeded key rotation from rekey_rx_version_mismatch()
-- carry the key length in the responder's assoc message instead of
-  deriving it from the version
+Siddharth Nayyar (7):
+      bpf: Add bpf_btf_get_struct_member_info() helper
+      libbpf: Implement bpf_gen__init_kern_struct_ops() for light skeletons
+      libbpf: Support BPF_MAP_TYPE_STRUCT_OPS in bpf_gen__map_create()
+      libbpf: Support BPF_PROG_TYPE_STRUCT_OPS in bpf_gen__prog_load()
+      libbpf: Implement bpf_gen__struct_ops_update_elem() for light skeletons
+      bpftool: Generate attach and detach for struct_ops in light skeletons
+      selftests/bpf: Add light skeleton struct_ops tests
 
-v2:
-- add tests for rekeys rejected due to psp state and version mismatch
-- add test for rx rekey rejected without a device key rotation
-- add rx-assoc, tx-assoc, and key-rotate rpcs to psp_responder
+ include/linux/bpf.h                                |   1 +
+ include/uapi/linux/bpf.h                           |  13 +
+ kernel/bpf/btf.c                                   |  73 +++++
+ kernel/bpf/syscall.c                               |   2 +
+ tools/bpf/bpftool/gen.c                            |  71 ++++-
+ tools/include/uapi/linux/bpf.h                     |  13 +
+ tools/lib/bpf/bpf_gen_internal.h                   |   7 +
+ tools/lib/bpf/gen_loader.c                         | 297 ++++++++++++++++++++-
+ tools/lib/bpf/libbpf.c                             |  59 ++--
+ tools/lib/bpf/libbpf_internal.h                    |  26 ++
+ tools/testing/selftests/bpf/Makefile.skel          |   3 +-
+ .../selftests/bpf/prog_tests/struct_ops_lskel.c    | 122 +++++++++
+ tools/testing/selftests/bpf/progs/struct_ops_mod.c |  51 ++++
+ .../selftests/bpf/progs/struct_ops_vmlinux.c       |  42 +++
+ 14 files changed, 747 insertions(+), 33 deletions(-)
 ---
- tools/testing/selftests/drivers/net/psp.py         | 255 ++++++++++++++++++++-
- .../testing/selftests/drivers/net/psp_responder.c  | 119 ++++++++++
- 2 files changed, 372 insertions(+), 2 deletions(-)
+base-commit: 3e18218484126afb9da722080659c038cb2256ab
+change-id: 20261102-lskel-struct-ops-03090424cfa2
 
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index 71eeade62ad2..004faf4bb57a 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -28,6 +28,10 @@ from lib.py import ip
- TCP_ULP = 31
- 
- 
-+_PSP_MAX_KEY_LEN = 32
-+_PSP_ASSOC_MSG = f'!IBB2x{_PSP_MAX_KEY_LEN}s'
-+
-+
- def _get_outq(s):
-     one = b'\0' * 4
-     outq = fcntl.ioctl(s.fileno(), termios.TIOCOUTQ, one)
-@@ -80,6 +84,33 @@ def _close_psp_conn(cfg, s):
-     _close_conn(cfg, s)
- 
- 
-+def _recv_all(s, target):
-+    data = b''
-+    while len(data) < target:
-+        chunk = s.recv(target - len(data))
-+        if not chunk:
-+            raise KsftFailEx(f"peer closed after {len(data)} of {target} bytes")
-+        data += chunk
-+    return data
-+
-+
-+def _remote_rx_assoc(cfg):
-+    _send_with_ack(cfg, b'rx assoc\0')
-+    msg = _recv_all(cfg.comm_sock, struct.calcsize(_PSP_ASSOC_MSG))
-+    spi, version, key_len, key = struct.unpack(_PSP_ASSOC_MSG, msg)
-+    return version, {'spi': spi, 'key': key[:key_len]}
-+
-+
-+def _remote_tx_assoc(cfg, version, rx):
-+    msg = struct.pack(_PSP_ASSOC_MSG, rx['spi'], version, len(rx['key']),
-+                      rx['key'])
-+    _send_with_ack(cfg, b'tx assoc\0' + msg)
-+
-+
-+def _remote_key_rotate(cfg):
-+    _send_with_ack(cfg, b'key rotate\0')
-+
-+
- def _spi_xchg(s, rx):
-     s.send(struct.pack('I', rx['spi']) + rx['key'])
-     tx = s.recv(4 + len(rx['key']))
-@@ -130,6 +161,44 @@ def _check_data_outq(s, exp_len, force_wait=False):
-     ksft_eq(outq, exp_len)
- 
- 
-+def _recv_careful(s, target, timeout=2):
-+    """Read exactly target bytes, tolerating short reads"""
-+    data = b''
-+    end = time.monotonic() + timeout
-+    while time.monotonic() < end:
-+        try:
-+            chunk = s.recv(target - len(data), socket.MSG_DONTWAIT)
-+            if not chunk:
-+                raise KsftFailEx(f"peer closed after {len(data)} of {target} bytes")
-+            data += chunk
-+            if len(data) == target:
-+                return data
-+        except BlockingIOError:
-+            time.sleep(0.001)
-+    raise KsftFailEx(f"short read, got {len(data)} of {target} bytes")
-+
-+
-+def _req_echo(cfg, s):
-+    """Ask the peer to echo, and check the reply arrives intact"""
-+    _send_with_ack(cfg, b'data echo\0')
-+    ksft_eq(_recv_careful(s, 5), b'echo\0')
-+
-+
-+def _psp_txrx(cfg, s, rounds, sent=0):
-+    """Send data both ways, and return the total bytes sent to the peer"""
-+    sent += _send_careful(cfg, s, rounds)
-+    _check_data_rx(cfg, sent)
-+    _req_echo(cfg, s)
-+    return sent
-+
-+
-+def _require_version(cfg, version):
-+    """Skip the test unless the device supports the given PSP version"""
-+    name = cfg.pspnl.consts["version"].entries_by_val[version].name
-+    if name not in cfg.psp_info['psp-versions-cap']:
-+        raise KsftSkipEx("PSP version not supported", name)
-+
-+
- def _get_stat(cfg, key):
-     return cfg.pspnl.get_stats({'dev-id': cfg.psp_dev_id})[key]
- 
-@@ -489,6 +558,186 @@ def _data_basic_send(cfg, version, ipver):
-     _close_psp_conn(cfg, s)
- 
- 
-+def _rekey_rx(cfg, s, version, sent):
-+    """Rekey the Rx direction, running traffic after each step"""
-+    rx_assoc = cfg.pspnl.rx_assoc({"version": version,
-+                                   "dev-id": cfg.psp_dev_id,
-+                                   "sock-fd": s.fileno()})
-+    sent = _psp_txrx(cfg, s, 1, sent)
-+
-+    _remote_tx_assoc(cfg, version, rx_assoc['rx-key'])
-+    return _psp_txrx(cfg, s, 1, sent)
-+
-+
-+def _rekey_tx(cfg, s, sent):
-+    """Rekey the Tx direction, running traffic after each step"""
-+    version, tx = _remote_rx_assoc(cfg)
-+    sent = _psp_txrx(cfg, s, 1, sent)
-+
-+    cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                        "version": version,
-+                        "tx-key": tx,
-+                        "sock-fd": s.fileno()})
-+    return _psp_txrx(cfg, s, 1, sent)
-+
-+
-+def rekey_rx_incomplete(cfg):
-+    """Test rejecting Rx rekey until the PSP connection is established"""
-+    psp_ver = 0
-+    _init_psp_dev(cfg)
-+
-+    with _make_lo_conn() as s:
-+        assoc = cfg.pspnl.rx_assoc({"version": psp_ver,
-+                                    "dev-id": cfg.psp_dev_id,
-+                                    "sock-fd": s.fileno()})
-+
-+        # Reject rekey before Tx state is configured.
-+        with ksft_raises(NlError) as cm:
-+            cfg.pspnl.rx_assoc({"version": psp_ver,
-+                                "dev-id": cfg.psp_dev_id,
-+                                "sock-fd": s.fileno()})
-+        ksft_eq(cm.exception.nl_msg.error, -errno.EBUSY)
-+
-+        cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                            "version": psp_ver,
-+                            "tx-key": assoc['rx-key'],
-+                            "sock-fd": s.fileno()})
-+
-+        # Reject rekey until authenticated PSP traffic has been received.
-+        with ksft_raises(NlError) as cm:
-+            cfg.pspnl.rx_assoc({"version": psp_ver,
-+                                "dev-id": cfg.psp_dev_id,
-+                                "sock-fd": s.fileno()})
-+        ksft_eq(cm.exception.nl_msg.error, -errno.EBUSY)
-+
-+
-+def rekey_tx_incomplete(cfg):
-+    """Test rejecting Tx rekey until the PSP connection is established"""
-+    psp_ver = 0
-+    _init_psp_dev(cfg)
-+
-+    with _make_lo_conn() as s:
-+        assoc = cfg.pspnl.rx_assoc({"version": psp_ver,
-+                                    "dev-id": cfg.psp_dev_id,
-+                                    "sock-fd": s.fileno()})
-+
-+        cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                            "version": psp_ver,
-+                            "tx-key": assoc['rx-key'],
-+                            "sock-fd": s.fileno()})
-+
-+        # Reject rekey until authenticated PSP traffic has been received.
-+        with ksft_raises(NlError) as cm:
-+            cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                                "version": psp_ver,
-+                                "tx-key": assoc['rx-key'],
-+                                "sock-fd": s.fileno()})
-+        ksft_eq(cm.exception.nl_msg.error, -errno.EBUSY)
-+
-+
-+def rekey_rx_version_mismatch(cfg):
-+    """Test rejecting an Rx rekey whose version does not match socket state"""
-+    _init_psp_dev(cfg)
-+    _require_version(cfg, 1)
-+
-+    s = _establish_psp_conn(cfg, 0)
-+    try:
-+        _psp_txrx(cfg, s, 1)
-+
-+        with ksft_raises(NlError) as cm:
-+            cfg.pspnl.rx_assoc({"dev-id": cfg.psp_dev_id,
-+                                "version": 1,
-+                                "sock-fd": s.fileno()})
-+        ksft_eq(cm.exception.nl_msg.error, -errno.EINVAL)
-+    finally:
-+        _close_psp_conn(cfg, s)
-+
-+
-+def rekey_tx_version_mismatch(cfg):
-+    """Test rejecting a Tx rekey whose version does not match socket state"""
-+    _init_psp_dev(cfg)
-+    _require_version(cfg, 1)
-+
-+    s = _establish_psp_conn(cfg, 0)
-+    try:
-+        _psp_txrx(cfg, s, 1)
-+
-+        with ksft_raises(NlError) as cm:
-+            cfg.pspnl.tx_assoc({"dev-id": cfg.psp_dev_id,
-+                                "version": 1,
-+                                "tx-key": {'spi': 0x12345678,
-+                                           'key': b'\xa5' * 32},
-+                                "sock-fd": s.fileno()})
-+        ksft_eq(cm.exception.nl_msg.error, -errno.EINVAL)
-+    finally:
-+        _close_psp_conn(cfg, s)
-+
-+
-+def _get_psp_ver_variants():
-+    for ver in range(4):
-+        yield KsftNamedVariant(f"v{ver}", ver)
-+
-+
-+@ksft_variants(_get_psp_ver_variants())
-+def rekey_rx_basic(cfg, version):
-+    """Test rekeying the Rx key of an established connection"""
-+    _init_psp_dev(cfg)
-+
-+    s = _establish_psp_conn(cfg, version)
-+    try:
-+        data_len = _psp_txrx(cfg, s, 1)
-+        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-+        data_len = _psp_txrx(cfg, s, 1, data_len)
-+        data_len = _rekey_rx(cfg, s, version, data_len)
-+        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-+        _psp_txrx(cfg, s, 1, data_len)
-+    finally:
-+        _close_psp_conn(cfg, s)
-+
-+
-+@ksft_variants(_get_psp_ver_variants())
-+def rekey_tx_basic(cfg, version):
-+    """Test rekeying the Tx key of an established connection"""
-+    _init_psp_dev(cfg)
-+
-+    s = _establish_psp_conn(cfg, version)
-+    try:
-+        data_len = _psp_txrx(cfg, s, 1)
-+        _remote_key_rotate(cfg)
-+        data_len = _psp_txrx(cfg, s, 1, data_len)
-+        data_len = _rekey_tx(cfg, s, data_len)
-+        _remote_key_rotate(cfg)
-+        _psp_txrx(cfg, s, 1, data_len)
-+    finally:
-+        _close_psp_conn(cfg, s)
-+
-+
-+@ksft_variants(_get_psp_ver_variants())
-+def rekey_both_sides(cfg, version):
-+    """Test rekeying both directions"""
-+    _init_psp_dev(cfg)
-+
-+    s = _establish_psp_conn(cfg, version)
-+    try:
-+        data_len = _psp_txrx(cfg, s, 10)
-+
-+        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-+        _remote_key_rotate(cfg)
-+
-+        # first, rx then tx
-+        data_len = _rekey_rx(cfg, s, version, data_len)
-+        data_len = _rekey_tx(cfg, s, data_len)
-+
-+        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-+        _remote_key_rotate(cfg)
-+
-+        # now, tx then rx
-+        data_len = _rekey_tx(cfg, s, data_len)
-+        _rekey_rx(cfg, s, version, data_len)
-+    finally:
-+        _close_psp_conn(cfg, s)
-+
-+
- def __bad_xfer_do(cfg, s, tx, version='hdr0-aes-gcm-128'):
-     # Make sure we accept the ACK for the SPI before we seal with the bad assoc
-     _check_data_outq(s, 0)
-@@ -1181,7 +1430,8 @@ def main() -> None:
-                                                           cfg.comm_port),
-                                                          timeout=1)
- 
--                cases = [data_basic_send, data_mss_adjust]
-+                cases = [data_basic_send, data_mss_adjust,
-+                         rekey_rx_basic, rekey_tx_basic, rekey_both_sides]
- 
-                 if has_cont:
-                     cases += [
-@@ -1197,7 +1447,8 @@ def main() -> None:
-                     ]
- 
-                 ksft_run(cases=cases, globs=globals(),
--                         case_pfx={"dev_", "data_", "assoc_", "removal_"},
-+                         case_pfx={"dev_", "data_", "assoc_", "rekey_",
-+                                   "removal_"},
-                          args=(cfg, ))
- 
-                 cfg.comm_sock.send(b"exit\0")
-diff --git a/tools/testing/selftests/drivers/net/psp_responder.c b/tools/testing/selftests/drivers/net/psp_responder.c
-index 14b179e1aec8..68a8a2b30c1a 100644
---- a/tools/testing/selftests/drivers/net/psp_responder.c
-+++ b/tools/testing/selftests/drivers/net/psp_responder.c
-@@ -5,6 +5,7 @@
- #include <sys/poll.h>
- #include <sys/socket.h>
- #include <sys/time.h>
-+#include <arpa/inet.h>
- #include <netinet/in.h>
- #include <unistd.h>
- 
-@@ -23,6 +24,7 @@ static bool should_quit;
- struct opts {
- 	int port;
- 	int ifindex;
-+	int devid;
- 	bool verbose;
- };
- 
-@@ -141,6 +143,108 @@ static void send_str(int sock, int value)
- 	send(sock, buf, ret + 1, MSG_WAITALL);
- }
- 
-+struct assoc_msg {
-+	__be32 spi;
-+	__u8 version;
-+	__u8 key_len;
-+	__u8 pad[2];
-+	char key[PSP_MAX_KEY_LEN];
-+};
-+
-+static void
-+handle_rx_assoc(struct ynl_sock *ys, int data_sock, int comm_sock)
-+{
-+	struct assoc_msg msg = {};
-+	unsigned int key_len;
-+	__u32 spi;
-+
-+	if (data_sock < 0) {
-+		fprintf(stderr, "WARN: rx assoc but no data sock\n");
-+		send_err(comm_sock);
-+		return;
-+	}
-+
-+	if (rx_assoc(ys, &spi, msg.key, &key_len, data_sock)) {
-+		fprintf(stderr, "ERROR: rx_assoc() failed\n");
-+		send_err(comm_sock);
-+		return;
-+	}
-+
-+	msg.spi = htonl(spi);
-+	msg.version = psp_vers.rx;
-+	msg.key_len = key_len;
-+	send_ack(comm_sock);
-+	send(comm_sock, &msg, sizeof(msg), MSG_WAITALL);
-+}
-+
-+static void
-+handle_tx_assoc(struct ynl_sock *ys, char *data, int data_sock, int comm_sock)
-+{
-+	struct assoc_msg msg;
-+
-+	if (data_sock < 0) {
-+		fprintf(stderr, "WARN: tx assoc but no data sock\n");
-+		send_err(comm_sock);
-+		return;
-+	}
-+
-+	memcpy(&msg, data, sizeof(msg));
-+	if (msg.key_len > PSP_MAX_KEY_LEN) {
-+		fprintf(stderr, "ERROR: tx assoc key too long\n");
-+		send_err(comm_sock);
-+		return;
-+	}
-+
-+	if (tx_assoc(ys, msg.version, ntohl(msg.spi), msg.key, msg.key_len,
-+		     data_sock)) {
-+		fprintf(stderr, "ERROR: tx_assoc() failed!\n");
-+		send_err(comm_sock);
-+		return;
-+	}
-+
-+	send_ack(comm_sock);
-+}
-+
-+static int rotate_key(struct ynl_sock *ys, int devid)
-+{
-+	struct psp_key_rotate_rsp *rsp;
-+	struct psp_key_rotate_req *req;
-+
-+	req = psp_key_rotate_req_alloc();
-+
-+	psp_key_rotate_req_set_id(req, devid);
-+
-+	rsp = psp_key_rotate(ys, req);
-+	psp_key_rotate_req_free(req);
-+
-+	if (!rsp) {
-+		perror("ERROR: failed to rotate key");
-+		return -1;
-+	}
-+
-+	psp_key_rotate_rsp_free(rsp);
-+
-+	return 0;
-+}
-+
-+static void
-+handle_key_rotate(struct ynl_sock *ys, struct opts *opts, int comm_sock)
-+{
-+	if (opts->devid < 0) {
-+		fprintf(stderr, "WARN: key rotate but no PSP device\n");
-+		send_err(comm_sock);
-+		return;
-+	}
-+
-+	if (rotate_key(ys, opts->devid)) {
-+		fprintf(stderr, "ERROR: rotate_key() failed\n");
-+		send_err(comm_sock);
-+		return;
-+	}
-+
-+	send_ack(comm_sock);
-+}
-+
- static void
- run_session(struct ynl_sock *ys, struct opts *opts,
- 	    int server_sock, int comm_sock)
-@@ -233,6 +337,9 @@ run_session(struct ynl_sock *ys, struct opts *opts,
- 			match;						\
- 		})
- 
-+#define cmd_w_msg(_name, _type)						\
-+		(off >= sizeof(_name) + sizeof(_type) && cmd(_name))
-+
- 			do {
- 				consumed = false;
- 
-@@ -247,6 +354,16 @@ run_session(struct ynl_sock *ys, struct opts *opts,
- 						fprintf(stderr, "WARN: echo but no data sock\n");
- 					send_ack(comm_sock);
- 				}
-+				if (cmd("rx assoc"))
-+					handle_rx_assoc(ys, data_sock,
-+							comm_sock);
-+				if (cmd_w_msg("tx assoc", struct assoc_msg)) {
-+					handle_tx_assoc(ys, buf, data_sock,
-+							comm_sock);
-+					__consume(sizeof(struct assoc_msg));
-+				}
-+				if (cmd("key rotate"))
-+					handle_key_rotate(ys, opts, comm_sock);
- 				if (cmd("data close")) {
- 					if (data_sock >= 0) {
- 						close(data_sock);
-@@ -277,6 +394,7 @@ run_session(struct ynl_sock *ys, struct opts *opts,
- 				}
- 				if (cmd("exit"))
- 					should_quit = true;
-+#undef cmd_w_msg
- #undef cmd
- 
- 				if (!consumed) {
-@@ -475,6 +593,7 @@ int main(int argc, char **argv)
- 		}
- 	}
- 	psp_dev_get_list_free(dev_list);
-+	opts.devid = devid;
- 
- 	if (opts.ifindex && devid < 0)
- 		fprintf(stderr,
-
+Best regards,
 -- 
-2.52.0
+Siddharth Nayyar <sidnayyar@google.com>
 
