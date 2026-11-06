@@ -1,75 +1,134 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.146
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793996424;
-	b=DXKyQlv4demA/jWOHeCtu4flF4rTrAdQZvv9MTXUujLKkHpPxF78fmP3T8HjPGviawsh
-	 BEC9an9yVJaRlMLszGhj9J/+ZhvjmtFWRqV5YBZsJLQdQvEZ9WJYN4rnQl3NpbGz/Cv49
-	 HvLEz5otRpRYmlKztDDV42VSVKTLlDr7gij8MXBBJ/l37WOpDX+iUSe4a9KwpqSyyRAje
-	 BnVFx4pTE80oIOj+/vV2hJ03uLcTYADwNc3c/pFGN9hSIMKueJp110vg/d3gjekxJYGgN
-	 RyxHmBPI0xmfPKGMCWr5Hd4L9N+wAvJYYTummgoCTEY5nJ7waiVaNDWh6IeUgV1tObQ==
+	t=1793997567;
+	b=fxmI+gYtdlzbFkcdJDN94b/qlk4L2oGEqDAegQ2WNOuEe4ieXbfnteF4clIYiSpkFKYC
+	 h1Iv4i+tWSDnbcRUfnvMU0jflHq2xyPE28oT0atLzHy9PGc0LUFWuGmg1NNAoFNX1Sl0U
+	 49p9S3swEjkVtnzVLm3RuMKvR2KET9qwzUY15zGdTU95clyf62rRN/KXNrRUi1uybkaxr
+	 ECNRAW0zgqLd7DTGB69qoVHbtVPW21uZOELdXdCSQOafTkUVzKQSiGzqnO1GRFMXK25/Y
+	 ivWhTfLyohxDknveOSMu8AYTgoXONEJFsXsdoH90s9gTDhCfKuBWViz5aIXoSxDwU1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793996424;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=K1sGHNV060QXqvoYM3K0orPPht5P734++yZ6XL1HQug=;
-	b=CNdRvBwW7aJeu7Np8TedSSc52bFCkZZ4Ds1K8ITVz9nVfUlci7+w+FCFQyUyohZ+zElB
-	 GSsFSNPWxbu4Suo8QMdtQ0o7aKprwb2m4gpJ19r9QZzdUIfBpZb3me1IZm3hESzCPSO7A
-	 vNUko/WAThibAt/BSg5cS5A2nkzc5CL8bZJyiDDmnG4wCBWxWUnLI9nHNfhEVKt654KK9
-	 k6DZmB2quzCEpYmR9gktsR2EBVtf5f6Xu+EqEJubwSJMpHGPwRev9Z3MQzMAJQSlGKFrH
-	 IucFO0ZRVAoSQm4krukqfuABjF+ocPToQlX3oBsiJh7hlo/TSifgcQuqnTcehLOZaWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793997567;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=y0BVziaquUjVVAPoh4llDs6v2FQ9OhndML7IsF84gsc=;
+	b=l1jvYHxCLpr3RwsViFRs/NafoZHIUeIlp2a0lLfOKytNIh8jvCRt/HAbbRL7X2qtmrnm
+	 pGKVN1YyXyaT+NIDr4zLj28E7fvJ6Q8b0B7HZ+2HvtTCN2Gkek1HVpIhIpbBDwHuwbs8t
+	 WxEL+0NeF8QdasdTJYvJLakIwtVu6r2t0zKyAUr+aohSUL1l9PvBYrSKTrRfvkGfKA4NK
+	 Ii0b+Hj4zCW/t6PBAyaWRgAI4Ws5vW+cpjc0Hf1V9rQUSW01xd9VBfMK7pShEEGQycWO+
+	 mX7IgtIcNlK13IHsRtcxHPC+enWU33jfVnC99xYsTXbPi8mskEN1qgqKnn5J0UWzWCA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G9hTJxj3;
-	arc=none smtp.remote-ip=209.85.216.71
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=shazbot.org;
+	spf=pass smtp.mailfrom=shazbot.org;
+	dkim=pass header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=QFns8ebX;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=jnaNMHw6;
+	arc=none smtp.remote-ip=103.168.172.146
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C29B606D81B
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 20:20:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C29B606D81B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B8D606A337
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 20:39:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82B8D606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=G9hTJxj3
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3ac7a4ba546so28041a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 12:20:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793996423; x=1794601223; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=K1sGHNV060QXqvoYM3K0orPPht5P734++yZ6XL1HQug=;
-        b=G9hTJxj3nxnHsQ8psWi9BDZisFa8akPkRgZwtJG3BDe1HdJ1NjLGREu70V2n50XZWN
-         Cg20DB6b+u1H2G05B49XZWC7KUrQjb93PukUDuXxxkP9OtVSrj8U9VBX8YLg7Ls9stKX
-         GkWsY7FcefOEGCEw7nv4zlKRIFs5zGNBiZi/RVo8hNT1uxjizcXAM99Yle8wYhIMcUQA
-         u66NqVfAh2X3gA07YRSDpkJsmzLf3W34nyFhbIul1XDNJoOva/Ca26O33Q41ypXZe2ei
-         4WrUwXVcnoLZt06weLOSt/rxDZtMvkCBFRmEkXS+41E7CUJj5ZlYQVDUe3T4hKUvEYan
-         fDjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793996423; x=1794601223;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=K1sGHNV060QXqvoYM3K0orPPht5P734++yZ6XL1HQug=;
-        b=phuyOp6VI8CXdKR7EOwLcvSOTLNjXjkLxfTfnrLtQaKxAVc3vSYdsKaM/ftu9+QNmv
-         1w838sIPODKvduQ4Tpz0jI6fBBHOd2ElKLAJwbqa7QpPg1oFdrPuTwHEZuPX2ocQB34e
-         M0K7F0XZpkr17smPyfvV2RFheRpFtBFoP6onRamf07HuMMnq/1YCGHXsRaoD2AcXsByQ
-         6yJyI6zhtP2qIA8HjVoIUlmWN5MY0m+XiVi55fBSuDJF3Zh5J+01y1CqBxkx1JlVx5SM
-         /7BtqmXQGCZn4M4z3k8yqM63+6JT7aqBLzyC0lXxCzsHquwUPMACRTLgDMzeSvngF5zR
-         XxTw==
-X-Forwarded-Encrypted: i=1; AL+hErFkaRpsoX96QUpz43FJrJRLJFXLHObmkIafIYsx0TNqguje/9Z7ktme2ipyj1egDzAaYDiLmUO2Bu7//SWa5Lg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+ubwoGXoSAy0o29Lt8lZoIrzxusYUxYx9Oc7rZ66vn1EsxXcbf
-	0mwoekUg/tOwb/vrcLTOxVXeqQBtmew2CwAlwp5a5ZZQ0+qlvzqHzWPg3gwTP7AHHCP2QiU1/p7
-	E4c/IdqjsQzWlpOcE1w==
-X-Received: from pjbmq2.prod.google.com ([2002:a17:90b:3802:b0:3b0:c476:aabc])
- (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3cc6:b0:3a8:786a:cfed with SMTP id 98e67ed59e1d1-3b10659feaemr50585a91.37.1793996422174;
- Fri, 06 Nov 2026 12:20:22 -0800 (PST)
-Date: Fri, 06 Nov 2026 20:19:54 +0000
-In-Reply-To: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=QFns8ebX;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=jnaNMHw6
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailfout.phl.internal (Postfix) with ESMTP id 7DBC0EC01DF
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 15:39:24 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Fri, 06 Nov 2026 15:39:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793997564;
+	 x=1794083964; bh=y0BVziaquUjVVAPoh4llDs6v2FQ9OhndML7IsF84gsc=; b=
+	QFns8ebXFo0UFvT6+ZHPsjuq+ghcluonVEII3xNwxed3tzNZSMo0BDnZS3wq9lKo
+	0t5PE6BPBfCVD/nTpgG5nwaqP6/OX3R5qJ6KDfKf1RgOt86qNBb+s7sM0+uWuMIZ
+	H1+IEctvDJOBnF2LcVuu1jVTd2xWcB61EbuTFQIQIY6cKRq611Yhpo1ZXcNt2Xis
+	2v3z+2PCZgSpn0JazvwAKLS6Iw3/OgxnSfXbPL6M5J2U2zc2E3qYoNejg1j7oTJo
+	Yui5sKMjD7NzhcqC60CUNh3OL5V5TQjQ1hySMnCfJlm8QSwulyGCXh8F9s2KAaGF
+	Ghwbe1SB3VWQSdmDM4MrIw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1793997564; x=
+	1794083964; bh=y0BVziaquUjVVAPoh4llDs6v2FQ9OhndML7IsF84gsc=; b=j
+	naNMHw6TOkiuBhQIxtaTCEmuvzmoa6wH6SL5N5kjy38vB1ucE+V8i3AQd0q9rb+h
+	dldrUfO0DPZZ7Xxim5fi08xJdLrHF71dihHNdTahXafS5oWt/OIW2/CRNjJyR2Th
+	Ceg0bMTZN1v2YKd3FqFuqnqqlF9W6ZQzYhUtp1OXeqCOD6tO6r207r/Pyp9eCoUi
+	Uw55yiI876gdEhjtzdmyFfHYJsoi75/Puatt0AasECt38B/r3sLUaKb69pATEuwf
+	CHPVG9LA3cl1um+RnAOjwiWRYFvutWcLPZc6M1LqemJvgeeZDdEVSBXXLQ7IQNtS
+	GZ5G+BAFYDz01NzSmuuAQ==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=shazbot.org a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793997564; d=shazbot.org;
+	mf=PGFsZXhAc2hhemJvdC5vcmc+;
+	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:PDvG0/3Yle96UrM5o4KU3yG7C0gagoSlpE5mwbV0vLcEsn6
+	6RR5GhfB9+DREbFeDu4rU0/qz/APkidrIKKnSdcG1IV6BLj83JSknC5cuAG7xVYB
+	JhwL9+DhkEMKHT3uWax+ENG3LPOcy4RyAWuBjDnpP95sefF7NdxQrqcejqlhpO/a
+	J7Vr8fr8GLJ28yZJa3SXHX8PYLBpA1ITwYlNl6F8RpxS1XJjgvN2W0dYfP8wTCLE
+	JJ8nQ2d6nZjrv5HwiZGld//Fv/viK3TYxKIAyB/kys9jM9fehKJ2x0/+7PpJXt3n
+	LyVIty5Th4yqcvikA0/cZesMJB1/9nWlxF8GFSw==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:TC2OAASFXc/kqGL+CunvWFfjUQDUXEFfcgl8mkejbCw=:KLM1XTdGORKLzVXxMM2+MBqBSSgPSj1LNFXBZwNORQc=;
+X-ME-Sender: <xms:-zruapswx845re28jK7E-OISiOWhgLdGEzbA0gYJ4Jaukh4q8ERM5w>
+    <xme:-zruagGv_oYl0JasYwTqNuMV9YfG4cqnE57Xk0ZmwUhwx4wfvWkkZcKjTNiOcHNH5
+    f1ObK33XWf7tyXP_cUBksnGPcFiyply7mFddvMfjxbMyfhNaK9-Rg>
+X-ME-Received: <xmr:-zruakL7z03VZTgAiqT4Blwr0mVgipsBhSTSBlaAlE-iTpTJR0DAEzose6zAjw>
+X-ME-Proxy-Cause: dmFkZTGIbL7eiEY7X8p/l+CeUB7m44a61PuMeL+fbY3aREjzPUsLlzqVekELJvtGSYzY/I
+    nO/9fOkHagfaTDpr/q7Hu4ec1OgxpJzeR1b+u+/9ylFLL0hiPQ7Q5WGOti0WTlU639UET8
+    W0OANyCth0cdOR2e7W6mWO1PJHdl/BResgCHiTxzvLlqq3zCDX3wvzLg16WhpWjXSqlvxH
+    89LRMj0xWkNEZ4qN6TB296bhwMUVIMYXaAmu9mgVoI4iM8H8vundo/2ymieM+LgoFiwTPq
+    IhQxBsWs0Ga7dr1x8oM6/9wnzhBZVCQvByhcFz33jTVizQNgL5tYw3VmrPQxyPhLIvxifv
+    H7QY9kPySOCsFJrhxoC6uqsSDc1GcMOACH3r7Wrmfr/jnoMJGP58FMF4t2RcELJnfT33jD
+    je5SutMzSelw6oN50vcX7lIELIN9R0dR9ohFPMT4pfg+q7rmzgKEPWOhidL3uG4rHDfx8E
+    bdsoBTFLWpPoCvbhqBhLI+776dylwZRjCQk6W/hoGKw0YgFB8jgrcJoIK9CA/qxfCdKgtu
+    VpseP5mr6Y0vLjZMqZAROvOolYbNFuQE9hVhhbAwSnSVTI/Gge+4z1RvnWcKgImEeF39T+
+    OWgDl/6GYLI6UCeWNQ2UCfPZamPvO1USkUaKy4natYDrfR6Un0JmtJhr1VyA
+X-ME-Proxy: <xmx:-zruaoYTS6zaXrUnuamRBu1QXRKhqDl6CLVkSZ2bn8QMmD4Yem2QHw>
+    <xmx:-zruahps8Qx_fewfGVvHRM6AEFA-RYq-3pHwGw9P3jodAEu4HSumLg>
+    <xmx:-zruagHkcYHQpi7Qlk7TjgwSxyJUT48sIqyc-BBi0duFKzQbget_zg>
+    <xmx:-zrualdFIYqEPdPn5BJgS0ePxXMEsDJW9LK7HWSjS1lZq1TJQzK-pA>
+    <xmx:_DruatZac4csxBguHlwKZ6baZZokuGozy6Fj434FxEBTDO-Hb4g6MpQ1>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 6 Nov 2026 15:39:21 -0500 (EST)
+Date: Fri, 6 Nov 2026 13:39:20 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: <mhonap@nvidia.com>
+Cc: <jgg@ziepe.ca>, <ankita@nvidia.com>, <jic23@kernel.org>,
+ <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
+ <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
+ <dave@stgolabs.net>, <alison.schofield@intel.com>,
+ <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
+ <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
+ <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
+ <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
+ <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+ <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
+ alex@shazbot.org
+Subject: Re: [PATCH v6 09/31] vfio/pci: Advertise the mmap areas around
+ excluded ranges
+Message-ID: <20261106133920.144f0665@shazbot.org>
+In-Reply-To: <20261016161839.2765592-10-mhonap@nvidia.com>
+References: <20261016161839.2765592-1-mhonap@nvidia.com>
+	<20261016161839.2765592-10-mhonap@nvidia.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,295 +137,164 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
-X-Mailer: b4 0.14.3
-Message-ID: <20261106-lskel-struct-ops-v1-7-a4486ffc79cb@google.com>
-Subject: [PATCH RFC bpf-next 7/7] selftests/bpf: Add light skeleton struct_ops tests
-From: Siddharth Nayyar <sidnayyar@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Giuliano Procida <gprocida@google.com>, 
-	Neill Kapron <nkapron@google.com>, "=?utf-8?q?Thi=C3=A9baud_Weksteen?=" <tweek@google.com>, 
-	Maxime Ripard <mripard@kernel.org>, Siddharth Nayyar <sidnayyar@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add selftests exercising BPF_MAP_TYPE_STRUCT_OPS support in light
-skeletons across both vmlinux and kernel module BTF targets:
+On Fri, 16 Oct 2026 21:48:16 +0530
+<mhonap@nvidia.com> wrote:
 
-- struct_ops_vmlinux.c defines a SEC(".struct_ops.link")
-  tcp_congestion_ops map in vmlinux BTF, testing open/load, link
-  attachment, callback invocation over a loopback TCP connection,
-  and unregistration upon detach.
-- struct_ops_mod.c defines two SEC(".struct_ops.link") maps targeting
-  bpf_testmod_ops in module BTF (including a reordered subset struct
-  bpf_testmod_ops___v2 sharing a callback), testing module BTF FD
-  resolution, runtime member offset/index lookup via
-  bpf_btf_get_struct_member_info(), scalar member copying, detach,
-  and per-map re-attachment.
+> From: Manish Honap <mhonap@nvidia.com>
+> 
+> A range excluded from mmap must not be reachable through an mmap of its
+> BAR. Refuse an mmap that overlaps such a range, and advertise the BAR
+> with a sparse mmap capability that lists the areas between the excluded
+> ranges, so a VMM maps those and traps the rest.
+> 
+> mmap is page granular, so each range is rounded out to whole pages, and
+> ranges that meet after rounding form one hole. The sorted list gives the
+> areas in two walks: the first counts them and the second fills them.
+> 
+> A BAR without mmap-excluded ranges gets no new capability. The MSI-X
+> table is excluded from read and write only, so the MSI-X BAR is
+> unchanged.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_core.c | 91 ++++++++++++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index bee3d1b4d8d2..f099a294af34 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1106,6 +1106,88 @@ static void vfio_pci_free_excluded_ranges(struct vfio_pci_core_device *vdev)
+>  	}
+>  }
+>  
+> +/* True when [start, start + len) on @bar overlaps a range with any of @flags. */
+> +static bool vfio_pci_bar_range_excluded(struct vfio_pci_core_device *vdev,
+> +					int bar, u64 start, u64 len, u32 flags)
+> +{
+> +	struct vfio_pci_excluded_range *range;
+> +
+> +	/* Only BARs have excluded ranges; a device-specific region has none. */
+> +	if (bar >= PCI_STD_NUM_BARS)
+> +		return false;
+> +
+> +	list_for_each_entry(range, &vdev->excluded_ranges[bar], entry) {
+> +		if (range->start >= start + len)
+> +			break;
+> +		if ((range->flags & flags) &&
+> +		    start < range->start + range->size)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +/*
+> + * Advertise a BAR with mmap-excluded ranges as the mmap-able areas between
+> + * them. mmap is page granular, so each range is rounded out to whole pages;
+> + * ranges that meet after rounding merge into one hole. The first walk counts
+> + * the areas and the second fills them.
+> + */
+> +static int vfio_pci_excluded_sparse_cap(struct vfio_pci_core_device *vdev,
+> +					int bar, struct vfio_info_cap *caps)
+> +{
+> +	struct vfio_region_info_cap_sparse_mmap *sparse __free(kfree) = NULL;
+> +	u64 bar_len = pci_resource_len(vdev->pdev, bar);
+> +	struct vfio_pci_excluded_range *range;
+> +	u32 nr_areas = 0;
+> +	bool holes = false;
+> +	u64 pos = 0;
+> +	u32 i = 0;
+> +
+> +	list_for_each_entry(range, &vdev->excluded_ranges[bar], entry) {
+> +		if (!(range->flags & VFIO_PCI_EXCLUDE_MMAP))
+> +			continue;
+> +		holes = true;
+> +		if (ALIGN_DOWN(range->start, PAGE_SIZE) > pos)
+> +			nr_areas++;
+> +		pos = max(pos, ALIGN(range->start + range->size, PAGE_SIZE));
+> +	}
+> +	if (!holes)
+> +		return 0;
+> +	if (pos < bar_len)
+> +		nr_areas++;
 
-Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
----
- tools/testing/selftests/bpf/Makefile.skel          |   3 +-
- .../selftests/bpf/prog_tests/struct_ops_lskel.c    | 122 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/struct_ops_mod.c |  51 +++++++++
- .../selftests/bpf/progs/struct_ops_vmlinux.c       |  42 +++++++
- 4 files changed, 217 insertions(+), 1 deletion(-)
+The number of sparse ranges is bounded by (num_mmap_excluded_ranges +
+1).  We're dealing with a very low number of excluded ranges, bounded by
+insertion via kernel drivers and core.  It seems worthwhile to avoid
+the duplication with a simple list walk that counts the mmap excluded
+ranges, then all of the alignment happens once, and the resulting
+nr_areas is calculated as we fill.
 
-diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
-index b8eaecc7f429..2726f9081e35 100644
---- a/tools/testing/selftests/bpf/Makefile.skel
-+++ b/tools/testing/selftests/bpf/Makefile.skel
-@@ -34,7 +34,8 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c 	\
- 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
- 	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
--	test_ringbuf_overwrite.c callx_rodata.c
-+	test_ringbuf_overwrite.c callx_rodata.c struct_ops_vmlinux.c	\
-+	struct_ops_mod.c
- 
- LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_lskel.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_lskel.c
-new file mode 100644
-index 000000000000..4e9bac460953
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_lskel.c
-@@ -0,0 +1,122 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "network_helpers.h"
-+#include "struct_ops_vmlinux.lskel.h"
-+#include "struct_ops_mod.lskel.h"
-+
-+static int set_tcp_ca_cb(int fd, void *opts)
-+{
-+	const char *tcp_ca = opts;
-+
-+	if (!ASSERT_OK(setsockopt(fd, IPPROTO_TCP, TCP_CONGESTION,
-+				  tcp_ca, strlen(tcp_ca)), "setsockopt"))
-+		return -1;
-+	return 0;
-+}
-+
-+static void test_vmlinux(void)
-+{
-+	char tcp_ca[] = "bpf_lskel_ca";
-+	struct network_helper_opts opts = {
-+		.post_socket_cb	= set_tcp_ca_cb,
-+		.cb_opts	= tcp_ca,
-+	};
-+	struct struct_ops_vmlinux_lskel *skel;
-+	int srv_fd = -1, cli_fd = -1, sock_fd = -1;
-+	int err;
-+
-+	skel = struct_ops_vmlinux_lskel__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	err = struct_ops_vmlinux_lskel__attach(skel);
-+	if (!ASSERT_OK(err, "attach"))
-+		goto cleanup;
-+
-+	srv_fd = start_server_str(AF_INET6, SOCK_STREAM, NULL, 0, &opts);
-+	if (!ASSERT_NEQ(srv_fd, -1, "start_server_str"))
-+		goto cleanup;
-+
-+	cli_fd = connect_to_fd_opts(srv_fd, &opts);
-+	if (!ASSERT_NEQ(cli_fd, -1, "connect_to_fd_opts"))
-+		goto cleanup;
-+
-+	ASSERT_GT(skel->bss->ca_init_cnt, 0, "ca_init_cnt");
-+
-+	close(cli_fd);
-+	cli_fd = -1;
-+	close(srv_fd);
-+	srv_fd = -1;
-+
-+	struct_ops_vmlinux_lskel__detach(skel);
-+	skel->links.lskel_ca_fd = 0;
-+
-+	/* Verify congestion control was unregistered on detach */
-+	sock_fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (!ASSERT_GE(sock_fd, 0, "socket"))
-+		goto cleanup;
-+
-+	err = setsockopt(sock_fd, IPPROTO_TCP, TCP_CONGESTION,
-+			 tcp_ca, strlen(tcp_ca));
-+	ASSERT_EQ(err, -1, "setsockopt_after_detach");
-+	ASSERT_EQ(errno, ENOENT, "errno_after_detach");
-+
-+cleanup:
-+	if (sock_fd != -1)
-+		close(sock_fd);
-+	if (cli_fd != -1)
-+		close(cli_fd);
-+	if (srv_fd != -1)
-+		close(srv_fd);
-+	struct_ops_vmlinux_lskel__destroy(skel);
-+}
-+
-+static void test_module(void)
-+{
-+	struct struct_ops_mod_lskel *skel;
-+	int err, link_fd;
-+
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = struct_ops_mod_lskel__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	err = struct_ops_mod_lskel__attach(skel);
-+	if (!ASSERT_OK(err, "attach"))
-+		goto cleanup;
-+
-+	ASSERT_GT(skel->links.testmod_1_fd, 0, "testmod_1_fd");
-+	ASSERT_GT(skel->links.testmod_2_fd, 0, "testmod_2_fd");
-+	ASSERT_EQ(skel->bss->test_1_cnt, 2, "test_1_cnt");
-+	ASSERT_EQ(skel->bss->testmod_1_result, 17, "testmod_1_result");
-+	ASSERT_EQ(skel->bss->testmod_2_result, 28, "testmod_2_result");
-+
-+	struct_ops_mod_lskel__detach(skel);
-+	skel->links.testmod_1_fd = 0;
-+	skel->links.testmod_2_fd = 0;
-+	memset(skel->bss, 0, sizeof(*skel->bss));
-+
-+	link_fd = struct_ops_mod_lskel__testmod_1__attach(skel);
-+	if (!ASSERT_GT(link_fd, 0, "testmod_1_attach"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(skel->bss->test_1_cnt, 1, "reattach_test_1_cnt");
-+	ASSERT_EQ(skel->bss->testmod_1_result, 17, "reattach_testmod_1_result");
-+	ASSERT_EQ(skel->bss->testmod_2_result, 0, "reattach_testmod_2_result");
-+
-+cleanup:
-+	struct_ops_mod_lskel__destroy(skel);
-+}
-+
-+void test_struct_ops_lskel(void)
-+{
-+	if (test__start_subtest("vmlinux"))
-+		test_vmlinux();
-+	if (test__start_subtest("module"))
-+		test_module();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_mod.c b/tools/testing/selftests/bpf/progs/struct_ops_mod.c
-new file mode 100644
-index 000000000000..b1bd7429149d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_mod.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int test_1_cnt = 0;
-+int testmod_1_result = 0;
-+int testmod_2_result = 0;
-+
-+SEC("struct_ops/test_1")
-+int BPF_PROG(test_1)
-+{
-+	test_1_cnt++;
-+	return 0;
-+}
-+
-+SEC("struct_ops/test_2")
-+void BPF_PROG(test_2, int a, int b)
-+{
-+	testmod_1_result = a + b;
-+}
-+
-+SEC("struct_ops/test_2_v2")
-+void BPF_PROG(test_2_v2, int a, int b)
-+{
-+	testmod_2_result = a * b;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops testmod_1 = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2,
-+	.data = 13,
-+};
-+
-+struct bpf_testmod_ops___v2 {
-+	int data;
-+	void (*test_2)(int a, int b);
-+	int (*test_1)(void);
-+};
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops___v2 testmod_2 = {
-+	.data = 7,
-+	.test_2 = (void *)test_2_v2,
-+	.test_1 = (void *)test_1,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_vmlinux.c b/tools/testing/selftests/bpf/progs/struct_ops_vmlinux.c
-new file mode 100644
-index 000000000000..1d8b573ad799
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_vmlinux.c
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int ca_init_cnt = 0;
-+
-+SEC("struct_ops/ca_lskel_init")
-+void BPF_PROG(ca_lskel_init, struct sock *sk)
-+{
-+	ca_init_cnt++;
-+}
-+
-+SEC("struct_ops/ca_lskel_cong_control")
-+void BPF_PROG(ca_lskel_cong_control, struct sock *sk, __u32 ack, int flag,
-+	      const struct rate_sample *rs)
-+{
-+}
-+
-+SEC("struct_ops/ca_lskel_ssthresh")
-+__u32 BPF_PROG(ca_lskel_ssthresh, struct sock *sk)
-+{
-+	return tcp_sk(sk)->snd_ssthresh;
-+}
-+
-+SEC("struct_ops/ca_lskel_undo_cwnd")
-+__u32 BPF_PROG(ca_lskel_undo_cwnd, struct sock *sk)
-+{
-+	return tcp_sk(sk)->snd_cwnd;
-+}
-+
-+SEC(".struct_ops.link")
-+struct tcp_congestion_ops lskel_ca = {
-+	.init = (void *)ca_lskel_init,
-+	.cong_control = (void *)ca_lskel_cong_control,
-+	.ssthresh = (void *)ca_lskel_ssthresh,
-+	.undo_cwnd = (void *)ca_lskel_undo_cwnd,
-+	.name = "bpf_lskel_ca",
-+};
+Note that with the use of __free, it's generally recommended to
+allocate at the point it's declared and mixed declarations and
+statements are allowed for this.  We can therefore do the declaration
+and allocation after we've done the simple version of the counting loop.
+Thanks,
 
--- 
-2.56.0.455.g6c5a503b38-goog
+Alex
+
+> +
+> +	sparse = kzalloc_flex(*sparse, areas, nr_areas);
+> +	if (!sparse)
+> +		return -ENOMEM;
+> +
+> +	sparse->header.id = VFIO_REGION_INFO_CAP_SPARSE_MMAP;
+> +	sparse->header.version = 1;
+> +	sparse->nr_areas = nr_areas;
+> +
+> +	pos = 0;
+> +	list_for_each_entry(range, &vdev->excluded_ranges[bar], entry) {
+> +		u64 hole = ALIGN_DOWN(range->start, PAGE_SIZE);
+> +
+> +		if (!(range->flags & VFIO_PCI_EXCLUDE_MMAP))
+> +			continue;
+> +		if (hole > pos)
+> +			sparse->areas[i++] = (struct vfio_region_sparse_mmap_area) {
+> +				.offset = pos,
+> +				.size = hole - pos,
+> +			};
+> +		pos = max(pos, ALIGN(range->start + range->size, PAGE_SIZE));
+> +	}
+> +	if (pos < bar_len)
+> +		sparse->areas[i] = (struct vfio_region_sparse_mmap_area) {
+> +			.offset = pos,
+> +			.size = bar_len - pos,
+> +		};
+> +
+> +	return vfio_info_add_capability(caps, &sparse->header,
+> +					struct_size(sparse, areas, nr_areas));
+> +}
+> +
+>  int vfio_pci_core_register_dev_region(struct vfio_pci_core_device *vdev,
+>  				      unsigned int type, unsigned int subtype,
+>  				      const struct vfio_pci_regops *ops,
+> @@ -1254,6 +1336,10 @@ int vfio_pci_ioctl_get_region_info(struct vfio_device *core_vdev,
+>  				if (ret)
+>  					return ret;
+>  			}
+> +			ret = vfio_pci_excluded_sparse_cap(vdev, info->index,
+> +							   caps);
+> +			if (ret)
+> +				return ret;
+>  		}
+>  
+>  		break;
+> @@ -1947,6 +2033,11 @@ int vfio_pci_core_mmap(struct vfio_device *core_vdev, struct vm_area_struct *vma
+>  	if (req_start + req_len > phys_len)
+>  		return -EINVAL;
+>  
+> +	/* An excluded sub-range is reachable only through its trap, not mmap. */
+> +	if (vfio_pci_bar_range_excluded(vdev, index, req_start, req_len,
+> +					VFIO_PCI_EXCLUDE_MMAP))
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * Ensure the BAR resource region is reserved for use.
+>  	 */
 
