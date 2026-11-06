@@ -1,84 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793942397;
-	b=wZWMn7/RsbGjQOm8hcj2oY6fdm0x08UjcQatDECPsC6nDD9bgl9eeBCAwprGQTcOLbN4
-	 IcAnnD+QQA+QaSgIq6VCAvYHWzPUBbvmMdJN8LGpO8ov7q3VEa7NOoMybj1Xw0lZjyhPa
-	 kycAbqzp2FaLsRXHP9Qf2isxoMaTG9cbIQQscPVL+2QF3yNX+ESPD0zm+Fg7bAH1eI2eL
-	 C51kgKOHCDTIKSuqOU52cgS5OlYKIt46u6UPYc4xOzXbgjZS1ZL75uwTVdzyCRwKou/3O
-	 swrHTw/hBjKAA5Qghpt3dr55TufgDVkzPbdwnGJEPxZA7qR2cznsa8iBcUEgLE11nBA==
+	b=05sdtsTWdTr+Z9bbs0mYEfljVuwEmS86qFWI8qArk4S+DhqD+RU+UlAwCnsDVFbbnkay
+	 QGEb9sF31bOB7crJPa7OXINWzTBZ369wFXyEUt27YIqTgnhgGWhZWXDvhkgmnVDn53ToS
+	 VIhzNdVEbasrpPqZQde+acJtXhQUz7Yv/MIFTdNhZGnPGHU70j6GKLkr2XH7F5Tmhe4E7
+	 7NVzdmdEnmP5SUfG06fZaOjfl8AEnYCeFrFx2HK8QzYJZTt662kUNw5UkHaQsqNXH8iZW
+	 bL0VRO+A7jv5ZaN2aJjsUAj9+7S1cn2XcuvfmH02deYaNTMuwtqdpPcZFOJarQJJhCQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793942397;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=thIA+a4MIDQnMOr6nTyDyHd3MBhrUbqPQ16GG235Ges=;
-	b=HNYcHjBmrI2RcWSnDMtsLnpXqHFOrQRrnwsPSF1Jgl/w9RKKMBCATOmVm0SDKJoUWD1E
-	 snm2Nh5khY2cIXMEIgFcecvPBYF/HO8KXNomEgtv2BMfIxqOzgzi+cT7oP3KMiXyJ3v2f
-	 9FWT9sGzyE3IbK2UEVOjKKT+Xa4JwQX0rSz7sYRkuFqXKoN6mksy5YFNrEhuOP1+EKkr6
-	 6Ka+1+NbPIOqgr8Ujwc4JZkd5FiummOmoeG6geG3H2OAvCJyMLuV1gxcEqxw5Lj4XwsMy
-	 GqCb079XmQ4KeWVa1ooQ0YbN65FkX6A9epUnTNmVZh+CT6IGYwvUuxemrxi2efm9Ndw==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=EhvxgM4OU3wkthv1IWxSDKnI9mH3KYqlfOb3SM6sBPU=;
+	b=3uhG1x4fixwv2GnXKv9ZRkFW9MYnxDmvUC9nLa8ctYtnfE+XtCm7J43ZZBK6Y0MV4dQa
+	 9aMrP1uUABnWFF9ZUVNzFVjBe+ZxPC0uI1S3tPfIhgO4VmNnUM7vWbPhREYn0FWcztRah
+	 hrxhOo6DduYXW6o0w0NIZQFgq4/x8b0BFuGGBOLY0Z65Il2sX4QipVMfZvvcU87XCyiRu
+	 y7Ou4iWu/xnMxMSoYZQl4SnI80q+Cl33JwYGz5NuphoeAuA7xSwr0S+YyKaPvtyYQHaSH
+	 5oPqLZ1/fRSeZglS9Xx+YvZaPS7tka7INNGegPJx8JP6zTZ+/fjqaIqeUzlntRg2bnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eqZz6nYC;
-	arc=none smtp.remote-ip=209.85.216.50
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jNE0BwBp;
+	arc=none smtp.remote-ip=209.85.214.173
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4EF606A31B
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 05:19:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A4EF606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBF9606A32E
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 05:19:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EBF9606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eqZz6nYC
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b0e0e65adbso94834a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 21:19:56 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jNE0BwBp
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ed28bac8d7so1244805ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2026 21:19:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793942396; x=1794547196; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=thIA+a4MIDQnMOr6nTyDyHd3MBhrUbqPQ16GG235Ges=;
-        b=eqZz6nYCn9PVjvW6yBFagMYl08LpllPL0trgOTQ3WHfIsNe+Y3/2+c9C6h18C0RNgg
-         jcERXhHYR2j4PoKgvkM1grKc5o+2PbWgwtCSHMNJwQzb4XvUs1QLlkxMNVJsq/GWuFUT
-         s9h1cmrFSKEV7dPPJif7k8Q29+sSOxXEHiCW/1HNAcVB4xEWcERlp9ysXpPpYfQcSXMT
-         yIa1DJOyKWCMCntBQS0TL3w+NtUTOJa3FmLKQJE1fsONpnQ7ap6O8tThBDnZ1j8EppoJ
-         sv0gJ5YPX0wJBbWlpMAqrJ/HtJVjkCSrhJ/YrnFRT8frMY3n7cMxI0P6o4n+ujJVHd5o
-         r5Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793942396; x=1794547196;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793942397; x=1794547197; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=thIA+a4MIDQnMOr6nTyDyHd3MBhrUbqPQ16GG235Ges=;
-        b=L972nbfROoGXgnN4ETXAJvF3FQKKd3+3XsR8SIUyp/hqwPhDO53y6CFbdEzXY8R40U
-         G3DytH7Vo8eKMqFcFtYMpWteZMPu7DZOXwEZTs/9Jw5lz+sdgSEEAFYSDu11kwdEy8yl
-         BKgVQyz/6pISPvekuty5djQCDt9Xe4kfT2aFZB3dE4U5pZ2EQTFwYBzaPcDIU9Vc+Lw5
-         A2vy9zHsz21J22nwS/X/GgF0FFk+U2FII3wOU3y+FXw09BtLeTc7u4nGFqlInqAGCiZ4
-         gzow2ZhtnjgRQzQCADI9I41+WthX83d7FDIYplZfmPEf+yvRcWqleyJzEtM38bGEXz0R
-         +OuQ==
-X-Forwarded-Encrypted: i=1; AL+hErEaHVxpbZVGLUJZ1X5qJFWcKprd+RcOURNR7ZiQjWzp8/akpyGlO0BLrgoj1Q9zCF4sG6iNasZb+Rp4zlYua9c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9gmiHSpD1hzAJ9ap4jDIbP0Zp7NheT+tHrNjbNCT6u3FaD7kzQ
-	o+7pfdpcgX8W9JkEzRBAuc8xAyAYUbrUvTqIBdXd6zGXIxRm+67doEP4
-X-Gm-Gg: AYBFou0F6Kc8Qt3lFHEarZh4n/5Yy4o8H2pIS3fa1r+HHIOXMWNLvox0Hyl/cWClpDh
-	vPlV8eInrYi0a5sdFTheGASIIz3E9QcuCio5ljGDj2hrmtcIEGvZsIXahnM1LKSa+GGWW1qBQ/F
-	VkmKBSrsKoOKLYXGERUq46MlsgvP3qFsX+XjdKKGT1A4FeQTLZQMGxifGIbJeH+UpIsb011elOY
-	S81pLAhbFgaFXeYRvQo5qWAWc55RHz4Znu5Nh6Vq+4KGiPszxptsADk2tHrygOpMs+8OyMjIg7Z
-	dOGNSbdaLiV9NpNEHjhED3zkEPlOjIP5PO9eC5Q4KRWo9dq4PaMD4rTGxvZC++k9Fz+rBbmg4iC
-	xGpd3L1txZPISov+sBoWJ047AeKkYQL5YQck9dS5RMn2Q6J7BIJEguanY0UGVmmAtXsac35JzG3
-	8L6+mksissanAcgc7cnhjxJHShKw9BkKQ2x9UCHl44uSJnkJfpuPtknM4kXX+8cIxZZ4yNXcIkn
-	TjfNMNBVFdBHjqSqwpyIiL9/sLCXw55L5vW+7dB0ewTSTaA+48+AxV5Hx0gT2hri+I3ct6Gifup
-	kxrwoB6tWIyvPxkTHdcmMNLwV67cIts4IllYcNg4omwyjnpxvhhlBN4w5nCKOReDUAzDBPYN43r
-	2RTH5Od0OhyzQTlJGA0WLO4T50ulJOKa+FFwZBXcAYCNJDfVfXUCNLMIU4k4TVDtm/fKigeNlKc
-	TmaOxRbHRhNuqlE7H/N/JhTQAYnmSN60EnKBmGdodS
-X-Received: by 2002:a17:90b:554d:b0:3ac:af8d:c839 with SMTP id 98e67ed59e1d1-3b0db6f7f23mr1414744a91.35.1793942395880;
-        Thu, 05 Nov 2026 21:19:55 -0800 (PST)
+        bh=EhvxgM4OU3wkthv1IWxSDKnI9mH3KYqlfOb3SM6sBPU=;
+        b=jNE0BwBpc/e7lmrNSiB0iQ/tyWQZ0whAica8HVjPbf3YT8WinM+PNzp2uUyvLpRxB/
+         pWmeMlkaULtOOo2rcPN7mr98adfqyC8rAiDhlL5S08sCeq/u2UhuE6UQNVyIBPFikQtt
+         VZ0BJrTbpPsmFqNdKrSVIZyiAvYRTRugZoC49u9eVJAevGNAELm18oNLJJjyY6T226VU
+         ZsJWQlUPzaOlU6i9uxXrElJagj5G+2Ox4/Z+OmijG5vxeiFnNRj5dhUlfie1mKesnWAR
+         bo/gPr8W3I7XLc18Jn/NQevyBB//FQPXmvEpdcdGgI3Yfk6fi0jkwWiFloZnJJRwQAVW
+         fMkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793942397; x=1794547197;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EhvxgM4OU3wkthv1IWxSDKnI9mH3KYqlfOb3SM6sBPU=;
+        b=anR/hMyvgc/hsQO4QgENLuWibEpxtZyGSuOguZS9v58+SdBSQj6VGrjobbU/GMHVkz
+         nyqD0XkmX7CVkh2NMFmah4w5QU7bscToYHd/9xWj3plL24sn5ObfjycPGKyeCA3QS0Q/
+         n6qpr+fTUofXiJKYQvPSUGGpsN8K2cvfPnmRxbVcGIFbcLE3aDfZuznabEjdWEOLjhe3
+         k5zm2IxbMF0cAXXyngvV7e5MhxBpzi+NVufqxk33p7qtFB0U+4FZCF+0Z4xD7gfbFxu/
+         emn57Vz01JaIw88oUBidxPqOXPS/uC4I7HLspsS+KnbpGzEWd+OuLzHeADmqwMyCztOr
+         zVFQ==
+X-Forwarded-Encrypted: i=1; AL+hErFfllVOHzqk7ogXy1G76lTMz8RDN+TgplLtYxOubz/fiJG1wWlTENR2+WwjIIfyhGN8kvvNrKDSxVK/wklE1SY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8KoyxaVR17wV3UQHVF4O40vcyXYEykhnSGZ9bZUbZWoSebCZ6o
+	Er43uOigAr/08XY185KXshdyXBd1L/vRYi9qQdi3MhIKh3ztfvDCrKn9
+X-Gm-Gg: AYBFou12+O0ycBa8XETE9celRRGLJ9A4ZMxru7vS1zRmDVtLaKGrN0uEhSYB9MATapa
+	977ZhU7wiXRQ8Yb/eTPHdlG8vp8R2yyDkd0uSF3wi7bg1I23ViPv2p32iszFbSmlkPJ8nv80MFC
+	QXd0FPreplD+y/0NHcLTzEfRsyE6mXT+MgL6ES8k1KfPDwtyuJevTb/1Uh1YkLj33vSCtRCmtAk
+	9Yd5f6+0fBd5CAhkQCTIBXXRdx2bdy42AIk9vnZGckXDVIh+xd4C+dJluBJxTviGAy33aKL6zdp
+	tIE/KL5fX16ZCjU5KckEYnfq1r5vrkysjslsgUezWzX0jQRCwBDRJGPVUmZXL7O3IuJ7n+RRm+L
+	Z9c1MJKuZER/nJvoEdus19n7TyuE204a6py7bBB/jTY99BQ+XZ+ayFkQ1O7gTPa2JUha8yn4UcV
+	x3EyXZgl/IzpPWz80lJC26aJIE0d3DYwvCdtVJKPPs7k2iceLDrKk6UbPXffAwgnBEjimfZy+yf
+	yI/uQ0Z64cVzanqMYvwojfG1MTU25bKBpmfXt8ChsoNib1w3GeS2ef3fEaAF4WW6W409nFSlgKM
+	H8z5twQDbmTDSu7J6c/+BIIxa2Woou5L39q/CqHRmwBoFaC6DLXHHfzCDcBEFhRJPJ2PDzv8gCR
+	lnOyJ0iKnJORXlm8TLAjp7ZrWFktdOyFJ0+VTXWM8GOw3ujxZhfwgqhMTtD1x4hrGcOwxZekmgg
+	jLiKownYMIPlJbMiFS4z/kBiopA4Npydb9niYjL+od
+X-Received: by 2002:a17:903:2343:b0:2e5:1069:fc11 with SMTP id d9443c01a7336-2ed23e53491mr32343595ad.1.1793942396545;
+        Thu, 05 Nov 2026 21:19:56 -0800 (PST)
 Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d7bd2esm1594465ad.56.2026.11.05.21.19.55
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d7bd2esm1594465ad.56.2026.11.05.21.19.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 21:19:55 -0800 (PST)
+        Thu, 05 Nov 2026 21:19:56 -0800 (PST)
 From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
 To: Kuniyuki Iwashima <kuniyu@google.com>,
 	Eric Dumazet <edumazet@kernel.org>,
@@ -96,10 +97,12 @@ Cc: Simon Horman <horms@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Subject: [PATCH net 0/4] af_unix: Fix inq_len and scm_stat.nr_fds accounting leaks
-Date: Fri,  6 Nov 2026 05:19:01 +0000
-Message-ID: <20261106051905.218638-1-sidchintamaneni@gmail.com>
+Subject: [PATCH net 1/4] af_unix: Fix inq_len leak when skipping unread OOB skb.
+Date: Fri,  6 Nov 2026 05:19:02 +0000
+Message-ID: <20261106051905.218638-2-sidchintamaneni@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261106051905.218638-1-sidchintamaneni@gmail.com>
+References: <20261106051905.218638-1-sidchintamaneni@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,31 +114,39 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series fixes receive-queue accounting leaks of u->inq_len and
-u->scm_stat.nr_fds in AF_UNIX sockets, along with selftests:
+When queue_oob() enqueues an out-of-band skb onto a stream socket's
+receive queue, it increments u->inq_len by 1 for the OOB byte.
 
-- Patch 1 fixes a u->inq_len leak in manage_oob() when an unconsumed
-  out-of-band (MSG_OOB) skb is skipped and dropped during a normal read.
-- Patch 2 fixes u->scm_stat.nr_fds leaks when an OOB skb is skipped or
-  freed in manage_oob(), unix_stream_recv_urg(), and
-  unix_stream_read_skb().
-- Patch 3 fixes a u->scm_stat.nr_fds leak in unix_dgram_disconnected()
-  when purging queued skbs from sk->sk_receive_queue on disconnect.
-- Patch 4 adds SIOCINQ and scm_fds (/proc/self/fdinfo/<fd>) checks to
-  the msg_oob and scm_rights selftests.
+If !sock_flag(sk, SOCK_URGINLINE) and the OOB byte has not been consumed
+via MSG_OOB, a subsequent normal read in manage_oob() unlinks the
+unconsumed u->oob_skb from sk_receive_queue and drops it via
+kfree_skb_reason(unread_skb, SKB_DROP_REASON_UNIX_SKIP_OOB), but fails to
+decrement u->inq_len.
 
-Siddharth Chintamaneni (4):
-  af_unix: Fix inq_len leak when skipping unread OOB skb.
-  af_unix: Fix scm_stat.nr_fds leaks for OOB skb.
-  af_unix: Fix scm_stat.nr_fds leak in unix_dgram_disconnected().
-  selftest: af_unix: Test SIOCINQ and scm_fds with OOB and dgram
-    disconnect.
+As a result, unix_inq_len() (reported via ioctl(SIOCINQ), SCM_INQ, and
+sock_diag) remains permanently elevated by 1 for each skipped OOB skb.
 
- net/unix/af_unix.c                            |  69 ++++++-----
- tools/testing/selftests/net/af_unix/msg_oob.c |  12 +-
- .../selftests/net/af_unix/scm_rights.c        | 108 ++++++++++++++++++
- 3 files changed, 161 insertions(+), 28 deletions(-)
+Decrement u->inq_len under sk_receive_queue.lock when unlinking
+unread_skb in manage_oob().
 
+Fixes: f4e1fb04c123 ("af_unix: Use cached value for SOCK_STREAM in unix_inq_len().")
+Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+---
+ net/unix/af_unix.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index 98fcfd7301f6..bfaab7c6d720 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -2853,6 +2853,7 @@ static struct sk_buff *manage_oob(struct sk_buff *skb, struct sk_buff **last,
+ 		WRITE_ONCE(u->oob_skb, NULL);
+ 
+ 		if (!sock_flag(sk, SOCK_URGINLINE)) {
++			WRITE_ONCE(u->inq_len, u->inq_len - 1);
+ 			__skb_unlink(skb, &sk->sk_receive_queue);
+ 			unread_skb = skb;
+ 			skb = skb_peek(&sk->sk_receive_queue);
 -- 
 2.43.0
 
