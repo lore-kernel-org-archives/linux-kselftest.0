@@ -1,45 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.220
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793955003;
-	b=5EVTh+hqLQt6WmYygJhS4WhRtnfUp749lhNkr8PB+bh9/mFSmKCgTLc59V+8gsbDEkAB
-	 39N0q5/v7D5fzxr9rUR/bF30qVaMA7SHdBSDM+2mG7u3xEknKQbZ1vYC+u9tOnGECAk5j
-	 /QOSm6z/4uMMhxajyhK8FyroFonPBJuhZGtHK6cZHQNN4kIqinMffeH9KeQZvXmibENKV
-	 p7kbteOGnDMcV69rOtN9kw4e+rPSI3cgrrnwFfIiifoG0CTCf26uZBx8lLRsrJeK5E5vV
-	 jZzNlJ7mNgCVPsu4kToGd083RShYBj8eqt4qF5QN+31aUXwTIhnh7hwyIRa24Z39EuA==
+	t=1793955000;
+	b=3ftSE22p8nCAFvrMQvn3C68S1F8ix3IMZnAaqSwvUWSu8nsskUg10kWGGyfTAXieskZU
+	 c2rm0oKPRHYlcVyGdDQav/rA8Fu0dBEKS4He0FU135jUceYcA6MPIrGCjTqMqnt255/Ih
+	 0ogrxS0gb7nJohFpGVarFRMg2mbJNVmYgOKdt1T/nbC0eNO0e78joexl1ovTnkAIGZQK9
+	 79Adl7RHwTNdfqgfHrDXDBGkGQ89GXx1v1ER1FBxkOhrtIuZTS81l9BnGEsb0vR3cLQd9
+	 bbr3AgCpcHBIfyNpaPiU5TZBizjFlwwSanXg6/JQskRWhnQm5Sh4f5fv+20zblUfZmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793955003;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=SdF3Rp3aXseTSt7FOhdZEwPXaenKJclgaNBdiWfNt5U=;
-	b=qvrJzTZZTGSynD0/9eDesFyV3+XirR38DSmMh9NhZenWFD+NYvbi6CW5/haLGsCdggrV
-	 2DDn1Ky5EuL3BPQqrMqPwPWrmhv/e+V/MD9cnVFyDNZV6De4HKQVMaFmlqiVGgqFEVC+h
-	 BBu3AnIILQWRYmS005kXbNlRjV7FqE4IbZEpfNnIhlzfXkZFWx1zeID70dtxyG5K6WM/n
-	 eGUAAoOtgypVl6fxrwnnCuBuEUiJf0NvF6UlH6EDeirQmCVfZaKmbQWhKUAFBnA1wxeay
-	 HqMyFY4ZG90UJSYlg/gEEFyQfunIdhwKvOPJguRkauyix+LT+np9uqr9V69AhgMJ9dQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793955000;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=mbtMgNxXBv8oh5HKSCR+cPQsHSvDrXy65iheHf5Wkw8=;
+	b=rALE/J2ORoe6NnctjRyKg0eVlqbzfYYgTHEWp0LGYJu+o/Aw/oEn+xH5Eh9TLP8Kveb/
+	 eKPhYAXyQRQWF4FryidoFexUxmcSIMT0T+eslV+H6KaJ5L24znJNE4wMHPGjS32Sd2XS5
+	 TOjA4LMhRXnne3eg7Ilmp871yYvTqEBT/emX+wg6r5mGF8Sy+MEm2EJA7jf8E9UqBO0ON
+	 jf7i7a+odP+78Q5unljo387/9vfEYVpyItHH3EkmqbgvW1ZA/ROWjbVo7UAxAmNWXL5Av
+	 IO5a2V06d+Tgil0zYNHRysv8HRUqQrCa8EUHmcjx58iMPXR0yvhAFvP6Oz/JRt1hiGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rv1daKAp;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="uIZM4t/z";
+	arc=none smtp.remote-ip=113.46.200.220
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E1B606A32E;
-	Fri,  6 Nov 2026 08:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CC7606A337;
+	Fri,  6 Nov 2026 08:49:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10CC7606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rv1daKAp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C18A1F0089F;
-	Fri,  6 Nov 2026 08:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793955003;
-	bh=SdF3Rp3aXseTSt7FOhdZEwPXaenKJclgaNBdiWfNt5U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Rv1daKApPZsdy9p1MlRmXzwhKibB2xD8VaT/OpYZnlacG+jl0nEQ0gEmN+zeytTcG
-	 CD/KxGsG2A4chKOxahUbbr1vQwpvOf7OJo2L6Ig3JVTtWqkufmJNb6X8NxqF2ERut7
-	 N95K0Rju33TmZZ51i2IXNDJXZHsLvRG1FJ0lfZOTlqKj3fKKWdAMveS2GbLQqvfZPD
-	 3zE63W5EZmFkOJns0gdqXyu+Se/qis+aOLsBvdhB4J/ULoSCpmU3tRU+2/RUcDCMjQ
-	 zLat+wKlQjj+33KDQjdNfMq6BeY+Qsd5+T/nzoc7N8Ok9+ZN839+nGFubyeNv9oAEX
-	 BtCZVQtsOXcEQ==
-Content-Type: multipart/mixed; boundary="===============0514556948363618847=="
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=uIZM4t/z
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=mbtMgNxXBv8oh5HKSCR+cPQsHSvDrXy65iheHf5Wkw8=;
+	b=uIZM4t/zkun8UmYvb6YeUw4BL4e0Su9RTmQR6AWOXholkm8CsfmrCO3YuBfx4JPUvtQReK0Oc
+	StkeQZ/1czNhu6x7t1JDl5Xfi2r7pKX/Q354O37tLpt5T9ejDTN6eDof60xsjBQztscqFDspKDF
+	dyeSHBePBTgY/OZlMul84Bw=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4jLXtT0xccz12LcP;
+	Fri,  6 Nov 2026 16:49:53 +0800 (CST)
+Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
+	by mail.maildlp.com (Postfix) with ESMTPS id 223932011D;
+	Fri,  6 Nov 2026 16:49:51 +0800 (CST)
+Received: from [10.67.120.103] (10.67.120.103) by
+ kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Fri, 6 Nov 2026 16:49:50 +0800
+Message-ID: <c80e143e-f899-4b86-94ad-f575c869d72b@huawei.com>
+Date: Fri, 6 Nov 2026 16:49:49 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,98 +62,447 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <b7b3f0926c35e8192180326438de9b6c119125a50ffb23b8d5754f31f47a999c@mail.kernel.org>
-In-Reply-To: <20261106080746.661431-1-yangfeng59949@163.com>
-References: <20261106080746.661431-1-yangfeng59949@163.com>
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
-From: bot+bpf-ci@kernel.org
-To: yangfeng59949@163.com,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,kpsingh@kernel.org,matt@bobrowski.net,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 08:50:02 +0000 (UTC)
-
---===============0514556948363618847==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 07/15] KVM: arm64: Add HDBSS per-vCPU buffer management
+To: Leonardo Bras <leo.bras@arm.com>
+CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
+	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
+	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
+	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
+	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
+	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
+	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
+	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
+References: <20260929103655.85107-1-zhengtian10@huawei.com>
+ <20260929103655.85107-8-zhengtian10@huawei.com> <at-bm_p_MHU3GmYn@LeoBrasDK>
+ <6e2d5b81-1ae9-476e-897c-f6dc7079565c@huawei.com>
+ <auSuAAmzoND1sy4c@LeoBrasDK>
+From: Tian Zheng <zhengtian10@huawei.com>
+In-Reply-To: <auSuAAmzoND1sy4c@LeoBrasDK>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-
-> bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
-
-TL;DR: Marking the new sleepable bpf_get_stack prototypes might_sleep may make
-the verifier reject sleepable programs that load today, e.g. calls inside
-rcu_read_lock regions, even without BPF_F_USER_BUILD_ID.
-
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-
-[ ... ]
-
-> @@ -1725,7 +1774,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->  	case BPF_FUNC_get_stackid:
->  		return &bpf_get_stackid_proto_raw_tp;
->  	case BPF_FUNC_get_stack:
-> -		return &bpf_get_stack_proto_raw_tp;
-> +		return prog->sleepable ? &bpf_get_stack_proto_raw_tp_sleepable
-> +				       : &bpf_get_stack_proto_raw_tp;
->  	case BPF_FUNC_get_attach_cookie:
->  		return &bpf_get_attach_cookie_proto_tracing;
->  	default:
-
-Can this make sleepable programs that load today fail to load?
-
-The new prototypes set .might_sleep = true, and check_helper_call() rejects
-such a helper whenever in_sleepable_context() is false:
-
-    if (fn->might_sleep && !in_sleepable_context(env)) {
-            verbose(env, "sleepable helper %s#%d in %s\n", ...);
-            ...
-            return -EINVAL;
-    }
-
-in_sleepable_context() is false inside bpf_rcu_read_lock(),
-bpf_preempt_disable(), bpf_local_irq_save() and lock regions, and inside
-rcu callbacks such as bpf_for_each_map_elem() on hash maps and
-bpf_find_vma().
-
-Before this patch the same call resolved to bpf_get_stack_proto_raw_tp or
-bpf_get_stack_proto_tp, which do not set might_sleep and never fault.  For
-example:
-
-    SEC("lsm.s/file_open")
-    int prog(void *ctx) {
-            bpf_rcu_read_lock();
-            bpf_get_stack(ctx, buf, sizeof(buf), 0);
-            bpf_rcu_read_unlock();
-            return 0;
-    }
-
-loads today and would be rejected with "sleepable helper bpf_get_stack#67 in
-rcu_read_lock region".
-
-The call chain is bpf_lsm_func_proto() -> tracing_prog_func_proto() ->
-raw_tp_prog_func_proto().  The same applies to sleepable raw_tp,
-tracepoint, fentry/fexit/fmod_ret, fsession and iter programs.  It also
-applies to every BPF_PROG_TYPE_SYSCALL program, since check_attach_btf_id()
-forces those to be sleepable.
-
-The rejection happens even when BPF_F_USER_BUILD_ID is not passed, so the
-helper could not sleep in those calls.
-
-The commit message acknowledges this ("such programs load today") and cites
-commit 9d02927fdf4e as precedent.  That commit fixed prototypes that could
-actually sleep in non-sleepable regions, whereas here the old prototypes
-were correct.
-
-The verifier already records per-insn non-sleepable call sites in
-env->insn_aux_data[insn_idx].non_sleepable, and specialize_kfunc() uses
-that to pick bpf_arena_alloc_pages_non_sleepable().  Could the non-faulting
-implementation be selected the same way at fixup time for call sites that
-are not always sleepable, instead of rejecting them?
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemr100010.china.huawei.com (7.202.195.125)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42188184517
---===============0514556948363618847==--
+On 10/30/2026 10:47 PM, Leonardo Bras wrote:
+> On Fri, Oct 30, 2026 at 11:47:20AM +0800, Tian Zheng wrote:
+>>
+>>
+>> On 10/27/2026 2:27 AM, Leonardo Bras wrote:
+>>> On Tue, Sep 29, 2026 at 06:36:47PM +0800, Tian Zheng wrote:
+>>>> From: Eillon <yezhenyu2@huawei.com>
+>>>>
+>>>> Each vCPU owns an HDBSS buffer, described by HDBSSBR_EL2 (base
+>>>> address and encoded size) and advanced by HDBSSPROD_EL2 as hardware
+>>>> appends entries. Tie the buffer lifetime to the vCPU: allocate at
+>>>> vCPU creation, free at destruction. The buffer is allocated zeroed,
+>>>> so a stale producer index can only ever observe invalid entries.
+>>>>
+>>>> Registers are programmed whenever the vCPU owns a buffer, regardless
+>>>> of whether HDBSS is enabled. The feature can be turned on
+>>>> mid-KVM_RUN, and hardware dirty-state updates write to
+>>>> HDBSSBR_EL2.BADDR without any fault, so the registers must already
+>>>> be in place by then. HDBSSPROD_EL2 is preserved across context
+>>>> switches and vCPU migration.
+>>>>
+>>>> Two details: the buddy order is kept separate from the HDBSSBR_EL2.SZ
+>>>> encoding, since the two only coincide on 4KB pages; and kvm_share_hyp()
+>>>> is unwound in kvm_arch_vcpu_create() when the HDBSS allocation fails.
+>>>
+>>> Out of curiosity: why can't we allocate the buffers when dirty-tracking
+>>> starts? (and free them when it stops)
+>>>
+>>> Since we have to request the vcpus to guest_exit, and enable
+>>> VTCR_EL2{HA,HD,HDBSS}, we could as well allocate the buffers and set the
+>>> HDBSSBR_EL2.BADDR. In case the buffer allocation fails, we could just not
+>>> enable HDBSS, maybe.
+>>>
+>>> Buffer allocation could happen before the VCPU request, for every vcpu, or
+>>> during the vcpu request, so every vcpu allocates it's own buffer.
+>>>
+>>> Am I missing something, or is it just to make things easier?
+>>>
+>>
+>> Hi loe,
+>>
+>> Yes, allocating the buffers at vCPU creation does make things simpler.
+>>
+>> I'd rather follow the x86 PML and dirty ring scheme: allocate at vCPU
+>> creation. This avoids partial enablement when an allocation fails mid-
+>> broadcast, the use-after-free window when freeing at logging stop, and
+>> naturally handles vCPU hotplug during logging.
+> 
+> Ah, I see.
+> Well, the problem of partial enablement is gone if the requester tries to
+> allocate all buffers for all vcpus, before requesting the vcpus to enable HDBSS.
+> If one of them fails, then just don't request the vcpus to enable :)
+> 
+> As for the use after free: you can free the buffer at the vcpu request to
+> disable the feature, making sure it's not using it when you free the
+> buffer.
+> 
+> I agree that allocating at the creation of a vcpu is easier, but this can
+> receive pushback as a VM will have to carry this buffers for it's whole
+> lifetime, even though it may never use it.
+> 
+> I suggest we try allocating at vcpu creation should only if dirty-tracking
+> is already happening, so we can enable the feature on the new vcpu.
+> 
+> I agree that x86 may have chosen to do that for a reason, but if we don't
+> know the reason, or if it's not compelling for us, maybe we can just try
+> doing something better.
+> 
+
+Hi Leo,
+
+Thanks for giving this suggestion. I think it's useful. x86's PML only
+occupies 4KB per vCPU, so its memory overhead is controllable. But ours
+can occupy up to 2MB, which is wasteful.
+
+Therefore, we keep allocating the HDBSS buffer when creating a vCPU if
+HDBSS is enabled (this is for vCPU hotplug). For normal vCPUs, we keep
+allocating HDBSS buffers when enabling HDBSS, and destroy them when
+disabling HDBSS or destroying the vCPU.
+
+I think it works and can save memory. What do you think about this?
+
+>>
+>>>>
+>>>> Signed-off-by: Eillon <yezhenyu2@huawei.com>
+>>>> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
+>>>> ---
+>>>>    arch/arm64/include/asm/kvm_dirty_bit.h | 28 +++++++++++++
+>>>>    arch/arm64/include/asm/kvm_host.h      | 13 ++++++
+>>>>    arch/arm64/include/asm/sysreg.h        |  9 +++++
+>>>>    arch/arm64/kvm/Makefile                |  1 +
+>>>>    arch/arm64/kvm/arm.c                   | 14 ++++++-
+>>>>    arch/arm64/kvm/dirty_bit.c             | 55 ++++++++++++++++++++++++++
+>>>>    arch/arm64/kvm/hyp/vhe/switch.c        | 17 ++++++++
+>>>>    arch/arm64/kvm/reset.c                 |  3 ++
+>>>>    8 files changed, 138 insertions(+), 2 deletions(-)
+>>>>    create mode 100644 arch/arm64/include/asm/kvm_dirty_bit.h
+>>>>    create mode 100644 arch/arm64/kvm/dirty_bit.c
+>>>>
+>>>> diff --git a/arch/arm64/include/asm/kvm_dirty_bit.h b/arch/arm64/include/asm/kvm_dirty_bit.h
+>>>> new file mode 100644
+>>>> index 000000000000..fe703f02626b
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/include/asm/kvm_dirty_bit.h
+>>>> @@ -0,0 +1,28 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>>>> +/*
+>>>> + * Per-vCPU buffer management for HDBSS-based dirty page tracking.
+>>>> + *
+>>>> + * Copyright (C) 2026 Huawei Technologies Co., Ltd
+>>>> + * Author: Tian Zheng <zhengtian10@huawei.com>
+>>>> + */
+>>>> +
+>>>> +#ifndef __ARM64_KVM_DIRTY_BIT_H__
+>>>> +#define __ARM64_KVM_DIRTY_BIT_H__
+>>>> +
+>>>> +#include <asm/kvm_pgtable.h>
+>>>> +#include <asm/sysreg.h>
+>>>> +#include <linux/sizes.h>
+>>>> +
+>>>> +#define KVM_ARM_HDBSS_DEFAULT_SIZE  PAGE_SIZE
+>>>> +#define KVM_ARM_HDBSS_MAX_SIZE      SZ_2M
+>>>> +
+>>>> +/* 0 means unconfigured, fall back to one page per vCPU. */
+>>>> +static inline u32 kvm_hdbss_buffer_size(struct kvm *kvm)
+>>>> +{
+>>>> +	return kvm->arch.hdbss_buffer_size ?: KVM_ARM_HDBSS_DEFAULT_SIZE;
+>>>> +}
+>>>
+>>> Why not set arch.hdbss_buffer_size to KVM_ARM_HDBSS_DEFAULT_SIZE at start,
+>>> instead of testing it here like this?
+>>>
+>>
+>> The size is set by userspace via ioctl, and we don't allow it to
+>> be set twice:
+>>
+>> ```
+>> if (kvm->created_vcpus) {
+>> 	r = -EINVAL;
+>> } else if (kvm->arch.hdbss_buffer_size) {
+>> 	r = -EBUSY;
+>> } else {
+>> 	kvm->arch.hdbss_buffer_size = size;
+>> }
+>> ```
+>>
+>> If we pre-fill the default at VM creation, hdbss_buffer_size is
+>> always non-zero and the -EBUSY branch would reject every attempt
+>> to set a size. The same 0 sentinel also gates the dirty-ring
+>> enable (a configured size conflicts with the ring), so it has to
+>> mean "not configured".
+>>
+> 
+> It looks like there is a reason for us not to set the size more than
+> once. I have not figured it yet, do you mind sharing?
+> 
+> I ask because effectively what we are having here is the same effect:
+> kvm_hdbss_buffer_size() may return two different values depending on the
+> IOCTL being ran or not. So for it's users does it look like the expected
+> value changed mid way.
+> 
+> What I am trying to understand: is it safe for us to change the perceived
+> value once? (default -> whatever the user sets) In which scenario is it
+> safe?
+> 
+> In that case, can't we just allow that change to happen in that scenario,
+> instead of having a proxy function to return the ring size?
+> 
+> 
+
+The size affects the dirty-ring reservation: when the ring is enabled, 
+it reserves entries for the HDBSS buffer. Once the ring is allocated 
+with that reservation, changing the HDBSS size would make the two 
+inconsistent, and matching them dynamically isn't practical.
+
+In practice a larger buffer doesn't provide much benefit either: the 
+buffer is flushed on every VM exit, so it rarely fills up. Setting it 
+once, before the ring is allocated, is the simplest correct option.
+
+>>>> +
+>>>> +int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu);
+>>>> +void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu);
+>>>> +
+>>>> +#endif /* __ARM64_KVM_DIRTY_BIT_H__ */
+>>>> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+>>>> index 86a4d6e50934..c8fc29f3db75 100644
+>>>> --- a/arch/arm64/include/asm/kvm_host.h
+>>>> +++ b/arch/arm64/include/asm/kvm_host.h
+>>>> @@ -425,6 +425,9 @@ struct kvm_arch {
+>>>>    	 */
+>>>>    	struct kvm_protected_vm pkvm;
+>>>>
+>>>> +	/* HDBSS: per-VM buffer size in bytes (0 = not configured, use default) */
+>>>> +	u32 hdbss_buffer_size;
+>>>> +
+>>>>    #ifdef CONFIG_PTDUMP_STAGE2_DEBUGFS
+>>>>    	/* Nested virtualization info */
+>>>>    	struct dentry *debugfs_nv_dentry;
+>>>> @@ -844,6 +847,13 @@ struct vcpu_reset_state {
+>>>>    	bool		reset;
+>>>>    };
+>>>>
+>>>> +struct vcpu_hdbss_state {
+>>>> +	struct page *hdbss_pg;		/* HDBSS buffer */
+>>>> +	u64 hdbssbr_el2;		/* programmed into the CPU on load */
+>>>> +	u64 hdbssprod_el2;		/* producer index, saved on put */
+>>>> +	unsigned int buddy_order;	/* allocation order for __free_pages() */
+>>>> +};
+>>>> +
+>>>>    struct vncr_tlb;
+>>>>
+>>>>    struct kvm_vcpu_arch {
+>>>> @@ -951,6 +961,9 @@ struct kvm_vcpu_arch {
+>>>>
+>>>>    	/* Hyp-readable copy of kvm_vcpu::pid */
+>>>>    	pid_t pid;
+>>>> +
+>>>> +	/* HDBSS buffer state */
+>>>> +	struct vcpu_hdbss_state hdbss;
+>>>>    };
+>>>>
+>>>>    /*
+>>>> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+>>>> index 7aa08d59d494..7c71560b57e4 100644
+>>>> --- a/arch/arm64/include/asm/sysreg.h
+>>>> +++ b/arch/arm64/include/asm/sysreg.h
+>>>> @@ -1039,6 +1039,15 @@
+>>>>
+>>>>    #define GCS_CAP(x)	((((unsigned long)x) & GCS_CAP_ADDR_MASK) | \
+>>>>    					       GCS_CAP_VALID_TOKEN)
+>>>> +
+>>>> +/*
+>>>> + * Definitions for the HDBSS feature
+>>>> + */
+>>>> +#define HDBSSBR_EL2(baddr, sz)	(((baddr) & HDBSSBR_EL2_BADDR_MASK) | \
+>>>> +				 FIELD_PREP(HDBSSBR_EL2_SZ_MASK, sz))
+>>>> +
+>>>> +#define HDBSSPROD_IDX(prod)	FIELD_GET(HDBSSPROD_EL2_INDEX_MASK, prod)
+>>>> +
+>>>>    /*
+>>>>     * Definitions for GICv5 instructions
+>>>>     */
+>>>> diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
+>>>> index 59612d2f277c..ec2749af64fa 100644
+>>>> --- a/arch/arm64/kvm/Makefile
+>>>> +++ b/arch/arm64/kvm/Makefile
+>>>> @@ -18,6 +18,7 @@ kvm-y += arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
+>>>>    	 guest.o debug.o reset.o sys_regs.o stacktrace.o \
+>>>>    	 vgic-sys-reg-v3.o fpsimd.o pkvm.o \
+>>>>    	 arch_timer.o trng.o vmid.o emulate-nested.o nested.o at.o \
+>>>> +	 dirty_bit.o \
+>>>>    	 vgic/vgic.o vgic/vgic-init.o \
+>>>>    	 vgic/vgic-irqfd.o vgic/vgic-v2.o \
+>>>>    	 vgic/vgic-v3.o vgic/vgic-v4.o \
+>>>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+>>>> index d9ad765943d9..5ea4ac26995e 100644
+>>>> --- a/arch/arm64/kvm/arm.c
+>>>> +++ b/arch/arm64/kvm/arm.c
+>>>> @@ -36,6 +36,7 @@
+>>>>    #include <asm/virt.h>
+>>>>    #include <asm/kvm_arm.h>
+>>>>    #include <asm/kvm_asm.h>
+>>>> +#include <asm/kvm_dirty_bit.h>
+>>>>    #include <asm/kvm_emulate.h>
+>>>>    #include <asm/kvm_hyp.h>
+>>>>    #include <asm/kvm_mmu.h>
+>>>> @@ -580,10 +581,19 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>>>>    	}
+>>>>
+>>>>    	err = kvm_share_hyp(vcpu, vcpu + 1);
+>>>> -	if (err)
+>>>> +	if (err) {
+>>>>    		kvm_vgic_vcpu_destroy(vcpu);
+>>>> +		return err;
+>>>> +	}
+>>>>
+>>>> -	return err;
+>>>> +	err = kvm_arm_vcpu_alloc_hdbss(vcpu);
+>>>> +	if (err) {
+>>>> +		kvm_unshare_hyp(vcpu, vcpu + 1);
+>>>> +		kvm_vgic_vcpu_destroy(vcpu);
+>>>> +		return err;
+>>>> +	}
+>>>> +
+>>>> +	return 0;
+>>>>    }
+>>>>
+>>>>    void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
+>>>> diff --git a/arch/arm64/kvm/dirty_bit.c b/arch/arm64/kvm/dirty_bit.c
+>>>> new file mode 100644
+>>>> index 000000000000..f9aeb9f34ad0
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/kvm/dirty_bit.c
+>>>> @@ -0,0 +1,55 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>> +/*
+>>>> + * Per-vCPU HDBSS buffer management.
+>>>> + *
+>>>> + * Copyright (C) 2026 Huawei Technologies Co., Ltd
+>>>> + * Author: Tian Zheng <zhengtian10@huawei.com>
+>>>> + */
+>>>> +
+>>>> +#include <asm/kvm_dirty_bit.h>
+>>>> +#include <asm/kvm_mmu.h>
+>>>> +#include <asm/sysreg.h>
+>>>> +#include <linux/gfp.h>
+>>>> +#include <linux/kconfig.h>
+>>>> +#include <linux/log2.h>
+>>>> +#include <linux/mm.h>
+>>>> +
+>>>> +int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu)
+>>>> +{
+>>>> +	struct page *hdbss_pg;
+>>>> +	u32 size;
+>>>> +	unsigned int buddy_order;
+>>>> +	u32 sz_encoded;
+>>>> +
+>>>> +	if (vcpu->arch.hdbss.hdbss_pg || !system_supports_hdbss())
+>>>> +		return 0;
+>>>> +
+>>>> +	size = kvm_hdbss_buffer_size(vcpu->kvm);
+>>>> +
+>>>> +	buddy_order = get_order(size);
+>>>> +	sz_encoded = ilog2(size) - 12;
+>>>> +
+>>>> +	hdbss_pg = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_ZERO, buddy_order);
+>>>> +	if (!hdbss_pg)
+>>>> +		return -ENOMEM;
+>>>> +
+>>>> +	vcpu->arch.hdbss = (struct vcpu_hdbss_state) {
+>>>> +		.hdbss_pg = hdbss_pg,
+>>>> +		.hdbssbr_el2 = HDBSSBR_EL2(page_to_phys(hdbss_pg), sz_encoded),
+>>>> +		.hdbssprod_el2 = 0,
+>>>> +		.buddy_order = buddy_order,
+>>>> +	};
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu)
+>>>> +{
+>>>> +	if (!vcpu->arch.hdbss.hdbss_pg)
+>>>> +		return;
+>>>> +
+>>>> +	__free_pages(vcpu->arch.hdbss.hdbss_pg, vcpu->arch.hdbss.buddy_order);
+>>>> +
+>>>> +	vcpu->arch.hdbss.hdbss_pg = NULL;
+>>>> +	vcpu->arch.hdbss.hdbssbr_el2 = 0;
+>>>> +}
+>>>> diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
+>>>> index 7875911c0506..922fc9260e11 100644
+>>>> --- a/arch/arm64/kvm/hyp/vhe/switch.c
+>>>> +++ b/arch/arm64/kvm/hyp/vhe/switch.c
+>>>> @@ -19,6 +19,7 @@
+>>>>    #include <asm/cpufeature.h>
+>>>>    #include <asm/kprobes.h>
+>>>>    #include <asm/kvm_asm.h>
+>>>> +#include <asm/kvm_dirty_bit.h>
+>>>>    #include <asm/kvm_emulate.h>
+>>>>    #include <asm/kvm_hyp.h>
+>>>>    #include <asm/kvm_mmu.h>
+>>>> @@ -219,6 +220,17 @@ static void __vcpu_put_deactivate_traps(struct kvm_vcpu *vcpu)
+>>>>    	local_irq_restore(flags);
+>>>>    }
+>>>>
+>>>> +static void __load_hdbss(struct kvm_vcpu *vcpu)
+>>>> +{
+>>>> +	if (!vcpu->arch.hdbss.hdbss_pg)
+>>>> +		return;
+>>>> +
+>>>> +	write_sysreg_s(vcpu->arch.hdbss.hdbssbr_el2, SYS_HDBSSBR_EL2);
+>>>> +	write_sysreg_s(vcpu->arch.hdbss.hdbssprod_el2, SYS_HDBSSPROD_EL2);
+>>>> +
+>>>> +	isb();
+>>>> +}
+>>>> +
+>>>>    void kvm_vcpu_load_vhe(struct kvm_vcpu *vcpu)
+>>>>    {
+>>>>    	host_data_ptr(host_ctxt)->__hyp_running_vcpu = vcpu;
+>>>> @@ -226,10 +238,15 @@ void kvm_vcpu_load_vhe(struct kvm_vcpu *vcpu)
+>>>>    	__vcpu_load_switch_sysregs(vcpu);
+>>>>    	__vcpu_load_activate_traps(vcpu);
+>>>>    	__load_stage2(vcpu->arch.hw_mmu);
+>>>> +	__load_hdbss(vcpu);
+>>>>    }
+>>>>
+>>>>    void kvm_vcpu_put_vhe(struct kvm_vcpu *vcpu)
+>>>>    {
+>>>> +	/* Saved under the same ownership condition as __load_hdbss(). */
+>>>> +	if (vcpu->arch.hdbss.hdbss_pg)
+>>>> +		vcpu->arch.hdbss.hdbssprod_el2 = read_sysreg_s(SYS_HDBSSPROD_EL2);
+>>>
+>>> Above suggestion would need you to reload HDBSSBR_EL2 as well.
+>>>
+>>
+>> Right, that reload is part of the ordering obligation above.
+>>
+>> I think keeping the allocation at vCPU creation is simpler, but
+>> let me know what you think.
+>>
+> 
+> I fully agree it's simpler, but we have to carry those per-cpu buffers
+> (that can go up to 2M each) for the whole life of the VM, which can be a
+> lot on a big VM.
+> 
+> That being said, I'm not against it. But I think we should resort to it
+> only if we have a compelling reason not to allocate/free on demand.
+> 
+> What do you think?
+> 
+> Thanks!
+> Leo
+
+Yes, I agree. My answer is the same as the one below.
+
+Thanks,
+Tian
