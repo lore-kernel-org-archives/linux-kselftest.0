@@ -1,99 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793968053;
-	b=YR/8sQRtPv82KAfYWJg7qAy/DF0xujeLYd4QxOCrrRy9qQsAkLAj5RPstHUbLfUhiRMS
-	 xHXfDt/1sCx/uuymsiyQ+R5er7lu4HKzFOi/9XYOZ6W5om+QRdi5lU1X08dcwQqEOU9PR
-	 qDrkxGrIeq3BPeQ9kdj/luI+4+zv2zReS/attv8bBAyTe9TAGzcar01mzgS9TTd4krVn7
-	 ZsVVcGooQh24Qqvd1fdg3hUKt1sXBi95ae5lT9vADePIurK2GLC/UFnpY6nvSHE5GxXBe
-	 t4+Eyr1ckY2H4fos54+Xqk/muoxFPwcVRSo105c6PUXt+x10SvcKkzAXwuvUENQPCog==
+	t=1793969081;
+	b=XJzZuiT3zr0WqQw8w5hg4q4w8f+AA7LrSh/ZX5dtCf/4qN3mWIgpjpNGtf1GXoZNL2E5
+	 +W/4Z5Wgu81nQWVnLxtoixwL85VRPwkrsHb1BIffr+gJpKBXiUASD8XuLKvbzg8AbozwZ
+	 4R9EDCURY3H/7xUwWI5NQwG9zfJvjkUU+8ZCwUiz16zUp3a+/us0eEUzbEI0XcpTfbyVD
+	 oIGpI8KdLlDIYS9lpAX9AX3JMhFia5SxVs6QryiKu2t6IN1iDEAVXbhrmg0TBZrnI3RPa
+	 /O5eDq3O9HUAUz3ahS3DkXyu7PPW4QQHetslR9xZM7ztzfj/zp9UzrceyVxEVHlsJUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793968053;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=hVQgj/qtamPKqZe9GjDSaLmwvkqiYswM2rlF0amjSwA=;
-	b=wiqa6NJBAMpHX2TESiNs2wQlrGFO/WxR0vtb+Mns8iYQyU/PiS2A5pGAsCIL8S05ipo5
-	 /amGSlU1UBZgz9f+BkiErQoIjiq6bYXlJfh3BhKN6d+qn94+OQRwEJGDSbe5q2ZCkDtEu
-	 iUoRVMvO+umq8yenTa8mFi+W5IQp23U39sOINjtHmhheUhoXuvH465e3ijTnvxX8bbYK5
-	 5u/9EJ+bB2j6J0yrtgDy24qtgRKXeQB+zDvNVWFH7YwQew+1j0G9Oi8S3qaSrtQSGwJd6
-	 FvX60G8kqHn0YGAmlD6rAharN8gj/C+hb2B5ue7hfeV3FZqym1ugMSFhKWK5JVlYflg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793969081;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=m22QOupz/Gj7ONgc3YhQfUsN4LYhFgGjhiGRN+k82cU=;
+	b=x9LeiCWHdgDPj1mosDQHsw47DC1LNPkqp6xGomBy6TZBuC+PACq0sCF9djCqP2GYBxJL
+	 v6WC+++kNzH4/c42HrFQ0Krz39Pnm1N53OcMETBkNmVMLRIr/nMJYsx2PPD27hi0PvtpN
+	 CuWIIV/KBpGn/M0jnMIqJaoYTpHyl2VoTLyJLfLDlmvsJANjoRqf9+2VNfGeweAQX5h5X
+	 zAeKyZzQ8nvjoqOWduPbuZeamcfWP8cSf8mby06P8m2LAm2XlcEC7uFJGLXXvFEKE95mp
+	 KnbvSyy/QTHLJPU8RuAqUE9SY5tK6dbULXMRn4ES/ZJ/kBzGLYjkncKb78ArF1U2rEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=resnulli.us;
-	spf=pass smtp.mailfrom=resnulli.us;
-	dkim=pass header.d=resnulli.us header.i=@resnulli.us header.a=rsa-sha256 header.s=google header.b=Slzp+EhU;
-	arc=none smtp.remote-ip=209.85.128.51
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qjafa3YK;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45453606A333
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 12:27:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45453606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=resnulli.us
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751E0606A329;
+	Fri,  6 Nov 2026 12:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=resnulli.us header.i=@resnulli.us header.a=rsa-sha256 header.s=google header.b=Slzp+EhU
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a5b2be99a8so4154265e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 04:27:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli.us; s=google; t=1793968049; x=1794572849; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=hVQgj/qtamPKqZe9GjDSaLmwvkqiYswM2rlF0amjSwA=;
-        b=Slzp+EhUlrouRtTK7cIqBLFjFKtffdW/HyvUHLYmJw7XjmBeYevm8Lj12xNdvJ+2qi
-         liAcKT2C2BgvihbgNMzb8b3i69eta9Ggy22EKuffT47ojjRQQeUZUlL0+CMrIOXXRdN+
-         sRLJx6nb9Q70/SrkYjnSYGmXCsN58DJZDOsQf3cuKue7biIpYuLYhoQmYvNYoUk6fl9O
-         lbOnIYtMBTTw5XM6N7cJWvWgsAPf/swDvDDEU7e0iy8FWBxtte++wUHhFiZsO9OPSdTN
-         CsUi1P7v2jyC3Rb5umcVVSNAGKgE5NKtIg3wR8TSSyEYwPS5r+U3dUbei/vxB4IV5Zoe
-         WKAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793968049; x=1794572849;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hVQgj/qtamPKqZe9GjDSaLmwvkqiYswM2rlF0amjSwA=;
-        b=hSf39dM7oPptEL/pC4u8S/7KT6zzHvCKHhELTgY/eUvwLmO10qKVFCcsgb1+k18/RH
-         alXS4ibr2tyoAcpZUyuidybq2WQY4EQy+ZUzqGmWc+Ro/v+8eKWd92J4snz6uLNoxahD
-         Xid7JBTpHGWacSbR9l3H9vO0Vicq3o5JB92+pmlPg6iyBJF22grr/cyzNmhOObVD0uZE
-         TQGIWOidAZSni/yAL5vGh+gG4fwiwmsDjdc3d4Fh2WvlOlMk39FIikLQdFyyLy+NOezQ
-         /iRH5iHkU+XQRCaBlI+EzEn34LRowJR46FSMcNJFfTJSPG0BQftFcZ2PgrRh6kVZcZHF
-         jTmQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwtziHjAkgygh0KlslNhNzOvSOynEgFGuR34dubUP/LCFbgLY0qoid7qG0L1VGHDMQ1il8kY+AVcVFOW40zyAc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9V0a9+6TFVgFCMCU4AuSsQ3dYpTzKuPndSQyoJm8a3Dhl51J3D
-	mkTLz0i7LCmicyDTyDYxa8eCK+JJevJLlUdK1O5pwieweaFzJx/Qd0z4ZFJIGU9AY/8=
-X-Gm-Gg: AYBFou2loK5SpUayua+oHnfjEAE79J6g9XxqCakJphcwmUVeVgz3PvqzZsvR0KjY0W8
-	bS5grevyfKG2LxQfV91u2DyPxwYeT7CuFMGgsgXEeFxf+Gkdg2icPXzilfR3FJI6LmLCy2jSD8o
-	Fal/rr6uwClN+YUliQnaXoKrADWX7/vwvryDZGmdcFrubwwz6SufXQnREKnr+jfd4AKwSIM+iTe
-	ZkNBbfMOEguTU8IwcoLNHVRCxKEaTZyv6LubjPC7gzpMV3bHZjlxp0wzwh84ZLU4Hx3MQKPuFDX
-	a4GA/NSJiSD1+jf1F/31QX2MymnyrgfZm9JJfvmglM/wLnq4DmFwWi5rNjc3cKmBNkK2k2bHCSr
-	/T5tMi6kgjVTCy1H1cFbzKSBeUgMuRaQG+o0XZeCh2UKNzzol8Iy3ZyeNGKuEjZ0GzJDjzQ5qph
-	o6rwHEJ7zFBCSRNMdWYpNODr50NQNiq5bA8OZ0mEDwlZHpEoemTYa3fraTzvpFffy26aspU2ywY
-	OjTkBEaFULauhLIf0dwqsH+dsbZSK5N4R1Y7dBhdrbVKs0zRLaSaVD7Gu5yXXE4GfFN+prfu29k
-	IkXJPLiIHRlAzpbCCTGnLiXMfZkBjqJQRb0p
-X-Received: by 2002:a05:600c:4454:b0:4a0:1b21:2628 with SMTP id 5b1f17b1804b1-4b6dfba8640mr38712955e9.23.1793968049321;
-        Fri, 06 Nov 2026 04:27:29 -0800 (PST)
-Received: from localhost ([208.127.45.21])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b6e1b5d745sm51444055e9.6.2026.11.06.04.27.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 04:27:28 -0800 (PST)
-Date: Fri, 6 Nov 2026 13:27:24 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Petr Oros <poros@redhat.com>
-Cc: netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Jani Nikula <jani.nikula@intel.com>, 
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>, Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>, 
-	Ivan Vecera <ivecera@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 00/14] dpll: add a simulated DPLL device
- driver
-Message-ID: <au3HhHt5LD5scvn1@FV6GYCPJ69>
-References: <20261105151852.1844305-1-poros@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qjafa3YK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 955491F0089F;
+	Fri,  6 Nov 2026 12:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793969081;
+	bh=m22QOupz/Gj7ONgc3YhQfUsN4LYhFgGjhiGRN+k82cU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Qjafa3YK0xGgJNwxjXBJ7J3iCGKQxc2IYZGgEozspFNho4P1EXhyZFN4k2QWmwYge
+	 OjcpjE59HMF5JRRv0Ac+GeQ6HLCrHuniwhH1XqL5ivv446zS9LjJIeAL8uuqRmHy5i
+	 ZphYsXU5efvyXSK7hgqogdscMcskcgHhn3v8ODQZTQgRPTbfvnijGmVN1p8/3BPFxS
+	 fcwreGWBHb2/Yc36hhSGbLEMFS5qErUE3pajBMBDCPYDiICwFn97gVjDHYCVn4cGeK
+	 qSk8+HwOD4/28nl2XCjhm1QPaBrAOnuT9k6KbAjfU8qfTTEEAC1iAj7qpdLRluF91/
+	 QybBGkhgjrMBQ==
+Message-ID: <fb9d1040-7d1e-4b72-b600-f80b6be3a0b3@kernel.org>
+Date: Fri, 6 Nov 2026 13:44:31 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,61 +51,126 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261105151852.1844305-1-poros@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] mm/ksm: align smart scan skips with the scan
+ number
+To: "Xu Xin (vivo)" <xu.xin@linux.dev>, Qiliang Yuan <odys.yuan@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261105-bug-mm-ksm-smart-scan-align-skips-v2-0-8a9780b6844e@gmail.com>
+ <20261105-bug-mm-ksm-smart-scan-align-skips-v2-1-8a9780b6844e@gmail.com>
+ <au2hqxeIz0l/DusZ@dgvxl46587.localhost.localdomain>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <au2hqxeIz0l/DusZ@dgvxl46587.localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thu, Nov 05, 2026 at 04:18:38PM +0100, poros@redhat.com wrote:
->The DPLL subsystem has no in-tree driver that can run without real
->hardware, so core changes and userspace tooling are hard to exercise in
->CI, and the pin-on-pin and reference sync paths see almost no coverage
->outside the vendors' labs. This series adds dpllsim, a simulated DPLL
->device driver, together with selftests that run against it.
->
->The driver is controlled through configfs, following gpio-sim. Writing a
->clock ID into a device directory and setting "live" to 1 registers a
->DPLL device with the core. Pins are directories under pins/ with their
->type, frequency, direction and priority as attributes, and all of them
->are registered when the device goes live. The split between creating
->the configuration and going live keeps the register and unregister
->paths reachable from userspace, so they can be exercised repeatedly
->without reloading the module. Nothing in the simulator is a stable ABI.
->
->The patches follow the shape of the zl3073x introduction. The
->driver starts with the device alone, then gains pins and the static pin
->operations one at a time (state, priority, frequency, phase adjustment),
->and every feature patch is followed by the selftest that covers it. The
->last two patches add concurrency stress tests and reference tracker
->leak tests for the lifecycle paths.
->
->The simulation loop (lock state machine, phase and frequency
->measurements, monitoring features), the topology features (MUX pin
->hierarchies, reference sync, media failure injection), netdevsim
->integration and device mode setting follow in two further series once
->this one is in, to stay within the 15 patch limit.
->
->The driver and the selftests were developed with an LLM coding
->assistant (Claude Code) working under my direction. I chose the
->configfs design, the split into one feature per patch and the test
->scenarios, and I reviewed every line. The assistant wrote most of the
->code and the first drafts of the changelogs, and it found and fixed
->bugs by running the suite on the lab host. The series then went
->through several rounds of an LLM based patch reviewer whose findings
->were fixed, and through a mutation test in which deliberately broken
->driver and core code was caught by the tests.
->
->The selftests live in tools/testing/selftests/drivers/net/dpll and run
->with "make -C tools/testing/selftests TARGETS=drivers/net/dpll
->run_tests". By default they create dpllsim devices; with
->DPLL_DEV_ID=<id> the basic and feature scripts run against an existing
->device instead, so the same suite exercises real hardware. The whole
->suite was run through the kselftest runner on an ice E810 host with
->CONFIG_KASAN, CONFIG_PROVE_LOCKING and CONFIG_DPLL_REFCNT_TRACKER
->enabled, against the simulator and, with DPLL_DEV_ID, against the ice
->DPLL, where the tests that need a simulator skip and the pin state and
->priorities of the hardware are left as they were. All pass with no
->warnings in dmesg.
->
+On 11/6/26 10:45, Xu Xin (vivo) wrote:
+> On Thu, Nov 05, 2026 at 04:36:14AM -0500, Qiliang Yuan wrote:
+>> Smart scan skips pages that KSM has failed to de-duplicate for a while.
+>> Once a page is three scans old, its rmap_item counts down its own number
+>> of scans to skip, 1, 2, 4 and then 8 as it ages, so an old page is looked
+>> at every ninth scan.
+>>
+>> The unstable tree is rebuilt on every scan, so two identical pages that
+>> are not in the stable tree yet can only be merged in a scan that looks
+>> at both. Each countdown runs from when its own page became mergeable, so
+>> two pages that became mergeable at different times end up on different
+>> phases and, once both are old, may never be looked at in the same scan
+>> again. They then stay unmerged for as long as they live. Making a page
+>> mergeable, waiting for 0 to 20 full scans before doing the same with an
+>> identical page, 20 times for each wait, and checking the pair after
+>> another 64 full scans shows this, on two boots per kernel:
+>>
+>>                                 before            after
+>>   pairs merged (of 420)         329 / 317         420 / 420
+>>   64M of unique pages skipped   89.0% / 89.1%     87.5% / 87.5%
+>>   ksmd CPU time per scan        6.25 / 6.25 ms    6.88 / 7.03 ms
+>>
+>> Pick the skipped scans by the global scan number instead, with periods
+>> of 2, 4 and 8 scans. The periods being powers of two, every old page is
+>> looked at on each scan that is a multiple of 8, whatever its age, so any
+>> two pages meet at least every eighth scan. The longest period goes from
+>> nine scans to eight, which costs 10-12% more ksmd time on memory that
+>> never merges.
+>>
+>> Fixes: 5e924ff54d08 ("mm/ksm: add "smart" page scanning mode")
+>> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+>> ---
+>>  mm/ksm.c | 24 ++++++++++--------------
+>>  1 file changed, 10 insertions(+), 14 deletions(-)
+> 
+> Brilliant design.
+> By using the global ksm_scan.seqnr as a unified time base, this patch eliminates
+> the out-of-sync problem of the original per-page skip counters.
+> 
+> It guarantees that any two pages will be processed in the same scan at least once
+> every 8 scans — the least common multiple of all scan periods — which completely
+> resolves the permanent de-duplication failure.
+> 
+> Admittedly, this comes at the cost of shrinking the longest scan interval from 9
+> to 8 scans, raising the scan frequency for aged pages by roughly 12.5%. But I
+> believe this is a very reasonable trade-off for correctness. So
+> 
+> Reviewed-by: Xu Xin (vivo) <xu.xin@linux.dev>
+> 
+> 
+> Besides, can we add a extra description about new smart_scan algorithm that we
+> missed in Documentation/mm/ksm.rst?
 
-set-
-Acked-by: Jiri Pirko <jiri@nvidia.com>
+Agreed, that would be nice. Thanks!
+
+-- 
+Cheers,
+
+David
