@@ -1,84 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793991920;
-	b=1havXuO5t2SichSSDA+OB9tZISIVumYfiw16UY/pXhmIpr5Dk5WOHmzIbUb9+475qzW4
-	 YCXyZrGcdU59yjrSXxGa9c1tiqlmZgP+uOs2K4VA47KddXiXOPKeoSZ6a0zzLlOmtL41r
-	 rRSbfgjtjWZy6WGGfvYLY0OUFAAG9iX3yyU2tO6cnoDSET0QypDCFSOtokFpP4t4p/uJC
-	 1STanJHy0aYh2lutQTiXc43xYY55IRwLGiRr/IoLpB8wOV4vP/6d21+4DpeZNUoHzU7E9
-	 UZzqmkcWnwIBp3N1VGvh0Xgn7l51pmj9YqvCK5y20xV5fV78EJIFXDQsFstabnq8UsA==
+	t=1793992226;
+	b=tAbeXD5XGl10t03hrpMkjt6m6XR+OaJzjIX9KDQayzJCd8V9c86BLdM+WJH9bi9f27X8
+	 YaHVaFo6h+4FBF/79+KOLYTaYraVPpFdZETjHUsGDHTkOrgSqsrtTGgRFp00gdRp6SKTN
+	 XLZ2eD8q7+sUca7yrhvAbgGHF1iADViWqeVaVty1eJUKerXqnwp1/HWvhVb8Mm3ww51ev
+	 AzesxP7DqYJ9N+ycMjNc0taVGprcutOAeF/VEqo4BJc2L3FGDEbQIYI2FawA6d0g8zH9A
+	 xmhn+dPZ163ag6U2mHsFnoLfRRwPM4AgUE25UE6KcoVlKsuBkDjTtZPWUGZa6HjDa1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793991920;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=KP0QCfy6n/aAd3jVf+wjI/kSKv7FWxjBTOq+hpFStLw=;
-	b=qpwa8QdaSNNFaCLZXvPg2vuIJO55jjPkcULKkpEdSV3WKzaeAZAXljBRG3v7ugN2fsT9
-	 pZggI2mOu3ikuJg1cDSCNdgo8yr/3wa3OoK28GBm2QQBG1Uw2bs9tSIL8fL5BA6zxJeJv
-	 YyBQEpwDzG6xPUDOgh3WITSLBHuwoQ0ZT85nJYl6+kNg+NeBaO1TXUN86Jx9G8A6BKwv7
-	 j9vR4+0RjVAOvgIyUAx+DQcSb8Tv0SUz+gGmQ7d5IAISdLX7yQ+spmpgztSwGiJ3Ihrul
-	 KmUKQ4XzPUFIuEAcBpe8eZIFtG75mEFGo3aiGFETfUtuKAyDxwOlKbdK6Dldll5d8EA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793992226;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=TibEcO9CNVSZ8+bVlmwBX3YZ8Clr0IvZkR0Oo11qWYo=;
+	b=jA5gVFN4ZOwhWF+bKFKDVa72yT12V5CbFFDsKOKZVGfojW0ImTeOde53/NPDfyH2Idub
+	 Y86iHzIY4NcK6RRXni1Amx91C1Aye6Sks9MAUy1nW21i+RrFSmvCaEiFE3ql+LHWTZt9E
+	 rsIpmNQs/wmww20r/l3SVH704vXIAQAPgghd8cECiG3wzwFs9UmwdK+VqpNx2fveaeh7U
+	 yEx2ypVB/eeOVQUav0dMGZvhpj8Yw7yw+UeOheoFMda3ihpIBQljUJ5SysBU3eimTD2Qe
+	 +pzRWReeP2hwNEGP6UVzPQkUvvLDOyCi5EpxIFkKqwEaclqbE5KP7aOY/p84UWeFRVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C8tque+l;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=eNDe0Xm0;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 3884C606A326;
-	Fri,  6 Nov 2026 19:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97939606A329
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 19:10:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97939606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C8tque+l
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 0696D1F0089F;
-	Fri,  6 Nov 2026 19:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793991919;
-	bh=KP0QCfy6n/aAd3jVf+wjI/kSKv7FWxjBTOq+hpFStLw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=C8tque+l5v7c9mujhczRgUd0lgAJiVKY+/ot2dvviS/j8YectO8mzr4CFc5YIXjtS
-	 qKMo8O4S4JyVQ9oy/mZpN12sZf7VWTrzqKTbDfqH5r52F6baposRiIgJTyz5jAOsQt
-	 /UPK+Lx4c5vMgntucIxzDzxxRIXuuesbqFLVNLFq7M4mI+CdeXcKAENC1JJ47hxQgr
-	 90sL9x/uEVwWfref3Eluzt6azkVCprndR7sJlx2+CTnomVRKEOvZnthETmngVUMsIR
-	 l8gmcaNA1nJ6j2HsY/EIrAIr3j45eLWMHokTJRwIJvCUn9bhTc/h/+g875ZObx87an
-	 PCwYAB4NsD+Tw==
-Date: Fri, 6 Nov 2026 21:05:15 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Hannes Reinecke <hare@suse.de>
-Cc: Eric Biggers <ebiggers@kernel.org>, David Howells <dhowells@redhat.com>,
-	bpf@vger.kernel.org, dm-devel@lists.linux.dev,
-	fsverity@lists.linux.dev, keyrings@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <au4k69xNBUjsNErr@kernel.org>
-References: <20261105031401.956609-1-jarkko@kernel.org>
- <20261105031401.956609-3-jarkko@kernel.org>
- <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
- <20261106090516.GA1973@sol>
- <93e6b4e6-43c3-462d-b57c-26676aec85ec@suse.de>
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=eNDe0Xm0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793992224;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TibEcO9CNVSZ8+bVlmwBX3YZ8Clr0IvZkR0Oo11qWYo=;
+	b=eNDe0Xm0FnjLTQv3VytifUqLpCDe5JrG9oFKRCACZBksnvnTlzH8YGa9H1LyntpNnqicBs
+	trHfPlNYoYkEmr3X42OEv3Hxbl08Rv8onM5DQvw7kDEIrQunGttRSsDkSnTzndHX1L6HVw
+	GX72MkOpmIHLLtOGkDHovnxr3ulT69o=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-499-DvM7aMjlMhGrBWybGLF7_w-1; Fri,
+ 06 Nov 2026 14:10:21 -0500
+X-MC-Unique: DvM7aMjlMhGrBWybGLF7_w-1
+X-Mimecast-MFC-AGG-ID: DvM7aMjlMhGrBWybGLF7_w_1793992219
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7CC371956060;
+	Fri,  6 Nov 2026 19:10:18 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1BCED1848D42;
+	Fri,  6 Nov 2026 19:10:15 +0000 (UTC)
+Message-ID: <fa9fa51a-6db3-4c2b-be06-6ba423108890@redhat.com>
+Date: Fri, 6 Nov 2026 14:10:15 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,45 +71,116 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93e6b4e6-43c3-462d-b57c-26676aec85ec@suse.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] cgroup/cpuset: Reset partition data when an
+ invalid partition stays invalid
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Chen Ridong <chenridong@huawei.com>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Sashiko <sashiko-bot@kernel.org>, Guopeng Zhang <zhangguopeng@kylinos.cn>,
+ Ridong Chen <chenridong@xiaomi.com>
+References: <20261106105538.2915492-1-ridong.chen@linux.dev>
+ <20261106105538.2915492-2-ridong.chen@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20261106105538.2915492-2-ridong.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Fri, Nov 06, 2026 at 02:02:11PM +0100, Hannes Reinecke wrote:
-> On 11/6/26 10:05 AM, Eric Biggers wrote:
-> > On Fri, Nov 06, 2026 at 09:21:32AM +0100, Hannes Reinecke wrote:
-> > > While I am pretty much in favour with this approach, is there a specific
-> > > reason why siphash has been chosen?
-> > 
-> > SipHash is the preferred choice for secure hash tables.  It is secure,
-> > performs well on short inputs, and doesn't require special instructions.
-> > See Documentation/security/siphash.rst
-> > 
-> > > Would there be a chance to make this configurable?
-> > > I do see slight complications when running in secure environments
-> > > (ie FIPS-certified environments) where most of the hash functions
-> > > might not be available ...
-> > 
-> > SipHash support is available even when the kernel is booted with fips=1,
-> > so there's no issue there.  It's already widely used in the kernel for
-> > hash tables, and that hasn't blocked FIPS certifications either.
-> > 
-> Ah, right. Thanks for the information. Just wanted to cross-check here.
-> 
-> > Side note: fips=1 actually has little do with security, and in some
-> > cases it actually decreases security.  See for example
-> > https://lore.kernel.org/linux-crypto/20261026183332.11402-1-ebiggers@kernel.org/
-> > where I'm fixing a vulnerability caused by fips=1.
-> > 
-> Oh, I am fully aware. FIPS is more a rubber-stamp than anything else.
-> Unfortunately, a pretty powerful one.
+On 11/6/26 5:55 AM, Ridong Chen wrote:
+> From: Ridong Chen <chenridong@xiaomi.com>
+>
+> When cpuset.cpus or cpuset.cpus.exclusive of a partition root is
+> changed, update_cpumask() and update_exclusive_cpumask() copy the new
+> effective_xcpus computed for the trial cpuset into the cpuset, and call
+> reset_partition_data() only if the partition was valid before and is
+> invalid now:
+>
+> 	if ((old_prs > 0) && !is_partition_valid(cs))
+> 		reset_partition_data(cs);
+>
+> An invalid partition root (old_prs < 0) that stays invalid is not
+> covered. Its effective_xcpus is then left with the trial value, which
+> is computed from user_xcpus() and so falls back to cpuset.cpus when
+> cpuset.cpus.exclusive is cleared. As an invalid partition root does not
+> own any exclusive CPUs, and rm_siblings_excl_cpus() treats a non-empty
+> effective_xcpus of a sibling without cpuset.cpus.exclusive as owned,
+> those CPUs can then no longer be claimed by a sibling:
+>
+>    # A1: cpuset.cpus=2-3, cpuset.cpus.exclusive=2-3, root, with tasks
+>    # offline CPUs 2-3 -> A1 becomes invalid
+>    echo > A1/cpuset.cpus.exclusive
+>    cat A1/cpuset.cpus.exclusive.effective    # 2-3, expected empty
+>    echo 3 > B1/cpuset.cpus.exclusive         # -EINVAL
+>
+> Reset the partition data whenever the cpuset is a partition root, valid
+> or not, and ends up invalid. As effective_xcpus may be cleared by that,
+> also force update_cpumasks_hier() to update the subtree, so that the
+> effective_xcpus of the descendants doesn't keep the released CPUs. Add
+> test cases for it.
+>
+> Fixes: de9f15e21c55 ("cpuset: use parse_cpulist for setting cpus.exclusive")
+> Fixes: c5866c9a007d ("cpuset: refactor CPU mask buffer parsing logic")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Link: https://sashiko.dev/#/patchset/20261101114206.2434398-1-ridong.chen%40linux.dev?part=15
+> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> ---
+>   kernel/cgroup/cpuset.c                            | 10 ++++++++--
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh |  6 ++++++
+>   2 files changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3052413e41e7..cf38e8708ddd 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2607,8 +2607,11 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+>   	spin_lock_irq(&callback_lock);
+>   	cpumask_copy(cs->cpus_allowed, trialcs->cpus_allowed);
+>   	cpumask_copy(cs->effective_xcpus, trialcs->effective_xcpus);
+> -	if ((old_prs > 0) && !is_partition_valid(cs))
+> +	if (old_prs && !is_partition_valid(cs)) {
+>   		reset_partition_data(cs);
+> +		/* effective_xcpus may be cleared, update the subtree too */
+> +		force = true;
+> +	}
+>   	spin_unlock_irq(&callback_lock);
+>   
+>   	/* effective_cpus/effective_xcpus will be updated here */
+> @@ -2672,8 +2675,11 @@ static int update_exclusive_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+>   	spin_lock_irq(&callback_lock);
+>   	cpumask_copy(cs->exclusive_cpus, trialcs->exclusive_cpus);
+>   	cpumask_copy(cs->effective_xcpus, trialcs->effective_xcpus);
+> -	if ((old_prs > 0) && !is_partition_valid(cs))
+> +	if (old_prs && !is_partition_valid(cs)) {
+>   		reset_partition_data(cs);
+> +		/* effective_xcpus may be cleared, update the subtree too */
+> +		force = true;
+> +	}
+>   	spin_unlock_irq(&callback_lock);
+>   
+>   	/*
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index bdca6c471f87..32e1e44fa0b1 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -434,6 +434,12 @@ TEST_MATRIX=(
+>   	# cpuset.cpus is allowed, but those extra CPUs are ignored.
+>   	"  C2-3:P1   C3:P1  .      .      .     C2-4    .      .     0 A1:|A2:2-3 A1:P1|A2:P1"
+>   
+> +	# Clearing cpuset.cpus.exclusive of an invalid partition releases its
+> +	# exclusive CPUs, including those of its descendants, so a sibling
+> +	# can claim them.
+> +	" CX2-3:P1    .     .     C3  T:O2=0:O3=0:X  .     .      X3   0 XA1:|XB1:3 A1:P-1"
+> +	" CX2-3:P1   X3     .     C3  T:O2=0:O3=0:X  .     .      X3   0 XA1:|XA2:|XB1:3 A1:P-1"
+> +
+>   	# A child cannot recover until its exclusive CPUs are available again.
+>   	" CX1-4:P1 CX3-4:P1 .     .     X1-2     .      .      .     0 A1:1-2|A2:1-2|XA2: A1:P1|A2:P-1"
+>   	" CX1-4:P1 CX3-4:P1 .     .  X1-2:X1-4   .      .      .     0 A1:1-2|A2:3-4|XA2:3-4 A1:P1|A2:P1"
 
-Just representing this as an option but in the current mainline indices
-are used instead of addresses, and thus it would be also an option to
-just jhash across the board, if that part is retained (now it is being
-removed).
+LGTM
 
-On plus side, any security bugs in cryptography would not be a concern
-of keyrings.
+Reviewed-by: Waiman Long <longman@redhat.com>
 
-Br, Jarkko
