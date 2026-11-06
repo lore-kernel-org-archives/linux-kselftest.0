@@ -1,134 +1,139 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.152
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794005506;
-	b=Lk/d/eHW6NbVkrQlYzadOc1EBGAAie18kRsGQi0i6oDOyQ05Y+6bpGx1VgAXHaggy2bF
-	 m1NKAfnJW7lbEdHrBf8zmlNWNTp9sYw9IRWguF6C/O/5yJsY28I/aBnY990blvBhV860K
-	 brZnKJFSQPPoleVgIDHA3fJdLLxPsRaRD2cxMp5D1pZifTLtzrP9gSg62D1EIWZhGQTXk
-	 7akwdHNpsg5jvcT6L/tQyaAQ4Su1FLlU/09lDpOiIBMzjQ3e5GQp0pgzHsts1GHVC6tSM
-	 Uyvfg1wMnqleEs2CezOIBzNgCpc/L0ulnDAv2R27fx8/XdfKg0h5EZ/zSyRzADeQeAw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794005506;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=pCINyycb2Yi7eXcN76C9p3VO8yXHWknwGqsZ4naX5E4=;
-	b=O4VOw+wTUZ0r5Ah9eO/aU1Rj+IsD3njk7l+x793nG1TC5d0tnKdCqhS+uEU6tODjsU5J
-	 WKNc44igm8qEISqMVTc1mm9dNGQK5ZB1vH/BF89Xshe3mziTGnbDlWJPKcpgWMWeiOSV/
-	 ZD47fEjETjmhTZi/QQaqWVmO+AhkjHe4M7ipBwJEOscM+cJitJT6z4WJLlpVMwa56Nk1g
-	 m3v+DS0nqRynRpy40YlE1nQfNcX/+D1eXzEIKt2hJfjlvZjIHT/aOriaTEDcZyyE1pnjM
-	 5Q/cN97VjEFi6hOvjYAluvL0aYJRO7Hfn3LUrgF01/xy2CX5ra+FLgGhg/rt+uku3Kw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=shazbot.org;
-	spf=pass smtp.mailfrom=shazbot.org;
-	dkim=pass header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=eXwYvvvp;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b="a/EV4SN3";
-	arc=none smtp.remote-ip=103.168.172.152
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=198.175.65.19
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1794008265;
+	b=PE4gZ/H2Qhfen8jmazCFvwo6yIkSc753Pw7AcYzK0NrFjqiXdGdRIEeZ+5E5pFE8uk58
+	 bf8axJQesaqvob2cDDKsx+QSaR8IjGkHOoXAGUCSd+GLvx1r5zjObJZnnXCbSYjEAZKhI
+	 iK+OP9M/UpwqAN1LqR4WXZLQ9amecsRwaXs6SZsNd4U4sQtFK4+iXEK4V4s9Mn8R6A/5W
+	 q5Ipu5RyLJvx040JWgTOnznx7toNZB8kawTQ1Vegs7+blOmcqVrbEg1jFtHfqj5A7OUO4
+	 iekGe2MzDXwXFRgeAnfwnTzQ6iy8icJsbJYyibwXBxCRlT5kaVSzmN+gosCF0J+yUfQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794008265;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:Received:Received:Message-ID:Date:User-Agent:Subject:To:CC:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-LD-Processed:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=tz9E6RWQg9/NjI+w5rv6AX5xHAYbYOVRHbCR4eu8ezw=;
+	b=dLR7L4qzs8KfU8DddBbqeFBLoWM5iaCIE/bN6QztFvaayymgL6p6QC10iJPtOhDA6hlU
+	 HAK9hjsILfutww2gecs3mhopUYWzlYcx6rl58LG/mMofDOQR63pUkmEF7FlfYRvBQtZKE
+	 VyvEYcALuuDcAPqev5+K4p3AfhYyn3YIpk0tFmf4D2nOQUdikE+NXCwMvkjFamRCXoPT2
+	 mbb7bi2QotuMby5OXh5EZ7iEdivvf27H6Z+tgn/Ein3SpyVugiAGX7dn98NdM1lHTM8Y/
+	 KJZ4nzsjhWGvjpGXrtWRKveoRo0/lreGYbfbtJLfQ3SlnkdksSBY6h3+ffUrnhsD/Vw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dB32Quqd;
+	arc=fail smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DC7606A33B
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 22:51:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34DC7606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9779B606A326;
+	Fri,  6 Nov 2026 23:37:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9779B606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=shazbot.org header.i=@shazbot.org header.a=rsa-sha256 header.s=fm2 header.b=eXwYvvvp;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=a/EV4SN3
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id C69231400120
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2026 17:51:42 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-12.internal (MEProxy); Fri, 06 Nov 2026 17:51:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1794005502;
-	 x=1794091902; bh=pCINyycb2Yi7eXcN76C9p3VO8yXHWknwGqsZ4naX5E4=; b=
-	eXwYvvvpQVKBaBpNbRUe/+3hYKCeOcbuVWiYmYLKEvLXtRoAGvUf8RbrmXwsx48p
-	RMEOXPcOMIYiwlgJiG2tu6GhNLXDb72Rz1d/Z1gV4gjhVv9VROtq60SjULmH35ib
-	PZVrZi6T4LBfl535OcFR2LdFMLf4CbQXL6pHnWFKuPquS9UGc9oQZsVTiFUgLCFO
-	++dgLLlhCWRIaIzw48OyM5BEywklope1/SwKtMCifcb2M47t9hktfmi7eSt/M3UA
-	7rwZSjQBVEa4VMwNCbH7KonnGQdnp8Hay/5XF84slGoGYXimieBUP8P7D3ZU/b2o
-	1QG4Ab+IwWFzwNIrtne2Iw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794005502; x=
-	1794091902; bh=pCINyycb2Yi7eXcN76C9p3VO8yXHWknwGqsZ4naX5E4=; b=a
-	/EV4SN34LhFKeoYm6dLT3OPcpHdaXHaATWoVHjVvgCPGmJTb5pjnZxCvn7ukG+JG
-	sLQeOwxldI5cEywnOf3f4YLOJoqeg3ghymFxn15lA9qe69MLo4CH2NozGNukA+8i
-	j3L4X2Vu/aL2SxDhWHewSeAdY5047siA2UMT0W3qVXejXKCwHQRk28cPB/r0iB5e
-	gYwQTPe9hbzlX34JPw9yzWAbqMnB4dSbHNt+X4NsJ2wEcplyKIrGlQM+h7vwDFyH
-	Z/s5D5/h/AMuCYCTEbMCSHFl7X51iK8VERLJkDK6HasGlxqsOHSR3atmfynWe/Fo
-	TMhS7FmeFF8DXAtm257Tw==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=shazbot.org a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794005502; d=shazbot.org;
-	mf=PGFsZXhAc2hhemJvdC5vcmc+;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:ELKhdP0q0dSkS+1aZ74OXiNN09Gosp4mCCeCUesJKhCL0rt
-	2Pz0axpC0C8cj8w/sD1FqlTrNZIhgSascE/R3ZCq4YJgiuO5Tpwk9htle8jPIabb
-	8QlLfp4IDcGDm1KU2Hg/JqyCQpB+XCvetZig/dk6dlkA7EDZmL6b8Lkba1d80rjj
-	TLs4rzr56XKOnrC6U6ijIV/D5A9DgZ7q2f8zgxYQuLHNIQ2f/zsKN7ukx9UmUXn0
-	SgytnwtQIq7+DJ1MmUywErBTAa6+Vp1lk34rLczVgWe7rt69UsZPVl8Hg43/K2Px
-	hoXXbU8nQwBidOXv9F0y64/lOaRQf03UDeSrNJg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:RaomtIcuXvUIFwt+5sZpEeZA5wqZr6f0fW2ssedUVHc=:TOM4g+7xSqNy0WSFjfB2JfWoxxEEleNx6wst9aJJXmM=;
-X-ME-Sender: <xms:_lnuasrUXba2FrX_QVudFK--ZVFTg4U3il0mSRvOBIMemZgedb16gA>
-    <xme:_lnuagTR-JZN5SUaZs4jWkwPnnep0J1QxGJoPLO1ZKiHJzt3oisUygEk2CYWdEjQi
-    kn6AEVtgCwNvxqoNeA5hKsRwEvOEySqBQnA_8Y4wUZpHOyj_6Dn4IQ>
-X-ME-Received: <xmr:_lnuaokoo8q81RfRbxNYqIAseOSj28-drfG_yAOgxIVVx0ALfmNpvcnrHow0rg>
-X-ME-Proxy-Cause: dmFkZTE6cr9qQxQy/NTdx2j4Uy5Tstc9ECcua64GU/0jH4N0I8lrKEWqW0lQfJCEnrS+FW
-    gyx3ol9myKVUtTXCA9e+BjNluWF9Pe7xw62YCW5NHRrMlGafLSXEyWuu/BRNxfSmaaNYk3
-    ehoFW8RAO9Lo2QPPkRc7SLF4DF8EkO0phNnJDBOrFkTdcKiJ1wl5a7GZTtFoVK5dKSI/Se
-    QAzufhGQWi4yhKr6pr77YJ5raXlX+1ksTpMfWqQQAN9wbkNk72zgi+E5g2y54K+q2tyjLE
-    Mbj4vpmCNPkzKYz9fyM4HMsfdMMUfYjpxN4v9LT2xRoZ6OeTk1TG0ide3UTnOQh3yMMdZ+
-    3TJl5bkNUPm9aDoS0Y71plJGBC28Zx0F4P6vPaH82ObBxWqh1SwdHWnETNDfw1BXPNOL0M
-    XeD+jGnmuSG7Fv9QHEoBl3VDJNBjaFcPBYKUn5hpg+f95Ka9UmSJvvCB9wKbxJ0Yysqy9w
-    FeNhXvPq3VKx8yPfk+rkNwJgHtk9dl5/+VNboIkvc7Z8TZUJlAfcX/b0bRp8Gt0DM4ErT/
-    8NovABCzt5qxLsbChHORU0PWnhIjppVCbJ76ra3OJz3PKFXWkZBS5TrqXD/Ad6Gmpgvom+
-    JT3/5L0/Ke5nO6i2sYG95fXtvrgBuHmUDoINrVDtRLny7nYXAbRN2zE4+PGQ
-X-ME-Proxy: <xmx:_lnuasEkV9zy_rdKjRXk4w0T4o0Yq0f5dU4bKCOuzR-TyNvkqkv_sw>
-    <xmx:_lnuajnE82WfU-nm3AOPdykNkoAc96cZkOvAKNMdlXGNzqgB9jC--Q>
-    <xmx:_lnuajRDMaG3gWHBcqQVfE8kK4lQAqaYCFH0b3kXUjn8tumL42oY1Q>
-    <xmx:_lnuag6gKPuHTLIN96fk-wGeWaIaOqccowAhMFZ0bnSdh4_a-vjm8Q>
-    <xmx:_lnuasGNzPibMYWZ8e9ucvV1agWqbApqR8cu9IgskTYC2TRgUOBPftzE>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 6 Nov 2026 17:51:40 -0500 (EST)
-Date: Fri, 6 Nov 2026 15:51:37 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: <mhonap@nvidia.com>
-Cc: <jgg@ziepe.ca>, <ankita@nvidia.com>, <jic23@kernel.org>,
- <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
- <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <dave@stgolabs.net>, <alison.schofield@intel.com>,
- <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
- <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
- <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
- <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
- <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
- <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
- alex@shazbot.org
-Subject: Re: [PATCH v6 12/31] vfio/pci: Call the CXL open and close hooks
- around device use
-Message-ID: <20261106155137.5fcf7259@shazbot.org>
-In-Reply-To: <20261016161839.2765592-13-mhonap@nvidia.com>
-References: <20261016161839.2765592-1-mhonap@nvidia.com>
-	<20261016161839.2765592-13-mhonap@nvidia.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=dB32Quqd
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794008262; x=1825544262;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=WVxRLx/GIcQ1KFAilNqZguSj4AumDQ3UUTkTFlACgek=;
+  b=dB32QuqdnPA2uOUzdNtWiAOme37rXfBbZiH4cuNsDGmHPD72kirHj4WB
+   BDpYM1Bd1FXPxBRph5JJEuAI6U/seoEzeJ5t985DlB4wAe3+OtOZusBuG
+   7l+6ywFE+ReHkiO9xXSUwzM12LO3Cdv1lu9FlbuQOOb9Gl5MtlDBtJia4
+   72V1warpi743hQpLQGea2h1KYOJCw4NlEJe9+CSmQa1j9zX0plSqFFzR9
+   O7I4Y3NOowCNqwSl57NBO8Ca8FFScUdqZJfUazYPzz6svSkxkB5Rhfzyl
+   fIZ2qjt5NrmsxHRkg6+BDXVw/llGGJS3+mVccIvO/O/6n46/FIcOXn2XJ
+   A==;
+X-CSE-ConnectionGUID: QceJ3ypiRRSZL27n/k2C1w==
+X-CSE-MsgGUID: KGK1gEuaRCy3s3EScZMIxg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11958"; a="2872002"
+X-IronPort-AV: E=Sophos;i="6.27,199,1787036400"; 
+   d="scan'208";a="2872002"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2026 15:37:42 -0800
+X-CSE-ConnectionGUID: t5ILzsIvTuaNhmekfW4AeA==
+X-CSE-MsgGUID: VHxVjGKnSRWVP2wploalmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,199,1787036400"; 
+   d="scan'208";a="7501993"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2026 15:37:41 -0800
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Fri, 6 Nov 2026 15:37:40 -0800
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56 via Frontend Transport; Fri, 6 Nov 2026 15:37:40 -0800
+Received: from BL0PR03CU003.outbound.protection.outlook.com (52.101.53.53) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Fri, 6 Nov 2026 15:37:39 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VwL+vfmwAdd5+YYQuYTYay8QczkRnRyj9rh0y1gX10IMOb2apEWdd0YRNafhc+KKD80xlq9+O+djQbJ1YXMFTpaiwqgqxPFp3Q8ZCABfUKcLHxoiVseKZiZex7yC0qCljXvFUH8/X34f4S8QO187mA4vkSA36J12gegRycDIlzCb2qarJ1EPP2WPhWO7QSYXeDnm8ZqEaSl3IIuCaSA2g5QFU/YqC/gwZVH1CKKe4W2JrO2M4AbRYXKvuC5Xbbmubo4KJEdHpsJxA+6PmREjqgwVBsWPrmsOkD9kMW+dQf2Y+nxab7TEV+xeE3edEFy02x/021TZAPbCfpjdqM5pLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tz9E6RWQg9/NjI+w5rv6AX5xHAYbYOVRHbCR4eu8ezw=;
+ b=HGVbCm9M7JX7WN94Vgie4AEXzKiO1TunY1x9SXIUUArFIejY0HnAfOgZjMZr28Jkaf4DmRCmCMrNQ5NdiHhKKMDKntZNMQ8AOdKVYOzfmC3y+osgQ9ZghbhseRNSkb8EyJa9tz2uSyQUh5e0N1YhfE30+NCkx+/3CJBHwD53qzRygCxvNQ35ErV6UlJkQMlIMgP9LMbomPLELJDbUg8zjXXU9uYB7Xv8t8Pkp+djNHbgWeSkPES/4Yo+5RED9R6WelDi5NxLdpDbtxcK/RzDQz5/0QcV+XaL+h80J7TfxnrtDGXx5YI8SrB6ObWz/uOLFZcWKgle9JNOX/khL8jCOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA0PR11MB8379.namprd11.prod.outlook.com (2603:10b6:208:488::20)
+ by SJ2PR11MB8567.namprd11.prod.outlook.com (2603:10b6:a03:568::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.10; Fri, 6 Nov
+ 2026 23:37:31 +0000
+Received: from IA0PR11MB8379.namprd11.prod.outlook.com
+ ([fe80::549f:e4b3:e10d:aaa6]) by IA0PR11MB8379.namprd11.prod.outlook.com
+ ([fe80::549f:e4b3:e10d:aaa6%6]) with mapi id 15.21.0592.007; Fri, 6 Nov 2026
+ 23:37:30 +0000
+Message-ID: <857d915f-9439-408b-9109-82143bd96ace@intel.com>
+Date: Fri, 6 Nov 2026 15:37:27 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/5] selftests/resctrl: Use bandwidth values for AMD
+ MBA schemata
+To: Babu Moger <babu.moger@amd.com>, Swapnil Sapkal <swapnil.sapkal@amd.com>,
+	<tony.luck@intel.com>, <fenghua.yu@intel.com>, <shuah@kernel.org>
+CC: <Dave.Martin@arm.com>, <james.morse@arm.com>, <peternewman@google.com>,
+	<eranian@google.com>, <tan.shaopeng@fujitsu.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<x86@kernel.org>
+References: <20261022132517.46805-1-swapnil.sapkal@amd.com>
+ <20261022132517.46805-5-swapnil.sapkal@amd.com>
+ <b250f681-5726-403c-86af-cb4bc35b9d1d@intel.com>
+ <e30b8e81-938c-4426-8b4a-2a3a8d5163ad@amd.com>
+ <4f656f59-9f2c-4774-9d9b-3a4d7b7b509d@intel.com>
+ <39598840-29b1-4524-806f-9ef9dc2a3944@amd.com>
+Content-Language: en-US
+From: Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <39598840-29b1-4524-806f-9ef9dc2a3944@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW4PR03CA0102.namprd03.prod.outlook.com
+ (2603:10b6:303:b7::17) To IA0PR11MB8379.namprd11.prod.outlook.com
+ (2603:10b6:208:488::20)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -138,170 +143,143 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR11MB8379:EE_|SJ2PR11MB8567:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0fd5f319-74fe-4909-2af8-08df3c5eecac
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|366016|261026121527099003|11063799006|4143699003|56012099006|261009223027099003|261102123227099003|261021121427099003|261022105027099003|261028144727099003|261026140227099003|10067099003|6133799003|18002099003|22082099003|3023799007;
+X-Microsoft-Antispam-Message-Info: lh/cWlD1tXgTbz9rEcxB47rtumPR4vo5gXOiXlXSZVRn/mJue3eJhaGcBQaEAMpItps7QmvPhmHFR95uM83ZM5WgOoWmnIEkgV7pDkOBKS8esMCVXPsb+kwueGn6LYkwuo0DJmYMyy7HVXcEcKmBbPzYwSnYltjA5RO/4AKdGPARxBfYxPnJ1FtfymrK8Yj95oJxro7ifWfb1JxX7Ex/dbuoPqfy0ZpPY+rQ92V9dNgDaLCSNBPXG794kMhc4Co+nEavrooFAJa2limJjfvdnNQprz0HOyAW2HV/WvpqlPEpbzAXPqTHHhKDkuSHSwS0pXqKB5pgSs5B6YY9yCBa43XAv1swZFUnwvvTx8udeNk7Cz3YtRDjyR1e7zTmYobb4tfiIH80WEXG3beRmj8J+CwC+mgDP9EiSMemNvts4V//0uMzlkz3dDBvxuFX2W6/yHNKkEkyAO7zkbU20eHfyYJFMdXk3WOWRF/Hi4sqYebmLpqQPsDaBFEXDW8wog32Td5uVoBxULmYnPIHCQxUrmeeXKec1zVQQwbbIwMfGk1gH33Zs/oxzraL83I1k6ORoBelbIkas8P8lO9d4Cs/rEfdT2qIFZ/5BVZKoP6aKb8mCqJwp9ilkCDZ+4iVEvTWoT6js3ZCunBB3yPQCMCdHpR1ZdSJxzbhNmkgcW5I2j8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR11MB8379.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(366016)(261026121527099003)(11063799006)(4143699003)(56012099006)(261009223027099003)(261102123227099003)(261021121427099003)(261022105027099003)(261028144727099003)(261026140227099003)(10067099003)(6133799003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K25aWlBxa2d3WS8zU2kzUFZFZnVpdkZsUzFwdXpCMXZ6ajFGZXB2bDlDbU9p?=
+ =?utf-8?B?VUt2OWdNVDZzQlZnTHVIb25jQU40ZzFvUWlmVmh2OEFxZC9YS2svRTNESm41?=
+ =?utf-8?B?ODlzanF1YXQ3aGFzL3BPcnVKTy9XQitoNGw5bmhNODZvaXdTYkdsd2ZCWE42?=
+ =?utf-8?B?a2pjY1BTK3R4aHlwRHBqdmdqZUg3T3dhOHNaWVA5dWwwd2dpVEdLbWdKcU5j?=
+ =?utf-8?B?STNNN3kvczJ3cU9ENmQ4R2F6Znhobmh1TksvVnhONllUV1lHRHI4eUVWek1C?=
+ =?utf-8?B?UFJ2ODI3V1grUG1HL2NCZklwK2FZS2l6UjAzZUUrVkd6YzNrWVRtUkZUTWtv?=
+ =?utf-8?B?d2kwbTFxVFlGaWc0UUloQ25vUUF3eklQVnV1QzVaU3pSWWZhZlJnV1FNN0t6?=
+ =?utf-8?B?SEpvOHdOVDJPTm9adStmT0cwSzhIL0xRZ0xLcXJoUzNodlNBZURJM0FPMVlw?=
+ =?utf-8?B?cjBrRG16bjdQcHovcDcrd01UbG90bGxHMUVVa0k5dkRPZ1RSSXhVYkdiWW9Z?=
+ =?utf-8?B?bGxReWdPdVppYUVINU9tTWFjbzNULzlUSTc2Ykx1bG5xMVBES2tndVlKcFhY?=
+ =?utf-8?B?R1Bzczk2VlY3WUtQZTBSZUZMb29rVVREdHNSMGlWNXJqSmh1WGM3N2N3dzNZ?=
+ =?utf-8?B?R3RxQUduNVZITEQ4eXNnRVZvVWJxQXdwbFZZLzVwd3lRaU9MM2JoN29TVW5X?=
+ =?utf-8?B?N0FMVHFwdmppR1piSUZnSEdVUGJFcHF4dXE2NkxFd3lOa2laZnEwa2g1dG1s?=
+ =?utf-8?B?Z2VHZ092ZGx3M1hsbUcvZ0h1L245RVh1S1h6VGN5QzBTVzZ0bkdlK1c5ZHl5?=
+ =?utf-8?B?SGJmUTJSMnZhalJaVFdYNlBnZytrQ1dHYnZieUhCR3ovRkhDSnY0eWZFd2d6?=
+ =?utf-8?B?aysyYkp0Y2cyajVlcjFEVllFbmtUMy96ZTFOMEhWYUNXUk5tR3lWS2JId0NQ?=
+ =?utf-8?B?TlpEMGMrSmdnVEJuRFZTR0ZsTUpaS1lHczZjT2lMSk1iNk80SGhFRFFCOXB6?=
+ =?utf-8?B?dDlzbmx5TXVRVVBCVnV1NlM4WndJZnRwSHFiSlA2aG01YU1VV2tJeVVsL2dG?=
+ =?utf-8?B?RTNlNkQxbVVQMVpKbGJpUUM0dlcyM1ZoOUJ3cmI4dUh0YmdiSWR6Z3NKay9P?=
+ =?utf-8?B?bU1CNzljb2w0VzN6Rlp1YUVTOEdwNExUK0pLMU1KSDUvdFF6b1VFSXpOWGJY?=
+ =?utf-8?B?U0IyMG1Jdis4Zk94WjgvdHdFWGxYSjBvYXV2UllISFE0bDZRZ1hrR1lZTlVT?=
+ =?utf-8?B?NDNnZlVQc0g3QnRyaTY0M3hvZndrSDRDTE5SZ3Y5UFFyVDByc1pkclVGZGIx?=
+ =?utf-8?B?cGV1OEdCWjJ2YllIM0dkYmFkeG1DSFR2MmJSZHNucGZtSXdWNDRHK0dGQ0gz?=
+ =?utf-8?B?Z3YrSmM3bm10Z1JUZjRRbmtmSHZZaWJicENTczJZRWFvK2ViQmcrd3VrVm5Q?=
+ =?utf-8?B?RzI3c3MzdW1MeXIrcnI2NEJoRHhqWFVxWStiaGRodHdkNFJHZm1mRTNtR3J1?=
+ =?utf-8?B?UkpOQ3g3Q0lPYld6aWRxUi9zMnRTV29LNlpvUEdxbjBSZ0VPM1NDa2pBOWli?=
+ =?utf-8?B?OFUxdVJSUlZ4SE9MNWNnTENuSVdDU3kwRFVncTd0em5wRVZrNGdYY1BHdFBr?=
+ =?utf-8?B?K0l6M2kwdzJaSGU3QTkzaElCU0dZT0lIUzZacGZLY3d0OWxIZVJQS1Q2cVFj?=
+ =?utf-8?B?K2VhMWwzUVdVSjRaSlg2WjNoU0d5Yk1rbkoyak1zanlrUWw3K2tLWFlxa01r?=
+ =?utf-8?B?U1dHL2preE9sZ2t0QWM5akhsMFR0eEgvZ0ZPRXhmd2NhekQ3MGo5Yk1JMDdM?=
+ =?utf-8?B?YUFxRXpoSGN4cFB3UUUxZnZWd1F2S1d1b3IxMGpwU0l1WUlOTnIyNExHUi80?=
+ =?utf-8?B?TTcydTdGMHhXQnFQK1l3VlY5Rml0c1lKdnE4T0NFUk9jck9kRWhwbzArSGdS?=
+ =?utf-8?B?RHhtWWJsMjQrRTF2WVpOQk5OaW50MmpYM1ZkcDZuUzdrZFo1QnY3YWpuTWFa?=
+ =?utf-8?B?K3lMNENqZW12dDdBUUNJWkl0eFhscTJwNWxtbk1aRXhQT2JOUEs1RHBZM1JX?=
+ =?utf-8?B?aEI0RW56cWF5U0VJMTlTYWlldUNPTVJ5eDVSR0ZIa2RZS09hSmVXdDZaZDNo?=
+ =?utf-8?B?bEhEcUtQekdvTlE4Nm5vZkZwZG5GK1R1V0VxODRPM1lpdWllRlhlZjFLb25P?=
+ =?utf-8?B?NHZuWTNITlBLUC9QRVhxamlFK25zTXlMWEtJZFV4Q3ZVeTBLMmppZ1VQOEtV?=
+ =?utf-8?B?L2piQXZzTVVaSGw0OFdONmd4dlpSVytUcmEyVUlNcmt4MTdPM281QjdjNVNx?=
+ =?utf-8?B?Qnh5dE5GU21Kdnp5U3UyQzZJL3ZkcGpBRlovZEI4QnNWTnZpL3dXWGhoQlVE?=
+ =?utf-8?Q?/yUVUPcX08aTZq+g=3D?=
+X-Exchange-RoutingPolicyChecked: y3PeS7I346spCUVO+1nDeGdoZgbtjeSb/kWORuucvqcZHHYlg0QuqAXVxpgsLfno52RF0fL/DLvgiAqEszkbcxRRBgrgvO5Mbio01t+5y2Ksjg9xC7uQQ81Y9zaqXAHpss+ZHxcerNtTrDu16pn+i7NmDqOAPq88+TQYUQZ383ykxKyBimLrWRvk6CLBkHCVuacRpNDZFRFDaObYGan5lyeaBbO6HxyDDjMviKpTZP8vbi2PI0qCSMcAoDbn+d9sUoYIST5IZqfwG0uuqxsD9obJpinlepboqDSghJR1FOgFg76lUCSPgBZr7923MN9qREJiZj6NXAqFYQFTS38rvw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fd5f319-74fe-4909-2af8-08df3c5eecac
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR11MB8379.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2026 23:37:30.6929
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LOzk2f59P/RE/kY8pNEt7mRcyVBPCPpRDz1bEu7rbtYSRlsvh8CAOpgCyrMDyDxNj+j/lPbwEH5jkjdJrJVc78/puZlroGKbb1dUIN/NeuQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8567
+X-OriginatorOrg: intel.com
 
-On Fri, 16 Oct 2026 21:48:19 +0530
-<mhonap@nvidia.com> wrote:
+Hi Babu,
 
-> From: Manish Honap <mhonap@nvidia.com>
+On 11/6/26 1:25 PM, Babu Moger wrote:
+> On 11/4/26 22:16, Reinette Chatre wrote:
+>> On 11/4/26 8:05 PM, Swapnil Sapkal wrote:
+>>> On 29-10-2026 00:15, Reinette Chatre wrote:
+>>>> On 10/22/26 6:25 AM, Swapnil Sapkal wrote:
+>>>>
+>>>>> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+>>>>> index 17ae73d3476c..947735e26099 100644
+>>>>> --- a/tools/testing/selftests/resctrl/mba_test.c
+>>>>> +++ b/tools/testing/selftests/resctrl/mba_test.c
+>>>>> @@ -13,10 +13,51 @@
+>>>>>    #define RESULT_FILE_NAME    "result_mba"
+>>>>>    #define NUM_OF_RUNS        5
+>>>>>    #define MAX_DIFF_PERCENT    15
+>>>>> +
+>>>>> +/* Intel MBA is specified as a percentage: 10%, 20% ... 100%. */
+>>>>
+>>>> The percentage based interface is the generic interface and not Intel specific.
+>>>> You can drop "Intel" from references to this interface.
+>>>>
+>>>
+>>> Sure, will do.
+>>>
+>>>>>    #define ALLOCATION_MAX        100
+>>>>>    #define ALLOCATION_MIN        10
+>>>>>    #define ALLOCATION_STEP        10
+>>>>>    +/*
+>>>>> + * AMD MBA is not a percentage but an absolute memory bandwidth value. The
+>>>>> + * test sweeps the bandwidth from 4 GB/s to 40 GB/s in steps of 4 GB/s,
+>>>>> + * which the hardware represents in units of 1/8 GB/s (i.e. 4 GB/s -> 32,
+>>>>> + * 8 GB/s -> 64, ... 40 GB/s -> 320).
+>>>>> + */
+>>>>> +#define AMD_ALLOCATION_MAX    320
+>>>>
+>>>> The AMD maximum is enumerated from hardware. How can it be ensured this is
+>>>> the appropriate maximum for all AMD systems?
+>>>>
+>>>
+>>> As Babu mentioned, it's difficult for a single-threaded workload to
+>>> reach the hardware-reported value. For that reason, I used these
+>>> values to verify whether throttling takes effect.
+>>
+>> Just to confirm, my question was not about needing this value to be the actual
+>> maximum of a system. Instead, I just wanted to confirm that this "320" value that
+>> is hardcoded here for all AMD systems is a _valid_ value. Since the actual maximum
+>> value is enumerated from  hardware it is not obvious to me that all systems will support
+>> this hardcoded maximum.
+>>
 > 
-> vfio-pci-core frees device regions and excluded ranges on close and on a
-> failed open, so a CXL provider must set them up at each open.
+> The value 320 corresponds to 40 GB/s. I have tested this on several systems and was able to achieve the expected 40 GB/s bandwidth. The tests did not fail.
 > 
-> Add open and close to the CXL ops and call them from the common enable
-> and close paths. A failed open unwinds the enable in reverse order:
-> release the device regions, unmap the BARs, drop the excluded ranges,
-> then free the virtual config.
+> There are some older systems where the test is not expected to run because AMD UMC support is not available.
 > 
-> Factor the device region release and the BAR unmap out of
-> vfio_pci_core_disable() into helpers so the enable failure path and the
-> disable path share them.
+> If you are concerned, since we are no longer depending on the maximum value, we can be conservative and start with the following adjusted values:
 > 
-> Assisted-by: LLM
-> Signed-off-by: Manish Honap <mhonap@nvidia.com>
-> ---
->  drivers/vfio/pci/vfio_pci_core.c | 57 +++++++++++++++++++++++---------
->  include/linux/vfio_pci_core.h    |  2 ++
->  2 files changed, 44 insertions(+), 15 deletions(-)
+> #define AMD_ALLOCATION_MIN    32
+> #define AMD_ALLOCATION_STEP    16
 > 
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> index 211fff6045e2..3d4e01eea7b1 100644
-> --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -590,6 +590,31 @@ static const struct dev_pm_ops vfio_pci_core_pm_ops = {
->  
->  static void vfio_pci_free_excluded_ranges(struct vfio_pci_core_device *vdev);
->  
-> +static void vfio_pci_core_unmap_bars(struct vfio_pci_core_device *vdev)
-> +{
-> +	struct pci_dev *pdev = vdev->pdev;
-> +
-> +	for (int i = 0; i < PCI_STD_NUM_BARS; i++) {
-> +		int bar = i + PCI_STD_RESOURCES;
-> +
-> +		if (IS_ERR_OR_NULL(vdev->barmap[bar]))
-> +			continue;
-> +		pci_iounmap(pdev, vdev->barmap[bar]);
-> +		pci_release_selected_regions(pdev, 1 << bar);
-> +		vdev->barmap[bar] = NULL;
-> +	}
-> +}
-> +
-> +static void vfio_pci_core_free_dev_regions(struct vfio_pci_core_device *vdev)
-> +{
-> +	for (int i = 0; i < vdev->num_regions; i++)
-> +		vdev->region[i].ops->release(vdev, &vdev->region[i]);
-> +
-> +	vdev->num_regions = 0;
-> +	kfree(vdev->region);
-> +	vdev->region = NULL; /* don't krealloc a freed pointer */
-> +}
+> This allows the value to reach 32 + 16 × 10(num_allocs) = 192, which corresponds to approximately 24 GB/s.
+> 
+> Hope this answers your question.
+> 
+I seem to have trouble articulating my question. Let me try to ask a different way.
 
-Mechanical changes like this should be done in a separate patch.
+Consider the scenario where:
+	#define AMD_ALLOCATION_MAX    320
 
-> +
->  int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
->  {
->  	struct pci_dev *pdev = vdev->pdev;
-> @@ -691,8 +716,20 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
->  
->  	vfio_pci_core_map_bars(vdev);
->  
-> +	if (vdev->cxl_ops) {
-> +		ret = vdev->cxl_ops->open_device(vdev);
-> +		if (ret)
-> +			goto out_free_config;
-> +	}
-> +
->  	return 0;
->  
-> +out_free_config:
-> +	/* A failed first open never reaches vfio_pci_core_disable(). */
-> +	vfio_pci_core_free_dev_regions(vdev);
-> +	vfio_pci_core_unmap_bars(vdev);
-> +	vfio_pci_free_excluded_ranges(vdev);
-> +	vfio_config_free(vdev);
+If the below (kernel code) snippet is run on all AMD systems on which the
+test could run:
+	u32 eax, ebx, ecx, edx;
+	cpuid_count(0x80000020, 1, &eax, &ebx, &ecx, &edx);
 
-Raising again that this doesn't account for the code previously added
-to this function that has its own unwind.
+Is it possible for eax to ever contain 8 or less?
 
-There also remains the question of whether excluded range setup should
-be moved to init/release.
-
->  out_free_zdev:
->  	vfio_pci_zdev_close_device(vdev);
->  out_free_state:
-> @@ -713,7 +750,6 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
->  	struct pci_dev *pdev = vdev->pdev;
->  	struct vfio_pci_dummy_resource *dummy_res, *tmp;
->  	struct vfio_pci_ioeventfd *ioeventfd, *ioeventfd_tmp;
-> -	int i, bar;
->  
->  	/* For needs_reset */
->  	lockdep_assert_held(&vdev->vdev.dev_set->lock);
-> @@ -759,24 +795,12 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
->  
->  	vdev->virq_disabled = false;
->  
-> -	for (i = 0; i < vdev->num_regions; i++)
-> -		vdev->region[i].ops->release(vdev, &vdev->region[i]);
-> -
-> -	vdev->num_regions = 0;
-> -	kfree(vdev->region);
-> -	vdev->region = NULL; /* don't krealloc a freed pointer */
-> +	vfio_pci_core_free_dev_regions(vdev);
->  
->  	vfio_config_free(vdev);
->  	vfio_pci_free_excluded_ranges(vdev);
->  
-> -	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> -		bar = i + PCI_STD_RESOURCES;
-> -		if (IS_ERR_OR_NULL(vdev->barmap[bar]))
-> -			continue;
-> -		pci_iounmap(pdev, vdev->barmap[bar]);
-> -		pci_release_selected_regions(pdev, 1 << bar);
-> -		vdev->barmap[bar] = NULL;
-> -	}
-> +	vfio_pci_core_unmap_bars(vdev);
->  
->  	list_for_each_entry_safe(dummy_res, tmp,
->  				 &vdev->dummy_resources_list, res_next) {
-> @@ -859,6 +883,9 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev)
->  #endif
->  	vfio_pci_dma_buf_cleanup(vdev);
->  
-> +	if (vdev->cxl_ops)
-> +		vdev->cxl_ops->close_device(vdev);
-> +
-
-Mismatched in both naming and conventions.
-
-vfio_pci_core_enable() -> cxl_ops->open_device()
-
-vfio_pci_core_close_device() -> cxl_ops->close_device()
-
-Some variant drivers unwind a failure after core_enable() with
-core_disable(), so the placement in the close_device() path is not only
-inconsistent, it's wrong.  The hooks should also be consistently named
-relative to where they're called from the core.  Thanks,
-
-Alex
-
->  	vfio_pci_core_disable(vdev);
->  
->  	mutex_lock(&vdev->igate);
-> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-> index fd1ad0baf470..6520a2dcfd4a 100644
-> --- a/include/linux/vfio_pci_core.h
-> +++ b/include/linux/vfio_pci_core.h
-> @@ -70,6 +70,8 @@ struct vfio_pci_device_ops {
->  struct vfio_cxl_ops {
->  	int	(*init)(struct vfio_pci_core_device *vdev);
->  	void	(*release)(struct vfio_pci_core_device *vdev);
-> +	int	(*open_device)(struct vfio_pci_core_device *vdev);
-> +	void	(*close_device)(struct vfio_pci_core_device *vdev);
->  	/* Pinned per bound CXL device so vfio-cxl cannot unload under usage */
->  	struct module *owner;
->  };
-
+Reinette
