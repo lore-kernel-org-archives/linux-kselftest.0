@@ -1,72 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793957325;
-	b=3fVUAiURTS44TjoGQ1pv7Aah/a8VEbAoBZOvCycNWlZ7OS8BJnUrrie5ZBrScP0hMF0p
-	 21zxSlKDIN8nbmfH1cwHmKY9uhWV3hDvnQbYRtwEk/WeQ9bxn7w+Qg4LdUvUB9HQ1hMHT
-	 kR3xtJJDPXCM2Xe0OYOWPR0HCm19hnKOht/swRQRtld0VOqdOJNFZS3u6Gvnbn8z/7YTX
-	 Z2+2dQK2BRqdEOAYdQeGZbFClZq+zLnqnPGEJvAw8Jpl00vWjnV5roS0ZBYIa0r5Vduwr
-	 LGGGEYsINPWjWnjQHYAAlFLdxMd9YRUkQ2LPIwi3dOT/bsb/9JG1joYP7HdZTCLO38g==
+	t=1793958277;
+	b=lnD0BT6z6bUz3L8J8FIk44JuuVj7bvqgt70wkO1IXmYK/oFLYvtlF4LpNyOIEgFqov1C
+	 ZKzq8s/virCDbo6Z+Q7O8K2khQ2UFDoSFGRV17+hcLGdCy81uGtF4/gDqh+IUjlaggzag
+	 9zFMyRHBLZPwZXNXTRNjvgOsI99guKYbaZPuPwM56CHDrvAE1MX102bh/j2R0CQ66LiEL
+	 ClmL+sSNrfWOT/ziQ9mlFJFfBns10hmLkfOG0vuXTbRRgFD5p+OEnNCTYh87t4UglHoPW
+	 RjsHIEGS6ifMStIp644E/I5PvJL1O/W42xNsTBu2cdEthf5Fs66/uuIiy8I/CoeMcow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793957325;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=VC16RfQ/Ch74ykYoajUZJ+R1KFdW7fHzBmB94MytVlk=;
-	b=WzQxChkHI14oFq4yEbBaoozusuAfMETEJqHgsvIlbbrk3f7FJMyKM0h0ede1zTF2wlNW
-	 tPdrK3zRAHQnUUaHigveEg5wBUFkPF8iMzTIFCABBZfq0zm3T3FZj+jIkGjxYZUtFZaCX
-	 W7v5YMGtmIOevBz4VVk1l18Xfj3sKMz+K/AnlFyMQFaTf7V1KRgfvFL+bNwPJxxra0WvX
-	 3rDyoKisrYk0d63aKxIdNezjdauRpVXfh3viFfcJUHrNXINP7TwO8D52bIJzEbZVsHZOC
-	 LQkd3+5+VkpH+w5+o7L0fPzhMuQqVMR4z4+VgzaN1tWoqXO/l910xeghKnN2lvUgqkA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793958277;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=3x30TCVHI6HA+CeHvlHb/+H3RtIDMYmugjilEli4TFo=;
+	b=487SjTH4vEmBEg04iSULCqgy4n8OwgQsmLcRAsK2pLqvNiVyTgTNGG3Yjn4hDb2sb8K6
+	 bksW8a31qk/CiRn+YCQEnjLKIkBO+aF+ql7qCEc715Y3/DBC8DAGIKzTE3pXWQ+w/+t7X
+	 DcTbzjhZpx3EM3MzUols8t9j7zeb8TLqMpWMyl8/fIYCj/CnQdxt0sw05gTnEk/GnIVFb
+	 8ukFyVhqdWvVHtm2cZ3CXWpAu80ay9IBCFlTOBuj5j3JPtv8VdPp/RTAnb+MaUEq32P3r
+	 KSoVdsffIU9bWBNfcDAY6sKMbgerPd9Nq4l7oB6C0ZP1LceVtsoyqJUKNkl0qdif5Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kqeWePhs;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=gAIJS6Ha;
+	arc=none smtp.remote-ip=113.46.200.217
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1504606A326;
-	Fri,  6 Nov 2026 09:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7719C606A906;
+	Fri,  6 Nov 2026 09:44:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7719C606A906
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kqeWePhs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C551F0089F;
-	Fri,  6 Nov 2026 09:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793957324;
-	bh=VC16RfQ/Ch74ykYoajUZJ+R1KFdW7fHzBmB94MytVlk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=kqeWePhskc8HNNCmYcdAWgvx59rFaItJGQOF/OyXIt/sCZd7S07yg+8aS/fnB0zNp
-	 VZWmUIjL5yONrrC/I3jiwH2+dnKikXHjGeTuLUGr0j0eRPY5SO/KWrCGOFcgNA3ZZL
-	 HdLccbtIl2+rB52+gfXthzuEXvhI4yjsjlV4x4GCkb7bizD6hCKSxpyMWCje9+/s6U
-	 4d4hYcIqy+tap693g+yX6oZ4XvZL7fnGPKzTviF5CpGIRYQ1kG01IAXQpkl7+VYCF1
-	 E9JusScvtWLyNrSjSK8j0HDA6lphKi+qTFh2GDRYyMedmYzEVbuuhiiS7jnOcasf3z
-	 PDOC78hNF61Zw==
-From: Christian Brauner <brauner@kernel.org>
-To: me@bobcopeland.com,
-	Hungyu Lin <dennylin0707@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	willy@infradead.org,
-	viro@zeniv.linux.org.uk,
-	jack@suse.cz,
-	akpm@linux-foundation.org,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	geert@linux-m68k.org,
-	tsbogend@alpha.franken.de,
-	maddy@linux.ibm.com,
-	linux-karma-devel@lists.sourceforge.net,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] omfs: remove the filesystem
-Date: Fri,  6 Nov 2026 10:28:33 +0100
-Message-ID: <20261106-vortrag-exotisch-pelzmantel-66235662f81f@brauner>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261105044046.52180-1-dennylin0707@gmail.com>
-References: <20261105044046.52180-1-dennylin0707@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=gAIJS6Ha
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=3x30TCVHI6HA+CeHvlHb/+H3RtIDMYmugjilEli4TFo=;
+	b=gAIJS6HaMixK13xBJxngCizzqXaVwAQAylIRB1e8UBqkX8JYSzj7oCVsGuI+kD0FtyWqrZCeO
+	SRzsBCWQ6s7XTmyTWAmwPM+7+5Py8e2Lb/uMdsEta20vaiUGFwE64ocIONy5XOZzbTgI29bU1q2
+	5fnLV0zl5K5XePyypLSDHUI=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jLZ4w0RgBzcb0q;
+	Fri,  6 Nov 2026 17:44:00 +0800 (CST)
+Received: from kwepemr100010.china.huawei.com (unknown [7.202.195.125])
+	by mail.maildlp.com (Postfix) with ESMTPS id 76A0540577;
+	Fri,  6 Nov 2026 17:44:30 +0800 (CST)
+Received: from [10.67.120.103] (10.67.120.103) by
+ kwepemr100010.china.huawei.com (7.202.195.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Fri, 6 Nov 2026 17:44:29 +0800
+Message-ID: <3bc53520-0d1c-4fdf-88f3-d88295aa8a75@huawei.com>
+Date: Fri, 6 Nov 2026 17:44:28 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,41 +62,162 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1286; i=brauner@kernel.org; h=from:subject:message-id; bh=i3zpqEJ74dna9za+0x2JJjtzgM6lB6eRNkY0jcS+yfg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS9nXv4bfPNlUcWTPn4uXNLgONU2auKFum3j/m/yNjO3 u7/4QGPcEcpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBEkjYzMkw6HKYfmszBsTjg nQ9D0/sLfp1fF166+WGPjq32xIUV3GcZfrMKhXHuzlJ3P5KXsnvXZd3mx77RJ1add2gs+WygyOB fzwsA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 09/15] KVM: arm64: Handle HDBSS faults
+To: Leonardo Bras <leo.bras@arm.com>
+CC: <maz@kernel.org>, <oupton@kernel.org>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <corbet@lwn.net>, <pbonzini@redhat.com>,
+	<yuzenghui@huawei.com>, <wangzhou1@hisilicon.com>, <yangjinqian1@huawei.com>,
+	<caijian11@h-partners.com>, <liuyonglong@huawei.com>,
+	<tangchengchang@huawei.com>, <yezhenyu2@huawei.com>, <yubihong@huawei.com>,
+	<linuxarm@huawei.com>, <joey.gouly@arm.com>, <kvmarm@lists.linux.dev>,
+	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <seiden@linux.ibm.com>,
+	<suzuki.poulose@arm.com>, <fuad.tabba@linux.dev>, <mark.rutland@arm.com>,
+	<seanjc@google.com>, <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
+References: <20260929103655.85107-1-zhengtian10@huawei.com>
+ <20260929103655.85107-10-zhengtian10@huawei.com> <auifWrY1u72afXfJ@LeoBrasDK>
+From: Tian Zheng <zhengtian10@huawei.com>
+In-Reply-To: <auifWrY1u72afXfJ@LeoBrasDK>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemr100010.china.huawei.com (7.202.195.125)
 
-On Thu, 05 Nov 2026 04:40:45 +0000, Hungyu Lin wrote:
-> OMFS supports the on-disk format used by the long-discontinued Rio Karma
-> music player and ReplayTV DVR. While reviewing a fix for incorrect block
-> mapping on writes starting beyond EOF, Matthew suggested removing the
-> filesystem instead of continuing to maintain it.
+
+
+On 11/2/2026 10:34 PM, Leonardo Bras wrote:
+> On Tue, Sep 29, 2026 at 06:36:49PM +0800, Tian Zheng wrote:
+>> From: Eillon <yezhenyu2@huawei.com>
+>>
+>> Once the buffer is full, hardware stops promoting writable-clean
+>> descriptors and raises a stage-2 Permission fault with
+>> ESR_EL2.ISS2.HDBSSF instead. Failed HDBSS accesses, such as external
+>> aborts and granule protection faults, are reported the same way.
+>>
+>> Dispatch from kvm_handle_guest_abort() via the new esr_iss2_is_hdbssf()
+>> helper. FSC == OK means the exit path already flushed, so resume the
+>> guest; any other FSC is an error - clear it and report -EFAULT.
+>>
+>> Signed-off-by: Eillon <yezhenyu2@huawei.com>
+>> Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
+>> ---
+>>   arch/arm64/include/asm/esr.h           |  5 +++++
+>>   arch/arm64/include/asm/kvm_dirty_bit.h |  1 +
+>>   arch/arm64/kvm/dirty_bit.c             | 29 ++++++++++++++++++++++++++
+>>   arch/arm64/kvm/mmu.c                   |  4 ++++
+>>   4 files changed, 39 insertions(+)
+>>
+>> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+>> index f816f5d77f1a..4b3ccd407faa 100644
+>> --- a/arch/arm64/include/asm/esr.h
+>> +++ b/arch/arm64/include/asm/esr.h
+>> @@ -437,6 +437,11 @@
+>>   #ifndef __ASSEMBLER__
+>>   #include <asm/types.h>
+>>
+>> +static inline bool esr_iss2_is_hdbssf(unsigned long esr)
+>> +{
+>> +	return !!(ESR_ELx_ISS2(esr) & ESR_ELx_HDBSSF);
+>> +}
+>> +
+>>   static inline unsigned long esr_brk_comment(unsigned long esr)
+>>   {
+>>   	return esr & ESR_ELx_BRK64_ISS_COMMENT_MASK;
+>> diff --git a/arch/arm64/include/asm/kvm_dirty_bit.h b/arch/arm64/include/asm/kvm_dirty_bit.h
+>> index d828e6b43fe9..eb2039820777 100644
+>> --- a/arch/arm64/include/asm/kvm_dirty_bit.h
+>> +++ b/arch/arm64/include/asm/kvm_dirty_bit.h
+>> @@ -39,5 +39,6 @@ static inline bool vcpu_hdbss_enabled(struct kvm_vcpu *vcpu)
+>>   int kvm_arm_vcpu_alloc_hdbss(struct kvm_vcpu *vcpu);
+>>   void kvm_arm_vcpu_free_hdbss(struct kvm_vcpu *vcpu);
+>>   void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu);
+>> +int kvm_handle_hdbss_fault(struct kvm_vcpu *vcpu);
+>>
+>>   #endif /* __ARM64_KVM_DIRTY_BIT_H__ */
+>> diff --git a/arch/arm64/kvm/dirty_bit.c b/arch/arm64/kvm/dirty_bit.c
+>> index be0d12555c84..893a8c4248bc 100644
+>> --- a/arch/arm64/kvm/dirty_bit.c
+>> +++ b/arch/arm64/kvm/dirty_bit.c
+>> @@ -98,3 +98,32 @@ void kvm_flush_hdbss_buffer(struct kvm_vcpu *vcpu)
+>>   	vcpu->arch.hdbss.hdbssprod_el2 = prod;
+>>   	isb();
+>>   }
+>> +
+>> +int kvm_handle_hdbss_fault(struct kvm_vcpu *vcpu)
+>> +{
+>> +	u64 prod;
+>> +	u64 fsc;
+>> +
+>> +	if (WARN_ON_ONCE(!system_supports_hdbss()))
+>> +		return -EFAULT;
+>> +
+>> +	if (WARN_ON_ONCE(!vcpu_hdbss_enabled(vcpu)))
+>> +		return -EFAULT;
+>> +
+>> +	prod = read_sysreg_s(SYS_HDBSSPROD_EL2);
+>> +	fsc = FIELD_GET(HDBSSPROD_EL2_FSC_MASK, prod);
+>> +
+>> +	if (fsc == HDBSSPROD_EL2_FSC_OK)
+>> +		/* Buffer full: the exit path drained it before handle_exit. */
+>> +		return 1;
+>> +
+>> +	if (fsc != HDBSSPROD_EL2_FSC_ExternalAbort &&
+>> +	    fsc != HDBSSPROD_EL2_FSC_GPF)
+>> +		WARN_ONCE(1,
+>> +			  "Unexpected HDBSS fault type, FSC: 0x%llx (prod=0x%llx, vcpu=%d)\n",
+>> +			  fsc, prod, vcpu->vcpu_id);
 > 
-> Existing OMFS media can still be accessed using an older kernel with OMFS
-> support.
+> Any reason for using if() before warn_once, given the first parameter is a
+> condition? I mean, why not use, instead:
 > 
-> [...]
+> +	WARN_ONCE(fsc != HDBSSPROD_EL2_FSC_ExternalAbort &&
+> +		  fsc != HDBSSPROD_EL2_FSC_GPF,
+> +		  "Unexpected HDBSS fault type, FSC: 0x%llx (prod=0x%llx, vcpu=%d)\n",
+> +		  fsc, prod, vcpu->vcpu_id);
+> 
 
-I agree. It's great to see that we are are able to shed a whole bunch of
-legacy tech.
+Right, this is a syntax style closer to the Linux kernel. I will modify
+it.
 
----
+>> +
+>> +	/* Clear FSC so hardware dirty state updates can resume. */
+>> +	write_sysreg_s(prod & ~HDBSSPROD_EL2_FSC_MASK, SYS_HDBSSPROD_EL2);
+>> +	return -EFAULT;
+>> +}
+>> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+>> index 85a98d2c23a9..7bf82d65041c 100644
+>> --- a/arch/arm64/kvm/mmu.c
+>> +++ b/arch/arm64/kvm/mmu.c
+>> @@ -15,6 +15,7 @@
+>>   #include <asm/pgalloc.h>
+>>   #include <asm/cacheflush.h>
+>>   #include <asm/kvm_arm.h>
+>> +#include <asm/kvm_dirty_bit.h>
+>>   #include <asm/kvm_mmu.h>
+>>   #include <asm/kvm_pgtable.h>
+>>   #include <asm/kvm_pkvm.h>
+>> @@ -2315,6 +2316,9 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
+>>
+>>   	is_iabt = kvm_vcpu_trap_is_iabt(vcpu);
+>>
+>> +	if (esr_iss2_is_hdbssf(esr))
+>> +		return kvm_handle_hdbss_fault(vcpu);
+>> +
+>>   	if (esr_fsc_is_translation_fault(esr)) {
+>>   		/* Beyond sanitised PARange (which is the IPA limit) */
+>>   		if (fault_ipa >= BIT_ULL(get_kvm_ipa_limit())) {
+> 
+> I did not get the criteria used to positioning it here:
+> Why placed before is_abt, if not using the result before returning?
+> What is the rationale to putting it here?
+> 
+> Thanks!
+> Leo
 
-Applied to the vfs-7.5.omfs branch of the vfs/vfs.git tree.
-Patches in the vfs-7.5.omfs branch should appear in linux-next soon.
+Ah, I'm sorry, there's no particular reason. I'll move it so it's placed
+before is_abt.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.5.omfs
-
-[1/1] omfs: remove the filesystem
-      https://git.kernel.org/vfs/vfs/c/b4d257187fe7
+Thanks!
+Tian
