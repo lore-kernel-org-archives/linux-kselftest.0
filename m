@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011838;
-	b=QGi6H0g+U/4ndEJur6fBi2JFM3bR4vnf6SBPdZjkj8hk60ZGoEsJdZ6E7R5F8tcpoKWa
-	 /tyRyLaNiu7n6LtBJN6rGibnLjQqKP++PBj/yRn4520lpzM0jFjxwOOo00il0SDvZDx1k
-	 4o2YckKjDd/sntJ+qEDFeyKH279WY6Yt6/EgrVYq7LwFyJmaHbIjFxoL/X+o5HUAQBkj2
-	 Hiekc/FjpdMk3LBtPsF6RyLCpMqAD7n7royyf6k3ipuNYeme5uL9LUw/bw0jlUHrcUaSg
-	 Sgb1c3yp9Bk9h8Wbz9Y6RE4ofU8+/a8BEVXJhJZo1iUdJ1upbsNL5zzaVMcHeQ9JXQQ==
+	t=1794011829;
+	b=lzW2spar0KRW82HmgQH0ZDIakL9IBqNlnqMn58NlAfiavg5Q45v0tIjHC3hmPc9hv8tr
+	 NWM0glRKgOKiR6M5uS7ETzkVWDYvSlTFSwEpcAn8oK0lCf2nRnwUI/t13ZWvI8PcJ40VG
+	 olLf2MHWWUWLY6Nqg9/ySKMJyMzxyQ4rbYcXmeMx6ULsRCe7kieZrz8jpiPR/cLdLX3H+
+	 JTM+X3njPlT5+nyktwkr6qTnKAGb/fuhE+0Q3YsP78fiQZ8VJlvZ8hVKS02jLzrOidjJI
+	 mOpEGPc2z4mj0k4FBPQIHmvr+vaL6vZNNxKEcAIu6+aPnN+5oDS9Lw86Xf4yUM+erdg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011838;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011829;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Zs1J/x6nfmV3dx/eHdCEN/mRYv0Hi+QZwL/OVF2OHBE=;
-	b=H2WnPd+umYoHbjRMV6obuW7KmB8mNlgqZ0ne2ilo0a5yUoILtPdvruMtqvisJqsqlKwT
-	 ubYXx6iyHNnOgjnnjbvY/ohAWvGocizxORqwFVQYHZbbd8WKVebwRpA9S0mz3hfFuab16
-	 C2zeOlU7cw985h9FzeDG3TYE/iIlxGexPNk16TSawjVGLRWy8iCkR6DuV5c+K5rBieM1I
-	 L8Lgxme6rOh9e9/wQgTBb3420qpUiH/JMCxbSW5RM/n5Ml8Z/1XwR/SwQUYPwrCt226I+
-	 Xp9PNHkg1+m1X2OTaPouV7wAeVX08AgQUs1fOtKB6yO2fpmNQIhz1/Wf1V65ZApRBsg==
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=U1Xg+Ovh6SABK55ACPtrHdOXD90IrQIkoxCH5viHnSQ=;
+	b=IqJWkfs/HBTkfYEvUPzYqX8m2Z7muiktz9Ic+CyKjE7BDdXcNvdhN57Xt7WJzCveiT+6
+	 KnT8xXhxRZ1rWEZczsmsyFyCnb1tZZW92BCz3hHj6i2KTpbYMzQjf1cKPQvsH97BdTHdO
+	 8uP+TWFnqV9wt0igpdOIFLCbrfLxrWOZF1UxwvasJ7xW7JK+JPe522kJYPiKwMPkL1DJm
+	 4+9+Au8yAfEkMjaxHcBkl8i2uJte5KIB9CjoulZWIfUucmdUk1mq2bHBXJAzbjtFs40ti
+	 v9MEU8lsOqJFfTbPlyVGBbqXEO3zA+EoX31nhlf98lzEYLYZX7bBRkesmH2iLzqoEZw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ieb+P2xG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kwO3yy+d;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655BE606A822;
-	Sat,  7 Nov 2026 00:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083E760A262E;
+	Sat,  7 Nov 2026 00:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ieb+P2xG
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kwO3yy+d
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011838;
-	b=g4hSPArBDnT/jney67n0J1t/Fbtz1sIexhNHL4FA/ltR+N1eazRRuuUxGVKnvNKFKE5Q
-	 hNDoB9kp0LaQcALLfEmwXi7mZ/qIMZ+1k+u8VsQYAdKZHqMa1VE8F4tcqEBsTU/I/tlec
-	 RZtzXwD/trH8VlFbVEAVvIKCHCwTbrSPrMNcFJwkIFkGeJ/7hX3iEMY30p/lCS3KSQmZP
-	 maq1I9OklQh/Tjv4Vl8SEcI1hCzVNKuB2Kn8BA1JVNh04fnzlZMT7hEhVmnugD9TNtfYI
-	 OVFGZBrG+qqpwD+OneiZx5Mi8+VuNlPoKsXkPVy2Mr+IWbQfTsVOiplV68lk5G8DJpw==
+	t=1794011828;
+	b=XMRKowyWMgLWEZmnbUUADVgocA9/c4gR2zKDICi+IGU+IWQPRsYimAJUhP+CgeIPQz52
+	 bbdIC6vkHFAgSEPd/LozGtyS6EibMutnBhmSXVgZUffaeq63lSQOAFxNZQa/oIn3YUL/x
+	 Zs+/zP/t1UBSxuQVF7dvqa2KhuJP1uoZCdbnuDgx0MRxkVLOx4gmSiH/wytJEq9zGUHf/
+	 lVtlanFHbRB7U0o/9GesqNWJH13Pmvz2IoYjn1Kk2tiqX2+2mfm2+tVdHESpBUFp0Xqts
+	 B07cgUwZA/d2gjSnieJNGNbjAcOAgp9buvpI+wIyG/3+I/3jF6+4AHkbVrJCSLZ6Mfw==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011838;
+	c=relaxed/relaxed; t=1794011828;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Zs1J/x6nfmV3dx/eHdCEN/mRYv0Hi+QZwL/OVF2OHBE=;
-	b=wUgxTJ7VW22WQ1KjJxU8xv8sYXDlQbWKTd59+MFCPYMmhcQiOaWNy+mVpqvnhPJrjoin
-	 xaOtNY6MG0T1A+8m7g9wRRwlPiBDlIClFjAFLZGjMyiuFXoXdA3dvBVg9kNYO5ejT8T9g
-	 y0WWdDQ5U2k5ikt6ybpknIxhOnsd4k+SVTIlhB1itYGviIdc78hLxjsH1l3+LBHPPkfgT
-	 Xq5smajz4qco+fPQpxqESnMm0T7+cRo52kSlaJOQn/NGwO7dX61+E1mR8Oo3ow0+MdwZ2
-	 wxeclurOeWODUsfpYF15CszyxTip1EKg/F6SyM8aOvkkScjB9Y2FFSnSnV0/0SYBPtA==
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=U1Xg+Ovh6SABK55ACPtrHdOXD90IrQIkoxCH5viHnSQ=;
+	b=ruDb9Sl5ebyFhGrVVaQJgDaGwuKpsF5n0yk08HD7nklnxKU/nGws8i8+k2Ra3HQ3I3xo
+	 RuDEMxqVrhzUkfx5n+oL16G4zdidCFDViHnjVI5l5FVMgQ1pSOu8vYSMLSDasYfj6Oq1D
+	 FtxmEKfsvAIOZFnRseLiIbSlAuCvVLY3tcFKtq8vfVrsFo1fcxR1XBp4tPWCvpByJTeoq
+	 LKU2fJ03y67d5bzo1969AoaUugaLXxzkM1ho2OS6dL26gC9XSp8gNGP4L96desbzTNke6
+	 GswPYpH0sM/FO7sJYz4gN1eYfWAdBkQF1UikhItetseuAJhCvdxdNQldUL2DnOzHdow==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E3C221F008BC;
-	Sat,  7 Nov 2026 00:37:12 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 879691F00922;
+	Sat,  7 Nov 2026 00:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011838;
-	bh=Zs1J/x6nfmV3dx/eHdCEN/mRYv0Hi+QZwL/OVF2OHBE=;
+	s=k20260515; t=1794011828;
+	bh=U1Xg+Ovh6SABK55ACPtrHdOXD90IrQIkoxCH5viHnSQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=ieb+P2xGQ6kamYKd4+tenquqlrTGuaSLKQlY4uw6J8rckIGGLk5ey3IKena50A7jJ
-	 A0e2nux8/sTNf0jZorwFGKdAy8YVWGhWc4N2wvjdyZtoZgaktWwjBFXVEzFv3qR9dN
-	 1fh2oJ90229fD92r5zPH3D92IYcdrqI6gb66u7wQRBnVD1yIw3EfjjlL18eCTsqajO
-	 dQ9qfzpMYgITlEJ/NKsQkpKfgeqKKUmmw6BFvy1KnC5WfxHBCjKiQ9cJmcoIME/GMK
-	 JQyaVUOBl/636TUTgWCF2pFfzD+cC2yWhxa90hK58oo6Jazwx0+lMOXNhRFpxOsBRX
-	 J1P4ZJPVmqTxA==
+	b=kwO3yy+dTQb5fpWMD6tGW89FR5gjzwDKZ3RVcPWrIfUXGwcBWgusNAHVnVwyKW058
+	 ghqY5RN1NInhvLD3gfLgmXY/326zHNpTiWD/JHNWkH4PN96R0i7QUt6/hRMxgykaex
+	 UI1eDR/rx5ltCZYEyytd/YQ+VJ3UXmhGF8MlyZ5Iwvk4VWGIDjRUn2wtA3YX+utC61
+	 LMLHyPCLLr5JcCd2OB4HEMqj0yjptyJraL7a+yb82tm+t09IyJCc4OtSSewcytLYRI
+	 BXBHR33xrTjpF7FfVRGUgv9ao51llPo+KVwZz98l1pGdYYZSUedDuwk/jmPNy9dng3
+	 zduz2aL3a4XZQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 4E83147A10;
-	Sat,  7 Nov 2026 00:36:57 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 7389C4796B;
+	Sat,  7 Nov 2026 00:36:54 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:39 -0800
-Subject: [PATCH RFC v3 65/88] vfio/pci: Revoke guest_memfd memory on BAR
- invalidation and reset
+Date: Fri, 06 Nov 2026 16:36:56 -0800
+Subject: [PATCH RFC v3 22/88] samples/kvm: Support marking page ranges
+ present or absent
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-65-8484dde66a7e@google.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261106-gmem-alternative-providers-v3-22-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,228 +106,217 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=7771;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011809; l=5672;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=g3NkV0PMjIPnPGwhZsAlobRqGmDhxygV0Omg1VEgfl4=;
- b=x0AjF2T9NT+QEEiAao5ICbuevp1PlS++gYajfqkdep24IiXXDURbfHVED4DDFk2qgccq23/84
- Hl46rCqEmiJD0groeAVC0Rygr97P5L8AyZHy2WA1gx7BSh3dr38vIwq
+ bh=2aAtvWaVMFLs1DyMSWgKDsrYTk08ExBkcEnGdMCup6U=;
+ b=FN3YnHse9NNd00ZJ6tUEz14740WtwjgOvcKLw/xxizDGT5VgohtqpKNVY2qr8NW56Ydpsd95G
+ R5y1ppau9KbCSiMoTgYL1snTpXD18XnCOj4rMX9lX962RMBGnVl6nTL
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
  auth_id=649
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
-Content-Transfer-Encoding: 7bit
 
-From: Ackerley Tng <ackerleytng@google.com>
+From: Fred Griffoul <fgriffo@amazon.co.uk>
 
-When PCI hardware events occur (such as clearing PCI_COMMAND_MEMORY,
-entering low-power D3, bus resets, or function-level resets), physical
-BAR access is invalidated.
+Support the MP_SET_PRESENT ioctl on provider files to allow userspace to
+dynamically mark page-aligned ranges of a provider file as present or
+absent.
 
-In vfio_pci_zap_bars(), if guest_memfd memory was marked available,
-mark the BARs unavailable and invoke vfio_device_gmem_revoke() for each
-mappable standard PCI BAR to revoke host userspace mappings and guest
-stage-2 SPTEs before hardware state is modified.
+Track absent pages using a zero-initialized bitmap so that the entire
+physical page range starts in the present state upon creation. Serialize
+bitmap updates with a per-file mutex so concurrent ioctl calls do not race
+when modifying page presence state.
 
-When memory decoding is subsequently re-enabled and power state is
-restored to D0 under the device memory lock, mark BARs available again
-so future guest_memfd faults can proceed.
-
+Co-developed-by: Ackerley Tng <ackerleytng@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
 ---
- drivers/vfio/pci/vfio_pci_config.c | 16 ++++++++++----
- drivers/vfio/pci/vfio_pci_core.c   | 44 ++++++++++++++++++++++++++++++--------
- include/linux/vfio_pci_core.h      | 22 +++++++++++++++++++
- 3 files changed, 69 insertions(+), 13 deletions(-)
+ samples/kvm/memory_provider.c | 83 ++++++++++++++++++++++++++++++++++++++++++-
+ samples/kvm/memory_provider.h | 15 ++++++++
+ 2 files changed, 97 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-index 9914f3ac69aef..fae3980fb8d9c 100644
---- a/drivers/vfio/pci/vfio_pci_config.c
-+++ b/drivers/vfio/pci/vfio_pci_config.c
-@@ -630,8 +630,10 @@ static int vfio_basic_config_write(struct vfio_pci_core_device *vdev, int pos,
- 		*virt_cmd &= cpu_to_le16(~mask);
- 		*virt_cmd |= cpu_to_le16(new_cmd & mask);
+diff --git a/samples/kvm/memory_provider.c b/samples/kvm/memory_provider.c
+index e89ce55a357c0..6b8364afc5ed9 100644
+--- a/samples/kvm/memory_provider.c
++++ b/samples/kvm/memory_provider.c
+@@ -6,18 +6,21 @@
+  *
+  * The control device /dev/memory_provider creates provider files.
+  * Each file allocates its own contiguous memory from alloc_contig_pages().
++ * Pages can be dynamically marked present or absent.
+  * See memory_provider.h.
+  *
+  * Confidential VMs are not supported.
+  */
  
--		if (__vfio_pci_memory_enabled(vdev))
-+		if (__vfio_pci_memory_enabled(vdev)) {
- 			vfio_pci_dma_buf_move(vdev, false);
-+			vfio_pci_set_bars_available(vdev, true);
-+		}
- 		up_write(&vdev->memory_lock);
- 	}
+ #include <linux/anon_inodes.h>
++#include <linux/bitmap.h>
+ #include <linux/file.h>
+ #include <linux/fs.h>
+ #include <linux/gfp.h>
+ #include <linux/miscdevice.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
  
-@@ -720,8 +722,10 @@ static void vfio_lock_and_set_power_state(struct vfio_pci_core_device *vdev,
- 	}
+@@ -30,21 +33,88 @@ struct mp_info {
+ 	unsigned long base_pfn;
+ 	unsigned long npages;
+ 	struct page *cma_pages;		/* from alloc_contig_pages() */
++
++	struct mutex lock;		/* the bitmaps */
++	unsigned long *absent;		/* taken away by MP_SET_PRESENT */
+ };
  
- 	vfio_pci_set_power_state(vdev, state);
--	if (__vfio_pci_memory_enabled(vdev))
-+	if (__vfio_pci_memory_enabled(vdev)) {
- 		vfio_pci_dma_buf_move(vdev, false);
-+		vfio_pci_set_bars_available(vdev, true);
-+	}
- 	up_write(&vdev->memory_lock);
++/* Byte range [offset, offset + len) of @info as page indices. */
++static int mp_range(struct mp_info *info, u64 offset, u64 len,
++		    unsigned long *start, unsigned long *end)
++{
++	if (!len || !PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
++		return -EINVAL;
++
++	*start = offset >> PAGE_SHIFT;
++	*end = *start + (len >> PAGE_SHIFT);
++
++	if (*end > info->npages || *end < *start)
++		return -EINVAL;
++
++	return 0;
++}
++
++static void mp_set_present(struct mp_info *info, unsigned long start,
++			   unsigned long end, bool present)
++{
++	mutex_lock(&info->lock);
++
++	if (present)
++		bitmap_clear(info->absent, start, end - start);
++	else
++		bitmap_set(info->absent, start, end - start);
++
++	mutex_unlock(&info->lock);
++}
++
+ static int mp_file_release(struct inode *inode, struct file *file)
+ {
+ 	struct mp_info *info = file->private_data;
+ 
+ 	if (info->cma_pages)
+ 		free_contig_range(info->base_pfn, info->npages);
++	bitmap_free(info->absent);
+ 	kfree(info);
+ 	return 0;
  }
  
-@@ -911,8 +915,10 @@ static int vfio_exp_config_write(struct vfio_pci_core_device *vdev, int pos,
- 			vfio_pci_zap_and_down_write_memory_lock(vdev);
- 			vfio_pci_dma_buf_move(vdev, true);
- 			pci_try_reset_function(vdev->pdev);
--			if (__vfio_pci_memory_enabled(vdev))
-+			if (__vfio_pci_memory_enabled(vdev)) {
- 				vfio_pci_dma_buf_move(vdev, false);
-+				vfio_pci_set_bars_available(vdev, true);
-+			}
- 			up_write(&vdev->memory_lock);
- 		}
- 	}
-@@ -996,8 +1002,10 @@ static int vfio_af_config_write(struct vfio_pci_core_device *vdev, int pos,
- 			vfio_pci_zap_and_down_write_memory_lock(vdev);
- 			vfio_pci_dma_buf_move(vdev, true);
- 			pci_try_reset_function(vdev->pdev);
--			if (__vfio_pci_memory_enabled(vdev))
-+			if (__vfio_pci_memory_enabled(vdev)) {
- 				vfio_pci_dma_buf_move(vdev, false);
-+				vfio_pci_set_bars_available(vdev, true);
-+			}
- 			up_write(&vdev->memory_lock);
- 		}
- 	}
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index 894b1332f8a0c..2b29d0ec6a0c9 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -464,8 +464,10 @@ static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
- 	 */
- 	down_write(&vdev->memory_lock);
- 	__vfio_pci_runtime_pm_exit(vdev);
--	if (__vfio_pci_memory_enabled(vdev))
-+	if (__vfio_pci_memory_enabled(vdev)) {
- 		vfio_pci_dma_buf_move(vdev, false);
-+		vfio_pci_set_bars_available(vdev, true);
++static long mp_file_set_present(struct mp_info *info, void __user *uarg)
++{
++	struct mp_set_present sp;
++	unsigned long start, end;
++	int ret;
++
++	if (copy_from_user(&sp, uarg, sizeof(sp)))
++		return -EFAULT;
++	if (sp.value > 1 || sp.pad)
++		return -EINVAL;
++
++	ret = mp_range(info, sp.offset, sp.len, &start, &end);
++	if (!ret)
++		mp_set_present(info, start, end, sp.value);
++
++	return ret;
++}
++
++static long mp_file_ioctl(struct file *file, unsigned int cmd,
++			  unsigned long arg)
++{
++	struct mp_info *info = file->private_data;
++	void __user *uarg = (void __user *)arg;
++
++	switch (cmd) {
++	case MP_SET_PRESENT:
++		return mp_file_set_present(info, uarg);
++	default:
++		return -ENOTTY;
 +	}
- 	up_write(&vdev->memory_lock);
- }
++}
++
+ static const struct file_operations mp_file_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.release	= mp_file_release,
++	.unlocked_ioctl	= mp_file_ioctl,
++	.compat_ioctl	= compat_ptr_ioctl,
+ };
  
-@@ -1337,8 +1339,10 @@ static int vfio_pci_ioctl_reset(struct vfio_pci_core_device *vdev,
+ static long mp_ctl_new_file(void __user *uarg)
+@@ -64,21 +134,30 @@ static long mp_ctl_new_file(void __user *uarg)
+ 		return -EINVAL;
  
- 	vfio_pci_dma_buf_move(vdev, true);
- 	ret = pci_try_reset_function(vdev->pdev);
--	if (__vfio_pci_memory_enabled(vdev))
-+	if (__vfio_pci_memory_enabled(vdev)) {
- 		vfio_pci_dma_buf_move(vdev, false);
-+		vfio_pci_set_bars_available(vdev, true);
+ 	npages = nf.size >> PAGE_SHIFT;
++	if (npages > KMALLOC_MAX_SIZE * BITS_PER_BYTE)
++		return -EINVAL;
+ 
+ 	info = kzalloc_obj(*info);
+ 	if (!info)
+ 		return -ENOMEM;
+ 
++	info->absent = bitmap_zalloc(npages, GFP_KERNEL);
++	if (!info->absent) {
++		ret = -ENOMEM;
++		goto err_free_info;
 +	}
- 	up_write(&vdev->memory_lock);
++
+ 	pages = alloc_contig_pages(npages, GFP_KERNEL | __GFP_ZERO,
+ 				   numa_node_id(), NULL);
+ 	if (!pages) {
+ 		ret = -ENOMEM;
+-		goto err_free_info;
++		goto err_free_absent;
+ 	}
  
+ 	info->cma_pages = pages;
+ 	info->base_pfn = page_to_pfn(pages);
+ 	info->npages = npages;
++	mutex_init(&info->lock);
+ 
+ 	fd = get_unused_fd_flags(O_CLOEXEC);
+ 	if (fd < 0) {
+@@ -99,6 +178,8 @@ static long mp_ctl_new_file(void __user *uarg)
+ 
+ err_free_pages:
+ 	free_contig_range(page_to_pfn(pages), npages);
++err_free_absent:
++	bitmap_free(info->absent);
+ err_free_info:
+ 	kfree(info);
  	return ret;
-@@ -1727,8 +1731,31 @@ static void vfio_pci_zap_bars(struct vfio_pci_core_device *vdev)
- 	loff_t start = VFIO_PCI_INDEX_TO_OFFSET(VFIO_PCI_BAR0_REGION_INDEX);
- 	loff_t end = VFIO_PCI_INDEX_TO_OFFSET(VFIO_PCI_ROM_REGION_INDEX);
- 	loff_t len = end - start;
-+	int i;
+diff --git a/samples/kvm/memory_provider.h b/samples/kvm/memory_provider.h
+index 0bd9e250aeaf5..de07ffa482283 100644
+--- a/samples/kvm/memory_provider.h
++++ b/samples/kvm/memory_provider.h
+@@ -27,4 +27,19 @@ struct mp_new_file {
+ #define MP_NEW_FILE \
+ 	_IOW(MP_IOCTL_BASE, 5, struct mp_new_file)
  
- 	unmap_mapping_range(core_vdev->inode->i_mapping, start, len, true);
++/*
++ * ioctl on a provider fd: SET_PRESENT on [@offset, @offset + @len).
++ * @value is the present value (1 = present, 0 = absent), and @offset
++ * and @len are a byte range within the file, page aligned.
++ */
++struct mp_set_present {
++	__u32 value;
++	__u32 pad;
++	__u64 offset;	/* bytes into the file, page aligned */
++	__u64 len;	/* bytes, page aligned */
++};
 +
-+#ifdef CONFIG_KVM_GUEST_MEMFD
-+	if (vfio_pci_get_bars_available(vdev)) {
-+		vfio_pci_set_bars_available(vdev, false);
++#define MP_SET_PRESENT \
++	_IOW(MP_IOCTL_BASE, 12, struct mp_set_present)
 +
-+		for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-+			pgoff_t gmem_start;
-+			unsigned long pfn;
-+			size_t nr_pages;
-+
-+			if (!vdev->bar_mmap_supported[i])
-+				continue;
-+
-+			gmem_start = VFIO_PCI_INDEX_TO_OFFSET(i) >> PAGE_SHIFT;
-+			nr_pages = pci_resource_len(vdev->pdev, i) >> PAGE_SHIFT;
-+			pfn = pci_resource_start(vdev->pdev, i) >> PAGE_SHIFT;
-+
-+			vfio_device_gmem_revoke(&vdev->vdev, gmem_start,
-+						nr_pages, &pfn);
-+		}
-+	}
-+#endif
- }
- 
- void vfio_pci_zap_and_down_write_memory_lock(struct vfio_pci_core_device *vdev)
-@@ -2621,8 +2648,10 @@ static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
- err_undo:
- 	list_for_each_entry_from_reverse(vdev, &dev_set->device_list,
- 					 vdev.dev_set_list) {
--		if (vdev->vdev.open_count && __vfio_pci_memory_enabled(vdev))
-+		if (vdev->vdev.open_count && __vfio_pci_memory_enabled(vdev)) {
- 			vfio_pci_dma_buf_move(vdev, false);
-+			vfio_pci_set_bars_available(vdev, true);
-+		}
- 		up_write(&vdev->memory_lock);
- 	}
- 
-@@ -2709,9 +2738,7 @@ int vfio_pci_core_gmem_attach(struct vfio_device *core_vdev)
- 
- 	bars_available = __vfio_pci_memory_enabled(vdev) &&
- 			 !vdev->pm_runtime_engaged;
--
--	/* Pairs with smp_load_acquire() in provider operations */
--	smp_store_release(&vdev->bars_available, bars_available);
-+	vfio_pci_set_bars_available(vdev, bars_available);
- 
- 	up_write(&vdev->memory_lock);
- 
-@@ -2726,8 +2753,7 @@ void vfio_pci_core_gmem_release(struct vfio_device *core_vdev)
- 
- 	down_write(&vdev->memory_lock);
- 
--	/* Pairs with smp_load_acquire() in provider operations */
--	smp_store_release(&vdev->bars_available, false);
-+	vfio_pci_set_bars_available(vdev, false);
- 
- 	up_write(&vdev->memory_lock);
- }
-@@ -2747,7 +2773,7 @@ int vfio_pci_core_gmem_get_pfn(struct vfio_device *core_vdev, pgoff_t index,
- 	 * Lockless check: if memory decoding is disabled or the device is in
- 	 * low-power D3, fail immediately without blocking on memory_lock.
- 	 */
--	if (!smp_load_acquire(&vdev->bars_available))
-+	if (!vfio_pci_get_bars_available(vdev))
- 		return -EFAULT;
- 
- 	bar = index >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index 6ff67e38eaf84..af74766d7c90a 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -178,6 +178,28 @@ int vfio_pci_core_gmem_get_pfn(struct vfio_device *core_vdev, pgoff_t index,
- int vfio_pci_core_gmem_check_set_attributes(struct vfio_device *core_vdev,
- 					    pgoff_t index, size_t nr_pages,
- 					    u64 attributes);
-+static inline void vfio_pci_set_bars_available(struct vfio_pci_core_device *vdev,
-+					       bool available)
-+{
-+	/* Pairs with smp_load_acquire() in provider operations */
-+	smp_store_release(&vdev->bars_available, available);
-+}
-+
-+static inline bool vfio_pci_get_bars_available(struct vfio_pci_core_device *vdev)
-+{
-+	/* Pairs with smp_store_release() under memory_lock */
-+	return smp_load_acquire(&vdev->bars_available);
-+}
-+#else
-+static inline void vfio_pci_set_bars_available(struct vfio_pci_core_device *vdev,
-+					       bool available)
-+{
-+}
-+
-+static inline bool vfio_pci_get_bars_available(struct vfio_pci_core_device *vdev)
-+{
-+	return false;
-+}
- #endif
- extern const struct pci_error_handlers vfio_pci_core_err_handlers;
- int vfio_pci_core_sriov_configure(struct vfio_pci_core_device *vdev,
+ #endif /* _SAMPLES_KVM_MEMORY_PROVIDER_H */
 
 -- 
 2.56.0.455.g6c5a503b38-goog
