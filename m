@@ -1,103 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.82
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794080058;
-	b=Bh2+3X3o/5pVBK45pbVcEaVtwhQOTYqerHQuIM0+OYsL6VqMFJp3JyRZDyitdcc+Ygou
-	 uHvBBZbXNfOZIuwH6kGvB259cy0OM8X2AVI5jpCoDEbKdySkI1c+Cbf20j0UQAEKXf969
-	 fUFOz2BQf5MFCyO9o1VAJmxGf22OHVOsHKthPj5Uh2LS73q/8Re0hPna4JdQMcXbnIGYd
-	 igB8sgTTOT75aKHnmTj8ccIxCXteHuKNtgrttziw3S/K4k1O6/Cbm4CnMVcTIliWCu3fv
-	 d3KCoBaLxyIohKDcYgJNTB4XgALOqYnLwZ9cqp285b2v9Q84aBB7eM+iOIN63BT/Upg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794080058;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=C2mc20T7WfwNWDWve4U8qj0WFgpO5sQP4D0U6/23ozU=;
-	b=MermuvuSN+KJPDbTqL265SyRgmfqeDMcmDbFx52JpfNNp4KwrAsTXC8A1nAy/oG3VuUD
-	 p40/op/5BxmRrVZsHdf8oGWMVneChISvFKd24884KlY+ktw8/KsdTcE7KDYQ1pAAYdKZz
-	 yMjRc2rSMp1sOkKLcCFz48C1afyonRea3MRMx7ut5k+aW28IDkYr+5M9lOsQsouIC3J8b
-	 y1tdGipw1Zp1qS7fwgxq+pXcMgiKDMNN9cdpaJaefGkebvve71ulWWSVOxPsRDzoTYEWz
-	 E1+TzsrGw38iXWiG3xOnFZyES5zCMbhea5r7ut+wWf3DNlrDN0tH/02RcXPFK56JZ5w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=dVCzEI05;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.82
-Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020082.outbound.protection.outlook.com [52.101.189.82])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794080896;
+	b=e+X8zRjHSZ4/YUiiy6toyq5/iY/lluENolgZEojaMG8LavQZqrgzIFYDJ7jITJNu6Fjo
+	 y3t+mcG7OJV/iUgjqCOqw8qabVuxGbxMPqgbxSQFLUMfFjoR67sRnRbqGrGmKfS/kCSnM
+	 J2xiP5wWDyXob+/5H/UbKQXPkyyX8EW4Ye6nUJShamLIu7NZDqB6tS72B2B3NVLNfXYl4
+	 Fql3WJhrZWMpmNAzAyVm5bLaEAnTp0fBsfJ9+ByRa3eey2kWIyS+GZm9lMtJoSBu8BmGJ
+	 DjCDIb8+Z7fbBEPn0J8gKnOzBlSfb3utiSmndIJ1DrQ835rmzGAROMwlG3Df05RCRhg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794080896;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=PgfupnOI9y63nTPBwUuVBVA9ftyhpGgpL4SadbS98oM=;
+	b=vESpW8MByV/roQP+nP5rLIpnGFqhBkrWUdCj1rC3arNAk+LAuks4X1gkjNsz8rxtGzI/
+	 kgHu7yQRZmuyQ1EISHPILQJfdCaPrHGQLb5vIvckYXuKr5gsFVExH5AQZLlb+XMGswBC/
+	 kAGNSwENxCPeDNzyxHzywzruBlcCUT0u9RxLpAKii1ttTJL9WwUUra/MIBGRNLJ8ePflC
+	 6SLr2P6eqN5oVMEHbL8QIR2nKwOOn+pRpX8DI9dwF5kBtu5l+7Lbw6E7GB98HDf6JK2k0
+	 k+Rd245C276ZV2J49ngpaD/VdqKsN2vlYkl5/uu2TsofNBA3/OnmUpERrFc9qMdWskA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="A97LRtV/";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9636C606A32F;
-	Sat,  7 Nov 2026 19:34:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9636C606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DE9606A32D;
+	Sat,  7 Nov 2026 19:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=dVCzEI05
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UtEG5bs2VtUQKREWHFXiWH8fYd1VibwyzNtvzLAekxf6YHsyeZR5PerRDDFEif6GVZ7pbjVJmyJRXuXdCFxeD2OrfSiceDnZdp4L4eRODzAfrL6sYMo9NFa+K4VLU90PZyiS4csCkmLuuqWBA+IDDElcBMcbwZWWYitIruWe+evXLk/XhU1vjqmrBxrrFUNH3oUSvcx/JrfKdMf9TvTkjLPmvBccHjCdwXWzBFb7c2lz8FBy27tmrBEyMiz69bz41dqmZ8gFIaqVUARI5v9VyEtYXl5tJyBUAMLf6cY/2dcinxKz2uhv69yU/fr0srjXh7cepvJhnrid1QC7JD7wfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C2mc20T7WfwNWDWve4U8qj0WFgpO5sQP4D0U6/23ozU=;
- b=rbWfvkB1G7SFmBajjh2zWIyG3Z81yypQbyWazGcf4EQITu6KI3t44ZG2zIsc6IyxfZo24E797bKc2P/fAKg+FfOIMu8KSefspc+GL5UYuwI+uZsTZTXItXvYKnb2sXooVqju/hSP1HH1OZyLKQhaHfhBDXuXE3yTEKpX74TlQsZlFpewMTXRnqhF4oYVSMSFcQ6md9/v0Ydk9tzCBhwRsOihLc2MVx8CMQYe7oGGsj9RIMuyjiIHdResSxEQi4h91q1GJ0D0i7xPGfChfGzhsG8Mxrg36IUFIGDsLaHCeudGVGjMLlpralNuV4NagPAH7R7mBpwWrNAnb9ocsc7gMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C2mc20T7WfwNWDWve4U8qj0WFgpO5sQP4D0U6/23ozU=;
- b=dVCzEI05fbDsUKrz30m6CqzTCbEHdbQJpUXlTZzOSWn7LPfTa9601oCQRoBX9FHEStYLZD/Fcy8JwhUiGgOS4u65UCL8Vbmay7gYLjwzp+NRrb+z43CZJIkzE1i2AMkODAK+s8+FE3yeSijD+foScFqZ/bYVDQpX2h18P5ortJgGuZBpogmWB2U9N36zMXQoZHXMtVnqgRIaSIbcC8lv/4BtFE7KHOQZckz+r9wzq6tLPTrla0YY0DJcl8pPIVG0YkHbe2KNXtJwokKCQzMjQGY337FuoD0QadjWMPqaWnjmpyJ+PfqOHlj+AB+WFCf/0X7IQoGNo8mlomTZRZm+rw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YT5PR01MB842448.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1b6::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.11; Sat, 7 Nov
- 2026 19:34:14 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0592.010; Sat, 7 Nov 2026
- 19:34:14 +0000
-Message-ID: <2a786b46-e935-4269-9bdc-edac43521a80@efficios.com>
-Date: Sat, 7 Nov 2026 14:34:12 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] locking/rtmutex: Stop spinning on the owner when the
- waiter is woken
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, tglx@kernel.org, mingo@redhat.com,
- linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
- longman@redhat.com, bigeasy@linutronix.de, clrkwllms@kernel.org,
- dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
- shuah@kernel.org, juri.lelli@redhat.com, linux-rt-devel@lists.linux.dev,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-References: <20261106235931.1478800-1-mathieu.desnoyers@efficios.com>
- <20261106235931.1478800-2-mathieu.desnoyers@efficios.com>
- <20261107002927.3cbad7ff@fedora>
- <20261107104329.GA2668564@noisy.programming.kicks-ass.net>
- <c77635b1-9c24-459a-b75c-82cbfb67185f@efficios.com>
- <20261107123642.149677cf@fedora>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <20261107123642.149677cf@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBP288CA0030.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c01:9d::28) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A97LRtV/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5808D1F0089F;
+	Sat,  7 Nov 2026 19:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794080896;
+	bh=PgfupnOI9y63nTPBwUuVBVA9ftyhpGgpL4SadbS98oM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=A97LRtV/UUHCQnkUrvGqtIgzlx3uxP7kbRD8h5sUFLlcyZ7oYisz4YMCY6RSdd6Sm
+	 aGMqDDuK6P+5x9Seobd4qsGICa4HESW+Cz/F1qLcDQzVfMsYE6L5a7c8cXt5TqjdlB
+	 4dhzoAL1Y52RPCY0ERC7LzQSxATD+urOPRwyUDyWq3EdlK73K/izVvC8jaUQ3IJSpR
+	 +0HtFI4/RzJ8QAlpH5i5TJbibWEyZoUuLHW3ITklZGXyjWFSogroDc/g9fHJqQeoAZ
+	 ZVGRJlud74lr1UcNyWAVexAmqn9fxBB6cWjp08cpvKEPWyNrZ3ikNWMFnA5vG+z/3y
+	 PVLi6hgK3gFzw==
+Message-ID: <fd2faf21-ce9c-496a-9bd5-4d8334cf5f13@kernel.org>
+Date: Sat, 7 Nov 2026 20:48:06 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,149 +51,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT5PR01MB842448:EE_
-X-MS-Office365-Filtering-Correlation-Id: d8f76e0c-22a3-4c53-6dbc-08df3d061acd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|7416014|1800799024|366016|261026140227099003|4143699003|261022075727099003|56012099006|261022105027099003|261021121427099003|261013131602099003|261021123027099003|261102123227099003|261026121527099003|261028144727099003|18002099003|22082099003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	dERBWBNA3TeJ4PA8tr2h9Ich35US2TmeTk6e/K7RfoN5R78FnzoHua/H6lGidtlt7yMkWi82/uTrFIdl4BCMQqP6p/jjTph27FVCqCOSHPtoWQHvSEXrmsSNn+jGRrQlIoHhwqKbul5nN8Q1fAKbLzrzDURaEDMcCav1CQ8Nij3+7hUHn702i/Ps51GXL61rGx3RulxneAYKijWFN7tKalnHd+SECWDp1zkkdeg4Nv6Tcg5633l8O8sFxMtJNb81tJS7CQic+Uyu5VZqpexlk4IesYd+KM/DaH32JElpnKZkx2uA6QnXSVJdJJn+7pvFIRnxHwXjR3JTZqzb7mlGmjZ1VsTlHSy7/QAyiBO6SvmJhK5iKgL64Alk5r/9zyr6royWrBOhyWuIeyE6luxBaZtouSmNSD0yq1Yz018N/r7WTfMLnOfl3y4YODPZK4WkFmNEAVYU3K/hTBQ5Nd4HIikBDoPQ3rhOfoc1/bdXQ428Be7ycAZXQTILb+3dc2gsdR32lG2vV8fRAwWS7fM+loEEqnKkgZANwCD+7F/e6PjBFpBln84p+251MlAt/J2FsZB45/RNpw6udFqUFAtkNL1epDA7nIGdx2ZMMTKawyg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(7416014)(1800799024)(366016)(261026140227099003)(4143699003)(261022075727099003)(56012099006)(261022105027099003)(261021121427099003)(261013131602099003)(261021123027099003)(261102123227099003)(261026121527099003)(261028144727099003)(18002099003)(22082099003)(10067099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M0JjOTd0YnpvY2VtOTJhc3EvcXZINVd2M1RMelJYejRza0ZUWWJXVTB5THc2?=
- =?utf-8?B?WVdRVHVWMDJackZLdlluaW5ucFUyc1c0d1FmdjlUa3lCQ1NFaGpnVHNyQndK?=
- =?utf-8?B?d0pXNk54REtnbDFYRWltUkJHTHd2UU5YN1BTNHAzb1ZKVG1ZbTIzSFJSN1lY?=
- =?utf-8?B?NGJtQ0g0S1hWQWZVRG8zUEdLNjc0WVNvZjNQWVRkRS9FUjF3aW0yREYvcGRl?=
- =?utf-8?B?UWw3YWg3eWcvWG1GZzIzTU5PeHB6aTFYWlRNZ1h1WXFvUjNZMVZHajZvVUEy?=
- =?utf-8?B?UjgrdExFY2h4SS95bWFZU2RWVFdwRmU3RVFqcHhMTWZtNDNVNDZDczhoSHMr?=
- =?utf-8?B?MWNVcWVhTExVYVZlYjJuaVdzaXpydXZFOW1QY1l6QnJ1cXc1cTRnOU9nYjhK?=
- =?utf-8?B?d1p2UDdkWGsrb3Y3dnQ4NGgyaHdGcHg0SlowaWJsTXpvOG9mbmdTTXFxb0Ji?=
- =?utf-8?B?emJ0TG5BU2xpckZ4TzloZFFQZTV1RUx1M1RMbUl3YS9aeVlLaE9ZUlRyMzM0?=
- =?utf-8?B?QnBaVTNVQ3ArMmo1a0oyeUJrMmlHZldTb1BQRVNOZFNva1VKSEdXdVVaUjJn?=
- =?utf-8?B?V01xRTFJZ2MreWdodEs3aS9HdGZoRnNRS2Q0Yk9IUW1OR0Z5akQ3ZVRYRVFs?=
- =?utf-8?B?eWJsWjQ4Sm5HKytyM1ljMElCYkJzaXVmcHVDenVLVlY5QlluWUIwdWQ4TVZC?=
- =?utf-8?B?STEvRWJQcG80bHJ3V1dvUGVLQ0MwdEFFMllRZWZOSGNRMHVrclhiZERIaUJ0?=
- =?utf-8?B?NnNYQ2FSRTZVU0c0T3Nhc0FzcS93d2xWblRlY0V4d25mK0p5MmtLWUN0Qkcr?=
- =?utf-8?B?Y1RWeUtnNHE1bUo2MUlIRlkrdEc1QlhmTTVVTGJ0WGFvRFoyd1BCeXVLNjVl?=
- =?utf-8?B?TzUzdkZzdHh6d0k4WHRLdmhwZGZtb2c4c2taYnl1bE54d2ZqWlF1TVRBU1Qw?=
- =?utf-8?B?WEJVV1NzaFhMdzZRK1pKYzlOOTJOd2dLUFBFcTZvQ2FMZllHYjFaYVdlY0o1?=
- =?utf-8?B?MlEvRWpGZmxFRW9makMyOHVOTSs2K2p0S25iMG90NEJSaDEzdU9yeUQxRGhD?=
- =?utf-8?B?ZXhMZmxGcEJtd0NNR21DS1RaNlNHVEFHc0VZWEFaejhPUTdjQURBTXcxb2dG?=
- =?utf-8?B?TmhsZDVKQU55WlliZnVEUUxkSDNsNzVhY2kxVytFbVBzT2pkejJHR3YyYzdB?=
- =?utf-8?B?WlBFL2xQWVBpZUt1R01MdnRIR05WdzBwNHh3bXlheGlJYVREL3lRM25pcUox?=
- =?utf-8?B?cjJEWlpWRE9wcDFYZ083djN1TmV6aHBTd0JsRnltdEwzK1dLWUFvSC81WFVR?=
- =?utf-8?B?bWthRkxJL2RmVldjNHF1bmRLU3pXQjhnaWVRalVhbi8yKzJrSUtFVWlrbFlr?=
- =?utf-8?B?MHp5VzZqclFMbUNqZUlra1JtdG4wdndYWlJ0T0NjTDBNS053L1ZQR1NycGo4?=
- =?utf-8?B?eHAwTkpCUWc1aW83UlFoZkVjdmhuWG5Bb3Z6S092ZzZUNXdVR3JvcHYxTjlJ?=
- =?utf-8?B?ZjR6SjVHRUVBTVdxMmJGWmhtS1VtZitqU00vdkpaNUhKbU1WbVIrYUxvZ3gw?=
- =?utf-8?B?TlNFZnNwQnVsTzNYYkU4bFB6VGVHNElXa2E2U1hDM2gzZUFNWVZkc1hSckVD?=
- =?utf-8?B?N0NaNDhjSFRnSzJOSEhVSk90NWNkQXFHbGdIRnR1MEkwZ1BqeHRsa1NlOXI2?=
- =?utf-8?B?SVJ3Vy90UkVySzV4WDRvbkl6Y0lOTTYyVE5aOHVtTU54emRDdTZhRXVZOG1Q?=
- =?utf-8?B?VGtnVWJ2ckg5eGZqQUZVWXdzZXdyK1Yxd1NIK1BpbmFKL0h2WFZyaVkxNkR5?=
- =?utf-8?B?amdndnBNVkxpekxDQ3NEdUsraG9VaVFMVE9Ud3Zoc21lczFhL0p2eitTR1M2?=
- =?utf-8?B?SzZVeFJNRGJpYTZud0JtR0xYY2d1azNjVXI3eE5KakViZ1VhL1ppaitRVHBp?=
- =?utf-8?B?NzJnTFV2aTRqM3VzOTNRbHBsaU9kbEFLSGE2dTZiTlhPejBpaDdpMzl2NGRy?=
- =?utf-8?B?Mit3bXVEdWpwTDJGL2NqOXQxcUVZVlo1M2MwZWxHWURiOEtmY2s1OFRwUlBz?=
- =?utf-8?B?dzAzbHg4UUZHTWpoaDRBcnJTVUc1ODJrQkl3UXJNd0VySnBCMGEyaXNUTzlk?=
- =?utf-8?B?aktNRzNqMGt0VFg5VWkwS3FvYUlraVVHeWtGVGhUU3JIZVRaUUlQNkNkMTQv?=
- =?utf-8?B?dUZJTXZ1eXJjdzJkaGZ6dFMzQ2Y3WWJ3T1JZSEV0bndJNlFRZjRqVXFueXA1?=
- =?utf-8?B?Z3VrbFRrU01mS2FOMkN1R3IvVVQ1MlBwRGRodzJBdUxCWTljUmJXQVY2VHp3?=
- =?utf-8?B?L09Nbk11NEsxSjR2QzNUV0lqYnlodzUxbk1XVFlKUUlYSGdiYUxNUHVVdndE?=
- =?utf-8?Q?k/t4KUZn7rvtM2LU=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8f76e0c-22a3-4c53-6dbc-08df3d061acd
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2026 19:34:14.0052
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aejBqTmOV7M6geACYGPw+sIsRhAF0MCbGy4BrgQ3SLzuuBEwjRA+CSUMKYlEcuaY7ElkimFeR30wZi6U/GlEeo9aGaQJ6wMx6lXwQFNVwCk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT5PR01MB842448
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] docs/mm: ksm: describe how smart scan picks the
+ scans to skip
+To: Qiliang Yuan <odys.yuan@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Xu Xin <xu.xin@linux.dev>,
+ Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
+ <20261107-bug-mm-ksm-smart-scan-align-skips-v3-2-16d5ce8b5fd6@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-2-16d5ce8b5fd6@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2026-11-07 12:36, Steven Rostedt wrote:
-[...]
-> Still way too verbose for the fix. It makes it sound more complicated
-> than it is.
+On 11/7/26 17:57, Qiliang Yuan wrote:
+> Documentation/mm/ksm.rst covers the stable tree and its reverse mapping,
+> and Documentation/admin-guide/mm/ksm.rst only says that smart scan skips
+> pages KSM has failed to merge before.
 > 
->    locking/rtmutex: Stop spinning on the owner when the waiter is woken
+> Neither says how often an unmerged page is looked at, or that the scans
+> are picked by the global scan number so that identical pages of
+> different ages still meet in some scan, which merging through the
+> unstable tree depends on.
 > 
->    The top waiter of an rt_mutex sets its sleep state. Then it spins in
->    rtmutex_spin_on_owner() as long as the owner is running. A wakeup sets
->    the waiter back to TASK_RUNNING. The spin loop does not check for this.
->    So a timeout or a signal is only handled when the owner blocks, or when
->    the waiter has to reschedule.
+> Add a section on smart scan that describes both.
 > 
->    The rtmutex_spin_on_owner() is just an optimization with the idea that
->    if the owner is still running on a CPU, it will likely release it soon.
->    If the owner gets preempted or schedules out on its own, the spinning
->    will stop and the waiter will sleep. This came from PREEMPT_RT adaptive
->    spinning for rt_spin_locks that allowed them to behave more like normal
->    spin locks and speed up PREEMPT_RT performance.
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+> ---
+>  Documentation/mm/ksm.rst | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
->    The problem is that when this was implemented for futex and normal
->    mutexes it did not account for timeouts or other mechanisms where
->    the owner releasing the lock wasn't the only way for the spinning
->    task to exit the mutex acquire. The spinning currently does not
->    account for anything else but the lock being released or the owner
->    sleeping.
-> 
->    Luckily, when the spinning task needs to exit the mutex lock code, it's
->    state is set to TASK_RUNNING. By having the spin check the spinning
->    task's state to see if it switches to running, it can exit the spin
->    appropriately.
-> 
-> How about something like the above?
-It drops important information, such as the user visible impact of the
-issue. How about this remix ?
+> diff --git a/Documentation/mm/ksm.rst b/Documentation/mm/ksm.rst
+> index 5a80573162def..f954d221e8017 100644
+> --- a/Documentation/mm/ksm.rst
+> +++ b/Documentation/mm/ksm.rst
+> @@ -75,6 +75,22 @@ The whole list of stable_node "dups" linked in the stable_node
+>  The frequency of such scans is defined by
+>  ``stable_node_chains_prune_millisecs`` sysfs tunable.
+>  
+> +Smart scan
+> +----------
+> +With ``smart_scan`` enabled, ksmd skips pages that it has already tried
+> +to merge without success. The ``age`` of a page's ksm_rmap_item counts
+> +the scans that went by while the page stayed unmerged. A page younger
+> +than three scans is looked at on every scan; after that it is looked at
+> +every second scan up to an age of five, every fourth scan up to an age
+> +of eight, and every eighth scan from then on.
+> +
+> +The scans that look at a page are picked by the global scan number
+> +``ksm_scan.seqnr``, not counted per page. The unstable tree is rebuilt
+> +on every scan, so two identical pages can only be merged in a scan that
+> +looks at both. As the periods are powers of two, every page is looked
+> +at on each scan whose number is a multiple of eight, so two identical
+> +pages meet at least every eighth scan whatever their ages.
 
-locking/rtmutex: Stop spinning on the owner when the waiter is woken
+Yeah, much clearer, thanks
 
-The top waiter of an rt_mutex sets its sleep state. Then it spins in
-rtmutex_spin_on_owner() as long as the owner is running. A wakeup sets
-the waiter back to TASK_RUNNING. The spin loop does not check for this.
-So a timeout or a signal is only handled when the owner blocks, or when
-the waiter has to reschedule.
-
-The spin is an optimization. A running owner will likely release the
-lock soon, so the waiter spins instead of going to sleep. It comes
-from the PREEMPT_RT adaptive spinning for rt_spin_locks. Only the
-lock handoff wakes an rt_spin_lock waiter, so the spin did not need to
-check for other wakeups there. The spin was then extended to all
-rtmutex based locks. Their waiters can also be woken by a timeout, a
-signal or a ww_mutex wound.
-
-The owner of a PI futex is a user task. It can run for a long time.
-With an owner spinning in userspace, a 1ms pthread_mutex_timedlock()
-returned up to 1.4s late in testing. A signal to the waiter is delayed
-too.
-
-With PREEMPT_RT, two contexts that take two ww_mutexes in opposite
-order spin on each other. Only something else that needs one of the two
-CPUs stops them. By default, the fair server does it after 950ms, to
-run SCHED_OTHER tasks.
-
-Fix this by also stopping the spin when the waiter is TASK_RUNNING. The
-slowpath then handles the wakeup, as it does after schedule().
-
-PI mutex throughput is unchanged. The futex and ww_mutex selftests added
-later in this series test both cases.
-
-Fixes: 992caf7f1724 ("locking/rtmutex: Add adaptive spinwait mechanism")
-Cc: stable@vger.kernel.org
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Thanks,
-
-Mathieu
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Cheers,
+
+David
