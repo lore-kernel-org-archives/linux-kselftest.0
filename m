@@ -1,107 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794019228;
-	b=d/t6lNhKrhd+ci83PlzTZeAUqwWDmQOAH2LhkNsY/Jc1VW8pGS8FBdelqA9B2HF/SmI4
-	 2bQ5mBcGCMMbPuU14jLg9jTG6sRI7RwDvbOuLUUwniG4qOf+PztcvzoXpUcz1QSwhgw+v
-	 0cSNpmII3ukwqvSXvvTg/VZAaUe985YRFXf58bI9HhGI7ubN7EFSMwTWyFY6XRNCb+LHX
-	 m1NxcxW0GypdbXsbWcz4fdMSubfmj6ofBdqz+HBhFKtu82Mpn/IAeM9Hpr/mRm465Eqps
-	 r7W6D52MDylf0gW5KSS5B4oAjJ2ZYKuAsRlu0EkspD51j5TUGetXDaeiQOb3/ha+4LA==
+	t=1794019234;
+	b=UWXJJti/QIiZOL+DvEjZoDk/HKKuuvz9Rgayp7ecSCRDIJUxkDhfGLs+2kHvQNq5DqCx
+	 8djob9WsisysfKVWXA3PaTz563hAObymKF2lEk/ge6DZwtw3+Tbd0XwMP30IvxmHx2+Tc
+	 9079Slfv4rj/0nwpDEzPH0SHkC3SKU41uVDwZF3rjb85oVEQypFowc7lx/YvjPdStNrNQ
+	 ZPpDn6HdJxJZs+4vmW6XSUOX3tdw2ox3Mps4a3QqF/uIZFOZNnNuwWzwSPUd7OZY/Yhra
+	 WfajGfko5x6SgvpXAvyc7+5bdjle6v6RPpH9Ds8S3pQkNKNcbbCxx+KvOZEZHLq0JNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794019228;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794019234;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:To:Cc:
 	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Proofpoint-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 Content-Transfer-Encoding:X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
+	 X-Authority-Analysis:X-Proofpoint-Virus-Version:
 	 X-Proofpoint-Spam-Details;
-	bh=sxv5EqtnYWUCOVJkYUviHmwxoOD0vd5Ri8oexCtFYW4=;
-	b=dYpgKhLJXEEXqGr+z9ZW0ztzOtqZZA1GNeapF4kOG5rwx160OrOTHebqOMOK8rzEED+d
-	 GH7oB2lZP8zR/gmXXAMIp2TkGVkIU+Cv8ViVcKG7hcB1ti9ZWJAC85JhEOpef0eX7OU/P
-	 BfLawF6vmFcTL8Lu2apYcyFXCXxXnmEM8WCs9oV3JKZHMhdN/wEfP3SRWh7D617RT6rSl
-	 5fr6e89bOkIlePrFBSmZFL7kyiq4jrjwNpD9qlzWSwiBLW6/H8oHjPUc7N/RtUm9As2LI
-	 pfu1tUUcX4a4wxLJ/FJdNiEsCUZ3T5wg6dGW77I0Y9AIbLc1Z9dNhWus3kEfMXuG/0w==
+	bh=3GIOH+/c8ZlwAH4hdy3vTg9Fnv+nr6QlL6HrUi9JjUI=;
+	b=fVxeWDVznBC+g10WuMpkzB18qWmogQy/BsExbYK5i5+noet9mhCvg7KP9AavwrwjYY4Y
+	 g2nYhWLg0ODmZ6gxefTeZCUxv+u3wCHdkbUEmnr4SwoXnZeo70djzcDQe+0JsrfE05yPD
+	 fM0VIGTZGZ6P/TYsuCHmxpJJxuga4Kt/M/W2hv4t96VRzxmJNNon9zIL5csEunJ6/rn4w
+	 K/Eo9rAbaaQ8evMd6wbiVzjpKfnMmFqd1ruH1oFOhhDjqIANtDiczhbMkdftRgaM1IA4Z
+	 L02LssdqOw9ZqtcA/6DI0OkI6xE1P/ACd97nQJOTZfKBnIVYgvf3A9GP98PWJpgV7OQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=L1gmG5pY;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=AZUDdQz4;
-	arc=none smtp.remote-ip=205.220.180.131
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=nop8ZZz5;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=KPIvxkBy;
+	arc=none smtp.remote-ip=205.220.168.131
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E504D606A330
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 02:40:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E504D606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21628606A330
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 02:40:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21628606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=L1gmG5pY;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=AZUDdQz4
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A72BZOA438764
-	for <linux-kselftest@vger.kernel.org>; Sat, 7 Nov 2026 02:40:27 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=nop8ZZz5;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=KPIvxkBy
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A72Afh3568265
+	for <linux-kselftest@vger.kernel.org>; Sat, 7 Nov 2026 02:40:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=sxv5EqtnYWU
-	COVJkYUviHmwxoOD0vd5Ri8oexCtFYW4=; b=L1gmG5pYYAgjaDrzkHaVi16Gsq6
-	/LL/bdPzdAX+2q1kcDuvVuYbcHTP9YzU9jn16oZISlObiwgRlIxwbZW9kJI9vQUj
-	WVGtlB3lCpDLs2sRw5F137AbZn8tqtHCfw1DoysxFjVKjoM/HCiWHUnWVF9YvRF8
-	q4DeiWs7kiZTohtW0hA9dT/QPrJnvSPDnMNQDBD8/F2eKDk448Wx6S3wG7/cBwSs
-	IO/cNrdrg8zXPxmdC79q77wGkr5uVdPkdfVXICkT9OltUFRUPjMJ3fchFLYcaMa7
-	ZUltcETQFkaXmYGOJNKXt7SiZ6PyJs2iYJLoKbueD3CNUN5AosrUJ+Nol9A==
+	:mime-version:references:subject:to; s=qcppdkim1; bh=3GIOH+/c8Zl
+	wAH4hdy3vTg9Fnv+nr6QlL6HrUi9JjUI=; b=nop8ZZz50KWkS8urDJT3hxpTV4k
+	BAEPCnNgvlCV5nW/ALTCX9VJTey5w3I10a/mjLDouG3WOysCbGYEzn7gNFkNg8M/
+	nzpOsFkzTU0Z/dY4mPagcZ7QvQcIjZqzc44YLqeoKSxhr7/j/HR9z2FI+0DuoyDV
+	i1bCmfL8UTAFZpvehzU413xo0+FAgXLAC7BKlCtlyydehZhLOkP/Qs49TEO2o2Rm
+	Tt6kwxWKzdvHE5kMzJ0E0bXvcpYIna7EiRYtn8YmVfbrX5esD/ex4wFvDxncrpOF
+	kmJbd5Xw6pX9NV4pmdQJWV8D0BfLJPqH+N0rZNvJ+7Dyq9HYKMns1MG1JZg==
 Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hsmeb1apw-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hsmyk17st-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 02:40:26 +0000 (GMT)
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-30bcb065bfdso2111204eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 18:40:26 -0800 (PST)
+	for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 02:40:33 +0000 (GMT)
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-351788121cfso3044642eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 18:40:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1794019226; x=1794624026; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1794019233; x=1794624033; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sxv5EqtnYWUCOVJkYUviHmwxoOD0vd5Ri8oexCtFYW4=;
-        b=AZUDdQz4GnFK74AM6JZjHJ5yQBaIhAD3Hlsl5EEGfCF9O6LekDTVFe7zuP5Lt/tRON
-         FFxQacwSQWI/V/u+TgOIOTgUmMT+HDHXVzWWCt43cgn0eLcS8ln3vD+pUdmPgyMRUCND
-         aimgQHQSVu0lT7nmBlDDVLKCNfo+5cgITt2njE3LchirHHOkMUPXdFULu1pISORAWQVx
-         +th3CMY8kKxhj/QTAhvEfSxZ75nhS6Fg4pzUyFsX4kxPFfF7L/B0kAARRyOtrGRtiw1c
-         fCa/n6MQk4YCyTlwDGcKIIblXwLPm7+lXRrAc/ygJYZGbY3b4XfbqRcDO89WetzAK96X
-         ZGfQ==
+        bh=3GIOH+/c8ZlwAH4hdy3vTg9Fnv+nr6QlL6HrUi9JjUI=;
+        b=KPIvxkByE1KosgLgqW5Sb95C1rvj70WDTN6BwrXk8vyEP6VBYI8yomA40wDJHuSNM2
+         Kp8cLocrUsVZPMGIFgRVEL1QAeWWnRrlRH8Yw5U3c4qSVUoahCveUzk4mwnC7qMxiMJ2
+         +yYfiRK6saosxIPN0EsLqmAP84GCPJbSN5JENUXsmb3TQNKqBy8jDIQGbLcnY6K/YS/k
+         KxQqVL7KkJbfHAelgU+7/8j+85aVZOiL+pW4aorm5yQEqVd62fTBcMp8KMbUgqYTMfo8
+         wb9P1MrgmtvSm5HCHlH3timskyIg1ODJ5Gv7oTW2LwweiIXHlO9uMAXQx8fIf/6eCS5r
+         9kkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794019226; x=1794624026;
+        d=1e100.net; s=20260707; t=1794019233; x=1794624033;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sxv5EqtnYWUCOVJkYUviHmwxoOD0vd5Ri8oexCtFYW4=;
-        b=zkCoTu95Icr8XP9clQ1eru+AH7mwBI1wor629cj9APTu4sowR6HOmMLO8v4L4G7/B0
-         +iWEUo8i4ctXpS09VR1SZAPqLUBkhKuaJOtFRVK/qLhX9fDLqJUDX0jaX94tYfqf+n7R
-         ZhLY8x+sQ93dl5nzY7HzYA5AEiPiXYmV6GSn/l02VZKPTJON5YFtE/17xIW8rMmlx/aY
-         hXFnf9mHi5BFnAtDOWVXxdCr4DdUG/kzysL9vXqhK8RmiSKx280e56tXiKt0c8jblF8Z
-         8B6h9/TbtwSv8T07ZMyJTrbQmjjMgbNhPj5xCBaY4A8+cSc+e6dwVVNYUfKu7yRvPzy+
-         N4gQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwet0ue6ZFuISwb9DdY5aFpHfMFtWh2lQkMciFs3A8Jhb4zDlYeWAxoNRnyPwJZkku/y5wji85qO0DVmnbniNk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8imPgAddKm3Uk0IHddKjtvaWc8J+Y1IDgf/QT40OAG31ep33cu
-	vAf/03KLwXEYlXbDMINPeF1Y7SUA9Dlh0snFGri6PhmVbYGutv2/cvmvvkG6W4B7zw/1q7+jbHv
-	H1TOrztxZhh6p5x+aqS5H3ryO0dIBGSE2kaaSXNak+pGUM+eQzvDJ152K8dlCJRsjakUXrLA=
-X-Gm-Gg: AYBFou2PZBIJUa1ZuOfjFP6OQGlw7LbNGVlqxvTO+HwDfsi5hwcdqWrpXdygxraqTa2
-	bLLIJFBT05viL/Uo2b5wcIH8T66nBSOHtSLX0GurGTx8ocgcgJ4o1jLqw5FAJCM2Kw4yUvHGzbn
-	bmQ8Kork5ko2y07z16tvPeRcv45iuKYByq82UigdToPqkFmCdDd7o9HktY+cur/fbElIV4djZvm
-	B9ArZrS+KBLKs5huU2+89XoPEd6mzenTysz/3lW/6ltzYXiYgB5nyShwnDJVU5JhtSKBGfv/M/R
-	WT4IYwZL6ddZJw0Sxq2lBwQGolvLhKHs/IhyrxvAKRsDpYVG0E2vRxKcQ4W/Jo8A3bGOrPKoBoe
-	u5vHk7ryCIeK6Om2aU8vDL4O5VSvxigoxNHCaDtbkBl/lVDbK8+MaZ51R2KpjKe6tCP5Wsq/Ez0
-	5ld08+fzZQ7YFA5bhn4gY5KpcI3Fe4WsAOrhMeLYmlnSCO3GO85wLgmH6a9BDtjygj/YRVZcCsE
-	g==
-X-Received: by 2002:a05:7301:6190:20b0:36a:1089:9836 with SMTP id 5a478bee46e88-36f75839295mr5734768eec.15.1794019225381;
-        Fri, 06 Nov 2026 18:40:25 -0800 (PST)
-X-Received: by 2002:a05:7301:6190:20b0:36a:1089:9836 with SMTP id 5a478bee46e88-36f75839295mr5734715eec.15.1794019224581;
-        Fri, 06 Nov 2026 18:40:24 -0800 (PST)
+        bh=3GIOH+/c8ZlwAH4hdy3vTg9Fnv+nr6QlL6HrUi9JjUI=;
+        b=D/onLebGH6ivhgbbX3dYegs3tw/6oMPT0PW/Wrdr4TDOhEESpUp+yIqQw46cbE4hJ8
+         MSB2ipOJt2j5gnoRuyJTJXwmODT++Sdya8AVoSJ6h+ALHIX5hTCXq3q5gA9b2CXemafV
+         f465Tq67wk9kXQ6IgV5WqxP3+bu8dbxHMej1gDcGmztWNA4aMja0EOvnMVKBzuu2Y9F5
+         7gWgTFmYXxeSTULg0g9Lh5hqgq1mBzM8lyXRVo5v1YmCyO8tT/x2Lh2Oub2XzXHHuQTD
+         UhgCLxa1mUNYRkjuktEtRCksyhNsW80Fqx14sfRvmfMjm8Tes/Di9nsb/XaNoV8SIFsi
+         tA3Q==
+X-Forwarded-Encrypted: i=1; AL+hErE49qV6R9Xyb8X3SPtfw7rPTYjplT9rZfWx9R2QhNMNVBpGT5MRgNMBaf7PetG2T7MzuoCFsfDIxVXn4R6M8lI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z82TuTehmF8Q5pUjieGlvwWdssAJ+pCGKQU3rW9Ln1gSUOrpacn
+	a8T0u/3u6+if8EpHs8GQ76wgEI9/DUlZYGzz7VUTpBXAFWtmKDfP1H7uB+EqRdX59/CXrm71YR+
+	kk9tFwELcDQtPPEd/PwGgZk/qI24qVW0PdZphW7yuUedoDH/YQxKZe+g27afLF8JY/UKiH7w=
+X-Gm-Gg: AYBFou3NqsAJoGYM2S8D01BPuRTE6aGViqO7WIpK/RvXtKfi4F7cK84CLXRvQlnElzd
+	Y4Nl/SC8dFP7EzDWslchHY1RR0PU7OQ5oav8FkEAtWveqXUHzb5aRk1KvX6r4EafiwIk9FkusRN
+	uKxh/V365gc88zIQr7aXfbJJX7JCmWI9bAcqQ+s2zDj4W+gBanSqGdIp1cWBNwa4ddzsCRqscK9
+	kAQN48k/vfA/O435mnmflzGBvBsYsyJhLqCM0xjVtc++HwAkZ8Cx/o1C2wutqHq3Fut1YdfVW1q
+	FTdYsZtu1yiXgbGqVcsG+eDlGptl9O8QBtuOGo6QpZMkG+Q0se5Dp9oaU6Yl69vkMXxonkTO7Rl
+	oA1HXcxfYCPUfMRTBa7cr32p3BcnGuQ8OXeEmH7sgzAz8+e8oIO6OJIZ6gyNQrwFewgWx/a/bXl
+	OGwA0Wt5m9AlCrKvT238H7jGCdYONBijXt6RcxsRqAzYoWik1tuve/IJ07xT5VI1LE9K4S2FD/i
+	Q==
+X-Received: by 2002:a05:7301:d805:b0:362:fa87:2aa6 with SMTP id 5a478bee46e88-36f6fc79169mr4866629eec.0.1794019232661;
+        Fri, 06 Nov 2026 18:40:32 -0800 (PST)
+X-Received: by 2002:a05:7301:d805:b0:362:fa87:2aa6 with SMTP id 5a478bee46e88-36f6fc79169mr4866588eec.0.1794019232016;
+        Fri, 06 Nov 2026 18:40:32 -0800 (PST)
 Received: from hu-himchau-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36faac86a96sm11069040eec.29.2026.11.06.18.40.17
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36faac86a96sm11069040eec.29.2026.11.06.18.40.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 18:40:24 -0800 (PST)
+        Fri, 06 Nov 2026 18:40:31 -0800 (PST)
 From: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
 To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
@@ -118,9 +118,9 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>, Jesse Taube <jtaubepe@redhat.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
-Subject: [PATCH v8 7/8] riscv: Add software supported single stepping with mc/mc6 triggers
-Date: Sat,  7 Nov 2026 08:09:16 +0530
-Message-ID: <20261107023917.40606-8-himanshu.chauhan@oss.qualcomm.com>
+Subject: [PATCH v8 8/8] perf tests: keep bp_signal memory accesses visible
+Date: Sat,  7 Nov 2026 08:09:17 +0530
+Message-ID: <20261107023917.40606-9-himanshu.chauhan@oss.qualcomm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261107023917.40606-1-himanshu.chauhan@oss.qualcomm.com>
 References: <20261107023917.40606-1-himanshu.chauhan@oss.qualcomm.com>
@@ -134,464 +134,93 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: Y51xDXadgJ6nSdOGyzlhLVcVJdtSGloX
-X-Authority-Analysis: v=2.4 cv=DOAacCNb c=1 sm=1 tr=0 ts=6aee8f9a cx=c_pps
+X-Proofpoint-GUID: R1TBTxiUnaKakHKnH37AlplVe2zzwasl
+X-Proofpoint-ORIG-GUID: R1TBTxiUnaKakHKnH37AlplVe2zzwasl
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA3MDAxMCBTYWx0ZWRfX3hBBweEH6yt8
+ jmY0ImEzcF8g6SYgYZeNEZa3bvO57H7yRMEZTCnHiqTQyjr6tmvJSXBG2AIgHMrF4JsLIKIhAno
+ /gdwUH9lOU1UABHqf20QgO4p+dfJzQI=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA3MDAxMCBTYWx0ZWRfX07pznrj9LrYH
+ pjoPdsU1GF6qQXKtkgEntMOFHP/swLDovH3B5ZNdE8trTNXGFDoUE2/kBdf43G3MPHOzmb3nD+e
+ syDqFFFhkrnxKZkcc58MHB9uxArS0AG4iBuQt/A/KVV6VegsBZGT0Y2NQCS/zB7yT6eeuj2/xm5
+ XxFoRCI+MfYBRcxoRXuU4r/45jp/5WV0hcmcPx81tCyIEZxyR97MlAzpom98c1pcjr7MwhGKLGo
+ 4LS0CPCwTEByG3HPkyGYmsAF0Cniyc7DauQdM2WpqOLaJsXgX13nG1MpJDdkbJZ0U7ASIOAUesu
+ +wwM0jPFS20YXdHe/9E+9iB4EZpGRhaFCafYj7lxMrv/5zOr4HuNi7SvpEhb36GtAjaWiegSJuU
+ /a9jfLfqKQ5/xuik45pOUBn04NkndwfJ2MgqBGrI7WGzxEBocobLkwyRpXfBwKqbA9vwraEYCnq
+ oEcgXV+gcy4jhd4vi4g==
+X-Authority-Analysis: v=2.4 cv=I5Tw19gg c=1 sm=1 tr=0 ts=6aee8fa1 cx=c_pps
  a=wEP8DlPgTf/vqF+yE6f9lg==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
  a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=EUspDBNiAAAA:8
- a=m8l0dXrX7-G3mt2yGekA:9 a=bBxd6f-gb0O0v-kibOvt:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA3MDAxMCBTYWx0ZWRfX2QX2rrwTg8dC
- /3HiU2QYBedxA7+8p3tW0n2nvgktZysTta8CPt7qvWzLySTiFKGmFXTpKWoXgB2Pv9F3zfg/37f
- KqNhCChdqcpTGaE0n9VNti0ZGqnt6vI=
-X-Proofpoint-ORIG-GUID: Y51xDXadgJ6nSdOGyzlhLVcVJdtSGloX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA3MDAxMCBTYWx0ZWRfXywgNOnJD1vCz
- r+SMUfR89Qc/kmW8aSdTYAtMW0tCAJ7td5LYSJ8CWTigkAFYP6d3DzEpX/q2x4a0Du9dMT4i9BO
- hH9recdkz27BePj7lyj7aBVFYo20+UHQ+W6YdlaQGbY20tMpzQdLj8DFr3d+nKbaaedNNF8u098
- 29bM0+WupvwkKX+WdDWr/7ZaXRJye0FpOc5jLjMzbzRpaZ9YPSkig3/51UlAOqQY67FqbLsMnRx
- /ensQvhRnhmo0tWzfe4GXflyV0cBD+I4KdB6/dkk7DC/7xqISh4NIzt24/s4TeJqYF64Ojc0tjp
- PjCVRJtAa/WG00uJHJ1nlb40XZTRb4hnwNjX5mDnSXUEPyX20zR6YtxjJw9tUhyb3Itd1130K34
- AALrb3nIPswOGp67z/0BFu28Wmw7sRkrPU3AmevZ5IQ8aOpB3V6BHhMqxTa9anWC13+jKvC+4md
- 1LaIoDchhnFHh9iDYTA==
+ a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22 a=EUspDBNiAAAA:8
+ a=tsqkxpHE8OKeFbBeJjEA:9 a=O8hF6Hzn-FEA:10 a=bBxd6f-gb0O0v-kibOvt:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-07_01,2026-11-06_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 adultscore=0
- impostorscore=0 malwarescore=0 suspectscore=0 clxscore=1015
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
+ impostorscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 phishscore=0 adultscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
  definitions=main-2611070010
 
-With mc/mc6 triggers, after handling breakpoint at current pc, there
-is no way to tell trigger to skip same breakpoint after the handler
-returns. This can cause loop of breakpoints at the same address until
-the trigger is disabled or uninstalled. Debugger may keep the breakpoints
-enabled and if kernel disables it, there is a loss of state coherency.
+In the breakpoint signal handler test, a breakpoint is set on
+__test_function. Keep that helper as a real call target so the breakpoint
+has a stable address.
 
-To avoid the loop, software disables the current breakpoint, finds the
-next instruction that would be executed after pc and puts a breakpoint
-at that address. When this breakpoint hits, old breakpoint is reinstalled.
+The test also relies on the watched variable being accessed as distinct
+memory operations. Use READ_ONCE() and WRITE_ONCE() for those accesses
+instead of making the object volatile, so the source marks the exact
+operations that must be preserved.
 
 Signed-off-by: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
 ---
- arch/riscv/include/asm/hw_breakpoint.h |  16 ++
- arch/riscv/kernel/hw_breakpoint.c      | 297 ++++++++++++++++++++++++-
- 2 files changed, 308 insertions(+), 5 deletions(-)
+ tools/perf/tests/bp_signal.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/arch/riscv/include/asm/hw_breakpoint.h b/arch/riscv/include/asm/hw_breakpoint.h
-index 6e8913d69df2..b3ccebb5185e 100644
---- a/arch/riscv/include/asm/hw_breakpoint.h
-+++ b/arch/riscv/include/asm/hw_breakpoint.h
-@@ -15,10 +15,26 @@ struct task_struct;
- /* Maximum number of hardware breakpoints supported */
- #define RISCV_MAX_BP		16
+diff --git a/tools/perf/tests/bp_signal.c b/tools/perf/tests/bp_signal.c
+index f580ba7486b1..2e4f7747d32f 100644
+--- a/tools/perf/tests/bp_signal.c
++++ b/tools/perf/tests/bp_signal.c
+@@ -36,15 +36,14 @@ static int fd3;
+ static int overflows;
+ static int overflows_2;
  
-+enum riscv_hw_bp_step_method {
-+	RISCV_HW_BP_STEP_DISABLED,
-+	RISCV_HW_BP_STEP_ICOUNT,
-+	RISCV_HW_BP_STEP_SW,
-+};
-+
- struct arch_hw_breakpoint {
- 	unsigned long address;
- 	unsigned long len;
- 	unsigned int type;
-+
-+	/*
-+	 * Single-step callback state.  While step_method is enabled, the
-+	 * hardware slot is temporarily programmed as either an icount trigger
-+	 * or an execute trigger at next_addr, and the original trigger config
-+	 * is restored when that temporary trigger fires.
-+	 */
-+	unsigned long next_addr;
-+	enum riscv_hw_bp_step_method step_method;
-+	bool pending_perf_event;
- 	unsigned int match;
- 	unsigned int chain;
- 	unsigned int select;
-diff --git a/arch/riscv/kernel/hw_breakpoint.c b/arch/riscv/kernel/hw_breakpoint.c
-index 4231170d4901..72be50943937 100644
---- a/arch/riscv/kernel/hw_breakpoint.c
-+++ b/arch/riscv/kernel/hw_breakpoint.c
-@@ -15,6 +15,7 @@
- #include <linux/cpu.h>
- #include <linux/cpuhotplug.h>
+-static volatile long the_var;
+-
++static long the_var;
  
-+#include <asm/insn.h>
- #include <asm/sbi.h>
- 
- #define RISCV_HW_BP_NUM_MAX	32
-@@ -62,6 +63,9 @@ enum {
- #define RISCV_DBTR_MC6_HIT1		BIT(25)
- #define RISCV_DBTR_MC6_HIT_MASK	(RISCV_DBTR_MC6_HIT | RISCV_DBTR_MC6_HIT1)
- 
-+#define RISCV_DBTR_ICOUNT_U		BIT(6)
-+#define RISCV_DBTR_ICOUNT_COUNT_MASK	GENMASK(23, 10)
-+
- #define RISCV_DBTR_MC6_HIT_FALSE	0
- #define RISCV_DBTR_MC6_HIT_BEFORE	1
- #define RISCV_DBTR_MC6_HIT_AFTER	2
-@@ -77,6 +81,7 @@ static union sbi_dbtr_shmem_entry __percpu *sbi_dbtr_shmem;
- /* number of debug triggers on this cpu . */
- static int dbtr_total_num __ro_after_init;
- static int dbtr_type __ro_after_init;
-+static bool dbtr_icount_available __ro_after_init;
- static unsigned long dbtr_init __ro_after_init;
- 
- #define MEM_HI(_m)		\
-@@ -194,6 +199,17 @@ static void init_sbi_dbtr(void)
- 		return;
- 	}
- 
-+	tdata1 = dbtr_tdata1_type(RISCV_DBTR_TRIG_ICOUNT);
-+
-+	ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS,
-+			tdata1, 0, 0, 0, 0, 0);
-+	if (ret.error) {
-+		pr_warn("Failed to detect icount triggers\n");
-+	} else if (ret.value) {
-+		dbtr_icount_available = 1;
-+		pr_warn("Icount trigger available.\n");
-+	}
-+
- 	tdata1 = dbtr_tdata1_type(RISCV_DBTR_TRIG_MCONTROL6);
- 
- 	ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS,
-@@ -397,6 +413,9 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
- 	hw->tdata1 = 0;
- 	hw->tdata2 = attr->bp_addr;
- 	hw->tdata3 = 0x0;
-+	hw->next_addr = 0x0;
-+	hw->step_method = RISCV_HW_BP_STEP_DISABLED;
-+	hw->pending_perf_event = false;
- 
- 	switch (dbtr_type) {
- 	case RISCV_DBTR_TRIG_MCONTROL:
-@@ -414,6 +433,168 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
- 	return ret;
- }
- 
-+static ulong get_step_address(struct pt_regs *regs, ulong insn)
-+{
-+	return get_next_insn_address(regs, insn, regs->epc);
-+}
-+
-+static int dbtr_update_event_tdata(struct perf_event *event,
-+				   unsigned long tdata1,
-+				   unsigned long tdata2,
-+				   unsigned long tdata3, bool wait);
-+
-+static bool hw_breakpoint_event_active(struct perf_event *event)
-+{
-+	return READ_ONCE(event->state) == PERF_EVENT_STATE_ACTIVE;
-+}
-+
-+static void clear_singlestep_state(struct arch_hw_breakpoint *bp)
-+{
-+	bp->step_method = RISCV_HW_BP_STEP_DISABLED;
-+	bp->next_addr = 0;
-+	bp->pending_perf_event = false;
-+}
-+
-+static void disable_unhandled_singlestep(struct perf_event *event,
-+					 struct pt_regs *regs, bool deliver_event,
-+					 int err)
-+{
-+	struct arch_hw_breakpoint *bp = counter_arch_bp(event);
-+
-+	/*
-+	 * If the temporary step trigger cannot be installed or restored, leave
-+	 * the CPU with no active trigger instead of re-entering the same debug
-+	 * exception forever.
-+	 */
-+	pr_warn("single-step setup failed for bp_addr=0x%lx epc=0x%lx: %d; disabling event\n",
-+		bp->address, regs->epc, err);
-+	clear_singlestep_state(bp);
-+	if (deliver_event && hw_breakpoint_event_active(event))
-+		perf_bp_event(event, regs);
-+	if (hw_breakpoint_event_active(event))
-+		perf_event_disable_inatomic(event);
-+}
-+
-+static unsigned long icount_step_tdata1(void)
-+{
-+	return dbtr_tdata1_type(RISCV_DBTR_TRIG_ICOUNT) |
-+	       FIELD_PREP(RISCV_DBTR_ICOUNT_COUNT_MASK, 1) |
-+	       RISCV_DBTR_ICOUNT_U;
-+}
-+
-+static int restore_original_breakpoint(struct perf_event *event)
-+{
-+	struct arch_hw_breakpoint *bp = counter_arch_bp(event);
-+	int ret;
-+
-+	/*
-+	 * Rebuild the original trigger from the perf attributes instead of
-+	 * keeping a second copy of the trigger data.  Do not update the
-+	 * temporary trigger in place when changing back from icount/software-step
-+	 * mode: uninstall/install gives the original breakpoint a fresh hardware
-+	 * slot and clears any transient hit state.
-+	 */
-+	arch_uninstall_hw_breakpoint(event);
-+
-+	ret = hw_breakpoint_arch_parse(NULL, &event->attr, bp);
-+	if (ret)
-+		return ret;
-+
-+	return arch_install_hw_breakpoint(event);
-+}
-+
-+/*
-+ * setup_singlestep - Set the breakpoint to next instruction after current breakpoint.
-+ */
-+static int setup_singlestep(struct perf_event *event, struct pt_regs *regs)
-+{
-+	struct arch_hw_breakpoint *bp = counter_arch_bp(event);
-+	unsigned long insn, next_addr = 0;
-+	int ret;
-+	struct arch_hw_breakpoint tmp = {};
-+
-+	clear_singlestep_state(bp);
-+
-+	if (dbtr_icount_available && !arch_check_bp_in_kernelspace(bp)) {
-+		/*
-+		 * User breakpoints can use an icount trigger to retire exactly
-+		 * one instruction.  The sdtrig icount path reports EPC after the
-+		 * counted instruction, so the callback sees the post-step PC
-+		 * without decoding the original instruction here.
-+		 */
-+		tmp.tdata1 = icount_step_tdata1();
-+
-+		ret = dbtr_update_event_tdata(event, tmp.tdata1, 0, 0, false);
-+		if (ret)
-+			return ret;
-+
-+		bp->step_method = RISCV_HW_BP_STEP_ICOUNT;
-+		bp->next_addr = 0;
-+		return 0;
-+	}
-+
-+	if (!event->hw.target) {
-+		/*
-+		 * A CPU-wide software-step trigger follows one task's decoded
-+		 * next PC.  If that task migrates, the per-CPU slot may wait
-+		 * forever for an address the CPU will not execute.
-+		 */
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ret = get_insn_safe(regs, regs->epc, &insn);
-+	if (ret < 0)
-+		return ret;
-+
-+	next_addr = get_step_address(regs, insn);
-+	if (next_addr == regs->epc) {
-+		/*
-+		 * Some control transfers, notably SRET, cannot be represented
-+		 * as an execute breakpoint at a different decoded PC.  Refuse
-+		 * the software step rather than programming the same address
-+		 * and looping on the original breakpoint.
-+		 */
-+		return -EOPNOTSUPP;
-+	}
-+
-+	/*
-+	 * Software path: update the trigger in-place to an execute
-+	 * breakpoint at next_addr.  Build the tdata directly without
-+	 * calling hw_breakpoint_arch_parse() so that bp->len and bp->address
-+	 * remain valid for the handler's matching logic after restore.
-+	 */
-+	tmp.tdata2 = next_addr;
-+	tmp.tdata3 = 0;
-+	switch (dbtr_type) {
-+	case RISCV_DBTR_TRIG_MCONTROL6:
-+		tmp.tdata1 = dbtr_tdata1_type(RISCV_DBTR_TRIG_MCONTROL6) |
-+			     RISCV_DBTR_MC6_EXEC;
-+		if (user_mode(regs))
-+			tmp.tdata1 |= RISCV_DBTR_MC6_U;
-+		else
-+			tmp.tdata1 |= RISCV_DBTR_MC6_S;
-+		break;
-+	case RISCV_DBTR_TRIG_MCONTROL:
-+		tmp.tdata1 = dbtr_tdata1_type(RISCV_DBTR_TRIG_MCONTROL) |
-+			     RISCV_DBTR_MC_EXEC;
-+		if (user_mode(regs))
-+			tmp.tdata1 |= RISCV_DBTR_MC_U;
-+		else
-+			tmp.tdata1 |= RISCV_DBTR_MC_S;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ret = dbtr_update_event_tdata(event, tmp.tdata1, next_addr, 0, false);
-+	if (ret)
-+		return ret;
-+
-+	bp->step_method = RISCV_HW_BP_STEP_SW;
-+	bp->next_addr = next_addr;
-+	return 0;
-+}
-+
- static void dbtr_encode_update(union sbi_dbtr_shmem_entry *shmem,
- 			       unsigned long idx, unsigned long tdata1,
- 			       unsigned long tdata2, unsigned long tdata3)
-@@ -574,12 +755,43 @@ static unsigned int mc6_read_and_clear_hit(int idx)
- 	return hit;
- }
- 
-+static int handle_triggered_breakpoint(struct perf_event *event,
-+				       struct pt_regs *regs)
-+{
-+	struct arch_hw_breakpoint *bp = counter_arch_bp(event);
-+	bool defer_perf;
-+	int ret;
-+
-+	/*
-+	 * Report user breakpoints after the temporary step trigger advances
-+	 * past the armed instruction.  Otherwise signal delivery can re-enter
-+	 * the same execute trigger before the PC has moved.
-+	 */
-+	defer_perf = !arch_check_bp_in_kernelspace(bp);
-+	if (!defer_perf) {
-+		perf_bp_event(event, regs);
-+		if (!hw_breakpoint_event_active(event))
-+			return NOTIFY_STOP;
-+	}
-+
-+	ret = setup_singlestep(event, regs);
-+	if (ret < 0) {
-+		disable_unhandled_singlestep(event, regs, defer_perf, ret);
-+		return NOTIFY_STOP;
-+	}
-+
-+	bp->pending_perf_event = defer_perf;
-+	return NOTIFY_STOP;
-+}
-+
  /*
-  * HW Breakpoint/watchpoint handler
+  * Use ASM to ensure watchpoint and breakpoint can be triggered
+  * at one instruction.
   */
- static int hw_breakpoint_handler(struct die_args *args)
+ #if defined (__x86_64__)
+-extern void __test_function(volatile long *ptr);
++extern void __test_function(long *ptr);
+ asm (
+ 	".pushsection .text;"
+ 	".globl __test_function\n"
+@@ -54,16 +53,19 @@ asm (
+ 	"ret\n"
+ 	".popsection\n");
+ #else
+-static void __test_function(volatile long *ptr)
++static noinline void __test_function(long *ptr)
  {
--	int i, bp_ret = NOTIFY_DONE;
-+	int i, ret = 0, bp_ret = NOTIFY_DONE;
-+	struct perf_event *deferred_step_event = NULL;
-+	struct arch_hw_breakpoint *deferred_step_bp = NULL;
- 	struct arch_hw_breakpoint *bp;
- 	struct perf_event *event;
- 
-@@ -590,6 +802,74 @@ static int hw_breakpoint_handler(struct die_args *args)
- 
- 		bp = counter_arch_bp(event);
- 
-+		if (bp->step_method != RISCV_HW_BP_STEP_DISABLED) {
-+			bool pending_perf_event;
-+
-+			/*
-+			 * This trap is for the temporary trigger installed by
-+			 * setup_singlestep().  Software stepping must match the
-+			 * decoded next_addr; icount already reports the post-step
-+			 * PC and can restore the original trigger immediately.
-+			 */
-+			if (bp->step_method == RISCV_HW_BP_STEP_SW &&
-+			    args->regs->epc != bp->next_addr) {
-+				/*
-+				 * A nested breakpoint can fire before this
-+				 * event reaches its decoded next_addr, for
-+				 * example when perf delivers a signal handler
-+				 * with its own breakpoint.  Let the later slot
-+				 * handle that trap and keep this temporary step
-+				 * armed.  If nobody handles the trap, restore
-+				 * below so a real divergence does not lose the
-+				 * original breakpoint indefinitely.
-+				 */
-+				deferred_step_event = event;
-+				deferred_step_bp = bp;
-+				continue;
-+			}
-+
-+			if (bp->step_method == RISCV_HW_BP_STEP_ICOUNT &&
-+			    args->regs->epc == bp->address) {
-+				unsigned long tdata1 = icount_step_tdata1();
-+
-+				/*
-+				 * A trap can be observed before the original
-+				 * user instruction retires, leaving EPC on the
-+				 * armed breakpoint.  Delivering the deferred
-+				 * perf event here would account the same
-+				 * breakpoint twice, so rearm icount and wait for
-+				 * a callback with a post-instruction EPC.
-+				 */
-+				ret = dbtr_update_event_tdata(event, tdata1, 0, 0, false);
-+				if (ret) {
-+					disable_unhandled_singlestep(event,
-+								     args->regs,
-+								     bp->pending_perf_event,
-+								     ret);
-+					bp_ret = NOTIFY_STOP;
-+					goto exit;
-+				}
-+				bp_ret = NOTIFY_STOP;
-+				goto exit;
-+			}
-+
-+			pending_perf_event = bp->pending_perf_event;
-+
-+			ret = restore_original_breakpoint(event);
-+			if (ret) {
-+				clear_singlestep_state(bp);
-+				perf_event_disable_inatomic(event);
-+				bp_ret = NOTIFY_STOP;
-+				goto exit;
-+			}
-+
-+			clear_singlestep_state(bp);
-+			if (pending_perf_event && hw_breakpoint_event_active(event))
-+				perf_bp_event(event, args->regs);
-+			bp_ret = NOTIFY_STOP;
-+			goto exit;
-+		}
-+
- 		switch (event->attr.bp_type) {
- 		/* Breakpoint */
- 		case HW_BREAKPOINT_X:
-@@ -603,8 +883,7 @@ static int hw_breakpoint_handler(struct die_args *args)
- 					       RISCV_DBTR_MC6_HIT_FALSE;
- 
- 				if (hit) {
--					perf_bp_event(event, args->regs);
--					bp_ret = NOTIFY_STOP;
-+					bp_ret = handle_triggered_breakpoint(event, args->regs);
- 					goto exit;
- 				}
- 			}
-@@ -640,8 +919,7 @@ static int hw_breakpoint_handler(struct die_args *args)
- 				hit |= ranges_overlap(bp_start, bp_len, stval,
- 						      sizeof(long));
- 				if (hit) {
--					perf_bp_event(event, args->regs);
--					bp_ret = NOTIFY_STOP;
-+					bp_ret = handle_triggered_breakpoint(event, args->regs);
- 					goto exit;
- 				}
- 			}
-@@ -653,6 +931,15 @@ static int hw_breakpoint_handler(struct die_args *args)
- 		}
- 	}
- 
-+	if (deferred_step_event) {
-+		bp = deferred_step_bp;
-+		ret = restore_original_breakpoint(deferred_step_event);
-+		if (ret)
-+			perf_event_disable_inatomic(deferred_step_event);
-+		clear_singlestep_state(bp);
-+		bp_ret = NOTIFY_STOP;
-+	}
-+
- exit:
- 	return bp_ret;
+-	*ptr = 0x1234;
++	WRITE_ONCE(*ptr, 0x1234);
  }
+ #endif
+ 
+ static noinline int test_function(void)
+ {
++	long value;
++
+ 	__test_function(&the_var);
+-	the_var++;
++	value = READ_ONCE(the_var);
++	WRITE_ONCE(the_var, value + 1);
+ 	return time(NULL);
+ }
+ 
 -- 
 2.43.0
 
