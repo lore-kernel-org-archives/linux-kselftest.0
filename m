@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794081004;
-	b=FNStP3v//XomsSxy64EsxU/DMYxNr1sAZAI0jzcnDyPw1XRD5ZjE6QC5jUtCJmFk/lLD
-	 /wPL2X4r1V3GQORiB1hWgcGLwUuDg/blM/cHF3E+d118skJG08s03jUAMBlQEpcM5GUg+
-	 S1LNdet4EglaTJIbLjvjw907d56Yw1KZS8We5VUIqlKRnMdOErakWUe+HqLi4MqGBzn7O
-	 l2nF6CRn+/9ENVobg+lamp293iRb11J7TpddbeZJDRiHSfWwe7MdZoNPMYOLKdsV34Zbd
-	 XruzZ4fmxRwbvp5rx8/tBdGLrj4CQJAmQun2LpPBG7VvZXfCtbHcuF4OgcPydB1c9DA==
+	t=1794081083;
+	b=PtWxcuri1Cm6u4IRwyFN9k8jrJuGmZVavZ3btaqtAL94Po59oeFp5IT1LK/+72fgrAYj
+	 Bkzh8K0ijBc6P37U5M+JTAAXoQzcKDo8EZMIFsauFVVkXcyDX1zXPIDTyMSee4h5VwrrH
+	 aL8MA8C+QHBMfjQx35KVetU/7ttBjlCAir3rRerts5uvJweTDSqRyn40F6bvhhbohPWn3
+	 jW8NscxQV4wjNJN2qb2l9SDNUEqdEmWVyUkC15ljpUQ/Cg6gNZkxEp5sTqNrgbNoKAkKq
+	 ame3QW6XhHOk9wS+hpahb0GiIOmpolisg5ymOWmoNZ1119W2KDEXKpL5dRfbImeaQ3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794081004;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794081083;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=SJlOV9BBt4UR6jgbVIiAcYdmTN/stgIBQ5MMHSHMERg=;
-	b=TA9WJivEHpK4CXNF7rJ5MmRhd3EKPeZBRSdR6hPbMSuCP9ZWsMpEajhZJs6rKbGyxT56
-	 4jhwLgERrG9CBnTiVv9YQJndbu4mq/Gpp1aCqFChmFF44joZHTEBsPp4dqSWxjOwOPuy6
-	 7pYd2uzUngPM6bO0YKyaqZWisw175Zxgz7qy4yzLE7ur5ExqLBjGcLtrsiIG0UGobXtf8
-	 O5d5tkxW8uI8Hc/IPEYaQ0GhwENp9aU1A4JmJUcQZZvBOG7VJsY7fu9MpASgEGLlaAxjl
-	 KNfslWq68CoINwpvFBNG0SAJAjt0iUhauqu+bGEQBhPyZ8aGcfD5PEhonu1KUkoDIOA==
+	bh=8NEcCG6Aq43ZRSmDhnrvufn3WG29LNvsLw98ja7BDX4=;
+	b=itY9I+gPWkuhP/HGn4yyVPVq5/JFyfxChHv3yZEuJNnQWkmuKKEKnjwpDSWTNFnTMxuX
+	 XOmq9g/V2UQuOwtyiHhNsd0E4Z+ClpKeEb3frKCaT+RKXpVWCxoZP1z697UbeKSmmV8lJ
+	 nRVdESaUTCOIXQd6wffNifTnwwtvyZhue0g1rEjR58RLP/6EaRohjujf/SLfkcR9AMcKt
+	 J9bfrwtCthLGZ5+JmcDxkxopCcrFAewZm7NOljZjMKC2SuuE6tnBqWMnKYM+nqXdnsy1x
+	 B3ewgvej62IvRJo1EFwm/5Q6zDOnFiQkg8BaoSnW+mim7cY73bXbJg7yq/zBF8RSodw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I5VSZ0Eu;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Bvif/XBB";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19783606A326;
-	Sat,  7 Nov 2026 19:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C73606A330;
+	Sat,  7 Nov 2026 19:51:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I5VSZ0Eu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2250C1F008A1;
-	Sat,  7 Nov 2026 19:49:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bvif/XBB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0097F1F0089F;
+	Sat,  7 Nov 2026 19:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794081003;
-	bh=SJlOV9BBt4UR6jgbVIiAcYdmTN/stgIBQ5MMHSHMERg=;
+	s=k20260515; t=1794081083;
+	bh=8NEcCG6Aq43ZRSmDhnrvufn3WG29LNvsLw98ja7BDX4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=I5VSZ0Eu8fHazgOSE6oZODYfX0H4ZqLHG7+cbCIGbNBhsoCRwFXHcUvpl8SuhIvCH
-	 QOyRrMyzx83kKD1sT3B2U6KmEnH2yex6XzTp/60nF687YJhfWaDGdj/7z2XrE1Ni0c
-	 al7qijHGR1hCtSJ5Kj/8fjo0wviH009lm6nZPds0Hd/bYI07s2aRwMw4hT6Ogzvbdc
-	 2O1+O7jpePVCDzjdIQG33uNX0x3513HM6f9au5rdHEs8PDLNQ8LHzIm8jnipBaRIOV
-	 Qq5Ghcd4xgrKVdi4AzCFDAI5qmuh1cYnw+P4JZM5AynzTVzes/MIyfxlRgdXgFR9C/
-	 +30zo3cl/sc1A==
-Message-ID: <21ac345b-1b34-4df5-8dd2-6c57912c661a@kernel.org>
-Date: Sat, 7 Nov 2026 20:49:53 +0100
+	b=Bvif/XBBoRKuYGbZ5ITkJSA5/rWfw2LbmlRX3olbvq6SZcfgljnv/7KDgflI2wi3m
+	 cuzA4GAU6SwVrcpUVv2P/vlyi6VovbWWLCXxKix+7fT7BP2+VgSdWEdGDRpstxEyE+
+	 Nerm2JJ7W46xycA3Rrw60HAi2meM9nxTmPj2FsgofK7ZHkPLcnM6rGUaSgBupNjn6p
+	 mVKYgWNT1RycwSVFbjcWczDXnVHM/wLtsSpZQ7dBOPnJbXbtgzxbiFcuddxHpL/stD
+	 tzK/gy7i3TJ/gQEPlZsiTtBZHqyaWS3yLWVgj590zCvAnv1kC4IqB4jYAHgBVpoZXQ
+	 sGjwFX5D8lxww==
+Message-ID: <7df793d7-55dd-40db-8455-1f22bb44193c@kernel.org>
+Date: Sat, 7 Nov 2026 20:51:13 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -146,16 +146,11 @@ On 11/7/26 17:57, Qiliang Yuan wrote:
 >   pairs merged (of 420)       361        420        116%
 >                               334        420        126%
 >   pages looked at per scan    1792       2048       114%
->   ksmd CPU time per scan      6.30 ms    6.88 ms    109%
->                               6.40 ms    6.96 ms    109%
->                               6.15 ms    6.88 ms    112%
-> 
-> Fixes: 5e924ff54d08 ("mm/ksm: add "smart" page scanning mode")
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> Reviewed-by: Xu Xin <xu.xin@linux.dev>
-> ---
+>
 
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+Oh, I was wondering whether this should actually go to stable? Do you think the
+above is rather an extreme case, and most users won't really run into it that
+severely?
 
 -- 
 Cheers,
