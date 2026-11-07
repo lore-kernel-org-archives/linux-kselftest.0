@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011846;
-	b=kmtc7eU/dDxjBX1XtL3/FvOzhIc0SKKwqfMaBTJqSHBiieqBAN1NXeHOI1F2WZKIkVxy
-	 LhiAkYnDTNX4rDyCUa7HTg1hmfRYCmhtPInHhQucE9Ln73kBo8QQmd3seMYXmhDKjY89n
-	 uIq2uRNR4r06NqFpSgRWPARmxUHIjA5KeTwQU8x1eR57hbFAAHQw0wEpYeuiUWHkZOP+5
-	 IkE4/4gVOifm/KEsX19eoL2s/8WbbVFJj9/ZMUTmpW1VCpybHzXlYdOjjRdyPUWBmkyr0
-	 ODkycLb6Ys/YDoL5Bg3FmEuRIOWIFvcaUZxgTGMsoUf9jSHxlvOGzRBkYqu2lRaYGGg==
+	t=1794011847;
+	b=ul25MY9Q+Tum4kXRZFnyX7ZsT0WdhbkzhzwU3DwPFt5R9qo7nulfsd15vyctbBnYQ8uz
+	 PRfBASmE5L8RJBlvfUOJFgq/RSQPC4L+51P25UHdMYTP/SRUQV3MI1QAV8//cigG0xPYB
+	 QiYbWU8x71Pz/LA54tC+JiyZRQ62yV/RmMwPS9reZBS2hqoQbDNFawCtaqKEdw8CJB7k6
+	 IaxxNDNX2T4btdiRffHQrTQk6ceBUVOVFSVQPjnf9XfiKo/2a6b0A0XIVgBwSF1NBEwJ6
+	 OV5/qsAvDcPtp+8Twf5oOri7U3csPC+do5XA1qcYojQAXPjhMhN5liYwiXzGPWNJXPA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011846;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011847;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=3ulA1mCA1LQi0DRwZd8cfcNJLIwMWpDlR/Rwc0hFr9I=;
-	b=F+CByPrNY1RsSwfEmIili92++wy2wp3g+hVhff+XYIEmOBf8hyZoNBLetsIeAUnF1CS1
-	 oBLjPDljzYLUUuX2Jxa0j+wHKsH4e5jIbweLCbMXH4oGo4OZPuAJm53YSDncWBtVQq+z4
-	 R+ItpdWn/T1QUWFhTpG+D11isEarAHKa+Yf9JOpsprgrytzE9dgzgFCJaOIUOSyNC8FhU
-	 NlLMF1616SY9nvveIqz/bwcbFzA7rqTVU67k82OaoCNC6JT3DL4kOvjkx8MsPvn9CVlUA
-	 +jekRV+JnjVfV6Kx0mLKWhbJRt0VmxeTJYMnGuMS6QLA5/cLJq4HscfSoiJlw9p58qw==
+	bh=KBhGX9yahIbsDDFoJ77ldQTuDbT5tg0ODdJhu+0F5YI=;
+	b=QkRMyEaGz+pfjFLaXAospl8PkpiLuc3It/d8MqVfseQ60S3oxYd2mG4VL03ZzxH4BwWT
+	 +Rnp0QGiMelatT6ByjPf/+tYB4sydxQ5Gnb5TV14VK4izvRl6X6cS37DLJM3qc2K5cztS
+	 cmNN5gDY2X/y1IJG94XTcyf11x7PKssJDu2MqW4Fq+hjVsWWB6Gp8q6ZggxKJsKLe1OEy
+	 3xXOulhcCV60fxX/57RYWjZ8OLSl/0LNnOs+fFNWHd7wriCwwS3Reyz5Qcq82U07Zh51L
+	 rdgGX8odWz/jpFkDplpG/pH5Ys43OzYCjBgU7lY11ZTbf5ET7QW4C5DhWJnsJPgIPjw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V7FAHBND;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PJfRbRBs;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3E9606B75B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4349C606B761;
 	Sat,  7 Nov 2026 00:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V7FAHBND
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PJfRbRBs
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1794011841;
-	b=q9lu4DKWG+lgRhjewoFPCy9JhybctoKScmpLwHjEZRAkIPRnBsfyILMDrDAeKwIeSEA/
-	 bBLL7h34VZOGD4/DHDblvPV/hZuMvEXsAMdxO/PmBDGETJZbHXcKasAUESrvFF5WLZMtQ
-	 I+nK2OKbe2POjZ6A+hlREVl8zy5Fb9s6r0yi2T9XzvLWSwUJupKr1utYyXIbDesEZLOD1
-	 /41s/lEYdYWpgfakqr4Yqd5N+bOMPaXoHQRo02UBdrTSjfOUtphwrPqL7BZ9i3ULk+S4Y
-	 QV9Hb935lZV7gh+xhA0YjUgKzaamb5LlX3gS8phfatvbSAQ4XnoZGJVLPaCsGCtJNfQ==
+	b=IC5lsvDwnO2pljiQ8KRSVTp+eYwcw0v648FfwXl3Cz9Q2ibruvVi9ivr8QOqCsPaMjM6
+	 hrb8EFaGVv0h8oanUHMbbvs3ojPRoGqSYFF+9qqo1qZmJiaZghj3jZhRfGGVy6wAt7P52
+	 ftOTMfNBqS3rMhZtvCmLPHgBCHE5jNyedeoqePB+DrwJmVRS8f75/kJUaAK2tsCJlOODy
+	 HO74dA8K4Jsh54juIFKgszuG+4hD+73kXvG+DH1b8tNlM9HfFS1ZMdUoq6Lt8pwRTZ1PJ
+	 59t1yPpTeanny8x5cGOGkXDID5aeAME1jTVFKn5lALF52KbdoGyNuqgpRx4WaaYF1Hw==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1794011841;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=3ulA1mCA1LQi0DRwZd8cfcNJLIwMWpDlR/Rwc0hFr9I=;
-	b=xsSRG7a780XKp0bW9h1S6KGyN51APmlzl5ekQYscf2ZG9NwhzmencdUvT/TKFbqfhKwp
-	 AWt5tX+0w4HnuSWL+KJDzl0BFmtrOiENbNMB1N1Ve+2g6ix2WyUyorSPgQ69W3oLr13eC
-	 QYlHU4Y8ZqHORXyaWnzKlfevNSYPApBSVMU7TOem7YgCfLnZkdGjfnUoM2oZy0ILTRP5o
-	 Wq27NPtbHf3EUpqxyzHn2S5vAqTSI8rwreZAtlulKtSKz+6gtniaapDxoUJU8/8/9MXjF
-	 mJjB3EbADYivWkPaw+9StkT8RvT/2aPbpK90Q23vBsND7iTZbZ3itGAKixrM8wTuNLQ==
+	bh=KBhGX9yahIbsDDFoJ77ldQTuDbT5tg0ODdJhu+0F5YI=;
+	b=g7e/2ed0nT/KRKyjNgSB4IgD69SQO87AmMBpcMFwZSC77+RyS0PVDkf3gHUwt43MtAv9
+	 rkzRszeTiYVG9HV8DLWlv8xXZVVqtIsrjCt6+i24cQwIjcp/rofUsyXzCa5g7lSLjViR2
+	 FRGvMZT1nz2ZVwQf3txqvJgPoV6h/D9+WF8gJt3dpGwkN4PT4XSB3xP+VLoT6hWqDys+w
+	 Hn1tJIuv9AQZHTaVIUEAekBpOs5Ce28SoIRnT7TBUjJpOtlF0UPyZLsCzcvCKRX3jr63q
+	 QG1iTt1qtL5FCWIfWlrU+F42hiWhWlf7xUUGxguuRX8pQg1CmLtqQdo4g4l5I+3MZVg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E61FA1F00929;
-	Sat,  7 Nov 2026 00:37:18 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id B46E31F008A5;
+	Sat,  7 Nov 2026 00:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794011841;
-	bh=3ulA1mCA1LQi0DRwZd8cfcNJLIwMWpDlR/Rwc0hFr9I=;
+	bh=KBhGX9yahIbsDDFoJ77ldQTuDbT5tg0ODdJhu+0F5YI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=V7FAHBND2ACYptYxDNQmGMGn+uQPlwkf1V1yLk0qMlFFM3NJGnay0gq0/ExKwhLhC
-	 eyCf2bw+BEeutm4JevN9egT9uN7q2G/hgF3/FcKr3E0XDJxiDFzK86JwXCyYwAHhBd
-	 rrAU9RBi2zS6mlpgsf6ZfmPUADuUTFdXngGdcqJUgtQh8xskK9iMjVlRxGefI1c3EK
-	 VOqu9c0hGHp/a9Yx19ivL8E5jh7/+QCz9EEopAXoTyqhvLF5fR3LPkOfKlnNosedYk
-	 TCcuG5iAD7ay+aIexTq1Ra8OYMLhcv4x1xH4tJx6fwNHadeKXx4k2q0vNY07lZ+YZc
-	 Ze7la/c7Yueqg==
+	b=PJfRbRBsq/zArvX5SSV+AJJfmzGv9LuvVropQ9uVhaGW2UaZraSUeBXfQXme3+Vbi
+	 QkUVozbzOKTFF+eAMYVXS6RufAEJjovCp22DfqPvN0nu+2L0CVG7Fv9gDXHN2lRoJg
+	 gQ/AUjNegaeg053dDeR5AfM4WDhqVLrYDdNL3ldZILB0L16zLo7+PU+nrT0g71QIiZ
+	 8CiEhzow2gzKcPG2jJ3+XSnFwMG79BrvP0XpK8+a/G9VJqOrDhzXsMxv1qsSq8gr0C
+	 lfCKfa55VYwYhjPVFr0P7aPAKC1+JXKvEcHPLzy556276iptGc3iO62jeh1a4aKx6y
+	 3blMeeEHP0KHw==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id AA30A47A63;
-	Sat,  7 Nov 2026 00:36:58 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 7D8DF47A1C;
+	Sat,  7 Nov 2026 00:36:57 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:38:01 -0800
-Subject: [PATCH RFC v3 87/88] QUESTION: KVM: guest_memfd: Disallow private
- mappings of shared-only PFNs
+Date: Fri, 06 Nov 2026 16:37:42 -0800
+Subject: [PATCH RFC v3 68/88] vfio/pci: Use iov_iter for MMIO read and
+ write
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-87-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-68-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=14128;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=6301;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=YboiAAXrsRpRc5OH/Rd6uFPv93m0ToCdIqIrHIwRJIg=;
- b=ajkHJ0uXvnLtyBLv2CwiADg6fka9TnKfqMME3i9rQ1b1fhDLrSXOMh6jeDKixXX8x+DGU5KPG
- OJ3ARdykJrxBkxFnYyWqbLtizhyXr6KmUhskiqTbqOaIdbedecBHtz+
+ bh=c4VDLuT5yqC8DJ1fpMzzzVy4zLcf9cySQYtbQA4hk74=;
+ b=L5BjRew5q1svkShxrjXUHUJtKZ/8fmvjKLgv7L6S7iOvEcrS/PClvlilzhXkLk+16KWEMf/Ny
+ 1dJMQc+3f77BIvFJT8Dpz/JuqAKav6jhjhEryI/df80j9npQPqOyeF+
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,339 +120,196 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Host kernel drivers directly write to the PCI MSI-X vector table to
-program and mask interrupts. On confidential computing platforms, allowing
-hardware protection tables (such as RMP, Secure-EPT, or GPT) to mark MSI-X
-pages private causes subsequent host kernel interrupt updates to trigger
-fatal hardware protection faults.
+Refactor the internal MMIO read and write helpers in vfio_pci_rdwr to
+operate on struct iov_iter rather than directly calling copy_to_user
+and copy_from_user with user pointers.
 
-I see 2 options here:
+Keep the existing vfio_pci_core_do_io_rw interface unchanged by
+importing user buffers into an iov_iter via import_ubuf before calling
+the internal implementation. The overhead of initializing the iov_iter
+on userspace accesses is negligible compared to PCIe bus cycle latency.
 
-1. Prevent it at conversion time, and require INIT_SHARED
-2. Let guest_memfd track all conversions to private as per normal, but
-   block setting the MSI-X range as private at the platform level by
-   blocking platform config for SNP, ARM CCA at fault time, and by blocking
-   faults for TDX.
+This decouples low-level PCI MMIO access from userspace copy semantics,
+allowing in-kernel callers to service I/O using kernel buffers (such
+as ITER_KVEC) without user copy overhead or page fault recursion.
 
-Implement (2) partially by introducing a PFN attribute bit indicating that
-a physical frame cannot be mapped or populated as private, reporting that
-attribute from VFIO PCI whenever a BAR page overlaps the MSI-X vector
-table.
+For delegation of read/write() to guest_memfd, this helps avoid AB-BA
+deadlocks between mapping.invalidate_lock and mm->mmap_lock when MMIO read
+and write operations are invoked under filemap invalidation locks.
 
-When a PFN carries this attribute, reject private stage-2 fault resolution,
-private memory population, and SNP RMP fault / VMSA reload paths before any
-platform private transition occurs, while still allowing shared mappings.
-
-The missing half is that for ARM CCA, which (for now?) doesn't use the
-.gmem_make_private() hook, will have to enforce in its GPT configuration
-path to block to-private config for MSI-X ranges.
-
-With (2), the attribute-conversion check callback is not longer required.
-
-Pros of preventing platform updates via PFN attributes:
-- Enforces the invariant at the single boundary where physical frames
-  enter hardware confidential state, covering both initial private files
-  and later conversions uniformly. (Though for Confidential IO, the
-  guest_memfd would have started off as INIT_SHARED anyway, so we could
-  require INIT_SHARED in the VFIO .attach() handler)
-- Allows virtual machine monitors to initialize or convert an entire BAR
-  at once without carving out the MSI-X range when a memslot hole already
-  traps guest MSI-X accesses.
-
-Cons of preventing platform updates via PFN attributes:
-- Defers error reporting from ioctl conversion or creation time to fault
-  or populate time if userspace maps a shared-only page into a memslot and
-  accesses it as private, whereas rejecting conversions and requiring
-  shared initialization fails eagerly and keeps software attributes
-  aligned with hardware capability.
-- Special architecture make-private paths (CCA only?, since SNP's
-  make-private is handled from within kvm_gmem_get_pfn) need to block this
+No functional change intended.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- arch/x86/kvm/svm/sev.c           |  9 +++++++-
- drivers/vfio/pci/vfio_pci.c      |  1 -
- drivers/vfio/pci/vfio_pci_core.c | 49 ++++++++++++----------------------------
- drivers/vfio/vfio_main.c         | 16 -------------
- include/linux/guest_memfd.h      | 14 ++----------
- include/linux/vfio.h             |  3 ---
- include/linux/vfio_pci_core.h    |  3 ---
- virt/kvm/guest_memfd.c           | 26 +++++----------------
- 8 files changed, 30 insertions(+), 91 deletions(-)
+ drivers/vfio/pci/vfio_pci_rdwr.c | 107 ++++++++++++++++++++++++---------------
+ 1 file changed, 65 insertions(+), 42 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 526f2a457cfe0..4d19ce862c27d 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -4100,7 +4100,8 @@ static void __sev_snp_reload_vmsa(struct kvm_vcpu *vcpu, gpa_t gpa)
- 	if (kvm_gmem_get_pfn(vcpu->kvm, slot, gfn, &pfn, NULL, &pfn_attrs))
- 		return;
+diff --git a/drivers/vfio/pci/vfio_pci_rdwr.c b/drivers/vfio/pci/vfio_pci_rdwr.c
+index e5f1f60513709..cc64722d1ab9a 100644
+--- a/drivers/vfio/pci/vfio_pci_rdwr.c
++++ b/drivers/vfio/pci/vfio_pci_rdwr.c
+@@ -91,34 +91,34 @@ VFIO_IOREAD(32)
+ VFIO_IOREAD(64)
  
--	if ((pfn_attrs & GUEST_MEMFD_PFN_ATTRS_READONLY) ||
-+	if ((pfn_attrs & (GUEST_MEMFD_PFN_ATTRS_READONLY |
-+			  GUEST_MEMFD_PFN_ATTRS_NO_PRIVATE)) ||
- 	    !kvm_gmem_pfn_is_cacheable(pfn_attrs))
- 		return;
+ #define VFIO_IORDWR(size)						\
+-static int vfio_pci_iordwr##size(struct vfio_pci_core_device *vdev,\
+-				bool iswrite, bool test_mem,		\
+-				void __iomem *io, char __user *buf,	\
+-				loff_t off, size_t *filled)		\
+-{									\
+-	u##size val;							\
+-	int ret;							\
+-									\
+-	if (iswrite) {							\
+-		if (copy_from_user(&val, buf, sizeof(val)))		\
+-			return -EFAULT;					\
+-									\
+-		ret = vfio_pci_core_iowrite##size(vdev, test_mem,	\
+-						  val, io + off);	\
+-		if (ret)						\
+-			return ret;					\
+-	} else {							\
+-		ret = vfio_pci_core_ioread##size(vdev, test_mem,	\
+-						 &val, io + off);	\
+-		if (ret)						\
+-			return ret;					\
+-									\
+-		if (copy_to_user(buf, &val, sizeof(val)))		\
+-			return -EFAULT;					\
+-	}								\
+-									\
+-	*filled = sizeof(val);						\
+-	return 0;							\
++static int vfio_pci_iordwr##size(struct vfio_pci_core_device *vdev,		\
++				bool iswrite, bool test_mem,			\
++				void __iomem *io, struct iov_iter *iter,	\
++				loff_t off, size_t *filled)			\
++{										\
++	u##size val;								\
++	int ret;								\
++										\
++	if (iswrite) {								\
++		if (!copy_from_iter_full(&val, sizeof(val), iter))		\
++			return -EFAULT;						\
++										\
++		ret = vfio_pci_core_iowrite##size(vdev, test_mem,		\
++						  val, io + off);		\
++		if (ret)							\
++			return ret;						\
++	} else {								\
++		ret = vfio_pci_core_ioread##size(vdev, test_mem,		\
++						 &val, io + off);		\
++		if (ret)							\
++			return ret;						\
++										\
++		if (!copy_to_iter_full(&val, sizeof(val), iter))		\
++			return -EFAULT;						\
++	}									\
++										\
++	*filled = sizeof(val);							\
++	return 0;								\
+ }									\
  
-@@ -5111,6 +5112,12 @@ void sev_handle_rmp_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u64 error_code)
- 		return;
- 	}
- 
-+	if (pfn_attrs & GUEST_MEMFD_PFN_ATTRS_NO_PRIVATE) {
-+		pr_warn_ratelimited("SEV: Unexpected RMP fault, shared-only backing page for GPA 0x%llx\n",
-+				    gpa);
-+		return;
-+	}
-+
- 	if (!kvm_gmem_pfn_is_cacheable(pfn_attrs)) {
- 		pr_warn_ratelimited("SEV: Unexpected RMP fault, non-cacheable backing page for GPA 0x%llx\n",
- 				    gpa);
-diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
-index e5e2dbca152ec..6b137e009982c 100644
---- a/drivers/vfio/pci/vfio_pci.c
-+++ b/drivers/vfio/pci/vfio_pci.c
-@@ -173,7 +173,6 @@ static const struct vfio_device_ops vfio_pci_ops = {
- 	.gmem_release		= vfio_pci_core_gmem_release,
- 	.gmem_get_pfn		= vfio_pci_core_gmem_get_pfn,
- 	.gmem_lookup_pfn_range	= vfio_pci_core_gmem_lookup_pfn_range,
--	.gmem_check_set_attributes = vfio_pci_core_gmem_check_set_attributes,
- 	.gmem_read		= vfio_pci_core_gmem_read,
- 	.gmem_write		= vfio_pci_core_gmem_write,
- #endif
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index c976574782663..ccaa24620112a 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -16,7 +16,6 @@
- #include <linux/eventfd.h>
- #include <linux/file.h>
- #include <linux/guest_memfd.h>
--#include <linux/kvm_host.h>
- #include <linux/interrupt.h>
- #include <linux/iommu.h>
- #include <linux/module.h>
-@@ -2790,45 +2789,25 @@ int vfio_pci_core_gmem_get_pfn(struct vfio_device *core_vdev, pgoff_t index,
- 	if (max_order)
- 		*max_order = 0;
- 
--	if (pfn_attrs)
-+	if (pfn_attrs) {
- 		*pfn_attrs = GUEST_MEMFD_PFN_ATTRS_CACHE_UC_ALLOW_WC;
- 
--	return 0;
--}
--EXPORT_SYMBOL_GPL(vfio_pci_core_gmem_get_pfn);
--
--int vfio_pci_core_gmem_check_set_attributes(struct vfio_device *core_vdev,
--					    pgoff_t index, size_t nr_pages,
--					    u64 attributes)
--{
--	struct vfio_pci_core_device *vdev =
--		container_of(core_vdev, struct vfio_pci_core_device, vdev);
--	pgoff_t bar_pgoff;
--	size_t size;
--	loff_t pos;
--	int bar;
--
--	if (!(attributes & KVM_MEMORY_ATTRIBUTE_PRIVATE))
--		return 0;
--
--	/*
--	 * Prevent private conversion of pages containing the MSI-X vector
--	 * table. The host kernel directly programs MSI-X table entries to
--	 * configure and mask interrupts; converting these pages to private
--	 * would cause host kernel writes to trigger fatal hardware protection
--	 * faults (e.g. RMP or GPT violations) on confidential compute platforms.
--	 */
--	bar = index >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
--	bar_pgoff = index & ((1ULL << (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
--	pos = (loff_t)bar_pgoff << PAGE_SHIFT;
--	size = nr_pages << PAGE_SHIFT;
--
--	if (vfio_pci_range_overlaps_msix(vdev, bar, pos, size))
--		return -EINVAL;
-+		/*
-+		 * Disallow private mappings of pages overlapping the MSI-X
-+		 * vector table. The host kernel directly programs MSI-X table
-+		 * entries to configure and mask interrupts; marking these pages
-+		 * private in hardware protection tables (e.g. RMP or GPT) would
-+		 * cause host kernel writes to trigger fatal faults.
-+		 */
-+		if (vfio_pci_range_overlaps_msix(vdev, bar,
-+						 (loff_t)pgoff << PAGE_SHIFT,
-+						 PAGE_SIZE))
-+			*pfn_attrs |= GUEST_MEMFD_PFN_ATTRS_NO_PRIVATE;
-+	}
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(vfio_pci_core_gmem_check_set_attributes);
-+EXPORT_SYMBOL_GPL(vfio_pci_core_gmem_get_pfn);
- 
- int vfio_pci_core_gmem_lookup_pfn_range(struct vfio_device *core_vdev,
- 					pgoff_t index, unsigned long *pfn,
-diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-index 96a768b5ec71b..770ae8ef7926f 100644
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@ -1621,21 +1621,6 @@ static int vfio_device_gmem_mmap(void *provider, struct vm_area_struct *vma)
- 	return vfio_device_mmap(df->device, vma);
- }
- 
--static int vfio_device_gmem_check_set_attributes(void *provider, pgoff_t index,
--						 size_t nr_pages,
--						 u64 attributes)
--{
--	struct file *file = provider;
--	struct vfio_device_file *df = file->private_data;
--	struct vfio_device *device = df->device;
--
--	if (!device->ops->gmem_check_set_attributes)
--		return 0;
--
--	return device->ops->gmem_check_set_attributes(device, index, nr_pages,
--						      attributes);
--}
--
- static int vfio_device_gmem_lookup_pfn_range(void *provider, pgoff_t index,
- 					     unsigned long *pfn,
- 					     size_t *nr_pages)
-@@ -1692,7 +1677,6 @@ static const struct guest_memfd_provider_operations vfio_device_gmem_provider_op
- 	.read                 = vfio_device_gmem_read,
- 	.write                = vfio_device_gmem_write,
- 	.mmap                 = vfio_device_gmem_mmap,
--	.check_set_attributes = vfio_device_gmem_check_set_attributes,
- };
- 
- int vfio_device_gmem_revoke(struct vfio_device *device, pgoff_t start,
-diff --git a/include/linux/guest_memfd.h b/include/linux/guest_memfd.h
-index c85594b58112a..f839ae936ebed 100644
---- a/include/linux/guest_memfd.h
-+++ b/include/linux/guest_memfd.h
-@@ -32,6 +32,8 @@ struct mempolicy;
- #define GUEST_MEMFD_PFN_ATTRS_CACHE_UC_ALLOW_WC	(2ULL << 1)
- #define GUEST_MEMFD_PFN_ATTRS_CACHE_WC		(3ULL << 1)
- 
-+#define GUEST_MEMFD_PFN_ATTRS_NO_PRIVATE	BIT_ULL(3)
-+
- static inline bool kvm_gmem_pfn_is_cacheable(u64 pfn_attrs)
- {
- 	return (pfn_attrs & GUEST_MEMFD_PFN_ATTRS_CACHE_MASK) ==
-@@ -88,16 +90,6 @@ static inline bool kvm_gmem_pfn_is_cacheable(u64 pfn_attrs)
-  * @mmap: Optional callback to set up user mappings. Called when userspace calls
-  *        mmap() on guest_memfd. The provider can customize VMA flags, or reject
-  *        the mapping.
-- * @check_set_attributes: Optional callback to validate attribute changes on a
-- *                        range of indices before they are committed. Called
-- *                        with the exclusive filemap invalidate lock held. The
-- *                        provider can inspect the requested attributes and
-- *                        offset range and return 0 to allow the transition or
-- *                        a negative error code (e.g. -EINVAL or -EPERM) to
-- *                        reject it. Once @check_set_attributes succeeds, the
-- *                        provider must ensure this result stays valid and
-- *                        constant until guest_memfd stops using the range. Do
-- *                        not take locks held across kvm_gmem_revoke().
-  *
-  * Used by filesystems and device drivers that provide memory for guest_memfd.
+ VFIO_IORDWR(8)
+@@ -132,11 +132,12 @@ VFIO_IORDWR(64)
+  * reads with -1.  This is intended for handling MSI-X vector tables and
+  * leftover space for ROM BARs.
   */
-@@ -117,8 +109,6 @@ struct guest_memfd_provider_operations {
- 			loff_t *ppos);
- 	ssize_t (*write)(void *provider, const void *buf, size_t count,
- 			 loff_t *ppos);
--	int (*check_set_attributes)(void *provider, pgoff_t index,
--				    size_t nr_pages, u64 attributes);
- };
+-ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
+-			       void __iomem *io, char __user *buf,
+-			       loff_t off, size_t count, size_t x_start,
+-			       size_t x_end, bool iswrite,
+-			       enum vfio_pci_io_width max_width)
++static ssize_t __vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev,
++					bool test_mem, void __iomem *io,
++					struct iov_iter *iter, loff_t off,
++					size_t count, size_t x_start,
++					size_t x_end, bool iswrite,
++					enum vfio_pci_io_width max_width)
+ {
+ 	ssize_t done = 0;
+ 	int ret;
+@@ -153,25 +154,25 @@ ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
  
- #ifdef CONFIG_KVM_GUEST_MEMFD
-diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-index 012a233a375ab..c38bbc5568fee 100644
---- a/include/linux/vfio.h
-+++ b/include/linux/vfio.h
-@@ -125,9 +125,6 @@ struct vfio_device_ops {
- 	int (*gmem_get_pfn)(struct vfio_device *device, pgoff_t index,
- 			    unsigned long *pfn, int *max_order,
- 			    u64 *pfn_attrs);
--	int (*gmem_check_set_attributes)(struct vfio_device *device,
--					 pgoff_t index, size_t nr_pages,
--					 u64 attributes);
- 	int (*gmem_lookup_pfn_range)(struct vfio_device *device, pgoff_t index,
- 				     unsigned long *pfn, size_t *nr_pages);
- 	ssize_t (*gmem_read)(struct vfio_device *device, void *buf,
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index 03cb0b41855dd..5bab69cb83c25 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -175,9 +175,6 @@ void vfio_pci_core_gmem_release(struct vfio_device *core_vdev);
- int vfio_pci_core_gmem_get_pfn(struct vfio_device *core_vdev, pgoff_t index,
- 			       unsigned long *pfn, int *max_order,
- 			       u64 *pfn_attrs);
--int vfio_pci_core_gmem_check_set_attributes(struct vfio_device *core_vdev,
--					    pgoff_t index, size_t nr_pages,
--					    u64 attributes);
- int vfio_pci_core_gmem_lookup_pfn_range(struct vfio_device *core_vdev,
- 					pgoff_t index, unsigned long *pfn,
- 					size_t *nr_pages);
-diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index 385b517b49ed5..cd484bdcb3f0c 100644
---- a/virt/kvm/guest_memfd.c
-+++ b/virt/kvm/guest_memfd.c
-@@ -245,16 +245,6 @@ static ssize_t gmem_provider_write(struct gmem_inode *gi,
- 	return -EINVAL;
- }
+ 		if (fillable >= 8 && !(off % 8) && max_width >= 8) {
+ 			ret = vfio_pci_iordwr64(vdev, iswrite, test_mem,
+-						io, buf, off, &filled);
++						io, iter, off, &filled);
+ 			if (ret)
+ 				return ret;
  
--static int gmem_provider_check_set_attributes(struct gmem_inode *gi, pgoff_t index,
--					      size_t nr_pages, u64 attributes)
--{
--	if (gi->provider_ops && gi->provider_ops->check_set_attributes)
--		return gi->provider_ops->check_set_attributes(gi->provider, index,
--							      nr_pages, attributes);
--
--	return 0;
--}
--
- #define kvm_gmem_for_each_file(f, inode) \
- 	list_for_each_entry(f, &GMEM_I(inode)->gmem_file_list, entry)
+ 		} else if (fillable >= 4 && !(off % 4) && max_width >= 4) {
+ 			ret = vfio_pci_iordwr32(vdev, iswrite, test_mem,
+-						io, buf, off, &filled);
++						io, iter, off, &filled);
+ 			if (ret)
+ 				return ret;
  
-@@ -1128,12 +1118,6 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
- 	if (kvm_gmem_range_has_attributes(inode, start, nr_pages, attrs))
- 		goto out;
+ 		} else if (fillable >= 2 && !(off % 2) && max_width >= 2) {
+ 			ret = vfio_pci_iordwr16(vdev, iswrite, test_mem,
+-						io, buf, off, &filled);
++						io, iter, off, &filled);
+ 			if (ret)
+ 				return ret;
  
--	r = gmem_provider_check_set_attributes(gi, start, nr_pages, attrs);
--	if (r) {
--		*err_index = start;
--		goto out;
--	}
--
- 	mas_init(&mas, mt, start);
- 	r = kvm_gmem_mas_preallocate(&mas, attrs, start, nr_pages);
- 	if (r) {
-@@ -1774,10 +1758,11 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 		} else if (fillable) {
+ 			ret = vfio_pci_iordwr8(vdev, iswrite, test_mem,
+-					       io, buf, off, &filled);
++					       io, iter, off, &filled);
+ 			if (ret)
+ 				return ret;
  
- 	/*
- 	 * Private memory requires exclusive, writable guest ownership and
--	 * cannot be backed by a read-only frame.
-+	 * cannot be backed by a read-only or shared-only frame.
- 	 */
- 	if (kvm_gmem_is_private_mem(file_inode(file), index) &&
--	    (*pfn_attrs & GUEST_MEMFD_PFN_ATTRS_READONLY)) {
-+	    (*pfn_attrs & (GUEST_MEMFD_PFN_ATTRS_READONLY |
-+			   GUEST_MEMFD_PFN_ATTRS_NO_PRIVATE))) {
- 		r = -EFAULT;
- 		goto out_put_folio;
+@@ -179,23 +180,45 @@ ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
+ 			/* Fill reads with -1, drop writes */
+ 			filled = min(count, (size_t)(x_end - off));
+ 			if (!iswrite) {
+-				u8 val = 0xFF;
+-				size_t i;
++				static const u8 ff_buf[64] = { [0 ... 63] = 0xFF };
++				size_t cur = filled;
++
++				while (cur) {
++					size_t step = min(cur, sizeof(ff_buf));
+ 
+-				for (i = 0; i < filled; i++)
+-					if (copy_to_user(buf + i, &val, 1))
++					if (!copy_to_iter_full(ff_buf, step, iter))
+ 						return -EFAULT;
++					cur -= step;
++				}
++			} else {
++				iov_iter_advance(iter, filled);
+ 			}
+ 		}
+ 
+ 		count -= filled;
+ 		done += filled;
+ 		off += filled;
+-		buf += filled;
  	}
-@@ -1824,9 +1809,10 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
  
- 	/*
- 	 * Populating pages initializes private memory, which cannot be
--	 * read-only or non-cacheable.
-+	 * read-only, shared-only, or non-cacheable.
- 	 */
--	if ((pfn_attrs & GUEST_MEMFD_PFN_ATTRS_READONLY) ||
-+	if ((pfn_attrs & (GUEST_MEMFD_PFN_ATTRS_READONLY |
-+			  GUEST_MEMFD_PFN_ATTRS_NO_PRIVATE)) ||
- 	    !kvm_gmem_pfn_is_cacheable(pfn_attrs)) {
- 		ret = -EPERM;
- 		goto out_put_folio;
+ 	return done;
+ }
++
++ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
++			       void __iomem *io, char __user *buf,
++			       loff_t off, size_t count, size_t x_start,
++			       size_t x_end, bool iswrite,
++			       enum vfio_pci_io_width max_width)
++{
++	struct iov_iter iter;
++	int ret;
++
++	ret = import_ubuf(iswrite ? ITER_SOURCE : ITER_DEST, buf, count, &iter);
++	if (ret)
++		return ret;
++
++	return __vfio_pci_core_do_io_rw(vdev, test_mem, io, &iter, off, count,
++					x_start, x_end, iswrite, max_width);
++}
+ EXPORT_SYMBOL_GPL(vfio_pci_core_do_io_rw);
+ 
+ ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev, char __user *buf,
 
 -- 
 2.56.0.455.g6c5a503b38-goog
