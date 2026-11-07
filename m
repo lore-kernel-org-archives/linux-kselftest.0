@@ -1,70 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794048217;
-	b=eUMmA2ZCKKBw4gkJN6CK+tacNMfJz9D2DO7Egx1Tig1Nd/7+7EzpUOBL0iDO7Wn353wl
-	 R5Q+EvfMyQIlI3ktbCFZCG5iGhnX2Bc8fU/VxyOsfcKEL7Jj8j79Z4DlizVwSFYoe9PBV
-	 Fv2VDKQK5ubIfAG9Ab/tQSNz9pbcIfzqjPNz9G6pcLog71O6R6abARSXofkdUlXB2hbNq
-	 m2PmP0oPAqD3lL4woapXvddzXGhf9SjIOGCl68ueZGC+rYZHI4Ol2IjzOtpsfkMorcBtW
-	 Yl7BU15Jm8Wn0g5DPtz8RTbiVyArlgkHunjbbN+tv8DBWqhHxS4ccRsA0s9UvJtGwXQ==
+	t=1794048815;
+	b=yQrIb/mz1FU7rNO6n7mix2jQ2GIw+Xy05XVubQm+tmu60jpdBUeODJfytDliNfxfR0v1
+	 aS2mQWV0noi/xQ1HznhDhobyRqvPGKX4dfjbTTrKvhxsAbXFzrTiGRM7DW/wxiiJK65HK
+	 r2/1ElHpv002VPfAbYhXVYNIWSZ6EaNmRTOrBmXMQT5nwExaKZ9YxNl65c/w0S5DnpGmH
+	 S4+wyF8wsBxXIlIzwhxOx1qjFGfTxWYxfC5Vjr6trTqYHifL0XgAdYKfnCdpT9LKmkXkv
+	 yps7mnwQSS9G76GUtnr/ofimRAfLsObney496Gzfz6HMbDZuuHfyPOXeSHlyqm+CbFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794048217;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=00YgSuh+6jx0afSBDldxTfJk1blWDnLXe0VtLaUOxXk=;
-	b=tGTE0tuDU1QULm1ovuXFImvl35dIHMOxYQfjFRgcCVd1mLEhf5vHfEOHXkakrymRQWJf
-	 SgvLyJAjnP9rTdXGNKzIeEMQIxNzFDo4Pj3kElq+GKi8PV9dV2mMbf6RYIEt4INddbMG6
-	 oV79KtVDrNxZWiGIVoNIn/MOa1LXqiEjFlv7p5Z+nPZ4FTQ0PZ/PJYZ6CdlDvjLaJuxaF
-	 RmjME8znKVAMlrRdMHNUDS536FqGErMuPj1iIQnrauEdSbFGKv4rXH4qvvC3SRicHaRNO
-	 Sqx3BMkzK42Uz4/OI7gXzeGP2yGPFLDAFUDjyAwDUOvtPRA3okKk3Zf88/7Qjk1saeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794048815;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=83piHwpYSzR6zROHuprEnSIuvOzBU+T0roPQgf/SBA8=;
+	b=U8Z8csJq/tVOFZm6lb9UYyDMY6mDL9aLWRro8vfqDhz3MU/mzI468zwIKn8I+2mfjh9v
+	 1e+u/BhlaE84oe1GE76LdFY8VqGTjK6rYMj1DZC7zHezeK7Trl4cW1/ffsMh9EvdVzg20
+	 YQqcktG5J9mgcHCv1CIWK2UjMVw7JQRBgWi3B29RHugtN76M2uW5J5cWXzIqwoODwRsyr
+	 vuwZZc18lBoqpqtOIaXIIf2kC5RVEtsYbZZ5oFqbC/k+0xyOnoc1uwoRqoE2kwGoOHJdh
+	 Kh+ysEKUUfshojaUu1JTsnKSkR1oFbbwZWwZVkFqMbYa4UAawaCYH11Oq8uGQVAicmw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=WQ4vEdpT;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=WS3zeBlg;
+	arc=none smtp.remote-ip=95.215.58.175
+Received: from mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90950606A330;
-	Sat,  7 Nov 2026 10:43:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 90950606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0401D606A32D
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 10:53:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0401D606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=WQ4vEdpT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=00YgSuh+6jx0afSBDldxTfJk1blWDnLXe0VtLaUOxXk=; b=WQ4vEdpTpZXUFp0gPkIKkOjiXH
-	VhxJd/x7V53CLfavcaj/BKuDXIlOYi4f5cqfDTgde17E0rGlk40dJjy/zZ2pcBrbtT+Up9sZ9JM2D
-	U9j5jfgF87PiMz53RVu5GqY+VT0IS7bYVriiRRcWwYxAZLAkclp2nnyuoSV3YuteoBMiY8v5eLu8G
-	SpKd3Av0YjIYGyW1yZgo45Did2Hjp5V1RhD1PC/AupJNJKjFFlUtsN0orQ0gqDpLd3opKLbZbyWgi
-	IKH+AOlK2V80w4EKi+NEpSit9SP1vhwEfi7Blwv+LdrOMbP3ko14dF0jh9zqrB5/Ztt1mD/LHOdKQ
-	cJl17gUA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xPdtS-0000000Gido-3xDF;
-	Sat, 07 Nov 2026 10:43:31 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B8FE4300339; Sat, 07 Nov 2026 11:43:29 +0100 (CET)
-Date: Sat, 7 Nov 2026 11:43:29 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, tglx@kernel.org,
-	mingo@redhat.com, linux-kernel@vger.kernel.org, will@kernel.org,
-	boqun@kernel.org, longman@redhat.com, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, dvhart@infradead.org, dave@stgolabs.net,
-	andrealmeid@igalia.com, shuah@kernel.org, juri.lelli@redhat.com,
-	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] locking/rtmutex: Stop spinning on the owner when the
- waiter is woken
-Message-ID: <20261107104329.GA2668564@noisy.programming.kicks-ass.net>
-References: <20261106235931.1478800-1-mathieu.desnoyers@efficios.com>
- <20261106235931.1478800-2-mathieu.desnoyers@efficios.com>
- <20261107002927.3cbad7ff@fedora>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=WS3zeBlg
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=jejRIbtJ8blFOjhH4ULa65m0uCrlH4/Znb48G0JTX1A=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794048810; v=1; x=1794653610;
+ b=WS3zeBlghc0sA53wZNaWTC9ehFtIpjeLXuogzJ8zZatnmogYn8xvjZ8Xe4CKQgx6UWWCPCp9
+ qFLYkpfah/G21nQqBcL9mNCTnj/s6fLJLDLY4FIp3+msDLuhI1+JpqCnqd4hA/mgrtldBVyMZx4
+ 5Dxhyn2EgBKieFKK2JSfW0+0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c87cc596a113beb7;
+	Sat, 07 Nov 2026 10:53:30 +0000
+X-Mizu-Trace-ID: c87cc596a113beb7
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <00c4ec9e-d772-4a2e-a336-aa7076328707@linux.dev>
+Date: Sat, 7 Nov 2026 18:53:24 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,29 +58,230 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261107002927.3cbad7ff@fedora>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/4] cpuset: settle isolation state when CPUs are given
+ back to parent
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Chen Ridong <chenridong@huawei.com>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Sashiko <sashiko-bot@kernel.org>, Guopeng Zhang <zhangguopeng@kylinos.cn>,
+ Ridong Chen <chenridong@xiaomi.com>
+References: <20261106105538.2915492-1-ridong.chen@linux.dev>
+ <20261106105538.2915492-4-ridong.chen@linux.dev>
+ <8efc80ab-3b65-4573-aac4-452bfdbb9a80@redhat.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <8efc80ab-3b65-4573-aac4-452bfdbb9a80@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 07, 2026 at 12:29:27AM -0500, Steven Rostedt wrote:
-> On Fri,  6 Nov 2026 18:59:27 -0500
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> 
-> > The top waiter of an rt_mutex spins while the owner runs,
-> > rtmutex_spin_on_owner(), and does not stop when it is woken: its timeout
-> > and a signal find it running, set it TASK_RUNNING, and the spin goes on
-> > until the owner leaves its CPU or the waiter's own CPU has to
-> > reschedule. A PI futex owner is a user task that may run as long as it
-> > likes. On v7.4-rc1, in 8-CPU VMs, behind an owner spinning in userspace,
-> > a 1ms pthread_mutex_timedlock() returns ETIMEDOUT 126ms to 631ms late on
-> > average, 1.4s at most, a SIGUSR1 is handled up to 1.9s late, and a
-> > waiter killed with SIGKILL is reaped 0.5s late on average. With
-> > PREEMPT_RT the wound of a ww_mutex is missed the same way: two contexts
-> > in an ABBA on two CPUs at SCHED_FIFO spin on each other, and the older
-> > one gets its second lock after 96ms on average, 0.95s at most.
-> > 
-> 
-> The above is very verbose. Are you starting to use AI? ;-)
 
-He definitely is. I can't read the above, its word soup. Part of using
-AI is making sure the Changelog is actually readable. This is not.
+
+On 11/7/2026 10:28 AM, Waiman Long wrote:
+> 
+> On 11/6/26 5:55 AM, Ridong Chen wrote:
+>> From: Ridong Chen <chenridong@xiaomi.com>
+>>
+>> partition_xcpus_del() only updates isolated_cpus when the partition that
+>> gives back the CPUs has a different state than its parent. CPUs that were
+>> further distributed to descendant isolated partitions are not taken into
+>> account, so isolated_cpus_release() has to be called afterwards in
+>> several places to walk up the ancestors and fix isolated_cpus.
+>>
+>> Make partition_xcpus_del() always set the isolation state of the given
+>> back CPUs to the state of the parent that receives them. As the
+>> effective_xcpus of a partition covers the CPUs distributed to its
+>> descendants, the isolation state of those CPUs is settled at the same
+>> time. Boot-time isolated CPUs are still preserved by isolated_cpu_update().
+>>
+>> compute_partition_effective_cpumask() invalidates a child partition
+>> without going through partition_xcpus_del(), so do the same there: the
+>> CPUs of the invalidated child take the isolation state of its parent.
+>>
+>> As the parent may be shrunk and its effective_xcpus not updated yet,
+>> only do so for the CPUs the parent still owns. This is to keep the
+>> isolation state correct for now, the in-place invalidation here will be
+>> removed later in the partition rework.
+>>
+>> isolated_cpus_release() is no longer needed and is removed.
+>>
+>> Acked-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+>> ---
+>>   kernel/cgroup/cpuset.c | 86 +++++++++++-------------------------------
+>>   1 file changed, 23 insertions(+), 63 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 85e5b529d144..a5ab9396eb61 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -1264,42 +1264,21 @@ static void isolated_cpus_update(int old_prs, int 
+>> new_prs, struct cpumask *xcpus
+>>   }
+>>   /*
+>> - * isolated_cpus_release - Remove the relevant CPUs in @xcpus from isolated_cpus
+>> - * @cs: the current cpuset
+>> - * @xcpus: the set of effective xcpus to be considered for removal
+>> - *
+>> - * This function is called when an isolated partition is invalidated or when
+>> - * some of its effective xcpus are to be removed from isolated_cpus due to
+>> - * changes in parent cpuset. The given @xcpus must be modifiable as the function
+>> - * will update its value to determine the right set of CPUs to be removed.
+>> + * isolated_cpus_set_state - Set the isolation state of @xcpus
+>> + * @prs: partition root state that @xcpus will belong to
+>> + * @xcpus: exclusive CPUs whose isolation state may change
+>>    */
+>> -static void isolated_cpus_release(struct cpuset *cs, struct cpumask *xcpus)
+>> +static void isolated_cpus_set_state(int prs, struct cpumask *xcpus)
+>>   {
+>> -    struct cpuset *ancestor = parent_cs(cs);
+>> -    struct cpuset *iancestor = NULL;
+>> -
+>> -    /*
+>> -     * Search the furthest isolated partition root ancestor available
+>> -     * until top_cpuset or a remote partition root is hit.
+>> -     */
+>> -    for (; ancestor; ancestor = parent_cs(ancestor)) {
+>> -        if (ancestor->partition_root_state == PRS_ISOLATED)
+>> -            iancestor = ancestor;
+>> -        if (is_remote_partition(ancestor))
+>> -            break;
+>> -    }
+>> -
+>> -    /*
+>> -     * If a furthest isolated partition acnestor is found, use it to
+>> -     * determine which of the CPUs in @xcpus should be removed from
+>> -     * isolated_cpus. Otherwise, all of them will be removed.
+>> -     */
+>> -    if (iancestor && !cpumask_andnot(xcpus, xcpus, iancestor->effective_xcpus))
+>> -        return; /* No CPU should be removed from isolated_cpus */
+>> +    bool updated = false;
+>> +    int cpu;
+>> -    spin_lock_irq(&callback_lock);
+>> -    isolated_cpus_update(PRS_ISOLATED, PRS_ROOT, xcpus);
+>> -    spin_unlock_irq(&callback_lock);
+>> +    lockdep_assert_held(&callback_lock);
+>> +    lockdep_assert_held(&cpuset_mutex);
+>> +    for_each_cpu(cpu, xcpus)
+>> +        updated |= isolated_cpu_update(prs, cpu);
+>> +    if (updated)
+>> +        update_housekeeping = true;
+>>   }
+> 
+> isolated_cpus_set_state() is almost the same as isolated_cpus_update(). 
+> isolated_cpus_update() just assumes that parent and child prs state should be 
+> different. You are right that we should proceed no matter if the parent and 
+> child has the same state or not. So you should consider merging these two 
+> functions as well.
+> 
+
+Hi Longman,
+
+Thanks for the review. You're right, these two functions should be merged.
+
+I didn't touch partition_xcpus_add() because the rework never hit a
+problem there, so I added isolated_cpus_set_state() instead of changing
+isolated_cpus_update(). However, that's not the right approach;
+
+In the next version, I'll drop the @old_prs argument and the
+WARN_ON_ONCE() from isolated_cpus_update(), use it everywhere, and
+remove isolated_cpus_set_state(). The state check in
+partition_xcpus_add() will go away too, since updating CPUs that are
+already in the right state is a no-op.
+
+> 
+>>   /*
+>> @@ -1355,9 +1334,8 @@ static void partition_xcpus_del(int old_prs, struct 
+>> cpuset *parent,
+>>       if (parent == &top_cpuset)
+>>           cpumask_andnot(subpartitions_cpus, subpartitions_cpus, xcpus);
+>> -    if (old_prs != parent->partition_root_state)
+>> -        isolated_cpus_update(old_prs, parent->partition_root_state,
+>> -                     xcpus);
+>> +    /* CPUs given back, including those of descendants, take parent's state */
+>> +    isolated_cpus_set_state(parent->partition_root_state, xcpus);
+>>       cpumask_or(parent->effective_cpus, parent->effective_cpus, xcpus);
+>>       cpumask_and(parent->effective_cpus, parent->effective_cpus, 
+>> cpu_active_mask);
+>> @@ -1612,6 +1590,7 @@ static void compute_partition_effective_cpumask(struct 
+>> cpuset *cs,
+>>       struct cgroup_subsys_state *css;
+>>       struct cpuset *child;
+>>       bool populated = partition_is_populated(cs, NULL);
+>> +    static cpumask_t xcpus;        /* Protected by cpuset_mutex */
+>>       /*
+>>        * Check child partition roots to see if they should be invalidated
+>> @@ -1640,14 +1619,15 @@ static void compute_partition_effective_cpumask(struct 
+>> cpuset *cs,
+>>               int parent_prs = cs->partition_root_state;
+>>               /*
+>> -             * Invalidate child partition and update isolated_cpus
+>> -             * if necessary.
+>> +             * Invalidate child partition. Its CPUs still owned by
+>> +             * cs take the isolation state of cs. effective_xcpus
+>> +             * of cs may not be updated yet, so recompute it.
+>>                */
+>>               spin_lock_irq(&callback_lock);
+>>               WRITE_ONCE(child->prs_err, PERR_NOCPUS);
+>> -            if ((old_prs == PRS_ISOLATED) && (parent_prs == PRS_ROOT))
+>> -                isolated_cpus_update(PRS_ISOLATED, PRS_ROOT,
+>> -                             child->effective_xcpus);
+>> +            compute_excpus(cs, &xcpus);
+>> +            cpumask_and(&xcpus, &xcpus, child->effective_xcpus);
+>> +            isolated_cpus_set_state(parent_prs, &xcpus);
+>>               child->partition_root_state = -old_prs;
+>>               spin_unlock_irq(&callback_lock);
+>>               notify_partition_change(child, old_prs);
+>> @@ -2080,22 +2060,8 @@ static int update_parent_effective_cpumask(struct 
+>> cpuset *cs, int cmd,
+>>            *
+>>            * A partition error happens when parent has tasks and all
+>>            * its effective CPUs will have to be distributed out.
+>> -         *
+>> -         * For an isolated partition with a shrunk root partition parent
+>> -         * we may need to return some or all of its isolated CPUs.
+>>            */
+>>           nocpu |= cpumask_empty(tmp->delmask);
+>> -        if ((parent_prs == PRS_ROOT) && (old_prs == PRS_ISOLATED)) {
+>> -            cpumask_clear(tmp->addmask);
+>> -            if (nocpu)
+>> -                cpumask_copy(tmp->addmask, cs->effective_xcpus);
+>> -            else if (!cpumask_subset(cs->effective_xcpus, parent- 
+>> >effective_xcpus))
+>> -                cpumask_andnot(tmp->addmask, cs->effective_xcpus,
+>> -                                 parent->effective_xcpus);
+>> -            if (!cpumask_empty(tmp->addmask))
+>> -                isolated_cpus_release(cs, tmp->addmask);
+>> -            /* Expansion of parent's effective_xcpus is handled below */
+>> -        }
+>>           if (nocpu) {
+>>               part_error = PERR_NOCPUS;
+>>               if (is_partition_valid(cs))
+>> @@ -2341,18 +2307,12 @@ static void update_cpumasks_hier(struct cpuset *cs, 
+>> struct tmpmasks *tmp,
+>>                   /*
+>>                    * When parent is not a valid partition root,
+>>                    * child partition roots become invalid too.
+>> -                 *
+>> -                 * For a to be invalidated isolated partition,
+>> -                 * call return_isolated_cpus() to remove the
+>> -                 * relevant CPUs from isolated_cpus.
+>> +                 * The isolation state of their CPUs has been
+>> +                 * settled when the parent gave them back.
+>>                    */
+>>                   if (is_partition_valid(cp))
+>>                       new_prs = -old_prs;
+>> -                if (old_prs == PRS_ISOLATED) {
+>> -                    cpumask_copy(tmp->delmask, cp->effective_xcpus);
+>> -                    isolated_cpus_release(cp, tmp->delmask);
+>> -                }
+>>                   WRITE_ONCE(cp->prs_err,
+>>                          is_partition_invalid(parent)
+>>                          ? PERR_INVPARENT : PERR_NOTPART);
+> 
+
+-- 
+Best regards
+Ridong
+
