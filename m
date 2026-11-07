@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022487;
-	b=cDXSivWud3eEhyPMv++wO2DXi6DMcAaBrRrrPTa6AfXm9qAPxy0dkTrFkAGBZGljpOfq
-	 7O7SqtQv5jH0JE1rZ5wgG+s7v/MZjq+iT6q3KU1yxv86jI43lmBvp885g2GpWBAUcrkOa
-	 fWGdJz0ERLrgiZfN/lFQGyUkE+ef+Tvzl6O1tF0CeTmEREDY4b54VBbORKB2r+ova+09P
-	 MWGglLM7CVkfAGwqATTma8eITCssdoYJxze/eXCnl9JMAWo5/rTXh+QcFQwu2WrYFfsFE
-	 niEdrU0SfqpW00s/3gE3gZssZK8VYRHQlkywIAC7jtTOdrkfZQMougB+qLqyX9H+sYA==
+	t=1794022491;
+	b=v1KRgnWD0KO2bWd4vYvr4pWZO601P17vfBPxwORm6eyXD4n+0qXlC2AMW8ZcyBDKPkGJ
+	 Yp7PmgidzEGrIKThiSG9x7My3IgheLm7UmxcCDmljUG5iTJVFh5gB0YN9+mb5DgWHfPk/
+	 F3gp9hI3n9QdjyW7t4p1J3eqnZLYOKOtYLZs+Nx5nfaHSg35HT+PzQS96EuTb8B9K/097
+	 naSpcxkYFVJdbidBx9Gjt0yt/t0m1s4OHagH9qpjUBDoJ1EykZ/TyRenQrMHsxuIsVPMR
+	 778TL0urttZStaJdzy9l5ikge9OgyR3AhBw1L8nrk9sqerFPttUHmyJlU3ReICOQTow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022487;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022491;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=x4zTBAOSJlU8f106RKk3bpv2K/L+ZgYBExNbeipkUpI=;
-	b=zkWwcwLG8NO+sar4SJiCWjXgohxvxTAbZpMmIvVemCIIMqouz8TioTNDrMfniG1ZiUpT
-	 gxOBVmRa0NIM1E7shz6HbA3tnKgPjTDMnjQ3Sb8+few1xkVpJmxukeBukgRmFAKhr8dLk
-	 gVTWR0a1OMyZ/5xhRy7enwcIILWTIuDWvw2DDLEN37TgKJwunCOVvMin8Ar38tnetEcYb
-	 MxM2I13KNysTMObh656avp0hEwBO6YWaMio5tcizb6vZhVoD8bi+30nKoQBwepKcgQ3RD
-	 DuYqpeOAQ5tBGR7ZRTYfItSL0ezA7l0+kwSsUXzWvNsfZkHrKUQX74ipCXWbBNVX+7g==
+	bh=phfdfz8PzHsM0KuP/80pAKM/8zTKfUk4DuybrzxV7UA=;
+	b=AWeRhBiPHGt/a2EaWwLzRRUy/z7HqJnGLjDfCBUnJdLvf9c03Flsk0NgsFPiCOglJCt5
+	 El/piMUFbhLEheGT2XEOoO/+BlgDe7msi+qlBmdlXxncN4Y3inTcoT8Z/VxlU5U3dZNde
+	 MRAf4Cn7C5QAa2fHpt3e6SSNNuqcWgtPiGjQ+dMx17acv1MzKCI+/fe+CO8c0vJJTK4c4
+	 SMih0mro7OFdW99ohRd5/Dyyk7zsPmbNHDYOBb5gLzzsSOB8h5D6nRF/0fIxuA+lbBpB5
+	 dtshxDu+96x2dLkg77pDCy5n5fVaL5cjOF7eDZ6NHHyj8ochub42DZOW/BEbeSwd1oA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=GIe+ZKoW;
-	arc=none smtp.remote-ip=209.85.218.46
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=XEerxCny;
+	arc=none smtp.remote-ip=209.85.218.41
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFE1606A32C
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 03:34:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4CFE1606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5192A606A32C
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 03:34:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5192A606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=GIe+ZKoW
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c423b145922so177655066b.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 19:34:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=XEerxCny
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c4550d8ab15so167816766b.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 19:34:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794022485; x=1794627285; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1794022490; x=1794627290; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=x4zTBAOSJlU8f106RKk3bpv2K/L+ZgYBExNbeipkUpI=;
-        b=GIe+ZKoW+pY5Fl7fRKi2DeDJ5Qd5FjGaaUW23q/i6MvM4UFc/J0l7jS5zsjSA4ZRxj
-         r6pa4/VmNL+ASX+wt8RkjKMbgD4AleZmF4shbhyaUu6J/yEbfU3gpkM9UDZCBmABAm7k
-         hIu2H6X8DvuG2YzUBsOyN+IcVqUlaVVw/FpnqNNLKwbVfyNlRV0MoM4IgrJnhdunFLYv
-         gIan4/vx0SSq/FbCC4OmZw9l6xwUBLa9I6SULVV+kMzUrNrkMJKSY7+IEue2duvueLN1
-         jH/6HLvXOqGgB/K9Cy+yZ2LN8sVQwYVnB4lHkTjXaMC5uzulWt+HinTK7nADVY5mR1Dz
-         WUog==
+        bh=phfdfz8PzHsM0KuP/80pAKM/8zTKfUk4DuybrzxV7UA=;
+        b=XEerxCnyjwKcqVqFSagvaAZbHGgSLll5tfTp9WFV+MtB/Xamb/ZOeg7o0c4w0XiEMa
+         xMLAkybvutqAKzAPJc3w2D3aLzm53kJswdbjIfF+dsxRxA1fFKLAnFY8qysufmZxqfyF
+         ZeBZxaxgZ64egi+JXBsgu+x2yoPK9UKCTuPK3pOYRKOmAIULnss7ZcMXfrmG09bPPOQB
+         7j1Oneomtfm8iwJxAb3JPGtNhwUlY9ZcY/9l4XHqDYBv9JIcHC4e+O112WzdidDsC9/W
+         EILySWchV9M8g/upHyBA2AGTKppoPkzM9R3XXraFPUnC7o74Ncta280wQseYliN+SdlX
+         /lnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022485; x=1794627285;
+        d=1e100.net; s=20260707; t=1794022490; x=1794627290;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=x4zTBAOSJlU8f106RKk3bpv2K/L+ZgYBExNbeipkUpI=;
-        b=Cst+XrWsc3F6cnYvJt37MUyqTsR9gKcHURZnyV0BBEg/PoRZXaYcULZY5R8M0ztNax
-         RlhksOYbp+nTQlik7EZA14jkEIPuPcWq+SrOVcWulHVCO/ndxGKL4DmFmm8SO8ceRCbt
-         0ZIW88kWe4sKIhRUvN1IZP8F0ScoZFdmMP6NN4JuMvysViXycevPoNvRSLdfSWbepNBu
-         6WE5UseLD79Ho8/dCk6zsH8+XCm+hFd7VEC6yoEptZR9hBNjH/W0WlfmenJ6znNSQMFu
-         +l4j96lKLPX58rISpBIg7EG4vMvlylW5W60r4/5VFFMGi73APSEFjnJBY4EMCZJ0CN2z
-         hEmA==
-X-Forwarded-Encrypted: i=1; AL+hErHerUxq9X3bXD8ySxoBhjYn/H74AAiKPk2joBe0AACk5danvr13C7HHo7nXX5++ghJJ1L8mqhjwlhoYs6FC6hw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9hcpTQ1ho0TwOmVgHrQmm5vhHkzZ8/ekFH9chJZ1w38blYlD/E
-	tI5aFJVFnvsoHPG6p2NZ27+kEX/UiLkWL5Vv67EbAqyySYWNglFKhgvkWDU6hX5y7dE=
-X-Gm-Gg: AYBFou3rN6onPKd9hzlA4LKjJI9heet7ZCYFgLAq8PTXG0zqmXf3tPGVo8UTz5oabVV
-	zYkA1X9lN6C8d43Th6ctxTlGThL/BdN/ZOWQ1X5u3/ILj1E7MRzHTlXoaoIhE9JFbyu00JxRYUW
-	W++q6C+mDFm0RdCqqG7IU1e0HxrBLzbJMUGT4tV+SIQUkDsDIP0at9tH7YP1lYC4VD339GEUaR6
-	rYEdt/PYNXtE5IMWZVJejp+VFv/3buqnRfhQTsj760EIq1WYqWqJyrthW6bAbNr3SkpiKVj2uoR
-	OhWH1et9cCv6gAsVxjFkygey5GLG92+9wDFRDMMNgCKrCdIwhNpNMD3ot7SZ6T0xy/xjzlG4lbD
-	6IU+NYESAWf0DqN6b80KckCXY+7PENY2Q5cSlrEJr3A02CjOIpQILkDKWR0UBHNOvTwMsGZtMjw
-	LNynCq+SMAaVR0/aoqGwlukl+b1JUhVOfah1NLC8FZMh6TlCHnV5f3Jf7joRCJfiIJwBKQ7KMcp
-	Dvfj9JCUSKJ0r6XeLKEaI8YESAmVxhhRuyeKQ1S/wpCJ+UWLrAXzMFqseo+SafrImUCHclS3TY4
-	IP818oD/FAJqyJUrA76I3UF/ph1fmMwRoa/pHiesTQNnMrkyKfLZVc9mfbK5EHwsMGVU8wJut2m
-	N0C8fuS8W
-X-Received: by 2002:a17:907:3e8d:b0:c37:c0dd:6642 with SMTP id a640c23a62f3a-c4d34c6d09emr361258566b.37.1794022484771;
-        Fri, 06 Nov 2026 19:34:44 -0800 (PST)
+        bh=phfdfz8PzHsM0KuP/80pAKM/8zTKfUk4DuybrzxV7UA=;
+        b=sieXLIHSfCwvcup9yZB6CH/fwH2/bvekRGPLofqgV9P/DuE+ywX17Q10uT8e2qjTzx
+         O720irOYEw0ehXDiNzQvcT63FWbelmifxNl6U2mHVyBjuGFkcFu4QN3E6t4WM4iZTyAg
+         BUAzg1mQe8kWJYdJPY2YP2VKymDSo95apA4irbmHMir7V4uRPDTBC7OVkzcy35F9hQJc
+         sV2bqeQPfwOHH1ZplDTKi8aVBfWaaJ7XJli+68HvL/8VsVtXRsgz079VNJXA2OS202mP
+         mi685p4W4KqO8YcLv6AZlzo4wgDCP409BMMAYc6HTGs0NPOobTe1ZyHvVrZWFWJNE+a3
+         uOgQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxo2/kmwdnWK7xk/z1dRFPTaAHYq6bJpdXnEPwUbaN9OQP+rYwp28iBqUeteH6qaRXiTumn1hqSZn5abNgsuo4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+3ih2O13l0xAcdZ1oeo9oWIZNY8cUCyVnHIP8h/NIzU1Kz2zyS
+	44GqOWNQZKiCC8R5uQuDcAxhZMEU1AAmW0ZjKfhGOtmf0cVmhh0YMPFSfUCJuGQVAGQ=
+X-Gm-Gg: AYBFou2vw0RVoQFQFOWp76W++ue2Taz1D+Rnxt7hxvsYG7YMq3rjRNuiaqL98J1BWsM
+	sQKzIqxAQw9e6hhTHO/veVCHH3D82QoJj6oMS4urjosqsXD/pv+Rwo9sMzDB7I8Vbu5WMGqP0d9
+	imMqnCV9MVQPHCXbCFAA1BHrmcnGGZ0lAeEZzPVqrIcCycHHmviFaeXwQm18e2UD3DmZc0gyvx2
+	A9ZF9IYlo6hDNb2vDuGw8GBG/zoaQoUTFsU1ASqgAraNKaLsyvfLbANvx0jrlHtFahqTRzrjr4D
+	A9ig623IQACqQIS0ZfP7mq+jrwp8UzoJlwISF4clnBsJgZgXAe8V2cJaKSHH2Lh0YfGfiUZBnG5
+	Jz5Mw7xRX36J68V7WI8RKANxiFPMBEy82+j9uesqmRxQ12iBY5kCxlAYJqSIVfAl8ZCr+yUTvnM
+	Jt2H4RTOuxqaqPIrsbTgiefQCJrOl25wuv9sS1c+wEU0BQU7cPpNd9xuCnE3JR8fxvyeCJ4Rscq
+	zuGhW8/odtLqQlvPT3evApuObJHQz2RKhgPDgHRZJk9ev60fYyR0/RzKZUkj+utMKImUUMCBwzm
+	RAe8nyHFNId3Amp6tN7KqchcMMN58Z4jaBumIgJ6mwEYtWgInrcf20fxwQxBmEvOtPwDey8m1AY
+	FzeTdCyvE
+X-Received: by 2002:a17:907:60c8:b0:c34:1ed:54d9 with SMTP id a640c23a62f3a-c4d344a872bmr442362766b.4.1794022489809;
+        Fri, 06 Nov 2026 19:34:49 -0800 (PST)
 Received: from L9JK9NPFH9.lan ([104.28.20.56])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4d3562e00dsm121104166b.21.2026.11.06.19.34.41
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4d3562e00dsm121104166b.21.2026.11.06.19.34.44
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 06 Nov 2026 19:34:43 -0800 (PST)
+        Fri, 06 Nov 2026 19:34:47 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -117,9 +117,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	kernel-team@cloudflare.com,
 	nh-open-source@amazon.com,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next 3/8] rtnetlink: add IFLA_TX_EXTRA_HEADROOM
-Date: Sat,  7 Nov 2026 03:34:22 +0000
-Message-ID: <e515d1a0d46831ca06f45659caa8c7c5668e20c9.1794020868.git.tianyi@cloudflare.com>
+Subject: [PATCH net-next 4/8] selftests: net: add tx_extra_headroom test
+Date: Sat,  7 Nov 2026 03:34:23 +0000
+Message-ID: <0a1936109734e9bbc443ec34744112a7f6a83976.1794020868.git.tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <cover.1794020868.git.tianyi@cloudflare.com>
 References: <cover.1794020868.git.tianyi@cloudflare.com>
@@ -136,196 +136,189 @@ Content-Transfer-Encoding: 8bit
 
 From: David Keogh <dkeogh@amazon.com>
 
-Expose tx_extra_headroom through a new IFLA_TX_EXTRA_HEADROOM u32
-attribute. The value is bounded to NETDEV_TX_EXTRA_HEADROOM_MAX
-(512 bytes) by the netlink policy, which is plenty for several layers
-of encapsulation while keeping the growth of per-packet allocations
-modest.
-
-The attribute can be given when creating a link and when changing one.
-It is included in link dumps and a change triggers the usual link
-notification when the device is up. Zero is the default and resets the
-reservation.
-
-IFLA_HEADROOM keeps reporting needed_headroom, the driver's own
-requirement, so userspace can tell the two apart.
-
-The setting applies to the device the packet is allocated for, that is
-the device selected by the route, and is not inherited by stacked
-devices. Document that together with the allocation-only semantics in
-netdevices.rst and add the attribute to the rt-link spec.
+Exercise the IFLA_TX_EXTRA_HEADROOM attribute through YNL: the default
+of zero, setting values up to the maximum and back to zero, rejection of
+a value above the maximum, supplying the attribute at link creation, the
+change notification, persistence across link down/up and across a
+network namespace move, and that a VLAN created on top of a configured
+device does not inherit the setting. It also checks that setting the
+attribute does not change needed_headroom. On a kernel without the
+attribute, every case is skipped.
 
 Signed-off-by: David Keogh <dkeogh@amazon.com>
-[tianyi: make IFLA_TX_EXTRA_HEADROOM a u32, fix the docs]
+[tianyi: skip on old kernels, check needed_headroom exactly]
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
-IFLA_TX_EXTRA_HEADROOM is a u32 attribute, although the maximum value
-(NETDEV_TX_EXTRA_HEADROOM_MAX) is 512.
-Documentation/userspace-api/netlink/specs.rst says to avoid types
-smaller than 32 bits. Netlink aligns each attribute to 4 bytes, so a
-smaller type does not save memory. The dev->tx_extra_headroom field
-stays unsigned short. IFLA_GSO_MAX_SEGS and the u16 dev->gso_max_segs
-do the same.
----
- Documentation/netlink/specs/rt-link.yaml | 12 ++++++++
- Documentation/networking/netdevices.rst  | 35 ++++++++++++++++++++++++
- include/uapi/linux/if_link.h             |  1 +
- net/core/rtnetlink.c                     | 19 ++++++++++++-
- 4 files changed, 66 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/tx_extra_headroom.py        | 147 ++++++++++++++++++
+ 2 files changed, 148 insertions(+)
+ create mode 100755 tools/testing/selftests/net/tx_extra_headroom.py
 
-diff --git a/Documentation/netlink/specs/rt-link.yaml b/Documentation/netlink/specs/rt-link.yaml
-index 81b58633911d..fb76410abd5b 100644
---- a/Documentation/netlink/specs/rt-link.yaml
-+++ b/Documentation/netlink/specs/rt-link.yaml
-@@ -1098,6 +1098,16 @@ attribute-sets:
-         name: pacing-offload
-         type: u32
-         doc: Enable EDT pacing offload (0 - disabled, 1 - enabled).
-+      -
-+        name: tx-extra-headroom
-+        type: u32
-+        doc: |
-+          Additional headroom, in bytes, reserved on top of the driver's
-+          requirement when the UDP, raw, AF_PACKET and AF_XDP copy mode transmit
-+          paths allocate a packet for this device. TCP and forwarded packets are
-+          not covered. Zero (the default) disables the extra reservation.
-+        checks:
-+          max: 512
-   -
-     name: prop-list-link-attrs
-     subset-of: link-attrs
-@@ -2471,6 +2481,7 @@ operations:
-             - gso-ipv4-max-size
-             - gro-ipv4-max-size
-             - af-spec
-+            - tx-extra-headroom
-     -
-       name: newlink-ntf
-       doc: Notify that a link has been created
-@@ -2567,6 +2578,7 @@ operations:
-             - gso-ipv4-max-size
-             - gro-ipv4-max-size
-             - pacing-offload
-+            - tx-extra-headroom
-       dump:
-         request:
-           value: 18
-diff --git a/Documentation/networking/netdevices.rst b/Documentation/networking/netdevices.rst
-index 6a87f09e7015..da3556e56cc2 100644
---- a/Documentation/networking/netdevices.rst
-+++ b/Documentation/networking/netdevices.rst
-@@ -441,6 +441,41 @@ from a notifier.
- 
- Drivers **must not** generate nested notifications of the ops-locked types.
- 
-+TX headroom reservation
-+=======================
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 9180b9bec515..4a931c010762 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -121,6 +121,7 @@ TEST_PROGS := \
+ 	test_vxlan_vnifiltering.sh \
+ 	tfo_passive.sh \
+ 	traceroute.sh \
++	tx_extra_headroom.py \
+ 	txtimestamp.sh \
+ 	udpgro.sh \
+ 	udpgro_bench.sh \
+diff --git a/tools/testing/selftests/net/tx_extra_headroom.py b/tools/testing/selftests/net/tx_extra_headroom.py
+new file mode 100755
+index 000000000000..153384a1fb0d
+--- /dev/null
++++ b/tools/testing/selftests/net/tx_extra_headroom.py
+@@ -0,0 +1,147 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-+``needed_headroom`` is the driver's own additional header-space requirement.
-+It is written by the driver, or by a stacked device inheriting the value of
-+the device below it, and is reported read-only through ``IFLA_HEADROOM``.
++"""Tests for the IFLA_TX_EXTRA_HEADROOM link attribute."""
 +
-+``tx_extra_headroom`` is a separate reservation configured by the
-+administrator through the ``IFLA_TX_EXTRA_HEADROOM`` rtnetlink attribute, a
-+byte count from 0 to 512 that defaults to 0. It can be supplied when a link
-+is created or changed, is reported in link dumps and change notifications,
-+and setting it back to 0 removes it.
++from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_raises, KsftSkipEx
++from lib.py import ip
++from lib.py import NetNS, NetNSEnter
++from lib.py import Netlink, NlError, RtnlFamily
 +
-+The extra reservation is only applied when the stack allocates a locally
-+generated packet for transmission through the device. ``LL_ALLOC_SPACE()``
-+adds ``tx_extra_headroom`` before ``LL_RESERVED_SPACE()`` aligns the sum to
-+``HH_DATA_MOD``, and is used by the UDP, raw and AF_PACKET transmit paths.
-+AF_XDP copy mode adds it through ``netdev_tx_alloc_headroom()``. Its purpose
-+is to give programs attached at TC egress room to push additional headers
-+without having to reallocate the packet first.
++ATTR = "tx-extra-headroom"
++MAX = 512
 +
-+The setting is deliberately not part of ``LL_RESERVED_SPACE()``, which
-+remains the threshold for deciding whether an already existing packet must
-+be expanded. Packets that reach the device with less than the extra
-+reservation, such as forwarded packets or TCP segments, are therefore not
-+reallocated because of it. Consumers must keep their usual headroom and
-+clone checks.
 +
-+The setting is not inherited through stacked devices. Packets are allocated
-+against the device selected by the route, so configure it on the VLAN,
-+bond or bridge device the route points at rather than on the device
-+beneath it. It survives link down/up and network namespace moves and is
-+independent of any TC or BPF attachment. It does not change the MTU or
-+the bytes on the wire.
++def ifindex(name):
++    """Return the ifindex of device name."""
++    return ip(f"link show dev {name}", json=True)[0]["ifindex"]
 +
- NETDEV_INTERNAL symbol namespace
- ================================
- 
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index 245b36204525..fb3a6b382a78 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -382,6 +382,7 @@ enum {
- 	IFLA_HEADROOM,
- 	IFLA_TAILROOM,
- 	IFLA_PACING_OFFLOAD,
-+	IFLA_TX_EXTRA_HEADROOM,
- 	__IFLA_MAX
- };
- 
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index e141340172ce..16ee1a874107 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -1409,6 +1409,7 @@ static noinline size_t if_nlmsg_size(const struct net_device *dev,
- 	       + nla_total_size(4)  /* IFLA_PACING_OFFLOAD */
- 	       + nla_total_size(2)  /* IFLA_HEADROOM */
- 	       + nla_total_size(2)  /* IFLA_TAILROOM */
-+	       + nla_total_size(4)  /* IFLA_TX_EXTRA_HEADROOM */
- 	       + rtnl_dev_parent_size(dev)
- 	       + 0;
- 
-@@ -2206,7 +2207,9 @@ static int rtnl_fill_ifinfo(struct sk_buff *skb,
- 	    nla_put_u16(skb, IFLA_HEADROOM,
- 			READ_ONCE(dev->needed_headroom)) ||
- 	    nla_put_u16(skb, IFLA_TAILROOM,
--			READ_ONCE(dev->needed_tailroom)))
-+			READ_ONCE(dev->needed_tailroom)) ||
-+	    nla_put_u32(skb, IFLA_TX_EXTRA_HEADROOM,
-+			READ_ONCE(dev->tx_extra_headroom)))
- 		goto nla_put_failure;
- 
- 	if (rtnl_fill_proto_down(skb, dev))
-@@ -2367,6 +2370,8 @@ static const struct nla_policy ifla_policy[IFLA_MAX+1] = {
- 	[IFLA_HEADROOM]		= { .type = NLA_REJECT },
- 	[IFLA_TAILROOM]		= { .type = NLA_REJECT },
- 	[IFLA_PACING_OFFLOAD]	= NLA_POLICY_MAX(NLA_U32, 1),
-+	[IFLA_TX_EXTRA_HEADROOM] =
-+		NLA_POLICY_MAX(NLA_U32, NETDEV_TX_EXTRA_HEADROOM_MAX),
- };
- 
- static const struct nla_policy ifla_info_policy[IFLA_INFO_MAX+1] = {
-@@ -3374,6 +3379,15 @@ static int do_setlink(const struct sk_buff *skb, struct net_device *dev,
- 		}
- 	}
- 
-+	if (tb[IFLA_TX_EXTRA_HEADROOM]) {
-+		u32 val = nla_get_u32(tb[IFLA_TX_EXTRA_HEADROOM]);
 +
-+		if (dev->tx_extra_headroom != val) {
-+			WRITE_ONCE(dev->tx_extra_headroom, val);
-+			status |= DO_SETLINK_NOTIFY;
-+		}
-+	}
++def get(rtnl, idx):
++    """Return the IFLA_TX_EXTRA_HEADROOM value of ifindex idx."""
++    link = rtnl.getlink({"ifi-index": idx})
++    if ATTR not in link:
++        raise KsftSkipEx("no IFLA_TX_EXTRA_HEADROOM support")
++    return link[ATTR]
 +
- 	if (tb[IFLA_OPERSTATE])
- 		set_operstate(dev, nla_get_u8(tb[IFLA_OPERSTATE]));
- 
-@@ -3865,6 +3879,9 @@ struct net_device *rtnl_create_link(struct net *net, const char *ifname,
- 		netif_set_gso_ipv4_max_size(dev, nla_get_u32(tb[IFLA_GSO_IPV4_MAX_SIZE]));
- 	if (tb[IFLA_GRO_IPV4_MAX_SIZE])
- 		netif_set_gro_ipv4_max_size(dev, nla_get_u32(tb[IFLA_GRO_IPV4_MAX_SIZE]));
-+	if (tb[IFLA_TX_EXTRA_HEADROOM])
-+		dev->tx_extra_headroom =
-+			nla_get_u32(tb[IFLA_TX_EXTRA_HEADROOM]);
- 
- 	return dev;
- }
++
++def set_hr(rtnl, idx, val):
++    """Set IFLA_TX_EXTRA_HEADROOM of ifindex idx to val."""
++    get(rtnl, idx)  # an old kernel ignores the attribute
++    rtnl.setlink({"ifi-index": idx, ATTR: val})
++
++
++def test_default_and_set() -> None:
++    """Default is 0, values up to the maximum are accepted, 0 resets."""
++    with NetNS() as ns, NetNSEnter(str(ns)):
++        ip("link add dummy0 type dummy")
++        rtnl = RtnlFamily()
++        idx = ifindex("dummy0")
++
++        ksft_eq(get(rtnl, idx), 0)
++        for val in (1, 256, MAX):
++            set_hr(rtnl, idx, val)
++            ksft_eq(get(rtnl, idx), val)
++            ksft_eq(rtnl.getlink({"ifi-index": idx})["headroom"], 0,
++                    "needed_headroom")
++        set_hr(rtnl, idx, 0)
++        ksft_eq(get(rtnl, idx), 0)
++
++
++def test_reject_above_max() -> None:
++    """Values above the maximum are rejected by the policy."""
++    with NetNS() as ns, NetNSEnter(str(ns)):
++        ip("link add dummy0 type dummy")
++        rtnl = RtnlFamily()
++        idx = ifindex("dummy0")
++
++        set_hr(rtnl, idx, 128)
++        with ksft_raises(NlError):
++            set_hr(rtnl, idx, MAX + 1)
++        ksft_eq(get(rtnl, idx), 128)
++
++
++def test_newlink() -> None:
++    """The attribute can be supplied when the link is created."""
++    with NetNS() as ns, NetNSEnter(str(ns)):
++        rtnl = RtnlFamily()
++        rtnl.newlink({"ifname": "dummy0", "linkinfo": {"kind": "dummy"},
++                      ATTR: 64},
++                     flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL])
++        ksft_eq(get(rtnl, ifindex("dummy0")), 64)
++
++
++def test_notification() -> None:
++    """A change produces a link notification carrying the new value."""
++    with NetNS() as ns, NetNSEnter(str(ns)):
++        ip("link add dummy0 type dummy")
++        ip("link set dev dummy0 up")
++        rtnl = RtnlFamily()
++        idx = ifindex("dummy0")
++
++        rtnl.ntf_subscribe("rtnlgrp-link")
++        set_hr(rtnl, idx, 192)
++
++        seen = None
++        for msg in rtnl.poll_ntf(duration=1):
++            if msg["name"] == "getlink" and msg["msg"]["ifi-index"] == idx:
++                seen = msg["msg"][ATTR]
++                break
++        ksft_eq(seen, 192)
++
++
++def test_survives_down_up() -> None:
++    """Toggling the link does not reset the value."""
++    with NetNS() as ns, NetNSEnter(str(ns)):
++        ip("link add dummy0 type dummy")
++        rtnl = RtnlFamily()
++        idx = ifindex("dummy0")
++
++        set_hr(rtnl, idx, 96)
++        ip("link set dev dummy0 up")
++        ksft_eq(get(rtnl, idx), 96)
++        ip("link set dev dummy0 down")
++        ksft_eq(get(rtnl, idx), 96)
++
++
++def test_survives_netns_move() -> None:
++    """Moving the link to another namespace keeps the value."""
++    with NetNS() as ns1, NetNS() as ns2:
++        with NetNSEnter(str(ns1)):
++            ip("link add dummy0 type dummy")
++            rtnl = RtnlFamily()
++            set_hr(rtnl, ifindex("dummy0"), 160)
++            ip(f"link set dev dummy0 netns {ns2}")
++
++        with NetNSEnter(str(ns2)):
++            rtnl = RtnlFamily()
++            ksft_eq(get(rtnl, ifindex("dummy0")), 160)
++
++
++def test_not_inherited() -> None:
++    """Stacked devices do not inherit the value of the device below."""
++    with NetNS() as ns, NetNSEnter(str(ns)):
++        ip("link add dummy0 type dummy")
++        rtnl = RtnlFamily()
++        set_hr(rtnl, ifindex("dummy0"), 224)
++
++        ip("link add link dummy0 name dummy0.10 type vlan id 10")
++        ksft_eq(get(rtnl, ifindex("dummy0.10")), 0)
++        ksft_eq(rtnl.getlink({"ifi-index": ifindex("dummy0.10")})["headroom"],
++                4, "vlan needed_headroom")
++
++
++def main() -> None:
++    """Run all test cases."""
++    ksft_run([test_default_and_set,
++              test_reject_above_max,
++              test_newlink,
++              test_notification,
++              test_survives_down_up,
++              test_survives_netns_move,
++              test_not_inherited])
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.56.0
 
