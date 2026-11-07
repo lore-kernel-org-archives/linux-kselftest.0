@@ -1,74 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794044930;
-	b=FxN8x0CdoVmuXem/PbyuZoavU79Lrb/y11DkGIRuhpDeJYYbN7ZNLB7eLcnRSl9w9bSe
-	 rYWYwbsuPSUJu1yNcsBJRf7TfIElA7NWyzg3rhe6M4UvIGFwzypQCZBimsXWhuv2uiMUO
-	 yB13Deb9RKSvdZgwpL0A2CgCFVGKmGw5TBxalc+OtpMI8DlwYuIdDt8T+7GWCg7GFwsXG
-	 2cOMmw6L7kyXLbwiRiG6by8jyMWLJolvKwMJcdk+AMI84zGJSXlDtNuaY2FqbXjcgxWny
-	 505wsLusQcyNy03C3qZ0kfdlO+lqZHE7WP1mI5jxNRR0MIitwhk2bkzMmjsn6WbB0xQ==
+	t=1794048217;
+	b=eUMmA2ZCKKBw4gkJN6CK+tacNMfJz9D2DO7Egx1Tig1Nd/7+7EzpUOBL0iDO7Wn353wl
+	 R5Q+EvfMyQIlI3ktbCFZCG5iGhnX2Bc8fU/VxyOsfcKEL7Jj8j79Z4DlizVwSFYoe9PBV
+	 Fv2VDKQK5ubIfAG9Ab/tQSNz9pbcIfzqjPNz9G6pcLog71O6R6abARSXofkdUlXB2hbNq
+	 m2PmP0oPAqD3lL4woapXvddzXGhf9SjIOGCl68ueZGC+rYZHI4Ol2IjzOtpsfkMorcBtW
+	 Yl7BU15Jm8Wn0g5DPtz8RTbiVyArlgkHunjbbN+tv8DBWqhHxS4ccRsA0s9UvJtGwXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794044930;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=rorNI1UIic/55wFWIBl0e+Ri75FN+PnMt9WvbEXwkRc=;
-	b=U7/psnXgEAnYQfxcSYHkkcUaBfLtp62nIG71yjEKq9ciYEBylQLa1LRNjfxuI8QXWsQc
-	 I6sGz2e6w6flKpwB3Gi59o/W9xwSWMotfMs8WhV/A4PkVzmRf0kzY6kGLWlBV69TJS6VK
-	 y8RCWYnIQoFkNGesjqgVrUUl9jcFQE9zwooeG9FHN/3/rX2h7/IDeGXJS1IPkU83u/yfm
-	 x/kyM1KupAhNeUhYagHFQ/QuCeoP0LMtpamDdbaNo70nyBMM0xyMQyigE+SjBOXQcCqAj
-	 /9c66oNu7IYlPouJfRw7syEROdKPuzSCD38Uj3D8yBaUJmO/YKo4Bs7G9XBhIToBd2w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794048217;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=00YgSuh+6jx0afSBDldxTfJk1blWDnLXe0VtLaUOxXk=;
+	b=tGTE0tuDU1QULm1ovuXFImvl35dIHMOxYQfjFRgcCVd1mLEhf5vHfEOHXkakrymRQWJf
+	 SgvLyJAjnP9rTdXGNKzIeEMQIxNzFDo4Pj3kElq+GKi8PV9dV2mMbf6RYIEt4INddbMG6
+	 oV79KtVDrNxZWiGIVoNIn/MOa1LXqiEjFlv7p5Z+nPZ4FTQ0PZ/PJYZ6CdlDvjLaJuxaF
+	 RmjME8znKVAMlrRdMHNUDS536FqGErMuPj1iIQnrauEdSbFGKv4rXH4qvvC3SRicHaRNO
+	 Sqx3BMkzK42Uz4/OI7gXzeGP2yGPFLDAFUDjyAwDUOvtPRA3okKk3Zf88/7Qjk1saeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iW02CE60;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=WQ4vEdpT;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20473606D801;
-	Sat,  7 Nov 2026 09:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90950606A330;
+	Sat,  7 Nov 2026 10:43:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 90950606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iW02CE60
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 328FB1F0089F;
-	Sat,  7 Nov 2026 09:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794044929;
-	bh=rorNI1UIic/55wFWIBl0e+Ri75FN+PnMt9WvbEXwkRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iW02CE60RHF02fEuqPqKcJf6i4V3KTjWDHzo9DZbo95gORtH0ZrmCJDxrNOCnD4Id
-	 9WnOBlB++VD4fZIWQsCzrQhJIry0nbljvHblYH3quGITH2PJSiPvwUzFopDT7DZDt2
-	 EHHmNwDws2w9I0dTG1wwVA0PVma1a6Hmr9kUmUnaP/d8oN+oH0kQjwhxNPRQPPwlA4
-	 xw0Rt/uXRWnSdUas9IyJY6YU5S7A3WpR700rHxBipZTWxfOwImozcBkuV3AdARVDwJ
-	 t+x6t7k7LiUG553yMU1QgCJYHr0hUKV7+ybnwND/Tl+BQydELSVgjRpI3YK5OOLnj3
-	 agc3DJMfrldDA==
-Date: Sat, 7 Nov 2026 10:48:35 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
-	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
-	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
-	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
-	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
-	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
-	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
-	Chuck Lever <cel@kernel.org>
-Subject: Re: [PATCH RESEND v2 14/23] proc: let procfs copy in writes before
- pinning the entry
-Message-ID: <20261107-akteur-gemieden-eckdaten-21304d085e35@brauner>
-References: <20261104-work-procfs-core-v2-14-76ace653a773@kernel.org>
- <CAMuHMdVfakapgBK6TBhO1iWX8qzvLDk8jzRS=t2MVa5G=MCUeg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=WQ4vEdpT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=00YgSuh+6jx0afSBDldxTfJk1blWDnLXe0VtLaUOxXk=; b=WQ4vEdpTpZXUFp0gPkIKkOjiXH
+	VhxJd/x7V53CLfavcaj/BKuDXIlOYi4f5cqfDTgde17E0rGlk40dJjy/zZ2pcBrbtT+Up9sZ9JM2D
+	U9j5jfgF87PiMz53RVu5GqY+VT0IS7bYVriiRRcWwYxAZLAkclp2nnyuoSV3YuteoBMiY8v5eLu8G
+	SpKd3Av0YjIYGyW1yZgo45Did2Hjp5V1RhD1PC/AupJNJKjFFlUtsN0orQ0gqDpLd3opKLbZbyWgi
+	IKH+AOlK2V80w4EKi+NEpSit9SP1vhwEfi7Blwv+LdrOMbP3ko14dF0jh9zqrB5/Ztt1mD/LHOdKQ
+	cJl17gUA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xPdtS-0000000Gido-3xDF;
+	Sat, 07 Nov 2026 10:43:31 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B8FE4300339; Sat, 07 Nov 2026 11:43:29 +0100 (CET)
+Date: Sat, 7 Nov 2026 11:43:29 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, tglx@kernel.org,
+	mingo@redhat.com, linux-kernel@vger.kernel.org, will@kernel.org,
+	boqun@kernel.org, longman@redhat.com, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, dvhart@infradead.org, dave@stgolabs.net,
+	andrealmeid@igalia.com, shuah@kernel.org, juri.lelli@redhat.com,
+	linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] locking/rtmutex: Stop spinning on the owner when the
+ waiter is woken
+Message-ID: <20261107104329.GA2668564@noisy.programming.kicks-ass.net>
+References: <20261106235931.1478800-1-mathieu.desnoyers@efficios.com>
+ <20261106235931.1478800-2-mathieu.desnoyers@efficios.com>
+ <20261107002927.3cbad7ff@fedora>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,58 +74,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVfakapgBK6TBhO1iWX8qzvLDk8jzRS=t2MVa5G=MCUeg@mail.gmail.com>
+In-Reply-To: <20261107002927.3cbad7ff@fedora>
 
-On Thu, Nov 05, 2026 at 11:07:32AM +0100, Geert Uytterhoeven wrote:
-> > +       ssize_t (*proc_write_buf)(struct file *, char *, size_t, loff_t *);
+On Sat, Nov 07, 2026 at 12:29:27AM -0500, Steven Rostedt wrote:
+> On Fri,  6 Nov 2026 18:59:27 -0500
+> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 > 
-> "const char *"?
+> > The top waiter of an rt_mutex spins while the owner runs,
+> > rtmutex_spin_on_owner(), and does not stop when it is woken: its timeout
+> > and a signal find it running, set it TASK_RUNNING, and the spin goes on
+> > until the owner leaves its CPU or the waiter's own CPU has to
+> > reschedule. A PI futex owner is a user task that may run as long as it
+> > likes. On v7.4-rc1, in 8-CPU VMs, behind an owner spinning in userspace,
+> > a 1ms pthread_mutex_timedlock() returns ETIMEDOUT 126ms to 631ms late on
+> > average, 1.4s at most, a SIGUSR1 is handled up to 1.9s late, and a
+> > waiter killed with SIGKILL is reaped 0.5s late on average. With
+> > PREEMPT_RT the wound of a ww_mutex is missed the same way: two contexts
+> > in an ABBA on two CPUs at SCHED_FIFO spin on each other, and the older
+> > one gets its second lock after 96ms on average, 0.95s at most.
+> > 
+> 
+> The above is very verbose. Are you starting to use AI? ;-)
 
-I prototyped this to have a detailed reply. It's not worth it.
-
-* The buffer is the entry's private copy.
-  procfs creates the copy for this specific call and frees it
-  afterwards.
-
-  A bunch of handlers modify the buffer in place and it's documented as
-  allowed:
-
-  - afs_proc_cells_write()
-  - afs_proc_sysname_write
-  - a chunk of the sunrpc cache channel ->cache_parse() implementations
-  - thinkpad_acpi's ->write() methods
-  - SCSI devinfo file
-  - dyndbg
-  - cio_ignore
-  - the pseries ofdt parsers
-  - two more hand the buffer to a char * interface:
-    - the SCSI host ->write_info()
-    - simple_strtoul() in proc_scsi_write()
-  - four strip a trailing newline in place
-
-All ways to make that work suck.
-
-(1) Copy in the handler. That means eight kmemdup_nul()s and a
-    kvmemdup() for every nfs downcall.
-    IOW the copy this series just removed comes back as a copy of a
-    copy which is not acceptable.
-
-(2) Make the parsers work on spans which also sucks and doesn't solve
-    all of them.
-
-(3) Leave the buffer writable. Costs nothing, nobody else can see it.
-
-So (3) I think char * stays.
-
-> While at it, I think it would be good to use this conversion as an
-> opportunity to replace "char *" by "void *", which will probably let
-> you drop several casts from users.
-
-So I tried that too. The thing is it drops exactly one u8 * cast in
-ntfs3's label write. And to get this done we need to introduce a whole
-range of local char *foo = arg assignments. So I decided against this.
-It just doesn't add value.
-
-Thanks for taking a look!
+He definitely is. I can't read the above, its word soup. Part of using
+AI is making sure the Changelog is actually readable. This is not.
