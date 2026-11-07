@@ -1,117 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794077103;
-	b=gVJjoBgqnS+RaDV2nrK4g/a0DgaMhWBxVQSN7h8K8nOvqa3eKcgFWHWSbZ7jBU68zyNk
-	 9kkxwYSI7Pv0qNvNHz6x1SRzvU5RoXQy0uWiGomAuy2L7WnvZcOkiyIm+mdMY7yC95wOB
-	 80+lPfKBq39Mc8qBCbeZpaxq4ME6TR85+J7GfcZt4aWytYabAVDEG24A1yvCb9o8aumK5
-	 mCP2L3nFsWR3dKFhrhAwMHptLElbl/FQstvnh4QoRg8GYUOAD1s1MR+9i2hokxwxS77Su
-	 r2GpvvhM1qBXWim6x7IVuK8jFSAcdmsoT7JOqNul66ipjAdBH6izQR6UY/+yW+1B8Cw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794077103;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794077276;
+	b=46Egdd71YXqJzb8y54svgnrzdTTwzJ60ZZz7EevYKSwzDSUudqTCwtoq5twSLVxrkH5f
+	 XYECmIJyTSFu+Y/e+RAPFgOqp0Tq12N97AIJUNm9F3kbh4tLKkaoL+FgXxlsZdwpF44ws
+	 vRofCPN51gG5qLcRoORUDy360e0xm8HyYUim+E+tlze5BWKfZSGWnBVJVK2lyFgYvp/CK
+	 LmSkT3om3TXXtOo6Iz5XKvRP0KDzmKGTdMk43Id2oFxRe8mYnrzgD5ibGxwHccgV9seHD
+	 chr0HezUzWaI0ASJStQ7CENRXB3TzK50b0/O2DUh2k0ivjDyyTvMDs5cMVMWnd7NlrQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794077276;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=fhdhbpDGmd7gIfxOVLBlem2mFmloT/DJ5ctenjojXQM=;
-	b=hbVT6d5r6ZMkWY4RNrEWQvrVn77aFZRhsccYAB1u5hLYyBcuogwPfhZYDKHtXS7RisN0
-	 PKDfcRxach8MvrePLWczuZZf4t9VKOSL2UdBg8LLF16UgQ/GV3GYZwtJ0yhe8P8w+zM5g
-	 /SenQcJX8zw3CH1zBhIJyaJ1I/MW42ioPtgPtYIVbry4Cs73vGK0fQ4R6JREftMqxCQp2
-	 x1PPPbhy7U1QeOdzDzrg8zZL9hBq05yqSUhFkh3clVIAZz3EaWXU4sgHDtnOV8BmMxCkh
-	 ciWnGa7yduJ1NQ8Ln5UQtsz3UQgNU96eDyvhnUqQRdQot/X5AespV27BmTqFq9J+3Vw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=blockcast.net;
-	spf=pass smtp.mailfrom=blockcast.net;
-	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=GkNciejQ;
-	arc=none smtp.remote-ip=74.125.82.182
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
+	b=mq7QuH1kZnX1U2dbwjs7m5W3z05uCACPC1ByZOU3T/CSbQjM/vmg/V1PQe+MsR287XEI
+	 /2hpROvMkLuDp1Wq9hTlhCHhkkobyczALxFi1rj3GOnwCp8ZmtwVO43pxyEvmvJ04JaaF
+	 65BN7jxehdqspnZpzTKDvar3bpr+phDuFv1oalKBvBm6L1TYWo26pHPHl70JArcR94RzB
+	 zo25RfbQSo3XkMnG6qnfr/hcEoZZT5+Q3hSda7UUuFD5HzKyn7KT9FpaJRjEYtoG8gmAh
+	 SVSbWR9pxTBBfgyJlxndmsT0SMiisEEqvsdsiznseOAIMWPZCFsXvGCG67bjbTYUn8A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=amacapital.net;
+	spf=pass smtp.mailfrom=amacapital.net;
+	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=jDsWkgNe;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D15606EEBF
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 18:45:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 03D15606EEBF
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AB3606A32F
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 18:47:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0AB3606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=GkNciejQ
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-36eb1cb7aabso2683731eec.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 10:45:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=jDsWkgNe
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5be3ed646a5so1981461e87.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 10:47:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794077274; cv=none;
+        d=google.com; s=arc-20260327;
+        b=GkkquNGnlZbG1VHwIlWYFOb1aqaobhN2tl8UUQabkY23LyHh5wE/X64ppjtHFydo3d
+         8XrMufCnnW3756bR74UAuLCuwZvwFEYSp6W8KyOMqhDm9KWhf1oBYnVB5+1rVQ4RuvBB
+         X4AXS947lG/+7o2dx9h5VBsEsiIQE2/i+Jxw1WaCI84uvJRZXF7PnJ27f3Ux2rrv9tBT
+         lOOHetJk+Qf48ocaaMKZBZUHVQ0/GngXmKbuvFse1OzsZ6lVvCWRhHWbT/MiAL282gGE
+         oihPILJgjBa4NX1dn2/0IlIvXSlmN7J43bbeFW/08w1JKikf9gaiWulUoRwuYZkMSsae
+         BvVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
+        fh=nDWdq2bmlHx30tbo81rvRZi/AA8EyYIpFfFa3Q09DY8=;
+        b=ctZJAHrMYLx0WK7yN1bcH44u1bR++TmDSsmQfuYbJfKwcVred1P3loYBw/XeIAbda+
+         4xl68plYZS4/cGHT9lPsIbCODHWLyNNj6XMU6EYidmVv9oqIwyuJ9v/BYIuhXSYnunXn
+         KVAj4dweEUE+Qav4U8resDqKxAi6jKq/UUSBEfE7HMJ9Fwm1CmOJ1i/nQi3eD69kHpUh
+         L714162SEkAp0J9bM6oPYsuQbBorLD2kXR4q/2n/xVqj3mbBxF+ZLkPLHYhZpOxQTgaP
+         05dm3C/jxPPIlb4XFf7DCT5hCbMq+WwhL2htA74n/Kxt+oFppcgqYLBFRL1eXmRBrjpe
+         pIuA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blockcast.net; s=google; t=1794077102; x=1794681902; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fhdhbpDGmd7gIfxOVLBlem2mFmloT/DJ5ctenjojXQM=;
-        b=GkNciejQJ/Z72Y1u1tTkdWG7r+DlIGafrtg6x1vnSUWnbKDtUfo4oXs8nuXxWCrwuE
-         1Dy4hbpxEU32Af0gjzGbD0e2A0xxeEkRgrPUDg8BceJKkqVQ35gtFLG1aIZabKzUWEuL
-         yD6pG/+159wzmKJ09bBLUlbQEO7IJQtnE1BpCAw2aE0oIMYk76pwDRK+tIO/8hSm1fO9
-         b55XlHUryrYD7WHEQdA9L3ffKEBDpFwDpkdSZd0y90CIVoUyKP6MD75ClHAiwVraWrMh
-         R1qBZx9fKz9+Vktmacea83L8gsjhpaWjMn8w941CjassP+0a7V9D2Jnw91zbdqUkRSgk
-         7/GA==
+        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1794077274; x=1794682074; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
+        b=jDsWkgNeFsbdQ7qKqbpHSGOmDkfyI4OzDS2pJc6+Irn0QHpBxG9wPbmRTDmNnDdzS5
+         db8t7KSVAGcHE/QtRbNhFDCWnX4uqUr1mEeZuLglr9YUDK4k94+gZZ0e2v5XDqaLBMAu
+         GF2mKtLq3tPj9IBZGN3w1gGTAF0jFrsZMFCKcXAmKrirJiOIjEcuysNg1l24IqICP4gV
+         r2UQCTmuYiVAi+q/1GU8UDVYE1+IZodom/D3RIz9GtMMMdasHTqHTXmlylMP0IcXnVJO
+         5lWPTzglrmuISOXtwRoPqefa1QyXnIQk56sGTTb2Rf1nGsDNJzcZ5BPRF2XDpKcZZ3TD
+         g2UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794077102; x=1794681902;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fhdhbpDGmd7gIfxOVLBlem2mFmloT/DJ5ctenjojXQM=;
-        b=Pb+JCmW0ZcnZU5ukhh+YBIq47VwP2gfQqyLb7+g4iOsNKGnbd+tcozxakAJW4pglIe
-         Gk96Ct+mXxgbHhtA4a325aNrc/tk6HiOBV5uiefjrhpCOzhhOIytw+JkbQh69VjO61ZR
-         bg/toK9b7yGHPPCheFr2qwjVgwQ/9jizS7A1W4FmpGpOrSAQ6ekcGpB+ePPKe8T07HWx
-         TDfKM086RRl4ZAg/vyuMk5QXvyJkpcV/pJuJqUJjmLg0zwbDxzc0w5htUJ03XBlnWnKE
-         YwB2HDzPtqCD6JdUEu1YVEubKe7PC8rczYeBu++cXNqSrc72wYwWwCMV+wtA/cMjdyDt
-         z2gw==
-X-Forwarded-Encrypted: i=1; AL+hErG9stg8CkdF+NA4L1Yt/MqkqxAKJlvRXyaN9mjr7BcMv9JzmVKp0oeqYciRtmBuObGKgj9f4+tIspg/pnm8qC4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9qzobV1RKAiI27BErNWXpqrj56zbEJ+6Q9bdlp5ZejiIrj/9vA
-	FeHAIL/ZQ0+uLFfqZrWfZK+7mjMRy0R/4GAFOcC5dvELu8p20b7Udu6AfnpSRAyw2uE=
-X-Gm-Gg: AYBFou3DAGmGWN8MeVcHJhXyS8gt/RJD5mF0Iq126nIPdE/vg5Jz11rqgY0/PW1SLAs
-	WeeMnKvkgEn0tUmFKKUv/4moA75usaCxQSiAJJdrLHlsno2qI6wHCrp47PqQI8PG5U2b6SlPatc
-	RXEM/zlEd/P+yLSZXKyfWSx/IbG/Fft5pAuPYmgdb6b123lmFnmvPDJkB9mq3pEZLbnxAb0p6dV
-	awH57yTq6Ru7r8ofGez8LwZ0MLhH0WGb041/lBUDTbsccSlXKd60w+OidF6h+hjggbKzhajWtnj
-	tJueHgfHxKvBkVpEiUNh08WYKz33TI2aGrAEwqKPQg670yuaure/tAZuhei3CinksdZjogg7CMh
-	cy0oSzCyTWldeWRVP3nB3OzFVR28wQF/O8lVISV3j+tOiZHblOgtA/leNCCoSc/UhHbM0WcEX1V
-	OyKsPmj0OvZTLonKzyY0tCruGTrLZVX70cZMkztXjLe7/od2qvtpDc36I9Hkfx1qyGH2bVSqLZ1
-	AHkpwiFpUSvg3CIpAlRmvvD1U5JPi3yDle1pJ5ZNUKJEfFDX4qy1f+8sTFzVAw94IZKzaWwhbBU
-	6GT0wp6nGh6CHIYVk+rZoUfhYX3fdOEpwG5kM4EcAfcg9GO0uAnPOacJja7Pd3Rgkt7O9n0=
-X-Received: by 2002:a05:7301:1601:b0:36e:dd5:fb08 with SMTP id 5a478bee46e88-36f773f7c7fmr8246456eec.40.1794077102206;
-        Sat, 07 Nov 2026 10:45:02 -0800 (PST)
-Received: from devbox.ts.blockcast.net ([2602:f74d:1::32])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36fa8c4f28dsm17286897eec.9.2026.11.07.10.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 10:45:01 -0800 (PST)
-From: Omar Ramadan <omar@blockcast.net>
-To: Taehee Yoo <ap420073@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com,
-	saeedm@nvidia.com,
-	leon@kernel.org,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	brett.creeley@amd.com,
-	sgoutham@marvell.com,
-	anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com,
-	intel-wired-lan@lists.osuosl.org,
-	Ido Schimmel <idosch@nvidia.com>,
-	Satish Kharat <satishkh@cisco.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [RFC PATCH net-next 9/9] MAINTAINERS: amt: cover the offload header and netdevsim provider
-Date: Sat,  7 Nov 2026 18:44:37 +0000
-Message-ID: <20261107184437.2783174-10-omar@blockcast.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261107184437.2783174-1-omar@blockcast.net>
-References: <20261107184437.2783174-1-omar@blockcast.net>
+        d=1e100.net; s=20260707; t=1794077274; x=1794682074;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
+        b=SP1LIpXv1QgPAJtaDd56K/fEW1OI0Upsx5S20RLbFuuIc82QtxHwpraW9iufDl1LVA
+         3LxGFluinAbfOnieIzKCOM/5VSi1Zr6MYtcg5zRq6j0MNz2WcgpVTqGygok2PDPtLRix
+         +ZGBI0uwheeCMX04vj3rEzymNKNAj7fHFdQ6xkeRBj7h9BLiVsrHJ7nGN2Kl+fUexIDF
+         YMzD3vSu98B7Ogn3D84aI98FgjTQFYXxpd6qv4KuICi6vSb7lT165BbVr7EMPjTFBpcq
+         30eTkdFTD9qkZwBAP6pvjCJJkA5gPuK8v+DmLLumy4JdhE5Ee90OTxX96sYPzsPRf5k7
+         uCxQ==
+X-Forwarded-Encrypted: i=1; AL+hErEwL+Sgq4u9YI7JEp8fy2wAvwEuSKDRYBLisMjHP7Vif26U8YwHocG/ayoZEcBVXA4pjlBdzkXrUcXZWkt8WNw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8o1FHLLI7BAjN97vOQlitAPmbKcPuxJYuoSRhaQcQ6wbbJjMEr
+	smFzuBTpnlJLEggNU45rnFen370DQ/oE3B/oEpHP+qyEpz5z5ownwHouMO2Al0Iw52S/VZ1jbqh
+	HLXCoCSJrqrgZCb1kSlb8GS1MvtGJz5SI+OPaBCP8
+X-Gm-Gg: AYBFou2k9fbF4lXXhhsWCVwMqscDiulhkqFOsgRRwRUdMt5nJhiRppr9owX1vbk4jt7
+	uH5nPpFqLTkvcFt3mLYnSYmhYEyo8wxWqRRsn5zp6cFvQ6uBCBzk3bzeUrb/Qi8MTui4X8G4f7L
+	+5bOVL4ZGLqoOUkhnPWxcCKSzK+BfU6k4RbRCKDNu6L1R6fWKvCtwJHzKPnK9f5PB1+WkPervp9
+	E57GqV34jkBUTtAtEF23EV6YgwPLuNMCNuxjkCWfMCJfriEUkQk6PiadZFAxqMYS/1qqDfC4OFc
+	YlARDSGR9e0DGaLV92X+Bog49XvVi2OOHjT10bo0+yYqHuMDqxoOMalyTBMr/EAaHDR0evVmpLz
+	KGM8nBGo/2D2anDZIce0Uk1inzayQpV5igw==
+X-Received: by 2002:a05:6512:291a:b0:5c0:ca1:9dd7 with SMTP id
+ 2adb3069b0e04-5c00ca19f2bmr594320e87.35.1794077274068; Sat, 07 Nov 2026
+ 10:47:54 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -121,37 +104,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
+ <20261106-befreien-addieren-eislauf-e09212803534@brauner>
+In-Reply-To: <20261106-befreien-addieren-eislauf-e09212803534@brauner>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Sat, 7 Nov 2026 10:47:41 -0800
+X-Gm-Features: AclHuK9s0dgg3FDVqp4WbjYQnA0hebDpEpxOAgz_VjLjRP_HfRjeTpRH9DX274k
+Message-ID: <CALCETrWa1SBLcb5oWjqjgzZvKvCoHjmYFk=Lf5ytEM9uqm5jYA@mail.gmail.com>
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+To: Christian Brauner <brauner@kernel.org>
+Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
+	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Jann Horn <jannh@google.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Jonathan Calmels <jcalmels@3xx0.net>, 
+	Casey Schaufler <casey@schaufler-ca.com>, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The AMT entry does not list include/net/amt_offload.h or the netdevsim
-reference provider drivers/net/netdevsim/amt.c, so get_maintainer.pl
-does not find the AMT maintainer for changes to either. Add both.
-tools/testing/selftests/net/amt_offload.sh is covered by the entry's
-amt*.sh pattern, which the IPv6 outer transport series adds.
+On Fri, Nov 6, 2026 at 5:13=E2=80=AFAM Christian Brauner <brauner@kernel.or=
+g> wrote:
+>
+> On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
+> > The whole unshare/clone flag situation is getting out of hand, IMO.
+> > And this new thing makes logical sense but is really about reducing
+> > exposure.
+> >
+> > Perhaps we should instead have a small list associated with a userns
+> > (extensible in the future) of things that the ns's admin (i.e. whoever
+> > has CAP_SYS_ADMIN relative to the ns) may do.  That list could
+> > include:
+> >
+> > - Create loopback with sensible defaults for ipv4 and/or ipv6 (i see
+> > no obvious reason to separate them)
+> > - Create tun/tap interfaces in that ns (and attach them, etc)
+> >
+> > And add a very simple new API to do these things.  Actually, the
+>
+> We've had this idea in the past and I think it is reasonable. I had
+> always thought that we should expose a system call to create empty
+> namespaces ot any type. Usually I'd be excited about that but I think
+> that point is a bit moot and I'd really like see whether we can turn
+> cells (or whatever other name) into a first class api.
+>
+> The problem I have with the patchset as written is that adds a lot of
+> moving parts. And yes, I find the CLONE_* and UNSHARE_* flags plus
+> sysctl to be suboptimal as well.
+>
+> So the TL;DR is that CAP_NET_ADMIN + userns =3D
+> CAP_NET_PRIVILEGE_ESCALATION 10+ years later. And this patchset wants to
+> put it back on a leash.
+>
+> So why isn't an aggressively stupid solution to this problem to split a
+> new capability out of CAP_NET_ADMIN so it covers the absolute minimal
+> set of things that should be allowed instead of doing effectively the
+> same thing but split over multiple apis?
 
-drivers/net/netdevsim/amt.c stays under the NETDEVSIM entry as well,
-through its existing drivers/net/netdevsim/* pattern, so the netdevsim
-maintainer is still found for it.
+Because we don't actually have a clean way to make a list of
+privileges that are, in theory, harmless but are hazardous from an
+attack surface perspective and assign them only to tasks that ought to
+have them.
 
-Assisted-by: LLM
-Signed-off-by: Omar Ramadan <omar@blockcast.net>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+But maybe we should invent such a thing.  It would be very, very nice.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b01fdeee6..f6d5b471f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1404,6 +1404,8 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
- F:	drivers/net/amt.c
-+F:	drivers/net/netdevsim/amt.c
-+F:	include/net/amt_offload.h
- F:	tools/testing/selftests/net/amt*.sh
- 
- ANALOG DEVICES INC AD3530R DRIVER
--- 
-2.43.0
+Other than that, I agree with you.
 
+>
+> Anything that is reasonably advanced should not be the kernel's
+> responsibility to delegate. I really think the old privilege model where
+> the kernel grants control over a whole subsystem is inherently flawed
+> and is much better replaced if you have the means to let userspace
+> services grant and delegate resources.
+
+
+
+--=20
+Andy Lutomirski
+AMA Capital Management, LLC
