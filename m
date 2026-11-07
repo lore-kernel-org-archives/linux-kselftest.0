@@ -1,88 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794070652;
-	b=c8hR7umuZpPJ/sOpRsC17J1U2SJSHzs+rrzY7Y1wf1hxJr/+wdlhSFQNrzNMRDUTiXiv
-	 XxfdNXKuVQLlqzCnSB5nuBo73Cvk/tN49YlEjnXCSxcbEvXoN1VjGL4joEfl07hN4yTxE
-	 GWbxR26DImEx2tqVbuyO1Vy9mCNjJwall97wSMi3Bwn3NwmdSwGsaKTzxW3ShzhIUQ0h6
-	 NEcu8MWxUT5zRqlkAAWkiqJkqLL281qekj7JBEL+Ne9IaHYHFRBa25y+Mt5/kWt8Rc6wM
-	 myKaNf0MjjJMvxyywcQF2KSjKKQZF9cpdYvbQc9EQY/ZcNwYER97B8l5Vmpu6MB3Mjg==
+	t=1794073049;
+	b=IhvdHYQpkBvjZXeql+PQFNZtTz1tyebjl1o0oFPNvio3dcG5Mfz0Zoc11jTE8YXv8Goj
+	 nan+5I6OhFRxd0R918ux+KGDHe84pHagrA4gQ106U0Tl8qy4ydtl3QyasGZsh4O7361oh
+	 7r2ul3/d37trCcUKGlYRVhykOb6M0C0Bh+Aai/FV5PSEPt4Lr8nVqiq/zHIy3/Rc19Gc3
+	 Pr6rvwTe63SKPucn9kFgZOZrp6MKi47Ri8AMQmGvTIt6gQo87USICxbe89cFO+h3vzA+k
+	 YHarfV9EGX9D0Mz945HE5UX78XfXZTZtRwVW5r7BDdi/SJFbsKaoUDk54+WCYipCdNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794070652;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=SdH1Q08JYIXzl7woAIVqMXKqevpqYl9Em5ExAHktt1c=;
-	b=sawnxcsJ8iAGWUmepUfKYvcIvcXlHIUn/TErziOJdE6EBNHziocr5MHoYHWQoyPMpRC5
-	 ILXQakSxZjljIdfwdzFUNYPaKIqD4EL9AOhC5vSvp61FS9Bx78OGFbbPiGXpdj+fnuwBV
-	 xB6amcD4e7DfTNC8JDIhr2osQHQjiK3e2Ql4ygTIfdpce96amfN69Ks23B/aneqNYwnlm
-	 lDFLyUeJbxiH4Gso/+/h5XmgH8NtqxXqTkMVtCZuhkE2P/EE7Dcm1d7h6ynr5NcF7VWOQ
-	 9ysVY2Vw1FAmwRojld+dhr9dbcz6YxccHKVWal6w2qBSgtfXFbFoeQlZAKI64ST+Aig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794073049;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id:X-Rspamd-Server:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=jA1Z4duQiQzeKq317JC2yso+OfINr1SzmCCDBHpydj0=;
+	b=DdDtheX/GOGkyNgDkw+6f+tgq0/Pkzwfn1X6xOxuGuqp+SAAdHLDCt3EwFxU/X2/BQ3m
+	 T0HVEk5d+e+858+phptwuvpMQoKG0rGwtWagElaf4LdXL3pZmsb6+kRi+6W623eoVD4El
+	 FuwTmzLNdvMdbFGgcGkcJXMc6NZsXTjHZI3kB4Wk9oxVAkRf24biyGSydtr6lhwK5YE2L
+	 ziMwBZQmEgiYUv5XpQghOwZ/wFx6NQkNUwvXYZfnpWsPe2dgkzh648u8Mjic2tSd2958J
+	 G7wsd+45sw+0Hh/zPA/XeGtyssbagNG9uPOZB+iWtV3tSv3Pc8s8Kj7wMDwtnpsPD/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="LO/GHqYA";
-	arc=none smtp.remote-ip=74.125.82.172
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=QHJOEINu;
+	arc=none smtp.remote-ip=216.40.44.15
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7543C606D816
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 16:57:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7543C606D816
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2B2606A32E;
+	Sat,  7 Nov 2026 17:37:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B2B2606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LO/GHqYA
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-36ff9c9da34so2217888eec.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 08:57:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794070652; x=1794675452; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SdH1Q08JYIXzl7woAIVqMXKqevpqYl9Em5ExAHktt1c=;
-        b=LO/GHqYAqIw4mRvvRBHWuOMVha4/0/Fi7P6E0tJ5PpKEL4XjKr0zuy7j53NqIyGEPn
-         GalzqySlwAi6F/U4404oaYZqyAkKYgQC0P2qHO6qkE/LBzrTq0vrGAeZw5sB1MVnNNwa
-         3Nf3YiG5ZPqnuv2m0Q1l5s3CRhe5FPex+uq7/qZ63sOy2nRH8WDLHO6Q7SN0OIyyw/7w
-         P0XxE2MCJCsjqsAko1DgCDIHhtLALTa3OzGfJQEd5sedu5uhJwhbh1Rb4vt959dCczXO
-         YSUQdRal3c/K9lAciPTxWMrXpAZewvNoINV9rPH7bpBnu9eNUeEIDqCLCYAxHTpUmdj6
-         tO4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794070652; x=1794675452;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SdH1Q08JYIXzl7woAIVqMXKqevpqYl9Em5ExAHktt1c=;
-        b=cJZllClVGfhFDlK6+JEzd59PA/9uJdq8+ASXlb6AMk53OAiM/6L4OBH4Z0+ZImnQAE
-         XplZOiEJrBUbf7ENWOhyItAj9pd2P+tVdjm7tliniCKIgEAkxSYxz0oHK02jL880ZzwG
-         7vEMHFVNrVruvcFhfZMUt1Z/Vfx7FPwBru7NzC5TCdjbcvRR6p1tZPbtlH3UR+cxzHgR
-         16z9pUZU2+H/5WOX+bv1FM2lgHnxacT6lqhycy3n5iUr4INvn6oi4MbAapq1nGZaE/cT
-         f/He0DOkCpknshobCOlY6r/6XongnzIObI9hvyBBsYxjEe1m2zC8SioEtI3Ojf8V3oOp
-         XxNw==
-X-Forwarded-Encrypted: i=1; AKwUvBzNF2E9M+rlyhjWQRCr0ghKcSEJ//lZgGRiRKYmJ3nJ+7DxTwQnJ1VHEqCEv5TeJSJOhL4lAux2XBkBozwY3kU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/lvHykYRfQBPdd6fLDCpgjAmmJRxSb20tEwFdi/XA0zUiydAAG
-	ag1qFHQSRgb2ArSQ0iEXSzRnRtE5QaSC0c0PFvkZSYZ5N0k+Q5Ak09lN
-X-Gm-Gg: AYBFou2roLL6cIoBd86ZnIm7TDhbfH3JhWnCYXrKCFHlyJcONnWhwbpO7L375B0yESJ
-	fGXAb6j/odJ0nWhZ7nIM2HaJZM5LS7oFGu42z0/5NC6YRkejysKF5w0Xbzc+m06P1EWXZ6ej29j
-	e4WSjhVN8P+3V4FAUIK9dc76occGS1H4EQxKqb7bqEXIKQEFPEbwO5B5+ByiSdBpkCmiEyix1Ph
-	rfFYT9vNaZw/E2V+9V/j3ygf/cuKgFrZt/iwIEp1GTYhsFG0+Bb1dX6NUEjzXsPJu2S8dHJciNL
-	6voW4MBxF8YwVPxaFVP8x/RXnUVD2290hSCE3YXKzbssUUd3e08C+r8IF5pDsg1TsYOFZmyvHjR
-	AmWqRlgPgPlDzL7a0RobFzbrjqBSDMOt+axwU1D7EqqrupllYmLdPWvezKW299qUNQ6+pp9gQW1
-	miH4pLLOMPdz47/bQeicm7TKOcWeUdSqZcTrn3aS9XIpQHlAOyPOQvHEh4Y8ghneUpuWlyEgue7
-	/hj5SB0yZ0Qs8eY+iV/RJVPDY+wyVwYlWbCla8iSJfndd/USRWoXHG/Bq/c08LFTTe8S49n/0w6
-	BygoY9DPe5YrNDvWfS4ziKb4
-X-Received: by 2002:a05:7022:3c12:b0:1a8:9857:2102 with SMTP id a92af1059eb24-1b25d3445demr7016509c88.30.1794070651262;
-        Sat, 07 Nov 2026 08:57:31 -0800 (PST)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b25e4b4aa7sm15456126c88.13.2026.11.07.08.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 08:57:30 -0800 (PST)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Sat, 07 Nov 2026 11:57:03 -0500
-Subject: [PATCH v3 4/4] selftests/mm: cover merging KSM pages aged by smart
- scan
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=QHJOEINu
+Received: from omf11.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 86C801C3AE5;
+	Sat,  7 Nov 2026 17:37:19 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id 535692002C;
+	Sat,  7 Nov 2026 17:36:58 +0000 (UTC)
+Date: Sat, 7 Nov 2026 12:36:42 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, tglx@kernel.org,
+ mingo@redhat.com, linux-kernel@vger.kernel.org, will@kernel.org,
+ boqun@kernel.org, longman@redhat.com, bigeasy@linutronix.de,
+ clrkwllms@kernel.org, dvhart@infradead.org, dave@stgolabs.net,
+ andrealmeid@igalia.com, shuah@kernel.org, juri.lelli@redhat.com,
+ linux-rt-devel@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] locking/rtmutex: Stop spinning on the owner when
+ the waiter is woken
+Message-ID: <20261107123642.149677cf@fedora>
+In-Reply-To: <c77635b1-9c24-459a-b75c-82cbfb67185f@efficios.com>
+References: <20261106235931.1478800-1-mathieu.desnoyers@efficios.com>
+	<20261106235931.1478800-2-mathieu.desnoyers@efficios.com>
+	<20261107002927.3cbad7ff@fedora>
+	<20261107104329.GA2668564@noisy.programming.kicks-ass.net>
+	<c77635b1-9c24-459a-b75c-82cbfb67185f@efficios.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,221 +69,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-4-16d5ce8b5fd6@gmail.com>
-References: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
-In-Reply-To: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Xu Xin <xu.xin@linux.dev>, 
- Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>, 
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
+X-Rspamd-Queue-Id: 535692002C
+X-Rspamd-Server: rspamout08
+X-Stat-Signature: m44kupjn78amr5iba158yzo71aerdhcm
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX195nEAbX1ye5HLf4TYsMhI2TyWK0f81IaE=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=jA1Z4duQiQzeKq317JC2yso+OfINr1SzmCCDBHpydj0=; b=QHJOEINuZLikmXVnkZT2L1ruJL/sFiyj1a7fbmNisUYPM3FED5UQaDWWBORf0uFWwrdV+MSQvl3GNH3g8/YiS2DTRupvspu8y8ro5C+eGzlCZIyVNXhDeXc44nGtcTwk00tHGTLiRum5o/wuaeGIUUQHOStCmkvQsjjCbVzmWuA=
+X-HE-Tag: 1794073018-50227
+X-HE-Meta: U2FsdGVkX1/xkZuEMEbBCRfnErlHYkRLRDuQ4GKd9JI66MgGk/9EtQjOr/4EcRkcQOmN7p7qTwDBZxQqLm4BRwFmhmB9b4FT7qkkG/sM2/a/lPmoftsEN/kGVVCJbP+oMtphFphXzojKGJXDoLj7973AVD34omJ6wjmlwbP7MNKbExqBzs0oifpfMCDA5FVYn1bwahkR2vCtgteuYTycxiab2tDqi1C3jnBKVa3FWckqqUst1nKjCoFXLjeCFbuaIcALKm2/gOo7lB6qmJiGE5+o5wL3iio+Gr9V6QpxtRAQCR0nLXBc00qzgheVeJuVnuguVSM304hz/NPMKas+Vb2qsxx5UeuMKzPJ0tQ0jO7+eAxCRaeVpEa1zm7Nq6bRRB8MX3GIgUJ0MPL1PjHCTqzV34xxNRpvXpf+I1wuKcH8PTU1dokdby+pxg9PhWaszNLnhPaeC4uIiIqTG7UIUQ==
 
-ksm_functional_tests checks merging and unmerging with ksmd's default
-settings, but nothing there exercises smart scan, which skips pages KSM
-has failed to merge for a while.
+On Sat, 7 Nov 2026 07:29:54 -0500
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 
-Smart scan used to time those skips per page, so two identical pages
-that became mergeable some scans apart could end up never being looked
-at in the same scan, and were never merged. "mm/ksm: align smart scan
-skips with the scan number" fixed that.
+> >>
+> >> The above is very verbose. Are you starting to use AI? ;-)  
+> 
+> I definitely am, as stated in the cover letter. :-)
 
-Add ksm_get_smart_scan() and ksm_set_smart_scan() to vm_util, and a
-case that enables smart scan, lets sixteen unique pages age for a dozen
-scans, then makes a duplicate of each mergeable one scan apart, and
-expects every pair to be merged 32 scans later:
+I skipped that part of the cover letter. The first patch touches my
+code (it has my commit as fixes) so I just jumped straight to that one.
 
-  kernel               failures, two boots
-  before the fix       20/20, 20/20
-  with the fix          0/20,  0/20
+> 
+> > 
+> > He definitely is. I can't read the above, its word soup. Part of using
+> > AI is making sure the Changelog is actually readable. This is not.  
+> 
+> Feedback on the commit message wording is welcome, I'll try to improve
+> things for next iterations. Is the following easier to parse ? I fed
+> Peter's and my own criticism to Claude and got it to rewrite the entire
+> thing (and keep those learnings for next time):
+> 
+> locking/rtmutex: Stop spinning on the owner when the waiter is woken
+> 
+> The top waiter of an rt_mutex sets its sleep state. Then it spins in
+> rtmutex_spin_on_owner() as long as the owner is running. A wakeup sets
+> the waiter back to TASK_RUNNING. The spin loop does not check for this.
+> So a timeout or a signal is only handled when the owner blocks, or when
+> the waiter has to reschedule:
+> 
+>    CPU 0 (waiter)                            CPU 1 (owner)
+> 
+>                                              pthread_mutex_lock()
+>                                                takes the PI futex
+>                                              spins in userspace
+>    pthread_mutex_timedlock(1ms)
+>      futex_lock_pi()
+>        rt_mutex_wait_proxy_lock()
+>          set_current_state(TASK_INTERRUPTIBLE)
+>          rt_mutex_slowlock_block()
+>            rtmutex_spin_on_owner()
+>              <timeout> hrtimer_wakeup()
+>                wake_up_process(waiter)
+>                  __state = TASK_RUNNING
+>              owner_on_cpu(owner): true
+>              need_resched(): false
+>              keeps spinning                  still spins in userspace
+> 
+> The owner of a PI futex is a user task. It can run for a long time.
+> With an owner spinning in userspace, a 1ms pthread_mutex_timedlock()
+> returns up to 1.4s late. A signal to the waiter is delayed in the same
+> way.
+> 
+> With PREEMPT_RT, a ww_mutex wound is missed too. Two contexts take two
+> ww_mutexes in opposite order, on two CPUs. They spin on each other for
+> up to a second.
+> 
+> Fix this by also stopping the spin when the waiter is TASK_RUNNING. The
+> slowpath then handles the timeout, the signal or the wound, as it does
+> after schedule().
+> 
+> rtlock waiters are not affected. Only the lock handoff wakes them from
+> TASK_RTLOCK_WAIT.
+> 
+> With this patch, the 1ms timed lock returns after about 1ms. The
+> ww_mutex ABBA resolves in microseconds. PI mutex throughput is
+> unchanged. The futex and ww_mutex selftests added later in this series
+> cover both cases.
 
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
----
- tools/testing/selftests/mm/ksm_functional_tests.c | 89 ++++++++++++++++++++++-
- tools/testing/selftests/mm/vm_util.c              | 32 ++++++++
- tools/testing/selftests/mm/vm_util.h              |  2 +
- 3 files changed, 122 insertions(+), 1 deletion(-)
+Still way too verbose for the fix. It makes it sound more complicated
+than it is.
 
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 31c06c72203fd..135191f99962d 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -695,6 +695,92 @@ static void test_fork_ksm_merging_page_count(void)
- 	munmap(map, size);
- }
- 
-+static void test_merge_aged_pairs(void)
-+{
-+	const unsigned int pairs = 16;
-+	const unsigned long size = 2 * pairs * pagesize;
-+	int old_smart_scan;
-+	unsigned int i;
-+	char *map;
-+
-+	ksft_print_msg("[RUN] %s\n", __func__);
-+
-+	old_smart_scan = ksm_get_smart_scan();
-+	if (old_smart_scan < 0) {
-+		ksft_test_result_skip("smart_scan not supported\n");
-+		return;
-+	}
-+	if (ksm_set_smart_scan(true) < 0) {
-+		ksft_test_result_fail("Enabling smart_scan failed\n");
-+		return;
-+	}
-+
-+	if (ksm_stop() < 0) {
-+		ksft_test_result_fail("Disabling (unmerging) KSM failed\n");
-+		goto restore;
-+	}
-+
-+	map = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (map == MAP_FAILED) {
-+		ksft_test_result_fail("mmap() failed\n");
-+		goto restore;
-+	}
-+	if (madvise(map, size, MADV_NOHUGEPAGE) && errno != EINVAL) {
-+		ksft_test_result_fail("MADV_NOHUGEPAGE failed\n");
-+		goto unmap;
-+	}
-+
-+	/*
-+	 * Page i of the first half and page i of the second half form a
-+	 * pair with content no other page shares.
-+	 */
-+	for (i = 0; i < pairs; i++) {
-+		memset(map + i * pagesize, i + 1, pagesize);
-+		memset(map + (pairs + i) * pagesize, i + 1, pagesize);
-+	}
-+
-+	/* Let the first page of each pair age without a duplicate. */
-+	if (madvise(map, size / 2, MADV_MERGEABLE)) {
-+		ksft_test_result_fail("MADV_MERGEABLE failed\n");
-+		goto unmap;
-+	}
-+	if (ksm_start() < 0 || ksm_wait_full_scans(12) < 0) {
-+		ksft_test_result_fail("Running KSM failed\n");
-+		goto unmap;
-+	}
-+
-+	/*
-+	 * Make the duplicates mergeable one scan apart so that each pair
-+	 * starts out with a different distance in scans.
-+	 */
-+	for (i = 0; i < pairs; i++) {
-+		if (madvise(map + (pairs + i) * pagesize, pagesize,
-+			    MADV_MERGEABLE)) {
-+			ksft_test_result_fail("MADV_MERGEABLE failed\n");
-+			goto unmap;
-+		}
-+		if (ksm_wait_full_scans(1) < 0) {
-+			ksft_test_result_fail("Running KSM failed\n");
-+			goto unmap;
-+		}
-+	}
-+
-+	if (ksm_wait_full_scans(32) < 0) {
-+		ksft_test_result_fail("Running KSM failed\n");
-+		goto unmap;
-+	}
-+
-+	ksft_test_result(ksm_get_self_merging_pages() == 2 * pairs,
-+			 "Pages aged by smart scan got merged\n");
-+unmap:
-+	ksm_stop();
-+	munmap(map, size);
-+restore:
-+	if (ksm_set_smart_scan(old_smart_scan) < 0)
-+		ksft_print_msg("Restoring smart_scan failed\n");
-+}
-+
- static void init_global_file_handles(void)
- {
- 	mem_fd = open("/proc/self/mem", O_RDWR);
-@@ -720,7 +806,7 @@ static void init_global_file_handles(void)
- 
- int main(int argc, char **argv)
- {
--	unsigned int tests = 9;
-+	unsigned int tests = 10;
- 	int err;
- 
- 	if (argc > 1 && !strcmp(argv[1], FORK_EXEC_CHILD_PRG_NAME)) {
-@@ -753,6 +839,7 @@ int main(int argc, char **argv)
- 	test_prctl_fork_exec();
- 	test_prctl_unmerge();
- 	test_fork_ksm_merging_page_count();
-+	test_merge_aged_pairs();
- 
- 	err = ksft_get_fail_cnt();
- 	if (err)
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 1c2bac54696dd..490e3c7161e8d 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -984,6 +984,38 @@ int ksm_use_zero_pages(void)
- 	return ret == 1 ? 0 : -errno;
- }
- 
-+int ksm_get_smart_scan(void)
-+{
-+	int smart_scan_fd;
-+	char buf;
-+	ssize_t ret;
-+
-+	smart_scan_fd = open("/sys/kernel/mm/ksm/smart_scan", O_RDONLY);
-+	if (smart_scan_fd < 0)
-+		return -errno;
-+
-+	ret = pread(smart_scan_fd, &buf, 1, 0);
-+	close(smart_scan_fd);
-+	if (ret != 1)
-+		return -errno;
-+
-+	return buf == '1';
-+}
-+
-+int ksm_set_smart_scan(bool enable)
-+{
-+	int smart_scan_fd;
-+	ssize_t ret;
-+
-+	smart_scan_fd = open("/sys/kernel/mm/ksm/smart_scan", O_WRONLY);
-+	if (smart_scan_fd < 0)
-+		return -errno;
-+
-+	ret = write(smart_scan_fd, enable ? "1" : "0", 1);
-+	close(smart_scan_fd);
-+	return ret == 1 ? 0 : -errno;
-+}
-+
- int ksm_wait_full_scans(long nr)
- {
- 	long start_scans, end_scans;
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 7e00030077d2f..ab1325dc65800 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -163,6 +163,8 @@ long ksm_get_self_zero_pages(void);
- long ksm_get_self_merging_pages(void);
- long ksm_get_full_scans(void);
- int ksm_wait_full_scans(long nr);
-+int ksm_get_smart_scan(void);
-+int ksm_set_smart_scan(bool enable);
- int ksm_use_zero_pages(void);
- int ksm_start(void);
- int ksm_stop(void);
+  locking/rtmutex: Stop spinning on the owner when the waiter is woken  
 
--- 
-2.43.0
+  The top waiter of an rt_mutex sets its sleep state. Then it spins in
+  rtmutex_spin_on_owner() as long as the owner is running. A wakeup sets
+  the waiter back to TASK_RUNNING. The spin loop does not check for this.
+  So a timeout or a signal is only handled when the owner blocks, or when
+  the waiter has to reschedule.
+
+  The rtmutex_spin_on_owner() is just an optimization with the idea that
+  if the owner is still running on a CPU, it will likely release it soon.
+  If the owner gets preempted or schedules out on its own, the spinning
+  will stop and the waiter will sleep. This came from PREEMPT_RT adaptive
+  spinning for rt_spin_locks that allowed them to behave more like normal
+  spin locks and speed up PREEMPT_RT performance.
+
+  The problem is that when this was implemented for futex and normal
+  mutexes it did not account for timeouts or other mechanisms where
+  the owner releasing the lock wasn't the only way for the spinning
+  task to exit the mutex acquire. The spinning currently does not
+  account for anything else but the lock being released or the owner
+  sleeping.
+
+  Luckily, when the spinning task needs to exit the mutex lock code, it's
+  state is set to TASK_RUNNING. By having the spin check the spinning
+  task's state to see if it switches to running, it can exit the spin
+  appropriately.
+
+How about something like the above?
+
+-- Steve
+
+
+> 
+> Fixes: 992caf7f1724 ("locking/rtmutex: Add adaptive spinwait mechanism")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> 
 
