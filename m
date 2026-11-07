@@ -1,104 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794051273;
-	b=gy9OGPt1zLff/9TIHghELEk8sRSUlt6TripF6f4KCLTAAWb4w7FvbrTPY3k2UsvOuIwr
-	 9G+CEGUIuNfCSj4QOs5hqPuHbjNkhVsRwR2+MW39An7FlcYwV0cbr7E65rOofBq9ZZQ/J
-	 /Te2nyryIlAGXDL6eo01BHu5sDPD4I9B7bfibsUSICEYx+1qwZE0dnPQLqGWOvE8J55H8
-	 Dnpx7rfNfbtIG757ZI1/Q8t/93U9QiK4VVZcOl4edkSY2uSuJ0MGEaOvbJApEnxDEMook
-	 E9xZA/jmSmofeWeLwcOZBqAcdSMaJ5zDu+VOsIrkSatB7qqpBHJ5fDBKINjzmt1bF7g==
+	t=1794052884;
+	b=Q5D8cZ+xXMqyULDNpdJeUSenYpSTUyenXqFXNdLBDWd0P9nTArBWXN0ljZqFumD3Tw5M
+	 cfev/EgWM4vBy7TqzcsG3eyBlSel1fU1oMqKi0cT5sPjd4LSOOHCaKT+B5KeBjic5GbNO
+	 +8D0+is76G1XkEPVT+oZAe/TJZT4Tei7PuvzKQSiOU0rJPlqYqSHNr2pVe23e7OGniOD0
+	 pLidrIrg3gDS/H7sVU9WwrWu+qm+SfrP0YZXVRphUuOeCt9CZKnDQlydqZI9Hjel88zwr
+	 31kz2MdDD/bBj2vvpr4Qnu037fkN4SdICSKuyvptrMZTba459Tprb1vngEomc5uh6WQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794051273;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=xIY44+mjGY+xOcsWd37ASHjx8uxdUiIESwC6jPT3OSI=;
-	b=ylTcQjfF9MWv+SDxnwHfjTEov+dv9uX4gTUUGSkIQ1byGRrtgwMSKn5zAwDvQ962xg7a
-	 tMSiH/d0SxccJ1D6xMi9KYgT9nsaTebNrzQthqzXoH5181pElFraBSFdkdRJEzT1ZPBc+
-	 Yq15RORKXRD4a/JL7T5VHAGJE6tY8eydu+h/AUJ6jxvWyXB2jjlS9qb5F7r9qDrJpZ4Gs
-	 Y8PNiCEcnKbyJoChyteevZtUeBJpwMHiTwhr9j4lYTFhUfV9crnzchMeQRF77pjRs1G/x
-	 sbjo9ZTwpGKxoftHNBYW7CWaFD1l6JVBtCDkym6yCxRI0kY7KdYcCd92QRPeCo9Klgw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794052884;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=hrj4JXzZ1TsgPylBSS9iKSCO976KUaXxCh80/VCZOeI=;
+	b=nfXQzgsEdxfkkoah4ieAqdnHO7E5tOLc59SRRm2GIGWX5ka0QuJtlMVSkVB/lv7agwIg
+	 Wr40wgrX0GBQxUiiZVUGROx+0R9l0Y1kdVXHWNkQjho68nyGYj+3LAYRsFQMymkPUpug/
+	 HQYTZsAWgi8wlZWs+NKli7KYtxby1bpp0yFuI45og5MqvTRSwMky+P/INRFwOoM95Z6KK
+	 UT7XXhrQnGxpnmzeV12+QTaNRGnk5GEd0dib/NnEWTPnzEcCtfx4nExhsW75r/2MjD6Sk
+	 C/gcp+aS2OdzxAz6pxYAhgsDN7a70E+UDB5MnNpQkqzfFnHirzNBR5mED/mKdsLfTLA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3gt4c2t;
-	arc=none smtp.remote-ip=209.85.128.178
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Y0+XV4Ox;
+	arc=none smtp.remote-ip=95.215.58.172
+Received: from mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C2D606A331
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 11:34:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85C2D606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27088606A32D
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 12:01:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27088606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D3gt4c2t
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b30477a320so10064447b3.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 03:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794051272; x=1794656072; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=xIY44+mjGY+xOcsWd37ASHjx8uxdUiIESwC6jPT3OSI=;
-        b=D3gt4c2tTnEkafeUs26vaLp616Qdc5J2iKnzxu9UV005j4N9NNVJexYZOibyFEm5tN
-         FoJtX/FPAssSJX08KZ9DMAw9O/yllgM0Q73CO0ovTmfY3oeI8hLHga8H7fISWjUSGp1h
-         zX0dndqwgMfxp+y0ROuNGVGZJW2pybSSaGgix4zftTMBO9t5FWsyMLytY8G0wVxr/3on
-         mqS9WI/ukUWhtAk8HRrHYL7fJOY/0WZRuDmpbuz2h3Xp7dyQ9pLg2jPe45j6to3grJda
-         pMzqfP4GRNE/PUpHnDNd9MfE6kv2Ll5zGauuXXH00ruCYNCAe1Xhxf/0BA45A/5N3U27
-         2MSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794051273; x=1794656073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xIY44+mjGY+xOcsWd37ASHjx8uxdUiIESwC6jPT3OSI=;
-        b=CLog5Vmg3YT0QXZHxOjECJ7kUr2/zQ4VuaDSp7bKhrC5lU2WfTFvUV8Edr29sx44NC
-         tcd480CcI8xHcCFHGWGhzs4GRA57g12ez6pCGXGxvvdgG4inRBJQ2leHXwcMcWkHSLNS
-         FPr+Fi0xzXnQiTWM88WrDorSmoDPJAps2ylBNf2FMiWPGjdcZtlhUA9yEqHf29yulfSd
-         XBFb1mBlewwzQizUb9E1ImyljczM/DIpG/t0N54DN+EYBbgYaOIPrEJKU0N8gqzaSQg7
-         eTgQWARlK7mLm1VrzumQxWp93JzLiRexqTIlVapOAv6o+uRTxlZVQNjoNooDF9eb6lG9
-         HtDQ==
-X-Forwarded-Encrypted: i=1; AL+hErFh0NmyofFvnnCc3XQYXR/KonxSeAFbmzA7h6YADJz9cvcBnLD+D+CxiQgYJu9GFCa0So+LFD7e2uYqJd7TL04=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8LAOUsp8KO/KmOgmlFvIGoNu5Urg28I/TUlFexkuXhk+ktVb/T
-	GEuGA5CPcSeoxHiYGuzj0Or+yxkH0IlnSnKO8QpmeM6sXxto8S0bCYHL
-X-Gm-Gg: AYBFou3+uzm1dP0DRAfxNSbxu0brB3v2ILUpKxBEguRjJsu+h3YoOzQhLBdYi9UahDZ
-	cO8WdjnrwvMvKu/DfaXNdjNbgNlQjeBS3mwZfzOxTWg6bmGybYTexvcS4TcK54JXbcEgOUnKGHS
-	1vg9fqjip5v/TArbD0LZkE2Ija/uPGZPASgMmROUOofvMVij1uBE0mhmhsPFt2zB4yquFONbFJs
-	rhSAxvoZUr2qvC40qVjln+0fKygTe6uWQuIT28Q38W3MwiAEjjgVH+/f7aRak/uzWNHL7iWBAKI
-	oEfBJafP3D2PY1mmXyiwwaIIaQcIlMHDaQAGT6LnNjf2bMhx9nwWw3+W//13F5ED3XTlv/gVpF5
-	IgdyZgWbnI4Lz4dUrs3CwM/CyMtCs1k7kIJGt0gxTqeSvJpxFaKpNb2IuLDh8ffB6H7EJDXpa3z
-	P8CprnsKoMyaz/6XGTdh/pVFi9zonJJRKRupUY+CrMF1vKxhoTn7TR9wtEtIHj6gEYzqYO6Kf9x
-	xVyZzqWrIwJwHNPS2zBvEM/9Z73Y/4vVReqRXP9iKmzR2TJAkZVl/iAUD1S2LPH9/JyA0odUsTN
-	Q2cmCo0j26F7YIgyoRY6iuw6
-X-Received: by 2002:a05:690c:6e8d:b0:8b1:567c:e7b2 with SMTP id 00721157ae682-8b34199c05emr25006407b3.39.1794051272608;
-        Sat, 07 Nov 2026 03:34:32 -0800 (PST)
-Received: from houminxi ([61.170.225.237])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f5f2d5dsm40084597b3.2.2026.11.07.03.34.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 03:34:31 -0800 (PST)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Aaron Conole <aconole@redhat.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Ilya Maximets <i.maximets@ovn.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Paul Blakey <paulb@nvidia.com>,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v1 2/2] selftests/net/openvswitch: check that a failed set keeps the features
-Date: Sat,  7 Nov 2026 06:34:03 -0500
-Message-ID: <20261107113403.797779-3-houminxi@gmail.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261107113403.797779-1-houminxi@gmail.com>
-References: <20261107113403.797779-1-houminxi@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Y0+XV4Ox
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=WAwIwB/wG7QJwBBWa9yFosmUNQG9PZLiWt4eFYdlm30=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794052881; v=1; x=1794657681;
+ b=Y0+XV4OxPgbsQLMjhSzjBW6hXX6MtJj/wIu6AAO9QsFWMF5Ul9lrWSQNiKzGF4cfxNlRo/06
+ Cbxb3RO3LgxT5sLEOmH8NemaJaaYqAgxYVZDYr7dB09alRel5rpIE7hh+Zyuq4ZsdGoLN8DuTAW
+ Aif3RCKdCeOcyX7TNK5/jSJc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5b9fe3969bd8cba9;
+	Sat, 07 Nov 2026 12:01:21 +0000
+X-Mizu-Trace-ID: 5b9fe3969bd8cba9
+X-Migadu-Flow: FLOW_OUT
+From: Ridong Chen <ridong.chen@linux.dev>
+To: Waiman Long <longman@redhat.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Ridong Chen <ridong.chen@linux.dev>,
+	Chen Ridong <chenridong@huawei.com>,
+	cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Sashiko <sashiko-bot@kernel.org>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>,
+	Ridong Chen <chenridong@xiaomi.com>
+Subject: [PATCH v3 0/4] cpuset: preparatory fixes and cleanups for partition rework
+Date: Sat,  7 Nov 2026 20:00:56 +0800
+Message-Id: <20261107120100.3587595-1-ridong.chen@linux.dev>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,183 +75,78 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a set-dp command to ovs-dpctl for the kernel's datapath SET command,
-and a test that uses it.
+From: Ridong Chen <chenridong@xiaomi.com>
 
-The test clears the features of a fresh datapath, sets the dispatch bit
-with a valid pid list, then sends a set that would set the same bit with
-an empty per-cpu-pids. The request has to fail with EINVAL, and the
-datapath has to keep reporting the features it had. A second round
-covers the other direction: with the recirc bit set, a failing request
-that would drop it has to leave it in place. That case needs
-CONFIG_NET_TC_SKB_EXT and is skipped without it.
+This is the first part of the cpuset local partition rework posted as
+RFC v4 [1]. The rework is split into three parts to make it easier to
+review and merge:
 
-Both rounds fail without the fix in the previous patch, which reports
-the features the failed request asked for instead of the old ones.
+  1) fixes and preparatory cleanups (this series);
+  2) introduce partition_enable/disable/update() and rework the local
+     partition code on top of them;
+  3) clean up the remaining partition state handling outside these
+     helpers.
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
----
- .../selftests/net/openvswitch/openvswitch.sh  | 64 +++++++++++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 50 +++++++++++++++
- 2 files changed, 114 insertions(+)
+Patch 1 is a fix for an existing bug, found while looking into a review
+comment on RFC v4: when cpuset.cpus.exclusive of an already invalid
+partition root is cleared, its effective_xcpus is not reset, so its
+former exclusive CPUs can't be claimed by a sibling. A test case is
+added for it.
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 21444657a040..f26c01a17b49 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -24,6 +24,7 @@ tests="
- 	nat_connect_v4				ip4-nat-xon: Basic ipv4 tcp connection via NAT
- 	nat_related_v4				ip4-nat-related: ICMP related matches work with SNAT
- 	netlink_checks				ovsnl: validate netlink attrs and settings
-+	dp_features				ovsdp: keep the set features
- 	upcall_interfaces			ovs: test the upcall interfaces
- 	tunnel_metadata				ovs: test extraction of tunnel metadata
- 	drop_reason				drop: test drop reasons are emitted
-@@ -1409,6 +1410,69 @@ test_netlink_checks () {
- 	return 0
- }
- 
-+test_dp_features() {
-+	dp_features_check() {
-+		python3 $ovs_base/ovs-dpctl.py show "$1" |
-+			grep -q "features: 0x$2\$"
-+	}
-+
-+	dp_features_set() {
-+		python3 $ovs_base/ovs-dpctl.py set-dp "$@"
-+	}
-+
-+	sbx_add "test_dp_features" || return $?
-+	ovs_add_dp "test_dp_features" dpfeat || return 1
-+
-+	# 8 is OVS_DP_F_DISPATCH_UPCALL_PER_CPU, the bit that makes the
-+	# kernel read per-cpu-pids.
-+	info "clear the datapath features"
-+	ovs_sbx "test_dp_features" dp_features_set dpfeat --features 0 \
-+	    || return 1
-+	ovs_sbx "test_dp_features" dp_features_check dpfeat 0 \
-+	    || { info "features were not cleared"; return 1; }
-+
-+	info "a set with the dispatch bit and pids is accepted"
-+	ovs_sbx "test_dp_features" dp_features_set dpfeat --features 8 \
-+	    --per-cpu-pids 1,2 || return 1
-+	ovs_sbx "test_dp_features" dp_features_check dpfeat 8 \
-+	    || { info "the accepted set was not applied"; return 1; }
-+
-+	ovs_sbx "test_dp_features" dp_features_set dpfeat --features 0 \
-+	    || return 1
-+
-+	info "a set with an empty per-cpu-pids is rejected"
-+	ovs_sbx "test_dp_features" dp_features_set dpfeat --features 8 \
-+	    --per-cpu-pids "" &> /dev/null
-+	[ $? -eq 22 ] \
-+	    || { info "the empty per-cpu-pids set did not fail with EINVAL"; \
-+		 return 1; }
-+
-+	info "the rejected set keeps the features it had"
-+	ovs_sbx "test_dp_features" dp_features_check dpfeat 0 \
-+	    || { info "the rejected set was recorded"; return 1; }
-+
-+	# 4 is OVS_DP_F_TC_RECIRC_SHARING, which only exists when the tc skb
-+	# extension is compiled in. A rejected set that drops the bit must
-+	# leave the key alone, so the features have to stay as they were.
-+	ovs_sbx "test_dp_features" dp_features_set dpfeat --features 4 \
-+	    &> /dev/null
-+	if [ $? -eq 0 ]; then
-+		info "a rejected set does not drop the recirc bit"
-+		ovs_sbx "test_dp_features" dp_features_set dpfeat --features 8 \
-+		    --per-cpu-pids "" &> /dev/null
-+		[ $? -eq 22 ] \
-+		    || { info "the clearing set did not fail with EINVAL"; \
-+			 return 1; }
-+		ovs_sbx "test_dp_features" dp_features_check dpfeat 4 \
-+		    || { info "the rejected set dropped the recirc bit"; \
-+			 return 1; }
-+	else
-+		info "tc skb extension is not available, skipping recirc"
-+	fi
-+
-+	return 0
-+}
-+
- test_upcall_interfaces() {
- 	sbx_add "test_upcall_interfaces" || return 1
- 
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 1615843c225e..be41ec72faf2 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -2301,6 +2301,24 @@ class OvsDatapath(GenericNetlinkSocket):
- 
-         return reply
- 
-+    def set(self, dpname, ifindex=0, features=None, per_cpu_pids=None):
-+        msg = OvsDatapath.dp_cmd_msg()
-+        msg["cmd"] = OVS_DP_CMD_SET
-+        msg["version"] = OVS_DATAPATH_VERSION
-+        msg["reserved"] = 0
-+        msg["dpifindex"] = ifindex
-+        msg["attrs"].append(["OVS_DP_ATTR_NAME", dpname])
-+        if features is not None:
-+            msg["attrs"].append(["OVS_DP_ATTR_USER_FEATURES", features])
-+        if per_cpu_pids is not None:
-+            msg["attrs"].append(["OVS_DP_ATTR_PER_CPU_PIDS", per_cpu_pids])
-+
-+        reply = self.nlm_request(
-+            msg, msg_type=self.prid, msg_flags=NLM_F_REQUEST | NLM_F_ACK
-+        )
-+
-+        return reply[0]
-+
-     def create(
-         self, dpname, shouldUpcall=False, versionStr=None, p=OvsPacket()
-     ):
-@@ -2961,6 +2979,23 @@ def main(argv):
-     deldpcmd = subparsers.add_parser("del-dp")
-     deldpcmd.add_argument("deldp", help="Datapath Name")
- 
-+    setdpcmd = subparsers.add_parser("set-dp")
-+    setdpcmd.add_argument("setdp", help="Datapath Name")
-+    setdpcmd.add_argument(
-+        "-f",
-+        "--features",
-+        type=lambda x: int(x, 0),
-+        default=None,
-+        help="Datapath user features",
-+    )
-+    setdpcmd.add_argument(
-+        "-p",
-+        "--per-cpu-pids",
-+        type=str,
-+        default=None,
-+        help="Comma separated upcall pids, an empty string sends none",
-+    )
-+
-     addifcmd = subparsers.add_parser("add-if")
-     addifcmd.add_argument("dpname", help="Datapath Name")
-     addifcmd.add_argument("addif", help="Interface name for adding")
-@@ -3057,6 +3092,21 @@ def main(argv):
-             ovspk.upcall_handler(ovsflow)
-     elif hasattr(args, "deldp"):
-         ovsdp.destroy(args.deldp)
-+    elif hasattr(args, "setdp"):
-+        rep = ovsdp.info(args.setdp, 0)
-+        if rep is None:
-+            print("DP '%s' not found." % args.setdp)
-+            return 1
-+        pids = None
-+        if args.per_cpu_pids is not None:
-+            pids = [int(x) for x in args.per_cpu_pids.split(",")
-+                    if x != ""]
-+        try:
-+            ovsdp.set(args.setdp, rep["dpifindex"], args.features, pids)
-+        except NetlinkError as ne:
-+            print("set failed: %s" % ne)
-+            return ne.code
-+        print("DP '%s' updated" % args.setdp)
-     elif hasattr(args, "addif"):
-         rep = ovsdp.info(args.dpname, 0)
-         if rep is None:
+Patches 2-4 are the first three patches of RFC v4, rebased onto
+next-20261104:
+
+  2) add an early empty cpumask check in partition_xcpus_add/del(), so
+     callers don't need to check it;
+  3) settle the isolation state of CPUs given back to the parent in
+     partition_xcpus_del(), so isolated_cpus_release() can be removed;
+  4) generalize validate_partition() so it can be used for both local
+     and remote partitions.
+
+All patches build on their own, and test_cpuset_prs.sh passes with
+this series applied.
+
+[1] https://lore.kernel.org/all/20261101114206.2434398-1-ridong.chen@linux.dev/
+
+Changes in v3:
+  - Patch 3: merge isolated_cpus_set_state() into isolated_cpus_update(),
+    dropping its @old_prs argument and the WARN_ON_ONCE(), and drop the
+    state check in partition_xcpus_add() (Waiman).
+    Drop the Acked-by from Guopeng as the patch changed.
+  - Patch 4: use top_cpuset as the parent of a remote partition and pass
+    the parent to tasks_nocpu_error() instead of parent_cs(cs) (Waiman).
+
+Changes in v2:
+  - Patch 1: force update_cpumasks_hier() after reset_partition_data(),
+    so that the descendants don't keep the released exclusive CPUs, and
+    add a test case for it (Sashiko).
+  - Patch 1: fix the Fixes tags (Sashiko).
+  - Link to v1: https://lore.kernel.org/all/20261105125215.2205892-1-ridong.chen@linux.dev/
+
+Changes since RFC v4:
+  - New patch 1 to fix the invalid partition effective_xcpus reset.
+  - Patch 3: only settle the isolation state of the CPUs still owned by
+    the parent when invalidating a child partition in
+    compute_partition_effective_cpumask(), as the parent may be shrunk
+    and not updated yet. This code is removed later in the rework.
+  - Rebase onto next-20261104, which includes commit 362212853cd0
+    ("cgroup/cpuset: Fix incorrect CPU accounting with parent's effective_xcpus expansion").
+
+Chen Ridong (2):
+  cpuset: add early empty cpumask check in partition_xcpus_add/del
+  cpuset: generalize the validate_partition() interface
+
+Ridong Chen (2):
+  cgroup/cpuset: Reset partition data when an invalid partition stays
+    invalid
+  cpuset: settle isolation state when CPUs are given back to parent
+
+ kernel/cgroup/cpuset.c                        | 236 +++++++-----------
+ .../selftests/cgroup/test_cpuset_prs.sh       |   6 +
+ 2 files changed, 100 insertions(+), 142 deletions(-)
+
+
+base-commit: 8b7179210b22f8e48a82c5ceacb9d56a9c4cfec4
 -- 
-2.56.0
+2.34.1
 
