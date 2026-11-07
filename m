@@ -1,59 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.26
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794058472;
-	b=e23T4N3m7wL8m9QBIeXQRH+enpJvXF+PJmja7G3M8+l64Y6ollu4PcSTOxz/fmhws5k+
-	 h+1lrVNRkTRxGfF5OXmQRsPlD1SO7IT7h1rTMgpcPdihF+C1l8qXATByC2F/sZ2yHlLDe
-	 Gbn/7fs6fiqRzl+BvWgPv/m3eF3SiRPAXXAo2SYAnrUSiVP1uhLcqbNqypw+yg6CS+CvT
-	 Eks40BHT6czLrQ3HVGG/cFpmIY2FVqDQ0rEKiLMpjl+EZlGLF1GdwAyAlGg9fyAtRv4D8
-	 c3z09V6rRUwJI97l9HlFzMWnhAAtMrtY6OZI7WTroS3YwXfNlUQr+h3S62oE8GvcTyA==
+	t=1794060142;
+	b=Sm5zp7n3wzBgafkdOJUtaaMSxZ/bUKt/Mz1Itr5D4BFmJ5NyHpWtytPSM81KmJlhnIHc
+	 TdWYYz7NDcJ1Ey1Esfme/AhqsdJI4lnbC2jtJxAY07/xS/Y9P2JJycQ78JG7lws11+rpF
+	 WpMutKcSYIgfzyzAI0dVDpJV6uSdvO0Dn9E/WhqO3pUOc0o+Vx8VLheMvv6M58TIHzJyI
+	 7Futp4Ggrj+37ffg1wjNgaTy6ze2+gu0kTn6Db7pjaSiND9zNMQ1RSaVJkY845TfN2QQl
+	 +7b08fYYFntcTOMvznqWO0FGQzv/NNfTQcy/n5NslGMc33AwkF0B8y5bPhm+n/ND+mw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794058472;
-	h=DMARC-Filter:DKIM-Signature:Cc:From:Content-Type:Date:
-	 Content-Transfer-Encoding:X-Lms-Return-Path:To:Subject:Message-Id:
-	 Mime-Version:Received:X-Mailer:X-Original-From;
-	bh=nINnfU7bY08LHLuoUTIzwVaBOZEYQj6zHgkfmZk00xM=;
-	b=NZHe57tlwCry6V0a0449k7awHCwL5X4kz95HkSlduDkfcwe2NWyM2SwSjVDTkSzjkgcr
-	 BX/F1TP2ve/43vb9dFiSCsToXnhpKY7TyG7ob/yYoIk8WglpnaCQh0/nB/gLDUBcVlCFN
-	 DJ4EHdEjn9gSsAq6sO7gRvCz5HV3ykA62akYTwcJsQUDLOyrzduX85IbhVMZWbD8nYskj
-	 2ZiMUD3noLzKi+Dy+RwU9vMSW+D43RX6Uo4Yk2wgYYXK2s1E3iN9v/p8kfzMRtR5F/LQv
-	 r0Jt7phJJuMiwTv8CigJNAbbbqESuosXdITFCaMBivONNn43d/0oZoueHaWas7jdS7g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794060142;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=jeBVTeWsp7XQ0SurPamFA2f1NhhOVbJgVg3z2VQmbcY=;
+	b=kVHxYEg4qQqeKCsH8lj8CSguYLOFVxc48bzLAt7FT2ZOgr8t1e8iRhaJ+/kzfsH/WI/F
+	 PhqaPXk6gRSxn5/m/izwwDpmRDDbdHZLn4kK2K8ZLdzJUbrdCSHvxHvR4wJy2VEinoLZr
+	 DYyKCNk7ncj225YIUNl3/hU9Fd/a1orRtSng3jaOCR0uRC+KTTXyrsxSx21NaW3YitMl1
+	 hx7j8M0edEynZ6yMzFj4bHIsmC/Bj2PVyG0tXIPVIJg710PeLcg1ibuo0tuGBJWPHwGZl
+	 GKol1RQv0HCGMy7lveKvJgfH2NhH9YwGxyTN2ZZZgGW7hpXJzPuNoYhCd0XEjG6UfdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=lanxincomputing.com;
-	spf=pass smtp.mailfrom=lanxincomputing.com;
-	dkim=pass header.d=lanxincomputing-com.20200927.dkim.feishu.cn header.i=@lanxincomputing-com.20200927.dkim.feishu.cn header.a=rsa-sha256 header.s=s1 header.b=bIyEJZl4;
-	arc=none smtp.remote-ip=209.127.231.26
-Received: from va-2-26.ptr.blmpb.com (va-2-26.ptr.blmpb.com [209.127.231.26])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Jzk4l6NG;
+	arc=none smtp.remote-ip=209.85.128.41
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBF0606A32C
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 13:34:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9EBF0606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lanxincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lanxincomputing.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B128606A32E
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 14:02:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B128606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lanxincomputing-com.20200927.dkim.feishu.cn header.i=@lanxincomputing-com.20200927.dkim.feishu.cn header.a=rsa-sha256 header.s=s1 header.b=bIyEJZl4
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=s1; d=lanxincomputing-com.20200927.dkim.feishu.cn; t=1794058462;
-  h=from:subject:mime-version:from:date:message-id:subject:to:cc:
- reply-to:content-type:mime-version:in-reply-to:message-id;
- bh=nINnfU7bY08LHLuoUTIzwVaBOZEYQj6zHgkfmZk00xM=;
- b=bIyEJZl4fG74HmgmBD3EiDlJp9gERQ9/sSijx+VKlhGmSjSN6PhLU76BJMkDXoSCPQuPbi
- K2cTss2AK+FvPir009Whec/9aw2zxZV28zlutAhxr/5wfViE6NJMwnXKqJaBVP4cMKl77x
- 95fRFtT5j0SJkX9GdbabQeHYwfZW4ZOpiffbcmcQm9H+4dvIyktdRaYLupP1C/PeKkXnAh
- mRvLAD2oIeqSTIl7GoSL8iUQ3GeWcwF4OH22B09xWlfBItZpZXoFoAVrpXICBT0nE7Rydx
- p0NqkbqWpdQSDgLFiP2L6F432EdTNL4Y3UNIFDIwjhzb2gK2kMc4wNm6v+bTCg==
-Cc: <davem@davemloft.net>, <edumazet@kernel.org>, <kuba@kernel.org>, 
-	<pabeni@redhat.com>, <horms@kernel.org>, <netdev@vger.kernel.org>, 
-	<linux-kselftest@vger.kernel.org>, "Jin Li" <jinli@lanxincomputing.com>
-From: "Jin Li" <jinli@lanxincomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Date: Sat,  7 Nov 2026 21:34:16 +0800
-Content-Transfer-Encoding: 7bit
-X-Lms-Return-Path: <lba+26aef28dc+b4cfd5+vger.kernel.org+jinli@lanxincomputing.com>
-To: <dsahern@kernel.org>, <idosch@nvidia.com>, <shuah@kernel.org>
-Subject: [PATCH net] selftests: net: forwarding: replace bash brace expansion with seq
-Message-Id: <20261107133416.212677-1-jinli@lanxincomputing.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Jzk4l6NG
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49d05d51553so9272445e9.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 06:02:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794060140; x=1794664940; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jeBVTeWsp7XQ0SurPamFA2f1NhhOVbJgVg3z2VQmbcY=;
+        b=Jzk4l6NGiX+HqnSZ15BN+hLDZCao5gt3EsidYlulPs2AUjGEDiGyZWmwm8GmKHSpz7
+         iojUe+nL1sffGrls1EUSz35B+L2zLMAWzn3KRUoxu3AB3ZRHqz38t+xAu5DP7CAmJiWe
+         EUttTOAPYVEQ4Ocb2noeI2H4/PpcrlISqFg5v2u8vqoWbU+QuZHnJ1QhMU1ZI1DqjF6p
+         oWHIXNW9fcG9yLHwYrFWx9+BM55KroP/iJ6Gkol1afqzYAE/n97WMEdQgmfsdIbRS4Ow
+         UfN7mEd7pXEXIDUHJUhKpe4u2Jl3vfSxM3ISoBAlP1KVx1NoOmcMePRrTxtmfgi/KlbG
+         UCvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794060140; x=1794664940;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=jeBVTeWsp7XQ0SurPamFA2f1NhhOVbJgVg3z2VQmbcY=;
+        b=nMIu5PhiTOJr6TOFhx6ivb4kuTnxSYbIezG/y1EvBWikPb04F3DChu0cDdkX/1rPGK
+         AqCr7Zp3Bywndaz3WDX5JKBPuIwvr6XTujG/C2mDBn3vRI+J8sZKcPa9XyTmv1RdxHeI
+         rvp9p09+WOyKGBZqt3qjS0proleVQ6kUhgWgZc/aBKAZbpVzdAy+sXQEeTBZXuJS/FpR
+         giIvMIYio2MxnWjT7D4HExcKuzOEgo6PsGnsXlpSSDyrjQ2cl5QcTb8Hzk9PJnC7wnVW
+         VeZ6RyrWLNRmLTeyKMbyQ517kfQuxm1FHuMV0Xz/Kk6SkkBmiMnaC4YFSQAF80DzNyed
+         iySQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzLyfFLb4vsjurhIp8DhiFJib4Kb71g/GTICSWfZaUvUCn9sBw3K++vQNMNuvqyWDUKmFlBkhf/MPPTDe0ANz0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+7QpGPiwVhhDOiJeYakqZpwrfmrWgGQRljEikOATQhhzonElx1
+	q/TBA6ugM0Z6wG3ERAULrGh0m84Oczxv7QB4uo2XdVAVJgJVW9UT0G+g
+X-Gm-Gg: AYBFou20VxhgMG10zSlWwwfSJcYStFxIlKXiLJmORGdHX0NTrdrQjtO04HxidoSUIlo
+	u3Yfb69ZHQSLK7LxyY1zuEH4msA7z8CTvwYzoQG9b2jz86qktzouaO40/INttXUfLxbcffADZx5
+	ZkA/ubKFG4TgOfkXNyTQ+gvsGnD1YkSmC+vr01hl5ixhzV1rjOMN+KI0iVqNQmmnkOhZyfs1DLN
+	Gh8WQTP/NjDPI1J3BMpWEpH0Rez8Kspk2tc9rxoteaLfIBNwX4crsWbZg0WFqOe8h9PjXRAXlP7
+	5sjsdASEo4xpBd7Q3wxv6xryDJXczReHvDZrtSJs2zqFH5mtvqSRK3LUV1/ZVbCbm4yooeVnBLu
+	mpq/BCe40QnhJknljoa2XFOtIlj55XUzHDXrNCrLI4ur+WavRIqGs0k1ZNz5LtGrs0VTQ5ph+8A
+	pYAFEh8JNmDkHwbYwXJciOYLIN7BBFk/8J2ttT9BLJ4feb/P3DK1kkxu9XKmkLxIx9WqgYflGuH
+	p36Fiat5M8oSBcTcvsWMI8Uw06hxMImdQVXqcdW2wjRE6LMxFaIUF5Vsm8Lr0LDH38IErB1S4aQ
+	Nh6sTFpKu5UxLM7pj/QJPod68qgXBkgy0E2a/FRc3x9yIcD4EPSe
+X-Received: by 2002:a05:600c:34ce:b0:4a3:59ee:86b with SMTP id 5b1f17b1804b1-4b6dc400256mr107335175e9.4.1794060139414;
+        Sat, 07 Nov 2026 06:02:19 -0800 (PST)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7efb1547fsm122148745e9.11.2026.11.07.06.02.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Nov 2026 06:02:18 -0800 (PST)
+Date: Sat, 7 Nov 2026 15:02:13 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: Christopher Lusk <clusk@northecho.dev>
+Cc: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] docs: landlock: clarify TTY signal scoping
+Message-ID: <20261107.7c3abf9dfa59@gnoack.org>
+References: <20260923163321.79770-1-clusk@northecho.dev>
+ <20260923163321.79770-2-clusk@northecho.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,82 +101,72 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Received: from ubuntu ([123.120.5.129]) by smtp.feishu.cn with ESMTPS; Sat, 07 Nov 2026 21:34:20 +0800
-X-Mailer: git-send-email 2.53.0
-X-Original-From: Jin Li <jinli@lanxincomputing.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260923163321.79770-2-clusk@northecho.dev>
 
-{1..16384} is bash-specific brace expansion and will not work with POSIX
-shells like dash or busybox ash. This breaks the flowlabel test when
-/bin/sh is not bash.
+On Wed, Sep 23, 2026 at 12:33:20PM -0400, Christopher Lusk wrote:
+> LANDLOCK_SCOPE_SIGNAL limits signals sent to arbitrary processes outside
+> a domain.  A PTY master differs because its holder controls attached
+> processes through input and signal injection.
+> 
+> Clarify this boundary in the userspace guide and narrow the UAPI
+> description to arbitrary target processes.
+> 
+> Built the userspace-api docs; no new warnings.
+> 
+> Link: https://lore.kernel.org/r/20260916152336.1589383-1-clusk@northecho.dev
+> Suggested-by: Günther Noack <gnoack@google.com>
+> Suggested-by: Mickaël Salaün <mic@digikod.net>
+> Assisted-by: Codex:gpt-5.6-sol
+> Signed-off-by: Christopher Lusk <clusk@northecho.dev>
+> ---
+>  Documentation/userspace-api/landlock.rst | 6 ++++++
+>  include/uapi/linux/landlock.h            | 2 +-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+> index 84cb7bf6b3ed..4d9fb1f1588c 100644
+> --- a/Documentation/userspace-api/landlock.rst
+> +++ b/Documentation/userspace-api/landlock.rst
+> @@ -430,6 +430,12 @@ The operations which can be scoped are:
+>      This limits the sending of signals to target processes which run within the
+>      same or a nested Landlock domain.
+>  
+> +    Holding a PTY master FD grants control over the processes running under that
+> +    terminal, including the ability to inject input and signals.  A process able
+> +    to write to the master should therefore be considered as privileged as those
+> +    processes, and this capability is not restricted by
+> +    ``LANDLOCK_SCOPE_SIGNAL``.
+> +
+>  ``LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET``
+>      This limits the set of abstract :manpage:`unix(7)` sockets to which we can
+>      :manpage:`connect(2)` to socket addresses which were created by a process in
+> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+> index cceda3b3b961..ad7b1ebd62ed 100644
+> --- a/include/uapi/linux/landlock.h
+> +++ b/include/uapi/linux/landlock.h
+> @@ -500,7 +500,7 @@ struct landlock_net_port_attr {
+>   *   connecting to an abstract UNIX socket created by a process outside the
+>   *   related Landlock domain (e.g., a parent domain or a non-sandboxed process).
+>   * - %LANDLOCK_SCOPE_SIGNAL: Restrict a sandboxed process from sending a signal
+> - *   to another process outside the domain.
+> + *   to an arbitrary process outside the domain.
+>   */
+>  /* clang-format off */
+>  #define LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET		(1ULL << 0)
+> -- 
+> 2.55.0
+> 
 
-Use $(seq 1 16384) for portable iteration. Fix the same issue in
-custom_multipath_hash.sh, gre_custom_multipath_hash.sh and
-ip6gre_custom_multipath_hash.sh.
+Apologies for dropping the ball on this, I'm only realizing it now.
 
-Signed-off-by: Jin Li <jinli@lanxincomputing.com>
----
- .../selftests/net/forwarding/custom_multipath_hash.sh     | 8 ++++----
- .../selftests/net/forwarding/gre_custom_multipath_hash.sh | 8 ++++----
- .../net/forwarding/ip6gre_custom_multipath_hash.sh        | 8 ++++----
- 3 files changed, 12 insertions(+), 12 deletions(-)
+Reviewed-by: Günther Noack <gnoack3000@gmail.com>
 
-diff --git a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
-index 5dbfab0e2..92940370e 100755
---- a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
-+++ b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
-@@ -224,10 +224,10 @@ send_dst_ipv6()
- send_flowlabel()
- {
- 	# Generate 16384 echo requests, each with a random flow label.
--	ip vrf exec v$h1 sh -c \
--		"for _ in {1..16384}; do \
--			$PING6 -F 0 -c 1 -q 2001:db8:4::2 >/dev/null 2>&1; \
--		done"
-+	ip vrf exec v$h1 sh -c '
-+		for _ in $(seq 1 16384); do
-+			'"$PING6"' -F 0 -c 1 -q 2001:db8:4::2 >/dev/null 2>&1
-+		done'
- }
- 
- send_src_udp6()
-diff --git a/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
-index b4f17a5bb..19384be4b 100755
---- a/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
-@@ -319,10 +319,10 @@ send_dst_ipv6()
- send_flowlabel()
- {
- 	# Generate 16384 echo requests, each with a random flow label.
--	ip vrf exec v$h1 sh -c \
--		"for _ in {1..16384}; do \
--			$PING6 -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1; \
--		done"
-+	ip vrf exec v$h1 sh -c '
-+		for _ in $(seq 1 16384); do
-+			'"$PING6"' -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1
-+		done'
- }
- 
- send_src_udp6()
-diff --git a/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
-index b24acfa52..d848e82d4 100755
---- a/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
-+++ b/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
-@@ -321,10 +321,10 @@ send_dst_ipv6()
- send_flowlabel()
- {
- 	# Generate 16384 echo requests, each with a random flow label.
--	ip vrf exec v$h1 sh -c \
--		"for _ in {1..16384}; do \
--			$PING6 -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1; \
--		done"
-+	ip vrf exec v$h1 sh -c '
-+		for _ in $(seq 1 16384); do
-+			'"$PING6"' -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1
-+		done'
- }
- 
- send_src_udp6()
--- 
-2.53.0
+A related documenation patch was brought up in [1] as well.
+
+–Günther
+
+[1] https://lore.kernel.org/all/tencent_1D938EDA50BCDB080CFADC6A@qq.com/
