@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011836;
-	b=HpOsmPaWNxr72azNZsG/5uLFejzs69unrBHaLX0DjzV3IxfHiuqt+NQFMWI0OJilLjp1
-	 tMmPR7oskxsklhqF663rpP9PlFHlREMnA+m4Z10EUFbvzd3qQYaK9taHOTzkYdE/MmrM4
-	 CpTrU2U6ZufXp7fG0A0d/6hyNVUL/BhkAj+/NGdBf+kWXKf4AUFLkmq/yuAoxmUi7287Q
-	 3br0gJ44CsLtEflPtAiZFxlkJVWQA+M2zkGiypoxxjDibOpNpruhuVXcuefQIUzLU4hTZ
-	 uEt93i/7Y94zFH7qpOSSuSDWGMLhrQ2/StPzQrkODYuQzE8wHGqQgyncbiZmaMDWH6w==
+	t=1794011837;
+	b=BQDyQhzaJNWF7OSypznLmzh8rrYRTWJLa0rpWojbA1spdtCjoiSPpNwO/11PjsATOPDI
+	 LnUFDCPjedoj9KkWDAzfkOJJ4NOT0iuh7wshQSE8cv/hy9VyhlbZQ+opFbNq9VHbG2YnS
+	 1VF4hwIqAGtl1Da24toQkJ+CjaStgf+AuA/dnTMpjU8zMSg2a6U/DkvO6TCqW9YlxBDUd
+	 8dbwJLxt4wIeJX4NMoAzpKjn9bm2F0nvljzb8QmFL/UzPAdTzbfX/YBf6+hJ4DxAeFY6Z
+	 VxybM16mQZk1aeWqaregEhA15wYognVLjUZz5jFUNphtn1JelWk80NyV4eV7nuoc4vQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011836;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011837;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=4UScqvpHbvwhPXhOC+pGujyyRV2Vm9+YOOe4hjQlTSs=;
-	b=XWtV27MErJ9OwiPel2HsjCkEziBMB/cfSgFYkCXbP9kA4ZpKUXjScqiDJPmusumTBtX8
-	 DL4G7H9aRSN3yTY+YErPpAZC1blQJqkzhzxk94v/h8UtE1D563X7NmHwJW9Mqs6AlAkU5
-	 QquTwH5lilDfvHr5vrlTOVHANk8MqePJ6hv5sHix48RbPO9M3lzmGu5MJGPB30H8dW3qX
-	 TMCByt4GzYKZQzzQaN+E8AHEn604TKoqIJEHJwnHYLRRlzk3WgbkWq0Y5NASLcIOjCE7W
-	 pwtWlVYSG2Bh+x8OWd5YKeSnMoTHvEFuJpNjTkTlVpw/eQr6SaPGHNRNrDn5LTU4Lzw==
+	bh=VQR0WakuaszDqO5R17sC1zMOvvVcE9BE0ownvxB0jTs=;
+	b=0+V+ao/IMCvd5Dob/K9TQwd2MnPjcxN3Notn+uYqSx/kK0w0dxGEakzDKjdt/knGM/4u
+	 Ms4r+VNiUPfyJt6O4wGiEvdCQ1PSnUjObvW1hx0hldOH9JDphVVHNyBZWha33PnhPaNLf
+	 4Wfbrv41cgNRjt8scZK1Fn2kuAmGQYJ4pTf1OgmaycPveEFtl9fry0GxUr7GIg6viQEup
+	 J9no5jrmDRpbWeux/V2c0znls/n0KuNeIehubZEJdR39lyhwEBHlQyZPcX5HKoBJesVqS
+	 SdgYYFXCFwkoBoHlNqwCcWSHl0rQ8Uj3WtRrY0tmHotCBoLzvmYWGUbfMpE8RZFVHUA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YEXgJipU;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xw3BV2VI;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F918606BFED;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63F0606BFF7;
 	Sat,  7 Nov 2026 00:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YEXgJipU
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xw3BV2VI
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1794011836;
-	b=jTC3oAAoY+yPgFxQmwwyYhKIPdch1/fiATv7pdrPs/9H/PbFt86C9LPdDPukPagJib5z
-	 ii8Um0uegDuIiAefBG2xK9tpjByYxqr/RdaYzpkjXJUTB2gfE0SjijitGVFQXdBpBS7iA
-	 abmbV2YC2WeC0eF8b/QpnNtnc4wmOPb+CV8iE40wa+nED73LI2YFC3CSGdFA1tSrp4/xI
-	 JYk2hJ90Vz/N1BTmDdAWmlZSQC6+0FI7O9w9xNLJGgOYTSTmJb6zBFE5OCOO9BT1vCwDL
-	 yyzPIVd/eWu3keIZab2ybeax+T489k1mj+6LtX+QT5Ryadc4Ly43lxdg7eo4w5GXLfw==
+	b=o0Ii1271i+krwEjn4Tn4bXdjUS4XGg0znAw7PfOsZ0A/sGt2dX+julXBLqNwvxUCE5oy
+	 79ntMgrDKKSYJxC5OoBAlLQ6MqXpklQSqmUS3XzTBRLYU8TuFYLL2Hf14XykCN3BLn/kj
+	 MyprcHN1DB/TpUVzWHN0d1RvveEvsHd/S41bVbX3G7w+lzeGY7kixjHI+1Z6ozYm6Q/dj
+	 LGOF/oNyS9NkiztWJ7U4iaNp5xUPShCOXUbIs31wwgRnOQobRbwAkFnFRlNgBZcx8oBiN
+	 /7z6OSbPSMtHN6PY+y/9Ni832G3WosbKnHOLCtEy+97XMwlTD92dlAKJIPLrXM6M9kQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1794011836;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=4UScqvpHbvwhPXhOC+pGujyyRV2Vm9+YOOe4hjQlTSs=;
-	b=HDIUQDobIvemgf+BIWga74IK7QG2WH7iBE0Ws6kqCqoyzB5DbagErY6duQVqoDIXsNbY
-	 Fj0BelWnMFBXiBqRLhNbLNL9iuA5ScYXPeMhS4pl6ztdSV28mGo4ca5PvtiU9TjZf0TDu
-	 Z55q6RodEhwfmTLL23OyUAuiyJt9my5aDRBppgP3lzYdKRHueDmUCJlYmqC9XZNryMvLh
-	 VwuU+lTKtoDPywq13IpyzyG+5fiHlhSmztqfr+UwoOaIR+fBhpet3met/OcAhnXmQR7+a
-	 GWyWfj1topXtKTAHxw7viCm4bJWgkqeajO/s/RUFJEWtFaSc0Y301KIip09+6EZOA6g==
+	bh=VQR0WakuaszDqO5R17sC1zMOvvVcE9BE0ownvxB0jTs=;
+	b=Lsxsx4TrJzn41FFwDbMfhGFbpsrXGjFAqmgNwqsBLbqS5Suh8iFzIoga7gbo8Ph7UuEe
+	 PFydi+3fAsBW04gfjKShVuDIztfZx4oxFpFVLxxYbOk4BqL92aPzxhAfbszngC6jwKzef
+	 PDjE07s7I/PClPTZmf32GrqdWGWsY8z9mDZOCw0o/9CiEqo+7iJn5aSmiPo5vMiFruRdX
+	 49xxLY2UdF0O5cmge9JOpIye37T3l9pzIXDHewcCfCWtb9ijdBAX9gGy/RAin8TOCwO7Q
+	 E21+5X6wr+7Shvb6/GPyIGIORYscrdjve9bGotM5Z9yQZ5FjnyRiSNiql8uGSEvX6oA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 818021F00AD4;
-	Sat,  7 Nov 2026 00:37:06 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id CD55F1F00A05;
+	Sat,  7 Nov 2026 00:37:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794011836;
-	bh=4UScqvpHbvwhPXhOC+pGujyyRV2Vm9+YOOe4hjQlTSs=;
+	bh=VQR0WakuaszDqO5R17sC1zMOvvVcE9BE0ownvxB0jTs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=YEXgJipUDsxc+shw4qFdKswehd6a1WuJk6fLk1NDYzhAmkqd2x+ZqeW3COYZQWd4k
-	 9waBXcxK+fGnrA+6aOPxKljfkIKzuoNY8hfLl3yVFgC7EEtLks8XFawYt8Ke+zSC6B
-	 X/nQb47vvsKge3FTQDKGt7cYufQQKxDMqk5QLgzIHxqFSGugg/ZsVEA5CoEPvZIE7h
-	 djZW68PoogF+2+/A2chdYeRcEWwywOwNsfBXGNhBr8PSLpYvdtLzNuJQXjn/zWkuuD
-	 ZXJGH5rIpVqKwUffxz/P/wvcwSVA3FNZegZ7IQlMHFrqWBKP2yK6cqZBRaKggjRFYC
-	 WELSa9krLggoA==
+	b=Xw3BV2VIh7HubueaXrhbvOpox2U/SiJK47yyhmnx8lVA2rF1B8o7CFMOy7ECNGyxL
+	 GSc/rF/UJeAVt75wNnm1HaKkQbx/waACwiUhvW3oigPkXt/nunoaho/LObiwMmfIRs
+	 YW3IlGwud+TZJ0JUZimPMa+QsQVtxRd0+RUgCX0ca2+zhZJFkPrIjlqQFpSFfUqw5T
+	 mC0/iHrGPmVsy88+ZXkOM5xn0bp7QIAuIM0rqf6qWzmoev5x46OgchecT/funBNBOq
+	 Xx6jKz5BjQ4v3uQVs9ckx3/wgpZzGnmPX0H/FAtv3UXRQY7yPuy93fH8BLCtlnRPvj
+	 jh4d1bJsWybyg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id EADFD47929;
-	Sat,  7 Nov 2026 00:36:55 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id E5480479F8;
+	Sat,  7 Nov 2026 00:36:56 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:18 -0800
-Subject: [PATCH RFC v3 44/88] samples/kvm: Implement attach and release
- provider ops in sample provider
+Date: Fri, 06 Nov 2026 16:37:33 -0800
+Subject: [PATCH RFC v3 59/88] vfio: Dispatch guest_memfd get_pfn provider
+ op via vfio_device_ops
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-44-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-59-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2754;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2331;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=wGkwYGWhWpUEbPcNoli9OVifhRpY95s9sJaKeYRfDoU=;
- b=2zBY4/UyvI/wD4fxk5n+1zA8wC8jypJ2hvfyGQousryL2X4dafvdKSl/QarQac9uuatqZ3yC7
- cRyw4A4lugaDN4Zps6HLSpdgi7cq6SIJHYldFyY/s718nvWW4wv8kWz
+ bh=xvhk/B5cJ5UV/xewATDcSIWa/TiLlY+J1HVubbWHrTs=;
+ b=o7/Mg1zgNXsxxe9h93PAmVT9+adieaG+XGvsvYOAGMQVbFhjEeQODEIVNBVomRcjlxVrpS+fC
+ vD5PwxCvv4YA1qhXrdJYU5KtKYsUBP51tja93wBeyuXND0y2TJGrwT/
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,93 +120,67 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Implement the guest_memfd provider operations in the sample memory
-provider module, providing .attach and .release callbacks.
+When servicing guest stage-2 page faults or host userspace page faults
+on guest_memfd memory backed by a VFIO resource descriptor, guest_memfd
+invokes the .get_pfn provider operation under the shared filemap
+invalidation lock.
 
-In .attach, take a reference to the provider file (get_file) to keep the
-provider context alive while attached. In .release, release the file
-reference via fput.
-
-Attach the provider operations to mps_file_fops.gmem_provider_ops so that
-provider file descriptors created by the sample module can be passed as
-resource_fd to guest_memfd.
+Implement .get_pfn on vfio_device_gmem_provider_ops to dispatch to the
+bus driver's .gmem_get_pfn callback on struct vfio_device_ops. Return
+-EOPNOTSUPP if the bus driver does not implement the callback. The core
+dispatch path avoids acquiring dev_set->lock to satisfy the requirement
+that provider callbacks do not acquire locks held during revocation.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- samples/kvm/memory_provider.c | 39 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+ drivers/vfio/vfio_main.c | 16 ++++++++++++++++
+ include/linux/vfio.h     |  3 +++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/samples/kvm/memory_provider.c b/samples/kvm/memory_provider.c
-index 81ac94ae1a4e9..6f86e3e3262e3 100644
---- a/samples/kvm/memory_provider.c
-+++ b/samples/kvm/memory_provider.c
-@@ -17,6 +17,7 @@
- #include <linux/file.h>
- #include <linux/fs.h>
- #include <linux/gfp.h>
-+#include <linux/guest_memfd.h>
- #include <linux/miscdevice.h>
- #include <linux/mm.h>
- #include <linux/module.h>
-@@ -34,9 +35,11 @@ struct mp_info {
- 	unsigned long npages;
- 	struct page *cma_pages;		/* from alloc_contig_pages() */
- 
--	struct mutex lock;		/* the bitmaps */
-+	struct mutex lock;		/* the bitmaps and gmem_inode */
- 	unsigned long *absent;		/* taken away by MP_SET_PRESENT */
- 	unsigned long *readonly;	/* marked read-only by MP_SET_READONLY */
-+
-+	struct inode *gmem_inode;
- };
- 
- /* Byte range [offset, offset + len) of @info as page indices. */
-@@ -161,11 +164,45 @@ static long mp_file_ioctl(struct file *file, unsigned int cmd,
- 	}
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index 618daf8bdaf80..93bd0a200ad22 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -1589,9 +1589,25 @@ static void vfio_device_gmem_release(void *provider)
+ 	fput(file);
  }
  
-+static void *mp_gmem_attach(struct inode *gmem_inode,
-+			    struct file *resource_file)
++static int vfio_device_gmem_get_pfn(void *provider, pgoff_t index,
++				    unsigned long *pfn, int *max_order,
++				    u64 *pfn_attrs)
 +{
-+	struct mp_info *info = resource_file->private_data;
++	struct file *file = provider;
++	struct vfio_device_file *df = file->private_data;
++	struct vfio_device *device = df->device;
 +
-+	mutex_lock(&info->lock);
-+	if (info->gmem_inode) {
-+		mutex_unlock(&info->lock);
-+		return ERR_PTR(-EBUSY);
-+	}
-+	info->gmem_inode = gmem_inode;
-+	mutex_unlock(&info->lock);
++	if (!device->ops->gmem_get_pfn)
++		return -EOPNOTSUPP;
 +
-+	return get_file(resource_file);
++	return device->ops->gmem_get_pfn(device, index, pfn, max_order,
++					 pfn_attrs);
 +}
 +
-+static void mp_gmem_release(void *provider)
-+{
-+	struct file *resource_file = provider;
-+	struct mp_info *info = resource_file->private_data;
-+
-+	mutex_lock(&info->lock);
-+	info->gmem_inode = NULL;
-+	mutex_unlock(&info->lock);
-+
-+	fput(resource_file);
-+}
-+
-+static const struct guest_memfd_provider_operations mp_gmem_provider_ops = {
-+	.attach		= mp_gmem_attach,
-+	.release	= mp_gmem_release,
-+};
-+
- static const struct file_operations mp_file_fops = {
- 	.owner		= THIS_MODULE,
- 	.release	= mp_file_release,
- 	.unlocked_ioctl	= mp_file_ioctl,
- 	.compat_ioctl	= compat_ptr_ioctl,
-+	.gmem_provider_ops = &mp_gmem_provider_ops,
+ static const struct guest_memfd_provider_operations vfio_device_gmem_provider_ops = {
+ 	.attach  = vfio_device_gmem_attach,
+ 	.release = vfio_device_gmem_release,
++	.get_pfn = vfio_device_gmem_get_pfn,
  };
+ #endif
  
- static long mp_ctl_new_file(void __user *uarg)
+diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+index 65dc2cb523351..51e04b980a381 100644
+--- a/include/linux/vfio.h
++++ b/include/linux/vfio.h
+@@ -122,6 +122,9 @@ struct guest_memfd_provider_operations;
+ struct vfio_device_ops {
+ 	int (*gmem_attach)(struct vfio_device *device);
+ 	void (*gmem_release)(struct vfio_device *device);
++	int (*gmem_get_pfn)(struct vfio_device *device, pgoff_t index,
++			    unsigned long *pfn, int *max_order,
++			    u64 *pfn_attrs);
+ 	char	*name;
+ 	int	(*init)(struct vfio_device *vdev);
+ 	void	(*release)(struct vfio_device *vdev);
 
 -- 
 2.56.0.455.g6c5a503b38-goog
