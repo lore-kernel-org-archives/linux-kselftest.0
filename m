@@ -1,76 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011841;
-	b=ku0XCX0xH+kqXys02a9JKgYklrsDY+k/L1Dqj8rDBpz1egfhQzAS2UF7EVUMlXhkb3PZ
-	 ob8Iz7bQvvQXs14meXnmZ3JtaViDpq0P4TA8kFgjYJP0unZNHEOmDjLDjZ3BstlTsQUjk
-	 Kz5JEe0j0/i3cv3/hO2b7i9J0s1ZKFO3+CkxiRdO1FCJbJoikfZ12K/srJeM5xFzs5t6h
-	 y4tuRp4XmWqYRt7Mq6qMwJU6vQ6/Rn1kgHC7Lu3Ua1XTOAdMd8ks9bts8k2dDv8ec8Yxg
-	 xSzwt56vXmP7EqdAtBXD/3AJe6hAX+rr4pEO4NaczBUsukNtb2jueKOVbxQ4G7T8zUw==
+	t=1794011842;
+	b=nX7xgXOpJsKmkJlpniehIOwQGGfjcdGXutxby39SYWTwWTQ9mofROjR7AKu6s8KM+/Ly
+	 /z8Cssdaoy1lYMLdtWdNJTCIb1eM2saVbjq9wAEg6b1rmxFyl8aiEz6OfTacnaya76HgN
+	 d+qvCZO1R2N5BSTrnE6ZEwsZDArX7vBO56ZygGQSYDcxdwB1/vMMBiOwYZ8ZSMIaN7AfL
+	 oW0HFOkAj62BUh1wqJRPd7mXJECwGg3SY6FOvajRGHqMgcYnH3Vpcz6fJgM1wj4sRWszw
+	 6Byfv0Rnol9hHC3IDV4BL6IAitB3tJ4TjBrSotCDlPA1puvC9+ceh7UIzj3hr9Dzqeg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011841;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011842;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7jyih/ZWZhrRU6GcpifC/ctZB9GVVxtxj6yL2+TCX50=;
-	b=IKblbz8r5hQKIPbdv7rXrzAh8rNMRqT56mbcESsAPaZIpZgMtrolDZp6hU22ZXwz2QqY
-	 3I3pgsC6Avwe1GBpcA8VZ0sJy5uEd37qLABFHU13n8ZeAU0LnzfjcmXehyQ3Tk3I4XfnE
-	 PWM4In1KXUsxynA+Gt1Fgz9oL2/M66UfKoFtNpU9j+ApgpOhNcqTEeV7KDI0fhe/YZYhs
-	 kGLdBHjrBj68uLprzbf3GK9tu7JU5JVEywAxSzzKf+nafZDuKjI9Z93Evy/0rsrTYY4oL
-	 YkojArU0w2+zBF9W6iVyWHAwDe0zcaqRPUTOFtQN910038Px7YKxI2C062UhE0A0PPA==
+	bh=j6n9yIIcfnOcnGVEaQqxGzHzdc6SyqXvU+1WBCgMQDc=;
+	b=nKSXcMLhQkQu9OSxJVqHcDIGqj73LyNqCoSMYsbX0G03cQwIvoNF0MotYNOePRifWkxt
+	 J6FVMYhj72fjot1yvoAkTLzHgUl3GlVR8M4y9lxgZzIF5LhI4VajVlKTSTJxENkuSWSIx
+	 frAUP5D908MLkMHjDDsbJzm4KmdJyzdDAXvVaU5utvBHDaL/ppRLkYi86qomH0xGk80r/
+	 5l3zLIcT3euX+PMDn5YSjAbyNOVvSib/nHHDPeyZjL34aCQU22Qq7xGfVtanp4ysvf2jI
+	 A0M06ZdwOMl/NymehMFTdpp1qD/L/z815E36FVcjs10k+KVTpWbkCs5/12QfIPShYOw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kkGXBUKw;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958A7606D810;
-	Sat,  7 Nov 2026 00:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8F4606B768;
+	Sat,  7 Nov 2026 00:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kkGXBUKw
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011825;
-	b=ewNOAhQVaOJd4siFJzBY8GcVN2CvNpGxyYx1oe3K8DIgjLu5mI6Ee8RDetk17w4Gwidw
-	 VRw3JqLHFd9RImfwmqx74zn/SyCXP5417G++gAWdtSvQf1p5VfaJS+ViLtw3W2tnhRqY2
-	 NXPmafnm2p1IKHUNb75r0OCQRkdQ6cTodo4i9WxpcvfuYLO48qeMNgOIsVYF040EFk/tm
-	 lpAxIWJCp9kCrimwvEJu7MNaQm/cQwLqrkjUeC/6Ot+UscAET1rFJQDvHOkBQJ5cPj00j
-	 9b/LGDMBOJEYcyzay123XnizVGfcyZZRRN3DcFO1+7Qe8iTS3uIjWZjdwLFl4mooPFw==
+	t=1794011841;
+	b=eb/vDVAKeECthiSwyI5qhxqUrowDLJpSM5ZwSeC41x/IhjM7aE+DtDB20ff4ODrWYYsC
+	 kmFbrM37IpmEZlg10dSiY3WVW3Iy4LGmcSMFsQ/yZgcg44wGhZQ2ibMuj6OJynR56Gdqn
+	 k7DVqRnIk/I9dUrSjrJzkFJOsPp9XmH1nMBJYXtsY+7HxLNgmnQqpz+SP4q2D1DaJ3s0a
+	 nH4Ws04Wg61Mjja8PWpbBe57QiAcbw0qg+GnEq4hEk68fvRrgweaZpTG6b6SOPs+AUlEJ
+	 eNhCJRY2iQoLsfapXSoeZrnlDi4dkA04j9BJpGHlTd9VyO30y88m9eo6PyH0kX+7SPA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011825;
+	c=relaxed/relaxed; t=1794011841;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=7jyih/ZWZhrRU6GcpifC/ctZB9GVVxtxj6yL2+TCX50=;
-	b=zxeBR7J22JNNfKUi6a/eB+wlijcGujOJT4m38NmkkI7sSZJ6N3lYxngjkbmFUFzpv2Y5
-	 j5QFuoNx80SPBgfX1UY8QBxsOM68paug0LL65HVmucM7DU4LFPJnG+nQ6sXwq2ggmB6qC
-	 KXeJgI/d4yf523NqvSq+A+J+eMypirNWOvtbE8DgEoxTAdmDbCQE4BaZ7r7yWfJMnBYzz
-	 ujqfao2+QrM0RnVPKbx3YKJ6g31W0RBQRnf7R3XQjoSvuAf0rJ21+NHXgng6dVfmmxA4z
-	 LlUhq38MzfpDgqving4vdfJgXl2obYlU+it+4Y8exTe86Pzx3jNfqTcIdHxxGmz6F9g==
+	bh=j6n9yIIcfnOcnGVEaQqxGzHzdc6SyqXvU+1WBCgMQDc=;
+	b=ro78RZlwZHTVYCnzFJZgdtqsHg3U5WN+pLQL2pe2S9BB/te/oEL8gxa8WvJUR6HJK1S1
+	 sAtBKO4qQEzeYj5mkPsKteLS8XqLeKnGRluf5CP3Zv3TmjG032koPohnG7Q7/OjsSsXuU
+	 bMjIaXS+FkJglhH8HJTEMVNR1tlQ6upM5L7VlZtgL90Q3BKbgoRGx5Kup+6MOH9J48NbS
+	 NaLTnDe9iar/6ejMz3MOxY4kLm8x2k9lr46XjB31SdOI1xiYiMWXJgVup1NZpHUyt3a6/
+	 NHw0/kcsIdWV7kN33IFCxQquAkUCrB/8nJYg1CKCaEe3vppihGQflhlQYxfmHmSm5FA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3EC421F00935;
-	Sat,  7 Nov 2026 00:36:59 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id D86FD1F008BC;
+	Sat,  7 Nov 2026 00:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011825;
-	bh=7jyih/ZWZhrRU6GcpifC/ctZB9GVVxtxj6yL2+TCX50=;
+	s=k20260515; t=1794011841;
+	bh=j6n9yIIcfnOcnGVEaQqxGzHzdc6SyqXvU+1WBCgMQDc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=YJ0Qo6jNfTzFoj6mVl0zDhylpwBaFlD/OlOhXGoXZIsU0jUXlqchzAvJ2ATcXk8St
-	 SnHAswlThfrMhrV9n9VGgu3ws0GS2y23yNtIZlrlvRt5dKDiqC5NFMcWlXhv8xuW3P
-	 gDRL1FKNnZ23loSt7fupwpnkh20z4WzTOsxlj1nxofp1V+zm7mTdk13qW1kMyjFgLi
-	 TgLsEUqeFHQLkABtg57RFWZlWbK94cI0xu7S4s0O1zwz27db9QbVLBNGMYQLMQkMGf
-	 GtrXTV2ZqIdYNduroGKG/RBRkPj+3TaI4qP12Do6h5G4nrWajOGPPBgE+eSydU/ddt
-	 auX71iruaSjCw==
+	b=kkGXBUKwR12OgLfL4wVSOZxLefx+VZHXQSIzpBVvnHzH/Jum7n/D20WJf32yzuE7h
+	 bx8PQSe7qL0Bl9kgQZwNFgzRERPfOnvtfuCCmYAztkgyAFmZdFL7Q0OatKNYJ+a/Oj
+	 p3wkoK3WcA7gm9TUSZ1zdUVei/vbtS+fiN/F9+06Be9GIIdlUNsFajFHQZXM9K9C2T
+	 WuBHw6Vo6e5N3aRNyVVkWkMSeN7dVfaOCicIgaSUkUgIrRjijkp6QtgJtG2+YLNQTd
+	 4fU83rNOiV5k5koUOnopmBTljpoFrikgBfSZH5PxM24y4ENrkhLzNq4394OViPIFs5
+	 0FMmwKZVNlctw==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 049624798A;
-	Sat,  7 Nov 2026 00:36:55 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 9BA8E47A60;
+	Sat,  7 Nov 2026 00:36:58 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:04 -0800
-Subject: [PATCH RFC v3 30/88] KVM: guest_memfd: Refactor error handling in
- kvm_gmem_fault_user_mapping
+Date: Fri, 06 Nov 2026 16:38:00 -0800
+Subject: [PATCH RFC v3 86/88] KVM: selftests: Expect successful conversion
+ on MSI-X BARs in VFIO test
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-30-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-86-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -102,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011809; l=1832;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2135;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=VKBzbTSyM8v25pj2OERwLhVUhvmGhWqrRwXpLizcOTo=;
- b=TNHQGkfJIKvSrJmsMJhLzh4Zf2IlSWb1GaDzeKt8ZF6I4gcbCyM3w70nbNY2BGZBmWj+BSlaL
- RGs8UwVSrcNDrzLDRtCrZvXA3lfyBNeELOimwZhBiqgNYheS6HmLA9N
+ bh=VzsQCzajxaq4+sy1dgFu+2FHBF/aQtRmKeEX0OOIiWI=;
+ b=S4xYrV5byO8s3TboxsOXiZx6GDu3T8GX8FRcNDg51wlr8/L7ZZOzal2WSfJanjxA8BGU7KO+2
+ Iju/+vhbIDtBPvAbcjUo+0kvLnJoyMJvy/myX3jkaxwU9LK9VGetSTJ
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -117,59 +120,50 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Track the status of kvm_gmem_fault_user_mapping() using an explicit error
-code rather than encoding errors into the folio pointer.
+Disallowing private mappings of MSI-X vector tables is now enforced
+lazily by rejecting private fault resolution when backends report
+shared-only physical frames, rather than eagerly rejecting software
+attribute conversions.
 
-This moves away from relying on the folio pointer holding error states,
-such as synthesizing ERR_PTR(-EACCES) when memory is not shared only to
-extract PTR_ERR afterwards, and prepares kvm_gmem_fault_user_mapping() for
-PFN mode in the next commit, where no folio is returned on success.
+Update the conversions subtest to expect successful attribute conversion
+on BAR3 containing the MSI-X table, matching the lazy rejection model.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- virt/kvm/guest_memfd.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index eedf03df12c55..180418c65a1ae 100644
---- a/virt/kvm/guest_memfd.c
-+++ b/virt/kvm/guest_memfd.c
-@@ -568,24 +568,28 @@ static bool kvm_gmem_supports_mmap(struct inode *inode)
- static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
- {
- 	struct inode *inode = file_inode(vmf->vma->vm_file);
--	struct folio *folio;
- 	vm_fault_t ret = VM_FAULT_LOCKED;
-+	struct folio *folio = NULL;
-+	int r = 0;
+diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
+index a520cf45fccb8..325d5e0c66026 100644
+--- a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
++++ b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
+@@ -798,17 +798,19 @@ TEST_F(guest_memfd_vfio, conversions)
+ 	ASSERT_EQ(0, ret);
  
- 	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
- 		return VM_FAULT_SIGBUS;
+ 	/*
+-	 * BAR3 contains the MSI-X vector table and PBA. Private conversion
+-	 * must be rejected by check_set_attributes to prevent host kernel
+-	 * writes to interrupt tables from triggering fatal protection faults.
++	 * BAR3 contains the MSI-X vector table and PBA. Disallowing private
++	 * mappings of the MSI-X table is enforced lazily via NO_PRIVATE PFN
++	 * attributes rather than eagerly rejecting software attribute conversion.
++	 * Converting BAR3 attributes to private in guest_memfd succeeds, but
++	 * attempting to fault the MSI-X page into the guest as private is
++	 * rejected with -EFAULT in kvm_gmem_get_pfn(), causing KVM to exit with
++	 * KVM_EXIT_MEMORY_FAULT.
+ 	 */
+ 	ret = __gmem_set_private(self->gmem_fd, bar3_info.offset,
+ 				 bar3_info.size, &err_offset);
+-	ASSERT_LT(ret, 0);
+-	ASSERT_EQ(EINVAL, errno);
+-	ASSERT_EQ(bar3_info.offset, err_offset);
++	ASSERT_EQ(0, ret);
  
- 	filemap_invalidate_lock_shared(inode->i_mapping);
--	if (kvm_gmem_is_shared_mem(inode, vmf->pgoff))
-+	if (!kvm_gmem_is_shared_mem(inode, vmf->pgoff)) {
-+		r = -EACCES;
-+	} else {
- 		folio = kvm_gmem_get_folio(inode, vmf->pgoff);
--	else
--		folio = ERR_PTR(-EACCES);
-+		if (IS_ERR(folio))
-+			r = PTR_ERR(folio);
-+	}
- 	filemap_invalidate_unlock_shared(inode->i_mapping);
- 
--	if (IS_ERR(folio)) {
--		if (PTR_ERR(folio) == -EAGAIN)
-+	if (r) {
-+		if (r == -EAGAIN)
- 			return VM_FAULT_RETRY;
- 
--		return vmf_error(PTR_ERR(folio));
-+		return vmf_error(r);
- 	}
- 
- 	if (WARN_ON_ONCE(folio_test_large(folio))) {
+-	/* Shared conversion on BAR3 should be permitted. */
++	/* Shared conversion on BAR3 should also succeed. */
+ 	ret = __gmem_set_shared(self->gmem_fd, bar3_info.offset,
+ 				bar3_info.size, &err_offset);
+ 	ASSERT_EQ(0, ret);
 
 -- 
 2.56.0.455.g6c5a503b38-goog
