@@ -1,104 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794032950;
-	b=I4phMoMDw/Acfr/e60K3Gro6iti5cYfs2IywBPYhMKz37AZ0wtM4l1JnLG2HbC12F+Fl
-	 o2o3mUpy/xF6PsSygItnOPC8F8cqQr4IdFL1g5I1m3szYIaeCt82okW74a9eekcM1buVc
-	 nTas70JzKCYDgx+yrdjuqDuHdnJxljOOcZq4/Yi/4nb+kOb1T9b7sIHRkorit7cpdzW4f
-	 aft4Cjc4beZVdd32NnVhY7OS+sTm/wezNKq21oJtszFNHTp1Jqe4N/xyuxztn5Hppmp2K
-	 aoZDH3edIjC0yg5ED0I3jxUHmtqxwfMF2h3R1Q1PRKUw+0iZCLL7vs/s2MWyHH7YmNA==
+	t=1794035124;
+	b=jt/HTaAdtUW3wIXDZbnY46pinTtLMEhyIvpLJtY9h4ZQaIpcpBfIxUsmWHzdWqEqs1CQ
+	 LHdrtA7KJiJwdeuWY0K3Lfok78pANHkijdCuyoYm3dRklgTO/x14HpQCbOLEejKiYJrh3
+	 ZFxwHcvhYiejNUvzh/RFw5PdYeWA1pgXyauUucZjY0nIqu/Tn2pLSPbn+rI9Y1MjHeXka
+	 J7JyB0aVbJz1PIUoTze3lohUaWXbzJYzFSmk4xJVC60SaULRfOGbVLvqYE9sI0XHLE6q6
+	 EsO0LOHvHesLmJqqmjyGqBxeJZKgAbjmuroatEtJeOEpIw5Kz0LCPXg05L6PZNM8l/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794032950;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:To:Cc:Subject:Date:Message-Id:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=8O/YtBbFAPp5NwvDGteEcyHryQg3K8JIIIYVXGE7IUc=;
-	b=v2zTptqaxe+f4sObc9qo+6LiXfBD0YJnC27MJD2l8DixeE15HVU7brNKfmE1vVQXIKVK
-	 yL44TGwkWxrHA9CcEgn5b6aeEFL6hjwkHRHM0gIaE7xRxmNmPnCX4pynSxW8tyfH4KgyL
-	 s8rooicpksmsdoGwaIH5yWMTWBOQ9B1+GJcihpfObiNmv6lQvaL//2CLYNPet13F7rEFX
-	 Fd20fVqK9g7DUvTPsArJt98mY9pujgiZTPbHitJVVDWTqSF3/AIz9QkQoRux17/UX8u/X
-	 SX47hQwK/L62GGesV76WcUiQgLyqDuvrtiw3JRtQHuxj4gXWfGSxRSbmEvnRmGgMaxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794035124;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=lAwYNWjlqw18PRKfs0wfc6QMvEJ/l8q6K3xULLq/RJc=;
+	b=bhxILmQ5atA4se8hQqAgS0lr8SNJ2OdzxcPmVKndBET4IucQmgDJdha0OY17AXl4XMC5
+	 qLTa3EN+uJTeFr4qEMrJiVDwAVFC8Y1st2L5ipvros/K0J1x/W5yd/8gHob3FfsQJHXBa
+	 It3xf0ktRSrfTlFCXRkP+ClRlZ3bu0MGOGep3qKRKHzcifW+sY2PDsCciG0VYn9dyy5uX
+	 /5RnS4U5Ov8tHdtkLZhGT7usf9N5jwhFchwOfoY6xNWm10r3OIhd9EORd7/CUraJdM/Ue
+	 fhhZcVkHaeAhVjUxfKd8UVv3wax3zsu/ICLwZQN4CD+8fSxNQhOJ0CHUk0Gjz9C93GQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zYaIXDeD;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=NaFJfyfF;
+	arc=none smtp.remote-ip=198.175.65.11
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47997606A32C
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 06:29:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47997606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2341606A32C;
+	Sat,  7 Nov 2026 07:05:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2341606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zYaIXDeD
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3acdcfa2bd3so1121097a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2026 22:29:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794032949; x=1794637749; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8O/YtBbFAPp5NwvDGteEcyHryQg3K8JIIIYVXGE7IUc=;
-        b=zYaIXDeD/ZWt27eZTb/FXR1Ei54NEXBrfYk0lGFzIrK04hqXvJbt4RY/udaYZwsuRF
-         pMyL/ZYTBPrqyXZl0w51+VFcTtZ7uZpQXL/b1ngiI/AoXN62k2G2D4uwv/4WozQ5OREN
-         uMUaMC/JE6irPYbMNmnLX/LBYefPbWV9imrAw7tL2WDIdrjnQM/gQRovFQUfj3D5AWRT
-         PrAPoKzlbCKwQtN7ic3//ml8lfhdnvvt5VJJr/aMLo2YwyuB/glDtPWfRS/irwaFqocl
-         7K4+eq4WN+t8Ve16MInu8F8YDxxrJRXhmShoMOifWYu6yg8Lee/oeY94kvUKfax0iZh1
-         hIGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794032949; x=1794637749;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8O/YtBbFAPp5NwvDGteEcyHryQg3K8JIIIYVXGE7IUc=;
-        b=1ArqGFRTT6Rf57CevGU9Ia9CoBwPZhy9VgEpCnN8xY2aCQgFF1zPsVSDZFVdAKo9pd
-         ReXmYbZgWayjBKci5qZLr8om4LGzdmFJpUhrIXDt3RSTB7YiVbIVFbOrMG0VUDrn402o
-         4Z3BEZLwzbDRydn2Pa2Rfq0mUUIREri61PyT+gzhD0DN2VSHXKxsGpTLKQfeDo4GB3sK
-         RTxWGv+reI9Lh0ayETLpjnWZxFbj7408yG5pd5DD0w73UetTHlSzlLWncA/4E/ijyg3D
-         V69cnX3ixKXtE6TDi6Y7hVeIAzAqPVSlj/MZk0vTe/0UZoZDtAaLE6yhc0KWHjQlIzaU
-         ZieQ==
-X-Forwarded-Encrypted: i=1; AL+hErFI/7y2tyfS6Bx/i/yt0mMBy1/KK+U1sRh6wuKeVRb23B4rguBIaCgv7yueKO20nohY3Xd/jxC5G3M9xI2GjP4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8UWSPfy1CgiJQcQxQiTSxvOyMIKRUsEBS1nFwKONIOfotlt0f9
-	jhQNcYq8QUH2+jnxLp7mESkflyyg6qIX+zgieHnwzX4niHmyRJ+RCJtP
-X-Gm-Gg: AYBFou0mN5AzhsW5VaUj6KVWtfCOXAdWEFHA1v3HKi8PwoIYB5uNt4y60o0OaYGLCf3
-	rE16fFCBINY7mEQNWesKJr96XxWy1Z5pizyM79WIz4eFEidnAbM/RcDc20eW4CdwhDCuhQtmWoT
-	uV3Mjzsw+OjSmPTu6ZPQtiA0OBap9YU+jSv/itUQezJaW6Sx6zAXG1Wi2yUOdVvaEfdzOcmaRTQ
-	sbZ6TKK5ZuNYrNRRxi80WazO8rvbu4MdLy1VNErW0DhFn65I/LeNP39Fe/IO6snC5Z1+YULzqZW
-	40iUKg7mFY/6J4JthRtoxs8lfPSM1xMd+rmHaMX8sHVXRUBCSZSRc7zOe/IdJILVSVbguvR6YVu
-	TlsSRcdWguZ05Hk8Dnqj7Ej1SeLKzBvy67dcURWmehDFRwoccsDos/547qh9oKGQLcpWP7QVYQu
-	bGNcizpdzdpAWzeLTYe6S2bLf6Gi14Q4Pie7pS4j2kpKPDVrfnrjhMS27DxQ4eNIBDpQt7ZUewF
-	OwDMC9NK6wL/8n4ACKl2GOVXRTDympet17wbuq2gs9Vkoud9mapEi+N/KhmHkSPM0Evcr8cr5X+
-	Nl8nN5e2nijzjucUncz7st43gh+5OJ4IhIY6ELcCOtgoYNE8OIx6Oh45+BQuRnmOLpq5RgY=
-X-Received: by 2002:a17:90b:4a89:b0:3ab:27f0:c90b with SMTP id 98e67ed59e1d1-3b0db6fbf17mr4900373a91.53.1794032949623;
-        Fri, 06 Nov 2026 22:29:09 -0800 (PST)
-Received: from lipengfei28-ThinkStation-P368.mioffice.cn ([2408:8607:1b00:8:a1a:7bc2:20ba:a479])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105854fa9sm2307453a91.15.2026.11.06.22.29.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 22:29:09 -0800 (PST)
-From: Li Pengfei <ljdlns1987@gmail.com>
-X-Google-Original-From: Li Pengfei <lipengfei28@xiaomi.com>
-To: sashiko-bot@kernel.org
-Cc: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	mark.rutland@arm.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	zhangbo56@xiaomi.com,
-	lipengfei28@xiaomi.com
-Subject: Re: [PATCH v8 5/5] selftests/ftrace: Add a stackmap basic functionality test
-Date: Sat,  7 Nov 2026 14:28:51 +0800
-Message-Id: <20261107062851.3367923-1-lipengfei28@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <sashiko-outbox-202648@kernel.org>
-References: <20261107055139.3138633-1-lipengfei28@xiaomi.com> <20261107055139.3138633-6-lipengfei28@xiaomi.com> <sashiko-outbox-202648@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=NaFJfyfF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794035123; x=1825571123;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MlHqtS8cT8ajIw/2dp1+/XcpibT8MY0x6er6vc3ClcU=;
+  b=NaFJfyfFLQ8fVFchaFpMq8uorPi0StZdUbRASrKZTD2PdM5eV9dkoA0H
+   wSkfjPZsd3eZkyKH9ZKXlj9/vif8MPkdGs6eHsyxQqAnpnanpQdHuWN4M
+   31uM8GfgRs//Z4R3fqg7i+CxFbqDQ3gkvSDmI/BNbr4lW3Qm2BHfbKnDx
+   h+JL4M46FbIjkNZS6/oTFPobBrDnNVqnchhrRAf2KUi7ATcRVi/aBXtif
+   KKr8fisKzKKHScRVCPblJ7KNcYtGPaoWNbg3SxU/hTPPtSr1XgywpVAh8
+   j/Q15Y5pX49vZjamqxkyetqcAVKYrFIvhNtix3pQRzOYsteCyrpnBqQe2
+   A==;
+X-CSE-ConnectionGUID: pxQbo8YPQPaBQ2LTkNOyDw==
+X-CSE-MsgGUID: jduqnKMgSiqagrZn67E38w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11958"; a="2734858"
+X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
+   d="scan'208";a="2734858"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2026 23:05:22 -0800
+X-CSE-ConnectionGUID: 9+2ftNMKQAqc50tJyR7fxg==
+X-CSE-MsgGUID: pNt5NwnMSVqZrahXN4gQYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,200,1787036400"; 
+   d="scan'208";a="7444739"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 06 Nov 2026 23:05:16 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xPaUC-00000000qZf-2cVD;
+	Sat, 07 Nov 2026 07:05:12 +0000
+Date: Sat, 7 Nov 2026 15:04:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
+Cc: oe-kbuild-all@lists.linux.dev, Alexandre Ghiti <alex@ghiti.fr>,
+	Jesse Taube <jtaubepe@redhat.com>, Oleg Nesterov <oleg@redhat.com>,
+	Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
+Subject: Re: [PATCH v8 3/8] riscv: add ptrace requests for hardware
+ breakpoints
+Message-ID: <202611071408.gyIRvq10-lkp@intel.com>
+References: <20261107023917.40606-4-himanshu.chauhan@oss.qualcomm.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,21 +98,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261107023917.40606-4-himanshu.chauhan@oss.qualcomm.com>
 
-From: Pengfei Li <lipengfei28@xiaomi.com>
+Hi Himanshu,
 
-On Sat, 07 Nov 2026 06:07:50 +0000, sashiko-bot@kernel.org wrote:
+kernel test robot noticed the following build errors:
 
-> Can clear_trace race with the resumed worker and leave the trace ring
-> buffer empty when max_ref reaches 2?
+[auto build test ERROR on shuah-kselftest/next]
+[also build test ERROR on shuah-kselftest/fixes perf-tools-next/perf-tools-next linus/master v7.4-rc1 next-20261105]
+[cannot apply to kees/for-next/execve tip/perf/core perf-tools/perf-tools acme/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yes. Hits recorded between enable_tracing and clear_trace raise ref but
-their cookies are cleared. The worker switches every 10 ms, so in
-practice more events follow before tracing is disabled, but the test
-should not depend on that. The next version clears the trace while the
-worker is stopped and tracing is off, before resuming it on the last
-iteration.
+url:    https://github.com/intel-lab-lkp/linux/commits/Himanshu-Chauhan/riscv-Introduce-support-for-hardware-break-watchpoints/20261107-080910
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20261107023917.40606-4-himanshu.chauhan%40oss.qualcomm.com
+patch subject: [PATCH v8 3/8] riscv: add ptrace requests for hardware breakpoints
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20261107/202611071408.gyIRvq10-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 16.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261107/202611071408.gyIRvq10-lkp@intel.com/reproduce)
 
-Thanks,
-Pengfei Li
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611071408.gyIRvq10-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/exit.c:57:
+>> include/linux/hw_breakpoint.h:137:20: error: redefinition of 'flush_ptrace_hw_breakpoint'
+     137 | static inline void flush_ptrace_hw_breakpoint(struct task_struct *tsk)  { }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/riscv/include/asm/processor.h:18,
+                    from arch/riscv/include/asm/cmpxchg.h:16,
+                    from arch/riscv/include/asm/barrier.h:14,
+                    from include/asm-generic/bitops/generic-non-atomic.h:7,
+                    from include/linux/bitops.h:28,
+                    from include/linux/thread_info.h:27,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/riscv/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:107,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:8,
+                    from kernel/exit.c:8:
+   arch/riscv/include/asm/hw_breakpoint.h:58:20: note: previous definition of 'flush_ptrace_hw_breakpoint' with type 'void(struct task_struct *)'
+      58 | static inline void flush_ptrace_hw_breakpoint(struct task_struct *task) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/flush_ptrace_hw_breakpoint +137 include/linux/hw_breakpoint.h
+
+24f1e32c60c45c include/linux/hw_breakpoint.h       Frederic Weisbecker 2009-09-09  136  
+24f1e32c60c45c include/linux/hw_breakpoint.h       Frederic Weisbecker 2009-09-09 @137  static inline void flush_ptrace_hw_breakpoint(struct task_struct *tsk)	{ }
+b332828c39326b include/asm-generic/hw_breakpoint.h K.Prasad            2009-06-01  138  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
