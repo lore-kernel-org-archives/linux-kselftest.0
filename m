@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794081247;
-	b=qA082D6xy7NqOmvQEArbcbuIQHmuqQbndJ+xZq7hq7SSRDvKbG0Lh4x2hgedKi6nT0YS
-	 TlGxQOYYocbcfU6cWBEZ3pWgU/BE80BBRKGjJNN5NuRsj82bmrZjSEhtWGWtELs+DoHlW
-	 3buF9vLmYIl0FZodIWuKNZOfrrr4/6rqVQ/ic7aKBFlhSjiKE60A8widFFAOKZjzLs7D1
-	 VRchs1LU/N+ZFi7Bf0ifqj7LG8wYmldcpde6p3yA/hChExo+AusmONoO5aJkvlH89Qlk3
-	 Eqz9Ta1SPCkVmQKbquylHqxe3Jva1T3Zu9tJCQTFecXI/rkDc1OIUSPACIKeWKt+kpw==
+	t=1794081312;
+	b=LYCMG9/JZEjdtnc2FbdEn+k61QEC8f93deozRdoOdmpP13bMpG2TckDdD9MvavLXuupb
+	 19SsQ8t/Kt5W/YP7U4talQTc5j1rBL7Xm778aAV6d+okzNy+Kk4LscfACFsGXzi/2o/ef
+	 BdTenE/YVC9h4dh2Fb4+RH5SXPEQ1XmNiPiQJi6B9zrRyyxrj/1BmIk27cEIlvz9i2GwM
+	 T0l0Mw0HRS3Ddp9uQbsJHjaJe6h9rP9rAa/bwZguk7bWTsLLhomw1nz6iQZnTO3Uuo/fv
+	 7x95D3MLi/unTg7hWt7J+nEP9SaETcpcsrom+tnNxEtRC69QjYoVZUOCdELic5nauog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794081247;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794081312;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=Azk0M4+4kN+LKI92RpesCylB3qOSG44cG8TkMmyE5iQ=;
-	b=UGMzpL2Yi/YCn32uxU1T/n54tfJkiFYTPo/6iXZoVIIl87PyZYpDy7D1CFqzOo8Sz2H1
-	 0sX3Z0X/haJy3zBNRTb74EeH31hAYE2F3x4A8MbpHY37Nd+sUHu4aJ6xRWmwvFDFswbO8
-	 wXCa+y49EHvS1SXJ8aSHMsbviYX1v+cmneeXxcO+gB2RmOA7+Oa64qOPeddewntqOhD5Q
-	 2x35U6Z1+hxweyekFc0QnNyhPz27DI8wcTQgUbil57N90VDe9Hh2ceRSEDTRByVNx1FhF
-	 0p4uMPSBWjmpcgFxelVCAWrCapFre0jtSTc6ulJ7+lDLrfD7zZp+h9AQPvGhN/aEmkQ==
+	bh=39+TUkTn71HtHvq6NpbancWTbHR1aQMzi3+k/eHDkII=;
+	b=Ryylcz7OLtrGPhdRBs4T8p8ZtdbyiZJpgJlCBk4fl3/5oOoou9uKVVZUMRLVYjQ02XP0
+	 tD7s97xzCkSLvc9UYVV7chGE9+dtqX74ey3ZCpw6up6A6FFofCSVwHaVH7daQx+LOu8wO
+	 Lc5o+/1t69/6fDz37YtKUuVZr4EDRAVyL7VfOjbf22pbo2FXYxeRZX6Kj6+wswtFjsMJr
+	 Rv5zCAnvfYSc40ksuzcaf3ooB6B4SKXdhFT2gSzbGUSAgwTbUbUQiCHHPu8FHtPKgJ9kf
+	 qxMuRhBqWx5WI3dBE7dfub/8lUDe94F921kk/rDnwh40fCa2DLGl86fzLllqOJzRkNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X35xwWRW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XPjXjKD8;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E5E5606A326;
-	Sat,  7 Nov 2026 19:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C700F606A32C;
+	Sat,  7 Nov 2026 19:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X35xwWRW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BE31F0089F;
-	Sat,  7 Nov 2026 19:54:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XPjXjKD8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D291F0089F;
+	Sat,  7 Nov 2026 19:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794081247;
-	bh=Azk0M4+4kN+LKI92RpesCylB3qOSG44cG8TkMmyE5iQ=;
+	s=k20260515; t=1794081311;
+	bh=39+TUkTn71HtHvq6NpbancWTbHR1aQMzi3+k/eHDkII=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=X35xwWRWp1NJKDUjUGwu/dPhn1u2kLVBfKW5yRwfwaE8KVYkdjSh3+y4dkzuSMyrD
-	 UC6f82CYICCr6FtBDy3AGdO5/L3cxDqjOEP59rX44rd4pqW9ydC79cRLVXVLHnS/Hh
-	 VbGJ0mVhgah24nTHfkgrCnfUFnOeyyywupL6Eu73Kjj/SDlx/mnKMS4A1ftEDAqUNo
-	 xFOI9/8SXDYctP9TX3Ot/ZiCYNdwitNbu+6zVHhI31PwPpWK5srd16sfb11kfSSfPH
-	 eFznTuvk6MRc7KHP3RkQuTGYNcgEbDYSkl8hw/d6GgOebb3ilzVHB92t4ysP54Dtbz
-	 THwAOjxx1XRNQ==
-Message-ID: <e0a38b09-725f-4e60-8c53-e4605c36be78@kernel.org>
-Date: Sat, 7 Nov 2026 20:53:57 +0100
+	b=XPjXjKD824HOWovf8zZKb5c7Cb7I3D6NAD/lB0a8I4g19WeIXtgm5YZyMR/Kiu++6
+	 B4OWZfuSb0TuEbG5bmrG2bK+f6320HjkTn4eSxLkhPYPhJuAPI/Jh8ChZpPIFGLunD
+	 0gzKkwqLlZI/nC5lfdscz6x4B0dc48SJXcDriiVIugJYxUjUYpWFyBPVUqiU7J53nT
+	 qFp9AzFPMSyoVTRSUkTWQiQs+YzS5oVk6erZmbjDuwzJEDle3ZhX+A1fth88v9z5+2
+	 egk4SzjImL8w9uEXb6v3D2msUKCRpiL66AJ6Xjc38rUj2CfFgXhL+hTpCJYEeJMPhT
+	 2gHXaIkgPZbVA==
+Message-ID: <f0935e4c-4165-433f-b454-069e68c61a92@kernel.org>
+Date: Sat, 7 Nov 2026 20:55:01 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,8 +52,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] selftests/mm: cover merging KSM pages aged by
- smart scan
+Subject: Re: [PATCH v3 0/4] mm/ksm: keep smart scan from losing duplicate
+ pages
 To: Qiliang Yuan <odys.yuan@gmail.com>,
  Andrew Morton <akpm@linux-foundation.org>, Xu Xin <xu.xin@linux.dev>,
  Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>,
@@ -65,7 +65,6 @@ To: Qiliang Yuan <odys.yuan@gmail.com>,
 Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
 References: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
- <20261107-bug-mm-ksm-smart-scan-align-skips-v3-4-16d5ce8b5fd6@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -112,33 +111,34 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-4-16d5ce8b5fd6@gmail.com>
+In-Reply-To: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/7/26 17:57, Qiliang Yuan wrote:
-> ksm_functional_tests checks merging and unmerging with ksmd's default
-> settings, but nothing there exercises smart scan, which skips pages KSM
-> has failed to merge for a while.
+On 11/7/26 17:56, Qiliang Yuan wrote:
+> With smart scan, which is on by default, two identical pages that become
+> mergeable some scans apart can stay unmerged for as long as they live:
+> each page times its skipped scans on its own, and once both are old they
+> may never be looked at in the same scan, which merging through the
+> unstable tree requires. This was first noticed as intermittent failures
+> of ksm_tests "KSM NUMA merging" in run_vmtests.sh.
 > 
-> Smart scan used to time those skips per page, so two identical pages
-> that became mergeable some scans apart could end up never being looked
-> at in the same scan, and were never merged. "mm/ksm: align smart scan
-> skips with the scan number" fixed that.
+> Patch 1 picks the skipped scans by the global scan number, so all old
+> pages are looked at together every eighth scan. Over 420 pairs made
+> mergeable 0 to 20 scans apart, 361 and 334 merged before on two boots
+> and all of them after, at the cost of about 10% more ksmd time on memory
+> that never merges.
 > 
-> Add ksm_get_smart_scan() and ksm_set_smart_scan() to vm_util, and a
-> case that enables smart scan, lets sixteen unique pages age for a dozen
-> scans, then makes a duplicate of each mergeable one scan apart, and
-> expects every pair to be merged 32 scans later:
+> Patch 2 documents how smart scan picks the scans to skip.
 > 
->   kernel               failures, two boots
->   before the fix       20/20, 20/20
->   with the fix          0/20,  0/20
+> Patch 3 moves waiting for KSM full scans into a vm_util helper, and
+> patch 4 adds a ksm_functional_tests case that fails 20/20 without patch
+> 1 and 0/20 with it, on both boots.
 > 
 > Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 > ---
 
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+I'll wait a bit for more review before I queue this, thanks.
 
 -- 
 Cheers,
