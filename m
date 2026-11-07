@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794080896;
-	b=e+X8zRjHSZ4/YUiiy6toyq5/iY/lluENolgZEojaMG8LavQZqrgzIFYDJ7jITJNu6Fjo
-	 y3t+mcG7OJV/iUgjqCOqw8qabVuxGbxMPqgbxSQFLUMfFjoR67sRnRbqGrGmKfS/kCSnM
-	 J2xiP5wWDyXob+/5H/UbKQXPkyyX8EW4Ye6nUJShamLIu7NZDqB6tS72B2B3NVLNfXYl4
-	 Fql3WJhrZWMpmNAzAyVm5bLaEAnTp0fBsfJ9+ByRa3eey2kWIyS+GZm9lMtJoSBu8BmGJ
-	 DjCDIb8+Z7fbBEPn0J8gKnOzBlSfb3utiSmndIJ1DrQ835rmzGAROMwlG3Df05RCRhg==
+	t=1794080947;
+	b=32WSY+SQl4nNLR5PrckEngGhOpQq9HjluHGa1lVFO8zI7YbRVEnWJgI4QrO3x14nfBl2
+	 A2oYYrxBk+GFUkWr0HTfmaEiN6n1jnhb86Kfwd4REz+yF8fb4sRwjGtz9Jo+uXuFdpThq
+	 ihQ7DC9PGjE7bhfq5NttYViZCF3vaqUOuo0R1Jki5ATIlnM79iQ2s3uFiVQQzUmfF20VS
+	 kr9VMiqIAT55JFHSgf5u/fF1/q5fuAhyDon1e9EpYV0FY0Agr4tyHFM98hLLF6n1DIX/0
+	 vEsrOfxtAnhLmMv8EMEpAjjmBAOUICnoCx9wFOpyELeEKc4QOg8SgR5tHqYXL8e2e1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794080896;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794080947;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=PgfupnOI9y63nTPBwUuVBVA9ftyhpGgpL4SadbS98oM=;
-	b=vESpW8MByV/roQP+nP5rLIpnGFqhBkrWUdCj1rC3arNAk+LAuks4X1gkjNsz8rxtGzI/
-	 kgHu7yQRZmuyQ1EISHPILQJfdCaPrHGQLb5vIvckYXuKr5gsFVExH5AQZLlb+XMGswBC/
-	 kAGNSwENxCPeDNzyxHzywzruBlcCUT0u9RxLpAKii1ttTJL9WwUUra/MIBGRNLJ8ePflC
-	 6SLr2P6eqN5oVMEHbL8QIR2nKwOOn+pRpX8DI9dwF5kBtu5l+7Lbw6E7GB98HDf6JK2k0
-	 k+Rd245C276ZV2J49ngpaD/VdqKsN2vlYkl5/uu2TsofNBA3/OnmUpERrFc9qMdWskA==
+	bh=quEIxWxT5Q+S3gOy3uhM6ka01cjxSecT9mp5i4V7aKA=;
+	b=Dp0bR/iDu7mJJzlRjSo/tEzFpFbP3iE55+SjI/FnAYmjJJHK62lpkAbFdXhTgSm+7Hqh
+	 05mWpLPRimJu/16QFblhCLi+Mm0wxo9202w7ONf6oZWhr9QZGHd1xYEQvQXT8mjOkFT9+
+	 s6UWocJUCwmugEhFuzI+1U9KGSO2fXPOO04x3porj8pvIwNi6Iyw+QXmJpAscrWcKofvS
+	 jbOcndaeZfRLZKzIuGRJVNyAazifimRZiCthT6oxcz0Pz+CWw2btuBCMogK6v1rKDMcIC
+	 Zq4rGAV7DBaBHfyydZUurlul7MSNpfsUAOjXCR6G+9enKMBcnntbSnv63v93TaY1bfQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="A97LRtV/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q9kAMNeE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DE9606A32D;
-	Sat,  7 Nov 2026 19:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5EC606A32F;
+	Sat,  7 Nov 2026 19:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A97LRtV/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5808D1F0089F;
-	Sat,  7 Nov 2026 19:48:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q9kAMNeE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2881F0089F;
+	Sat,  7 Nov 2026 19:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794080896;
-	bh=PgfupnOI9y63nTPBwUuVBVA9ftyhpGgpL4SadbS98oM=;
+	s=k20260515; t=1794080946;
+	bh=quEIxWxT5Q+S3gOy3uhM6ka01cjxSecT9mp5i4V7aKA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=A97LRtV/UUHCQnkUrvGqtIgzlx3uxP7kbRD8h5sUFLlcyZ7oYisz4YMCY6RSdd6Sm
-	 aGMqDDuK6P+5x9Seobd4qsGICa4HESW+Cz/F1qLcDQzVfMsYE6L5a7c8cXt5TqjdlB
-	 4dhzoAL1Y52RPCY0ERC7LzQSxATD+urOPRwyUDyWq3EdlK73K/izVvC8jaUQ3IJSpR
-	 +0HtFI4/RzJ8QAlpH5i5TJbibWEyZoUuLHW3ITklZGXyjWFSogroDc/g9fHJqQeoAZ
-	 ZVGRJlud74lr1UcNyWAVexAmqn9fxBB6cWjp08cpvKEPWyNrZ3ikNWMFnA5vG+z/3y
-	 PVLi6hgK3gFzw==
-Message-ID: <fd2faf21-ce9c-496a-9bd5-4d8334cf5f13@kernel.org>
-Date: Sat, 7 Nov 2026 20:48:06 +0100
+	b=Q9kAMNeEmpMt1H6xQlnIWiQ9o/ScZQHlFtgj0GVZUjX04tr1tZYKe+1144Dh5uuhG
+	 5ft+9002eIOnO/abET6se6fs98rqU/wNe04AUe8pNLOIVDVEV8/A7nmuGJRtRJdtg0
+	 iliJNmBxybwkEoYfkWfmDtF3pkmu9Mhp4LRuUDFo+zKwrPlTF3B4nzOy+egJrBrRKf
+	 Wd6dOEtDraGbLqSZEcE1pYZkmDKWKOA7q+0IxCwWdbCP8X/ndLdoBQ4j85S//fNgOP
+	 H8QBXQo1w1M1hOuOeRxxnADbVx1wPMR8P+BEnr1a9xN6oylccFLlHhQY7oGgP3jVM/
+	 g7fdvSk/sQEig==
+Message-ID: <03e74c29-c6a8-4ace-9388-6a658aff9031@kernel.org>
+Date: Sat, 7 Nov 2026 20:48:56 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,8 +52,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] docs/mm: ksm: describe how smart scan picks the
- scans to skip
+Subject: Re: [PATCH v3 3/4] selftests/mm: move waiting for KSM full scans into
+ a helper
 To: Qiliang Yuan <odys.yuan@gmail.com>,
  Andrew Morton <akpm@linux-foundation.org>, Xu Xin <xu.xin@linux.dev>,
  Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>,
@@ -65,7 +65,7 @@ To: Qiliang Yuan <odys.yuan@gmail.com>,
 Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
 References: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
- <20261107-bug-mm-ksm-smart-scan-align-skips-v3-2-16d5ce8b5fd6@gmail.com>
+ <20261107-bug-mm-ksm-smart-scan-align-skips-v3-3-16d5ce8b5fd6@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -112,52 +112,22 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-2-16d5ce8b5fd6@gmail.com>
+In-Reply-To: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-3-16d5ce8b5fd6@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/7/26 17:57, Qiliang Yuan wrote:
-> Documentation/mm/ksm.rst covers the stable tree and its reverse mapping,
-> and Documentation/admin-guide/mm/ksm.rst only says that smart scan skips
-> pages KSM has failed to merge before.
+> ksm_start() enables ksmd and then polls full_scans until two more full
+> scans have completed, so that any merging that can happen has happened.
 > 
-> Neither says how often an unmerged page is looked at, or that the scans
-> are picked by the global scan number so that identical pages of
-> different ages still meet in some scan, which merging through the
-> unstable tree depends on.
+> There is no helper to wait for a number of full scans while ksmd is
+> already running, so a test that needs one has to copy that loop.
 > 
-> Add a section on smart scan that describes both.
-> 
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> ---
->  Documentation/mm/ksm.rst | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/mm/ksm.rst b/Documentation/mm/ksm.rst
-> index 5a80573162def..f954d221e8017 100644
-> --- a/Documentation/mm/ksm.rst
-> +++ b/Documentation/mm/ksm.rst
-> @@ -75,6 +75,22 @@ The whole list of stable_node "dups" linked in the stable_node
->  The frequency of such scans is defined by
->  ``stable_node_chains_prune_millisecs`` sysfs tunable.
->  
-> +Smart scan
-> +----------
-> +With ``smart_scan`` enabled, ksmd skips pages that it has already tried
-> +to merge without success. The ``age`` of a page's ksm_rmap_item counts
-> +the scans that went by while the page stayed unmerged. A page younger
-> +than three scans is looked at on every scan; after that it is looked at
-> +every second scan up to an age of five, every fourth scan up to an age
-> +of eight, and every eighth scan from then on.
-> +
-> +The scans that look at a page are picked by the global scan number
-> +``ksm_scan.seqnr``, not counted per page. The unstable tree is rebuilt
-> +on every scan, so two identical pages can only be merged in a scan that
-> +looks at both. As the periods are powers of two, every page is looked
-> +at on each scan whose number is a multiple of eight, so two identical
-> +pages meet at least every eighth scan whatever their ages.
+> Move the loop into ksm_wait_full_scans() and make ksm_start() call it
+> after enabling ksmd. The count is now read after ksmd starts rather than
+> before, which can only make ksm_start() wait longer.
 
-Yeah, much clearer, thanks
+Right, we don't care about that
 
 Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
