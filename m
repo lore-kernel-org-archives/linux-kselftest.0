@@ -1,87 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794070636;
-	b=mXtlQHiE+IJEzC3yxVyAic2raEmT8igMn13M32oAK5XeZWkeq4RxWUPWOnqgVc2HCbO0
-	 MjVqrhawxo6S3MgirBQgD5cBzkI0y5ojQIt4xc8HZtyA2Rp0VAQ58PJ/zivEft4sTh0O8
-	 R62S9m92PiZL9+LyajdLs6MHnFnqBE5sZO4fFRgjKHFjLfx86M1py9tOWNt3nkAGo71G+
-	 hSYnrllYXbYFZ6xLZzaw7Xy1QM9ZAKiRTdxHblPEutd79ObQRU7XxAUCr56GMtLKFqKXk
-	 +PTDmD0JwfvGYaTIaevvTkpD/lscg5EOpirK1XbkgDv9+Bq25lc+1pJOoEO6GoVvbQg==
+	t=1794070641;
+	b=twt1Ll0JSssE6KgcVaLNf1412ZEIF6m8lVvTD0VVeSCl7tKd7ldTbbBcwkj/FLape7np
+	 lYmL3Ebg/PJwTOFW/ALBxpeNPRnN1gmSUs7n7Bcfdq35jQHIPpDpp2jt4NjXzsPr+wI6c
+	 4Ov06fng7yZ/t6ApgxseDk+qemt4jJb25StM6rBP0i39B9M03efmFE40EnE048ws/EM2Y
+	 +CueJG6l8Mwr66npilEzuvmgn8Hfvb/AH9QQ7ZYXKQAFphqBvZo6rayNW1UtYv3SS8ivQ
+	 Ii36IgSgUVWq8Yet41i7QTnWh8TLQoUsve+mnq8sW4c6HiDk1qVXdcbUV8SWcE0WyCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794070636;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794070641;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=ivuY9EEI4xJsyai8BcC5oRsS+qnZmw9EkgstKaheARM=;
-	b=Q7Z+P/cTG1sYWOkYuDglKpdBn8sat4gGLP32nWkcl8oX/ljANx+K4U4ucdqj5GLFLxxr
-	 4UYPA67cLICEFMWjlahv10A+f6TsSThp1e2Gx7f17OfWjhOotyf80A2L4UkVTB3tGxYf9
-	 ht07PY2KXAdFIawHMq42b0dP2jJklEHfFr6xik/8470b8ajDWV5xoZlWjYQuNmblFGdNH
-	 VR/dAb2Sskd98yA5M0ZHegVUwHqX0/L6K+K2SOrafY9mgXxSK0LtH7Qfs2j5Zln9Oyyco
-	 TNu4tu8X/g/uB8mQQtzY4dobGHMD0/+Cuu6h8RvePEu7p2OQEKwOVih6hNRlG2PJdxA==
+	bh=Hy+b2FmS+WOb9VH7r/wCKLd2ZpYqYwoBlahUfl/vu2s=;
+	b=wNKm8zCXaPFBX0FtLgEM/NhhQr83kFQ9mpcVVq49v23U5Wv8nokcWaPfPAIXwEPb/RHY
+	 ZTDm1G73AmwFAl7ctvL6OS8hLYIuOd/2/aTy9k7bFne+LNg10O67X0uavp26yFI3HcF+8
+	 ovI6ApUqLuZAWFy2BuRIFywTfrOM/1839QYR5cye+VL2WUiXuTUj5EtFRaM6x7ppuYYu2
+	 WopbuD2y06aytlc/pXIFl8ERq0F//UqvDs0cAei+8smYTLdhJPcNGpal7Rxb7+mm/x8Y5
+	 dPsduF9iIRJSUZzHWeeHJLzD9Kk9S3Nxcr5kePT+uAymor+E9PZcW/30RXjISGymCFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="gWKG/ZBM";
-	arc=none smtp.remote-ip=74.125.82.44
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FVbx9nZ2;
+	arc=none smtp.remote-ip=74.125.82.46
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1151606A32F
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 16:57:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1151606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FD5606A326
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 16:57:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3FD5606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gWKG/ZBM
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-170135e43c7so2859626c88.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 08:57:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FVbx9nZ2
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-1a2761c69fbso487015c88.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 08:57:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794070635; x=1794675435; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794070640; x=1794675440; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ivuY9EEI4xJsyai8BcC5oRsS+qnZmw9EkgstKaheARM=;
-        b=gWKG/ZBMtHEsYYrUBcVs3+fgRDxaXmPFh30ADFzxgQHOTGcquQA37Ag/lJxXmcor9u
-         7XiqubgiG85dnaFZiW2ujFYoyYD4nB2aCKH9CCI+K7l/GibAWOSWkE2GkaEaVob6Y7ek
-         IQRIrh1MzTvjyhT7uumnwjWRxUxTFweJOAmBDRPLC/0lfZReX3ZBhBmLfgRzlxvFT3fP
-         RGFEMCje7ecx48sQl11BSO49MRwVcupOnMeYIwOaGeaG9HotUIiPq+MIZSVHd5Vzn1xr
-         17W6wkPEoaHMGFmYaQyc/JvDmSugfXBWNz1LqXUOE8iGQfDJ/va//Hyd3I2G+JPuowM6
-         q1Zg==
+        bh=Hy+b2FmS+WOb9VH7r/wCKLd2ZpYqYwoBlahUfl/vu2s=;
+        b=FVbx9nZ2ZQU/Elz+giW71b2m0Bac3qeomfVqTX0WiyIt4mAJdLaKsWVhSGk2pUiUpy
+         cpzvDvXBUBsmrsfeQuJ+D7gsbcQK8ztdetkr06L53bMUL4YkCCkC0Z70DqQY5tK83ehs
+         x8kQS562yWqhZ7zMv3AQYRkKC3IzyAYzzljvPmJmA6RIE/f5lzFm/puQvZDX5KFVzcC7
+         QYH2kyHHjXJGksKwIjGlUtHpmAdZne9UdiaTWs7xx5MOwQboahwUbuG9lskgNAVngZUP
+         YpnCQej80VTWKfth5/o8/BUtIDUJmsylsOtEDA3GTYHp15Tion5NtJt6Gr3KLf3pppci
+         PC3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794070635; x=1794675435;
+        d=1e100.net; s=20260707; t=1794070640; x=1794675440;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ivuY9EEI4xJsyai8BcC5oRsS+qnZmw9EkgstKaheARM=;
-        b=PHPFSMtcUPZAXpzZfyR8yXBf2imOpQtyGGqmZNJO1lofuncUMxvSThKrYPB3li22Uk
-         kJTksMhtCdrs9iUnnVc5XsMFqgki7+yOs1nPmCcSg535LRjD7+zuMX+9iRtxUtA6bV7l
-         AmLB3WuHHfxoUbHNQzqDzbMtbAi7dLO5mwxnhTE+Vat/FBfxxz/6vQQ7UE7xRlmHzjlG
-         oM8VMlpxqc6LX/4ZaPZeyMk8BjQA5e6w/ZMCO5OHYH3VDoUIXuq1r73phcNL0n4jEqtc
-         YSsarLchqwivrkX58eF+Uh4ekjKPbBNiYI/iMJLIDGoKfc8qar9MIby6dSxiBCVHggNS
-         JHXw==
-X-Forwarded-Encrypted: i=1; AKwUvBwY1TG2MlldZXTzm/o1/PVBqUgrddIFvXbO2rBe0JOrZ9KrKYww6PHyYndJJ2ENOBvdUSgL+T9MSsMqHnwDpqY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z91gDjchIP+TBqXrIq0S/xabRo4Y+FgtJf4ovK/1ck27Mn1ztWT
-	PcBQHtFWwKzA2hyq8PMNvu+dK/2mXtpPV3alOVdrZC5b2DbT4Usbfqwz
-X-Gm-Gg: AYBFou3JdkUp6CdWeP09j2oEY6A9vYXchpQspCc8mOUis5adi7Ehf7akNFErRAxbMC2
-	v0Wv5Dn2Vmt33gjAGwIBS8aJftQW0CsjJ3ficXTBNQCd/VIkPcXC/mTyeUryb8NKkdkV3DT/WXf
-	JuiBAWNdAIoh2DV8hqOeEE9LnjknD8bbbwi8XVuP+Fas4kib+3dAJOJa/Iy8+UtevVrCpJymNYT
-	U/p+n9gUnbd9u0sWHNJ2KtOpsim5tnMEQOSN4wtnU3dWgG7iWlwKeiBuqb/gquYxmZqfI8djuVY
-	AEXeHybxidRnrB6FSqQmAo+fnxQxQddUeqiAxd5qr5Kpl4Pq2gihzhbEIBGnjikt22y3JFypC2e
-	G6cu0LQR+QNF4Ypl8WWDlXJLDb16nehMvVXtxQGQoAQDHDUoYGpsDZyQfU0EUtGsIC9zZGI5/a/
-	njL5M/V7vdXKKGji2ay8SBBYmyOqLEgYS9uS1wq/yUitPHyQ2QaSyCtIqXFN7KKf1cJL7nTf9tT
-	fo4npB0nWy6Uz4xRmYRzKEHyUx/hjZ3zr61ds8C/UjL79wd/c8elZaWDvR4giQnpQgN9afHRIJs
-	pHuuAhZzuKNwsY4R/skK6xIb
-X-Received: by 2002:a05:701a:c902:b0:1b2:6cba:7f48 with SMTP id a92af1059eb24-1b26cba843fmr2296822c88.31.1794070634776;
-        Sat, 07 Nov 2026 08:57:14 -0800 (PST)
+        bh=Hy+b2FmS+WOb9VH7r/wCKLd2ZpYqYwoBlahUfl/vu2s=;
+        b=e+2rK73lmJeyKJnmD/332sdMUhTV/EtkRJyRjvYOl0j9cdKU8HIJLZz4KXiHhmFy4M
+         SuNMMh75gBjbcg5pYi0nY9/TaAJJTJCCpALu7PKeiqpPtS8jSEDOr6ZlkufDdJfyWHiC
+         NtVrMvRICAjNK80EZLkpGw2VWrQsrG5Dcswoi1ITt1LcDmVerXCvjSQDUYgKDEiImi6B
+         WRQTRUoV7f/ssHjsdQRUw/L02x0l+39hh4BbLyrBuwbrGTGsUiKpa5O81e85ZeflO3mN
+         yu56CvBdStdMiLhQNUpojfxxE8isLejXGbWPPx3XWK/PTjwo9Dl9Yw9bHLoATpEg/eBQ
+         ftbw==
+X-Forwarded-Encrypted: i=1; AKwUvBxDlbtFqryEOQ0BX2w0kDTErq/i2iZx7NarzZ6J5Z5dpnoKQY4+yOmalN+Cbo8Y90rAR7O02dPqa5zjCEiAaok=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9AGRe6GK/UE+LXBYP6suf4H4pPrpkjcxXpBaMb2AwcTinlsGj4
+	z0VWqi82WQAxCJ/Z5gEvdDgja0N1rNjV6J+6Qvi+k2WO51cSw8gdUj0L
+X-Gm-Gg: AYBFou3uQKmUwVyBYP6AdQs2jxDtzYZqFyaPX3WpIadKkMXZcgz9kGq0lUVtrGCnLds
+	fck2/ZaZ1JM+qEfEFjJKUUJwXRbw0doPpVmY137CSd/nhrkaUM0iEI9rIgaz7/Qrr1WuLVBr/7N
+	u3nRO/ZdrqIPRnrpUmdxd/TTVMEmlmSmxZLh4r9aHygMkTVlFdCrDVtBVBlmKl/jjcx01m3xsr5
+	KUVamfpV+91vtySp5P9+7gLbEge2oosrluozDHNrqGSvGhyYRcGMlZ4KisJZ5K88ukkr105zI0L
+	Rbczqs1Pv5OWG29CAuRYeBHlpeWZVdXSSqVo8+MLAKtxF3QkUzZWxhD5/plPICa65BC7YU7J0Nu
+	p+6zb/T4tc2lvQ8NaPiPcPhf9PJJpjM4GIGxwKlojcBzwUwNGJWWnaCE94k/Md6PcXH/uWOPgu9
+	10juHY/vd+ZPp9qVmJCiJy7joU1/tyYgc4NBwzvd3uby759WdE9mG865XqYW0WqHkLEURM0ZFU7
+	Oa1Jy1TNDwBdyMN5snbK9uQDBRzzNSWY62FAutTsJKK8EPZa7Xjzim0adBnxFKK1wPP/G2+dQQA
+	PyW0kVL8FNdvx6CAFfeuNn5h
+X-Received: by 2002:a05:7022:5e09:b0:1ab:de8b:5f0f with SMTP id a92af1059eb24-1b25d36f9dfmr7314191c88.40.1794070639786;
+        Sat, 07 Nov 2026 08:57:19 -0800 (PST)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b25e4b4aa7sm15456126c88.13.2026.11.07.08.57.09
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b25e4b4aa7sm15456126c88.13.2026.11.07.08.57.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 08:57:14 -0800 (PST)
+        Sat, 07 Nov 2026 08:57:19 -0800 (PST)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Sat, 07 Nov 2026 11:57:00 -0500
-Subject: [PATCH v3 1/4] mm/ksm: align smart scan skips with the scan number
+Date: Sat, 07 Nov 2026 11:57:01 -0500
+Subject: [PATCH v3 2/4] docs/mm: ksm: describe how smart scan picks the
+ scans to skip
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,7 +94,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-1-16d5ce8b5fd6@gmail.com>
+Message-Id: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-2-16d5ce8b5fd6@gmail.com>
 References: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
 In-Reply-To: <20261107-bug-mm-ksm-smart-scan-align-skips-v3-0-16d5ce8b5fd6@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -110,111 +111,49 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-Smart scan skips pages that KSM has failed to de-duplicate for a while.
-Once a page is three scans old, its rmap_item counts down its own number
-of scans to skip, 1, 2, 4 and then 8 as it ages, so an old page is looked
-at every ninth scan.
+Documentation/mm/ksm.rst covers the stable tree and its reverse mapping,
+and Documentation/admin-guide/mm/ksm.rst only says that smart scan skips
+pages KSM has failed to merge before.
 
-The unstable tree is rebuilt on every scan, so two identical pages that
-are not in the stable tree yet can only be merged in a scan that looks
-at both. Each countdown runs from when its own page became mergeable, so
-two pages that became mergeable at different times end up on different
-phases and, once both are old, may never be looked at in the same scan
-again. They then stay unmerged for as long as they live. The pairs below
-are counted by making a page mergeable, waiting for 0 to 20 full scans
-before doing the same with an identical page, 20 times for each wait,
-and checking the pair after another 64 full scans, on two boots per
-kernel.
+Neither says how often an unmerged page is looked at, or that the scans
+are picked by the global scan number so that identical pages of
+different ages still meet in some scan, which merging through the
+unstable tree depends on.
 
-Pick the skipped scans by the global scan number instead, with periods
-of 2, 4 and 8 scans. The periods being powers of two, every old page is
-looked at on each scan that is a multiple of 8, whatever its age, so any
-two pages meet at least every eighth scan. The longest period goes from
-nine scans to eight, so ksmd looks at more of the pages that never
-merge. The rest of the table is measured on 64M of such pages, median of
-five runs of 256 scans on each of three boots per kernel, CPU time from
-schedstat:
+Add a section on smart scan that describes both.
 
-                              before     after      after/before
-  pairs merged (of 420)       361        420        116%
-                              334        420        126%
-  pages looked at per scan    1792       2048       114%
-  ksmd CPU time per scan      6.30 ms    6.88 ms    109%
-                              6.40 ms    6.96 ms    109%
-                              6.15 ms    6.88 ms    112%
-
-Fixes: 5e924ff54d08 ("mm/ksm: add "smart" page scanning mode")
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-Reviewed-by: Xu Xin <xu.xin@linux.dev>
 ---
- mm/ksm.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+ Documentation/mm/ksm.rst | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index d24b129932bf7..3053b438e9c10 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -197,7 +197,6 @@ struct ksm_stable_node {
-  * @head: pointer to stable_node heading this list in the stable tree
-  * @hlist: link into hlist of rmap_items hanging off that stable_node
-  * @age: number of scan iterations since creation (unstable node)
-- * @remaining_skips: how many scans to skip (unstable node)
-  * @linear_page_index: the original page's index before merged by KSM (stable node)
-  */
- struct ksm_rmap_item {
-@@ -214,7 +213,6 @@ struct ksm_rmap_item {
- 		struct {
- 			unsigned int oldchecksum;
- 			rmap_age_t age;
--			rmap_age_t remaining_skips;
- 		};			/* when unstable */
- 		unsigned long linear_page_index;    /* for reverse mapping, when stable */
- 	};
-@@ -2457,16 +2455,14 @@ static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
- }
+diff --git a/Documentation/mm/ksm.rst b/Documentation/mm/ksm.rst
+index 5a80573162def..f954d221e8017 100644
+--- a/Documentation/mm/ksm.rst
++++ b/Documentation/mm/ksm.rst
+@@ -75,6 +75,22 @@ The whole list of stable_node "dups" linked in the stable_node
+ The frequency of such scans is defined by
+ ``stable_node_chains_prune_millisecs`` sysfs tunable.
  
- /*
-- * Calculate skip age for the ksm page age. The age determines how often
-- * de-duplicating has already been tried unsuccessfully. If the age is
-- * smaller, the scanning of this page is skipped for less scans.
-+ * Calculate how often a page of the given ksm page age is scanned. The age
-+ * determines how often de-duplicating has already been tried
-+ * unsuccessfully. The older the page, the fewer scans look at it.
-  *
-  * @age: rmap_item age of page
-  */
--static unsigned int skip_age(rmap_age_t age)
-+static unsigned int scan_period(rmap_age_t age)
- {
--	if (age <= 3)
--		return 1;
- 	if (age <= 5)
- 		return 2;
- 	if (age <= 8)
-@@ -2516,17 +2512,17 @@ static bool should_skip_rmap_item(struct folio *folio,
- 		return false;
- 
- 	/*
--	 * Are we still allowed to skip? If not, then don't skip it
--	 * and determine how much more often we are allowed to skip next.
-+	 * The unstable tree is rebuilt on every scan, so two identical pages
-+	 * can only be merged if both are looked at in the same scan. Pick the
-+	 * scans by the global scan number rather than per page: the periods
-+	 * are powers of two, so pages of any age meet on every scan that is a
-+	 * multiple of the longest one.
- 	 */
--	if (!rmap_item->remaining_skips) {
--		rmap_item->remaining_skips = skip_age(age);
-+	if (!(ksm_scan.seqnr & (scan_period(age) - 1)))
- 		return false;
--	}
- 
- 	/* Skip this page */
- 	ksm_pages_skipped++;
--	rmap_item->remaining_skips--;
- 	remove_rmap_item_from_tree(rmap_item);
- 	return true;
- }
++Smart scan
++----------
++With ``smart_scan`` enabled, ksmd skips pages that it has already tried
++to merge without success. The ``age`` of a page's ksm_rmap_item counts
++the scans that went by while the page stayed unmerged. A page younger
++than three scans is looked at on every scan; after that it is looked at
++every second scan up to an age of five, every fourth scan up to an age
++of eight, and every eighth scan from then on.
++
++The scans that look at a page are picked by the global scan number
++``ksm_scan.seqnr``, not counted per page. The unstable tree is rebuilt
++on every scan, so two identical pages can only be merged in a scan that
++looks at both. As the periods are powers of two, every page is looked
++at on each scan whose number is a multiple of eight, so two identical
++pages meet at least every eighth scan whatever their ages.
++
+ Reference
+ ---------
+ .. kernel-doc:: mm/ksm.c
 
 -- 
 2.43.0
