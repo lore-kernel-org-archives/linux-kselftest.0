@@ -1,99 +1,114 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794087143;
-	b=P0Th0o14l0/nwMnLWtmD2rGEB07/wJLsJMBAuj4v7R+gYoubg854uI0B2/J+dklvcXAC
-	 OGcHYD/blrOMmTT3xVu7IBKGu282oMYP8aGRJxHwVzuTho70vDvvxcUB7KB/LVJPAkwgz
-	 kzno5bPMhDw2wPd6+LQe2LU64UrXVd9OXQL+ul2r4O5Gq4DYGaw8DB3Kwt9QTM8PuoHYg
-	 SIbUgD1vzAqaS5bxNpA42j1Bn7oSbHtabY4TczP5VxITJYh0kFonvfS9TrEW+xJYR5ltO
-	 kMjgQm9NPbkjMAz8cySAqmckLWCAuqSRawNYUohAZTdhzjshlX1/pEjHeHBtIL2aDFQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794087143;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794089150;
+	b=0IcW6VepDassINCzalobfHGtaXWyoFcXyzuMf+8dMIhGtioFiOyJGcHifhluGKxWU9H2
+	 wxnOAlSlXxfT0HXruL2GaueVLr6urwyGj+2uugnc7NDkffGOCWL33xmzWcDgCoxjzPZgL
+	 NWzoGBprs0DAt4wEQ4tmeYKgTI+3dQkvLHGKyzKflyrfrPmCQ2yZB+6zLXbPzN6BQ0aEp
+	 NKgKT3NgU2FDK6ZzlmfsmnRajlAih/olttDw5+Tp7laKIfiL7+Ku9da8X69nJ+oHT6CH2
+	 D5kj2EX6aoAV/MQhgFOc2A9JttrDM68gq0KibD82gqGKjnFrh2c2alemel/gpA5SZRg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794089150;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
-	b=KFIspxB8W6qqX5wJEN+K2Vj1CdfG9BmzJQ2aeY5I/PWJaQfvIzpyl/xp5VxA5JY8E1Xo
-	 lj+rBpJDvnsutXWNyNg1pJYhfQTU+W5dWUo1Yb5weyzt4lKLyu1QZaS2/OLlsuI4TY5sY
-	 ccZFu7KWx+xhW9m+/7MpKSTOsNVGD69d0E2wK0WZjKUnpQ0BRT8vrk4BEYz38tO3TBTSn
-	 Z9qA5rMANxuY5eAqsqu1rhEmdEtW/ggX8c+j4mWHLsKV2UlYuw5ck3Eq6NCzKHFWedhpk
-	 gtuCSzqvwcQce0+s9LFCJMtRsCQu9r+E30nDXxNriGrt4pPQoNfXenQ2sEioq8+b1sw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=sentinelone.com;
-	spf=pass smtp.mailfrom=sentinelone.com;
-	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=FE4M6Z2d;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=DkAVpPVqUaM5/OO3qyebRlx/+ki6XiRI4yS3tN5o7Iw=;
+	b=rsYQI6ynBrMp75iAq0SJtK+m79HGD0MGBxNXiVQnm8NS4CnO+ENCsK/s0N/jyG58joRo
+	 xfKc0T/atQXkUHWdH0p+tp3TrDnztoRgkj+p2/+xnXvu+6Uclqxxa2My+b0BrPHFoDoP2
+	 xanYsXaf+CdUK88vKIigz1ytl0T/8CP39qnEeQcY68NFX1zQkwaV+cUZZE/12/Yu3A1Fh
+	 dxXmBiYIMmzrxcou3+0bRaPcnVZcJ1uJQYIUjKn2C3wP2w64lHX2Rrq3M4u8bWdggZx3c
+	 4/ukJ6Hmvi5OepQORdePAmSccS013s9ZReuTExUUKutV5knf9M+s1iMbimRQSKI7DIw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="cf/E5vZg";
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCB1606A32E
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 21:32:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BBCB1606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E089C606A333
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 22:05:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E089C606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=FE4M6Z2d
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3b0b133f64fso7759a91.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 13:32:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794087142; cv=none;
-        d=google.com; s=arc-20260327;
-        b=b1eoLCyiNRoDi1fflg7uyLijQjpcT3ltbQ4y6QiIBRt+069PDTKqb1gqrgTljY8pGx
-         XHKLP8RJaTDDwccwJs9wsQRuXUGmjaOWEvtQCbIcqdm9GSTRn4iFnS8FMAneTrxD7xdy
-         FdllfFcCnwnKG8kRKZaAx3YScESs7YXOijUwH8E+1bikASznBopV6s9+iOSVVTOegH7X
-         iGUx9g/Fex7GFU28+KMbyf7ghQjTkBYyaykcoy3QZxf1pQx2jfQYVZ/4YRXZ9tM/APhG
-         iUZBgV4kwdttKsjUYgcRuZ/0IfBLhs0m3T+vCG9Lc10e/WAlURS/wJDqQrIuyR2PXyzK
-         W/KQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
-        fh=NBnHS70r/mherC0AUEOSy+v7f7N3mW2inJdvqMS4hX8=;
-        b=fSGBcTAfoym/6eQWvcScuEKLkXxEf+2rNcyPKJy4HdU1CXvBud84a8o41uZXYHQkJh
-         3dF9SdOdFL3f9lkImbWaL5R2/Ik9x8Qk96xaAeh0feyYAjDnrPAO1h0c9gSFELi67pLs
-         frhI/yIw2XYISyuVFL2GDuEev6fHx6895j6uS5OyIqeHUWcKCVhI4LJQJfQoaKX0vZkC
-         nqG3hYQrghH/Y+7Is900S+QN8QWh0PuCz/g22uzJboY/ghD+nbd9UR0lmFjjx5ufNWvF
-         2USzQIRE7TleITF1P59g5VaAv8g3bqP4Htsg1hVPbyZ0scHGdhsq29BHyimM0dRjtf8T
-         JroQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cf/E5vZg
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a599e9110eso121665e9.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 14:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sentinelone.com; s=google; t=1794087142; x=1794691942; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
-        b=FE4M6Z2dKnhEWsud6rEQ6kWuD+HailDfVd/JSa0GXgCdcPn/l2WszEIk9XGPSqeT0q
-         GbQ8fn0qxiCAjHSNLQ8UEr47fIuqLuWD9yVjm1xLIt14/XsoVbxZC0+NWjeXjUu9SxyH
-         6eQKrG1KNgkAACTm8Bcor7Ml+W5azJissuwxAA/4bqBbsvRDWR8viHkGdrYgmiJ1kzwg
-         xl84zqI8urOELJQ9lWk/bskTrvjGrog+67v8Y2Mtp+BRPny0bsTNNQSG7QSZeVkfxRbI
-         9oDRmImLfydYBBDo4Ndiptq+f+JzZzTM9nGBU1/WVhium6lA7JGNpiDMmPpzKWwDIurI
-         iGzg==
+        d=gmail.com; s=20260707; t=1794089148; x=1794693948; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DkAVpPVqUaM5/OO3qyebRlx/+ki6XiRI4yS3tN5o7Iw=;
+        b=cf/E5vZgfvjBwwCDczap2r/I/PH8rQhSxiTmwRRidMM58beSJpz4ghZrfQdCEMSJMe
+         zAzZn1erHUBe3bnncnBAbVjvIutmZhBnFec9lrbdefhq/uvMukhqlZa4CvGQ3x85+9IF
+         1I7Z5StSdDfqr98h1c5p0mqmRWtoFpjd65JzkPQgjr4JyobBktGm+YtpL6qGncV3F0n9
+         IecC6vXl4cAB7BCmDdxPptJU7mI5p7BIWSFzQfK1IPYZMpn7sCCA6aKMFuZdPy2DXfO4
+         NmZMICLIbmqv4/k85A7VsTcPAQBXoV/Mt6mZQeg87BCBfGD1ZsWzTO4BNce5XN46x45U
+         b/gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794087142; x=1794691942;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
-        b=dI3eddz/Uo7io6rl+DM80LEilWm9GdODd5Xl3SqULvWe6+T4tB9PtuB7e38aNgxsUy
-         CeXDq9D2lja2QF+Vg6Y3mFUkHottwZ5yWOa5rljWRVF/5DCROWaJN2W+TofvC1SeD7bl
-         z2VH5W6zBcYWvnSaC/062Q3iRNHD2bs9Vkhg5n3rxv5tBuW+4wu3FoHpnp2SfVjbbtpq
-         F2FLC1TJLRg+dgclcp/AzuvpplAr0aC4AURBYIue0W2ahIrppHPoZi/qMxeZ02OINkyA
-         CiLlvqAOlLrSi+d1EPFhV4hPIjN+dtX5BhvmkNg2Im+FsThg+TkczIwDxYHLxCU8eEsn
-         AQDw==
-X-Forwarded-Encrypted: i=1; AL+hErEplgVNt1HKdtyfYmD9QQcCAkw2Z1uSIfegxlcKOtWYyUIyZVB+Cf9VmDnLscxL9jwhHDwBd4mqY2fuBdkCVJA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/cQZ5KhylrgA8S+6JQ6ETSwbIAwF7LmuT/U+U0CbeH8jvUl1hk
-	14nw7im3A1c2QuR8ujA6z/axmyTK9QbLqfrH/udzWaeJKLukW5K1j0Ui3KCLF2b/qkOT+5VT+1w
-	ncK1wWK9oonBSog6xi6anVw67bn54vGtyWPBf8Wg8Mg==
-X-Gm-Gg: AYBFou1zXYr/4duKFo10ge23lFoq5RIDNQGCsWsjNGRTc2OjHeq5ugZV3028gCOqX7y
-	h2wXoszDrbPoc6fCMJxkGGM6cMhvRvhXNhEWEy+elusudAe+MfEHmHkx/8nezHhKeWmrsCLVxGH
-	VPJUKwmxXjPRJxhVmJEuFKQ5hyygBK1rrqnYGHiM0tggxKOsgI6BWq8Q1NDehskHXqV4s7LrD2s
-	q7CLrnYQC3pbiNe73etrgU6ZN2+lnOID24Loks5apcxARoDxlYPeom202a9O4TPexzcmrjFXkRH
-	4hMtbRLBHb+pqL1RQp93pvHMkgfsGF3czm8E6uAYfg3YlVyPrRrLHPF+zK6iYkfdDD4iQeNLqJs
-	I820KJCvxTlNsf75PNeaN3rR0Y1AQMg1MUA==
-X-Received: by 2002:a17:90b:388d:b0:3a8:9db2:a59 with SMTP id
- 98e67ed59e1d1-3b0db013fbamr10127781a91.0.1794087141883; Sat, 07 Nov 2026
- 13:32:21 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794089148; x=1794693948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DkAVpPVqUaM5/OO3qyebRlx/+ki6XiRI4yS3tN5o7Iw=;
+        b=jsqZSWBaNjRLOlhFCKNGkUxG5onUx7HB/WpFM/nNZL7R+S+eMNsKXiHqnoh+l9hlaa
+         IT0RbnO4Fxsdpsuz1ZFASNokdB1lPrGyCIHphi+1fhmUBnZVnfMd1+1XzbtnBfkFJeyt
+         WvgJNx8AFJiLZ6Ehv7G8Dvkbw8Ye6mwI82DyFigkWbXXWWwElABvgnDVVo/zGTV9W9Nl
+         ni3K+QjTzRPIl6XVKUylm8fT3pFgUdnUmkq+MnzJdA++zTdSH5YXE/OjoQDdEKXvjz76
+         S0nw9IEI0u1XDNWrebhBBnMDKKzi9LGChBV2NsxnHlngeca68IQ0UQKDgNk6iCEkinqo
+         rVjw==
+X-Forwarded-Encrypted: i=1; AL+hErFZseQhPudcHI/QSUw/QJJLUM+D89eGYGFJJXnsfIm8BvIRw4Rzo4xjKI3NAwvyHpSNyJJIwf53gBmhPLeHznI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/X1OrHyqHAKuUZclFiXaUPg3RPwzYaB4Y44/g1bi2teNbNPYG8
+	+YLfJpip45xCMlYIHNjbYoKdA0yRBTdpUgKmu8F9n0aG8Fi10EZzarHh
+X-Gm-Gg: AYBFou0MGzxyldeirGUcU3QIa5o+BrkX5QnAHOd3/6mE73j18dw6efxYSnBwxm443bw
+	AiA/Kxld0Xm0mLOo7MCld4IittL9jcn/qxylD8g8djd4o6/aLL/P4vH0oASDWk4qfxmSkHmFLkK
+	etSyAKHXeOr5P9+7ABVL0M40uO8kVUs99Uu0mMZmBEcy4IlEtNemp1BJEbyoJ81t+7wAIc43FxL
+	zi6EJws0FeBfXkDGezKjgEHc9At6DQ5uns/vtWZwL73NW4B89CdWPQaekPiGDS/XmIoXAdIYWEK
+	dQxjL8vxLtHlA/tzHMDSEBEISrcZV4qeSf79o4jMkMTtv1qybrK03Zby108V3PJ+iXzJUC9Nkme
+	SY9P+xW3mER81g5HglqsaKWYeuCFuJyvVa6dr4B36MOIJ5ZJqcxetEmN/yuxYDJsRHVGkqyvRii
+	wDHZMfh9S2LHan18tlZWciwnQmM2VrO1/UFu5y4A0CAQ9IYEat+xK97JOauO8HlcOReeHAbcy0H
+	t7sYkxQsaIdzzHjLmU1nMhRk/KI3mn6GiousFDhEpYd9cfim/1RAkQKE+/4LM+OeH3vGUFd3JeP
+	RBY+y5nxhRH96S0TQTxtESo97VxIndSphlg2mJUDtF5gMDKq1Bm+5+lfZRoWNF4evrA7Kv468ck
+	SDkVnoBDhVueAzcI6HA4FHrTsssPjbnRNbtAUjuebwh9JLe8Qjmzo1LyvV469SRWRoVBCdE/MiV
+	o7tkyD/znd
+X-Received: by 2002:a05:6000:220d:b0:48e:eb:56a5 with SMTP id ffacd0b85a97d-49583dec0camr553117f8f.4.1794089147943;
+        Sat, 07 Nov 2026 14:05:47 -0800 (PST)
+Received: from L-022584.energy.envision.com (dynamic-077-189-161-157.77.189.pool.telefonica.de. [77.189.161.157])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49597b1f969sm358958f8f.50.2026.11.07.14.05.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Nov 2026 14:05:46 -0800 (PST)
+From: Xin Xie <xiexinet@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	kees@kernel.org,
+	petr.wozniak@gmail.com,
+	qingfang.deng@linux.dev,
+	fmaurer@redhat.com,
+	luka.gejak@linux.dev,
+	bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com,
+	skhawaja@google.com,
+	liuhangbin@gmail.com,
+	stable@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	xiexinet@gmail.com,
+	lukma@denx.de,
+	fmancera@suse.de,
+	danishanwar@ti.com
+Subject: [PATCH net v8 0/4] net: hsr: fix super-packet forwarding
+Date: Sat,  7 Nov 2026 23:05:39 +0100
+Message-ID: <20261107220544.20-1-xiexinet@gmail.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,68 +118,156 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
- <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
- <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com> <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
- <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
-In-Reply-To: <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
-From: Mike Bazov <mikeba@sentinelone.com>
-Date: Sat, 7 Nov 2026 23:32:27 +0200
-X-Gm-Features: AclHuK8VaELpN_xVEw5v6aYLhDqxLEvH5z7CzGWzlbUdtSKDEKr2aOOzYpF-uoo
-Message-ID: <CAPnbwjpZRmzJFXDa=thc188ZNru2xCBrCsc1WO5mNDzRRQZJBg@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, JP Kobryn <jp.kobryn@linux.dev>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	peterz@infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 6, 2026 at 2:08 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> hm, funny how AI figured out run_ctx, but didn't figure out that we
-> already chain them and we do have that pointer in current->bpf_ctx...
+HSR/PRP requires per-wire-frame tags/RCTs and sequence numbers, and
+duplicate discard is per frame. RX GRO and TX GSO can present multiple
+frames as one skb and violate that assumption: a super-skb is either
+rejected by a constrained lower device, or forwarded without valid
+per-frame trailers and sequence numbers. An oversized PRP aggregate
+can also truncate the RCT's 12-bit LSDU size field.
 
-right, good point, v2 would walk the existing current->bpf_ctx chain instead of
-adding a new task_struct pointer
+Patch 1 keeps software GRO off while devices are direct HSR/PRP
+members, in the requested as well as in the active features. Fixed-on
+or driver-required GRO_HW may remain enabled.
 
-> That's all to say that I don't think there is a need to keep
-> guarantees. If per-cpu map is used naively today it works ok most of
-> the time, but not all of the time.
+Patch 2 refuses bridge, bond, team, OVS, macvlan and MACsec devices,
+and devices without an RX handler such as ipvlan and VRF, as HSR/PRP
+ports. This closes the syzbot report of recursive seqnr_lock locking
+through a bridge whose port is a second HSR master. seqnr_lock stays as
+it is.
 
-Alexei was concerned about existing progs relying on it.
+Patch 3 segments valid GSO before per-frame processing, so each wire
+frame gets its own tag/RCT and sequence number; segmentation runs
+outside seqnr_lock. Patch 4 tests member GRO policy, port refusal, GSO
+forwarding and local submission order.
 
-> Perhaps we should just get rid of that whole per-program recursion
-> protection and just make sure that a) BPF program can protect itself,
-> if necessary
+A typical GSO source is a container connected to a PRP RedBox
+interlink through veth. An existing TCP/UDP GSO skb can reach the
+interlink with GRO disabled:
 
-If we drop the recursion check and go with a), protection is up to
-each bpf program author, so wouldn't a careless one be able to panic the
-kernel? A prog as simple as this one triggers itself:
+  container/netns                  host PRP RedBox
+  prp0-peer ---- veth ---- prp0-int (interlink RX)
+                                  |
+                           split GSO into frames
+                                  |
+                           sequence number + RCT
+                              /          \
+                           LAN A        LAN B
 
-struct {
-      __uint(type, BPF_MAP_TYPE_HASH);
-      __uint(max_entries, 1);
-      __type(key, int);
-      __type(value, long);
-} m SEC(".maps");
+Compatibility with older PRP senders:
 
-SEC("fentry/htab_map_delete_elem")
-int on_delete(__u64 *ctx)
-{
-      int k = 0;
+Valid PRP frames from older senders remain supported. Some old Linux
+PRP senders incorrectly append one RCT to an entire GSO skb. This
+violates the per-frame PRP requirement. Patch 3 drops such intact
+aggregates when trailing bytes extend past a known, nonzero IP length;
+zero lengths and GSO_PARTIAL are not covered by that check.
 
-      if ((void *)ctx[0] == (void *)&m)
-              bpf_map_delete_elem(&m, &k);
-      return 0;
-}
+On virtio-net/TAP paths, disabling GRO_HW in patch 1 can make the host
+segment an old sender's malformed aggregate before it reaches the
+receiving VM. The RCT then becomes transport payload, which the
+receiver cannot reliably identify or remove. Upgrade the sender or
+disable GSO/TSO on its HSR/PRP master.
 
-Without the check it would keep going until the stack overflows
+Validation:
 
-Mike
+On a lockdep kernel with the series, the GRO selftest passed 15/15
+and the ordered selftest 5/5. The syzbot reproducer reports recursive
+locking on the base kernel and nothing on the series in five minutes.
+It needed one adjusted ifindex, because the caif device it counts on
+no longer exists. Down/up of an attached veth and detach of a veth
+attached while down hang or hit BUG_ON with v7 and pass with this
+series.
+
+W=1 allmodconfig and allyesconfig builds show no new warnings against
+the base.
+
+Based on net fafbc4051123 (2026-11-05). The series applies without
+conflicts to net 30c71476d842 and net-next fa5196392691, where net/hsr
+is identical. The net-next conflicts reported for v7 came from the
+sequence-number changes in v7's patch 2, which this version drops.
+
+No stable backport is requested here. The remaining HSR dev->stats
+races are left to a separate series, as Paolo suggested [1].
+Pre-existing shared-skb mutations are also handled separately.
+
+[1] https://lore.kernel.org/netdev/4fc3b9f1-4bef-4b34-ae7a-e89037cce829@redhat.com/
+
+Changes since v7:
+
+- Patch 1: also clear GRO and configurable GRO_HW from wanted_features.
+  veth adds and deletes its NAPI instances according to the request, so
+  the v7 split between requested and active GRO could hang
+  "ip link set down" or hit the BUG_ON() in napi_enable() (the critical
+  NIPA finding on patch 1). GRO is no longer restored when a port leaves,
+  as for LRO; the comments only claim GRO off for direct members.
+- Patch 2: replace the ordered forwarding consumer with a check of the
+  port type, as Sebastian suggested [2]; seqnr_lock is unchanged. The
+  rule is by device type rather than "no lower devices" as I wrote in
+  the thread, because DSA user ports are uppers of their conduit.
+  Dropping the consumer also drops the review points on its admission
+  limit, supervision budget and PREEMPT_RT behavior. Narrowing
+  seqnr_lock is left to a separate net-next change, where Hangbin's
+  patch fits [3]. Ports whose RX handler is in use or not supported are
+  refused before any state change too, so a refused device keeps its
+  GRO request.
+- Patch 3: segment before taking seqnr_lock and number each segment
+  under it; the lock moves from the callers into the per-frame helper.
+  A still-shared GSO input is unshared before segmentation. New gate
+  drops are counted once on the entry device.
+- Patch 4: the GRO checks follow the new policy, including the
+  requested state. New cases cover down/up while attached, attach while
+  down then up and detach, a request while attached, and port refusal.
+  From the NIPA review: CONFIG_MACVLAN and CONFIG_BONDING in config,
+  captures scoped to their case, read-back instead of ethtool output
+  matching, PRP trailers decoded only on PRP LANs with the kernel's
+  fallback, capture sockets bound before they receive, producer errors
+  not hidden by the barrier, INT/TERM blocked while namespaces or
+  handlers switch, completion on the expected frames rather than a quiet
+  period, and only the common prefix compared where supervision runs
+  through the lane cutoff. Unused code is removed. The helper stays
+  standalone instead of using net/lib/py, which has no in-process,
+  namespace-bound AF_PACKET capture or stop-after-failure TAP handling.
+  The remaining low-severity remarks are addressed or went away with
+  the consumer.
+
+[2] https://lore.kernel.org/netdev/20261014151838.6RyMIRVM@linutronix.de/
+[3] https://lore.kernel.org/netdev/20260805-hsr_deadlock-v1-1-d8a6f06fc5a8@kylinos.cn/
+
+Previous postings (earlier design, newest first):
+v7: https://lore.kernel.org/netdev/20261009201324.17-1-xiexinet@gmail.com/
+v6: https://lore.kernel.org/netdev/20260809121455.1745-1-xiexinet@gmail.com/
+v5: https://lore.kernel.org/netdev/20260807140751.1351-1-xiexinet@gmail.com/
+v4: https://lore.kernel.org/netdev/20260803222211.877-1-xiexinet@gmail.com/
+v3: https://lore.kernel.org/netdev/20260731090224.18-1-xiexinet@gmail.com/
+v2: https://lore.kernel.org/netdev/20260724161253.79-1-xiexinet@gmail.com/
+v1: https://lore.kernel.org/netdev/20260722171836.196-1-xiexinet@gmail.com/
+
+Xin Xie (4):
+  net: hsr: keep GRO disabled on HSR/PRP ports
+  net: hsr: refuse forwarding devices as HSR/PRP ports
+  net: hsr: segment GSO before per-frame forwarding
+  selftests: net: hsr: verify GRO policy and ordered forwarding
+
+ .../networking/net_cachelines/net_device.rst  |    1 +
+ include/linux/netdevice.h                     |    7 +
+ net/core/dev.c                                |   15 +
+ net/hsr/hsr_device.c                          |    6 +-
+ net/hsr/hsr_forward.c                         |  154 ++
+ net/hsr/hsr_forward.h                         |    1 +
+ net/hsr/hsr_slave.c                           |   94 +-
+ tools/testing/selftests/net/hsr/Makefile      |    7 +-
+ tools/testing/selftests/net/hsr/config        |    4 +
+ .../selftests/net/hsr/hsr_gro_superpacket.py  | 1376 +++++++++++++++++
+ .../selftests/net/hsr/hsr_gro_superpacket.sh  |    9 +
+ .../net/hsr/hsr_ordered_forwarding.sh         |    9 +
+ 12 files changed, 1668 insertions(+), 15 deletions(-)
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_ordered_forwarding.sh
+
+
+base-commit: fafbc4051123d5459ea6950899cec08ed946e278
+-- 
+2.53.0
+
