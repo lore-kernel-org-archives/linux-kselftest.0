@@ -1,80 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794084133;
-	b=QhvuhvshrTL+oJqEwDjvFYoy5N5D1us+K6SlqIwUc3B8DA1f5JKM3gkVWCEn/Xlt7rcD
-	 cLDdgmblvgFZNBbeMpdvu/hIJlElBxVz9kpxtZ7qlupzmASiBbG9bNU0wnCTpM/cVplSZ
-	 ql4YCAEKVbgxVqQe4HJdRbySqRCzdBcHrVNlL2gRWq+Gt+nCt17NFdn7eL+P8yRTAFqk9
-	 xaseRpi6wvcWzyDwwipxRvhwU0f8Cc0skFwaPStHXxeDCAyPR0xKIUu+uOyk485vsOO/I
-	 ZIwTc+Qn52LaeyxC/ITTsfnVuKyqQoYYazJemTvRK/hpHhPlUTMFOTxNkyV0VjbGqHw==
+	t=1794085169;
+	b=X77VA/ymldNBIwUzp6QS9So1Shnb255TzNvkq2tjFtkc+cI+0HQVSduXk0m7VwoI5pJU
+	 xlCu/n0sMJ1j1v98ITIzAuNxGN6vM7eBE5cKxxyGjJ9+8fgZ5A1RHIZVd4Mr7TFsFMqbz
+	 XeTaCoVtdH4LeCVdyOXmTADy93tJshZMgSfGRyNXlnm3oWPNGDf0xzwQMqYE0ZN29fOxd
+	 vpPvqAISIvnUcUIQfsg5eVpA5LAsNVeBkG6/QFqNq9rFAbxCNKPkDSi4cEtHSBok8S6RG
+	 mv38Ez3u43GqyyeNrB7O5oNjcqaBJddaCP1N1abQCoTf6rQ/EFXRzzSKB7ZoAGX1kkw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794084133;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=vt9E+5gU7NQ+Wi6z2HfmB+6KsnzMwitmxcnzRralzow=;
-	b=K8Up2qhvAWN6iqi+8zLohCs0N7EStequwm2WhLeqCvRHIH3JFYOYXGLLlnwZehQc1ZnR
-	 d/qAU2cOjltseNaiTE87mxguZdqoG1UMuM29rKYBFCoa70+MHTngX78+bCsGJdjqQtL4b
-	 lWyeQRPyXF8BbrxjQ9CSYefsS+1YoiBKC3WkVW4EvkuqEBFobSP8W3WI2rW/xsQ+3N78q
-	 JlELn9ECrvZqpMBw0RIgU9hU1u0SoFe8CKo2IJZQa9w3BgKkXHbehdlVwYrkgsoGb3HOA
-	 zneznpffKSwauq4VivCLz941Tj/CQD5Gz7QGSBEE5xSHxfM3SYB0/PAmsv9Es8Gl9lA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794085169;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=rBTYyUmfsQGb/AQCf/MvwklElVs0fgEKG8OanSKNog4=;
+	b=QFmLbxo3VcnXpQWIP5ir7iuLkb4OQBCJ5lKf69+dfaA0dhSv395eU3DhfWy5u+1oi0Ze
+	 m4eC/pWti8pZu92RjTn4hc2r6n76SEhFfjNcCi0OnniYNiQW770x/ttTFv6rQskMRd4U1
+	 IC/lvpRzFfQSbuNvBdGN8j06hlXCk9pVZhGRljpTVrUASrw3Lqj5HyX6AJIBQ1TVOn648
+	 GDS9vZCjjTeFkvSyLlV818Whf0+zRt1jF9DymPotSuiimc5BUdqoXb7dP7Wy0gwL1I3ZU
+	 DnyXUmBp7ek5ohcLuv2owoeT+k8r/FGms5a5gjBUxal35WLw9JGZeCthIf/50wzDxzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdgeqcGm;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="VcRrtY/4";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A167606A32E;
-	Sat,  7 Nov 2026 20:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEA3606A32C;
+	Sat,  7 Nov 2026 20:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdgeqcGm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10651F0089F;
-	Sat,  7 Nov 2026 20:42:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VcRrtY/4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AAFF1F008A1;
+	Sat,  7 Nov 2026 20:59:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794084133;
-	bh=vt9E+5gU7NQ+Wi6z2HfmB+6KsnzMwitmxcnzRralzow=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=QdgeqcGm7aLjvMwhDXbnVrXyrjxTJoRQkqRIsDjcoduMOTEL8GCNOFQSiDbwYCCXA
-	 bdiOlqUv4nmV7s8TUKhpFnqxqC6DSKCS1JUo3diwp71Rk0vlgv1Nh8kEE+kDsic1tz
-	 A+Jb5V3672/95emWmClD9muYAGY/rWdyjIttmwrc+GYxS6MurZyD0azH7QdvjXiOYE
-	 GXdd+qElL0kyHa09o4qK64HoO7MAQfsV8IpmBzQ6+Res9Ewlsf0DCXIDsQqqLpTLm2
-	 O/+ktjWajqgRw+TV+MG2JVz5d1/6q6chhmKGj+4z5BEqZwVpkAS+1MglhWGlk1QczL
-	 LwZyEhkdgqX/A==
-Date: Sat, 7 Nov 2026 12:42:10 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
-	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ignat Korchagin <ignat@linux.win>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH v6 0/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <20261107204210.GG6049@quark>
-References: <20261107195605.3929659-1-jarkko@kernel.org>
- <au-FkAtC4Gcw7Bkb@kernel.org>
+	s=k20260515; t=1794085168;
+	bh=rBTYyUmfsQGb/AQCf/MvwklElVs0fgEKG8OanSKNog4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=VcRrtY/45mXjrDCOOngeZIVy6yS72n3h7axO0Q5nCD0sVuBwrxA7FkYQ31G2S51KJ
+	 u9E48zZzrHSLfH1xxrvbjfoBGAXdX46ztL8NcKK0trDbP8uQeLxSTvugV3Iwru1d67
+	 sjoa2+6xIub0C8nZjEHNzTiMpR5LPopSw2YkmdyTo5QeDydCZ6B45MYYmGRvxmTm49
+	 OY14FHkDUmzH/yRmsFwwozAd39aJBykYdTSbxRLD4tz8uDQxuvlZH4CoV6bHviV4K9
+	 fTHoGvMyZEW/Y4Ubumqx42wrpej5CSpLddYkB95IzNezt85QIqX7C8ldcXVgmtwD9L
+	 FWffREGb4r+LQ==
+Subject:
+ Re: [PATCH net-next v3 3/5] psp: defer tx key deletions for SADB drivers
+From: netdev-bot+sashiko@kernel.org
+To: daniel.zahka@gmail.com
+Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
+ edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, rdunlap@infradead.org, donald.hunter@gmail.com,
+ andrew+netdev@lunn.ch, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Sat, 07 Nov 2026 20:59:26 +0000
+Message-ID: <179408516694.994134.18039275084711975656@kernel.org>
+In-Reply-To: <20261106-psp-v3-3-a8dd38f5a727@gmail.com>
+References: <20261106-psp-v3-3-a8dd38f5a727@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,74 +66,172 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <au-FkAtC4Gcw7Bkb@kernel.org>
 
-On Sat, Nov 07, 2026 at 10:09:52PM +0200, Jarkko Sakkinen wrote:
-> On Sat, Nov 07, 2026 at 09:56:01PM +0200, Jarkko Sakkinen wrote:
-> > The keyrings subsystem is the sole user of assoc_array. It has over 1700
-> > lines of code, no test suite, and a long history of bugs, with LLMs now
-> > finding more.
-> > 
-> > This unfortunate outcome has evolved over time by large from the shortage
-> > of in-kernel callers, time bandwidth and 3rd party contributors.
-> > 
-> > What the keyrings subsystem needs is just a generic key-value store, which
-> > performs well with sparse key sets. Replace assoc_array with an
-> > rhashtable-backed keyring index and remove assoc_array from the kernel.
-> 
-> Sashiko: https://sashiko.dev/#/patchset/20261107195605.3929659-1-jarkko%40kernel.org
-> 
-> Not addressing this as only one patch changed and the change was
-> exactly:
-> 
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> index 772fa0e35f9d..6761c6801edc 100644
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
-> @@ -12,7 +12,6 @@
->  #include <linux/security.h>
->  #include <linux/seq_file.h>
->  #include <linux/err.h>
-> -#include <linux/delay.h>
->  #include <linux/jhash.h>
->  #include <linux/user_namespace.h>
->  #include <linux/nsproxy.h>
-> @@ -101,6 +100,7 @@ static const struct rhashtable_params keyring_link_params = {
->         .min_size               = 4,
->         .nelem_hint             = 3,
->         .automatic_shrinking    = true,
-> +       .insecure_elasticity    = true,
->  };
-> 
->  static struct keyring_index *keyring_index_locked(const struct key *keyring)
-> @@ -1225,12 +1225,8 @@ int __key_link_begin(struct key *keyring,
->                 if (ret < 0)
->                         goto error;
-> 
-> -               do {
-> -                       ret = rhashtable_insert_fast(&links->ht, &link->node,
-> -                                                    keyring_link_params);
-> -                       if (ret == -EBUSY)
-> -                               fsleep(100);
-> -               } while (ret == -EBUSY);
-> +               ret = rhashtable_insert_fast(&links->ht, &link->node,
-> +                                            keyring_link_params);
->                 if (ret < 0) {
->                         key_payload_reserve(keyring,
->                                             keyring->datalen - KEYQUOTA_LINK_BYTES);
-> 
-> So I don't think there are any real issue with the patch set, except I
-> will need to rebase the commits to the latest mainline.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-It looks good to me now too, but it would be good to get a Sashiko run
-on the latest version.  Sashiko hasn't run since v3, as it failed to
-apply the series.  You should base the series on a commit in either
-mainline or linux-next, and pass the '--base' option to 'git
-format-patch' so it adds a 'base-commit' line.
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-(The only reason I've been able to apply it myself for review is that I
-went out of my way to find your keys-rhashtable branch in git.)
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-- Eric
+- [Medium] This patch removes the psp_dev_has_sadb() -> -EOPNOTSUPP guard
+  from psp_sock_tx_rekey() (net/psp/psp_sock.c) and replaces the old…
+- [Low] The patch adds an implicit rule for SADB drivers (those with
+  tx_key_add/tx_key_del) that is written down only in the commit…
+
+--
+
+psp: defer tx key deletions for SADB drivers
+
+This commit enables Tx rekey on devices that keep Tx keys in an SADB. A
+superseded Tx key is now deleted only after a BQL-based descriptor grace
+period has passed on every active Tx queue, and a delayed work polls the
+queued and completed byte counts to detect the end of that period.
+CONFIG_INET_PSP now depends on CONFIG_BQL, and SADB drivers must be ops
+locked.
+
+> diff --git a/Documentation/networking/psp.rst b/Documentation/networking/psp.rst
+> index 43f222b38d3d4..ceb1e232317fc 100644
+> --- a/Documentation/networking/psp.rst
+> +++ b/Documentation/networking/psp.rst
+> @@ -202,6 +202,48 @@ Drivers must use ``psp_skb_get_assoc_rcu()`` to check if PSP Tx offload
+
+[ ... ]
+
+> +Drivers which implement the Tx key callbacks must meet the following
+> +requirements:
+> +
+> +* The driver must be "ops locked"
+> +  (see Documentation/networking/netdevices.rst).
+
+[ ... ]
+
+> +* Before calling ``psp_dev_unregister()``, the driver must ensure that all
+> +  outstanding Tx descriptors containing key references have been completed
+> +  or discarded. PSP core deletes all remaining Tx keys during
+> +  unregistration without waiting for a grace period.
+> +
+
+[Severity: Low]
+Should this list also say that psp_dev_unregister() must not be called
+with the netdev instance lock held? Right now that rule is only in the
+commit message.
+
+psp_dev_unregister() now begins with psp_deferred_del_stop(), which waits
+for the work:
+
+psp_deferred_del_stop() {
+	disable_delayed_work_sync(&psd->tx_del.work);
+}
+
+The work takes psd->lock first and then the instance lock:
+
+psp_deferred_del_work() {
+	...
+	mutex_lock(&psd->lock);
+	netdev_lock(psd->main_netdev);
+	...
+}
+
+Suppose a driver calls psp_dev_unregister() under netdev_lock() while the
+work is blocked in netdev_lock(). Then disable_delayed_work_sync() never
+returns. Taking psd->lock after that would also invert the psd->lock ->
+instance lock order.
+
+The psp_dev_unregister() kernel-doc has no Context: line covering this.
+The @tx_key_add / @tx_key_del kernel-doc in include/net/psp/types.h still
+only says "Can be left NULL if device does not store Tx keys". It doesn't
+say that psp_dev_create() now rejects tx_key_add on devices that aren't
+ops locked, and it doesn't mention the BQL requirements.
+
+mlx5 calls psp_dev_unregister() from mlx5e_nic_cleanup() without holding
+netdev_lock, so it isn't affected today.
+
+[ ... ]
+
+> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
+> index d497f41c483e1..48bffe088c79b 100644
+> --- a/net/psp/psp_sock.c
+> +++ b/net/psp/psp_sock.c
+
+[ ... ]
+
+> @@ -287,10 +293,6 @@ psp_sock_tx_rekey(struct sock *sk, struct psp_dev *psd, struct psp_assoc *pas,
+>  	struct psp_assoc *new;
+>  	int err;
+>  
+> -	if (psp_dev_has_sadb(psd)) {
+> -		NL_SET_ERR_MSG(extack, "Tx rekey not supported on this device");
+> -		return -EOPNOTSUPP;
+> -	}
+>  	if (!pas->peer_tx) {
+>  		NL_SET_ERR_MSG(extack, "Socket PSP state is not fully established");
+>  		return -EBUSY;
+
+[Severity: Medium]
+With this check removed, can an unprivileged user use up the device's Tx
+key space by calling tx-assoc in a loop on a single socket?
+
+The PSP_CMD_TX_ASSOC op in psp-nl-gen.c sets only GENL_CMD_CAP_DO and not
+GENL_ADMIN_PERM. The caller just needs to own an established TCP socket
+routed over an SADB device. Every rekey allocates a new device key:
+
+psp_nl_tx_assoc_doit()
+  psp_sock_assoc_set_tx()
+    psp_sock_tx_rekey()
+      psp_assoc_set_tx()
+        psp_dev_tx_key_add()
+          mlx5e_psp_assoc_add()
+            mlx5_create_encryption_key()
+
+The superseded key is released only after all of these steps:
+
+- an RCU grace period
+- the free work runs
+- psp_deferred_del_queue() moves it onto psd->tx_del.next
+- a BQL grace period completes on every Tx queue
+
+psp_deferred_del_work() checks for the end of that grace period only once
+every PSP_TX_GRACE_POLL_MS (1000 ms).
+
+Nothing limits the rekey rate or the length of tx_del.next and
+tx_del.active:
+
+psp_deferred_del_queue() {
+	...
+	list_move_tail(&pas->assocs_list, &psd->tx_del.next);
+	schedule_delayed_work(&psd->tx_del.work, 0);
+}
+
+If a Tx queue stops completing its snapshotted bytes (for example, the
+peer sends link-level pause frames), the grace period never ends. In that
+case tx_del.next keeps growing and new device keys keep being allocated.
+
+Every PSP socket on the device shares these keys, and they aren't charged
+to the caller's memcg (only the psp_assoc allocation uses
+GFP_KERNEL_ACCOUNT). Once they run out, tx_key_add() fails for every
+other user of the device.
+
+The commit message says:
+
+  Adding a time based rate limit per socket for tx-assoc to prevent
+  wasting SADB or deferred deletion queue space is possible for future
+  work. For now, users should avoid presenting PSP devices to users they
+  don't trust to abuse this.
+
+Before this patch, a socket on an SADB device could hold only one Tx key.
+There also doesn't seem to be an in-kernel way to limit tx-assoc to
+trusted users. The rest of the series only adds selftests, so no later
+patch adds a bound.
+
+Could this patch cap the number of pending deferred deletions per device
+or per socket, or rate limit Tx rekey, instead of leaving that for later?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106-psp-v3-0-a8dd38f5a727%40gmail.com
