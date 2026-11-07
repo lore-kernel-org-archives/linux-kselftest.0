@@ -1,47 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794085169;
-	b=X77VA/ymldNBIwUzp6QS9So1Shnb255TzNvkq2tjFtkc+cI+0HQVSduXk0m7VwoI5pJU
-	 xlCu/n0sMJ1j1v98ITIzAuNxGN6vM7eBE5cKxxyGjJ9+8fgZ5A1RHIZVd4Mr7TFsFMqbz
-	 XeTaCoVtdH4LeCVdyOXmTADy93tJshZMgSfGRyNXlnm3oWPNGDf0xzwQMqYE0ZN29fOxd
-	 vpPvqAISIvnUcUIQfsg5eVpA5LAsNVeBkG6/QFqNq9rFAbxCNKPkDSi4cEtHSBok8S6RG
-	 mv38Ez3u43GqyyeNrB7O5oNjcqaBJddaCP1N1abQCoTf6rQ/EFXRzzSKB7ZoAGX1kkw==
+	t=1794085172;
+	b=qS8irPP309LyWfG+bvCqGzylK4AnscqE93McLRyTpgO1QBYPifBFED4ZIytz3p5tVUT0
+	 GYP29Uyvt2ll8ZigkT4szVxt+YfoBzk1kUEueJZxqd7sAbCy8PtQKDNGF6/+7ITP1I+BM
+	 5wOClq5bqaNsdZYzfL2vpZb+cLvAl53iNn4Eu5WqZqVhDHduMh/AT6Uk+JhEMMZsdKlDL
+	 M7KCGCTKBcAJs/7tfps/h7ck5+4Va6/iIM93bPUh7/JvwBxqZh8jbvguBGIPRnQJGEqt9
+	 6Ky96Hkahv9295b4GcvaUIa6AQSiADM2/oIV5aAlaH+ZMDDUkval3Mk6IYuEX7GhGYg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794085169;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794085172;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=rBTYyUmfsQGb/AQCf/MvwklElVs0fgEKG8OanSKNog4=;
-	b=QFmLbxo3VcnXpQWIP5ir7iuLkb4OQBCJ5lKf69+dfaA0dhSv395eU3DhfWy5u+1oi0Ze
-	 m4eC/pWti8pZu92RjTn4hc2r6n76SEhFfjNcCi0OnniYNiQW770x/ttTFv6rQskMRd4U1
-	 IC/lvpRzFfQSbuNvBdGN8j06hlXCk9pVZhGRljpTVrUASrw3Lqj5HyX6AJIBQ1TVOn648
-	 GDS9vZCjjTeFkvSyLlV818Whf0+zRt1jF9DymPotSuiimc5BUdqoXb7dP7Wy0gwL1I3ZU
-	 DnyXUmBp7ek5ohcLuv2owoeT+k8r/FGms5a5gjBUxal35WLw9JGZeCthIf/50wzDxzA==
+	bh=dzuonoA9qOkLc7kATxtO9OD76IIkPooDhtETN2ywYhI=;
+	b=NQQ3KZiIobxv7ahVgETo3hm11hHOQUKj6t2FAX8U+AjpeOduqND9CoFEgfG7eO6BIE3O
+	 qBixsDRv5P9L7Q+FdlATheqCoI76w/1emzgFPDhy2MWYmqxvdeIb6oNz1muh5gQd0rBw7
+	 CMgI4slYMk6cnnKKMVWfCuMqf63O/afxeYzPf53TZa1zb9bFo3Tpkl/EcMhyVSjpHr8k4
+	 CvY7eOYyLIvi4Kp4foEy9sMoxj1GMs1F6SKpUzYV73kgIEcbs33PCI/ur+KQtfnHmKncs
+	 CfCmGHHFN9FK0aiUlwlGNM8yv04fzDUl7iYgTtzO93BhipE4hxKZDyCzfHwBL0Fq/2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="VcRrtY/4";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=odcQ+DoD;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEA3606A32C;
-	Sat,  7 Nov 2026 20:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99E7606A32E;
+	Sat,  7 Nov 2026 20:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VcRrtY/4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AAFF1F008A1;
-	Sat,  7 Nov 2026 20:59:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=odcQ+DoD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E15F1F008A2;
+	Sat,  7 Nov 2026 20:59:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794085168;
-	bh=rBTYyUmfsQGb/AQCf/MvwklElVs0fgEKG8OanSKNog4=;
+	s=k20260515; t=1794085171;
+	bh=dzuonoA9qOkLc7kATxtO9OD76IIkPooDhtETN2ywYhI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VcRrtY/45mXjrDCOOngeZIVy6yS72n3h7axO0Q5nCD0sVuBwrxA7FkYQ31G2S51KJ
-	 u9E48zZzrHSLfH1xxrvbjfoBGAXdX46ztL8NcKK0trDbP8uQeLxSTvugV3Iwru1d67
-	 sjoa2+6xIub0C8nZjEHNzTiMpR5LPopSw2YkmdyTo5QeDydCZ6B45MYYmGRvxmTm49
-	 OY14FHkDUmzH/yRmsFwwozAd39aJBykYdTSbxRLD4tz8uDQxuvlZH4CoV6bHviV4K9
-	 fTHoGvMyZEW/Y4Ubumqx42wrpej5CSpLddYkB95IzNezt85QIqX7C8ldcXVgmtwD9L
-	 FWffREGb4r+LQ==
-Subject:
- Re: [PATCH net-next v3 3/5] psp: defer tx key deletions for SADB drivers
+	b=odcQ+DoD+ixuvrLkIaAD3Ybtp7fexE+OCQbPvhz17u8kz/tn2UQuSCo9MYYg4c1gq
+	 qRwe0yqsR9zNjzrhCEfKdzPSBjMbZeKzRCV5Cb7zuvSVsZZfvz7Q64w6jFOX3e7QkH
+	 wHqaqPgVHN53WJLUjhda/8OSnsSpJpA+Dlg6gA8VOvT/EX8LPWnsowWf8+1vF0pFJi
+	 22KKcBSrqDiq5RevrMHv6X8v0SyilSaWkXG1eSnyMvqVVMM7dwQvnezAYb4j+Ru6ww
+	 0psIJp+lB9MIf4qfcyR3biqCVJcWxQR4Efsn2BBl+hdAgaSrZYbzmcXroRAW9cADe5
+	 aFNBTCG9jBlHw==
+Subject: Re: [PATCH net-next v3 5/5] selftests: drv-net: psp: add rekey tests
 From: netdev-bot+sashiko@kernel.org
 To: daniel.zahka@gmail.com
 Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
@@ -50,11 +49,11 @@ Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
  andrew+netdev@lunn.ch, shuah@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Sat, 07 Nov 2026 20:59:26 +0000
-Message-ID: <179408516694.994134.18039275084711975656@kernel.org>
-In-Reply-To: <20261106-psp-v3-3-a8dd38f5a727@gmail.com>
-References: <20261106-psp-v3-3-a8dd38f5a727@gmail.com>
-X-sashiko-severity: Medium
+Date: Sat, 07 Nov 2026 20:59:30 +0000
+Message-ID: <179408517003.994134.18139473201924553095@kernel.org>
+In-Reply-To: <20261106-psp-v3-5-a8dd38f5a727@gmail.com>
+References: <20261106-psp-v3-5-a8dd38f5a727@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -67,169 +66,114 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] This patch removes the psp_dev_has_sadb() -> -EOPNOTSUPP guard
-  from psp_sock_tx_rekey() (net/psp/psp_sock.c) and replaces the old…
-- [Low] The patch adds an implicit rule for SADB drivers (those with
-  tx_key_add/tx_key_del) that is written down only in the commit…
+- [Low] In tools/testing/selftests/drivers/net/psp.py, the second half of
+  rekey_both_sides() (the "# now, tx then rx" block, lines 734-736) does…
 
 --
 
-psp: defer tx key deletions for SADB drivers
+selftests: drv-net: psp: add rekey tests
 
-This commit enables Tx rekey on devices that keep Tx keys in an SADB. A
-superseded Tx key is now deleted only after a BQL-based descriptor grace
-period has passed on every active Tx queue, and a delayed work polls the
-queued and completed byte counts to detect the end of that period.
-CONFIG_INET_PSP now depends on CONFIG_BQL, and SADB drivers must be ops
-locked.
+This commit adds psp.py selftests for rekeying PSP connections. They cover
+basic Rx and Tx rekeys, plus cases where rx-assoc and tx-assoc should fail
+because of a psp version mismatch or the psp state. It also adds rx-assoc,
+tx-assoc and key-rotate RPCs to psp_responder.
 
-> diff --git a/Documentation/networking/psp.rst b/Documentation/networking/psp.rst
-> index 43f222b38d3d4..ceb1e232317fc 100644
-> --- a/Documentation/networking/psp.rst
-> +++ b/Documentation/networking/psp.rst
-> @@ -202,6 +202,48 @@ Drivers must use ``psp_skb_get_assoc_rcu()`` to check if PSP Tx offload
+> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+> index 71eeade62ad24..004faf4bb57ae 100755
+> --- a/tools/testing/selftests/drivers/net/psp.py
+> +++ b/tools/testing/selftests/drivers/net/psp.py
 
 [ ... ]
 
-> +Drivers which implement the Tx key callbacks must meet the following
-> +requirements:
-> +
-> +* The driver must be "ops locked"
-> +  (see Documentation/networking/netdevices.rst).
+> @@ -489,6 +558,186 @@ def _data_basic_send(cfg, version, ipver):
 
 [ ... ]
 
-> +* Before calling ``psp_dev_unregister()``, the driver must ensure that all
-> +  outstanding Tx descriptors containing key references have been completed
-> +  or discarded. PSP core deletes all remaining Tx keys during
-> +  unregistration without waiting for a grace period.
+> +@ksft_variants(_get_psp_ver_variants())
+> +def rekey_both_sides(cfg, version):
+> +    """Test rekeying both directions"""
+> +    _init_psp_dev(cfg)
 > +
+> +    s = _establish_psp_conn(cfg, version)
+> +    try:
+> +        data_len = _psp_txrx(cfg, s, 10)
+> +
+> +        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
+> +        _remote_key_rotate(cfg)
+> +
+> +        # first, rx then tx
+> +        data_len = _rekey_rx(cfg, s, version, data_len)
+> +        data_len = _rekey_tx(cfg, s, data_len)
+> +
+> +        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
+> +        _remote_key_rotate(cfg)
+> +
+> +        # now, tx then rx
+> +        data_len = _rekey_tx(cfg, s, data_len)
+> +        _rekey_rx(cfg, s, version, data_len)
 
 [Severity: Low]
-Should this list also say that psp_dev_unregister() must not be called
-with the netdev instance lock held? Right now that rule is only in the
-commit message.
+Does the "tx then rx" half of rekey_both_sides() check that either of its
+Tx rekeys actually took effect?
 
-psp_dev_unregister() now begins with psp_deferred_del_stop(), which waits
-for the work:
+After an Rx rekey, the old SPI stays acceptable:
 
-psp_deferred_del_stop() {
-	disable_delayed_work_sync(&psd->tx_del.work);
+net/psp/psp_sock.c:psp_sock_rx_rekey() {
+    ...
+	pas->prev_spi = prev->rx.spi;
+	pas->prev_generation = prev->generation;
+
+	memcpy(&pas->tx, &prev->tx, sizeof(pas->tx));
+    ...
 }
 
-The work takes psd->lock first and then the instance lock:
+psp_pse_matches_pas() accepts packets that match it:
 
-psp_deferred_del_work() {
-	...
-	mutex_lock(&psd->lock);
-	netdev_lock(psd->main_netdev);
-	...
+include/net/psp/functions.h:psp_pse_matches_pas() {
+    ...
+		(pas->prev_spi && pas->prev_spi == pse->spi &&
+		 pas->prev_generation == pse->generation));
 }
 
-Suppose a driver calls psp_dev_unregister() under netdev_lock() while the
-work is blocked in netdev_lock(). Then disable_delayed_work_sync() never
-returns. Taking psd->lock after that would also invert the psd->lock ->
-instance lock order.
+The old SPI only becomes invalid when the device key is rotated:
 
-The psp_dev_unregister() kernel-doc has no Context: line covering this.
-The @tx_key_add / @tx_key_del kernel-doc in include/net/psp/types.h still
-only says "Can be left NULL if device does not store Tx keys". It doesn't
-say that psp_dev_create() now rejects tx_key_add on devices that aren't
-ops locked, and it doesn't mention the BQL requirements.
-
-mlx5 calls psp_dev_unregister() from mlx5e_nic_cleanup() without holding
-netdev_lock, so it isn't affected today.
-
-[ ... ]
-
-> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-> index d497f41c483e1..48bffe088c79b 100644
-> --- a/net/psp/psp_sock.c
-> +++ b/net/psp/psp_sock.c
-
-[ ... ]
-
-> @@ -287,10 +293,6 @@ psp_sock_tx_rekey(struct sock *sk, struct psp_dev *psd, struct psp_assoc *pas,
->  	struct psp_assoc *new;
->  	int err;
->  
-> -	if (psp_dev_has_sadb(psd)) {
-> -		NL_SET_ERR_MSG(extack, "Tx rekey not supported on this device");
-> -		return -EOPNOTSUPP;
-> -	}
->  	if (!pas->peer_tx) {
->  		NL_SET_ERR_MSG(extack, "Socket PSP state is not fully established");
->  		return -EBUSY;
-
-[Severity: Medium]
-With this check removed, can an unprivileged user use up the device's Tx
-key space by calling tx-assoc in a loop on a single socket?
-
-The PSP_CMD_TX_ASSOC op in psp-nl-gen.c sets only GENL_CMD_CAP_DO and not
-GENL_ADMIN_PERM. The caller just needs to own an established TCP socket
-routed over an SADB device. Every rekey allocates a new device key:
-
-psp_nl_tx_assoc_doit()
-  psp_sock_assoc_set_tx()
-    psp_sock_tx_rekey()
-      psp_assoc_set_tx()
-        psp_dev_tx_key_add()
-          mlx5e_psp_assoc_add()
-            mlx5_create_encryption_key()
-
-The superseded key is released only after all of these steps:
-
-- an RCU grace period
-- the free work runs
-- psp_deferred_del_queue() moves it onto psd->tx_del.next
-- a BQL grace period completes on every Tx queue
-
-psp_deferred_del_work() checks for the end of that grace period only once
-every PSP_TX_GRACE_POLL_MS (1000 ms).
-
-Nothing limits the rekey rate or the length of tx_del.next and
-tx_del.active:
-
-psp_deferred_del_queue() {
-	...
-	list_move_tail(&pas->assocs_list, &psd->tx_del.next);
-	schedule_delayed_work(&psd->tx_del.work, 0);
+net/psp/psp_sock.c:psp_assocs_key_rotated() {
+    ...
+	list_for_each_entry(pas, &psd->active_assocs, assocs_list) {
+		if ((pas->rx.spi ^ pas->prev_spi) &
+		    cpu_to_be32(PSP_SPI_KEY_PHASE))
+			pas->prev_generation |= ~PSP_GEN_VALID_MASK;
+	}
+    ...
 }
 
-If a Tx queue stops completing its snapshotted bytes (for example, the
-peer sends link-level pause frames), the grace period never ends. In that
-case tx_del.next keeps growing and new device keys keep being allocated.
+In the first half, the key_rotate calls that come next cause a stale Tx
+SPI to be dropped. The second half ends right after _rekey_rx(), and
+neither side rotates again.
 
-Every PSP socket on the device shares these keys, and they aren't charged
-to the caller's memcg (only the psp_assoc allocation uses
-GFP_KERNEL_ACCOUNT). Once they run out, tx_key_add() fails for every
-other user of the device.
+Say the local tx_assoc in _rekey_tx() were silently ignored. The local
+side would keep sending with the old SPI, and the responder would still
+accept it through prev_spi. The same applies if the responder ignored
+the tx assoc sent by _remote_tx_assoc() in _rekey_rx(): its echo would
+still be accepted locally.
 
-The commit message says:
+This half is also the only place where an Rx rekey follows a Tx rekey on
+the same socket, which is the memcpy of prev->tx shown above. If that
+path lost the Tx key that was just installed, would this test notice?
 
-  Adding a time based rate limit per socket for tx-assoc to prevent
-  wasting SADB or deferred deletion queue space is possible for future
-  work. For now, users should avoid presenting PSP devices to users they
-  don't trust to abuse this.
+The v3 changelog says the basic tests now "rotate again after it to
+verify the new key is in use". Could this test end the same way, with a
+final cfg.pspnl.key_rotate() and _remote_key_rotate() and then another
+_psp_txrx()?
 
-Before this patch, a socket on an SADB device could hold only one Tx key.
-There also doesn't seem to be an in-kernel way to limit tx-assoc to
-trusted users. The rest of the series only adds selftests, so no later
-patch adds a bound.
-
-Could this patch cap the number of pending deferred deletions per device
-or per socket, or rate limit Tx rekey, instead of leaving that for later?
+> +    finally:
+> +        _close_psp_conn(cfg, s)
 
 [ ... ]
 
