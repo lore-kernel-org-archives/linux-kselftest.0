@@ -1,67 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794023969;
-	b=1hJu3QD2xmzqHEyVrTC1De6CGOUEUJmx7RaVXP0tdKfqHQzE1NwHB5APT1x0pFhUAbYY
-	 IeCUHOB9Ef9nDOol5J+T6OjRJKgl1MD792+Y4voZeKODkAVWSJySclo0KDZylfbg20ShT
-	 nGKiqPpqHY8zgThDT485OcTtJ+NGsGwk4k6m0L1Oh2yL3mlXHD0LKFNkIwEhJ3FT1xk/v
-	 096j6q1iIjOqHDYhOAXh8iyFO/PRgvPWZFqrtivl0TDXU6xD0YVibnjmIeoO7LvwUeGU8
-	 nNpIMp9ksoYJ+1iFXba2Ts/kf43IpKsvccRNSDb7v6usTBkQrwqSxUBa9tiM68N4LPg==
+	t=1794029387;
+	b=hNRpL+Gz36Jcff+vk7BKAGkbGxSkWnigLI2ZgJcNkH5HH7OMaGzBRgyq6KVZ2OIJIlOx
+	 1xePYx49utDwrOwYx2r6mhjkrk0ZX/e3eabRPe7+E49rkFRN0EWqt4otftaRrIEmhN3Lq
+	 Y1XP0yZKTsOR+f0fxFPGEdLE19AcZsFuSvo+MvV8GlZxoLk54dHzOBsj7AmK2dISdu3ib
+	 2ymATlJPPKS15zliAmN9gNYl8Vj/bpCecl6TNHGCL5Q2XPN8rWQexWiDoQ8VEThYHLnH4
+	 XYXQygkko2cCUV0QhLw089jupdMvJFR4RKUC0e9rl9ZWOCjUdRnpitaiEzRcfu/VWXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794023969;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=EAEthflt2t20HJ71ADyhC30eFYFr66TlnXqMxdpZXW0=;
-	b=WhhkeepqxOcM74eUGRV+Dlc00chY8EPhxWUkJR5P4EPI0d+95jEBhgSqzw50ArbXMfn+
-	 6+5GYkbE70er17NG6bwNMXKbSNsdTbpc3IW0pFukygkmPHigDIpnd0QmGcaUDxLwwxChc
-	 AUNvtDjFT2somzP0Pp3KH8T/kqTkWkuw35xAWUu6BOvJbhca5IctTe3Aa3Q4SiEjrxY/F
-	 islL0bVoHaoVfFwDyGQBtq1F22XpQmdmSG9M65X3hxc6yLTlQOJberVkxlqJoHMb1wBef
-	 4617yj1zHQLsmtbyYrP2lMb45ENSSZsnsrNopXQqMrXizljKDc/MCHq9agHaINHr7Ow==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794029387;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=mld7kjkRbHaOrbf5kuHU3Y7anGgqjs03ezIpptqfNZ8=;
+	b=4ihvd5raynej2gfUqrNerxywVKm5Vv2d+0Utktq2Rbf7gppltZnksQQc9a7u4AQeKRc2
+	 8n6m2o/9VIE7sb9LpHfJWoUS5toR8LCyCGkm0KTCFVa4MoDOX28wdw1V4lasGx/4aqcA8
+	 skZKBwp+pqDzAaobLyhbyx3PCwTGi2Aw0eILM0ZkI/uo8/7WA9pdZNobKz7ZCJSo+1aBR
+	 NUzN8AYhGBUrPVf/26sPys/yFsZbIT17+CXG4EXIuWU1P8hieCrHKbp1SpJcr3rCiE4k1
+	 lm4UYwlBFJrFvivjGPquPqsPVwL6DIwntoiLYM98cteFvkqNrAka35HwT9JGNxzcoHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HS5LrA+j;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Qn9Sm9By;
+	arc=none smtp.remote-ip=216.40.44.11
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62FED606A326
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 03:59:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62FED606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE225606D81E;
+	Sat,  7 Nov 2026 05:29:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE225606D81E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HS5LrA+j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794023967;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EAEthflt2t20HJ71ADyhC30eFYFr66TlnXqMxdpZXW0=;
-	b=HS5LrA+j9AnGdEEI6Nt8Jfl1tRwnTpiLvwNu63qt7YkG5GAfKdiuKWplnDR0nmz33Masm1
-	/jmElYIYc9jjm3T3CJzyRiS02MY2GFVsEipOK7cdnEO9NP2luabBglBtGSHAC3ddrl4hHg
-	bRn8kyXhMKJaWAU1JHDZOqIEGtdQIcI=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-306-s6_bW1-nNaeNeuLWb7gmmA-1; Fri,
- 06 Nov 2026 22:59:21 -0500
-X-MC-Unique: s6_bW1-nNaeNeuLWb7gmmA-1
-X-Mimecast-MFC-AGG-ID: s6_bW1-nNaeNeuLWb7gmmA_1794023958
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7913219560AD;
-	Sat,  7 Nov 2026 03:59:17 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B83861800446;
-	Sat,  7 Nov 2026 03:59:14 +0000 (UTC)
-Message-ID: <04c50e9b-954f-4869-a9bd-41b9341bdef8@redhat.com>
-Date: Fri, 6 Nov 2026 22:59:13 -0500
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=Qn9Sm9By
+Received: from omf09.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 92ECA160297;
+	Sat,  7 Nov 2026 05:29:35 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id D5BB820028;
+	Sat,  7 Nov 2026 05:29:29 +0000 (UTC)
+Date: Sat, 7 Nov 2026 00:29:27 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, tglx@kernel.org, mingo@redhat.com,
+ linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
+ longman@redhat.com, bigeasy@linutronix.de, clrkwllms@kernel.org,
+ dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
+ shuah@kernel.org, juri.lelli@redhat.com, linux-rt-devel@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] locking/rtmutex: Stop spinning on the owner when
+ the waiter is woken
+Message-ID: <20261107002927.3cbad7ff@fedora>
+In-Reply-To: <20261106235931.1478800-2-mathieu.desnoyers@efficios.com>
+References: <20261106235931.1478800-1-mathieu.desnoyers@efficios.com>
+	<20261106235931.1478800-2-mathieu.desnoyers@efficios.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,208 +65,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] cpuset: generalize the validate_partition()
- interface
-To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: Chen Ridong <chenridong@huawei.com>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Sashiko <sashiko-bot@kernel.org>, Guopeng Zhang <zhangguopeng@kylinos.cn>,
- Ridong Chen <chenridong@xiaomi.com>
-References: <20261106105538.2915492-1-ridong.chen@linux.dev>
- <20261106105538.2915492-5-ridong.chen@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20261106105538.2915492-5-ridong.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: D5BB820028
+X-Stat-Signature: gfqbz1cxxp9kkah8phjo3oydi9owe8xk
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18lmIEtPfC8g+PJJzjbhI1/k4URfSupTxc=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=mld7kjkRbHaOrbf5kuHU3Y7anGgqjs03ezIpptqfNZ8=; b=Qn9Sm9By+8LQ1gl5vPbqzh1am/KGiw4g9XC4J8hRGZhtBhrgi8a6uAlAKWEHY2GTuz+ecmsb8uFLijexcA4tZ6XoHLX1Vf1yzQuRDeTWvRh5f5Od68/TQxlkcHTzYe0kqvudI8+oFgRozN19sP+ne+bOl55N2xB2jCS4btTW1RA=
+X-HE-Tag: 1794029369-923082
+X-HE-Meta: U2FsdGVkX19jmckBHz2NQ7nIP+uMgyu/7nZb8Opx/+1rtGvWri2KbF8ZAyg6tQe9tq1pvpMN+gEJvU4gM9Uw0hl5zkfVnFXwnuLgXQ1dcEcInCOfY5J48Jhc2JdWWPTk5RPjV6szp0+TTQRGxKpacCSd7vQqSuRyCiZvxybkIlYB7I1NJQqpBpWbRjpn6xnAVDQ0QjbxZrmEm0BhUHs0HlGPGZKIfbzLQL1t+dmFxfQ30QjJYKo3xydd5su4jEqNLBu+UO8hL2dfbcg3SnXzaou92Pl6tnvkFVm3J1Zg0z4TdBH5eKxJyPFC31xrlH9RsgMCNwrogfk5+ye7fsQFLWy2RUEcJk+lg6H3UsTEHurfFJmiZmdjGO6tohwRjHJAVu9MyxsXKtyQxVcGL/tsmTigDbXzkUUs7IgHJXrt/lxhlk/eVntnoRJQvXLLuoEaZIK+F7e3O5ZjymGy76InyQ==
 
-On 11/6/26 5:55 AM, Ridong Chen wrote:
-> From: Chen Ridong <chenridong@huawei.com>
->
-> Refactor validate_partition() to take the parent partition, the new
-> partition root state, the new effective exclusive CPUs and the CPUs to
-> be deleted, instead of a trial cpuset. A NULL parent stands for a
-> remote partition, whose CPUs come from top_cpuset. This makes the
-> interface flexible enough to handle both local and remote partition
-> validation.
->
-> The housekeeping conflict check is folded into validate_partition(). It
-> is skipped when the parent is not a valid partition root, as @cs can't
-> be a valid local partition in that case.
->
-> Use the new interface for local partition enablement in
-> update_parent_effective_cpumask() and in partition_cpus_change(),
-> replacing the open-coded checks there. The order of the checks is now
-> the same for both paths: empty CPUs, housekeeping conflict, then no CPU
-> left for tasks.
->
-> Signed-off-by: Chen Ridong <chenridong@huawei.com>
-> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+On Fri,  6 Nov 2026 18:59:27 -0500
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+
+> The top waiter of an rt_mutex spins while the owner runs,
+> rtmutex_spin_on_owner(), and does not stop when it is woken: its timeout
+> and a signal find it running, set it TASK_RUNNING, and the spin goes on
+> until the owner leaves its CPU or the waiter's own CPU has to
+> reschedule. A PI futex owner is a user task that may run as long as it
+> likes. On v7.4-rc1, in 8-CPU VMs, behind an owner spinning in userspace,
+> a 1ms pthread_mutex_timedlock() returns ETIMEDOUT 126ms to 631ms late on
+> average, 1.4s at most, a SIGUSR1 is handled up to 1.9s late, and a
+> waiter killed with SIGKILL is reaped 0.5s late on average. With
+> PREEMPT_RT the wound of a ww_mutex is missed the same way: two contexts
+> in an ABBA on two CPUs at SCHED_FIFO spin on each other, and the older
+> one gets its second lock after 96ms on average, 0.95s at most.
+> 
+
+The above is very verbose. Are you starting to use AI? ;-)
+
+> Stop spinning once the waiter is woken, where the sleep the spin stands
+> in for would end: rt_mutex_slowlock_block() then sees the timeout, the
+> signal or the wound, as after schedule(). An rtlock waiter is woken out
+> of TASK_RTLOCK_WAIT by the lock handover alone, and spins as before.
+
+OK, because its state is set to TASK_RUNNING the schedule_rtlock() will
+simply return.
+
+> 
+> With this patch the 1ms waits end after 1.01ms on average, a signal is
+> handled within 0.3ms (1.4ms with PREEMPT_RT), and the ww_mutex ABBA
+> resolves in 12us to 33us; a contended PI mutex keeps its throughput.
+> The futex_lock_pi_inherit and test-ww_mutex cases added later in this
+> series catch both.
+> 
+> Fixes: 992caf7f1724 ("locking/rtmutex: Add adaptive spinwait mechanism")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
->   kernel/cgroup/cpuset.c | 112 +++++++++++++++++++----------------------
->   1 file changed, 52 insertions(+), 60 deletions(-)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index a5ab9396eb61..1b0ac4e76ec7 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1434,6 +1434,41 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
->   	return res;
->   }
->   
-> +/**
-> + * validate_partition - Validate a cpuset partition configuration
-> + * @cs: The cpuset to validate
-> + * @parent: Parent partition of @cs, NULL for remote partition
-> + * @new_prs: The proposed new partition root state
-> + * @new_excpus: The new effective exclusive CPUs mask to validate
-> + * @del: exclusive CPUs to be deleted from @cs, can be NULL
-> + *
-> + * The housekeeping check is skipped if @parent is not a valid partition
-> + * root as @cs can't be a valid local partition in that case.
-> + *
-> + * Return: PRS error code (0 if valid, non-zero error code if invalid)
-> + */
-> +static enum prs_errcode validate_partition(struct cpuset *cs,
-> +		struct cpuset *parent, int new_prs,
-> +		struct cpumask *new_excpus, struct cpumask *del)
-> +{
-> +	int parent_prs = parent ? parent->partition_root_state : PRS_ROOT;
-> +
-> +	if (new_prs == PRS_MEMBER)
-> +		return PERR_NONE;
-> +
-> +	if (cpumask_empty(new_excpus))
-> +		return PERR_INVCPUS;
-> +
-> +	if ((parent_prs > 0) &&
-> +	    prstate_housekeeping_conflict(new_prs, parent_prs, new_excpus, del))
-> +		return PERR_HKEEPING;
-> +
-> +	if (tasks_nocpu_error(parent_cs(cs), cs, new_excpus))
-> +		return PERR_NOCPUS;
+>  kernel/locking/rtmutex.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> index 5a9534c715b8..323973be2074 100644
+> --- a/kernel/locking/rtmutex.c
+> +++ b/kernel/locking/rtmutex.c
+> @@ -1516,9 +1516,13 @@ static bool rtmutex_spin_on_owner(struct rt_mutex_base *lock,
+>  		 *  - current is not longer the top waiter
+>  		 *  - current is requested to reschedule (redundant
+>  		 *    for CONFIG_PREEMPT_RCU=y)
+> +		 *  - current is woken, by its timeout, a signal or
+> +		 *    whatever else would end the sleep the spin
+> +		 *    stands in for
+>  		 *  - the VCPU on which owner runs is preempted
+>  		 */
+>  		if (!owner_on_cpu(owner) || need_resched() ||
+> +		    task_is_running(current) ||
 
-For remote partition, the parent should be top_cpuset. I think we should 
-set parent to top_cpuset if NULL and pass it directly to 
-tasks_nocpu_error().
+So the task enters here with its state non-running, even for
+rt_spin_locks, and you break out of the spin if something woke it up.
+Breaking out of the spin with the state as TASK_RUNNING just makes it
+reanalyze the situation and for rt_spin_locks it will put itself back
+to RTLOCK_WAIT and spin again, if the owner hasn't left the CPU.
 
-Other than that, the rests look good to me.
+Makes sense.
 
-Cheers,
-Longman
+Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
 
-> +
-> +	return PERR_NONE;
-> +}
-> +
->   /*
->    * cpuset_update_sd_hk_unlock - Rebuild sched domains, update HK & unlock
->    *
-> @@ -1954,18 +1989,10 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->   	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
->   		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
->   
-> -		/*
-> -		 * Enabling partition root is not allowed if its
-> -		 * effective_xcpus is empty.
-> -		 */
-> -		if (cpumask_empty(tmp->delmask))
-> -			return PERR_INVCPUS;
-> -
-> -		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
-> -			return PERR_HKEEPING;
-> -
-> -		if (nocpu)
-> -			return PERR_NOCPUS;
-> +		part_error = validate_partition(cs, parent, new_prs,
-> +						tmp->delmask, NULL);
-> +		if (part_error)
-> +			return part_error;
->   
->   		/*
->   		 * This function will only be called when all the preliminary
-> @@ -2444,32 +2471,6 @@ static int parse_cpuset_cpulist(const char *buf, struct cpumask *out_mask)
->   	return 0;
->   }
->   
-> -/**
-> - * validate_partition - Validate a cpuset partition configuration
-> - * @cs: The cpuset to validate
-> - * @trialcs: The trial cpuset containing proposed configuration changes
-> - *
-> - * If any validation check fails, the appropriate error code is set in the
-> - * cpuset's prs_err field.
-> - *
-> - * Return: PRS error code (0 if valid, non-zero error code if invalid)
-> - */
-> -static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *trialcs)
-> -{
-> -	struct cpuset *parent = parent_cs(cs);
-> -
-> -	if (cs_is_member(trialcs))
-> -		return PERR_NONE;
-> -
-> -	if (cpumask_empty(trialcs->effective_xcpus))
-> -		return PERR_INVCPUS;
-> -
-> -	if (tasks_nocpu_error(parent, cs, trialcs->effective_xcpus))
-> -		return PERR_NOCPUS;
-> -
-> -	return PERR_NONE;
-> -}
-> -
->   /**
->    * partition_cpus_change - Handle partition state changes due to CPU mask updates
->    * @cs: The target cpuset being modified
-> @@ -2483,33 +2484,24 @@ static void partition_cpus_change(struct cpuset *cs, struct cpuset *trialcs,
->   				  struct tmpmasks *tmp)
->   {
->   	enum prs_errcode prs_err;
-> -	int parent_prs = is_remote_partition(cs)
-> -		       ? PRS_ROOT : parent_cs(cs)->partition_root_state;
-> +	struct cpuset *parent = is_remote_partition(cs) ? NULL : parent_cs(cs);
->   
->   	if (cs_is_member(cs))
->   		return;
->   
-> -	prs_err = validate_partition(cs, trialcs);
-> -	if (!prs_err && (parent_prs > 0) &&
-> -	    !cpumask_empty(trialcs->effective_xcpus)) {
-> -		int prs = cs->partition_root_state;
-> -
-> -		/*
-> -		 * Check for housekeeping conflict by passing the whole
-> -		 * effective_xcpus as well as those CPUs that are to be
-> -		 * removed from cs as delmask.
-> -		 */
-> -		if (prs > 0)
-> -			cpumask_andnot(tmp->delmask, cs->effective_xcpus,
-> -				       trialcs->effective_xcpus);
-> -		else
-> -			cpumask_clear(tmp->delmask);
-> -
-> -		if (prstate_housekeeping_conflict(prs, parent_prs,
-> -						  trialcs->effective_xcpus, tmp->delmask))
-> -			prs_err = PERR_HKEEPING;
-> -	}
-> +	/*
-> +	 * Check for housekeeping conflict by passing the whole
-> +	 * effective_xcpus as well as those CPUs that are to be
-> +	 * removed from cs as delmask.
-> +	 */
-> +	if (is_partition_valid(cs))
-> +		cpumask_andnot(tmp->delmask, cs->effective_xcpus,
-> +			       trialcs->effective_xcpus);
-> +	else
-> +		cpumask_clear(tmp->delmask);
->   
-> +	prs_err = validate_partition(cs, parent, trialcs->partition_root_state,
-> +				     trialcs->effective_xcpus, tmp->delmask);
->   	if (prs_err) {
->   		WRITE_ONCE(cs->prs_err, prs_err);
->   		trialcs->prs_err = prs_err;
+-- Steve
+
+
+>  		    !data_race(rt_mutex_waiter_is_top_waiter(lock, waiter))) {
+>  			res = false;
+>  			break;
 
