@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794015902;
-	b=4tQCSvK4zzF6vIxVEZXOTxC+tmvdu/jcnTe1PNAtWvVT7HgFNXdNkL6R9HQpSt/TaEqD
-	 aKvPka3cl1KTT5zHmQkpG97ZKnWeRooHsAqRave381morq95iEC/ybQ3/5HbvM0BkMLv9
-	 Qb6KCGJRTvtvI8+2qYIcWAgCAc37bmq0ZiPrbtJ1bZ6V+qR7t0eIdrSrKb5IDhCBY5gvd
-	 eJT8hS7h9+EQ1oNTMD9ZqyaTrMIFd6TvRaWmv2i9mLufSOSdC1MBdsk5Q1rp7fpRLFtqB
-	 RUOORUgyWOPk5KOAHR7YJcOILOT1+GsNpB+m9FNlUcNwFKdHeB//b8RethX0uR8Kb5w==
+	t=1794015908;
+	b=BYqydkgWbQcyapPLFrDhtcyRB0EfybBGcr554syNn9XdUPZgj+zI2XXWAWxAtCsIuAcn
+	 2yxdlQYOqz4K5xL8gqAyCWZPCHjQQI2uR6VVYLfaNZ+UQKEpc/U5LuZC61jKP+kMoEMF6
+	 yHu6UdKr+t2L2Ukop7ia6OTdI/GQIjnXEeiREAarQMKEPHsdIZEo4bo++Wcv3iArpo0RV
+	 mEiV68FyuPgr857IiMFlpLmJg7T2L2GDRZiT60AC8t9ieRadRciv7nxiPXc/hMyjgVRZs
+	 osbkvGrQvOpMI0E1YLgr4Efwa+61HxYOG8NPadwAzTGeJDGlZarGcYq61rcDXo61lwg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794015902;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794015908;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ufKD3yo0IU8O9h+5AOdnMqxb+tYGqKSNZQWh8YpfE7s=;
-	b=5E8MqIykmcv9gXw1p4pxn2STGWSc7RsTVCzMiT7/XIHRYeEQCfYEUem2oJyN4eQYXUWR
-	 ejy+doP1s/zCdts+gGyTyTKCVcc0nnr5Zcf5yAzXW6iPy7FkIs4kSN96JUIBBAK+aw9+k
-	 +dh2G8q+wQB0F45+fBU3CEbuj3V96L013pfnCeU6U0NvTHq9mUe0xCjldleJ7mmUeMBAM
-	 qfBUavmd+tq8ejAg0clAtCOP9ASIqEb8xtq64PJpA66bhGeUEwiHuyduu8c0pUmXwys4y
-	 EWPJjSufPbv05sWO3MXDDnxc3nMxSkIDFOGHUcI5ECZpTo3zBHPLqi9ytdGX0QazxFw==
+	bh=HpDcG3Am8kwsk/tY8hxTPsdCTtQhfJ4hh5SBJNUS2/c=;
+	b=rZqOtarcs7gRvZe1ZpM927QIUutxSfhnLJW9fjQm/fjJDTjIRSIuejTPeSQZDcccml6z
+	 lLdcRdESg5N5YCpnat7E8DYdQ8iYzmvwzMo6WcGRWLZ0zJ9ONJsEiEqjL38OrcNhMM3fN
+	 Vwyi0vnOqSsm/3OIvXWdK4Fo48Vug4TgJ8aW+ECieH8liCcvlpuYuWr0YCvzbYx5a1QDm
+	 J8qXKvKE+Km8G1N5L7fTfrmeZAlMVZhovRY1llh3SAEjr92Cq93iVy3i/aUoa7Bzqs+DZ
+	 T7PmVcFuuIj2ysAIyUr1gL+xumx0Co2K7lwskSwhYf8cn2x/IqLV9bPlCKd1ieCvKQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=m0KNl5gN;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=eKkcQ11K;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BDE7606D813;
-	Sat,  7 Nov 2026 01:45:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5BDE7606D813
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D166082BD9;
+	Sat,  7 Nov 2026 01:45:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6D166082BD9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=m0KNl5gN
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=eKkcQ11K
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794015900;
-	bh=ufKD3yo0IU8O9h+5AOdnMqxb+tYGqKSNZQWh8YpfE7s=;
+	s=smtpout1; t=1794015907;
+	bh=HpDcG3Am8kwsk/tY8hxTPsdCTtQhfJ4hh5SBJNUS2/c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=m0KNl5gNgQVilcQ6DGQivWxnzyaz3mViWGDftwT4aV0FlFigFFs0yoD7YuAcZEOrL
-	 rtdrgJuOnxS5jJwwTOjvw+eA9xIK7fRNOA5G3bq3z2U6Ho2kKfgHHStCHNE5UyOoM2
-	 wLr+rEC9hP8ZnQKMvNAnykBz/rilxxMoOGj1KgE2lli6hi6IsS3j7MW208MjdGJnnc
-	 i35nWn09f2/NPExXpRxHTESHhWVD5U/gLMF/Vwue5878881XAtVLRKfPC5vzImJRll
-	 n2IsLUX8Hj06MB0ZIIZpZvOG/Xj88Bc+cSoKmGXgZo/Fhzy9pGCAG23qon8DweWPr6
-	 Nmk3eu8dfkSmQ==
+	b=eKkcQ11KsO5GQ9oTQVMJlPsFfJyPepSkcJwf5uG9c/JjRXlSCEWtW961XF7jWFbAK
+	 dH/PAQgEiONQYIivqOHsgBAwOi737RoL3EEFExWsef6BYmNtmF3m34l5RGJnvVh5VP
+	 0Qkvy3r9RepY4BRmg8M+sPJJhIvftHBo5QnZE6OmOkMmHOCElNoREaqv33j8vjfQhY
+	 R4hW3E7lHVKUSajcBEwy+PzXKvNbKOqL7AI77q8hAV06mzDV9eeb2CeaOtQ07CO76c
+	 x4P6wRFnHd4XDPtLf8uxS6d0l2buqqJvpNvqp3tk6Gyo5YuhQYB7sonf80sH6QF7T/
+	 FPR8WYA+28MPQ==
 Received: from thinkos.internal.efficios.com (unknown [64.58.40.251])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLzPm0j2vzLgS;
-	Fri, 06 Nov 2026 20:45:00 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLzPt5yMHzMR8;
+	Fri, 06 Nov 2026 20:45:06 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: juri.lelli@redhat.com,
 	peterz@infradead.org,
@@ -80,9 +80,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: [PATCH v4 05/26] sched/deadline: Do not divide by zero active CPUs of a root domain
-Date: Fri,  6 Nov 2026 20:44:30 -0500
-Message-Id: <20261107014451.1487825-6-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v4 21/26] sched/deadline: Cancel the replenishment timer with the parameters
+Date: Fri,  6 Nov 2026 20:44:46 -0500
+Message-Id: <20261107014451.1487825-22-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261107014451.1487825-1-mathieu.desnoyers@efficios.com>
 References: <20261107014451.1487825-1-mathieu.desnoyers@efficios.com>
@@ -97,106 +97,73 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-__dl_sub() and __dl_add() spread a change of a root domain's total_bw
-over the extra_bw of its active CPUs, dividing it by their number,
-dl_bw_cpus(). That number is 0 for a root domain whose CPUs all went
-offline, such as the default root domain, which holds the offline CPUs:
-the division traps.
+The replenishment timer of a throttled task is armed for its next
+period, which can come after its 0-lag time: a task that yielded keeps
+runtime, and a constrained-deadline task that overruns by little
+reaches its 0-lag time within the same period. Leaving SCHED_DEADLINE,
+such a task has its parameters cleared at the 0-lag time with that
+timer still armed.
 
-A debugfs write of a fair server's runtime or period divides there while
-its CPU goes offline or comes online: the CPU sits in the default root
-domain from the rebuild in sched_cpu_deactivate() until it is offline,
-and from its online until sched_cpu_activate(), and
-commit 4043f5498416 ("sched/deadline: Reject debugfs dl_server writes
-for offline CPUs") refuses the write only once the CPU is offline. A
-write that leaves the server's bandwidth as it is passes admission
-there. Writing a fair server's own runtime back in a loop while its CPU
-goes offline and online oopses on the first round, in 8-CPU VMs of
-v7.4-rc1:
+Back in the class before it fires, the task throttles again, and
+start_dl_timer() leaves the armed timer where it is:
 
-  Oops: divide error: 0000 [#1] SMP NOPTI
-  RIP: 0010:dl_server_apply_params+0x335/0x380
-  Call Trace:
-   sched_server_write_common.isra.0+0x1c0/0x260
-   full_proxy_write+0x58/0x90
-   vfs_write+0xcb/0x550
+	if (!hrtimer_is_queued(timer)) {
+		if (!dl_server(dl_se))
+			get_task_struct(dl_task_of(dl_se));
+		hrtimer_start(timer, act, HRTIMER_MODE_ABS_HARD);
+	}
 
-inactive_task_timer() can divide too, found by reading: it releases the
-bandwidth of a task that left SCHED_DEADLINE, or died, from the root
-domain of its CPU, which may have gone offline since. With admission
-control off, so can sched_setattr(SCHED_DEADLINE) of a task asleep on an
-offline CPU.
+so the replenishment comes at the period of the reservation the task
+left: too early, which hands it runtime it has not earned, or up to a
+period too late.
 
-Refuse the write while the runqueue is offline, as once the CPU is: the
-server's bandwidth is not counted then, and the rebuild at the CPU's
-activation counts what the server has. rq->online is set under the
-runqueue lock by the attach to a root domain that counts the CPU, and
-cleared before the rebuild that drops it, where cpu_active() is set
-before the attach and would be read without cpus_read_lock(). With no
-active CPU there is no extra_bw to update either: change total_bw alone,
-for the paths that have no write to refuse. 20 rounds of the reproducer
-leave no warning then, its writes refused with EBUSY in the window.
+Commit a649f237db18 ("sched,dl: Fix sched class hopping CBS hole") left
+that timer armed on purpose, as what reset a task that stayed out of
+the class. The 0-lag time took that over and left the timer behind:
+cancel it where the parameters go, and where switched_from_dl()
+releases the bandwidth of a task that leaves asleep past its 0-lag
+time, a constrained task that overran as it blocked having the timer
+armed there too.
 
-Fixes: daec57983670 ("sched/deadline: Reclaim bandwidth not used by dl tasks")
+Fixes: 209a0cbda7a0 ("sched/deadline: Improve the tracking of active utilization")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- kernel/sched/deadline.c | 11 +++++++++--
- kernel/sched/debug.c    |  9 ++++++++-
- 2 files changed, 17 insertions(+), 3 deletions(-)
+ kernel/sched/deadline.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index dfae08625342..00983487bff3 100644
+index ed951246e3d2..a0b05ff8c6da 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -189,18 +189,25 @@ void __dl_update(struct dl_bw *dl_b, s64 bw)
- 	}
- }
- 
-+/*
-+ * @cpus is the number of active CPUs of the root domain, whose extra_bw
-+ * shares the change: none once they all went offline, and total_bw alone
-+ * changes then.
-+ */
- static inline
- void __dl_sub(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
- {
- 	dl_b->total_bw -= tsk_bw;
--	__dl_update(dl_b, (s32)tsk_bw / cpus);
-+	if (cpus)
-+		__dl_update(dl_b, (s32)tsk_bw / cpus);
- }
- 
- static inline
- void __dl_add(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
- {
- 	dl_b->total_bw += tsk_bw;
--	__dl_update(dl_b, -((s32)tsk_bw / cpus));
-+	if (cpus)
-+		__dl_update(dl_b, -((s32)tsk_bw / cpus));
- }
- 
- static inline bool
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index e6a3b516c703..5f8303630296 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -410,7 +410,14 @@ static ssize_t sched_server_write_common(struct file *filp, const char __user *u
- 			return  -EINVAL;
+@@ -607,6 +607,7 @@ static void task_non_contending(struct sched_dl_entity *dl_se, bool dl_task)
+ 				if (dl_task && READ_ONCE(p->__state) == TASK_DEAD)
+ 					sub_rq_bw(dl_se, &rq->dl);
+ 				dl_task_release_bw(p);
++				cancel_replenish_timer(dl_se);
+ 				__dl_clear_params(dl_se);
+ 			}
+ 		}
+@@ -2375,6 +2376,7 @@ static enum hrtimer_restart inactive_task_timer(struct hrtimer *timer)
  		}
  
--		if (!cpu_online(cpu_of(rq)))
-+		/*
-+		 * Nor while its runqueue is offline, the CPU going offline or
-+		 * coming online: the server's bandwidth is not counted in a
-+		 * root domain then, which has no active CPU to spread a
-+		 * change over. rq->online follows the attach to a root domain
-+		 * under this lock; cpu_active() is set before it.
-+		 */
-+		if (!rq->online)
- 			return -EBUSY;
+ 		dl_task_release_bw(p);
++		cancel_replenish_timer(dl_se);
+ 		__dl_clear_params(dl_se);
  
- 		update_rq_clock(rq);
+ 		goto unlock;
+@@ -4009,8 +4011,10 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+ 		 * dl_non_contending cleared under it by migrate_task_rq_dl():
+ 		 * it finds !dl_task(p).
+ 		 */
+-		if (released)
++		if (released) {
++			cancel_replenish_timer(&p->dl);
+ 			__dl_clear_params(&p->dl);
++		}
+ 	}
+ 
+ 	/*
 -- 
 2.47.3
 
