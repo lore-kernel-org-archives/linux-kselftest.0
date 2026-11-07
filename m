@@ -1,100 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794077276;
-	b=46Egdd71YXqJzb8y54svgnrzdTTwzJ60ZZz7EevYKSwzDSUudqTCwtoq5twSLVxrkH5f
-	 XYECmIJyTSFu+Y/e+RAPFgOqp0Tq12N97AIJUNm9F3kbh4tLKkaoL+FgXxlsZdwpF44ws
-	 vRofCPN51gG5qLcRoORUDy360e0xm8HyYUim+E+tlze5BWKfZSGWnBVJVK2lyFgYvp/CK
-	 LmSkT3om3TXXtOo6Iz5XKvRP0KDzmKGTdMk43Id2oFxRe8mYnrzgD5ibGxwHccgV9seHD
-	 chr0HezUzWaI0ASJStQ7CENRXB3TzK50b0/O2DUh2k0ivjDyyTvMDs5cMVMWnd7NlrQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794077276;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794078935;
+	b=J5fC+dlMiXdxN3LU9Bmrc2TCSNewoxCg6lQRhc1x9mwk18JW9pQ2UcYzhNQPARmZ3i/n
+	 mSJuzxbV9HoVHvrhNMKINboNQkdi+/tXY8Dmvcw5+/OKMM8yPxtalGf++dfvPkpvIIKCZ
+	 jD/Q7gZ0y74EyOTzUCrOyhvNkfNpzwDaJU2m7eDADl7w0CVo5svZsJuA4vjN6zptrLHy1
+	 BHMwWCANXqTiB8BOALV5dHXOAhQ9bBJlRWBc92qpB9s/82rnja/jPhwGhQ/9zAxgOPmFl
+	 TBEQ418AezCvetPOlITuMrB3adPSq8f0nJZLH5NAmz1Y7mIVv6gyZWRTRWkhQtUBJMw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794078935;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
-	b=mq7QuH1kZnX1U2dbwjs7m5W3z05uCACPC1ByZOU3T/CSbQjM/vmg/V1PQe+MsR287XEI
-	 /2hpROvMkLuDp1Wq9hTlhCHhkkobyczALxFi1rj3GOnwCp8ZmtwVO43pxyEvmvJ04JaaF
-	 65BN7jxehdqspnZpzTKDvar3bpr+phDuFv1oalKBvBm6L1TYWo26pHPHl70JArcR94RzB
-	 zo25RfbQSo3XkMnG6qnfr/hcEoZZT5+Q3hSda7UUuFD5HzKyn7KT9FpaJRjEYtoG8gmAh
-	 SVSbWR9pxTBBfgyJlxndmsT0SMiisEEqvsdsiznseOAIMWPZCFsXvGCG67bjbTYUn8A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=amacapital.net;
-	spf=pass smtp.mailfrom=amacapital.net;
-	dkim=pass header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=jDsWkgNe;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.48
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=mafEGEdrVUw8NHEcO8SJv6Z5WTJzza2tDmHJlOhN/14=;
+	b=FFsX004U6Ys81QrKSwFvF+afIZzJF0nYmbFPH7iDTfdpsfSNAUpJdMYcc941APGl4oyn
+	 hXSO5tuiqgwM+FZWOyc/xUDeInZSvffODOfWf4pkPE01oqIkHkMeief7D7vxnYKworMSa
+	 MzaJfGR6ya1UAoTuNdNWNcY34LOd8Mlyg/qsrtXTlUT9cru8uEgQ52uk442o3+hri8n8e
+	 OmSZK8ot5QjKRPNxKuu+KQOCUWfBDtNfnqi7r/o6UAA0cAguiR7mOARYblrTz1MbGNHFN
+	 1xN647s6Kj+K6xoVieHemBavCW0xt/aMttoZmt39MAJFvd58c5MIRY8Qf1F1koTcbuQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="dC6J/aT7";
+	arc=none smtp.remote-ip=209.85.214.197
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AB3606A32F
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 18:47:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0AB3606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88FF606A32C
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 19:15:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D88FF606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amacapital-net.20260707.gappssmtp.com header.i=@amacapital-net.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=jDsWkgNe
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5be3ed646a5so1981461e87.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 10:47:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794077274; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GkkquNGnlZbG1VHwIlWYFOb1aqaobhN2tl8UUQabkY23LyHh5wE/X64ppjtHFydo3d
-         8XrMufCnnW3756bR74UAuLCuwZvwFEYSp6W8KyOMqhDm9KWhf1oBYnVB5+1rVQ4RuvBB
-         X4AXS947lG/+7o2dx9h5VBsEsiIQE2/i+Jxw1WaCI84uvJRZXF7PnJ27f3Ux2rrv9tBT
-         lOOHetJk+Qf48ocaaMKZBZUHVQ0/GngXmKbuvFse1OzsZ6lVvCWRhHWbT/MiAL282gGE
-         oihPILJgjBa4NX1dn2/0IlIvXSlmN7J43bbeFW/08w1JKikf9gaiWulUoRwuYZkMSsae
-         BvVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
-        fh=nDWdq2bmlHx30tbo81rvRZi/AA8EyYIpFfFa3Q09DY8=;
-        b=ctZJAHrMYLx0WK7yN1bcH44u1bR++TmDSsmQfuYbJfKwcVred1P3loYBw/XeIAbda+
-         4xl68plYZS4/cGHT9lPsIbCODHWLyNNj6XMU6EYidmVv9oqIwyuJ9v/BYIuhXSYnunXn
-         KVAj4dweEUE+Qav4U8resDqKxAi6jKq/UUSBEfE7HMJ9Fwm1CmOJ1i/nQi3eD69kHpUh
-         L714162SEkAp0J9bM6oPYsuQbBorLD2kXR4q/2n/xVqj3mbBxF+ZLkPLHYhZpOxQTgaP
-         05dm3C/jxPPIlb4XFf7DCT5hCbMq+WwhL2htA74n/Kxt+oFppcgqYLBFRL1eXmRBrjpe
-         pIuA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=dC6J/aT7
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ed08b07232so16058355ad.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 11:15:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20260707.gappssmtp.com; s=20260707; t=1794077274; x=1794682074; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
-        b=jDsWkgNeFsbdQ7qKqbpHSGOmDkfyI4OzDS2pJc6+Irn0QHpBxG9wPbmRTDmNnDdzS5
-         db8t7KSVAGcHE/QtRbNhFDCWnX4uqUr1mEeZuLglr9YUDK4k94+gZZ0e2v5XDqaLBMAu
-         GF2mKtLq3tPj9IBZGN3w1gGTAF0jFrsZMFCKcXAmKrirJiOIjEcuysNg1l24IqICP4gV
-         r2UQCTmuYiVAi+q/1GU8UDVYE1+IZodom/D3RIz9GtMMMdasHTqHTXmlylMP0IcXnVJO
-         5lWPTzglrmuISOXtwRoPqefa1QyXnIQk56sGTTb2Rf1nGsDNJzcZ5BPRF2XDpKcZZ3TD
-         g2UA==
+        d=google.com; s=20260707; t=1794078934; x=1794683734; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mafEGEdrVUw8NHEcO8SJv6Z5WTJzza2tDmHJlOhN/14=;
+        b=dC6J/aT7bfCHFAgBwL9fqX1e+XMB4+JBfvLSPEI8QMnQp2rB5ihlxHSZcZ4lG1siSt
+         at8n0Fcu7d6uRniKJQJ6R60b0eUq+EL+T2S578q5VnXp2yUGL8wSDnrO4jvcj/c08q8D
+         74EkV0l2nM3hyeCj16HmTGFs2gJ6fG0Sx1o2NzZwVtCkHSzSpTRt31QoQzMi10woPj2R
+         sVshTgt+yHiuT3OYIAtd+hNBnscKhi7yyFEa0DJiWHLjPbaeiwbdKXtAcsYATXrUkrng
+         uGqELtm8cv1gB+KeW64o7KjpCnL0U9avz5K4guIoqjIFrBb9VFiS+/62xlEirGpyGuOH
+         VXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794077274; x=1794682074;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1794078934; x=1794683734;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DWojXY4nDMT9rtwg6h/b477SwUuLPC3ITyeb/WPBYqc=;
-        b=SP1LIpXv1QgPAJtaDd56K/fEW1OI0Upsx5S20RLbFuuIc82QtxHwpraW9iufDl1LVA
-         3LxGFluinAbfOnieIzKCOM/5VSi1Zr6MYtcg5zRq6j0MNz2WcgpVTqGygok2PDPtLRix
-         +ZGBI0uwheeCMX04vj3rEzymNKNAj7fHFdQ6xkeRBj7h9BLiVsrHJ7nGN2Kl+fUexIDF
-         YMzD3vSu98B7Ogn3D84aI98FgjTQFYXxpd6qv4KuICi6vSb7lT165BbVr7EMPjTFBpcq
-         30eTkdFTD9qkZwBAP6pvjCJJkA5gPuK8v+DmLLumy4JdhE5Ee90OTxX96sYPzsPRf5k7
-         uCxQ==
-X-Forwarded-Encrypted: i=1; AL+hErEwL+Sgq4u9YI7JEp8fy2wAvwEuSKDRYBLisMjHP7Vif26U8YwHocG/ayoZEcBVXA4pjlBdzkXrUcXZWkt8WNw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8o1FHLLI7BAjN97vOQlitAPmbKcPuxJYuoSRhaQcQ6wbbJjMEr
-	smFzuBTpnlJLEggNU45rnFen370DQ/oE3B/oEpHP+qyEpz5z5ownwHouMO2Al0Iw52S/VZ1jbqh
-	HLXCoCSJrqrgZCb1kSlb8GS1MvtGJz5SI+OPaBCP8
-X-Gm-Gg: AYBFou2k9fbF4lXXhhsWCVwMqscDiulhkqFOsgRRwRUdMt5nJhiRppr9owX1vbk4jt7
-	uH5nPpFqLTkvcFt3mLYnSYmhYEyo8wxWqRRsn5zp6cFvQ6uBCBzk3bzeUrb/Qi8MTui4X8G4f7L
-	+5bOVL4ZGLqoOUkhnPWxcCKSzK+BfU6k4RbRCKDNu6L1R6fWKvCtwJHzKPnK9f5PB1+WkPervp9
-	E57GqV34jkBUTtAtEF23EV6YgwPLuNMCNuxjkCWfMCJfriEUkQk6PiadZFAxqMYS/1qqDfC4OFc
-	YlARDSGR9e0DGaLV92X+Bog49XvVi2OOHjT10bo0+yYqHuMDqxoOMalyTBMr/EAaHDR0evVmpLz
-	KGM8nBGo/2D2anDZIce0Uk1inzayQpV5igw==
-X-Received: by 2002:a05:6512:291a:b0:5c0:ca1:9dd7 with SMTP id
- 2adb3069b0e04-5c00ca19f2bmr594320e87.35.1794077274068; Sat, 07 Nov 2026
- 10:47:54 -0800 (PST)
+        bh=mafEGEdrVUw8NHEcO8SJv6Z5WTJzza2tDmHJlOhN/14=;
+        b=tkqL3LOdw0uf62FrbOVL/cI5bvREM6spWvLeuQTJ85mh0zwYSnwPQM7rX7d8F23bvc
+         3ufLitTGXqqTdtZZWtp02jhtDSUa+U3U/JhkUtNMyEw9jyuZQXpvFvW6xlmMqGLggh1i
+         te7jt/wjDymzX/MXAKwFCf5UMujMgbf4zFqfREC0o0JAOIWxcl3V3hKvxiLNh+Q6haak
+         CKH8tEizyX6DXm49tKkDPtAoOYpMtwtxWI4ZC3Q8tcWHNFWUVzx1ckC4Z/0+JycQCR5D
+         zKwCnaI80J+yBk8KSUgoD7b5ygxSb+6S0v2822YYvpcZRMl0yzot0l9HIk6wh+glhOAN
+         eD7Q==
+X-Forwarded-Encrypted: i=1; AL+hErG4LbnDyhcNLucZ5zwBG4H5aBXPtOLlzsVpZ0Bc7oNYSoLn6qB7hNmeAfQmFyV9wBrtRa7UUn/27LtdLdKm770=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/nVmSh13XsqXQZ5du5sqaEmPOKkk+tF9AsI75EwE6xJEwrMzrJ
+	OYd3XL1eDcYCOjKV7DeQtSys11q7oxJEDDRdWUzxeealRpzB0XdqQAohJe4wjl3PfTBj+55lv2/
+	AoGPfyw==
+X-Received: from plsl4.prod.google.com ([2002:a17:903:2444:b0:2eb:6048:4647])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:4b28:b0:2ed:2e3a:1faf
+ with SMTP id d9443c01a7336-2ed40c937e4mr67561865ad.47.1794078933562; Sat, 07
+ Nov 2026 11:15:33 -0800 (PST)
+Date: Sat, 7 Nov 2026 19:15:33 +0000
+In-Reply-To: <CADVnQy=AHpy6UoiAFopRUmHLNv6Arw07PysXVijiR=qERuzeww@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,88 +79,139 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
- <20261106-befreien-addieren-eislauf-e09212803534@brauner>
-In-Reply-To: <20261106-befreien-addieren-eislauf-e09212803534@brauner>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Sat, 7 Nov 2026 10:47:41 -0800
-X-Gm-Features: AclHuK9s0dgg3FDVqp4WbjYQnA0hebDpEpxOAgz_VjLjRP_HfRjeTpRH9DX274k
-Message-ID: <CALCETrWa1SBLcb5oWjqjgzZvKvCoHjmYFk=Lf5ytEM9uqm5jYA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
- opt-in netns loopback
-To: Christian Brauner <brauner@kernel.org>
-Cc: "Hallgrimur H. Gunnarsson" <halg@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
-	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Jann Horn <jannh@google.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	KP Singh <kpsingh@kernel.org>, Jonathan Calmels <jcalmels@3xx0.net>, 
-	Casey Schaufler <casey@schaufler-ca.com>, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
-	containers@lists.linux.dev, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+Mime-Version: 1.0
+References: <20261103-mtu-probing-series-v1-0-a2809e725aaa@gmail.com>
+ <20261103-mtu-probing-series-v1-1-a2809e725aaa@gmail.com> <CADVnQy=AHpy6UoiAFopRUmHLNv6Arw07PysXVijiR=qERuzeww@mail.gmail.com>
+Message-ID: <au9zxblIQx7OF_gx@google.com>
+Subject: Re: [PATCH net-next 1/4] tcp: sync MSS after enabling MTU probing on
+ passive connections
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Neal Cardwell <ncardwell@google.com>
+Cc: echoowall@gmail.com, horms@kernel.org, edumazet@kernel.org, 
+	kuba@kernel.org, shuah@kernel.org, davem@davemloft.net, pabeni@redhat.com, 
+	netdev@vger.kernel.org, panweiping3@gmail.com, 
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 6, 2026 at 5:13=E2=80=AFAM Christian Brauner <brauner@kernel.or=
-g> wrote:
->
-> On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
-> > The whole unshare/clone flag situation is getting out of hand, IMO.
-> > And this new thing makes logical sense but is really about reducing
-> > exposure.
+On Sat, 07 Nov 2026 12:53:36 -0500, Neal Cardwell wrote:
+> On Tue, Nov 3, 2026 at 2:09=E2=80=AFAM Yongjian Wang via B4 Relay
+> <devnull+echoowall.gmail.com@kernel.org> wrote:
 > >
-> > Perhaps we should instead have a small list associated with a userns
-> > (extensible in the future) of things that the ns's admin (i.e. whoever
-> > has CAP_SYS_ADMIN relative to the ns) may do.  That list could
-> > include:
+> > From: Yongjian Wang <echoowall@gmail.com>
 > >
-> > - Create loopback with sensible defaults for ipv4 and/or ipv6 (i see
-> > no obvious reason to separate them)
-> > - Create tun/tap interfaces in that ns (and attach them, etc)
+> > tcp_v4_syn_recv_sock() and tcp_v6_syn_recv_sock() call tcp_sync_mss()
+> > before MTU probing is enabled, and tcp_init_transfer() enables it later
+> > without syncing the MSS again.
 > >
-> > And add a very simple new API to do these things.  Actually, the
->
-> We've had this idea in the past and I think it is reasonable. I had
-> always thought that we should expose a system call to create empty
-> namespaces ot any type. Usually I'd be excited about that but I think
-> that point is a bit moot and I'd really like see whether we can turn
-> cells (or whatever other name) into a first class api.
->
-> The problem I have with the patchset as written is that adds a lot of
-> moving parts. And yes, I find the CLONE_* and UNSHARE_* flags plus
-> sysctl to be suboptimal as well.
->
-> So the TL;DR is that CAP_NET_ADMIN + userns =3D
-> CAP_NET_PRIVILEGE_ESCALATION 10+ years later. And this patchset wants to
-> put it back on a leash.
->
-> So why isn't an aggressively stupid solution to this problem to split a
-> new capability out of CAP_NET_ADMIN so it covers the absolute minimal
-> set of things that should be allowed instead of doing effectively the
-> same thing but split over multiple apis?
+> > With net.ipv4.tcp_mtu_probing=3D2, a passive connection therefore start=
+s
+> > at the full MSS instead of tcp_base_mss as documented, while an active
+> > connection starts at tcp_base_mss. This has two visible effects, shown
+> > here with tcp_base_mss=3D1024:
+> >
+> >  - The MSS drops when the first probe is acknowledged, from 1460 to 124=
+2,
+> >    although that probe has just shown the path can carry more.
+> >
+> >  - On a black hole path the MSS never tries tcp_base_mss. It goes from
+> >    1460 straight to 512, since MTU probing is already enabled when blac=
+k
+> >    hole detection triggers.
+> >
+> > Sync the MSS right after tcp_mtup_init(). tcp_sync_mss() only applies
+> > search_low when MTU probing is enabled, so the other tcp_mtu_probing
+> > values keep their behaviour.
+> >
+> > The Fixes commit kept tcp_mtup_init() in a single place on purpose, so
+> > sync the MSS next to it instead of moving it back into the
+> > syn_recv_sock() handlers.
+> >
+> > Fixes: 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
+> > Signed-off-by: Yongjian Wang <echoowall@gmail.com>
+> > ---
+> >  net/ipv4/tcp_input.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> > index e1f2d9765..c13f005b2 100644
+> > --- a/net/ipv4/tcp_input.c
+> > +++ b/net/ipv4/tcp_input.c
+> > @@ -6760,6 +6760,7 @@ void tcp_init_transfer(struct sock *sk, int bpf_o=
+p, struct sk_buff *skb)
+> >         struct tcp_sock *tp =3D tcp_sk(sk);
+> >
+> >         tcp_mtup_init(sk);
+> > +       tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
+> >         icsk->icsk_af_ops->rebuild_header(sk);
+> >         tcp_init_metrics(sk);
+> >
+> >
+> > --
+>=20
+> Functionally this seems correct. But I'm wondering about the
+> performance impact, and whether there is a way to achieve this without
+> adding this call to the code path for every connection establishment?
+>=20
+> Eric and Kuniyuki, WDYT?
 
-Because we don't actually have a clean way to make a list of
-privileges that are, in theory, harmless but are hazardous from an
-attack surface perspective and assign them only to tasks that ought to
-have them.
+Looking at history, initially it seems we properly called
+tcp_mtup_init() right before tcp_sync_mss() in ->syn_recv_sock(),
+but 4d83e1773031 removed them.
 
-But maybe we should invent such a thing.  It would be very, very nice.
+The dup tcp_mtup_init() mentioned in the commit is the one in
+tcp_init_transfer() today.
 
-Other than that, I agree with you.
+Then, 27204aaa9dc6 moved only tcp_mtup_init() to tcp_init_transfer()
+without tcp_sync_mss().
 
->
-> Anything that is reasonably advanced should not be the kernel's
-> responsibility to delegate. I really think the old privilege model where
-> the kernel grants control over a whole subsystem is inherently flawed
-> and is much better replaced if you have the means to let userspace
-> services grant and delegate resources.
+The dup exists in tcp_rcv_state_process() from day 0 (5d424d5a674f),
+and 168a8f58059a copy-and-pasted the unnecessary tcp_mtup_init().
 
+So, 4d83e1773031 removed the correct one.
 
+Instead of restoring the 2nd set of calls, I think we should
+revert 4d83e1773031 and remove tcp_mtup_init() in tcp_init_transfer().
 
---=20
-Andy Lutomirski
-AMA Capital Management, LLC
+---8<---
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index e1f2d9765f81..8d009c0d9359 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -6759,7 +6759,6 @@ void tcp_init_transfer(struct sock *sk, int bpf_op, s=
+truct sk_buff *skb)
+ 	struct inet_connection_sock *icsk =3D inet_csk(sk);
+ 	struct tcp_sock *tp =3D tcp_sk(sk);
+=20
+-	tcp_mtup_init(sk);
+ 	icsk->icsk_af_ops->rebuild_header(sk);
+ 	tcp_init_metrics(sk);
+=20
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index a7f9242f1e42..579a88472abf 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -1740,6 +1740,7 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *=
+sk, struct sk_buff *skb,
+=20
+ 	tcp_ca_openreq_child(newsk, dst);
+=20
++	tcp_mtup_init(newsk);
+ 	tcp_sync_mss(newsk, dst4_mtu(dst));
+ 	newtp->advmss =3D tcp_mss_clamp(tcp_sk(sk), tcp_dst_advmss(dst));
+=20
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index e006a30360ea..c465fd97baec 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -1489,6 +1489,7 @@ static struct sock *tcp_v6_syn_recv_sock(const struct=
+ sock *sk, struct sk_buff *
+=20
+ 	tcp_ca_openreq_child(newsk, dst);
+=20
++	tcp_mtup_init(newsk);
+ 	tcp_sync_mss(newsk, dst6_mtu(dst));
+ 	newtp->advmss =3D tcp_mss_clamp(tcp_sk(sk), tcp_dst_advmss(dst));
+=20
+---8<---
+
