@@ -1,81 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=63.250.43.97
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794055457;
-	b=AbnIDA58KFwxpR2O7rbp+q6JGQfh86T58qC+iCWj0D7FwX5UPYBU1YJEUhHLRHNETSnx
-	 RejsgBStFOfLFq8v6eMynwCs+eQ6wM6cRC9T6S9hF0C6u6Qzc+oHgP3w3VF5Ze4mq/xtx
-	 0gMotb79vJVo9BXy5GjjJsJgQ9AV5HuzuGlQIrS7SsGKeILpP5fFWg3HYH83Y03BfIU+H
-	 s9w6XwxrOCa3fCI3hwXnJ/ui/WC1y5FVV+JAK6VzPYSq0kGmew6aafLgckif6+ssjg5uL
-	 TeVjH9UidYcH4F67yVM1ARu8t5Zhf7BJLQ0gT6gU7VrdckSIpPw1JWEsaFC0GtSRdug==
+	t=1794057111;
+	b=n4mi+wGsC1NJEz1eqrWRRO4nudEj7MWXDJEkHw3RBmlOiMexFn5J0m2atdTAZCejSFhy
+	 TcGNqDCrA7URZns7cAueA8uMWsMPgWAZM0iCZ+rQSbWpStfhRxRpfKRkM5EHhbXxZ/HwR
+	 3LZbJ6ve5LtjAvBcVIybITAFAFIo1iQEnkP/reGk0QjReNSYljfdh7wFEXtQf8fUVrbpH
+	 pr5tZE03QuDKBBn3eVE5mgvkq2l0kMlVSqiAYPa+KjHKUeR2dKtex4SjwueEMQIRXGhvm
+	 ZiTf9/TECoutkxr8iKTHrngop9+owWkvmfDi6vhhfKATuP7eAINndKFgvhpk0KETJPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794055457;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=dzBwFs2TljpOP5elYmUhvLnbOuXM3QGLPguMHu8Knu4=;
-	b=G0YdbdlyaxA2aKdszaI1WsBtao1QelFu9QxsAUm+ai9es+iXtjzkD1Vtd2f4lz+z8HKt
-	 N75f7OU6EYiIUSoAjiSa0M7QbmrQObkVniLDKvNP4ohMH6gY8jyCAToXDtMnrvVqJrznS
-	 ReUR58xvrXOnYFPmu5hAk2BmsmkepgDUaf9kaO9xOANBL7au8gkB7uL/zbQJ10Z/sAoSb
-	 VLfEd3GZkivRxURstoZcNoq+KDwQBPhaKVNlJgNbDqLd+97uWNFZpm76zGoo2GflbyAG2
-	 VaMEAsSpzJyQ0D9MMfdBRNq2/MM78A8Ju3Xp5+t5/bhRw9XLaQlWd65trugMxmz4uRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794057111;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Envelope-From;
+	bh=Hpnb3lkVBewOXosHHRQ+q5UlfoQ87orREhfjDwgUyjw=;
+	b=3XmmBLFVAqznMD3ojhSM5x5qv2NXRJdx6cOvTmkavyBvEy34uo+Rqmg+VsN8/BOQCru0
+	 kpGii8D6gpswZUCrx504FMYOHYolsQQjwWt/CYMrQkhIz3PzZJu4SDdfu+RpO9ln6qt8H
+	 OWn4XlCJijKCEpCqsVWgi5ayfwpRIpuLBKyXplllWxt4/9+lvkiljy2KZHzOlqkqzS8So
+	 /hMKREixswFeW0K+78vgLNej0k1aypgIQmvAMAG0/hjePYMNlCWEbo87qB7TE7sqE9J4s
+	 OoyEZyoOxs/xBag+Jj515LAIJSg9q8FqVexrg6VeIzmNvI6zHnW/GB9lNk8PRaELc0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=egCKZgvR;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=tychen.cc;
+	spf=pass smtp.mailfrom=tychen.cc;
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=l8oqGiMj;
+	arc=none smtp.remote-ip=63.250.43.97
+Received: from out-2uec-a97.jellyfish.systems (out-2uec-a97.jellyfish.systems [63.250.43.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 2E64D606A32C;
-	Sat,  7 Nov 2026 12:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A556606A32C
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 13:11:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A556606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=egCKZgvR
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 076321F0089F;
-	Sat,  7 Nov 2026 12:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794055456;
-	bh=dzBwFs2TljpOP5elYmUhvLnbOuXM3QGLPguMHu8Knu4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=egCKZgvR+uM5AdIYnxZkn5qTtOFRr/D3N+7/N7RqicbOfSHrHL2dAv65ZHdA46cvx
-	 H8Aju+BdzWVMfOnqof3bfkSW/intUk7fd7I5A+IhhLXuhZM296Pxee0SYLQ13Ljivm
-	 K4B2f7/mN5ZO7OdxLMTCLSdZHpB9AiwG02mU5KZUvzE21CFWbQ5GYBn2SQCTfKJA/z
-	 Ykpgc4X8/HTtlJ8M3qUB4wDiITeiFk2tMFC2NSwRpGI5uzZOb9Ws0T0UgPYBdAoJWh
-	 0zfw15CJ8okfY7ZIxpgcJ4vg46Zh0SNJrTZdSWnmXTnp9TXAFLf08v4ziCE1Ykqwmi
-	 R7jztThEgO3YA==
-Date: Sat, 7 Nov 2026 14:44:12 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
-	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <au8dHKGIv2tr_Xom@kernel.org>
-References: <20261105031401.956609-1-jarkko@kernel.org>
- <20261105031401.956609-3-jarkko@kernel.org>
- <20261107032551.GA1990@sol>
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=l8oqGiMj
+Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jMGdt47G8z8sWP;
+	Sat, 07 Nov 2026 13:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1794057094;
+	bh=Hpnb3lkVBewOXosHHRQ+q5UlfoQ87orREhfjDwgUyjw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=l8oqGiMj1f1+oSNv00Cla/P24UtVh+J/scLC9B2R3PBel+KK3bLsefYm6GmTpTXgs
+	 O+l5666h90dnTvQelA/96LOAtHCexti3Pk9QGw0tEdmshz+oO3PFE+z56YGkH/exgp
+	 WNhlQyvxLh1YD3mqYwExGaYrmyK4HMDGYTvolkpVMu96DHq8DxQ0YOa6qTL2lQnl2t
+	 j6iVpex0zMYP2CAdjPtrEwhyak+uSbt6l3ebuqilnKN+yNRoQ6npVpBvO6vD8YHzkO
+	 izqXRDSB9pMC0eGHEP0oj/oKrdFG3KvZ2iIzXD1Ol2c0mgIuaS2wiAgpMH4ZTBbcko
+	 bbbNc1bbblpuw==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: Tianyi Chen <hi@tychen.cc>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	yatsenko@meta.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 1/2] bpf: Report lost RHASH batch traversal keys as EAGAIN
+Date: Sat,  7 Nov 2026 22:11:19 +0900
+Message-ID: <4c32437eee7649fbd822108278a3f582bb795329.1794056839.git.hi@tychen.cc>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <cover.1794056839.git.hi@tychen.cc>
+References: <cover.1794056839.git.hi@tychen.cc>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,38 +75,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261107032551.GA1990@sol>
+Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-On Fri, Nov 06, 2026 at 07:25:51PM -0800, Eric Biggers wrote:
-> I don't think the retry loop is actually sufficient or desirable here
-> (though it would be very rare for it to be reached).  It gets reached
-> when there are too many elements in one rhashtable chain.  However,
-> we're already pre-hashing with SipHash, and the rhashtable level hash is
-> passed only the 32-bit SipHash.  Suppose we reach this case because the
-> SipHash values collided: then rhashtable's rehashing would never reduce
-> the chain length, and the -EBUSY would last forever.
-> 
-> I think the right solution is to just set '.insecure_elasticity = true'
-> in the rhashtable_params, to disable the chain length checks.  Those
-> checks make no sense when we're using SipHash anyway.
+If a key is deleted after a batch copies it, rhashtable_next_key()
+returns ERR_PTR(-ENOENT). The batch code treats the missing next cursor
+as end-of-iteration and returns -ENOENT with a partial batch, so callers
+can silently stop before reading keys that are still present.
 
-Thanks, this is a valid suggestion. I  was thinking about having maximum
-retries but this is much better idea. I'll address this as you proposed.
+Translate a lost traversal key to -EAGAIN, as for a missing input cursor,
+and preserve other iterator errors. Still copy the collected entries and
+update the count, including for lookup-and-delete batches.
 
+Fixes: 818e00848227 ("bpf: Implement iteration ops for resizable hashtab")
+Link: https://github.com/kernel-patches/bpf/pull/14700#issuecomment-6641291019
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+ kernel/bpf/hashtab.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-> 
-> Then the retry loop would not be needed.
-> 
-> (And even for rhashtable users who aren't using SipHash, like
-> fs/verity/, hard-failing insertions if the hash chains gets too long
-> seems wrong.  I mean, imagine if the kernel started refusing to do file
-> operations if one of the hash chains in the VFS hash tables happened to
-> get too long...  But I guess rhashtable was designed for towards
-> networking users who are able to just drop the data without much issue.
-> Plus it predates SipHash existing.)
-> 
-> - Eric
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 6e2115477cb9..346a2afb4ad3 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -3556,14 +3556,15 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 
+ 	rcu_read_unlock();
+ 
+-	if (total == 0) {
++	if (IS_ERR(elem)) {
++		ret = PTR_ERR(elem);
++		if (ret == -ENOENT)
++			ret = -EAGAIN;
++	} else if (!has_next_cursor) {
+ 		ret = -ENOENT;
+-		goto free;
+ 	}
+-
+-	/* No more elements after this batch. */
+-	if (!has_next_cursor)
+-		ret = -ENOENT;
++	if (!total)
++		goto free;
+ 
+ 	if (copy_to_user(ukeys, keys, (size_t)total * key_size) ||
+ 	    copy_to_user(uvalues, values, (size_t)total * value_size) ||
+-- 
+2.56.0
 
-Br, Jarkko
