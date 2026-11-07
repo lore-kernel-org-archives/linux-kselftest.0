@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1794011839;
-	b=UlI4reOJ5m8rdp9X1Xu0jsyLxw9hIstdJOMVOjmYhXfX9rY8OqRUt/u4FRwdULUuk+EV
-	 jA6xqFYGhis4v18bDC3JJaXQ1leKESlvp764VzDtf2rZ+QUr8ySeIWCc4+eoRsp+mEQTr
-	 hx6fRD+byJqxhNrOU0mQQ81ut8Aci3WmLM2KPO3Ba7lQxdqmPkSrNXidyDUsYUR5cfyLs
-	 E0Xi+POioBN1o7AmqNX6RaVVSfzEchymlYyo68ZPMpfrrMuvvnxecS0eLeJkPy4QwD+Js
-	 d7q1KtmE46TiJ5DxrV9IFDJyV3DxUSh8xj2L6pK3St3GXU19gCUoSsPvEKJUJi3QRsw==
+	b=pG85LD+qyAAIoAC0Nvb3AFUBnAoV9VPhDkOXBcSlOEiTeFrcGNJcgLcS6GQ0Jl6b9RXG
+	 hZXcAroSAI/B32eq66/naemIEF5Kv7Q/CRbYIR+D0rnJiE1kfYtlr44R1L1JUYfd5fU63
+	 e/PtyPIkvZVLsfbXidHEvSeKwcai5InU36lHGWXCqLBXTbOrrRrmOSM4EUd0HrFy/CzrZ
+	 QRpv0V3RrQnS48MZWI1/mtH3qa70gkZGB3UrN9g0mbdcfYaj+ge/N99JVaxngYr3SZ2F+
+	 SorZMK6jif2rBJ3DFCdSTqkQpiqsAshGm4yid2qeLqypWP1hB4N6zJZfPK4IVZt49ig==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794011839;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=LZOMQbbwROsg3RJmo5tNBpuYTJxKTJ2ke5j/Ex7a5iY=;
-	b=4D+SwA9+cXDf3NcQh9zqQuTRewO2D/egYbmQhzCXSze/in6FguL2uOfYwOvRSqdasBzh
-	 XWfkMhgTiYc9gIO+sSlKW64mbHzYdONGRVEPQ3fnb7D6TmdaRfF4eSYMGAqe9gMvYRncf
-	 1RzTrtLSNqFOCjcDpDqOuOiA/bouTPxdT3siUaCyi9jNjcxcWEckiR0J86YCjXN59fPeG
-	 vFPGnzmhh44KiD76zgHv0/4e6XUzGNP5X2zniTrSQP4+vGjcleZi2SijUgRrQmChWzcCL
-	 kJMeMCLQ8a/wz+jELHF/ljboRzoCinqj9hkY58iRGR0nOadJwLgB8wGUgHgHRhCRHRA==
+	bh=8FI7dlGgiyTT6PAbX8ijOtddOd63Y42N45h2JTeZ+J0=;
+	b=Ttd2bTrruZXwVpid5Yzua5L1rJdXMuCnvcAOPpTtnxlR70mvKfDBQECQeq32rhYD4CaK
+	 sXRFtGaxUCWNKDQeMt+Eh0dRwSXrbSXy+yOGBXcEMETEXkIjVEa1TWIEJn0Wi/MyubTAt
+	 IpiLDsz6yC+zkv4YgurcENoBTeCWqzWq3LrvGTWnXNzhqlVYgtVI//mhR2PH/DjUHlQ7T
+	 6HxNsjTHJSe++J/d6EqFVqa22/GAo4z0cUtqOYtwowLrF+5DhQbUV5e5/dk9EwHch283f
+	 zHNRWGmJsd/66uPDSHGYUg9QKWwnq47KpwNiJWsvOvkcDEkeuUfmiuk6BStOExekloQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gtHV2y36;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C2RCVqpY;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F142C606A837;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7AD606A828;
 	Sat,  7 Nov 2026 00:37:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gtHV2y36
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C2RCVqpY
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1794011838;
-	b=Q7CEpij3av3k2nbISTpV+xuRk/HBYUd2JJ9pV4+OeLltEqYt+Mf7AL9lKh7eqVvoP0zB
-	 xdmN+htVTvft8NROTmnoHCyoLoEWYLwqKQRX/egY8GhyDfwdqn0rgJbB2F4n5ozxe6pwj
-	 yALOykOlHVQTCYknG/J5G1cbpgvOknzosaYE6m/Te29ApU3BEdSVabBRf7xF8Ukk0Xh/u
-	 j/WpOWZ5+ltkMDn2Gr8md4jZXL+kWn88p53JE5l2HpVGzdxIh7TbzdO8/KUmcfE82qX/E
-	 OTJcShnJuuy0IHMhG089QQVsxBpOOVXPkixhssuHzA+5vvTtyDHkfDBczgjB7PxnzzA==
+	b=NgV4L467X+daB4ct6bhwQhynSBLGCdybURTDGDEcnNvhEnyVN6blzC1oMg7HN66/6jaZ
+	 cFX1XV1wOpy7ZuBsql6xJj2wDmJPElCqXLE79juyVRqbKSJbJAqO2t1LnzxGxit0y5Vfd
+	 7jCK5+EdQmHESQnmwK393ARJay8cpUhW720Jfm+4YCmcHAkQCNqlVZwIpTJWNy6c38r1A
+	 JyJ4bXq3KCq1hvyvQEpjv9DRjGfdcSqtMsKo1z+Y77udoJYz0DsGNfTuYqr958s1DS3+m
+	 0wA8q9LsP3o5yxQemuPptAZP904nRXyQ7ZV7RoHQEv/pSYsVYFeEqn6JDyGC/XFsSBA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1794011838;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=LZOMQbbwROsg3RJmo5tNBpuYTJxKTJ2ke5j/Ex7a5iY=;
-	b=aYUncUAOF1z24CX+m25wIoBeOrC+feCAcMh5v0XeHTYGxjVrpxE8oNYPYrZV99P/Lg4i
-	 zmCFUB4t8RvzYIAYbKp6uwYusu8Z6DuHTdqS+QVxxSuknrOB1S8V8kPaov2J0MM8ctSuO
-	 mjlkJLCSErEsD87vl56J2FAenMM56NjTnujgHuOjjyUi8kArcxoKYxOFhxaA6DzD6SMzb
-	 o+uPrk6M8UibVBbTN4tpUgbAEZgZdCHLv6lKBYdBiun8cdWRa0hl90er5NxBMAgpIQxc3
-	 L10+ujEXTfaWWlvL22QGpL0JAjvVjJ8384HhyzOEziKpK0UVNiv+6UqD16cjtrZh9Yg==
+	bh=8FI7dlGgiyTT6PAbX8ijOtddOd63Y42N45h2JTeZ+J0=;
+	b=y4usqB47yGylU39HH2wG50ZsHv/Jagk9iVndBi9xK5Bc1QZ/NOrlBRywNFGkZ3cuSdk3
+	 xPrjtOFl/s9gQsPv6KDe38ROgvZ7UkPN5zy5vyuc4nB+ABRGo56Cocv++VQJ3XSe1dYAq
+	 zEYtjJvLlF4Ef2eH+bf0Y1eand2AbfYeuvPoBK7ui8RVyA751FiVwImFtzitYgAfqCjQN
+	 qDVSZA/C1fG0E2H+q6+F89oPjslda251DG8CcK3OUs0Y2+/ui2PtegVLV0A7H3hZloaaj
+	 sgc+KdJmDWUC2HQt15rRkxo/hGhpnSftpkIK3YvaJYbX1dnldjOQ+Uiezv/M14FWgCg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 84EFF1F00922;
-	Sat,  7 Nov 2026 00:37:16 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2908B1F00900;
+	Sat,  7 Nov 2026 00:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794011838;
-	bh=LZOMQbbwROsg3RJmo5tNBpuYTJxKTJ2ke5j/Ex7a5iY=;
+	bh=8FI7dlGgiyTT6PAbX8ijOtddOd63Y42N45h2JTeZ+J0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=gtHV2y36PgAJHCS5NiPs0Ma8QHOH4Srr3v45JFj1jY/zag3RUsy8mG6y3f50gqCmr
-	 auq/cLI2JWUZjFWx88XFLhSH5BqQMvvXKcyJ+gjSu6S2+CRdu4u+suleoP2zxsFt6j
-	 IA57r3NRnu+/QDCY39IRfzWhcICBifOm62nSJN+EgGUwsfDY4gtUCT/rzqU4mUVjaY
-	 gfsx8XSWqocv/pENT0zGunXFpJHtFPmjfPWTKcGF4a7/PZL723A7YWpondZ9/I+rNk
-	 dRuO7YowuBZPOpbfTsDbSI/rGPf1+G+9KPmyXPYZ9dsS5MY3zowyoVnORpyARQfADn
-	 mWqODlfLAj7ng==
+	b=C2RCVqpYvdw5UTGpPtxYrUi6sBxO+V3ux76tMhUupJRLrZC2QHcJnS5dsC/jRh+JI
+	 RAe2ZeRW4mmxl4uD8RfUExLlrnhg4j8grvVj3ZgeghENaO2eOjq6kkscgm2v/p7+F1
+	 55Zbwnlh6u+8btpD14dEXjjb+MbMuNA9L7w2gtwuKyt8tZNBxgXm2i6iFKYYEM2PvO
+	 lz2m7xTMK8VCsVuPaq6XmnRk7E1XPhcqgrWoXBPdATPy5wEq9I9W8Jg6QKpl1qz+ga
+	 19e1ioBt7y8TIDVrgg/JnAka7NVpwpMjimErG04oMVScdyfbwBjRnF/geYsPwztawZ
+	 +7o4NDULrTe8Q==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 43F2547A4A;
+	by lkml.kernel.org (Postfix) with ESMTP id 0A89647A3B;
 	Sat,  7 Nov 2026 00:36:58 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:54 -0800
-Subject: [PATCH RFC v3 80/88] KVM: selftests: Verify host VMA flags for
- VFIO BAR
+Date: Fri, 06 Nov 2026 16:37:50 -0800
+Subject: [PATCH RFC v3 76/88] KVM: selftests: Verify VFIO MMIO mmap access
+ for igb device
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-80-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-76-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2687;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2223;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=UlabEjEO5/7bc1Xc7qMAcF1rv+8kEYtRG7NVYEhErUE=;
- b=AYnUVtyYbnET239Be/q7ZKR7z0MuG0D/wBLiSNROBy6M+iTcydm/LLxQnKZUtCpZwDkUgkWWx
- NLfenWKq+rzDHvtjBPQsocyULycu+dcV6xLglIVZfDmfMBDwHdFzAaM
+ bh=jzqW1Jjl/TdHDq92R8GBSwh+0N7VE+Z3IfJio0K3a6M=;
+ b=f9okZk6tF+33EEc7SQLegmp34Vb1lvk+kZzlENivyzjPi6JteKmB26YWjXUyVF37IjJG8C0Tk
+ 2GEFDMEETf7AmUmyoLD2UCbk907cEfoHL0cwp4KYGbpDQEbydtcIKgA
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,68 +120,37 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Add a test verifying host userspace memory mapping characteristics
-over a VFIO device BAR.
+Add a subtest verifying memory-mapped I/O (mmap) access to BAR0.
 
-Map BAR0 of the bound VFIO device into host userspace and parse
-/proc/self/smaps to verify that the kernel configured the expected
-hardware MMIO VMA flags (io, pf, de).
+Map BAR0 into userspace address space, read the device status register
+using a pointer dereference to confirm device responsiveness, and write
+and read back a scratch test pattern on RAL0.
+
+This validates that direct CPU page table mappings to device MMIO via
+VFIO function properly, establishing an access baseline before wrapping
+the BAR inside guest_memfd.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-index cf2d46a365504..79a0001ca1733 100644
+index fa05b7cfb3185..4d5211b6acf79 100644
 --- a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
 +++ b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-@@ -529,4 +529,69 @@ TEST_F(guest_memfd_vfio, low_power_bar_revocation)
- 	ASSERT_EQ(0, munmap(bar0, bar0_info.size));
+@@ -294,4 +294,41 @@ TEST_F(guest_memfd_vfio, bar_rw)
+ 	ASSERT_EQ(0xdeadbeef, val);
  }
  
-+
-+static void verify_smaps_vm_flags(struct __test_metadata *_metadata,
-+				  void *addr, const char *flag_substr)
-+{
-+	unsigned long vma_start, vma_end;
-+	bool found_flag = false;
-+	bool in_vma = false;
-+	char *line = NULL;
-+	size_t size = 0;
-+	FILE *file;
-+
-+	file = fopen("/proc/self/smaps", "r");
-+	ASSERT_NE(NULL, file);
-+
-+	while (getline(&line, &size, file) > 0) {
-+		if (sscanf(line, "%lx-%lx", &vma_start, &vma_end) == 2) {
-+			if ((unsigned long)addr >= vma_start &&
-+			    (unsigned long)addr < vma_end)
-+				in_vma = true;
-+			else
-+				in_vma = false;
-+			continue;
-+		}
-+
-+		if (in_vma && !strncmp(line, "VmFlags:", 8)) {
-+			if (strstr(line, flag_substr))
-+				found_flag = true;
-+			break;
-+		}
-+	}
-+
-+	free(line);
-+	fclose(file);
-+
-+	ASSERT_TRUE(found_flag);
-+}
-+
-+TEST_F(guest_memfd_vfio, host_vma_flags)
++TEST_F(guest_memfd_vfio, bar_mmap)
 +{
 +	struct vfio_region_info bar0_info = {};
-+	void *bar0_mmap;
++	uint32_t val;
++	void *bar0;
 +	int ret;
++
++	vfio_pci_enable_memory_and_bus_master(_metadata, self->vfio_fd);
 +
 +	bar0_info.argsz = sizeof(bar0_info);
 +	bar0_info.index = VFIO_PCI_BAR0_REGION_INDEX;
@@ -189,20 +158,26 @@ index cf2d46a365504..79a0001ca1733 100644
 +	ASSERT_EQ(0, ret);
 +	ASSERT_TRUE(bar0_info.flags & VFIO_REGION_INFO_FLAG_MMAP);
 +
-+	/* mmap the VFIO BAR directly into host userspace */
-+	bar0_mmap = mmap(NULL, bar0_info.size, PROT_READ | PROT_WRITE,
-+			 MAP_SHARED, self->bar_fd, bar0_info.offset);
-+	ASSERT_NE(MAP_FAILED, bar0_mmap);
++	bar0 = mmap(NULL, bar0_info.size, PROT_READ | PROT_WRITE, MAP_SHARED,
++		    self->vfio_fd, bar0_info.offset);
++	ASSERT_NE(MAP_FAILED, bar0);
 +
 +	/*
-+	 * Verify host VMA configuration in /proc/self/smaps:
-+	 * VFIO MMIO mappings must have io, pf, and de flags set.
++	 * Read Device Status (E1000_STATUS) via mapped pointer. Confirm device
++	 * is readable and does not return 0xFFFFFFFF.
 +	 */
-+	verify_smaps_vm_flags(_metadata, bar0_mmap, "io");
-+	verify_smaps_vm_flags(_metadata, bar0_mmap, "pf");
-+	verify_smaps_vm_flags(_metadata, bar0_mmap, "de");
++	val = READ_ONCE(*(uint32_t *)((char *)bar0 + E1000_STATUS));
++	ASSERT_NE(0xFFFFFFFF, val);
 +
-+	ASSERT_EQ(0, munmap(bar0_mmap, bar0_info.size));
++	/*
++	 * Write a distinct scratch test pattern to RAL0 via mapped pointer and
++	 * read it back.
++	 */
++	WRITE_ONCE(*(uint32_t *)((char *)bar0 + E1000_RAL0), 0xdeadbeef);
++	val = READ_ONCE(*(uint32_t *)((char *)bar0 + E1000_RAL0));
++	ASSERT_EQ(0xdeadbeef, val);
++
++	ASSERT_EQ(0, munmap(bar0, bar0_info.size));
 +}
 +
  TEST_HARNESS_MAIN
