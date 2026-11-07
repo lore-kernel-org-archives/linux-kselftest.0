@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794085172;
-	b=qS8irPP309LyWfG+bvCqGzylK4AnscqE93McLRyTpgO1QBYPifBFED4ZIytz3p5tVUT0
-	 GYP29Uyvt2ll8ZigkT4szVxt+YfoBzk1kUEueJZxqd7sAbCy8PtQKDNGF6/+7ITP1I+BM
-	 5wOClq5bqaNsdZYzfL2vpZb+cLvAl53iNn4Eu5WqZqVhDHduMh/AT6Uk+JhEMMZsdKlDL
-	 M7KCGCTKBcAJs/7tfps/h7ck5+4Va6/iIM93bPUh7/JvwBxqZh8jbvguBGIPRnQJGEqt9
-	 6Ky96Hkahv9295b4GcvaUIa6AQSiADM2/oIV5aAlaH+ZMDDUkval3Mk6IYuEX7GhGYg==
+	t=1794085167;
+	b=aEe9Tb9bm/bgEQK9ftp/rPeB6NJjU7K8b9z0bYn65OG5Od8hMhsaZFY7o7CCL2HvSEwi
+	 PBt0IgysckDBcJwlZD8XsnCmaxiT1F/CBbQ2XEbVSNJtm+JUk/EdgutbZ1k29DZ3S1y2J
+	 DcH8L+mWsZl3Dca+l19Tk5pyqTZbmFi0D9sP0y1XDS0REC7bxWU8zgAWtAhTXwLVyhwv+
+	 dlY192B3vR6nqrpdZTqbuaYPIxLzUT2Sw8VZSO2Xt0MK5CEO0WDDWehcSeNFoNDETocr0
+	 ip48V8T/bsnIQ2CZoKTXawi+pUWd5FT4tlyCVx7Tt1Y7tCCrutS0xPXdUhcCdu1xwig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794085172;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794085167;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=dzuonoA9qOkLc7kATxtO9OD76IIkPooDhtETN2ywYhI=;
-	b=NQQ3KZiIobxv7ahVgETo3hm11hHOQUKj6t2FAX8U+AjpeOduqND9CoFEgfG7eO6BIE3O
-	 qBixsDRv5P9L7Q+FdlATheqCoI76w/1emzgFPDhy2MWYmqxvdeIb6oNz1muh5gQd0rBw7
-	 CMgI4slYMk6cnnKKMVWfCuMqf63O/afxeYzPf53TZa1zb9bFo3Tpkl/EcMhyVSjpHr8k4
-	 CvY7eOYyLIvi4Kp4foEy9sMoxj1GMs1F6SKpUzYV73kgIEcbs33PCI/ur+KQtfnHmKncs
-	 CfCmGHHFN9FK0aiUlwlGNM8yv04fzDUl7iYgTtzO93BhipE4hxKZDyCzfHwBL0Fq/2g==
+	bh=b3RDVGO3+bP5dg9fDJjr6KnmIzH5WR2VM3WhSL40Oqs=;
+	b=xT3v+L08LVfMAl9c4cyp4sCVbdxITtPxiZv5FnEGLldZ5gw4mpJCYlhER+c3YMKUff6m
+	 VAp50W9gvi+W9uNFM8qk0aSxV+fIYJ1o/FY+BrYYSTcKI8ccm8mgfrXm5y+UyKCaNWaMk
+	 7YlxHdPZFnDvivtcsfGl3v5OowJyzqEVuo6Iv7SUCsUk8wBdXvkSsJQw+/6OlpPIXLvh3
+	 nE2uiRrTA1TR3RDmTXvoShaBCRVseBoDsIoQuCA73DlT8/zYVSSqU7YbDtfo7uauOn/0J
+	 TIp2hLEEDiFYima55Y632ehBP/TGQ68x5TtwC0604g5x+6MAx888BC01DPOJ6N6diJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=odcQ+DoD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cGgfNYTX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99E7606A32E;
-	Sat,  7 Nov 2026 20:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA85606A32D;
+	Sat,  7 Nov 2026 20:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=odcQ+DoD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E15F1F008A2;
-	Sat,  7 Nov 2026 20:59:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cGgfNYTX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E64731F0089F;
+	Sat,  7 Nov 2026 20:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794085171;
-	bh=dzuonoA9qOkLc7kATxtO9OD76IIkPooDhtETN2ywYhI=;
+	s=k20260515; t=1794085166;
+	bh=b3RDVGO3+bP5dg9fDJjr6KnmIzH5WR2VM3WhSL40Oqs=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=odcQ+DoD+ixuvrLkIaAD3Ybtp7fexE+OCQbPvhz17u8kz/tn2UQuSCo9MYYg4c1gq
-	 qRwe0yqsR9zNjzrhCEfKdzPSBjMbZeKzRCV5Cb7zuvSVsZZfvz7Q64w6jFOX3e7QkH
-	 wHqaqPgVHN53WJLUjhda/8OSnsSpJpA+Dlg6gA8VOvT/EX8LPWnsowWf8+1vF0pFJi
-	 22KKcBSrqDiq5RevrMHv6X8v0SyilSaWkXG1eSnyMvqVVMM7dwQvnezAYb4j+Ru6ww
-	 0psIJp+lB9MIf4qfcyR3biqCVJcWxQR4Efsn2BBl+hdAgaSrZYbzmcXroRAW9cADe5
-	 aFNBTCG9jBlHw==
-Subject: Re: [PATCH net-next v3 5/5] selftests: drv-net: psp: add rekey tests
+	b=cGgfNYTXs/SqnlSxtrc8zAA0ldSrb39BN89s7qPsjezo1YSGMgJaLcEzt7N1Vd4lw
+	 abk2lMgjqIvZW8sTGfMyb37u6Qhz3f5yEv9PeeSwUXn3ksz5GG+SlMI/YWeL3CA9Px
+	 EsJiETn2FhKbQ2+YYvpRsjtEmvx5hRXBS+5gWrdYYZELUZr2iZWkX0qdDf3CFTKbcO
+	 YjoyTVLAW5WkOvyUYuzcO347VxDgGbpL/tkDLkI0cxjjVanbLW+L0p1vciO8zfCiGm
+	 3FbCO5Ss4v0/tVgXMZE2XXRyWPzbw9Ydn7uwMD/mKrlO5kWnMS7eiOO7VYCcEPPMLw
+	 lSow9d/xle9Ww==
+Subject: Re: [PATCH net-next v3 1/5] psp: support rx rekey operation
 From: netdev-bot+sashiko@kernel.org
 To: daniel.zahka@gmail.com
 Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
@@ -49,10 +49,10 @@ Cc: kuba@kernel.org, willemdebruijn.kernel@gmail.com, davem@davemloft.net,
  andrew+netdev@lunn.ch, shuah@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Sat, 07 Nov 2026 20:59:30 +0000
-Message-ID: <179408517003.994134.18139473201924553095@kernel.org>
-In-Reply-To: <20261106-psp-v3-5-a8dd38f5a727@gmail.com>
-References: <20261106-psp-v3-5-a8dd38f5a727@gmail.com>
+Date: Sat, 07 Nov 2026 20:59:25 +0000
+Message-ID: <179408516544.994134.848767943937829488@kernel.org>
+In-Reply-To: <20261106-psp-v3-1-a8dd38f5a727@gmail.com>
+References: <20261106-psp-v3-1-a8dd38f5a727@gmail.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -72,110 +72,103 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] In tools/testing/selftests/drivers/net/psp.py, the second half of
-  rekey_both_sides() (the "# now, tx then rx" block, lines 734-736) does…
+- [Low] There is an unannotated data race on the new
+  psp_assoc::prev_generation field.
 
 --
 
-selftests: drv-net: psp: add rekey tests
+psp: support rx rekey operation
 
-This commit adds psp.py selftests for rekeying PSP connections. They cover
-basic Rx and Tx rekeys, plus cases where rx-assoc and tx-assoc should fail
-because of a psp version mismatch or the psp state. It also adds rx-assoc,
-tx-assoc and key-rotate RPCs to psp_responder.
+This commit lets an established PSP socket rekey its Rx direction. It
+does this by creating a new psp_assoc that copies the existing Tx state,
+and it records the previous Rx SPI and generation as a fallback.
+psp_pse_matches_pas() now accepts packets that match either the current
+or the previous Rx SPI/generation, and psp_assocs_key_rotated()
+invalidates prev_generation as needed.
 
-> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-> index 71eeade62ad24..004faf4bb57ae 100755
-> --- a/tools/testing/selftests/drivers/net/psp.py
-> +++ b/tools/testing/selftests/drivers/net/psp.py
+> diff --git a/include/net/psp/functions.h b/include/net/psp/functions.h
+> index 410adb6718c16..5a7a518b9579b 100644
+> --- a/include/net/psp/functions.h
+> +++ b/include/net/psp/functions.h
+> @@ -77,10 +77,12 @@ psp_is_allowed_nondata(struct sk_buff *skb, struct psp_assoc *pas)
+>  static inline bool
+>  psp_pse_matches_pas(struct psp_skb_ext *pse, struct psp_assoc *pas)
+>  {
+> -	return pse && pas->rx.spi == pse->spi &&
+> -	       pas->generation == pse->generation &&
+> -	       pas->version == pse->version &&
+> -	       pas->dev_id == pse->dev_id;
+> +	return pse && pas->version == pse->version &&
+> +	       pas->dev_id == pse->dev_id &&
+> +	       ((pas->rx.spi == pse->spi &&
+> +		 pas->generation == pse->generation) ||
+> +		(pas->prev_spi && pas->prev_spi == pse->spi &&
+> +		 pas->prev_generation == pse->generation));
+>  }
 
 [ ... ]
 
-> @@ -489,6 +558,186 @@ def _data_basic_send(cfg, version, ipver):
+> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
+> index f2cba3fa3a235..c1e38845f08c3 100644
+> --- a/net/psp/psp_sock.c
+> +++ b/net/psp/psp_sock.c
 
 [ ... ]
 
-> +@ksft_variants(_get_psp_ver_variants())
-> +def rekey_both_sides(cfg, version):
-> +    """Test rekeying both directions"""
-> +    _init_psp_dev(cfg)
+> @@ -302,8 +333,21 @@ void psp_assocs_key_rotated(struct psp_dev *psd)
+>  	 */
+>  	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list) {
+>  		pas->generation |= ~PSP_GEN_VALID_MASK;
+> +		pas->prev_generation |= ~PSP_GEN_VALID_MASK;
+>  		psd->stats.stales++;
+>  	}
 > +
-> +    s = _establish_psp_conn(cfg, version)
-> +    try:
-> +        data_len = _psp_txrx(cfg, s, 10)
-> +
-> +        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-> +        _remote_key_rotate(cfg)
-> +
-> +        # first, rx then tx
-> +        data_len = _rekey_rx(cfg, s, version, data_len)
-> +        data_len = _rekey_tx(cfg, s, data_len)
-> +
-> +        cfg.pspnl.key_rotate({"id": cfg.psp_dev_id})
-> +        _remote_key_rotate(cfg)
-> +
-> +        # now, tx then rx
-> +        data_len = _rekey_tx(cfg, s, data_len)
-> +        _rekey_rx(cfg, s, version, data_len)
+> +	/* Don't allow SPI from two generations ago to alias one from the
+> +	 * current generation. Rx rekeying under the same device key generation
+> +	 * is currently permitted, so skip if the previous SPI is from just one
+> +	 * generation ago.
+> +	 */
+> +	list_for_each_entry(pas, &psd->active_assocs, assocs_list) {
+> +		if ((pas->rx.spi ^ pas->prev_spi) &
+> +		    cpu_to_be32(PSP_SPI_KEY_PHASE))
+> +			pas->prev_generation |= ~PSP_GEN_VALID_MASK;
+> +	}
 
 [Severity: Low]
-Does the "tx then rx" half of rekey_both_sides() check that either of its
-Tx rekeys actually took effect?
+Will KCSAN report a data race on pas->prev_generation here?
 
-After an Rx rekey, the old SPI stays acceptable:
+psp_assocs_key_rotated() updates prev_generation with a plain
+read-modify-write while holding only psd->lock. That happens both for
+the prev_assocs entries and in the new active_assocs loop. Both lists
+hold assocs that are still attached to sockets and can still receive
+traffic.
 
-net/psp/psp_sock.c:psp_sock_rx_rekey() {
-    ...
-	pas->prev_spi = prev->rx.spi;
-	pas->prev_generation = prev->generation;
+On the Rx side, psp_pse_matches_pas() reads prev_spi and prev_generation
+with plain loads and does not take psd->lock:
 
-	memcpy(&pas->tx, &prev->tx, sizeof(pas->tx));
-    ...
-}
+tcp_v4_do_rcv() / tcp_v6_do_rcv()
+  psp_sk_rx_policy_check()
+    __psp_sk_rx_policy_check()
+      psp_pse_matches_pas()
 
-psp_pse_matches_pas() accepts packets that match it:
+psp_twsk_rx_policy_check() reaches the same check under RCU.
 
-include/net/psp/functions.h:psp_pse_matches_pas() {
-    ...
-		(pas->prev_spi && pas->prev_spi == pse->spi &&
-		 pas->prev_generation == pse->generation));
-}
+This means a key-rotate running while a rekeyed socket is receiving PSP
+traffic gives a plain write racing with a plain read. The writer and
+reader hold no lock in common.
 
-The old SPI only becomes invalid when the device key is rotated:
+Since the field is a u8, it can't tear. A racing packet would either
+match the old prev_generation or be dropped against the invalidated one,
+so there doesn't seem to be a functional problem. The existing
+pas->generation update already follows the same unannotated pattern.
 
-net/psp/psp_sock.c:psp_assocs_key_rotated() {
-    ...
-	list_for_each_entry(pas, &psd->active_assocs, assocs_list) {
-		if ((pas->rx.spi ^ pas->prev_spi) &
-		    cpu_to_be32(PSP_SPI_KEY_PHASE))
-			pas->prev_generation |= ~PSP_GEN_VALID_MASK;
-	}
-    ...
-}
+Would it make sense to use WRITE_ONCE() for these stores in
+psp_assocs_key_rotated() and READ_ONCE() for the loads in
+psp_pse_matches_pas()? The later patches in this series don't appear to
+add those annotations.
 
-In the first half, the key_rotate calls that come next cause a stale Tx
-SPI to be dropped. The second half ends right after _rekey_rx(), and
-neither side rotates again.
-
-Say the local tx_assoc in _rekey_tx() were silently ignored. The local
-side would keep sending with the old SPI, and the responder would still
-accept it through prev_spi. The same applies if the responder ignored
-the tx assoc sent by _remote_tx_assoc() in _rekey_rx(): its echo would
-still be accepted locally.
-
-This half is also the only place where an Rx rekey follows a Tx rekey on
-the same socket, which is the memcpy of prev->tx shown above. If that
-path lost the Tx key that was just installed, would this test notice?
-
-The v3 changelog says the basic tests now "rotate again after it to
-verify the new key is in use". Could this test end the same way, with a
-final cfg.pspnl.key_rotate() and _remote_key_rotate() and then another
-_psp_txrx()?
-
-> +    finally:
-> +        _close_psp_conn(cfg, s)
-
-[ ... ]
+>  	list_splice_init(&psd->prev_assocs, &psd->stale_assocs);
+>  	list_splice_init(&psd->active_assocs, &psd->prev_assocs);
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106-psp-v3-0-a8dd38f5a727%40gmail.com
