@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1794011827;
-	b=gSOrd37L4eVfK1IcxXMcboxJVAnDm8g5n9t9PfUZnvqhjXcHmEvmWZzR3kfymOTiwSwY
-	 +f2a1ZusPgWz3IqfUBPn5K0qgc9+EgJrxg2jzpr9e81AsFcFotc6H6rgOJKrbh6B0ybGS
-	 RmhmbMP43DEOiOTLV/iR5FFb+WKVdWm40MgPySeEvOPO12cDtJNPae3UOorb+shw+Ux2e
-	 k7xNPx4H0V3AlQx3PiH5raaYtYm8+LzPZus89jZU6Yt3RkL5YpzD+Adfc5y+6vzrSM/sX
-	 AJikAUHBntLPbKj1Hoz+1XhhfQGeNzeo+NReKniIbCnSkTMksFdhhqS8qPotUNSF/uA==
+	b=rk0Pfi+AzrPiUHJJ9cy7sDWkwxhvfAAfuSHVnatjWDfJno3ZuJ1yEsSaeFKRbNd0zWkN
+	 0E2uN4bmK2NKYgsti8ANavnc0Zu1Qu6KL7Y2gg6k/vrYEaBu23ZxJ8El+mSO0W8G591/Y
+	 PVrlZaYY9ZnQjS4LxZ05DonJzIf+AfE+N+4vsca8DvyE62P1W/DROkVonfyS90ZIGu4LM
+	 +TWQGSRT0nSxd/5NMCVuEBgWLDRSQ1aPYlh1gIWjEsaCKow+vfDmS8eDQXObSpe9PqwRC
+	 22GblsnofIEWadcZgTX8NLVFq+kt7FL+GMx/RRRKLNmPmIyVK+UoYxdl/e2YOzy5txw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794011827;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ReU0Kd+FdZN68/M0M8cDAR0IDKP7C8zpUFj1mjltVuQ=;
-	b=I2tASj0yR38GECyAM2q3K8/TMRl8zGKYnSZN0oN/gu7bT0jf5wLpGH9mpJQJRoW8E1v4
-	 AFh5qZmJ9i11noMQQFqx4AJsVg2ZTJhZV9iKDG3hUqML5jlKxSTQrXcm4PkU1EVlKZohp
-	 LeViilsCjcyg50EBLYiNWq3nE1jQlwtAXy+fZ05KhZUhQ2t4oqbPXlW+dMdx0QihgLc2J
-	 jGIPJ6i2/Jv8IZMLOTZco5idnX/d5L6y4EV++HawvECuTEDxX7ZuXcWlTvbSI7uWZGNsp
-	 Kl04pVCfPs32s9iA5oXKl/eCn8c6nPGi7dpegbq/tt3wM8mfj/lZ0BDbhMavwTJqkEg==
+	bh=GG/vi0gJ8pTHrLZGRuIsOdTtI6tx4Aak0QyiCSlFpoE=;
+	b=RjfvFIA6XgXsfs2ckGqOidWg0oZStzyrW3/+5WUBDEjK1fQzH8Nt0cM6JvzyQk45xTDG
+	 BNd+RW3cHhA3xp6qXvfAUfe6YYefMgvi0BgtRY2GQFyFu2iEayiKGCWgak0Q66K3mXtYc
+	 nvAQMGPeFgW85855KDXIUG+4grkGBn6ZsJFRFWusoLXKY8cDjZO+xbd+Y1fkrPr3M8jsK
+	 pw9e4FxrImbjOQQm6F6hI0Wu6CqAhUW/OgyjJZaBX5SvmiLZbM1Ynbu6A8P/d0160liav
+	 85XV7qohxM0T7cgESQIGtFVskSUZdouueGH1AokOFKxzB/pyI53rgUUynvqPHG2GrTg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F75uEguT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Sr/HKeXx";
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67E2606EE87;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCCE606EE84;
 	Sat,  7 Nov 2026 00:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F75uEguT
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Sr/HKeXx
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1794011826;
-	b=05hxEjhEqo6TvNbe5/8iJxieooxXKUZKhOzJBq23AsnOnI5tSbhzuZ+4sLMXis071Nni
-	 fl/NT0mHeIJ1aw4ehxfOmw78CptWMnMEwcPCB1INRIL0SAWY9NxdBEHnyjhiPkxxkPEN3
-	 UetotQ275OHDoU/+ncUEAm/ToGVLYHGLP5gjcmOiG/S1xHjgFTcBoJ/LErLm4wYJYD9AK
-	 MHUAUKnPadsCWC6rbIlP6UTiafZoXoLFz34ZNygq+dXF2GpJctvTBbi1/6ePZQi+RGMc9
-	 gcmaasssLjE6FWe/2Z05kFgIJyz9E43apeS7ZVZ8uqI/zlfEyyhm+MR8bWPi2z2ug/g==
+	b=Df8QglB/TUk3FzbaeAHZ2/I3OMtv1blVusJAlbAckTpCX2lavBb40FPr++NG01Y/VK4c
+	 PzdeP9oAjbZXtmEPq4a+cd8akZjzOC13W9OOgUwgmA4nDBLygw89BOjRIulTb+EVbdbaS
+	 8XoBHJ10msffbOqf/jmt1q+br7/xC6d41uIxZwFp2y7XSJG2L/Epe4pZxA2tt4Gyp9RdE
+	 r3YKF3Ed7/uEh7+AM48eQLsUXMcWkjVYaT3NdwwpgTQJ7Q21l+CBQsgqE0z6JHkf3y7SV
+	 QyhrnAyyvvyO7j+XDplj33PJ7GSQK1jzYAuxqhvAJObTdhRN4BxQkiCpyl1Bs9irWmA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1794011826;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ReU0Kd+FdZN68/M0M8cDAR0IDKP7C8zpUFj1mjltVuQ=;
-	b=zj+jbU7dzpnKmpF3CZ/l/SkqwmeK76jlYHq6Ubi8oIt9PhR8cSOxY5BUY3sfv0BUenhH
-	 1jUOimltu+lTt0xnjbBnmxVR1/8xpX04iUzTQPVXJu+o7iYwmJjLjTY+MsmCRU6IkZxFy
-	 xiXI6nruMMqWFDlPVBpImWcZnqsfCCaFslALf4C1/KD+XVQBgaIgUZqUtSZjGcKr3eQVZ
-	 cSMC0p8dUbjnivJ5ufvDeD3SSICWL9hTlsSX35716viscDpBNkGSX4CcARCQpOt7UzcUi
-	 YNctGat2XxQJPJ5Rc/+dE9MP6CzjmpK+QSwtIdFzeBbxhJmr391TcfBvXEECSEf8VqA==
+	bh=GG/vi0gJ8pTHrLZGRuIsOdTtI6tx4Aak0QyiCSlFpoE=;
+	b=VWetsHcOd/gg92AKF6N1EC88C7mRo2Ch/3xKXO6sXEr6bcfx7j99SCM24n1M1WtjELNh
+	 9dX7IOVA+Ag0Zh7OaEpctGkTIIKHxC9SXw5qKkVwKDxlqNMurAvQQttxnLk/BcnTB6JYf
+	 D7SPLSJj8TmF6lvVnVotlrGrDmfBM+hiDMqRuSi5kFWzt+X0l4jHgH1MJ00PW015JgOr6
+	 Zsh13n0O8BmO3EasjQRctr9P/w863FgKgBBIjlbclIWnYaN82juqxgZ1Ytrm6IXp9I00o
+	 7DTZvOWSAUoNRfWueTatKMwob+bZWS200psCJq8sk4iNjTtc7NGHC3k7na95LJmwzbw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9D7861F008A6;
-	Sat,  7 Nov 2026 00:37:00 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id B17901F00932;
+	Sat,  7 Nov 2026 00:36:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794011826;
-	bh=ReU0Kd+FdZN68/M0M8cDAR0IDKP7C8zpUFj1mjltVuQ=;
+	bh=GG/vi0gJ8pTHrLZGRuIsOdTtI6tx4Aak0QyiCSlFpoE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=F75uEguTQqAJ03WhlACLIRO2diPsETAYhJCo12G2j3JlW1G606YrIicyLAfSJZt3U
-	 Wl/AoXCSkF3oJFW+jlylucMvO1VE4eE7Lbqk9lS+6JZnvPIU8LDDic8rN6ByuDwt63
-	 oSSgAdSuX0wGgFLuM39z7F5Y+myaYwLJ8kXb4MkwJ5VdzbqgYyLS3eq7ul8NXkX/uT
-	 VbhWJwIHCp3hz0rkiDO56coeRdJKpKrT9hA6S3C2bm65TFC2kSgZxpnmUVuEjzPG0G
-	 BOP3A3raKASJpxDQDkZIHrA12le/QgD4Jj9yKKAAW2aB2e7bZekyai/BV8nSYQWHVP
-	 mFB8tKGBFRUBA==
+	b=Sr/HKeXxICARumR9MJeBd8kXcXqe1+kN1thUC5m4BaxGMm0Xj5iyCC4DNA7xwy45M
+	 v5MxgZSorel1UCzAu/bJ65nDOKsIhuX7sDDG6ijaAb+ra3bEJjdYJEbFREMs5mV0w9
+	 lpaoV69K4KTSznNMl/cuvDkYwCueV3W0yp1nH8vZ4fgAizfJ/ay790XBLc9L4lJCpK
+	 qAxd7J6W36bEqJGB5Dw0C+t6yxAof98d5RVrpqlWo6cGKjo5LaF+1iaqlOS1C5kxmi
+	 v7YhnropXNOmISXkSlDcwsSeZVOl+BJj6FRTAkUFHsSl9siCaB0ztlkwRFtaQm0+F6
+	 AyOV93HWEryIg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 66C09479A2;
+	by lkml.kernel.org (Postfix) with ESMTP id 467C64799A;
 	Sat,  7 Nov 2026 00:36:55 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:10 -0800
-Subject: [PATCH RFC v3 36/88] KVM: guest_memfd: Clamp hole punch range to
- inode size
+Date: Fri, 06 Nov 2026 16:37:08 -0800
+Subject: [PATCH RFC v3 34/88] KVM: guest_memfd: Support converting to
+ shared in PFN mode
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-36-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-34-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011809; l=1715;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011809; l=5043;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=T1L8Nqi+JAoaUb9Yx5e8qDpkaF/OKb1FzBs+jwYeM/M=;
- b=4gV4aRNMilBvg0nqyt8Kg4QHKxmtpIyDoHFAB46oLSBIQhuWagSSLMn6nq9UF/ZLeSvyJZ1eW
- jOa0E0XXB1iAfvQ6IfaTdKRmpQRRW0WZutOkaFwv0I1tgcjtp4U/5YM
+ bh=Iv1zxYO7fP3JXSyVWe6MUD/FvJRtFUd+FcQgJ86kKzs=;
+ b=t9r2seWbuOAXmUmfzxNh546Jm5ih8d+H+/MViGmGMCCMkk14rA7b1r8r4bFuLkICvw9lrZNT9
+ aVvzkME4C1NDEPrlUHY28C3SvXO2C/Assv0iGM+b0fiXHh5FEAyWZKf
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,49 +120,130 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-When userspace punches a hole via fallocate, the VFS only validates that
-the offset and length do not overflow the superblock maximum file size,
-allowing ranges that extend past the end of the guest_memfd inode.
+When converting memory attributes to shared, guest_memfd iterates
+through folios in the page cache to notify architecture code.
 
-In folio mode, truncating page cache folios past the end of the inode is a
-fast no-op because the page cache xarray has no entries beyond the inode
-size.
+In PFN mode, memory is not backed by page cache folios. To notify
+architecture code without unintentionally triggering memory allocation
+in dynamic providers for unpopulated ranges, introduce the
+lookup_pfn_range provider operation. It returns the PFN and number of
+pages of contiguous backing memory, or -ENOENT if not allocated.
 
-Prepare for PFN mode by clamping the hole punch range to the inode size and
-returning early if the starting offset is at or beyond the end of the file.
-
-This avoids, in PFN mode, iterating across a potentially huge punched range
-where the provider isn't even providing that memory to guest_memfd.
-
-For folios, no functional change intended.
+Add support for PFN mode when converting to shared by querying
+lookup_pfn_range and converting contiguous chunks.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- virt/kvm/guest_memfd.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ include/linux/guest_memfd.h | 19 +++++++++++++++++-
+ virt/kvm/guest_memfd.c      | 47 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/guest_memfd.h b/include/linux/guest_memfd.h
+index 9fdc0bd1a7190..e965aeca061a6 100644
+--- a/include/linux/guest_memfd.h
++++ b/include/linux/guest_memfd.h
+@@ -28,7 +28,22 @@ struct mempolicy;
+  *           @pfn with uniform @pfn_attrs in @max_order. Once @get_pfn succeeds,
+  *           the provider must keep the @index-to-@pfn mapping and @pfn_attrs
+  *           constant, and the memory accessible, until guest_memfd stops using
+- *           this page. Returns a negative error code on failure.
++ *           this page. Returns a negative error code on failure. The provider
++ *           must define @lookup_pfn_range when @get_pfn is defined.
++ * @lookup_pfn_range: Look up the PFN for a given index. This only checks for
++ *                    the existence of backing pages and should not allocate
++ *                    memory. Returns 0 on success with the physical frame
++ *                    number in @pfn and the number of physically contiguous
++ *                    pages in @nr_pages (@nr_pages need not be reduced for
++ *                    pages with different PFN attributes). Once
++ *                    @lookup_pfn_range succeeds, the provider must keep the
++ *                    existence of the pages and the @index-to-@pfn mapping
++ *                    constant until guest_memfd stops using the range. If
++ *                    backing memory is not available at @index, return -ENOENT
++ *                    with @nr_pages set to the number of consecutive indices
++ *                    starting from @index that have no entry. Return a negative
++ *                    error code on other failure. The provider must define
++ *                    @get_pfn when @lookup_pfn_range is defined.
+  *
+  * Used by filesystems and device drivers that provide memory for guest_memfd.
+  */
+@@ -40,6 +55,8 @@ struct guest_memfd_provider_operations {
+ 	void (*invalidate_folio)(void *provider, struct folio *folio);
+ 	int (*get_pfn)(void *provider, pgoff_t index, unsigned long *pfn,
+ 		       int *max_order, u64 *pfn_attrs);
++	int (*lookup_pfn_range)(void *provider, pgoff_t index,
++				unsigned long *pfn, size_t *nr_pages);
+ };
+ 
+ #endif /* _LINUX_GUEST_MEMFD_H */
 diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index c62e15e05a249..9e8204f5c2588 100644
+index ceef61cb63a0d..0e392b8735259 100644
 --- a/virt/kvm/guest_memfd.c
 +++ b/virt/kvm/guest_memfd.c
-@@ -388,8 +388,15 @@ static void kvm_gmem_invalidate_end(struct inode *inode, pgoff_t start,
- static long kvm_gmem_punch_hole(struct inode *inode, loff_t offset, loff_t len)
- {
- 	enum kvm_gfn_range_filter filter = kvm_gmem_get_all_gfns_filter(inode);
--	pgoff_t start = offset >> PAGE_SHIFT;
--	pgoff_t end = (offset + len) >> PAGE_SHIFT;
-+	loff_t size = i_size_read(inode);
-+	pgoff_t start, end;
-+
-+	if (offset >= size)
-+		return 0;
-+
-+	len = min(len, size - offset);
-+	start = offset >> PAGE_SHIFT;
-+	end = (offset + len) >> PAGE_SHIFT;
+@@ -149,6 +149,27 @@ static int gmem_provider_get_pfn(struct gmem_inode *gi, pgoff_t index,
+ 	return 0;
+ }
  
- 	/*
- 	 * Bindings must be stable across invalidation to ensure the start+end
++#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
++static int gmem_provider_lookup_pfn_range(struct gmem_inode *gi, pgoff_t index,
++					  kvm_pfn_t *pfn, size_t *nr_pages)
++{
++	unsigned long raw_pfn;
++	int r;
++
++	r = gi->provider_ops->lookup_pfn_range(gi->provider, index, &raw_pfn,
++					       nr_pages);
++	if (!r || r == -ENOENT) {
++		if (WARN_ON_ONCE(!*nr_pages))
++			return -EINVAL;
++	}
++	if (r)
++		return r;
++
++	*pfn = raw_pfn;
++	return 0;
++}
++#endif
++
+ static void gmem_provider_invalidate_folio(struct gmem_inode *gi,
+ 					   struct folio *folio)
+ {
+@@ -830,10 +851,36 @@ static bool kvm_gmem_has_outstanding_references(struct inode *inode,
+ #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+ static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end)
+ {
++	struct gmem_inode *gi = GMEM_I(inode);
+ 	struct folio_batch fbatch;
+ 	pgoff_t next = start;
+ 	int i;
+ 
++	if (kvm_gmem_is_pfn_mode(gi)) {
++		pgoff_t index;
++
++		for (index = start; index < end; ) {
++			size_t step = 1;
++			size_t nr_pages;
++			kvm_pfn_t pfn;
++			int r;
++
++			r = gmem_provider_lookup_pfn_range(gi, index, &pfn, &nr_pages);
++			if (!r || r == -ENOENT) {
++				step = min_t(size_t, nr_pages, end - index);
++				if (!r)
++					kvm_arch_gmem_make_shared(pfn, step);
++			} else {
++				WARN_ONCE(1, "unexpected lookup_pfn_range error %d at index 0x%lx\n",
++					  r, index);
++			}
++
++			index += step;
++			cond_resched();
++		}
++		return;
++	}
++
+ 	folio_batch_init(&fbatch);
+ 	while (filemap_get_folios(inode->i_mapping, &next, end - 1, &fbatch)) {
+ 		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
 
 -- 
 2.56.0.455.g6c5a503b38-goog
