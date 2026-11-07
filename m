@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011837;
-	b=BQDyQhzaJNWF7OSypznLmzh8rrYRTWJLa0rpWojbA1spdtCjoiSPpNwO/11PjsATOPDI
-	 LnUFDCPjedoj9KkWDAzfkOJJ4NOT0iuh7wshQSE8cv/hy9VyhlbZQ+opFbNq9VHbG2YnS
-	 1VF4hwIqAGtl1Da24toQkJ+CjaStgf+AuA/dnTMpjU8zMSg2a6U/DkvO6TCqW9YlxBDUd
-	 8dbwJLxt4wIeJX4NMoAzpKjn9bm2F0nvljzb8QmFL/UzPAdTzbfX/YBf6+hJ4DxAeFY6Z
-	 VxybM16mQZk1aeWqaregEhA15wYognVLjUZz5jFUNphtn1JelWk80NyV4eV7nuoc4vQ==
+	t=1794011832;
+	b=RGERwpjCW2MfyYIGxcmUEHwiwbjhWs/W4MnsewDNVRmF7s++Cafr8C8T53YkhV+ltSv3
+	 yWKXWpAue7Ukl2/2pHyIbbxEJmkBqZ+TrX8MN4yUhMRHIOAmy0T/8JlbnSZV2xa7GNcqI
+	 1fC5ZtN7x2P4RgxwkblexkNIdkSWcFs6agEjm72gll1ze9ukAwXHQrWTqkXX9LA9/8Bzs
+	 /ahjy6Nti6dkQJ7wBoHNbTpiJ96WxDOTd8/hlf/561Bfx/4xiIOQBBa0kflYCQQS9UWTH
+	 tht+Lm8IFTyx0V3CqtfnRXrZj0ygYO0wd+HKHMa/zuY0QCglCUE1Zmgfu/bDpDqSY3g==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011837;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011832;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=VQR0WakuaszDqO5R17sC1zMOvvVcE9BE0ownvxB0jTs=;
-	b=0+V+ao/IMCvd5Dob/K9TQwd2MnPjcxN3Notn+uYqSx/kK0w0dxGEakzDKjdt/knGM/4u
-	 Ms4r+VNiUPfyJt6O4wGiEvdCQ1PSnUjObvW1hx0hldOH9JDphVVHNyBZWha33PnhPaNLf
-	 4Wfbrv41cgNRjt8scZK1Fn2kuAmGQYJ4pTf1OgmaycPveEFtl9fry0GxUr7GIg6viQEup
-	 J9no5jrmDRpbWeux/V2c0znls/n0KuNeIehubZEJdR39lyhwEBHlQyZPcX5HKoBJesVqS
-	 SdgYYFXCFwkoBoHlNqwCcWSHl0rQ8Uj3WtRrY0tmHotCBoLzvmYWGUbfMpE8RZFVHUA==
+	bh=S1VeQt4eeGIXDkcfneZT3UM35I4Mo6EWsujW5a+4lpA=;
+	b=MrWfV6y5vrdQ20bRNJ9CL0z8UHuOTOyY+b2QeLVMdToi4QwmzFW1vrIMls+hjESKa8MY
+	 knyzU89BaaEsKYAsHjC1qWm/lKlauVe02CFkVr+1oqRolkJptrUmyXqJiaRiZbitBYdWo
+	 ++RVgdmHEBupQ9gAkar/2udUlhwg2nMUxop+LBKcIeCWKNcsSB0WhuslWnw6maexeSull
+	 L0DsXKN30JcIhDSOTaJJGp9QKjehnkhkgY5swk2CS5KQ/4sBf3/XMOPpynzPH1V1CZV15
+	 PZDxIUEs4mnOcVtUgRtDLORSv1yWj+kYTtTxEY5h5KwZIOmDDKae/PLQCdZkf6vO9MA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xw3BV2VI;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YSImQPJL;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63F0606BFF7;
-	Sat,  7 Nov 2026 00:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CC2606D82A;
+	Sat,  7 Nov 2026 00:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xw3BV2VI
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YSImQPJL
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011836;
-	b=o0Ii1271i+krwEjn4Tn4bXdjUS4XGg0znAw7PfOsZ0A/sGt2dX+julXBLqNwvxUCE5oy
-	 79ntMgrDKKSYJxC5OoBAlLQ6MqXpklQSqmUS3XzTBRLYU8TuFYLL2Hf14XykCN3BLn/kj
-	 MyprcHN1DB/TpUVzWHN0d1RvveEvsHd/S41bVbX3G7w+lzeGY7kixjHI+1Z6ozYm6Q/dj
-	 LGOF/oNyS9NkiztWJ7U4iaNp5xUPShCOXUbIs31wwgRnOQobRbwAkFnFRlNgBZcx8oBiN
-	 /7z6OSbPSMtHN6PY+y/9Ni832G3WosbKnHOLCtEy+97XMwlTD92dlAKJIPLrXM6M9kQ==
+	t=1794011831;
+	b=nlK8gBR7K2hvsAwNnVXGVAPDl/sTzzIGYraJ03hS3G/32/N8X1Yuk7wHvEAAJqEMZ2l2
+	 xFXnEcjoZKNsnnf6idKtzrdiHxa72oU7d78oCQwNHwu/tGsdAtTcddLeJT938PqFmXQ95
+	 Mm0GGK5zt2ziq+TOsZkEhBWOOrGwswKL1ISwZCZZtqVD79Dtxqx8LfYOfYn7SnuWCdk0G
+	 IpK25VdJFdYYsmkjWVulvzYQHuahKEe5kY1UebO0x/z7Wus4yboqfQg+y/xnkXk/O9ZG4
+	 nL4OkKy3Z2NWlQypYqvA6pUA+ft7tYVxF0AhBTtaPqxohOHxwSMHv+HmHKthPMSwnNA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011836;
+	c=relaxed/relaxed; t=1794011831;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=VQR0WakuaszDqO5R17sC1zMOvvVcE9BE0ownvxB0jTs=;
-	b=Lsxsx4TrJzn41FFwDbMfhGFbpsrXGjFAqmgNwqsBLbqS5Suh8iFzIoga7gbo8Ph7UuEe
-	 PFydi+3fAsBW04gfjKShVuDIztfZx4oxFpFVLxxYbOk4BqL92aPzxhAfbszngC6jwKzef
-	 PDjE07s7I/PClPTZmf32GrqdWGWsY8z9mDZOCw0o/9CiEqo+7iJn5aSmiPo5vMiFruRdX
-	 49xxLY2UdF0O5cmge9JOpIye37T3l9pzIXDHewcCfCWtb9ijdBAX9gGy/RAin8TOCwO7Q
-	 E21+5X6wr+7Shvb6/GPyIGIORYscrdjve9bGotM5Z9yQZ5FjnyRiSNiql8uGSEvX6oA==
+	bh=S1VeQt4eeGIXDkcfneZT3UM35I4Mo6EWsujW5a+4lpA=;
+	b=HNioULsevLhci2bx6v/QOTtiDg0YAgmlQRTHuF7X2wbsShQ03MWl0nfXKuF4MqIc8rrB
+	 PizRwKXTnSWyPGdvQJlp1zXvd08jNOAXkGtjfI5Ne4FlbuDfanv7vH4pGBxtYKXNe+Klm
+	 39FmsXAnbLkO5ZICNcSaFTUSyLqy3XntMLvyc6LapLCbTxvyKhwc5OH2QODwWiMP06vp6
+	 VqfBM3iwW8ivoxwj2iGz2NWXI0Z0KV9ved5jzOudkNJz1ZmW+GjWquX91KWiZEE5j0VYH
+	 XVEHdGIY2qDzwIuvQ9h2O9Z+XMW8/PE8OqTFxry87V9utaUfKV+OvdgkiVnCsgVsSZw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CD55F1F00A05;
-	Sat,  7 Nov 2026 00:37:10 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 852E21F00AD1;
+	Sat,  7 Nov 2026 00:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011836;
-	bh=VQR0WakuaszDqO5R17sC1zMOvvVcE9BE0ownvxB0jTs=;
+	s=k20260515; t=1794011831;
+	bh=S1VeQt4eeGIXDkcfneZT3UM35I4Mo6EWsujW5a+4lpA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=Xw3BV2VIh7HubueaXrhbvOpox2U/SiJK47yyhmnx8lVA2rF1B8o7CFMOy7ECNGyxL
-	 GSc/rF/UJeAVt75wNnm1HaKkQbx/waACwiUhvW3oigPkXt/nunoaho/LObiwMmfIRs
-	 YW3IlGwud+TZJ0JUZimPMa+QsQVtxRd0+RUgCX0ca2+zhZJFkPrIjlqQFpSFfUqw5T
-	 mC0/iHrGPmVsy88+ZXkOM5xn0bp7QIAuIM0rqf6qWzmoev5x46OgchecT/funBNBOq
-	 Xx6jKz5BjQ4v3uQVs9ckx3/wgpZzGnmPX0H/FAtv3UXRQY7yPuy93fH8BLCtlnRPvj
-	 jh4d1bJsWybyg==
+	b=YSImQPJLVctRWA9uk5of//u47z47vnJGGof9RAJmUHprZd7MtBhM1UoJJcxaNIgl2
+	 3uvZXMb/uXKQi2nJEjG/2CdcyUhmZdsX0Pdg/n5VeqIerV6nzcxyZGh3Lg4uhb9edA
+	 58c2ZGuQfhbjwWPxCf9UV01NdeDeNgZDfOPPJbFnhtYsnPAY1G8N6EhsGjQDEfZDFg
+	 qIi/JMELX8Pb1QwUv5xWiKf5HX13Tsv7IQTejgLNyQHjtaIuwUC6h2j4pxTudSU57Q
+	 iOvjJejWhDhjBfD7B1zrBXVcI9OTWwtMlUyGoQgdogE2CE5zN6ZCrOFZGeGNOcjNXl
+	 L0Lit6heGxopA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id E5480479F8;
+	by lkml.kernel.org (Postfix) with ESMTP id 45B68479D2;
 	Sat,  7 Nov 2026 00:36:56 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:33 -0800
-Subject: [PATCH RFC v3 59/88] vfio: Dispatch guest_memfd get_pfn provider
- op via vfio_device_ops
+Date: Fri, 06 Nov 2026 16:37:23 -0800
+Subject: [PATCH RFC v3 49/88] samples/kvm: Implement lookup_pfn_range
+ provider operation
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-59-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-49-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2331;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=1753;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=xvhk/B5cJ5UV/xewATDcSIWa/TiLlY+J1HVubbWHrTs=;
- b=o7/Mg1zgNXsxxe9h93PAmVT9+adieaG+XGvsvYOAGMQVbFhjEeQODEIVNBVomRcjlxVrpS+fC
- vD5PwxCvv4YA1qhXrdJYU5KtKYsUBP51tja93wBeyuXND0y2TJGrwT/
+ bh=zF6/NHZXYKv9L/HYCXHQCrJDAKRuC7sUwZ4mNyf3Ilw=;
+ b=ahCkSRHzo9omVJZMhhE6rfmRR1w5YCbKaLV2veN+koHtwyTZEPMuUJDWA4vp4xnnxkooZ1qco
+ erjm1pX+7bACC1WV18Q1Je2NRoYM1uyGK8yLYYA8TUwGIp3C8gOY06l
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,67 +120,58 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-When servicing guest stage-2 page faults or host userspace page faults
-on guest_memfd memory backed by a VFIO resource descriptor, guest_memfd
-invokes the .get_pfn provider operation under the shared filemap
-invalidation lock.
+Implement .lookup_pfn_range to allow looking up index -> pfn mappings to
+satisfy guest_memfd requirements and make this sample memory provider a
+valid PFN mode provider.
 
-Implement .get_pfn on vfio_device_gmem_provider_ops to dispatch to the
-bus driver's .gmem_get_pfn callback on struct vfio_device_ops. Return
--EOPNOTSUPP if the bus driver does not implement the callback. The core
-dispatch path avoids acquiring dev_set->lock to satisfy the requirement
-that provider callbacks do not acquire locks held during revocation.
+This sample memory provider performs allocations upfront, so
+.lookup_pfn_range doesn't do any allocations anyway and is only slightly
+different from .get_pfn.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- drivers/vfio/vfio_main.c | 16 ++++++++++++++++
- include/linux/vfio.h     |  3 +++
- 2 files changed, 19 insertions(+)
+ samples/kvm/memory_provider.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-index 618daf8bdaf80..93bd0a200ad22 100644
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@ -1589,9 +1589,25 @@ static void vfio_device_gmem_release(void *provider)
- 	fput(file);
+diff --git a/samples/kvm/memory_provider.c b/samples/kvm/memory_provider.c
+index 926f3cf68ed49..7fb7365b65940 100644
+--- a/samples/kvm/memory_provider.c
++++ b/samples/kvm/memory_provider.c
+@@ -249,10 +249,34 @@ static int mp_gmem_get_pfn(void *provider, pgoff_t index, unsigned long *pfn,
+ 	return 0;
  }
  
-+static int vfio_device_gmem_get_pfn(void *provider, pgoff_t index,
-+				    unsigned long *pfn, int *max_order,
-+				    u64 *pfn_attrs)
++static int mp_gmem_lookup_pfn_range(void *provider, pgoff_t index,
++				     unsigned long *pfn, size_t *nr_pages)
 +{
-+	struct file *file = provider;
-+	struct vfio_device_file *df = file->private_data;
-+	struct vfio_device *device = df->device;
++	struct file *resource_file = provider;
++	struct mp_info *info = resource_file->private_data;
 +
-+	if (!device->ops->gmem_get_pfn)
-+		return -EOPNOTSUPP;
++	if (index >= info->npages)
++		return -EINVAL;
 +
-+	return device->ops->gmem_get_pfn(device, index, pfn, max_order,
-+					 pfn_attrs);
++	if (test_bit(index, info->absent)) {
++		unsigned long next_present;
++
++		next_present = find_next_zero_bit(info->absent, info->npages,
++						  index + 1);
++		*nr_pages = next_present - index;
++		return -ENOENT;
++	}
++
++	*pfn = info->base_pfn + index;
++	*nr_pages = find_next_bit(info->absent, info->npages, index + 1) - index;
++	return 0;
 +}
 +
- static const struct guest_memfd_provider_operations vfio_device_gmem_provider_ops = {
- 	.attach  = vfio_device_gmem_attach,
- 	.release = vfio_device_gmem_release,
-+	.get_pfn = vfio_device_gmem_get_pfn,
+ static const struct guest_memfd_provider_operations mp_gmem_provider_ops = {
+ 	.attach		= mp_gmem_attach,
+ 	.release	= mp_gmem_release,
+ 	.get_pfn	= mp_gmem_get_pfn,
++	.lookup_pfn_range = mp_gmem_lookup_pfn_range,
+ 	.put_pfn_range	= mp_gmem_put_pfn_range,
  };
- #endif
  
-diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-index 65dc2cb523351..51e04b980a381 100644
---- a/include/linux/vfio.h
-+++ b/include/linux/vfio.h
-@@ -122,6 +122,9 @@ struct guest_memfd_provider_operations;
- struct vfio_device_ops {
- 	int (*gmem_attach)(struct vfio_device *device);
- 	void (*gmem_release)(struct vfio_device *device);
-+	int (*gmem_get_pfn)(struct vfio_device *device, pgoff_t index,
-+			    unsigned long *pfn, int *max_order,
-+			    u64 *pfn_attrs);
- 	char	*name;
- 	int	(*init)(struct vfio_device *vdev);
- 	void	(*release)(struct vfio_device *vdev);
 
 -- 
 2.56.0.455.g6c5a503b38-goog
