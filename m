@@ -1,78 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011822;
-	b=L7/b7lhtcOyjH2/o0jS1QkL9Pb+Rcin0SljOyZD4RoP83tcOjskFUPrYQeAtoIyiqwl5
-	 qVLCZNAeXzRTawlP+nkEkJtHVDW8a1s+geiZwwQedpe8n9kSM7BOYTxOtGH9vGc78dmdS
-	 hZaeor6v0eB8BtLJX53dBVkAI6VNTD5i7y6y9CC7tfCJ22bWc8g0UZceio5QsrsbRv9q4
-	 VCFuwCzFaXJd3AymfAMU3ws1pr8J3iV0tPK0cLFxvDjPG0dskCl8BRX78sb6a72ArGlNm
-	 zggD2TQARv+bfiyRlmiDt3baZ1Hfgj9Toauu3fYDRJHqgAOVUiZdlsA6+CoxtTREgbw==
+	t=1794011817;
+	b=SnNME9QMBnQEm348AO1w3xQLGP1E36kVIJXDdSHWxu8U5D/jiY+J4QC5JxBB5ivRuS8l
+	 O+Qvb2jcW78QeFMCREJzkaRBMwKgtd8+CwmOU5SZQ+OEISA8odc1PQf917thOkTKCuv34
+	 7g8IPUMfTNJ/YylPEAqFswEYSDWVydq0k7rfsk8iejbjNjNFMRztsW2VTHdFBKc4Pd4KC
+	 7H7vvikYa+KSlTwk/iM0drgIvzdgKBQcpA8zpFbgROMOBzEW5646x+7u4maMVbN/eOoBr
+	 tz//21bCHvtkNGGWWcl+zbkvLgOUbGmvIBJFfAW1TFxAlhpBsOupSfJ1pU0EzZ8sGSQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011822;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011817;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KYQcoPoT+TiTChq9S734+r6sv2Rvv/KnvU2FGo7SPLo=;
-	b=4AXbGAR9TkuxGF6SlqgYvxidu/d7YkNE3ARIYmi1w0FqFMSU2wAHNGtasRYZOel/ryeW
-	 RH1PZVGB0bZRuidSTYlOPuSVzT58miY50XYG7bXUyv+KNg5nLRhxTNLgP5g6C6i9cxpRy
-	 uuJTRriaRs9Fe5KyXjLaw9wyXeNX//sNTEyeAUaJic4NMjFe+/IiEQ7UrX0V8f+1SiML8
-	 kdPfOLXQ/2CXkXk6eLdfZuC7HndRviDK1Sw3ZA3Yuy3hjyJyWFEtwx3ncHjVwdOpD2rrP
-	 Ndwp7pxHyvUkOqAdCFINvlDh7QuS6U/ixVlju+gyEBXXk+NANcIOTq0L2POhFjVFwuw==
+	bh=wzMjOKIzu33g7FJKvimMpae1iK2TD3Ag5YmcsJozb+4=;
+	b=JUkk7fv4iRmIcRgFxCgu6CMUrloBC4aKubx45ORoHZ4Y+889Wvkk+omdpZThGqtiOx4/
+	 /pb7CkgSbhjS91StjXmupt8pHKckVufKJeYmT2/EwzWRVbclgScZsuSITNZgPxG0kx/f2
+	 Hw7q0KHQrmzEixNvC8QAOD0jxs5zEs/at+wjUdaURODphslNcF2bIxxcPy47faveAuvni
+	 VZ/XJSvaC1Bpz6IcDJc2sQDWO+807ZSOg7CWjM4U8AMwcZVJZnhtFw0VrUU7uIa67jYnm
+	 IfXJYJlU921see0woSjEnLe/0TE+okx5N5hFVcI2x0PTE9IzI+HU8BzvkuIDHffuhqA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AZR44uLX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ECd6EWlw;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D21606EE96;
-	Sat,  7 Nov 2026 00:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3140606D82B;
+	Sat,  7 Nov 2026 00:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AZR44uLX
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ECd6EWlw
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011818;
-	b=HRMiDfQ8ajIuCkQf+NqqMN+Nzxr/LBlZeEHUIvomvANEuQz2jo/dCI5nU+Fy2gCFQ6HJ
-	 8bN/41fe09u8TtAWOwKTGzIjwLi/oNKPwuxIVdr9WY/eJ8+FN92vNGSrP1HLZkmP5g/wm
-	 f9X9MxB06L183kgAruErsAdEve3IxyiXGxHohYva/JoqUnCBesEmD8ctNRDX9aRFHPIHM
-	 NszHcX0Uc2PN8Bsw3xhG//834K+oSfKspPKJJpv7/3qqoqOILGh+K10jSTCRokvX6rXRg
-	 TLqrYgoU6Kt/3tkTqc3hScRcmthgtD84HOUE2YBAcv/9VvHP0w6zbqv9WfX/10mYzow==
+	t=1794011816;
+	b=vOtosl5U7F+S1ku04Cmwj3N515jdS1XahrZcC+S1GocfB/tU9oh/72zMSEZtl7iQKGFA
+	 5BzNygVvkvv5NjVeDXg4s8dK4hj2LdFhtQR1lMyqcJQtFQMExOTXZjwLyUzS9D8Yimbje
+	 I1H97Tp+jmBl6FS+HcZY9mdKjbaDVt1k3ZsB7bI7ycJaRR2qzsnWpA7UOg6RVb00RuotI
+	 UNCJy9tVf4+7mvU/5MOneVmJ3/rdPuDJSXeFbr/V+jCeH9ZKeHH0pYXka87211Jkibg2b
+	 Vfm5vJem10dfPe+3RprKhtiapA7AQ/YfMNbdxtvbBSQ/cU56g6qIeTztnCBL4sVubcA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011818;
+	c=relaxed/relaxed; t=1794011816;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KYQcoPoT+TiTChq9S734+r6sv2Rvv/KnvU2FGo7SPLo=;
-	b=BgPp4xXKDhsbCSLSm5QfmSLOzIBPN/G3uvdE3ATK4iYWbuuv81WzNzbDMJINbYH9e/or
-	 UJmC9Ko8ILfnwlxgp1hW+qasvHhbI+PFQF0qK6FeQvED0qfCQQQMqQu2cvZ4DKSAsYkb+
-	 08oBHWc5N+RPx/0l8yeIse0zrhc6haOBG5QwcqpBDdaDudcHt5OJ9DoWaDeYk0XMfnESc
-	 ilLngQ3pt6YVldZ8OSYM3wrn91Sx8pHtmQemQKBcA6J/zWp/iWi8QHroKcMT2f57gm2PT
-	 tLsGVWuAR+OtKl0e+N5FLUQbFDZYyKZimuKQFF4kXaCVDD1Lu6o45tZxXT7NOj+GunQ==
+	bh=wzMjOKIzu33g7FJKvimMpae1iK2TD3Ag5YmcsJozb+4=;
+	b=yaVww1pg1RUNUgCGHkvymom8G12jze5okkinEDoWLL2GfbDKDJAWlSbS1j59WvuXoC6f
+	 ErTqVFAce67h7jsW2YzK1iZbeJAQmrW3c4KJBmx62GGRCOpbeqUndpkXP7xVcCvxPXfW1
+	 o++XlcXFDT+XYQBcF29r7FGJPA7nRhX9UGPrCHuahtyDDTDcSmCN7oFxNJ38jk+/W6ZPr
+	 0DnyXdGflbO+3Lz3gsbprm0hX9cRAWFzACoJd1CnioCwg/MDAzyiQZoeDTpukCgd/d6XX
+	 ZSH6vkMr3SQzNLYYSC7GSNz+tQblPm4rk2LNoE8FyZav6RU5fwnhX+CQQu1jpqTa4Kw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 269641F00907;
-	Sat,  7 Nov 2026 00:36:57 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8C70B1F008A4;
+	Sat,  7 Nov 2026 00:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011818;
-	bh=KYQcoPoT+TiTChq9S734+r6sv2Rvv/KnvU2FGo7SPLo=;
+	s=k20260515; t=1794011816;
+	bh=wzMjOKIzu33g7FJKvimMpae1iK2TD3Ag5YmcsJozb+4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=AZR44uLXAkzv9LkdZplwoYbYql1WdkWmMI3bK6jtFx9Nl3IHsg2IqgbZlzTjIXLqj
-	 1ImkTjdYth0pcfyGQVeHKKlzpOijNOkeB2hg4aV4kkyQJS5gxvJLhY+0uLoF7jC39a
-	 Mg/emigBmh7clPr/Tvv15ddcSnyw0rdZMHF1t2x7hQAHxKtvb4ptuQBVMUAq2qAAMh
-	 Y0zyt5tTsH3M/tg8N5HDkAqj1uOgmSb+xzOnbiM9TRYmgfMGc5jXH8HsWWIcjEZhRd
-	 J9TfFKMq0S5NyixMCz32mV//I99BNRJT+1JioVVmaJOb9W0A5TnI2v4M6/8s4kW05z
-	 ggxbxZ10yvf9g==
+	b=ECd6EWlwhwpl78kL6NkcmvF/DAUiWoizeIdyyXTZVrmlfJrcgh8BwFJSd5gJ/obKw
+	 hvhJjVeCtbebCBsEH5O005mbhWX97RPngzbtE0C/Iz5jGNEjthqHbrm2MqSd4J4EUD
+	 SYpis7zleFOf0e4egkB6krTPp++9oN6e59dzp2NjahxhNcd9VMT2bYxFclO77V4CyP
+	 QUx3wMDbTOiGPiCa/VAkFtqYakJkWNNHeaYQy7Gp2OEyXHE2ru45BmRuizGv1UiGbr
+	 tPENSIoHbPMyowNKspA6FOsPd4X80C10CqiIxzuUPVL+hJKryHdbGTWa8dRC+2D/S0
+	 ztEwozxRVs15w==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 36FF84795B;
-	Sat,  7 Nov 2026 00:36:54 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 10A8447925;
+	Sat,  7 Nov 2026 00:36:53 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:36:52 -0800
-Subject: [PATCH RFC v3 18/88] KVM: selftests: Document testing TODOs
+Date: Fri, 06 Nov 2026 16:36:38 -0800
+Subject: [PATCH RFC v3 04/88] KVM: guest_memfd: Support provider folio
+ invalidation
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-18-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-4-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -104,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011809; l=1090;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011809; l=3364;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=r1ZmFiR1qPCCBxX8ciGCFcsvJLc5HDkv8vhs7vVOKUw=;
- b=6pZvfbTvHbGzO6Z9YIneIq3T90JrEFZL7fDyOhT8/iiNQMcWLUJ/EJt5W2PPBe1GU4JzzYZmE
- 4L1rjvsT8X5BB33CyQAYR6oIMcuTNN3d2fOXsyT2kk5AxXVOgIZJjzF
+ bh=MGHk6/Cisdy/wpa1a0X1OzKyL7CzzGctRSrQGUJPYjc=;
+ b=0KoWPhP/+ANsbW65PxaOZBZqe5dkk4DAuC4v1KLIC4R5Fu5djTD8G+xa3t2kfBvY/9v08lGNw
+ rD9zaIwVcAjDsEAFo+Xlsb9U+GXt7PCNBe9Ws2/8FhAQMqClCp2gjaH
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -119,34 +120,94 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Remind myself about all the tests (A)I did not write.
+tmpfs increments the total number of used pages on the mount at allocation
+time, so that number has to be decremented when the folio is removed from
+tmpfs' ownership.
+
+In this model where guest_memfd allocates from a tmpfs mount, I believe we
+should respect the limits set in the mount, hence I require .alloc_folio()
+to increment.
+
+.invalidate_folio() is then the counterpart to .alloc_folio(), for undoing
+any provider-specific per-folio work during allocations.
+
+.invalidate_folio() requires mapping_set_release_always(). Not sure how odd
+it is to use that mapping flag.
+
+Using .free_folio() is hard because folio->mapping is NULL by then, so I
+can't reach provider information. The provider information could also be
+stuffed in folio->private? What do people think of that?
+
+Another alternative would be to use a custom truncation function in
+guest_memfd, just like shmem_truncate_range() or shmem_undo_range(). The
+con is that guest_memfd might at some point support more generic mm stuff
+like swap/reclaim, of some form? Or maybe never? Shall we go custom now and
+unify later? Or just not think too far ahead?
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kvm/guest_memfd_test.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ virt/kvm/guest_memfd.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 8e9261db23354..fd249445ce3cc 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -701,6 +701,16 @@ static void test_guest_memfd(unsigned long vm_type)
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 545c3e646e9c1..ee823f2ef0368 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -113,6 +113,13 @@ static struct folio *gmem_provider_alloc_folio(struct gmem_inode *gi,
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
  
- 	test_guest_memfd_flags(vm);
++static void gmem_provider_invalidate_folio(struct gmem_inode *gi,
++					   struct folio *folio)
++{
++	if (gi->provider_ops && gi->provider_ops->invalidate_folio)
++		gi->provider_ops->invalidate_folio(gi->provider, folio);
++}
++
+ #define kvm_gmem_for_each_file(f, inode) \
+ 	list_for_each_entry(f, &GMEM_I(inode)->gmem_file_list, entry)
  
-+	/*
-+	 * TODO: Test that guest_memfd creation rejects a read-only tmpfs mount
-+	 * (e.g. MOUNT_ATTR_RDONLY) with EROFS.
-+	 *
-+	 * TODO: Test that guest_memfd creation rejects an ID-mapped tmpfs mount
-+	 * (e.g. MOUNT_ATTR_IDMAP) lacking write or execute/search permissions
-+	 * with EACCES.
-+	 *
-+	 * TODO: Test mpol fallback to mount config.
-+	 */
- 	test_resource_fd_invalid(vm);
- 	test_resource_fd_unsupported_fs(vm);
- 	test_resource_fd_memfd(vm);
+@@ -213,6 +220,7 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+ 
+ 	r = filemap_add_folio(inode->i_mapping, folio, index, GFP_KERNEL);
+ 	if (r) {
++		gmem_provider_invalidate_folio(GMEM_I(inode), folio);
+ 		folio_put(folio);
+ 		if (r == -EEXIST)
+ 			goto retry;
+@@ -942,10 +950,24 @@ static void kvm_gmem_free_folio(struct folio *folio)
+ }
+ #endif
+ 
++static void kvm_gmem_invalidate_folio(struct folio *folio, size_t offset,
++				      size_t len)
++{
++	struct inode *inode = folio->mapping->host;
++	struct gmem_inode *gi = GMEM_I(inode);
++
++	/* guest_memfd only allows truncating full folios. */
++	if (WARN_ON_ONCE(offset != 0 || len != folio_size(folio)))
++		return;
++
++	gmem_provider_invalidate_folio(gi, folio);
++}
++
+ static const struct address_space_operations kvm_gmem_aops = {
+ 	.dirty_folio = noop_dirty_folio,
+ 	.migrate_folio	= kvm_gmem_migrate_folio,
+ 	.error_remove_folio = kvm_gmem_error_folio,
++	.invalidate_folio = kvm_gmem_invalidate_folio,
+ #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_RECLAIM
+ 	.free_folio = kvm_gmem_free_folio,
+ #endif
+@@ -984,6 +1006,7 @@ static int kvm_gmem_init_inode(struct inode *inode, loff_t size, u64 flags)
+ 	 */
+ 	mapping_set_inaccessible(inode->i_mapping);
+ 	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
++	mapping_set_release_always(inode->i_mapping);
+ 
+ 	gi->flags = flags;
+ 
 
 -- 
 2.56.0.455.g6c5a503b38-goog
