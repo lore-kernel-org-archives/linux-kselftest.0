@@ -1,62 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794014179;
-	b=4TVGQmevfkg/bYh6JzTwl2WM36Ej5oR0lK4f2jupWDKXRu5zSRqfyF4MmF6JVXkOP9WJ
-	 SIPFAuCIJ6B9c+zc1qJW0bN09wolF9xFY1ZSeOlTi2aa1hzSp5rKWlLo6V9OWNx2GLMCX
-	 rzD8QhN7jy6UDiizUq5dQbXkevWsR9+2yxF7tHh3wh3Hn1hYUrFEA5I6NjOMURwxyvH7p
-	 mdGZ8J1pQDao8839YMuJ9xsEGakxJ/CX+2F+ATmAim2nabXEpbXEV2DFyskIA2CfZqm6r
-	 ctSq/0KvF/6z0EYrmwJtbcOr4oeVeCf6RgZ3ifsFAM8odtVcVpM0wFu0Y0ksjBsqfZA==
+	t=1794015901;
+	b=UfjBT3/cOqC7gLEztXcMDd2G4QU4hBZFFFbJrikJyuJBedTMmSDlOiLjqdDNp2vZFDQ2
+	 FKya7y2NqA6YvCaHO2pM7cBTjaWOxmnBmvJekbELoGpjpKNzB/UPdvlmtoPlPBX0JUGvK
+	 i4ozat1Gl+7/mVSeODADD7P//YD0WssCSTURMgA8Z1jDGv5kFRkVUz/PTV/RNXEKiahlm
+	 b24DbXgR34NLQGnIyztVeN/SzG+Qnfwrjrwy67IYUyLjCtE4JNPHGxflVhpxIcHMcopoO
+	 +abTanw8yyNyFlaeFKjTuRB6ASibAmpNjg54CIXyFYRi8ojKvG9ERqXMilmGJN6r6vA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794014179;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:To:
-	 CC:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy;
-	bh=09pdPTC0H3pX4QDaAkEJkvwP2Z2O6sdNBhQWaHjJtTk=;
-	b=q8eE7hdEl+Hu2wHEgCXCJ/7e1WlSxXl/964kzX0Lsrebw00XuEv0bq0rm7cT0x1iW+E+
-	 IcCp4yg3qXUtonsmUPPCwgQSmemdgQXY1zJiK8fCipF54rqv1sj48QTbAHQMLCwDPBd2J
-	 xW3Wgkrn/p9aATA/rGF5DlfTsAk3xOcPn4LTwv5k/aZGfO67RcHPaUXcNxyrIbdHp59e1
-	 egQw3modONagfu1LwxEUunafpxu2sq7lR9pTLHL9on4MNkEDpn7t9nPAP7yfbCJ5D5wB4
-	 pzBGhuwiK1j5U0OzvP3GxXnZlPXmkRF21/O/x0RTLETDJGzrDFHu0AVFmtaswv1rKHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794015901;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=mI+ziSio1iV38A7zAtI/jCX6dpwTqCt4uTFt5k+KiF4=;
+	b=hox/bggUiJNm5fQdCJRHjRO/R2i8b0ZiRxhjuyW9VjKlE9Ph4dd4sSWQfYl6juEs9PxP
+	 m52/GYtrxYYxOz4y/jv+rZqM/QFtGMyJO+B+x2fCK2vscOagu6p0qc5Flrvjuev7S/isH
+	 NzNTt/X0EukqESRQFLinUaJH5eJ/qUl3Gg3t4RIj0iiAXp2DbB7BB4n4wLeT0X4EQk/S9
+	 /xP+blyi4Onfqp+7l4UBJds1md5PiCS3tm/zrozvTf5pVROCaHfI0dUH41nbRMDgihWI/
+	 Z0bOoXVZezmNZy0n+W7dSULmlRBd2FPDxF1T24nTnsamv6CIhqaZBSq8pfFvZqIG7KA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=J2F7P3Q8;
-	arc=none smtp.remote-ip=113.46.200.217
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=tRfUw7n+;
+	arc=none smtp.remote-ip=158.69.130.18
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B917F606A326;
-	Sat,  7 Nov 2026 01:16:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B917F606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD0A606A32D;
+	Sat,  7 Nov 2026 01:44:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FD0A606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=J2F7P3Q8
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=09pdPTC0H3pX4QDaAkEJkvwP2Z2O6sdNBhQWaHjJtTk=;
-	b=J2F7P3Q89MQRdCeGRgcWFeHu+EDvE216q7TDqn+24l8ihjJSIV1ZXv3ES9EjfdJ7DBiWLz0Cl
-	WeLT/X3NubEtOCu9XYMZoNKS5G4EdgtFI229U9/NxApTWoJWaSEpgRy3N5sks5sJNWPN+dDJiUk
-	Am0epWmj1C2LFbnx3HtxzZU=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4jLylv6xSCzcZxr;
-	Sat,  7 Nov 2026 09:15:39 +0800 (CST)
-Received: from dggpemr500002.china.huawei.com (unknown [7.185.36.170])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9A5ED40561;
-	Sat,  7 Nov 2026 09:16:11 +0800 (CST)
-Received: from whupemq100006.china.huawei.com (7.152.184.206) by
- dggpemr500002.china.huawei.com (7.185.36.170) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Sat, 7 Nov 2026 09:16:11 +0800
-Received: from [10.67.110.154] (10.67.110.154) by
- whupemq100006.china.huawei.com (7.152.184.206) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Sat, 7 Nov 2026 09:16:09 +0800
-Message-ID: <d0647583-f51c-4a74-b71c-6088abffe502@huawei.com>
-Date: Sat, 7 Nov 2026 09:16:08 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=tRfUw7n+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+	s=smtpout1; t=1794015898;
+	bh=mI+ziSio1iV38A7zAtI/jCX6dpwTqCt4uTFt5k+KiF4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tRfUw7n+6XDuf6yylkr3yNF5xAVBBYCEy4JWxiq/69kvdx156SFXl6WbIH65D0GLr
+	 0lpCQ/uKOQCcwm/FSLROIqIrx0YpB4wCR2scAJrRSoI6nX4EJYi8DexWCf5C9/hLhJ
+	 IGp+J0UjHZj08Azedq56y9sDZwzOegxRHCKKiz8CXj/csyTpEObgVYLhky6NkP8hlh
+	 xFYlePjc/adQUDgztGE4PeEgjN13324gPy+EBbSeMgzHo/3Rba1lchwfEAP4opnJ/r
+	 Sdav4bndSSRq3Z3lpy9pqsK67aRX+hj84ImPM0tI4xKBJ09fx1ii1HUVDfPpxO9FAb
+	 BSr2Wj8XyzIew==
+Received: from thinkos.internal.efficios.com (unknown [64.58.40.251])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jLzPk00B9zLZ3;
+	Fri, 06 Nov 2026 20:44:57 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: juri.lelli@redhat.com,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	vincent.guittot@linaro.org
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	tglx@kernel.org,
+	will@kernel.org,
+	boqun@kernel.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org,
+	longman@redhat.com,
+	ridong.chen@linux.dev,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	bigeasy@linutronix.de,
+	clrkwllms@kernel.org,
+	parri.andrea@gmail.com,
+	m.szyprowski@samsung.com,
+	kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH v4 00/26] sched/deadline: bandwidth accounting fixes and selftests
+Date: Fri,  6 Nov 2026 20:44:25 -0500
+Message-Id: <20261107014451.1487825-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.5
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,108 +91,240 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 bpf-next 3/3] selftests/bpf: Test a private stack
- together with stack arguments
-Content-Language: en-US
-To: Chen Pei <cp0613@linux.alibaba.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
-	<bjorn@kernel.org>, <puranjay@kernel.org>, <alexei.starovoitov@gmail.com>
-CC: <eddyz87@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
-	<ihor.solodrai@linux.dev>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <alex@ghiti.fr>, <luke.r.nels@gmail.com>,
-	<xi.wang@gmail.com>, <shuah@kernel.org>, <rgbi3307@gmail.com>,
-	<guoren@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20261106181558.1564-1-cp0613@linux.alibaba.com>
- <20261106181558.1564-4-cp0613@linux.alibaba.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20261106181558.1564-4-cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemq100006.china.huawei.com (7.152.184.206)
+Content-Transfer-Encoding: 8bit
+
+Hi Ingo, Juri,
+
+This series fixes twenty-two bugs of SCHED_DEADLINE, most of them in its
+bandwidth accounting, then adds each runqueue's deadline bandwidth to
+sched_debug and three selftests: twenty-six patches on tip sched/urgent,
+the fixes first, as you asked, so that stable can take 1 to 22. Three of
+the bugs take the kernel down (patches 5, 8 and 20), two leave
+cpuset_mutex unusable (1 and 6), and most of the others leave a root
+domain's total_bw or a runqueue's this_bw wrong: the root domain then
+admits deadline tasks beyond its capacity, or refuses every one.
+
+It applies on top of "locking/rtmutex: priority inheritance fixes and
+tests", posted for Peter and Thomas: patch 8 rests on its patch 3. Patch
+1 is Andrea Parri's, reviewed by Waiman, Kayra and Juri, carried here
+because patches 6 and 14 build on it, now with my Signed-off-by; take it
+from whichever route you prefer.
+
+Your four fixes, Juri, which Ingo dropped from sched/urgent after the
+first crashed Marek Szyprowski's hotplug test, are patches 16 (1/4,
+without the task's mask, which has no active CPU during hotplug), 10
+(2/4, without its double release, and without your Signed-off-by, which
+is yours to add back), 2 (3/4) and 11 (4/4, extended). Marek found v2
+fixed on the board that crashed.
+
+The fixes, by patch number
+==========================
+
+ 1  a retry in __sched_setscheduler() unlocks a cpuset_mutex it no
+    longer holds (Andrea Parri);
+ 2  SCHED_FLAG_KEEP_PARAMS carries out half of a policy or class change,
+    and leaks the bandwidth of a boosted task;
+ 3  SCHED_FLAG_KEEP_PARAMS admits stale parameters, read without a lock;
+ 4  a task boosted by a deadline waiter cannot leave for another policy
+    (EBUSY);
+ 5  a debugfs write to a fair server divides by zero active CPUs while
+    its CPU goes offline or comes online;
+ 6  sysrq-n takes cpuset_mutex under tasklist_lock and never releases
+    it;
+ 7  a throttled task switched out and back before its 0-lag time never
+    runs again;
+ 8  the owner boosted by a deadline waiter that leaves the class loops
+    forever in replenish_dl_entity(), under the runqueue lock;
+ 9  a task back in the class runs on the deadline and runtime of the
+    period it left, or of the donor that boosted it;
+ 10 a task that leaves the class asleep keeps its bandwidth in total_bw
+    for good;
+ 11 SCHED_DEADLINE on a zombie reserves bandwidth nothing releases, and
+    a zombie switched out of the class is taken off its cpuset's count
+    twice;
+ 12 a rebuild of the accounting forgets the bandwidth of tasks that left
+    the class, or died, before their 0-lag time, which is then released
+    twice;
+ 13 a parameter change while a wakeup is in flight underflows the
+    this_bw of a runqueue that never held the task's bandwidth;
+ 14 without cpusets, the first hotplug drops the bandwidth of every
+    deadline task; with them, a drifting count has every rebuild drop a
+    cpuset's tasks;
+ 15 a rebuild counts the bandwidth of a task at its last schedule, which
+    nothing releases;
+ 16 admission, moves and rebuilds disagree on the root domain that
+    counts a task's bandwidth, and take it from one that never had it;
+ 17 a cpuset move takes bandwidth off a root domain with no room made
+    for it: total_bw of a partition reaches 2^64 - 262144;
+ 18 a rebuild of the sched domains between cpuset_can_attach() and
+    cpuset_attach() drops the attach's reservation;
+ 19 an attach leaves in the destination's total_bw the reservation of a
+    task that left the class, or died, before it;
+ 20 a rebuild counts a task on the first active CPU of its cpuset: an
+    isolated one, none at all (BUG()), or not where
+    dl_task_offline_migration() moved it;
+ 21 a replenishment timer left armed across a class round trip fires at
+    the period of the reservation the task left;
+ 22 sched_setattr(SCHED_DEADLINE) on a boosted task leaves its
+    runqueue's this_bw without the task's bandwidth, and a sugov
+    kthread's own reservation is never admitted.
+
+Patch 23 shows patch 13's bug from userspace; patches 24 to 26 add 55
+cases in tools/testing/selftests/sched/deadline, as Juri suggested.
+Patches 16 to 20 go together: 16 records the root domain that counts a
+task's bandwidth, and 17 to 20 fix the attach and rebuild paths that the
+record exposes. Patch 22 completes patch 13.
+
+Patch 8 touches the rt_mutex code, Peter and Thomas: it records a
+deadline waiter's reservation in its rt_mutex node, which grows struct
+rt_mutex_waiter by 48 bytes, and takes a deadline boost from there; the
+other classes keep the waiter's own priority, as since acd58620e415
+("sched/rtmutex: Refactor rt_mutex_setprio()").
+
+Testing
+=======
+
+The 55 cases pass every time with no kernel warning in 16 QEMU guests,
+lockdep on: 8 of 8 vCPUs, and 2 each of 4 vCPUs, PREEMPT_RT, proxy
+execution off and no CONFIG_CPUSETS. v7.4-rc1 fails 19 of them, which
+patches 24 to 26 list, and three hotplug cases without cpusets. Kernels
+stopped at single patches confirm the claims of patches 10, 12, 18 and
+19. Patch 8 has no selftest: a debug delay or a stress test locks
+v7.4-rc1 up, and the series runs the stress test for 600 seconds; the
+locking API, ww_mutex, locktorture and futex selftests pass, with and
+without PREEMPT_RT.
+
+How this was developed
+======================
+
+These patches, their messages and the tests were written by an LLM
+coding assistant under my direction and review. I am at home with the
+concepts behind SCHED_DEADLINE, but not with its implementation, so I am
+asking those who know this code for a careful reading of the fixes: a
+reproducer that stops failing says that the symptom goes away, not that
+the fix is the one you would have written. The bugs came from flaky
+cgroup selftests of a feature I am developing, from reviewing Juri's
+four fixes, from building deadline_bw_test, from reading the code, and
+from the Sashiko AI reviews of v1 to v3, each finding checked against
+the code first; the patches changed since v3 also went through a local
+Sashiko run before posting.
+
+Changes since v3
+================
+
+ - rebased on tip sched/urgent, which took Nickolai Zeldovich's this_bw
+   fix for a dying task; patch 12 keeps its dl_task test;
+ - new patches 4 (a boosted task may change its policy) and 8 (a
+   deadline boost from the waiter's rt_mutex node);
+ - 1: my Signed-off-by; 5: rq->online instead of cpu_active(); 6:
+   cpuset_mutex decided again under the runqueue lock; 9: the deboost of
+   a task with no parameters resets the donor's deadline and runtime;
+ - 10: an inactive timer where the 0-lag time is ahead, and the
+   parameters cleared with the bandwidth; 14: the rebuild walks the task
+   list with cpusets too, without the per-cpuset count, and leaves out
+   tasks with no bandwidth;
+ - 16: special and boosted tasks with no bandwidth of their own are not
+   moved; 18: waits in cpuset_full_lock() too; 20: the task's own mask
+   first, and dl_task_offline_migration() counts a task a rebuild left
+   out; 22: checks that the bandwidth is counted before a no-op, and
+   leaves the runqueue alone when it is kept;
+ - deadline_bw_test: boosted_owner_policy, deboost_resets_period and
+   deboost_released_resets_period added, three cases fixed to reach the
+   state they are named for, CPUs from the online set, error paths that
+   join their threads;
+ - deadline_switch_test: its children die with the test
+   (PR_SET_PDEATHSIG);
+ - shorter commit messages.
+
+Not changed: a departed task boosted into the class is counted
+conservatively across a rebuild, never twice, and the EPERM of a
+sleeping task moved to another partition is the baseline's affinity
+check.
+
+Based on tip sched/urgent, 006991aa8997, with "locking/rtmutex: priority
+inheritance fixes and tests" applied first:
+https://lore.kernel.org/lkml/20261106235931.1478800-1-mathieu.desnoyers@efficios.com
+
+v3: https://lore.kernel.org/all/20261105193359.1450487-1-mathieu.desnoyers@efficios.com/
+
+Andrea Parri (1):
+  sched: Fix cpuset_mutex double unlock in __sched_setscheduler()
+
+Juri Lelli (1):
+  sched/deadline: Reject SCHED_DEADLINE on exited tasks
+
+Mathieu Desnoyers (24):
+  sched: Refuse SCHED_FLAG_KEEP_PARAMS that would change the policy or
+    the class
+  sched/deadline: Do not admit bandwidth for parameters that are kept
+  sched: Let a task boosted by a deadline waiter change its policy
+  sched/deadline: Do not divide by zero active CPUs of a root domain
+  sched: Take cpuset_mutex for a deadline policy change only with pi
+  sched/deadline: Do not lose a throttled task switched out and back
+  sched/deadline: Take a deadline boost from the waiter's rt_mutex node
+  sched/deadline: Reset the deadline and the runtime with the parameters
+  sched/deadline: Release the bandwidth of a task that leaves the class
+    asleep
+  sched/deadline: Keep departing bandwidth across a root domain rebuild
+  sched/deadline: Do not take a waking task's bandwidth off a runqueue
+    it left
+  sched/deadline: Rebuild the root domains' accounting from the task
+    list
+  sched/deadline: Leave a dying task out of a rebuild of the accounting
+  sched/deadline: Record the root domain holding a task's bandwidth
+  sched/deadline: Move a task's bandwidth only where room was made
+  cgroup/cpuset: Wait for an attach before rebuilding the sched domains
+  cgroup/cpuset: Give back the bandwidth an attach did not move
+  sched/deadline: Credit a rebuild to the CPU recorded with the task's
+    bandwidth
+  sched/deadline: Cancel the replenishment timer with the parameters
+  sched/deadline: Count the bandwidth a boosted task is given
+  sched/debug: Show the deadline bandwidth of each runqueue
+  selftests/sched: Add a test of SCHED_DEADLINE policy round trips
+  selftests/sched: Test SCHED_DEADLINE bandwidth across a root domain
+    rebuild
+  selftests/sched: Add a test of SCHED_DEADLINE bandwidth accounting
+
+ include/linux/cpuset.h                        |    9 -
+ include/linux/sched.h                         |   47 +-
+ include/linux/sched/deadline.h                |   38 +-
+ include/linux/sched/rt.h                      |   11 -
+ kernel/cgroup/cgroup.c                        |    3 -
+ kernel/cgroup/cpuset-internal.h               |    8 +-
+ kernel/cgroup/cpuset.c                        |  126 +-
+ kernel/locking/rtmutex.c                      |   41 +-
+ kernel/locking/rtmutex_api.c                  |    2 +-
+ kernel/locking/rtmutex_common.h               |    5 +
+ kernel/sched/core.c                           |   88 +-
+ kernel/sched/deadline.c                       |  799 +++-
+ kernel/sched/debug.c                          |   11 +-
+ kernel/sched/sched.h                          |   23 +-
+ kernel/sched/syscalls.c                       |   87 +-
+ kernel/sched/topology.c                       |    9 +
+ tools/testing/selftests/Makefile              |    1 +
+ .../selftests/sched/deadline/.gitignore       |    3 +
+ .../testing/selftests/sched/deadline/Makefile |    8 +
+ tools/testing/selftests/sched/deadline/config |    4 +
+ .../sched/deadline/deadline_bw_test.c         | 3902 +++++++++++++++++
+ .../sched/deadline/deadline_rebuild_test.c    |  462 ++
+ .../sched/deadline/deadline_switch_test.c     |  440 ++
+ .../testing/selftests/sched/deadline/settings |    1 +
+ 24 files changed, 5847 insertions(+), 281 deletions(-)
+ create mode 100644 tools/testing/selftests/sched/deadline/.gitignore
+ create mode 100644 tools/testing/selftests/sched/deadline/Makefile
+ create mode 100644 tools/testing/selftests/sched/deadline/config
+ create mode 100644 tools/testing/selftests/sched/deadline/deadline_bw_test.c
+ create mode 100644 tools/testing/selftests/sched/deadline/deadline_rebuild_test.c
+ create mode 100644 tools/testing/selftests/sched/deadline/deadline_switch_test.c
+ create mode 100644 tools/testing/selftests/sched/deadline/settings
 
 
+base-commit: 006991aa89974378ee579416dba87adc22cd60fd
+prerequisite-patch-id: 382feddeb27d226d8711d23036c8ae0c8629c680
+prerequisite-patch-id: 72e83c74aa52fcd32afb2909b071f40c82b0ef10
+prerequisite-patch-id: cfd50da1cef9606aafc687658a1ac79f74969703
+prerequisite-patch-id: 2e79dc888982d901d6e8b3784790ef71037482a9
+prerequisite-patch-id: f7338b3af8aeb24a47d19dff76d7e3180120b9aa
+-- 
+2.47.3
 
-On 2026/11/7 2:15, Chen Pei wrote:
-> Add two asm programs to verifier_stack_arg.c, inside the block that is
-> already gated on x86, arm64 and riscv64. A raw_tp program with a 64 byte
-> frame calls a ten-argument subprog with a 64 byte frame of its own, and
-> BPF_PROG_TEST_RUN runs the pair without attaching it. Args 9 and 10 stay
-> in the kernel frame and arg 10 points into the caller's frame, so the two
-> have to agree on where the outgoing area is. The callee returns what the
-> caller stored plus arg 9, so a wrong area shows up as a wrong retval
-> rather than as a crash.
-> 
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-> ---
->   .../selftests/bpf/progs/verifier_stack_arg.c  | 49 +++++++++++++++++++
->   1 file changed, 49 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> index 146cdf81bbc4..e8108e768b89 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> @@ -975,6 +975,55 @@ __naked void stack_arg_precision_fallback(void)
->   	);
->   }
->   
-> +/* Writes both ends of its frame, then reads args 9, 10 and the frame of the caller. */
-> +static __naked __noinline __used
-> +long priv_stack_10args(long a, long b, long c, long d, long e, long f, long g, long h,
-> +		       long i, long *j)
-> +{
-> +	asm volatile (
-> +		"r1 = 0;"
-> +		"*(u64 *)(r10 - 8) = r1;"
-> +		"*(u64 *)(r10 - 64) = r1;"
-> +		"r0 = *(u64 *)(r11 + 32);"
-> +		"r1 = *(u64 *)(r11 + 40);"
-> +		"r1 = *(u64 *)(r1 + 0);"
-> +		"r0 += r1;"
-> +		"exit;"
-> +		::: __clobber_all
-> +	);
-> +}
-> +
-> +/*
-> + * A frame of 64 bytes in a raw_tp prog goes to the private stack.
-> + * arm64 and riscv64 pass args 9 and 10 on the kernel stack. On x86-64
-> + * both frames stay there as well.
-> + */
-> +SEC("raw_tp")
-> +__description("stack_arg: private stack in the caller and in the callee")
-> +__success __retval(890)
-> +__naked void stack_arg_priv_stack(void)
-> +{
-> +	asm volatile (
-> +		"r1 = 800;"
-> +		"*(u64 *)(r10 - 64) = r1;"
-> +		"r1 = r10;"
-> +		"r1 += -64;"
-> +		"*(u64 *)(r11 - 40) = r1;"
-> +		"*(u64 *)(r11 - 32) = 90;"
-> +		"*(u64 *)(r11 - 24) = 8;"
-> +		"*(u64 *)(r11 - 16) = 7;"
-> +		"*(u64 *)(r11 - 8) = 6;"
-> +		"r1 = 1;"
-> +		"r2 = 2;"
-> +		"r3 = 3;"
-> +		"r4 = 4;"
-> +		"r5 = 5;"
-> +		"call priv_stack_10args;"
-> +		"exit;"
-> +		::: __clobber_all
-> +	);
-> +}
-> +
->   #else
->   
->   /* No BTF tells about this store. The insn is what JIT has to deal with. */
-
-
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
