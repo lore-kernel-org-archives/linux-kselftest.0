@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011847;
-	b=ul25MY9Q+Tum4kXRZFnyX7ZsT0WdhbkzhzwU3DwPFt5R9qo7nulfsd15vyctbBnYQ8uz
-	 PRfBASmE5L8RJBlvfUOJFgq/RSQPC4L+51P25UHdMYTP/SRUQV3MI1QAV8//cigG0xPYB
-	 QiYbWU8x71Pz/LA54tC+JiyZRQ62yV/RmMwPS9reZBS2hqoQbDNFawCtaqKEdw8CJB7k6
-	 IaxxNDNX2T4btdiRffHQrTQk6ceBUVOVFSVQPjnf9XfiKo/2a6b0A0XIVgBwSF1NBEwJ6
-	 OV5/qsAvDcPtp+8Twf5oOri7U3csPC+do5XA1qcYojQAXPjhMhN5liYwiXzGPWNJXPA==
+	t=1794011848;
+	b=k0A9tkVKkqXL94cuVhMVx7YapJuzNW4PD/rXwSWTOwISlcI2PN+ziKadys/cUtRsCi2p
+	 h+YxLZT7dtZHj131LbmropbC42KMYFCscUR2ONKg5Gq7YltQCGg4CBtnmoOngIzGny8Xa
+	 UPe4btoLvUmfGsQfQxysfWgozVRZ2zIv1MuIHTKKHaTWvZBB1ERivaPHM2FYOEeLrTLWq
+	 diaysxJDynshxTwL9tb8E16TrMHIf7wzX2y3XWLs3G1c2AfrtA+HsH4RTfmpjhtMebREE
+	 YURrUf9lmRXCYG3r2ejvRcLmhnVNHDcENiRUSRhfDPDwp5mFhUAPIXmgmOPivU0zsWg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011847;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011848;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KBhGX9yahIbsDDFoJ77ldQTuDbT5tg0ODdJhu+0F5YI=;
-	b=QkRMyEaGz+pfjFLaXAospl8PkpiLuc3It/d8MqVfseQ60S3oxYd2mG4VL03ZzxH4BwWT
-	 +Rnp0QGiMelatT6ByjPf/+tYB4sydxQ5Gnb5TV14VK4izvRl6X6cS37DLJM3qc2K5cztS
-	 cmNN5gDY2X/y1IJG94XTcyf11x7PKssJDu2MqW4Fq+hjVsWWB6Gp8q6ZggxKJsKLe1OEy
-	 3xXOulhcCV60fxX/57RYWjZ8OLSl/0LNnOs+fFNWHd7wriCwwS3Reyz5Qcq82U07Zh51L
-	 rdgGX8odWz/jpFkDplpG/pH5Ys43OzYCjBgU7lY11ZTbf5ET7QW4C5DhWJnsJPgIPjw==
+	bh=SxZseH1D/U//4ssKZEL6OBhMNAqOusdgqcQCPzcsa1A=;
+	b=0iT2JSa1WceNS996LcTt0wrT+9Nc79PlKXr8j0DAA6ir5whPSAg7Mdg02U4cR9cf4AAT
+	 ErL9xtGnKTXNzLKV2tRtYfOHnx3u3ysglpVLpmsVPC7XqU7Qc998bAPvFHSgdV3h44XCq
+	 c50FpKe1RJ3YzMM7+2PlS6szipJqxKacy2HIFQwCpAmmLAhUlKYGZR2HoK/QVfoTwWoFl
+	 8X0ivgusdxZnaFxMhlwtjIuqcTc+B8fv9iOfyR0fl2vu90N7cxf1ZqFpeOSnyIfh02IFa
+	 I9aj2RwSMfeWDoHtanjRLxtkRL8VKrVCjI1Vkuf7orX6HlyO3hZnAanqZBHMEYc0bjA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PJfRbRBs;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="mUBFs/H/";
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4349C606B761;
-	Sat,  7 Nov 2026 00:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB576070BAE;
+	Sat,  7 Nov 2026 00:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PJfRbRBs
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mUBFs/H/
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011841;
-	b=IC5lsvDwnO2pljiQ8KRSVTp+eYwcw0v648FfwXl3Cz9Q2ibruvVi9ivr8QOqCsPaMjM6
-	 hrb8EFaGVv0h8oanUHMbbvs3ojPRoGqSYFF+9qqo1qZmJiaZghj3jZhRfGGVy6wAt7P52
-	 ftOTMfNBqS3rMhZtvCmLPHgBCHE5jNyedeoqePB+DrwJmVRS8f75/kJUaAK2tsCJlOODy
-	 HO74dA8K4Jsh54juIFKgszuG+4hD+73kXvG+DH1b8tNlM9HfFS1ZMdUoq6Lt8pwRTZ1PJ
-	 59t1yPpTeanny8x5cGOGkXDID5aeAME1jTVFKn5lALF52KbdoGyNuqgpRx4WaaYF1Hw==
+	t=1794011842;
+	b=jzOrZDWUD1p8kRij7cmVHLLe4mumO4XJrdbrb5T92+kjvRJlJX58DBxDoPOMgJbStZV0
+	 zUYQWk1qUb62mmo0x+Z66by7GK0AFWNpWx5dQ7rwn+m5yMtMmsDflC6kVIx0UlRVIbdhw
+	 NpwjBT5b2SD+3MPRPXbgaJGJY7GxjGANJsNT805PRK+3QAS6bkNPkWgP90smMZ7NN0R5s
+	 37anuPvmlYENpYaLPfmKt/2v8IS5EX22MfaJLH9q0vnYAQOJH6XYFRYjkupTswBHb+svS
+	 1kaMGgCReRBiB/oUKjerFal58QYnHsF2jHAzgrqMlLe+KrqzE3vZBnE3wpEqnEdUENQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011841;
+	c=relaxed/relaxed; t=1794011842;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KBhGX9yahIbsDDFoJ77ldQTuDbT5tg0ODdJhu+0F5YI=;
-	b=g7e/2ed0nT/KRKyjNgSB4IgD69SQO87AmMBpcMFwZSC77+RyS0PVDkf3gHUwt43MtAv9
-	 rkzRszeTiYVG9HV8DLWlv8xXZVVqtIsrjCt6+i24cQwIjcp/rofUsyXzCa5g7lSLjViR2
-	 FRGvMZT1nz2ZVwQf3txqvJgPoV6h/D9+WF8gJt3dpGwkN4PT4XSB3xP+VLoT6hWqDys+w
-	 Hn1tJIuv9AQZHTaVIUEAekBpOs5Ce28SoIRnT7TBUjJpOtlF0UPyZLsCzcvCKRX3jr63q
-	 QG1iTt1qtL5FCWIfWlrU+F42hiWhWlf7xUUGxguuRX8pQg1CmLtqQdo4g4l5I+3MZVg==
+	bh=SxZseH1D/U//4ssKZEL6OBhMNAqOusdgqcQCPzcsa1A=;
+	b=Dy+Z+ObJO3FzbV4FOUB+h7rnmNS1gQ8AMaGQxZCHs5oXZGcMl99n7uqOR9sJRAyBzoTH
+	 CcoXXdGb2DZdEEzIIEchPKWWIx1FWTtLaKaYBDVx5x8srY9y8bIHXsY7csJjuqyO9mH+P
+	 BfUi/zMBB75GslOqpIA7UXudlgN3YKErXkmo7JIOlFe7gbDDGyMoh0fu3y25pIr1B1uup
+	 98fymrOignzArdl1iqhHxtcsnaBityb2XvpwqOS845qyfu3p4O+k5QQSS+bRsk4u7tXQU
+	 09UCChdjCiJecFSdHlWyX+7RiRsYmmf5b0+1pjNZmIFzgWymHlMfwjg3KF+a4561eug==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B46E31F008A5;
-	Sat,  7 Nov 2026 00:37:13 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0D5AB1F008A4;
+	Sat,  7 Nov 2026 00:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011841;
-	bh=KBhGX9yahIbsDDFoJ77ldQTuDbT5tg0ODdJhu+0F5YI=;
+	s=k20260515; t=1794011842;
+	bh=SxZseH1D/U//4ssKZEL6OBhMNAqOusdgqcQCPzcsa1A=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=PJfRbRBsq/zArvX5SSV+AJJfmzGv9LuvVropQ9uVhaGW2UaZraSUeBXfQXme3+Vbi
-	 QkUVozbzOKTFF+eAMYVXS6RufAEJjovCp22DfqPvN0nu+2L0CVG7Fv9gDXHN2lRoJg
-	 gQ/AUjNegaeg053dDeR5AfM4WDhqVLrYDdNL3ldZILB0L16zLo7+PU+nrT0g71QIiZ
-	 8CiEhzow2gzKcPG2jJ3+XSnFwMG79BrvP0XpK8+a/G9VJqOrDhzXsMxv1qsSq8gr0C
-	 lfCKfa55VYwYhjPVFr0P7aPAKC1+JXKvEcHPLzy556276iptGc3iO62jeh1a4aKx6y
-	 3blMeeEHP0KHw==
+	b=mUBFs/H/7OWwoFBVxL4CLWIAEgOJOkKjVNsHtKrGyqlRUKut7S4Hgy/uPK56zo1B1
+	 hCYuzouZpkZkjFbKVLdn3ZRjkhftiwdOE0ZRH1Ro8MoBanvvLQW91mro4yeSqM4eD1
+	 OwlbCh8IytC02h4XXubQQtfX3FjwzLwf3cKzfbcI1sREobTztwhzr2++avhhOnhm46
+	 gJj17sf5PdbMAvLLMs0mK750/ntTjXUOZ2Sbw8CL3sHaMoN6SK+SEAybPmFlPdiuQ6
+	 N96KjR1WgCHQQ7BbaUV0x0WSb6B+aLjFEg5d1u/JgohH9qWkbOVDSXYyhreOVr0qKo
+	 7NhGXGhma0QcQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 7D8DF47A1C;
+	by lkml.kernel.org (Postfix) with ESMTP id EF32A47A37;
 	Sat,  7 Nov 2026 00:36:57 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:42 -0800
-Subject: [PATCH RFC v3 68/88] vfio/pci: Use iov_iter for MMIO read and
- write
+Date: Fri, 06 Nov 2026 16:37:49 -0800
+Subject: [PATCH RFC v3 75/88] KVM: selftests: Verify VFIO MMIO read and
+ write for igb device
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-68-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-75-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=6301;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=3042;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=c4VDLuT5yqC8DJ1fpMzzzVy4zLcf9cySQYtbQA4hk74=;
- b=L5BjRew5q1svkShxrjXUHUJtKZ/8fmvjKLgv7L6S7iOvEcrS/PClvlilzhXkLk+16KWEMf/Ny
- 1dJMQc+3f77BIvFJT8Dpz/JuqAKav6jhjhEryI/df80j9npQPqOyeF+
+ bh=3rXXPklnl0jKOPE29y7ipXm7LsNh6MGUlvgjiF//KXQ=;
+ b=xloQFGBoKJ2DqV21AvqSu5E1J/CpqtQbloSW0T3GvaqdUgvm8xoOH8M0ztGaadapQ2nhxCakj
+ IhodY//gGI6CJqHf9PiPv1GyWySREMT+8pDpBuxA/6S9HQ3zZS/kyLY
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,196 +120,90 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Refactor the internal MMIO read and write helpers in vfio_pci_rdwr to
-operate on struct iov_iter rather than directly calling copy_to_user
-and copy_from_user with user pointers.
+Add a subtest verifying direct pread() and pwrite() operations on the
+device descriptor targeting BAR0 MMIO space.
 
-Keep the existing vfio_pci_core_do_io_rw interface unchanged by
-importing user buffers into an iov_iter via import_ubuf before calling
-the internal implementation. The overhead of initializing the iov_iter
-on userspace accesses is negligible compared to PCIe bus cycle latency.
+Enable memory decoding in the PCI Command register, verify that reading
+the device status register returns an accessible value, and verify that
+writing and reading back a scratch MAC register (RAL0) succeeds with
+expected data.
 
-This decouples low-level PCI MMIO access from userspace copy semantics,
-allowing in-kernel callers to service I/O using kernel buffers (such
-as ITER_KVEC) without user copy overhead or page fault recursion.
-
-For delegation of read/write() to guest_memfd, this helps avoid AB-BA
-deadlocks between mapping.invalidate_lock and mm->mmap_lock when MMIO read
-and write operations are invoked under filemap invalidation locks.
-
-No functional change intended.
+This validates that kernel-mediated MMIO operations over the VFIO device
+descriptor function properly, providing a baseline to compare against
+when guest_memfd wraps the BAR.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- drivers/vfio/pci/vfio_pci_rdwr.c | 107 ++++++++++++++++++++++++---------------
- 1 file changed, 65 insertions(+), 42 deletions(-)
+ .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/drivers/vfio/pci/vfio_pci_rdwr.c b/drivers/vfio/pci/vfio_pci_rdwr.c
-index e5f1f60513709..cc64722d1ab9a 100644
---- a/drivers/vfio/pci/vfio_pci_rdwr.c
-+++ b/drivers/vfio/pci/vfio_pci_rdwr.c
-@@ -91,34 +91,34 @@ VFIO_IOREAD(32)
- VFIO_IOREAD(64)
- 
- #define VFIO_IORDWR(size)						\
--static int vfio_pci_iordwr##size(struct vfio_pci_core_device *vdev,\
--				bool iswrite, bool test_mem,		\
--				void __iomem *io, char __user *buf,	\
--				loff_t off, size_t *filled)		\
--{									\
--	u##size val;							\
--	int ret;							\
--									\
--	if (iswrite) {							\
--		if (copy_from_user(&val, buf, sizeof(val)))		\
--			return -EFAULT;					\
--									\
--		ret = vfio_pci_core_iowrite##size(vdev, test_mem,	\
--						  val, io + off);	\
--		if (ret)						\
--			return ret;					\
--	} else {							\
--		ret = vfio_pci_core_ioread##size(vdev, test_mem,	\
--						 &val, io + off);	\
--		if (ret)						\
--			return ret;					\
--									\
--		if (copy_to_user(buf, &val, sizeof(val)))		\
--			return -EFAULT;					\
--	}								\
--									\
--	*filled = sizeof(val);						\
--	return 0;							\
-+static int vfio_pci_iordwr##size(struct vfio_pci_core_device *vdev,		\
-+				bool iswrite, bool test_mem,			\
-+				void __iomem *io, struct iov_iter *iter,	\
-+				loff_t off, size_t *filled)			\
-+{										\
-+	u##size val;								\
-+	int ret;								\
-+										\
-+	if (iswrite) {								\
-+		if (!copy_from_iter_full(&val, sizeof(val), iter))		\
-+			return -EFAULT;						\
-+										\
-+		ret = vfio_pci_core_iowrite##size(vdev, test_mem,		\
-+						  val, io + off);		\
-+		if (ret)							\
-+			return ret;						\
-+	} else {								\
-+		ret = vfio_pci_core_ioread##size(vdev, test_mem,		\
-+						 &val, io + off);		\
-+		if (ret)							\
-+			return ret;						\
-+										\
-+		if (!copy_to_iter_full(&val, sizeof(val), iter))		\
-+			return -EFAULT;						\
-+	}									\
-+										\
-+	*filled = sizeof(val);							\
-+	return 0;								\
- }									\
- 
- VFIO_IORDWR(8)
-@@ -132,11 +132,12 @@ VFIO_IORDWR(64)
-  * reads with -1.  This is intended for handling MSI-X vector tables and
-  * leftover space for ROM BARs.
-  */
--ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
--			       void __iomem *io, char __user *buf,
--			       loff_t off, size_t count, size_t x_start,
--			       size_t x_end, bool iswrite,
--			       enum vfio_pci_io_width max_width)
-+static ssize_t __vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev,
-+					bool test_mem, void __iomem *io,
-+					struct iov_iter *iter, loff_t off,
-+					size_t count, size_t x_start,
-+					size_t x_end, bool iswrite,
-+					enum vfio_pci_io_width max_width)
- {
- 	ssize_t done = 0;
- 	int ret;
-@@ -153,25 +154,25 @@ ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
- 
- 		if (fillable >= 8 && !(off % 8) && max_width >= 8) {
- 			ret = vfio_pci_iordwr64(vdev, iswrite, test_mem,
--						io, buf, off, &filled);
-+						io, iter, off, &filled);
- 			if (ret)
- 				return ret;
- 
- 		} else if (fillable >= 4 && !(off % 4) && max_width >= 4) {
- 			ret = vfio_pci_iordwr32(vdev, iswrite, test_mem,
--						io, buf, off, &filled);
-+						io, iter, off, &filled);
- 			if (ret)
- 				return ret;
- 
- 		} else if (fillable >= 2 && !(off % 2) && max_width >= 2) {
- 			ret = vfio_pci_iordwr16(vdev, iswrite, test_mem,
--						io, buf, off, &filled);
-+						io, iter, off, &filled);
- 			if (ret)
- 				return ret;
- 
- 		} else if (fillable) {
- 			ret = vfio_pci_iordwr8(vdev, iswrite, test_mem,
--					       io, buf, off, &filled);
-+					       io, iter, off, &filled);
- 			if (ret)
- 				return ret;
- 
-@@ -179,23 +180,45 @@ ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
- 			/* Fill reads with -1, drop writes */
- 			filled = min(count, (size_t)(x_end - off));
- 			if (!iswrite) {
--				u8 val = 0xFF;
--				size_t i;
-+				static const u8 ff_buf[64] = { [0 ... 63] = 0xFF };
-+				size_t cur = filled;
-+
-+				while (cur) {
-+					size_t step = min(cur, sizeof(ff_buf));
- 
--				for (i = 0; i < filled; i++)
--					if (copy_to_user(buf + i, &val, 1))
-+					if (!copy_to_iter_full(ff_buf, step, iter))
- 						return -EFAULT;
-+					cur -= step;
-+				}
-+			} else {
-+				iov_iter_advance(iter, filled);
- 			}
- 		}
- 
- 		count -= filled;
- 		done += filled;
- 		off += filled;
--		buf += filled;
+diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
+index 6525f392b3930..fa05b7cfb3185 100644
+--- a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
++++ b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
+@@ -236,4 +236,62 @@ TEST_F(guest_memfd_vfio, get_irq_info)
  	}
- 
- 	return done;
  }
-+
-+ssize_t vfio_pci_core_do_io_rw(struct vfio_pci_core_device *vdev, bool test_mem,
-+			       void __iomem *io, char __user *buf,
-+			       loff_t off, size_t count, size_t x_start,
-+			       size_t x_end, bool iswrite,
-+			       enum vfio_pci_io_width max_width)
+ 
++static void vfio_pci_enable_memory_and_bus_master(struct __test_metadata *_metadata,
++						  int vfio_fd)
 +{
-+	struct iov_iter iter;
++	struct vfio_region_info cfg_info = {};
++	ssize_t ret_bytes;
++	uint16_t cmd;
 +	int ret;
 +
-+	ret = import_ubuf(iswrite ? ITER_SOURCE : ITER_DEST, buf, count, &iter);
-+	if (ret)
-+		return ret;
++	cfg_info.argsz = sizeof(cfg_info);
++	cfg_info.index = VFIO_PCI_CONFIG_REGION_INDEX;
++	ret = ioctl(vfio_fd, VFIO_DEVICE_GET_REGION_INFO, &cfg_info);
++	ASSERT_EQ(0, ret);
 +
-+	return __vfio_pci_core_do_io_rw(vdev, test_mem, io, &iter, off, count,
-+					x_start, x_end, iswrite, max_width);
++	/* Enable Memory Space and Bus Master in PCI Command register */
++	ret_bytes = pread(vfio_fd, &cmd, sizeof(cmd), cfg_info.offset + PCI_COMMAND);
++	ASSERT_EQ(sizeof(cmd), ret_bytes);
++	cmd |= (PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
++	ret_bytes = pwrite(vfio_fd, &cmd, sizeof(cmd), cfg_info.offset + PCI_COMMAND);
++	ASSERT_EQ(sizeof(cmd), ret_bytes);
 +}
- EXPORT_SYMBOL_GPL(vfio_pci_core_do_io_rw);
- 
- ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev, char __user *buf,
++
++TEST_F(guest_memfd_vfio, bar_rw)
++{
++	struct vfio_region_info bar0_info = {};
++	ssize_t ret_bytes;
++	uint32_t val;
++	int ret;
++
++	vfio_pci_enable_memory_and_bus_master(_metadata, self->vfio_fd);
++
++	bar0_info.argsz = sizeof(bar0_info);
++	bar0_info.index = VFIO_PCI_BAR0_REGION_INDEX;
++	ret = ioctl(self->vfio_fd, VFIO_DEVICE_GET_REGION_INFO, &bar0_info);
++	ASSERT_EQ(0, ret);
++
++	/*
++	 * Read Device Status (E1000_STATUS) via pread() at BAR0 offset.
++	 * Confirm device is readable and does not return 0xFFFFFFFF.
++	 */
++	val = 0;
++	ret_bytes = pread(self->vfio_fd, &val, sizeof(val), bar0_info.offset + E1000_STATUS);
++	ASSERT_EQ(sizeof(val), ret_bytes);
++	ASSERT_NE(0xFFFFFFFF, val);
++
++	/*
++	 * Write a distinct scratch test pattern to RAL0 via pwrite() and read
++	 * it back via pread().
++	 */
++	val = 0xdeadbeef;
++	ret_bytes = pwrite(self->vfio_fd, &val, sizeof(val), bar0_info.offset + E1000_RAL0);
++	ASSERT_EQ(sizeof(val), ret_bytes);
++
++	val = 0;
++	ret_bytes = pread(self->vfio_fd, &val, sizeof(val), bar0_info.offset + E1000_RAL0);
++	ASSERT_EQ(sizeof(val), ret_bytes);
++	ASSERT_EQ(0xdeadbeef, val);
++}
++
+ TEST_HARNESS_MAIN
 
 -- 
 2.56.0.455.g6c5a503b38-goog
