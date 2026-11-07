@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011843;
-	b=sjOJgXjICESCxlDikkpekzRdJxuWWEKBuPIHyE7FHGinUNBIN0jU4Y2Vtj4M83PQh8Kh
-	 ZQQhkoF66Dc7R1u8/dRJKuBUPVIg7dkm8cAXje8zX8XC950Ppi0v43+ESh8MUkH4vnac7
-	 jn+izwKv3t0quCsNsjXX5+JDXbRR2SI2GK1DgYDsOADeM4zN9Zyndj+IxQSUzeH1D4AKE
-	 qewhiYKN2hSLrAhfZkdv9VMkWPxKsZNBT8qO1tU1GFPWs7t/QA7jPG2b+ngr7tssB1sDE
-	 5mdDkF4Ylne5vMxgGBk3WgawNipnhrcywgtM3qj95MaHQGZxsGbuRScZTqgkNoZ9bTQ==
+	t=1794011838;
+	b=cHhAp8obfysegoT/qTaks/rAw1Z4EUOPCdUiIMgHmJXam5f23EExB/ycdYoB7UwUDCBw
+	 mjJv405y6IyceF5FXoNE/xPwoTXwJAEP9a/sKnou3q4Cc2MOS/D5k0nUoenyWcuj6Ez3K
+	 pjqYGh1W6oIM7UeRNrcYL5XswnNSRTNqI+QUpuHsP8l4IfT2dl8QcrrJUhfoFomIR83yI
+	 nEHrM6EZ8IM3RdT+0v92+xRvBVcLGq9nQTLuZSTFC+edWOW0iMb22nrsiexFkXF+U3wa0
+	 C3+rFDOfcdrPKr7U3O1SwuV/3/gxvA/LT1XS4gLnk0qDD3AVZgdPZ1kwsogivl2R0LA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011843;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011838;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Nw+7gH6TQyDm++SEtaBJ9qTZjP0IXilw6YZGdfy/+5c=;
-	b=hNwhl2+nhO68959vplCuM/StCnIAsbEUTTGSy+9uroxuR8VzG8b9bW2/4MyPGtiMxGHg
-	 jeKpPP85+wiIWxpdTceCr07QsU4S/bH9kd3+WF1dd73uiOCeTvvekPddSLLYtOW/5wIwg
-	 U5EsmTPwzuw+qwqduJ0LR4P7Ns+ZQMede/udMutooQRD9e+k4+jKnwFhIjSzb/Ae/4GWS
-	 8CctkQkfB8fp6WFxNdVmwbwQRwI3FSNC4g86Smb7ZpzfzN/nkli0dPegu6lqZV6eXKuOl
-	 Zcvv9T/3cS2HxZDZaOH8su4lKLMEKf/QlKqJQ8/++8W1ECkRs5P1oNtBJAkoGpXPPOw==
+	bh=ANWT/yfx2UhN0rafXVKWKPXBTCBXsWp+E5MMs+sD+/M=;
+	b=Naq2wf3go6X6M7rAReTdNUrUopsalbSRnbBY36bdzshg0AAX8hh0wOhjGFPiei/lv4eT
+	 nqP0LmWoVcP9xhvNRHO65M4BgEMR+xAtnswKVspswL4P0BbMfzoIbMwXBgrAHQ3ClZFoc
+	 RK+cgfwVQ+UMj6YAZCyokoZxM6EPbHKVsDK/Nbe6PzTq47hg+R39XQ51Xhf4dqperHUn6
+	 me304grzYv8wiaSg+udX1Vsw2Vcm2xsBfOAQ8bxn8rAQGhL0ryjp02HobjIfIMh+23tKy
+	 XPlMkZCcfl7yKf4Z2s/TCn2+s07lnNkdI2RpXBq+a+zdxc01oX935f0qebLbQIGgcqw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aShcBXa0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kMhXHIRI;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681D060A3833;
-	Sat,  7 Nov 2026 00:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19EFC606A81D;
+	Sat,  7 Nov 2026 00:37:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aShcBXa0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kMhXHIRI
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011825;
-	b=G3e7bbwIKSigAnvmAE3ySxyTekfUL94FMcE79ekSs9Sd1Bb3+rTxYqQ6EH7YB5G+zeeC
-	 nimu+aS47yNcQhzRy0sw9pc7Za2hrSa7uMXl6le/R0VOFuaSPW3V4hNi2e+bwIKIRv0AU
-	 eFsBHb+DdSgfZJlVWanWYJYjX2aqvdgd90gFLjy1DiRUEawogWdQZS8T1n16Zj9/ddGLF
-	 5CY3ndxO216oMA3cIs+Qwn+rsZ5aq4GX0sLuBN6mAflwpUloIhjtxSKJtbDO8VDM4b8dZ
-	 NGje3FpYinNeTMuRthJWiK0SCigq6M9IXq/x9IW3BOEzTi+9/1l6JAe0fYiLlcF1F6w==
+	t=1794011837;
+	b=ykgojiHXCIygWkG0/JPqjnYV/HZ4gGttqOalTu1Zlg1zQTWtCvwGLSg85Z9ruRUFnGax
+	 g08MCHqCn3p4eA+LB0LdK7Vm4BO/sAUOq6rK58E59FS7NjeOp/kzrwm4JwtWio+aDvq4p
+	 qO2YmXVhwMthtt8Gcs1RgABpjGET3uiUvTAbUG5u3RNCtiYnneW6XOT2v3cHszhy8dgIt
+	 HfhN4vyKYx5uBIB3boG38paduYpqqAf1CZ6Nbf3TFcrAS0nDt4BaTdtTAsYqJuqx29nor
+	 ZZFBqQhRWxMf4A5WczPp2smCYqjjj01gLf+ChWUVfCjK4CwjxV4L/zhXOXOayUwRRZA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011825;
+	c=relaxed/relaxed; t=1794011837;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Nw+7gH6TQyDm++SEtaBJ9qTZjP0IXilw6YZGdfy/+5c=;
-	b=PGjf+K+Y5dYZyq1RC+f01aFmITwhGZ+5JA2stxPJV2xkAVZfjFFkOQ9oo3Rf5qq4ioqJ
-	 YJCvY6/Z4G0/lVU4SKynmF5CB+2/MOmIe/md3X4MlJZRgNzwp06DbYqMqISXE9VZjQJ1P
-	 zOGj87IHpdPRgv/rt6Ha0OwiVo5O5Vht4VWJ3nzDLIVXEHUNYBZCULsU49AmmiLz74iiX
-	 mdUw/QEU0GDg7lki6INGinAVtDryYPfd1n4ZzP0lnciSBZ9+DqBwHm1nC8mWQgTPxLlvH
-	 CyAvlz3WyCggtaeWko4vKlSy2Jf0rDsDF1zp641/baBPlas/3rr3PK05B+NuxaiG2eg==
+	bh=ANWT/yfx2UhN0rafXVKWKPXBTCBXsWp+E5MMs+sD+/M=;
+	b=PO70nIr1HAS5b1IKxYR+Lrxa/Y9Y1pKyel/9R5zQg+7XsOREMFZDLZJAnCTDJKCGR8cV
+	 M7epETpLYNLg/5IzpGOFKxKPI5MKcWw4QGjgMnaqfIpnByuZL8a92nRbKnTRYqhKtdpKu
+	 l40NEIApykGW/uc13HEXr6axb+tmlrHgbBl6bCgC+vPWjCijWVOgYh7PzjtxW56i/urNJ
+	 TlnwbbzhfahvpHkHpL6DsXCJQ0AFtE8RIT+RJjLSYr32R9VW6MBhpL8GYumHLDwrBWr80
+	 hC49xdCwHtCZq+nBVRA++eLW2F9/ydZHlzft8HlKCHig1c+OEwjMbP+mS3sOrccfTJA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8BD031F00A04;
-	Sat,  7 Nov 2026 00:37:02 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 58D301F008AB;
+	Sat,  7 Nov 2026 00:37:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011825;
-	bh=Nw+7gH6TQyDm++SEtaBJ9qTZjP0IXilw6YZGdfy/+5c=;
+	s=k20260515; t=1794011837;
+	bh=ANWT/yfx2UhN0rafXVKWKPXBTCBXsWp+E5MMs+sD+/M=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=aShcBXa0Mol8YafWuNQV7fdFIYFdp7mdpO5ytD+MtPYWHeB+z5LLAFIMlnhdac+mi
-	 pCPWjCmvMyyr6Z/wn6hc59Tb4xzLOJZJVjItFi7BvKyX32l+nXGaWr3o/QF/v2Xu41
-	 ACDFYMtx52xLwQVGDMALGdZL9JhAcnjQJFt02PhQLtrINhBaVt4/QqPlgs2J0fP1G8
-	 QaCf0rdxzyMvElPICGhEs9KaazSw8jfk7nH26Cn9JwQ5tdQkO1OVLs6JwGIruIpkcO
-	 pMNMQt3nzTxITUOVq8fudBjn+iQjHWyEFZVwM0FXZSWSLjT/plVjdy/GhRkZYZl8DW
-	 tjYsxBOsAkWLg==
+	b=kMhXHIRI8gNSATPETteSO2ApCNxqYfTFx7ivg+GysltwNGs0bAGLGsrjEx3d8B3WM
+	 FPatWjXzPLc4jxkF+0UWhtuXtPlljLxr1Sot6JH1ET2agAu7QaVtQWsPkSQLe38sQC
+	 x+3oIRxvm1uxHjy3PO9A/YuKsoPiCmKi2BT7P2hFfQaD+jPfcNQutfZp4lR6/fryil
+	 dHFKXChyT7XGafuE0Dkz7JdHSNNiZ0lEWBVU9xJbtHhu+Huo5hGTu8mtEtKiOWmewj
+	 dpSX99cuOIBLEJd/5hHVA3jVZCbXyBRi0BaEDsTQK8B+liFVk/JHOHGGdSr2w2aWl3
+	 Y54D8wh2+FsgA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 886E1479A9;
-	Sat,  7 Nov 2026 00:36:55 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id BFD4C47A2C;
+	Sat,  7 Nov 2026 00:36:57 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:12 -0800
-Subject: [PATCH RFC v3 38/88] KVM: guest_memfd: Support arch reclaim on
- inode destruction in PFN mode
+Date: Fri, 06 Nov 2026 16:37:46 -0800
+Subject: [PATCH RFC v3 72/88] KVM: selftests: Add initial VFIO test
+ verifying device info
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-38-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-72-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -102,14 +102,13 @@ To: Alexey Kardashevskiy <aik@amd.com>,
  Xu Yilun <yilun.xu@linux.intel.com>, Fuad Tabba <fuad.tabba@linux.dev>
 Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
- Ackerley Tng <ackerleytng@google.com>
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=1330;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=5637;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=TXq1Q9jBI24peVbPvjCPNkLRxMY1K4Ef0Snx4+ixQ0k=;
- b=NZ3n/EAMYCRX+fSqoFNACF15ZIxG3Bi/dLX6qBEDTgTqkaUaK6OzCVw0u+02oNBki4B329uiy
- 2o4HzhyKxyYDdZSUnNDup6ShAhNskz8gXyW1Q2hAjUX3tFCGmC2x4V5
+ bh=qwwY1wogTiFJkGLjVl6X2EfDY2DAV1c/GKKv838ghMk=;
+ b=NtT2E6e6NOXKRJJI6K8IGA2kAqoRSKGa8TTX9X40Mk2ZO0d+8X6Uf5VI8mskLD0aG5AXW51ZN
+ DL61hLwxxv5D5p+w9bG47JvOxpnd9e/seVW7PI53w29SMhPOwZq8Bfy
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,40 +119,190 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-In folio mode, folios truncated on inode destruction are reclaimed via
-aops->free_folio (kvm_gmem_free_folio), calling kvm_arch_gmem_reclaim()
-to reset hardware confidential VM state (e.g. SEV-SNP RMP entries).
+Add a standalone selftest to verify that an emulated or physical
+Intel 82576 network card bound to the vfio cdev interface can be opened,
+bound to iommufd, and queried for device information without requiring
+an attached IOMMU page table or a running virtual machine.
 
-In PFN mode, memory is not backed by page cache folios, so
-kvm_gmem_free_folio() is never invoked.
-
-Do the reclaim during kvm_gmem_destroy_inode() when in PFN mode across the
-entire file range, ensuring that any confidential architecture state on
-provider PFNs is reclaimed before releasing the provider.
-
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+Structure test setup and teardown into a kselftest harness fixture,
+skipping cleanly if the device or /dev/iommu is unavailable, and
+verifying that queried device flags reflect PCI and reset capabilities.
 ---
- virt/kvm/guest_memfd.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/kvm/Makefile.kvm           |   1 +
+ .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 153 +++++++++++++++++++++
+ 2 files changed, 154 insertions(+)
 
-diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index 567735a564c7a..b46907b480138 100644
---- a/virt/kvm/guest_memfd.c
-+++ b/virt/kvm/guest_memfd.c
-@@ -1726,6 +1726,13 @@ static void kvm_gmem_destroy_inode(struct inode *inode)
- {
- 	struct gmem_inode *gi = GMEM_I(inode);
- 
-+	/*
-+	 * Skip if the provider was not yet set up, as iput() can reach this on
-+	 * error paths before provider_ops is initialized.
-+	 */
-+	if (gi->provider_ops && kvm_gmem_is_pfn_mode(gi))
-+		kvm_gmem_pfn_reclaim(gi, 0, i_size_read(inode) >> PAGE_SHIFT);
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 5f7118bddfc36..05f87764b71e7 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -162,6 +162,7 @@ TEST_GEN_PROGS_x86 += x86/triple_fault_event_test
+ TEST_GEN_PROGS_x86 += x86/recalc_apic_map_test
+ TEST_GEN_PROGS_x86 += x86/aperfmperf_test
+ TEST_GEN_PROGS_x86 += x86/guest_memfd_conversions_test
++TEST_GEN_PROGS_x86 += x86/guest_memfd_vfio_test
+ TEST_GEN_PROGS_x86 += access_tracking_perf_test
+ TEST_GEN_PROGS_x86 += coalesced_io_test
+ TEST_GEN_PROGS_x86 += dirty_log_perf_test
+diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
+new file mode 100644
+index 0000000000000..669acc6058b5b
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
+@@ -0,0 +1,153 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Minimal standalone test to verify an emulated or physical Intel 82576 (igb)
++ * NIC bound to vfio-pci via IOMMUFD cdev, without creating a KVM guest.
++ */
++#include <dirent.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++#include <sys/types.h>
 +
- 	gmem_provider_release(gi);
- 
- 	mpol_free_shared_policy(&gi->policy);
++#include <linux/iommufd.h>
++#include <linux/pci_regs.h>
++#include <linux/types.h>
++#include <linux/compiler.h>
++#include <linux/vfio.h>
++
++#include "kselftest_harness.h"
++
++#define PCI_VENDOR_ID_INTEL 0x8086
++#define PCI_DEVICE_ID_INTEL_82576 0x10C9
++
++/* Intel 82576 BAR0 register offsets */
++#define E1000_CTRL	0x00000 /* Device Control - RW */
++#define E1000_STATUS	0x00008 /* Device Status - RO */
++#define E1000_RAL0	0x05400 /* Receive Address Low (0) - RW */
++#define E1000_RAH0	0x05404 /* Receive Address High (0) - RW */
++
++static char *find_igb_cdev_path(void)
++{
++	const char *sys_pci = "/sys/bus/pci/devices";
++	struct dirent *dev_entry;
++	DIR *dir = opendir(sys_pci);
++	char cdev_path[PATH_MAX];
++	char path[PATH_MAX];
++
++	if (!dir)
++		return NULL;
++
++	while ((dev_entry = readdir(dir)) != NULL) {
++		FILE *f;
++		uint32_t vendor = 0, device = 0;
++		DIR *vfio_dir;
++		struct dirent *vfio_entry;
++
++		if (dev_entry->d_name[0] == '.')
++			continue;
++
++		snprintf(path, sizeof(path), "%s/%s/vendor", sys_pci, dev_entry->d_name);
++		f = fopen(path, "r");
++		if (!f)
++			continue;
++		if (fscanf(f, "0x%x", &vendor) != 1) {
++			fclose(f);
++			continue;
++		}
++		fclose(f);
++
++		snprintf(path, sizeof(path), "%s/%s/device", sys_pci, dev_entry->d_name);
++		f = fopen(path, "r");
++		if (!f)
++			continue;
++		if (fscanf(f, "0x%x", &device) != 1) {
++			fclose(f);
++			continue;
++		}
++		fclose(f);
++
++		if (vendor != PCI_VENDOR_ID_INTEL || device != PCI_DEVICE_ID_INTEL_82576)
++			continue;
++
++		/* Found an Intel 82576 device. Check if bound to vfio-pci cdev. */
++		snprintf(path, sizeof(path), "%s/%s/vfio-dev", sys_pci, dev_entry->d_name);
++		vfio_dir = opendir(path);
++		if (!vfio_dir)
++			continue;
++
++		while ((vfio_entry = readdir(vfio_dir)) != NULL) {
++			if (strncmp(vfio_entry->d_name, "vfio", 4) == 0) {
++				snprintf(cdev_path, sizeof(cdev_path), "/dev/vfio/devices/%s",
++					 vfio_entry->d_name);
++				closedir(vfio_dir);
++				closedir(dir);
++				return strdup(cdev_path);
++			}
++		}
++		closedir(vfio_dir);
++	}
++
++	closedir(dir);
++	return NULL;
++}
++
++FIXTURE(guest_memfd_vfio) {
++	char *cdev_path;
++	int iommufd;
++	int vfio_fd;
++};
++
++FIXTURE_SETUP(guest_memfd_vfio)
++{
++	struct vfio_device_bind_iommufd bind_args = {};
++	int ret;
++
++	self->cdev_path = find_igb_cdev_path();
++	if (!self->cdev_path)
++		SKIP(return, "Intel 82576 device bound to vfio not found\n");
++
++	self->iommufd = open("/dev/iommu", O_RDWR);
++	if (self->iommufd < 0) {
++		free(self->cdev_path);
++		self->cdev_path = NULL;
++		SKIP(return, "Failed to open /dev/iommu\n");
++	}
++
++	self->vfio_fd = open(self->cdev_path, O_RDWR);
++	ASSERT_GE(self->vfio_fd, 0);
++
++	bind_args.argsz = sizeof(bind_args);
++	bind_args.iommufd = self->iommufd;
++	ret = ioctl(self->vfio_fd, VFIO_DEVICE_BIND_IOMMUFD, &bind_args);
++	ASSERT_EQ(0, ret);
++}
++
++FIXTURE_TEARDOWN(guest_memfd_vfio)
++{
++	if (self->vfio_fd >= 0)
++		close(self->vfio_fd);
++	if (self->iommufd >= 0)
++		close(self->iommufd);
++	free(self->cdev_path);
++}
++
++TEST_F(guest_memfd_vfio, get_device_info)
++{
++	struct vfio_device_info dev_info = {};
++	int ret;
++
++	dev_info.argsz = sizeof(dev_info);
++	ret = ioctl(self->vfio_fd, VFIO_DEVICE_GET_INFO, &dev_info);
++	ASSERT_EQ(0, ret);
++	ASSERT_TRUE(dev_info.flags & VFIO_DEVICE_FLAGS_PCI);
++	ASSERT_TRUE(dev_info.flags & VFIO_DEVICE_FLAGS_RESET);
++	ASSERT_GE(dev_info.num_regions, VFIO_PCI_NUM_REGIONS);
++	ASSERT_GT(dev_info.num_irqs, 0);
++}
++
++TEST_HARNESS_MAIN
 
 -- 
 2.56.0.455.g6c5a503b38-goog
