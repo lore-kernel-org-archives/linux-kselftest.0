@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011848;
-	b=k0A9tkVKkqXL94cuVhMVx7YapJuzNW4PD/rXwSWTOwISlcI2PN+ziKadys/cUtRsCi2p
-	 h+YxLZT7dtZHj131LbmropbC42KMYFCscUR2ONKg5Gq7YltQCGg4CBtnmoOngIzGny8Xa
-	 UPe4btoLvUmfGsQfQxysfWgozVRZ2zIv1MuIHTKKHaTWvZBB1ERivaPHM2FYOEeLrTLWq
-	 diaysxJDynshxTwL9tb8E16TrMHIf7wzX2y3XWLs3G1c2AfrtA+HsH4RTfmpjhtMebREE
-	 YURrUf9lmRXCYG3r2ejvRcLmhnVNHDcENiRUSRhfDPDwp5mFhUAPIXmgmOPivU0zsWg==
+	t=1794011846;
+	b=MFI1OgFay6o4LFWhWQ23TTa1Z2SWB9unMWlx4TvWm3Talb7/f9O1kJ1DJG5N8LGsWVDC
+	 Rht+V7PDM2lnRknT6WJVsXmmLBWx+Nt7oHnUbGIs79RV1pJ7WDYfBNjcXApPVwkV6C8lx
+	 0Txo1SEvaBGnN9vBBNsGbF+fl/rFTw83q+K034L9Y6axhDYnJonOlXx/ZiqB7l3M6IPNw
+	 i0jWV+AKgv6/O4numNt1RK7wao4MCFqQNAHu7pvpEsRtQdo+AbRpd8I7ukeKPiXKKJ3mD
+	 F41FRihiYGFp6FSLkI+TXmpkemcpfzs9fNiHJUIob5LtEEQx5b+wialCE42T5UQ7vDA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011848;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011846;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=SxZseH1D/U//4ssKZEL6OBhMNAqOusdgqcQCPzcsa1A=;
-	b=0iT2JSa1WceNS996LcTt0wrT+9Nc79PlKXr8j0DAA6ir5whPSAg7Mdg02U4cR9cf4AAT
-	 ErL9xtGnKTXNzLKV2tRtYfOHnx3u3ysglpVLpmsVPC7XqU7Qc998bAPvFHSgdV3h44XCq
-	 c50FpKe1RJ3YzMM7+2PlS6szipJqxKacy2HIFQwCpAmmLAhUlKYGZR2HoK/QVfoTwWoFl
-	 8X0ivgusdxZnaFxMhlwtjIuqcTc+B8fv9iOfyR0fl2vu90N7cxf1ZqFpeOSnyIfh02IFa
-	 I9aj2RwSMfeWDoHtanjRLxtkRL8VKrVCjI1Vkuf7orX6HlyO3hZnAanqZBHMEYc0bjA==
+	bh=s0F8jvacFzHXtq1BNYj1XM72iSeOawkyFa8eWHiNWfw=;
+	b=PRY/H8h8TaanIzWK5fGCdaNS9voubOOEBKCXrDTpIfh8iaLZNM2byMczZkRs8SDae47l
+	 lQ2DmK3k9Vqsbp4nwYY5ed6SwOanidh3R2Q0kbrxl2VV/iMCGf/F1/3aYlRbFdHHPTF75
+	 ZtszZsa8JMOIFO/hzPOAbg+4LXHllkqJzipZfUugu85sbnOYwevuxCvK/hhLzKweoM0W7
+	 JF1r7y1c7u5vY0eo5xbPIQK7tKIOfU6BZ4MGZ/GxAhQoAnE9gMQyx9mEq0KfRiHmILTOb
+	 w8AiGXmHZrancZCLac1zixaikOLyBhFAylXEOuZMHZtFipWYiqUWvS3u0VT+4zZFJlQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="mUBFs/H/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="cjRjDf/U";
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB576070BAE;
-	Sat,  7 Nov 2026 00:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8B4606BFE7;
+	Sat,  7 Nov 2026 00:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mUBFs/H/
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cjRjDf/U
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011842;
-	b=jzOrZDWUD1p8kRij7cmVHLLe4mumO4XJrdbrb5T92+kjvRJlJX58DBxDoPOMgJbStZV0
-	 zUYQWk1qUb62mmo0x+Z66by7GK0AFWNpWx5dQ7rwn+m5yMtMmsDflC6kVIx0UlRVIbdhw
-	 NpwjBT5b2SD+3MPRPXbgaJGJY7GxjGANJsNT805PRK+3QAS6bkNPkWgP90smMZ7NN0R5s
-	 37anuPvmlYENpYaLPfmKt/2v8IS5EX22MfaJLH9q0vnYAQOJH6XYFRYjkupTswBHb+svS
-	 1kaMGgCReRBiB/oUKjerFal58QYnHsF2jHAzgrqMlLe+KrqzE3vZBnE3wpEqnEdUENQ==
+	t=1794011836;
+	b=ROLs1mGmGaXr4nf5VeW7xa4FI4ARw97o9g8w4Mk8n6OrZSg8GX2Ph4gEE3y85HJz3aqQ
+	 cJsaG/CRZfOxrYrCSPkXsp6CT/PP02sXJws9G1y4RPrDf6SwrMstI+KsqPE4VeR5Ci/lf
+	 vGUd2onDjiBvaj0rCeapFfzeeU93l8Pg2TwkEIXrtpm11zDB/X9Ch3tgMVPnf9QT44al6
+	 R0GFoqhv1H3bWvAYtcNP9ycVi/je+y/wlokWpshBCFMlfcocEvM6ISvJJz7kLC1f2Eu4u
+	 aS2hVxU+HlfCX0m/HxYAvOTefosaMqYbP9dUTrYCHrW4qx+ePgWoMh9aob5JOAa7jIg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011842;
+	c=relaxed/relaxed; t=1794011836;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=SxZseH1D/U//4ssKZEL6OBhMNAqOusdgqcQCPzcsa1A=;
-	b=Dy+Z+ObJO3FzbV4FOUB+h7rnmNS1gQ8AMaGQxZCHs5oXZGcMl99n7uqOR9sJRAyBzoTH
-	 CcoXXdGb2DZdEEzIIEchPKWWIx1FWTtLaKaYBDVx5x8srY9y8bIHXsY7csJjuqyO9mH+P
-	 BfUi/zMBB75GslOqpIA7UXudlgN3YKErXkmo7JIOlFe7gbDDGyMoh0fu3y25pIr1B1uup
-	 98fymrOignzArdl1iqhHxtcsnaBityb2XvpwqOS845qyfu3p4O+k5QQSS+bRsk4u7tXQU
-	 09UCChdjCiJecFSdHlWyX+7RiRsYmmf5b0+1pjNZmIFzgWymHlMfwjg3KF+a4561eug==
+	bh=s0F8jvacFzHXtq1BNYj1XM72iSeOawkyFa8eWHiNWfw=;
+	b=B+OkdPsHUv8ySdiYEuVCd4HOaAVFZlR7RUbdaghw0ZfAw3DdDbHmZsKyVxmd7NJnHAi0
+	 yx+0/3SXYFXguDhF0q1U6AZcFkrTC1LbZXQ2tdG6iPtvZON9dJ/OMMSKTsIK7yQ0wBAZW
+	 8cBKNtmHGDZF7u7CFyeZ0UfzjhwGzSOV3W+Mj8Ph3/O+FchJT6iGzvwrZ0v3tlNChXHfm
+	 kn8xCb6QtNebwEfUVN1IcjA5g9aEZkNiZ78Tm5F+AeO6JwF/ZT33f/VM7htb9moJglZX1
+	 27y64/foBL5hJr121aSWrdF8IATf3/ch8TBFYAj3R0iGnRlVgizrash67KmBn/tiEWQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0D5AB1F008A4;
-	Sat,  7 Nov 2026 00:37:15 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 537A61F0092F;
+	Sat,  7 Nov 2026 00:37:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011842;
-	bh=SxZseH1D/U//4ssKZEL6OBhMNAqOusdgqcQCPzcsa1A=;
+	s=k20260515; t=1794011836;
+	bh=s0F8jvacFzHXtq1BNYj1XM72iSeOawkyFa8eWHiNWfw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=mUBFs/H/7OWwoFBVxL4CLWIAEgOJOkKjVNsHtKrGyqlRUKut7S4Hgy/uPK56zo1B1
-	 hCYuzouZpkZkjFbKVLdn3ZRjkhftiwdOE0ZRH1Ro8MoBanvvLQW91mro4yeSqM4eD1
-	 OwlbCh8IytC02h4XXubQQtfX3FjwzLwf3cKzfbcI1sREobTztwhzr2++avhhOnhm46
-	 gJj17sf5PdbMAvLLMs0mK750/ntTjXUOZ2Sbw8CL3sHaMoN6SK+SEAybPmFlPdiuQ6
-	 N96KjR1WgCHQQ7BbaUV0x0WSb6B+aLjFEg5d1u/JgohH9qWkbOVDSXYyhreOVr0qKo
-	 7NhGXGhma0QcQ==
+	b=cjRjDf/US9xa3V98KO6V4mH2o1LdydfcwvxsMwmk+UkSwxLoF3bix9AAFi1lzaVja
+	 qRF1IFAD0pt5NU7eBEQtDsrKBMJcGVztW1hkCADtM3qr1zgcGGiDx4BbNtz97WSS3k
+	 qLtOYWrvFc4ktIXZtWXvTvEinxQl9t4biA8nXcmHKITXdyoK16Af4nN/1Z2CvZPaGg
+	 fnD0gJMouFMV1T3VmBAkeJ4RNcxbo40Dwk1BV9ps4QgR8RtpYoPOvg8bVVzzNFaxnQ
+	 7TjnZzsf/Ii+ZNv9DvooPJ5KVwP1XXx+GqgPwrAro/7pngSUGNVWo4qN9Isf+H/Y0r
+	 +/ZLTgbufeX7w==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id EF32A47A37;
-	Sat,  7 Nov 2026 00:36:57 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id DB285479BC;
+	Sat,  7 Nov 2026 00:36:55 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:49 -0800
-Subject: [PATCH RFC v3 75/88] KVM: selftests: Verify VFIO MMIO read and
- write for igb device
+Date: Fri, 06 Nov 2026 16:37:17 -0800
+Subject: [PATCH RFC v3 43/88] KVM: selftests: Test flag dependency of
+ PFN_MODE on USE_RESOURCE
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-75-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-43-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=3042;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2495;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=3rXXPklnl0jKOPE29y7ipXm7LsNh6MGUlvgjiF//KXQ=;
- b=xloQFGBoKJ2DqV21AvqSu5E1J/CpqtQbloSW0T3GvaqdUgvm8xoOH8M0ztGaadapQ2nhxCakj
- IhodY//gGI6CJqHf9PiPv1GyWySREMT+8pDpBuxA/6S9HQ3zZS/kyLY
+ bh=EE/Gsp3+vkbnMZChnYBAJO/h7nnosq/HYGBfPtTEjSg=;
+ b=QNfSEUjkf0mmaRJLidwIxGxZJjYboqSAt3/LrwLXP/KiV2nJmCAw/FG1dfUDbyKYK7iveNUQ3
+ h7EkpJWjXFUD0P2174TJKMc5yyC09FzAG8K29bj7LwtBDRnjEvqoMxu
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,90 +120,61 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Add a subtest verifying direct pread() and pwrite() operations on the
-device descriptor targeting BAR0 MMIO space.
+Creating a guest_memfd with GUEST_MEMFD_FLAG_PFN_MODE requires
+GUEST_MEMFD_FLAG_USE_RESOURCE.
 
-Enable memory decoding in the PCI Command register, verify that reading
-the device status register returns an accessible value, and verify that
-writing and reading back a scratch MAC register (RAL0) succeeds with
-expected data.
+Skip testing GUEST_MEMFD_FLAG_PFN_MODE as an isolated flag in
+test_guest_memfd_flags() because creating a guest_memfd with PFN_MODE
+alone without USE_RESOURCE is rejected by KVM with EINVAL.
 
-This validates that kernel-mediated MMIO operations over the VFIO device
-descriptor function properly, providing a baseline to compare against
-when guest_memfd wraps the BAR.
+In test_resource_fd_invalid(), verify that attempting to create a
+guest_memfd with GUEST_MEMFD_FLAG_PFN_MODE without
+GUEST_MEMFD_FLAG_USE_RESOURCE fails with EINVAL.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ tools/include/uapi/linux/kvm.h                 | 1 +
+ tools/testing/selftests/kvm/guest_memfd_test.c | 8 +++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-index 6525f392b3930..fa05b7cfb3185 100644
---- a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-+++ b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-@@ -236,4 +236,62 @@ TEST_F(guest_memfd_vfio, get_irq_info)
- 	}
- }
+diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
+index 66c1f40b50c29..3ef7bc37a7070 100644
+--- a/tools/include/uapi/linux/kvm.h
++++ b/tools/include/uapi/linux/kvm.h
+@@ -1655,6 +1655,7 @@ struct kvm_memory_attributes {
+ #define GUEST_MEMFD_FLAG_MMAP		(1ULL << 0)
+ #define GUEST_MEMFD_FLAG_INIT_SHARED	(1ULL << 1)
+ #define GUEST_MEMFD_FLAG_USE_RESOURCE	(1ULL << 2)
++#define GUEST_MEMFD_FLAG_PFN_MODE	(1ULL << 3)
  
-+static void vfio_pci_enable_memory_and_bus_master(struct __test_metadata *_metadata,
-+						  int vfio_fd)
-+{
-+	struct vfio_region_info cfg_info = {};
-+	ssize_t ret_bytes;
-+	uint16_t cmd;
-+	int ret;
+ struct kvm_create_guest_memfd {
+ 	__u64 size;
+diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+index cbc2f309664b2..fb9d50be2e3b6 100644
+--- a/tools/testing/selftests/kvm/guest_memfd_test.c
++++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+@@ -407,7 +407,8 @@ static void test_guest_memfd_flags(struct kvm_vm *vm)
+ 	int fd;
+ 
+ 	for (flag = BIT(0); flag; flag <<= 1) {
+-		if (flag == GUEST_MEMFD_FLAG_USE_RESOURCE)
++		if (flag == GUEST_MEMFD_FLAG_USE_RESOURCE ||
++		    flag == GUEST_MEMFD_FLAG_PFN_MODE)
+ 			continue;
+ 		fd = __vm_create_guest_memfd(vm, page_size, flag);
+ 		if (flag & valid_flags) {
+@@ -432,6 +433,11 @@ static void test_resource_fd_invalid(struct kvm_vm *vm)
+ 	TEST_ASSERT(fd < 0, "guest_memfd with resource_fd but without flag should fail");
+ 	TEST_ASSERT_EQ(errno, EINVAL);
+ 
++	/* PFN_MODE without GUEST_MEMFD_FLAG_USE_RESOURCE fails */
++	fd = __vm_create_guest_memfd(vm, page_size, GUEST_MEMFD_FLAG_PFN_MODE);
++	TEST_ASSERT(fd < 0, "guest_memfd with PFN_MODE without USE_RESOURCE should fail");
++	TEST_ASSERT_EQ(errno, EINVAL);
 +
-+	cfg_info.argsz = sizeof(cfg_info);
-+	cfg_info.index = VFIO_PCI_CONFIG_REGION_INDEX;
-+	ret = ioctl(vfio_fd, VFIO_DEVICE_GET_REGION_INFO, &cfg_info);
-+	ASSERT_EQ(0, ret);
-+
-+	/* Enable Memory Space and Bus Master in PCI Command register */
-+	ret_bytes = pread(vfio_fd, &cmd, sizeof(cmd), cfg_info.offset + PCI_COMMAND);
-+	ASSERT_EQ(sizeof(cmd), ret_bytes);
-+	cmd |= (PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER);
-+	ret_bytes = pwrite(vfio_fd, &cmd, sizeof(cmd), cfg_info.offset + PCI_COMMAND);
-+	ASSERT_EQ(sizeof(cmd), ret_bytes);
-+}
-+
-+TEST_F(guest_memfd_vfio, bar_rw)
-+{
-+	struct vfio_region_info bar0_info = {};
-+	ssize_t ret_bytes;
-+	uint32_t val;
-+	int ret;
-+
-+	vfio_pci_enable_memory_and_bus_master(_metadata, self->vfio_fd);
-+
-+	bar0_info.argsz = sizeof(bar0_info);
-+	bar0_info.index = VFIO_PCI_BAR0_REGION_INDEX;
-+	ret = ioctl(self->vfio_fd, VFIO_DEVICE_GET_REGION_INFO, &bar0_info);
-+	ASSERT_EQ(0, ret);
-+
-+	/*
-+	 * Read Device Status (E1000_STATUS) via pread() at BAR0 offset.
-+	 * Confirm device is readable and does not return 0xFFFFFFFF.
-+	 */
-+	val = 0;
-+	ret_bytes = pread(self->vfio_fd, &val, sizeof(val), bar0_info.offset + E1000_STATUS);
-+	ASSERT_EQ(sizeof(val), ret_bytes);
-+	ASSERT_NE(0xFFFFFFFF, val);
-+
-+	/*
-+	 * Write a distinct scratch test pattern to RAL0 via pwrite() and read
-+	 * it back via pread().
-+	 */
-+	val = 0xdeadbeef;
-+	ret_bytes = pwrite(self->vfio_fd, &val, sizeof(val), bar0_info.offset + E1000_RAL0);
-+	ASSERT_EQ(sizeof(val), ret_bytes);
-+
-+	val = 0;
-+	ret_bytes = pread(self->vfio_fd, &val, sizeof(val), bar0_info.offset + E1000_RAL0);
-+	ASSERT_EQ(sizeof(val), ret_bytes);
-+	ASSERT_EQ(0xdeadbeef, val);
-+}
-+
- TEST_HARNESS_MAIN
+ 	/* Bad file descriptor with GUEST_MEMFD_FLAG_USE_RESOURCE fails */
+ 	fd = __vm_create_guest_memfd_resource(vm, page_size,
+ 					      GUEST_MEMFD_FLAG_USE_RESOURCE, -1);
 
 -- 
 2.56.0.455.g6c5a503b38-goog
