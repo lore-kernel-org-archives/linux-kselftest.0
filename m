@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794011843;
-	b=dELsmD/I+rt3cLVnA+Q2/y0iaxswfiONgVOGPhzm/4Y+QvjJACGXGxcHtGDN/t6u96yY
-	 chHa8IbY9FTLRC+IELDEdrKll6hswo8w4R3WJt8TipAktRGnLe1ALs7HOS6dsOvn83aOY
-	 PEwUSpugiXsTElvaZjAjtE+WPXa4hKG5ddjCuu2NXNP1t5i8qpOIUgL8g98xwfO5LqMNm
-	 PkugwHSeuDTTp3QCSFaDivW0dqfiS8bGky7KprTsYlUfX5Kea8oApRnetx4jXTWNnYX/o
-	 oTs3V16lF88HyQsNthbB8Mjr5Gk6kUVfNuIhfEIsGSv/2j5WS9mrpgWN0nSwG9kiKww==
+	t=1794011833;
+	b=P/VjqHOPip3QH5dk0vOOcbLoZVAjlGUZYnEZwMGuDVaB9pPEW78F8rNUXhsOcC/+wl03
+	 ioTfHcpBkrOfiyTmn9enzcH7BzhQbAMfKbWjdhFOwYYoEewwiRuzM0dIkLmxeUQsHaOjc
+	 WQlWhCjZwpMT4edLi9A7Myi5AGBvylE5FJaItesuUVvm7x0z01WFuKcy+xMfcgqvw/O7g
+	 65JwJTMk0cI0FKl9h/0aIgPvYAd5AOgCMBliw4MfZCJ9po9caBAcvttJ4slbYjEJ9aMmV
+	 WcZhlYUGx/KWnJj2kyyaOhb1Fjk9fb6+iPet3bDlAAUdUMj9NJZ8A6M9MzSy4BFsYhA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794011843;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794011833;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=pkX5RglPGJDEhnslhp8xP4OHF0T6ris68N5dtaSSV90=;
-	b=GS+27fPAprRbjsnNfPfLTWmHDNb7bqk0VgngwtqNFlTmTCzkAcXdmVbFIxzfOSEark3B
-	 HFb66/200TBup+1OZznrPEqHm0GVefVXSUrrG8vdjNO/7ZWAUmjVWMU0WXbcsvxBCJWs8
-	 UX0C23kSi5POhfu/bN/ZtiuPw/TFDWo4E1I2SvY0HOwI0qYZK3iFIUZI8XA2yh1kfw2IQ
-	 9uHdY5CAXvu0t242eopez0Gt0acC2VAst/ZNYul3+0BRWybRc+QzpvUJQZwFL/fCezuBA
-	 9nmkxutzOxc67TXzcKQGiLxzKkbxX+pUkGAorgYnv1nixDoRjo59fNr0jDLDkePwqNA==
+	bh=7u/xUqUjSpG1uHVLTmzq+uP5uQjAYFobNAgMRyNfitg=;
+	b=BH68zBNRnKoPSIq0mJYO/8XLDGSFUpnQfs2Div4L852mDy4eal4wNTT1FyyTzkMHmQ2O
+	 3tNXZZUkJ5NaY8k5EHYnv9LS5+PIFc80KUUZ2l6/a9Fb+SkKlDnhM4yjbLUjVaUWpr35L
+	 gXGLVqdlQhLZ1u2cNQfNrpuJ0921jOZEUuV5DLmugGgAY4QwjcOAZw2oxuT9N5YbSBbW8
+	 WnAAOTO+0/5W3ITyghx0PMdgai21AYykTjjmPjlsEMB4J0Xk3b2Yz8Po6zBVo24EMpUL3
+	 psfTmOdohjFKFt2VLSpWSuouBhX0v/6rdhmauTpArMeSs57wtHq/5UnwiqchV+QOotw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="IK/m6TYo";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="LN9e0/At";
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B47606A824;
-	Sat,  7 Nov 2026 00:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFA860A5BDA;
+	Sat,  7 Nov 2026 00:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IK/m6TYo
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LN9e0/At
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011838;
-	b=jIhZc3YtIfe5cGjupmPKguq3MIOc4IViaBNarp0kezszBSIFeD+vPD8seCd1Al+3SJEO
-	 VR34ACWL7VVY8kCdC65950LNEgqgK1t+Ly18bwxDs5JBsTmc04v4dh+6cPoOy+LUtpDhF
-	 nJmORB1n0eS6nCeZ9g27wqIPq/rXu7vM+0Kjcq2fDBsyVMOt3akP9k2chiNCyG8UAKJQn
-	 UTzsv8hJ7DEa/H66j6Aq8t78biqBmEc0nIUV5QN7Rr2vqpfzJ2hqMunHEsEV0nznp5yzH
-	 7cPKLI+RD0ckxbb/xKrYqV5c7dl6ZYEJCRheBpen4BrhwrmCgQmvgdVCL0UzQh12N7g==
+	t=1794011833;
+	b=KQ7Pa95P+RuYFA3R/MlXuUG5Q5TMXlvSi9HyCZkGFDaxYMVDSfsOYo7+p4BCGzsxML/z
+	 riiu48h7oL/qriWC3kOxA8VRK8/AN00iLh0k02dOF3mUUTTV3DqYF1ojctF+CAqgjGSiI
+	 8RcoHXeDtY2QP733RJ7p+3xtgcBj6VHeI+TC85O9uk0H0O4/86RgKjnvdm7/jV+teUTmQ
+	 vxJ+ACCT8gBSAq5+sxgVdMtnKgsQ/vQ1/RomkQXt5/1HIWyCjoxOZ2hsXjuhgDhYbkiMt
+	 OU4y6YAvDksK4gGJx/yDOiiRzTX7VkITKUBx2Fnzg7MNnB54hka/P+PsNAMJnW3rLNg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011838;
+	c=relaxed/relaxed; t=1794011833;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=pkX5RglPGJDEhnslhp8xP4OHF0T6ris68N5dtaSSV90=;
-	b=znU0U+Bvk6MTU7HjAJKMKPgZMxkvgaHbhXJJOQhopEd4l3ntegVilnlcOKygdcedpREH
-	 dRU1Y4TXK50KyaDv52X3RTTIl7V6EUcaH8vuRKYA57BOSC7sRaAbcVNL+k+8rOo3FpeBB
-	 mzd5aaiah9WMFQ8JOZ7yHd2T+upw8XvoSTOpr1ooVRWkFQPsGYvFkU7425vcqD/RvQSUC
-	 VeC4fktfigpFXrrZfYM8pxGrDhBaKMhNz/XCjOpjmSvcFCy36u+2alrlTveh75ZLgTEgJ
-	 OM76TdLjoRpoEX0YpFSg3vsSnxkllePOTWARQa5ymFaFOPMdVADiDZmJOYDN7hFD+Dg==
+	bh=7u/xUqUjSpG1uHVLTmzq+uP5uQjAYFobNAgMRyNfitg=;
+	b=Anb/xznNcUqNJlEFcqOxyVh6fJ37SopfHjjqNViv1hlh3sFLz67CBkEIIOxow9ni5ra1
+	 7HOapqsPqrJ+WoHjm7uRrVxGHDgiMkVELPjwPMvzjUIujDkT8q310BwaAa9A9okRonEj4
+	 gZPNFmEO1N0dQMC4EddH1ZtKkpV/0AobthOKFXl6Hn+atVlz5NW6kJBsRByIzu00vvuQY
+	 HzS8IPea+WAKEKzZezOmOTZW9BTROhhhO8IY4sDDArVGic1wHB1FNn4GaNQ38hnuC4YK/
+	 6YajYahUOl5TxQAGEEneiOkPAbfaJm4D0Eidmj+nZA5CM6xJKLQthtj2wkF2lb7UtYQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1F5AB1F00925;
-	Sat,  7 Nov 2026 00:37:17 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7815C1F008AB;
+	Sat,  7 Nov 2026 00:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011838;
-	bh=pkX5RglPGJDEhnslhp8xP4OHF0T6ris68N5dtaSSV90=;
+	s=k20260515; t=1794011833;
+	bh=7u/xUqUjSpG1uHVLTmzq+uP5uQjAYFobNAgMRyNfitg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=IK/m6TYodvJPSVDageZXSBAYTxQxbGrpYMBiiX865Fpf4W5Xl9gj22vVhvpjq0Ve7
-	 bCe04St6ikuvo9AjP6+boQR7205VjcIvKyvfudmdaD/gH9zidXt+LF1/gDbsTxcp8l
-	 r8BEC4wBThd9pPL8u8Xy9T9/0PHLU+fc7PUqhEB5HnpJAWFOwmw91kI45v5o1/tww+
-	 KbSjbMNLOPJkZsZuK25UYWA0muMoflzeKQOTXbSznzaMQJnzMN2JAPjZGpvKk7ytKj
-	 INtVQhNY88zlGGVQZtp0bOlJbHKQmbxSu6/7FUK0IBpZCKclHC8ot5C9pwEWX4kKxk
-	 GMS3EHMSEy06Q==
+	b=LN9e0/AtB7Izb4lqha7xs8FLfETDMlx/1nrJ7pTkRXq1u+n8796yPJra24YFlq+3H
+	 vrD7PybLJjSPbpQe6+n+3qysUlG3Nbyu3iiLWC3574iW++Py0jeswshs5HwfBlr9Mt
+	 ZFmSxAh08jHjFZdem3eUeZqMPPCD/WKCqS1BaF9JoFUFROVo+W3zuvfEMJ+3D8XVE8
+	 dTpxXj/WlrnsY85LycQuNwE2nhfatfyBC7tsPuLkcf2kEW0LKF7EhOU2G3XGR+97y0
+	 VtsTIXhNAJKkbpvtW9DvrHZLicPC3uCO7bjMIi3z90JwTGcs41DlnehxcTJFfYYcXf
+	 m9KoJ1oheNBMA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 708A547A55;
-	Sat,  7 Nov 2026 00:36:58 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id A5F77479E9;
+	Sat,  7 Nov 2026 00:36:56 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:57 -0800
-Subject: [PATCH RFC v3 83/88] KVM: selftests: Verify VFIO ioeventfd
- creation for igb device
+Date: Fri, 06 Nov 2026 16:37:29 -0800
+Subject: [PATCH RFC v3 55/88] vfio: Track device file access mode with an
+ enum
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-83-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-55-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2410;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=5176;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=lOTB0T1ZgH2qBwxbzF1p5KVxU2nrnnE76xPmcwyhgYk=;
- b=dWWgKLHu4omBOrcbWgEzhyA8WgLPlocfMYQX0wM811XEqldFlmfdRwW/DSH6jtFRb5JzYUcHE
- Z8Q/wpLQ65VBYUKMm9/i2vELQblt1W1Vak0UmJun4RPZLtCa7JjWqVb
+ bh=OPzfI8FY9YTnY7U//Qo2HO1R07AW0TxEMrDt75CQipU=;
+ b=yxGBfLn330m/QlZKxV56D9+INpmu/vb92BX3fIJN1BHK07X4RoQNHQmNHqFgxcPEyc9f3OrFI
+ TITTtiAfEvkBiWVgqH/0/MljlVFSh1dt4fWyaeiRAMfq00Gn4JmxuQ3
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,78 +120,139 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Add a subtest to verify ioeventfd registration and unregistration on
-the bound Intel 82576 device.
+Device file operations currently track whether access has been granted
+using a boolean flag, assuming that binding a device always unlocks both
+control-plane operations and direct region access simultaneously.
 
-Allocate an eventfd and configure a VFIO_DEVICE_IOEVENTFD ioctl targeting
-the scratch receive address low (RAL0) register in BAR0 with 4-byte width
-and a test trigger value.
+Upcoming support for control-only device bindings requires distinguishing
+unbound descriptors from descriptors bound with restricted vs. full
+access, without introducing multiple flags that could get out of sync or
+represent invalid combinations under lockless release-acquire ordering.
 
-Assert that in direct mode registration succeeds and that unregistration
-(passing fd = -1 with matching register criteria) succeeds cleanly.
-In guest_memfd mode, verify that ioeventfd registration is rejected with
--EOPNOTSUPP.
+Replace the boolean flag with an enum representing the access mode so
+that the entire access state continues to be published and read as a
+single release-acquire value.
+
+No functional change intended.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ drivers/vfio/device_cdev.c | 8 ++++----
+ drivers/vfio/group.c       | 2 +-
+ drivers/vfio/vfio.h        | 7 ++++++-
+ drivers/vfio/vfio_main.c   | 8 ++++----
+ 4 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-index 46d325228bda3..dde249571ebc4 100644
---- a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-+++ b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-@@ -10,6 +10,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
-+#include <sys/eventfd.h>
- #include <sys/ioctl.h>
- #include <sys/mman.h>
- #include <sys/types.h>
-@@ -725,4 +726,42 @@ TEST_F(guest_memfd_vfio, dmabuf_creation)
- 	free(feat);
- }
+diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
+index c1c26d7a9aec9..19be3947fc74a 100644
+--- a/drivers/vfio/device_cdev.c
++++ b/drivers/vfio/device_cdev.c
+@@ -125,7 +125,7 @@ long vfio_df_ioctl_bind_iommufd(struct vfio_device_file *df,
  
-+TEST_F(guest_memfd_vfio, ioeventfd_creation)
-+{
-+	struct vfio_device_ioeventfd ioeventfd = {};
-+	struct vfio_region_info bar0_info = {};
-+	int ret;
-+	int efd;
+ 	mutex_lock(&device->dev_set->lock);
+ 	/* one device cannot be bound twice */
+-	if (df->access_granted) {
++	if (df->access_mode != VFIO_DF_ACCESS_NONE) {
+ 		ret = -EINVAL;
+ 		goto out_unlock;
+ 	}
+@@ -163,7 +163,7 @@ long vfio_df_ioctl_bind_iommufd(struct vfio_device_file *df,
+ 	 * Paired with smp_load_acquire() in vfio_device_fops::ioctl/
+ 	 * read/write/mmap
+ 	 */
+-	smp_store_release(&df->access_granted, true);
++	smp_store_release(&df->access_mode, VFIO_DF_ACCESS_FULL);
+ 	mutex_unlock(&device->dev_set->lock);
+ 	return 0;
+ 
+@@ -185,10 +185,10 @@ void vfio_df_unbind_iommufd(struct vfio_device_file *df)
+ 
+ 	/*
+ 	 * In the time of close, there is no contention with another one
+-	 * changing this flag.  So read df->access_granted without lock
++	 * changing this mode.  So read df->access_mode without lock
+ 	 * and no smp_load_acquire() is ok.
+ 	 */
+-	if (!df->access_granted)
++	if (df->access_mode == VFIO_DF_ACCESS_NONE)
+ 		return;
+ 
+ 	mutex_lock(&device->dev_set->lock);
+diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+index 185f359f75d38..0a33e0e025bd8 100644
+--- a/drivers/vfio/group.c
++++ b/drivers/vfio/group.c
+@@ -217,7 +217,7 @@ static int vfio_df_group_open(struct vfio_device_file *df)
+ 	 * Paired with smp_load_acquire() in vfio_device_fops::ioctl/
+ 	 * read/write/mmap and vfio_file_has_device_access()
+ 	 */
+-	smp_store_release(&df->access_granted, true);
++	smp_store_release(&df->access_mode, VFIO_DF_ACCESS_FULL);
+ 
+ 	mutex_unlock(&device->dev_set->lock);
+ 	mutex_unlock(&device->group->group_lock);
+diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+index 2eeb526a8da58..af2b8158b40c0 100644
+--- a/drivers/vfio/vfio.h
++++ b/drivers/vfio/vfio.h
+@@ -16,11 +16,16 @@ struct iommufd_ctx;
+ struct iommu_group;
+ struct vfio_container;
+ 
++enum vfio_df_access_mode {
++	VFIO_DF_ACCESS_NONE = 0,
++	VFIO_DF_ACCESS_FULL,
++};
 +
-+	bar0_info.argsz = sizeof(bar0_info);
-+	bar0_info.index = VFIO_PCI_BAR0_REGION_INDEX;
-+	ret = ioctl(self->vfio_fd, VFIO_DEVICE_GET_REGION_INFO, &bar0_info);
-+	ASSERT_EQ(0, ret);
-+
-+	efd = eventfd(0, EFD_CLOEXEC);
-+	ASSERT_GE(efd, 0);
-+
-+	/* Register ioeventfd on BAR0 targeting RAL0 with 4-byte width */
-+	ioeventfd.argsz = sizeof(ioeventfd);
-+	ioeventfd.flags = VFIO_DEVICE_IOEVENTFD_32;
-+	ioeventfd.offset = bar0_info.offset + E1000_RAL0;
-+	ioeventfd.data = 0xdeadbeef;
-+	ioeventfd.fd = efd;
-+
-+	ret = ioctl(self->vfio_fd, VFIO_DEVICE_IOEVENTFD, &ioeventfd);
-+	if (variant->use_gmem) {
-+		ASSERT_LT(ret, 0);
-+		ASSERT_EQ(EOPNOTSUPP, errno);
-+	} else {
-+		ASSERT_EQ(0, ret);
-+
-+		/* Unregister ioeventfd by passing fd = -1 with identical match criteria */
-+		ioeventfd.fd = -1;
-+		ret = ioctl(self->vfio_fd, VFIO_DEVICE_IOEVENTFD, &ioeventfd);
-+		ASSERT_EQ(0, ret);
-+	}
-+
-+	close(efd);
-+}
-+
- TEST_HARNESS_MAIN
+ struct vfio_device_file {
+ 	struct vfio_device *device;
+ 	struct vfio_group *group;
+ 
+-	u8 access_granted;
++	enum vfio_df_access_mode access_mode;
+ 	u32 devid; /* only valid when iommufd is valid */
+ 	spinlock_t kvm_ref_lock; /* protect kvm field */
+ 	struct file *kvm;
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index ea8e6cc13c457..fe126e137d5ca 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -1349,7 +1349,7 @@ static long vfio_device_fops_unl_ioctl(struct file *filep,
+ 		return vfio_df_ioctl_bind_iommufd(df, uptr);
+ 
+ 	/* Paired with smp_store_release() following vfio_df_open() */
+-	if (!smp_load_acquire(&df->access_granted))
++	if (smp_load_acquire(&df->access_mode) == VFIO_DF_ACCESS_NONE)
+ 		return -EINVAL;
+ 
+ 	ret = vfio_device_pm_runtime_get(device);
+@@ -1397,7 +1397,7 @@ static ssize_t vfio_device_fops_read(struct file *filep, char __user *buf,
+ 	struct vfio_device *device = df->device;
+ 
+ 	/* Paired with smp_store_release() following vfio_df_open() */
+-	if (!smp_load_acquire(&df->access_granted))
++	if (smp_load_acquire(&df->access_mode) == VFIO_DF_ACCESS_NONE)
+ 		return -EINVAL;
+ 
+ 	if (unlikely(!device->ops->read))
+@@ -1414,7 +1414,7 @@ static ssize_t vfio_device_fops_write(struct file *filep,
+ 	struct vfio_device *device = df->device;
+ 
+ 	/* Paired with smp_store_release() following vfio_df_open() */
+-	if (!smp_load_acquire(&df->access_granted))
++	if (smp_load_acquire(&df->access_mode) == VFIO_DF_ACCESS_NONE)
+ 		return -EINVAL;
+ 
+ 	if (unlikely(!device->ops->write))
+@@ -1429,7 +1429,7 @@ static int vfio_device_fops_mmap(struct file *filep, struct vm_area_struct *vma)
+ 	struct vfio_device *device = df->device;
+ 
+ 	/* Paired with smp_store_release() following vfio_df_open() */
+-	if (!smp_load_acquire(&df->access_granted))
++	if (smp_load_acquire(&df->access_mode) == VFIO_DF_ACCESS_NONE)
+ 		return -EINVAL;
+ 
+ 	if (unlikely(!device->ops->mmap))
 
 -- 
 2.56.0.455.g6c5a503b38-goog
