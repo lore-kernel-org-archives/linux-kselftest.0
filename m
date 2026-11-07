@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794077099;
-	b=xKq1m8fcw+jxMNlau4RvJX65k+GhqGUSJUbkMefR+gmdLz6HeP6z1JbAUrar1Q8IpCZ2
-	 jJd6QNKqmRdQNjMh/vqi8TT3+gf0JhqZi/Zop80TtYWf7qfGS+3EteAUYA13vgBnRvk7N
-	 vLnlysirbxwFAYCww8R6af+uEk5k+hZ/xKP8nNHyBZENZmC2Q7dNpHx5lKHIJK/eOPki4
-	 lcOPk4Khy8dPQCZKURn/jR821bfO8PgkT7UdYBrmOu1bSplTihXN5LQgsJwurFj3LR6cC
-	 9HY/jHoISQrItPZXFfN/36V51PhMKwMTygubGk36OMJvO01JsjbH64BoXhnRZuH/Wxg==
+	t=1794077101;
+	b=t/HRH/iv8kCPGTYCzwIAOjjmskx9w8Twa/sxx+HoXVR/+behDMPCX2LRwQxp/VCJxycu
+	 HLtdmT0/vGjjdRxiZtPUGs/5UL14jW/Mb0miVxXojXi9kJm8cECXGdZCjsEyen9iuj7c+
+	 x0tRCqTZobuK2ZnsXV6ACn/fa6Z9ZZeKoFHuYF+jNeN1qimjR0+OBCu5pVaLrCT05Ee+/
+	 y39gERTwabIjkKVzm996ezhkdAhlKUdocBY/RI8tWiPRKzuutD7EgqlLzBOHIb3FFRVKV
+	 VaSquOB28JgfmzON/+FPURh0oPzEqeal4zHe1JOryl4hArTdc/K5hp/88MbcLUIrHjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794077099;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794077101;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=mg8UGJuyK6ZVPowqoxE+B4fRWFQpJezgay0t77tS3ig=;
-	b=jxSKk2FMjWoKlzItNGIWtMlv79xBriNXYI+kg5q46EA4wgZkm7jgB0mOyO3W4GCRw3kL
-	 4AnGLoN2ImqFLrU3FSOasMcSVJI+NNpNzYch5AR4xo6u5sCrFP9C6Ll6bTWIutgURwszd
-	 7lGImc1BODkgBjdDRJh47NsGwUbx61CA3guIc61QIlZXw5V96CCAC+Kq2ymAIqUJiKjC5
-	 UER19dEUcg4Edf/xvLCV48GUt5pdXObK7p4+XDMEHuYB66aDDln3g2ByGJyspG9qtq4Ns
-	 KbIz898VwmyV2THTib02DiYIw7A0RR+Oa0AOLQQXdCRZss7LM9lDs/W5kQV9R+mUXkw==
+	bh=u3pF9cSG2s2OvUiOff2e3lsOipUwDDFyl2aM5L15+sk=;
+	b=Js+u7xuadU0Uc2rY6ws3A3V95QYvDd0c2JqEAGiA6tHKX9eznbTadMg5kmaXraY9SRrg
+	 H4XiFwLX2g68rhvZ2utVkihGRKbocFJWdWOUhn1x0egtKfOw2huBIFlKgIAXMYimacrjB
+	 cRuLfppKfYeqHY2HY6Q+Qauu/hHXBTEL3EFE6Ybqg7aoTT74A5wFOK6kg78J4n7vgxx9V
+	 tXq/1SbG9X6OdqsTEVK+cZHdhbnqkyggtJy8i4hgCssS4RNd+t99Zbj7u4X23zO8M5rIT
+	 7nq5q9rZ4jBS82E93EcaXIshY8XFYoy1qWdNd97XKSleG1Yn7HUYpo4+JCAO+VYJL8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=blockcast.net;
 	spf=pass smtp.mailfrom=blockcast.net;
-	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=dZIzs1Fw;
-	arc=none smtp.remote-ip=74.125.82.177
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	dkim=pass header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=v223FkNi;
+	arc=none smtp.remote-ip=74.125.82.174
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2184F606D80E
-	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 18:44:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2184F606D80E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEED606EEB1
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Nov 2026 18:45:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EBEED606EEB1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blockcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=dZIzs1Fw
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-36eb1cb7aabso2683668eec.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 10:44:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blockcast.net header.i=@blockcast.net header.a=rsa-sha256 header.s=google header.b=v223FkNi
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-36fc0a3fe93so2805121eec.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 10:45:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blockcast.net; s=google; t=1794077097; x=1794681897; darn=vger.kernel.org;
+        d=blockcast.net; s=google; t=1794077100; x=1794681900; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mg8UGJuyK6ZVPowqoxE+B4fRWFQpJezgay0t77tS3ig=;
-        b=dZIzs1Fwt2l1a3nl0vqs640rx0OYLG7nNrJU10Qyd5DthXDzXgWAIv0pznL77q8xLy
-         UeGdQ5mEsbBQ30kUxpU+iMlJvpKRIgm1jW8qs6agm4zNnyuWTpd+Uo+unpoB/LhO/OGR
-         OlTyFUWFVwrhIaTh/MkRhdtNSKqKjZWuiG1WZh9wCylirPtwAszfcldnxMTvcrJa8y/O
-         2M0keArIZ9TUJOuo4HeSeQjANlp9RIT7Ig3q5I1VRrotHuHz3OvyM8Cw6G6yJqHyYO5r
-         DU3h5fKA/DKeQgGGjb5ycshBAoXTqHcdscXU8zMoiOOVyB3Kdeca3S2V5MJbqmXOTxhK
-         KjNA==
+        bh=u3pF9cSG2s2OvUiOff2e3lsOipUwDDFyl2aM5L15+sk=;
+        b=v223FkNijesrgNpTUfmBe6Qu54+NRmuf0tnJdnKwuFzr+Lv4YB2EnGU52GX/Ldm6Z2
+         dLtexW34puVcO52oSJTijenVjq55fO/dMZg3Fh8WOL7GNtFHzffluF62CqOXnVb8LPtj
+         WBpUUCG+Wd0bhtZciAA6aTZej13YWY+ZFFmwIMu8q9AAyuFMhmSBes2n53yaYipv97b6
+         BjtVUrCx50MZpkmho9WxqU02v4oUqIgfpSiNz75rPZg8Rc043hgmXP/0DfGm48lEffiU
+         n0ZPL/Uahn9qnb3H4q+Fjo1cSVK9tvNZRkiLGQvcMnBuBcIP5pd18vXHqNOzKYozxUzU
+         3w/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794077097; x=1794681897;
+        d=1e100.net; s=20260707; t=1794077100; x=1794681900;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mg8UGJuyK6ZVPowqoxE+B4fRWFQpJezgay0t77tS3ig=;
-        b=155SiBdsskMFab5iJmXsUdXqnhXDuAm0F0L6xc0y/rtBmD7Hao5arxfpkhohzYchwj
-         pReLe+r/XjuTLrlys8cUpVkvLnSqJ63wul1OG/bJSp9nXOguGZ353/XvHLXDOOqs2h5t
-         JZv0rEnVr660ijJuz+Cghtye+1OIY5Dc9LwuACpufM7NPoWM148NJ5zqFeCRcOYFfDiQ
-         r5im3pMABLkhV6jIin1J0LVKX2FMxzbyDlv/sYOwqM3j/GNKfwuqVwsWwWAJl/BcZewu
-         SOZip3HcvchPYjBQ0AX0ea0BIS3+QgWSeHHIugAiRN7y5IbPhsBi1vMeOMQ3tQ59rj3h
-         16bA==
-X-Forwarded-Encrypted: i=1; AL+hErEeP6iss1HjWBuvGnNjSTBVgJ7eFhuLEbQjQN6vdp+0YKa/OCaOpGG+HjSu7B/EaAwq8FukbAuadlv8Sk4kLoI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z93de2WU6AMJeO7q1ANeYehXhf2kZWKJQ9/wuTPQ3z07+MQBLuu
-	0rdQx8Yn2NVMQYcfKXdn9rgg3M8uR1/c9waZX4zcx+U1zMsdgsFaQzQssv5fcbPdA+g=
-X-Gm-Gg: AYBFou1teLP8RtodfL60iV74/G2jTYYOVRuje6xewchhBnDVxJVgNgtIuaNWSycZ08U
-	MqJ0wsxM1WK1r4N3tH7tMlTSM1gpDAsl4yKiw9tMhxPoy8TpcN2PqCj8CuPpfOuh9exnUNtf+9g
-	Ol/+nkxLN/s+/6WHZZz7iOasfWKCXXs0fdp2io2r/G51fay8lhVx+91AK2gERJz70EmEOiV+Cr9
-	dPbeTgmU3bD9/CEHlZ7kZ1dqMCXSZrZaRhfIJjLOYdZ7P6fssz0vZ8cf4hhvU6JXMEn5l91/YAV
-	b8/iXr/qH2AQ+47Bfl74BtQJDxcqph/ZPnOm/LVBV0SSN4Ia/08KNJgzSC3SJMbRimCAwktZHfr
-	ulgtm8fxWBr/57O5D90iBs2VYt/zXoyIeRcu9oS6nn9D+IViSCyvI7us8LUotz1fJAp+PmHVoFX
-	dUNCkgh2Lt3CJVE7ouNJ3ABFCll2zoBQ0JihqoL96n3NCW3Vli4dW+MuedQLhewbuiJmbLBu8E7
-	JbzvFFz1C3Yq8/z3+qttF7dy7AfxtTUTkwZOMExfOLRfAQ3uY5zZQwBqQT5F3IxrqTmakyyZ01K
-	oYjkeOo97sbj+ZMByjPZXmK/5Rz5G0BJ5aMQ/gcT5r5x1zfhBIbqsYVES0TJKNtWX/oM310=
-X-Received: by 2002:a05:7301:dd81:b0:35c:8b96:94d9 with SMTP id 5a478bee46e88-36f75d229e2mr8091949eec.19.1794077097000;
-        Sat, 07 Nov 2026 10:44:57 -0800 (PST)
+        bh=u3pF9cSG2s2OvUiOff2e3lsOipUwDDFyl2aM5L15+sk=;
+        b=Co8FuQC01iLCJiLmRIHmatZ72Ju6Zl8m2LUjwGp82rPTmYEfxAf9pcgJfajuXNkhrr
+         Tp0/VBrrfthTfIe/NLLq8ZsIKsNuaDV0pGAEDizuzP/GI0+gN5yN0FyNFIEEIDswy7CL
+         Icb+HHp0rTBmzTy8rtyksyTY0SuLi711XR6LEr3EWpbgLToIous5YL7b81RkhhteEZcM
+         GtrL6sG3jBqyMjK8BEzvT1/SAXWk/3JXr8j93AZXi4/TOBdj6JqgT+XLZ5jr49O8LHCR
+         RVK0wGM9UheH3ZfKjMwJXn/PcXu5w564Xbd7uwFzHbpKcYN+GPnPpHPCZeNiDAA97vpR
+         k0aw==
+X-Forwarded-Encrypted: i=1; AL+hErEgEPQ/mI0UeBByXBLmQ2GWwThjWqCIwvVxY7ggwgqxADubpk0zPzhwT8+3nv7rBpBFMsIPfgScG1zTzCYlYYg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/qK78cJUTh8UCluaWhC7q8KIlKttHR69nTnqTS+nVCz/H/Q4LI
+	eLFi+YFZW+dCG9OENHmjSIGL4PqVn4hnuV1WAgC2BJKgtMn6xq5FL3kvCnAA3SILDCQ=
+X-Gm-Gg: AYBFou354/yJpfJdP3K8mX8WIqD+EFTb4WKIMr0x6Adl+bBNOYUF5yQy7tsQKSoptN+
+	U5bew3Sz0hBu5CVhUOm0Q53mT5UeoID9X5iFCFOrN1/hyfnjTmamjPakCag7q+Kr6qLLgWP2R2V
+	7f7Xev9iZRtrnrQv5AtwWps3w6U+B5IZ4O2qR+gHb3qnZGz7LngVEwtZnC5o7xBS8t2d5P8QssM
+	4KhcehHhpqsAYLEhj+Jis+8CO69Y2qvs6Cmw6X+IXBGGqW56LyiE3wEuzFeQlAlWfVq9dlyxFxy
+	DsQO2zD4in4L/kKztht1vE6+Xes11xkKLTAT/J0zjuTZHQzKNBGj2mAteNzFaWKtCDI55ePwjEX
+	B4R8IaU/tf8X6hp5wboe5IfVRF78SDAqcuSArV90n0sYZ/HhLfpe/pmtESSx1v83wq2n3GimklL
+	7z4rc/tNYmvi+zOA37QWlzOhalZJKJps0OhtEtxMHHVrQXxVsFKZ4q9R9GcqPrCRs5Fo7F8sWwf
+	rRq7i7Npu1xZ/SZM/jxv/PyHt+G4fLgZR+15doB3N+xnXAuP1PrF8ATxsUde4QBg+dew9oVE9UE
+	4Vfj/m6Cb7nNYm8A93ulPpruytJNJyjXEttPqxlFqz2AC5SG0AYoUFT+AtfZ8LFWMj2Ibb8=
+X-Received: by 2002:a05:7300:b0aa:b0:36f:4d62:2884 with SMTP id 5a478bee46e88-36f7691a412mr8340188eec.30.1794077099785;
+        Sat, 07 Nov 2026 10:44:59 -0800 (PST)
 Received: from devbox.ts.blockcast.net ([2602:f74d:1::32])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36fa8c4f28dsm17286897eec.9.2026.11.07.10.44.55
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36fa8c4f28dsm17286897eec.9.2026.11.07.10.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 10:44:56 -0800 (PST)
+        Sat, 07 Nov 2026 10:44:58 -0800 (PST)
 From: Omar Ramadan <omar@blockcast.net>
 To: Taehee Yoo <ap420073@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -106,9 +106,9 @@ Cc: netdev@vger.kernel.org,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-hardening@vger.kernel.org
-Subject: [RFC PATCH net-next 7/9] netdevsim: add a TX reference provider for AMT relay offload
-Date: Sat,  7 Nov 2026 18:44:35 +0000
-Message-ID: <20261107184437.2783174-8-omar@blockcast.net>
+Subject: [RFC PATCH net-next 8/9] selftests: net: add amt_offload.sh for AMT relay offload
+Date: Sat,  7 Nov 2026 18:44:36 +0000
+Message-ID: <20261107184437.2783174-9-omar@blockcast.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261107184437.2783174-1-omar@blockcast.net>
 References: <20261107184437.2783174-1-omar@blockcast.net>
@@ -123,964 +123,702 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Each PF port offers itself as an AMT relay replication offload provider
-(include/net/amt_offload.h) for relays whose stream device it is. It is
-not a pass-through to amt's software fan-out: the port keeps its own
-endpoint and group tables, with a staged and a committed member set per
-group under the generation amt gave it, and decides from those which
-endpoints get a copy of each packet amt hands to ->xmit. Each copy is
-encapsulated by amt_offload_encap_xmit() and sent out of the port to its
-peer, so any divergence between amt's desired state and what the
-provider committed shows up as a wrong copy count at the peer. The set
-committed before the last one is kept for packets already in flight,
-and an endpoint stays allocated while a set names it.
+Exercise the AMT relay replication offload contract against netdevsim's
+TX reference provider. A relay in offload auto mode transmits on one
+netdevsim port; four in-tree AMT gateways, each in its own netns (an amt
+device binds relay_port on INADDR_ANY, so two gateways cannot share
+one), reach its peer through a bridge. Copies are counted per gateway on
+the decapsulating amtg device, and hardware copies on the provider's own
+counter, so the eleven assertions are about what actually reached each
+gateway:
 
-debugfs (ports/<n>/amt/) shows the tables and counters and injects the
-failures the contract has to survive: busy (xmit returns BUSY),
-fail_commit (group_commit returns -ENOSPC), max_endpoints (endpoint_add
-returns -ENOSPC), stall_ms (every programming op sleeps, so amt sees it
-overrun op_timeout_ms and resets) and op_timeout_ms (advertised at
-bind).
+ 1. no membership: no copy anywhere
+ 2. one copy per committed endpoint per packet, all from the provider,
+    and the provider's devlink resources agree
+ 3. members joining under traffic (generation replace): stable members
+    get exactly one copy of every packet, and every copy comes from the
+    provider
+ 4. xmit BUSY: exactly one software copy set, counted
+ 5. forwarding is per group: an INCLUDE(S1) member still receives S2
+ 6. a programming op overruns op_timeout_ms: amt resets the provider,
+    ignores the stale result, replays, and copies stay at one; the
+    provider's health reporter records it
+ 7. partial commit (group_update succeeds, group_commit fails): no
+    hardware copy, the group is served in software
+ 8. every member leaves: once the relay times their sources out, the
+    group is disabled, no copy anywhere
+ 9. offload required with no provider: refused with an extack, counted
+10. the peer unlinked under traffic, relinked, then the relay's netdevsim
+    deleted under traffic: ordered teardown, no splat
+11. a lower carrying two amt devices deleted: both go with it, no splat
+    (runs first, in its own netns, independent of the offload setup;
+    one dmesg snapshot after its netns teardown ends its splat scan
+    and starts case 10's)
 
-The provider owns its devlink objects, registered on netdevsim's own
-devlink instance, not amt's: resources amt/endpoints, amt/groups,
-amt/members and amt/cmdq, and an "amt" health reporter reported on
-every flush (amt's reset). amt registers nothing on devlink.
+No IGMPv3 leave takes effect at once on this base: a BLOCK or TO_IN
+leaves the timer of each source it drops alone, so the relay keeps the
+source until that timer expires, at least a GMI (260 s by default)
+after the last report that refreshed it. So case 3 drives its
+generation replaces with joins alone, and case 8 waits out the GMI.
 
-Moving a netdev to another netns unregisters it there first, which
-makes amt forget its provider; the port offers itself again once it is
-registered in the new netns.
-
-TX only: netdevsim has no ingress classifier to simulate the ingress
-path with.
+The test SKIPs, loudly, when ip cannot set the offload mode or the
+netdevsim has no provider, rather than silently testing software only.
 
 Assisted-by: LLM
 Signed-off-by: Omar Ramadan <omar@blockcast.net>
 ---
- drivers/net/Kconfig               |   1 +
- drivers/net/netdevsim/Makefile    |   4 +
- drivers/net/netdevsim/amt.c       | 600 ++++++++++++++++++++++++++++++
- drivers/net/netdevsim/dev.c       |  68 ++++
- drivers/net/netdevsim/health.c    |  28 +-
- drivers/net/netdevsim/netdev.c    |  19 +-
- drivers/net/netdevsim/netdevsim.h |  27 ++
- 7 files changed, 744 insertions(+), 3 deletions(-)
- create mode 100644 drivers/net/netdevsim/amt.c
+ tools/testing/selftests/net/Makefile       |   1 +
+ tools/testing/selftests/net/amt_offload.sh | 608 +++++++++++++++++++++
+ tools/testing/selftests/net/config         |   2 +
+ 3 files changed, 611 insertions(+)
+ create mode 100755 tools/testing/selftests/net/amt_offload.sh
 
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index fda19ae4b..6e45d2fa0 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -625,6 +625,7 @@ config NETDEVSIM
- 	depends on INET
- 	depends on PSAMPLE || PSAMPLE=n
- 	depends on PTP_1588_CLOCK_MOCK || PTP_1588_CLOCK_MOCK=n
-+	depends on AMT || AMT=n
- 	select NET_DEVLINK
- 	select PAGE_POOL
- 	select NET_SHAPER
-diff --git a/drivers/net/netdevsim/Makefile b/drivers/net/netdevsim/Makefile
-index 87718204f..eec03812a 100644
---- a/drivers/net/netdevsim/Makefile
-+++ b/drivers/net/netdevsim/Makefile
-@@ -25,3 +25,7 @@ endif
- ifneq ($(CONFIG_MACSEC),)
- netdevsim-objs += macsec.o
- endif
-+
-+ifneq ($(CONFIG_AMT),)
-+netdevsim-objs += amt.o
-+endif
-diff --git a/drivers/net/netdevsim/amt.c b/drivers/net/netdevsim/amt.c
-new file mode 100644
-index 000000000..ffb9aa4e7
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 5db68de0b..2d6c6de0d 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -11,6 +11,7 @@ TEST_PROGS := \
+ 	amt.sh \
+ 	amt_v6.sh \
+ 	amt_gw_v6.sh \
++	amt_offload.sh \
+ 	amt_scale.sh \
+ 	arp_ndisc_evict_nocarrier.sh \
+ 	arp_ndisc_untracked_subnets.sh \
+diff --git a/tools/testing/selftests/net/amt_offload.sh b/tools/testing/selftests/net/amt_offload.sh
+new file mode 100755
+index 000000000..4e00fba0b
 --- /dev/null
-+++ b/drivers/net/netdevsim/amt.c
-@@ -0,0 +1,600 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* netdevsim: TX reference provider for AMT relay replication offload.
-+ *
-+ * Each PF port registers itself as a provider for relays that transmit
-+ * on it (include/net/amt_offload.h). The port keeps its OWN endpoint and
-+ * group tables, with a staged and a committed member set per group under
-+ * the generation amt gave it, and decides replication from them: a packet
-+ * amt hands to ->xmit is copied to the endpoints of the committed set of
-+ * that generation, each copy encapsulated by amt_offload_encap_xmit() and
-+ * sent out of this port to its peer. Any divergence between what amt
-+ * wants and what the provider committed shows up at the peer as a wrong
-+ * copy count. TX only: netdevsim has no ingress classifier to simulate.
-+ *
-+ * debugfs, per port, under ports/<n>/amt/:
-+ *   tables         the provider's endpoints and groups, read-only
-+ *   tx_copies, tx_busy, tx_stale_gen, tx_dropped, commits, flushes
-+ *                  counters, read-only
-+ *   busy           xmit returns BUSY
-+ *   fail_commit    group_commit fails with -ENOSPC
-+ *   max_endpoints  endpoint_add fails with -ENOSPC beyond this (0: none)
-+ *   stall_ms       every programming op sleeps this long first
-+ *   op_timeout_ms  advertised to amt at bind (0: no limit)
-+ *
-+ * devlink, per device: resources amt/{endpoints,groups,members,cmdq} and
-+ * the "amt" health reporter, reported on every flush (amt's reset).
-+ */
++++ b/tools/testing/selftests/net/amt_offload.sh
+@@ -0,0 +1,608 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# AMT relay replication offload, against netdevsim's TX reference provider.
++#
++# netdevsim keeps its own endpoint and group tables and emits each copy
++# through amt_offload_encap_xmit() out of the relay's stream device to its
++# peer, so a divergence between what amt wants and what the provider
++# committed shows up as a wrong copy count at the gateways. Copies are
++# counted per gateway on the decapsulating amtg device (AF_PACKET), and
++# hardware copies on the provider's own counter in debugfs.
++#
++#   RELAY netns                                GATEWAY netns
++#   src0 (S1 172.17.0.2, S2 172.17.0.3)
++#     | sender, IP_MULTICAST_IF amtr
++#   amtr (relay, offload auto)
++#     | stream_dev
++#   nsim_r 10.0.0.2/24  <== netdevsim peer link ==>  nsim_g -- br0
++#                                                              |
++#                                     veth to GATEWAY netns i = 1..4:
++#                                     gw<i> 10.0.0.1<i>/24, amtg<i>
++#
++# One gateway per netns: an amt device binds its UDP socket to relay_port
++# on INADDR_ANY in its netns, gateways included, so a second gateway in
++# the same netns fails to come up with EADDRINUSE.
++#
++# The source sits in the relay netns and transmits on amtr directly: how
++# multicast reaches amtr (mroute) is not under test, amt_dev_xmit is.
++#
++# Eleven assertions, each printing one "TEST: ... [ OK ]" line; the run
++# passes only if all eleven printed OK.
 +
-+#include <linux/debugfs.h>
-+#include <linux/delay.h>
-+#include <linux/netdevice.h>
-+#include <linux/rculist.h>
-+#include <linux/refcount.h>
-+#include <linux/seq_file.h>
-+#include <linux/skbuff.h>
-+#include <net/amt_offload.h>
-+#include <net/devlink.h>
++source "$(dirname "$0")"/lib.sh
 +
-+#include "netdevsim.h"
++readonly RELAY=$(mktemp -u amtofl-r-XXXXXXXX)
++readonly GW=$(mktemp -u amtofl-g-XXXXXXXX)
++readonly TMP=$(mktemp -d)
++readonly G1=239.1.1.1 G2=239.1.1.2 G3=239.1.1.3 G4=232.1.1.4 G5=239.1.1.5
++readonly S1=172.17.0.2 S2=172.17.0.3
++readonly K=50
++NSIM_R_ID=$((256 + RANDOM % 256))
++NSIM_G_ID=$((NSIM_R_ID + 256))
++readonly NSIM_SYS=/sys/bus/netdevsim
++readonly DFS=/sys/kernel/debug/netdevsim/netdevsim$NSIM_R_ID/ports/0/amt
++readonly DL=netdevsim/netdevsim$NSIM_R_ID
++ERR=$ksft_skip
++OKS=0
++PIDS=()
++gwns() { echo "$GW-$1"; }
++declare -A JOIN
 +
-+struct amt_offload_endpoint {
-+	struct list_head		node;	/* nsim_amt_bind.eps */
-+	struct amt_offload_endpoint_key	key;
-+	/* One for amt's handle (all endpoint_add calls for the key), one per
-+	 * member set naming it: an in-flight packet may still be copied to
-+	 * an endpoint amt already deleted.
-+	 */
-+	refcount_t			refs;
-+	u32				adds;
-+	atomic64_t			copies;
-+	struct rcu_head			rcu;
-+};
-+
-+struct nsim_amt_set {
-+	u64				gen;
-+	u32				n;
-+	struct rcu_head			rcu;
-+	struct amt_offload_endpoint	*eps[] __counted_by(n);
-+};
-+
-+struct amt_offload_group {
-+	struct list_head		node;	/* nsim_amt_bind.grps */
-+	struct amt_offload_group_key	key;
-+	struct nsim_amt_set		*staged;
-+	/* Committed last, and the one before it for packets in flight. */
-+	struct nsim_amt_set __rcu	*cur;
-+	struct nsim_amt_set __rcu	*prev;
-+	struct rcu_head			rcu;
-+};
-+
-+struct nsim_amt_bind {
-+	struct list_head		node;	/* nsim_amt.binds */
-+	struct amt_offload_binding	*b;
-+	struct list_head		eps;
-+	struct list_head		grps;
-+	u32				nr_eps;
-+};
-+
-+struct nsim_amt {
-+	struct netdevsim		*ns;
-+	struct mutex			lock;	/* binds and their tables */
-+	struct list_head		binds;
-+	struct dentry			*ddir;
-+	bool				busy;
-+	bool				fail_commit;
-+	u32				max_endpoints;
-+	u32				stall_ms;
-+	u32				op_timeout_ms;
-+	u64				commits;
-+	u64				flushes;
-+	atomic64_t			tx_copies;
-+	atomic64_t			tx_busy;
-+	atomic64_t			tx_stale_gen;
-+	atomic64_t			tx_dropped;
-+};
-+
-+#define nsim_amt_deref(nam, p) \
-+	rcu_dereference_protected(p, lockdep_is_held(&(nam)->lock))
-+
-+static struct nsim_amt *nsim_amt_of(struct amt_offload_binding *b)
++cleanup()
 +{
-+	struct netdevsim *ns = netdev_priv(b->lower);
-+
-+	return ns->amt;
++	for p in "${PIDS[@]}" "${JOIN[@]}"; do
++		kill "$p" 2>/dev/null
++	done
++	wait 2>/dev/null
++	ip netns del "$RELAY" 2>/dev/null
++	ip netns del "$GW" 2>/dev/null
++	for i in 1 2 3 4 mu; do
++		ip netns del "$(gwns $i)" 2>/dev/null
++	done
++	echo "$NSIM_R_ID" > $NSIM_SYS/del_device 2>/dev/null
++	echo "$NSIM_G_ID" > $NSIM_SYS/del_device 2>/dev/null
++	rm -rf "$TMP"
++	exit $ERR
 +}
 +
-+/* Every programming op runs inside one of these: cmdq occupancy, and the
-+ * injected stall that makes amt see an op overrun op_timeout_ms.
-+ */
-+static struct nsim_amt *nsim_amt_op_begin(struct amt_offload_binding *b)
++skip()
 +{
-+	struct nsim_amt *nam = nsim_amt_of(b);
-+	u32 stall = READ_ONCE(nam->stall_ms);
-+
-+	atomic_inc(&nam->ns->nsim_dev->amt.cmdq);
-+	if (stall)
-+		msleep(stall);
-+	mutex_lock(&nam->lock);
-+	return nam;
++	echo "SKIP: $*"
++	# A failure already printed (assertion 11 runs before the provider
++	# checks) must not be reported as a skip.
++	[ "$ERR" = 1 ] || ERR=$ksft_skip
++	exit $ERR
 +}
 +
-+static void nsim_amt_op_end(struct nsim_amt *nam)
++ok()
 +{
-+	mutex_unlock(&nam->lock);
-+	atomic_dec(&nam->ns->nsim_dev->amt.cmdq);
++	printf "TEST: %-62s  [ OK ]\n" "$1"
++	OKS=$((OKS + 1))
 +}
 +
-+static void nsim_amt_ep_put(struct amt_offload_endpoint *ep)
++fail()
 +{
-+	if (refcount_dec_and_test(&ep->refs))
-+		kfree_rcu(ep, rcu);
++	printf "TEST: %-62s  [FAIL]\n" "$1"
++	shift
++	[ $# -gt 0 ] && echo "      $*"
++	ERR=1
++	return 0
 +}
 +
-+static void nsim_amt_set_free_rcu(struct rcu_head *head)
-+{
-+	struct nsim_amt_set *set = container_of(head, struct nsim_amt_set,
-+						rcu);
-+	u32 i;
++# --- helpers --------------------------------------------------------------
 +
-+	for (i = 0; i < set->n; i++)
-+		nsim_amt_ep_put(set->eps[i]);
-+	kfree(set);
++cat > "$TMP/join.py" <<'EOF'
++# join.py IFNAME GROUP [SOURCE]: hold an ASM or SSM membership on IFNAME
++# until killed; leaving is closing the socket.
++import signal, socket, struct, sys, time
++ifn, grp = sys.argv[1], sys.argv[2]
++src = sys.argv[3] if len(sys.argv) > 3 else None
++def sin(a):
++    return struct.pack('=HH4s120x', socket.AF_INET, 0, socket.inet_aton(a))
++s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++req = struct.pack('=I4x', socket.if_nametoindex(ifn)) + sin(grp)
++if src:
++    s.setsockopt(socket.IPPROTO_IP, 46, req + sin(src)) # MCAST_JOIN_SOURCE_GROUP
++else:
++    s.setsockopt(socket.IPPROTO_IP, 42, req)            # MCAST_JOIN_GROUP
++signal.signal(signal.SIGTERM, lambda *a: sys.exit(0))
++while True:
++    time.sleep(3600)
++EOF
++
++cat > "$TMP/send.py" <<'EOF'
++# send.py IFNAME SRC GROUP COUNT INTERVAL: COUNT UDP datagrams to GROUP:5000
++# from SRC out of IFNAME. Send errors (the device going away) are ignored.
++import socket, struct, sys, time
++ifn, src, grp, n, ivl = sys.argv[1:6]
++s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++s.bind((src, 0))
++s.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF,
++             struct.pack('=4s4si', bytes(4), bytes(4),
++                         socket.if_nametoindex(ifn)))
++s.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 8)
++s.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 0)
++for i in range(int(n)):
++    try:
++        s.sendto(b'%08d' % i + bytes(56), (grp, 5000))
++    except OSError:
++        pass
++    time.sleep(float(ivl))
++EOF
++
++cat > "$TMP/count.py" <<'EOF'
++# count.py IFNAME...: count received UDP datagrams to port 5000 per
++# (interface, source, group) until SIGTERM, then read what is already
++# queued and print one line per key.
++import collections, select, signal, socket, sys
++socks = {}
++for ifn in sys.argv[1:]:
++    s = socket.socket(socket.AF_PACKET, socket.SOCK_DGRAM, socket.htons(0x0800))
++    s.bind((ifn, 0x0800))
++    socks[s] = ifn
++cnt = collections.Counter()
++done = False
++def stop(*a):
++    global done
++    done = True
++signal.signal(signal.SIGTERM, stop)
++sys.stdout.write('READY\n'); sys.stdout.flush()
++while True:
++    r = select.select(list(socks), [], [], 0 if done else 0.1)[0]
++    if not r and done:
++        break
++    for s in r:
++        d, a = s.recvfrom(4096)
++        if a[2] == socket.PACKET_OUTGOING or len(d) < 28 or d[9] != 17:
++            continue
++        hl = (d[0] & 15) * 4
++        if int.from_bytes(d[hl + 2:hl + 4], 'big') != 5000:
++            continue
++        cnt[(socks[s], socket.inet_ntoa(d[12:16]),
++             socket.inet_ntoa(d[16:20]))] += 1
++for (ifn, src, grp), n in sorted(cnt.items()):
++    print(ifn, src, grp, n)
++EOF
++
++dfs() { cat "$DFS/$1"; }
++dfs_set() { echo "$2" > "$DFS/$1"; }
++rsys() { ip netns exec "$RELAY" cat "/sys/class/net/amtr/offload/$1"; }
++
++# Committed member count of group $1 in the provider's own table, or 0.
++hw_members()
++{
++	awk -v g="group $1" '
++		$0 == g { in_g = 1; next }
++		/^group / || /^endpoint / || /^binding / { in_g = 0 }
++		in_g && $1 == "committed" { n = $5; sub(":", "", n); print n; f = 1; exit }
++		END { if (!f) print 0 }' "$DFS/tables"
 +}
 +
-+static void nsim_amt_set_free(struct nsim_amt_set *set)
++hw_group_present()
 +{
-+	if (set)
-+		call_rcu(&set->rcu, nsim_amt_set_free_rcu);
++	grep -qx "group $1" "$DFS/tables"
 +}
 +
-+static int nsim_amt_bind(struct amt_offload_binding *b,
-+			 struct amt_offload_caps *caps)
++# wait_for SECONDS CMD...: poll CMD every 0.2s.
++wait_for()
 +{
-+	struct nsim_amt *nam = nsim_amt_of(b);
-+	struct nsim_amt_bind *nb;
++	local t=$(( $1 * 5 ))
 +
-+	nb = kzalloc_obj(*nb, GFP_KERNEL);
-+	if (!nb)
-+		return -ENOMEM;
-+	nb->b = b;
-+	INIT_LIST_HEAD(&nb->eps);
-+	INIT_LIST_HEAD(&nb->grps);
-+	b->priv = nb;
-+
-+	caps->families = AMT_OFFLOAD_FAMILY_V4 | AMT_OFFLOAD_FAMILY_V6;
-+	caps->paths = BIT(AMT_OFFLOAD_PATH_TX);
-+	caps->op_timeout_ms = READ_ONCE(nam->op_timeout_ms);
-+	caps->max_endpoints = READ_ONCE(nam->max_endpoints);
-+
-+	mutex_lock(&nam->lock);
-+	list_add_tail(&nb->node, &nam->binds);
-+	mutex_unlock(&nam->lock);
-+	return 0;
++	shift
++	while [ $t -gt 0 ]; do
++		"$@" && return 0
++		sleep 0.2
++		t=$((t - 1))
++	done
++	return 1
 +}
 +
-+/* Drop every group and endpoint of @nb. Caller holds nam->lock; amt has
-+ * stopped submitting packets for this binding.
-+ */
-+static void nsim_amt_bind_clear(struct nsim_amt *nam, struct nsim_amt_bind *nb)
-+{
-+	struct nsim_dev *nsim_dev = nam->ns->nsim_dev;
-+	struct amt_offload_endpoint *ep, *et;
-+	struct amt_offload_group *g, *gt;
-+	struct nsim_amt_set *set;
++members_eq() { [ "$(hw_members "$1")" = "$2" ]; }
++group_gone() { ! hw_group_present "$1"; }
++sysfs_ge() { [ "$(rsys "$1")" -ge "$2" ]; }
 +
-+	list_for_each_entry_safe(g, gt, &nb->grps, node) {
-+		set = nsim_amt_deref(nam, g->cur);
-+		if (set)
-+			atomic_sub(set->n, &nsim_dev->amt.members);
-+		nsim_amt_set_free(set);
-+		nsim_amt_set_free(nsim_amt_deref(nam, g->prev));
-+		nsim_amt_set_free(g->staged);
-+		list_del(&g->node);
-+		atomic_dec(&nsim_dev->amt.groups);
-+		kfree_rcu(g, rcu);
-+	}
-+	list_for_each_entry_safe(ep, et, &nb->eps, node) {
-+		list_del(&ep->node);
-+		nb->nr_eps--;
-+		atomic_dec(&nsim_dev->amt.endpoints);
-+		nsim_amt_ep_put(ep);
-+	}
++# Members that later leave join source-specific, so a relay that applies
++# INCLUDE leaves at once drops the group at once. This base does not: a
++# BLOCK or TO_IN leaves the timer of each source it drops alone, so the
++# relay keeps the source until that timer expires, at least a GMI after
++# the last report that refreshed it, and deletes the group with its last
++# source (an ASM leave waits out the group timer the same way). So case 8
++# waits out the GMI, and case 3 drives its generation replaces with joins
++# alone.
++join()	# join KEY IFNAME GROUP [SOURCE]
++{
++	local key=$1
++
++	shift
++	ip netns exec "$(gwns "${1#amtg}")" python3 "$TMP/join.py" "$@" &
++	JOIN[$key]=$!
 +}
 +
-+static void nsim_amt_unbind(struct amt_offload_binding *b)
++leave()
 +{
-+	struct nsim_amt *nam = nsim_amt_of(b);
-+	struct nsim_amt_bind *nb = b->priv;
-+
-+	mutex_lock(&nam->lock);
-+	/* Empty unless amt broke the teardown order; then free, not leak. */
-+	WARN_ON_ONCE(!list_empty(&nb->grps) || !list_empty(&nb->eps));
-+	nsim_amt_bind_clear(nam, nb);
-+	list_del(&nb->node);
-+	mutex_unlock(&nam->lock);
-+	kfree(nb);
++	kill "${JOIN[$1]}" 2>/dev/null
++	wait "${JOIN[$1]}" 2>/dev/null
++	unset "JOIN[$1]"
 +}
 +
-+static bool nsim_amt_ep_key_eq(const struct amt_offload_endpoint_key *a,
-+			       const struct amt_offload_endpoint_key *b)
++# measure SRC GROUP COUNT INTERVAL [HOOK]: send, count per gateway, and
++# the provider's hardware copies. Fills CNT[amtgN] (copies from SRC to
++# GROUP) and HW (tx_copies delta). The counters run until a second after
++# the last packet is sent, however long sending takes. HOOK, a function
++# that must not block, runs once every counter is ready, just before the
++# first packet.
++declare -A CNT
++HW=0
++measure()
 +{
-+	if (a->family != b->family || a->port != b->port)
-+		return false;
-+	if (a->family == AF_INET6)
-+		return ipv6_addr_equal(&a->addr.ip6, &b->addr.ip6);
-+	return a->addr.ip4 == b->addr.ip4;
++	local src=$1 grp=$2 n=$3 ivl=$4 hw0 line i cpids=()
++
++	hw0=$(dfs tx_copies)
++	for i in 1 2 3 4; do
++		ip netns exec "$(gwns $i)" python3 "$TMP/count.py" amtg$i \
++			> "$TMP/count$i.out" &
++		cpids+=($!)
++	done
++	for i in 1 2 3 4; do
++		wait_for 5 grep -q READY "$TMP/count$i.out"
++	done
++	[ -z "${5:-}" ] || "$5"
++	ip netns exec "$RELAY" python3 "$TMP/send.py" amtr "$src" "$grp" "$n" \
++		"$ivl"
++	sleep 1
++	kill -TERM "${cpids[@]}" 2>/dev/null
++	wait "${cpids[@]}"
++	HW=$(( $(dfs tx_copies) - hw0 ))
++	CNT=([amtg1]=0 [amtg2]=0 [amtg3]=0 [amtg4]=0)
++	while read -r ifn s g c; do
++		[ "$s" = "$src" ] && [ "$g" = "$grp" ] && CNT[$ifn]=$c
++	done < <(cat "$TMP"/count[1-4].out | grep -v READY)
 +}
 +
-+static int nsim_amt_endpoint_add(struct amt_offload_binding *b,
-+				 const struct amt_offload_endpoint_key *key,
-+				 struct amt_offload_endpoint **epp)
-+{
-+	struct nsim_amt *nam = nsim_amt_op_begin(b);
-+	struct nsim_amt_bind *nb = b->priv;
-+	struct amt_offload_endpoint *ep;
-+	int err = 0;
++counts() { echo "amtg1..4=${CNT[amtg1]},${CNT[amtg2]},${CNT[amtg3]},${CNT[amtg4]} hw=$HW"; }
 +
-+	list_for_each_entry(ep, &nb->eps, node) {
-+		if (nsim_amt_ep_key_eq(&ep->key, key)) {
-+			ep->adds++;
-+			goto out;
-+		}
-+	}
-+	if (nam->max_endpoints && nb->nr_eps >= nam->max_endpoints) {
-+		err = -ENOSPC;
-+		goto unlock;
-+	}
-+	ep = kzalloc_obj(*ep, GFP_KERNEL);
-+	if (!ep) {
-+		err = -ENOMEM;
-+		goto unlock;
-+	}
-+	ep->key = *key;
-+	refcount_set(&ep->refs, 1);
-+	ep->adds = 1;
-+	list_add_tail(&ep->node, &nb->eps);
-+	nb->nr_eps++;
-+	atomic_inc(&nam->ns->nsim_dev->amt.endpoints);
-+out:
-+	*epp = ep;
-+unlock:
-+	nsim_amt_op_end(nam);
-+	return err;
++dl_occ()
++{
++	devlink -j resource show "$DL" | jq -r --arg r "$1" \
++		'.resources[][] | select(.name == "amt") | .resources[] |
++		 select(.name == $r) | .occ'
 +}
 +
-+static void nsim_amt_endpoint_del(struct amt_offload_binding *b,
-+				  struct amt_offload_endpoint *ep)
-+{
-+	struct nsim_amt *nam = nsim_amt_op_begin(b);
-+	struct nsim_amt_bind *nb = b->priv;
++# --- preflight ------------------------------------------------------------
 +
-+	if (!--ep->adds) {
-+		list_del(&ep->node);
-+		nb->nr_eps--;
-+		atomic_dec(&nam->ns->nsim_dev->amt.endpoints);
-+		nsim_amt_ep_put(ep);
-+	}
-+	nsim_amt_op_end(nam);
++[ "$(id -u)" -eq 0 ] || skip "needs root"
++for c in python3 jq devlink; do
++	command -v $c > /dev/null || skip "$c not found"
++done
++# A guest whose ip cannot set the mode would silently test software only.
++ip link help amt 2>&1 | grep -q 'offload OFFLOAD' ||
++	skip "ip lacks IFLA_AMT_OFFLOAD_MODE (iproute2 amt offload patch)"
++modprobe amt 2>/dev/null
++modprobe netdevsim 2>/dev/null
++[ -w $NSIM_SYS/new_device ] || skip "netdevsim not available"
++
++trap cleanup EXIT
++DMESG0=$(dmesg | wc -l)
++
++# --- 11. a lower carrying two amt devices is deleted ------------------------
++# Not offload, so it runs first, in its own netns, and is not lost when
++# the offload setup below fails: the amt notifier must take down every
++# amt device on an unregistering lower, not just the first.
++# One left linked trips the upper-dev WARN in
++# unregister_netdevice_many_notify() and a kernfs upper_* splat. The
++# devices stay down: two gateways cannot both bind relay_port in one
++# netns, and linking is all this needs.
++MU=$(gwns mu)
++ip netns add "$MU"
++ip -n "$MU" link add mu0 type dummy
++ip -n "$MU" addr add 10.9.0.1/24 dev mu0
++for d in mu_a mu_b; do
++	ip -n "$MU" link add $d type amt mode gateway local 10.9.0.1 \
++		discovery 10.9.0.2 dev mu0
++done
++made=$(ip -n "$MU" -o link show type amt | wc -l)
++ip -n "$MU" link del mu0
++left=$(ip -n "$MU" -o link show type amt | wc -l)
++ip netns del "$MU"
++# The netns teardown is asynchronous: give it a second. Then one dmesg
++# snapshot ends this case's scan and starts case 10's, so the two scans
++# tile and a splat this case provokes fails this case only.
++sleep 1
++dm=$(dmesg)
++DMESG1=$(printf '%s\n' "$dm" | wc -l)
++splat=$(printf '%s\n' "$dm" | tail -n +$((DMESG0 + 1)) |
++	grep -E 'WARNING:|BUG:|Oops|kernfs: can not remove|refcount_t|use-after-free')
++if [ "$made" -eq 2 ] && [ "$left" -eq 0 ] && [ -z "$splat" ]; then
++	ok "lower carrying two amt devices deleted: both gone"
++else
++	fail "lower carrying two amt devices deleted" \
++		"made=$made left=$left splat: $splat"
++fi
++
++echo "$NSIM_R_ID" > $NSIM_SYS/new_device
++echo "$NSIM_G_ID" > $NSIM_SYS/new_device
++udevadm settle 2>/dev/null
++[ -d "$DFS" ] || skip "netdevsim has no AMT offload provider ($DFS)"
++NR=$(ls $NSIM_SYS/devices/netdevsim$NSIM_R_ID/net)
++NG=$(ls $NSIM_SYS/devices/netdevsim$NSIM_G_ID/net)
++
++set -e
++ip netns add "$RELAY"
++ip netns add "$GW"
++ip link set "$NR" netns "$RELAY"
++ip link set "$NG" netns "$GW"
++ip -n "$RELAY" link set "$NR" name nsim_r
++ip -n "$GW" link set "$NG" name nsim_g
++for ns in "$RELAY" "$GW"; do
++	ip -n "$ns" link set lo up
++done
++ip -n "$RELAY" addr add 10.0.0.2/24 dev nsim_r
++ip -n "$RELAY" link set nsim_r up
++ip -n "$GW" link set nsim_g up
++
++exec {FD_R}<"/var/run/netns/$RELAY"
++exec {FD_G}<"/var/run/netns/$GW"
++IFX_R=$(ip netns exec "$RELAY" cat /sys/class/net/nsim_r/ifindex)
++IFX_G=$(ip netns exec "$GW" cat /sys/class/net/nsim_g/ifindex)
++echo "$FD_R:$IFX_R $FD_G:$IFX_G" > $NSIM_SYS/link_device
++
++ip -n "$RELAY" link add src0 type dummy
++ip -n "$RELAY" addr add $S1/24 dev src0
++ip -n "$RELAY" addr add $S2/24 dev src0
++ip -n "$RELAY" link set src0 up
++ip -n "$RELAY" link add amtr type amt mode relay local 10.0.0.2 dev nsim_r \
++	relay_port 2268 offload auto
++ip -n "$RELAY" link set amtr up
++ip -n "$GW" link add br0 type bridge
++ip -n "$GW" link set nsim_g master br0
++ip -n "$GW" link set br0 up
++for i in 1 2 3 4; do
++	ns=$(gwns $i)
++	ip netns add "$ns"
++	# No IPv6 on the gateways: amtg would join solicited-node groups over
++	# the tunnel and the relay would offload them alongside G1..G4.
++	ip netns exec "$ns" sysctl -qw net.ipv6.conf.default.disable_ipv6=1 \
++		2>/dev/null || true
++	ip -n "$ns" link set lo up
++	ip -n "$GW" link add br_g$i type veth peer name gw$i netns "$ns"
++	ip -n "$GW" link set br_g$i master br0 up
++	ip -n "$ns" addr add 10.0.0.1$i/24 dev gw$i
++	ip -n "$ns" link set gw$i up
++	ip -n "$ns" link add amtg$i type amt mode gateway local 10.0.0.1$i \
++		discovery 10.0.0.2 dev gw$i gateway_port 2268 relay_port 2268
++	ip -n "$ns" addr add 192.168.$i.1/32 dev amtg$i
++	ip -n "$ns" link set amtg$i up
++done
++set +e
++
++discovered()
++{
++	local i
++
++	for i in 1 2 3 4; do
++		[ "$(ip -n "$(gwns $i)" -d -j link show amtg$i |
++		     jq -r '.[0].linkinfo.info_data.remote')" = 10.0.0.2 ] ||
++			return 1
++	done
 +}
++wait_for 30 discovered || { fail "setup" "gateways never discovered the relay"; exit; }
 +
-+static int nsim_amt_group_update(struct amt_offload_binding *b,
-+				 const struct amt_offload_group_key *key,
-+				 struct amt_offload_endpoint *const *members,
-+				 unsigned int nr_members, u64 gen,
-+				 struct amt_offload_group **grpp)
-+{
-+	struct nsim_amt *nam = nsim_amt_op_begin(b);
-+	struct amt_offload_group *g = *grpp;
-+	struct nsim_amt_bind *nb = b->priv;
-+	struct nsim_amt_set *set;
-+	int err = 0;
-+	u32 i;
++mode=$(ip -n "$RELAY" -d -j link show amtr | jq -r '.[0].linkinfo.info_data.offload')
++[ "$mode" = auto ] && [ "$(rsys bound)" = 1 ] ||
++	{ fail "setup" "relay offload mode '$mode', bound $(rsys bound)"; exit; }
++ERR=0
 +
-+	if (!g) {
-+		g = kzalloc_obj(*g, GFP_KERNEL);
-+		if (!g) {
-+			err = -ENOMEM;
-+			goto out;
-+		}
-+		g->key = *key;
-+		list_add_tail(&g->node, &nb->grps);
-+		atomic_inc(&nam->ns->nsim_dev->amt.groups);
-+		*grpp = g;
-+	}
-+	set = kzalloc(struct_size(set, eps, nr_members), GFP_KERNEL);
-+	if (!set) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	set->n = nr_members;
-+	set->gen = gen;
-+	for (i = 0; i < nr_members; i++) {
-+		refcount_inc(&members[i]->refs);
-+		set->eps[i] = members[i];
-+	}
-+	nsim_amt_set_free(g->staged);
-+	g->staged = set;
-+out:
-+	nsim_amt_op_end(nam);
-+	return err;
-+}
++# --- 1. no membership, nothing committed: no copies anywhere ----------------
++measure $S1 $G1 $K 0.01
++if [ "$HW" -eq 0 ] && [ $((CNT[amtg1] + CNT[amtg2] + CNT[amtg3] + CNT[amtg4])) -eq 0 ]; then
++	ok "0 copies before any group is committed"
++else
++	fail "0 copies before any group is committed" "$(counts)"
++fi
 +
-+static int nsim_amt_group_commit(struct amt_offload_binding *b,
-+				 struct amt_offload_group *g, u64 gen)
-+{
-+	struct nsim_amt *nam = nsim_amt_op_begin(b);
-+	struct nsim_dev *nsim_dev = nam->ns->nsim_dev;
-+	struct nsim_amt_set *cur, *prev;
-+	int err = 0;
-+
-+	if (nam->fail_commit) {
-+		err = -ENOSPC;
-+		goto out;
-+	}
-+	if (!g->staged || g->staged->gen != gen) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+	cur = nsim_amt_deref(nam, g->cur);
-+	prev = nsim_amt_deref(nam, g->prev);
-+	atomic_add(g->staged->n, &nsim_dev->amt.members);
-+	if (cur)
-+		atomic_sub(cur->n, &nsim_dev->amt.members);
-+	rcu_assign_pointer(g->prev, cur);
-+	rcu_assign_pointer(g->cur, g->staged);
-+	g->staged = NULL;
-+	nsim_amt_set_free(prev);
-+	nam->commits++;
-+out:
-+	nsim_amt_op_end(nam);
-+	return err;
-+}
-+
-+static void nsim_amt_group_disable(struct amt_offload_binding *b,
-+				   struct amt_offload_group *g)
-+{
-+	struct nsim_amt *nam = nsim_amt_op_begin(b);
-+	struct nsim_amt_set *set;
-+
-+	set = nsim_amt_deref(nam, g->cur);
-+	if (set)
-+		atomic_sub(set->n, &nam->ns->nsim_dev->amt.members);
-+	nsim_amt_set_free(set);
-+	nsim_amt_set_free(nsim_amt_deref(nam, g->prev));
-+	nsim_amt_set_free(g->staged);
-+	list_del(&g->node);
-+	atomic_dec(&nam->ns->nsim_dev->amt.groups);
-+	kfree_rcu(g, rcu);
-+	nsim_amt_op_end(nam);
-+}
-+
-+/* Softirq, under rcu_read_lock(). Copies go to the committed set of @gen
-+ * only; a generation this provider never committed (or has already
-+ * retired) is declined, never guessed at.
-+ */
-+static enum amt_offload_result
-+nsim_amt_xmit(struct amt_offload_binding *b, struct amt_offload_group *g,
-+	      struct sk_buff *skb, u64 gen)
-+{
-+	struct nsim_amt *nam = nsim_amt_of(b);
-+	struct nsim_amt_set *set;
-+	u32 i;
-+
-+	if (READ_ONCE(nam->busy)) {
-+		atomic64_inc(&nam->tx_busy);
-+		return AMT_OFFLOAD_BUSY;
-+	}
-+	set = rcu_dereference(g->cur);
-+	if (!set || set->gen != gen) {
-+		set = rcu_dereference(g->prev);
-+		if (!set || set->gen != gen) {
-+			atomic64_inc(&nam->tx_stale_gen);
-+			return AMT_OFFLOAD_FALLBACK;
-+		}
-+	}
-+	for (i = 0; i < set->n; i++) {
-+		if (amt_offload_encap_xmit(b, &set->eps[i]->key, skb)) {
-+			atomic64_inc(&nam->tx_dropped);
-+			continue;
-+		}
-+		atomic64_inc(&set->eps[i]->copies);
-+		atomic64_inc(&nam->tx_copies);
-+	}
-+	consume_skb(skb);
-+	return AMT_OFFLOAD_CONSUMED;
-+}
-+
-+/* Called under amt's offload mutex, like every programming op: from
-+ * the reconciler with no other lock, or at teardown with RTNL held and,
-+ * when the port is being deleted, the devlink instance lock too. The
-+ * "amt" reporter has no .recover and no .dump (health.c), so reporting
-+ * it takes no devlink lock in either case.
-+ */
-+static void nsim_amt_flush(struct amt_offload_binding *b)
-+{
-+	struct nsim_amt *nam = nsim_amt_op_begin(b);
-+
-+	nsim_amt_bind_clear(nam, b->priv);
-+	nam->flushes++;
-+	nsim_amt_op_end(nam);
-+	devlink_health_report(nam->ns->nsim_dev->health.amt_reporter,
-+			      "amt reset: provider tables flushed", NULL);
-+}
-+
-+static const struct amt_offload_ops nsim_amt_ops = {
-+	.bind		= nsim_amt_bind,
-+	.unbind		= nsim_amt_unbind,
-+	.endpoint_add	= nsim_amt_endpoint_add,
-+	.endpoint_del	= nsim_amt_endpoint_del,
-+	.group_update	= nsim_amt_group_update,
-+	.group_commit	= nsim_amt_group_commit,
-+	.group_disable	= nsim_amt_group_disable,
-+	.xmit		= nsim_amt_xmit,
-+	.flush		= nsim_amt_flush,
-+};
-+
-+static void nsim_amt_show_ep(struct seq_file *m,
-+			     const struct amt_offload_endpoint_key *key)
-+{
-+	if (key->family == AF_INET6)
-+		seq_printf(m, "[%pI6c]:%u", &key->addr.ip6, ntohs(key->port));
++# --- 2. one hardware copy per committed endpoint per packet -----------------
++for i in 1 2 3; do
++	join a$i amtg$i $G1 $S1
++done
++if ! wait_for 40 members_eq $G1 3; then
++	fail "1 copy per endpoint per packet" \
++		"G1 never committed with 3 members: $(cat "$DFS/tables")"
++else
++	measure $S1 $G1 $K 0.01
++	if [ "${CNT[amtg1]}" -eq $K ] && [ "${CNT[amtg2]}" -eq $K ] &&
++	   [ "${CNT[amtg3]}" -eq $K ] && [ "${CNT[amtg4]}" -eq 0 ] &&
++	   [ "$HW" -eq $((3 * K)) ] && [ "$(dl_occ endpoints)" = 3 ] &&
++	   [ "$(dl_occ groups)" = 1 ] && [ "$(dl_occ members)" = 3 ]; then
++		ok "1 copy per endpoint per packet, all from the provider"
 +	else
-+		seq_printf(m, "%pI4:%u", &key->addr.ip4, ntohs(key->port));
-+}
++		fail "1 copy per endpoint per packet" "$(counts)" \
++			"devlink endpoints/groups/members:" \
++			"$(dl_occ endpoints)/$(dl_occ groups)/$(dl_occ members)"
++	fi
++fi
 +
-+static void nsim_amt_show_set(struct seq_file *m, const char *name,
-+			      const struct nsim_amt_set *set)
++# --- 3. generation replace under traffic: no duplicate, no loss --------------
++# G5 has two stable members; two more join while it is sent, 3 s and 6 s
++# into a 12 s stream, so each join is a generation replace under traffic.
++late_joins()
 +{
-+	u32 i;
-+
-+	if (!set)
-+		return;
-+	seq_printf(m, "  %s gen %llu members %u:", name, set->gen, set->n);
-+	for (i = 0; i < set->n; i++) {
-+		seq_putc(m, ' ');
-+		nsim_amt_show_ep(m, &set->eps[i]->key);
-+	}
-+	seq_putc(m, '\n');
++	ip netns exec "$(gwns 3)" bash -c \
++		"sleep 3; exec python3 $TMP/join.py amtg3 $G5 $S1" &
++	JOIN[l3]=$!
++	ip netns exec "$(gwns 4)" bash -c \
++		"sleep 6; exec python3 $TMP/join.py amtg4 $G5 $S1" &
++	JOIN[l4]=$!
 +}
++join l1 amtg1 $G5 $S1
++join l2 amtg2 $G5 $S1
++if ! wait_for 40 members_eq $G5 2; then
++	fail "generation replace under traffic" \
++		"G5 never committed with 2 members: $(cat "$DFS/tables")"
++else
++	c0=$(dfs commits)
++	st0=$(dfs tx_stale_gen)
++	measure $S1 $G5 600 0.02 late_joins
++	gens=$(( $(dfs commits) - c0 ))
++	stale=$(( $(dfs tx_stale_gen) - st0 ))
++	# The stable members got every packet once, the late members some
++	# but not all of them, and every copy came from the provider (HW is
++	# their sum), none from a software fallback on a stale generation.
++	if [ "${CNT[amtg1]}" -eq 600 ] && [ "${CNT[amtg2]}" -eq 600 ] &&
++	   [ "${CNT[amtg3]}" -gt 0 ] && [ "${CNT[amtg3]}" -lt 600 ] &&
++	   [ "${CNT[amtg4]}" -gt 0 ] && [ "${CNT[amtg4]}" -lt 600 ] &&
++	   [ "$HW" -eq $((CNT[amtg1] + CNT[amtg2] + CNT[amtg3] + CNT[amtg4])) ] &&
++	   [ $gens -ge 2 ] && [ $stale -eq 0 ]; then
++		ok "generation replace: stable members get exactly 1 copy"
++	else
++		fail "generation replace under traffic" \
++			"$(counts) generations=$gens stale_gen=+$stale"
++	fi
++fi
 +
-+static int nsim_amt_tables_show(struct seq_file *m, void *unused)
-+{
-+	struct nsim_amt *nam = m->private;
-+	struct amt_offload_endpoint *ep;
-+	struct amt_offload_group *g;
-+	struct nsim_amt_bind *nb;
++# --- 4. BUSY: exactly one software copy set -----------------------------------
++b0=$(rsys busy_fallback)
++t0=$(dfs tx_busy)
++dfs_set busy 1
++measure $S1 $G1 $K 0.01
++dfs_set busy 0
++if [ "${CNT[amtg1]}" -eq $K ] && [ "${CNT[amtg2]}" -eq $K ] &&
++   [ "${CNT[amtg3]}" -eq $K ] && [ "$HW" -eq 0 ] &&
++   [ $(( $(rsys busy_fallback) - b0 )) -eq $K ] && [ $(( $(dfs tx_busy) - t0 )) -eq $K ]; then
++	ok "BUSY: exactly one software copy set per packet"
++else
++	fail "BUSY: exactly one software copy set" "$(counts)" \
++		"busy_fallback +$(( $(rsys busy_fallback) - b0 ))"
++fi
 +
-+	mutex_lock(&nam->lock);
-+	list_for_each_entry(nb, &nam->binds, node) {
-+		seq_printf(m, "binding %s epoch %llu\n", netdev_name(nb->b->dev),
-+			   nb->b->epoch);
-+		list_for_each_entry(ep, &nb->eps, node) {
-+			seq_puts(m, "endpoint ");
-+			nsim_amt_show_ep(m, &ep->key);
-+			seq_printf(m, " copies %llu\n",
-+				   atomic64_read(&ep->copies));
-+		}
-+		list_for_each_entry(g, &nb->grps, node) {
-+			if (g->key.family == AF_INET6)
-+				seq_printf(m, "group %pI6c\n", &g->key.group.ip6);
-+			else
-+				seq_printf(m, "group %pI4\n", &g->key.group.ip4);
-+			nsim_amt_show_set(m, "committed",
-+					  nsim_amt_deref(nam, g->cur));
-+			nsim_amt_show_set(m, "previous",
-+					  nsim_amt_deref(nam, g->prev));
-+			nsim_amt_show_set(m, "staged", g->staged);
-+		}
-+	}
-+	mutex_unlock(&nam->lock);
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(nsim_amt_tables);
++# --- 5. forwarding is per group: INCLUDE(S1) still receives S2 ----------------
++join s1 amtg1 $G4 $S1
++if ! wait_for 40 members_eq $G4 1; then
++	fail "INCLUDE(S1) member receives S2" "G4 never committed: $(cat "$DFS/tables")"
++else
++	measure $S2 $G4 $K 0.01
++	if [ "${CNT[amtg1]}" -eq $K ] && [ "$HW" -eq $K ]; then
++		ok "INCLUDE(S1) member still receives S2, in hardware"
++	else
++		fail "INCLUDE(S1) member receives S2" "$(counts)"
++	fi
++fi
 +
-+static int nsim_amt_atomic64_get(void *data, u64 *val)
-+{
-+	*val = atomic64_read(data);
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(nsim_amt_atomic64_fops, nsim_amt_atomic64_get,
-+			 NULL, "%llu\n");
++# --- 6. op overruns op_timeout_ms: reset, stale results ignored, no dup -------
++r0=$(rsys resets)
++s0=$(rsys stale_completions)
++f0=$(dfs flushes)
++h0=$(devlink -j health show "$DL" reporter amt | jq '.health[][0].error')
++dfs_set stall_ms 1500
++join r2 amtg2 $G3
++wait_for 30 sysfs_ge resets $((r0 + 1))
++dfs_set stall_ms 0
++if ! wait_for 40 members_eq $G3 1; then
++	fail "reset: stale completion ignored" \
++		"G3 never committed after reset: $(cat "$DFS/tables")"
++else
++	measure $S1 $G3 $K 0.01
++	h1=$(devlink -j health show "$DL" reporter amt | jq '.health[][0].error')
++	if [ "${CNT[amtg2]}" -eq $K ] && [ "$HW" -eq $K ] &&
++	   [ "$(rsys resets)" -gt "$r0" ] && [ "$(rsys stale_completions)" -gt "$s0" ] &&
++	   [ "$(dfs flushes)" -gt "$f0" ] && [ "$h1" -gt "$h0" ]; then
++		ok "reset: stale completion ignored, replay gives 1 copy"
++	else
++		fail "reset: stale completion ignored" "$(counts)" \
++			"resets $r0->$(rsys resets)" \
++			"stale $s0->$(rsys stale_completions) health $h0->$h1"
++	fi
++fi
 +
-+static void nsim_amt_debugfs_init(struct nsim_amt *nam)
-+{
-+	struct dentry *d;
++# --- 7. partial commit: group staged, commit refused -> software -------------
++w0=$(rsys sw_remainder)
++dfs_set fail_commit 1
++for i in 1 2 3; do
++	join p$i amtg$i $G2 $S1
++done
++wait_for 40 sysfs_ge sw_remainder $((w0 + 1))
++sleep 2
++measure $S1 $G2 $K 0.01
++dfs_set fail_commit 0
++if [ "${CNT[amtg1]}" -eq $K ] && [ "${CNT[amtg2]}" -eq $K ] &&
++   [ "${CNT[amtg3]}" -eq $K ] && [ "$HW" -eq 0 ] && [ "$(hw_members $G2)" = 0 ]; then
++	ok "partial commit: 0 hardware copies, software remainder"
++else
++	fail "partial commit: software remainder" "$(counts) sw_remainder $w0->$(rsys sw_remainder)"
++fi
++for i in 1 2 3; do
++	leave p$i
++done
 +
-+	d = debugfs_create_dir("amt", nam->ns->nsim_dev_port->ddir);
-+	nam->ddir = d;
-+	debugfs_create_file("tables", 0400, d, nam, &nsim_amt_tables_fops);
-+	debugfs_create_file("tx_copies", 0400, d, &nam->tx_copies,
-+			    &nsim_amt_atomic64_fops);
-+	debugfs_create_file("tx_busy", 0400, d, &nam->tx_busy,
-+			    &nsim_amt_atomic64_fops);
-+	debugfs_create_file("tx_stale_gen", 0400, d, &nam->tx_stale_gen,
-+			    &nsim_amt_atomic64_fops);
-+	debugfs_create_file("tx_dropped", 0400, d, &nam->tx_dropped,
-+			    &nsim_amt_atomic64_fops);
-+	debugfs_create_u64("commits", 0400, d, &nam->commits);
-+	debugfs_create_u64("flushes", 0400, d, &nam->flushes);
-+	debugfs_create_bool("busy", 0600, d, &nam->busy);
-+	debugfs_create_bool("fail_commit", 0600, d, &nam->fail_commit);
-+	debugfs_create_u32("max_endpoints", 0600, d, &nam->max_endpoints);
-+	debugfs_create_u32("stall_ms", 0600, d, &nam->stall_ms);
-+	debugfs_create_u32("op_timeout_ms", 0600, d, &nam->op_timeout_ms);
-+}
++# --- 8. every member leaves: group disabled, no copies ------------------------
++# The relay drops S1, and G1 with it, at least a GMI after the last
++# report that refreshed it: qrv * 125 s query interval + 10 s response
++# interval. The timer wheel can fire it up to 8/63 of its delay late
++# (32.8 s of a 260 s GMI at HZ=1000), so wait a seventh more, and 10 s.
++gmi=$(( $(ip netns exec "$RELAY" sysctl -n net.ipv4.igmp_qrv) * 125 + 10 ))
++for i in 1 2 3; do
++	leave a$i
++done
++if wait_for $((gmi + gmi / 7 + 10)) group_gone $G1; then
++	measure $S1 $G1 $K 0.01
++	if [ "$HW" -eq 0 ] && [ $((CNT[amtg1] + CNT[amtg2] + CNT[amtg3] + CNT[amtg4])) -eq 0 ]; then
++		ok "0 copies after the group is disabled"
++	else
++		fail "0 copies after the group is disabled" "$(counts)"
++	fi
++else
++	fail "0 copies after the group is disabled" "G1 still in the provider: $(cat "$DFS/tables")"
++fi
 +
-+int nsim_amt_init(struct netdevsim *ns)
-+{
-+	struct nsim_amt *nam;
-+	int err;
++# --- 9. required mode with no provider: refused with extack -----------------
++ip -n "$RELAY" link add dum0 type dummy
++ip -n "$RELAY" addr add 10.0.1.2/24 dev dum0
++q0=$(cat /sys/module/amt/parameters/offload_required_refused)
++msg=$(ip -n "$RELAY" link add amtx type amt mode relay local 10.0.1.2 \
++	dev dum0 offload required 2>&1)
++rc=$?
++q1=$(cat /sys/module/amt/parameters/offload_required_refused)
++if [ $rc -ne 0 ] && echo "$msg" | grep -q '^Error: ' && [ $((q1 - q0)) -eq 1 ] &&
++   ! ip -n "$RELAY" link show amtx > /dev/null 2>&1; then
++	ok "required with no provider: refused with extack, counted"
++else
++	fail "required refuses with extack" "rc=$rc refused $q0->$q1 msg: $msg"
++fi
 +
-+	nam = kzalloc_obj(*nam, GFP_KERNEL);
-+	if (!nam)
-+		return -ENOMEM;
-+	nam->ns = ns;
-+	mutex_init(&nam->lock);
-+	INIT_LIST_HEAD(&nam->binds);
-+	nam->op_timeout_ms = 1000;
-+	nsim_amt_debugfs_init(nam);
++# --- 10. lower device torn away under traffic: ordered teardown ---------------
++# Unlink the peer mid-stream (copies stop, the binding survives), relink
++# (copies resume at 1 per packet), then delete the relay's netdevsim under
++# traffic: amt tears the binding down before the relay goes, with no splat.
++# The unlink-phase stream is from S1, so copies queued while unlinked and
++# released on relink are not counted as the relinked (S2, G4) copies.
++ip netns exec "$RELAY" python3 "$TMP/send.py" amtr $S1 $G4 100 0.02 &
++PIDS+=($!)
++sleep 0.5
++echo "$FD_R:$IFX_R" > $NSIM_SYS/unlink_device
++wait "${PIDS[-1]}"
++bound_after_unlink=$(rsys bound)
++echo "$FD_R:$IFX_R $FD_G:$IFX_G" > $NSIM_SYS/link_device
++wait_for 20 members_eq $G4 1
++measure $S2 $G4 $K 0.01
++relinked=${CNT[amtg1]}
++relinked_hw=$HW
++ip netns exec "$RELAY" python3 "$TMP/send.py" amtr $S2 $G4 200 0.01 &
++PIDS+=($!)
++sleep 0.5
++echo "$NSIM_R_ID" > $NSIM_SYS/del_device
++wait "${PIDS[-1]}"
++splat=$(dmesg | tail -n +$((DMESG1 + 1)) |
++	grep -E 'WARNING:|BUG:|Oops|refcount_t|use-after-free|list_(add|del) corruption')
++if [ "$bound_after_unlink" = 1 ] && [ "$relinked" -eq $K ] && [ "$relinked_hw" -eq $K ] &&
++   ! ip -n "$RELAY" link show amtr > /dev/null 2>&1 && [ ! -d "$DFS" ] &&
++   [ -z "$splat" ]; then
++	ok "lower device unlinked and deleted under traffic: ordered teardown"
++else
++	fail "ordered teardown under traffic" \
++		"bound=$bound_after_unlink relinked=$relinked hw=$relinked_hw splat: $splat"
++fi
 +
-+	rtnl_lock();
-+	ns->amt = nam;
-+	err = amt_offload_register(ns->netdev, &nsim_amt_ops);
-+	if (err)
-+		ns->amt = NULL;
-+	rtnl_unlock();
-+	if (err) {
-+		debugfs_remove_recursive(nam->ddir);
-+		mutex_destroy(&nam->lock);
-+		kfree(nam);
-+	}
-+	return err;
-+}
-+
-+void nsim_amt_uninit(struct netdevsim *ns)
-+{
-+	struct nsim_amt *nam = ns->amt;
-+
-+	if (!nam)
-+		return;
-+	rtnl_lock();
-+	amt_offload_unregister(ns->netdev);
-+	ns->amt = NULL;
-+	rtnl_unlock();
-+	debugfs_remove_recursive(nam->ddir);
-+	mutex_destroy(&nam->lock);
-+	kfree(nam);
-+}
-+
-+/* amt forgets a provider when its lower device is unregistered, and
-+ * moving a netdev to another netns unregisters it there first. Offer
-+ * the port again once it is registered in its new netns.
-+ */
-+static int nsim_amt_netdev_event(struct notifier_block *nb,
-+				 unsigned long event, void *ptr)
-+{
-+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+	struct netdevsim *ns;
-+
-+	if (event != NETDEV_REGISTER || !netdev_is_nsim(dev))
-+		return NOTIFY_DONE;
-+	ns = netdev_priv(dev);
-+	if (ns->amt)
-+		amt_offload_register(dev, &nsim_amt_ops);
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block nsim_amt_notifier = {
-+	.notifier_call = nsim_amt_netdev_event,
-+};
-+
-+int nsim_amt_module_init(void)
-+{
-+	return register_netdevice_notifier(&nsim_amt_notifier);
-+}
-+
-+void nsim_amt_module_exit(void)
-+{
-+	unregister_netdevice_notifier(&nsim_amt_notifier);
-+	rcu_barrier();	/* nsim_amt_set_free_rcu() is module text */
-+}
-diff --git a/drivers/net/netdevsim/dev.c b/drivers/net/netdevsim/dev.c
-index f00fc2f9e..7fcdb0d67 100644
---- a/drivers/net/netdevsim/dev.c
-+++ b/drivers/net/netdevsim/dev.c
-@@ -444,6 +444,69 @@ static void nsim_dev_port_debugfs_exit(struct nsim_dev_port *nsim_dev_port)
- 	debugfs_remove_recursive(nsim_dev_port->ddir);
- }
- 
-+static u64 nsim_dev_amt_endpoints_occ_get(void *priv)
-+{
-+	return atomic_read(&((struct nsim_dev *)priv)->amt.endpoints);
-+}
-+
-+static u64 nsim_dev_amt_groups_occ_get(void *priv)
-+{
-+	return atomic_read(&((struct nsim_dev *)priv)->amt.groups);
-+}
-+
-+static u64 nsim_dev_amt_members_occ_get(void *priv)
-+{
-+	return atomic_read(&((struct nsim_dev *)priv)->amt.members);
-+}
-+
-+static u64 nsim_dev_amt_cmdq_occ_get(void *priv)
-+{
-+	return atomic_read(&((struct nsim_dev *)priv)->amt.cmdq);
-+}
-+
-+static int
-+nsim_dev_amt_resources_register(struct devlink *devlink,
-+				const struct devlink_resource_size_params *p)
-+{
-+	static const struct {
-+		const char *name;
-+		u64 id;
-+		devlink_resource_occ_get_t *occ_get;
-+	} res[] = {
-+		{ "endpoints", NSIM_RESOURCE_AMT_ENDPOINTS,
-+		  nsim_dev_amt_endpoints_occ_get },
-+		{ "groups", NSIM_RESOURCE_AMT_GROUPS,
-+		  nsim_dev_amt_groups_occ_get },
-+		{ "members", NSIM_RESOURCE_AMT_MEMBERS,
-+		  nsim_dev_amt_members_occ_get },
-+		{ "cmdq", NSIM_RESOURCE_AMT_CMDQ, nsim_dev_amt_cmdq_occ_get },
-+	};
-+	int err, i;
-+
-+	if (!IS_ENABLED(CONFIG_AMT))
-+		return 0;
-+	err = devl_resource_register(devlink, "amt", (u64)-1,
-+				     NSIM_RESOURCE_AMT,
-+				     DEVLINK_RESOURCE_ID_PARENT_TOP, p);
-+	if (err) {
-+		pr_err("Failed to register AMT top resource\n");
-+		return err;
-+	}
-+	for (i = 0; i < ARRAY_SIZE(res); i++) {
-+		err = devl_resource_register(devlink, res[i].name, (u64)-1,
-+					     res[i].id, NSIM_RESOURCE_AMT, p);
-+		if (err) {
-+			pr_err("Failed to register AMT %s resource\n",
-+			       res[i].name);
-+			return err;
-+		}
-+		devl_resource_occ_get_register(devlink, res[i].id,
-+					       res[i].occ_get,
-+					       devlink_priv(devlink));
-+	}
-+	return 0;
-+}
-+
- static int nsim_dev_resources_register(struct devlink *devlink)
- {
- 	struct devlink_resource_size_params params = {
-@@ -514,6 +577,11 @@ static int nsim_dev_resources_register(struct devlink *devlink)
- 		pr_err("Failed to register NEXTHOPS resource\n");
- 		goto err_out;
- 	}
-+
-+	/* AMT relay offload tables, owned by the ports' provider (amt.c) */
-+	err = nsim_dev_amt_resources_register(devlink, &params);
-+	if (err)
-+		goto err_out;
- 	return 0;
- 
- err_out:
-diff --git a/drivers/net/netdevsim/health.c b/drivers/net/netdevsim/health.c
-index 3bd0e7a48..f6bc6cb51 100644
---- a/drivers/net/netdevsim/health.c
-+++ b/drivers/net/netdevsim/health.c
-@@ -175,6 +175,16 @@ static const struct file_operations nsim_dev_health_break_fops = {
- 	.owner = THIS_MODULE,
- };
- 
-+/* Reported by the AMT relay offload provider (amt.c) each time amt resets
-+ * it. Recovery is amt's own replay, so there is no .recover, and no .dump:
-+ * with neither, devlink_health_report() never takes the devlink instance
-+ * lock, which amt's ->flush() may not take (amt holds its offload mutex,
-+ * below rtnl, and the instance lock sits above rtnl).
-+ */
-+static const struct devlink_health_reporter_ops nsim_dev_amt_reporter_ops = {
-+	.name = "amt",
-+};
-+
- int nsim_dev_health_init(struct nsim_dev *nsim_dev, struct devlink *devlink)
- {
- 	struct nsim_dev_health *health = &nsim_dev->health;
-@@ -196,10 +206,21 @@ int nsim_dev_health_init(struct nsim_dev *nsim_dev, struct devlink *devlink)
- 		goto err_empty_reporter_destroy;
- 	}
- 
-+	if (IS_ENABLED(CONFIG_AMT)) {
-+		health->amt_reporter =
-+			devl_health_reporter_create(devlink,
-+						    &nsim_dev_amt_reporter_ops,
-+						    health);
-+		if (IS_ERR(health->amt_reporter)) {
-+			err = PTR_ERR(health->amt_reporter);
-+			goto err_dummy_reporter_destroy;
-+		}
-+	}
-+
- 	health->ddir = debugfs_create_dir("health", nsim_dev->ddir);
- 	if (IS_ERR(health->ddir)) {
- 		err = PTR_ERR(health->ddir);
--		goto err_dummy_reporter_destroy;
-+		goto err_amt_reporter_destroy;
- 	}
- 
- 	health->recovered_break_msg = NULL;
-@@ -213,6 +234,9 @@ int nsim_dev_health_init(struct nsim_dev *nsim_dev, struct devlink *devlink)
- 			    &health->fail_recover);
- 	return 0;
- 
-+err_amt_reporter_destroy:
-+	if (health->amt_reporter)
-+		devl_health_reporter_destroy(health->amt_reporter);
- err_dummy_reporter_destroy:
- 	devl_health_reporter_destroy(health->dummy_reporter);
- err_empty_reporter_destroy:
-@@ -226,6 +250,8 @@ void nsim_dev_health_exit(struct nsim_dev *nsim_dev)
- 
- 	debugfs_remove_recursive(health->ddir);
- 	kfree(health->recovered_break_msg);
-+	if (health->amt_reporter)
-+		devl_health_reporter_destroy(health->amt_reporter);
- 	devl_health_reporter_destroy(health->dummy_reporter);
- 	devl_health_reporter_destroy(health->empty_reporter);
- }
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index a75076891..4294c026d 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -1075,6 +1075,10 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
- 	if (err)
- 		goto err_unregister_netdev;
- 
-+	err = nsim_amt_init(ns);
-+	if (err)
-+		goto err_psp_uninit;
-+
- 	if (IS_ENABLED(CONFIG_DEBUG_NET)) {
- 		ns->nb.notifier_call = netdev_debug_event;
- 		if (register_netdevice_notifier_dev_net(ns->netdev, &ns->nb,
-@@ -1084,6 +1088,8 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
- 
- 	return 0;
- 
-+err_psp_uninit:
-+	nsim_psp_uninit(ns);
- err_unregister_netdev:
- 	rtnl_lock();
- 	peer = rtnl_dereference(ns->peer);
-@@ -1182,8 +1188,10 @@ void nsim_destroy(struct netdevsim *ns)
- 		unregister_netdevice_notifier_dev_net(ns->netdev, &ns->nb,
- 						      &ns->nn);
- 
--	if (nsim_dev_port_is_pf(ns->nsim_dev_port))
-+	if (nsim_dev_port_is_pf(ns->nsim_dev_port)) {
-+		nsim_amt_uninit(ns);
- 		nsim_psp_uninit(ns);
-+	}
- 
- 	rtnl_lock();
- 	peer = rtnl_dereference(ns->peer);
-@@ -1238,10 +1246,14 @@ static int __init nsim_module_init(void)
- {
- 	int err;
- 
--	err = nsim_dev_init();
-+	err = nsim_amt_module_init();
- 	if (err)
- 		return err;
- 
-+	err = nsim_dev_init();
-+	if (err)
-+		goto err_amt_exit;
-+
- 	err = nsim_bus_init();
- 	if (err)
- 		goto err_dev_exit;
-@@ -1256,6 +1268,8 @@ static int __init nsim_module_init(void)
- 	nsim_bus_exit();
- err_dev_exit:
- 	nsim_dev_exit();
-+err_amt_exit:
-+	nsim_amt_module_exit();
- 	return err;
- }
- 
-@@ -1264,6 +1278,7 @@ static void __exit nsim_module_exit(void)
- 	rtnl_link_unregister(&nsim_link_ops);
- 	nsim_bus_exit();
- 	nsim_dev_exit();
-+	nsim_amt_module_exit();
- }
- 
- module_init(nsim_module_init);
-diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-index d909c4160..549afee0d 100644
---- a/drivers/net/netdevsim/netdevsim.h
-+++ b/drivers/net/netdevsim/netdevsim.h
-@@ -127,6 +127,8 @@ struct netdevsim {
- 		u32 assoc_cnt;
- 	} psp;
- 
-+	struct nsim_amt *amt;
-+
- 	struct nsim_bus_dev *nsim_bus_dev;
- 
- 	struct bpf_prog	*bpf_offloaded;
-@@ -232,6 +234,11 @@ enum nsim_resource_id {
- 	NSIM_RESOURCE_IPV6_FIB,
- 	NSIM_RESOURCE_IPV6_FIB_RULES,
- 	NSIM_RESOURCE_NEXTHOPS,
-+	NSIM_RESOURCE_AMT,
-+	NSIM_RESOURCE_AMT_ENDPOINTS,
-+	NSIM_RESOURCE_AMT_GROUPS,
-+	NSIM_RESOURCE_AMT_MEMBERS,
-+	NSIM_RESOURCE_AMT_CMDQ,
- };
- 
- enum nsim_port_resource_id {
-@@ -241,6 +248,7 @@ enum nsim_port_resource_id {
- struct nsim_dev_health {
- 	struct devlink_health_reporter *empty_reporter;
- 	struct devlink_health_reporter *dummy_reporter;
-+	struct devlink_health_reporter *amt_reporter;
- 	struct dentry *ddir;
- 	char *recovered_break_msg;
- 	u32 binary_len;
-@@ -351,6 +359,13 @@ struct nsim_dev {
- 	bool fail_reload;
- 	struct devlink_region *dummy_region;
- 	struct nsim_dev_health health;
-+	/* AMT relay offload tables of every port, for devlink resources */
-+	struct {
-+		atomic_t endpoints;
-+		atomic_t groups;
-+		atomic_t members;
-+		atomic_t cmdq;
-+	} amt;
- 	struct nsim_dev_hwstats hwstats;
- 	struct flow_action_cookie *fa_cookie;
- 	spinlock_t fa_cookie_lock; /* protects fa_cookie */
-@@ -472,6 +487,18 @@ nsim_psp_handle_ext(struct sk_buff *skb, struct skb_ext *psp_ext) {}
- int nsim_setup_tc(struct net_device *dev, enum tc_setup_type type,
- 		  void *type_data);
- 
-+#if IS_ENABLED(CONFIG_AMT)
-+int nsim_amt_init(struct netdevsim *ns);
-+void nsim_amt_uninit(struct netdevsim *ns);
-+int nsim_amt_module_init(void);
-+void nsim_amt_module_exit(void);
-+#else
-+static inline int nsim_amt_init(struct netdevsim *ns) { return 0; }
-+static inline void nsim_amt_uninit(struct netdevsim *ns) {}
-+static inline int nsim_amt_module_init(void) { return 0; }
-+static inline void nsim_amt_module_exit(void) {}
-+#endif
-+
- struct nsim_bus_dev {
- 	struct device dev;
- 	struct list_head list;
++if [ $OKS -ne 11 ]; then
++	echo "only $OKS of 11 assertions passed"
++	ERR=1
++fi
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 94d722770..88eb75060 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -11,6 +11,7 @@ CONFIG_CRYPTO_ARIA=y
+ CONFIG_CRYPTO_CHACHA20POLY1305=m
+ CONFIG_CRYPTO_SHA1=y
+ CONFIG_CRYPTO_SM4_GENERIC=y
++CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_DEBUG_INFO_BTF_MODULES=n
+ CONFIG_DUMMY=y
+@@ -117,6 +118,7 @@ CONFIG_OPENVSWITCH=m
+ CONFIG_OPENVSWITCH_GENEVE=m
+ CONFIG_OPENVSWITCH_GRE=m
+ CONFIG_OPENVSWITCH_VXLAN=m
++CONFIG_PACKET=y
+ CONFIG_PROC_SYSCTL=y
+ CONFIG_PSAMPLE=m
+ CONFIG_RPS=y
 -- 
 2.43.0
 
