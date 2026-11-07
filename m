@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1794011840;
-	b=w6px+idG8Qodiq0zf1GAHzGSsZa17mA3GzMXdyvyvGoNjPkesiuslZJRG0vyPoYXHiI6
-	 2FkcCP7uQRdZd069AiS7iVqn7i1RLhz8hGVlwB5Y0qIq3Jk07Jfig5hYRYEAJJdIB+2Tj
-	 ma5L08/h2+0L7sk/Rzy4dJMkCcrenMu7mQcujs1RXml1lxuJ2awzQsvESukFrcZIgcnt3
-	 uHcdluZuld+rwooQRzku8ZXSNzGmy+S1JaxhNzs6relfCE124WYZjZcasObvdiiXCt9/c
-	 psK5G67sKcCxH2FJ4+PpGaNS6ZTpYXCrx8/xF+6ugn6SBOmK41Imjv/ZjfeK5daNZrA==
+	b=By7FNmPoFaTqciGnsWxm8jvYOgFppoNwb5VKL2zBVTPcErnPMnI+DFowBXvpyEcLITyC
+	 ub4E/UTsqU8L4VbBJskYxAb+EI4vHeu4D3t1Tqj4gp4Khak+cgKYaDzPMFrPhj5TRg+qV
+	 7U/GT3Ceypekw2pEXT2zSC+fFEz3QY5ARmM4Ots+vcidnjTnke5QkopRNgX7C/tWEbJ3y
+	 /omt4XiV973goFtojJX4allqE1qAt4TGybV++3HjjMcHxgFervPZiqMl0CmmOkpzw7chO
+	 Kcv5cg0TqIvVt/KJetqfaUN1BbXVtWmJWOqOXqzlyFjZOYxk01vukX6ufCwzzqcZ9SQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794011840;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=0nkKW4qaDx3asj2guFXILmxbH04Ei7Qw0v+PRGtBfmM=;
-	b=DeV0ca24W8+d1x6iEbecLoy7E5QmRQ+2xHVpZvrlbW7qfm6e/NuYLjtS8iNvPVpEjMr/
-	 AkI16Kv8Ujl4/AUCTyUiE20GGe+04Qs5eZD9xtiJUWJt9w4kdwnuM0ouGcxDiOWQZudVw
-	 RoLtbrAdylF4UywsIprga7CT9fg7u63ce3BgQ2+8bk4LZUDc6o1rGNXPRPc8TYGwE+emS
-	 WNWiZwNGtDtLfwTF+RPYy5oABdv4lmOPdjw+DhjtDgtTPabkh7TRRsNXPR9MalgIjiX7x
-	 ns+A6vJKR/gqQQa+M/9tqpsGiygSXNDoh0xtyIKiRNGRMTjgohGaKMQrAHxByqkje3w==
+	bh=iUFF8ihBt1kNc/OLwiTGvCS0cCJuPlqdLR52uCLjSi8=;
+	b=A4Fq6KnnZPqSelMootSN+F9qdKy8h5Q1l7iebojlj9tiLayqhBgDnJNCtml9m+N1Yut4
+	 ysO5kHkVqp1cllCaSkaSxFNnLxkUehlOUvyJFeot5C9JwKfl7HoV0baKdjt9EABWvvgkt
+	 oCwVhkcJ9U6kCuGmqbw47Xoh6qG7SGfabXwzN+3vc7ycURtH8MyMjg1vL+/dwtbGdkww7
+	 jVvKus0u4FLPnSFuMYYBmT10nuQoUvnMAQHrwPGOIklhWpUtH7Wh3nRlC44g2EMvj6Rea
+	 OlrihlUZ5RzMfovKXk/XbWY2DUX/0+L+ynhrItuKysUBRcwIlhjbctX5FLQhWpvwF9g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hazlIY6T;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n7DhmpN0;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE481606AF8C;
-	Sat,  7 Nov 2026 00:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF65606AFAE;
+	Sat,  7 Nov 2026 00:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hazlIY6T
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n7DhmpN0
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794011839;
-	b=i3OjkfOEm6IXp1VyiCWIyLE8QFPCgCTpa9ToPd1NL9YXN/iV4mZfAp8VDWdWp83YIXfo
-	 AFyYe52P736v5tjTqrEFeyuxdYDOMKejSwrTT0duKlszhQHP44b6rjO053RTbThhKGgdN
-	 tAcfPI8G/BBLOkCho1W8jVEY4XYKaIphx/PMvTXC2QMemgHVAWylX8CPB17HOb2J1dQ2s
-	 AOaVa7jCkaIzOY2okmZxzW3RtX2a4SUwv5efZFdP5fJXpqarjNLy516BFk+qBm2g3pXE2
-	 B812GoLlHdSsT/uCof1lrZUaM1tIDszuoIa+a2hCPM0eUPaKv1AGMu4IvQdryWVFIbg==
+	t=1794011840;
+	b=zjdZdRHO+LhMZg6GzotNudaaeL59oliWn1QypSoN1arSS4SJvPq0SF/XuGyoTKS6My53
+	 jegL+GhMQCixP6BaSdOhQixt9Q/Cu7VoxF52+FXYZ7KWm6QCycPIchyD48HYoJgTjgZaC
+	 utkoAubONlDR5Vgcjf+sIFuuPFvrmmcc+GxKM1siqeV4/05YZv51kktwZYTonWUg0fcu7
+	 Hm3RsTl/RlUqus5VW29//oCglNjdzWiJVUdsykOiROGiJUp5uOh0LdOrKM8hPoUGMlWF8
+	 8rTHybgW3f+sWuIx1FRRcRMVBS/UuHC9zY8kXqfzxXGOiCE9ftK8hkMDgwrOY49TCiQ==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794011839;
+	c=relaxed/relaxed; t=1794011840;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=0nkKW4qaDx3asj2guFXILmxbH04Ei7Qw0v+PRGtBfmM=;
-	b=zrZ65MbsloqKg+o34ShyiAI9rC2PdFU0auT0c6t+rwvqRHuiVYq0Js7Kb9J1HpXZzwrF
-	 M9o1X/LSpwMLqNyH44cx8gH38t7sLyo7qm9oOyTzw/SWaXNqGB4dRP16OYJ6K5KbnOyMW
-	 SscE/01qzIzluMwEejpGYK8b3oZwxudmvxO4/GwNC2k7lrXSH9+VbLZ5DrqMSAJOdKbRF
-	 PPWqatBwQi/yepuWx33Ovn9LmypTB/Ym+Xqo1Krim2rAV8a39AFJdF9pCYK+xC/SL0W/6
-	 ObPtZsk0fJHicBdoPqkY0ZXGD+n/MQ/+fs5J6y2moaM5+21woDpqVTD08lddCQCZ28g==
+	bh=iUFF8ihBt1kNc/OLwiTGvCS0cCJuPlqdLR52uCLjSi8=;
+	b=TyWdXLqod+8/EI6UXAq5DdkkB6lBVdrRDYkrZ1/uua2QKEHmSIqkgZTHqo1T3jQgmrTD
+	 +xWaZB5BxC0h/Mh2FU2KtFO9AbymG7ZTWWJj4eByyvQoZv98mfhDn3IRKIJmA8Ukm6Goz
+	 ixNJ3hLJCNfFv8BDDFY6HW8kg5PrTWhrxqEWcf13z1oPtQSPOX/Mx4l9Fpofa7EKQwanR
+	 YgOmAx6aKiEH84fdAhqbx3U193PWMl1rvv9xiQsi5/eqILYWdB0ld0ypW8KkC9zoXlMxE
+	 mQ322AWAEQX7NRbfuyfuzddK801CXmRL1FpJGILsBOZwj64O36FIqhlS1yZ4AWYsRgg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 420141F00901;
-	Sat,  7 Nov 2026 00:37:15 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id DAAD01F00A09;
+	Sat,  7 Nov 2026 00:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794011839;
-	bh=0nkKW4qaDx3asj2guFXILmxbH04Ei7Qw0v+PRGtBfmM=;
+	s=k20260515; t=1794011840;
+	bh=iUFF8ihBt1kNc/OLwiTGvCS0cCJuPlqdLR52uCLjSi8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=hazlIY6TaUYJJBHK20yeEie7vDuC4nIuUs6rgF5AWjaAsWS2CR3tdgWF9zrpnxyfQ
-	 dlLfxX/O+9rSMGB3ImgNqjX7jRPH8TaUg3lRxijCT+c6OdznXVyiyJrVwFWEK59Gun
-	 SEuQlLLYn4z6QF2wQnJUlHlPrqTQSa249YP3JFjHvI+bD7ZSOJEKcY3Lp2hWCRn1Im
-	 GkUa+f5Uj0W2D06vn9830RKJxd/TlXD0zUqdlfFW0ZUFlKoOZs7GKWjIbSQTY0/xPG
-	 iak9/tablOE2/IwsA/R76zv8LkqFWlwwUXHlSSjeYMKEx/CKcdyBL5pBWIX7H+IqA3
-	 jKFMSj8pbiIUw==
+	b=n7DhmpN0wvb9h4REmbSEt1Lq9D+wPsvxzHDF5tjTk1zufmArJ95TKy/3rg/BdsfeN
+	 iszRksMAOZOmnPVWhsF7eUmV0IuVjqR7TyZGhdF+XYrBrQ92cO28MIhe9yrPVe9Y4Y
+	 tUyjSQYegUES3MEILRy7TEcVjNOEtzGnTlp0h17NRUz8fGOGeCwJmUUE2PQqJIKWvV
+	 fD1J2KxcPa30P0b8bx7YVQ44p1L1JkqJ+M/Id+QPCjYlapksz39/5nqBB5O9U20CyD
+	 fROhWzE0xWC1URneQkpRowWJq6u6Iv3PfOfQwTx3Vh0pQOrJFRfloeufhwG7+S0n01
+	 +ZczOWdia9tTg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 18F5847A3F;
+	by lkml.kernel.org (Postfix) with ESMTP id 61A0E47A51;
 	Sat,  7 Nov 2026 00:36:58 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 06 Nov 2026 16:37:51 -0800
-Subject: [PATCH RFC v3 77/88] KVM: selftests: Verify VFIO device reset for
- igb device
+Date: Fri, 06 Nov 2026 16:37:56 -0800
+Subject: [PATCH RFC v3 82/88] KVM: selftests: Verify VFIO dmabuf creation
+ for igb device
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-gmem-alternative-providers-v3-77-8484dde66a7e@google.com>
+Message-Id: <20261106-gmem-alternative-providers-v3-82-8484dde66a7e@google.com>
 References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 In-Reply-To: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
 To: Alexey Kardashevskiy <aik@amd.com>, 
@@ -105,11 +105,11 @@ Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=2756;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794011810; l=3911;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=jIcxaC8x28xPsLi5SMudkDfabTx4GIIOp8BRTMbwoBw=;
- b=22zVgyg/vzsiW0zlhJ3ne60GqMpiyEfDMQk6bsvNnD6uIZt2eSXJ3foj8SNHHIzAaGagwcB/5
- y8itLkPWPqaCVForcElwYW6W+a1qYjsL6jumqYkGxAoeFuJhkUTZucc
+ bh=MbD33+QhDIw1sC8OkTEtVrBZ+IoL3RD4qfhKhPg8oKQ=;
+ b=7iVZ9xRpmIAg6xpTbf7wls4Z/04O441wO1Vwt3NgTl0XIJAE2iswEYKcjFie8IMkCRGxXqAKQ
+ 8/ywYYSClSZASYJSFTxZ80gUqe3p+BNGG16CJqQEWTaXedsT8K4Umdm
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -120,75 +120,108 @@ Content-Transfer-Encoding: 7bit
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Add a subtest for VFIO_DEVICE_RESET on the bound Intel 82576 device.
+Add a subtest to verify dmabuf export via VFIO_DEVICE_FEATURE_DMA_BUF.
 
-Configure PCI command space to enable memory decode, map BAR0, and write
-a distinct test pattern to the scratch receive address low (RAL0) register.
+Probe device feature support using VFIO_DEVICE_FEATURE_PROBE, skipping
+the test cleanly when kernel dmabuf support is absent
+(CONFIG_VFIO_PCI_DMABUF or CONFIG_PCI_P2PDMA disabled).
 
-Trigger a device reset via the VFIO device ioctl, handling potential lock
-contention with retry logic. Re-enable memory decode post-reset and assert
-that the scratch register pattern reverted to its hardware reset value.
+Allocate and configure a vfio_device_feature request covering BAR0,
+requesting a dma_buf file descriptor export via
+VFIO_DEVICE_FEATURE_GET.
 
-This verifies hardware reset lifecycle behavior, establishing a baseline
-to later confirm that resetting a device revokes access when BAR0 is
-wrapped by guest_memfd.
+Verify that in direct mode a valid file descriptor is returned, confirm
+that attempting to mmap the resulting dmabuf fd fails with -EINVAL (as
+VFIO PCI dmabufs provide peer-to-peer kernel DMA rather than userspace
+CPU mappings), and verify clean closure and resource release.
+In guest_memfd mode, verify that dmabuf creation is rejected with
+-EOPNOTSUPP.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ .../selftests/kvm/x86/guest_memfd_vfio_test.c      | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-index 4d5211b6acf79..91cba359e4392 100644
+index 0339794fb6dd3..46d325228bda3 100644
 --- a/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
 +++ b/tools/testing/selftests/kvm/x86/guest_memfd_vfio_test.c
-@@ -331,4 +331,49 @@ TEST_F(guest_memfd_vfio, bar_mmap)
- 	ASSERT_EQ(0, munmap(bar0, bar0_info.size));
+@@ -651,4 +651,78 @@ TEST_F(guest_memfd_vfio, guest_mapping)
+ 	ASSERT_EQ(0, munmap(bar0_mmap, bar0_info.size));
  }
  
-+TEST_F(guest_memfd_vfio, device_reset)
++TEST_F(guest_memfd_vfio, dmabuf_creation)
 +{
++	struct vfio_device_feature_dma_buf *dmabuf_feature;
++	struct vfio_device_feature probe_feat = {};
 +	struct vfio_region_info bar0_info = {};
-+	uint32_t val;
-+	void *bar0;
-+	int retries = 20;
++	struct vfio_device_feature *feat;
++	size_t feat_size;
++	int dmabuf_fd;
 +	int ret;
 +
-+	vfio_pci_enable_memory_and_bus_master(_metadata, self->vfio_fd);
++	/*
++	 * Probe support for VFIO_DEVICE_FEATURE_DMA_BUF. This requires kernel
++	 * support for CONFIG_VFIO_PCI_DMABUF (CONFIG_PCI_P2PDMA). In guest_memfd
++	 * mode, VFIO_DEVICE_BIND_FLAG_CTRL_ONLY is active, so the probe itself
++	 * is rejected with -EOPNOTSUPP by the control-only allowlist.
++	 */
++	probe_feat.argsz = sizeof(probe_feat);
++	probe_feat.flags = VFIO_DEVICE_FEATURE_PROBE |
++			   VFIO_DEVICE_FEATURE_GET |
++			   VFIO_DEVICE_FEATURE_DMA_BUF;
++	ret = ioctl(self->vfio_fd, VFIO_DEVICE_FEATURE, &probe_feat);
++	if (variant->use_gmem) {
++		ASSERT_LT(ret, 0);
++		ASSERT_EQ(EOPNOTSUPP, errno);
++	} else if (ret != 0) {
++		SKIP(return, "Kernel lacks CONFIG_VFIO_PCI_DMABUF support\n");
++	}
 +
 +	bar0_info.argsz = sizeof(bar0_info);
 +	bar0_info.index = VFIO_PCI_BAR0_REGION_INDEX;
 +	ret = ioctl(self->vfio_fd, VFIO_DEVICE_GET_REGION_INFO, &bar0_info);
 +	ASSERT_EQ(0, ret);
 +
-+	bar0 = mmap(NULL, bar0_info.size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		    self->vfio_fd, bar0_info.offset);
-+	ASSERT_NE(MAP_FAILED, bar0);
-+
-+	/* Write scratch test pattern to RAL0 */
-+	WRITE_ONCE(*(uint32_t *)((char *)bar0 + E1000_RAL0), 0xdeadbeef);
-+	val = READ_ONCE(*(uint32_t *)((char *)bar0 + E1000_RAL0));
-+	ASSERT_EQ(0xdeadbeef, val);
-+
-+	/* Trigger VFIO_DEVICE_RESET, handling possible lock contention (-EAGAIN) */
-+	do {
-+		ret = ioctl(self->vfio_fd, VFIO_DEVICE_RESET, NULL);
-+		if (ret != 0 && errno == EAGAIN)
-+			usleep(10000);
-+	} while (ret != 0 && errno == EAGAIN && retries-- > 0);
-+	ASSERT_EQ(0, ret);
-+
 +	/*
-+	 * After device reset, PCI Command register memory decode is cleared by
-+	 * hardware. Re-enable it to access BAR0 registers again.
++	 * Allocate vfio_device_feature with trailing vfio_device_feature_dma_buf
++	 * containing one dma_range covering BAR0.
 +	 */
-+	vfio_pci_enable_memory_and_bus_master(_metadata, self->vfio_fd);
++	feat_size = sizeof(*feat) + sizeof(*dmabuf_feature) +
++		    sizeof(struct vfio_region_dma_range);
++	feat = calloc(1, feat_size);
++	ASSERT_NE(NULL, feat);
 +
-+	/* Verify RAL0 was reset and reverted from scratch pattern */
-+	val = READ_ONCE(*(uint32_t *)((char *)bar0 + E1000_RAL0));
-+	ASSERT_NE(0xdeadbeef, val);
++	feat->argsz = feat_size;
++	feat->flags = VFIO_DEVICE_FEATURE_GET | VFIO_DEVICE_FEATURE_DMA_BUF;
 +
-+	ASSERT_EQ(0, munmap(bar0, bar0_info.size));
++	dmabuf_feature = (struct vfio_device_feature_dma_buf *)feat->data;
++	dmabuf_feature->region_index = VFIO_PCI_BAR0_REGION_INDEX;
++	dmabuf_feature->open_flags = O_RDWR | O_CLOEXEC;
++	dmabuf_feature->nr_ranges = 1;
++	dmabuf_feature->dma_ranges[0].offset = 0;
++	dmabuf_feature->dma_ranges[0].length = bar0_info.size;
++
++	dmabuf_fd = ioctl(self->vfio_fd, VFIO_DEVICE_FEATURE, feat);
++	if (variant->use_gmem) {
++		ASSERT_LT(dmabuf_fd, 0);
++		ASSERT_EQ(EOPNOTSUPP, errno);
++	} else {
++		ASSERT_GE(dmabuf_fd, 0);
++
++		/*
++		 * VFIO PCI dmabufs are intended for peer-to-peer kernel DMA and
++		 * do not implement mmap or read operations. Verify mmap returns
++		 * -EINVAL.
++		 */
++		ASSERT_EQ(MAP_FAILED, mmap(NULL, bar0_info.size,
++					   PROT_READ | PROT_WRITE,
++					   MAP_SHARED, dmabuf_fd, 0));
++		ASSERT_EQ(EINVAL, errno);
++		close(dmabuf_fd);
++	}
++
++	free(feat);
 +}
 +
  TEST_HARNESS_MAIN
