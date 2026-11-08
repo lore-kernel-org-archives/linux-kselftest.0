@@ -1,132 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794150786;
-	b=a8XKnaIcSsw4v0TwmmThu17GzejrlrILiSrYmHfO+riuNMxM4s7U4MnA5Ifhd4iDzSMT
-	 CQIx/6WBN3+3hBwWSVPrab7acRYc+Ttzq6JK81sz+Zwzk+N6QBJkNmeq0KFvSYA4WgEbB
-	 c7u28udv2Xz2ehzwG3RRkxmVr8ho2K094RcoRJJn7LYV/m4yLk7J8xLi1XAQ9qkC5AMAE
-	 Bmy3Dp+CNG2ql5pE4PThJeX/q5U5iNouX/2ShgG+BH4c5gWwjslOaLGqVxGhlo0H+u5+u
-	 29hYZTUl9Ll5id9UEh88nUQjHNtWfd8C7giuLZy1r9TIHxCjUjMHC7UUYiirJjqtVdw==
+	t=1794151460;
+	b=1fiiPHlWMXHVv4rtW+emE8iRtF9xThVhL3MQi+BBKbueNZteXpr96iIKANlBvYV7F40D
+	 TOoSuKsuIFwtWiVJ4RhH4zJBRbd/iG2ttUiGPdIOUABJW+4o9FQxCr1E0Q5UN0TYI59/P
+	 S27bNqGlt+vLOtsMCkCog0ykPNKBCWfQtnvb69sk08tMlA9TJCZqqLjmUmBjPxkRUNWQy
+	 MSoJZKTzSRjjJDgDxF0P7A+Mguv/QDKhmzdIubfttBmOpqr+tHyIFgADrvMLcRiy/ygGd
+	 0rqhlrcoW4ubTHGhS4m+jvlebeEmOdR1wTlUfR9JYH9yAkbKQJkOSgfFkXYKodC4Kgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794150786;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794151460;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=oGOpptMTTRvU+q+lGfxSAwJKiB4VoXJ/0q8Ure01rsI=;
-	b=GTMZ+Exm4DskMca0hIqNKbLelBrrcsaYa8Lxt2+wFWZg8ajN/w3F2BChOLDmbgvuXBo/
-	 o7ynMsFAm1kXSXupQpUkF1rCTGHFLo/gXLDzsVeCI4dQim4eiDkpe8OS6FRKeE09tJH5k
-	 cKv8Wsmpe7NWAqpQQIvQqFq04EmWc1Kolz8i539Gipg34AzdmvRIWGUm/ndbisjQ8G2g2
-	 ZAQZnNXCewBqQNJkEaph6pybehsCkMA0vwjdEC+BdJhcSdAXBmk17bF0h/YEB7hC2FouD
-	 UyrQBtLW7GprX3pO9h0FmrpE1INCEwuKAtW99D0e2paEYB9NunOqYSBjJykNIubC49w==
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:To:
+	 Cc:In-Reply-To:References:Date:Message-Id:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key;
+	bh=5H2H8MP8L+/rXp31cDc9VnUcbqmvBKhHx7W0RFsHYLE=;
+	b=5hoDiGxkQsxENzEZGyWjPs27HzlPNsZqwP2m4k5BrIJGrtVkKaltESYQnprMwRziQNAU
+	 /6KvNNXFw/ogaZogg86fGypPDVz1vJA45tUXzY5V0SUTlSUUfRbTEUN0339kitQFysTnE
+	 R+1pQNrw7bS18taikZaq9hECo/Zb4whOMmi07Wz5rFV3DjL7EkaKdo+eoCI4DLRgTV+2X
+	 OK1TPBxXL9105oLeAhUPaKbBr9O/Bu+msyWOM+7EPgJVJcCDqAfp57YbgeASUEpzWlOyT
+	 2P/o8JTCcD/MiHDfAIeIFwwGGclgP7eLzR8cDtpkqld2f2kvYgXApsU2rueE7Bui7nA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="gQ8KArV/";
-	arc=none smtp.remote-ip=209.85.221.178
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=VzLHlha2;
+	arc=none smtp.remote-ip=209.85.221.171
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368F7606A330
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 15:13:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 368F7606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2C7606A31C
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 15:24:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B2C7606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gQ8KArV/
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5eafb65e169so68022e0c.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 07:13:06 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=VzLHlha2
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-5ece3ab2e91so38675e0c.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 07:24:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794150785; x=1794755585; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+        d=soleen.com; s=google; t=1794151459; x=1794756259; darn=vger.kernel.org;
+        h=message-id:date:references:in-reply-to:cc:to:from:subject
+         :content-transfer-encoding:content-type:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=oGOpptMTTRvU+q+lGfxSAwJKiB4VoXJ/0q8Ure01rsI=;
-        b=gQ8KArV/ErbsVTXda3c9mTt1T9/eZSFNq5fU2hi92W6EJ8QEPp6hstG1ZKrfTTKuCc
-         6fJdT2zddwVPqHY0dKFwv4p91YTgDtmIDdAhYaXTS3SS+u6dDKU5CGob3wri1RZx1phL
-         4bmJ5mAcBjzwlr6WuixJp8lWzr4KMK+74i+QENNkzHlIOFd8A6dDN4wvKZ+y7/C3NYfr
-         wpD8s84LSUxk0othXtncH9vgHxVoGqDatOLHXpHfPrE3Xs2mKY3sq320MQPxsvZRWoxB
-         TtlrLoRibfOEiDkIkABgHwKAuTnwXCG7JUdQxIr7MkKA5fdaTQaG0vNJIokjKs8yATrW
-         XaQA==
+        bh=5H2H8MP8L+/rXp31cDc9VnUcbqmvBKhHx7W0RFsHYLE=;
+        b=VzLHlha2mdx1LQqvx5whvbUtOCVSCiG6OmtDhaZuB/r471T/9qSBWxLL9WSFW0Olf7
+         G77d3EHfKK451U778tccdeTga1CwXe6IPTQr7/uw2pBEyA1+TFuCWItAMnzg6Zr2GH5+
+         6VJhOUH5o78i6E+cxe/s4LLwiIjPVwvSXImgqsUijxEVLzO5jzj+UyG/6g8znGG+D/xs
+         L89xi2e6Si8NozKOQKJbp6aIL+RZ/xE/P98R9rq6WDrpiA6pIXUF17XpIv3GqPNXWsvv
+         NJkUkFs4sa7uzz/cy1hzwwi4u8U/lpHhMtRq9hR0nIwSAcgMzUeq/grYXRR6AeffUIf5
+         v9nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794150785; x=1794755585;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1794151459; x=1794756259;
+        h=message-id:date:references:in-reply-to:cc:to:from:subject
+         :content-transfer-encoding:content-type:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oGOpptMTTRvU+q+lGfxSAwJKiB4VoXJ/0q8Ure01rsI=;
-        b=nb7uT2mj5UcEvxT4z2nQa6BTRg/2c7tbmpkNHp27CXuVQJ95Qy1K+vSDBXw51lSTFf
-         XeaJ6JOaoeLnIG8GD1DambwIYhBlY1I4R0uEEBHQR/2pesBoeIOFOuY9Z+b6E3N/55JN
-         v0Jb92hzORdKCnaKOKGFbYW0X2eTju6dOsF7gb7il3ogo1n+EQ7jarORb41wDozUeLCB
-         rwgTYKKu12RvPjkWdb29EcffKIfh6IloZg4haPJ1fFrfMxFuiogLuZrxcg7xCrTMBNIs
-         As8TV2T6awmE4OhxMACsuglWCibM7B3fKOJ4k4hO7p43Hp/xJ/gXciSQ9BMxKEP/xGq+
-         E5Cw==
-X-Forwarded-Encrypted: i=1; AL+hErHEDf53yldRdXiB71aQ0RQXuaujELeznWvUMjtlJG7FoeX3K3yaLFNdgonp/0XrENyJDTEomRZ3QvZjGH3Hep4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z83xYpbOQGUUtU31P3JyT5U38gLb3TLdBe+b7uJ6m2L4m9rGfu+
-	gi+MQoFIA8/v08fSUxXeYZ2hM6g1BOp3+eBao7+7JjMbvSTMioThCXF0
-X-Gm-Gg: AYBFou0r/LippGqU9Fn8piPzVl0MxyZMcCQ6l3aEqbycFL2U94elnl3atPMWf50DI64
-	eODXHjZ32UlX5lTA9WZ8UvTzGuhUsiUYWxBKHs+R1ngR5J1/M0UbDMgu0shk3nuDjGr5mi0+vs/
-	DvAtou2Pq8h6eukxDzVaHlruUYFxEw4fwuWHuxyXnpsRelJTSeXcD8KVKSycXX+Om4sPuQjUEFY
-	UHkOcBaM/DtAZoG+kKGRi6oxR4QenijGzm2DzBuH4kfWrkm1JONiWYRinkdHP3eMUdLY5LRuOkK
-	KberyydZ1g2JwwPK5iuPxyMXsdykDQAOFnko0ruhMpzS6/U8UnMJTVrjRjPcLIyT8MPvVheVj3o
-	fmtuJz6dxxCaPTMgoQH8FGcKHgeFJ19fjo4wn8q+TmX9NAvQJnPreRfTV/HEhLLOvhiAC7ZsgIu
-	7gq7BqBKX10Pwxaf7J1po5FzAQ9l3UC+re38x8+6yso1OXFwkDUdXa/pI6W3TGJI4hhngdYtw7M
-	PqwG92u56W/7AXG923kkzkg4j+Bs4Ndoyckl2VsLEhPPOSdyU4MdmwvrYiJuvItQ5VUnBPV5FsN
-	erU9HScqD/yR7AyCUUI4UVkx7VMS6ItLtHTJLR1VILzy4780alZV0v6XlD3Zuss3REc36fD5GAt
-	joAeF9+oJB4+ro53pvBAOqih9ecPqytKIlR9knPoBnm/NFljQst4+nvPc2b14jmMnxAfE5yA=
-X-Received: by 2002:a05:6102:41a6:b0:7a6:85d6:84c3 with SMTP id ada2fe7eead31-7d2daab4c34mr493239137.3.1794150785073;
-        Sun, 08 Nov 2026 07:13:05 -0800 (PST)
-Received: from gmail.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d2daf08fe5sm2083603137.0.2026.11.08.07.13.04
+        bh=5H2H8MP8L+/rXp31cDc9VnUcbqmvBKhHx7W0RFsHYLE=;
+        b=d4LeigbrjmIqzl239pW0sGN+WanL4LJC3UIHnNttwdYM28UGxgto5tr6nQr/T1VgXl
+         Ge3x+U9wa/9QcHLk/47ARm2sjXMWaBSm4QiSc/1O6+Te0RXbIcEXRzxuncPVT9ptLbWs
+         DBj6a3YIfqq6x19Pces4CrqKUQEMXiMBveyPjP4k9I6Qrk3j1mfpiQZB53WUTTgJldYS
+         APP3l9YFdLjuOqdFoOP7SeLyLUimw8+6jh4aT9+SCLmlFVkIgzOgvO2mYjsikpXQJNv1
+         3K/jqpfNgy4nRrovl9Rizz0tz5dW+97WhwZZhGiwMs/NFFsNXsYu0JhchbzLdNVwead0
+         OxuA==
+X-Forwarded-Encrypted: i=1; AL+hErHVNfreqWtAcd8GK237v7rYETusMjguk5AdImYKyZveMvVUVfh9GYMVOeERsbt2dAaJI2USTpvx9/8Odt5lhmM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9RZSiiA9yg8fgjlNgXrobZTt5dlj0BSV72uLhDuIt0AyR1QZuj
+	eshA+Auzx8uRiVnM9X7Cd/RuEg0VheJ+Cg0cKMcsQpaqkupRRJ85EAXKUMW7AUvVT3s=
+X-Gm-Gg: AYBFou1ThfsOAcfHQrd8EMXUIrejY5p/MAIdpTUhAjbQP55JyT7nHui8VyHGLdyebN7
+	FvlsmFvb4jIFxfRvCw050SnL2aetG6zzprEqDiPT6hhmP1ZJ39U0WHgXu5dBGkH1NHEJJszSXIz
+	FkjoiymVMkKjyUN1ztwIFGWbKNWoT4PBSis5GQXSTRfxiLYjcxboOyrTzbPCRn7FxN0PvNRXRlh
+	Hi6zmuOpMCM44LDPtBZjU075aHdI0j3OHp1ohnavZ1oJG4ucFeUK18cmbGyCOgXsn/ALOCkf7yX
+	z+g10vEEyIiOeUiFYYIpbsG1dYuBRflabzfMB7wgwH1mAVrVHjALbXuLHOdrIX/lg0UAn1hnWg+
+	T7Rhj1WHRIIjphfsAiEvO9PAtkZa/cDr0dJiioRP9g2r6Tg6rGDEecwHubbscHpcrirgGg3H5EM
+	JtgAhe2sadOtAXICxzCHOLIkjU28dEhgSu1V+lNu3M83pS/1fWiy3c+uYZu/ZpbfMT31OXVmws5
+	txwZIQNvSW6tMpQMPJ/VELyVLcbJ71K/tjGqA+q6s9RjPXmN0TxXmIKTZkM0xlnSXZI1V6xA9ze
+	7vp38khes8XKBi1FyRrU6eR7iu2eYIPq9+ViZU+NDMDGxz/LfL6/lW9AedNMELFspUq0r0/sX+i
+	r6Akek4rqYND0HvlyIw9gxwZksj7I55j4yR+JyB4fsWoxdlET
+X-Received: by 2002:a05:6123:4a:b0:5ec:c162:d58c with SMTP id 71dfb90a1353d-5ece7232e04mr468275e0c.9.1794151459109;
+        Sun, 08 Nov 2026 07:24:19 -0800 (PST)
+Received: from soleen.c.googlers.com (64.167.245.35.bc.googleusercontent.com. [35.245.167.64])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ece60c1adfsm2166205e0c.8.2026.11.08.07.24.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 07:13:04 -0800 (PST)
-Date: Sun, 08 Nov 2026 10:13:03 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Tianyi Gao <tianyi@cloudflare.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Eric Dumazet <edumazet@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Simon Horman <horms@kernel.org>, 
- David Keogh <dkeogh@amazon.com>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- David Woodhouse <dwmw2@infradead.org>, 
- Dragos Tatulea <dtatulea@nvidia.com>, 
- Nimrod Oren <noren@nvidia.com>, 
- Alasdair McWilliam <alasdair@mcwilliam.dev>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- David Ahern <dsahern@kernel.org>, 
- Ido Schimmel <idosch@nvidia.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Donald Hunter <donald.hunter@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Breno Leitao <leitao@debian.org>, 
- =?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>, 
- Danielle Ratson <danieller@nvidia.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- bpf@vger.kernel.org, 
- linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- kernel-team@cloudflare.com, 
- nh-open-source@amazon.com
-Message-ID: <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
-In-Reply-To: <20261107182526.69543-1-tianyi@cloudflare.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
+        Sun, 08 Nov 2026 07:24:18 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -136,65 +90,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3 1/4] riscv: Call early_ioremap_setup() before
+ parsing the DTB
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Chen Pei <cp0613@linux.alibaba.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, alex@ghiti.fr, rppt@kernel.org, 
+ pasha.tatashin@soleen.com, pratyush@kernel.org, graf@amazon.com, 
+ shuah@kernel.org, guoren@kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, kexec@lists.infradead.org
+In-Reply-To: <20261106071459.2003-2-cp0613@linux.alibaba.com>
+References: <20261106071459.2003-1-cp0613@linux.alibaba.com>
+ <20261106071459.2003-2-cp0613@linux.alibaba.com>
+Date: Sun, 08 Nov 2026 10:24:13 -0500
+Message-Id: <179415145357.358073.15510298244264317494.b4-review@b4>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=612;
+ i=pasha.tatashin@soleen.com; h=from:subject:message-id;
+ bh=3Y64H37LmlHFT1VEQVtmy1MOdzH3F3b2j267UF4uRWE=;
+ b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq8JQgz9JeNn8fjKYo6x7VzlFWQWT/Lp3pbpLNs
+ SP93uPVKjCJAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCavCUIAAKCRC7dyhM23N6
+ 3uGHD/9Puz8wWfsenmFRRLxdqDDp4alEi2QGtibd3g1gVeZ7Erpg749NWd29hLL+Nps+tMLws+e
+ ee5EPvfyBmjdqv2aB9jwLRhFRBVCu+uecsYEpi5pIvZnhLUYS7pLfzWQESHepH0t1Uo1zbs2ThQ
+ w2QeZ6ys+x3aRZh5P4T57xtD9ZKTMO/lx5nL0zQ7y10Lc59MkvZiuIpgegVGt+afWmMp51e1LMU
+ zZTNA54QUipvJplO8tdXHzC2R9tnDyCkspRxxi+iIQ52w3TaF2LY0HGMYNKjv/GWdQGcaMoORg9
+ HPw3OPmHgI8x2rX0qbSZR6VLp8KqKd8jnlSzWcI1w2NMxzwF5tswwwvmxHxRXWBigTxL/ZI91qg
+ FBK/MLdWhxbZ2ikerG6+mpnyJh8ifXFLI2QXmbVvjiKZTghn9/oq313tuHBfPlBxHLT07rp1gwh
+ EYQ/h5X/PzAQOWJTT7h6f6LvoJANqrnrTIh/YVT3FGSGfOs82HjJtsmvkPAbaY6bCM1fgcy5Iu6
+ o0CHn9bw6TOupWQqjrVgowolhg9vSeQNBv0rpoRTA/lmGKBzSTNtRYZeZfeQCViJ9VL0X/OlK9C
+ l+fImT0gCxVTujJCKLC3TbO2Nb9dqnsI0iSqK/Ftgm/7Pt3MXpy48agJgU4famUxHxEvG0dTa/r
+ P3vcc/gP4HWC/tg==
+X-Developer-Key: i=pasha.tatashin@soleen.com; a=openpgp;
+ fpr=CAAAB722DD22A081F0D49F35633A6A993D43B569
 
-Tianyi Gao wrote:
-> On Sat, Nov 07, 2026 at 09:51:07AM -0500, Willem de Bruijn wrote:
-> > Tianyi Gao wrote:
-> > > From: David Keogh <dkeogh@amazon.com>
-> > >
-> > > Add a tx_extra_headroom field to struct net_device for that purpose,
-> >
-> > Main high level concern is just adding an extra field. What's next,
-> > do we need to add a field extra_extra_headroom?
+On Fri, 06 Nov 2026 15:14:56 +0800, Chen Pei <cp0613@linux.alibaba.com> wrote:
+> parse_dtb() can reach early_memremap(), whose return value is composed
+> from the slot table that early_ioremap_setup() fills in - and on RISC-V
+> that setup ran after the scan, so the mapping came back NULL. The DT
+> based kexec handover parsing is the first caller to hit this:
+> kho_populate() cannot map the handover FDT and the handover is dropped.
 > 
-> Thanks for the review.
+> Run early_ioremap_setup() before parse_dtb(), as arm64 and x86 already
+> do.
 > 
-> A user needs more room either in every packet or only in new skbs.
-> needed_headroom covers the first case and tx_extra_headroom the
-> second. I do not see a third case.
-> 
-> needed_headroom does not only set the headroom of new skbs. It is also
-> the minimum that ip_finish_output2() and ip_forward() require of
-> existing skbs. Raising it for new skbs also raises that minimum. With
-> XDP on a veth peer and needed_headroom raised to 256, throughput drops
-> by 2.8% to 5.8% for local TCP and by 4.0% to 20.8% for forwarded
-> traffic. The cover letter has the detailed analysis. veth also cannot
-> set needed_headroom from user space today.
-> 
-> pahole on x86_64 (defconfig, net/core/dev.o) shows that the field fills
-> the 2-byte hole after needed_headroom, so struct net_device does not
-> grow:
-> 
-> before:
-> 	unsigned short             needed_headroom;      /*    60     2 */
-> 	/* XXX 2 bytes hole, try to pack */
-> 	/* size: 2688, cachelines: 42, members: 187 */
-> 
-> after:
-> 	unsigned short             needed_headroom;      /*    60     2 */
-> 	unsigned short             tx_extra_headroom;    /*    62     2 */
-> 	/* size: 2688, cachelines: 42, members: 188 */
+> [...]
 
-Thanks.
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Pushing back on another design choice: the UAPI change. That both cannot be
-undone, and is fragile and laborious, requiring manual admin arithmetic.
-
-The RFC patch mentioned two other approaches: explicit headroom requirement
-labeling for tc and BPF, and dynamic adjustment of this field whenever a
-realloc in the stack is encountered.
-
-They are left for future work. But should those instead be implemented
-first? As said, this manual hackery cannot be undone. While in-kernel
-mechanisms can be refined and built upon.
-
-It seems to be that this series is trying to address a few related
-situations and argues that no single solution fixes all except for manual
-adjustment. But likely a combination of the above (and more) will.
-
-This does leave the veth peer to solve, but that does not seem
-fundamentally intractable.
+-- 
+Pasha
 
