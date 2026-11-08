@@ -1,55 +1,81 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794126415;
-	b=aYWUDQ0VHyatPRuR/YN44W+M1CqwuK/sIdw137Z5h/de3B1NDX4CN1d3qbpf+SsT72Mn
-	 kq6R0BSTXiM5g94rgdTLMClaBg5ql+LqFY4+9qS8+0/jJ2Tb1V8ASfrJOlW7GUlOHaFCq
-	 bvSm/bEPyCHwYTAtuWqNeShDVpbq7AksuhEbSXNf66vbRTYw4ctDD/tWyTMp8r9P/xD+c
-	 FMgJ8FdVdOaT4reS1XgW9jg0u4sZFTyKOInaocX4INrFQeYMy0vDe879xUoSUywSltS7I
-	 mrTBGZhN3k/kME6XlN42Q2gnUmRYzZdj5KJZXN4mBnmICqIcz0bgtFqHn3DXxLApXng==
+	t=1794135430;
+	b=tZAIUfN0spgqhpw7TYDdp5Fdw780DcET0OvjKErMIil6cHhxaQsE7+zEKd30raNI0cqv
+	 JNmGjhnq+sRaER6czdaHZ/m4SAO3BN1NoCVxJu0whg5EACGYvmvC4blndPktZ14Pd232p
+	 OXE1UTOIXxFonHwYAfqX+/9szrGWxr9IjDmaKGPEG3Op/zzNy9/nqMkSYIlwYWtu58rjA
+	 ipiLLS5X0RgIh/md62b4UTViEq6zPDFXNEgcjZwByYhwmuwcXxx/v6MkXrvALzGH14fUL
+	 mZU6m1wpUqo2tukrax/9oAa2gvMjVoPiBYzAqZnfg1AJFELoEW5gTyqFPsi82jHJsOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794126415;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=p4OcSAvcvQKsjkU4ru+MvGNBWR2vHDxkyHmPg+JgZAI=;
-	b=kpJuGwOqN6OGJCg2G1rsBL6qEt4e7rDXLcbr3rq+ck5N3mccLCWF8VdtHHbnlnwMfaTt
-	 Pmzs7f1zHsIhI5/UxPvxHqd0S7Iw4I7o+suRNnstkyhc6Qz0CY7mK4/S8o6w1QyCGecWQ
-	 y8hffrqo6gTtR3W1Lyz2XzMHBfU0BRJkoikPbvMoWlAdHiwkfEhL4OBcb+n9I5NBaGyd3
-	 8Q+18OoLvRt98LFmigZnFrNrUl19tXFa5BPpMBpS64rLw5DQpZOm+f8Ximcx8OTRHUQ6v
-	 f2R0kWLGxemKMK8GgM6gvhii2X8rWAaSlCLR0zqQrb7hSqQu6p4cWCu0dd56YLIhI8Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794135430;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=TwD6srxjUR1mlpO3FVThd9ARdJjbCvcuXWMQlKqn3B8=;
+	b=WG3+30/PhBO8ujMdOvgE3j5hPkbER73U4hFLILkcFCfVURtWZLrJM20LQ6GRqlONPYdI
+	 mBAFS+H0NptRrpnDgtQvVNiPwoxi1wtg8qFDg0ZLrr9LABhp4+DOEaWKpR0ij6Z/SfPik
+	 JzurcC9Ihh1nxf7h11RF5SjcvN37Qjf7SIDVlO7CIC0spL2BqIKdx3sXX4pL8fzCWbrGP
+	 hRHloaWcy8rGTrWGCAnoQ44beYpkmQow4sDHJyEjlkwLtGjPiahWah6zTp6JYDuaaZgDo
+	 7wOSt5pvdycjmYozYvIN03wJVhNa9LHm5WB2NtYuycV4UU+651c9rjHcm/t+LelZFRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Oq7mXUay;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TRiyJ6fm;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F67606A321
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 08:26:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 944DF606A321;
+	Sun,  8 Nov 2026 10:57:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Oq7mXUay
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556A11F008A4
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 08:26:55 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TRiyJ6fm
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 7C02B1F0089F;
+	Sun,  8 Nov 2026 10:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794126415;
-	bh=p4OcSAvcvQKsjkU4ru+MvGNBWR2vHDxkyHmPg+JgZAI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Oq7mXUayhQTDePVUjrfThAEG1V7e8Y9jHk7AEkIGpjTfkJ74OuNKPp2JUR7gO6tjO
-	 gK8sjs0oIZYhKDO6UAQr8qwL/YVbv56dLKzgtpDd7Ua8fA1u/US0Lt6Z7nqH5rpA4e
-	 /IbdbI//jYesPChnrmZ3wF53SnhaOo9IpQJRu/gjg2BgoiNbccUOk2BlPXeSHLr2bJ
-	 W+AKvkmtSnFlVXENHlF79lpkVV5/tb9l3kXutdiZPrBwEESDq5a9oN/zvlNORF7AkL
-	 cVdyb9kv+rjJRYxLzhIkLE1kUTtu2vZibPxBIDsg25TnlJwIVxiE8uI0sMGN6rYzyO
-	 hqnXX48hdsztA==
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6b47c1a3c74so249441a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 00:26:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErGwhwJVGddy2rrNajpq8G8DGj7qeCIVV9CJW0IPETCd6zpc4usSsfsbwNgsOXtBH+ZDEjxvZwOos/zs+YyUH7c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9JfcttL8MFIkNaZ6P0YwoVlzb4bALrzvq5vRANcF6nFniXu+m0
-	YrAv0ZGV2gkktlM6EzDsuR7nZ4craLrM7cpZJIZVIBpX8T5qXoEBIsopbg9MEPL3F2/kJgaxsri
-	SJJvmEnexe5s7KeMKy9x0CqNDV4miRFY=
-X-Received: by 2002:a05:6402:1ecc:b0:6b7:1c:eaf2 with SMTP id
- 4fb4d7f45d1cf-6b7224041dfmr591123a12.7.1794126413758; Sun, 08 Nov 2026
- 00:26:53 -0800 (PST)
+	s=k20260515; t=1794135429;
+	bh=TwD6srxjUR1mlpO3FVThd9ARdJjbCvcuXWMQlKqn3B8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=TRiyJ6fmFAW63gdpsdwizsp8sks3nQPXCSsVNd2T20n3ecL1W08N+jUzZxESIVAWt
+	 rhR2mdZ4qwRW/NMbHJFqpDNOPF9CXCkui9oI7PMmIUK4NxRCe2tt3hQpxEkFSNqnT0
+	 fw0KvS+KzLx48jNlOy68g7m9gUQm5PjmAAZkx6rtXjtm9xekTzjZXWKbj5B0QbYwyG
+	 JB/8XGKYPRZUhr7WB2L1DE2wA6j8fiZesr0+iLMikAA0HSFogUoI1v59TfiFrI9g6D
+	 VM/ZyMozcNPiWETPtwx8BEFg9Wkle0PgGqG+r2WbGEMNej4Yxuy0+ze7IBBhmtmmqV
+	 eurIf9dCG5Cjg==
+Date: Sun, 8 Nov 2026 12:57:05 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ignat Korchagin <ignat@linux.win>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v6 0/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <avBVgZt92j3OkpOG@kernel.org>
+References: <20261107195605.3929659-1-jarkko@kernel.org>
+ <au-FkAtC4Gcw7Bkb@kernel.org>
+ <20261107204210.GG6049@quark>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,93 +85,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261029172956.20791-1-dongtai.guo@linux.dev> <20261029172956.20791-6-dongtai.guo@linux.dev>
- <aux9Hm0QFJLUDPWv@kernel.org> <CAAhV-H7Dsnz03iXChzE6nYM2cs+D6fdDFiWrDxX5jM13kYL6HA@mail.gmail.com>
- <auypq8_7T-vml5_B@kernel.org> <CAAhV-H6aO_QNEzV-r6+FbNa=9EUQgv1vH0ET-ETXAH5x6oQGjA@mail.gmail.com>
- <avAvdiYY7SJ_Gfwt@kernel.org>
-In-Reply-To: <avAvdiYY7SJ_Gfwt@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sun, 8 Nov 2026 16:26:41 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5q2SiDJC+ZSA4F7kw2vO=Y+c5J-aNg=PNMoh_CZ7qWdg@mail.gmail.com>
-X-Gm-Features: AclHuK9UKAm9d_ZAky8YF1Z-Jn3w5G8u3fB621EiI1G-bSq5xcRQq5mtls0NIdA
-Message-ID: <CAAhV-H5q2SiDJC+ZSA4F7kw2vO=Y+c5J-aNg=PNMoh_CZ7qWdg@mail.gmail.com>
-Subject: Re: [PATCH v6 5/8] LoongArch: Allow memblock arrays to resize
-To: Mike Rapoport <rppt@kernel.org>
-Cc: George Guo <dongtai.guo@linux.dev>, pasha.tatashin@soleen.com, pratyush@kernel.org, 
-	ardb@kernel.org, shuah@kernel.org, ilias.apalodimas@linaro.org, 
-	akpm@linux-foundation.org, baoquan.he@linux.dev, ruirui.yang@linux.dev, 
-	guodongtai@kylinos.cn, kernel@xen0n.name, graf@amazon.com, 
-	liukexin@kylinos.cn, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261107204210.GG6049@quark>
 
-On Sun, Nov 8, 2026 at 4:14=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wrot=
-e:
->
-> On Fri, Nov 06, 2026 at 10:35:01PM +0800, Huacai Chen wrote:
-> > On Fri, Nov 6, 2026 at 12:07=E2=80=AFAM Mike Rapoport <rppt@kernel.org>=
- wrote:
-> > >
-> > > On Thu, Nov 05, 2026 at 11:07:01PM +0800, Huacai Chen wrote:
-> > > > Hi, Mike,
-> > > >
-> > > > On Thu, Nov 5, 2026 at 8:57=E2=80=AFPM Mike Rapoport <rppt@kernel.o=
-rg> wrote:
-> > > > >
-> > > > > On Fri, Oct 30, 2026 at 02:29:52AM +0900, George Guo wrote:
-> > > > > > From: George Guo <guodongtai@kylinos.cn>
-> > > > > >
-> > > > > > LoongArch never calls memblock_allow_resize(), so the reserved =
-region
-> > > > > > array cannot grow beyond INIT_MEMBLOCK_RESERVED_REGIONS entries
-> > > > > > (INIT_MEMBLOCK_REGIONS + NR_CPUS).
-> > > > >
-> > > > > This might be something to fix independent of KHO.
-> > > > >
-> > > > > Huacai,
-> > > > >
-> > > > > What's the reason LoongArch never enables memblock resizing and w=
-hy it
-> > > > > defines INIT_MEMBLOCK_RESERVED_REGIONS to include NR_CPUS?
-> > > > At first we didn't define INIT_MEMBLOCK_RESERVED_REGIONS, then we g=
-ot
-> > > > boot failures on a 128-cores machine, so define it, and the value i=
-s
-> > > > similar to arm64.
-> > >
-> > > AFAIR, arm64 had to reserve some per cpu data before they could enabl=
-e
-> > > memblock resizing, so they had to make it static.
-> > LoongArch is similar, so below 64-cores machine has no problem.
-> >
-> > >
-> > > > The reason LoongArch never enables memblock resizing is because the=
- mm
-> > > > code is derived from MIPS, and MIPS never enables it.
-> > >
-> > > If that's the only reason, you might want to revisit that :)
-> > Yes, it seems we need memblock_allow_resize(), but maybe it is better
-> > to bring back paging_init()? Most other archs call
-> > memblock_allow_resize() in paging_init().
->
-> paging_init() is a historical relict that hugely misnamed everywhere :)
->
-> I think platform_init() should be fine.
-If paging_init() is unnecessary, then arch_mem_init() is better than
-platform_init(), at least the name is better.
+On Sat, Nov 07, 2026 at 12:42:10PM -0800, Eric Biggers wrote:
+> On Sat, Nov 07, 2026 at 10:09:52PM +0200, Jarkko Sakkinen wrote:
+> > On Sat, Nov 07, 2026 at 09:56:01PM +0200, Jarkko Sakkinen wrote:
+> > > The keyrings subsystem is the sole user of assoc_array. It has over 1700
+> > > lines of code, no test suite, and a long history of bugs, with LLMs now
+> > > finding more.
+> > > 
+> > > This unfortunate outcome has evolved over time by large from the shortage
+> > > of in-kernel callers, time bandwidth and 3rd party contributors.
+> > > 
+> > > What the keyrings subsystem needs is just a generic key-value store, which
+> > > performs well with sparse key sets. Replace assoc_array with an
+> > > rhashtable-backed keyring index and remove assoc_array from the kernel.
+> > 
+> > Sashiko: https://sashiko.dev/#/patchset/20261107195605.3929659-1-jarkko%40kernel.org
+> > 
+> > Not addressing this as only one patch changed and the change was
+> > exactly:
+> > 
+> > diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+> > index 772fa0e35f9d..6761c6801edc 100644
+> > --- a/security/keys/keyring.c
+> > +++ b/security/keys/keyring.c
+> > @@ -12,7 +12,6 @@
+> >  #include <linux/security.h>
+> >  #include <linux/seq_file.h>
+> >  #include <linux/err.h>
+> > -#include <linux/delay.h>
+> >  #include <linux/jhash.h>
+> >  #include <linux/user_namespace.h>
+> >  #include <linux/nsproxy.h>
+> > @@ -101,6 +100,7 @@ static const struct rhashtable_params keyring_link_params = {
+> >         .min_size               = 4,
+> >         .nelem_hint             = 3,
+> >         .automatic_shrinking    = true,
+> > +       .insecure_elasticity    = true,
+> >  };
+> > 
+> >  static struct keyring_index *keyring_index_locked(const struct key *keyring)
+> > @@ -1225,12 +1225,8 @@ int __key_link_begin(struct key *keyring,
+> >                 if (ret < 0)
+> >                         goto error;
+> > 
+> > -               do {
+> > -                       ret = rhashtable_insert_fast(&links->ht, &link->node,
+> > -                                                    keyring_link_params);
+> > -                       if (ret == -EBUSY)
+> > -                               fsleep(100);
+> > -               } while (ret == -EBUSY);
+> > +               ret = rhashtable_insert_fast(&links->ht, &link->node,
+> > +                                            keyring_link_params);
+> >                 if (ret < 0) {
+> >                         key_payload_reserve(keyring,
+> >                                             keyring->datalen - KEYQUOTA_LINK_BYTES);
+> > 
+> > So I don't think there are any real issue with the patch set, except I
+> > will need to rebase the commits to the latest mainline.
+> 
+> It looks good to me now too, but it would be good to get a Sashiko run
+> on the latest version.  Sashiko hasn't run since v3, as it failed to
+> apply the series.  You should base the series on a commit in either
+> mainline or linux-next, and pass the '--base' option to 'git
+> format-patch' so it adds a 'base-commit' line.
+> 
+> (The only reason I've been able to apply it myself for review is that I
+> went out of my way to find your keys-rhashtable branch in git.)
+> 
+> - Eric
 
-Huacai
+I think know what is the problem here exactly. It's the prepending bug
+fixes. Sorry, I only now realized this althouhgh it should be quite
+obvious.
 
->
-> As far as I can tell, by the time platform_init() calls init_numa_memory(=
-),
-> all memory reservations that must happen before any memblock allocations
-> are done.
->
-> > Huacai
->
-> --
-> Sincerely yours,
-> Mike.
+I updated mainline few days for the sake of v7.4-rcX PRs late this
+week (I think it was Thu or Fri) but linux-next was not up to date
+last time I checked.
+
+One I'm able to send the PR containing the fixes, I'll do that and
+once that is in the mainline. I'll send a new version of this patch
+set.
+
+Br, Jarkko
