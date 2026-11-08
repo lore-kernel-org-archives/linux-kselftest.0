@@ -1,105 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.192.131
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794144232;
-	b=tV1nBHHWMH7oMyjJZ8rGUOJNt5ik08Gaq1TkiZB1q+OvJrcgnQu8HqrIwKEwMMJiaGkJ
-	 Nkm1MGfpvvO8jUIsrfu/JPogjKzRikCdYd1/wgv5pCpg/MNOlbXTIDYpHoFho+0CYVTwr
-	 j9rQ6+MYNT56MfWQRqtc+ONBLdcA/unvdpTHgD/s4upoBGKEwRT7uNHLlEmuwfenN4nT0
-	 gBjFMB4no/OmVTSa+HeAykMrXdZB66OIucF4hPTMLzx3nh8KUkic0pt8WrJ45mcweZKYW
-	 E27UgvbKhRsps8BmQIH9QiIVfTj4mST/SL28xCXyFOJW5/TzarXiyrnpiJY2DOlF9GA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794144232;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=p72pDBbr7HHactFR0hZxl1j6wxNTtzgk+oAp0nON7EM=;
-	b=Ru+crH6FDf+w2VY9WUrAR8/l7oZcht4OlD1yPjEV+UuPVxMHKGMPWCdFCPSxTyxDgmrT
-	 W1uGaTy0QMqhDrY19GV5eJeQgy0DIv369H3mdGZ6E1osalj/zy7zo+KbinmwPtL+1BZk2
-	 GlRWtTPGLroBfQ1YHaeCtlSyEDtEdkkIOu4KPV6zg4zG/0Rlsmy66Y7tJdafzSs87QHny
-	 1FvGW5GRxPUIIlF+buZsoMa6mcmQWoEtxNgzsKSNvTQFVCdxSvClB2p3ElzlkWNHPe+wh
-	 AJ/g5QgFQJEtuYqaXO8ykhHbIYntUulb0JXdrAXTZeQSzap7WTDua3W2Fja9LQM5c3g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=bnfscUaL;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.192.131
-Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021131.outbound.protection.outlook.com [40.107.192.131])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.63.66.53
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794146801;
+	b=VYQ//91krVYCLu5S2bbiD8ZGgU/WckJ6A6hsmj2g+Q2oHNhMoaq+EGfEgDjulfjYDVI+
+	 5+/fbIRHiV7zb3RBGyt+yzlApXlsLprswMmyMI2UyO/UuLFSJJEL+2I7mFSLJ/p6fBxOa
+	 oBOXYOnuK6kqWJkqIodHOzr9I1ZHu6U/F/rXHhua3SdFlkb5ZJVhfoM8DtW6A0XNvRS80
+	 y6ileZCx0SJuxayfLhontGlz/Br3mSOQsPe57TAtt7VTsqDqwboWvDKKRfYWwBIo3xR/r
+	 UmLx8FgIFTb3ySWkK8QcUwTsjOAoFI1SzWvsPARz2ebv9zsBMkqSoX0Cg6K0tdN+YEA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794146801;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Message-ID:
+	 In-Reply-To:References:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Correlation-ID;
+	bh=7hT58o+4gmhdRju3R7Zzor1WNb/1Kh9cQCOkUUz9Uek=;
+	b=iVUpP/IH1O55sLpCBJJB4LRHkxi4vy7fS3jDIayRGzNipxKdaKQl6Plh2NFnH/XtA9sl
+	 bKpVOSoEAPdhPsg1rWLZ1kl3SxSddVDNikG+w4YHgIGM9NY1oUrGKa2IZZ3DAYxy5izJd
+	 cJhMMhl5Ta+CbTwhYJM5LV6TMu9KLFFuF4nemElnIl8yTdwYDg1b8/+3YCeJ2cYGi/YYT
+	 Y42xwHncq6g9luK1vKJcIfZ85JSnwfYLkP+ScRwr1eNnCmI/cq9MbxlKCKxyL3yvrN0GP
+	 dBr684iyyMSqMjjUK2Aj94cFnOUDTI39uPF5uq+2bD9rGiEMpE4yWGSNge4pDZFz8Pg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=hallyn.com;
+	spf=(null) smtp.mailfrom=hallyn.com;
+	dkim=pass header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=VVzVD4zv;
+	arc=none smtp.remote-ip=178.63.66.53
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1A8606A320;
-	Sun,  8 Nov 2026 13:23:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B1A8606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB244606A31C;
+	Sun,  8 Nov 2026 14:06:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB244606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=tempfail smtp.mailfrom=hallyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=bnfscUaL
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WT3Z5EUDHBi2Dq1Gnb7n7r9DVzHsVXhUGYHiVeUitoA+aYiVEpzgfSYR9UMsCdS6HVyquRdVQPkkHDF/5wQGV2r93q2B3UOMx7FPPiYrYFNE39wPYG1xRc4zzsu+SIyc6a1tpr2ALL00TJktUjwvVdd6w44HTBI59azWDdCid+Uo3Ezc80zBqtMiqSmhdw40lsra52bP0cLEn7zy3c6kRCHn0zcbMOv2hQxCO3Zdm0aXiawD7fqs6zpSXJWwxK4ivsaHhNKTaWfWjSK+XnV95dw8xUGFWkh/NZpGymLdpl6c1PQwwFPFsiwqA0qR++fuXs6yvojU8NBAwUrcPur6Zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p72pDBbr7HHactFR0hZxl1j6wxNTtzgk+oAp0nON7EM=;
- b=GfNPQcqIts4/iw0uswhbw8xngwMksw/tCgKNtG6HDEkMVjs0HCnV+Z024dOTRGWgPwWiSmArc7hjiix64372FXQIac6W8DYlQmGGvJ7N0JqSjC0qqeOiEljFMG7L+2T25hD1ZYns3qdTe1ZPI5MEAkHOfh5bS86SxgyLap6ksoT0NSC/OfuAmtJz98T8HcAKDMjFF4YugRW/WE5UR1Va1qt6uaqJboMs7Wk62fMUDRDGCJj3mpKAQ4bX6almlTIeI6JQmFDrw3XdS2fpy3sS7fiN7jymnsb3nUgdQLm7ZEyaIY5uXxCo5EFMNZJ5mbmjecHT0cd8XahPMP3wh2yRFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p72pDBbr7HHactFR0hZxl1j6wxNTtzgk+oAp0nON7EM=;
- b=bnfscUaLbfLY4jKYiUBq3IZ2wFxvMMaBYWdIaITiw5Ndonivn9Tii4/QCircZi8LZiEUa0iSXjFFSiqlf8gYyTxNO3mf9xc5tYAONfqJy5YjSOOmPG9K4LZ43c+tefcIjmKt/Jgpn/ax3CbTUtezotWSCbzzc4yXosT76j1EI3HBk8N154CgV89SDiDr4qlpfnlelx3sUaScU5oFMEOKIL1i9U4zad1GSEEcwuzotRkQGX7Vj8d2ighx+/VG2LCPU8xW/Mnj1uLuX9Xym54FWgjkfWsCmK6AqzRHPHPceJwkeiyW3653jD36hhs/aQpAmjoRkfrKoIndvKWJZAKOBg==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YT1PPF794138A02.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b08::552) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.12; Sun, 8 Nov
- 2026 13:23:48 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0592.010; Sun, 8 Nov 2026
- 13:23:48 +0000
-Message-ID: <1a3fff79-6e94-4e55-b262-8970ad2d54f2@efficios.com>
-Date: Sun, 8 Nov 2026 08:23:47 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] locking/rtmutex: Stop spinning on the owner when the
- waiter is woken
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, tglx@kernel.org, mingo@redhat.com,
- linux-kernel@vger.kernel.org, will@kernel.org, boqun@kernel.org,
- longman@redhat.com, bigeasy@linutronix.de, clrkwllms@kernel.org,
- dvhart@infradead.org, dave@stgolabs.net, andrealmeid@igalia.com,
- shuah@kernel.org, juri.lelli@redhat.com, linux-rt-devel@lists.linux.dev,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-References: <20261106235931.1478800-1-mathieu.desnoyers@efficios.com>
- <20261106235931.1478800-2-mathieu.desnoyers@efficios.com>
- <20261107002927.3cbad7ff@fedora>
- <20261107104329.GA2668564@noisy.programming.kicks-ass.net>
- <c77635b1-9c24-459a-b75c-82cbfb67185f@efficios.com>
- <20261107123642.149677cf@fedora>
- <2a786b46-e935-4269-9bdc-edac43521a80@efficios.com>
- <20261107171841.06d3ac92@fedora>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <20261107171841.06d3ac92@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQ1P288CA0019.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c01:9e::24) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (2048-bit key, unprotected) header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=VVzVD4zv
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
+	t=1794146790; bh=7hT58o+4gmhdRju3R7Zzor1WNb/1Kh9cQCOkUUz9Uek=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=VVzVD4zvHZf5/hd2vzbniEpd5oRzlxNKhMF400GpI/QIuH9nDgp+TO9df1vs3vmOK
+	 rsZBOyb4syo4GV92U2btfiLiLlvy0Ccn4Ib23rIL+KDiyddOTOxR+PsZhoaefoq0j4
+	 BEUwKC6+6KTOaZWGrKvX16OUGBejjxmH+nbe253OFWf84ozZCqk8Hy7PdZ6imkvlML
+	 PUTf/QdeMrpWYa6oocqL8agbIe16MrnBLbGVC7k5aOvuuPdU/TWBP2KI7DH1j3sEiN
+	 SHptc8hv0g7/iUjuyMF5PN2NIzGLS6jqoZqo5OAfsIsiyLNe/63XGjuM/SH5by7qH+
+	 jTvNn11SY/2mA==
+Received: from dummy.faircode.eu (unknown [172.56.94.40])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: serge)
+	by mail.hallyn.com (Postfix) with ESMTPSA id DDCC3822;
+	Sun,  8 Nov 2026 08:06:26 -0600 (CST)
+Date: Sun, 8 Nov 2026 08:06:11 -0600
+From: Serge Hallyn <serge@hallyn.com>
+To: Josef Bacik <josef@toxicpanda.com>
+Cc: Paul Moore <paul@paul-moore.com>, Christian Brauner <brauner@kernel.org>,
+	James Morris <jmorris@namei.org>,
+	David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	"Andrew G. Morgan" <morgan@kernel.org>,
+	Serge Hallyn <sergeh@kernel.org>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Bradley Morgan <brads@mainlining.org>
+Message-ID: <fd159e68-c613-4c7d-bfba-8af0a3f3a96e@hallyn.com>
+In-Reply-To: <20261027-b4-setfcap-userns-v8-0-2674adc63f3c@toxicpanda.com>
+References: <20261027-b4-setfcap-userns-v8-0-2674adc63f3c@toxicpanda.com>
+Subject: Re: [PATCH v8 0/6] capabilities: close the ways around the
+ CAP_SETFCAP rule for uid 0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,85 +76,305 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT1PPF794138A02:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb6a8ccb-939b-4748-7044-08df3d9b85cb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|23010399003|376014|22082099003|18002099003|10067099003|4143699003|261028144727099003|261026121527099003|261022105027099003|56012099006|261026140227099003;
-X-Microsoft-Antispam-Message-Info:
-	2TFJPORNSsUb+9QXFLEunf2EdP8LYGshZuKYCVFxoySPmB2BGQHEMgc9beFlDXGe3gD/EJk248Otsll3XwuA0JWpfLBlYWlK1EXpKTWjSI2qaGRKNL8QqZukWHpqyAtZjU8V4bmA179GAqOtmAzigZy4enZuQHJlVDfKB6TIzq9VZbNWc6HcbQvxM4r2RvKNJr0n9BsWGJxJH/7WJZvBq3CZpF+QV5f8Tt6Ck2MHrzb1gR9JJT8Ahw9kO3Nl0QQMe8RAjg4SwBAd1g2oh5TWQTCabazoxGASPKflgW2TFl0Feck3c7QxL1cDUu+C8UodI9lFXtHNi7JSDXE4aFG4DcmOxghQGKt+N+AfP1jHdozMdczruTe9eoxwjDobXPthVWBlJ5njOboJK8xphU5sexjooEbSCLB1eKi/9uy/d9WqfcU4LuOqlQyNZcDRrAFdm4ey19gYuKTQbow1vTvm/AQQuvLujzN4MlBOtjxiTlu43RUoEPp7CSabMZ5LFgRDWbnPilcAexeUdxRpz5+ftghaO5USljbnrv0tb4YuABDt1/L3QiPsKBH0npDfKJ1/STXUox5PJ/IPUTRUs8L1CcxBo1fOB9aZyQrEgJ4Mut4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(23010399003)(376014)(22082099003)(18002099003)(10067099003)(4143699003)(261028144727099003)(261026121527099003)(261022105027099003)(56012099006)(261026140227099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T0lqYUU1RnFkeUkwQWRZL09vSGZHZDRMMU9aUTQ0bDVickRtdnA1b3JQRWx6?=
- =?utf-8?B?L2hKYlNNQ2t4VURhT0NxcVVzTThYY21MdnJtOXZFRUJHZXRhQ1JMRW9FTFly?=
- =?utf-8?B?ZjZOVnZmMzNRYVozcEdHRUhhZlBReDRJQ1pNVW5OQ1JRV1pKNTVzVTgzUU00?=
- =?utf-8?B?cyszMy9vWktrZ1gwOVpHbk5nM1hzcnhYeHZYVEZXcHNyZTlHemxxVXZoUmRz?=
- =?utf-8?B?RkZncEkzN1F0QWRNRlltK0hDUXJxUXlpbVVWbTZFN1NHTVZUc0tHaXdoUDdx?=
- =?utf-8?B?MlpDTkwrYjNEQjhrYUlmZXZjNldVU1JYUHl2dWpKN1k5MURxZW40bytBUDJk?=
- =?utf-8?B?bjU1QndxY204dXpLdjhBNlV2RHBaNks4dW9zVTgxeFpOWG56dEhYMm0vNTR5?=
- =?utf-8?B?N0dJRVo5bTkrWjdsVENGNlprTDlxRHhYaGhNbzkrcGd4L21sOEIrUFRPMWlx?=
- =?utf-8?B?RGNPT2EzUXB2M29WUzJ1Q2h4SVJDcjhRakdZaWZHTG1HU1BFNHpaMXo5WE52?=
- =?utf-8?B?OWM4MThRN2FOZEVUMmZaTnQreC9DckU4c1EzK0lxYlZ6N3hIc2ZjUHJsd1Uv?=
- =?utf-8?B?U1prNTVVZ3gvekw3REM0emkvWHdDOTZ1OE8wWGpCU3NZQkZ4OEs3ZEIyZC9j?=
- =?utf-8?B?VTVFRjQxWlc5VlB5eUc3aEVaR1pkRTQzSjRVZWVPdnlmZnJadjErVDJaK1ZS?=
- =?utf-8?B?cW81MGhIelNKaHk1YjBpVmZGejhUMlR2d0d3eGJySVpEZE51eDdZZVF6a3VH?=
- =?utf-8?B?TDhDZnRUSHdtSWY0bE1xdzVJdW45QUgzOExvbHBoSFhmc0diZnNXeVY2SVpR?=
- =?utf-8?B?R1Z5Qm1JSldpRXhJUWxPSU4vK0QvMDd3MkNBaHBOcVVZZWhmazVFRUpZajQ3?=
- =?utf-8?B?WWJqWkFUc0RWT2VOeUdtNFF0Z1M0eWFwSW9iMzQ4TVZsWnE0RVBVQTJPa0Ix?=
- =?utf-8?B?eDRNQ2ZZaWJUNkZMajJMcGZwSWNuUTdjbGNHa1NwcGZaN1pTVVRhL2Q3Y1Vw?=
- =?utf-8?B?d1lDVytHdnFSMFhYa1pzLzMzSmVFVzd6RzBCVzM5YU1zNjlEOXJQUFVYMmF1?=
- =?utf-8?B?aDA0N0JCRnd6TUZoV1VnYW5UYnFtQkVoeXg4OVdpOHQ4TFROcWgvTUxzK0RG?=
- =?utf-8?B?RFhxTWRjMmxUWFo0SCtlQVh4MFN3aC9selpUSlZDMjRSNnhIakI4QThPbk5H?=
- =?utf-8?B?dXZ5cWhSWTBYTzRpN3JqcXNMTkYwaGhrZ3FxcHg3UjdicEIyU3Y3TTYxNEV2?=
- =?utf-8?B?SEJ3ZHJuYlVDam9UZjl2bzJENWN5RjJDT1U4cDk1TG5GKzFKTE5Dckh4UWdT?=
- =?utf-8?B?WU02My9OQVNDajZhZVVUL1IzcDNOcm96OVVJNW56WmhrdGZYanZzMngzc0gw?=
- =?utf-8?B?T2llNnZvMisxN09JekRHQkRNeUpON0lKamJ4UHI4djVPc2hBcVlackxiSlh5?=
- =?utf-8?B?Ykp3aFJKVTVlNmd3d2JpQm1oSjVOVzJ3VkpaZkF1VlZ5UGpMS2E3bXg0TFhC?=
- =?utf-8?B?YzJzRDZTZEtrWkQ0WGJTOUhFS0V5czhnTndON2I5ak1kYXpzTU8xcFBEUzlS?=
- =?utf-8?B?T0lTc1NvZWw2QlR5ekdteU9WTzU1RFFtMlFDVVNheThCdHNOQnU4b3I5STht?=
- =?utf-8?B?MTF0V1NKT3QvQWhVTzNXamtNdDVJZmhteGZKM3BSZFlUUkI0Wk1VRTMxWGxB?=
- =?utf-8?B?N2RSQlZmdk81cEkyOE1RQWx4czMzMWVoT0JaRW5zQ0N5eVNCK1FuWXFKaVFE?=
- =?utf-8?B?MXdESysyWWNmZ3BLQXE4Zk03em0zd2hROFN5Yno2K2FJUHc3NFBIQkFqYVZh?=
- =?utf-8?B?S1QySWVGZFY3amlyUTV3SWRXYjRvNEg0VEpicXQ1ZkZnZ3JnYk8rczVJY0Fz?=
- =?utf-8?B?anN2bXQrdmQxT2lIS2Rxa3NVNGNmN1JHNFo0U2RxSldDb2tjcVo2UVZnYU13?=
- =?utf-8?B?ZEx1Z0xDMGVpZk50cGx2cjJZM3kvUmFLYWt3ME04REpHSUZOa3BiZXRYdHpt?=
- =?utf-8?B?dzg0a2QzeDdHOFNPZkhOUmtxcnMzdk9iYWlwcUc4N1FIeFNkL0lNNFkwQXNl?=
- =?utf-8?B?aDVDNVZkV0U0eVlUREJCa1pneDY0dURTUXRySTAvcTI2WlAzVW1EWXVraDk2?=
- =?utf-8?B?dEZvMkNaanRORWtRaURBY1RrRHdYMlNvZHR2OW56cXprL2dNZmdGUC8zL1Fs?=
- =?utf-8?B?ekVwYklNTFVYTmlLU0lWVWpPT016YVNvaGRnam1SMDVLZlREclJSbTVWeHRu?=
- =?utf-8?B?Y1VpYkNsdEJFbnJyS0F4NGZHek4wbFlINjRVd05ySENVbnN2enU3eUtXZG12?=
- =?utf-8?B?NzAwSFR6c1RWak1sWG5sdW9QbXl1RndHcW8vcmNjS1hicFpnMEEwWDVkWVAy?=
- =?utf-8?Q?DcwWu6YNLpZHFkvY=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb6a8ccb-939b-4748-7044-08df3d9b85cb
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2026 13:23:48.4633
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jvMgX6Ffc3T3VXrrABkVCFfJd4rhe+SDNq6FfQgIPFwz5X5l71dQEppOPtvx3kATRd+YeaU7QWVLEhjpoGcV+07XdcOmuk8cuf8da6hKEkI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT1PPF794138A02
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <fd159e68-c613-4c7d-bfba-8af0a3f3a96e@hallyn.com>
 
-On 2026-11-07 17:18, Steven Rostedt wrote:
-[...]
-> The last sentence doesn't really make sense. I can figure it out
-> because I know what the slowpath does, but as you see in my version, I
-> go into a little more detail to why it's not an issue to break out of
-> that spin on TASK_RUNNING.
+Oct 27, 2026 09:23:17 Josef Bacik <josef@toxicpanda.com>:
 
-Thanks for the feedback! I'll take your suggested wording as is and
-add the two paragraphs about user-visible impact of the issue.
+> v1: https://lore.kernel.org/all/20261006-b4-setfcap-userns-v1-0-f47e7ed66=
+072@toxicpanda.com/
+> v2: https://lore.kernel.org/all/20261014-b4-setfcap-userns-v2-0-fac4d1928=
+1d7@toxicpanda.com/
+> v3: https://lore.kernel.org/all/20261021-b4-setfcap-userns-v3-0-97c7ed4e4=
+3e1@toxicpanda.com/
+> v4: https://lore.kernel.org/all/20261022-b4-setfcap-userns-v4-0-88aa0ffaa=
+08f@toxicpanda.com/
+> v5: https://lore.kernel.org/all/20261023-b4-setfcap-userns-v5-0-0620223be=
+951@toxicpanda.com/
+> v6: https://lore.kernel.org/all/20261026-b4-setfcap-userns-v6-0-25f10b7ca=
+497@toxicpanda.com/
+> v7: https://lore.kernel.org/all/20261026-b4-setfcap-userns-v7-0-bf8a576f7=
+259@toxicpanda.com/
+>
+> v7->v8:
+> - 6/6 only, 1-5 are unchanged.=C2=A0 A case whose setup failed in a child
+> =C2=A0 waited for the harness timeout, because the parent kept its own co=
+py
+> =C2=A0 of the pipe end it read from.=C2=A0 The cases where a privileged t=
+ask maps
+> =C2=A0 for one that gave up CAP_SETFCAP now share one helper that talks t=
+o
+> =C2=A0 it over a socket pair, and the others close the ends they don't us=
+e,
+> =C2=A0 so a failed step ends the case with a setup error at once (Sashiko=
+).
+>
+> v6->v7:
+> - 6/6 only, 1-5 are unchanged.=C2=A0 Every case now reaches the step it i=
+s
+> =C2=A0 named for, and a setup step that fails is an error rather than a
+> =C2=A0 refusal.=C2=A0 Cases that stopped at setns() are setns() cases now=
+: a task
+> =C2=A0 that joins has CAP_SETFCAP wherever the creator had it, so nothing
+> =C2=A0 after setns() checks it.=C2=A0 In the v3 rootid, nesting after dro=
+pping
+> =C2=A0 CAP_SETFCAP and reverse idmapped mount cases a privileged task map=
+s a
+> =C2=A0 namespace created without CAP_SETFCAP, so the xattr gets written.
+> =C2=A0 pidfd_getfd() is a ptrace case of its own.=C2=A0 The session keyri=
+ng case
+> =C2=A0 joins a keyring of its own first, so it works under su, and skips
+> =C2=A0 without keyrings (Sashiko).
+>
+> v5->v6:
+> - New 6/6: a kselftest with every case the series has been through,
+> =C2=A0 48 of them.=C2=A0 Without the series 22 fail, with v5 the 4 below =
+fail.
+> - 3/5: a task inside the namespace that is being mapped also has to
+> =C2=A0 hold CAP_SETFCAP there to open or write a uid_map that maps an
+> =C2=A0 ancestor's root user.=C2=A0 Before, a task that gave up CAP_SETFCA=
+P could
+> =C2=A0 write "0 0 1" and get it back from execve() (Sashiko).
+> - 4/5: a v2 xattr on a filesystem whose namespace has no uid 0 is
+> =C2=A0 refused with -EINVAL instead of stored unconverted, where it was
+> =C2=A0 honoured nowhere.=C2=A0 Falling through to the conversion would no=
+t do:
+> =C2=A0 for a writer outside that namespace it names the writer's root use=
+r
+> =C2=A0 instead (Sashiko).
+>
+> v4->v5:
+> - 3/5: the uid_map check only looked for an extent at the parent's uid
+> =C2=A0 0.=C2=A0 The root user of an ancestor can sit at any uid in the pa=
+rent, so
+> =C2=A0 a task without CAP_SETFCAP could map "0 1000 1" under a "1000 0 1"
+> =C2=A0 and get host uid 0 as its uid 0 unchecked.=C2=A0 It now finds ever=
+y
+> =C2=A0 ancestor root user the map contains.=C2=A0 4/5 already refused the=
+ file
+> =C2=A0 capabilities after such a map, so this is the map rule itself
+> =C2=A0 (Sashiko).=C2=A0 Dropped Bradley's Reviewed-by on 3/5, which chang=
+ed.
+>
+> v3->v4:
+> - 4/5: a v2 security.capability xattr skipped the new checks, it was
+> =C2=A0 written as is whenever the writer had CAP_SETFCAP over the
+> =C2=A0 filesystem's namespace.=C2=A0 It now only does that when the files=
+ystem's
+> =C2=A0 root user is within reach, and goes through the v3 conversion and =
+its
+> =C2=A0 checks otherwise (Sashiko).
+>
+> v2->v3:
+> - The setns() check in 2/5 and the ptrace check in 5/5 only apply to
+> =C2=A0 namespaces that map the root user of an ancestor within the creato=
+r's
+> =C2=A0 CAP_SETFCAP, or that have no uid_map yet.=C2=A0 Root users stored =
+through
+> =C2=A0 an idmapped mount are left to whoever sets up the mount, so a root
+> =C2=A0 task without CAP_SETFCAP can join an ordinary "0 100000" container
+> =C2=A0 again (Serge, Christian).
+> - 2/5 adds cred_may_setfcap_userns() for those two checks and
+> =C2=A0 cred_setfcap_reaches() for the uid_map check; nothing outside
+> =C2=A0 create_user_ns() calls cap_setfcap_level() directly (Serge).
+> - Fixed the cap_setfcap_level() kernel-doc, @ns doesn't have to be the
+> =C2=A0 cred's namespace or below; cap_capable() is compared with !=3D 0
+> =C2=A0 (Serge).
+> - Picked up Bradley's Reviewed-by on 1/5 and 3/5, not on 2/5, which
+> =C2=A0 changed.
+> - Rebased onto current vfs.all.
+>
+> v1->v2:
+> - The state lives on the user namespace now: ns->setfcap_level replaces
+> =C2=A0 ns->parent_could_setfcap, and cred->setfcap_level is gone (Serge,
+> =C2=A0 Christian).
+> - New 2/5: setns() refuses a task whose CAP_SETFCAP doesn't reach as far
+> =C2=A0 up as the namespace's setfcap_level.=C2=A0 It applies to every use=
+r
+> =C2=A0 namespace, not only to those that map the parent's uid 0, because =
+of
+> =C2=A0 idmapped mounts (Serge, Christian).
+> - 5/5 asks a tracer for what setns() asks for, also when the namespace
+> =C2=A0 doesn't map an ancestor's root user, again because of idmapped mou=
+nts.
+> - Dropped "userns: don't let setns() lend the right to map uid 0", the
+> =C2=A0 setns() check covers it.=C2=A0 Its nested case moved into 3/5, whi=
+ch checks
+> =C2=A0 the opener and the writer.
+> - set_cred_user_ns() isn't touched anymore, so the put-before-use in
+> =C2=A0 userns_install() is gone (Sashiko).
+> - Rebased onto current vfs.all.
+>
+> What it does now:
+>
+> Every user namespace gets a setfcap_level when it's created, which is
+> how far up the creator's CAP_SETFCAP counted.=C2=A0 If its tasks can writ=
+e
+> file capabilities for the root user of an ancestor, because the
+> namespace maps that root user or can still map it, setns() only lets in
+> tasks whose own CAP_SETFCAP reaches that far, and PTRACE_ATTACH asks the
+> tracer for the same.=C2=A0 The checks on the way to file capabilities the=
+n go
+> by the namespace instead of the cred: a uid_map write that maps the
+> parent's uid 0 (opener and writer), and setting security.capability.
+>
+> The visible difference from v1 is the setns() restriction.=C2=A0 A task
+> without CAP_SETFCAP can't join, or attach to tasks in, a namespace that
+> maps the root user of an ancestor, such as host uid 0, and was created
+> by a task that had it.=C2=A0 A task that joins takes on the namespace's
+> reach.=C2=A0 Containers that don't map host uid 0, unprivileged users and
+> anything with CAP_SETFCAP aren't affected.
+>
+> Testing: 6/6 runs every case on its own, 48 in all, as root in private
+> mount namespaces.=C2=A0 On vfs.all without the series 22 of them fail: th=
+e
+> ways around the rule, and the two v2 xattrs without a root user that are
+> now refused; with the series all pass, including the idmapped mount
+> ones.=C2=A0 The pidfd, namespaces, mount_setattr and ptrace selftests giv=
+e
+> identical results with and without.=C2=A0 The TLA+ model, which has no
+> idmapped mounts, no v2 xattrs and maps only uid 0 of the parent, finds
+> no violation with the narrower setns() and ptrace checks, and still
+> finds the setns() bypass when the check is taken out.
+>
+> --- Original email (v1) ---
+>
+> Hello,
+>
+> Commit db2e718a4798 ("capabilities: require CAP_SETFCAP to map uid 0")
+> stops a root task that has given up CAP_SETFCAP from creating a user
+> namespace that maps uid 0 and then writing file capabilities in it that
+> the initial namespace honours.=C2=A0 The check only looks at the task tha=
+t
+> creates the namespace, so if somebody who did have CAP_SETFCAP created
+> one, there are still several ways around it:
+>
+> - setns() into their namespace and write uid_map from inside (patch 2)
+> - write "0 0 1" through a uid_map fd that they opened (patch 3)
+> - setns() into a namespace of theirs that already maps uid 0 and set
+> =C2=A0 security.capability there, no map write needed (patch 4)
+> - ptrace one of their tasks and have it do any of the above (patch 5)
+>
+> On an unmodified kernel we took a uid 0 task with CAP_SETFCAP dropped
+> from its permitted, effective and bounding sets and, through each of
+> these, ended up with a file that a uid 1000 user execs with
+> CAP_SYS_ADMIN in its effective set.
+>
+> Patch 1 adds cred->setfcap_level, which records how far up the
+> namespace tree a task's CAP_SETFCAP reached when it entered its
+> namespace, and patches 2-5 check it.=C2=A0 Patch 4 is the check that clos=
+es
+> the class, the map patches make the uid 0 map rule mean what
+> db2e718a4798 meant it to, and patch 5 keeps ptrace from borrowing what
+> the target is entitled to.
+>
+> This does change behaviour.=C2=A0 Everything new is -EPERM:
+>
+> - a task that entered a namespace without CAP_SETFCAP outside can't map
+> =C2=A0 uid 0 of the outside or write fscaps for that root user anymore
+> - a uid_map fd opened by a task with CAP_SETFCAP can't be used by a
+> =C2=A0 task without it to map uid 0
+> - if a privileged task maps "0 0 1" from the parent for a namespace
+> =C2=A0 created by a task without CAP_SETFCAP, that namespace can no longe=
+r
+> =C2=A0 write fscaps honoured outside
+> - PTRACE_ATTACH and PTRACE_TRACEME fail when the tracer gave up
+> =C2=A0 CAP_SETFCAP and CAP_SYS_PTRACE, the target didn't, and they share =
+a
+> =C2=A0 root user
+>
+> Rootless containers, privileged runtimes writing the map from the
+> parent, nested unprivileged namespaces and containers that don't map
+> host uid 0 aren't affected.=C2=A0 The ptrace check is one compare for
+> targets in the initial namespace and in namespaces entered without
+> the capability.
+>
+> Testing: a set of flows run on the base and patched kernels, every
+> bypass route above gets -EPERM with the series and the 16 legitimate
+> flows behave the same.=C2=A0 The capabilities, namespaces, ptrace, pidfd =
+and
+> proc selftests give the same results before and after. Thanks,
+>
+> Josef
+>
+> ---
+> Changes in v8:
+> - Link to v7: https://patch.msgid.link/20261026-b4-setfcap-userns-v7-0-bf=
+8a576f7259@toxicpanda.com
+>
+> Changes in v7:
+> - Link to v6: https://patch.msgid.link/20261026-b4-setfcap-userns-v6-0-25=
+f10b7ca497@toxicpanda.com
+>
+> Changes in v6:
+> - Link to v5: https://patch.msgid.link/20261023-b4-setfcap-userns-v5-0-06=
+20223be951@toxicpanda.com
+>
+> Changes in v5:
+> - Link to v4: https://patch.msgid.link/20261022-b4-setfcap-userns-v4-0-88=
+aa0ffaa08f@toxicpanda.com
+>
+> Changes in v4:
+> - Link to v3: https://patch.msgid.link/20261021-b4-setfcap-userns-v3-0-97=
+c7ed4e43e1@toxicpanda.com
+>
+> Changes in v3:
+> - Link to v2: https://patch.msgid.link/20261014-b4-setfcap-userns-v2-0-fa=
+c4d19281d7@toxicpanda.com
+>
+> Changes in v2:
+> - Link to v1: https://patch.msgid.link/20261006-b4-setfcap-userns-v1-0-f4=
+7e7ed66072@toxicpanda.com
+>
+> ---
+> Josef Bacik (6):
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 userns: record how far up CAP_SETFCAP reac=
+hes
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 userns: don't let setns() lend CAP_SETFCAP
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 userns: check the opener and the writer be=
+fore mapping uid 0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 capabilities: limit fscaps to where CAP_SE=
+TFCAP reaches
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 capabilities: don't let ptrace borrow CAP_=
+SETFCAP
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests/namespaces: test the CAP_SETFCAP=
+ rule for user namespaces
 
-Mathieu
+The cancern addressed by pach 3 requires collusion by a task which can do i=
+t all on its own (or a confused deputy). I don't think that's something we =
+should protect against. Same is true for 4.
 
+For setns and ptrace, i find the level metric too disconnected from the pro=
+blem and hard to reason about, and worry about future maintenance. Can we j=
+ust compare the lower root kuids? So for ptrace, we can use explicitly chec=
+k that the caller is uid 0 without setfcap, and target has setfcap. Analogo=
+us for setns.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Alternatively,=C2=A0 for ptrace, we could update the docs and man-pages to =
+recommend always dropping ptrace along with setfcap. After all, the task ca=
+n just ptrace any other task in same userns, right?
+
+> include/linux/capability.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 6 +
+> include/linux/user_namespace.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0=C2=A0=C2=A0 7 +-
+> kernel/user_namespace.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 95 +-
+> security/commoncap.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 184 ++-
+> tools/testing/selftests/namespaces/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 |=C2=A0=C2=A0=C2=A0 3 +-
+> tools/testing/selftests/namespaces/config=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 3 +
+> tools/testing/selftests/namespaces/setfcap_test.c | 1368 ++++++++++++++++=
++++++
+> 7 files changed, 1632 insertions(+), 34 deletions(-)
+> ---
+> base-commit: 2c3ba1f1cb416b81d617b92a24a4bcaa48d574e3
+> change-id: 20261006-b4-setfcap-userns-d63185a31ce3
+
