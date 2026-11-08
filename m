@@ -1,128 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794174243;
-	b=g+kb+pmnAaWT9RAALTrECfCkRd1qGF5eXLcPQ+gzq1894SxMbnnTq57QBZdjDH1JVr+W
-	 SRoZ7YhPPpQbxBuUFoqnNV+Tio8jUe5pXQN1nlg35rTqQLvAyDeb0V4AzWUG3Xeo0Fs6X
-	 208pLQYapqxHTioJ8a4Jp+Z4RdYwp7TIATBbqYhQzhbpeiqUJycwxyaCVqxjS03uyME41
-	 aNNcSPb02eHLfIj/jAsuj1Vq3xkm4TLZDVSTYlpibq4g9mNfHl8cgMbKl/0SajARlO6nk
-	 G//IK59CdLCr4Nv5W2+kAGrG7MAKf8H/kPsL84SuVTylyUpOYa0RVWNrC5p9dKjROdw==
+	t=1794175628;
+	b=Eugr2p3n09sz8UQtUgeTRz8yqTi70xhbbhVZUFrnMqCVjo5x06mJfRgTD+0unqQ6ukLW
+	 APcYkeP8mcxxCS1vuiZHFAHIcMfj317DMx0qEaT7txoeHNBWVZkFN7lBegdwAq3cF7RUA
+	 sZ77tJE05YiYkBBRqLV0++U9Y2uTi0wqfVIPoGJ2D3L+GdgkrVxf+xFBvpfEi+g6DSSzN
+	 SMZ8FhyQttZKYEfoAR69XiVob44UfWGhDwi8oHsd6H2fvXonV6JlhN140jAl0JqBqsLkY
+	 6eAfTyghx8QlNF/pkyykY5bmthT6cH6v1BCKlC6O+/qXp4xnU7rMV4U/XnSqE/OVNUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794174243;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794175628;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=Y10z5AzD+i22lo7RP46fqtgjpar7IW8k2qpztw2GR18=;
-	b=k3O3a8jPFVwmjmKM5CiIJOlhavog4yTTDwsQh2dOzVcwYAGhyH0HwZcg/NkxMoxcpjT9
-	 OZfCas+VrISZfnxhpPDfVBv2ENrzn8+AWnK6GeKwq5u7iZajeKS0g3b/IpdLBMPN9n0l9
-	 ISEo1TjxNwtIwFpBqA2SCbkwe6idbZP/Z0nYF8ljpT4wJoiscaxpbZOi6JpSGDjzyM9Br
-	 o8GvJVksjJ97aXfwWe6EVcmEig1ay8XoEWdLVC+ognVsEiVJZrXPV7kANmd7xeOy7I1R6
-	 vREcdoGFLDBVcsDFvW8nU3Sa5O6wMr1Zoo6VL7ZaaG/WflANuCNSoqpkRYFGiQEitOA==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Subject:
+	 In-Reply-To:References:Date:Message-ID:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=fskAnZVKzc8hUGA1+pTPLWvHFMaE6t+Q83bw3SAfWr4=;
+	b=2yGSJRnzPfYTyGRgcMJzeAUK21IvpcA9Y76bgivgZa6zAQUwrSQPTkplCZXrMaq0sLw/
+	 ClT3uhwDlIynx+AOn7bV8S8/VDgi24jzFxN1N/1xXNY9qOB4zG3FH/A063gBI5BytgDhl
+	 0IisyFj8rvXlb8rSHNbixIghkjtcVXUUO9LHfn7+lFHY0DucQ1dvAEgxPjdZFgiRA66Hm
+	 MsPDx9YvY0WBiFo0fUh1RZ7vbe4Yssm4Z7XYtgzqQAPxkkGafkUyaffZCLl2sAYsJ+fzZ
+	 7wWwOCwLrs8ncNRiWYv6R+Yc0tlWFgzaQgTs7mKYXfjU6zIBMCBUWzbPLcaFB8nSsuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Sr6yDk4d;
-	arc=none smtp.remote-ip=209.85.208.51
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DMkSfkrI;
+	arc=none smtp.remote-ip=209.85.222.175
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60414606A320
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 21:44:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60414606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7950C606A31C
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 22:07:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7950C606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Sr6yDk4d
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b596569640so436008a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 13:44:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DMkSfkrI
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93f2f2edb19so26030285a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 14:07:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794174242; x=1794779042; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Y10z5AzD+i22lo7RP46fqtgjpar7IW8k2qpztw2GR18=;
-        b=Sr6yDk4dtttSFsLiVpGOBa/SdwfLyad+WndTtGDMVrwbwUEW+v4mm00fVFKu8yDnA1
-         wyEAr4CEHKEhS4ndIll1qHxbwFVo2TxN+nmDGCFHY8qB5YowQ2Jy9/MDh9R++vG8hSLu
-         dYgy9bSDHQdFELf+JSbTYNm6Wtc8/KjFWI9Bx44NnX4P27EMTEIoy82G3n7SmpOS8uk6
-         G0wQ2kVsR2nI50m4XPIz/XgRU6EVhs+dHpMPmSoq4+9Nb9FOPyE45NjRIK7hn4kNIZ35
-         ely+fNVEv+LDHnYkHb31OSzYzWJ+2qBHkUJHLNsLM5eYuE4UjEhWOexgb+un8vvBTp7D
-         9qfg==
+        d=gmail.com; s=20260707; t=1794175627; x=1794780427; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :references:in-reply-to:subject:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fskAnZVKzc8hUGA1+pTPLWvHFMaE6t+Q83bw3SAfWr4=;
+        b=DMkSfkrIvh1J0HmyqnldyergtJCpVvzbM5wCx8OJ2o23lhtd7XoP/mungBoCmsSuqV
+         M+rYApkY8E0axtbaa8c13yvk09njje6q4WLdVpJlBRrKUkSiA5bVzZwBO1ycKC4sqJIB
+         R+Nkm8BWTmhQ1/h+bNlpkJ0sR92QwIqusM2bsN8SVZr+JR1VvGLQqBKIdo5z1FOoj/OM
+         abdkoH7n1mm4fwCKsW85apwhJYw/e2R3cVgrjcPJxPubj9JnXKEZ427TWvB9z3Pc3D6z
+         6V7XaK1/XyDyfSxMPSZ5S1XB3652vVtep5CjHsJygTDjnHK8tdBGZOY0VaHvLr8eor7U
+         iBHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794174242; x=1794779042;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y10z5AzD+i22lo7RP46fqtgjpar7IW8k2qpztw2GR18=;
-        b=OjonFgHkzGbEqAXK3TKrUq8vhYzpXhoAX/XTtdCW+yFsVzXTVYH1twJgsTIbUfZ5f4
-         VASJppMG4zv5M63dX5s0J+cPGHRLJb0n9ZkYWghILokWL8caWFrd9d0KLnZRzEx2ehS1
-         e1rA0AQBR4Tut9yF+8FuAftqztkJQgt37aE8gifHzx4i6KL6cJ40ctYljtOo1NNJ8+up
-         Qh/PlEbJR9mmGOGnV+RIAYmmE83H1gdjstH0b2WEYRsnJcQZM8Ed+6G66X0k5MO6JcxT
-         IyAxEKiSuv9Ukb37uSPZa9mGEDoMfU27hFN2MsXERnfkWd2ea4omSmQY61fIphKc3lFk
-         1QSQ==
-X-Forwarded-Encrypted: i=1; AL+hErEr2j23nDqhba28M4gyHfrjVLvKGvHNz+5phnOIgr7umaaLo1BOJfGhiQK/lhQQVV8FyQ+SQPGjMTmdJXwjT/Q=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/uqKGZ8lOnKLU12IQJUvP1RZL/wx7hyzFnOhsik2H+cteRQJbq
-	9bP+bqgZhWCo9Qtc8AD2nkHLLGatslccVuVYlE+eoGaIPSnAXj4fvlw2ifZJr2nnTPA=
-X-Gm-Gg: AYBFou0ccDSxZaDyYcgrSvh72oVHxlgwb+DEzH+AonY1dSBbV/itvknap5qW8vjElcB
-	HpeQzYZxtxJuF0EAF75MK9da6Pk99j8wc0Q65r4eYYPUfQC4Snkt0RQSaQmKoGz+N3BacqPnADo
-	8Sq2+Zvk2uFNs3XMajiEI9E/lk+afZN3VXLI4vUbQLOO9M9gLLoV+7djz8BhWMTwOSVBPfb/RqP
-	hY6fjvTWNCJHfkmG3SfZF8oZZ3vxksPj0eNYOdsPupCdDgIXF/zcFI+exKrYApSQFOwxjo6jT6o
-	4GpOOCD+oryRi3qm336onHv/4roq1ItL1QyJmqgyQHEuvzmWGvQilles3jkrDeG7SYczxETdrL8
-	82q0R6nDLhlMknbg8vGyTkGFkVheoV7M5aHLuExHvRPZnw69Zd8nBUVuMN1wgyxmrOcV7XQaOme
-	fFasaXFVDUb2h4fGD464rKXRfidycJKJ1DDBpaI+wsjZyc5+ZRjBE99HLiorVn77N/CQ3bSdyhm
-	rnraWTU6wgWNV7dLHXqQe3MmGIL+tZKGrfSvys0CuMfD50AWtEa3715Y7PUOOmJlOnD2Nq2gXWm
-	t1N9IC+SjMUCrowRS+gDWF4l7b/RBbMVgApQT6OjXmuVOnGyFeT/CZoKdLK9i6NVxxMvcnegD/e
-	/+D+3A2lu
-X-Received: by 2002:a05:6402:320e:b0:6b3:e89b:128f with SMTP id 4fb4d7f45d1cf-6b722466c43mr1643975a12.9.1794174241711;
-        Sun, 08 Nov 2026 13:44:01 -0800 (PST)
-Received: from L9JK9NPFH9.lan ([104.28.20.57])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b721ea3b27sm742043a12.11.2026.11.08.13.43.58
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 08 Nov 2026 13:44:00 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>,
-	David Keogh <dkeogh@amazon.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Nimrod Oren <noren@nvidia.com>,
-	Alasdair McWilliam <alasdair@mcwilliam.dev>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Breno Leitao <leitao@debian.org>,
-	=?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	bpf@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	nh-open-source@amazon.com
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and LL_ALLOC_SPACE()
-Date: Sun,  8 Nov 2026 21:43:56 +0000
-Message-ID: <20261108214356.95406-1-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com> <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com> <willemdebruijn.kernel.1d64e7848503b@gmail.com> <20261107182526.69543-1-tianyi@cloudflare.com> <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
+        d=1e100.net; s=20260707; t=1794175627; x=1794780427;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :references:in-reply-to:subject:to:from:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fskAnZVKzc8hUGA1+pTPLWvHFMaE6t+Q83bw3SAfWr4=;
+        b=easn+3rJenurb+0S+ONpTzahWAe8Jb0qeTuyukZ8yqGBnCW6rDc1ZBVjoNTgrRPYso
+         G5kZWRDlu7P8351DX+LPpJUt1t40xQLktfGbY0JFOYnApqif18Jfhm/BPC3CvekdnLnU
+         aI5Q7d5fTKObCulZQEJLuhV5qctB+tazGs++22tCc/Ft0mBNE+XcmlSc6vARd143kwzQ
+         65wsAqLIEgImwTGPByrvasEkc9IU86Jy0hr8s7tNOyBbqc5rTgwX2AbVpfQhEVkH7uix
+         QaYF+sZddcKmruJEesNALbz6yZ/dArhYfe0aApQ7zmsGa1Buv0uEnOliI82t+5GRgRwz
+         Ptyg==
+X-Gm-Message-State: APuU4Z+GNgTs3m6A/1BRn7caI6cbd18km+OyxsK6eIBpCww2iOG6PlPO
+	Wv4/1mDXf4X7xEkRAXyUJJK3JPwTP3IzOFEjB5P8QVl1KMbBr4tJzD+fqe6QXKo=
+X-Gm-Gg: AYBFou181hafHgEAqHJajb6FIHoGM1bb55Iddh625TojlFgBwyJ+mvdfkUocnYHIrwm
+	tA6nokn8I4vDFLJyIMsc9xsWq+UgBDNkCR90AtrtGrK0sZexnhT/xv85Mzupv0h8auaUztVZFed
+	8HfVsgZu69Q6qQJI6ruwoU/+xuw3V/iyMmhNOC2ooDFEJa0Gw0KlEVdinbyzETHNHQQ1VxdfAUx
+	D/ajfyqHtH2dyHgBJGzZvfk4VVjjWlaqGY0oTpVhxjgL4lKTtPsTsoNsflPa0jbrtRZeci/U0uz
+	wKkkCgF+W2KXZhXOSdcrBu0XDXyLyhTNrvcAXXfTYdANdSUnnqOqyPn9oGsM5bunDuuEbQXARIF
+	02QBPN9k/UOof8qTz3aL0EKGW7V54QninLhBBcHzHt5lHQMh5W11L+RbwUFO+GjhZZ9jwNEo/xv
+	+ZkZ7kZg2CAiQcTh6ne7rnTip0vxpHNQ2F4UjEcTPdPBuk9r8ex5Zx669Y5iJ99szB243d1DrzZ
+	NzW1iooXk4rdVN2wHbLuZjTu5WGiWgS3S3AVjUoEfV/DJj/HCEavTwc3xXcKaPL8jIx6M/Fpegw
+	ros1buDWo1aMm+J461UKRmjTsjiGA1CXNbvR61n1U9+yaYNI7KAkqeGBwHX9Lupk2KBM7m3CK2c
+	A8NR1H8g91Lr68kcn6Sy1qjDHPuF14XLUGKhEFKPzEvAIVQEEVp00oeTZd4EyVhMCr3ZU55s=
+X-Received: by 2002:a05:620a:1a03:b0:93e:3824:4123 with SMTP id af79cd13be357-947848e90admr386631985a.65.1794175627456;
+        Sun, 08 Nov 2026 14:07:07 -0800 (PST)
+Received: from [127.0.1.1] (207-237-119-98.s2383.c3-0.nyr-cbr1.nyr.ny.cable.rcncustomer.com. [207.237.119.98])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-94782d93650sm306944185a.23.2026.11.08.14.07.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Nov 2026 14:07:06 -0800 (PST)
+From: Eugenio Zuccarelli <eugenio.zuccarelli@gmail.com>
+To: linux-kselftest@vger.kernel.org, workflows@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Documentation: kunit: document --summary and --failed options
+In-Reply-To: <179297820302.2598507.5712076951623488183@gmail.com>
+References: <179250646543.2190262.8632957027583518623@gmail.com> <CAMAsx6cniehFSgKz0+FRbGV=A=TGvogwx87xcqhiZNQGfeFFYQ@mail.gmail.com> <179297820302.2598507.5712076951623488183@gmail.com>
+Date: Sun, 08 Nov 2026 22:07:05 +0000
+Message-ID: <179417562518.1641291.6757389780804092916@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -132,92 +96,11 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 08, 2026 at 10:13:03AM -0500, Willem de Bruijn wrote:
-> Pushing back on another design choice: the UAPI change. That both cannot be
-> undone, and is fragile and laborious, requiring manual admin arithmetic.
+Hi David, Brendan,
 
-Thanks for the valuable feedback.
+Gentle ping on this v2, which has Daniel's Reviewed-by. Is it okay to
+pick up for the kunit tree, or is there anything you would like changed?
 
-On fragile: a wrong value never changes the packet. If it is too
-small, the push reallocates, as it does today. If it is too large,
-locally generated skbs on that device use more memory. So if the value
-drifts from what the programs push, only performance changes. The
-software that loads the encapsulating program knows the size and can
-set the value at the same time.
-
-On manual arithmetic: user space already does this for netkit. Commit
-b9ed315d3c4c ("netkit: Allow for configuring needed_{head,tail}room")
-lets the Cilium CNI plugin compute the headroom and set it on the
-device.
-
-On "cannot be undone": the IFLA_TX_EXTRA_HEADROOM UAPI does not block
-in-kernel mechanisms. They can write the same field later, and the UAPI
-stays a bounded, explicit value.
-
-> The RFC patch mentioned two other approaches: explicit headroom requirement
-> labeling for tc and BPF, and dynamic adjustment of this field whenever a
-> realloc in the stack is encountered.
->
-> They are left for future work. But should those instead be implemented
-> first? As said, this manual hackery cannot be undone. While in-kernel
-> mechanisms can be refined and built upon.
->
-> It seems to be that this series is trying to address a few related
-> situations and argues that no single solution fixes all except for manual
-> adjustment. But likely a combination of the above (and more) will.
->
-> This does leave the veth peer to solve, but that does not seem
-> fundamentally intractable.
-
-Regarding labeling for tc and BPF: it is also a new UAPI, and a label
-increases the value of the device that the program is attached to.
-That is often not the device that the skb was allocated on, as in the
-cases below. If we have to add a new UAPI anyway, I would prefer one
-that covers all of them.
-
-I looked at what dynamic adjustment would take. The kernel can find
-the device to increase in these cases:
-
-- XDP on a veth peer: veth_xdp_set() and generic_xdp_install() can
-  increase the headroom of the peer to XDP_PACKET_HEADROOM on attach
-  and reset it on detach.
-- A TC egress program on the device that the skb was allocated on: a
-  check around the tc egress hook catches a head reallocation, and the
-  kernel increases the headroom of skb->dev.
-- Stacked devices: a vlan leaves its tag in skb->vlan_tci, so the lower
-  device can find the vlan with __vlan_find_dev_deep_rcu(). macvlan,
-  ipvlan and team keep the dst.
-
-It cannot in this case, which we have at Cloudflare:
-
-- A service in a network namespace sends through a veth pair. The host
-  forwards the traffic to the uplink, and a TC egress program there
-  encapsulates it. ip_rcv_core() has already orphaned the skb, so the
-  kernel can only guess that the veth peer of skb_iif allocated it.
-
-Even where the kernel finds the right device, auto-tuning has problems:
-
-- It grows too easily. Background traffic counts the same as the main
-  traffic, so a few encapsulated health-check probes increase the
-  headroom of every skb on the device. A threshold to filter them out
-  would be one more policy value to choose.
-- That growth can move skbs into a larger kmalloc size without anyone
-  deciding it. On x86_64, for 1500-byte MTU UDP over IPv4 on an
-  Ethernet device, 194 bytes or more moves the skb head from
-  kmalloc-2048 to kmalloc-4096. That adds 2048 bytes to the memory and
-  the truesize of each such skb. The IFLA_TX_EXTRA_HEADROOM UAPI can
-  do the same, but then the operator chose to pay that cost.
-- It only grows, unless it is reset on detach. A reset on detach must
-  find every device that the auto-tuning increased, which can be a veth
-  peer in another namespace.
-
-So I prefer to keep the IFLA_TX_EXTRA_HEADROOM UAPI. If we need
-auto-tuning on top of it, we can discuss it when someone actually needs
-it.
-
-Thanks again for pushing on this. If you see a simpler way to do
-this, I am happy to change direction after discussing it with David
-Keogh, who posted the initial RFC.
+Thanks,
+Eugenio
