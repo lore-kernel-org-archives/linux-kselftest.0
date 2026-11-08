@@ -1,101 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794166030;
-	b=sVowyMkSz5Enx0Jc34kqHdN0IVeqGG0gT5yMQjoDTTVqdmwM7/cRtcWMgfkyVnPUaLbL
-	 PS9he7ia3yOYSfTkmifktE2P3JbhfC+SziSpAGI2PWW9G2mDuvBkMI/AiqC20bwCsWyK2
-	 p5SxrtGEPjAeF0XZyegamCxljDck1EKDnRkJBt1p4VnoAW17ilrk0ZZrr8vnUGFtLHui2
-	 VN42zpS7tW0t+vc0hI62h9T02C679gXcPZFXOWx9eGcqhUqpxp+rl3EiAipEqKTtJw4g7
-	 l/noeV6Gscp4Rx69drnmuVJgdF/sMIac4fFDd4RStI/jr1uQOvqyWorxLAxnJtziOkA==
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=74.125.82.175
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1794167971;
+	b=QsqopSRJUaI1pLHreUKFntfEqEOVIFaYqYXD2t4tlRuqMs5EpeEDLunrmmrxzp347VL+
+	 JPa82p5lYttjTG6xUuzunlef9TMWlg1Lx9KOU4eWXxybzeY1ooXwLz/jcMcTRztnHLhU2
+	 XhWHBCIY0+a6dNv3DQt4dEDNOesUHQ4fzFkzhn03mHLPmrL/GaV4WwGFvQIWUa0Ljmu5B
+	 OMV+6lJasGMoiBz0rXwfSRsqYHQanf4ESf905lB9eCQS5PLNDazIi//VBQlQo+wIN4g1a
+	 6pHwhWZQeq0YxkSEPKjYuxUmm6imFTX5KAJmHeqGkfjmCcYkEQOmRsrTA8wx4kRBoFQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794166030;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794167971;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=BO37IMunpFsRap9NM4xeqnXFrjMV86qXDOv6LcF5YHA=;
-	b=aFF9H8GIY/aPrC4RLepTy3YldiJLImxCHbpRUBUQTwVIAiMfQD3l24spDS7EcLfn5REb
-	 Jr2yUMPqluvSKiqDmiGiGWKcKYcZqgL8lcuPyvk/ad6D9C0o06PoTzhL3DldEcYiUHgKD
-	 QVQ2bce4u2F0SeElJz6C1gSEPfzJzqgci/93n8oOflPRrtClXy8OkE4wsq2c/643CcqXM
-	 PPXmzvfDuhw+EWmnnnRKUGMsXy4EH4TtxKzgwP1S55pnJ4YZ3sg16OVS9JvsuiQOfchWp
-	 w2WzLS+fLpLx4wpWVI8/czkJBD6/0j8Co4X9mv55oP4yDNbe3lZZWC0pH5mJBeP5AEQ==
+	bh=YJY+aGtrpeDr2G8/Ik5cLYYuRPZB321tnaAjDteWj00=;
+	b=maD+4gPdHGRkgeUaZgvnRgYeypxJwPzwcAUobX1vT8OvgaFkVD/GIW3ZlDPnYw6Rj+G9
+	 WLtlJ0FtcQ4Pyzv+xp9hm5Z30UoATUXto7HLED05T9vwfWQ05FYOulh8LLTKu+Jmgcow0
+	 O83mVNceMdc1CaMOw7LJRS00LKbT1TYQd7SCwmF5ypSQLEVS0yuuN5uH5Q1H04eDIRgIU
+	 qLtm3TWUIRi3oR6PwXMpJxBa1ehU+Faie2pbocecpluuBuk2kdtzqHmhT6aCw90T1bycF
+	 W/ebDldqSRZLbllQjU648EWeBXONrnSr5wl+ceoxirxCFNwcWIp0B+NyjQbboQD0wEw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="czutAw/j";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MHU9Z+w9;
+	arc=fail smtp.remote-ip=74.125.82.175
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A98606A326
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 19:27:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1A98606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A42606A321
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 19:59:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62A42606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=czutAw/j
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-54492d8a988so46851cf.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 11:27:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794166029; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MHU9Z+w9
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-370f4e5cfc9so23411eec.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 11:59:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794167970; cv=none;
         d=google.com; s=arc-20260327;
-        b=dlz71HrE7jgqdemKsJa+Myyc+CNz01GYRKVigc5hWysDzg4Wi7bg5L2yYj0f/icgV3
-         ajWUL5VLRJIUDGIyqwsQP4Lcn+SO/9Z9npCA9R7N2699JRfy7MrQm9DtSpjWCc1GaQ5K
-         DbYqG95mR6pL63BjEchzEDMp3NX28ivt4gLvLgJaAfeJ4wtIsAUrBz+cNPd7VbCUFUd0
-         EacAuH4ZzW3v4QBiMHRX+PVcNQUdWyUigWNq9W/M+7orzjLbEsdae6FNWwpSLBFRimFg
-         mdreNvuLkoeiJQkIP3Am1X2SgpeWdO4o4dkkzySygPkM+fD07RQweiOXafbiVt/uAybe
-         57RA==
+        b=busqz5pJSVhxEo4TN6auT91MVx89Fw+6ZEyn2rcqORj6pRjbknHdm9pWtrB0e4cmlg
+         dcYqlfBGmcZk9s/7VAtiJC9DDZINF2G9T1uuuKPUlUE3pPrpx4gMVjO3Mc5MB3RQn6bk
+         1cg4Hjq1bQObmdC2bp1eAYv8mVrPC2PaIEtQABkytf1hGWaVz2IT0d1NaIOyl5ExBRFu
+         foSbqIbDMPM2ATj3cGlFf0T9SdORDLAH/6YANwfIKqZK2DurGCqdyGDgmKTudw5PZ9MN
+         L6qXfOnrhz9W0xOzttE6AoPOam7knKFMW2SglX4cQFNSkDMaNpFcnUG3gOG8jWNmQUsU
+         MxoA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=BO37IMunpFsRap9NM4xeqnXFrjMV86qXDOv6LcF5YHA=;
-        fh=hDW/jjtVbhXgU4hI/Nq/UTnRUFPHzjbue31Ct8oVZuQ=;
-        b=CWy2dkvzoIVb/DOfa/FLNheuK7fyT7G4noAIemm30DXcJBGmXK5Bcn2R/BwM0UaE8c
-         OzBbqfDSHjOOHr0PVQkdJPwFvlLP8qjDS+F280MbyezckLb9bbo1cms0hwouHOrPN9TV
-         Cc05CnKAgJOd+PIW5Gzm7Ptu7Jjsf9J9ii5pP7DyX0uXnM97sP3Eb8PoPH7nQ1V7CLPO
-         O6zcrdPuRtFOBsOxDh9RDFdBFGuhYsY8amvOJTIqeVmStBduNtxQzJgb5022uILs3SeH
-         6ARym+G3yyAuzKi/J5IC0aD2NM5X5MTwRWU8eqZ4hxXkoHfHy1TyBuhlyYfVYyL3jYIJ
-         QiQQ==;
+        bh=YJY+aGtrpeDr2G8/Ik5cLYYuRPZB321tnaAjDteWj00=;
+        fh=A8BfK1weOq2pvmO5BOchEF2tt/fs14d9oGflLpo2I8o=;
+        b=pZSDLIrfR/LnUekUbKagW1Oo/GY+bdQVP56D2s36q9RFHXyD44AHJQhQ26ur3wuYF0
+         5mXeNopyQCnPA0JUiuHO0E71hAkgTKzvVsVYKtACcCBAy2PkuDVfQv8UGlJXZxBR6eAH
+         YucmGE6t17gq0uolKooBtgWRA0FxSGLs+ztDdVtQ7KdlfWq/hpeWcUnUiC2mlu+V0t5m
+         9jyG0txwM8js8cmhrWeNi45RvqSc/tdYMGDRMGUWnm/ZfeEH78HqDOVEIVaNRsgm37Vw
+         W6YtHs5AsA5cPgYiiaFIABIgMIxejTXsMU68hA1yedeorswiG+S8NyIgcVdAyql4oFhA
+         w7sw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794166029; x=1794770829; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794167970; x=1794772770; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=BO37IMunpFsRap9NM4xeqnXFrjMV86qXDOv6LcF5YHA=;
-        b=czutAw/jdxttlNeAE5hjzfXJT8dJ0d3urmQJnKzcfRWAZR2oa9LY5teW/l9LiV+5zp
-         iGm/vKnvU5qbpNbkDdDMfyiwuwBO9nSK+xNSNQhqcg1ACm3PLri0AtSCurgN/awEoVBg
-         z5uj+II6zPHXH9ub9Unwa8ZMPEcpvuT1WmrJaxEoPk3MJ1GI3X/wy8JX6Y0FctFzRTpf
-         dzg3KqZnmzLlkTSaM6HYMBQSczmEgITk4eq9lUSsPrjDG8TGbgZGi9zBgPQaeU1mWxsv
-         hyHu3Xr1zxy+YZGMFFP8jBmBpSvyzT2WfIOMtXxuEtE6N5WV73zUdRCvT+8BKfGJs2+E
-         86WA==
+        bh=YJY+aGtrpeDr2G8/Ik5cLYYuRPZB321tnaAjDteWj00=;
+        b=MHU9Z+w9qtdjHnQktt3JQr8/UeWV072k1RPmYbRJRMs889bomwOl8dJxgVXlbfP/nc
+         pCsfloYtrk1Kpfju5tKaC3PkKbAqtnSS7A1yjrADrdRkoG1x/h8wLQGMyNELJ6hQUvPz
+         IuVjLBdZjlHkTadxck1FYnqucF3+wO8nLJzyPdvJJ//wP7b/K6Yr+3w5V8mhkSdne1GN
+         1NIM6l7Kt+pq5n2UyPY8SWwIYK5CU78kzR93oSeptbvhyOhdqJ0/SM2fW6ObFqOZbTUl
+         Qd+W3QFW9p9VrUCKviV32t9I0dI6Qpzu6Uvav1PowSd/RU0rI7lra/eoDnLYqXWHYivi
+         wSag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794166029; x=1794770829;
+        d=1e100.net; s=20260707; t=1794167970; x=1794772770;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=BO37IMunpFsRap9NM4xeqnXFrjMV86qXDOv6LcF5YHA=;
-        b=JrQdm1gulxPqMqjxzAdVfxyxv3eD2MvEj7ytJ4LvtxNXnI7kceeniXmqljf4DMOcgZ
-         oiRAIloGqivM8AFgvXpD27eG83XskAVWrAikVCW9Ps+HqHVdJibKr4vH/wUkkF+z8xL3
-         74VbWDXViLu+EWHyjcATbUwnPBpNYvYLYZVyew3tVs6Nx3BPI6ZJ+6upYhbMOVtmrynV
-         msifXcDvwE71nktxLDDYTLstH13SDfe8MfV6jXz3H37iZB5Z8lZ+2gL9mLwPuMNwbkwA
-         KHLVWWIg3jZASgj5DfAQvLN/dme6QaY7PJ6dK8D9D6ht+WTmmQf1x3DlgC8P+Be8J8O0
-         pHEg==
-X-Forwarded-Encrypted: i=1; AL+hErHhjoN1RHArcbBaWTnEpWuKzaTQ4dC0c9rgb1KPnVG4RSS6neiPPthBbprnHMA/R2FVgr/jaecr+VkSPv+jb/E=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/BZWxANQuaLfmSz96wBuZfugLuU6xZMgeZLfoOXSG0jkOAJjXL
-	7deqgztFWMBqHdmoIRhbkywGbLua/4aXfr7ZsI16K1YiPpb8pt1Px+ZMm476byVdMlOSnkicUYb
-	G5o6/4PaMkdiFn76zog9XseaD6lXTABqWgLy/H70P
-X-Gm-Gg: AYBFou0dka7+PosckUGCjpxwzBn0GwVIYFxjx36yYj7n//0zSCHTd9fXbvx6Dvdy02c
-	gpTMPmR8DAeXOJqVN7dYWnTifpLgnuViMTJXiDnQCbPKvdh05zkCtNq8jM5RsHSeiKOM8o7nk3H
-	TYZ0/eerTGlQhpdXy1WdnYsqcNdUknx5F/JI4qiH8UD/96/NILOiLiWVdU68Z2l7FNtqY1sV4jY
-	R7m1MZ1ib7+zbhUpFUEIKUMJ9e4VuxUVClv73GgAD0zIsbAB2XMNzY1KDJQRen03NKJrvobFTs6
-	7adkYsP/y8IfCwm/NWL6++zG/qXG4FItdihZ5betOG+9hLA93YSsKacU5thTW+dq5Bb8+21hFvd
-	AzvGSxgXSnzhqFPdEXf/up7yGP3Xq2rg8w4uyxfC9/ttfC7ivg6uz/CpkB3bau0iG4eJPvHOe3s
-	xC01orGJCe8ctv5l1N+ySbneDNvw==
-X-Received: by 2002:a05:622a:4a8a:b0:542:fc60:fe23 with SMTP id
- d75a77b69052e-54fa22f2df9mr26125631cf.3.1794166028049; Sun, 08 Nov 2026
- 11:27:08 -0800 (PST)
+        bh=YJY+aGtrpeDr2G8/Ik5cLYYuRPZB321tnaAjDteWj00=;
+        b=e1ig7wUBMJYLPUJfFBvC648PdAJgjOgF4RDqtmMwsHe2fGeTtM259FTfrsSfeJRc/K
+         Z8JHXYcrQbHIp4HRQwYq7KT6R0qMeOpWZF+uBGnW8XgV22kriBt0/Qnkj2sQVf0l6Fsv
+         t16IZcCtVRxBzfzwlWdjdGpCDwrzjp4K1ZmsvH7zV9f+ltLL5YSY3LTP8K9Q6qjsnoX+
+         /wcmEIC33IZbWIrKa4eOvpmex7XzzzxLc4wR7SboGRJjuY5QOSxMqVJAcbFMZg/2fPfI
+         SYNkiGgb3XvL8hdXwe4hRcc/Uxfo2NYc553ejK3OVFxtv04l1p/MSntTwMCIq986Ry3o
+         D6Uw==
+X-Forwarded-Encrypted: i=1; AL+hErErtULvWi0HRZ83GMXABScX5AVaPvD2bbE4xb6qM5EfmvJcMzYd5qPjtNHX2stVWo+5joH/dBpg/dCBV4lm/gQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z87a8+uFsA0/J87DiGsYXAzNRPD1IaFfpa54hUCYAKQ37oIJuWK
+	ihBJVgXNICjSSVtkF5rVYJYBi0oU2BpH9vuL7KmWXypbbPxicGmsOd505s7AUnehZkFJY57lYRs
+	sqrU7ShMnMT8Kbs0qqcLPzhP5slQnCgc=
+X-Gm-Gg: AYBFou3Nnf2ZLCGrHWbOhB+OUAz76InTWLygJCXjwRXwM8ycvYAm2YKFQSv6N0Mqn5n
+	zyqp0AtbbO5JC3pittpk+v0xziPQsxSU0s+qIa/+M02VA97h2OOKFhxPA0URiQ8VDY6GoJsHo+x
+	QnjdexXF557N7xt6zu9tGXiVdAwCqZmV4eXF+4W7IoTmFTmgjBJZiJFhxCRG4ytx2nV8xp+LvTW
+	bfbkc8GjuGzoqWdxLo2gzigO1E+D52oOm7OWZqH7tXoYAr+ndcJrXpRFBUiZ/WxGKcHlqGGADpt
+	O0W64FcKA901QX4yoFx3D9PNUQXQ8GukfpAXxkYz3f2wNNDYQlqXiUnbHgh8SLcrfjl+xDdDHGz
+	vcIwHfiesvqQVlCrN15h5upmUTvPeczf/dzt49H+yNMg3MmABqhZIUwZE3Nq4K2TWWtPq5EUzQm
+	NPPfavMtAmkO3WIxw6MsyuTbhufHor8Wt78/BS9IiHNx7/Xhl6atWb8s31ZFXoGUMJhQMQWfSxE
+	h7fs0av3yRa6IH3vxM3UkqrTSFvVgXMFBN5
+X-Received: by 2002:a05:693c:62cc:b0:36e:66d8:1424 with SMTP id
+ 5a478bee46e88-3725024039amr6518267eec.0.1794167970321; Sun, 08 Nov 2026
+ 11:59:30 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,76 +106,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261108-mtu-probing-series-v2-0-355d6490c3db@gmail.com> <20261108-mtu-probing-series-v2-4-355d6490c3db@gmail.com>
-In-Reply-To: <20261108-mtu-probing-series-v2-4-355d6490c3db@gmail.com>
-From: Neal Cardwell <ncardwell@google.com>
-Date: Sun, 8 Nov 2026 14:26:48 -0500
-X-Gm-Features: AclHuK8zDFeFkG1trZEMSppYXF-uzQmF3qY-1kqhwEX4JZnkZedZbD6YsibKJOI
-Message-ID: <CADVnQykAX6Fw8_86emqtTUDWgFzRd_jXTZKdDJLb0s8AUmfUaw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 4/4] selftests/net: packetdrill: add TCP MTU
- probing test
-To: echoowall@gmail.com
-Cc: davem@davemloft.net, pabeni@redhat.com, horms@kernel.org, kuba@kernel.org, 
-	kuniyu@google.com, shuah@kernel.org, edumazet@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	panweiping3@gmail.com, netdev@vger.kernel.org
+References: <20261029-rust_kunit_v6_send-v2-0-5ce551efc48e@gmail.com> <20261029-rust_kunit_v6_send-v2-3-5ce551efc48e@gmail.com>
+In-Reply-To: <20261029-rust_kunit_v6_send-v2-3-5ce551efc48e@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 8 Nov 2026 20:59:16 +0100
+X-Gm-Features: AclHuK9jeLy5xXtIqSKPxHyksnUP7RPDUpLBrvvwrDuJgV1dxihT2q9FQbUKuo4
+Message-ID: <CANiq72ma7GrbeMjktpWzNwWYj5y+AsQk8NROKY6TMdk3fwXEgA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] rust: bitmap: kunit: uncomment owned_bitmap_out_of_bounds
+ panic case
+To: nico.antinori.7@gmail.com
+Cc: Alice Ryhl <aliceryhl@google.com>, Benno Lossin <lossin@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Danilo Krummrich <dakr@kernel.org>, 
+	David Gow <david@davidgow.net>, Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Burak Emir <burak.emir@gmail.com>, Rae Moar <raemoar63@gmail.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Trevor Gross <tmgross@umich.edu>, Yury Norov <yury.norov@gmail.com>, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 8, 2026 at 9:39=E2=80=AFAM Yongjian Wang via B4 Relay
-<devnull+echoowall.gmail.com@kernel.org> wrote:
+On Thu, Oct 29, 2026 at 5:59=E2=80=AFPM Nicol=C3=A1s Antinori via B4 Relay
+<devnull+nico.antinori.7.gmail.com@kernel.org> wrote:
 >
-> From: Yongjian Wang <echoowall@gmail.com>
->
-> Packetization layer path MTU discovery (net.ipv4.tcp_mtu_probing=3D2) has
-> no selftest coverage.
->
-> Add a test for an active connection. Check that it starts at
-> tcp_base_mss, that it sends the first probe half way between
-> tcp_base_mss and the peer's MSS once cwnd allows it, and that an
-> acknowledged probe raises the MSS and leads to a larger probe.
->
-> Disable TCP timestamps since the MTU search range is computed before the
-> timestamp option is negotiated, which would otherwise make the MSS
-> depend on the header length at connect time.
+> -    #[test]
+>      #[cfg(not(CONFIG_RUST_BITMAP_HARDENED))]
+> +    #[test]
 
-AFAICT with patch 1/4 of this v2 applied, that is no longer true:
-active connections now call tcp_mtup_init() in
-tcp_rcv_synsent_state_process() after the timestamp option has been
-negotiated.
+Is this one done to match the other? If so, please mention it in the
+commit message, and consider whether the last test in the file should
+also be changed then.
 
-So I would suggest removing this paragraph from the commit description.
+(We could do it in a separate, previous commit, but that is nit :)
 
-> Signed-off-by: Yongjian Wang <echoowall@gmail.com>
-> ---
->  .../net/packetdrill/tcp_mtu_probing_search.pkt     | 43 ++++++++++++++++=
-++++++
->  1 file changed, 43 insertions(+)
->
-> diff --git a/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_sear=
-ch.pkt b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_search.pkt
-> new file mode 100644
-> index 000000000..65e466fbf
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_search.pkt
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Test packetization layer path MTU discovery with tcp_mtu_probing=3D2:=
- an
-> +// active connection starts at tcp_base_mss and raises its MSS by binary=
- search
-> +// as probes are acknowledged.
-> +
-> +`./defaults.sh
-> +sysctl -q net.ipv4.tcp_mtu_probing=3D2
-> +sysctl -q net.ipv4.tcp_base_mss=3D1024
-> +sysctl -q net.ipv4.tcp_timestamps=3D0`
+>          let mut b =3D BitmapVec::new(128, GFP_KERNEL)?;
+> -
+>          b.set_bit(2048);
 
-AFAICT if we drop the tcp_timestamps=3D0 line here (so our SYN offers
-timestamps and the scripted SYN-ACK declines them), the script should
-pass unchanged with patch 1/4, and fail without it (2072-byte rather
-than 2048-byte TSO packets, i.e. 2 x 1036 bytes). So I'd suggest
-dropping that tcp_timestamps=3D0 line. That way this test also covers
-the active-side part of patch 1/4.
+Spurious change?
 
-neal
+> +    #[should_panic]
+
+It is great to have this, thanks! :)
+
+Cheers,
+Miguel
