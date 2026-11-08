@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794175706;
-	b=vZOu2ncB6pZ+01UdRVPPHzUL3h4sxKPkecFP9V5xoCzgt+JLVx+Bf/nLah2c4Rb++CrC
-	 HiCBXfTmjftpeIJUVbinhn5oDMpf0VnsjopHQUZqKro7vmannkU9idNb6UuaelPghnD7r
-	 dWmczQyfcVmv3xvbqqBmVpjeILyIiCBQ2pO3CbO3k345zmuK2RZ3uiE+HXXo8EF+gOEOt
-	 Dw8RueoweJs/5fIVkT7AjMoITnYfW3aKBIEDozAroAuLXZsPBuZbLu3/zIrIsKlZ0ZXpb
-	 +Y7dSazt6ThBglKOU0nn2OjR8Ypy0hxIpr5jNqqkIAU3LQORHuZQzO+TKZbVYGZlloA==
+	t=1794175710;
+	b=f0J7V5PdkKRkxQkUMYFZUwZvXhnBJKQOmhKakt9U9pvdCw//+ifp4jsNa++afu8bzgGw
+	 ts+ISaQoFz87qDuB0SYTfjyqjJXeASIBK2k9YCv8OIeeDHZaFMMoXaon5pAm27sO//Izs
+	 KTjWiAyko4uR6YF8FRGkECt2dkbt6itgJdzcitvNJnTh12pJH4JSqODOAmyPCYTMjjo8F
+	 M0fAEhlZLGZqdRi359K6Edl8FSAGSRrthc7W0FRS2sxdesI2GS60h3Pn8z5nHOBbePbLy
+	 2gmPLMV3kI7/+t1pzPDmUt/lKtKI7cgtx9VOHwvXM4S524gcbjSPyn3r5/UXqqM9SnQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794175706;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794175710;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=vTNVZdXw6o21WqcFGBxd9DOHUD3xQC0qrIumoTiqvwU=;
-	b=LfnscoB0Nkef0pcCThkea5VIl19jvPOouh44f1LDQKf2N/T2JlI22WxgYlI/khxuI+bp
-	 QJ+cZRACPajSvnuwpNhD2nB6FHDpZT7wDw4pP4/rcstBnzxYySqkQ52gS6uTj2HZCDSmw
-	 2uVtZTbo2q0vHxtqYPfjJ+uLm20/n9om+xwKuDGRnpJi0zRhmHeiaGdfDvT/I6aGzHWbq
-	 VPFuUnCe41XbcvVKPnU0Ui8A/W7ZlEh28LpftgJO/LNmL4n5pZxqBE/VV8NtVZuKIuW5v
-	 HQrzDERk9d8VZ6Nlz2DKvCAwYnPIelH+ubOkEbicyQFzrG4/8vrxsVpk3ROcxj0Be/Q==
+	bh=iTZBGe8G+lD7PKpVW+guhg/OgKRa7+G7PTCcyuD4K7k=;
+	b=OEM3bsz08cKAUZfYK1rIEDMLD3AJE/S+P3Qiy+F4k+VTuPuCH8Wfpt1gm7n1fRXvIIpn
+	 MaBgE64K2fmWv8KGjQA5u8msnt2gvihNppUsa8iGMhS39FiN5bgyONKw3qQbCeWKdFLFj
+	 hYzYzC+kDwQ9G+kqf25xMXE1mgR+nBrkkeR6NdKYLS49HYf/BmsNg9pBqUrHEg3s35ezn
+	 9lwwDmwTwvEeoUEU1j4Jealm74BD6n1mUKk3OUmYWXhcu2yj1yozfpy6+GxPrxqlNltFL
+	 8aw0IGfaVs13jsxtD5sai4wWI+oBGFhGZ5rhSfiCXCNXGZ+bfRm7nTBjnIp7y+oitCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Am3cYaRO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k6wBI8kG;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E18606A333;
-	Sun,  8 Nov 2026 22:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E401D606D810;
+	Sun,  8 Nov 2026 22:08:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Am3cYaRO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D8B1F0089F;
-	Sun,  8 Nov 2026 22:08:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k6wBI8kG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232631F0089F;
+	Sun,  8 Nov 2026 22:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794175705;
-	bh=vTNVZdXw6o21WqcFGBxd9DOHUD3xQC0qrIumoTiqvwU=;
+	s=k20260515; t=1794175709;
+	bh=iTZBGe8G+lD7PKpVW+guhg/OgKRa7+G7PTCcyuD4K7k=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Am3cYaRONk8QHztljHE7Ay5r5WM9squmFdyAqUkQMiDuJwgcRy5nl/lBu4545WkIJ
-	 iQlQ+K7TrVc9tS7HoCaIe0H7/YYVRRT8OwW5L29hrNI/H/8YTqCNE8TDtMaEAlPlJN
-	 XLoP+trs2pmcEJJNUdFQm08U/6WGKGDDuDTt4M6utHTE1PKEDPOsYfmnMrmZTi0q6Y
-	 51eTCjjuz0QM1gWhuO2BrImaASjAcmgLV/wpFxV/zCSiFykzv1NJ3f7pXSHSH96Srg
-	 pyINJuPXqZZFrr28OKi74kc3JFeH80Sqj/ClSHsYPSvNPBzPY1OkLiBIRZzBS/9C9d
-	 nNqwHH1+Hwx0A==
-Subject: Re: [PATCH net v8 1/4] net: hsr: keep GRO disabled on HSR/PRP ports
+	b=k6wBI8kG/XcVE9XlmLOiJLBUSHxx63al9ouLQqMT4/MLNoGLvJMg2uo5hYZyTCBW3
+	 KRaczsKwaEM56lUjexcJ/baDZ6AwffSWv3u8B47OzhvvQpJfW9XMwWKD5rPVxRb26i
+	 Od8LBrxblSQBUiCNhJNxwySeq+jbnZzDe0oBzyMOG03UKc34lCLJ7topGqUcrfNuES
+	 UCX8rgvRUExXI8CeeXxDFcPsALA+ScjKnF3BQa9OJdqxdV6vLMvRsHiGdZZnbd5mxp
+	 SCil7Lgecui+P3tqkqRgLP12SMe1LPmUBPv2rlkpsDnvJPBIc2WNl0A4FC7l2OLNQY
+	 W17tKvpCOKQcA==
+Subject:
+ Re: [PATCH net v8 3/4] net: hsr: segment GSO before per-frame forwarding
 From: netdev-bot+sashiko@kernel.org
 To: xiexinet@gmail.com
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -51,10 +52,10 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
  liuhangbin@gmail.com, stable@vger.kernel.org, sdf.kernel@gmail.com,
  lukma@denx.de, fmancera@suse.de, danishanwar@ti.com
-Date: Sun, 08 Nov 2026 22:08:23 +0000
-Message-ID: <179417570353.994134.16201150912134067025@kernel.org>
-In-Reply-To: <20261107220544.20-2-xiexinet@gmail.com>
-References: <20261107220544.20-2-xiexinet@gmail.com>
+Date: Sun, 08 Nov 2026 22:08:27 +0000
+Message-ID: <179417570768.994134.12148285775525774237@kernel.org>
+In-Reply-To: <20261107220544.20-4-xiexinet@gmail.com>
+References: <20261107220544.20-4-xiexinet@gmail.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -68,10 +69,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 0
+Critical: 0 · High: 0 · Medium: 2 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -79,207 +80,217 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] hsr_portdev_setup() (net/hsr/hsr_slave.c:210) calls
-  hsr_portdev_role_set() on every non-master port without checking…
-- [Medium] hsr_portdev_role_set() calls netdev_change_features() with
-  dev->hsr_port set.
+- [Medium] Setups with HSR offload now lose GSO on TX, and the commit
+  message does not mention it.
+- [Medium] hsr_forward_input() protects software segmentation only with
+  skb_share_check(), which handles skb_shared() (users > 1) by cloning.
+- [Low] hsr_forward_input() now drops every GSO skb whose effective
+  protocol is ETH_P_HSR or ETH_P_PRP (net/hsr/hsr_forward.c:916-917),…
 
 --
 
-net: hsr: keep GRO disabled on HSR/PRP ports
+net: hsr: segment GSO before per-frame forwarding
 
-This patch adds an hsr_port role bit to struct net_device. The bit is set
-on HSR/PRP slave A/B and interlink ports. While it is set,
-__netdev_update_features() drops software GRO and configurable GRO_HW
-from both wanted_features and the computed features, and the attach
-fails if software GRO stays active.
+This patch adds hsr_forward_input() as the single forwarding entry point
+for master TX and slave RX. It segments GSO skbs in software before the
+per-frame HSR/PRP tagging and sequence numbering, and drops aggregates
+with inner HSR/PRP, unreadable frags or trailing data. It also removes
+NETIF_F_GSO_MASK from the master's hw_features.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index df1a840b03343..2916b17f4169f 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -11269,6 +11269,21 @@ int __netdev_update_features(struct net_device *dev)
->  
->  	features = netdev_get_wanted_features(dev);
->  
-> +	/* A direct HSR/PRP port needs per-frame metadata. Drop software
-> +	 * GRO and configurable GRO_HW from the request as well as from the
-> +	 * result, as the core does for upper-disabled features: drivers
-> +	 * such as veth derive state from wanted_features and need the
-> +	 * requested and the active bit to agree. Fixed-on or
-> +	 * driver-required GRO_HW is left to the driver.
-> +	 */
-> +	if (dev->hsr_port) {
-> +		netdev_features_t gro = NETIF_F_GRO |
-> +					(dev->hw_features & NETIF_F_GRO_HW);
-> +
-> +		dev->wanted_features &= ~gro;
-> +		features &= ~gro;
-> +	}
-> +
->  	if (dev->netdev_ops->ndo_fix_features)
->  		features = dev->netdev_ops->ndo_fix_features(dev, features);
->  
-> diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
-> index a546f70f9cc8b..bc340ae0b52e1 100644
-> --- a/net/hsr/hsr_slave.c
-> +++ b/net/hsr/hsr_slave.c
+> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+> index fc512204600cd..2521a72280aca 100644
+> --- a/net/hsr/hsr_device.c
+> +++ b/net/hsr/hsr_device.c
 
 [ ... ]
 
-> +static void hsr_portdev_role_clear(struct net_device *dev)
+> @@ -686,7 +684,7 @@ void hsr_dev_setup(struct net_device *dev)
+>  	dev->needs_free_netdev = true;
+>  
+>  	dev->hw_features = NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HIGHDMA |
+> -			   NETIF_F_GSO_MASK | NETIF_F_HW_CSUM |
+> +			   NETIF_F_HW_CSUM |
+>  			   NETIF_F_HW_VLAN_CTAG_TX |
+>  			   NETIF_F_HW_VLAN_CTAG_FILTER;
+
+[Severity: Medium]
+Does removing NETIF_F_GSO_MASK here cause a TX performance regression on
+lowers with HSR tag insertion offload, such as xrs700x or icssg?
+
+Before this patch the master kept TSO even when the lowers had none. The
+master port is in hsr->ports, so hsr_features_recompute() folds in the
+master's own features:
+
+net/hsr/hsr_device.c:hsr_features_recompute() {
+    ...
+	features &= ~NETIF_F_ONE_FOR_ALL;
+	hsr_for_each_port_rtnl(hsr, port)
+		features = netdev_increment_features(features,
+						     port->dev->features,
+						     mask);
+    ...
+}
+
+On NETIF_F_HW_HSR_TAG_INS lowers, the aggregate was passed on unchanged:
+
+net/hsr/hsr_forward.c:hsr_create_tagged_frame() {
+    ...
+	} else if (port->dev->features & NETIF_F_HW_HSR_TAG_INS) {
+		return skb_clone(frame->skb_std, GFP_ATOMIC);
+	}
+    ...
+}
+
+prp_create_tagged_frame() does the same. The lower's validate_xmit_skb()
+then segmented the aggregate, and the hardware tagged and numbered each
+wire frame. So GSO already worked correctly on these setups.
+
+The mask is now removed whatever the lowers support. The core therefore
+segments every local super-packet before hsr_dev_xmit(). Each MSS-sized
+frame then goes through these steps on its own: seqnr_lock,
+fill_frame_info(), the node list lookup, hsr_register_frame_in(), a
+clone per port and dev_queue_xmit().
+
+RX is affected too. Plain aggregates that used to be delivered correctly
+are now segmented in hsr_forward_input() with features = 0. That means
+linear copies and software checksums. One example is a PRP SAN aggregate
+arriving from a veth on LAN A/B. Plain TAG_RM aggregates would be
+affected as well. In-tree offload drivers should stop producing those
+once the GRO patch in this series is applied.
+
+This patch carries a Fixes: tag, so it will be picked up for stable.
+Should the commit message mention the cost for offload setups?
+
+Could the feature removal and the segmentation apply only when software
+tagging is actually needed?
+
+> diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
+> index 44f6d9c83180a..c9cd5d9208795 100644
+> --- a/net/hsr/hsr_forward.c
+> +++ b/net/hsr/hsr_forward.c
+
+[ ... ]
+
+> @@ -794,3 +797,154 @@ void hsr_forward_skb(struct sk_buff *skb, struct hsr_port *port)
+
+[ ... ]
+
+> +void hsr_forward_input(struct sk_buff *skb, struct hsr_port *port)
 > +{
-> +	netdev_lock_ops(dev);
-> +	dev->hsr_port = false;
-> +	/* Recompute features without the role. GRO was dropped from
-> +	 * the request while the role was set and stays off; the user
-> +	 * can turn it back on with ethtool. A dying device just drops
-> +	 * the role, a netns move stays registered and is recomputed.
-> +	 */
-> +	if (dev->reg_state == NETREG_REGISTERED)
-> +		netdev_change_features(dev);
-> +	netdev_unlock_ops(dev);
-> +}
 
 [ ... ]
 
-> @@ -169,6 +199,22 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
->  	if (res)
->  		goto fail_upper_dev_link;
->  
-> +	/* Enable the member role and recompute before the RX handler
-> +	 * is published, so that software GRO on this device is off
-> +	 * before frames can arrive. This covers the direct member
-> +	 * only: a stacked member receives from a lower device that
-> +	 * may still run GRO and can deliver merged frames as GSO skbs.
-> +	 * A still-active software GRO rejects the port, a remaining
-> +	 * GRO_HW alone does not.
+> +	if (!skb_frags_readable(skb))
+> +		goto drop;
+> +	proto = hsr_gso_effective_proto(skb, &l3off);
+> +	if (!proto)
+> +		goto drop;
+> +	if (proto == htons(ETH_P_HSR) || proto == htons(ETH_P_PRP))
+> +		goto drop;
+
+[Severity: Low]
+Will this also drop locally destined traffic from unpatched HSR senders?
+
+An unpatched HSR master advertises TSO, and hsr_create_tagged_frame()
+pushes one HSR tag onto the whole aggregate. A virtio/tap lower with
+HW_CSUM and TSO carries that skb to the peer unchanged, as a
+VIRTIO_NET_HDR_GSO_TCPV4 packet.
+
+Before this patch, a receiver with a tap/virtio HSR slave stripped the
+tag in create_stripped_skb_hsr(). That uses __pskb_copy(), which keeps
+the GSO metadata, and the result went to the master for local delivery.
+So local TCP worked.
+
+With this patch, hsr_gso_effective_proto() returns ETH_P_HSR and the skb
+is dropped before local delivery. TCP from an unpatched HSR guest to a
+patched host would then degrade to RTO-driven single-MSS
+retransmissions.
+
+The commit message covers the PRP case:
+
+  "Older PRP senders can append one RCT to a whole GSO skb. Such
+  aggregates, including locally destined ones, are now dropped instead
+  of being delivered."
+
+Should it also mention the HSR case? It only happens with mixed kernel
+versions over tap/virtio. veth cannot trigger it, because both ends run
+the same kernel.
+
+> +	if (hsr_gso_trailing_data(skb, proto, l3off))
+> +		goto drop;
+> +
+> +	/* Segmentation writes skb->cb and header metadata: work on a
+> +	 * private skb if the input is still shared with a packet socket.
 > +	 */
-> +	hsr_portdev_role_set(dev);
-> +	if (dev->features & NETIF_F_GRO) {
-
-[Severity: Medium]
-The role is set here for every non-master port. Nothing checks
-prot_version, port->type or hsr->fwd_offloaded first. Is GRO actually a
-problem on all of these ports?
-
-On PRP slave A/B, frames that carry an RCT trailer do not appear to be
-merged. inet_gro_receive() flushes when the IP tot_len does not match
-skb_gro_len():
-
-net/ipv4/af_inet.c:inet_gro_receive() {
-    ...
-	flush = (u16)((ntohl(*(__be32 *)iph) ^ skb_gro_len(skb)) | (ntohl(*(__be32 *)&iph->id) & ~IP_DF));
-    ...
-}
-
-prp_is_lan_dup() also drops A/B forwarding. Untagged LAN traffic goes to
-the master or interlink untagged, the same way a bridge forwards GRO
-skbs.
-
-Some slaves have HW forwarding offload (NETIF_F_HW_HSR_FWD, for example
-icssg, ksz9477 and xrs700x). For those, hsr_drop_frame() does:
-
-net/hsr/hsr_forward.c:hsr_drop_frame() {
-	if (port->dev->features & NETIF_F_HW_HSR_FWD)
-		return prp_is_lan_dup(frame->port_rcv->type, port);
-    ...
-}
-
-so merged skbs are never re-tagged towards the other slave.
-
-There is also no GRO offload for ETH_P_HSR or ETH_P_PRP. Outside
-net/hsr, the only references are in flow_dissector, so tagged frames
-cannot be merged. The per-frame metadata problem seems to exist only
-where untagged frames get tagged: the interlink, and SAN frames
-forwarded between non-offloaded HSR slaves.
-
-Because wanted_features is cleared and not restored when the port
-leaves, PRP ports and HW-offloaded ports lose software GRO for good.
-Host-bound receive then costs more CPU and gets less throughput. The
-commit message does not mention this cost. The Fixes: tag would also
-bring this behaviour change into stable kernels.
-
-Could the role be limited to the ports where GRO actually breaks
-per-frame tagging?
-
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "software GRO still on after feature update, cannot join");
-> +		res = -EBUSY;
-> +		goto fail_role_policy;
+> +	skb = skb_share_check(skb, GFP_ATOMIC);
+> +	if (!skb) {
+> +		hsr_gso_drop_stat(port);
+> +		return;
 > +	}
 > +
->  	res = netdev_rx_handler_register(dev, hsr_handle_frame, port);
->  	if (res)
->  		goto fail_rx_handler;
-> @@ -177,7 +223,12 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
->  	return 0;
->  
->  fail_rx_handler:
-> +fail_role_policy:
-> +	/* Rollback order: unlink the upper, clear the role and
-> +	 * recompute, then undo this setup's promiscuous increment.
+> +	/* features = 0 requests full software segmentation into single
+> +	 * wire frames; tx_path is true only for locally generated
+> +	 * traffic on the master.
 > +	 */
->  	netdev_upper_dev_unlink(dev, hsr_dev);
-> +	hsr_portdev_role_clear(dev);
+> +	segs = __skb_gso_segment(skb, 0, port->type == HSR_PT_MASTER, 0);
 
 [Severity: Medium]
-Can a failed attach leave GRO disabled on a device that never became an
-HSR member?
+Is skb_share_check() enough to protect the packet data here? It only
+handles skb_shared() (users > 1). A cloned skb (users == 1,
+cloned == 1) still shares its data with another holder. So does the
+clone that skb_share_check() creates itself.
 
-hsr_portdev_role_set() leads to __netdev_update_features(), which clears
-NETIF_F_GRO (and configurable GRO_HW) from dev->wanted_features. This
-happens before the attach is known to succeed. The previous request is
-not saved anywhere. hsr_portdev_role_clear() only recomputes from the
-reduced wanted_features.
+On RX ports tx_path is false, so __skb_gso_segment() calls
+skb_cow_head() only for CHECKSUM_NONE:
 
-This rollback undoes the upper link, the role bit and promiscuity, but
-not the GRO request. The -EBUSY check above can fire, for example, when
-ndo_set_features() fails. In that case __netdev_update_features()
-returns early with dev->features unchanged, but wanted_features has
-already been cleared.
+net/core/gso.c:skb_needs_check() {
+	if (tx_path)
+		return skb->ip_summed != CHECKSUM_PARTIAL &&
+		       skb->ip_summed != CHECKSUM_UNNECESSARY;
 
-A second path goes through hsr_del_port(). hsr_dev_finalize() attaches
-the ports one at a time:
+	return skb->ip_summed == CHECKSUM_NONE;
+}
 
-net/hsr/hsr_device.c:hsr_dev_finalize() {
+The GSO handlers then write checksum fields into the head's linear data.
+udp4_ufo_fragment() does this for every SKB_GSO_UDP input:
+
+net/ipv4/udp_offload.c:udp4_ufo_fragment() {
     ...
-	res = hsr_add_port(hsr, slave[0], HSR_PT_SLAVE_A, extack);
-	if (res)
-		goto err_unregister;
-
-	res = hsr_add_port(hsr, slave[1], HSR_PT_SLAVE_B, extack);
-	if (res)
-		goto err_unregister;
+	uh->check = 0;
+	csum = skb_checksum(skb, 0, skb->len, 0);
+	uh->check = udp_v4_check(skb->len, iph->saddr, iph->daddr, csum);
     ...
 }
 
-Slave B or the interlink can fail, for example in hsr_check_dev_ok() or
-in the new -EBUSY check. Then err_unregister runs
-hsr_del_ports()->hsr_del_port()->hsr_portdev_role_clear() on slave A,
-which had attached successfully, and slave A keeps GRO disabled. For
-example:
+tcp4_gso_segment() also rewrites th->check whenever ip_summed is not
+CHECKSUM_PARTIAL.
 
-  ip link add hsr0 type hsr slave1 eth0 slave2 lo
+An RX skb reaching hsr_handle_frame() can be cloned. Two ways this
+happens:
 
-fails, but GRO stays off on eth0.
+  - packet_rcv() on a non-mmap AF_PACKET socket bound to the port
+  - a tc ingress mirred mirror
 
-The commit message says:
+A guest or tap user can inject UFO frames through
+virtio_net_hdr_to_skb(), either on the interlink or on a PRP LAN as a
+SAN.
 
-  A failed attach does not restore the GRO request either; the next patch
-  refuses the usual causes before any state is changed.
+In that case, could the other clone holder see the rewritten UDP
+checksum bytes? It could also race with them if it segments or
+checksums the same data at the same time.
 
-The next patch, "net: hsr: refuse forwarding devices as HSR/PRP ports",
-only adds checks to hsr_check_dev_ok() for the port being attached.
-Wouldn't that still leave out ports attached earlier in
-hsr_dev_finalize(), and ndo_set_features() failures?
+The comment above says segmentation writes skb->cb and header metadata,
+but it writes packet bytes as well. Before this patch, software HSR
+worked on __pskb_copy() copies with private heads, so this write appears
+to be new.
 
-A stable backport selected through the Fixes: tag could also take this
-patch without the follow-up.
+Would calling skb_cow_head(skb, 0) or skb_unshare() before
+__skb_gso_segment() on the RX path close this? For reference,
+openvswitch's RX path uses the same skb_share_check() plus
+tx_path = false pattern.
 
->  fail_upper_dev_link:
->  	if (!port->hsr->fwd_offloaded || port->type == HSR_PT_INTERLINK)
->  		dev_set_promiscuity(dev, -1);
+> +	if (IS_ERR_OR_NULL(segs))
+> +		goto drop;
 
 [ ... ]
 
