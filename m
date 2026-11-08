@@ -1,86 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794151465;
-	b=4oAWiSeWaGSARY2ddnOQzSJ8xveYLEIBscYYumNTAtnLHCXfheQBaR7QOkgc+KPRRCcF
-	 kfQ46P5yusiw3v3y+x5uzO2IOibpzuK9TR6bftuaU18VqZPakQlXEVR6H8VPOCCqrP3Xz
-	 QrxFCHjwOnPUSJc6/gKXNByv3Kw07/t/Bx/oZf9Y5289B8nMdcInnwdJHVb4c/vTJ+GYv
-	 jb6MKucg0grG4XQ5Kh4BR6CG1nSNtetVVxbSHZ4blT7XyVKRG+AOR7STRMl8NMG3ulWno
-	 KqG7bFZ2/UIol0qHCL9fj2WPw5tx/nvzL2GlB8vE9/j3NFdOqtpE3KwUEAovpyCBreQ==
+	t=1794164058;
+	b=RQcbk4im+3BJuwetcSoCxoeADOMIL6vTm0sMWsz13zBMJELvFBfMhlgIzJo6ybe3kEfL
+	 5u9dbrnD5aq4W3loACx5OaWuCpUn5lNZXea6I2FU8xHXvcekpnlegsxaSLavAL970GmrC
+	 u1MybDuRoK1LRHVyJAYiP4P5nswXbOSkhEC+N9fRtQVMXdQvhzL71yPruDTnkeaPY6QS+
+	 UruKiyji1fTC82dFpLHOdOEdm4uk4ZoPb3le+Cy/4ybfktKZfwx/7fmtwv1tEHK5uM4iG
+	 9KoM2S6Jg+0mfV98W0gjVHhdEw6zkUv8MIKOy2lcmCju86KJxV4GS52u+eUDouoX5cQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794151465;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:From:To:
-	 Cc:In-Reply-To:References:Date:Message-Id:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key;
-	bh=UxG7GXUsicfCIDfMFjBbx3umG5dZ58gNRJ1FSEEffBI=;
-	b=L7ocZ7S8+SR958ltvFQkaiTmTJ7icxD5kzWgPfajeOgMUSf3NkHxCX2KazEDZANLywXy
-	 xml0tZifmmf37sAvW9vo9aiyUKAIhQcTcnZ+kpO7kj7McRvFhgODoUpxxXWfB8L9jZIEf
-	 Xu2Oj8bhdm0RjbVB3MbbNuiXim0AryCxPaf0iI/L40tdIzhRvRfjNWy1sHGyIUqSaPqlN
-	 GjaDDvg6SHhq7SmL3wQohsYP1qTnsScQyeQB1QSamVWhjbHx09S1n9J3tUhr/Kex9BwvX
-	 6k8Jybhh4SPN+cixR83jzy6RmGexdfhU8tVMnCLVGqtu/rfKjU2Ah1Vz/7nj+7w5X/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794164058;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=86euM9Gfx67Z/jCzCvP+9zClJRgbdRmi1RRM/bKJC7A=;
+	b=mh4XyAYMwOaIoAi/BQIH1ZnA33z7+x53eHQvaDriQtj94jmItr4s3DASB/h39T1Nh0SE
+	 uYtPKy6E6manDKtsoM/ogv08ZzT6N+DTchUEhnEqXbtFL/vgfQN/Pu/BqqMRTXvBtL6Sb
+	 rShtbQ/il8Twe79ycJuKwLOtcMhpLbyutCVUuUIKRnB+94RcqK/kBbguiDKpq1buEbPl0
+	 PeqG5NhpwSZst6hgJmrAb17lEailc4NC4DKmVrg6Of5Ni5QyDjuBtxcd++HTye5WJ7OAJ
+	 tGEuBVFqyHCOkklA/4wx9BLmVpA7XbT2nazMGvSWNfGjNyMS5HMIPO71eMZRPWL9/cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=soleen.com;
-	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=gD+h8bUO;
-	arc=none smtp.remote-ip=209.85.221.177
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=XLwDVfxX;
+	arc=none smtp.remote-ip=158.69.130.18
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4CB606A339
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 15:24:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED4CB606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13E9606A322;
+	Sun,  8 Nov 2026 18:54:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C13E9606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=gD+h8bUO
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5eabf243d05so32172e0c.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 07:24:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1794151464; x=1794756264; darn=vger.kernel.org;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=UxG7GXUsicfCIDfMFjBbx3umG5dZ58gNRJ1FSEEffBI=;
-        b=gD+h8bUO+1L/eQe9FHB+DiMx8C47qRTq+a4g17dQYS7gvvFLCuTolDCZ6PARdyuXX4
-         acZ8D3aMWZ0aa6cKiWw9k1VJHJ1iQr2VAspHk/gWMdyNJBMzXmWegP7sBmZbKxuy/GSM
-         6JAoTLO82VE48THmZelnCmHqMMm+d64i6eKciHmwUjRaXLqRLW9AGr46IB6G6vAJhh/k
-         hCcFJPPLlmZDQzIFVS4FxKV5X+kj5htqBjd1kuQ4F7VFC3wktmsCi0fwrK1CkrxfLKaw
-         qJo6qjeZqvDolqJMLqt0LmJuAa+/3+PlkUh7G1Z3cDLjttC66XM4ejrBpHkqVxcvNXZJ
-         fH3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794151464; x=1794756264;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UxG7GXUsicfCIDfMFjBbx3umG5dZ58gNRJ1FSEEffBI=;
-        b=1D35FZboFQQ6a32tQF12e0qhRxp9ssDGL3HdzamwrL25C9HJusTi2kEIRjEGV+syBu
-         WUTGPl/JL/N/HtETnE9KF449ypXx3EilnFnDl/seRuzXME91VXdjm+jr5krxseOnVSKF
-         SvKYj+jxeaRbvN8RUhPYXMvx0WwpkUiujKVhzHDHRaegoIL8nV0lOt3VIng/7aczqWab
-         XMIWgsb9J8+tU+Rn9mA5dVNQ9Bvyqlrm8dhEq6Omu2ybwRZTsmSAtaoctYMF0tXuLrvf
-         I/e0f4q4g7srQGdbfYGBqLdOy678BfvWoMYUJPJ67xj8q5WE6G+HlRWEd9vVQ5ga2u2S
-         iT4Q==
-X-Forwarded-Encrypted: i=1; AL+hErH8nXcpjFEovMZoX2t2FzLw5+RqBvFPltNSZnsVnWUAw4BN9m2td5FxKnxoqLz8fSUEFJhuJ9Ej/yITN73Oerg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/aI0CSG4d4vqKsKml4JWJneIuGHl93TwEOeNrkKMHBPNeFcJkI
-	0O1Iew39po6hw1GIkc4l3FoZsfco9Ux9CRnilD0uAe8/QGwDCiR4SiXOt+QuODhbzsk=
-X-Gm-Gg: AYBFou0FStJ0ugvoKZBiw9B7XYnVpY2O3pm2/OM8kR4X7nacAcBzBq7RPUQySCaVrRh
-	gZ3nblD+L2NRrzRD+wAiVma+03gDllT8Zx3+qB7sbbCNvvzwlZKa4kmA7a6BBOo1ITN1pEzYJvI
-	OKWse9FhefxMO5DZoIr98amjo8WZtl/Z4OvaXt9/mRDjuvLO1ewdz51oBl+Qc9t5JCbQ7hGqq8Q
-	AbqRtyAukT9KOkyE9StfS31JQ39qcamK3Reg/eC2VGDo33XP/VWQvPVH8iOUIGc1b9AGwP64kdp
-	vTJeA2jUZ+FexUiPr9cNJDnY1gOmXY8nMflitJhMuBDmYrmpF3sYQQgZZ3nhfbXxcjtMRzk81/6
-	wlllHsoRzpye51l1LuHn5wHAss1Q694dPzS3gGibBquHWEo36uVvcDF3kmlJRiWAJ8uIL8s63m4
-	HMwcTIdsFRL+7Ciyv0mwQDVuNDFDKPbg4Ds7qXyiS1UrQeIfLRuurSeHGxzK/0eKTcB6fbfV8BR
-	IyrjXyx0JpCIYrhRE7r+ncjPCjygaqsyyTA7SKPVaGHBhmbzCxVDIGhNJcLl3R05SShIoFwaDuW
-	p3QcXUj58kmxLY2a4gKhgahLQmEbOsPbQ2Ml+TKob/1DUUwiL3kClPDUydEVNvEv2q3h8QdOI59
-	BhHXzrX1BG7KmGcU+MWUVrC9BQSCgf1P9jNNEzzoCcCRZi4M=
-X-Received: by 2002:a05:6122:546:b0:5ea:389c:51fe with SMTP id 71dfb90a1353d-5ece725fcc1mr534957e0c.17.1794151463870;
-        Sun, 08 Nov 2026 07:24:23 -0800 (PST)
-Received: from soleen.c.googlers.com (64.167.245.35.bc.googleusercontent.com. [35.245.167.64])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ece60c1adfsm2166205e0c.8.2026.11.08.07.24.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 07:24:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=XLwDVfxX
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+	s=smtpout1; t=1794164056;
+	bh=86euM9Gfx67Z/jCzCvP+9zClJRgbdRmi1RRM/bKJC7A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XLwDVfxX9AiDDInUiRtFjFwl/7zrrebQYcO3snoBQ1K+ZN0L/JLDc7zq4QXqmLV90
+	 ifWrHgzKYGNHdRmyAPltc+isnGO6/nnbT1BEXrBsWfu+VNdYtdtgMSApxc9SItPJp5
+	 SmxUWdqoMdFZQ6Dcu015Hvc3fKI2AxNHv+KJcClOp/f5l/X/LnDunP+3PIKUZim3TE
+	 8PCBh2DLlc9+IrTg3fJGVoATeHomhLkJLylzctDGwg80I4Wgev6gmkeaAppHFgh/UY
+	 SMZ1h0wTGfBy0TOHgV0QNNZK1HcBSJUC/vPC0H856gei9VeCsQHhUieiVS0pvy6HjX
+	 z3VlbvYat2v/g==
+Received: from thinkos.internal.efficios.com (unknown [64.58.40.251])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jN2Bw4cBczMkC;
+	Sun, 08 Nov 2026 13:54:16 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: juri.lelli@redhat.com,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	vincent.guittot@linaro.org
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	tglx@kernel.org,
+	will@kernel.org,
+	boqun@kernel.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	kprateek.nayak@amd.com,
+	luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org,
+	longman@redhat.com,
+	ridong.chen@linux.dev,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	bigeasy@linutronix.de,
+	clrkwllms@kernel.org,
+	parri.andrea@gmail.com,
+	m.szyprowski@samsung.com,
+	kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	Sashiko <sashiko-bot@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH v5 01/29] sched: Fix cpuset_mutex double unlock in __sched_setscheduler()
+Date: Sun,  8 Nov 2026 13:53:38 -0500
+Message-Id: <20261108185406.1549770-2-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -90,52 +96,165 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 4/4] selftests: liveupdate: Add riscv support
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: Chen Pei <cp0613@linux.alibaba.com>
-Cc: pjw@kernel.org, palmer@dabbelt.com, alex@ghiti.fr, rppt@kernel.org, 
- pasha.tatashin@soleen.com, pratyush@kernel.org, graf@amazon.com, 
- shuah@kernel.org, guoren@kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, kexec@lists.infradead.org
-In-Reply-To: <20261106071459.2003-5-cp0613@linux.alibaba.com>
-References: <20261106071459.2003-1-cp0613@linux.alibaba.com>
- <20261106071459.2003-5-cp0613@linux.alibaba.com>
-Date: Sun, 08 Nov 2026 10:24:13 -0500
-Message-Id: <179415145359.358073.275309518363721943.b4-review@b4>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=417;
- i=pasha.tatashin@soleen.com; h=from:subject:message-id;
- bh=FtmrOogkqyUZ+q/8/Vic7Il7P35EARJys1IQgDvRVIs=;
- b=owEBbQKS/ZANAwAKAbt3KEzbc3reAcsmYgBq8JQhVEhYRlNImO2ueIVy23Pfe/4w2LJsKj2WG
- qH/Tmd7+XeJAjMEAAEKAB0WIQRBMaqT7LRvGvB/NmK7dyhM23N63gUCavCUIQAKCRC7dyhM23N6
- 3vP+D/sGPpbNDhlfiFA68lnaSlf3Ud1W6sEIzkODc2Rr/nh/XGhE/+iIjOkpoSCxRJE/NO9C+DG
- jRVkLElYMybWKAUMrMtK/FIY/Mmj3rQk8/+k2K6EyT8bp5Y5pm3UJWc3keXSIflkIzqBrdk8OXd
- jc5vEvhN6qdxqdjUra55/a8LMtN17XIqisUGChRTOKnezNh85HlE5QXwKBWEqOhTZjrKrntjYer
- eOUgHTCNquEbY7APFlbwpmVAwBwissclqIuP6RyhNBxnQRqOXacs8aiRer/a3lrBw56srBMgGEF
- Rz9b6ezMwvCKh5xpZJRAGlCpYcn4mztgSYF7qcsBmQdYhJq7h6bupQliFFODDM+BF8IPhTU0qYp
- JpCLkQvAUYKCSzApDXp4mGTNdwfPr+Dn/vL7vv21BiZ3nYC2zdmt8L3v34AoMkQuK+a0s1nUWMh
- syI3MknQ2599AHAVwKArwt3/21IjEzIIbZzcZdO+XsALXP79CbPrgN3Tz6Z+h1Dr8LB3dmfQTFm
- nhFIECmygvfqj7AVJQhQeN3IHyDJyyhpqLb3t7HlTEs4+MYEROzKSC+8ZZogWFtGCHVfovlcKgP
- uKerMtzV8HQ4ZSBMJ1ZQ5PX9EMGpc8uOa/dLCjDJX6tjUtcIEoU0vWb/7qtwlMVuPp0e1ny0g4M
- TnCpyQ6RyzM/VOw==
-X-Developer-Key: i=pasha.tatashin@soleen.com; a=openpgp;
- fpr=CAAAB722DD22A081F0D49F35633A6A993D43B569
+Content-Transfer-Encoding: 8bit
 
-On Fri, 06 Nov 2026 15:14:59 +0800, Chen Pei <cp0613@linux.alibaba.com> wrote:
-> Teach the live update vmtest runners about riscv64, so the LUO tests can
-> be run on this architecture.
-> 
-> LIVEUPDATE depends only on KEXEC_HANDOVER, enabled for riscv64 by the
-> previous commit, so nothing in the tests stood in the way.
-> 
-> 
-> [...]
+From: Andrea Parri <parri.andrea@gmail.com>
 
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+A sched_setattr() with SCHED_FLAG_KEEP_POLICY on a SCHED_DEADLINE task
+unlocks cpuset_mutex twice if the task's policy changes concurrently:
 
+  WARNING: bad unlock balance detected!
+  7.4.0-rc1 #1 Not tainted
+  -------------------------------------
+  repro/126 is trying to release lock (cpuset_mutex) at:
+  [<ffffffff9a17cacc>] __sched_setscheduler+0x9cc/0xc40
+  but there are no more locks to release!
+  ...
+  Call Trace:
+   print_unlock_imbalance_bug.part.0+0xfb/0x110
+   lock_release+0x286/0x2e0
+   __mutex_unlock_slowpath+0x1a/0x400
+   __sched_setscheduler+0x9cc/0xc40
+   __x64_sys_sched_setattr+0xa3/0x1b0
+   do_syscall_64+0x106/0x5f0
+   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+__sched_setscheduler() samples p->policy before taking any lock, and
+restarts from the recheck label if p->policy differs under the rq lock.
+The restart drops cpuset_mutex but leaves cpuset_locked set, so a pass
+that no longer needs the mutex still unlocks it on its way out:
+
+  CPU 1                                CPU 2
+  __sched_setscheduler(KEEP_POLICY)
+    policy = p->policy /* DEADLINE */
+                                       __sched_setscheduler(SCHED_OTHER)
+                                         p->policy = SCHED_OTHER
+    cpuset_locked = true
+    cpuset_lock()
+    rq = task_rq_lock(p)
+    oldpolicy != p->policy
+      cpuset_unlock()
+      goto recheck
+    /* no cpuset_lock() this time */
+    ...
+    if (cpuset_locked)
+      cpuset_unlock()
+
+Without CONFIG_DEBUG_MUTEXES, or CONFIG_DEBUG_RT_MUTEXES on PREEMPT_RT,
+nothing warns. The second unlock still clears the owner field regardless
+of who holds the mutex, so another task can lose cpuset_mutex inside its
+critical section. Entering SCHED_DEADLINE needs CAP_SYS_NICE, but a
+racing caller that owns the task does not need it if it samples a policy
+other than SCHED_DEADLINE.
+
+Clear cpuset_locked when dropping the mutex for the restart. This should be
+safe because the flag is only tested on the paths leaving the next pass,
+after that pass has set it again if it took the mutex.
+
+The following program, run as root, reproduces the splat, which no longer
+appears with this applied. On PREEMPT_RT it crashes the kernel within
+seconds, which this also fixes:
+
+  #define _GNU_SOURCE
+  #include <pthread.h>
+  #include <stdint.h>
+  #include <sys/syscall.h>
+  #include <unistd.h>
+
+  struct attr {
+      uint32_t size, policy;
+      uint64_t flags;
+      int32_t nice;
+      uint32_t prio;
+      uint64_t runtime, deadline, period;
+  };
+
+  static volatile int stop;
+  static volatile pid_t target;
+
+  static void set(struct attr a)
+  {
+      a.size = sizeof(a);
+      syscall(SYS_sched_setattr, target, &a, 0);
+  }
+
+  static void *sleeper(void *arg)
+  {
+      target = syscall(SYS_gettid);
+      while (!stop)
+          usleep(1000);
+      return arg;
+  }
+
+  static void *switcher(void *arg)
+  {
+      while (!stop) {
+          /* SCHED_DEADLINE, 2us every 1s */
+          set((struct attr){ .policy = 6, .runtime = 2000,
+                             .deadline = 1000000000,
+                             .period = 1000000000 });
+          set((struct attr){ .policy = 0 }); /* SCHED_OTHER */
+      }
+      return arg;
+  }
+
+  static void *racer(void *arg)
+  {
+      /* KEEP_POLICY | KEEP_PARAMS */
+      while (!stop)
+          set((struct attr){ .flags = 0x18 });
+      return arg;
+  }
+
+  int main(void)
+  {
+      pthread_t t[5];
+      int i;
+
+      pthread_create(&t[0], NULL, sleeper, NULL);
+      while (!target)
+          usleep(100);
+      pthread_create(&t[1], NULL, switcher, NULL);
+      for (i = 2; i < 5; i++)
+          pthread_create(&t[i], NULL, racer, NULL);
+      sleep(30);
+      stop = 1;
+      for (i = 0; i < 5; i++)
+          pthread_join(t[i], NULL);
+      return 0;
+  }
+
+An LLM helped find the PREEMPT_RT crash and write this patch and its test.
+
+Fixes: 111cd11bbc54 ("sched/cpuset: Bring back cpuset_mutex")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Link: https://sashiko.dev/#/patchset/20261016062629.2102883-1-sh_def%40163.com
+Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Waiman Long <longman@redhat.com>
+Reviewed-by: Kayra Cizmeci <kayracizmeci@gmail.com>
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ kernel/sched/syscalls.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
+index 45a127deeadd..2af550f92ac6 100644
+--- a/kernel/sched/syscalls.c
++++ b/kernel/sched/syscalls.c
+@@ -640,8 +640,10 @@ int __sched_setscheduler(struct task_struct *p,
+ 	if (unlikely(oldpolicy != -1 && oldpolicy != p->policy)) {
+ 		policy = oldpolicy = -1;
+ 		task_rq_unlock(rq, p, &rf);
+-		if (cpuset_locked)
++		if (cpuset_locked) {
+ 			cpuset_unlock();
++			cpuset_locked = false;
++		}
+ 		goto recheck;
+ 	}
+ 
 -- 
-Pasha
+2.47.3
 
