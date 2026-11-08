@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794141336;
-	b=LhThgwaXF/jfHuZVjxaisysD/6DjlhwzzXe3uqaYeyF7McW1G5c2ztsPDAaaj9DKY7Cm
-	 qvrZvQlD1ArETTbeiBD6Md2yGKLfofkBiYfP3HcNn1NdGZKx418gBmkjtcXbgBIVdpd75
-	 nE6tVNn9PPAAxKmQgZTflkRiqigQ43G5xQR5c6n4KPZDQKWnec2ZKpbbBXWk12ucBI2wN
-	 5kpNuJJb3yglwtiI/dO3PJdJnfuFRhYlGc1fnDR+wJL1qAbPdyTLAxNTJg+Eo+VkOBuLJ
-	 IW/CAt+zVC5Ihq+5s7H293b/7n3XRkhMKTaQhGi3OQ4V6EnK+6vxQMZkS68xnOqykVQ==
+	t=1794141341;
+	b=UyjZMPr8/qPSUNsiYusCnMU+6dqHnnEqtN/ooQfgkcjivnExPskdQoXdQT80QPxMnU1I
+	 +v+t5+97OCucQ9HwzR6pYPhuGBwXegbTs3omn842QEpr8Z7+oenAM/MCcxYc9NwD8F7yc
+	 y/D7XaoMSO7Pban0+hdgeE2LVIU0t5Ecwq0/oRhdnqn8KnoFb5CSyCZdXzy5VXbgxPWku
+	 I9cOompQWm/EohGkRQgv9du48VsgkRWdbPybeAufYzxgbfaKVUbdkztwDOq/dchkt/+ex
+	 zIj0SmHnT+3BMQKdgOm+JqRGXe+JhQNxoXy8oVNyq325gDDiM0Uqn8w3P9zIg1LGv+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794141336;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794141341;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
 	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	bh=PI3mxdu/F4E99n2vbtGBdOsTP2HHkJVPSsEC8stKuJQ=;
-	b=y9aQ/ssG6JLeupPx7QDzerBM8m4SK4jFHLlG6Hn6VwFI3Y4PvqaNV0BO6pKe+Vtnjj0D
-	 LMsnEh3h087aULwdtKBznprTJWgrbLMkw7Z7VVT/+5LWdnfTzNehXR53ZvGt+r7XQPLVp
-	 eFpTRmTzYtSCCc1PTJLUGfHEdx8f145pgdUsHfbIZsK8lOSw/djBj/9UnofycIGwsrG9y
-	 mABHaZSdU3FLV0dKUZM3eY5tk8fD+FprjRiYqm6ERIqnTUdeoW0+oPOQkSahecmqCyk3V
-	 bhGugzX4j2DYfMSKOoWlmKuWfjFtDxqAIM3dgsNcry20v5VT/hPE6xIcyFlXNzahdfQ==
+	bh=BsIqDH2uBIw07srR7JvSFFgacKj9qHr7Bysu5dj2LaQ=;
+	b=gg8PJS+P4ZSFM6XYw8j1xBLrtl5Nen0TRvS29sRtCKqfqdPEascmkx2Yy1fFJz10IWzU
+	 BWpAKFkIGRRKvLAx3iECZqb35lGxv48h7z7PHK7Wu4vXYWZ7GoFwoe4KuFQDh21hs0bXO
+	 KwmKsAcKDmPLd4a1uC1MOcD+lhuCIZdvNf122hPkOjgZnm3LGL/cQJMjiUP0YJkSZse3E
+	 QfGwF+b/pR3bKCVQxAkDdSksWYjv0CWx6BMqwUJ6g7/FN9hcBxV7283zWQqYXWTxEzRK6
+	 dpFcXaIoyWfOBA6s5SsIXxABRnB0SjSdaa6qUs0stM+kqNHoae8v786HMtu6fV7v44A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aFFtM+Q+;
-	arc=none smtp.remote-ip=74.125.224.50
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c+8q2x3i;
+	arc=none smtp.remote-ip=74.125.224.43
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC02606A321
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 12:35:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BBC02606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB51606A320
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 12:35:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AB51606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aFFtM+Q+
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-67be6030c9fso18078d50.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 04:35:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c+8q2x3i
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67990a45e02so27540d50.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 04:35:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794141335; x=1794746135; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794141340; x=1794746140; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:content-type:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=PI3mxdu/F4E99n2vbtGBdOsTP2HHkJVPSsEC8stKuJQ=;
-        b=aFFtM+Q+ywj7/wRJUg9KitjHUvOiVx7dsT2zTDfuKY4O4Y5zq2zNpffTnPQPmH1/Be
-         L5Rg3GJ6lrjtXaHtRu4lfkNgFe+vQ3kOXvzMF9Apf/C1u14YTIdTForRpX30H39leAZ+
-         AE4Z+A+r/K/VXavRXo4tFokWMhx8ajEhAeXkx4P8CogQBSQSuqaZmjBj39eW8Dil3x/P
-         8IO30JSVlBqoXKsVn8P3jSLpGkww44H2n3T6GsJ1s21hCB9hfEcmguGJkspReTUFBWbe
-         5SsEAiF5HJlIFq4UBzUK1Y7grY8kNdNlt/PHE09pQHsE1nDHLZQUpPfOqYu+1Fpa4Ze7
-         RZKg==
+        bh=BsIqDH2uBIw07srR7JvSFFgacKj9qHr7Bysu5dj2LaQ=;
+        b=c+8q2x3ibzX3DXzv36nytcJfoaxql7mkrXSZ1ykHvC2IhuVHo6W/fsqeB0shu9wl7a
+         6W4w/kP17+wKfkTqjwt3F+MERyu7So4fAsTAwuk50DnjtjfXZQVRsmEhlJ521I3KrC9p
+         3ZO9RCIjfd10csfppZND2Bhg0pXH4pUWhxPCHX7OSLiNex+WjU7anHQ+N5RzVUyRGxRy
+         hFn2vRdGbo/AO+WxA9IQeFHcKLAEI/TBjdj63deXHdOpI59bnMLep0KJxxR3QjXznRf0
+         I7vMuoqnmfbwLRK0hDoNrtOCLd0nPU021BlLLlC+5aWDP29xDEtDAUEiGWVSIPVAUjPl
+         nnBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794141335; x=1794746135;
+        d=1e100.net; s=20260707; t=1794141340; x=1794746140;
         h=mime-version:content-transfer-encoding:content-type:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PI3mxdu/F4E99n2vbtGBdOsTP2HHkJVPSsEC8stKuJQ=;
-        b=Wfu892ZluxrTGzASwg5Lwzq4XETjWjyL5eTjGnCpi3udpv6UAxl+v+9C2nfZIbBMCz
-         /L3cmkkly9k+IvKMzwp7SUTsH1X5O9HWvWPzM0PThmTn3cjR4pOtZLtve9XjPY9S/Le5
-         HQZjPRDXf7yjPd7J2wiXjRJGOUPSuPU0ldfbuI5v7o9ftLEPJ49gRIj5CwmnSmfHvR4/
-         M0hsPpDCW50he+SrxBtILxlN1mC+8YNqMsq7uW8sifAhBDzTGoScQuK5/DV4za4m8I1f
-         ySOMtlPxNzlXRpKwW054+tgNB6Q68n1+ugN+zx3rUl1gpUk4IEOS1wnS6qT+WsjYZrPU
-         k5SQ==
-X-Forwarded-Encrypted: i=1; AL+hErEXGe0lgi7tkbxE54RC+/nUf7VHiOYZbkEgcQObRlBQdfEuengLqLBq/qBccNM90PA5yGAGwmYmv8HjZoxhl2Q=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/dizqqwhqsXOdX1mSWiLl1IEVa0aAAB5pXeEQINxvFr0GhPBHS
-	JcMmxZMfxvVuIbnsLrsXsk/j3LMk0fFarIoCqx69zn/3KuvBsM5LzbOf
-X-Gm-Gg: AYBFou3ZDMSYM/kmFVNTMhpsKLORAkC2lVql1jX5tkscC/LVz5vFxqKEkzOP2/a3PkM
-	gTlOib8WmAeWX633TI4AyZWN4CzpdaHdR+d8w9vQaUHXTtdp6vBB0452BAQNJeLAe0ICyfu3dKe
-	jAIMx3HVCMjGlkAIC25gRQMqgBdiclaTK5AZPEYT7O2Siljh4v+8U2yX80VkYe1feUYErdmYRWV
-	NnYpqwpGPZCu3yfU27nRu9GiITYguj1aZskJkyl+OOcOV6mxM8ojyQP/xrVuaiJGGdbmZOxgX8b
-	ZjArUm269yItggDr8+eUZ9e1V7XNEh8AyhF+f3CmzV3pP9YaAeQJ5V6niX+8ki7V3KTibZW1mAQ
-	xH3soIFUhJL1dw74ykeg1RRHK9xanCyZ0+XKUuDIIgcQABvDNQFqBo9o/U/GirTWuyfsHdo6Zw6
-	+TsHA/41o3PfP98iXQMKinRUVjrVNImUox93sYHFGFn29wvbJuqWELvLgvHgT8p7pNTG075GAXM
-	rJIvJaYUF4suLfqv+i4Koqtn3aFcfyLuFbLNb893/ubKBAnAPs9ELiWRlPm/XvqBoZNF+0qYsAv
-	G8kmOJD6Vf2f5etVS37Hb6MYpKA0uAX40oHHsGoAJIVUe3zOnF3zWrb3
-X-Received: by 2002:a05:690e:140f:b0:67c:1e0d:f7b3 with SMTP id 956f58d0204a3-67c3d7afb18mr892949d50.11.1794141334626;
-        Sun, 08 Nov 2026 04:35:34 -0800 (PST)
+        bh=BsIqDH2uBIw07srR7JvSFFgacKj9qHr7Bysu5dj2LaQ=;
+        b=HUeJKECjq2br3wbp3JCj9NME6f/AOwEo4Qmlf0cx6TRSFKiOgmkyXpn2SSx9twTNte
+         Yo8zhc3w0qlFWNqEL9oeG9jso3eQwlF5ljGZE3qFx79qh7Fzq28Nyp0yPRSxh8pXqaF0
+         DEKDCzYEgyHPLfy+pJjoTo6oMDgqMfZ/0mE8T5zX46+bX1vHG/BN1I6MQkSA4AsdsZAA
+         uQGtWVTV4gTsaZVgYL+0lisUWbabwwlombBncmdB1x+m/tDyinL0/rUvbpf+N9eZoASl
+         DKho1CMiUzPAB+S7+101NxvUDT51bSV7Z7SnJqb0s1SSkLZ0lXekAUajU/Sjq7u9U/5D
+         N49w==
+X-Forwarded-Encrypted: i=1; AL+hErGRcV59y6ZJbagJBP7SCuFZVQK8fTb9BZ75lwgoUqFu48tG77byvHarZNXRwODp68HsdILoPJEwac5zj2E5Bg4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/QiJrzjusqc5omEMsP/PNRz7IeKGmaY5rGs2gy2mUtVnhWLvBI
+	EV34Trq72oL69veG5UtWM6yK3yunZO2uzKQBDrZ47PSh3nj+mGjATYXb
+X-Gm-Gg: AYBFou1e+yrM8E3On2X3ykEN//5XxDdeUpjhtn+7fP8OFEnEhr8OkSFF0aCc9PBeLw5
+	Jkj314YqFOT3mIPrkoH2VM1M25XOuFkYB+lQ4TLxVkN0FvJ7QLSqrtREVMsq+PSVMl0GdtIeYjj
+	6KvxCw4wIN9tX7l3Odwi8VscMhRoaccmWZgivC/mrhIzM/7qJMviRTxNe15nsEaY7SB1ACfjDft
+	KmR76CBeWI0CngpJVMnUbnmGp6ob6BdqCBICG1kC3KTA+8De7D2oUlkWRi/r3+NggY1sA2F7pLF
+	6OGhYVzhUaXnViKm8dv4f/WHndh15dD1ZWloXzgm94MKVos03MVozbIS+DVdXPViyCBXtItskNZ
+	FUWtMhQk3r5r1YRmg/mMfwKZI4il4kEvCLuujDyGgTO+vyydpAJpQh24P+4h13rv2XPnRDXx+9o
+	S6AEOyQcMUAHl86JP9V+Unqh/SceOkKK10ro9zYfQT9lZ03h6/RNNm/zLyf743oVf0paGr92ZYv
+	MV02GT2IMbSQ5Fs42JI1s7z9IgbaI3dhQ0hgjMMkrZzFXbQ3KfpB/s53aQ2qtc4lj8gHtIf5O1D
+	X1ImdNIsul7J3i5MXxhDajTVAq8PgD9u0UA=
+X-Received: by 2002:a05:690e:441c:b0:67c:608:b375 with SMTP id 956f58d0204a3-67c3da7825dmr655795d50.101.1794141340146;
+        Sun, 08 Nov 2026 04:35:40 -0800 (PST)
 Received: from [192.168.100.12] ([61.170.225.237])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67c3b959615sm1680270d50.14.2026.11.08.04.35.26
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67c3b959615sm1680270d50.14.2026.11.08.04.35.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 04:35:33 -0800 (PST)
+        Sun, 08 Nov 2026 04:35:39 -0800 (PST)
 From: Minxi Hou <houminxi@gmail.com>
 To: netdev@vger.kernel.org
 Cc: netdev-bot+sashiko@kernel.org, Aaron Conole <aconole@redhat.com>,
@@ -88,13 +88,13 @@ Cc: netdev-bot+sashiko@kernel.org, Aaron Conole <aconole@redhat.com>,
  Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
  Jamal Hadi Salim <jhs@mojatatu.com>, Paul Blakey <paulb@nvidia.com>,
  dev@openvswitch.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v1 1/2] net: openvswitch: do not record user features
- when the change fails
-Date: Sun, 08 Nov 2026 07:35:26 -0500
-Message-ID: <179414132635.2826493.1662034784357588334@gmail.com>
-In-Reply-To: <20261107113403.797779-2-houminxi@gmail.com>
+Subject: Re: [PATCH net v1 2/2] selftests/net/openvswitch: check that a failed
+ set keeps the features
+Date: Sun, 08 Nov 2026 07:35:34 -0500
+Message-ID: <179414133477.2826493.3370183031916994716@gmail.com>
+In-Reply-To: <20261107113403.797779-3-houminxi@gmail.com>
 References: <20261107113403.797779-1-houminxi@gmail.com>
- <20261107113403.797779-2-houminxi@gmail.com>
+ <20261107113403.797779-3-houminxi@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -107,24 +107,25 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Both points are right, and v2 changes the description.
+Both are real, and v2 fixes them.
 
-The Medium one is a wording defect. "A failed request" reads as covering
-every request that fails, and the paths you list do still leave the key
-away from the features: the NEW unwind after new_vport() fails, and
-ovs_dp_reset_user_features() on the -EEXIST branch. They predate this
-change and stay out of it, as the changelog says, but the closing
-sentence promised more than ovs_dp_change() can deliver. v2 says "A
-failed OVS_DP_CMD_SET then leaves both the features and the key alone",
-and adds that a failed OVS_DP_CMD_NEW and the reset that follows it still
-leave the key one enable ahead.
+The Medium one: the else branch treated any failure as "the key is not
+there". v2 reads the exit status of the recirc set, takes EOPNOTSUPP
+(95, what set-dp returns when ovs_dp_change() rejects the recirc bit
+under !IS_ENABLED(CONFIG_NET_TC_SKB_EXT)) as the reason to return
+$ksft_skip, and fails the test on any other status.
 
-For the Low one, v2 names the reachability and the effect. The request
-needs only CAP_NET_ADMIN, which a user namespace that owns a network
-namespace carries. datapath_policy has no entry for
-OVS_DP_ATTR_PER_CPU_PIDS and the operation skips strict validation, so an
-empty attribute reaches the check that fails. A disable on a count of
-zero reaches the WARN_ON_ONCE in static_key_dec_not_one(), which panics a
-host that runs with panic_on_warn.
+You are also right about the fragment. tools/testing/selftests/net/
+openvswitch/config selected neither CONFIG_NET_CLS_ACT nor
+CONFIG_NET_TC_SKB_EXT, so a kernel built from it could never run that
+round, and the claim that both rounds fail without the fix did not hold
+for such a build. v2 adds both symbols. I built a kernel from the
+fragment before the change and one from the fragment after it: the first
+reports the skip with the test harness marking it SKIP, the second has
+both symbols set and runs the round.
 
-pw-bot: cr
+The Low one: ovs_dp_change() starts user_features at 0, so a set-dp
+without --features cleared every bit, and a pid list sent without the
+dispatch bit was ignored while the command still printed "updated". v2
+reads the current features from the GET reply and sends those when
+--features is left out, and the help text says so.
