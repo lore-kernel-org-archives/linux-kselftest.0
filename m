@@ -1,125 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794164398;
-	b=joy13e7JsNjoCG0G1qwzlUx38PnPgm/Gd4nEsdeVILHG6tuEOyFcaMMd+370V8o21n6s
-	 hdfHkdA+PqAZX4Zn/sqLZnrHxH0bAjiAsEzTLeRbqsnK05Y3rQOWWijlgn19CmvsAcaBE
-	 FWC7LjdRaXAYMiToJBKHt7PY2ccXolaqsy/wZlyu0LMJ9oI8vOYp6Q2GISJRIw9graTPV
-	 yl+Hjk/wrQpLexTLVsZWTEoZMwbF4hdPoLshOmR+4QXMMKmTWURIYTWy8p7ibSmEM+ouY
-	 haePQaU/y+m7Vr+xnRuCfF7frwvse4HW0w8WRgWyHm06r37h+h2peUt9OS4/sXOegow==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794164398;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.176
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794165255;
+	b=QBK1WeGUaYLVh5rZejYpI0ess5CQVUP546riRAgnyBsQpVfHXf+z9+OrOSN/EdWti0bc
+	 7kuOyj/0QBmwL5zUTDTuj4H5leLllmqE/QG6faHKi119WnMV0dmAR2ZFvj+Et9a/lQaGk
+	 szsptmJ7kuhYlDQKSCwwxtC0P32Cskt2Pmz5wBygyNQDyOJwGap1iUFPelS3fM7cWzz19
+	 LpJ9a6jUhBBek0p9QIAaTV/ZG2XB1iiBzSKmvMzp09Mh8pp/WGSWDHSTHqK/vs83k8IC8
+	 Ih2u6ssZGzHdCv6+zislD8IfFq9sn6TgFlyy0Iv9mh8y26rmwdopWDEI1EUXzO5iEQQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794165255;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=JLhUwzup1lwefYy8NOOFjthYnrByVfTsqIe79kkV+Lk=;
-	b=ywl1UKZnJoxVaGR+9Uzm7pV7582jBd8KyLbe4lzzAraK4gLjblNJSyaa/mFSN+Oy+qyD
-	 /a6hGRAP03QYYaW9Zs8f8U9x8X0Qm3Y3ot6+9D0au7W0nYiakZUgN7Db7/bwNm7bMZAsu
-	 evOmjzaPh58JXv0dGIzbiqnCiL/w4cjjPhX6kWBfiv8LyQgAUBQDE8maqzd6rgk9EyuN4
-	 fy1lCviKSEeNkRA9Syk6xYBGrsxZS7rvZbFVSJ5GY70PqLWFIpBPwVPoELsSDKCAt5PUU
-	 uLoe3xPaDY0u1/qjRcQkDQA3WKtwXxlBjJlWEL5kjieIsYvhBiR4QfVxLKKlz4EPFVw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=Aigj0AbyH3j86dbZXjOqGutzBLlzhmdni5njhtK+RHk=;
+	b=BCeG3clmvTs3QZUt/Tr7Pm2PyBxDiEaCvIV+gpXFyAznqTgfPmwZ5uMny4ihiJOoyxvi
+	 ttQd5xEzx4Ca3aHSxZiONafBMV7T66wBmBRvebQgTxpvP+Y85YfbN8i2MyknOq3IKdoc1
+	 Yjv/Sw4RAk0GR/soIGIhnWjmfc6CTcpgWBbkwY/kc8kkBNFDoyM2r9yxh/nWdrHStZn98
+	 Dr6HTeZ7HPx4FUcRzYiE7phOHyxgdiFWPvAYl4etKKxOc3+iBlPUi6CQSpQ1jGHWL+UfG
+	 w2LDY4YTks5wwFrV0Au0NSNpQQ1S4Wq2G1OmxAQulXgYaSeBTvBcW6c+gA3dDaOWl1g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R1wo23fo;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rllbRpEg;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.176
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28907606A31C
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 18:59:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28907606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46EAC606A320
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 19:14:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46EAC606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R1wo23fo
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso1148425e9.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 10:59:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rllbRpEg
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-33fb4680717so574045eec.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 11:14:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794165254; cv=none;
+        d=google.com; s=arc-20260327;
+        b=KFcFypBV+a+oe2mMxVIRpu3NEKxbelLnXdcwetQGLL4RjbTPZnYu67YS3n9HeFz4jh
+         jGwnFr/+kypieYI0H56IlVy99TG4pyZ1W02ibeo+GLGvegGmgxEGS6FpoydppU3mPPcD
+         kuzdOczggaX/Z6mkBJNL+4Y7RUh7j0EZqWu9Bw9D0nlFcf60baFUcKZI3aIyH0pIbV1W
+         LwS1DvytlZoprnARQDLXTGBCdHVjJl0cgC0oPQbxxXfjOpDIy7w+TCvmkb87PJzrTieO
+         JPHFa3A6xTBZE4FzUkjkDZucQFbXnjgmLNtRvCug8nMcmlq6dRiPNqsaJeRpaNYRs65o
+         lCtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Aigj0AbyH3j86dbZXjOqGutzBLlzhmdni5njhtK+RHk=;
+        fh=D/2qTpPu9MOIUYCRrX/AvGdXM2frv4No8ACI6KVnq9o=;
+        b=dd1BFuiQwP2iho/pdYhnRGzXqhZBuFWK14CAPL0QghS/qRINC/DluS8Tn/7Ym4nes/
+         8tYqS2kVifA0qyIwv0EzMBQuczUoSsnw1LGo14awOtsx38zIh/RtzbGq3L7xpJSbguXp
+         CXOjw/mfIzXlO0RIRrBxBn7flPSrytEADkcW+yN7AuZ7FVHo+Ce6THr40bm+qlISxhxo
+         8eeeRF6T7JEVmMHaRgGd3e+Ka54+nNA2wb9vE+LednbbOjzU4xgBYEOQOAIkJZ5m1eFR
+         PkyikCq0QOiQi2eYeYf19mKDm3Ua+zV2lJWAAbYGgSZSd5nWzCCe4XFVTQygnRx1991v
+         OYfw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794164396; x=1794769196; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1794165254; x=1794770054; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=JLhUwzup1lwefYy8NOOFjthYnrByVfTsqIe79kkV+Lk=;
-        b=R1wo23foPI+Ww2Y4cpq43W07Mf+jit8FQA4fqT2qskAAUi1V7hffRwMpOB7+Qy2feP
-         zp6ldJHSuMH1zABQV7szZf0nfxC20mZGpEGGAYUnTMCSA+D/eM3r40446T7et2bkfjiC
-         dreWD5HpEsS9nqCgyxIq04eCKbTgTbecdrGOOUVU6ZMxtSJBu5DsFEalLWpDFdkgQ0uB
-         aL4KHaRzCve8FwzdGS5EGGspb2mKb0HSEJeXONH5i7OkOKbeDnK72SKcvi+y7+XCn36O
-         0hhhuZpIRf7jFenNh+SDQ8wSqcE+XBpGUeI1p8lamNeGQoxRmIsRYhy/w5iH4vbINrAq
-         VQEQ==
+        bh=Aigj0AbyH3j86dbZXjOqGutzBLlzhmdni5njhtK+RHk=;
+        b=rllbRpEgiw5AIuoQnqAOapTJtURQPajg1YXAwpRhZlWjt7K+ZzeDGOMzFSAzbSqle8
+         RZSht2rfco69yYb8DEwj2en5KGT41k/56aT8gFqQnYZbnRoU0I4+FoIQPMMpYyMQr1tR
+         uhD/S0OsBEBHi1wcCfsbCoe2fmWPlMGpvlttpmmuONqFrunvkEbxIVNU548gxCpkJp/H
+         Cp3e/CrOl9QoehwxzPoS8HzOv1MqoWlgKxSSr1+7axyaM2JhbW82FxzdcAhYpfeuaWsq
+         Fr2lWuGq1Mqt6zthCm79fbucEi+tySKeWtrJ+OpVVr7ZEFfBUNeHjQm/YgJYmfsTksLV
+         2cOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794164397; x=1794769197;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1794165254; x=1794770054;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JLhUwzup1lwefYy8NOOFjthYnrByVfTsqIe79kkV+Lk=;
-        b=YLi6gnFjV4tW5dbob28AZl78DJ7bsNjazRbWzFOcEGR6a8hEd06VI7JkYcXkgKpKEI
-         Ft4Qq1jdWU0Q5oHEMgMvFz4JB33QUIDak1ev5yDC7rI71ETp6d19AYKjNoTxzNU5uDqx
-         U8h22cg02r8Aghv2oCCUFboRx/N4cfr81D+Rr+R3grZuRTNxvRxeTAjhUbdPptoF8HM7
-         pNhlhw+5InDBQm6EOpn+5d9JgTAZDiQ+vsIfl7LOr/bqFSzAimQUmd6sRp0vJUng4izV
-         b/GNS3GOu1IxHA9mMB7zwkcLIqP+FyZ6Lf9PVQfNjG1mRD1IR7BwEUKM/m4JU0ldWLMg
-         3AoA==
-X-Forwarded-Encrypted: i=1; AL+hErHxt63HznrOqsw24Mg/IU1Uguk72Vd93WDcUgIWihvIiZsMruvUxDirpp3boEEC8s3grceNAJ8mIu9nE+AkKS8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9w6/vQKkoM5/uXC8GsLdymvJE4KolkSHBWMoy5ANdb02wB0IJQ
-	juF/+vX01huTb2V++AXbXex0m57e3eUzfin3YU7XOUIF5EUIA81jyrJU4mokhlBM
-X-Gm-Gg: AYBFou2lbUb/PD0/+D3KyY/6b1V4BcBSDP6CFeAC5mez5OA9/B+FlLliXvqLdJzLaiH
-	GuoJE3rzQwJqEqeuOc7uw4CSGQM+a7uvSruZWOByt2c1LZQs/0WwgaUnWJ+qN4KvZ8y34RsGBJZ
-	9HTDDSE+D0uN4Ss7jyEcM0hcYAb+11Advs8H1ggT3NsM+7TtPHM9pTlivrySJuSvbwftWZn92HX
-	rqmrcjFMxURQr0hVcyWqwPWRE88E4KKeLC8HXifhZsVP/wWckpfrQFGRjo1ZK6kjkE6OZQwFEWC
-	fOujxgS1hO77+1EvhsLsr7PrIGWEd+fGOwabCPSocEMw6wbmQxlX4V466AG7Tc/KGU4W/cw954k
-	wh7nEwYmoqxbFBQVP2FBmjBEBIiyNREm/APkEuqEz1VerWnla7o9GTjtjVjM6ybzgg5YAn1rKSd
-	Oo8dcSQktQO4/CTFczZfNjtWTvPawEQy7nWSgw2kn7dceVwYiPlBDbKFiuJHGfeDG4bWkq48wvF
-	ergs2NlfHTxfG2CKgT8IU9juWF+smfXXuAxf0Zcye1WiJH6UC661IPVU4pgBYy2fa8P968GFm9G
-	ZPRVFfJXTgrfqpKwpCEVpNHyP2XE8hBbIWiZb9rl5DSjPgZHRpUID+YiNSBasFwi
-X-Received: by 2002:a05:600c:468f:b0:4a1:7e77:c382 with SMTP id 5b1f17b1804b1-4b960d9b170mr35982125e9.5.1794164396406;
-        Sun, 08 Nov 2026 10:59:56 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7efb1f3acsm185228445e9.14.2026.11.08.10.59.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 10:59:56 -0800 (PST)
-Date: Sun, 8 Nov 2026 18:59:53 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
- linux-fsdevel@vger.kernel.org, Linus Torvalds
- <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik
- <josef@toxicpanda.com>, Chris Mason <mason@kernel.org>, Jeff Layton
- <jlayton@kernel.org>, NeilBrown <neil@brown.name>, Eric Dumazet
- <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Al Viro
- <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph
- Hellwig <hch@lst.de>, Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados
- <joel.granados@kernel.org>, Kees Cook <kees@kernel.org>, Jan Kara
- <jack@suse.cz>, Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
- linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-um@lists.infradead.org,
- linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- netdev@vger.kernel.org, ntfs3@lists.linux.dev,
- platform-driver-x86@vger.kernel.org, coreteam@netfilter.org,
- kexec@lists.infradead.org, linux-pci@vger.kernel.org,
- linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net,
- jfs-discussion@lists.sourceforge.net, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org,
- linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-mm@kvack.org, linux-sh@vger.kernel.org, linux-usb@vger.kernel.org,
- samba-technical@lists.samba.org, sparclinux@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net,
- Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org,
- linux-raid@vger.kernel.org, linux-ext4@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, Chuck Lever
- <cel@kernel.org>
-Subject: Re: [PATCH RESEND v2 14/23] proc: let procfs copy in writes before
- pinning the entry
-Message-ID: <20261108185953.28054fb3@pumpkin>
-In-Reply-To: <20261107-akteur-gemieden-eckdaten-21304d085e35@brauner>
-References: <20261104-work-procfs-core-v2-14-76ace653a773@kernel.org>
-	<CAMuHMdVfakapgBK6TBhO1iWX8qzvLDk8jzRS=t2MVa5G=MCUeg@mail.gmail.com>
-	<20261107-akteur-gemieden-eckdaten-21304d085e35@brauner>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        bh=Aigj0AbyH3j86dbZXjOqGutzBLlzhmdni5njhtK+RHk=;
+        b=z1hr/7anKIrQYBl+dvGekDn3YpRR34BpYPRPfZPqJiWVT/y8PaZeqTb2hJbZmbE+CS
+         iIrKsGPJBRVg+MqVModYO0OPxJmnk3AqIov8ppS+8rFKMeSnJ82BmkAMPohJwXoiSHwJ
+         xJDs22GnLY03SIe+yUnjdoQ2iZLHeER3+7g4vnVpZ7z+wJO+HNrUzRKnWI25Ia6HVq4b
+         jFoNGmqqBBAMXPUQNUzdHBxftDVAWgEMB4kG7irkWLK3QSPFO+RG567ucylgHNGDuwG3
+         0T+/qOQJfiFMU7NGn+x9Z0DiX3p+Aw0QhPFH2o3NZTvQV4u7XaI/yVVRc1V1BKIDHOIH
+         VKlw==
+X-Forwarded-Encrypted: i=1; AL+hErGME67FcRIeaDXQ5JE4yZpgYTx2R18LrWTxNdzk5YhDO6vzrqtk7TdqzoNllEqajQBm6VGaA7lMvMn9RAF42Jk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9CwJjYbAyZCTSpeRuBawg8ooUKSIypYdJHCU/qWgDWeNT5KMam
+	0GACqxOZlyKv9c9LMJP320FsS4Uhg5IxlkYuXH3sXAQhYIYq6/CCBjaHVE7b0/2jtHcQ17GdSMO
+	x19YVXQnn4X3Bcan8lWE1+/oQVFpjlTU=
+X-Gm-Gg: AYBFou1Y3aHdyhqxIrmUD05gP/VIOdPKCdVXIxzmHLfoxZWJ4swTVCvVys+nFdygf42
+	FWNxC2XPWFGAjpmeSqzkPddZuxZFQiHbh5uqfY3WYtByTqnT8NSYzTD4ZivGjmbyW5/wzcSGR/g
+	IJf14/AR4MXlZCKHArMMJrOZ64V3dibDbx0E25DoCIK1vPQ9yiVhDXWyUYBTO5xvevKL7X4rR18
+	X3EK7LVeRk0i/7TCqaDCG+wrq5mA3yhzR/WDHA5tuYYijC05RTNkjdFbW5uo8UP0K0Z/S3MgJ5h
+	Tvn06YLDEBt4rTZCJbPlyhAYSOsg31BxDnABWIXBkLAyQao0AXitGCeBJwl/MDxgq8d7dbAVkUI
+	5vGqmSChDmy58sq5HFf6RrEn9AlBnifrZjccAiAj7aNj9yDOLzprLT6RRd8eCDpMKflKo4rw/91
+	0nWTjbEykQgOQd9lX6j5UaYtQ7J0sLpP5uqX9Bs+paJ/FmRgzVl5GIiBigunLl/EZq7cxfAkreJ
+	dzypIY=
+X-Received: by 2002:a05:7301:7004:b0:372:eab:d700 with SMTP id
+ 5a478bee46e88-37252e3a967mr4833895eec.1.1794165254303; Sun, 08 Nov 2026
+ 11:14:14 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -129,19 +106,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20261029-rust_kunit_v6_send-v2-0-5ce551efc48e@gmail.com> <20261029-rust_kunit_v6_send-v2-3-5ce551efc48e@gmail.com>
+In-Reply-To: <20261029-rust_kunit_v6_send-v2-3-5ce551efc48e@gmail.com>
+From: Burak Emir <burak.emir@gmail.com>
+Date: Sun, 8 Nov 2026 20:14:02 +0100
+X-Gm-Features: AclHuK8Zqm3SYvO-6lPeY5_gCtAhcGYV6kboEDJv7680m_CzRJR-fiUMmy4_9do
+Message-ID: <CABwQupNhiTRmbA+1Ps96tAe_vrUehAR=ZqmPustz8M4k47X6vA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] rust: bitmap: kunit: uncomment owned_bitmap_out_of_bounds
+ panic case
+To: nico.antinori.7@gmail.com
+Cc: Alice Ryhl <aliceryhl@google.com>, Benno Lossin <lossin@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Danilo Krummrich <dakr@kernel.org>, 
+	David Gow <david@davidgow.net>, Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Rae Moar <raemoar63@gmail.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Yury Norov <yury.norov@gmail.com>, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 7 Nov 2026 10:48:35 +0100
-Christian Brauner <brauner@kernel.org> wrote:
+On Thu, Oct 29, 2026 at 5:59=E2=80=AFPM Nicol=C3=A1s Antinori via B4 Relay
+<devnull+nico.antinori.7.gmail.com@kernel.org> wrote:
+>
+> From: Nicol=C3=A1s Antinori <nico.antinori.7@gmail.com>
+>
+> Rust KUnit tests now support `#[should_panic]` attribute. Uncomment the
+> test so it can be run when CONFIG_RUST_BITMAP_HARDENED=3Dy.
+>
+> Signed-off-by: Nicol=C3=A1s Antinori <nico.antinori.7@gmail.com>
+Reviewed-by: Burak Emir <burak.emir@gmail.com>
 
-> > While at it, I think it would be good to use this conversion as an
-> > opportunity to replace "char *" by "void *", which will probably let
-> > you drop several casts from users.  
-> 
-> So I tried that too. The thing is it drops exactly one u8 * cast in
-> ntfs3's label write. 
+Thank you for implementing this TODO, Nicolas!
+Testing panic behavior is useful, not just for ensuring that it meets
+the specification but also ensuring that changes preserve the
+behavior.
 
-Since char is now unsigned that one isn't even needed...
-
-David
+cheers,
+Burak
