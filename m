@@ -1,75 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794117497;
-	b=wzWlugmcVBxMPhXBwr1svrQyU+R1Z3mFxGrO0lNsL9YKMICRZTpiSv1nigqajZZBm/lp
-	 s70h/6EzW2y7w9yUAuE7KL04WJfi9g3uEYGtO7V1ZC7W5gsMqMAu5vw3RUi5xAdZKJO4r
-	 +YBKBC3pSJnU1jC2vhNHAfg36LWP6TfVDEAkzlm0KQyfyt9vG67mH4wfIukGglQu8HcXt
-	 YBcuoKsWui6DMB0BnVJR234UE1llhNqLCLLXEoeS2w9yWS69zb2o0BTbQnNJktfvCuY+x
-	 hOS2pepNDmj1sJ3eKq7edu/Fmwt1vEQmNZ8DGNNdVYmz8iRyeW47D9CDmiT6+zO2DPQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794117497;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794118923;
+	b=itJ9c9YRrzn3XqwUjoRk6qiriB/soArlGjq+u/o/dCatZKSYPT3knRDjG04durKj2WFm
+	 TrpQ7iKkswQhy3zXaJcjSMU+x18RihJC7Hn5IcUXcbKC/3dXB0d86Uo4yFWTulLOWErmE
+	 HToiQNvXF8HN4CzRAg0i3nAnYM29MLCFNmftiMV1RrFXulXKqHMbW9fTtCQc5oM0nX8/L
+	 dF2mRl6FPYy5ROaMB6Q+7z2glzhy6pKudbBUoel0Ia8GxSu5lFr7D6rvhyJ9epBmvlXII
+	 t3EghD3y9Ehkthy6GNaZR4Wmdr1oidB4DLeX5jc6H0jRLuOFPieUEB8N9ntKLf+5pYQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794118923;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=QYnZ4f08SwRhsosiiEmUJpp+LTvkBM+gRqSOdQT1O/I=;
-	b=UqVxXvQ3bE3Skd19foA82E3Q0lLB5/LokaHR8qubtwAtGvdaoGvlNs0oqsFb+pdRyDuT
-	 K52aM0PT9KZkDQ77H8nyoSBB2wWkWfzRqssihKoQvS7wD87eNwVN/qItoGeFJEhS/ErMW
-	 r62QORZ0CMPf1/3/nT/wJmORpdPfn8b7Mr54wdhvUN4kB++5U0l+OMEzy75g+x4j+emqR
-	 7auOpwTOoJKDkItqifMyODW1KuTWWyorxzYjTolksfrOKI+QQX6XVHlKRL9asfwVan/6M
-	 wle8NMUqDSYIQ2Z4/mdb0pqtlZK7pG/P4Pj4dbv8KYqCT4DvVOS+n/PPm1e9NP63RUA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=v2XprYGCXtRTCuqB4/wKtddK9ZYd1kM+u1y6WT6JlOc=;
+	b=3xJtvWa+WneFeWRcw3TCumI+7RTXx3kqctFPb/OnrM7qGE4cpVN4D16VVSaZugObNg5m
+	 OqDf/WQezGHLu14y/7quTtoYVcOnJwe7qdcM0UtsSPB9Xly2qkcI+KQTcEG2mfkfJ8Q91
+	 AN83pZ/DBAXa8zOXAPcwsdwzSLboOCSjp5CkiNcfg3SSwgLvzfUtiuwQ46bgbwNRQLtJc
+	 iUUstJlplvY5Rgd95p26d7VPyyAlO3UgLAjGamzQF44NuJ9GWlBAA5TnsHeq0UxTzOcRq
+	 7cXidAh/B0Vo0YM0NQ42HG0BL7ILDtGec40Mrqun0BJbINxAeC8S6tacn/h/8QBLIdg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IEJh5ae6;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hUgHyzbh;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455C8606D816
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 05:58:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 455C8606D816
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D1B606A321
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 06:22:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0D1B606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IEJh5ae6
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-36f1e7d9d4dso617739eec.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 21:58:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hUgHyzbh
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6b71ee00f0dso144a12.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 22:22:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794118920; cv=none;
+        d=google.com; s=arc-20260327;
+        b=eaBd8Pp9SWYzyPuy0gbDoVKJyKdZYBidiSk1HoQVU1xZVpiv0cyuKaDU84glKX6GUe
+         Ct/Qoq+wVj9WxPICMDNi2Bj98M87MKs3sDUwmhH4MQZwwcMEjqBd5kDj24NtmzplP/ws
+         JZnluQR7o855MnPXF2EgHwhn3eWNm1sRXpBBA7tyDpqUEaKJILqhtcoPpTIr/qqhrACC
+         bj1ciaMSrBa2k7zFQJkhjpS7Il+0xijTSADWisLHat5u5LAepH3kJ/H7Aa8O5G9fbddm
+         KaWUR5WaA964NWGl0xYID9e/hpHQFogS/hjzm7EXiajo7ss4gynxhyq/sRMq0SFx7Rir
+         I0bQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=v2XprYGCXtRTCuqB4/wKtddK9ZYd1kM+u1y6WT6JlOc=;
+        fh=S1P5T8ukByy3dGSOsoTkumA4MG10tBjqb7vsmwuNzWU=;
+        b=WPfBJrcOP+UCqkwZ/34o9fE/GAY9Iaan185IG1MOL5PvLl08q9/I+y8jYgwi3onrGi
+         kE/8KaW3KepSuw6fNm7SVCRRSg/Nn8QC6jvTkd/ASj3OsRnokgPsmImTnNUwCOSfAJIG
+         tvhVr1UcdkLoI4EaBtWe8pyjpawEtgmoUIFcp/kHJpUPLuLjwDZLPIzQU8jG3NRk0hlU
+         5Vjrgx+76w/2adhRH5Mm5PR0kHPsy35+pxSckuCK1dZHmoEAz8K5EKgNQnIgllvu1LDF
+         Q3XHaPmAHn5P+aK66W0WQ21mLkEb+sqZu4VcWr2JLO+bg2Exr2AedCPg4jHZ8Qh6HDgq
+         M2vQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794117496; x=1794722296; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QYnZ4f08SwRhsosiiEmUJpp+LTvkBM+gRqSOdQT1O/I=;
-        b=IEJh5ae6TjXORBvPm/AHJV/MFZu6TKp8f38jWxw3/XUXdqItNsMIL6tPssXu80p0hF
-         pHWTg9Y+FCWFl54Ro/L81Pb8WCv1/auLLSpFhQ5KViWkqeVtYdijQ7RCdNTVMWKpAt4o
-         eVdrBMhCY1lmMHIAiQ882jbAD67KxopQW3HXK2zXcb+vVL1e2r+pJiYVLGQNNWcnuW72
-         KE+0PS0uZJKd0oB1Pypj/5ySSMYBjJAxeM+nNpyE9jg09fXIyntsvj2BWMDUhOwEkIlZ
-         A345OhhTPuRn1SxyI9Nem4MijN0vlMXoKXiEgZmANZjtstr2M+Mz3A/zZCIfFefxUs/F
-         g+Ig==
+        d=google.com; s=20260707; t=1794118920; x=1794723720; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=v2XprYGCXtRTCuqB4/wKtddK9ZYd1kM+u1y6WT6JlOc=;
+        b=hUgHyzbhHHaa3x0MGZHtZ50WogQLFlCdZt/lmpI5crcqaTYEzBLVvoJT+z9qJrP+mN
+         2zbgqjLjweGNemctefm1fEFSRBhgSp3oao5JaYrbL794p9RQwLH8IbD03A1vfK9G8Hgn
+         xU6BgmL/ohZrkZkQyqHOCeP1wKoEuHAy+mrlzWmeCsJ2azmakD7HX9Dv1qYjRCWTRvml
+         +A31W1Sdhj137368ySt2DvScSVHTeX6n1V3A5imgT+udmv2EDO5fo8gOJEOirBFNfme2
+         CiOhPNFnNc+LyuKNTbG/oQjABYDT9OeAE1XRKctqmZGWr4uzP4FMUjddZw6ab+cFyo3z
+         Mnkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794117496; x=1794722296;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QYnZ4f08SwRhsosiiEmUJpp+LTvkBM+gRqSOdQT1O/I=;
-        b=jJBxGiAEjFmq8yah8aLgKWgGmyY6muZaWUbOfeIHRoZ710/omkzFp4Um3K/1RMfxiD
-         sLTTLfIof5uDLlMWtWlso0tkGFogqJ0PCeDGJVRekd0w7DsA0nXEQoZ2xcyYqAQCvSuf
-         qDOCkgh+Yu7Jh+iVufBiREdb/naDx2eYeTV0jy7S4IIUzPmTi+btMLH1NKzW5IqiScml
-         jBkH8JL0ZL5krVmGBOSzr3kj8CsW1zSVi58MzCN1bjXa9+XZ5LNlpI6W0WPu5rEKA2Jl
-         MzujTNIdjATqaECDz5kazJd2FgNUzQfUwe/5K0juQUiSiDQf/mNjrh2DBprIE6kEYe8l
-         kwqA==
-X-Forwarded-Encrypted: i=1; AL+hErFE5hSD8cuK4IVaUKcLaN8uvzJBBu2OJ3bWnJ2ei/HsGI0VbbencjxyI8ti9jt+AzAf+6qzBx/9rlVcrl9Xcwo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Adl5HlftXcdy17m13Shyh5fgnfOpVALM2UEUGffzqH0rd/KIF
-	4GIrGIjMx990JbXyQRX5h37tQd//iiq930T5gzxhb738RCJbvzIo59RgonFB6zcS98ok8wrbvYq
-	bE0Zh/fiXshe1DhVNWZw9XSd08g==
-X-Received: from dybpg4.prod.google.com ([2002:a05:7301:4144:b0:36c:a067:eca4])
- (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:648e:b0:36c:a390:8907 with SMTP id 5a478bee46e88-37255a4e72amr2132546eec.21.1794117496193;
- Sat, 07 Nov 2026 21:58:16 -0800 (PST)
-Date: Sun,  8 Nov 2026 05:58:09 +0000
-In-Reply-To: <20261108055809.2122934-1-almasrymina@google.com>
+        d=1e100.net; s=20260707; t=1794118920; x=1794723720;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=v2XprYGCXtRTCuqB4/wKtddK9ZYd1kM+u1y6WT6JlOc=;
+        b=pEZWes1FGmDr121nN0MoJVMY0xyq3mxB61gTMFZlo1DYub+6xI7eo5uNj0CmuFdsHh
+         e9TT2DiVS/jAixQMcXNJ58hpj+eapZ16PmSnQZP7i/T68LJRE6s3eCdeFRyPyHWWChwm
+         rPI8bucZ33GwC2E74S600SokTewGEi6mhk2y+n7StFJrB/bxl3azo5bbTPwl3jIZru2x
+         hvFmqKpBY8b34+UzSEQs0CLCfbAVoWq60iIvF+KVIzghLh/hOFU4YDRJ8LVPHnXpPrCA
+         wfTWhugBpXHnxfCO1I8S24P1uS3aSovMKYhCluaYdeV3d++jeST1ysB1KQ6cO6aCpX6v
+         jAvw==
+X-Forwarded-Encrypted: i=1; AL+hErGxz+s0dLF8rWNFraYGvfj76lNOMXIcbKVsDk8rUWHmrfbQx0GaquGQVIQSpCf4mCIJmY/hDgFF4ZN4owcPBG8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8rr9KtpoNMQpfLN1jDBkPlDhUkIyBVAEcSX15amAWScxeiTotu
+	h02o+w7fW+4yJeLls9ctz1LkSOP9/gFhyDeBuFdSE15QGCs2gIpwrLySjCwqL8/IsubnuSAeLYx
+	VE5KTvAVAtfxnS8rNGSXA3IYXy/McWaNA3GpHk2+D
+X-Gm-Gg: AYBFou30hGTW888Zw3WIRwJIp6WSWa7rKSpr03DVNIrf1NSxg506ikmT39mGJHdWfIr
+	SityU/xqVVpv1QImkrELCMTMLvD5OT7UTcQleyQkTUxIoI38aDxuEoC568pTomsCYqLt1w4uFxB
+	P+TwMHSibyks8PkGyF1za7Uzx/u4d/mJRnEIaIwIq7CzhtZh20brCcWH7owilvxpK8NgV8nRbdt
+	PPFH+0vsq/DxCaGbUa0nzhU7Ge6Ya26uYPS/mqFFvkVByyAsaLMZXfJQItmlf7rrCYj9W5X5oJc
+	iZ0P6n6DbxqiAN2RWIrdPzrJBSs8vCNZIv6jvsIJqHXdqDaXgxaHkBiORdtX244tyyl5ScwmQp7
+	mySSXZvKhECG+WiwEEuxVOuDry2HmNt03BocyviXmiTQIyiPrU4Ejpw3jqQ==
+X-Received: by 2002:a05:6402:c502:20b0:6aa:128c:36ad with SMTP id
+ 4fb4d7f45d1cf-6b6fef8853fmr25733a12.10.1794118919631; Sat, 07 Nov 2026
+ 22:21:59 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,201 +103,89 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261108055809.2122934-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261108055809.2122934-7-almasrymina@google.com>
-Subject: [PATCH net-next v2 6/6] selftests: net: add leased devmem RX and TX
- netdev unregister tests
+MIME-Version: 1.0
+References: <20261015163915.1166043-1-almasrymina@google.com>
+ <20261015163915.1166043-4-almasrymina@google.com> <20261020121858.3b9107c5@kernel.org>
+ <CAHS8izPwWT+vbgAe49m5vXsRxT3unbfjLTkVZBScgAPdQTo2dQ@mail.gmail.com> <20261021132304.23e0a4e7@kernel.org>
+In-Reply-To: <20261021132304.23e0a4e7@kernel.org>
 From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
-	Stanislav Fomichev <sdf.kernel@gmail.com>, Bobby Eshleman <bobbyeshleman@meta.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>
+Date: Sat, 7 Nov 2026 22:21:48 -0800
+X-Gm-Features: AclHuK84A9Z4KJMCekRVvO906KgemJ7leA4F7qgUGSEUquHWR-U_KufDY8SuGMQ
+Message-ID: <CAHS8izNTbs8ONvjhiw+6cRkZQq+cX3t=BZK9aCr39JNkVbY9gA@mail.gmail.com>
+Subject: Re: [PATCH net v4 3/4] netdevsim: support devmem RX and TX bindings
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Taehee Yoo <ap420073@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Dragos Tatulea <dtatulea@nvidia.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Tariq Toukan <tariqt@nvidia.com>, 
+	Kaifeng Wang <kaifengw@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Extend nl_netdev.py to cover netdev unregistration while devmem RX and
-TX bindings are active on a virtual netkit device leasing an RX queue
-from netdevsim:
+On Wed, Oct 21, 2026 at 1:23=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Tue, 20 Oct 2026 23:17:34 -0700 Mina Almasry wrote:
+> > But on the other hand the test coverage is nice, and maybe one day if
+> > we add enough devmem support in netdevsim we'll be able to fuzz the
+> > data path or something. Is there a way to get the best of both worlds?
+> > Like put a comment on top of netdevsim that this is test simulator
+> > device and any missing functionality and/or bugs in it should be
+> > medium criticality max or something? Or is it too much trouble and I
+> > should drop the netdevsim support and tests?
+>
+> I already strip Fixes tags and apply the patches to net-next.
+> But it's still a burden. If you're signing up to fix the issues /
+> review the slop we can try.
 
-1. devmem_lease_bind_rx_unregister_check: binds an RX dmabuf to a netkit
-   device backed by a leased netdevsim queue and verifies clean teardown
-   both when the virtual netkit device is deleted first (unleasing the
-   queue while netdevsim remains up) and when the underlying netdevsim
-   device is unregistered directly (which uninstalls the physical queue
-   memory provider and cascades unregistration to the leasing netkit).
-2. devmem_lease_bind_tx_unregister_check: binds a TX dmabuf to a netkit
-   device backed by a leased netdevsim queue and verifies clean teardown
-   both when the virtual netkit device is deleted first and when the
-   underlying netdevsim device is unregistered directly.
+Hi Jakub,
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
----
- tools/testing/selftests/net/nl_netdev.py | 132 ++++++++++++++++++++++-
- 1 file changed, 129 insertions(+), 3 deletions(-)
+So I started looking into whether we can improve test and fuzz
+coverage with an improved netdevsim. My LLM prototyped full datapath
+(with devmem) and offload support in netdevsim so the hardware
+selftests and packetdrill run and pass in a plain VM without physical
+NICs. I posted the branch at:
 
-diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-index dd0321c0b463a..fa4b5be093257 100755
---- a/tools/testing/selftests/net/nl_netdev.py
-+++ b/tools/testing/selftests/net/nl_netdev.py
-@@ -12,8 +12,9 @@ import os
- import struct
- from os import system
- from lib.py import ksft_run, ksft_exit, KsftFailEx, KsftSkipEx
--from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
--from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, NlError, defer, ip
-+from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_not_in, ksft_raises, ksft_busy_wait
-+from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, Netlink
-+from lib.py import NlError, RtnlFamily, cmd, defer, ip
- 
- 
- def empty_check(nf) -> None:
-@@ -483,6 +484,129 @@ def devmem_bind_tx_unregister_check(_nf) -> None:
-     nf_priv.close()
- 
- 
-+def _create_netkit_single(rxqueues=2):
-+    """Create a single-device netkit interface for queue lease tests."""
-+    ifname = f"nk{os.getpid()}"
-+    try:
-+        with RtnlFamily() as rtnl:
-+            rtnl.newlink(
-+                {
-+                    "ifname": ifname,
-+                    "linkinfo": {
-+                        "kind": "netkit",
-+                        "data": {
-+                            "mode": "l2",
-+                            "pairing": "single",
-+                        },
-+                    },
-+                    "num-rx-queues": rxqueues,
-+                },
-+                flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
-+            )
-+    except NlError as e:
-+        if e.error in (errno.EOPNOTSUPP, errno.ENOENT):
-+            raise KsftSkipEx(f"netkit single mode not supported: {e}") from e
-+        raise
-+    defer(cmd, f"ip link del dev {ifname}", fail=False)
-+
-+    link = ip(f"-d link show dev {ifname}", json=True)[0]
-+    return ifname, link["ifindex"]
-+
-+
-+def devmem_lease_bind_rx_unregister_check(nf) -> None:
-+    """Verify leased RX devmem bindings detach cleanly on virt/phys unregister."""
-+    for remove_virt_first in (False, True):
-+        dmabuf_fd = _create_udmabuf()
-+        defer(os.close, dmabuf_fd)
-+        nf_priv = NetdevFamily()
-+        defer(nf_priv.close)
-+        nsimdev = NetdevSimDev(queue_count=2)
-+        defer(nsimdev.remove)
-+        nsim = nsimdev.nsims[0]
-+
-+        ip(f"link set dev {nsim.ifname} up")
-+        with EthtoolFamily() as ef:
-+            ef.rings_set({"header": {"dev-index": nsim.ifindex},
-+                          "tcp-data-split": "enabled"})
-+
-+        nk_ifname, nk_ifindex = _create_netkit_single(rxqueues=2)
-+        ip(f"link set dev {nk_ifname} up")
-+
-+        res = nf.queue_create({
-+            "ifindex": nk_ifindex,
-+            "type": "rx",
-+            "lease": {
-+                "ifindex": nsim.ifindex,
-+                "queue": {"id": 1, "type": "rx"},
-+            },
-+        })
-+
-+        _devmem_bind(nf_priv.bind_rx, {
-+            "ifindex": nk_ifindex,
-+            "fd": dmabuf_fd,
-+            "queues": [{"id": res["id"], "type": "rx"}],
-+        })
-+        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+
-+        if remove_virt_first:
-+            ip(f"link del dev {nk_ifname}")
-+            phys_q = nf.queue_get({"ifindex": nsim.ifindex, "id": 1,
-+                                   "type": "rx"})
-+            ksft_not_in("dmabuf", phys_q)
-+            ksft_not_in("lease", phys_q)
-+            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+            nsimdev.remove()
-+        else:
-+            nsimdev.remove()
-+            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
-+        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
-+
-+        nf_priv.close()
-+
-+
-+def devmem_lease_bind_tx_unregister_check(nf) -> None:
-+    """Verify leased TX devmem bindings detach cleanly on virt/phys unregister."""
-+    for remove_virt_first in (False, True):
-+        dmabuf_fd = _create_udmabuf()
-+        defer(os.close, dmabuf_fd)
-+        nf_priv = NetdevFamily()
-+        defer(nf_priv.close)
-+        nsimdev = NetdevSimDev(queue_count=2)
-+        defer(nsimdev.remove)
-+        nsim = nsimdev.nsims[0]
-+
-+        ip(f"link set dev {nsim.ifname} up")
-+
-+        nk_ifname, nk_ifindex = _create_netkit_single(rxqueues=2)
-+        ip(f"link set dev {nk_ifname} up")
-+
-+        nf.queue_create({
-+            "ifindex": nk_ifindex,
-+            "type": "rx",
-+            "lease": {
-+                "ifindex": nsim.ifindex,
-+                "queue": {"id": 1, "type": "rx"},
-+            },
-+        })
-+
-+        _devmem_bind(nf_priv.bind_tx, {
-+            "ifindex": nk_ifindex,
-+            "fd": dmabuf_fd,
-+        })
-+        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+
-+        if remove_virt_first:
-+            ip(f"link del dev {nk_ifname}")
-+            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+            nsimdev.remove()
-+        else:
-+            nsimdev.remove()
-+            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
-+        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
-+
-+        nf_priv.close()
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
-     nf = NetdevFamily()
-@@ -498,7 +622,9 @@ def main() -> None:
-               page_pool_ifindex_leak_check,
-               page_pool_stats_ifindex_check,
-               devmem_bind_rx_unregister_check,
--              devmem_bind_tx_unregister_check
-+              devmem_bind_tx_unregister_check,
-+              devmem_lease_bind_rx_unregister_check,
-+              devmem_lease_bind_tx_unregister_check
-               ],
-              args=(nf, ))
-     ksft_exit()
--- 
-2.56.0.455.g6c5a503b38-goog
+https://github.com/mina/linux/tree/nsim-devmem-rx-tx
 
+The main problem is the total LLM generated diff to netdevsim: 62
+files changed with 5,525 additions and 672 deletions :( So it's a big
+change.
+
+But with this, we can do pretty cool things:
+
+- All 36/36 drivers/net/hw/ tests, 18/18 drivers/net/ tests, and
+164/164 net/packetdrill/ tests now pass on a linked netdevsim pair,
+without needing real hardware. This is significant because a lot of
+these 'driver' tests also actually tested unique code paths in core
+like devmem.
+
+- NIPA can now (I think) run all these netdev driver tests and
+packetdrills without real hardware:
+https://github.com/mina/patches/tree/nipa-nsim-hw-and-packetdrill
+
+- Packetdrill can now run on netdevsim:
+https://github.com/mina/patches/tree/packetdrill-nsim-default
+
+-(best part) Syzkaller can now fuzz live devmem/zcrx datapath &
+offload netlink APIs:
+https://github.com/mina/patches/tree/syzkaller-nsim-full-net-coverage
+
+You asked me to do add syzkaller devmem support before, but adding
+devmem support to netdevsim was too hard. With LLMs, it's almost
+trivial, but it involves a lot of generated code.
+
+Do you think this (or a subset) is valuable to post upstream to add to
+netdevsim?
+
+--=20
+Thanks,
+Mina
