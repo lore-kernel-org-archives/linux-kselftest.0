@@ -1,94 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.193.141
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794148487;
-	b=3Irjszdv+ldn+rnhY00PpWLgbvKYLY+KiTaoJBRAvl87ksyzQ1sXjdQI7XjwNdbtD5iX
-	 RNNJF3JfmLBrjqHa8D1ReqxwOQrkrnliTOSVU/EMfpl/s+dtOANA8q7Hh1xmoZgbr3L+c
-	 ylyP30gj6aPI5RS49xHsq2wWO0PuFn2/fLlJ4NxhNes5t1WbbS5K0xKJhLhCSnEBKeQuD
-	 uC87aj37+htV+hPDYhsO09FC4thC811PptpIQrmTAO+5dpIOeLLKsRhTylXq0XLFmhJvz
-	 d7IDQlBi7dk5OGBg5DKCrxc5PXR8N90sHWCFQV4bO7Xc+mAfFOXkbQt6qt9GidAyy9g==
+	t=1794148795;
+	b=jXL5jHfIpcQuF6HIMbWwIkwwc0GndEg9UPqlzNJFtJXSVe94x3YLzN4c2Az0MSvR79yy
+	 vakcSRoBpyNZJGt+3RZSEFmTr351Er9QMxZRgb0O8kHy+K0Dkk1DfLbxjDOA4BV5EQUxZ
+	 RCcNtuTWc+avx8m23jWqppMarSvPnyMsQihGdaWWx6nKRH073BOiltlIjHMF4oJZwQu3f
+	 mLDzACVEMOr230EOrRxyIbS5703fSZwrXdcrE80tBMm1v4wnTMfwNEieQXJ2sDcitp50t
+	 tu/TDT8riawP0YN/91sm/YvrWpMNklNaDRF4Mf0xPuPC/qk+dfPNbw0Wu+fTtC4EBcA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794148487;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=2UfL2cRDnByQmhtigYwur6fpz0c3fQRS0ywh16x6CXE=;
-	b=CLXU3Hy7ojWhXdoz7gIJpF71ROZsr5Owdgu8DCR7Sgzogy6jX09/32d+HzzSDf1DjOfN
-	 b5nfUzSIi4aYdryNLOvX2tuoVZGP/yEyAb2DqYR+qi8B2gbm4jjeQMZQf4ktumu/xmQeq
-	 C/yIDkcWRBkHs4fBqIASg+F5HCRE7F0w+tQ4IPTxL3z59q/9QEq0nbvwD70utvrzcB9fG
-	 lpsNga2Hf+6kx5fgWhB02xm6Y/Zgc+xJZFpiEInAcPbpnqqzCoAiLqQAuMOKu+i7GTKX9
-	 CMk+wGJYXU0IHXgINKBBcn4GGtpA+lmsFKq3FmWdx/YsQzR+wtTm/pdHEG92uZJd47g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794148795;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=FMoAdPEcYt4xKfDhScvEiOopiYclkGEqczu8+BGmiOU=;
+	b=sbG9XGnTetUr7TkVvioWYBOmfREP6mjsdy1J2GIoLyMkPiB1fr9ni7Iw9tJsfTbdflD8
+	 Zq5NkimyxFpwefqn9ze8mDTzBnjzWxQsYqAqzCBRUpvCCL9aXlN8JeEQUN6jQ83+BL2Tw
+	 8GNb2Si65U/4G9kidvW8zUF2Mg4zRC4vIbpJFygL+QjmSFcQzIi131ngK+TIVQaY2N3Wu
+	 40DF1uKg9BWToob8bRkXRbjVKGa5y5Zkoce7F4LL/3AciU2pHkwtubxhgtqs0o6fXoKrt
+	 Vl2Q38O2AC1TK/wTIkiH6eb04MBXrmhKauXaofGqxmRixeeDhFmANobqYm4QijPggFw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=HftBzWNB;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.193.141
-Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022141.outbound.protection.outlook.com [40.107.193.141])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eCaQUiyO;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F49C606A321;
-	Sun,  8 Nov 2026 14:34:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F49C606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6435606A320;
+	Sun,  8 Nov 2026 14:39:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=HftBzWNB
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PiUjfuTr68s9oJSAgDZIPVN0nnwti9u4PPvsZwma0PQ3gxCsJ9gjterapUPeqcOux08aXMTrN77D+5//tClOJko8n+La6XP6n3nzTdFBlrRfSXT95ekflP5yvEPIAyD40qEDFHERTgqIweNysu3EY+h/X9P/rRE2yg6NEZEB6lJBtyXvMQwIWN/QzE6NqvasxXcNDmIMUinVsPjE+yYlGDYmFqlwAHxXWWlSupOhGTVRqEGamFSEQ2mfMpNRJDP2/oZ2ccWc8UHOm+65flvxJ83LPudu+ht+txpUvhwD1K4NrSHfCaM81zE1cJfmzgqJrOEjUIXgJ+w12uHyaLYK8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2UfL2cRDnByQmhtigYwur6fpz0c3fQRS0ywh16x6CXE=;
- b=qAlUqbCHdPbdS8POAXmCtOpfppp/NMPw6c3Rrg0kheSVwxNF7EODLiyuZPC46Op8JOQbR+dP5EiHgzVJ/hmRDfAGVv9davFRZGUQC8unjQAhog0Sz9t4seD/KEO7bBPNujy/M56cmTitbAJgDHqIB97b/GPvHvI9YnWs0GkWRAq4OlAO4MhqizBZaNHzDESxcyZqsjTU+DZoqk4hfMptGQi5RW3QYkb2m6i8Q0kpN7GcdrJLGkPe+XrF++3yc8uPW+Ut5eubznRIdPUVGh+g+MYuEyHJ8/LxN0Q8w8Ed4JVCVlp9M6nJgph16RGc9REd+VNX7e78e3bd250FA0xP6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2UfL2cRDnByQmhtigYwur6fpz0c3fQRS0ywh16x6CXE=;
- b=HftBzWNBvvuqv6/+uwhl7H024Pm0OBqoEVrC3TXkJAqFMt27QGyZNrpgQRKxvE56sXHjv+ZZiYMQT8dpDkBmkU7yHkPC8O5xTiGyTAMCuG2G+rFKsfONNp4cq5rM48xtqUzD59oxmleHj31KjqhAjN9KSLqQdbECXuXLNqdVTFDjhEH4XAkTaeTevFIAM1o0KFCIH/pmeWmE2vu1oy4+nGLplXoPZ+vIM3v2WWv2n1SJgrqHYvvx5ea6/ZnfclgwOcpefw+Z0THjCftHyyWF4sBgitLRBMOjEflHargLjqTMkTp7k+WnjAXrwYdt0z4L6MPCSmzxjJPlrEyhL754lA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YT3PR01MB351950.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1a7::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.12; Sun, 8 Nov
- 2026 14:34:43 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0592.010; Sun, 8 Nov 2026
- 14:34:43 +0000
-Message-ID: <7636700d-1aed-4e6f-adc6-720b1aa98501@efficios.com>
-Date: Sun, 8 Nov 2026 09:34:42 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/futex: Retry the wake in futex_wait instead of
- sleeping
-To: tglx@kernel.org, mingo@redhat.com, peterz@infradead.org
-Cc: linux-kernel@vger.kernel.org, dvhart@infradead.org, dave@stgolabs.net,
- andrealmeid@igalia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20261108142309.1527337-1-mathieu.desnoyers@efficios.com>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <20261108142309.1527337-1-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0266.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:68::31) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eCaQUiyO
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794148794;
+	b=aNkGVyxrBbbikCN668/flzS34u3NqryXGwDi8QKwgtg0hECTcM6R2QLj9ppE9u70J5CK
+	 FYWSrV2LvkXndDEwG2wVO65EPTEQsvB7V1+tDc+9xFP0kWEopsJg7kn8WCVAlOBhwIDkC
+	 vdCkMAE+Cgl3EGBxDJADEocnZrYxHnS/IGOSFh6L6fM5waiohb0iLq2guZHZfTgkbmo3g
+	 WsP4xiLGzBwRQqD3O64ryKgYPDFWK0Koqh8vOPFXeoMgc/W78TE4rQ2vexumY3tRIEFC+
+	 W6m3O6EZ77gCdSiTK/vfZDJFTjbxMiAu3tep1nouVh/cAYfdFTsHEQn8Q+K8bTjZrxQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794148794;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=FMoAdPEcYt4xKfDhScvEiOopiYclkGEqczu8+BGmiOU=;
+	b=B5Fs3a6t5Fe6HHSaxLn+EZ8xmFUzMmCDA7GlvwxjwVEF97jeerSD+pp/fZ8dL3G7v68A
+	 qrSUeJmZgkx3sdTs/b4qTkxX5LiMJAT7kfdcGNDVDI/tByrpFr3qUMshT0R0Oue6NBFXw
+	 7JPlu8ZiCK3alYEBCYOXRpHiadZPJ+YdR93BotsyHpMTMk4klso909nehkZRzEvVPatdu
+	 OXvOpUvmGY+k0UHZgRN8Sl3JEggoMNFmYeOh1rtwdLBR6vVF5R4JvBP+EVCCtGfHxzd3l
+	 VMoFLrkTdTHXZyH/86qF9ks9pWDD7fFeKBHHX4+0TX+dGINQx7rUQpGev6eictvdF3A==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 07FA61F008A1;
+	Sun,  8 Nov 2026 14:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794148794;
+	bh=FMoAdPEcYt4xKfDhScvEiOopiYclkGEqczu8+BGmiOU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=eCaQUiyOoeulPWd1jbleynPgE7eZ3Ty9fm7XbqN7OirQTBApIZPLSvLt8VH24GS0B
+	 UsgIanCOp77lHGcbawFvqAkbvceTHL6j6SCl//NlVyATYSAP6AN1sm8+kI5cRUJZwl
+	 6ykpadFywOa37ZJTEGZ3vUlRfzpGFnvt+YAfwrrw2v0mnrupXtG7EKMXSR8Ds7RKGc
+	 SGWor8tNAUs+9xJkpyLwk72sa5CGPA4iHLQBfGNmMJr4/SkC8WdpRS7jKgYj9apShg
+	 XDO7+euT9zuyc2279h7QEQ0E8ce7iK7JY14cv2cv7mdKdrBRdc46lXiUz5lnBJVgnT
+	 5TAyKhU+jwQ3w==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 8520647FBB;
+	Sun,  8 Nov 2026 14:39:53 +0000 (UTC)
+From: Yongjian Wang via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
+Date: Sun, 08 Nov 2026 22:39:52 +0800
+Subject: [PATCH net-next v2 2/4] selftests/net: packetdrill: test
+ tcp_base_mss on passive connections
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -98,100 +83,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT3PR01MB351950:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8d562e9-1d9e-45ea-3ae9-08df3da56db7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|22082099003|18002099003|10067099003|261028144727099003|261022105027099003|56012099006|261026140227099003;
-X-Microsoft-Antispam-Message-Info:
-	KSPt2L1lZaOu/keCVJ30VnZMCxCgbfH8umxO87F3QJEbTgQ1mvKttavG8Fr2i6cZInNmXGo9JQqLXrjYrUd+/5z30ubuJkUwJaXh4Oj8fl0/4j/YmC9ZrRildQWYr+QUewN/2qI3bpYE3WHS8Hqqo3G8YM2XrG6aHPQ8xAUJtaL5Z4jKDFyHZ4y1Zr8GaTEEvg+l0+HsWZrf7BbBjb1OK7vGytWnZPqk7sKM0Eq0IKJz1rBBMoBAUAI7IVq/Dt44lgfal2v+t4VIBP4TH+iCdWitVmOF2DIaabrO5zehcJoznodLAJaSX3jSjwksp71VoxNv2PF2Umd5TiASTtHnPMRehQXuD5N5pnAOuMS9EchFxWagBy54738uuCBkGuEyz8Z5Y7ykQAtIPTXA2Erl9PwMejNhfDXP7gJETJYwzpo5P7fzW/s1VSvbJcjafJboVtklKqZsi+7ieGDz+/zBNRbXOjl9JlCNTB1KE6ji5qJzZAO7tE/J76GE9OxfifREEyE14kWoRWGi/sKBNzAANPE9kYGaeyyr4Qzur2GSiyeupGVBEiU7pL4jTEaW3baYzWA0NTG69eefIdyXEZN0n4AciQFHZNs/umtJyqoyWLo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(22082099003)(18002099003)(10067099003)(261028144727099003)(261022105027099003)(56012099006)(261026140227099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OERQQzZJMnVkbk5kQk5yMnRTdmZxVlhJSE9DcFllOVNXdlZ3bDJJV2REamhD?=
- =?utf-8?B?cytIbDNoaU90c2RPcWI3WnNjWVBDby9sS3JaQ3pJa0JuczhnbmFNQzhBWVF1?=
- =?utf-8?B?L1M3WVJRc2RvOGtVNWUxQkFaZzNHYVlDYndUcUVJUFRlMWU3dnc0L0xuSmkx?=
- =?utf-8?B?WlM3Y2VJVHlTOStDSUx3a2tkSDFaUS9pcjMrL1pQMVZybURaeWNZMGRHaE5k?=
- =?utf-8?B?T2R2NTFkaVdRS0ZiRjJBQ0VwR3dJMUxCUGtvZS9QQXdDcjdpbW8ydktvYVAv?=
- =?utf-8?B?WlpPTjNuVVdsdlJFY1g2Z3VseXp0R055amEwT3l3L1RiUDBLT1VCQUdNN01w?=
- =?utf-8?B?U1UvdmgxcUdNdWlabWxhQW1aSlpIcEJ3bXlwOVRYeDE3VUdTQ3ZoZ0tCdEpY?=
- =?utf-8?B?b2hnaEl1eDNhYldma0RtcjQvTFJPSkZJM2xWNFBTeWZRWjQ4NlgyUit3ZUNQ?=
- =?utf-8?B?aXZCbG8xNEFjWFdmRnVmQjFpUW9Jc0dlUHlHblV6MjVJeXZReFlRUTBNUkFK?=
- =?utf-8?B?eGQ1dlF5WFVpZCtXQUtuZlBBYWtRY2ZFQzhtK3dIdXJ5ZlJ5YnlqVkZOVkVv?=
- =?utf-8?B?TFhYOE9ISmduMWVlMEFOTGg1OTRVZmVnelh5Q2l3SmVEcjJLQXBGQURvb2Uy?=
- =?utf-8?B?c0NZdkozM0p4RjVLWVMza2UwOTQ3TnFxT0p2bG0zL21lcU41VE9HaHRXdGZw?=
- =?utf-8?B?Q1JiOER2S2x2MXVMVmRMUkNNdzUxSForVm9zVmNFY3FoZVBNdHFwVkdTVFE5?=
- =?utf-8?B?USthcjNTWjVjcjlQdC93QUx4VlhZQVJBdm9UT09aYjFGTnVGOGU2UTNnY2pl?=
- =?utf-8?B?ZDJYdTFkUFZ5R0kvSU52d0ZoV3oxa1BLVm5hMFpOTklwWmdXTUdUL1ZvcmF5?=
- =?utf-8?B?dks5RmFRTWhCOWpnZkhWUm9GQ3VWVDFIRkJGdkJHZUV5NG52aE5tNGVXM2Ir?=
- =?utf-8?B?MWNUSWNTeStOTnUrRlkzZGhhOWliVGpmY1hodHNkQmRTeHNrdjNzazZzbHBE?=
- =?utf-8?B?NE1YMkdXZkxEUUlJTWM5TkFzc2FlNkhuQlpaaTdmU1NHNzZPektTNFM1eHZa?=
- =?utf-8?B?dWRocWhoaEdCK3Bsam1FaDVaVUhwV2xhUUx5ejNjMW5VSSttMGlRUnZUMkZY?=
- =?utf-8?B?T0hlb1BvVVZBNzJuSC9CTmpucWpGZXc3WXVOQnZkSkVqNDNhVE5vTHkzaWFK?=
- =?utf-8?B?QVZWN3RSRlQwQTJFRm03TFU2aGNQcEtvTTVyWnZUNHpWYkhwTmQxVVJmWWUv?=
- =?utf-8?B?YytJN1hnTFZaemVqYVJyOUdXNnVsUCtObWhFZVdlQ1B3M3VTVG50OWdKbnc1?=
- =?utf-8?B?RGdyMGc4WDhrL3lBSTEvdzVxTXVLY3J0WG1mZUFDUys1Vk5mUTN5R01SLzRE?=
- =?utf-8?B?ODFPNnB3NElJZjF6NThCVVU0dS9QaWhJVHphczB0K1o0OVpWQVBTWTJReDc2?=
- =?utf-8?B?TnluUEtWNmxuZjVON2I0NW1pNmtKNDhzb0dibjFpeWxyUzdTUVpXdkF1aUp0?=
- =?utf-8?B?RmhDdXRkK0R1anNTVkUxNExwYUNRbSs3cmtKR0VOZHI1UEdVSG8zdDdwVFZ2?=
- =?utf-8?B?OUVTNW9GRVRVeUZndk01SE1xdkdXNkVjNjJEZEFvSWcwUCtvQVVSNlFNMTdU?=
- =?utf-8?B?OVo1azhxREVPVG5xd090QTk1eCt0M1lWQkh1QWFqV3IyT0EvWUJDbnNnelh6?=
- =?utf-8?B?cmRNVk8xYmdxaTBxMVRFOUZROERZcTJHWDFwcGFPVk1vT0J6ckxBaFV5dS9C?=
- =?utf-8?B?djYxT3kzc2hrcjZGTFlLZWlZZVUveFlyeHVab3g2MExCbGJ6RmhrcUxwZ2hr?=
- =?utf-8?B?UlhESGsxdUROeTViTDhmYWJjelFHcWl6N0hocWNCV2xaVkJNNGlIZG03YkRr?=
- =?utf-8?B?MElGRi9kemRzc3I1U1RUUDdBWmh4NTNhMU5tdWhwbEdaTjE4ZGpYSEdFUzha?=
- =?utf-8?B?am0waG5oMVBWK242Ni93Q2NuazNXL2FJdHUrMG4vZjkwZ01xcVV3dDlacmtJ?=
- =?utf-8?B?YmRTZ3hIaE9ObzFBTkNSM09UL0hseGVjMS8xcTNldEp0N2ZFMGV6eFVpTkJx?=
- =?utf-8?B?MG9VVDBOaHRjOXNsK3ZZV1RuZ3plTFhtTmpJNlZBUTd5YTA0MlVJTzdyWjRv?=
- =?utf-8?B?RXBaUlFVQU10SEd2ek5KZlhocUEyRDM5U01wVDJGcElWdUxCMjN3a0s2WUF1?=
- =?utf-8?B?N21CaFpzVDdVRkZwbUxCeU1FbkljSWp3RFliWUJqMEhGYktZUTIzN2hQS1hH?=
- =?utf-8?B?eEhZQ3d2VDlBeFVJa0I3OUNXWm83MkVvR1l5NFRmU0hJcEtxOE9qWHlKUHhl?=
- =?utf-8?B?ZlJhNi9JUytieFdua0tkM1Y1MnFHWjhQanFWVyt6ME9LcWxLVnJsRXpQcnpL?=
- =?utf-8?Q?ZYbibTdIH8mmnXHA=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8d562e9-1d9e-45ea-3ae9-08df3da56db7
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2026 14:34:43.0379
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f2GdDGq7oJ3T1mGi8c2czYZKxQaHdEQJCnOytbWBSwY/N33PzW1zn2fM1ZINd60stT8sY2yAf7jxd70k9XQaYszbqXdciIRsWcHjml8RrX0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB351950
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261108-mtu-probing-series-v2-2-355d6490c3db@gmail.com>
+References: <20261108-mtu-probing-series-v2-0-355d6490c3db@gmail.com>
+In-Reply-To: <20261108-mtu-probing-series-v2-0-355d6490c3db@gmail.com>
+To: davem@davemloft.net, pabeni@redhat.com, ncardwell@google.com, 
+ horms@kernel.org, kuba@kernel.org, kuniyu@google.com, shuah@kernel.org, 
+ edumazet@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ panweiping3@gmail.com, netdev@vger.kernel.org, 
+ Yongjian Wang <echoowall@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794148792; l=1593;
+ i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
+ bh=dWQVgF2dw8T0SSpgY/AM6QslZB53fGfIfx1Y00i/T1Y=;
+ b=w+o9ztOdtKWCEUBar9Cf62EYRn4QOlVk7ppE9m/R/+dUUhG/2pcVaLBJtqTQWmkp4PD/v/mpk
+ hEcobO0HMGDDCsnGLco1DDnc/Dd3vlC7SSSKVdMQd5dM8w1sKEQ18qO
+X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
+ pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
+X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
+ auth_id=1323
+X-Original-From: Yongjian Wang <echoowall@gmail.com>
+Reply-To: echoowall@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On 2026-11-08 09:23, Mathieu Desnoyers wrote:
-> Each futex_wait test starts a waiter thread, which calls futex_wait()
-> with a 30ms timeout. The main thread sleeps 10ms, then expects
-> futex_wake() to wake one waiter. So the test assumes that the waiter
-> reaches futex_wait() within 10ms, and that the main thread runs again
-> within 30ms.
-> 
-> A busy machine breaks both. The built-in locktorture at times holds a
-> spinlock for 100ms with preemption off. With it, private_futex failed in
-> about 0.5% of the runs in 8-CPU VMs, on v7.4-rc1.
-> Timestamps showed two cases. The waiter started up to 75ms late, after
-> the wake. Or the main thread woke up to 105ms late, after the waiter
-> had timed out.
-> 
-> Fix this by retrying futex_wake() every millisecond until it wakes the
-> waiter, for up to 5s. Give the waiter a timeout of 10s, so that it
-> outlasts the retries. The tests then wait for the waiter, instead of
-> assuming when it runs.
-> 
-> With this patch, private_futex passed 6000 runs of 6000 in the same VMs,
-> and the three tests 2000 runs of 2000.
-Self-nack. That's flaky as well. A bounded retry can still fail. This
-needs a proper synchronization flag. Will respin a v2.
+From: Yongjian Wang <echoowall@gmail.com>
 
-Thanks,
+Check that a passive connection starts at tcp_base_mss with
+net.ipv4.tcp_mtu_probing=2, as an active connection does.
 
-Mathieu
+Signed-off-by: Yongjian Wang <echoowall@gmail.com>
+---
+ .../net/packetdrill/tcp_mtu_probing_passive.pkt    | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_passive.pkt b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_passive.pkt
+new file mode 100644
+index 000000000..14bae144c
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_passive.pkt
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test that a passive connection starts at tcp_base_mss with tcp_mtu_probing=2,
++// the same way as an active connection.
++
++`./defaults.sh
++sysctl -q net.ipv4.tcp_mtu_probing=2
++sysctl -q net.ipv4.tcp_base_mss=1024
++sysctl -q net.ipv4.tcp_timestamps=0`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 65535 <mss 1460,nop,nop,sackOK>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
++  +.1 < . 1:1(0) ack 1 win 65535
++   +0 accept(3, ..., ...) = 4
++
++// The initial window is sent with tcp_base_mss, not the peer's MSS.
++   +0 write(4, ..., 10240) = 10240
++   +0 > P. 1:2049(2048) ack 1
++   +0 > P. 2049:4097(2048) ack 1
++   +0 > P. 4097:6145(2048) ack 1
++   +0 > P. 6145:8193(2048) ack 1
++   +0 > P. 8193:10241(2048) ack 1
++  +.1 < . 1:1(0) ack 10241 win 65535
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Git-157)
+
+
