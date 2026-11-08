@@ -1,68 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.227
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794122880;
-	b=HlLTyPCy2sDwSLLcY0Qr1j4QkC/hqjWem2OsUNLU1NhpU5Q85Kt+MotX8P/zKMARhgEs
-	 ktaOz82krF8npY7J9MhPnDtvz0Dapy85TL8P0bnW2d6YMTbDjrVtwhOgBI/uTz80OxDmm
-	 BBxV+noAN4bqcmQ6hoHPNcFHvWlMcQKZyiz8oDKxFiH61LUmK6wwP/sXbt+Q+mc8KVjRA
-	 k6+1wPkaQQx2QBLvd3Srwvey3ObQrz+IZZAN/q+MnXmUh9a+UXbwwBUgBuUtIesxuYE0d
-	 EgEY1/hoL9NmLre5nHH8PdCth/+9G0etFpPPpObh9H28hDpbw2XhhC172V6lVPpoEBg==
+	t=1794125697;
+	b=nBd5FmhmL1ERbIILAjZjanGe35FMNVjqPyAy0wo6a150KUyRdFqLvcB1KJZQny+8nqX8
+	 ZotODc+qYAwRoDaAnaLezA+pb7DSwBtYlHjAGqU0peJNvTQVs14vr2QzDrmq1NTzfCr4G
+	 01NuJg+cCatLN6kNfRji2yUCinzMoQl+aDHoHOAmZFBTQDdrlMC6usxEkKqblhK5+3T3L
+	 IyVTPktoZlHn5fbv3JzGE/WTLyrIQhc0uChfZpGqsSx5jCQQTcMaEVLQTHLCDroSNSoFV
+	 aFgsko5xQZOQzv+aclTxWpeaStTUtBzMPUgQDR94w21IO+JhfZwNQBoOK3hmlfvykEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794122880;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=as9n+dNBfp1o44qNiI4p9jEq0z77VwxPRRD44uR3xLY=;
-	b=aiR2ZLOt9ZYvcN+qucf+96T4nfOvkRaNIv+br7S/iyHaVNfXeg4DHADA32PB+ZzetDdg
-	 FQB64+Rd1t1weCMhcXAR9e+sbWEOPDAf5rKM7QMZvSs2B3Cd3TsMRsJc/uyaS9uXu89sA
-	 w9q8PZG1kjKo3aSC1/4cgQrgfADoDOobRe573NJSmNus83Vu+3nuH9g1MVKFqTNaNNvn+
-	 KQ0xBcbFaJUvjEcW3Ar3w4QSPkMcTQl7m4xwYiSjo1abri6CNKpjALURo2rNabs1Iv21f
-	 SaOgQDLmPqFQSAXK2O6dHZvbT50e7QTOERflEm+YQieENxqnBXghVWZcXjE4SnRgDwg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794125697;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=0W/6CqRYQKhRFQh0YmGByeLiEw+AYRdR3bmjVY7Mfnw=;
+	b=epci4E9X3u5sXZK0uzov5kunDpRN+EgPLn6y+zghOQ5eISXRDRpou+Z1wYiqQuvt2Utu
+	 F7AVzDRk5TXp7IJDfUc/qa7/fFJLEs6APjJNHuRAu1/4nnyxyz2xErjPMWRmR709ilnmP
+	 R/AngaRLnqtvwrweoIGcyvNSBzIqtKd1KsbgAGiZNv+Vj1oH7Td2AgGiOGRtMfQLlUJNX
+	 GHY2PIvRHv5k13Td/6SQND7gGokgt0FOS2nGlYT+o8MqvU99179ZuxQnZ6KJTxmqOba2S
+	 SMoHpErgIJ+VBXO1132p05EayspBBJbvkIj0qR57wOadAHKROASbnkVakpUrnYv4myQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kGnzMWBf;
-	arc=none smtp.remote-ip=91.218.175.227
-Received: from mta0.migadu.com (out-227.mta0.migadu.com [91.218.175.227])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MKFzGvSF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976FC606A31C
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 07:27:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 976FC606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D69606A31C;
+	Sun,  8 Nov 2026 08:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kGnzMWBf
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=4elqSwc3DAM5howwrqEHgu/Vk/FDsIcZJHWFPI3k6NI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794122876; v=1; x=1794727676;
- b=kGnzMWBfJQp2yk7gP3ByV94Oo30xQFkPnUMzpcRgIJvdiUTW9kyykkDH+8oZRtl+Tyn+HjvV
- VeWkGBNVcS9QrhAD29IxJSX59Jok/a4o84XAcwElVSYYeLsp1ZF3NOXosZIkUiArfW0aJGHc1z6
- LZyHphbVB6KgHSawy6iZBj7k=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7e7fadc3522c9a21;
-	Sun, 08 Nov 2026 07:27:56 +0000
-X-Mizu-Trace-ID: 7e7fadc3522c9a21
-X-Migadu-Flow: FLOW_OUT
-From: Zenghui Yu <zenghui.yu@linux.dev>
-To: linux-kselftest@vger.kernel.org,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	surenb@google.com,
-	hao.ge@linux.dev,
-	abhishekbapat@google.com,
-	brauner@kernel.org,
-	aniketgattani@google.com,
-	peterz@infradead.org,
-	thehajime@gmail.com,
-	Zenghui Yu <zenghui.yu@linux.dev>
-Subject: [PATCH] selftests: Add missing generated files to .gitignore
-Date: Sun,  8 Nov 2026 15:27:35 +0800
-Message-ID: <20261108072735.36842-1-zenghui.yu@linux.dev>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MKFzGvSF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F881F008A1;
+	Sun,  8 Nov 2026 08:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794125696;
+	bh=0W/6CqRYQKhRFQh0YmGByeLiEw+AYRdR3bmjVY7Mfnw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MKFzGvSFZwWIFFRA0ZXyvs16A8suXF5CnHj8Yu6DWVn1XNaXrMDEdixojJ9WmXEb7
+	 B8HFMUjzOTvU6RwlNQjwdzjqPDvQCGA/4AJ0Em0zHhj4ypRhnI0mKxzYLZP1OV0ifL
+	 eA9/fxW3Pxy16892wCazYquUCYCuIsm8XcchNAPA4t/tkQu4javpgOcU7RVq4A3nxo
+	 k4uHK/8yLyZ3smraijDdggziz20OX07t14xfVyqW5GBbR1PgqbbVWyHXUI4Z32Xbrc
+	 0iyAWtnR+xfX5UnU/tie3OAW89SLmVQEk/G3YHRAs2N39oS4qhXV1enxnkV6a1AaEm
+	 jVNdWp25bMNnQ==
+Date: Sun, 8 Nov 2026 10:14:46 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: George Guo <dongtai.guo@linux.dev>, pasha.tatashin@soleen.com,
+	pratyush@kernel.org, ardb@kernel.org, shuah@kernel.org,
+	ilias.apalodimas@linaro.org, akpm@linux-foundation.org,
+	baoquan.he@linux.dev, ruirui.yang@linux.dev, guodongtai@kylinos.cn,
+	kernel@xen0n.name, graf@amazon.com, liukexin@kylinos.cn,
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+	kexec@lists.infradead.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: Re: [PATCH v6 5/8] LoongArch: Allow memblock arrays to resize
+Message-ID: <avAvdiYY7SJ_Gfwt@kernel.org>
+References: <20261029172956.20791-1-dongtai.guo@linux.dev>
+ <20261029172956.20791-6-dongtai.guo@linux.dev>
+ <aux9Hm0QFJLUDPWv@kernel.org>
+ <CAAhV-H7Dsnz03iXChzE6nYM2cs+D6fdDFiWrDxX5jM13kYL6HA@mail.gmail.com>
+ <auypq8_7T-vml5_B@kernel.org>
+ <CAAhV-H6aO_QNEzV-r6+FbNa=9EUQgv1vH0ET-ETXAH5x6oQGjA@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,77 +68,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H6aO_QNEzV-r6+FbNa=9EUQgv1vH0ET-ETXAH5x6oQGjA@mail.gmail.com>
 
-Add .gitignore entries for test binaries that are generated during
-a build but leave git status dirty, and add the missing .gitignore
-files for the alloc_tag and nommu directories.
+On Fri, Nov 06, 2026 at 10:35:01PM +0800, Huacai Chen wrote:
+> On Fri, Nov 6, 2026 at 12:07 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > On Thu, Nov 05, 2026 at 11:07:01PM +0800, Huacai Chen wrote:
+> > > Hi, Mike,
+> > >
+> > > On Thu, Nov 5, 2026 at 8:57 PM Mike Rapoport <rppt@kernel.org> wrote:
+> > > >
+> > > > On Fri, Oct 30, 2026 at 02:29:52AM +0900, George Guo wrote:
+> > > > > From: George Guo <guodongtai@kylinos.cn>
+> > > > >
+> > > > > LoongArch never calls memblock_allow_resize(), so the reserved region
+> > > > > array cannot grow beyond INIT_MEMBLOCK_RESERVED_REGIONS entries
+> > > > > (INIT_MEMBLOCK_REGIONS + NR_CPUS).
+> > > >
+> > > > This might be something to fix independent of KHO.
+> > > >
+> > > > Huacai,
+> > > >
+> > > > What's the reason LoongArch never enables memblock resizing and why it
+> > > > defines INIT_MEMBLOCK_RESERVED_REGIONS to include NR_CPUS?
+> > > At first we didn't define INIT_MEMBLOCK_RESERVED_REGIONS, then we got
+> > > boot failures on a 128-cores machine, so define it, and the value is
+> > > similar to arm64.
+> >
+> > AFAIR, arm64 had to reserve some per cpu data before they could enable
+> > memblock resizing, so they had to make it static.
+> LoongArch is similar, so below 64-cores machine has no problem.
+> 
+> >
+> > > The reason LoongArch never enables memblock resizing is because the mm
+> > > code is derived from MIPS, and MIPS never enables it.
+> >
+> > If that's the only reason, you might want to revisit that :)
+> Yes, it seems we need memblock_allow_resize(), but maybe it is better
+> to bring back paging_init()? Most other archs call
+> memblock_allow_resize() in paging_init().
 
-Signed-off-by: Zenghui Yu <zenghui.yu@linux.dev>
----
+paging_init() is a historical relict that hugely misnamed everywhere :)
 
-These are all trivial one-liner changes, so I have folded them into a
-single patch. Please let me know if you would prefer it to be split.
+I think platform_init() should be fine.
 
- tools/testing/selftests/alloc_tag/.gitignore  | 2 ++
- tools/testing/selftests/coredump/.gitignore   | 2 ++
- tools/testing/selftests/exec/.gitignore       | 4 ++++
- tools/testing/selftests/membarrier/.gitignore | 1 +
- tools/testing/selftests/nommu/.gitignore      | 3 +++
- 5 files changed, 12 insertions(+)
- create mode 100644 tools/testing/selftests/alloc_tag/.gitignore
- create mode 100644 tools/testing/selftests/nommu/.gitignore
+As far as I can tell, by the time platform_init() calls init_numa_memory(),
+all memory reservations that must happen before any memblock allocations
+are done.
+ 
+> Huacai
 
-diff --git a/tools/testing/selftests/alloc_tag/.gitignore b/tools/testing/selftests/alloc_tag/.gitignore
-new file mode 100644
-index 000000000000..30fa3b6712c0
---- /dev/null
-+++ b/tools/testing/selftests/alloc_tag/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+allocinfo_ioctl_test
-diff --git a/tools/testing/selftests/coredump/.gitignore b/tools/testing/selftests/coredump/.gitignore
-index e32f6e9006f6..6a9460c4450f 100644
---- a/tools/testing/selftests/coredump/.gitignore
-+++ b/tools/testing/selftests/coredump/.gitignore
-@@ -4,3 +4,5 @@ coredump_socket_test
- coredump_socket_protocol_test
- coredump_signal_test
- coredump_worker_test
-+coredump_notify_signal_helper
-+coredump_notify_signal_test
-diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
-index e42ecd4c908d..d39df26e5cf9 100644
---- a/tools/testing/selftests/exec/.gitignore
-+++ b/tools/testing/selftests/exec/.gitignore
-@@ -28,5 +28,9 @@ binfmt_transparent_interp
- binfmt_misc_loader
- binfmt_loader_payload
- binfmt_loader_payload_static
-+binfmt_bind_interp
-+binfmt_misc_delim
-+binfmt_misc_disabled
-+binfmt_misc_selfpin
- *.bpf.o
- vmlinux.h
-diff --git a/tools/testing/selftests/membarrier/.gitignore b/tools/testing/selftests/membarrier/.gitignore
-index f2fbba178601..031920478205 100644
---- a/tools/testing/selftests/membarrier/.gitignore
-+++ b/tools/testing/selftests/membarrier/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- membarrier_test_multi_thread
- membarrier_test_single_thread
-+membarrier_rseq_stress
-diff --git a/tools/testing/selftests/nommu/.gitignore b/tools/testing/selftests/nommu/.gitignore
-new file mode 100644
-index 000000000000..37da7c4765cd
---- /dev/null
-+++ b/tools/testing/selftests/nommu/.gitignore
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+nommu_mmap_test
-+nommu_mremap_test
 -- 
-2.56.0
-
+Sincerely yours,
+Mike.
