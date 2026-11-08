@@ -1,65 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794149398;
-	b=N6puMS4l7f4E31HifdmStTa/Nu+c3OpubxqfjBrH8KCkRGpLy6UDnEuuR+sLwkQvAUJT
-	 TtJOQlklSVG1Zc/OT4DtggaT8o3lgT6DHUyTtCuI9lYWmewPf4V1XshEzy2Wa0mLIrX3X
-	 RtkcRWXDzF1nwecjabJkIIeuQvI0oVAbf3EYOl1xKbfCrHMJz2gcahJQangK36WDqsxoi
-	 4MDRFaUZje7sRvb32binOX8pfjvwzXA1qC4f+yvYb1+O2HuKjIsVgw7hGOTp/r+L07Vag
-	 73UxzHRmG+MhaNwCK5thOQAdwJPA62lYuJ7xVDn9G21X0zmc4IZLN5q8ozYr9P99a3A==
+	t=1794149948;
+	b=RmaF+ysMHLePagtw0ywOVt+Gm1JKgunOnozlAIFLIGoVyMaqqex0A5O1HoC7VN1dnAww
+	 8WLoe60w1qBNr5GO6Cm2hU3/DkBWPTWuwRUmubne/sHz33Z2LrcGVfP068cSDXXndgCyM
+	 o+ncqdXR8bQeybAd5g61514LZr9cn26DzluGgaPEkgP1WzACf9d6JqGXSL3FtGuJxqUKb
+	 h/ApkB/E0u3w3HGrpS2hlTxwKj4g9L6RAXrqF7zhUsiPK5BGvMR32AJQXtEH5N2YGxOIu
+	 MxyfZOWrdxMSQWcIWeGtaa+6PBfDUflITZ6pRQjwgg2ppcRfnTVAYzbGh7R1Ts4GEdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794149398;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=ZhEKc45wg9ja/I6OBslZH8YXgn2o7121d7yFkBAteOI=;
-	b=am8mwQsru8pGmzVm3pCy+8OEPxQYGF9X1PhY5ITNZ6knZ1r6fgoSKvzno/0RgIaJFnTA
-	 nYYV+j0ueuOQNv6sCHeAR8QRePC2CQyWTaWM8g3qkyMIY/4YxFK+yK+sFHbKt8nfQpkoY
-	 x54qCdaNuRjeRBLTXKMAqOhGgPpZ89yZge0g8Xtx+kUQM7KYgIubaUu2DF8a8dgjosign
-	 RbArebamWpbLryKkR07MlmTUUTW3d5tPLdqvzYZOuErQiopV/fCLy9JyieRlfr/FqlFQo
-	 LzAsRqo7llJAkJ4HfLVTSpw2SuIahpWJgglc4ZHBvfOMHgQSbr4pIxXIypWLt5RR04A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794149948;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Content-Transfer-Encoding:Message-Id:References:To:X-Mailer;
+	bh=46GXHeUALtpO4O3TOALhIC4HG0bGJ4xyjvuRvhuOfq0=;
+	b=0uk3f9YXPJ339/YluTIU14/YKyoqiGiL3paYRhu/ouUnyODEjLMJ405JJTrm52oSFyko
+	 OWwnUygm9gpFN1YG6U+tPb9edy7kh5daVy0GTo6rjiH6ysykpYmJ5sGMhqfHXXOB0bFBK
+	 YGwbqi2cHEnaDzd4DBa5jzvTCs8MePiSoFP7UoxqUXUfdq2RHX+kgmKPVqYhG12ljHSlO
+	 O4HjSxJandJPkJl4FurAFgEOqbcWnIYpQmemAyJjpoW4EYT6xpPloOLobJBlBvsUNoa1Q
+	 +Z0IBx4HSAkjF0EHiHhLE4e1nRKJp3urrN/eqw1YpkXb2uDkbvaeMfE237cH4bFqb2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=B82dEkbu;
-	arc=none smtp.remote-ip=158.69.130.18
-Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I+mgnbqn;
+	arc=none smtp.remote-ip=74.125.82.176
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C61D606A320;
-	Sun,  8 Nov 2026 14:49:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C61D606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46254606A320
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 14:59:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46254606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=B82dEkbu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794149396;
-	bh=ZhEKc45wg9ja/I6OBslZH8YXgn2o7121d7yFkBAteOI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=B82dEkbuKRiY1S6yHi73o/TIC4ID0vJFWBAJ2BEzk7c36akTQhNXTjFk0wBC/b2+7
-	 FMoYHfrYwNQWqmnE5UcQDJkhsour1KU7dTyOpMZYMGUI2oj1hMfGwcWz6e/ZKwMPEL
-	 sDNguSUC4r1Dg6tjsY0p7PpM7Iey99OqDw6LD6absWU7bNFq7gatvxU39VsF3cgfMB
-	 8++pdUTKTx3G/NWhTyQP/vlPfud8iy94stS+Lx10c8etAr4ROaa3oPQleYJCg4nU0L
-	 vNO9DFgQ9AkWOC3gwNQjYs6HE+v2XYbnoo2/nFhICFm5AmVnXji3OTWSTZMBBcaSPY
-	 5I0YCRtn/yglg==
-Received: from thinkos.internal.efficios.com (unknown [64.58.40.251])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jMwn02gRLzMk4;
-	Sun, 08 Nov 2026 09:49:56 -0500 (EST)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: tglx@kernel.org,
-	mingo@redhat.com,
-	peterz@infradead.org
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	dvhart@infradead.org,
-	dave@stgolabs.net,
-	andrealmeid@igalia.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 0/4] selftests/futex: Fix flaky futex_wait and futex_waitv tests
-Date: Sun,  8 Nov 2026 09:49:48 -0500
-Message-Id: <20261108144952.1531160-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I+mgnbqn
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-36ff9c9da34so204325eec.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 06:59:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794149947; x=1794754747; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:content-type:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=46GXHeUALtpO4O3TOALhIC4HG0bGJ4xyjvuRvhuOfq0=;
+        b=I+mgnbqnq8NSHuqYlXQCBRsCwEE4OSEQinRr8N0VZR0arR5lJW+qfCv8UvBUUbAt1A
+         iuNEdhaiHT5wbCtr0NgDNbh48EXeKcpGcaJZszJnqmKYY6z5U3E7veLLoAjgfQmxcYbI
+         JmwYZwMdrk6PAc5Yq2opy2NeE8Ns4p9GNTn5qsxTBDmYfYaVZgbenDQNJpseaGv71hEL
+         IzcqwNqVhVdURUQvExrPOvJSU09getdEEbZeaHkZ//MDYaHZJZh758RQ4kLPXtqv0tlB
+         c0JPbzbwIdq925YL/RhIsc1eAj6H9AHwfkKLa/2RLe2lI/PDG6FNJGBWO2PgUC01qL0i
+         lWMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794149947; x=1794754747;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=46GXHeUALtpO4O3TOALhIC4HG0bGJ4xyjvuRvhuOfq0=;
+        b=DGm/c9aGO8EcXUqLo9dpI6KRfB2tFOUFk4zJ75WCm3d+pkFNEd/uXvz/5khEkVKWFC
+         yNs8+rEiSwzAzOieRn3da5yp3WXkIQUY0AHUvMbQMasvQIu/cL7lb9SgE/fYLqziuQ9n
+         qqjEgFLCOekpNwRw34/t0/WfJqOyp38uL3YOySDIsot7Yo6B3OINwZ2ltce2vHtZ54nB
+         DIqaFP0BRXw2ZAYyzOyszlfLa5h9+H4cgb3lbYJXLH1XPLAB6JaO9o/h+IeftrJeaAV1
+         JJUKDBk9yHJjAO33EQ0lcMaBOdw6mXd75bDhQg1JzvBC+fD0mjbzmL725I5zDR2wN6Ef
+         ljLA==
+X-Forwarded-Encrypted: i=1; AL+hErFFeE8bO8ifCqKxtvB4kLTUwxVd1glUSPp4EPKy6jBEEsrbbH1sYAabPGSuOr7JLvkj48rbtSm1h82bljIMX38=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+JJkOmHGIaZVZ42Sxl0p8EdAjf0UaH5eUmbi2MYdGj5vJbWPaQ
+	7aCuppyQQr+6cyTJn3f/8NNJL6ADANILeX6v7v/i/tHs9Zc89XVtdvy6
+X-Gm-Gg: AYBFou38L5RF9Ob+NFSh+J39zGoc2QDaJP2nCvivkoEjTem8Oxagd0uvfEwwrVJzjBG
+	2tcgqZ9rXUZhBMF8J2LgFc7cFHNpdwnJbReYudGlpsoVMo2LxwKNGp8shMQ2oi8f5BaF3Z80IYH
+	2X7A7zZ9uja1zu7BNLIDU3t3j54lGJAbSKnNbpUp0CqAiB7AxXD7deEAc/sU1jOHu+Rg1MXjwVi
+	gPcicNSEsV5vSiyv8M8bP1GXxJe1LQZgfTJjePFd2ms8cOLmOCnXgx3xoLHBSeDAVyeeQz6e2Ge
+	egJkHROhW8VuDYgFYkq3d/zOEQFpg2GlT1nNM2DyGnZDZv5V7knveFbpuxiGncWPU2gV4jLmmqA
+	Zx+UDT16FJuYWqECD50cQcun0WueuAhiawAOj/+53Z92PVXHzEQeJBiDNsbEcTe8HZBFo2j6/zq
+	O+SQeiVvdmGFzuOZqdTwFaHEJ5QpE+Nl0JBE6Yz7LPzaQfWCd7ZpOrtYCQnlNdm45IhHEEyq0GA
+	8nYvS6oZV09B7gLty2GolIVdrzmCFiBO0elZH8kZzfnHfvGlJNlP+YESfIHIn+2WOpYOWaLZZC4
+	+cnFVDX4/A7pVbNDExJWzbSYqyjH+dQEE11SnX1k0D8OHt1mYPAhXXjwA+itQS9Syw==
+X-Received: by 2002:a05:7300:680e:b0:36b:d3dd:2e85 with SMTP id 5a478bee46e88-372575c63fcmr3296545eec.36.1794149947219;
+        Sun, 08 Nov 2026 06:59:07 -0800 (PST)
+Received: from smtpclient.apple (v133-18-180-162.vir.kagoya.net. [133.18.180.162])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37265c06c61sm5679879eec.14.2026.11.08.06.59.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 08 Nov 2026 06:59:06 -0800 (PST)
+Content-Type: text/plain;
+	charset=us-ascii
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -68,57 +89,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3901.100.1.1.12\))
+Subject: Re: [PATCH net-next v2 0/4] tcp: fix tcp_base_mss on passive
+ connections and test MTU probing
+From: Esko Mobius <echoowall@gmail.com>
+In-Reply-To: <179414895487.488859.839196891969031483@kernel.org>
+Date: Sun, 8 Nov 2026 22:58:50 +0800
+Cc: davem@davemloft.net,
+ pabeni@redhat.com,
+ ncardwell@google.com,
+ horms@kernel.org,
+ kuba@kernel.org,
+ kuniyu@google.com,
+ shuah@kernel.org,
+ edumazet@kernel.org,
+ linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ panweiping3@gmail.com,
+ netdev@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <6A5F2D50-D257-4F6B-A1B6-BE08489591F6@gmail.com>
+References: <20261108-mtu-probing-series-v2-0-355d6490c3db@gmail.com>
+ <179414895487.488859.839196891969031483@kernel.org>
+To: netdev-bot+sinfo@kernel.org
+X-Mailer: Apple Mail (2.3901.100.1.1.12)
 
-Hi Thomas, Peter,
+> How the issue was discovered
+Hi,
 
-The futex_wait and futex_waitv selftests assume that a waiter thread
-blocks within 10ms, and that the main thread wakes it in time. Under
-load, both assumptions fail. With the built-in locktorture, the tests
-failed in 0.5% to 1% of the runs in 8-CPU VMs. Repeated runs of
-futex_waitv also run out of System V shared memory segments.
+This came up while adding packetdrill coverage for tcp_mtu_probing=2.
+The test work involved comparing the initial send MSS and what happened
+after the first probe was acknowledged on active and passive IPv4
+connections.
 
-These four patches fix both problems:
+With tcp_base_mss=1024, the active connection started at 1024 as
+expected. The passive connection started at 1460, and its send MSS
+dropped to 1242 after the first probe was acknowledged. That led to
+checking the passive setup path, where tcp_v4_syn_recv_sock() called
+tcp_sync_mss() before tcp_init_transfer() enabled MTU probing.
 
- 1  Let the futex_waitv() helper take no timeout.
- 2  Retry the wake in futex_wait until the waiter has returned, instead
-    of sleeping a fixed time.
- 3  Do the same in futex_waitv, and join its waiter.
- 4  Remove the shared memory segments that the tests create.
-
-How this was developed
-======================
-
-An LLM coding assistant wrote these patches and their messages, under
-my direction and review.
-
-Changes since v1
-================
-
-- v1 was patch 2 alone. It retried the wake for up to 5s, and gave the
-  waiter a timeout of 10s. Both bounds were timing assumptions too. In
-  v2, the main thread retries until the waiter has returned from
-  futex_wait(), and the waiter waits without a timeout.
-- New patches 1, 3 and 4.
-
-Based on v7.4-rc1, 6628e7d4c6b2.
-
-v1: https://lore.kernel.org/all/20261108142309.1527337-1-mathieu.desnoyers@efficios.com/
-
-Mathieu Desnoyers (4):
-  selftests/futex: Let futex_waitv() take no timeout
-  selftests/futex: Retry the wake in futex_wait instead of sleeping
-  selftests/futex: Retry the wake in futex_waitv instead of sleeping
-  selftests/futex: Remove the shared memory segments of the futex tests
-
- .../selftests/futex/functional/futex_wait.c   | 59 +++++++++++++------
- .../selftests/futex/functional/futex_waitv.c  | 52 +++++++++++-----
- .../selftests/futex/include/futex2test.h      | 14 +++--
- 3 files changed, 86 insertions(+), 39 deletions(-)
-
-
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
--- 
-2.47.3
-
+Thanks,
+Yongjian
