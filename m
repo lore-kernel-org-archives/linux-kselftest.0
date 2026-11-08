@@ -1,77 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794147245;
-	b=MySydXQ26SdF2QZ2El1zsbZZsWU/Ta9IWQ4CRnYyXOlrfQNVxep8S6XrwZNYv6P6I5+Q
-	 YtG7Jg+krZYW3CmBGUv4PaIEC4n+JOxZ7usWN1DtkZhNLJ+4h3xS1deg1ye0jWjrfQwDZ
-	 Suy2R2t+eY0EGD+4qBB0fQ7LAWZfUsdHU+jW2SGxqVJH0MDX+VuCmkDrpIJRGWKvZnX4P
-	 A1NVGXLvOqNXWlZovpM18XYsVe0aTsz5Gbl6JiQywxrbDs33LushUPGfsrYzsIwIZcCNU
-	 SQKixXSSAMVXW+cc6cnlVXUPQjPMbRmxlVx9ewyBJTRPI141rm7gBKz5/52sdsjfJhA==
+	t=1794147799;
+	b=2PAz2maaTiZ93n2yxULg94IjIgcqLUsFc492FZbyeeOdsoaTcJtJVSWkQkGHLbsIbR2q
+	 ZlONOjK0zZKl2kQPSbX5A3bXEvqtpQnizbgx1eOQ5WOhv+IJI32xqcIeC8yT0Mtb7+1Hn
+	 5X9yt0uZaaUiEvlKdK4ILmFSQ8Wz/hSm2FVk7fWNDBQZkSkkvXX2s5oSg2zMcMK2l7jqy
+	 pw6VCS9AS5ir3HlsUBTcHmwR4BGjFK2Hdd94aDGXTAqbs0G+v7sstzPD8meYRxuV6jY2T
+	 5VywkWBxLPf6lx50ZfItC24syao8OQig4K+ocM/R0zvTRdhVc0mj4Ekf9PGtmG6cXxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794147245;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794147799;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=RD9wBI9Yu/LeRJ+j05l5UqSYv5kN0CfbFsjR9ogEBcE=;
-	b=3fbuuEg4NCKzZk2TWzHGnpLEsvsy0zddFN3d2hHSn3/BGroKV/IcD1KbzhnFi53SrJ3N
-	 RS8sMP71JxzMBe1d5tXeaedrvCMoWQ0nZFPGgJ/WcNDdfp2ey6Mdi4oXVWGTeJkDecTx/
-	 8/ZM4eWon6F2YVn64EUdrOPZu4pi1XwLbDGeWNRFOhn5PRJhg4R8Weq8VYREeg146PcH6
-	 MYpdZkO7nwFk7PswIwHgIX7P+hzKl6jvMt0C1K/I2CzOeLsw4BttZblpg+0Q1QW89Y7Hi
-	 zw48RlVKOYSWH3jO1GgSCsPq4MqJu0qgfkFZhf9AK2okepuN65L5wM1sRmTEhZ4YuqA==
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=gG+88wZUi/y1Vveym/bPnrUsXqEu+rY4Y/0wdGlvsFA=;
+	b=yLDHFuUhnb4fftosqdAlS3sidYdFoNWeWAo7XKNq/VLWyJ7+Z1IdQzi4pX9vooAw3MDp
+	 sgWoWX18LHcO9k6qJCAB4irVo0QElu61QFEFnEcOs/kE5U0VtA/W14X0P/8XyWy9JmxXU
+	 Nq3dslwDjtE9yeW9UIdrMNsI66P6S3ATmzKSudcHIt2F+VDZ/HhXX7E7rH9k9hUALwUhY
+	 3mYfJK3BjBfeKJkqCzIizLuZxyAR17SC/xOPRXTMPbKVfpGXkdX/31X/WUYy3omrOkxHQ
+	 y6sDitqe0lTS3YZ6rwbkvlTFKEZXQBWdWaeeW9A4YI1eMjra4yJBkrVD1wkTkLCnz+g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ntNNri5k;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=KmhMSfKG;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922AA606A330;
-	Sun,  8 Nov 2026 14:14:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 922AA606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89436606A332;
+	Sun,  8 Nov 2026 14:23:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89436606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=ntNNri5k
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=KmhMSfKG
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794147236;
-	bh=RD9wBI9Yu/LeRJ+j05l5UqSYv5kN0CfbFsjR9ogEBcE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ntNNri5kq9o4YnCOvZXKsHhjnQYP70QeAOub505HN2eid21LQpgGauPPKmznLrAns
-	 q1KbuT8U7Gc6Y3Ow0qwtORaGADHofqyPLk5Xjf/22cQKp+AHAwuoCOrk3n3q/NCz+O
-	 YU7s9q3pw8H/QlsIQ6SSfLGps+O8dxPDXgYoC9EphPVnWiAxnU3Gm3bhxF+fl5zfr7
-	 Wv3BvUhce6t/nldRuWg3URxJDC0JW2uJaFkwc+MXze/Ive8vS3NzPoMMy0kxXqtm+3
-	 3XPoV/uTtB9WO9LGsp0fY/g8fJ8tqzH/HC4OOZjZg1OFJafjSkSZ4+On7zmjdH0p7L
-	 ybUCJkXAWkPqg==
+	s=smtpout1; t=1794147797;
+	bh=gG+88wZUi/y1Vveym/bPnrUsXqEu+rY4Y/0wdGlvsFA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KmhMSfKGaxO9tKxXEjvFJrmTyZf+j8HXCvghmKXjQFYbSf28ffi+zbV7QKcFktAoL
+	 pCNEiEC+/nsOej9VmUpuETduHhll1WzIg7KA7KIoPt6DleEgVTO1sy+EzLLst+dbV6
+	 R1LgNn4IiiIAUt1H+XHPbWesCTKSqU3JNE5tWSWVLsO8XZBKb8Y25DoeMP0zqPvydO
+	 QqaUUXwT/SbPFXU9/Y9XU0K06vanF9RHlsx6YA7wLdTtRoFm5k+AIx+UKxNqBXB64c
+	 6DEkI1uVGTr0cLOhooRBkJYiD5khFBKhM1HWOR/JmryGFBw8kkxRwRKRjq6XoICmHY
+	 BAEPuo2HmfD5g==
 Received: from thinkos.internal.efficios.com (unknown [64.58.40.251])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jMvzS4vTmzMgn;
-	Sun, 08 Nov 2026 09:13:56 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jMwBF2kCPzMmP;
+	Sun, 08 Nov 2026 09:23:17 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: peterz@infradead.org,
-	tglx@kernel.org,
-	mingo@redhat.com
+To: tglx@kernel.org,
+	mingo@redhat.com,
+	peterz@infradead.org
 Cc: linux-kernel@vger.kernel.org,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	will@kernel.org,
-	boqun@kernel.org,
-	longman@redhat.com,
-	rostedt@goodmis.org,
-	bigeasy@linutronix.de,
-	clrkwllms@kernel.org,
 	dvhart@infradead.org,
 	dave@stgolabs.net,
 	andrealmeid@igalia.com,
 	shuah@kernel.org,
-	juri.lelli@redhat.com,
-	linux-rt-devel@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2 3/5] locking/rtmutex: Clone the sort keys in rt_mutex_enqueue_pi()
-Date: Sun,  8 Nov 2026 09:13:45 -0500
-Message-Id: <20261108141347.1525532-4-mathieu.desnoyers@efficios.com>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/futex: Retry the wake in futex_wait instead of sleeping
+Date: Sun,  8 Nov 2026 09:23:09 -0500
+Message-Id: <20261108142309.1527337-1-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
-References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,102 +71,123 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-An rt_mutex waiter has two copies of its sort keys. waiter->tree sorts
-the waiters of its lock. waiter->pi_tree sorts the pi_waiters of the
-lock owner. Only the top waiter of each lock is in pi_waiters.
+Each futex_wait test starts a waiter thread, which calls futex_wait()
+with a 30ms timeout. The main thread sleeps 10ms, then expects
+futex_wake() to wake one waiter. So the test assumes that the waiter
+reaches futex_wait() within 10ms, and that the main thread runs again
+within 30ms.
 
-When the priority of a waiter changes, the chain walk updates
-waiter->tree. It copies waiter->tree to waiter->pi_tree for the top
-waiter only. A waiter that is not the top waiter keeps its old pi_tree
-keys.
+A busy machine breaks both. The built-in locktorture at times holds a
+spinlock for 100ms with preemption off. With it, private_futex failed in
+about 0.5% of the runs in 8-CPU VMs, on v7.4-rc1.
+Timestamps showed two cases. The waiter started up to 75ms late, after
+the wake. Or the main thread woke up to 105ms late, after the waiter
+had timed out.
 
-Such a waiter can become the top waiter later. remove_waiter() does this
-when the top waiter leaves. try_to_take_rt_mutex() does it when the lock
-changes owner. Both put the new top waiter in pi_waiters without a new
-copy. So pi_waiters sorts it by a priority it no longer has. The owner
-then inherits from the wrong waiter, at that waiter's current priority.
+Fix this by retrying futex_wake() every millisecond until it wakes the
+waiter, for up to 5s. Give the waiter a timeout of 10s, so that it
+outlasts the retries. The tests then wait for the waiter, instead of
+assuming when it runs.
 
-In this example, O is the owner, a SCHED_OTHER task. L1 and L2 are two
-rt_mutexes. W1, W2 and W3 are waiters. Their SCHED_FIFO priority is
-under their name. T is any other task. It changes the priority of W2:
+With this patch, private_futex passed 6000 runs of 6000 in the same VMs,
+and the three tests 2000 runs of 2000.
 
-  T                         O                W1                            W2           W3
-                                             FIFO 80                       FIFO 70      FIFO 50
-
-                            locks L1, L2
-                                                                                        blocks on L2
-                                             blocks on L1 (timed)
-                                                                           blocks on L1
-  sched_setscheduler(W2)
-    W2 now at FIFO 10
-    rt_mutex_adjust_pi(W2)
-      W2->tree: FIFO 10
-      W2 not top: no copy
-      W2->pi_tree: FIFO 70
-                                             <timeout>
-                                             remove_waiter()
-                                               rt_mutex_enqueue_pi(O, W2)
-                                                 W2 sorted as FIFO 70,
-                                                 ahead of W3
-                                               rt_mutex_adjust_prio(O)
-                                                 O inherits W2's FIFO 10
-                            runs at FIFO 10                                             still waits
-
-The owner runs at SCHED_FIFO 10 while a SCHED_FIFO 50 task waits for
-it. This needs no race. Each step can come long after the one before.
-
-Fix this by copying the keys in rt_mutex_enqueue_pi(). All callers hold
-the wait_lock and the owner's pi_lock, as waiter_clone_prio() requires.
-Remove the three copies the callers made.
-
-With this patch, the owner runs at SCHED_FIFO 50. The
-futex_lock_pi_inherit selftest added later in this series tests this
-case (promoted_waiter).
-
-Fixes: f7853c342418 ("locking/rtmutex: Fix task->pi_waiters integrity")
-Cc: stable@vger.kernel.org
+Fixes: c3d128581f64 ("selftests: futex: Add futex wait test")
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- kernel/locking/rtmutex.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ .../selftests/futex/functional/futex_wait.c   | 39 ++++++++++++-------
+ 1 file changed, 26 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 323973be2074..975efa1d864c 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -517,6 +517,8 @@ rt_mutex_enqueue_pi(struct task_struct *task, struct rt_mutex_waiter *waiter)
- {
- 	lockdep_assert_held(&task->pi_lock);
+diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
+index 5292f5d2c3b5..e7ebc7d8be1d 100644
+--- a/tools/testing/selftests/futex/functional/futex_wait.c
++++ b/tools/testing/selftests/futex/functional/futex_wait.c
+@@ -14,8 +14,9 @@
+ #include "futextest.h"
+ #include "kselftest_harness.h"
  
-+	/* The tree keys can change while @waiter is not in pi_waiters. */
-+	waiter_clone_prio(waiter, task);
- 	rb_add_cached(&waiter->pi_tree.entry, &task->pi_waiters, __pi_waiter_less);
+-#define timeout_ns  30000000
+-#define WAKE_WAIT_US 10000
++#define WAIT_TIMEOUT_S	10
++#define WAKE_RETRY_US	1000
++#define WAKE_TRIES	5000
+ #define SHM_PATH "futex_shm_file"
+ 
+ void *futex;
+@@ -32,8 +33,8 @@ static void *waiterfn(void *arg)
+ 	struct timespec to;
+ 	int res;
+ 
+-	to.tv_sec = 0;
+-	to.tv_nsec = timeout_ns;
++	to.tv_sec = WAIT_TIMEOUT_S;
++	to.tv_nsec = 0;
+ 
+ 	res = futex_wait(futex, 0, &to, args->flags);
+ 	if (res) {
+@@ -45,6 +46,24 @@ static void *waiterfn(void *arg)
+ 	return NULL;
  }
  
-@@ -1005,7 +1007,6 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 		 * and adjust the priority of the owner.
- 		 */
- 		rt_mutex_dequeue_pi(task, prerequeue_top_waiter);
--		waiter_clone_prio(waiter, task);
- 		rt_mutex_enqueue_pi(task, waiter);
- 		rt_mutex_adjust_prio(lock, task);
++/*
++ * Wake the waiter of @uaddr. The waiter thread may not have reached
++ * futex_wait() yet, so retry until futex_wake() wakes it, for up to
++ * WAKE_TRIES times WAKE_RETRY_US. Return what futex_wake() last returned.
++ */
++static int wake_waiter(void *uaddr, unsigned int flags)
++{
++	int i, res = 0;
++
++	for (i = 0; i < WAKE_TRIES; i++) {
++		res = futex_wake(uaddr, 1, flags);
++		if (res)
++			break;
++		usleep(WAKE_RETRY_US);
++	}
++	return res;
++}
++
+ TEST(private_futex)
+ {
+ 	struct waiter_args *args = malloc(sizeof(*args));
+@@ -61,10 +80,8 @@ TEST(private_futex)
+ 	ASSERT_EQ(pthread_create(&waiter, NULL, waiterfn, args), 0)
+ 		TH_LOG("pthread_create failed");
  
-@@ -1022,7 +1023,6 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
- 		 */
- 		rt_mutex_dequeue_pi(task, waiter);
- 		waiter = rt_mutex_top_waiter(lock);
--		waiter_clone_prio(waiter, task);
- 		rt_mutex_enqueue_pi(task, waiter);
- 		rt_mutex_adjust_prio(lock, task);
- 	} else {
-@@ -1243,7 +1243,6 @@ static int __sched task_blocks_on_rt_mutex(struct rt_mutex_base *lock,
- 	waiter->task = task;
- 	waiter->lock = lock;
- 	waiter_update_prio(waiter, task);
--	waiter_clone_prio(waiter, task);
+-	usleep(WAKE_WAIT_US);
+-
+ 	TH_LOG("Calling private futex_wake on futex: %p", futex);
+-	res = futex_wake(futex, 1, FUTEX_PRIVATE_FLAG);
++	res = wake_waiter(futex, FUTEX_PRIVATE_FLAG);
+ 	EXPECT_EQ(res, 1)
+ 		TH_LOG("futex_wake private returned: %d %s", res, res < 0 ? strerror(errno) : "");
  
- 	/* Get the top priority waiter on the lock */
- 	if (rt_mutex_has_waiters(lock))
+@@ -106,10 +123,8 @@ TEST(anon_page)
+ 	ASSERT_EQ(pthread_create(&waiter, NULL, waiterfn, args), 0)
+ 		TH_LOG("pthread_create failed");
+ 
+-	usleep(WAKE_WAIT_US);
+-
+ 	TH_LOG("Calling shared (page anon) futex_wake on futex: %p", futex);
+-	res = futex_wake(futex, 1, 0);
++	res = wake_waiter(futex, 0);
+ 	EXPECT_EQ(res, 1) {
+ 		TH_LOG("futex_wake shared (page anon) returned: %d %s",
+ 		       res, res < 0 ? strerror(errno) : "");
+@@ -161,10 +176,8 @@ TEST(file_backed)
+ 	ASSERT_EQ(pthread_create(&waiter, NULL, waiterfn, args), 0)
+ 		TH_LOG("pthread_create failed");
+ 
+-	usleep(WAKE_WAIT_US);
+-
+ 	TH_LOG("Calling shared (file backed) futex_wake on futex: %p", futex);
+-	res = futex_wake(shm, 1, 0);
++	res = wake_waiter(shm, 0);
+ 	EXPECT_EQ(res, 1) {
+ 		TH_LOG("futex_wake shared (file backed) returned: %d %s",
+ 		       res, res < 0 ? strerror(errno) : "");
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
 -- 
 2.47.3
 
