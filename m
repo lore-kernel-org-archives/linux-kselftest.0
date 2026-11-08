@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794117496;
-	b=s5w+tI5BpK6D0VlGGZLVomU9N2UZr8bbXFz365WvESxn3QmB9oRtav3LYnVTQ0hc4iAw
-	 nI5sU9owc/wlUqMXya5lj6DfsTmaT6idJWeQHogLO/GE5r+ei/uWdeWmswR/dYLUU98x4
-	 PQqigwM06CiaLmm8sY1ZVs7tlmS/fsouawHXfxW1X1eNxZxFetDwUFffpvnkVDkpPaU+4
-	 rWq2R8lchioZYK1c7/EVoRHR+Nr5Q58SsZU8w/oDb8PaS519PEd0wV5WfDmxaD2atu74e
-	 L20lvxKv7MYe62vUSX+ELjnOpXNYQk1Gp36KKR6LhgdJk/I6jnBMeVCNuW0OeA0sg/A==
+	t=1794117497;
+	b=wzWlugmcVBxMPhXBwr1svrQyU+R1Z3mFxGrO0lNsL9YKMICRZTpiSv1nigqajZZBm/lp
+	 s70h/6EzW2y7w9yUAuE7KL04WJfi9g3uEYGtO7V1ZC7W5gsMqMAu5vw3RUi5xAdZKJO4r
+	 +YBKBC3pSJnU1jC2vhNHAfg36LWP6TfVDEAkzlm0KQyfyt9vG67mH4wfIukGglQu8HcXt
+	 YBcuoKsWui6DMB0BnVJR234UE1llhNqLCLLXEoeS2w9yWS69zb2o0BTbQnNJktfvCuY+x
+	 hOS2pepNDmj1sJ3eKq7edu/Fmwt1vEQmNZ8DGNNdVYmz8iRyeW47D9CDmiT6+zO2DPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794117496;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794117497;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=7n5mV7LlVJBcizMSVH3942EO35b0cUF5y9HFomTyAB0=;
-	b=PlDlr1Fek8viyQpXOwkqLqr6oKC8xQbAIRKHlmYD5meJQgCFO8MgIVeWZicP9O4spVDs
-	 ZZm45aTe13eg0dn/sx2f/8DiZEC6XvctJ8r/oEiZyeK/bnVxSX1vqCNzu68bKIjpN579W
-	 EuusgZRALXaXopFQEr/MCqnZEguHQwpwxSGEa9NaPnUTMunriKX+0n0vUqG+OmKylr+Iu
-	 B0A1Us5i7BpxVw8Z7muHARaG2pPz2siqrccdFbWZZeUAynejR4d2363CBZkgZ48MAww5p
-	 tOrQd3vUPfmL/I8FTVWUReHPnHFt4pF04VzvjlzdnKLcOX1tlXiaiFfQC0MfSYTqqeQ==
+	bh=QYnZ4f08SwRhsosiiEmUJpp+LTvkBM+gRqSOdQT1O/I=;
+	b=UqVxXvQ3bE3Skd19foA82E3Q0lLB5/LokaHR8qubtwAtGvdaoGvlNs0oqsFb+pdRyDuT
+	 K52aM0PT9KZkDQ77H8nyoSBB2wWkWfzRqssihKoQvS7wD87eNwVN/qItoGeFJEhS/ErMW
+	 r62QORZ0CMPf1/3/nT/wJmORpdPfn8b7Mr54wdhvUN4kB++5U0l+OMEzy75g+x4j+emqR
+	 7auOpwTOoJKDkItqifMyODW1KuTWWyorxzYjTolksfrOKI+QQX6XVHlKRL9asfwVan/6M
+	 wle8NMUqDSYIQ2Z4/mdb0pqtlZK7pG/P4Pj4dbv8KYqCT4DvVOS+n/PPm1e9NP63RUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gYDNJ9Yv;
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IEJh5ae6;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFD2606D80D
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 05:58:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FFD2606D80D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455C8606D816
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 05:58:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 455C8606D816
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gYDNJ9Yv
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1a71dd190b0so560395c88.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 21:58:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IEJh5ae6
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-36f1e7d9d4dso617739eec.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Nov 2026 21:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794117495; x=1794722295; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794117496; x=1794722296; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7n5mV7LlVJBcizMSVH3942EO35b0cUF5y9HFomTyAB0=;
-        b=gYDNJ9YvcgaGgARpbqxXCMEam5H7M5s2M3dqSUKWhMtgQ/me5o82l0pOJ8rihw4zZF
-         4tCrIu0Z0QfhxilC1PimzntouTAKdqBsHXWm5nX9fR8SeE265CDQ/eA0hE+uKErT5U7l
-         tsUWgTDtOVzVulLwAIm9dR1lAUfBEA1nG2MZnyqF39XxRhvbXN00FSFdHFcEXFzAtU/c
-         hCvLhIpbSFmICd0JYDMNhl2bu7nXnSX/u1h5i7SUPf7VskOdCK3VtR+/Ad7RxhSp2T6b
-         ZMZU9D9rnrq0RUi8H1qkg2wljzSlcUqxAbp/JVcnHQlAi0K+WbII1n1WURJ/YXOoszJ5
-         SK1Q==
+        bh=QYnZ4f08SwRhsosiiEmUJpp+LTvkBM+gRqSOdQT1O/I=;
+        b=IEJh5ae6TjXORBvPm/AHJV/MFZu6TKp8f38jWxw3/XUXdqItNsMIL6tPssXu80p0hF
+         pHWTg9Y+FCWFl54Ro/L81Pb8WCv1/auLLSpFhQ5KViWkqeVtYdijQ7RCdNTVMWKpAt4o
+         eVdrBMhCY1lmMHIAiQ882jbAD67KxopQW3HXK2zXcb+vVL1e2r+pJiYVLGQNNWcnuW72
+         KE+0PS0uZJKd0oB1Pypj/5ySSMYBjJAxeM+nNpyE9jg09fXIyntsvj2BWMDUhOwEkIlZ
+         A345OhhTPuRn1SxyI9Nem4MijN0vlMXoKXiEgZmANZjtstr2M+Mz3A/zZCIfFefxUs/F
+         g+Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794117495; x=1794722295;
+        d=1e100.net; s=20260707; t=1794117496; x=1794722296;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7n5mV7LlVJBcizMSVH3942EO35b0cUF5y9HFomTyAB0=;
-        b=BF9apLuhWjgUs5/UTFUnTh5HxNAlDCPM4qcJ3UstK4hmaGMqJfTQBcm7jFU3KJVf91
-         OisaaCPDc/XU0lWJHVOf4eNCR810UZ5O5LlzhWAgVKuDmA1lnaF29EmUUzvdJspx5Nj9
-         h7WKmyhG5lbrVOZU0kx+mopnExrelAqH7pgRKfa0v995KzMjHgn955zZ9d66iK5yfB67
-         ROqK9KBjWMQJR/084Zo0Wxda+g7TIYWbQqVqrAPeOIivaA8ymowXr2SlAlz4zdrCsSBf
-         lzM7cb8kJ/KQl72ZiKTGwA4qjNj5s9xuBlc0JzPnlMx3W2aWVIik5ORwAgkcHr7S2RwX
-         Op5Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwsqUSnun1twKT52sKHen4pvWCwIIs3fwNdLr78OP1FO21SozkGK/lb6FBjLMcKkPRirGwXZjOHOqw1IHSclU8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8Wrz+6jIl596Z/DLt5oCZa/zBgfs78r8NpnCkHsbAGoPxEsFZ8
-	+pHkRtevJETA0zI2Om7v4MMfbtoeshdYr47/HD+EAcjElZ3RJhNyC0ioPRzwNj5JViTCsit0kaD
-	wi6sR4980SUOauZgXZJhBr0bwIg==
-X-Received: from dlbtu15.prod.google.com ([2002:a05:7022:3c0f:b0:15d:6b8d:2adc])
+        bh=QYnZ4f08SwRhsosiiEmUJpp+LTvkBM+gRqSOdQT1O/I=;
+        b=jJBxGiAEjFmq8yah8aLgKWgGmyY6muZaWUbOfeIHRoZ710/omkzFp4Um3K/1RMfxiD
+         sLTTLfIof5uDLlMWtWlso0tkGFogqJ0PCeDGJVRekd0w7DsA0nXEQoZ2xcyYqAQCvSuf
+         qDOCkgh+Yu7Jh+iVufBiREdb/naDx2eYeTV0jy7S4IIUzPmTi+btMLH1NKzW5IqiScml
+         jBkH8JL0ZL5krVmGBOSzr3kj8CsW1zSVi58MzCN1bjXa9+XZ5LNlpI6W0WPu5rEKA2Jl
+         MzujTNIdjATqaECDz5kazJd2FgNUzQfUwe/5K0juQUiSiDQf/mNjrh2DBprIE6kEYe8l
+         kwqA==
+X-Forwarded-Encrypted: i=1; AL+hErFE5hSD8cuK4IVaUKcLaN8uvzJBBu2OJ3bWnJ2ei/HsGI0VbbencjxyI8ti9jt+AzAf+6qzBx/9rlVcrl9Xcwo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Adl5HlftXcdy17m13Shyh5fgnfOpVALM2UEUGffzqH0rd/KIF
+	4GIrGIjMx990JbXyQRX5h37tQd//iiq930T5gzxhb738RCJbvzIo59RgonFB6zcS98ok8wrbvYq
+	bE0Zh/fiXshe1DhVNWZw9XSd08g==
+X-Received: from dybpg4.prod.google.com ([2002:a05:7301:4144:b0:36c:a067:eca4])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:7f01:b0:1b0:f268:3419 with SMTP id a92af1059eb24-1b39fe87bedmr1005367c88.7.1794117495052;
- Sat, 07 Nov 2026 21:58:15 -0800 (PST)
-Date: Sun,  8 Nov 2026 05:58:08 +0000
+ 2002:a05:7301:648e:b0:36c:a390:8907 with SMTP id 5a478bee46e88-37255a4e72amr2132546eec.21.1794117496193;
+ Sat, 07 Nov 2026 21:58:16 -0800 (PST)
+Date: Sun,  8 Nov 2026 05:58:09 +0000
 In-Reply-To: <20261108055809.2122934-1-almasrymina@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261108055809.2122934-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261108055809.2122934-6-almasrymina@google.com>
-Subject: [PATCH net-next v2 5/6] net: devmem: resolve physical map_dev for
- leased RX bindings
+Message-ID: <20261108055809.2122934-7-almasrymina@google.com>
+Subject: [PATCH net-next v2 6/6] selftests: net: add leased devmem RX and TX
+ netdev unregister tests
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org
 Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
@@ -95,121 +95,184 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Dragos Tatulea <dtatulea@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Previously, netdev_nl_bind_rx_doit() passed netdev as both map_dev and
-bind_dev to net_devmem_bind_dmabuf(), so leased RX bindings stored the
-virtual netdev in binding->map_dev without tracking the physical backing
-netdev at all. Unregistering the physical backing netdev while a leased
-RX binding was active failed to detach and unmap the dmabuf.
+Extend nl_netdev.py to cover netdev unregistration while devmem RX and
+TX bindings are active on a virtual netkit device leasing an RX queue
+from netdevsim:
 
-Return the physical backing net_device from netdev_nl_get_dma_dev() when
-the RX queue is leased from another netdev, lock map_dev around
-net_devmem_bind_dmabuf() when map_dev != netdev (matching
-netdev_nl_bind_tx_doit()), and assert in net_devmem_bind_dmabuf() that
-both bind_dev and map_dev are locked.
-
-Because a leased map_dev is reached via rxq->lease->dev and locked with
-raw netdev_lock(map_dev) rather than netdev_get_by_index_lock(), it may
-already have entered NETREG_UNREGISTERING and completed
-net_devmem_dev_unregister(map_dev) before cascaded unregistration of
-bind_dev tears down the lease. Reject binding in
-net_devmem_bind_dmabuf() if map_dev->reg_state != NETREG_REGISTERED.
+1. devmem_lease_bind_rx_unregister_check: binds an RX dmabuf to a netkit
+   device backed by a leased netdevsim queue and verifies clean teardown
+   both when the virtual netkit device is deleted first (unleasing the
+   queue while netdevsim remains up) and when the underlying netdevsim
+   device is unregistered directly (which uninstalls the physical queue
+   memory provider and cascades unregistration to the leasing netkit).
+2. devmem_lease_bind_tx_unregister_check: binds a TX dmabuf to a netkit
+   device backed by a leased netdevsim queue and verifies clean teardown
+   both when the virtual netkit device is deleted first and when the
+   underlying netdevsim device is unregistered directly.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
+Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
 ---
- net/core/devmem.c      | 12 ++++++++++++
- net/core/netdev-genl.c | 19 ++++++++++++++++---
- 2 files changed, 28 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/nl_netdev.py | 132 ++++++++++++++++++++++-
+ 1 file changed, 129 insertions(+), 3 deletions(-)
 
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index bb785a871d1c4..2dac581a57e13 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -321,6 +321,18 @@ net_devmem_bind_dmabuf(struct net_device *map_dev,
- 	size_t i;
- 	long err;
+diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+index dd0321c0b463a..fa4b5be093257 100755
+--- a/tools/testing/selftests/net/nl_netdev.py
++++ b/tools/testing/selftests/net/nl_netdev.py
+@@ -12,8 +12,9 @@ import os
+ import struct
+ from os import system
+ from lib.py import ksft_run, ksft_exit, KsftFailEx, KsftSkipEx
+-from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
+-from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, NlError, defer, ip
++from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_not_in, ksft_raises, ksft_busy_wait
++from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, Netlink
++from lib.py import NlError, RtnlFamily, cmd, defer, ip
  
-+	netdev_assert_locked(bind_dev);
-+	netdev_assert_locked(map_dev);
+ 
+ def empty_check(nf) -> None:
+@@ -483,6 +484,129 @@ def devmem_bind_tx_unregister_check(_nf) -> None:
+     nf_priv.close()
+ 
+ 
++def _create_netkit_single(rxqueues=2):
++    """Create a single-device netkit interface for queue lease tests."""
++    ifname = f"nk{os.getpid()}"
++    try:
++        with RtnlFamily() as rtnl:
++            rtnl.newlink(
++                {
++                    "ifname": ifname,
++                    "linkinfo": {
++                        "kind": "netkit",
++                        "data": {
++                            "mode": "l2",
++                            "pairing": "single",
++                        },
++                    },
++                    "num-rx-queues": rxqueues,
++                },
++                flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
++            )
++    except NlError as e:
++        if e.error in (errno.EOPNOTSUPP, errno.ENOENT):
++            raise KsftSkipEx(f"netkit single mode not supported: {e}") from e
++        raise
++    defer(cmd, f"ip link del dev {ifname}", fail=False)
 +
-+	/* When map_dev != bind_dev, map_dev is locked via the queue lease
-+	 * rather than netdev_get_by_index_lock(), so it may already be
-+	 * unregistering before cascaded bind_dev unregistration runs.
-+	 */
-+	if (map_dev->reg_state != NETREG_REGISTERED) {
-+		NL_SET_ERR_MSG(extack, "Device is being unregistered");
-+		return ERR_PTR(-ENODEV);
-+	}
++    link = ip(f"-d link show dev {ifname}", json=True)[0]
++    return ifname, link["ifindex"]
 +
- 	if (!dma_dev) {
- 		NL_SET_ERR_MSG(extack, "Device doesn't support DMA");
- 		return ERR_PTR(-EOPNOTSUPP);
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 9e56c26fc65f9..442362f23fe88 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -1005,12 +1005,15 @@ static int netdev_nl_read_rxq_bitmap(struct genl_info *info,
- 
- static struct device *
- netdev_nl_get_dma_dev(struct net_device *netdev, unsigned long *rxq_bitmap,
-+		      struct net_device **map_dev,
- 		      struct netlink_ext_ack *extack)
- {
- 	struct device *dma_dev = NULL;
- 	u32 rxq_idx, prev_rxq_idx;
- 
-+	*map_dev = netdev;
- 	for_each_set_bit(rxq_idx, rxq_bitmap, netdev->real_num_rx_queues) {
-+		struct netdev_rx_queue *rxq;
- 		struct device *rxq_dma_dev;
- 
- 		rxq_dma_dev = netdev_queue_get_dma_dev(netdev, rxq_idx,
-@@ -1023,6 +1026,11 @@ netdev_nl_get_dma_dev(struct net_device *netdev, unsigned long *rxq_bitmap,
- 
- 		dma_dev = rxq_dma_dev;
- 		prev_rxq_idx = rxq_idx;
-+		if (netif_rxq_is_leased(netdev, rxq_idx) &&
-+		    netif_is_queue_leasee(netdev)) {
-+			rxq = __netif_get_rx_queue(netdev, rxq_idx);
-+			*map_dev = rxq->lease->dev;
-+		}
- 	}
- 
- 	return dma_dev;
-@@ -1032,9 +1040,9 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
- {
- 	struct net_devmem_dmabuf_binding *binding;
- 	unsigned int niov_shift = PAGE_SHIFT;
-+	struct net_device *netdev, *map_dev;
- 	u32 ifindex, dmabuf_fd, rxq_idx;
- 	struct netdev_nl_sock *priv;
--	struct net_device *netdev;
- 	unsigned long *rxq_bitmap;
- 	struct device *dma_dev;
- 	struct sk_buff *rsp;
-@@ -1104,16 +1112,21 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
- 	if (err)
- 		goto err_rxq_bitmap;
- 
--	dma_dev = netdev_nl_get_dma_dev(netdev, rxq_bitmap, info->extack);
-+	dma_dev = netdev_nl_get_dma_dev(netdev, rxq_bitmap, &map_dev,
-+					info->extack);
- 	if (IS_ERR(dma_dev)) {
- 		err = PTR_ERR(dma_dev);
- 		goto err_rxq_bitmap;
- 	}
- 
--	binding = net_devmem_bind_dmabuf(netdev, netdev, dma_dev,
-+	if (map_dev != netdev)
-+		netdev_lock(map_dev);
-+	binding = net_devmem_bind_dmabuf(map_dev, netdev, dma_dev,
- 					 DMA_FROM_DEVICE, dmabuf_fd,
- 					 niov_shift, priv, NETLINK_CB(skb).sk,
- 					 info->extack);
-+	if (map_dev != netdev)
-+		netdev_unlock(map_dev);
- 	if (IS_ERR(binding)) {
- 		err = PTR_ERR(binding);
- 		goto err_rxq_bitmap;
++
++def devmem_lease_bind_rx_unregister_check(nf) -> None:
++    """Verify leased RX devmem bindings detach cleanly on virt/phys unregister."""
++    for remove_virt_first in (False, True):
++        dmabuf_fd = _create_udmabuf()
++        defer(os.close, dmabuf_fd)
++        nf_priv = NetdevFamily()
++        defer(nf_priv.close)
++        nsimdev = NetdevSimDev(queue_count=2)
++        defer(nsimdev.remove)
++        nsim = nsimdev.nsims[0]
++
++        ip(f"link set dev {nsim.ifname} up")
++        with EthtoolFamily() as ef:
++            ef.rings_set({"header": {"dev-index": nsim.ifindex},
++                          "tcp-data-split": "enabled"})
++
++        nk_ifname, nk_ifindex = _create_netkit_single(rxqueues=2)
++        ip(f"link set dev {nk_ifname} up")
++
++        res = nf.queue_create({
++            "ifindex": nk_ifindex,
++            "type": "rx",
++            "lease": {
++                "ifindex": nsim.ifindex,
++                "queue": {"id": 1, "type": "rx"},
++            },
++        })
++
++        _devmem_bind(nf_priv.bind_rx, {
++            "ifindex": nk_ifindex,
++            "fd": dmabuf_fd,
++            "queues": [{"id": res["id"], "type": "rx"}],
++        })
++        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
++
++        if remove_virt_first:
++            ip(f"link del dev {nk_ifname}")
++            phys_q = nf.queue_get({"ifindex": nsim.ifindex, "id": 1,
++                                   "type": "rx"})
++            ksft_not_in("dmabuf", phys_q)
++            ksft_not_in("lease", phys_q)
++            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
++            nsimdev.remove()
++        else:
++            nsimdev.remove()
++            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
++        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
++
++        nf_priv.close()
++
++
++def devmem_lease_bind_tx_unregister_check(nf) -> None:
++    """Verify leased TX devmem bindings detach cleanly on virt/phys unregister."""
++    for remove_virt_first in (False, True):
++        dmabuf_fd = _create_udmabuf()
++        defer(os.close, dmabuf_fd)
++        nf_priv = NetdevFamily()
++        defer(nf_priv.close)
++        nsimdev = NetdevSimDev(queue_count=2)
++        defer(nsimdev.remove)
++        nsim = nsimdev.nsims[0]
++
++        ip(f"link set dev {nsim.ifname} up")
++
++        nk_ifname, nk_ifindex = _create_netkit_single(rxqueues=2)
++        ip(f"link set dev {nk_ifname} up")
++
++        nf.queue_create({
++            "ifindex": nk_ifindex,
++            "type": "rx",
++            "lease": {
++                "ifindex": nsim.ifindex,
++                "queue": {"id": 1, "type": "rx"},
++            },
++        })
++
++        _devmem_bind(nf_priv.bind_tx, {
++            "ifindex": nk_ifindex,
++            "fd": dmabuf_fd,
++        })
++        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
++
++        if remove_virt_first:
++            ip(f"link del dev {nk_ifname}")
++            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
++            nsimdev.remove()
++        else:
++            nsimdev.remove()
++            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
++        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
++
++        nf_priv.close()
++
++
+ def main() -> None:
+     """ Ksft boiler plate main """
+     nf = NetdevFamily()
+@@ -498,7 +622,9 @@ def main() -> None:
+               page_pool_ifindex_leak_check,
+               page_pool_stats_ifindex_check,
+               devmem_bind_rx_unregister_check,
+-              devmem_bind_tx_unregister_check
++              devmem_bind_tx_unregister_check,
++              devmem_lease_bind_rx_unregister_check,
++              devmem_lease_bind_tx_unregister_check
+               ],
+              args=(nf, ))
+     ksft_exit()
 -- 
 2.56.0.455.g6c5a503b38-goog
 
