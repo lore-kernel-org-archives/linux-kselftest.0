@@ -1,60 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794139480;
-	b=tFrb7Pw7lepZhcN+Z2T/ijx7OAahK+JJg38OqhshSA2iJikXl+6FuAx5Hnfa7ClKSNra
-	 MaPD54/tbiAsDkW2Ya1jghu49LaNpNoyF4Js8phQ90XRIlbt/MfQrmovaHdfJcv8cqSFc
-	 1JPn6bolwQEHkKzihqqCpUtXnBGSZ7lJ4d6P7DpvwicqMmSDDjkKp0r7c2XckIGc1TnqB
-	 BF1si4CD5GgtzTx5YSxDLIRpI69tC97SB40pa9mxYzSUoYKEFYuILH1GyF4IrVdEkT/6u
-	 cdTzZqWDgg60Itw9rJ+M1mg3uijtpnTsJOyehZhKDOa8NZaVNPvxazYJr6w7hP0OyOg==
+	t=1794141286;
+	b=EXCGSUJJIKa7Bfc8EuKUl/8Dw778hyYKEnSGV6jBiUVL3wOwDy0FDL9fNBLBIkHhFhPk
+	 ZP/UyHw2UuM7TtX5TwRFxHmDodpLdKt3lUVRU0tGlMGwQFULN3SSiZYKlt3JG3JZIEk4A
+	 hMm4QVcFWuP8svx8lRfGyzB6M2ya9vYW5JFVTOphrecdrlbe1tiV6BxASsWX0H/uviaZN
+	 Fku9xfmJRpLs5aPSSfj5BRH+HF7PNxXk+VQ2bVOyr924XSarMgfjAXTJpNJQSQE48Z15J
+	 liQrONOOrJ/K0q6WxIordGD7mr+eFdD0ClHIDFDekfdKwR+ZIOrSkeVAQIKDtAV0nCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794139480;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=T2Q43N/EmQfqSH6+WvASCF147eufwEc9GCOSIJRTPYc=;
-	b=JaEa2qlYnSiFOQo2vgnGhLYTJdvafE+ilatorRXeauRJvXyTNgTR+fMNqIpoUXUeZsGD
-	 WemgaZY0sondyPCi9o1Dx1FxmHyghF9qImZaBEII/PW66Gk8kzruBm0np3Mi53QNoQ/ly
-	 MFQz20J+3sfrqfvBt3vAsjhtqu2jGR8mvvUWlvgnIj1iNJmXxFV69SWxGbe5Wuy8dzXac
-	 AiMrqcTAqJEnUr+IqjfZv8LlumzOmQyYHNTcwlwJ4ft5DEvtPBlTcaQ6UTXNnYgRzAY9A
-	 3Jvfi1ikfBKNxG7Rr6LrOUGXmNO/krvLZj+SjRIdo4S85KgLQq1TTOUfxSuWxF6CUBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794141286;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=fOZEfPbkpDcUaP0mBLPSnsv8fE4ioirCVy7jzR22tC4=;
+	b=jLyYt46cHHbemjhK0vv70X9Smdi1Nf73g4pB05tr6GXhKiNIxQ1izmGnX97SAgdSQ5nv
+	 xhBe0U8ejlFv7xRDeIGsvg4AkjzeaojUZ0q48F3m0Fczwjteq3YFAWcQBT1HGs9kftUmo
+	 Cgpp/MzFXFAOZdV3aqD8hJmhe/4AYRtflkotdutA+ec5v/IaQiODS0cfODq+h/OMtGDlr
+	 K/hd2P0VeKcYpi7GlZbxQUKJQQKntNRBon/nponIbIkBPZMKolN93MLziaArJWSFWMWr8
+	 R0UePMbD0pdATYpm7CTGR0xx1U2w1rLM/Z3dYdHngygNuv83XbTvOchU9IYYY3bq9eA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V77POt1m;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eH2WZQCq;
+	arc=none smtp.remote-ip=209.85.128.171
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDD1606A322;
-	Sun,  8 Nov 2026 12:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFAD606A320
+	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 12:34:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDFAD606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V77POt1m
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012C51F008A1;
-	Sun,  8 Nov 2026 12:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794139479;
-	bh=T2Q43N/EmQfqSH6+WvASCF147eufwEc9GCOSIJRTPYc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=V77POt1mVoiWIGIeikZgyvrVsE8Zc8BPG+MpgPq6lulXuwY9PVhmDcDGWL51rSxOG
-	 f4pKsNIaJOHv4a9dNuzQIiqVXUEBiFKqnxEcSRK0rRgERbZjGg6JYeKz98In2wTnd7
-	 szDageKou6cBRR/2fCOlAakSlbruyauOe/wy39NEUAMexgPHlfuElB+8awxiDgn9e/
-	 8Ie5F4G05VZRMzUvhS84AjTjDbwN048zwsLCoASSKNMVePcDh1QYCbJD5eKsJJsARC
-	 XpMcSQiEwKZtL285X8ae3m4FCPwd7tspYYpWKDuiIoEZl0+LbxldYu6qiKFRuMvGdi
-	 adjWB3GDahvew==
-Subject: Re: [PATCH net v1 2/2] selftests/net/openvswitch: check that a failed
- set keeps the features
-From: netdev-bot+sashiko@kernel.org
-To: houminxi@gmail.com
-Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
- i.maximets@ovn.org, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, jhs@mojatatu.com,
- paulb@nvidia.com, dev@openvswitch.org, linux-kselftest@vger.kernel.org
-Date: Sun, 08 Nov 2026 12:04:38 +0000
-Message-ID: <179413947858.994134.617046081353196823@kernel.org>
-In-Reply-To: <20261107113403.797779-3-houminxi@gmail.com>
-References: <20261107113403.797779-3-houminxi@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eH2WZQCq
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8b305d38bafso187817b3.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 04:34:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794141284; x=1794746084; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fOZEfPbkpDcUaP0mBLPSnsv8fE4ioirCVy7jzR22tC4=;
+        b=eH2WZQCqohh3ZJL9JRPl4XVfAxk4PlENe5FMnO43jrWAFkPkWOtSNC8UupurbmgryD
+         I6pBz6m1BrZIiYw/pBD98CTalo0Uct2IOD61fMDiO3SodxAHEbcutIEazv9vY7/0OrVe
+         bzXlxUNghxhrmL+LPp4K8BYfk0k+rjFe893do6FFZLDCN1pRSSIcTiLPyY/gPx6fNEn0
+         9rrVnLfyTCVfL3KKZS35VpaWyGcMe/huNkk2yvZiuU8cHCQyD1Dhv56KrA7gfEapCpgv
+         EMRgQcjRA4JILeXgsqpBJeUtzAmnwqCmytiESjPWC3bXUXzqXzaOnntBRALtoZVD7qi2
+         gGCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794141284; x=1794746084;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fOZEfPbkpDcUaP0mBLPSnsv8fE4ioirCVy7jzR22tC4=;
+        b=OMSvoPMGIdtNDy8F79qigWdGDvSeda61UEUZicSSllK6ALYkf+a3F8DJUqVPR1kobh
+         XLb0Lk7HYMByPpm7EiOIu4r39ySPfpNtBwv8yg6qzeq9+V81qW4VH+Q94G72cbgkIjWt
+         GVeXJwy4Jx1PMgSJzGBsKcOgHXPS6FlL9Tx2R+NtARUs5FJPheqkrt3f8QLyPBlQ1iJs
+         C8DVCewsc5gylVvvp8OcvF7cnpCmY2MrS+sJb1+rLRvALU6OU2bFCMaejmjPvAvsSLY0
+         avMBEAJZB5fykzl3XMwEBVYOPPH1i6V3OtcKUhqmvWvD6z4YUN7BmDnl0S8ho4AC+azO
+         SJpA==
+X-Forwarded-Encrypted: i=1; AL+hErFxhai+wWXYUTC5Y87TcGJCYnDIn5Ki2VgWyiMLdvpMzB/B+Lsiq9SFgf3SeL1K//yLZb8ummH72jxdcHnyvoo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Hl3Gqv9XFcOyANvKmmnjkN/Q8z62NNVVC0HaqQMZ4HOdKrM64
+	wwvZe0h5c56WZ30VEeb5xiCNwdiUmABTXhwrQmPd6IA57kGF/V1qLFXF
+X-Gm-Gg: AYBFou1XXXH27iBVYuxtZEadcqqEj0cs+fZF5GM5/gZcehSJjq+e/i3wIW9CzKDCfjT
+	QNTn1IflA4OCLeCwNO+N+Mg2BOunAh3eKsB5khT/y1JmSMUaq/vJuWILmbtfgbOTtCMBvYDWHmz
+	kRk6pQpMNZngjoU1//xCIoE3BKR9J6bfBvQX8hoObbYOCE86zysWOGvEPru2I3nNt+aMtoi1vZl
+	Uf8TBBwx4QGvLi0xBVgWdU4WOfY+wtRSoAHq9pdyffxzSwUoobrAsEBFpUpn5rsXra1XsT6un8B
+	L5eQ6jT/fUIa6g7Y/M2P+bFrdpIdaZtLv6wITiizPoDfiTrsqmkN6VEUIhYdjluLTcVkDqrZL7u
+	5eTHTquMPWODkREQe3um1DPqHYKzYAkFa2OzmbezGxct02wjCeW0Oq8SnllJ3QhjpTKJc4rkbhq
+	TzlEE9HsXGX/KvU203qyRLDCccIw7nP2wzf61KZLw2JrFLUwEF9bF2VZIInDGwaIq9rdr2JCTUA
+	9+iB5793vMD997ZVs29TfYM3u2v0YOQgUFu2jVPwfscUIw7nLpIYCGuZ6jeX/iXtak4ET7WLWch
+	/vE7BuRPKqDd9bHdF/WcN6E+wr5powxd6XSYfEtrSg75/Q==
+X-Received: by 2002:a05:690c:68f:b0:8b3:3fc5:2be with SMTP id 00721157ae682-8b36c9c514cmr8721117b3.20.1794141284574;
+        Sun, 08 Nov 2026 04:34:44 -0800 (PST)
+Received: from houminxi ([61.170.225.237])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b36be7d88dsm13475627b3.39.2026.11.08.04.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Nov 2026 04:34:43 -0800 (PST)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Aaron Conole <aconole@redhat.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	Ilya Maximets <i.maximets@ovn.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Paul Blakey <paulb@nvidia.com>,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v2 0/2] net: openvswitch: fix a feature leak on a failed change
+Date: Sun,  8 Nov 2026 07:34:22 -0500
+Message-ID: <20261108123424.2825403-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,149 +105,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Changes in v2:
+- Patch 1 limits its closing claim to OVS_DP_CMD_SET, and says that a
+  failed OVS_DP_CMD_NEW and the reset that follows it still leave the
+  key one enable ahead.
+- Patch 1 names the reachability and the effect: only CAP_NET_ADMIN is
+  needed, datapath_policy does not validate the per-cpu-pids attribute,
+  and a disable on a count of zero warns in static_key_dec_not_one().
+- Patch 2 treats only EOPNOTSUPP as the missing key and skips with the
+  kselftest skip code; any other failure fails the test.
+- Patch 2 selects CONFIG_NET_CLS_ACT and CONFIG_NET_TC_SKB_EXT in the
+  selftest config fragment, so the recirc round runs in CI.
+- Patch 2 sends the features the datapath reports when --features is
+  left out, instead of clearing them.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+v1: https://lore.kernel.org/netdev/20261107113403.797779-1-houminxi@gmail.com/
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+ovs_dp_change() records the requested user features before it calls the
+update that can fail, so a request rejected for an empty per-cpu-pids
+leaves the datapath claiming a feature it never enabled. The tc skb
+extension key is a reference count shared with cls_flower, and the code
+that would keep it in step is skipped on that path.
 
-- [Medium] The recirc-sharing round of the new test_dp_features()
-  selftest (tools/testing/selftests/net/openvswitch/openvswitch.sh) can…
-- [Low] The new `set-dp` subcommand in ovs-dpctl.py makes `--features`
-  optional (default None), and OvsDatapath.set() only appends…
+Patch 1 fixes the ordering. Patch 2 adds a set-dp command to the
+openvswitch selftest tool, and a test that sends such a request and
+checks the features the datapath reports afterwards. It fails without
+the fix and passes with it.
 
---
+The problem turned up while the YNL spec for this family was being
+written: describing the ovs_datapath set command meant reading
+ovs_dp_change(), where the ordering stands out.
 
-selftests/net/openvswitch: check that a failed set keeps the features
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
 
-This patch adds a set-dp subcommand to ovs-dpctl.py that issues
-OVS_DP_CMD_SET. It also adds a test_dp_features selftest. The test checks
-that a rejected set request leaves the datapath user features unchanged,
-first for the dispatch bit and then for the recirc sharing bit.
+Minxi Hou (2):
+Minxi Hou (2):
+  net: openvswitch: do not record user features when the change fails
+  selftests/net/openvswitch: check that a failed set keeps the features
 
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index 21444657a0404..f26c01a17b498 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+ net/openvswitch/datapath.c                    | 10 +--
+ .../testing/selftests/net/openvswitch/config  |  2 +
+ .../selftests/net/openvswitch/openvswitch.sh  | 67 +++++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 53 +++++++++++++++
+ 4 files changed, 127 insertions(+), 5 deletions(-)
 
-[ ... ]
 
-> @@ -1409,6 +1410,69 @@ test_netlink_checks () {
->  	return 0
->  }
->  
-> +test_dp_features() {
-
-[ ... ]
-
-> +	# 4 is OVS_DP_F_TC_RECIRC_SHARING, which only exists when the tc skb
-> +	# extension is compiled in. A rejected set that drops the bit must
-> +	# leave the key alone, so the features have to stay as they were.
-> +	ovs_sbx "test_dp_features" dp_features_set dpfeat --features 4 \
-> +	    &> /dev/null
-> +	if [ $? -eq 0 ]; then
-> +		info "a rejected set does not drop the recirc bit"
-
-[ ... ]
-
-> +	else
-> +		info "tc skb extension is not available, skipping recirc"
-> +	fi
-> +
-> +	return 0
-> +}
-
-[Severity: Medium]
-Does this probe skip the recirc round on any failure, and not only when
-CONFIG_NET_TC_SKB_EXT is missing?
-
-ovs_dp_change() reports the missing option with -EOPNOTSUPP:
-
-#if !IS_ENABLED(CONFIG_NET_TC_SKB_EXT)
-		if (user_features & OVS_DP_F_TC_RECIRC_SHARING)
-			return -EOPNOTSUPP;
-#endif
-
-In that case set-dp exits with 95. Other failures also reach the else
-branch, for example a Python exception, a missing datapath (both exit 1)
-or a different errno.
-
-In the else branch, info only writes to debug.log unless -v is given. The
-function then returns 0, so run_test reports PASS rather than SKIP.
-
-Could the probe check for 95 explicitly and return $ksft_skip, or at least
-make the skip visible?
-
-Also, tools/testing/selftests/net/openvswitch/config has neither
-CONFIG_NET_CLS_ACT nor CONFIG_NET_TC_SKB_EXT. NET_TC_SKB_EXT is a bool
-with no default, and openvswitch does not select it. Kernels built from
-this fragment would therefore always skip this round.
-
-This is the only round that touches OVS_DP_F_TC_RECIRC_SHARING and the
-tc_skb_ext static key. The first round only toggles
-OVS_DP_F_DISPATCH_UPCALL_PER_CPU, which never touches the key.
-
-Should CONFIG_NET_CLS_ACT=y and CONFIG_NET_TC_SKB_EXT=y be added to the
-config fragment? Without them, the statement "Both rounds fail without
-the fix in the previous patch" in the commit message would not hold for
-CI runs.
-
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index 1615843c225e4..be41ec72faf2a 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -2301,6 +2301,24 @@ class OvsDatapath(GenericNetlinkSocket):
->  
->          return reply
->  
-> +    def set(self, dpname, ifindex=0, features=None, per_cpu_pids=None):
-> +        msg = OvsDatapath.dp_cmd_msg()
-> +        msg["cmd"] = OVS_DP_CMD_SET
-> +        msg["version"] = OVS_DATAPATH_VERSION
-> +        msg["reserved"] = 0
-> +        msg["dpifindex"] = ifindex
-> +        msg["attrs"].append(["OVS_DP_ATTR_NAME", dpname])
-> +        if features is not None:
-> +            msg["attrs"].append(["OVS_DP_ATTR_USER_FEATURES", features])
-> +        if per_cpu_pids is not None:
-> +            msg["attrs"].append(["OVS_DP_ATTR_PER_CPU_PIDS", per_cpu_pids])
-
-[Severity: Low]
-When --features is left out, OVS_DP_ATTR_USER_FEATURES is not sent.
-ovs_dp_change() starts with user_features at 0 and stores it on every
-successful set:
-
-	u32 user_features = 0, old_features = dp->user_features;
-	...
-	dp->user_features = user_features;
-
-Does that mean "ovs-dpctl.py set-dp <dp>" with no --features clears every
-feature bit on the datapath?
-
-Running "set-dp <dp> --per-cpu-pids 1,2" without "--features 8" also
-looks surprising. The pid handling only runs under this check:
-
-	if (user_features & OVS_DP_F_DISPATCH_UPCALL_PER_CPU &&
-	    a[OVS_DP_ATTR_PER_CPU_PIDS]) {
-
-So the pid list is ignored and the features are cleared, but the tool
-still prints "DP '...' updated" and exits 0.
-
-The set-dp handler in main() already calls ovsdp.info(args.setdp, 0).
-Could args.features default to the current OVS_DP_ATTR_USER_FEATURES from
-that reply? Alternatively, the "Datapath user features" help text could
-say that leaving out --features clears the features.
-
-The new test always passes --features, so the test itself is not
-affected.
-
-[ ... ]
-
+base-commit: 30c71476d842b094651bd7712f6c8ee8716147d0
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261107113403.797779-1-houminxi%40gmail.com
+2.56.0
+
