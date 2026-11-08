@@ -1,102 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794141341;
-	b=UyjZMPr8/qPSUNsiYusCnMU+6dqHnnEqtN/ooQfgkcjivnExPskdQoXdQT80QPxMnU1I
-	 +v+t5+97OCucQ9HwzR6pYPhuGBwXegbTs3omn842QEpr8Z7+oenAM/MCcxYc9NwD8F7yc
-	 y/D7XaoMSO7Pban0+hdgeE2LVIU0t5Ecwq0/oRhdnqn8KnoFb5CSyCZdXzy5VXbgxPWku
-	 I9cOompQWm/EohGkRQgv9du48VsgkRWdbPybeAufYzxgbfaKVUbdkztwDOq/dchkt/+ex
-	 zIj0SmHnT+3BMQKdgOm+JqRGXe+JhQNxoXy8oVNyq325gDDiM0Uqn8w3P9zIg1LGv+Q==
+	t=1794142460;
+	b=HANtxk7wE3ye6+ZZS6C7L1Hq3UwVQYaQGE70L/lCXirvr4ogoMCV5JOFZK2qcFDUIm1B
+	 CrZSpLgCKv/stYQiCuvW7H1l/hUdZEt5m39ga71x5uUhu8okl9b3x/NYt9RttwFl3/acV
+	 kdALmsUVOsknOSOM0C83ZcTM+6LZAklNiFksz4RVKYyzMRrm2S5/mydOJaYUox+2mYknO
+	 k4vjBTVxGwOCKkZ9igioBCf9FdqQIIJ9uo+tuFOxC/1w5Zj8uKogALmgtspktfzJTLKJo
+	 3m1kuN6yjzp0Lncz22b6mCNeByanTzoST1WpnQ37aEKwCWTsPM+UGCmIpA92EEJgHhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794141341;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	bh=BsIqDH2uBIw07srR7JvSFFgacKj9qHr7Bysu5dj2LaQ=;
-	b=gg8PJS+P4ZSFM6XYw8j1xBLrtl5Nen0TRvS29sRtCKqfqdPEascmkx2Yy1fFJz10IWzU
-	 BWpAKFkIGRRKvLAx3iECZqb35lGxv48h7z7PHK7Wu4vXYWZ7GoFwoe4KuFQDh21hs0bXO
-	 KwmKsAcKDmPLd4a1uC1MOcD+lhuCIZdvNf122hPkOjgZnm3LGL/cQJMjiUP0YJkSZse3E
-	 QfGwF+b/pR3bKCVQxAkDdSksWYjv0CWx6BMqwUJ6g7/FN9hcBxV7283zWQqYXWTxEzRK6
-	 dpFcXaIoyWfOBA6s5SsIXxABRnB0SjSdaa6qUs0stM+kqNHoae8v786HMtu6fV7v44A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794142460;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=S+YnvTW9wjLG9Bb1xdTq3cc7U/wCPzi1Ggn3aEWL+QI=;
+	b=FWJqWWjWaUwe7GA9lwrOYed5+pz7xUe425OBJvRCkwHk9LKOdumAbEZXWROeq9AyPfzo
+	 ZbuW1ezGQ9pfY7iGsKnVok5GXaEPekZQ3IYAmXce/bSlGbU3o5SXApCf2RntyzKUX7GoT
+	 CVu6aXrIcWFjZ8JuuvOuKjX0i+qEP+kJ6Wm9voX3yJYyyE0XeMSyniLXmood4gCRKg4k8
+	 T7DrzNsy5MJetFVYHvasVQJ0XtBrIiIzc9Stz/lht1+4QWNWalFPmm4fCTDTIBVc3nTr8
+	 N7Kz+0/M3zpC4188pA8Kn86aO8Yz3yB1QKooLpkwNN32DUzim5OOsoNA6UkhadbXpkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c+8q2x3i;
-	arc=none smtp.remote-ip=74.125.224.43
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HST+DHzN;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB51606A320
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Nov 2026 12:35:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AB51606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id C8BF0606A31C;
+	Sun,  8 Nov 2026 12:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c+8q2x3i
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67990a45e02so27540d50.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 04:35:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794141340; x=1794746140; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BsIqDH2uBIw07srR7JvSFFgacKj9qHr7Bysu5dj2LaQ=;
-        b=c+8q2x3ibzX3DXzv36nytcJfoaxql7mkrXSZ1ykHvC2IhuVHo6W/fsqeB0shu9wl7a
-         6W4w/kP17+wKfkTqjwt3F+MERyu7So4fAsTAwuk50DnjtjfXZQVRsmEhlJ521I3KrC9p
-         3ZO9RCIjfd10csfppZND2Bhg0pXH4pUWhxPCHX7OSLiNex+WjU7anHQ+N5RzVUyRGxRy
-         hFn2vRdGbo/AO+WxA9IQeFHcKLAEI/TBjdj63deXHdOpI59bnMLep0KJxxR3QjXznRf0
-         I7vMuoqnmfbwLRK0hDoNrtOCLd0nPU021BlLLlC+5aWDP29xDEtDAUEiGWVSIPVAUjPl
-         nnBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794141340; x=1794746140;
-        h=mime-version:content-transfer-encoding:content-type:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BsIqDH2uBIw07srR7JvSFFgacKj9qHr7Bysu5dj2LaQ=;
-        b=HUeJKECjq2br3wbp3JCj9NME6f/AOwEo4Qmlf0cx6TRSFKiOgmkyXpn2SSx9twTNte
-         Yo8zhc3w0qlFWNqEL9oeG9jso3eQwlF5ljGZE3qFx79qh7Fzq28Nyp0yPRSxh8pXqaF0
-         DEKDCzYEgyHPLfy+pJjoTo6oMDgqMfZ/0mE8T5zX46+bX1vHG/BN1I6MQkSA4AsdsZAA
-         uQGtWVTV4gTsaZVgYL+0lisUWbabwwlombBncmdB1x+m/tDyinL0/rUvbpf+N9eZoASl
-         DKho1CMiUzPAB+S7+101NxvUDT51bSV7Z7SnJqb0s1SSkLZ0lXekAUajU/Sjq7u9U/5D
-         N49w==
-X-Forwarded-Encrypted: i=1; AL+hErGRcV59y6ZJbagJBP7SCuFZVQK8fTb9BZ75lwgoUqFu48tG77byvHarZNXRwODp68HsdILoPJEwac5zj2E5Bg4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/QiJrzjusqc5omEMsP/PNRz7IeKGmaY5rGs2gy2mUtVnhWLvBI
-	EV34Trq72oL69veG5UtWM6yK3yunZO2uzKQBDrZ47PSh3nj+mGjATYXb
-X-Gm-Gg: AYBFou1e+yrM8E3On2X3ykEN//5XxDdeUpjhtn+7fP8OFEnEhr8OkSFF0aCc9PBeLw5
-	Jkj314YqFOT3mIPrkoH2VM1M25XOuFkYB+lQ4TLxVkN0FvJ7QLSqrtREVMsq+PSVMl0GdtIeYjj
-	6KvxCw4wIN9tX7l3Odwi8VscMhRoaccmWZgivC/mrhIzM/7qJMviRTxNe15nsEaY7SB1ACfjDft
-	KmR76CBeWI0CngpJVMnUbnmGp6ob6BdqCBICG1kC3KTA+8De7D2oUlkWRi/r3+NggY1sA2F7pLF
-	6OGhYVzhUaXnViKm8dv4f/WHndh15dD1ZWloXzgm94MKVos03MVozbIS+DVdXPViyCBXtItskNZ
-	FUWtMhQk3r5r1YRmg/mMfwKZI4il4kEvCLuujDyGgTO+vyydpAJpQh24P+4h13rv2XPnRDXx+9o
-	S6AEOyQcMUAHl86JP9V+Unqh/SceOkKK10ro9zYfQT9lZ03h6/RNNm/zLyf743oVf0paGr92ZYv
-	MV02GT2IMbSQ5Fs42JI1s7z9IgbaI3dhQ0hgjMMkrZzFXbQ3KfpB/s53aQ2qtc4lj8gHtIf5O1D
-	X1ImdNIsul7J3i5MXxhDajTVAq8PgD9u0UA=
-X-Received: by 2002:a05:690e:441c:b0:67c:608:b375 with SMTP id 956f58d0204a3-67c3da7825dmr655795d50.101.1794141340146;
-        Sun, 08 Nov 2026 04:35:40 -0800 (PST)
-Received: from [192.168.100.12] ([61.170.225.237])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67c3b959615sm1680270d50.14.2026.11.08.04.35.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 04:35:39 -0800 (PST)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: netdev-bot+sashiko@kernel.org, Aaron Conole <aconole@redhat.com>,
- Eelco Chaudron <echaudro@redhat.com>, Ilya Maximets <i.maximets@ovn.org>,
- David S. Miller <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Paul Blakey <paulb@nvidia.com>,
- dev@openvswitch.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v1 2/2] selftests/net/openvswitch: check that a failed
- set keeps the features
-Date: Sun, 08 Nov 2026 07:35:34 -0500
-Message-ID: <179414133477.2826493.3370183031916994716@gmail.com>
-In-Reply-To: <20261107113403.797779-3-houminxi@gmail.com>
-References: <20261107113403.797779-1-houminxi@gmail.com>
- <20261107113403.797779-3-houminxi@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HST+DHzN
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 8DF571F0089F;
+	Sun,  8 Nov 2026 12:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794142459;
+	bh=S+YnvTW9wjLG9Bb1xdTq3cc7U/wCPzi1Ggn3aEWL+QI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HST+DHzNkQ1gw3AIpd5D0TgEIQolNUgaQB9q3S8j8KXW+uTqPNqvM8T0TTL4jFzW+
+	 8fneCgSKng5GEK2sP82/xhwzqlqgXhd3RBI6qsRDgn8dp5gNK1oIL8Ao3I5gcCyL+7
+	 wz4384LrRO97ZlPNnpbvfJ5bwVxJafoDd9PNg8q98LKXIJGZRNtG/CErKEdVDta5c9
+	 te2zVyCjNm05bgFQBEQks//164933xqL3KJltQjDTlEm9OFRN2Fl9el+ZZF8beOPTF
+	 +n4QDzjA9vwmInwZ9d04Lg1Uq07df41UopVKlvjsyABmJ1mge57z7oG8RJ8S7YsLui
+	 86ewMO/v9JKYA==
+Date: Sun, 8 Nov 2026 14:54:15 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ignat Korchagin <ignat@linux.win>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH v6 0/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <avBw92ZChNT6E8cZ@kernel.org>
+References: <20261107195605.3929659-1-jarkko@kernel.org>
+ <au-FkAtC4Gcw7Bkb@kernel.org>
+ <20261107204210.GG6049@quark>
+ <avBVgZt92j3OkpOG@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,26 +86,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avBVgZt92j3OkpOG@kernel.org>
 
-Both are real, and v2 fixes them.
+On Sun, Nov 08, 2026 at 12:57:09PM +0200, Jarkko Sakkinen wrote:
+> I think know what is the problem here exactly. It's the prepending bug
+> fixes. Sorry, I only now realized this althouhgh it should be quite
+                                                             ~~
+                                                             have been
+> obvious.
+> 
+> I updated mainline few days for the sake of v7.4-rcX PRs late this
+           ~             ~~~~ 
+	   the           days ago
+			 
+> week (I think it was Thu or Fri) but linux-next was not up to date
+> last time I checked.
+> 
+> One I'm able to send the PR containing the fixes, I'll do that and
+  ~~~
+  Once
+> once that is in the mainline. I'll send a new version of this patch
+                              ~
+			      ,
+> set.
 
-The Medium one: the else branch treated any failure as "the key is not
-there". v2 reads the exit status of the recirc set, takes EOPNOTSUPP
-(95, what set-dp returns when ovs_dp_change() rejects the recirc bit
-under !IS_ENABLED(CONFIG_NET_TC_SKB_EXT)) as the reason to return
-$ksft_skip, and fails the test on any other status.
+A few keys of my laptop's keyboard were stuck when I wrote this. Thus, I
+had difficulties to write a proper email :-) Now that I'm reading what I
+wrote, the typos started jump into my eyes, so thus the corrections.
 
-You are also right about the fragment. tools/testing/selftests/net/
-openvswitch/config selected neither CONFIG_NET_CLS_ACT nor
-CONFIG_NET_TC_SKB_EXT, so a kernel built from it could never run that
-round, and the claim that both rounds fail without the fix did not hold
-for such a build. v2 adds both symbols. I built a kernel from the
-fragment before the change and one from the fragment after it: the first
-reports the skip with the test harness marking it SKIP, the second has
-both symbols set and runs the round.
-
-The Low one: ovs_dp_change() starts user_features at 0, so a set-dp
-without --features cleared every bit, and a pid list sent without the
-dispatch bit was ignored while the command still printed "updated". v2
-reads the current features from the GET reply and sends those when
---features is left out, and the help text says so.
+Br, Jarkko
