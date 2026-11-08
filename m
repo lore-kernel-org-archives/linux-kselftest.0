@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794139479;
-	b=sA1p5canxPVxMq0gtuu8iYc7YLg0kEvnFcjdw+/pF2/27LaSZgmtFpxHVRPkUQ1ziQAT
-	 NYZxZru6y+HiRN8hCumIvSTMTf+Opd0Nk2bXbYp+FwPlm8J7IWU9GImTazipvNdl+x9+3
-	 S7M7xWG+P0X7VXjxGLLdtO6TQ4t20k4QSg0f5zprcdymDyLYqrc3l7RqLhQ6ZNOAKFWGV
-	 JE4l37NtIySx0H5fMp1TKrsd5hr5MR+nC69k7cMAKrJki5yL09DysdScE/vCyjiVGuH9b
-	 CbmeNUWRoZVo0FUG0XYgApBEpYebaq8Ija8btVPG88ucTQlw2ZqfCr+TIzAqQJewbnw==
+	t=1794139480;
+	b=tFrb7Pw7lepZhcN+Z2T/ijx7OAahK+JJg38OqhshSA2iJikXl+6FuAx5Hnfa7ClKSNra
+	 MaPD54/tbiAsDkW2Ya1jghu49LaNpNoyF4Js8phQ90XRIlbt/MfQrmovaHdfJcv8cqSFc
+	 1JPn6bolwQEHkKzihqqCpUtXnBGSZ7lJ4d6P7DpvwicqMmSDDjkKp0r7c2XckIGc1TnqB
+	 BF1si4CD5GgtzTx5YSxDLIRpI69tC97SB40pa9mxYzSUoYKEFYuILH1GyF4IrVdEkT/6u
+	 cdTzZqWDgg60Itw9rJ+M1mg3uijtpnTsJOyehZhKDOa8NZaVNPvxazYJr6w7hP0OyOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794139479;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794139480;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=Wb8eRjnwc9cUIRttGY09a9xgkF3rw+IiAl215Pk7qnY=;
-	b=5Zfq9513k4qjdlDHKlhMOkxDai2QqNYJ6nT1SDQCZdZwQzOuW8ihL083/vPDzsxVwtW6
-	 ZQQrAirDDEB2c285CyxqHMN6PSQYlCHVTbiXOCfIswKwTtKLmjG5/hwRaSSni5ng4QabR
-	 OtmkzjCDVVrSXvcl94s/QA2IACbpEir47atsJdBRZt8N1PBagy41tP0IjeZbOaz81CMZX
-	 L6WUZenGXBiwWQ7TmyKCiXdR+KHKgyOHgmQ2F4XHcDpaADkeesFs/f8NZi089p+2PTWmH
-	 xD0bmFBd6sAVHrS0WNHyY02srXWXVFsGcRjDEzuCcxDqpwz2LGnKGmkwaUN7h5Z9l0Q==
+	bh=T2Q43N/EmQfqSH6+WvASCF147eufwEc9GCOSIJRTPYc=;
+	b=JaEa2qlYnSiFOQo2vgnGhLYTJdvafE+ilatorRXeauRJvXyTNgTR+fMNqIpoUXUeZsGD
+	 WemgaZY0sondyPCi9o1Dx1FxmHyghF9qImZaBEII/PW66Gk8kzruBm0np3Mi53QNoQ/ly
+	 MFQz20J+3sfrqfvBt3vAsjhtqu2jGR8mvvUWlvgnIj1iNJmXxFV69SWxGbe5Wuy8dzXac
+	 AiMrqcTAqJEnUr+IqjfZv8LlumzOmQyYHNTcwlwJ4ft5DEvtPBlTcaQ6UTXNnYgRzAY9A
+	 3Jvfi1ikfBKNxG7Rr6LrOUGXmNO/krvLZj+SjRIdo4S85KgLQq1TTOUfxSuWxF6CUBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CNh1nA9T;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V77POt1m;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387A9606A31C;
-	Sun,  8 Nov 2026 12:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDD1606A322;
+	Sun,  8 Nov 2026 12:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CNh1nA9T
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68B81F0089F;
-	Sun,  8 Nov 2026 12:04:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V77POt1m
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012C51F008A1;
+	Sun,  8 Nov 2026 12:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794139478;
-	bh=Wb8eRjnwc9cUIRttGY09a9xgkF3rw+IiAl215Pk7qnY=;
+	s=k20260515; t=1794139479;
+	bh=T2Q43N/EmQfqSH6+WvASCF147eufwEc9GCOSIJRTPYc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=CNh1nA9TmvwB+462UZ+RlEIeRxSPCvs3c1z/KwLsYe+bZz2PfTU93wcUltRX42Y8W
-	 o7cNem/dFfNn3xjktp1xLtKJHzPg6jGmjI7qqt5yIQgck6D5p11UVCD8tI5qg26d3P
-	 xqj9fct/9u8p9eqQC4oXvuei2NMZiPifP5KHNcWsUn5psIGl0DgVuCXbRplBA7ICoF
-	 1PKTKLNA08Mmt89lILh1ICDCtU8Gi056FCmNqFT1L6rSKHfaYdPK070ntpnW9w+H7C
-	 vubKOvXInupD2Ilor4jqrJeCF4gDkiQ76EzY94zsZ+rmB1mTpwvVCRLBEDRF9po9kr
-	 MpabeI93Agr5A==
-Subject: Re: [PATCH net v1 1/2] net: openvswitch: do not record user features
- when the change fails
+	b=V77POt1mVoiWIGIeikZgyvrVsE8Zc8BPG+MpgPq6lulXuwY9PVhmDcDGWL51rSxOG
+	 f4pKsNIaJOHv4a9dNuzQIiqVXUEBiFKqnxEcSRK0rRgERbZjGg6JYeKz98In2wTnd7
+	 szDageKou6cBRR/2fCOlAakSlbruyauOe/wy39NEUAMexgPHlfuElB+8awxiDgn9e/
+	 8Ie5F4G05VZRMzUvhS84AjTjDbwN048zwsLCoASSKNMVePcDh1QYCbJD5eKsJJsARC
+	 XpMcSQiEwKZtL285X8ae3m4FCPwd7tspYYpWKDuiIoEZl0+LbxldYu6qiKFRuMvGdi
+	 adjWB3GDahvew==
+Subject: Re: [PATCH net v1 2/2] selftests/net/openvswitch: check that a failed
+ set keeps the features
 From: netdev-bot+sashiko@kernel.org
 To: houminxi@gmail.com
 Cc: netdev@vger.kernel.org, aconole@redhat.com, echaudro@redhat.com,
  i.maximets@ovn.org, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, jhs@mojatatu.com,
  paulb@nvidia.com, dev@openvswitch.org, linux-kselftest@vger.kernel.org
-Date: Sun, 08 Nov 2026 12:04:37 +0000
-Message-ID: <179413947720.994134.15071187484931474185@kernel.org>
-In-Reply-To: <20261107113403.797779-2-houminxi@gmail.com>
-References: <20261107113403.797779-2-houminxi@gmail.com>
+Date: Sun, 08 Nov 2026 12:04:38 +0000
+Message-ID: <179413947858.994134.617046081353196823@kernel.org>
+In-Reply-To: <20261107113403.797779-3-houminxi@gmail.com>
+References: <20261107113403.797779-3-houminxi@gmail.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -76,151 +76,137 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The commit message says "A failed request then leaves both the
-  features and the key alone".
-- [Low] The commit message understates who can trigger the fixed bug and
-  what happens.
+- [Medium] The recirc-sharing round of the new test_dp_features()
+  selftest (tools/testing/selftests/net/openvswitch/openvswitch.sh) can…
+- [Low] The new `set-dp` subcommand in ovs-dpctl.py makes `--features`
+  optional (default None), and OvsDatapath.set() only appends…
 
 --
 
-net: openvswitch: do not record user features when the change fails
+selftests/net/openvswitch: check that a failed set keeps the features
 
-This patch moves the store of the new features into dp->user_features in
-ovs_dp_change() so it happens after ovs_dp_set_upcall_portids() succeeds.
-The enable and disable decisions for the tc skb extension static key now
-use the local user_features variable. A failed request should no longer
-leave the recorded features and the key out of step.
+This patch adds a set-dp subcommand to ovs-dpctl.py that issues
+OVS_DP_CMD_SET. It also adds a test_dp_features selftest. The test checks
+that a rejected set request leaves the datapath user features unchanged,
+first for the dispatch bit and then for the recirc sharing bit.
 
-> That key is a
-> reference count shared with cls_flower, so the count ends up one short
-> and reaches zero while other users still hold a reference.
-
-[Severity: Low]
-Could the commit message say more about who can trigger this and what
-happens?
-
-OVS_DP_CMD_SET and OVS_DP_CMD_NEW use GENL_UNS_ADMIN_PERM, and
-dp_datapath_genl_family sets netnsok, so CAP_NET_ADMIN in a user namespace
-is enough. The ops use GENL_DONT_VALIDATE_STRICT and datapath_policy has
-no entry for OVS_DP_ATTR_PER_CPU_PIDS. An empty attribute therefore gets
-through validation and reaches the -EINVAL in ovs_dp_set_upcall_portids().
-
-tc_skb_ext_tc is a single global key in net/sched/cls_api.c, read by tc,
-the bridge, the flow dissector and OVS. One crafted SET from a container
-can change skb-ext behaviour for the whole host.
-
-When OVS is the only user of the key, the pre-patch sequence is: a failed
-SET records the bit, then a later SET clears it. That calls
-tc_skb_ext_tc_disable() with the count at zero, which hits the WARN in
-static_key_dec_not_one():
-
-kernel/jump_label.c:static_key_dec_not_one() {
-    ...
-	if (WARN_ON_ONCE(v == 0))
-		return true;
-    ...
-}
-
-When cls_flower does hold a reference, its own later disable hits the same
-WARN. With panic_on_warn set, the system panics.
-
-Would it be worth mentioning the WARN and the user namespace reachability
-in the changelog, so stable and security triage can weigh the fix?
-
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index b2a0b09fd4a56..00043aef2d030 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
+> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> index 21444657a0404..f26c01a17b498 100755
+> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
 
 [ ... ]
 
-> @@ -1812,10 +1810,12 @@ static int ovs_dp_change(struct datapath *dp, struct nlattr *a[])
->  			return err;
->  	}
+> @@ -1409,6 +1410,69 @@ test_netlink_checks () {
+>  	return 0
+>  }
 >  
-> -	if ((dp->user_features & OVS_DP_F_TC_RECIRC_SHARING) &&
-> +	dp->user_features = user_features;
+> +test_dp_features() {
+
+[ ... ]
+
+> +	# 4 is OVS_DP_F_TC_RECIRC_SHARING, which only exists when the tc skb
+> +	# extension is compiled in. A rejected set that drops the bit must
+> +	# leave the key alone, so the features have to stay as they were.
+> +	ovs_sbx "test_dp_features" dp_features_set dpfeat --features 4 \
+> +	    &> /dev/null
+> +	if [ $? -eq 0 ]; then
+> +		info "a rejected set does not drop the recirc bit"
+
+[ ... ]
+
+> +	else
+> +		info "tc skb extension is not available, skipping recirc"
+> +	fi
 > +
-> +	if ((user_features & OVS_DP_F_TC_RECIRC_SHARING) &&
->  	    !(old_features & OVS_DP_F_TC_RECIRC_SHARING))
->  		tc_skb_ext_tc_enable();
+> +	return 0
+> +}
 
 [Severity: Medium]
-The commit message says "A failed request then leaves both the features
-and the key alone". Is that true for a failed OVS_DP_CMD_NEW?
+Does this probe skip the recirc round on any failure, and not only when
+CONFIG_NET_TC_SKB_EXT is missing?
 
-In ovs_dp_cmd_new(), ovs_dp_change() runs on a fresh dp where
-old_features is 0. A request that carries OVS_DP_F_TC_RECIRC_SHARING
-therefore takes the tc_skb_ext_tc_enable() branch above.
+ovs_dp_change() reports the missing option with -EOPNOTSUPP:
 
-new_vport() can then fail. Examples are -EEXIST when a netdev with that
-name already exists, -ENOMEM, or an ifindex conflict:
+#if !IS_ENABLED(CONFIG_NET_TC_SKB_EXT)
+		if (user_features & OVS_DP_F_TC_RECIRC_SHARING)
+			return -EOPNOTSUPP;
+#endif
 
-net/openvswitch/datapath.c:ovs_dp_cmd_new() {
-    ...
-	err = ovs_dp_change(dp, a);
-	if (err)
-		goto err_unlock_and_destroy_meters;
+In that case set-dp exits with 95. Other failures also reach the else
+branch, for example a Python exception, a missing datapath (both exit 1)
+or a different errno.
 
-	vport = new_vport(&parms);
-	if (IS_ERR(vport)) {
-		...
-		goto err_destroy_portids;
-	}
-    ...
-err_destroy_portids:
-	kfree(rcu_dereference_raw(dp->upcall_portids));
-err_unlock_and_destroy_meters:
-	ovs_unlock();
-	ovs_meters_exit(dp);
-    ...
-err_destroy_dp:
-	kfree(dp);
-    ...
-}
+In the else branch, info only writes to debug.log unless -v is given. The
+function then returns 0, so run_test reports PASS rather than SKIP.
 
-That unwind never calls tc_skb_ext_tc_disable(). The dp was never added
-to ovs_net->dps, so __dp_destroy() does not run for it either.
+Could the probe check for 95 explicitly and return $ksft_skip, or at least
+make the skip visible?
 
-Does each such request leak one reference on the global tc_skb_ext_tc
-key? That would leave the key "enabled for good", which the commit
-message lists as part of the bug.
+Also, tools/testing/selftests/net/openvswitch/config has neither
+CONFIG_NET_CLS_ACT nor CONFIG_NET_TC_SKB_EXT. NET_TC_SKB_EXT is a bool
+with no default, and openvswitch does not select it. Kernels built from
+this fragment would therefore always skip this round.
 
-The -EEXIST branch has a second path. When genlhdr->version is below
-OVS_DP_VER_FEATURES, it calls ovs_dp_reset_user_features() on the
-existing datapath:
+This is the only round that touches OVS_DP_F_TC_RECIRC_SHARING and the
+tc_skb_ext static key. The first round only toggles
+OVS_DP_F_DISPATCH_UPCALL_PER_CPU, which never touches the key.
 
-net/openvswitch/datapath.c:ovs_dp_reset_user_features() {
-    ...
-	dp->user_features = 0;
-}
+Should CONFIG_NET_CLS_ACT=y and CONFIG_NET_TC_SKB_EXT=y be added to the
+config fragment? Without them, the statement "Both rounds fail without
+the fix in the previous patch" in the commit message would not hold for
+CI runs.
 
-This clears OVS_DP_F_TC_RECIRC_SHARING without calling
-tc_skb_ext_tc_disable(). __dp_destroy() decides from dp->user_features:
+> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> index 1615843c225e4..be41ec72faf2a 100644
+> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> @@ -2301,6 +2301,24 @@ class OvsDatapath(GenericNetlinkSocket):
+>  
+>          return reply
+>  
+> +    def set(self, dpname, ifindex=0, features=None, per_cpu_pids=None):
+> +        msg = OvsDatapath.dp_cmd_msg()
+> +        msg["cmd"] = OVS_DP_CMD_SET
+> +        msg["version"] = OVS_DATAPATH_VERSION
+> +        msg["reserved"] = 0
+> +        msg["dpifindex"] = ifindex
+> +        msg["attrs"].append(["OVS_DP_ATTR_NAME", dpname])
+> +        if features is not None:
+> +            msg["attrs"].append(["OVS_DP_ATTR_USER_FEATURES", features])
+> +        if per_cpu_pids is not None:
+> +            msg["attrs"].append(["OVS_DP_ATTR_PER_CPU_PIDS", per_cpu_pids])
 
-	if (dp->user_features & OVS_DP_F_TC_RECIRC_SHARING)
-		tc_skb_ext_tc_disable();
+[Severity: Low]
+When --features is left out, OVS_DP_ATTR_USER_FEATURES is not sent.
+ovs_dp_change() starts with user_features at 0 and stores it on every
+successful set:
 
-so that reference is never dropped. A later SET that sets the bit again
-takes another one.
+	u32 user_features = 0, old_features = dp->user_features;
+	...
+	dp->user_features = user_features;
 
-The commit message does name both paths and leaves them out of scope. Both
-end in the same state this patch fixes in ovs_dp_change(): the bit in
-dp->user_features no longer matches exactly one held key reference. Both
-can be reached with CAP_NET_ADMIN in a user namespace, and the effect
-applies to the whole host.
+Does that mean "ovs-dpctl.py set-dp <dp>" with no --features clears every
+feature bit on the datapath?
 
-Two possible fixes:
+Running "set-dp <dp> --per-cpu-pids 1,2" without "--features 8" also
+looks surprising. The pid handling only runs under this check:
 
-- In the NEW unwind, call tc_skb_ext_tc_disable() when dp->user_features
-  has the bit, or delay the enable until the request succeeds.
+	if (user_features & OVS_DP_F_DISPATCH_UPCALL_PER_CPU &&
+	    a[OVS_DP_ATTR_PER_CPU_PIDS]) {
 
-- In ovs_dp_reset_user_features(), call tc_skb_ext_tc_disable() when it
-  clears the bit.
+So the pid list is ignored and the features are cleared, but the tool
+still prints "DP '...' updated" and exits 0.
 
-Since the patch has Cc: stable, could the closing sentence be narrowed?
-Otherwise backporters may read it as meaning failed requests now keep the
-key balanced in all cases.
+The set-dp handler in main() already calls ovsdp.info(args.setdp, 0).
+Could args.features default to the current OVS_DP_ATTR_USER_FEATURES from
+that reply? Alternatively, the "Datapath user features" help text could
+say that leaving out --features clears the features.
+
+The new test always passes --features, so the test itself is not
+affected.
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261107113403.797779-1-houminxi%40gmail.com
