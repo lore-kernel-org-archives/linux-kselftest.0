@@ -1,51 +1,50 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794147245;
-	b=E+cw76k7VFK9AXzFu0iNwRY7M6SdG+/vQzo6CWX6+9xAk/1tBmVLzpPG96Ob7Avlf+ft
-	 ZqU4kk/4TH7XfVi/i6eCHY0EKGh2BQlLcYY+g1Od1h4CGKNRVOSbMSJblgrpFlMrlSm9z
-	 WjXMuiHksA+wU0E4h8otsoTVowJpvsOLt3J7Jrvmufia6lTjjVZVNUyIWsssR6gWlaCTZ
-	 FQys5qilvWVEiCCd0ZYu1ENbmNdzNZuC2+ZelY4lRDCWkgpD6zFKDGikomkSyMW67Va6b
-	 usi4RR/xThdNsf+K/vvR9gzWYE+8EYngO6NARKbKN7jV6uEbGKoTmQ6F4ta9MhsOHVA==
+	t=1794147244;
+	b=TArXHl4mGJ4ANS7d0h+u45zhqudnQYdRuqtKm/CSVWLlxj51WtX+YOhhITC3AdZveGsz
+	 kNI+qn+i4H5BD5jNptLt0/tx5ZYDsgIK4qSPjNVEszdNZ2t+87aKtCReaKSozvH/EHZVh
+	 mJrCiF8QjJjoqm4CCOWIfu23/P8oeCbRruTsk2NoBBSivkZ1yAZ+m0FWuiQPuUz3xHFwa
+	 3g0xIBzCU9yYHpidlwy8SPtFDjymXF861cgdqlrO8ptqwPvT0v0wyr8OdFcEUuHHI5IdV
+	 9q1ZAMFyh37RsJhDv6x/qfyzt4HKMS2ZoyvBWIaCdpJ+wqBu/OZAEUfhwXbjXw6qJvw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794147245;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794147244;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=uLCqj/8CXom0JHWoiXolzi299jPFMQ6mZGqs04pIdnE=;
-	b=mf6Yp3wOtNI5t/84wScRrfD/aLlPnMjxqeBxnnuB5/FNzMGd1Nu63x2kkDMzjFtF0Ihz
-	 Pqv2xzidtzsH8BejJa6EbXiJUNg9eWoOYmBbRMysqNtq7iP84FGW67kqRKSa1YTQgShxH
-	 DP4zIS0uDYEKsZKgUJ20R2uN1T0Suc4FtfJxleuX8qZvSKdISwj+a8/bVvhlsTyxxL4da
-	 ijxi6CggW3Ef5RcTAB9XPauZKMBYAE8wCgO1M8Si0FICBePXjn6mqknQdD7kgkhmAP4kJ
-	 hgXHXP1QZEde/EnZmfmrq2Sgz3G9lAIMWWwyMaqTcE7oQDT3xBKqlehISd3XKK/4rzQ==
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=H/G/OjMc6mQZaXNhFSTV9a8ylfQUHgfRGUW7bD2Bnw8=;
+	b=EYyXc08ZOTchqqbdBaVUgNk1706Z/Czui2N8dVZwRdwMjLqBIjbTko49qdKY3cqEOjep
+	 LO+dQOAXogfutwq3+C1U+y39XMewntKgfOl0crWUA5Q3njHpWt3ezCNHMxL0kGTRNFp5Z
+	 KXdcJQ2IwaSZwyh7KSHf5J/lY+K7lww9BhSKhybNKCE6mGGmxDccvX8s7tlbV5oq87ljh
+	 GfdTb3D6DU6XJxh3g5TNq0qfRIVqohg9qUTJVvBXs+b8FKLdW+dTVLBmsRNHZX48j4xfT
+	 +Nr4IWSNU1Pv0iuOX2gEuvq4wQrH4SfKB9Vmn9lF1wdUHaBl9KixgPshcWBNIIgegYA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=wU3JpHeF;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=NuJNfYoC;
 	arc=none smtp.remote-ip=158.69.130.18
 Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439B2606D807;
-	Sun,  8 Nov 2026 14:14:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 439B2606D807
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A07A606A323;
+	Sun,  8 Nov 2026 14:14:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A07A606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=wU3JpHeF
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=NuJNfYoC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794147237;
-	bh=uLCqj/8CXom0JHWoiXolzi299jPFMQ6mZGqs04pIdnE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wU3JpHeF9kbKjEQREp0DmnL+YSel+opUiLnxHJlPFKqxuDQLO90vwufOgZRhADEyD
-	 V/gSU1N2uZ3ML1Zmtl0Spp4NODPSuFXD+zEzdgHP4k00SB1oxlovoYrKBAmX43SnEM
-	 DoHmsqBWpfI9YXddjRmPMKJE45VqZSl0HUaI+Epdl1+u+/AxTU7OOqGvefvQyl2s1j
-	 VknlDZN+E5x8YtyVPDwbN+9ebnyuKAExpAuFp/N3UkmJw6YoyP2pvY2HYUdnoIhskW
-	 w92NG0ovaQkf/HFKvqobvtzoZyV4C9pOmeEEBe12s3Cij9z0oqypj2aGZTlc67DQcG
-	 vcZeV/hy8UXDw==
+	s=smtpout1; t=1794147236;
+	bh=H/G/OjMc6mQZaXNhFSTV9a8ylfQUHgfRGUW7bD2Bnw8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NuJNfYoCrQVKljcSPPFClBpVK6f/fs/1nWXhwH/lodDZYf9LKDZWRfziEN+GP7okw
+	 OnR/t167zW7rtz26BhtYOP6T7BeNu0cv02LL6AZ5TQ/DiByHMHCsmZGgKMQxnENWz2
+	 KiPvt9+t8ezVRsttafsTyZABy1FpNf5SUUHjcQ3qqy45hFL5YYfn3UBC1/KVqFmOTX
+	 mRn24eslSvaDhA318NFQbgeQuAp/59JMZw0DhxQMulhCLIqdiN1FLEOxeXwVQEEq1k
+	 Lq82WU2srSyQZYPWwlpwJODMTHfjOkjMeOiIRH+vk4c9lfuIn3rNgvNF2WR2k/Qh0X
+	 NamBxE1zY0C2g==
 Received: from thinkos.internal.efficios.com (unknown [64.58.40.251])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jMvzT1dc7zMgq;
-	Sun, 08 Nov 2026 09:13:57 -0500 (EST)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jMvzR5whdzM5p;
+	Sun, 08 Nov 2026 09:13:55 -0500 (EST)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: peterz@infradead.org,
 	tglx@kernel.org,
@@ -65,12 +64,10 @@ Cc: linux-kernel@vger.kernel.org,
 	juri.lelli@redhat.com,
 	linux-rt-devel@lists.linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 5/5] locking/ww_mutex/test: Time an ABBA with both owners running
-Date: Sun,  8 Nov 2026 09:13:47 -0500
-Message-Id: <20261108141347.1525532-6-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v2 0/5] locking/rtmutex: priority inheritance fixes and tests
+Date: Sun,  8 Nov 2026 09:13:42 -0500
+Message-Id: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
-References: <20261108141347.1525532-1-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,293 +79,82 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In the ABBA cases of test-ww_mutex, an owner never keeps running while
-the other context blocks on it. With PREEMPT_RT, a ww_mutex waiter
-spins while its owner runs. The wound that resolves an ABBA reaches the
-waiter through a wakeup.
+Hi Peter, Thomas,
 
-Add a wound-wait case where both contexts keep running. Each one runs
-on its own CPU at SCHED_FIFO. The younger context holds B and blocks on
-A. The older context holds A, then blocks on B, which wounds the
-younger one. The older context must get B within 10ms on average, over
-10 rounds.
+This series fixes three rt_mutex priority inheritance bugs on v7.4-rc1,
+and adds two tests that catch them. The bugs came out of the work on
+"sched/deadline: bandwidth accounting fixes and selftests". Its v5,
+posted after this series, applies on top of it. Its patch 8 takes a
+deadline boost from the waiter's rt_mutex node, and needs patch 3 here
+to keep that node current.
 
-On v7.4-rc1 with PREEMPT_RT, the case fails every time. The two
-contexts spin on each other until the fair server preempts them, after
-950ms by default. With "locking/rtmutex: Stop spinning on the owner
-when the waiter is woken", earlier in this series, the older context
-gets B in microseconds. Without PREEMPT_RT, the case passes with or
-without that fix.
+The fixes
+=========
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- kernel/locking/test-ww_mutex.c | 235 +++++++++++++++++++++++++++++++++
- 1 file changed, 235 insertions(+)
+ 1  Stop spinning on a running owner once the waiter is woken, so that
+    timeouts and signals are no longer delayed.
+ 2  Initialize the ww_mutex context of a waiter, so that PREEMPT_RT
+    reports PI futex deadlocks again.
+ 3  Clone a waiter's sort keys as it enters pi_waiters, so that the
+    owner inherits the right priority.
 
-diff --git a/kernel/locking/test-ww_mutex.c b/kernel/locking/test-ww_mutex.c
-index 838d631544ed..9f76647f6c07 100644
---- a/kernel/locking/test-ww_mutex.c
-+++ b/kernel/locking/test-ww_mutex.c
-@@ -6,10 +6,12 @@
- #include <linux/kernel.h>
- 
- #include <linux/completion.h>
-+#include <linux/cpu.h>
- #include <linux/delay.h>
- #include <linux/kthread.h>
- #include <linux/module.h>
- #include <linux/prandom.h>
-+#include <linux/sched/task.h>
- #include <linux/slab.h>
- #include <linux/ww_mutex.h>
- 
-@@ -279,6 +281,235 @@ static int test_abba(struct ww_class *class, bool trylock, bool resolve)
- 	return ret;
- }
- 
-+/*
-+ * An ABBA where both contexts keep running. Each one runs on its own CPU
-+ * at SCHED_FIFO. The younger context holds B and blocks on A. The older
-+ * context holds A and stays on its CPU. Then it blocks on B, which wounds
-+ * the younger context.
-+ *
-+ * The wound reaches the younger context through a wakeup. A waiter that
-+ * spins while its owner runs must stop spinning on that wakeup. If it
-+ * does not, the two contexts spin on each other until something else
-+ * needs one of the two CPUs.
-+ *
-+ * The older context must get B within 10ms on average, over 10 rounds.
-+ * It takes microseconds when the spin stops on the wakeup.
-+ *
-+ * Wound-wait only. With wait-die, the younger context backs out as soon
-+ * as it blocks on the older one.
-+ */
-+struct test_abba_spin {
-+	struct ww_class *class;
-+	struct ww_mutex a_mutex, b_mutex;
-+	struct completion start, done[2];
-+	struct task_struct *young;
-+	atomic_t stage;
-+	u64 wait_ns;
-+	int err[2];
-+};
-+
-+/*
-+ * Spin until @s->stage reaches @stage. Give up after 5s. The acquire pairs
-+ * with the release that sets each stage. This makes sure that:
-+ * - the younger context takes its stamp after the older one;
-+ * - a lock that a stage reports as taken is held before the other
-+ *   context goes on.
-+ */
-+static bool abba_spin_until(struct test_abba_spin *s, int stage)
-+{
-+	u64 end = ktime_get_ns() + 5ULL * NSEC_PER_SEC;
-+
-+	while (atomic_read_acquire(&s->stage) < stage) {
-+		if (ktime_get_ns() > end)
-+			return false;
-+		cpu_relax();
-+	}
-+	return true;
-+}
-+
-+/*
-+ * Spin until the younger context blocks on a lock. Its state is then no
-+ * longer TASK_RUNNING. Give up after 5s.
-+ */
-+static bool abba_spin_until_waiting(struct test_abba_spin *s)
-+{
-+	u64 end = ktime_get_ns() + 5ULL * NSEC_PER_SEC;
-+
-+	while (task_is_running(s->young)) {
-+		if (ktime_get_ns() > end)
-+			return false;
-+		cpu_relax();
-+	}
-+	return true;
-+}
-+
-+static int abba_spin_old(void *arg)
-+{
-+	struct test_abba_spin *s = arg;
-+	struct ww_acquire_ctx ctx;
-+	u64 t, end;
-+	int err = -ETIMEDOUT;
-+
-+	sched_set_fifo_low(current);
-+	wait_for_completion(&s->start);
-+	ww_acquire_init_noinject(&ctx, s->class);
-+	atomic_set_release(&s->stage, 1);
-+	if (!abba_spin_until(s, 2))
-+		goto fini;
-+	err = ww_mutex_lock(&s->a_mutex, &ctx);
-+	if (err)
-+		goto fini;
-+	atomic_set_release(&s->stage, 3);
-+	err = -ETIMEDOUT;
-+	if (!abba_spin_until(s, 4) || !abba_spin_until_waiting(s))
-+		goto unlock;
-+	/* The younger context waits on A. Give it 1ms to start its spin. */
-+	end = ktime_get_ns() + NSEC_PER_MSEC;
-+	while (ktime_get_ns() < end)
-+		cpu_relax();
-+	t = ktime_get_ns();
-+	err = ww_mutex_lock(&s->b_mutex, &ctx);
-+	s->wait_ns = ktime_get_ns() - t;
-+	if (!err)
-+		ww_mutex_unlock(&s->b_mutex);
-+unlock:
-+	ww_mutex_unlock(&s->a_mutex);
-+fini:
-+	ww_acquire_fini(&ctx);
-+	s->err[0] = err;
-+	complete(&s->done[0]);
-+	return 0;
-+}
-+
-+static int abba_spin_young(void *arg)
-+{
-+	struct test_abba_spin *s = arg;
-+	struct ww_acquire_ctx ctx;
-+	int err = -ETIMEDOUT;
-+
-+	sched_set_fifo_low(current);
-+	wait_for_completion(&s->start);
-+	if (!abba_spin_until(s, 1))
-+		goto out;
-+	ww_acquire_init_noinject(&ctx, s->class);
-+	err = ww_mutex_lock(&s->b_mutex, &ctx);
-+	if (err)
-+		goto fini;
-+	atomic_set_release(&s->stage, 2);
-+	if (!abba_spin_until(s, 3)) {
-+		err = -ETIMEDOUT;
-+		ww_mutex_unlock(&s->b_mutex);
-+		goto fini;
-+	}
-+	atomic_set_release(&s->stage, 4);
-+	err = ww_mutex_lock(&s->a_mutex, &ctx);
-+	if (err == -EDEADLK) {
-+		/* Wounded. Release B, wait for A, then take B again. */
-+		ww_mutex_unlock(&s->b_mutex);
-+		ww_mutex_lock_slow(&s->a_mutex, &ctx);
-+		err = ww_mutex_lock(&s->b_mutex, &ctx);
-+		if (err) {
-+			ww_mutex_unlock(&s->a_mutex);
-+			goto fini;
-+		}
-+	} else if (err) {
-+		ww_mutex_unlock(&s->b_mutex);
-+		goto fini;
-+	}
-+	ww_mutex_unlock(&s->b_mutex);
-+	ww_mutex_unlock(&s->a_mutex);
-+fini:
-+	ww_acquire_fini(&ctx);
-+out:
-+	s->err[1] = err;
-+	complete(&s->done[1]);
-+	return 0;
-+}
-+
-+static int test_abba_spin(struct ww_class *class)
-+{
-+	int (*fn[2])(void *) = { abba_spin_old, abba_spin_young };
-+	unsigned int c, cpu[2] = { nr_cpu_ids, nr_cpu_ids };
-+	u64 total = 0, longest = 0;
-+	struct test_abba_spin s;
-+	int i, round, ret = 0;
-+
-+	if (class->is_wait_die)
-+		return 0;
-+	cpus_read_lock();
-+	/* Use the last two online CPUs. Boot and housekeeping use them least. */
-+	for_each_online_cpu(c) {
-+		cpu[0] = cpu[1];
-+		cpu[1] = c;
-+	}
-+	for (round = 0; cpu[0] < nr_cpu_ids && round < 10 && !ret; round++) {
-+		struct task_struct *t[2];
-+
-+		ww_mutex_init(&s.a_mutex, class);
-+		ww_mutex_init(&s.b_mutex, class);
-+		init_completion(&s.start);
-+		atomic_set(&s.stage, 0);
-+		s.class = class;
-+		s.wait_ns = 0;
-+		for (i = 0; i < 2; i++) {
-+			init_completion(&s.done[i]);
-+			s.err[i] = -EINVAL;
-+		}
-+		for (i = 0; i < 2; i++) {
-+			t[i] = kthread_create_on_cpu(fn[i], &s, cpu[i], "ww_abba_spin/%u");
-+			if (IS_ERR(t[i])) {
-+				ret = PTR_ERR(t[i]);
-+				if (i)
-+					kthread_stop(t[0]);
-+				goto unlock;
-+			}
-+		}
-+		s.young = t[1];
-+		/*
-+		 * Hold a reference. kthread_stop() may run after the thread
-+		 * has returned.
-+		 */
-+		for (i = 0; i < 2; i++) {
-+			get_task_struct(t[i]);
-+			wake_up_process(t[i]);
-+		}
-+		/*
-+		 * Release both threads at once. Neither one starts spinning
-+		 * before the other.
-+		 */
-+		complete_all(&s.start);
-+		for (i = 0; i < 2; i++) {
-+			int err;
-+
-+			wait_for_completion(&s.done[i]);
-+			err = kthread_stop(t[i]);
-+			put_task_struct(t[i]);
-+			if (err && !ret) {
-+				pr_err("%s: kthread_stop: %d\n", __func__, err);
-+				ret = err;
-+			}
-+		}
-+		if (s.err[0] || s.err[1]) {
-+			pr_err("%s: ABBA with both owners running not resolved, err %d and %d\n",
-+			       __func__, s.err[0], s.err[1]);
-+			ret = -EINVAL;
-+		}
-+		total += s.wait_ns;
-+		longest = max(longest, s.wait_ns);
-+	}
-+	if (cpu[0] >= nr_cpu_ids)
-+		pr_info("%s: skipped, two online CPUs needed\n", __func__);
-+	if (!ret && round && total > 10 * NSEC_PER_MSEC * round) {
-+		pr_err("%s: ABBA with both owners running resolved in %llu us on average, %llu us at most\n",
-+		       __func__, div_u64(total, round * NSEC_PER_USEC),
-+		       div_u64(longest, NSEC_PER_USEC));
-+		ret = -EINVAL;
-+	}
-+unlock:
-+	cpus_read_unlock();
-+	return ret;
-+}
-+
- struct test_cycle {
- 	struct work_struct work;
- 	struct ww_class *class;
-@@ -664,6 +895,10 @@ static int run_tests(struct ww_class *class)
- 			return ret;
- 	}
- 
-+	ret = test_abba_spin(class);
-+	if (ret)
-+		return ret;
-+
- 	ret = test_cycle(class, ncpus);
- 	if (ret)
- 		return ret;
+Patch 4 adds futex_lock_pi_inherit to the futex selftests. It checks the
+priority an owner runs at, and the EDEADLK of FUTEX_LOCK_PI. It also
+checks how late a timeout or a signal ends a wait behind a running
+owner. Patch 5 adds an ABBA with both owners running to test-ww_mutex.
+v7.4-rc1 fails the cases of each fix. The series passes them, with and
+without PREEMPT_RT. So do the locking API selftests, the ww_mutex
+selftest, locktorture's rtmutex_lock and the futex selftests.
+
+How this was developed
+======================
+
+An LLM coding assistant wrote these patches, their messages and the
+tests, under my direction and review. Patch 1 came out of a stress test
+of the deadline boost. Patch 3 came out of a review of the deadline fix
+by a second model. Patch 2 came out of futex_lock_pi_inherit, on its
+first run with PREEMPT_RT. A local run of the Sashiko AI review checked
+each patch before posting.
+
+Changes since v1
+================
+
+- Commit messages and comments rewritten to read more easily, after
+  Peter's and Steven's reviews.
+- Patch 1: Steven's wording, with the two paragraphs on the impact
+  added. It carries his Reviewed-by.
+- Patch 3: new subject, "locking/rtmutex: Clone the sort keys in
+  rt_mutex_enqueue_pi()". The message shows the sequence that leaves
+  stale keys, and the comment is one line.
+- Patch 5: the stage handoff of the ABBA test uses release and acquire,
+  as the Sashiko review of v1 found. On a weakly ordered CPU, the test
+  could fail falsely with EDEADLK.
+- No change to the kernel code.
+
+Based on v7.4-rc1, 6628e7d4c6b2. It also applies as is to tip
+sched/urgent (006991aa8997), which the deadline series is based on.
+
+v1: https://lore.kernel.org/lkml/20261106235931.1478800-1-mathieu.desnoyers@efficios.com
+
+Mathieu Desnoyers (5):
+  locking/rtmutex: Stop spinning on the owner when the waiter is woken
+  locking/rtmutex: Initialize the ww_mutex context of a waiter
+  locking/rtmutex: Clone the sort keys in rt_mutex_enqueue_pi()
+  selftests/futex: Test priority inheritance on PI futexes
+  locking/ww_mutex/test: Time an ABBA with both owners running
+
+ kernel/locking/rtmutex.c                      |   9 +-
+ kernel/locking/rtmutex_common.h               |   1 +
+ kernel/locking/test-ww_mutex.c                | 235 ++++++
+ .../selftests/futex/functional/.gitignore     |   1 +
+ .../selftests/futex/functional/Makefile       |   3 +-
+ .../futex/functional/futex_lock_pi_inherit.c  | 773 ++++++++++++++++++
+ .../testing/selftests/futex/functional/run.sh |   3 +
+ 7 files changed, 1021 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/futex/functional/futex_lock_pi_inherit.c
+
+
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
 -- 
 2.47.3
 
