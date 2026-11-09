@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794244717;
-	b=Ja6FdEDiCadYGw8oo0U7v99th0a0P5IrxYelabutHirgZJxFAC2927UWkRiNihTfSoy7
-	 o9tGZSxceIDOz/mpg4GwBKBWtkb+vkeS6DGQw5onYu9Ak8hcGKsRGOuCfFCuLNri/qKPS
-	 tOWtpL2tmtoC0hix0BLXw72hemDtoonxsWvMEurPDzu5zlxljDU+1Lu1O2rOflYUBra+p
-	 6ZZjCVdokpnA9mWchfrwZactlfmXx6scs5BUTS/RB1IA6Y4bYo7KLz5oPv3kHzVf9Pj5z
-	 X4d3JY6FR/ruHvpGKG2/p4VzpW4hme1jdtQlvvxF4S/jgffqsUdOq4gckK4oFrRVu1w==
+	t=1794244715;
+	b=rVu8Dl6seG0xY8XhNz7vARSfGZYtWWkkjSIgDxibBuxkPkYGOyLKYwMEtyJLIei4BqiW
+	 pP9Yvv4qhYxPKcftuEdapVNIvcsKk2GGC/lKCtfqs84FruUD9YG8YNFoApfMzbUVVZxuQ
+	 G8oIjCOaAbh17ymfnPBsBR7SHKiVhXE5bGJNjyjwCi3wR38P9UDYQvr/vXOEMbkVeRttB
+	 3pwlIOzCG5yuVKjYXK/RBnZbYseyrCmme1bitbjgevyp0PkMd5AdqKBx31QqQqUGrJfBj
+	 VKanLM8PvEy5mRsavitzF1aBxuhT4YXuW1pMULm8opmJTJpMeLfen+KcieiuMvhjMrw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794244717;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794244715;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=N1jVAbk+fLYeVgHzpO4lNhBibStWh+CggcSUKOdyVco=;
-	b=R/R2VUyESkO2cciCK61ROpSCgg6IlIPpmpLQSukzZ5U5bBH4r0nDKiVTS+ureb8ViWct
-	 0lRxwsHbT3yVEkSVtOee5opbPFD4EtAFZJS4ZDO9AtBS59TYyeeI9U+jH/JuskIyoyr9O
-	 0Em1OZ+pqftRTPWAokW0qS4YMpJZHcZbf0muUJUJTr4w3qFh9Qe5uHl2gFo8XBEbXq0YZ
-	 s7Dhz5XGg6pDYCM8q5748yYtzNaiUbT4f6B8CapApxLhs1JK79+VDGO6HP2e8UjrUaCz/
-	 NRa4xK5OkqylsCOFVNq/6A9tM3Y/7awtD5K0ui8+Bl/xw2LdRtJP9UnYz/E9roi5cpA==
+	bh=NKBythzzX1X+qqWFUaZ4bSCXV58wist4G0vUQRYy4Sg=;
+	b=T8N48/otVnZ9a77k/E5IDy2y1JwpakmDZhloPpF1E5OsLV622+gyjcTmqP29ilbxcScZ
+	 taPGetumVIUEHldOJ91nLkcsxUg+HgiQ1ANwQKg7kPLtTqhsMwdsq+MpRVuMlxVtDMuZd
+	 Dan5/sbUrCz/xhcwXxe/dg8w6HyziOjM3MT4jBswwAnIvVHuqa4eAi62fsLp3jp0UXNj+
+	 4aFG77lmEhaTwagsnNq0u5jI2nJ2zvOoUhxifkQJHEHWM4g2UwSoQrA6nwtYyil2fDZhH
+	 h7y+lQbdEf5oX0uk+XgGQY37Zg6fqaady5Rl0A4GhDR5y3DoyeUAusdXbVy9kbvU64w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B+3Vt0ub;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="eTU1b/MQ";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC072606EE8E;
-	Mon,  9 Nov 2026 17:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FB1606A33A;
+	Mon,  9 Nov 2026 17:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B+3Vt0ub
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1681F008A1;
-	Mon,  9 Nov 2026 17:18:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eTU1b/MQ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4BD81F008A2;
+	Mon,  9 Nov 2026 17:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794244716;
-	bh=N1jVAbk+fLYeVgHzpO4lNhBibStWh+CggcSUKOdyVco=;
+	s=k20260515; t=1794244714;
+	bh=NKBythzzX1X+qqWFUaZ4bSCXV58wist4G0vUQRYy4Sg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=B+3Vt0ubNJLnX81jdqt4VAHPCX17jde7HN/5WPX1znhgnAra0RbC4opyj2B4kBcya
-	 nBlDUVBZkQIWgV0FJ6FA6VPmzJbwG7vk1p2Li2k+Mh5doXPB5oFDCgvooQFaMF3E2x
-	 nK1DwXvE+zZcGNCepPvwdZv4Yc2c75myGb/tuasl+Qdemf+ObGGR6tQ8X0L/mweXFj
-	 TWshZjyGC2f7Yd6dliVYw8UiLqqZE9qKTJQ8ol9mb+MIaRE+PMpmfANQZ180qOQI4T
-	 aG+1LsRuDPYThmpbInHbOkIAuA/lxRJWr5GZX7JI2uHbl7cMcljedVf7K6K5sJ5MUD
-	 LyLJwESafqvAA==
-Subject: Re: [PATCH net-next v6 6/6] selftests/tls: add KeyUpdate tests
+	b=eTU1b/MQiWfOTY9kq3PDF01WZGqx0cZ2OWXBYeQNJ1PVuoSZkV0UwFA42RS0cRIJy
+	 39jz8Plu/GLK0lK2h3CiaY/B8Z69IF5n6AZq7Yb4ipQVCfOGQeWz9Lnee961PdVj8p
+	 dwtVOxpNr3rTSPPmQPepRnSc9NHJLbf9Jm4VkyZ1GVhWnnc/5XYscvV+2xeEdjk9f9
+	 pW1a7w2OOyJl5lDT1id0rqLk7juHAIFJSq3VAcNWXBNGsjQwLrz3LGijeaA+r79mRS
+	 8n1ohVzbusBcWl4LEKyxWGfvBRM+atXqHq/J+YkWuSaF/z3pWcsSle0KiQxnmUVlAD
+	 UsLUSXLmGQztQ==
+Subject: Re: [PATCH net-next v6 5/6] tls: send a KeyUpdate at the record limit
+ and on request
 From: netdev-bot+sashiko@kernel.org
 To: martin.nvme.dev@gmail.com
 Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
@@ -50,10 +51,10 @@ Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, hare@kernel.org,
  cel@kernel.org, kernel-tls-handshake@lists.linux.dev,
  alistair.francis@wdc.com, martin.belanger@dell.com
-Date: Mon, 09 Nov 2026 17:18:34 +0000
-Message-ID: <179424471492.994134.1896421329544039632@kernel.org>
-In-Reply-To: <20261105-keyupdate-rfc-v6-6-99b695f9eb4f@gmail.com>
-References: <20261105-keyupdate-rfc-v6-6-99b695f9eb4f@gmail.com>
+Date: Mon, 09 Nov 2026 17:18:33 +0000
+Message-ID: <179424471332.994134.12793914111732564453@kernel.org>
+In-Reply-To: <20261105-keyupdate-rfc-v6-5-99b695f9eb4f@gmail.com>
+References: <20261105-keyupdate-rfc-v6-5-99b695f9eb4f@gmail.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,10 +68,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Critical: 0 · High: 0 · Medium: 3 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,196 +79,224 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] In keyupdate_setup_seq() (tools/testing/selftests/net/tls.c),
-  a missing AF_ALG hash interface makes the test FAIL instead of SKIP.
-- [Low] No new selftest checks the next-generation traffic secret, key or
-  IV that the kernel derives in tls_keyupdate_rekey()…
-- [Low] In keyupdate_manual_rekey() (tools/testing/selftests/net/tls.c),
-  the comment says "a key installed by the user removes the registered…
+- [Medium] Race in the kernel KeyUpdate path: its state can change while
+  the socket lock is dropped.
+- [Medium] The record limit is wrong for AES-128-CCM.
+- [Medium] setsockopt(SOL_TLS, TLS_TX_KEY_UPDATE) can block indefinitely
+  and ignores O_NONBLOCK.
+- [Low] Documentation/networking/tls.rst does not match the
+  implementation in two places.
 
 --
 
-Reviewing commit cf973cdf44894385edb313912c677758928546ac in this reply.
+tls: send a KeyUpdate at the record limit and on request
 
-selftests/tls: add KeyUpdate tests
+With this commit, the kernel sends a TLS 1.3 KeyUpdate before the next
+Application Data record in two cases: when the TX key has protected 2^24
+records (except ChaCha20-Poly1305), or when the peer sent
+update_requested. It also adds the TLS_TX_KEY_UPDATE socket option to
+send a KeyUpdate on demand and, optionally, ask the peer to update too.
 
-This adds kselftests for the in-kernel TLS 1.3 KeyUpdate. Each end of a
-bidirectional connection registers both traffic secrets. The tests cover
-registration errors, KeyUpdates in both directions, update_requested,
-splice, the record limit, manual rekeys, the rate limit and invalid
-KeyUpdate messages. The generation-0 keys are derived in userspace with
-HKDF-Expand-Label, using the kernel HMAC through AF_ALG.
-
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index c4203401c4bfc..ed3b510a5ef6f 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-
-[ ... ]
-
-> @@ -2421,6 +2422,525 @@ TEST_F(tls, rekey_poll_delay)
-
-[ ... ]
-
-> +static bool hkdf_expand_label(const unsigned char *secret, int secret_len,
-> +			      const char *label, unsigned char *out,
-> +			      int out_len)
-> +{
-
-[ ... ]
-
-> +	tfm = socket(AF_ALG, SOCK_SEQPACKET, 0);
-> +	if (tfm < 0)
-> +		return false;
-> +	if (bind(tfm, (struct sockaddr *)&sa, sizeof(sa)) ||
-> +	    setsockopt(tfm, SOL_ALG, ALG_SET_KEY, secret, secret_len))
-> +		goto out;
-
-[ ... ]
-
-> +static bool keyupdate_setup_seq(struct __test_metadata *_metadata,
-> +				FIXTURE_DATA(tls) *self,
-> +				const FIXTURE_VARIANT(tls) *variant,
-> +				uint64_t seq)
-> +{
-
-[ ... ]
-
-> +	memset(secret_a, 0xa5, sizeof(secret_a));
-> +	memset(secret_b, 0x5a, sizeof(secret_b));
+> diff --git a/Documentation/networking/tls.rst b/Documentation/networking/tls.rst
+> index 2e011bd1ce4ae..69752a6d67df4 100644
+> --- a/Documentation/networking/tls.rst
+> +++ b/Documentation/networking/tls.rst
+> @@ -326,6 +326,23 @@ direction is then left to the application again.
+>  
+>  The secrets cannot be read back.
+>  
+> +With a registered TX secret, the kernel sends a KeyUpdate before the key
+> +reaches its record limit (RFC 9846, section 5.5): after 2^24 records, except
+> +for ChaCha20-Poly1305, which has no limit. It also sends one before the next
+> +record when a received KeyUpdate asks for it. With a registered RX secret,
+> +the kernel processes a received KeyUpdate and does not pass the record to
+> +the application. A peer that sends more than 8 KeyUpdates in one second ends
+> +the connection.
 > +
-> +	/* the keys must be the ones that the secrets give */
-> +	ASSERT_TRUE(keyupdate_keys(variant->cipher_type, secret_a, len,
-> +				   &keys_a));
-> +	ASSERT_TRUE(keyupdate_keys(variant->cipher_type, secret_b, len,
-> +				   &keys_b));
+> +TLS_TX_KEY_UPDATE
+> +~~~~~~~~~~~~~~~~~
+> +
+> +TLS 1.3 only. Send a KeyUpdate now and install the next TX key. Needs a
+> +registered TX secret. The value is an ``int``: 0 to send a KeyUpdate, 1 to
+> +also ask the peer to update its key. Asking the peer needs a registered RX
+> +secret, and fails with ``EBUSY`` until the peer has answered the previous
+> +request.
+
+[Severity: Low]
+This isn't a bug, but two parts of this text don't seem to match the code.
+
+The text says the reply is sent "before the next record". In
+tls_sw_sendmsg_locked(), the check only runs for data records:
+
+    if ((!ctx->open_rec || !ctx->open_rec->msg_plaintext.sg.size) &&
+        record_type == TLS_RECORD_TYPE_DATA) {
+            ret = tls_tx_maybe_update_key(sk, msg->msg_flags);
+
+Suppose tx_key_update_reply is set and the application sends an alert or
+handshake record with TLS_SET_RECORD_TYPE. That record goes out before
+the reply. This matches RFC 9846 section 4.7.3 and the commit message
+("before the next Application Data record"). Should the documentation
+say the same?
+
+For TLS_TX_KEY_UPDATE, the text says "Send a KeyUpdate now and install
+the next TX key". If the value is 1 and a peer request is pending,
+tls_sw_key_update() calls tls_tx_key_update() twice:
+
+    if (request && ctx->tx_key_update_reply) {
+            ret = tls_tx_key_update(sk, TLS_KEY_UPDATE_NOT_REQUESTED,
+                                    MSG_NOSIGNAL);
+            ...
+    }
+
+    ret = tls_tx_key_update(sk, request ? TLS_KEY_UPDATE_REQUESTED : ...
+
+That sends two KeyUpdates and moves the TX key forward two generations in
+one call. Could the documentation mention this, and also the EKEYEXPIRED
+return?
+
+[ ... ]
+
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 027c32edaf850..433a43d13a872 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+
+[ ... ]
+
+> @@ -1005,6 +1021,153 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+>  	return copied > 0 ? copied : ret;
+>  }
+>  
+> +/* RFC 9846 section 5.5 allows 2^24.5 full-size records per AES-GCM key.
+> + * Send the KeyUpdate a little earlier.
+> + */
+> +#define TLS_KEYUPDATE_TX_RECORDS	BIT_ULL(24)
 
 [Severity: Medium]
-If the AF_ALG hash interface is missing, should these tests skip rather
-than fail?
+The comment bases 2^24 on the AES-GCM figure. However,
+tls_tx_maybe_update_key() applies it to every cipher except
+ChaCha20-Poly1305:
 
-hkdf_expand_label() returns false if any of these fail:
+    limit = ctx->prot_info.cipher_type != TLS_CIPHER_CHACHA20_POLY1305 &&
+            get_unaligned_be64(ctx->tx.rec_seq) >= TLS_KEYUPDATE_TX_RECORDS;
 
-- socket(AF_ALG, ...)
-- bind() to "hmac(sha256)" or "hmac(sha384)"
-- ALG_SET_KEY
-- accept()
+tls_traffic_secret_len() accepts TLS_CIPHER_AES_CCM_128. An AES-128-CCM
+socket can therefore register a TX secret and reach this path.
 
-That happens on a kernel without CONFIG_CRYPTO_USER_API_HASH,
-CONFIG_CRYPTO_HMAC or the SHA-256/SHA-512 crypto API drivers. The
-ASSERT_TRUE() above then aborts every in-kernel KeyUpdate test as a
-failure, for each TLS 1.3 variant. keyupdate_manual_rekey_request() has
-the same ASSERT_TRUE(keyupdate_keys(...)).
+Is 2^24 the right limit for AES-128-CCM? RFC 9147 Appendix B uses the
+CCM confidentiality bound (2l * q)^2 / 2^n. With l = 2^10 blocks and
+n = 128, that gives about 2^23 full-size records for the 2^-60 target
+used by TLS 1.3. At 2^24 records the attacker's advantage is closer to
+2^-58.
 
-The kernel feature does not need any of these options. net/tls/Kconfig
-only has:
-
-	select CRYPTO_LIB_SHA256
-	select CRYPTO_LIB_SHA512
-
-The additions to selftests/net/config only help runs built from that
-fragment. Elsewhere, a missing test-only dependency will look like a
-KeyUpdate regression.
-
-Could this return false so the caller takes the existing "no in-kernel
-KeyUpdate for this variant" skip, or SKIP() with its own message?
-
-> +
-> +	/* rec_seq is the last member of each crypto_info */
+Should CCM get a lower threshold? If not, could the comment explain why
+the GCM figure also covers CCM?
 
 [ ... ]
 
-> +	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX_TRAFFIC_SECRET,
-> +			     secret_a, len), 0);
-> +	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_RX_TRAFFIC_SECRET,
-> +			     secret_b, len), 0);
-> +	EXPECT_EQ(setsockopt(self->cfd, SOL_TLS, TLS_TX_TRAFFIC_SECRET,
-> +			     secret_b, len), 0);
-> +	EXPECT_EQ(setsockopt(self->cfd, SOL_TLS, TLS_RX_TRAFFIC_SECRET,
-> +			     secret_a, len), 0);
+> +	/* A control record closes the open record first, so all data
+> +	 * written so far goes out with the current key, ahead of the
+> +	 * KeyUpdate.
+> +	 */
+> +	ret = tls_sw_sendmsg_locked(sk, &msg, sizeof(body));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Nothing may be encrypted with the next key before the KeyUpdate
+> +	 * is encrypted with the current one.
+> +	 */
+> +	ret = tls_encrypt_async_wait(ctx);
+> +	if (!ret)
+> +		ret = tls_keyupdate_rekey(sk, 1);
+> +	if (ret) {
+> +		/* The peer expects the next key: the connection is lost */
+> +		TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXREKEYERROR);
+> +		tls_err_abort(sk, ret);
+> +		return ret;
+> +	}
 
-[Severity: Low]
-This isn't a bug, but does any test check the next-generation secret,
-key and IV against an independent calculation?
+[Severity: Medium]
+Can the TX key state change between the caller's tx_secret check and
+this tls_keyupdate_rekey() call?
 
-Each test that uses keyupdate_setup() or keyupdate_setup_seq() registers
-both secrets on both fd and cfd. The sender and the receiver therefore
-run the same kernel code on the same secret:
+The nested tls_sw_sendmsg_locked() can drop the socket lock while
+tx_lock is still held. For example, when the send buffer is full:
 
-sender:   tls_keyupdate_rekey(sk, 1)
-receiver: tls_keyupdate_rekey(sk, 0)
+    wait_for_sndbuf:
+            sk_set_nospace(sk);
+    wait_for_memory:
+            ret = sk_stream_wait_memory(sk, &timeo);
 
-net/tls/tls_keyupdate.c:tls_keyupdate_rekey() {
-    ...
-	rc = tls_hkdf_expand_label(secret->data, secret->len, "traffic upd",
-				   next, secret->len);
-    ...
-	memcpy(secret->data, next, secret->len);
-    ...
-}
+Pushing the record through tcp_sendmsg_locked() can drop it as well.
 
-Both ends would agree on the same wrong key after any of these mistakes,
-and every test would still pass:
+In do_tls_setsockopt(), TLS_TX and TLS_TX_TRAFFIC_SECRET only take
+lock_sock(), not tx_lock. A TLS_TX rekey from another thread can
+therefore run inside this window. do_tls_setsockopt_conf() then does:
 
-- a wrong label
-- a wrong output length
-- a wrong hash
-- swapped salt and IV
-- the secret never being replaced
+    if (tx) {
+            memzero_explicit(&ctx->tx_secret,
+                             sizeof(ctx->tx_secret));
+            ctx->tx_key_update_reply = false;
+    }
 
-keyupdate_keys() only derives the generation-0 key. The kernel already
-checks that key at registration in tls_check_traffic_secret().
+When this thread resumes, tls_keyupdate_rekey(sk, 1) sees
+secret->len == 0 and returns -EINVAL. tls_err_abort() then aborts the
+connection.
 
-One option is to compute HKDF-Expand-Label(secret_a, "traffic upd", ...)
-here, pass it to keyupdate_keys(), and compare the result with
-getsockopt(TLS_TX) after a KeyUpdate. Another is to register only the TX
-secret on fd and install the independently derived next key on cfd with
-TLS_RX.
+If the wait happened before the KeyUpdate record was copied, the
+KeyUpdate is also encrypted with the key user space just installed. The
+peer then receives a KeyUpdate that user space doesn't know about.
+
+tls.rst documents handing KeyUpdate back to the application with TLS_TX
+as supported. The application can't tell when sendmsg() will insert an
+automatic KeyUpdate.
+
+Should TLS_TX and TLS_TX_TRAFFIC_SECRET take tx_lock, as
+TLS_TX_KEY_UPDATE and TLS_TX_MAX_PAYLOAD_LEN do?
 
 [ ... ]
 
-> +TEST_F(tls, keyupdate_manual_rekey)
-> +{
-> +	struct tls_crypto_info_keys tls12;
-> +	int zero = 0;
+> +	/* A reply must carry update_not_requested */
+> +	if (request && ctx->tx_key_update_reply) {
+> +		ret = tls_tx_key_update(sk, TLS_KEY_UPDATE_NOT_REQUESTED,
+> +					MSG_NOSIGNAL);
+> +		if (ret)
+> +			return ret;
+> +	}
 > +
-> +	if (!keyupdate_setup(_metadata, self, variant))
-> +		SKIP(return, "no in-kernel KeyUpdate for this variant");
-> +
-> +	/* a key installed by the user removes the registered secrets */
-> +	tls_crypto_info_init(variant->tls_version, variant->cipher_type,
-> +			     &tls12, 2);
-> +	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, tls12.len), 0);
-> +
-> +	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX_KEY_UPDATE,
-> +			     &zero, sizeof(zero)), -1);
-> +	EXPECT_EQ(errno, EINVAL);
-> +}
+> +	ret = tls_tx_key_update(sk, request ? TLS_KEY_UPDATE_REQUESTED :
+> +				TLS_KEY_UPDATE_NOT_REQUESTED, MSG_NOSIGNAL);
+> +	if (!ret && request)
+> +		ctx->tx_key_update_asked = true;
 
-[Severity: Low]
-This isn't a bug, but the comment says "secrets", and the test only
-shows that the TX secret is gone.
+[Severity: Medium]
+Can setsockopt(SOL_TLS, TLS_TX_KEY_UPDATE) block indefinitely on a
+non-blocking socket?
 
-The EINVAL comes from the first check in tls_sw_key_update():
+Both calls here pass only MSG_NOSIGNAL, and tls_tx_key_update() keeps
+only these flags:
 
-	if (!ctx->tx_secret.len)
-		return -EINVAL;
+    msg.msg_flags = flags & (MSG_DONTWAIT | MSG_NOSIGNAL);
 
-On a TLS_TX update, do_tls_setsockopt_conf() also clears the RX secret
-and tx_key_update_asked:
+MSG_DONTWAIT is therefore never set on this path, and
+tls_sw_sendmsg_locked() uses sock_sndtimeo(sk, 0). That is sk_sndtimeo,
+which defaults to MAX_SCHEDULE_TIMEOUT.
 
-		memzero_explicit(&ctx->rx_secret, sizeof(ctx->rx_secret));
-		/* the answer now goes to user space */
-		ctx->tx_key_update_asked = false;
+If the send buffer is full, for example because the peer stopped
+reading, the call sleeps in sk_stream_wait_memory() with tx_lock held.
+It waits until space frees up, an error or shutdown happens, or a signal
+arrives. sendmsg() turns O_NONBLOCK into MSG_DONTWAIT, but setsockopt()
+has no such conversion.
 
-Nothing here would catch a change that left rx_secret set. The kernel
-would then keep consuming the peer's KeyUpdates silently, even though fd
-can no longer answer them.
+tls.rst doesn't mention this blocking. It also lists only EBUSY. It
+leaves out EINVAL (no TX secret, no RX secret with value 1, or not
+TLS_SW), EKEYEXPIRED, and send errors such as EAGAIN after SO_SNDTIMEO,
+EPIPE, or EINTR.
 
-Could the test also check that a KeyUpdate sent from cfd now reaches
-user space on fd?
-
-[ ... ]
+With value 1 and a pending reply, the first KeyUpdate can succeed and
+the second fail. The call then returns an error even though one
+KeyUpdate has gone out and the key has moved forward. Should this be
+documented, or handled differently?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261105-keyupdate-rfc-v6-0-99b695f9eb4f%40gmail.com
