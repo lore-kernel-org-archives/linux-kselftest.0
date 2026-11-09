@@ -1,78 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.248
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794188744;
-	b=oynEtUvSgE5ONdTYtfpLtHf/c9YzzGLpD2m5vJrCv/U/XLhOHQWLOk4mzYWGmPOrBdUG
-	 sZ7hEO+6pY9fhfyYE46dUcpjRL4ix8MmnPHP9TaX64Q7Nau1lOoBWnW+JC6DHQacg/HEM
-	 50rEJsuY1ck++iUo70A53o+0aYy9bJOIbyIJvtBcdyRKiLCa4ragNyp5RQlwP6zJ6A+O8
-	 3gcm4RHUKpKnsmml/mDzZqLjnMCupG5k8wLGytN/vHwmlk+pTAGbrJeRiwrAnYSUsygrV
-	 mT7DC3BWIyD9wcgea1fVSlk5IWnraVHPcUdsBFJaLq/6tv5S0CxwY5gLZ8h4xFYoY4w==
+	t=1794189053;
+	b=rC2Ui/zerSc3AcNeIQ0aMDOsPh9tvdul1YMIy7y1Gk2jVPADhLFy6gouq1MpAyaio2sN
+	 90q6yY7kqeLI/JOLXtBhvzurh6vuBMoy05NDhFvt3yG/scZ/SX3ZLYxpoaRNhWhZpPHXP
+	 z3HqWXRxrBPA5ABAVQ0q8+j3mITjkW4g4hawOrT1HqoNI0UWqZtcVhFN0yzwauovDlqhz
+	 MQY+d2+sdnmJWTONc0ISt6dGpzp6LfbLMJWRImwHJD7kf9Y5l0r8T4k8/0o4u6jbhcNKP
+	 g8aeg3QSu8pZ+qKEuQdLd4TGH6S4u+gXKBk9yeTmZy3JD/XfSPaRMyeP5H16bn9Wv3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794188744;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=dJtHGHDtZtmjbOKJHErtajvv0VrvqMou54t9YxCKM0o=;
-	b=ouRyu2UiZTtQmiKFdHMRezNqYdmOueGo+zPgu8C7qnxF/W1wX5cXMXVWURQ/vl77Xdcv
-	 /A1d9WOsG84XgcBCwfMIAvycd3uo75jOMrAltmwaQSJ9kgMKPR+HnFyzPz9jOzWPmYpFT
-	 Y7YryrrltJm70VpfGLuGG9V2whstAN2hsJUqH7MIq1Ej9+W3nHwWaftKLbTg9uT90jSSv
-	 74zypaXgzXKXjivKuSRBXlXSFA3/iTfmyHlQr6tCAU4GS4qkUrxHGcumfp2+dH8qI9AKP
-	 GINWQLEFdG1uYgEfUFBgSCw15v/EjeZHKEPN7oiuYXBGhTRvX9DzDTUqAcKc8rVugbw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794189053;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=H7Bnt0oaHObCRAYHP9jDNv4qbPY14ASkahF3dtA4y2s=;
+	b=llM/ssU8/FsdKMBjDVo2ky3hh/w4UqL9Xt4KBgVq0F0cPqdUA/+CdDK8jM34vqlDn7aU
+	 cC3i7kLAXNhM7rk9NB+HyqbCbaNAXEmYw8qRPaWGFxHDZIPMXR8R/C3D0oHf17l6TavPG
+	 GlcOj61WRDZyIAdN+9j0DJX6OwSnw10ZezE52xhHk+Z27OJYi09zqmhuVISSyaF46fBJx
+	 iym0KKerjv9znIGFAkxU+ZtcufRQSjrv+6h9DEKycZmX1SHaaur8WB7jjoQGim+kb7Qa7
+	 0strSyMYrvjVoIs4mqkqIytqe5E6EnI3yVL9yE+KmhBkhlWoJ7Pl41REI/a005BbB1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=ZCTsIWQC;
-	arc=none smtp.remote-ip=111.22.67.151
-Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFB3606A323;
-	Mon,  9 Nov 2026 01:45:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFFB3606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PFk7jMUM;
+	arc=none smtp.remote-ip=91.218.175.248
+Received: from mta0.migadu.com (out-248.mta0.migadu.com [91.218.175.248])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36514606A31C
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 01:50:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36514606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=ZCTsIWQC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=ZCTsIWQC3uvYimIqtqZrylff+56BGKJHKpKwpaU5Cfuz3bUDPtX3EwWWAvqfl7xXjo+y1LyVfRs7c
-	 wnXw33m0+kHd/0iiqbS1iWT+FHjzuKUq+qvNo8PWqUvwcWp/JJIPzrsIzAM+XYhn3VpPnocEo7i5VX
-	 dAEfzoNP+QhB3fmc=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee26af125c3ba6-fa8ff;
-	Mon, 09 Nov 2026 09:45:40 +0800 (CST)
-X-RM-TRANSID:2ee26af125c3ba6-fa8ff
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from  (unknown[223.108.79.102])
-	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af125c1671-7c028;
-	Mon, 09 Nov 2026 09:45:40 +0800 (CST)
-X-RM-TRANSID:2eea6af125c1671-7c028
-From: Xia Yan <yanxia@cmss.chinamobile.com>
-To: netdev@vger.kernel.org
-Cc: dsahern@kernel.org,
-	idosch@nvidia.com,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	willemdebruijn.kernel@gmail.com,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	yana06070@163.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	willemb@google.com,
-	tpluszz77@gmail.com
-Subject: [PATCH net v3 2/2] selftests: net: exercise SO_MARK on connected sockets
-Date: Mon,  9 Nov 2026 09:45:26 +0800
-Message-ID: <20261109014400.9025-2-yanxia@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261109014400.9025-1-yanxia@cmss.chinamobile.com>
-References: <20261109014400.9025-1-yanxia@cmss.chinamobile.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PFk7jMUM
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=V8t2DsGsOlEEZeIAghkdXZSawCAIBraQf2pr/ZV9ZYE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794189050; v=1; x=1794793850;
+ b=PFk7jMUMChfz9psSEwtr0OYbxIi9BbBbddxigtvq7g7LihnCOYef+y/9EwqQoQz3EbSKH+QB
+ hive4t5oKHrdSFuFeVI4elLql9AeINrfw/RYJd6sb8nad3FMw8Nh6pt6tEydxxQYma+r6z9b4cU
+ 2Nj2WjvZcoOjMDREb8OmFKD0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ab26c670e0a08f52;
+	Mon, 09 Nov 2026 01:50:49 +0000
+X-Mizu-Trace-ID: ab26c670e0a08f52
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <04d2e2ba-e6d3-486e-bf38-7d6b1902eeb1@linux.dev>
+Date: Mon, 9 Nov 2026 09:50:39 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,132 +58,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: pkeys: wait for the child in become_child()
+To: =?UTF-8?Q?Carlos_L=C3=B3pez?= <clopez@suse.de>,
+ akpm@linux-foundation.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc: dave.hansen@linux.intel.com, David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ hongfu.li@linux.dev
+References: <20261106164639.2959195-1-clopez@suse.de>
+From: Hongfu Li <hongfu.li@linux.dev>
+In-Reply-To: <20261106164639.2959195-1-clopez@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-cmsg_so_mark.sh sends to explicit destinations, so it does not test the
-route cached by connect().
 
-Add -k to cmsg_sender to connect first and send without msg_name.
-Check connected IPv4 and IPv6 UDP, ping and raw sockets with equal,
-prohibited and zero per-message marks.
+在 11/7/26 00:46, Carlos López 写道:
+> become_child() forks during test_pkey_alloc_exhaust() and has the parent
+> exit, so that the remaining tests run in the child. However, the test
+> runner only waits for the original process, so it sees the test finish
+> early with a success status while the remaining tests keep running in
+> the background. Failures after the first fork are thus not reported in
+> the exit status, and the remaining tests overlap with the next selftest.
+>
+> Fix this by waiting for the child in the parent and exiting with its
+> status. A previous fix avoided waiting, arguing that the parents would
+> keep holding their resources [1]. Particularly, the parent keeps the
+> hugetlb reservation of its test memory, so the child runs out of hugetlb
+> pages after a few iterations. Avoid this by freeing the test memory
+> before waiting.
+>
+> Link: https://lore.kernel.org/all/20240419115027.3848958-1-usama.anjum@collabora.com [1]
+> Fixes: e1812933b17b ("x86/selftests/pkeys: Fork() to check for state being preserved")
+> Signed-off-by: Carlos López <clopez@suse.de>
 
-Add an exact mark 0 prohibit rule before the connected cases. Connect
-with an allowed socket mark, then require rejection of a mark 0 cmsg.
+Hi Carlos,
 
-The same test fails four IPv6 cases before the kernel fix and passes
-all 54 with it.
-Signed-off-by: Xia Yan <yanxia@cmss.chinamobile.com>
----
-v3:
-  - Add an exact mark 0 prohibit rule for the connected cases.
-  - Require rejection of a mark 0 cmsg after an allowed connect().
+This is a great catch, thank you for working on the fix.
 
-v2: https://lore.kernel.org/netdev/20261104092252.15712-1-yanxia@cmss.chinamobile.com/T/
+I reproduced it locally: without the patch, a failure after become_child()
+is not reflected in the result and the runner still prints
+"ok 1 protection_keys_64"; with your patch the same failure is reported as
+"not ok 1 protection_keys_64 # exit=1". So the fix works as described.
 
- tools/testing/selftests/net/cmsg_sender.c   | 21 +++++++++++++++++---
- tools/testing/selftests/net/cmsg_so_mark.sh | 22 +++++++++++++++++++++
- 2 files changed, 40 insertions(+), 3 deletions(-)
+Tested-by: Hongfu Li <lihongfu@kylinos.cn>
+Reviewed-by: Hongfu Li <lihongfu@kylinos.cn>
 
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
-index 67a72b1..035ab54 100644
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -34,6 +34,7 @@ enum {
- 	ERN_CMSG_RD,
- 	ERN_CMSG_RCV,
- 	ERN_SEND_MORE,
-+	ERN_CONNECT,
- };
- 
- struct option_cmsg_u32 {
-@@ -48,6 +49,7 @@ struct options {
- 	unsigned int size;
- 	unsigned int num_pkt;
- 	bool msg_more;
-+	bool connected;
- 	struct {
- 		unsigned int mark;
- 		unsigned int dontfrag;
-@@ -93,6 +95,7 @@ static void __attribute__((noreturn)) cs_usage(const char *bin)
- 	printf("Usage: %s [opts] <dst host> <dst port / service>\n", bin);
- 	printf("Options:\n"
- 	       "\t\t-s      Silent send() failures\n"
-+	       "\t\t-k      Connect before sending\n"
- 	       "\t\t-S      send() size\n"
- 	       "\t\t-4/-6   Force IPv4 / IPv6 only\n"
- 	       "\t\t-p prot Socket protocol\n"
-@@ -121,8 +124,12 @@ static void cs_parse_args(int argc, char *argv[])
- {
- 	int o;
- 
--	while ((o = getopt(argc, argv, "46sS:p:P:m:M:n:d:tf:F:c:C:l:L:H:Q:")) != -1) {
-+	while ((o = getopt(argc, argv,
-+			   "46ksS:p:P:m:M:n:d:tf:F:c:C:l:L:H:Q:")) != -1) {
- 		switch (o) {
-+		case 'k':
-+			opt.connected = true;
-+			break;
- 		case 's':
- 			opt.silent_send = true;
- 			break;
-@@ -521,6 +528,12 @@ int main(int argc, char *argv[])
- 
- 	ca_set_sockopts(fd);
- 
-+	if (opt.connected && connect(fd, ai->ai_addr, ai->ai_addrlen)) {
-+		fprintf(stderr, "Can't connect socket: %s\n", strerror(errno));
-+		err = ERN_CONNECT;
-+		goto err_out;
-+	}
-+
- 	if (clock_gettime(CLOCK_REALTIME, &time_start_real))
- 		error(ERN_GETTIME, errno, "gettime REALTIME");
- 	if (clock_gettime(CLOCK_MONOTONIC, &time_start_mono))
-@@ -530,8 +543,10 @@ int main(int argc, char *argv[])
- 	iov[0].iov_len = opt.size;
- 
- 	memset(&msg, 0, sizeof(msg));
--	msg.msg_name = ai->ai_addr;
--	msg.msg_namelen = ai->ai_addrlen;
-+	if (!opt.connected) {
-+		msg.msg_name = ai->ai_addr;
-+		msg.msg_namelen = ai->ai_addrlen;
-+	}
- 	msg.msg_iov = iov;
- 	msg.msg_iovlen = 1;
- 
-diff --git a/tools/testing/selftests/net/cmsg_so_mark.sh b/tools/testing/selftests/net/cmsg_so_mark.sh
-index 772ad0c..341abfc 100644
---- a/tools/testing/selftests/net/cmsg_so_mark.sh
-+++ b/tools/testing/selftests/net/cmsg_so_mark.sh
-@@ -68,6 +68,28 @@ for ovr in setsock cmsg both; do
-     done
- done
- 
-+# Reject an explicit zero mark while leaving the socket mark allowed.
-+ip -netns "$NS" rule add fwmark 0/0xffffffff lookup 300 || exit 1
-+ip -6 -netns "$NS" rule add fwmark 0/0xffffffff lookup 300 || exit 1
-+
-+# Check per-message marks after connect() has populated the route cache.
-+for i in 4 6; do
-+    [ "$i" = 4 ] && TGT=$TGT4 || TGT=$TGT6
-+
-+    for p in u i r; do
-+	for mark in "$((MARK + 1))" "$MARK" 0; do
-+	    expected=0
-+	    if [ "$mark" -eq "$MARK" ] || [ "$mark" -eq 0 ]; then
-+		expected=1
-+	    fi
-+
-+	    ip netns exec "$NS" ./cmsg_sender -"$i" -p "$p" -k \
-+		-M "$((MARK + 1))" -m "$mark" -s "$TGT" 1234
-+	    check_result "$?" "$expected" "IPv$i $p connected mark $mark"
-+	done
-+    done
-+done
-+
- # Summary
- if [ $BAD -ne 0 ]; then
-     echo "FAIL - $BAD/$TOTAL cases failed"
+> ---
+>   tools/testing/selftests/mm/protection_keys.c | 16 +++++++++++++---
+>   1 file changed, 13 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+> index b7882ab97683..5dece144ab95 100644
+> --- a/tools/testing/selftests/mm/protection_keys.c
+> +++ b/tools/testing/selftests/mm/protection_keys.c
+> @@ -1009,9 +1009,10 @@ static void test_pkey_syscalls_bad_args(int *ptr, u16 pkey)
+>   	pkey_assert(err);
+>   }
+>   
+> -static void become_child(void)
+> +static void become_child(int *ptr)
+>   {
+>   	pid_t forkret;
+> +	int status;
+>   
+>   	forkret = fork();
+>   	pkey_assert(forkret >= 0);
+> @@ -1021,7 +1022,16 @@ static void become_child(void)
+>   		/* in the child */
+>   		return;
+>   	}
+> -	_exit(0);
+> +
+> +	/*
+> +	 * Wait for the child to finish the tests and pass on its result.
+> +	 * Free the test memory first, as it may reserve pages from the
+> +	 * small hugetlb pool that the child needs.
+> +	 */
+> +	free_pkey_malloc(ptr);
+> +	if (waitpid(forkret, &status, 0) != forkret || !WIFEXITED(status))
+> +		_exit(KSFT_FAIL);
+> +	_exit(WEXITSTATUS(status));
+>   }
+>   
+>   /* Assumes that all pkeys other than 'pkey' are unallocated */
+> @@ -1060,7 +1070,7 @@ static void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
+>   		 * preserved across fork().
+>   		 */
+>   		if (i == NR_PKEYS*2)
+> -			become_child();
+> +			become_child(ptr);
+>   	}
+>   
+>   	dprintf3("%s()::%d\n", __func__, __LINE__);
+>
+> base-commit: 843c58022865a7b0f9743416c2b48bc2632da23c
 
+-- 
+Best regards,
+Hongfu
 
