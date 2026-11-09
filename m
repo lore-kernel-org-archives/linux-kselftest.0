@@ -1,89 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.181
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794250432;
-	b=l8dEzsbQGMxcI+t8D71k9PQYtsUIJAqv/OFDBEsYa61q5RN2/DjpqtexfpoSEFJZWhyH
-	 /pkXfb5IoE23Xidfj8glxqnaJKk1deyrnlp5JbKOehureM/09NR9VuEVpSTeXNAPCM5Z7
-	 aBJlxRR25BDCO+cM20kcdWzmHC6ievqc+5ykw6MK0eQrby9mi31SEl/Av6YXjUMt5N/XO
-	 joa6fbLQPak5pNReVN4L9NUD+iehFtoonyzF95UI1BOVd+fSF6bF69zGUw8s+ND+sNtB3
-	 9SLUemfPZjEl37JuJo7eOr4swEe8xFDJJNkqfpB43mHKOKJNd0FCxCcjfcnDlVqNaNw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794250432;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=80cmEy5EJnrhtr5kg0iasxnfCalwVR0GuYGpWzI/iqI=;
-	b=E+1mKFKBCikxpGUBbIEtOGDNL0JRUY2Q+QzQt88TR6y0eETEbgWs+WJK9bP8fE1NeFgP
-	 t6uoZ/O6SS1h1h19tG/ggplh6gKipeu7avmRvUf3tf9kPjaTeKtFpgKNsDTaR/VlzOLIJ
-	 TeKEJt1/UnN8rFlPqIrrSjUSb0SeLUivVzQU8bByUpWAImmjhi8Blgq97UOgZHMN+RBPB
-	 /nLQlhHNMgce+RQMyQjXlXK3Rc23yE29bpMXZt7lFpthgTlXeRtnjdDfisEK9sy8SEKsf
-	 5y+B4aD/pdAIG+TwRqAs6prgvJuG63CG/Tm3uRYH/WDCSqfFdP6vH/KQfBL0gVq6W/g==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yRCYdPNS;
-	arc=none smtp.remote-ip=74.125.82.181
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.127
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794250563;
+	b=ICe/ozRj5PzmXTFvh5V7Bu3diqwo1f+wUfmrQXeXcpytv/r7IBYpfyWTWmy0L1zIxt7q
+	 1jbgLVJk/LxM6lVBN7Y0mpmBIDgIc6wXTsgwcAfsOeFZv8KU+8tsuZPUxr2DYPvzkSQ8e
+	 7h5a3LflFcEfvW0mcgHc/OSqAFGP75hAVNWePVOzvzaKq8ja0MRNsG+DKBgHUOAyu67H1
+	 l42MgjGMl1zF3FSMprcEiWnJ6veWTNz3WwTs4FLm6NSMo4RBIRqZDxZ8FoY1Q7GEOXsrt
+	 pIzBnXKhNhC1t+pYmg/4ezXv9SWdMv7IIJQKhrQogqutcxvCP2L+P473xeTXbHSgRAA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794250563;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:From:To:Cc:References:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=s0tk+k6veTGxTgDsZF9uG7roBgJrqasWzy81nv+LlEU=;
+	b=XuSXNXf3u6RGJnT3vOUgm20l5YuIsIfdnPfRKtsqH/zByiZacMhunKVCCsLIrhkMFL7F
+	 m349N0l0yfhDq5ZWvHtZX4Q13ukMFs4+YluKAUUYwJtVFSjEvmTQp28sUNCHyMN8WAQaG
+	 naerwT9Cymh+PT72dQcUzoPWNj4BwcTfdrva2AsyOBU1i57qpFVbvV0Grj58mySx9i/Ii
+	 0pyLRzG/nHeOI5AdX5ws0aNEQ2OYKKJBPeoRjZ5GEqFegXm/fkb/cxEjSk2sQaCTij4Yh
+	 xhz92n6eDO+M35pPcr8zmDDdu6Crn5+pRQ7HdUzeuyGGL9oTDePnwOK+fBFqmnW3vhg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=ezwHfReA;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.127
+Received: from YQZPR01CU011.outbound.protection.outlook.com (mail-canadaeastazon11020127.outbound.protection.outlook.com [52.101.191.127])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF107606A32A
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 18:53:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF107606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27200606A31C;
+	Mon,  9 Nov 2026 18:56:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27200606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yRCYdPNS
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-36f6295304dso1557302eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 10:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794250431; x=1794855231; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=80cmEy5EJnrhtr5kg0iasxnfCalwVR0GuYGpWzI/iqI=;
-        b=yRCYdPNS+IvYOA7gTO54RmPLdE/OaAVWHZo5ZJ0g4dpEQ+Tu1Ancuv56seUgIci3yX
-         NnKYJcySnueyMpgY9OQhAPfqg2KTGKr9rp4O6EXDDi0zcowdymDTwn35hVWivgOauUN/
-         rMI3eXManK5wV+CaS9Kx1g4T0e/xObB2htmJJT1iDJXq/VcZ5y+Az0Wunq2/e+tnNrVr
-         QUCBC+VzQFusc21SK3+8T+5hLo3l1IY2zPOsVwvs1zka4f3f7gQapMFpsIGJuIlgBzaH
-         Flhk41E7aQv0M85qV/t7ZsWmcNiVWslGJjK6RYUdt7jG2bituqChbXq12LQJo1wzqiu4
-         +IVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794250431; x=1794855231;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=80cmEy5EJnrhtr5kg0iasxnfCalwVR0GuYGpWzI/iqI=;
-        b=F83/eZcgT1r5h/BMr1rGRbDVzuq/WtaPWPmfrB4TpuEfQXA4be35o/Q6XA9b4qSQ2s
-         OUEaqC7ImvZpdLf/A+GmvQcy9Laj3e4JZqd97jQX2SUqxSsEnnY8UIqmSpHL7UvZWCWi
-         3tXy2Js0JcAguw3u05uJ3RP0IjPVnaBRA4Am6OO0UQEplyPnohdToEck3Z6EE8hBo3RP
-         aPR8G8SmlMhsF5NhWMXyfiWcZRFYf3bXAEI8eA2i4Mk+ajgZ24Fp6bQTfthNUgP9QBf4
-         u8KKXZDzx+IQhSCsJoh2mDMLLkH0y9hyK5OFd5wN1ZzoMQ0RCgTeyvBQIllEULMjsxKO
-         tVqg==
-X-Forwarded-Encrypted: i=1; AL+hErEdlIvVypDkSRMg+n0nCCHrDCGUxID59TKUnjFEtWwADsMMvzC4locBWI5A1zbpoTEPmgax+KWCQ7biDdFpfOM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/QSZyUdvDnLZjat2xFgjcd8SYEceErcOmS1EC3CyxlrRyiXhPo
-	bPcngkLBxpSRcZl79jDOfhGxvwaobnj+SdIvl/qyigkkM0ZD4FD3kb7fUpTEQaraW9E=
-X-Gm-Gg: AYBFou08IZfhLluAguQYbQTLx5Dl5FyESknl4DTlM2XTOq5lEJpgD8vsP/KKU3FkQDX
-	zmmqh3C0OibosgEIUNLG1fg+kdMSYqUq89scIOGDv5JCzUO3VsVZsXB/M8uGuokWI65EoZk12Lq
-	6dkpFlFmS244TjDoAelviCq+cq3aD6rnhd6ReaMfVGjxG5BqREp39bT7pFqyFFd2hMHK2psXWQ8
-	x8pXSn6LJ9TZ6J1v5YSGlSf07ZynQnS1fg2/1CwXyzNO0IQpx1FzNcZJhnmAL7mY36iEFa0R9od
-	pbAEJJBqJ0wk5UMoQubEt3UWiPaQ07uGWhkV1Kzm3pV6175TC7ZTxHE42foOoWVxFW1cr0RUQjl
-	/6mt8RQl3sM3eCXSPI9B+vkZv+qkMnKYRuV0dR2vbJM+6uTPL/zZha38NcgcGd+Yw8SSnBgdcsT
-	ZBVXzqOiKfkmnS1WzqMUfuJVGOd+yYuoh/uw1iLClJJaOiXRU3Q2Ny65xHxzQrpN7Wv/OjDWmIF
-	Jsdttz9htZ0hC1u470wFWS+eOk+Bix/iVnNlyShaqKAt8INplg+/4Fzyg3v4URbv4BtJfSFzB7G
-	VkqMrbWKeC2lhxQU0OtA4R80wANWmUcRtGrpSbLIwzcfFjCmvNhUst4D20Z7QPV7NTGa/stQZyh
-	TstNJLch38eE=
-X-Received: by 2002:a05:7300:7f21:b0:35d:eafd:5737 with SMTP id 5a478bee46e88-3751f55f6f7mr163325eec.22.1794250430709;
-        Mon, 09 Nov 2026 10:53:50 -0800 (PST)
-Received: from ?IPV6:2620:10d:c096:325:b155:8c68:f317:3997? ([2620:10d:c093:600::1:93d4])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-37520cfe07dsm215259eec.20.2026.11.09.10.53.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Nov 2026 10:53:50 -0800 (PST)
-Message-ID: <85e164aa-7aa7-40ed-bfaf-883b8f51f7b2@gmail.com>
-Date: Mon, 9 Nov 2026 18:53:38 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=ezwHfReA
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ox/9M2vPXM5MULttUX3MpL8Ss2OI7DTjCe/Fd9cegYkwyynzXEvx94GITfLoTRArvO2jCCmeAtONRkY8AJ58pixQcAGnPvPHbTUlD+MJK0t6Rpfr/HHHuRVjQ3W12K5XzWLdlT7jUT1iPKOQrMer5mjgeqh2W1+5cTYmLyMmkbbfNebJyC1vlIzdoTMNVUIRuD2wOYpjiip4Tkv00khZXmpd8Y3EEnIzfay/S+N6dWSugL86DsSRCobyqUUFbPGr9LWhwq9YeihN0UuV+ld+npxUnYkSzSSOfOTryF/OeThILXuyyWCRom1w44YbP5lX1Qo8fEcmXqQNyf1IvUNgFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s0tk+k6veTGxTgDsZF9uG7roBgJrqasWzy81nv+LlEU=;
+ b=KEn0qvPhxTiRRGan4PhXeaN5o58bQGRVhlCYXE0/SSe1dYDZLu6LJK/ajbS7Fo6WnSdSVZdbkv8a9Ke2lx8nyxaLRWJZQoQBypM4Qb3maLlhww1+tnxWaeEmUjJNRFyXLpRAL+F7yevL/cCDLozDxfP8e198KLWgXy0BeTORarSaynhLGQbUsxPWDypjbt966oBLHsFV6q9ROsz4X2QwxgJ2hqTjJB9FR9PKHGev7n3yT5lWakGwYmZrQvg+ktRYOEx+xt7xkVWwVNS+uJS3ExTPAIU4kCVnXbXtGvNa+YZ1gJMFDLZzHPSeT7xQJhm4YOAYxtRuIoH1JJIC1cHHdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s0tk+k6veTGxTgDsZF9uG7roBgJrqasWzy81nv+LlEU=;
+ b=ezwHfReAQkkXzTu4tF3TledB4FvYsZJeVp3Xm3BIliA8rHl/QqP3XNTOl7pAG2fEWIgQYqat6T4XE9g0hcDZ3pCqkEcOHgE1F6b9BT4LVNNeq9J7FSgYSuftLfxPrpxipNxF/x25DZ205Vf6LTa7DRRCdY6B08F4z1f0DiM70oWfDG0tl9gAIU7keux6juo8+yTOyRQW9H3adaqqCvYNRhYfioMBK4vRf0e1BIliejzmvyzKE8P/KDbUNmV6eSBPMkuubmNOOKr//t4W8TBBLlmTorsVmHLp7VgSIsIOXfa+31n0Pn3Y2aG2dempHtRo44kx0HC2a2Q9J8upvwCHXg==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YT2PPF8EE490D48.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b08::462) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.13; Mon, 9 Nov
+ 2026 18:55:58 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0592.012; Mon, 9 Nov 2026
+ 18:55:58 +0000
+Message-ID: <1ee6d971-b48a-4f7e-b0d4-b500a6fe1f5c@efficios.com>
+Date: Mon, 9 Nov 2026 13:55:56 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 07/29] sched/deadline: Do not lose a throttled task
+ switched out and back
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+ linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+ boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+ kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+ mathieu.poirier@linaro.org, longman@redhat.com, ridong.chen@linux.dev,
+ tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
+ m.szyprowski@samsung.com, kayracizmeci@gmail.com, weihengqiuu@gmail.com,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, stable@vger.kernel.org
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-8-mathieu.desnoyers@efficios.com>
+ <avHvPjz4dL0zNyGb@jlelli-thinkpadt14gen4.remote.csb>
+ <c5a408b8-1388-4dcf-bfa6-bc987ce83fae@efficios.com>
+Content-Language: en-US
+In-Reply-To: <c5a408b8-1388-4dcf-bfa6-bc987ce83fae@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0332.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:6b::18) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,72 +110,132 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf: Report lost RHASH batch traversal keys as
- EAGAIN
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, yatsenko@meta.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1794056839.git.hi@tychen.cc>
- <4c32437eee7649fbd822108278a3f582bb795329.1794056839.git.hi@tychen.cc>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <4c32437eee7649fbd822108278a3f582bb795329.1794056839.git.hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT2PPF8EE490D48:EE_
+X-MS-Office365-Filtering-Correlation-Id: c23dfea0-305b-4f6b-d179-08df3e93172d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|23010399003|7416014|366016|1800799024|5023799004|4143699003|261021121427099003|261022105027099003|56012099006|261021123027099003|261026140227099003|261028144727099003|261026121527099003|261009223027099003|261102123227099003|10067099003|22082099003|18002099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	JeEOM/Nz7X5WGAdusui83fU5VILy8w1UxOO7yBuF8WKNWGVlWX1PcCOcMR8mGGUsLd5z+tXPCzg3eJwat1C2RH58llZ89leXg4MktkU1P39gEGPO7hSDLfRvjAPVkdULeSOWNz/N9bo03PBjDkFLHd6Vs+QHwK/wqSDEj03GjFpoqCW1GR+bv32Rwe2aJk1dzm8Vgfen23eYaN7j7qKxZ1zUXsBwN05DgxhyfR0ekykYRrfyxiq185O2YCP/LkV8rdMdMZSOTWID64Nk74AwNALmxuIDcKtEznqb1k3AYVkSHWJ+g5DBJrjsPzgxia6ivd+scQsxjxxlA/u5hyV+hU/55eiypzNZ3ebPOeegyqqleqOCheKvIDGUEq9YvWWTLmA4pUYDXlx454lKmYYeUMEpE73AQ2zpRVHlGSTUAxh+ol7CHZlQkXtcpbly32zEiGNf6bA2A08AB1Fle43bJNdbEd/9HsVjtkkorNeWyLmH3nf+27IH5H8iMXa3SQpiGK3fXtcPda6DSViSl1wUe4Ec+BsOAkb6EyMdVJ8lc5QEfrfQLe6Awxx4rGT/NEp3n8TTL1+1TtJ50c+gxBfJE6hwUypUY7aykdIxT716VzE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(7416014)(366016)(1800799024)(5023799004)(4143699003)(261021121427099003)(261022105027099003)(56012099006)(261021123027099003)(261026140227099003)(261028144727099003)(261026121527099003)(261009223027099003)(261102123227099003)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R3VBcWd2THlFRkk5NzVqcjdYTlhZL1NWT0Flbkp5ZFF6eGEyQ0hlT2EzQkxk?=
+ =?utf-8?B?TG4rNFFhSnVpZTdpa1lvbElFRVg4WnMwdjJ1SitPYkZtanlrZTdHQzhpREdn?=
+ =?utf-8?B?MUphQ2VodUsvVDh1cFgvUzhQclR1K1JaQTJDTGtaVHdOZ3UvQ1ZpZnU4M2ND?=
+ =?utf-8?B?R21TTm55akNWRHYxWHo1MmdFaU9Va2x4OFhUbmk5c0pjWWtmM3g0UGpldkF6?=
+ =?utf-8?B?Wm1QcUFoRmFrVlN3MVVzMWlEZElFY21qcUxhcGVuYU1JRko4cHRQdjN2RzhV?=
+ =?utf-8?B?WjJZbi9HZFJpRzhSRE9xR2JDK1E5SDBaK21jTWVTTTZTRC9nOGhuVHg2VmRX?=
+ =?utf-8?B?V3ZnR3RnYm4rUFpxR3N3dU8vZDcyTDcyeXNCdy9hLzNtcG5QSnJoRzhRaVhJ?=
+ =?utf-8?B?NjZuZUpxbGwybkJkWmRiZzlmSzFzell5clpyckN6SnVweUxRV1hKbmxBeDBG?=
+ =?utf-8?B?UGovTERQVmdjV3NMUWI4Tkhyak8ySWJETnZFSURkU1JiYXkrT29LNWxPV2lR?=
+ =?utf-8?B?YWZ4VHpudnU0d1BCRVM3TGRmbDBUUEw4UFZxYUlkS2FPVER0bk4vbCs1bWRD?=
+ =?utf-8?B?L0dLTEhJU2pxQ3lVQ3BTUUlNTk14c0xYU01tQ2t5ZVBvRi9wQVYvNlprQWZH?=
+ =?utf-8?B?NDBQUTgwcjNjVEpnQUFZbjhrS2VUSnJ1Nk1XYmcwejdDaWhqSEFuTW5aNHZE?=
+ =?utf-8?B?WVNIQ2JkdXhvcldzZkRLTTNDNkZZT05SZWxzRFQ4Y2hyMnJHbEJnQVd5bndr?=
+ =?utf-8?B?MzRWc2I3YjdMVnhZRE5pbHY3dkNyYUlDSTFxZUx2cWJFaG9xdWtVSllvOXMx?=
+ =?utf-8?B?eDdwKzh0amh3cU9uQURxU1NGaEpoMjRVUzdjWTVqUGlrRVVlTEZ2S2grVnpr?=
+ =?utf-8?B?MmM1UkpVajExMzZoMEVBMCtRcDJRSEpIS2hxSGliWXFMUlRjYncyL2VqV3U5?=
+ =?utf-8?B?Z2ZlZ204bXZ1ZkY2SzdsTGRKbk5DUGVOUTdRZEU5dXhRVDNDZGdkcG9IaHRq?=
+ =?utf-8?B?akx5T0RmTkg1ME5kTCtXSTYvMnFjS2xFbHVOOW40Ty9VTU9YcHNxYUQrUThr?=
+ =?utf-8?B?VVQ5ZkFma2JqZXZ4K0FtTDQ2MjVHUnZLbC9oYktmWWw3QVl0Mmhnbzh3Ujl4?=
+ =?utf-8?B?UUJ1VVRFa3FDandBM0hDNWZqVTgvZHEzUVEwaVpwS3hWQTlyb25jMlJoMCtq?=
+ =?utf-8?B?RWVEQmw0S05Cb0NyRU56eEpHV3JYajJuYy9BN0tiRGhOSzh5cU56QkVUSUds?=
+ =?utf-8?B?QUVEQ29OaHdFUk8vWSs2VzBMaVNoRTk3QWZzR3FsWEk4R09Ia1NQRzlSek9F?=
+ =?utf-8?B?UkdmcTQvWDg4SXhPZFVKTkJkUXVwTzljMVVrM25Xek9LMENHcG5KKzVmNk5S?=
+ =?utf-8?B?cXVPMGNoNVB2ZHpXWllmTkZhNkpwMGhiRVlEUWJrN2FDU1NWcmFheEJHeURa?=
+ =?utf-8?B?WmRucG9yTlBvTk1SSXg3bU52T09aaUVZeUNhbVBSY0NIQ1FOeklMUk9kR1lN?=
+ =?utf-8?B?UkkzSVBDN1NDcW9MRC9NY3k4Y1J1cXlieDdOd1VzaDBwQlZkMVFwMldaVWli?=
+ =?utf-8?B?RDdFUTBFMExEZ1p2TThjNmlBaVBtQUgzZm05Q1hicWlYQ1pzNkFKSEZKbU5K?=
+ =?utf-8?B?b1B3bTgxOFRuM0hoOU90eTdmclhHcU5zZlhMbDZCaHg3bXBIL3VlTlI5T05w?=
+ =?utf-8?B?QWdMSytOMUhCU3JQSXdyZTJKUlRzdHlJY0JjN0ZyTzBYNUZibE9PQjRjQjlv?=
+ =?utf-8?B?a2hBU2NiLytiVDNuY3lBaHV5ZmhZZnJ0YzQvZ1hEWU5TM1BBK2svSnBIalRG?=
+ =?utf-8?B?QlozWGNzcnFyUTBLUjFaTTlxdjFPc084TExVZmFmeDhyK1YvQ0VkVTdNS0pz?=
+ =?utf-8?B?d2luK0VvRVgwb3JsMFFDRzdmTWdUQ3hRMlM3NUI0MTZMcXpzS0xIV0FnYUlx?=
+ =?utf-8?B?Q0M2WGMwWGRnUFV6WS9hWVpPWXdXUXMwRkt3TWVGVUFUN3owTk1OaFMvZjM1?=
+ =?utf-8?B?VXJxdmcvMW83c1hYYUdBVlVIei92MlBHTFFELzF6cFNDWlZ2QzNwK0UwUmZm?=
+ =?utf-8?B?RzBZQTBBbGFKanhoWFM3ZG9iOHI4RHdjNHErNSt3VWZTbm1VNFpqOFg3c0Ry?=
+ =?utf-8?B?ZGJNSzlxYnlMQ1pXL0VPb2dtclpWVnRTK0hDYTNzWGY4SFFSREFnNzRjMWQx?=
+ =?utf-8?B?Qkp4a1dmNHNsL0RkM2w0TkdaajVoWXBla25ybCtlQ202WG1XazFFelBwcTI5?=
+ =?utf-8?B?VktIenJUUHFGMHZWUlZEYktQcGVkM2Yvd0tTTHFiWkxrazFzTHR2aHRyQVRu?=
+ =?utf-8?B?K3BMT2JhNkd2Mnp0cjZVTjh3VnlDejhtZlNaMlZyUGdPVXFOM0FoZzFpNlFy?=
+ =?utf-8?Q?Vt6xuff8GzxIyuUtZCSbpzIdyGJiJikaKHZz2?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c23dfea0-305b-4f6b-d179-08df3e93172d
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2026 18:55:58.1169
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EvNyHc75JrPw1BhApeihA/bFUBVOGNNj4yBQbZFw7yIMQMe+Z8OT6PJZxLOX4TdqJbzMk+vLfk8mCPK+TRAYS+XGG0apP8XVwZSouRTZSKw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PPF8EE490D48
 
-
-
-On 11/7/26 1:11 PM, Tianyi Chen wrote:
-> If a key is deleted after a batch copies it, rhashtable_next_key()
-> returns ERR_PTR(-ENOENT). The batch code treats the missing next cursor
-> as end-of-iteration and returns -ENOENT with a partial batch, so callers
-> can silently stop before reading keys that are still present.
+On 2026-11-09 11:29, Mathieu Desnoyers wrote:
+> On 2026-11-09 11:05, Juri Lelli wrote:
+[...]
 > 
-> Translate a lost traversal key to -EAGAIN, as for a missing input cursor,
-> and preserve other iterator errors. Still copy the collected entries and
-> update the count, including for lookup-and-delete batches.
+>>
+>> Still have to review them properly, but between 09/29 and 24/29 I
+>> believe every return at or after the 0-lag time is now covered, that was
+>> the bulk of what I was "seeing more of" in my v2 review.
+>>
+>> What I think is still open is the other half: a return before the 0-lag
+>> time, with different parameters, where the budget carried over from the
+>> old reservation is never validated against the new one. IIUC that can
+>> only buy a task one instance past its new admission (it converges at the
+>> next replenishment), so it should not block this series and we can
+>> discuss separately/later on. Just mentioning here so that I hopefully
+>> don't forget.
 > 
-> Fixes: 818e00848227 ("bpf: Implement iteration ops for resizable hashtab")
-> Link: https://github.com/kernel-patches/bpf/pull/14700#issuecomment-6641291019
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
-> ---
-Looks correct: transform -ENOENT returned from rhashtable_next_key() to
--EAGAIN indicating loss of cursor.
-rhashtable_next_key() returns NULL when iteration is exhausted, that
-is transformed to -ENOENT in if (!has_next_cursor)
+> Your insight points to a coverage hole in my proposed test cases (last
+> patches of the series). Let's see if I can improve coverage there.
+Hi Juri,
 
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+A heads-up on the case you pointed out: a return before the 0-lag
+time, with different parameters.
 
->  kernel/bpf/hashtab.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 6e2115477cb9..346a2afb4ad3 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -3556,14 +3556,15 @@ static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
->  
->  	rcu_read_unlock();
->  
-> -	if (total == 0) {
-> +	if (IS_ERR(elem)) {
-> +		ret = PTR_ERR(elem);
-> +		if (ret == -ENOENT)
-> +			ret = -EAGAIN;
-> +	} else if (!has_next_cursor) {
->  		ret = -ENOENT;
-> -		goto free;
->  	}
-> -
-> -	/* No more elements after this batch. */
-> -	if (!has_next_cursor)
-> -		ret = -ENOENT;
-> +	if (!total)
-> +		goto free;
->  
->  	if (copy_to_user(ukeys, keys, (size_t)total * key_size) ||
->  	    copy_to_user(uvalues, values, (size_t)total * value_size) ||
+It is real, and older than this series. On v7.4-rc1, a task of 50ms
+every 100ms came back through SCHED_OTHER with 10ms. It then ran 39ms
+of the next 100ms. If the task is asleep when it comes back, its wakeup
+checks the runtime left with dl_entity_overflow(). If it is runnable,
+nothing checks it.
 
+The same happens without leaving the class. A runnable task that
+shrinks its parameters keeps the runtime left from the old ones. Since
+40767b0dc768, new parameters take effect at the next period. But the
+old bandwidth is released at once, as the XXX comment in
+sched_dl_overflow() says.
+
+For v6, I plan two fixes, after the current patch 27:
+- 28: a task that enters the class runnable gets the wakeup rule,
+   update_dl_entity(). Fixes: a649f237db18.
+- 29: the same after sched_setattr() changes the runtime, deadline or
+   period of a runnable task. __setparam_dl() sets a dl_new_params bit
+   for the next enqueue. The enqueue flags cannot tell this case: a
+   cgroup move also uses ENQUEUE_MOVE. Fixes: 40767b0dc768.
+
+A task whose runtime left fits the new parameters keeps it. So it
+never gets more than a wakeup would give it.
+
+I also plan three deadline_bw_test cases. return_running_new_params
+and change_running_new_params fail on v7.4-rc1, and pass with the
+planned fixes. return_asleep_new_params passes everywhere: it covers
+the wakeup path.
+
+Patch 29 changes the choice of 40767b0dc768 for a task that shrinks.
+You may prefer to keep it, and delay the bandwidth release as the XXX
+comment suggests. Then I would leave 29 out of v6.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
