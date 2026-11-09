@@ -1,77 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=165.173.182.12
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794239873;
-	b=TZrQYlvmzZHIRJABqfxCMOWj/JQEQHwxpi/KNgufpwjqvp5PpEKHyJJj/HoyFoiCUPei
-	 hH4Rc+juJDXjvMBSd1RnUag4lCF1xfT3LyaV5ZYKvrhARlLkF4WapankBclPSh+1a1jE/
-	 Y4tkbHeWNHd1EK5zVEUCdlMnmCoFjHUVDyN4n1tj2c0cObXI4tFeSsFidwt8sKi7BvoXz
-	 B37YeiMZYOy1KfqSAeeeke7A4grNxpUIUmUpFiV9+GmRvFesHtolnDXX8Ce4aMVPByZPJ
-	 JBhXWoRHvDIphUIzTJKMvNcEvvpDISj73rbyhw/9ixmDbNjk6+oEdQY2CxotzAcsqBg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794239873;
-	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Subject:From:To:Cc:
-	 Date:In-Reply-To:References:Organization:Content-Type:
-	 Content-Transfer-Encoding:User-Agent:MIME-Version:X-ZohoMailClient;
-	bh=9W5U9MRLdiGXEzabQcr7VS1i+v+HHL0WqrvbrIzGW3Q=;
-	b=5CE9BuCRc9vNl5mu5b4pLhznlOGEI/iamklGuGqZy6OdTDqwFODVjh4/YJK03OExDLGK
-	 1FvPhheY5alR4Xsf+nAhMs/G6Z1Mrjw3DqLUWBpdcJmCJkdyB+75cAyDb+0olojjXLEnp
-	 6uV8Tp9Ps/xwzvC9g4z1WFB9JR2nAO6dGFF5by5tzhf/FyNrV45abZ1uB//QxgIgolYAi
-	 8vyCa1QdD8Ms7XK78xF1Jh33wnh1BsQpVLqp/Mc2xF49ngAZ7YcUHwTrdxErRJ/f1Yo4d
-	 XlkznkN5O3Hgm8gFdgaCL4Dyl7ggr4MEcPYAB0p6cbT/yUNqE2+jI84/HVDFYtWvBzg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=icenowy.me;
-	spf=pass smtp.mailfrom=icenowy.me;
-	dkim=pass header.d=icenowy.me header.i=@icenowy.me header.a=rsa-sha256 header.s=zmail2 header.b="Zqa/eYBR";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=165.173.182.12
-Received: from sender5-op-o12.zoho.com (sender5-op-o12.zoho.com [165.173.182.12])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.30.148.35
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794239901;
+	b=seikPZHxWVJpJFIEIHIIBJXGgCTBf91bLCsH/x68inl3+eUo6g3Ub+kHFZOrp6P41Wjw
+	 yK1xgiXU40UQgssedrbHjVXNcYT7WsEQKg3VIiDoyrNB6vg/UbQh39pgqxakykWv3Vl5h
+	 R8cUy4/xBU8zGQ+S8Hl6s6xRVgbHpLe7mgTG3byBDul4iOKvl/rrSl8j6NB1iCyTMuzAo
+	 fRWpTEA+ABSqTcIwMUG5IwGTIAfeaaJCuYzX0cSZ2dGQc+pPyzrNa0P0ZsLWKPTQ+VDTQ
+	 l+ePU/KzPvJUjp97tntP54xEGSYrYy4xgNxUZ2HBo8gCs7rWxyuV5AMBqaaHwZH9Sdg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794239901;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Zmail-TransId:X-Mailer:Message-ID:Date:Mime-Version:From:To:Cc:
+	 Subject:Content-Type:X-MAIL:X-TLS:X-ENVELOPE-SENDER:X-SOURCE-IP:
+	 X-CLEAN:X-Fangmail-Anti-Spam-Filtered:X-Fangmail-MID-QID;
+	bh=zLeBDeQcVR5Q0Jv6hH+HoARVZwuyEL/ztbGvicGzjrg=;
+	b=t90ZjwwYti1rh/ODAbfwd1CDlq2XcG+jOaNDq5sI6AmgESAC5BQlEXflp7C/nObiQeta
+	 LAM0eNl21zqHGX03IvTtd6JzaOxmzjIAw9/e7PAvWFVyTpXNaUFXO+Jh6aFzx5N3AyD2q
+	 VYbUL+fFOaPISpDnOUjILv9LSc2in0XLZTzbZig5AFLN4wNVzt4Kh8QBIVZumrm6MH+Ie
+	 dDUhCERiNfBqvl8N6CldBf8+dawY99Iztqgo4ODXPY0mToV6zBWjtSn8DtQqKDImNPcxl
+	 d95UyTAEvdyrUtaEIHVhhDzsEA66fgmiD7I8EHg4binjP99wCRNGF7U+xRKe+Z69W6w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=zte.com.cn;
+	spf=pass smtp.mailfrom=zte.com.cn;
+	dkim=pass header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=OQLaxX+1;
+	arc=none smtp.remote-ip=160.30.148.35
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.35])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC87606A321;
-	Mon,  9 Nov 2026 15:57:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EBC87606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8DA60A2633;
+	Mon,  9 Nov 2026 15:58:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB8DA60A2633
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=icenowy.me header.i=@icenowy.me header.a=rsa-sha256 header.s=zmail2 header.b=Zqa/eYBR
-ARC-Seal: i=1; a=rsa-sha256; t=1794239816; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=OXNxm9K6TpVwKvnwPPPl3jqRoaY4ES0QKb2PPRjqXrNvo/HatRUvt4qGmFpc5pttihTZCVaFXzM5pGVjDONouhTDi5d/pWcX9RNfVrct0fShJ1r6uW/5odNwKbBZUwN6YuJKX4A1J9j1kBxXrEeJk+a/uEBAYlDLBlStE3ne4/A=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1794239816; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=9W5U9MRLdiGXEzabQcr7VS1i+v+HHL0WqrvbrIzGW3Q=; 
-	b=nnU3Az4/Y5XbPU0/MQjLSGBAmL1EhfPAp7cZ5niPHmOGRYMEB8GO2BSnUu8zEmpE4LrLmW5F+8ov9h3jmGKYPAXOL3B4qjcjtMSRj325WMZA5nQp8OIgLN1kRaCLgqF6GFjq2bJvn1HWTVvWt+YSaaXN3GaapTbqvfJN5DNlQI4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=icenowy.me;
-	spf=pass  smtp.mailfrom=uwu@icenowy.me;
-	dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: a=rsa-sha256; b=Zqa/eYBRCDEfDOpFZ8B1SiZUoIS3Zl/4EULbz297rAQxidxQ2K97RoraPZkLwgt4tNZNbE33NQzosO16k++uFvpB/syXvt5Z0G2GN39ByiIhCKv7DWoQrshTsvbEMDNDGjIeEM6WpalH/dZhiLiJyTUtZW0TRVFE+Xtjd5BnZRVSh2Bfpc3EOXGHsFV9Jh1xk5beAANh0ahnZlj4q8UyZ1JsYPOdZ5ihf6BvUDCmtMXYuN02nI0KqX1ga/8Ii6k9iEkBuLdbJlYy87VukmEtGzhSGRZgIy3HmBfBSlgU9xyx6lEZLvB9JO4iI8Cz7n5OyTmqD7nKwjRgl3dt14V2ww==; c=relaxed/relaxed; s=zmail2; d=icenowy.me; v=1; bh=9W5U9MRLdiGXEzabQcr7VS1i+v+HHL0WqrvbrIzGW3Q=; h=Content-Description:Content-ID:Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:List-Subscribe:List-Post:List-Owner:List-Id:List-Archive:List-Help:List-Unsubscribe:MIME-Version:Message-ID:Resent-Sender:Resent-Cc:Resent-Date:Resent-To:Reply-To:Resent-Message-ID:Resent-From:Sender:Subject:To:Date:From:Message-Id:Reply-To:Subject:To:Cc;
-Received: by smtp.zohomail.com with SMTPS id 179423981483454.124000191802565;
-	Mon, 9 Nov 2026 07:56:54 -0800 (PST)
-Message-ID: <ce886c3a5bf5af34df5c1ac3fefbd86a8f0567ff.camel@icenowy.me>
-Subject: Re: [PATCH v9 1/4] riscv: cpufeature: Introduce ISA bases bitmap
- and rva23u64 detection
-From: Icenowy Zheng <uwu@icenowy.me>
-To: Guodong Xu <guodong.xu@oss.qualcomm.com>, Jonathan Corbet
- <corbet@lwn.net>,  Shuah Khan <skhan@linuxfoundation.org>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt	 <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Alexandre Ghiti	 <alex@ghiti.fr>, Randy Dunlap
- <rdunlap@infradead.org>, Radim Krcmar	 <rkrcmar@qti.qualcomm.com>
-Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
- Conor Dooley <conor@kernel.org>, linux-kselftest@vger.kernel.org, Andy Chiu
- <tchiu@tenstorrent.com>,  Florian Weimer <fweimer@redhat.com>, Peter
- Bergner <bergner@oss.tenstorrent.com>, Zihong Yao	
- <zihong.plct@isrc.iscas.ac.cn>, Mark Harris <mark.hsj@gmail.com>, Aurelien
- Jarno <aurelien@aurel32.net>, Andrew Jones <andrew.jones@linux.dev>
-Date: Mon, 09 Nov 2026 23:56:47 +0800
-In-Reply-To: <20261109-rva23u64-hwprobe-v2-v9-1-ae846c5c7178@oss.qualcomm.com>
-References: 
-	<20261109-rva23u64-hwprobe-v2-v9-0-ae846c5c7178@oss.qualcomm.com>
-	 <20261109-rva23u64-hwprobe-v2-v9-1-ae846c5c7178@oss.qualcomm.com>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 
+	dkim=pass (2048-bit key, unprotected) header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=OQLaxX+1
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4jNZFN434Dz8Xrnw;
+	Mon, 09 Nov 2026 23:58:16 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zte.com.cn;
+	s=z202610; t=1794239896;
+	bh=ZD5Vz0dYdMHAoRn66WdpVTqDsd56pq0fa4QdyoLKuG8=;
+	h=Date:From:To:Cc:Subject;
+	b=OQLaxX+11GbDnFLswRX/TE40XfrzbYOf4xISJ+RH0IThRMVMDvWrkDjjT0gKgnybs
+	 g2A6o0WJyqr2mAwKUC1BNxiVSZbbp/Ek1LJlvjIwkEN4AlbFdelVT+6VfWVFIrCOAO
+	 M1OdKNDDFUK/015H3s2R15hHvRD+E0fiy0+eq6pGo2M808nyiV+f0qFfoA4T9XaNoC
+	 VwXNvfV8HdzX0vPlbKS02H4JOzUQgIVVu6GsJ8HGqC+4xzdOkHylhvNQCshUBU+xVc
+	 8Rc+RfC8ECiIWq2q4xm8c4wKyFvy412h9hf5ucdVDBgVIXH1zB33sRQlRYluFfQNsj
+	 wQZ2rEzohr8Xw==
+Received: from xaxapp05.zte.com.cn ([10.99.98.109])
+	by mse-fl1.zte.com.cn with SMTP id 6A9Fw961036738;
+	Mon, 9 Nov 2026 23:58:09 +0800 (+08)
+	(envelope-from shao.mingyin@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+	by mapi (Zmail) with MAPI id mid32;
+	Mon, 9 Nov 2026 23:58:13 +0800 (CST)
+X-Zmail-TransId: 2af96af1ed95a12-a17af
+X-Mailer: Zmail v1.0
+Message-ID: <202611092358134332uegNg75loROSwL53Em6A@zte.com.cn>
+Date: Mon, 9 Nov 2026 23:58:13 +0800 (CST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,260 +69,283 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-X-ZohoMailClient: External
+Mime-Version: 1.0
+From: <shao.mingyin@zte.com.cn>
+To: <tom.leiming@gmail.com>, <shuah@kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBzZWxmdGVzdHM6IHVibGs6IHByb3BhZ2F0ZSByZWNvdmVyeSB3b3JrZXIgZmFpbHVyZXM=?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl1.zte.com.cn 6A9Fw961036738
+X-TLS: YES
+X-ENVELOPE-SENDER: shao.mingyin@zte.com.cn
+X-SOURCE-IP: 10.5.228.132 unknown Mon, 09 Nov 2026 23:58:16 +0800
+X-CLEAN: YES
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6AF1ED98.001/4jNZFN434Dz8Xrnw
 
-=E5=9C=A8 2026-11-09=E4=B8=80=E7=9A=84 07:47 -0500=EF=BC=8CGuodong Xu=E5=86=
-=99=E9=81=93=EF=BC=9A
-> Introduce a per-hart and host-wide bitmap of conformant ISA "bases"
-> (named profile-class sets such as IMA and RVA23U64), computed at init
-> time by riscv_init_isa_bases().
->=20
-> The IMA base is set unconditionally: it is behavior the kernel always
-> provides, and is intentionally not derived from the I, M and A
-> extensions.
->=20
-> Register riscv_init_isa_bases() as an arch_initcall. That is late
-> enough that core_initcall(tagged_addr_init) has probed senvcfg.PMM
-> and
-> populated have_user_pmlen_*; without that ordering,
-> riscv_have_user_pmlen(7) would still return its default false and the
-> RVA23U64 detection path would always bail. It is also early enough
-> that
-> arch_initcall_sync(init_hwprobe_vdso_data) finds the bases populated
-> when it snapshots the hwprobe values into the vDSO data page.
->=20
-> Consider this as the cache that subsequent consumers (hwprobe's
-> RVA23U64 base behavior bit, /proc/cpuinfo's "isa bases" lines, etc.)
-> can read without recomputing, which keeps them consistent with
-> each other.
->=20
-> Co-developed-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-> Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-> Signed-off-by: Guodong Xu <guodong.xu@oss.qualcomm.com>
-> ---
-> v9: Set the IMA base unconditionally; do not derive it from I, M and
-> A.
-> v8: Add Co-developed-by for Andrew Jones (Conor).
-> v7:
-> - Register riscv_init_isa_bases() at arch_initcall, ahead of the vDSO
-> =C2=A0 hwprobe snapshot at arch_initcall_sync; v6 returned 0 for
-> =C2=A0 RISCV_HWPROBE_KEY_BASE_BEHAVIOR through the vDSO.
-> - Keep riscv_isa_bases static; add riscv_isa_base_available().
-> v6: No change.
-> v5: No change.
-> v4:
-> - In riscv_set_isa_base(), reorder those __setbit(RISCV_ISA_EXT_X,m)
-> =C2=A0 lines to make them conform to the order they appear in the RVA23
-> 1.0
-> =C2=A0 Profile.
-> v3:
-> - Add a blank line before the subsys_initcall() registration
-> (Andrew).
-> - Set the local ext_mask with __set_bit() and test the mandate set
-> with
-> =C2=A0 !bitmap_subset() (Sashiko).
-> - Require the Zic64b ISA extension in the RVA23U64 mask,
-> =C2=A0 instead of open-coded cache block-size check. (New, thoughts from
-> Andrew)
-> v2:
-> - Implement riscv_init_isa_bases() that runs at system init time,
-> =C2=A0 after tagged_addr_init() populates have_user_pmlen_*.
-> - Split RVA23S64 placeholder into a future patch.
-> ---
-> =C2=A0arch/riscv/include/asm/cpufeature.h |=C2=A0 13 +++++
-> =C2=A0arch/riscv/kernel/cpufeature.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 109
-> ++++++++++++++++++++++++++++++++++++
-> =C2=A02 files changed, 122 insertions(+)
->=20
-> diff --git a/arch/riscv/include/asm/cpufeature.h
-> b/arch/riscv/include/asm/cpufeature.h
-> index 99799cc6c198..2ce1a1e212c9 100644
-> --- a/arch/riscv/include/asm/cpufeature.h
-> +++ b/arch/riscv/include/asm/cpufeature.h
-> @@ -25,8 +25,20 @@ struct riscv_cpuinfo {
-> =C2=A0	unsigned long mimpid;
-> =C2=A0};
-> =C2=A0
-> +enum {
-> +	RISCV_ISA_BASE_IMA,
+From: Shao Mingyin <shao.mingyin@zte.com.cn>
 
-I may have missed something, but would it be worth to add a GC tier?
+The recovery tests update ERR_CODE in background subshells and use wait
+without PIDs. A worker can report a failure while the parent still prints
+PASS and exits with zero. Calling _show_result() from a failed worker also
+removes shared backing files while other workers may still be using them.
 
-I think many Linux distros have GC defined as their baseline.
+Wait for each recorded worker PID and aggregate its status in the parent,
+keeping failures ahead of skips and preserving errors across batches.
+Return worker and device-creation errors without reporting or cleaning up
+from the child, so the parent can finish waiting before shared cleanup.
 
-Thanks,
-Icenowy
+Fixes: 57e13a2e8cd2 ("selftests: ublk: support user recovery")
+Fixes: 533c87e2ed74 ("selftests: ublk: add test for UBLK_F_QUIESCE")
+Fixes: 63276182c513 ("selftests: ublk: add user copy test cases")
+Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
+---
+Tested on native x86_64 Bash 5.2 with the recovery scripts and common
+helpers from the unpatched and patched trees. Device and I/O operations
+were replaced by test-only stubs. Single-worker failures at every launch
+position, multiple failures, skips, signal termination and device-creation
+errors no longer produce a final PASS or a zero exit status. Successful
+runs still pass, and cleanup follows all worker exits. Prerequisite skips
+still exit before preparation. The 71 scenarios passed their expected
+checks on each tree. This does not exercise real ublk devices or I/O.
 
-> +	RISCV_ISA_BASE_RVA23U64,
-> +	RISCV_NR_ISA_BASES,
-> +};
-> +
-> +/**
-> + * struct riscv_isainfo - per-hart ISA state
-> + * @isa: bitmap of ISA extensions this hart implements
-> + * @isa_bases: bitmap of profile bases this hart conforms to
-> + */
-> =C2=A0struct riscv_isainfo {
-> =C2=A0	DECLARE_BITMAP(isa, RISCV_ISA_EXT_MAX);
-> +	DECLARE_BITMAP(isa_bases, RISCV_NR_ISA_BASES);
-> =C2=A0};
-> =C2=A0
-> =C2=A0DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
-> @@ -134,6 +146,7 @@ extern const size_t riscv_isa_ext_count;
-> =C2=A0extern bool riscv_isa_fallback;
-> =C2=A0
-> =C2=A0unsigned long riscv_isa_extension_base(const unsigned long
-> *isa_bitmap);
-> +bool riscv_isa_base_available(const unsigned long *isa_bases,
-> unsigned int base);
-> =C2=A0static __always_inline bool riscv_cpu_has_extension_likely(int cpu,
-> const unsigned long ext)
-> =C2=A0{
-> =C2=A0	compiletime_assert(ext < RISCV_ISA_EXT_MAX, "ext must be <
-> RISCV_ISA_EXT_MAX");
-> diff --git a/arch/riscv/kernel/cpufeature.c
-> b/arch/riscv/kernel/cpufeature.c
-> index 72bce616491f..0377fc148785 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -41,6 +41,9 @@ unsigned long elf_hwcap __read_mostly;
-> =C2=A0/* Host ISA bitmap */
-> =C2=A0DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
-> =C2=A0
-> +/* Host ISA bases bitmap */
-> +static DECLARE_BITMAP(riscv_isa_bases, RISCV_NR_ISA_BASES)
-> __read_mostly;
-> +
-> =C2=A0/* Per-cpu ISA extensions. */
-> =C2=A0struct riscv_isainfo hart_isa[NR_CPUS];
-> =C2=A0
-> @@ -81,6 +84,26 @@ bool __riscv_isa_extension_available(const
-> unsigned long *isa_bitmap, unsigned i
-> =C2=A0}
-> =C2=A0EXPORT_SYMBOL_GPL(__riscv_isa_extension_available);
-> =C2=A0
-> +/**
-> + * riscv_isa_base_available() - Check whether a given ISA base is
-> + * available or not
-> + *
-> + * @isa_bases: ISA bases bitmap to use
-> + * @base: bit position of the desired ISA base
-> + * Return: true or false
-> + *
-> + * NOTE: If isa_bases is NULL then the host ISA bases bitmap will be
-> used.
-> + */
-> +bool riscv_isa_base_available(const unsigned long *isa_bases,
-> unsigned int base)
-> +{
-> +	const unsigned long *bmap =3D isa_bases ? isa_bases :
-> riscv_isa_bases;
-> +
-> +	if (base >=3D RISCV_NR_ISA_BASES)
-> +		return false;
-> +
-> +	return test_bit(base, bmap);
-> +}
-> +
-> =C2=A0static int riscv_ext_f_depends(const struct riscv_isa_ext_data
-> *data,
-> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const unsigned long *isa_bi=
-tmap)
-> =C2=A0{
-> @@ -1406,3 +1429,89 @@ void __init_or_module
-> riscv_cpufeature_patch_func(struct alt_entry *begin,
-> =C2=A0	if (early)
-> =C2=A0		local_flush_icache_all();
-> =C2=A0}
-> +
-> +/*
-> + * Compute the set of bases a hart conforms to. Profile bases such
-> as
-> + * RVA23U64 are derived from its resolved ISA bitmap.
-> + *
-> + * If @isa_bitmap is NULL, the host ISA bitmap (the AND across all
-> harts) is
-> + * used.
-> + */
-> +static void riscv_set_isa_bases(unsigned long *bases, const unsigned
-> long *isa_bitmap)
-> +{
-> +	const unsigned long *isa =3D isa_bitmap ? isa_bitmap :
-> riscv_isa;
-> +	DECLARE_BITMAP(ext_mask, RISCV_ISA_EXT_MAX) =3D { 0 };
-> +
-> +	/* The IMA base is behavior the kernel always provides. */
-> +	set_bit(RISCV_ISA_BASE_IMA, bases);
-> +
-> +	/* RVA23U64 */
-> +
-> +	/* Supm with PMLEN=3D7 */
-> +	if (!riscv_have_user_pmlen(7))
-> +		return;
-> +
-> +	__set_bit(RISCV_ISA_EXT_I, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_M, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_A, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_F, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_D, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_C, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_B, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICSR, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICNTR, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZIHPM, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICCIF, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICCRSE, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICCAMOA, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICCLSM, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZA64RS, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZIHINTPAUSE, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZIC64B, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICBOM, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICBOP, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICBOZ, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZFHMIN, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZKT, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_V, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZVFHMIN, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZVBB, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZVKT, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZIHINTNTL, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZICOND, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZIMOP, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZCMOP, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZCB, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZFA, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_ZAWRS, ext_mask);
-> +	__set_bit(RISCV_ISA_EXT_SUPM, ext_mask);
-> +
-> +	if (!bitmap_subset(ext_mask, isa, RISCV_ISA_EXT_MAX))
-> +		return;
-> +
-> +	set_bit(RISCV_ISA_BASE_RVA23U64, bases);
-> +}
-> +
-> +/*
-> + * Populate the host ISA bases bitmap (riscv_isa_bases) and each
-> + * hart's per-cpu isa_bases.
-> + */
-> +static int __init riscv_init_isa_bases(void)
-> +{
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu)
-> +		riscv_set_isa_bases(hart_isa[cpu].isa_bases,
-> hart_isa[cpu].isa);
-> +
-> +	riscv_set_isa_bases(riscv_isa_bases, NULL);
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Registered as arch_initcall: late enough that
-> + * core_initcall(tagged_addr_init) has populated have_user_pmlen_*,
-> + * and early enough that arch_initcall_sync(init_hwprobe_vdso_data)
-> + * finds the ISA bases populated when it snapshots the hwprobe
-> + * values into the vDSO data page.
-> + */
-> +arch_initcall(riscv_init_isa_bases);
+ tools/testing/selftests/ublk/test_common.sh   | 23 +++++++++++++++++--
+ .../testing/selftests/ublk/test_recover_01.sh | 20 ++++++++++++----
+ .../testing/selftests/ublk/test_recover_02.sh | 20 ++++++++++++----
+ .../testing/selftests/ublk/test_recover_03.sh | 20 ++++++++++++----
+ .../testing/selftests/ublk/test_recover_04.sh | 14 ++++++++---
+ 5 files changed, 80 insertions(+), 17 deletions(-)
+
+diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
+index af2ea4fa1..c5adb4d29 100755
+--- a/tools/testing/selftests/ublk/test_common.sh
++++ b/tools/testing/selftests/ublk/test_common.sh
+@@ -379,6 +379,26 @@ run_io_and_kill_daemon()
+ 	fi
+ }
+ 
++# Collect recovery workers in the parent before removing shared backing files.
++_wait_recovery_tests()
++{
++	local pid
++	local ret
++
++	for pid in "$@"; do
++		if wait "$pid"; then
++			continue
++		else
++			ret=$?
++		fi
++
++		# A failure takes precedence over a skipped worker.
++		if [ "$ERR_CODE" -eq 0 ] || [ "$ERR_CODE" -eq "$UBLK_SKIP_CODE" ]; then
++			ERR_CODE=$ret
++		fi
++	done
++}
++
+ run_io_and_recover()
+ {
+ 	local size=$1
+@@ -387,8 +407,7 @@ run_io_and_recover()
+ 	local dev_id
+ 
+ 	shift 2
+-	dev_id=$(_add_ublk_dev "$@")
+-	_check_add_dev "$TID" $?
++	dev_id=$(_add_ublk_dev "$@") || return $?
+ 
+ 	fio --name=job1 --filename=/dev/ublkb"${dev_id}" --ioengine=libaio \
+ 		--rw=randread --iodepth=256 --size="${size}" --numjobs=4 \
+diff --git a/tools/testing/selftests/ublk/test_recover_01.sh b/tools/testing/selftests/ublk/test_recover_01.sh
+index 1cddc2345..950928abd 100755
+--- a/tools/testing/selftests/ublk/test_recover_01.sh
++++ b/tools/testing/selftests/ublk/test_recover_01.sh
+@@ -11,8 +11,8 @@ ublk_run_recover_test()
+ 	ERR_CODE=$?
+ 	if [ ${ERR_CODE} -ne 0 ]; then
+ 		echo "$TID failure: $*"
+-		_show_result $TID $ERR_CODE
+ 	fi
++	return "$ERR_CODE"
+ }
+ 
+ if ! _have_program fio; then
+@@ -25,20 +25,32 @@ _create_backfile 0 256M
+ _create_backfile 1 128M
+ _create_backfile 2 128M
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 -b &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 -b "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 -b "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 -i 1 &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 -i 1 "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
+ _cleanup_test
+ _show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_recover_02.sh b/tools/testing/selftests/ublk/test_recover_02.sh
+index 9c3f48188..beeeb3535 100755
+--- a/tools/testing/selftests/ublk/test_recover_02.sh
++++ b/tools/testing/selftests/ublk/test_recover_02.sh
+@@ -11,8 +11,8 @@ ublk_run_recover_test()
+ 	ERR_CODE=$?
+ 	if [ ${ERR_CODE} -ne 0 ]; then
+ 		echo "$TID failure: $*"
+-		_show_result $TID $ERR_CODE
+ 	fi
++	return "$ERR_CODE"
+ }
+ 
+ if ! _have_program fio; then
+@@ -29,20 +29,32 @@ _create_backfile 0 256M
+ _create_backfile 1 128M
+ _create_backfile 2 128M
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 -z -b &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 -z -b "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 -z -b "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 -z &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 -z "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 -z "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 -z -i 1 &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 -z -i 1 "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 -z -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
+ _cleanup_test
+ _show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_recover_03.sh b/tools/testing/selftests/ublk/test_recover_03.sh
+index 92f401217..0c6b312e2 100755
+--- a/tools/testing/selftests/ublk/test_recover_03.sh
++++ b/tools/testing/selftests/ublk/test_recover_03.sh
+@@ -11,8 +11,8 @@ ublk_run_quiesce_recover()
+ 	ERR_CODE=$?
+ 	if [ ${ERR_CODE} -ne 0 ]; then
+ 		echo "$TID failure: $*"
+-		_show_result $TID $ERR_CODE
+ 	fi
++	return "$ERR_CODE"
+ }
+ 
+ if ! _have_feature "QUIESCE"; then
+@@ -29,20 +29,32 @@ _create_backfile 0 256M
+ _create_backfile 1 128M
+ _create_backfile 2 128M
+ 
++pids=()
+ ublk_run_quiesce_recover -t null -q 2 -r 1 -b &
++pids+=("$!")
+ ublk_run_quiesce_recover -t loop -q 2 -r 1 -b "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_quiesce_recover -t stripe -q 2 -r 1 -b "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
++pids=()
+ ublk_run_quiesce_recover -t null -q 2 -r 1 &
++pids+=("$!")
+ ublk_run_quiesce_recover -t loop -q 2 -r 1 "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_quiesce_recover -t stripe -q 2 -r 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
++pids=()
+ ublk_run_quiesce_recover -t null -q 2 -r 1 -i 1 &
++pids+=("$!")
+ ublk_run_quiesce_recover -t loop -q 2 -r 1 -i 1 "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_quiesce_recover -t stripe -q 2 -r 1 -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
+ _cleanup_test
+ _show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_recover_04.sh b/tools/testing/selftests/ublk/test_recover_04.sh
+index 4c83c1840..232ae7d4a 100755
+--- a/tools/testing/selftests/ublk/test_recover_04.sh
++++ b/tools/testing/selftests/ublk/test_recover_04.sh
+@@ -11,8 +11,8 @@ ublk_run_recover_test()
+ 	ERR_CODE=$?
+ 	if [ ${ERR_CODE} -ne 0 ]; then
+ 		echo "$TID failure: $*"
+-		_show_result $TID $ERR_CODE
+ 	fi
++	return "$ERR_CODE"
+ }
+ 
+ if ! _have_program fio; then
+@@ -25,15 +25,23 @@ _create_backfile 0 256M
+ _create_backfile 1 128M
+ _create_backfile 2 128M
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 -u &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 -u "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 -u "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
++pids=()
+ ublk_run_recover_test -t null -q 2 -r 1 -u -i 1 &
++pids+=("$!")
+ ublk_run_recover_test -t loop -q 2 -r 1 -u -i 1 "${UBLK_BACKFILES[0]}" &
++pids+=("$!")
+ ublk_run_recover_test -t stripe -q 2 -r 1 -u -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+-wait
++pids+=("$!")
++_wait_recovery_tests "${pids[@]}"
+ 
+ _cleanup_test
+ _show_result $TID $ERR_CODE
