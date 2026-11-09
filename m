@@ -1,79 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.105
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794214199;
-	b=guzkoP7/LMtFV3TVioJl8YUrcwhXN6s0bB10Oav1aLowjURG4s/3Yqk0W1OxDB8zu0z4
-	 BpIP6RZdMkmGGSgph3Wm0yBFK5hQQFUjeQDlhJbPvW7eiWWjdEFerJdhopA/tTgTZMtKy
-	 EO9+HYFq9KLHWbZfMYJO8nKRYjiOk1Y108BMrDdsPk0HwpBIwaI9vYeR7oVdilKglXyuV
-	 +nBWcmKHhVSA4+jJjTK/klpZfbUuRqKw2l9a4bgGx+rsaspxQS1cQASSTUtksHZK8DMW8
-	 MySai+m23niziK4VZ6MA3P03aZDdVXN0BsdojiZA7l5/pTGD2w8cxxGZdz6e+JwrikA==
+	t=1794215320;
+	b=iKYgBAnd9So4njozrTl0zeboLgQMIMSAUqCL+LvbaBgpLev28WkrdadOGKAEGq0AHFId
+	 X/wonTK1NNc9HuenkaFE/wJmkQgLViJX7cwd6DA4Xs5+kVvWqUgDrWAkxhOpKKXF0UqfS
+	 NjCEoTFkcBwVwTxFO68lYLjh+NSAgr3+gjksajK/GnLEcFNaQEescSyDOQJ12K4AKhojz
+	 CPW/v5CrdgKzSWRSJKIxnbKF3Ek+q6sL6UEEu8BdiF/1WrgnI9jxkNd9zNHF3RrDM7l7b
+	 begWPSXvezQ/qH3D+S5ViHYXSc6J0m9F7Ap49PauYfd22JcfTWWaR6fNA53JsuA0Uuw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794214199;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=RKQQUYkySIuWXQVY7MpCGDxE52luhCcCeJyJckRYrE0=;
-	b=rY4PLeD+9QFajprm4sM54JII9U0bzSDZYvL00a4q4BjvF+vSojirwZ2CD2AoTWAicoGr
-	 YpFDgniC6SjLcEXcxnHpvEAHGLPo6GBoA5EjRF0/pP/YhfSNgKFD5+p6At/6FuzJ80xMs
-	 rxHfvocIaXgdeGM1S0Kgm092Uqtb+995VbIDpKPXZq6XY8Z+V45ReWiqOnxk9Ks2GQxSl
-	 q3/LjmignA0v9VXF68BBgLKM0ujb15r6ZhVLfUdMkJ8ur+GOKNi/opQ43np1FW3iWjJMk
-	 5ImuHv9nP29WozP8c98aeVayDS5L3DGy5v/blIl7uM9DvMHwFfR8VjQidDheWlVI+TQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794215320;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=asv+L+6XrSQhvTA+x8KlHG7bpla/glF8wUGDppGecfM=;
+	b=Qf0kjWiINDBb1YauY+ewdoUpgjoiQ9ePfLxkcR27zquRC50c+3qiMP1tVgvUa389o8o4
+	 dn/obf3wOumNODlrMLOVMa4vElmdBcx3wV5hp+XYLEunI9ha7DbbiL6LQTlcbhfRViGul
+	 WRwFcwf4gckNlWtWsj9SaSrrvH29o84u/mnE/LIgs94XUJchKcDeuzUGtmVH3TtBfKJlV
+	 T/9Y5QXmcO4rzjvgCSUejOYQkZ1r8ryoUsaVkITn6luaT3UzNPtTqmL5aOMS3z38KsZ3Q
+	 cyNk6bxT+FKxK8h4dKOcqXoiV0eurbS0Sykf6MU9QcoC+VyCpVImd3n5u5ZfHEGxzrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hAxNi3tI;
-	arc=none smtp.remote-ip=91.218.175.105
-Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E8A60A382E
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 08:49:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44E8A60A382E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Ozg8aZ+6;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAF7606A321;
+	Mon,  9 Nov 2026 09:08:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CAF7606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hAxNi3tI
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=pvY9wx5XSdLlCtF08ytiK5bki8t7g1hmkb8W5MfUPHI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794214197; v=1; x=1794818997;
- b=hAxNi3tIp7AiDzqFaKyNVmbI1VzG8WuBzzkfyaycbM86IAxwt+uFIY/JMjHvVG3jI5iM36Dt
- U64tZmbp6gN/ew7M0vYkHyBrKerYc+D1OTVBaKqxc0ZrFx5WcMmAEIETFuCwVKj7zRtQr1u+yNr
- 6DYqrdJKNsin+BEQTcJ4r6IM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 72df1d8da48c0203;
-	Mon, 09 Nov 2026 08:49:55 +0000
-X-Mizu-Trace-ID: 72df1d8da48c0203
-X-Migadu-Flow: FLOW_OUT
-From: Fuad Tabba <fuad.tabba@linux.dev>
-To: Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>
-Cc: Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	Quentin Perret <qperret@google.com>,
-	Fuad Tabba <tabba@google.com>,
-	kvmarm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 19/19] KVM: arm64: selftests: Check MOPS, PIE, POE and FPMR in a protected VM
-Date: Mon,  9 Nov 2026 08:48:54 +0000
-Message-ID: <20261109084854.840576-20-fuad.tabba@linux.dev>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261109084854.840576-1-fuad.tabba@linux.dev>
-References: <20261109084854.840576-1-fuad.tabba@linux.dev>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=Ozg8aZ+6
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 891F114BF;
+	Mon,  9 Nov 2026 01:08:35 -0800 (PST)
+Received: from [10.57.12.22] (unknown [10.57.12.22])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABB8E3F85F;
+	Mon,  9 Nov 2026 01:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1794215318; bh=b/Z8FOQeGGjUmR5j+LUi8n9Jv3kX2zKWVa4aDbKzjXE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Ozg8aZ+6ju7WL3UUHR16QwAhksplV/ASDDZW3dQr9NmR9+OrjSnwnB/YOwK6Sn6eT
+	 +kIEQtT4khd5vClwnlxABv+rMZ8rWsoTdj93yBRbD6f4dn+ZaVIkqT/uh+26cpQaZ/
+	 O1NXsHR5Qj7I7BU7NBsc33Kqv2YFefS6QtncQW+8=
+Message-ID: <bcb0bfcb-e359-4710-aa6f-8de032327d03@arm.com>
+Date: Mon, 9 Nov 2026 09:09:09 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,127 +53,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/6] powercap: dtpm: Use generic powercap hierarchy
+ helpers
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+Cc: Daniel Lezcano <daniel.lezcano@kernel.org>, rafael@kernel.org,
+ Heiko Stuebner <heiko@sntech.de>, Shuah Khan <shuah@kernel.org>,
+ Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kselftest@vger.kernel.org
+References: <cover.1793666444.git.daniel.lezcano@oss.qualcomm.com>
+ <bded992091c92baa7246b939f266297f99c8942b.1793666444.git.daniel.lezcano@oss.qualcomm.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <bded992091c92baa7246b939f266297f99c8942b.1793666444.git.daniel.lezcano@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-For each of MOPS, S1PIE, S1POE and FPMR that a protected VM's ID
-registers advertise, EL2 has to set up the HCRX_EL2 enables, the
-fine-grained traps and the context switch to match.
 
-Check from the guest that each feature works when its ID field is set
-and UNDEFs when it is clear. Working means the registers read back what
-the guest writes, and a SETP/SETM/SETE fill completes. At v7.4-rc1 pKVM
-advertises none of the four, so only the UNDEF cases run. Also check
-that ID_AA64PFR2_EL1, ID_AA64ISAR3_EL1 and ID_AA64MMFR3_EL1 expose
-nothing beyond the supported features, and that WFxT and the 128-bit
-System register features stay hidden.
 
-Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
----
- .../selftests/kvm/arm64/pkvm_id_regs.c        | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
+On 11/3/26 04:48, Daniel Lezcano wrote:
+> DTPM implements its own hierarchy creation and destruction logic while
+> the powercap core now provides generic helpers for this purpose.
+> 
+> Convert DTPM to use the generic powercap hierarchy infrastructure.
+> Duplicate the platform hierarchy before creating it, and use
+> powercap_hierarchy_create() and powercap_hierarchy_destroy() to manage
+> the DTPM zones.
+> 
+> Add DTPM callbacks to create and destroy the zones associated with each
+> powercap hierarchy node. Adapt the CPU and devfreq backends to return
+> the created DTPM instance and use the node name provided by the
+> hierarchy.
+> 
+> Convert the Rockchip RK3399 description to struct powercap_hierarchy
+> and keep the device tree path as DTPM-specific node data.
+> 
+> This removes the DTPM-specific hierarchy traversal and destruction code
+> and leaves the hierarchy management to the powercap core.
+> 
+> Preserve best-effort creation: an unavailable backend returns NULL to
+> skip its branch, and setup failures are warned about and skipped rather
+> than rolling back independent zones. Invalid node descriptors remain
+> fatal. Reject a DT node with a NULL path before calling
+> of_find_node_by_path(), treating it as an invalid descriptor rather
+> than an unavailable backend.
+> 
+> When the representative CPU is offline, find an active policy through an
+> online sibling whose related_cpus mask contains it. Hold the CPU hotplug
+> read lock during selection and setup, and initialize the zone through the
+> policy's active CPU while keeping the hierarchy-provided name. An entirely
+> offline policy still has no active CPU to initialize through.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
+> ---
+> Changes in v5 (since v4):
+> - Reject a NULL DT node path with -EINVAL before invoking
+>    dtpm_setup_dt(), as suggested by Lukasz Luba.
+> - Document that a missing path is an invalid hierarchy descriptor.
+> 
+> Changes in v4 (since v3):
+> - Rebase on v7.3; no code or commit-description changes.
+> 
+> Changes in v3 (since v2):
+> - Rebase on v7.3-rc7.
+> - Preserve best-effort branch creation using the generic NULL result.
+> - Find an online policy sibling for offline CPU representatives and
+>    protect policy selection and setup against CPU hotplug.
+> - Keep generic API behavior and documentation in patch 1.
+> - Fix __initdata placement; match-table indentation is handled in patch 3.
+> - Name setup callback arguments and remove whitespace-only lines.
+> - Update the description.
+> 
+>   drivers/powercap/dtpm.c         | 180 +++++++++++++++-----------------
+>   drivers/powercap/dtpm_cpu.c     |  62 ++++++++---
+>   drivers/powercap/dtpm_devfreq.c |  22 ++--
+>   drivers/soc/rockchip/dtpm.c     |  67 +++++++++---
+>   include/linux/dtpm.h            |   6 +-
+>   5 files changed, 198 insertions(+), 139 deletions(-)
+> 
 
-diff --git a/tools/testing/selftests/kvm/arm64/pkvm_id_regs.c b/tools/testing/selftests/kvm/arm64/pkvm_id_regs.c
-index 93ed557a30bc6..7a8367af3e009 100644
---- a/tools/testing/selftests/kvm/arm64/pkvm_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/pkvm_id_regs.c
-@@ -33,6 +33,11 @@
- #define DBGBCR_VAL	((0xfUL << 5) | (1UL << 1))
- #define DBGWCR_VAL	((0xffUL << 5) | (3UL << 3) | (1UL << 1))
- 
-+/* Allocated encodings only: a reserved one reads back UNKNOWN. */
-+#define PIR_PATTERN	0xeca87653210eca87UL
-+#define POR_PATTERN	0x76543210UL
-+#define FPMR_PATTERN	0x2a5a55c000UL
-+
- extern unsigned char brk_insn;
- 
- static volatile bool undef_seen;
-@@ -132,6 +137,20 @@ static void assert_id_regs(void)
- 	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64ISAR2_EL1) &
- 			(ID_AA64ISAR2_EL1_APA3_MASK | ID_AA64ISAR2_EL1_GPA3_MASK), 0);
- 
-+	/* WFxT and the 128-bit System register and instruction features are hidden. */
-+	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64ISAR2_EL1) &
-+			(ID_AA64ISAR2_EL1_WFxT_MASK | ID_AA64ISAR2_EL1_SYSREG_128_MASK |
-+			 ID_AA64ISAR2_EL1_SYSINSTR_128_MASK), 0);
-+
-+	/* Of these registers, only the fields of the features pKVM supports can be set. */
-+	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64PFR2_EL1) & ~ID_AA64PFR2_EL1_FPMR_MASK, 0);
-+	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64ISAR3_EL1) &
-+			~(ID_AA64ISAR3_EL1_FPRCVT_MASK | ID_AA64ISAR3_EL1_LSFE_MASK |
-+			  ID_AA64ISAR3_EL1_FAMINMAX_MASK | ID_AA64ISAR3_EL1_LSUI_MASK), 0);
-+	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64MMFR3_EL1) &
-+			~(ID_AA64MMFR3_EL1_TCRX_MASK | ID_AA64MMFR3_EL1_SCTLRX_MASK |
-+			  ID_AA64MMFR3_EL1_S1PIE_MASK | ID_AA64MMFR3_EL1_S1POE_MASK), 0);
-+
- 	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64DFR1_EL1), 0);
- 	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64AFR0_EL1), 0);
- 	GUEST_ASSERT_EQ(read_sysreg_s(SYS_ID_AA64AFR1_EL1), 0);
-@@ -217,6 +236,56 @@ static void assert_undef_regs(void)
- 	GUEST_ASSERT_UNDEF(asm volatile(".arch_extension sve\n rdvl x0, #1" : : : "x0"));
- }
- 
-+/* setp [x0]!, x1!, x2; setm; sete */
-+static void mops_set(void *dst, u64 len, u64 val)
-+{
-+	register void *d asm("x0") = dst;
-+	register u64 n asm("x1") = len;
-+	register u64 v asm("x2") = val;
-+
-+	asm volatile(".inst 0x19c20420\n\t.inst 0x19c24420\n\t.inst 0x19c28420"
-+		     : "+r"(d), "+r"(n) : "r"(v) : "cc", "memory");
-+}
-+
-+/* A feature's registers and instructions work when it's advertised and UNDEF when hidden. */
-+static void assert_feature_access(void)
-+{
-+	u64 mmfr3 = read_sysreg_s(SYS_ID_AA64MMFR3_EL1);
-+	u64 buf[4] = {};
-+	int i;
-+
-+	if (SYS_FIELD_GET(ID_AA64MMFR3_EL1, S1PIE, mmfr3)) {
-+		GUEST_ASSERT_RW(SYS_PIR_EL1, PIR_PATTERN);
-+		GUEST_ASSERT_RW(SYS_PIRE0_EL1, PIR_PATTERN);
-+	} else {
-+		GUEST_ASSERT_UNDEF((void)read_sysreg_s(SYS_PIR_EL1));
-+		GUEST_ASSERT_UNDEF((void)read_sysreg_s(SYS_PIRE0_EL1));
-+	}
-+
-+	if (SYS_FIELD_GET(ID_AA64MMFR3_EL1, S1POE, mmfr3)) {
-+		GUEST_ASSERT_RW(SYS_POR_EL1, POR_PATTERN);
-+		GUEST_ASSERT_RW(SYS_POR_EL0, POR_PATTERN);
-+	} else {
-+		GUEST_ASSERT_UNDEF((void)read_sysreg_s(SYS_POR_EL1));
-+		GUEST_ASSERT_UNDEF((void)read_sysreg_s(SYS_POR_EL0));
-+	}
-+
-+	if (SYS_FIELD_GET(ID_AA64PFR2_EL1, FPMR, read_sysreg_s(SYS_ID_AA64PFR2_EL1)))
-+		GUEST_ASSERT_RW(SYS_FPMR, FPMR_PATTERN);
-+	else
-+		GUEST_ASSERT_UNDEF((void)read_sysreg_s(SYS_FPMR));
-+
-+	if (SYS_FIELD_GET(ID_AA64ISAR2_EL1, MOPS, read_sysreg_s(SYS_ID_AA64ISAR2_EL1))) {
-+		undef_seen = false;
-+		mops_set(buf, sizeof(buf), 0x5a);
-+		GUEST_ASSERT(!undef_seen);
-+		for (i = 0; i < ARRAY_SIZE(buf); i++)
-+			GUEST_ASSERT_EQ(buf[i], 0x5a5a5a5a5a5a5a5aUL);
-+	} else {
-+		GUEST_ASSERT_UNDEF(mops_set(buf, sizeof(buf), 0x5a));
-+	}
-+}
-+
- static void assert_host_handled(void)
- {
- 	/* Host-handled registers reach the guest with no UNDEF. */
-@@ -236,6 +305,7 @@ static void guest_baseline(void)
- 	else
- 		assert_debug_raz_wi();
- 	assert_undef_regs();
-+	assert_feature_access();
- 	assert_host_handled();
- 
- 	asm volatile("brk_insn: brk #0");
--- 
-2.47.3
+Thank you Daniel for addressing that, LGTM
 
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
