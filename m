@@ -1,73 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794191712;
-	b=oWYYgY4wTy9Koo8kDomwNhTHgiXqBGDq4/RcbWIZ8l9wuy/Ed7q5ymcfBsLLzbt0q24L
-	 7L4OusxZWW7PTOgTkLdy5/C/hagUsGRteg4zmZ0wihzomqeAe6nCeFImc1cQJkVc/Amqk
-	 L+JzwZqC6soEDcRgu8g52tzbUCbW2nY/uuBejkCkC1bcCju5FbtNgQ6EyD5FLh3PUnWMm
-	 TJFFvt7u7vYt8gYgDjUa/u34vK4L39UcLYqwMGqzROBtoKjC6qKNtnC1EajSe5UfgXlSh
-	 GrM1hsN9iQsU6yOgy1DYyYDVj9KZna1UU7MlM2iIbUeWCk9JPj4l0gkXnX7Fb/Nuteg==
+	t=1794193715;
+	b=1mU3/29NL/jGtRp3ne7/KD4XIsns/xCLpk29e2Kjxu1ODO85Yhaoj7RjOMSJNYhqWVXN
+	 Z/vUxE25mlC9s5TrkS8wbrTBIOSLTZobCfY75XaDSBdC6ulccjOA1m3Xgh0UehnmFK+Eh
+	 GcJrLncIspt50GRzAJPfNucxCERSaYT21qkDjuk/DUTRZ9OCVqtAH6L9SSBYkSmHxu4hB
+	 DLv3mqXTaohh1J565D1xzl/kyHA/zvIUFf0jFhHZE1u8TgkKpcb8CVkR9k+OWclOv96za
+	 BdJD7Lhl8f2JStPM7m3jgzKjPpx91THSYGF2iOI9BP75OvBGgNX0MKewma4eM7DmhAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794191712;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=/ikAqP7gpdbBI+hdFB0vTPSMi3bWmtsaCXh9lO0ty1U=;
-	b=YtkxxoaYk5KLo5wSNIuc5mDJOaxyvh1RCBArMAash/anFrIDykHOUebBYNo7Rxbt8E0u
-	 cQW/y95HH8v/6Hfp4wWBgZmfn0SeKQNzkWrJcx9ydFQ3Tw1hQc7GT3p//8Fy3E3ATIeYU
-	 EhJcln/+fUJ46PhIHyxA9pBUZpqx8IfN/AWao90FfNuNObZs4VVfNMguhmvhR4qvJ33Jp
-	 jGDoO2FZt9EyvjnrC6b7fnVx0fG+6j6nG1qHATISP3gw8gc5AksO+fy+ttBkk9ykCe3XR
-	 dgmOse9F7s7Gf6cFD8Y8D4jlSCLotdpg18FMxJ4mKGqUpUoHhbEsZUEPoxqcG2cVQJw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794193715;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=0sZDYHfCBUrE7G/AgueE+PrG6dEwDPLCmAlQ7vBMuvM=;
+	b=AFwm5D4vI6O+pMK5ys5G97G+JXy0JRfLFzEMgvplvIIECuL+Kw+GKW/W3i/oyXTeEfx1
+	 20AtIBBaNw35zdP/HtXIUb2rn116cHauM0lD4rgoZawag8kh8yLysLR0vVPm9e2vwKRFE
+	 sELylboUe+pu2b4/W5zPXlQWHZezVVaaNAqg19lGhGYH1HNWPnU9Bz6TzQ3BoAUlNo2J+
+	 OgGJbufI3Xh2Kb9xE8c9W/f0ePGXhiWmZQlBu5kgb1gv401sB3UDVqTDGMLgbq2SRYv7d
+	 aQ6l1WcGd0ZzwsiK4Fa4lKTgo+Qj6Eyi0esUPdUZ+GcxrLdaJAx5loWIQwTYrx/JSyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="M75aPf/F";
-	arc=none smtp.remote-ip=95.215.58.224
-Received: from mta1.migadu.com (out-224.mta1.migadu.com [95.215.58.224])
+	dmarc=pass header.from=networkplumber.org;
+	spf=pass smtp.mailfrom=networkplumber.org;
+	dkim=pass header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=pt7WhZXe;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913D7606A33C
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 02:35:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 913D7606A33C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52864606A337
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 03:08:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52864606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=M75aPf/F
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=psUKZVZC7okDpUhR+qBHZvo0Vd9UtjuNKUs9HwCN5Cc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794191709; v=1; x=1794796509;
- b=M75aPf/FXyCfS/8MBflmk0QpORPYRN6M4MksV8HldOSW/4cycR8VsEgQ8QnBVA4jvK3L5Dxk
- jSzmhfyvXHJ4ZVofXVaXCrOCxNB5TFvQYHgrZXKkBncBM5Oh8laRz936jLwoHC0gETmNWY0c+qc
- ZMvPD8UjNP8ZMEkG71bz3NGM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id e7a58ce54b55df96;
-	Mon, 09 Nov 2026 02:35:07 +0000
-X-Mizu-Trace-ID: e7a58ce54b55df96
-X-Migadu-Flow: FLOW_OUT
-Date: Mon, 9 Nov 2026 10:34:53 +0800
-From: "Xu Xin (vivo)" <xu.xin@linux.dev>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Stefan Roesch <shr@devkernel.io>, Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 5/5] selftests/mm: cover merging KSM pages aged by
- smart scan
-Message-ID: <avExTeM7wyb7PIa6@dgvxl46587.localhost.localdomain>
-References: <20261108-bug-mm-ksm-smart-scan-align-skips-v4-0-86be8fe77e7a@gmail.com>
- <20261108-bug-mm-ksm-smart-scan-align-skips-v4-5-86be8fe77e7a@gmail.com>
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=pt7WhZXe
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so240436a91.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 19:08:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20260707.gappssmtp.com; s=20260707; t=1794193714; x=1794798514; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0sZDYHfCBUrE7G/AgueE+PrG6dEwDPLCmAlQ7vBMuvM=;
+        b=pt7WhZXeywLb/bcQV2nL6QpkS6JEXGU1cssautcEf6mWoJC18Gr54ooaweb+t1ZFIE
+         ghCjULBymeJWwH+qHK0m1Spx+TGMO7fWA2VEegBq5iws/+OKiAROe4ChxlkcrC6TXsu7
+         WT97TK8qLmt/p895r9JSxv3Qdcu1UKN5ZdMtLrmiwjFTBHBNa29uUxZ1SUXJBuWNMrem
+         RXbIrgMJILoskHstKp8XhrNVuesrbsywHykYMIn3llw5DKc5SzjrQxZfDAE6Cz8XyXbl
+         ihhd2u7ePq5vCeNgxuVZd2bAObcHZa59CgKxl4MwoUuiC9m1mxyFHKyrMSC5UyvM1KFB
+         PHBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794193714; x=1794798514;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0sZDYHfCBUrE7G/AgueE+PrG6dEwDPLCmAlQ7vBMuvM=;
+        b=zVES96q+VOybge5iemEbBv7ulZlk3mCIruLWdVbVMwC9OeyNrdazjKSdrfkWB98WIg
+         yVm0dKWKDOBmlCt6HYKHwzr7ak7KDy9S8pO93hov4MRmfPAlQa5c+xV0PMJCH6psGwV2
+         Tgl5wZ69/djrPOk0evpg+hCYH0WZCp8/qN33IWZdmYTF3p27l+KN867N0xQsuScxi5IV
+         yfkTrrd2MOfTrl6jUeudMo3sQVLHsPQe8/akqMoyhc9JtYlNtOCEEsJ+Df5EIlXB9Q8F
+         QhfftTAM9KWMobZweK/Y5ieb9f4pVgse8zY8zzibMlxMaVcyj8g9ThD91ekYxyTIHn5A
+         WYOw==
+X-Forwarded-Encrypted: i=1; AL+hErG6HsFXZUuyoyUyI0LLMYc4ESXdAZlqo30zCCIkA8r8AQL/IrPfFIMaMuS9y2SIQeQcz/M0GPjnuywHyrJUa60=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+hzqwmYc5MjQOanaRoPsu9QdXgiQXJF9I771QHPIJdsY+abqOW
+	QWeI9WZhvrm2ZTEERtVmCYgYTjEkXSa/1L1g6KtqplbpVbluyPFFX/VCz7KbyvLOers=
+X-Gm-Gg: AYBFou2DYFcUmwfengNluUVoqhWxacasB7VO8CnSDgxKq/BqtRSkJPzfGDpWXQXf7Fn
+	L2+G8Pd3r2aGuCByHh0L9T4CvfP83jGxrGXHkoBUtKWrQaswxhEnsW4XZphIVP+WPOy+xtwDx/s
+	OoSDiH7qsDhns5ldy7VQcK5KdL+Izh26xutU/K9Bf2ljwgelMvEQ0ZCKlYO2JcD0qQ7koiFRw+o
+	PnZTVjuhGeqVRJrtCuMBYzkuFcgYei8ZXjT14otFy9g10ExeSuXmBbI5XY1Uer+foBQJuM4RrB1
+	CvMWw3YkME/Kk8qnFtbneSprFGFKqg8ABOi+bGTQhmDL4nImRqZS6/3/HR3NV12AfET73VNZ852
+	6JsUCSOuowu64QsUF7WgmzMmknYg2Ydoq0rCvOlcIGPPvL2mlMfA0PTU3RGG2e28POZmcco8Awz
+	nHpfqv1hsf6olj9EOP0eUydlV/eBmoMFy8jO7sfxZl9oaEQ4vwa/fUu3ZAwk3nC3IVjiQZVWxxn
+	qkEHiceFYWp52JwyrSGd5pYpguyveUIbSoHXZ0NbsdH6OKqsY1WGXe3jom+2KGkYblWexUUIC71
+	mbebjf6r1ML8PdeyK9pMHVg/JYoi5+bAcFDnPnRL90WMQQeevpfq6WcovWNeIjWTpKxKZhRF
+X-Received: by 2002:a17:90b:2d87:b0:3a0:9c9d:eb18 with SMTP id 98e67ed59e1d1-3b12d479035mr2604915a91.54.1794193714581;
+        Sun, 08 Nov 2026 19:08:34 -0800 (PST)
+Received: from phoenix.local (204-195-112-43.wavecable.com. [204.195.112.43])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1032b8c55sm5027795a91.2.2026.11.08.19.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Nov 2026 19:08:33 -0800 (PST)
+Date: Sun, 8 Nov 2026 19:08:31 -0800
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Tianyi Gao <tianyi@cloudflare.com>, netdev@vger.kernel.org, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+ <edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon
+ Horman <horms@kernel.org>, David Keogh <dkeogh@amazon.com>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, David
+ Woodhouse <dwmw2@infradead.org>, Dragos Tatulea <dtatulea@nvidia.com>,
+ Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
+ <alasdair@mcwilliam.dev>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Magnus Karlsson <magnus.karlsson@intel.com>, David Ahern
+ <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, Alexei Starovoitov
+ <ast@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Donald Hunter
+ <donald.hunter@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Jonathan
+ Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+ <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Breno Leitao
+ <leitao@debian.org>, =?UTF-8?B?QXNiasO4cm4=?= Sloth =?UTF-8?B?VMO4bm5l?=
+ =?UTF-8?B?c2Vu?= <ast@fiberby.net>, Danielle Ratson <danieller@nvidia.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@cloudflare.com, nh-open-source@amazon.com
+Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
+ LL_ALLOC_SPACE()
+Message-ID: <20261108190831.3f991a13@phoenix.local>
+In-Reply-To: <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
+References: <cover.1794020868.git.tianyi@cloudflare.com>
+	<e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+	<willemdebruijn.kernel.1d64e7848503b@gmail.com>
+	<20261107182526.69543-1-tianyi@cloudflare.com>
+	<willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,216 +120,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261108-bug-mm-ksm-smart-scan-align-skips-v4-5-86be8fe77e7a@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 08, 2026 at 08:22:54PM -0500, Qiliang Yuan wrote:
-> ksm_functional_tests checks merging and unmerging with ksmd's default
-> settings, but nothing there exercises smart scan, which skips pages KSM
-> has failed to merge for a while.
-> 
-> Smart scan used to time those skips per page, so two identical pages
-> that became mergeable some scans apart could end up never being looked
-> at in the same scan, and were never merged. "mm/ksm: align smart scan
-> skips with the scan number" fixed that.
-> 
-> Add ksm_get_smart_scan() and ksm_set_smart_scan() to vm_util, and a
-> case that enables smart scan, lets sixteen unique pages age for a dozen
-> scans, then makes a duplicate of each mergeable one scan apart, and
-> expects every pair to be merged 32 scans later:
-> 
->   kernel               failures, two boots
->   before the fix       20/20, 20/20
->   with the fix          0/20,  0/20
-> 
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> Tested-by: Andrew Morton <akpm@linux-foundation.org>
-> Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
-> ---
->  tools/testing/selftests/mm/ksm_functional_tests.c | 89 ++++++++++++++++++++++-
->  tools/testing/selftests/mm/vm_util.c              | 36 +++++++++
->  tools/testing/selftests/mm/vm_util.h              |  2 +
->  3 files changed, 126 insertions(+), 1 deletion(-)
+On Sun, 08 Nov 2026 10:13:03 -0500
+Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
 
-Reviewed-by: Xu Xin (vivo) <xu.xin@linux.dev>
+> Tianyi Gao wrote:
+> > On Sat, Nov 07, 2026 at 09:51:07AM -0500, Willem de Bruijn wrote:  
+> > > Tianyi Gao wrote:  
+> > > > From: David Keogh <dkeogh@amazon.com>
+> > > >
+> > > > Add a tx_extra_headroom field to struct net_device for that purpose,  
+> > >
+> > > Main high level concern is just adding an extra field. What's next,
+> > > do we need to add a field extra_extra_headroom?  
+> > 
+> > Thanks for the review.
+> > 
+> > A user needs more room either in every packet or only in new skbs.
+> > needed_headroom covers the first case and tx_extra_headroom the
+> > second. I do not see a third case.
+> > 
+> > needed_headroom does not only set the headroom of new skbs. It is also
+> > the minimum that ip_finish_output2() and ip_forward() require of
+> > existing skbs. Raising it for new skbs also raises that minimum. With
+> > XDP on a veth peer and needed_headroom raised to 256, throughput drops
+> > by 2.8% to 5.8% for local TCP and by 4.0% to 20.8% for forwarded
+> > traffic. The cover letter has the detailed analysis. veth also cannot
+> > set needed_headroom from user space today.
+> > 
+> > pahole on x86_64 (defconfig, net/core/dev.o) shows that the field fills
+> > the 2-byte hole after needed_headroom, so struct net_device does not
+> > grow:
+> > 
+> > before:
+> > 	unsigned short             needed_headroom;      /*    60     2 */
+> > 	/* XXX 2 bytes hole, try to pack */
+> > 	/* size: 2688, cachelines: 42, members: 187 */
+> > 
+> > after:
+> > 	unsigned short             needed_headroom;      /*    60     2 */
+> > 	unsigned short             tx_extra_headroom;    /*    62     2 */
+> > 	/* size: 2688, cachelines: 42, members: 188 */  
+> 
+> Thanks.
+> 
+> Pushing back on another design choice: the UAPI change. That both cannot be
+> undone, and is fragile and laborious, requiring manual admin arithmetic.
 
-> 
-> diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-> index 31c06c72203fd..135191f99962d 100644
-> --- a/tools/testing/selftests/mm/ksm_functional_tests.c
-> +++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-> @@ -695,6 +695,92 @@ static void test_fork_ksm_merging_page_count(void)
->  	munmap(map, size);
->  }
->  
-> +static void test_merge_aged_pairs(void)
-> +{
-> +	const unsigned int pairs = 16;
-> +	const unsigned long size = 2 * pairs * pagesize;
-> +	int old_smart_scan;
-> +	unsigned int i;
-> +	char *map;
-> +
-> +	ksft_print_msg("[RUN] %s\n", __func__);
-> +
-> +	old_smart_scan = ksm_get_smart_scan();
-> +	if (old_smart_scan < 0) {
-> +		ksft_test_result_skip("smart_scan not supported\n");
-> +		return;
-> +	}
-> +	if (ksm_set_smart_scan(true) < 0) {
-> +		ksft_test_result_fail("Enabling smart_scan failed\n");
-> +		return;
-> +	}
-> +
-> +	if (ksm_stop() < 0) {
-> +		ksft_test_result_fail("Disabling (unmerging) KSM failed\n");
-> +		goto restore;
-> +	}
-> +
-> +	map = mmap(NULL, size, PROT_READ | PROT_WRITE,
-> +		   MAP_PRIVATE | MAP_ANON, -1, 0);
-> +	if (map == MAP_FAILED) {
-> +		ksft_test_result_fail("mmap() failed\n");
-> +		goto restore;
-> +	}
-> +	if (madvise(map, size, MADV_NOHUGEPAGE) && errno != EINVAL) {
-> +		ksft_test_result_fail("MADV_NOHUGEPAGE failed\n");
-> +		goto unmap;
-> +	}
-> +
-> +	/*
-> +	 * Page i of the first half and page i of the second half form a
-> +	 * pair with content no other page shares.
-> +	 */
-> +	for (i = 0; i < pairs; i++) {
-> +		memset(map + i * pagesize, i + 1, pagesize);
-> +		memset(map + (pairs + i) * pagesize, i + 1, pagesize);
-> +	}
-> +
-> +	/* Let the first page of each pair age without a duplicate. */
-> +	if (madvise(map, size / 2, MADV_MERGEABLE)) {
-> +		ksft_test_result_fail("MADV_MERGEABLE failed\n");
-> +		goto unmap;
-> +	}
-> +	if (ksm_start() < 0 || ksm_wait_full_scans(12) < 0) {
-> +		ksft_test_result_fail("Running KSM failed\n");
-> +		goto unmap;
-> +	}
-> +
-> +	/*
-> +	 * Make the duplicates mergeable one scan apart so that each pair
-> +	 * starts out with a different distance in scans.
-> +	 */
-> +	for (i = 0; i < pairs; i++) {
-> +		if (madvise(map + (pairs + i) * pagesize, pagesize,
-> +			    MADV_MERGEABLE)) {
-> +			ksft_test_result_fail("MADV_MERGEABLE failed\n");
-> +			goto unmap;
-> +		}
-> +		if (ksm_wait_full_scans(1) < 0) {
-> +			ksft_test_result_fail("Running KSM failed\n");
-> +			goto unmap;
-> +		}
-> +	}
-> +
-> +	if (ksm_wait_full_scans(32) < 0) {
-> +		ksft_test_result_fail("Running KSM failed\n");
-> +		goto unmap;
-> +	}
-> +
-> +	ksft_test_result(ksm_get_self_merging_pages() == 2 * pairs,
-> +			 "Pages aged by smart scan got merged\n");
-> +unmap:
-> +	ksm_stop();
-> +	munmap(map, size);
-> +restore:
-> +	if (ksm_set_smart_scan(old_smart_scan) < 0)
-> +		ksft_print_msg("Restoring smart_scan failed\n");
-> +}
-> +
->  static void init_global_file_handles(void)
->  {
->  	mem_fd = open("/proc/self/mem", O_RDWR);
-> @@ -720,7 +806,7 @@ static void init_global_file_handles(void)
->  
->  int main(int argc, char **argv)
->  {
-> -	unsigned int tests = 9;
-> +	unsigned int tests = 10;
->  	int err;
->  
->  	if (argc > 1 && !strcmp(argv[1], FORK_EXEC_CHILD_PRG_NAME)) {
-> @@ -753,6 +839,7 @@ int main(int argc, char **argv)
->  	test_prctl_fork_exec();
->  	test_prctl_unmerge();
->  	test_fork_ksm_merging_page_count();
-> +	test_merge_aged_pairs();
->  
->  	err = ksft_get_fail_cnt();
->  	if (err)
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 8184691211acc..f26f9e4bfdbe9 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -992,6 +992,42 @@ int ksm_use_zero_pages(void)
->  	return ret == 1 ? 0 : -EIO;
->  }
->  
-> +int ksm_get_smart_scan(void)
-> +{
-> +	int smart_scan_fd;
-> +	char buf;
-> +	ssize_t ret;
-> +
-> +	smart_scan_fd = open("/sys/kernel/mm/ksm/smart_scan", O_RDONLY);
-> +	if (smart_scan_fd < 0)
-> +		return -errno;
-> +
-> +	ret = pread(smart_scan_fd, &buf, 1, 0);
-> +	close(smart_scan_fd);
-> +	if (ret < 0)
-> +		return -errno;
-> +	if (ret != 1)
-> +		return -EIO;
-> +
-> +	return buf == '1';
-> +}
-> +
-> +int ksm_set_smart_scan(bool enable)
-> +{
-> +	int smart_scan_fd;
-> +	ssize_t ret;
-> +
-> +	smart_scan_fd = open("/sys/kernel/mm/ksm/smart_scan", O_WRONLY);
-> +	if (smart_scan_fd < 0)
-> +		return -errno;
-> +
-> +	ret = write(smart_scan_fd, enable ? "1" : "0", 1);
-> +	close(smart_scan_fd);
-> +	if (ret < 0)
-> +		return -errno;
-> +	return ret == 1 ? 0 : -EIO;
-> +}
-> +
->  int ksm_wait_full_scans(long nr)
->  {
->  	long start_scans, end_scans;
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 7e00030077d2f..ab1325dc65800 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -163,6 +163,8 @@ long ksm_get_self_zero_pages(void);
->  long ksm_get_self_merging_pages(void);
->  long ksm_get_full_scans(void);
->  int ksm_wait_full_scans(long nr);
-> +int ksm_get_smart_scan(void);
-> +int ksm_set_smart_scan(bool enable);
->  int ksm_use_zero_pages(void);
->  int ksm_start(void);
->  int ksm_stop(void);
-> 
-> -- 
-> 2.43.0
-> 
+
+I agree with Willem. This is heading the wrong direction.
+
+
+The more wordy AI analysis is from the iproute2 patch side:
+
+
+Network configuration should not require pre-guessing this value. To set
+it correctly an administrator must know which TC egress programs are
+attached, how many bytes each pushes, and whether XDP is attached on the
+veth peer. That is a kernel-internal sizing decision being pushed out to
+user space, where the information is not reliably available. Worse, it
+goes stale silently: attach another encap action or move the peer to a
+different netns, and the value that was right at "ip link add" time is
+now wrong with nothing reporting it.
+
+The reply that a stale value only costs performance is true but does not
+rescue the design. The entire purpose of the field is performance. A
+setting that quietly stops delivering the benefit it exists for is one
+operators carry indefinitely without knowing whether it still helps.
+Failing quietly in the only dimension the knob was added for is the cost,
+not a mitigation.
+
+Since the motivating case is XDP, the mechanism should let the XDP program
+ask for the padding it needs, rather than making the operator translate
+the program's requirement into a device setting by hand. XDP already
+guarantees XDP_PACKET_HEADROOM to its programs. The requirement is known
+to the kernel, in the right units, at the moment of attach. Propagating it
+from the attach point beats an administrator's arithmetic and cannot go
+stale, because detach undoes it.
+
+Your own reply already works this out:
+
+> - XDP on a veth peer: veth_xdp_set() and generic_xdp_install() can
+>   increase the headroom of the peer to XDP_PACKET_HEADROOM on attach
+>   and reset it on detach.
+
+That is the mechanism, and it needs no uapi, no operator arithmetic, and
+no stale state. I would rather see it implemented for the cases it covers
+than add a permanent uapi that removes the incentive to do so.
+
+To be clear on what I am not asking for: this is not auto-tuning. Your
+objections to auto-tuning are good ones. The kmalloc-2048 to kmalloc-4096
+cliff being crossed without anyone deciding to is a real problem, and the
+reset-on-detach bookkeeping across namespaces is real work. Attach-time
+propagation is a different thing: a known requirement, declared at a known
+point, with a natural reset.
+
+On the argument that program-side declaration is itself new uapi, and that
+the labeled device is often not the device the skb was allocated on:
+granted for the general TC egress case. It does not apply to the
+attach-time propagation above, which is in-kernel plumbing rather than
+uapi.
+
+Which leaves the genuinely hard case, the one you describe at Cloudflare: a
+service in a netns sends through a veth pair, the host forwards to the
+uplink, and a TC egress program there encapsulates, after ip_rcv_core()
+has orphaned the skb so the allocating device cannot be identified. If
+that is the real residue, make it the problem being solved and argue for
+the narrowest mechanism that solves it. As posted, the series leads with
+cases that in-kernel propagation handles and uses them to justify an
+interface sized for the case it does not.
+
+
+
