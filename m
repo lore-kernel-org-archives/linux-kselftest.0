@@ -1,61 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794204019;
-	b=XqfG9+kUVHIchcErk7Ucd0gbnyuV96JVeIz0h4fTf3S817rofyuXw1/kazP/JmfoEqJC
-	 qpirkGuhxkxcZ5h3Gz9nHZ29rfJEiH2yln8qSwL6MobQbRJ3c5oYsuHx4XIZumulruLj0
-	 +nW5129rFEOJdxKx3HNQi92NlHUR26ufh4bfwGymnap03s6Zu9HtIV6A9Z8MyoAJzr47w
-	 MnVHzFc7Iz0eBoNng3YfJ30jmLuTD60Nq6yOK2t6CKRwKSfGZjOWDmqOqx5y3rxzwohJ0
-	 rhPyJHEjaoRFlSufD3nFxkMmZzY0BA//tHUXAJgOzu025bPtmf3GptkaYPOHhCxGmcg==
+	t=1794205485;
+	b=T0ANjRbuDeQXrGlm2NiikTJXHMAKHMlLY3BO6klk4LwuUMGXLOuEemAVEQluuO2VOU/S
+	 Uh39A0Qrgm4oSMQXVicymYDY4XJ+Ys8KxAQjXmJzU6a/s2D7e+B03V+NBXyg/vIGjkqS5
+	 RImWWUE/GeoFt2WF1e2zg0yJs4uCJ05Sm9K7BmeLqrmAoLIsG1e7eDLmSbX2t+yEN3FQZ
+	 /U5li2QlOHuXhSrcUHeEXcQ5W0SpMqZWGO1StQxiAVH4usIXmQiPblLLFr8gOK3euaEKX
+	 X77whIGqEUrBsy4Cnu9gO6r5FvDLXpDpc3btwOON0u6q03IPYfjNn9m8PJXOOXOf2RA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794204019;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=Ezt0QzdtXRpdhW1yj2rTzGXOSQDTzrUEz+cuvrZygBU=;
-	b=2EHwHjQwkjdWt0pFVfqotv64D4Yd/OJGXeCgr3Zrr8r6br/qeA3w9kxsg6J+LGCGAZPd
-	 mbgpG7tz8BWYDYf08g33Yz9D6As0xvHWYldRE0qk73ZLt1del/j3bIhtCYLuXIRvcQF2C
-	 ruO02RpopmQBqQ+ggAaJn8GxEDyI/d4UviBpWmsWSdZkkom+l1wI5IEinOd1F8BpOhZ5x
-	 f2fJveI0i7BTX3HIdap+3RR87tcCUyWkCFgrbiS+4U8Q0h2HvrN4lNIhTPdpBbAmT5ipU
-	 vIQuR1ZhpEw8CL8/cevT1aYgZG3nZ0cCxBW5nPbY/916Mrd1n44L31DgjZKJBSPQZCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794205485;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=eQbEKx9xMufs3cpWePsrC3f3RfF5/FJSvfxQAw/nFAg=;
+	b=f1Q4shctak+mBAIlfpAScDYkhe3nodwXVVLWohJIXuyNzdQp0fSUrCzvVQ/v3egnsFUQ
+	 MgwHrlmIwxQDqCynsTxjUgqyMyJblvrTFhkaP/CJJVZDOPc8EfN3InE/pZbw3Jaea+ZTo
+	 78s/8vUd4zf8DazS3AIvBTltql9yhA1O5lmuHAz9+o1qhUEdnc8CLBl17TxXI1quRmEZI
+	 KXv5pnaNqkA1fOWmf7EkOXgqmlrkzkztIKJiFv3h+UaxHRvOa50d3T7Po9L3gaeXsdQbs
+	 ZeF93pAOfIjL5EeumCQGEvEdl5/HgwoNk3Ft+W4HcwgNbkjQwsMRR1fgZn/YTQ5MOrA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YgH1LWq8;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=EShNKBkl;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FF6606D80D;
-	Mon,  9 Nov 2026 06:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DCC606A321;
+	Mon,  9 Nov 2026 06:24:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1DCC606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YgH1LWq8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A771F008A6;
-	Mon,  9 Nov 2026 06:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794204019;
-	bh=Ezt0QzdtXRpdhW1yj2rTzGXOSQDTzrUEz+cuvrZygBU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YgH1LWq8b35HH0hXDk3dOkDlwfVylAC4iCxcJZGczWKBo1r0frgv2K1lp23jQllPb
-	 uasE57Hw7nYvh277QI2NzK1XyGgCi+ErhSnoSGtG2YFitlWIDUAv++qAZLxca0wPbx
-	 K4gH42H0l62qbNpb2rBWHzcEe9YNJdYMP3tWu6qgxsus8gXB+GeXYb5mrRbHjqUUoI
-	 FXanv/is2rjhkHR9GZ2/w2nkDwpaGttIsgO6SyM+HxyGQ/EY+uxouPK8oeH+aFH+A5
-	 OXXT406BNJtqyPZt7FN/Z27wKmFRZ8kNonYF59ra7o7H5podeQS7oLLemSuKodu14S
-	 VdsEvX61WZkAA==
-Subject: Re: [PATCH net-next v2 6/6] selftests: net: add leased devmem RX and
- TX netdev unregister tests
-From: netdev-bot+sashiko@kernel.org
-To: almasrymina@google.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- daniel@iogearbox.net, razor@blackwall.org, dw@davidwei.uk,
- sdf.kernel@gmail.com, bobbyeshleman@meta.com, dtatulea@nvidia.com
-Date: Mon, 09 Nov 2026 06:00:18 +0000
-Message-ID: <179420401815.994134.4956375359433881127@kernel.org>
-In-Reply-To: <20261108055809.2122934-7-almasrymina@google.com>
-References: <20261108055809.2122934-7-almasrymina@google.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=EShNKBkl
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794205485; x=1825741485;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YSso0Po3Ac6MsrirK9TwldtrkZcqVN03F1SxefX9FxQ=;
+  b=EShNKBklJIhIs5D9l+z+SD7f+GY0yYM2zZVPoDbBZRo5X3QJ9Xe6Cbj9
+   FZSeq93WNjEV+d1BvZsZ2baELTOXCxYXFKeY7JpwYhuRco5bFBHbbLcJx
+   FAhW9yivS4HTQvUEhVtddczCL/jxkzu5qfIwW5sEdEhLXJCZlrlAPJBIk
+   HN/yqL9+ANtz4YepUkY1sL0XlyiEUxwNH/N1XngrrUnFCHXzd/GlrohOs
+   FMec8mtw7dzESBqMRpmQIIFfYB4KPVCXR3jC/KS+Jvssala1eX91tPlbx
+   v3Rn4SxLLFQ6bpZ9MAbEfxVDRNTnxdOjY7YA9XHUPF6sxTZnl+MdELJkp
+   Q==;
+X-CSE-ConnectionGUID: GYSkdCG1Tpu/i2JQ+kwkMw==
+X-CSE-MsgGUID: WCNhKKJbS3mtGvMr8j1HQA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11960"; a="2913761"
+X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
+   d="scan'208";a="2913761"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 22:24:43 -0800
+X-CSE-ConnectionGUID: GzK1GYJdQue5f+Pi2BBMaQ==
+X-CSE-MsgGUID: iW7KKfENRneZYXWo/Xw9aw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
+   d="scan'208";a="7824695"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 08 Nov 2026 22:24:38 -0800
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xQIny-00000000u1P-2AzQ;
+	Mon, 09 Nov 2026 06:24:34 +0000
+Date: Mon, 9 Nov 2026 14:24:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Woodhouse <dwmw2@infradead.org>, kvm@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	xen-devel@lists.xenproject.org, x86@kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paul Durrant <paul@xen.org>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Juergen Gross <jgross@suse.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Sascha Bischoff <Sascha.Bischoff@arm.com>,
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Jack Allister <jalliste@amazon.com>,
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com,
+	David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [PATCH v12 08/24] KVM: x86: Re-synchronize TSC after
+ KVM_SET_TSC_KHZ
+Message-ID: <202611091411.tSxUx2Bj-lkp@intel.com>
+References: <20261109012112.3415328-9-dwmw2@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,172 +100,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261109012112.3415328-9-dwmw2@infradead.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+Hi David,
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+kernel test robot noticed the following build errors:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+[auto build test ERROR on dea4f6380f4ec96e8f3b0aaf2343764bd0d25ef4]
 
-- [Medium] The new leased tests bind through `_devmem_bind()`, which
-  turns every NlError with EOPNOTSUPP into KsftSkipEx.
-- [Low] devmem_lease_bind_rx_unregister_check()
-  (tools/testing/selftests/net/nl_netdev.py), remove_virt_first=True…
-- [Low] devmem_lease_bind_rx_unregister_check() and
-  devmem_lease_bind_tx_unregister_check() each run a two-pass loop…
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Woodhouse/KVM-x86-Improve-synchronization-in-kvm_synchronize_tsc/20261108-172047
+base:   dea4f6380f4ec96e8f3b0aaf2343764bd0d25ef4
+patch link:    https://lore.kernel.org/r/20261109012112.3415328-9-dwmw2%40infradead.org
+patch subject: [PATCH v12 08/24] KVM: x86: Re-synchronize TSC after KVM_SET_TSC_KHZ
+config: i386-buildonly-randconfig-1005-20261109 (https://download.01.org/0day-ci/archive/20261109/202611091411.tSxUx2Bj-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261109/202611091411.tSxUx2Bj-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202611091411.tSxUx2Bj-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: arch/x86/kvm/x86.o: in function `kvm_synchronize_tsc_at':
+>> x86.c:(.text+0xfaca): undefined reference to `__udivdi3'
 
 --
-
-selftests: net: add leased devmem RX and TX netdev unregister tests
-
-This commit adds two tests to nl_netdev.py. Each one binds an RX or TX
-dmabuf to a single-mode netkit device that leases RX queue 1 from
-netdevsim. The tests then check for clean teardown both when the netkit
-device is deleted first and when the netdevsim device is removed
-directly.
-
-> diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-> index dd0321c0b463a..fa4b5be093257 100755
-> --- a/tools/testing/selftests/net/nl_netdev.py
-> +++ b/tools/testing/selftests/net/nl_netdev.py
-
-[ ... ]
-
-> +def devmem_lease_bind_rx_unregister_check(nf) -> None:
-> +    """Verify leased RX devmem bindings detach cleanly on virt/phys unregister."""
-> +    for remove_virt_first in (False, True):
-
-[ ... ]
-
-> +        _devmem_bind(nf_priv.bind_rx, {
-> +            "ifindex": nk_ifindex,
-> +            "fd": dmabuf_fd,
-> +            "queues": [{"id": res["id"], "type": "rx"}],
-> +        })
-> +        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-> +
-> +        if remove_virt_first:
-> +            ip(f"link del dev {nk_ifname}")
-> +            phys_q = nf.queue_get({"ifindex": nsim.ifindex, "id": 1,
-> +                                   "type": "rx"})
-> +            ksft_not_in("dmabuf", phys_q)
-> +            ksft_not_in("lease", phys_q)
-
-[Severity: Low]
-Do these two absence checks show that unleasing removed anything?
-
-Nothing earlier checks that the physical queue reported dmabuf or lease
-while the binding was active. The only check after the bind is:
-
-    ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-
-That count goes up when net_devmem_bind_dmabuf() maps the dma-buf, which
-happens before any queue gets the memory provider. So it says nothing
-about the physical rxq.
-
-Suppose netdev_nl_queue_fill_mp() stopped reporting dmabuf on the leased
-physical queue, or the lease redirect in netif_mp_open_rxq() never
-installed the memory provider. These ksft_not_in() checks would still
-pass.
-
-nk_qlease.py checks lease reporting, but no selftest checks dmabuf on a
-leased physical queue.
-
-Could a ksft_in() check on the physical queue be added right after the
-bind?
-
-> +            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-> +            nsimdev.remove()
-> +        else:
-> +            nsimdev.remove()
-> +            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
-
-[Severity: Low]
-What happens on the second loop pass if this check fails?
-
-ksft_ne() only records the failure and does not raise. If removing
-netdevsim no longer cascades to the netkit device, the loop moves on to
-the remove_virt_first=True pass with the netkit device still there.
-
-That pass calls _create_netkit_single() again with the same name and
-NLM_F_EXCL:
-
-    ifname = f"nk{os.getpid()}"
-    ...
-                flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
-    ...
-    defer(cmd, f"ip link del dev {ifname}", fail=False)
-
-The deferred ip link del only runs when the whole test case ends, not
-after each iteration.
-
-Would RTM_NEWLINK then fail with EEXIST? _create_netkit_single() only
-turns EOPNOTSUPP and ENOENT into a skip, so it would re-raise that error.
-
-The real cascade failure would then be hidden under an unrelated NlError
-traceback, and the remove_virt_first=True case would not run.
-devmem_lease_bind_tx_unregister_check() has the same pattern.
-
-> +        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
-> +
-> +        nf_priv.close()
-> +
-> +
-> +def devmem_lease_bind_tx_unregister_check(nf) -> None:
-> +    """Verify leased TX devmem bindings detach cleanly on virt/phys unregister."""
-> +    for remove_virt_first in (False, True):
-
-[ ... ]
-
-> +        _devmem_bind(nf_priv.bind_tx, {
-> +            "ifindex": nk_ifindex,
-> +            "fd": dmabuf_fd,
-> +        })
-
-[Severity: Medium]
-Can a broken lease lookup be reported as SKIP here rather than FAIL?
-
-_devmem_bind() turns every EOPNOTSUPP into a skip:
-
-    def _devmem_bind(bind, attrs) -> None:
-        try:
-            bind(attrs)
-        except NlError as e:
-            if e.error == errno.EOPNOTSUPP:
-                raise KsftSkipEx(f"devmem binding not supported: {e}") from e
-
-netkit sets dev->netmem_tx = NETMEM_TX_NO_DMA. So this bind only succeeds
-if netdev_find_netmem_tx_dev() walks the netkit rx queues, finds
-rxq->lease, and returns the physical device. If that walk fails,
-netdev_nl_bind_tx_doit() returns the same errno:
-
-    map_dev = netdev_find_netmem_tx_dev(netdev);
-    if (!map_dev) {
-        err = -EOPNOTSUPP;
-        NL_SET_ERR_MSG(info->extack,
-                       "No DMA-capable device found for netmem TX");
-
-The leased RX bind in devmem_lease_bind_rx_unregister_check() has the
-same problem. netif_mp_open_rxq() returns -EOPNOTSUPP when the lease
-redirect resolves to a device without a parent ("rx queue belongs to a
-virtual netdev"), and __netif_mp_open_rxq() does the same when there are
-no qops.
-
-The skip is needed when netdevsim has no DMA mask and so does not set
-NETMEM_TX_DMA. But the wrapper cannot tell that case apart from a lease
-resolution failure.
-
-Would it work to skip only if a direct bind on the nsim device also
-returns EOPNOTSUPP, or to check the nsim DMA capability up front?
-
-> +        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261108055809.2122934-1-almasrymina%40google.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
