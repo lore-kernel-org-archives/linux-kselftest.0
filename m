@@ -1,55 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794187289;
-	b=jbCA5YRQhL9zNiXoTMToqY63T987UOS5rbLB0RYA+Cw1GZXORZ0suP1Hwqwa+GwxVAil
-	 Pp+bVVbxuVPoattn4yU5rXEX2k8C3wr9fsa1TU03RzVq13VPp6H6Qi3VDH6sV7fW8WFMa
-	 ayPNm+uMdJF+YaJfMxeI9rv8Z+UNi5G3C+a47BT896ql2W4Gf6vCd0YWjGKocMOczLnIz
-	 S2uMlxxFvp7i2aj+9vvtSmlbsNKnFKEbYn/bxBk6YG79nE2nsvwhe0fHQ85xGjhXfFTll
-	 tj151ri7VJWjK/6rLSGMa21a3a/UkKCBJbSfnJe12GUcgOgtNXybo5BH7mA4FmxqhMQ==
+	t=1794187280;
+	b=3yuVxjA6ZbHlIQ/FcbaJKNhiTGWyyNcK0ssp9icNnG3GJMpoCswZZVdw/g85sRvFAuFL
+	 xbJ9eFI2DHrit7AWUjDSRkuABUtuiVouXWnH1KOS0LsLjUaAGcx/5SLOfAAQBhdKu6zAV
+	 6yPCVOhtuAX/JbFsANxij/9L9JEoJeW19vLqd1nog+PfbNUskU40sKXy1dhyiaA53FcFG
+	 n/tHVQfLUuULF7o6bn9E8sQugLK6nbeitD6P/74uNSCC57WXME1EHG0n9HpFxASt5gVLN
+	 ynCOLtXPhoAr7oItptM3LoDBz0Tc9FWwwyiX2PR9Cd552ZXW7oVEWSlBy9DpDOGHZNQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794187289;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794187280;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=m2fbPc6XHvWEP1WHR95w78T0mzWK9qb5UsTlN179DUY=;
-	b=TYjlimOwo5Dt9ILrkeK6/hv8rnfsgNkMj4cHgiv61ZZolBCYb0K5raM7VAuCJFZGKEQT
-	 ZBDQlsQeBARFeYNwKM01pNz7aySVr9gVpcUdh3sjdkDCbDFAGEfm1h2a5OII/zry1U2SS
-	 /fNsNuHig5/jxsPw69ULJt4dtMIkojKYfpx6g+VEiRlZ6eH5688XkRpAACfoHqUCHTOns
-	 oPCsnlFrUI7HaZ1rsTARB7klhYjwPxi/tCLo8Z2ZTxOAYIHWvSnSRDAHndZ1NSu5oByTn
-	 1tsdUU1GNcKHz6aiKbHsNVgkuZUsdoZeT8LWrGtoLuFHLxOshphDhfil0aKe1u0gq/g==
+	bh=jhbHTsXlkafiijDqKYXVFTZ8kLMGsWqGWQ4/HbRTNCs=;
+	b=31qQ8TGX+I8v0lo1228RF+xNP7SWcGAaZ13wHhhjgNYHOUDoRsUv4wO3Jdw09VJbxn/b
+	 GRg6rcAAVuHEPSlYgRf1Ats6z22A5WckijWo3M3iqqzjS3Dt2qij6KCwmiEzuhdT9DfsB
+	 OfR1REn392rX1HU/3sZpwtPyXvYz22KX6d3YXFGg+B9XsSq8HatKS0Bk4MfIgCzCwh5lw
+	 lTwjvwp0ODXE9ubX55DCg/IW3BmUELGgNdnmisah34Crv8M2eqRDmqtR9DdVjQIRfx5KB
+	 QTdhnqZ8ws9v49IvBxNsZqJz890DOEMCPR4g6h6JjrcRJ5RTUQOa7SJxmTJuM3WPNfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=desiato.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=ES5u6lWg;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	spf=none smtp.mailfrom=casper.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=UMiTYyaJ;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B669606EE8E;
-	Mon,  9 Nov 2026 01:21:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B669606EE8E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71438606A32A;
+	Mon,  9 Nov 2026 01:21:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71438606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=ES5u6lWg
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=UMiTYyaJ
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
 	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
 	To:From:Reply-To:Content-ID:Content-Description;
-	bh=m2fbPc6XHvWEP1WHR95w78T0mzWK9qb5UsTlN179DUY=; b=ES5u6lWgnx208h9BxW/VwpJR5g
-	8d08nYWsbfhFvE/O7fc+yaqoNW1lLrLEl/0OQzyYjYxyTLUJtXTJcXIHNIxtiqifmlZBfaRpoPD1C
-	HhpghyN22R2EJTLAy7LAOB56Hy2XU+N87HG99MKut7ywYNppf/DJjVyO8AUGSTcHDuMYhHfViOpbL
-	yN6Zc3KPyEqPvdoiJE4jFYzVbEcFzNwoYfomqU0NNfe0anix1ZA/lTLYtxGjCCmiNHgbq4pKQihcI
-	xWc2eiCUP7m5PmDD7dAOzsloyNIHzM1SHPcPeL4MwAkIAS4LWXVfkpQtK2K20ZDJox/O8MkNzNpo7
-	3IPjDGGw==;
+	bh=jhbHTsXlkafiijDqKYXVFTZ8kLMGsWqGWQ4/HbRTNCs=; b=UMiTYyaJUWRPpigzSX/2R4AfNf
+	Vms5l1HWVobQvkUIuIvqktD0UgljhqxSbtoiRrsneCppCdTNcKxy8ly0tJqBPhNnip96ELPYdAV46
+	pTVBeOf2FCjl/Af314myhUZtQJTMYO4fTEWjC7W4CRrHfJL9OCXfV0gY+9eWIvOmjvEfNd31l/eJf
+	R4VjoZJ9AcTbMWMfKdwocZ6BBEQZ90As+82F9cuKSVmnjwBy9MGTCNesvzdaYTKGxrPgjh1eH5vCX
+	Cj2T5dSA1IPFIUfOpUZYN5G+Li/Wd+b4emrOkVGbedGPy+R+eyALKGKOIA/+GXVUAjSqPdDoChUhj
+	VOAyAk6g==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xQE4Q-00000006AY8-28SP;
-	Mon, 09 Nov 2026 01:21:15 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xQE4P-00000007PwJ-2HJo;
+	Mon, 09 Nov 2026 01:21:13 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xQE4O-0000000EKUA-23cT;
-	Mon, 09 Nov 2026 01:21:12 +0000
+	id 1xQE4P-0000000EKVS-1Vui;
+	Mon, 09 Nov 2026 01:21:13 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -78,9 +78,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Dongli Zhang <dongli.zhang@oracle.com>,
 	joe.jin@oracle.com,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v12 02/24] KVM: x86: Kill last_tsc_{nsec,write,offset} fields
-Date: Sun,  8 Nov 2026 17:20:48 -0800
-Message-ID: <20261109012112.3415328-3-dwmw2@infradead.org>
+Subject: [PATCH v12 21/24] KVM: selftests: Test that the first user TSC write is honoured exactly
+Date: Sun,  8 Nov 2026 17:21:07 -0800
+Message-ID: <20261109012112.3415328-22-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109012112.3415328-1-dwmw2@infradead.org>
 References: <20261109012112.3415328-1-dwmw2@infradead.org>
@@ -96,265 +96,204 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-These mostly duplicate the cur_tsc_{nsec,write,offset} values. In the
-matching paths for a stable TSC, the values used were definitely
-identical. On the unstable-TSC paths the two could diverge (a matched
-synchronization recorded its freshly computed offset in last_tsc_offset
-while cur_tsc_offset kept the generation's reference), so matching in
-kvm_arch_tsc_set_attr() now compares against the generation's reference
-offset instead. With an unstable TSC the master clock is off and the
-match only affects generation accounting, and matching against the
-generation's own reference is the more principled behaviour anyway.
+The 1-second "slop" heuristic in kvm_synchronize_tsc() is only
+supposed to apply between successive userspace TSC writes, i.e. once
+kvm->arch.user_set_tsc has been set by a previous write. The kernel's
+own internal TSC synchronization on vCPU creation (and frequency
+changes) must not arm it, otherwise the first genuine userspace write
+falling within 1 second of virtual cycle time of the kernel's default
+generation is "corrected" back to that generation instead of being
+honoured — breaking the restore of a guest with less than one second
+of runtime.
 
-Rename last_tsc_khz and last_tsc_scaling_ratio to cur_tsc_khz and
-cur_tsc_scaling_ratio respectively, since they are properties of the
-current TSC generation.
-
-Since cur_tsc_offset now serves as the single source of truth for the
-TSC generation's offset, the backwards-TSC adjustment (used during S4
-resume when the host TSC resets) must also update cur_tsc_offset by
-the same delta applied to all vCPUs (scaled to the guest TSC rate, as
-adjust_tsc_offset_host() does). Without this, subsequent vCPUs that
-synchronize after the adjustment would get the stale pre-S4 offset.
-
-Since a synchronization now establishes an absolute offset which (via
-a matched reuse of cur_tsc_offset) already includes any backwards-TSC
-delta, clear the vCPU's pending tsc_offset_adjustment when writing it:
-the deferred per-vCPU compensation would otherwise be applied on top
-at the next vcpu_load, doubling the delta. Previously a nonzero write
-could not hit this, because zeroing the last_tsc values broke the
-1-second matching window after a backwards TSC; a forced
-synchronization (vCPU creation, or a zero write) could always match,
-and takes the compensated offset as intended.
-
-The lockless vm_list walk in kvm_arch_enable_virtualization_cpu() is
-unsound against a concurrent kvm_destroy_vm(), but that predates this
-patch and is not made materially worse by it; it cannot be fixed by
-taking kvm_lock here, which would recreate the lock inversion against
-cpus_read_lock() that commit 44d174596260 ("KVM: Use dedicated mutex
-to protect kvm_usage_count to avoid deadlock") untangled.
+Add a test which creates a vCPU and immediately performs a first
+host-initiated write of a TSC value corresponding to ~500ms of guest
+runtime, then verifies the value reads back exactly (modulo elapsed
+time) rather than being snapped back to the kernel's default
+generation near zero.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Reviewed-by: Paul Durrant <paul@xen.org>
 ---
- Documentation/virt/kvm/locking.rst |  2 +-
- arch/x86/include/asm/kvm_host.h    |  7 +--
- arch/x86/kvm/x86.c                 | 98 +++++++++++++++++++++---------
- 3 files changed, 71 insertions(+), 36 deletions(-)
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/x86/tsc_user_set_test.c     | 153 ++++++++++++++++++
+ 2 files changed, 154 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86/tsc_user_set_test.c
 
-diff --git a/Documentation/virt/kvm/locking.rst b/Documentation/virt/kvm/locking.rst
-index 662231e958a0..4548b61a7652 100644
---- a/Documentation/virt/kvm/locking.rst
-+++ b/Documentation/virt/kvm/locking.rst
-@@ -263,7 +263,7 @@ time it will be set using the Dirty tracking mechanism described above.
- 
- :Type:		raw_spinlock_t
- :Arch:		x86
--:Protects:	- kvm_arch::{last_tsc_write,last_tsc_nsec,last_tsc_offset}
-+:Protects:	- kvm_arch::{cur_tsc_write,cur_tsc_nsec,cur_tsc_offset}
- 		- tsc offset in vmcb
- :Comment:	'raw' because updating the tsc offsets must not be preempted.
- 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index e2eef7057bd3..ea48b1949316 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1236,11 +1236,8 @@ struct kvm_arch {
- 	 * preemption-disabled region, so it must be a raw spinlock.
- 	 */
- 	raw_spinlock_t tsc_write_lock;
--	u64 last_tsc_nsec;
--	u64 last_tsc_write;
--	u32 last_tsc_khz;
--	u64 last_tsc_offset;
--	u64 last_tsc_scaling_ratio;
-+	u32 cur_tsc_khz;
-+	u64 cur_tsc_scaling_ratio;
- 	u64 cur_tsc_nsec;
- 	u64 cur_tsc_write;
- 	u64 cur_tsc_offset;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7a2b0b99373f..20b84b2e4424 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1334,17 +1334,24 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
- 		vcpu->kvm->arch.user_set_tsc = true;
- 
- 	/*
--	 * We also track th most recent recorded KHZ, write and time to
--	 * allow the matching interval to be extended at each write.
-+	 * Track the TSC frequency, scaling ratio, and offset for the current
-+	 * generation. These are used to detect matching TSC writes and to
-+	 * compute the guest TSC from the host clock.
- 	 */
--	kvm->arch.last_tsc_nsec = ns;
--	kvm->arch.last_tsc_write = tsc;
--	kvm->arch.last_tsc_khz = vcpu->arch.virtual_tsc_khz;
--	kvm->arch.last_tsc_offset = offset;
--	kvm->arch.last_tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
-+	kvm->arch.cur_tsc_khz = vcpu->arch.virtual_tsc_khz;
-+	kvm->arch.cur_tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
- 
- 	vcpu->arch.last_guest_tsc = tsc;
- 
-+	/*
-+	 * The offset written below is absolute, superseding any backwards-TSC
-+	 * compensation still pending from kvm_arch_enable_virtualization_cpu()
-+	 * (which has already been folded into cur_tsc_offset, and thus into
-+	 * a matched @offset); applying it again at the next vcpu_load would
-+	 * double it.
-+	 */
-+	vcpu->arch.tsc_offset_adjustment = 0;
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index 1edc78845fd3..fd063806a7fb 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -151,6 +151,7 @@ TEST_GEN_PROGS_x86 += x86/xcr0_cpuid_test
+ TEST_GEN_PROGS_x86 += x86/xss_msr_test
+ TEST_GEN_PROGS_x86 += x86/debug_regs
+ TEST_GEN_PROGS_x86 += x86/tsc_msrs_test
++TEST_GEN_PROGS_x86 += x86/tsc_user_set_test
+ TEST_GEN_PROGS_x86 += x86/vmx_pmu_caps_test
+ TEST_GEN_PROGS_x86 += x86/xen_cpuid_timing_test
+ TEST_GEN_PROGS_x86 += x86/xen_migration_test
+diff --git a/tools/testing/selftests/kvm/x86/tsc_user_set_test.c b/tools/testing/selftests/kvm/x86/tsc_user_set_test.c
+new file mode 100644
+index 000000000000..a74eb78a975b
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86/tsc_user_set_test.c
+@@ -0,0 +1,153 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test that the first userspace write to MSR_IA32_TSC takes effect
++ * precisely, and is not subjected to the 1-second "slop" heuristic
++ * which is only supposed to apply between successive *userspace*
++ * writes (kvm->arch.user_set_tsc).
++ *
++ * The kernel synchronizes the TSC internally when a vCPU is created
++ * (and when its frequency is set). If any of those kernel-internal
++ * paths incorrectly sets user_set_tsc, then the first genuine write
++ * from userspace which happens to fall within 1 second of virtual
++ * cycle time of the kernel's default generation is "corrected" to
++ * match that generation instead of being honoured exactly. That
++ * breaks the restore of a guest which has genuinely been running
++ * for less than one second.
++ *
++ * Simulate exactly that: create a vCPU (kernel establishes a default
++ * TSC generation starting near zero), then perform the first
++ * host-initiated write with a value corresponding to ~500ms of guest
++ * runtime. If the slop heuristic fires, the written value is snapped
++ * back to the kernel's generation (near zero) and the TSC reads back
++ * hundreds of milliseconds low. Repeat with an explicit
++ * KVM_SET_TSC_KHZ on the never-run vCPU before the write: that is
++ * another kernel-internal synchronization which must not arm the
++ * heuristic (nor open a generation that swallows the first write).
++ */
++#include "kvm_util.h"
++#include "processor.h"
 +
- 	kvm_vcpu_write_tsc_offset(vcpu, offset);
- 
- 	if (!matched) {
-@@ -1354,8 +1361,6 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
- 		 * nanosecond time, offset, and write, so if TSCs are in
- 		 * sync, we can match exact offset, and if not, we can match
- 		 * exact software computation in compute_guest_tsc()
--		 *
--		 * These values are tracked in kvm->arch.cur_xxx variables.
- 		 */
- 		kvm->arch.cur_tsc_generation++;
- 		kvm->arch.cur_tsc_nsec = ns;
-@@ -1395,7 +1400,7 @@ void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
- 	}
- 
- 	offset = kvm_compute_l1_tsc_offset(vcpu, host_tsc, data);
--	elapsed = ns - kvm->arch.last_tsc_nsec;
-+	elapsed = ns - kvm->arch.cur_tsc_nsec;
- 
- 	if (vcpu->arch.virtual_tsc_khz) {
- 		if (data == 0) {
-@@ -1405,7 +1410,7 @@ void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
- 			 */
- 			synchronizing = true;
- 		} else if (kvm->arch.user_set_tsc) {
--			u64 tsc_exp = kvm->arch.last_tsc_write +
-+			u64 tsc_exp = kvm->arch.cur_tsc_write +
- 						nsec_to_cycles(vcpu, elapsed);
- 			u64 tsc_hz = vcpu->arch.virtual_tsc_khz * 1000LL;
- 			/*
-@@ -1436,15 +1441,14 @@ void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
- 	 * it's better to try to match offsets from the beginning.
-          */
- 	if (synchronizing &&
--	    vcpu->arch.virtual_tsc_khz == kvm->arch.last_tsc_khz) {
-+	    vcpu->arch.virtual_tsc_khz == kvm->arch.cur_tsc_khz) {
- 		/*
--		 * If synchronizing, advance the reference point to "now"
--		 * so the matching window slides forward with each vCPU.
--		 * Extrapolate from the generation's own origin: 'elapsed'
--		 * is measured from the most recent write, which lies on
--		 * the generation's line only for the first matched write.
-+		 * If synchronizing, extrapolate the generation's value to
-+		 * "now": the matching window slides forward with wall time,
-+		 * anchored on the generation's origin alone (a matched
-+		 * write no longer updates any stored reference point).
- 		 */
--		u64 delta = nsec_to_cycles(vcpu, ns - kvm->arch.cur_tsc_nsec);
-+		u64 delta = nsec_to_cycles(vcpu, elapsed);
- 
- 		data = kvm->arch.cur_tsc_write + delta;
- 
-@@ -1615,7 +1619,7 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
- 		 * get_kvmclock() to compute kvmclock from the host TSC
- 		 * without needing a vCPU reference.
- 		 */
--		ka->master_tsc_scaling_ratio = ka->last_tsc_scaling_ratio;
-+		ka->master_tsc_scaling_ratio = ka->cur_tsc_scaling_ratio;
- 		tsc_hz = (u64)get_cpu_tsc_khz() * HZ_PER_KHZ;
- 		if (tsc_hz && kvm_caps.has_tsc_control)
- 			tsc_hz = kvm_scale_tsc(tsc_hz,
-@@ -3344,8 +3348,8 @@ static int kvm_arch_tsc_set_attr(struct kvm_vcpu *vcpu,
- 		raw_spin_lock_irqsave(&kvm->arch.tsc_write_lock, flags);
- 
- 		matched = (vcpu->arch.virtual_tsc_khz &&
--			   kvm->arch.last_tsc_khz == vcpu->arch.virtual_tsc_khz &&
--			   kvm->arch.last_tsc_offset == offset);
-+			   kvm->arch.cur_tsc_khz == vcpu->arch.virtual_tsc_khz &&
-+			   kvm->arch.cur_tsc_offset == offset);
- 
- 		tsc = kvm_scale_tsc(rdtsc(), vcpu->arch.l1_tsc_scaling_ratio) + offset;
- 		ns = get_kvmclock_base_ns();
-@@ -9803,7 +9807,7 @@ int kvm_arch_enable_virtualization_cpu(void)
- {
- 	struct kvm *kvm;
- 	struct kvm_vcpu *vcpu;
--	unsigned long i;
-+	unsigned long i, flags;
- 	int ret;
- 	u64 local_tsc;
- 	u64 max_tsc = 0;
-@@ -9874,6 +9878,44 @@ int kvm_arch_enable_virtualization_cpu(void)
- 	if (backwards_tsc) {
- 		u64 delta_cyc = max_tsc - local_tsc;
- 		list_for_each_entry(kvm, &vm_list, vm_list) {
-+			/*
-+			 * Hold tsc_write_lock across the per-vCPU adjustments
-+			 * AND the generation reference offset adjustment, so
-+			 * that a concurrent TSC synchronization cannot observe
-+			 * one without the other (it would compute an offset
-+			 * with the delta applied twice, or not at all). The
-+			 * consume of tsc_offset_adjustment in
-+			 * kvm_arch_vcpu_load() remains outside the lock, as
-+			 * it always was; its races are with vcpu_put/load
-+			 * ordering, not with the generation state.
-+			 *
-+			 * The generation's reference offset is adjusted by the
-+			 * same (guest-scaled, as adjust_tsc_offset_host()
-+			 * does for each vCPU) delta, so that future
-+			 * KVM_SET_TSC / vCPU creation still matches against
-+			 * the adjusted TSC timeline.
-+			 *
-+			 * The recorded {cur_tsc_nsec, cur_tsc_write} pair is
-+			 * left alone, and ends up stale by the sleep period:
-+			 * cur_tsc_nsec is CLOCK_BOOTTIME, which has the sleep
-+			 * injected on resume, while the guest TSC (kept
-+			 * continuous across the host TSC jump) does not
-+			 * advance during the sleep. It cannot be re-anchored
-+			 * here because, as noted above, timekeeping has not
-+			 * yet been resumed. The 1-second matching window
-+			 * therefore fails to match across a longer sleep,
-+			 * and the next nonzero TSC write opens a fresh,
-+			 * coherent generation. A forced synchronization
-+			 * (vCPU creation, or a zero write) bypasses the
-+			 * window and does extrapolate along the stale line,
-+			 * overshooting by the sleep period — but it installs
-+			 * the compensated offset, so the vCPU's actual TSC
-+			 * is correct; only last_guest_tsc overshoots, which
-+			 * matters only if the TSC turns unstable before the
-+			 * vCPU first enters the guest, exactly as it did
-+			 * before this accounting existed.
-+			 */
-+			raw_spin_lock_irqsave(&kvm->arch.tsc_write_lock, flags);
- 			kvm->arch.backwards_tsc_observed = true;
- 			kvm_for_each_vcpu(i, vcpu, kvm) {
- 				vcpu->arch.tsc_offset_adjustment += delta_cyc;
-@@ -9881,14 +9923,10 @@ int kvm_arch_enable_virtualization_cpu(void)
- 				kvm_make_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu);
- 			}
- 
--			/*
--			 * We have to disable TSC offset matching.. if you were
--			 * booting a VM while issuing an S4 host suspend....
--			 * you may have some problem.  Solving this issue is
--			 * left as an exercise to the reader.
--			 */
--			kvm->arch.last_tsc_nsec = 0;
--			kvm->arch.last_tsc_write = 0;
-+			kvm->arch.cur_tsc_offset +=
-+				kvm_scale_tsc(delta_cyc,
-+					      kvm->arch.cur_tsc_scaling_ratio);
-+			raw_spin_unlock_irqrestore(&kvm->arch.tsc_write_lock, flags);
- 		}
- 
- 	}
++/*
++ * Returns false when the attempt was inconclusive: a snapped-back value
++ * tracks time since vCPU creation, so if creation-to-write time gets
++ * anywhere near the written 500ms, a buggy kernel's value could land
++ * inside the assertions' tolerance and pass. The caller retries.
++ */
++static bool test_first_write(bool set_freq)
++{
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	u64 freq_khz, t_write, t_read, slack_cycles, mono_ns, create_ns, read_ns;
++	struct timespec ts;
++	int r;
++
++	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
++	create_ns = ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++
++	vm = vm_create_with_one_vcpu(&vcpu, NULL);
++
++	if (set_freq) {
++		/*
++		 * Halve the frequency so this is a real change, exercising
++		 * the frequency resynchronization path rather than the
++		 * unchanged-frequency no-op.
++		 */
++		r = __vcpu_ioctl(vcpu, KVM_GET_TSC_KHZ, NULL);
++		TEST_ASSERT(r > 0, "KVM_GET_TSC_KHZ failed");
++		vcpu_ioctl(vcpu, KVM_SET_TSC_KHZ,
++			   (void *)(unsigned long)(r / 2));
++	}
++
++	r = __vcpu_ioctl(vcpu, KVM_GET_TSC_KHZ, NULL);
++	TEST_ASSERT(r > 0, "KVM_GET_TSC_KHZ failed");
++	freq_khz = r;
++
++	/*
++	 * The first user write: a guest TSC corresponding to 500ms of
++	 * runtime. This is within 1s (of virtual cycle time) of the
++	 * kernel's default generation, so it is exactly the case that
++	 * the slop heuristic would destroy if it were (incorrectly)
++	 * armed by the kernel's own internal TSC synchronization.
++	 */
++	t_write = freq_khz * 500ULL;		/* khz * ms = cycles */
++
++	/*
++	 * Measure only the write..read window (a window measured from
++	 * before creation would also bound a snapped-back value), and
++	 * insist the write lands well before 500ms of creation time so
++	 * a snapped-back value cannot sit inside the tolerance.
++	 */
++	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
++	mono_ns = ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++
++	if (mono_ns - create_ns > 250000000ULL) {
++		pr_info("  creation took %lu ms, retrying for a conclusive run\n",
++			(mono_ns - create_ns) / 1000000);
++		kvm_vm_free(vm);
++		return false;
++	}
++
++	vcpu_set_msr(vcpu, MSR_IA32_TSC, t_write);
++
++	t_read = vcpu_get_msr(vcpu, MSR_IA32_TSC);
++
++	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
++	read_ns = ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++
++	/*
++	 * Bound the whole creation..read interval too: a snapped-back
++	 * value tracks it, so letting it approach the written 500ms
++	 * (via a stall between the two MSR ioctls, which the slack
++	 * below would otherwise absorb) would let a buggy kernel pass.
++	 */
++	if (read_ns - create_ns > 400000000ULL) {
++		pr_info("  creation..read took %lu ms, retrying for a conclusive run\n",
++			(read_ns - create_ns) / 1000000);
++		kvm_vm_free(vm);
++		return false;
++	}
++
++	mono_ns = read_ns - mono_ns;
++
++	/*
++	 * The TSC advances between the write and the read; bound the
++	 * difference by the measured elapsed time around the two ioctls
++	 * plus 10ms of slop, so a descheduled test cannot flake. If the
++	 * write was snapped to the kernel's default generation, the
++	 * value read back is ~500ms low (i.e. below t_write), which is
++	 * unambiguous.
++	 */
++	slack_cycles = freq_khz * (mono_ns / 1000000ULL + 10);
++
++	TEST_ASSERT(t_read >= t_write,
++		    "TSC went backwards from explicit write: wrote %lu, read %lu"
++		    " (first userspace write was subjected to 1-second slop?)",
++		    t_write, t_read);
++	TEST_ASSERT(t_read - t_write < slack_cycles,
++		    "TSC read back too far from written value: wrote %lu, read %lu",
++		    t_write, t_read);
++
++	kvm_vm_free(vm);
++	return true;
++}
++
++static void run_first_write(bool set_freq)
++{
++	int i;
++
++	for (i = 0; i < 5; i++)
++		if (test_first_write(set_freq))
++			return;
++
++	TEST_FAIL("vCPU creation repeatedly too slow for a conclusive run");
++}
++
++int main(void)
++{
++	run_first_write(false);
++
++	if (kvm_has_cap(KVM_CAP_TSC_CONTROL))
++		run_first_write(true);
++
++	return 0;
++}
 -- 
 2.43.0
 
