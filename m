@@ -1,89 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.165.32
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794258805;
-	b=VZPZZuSmTtC/fWvovQAlqDctAZR1fHKbzDKXD5Nz7kostz5r7AfKgx9fsy7H9rCqi8WA
-	 ISNvX0Z9+6rx8ckVCpMQdiG8YJwNfb2t6czIa/XPs8g79LmGjH8A3xdSh1oqA2OXZ4Q0K
-	 +I+AIpTIQHe1j5ygyzzGniq1e1vJgqtcvoqc9Tze7eLFydQpp7EdR53slohV6DEXYdQC6
-	 xY3vgHeKQynObp+rXAyshe9TIaxjda3RxaF1ejRHlBYRRVe6uxZonEoGJ1y/2vqo5iSui
-	 wa+BQiV2vIleoXRJ3UGF+GeTlfhKL0t+5xxK8iNpkLNT0ucplF5iwOJ5jcIB12hMM2g==
+	t=1794259376;
+	b=INoKcnI5QFt9Q28gza8gMi2eNzKDF0gfnJLelaDiToJlGFiSP0tnp7A3DhOC3AP0o/w7
+	 gxZ3MXx9WcXGwwtb1/aYXCoS+LY1xbAeYcK05IAzquMxmPkb1GqSg6syGMn6+xqEWaERt
+	 BfVi3N8we/QsietmiDcVeN03v2e3aOzr/EehlOhX+NYVICP44/lJhxN2QU7ThlAScPj4e
+	 XIeL7c/lDW10IsPNLkgggYkTYrWl/Z8v9wfgBrsqDtcO74N7pcHN/aaD3PFMvTeunbDbW
+	 2HQ507Hu000DcCX/lmX12Ik/OyRZ/O1dybn6c28oCTxaDORBV9dR815RxKhJ9kk2v6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794258805;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=5ZNPQys28VTRtmsp1eXTTI33dx/ut9Rp+BrA0JVtHoQ=;
-	b=L/u31bcBlsrnBPns0Se+S6tT1OsIUfmlCJBItBVde66xgWdxpoeFaFi5DzYKkMnMEaoB
-	 s6jyUKJmP5gL+MEmPEd307na9YdpA86ngFuahL6rKNNqZa9n4qyQvmjFRMScg46onRSDj
-	 rzcxJaCHKoPjg2nJXAGODnxrxZj7CCKcuOQ/Hk3sOCV8wwtQibev2m03BUK+einXYMG3J
-	 kACwXREImbjYc9uz4B5qSaK48s1HJVgO6BSdQWHpKr4n8etwVBH1cTDvT11cWySZOhWEf
-	 3wnkU3K6whIq/2xW+1N35cNzLH730SthewllDy3lw+bQztjVsHjkctEfLwJZdAXnTDg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794259376;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:X-Proofpoint-Reinject:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID;
+	bh=UpAvN4/JLKemRBfAUDzDGGqAINf3dXx5jhHdtBekoy0=;
+	b=u/ABOOUlWAg8fgT+BqD197LPo1fKV0WI0Zh8zMHpa246CvU+DOhfgpgwSB6EFYandCbI
+	 bvCF5UXs8NWXko54BcYd3VD/jLMeFWkR+U0PJjgjcJFlopQ/XJ+5jOLSLeiKvHSagQUmJ
+	 rzMYLeyNVgalWkNsL1WUGEOlasS2hIPoGYuueUky28YzBdf+lQ5jtd2BnpNrOPp8v48kS
+	 XVTjdtuUFdmVXJz7wba9XYWxUGaCa3aFz1tsRQL244LQnixgEbM0Kd21pDQoPFGRWaxCL
+	 egmC5dFRSCT/TohCa01PYvuA41qyo2CLLN/3pobv1lWcNojpqAyhpM4BqbttvBXlHWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ENqfNuuA;
-	arc=none smtp.remote-ip=74.125.82.179
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=oracle.com;
+	spf=pass smtp.mailfrom=oracle.com;
+	dkim=pass header.d=oracle.com header.i=@oracle.com header.a=rsa-sha256 header.s=corp-2025-04-25 header.b=ZgI1xwjj;
+	arc=none smtp.remote-ip=205.220.165.32
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39F4606A31C
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 21:13:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E39F4606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25988606A31C;
+	Mon,  9 Nov 2026 21:22:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25988606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ENqfNuuA
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-3645f0f3fcdso2624362eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 13:13:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794258804; x=1794863604; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5ZNPQys28VTRtmsp1eXTTI33dx/ut9Rp+BrA0JVtHoQ=;
-        b=ENqfNuuAFxyDL2IDpZPlk/BWUNs84NuuaWn4CO+fnEOfULkSa8HbTJ4U+kZwlqlZ3C
-         wXY+JQ6xnUn4dYwEHrWpxzbXVd231h1DooLE27d0RTcwHx95glBTJSNtdhHinDKbZl9o
-         +6ul5n/BABoey2/7NoIYpdVeUvS5PEV2wm6nikcO4AJsBHiLk5vPtXo6cr9pWUMENIRJ
-         WOlOTx1Uze0G3Rv1m4ykEJELQXJLBISMV3810gx+PUTE6Q2hsv3qcs5xKbUpj1b12Y+P
-         NT/VgKXLG68HuF5ExMEpgF3fua0t2jPUMi2jnId3PXwjxP8erBbaMIVebdf0ClaIRRaO
-         ttnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794258804; x=1794863604;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5ZNPQys28VTRtmsp1eXTTI33dx/ut9Rp+BrA0JVtHoQ=;
-        b=VxJRLK0R4+Dywj0W92tEy/qnD7ZwH4T4wpqC28BurDgpsAznthExXH9MCxoKR6R7tR
-         GXOZOmgQV+tXSn20/bZoH6X3SgZBAqm7v0ktND2/7ZMcbH4hBLMtAdaMNqSRJORjAK1G
-         dZpDtEY5iOenywsiWrBHGFjSN4HxAElqmmN/Z7NuDpI2Se+JQetaGLWF4cHAsBghZF6x
-         bygLX2YRyN/vZFQsqZWnD/a1VaIrT2UyuEeft3b7vgaoUM7GAZ+fxQzPtBhopHGsEjXz
-         LJB6MYkMkx6SNAAkcPf/IXl1VnoCavQJsdCwFoWsTFRzgNnJt8yHhY74rCpobIp19krI
-         8vKA==
-X-Forwarded-Encrypted: i=1; AL+hErEXSGZ4nSFR6YiZLDwQirrdvWlGIO8sr3tUIzWdFGkW9oPKVv//yslW42V+we0pMpGzCANXAKZkDghJ9iBtctI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+7RkOAuwDbS44fu7PVPFR/0oArogeNRSCOSgvuqGXtuui2y6DK
-	nFOo59Z+oj4pbV9gT/4zHqhNbBPjOq2kL1VNaiEfJej25U6+gCFvabWm
-X-Gm-Gg: AYBFou1Q8maAlr6bLj4eYxga2bRVBJy6Pelc+dDQD6zHpPJ0RkCxk6+f/vO/jBewBIe
-	vXOUkgpss2jVomUY6l8QRdFptZXtd+TIuYPR814lnvSfGaTS6O0mDVmqvSjNzxpp3JYr+to994d
-	7x1fHtdclHfK+RMfLnGl4XZST8fOsR9lHUue+mTOJc9tZAHKsG6wm7jlfOOqVJBViPk4JWohj5I
-	ffkQyW51l2Ou2H3F2aGZUPOezrxNbsUd/H8rRx/bq8sQzsmw1BMFoRnSV0baTwklLpInowS0iXk
-	1dJQ/oyBR0U4rgFCr8w2efRGOY43Njs0MyLR4xJGAys85TOQFOhl6g8cX54GNUcNdYVqVlIdgKc
-	kf5Gh1j3oE3LVGvO8KNEJTQEYeVDaLAoUb5MREOQ9FhIEGPiyJYG6m8tKCv15GWTyX21PXKqA+U
-	MktNcRjOofYPYW2y5obHtIq3BH2Gt74YoOG7eCQ6U0SmD7yYWf5dY6kMlcIfCNWMK7c2CtldBJQ
-	hIDQjrBjZcjbCksrTb1x2Ilp0HAPjwbdXXaJKhT9oGuo6KK9ETc1iFJNqF21ps/wR2VTQDuaxNX
-	UxeFnJ2X6h4B+yJiiPtCZny1gg1wRbRZlhj0q33pac0Oz4Z40cnObklIsoQbZ0bQ4z2VIs5hGj1
-	eYm9Aex8E/Xq+qRo=
-X-Received: by 2002:a05:7301:6788:b0:36f:83e7:fb7b with SMTP id 5a478bee46e88-375202187famr859550eec.40.1794258803833;
-        Mon, 09 Nov 2026 13:13:23 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1151:15:c24:4ad9:f660:1904? ([2620:10d:c090:500::5:5de1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-375212e76e2sm931984eec.24.2026.11.09.13.13.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Nov 2026 13:13:23 -0800 (PST)
-Message-ID: <754d48b0-943c-471e-9e10-f8f23d35994d@gmail.com>
-Date: Mon, 9 Nov 2026 13:13:22 -0800
+	dkim=pass (2048-bit key, unprotected) header.d=oracle.com header.i=@oracle.com header.a=rsa-sha256 header.s=corp-2025-04-25 header.b=ZgI1xwjj
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A9EHITv390072;
+	Mon, 9 Nov 2026 21:22:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=UpAvN4/JLKemRBfAUDzDGGqAINf3d
+	Xx5jhHdtBekoy0=; b=ZgI1xwjjw0fB4BbHsEoRJJkq8cHlU7bDCRm3l7X3bH8nv
+	mpGHZ2KQUFMjbensrddhg8Et4wNxBVDO7FDQ9sdhTjrglAzZGaiSsVCddcUoWFdC
+	Ztci3y3T5WpTVAOpt8e9UfIi7kzXwlHH7cQrc4twyDikV/PoVX+xXT4y07hcptgZ
+	b5yExAKLunLKZMQ3rMbDa9SkDpYeJzlWGdWTGELWZ6h9oqrh27wzzq/f1aM2SoZd
+	NIJDxmRtSECTS3m0sXQePM06PhiwGH2r2ckzACyLbnUzIw1FdOq9B/YkeCJ8j5/V
+	bBZSK51etYERC94uNl3yeMxT5ZQI2lrx19zZKn51g==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4hsvhs35pp-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Mon, 09 Nov 2026 21:22:49 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.11/8.18.1.11) with ESMTP id 6A9L86sU3131928;
+	Mon, 9 Nov 2026 21:22:49 GMT
+Received: from alaljime-e5-test-20240903-1847.osdevelopmeniad.oraclevcn.com (alaljime-e5-test-20240903-1847.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.250.206])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4humgdtyrh-1;
+	Mon, 09 Nov 2026 21:22:49 +0000 (GMT)
+From: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+To: seanjc@google.com, pbonzini@redhat.com
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        partha.satapathy@oracle.com, alejandro.j.jimenez@oracle.com
+Subject: [PATCH v2 0/2] KVM: x86: Fix physical APIC map routing for aliased xAPIC IDs
+Date: Mon,  9 Nov 2026 21:22:46 +0000
+Message-ID: <20261109212248.996736-1-alejandro.j.jimenez@oracle.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,130 +75,99 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] selftests: drv-net: hds: restore HDS
- settings in ioctl_set_xdp
-To: netdev-bot+sashiko@kernel.org
-Cc: davem@davemloft.net, andrew+netdev@lunn.ch, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261106031208.465456-4-dimitri.daskalakis1@gmail.com>
- <179424805404.994134.17832090759573772957@kernel.org>
-Content-Language: en-US
-From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-In-Reply-To: <179424805404.994134.17832090759573772957@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-09_07,2026-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611090084
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA5MDA4NSBTYWx0ZWRfXxVy93SzGnbsZ
+ RDQ11ZPa8VbC32tzf62iWZWeGwl/Sw+OO+em2UhTTUR/RicAHP53lmV0KA4yEt1gk3rfnyhSLGk
+ XR3FcFVteU3NdoOyhjOEyTOJ05uaUcYqA9Vb/cOVgh/KHqVSw7Lt
+X-Proofpoint-GUID: DZdmkregTriOSAK4fCCmW9AV3SOaYfDO
+X-Authority-Analysis: v=2.4 cv=B6EsQ+tM c=1 sm=1 tr=0 ts=6af239aa cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=7Gl3-_t3PgB9XO-mQDs3:22 a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8 a=yPCof4ZbAAAA:8
+ a=a3Bxhg6RGKrUSRw42DIA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA5MDA4NSBTYWx0ZWRfX/G+AOwrX4wS2
+ 6lPKdvHKpOo488pZxrhu9GI9p9EgkJ9BM/TJD1XNU9zy5tGo6cVo/yEc9QgqkxaktyFzHtexNNB
+ OyWdm9uNp1rn+a/aBymR35kv6gl9taOSeFhOVYf6+9OxmziyY9YVXNmHqHIIE18gID3ABRXuNwn
+ Awy31RQFiUebSL1S7AFKwmQ3wXvXg4AIBrjm4jq/b8Vaqmu4gpGrOAatG2xg8voC5kUned3NNwA
+ KJMzWROrfzqskOuVt2VJzM2EssWAKzXs4w7NFdZ/GPGdHsN8QwHNBBjeAZiL0xuSRpQ83XEe2Sw
+ oAIU2TNUGco3RVP+10ahpdhlQBlUi85yWxcET5yCynnZOASEoruJ++9yn6i2d35/w5m5UOfeJPR
+ PgXEqjHMNInZK0jFdG/mOXF+agThABlc3Y4NLuxsLtFVZ9TnPhzFSURkNxXJpIZpapDGbZ5ZEWN
+ tKSTYwLmyGF/Ndyo1eA==
+X-Proofpoint-ORIG-GUID: DZdmkregTriOSAK4fCCmW9AV3SOaYfDO
 
-On 11/9/26 1:14 PM, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 1
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] The fix is incomplete: two sibling tests in
->   tools/testing/selftests/drivers/net/hds.py still change tcp-data-split…
-> - [Low] The patch has no Fixes: tag.
-> 
-> --
-> 
-> selftests: drv-net: hds: restore HDS settings in ioctl_set_xdp
-> 
-> This patch makes ioctl_set_xdp() in the drv-net hds.py selftest call
-> _defer_reset_hds() before it sets tcp-data-split to "unknown". The
-> original HDS configuration is then restored when the test finishes, the
-> same way set_xdp() already does it.
-> 
->> diff --git a/tools/testing/selftests/drivers/net/hds.py b/tools/testing/selftests/drivers/net/hds.py
->> index 7f052c3196039..a1ea195743b56 100755
->> --- a/tools/testing/selftests/drivers/net/hds.py
->> +++ b/tools/testing/selftests/drivers/net/hds.py
->> @@ -254,6 +254,7 @@ def ioctl_set_xdp(cfg, netnl) -> None:
->>      """
->>      mode = _get_hds_mode(cfg, netnl)
->>      if mode == 'enabled':
->> +        _defer_reset_hds(cfg, netnl)
->>          netnl.rings_set({'header': {'dev-index': cfg.ifindex},
->>                           'tcp-data-split': 'unknown'})
-> 
-> [Severity: Medium]
-> Is this fix complete? Two sibling tests in hds.py still change
-> tcp-data-split, and they defer only a fixed reset to "unknown" instead of
-> going through _defer_reset_hds():
-> 
-> tools/testing/selftests/drivers/net/hds.py:enabled_set_xdp() {
->     ...
->     netnl.rings_set({'header': {'dev-index': cfg.ifindex},
->                      'tcp-data-split': 'enabled'})
-> 
->     defer(netnl.rings_set, {'header': {'dev-index': cfg.ifindex},
->                             'tcp-data-split': 'unknown'})
->     ...
-> }
-> 
-> ioctl_enabled_set_xdp() uses the same pattern.
-> 
-> When "unknown" does not bring back the saved value, _hds_reset() falls
-> back to setting that value explicitly:
-> 
->         if cur.get('tcp-data-split') == rings['tcp-data-split']:
->             del arg['tcp-data-split']
->         else:
->             # Try the explicit setting
->             arg['tcp-data-split'] = rings['tcp-data-split']
-> 
-> The fixed resets have no such fallback. If the operator set "enabled" or
-> "disabled" explicitly, and the driver reports a different value under
-> "unknown", that setting is lost.
-> 
-> Here is the test order in main():
-> 
->                   set_xdp,
->                   enabled_set_xdp,
->                   ioctl,
->                   ioctl_set_xdp,
->                   ioctl_enabled_set_xdp],
-> 
-> In a default full run, enabled_set_xdp() has already left the device at
-> "unknown" before ioctl_set_xdp() starts. The new _defer_reset_hds() call
-> therefore only saves that already-reset state. ioctl_enabled_set_xdp()
-> runs last and leaves the device at "unknown" again.
-> 
-> Doesn't that mean this change only has a visible effect when
-> ioctl_set_xdp is run by itself with -t?
-> 
-> The previous patch in this series, "selftests: drv-net: hds: perturb
-> settings via ioctl in ioctl_enabled_set_xdp", edited
-> ioctl_enabled_set_xdp() but kept its fixed "unknown" reset.
-> 
-> Could enabled_set_xdp() and ioctl_enabled_set_xdp() also call
-> _defer_reset_hds(cfg, netnl) before they set 'enabled'?
-> 
+Fix physical APIC map routing when an xAPIC-mode vCPU with an ID above 0xff is
+created before a vCPU whose ID matches its truncated xAPIC ID.
+With KVM_X2APIC_API_USE_32BIT_IDS enabled, the existing alias entry in the xAPIC
+range can prevent the lower-ID vCPU from being reached via its xAPIC ID, and
+result in incorrect delivery of INIT/SIPI during CPU hotplug.
 
-It's true that there is no visible effect unless the test is run standalone
-or with a non-default config, but the point of the patch was to bring this
-in line with set_xdp().
+Following Sean's proposal [1], always allow the vCPU whose ID exactly matches
+the aliased xAPIC ID to install an entry in the map, even if one is already
+present. The full-ID (i.e. x2APIC ID) routes are still used to reach the
+higher-ID vCPUs in xAPIC mode, preserving KVM hotplug behavior.
 
-I'd leave the fixed "unknown" resets as is. _defer_reset_hds() handles some
-additional scenarios, but as in my reply on patch 1, netlink reports state
-rather than config, so no reset can cover all cases.
+The standalone selftest covers both creation orders and checks delivery to both
+the aliased xAPIC ID ("low") and the full x2APIC ID ("high") destinations.
+Example output on an unpatched kernel:
 
-> [Severity: Low]
-> Should this patch carry a Fixes: tag? Commit ee3ae27721fb
-> ("selftests: drv-net: hds: restore hds settings") added _defer_reset_hds()
-> to set_xdp() and the set_hds_* tests, but not to ioctl_set_xdp().
-> Something like:
-> 
-> Fixes: ee3ae27721fb ("selftests: drv-net: hds: restore hds settings")
-> 
-> The test itself was added by 29b036be1b0b ("selftests: drv-net: test XDP,
-> HDS auto and the ioctl path"), which would also be a reasonable target.
-> 
+ok 1 Destination 0x1d: Lower-ID vCPU 29 created first.
+# Expected IRQ only on vCPU 29.
+# Higher-ID vCPU 285: IRQ vector 0xe0 not delivered.
+# Lower-ID vCPU 29: IRQ vector 0xe0 delivered.
+ok 2 Destination 0x11d: Lower-ID vCPU 29 created first.
+# Expected IRQ only on vCPU 285.
+# Higher-ID vCPU 285: IRQ vector 0xe1 delivered.
+# Lower-ID vCPU 29: IRQ vector 0xe1 not delivered.
+not ok 3 Destination 0x1d: Higher-ID vCPU 285 created first.
+# Expected IRQ only on vCPU 29.
+# Higher-ID vCPU 285: IRQ vector 0xe0 delivered.
+# Lower-ID vCPU 29: IRQ vector 0xe0 not delivered.
+ok 4 Destination 0x11d: Higher-ID vCPU 285 created first.
+# Expected IRQ only on vCPU 285.
+# Higher-ID vCPU 285: IRQ vector 0xe1 delivered.
+# Lower-ID vCPU 29: IRQ vector 0xe1 not delivered.
+# Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
 
-This change is not critical enough for a Fixes tag.
+Note the third test case fails because vCPU 285 was created before vCPU 29.
+
+Changes since v1 [2]:
+- Prefer an exact vCPU ID match instead of selecting the lowest vCPU ID, and
+update the errata wording.
+- Move the selftest out of recalc_apic_map_test into a standalone
+apic_id_routing_test.
+- Cover both creation orders, and check delivery via the higher vCPU's full
+x2APIC ID.
+- Use kselftest, allowing the full-ID test to run even when an earlier alias
+check fails in unpatched kernels.
+
+Thank you,
+Alejandro
+
+
+[1] https://lore.kernel.org/all/auT6S-I5b5ordXy9@google.com/
+[2] https://lore.kernel.org/all/20261027051808.243000-1-partha.satapathy@oracle.com/
+
+Alejandro Jimenez (2):
+  KVM: x86: Prefer exact vCPU ID matches for physical APIC map aliases
+  KVM: selftests: Test exact vCPU ID matching for aliased xAPIC IDs
+
+ Documentation/virt/kvm/x86/errata.rst         |   9 +-
+ arch/x86/kvm/lapic.c                          |   7 +-
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/x86/apic_id_routing_test.c  | 217 ++++++++++++++++++
+ 4 files changed, 227 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/apic_id_routing_test.c
+
+
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+-- 
+2.47.3
+
