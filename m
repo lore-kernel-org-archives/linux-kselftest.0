@@ -1,87 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794187384;
-	b=mRobmkd7kwlViW4uI+RH4toZYVWvGidAdj90hTqSDQTPIxXB8ISM0imslGHVLY391hD/
-	 78feIKiQO6RIlnSaMdZtgSr8JkgJb/3geG5ridOW5/3R1UG52IN0tl8muQS2S/tec3pM5
-	 BtqK1D4S04qrVYrencokmOLBS1nmb66bFR+4F+XUaRa1RtE6tW+M7VnRIfeDqTSYuD6X0
-	 DjWDIMnBZzJcNhrtZR+gtLh6nl/e8iMaqrCLznAEe0Q2S2PUebEG+kZT8IxjPBJBJuYny
-	 1yYPOPJGTHHi3rEQHG45GFeuaJu1cx/aLAIZj3nLAHhewqGLw1posoYZ62irjW53u7g==
+	b=g/Pw4i4TMOTfGO31t/As8Mz0ZskajtOlSaxe9+BzTZh20AQK1AllhHrzvtq2+0Lpa54t
+	 UjzC2T9toZIhh1n2JuPasFfISI4M5jxGMLa8ZRg7UeLZ0N3fn8x6aRinkI0RizznjBlgZ
+	 e0JMM4QZdslI0Nj8N4FPNpII+htIxYlUwDOOfKZ/+gtWt1LoEi6KcjcjImGYeD7IP6eaX
+	 nGdpGzPbOvgJ4PTewntolmYydFzwkSF3w9JBKN23AF9rC3WLhA7ubbBW6CeZYSlO9+xGC
+	 8qIkSBQV7nDZVX8NZPBWhFbbaZoRu7BxIUl5k+V6RpsPZPPWemE56UnyDs2lWxwNLRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794187384;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=XX9ESCVfSBNTpp12XWWFYyZTazCHcyRRL6wSEZ9nPSY=;
-	b=RhUcfDsPNi/EnFy5ZpKPQgo/bJUDZD9HOjH0jSD/cgX9wHFuD0weC74CgAuFKspKsyAn
-	 B8UtPuPEIvse1/5X5FO4xeWqCNzuSRsoUClSBHtq4kdCSolFMrDj3PjmSQ9OV8irX6pmI
-	 Qwjai2QYudJjPMfP4VBzx0WfZu5AMrMoaN8vaS27YoS7sb7TwUOyM6pOGpSC3beBlvpOl
-	 iz+i6xX0gdv248/xr5QjY6EOagutXoIn+dSthSY4IfGSzk9Qy/FBiOMZOKBtGK41mCsyG
-	 CHrFeB/wK9Q79QJFZ8OrihFedjVRa8E5YxezcWrwqFKfvO/hLHurRLk6tiaTAHO9kUg==
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=s1zfZI8JUKbwHpOBFW8jIWnPvQkeTTvTBB5i5S2oBVk=;
+	b=YQIJzXnhwe83axsOvxHVQwa6cc8UgfldHKszUe30RY/QZluvflNgDHNg2D+NxksQ65fK
+	 0g+79P7VbWgwuMfoNoNCaNK3OuQtuhKtSLi2i2IhbIzi3CQMhcL2jQxjr0kOyaRm1zwzg
+	 vN5fqk3eZ5NF8hZ0IohUMvjtQzL2vnHj/9FcoZNabWAwYj476KYUbhpQOvGul+5m3W39X
+	 eIhWWe0j/96ILCskeud/qmp1V4Pwppidq6zCR8DVNcpJ2DQ2VmTP3FHsHal6S+WOW2pyn
+	 M1eSy7bWqSYKBtIF7o2anjMiS2rL4pGBW9vuEImal3Kl5BUlrhGSbvhk2i28O2VW64w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SE0qTeFz;
-	arc=none smtp.remote-ip=74.125.82.54
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eFgOmI1g;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AE260A260E
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 01:23:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3AE260A260E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4301960A261F;
+	Mon,  9 Nov 2026 01:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SE0qTeFz
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1b244fb7fffso364283c88.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 17:23:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794187383; x=1794792183; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XX9ESCVfSBNTpp12XWWFYyZTazCHcyRRL6wSEZ9nPSY=;
-        b=SE0qTeFzqaJu1j4culD59qlETogr4FP2tlhi3RdWubs2Rq6jhDqKWZvimjhU1ipQCO
-         BED90XOaroUx7mK3TKABT5wicefxpFqjgzEyVcWH9LZb6WyLHUvFzDiM9ccNkHq/WY1m
-         ZR0TtXFtschd0HQXj+fYBViVncxDK6vmflvAfcQDtx6H72X5G1WjzntJZmgQOJqZLrdD
-         mYAPv2dNk6EnIB7rdZX0yVKJ/3PgNdN62PXUsT2c0aiem4FV23qwQaydrLsTgUjR/9gO
-         sMaRYZXGJVSHxLdIijypmxp9xqYE2S064M8BEvrU75am7Tcfbx20c/FyRHDRaBIcbTIt
-         0clA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794187383; x=1794792183;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XX9ESCVfSBNTpp12XWWFYyZTazCHcyRRL6wSEZ9nPSY=;
-        b=FExKIH+X81U/rEdsM5HFp0fJz3ONS87NmShCw0jh/fb1ZpSxvZBM2nJjLpRFmBnsIQ
-         MN4vuXUQgm9zmiEicpoo9hFQXo+azNS/Sz/x8E/CWCtuxYwhwISkFHyNAncD++izZTUk
-         Z7IYfyEnc5S0XjcpLuZTUaHP7RMmB1uFPpVLLTE9G5lKqazYYk2bsee3CXGYVBn9IWNy
-         nv2IFthJInjZau+IvLzSTSWiwhctC2n2P6GhK18aU4a4M/KJboiPcr23ezVp51n4a5gb
-         l1Z6XNB3eWbFYcUxSgHmlNYdJ5EEBCkGOLFwl0NciLgb/abx7x+pJCAPKtA5QqBY2L7p
-         l2LQ==
-X-Forwarded-Encrypted: i=1; AL+hErHzEt1m400w5zEJgpVHZEfVhvDwtBC0yBxQJroTW+8GPLtNbApfSysvqQSFwyBof/WbZRYkqz4Nnk1sIvgdgRc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+3YosnZAZK34VXy/m/vrxTftzot9kFdNk+Xh57tQ4g7goci47q
-	KvotYL1fFU9pz3Sp1MHvf9Lm2Bb8Fp6IraIRDFRzDBMYyo2xdVlKEAy9
-X-Gm-Gg: AYBFou20jDucKxtHfWHfsm//OuKN20vdTSmWNRK5VJ3sdCxecNM6Haj5TjZLgN3dKfJ
-	2y066ub9/8U6e67MZHlWIUJUyZQy7VRN/j4pm4kWzs1lB+aUbcvfV2BwMkZpb7aMlkp4nivfkbv
-	9/+7JVL6V3/aqjodI2RVcC787+HXQcFdnLstSmV1L0vUJsIVj1MM+ZBmvL0iq3eSXLtEw9hyLPO
-	uSB3EGoMZv9N6JLy7ImsC+f0msOYCRSMvhkLqJAZsLftwfLPTmSHqkTzUV+DyPAimbLcGbbqJ9o
-	QvfWG42vo3oWZuk2ndzkegADBYNaNMjwIRgQ4Ss2my9e3ORNRRWLemi28J5hgF+haVtvoTP8W8y
-	hzbQsB5IBdf2n0PrGFNOG+c6uYE1MzhGqY7j91L8gfgmv896lmP7gzko0RDNLCeo+6Un4s9pZhm
-	7euGJdskFRrl0+ZOHCXPdGGxum/TW/WCTr4gYR6dMwpCwTK5vGdu0+6ueI88bBRaLSzpqZDuEXA
-	+WjB/e+vp/rGVj7WPPbwK3ijORC0mUV+UB2tA649jwiV08Ek9cMkzXViWD4SJ/AjFMcfip3OnzU
-	wSr3atVTku6YubLZa8PuVJjNkA==
-X-Received: by 2002:a05:701b:2306:b0:1b3:a22c:7f68 with SMTP id a92af1059eb24-1b3a22cb4a4mr3636286c88.29.1794187382778;
-        Sun, 08 Nov 2026 17:23:02 -0800 (PST)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b3771ea85bsm9428226c88.18.2026.11.08.17.22.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 17:23:02 -0800 (PST)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Sun, 08 Nov 2026 20:22:50 -0500
-Subject: [PATCH v4 1/5] mm/ksm: align smart scan skips with the scan number
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eFgOmI1g
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BF71F008A4;
+	Mon,  9 Nov 2026 01:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794187383;
+	bh=s1zfZI8JUKbwHpOBFW8jIWnPvQkeTTvTBB5i5S2oBVk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=eFgOmI1gXbfWdehEgTIKPRe6pmpqRDxvFxrUbb8Em0Pdf8rwV/zuX5KxwfD/Ad8UQ
+	 gVPA2kPimxvV3Xx3Q7ld8ewYT9GgXZpyLR13ydQJw5nvJbvY1dQKstvSFPf09ZZn0M
+	 +81pCmKApQ4tkM4QpnZwMaYNaEm+jpm4xPMYnL5ZvZsgNLy5vSPcE/7YPdle095wpp
+	 jGNPzflJK6aLnYEAEf8PKPjbaOAK76vqk6wL7gTme295OQhfLaC+goDUe9GMu/sTQ0
+	 SoHWyED4V0oEL8i34DH9yQJimUD/i4sk+KtfhARI5mNTt6cBFnCQh7EL1/QYhrMBR/
+	 pRAWXx/TTweCw==
+Subject:
+ Re: [PATCH net-next v3 7/9] net/mlx5e: lift the netmem TX frag size limit
+From: netdev-bot+sashiko@kernel.org
+To: sdf.kernel@gmail.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch,
+ edumazet@kernel.org, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, rdunlap@infradead.org, michael.chan@broadcom.com,
+ pavan.chebbi@broadcom.com, saeedm@nvidia.com, tariqt@nvidia.com,
+ mbloch@nvidia.com, alexanderduyck@fb.com, kernel-team@meta.com,
+ sdf@fomichev.me, dimitri.daskalakis1@gmail.com, almasrymina@google.com,
+ dtatulea@nvidia.com, bobbyeshleman@meta.com, asml.silence@gmail.com,
+ daniel@iogearbox.net, razor@blackwall.org, leitao@debian.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, leon@kernel.org
+Date: Mon, 09 Nov 2026 01:23:01 +0000
+Message-ID: <179418738174.994134.464817117967884735@kernel.org>
+In-Reply-To: <20261105222058.944293-8-sdf@fomichev.me>
+References: <20261105222058.944293-8-sdf@fomichev.me>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -91,134 +71,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261108-bug-mm-ksm-smart-scan-align-skips-v4-1-86be8fe77e7a@gmail.com>
-References: <20261108-bug-mm-ksm-smart-scan-align-skips-v4-0-86be8fe77e7a@gmail.com>
-In-Reply-To: <20261108-bug-mm-ksm-smart-scan-align-skips-v4-0-86be8fe77e7a@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Xu Xin <xu.xin@linux.dev>, 
- Chengming Zhou <chengming.zhou@linux.dev>, Stefan Roesch <shr@devkernel.io>, 
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- Qiliang Yuan <odys.yuan@gmail.com>, stable@vger.kernel.org
-X-Mailer: b4 0.13.0
 
-Smart scan skips pages that KSM has failed to de-duplicate for a while.
-Once a page is three scans old, its rmap_item counts down its own number
-of scans to skip, 1, 2, 4 and then 8 as it ages, so an old page is looked
-at every ninth scan.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-The unstable tree is rebuilt on every scan, so two identical pages that
-are not in the stable tree yet can only be merged in a scan that looks
-at both. Each countdown runs from when its own page became mergeable, so
-two pages that became mergeable at different times end up on different
-phases and, once both are old, may never be looked at in the same scan
-again. They then stay unmerged for as long as they live. The pairs below
-are counted by making a page mergeable, waiting for 0 to 20 full scans
-before doing the same with an identical page, 20 times for each wait,
-and checking the pair after another 64 full scans, on two boots per
-kernel.
+Low priority / nit picks for your consideration:
 
-Pick the skipped scans by the global scan number instead, with periods
-of 2, 4 and 8 scans. The periods being powers of two, every old page is
-looked at on each scan that is a multiple of 8, whatever its age, so any
-two pages meet at least every eighth scan. The longest period goes from
-nine scans to eight, so ksmd looks at more of the pages that never
-merge. The rest of the table is measured on 64M of such pages, median of
-five runs of 256 scans on each of three boots per kernel, CPU time from
-schedstat:
+- [Low] This patch sets `netdev->netmem_tx_max_frag_size = U32_MAX` in
+  `mlx5e_build_nic_netdev()`…
 
-                              before     after      after/before
-  pairs merged (of 420)       361        420        116%
-                              334        420        126%
-  pages looked at per scan    1792       2048       114%
-  ksmd CPU time per scan      6.30 ms    6.88 ms    109%
-                              6.40 ms    6.96 ms    109%
-                              6.15 ms    6.88 ms    112%
+--
 
-Fixes: 5e924ff54d08 ("mm/ksm: add "smart" page scanning mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-Tested-by: Andrew Morton <akpm@linux-foundation.org>
-Reviewed-by: Xu Xin <xu.xin@linux.dev>
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
----
- mm/ksm.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+net/mlx5e: lift the netmem TX frag size limit
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index d24b129932bf7..3053b438e9c10 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -197,7 +197,6 @@ struct ksm_stable_node {
-  * @head: pointer to stable_node heading this list in the stable tree
-  * @hlist: link into hlist of rmap_items hanging off that stable_node
-  * @age: number of scan iterations since creation (unstable node)
-- * @remaining_skips: how many scans to skip (unstable node)
-  * @linear_page_index: the original page's index before merged by KSM (stable node)
-  */
- struct ksm_rmap_item {
-@@ -214,7 +213,6 @@ struct ksm_rmap_item {
- 		struct {
- 			unsigned int oldchecksum;
- 			rmap_age_t age;
--			rmap_age_t remaining_skips;
- 		};			/* when unstable */
- 		unsigned long linear_page_index;    /* for reverse mapping, when stable */
- 	};
-@@ -2457,16 +2455,14 @@ static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
- }
- 
- /*
-- * Calculate skip age for the ksm page age. The age determines how often
-- * de-duplicating has already been tried unsuccessfully. If the age is
-- * smaller, the scanning of this page is skipped for less scans.
-+ * Calculate how often a page of the given ksm page age is scanned. The age
-+ * determines how often de-duplicating has already been tried
-+ * unsuccessfully. The older the page, the fewer scans look at it.
-  *
-  * @age: rmap_item age of page
-  */
--static unsigned int skip_age(rmap_age_t age)
-+static unsigned int scan_period(rmap_age_t age)
- {
--	if (age <= 3)
--		return 1;
- 	if (age <= 5)
- 		return 2;
- 	if (age <= 8)
-@@ -2516,17 +2512,17 @@ static bool should_skip_rmap_item(struct folio *folio,
- 		return false;
- 
- 	/*
--	 * Are we still allowed to skip? If not, then don't skip it
--	 * and determine how much more often we are allowed to skip next.
-+	 * The unstable tree is rebuilt on every scan, so two identical pages
-+	 * can only be merged if both are looked at in the same scan. Pick the
-+	 * scans by the global scan number rather than per page: the periods
-+	 * are powers of two, so pages of any age meet on every scan that is a
-+	 * multiple of the longest one.
- 	 */
--	if (!rmap_item->remaining_skips) {
--		rmap_item->remaining_skips = skip_age(age);
-+	if (!(ksm_scan.seqnr & (scan_period(age) - 1)))
- 		return false;
--	}
- 
- 	/* Skip this page */
- 	ksm_pages_skipped++;
--	rmap_item->remaining_skips--;
- 	remove_rmap_item_from_tree(rmap_item);
- 	return true;
- }
+This commit sets netmem_tx_max_frag_size to U32_MAX for mlx5e NIC netdevs.
+The commit message says mlx5 TX data segments have a 32-bit byte count,
+so devmem TX frags don't need a size limit.
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index c3c2c5720c6f3..28ba04bd5f4a4 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -5967,6 +5967,7 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
+>  	netdev->priv_flags       |= IFF_UNICAST_FLT;
+>
+>  	netdev->netmem_tx = NETMEM_TX_DMA;
+> +	netdev->netmem_tx_max_frag_size = U32_MAX;
+
+[Severity: Low]
+Is U32_MAX really the largest length an mlx5 data segment can describe?
+The commit message says:
+
+  TX data segments have a 32-bit byte count, so devmem TX frags don't
+  need a size limit.
+
+Bit 31 of byte_count looks like it is the inline segment marker rather
+than part of the length:
+
+include/linux/mlx5/device.h:
+	MLX5_INLINE_SEG = 0x80000000,
+
+The mlx5 IB ODP WQE parser reads it the same way:
+
+drivers/infiniband/hw/mlx5/odp.c:
+	inline_segment = !!(byte_count &  MLX5_INLINE_SEG);
+	bcnt	       = byte_count & ~MLX5_INLINE_SEG;
+
+The mlx5e XDP, IPsec and PSP TX paths also OR this bit in to mark inline
+segments. That leaves 31 bits for the length of a pointer segment.
+
+mlx5e_txwqe_build_dsegs() stores the frag size in a signed int and writes
+it to byte_count without masking:
+
+drivers/net/ethernet/mellanox/mlx5/core/en_tx.c:mlx5e_txwqe_build_dsegs() {
+    ...
+		int fsz = skb_frag_size(frag);
+    ...
+		dseg->byte_count = cpu_to_be32(fsz);
+    ...
+}
+
+If a frag of 2^31 bytes or more ever got here, fsz would be negative.
+The pointer segment would also have the inline bit set, so the WQE would
+be malformed.
+
+Today nothing can trigger this. net_devmem_bind_dmabuf() is called with
+niov_shift=0 for TX, so the net_iov size is at most SZ_2M. Each frag in
+zerocopy_fill_skb_from_devmem() is limited by that size.
+
+The documented contract in Documentation/networking/netmem.rst still
+says:
+
+   Drivers which can describe larger TX buffers
+   may raise it, up to the largest buffer a single TX descriptor can
+   describe.
+
+zerocopy_fill_skb_from_devmem() also relies on this value as the
+per-device bound:
+
+	size = min_t(size_t, size, binding->tx_max_frag_size);
+
+Would a value that matches the hardware, such as (1U << 31) - 1 or SZ_1G,
+work better here? The commit message would need updating to match.
+
+>
+>  	netif_set_tso_max_size(netdev, GSO_MAX_SIZE);
+>  	mlx5e_set_xdp_feature(priv);
 
 -- 
-2.43.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261105222058.944293-1-sdf%40fomichev.me
