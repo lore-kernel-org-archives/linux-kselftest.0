@@ -1,67 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794232817;
-	b=MiPaZ1RhDLbB/CmD9u8BzcaMTp77oSwXclBvVnJI5xvUYpIAnZmFqaQL9BOAXdbnRX0K
-	 cRhDcnkumplAVvb+DP3RZEgRtEMhW4xZ7rUhde+B6pztNz/7JM3Ob/KD5GyMWy6GnJoSU
-	 1SUIeR99BARVh+94sS3kcPGJTDzwJU8XJBVr0twBNerrHYvNdYi//rgRJKElljVOk2cO6
-	 qfH1MPqVpjbaEhb9KABXgF9Vk+eO8yJXNBTihcmhdaUneFv3/HUPX97hnEHQcREl8XAGP
-	 DIelruCSBlTAHHvqmtBRI4xjKIKwwwLVO+5xu9xtv15urui35ECqTNGwT9bsyBW8MLw==
+	t=1794232863;
+	b=LqdwW4aKmr9gqo66NnFi98xr5wLyLnUi4b2TTG3495hY46j+3zwGePqkm31RY3FL1uHw
+	 bzT27CdFwbTPaJe/zUJJcExxvkPmRAuBAGbRZaOTejyrtXibOHVfvuDUeX7mgdGtOC7Lk
+	 QUKzhw/K9YX5Zse/M5ZWetnhPkxH57oee08rh4XDebuLiQNX2FB7iCwYKFEwdxv4UHMwO
+	 ZW/9lvooD9jdWTefeU/OrIj+elQnS7HsSp424EEAZ8T5MGFMAPJxWgwIvlKNgRRh1d3JE
+	 G/wzuTn75/RA4EcJ/c+mjxC/j4r0lEIt0JBYEZqlPLMjYGNnvYsRLI25z2xPE46ikVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794232817;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794232863;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
 	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=DHIw1EPWZJB++YZvHsd7F6bNOe1Qinnyb4fKKIHoJSM=;
-	b=Ne3mc2ml/rUliE3Ov95InJ8pkG5LP7TUHccSqECDak5Dg/PfbRy6CsxfAXkrVw96K24D
-	 KxjppLYtiawwlZrN8zOKY+5kfpJSQqZN6lz8j2FkAYw0lEzYNScmEhofLRxDmb74u08nW
-	 Oqt5o0nN5SjfLBrbkYJIkaimBZMvyuwX4gPwFaulNtTvIzDuBIbsOx3mOElJbnjvRrlXn
-	 WLMGeNjKm4iiYDuBcByX46XnQoYDb09rE9/6kVsri700Iouq1/5fbWO7oLlev2pnoOSiM
-	 LIjCAG31kcMd53G/JdM/1kBjfc5jD/Ddz8CKyvEve4PlVavn5ovM4KB6pzYeNZDOK8w==
+	bh=9Oiih5slTZyatARVLusbIPjFVP7cGpNfYHK2OPkvmRA=;
+	b=z8hxCKrLZnmGdo3qDc4Y0Di3yW8a/pfo0aaEhQ38r1zFs2r8KYgPdxzp8zQ25cFt653c
+	 JojyLFuQ9WbfZmmaeZilxDTnZsZfIoiu9Mvcu0Jk/kUFACJ4h4Nbh5MHGjN8Hr5QP16D5
+	 9ATsatcM9K4paoBboyydGrrayqt134R2q/SO0onD9MNUVCb5KU6WoIzIc7IrL59ZsasnP
+	 34He6tp3qlRoZnUXbWVtHFOocGmoBqVaY1SHSPUNsKRIwiv1gLj1p8Gd1BvBan5Y/nqUg
+	 2k98Xd6UXu768pN+xF/E1aW6iNxP+MjonlGWF7sUkax2hAEC587758eFbIyyVJKUojw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=h+eW49q9;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZwB0WqLr;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6775606D801
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 14:00:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6775606D801
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EA0606A321
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 14:01:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5EA0606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=h+eW49q9
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZwB0WqLr
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794232816;
+	s=mimecast20190719; t=1794232862;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DHIw1EPWZJB++YZvHsd7F6bNOe1Qinnyb4fKKIHoJSM=;
-	b=h+eW49q9y47rYNeBHrRoS7kdlGOvYflmZUGHgk6mgOQH63Fe0G3mqYdx9EhIQeRTNeob2v
-	OuTGW128ZCeRKcnpMv8qiihjTQ5uEIwN3jw/rUjZG3OB20S42gEPI0UBi/PJR7y/gfHKo1
-	GR+Dx/tRfzcREWLh8QPpxTuupr0RfzM=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+	bh=9Oiih5slTZyatARVLusbIPjFVP7cGpNfYHK2OPkvmRA=;
+	b=ZwB0WqLr6VFEWZYkFPoje9nwFOzZF6Oo1d6V/Zs7Pl67KGdyhRuvreAqycfV1F++ZKfiAR
+	5PTamG+FKuzs8+NJ43ymUVFnEOlg3guNnV/ll+l30W6V8d+ZIrZBWzmRrLB7BvFPmCrKB8
+	w0mSylDtEP17/ydvSmAPTwoGu8GPpgk=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-596-hbW2XiHzOLGS3RfqDgBnBw-1; Mon,
- 09 Nov 2026 09:00:09 -0500
-X-MC-Unique: hbW2XiHzOLGS3RfqDgBnBw-1
-X-Mimecast-MFC-AGG-ID: hbW2XiHzOLGS3RfqDgBnBw_1794232807
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-295-KZaldpeVMb2chDoXjrJOXg-1; Mon,
+ 09 Nov 2026 09:00:58 -0500
+X-MC-Unique: KZaldpeVMb2chDoXjrJOXg-1
+X-Mimecast-MFC-AGG-ID: KZaldpeVMb2chDoXjrJOXg_1794232854
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B7952180055F;
-	Mon,  9 Nov 2026 14:00:06 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3F27B180059C;
+	Mon,  9 Nov 2026 14:00:54 +0000 (UTC)
 Received: from [100.91.101.41] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5FF8018004F7;
-	Mon,  9 Nov 2026 14:00:02 +0000 (UTC)
-Message-ID: <820f8832-ab71-4f6c-b469-b49d7518196a@redhat.com>
-Date: Mon, 9 Nov 2026 15:00:01 +0100
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D6FD330000E5;
+	Mon,  9 Nov 2026 14:00:49 +0000 (UTC)
+Message-ID: <36a27d0b-a4d8-4135-8796-525898b91807@redhat.com>
+Date: Mon, 9 Nov 2026 15:00:48 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,11 +72,12 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 06/14] selftests: dpll: add pin state tests
+Subject: Re: [PATCH net-next v3 14/14] selftests: dpll: add reference leak
+ tests
 To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Jani Nikula <jani.nikula@intel.com>,
+Cc: Jiri Pirko <jiri@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Jani Nikula <jani.nikula@intel.com>,
  Vadim Fedorenko <vadim.fedorenko@linux.dev>,
  Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
  Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -84,67 +85,53 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20261109093523.931201-1-poros@redhat.com>
- <20261109093523.931201-7-poros@redhat.com>
+ <20261109093523.931201-15-poros@redhat.com>
 Content-Language: en-US
 From: Ivan Vecera <ivecera@redhat.com>
-In-Reply-To: <20261109093523.931201-7-poros@redhat.com>
+In-Reply-To: <20261109093523.931201-15-poros@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
 On 11/9/26 10:35, Petr Oros wrote:
-> Add dpll_features.sh, a script that exercises individual device and pin
-> callbacks with get/set roundtrips over netlink. It creates a dpllsim
-> device with the standard pin layout by default or runs against the
-> device named by DPLL_DEV_ID or the first device of the driver named by
-> DPLL_DRIVER, and picks the pin to reconfigure up front, the first input
-> pin that is not connected on the device, so that no test touches the
-> reference the device is locked to.
+> With CONFIG_DPLL_REFCNT_TRACKER the DPLL core keeps the stack traces of
+> unreleased device and pin references in debugfs. The entries do not
+> name their owner, so add library helpers that snapshot the entries
+> present before a test creates its devices and fail when an entry that
+> is not in the snapshot still holds references afterwards. An entry in
+> the snapshot belongs to an object of another driver and is ignored
+> even when its content changed, since other drivers take and drop
+> references while the tests run. The teardown of a device releases its
+> references before the write to live returns, so the entries are
+> expected to be gone at the first look; the check still polls for a
+> while before it reports a leak, so that it does not fail on a single
+> read. Attributing
+> by name means that a leak of an earlier run goes unnoticed and that an
+> object reusing the address of a freed one from the snapshot can hide a
+> leak, which is accepted, the entries carry nothing better to go by. A
+> second run alongside would have its devices attributed to this one,
+> which is one more reason for the lock every script takes.
 > 
-> The first test moves that pin through the states of the device mode,
-> as Documentation/driver-api/dpll.rst defines them, reads the state back
-> after each step and restores the original state at the end. In
-> automatic mode these are disconnected and selectable, and on the
-> device the script created the test then checks that connected is
-> refused. Hardware drivers are not held to that, ice accepts connected
-> in automatic mode, and a pin with the state-connected-override
-> capability would take over the reference. In manual mode connected and
-> disconnected
-> are the states, connecting the pin makes it the reference, so the test
-> finds the pin connected before, connects it back at the end and checks
-> that it is the reference again.
+> Whether the tracker works is probed with a throwaway device, which has
+> to show entries while it is live and to drain them once it is deleted,
+> so that a kernel without the tracker is told apart from a broken
+> simulator and from a leak. The probe runs as the first test of the
+> stress script, which gains a final leak check, and of the new
+> dpll_reftrack.sh, which registers a device, removes it and verifies
+> that no reference survived. The snapshot file lives next to the lock
+> file under /run, for the same reason the lock file does not live in
+> /tmp. The library mounts debugfs when nothing else did, like it does
+> for configfs, and the selftest config enables the tracker together
+> with CONFIG_DEBUG_KERNEL, which it depends on, and debugfs.
 > 
-> A driver may refuse a state the capability promises, for a constraint
-> the interface does not tell. That is a skip on a device provided by
-> the user, with the reason the tool reported, and a failure on the
-> device the script created, whose simulator accepts both states of its
-> mode. The restores are deferred right after the original states are
-> read, and the cleanup handler of every script that defers runs the
-> pending restores before it removes the devices the script created, so
-> that an interrupted run puts the device back as well.
-> 
-> The stress script gains a test that floods one input pin of a fresh
-> device with changes between the states of automatic mode. The library
-> gains the state setter both use, which keeps the extack line of the
-> tool in DPLL_LAST_ERR so that a test can tell a refusal from a failure,
-> the device mode getter, and a check whether the pin set usage of the
-> tool knows a keyword, so that a test skips on a tool too old for it
-> rather than every script requiring a newer tool.
-> 
+> Acked-by: Jiri Pirko<jiri@nvidia.com>
 > Signed-off-by: Petr Oros<poros@redhat.com>
 > ---
 > v3:
-> - follow the mode of the device under test: disconnected and
->    selectable in automatic mode, where the simulator is checked to
->    refuse connected, connected and disconnected in manual mode, where
->    the pin connected before is connected back at the end
-> - cycle the state flooding test through the states of automatic mode
-> - add the device mode getter to the library
-> - honor DPLL_DRIVER like dpll_basic.sh does
+> - say what the leak check waits for instead of a concurrent dump
+>    holding references, which nothing does (Ivan Vecera)
 > - follow the move of the selftests to
 >    tools/testing/selftests/drivers/dpll
-> - the Reviewed-by and Acked-by of v2 are not carried over, the
->    state test changed
 
 Reviewed-by: Ivan Vecera <ivecera@redhat.com>
 
