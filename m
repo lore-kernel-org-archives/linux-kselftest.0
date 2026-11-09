@@ -1,128 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.45
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794239355;
-	b=ItZ24DPqlGiunKjXfEKCnFmV3NkfHZjMKe2R5O5RiHhHfIFGWiVbh4u7JIT4m0Q5SvqM
-	 fzIe/PZU6PL8WGalekE7ChCEdr+iB5KjKYhg+62qIyS+gwYbzss9blZaDCCmk7Nh6oFKB
-	 awD0eobzYoAmSEX1Gp/yrjk0TyMCtEnzBYwcZaMGnlB5ldXguPkBWcxSx68S3fd4PlLOe
-	 2VXOfAkOGF2ipJV55SwOAcwdfc5jJk2WK9frv531SQNW8tDpe3FcZso57PGP+vAO7p70B
-	 gIl6yrjvhM4CeENLvCSazUfnRJUeuuETeLhSa0lIK4Jc8G/Pj83i/sUfzpJJx+SXsgQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794239355;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=YbLfW9U7bURTW7WWyEUs2jKzerBMtTsg+xvyertb1hc=;
-	b=d6A6p1l97GcDlU8biC4lrMQaSfOxQcDcKQjsH4AdYvBt5ZRe/AskBfbpqlKV3lqUh1ol
-	 RKosspXkLJdQIQOwfWcjCMercpCWqhlZcn0YVE4GB/8Ldh2nOUzzPJMso1Nj4a6Q/k0+7
-	 XJzWWJmsEBUCmugooVjQx+8sn3g/uBCG6wWGiVYlm/LBUKDGkulcVgSZ2zx7tDkNjhiBc
-	 Y66nbAKzueNU5nChwVQEbV+qlr+r1uuX3yTQODHYAO7U/IPQ75B9kb/Y3fO4QAZ9G6Nw3
-	 l9FDVm8MZDEdH9OC1wvM/e7n0iAOPgZ8AWSWf6Y1vRbodBWG7LnlOi3c5Lxr6WzK28w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NgmDxAS1;
-	arc=none smtp.remote-ip=209.85.218.45
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=165.173.182.12
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794239873;
+	b=TZrQYlvmzZHIRJABqfxCMOWj/JQEQHwxpi/KNgufpwjqvp5PpEKHyJJj/HoyFoiCUPei
+	 hH4Rc+juJDXjvMBSd1RnUag4lCF1xfT3LyaV5ZYKvrhARlLkF4WapankBclPSh+1a1jE/
+	 Y4tkbHeWNHd1EK5zVEUCdlMnmCoFjHUVDyN4n1tj2c0cObXI4tFeSsFidwt8sKi7BvoXz
+	 B37YeiMZYOy1KfqSAeeeke7A4grNxpUIUmUpFiV9+GmRvFesHtolnDXX8Ce4aMVPByZPJ
+	 JBhXWoRHvDIphUIzTJKMvNcEvvpDISj73rbyhw/9ixmDbNjk6+oEdQY2CxotzAcsqBg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794239873;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Subject:From:To:Cc:
+	 Date:In-Reply-To:References:Organization:Content-Type:
+	 Content-Transfer-Encoding:User-Agent:MIME-Version:X-ZohoMailClient;
+	bh=9W5U9MRLdiGXEzabQcr7VS1i+v+HHL0WqrvbrIzGW3Q=;
+	b=5CE9BuCRc9vNl5mu5b4pLhznlOGEI/iamklGuGqZy6OdTDqwFODVjh4/YJK03OExDLGK
+	 1FvPhheY5alR4Xsf+nAhMs/G6Z1Mrjw3DqLUWBpdcJmCJkdyB+75cAyDb+0olojjXLEnp
+	 6uV8Tp9Ps/xwzvC9g4z1WFB9JR2nAO6dGFF5by5tzhf/FyNrV45abZ1uB//QxgIgolYAi
+	 8vyCa1QdD8Ms7XK78xF1Jh33wnh1BsQpVLqp/Mc2xF49ngAZ7YcUHwTrdxErRJ/f1Yo4d
+	 XlkznkN5O3Hgm8gFdgaCL4Dyl7ggr4MEcPYAB0p6cbT/yUNqE2+jI84/HVDFYtWvBzg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=icenowy.me;
+	spf=pass smtp.mailfrom=icenowy.me;
+	dkim=pass header.d=icenowy.me header.i=@icenowy.me header.a=rsa-sha256 header.s=zmail2 header.b="Zqa/eYBR";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=165.173.182.12
+Received: from sender5-op-o12.zoho.com (sender5-op-o12.zoho.com [165.173.182.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7425606A325
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 15:49:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7425606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC87606A321;
+	Mon,  9 Nov 2026 15:57:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EBC87606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NgmDxAS1
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c45551fa84eso142639666b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 07:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794239353; x=1794844153; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=YbLfW9U7bURTW7WWyEUs2jKzerBMtTsg+xvyertb1hc=;
-        b=NgmDxAS1XReNTi/U/iDSh8mgdE/VoqW1kZ2zrt2gbEsPCn3AoOaYrbgL9tBQAZLMEg
-         sV1TIQgRXFgzd1XPkVoMNWMz8rwtJgsCUJvrGIXSjJEsh2kAkWJWNGOMqn56aoS4OmA8
-         lpwqWCOhQBlb9P7N5tlRhT4FVaxsJECMGhHakqy/9NLArjfFFim4/6V3tlgq5sWA5cwL
-         xIK6pjqBvc+iI/Fxmm2zbJb8gixcmt4FLLxfXebAgJBtVqdpAQYe9yFNrmVh/GaOD0mh
-         mXtE4u5A8ZUk9XtmUFwyDlF2ztOVWC3Id4wBEKb7x8CsvaLz3kNnOz5wMXICrpr/rXZk
-         tahA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794239353; x=1794844153;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YbLfW9U7bURTW7WWyEUs2jKzerBMtTsg+xvyertb1hc=;
-        b=eix50Vds5ZVRxE3Jb30LmJ6eOB2Hxh1+V4VG4bujXlUoPqNfuMe3HJ5fuzvH//6Azi
-         oeeMtG2hybxuphsBs923PGakxt5T4EyJRbertqPUv22PfpuvMMRo0LGQTjRTk/VL6Ot0
-         F7Er6xNjMJCjEekvMaQ4DQoyP9VDsWEcIRV+/U9GyIbwYwQ3XCNNHM99lMIhEYDYMgZe
-         2nXy88mUPwojmQzH6ZvCVXrm8ealtJBsxf2kTFLkTzgzBYylqeaV8dblr3DZcxRoALVd
-         6EIRBxbTJeeNBDVMocR5XugUdCXB4T9ckxkOO4RzzZkpaHBAKCtwljB2sF94crW4BpjK
-         bM8Q==
-X-Forwarded-Encrypted: i=1; AL+hErGhLtxwnIBhqr4mHb1XC64eRqeL3+xLo/vlJ1vbuqdeTnsyGpNoOk9IfxYACFVADMbkRUfljSxnDuj5/WcaXPo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/dntxMhsrsSyGrPXM2rTbPSmtVnJyG7SdqmGjSn5JpKrU3duFE
-	g73wsuX4pVwdEpOqyf9xtysJcpkmYphT3UFdPgLBKhY+0+1PiEv7lKQiCNt97B57qfU=
-X-Gm-Gg: AYBFou07b2Ew4Rn6GNuzN5B/NDR+PLr43STTpgMPYMN2yeAOmKO/GZtxkMZk2pj9Sm0
-	qOdZI9Hwbnmkl3OQZS21rMwCQ236mVEseA1wzQq1cm8qQs/oRa8LBDVfKun4jHrXM2SRLx+G2gI
-	E1+QG6iwculh7J+2sCD6XXfe2TV46XBpJ+Jmid/7h+uv3Ij5N2iqa0y4IlcMdLNFvJXHTy8LIrI
-	pSCj81K+H+iwTaj9VpxeBpUBH03T+gCbQJEC8qs1JgTdUxuG9w0dIfHwAQK38iwLu9jKsLN+6Sq
-	UFDu1I4TGcIzfA1HKcQohCnTZ8MzmamRvIgdss9RQNhUsXq0j9omb6bAKuZvPdmaItUUXxyG28I
-	kPKQFNPXDhQ3xf2DxeCltrU+T5runn0Q/HGSnTnfI3tb3UPdn7hdqBkeZtp6m2AVfKnWC1Tp96n
-	EG0gGKY853PV0F5Ab4obLtnwQn+QAWuaSMXvGvP/Vuvak1qPJaUC97HsTLVLFwBFQNVaaYJRpmi
-	EPgrrNA11gmilGrtJR7iygl+RRoaY2clrE0kZOeHDz8D9xSoccdK2687i0z2x0cIzqGLwVTAAsF
-	k6MMkaHp6Pe1uJmYg12D/uTW8u0FCefkukDYyXK5KFFKKfM=
-X-Received: by 2002:a17:907:e8e:b0:c2e:8eb7:53dd with SMTP id a640c23a62f3a-c4d6d82594cmr350173866b.42.1794239353250;
-        Mon, 09 Nov 2026 07:49:13 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:b])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4d6a9990besm179938866b.70.2026.11.09.07.49.11
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 09 Nov 2026 07:49:12 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: Stephen Hemminger <stephen@networkplumber.org>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>,
-	David Keogh <dkeogh@amazon.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Nimrod Oren <noren@nvidia.com>,
-	Alasdair McWilliam <alasdair@mcwilliam.dev>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Breno Leitao <leitao@debian.org>,
-	=?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	bpf@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	nh-open-source@amazon.com
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and LL_ALLOC_SPACE()
-Date: Mon,  9 Nov 2026 15:49:09 +0000
-Message-ID: <20261109154909.32748-1-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261108190831.3f991a13@phoenix.local>
-References: <cover.1794020868.git.tianyi@cloudflare.com> <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com> <willemdebruijn.kernel.1d64e7848503b@gmail.com> <20261107182526.69543-1-tianyi@cloudflare.com> <willemdebruijn.kernel.2c6a653eb65fa@gmail.com> <20261108190831.3f991a13@phoenix.local>
+	dkim=pass (2048-bit key, unprotected) header.d=icenowy.me header.i=@icenowy.me header.a=rsa-sha256 header.s=zmail2 header.b=Zqa/eYBR
+ARC-Seal: i=1; a=rsa-sha256; t=1794239816; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=OXNxm9K6TpVwKvnwPPPl3jqRoaY4ES0QKb2PPRjqXrNvo/HatRUvt4qGmFpc5pttihTZCVaFXzM5pGVjDONouhTDi5d/pWcX9RNfVrct0fShJ1r6uW/5odNwKbBZUwN6YuJKX4A1J9j1kBxXrEeJk+a/uEBAYlDLBlStE3ne4/A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1794239816; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=9W5U9MRLdiGXEzabQcr7VS1i+v+HHL0WqrvbrIzGW3Q=; 
+	b=nnU3Az4/Y5XbPU0/MQjLSGBAmL1EhfPAp7cZ5niPHmOGRYMEB8GO2BSnUu8zEmpE4LrLmW5F+8ov9h3jmGKYPAXOL3B4qjcjtMSRj325WMZA5nQp8OIgLN1kRaCLgqF6GFjq2bJvn1HWTVvWt+YSaaXN3GaapTbqvfJN5DNlQI4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=icenowy.me;
+	spf=pass  smtp.mailfrom=uwu@icenowy.me;
+	dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: a=rsa-sha256; b=Zqa/eYBRCDEfDOpFZ8B1SiZUoIS3Zl/4EULbz297rAQxidxQ2K97RoraPZkLwgt4tNZNbE33NQzosO16k++uFvpB/syXvt5Z0G2GN39ByiIhCKv7DWoQrshTsvbEMDNDGjIeEM6WpalH/dZhiLiJyTUtZW0TRVFE+Xtjd5BnZRVSh2Bfpc3EOXGHsFV9Jh1xk5beAANh0ahnZlj4q8UyZ1JsYPOdZ5ihf6BvUDCmtMXYuN02nI0KqX1ga/8Ii6k9iEkBuLdbJlYy87VukmEtGzhSGRZgIy3HmBfBSlgU9xyx6lEZLvB9JO4iI8Cz7n5OyTmqD7nKwjRgl3dt14V2ww==; c=relaxed/relaxed; s=zmail2; d=icenowy.me; v=1; bh=9W5U9MRLdiGXEzabQcr7VS1i+v+HHL0WqrvbrIzGW3Q=; h=Content-Description:Content-ID:Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:List-Subscribe:List-Post:List-Owner:List-Id:List-Archive:List-Help:List-Unsubscribe:MIME-Version:Message-ID:Resent-Sender:Resent-Cc:Resent-Date:Resent-To:Reply-To:Resent-Message-ID:Resent-From:Sender:Subject:To:Date:From:Message-Id:Reply-To:Subject:To:Cc;
+Received: by smtp.zohomail.com with SMTPS id 179423981483454.124000191802565;
+	Mon, 9 Nov 2026 07:56:54 -0800 (PST)
+Message-ID: <ce886c3a5bf5af34df5c1ac3fefbd86a8f0567ff.camel@icenowy.me>
+Subject: Re: [PATCH v9 1/4] riscv: cpufeature: Introduce ISA bases bitmap
+ and rva23u64 detection
+From: Icenowy Zheng <uwu@icenowy.me>
+To: Guodong Xu <guodong.xu@oss.qualcomm.com>, Jonathan Corbet
+ <corbet@lwn.net>,  Shuah Khan <skhan@linuxfoundation.org>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt	 <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti	 <alex@ghiti.fr>, Randy Dunlap
+ <rdunlap@infradead.org>, Radim Krcmar	 <rkrcmar@qti.qualcomm.com>
+Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+ Conor Dooley <conor@kernel.org>, linux-kselftest@vger.kernel.org, Andy Chiu
+ <tchiu@tenstorrent.com>,  Florian Weimer <fweimer@redhat.com>, Peter
+ Bergner <bergner@oss.tenstorrent.com>, Zihong Yao	
+ <zihong.plct@isrc.iscas.ac.cn>, Mark Harris <mark.hsj@gmail.com>, Aurelien
+ Jarno <aurelien@aurel32.net>, Andrew Jones <andrew.jones@linux.dev>
+Date: Mon, 09 Nov 2026 23:56:47 +0800
+In-Reply-To: <20261109-rva23u64-hwprobe-v2-v9-1-ae846c5c7178@oss.qualcomm.com>
+References: 
+	<20261109-rva23u64-hwprobe-v2-v9-0-ae846c5c7178@oss.qualcomm.com>
+	 <20261109-rva23u64-hwprobe-v2-v9-1-ae846c5c7178@oss.qualcomm.com>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -132,113 +81,259 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Hi Stephen,
+=E5=9C=A8 2026-11-09=E4=B8=80=E7=9A=84 07:47 -0500=EF=BC=8CGuodong Xu=E5=86=
+=99=E9=81=93=EF=BC=9A
+> Introduce a per-hart and host-wide bitmap of conformant ISA "bases"
+> (named profile-class sets such as IMA and RVA23U64), computed at init
+> time by riscv_init_isa_bases().
+>=20
+> The IMA base is set unconditionally: it is behavior the kernel always
+> provides, and is intentionally not derived from the I, M and A
+> extensions.
+>=20
+> Register riscv_init_isa_bases() as an arch_initcall. That is late
+> enough that core_initcall(tagged_addr_init) has probed senvcfg.PMM
+> and
+> populated have_user_pmlen_*; without that ordering,
+> riscv_have_user_pmlen(7) would still return its default false and the
+> RVA23U64 detection path would always bail. It is also early enough
+> that
+> arch_initcall_sync(init_hwprobe_vdso_data) finds the bases populated
+> when it snapshots the hwprobe values into the vDSO data page.
+>=20
+> Consider this as the cache that subsequent consumers (hwprobe's
+> RVA23U64 base behavior bit, /proc/cpuinfo's "isa bases" lines, etc.)
+> can read without recomputing, which keeps them consistent with
+> each other.
+>=20
+> Co-developed-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
+> Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
+> Signed-off-by: Guodong Xu <guodong.xu@oss.qualcomm.com>
+> ---
+> v9: Set the IMA base unconditionally; do not derive it from I, M and
+> A.
+> v8: Add Co-developed-by for Andrew Jones (Conor).
+> v7:
+> - Register riscv_init_isa_bases() at arch_initcall, ahead of the vDSO
+> =C2=A0 hwprobe snapshot at arch_initcall_sync; v6 returned 0 for
+> =C2=A0 RISCV_HWPROBE_KEY_BASE_BEHAVIOR through the vDSO.
+> - Keep riscv_isa_bases static; add riscv_isa_base_available().
+> v6: No change.
+> v5: No change.
+> v4:
+> - In riscv_set_isa_base(), reorder those __setbit(RISCV_ISA_EXT_X,m)
+> =C2=A0 lines to make them conform to the order they appear in the RVA23
+> 1.0
+> =C2=A0 Profile.
+> v3:
+> - Add a blank line before the subsys_initcall() registration
+> (Andrew).
+> - Set the local ext_mask with __set_bit() and test the mandate set
+> with
+> =C2=A0 !bitmap_subset() (Sashiko).
+> - Require the Zic64b ISA extension in the RVA23U64 mask,
+> =C2=A0 instead of open-coded cache block-size check. (New, thoughts from
+> Andrew)
+> v2:
+> - Implement riscv_init_isa_bases() that runs at system init time,
+> =C2=A0 after tagged_addr_init() populates have_user_pmlen_*.
+> - Split RVA23S64 placeholder into a future patch.
+> ---
+> =C2=A0arch/riscv/include/asm/cpufeature.h |=C2=A0 13 +++++
+> =C2=A0arch/riscv/kernel/cpufeature.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 109
+> ++++++++++++++++++++++++++++++++++++
+> =C2=A02 files changed, 122 insertions(+)
+>=20
+> diff --git a/arch/riscv/include/asm/cpufeature.h
+> b/arch/riscv/include/asm/cpufeature.h
+> index 99799cc6c198..2ce1a1e212c9 100644
+> --- a/arch/riscv/include/asm/cpufeature.h
+> +++ b/arch/riscv/include/asm/cpufeature.h
+> @@ -25,8 +25,20 @@ struct riscv_cpuinfo {
+> =C2=A0	unsigned long mimpid;
+> =C2=A0};
+> =C2=A0
+> +enum {
+> +	RISCV_ISA_BASE_IMA,
 
-Thanks for the invaluable and detailed review.
+I may have missed something, but would it be worth to add a GC tier?
 
-On Sun, 8 Nov 2026 19:08:31 -0800, Stephen Hemminger wrote:
-> Since the motivating case is XDP, the mechanism should let the XDP program
-> ask for the padding it needs, rather than making the operator translate
-> the program's requirement into a device setting by hand.
-
-The series started from David Keogh's TC egress case, as described in
-the RFC [1] and in the first paragraph of the v1 cover letter. The veth
-XDP case came later, when I found that the same field also avoids the
-copy for generic XDP on veth.
-
-> Your own reply already works this out:
->
-> > - XDP on a veth peer: veth_xdp_set() and generic_xdp_install() can
-> >   increase the headroom of the peer to XDP_PACKET_HEADROOM on attach
-> >   and reset it on detach.
->
-> That is the mechanism, and it needs no uapi, no operator arithmetic, and
-> no stale state. I would rather see it implemented for the cases it covers
-> than add a permanent uapi that removes the incentive to do so.
-
-Agreed. For this case, I plan to move to this in v2. When an XDP program
-is attached to a veth device, tx_extra_headroom of the peer is set to
-XDP_PACKET_HEADROOM.
-
-> On the argument that program-side declaration is itself new uapi, and that
-> the labeled device is often not the device the skb was allocated on:
-> granted for the general TC egress case.
-
-For TC egress, the kernel does not know at attach time how many bytes
-the program pushes. Only the program, or the software that loads it,
-knows. Attach-time propagation works for XDP because XDP_PACKET_HEADROOM
-is a fixed value.
-
-Since we both agree that auto-tuning has real problems, a narrow UAPI,
-such as a BPF-side declaration, seems unavoidable for TC egress. The
-program declares the headroom that it needs through this UAPI. The
-initial plan is a BTF decl_tag, as Dragos Tatulea suggested on the RFC
-[2]. On attach, the kernel increases tx_extra_headroom of the device
-that the program is attached to.
-
-> Which leaves the genuinely hard case, the one you describe at Cloudflare: a
-> service in a netns sends through a veth pair, the host forwards to the
-> uplink, and a TC egress program there encapsulates, after ip_rcv_core()
-> has orphaned the skb so the allocating device cannot be identified. If
-> that is the real residue, make it the problem being solved and argue for
-> the narrowest mechanism that solves it.
-
-This case only came up after I started to look at in-kernel approaches,
-because the general IFLA_TX_EXTRA_HEADROOM UAPI already solves it. It is
-not a new case, and it is not uncommon. Cilium, Flannel and Calico use a
-tunnel by default [3][4][5], so the device that encapsulates is not the
-device that allocated the skb.
-
-netkit already has a similar UAPI. Commit b9ed315d3c4c ("netkit: Allow
-for configuring needed_{head,tail}room") [6] by Daniel Borkmann added
-IFLA_NETKIT_HEADROOM for Cilium in VXLAN or Geneve tunneling mode. As
-you point out, the value can go stale. But the CNI plugin sets it when
-it creates the device, as Cilium does for netkit.
-
-As far as I can see, a narrow UAPI, such as a veth attribute
-VETH_INFO_TX_EXTRA_HEADROOM, is unavoidable for this case.
-
-> As posted, the series leads with
-> cases that in-kernel propagation handles and uses them to justify an
-> interface sized for the case it does not.
-
-Based on what I have learned from both of you, this is my plan for v2:
-
-- Drop IFLA_TX_EXTRA_HEADROOM.
-- Keep 1/8 and 2/8, i.e. tx_extra_headroom, as an in-kernel field. It is
-  needed to avoid a perf regression if we just use needed_headroom. It
-  is needed in all three cases below.
-- veth XDP: set on attach as described above.
-- TC egress on the device that allocates the skb: the BTF decl_tag UAPI
-  described above.
-- Cross-device encapsulation: the veth attribute
-  VETH_INFO_TX_EXTRA_HEADROOM UAPI described above. I will rework the
-  existing iproute2 series [7] to set this attribute, and post it
-  together with v2.
-
-This would introduce two narrow UAPIs instead of one generic UAPI.
-Please let me know if everyone is happy with this new plan. If there are
-no objections, I will proceed with v2 following this plan. I am happy to
-change it if there is a better solution for these cases.
-
-To David Keogh: this plan drops the generic device attribute UAPI that
-your RFC proposed. Your TC egress use case stays in v2, with a BPF-side
-declaration instead of the device attribute. Before I proceed, please
-let me know if you are unhappy with this plan.
+I think many Linux distros have GC defined as their baseline.
 
 Thanks,
-Tianyi
+Icenowy
 
-[1] https://lore.kernel.org/all/20261015235335.4162993-1-dkeogh@amazon.com/
-[2] https://lore.kernel.org/all/bba453eb-769e-458b-88f7-8cc9bcafc1db@nvidia.com/
-[3] Cilium, veth with VXLAN by default:
-    https://github.com/cilium/cilium/blob/main/pkg/defaults/defaults.go
-[4] Flannel, VXLAN by default:
-    https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml
-[5] Calico, IPIP by default:
-    https://github.com/projectcalico/calico/blob/master/manifests/calico.yaml
-[6] https://git.kernel.org/torvalds/c/b9ed315d3c4c
-[7] https://lore.kernel.org/all/cover.1794022936.git.tianyi@cloudflare.com/
+> +	RISCV_ISA_BASE_RVA23U64,
+> +	RISCV_NR_ISA_BASES,
+> +};
+> +
+> +/**
+> + * struct riscv_isainfo - per-hart ISA state
+> + * @isa: bitmap of ISA extensions this hart implements
+> + * @isa_bases: bitmap of profile bases this hart conforms to
+> + */
+> =C2=A0struct riscv_isainfo {
+> =C2=A0	DECLARE_BITMAP(isa, RISCV_ISA_EXT_MAX);
+> +	DECLARE_BITMAP(isa_bases, RISCV_NR_ISA_BASES);
+> =C2=A0};
+> =C2=A0
+> =C2=A0DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
+> @@ -134,6 +146,7 @@ extern const size_t riscv_isa_ext_count;
+> =C2=A0extern bool riscv_isa_fallback;
+> =C2=A0
+> =C2=A0unsigned long riscv_isa_extension_base(const unsigned long
+> *isa_bitmap);
+> +bool riscv_isa_base_available(const unsigned long *isa_bases,
+> unsigned int base);
+> =C2=A0static __always_inline bool riscv_cpu_has_extension_likely(int cpu,
+> const unsigned long ext)
+> =C2=A0{
+> =C2=A0	compiletime_assert(ext < RISCV_ISA_EXT_MAX, "ext must be <
+> RISCV_ISA_EXT_MAX");
+> diff --git a/arch/riscv/kernel/cpufeature.c
+> b/arch/riscv/kernel/cpufeature.c
+> index 72bce616491f..0377fc148785 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -41,6 +41,9 @@ unsigned long elf_hwcap __read_mostly;
+> =C2=A0/* Host ISA bitmap */
+> =C2=A0DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
+> =C2=A0
+> +/* Host ISA bases bitmap */
+> +static DECLARE_BITMAP(riscv_isa_bases, RISCV_NR_ISA_BASES)
+> __read_mostly;
+> +
+> =C2=A0/* Per-cpu ISA extensions. */
+> =C2=A0struct riscv_isainfo hart_isa[NR_CPUS];
+> =C2=A0
+> @@ -81,6 +84,26 @@ bool __riscv_isa_extension_available(const
+> unsigned long *isa_bitmap, unsigned i
+> =C2=A0}
+> =C2=A0EXPORT_SYMBOL_GPL(__riscv_isa_extension_available);
+> =C2=A0
+> +/**
+> + * riscv_isa_base_available() - Check whether a given ISA base is
+> + * available or not
+> + *
+> + * @isa_bases: ISA bases bitmap to use
+> + * @base: bit position of the desired ISA base
+> + * Return: true or false
+> + *
+> + * NOTE: If isa_bases is NULL then the host ISA bases bitmap will be
+> used.
+> + */
+> +bool riscv_isa_base_available(const unsigned long *isa_bases,
+> unsigned int base)
+> +{
+> +	const unsigned long *bmap =3D isa_bases ? isa_bases :
+> riscv_isa_bases;
+> +
+> +	if (base >=3D RISCV_NR_ISA_BASES)
+> +		return false;
+> +
+> +	return test_bit(base, bmap);
+> +}
+> +
+> =C2=A0static int riscv_ext_f_depends(const struct riscv_isa_ext_data
+> *data,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const unsigned long *isa_bi=
+tmap)
+> =C2=A0{
+> @@ -1406,3 +1429,89 @@ void __init_or_module
+> riscv_cpufeature_patch_func(struct alt_entry *begin,
+> =C2=A0	if (early)
+> =C2=A0		local_flush_icache_all();
+> =C2=A0}
+> +
+> +/*
+> + * Compute the set of bases a hart conforms to. Profile bases such
+> as
+> + * RVA23U64 are derived from its resolved ISA bitmap.
+> + *
+> + * If @isa_bitmap is NULL, the host ISA bitmap (the AND across all
+> harts) is
+> + * used.
+> + */
+> +static void riscv_set_isa_bases(unsigned long *bases, const unsigned
+> long *isa_bitmap)
+> +{
+> +	const unsigned long *isa =3D isa_bitmap ? isa_bitmap :
+> riscv_isa;
+> +	DECLARE_BITMAP(ext_mask, RISCV_ISA_EXT_MAX) =3D { 0 };
+> +
+> +	/* The IMA base is behavior the kernel always provides. */
+> +	set_bit(RISCV_ISA_BASE_IMA, bases);
+> +
+> +	/* RVA23U64 */
+> +
+> +	/* Supm with PMLEN=3D7 */
+> +	if (!riscv_have_user_pmlen(7))
+> +		return;
+> +
+> +	__set_bit(RISCV_ISA_EXT_I, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_M, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_A, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_F, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_D, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_C, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_B, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICSR, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICNTR, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZIHPM, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICCIF, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICCRSE, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICCAMOA, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICCLSM, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZA64RS, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZIHINTPAUSE, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZIC64B, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICBOM, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICBOP, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICBOZ, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZFHMIN, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZKT, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_V, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZVFHMIN, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZVBB, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZVKT, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZIHINTNTL, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZICOND, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZIMOP, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZCMOP, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZCB, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZFA, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_ZAWRS, ext_mask);
+> +	__set_bit(RISCV_ISA_EXT_SUPM, ext_mask);
+> +
+> +	if (!bitmap_subset(ext_mask, isa, RISCV_ISA_EXT_MAX))
+> +		return;
+> +
+> +	set_bit(RISCV_ISA_BASE_RVA23U64, bases);
+> +}
+> +
+> +/*
+> + * Populate the host ISA bases bitmap (riscv_isa_bases) and each
+> + * hart's per-cpu isa_bases.
+> + */
+> +static int __init riscv_init_isa_bases(void)
+> +{
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu)
+> +		riscv_set_isa_bases(hart_isa[cpu].isa_bases,
+> hart_isa[cpu].isa);
+> +
+> +	riscv_set_isa_bases(riscv_isa_bases, NULL);
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Registered as arch_initcall: late enough that
+> + * core_initcall(tagged_addr_init) has populated have_user_pmlen_*,
+> + * and early enough that arch_initcall_sync(init_hwprobe_vdso_data)
+> + * finds the ISA bases populated when it snapshots the hwprobe
+> + * values into the vDSO data page.
+> + */
+> +arch_initcall(riscv_init_isa_bases);
