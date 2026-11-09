@@ -1,68 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794215501;
-	b=MeHEJh4Xoa6c/FPcuk9l1Y2D9vxFhL8PnMam30bqDNDtFc8fnEnFHSJwh2brU3hp+N7Q
-	 isawjtW1YelWc2ckvjfCWDp+AnegQHrhdYRO3N+RMTJ68kPdt1qi3W6A1zup+Nq6XEf3I
-	 HQMRd7ywuopUa4T9v/pFguyRmRKdEWMYp6XM6+GMBUpozCshzTc6qxzb6pGThiQSx0frc
-	 jykMv8P6SKRexBG2VUio4vIVM23in2cXB+6dFubBIPpwEX73P8Y2ibhYfhppN2Gg/48GE
-	 qdDax1KiD03l+Hb0FHJsVsiwm9nlHdgrbrqt5RF98LLbo+61+qVOpFdJSzeirXzsh6w==
+	t=1794216957;
+	b=dBC4RgVgikf60wMigDrHbRJf3kG3T/bxesobeUyWVc+/j603xtbi0t4VIgj0vhyTRrZQ
+	 +Y/DvIQqVUFPbi44weu/PrgMidjfgaGbKfANQ8pw1Vcy3uf7ZKdJuiK2ZmIvxPgzMxfwW
+	 nVtJM034kg5SorC4DQ1QpEyg8RIP5NTKF8I1L5PdmOTfNIMG+fGVxAzlm6bHNdtPM1WDY
+	 X9tUb6JRbtNdHWywHDFl08U2wrprqXSGlXgyU5XWy6lUAHW4dOlCT9JBP1cC0SobM0u+E
+	 bVJlKNfeDSf8sfFqDQ0Lm77dGiHxl2xVLF94eAAYmrwEZ2imM0UkO6vPR9iQWlfxvEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794215501;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=egzxngU69vKcrr7+p837GGhnPvFEBet1zuOWDt4J3YI=;
-	b=mNfhlI1XhRjYeUp6+62khyKU8ZHKP78Z0bsbu/vQYJZY9Nl04qDDItbnx9IMpuZnL6nP
-	 0+6JtwBNC3TLkUqnsnwO6pUMCvhmcpDVecIpR++tZG1E1XMtR7NvVTPNzMb8KuU1/H5is
-	 h02ONK0Ac2oaM6IUq06Nn1GNrSOsTBnBI0VPYF7Ve2lLxKLI7fC/WlmXFjF3mrDnXpX9Y
-	 cWTztykPrAjo6UlctGnDslu/58AKfBvFiIVl40yvTxHi4i2Dx4kv/SD7Y2Vfx5tJqpRKB
-	 NmdwFPfXKJnR9Lia7dt0dL+kRRrRrmOESyrozRC5BQzLJfpUIEQpPui7DS3rrV3NKAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794216957;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Transfer-Encoding:X-Scanned-By;
+	bh=Vxez0Rgpzes99K6x2T7B3nIvRzO9kUQMcRduTsuPTss=;
+	b=jMiSrb6DMkE/b68D41pf9QFbmhL1h/Y8KDOyN3oC2vxBkrna3z0hi4U6Mwd7r0UOf3KU
+	 qMYgkby2yyXXWz3yQ8GAmcs6ou68oM/KthcbcCRJdv4qm09sZ00UjWKOiy/POmHUveNuR
+	 bKEDcucQGR5o8Xu6zoQQv2W2Rod3BfGGobIUKRfez5TD5wzOAt2AFlAo5vbxTSRGqC6VO
+	 VAozNfBbnndoxzkK6RlGBAdKja9acdkySbcNoFYHVS28YWUICnAcT0VFELWhRtgxRBpFf
+	 MKrqN29fqEd+tBuv8SP971xm9Wtq9JdMnD2rOMSZG+ReoUPUA72oAer+RUw9K7Dg2hw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cGRTTmgM;
-	arc=none smtp.remote-ip=198.175.65.15
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ezNOIisS;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4094606A321;
-	Mon,  9 Nov 2026 09:11:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4094606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0138606A31C
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 09:35:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0138606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cGRTTmgM
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794215501; x=1825751501;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=13TAfu869OtGIxSBgxkcnFwjcF4uUzC6r7aMz7+y47M=;
-  b=cGRTTmgMqYutSoMgM0DRVo7d+H2WLaqLhi1XwzKPvLhfblfKF8VMEV7J
-   li0XCM31EzIx8kWAnxmob501hZYyZ9xcguVi+WKgd6PSCnWBcM+wdTIAF
-   GqsZvSXnY53Er8hk5BOvTG9z2nGCWigRJW4kv3nIf2DbxleBVKL3vQXbF
-   ZPedlNDjf0ZNiaFDwIB6eehDXapfujNRCkZJBVmpt0e+2Y9ZrFUXYcvZQ
-   x28PZ0Cq7XZRnH7oNn/3K6MPCKRb8klufOZeSicq/znMhvMMdUZK8Lfxh
-   7zTg2zN69EQwmF944PkjPVu4QpDLkSno7IuwePulvFjPY8pNJMPTQsAkW
-   A==;
-X-CSE-ConnectionGUID: tV7WAmX0TEa9mXWVIN1Wkw==
-X-CSE-MsgGUID: 51e/B9THSK2SNl0LchO8mg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11960"; a="2934162"
-X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
-   d="scan'208";a="2934162"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 01:11:40 -0800
-X-CSE-ConnectionGUID: FNDEk0SGShCMDGU0eOop1Q==
-X-CSE-MsgGUID: hjF5Ezs7SIaOgd0QS3sSWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
-   d="scan'208";a="8391745"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 01:11:35 -0800
-Message-ID: <0a02bc98-9df3-4f18-b52f-9a7f70653be1@linux.intel.com>
-Date: Mon, 9 Nov 2026 17:11:32 +0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ezNOIisS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794216955;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Vxez0Rgpzes99K6x2T7B3nIvRzO9kUQMcRduTsuPTss=;
+	b=ezNOIisSZ6O8xJ+1DpuJf4/N77fqcIk4IrENBPr23NGhprzHCrpU3KPV4anYhc7m7Opilp
+	yam5XGE+KlHhR1ac6BTzDEhJH5xF8KbYX8EwG8a2e3Fda7EY1FOk0tQxivaMB8YE2j/8N0
+	DIesF/YZM88JsuInT+5mcqxUQVZ7ScM=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-601-OTPyD9LIPOKpETnXOeSJNw-1; Mon,
+ 09 Nov 2026 04:35:52 -0500
+X-MC-Unique: OTPyD9LIPOKpETnXOeSJNw-1
+X-Mimecast-MFC-AGG-ID: OTPyD9LIPOKpETnXOeSJNw_1794216949
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3F44F1955E85;
+	Mon,  9 Nov 2026 09:35:49 +0000 (UTC)
+Received: from poros-thinkpadp16vgen1.tpbc.com (unknown [10.44.48.50])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B850818004F7;
+	Mon,  9 Nov 2026 09:35:43 +0000 (UTC)
+From: Petr Oros <poros@redhat.com>
+To: netdev@vger.kernel.org
+Cc: Petr Oros <poros@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Ivan Vecera <ivecera@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3 00/14] dpll: add a simulated DPLL device driver
+Date: Mon,  9 Nov 2026 10:35:09 +0100
+Message-ID: <20261109093523.931201-1-poros@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,94 +89,142 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 12/20] KVM: selftests: Call KVM_TDX_INIT_VCPU when
- creating a new TDX vcpu
-To: Lisa Wang <wyihan@google.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
- Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
- kvm@vger.kernel.org, linux-coco@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
- <20261105-tdx-selftests-v16-12-2024e8fa517a@google.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <20261105-tdx-selftests-v16-12-2024e8fa517a@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On 11/6/2026 7:46 AM, Lisa Wang wrote:
-> From: Sagi Shahar <sagis@google.com>
-> 
-> TDX VMs need to issue the KVM_TDX_INIT_VCPU ioctl for each vcpu after
-> vcpu creation.
-> 
-> KVM_TDX_INIT_VCPU has a strict prerequisite for the CPUID state. To
-> satisfy this requirement, call KVM_TDX_GET_CPUID and KVM_SET_CPUID2 to
-> pull the CPUID configuration from the TDCS and commit it into KVM,
-> allowing KVM_TDX_INIT_VCPU to succeed.
-> 
-> Additionally, unlike tdx_vm_ioctl(), tdx_vcpu_ioctl() doesn't check
-> hw_error. KVM's vCPU-scoped TDX ioctl handlers don't propagate SEAMCALL
-> errors into hw_error: the error is handled in the kernel and only an
-> errno is returned. Checking the ioctl's return value and errno is
-> therefore sufficient.
-> 
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
+The DPLL subsystem has no in-tree driver that can run without real
+hardware, so core changes and userspace tooling are hard to exercise in
+CI, and the pin-on-pin and reference sync paths see almost no coverage
+outside the vendors' labs. This series adds dpllsim, a simulated DPLL
+device driver, together with selftests that run against it.
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+The driver is controlled through configfs, following gpio-sim. Writing a
+clock ID into a device directory and setting "live" to 1 registers a
+DPLL device with the core. Pins are directories under pins/ with their
+type, frequency, direction and priority as attributes, and all of them
+are registered when the device goes live. The split between creating
+the configuration and going live keeps the register and unregister
+paths reachable from userspace, so they can be exercised repeatedly
+without reloading the module. Nothing in the simulator is a stable ABI.
 
-One nit below.
+The patches follow the shape of the zl3073x introduction. The
+driver starts with the device alone, then gains pins and the static pin
+operations one at a time (state, priority, frequency, phase adjustment),
+and every feature patch is followed by the selftest that covers it. The
+last two patches add concurrency stress tests and reference tracker
+leak tests for the lifecycle paths.
 
-> ---
->  .../selftests/kvm/include/x86/tdx/tdx_util.h       | 22 ++++++++++++++++++
->  tools/testing/selftests/kvm/lib/x86/processor.c    | 27 +++++++++++++++-------
->  tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c | 11 +++++++++
->  3 files changed, 52 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> index 4330290d29e9..9d951f67b3b5 100644
-> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> @@ -46,9 +46,31 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
->  		    #cmd, ret, errno, strerror(errno), hw_error);	\
->  })
->  
-> +#define __tdx_vcpu_ioctl(vcpu, cmd, _flags, arg)			\
-> +({									\
-> +	union {								\
-> +		struct kvm_tdx_cmd c;					\
-> +		unsigned long raw;					\
-> +	} tdx_cmd = { .c = {						\
-> +		.id = (cmd),						\
-> +		.flags = (u32)(_flags),					\
-> +		.data = (u64)(arg),					\
-> +	} };								\
-> +									\
-> +	__vcpu_ioctl(vcpu, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
-> +})
-> +
-> +#define tdx_vcpu_ioctl(vcpu, cmd, flags, arg)				\
-> +({									\
-> +	int ret = __tdx_vcpu_ioctl(vcpu, cmd, flags, arg);		\
-> +									\
-> +	TEST_ASSERT(!ret, "%s failed, rc: %i errno: %i (%s)",		\
-> +		    #cmd, ret, errno, strerror(errno));			\
-> +})
+The simulation loop (lock state machine, phase and frequency
+measurements, monitoring features), the topology features (MUX pin
+hierarchies, reference sync, media failure injection), netdevsim
+integration and device mode setting follow in two further series once
+this one is in, to stay within the 15 patch limit.
 
-Nit: missing a blank line.
+The driver and the selftests were developed with an LLM coding
+assistant (Claude Code) working under my direction. I chose the
+configfs design, the split into one feature per patch and the test
+scenarios, and I reviewed every line. The assistant wrote most of the
+code and the first drafts of the changelogs, and it found and fixed
+bugs by running the suite on the lab host. The series then went
+through several rounds of an LLM based patch reviewer whose findings
+were fixed, and through a mutation test in which deliberately broken
+driver and core code was caught by the tests.
 
->  void tdx_init_vm(struct kvm_vm *vm);
+The selftests live in tools/testing/selftests/drivers/dpll and run
+with "make -C tools/testing/selftests TARGETS=drivers/dpll run_tests".
+By default they create dpllsim devices; with DPLL_DEV_ID=<id> the basic
+and feature scripts run against an existing device instead, so the same
+suite exercises real hardware, and DPLL_DRIVER=<module name> picks the
+first device of that driver, dpllsim for a simulated one. The whole
+suite was run through the kselftest runner in a KVM guest and on an ice
+E810 host with CONFIG_KASAN, CONFIG_PROVE_LOCKING and
+CONFIG_DPLL_REFCNT_TRACKER enabled, against the simulator and, with
+DPLL_DRIVER=ice, against the ice DPLL, where the tests that need a
+simulator skip and the pin state and priorities of the hardware are
+left as they were. All pass with no warnings in dmesg.
+
+---
+v3:
+- move the selftests from tools/testing/selftests/drivers/net/dpll to
+  tools/testing/selftests/drivers/dpll, with the shared library as a
+  TEST_FILES entry of that directory, so that the tests sit where the
+  drivers do
+- let dpllsim refuse pin states that are not valid in the device mode:
+  connected is refused in automatic mode, which the simulator runs in,
+  as Documentation/driver-api/dpll.rst reserves it for manual mode
+  (Ivan Vecera)
+- make the pin state test follow the mode of the device under test and
+  check on the simulator that connected is refused in automatic mode;
+  cycle the stress tests through the states of automatic mode only
+- add DPLL_DRIVER to pick the device of a given driver, or the simulator
+  with DPLL_DRIVER=dpllsim, on a system that has hardware DPLL devices
+- describe what the leak check waits for instead of a concurrent dump
+  holding references, which nothing does (Ivan Vecera)
+- carry the Reviewed-by and the set Acked-by of v2 over to the patches
+  whose code did not change or only moved; patches 2, 5 and 6 changed
+  and ask for a new look
+
+v2:
+- sort tools/testing/selftests/drivers/net/dpll/config alphabetically
+  and make the scripts clean under the shellcheck run of the netdev CI
+  (quoted exit and return values, shellcheck directives for the globals
+  shared between the library and the scripts and for the optional
+  argument of dpllsim_setup_standard_device())
+
+v2: https://lore.kernel.org/all/20261105151852.1844305-1-poros@redhat.com/
+v1: https://lore.kernel.org/all/20261103093910.596225-1-poros@redhat.com/
+---
+Petr Oros (14):
+  dpll: dpllsim: Add simulated DPLL device driver
+  selftests: dpll: add test library and device lifecycle tests
+  dpll: dpllsim: Add configurable pins
+  selftests: dpll: add pin enumeration and property tests
+  dpll: dpllsim: Add support to set input pin state
+  selftests: dpll: add pin state tests
+  dpll: dpllsim: Add support to get/set priority on input pins
+  selftests: dpll: add pin priority test
+  dpll: dpllsim: Add support to set frequency on pins
+  selftests: dpll: add pin frequency test
+  dpll: dpllsim: Add support to adjust phase
+  selftests: dpll: add pin phase adjust test
+  selftests: dpll: add concurrency stress tests
+  selftests: dpll: add reference leak tests
+
+ Documentation/driver-api/dpllsim.rst          |  72 ++
+ Documentation/driver-api/index.rst            |   1 +
+ MAINTAINERS                                   |   8 +
+ drivers/dpll/Kconfig                          |   1 +
+ drivers/dpll/Makefile                         |   1 +
+ drivers/dpll/dpllsim/Kconfig                  |  16 +
+ drivers/dpll/dpllsim/Makefile                 |   4 +
+ drivers/dpll/dpllsim/core.c                   | 471 ++++++++++
+ drivers/dpll/dpllsim/dpll.c                   | 498 ++++++++++
+ drivers/dpll/dpllsim/dpllsim.h                |  99 ++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/drivers/dpll/Makefile |  17 +
+ tools/testing/selftests/drivers/dpll/config   |   6 +
+ .../selftests/drivers/dpll/dpll_basic.sh      | 223 +++++
+ .../selftests/drivers/dpll/dpll_features.sh   | 470 ++++++++++
+ .../selftests/drivers/dpll/dpll_lib.sh        | 872 ++++++++++++++++++
+ .../selftests/drivers/dpll/dpll_reftrack.sh   | 184 ++++
+ .../selftests/drivers/dpll/dpll_stress.sh     | 563 +++++++++++
+ tools/testing/selftests/drivers/dpll/settings |   1 +
+ 19 files changed, 3508 insertions(+)
+ create mode 100644 Documentation/driver-api/dpllsim.rst
+ create mode 100644 drivers/dpll/dpllsim/Kconfig
+ create mode 100644 drivers/dpll/dpllsim/Makefile
+ create mode 100644 drivers/dpll/dpllsim/core.c
+ create mode 100644 drivers/dpll/dpllsim/dpll.c
+ create mode 100644 drivers/dpll/dpllsim/dpllsim.h
+ create mode 100644 tools/testing/selftests/drivers/dpll/Makefile
+ create mode 100644 tools/testing/selftests/drivers/dpll/config
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_basic.sh
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_features.sh
+ create mode 100644 tools/testing/selftests/drivers/dpll/dpll_lib.sh
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_reftrack.sh
+ create mode 100755 tools/testing/selftests/drivers/dpll/dpll_stress.sh
+ create mode 100644 tools/testing/selftests/drivers/dpll/settings
+
+-- 
+2.56.0
+
