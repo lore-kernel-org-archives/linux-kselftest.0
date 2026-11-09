@@ -1,89 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794187289;
-	b=IF8pDGggSx5LehPXPfwdXeHyy1HbLQ7NL+JN4endjB7myrIPU0VE6kjSopimn/dVVyDG
-	 N0+DVXqKPYDpTMgxvn0Rg/KZZMyWAPtIxV6jkIgdRUfi+FsGrjGheIHk6+S8R/R13Zk6r
-	 qg+8kRqqnSTigLY6IvVES1VBVN10DH2gurUaaq2IWdwSt6ytpe/Pc0hocwS49TtHsnMRb
-	 VUGGVFQXGBARCinXoTg2fXdw+fFON+CjUld6Hz9UJpZf6O2GB4p0bfv5uBtkA7TCDjuIi
-	 pV6S38vVzLZCFS1zAmVOofvYk59PnTojAvXlOHf6R59zo93BJ8cY++VVVSClWsLJtbA==
+	t=1794187375;
+	b=BraBxLLaY3l+/5HE9JhZPyI/Ed5KW8LRrxWByM++ss0X78PE7MqNFACaPZ8pFstkCBZW
+	 B1OauzV9xMJ49Z/QAMNmMniiNSugsDctLFjj9SNrhkKR1pScRQt4HU+FDznhFWDTYTBKh
+	 G95XLNL6PW1CRc5K2ejTpSFWxx9q2CwjIXQxYpjHI4lmuu0vBXBrDB95ZcrTPqWZN8t2s
+	 BnviR8A1T4yqcv/gtRst9xpuUnCmG2AtEHt97bDFZUaFy55Morhdi2voZ3GEZvj41Mx6y
+	 Ml0kS4s6AVnnJqz80UWiTGrXk6AgS3X1t17PPRZmASTf93eubbt+fjTTqLeP8PpOd2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794187289;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=gSB/Q9g2yibJwD9klPXFy+4TUZDSE+Oz1s1D+60pOVU=;
-	b=dQbz55ZxDpsg5s7POC2AoLFTpSfiCRIFFSusRfnNKfJEEG3JYIFUShZoN4mBdZfzCZ/r
-	 RWWdSFMNZEGJJm90X1daFQLKyo/HQ5BCFuZq07Vuc1rJnE009ExzHVZTUMe6wAg/trvNc
-	 l4eVlEYIVVVPnHn5MzaWmsfzs0WmgX4izvg+/hgPGG1m8h790ygU5qBQ3w2Zn+AHBrpbc
-	 4mcFcAN9wAaCOAZOuEr51Nk4nPMs9kbYXZwtWvK1XcoC09xXomWbKNAj1F5mXS1asCxyL
-	 DU52hXmoR4hTlCIkBVN0ZSgg/4yqVnwuajfnrK3ek61SujviGyccgJoJv354rtWaSgQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794187375;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=uu4b4q9g+ZAPloji05p+CCMtBgpxRHYFQ7AS0/TwBHc=;
+	b=bpzXhPP/V6qas6ZYsSF+cECshihInCxV6ro3LzxCVAfLrk8GCNfLW/j7Ew0FrDZHNtpp
+	 7QmCeCw/pqPBHq7MPFZbkKpk4Ss4/KahxOvRi/xMprtCat65jz+O2kfpGjdKEKrdW6FMq
+	 +yd/ZleC4sZZaK61DdyipVq/Qx5lLBcww4e+GOCCNwEHGjE2dWPgkcy+5zVh+i4rEYFxk
+	 TWdAobibxSl3LOsEvZ9cd1VFdM+cfyHBwfdgrQI2uApB6vxRS4NzyrpQ5g95bPwb6tCUO
+	 Qw1qg0wyrvn2p/98SVW3i35IRAfnVyagTDVGncJwJ6aq9zsaCpucuraDCXPysipI0Fg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=desiato.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=o3dyt0zt;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ci25x92W;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C5F606EE8C;
-	Mon,  9 Nov 2026 01:21:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49C5F606EE8C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183E6606A322;
+	Mon,  9 Nov 2026 01:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=o3dyt0zt
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
-	To:From:Reply-To:Content-ID:Content-Description;
-	bh=gSB/Q9g2yibJwD9klPXFy+4TUZDSE+Oz1s1D+60pOVU=; b=o3dyt0zte310tj+0K/tp82gDvN
-	s8TRU8MMU+xs4tLlXEcOzm2ycUUHAog6y2O8bEieNbhSRQLJqe1u69KnP40/zOZ1B8+meeGlal9TA
-	jVU4kwLCjKEIt7sSHiTgMoC2uzq5i2IJ9Vmx3cwG0BHfIrEHL0KvQj4NFEtqrjiXd3ybW/SBm+Ad8
-	wFaJoXTF0u1aMD9gabOvdlgGuYCNhBFMOZYxvsiGvlZ3mpKDZYFBonE/G6CVgx+UwPR1Wiw7s4BB0
-	29LTjnwbaxcNkJiSlDU9BFypwqeNAsbjpMSTmUAbcOMtX4hIwkZN9U1ZtqpRb6EY7t6L5PIcckGOY
-	JKevFVRQ==;
-Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xQE4Q-00000006AY7-27ye;
-	Mon, 09 Nov 2026 01:21:15 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xQE4O-0000000EKUD-2CZT;
-	Mon, 09 Nov 2026 01:21:12 +0000
-From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	xen-devel@lists.xenproject.org,
-	x86@kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paul Durrant <paul@xen.org>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Sascha Bischoff <Sascha.Bischoff@arm.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Jack Allister <jalliste@amazon.com>,
-	Dongli Zhang <dongli.zhang@oracle.com>,
-	joe.jin@oracle.com,
-	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v12 03/24] KVM: x86: Replace nr_vcpus_matched_tsc count with all_vcpus_matched_tsc bool
-Date: Sun,  8 Nov 2026 17:20:49 -0800
-Message-ID: <20261109012112.3415328-4-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261109012112.3415328-1-dwmw2@infradead.org>
-References: <20261109012112.3415328-1-dwmw2@infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ci25x92W
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E65011F008A2;
+	Mon,  9 Nov 2026 01:22:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794187374;
+	bh=uu4b4q9g+ZAPloji05p+CCMtBgpxRHYFQ7AS0/TwBHc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=Ci25x92We9LQDp/BzLsL3hLWF7dXU8H8VmIjEskiWc94CTiila4wXQqE6HAowUH1B
+	 Qga+SpdoDITwuPEILfgjqKjSSAifvxY7GGA5UBFlZhlo8dOcK1G9LZ4DN8LJZqGxXE
+	 2iIkQLAXUA7CaH0jNAnO36t43eFI50nYnmE82YARF3g/+9I2cs2CqIO/pbOX2iZFtT
+	 jPSKiX1g5SunKcVF5nwb1pAkHZb1TRltiyGEouZoHtWWAzZdYJjZ/rgm0uxYeiqJv7
+	 NrvGiYw+bDKNmfwwSq+/Dfu8lSwId7uSxfj/Y24x7ShuNTCwMAtM2QTx03Uu5kD22G
+	 XsVAZguAlr1Wg==
+Subject: Re: [PATCH net-next v3 1/9] bnxt_en: let the stack segment GSO skbs
+ with too many frags
+From: netdev-bot+sashiko@kernel.org
+To: sdf.kernel@gmail.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, andrew+netdev@lunn.ch,
+ edumazet@kernel.org, horms@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, rdunlap@infradead.org, michael.chan@broadcom.com,
+ pavan.chebbi@broadcom.com, saeedm@nvidia.com, tariqt@nvidia.com,
+ mbloch@nvidia.com, alexanderduyck@fb.com, kernel-team@meta.com,
+ sdf@fomichev.me, dimitri.daskalakis1@gmail.com, almasrymina@google.com,
+ dtatulea@nvidia.com, bobbyeshleman@meta.com, asml.silence@gmail.com,
+ daniel@iogearbox.net, razor@blackwall.org, leitao@debian.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org, leon@kernel.org
+Date: Mon, 09 Nov 2026 01:22:52 +0000
+Message-ID: <179418737248.994134.10509157155829463489@kernel.org>
+In-Reply-To: <20261105222058.944293-2-sdf@fomichev.me>
+References: <20261105222058.944293-2-sdf@fomichev.me>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,143 +71,116 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Using a count and comparing with kvm->online_vcpus was always racy
-because a new vCPU could be created while kvm_track_tsc_matching() was
-running and comparing with kvm->online_vcpus. That variable is only
-atomic with respect to itself; kvm_arch_vcpu_create() runs before
-kvm->online_vcpus is incremented for the new vCPU.
+Low priority / nit picks for your consideration:
 
-Replace the count with a boolean that is set in kvm_track_tsc_matching()
-after comparing the count, and cleared when a new TSC generation starts.
-The boolean is consumed by pvclock_update_vm_gtod_copy() under the
-tsc_write_lock, which serializes against __kvm_synchronize_tsc().
+- [Low] The patch fixes real functional bugs in existing bnxt code, but
+  it has no Fixes: tag and is not routed to stable.
+- [Low] Clearing NETIF_F_GSO_MASK in bnxt_features_check() makes the
+  stack segment a GSO skb with nr_frags > TX_MAX_FRAGS.
 
-Keep the count for now as it's still used in the trace event.
+--
 
-Note that the explicit clear of the flag when a new generation starts
-is currently overwritten by the unconditional recompute in
-kvm_track_tsc_matching() under the same lock; it is preparation for
-subsequent patches which consume the previous value of the flag.
+bnxt_en: let the stack segment GSO skbs with too many frags
 
-Initialize the flag to true at VM creation: a VM whose vCPUs never
-reach kvm_track_tsc_matching() — notably with a protected guest TSC
-(TDX, SNP Secure TSC), where __kvm_synchronize_tsc() returns early —
-would otherwise never be eligible for PVCLOCK_TSC_STABLE_BIT, where
-the old read-time computation gave 0 + 1 == 1 for a single-vCPU VM.
+When MAX_SKB_FRAGS > TX_MAX_FRAGS, this patch clears the GSO features in
+bnxt_features_check() for skbs that have more than TX_MAX_FRAGS frags.
+The stack then segments those skbs, and bnxt_start_xmit() no longer
+linearizes them. Non-GSO skbs with too many frags are still linearized in
+the xmit path.
 
-Initializing the flag to true means pvclock_update_vm_gtod_copy() now
-reaches its scaling path from kvm_arch_init_vm(), where the scaling
-ratio is still zero from allocation; initialize it to the default
-ratio at the same point, since a zero ratio would zero tsc_hz and turn
-the master clock straight back off — permanently for protected-TSC
-guests, whose vCPUs never write the ratio in __kvm_synchronize_tsc().
+Link: https://lore.kernel.org/all/CANn89i+ps_CozfOyRnKav0_LUmSekJ9ExB5JkDbTAVf_ss_98g@mail.gmail.com/
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/x86/include/asm/kvm_host.h |  1 +
- arch/x86/kvm/x86.c              | 41 +++++++++++++++++++++++++++++----
- 2 files changed, 37 insertions(+), 5 deletions(-)
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index 33c4cacc8ffe3..f20b61180ab2d 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -14320,6 +14320,11 @@ static netdev_features_t bnxt_features_check(struct sk_buff *skb,
+>  				skb_shinfo(skb)->gso_size))
+>  		features &= ~NETIF_F_GSO_MASK;
+>  
+> +#if (MAX_SKB_FRAGS > TX_MAX_FRAGS)
+> +	if (skb_shinfo(skb)->nr_frags > TX_MAX_FRAGS)
+> +		features &= ~NETIF_F_GSO_MASK;
+> +#endif
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index ea48b1949316..1efca01647d2 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1242,6 +1242,7 @@ struct kvm_arch {
- 	u64 cur_tsc_write;
- 	u64 cur_tsc_offset;
- 	u64 cur_tsc_generation;
-+	bool all_vcpus_matched_tsc;
- 	int nr_vcpus_matched_tsc;
- 
- 	u32 default_tsc_khz;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 20b84b2e4424..d29e5bc75f7a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1125,8 +1125,10 @@ static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool new_generation)
- 	 * and all vCPUs must have matching TSCs.  Note, the count for matching
- 	 * vCPUs doesn't include the reference vCPU, hence "+1".
- 	 */
--	bool use_master_clock = (ka->nr_vcpus_matched_tsc + 1 ==
--				 atomic_read(&vcpu->kvm->online_vcpus)) &&
-+	ka->all_vcpus_matched_tsc = (ka->nr_vcpus_matched_tsc + 1 ==
-+				     atomic_read(&vcpu->kvm->online_vcpus));
-+
-+	bool use_master_clock = ka->all_vcpus_matched_tsc &&
- 				gtod_is_based_on_tsc(gtod->clock.vclock_mode);
- 
- 	/*
-@@ -1367,6 +1369,7 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
- 		kvm->arch.cur_tsc_write = tsc;
- 		kvm->arch.cur_tsc_offset = offset;
- 		kvm->arch.nr_vcpus_matched_tsc = 0;
-+		kvm->arch.all_vcpus_matched_tsc = false;
- 	} else if (vcpu->arch.this_tsc_generation != kvm->arch.cur_tsc_generation) {
- 		kvm->arch.nr_vcpus_matched_tsc++;
- 	}
-@@ -1593,8 +1596,7 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
- 	bool host_tsc_clocksource, vcpus_matched;
- 
- 	lockdep_assert_held(&kvm->arch.tsc_write_lock);
--	vcpus_matched = (ka->nr_vcpus_matched_tsc + 1 ==
--			atomic_read(&kvm->online_vcpus));
-+	vcpus_matched = ka->all_vcpus_matched_tsc;
- 
- 	/*
- 	 * If the host uses TSC clock, then passthrough TSC as stable
-@@ -9552,8 +9554,23 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
- 
- void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
- {
--	if (mutex_lock_killable(&vcpu->mutex))
-+	if (mutex_lock_killable(&vcpu->mutex)) {
-+		/*
-+		 * The new vCPU is already counted in online_vcpus but has
-+		 * not been synchronized. Nothing recomputes the cached
-+		 * matched state against the raised count until the next
-+		 * synchronization, so clear it here rather than leave the
-+		 * clock advertised as matched while an unmatched vCPU is
-+		 * runnable. It heals when this vCPU first synchronizes.
-+		 */
-+		struct kvm_arch *ka = &vcpu->kvm->arch;
-+		unsigned long flags;
-+
-+		raw_spin_lock_irqsave(&ka->tsc_write_lock, flags);
-+		WRITE_ONCE(ka->all_vcpus_matched_tsc, false);
-+		raw_spin_unlock_irqrestore(&ka->tsc_write_lock, flags);
- 		return;
-+	}
- 	vcpu_load(vcpu);
- 	kvm_synchronize_tsc(vcpu, NULL);
- 	if (kvm_check_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
-@@ -10029,6 +10046,20 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
- 	ratelimit_set_flags(&kvm->arch.kvmclock_update_rs, RATELIMIT_MSG_ON_RELEASE);
- 	kvm->arch.kvmclock_offset = -get_kvmclock_base_ns();
- 
-+	/*
-+	 * Start with all (zero) vCPUs considered matched, so that a VM whose
-+	 * vCPUs never reach kvm_track_tsc_matching() — notably when the guest
-+	 * TSC is protected (TDX, SNP Secure TSC) and __kvm_synchronize_tsc()
-+	 * returns early — is still eligible for PVCLOCK_TSC_STABLE_BIT. The
-+	 * scaling ratio must then also be initialized: with vcpus_matched
-+	 * now true here, pvclock_update_vm_gtod_copy() reaches the scaling
-+	 * path, and a zero ratio would zero tsc_hz and turn the master
-+	 * clock straight back off (permanently so for protected-TSC guests,
-+	 * which never write the ratio in __kvm_synchronize_tsc()).
-+	 */
-+	kvm->arch.all_vcpus_matched_tsc = true;
-+	kvm->arch.cur_tsc_scaling_ratio = kvm_caps.default_tsc_scaling_ratio;
-+
- 	raw_spin_lock_irqsave(&kvm->arch.tsc_write_lock, flags);
- 	pvclock_update_vm_gtod_copy(kvm);
- 	raw_spin_unlock_irqrestore(&kvm->arch.tsc_write_lock, flags);
+[Severity: Low]
+Should this patch have a Fixes: tag?
+
+Commit b91e82129400 ("bnxt_en: Linearize TX SKB if the fragments exceed
+the max") added the unconditional linearize in bnxt_start_xmit():
+
+bnxt_start_xmit() {
+    ...
+#if (MAX_SKB_FRAGS > TX_MAX_FRAGS)
+	if (skb_shinfo(skb)->nr_frags > TX_MAX_FRAGS) {
+		...
+		if (skb_linearize(skb))
+			goto tx_free;
+	}
+#endif
+    ...
+}
+
+bnxt calls netif_set_tso_max_size(dev, GSO_MAX_SIZE), so a BIG TCP skb
+can be linearized into a head larger than 64KB. That length is then
+encoded here:
+
+	flags = (len << TX_BD_LEN_SHIFT) | TX_BD_TYPE_LONG_TX_BD |
+		TX_BD_CNT(last_frag + 2);
+
+TX_BD_LEN_SHIFT is 16 and flags is a u32. The upper bits of the length
+are lost, so the BD length no longer matches the DMA mapping.
+
+bnxt also sets dev->netmem_tx = NETMEM_TX_DMA. For devmem GSO skbs,
+skb_linearize() always fails, because __pskb_pull_tail() returns NULL
+when !skb_frags_readable(). Those skbs are dropped at tx_free.
+
+The commit message describes both problems. Without a Fixes: tag, stable
+kernels that carry b91e82129400 won't pick up this fix.
+
+[Severity: Low]
+Can the segments that the stack produces here still have more than
+TX_MAX_FRAGS unreadable frags?
+
+Only the GSO features are cleared, and nothing limits the frag count of
+each resulting segment. zerocopy_fill_skb_from_devmem() adds one frag per
+iovec entry and does not merge adjacent ranges:
+
+net/core/datagram.c:zerocopy_fill_skb_from_devmem() {
+    ...
+		size = min_t(size_t, size, iter_iov_len(from));
+		netmem_inc_ref(net_iov_to_netmem(niov));
+		skb_add_rx_frag_netmem(skb, i, net_iov_to_netmem(niov), off,
+				       size, PAGE_SIZE);
+    ...
+}
+
+Suppose a devmem sender uses small iovecs: frags averaging under about
+47 bytes at a 1500 MTU, or under about 290 bytes at a 9K MTU. Then a
+single MSS-sized segment from skb_segment() can span more than 30 frags.
+__copy_skb_header() also carries over skb->unreadable to that segment.
+
+Such a non-GSO segment then reaches skb_linearize() in bnxt_start_xmit(),
+which fails for net_iov frags, and the segment is dropped at tx_free.
+TCP retransmissions rebuild the same layout, so the flow may stall.
+
+This is not worse than before the patch, when the whole GSO skb was
+dropped in the same way. However, the commit message gives "always fails
+for unreadable skbs" as a reason for the change, and for these flows that
+failure can still happen after segmentation.
+
+Could the commit message mention this limitation? Fully closing the gap
+would need a fallback that handles unreadable frags, or a frag limit per
+MSS window at sendmsg time, rather than skb_linearize().
+
+>  	switch (vlan_get_protocol(skb)) {
+>  	case htons(ETH_P_IP):
+>  		if (!skb->encapsulation)
+
 -- 
-2.43.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261105222058.944293-1-sdf%40fomichev.me
