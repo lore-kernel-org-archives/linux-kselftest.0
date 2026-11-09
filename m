@@ -1,126 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794236960;
-	b=t96t2BXuve1TVMr+HuU16YAWfAT1yvNtkOn/3ForEw4Y1NPSwR9dLiNqE78MMkufH/Pe
-	 eFWOjzLk3EAu/n1tXVoj94T+dqb35vL0Kr4kEjZ5hWeYb56UNwqsxiH5pyJzG6HN0Eali
-	 P7CsxOtcXsoj0Ob8QAqxkwVtrgRdB2unFkQ/RIsP2IGi69XXv8b3g7pFBLekzCrh8J6xn
-	 kYMo75MPB6nzGLDizuUUT+rL84GOeAZBUw3eEA8FW9TH2GqKpAtFiYoTvJfbZW2qJToOM
-	 et+lH+/55V/SvZ17qssp5jVZs5KFtwfupKsfiDyeh5yosQoNDDjlh9bxX2FCy61DZKA==
+	t=1794237568;
+	b=mQ4ITTYB0GsdTDJP2i9L23BLdSWsOdBTe1ucbJVc+vszasFJLw63ZEEZz1aN2FYV1/hY
+	 wnpNQhQI1JmwPpbRys9L+RnYDqGHT5W4UK1Ydvr4vpAcpppNDu5muWzb5wbAseEJwPL0c
+	 Jn5pqPM4poOPFyZJBKoB8mZnTz6aTuqj2/B4EFY3SrXjeXkpWtJ5TD+xdNTaVLPtuAS3F
+	 3VVEuvDToMfWIqxEmZIVUexeY5eif/3tw2LPDCp0Hk1XQsohqc1ZmrxMPnXY1DwQQeHFB
+	 1bgxfhVmpkezZ7JdEWzKKSehqkaT4tV9dW2Gl6QdOeZOacZtK07xystwC7NS5mwlWjw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794236960;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ehk/Gi0k4ynJUIsecQ39iaSJWX96HxZZqDpEX10WpqA=;
-	b=fHaxW2U0RxlzpOxAE2m81XtErAfioxdiCcjDQP9zst2+lNFTUl1S4XchTbMgGiJaS9jG
-	 IkyZr9tlnFrn/0BR41LkQFB2ACI2epGYIKFLYtXFGUuYIPNWAkr2ZbKRMkrfhiYLSCaLu
-	 nrxmDn8LlHpDglDvMMic51SK3I0T0Cfx8u6/lD6Cr9ZNfWUlXdfESzMAsR7HfVge27zNG
-	 L8cCFpVVsM4ZAEEn946g8VV+JRaAnGQIPgZVYyIyhaExkNpaJWWql/gxi4W9zHy49vFgl
-	 npKVvy2puJSkaE6W0mq+BXiO1IEFZ2hafRqiJovFUN42EJb6bkQLOevrS7rRXWdHfsw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794237568;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=sOAMN6xB6AUOiuNDamigNEt4burmkXflULavAghu0Hc=;
+	b=j6T2k3enXGFIhTFFoc9pCPZDCLpRaMWBJlKAxIF4G3M9sGvmL+SUe0W8QvZ8QOq8odrK
+	 d1cL1JVRYrGbTAfgCdDdtTyq/Nae8Wj/R1+RgHP8sW+rNoW8Swirm2F5TbUDJuV5CZdRp
+	 VNFD1vrKGb9mPfD1KpnuXcHRpV7Kx+heR2OmZ5bYFMJffInF3qXf8b9ZJEYxjWkwAl0Kl
+	 xCqREc0cyoariPq5zYvcO6wUnfjcWdAaiFCihV8/TgG2XnRauOiRJ4YP0jWwF+GORTrC0
+	 9S6e5yHcQg7bxGBmEzeeCjMBNBx5//5oBVL7VyNlsqPwqf+UuizhZuuDKqft11wifYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NBPytV81;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=LTIsuBLa;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BmABFaJw;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA41606A322
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 15:09:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CA41606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC857606A330
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 15:19:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC857606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NBPytV81;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=LTIsuBLa
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794236958;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ehk/Gi0k4ynJUIsecQ39iaSJWX96HxZZqDpEX10WpqA=;
-	b=NBPytV81+7IQ1bsURrkG9p3gBWD4pBjXPu9W1Zpig2qF91IchzVeWY2UaFkJ5ZYL17VDcL
-	wa7qbofyx6q56Epg4YDYYC88bo1P9d2EurOueQ0Ie9CTj4+si1qdoXJJ/RE9MGsiWUt8ut
-	YS6EcLvqonfgwrKtcrKGXAyADl4coHM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-684-El6ZYx6MPYuRrnCZTjVj_g-1; Mon, 09 Nov 2026 10:09:17 -0500
-X-MC-Unique: El6ZYx6MPYuRrnCZTjVj_g-1
-X-Mimecast-MFC-AGG-ID: El6ZYx6MPYuRrnCZTjVj_g_1794236956
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a1fdde384cso5805405e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 07:09:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BmABFaJw
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a06cc097c7so539753b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 07:19:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794236956; x=1794841756; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ehk/Gi0k4ynJUIsecQ39iaSJWX96HxZZqDpEX10WpqA=;
-        b=LTIsuBLaTJuFbm754tSh3DeL+OrbAxHo5FnRP/90ZuKvbnEDj7v8rOVgTVoP9+/9c8
-         CQPD2ixbWQqhUKx/pDu4v6PA/pMkf1xzvIUn/bez4yFIkpU8JnNoULhad5PSW/2DGP1L
-         FKiNt9gOjCE2HOGezsfk3wZnGVm3JdxxSurhkZNUbmdTbL57/knVw7gvuEcmp/xyfq76
-         4OCeBZPwWgTINF0Vpr0y6QgI1eUSkJfPivCYwlt4AgEAmtR6vPZR4no3b5R30BzYkdI0
-         nVrDG9rmcrdpPzOLAgziSE4torSay4ZfeVzjGKJAjFYJ8yCI7ABuD4Y6MsOBGO2W0Q1Q
-         l13Q==
+        d=gmail.com; s=20260707; t=1794237567; x=1794842367; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=sOAMN6xB6AUOiuNDamigNEt4burmkXflULavAghu0Hc=;
+        b=BmABFaJwRDbo/JuVeLe7Fwiac4Pa3GGM9x5qQ2hEo87GfV56Q7pg8LxpFggbyEKZyq
+         OLcrgqV2wthO5NLR4BI9TNk1zz6oXqW6jeMFKjESaG7SZbN0gEXVPyaF8MGNvEsZfruU
+         FtqjvsEJ4f4MUvKOosR2r4WhizqNDMrrRg9jXzMfxWeztgex5kSBvFnkr1l6ENfftHwd
+         wRAyrFhFAkSGvLLv+ovwWGvaEu+GLUFIXdMB0RUltMbIB074Wia4ZFPc7XSH11c4GW8S
+         UEXPeIpK9X5JKmJlNwBn0hbVquKOQ3sYG6G2PH4E0JtV4HL7eHZPlKFbDxUUXDcxzL62
+         gSHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794236956; x=1794841756;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ehk/Gi0k4ynJUIsecQ39iaSJWX96HxZZqDpEX10WpqA=;
-        b=HKu9UhGGfE+xizkjm4lJb5xt0cFygZUVzkmhKXUyYLZbaF22lFvJ0BtTQZDBdxyMa8
-         DUk5pLY+Gby5kGkv6L2D2VwJRToYklB+ZD6iNd4WoooXsp51AmWOxvkLfWyj1cGyKETz
-         P3Sc48R9pztu2w+VnFzqmxUR3C9y4JG2VGcq8qBZ1VzkC8ZsAsMpAd3C696R2mLQNZ9D
-         EiYtSBWVFD+CRKGXCuOFZfrirhQiiYDk8E5hzNL8LxiOYq/28vr/L/f467HuCBhCOdmL
-         SfXja52VZ84RwQXzk95s/RSFrfU9x2gnKnUbkhtDgU12lPID00p2sXR1mhSkGaS9zeAP
-         jYGA==
-X-Forwarded-Encrypted: i=1; AL+hErE9wvJgwQ6yho8f7HMyVL/U2WkuPtq3dp2rJ2hmPVyxNlrUfS/qyKIdCiEEcpYrNbquhvpnfuSeHXpedP6/JXQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8ZIPjYlYZyKT84hxPGKwbSzktVirgPL+aT1+Y0gGvN0eO9O8g+
-	DqCZoH0Q078EhgPXTkN5GB8OTmuWh7sj6uWDb8xZUZA6q3cPh7oGs9gOvkok0l19dJu6w1BVl/V
-	wZB7vVDJ/z7d0c8ZnziM0tp+uaMpC/O0Bx+0OpxpAt1m/t/BAroIja+uJWkhGbiy2FMuFTA==
-X-Gm-Gg: AYBFou2JveL5bohAIS8o4Eh+JRFvrD+e2f0lC065auv/LVBB7tIFa1av2u1zrY5f+5R
-	O0iXRv9Q0nO880FSaYIzHJMb6+PI5ibgs5LoCYdyKnQInmnB8lEzLfD3aZPKf56g4kUCkPZf/9M
-	dhvxN7oo0K8nn2/b8eKoyUd4if6ng4wD26gty1UIaoyEORTUkz36EgYh1hikntbc0Bzk+7JHO9B
-	If5wJ70hcs5f+0+1VLA2qWrAJ+hfGC2RZVS4wMeIQw7zI53mx+AklX1xbiTyfrYWYNIrspJPQtz
-	4qsWJ5UfCPET+vbF2KxuNGtSsd7LUvwEI7jzf6EIplAt2VeaBFc5tUNbXghgICATX8R6VfnPhEN
-	g3Cd6jJXtr2lEzfYiQskJpsAgXWCXHN0993pgW20BkWUB6N5AYZJaYeOzdMm+PuXzHyyyeB7dCA
-	xr1Q==
-X-Received: by 2002:a05:600d:82ea:b0:4a7:7f3f:6f8e with SMTP id 5b1f17b1804b1-4b943f76d81mr96595385e9.0.1794236956023;
-        Mon, 09 Nov 2026 07:09:16 -0800 (PST)
-X-Received: by 2002:a05:600d:82ea:b0:4a7:7f3f:6f8e with SMTP id 5b1f17b1804b1-4b943f76d81mr96594555e9.0.1794236955393;
-        Mon, 09 Nov 2026 07:09:15 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7e32ad4d1sm255269375e9.5.2026.11.09.07.09.13
+        d=1e100.net; s=20260707; t=1794237567; x=1794842367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=sOAMN6xB6AUOiuNDamigNEt4burmkXflULavAghu0Hc=;
+        b=JbrPmTeSqWxJWeyg39OQqTA87/krchRbSGwZajJ5IDzvqaXKUvfZERBf4WYRRmXz26
+         THVwrQ3l6fkAxEWs4W0+HRk3Uj0Ph6jkcOJcQTbWGNVU0GxpxVtY/shSV4t9UolXmp9K
+         NyRZw+f6giBruWR6Od2nLfaB/68JFU9BF4Vv1tjg6HqKDVK2VAaybZi9oi3uRl522dYx
+         EIOmHz1yuWmfUPwPel+z9MCwKkQdPnxdgqhGWMpEICIZCxpSuuDuUnxd7zfba7ywIboy
+         s7GoLtXnC3R1hnKad22hL3do3gtpbrhz/JIfvPUGs9fJdKgkAo57pExYRvRhj65bR8cC
+         qieg==
+X-Forwarded-Encrypted: i=1; AL+hErHoi/lWyEfFAwcqO9VXAdrwIA7xpeD7M1gUqpQzRaUF77I+EULtKrecByfjcxhp+Vd9W0GWGFjEjylaCvw2ajw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+c7xzOHmacfbyG+WtJUC9SBly+aFxWNXqC37AZmkbm4vJ0P+da
+	wJmli2Nny11DeuY0+f89p7l+62SV4mbAOXYriLSOur9qMW825kbDjYzGIXRCww==
+X-Gm-Gg: AYBFou1CkUmO46JtyrH5PwpZ8Gf5tN6yubuaQsOO+Tbmn+JrdwYgjDm6JjGflOK98jE
+	9g5cmegKoi19NUzOu5IZDVI6KGVBw1mXR9evXI//KyB4OLQ2sTphP64WWx2BU6iBHI2ENUSB/SS
+	8JWc5WF/det1cl9Vwne4WhNgublNx36bH6cGadoxWfWycx/wssqJ+DYfUB7iO0qNospQvz25oBW
+	AfY5DHqWyQI3FR0JkYx6lpRt4OqdoE9uDjx7nAIuyGmUO36ZZt1GA2U84n4glZ9nbzArE2y7YSK
+	Mrwds+wEnFedV0QmuYYK6RY9X1UY1jn3n85mMVFxvG59P5gS3KfxNOGkbcWZwxLRrbfZ/LdS3i5
+	ywMTG7M3sTx8KnbDMJQK/oeF6lw/QTxv4RXNawKR/KDcg4DnwlSW/+nFxAr59IWz+6orMd1tGIT
+	yDWgem4gKCFLA7pYEyY2ykYmDCwIs+O6XTNsDHWm9Rh2q/7FMO1A2UUqJywdUsKVFJwKiyYG97i
+	3L3JWdQPqPZkyyidh0fG+muHQBum2xDl6NEMKbstcrTvh8Plyrzzq2t3a6gJr5GfpaIXBOY6LVm
+	ytddN4s7m05hrhwvZpe09BSnT1ftrsIC2XjEQalB9NWjPLafR/wcqzj59veqI6GMiBT7ptyr2a1
+	2DKQvGEABjUjuOX5b
+X-Received: by 2002:a05:6a00:ad89:b0:89d:faf6:c69d with SMTP id d2e1a72fcca58-8b670a219damr4138847b3a.58.1794237567091;
+        Mon, 09 Nov 2026 07:19:27 -0800 (PST)
+Received: from localhost (218-35-178-218.cm.dynamic.apol.com.tw. [218.35.178.218])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b649821c57sm1508383b3a.37.2026.11.09.07.19.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 07:09:14 -0800 (PST)
-Date: Mon, 9 Nov 2026 16:09:12 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
-	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org, longman@redhat.com,
-	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
-	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 05/29] sched/deadline: Do not divide by zero active
- CPUs of a root domain
-Message-ID: <avHiGH_4WBizEaBJ@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-6-mathieu.desnoyers@efficios.com>
- <avHY7oNeuvjsLT4I@jlelli-thinkpadt14gen4.remote.csb>
- <3e6677a8-b972-4081-a080-e925fe1df3b0@efficios.com>
+        Mon, 09 Nov 2026 07:19:26 -0800 (PST)
+From: Kurt Lin <lylin1023@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>,
+	Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kurt Lin <lylin1023@gmail.com>
+Subject: [PATCH] selftests/proc: proc-empty-vm: handle CPUs without protection keys
+Date: Mon,  9 Nov 2026 23:19:12 +0800
+Message-ID: <20261109151912.156518-1-lylin1023@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -130,29 +100,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e6677a8-b972-4081-a080-e925fe1df3b0@efficios.com>
+Content-Transfer-Encoding: 8bit
 
-On 09/11/26 09:57, Mathieu Desnoyers wrote:
-> On 2026-11-09 09:30, Juri Lelli wrote:
-> [...]
-> > This 2nd hunk complements and tightens 4043f54984161 ("sched/deadline:
-> > Reject debugfs dl_server writes for offline CPUs") which has Fixes:
-> > d741f297bcea ("sched/fair: Fair server interface"). Do we need both
-> > fixes (if that is allowed) or maybe we need to split this change in two
-> > (as this second part won't apply to old kernels w/o dl-servers)?
-> 
-> Good point. I will split it in two in the next version:
-> 
-> - __dl_sub() and __dl_add() skip the division when the root domain has
->   no active CPU. Fixes: daec57983670. This alone removes the divide
->   error, on the debugfs path too.
-> - The debugfs write is refused while the runqueue is offline. Fixes:
->   4043f5498416, which it completes for the hotplug windows. It only
->   applies where that commit is.
+On x86 CPUs without protection keys, pkey_alloc() fails with ENOSPC,
+as documented in pkey_alloc(2). protection_key_support() only expects
+ENOSYS or EINVAL, so the test fails on such machines, e.g. an Intel
+Core i5-7200U:
 
-Hummm, I'm not sure we can say it fixes 4043f5498416, which was a
-correct, but only incomplete, fix for d741f297bcea (which the second
-hunk fixes properly).
+  protection_key_support: error: rv -1, errno 28
+
+Treat ENOSPC as "no protection key support" as well.
+
+An AI coding assistant (Claude) was used to analyze the failure and to
+draft the fix and this changelog. Tested on v7.4-rc1 on the machine
+above; the test now passes.
+
+Fixes: bf5add391eeb ("proc: test ProtectionKey in proc-empty-vm test")
+Signed-off-by: Kurt Lin <lylin1023@gmail.com>
+---
+ tools/testing/selftests/proc/proc-empty-vm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/selftests/proc/proc-empty-vm.c b/tools/testing/selftests/proc/proc-empty-vm.c
+index b3f898aab4ab..a9d3c973a663 100644
+--- a/tools/testing/selftests/proc/proc-empty-vm.c
++++ b/tools/testing/selftests/proc/proc-empty-vm.c
+@@ -77,6 +77,9 @@ static int protection_key_support(void)
+ 	} else if (rv == -1 && errno == EINVAL) {
+ 		// ospke=n
+ 		return 0;
++	} else if (rv == -1 && errno == ENOSPC) {
++		// CPU without protection keys
++		return 0;
+ 	} else {
+ 		fprintf(stderr, "%s: error: rv %ld, errno %d\n", __func__, rv, errno);
+ 		exit(EXIT_FAILURE);
+-- 
+2.56.0
 
