@@ -1,49 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794219700;
-	b=eD3PXSPtiweqqOsrU16LHNmYwOyNswBItXOdhzaEYjMLTtjnTfQxTlPWxEimPXvKVxbv
-	 PkC8rcIqr0bSM8ZRMaqllp5UudCCX/kHU0QPn1t6c1sIjcwvqYIwq5ZcjNJT3wN/OM/v4
-	 rkrA02qgi//STutOTVfYDvSqM5cVFvN+P0qMmoE1/ty8bwm9QI2EZhlwFh5KgVEG02ZG7
-	 N40In6mSVZGxfCYZuEnTJBsDp0+Ejd/iz0XIeWcRaOs1f580a1rUzDmyR17NnP+HW757R
-	 vSCQybZjUZA7FfxFNCL6mmQM/W9MDWdBa+YbpglO/ZjwAhMQM15oP6saBELm2QYrdJQ==
+	t=1794219761;
+	b=zj+LiqL6dbQyFYUZJIXU/Em7riGkXjWE/Rt0u25/+uHb+8XEtV+GYhG6X9bJ5g6jgWvA
+	 L4GojnHa8FSGqq5e73Xhl9YJsUSJ35Hpzj/mTjrjjeVZTi8r8E7jTjLOD+QBYpqmAp9mZ
+	 wwpAZyWKJsYr93zJnssMwYMpmYRkBRuDufHyAfyGPWwgmgM0bDD5iUxGwItGTtm8/E6UO
+	 CJw4O8r7wbMnWU6c7bkmjAjHEexWg7339ISVN1UvVb+IL2YGMlQ3NgKnbHQiblLrLSdP+
+	 sRsOSl/JZgfBEGiWjAYrDsnm47lFR7fCA8mhy4pWXuj4YSdg83BH9CZRLALI/8AWQTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794219700;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:From:To:Cc:References:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=d9Mh7zcU2qVqN6q3YyF1TgdqL89OnrMKzQIrIs171OY=;
-	b=f7TfXNUu/nAPSdugz4Q94jMY4qBXK3oHjfCMoDLDYT15i5GL3oNuSc/QvpYFqouHkupK
-	 Kz5W13KCMrX3WvuQE/zyU+PiuAHL6ZGmhBu4iAwGkrIbFBYn1JKjXD2/oIcz2/bIcIMPB
-	 oWmxixLZMs9cCWeaTzgBHs8Z0+9J2bRgPWWLm8UtNvkVrqpyD0eZDvpToGozzuQru5mzp
-	 XxMjdlr+Gbjn7BfGF2IV3Ay47/n9LENP8d7/vzKRp42JsNscxAca9gzcQj75R2bSD0GYT
-	 P0zkGqvHCPBh6XCaczalWxQIIU4OPYpFWEWFZw88s9FvJmFFVaGdapBOkpr05hYzK9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794219761;
+	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:
+	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=T7TAPE/7YhD5ngclGTREyMx61AzehRbnlDAFX5Ebjf4=;
+	b=iUDpQ1R1D3f4iau/jqPb405RhYY/vk3T0Dpsemb8pU5YcA46D4beF1MpGdWrgHlHg2ET
+	 4FEpVjpkrJo2bvASkeCxb3rUx7MHmzJxr2MWyIl313QTdvl6Hla/OLVpJJXWS7P+zWEwe
+	 ImI53GKUM0NyGH6UANDC+/RxvbuECaBn0bbXYJiIIcUieUDH3GTO1nboQHhACbkhhRfRW
+	 wZJ19jzZTCpYVJkTWIknQ5NRVkVt/kqEEVAl012Lkje4B7hOToZMj4TAZsj4TACGkbXZz
+	 aV5cwydQxTI+SNNWZIbMNChzVoIb9oS11XYiybPSikktrYb4B8ORuCfD3WWfnccwnxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=UYTbY79Z;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9270F606A31C;
-	Mon,  9 Nov 2026 10:21:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9270F606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=Rnq7w67q;
+	arc=none smtp.remote-ip=195.10.208.55
+Received: from mout-b-110.mailbox.org (mout-b-110.mailbox.org [195.10.208.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0AC606A325;
+	Mon,  9 Nov 2026 10:22:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D0AC606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=UYTbY79Z
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B4CD1576;
-	Mon,  9 Nov 2026 02:21:34 -0800 (PST)
-Received: from [10.211.55.3] (unknown [10.57.89.2])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 130803FA1F;
-	Mon,  9 Nov 2026 02:21:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794219697; bh=PSQikwJy94/T+7OO4mA3Xf6CT740QCSmYym6UYgaEEU=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=UYTbY79ZupocCRvr6Y47AQpUaDGa6hSOcnG1TkMa5py3ijSTzJxjLTLBKJQMK3q1e
-	 OSiH5WiSYACD+K8PU75soaQDYstCPHGTExvLoBt+QGF0M7xXALgjSPilh79I2xwqtd
-	 nagDQ8xXiGECC2Wgmc/wMTMsE1cf3kC/EIzL/szk=
-Message-ID: <08ba3b64-fcc3-47c2-8c04-ad00d54da8c1@arm.com>
-Date: Mon, 9 Nov 2026 10:21:22 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=Rnq7w67q
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-b-110.mailbox.org (Postfix) with ESMTPS id 4jNQnw5dx8zNlct;
+	Mon, 09 Nov 2026 11:22:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1794219748;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T7TAPE/7YhD5ngclGTREyMx61AzehRbnlDAFX5Ebjf4=;
+	b=Rnq7w67qr3fdW8K0dRjJ2X5SQEXHYt+9dK6WfcRgEEH9wqqXahCq4z5TfX6F9sw3GOaGwy
+	SEJbn0MEekLBrYoRMtUPQHCOPd5TWRksWGbTtJ0+WN9kfo2Fy1VaVBWjUTS4/76B9TzWtb
+	bQfnhf2mgTI4r1DRQjews0iTccI7u0vht8j17p52PfqfY4A/O8/QB+wNIQN4bWBsmtLyt3
+	SXT1TJNvmxVHpds8f6IPmWWhCoHU/sxlGmNsKbYBQn+W9/INgwj8WXYqU7EZ0RJ1zP91Jb
+	XghtWp+xinEG90AxN+ScwFyZSmiwq3x9CjEl2gtRkLXy8mfNI6hrMxyOx4p+LQ==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+Message-ID: <b1d44592-ddf8-4103-ae3c-dd1c67641f01@mandelbit.com>
+Date: Mon, 9 Nov 2026 11:22:24 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,35 +66,66 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Thunderbird Daily
-Subject: Re: [PATCH v5 1/2] selftests/resctrl: Implement cl_flush() and sb()
- for aarch64
-From: Ben Horgan <ben.horgan@arm.com>
-To: Reinette Chatre <reinette.chatre@intel.com>,
- Richard Cheng <icheng@nvidia.com>
-Cc: tony.luck@intel.com, x86@kernel.org, shuah@kernel.org,
- fenghuay@nvidia.com, Dave.Martin@arm.com, james.morse@arm.com,
- babu.moger@amd.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kaihengf@nvidia.com, kobak@nvidia.com,
- newtonl@nvidia.com, kristinc@nvidia.com
-References: <20261012074729.40042-1-icheng@nvidia.com>
- <20261012074729.40042-2-icheng@nvidia.com>
- <847af89d-7b79-44b4-8273-243dfb51ef5e@arm.com>
- <9cccea63-397c-4913-95bc-eed38f0ebd66@arm.com> <aurOz7iGKInyjddW@MWDK4CY14F>
- <b94aa5e5-a4ab-4b61-a864-d10ff1ff2b63@arm.com> <auxM9hVAgp61Qbgv@MWDK4CY14F>
- <c58c397e-26e4-4866-be80-59d9bd861654@arm.com>
- <808923a4-0a6e-4d8f-8ace-d3573aa125e8@intel.com>
- <89549a38-4764-466b-b66e-98bab801fefc@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v4 1/2] tun: bound the NAPI receive queue
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, jasowangio@gmail.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, mst@redhat.com,
+ eperezma@redhat.com, shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ maheshb@google.com, peterpenkov96@gmail.com, netdev@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20261103142232.1869185-1-antonio@mandelbit.com>
+ <20261103142232.1869185-2-antonio@mandelbit.com>
+ <willemdebruijn.kernel.20268598d87e6@gmail.com>
 Content-Language: en-US
-In-Reply-To: <89549a38-4764-466b-b66e-98bab801fefc@arm.com>
-Content-Type: text/plain; charset=UTF-8
+From: Antonio Quartulli <antonio@mandelbit.com>
+Organization: Mandelbit SRL
+In-Reply-To: <willemdebruijn.kernel.20268598d87e6@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4jNQnw5dx8zNlct
 
+Hi,
 
+On 06/11/2026 22:04, Willem de Bruijn wrote:
+> This is quite a complex solution.
 
-On 14/11/2026 03:16, Ben Horgan wrote:
-> Hi Reinette and Richard,
+Yeah, I agree. Trying to address all concerns (including Sashiko's) got 
+me a bit out of track.
+
 > 
-Apologies for the time travelling.
+> Can we perhaps simplify it a bit? For instance:
+> 
+> On tx only keep the lockless check. Number of packets that can bypass
+> that is bounded, by the number of competing threads.
+> 
+> On rx avoid the new queue, by not temporary presenting an empty queue:
+> 
+>          spin_lock(&queue->lock);
+>          if (skb_queue_len(queue) <= budget) {
+>              skb_queue_splice_tail_init(queue, &process_queue);
+>          } else {
+>              while (skb_queue_len(&process_queue) < budget &&
+>                     (skb = __skb_dequeue(queue)))
+>                  __skb_queue_tail(&process_queue, skb);
+>          }
+>          spin_unlock(&queue->lock);
+> 
 
-Ben
+Ok, I get your point.
+Let me spin another simplified version.
+
+Cheers,
+
+pw-bot: cr
+
+
+-- 
+Antonio Quartulli
+
+CEO and Co-Founder
+Mandelbit Srl
+https://www.mandelbit.com
+
