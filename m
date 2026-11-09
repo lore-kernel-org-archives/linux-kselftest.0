@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.85
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.238
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794214138;
-	b=ig6gBVqJDCMIWBxKhp22N1VaZb5OEeTcoe1rqADtUH4elN8IsiSomen5la9weyUS4ff5
-	 ekrnu+rTTVBxT9tjFDCW6fD2DvK1kWi84KpG8Cy14uBpGt8u2fKc+u4bP2Ye+gMi79WIm
-	 Va/nxCoy1KaAjycSUgZM982YRPukXfWAz7ZGIgbsUzGzU3+3sbego3/lPqanxY03HfRrM
-	 GbSAq0MtFwu9NQCIVePb2zQGyIbO2QDUrGkgnyWZP2G3yBP87cjjz/XyfhgrKmIfOOrMt
-	 CNq8CBarDGsfzq/VgOTMTlls/ho0sv6lVrhYbFY4k6xFxQqFSVgf2u01/v1tbQbIAlg==
+	b=vnpWIvFY/bt4GI5zT0jA4+Ub4oaJ/5eXnz9RndfUEfofO//lrqlNDsuW01uVoUV+4iXm
+	 lSiIBNHF0gOAiYGEcT+oWobmYqdOuWhMPY7tz5EpRQ3fqwinb/NM5zGs+mNDibp4CTeVs
+	 wexMZils9K0F+f99BIFMW8GhO2SfQgDlCNeUQKWnThh0juqLsx9hlXQfysEvZxuv5kAGs
+	 Rr3t+Din6xNuoeWgH+DuWUJFlJPWV7bbZORL0z9Xh0k9JUAZEqS/KLpgrdrKOg7ROQrG6
+	 R41OkQ1lHAjRybv4qFWXPpCXBsCC1L/oCF5dtWCphPgY6wRBCoYZGY9yQqjICmeEQ1w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794214138;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=fBfm9dsEkwLJa3RQILFcp1NS9oIiSGmRdrDoGcyXcLU=;
-	b=Bq6OV+d3kHMFHqAyXMlre8F/VQ6dhAGeFE4JreTkJojCocdTTT+NJx750UloKwk5MDw9
-	 imIBFmO3U9/VYc3PGvnJLEl1gEf/woHS77RIaetDyVQWZws9+KHCEbEnY5DziBqru/k0V
-	 GD2w+HOXFPrOItZfv4QAmRJQXcl+SX1KHR+ddQ2zjXQCgakHiyxFKgTKb3OkDHKWcyW9J
-	 TF4iHD9iYKvBoW0uvnVz93Zjqq8VhmspO7VKqKTuwFm6Z80fzL2jpw8c1Np93G2aPJT6x
-	 JI3aieT1YI8QDfFeBTiJ5sYdkYQuJN3idc43ZCtr1aNusoh41fgWojSw1ZWBVufRszg==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=9EDiuahpoC5a8fdBVjn+7UwWB1qVxtY459zTXN5uFBc=;
+	b=2QV6F1yz/Tzg7INnSvprQzfXPIVM7EljUu1sX5ayyjh+zNDTac3kC3gtJMZ8UxQfkpef
+	 ldcrW01RNflo6r4Hv8BWBsj2zkiznExw4GX54UOxchyk1hl42FsrR9/DojPOrO1d00oD0
+	 oy1t71LVpiLCyQ9Z8FUAdufrJsxHOo7+7PhfEoo6i1LMhPQkM6+r+SOflwTgSeCQL3GvB
+	 yVCzTTwMI2AdNc2V6lQ81n4eLPAyGl15S8kSHsLTxWYIXT94ssJtyKwaCEHlNeM3FqdTx
+	 tiNdhvIiG4iscl7pQSq3U987yHgn4O+MbuO27apQg2MDIebgU/FKJ39zMZDLsNEkisA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AO9X86Hc;
-	arc=none smtp.remote-ip=95.215.58.85
-Received: from mta1.migadu.com (out-85.mta1.migadu.com [95.215.58.85])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aKniBgn2;
+	arc=none smtp.remote-ip=91.218.175.238
+Received: from mta0.migadu.com (out-238.mta0.migadu.com [91.218.175.238])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE31606A323
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 08:48:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BE31606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E463E606A326
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 08:48:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E463E606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AO9X86Hc
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=aKniBgn2
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1sOzaznMmJOHy+e+QiztzCqMUj8wOs6qA6WdAtqbHAA=;
+DKIM-Signature: a=rsa-sha256; bh=zpKaD0TgIJfqXkuMLyaymhMm6AH9D97hWArAafrSB6U=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794214135; v=1; x=1794818935;
- b=AO9X86HcTL0K+CGNnuBPjfjNLE4+VlvxSRRM58BvIX2mWYXf3ukrfXySEoc8qb2e9zLW7Q1H
- Hf8qEdzgN+FpuZ885LhNtC0c4Rig/HvT/lepYeYotNoH4ESpR+UhO6ucuCjKlr3+/qGFUR9ehHf
- zopKudzN3+xXVCFXQDvgNAIU=
+ t=1794214136; v=1; x=1794818936;
+ b=aKniBgn25IHI6/+paezktja3kzUe2XHYTbZvR+c/c7IlRhOWL6NzzF3m11fb8KQs/r5okijz
+ /HUM78yf3sesqRmdI2T9Ze8vyBoxAkGO0SMDUqxoZWloB6hglXKhuB9wlHE1fyeWgZUyqlOV3x1
+ R8V3eI0h2bytT8Y8YlFyZWJ8=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6d1e8b5ddadfa23a;
-	Mon, 09 Nov 2026 08:48:54 +0000
-X-Mizu-Trace-ID: 6d1e8b5ddadfa23a
+Received: by smtp.migadu.com with ESMTPS id 9a819a32ecff5883;
+	Mon, 09 Nov 2026 08:48:55 +0000
+X-Mizu-Trace-ID: 9a819a32ecff5883
 X-Migadu-Flow: FLOW_OUT
 From: Fuad Tabba <fuad.tabba@linux.dev>
 To: Marc Zyngier <maz@kernel.org>,
@@ -67,10 +68,12 @@ Cc: Will Deacon <will@kernel.org>,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/19] KVM: arm64: selftests: Tests for protected VMs
-Date: Mon,  9 Nov 2026 08:48:35 +0000
-Message-ID: <20261109084854.840576-1-fuad.tabba@linux.dev>
+Subject: [PATCH v2 01/19] KVM: arm64: Hide generic ptrauth from protected VMs without ptrauth
+Date: Mon,  9 Nov 2026 08:48:36 +0000
+Message-ID: <20261109084854.840576-2-fuad.tabba@linux.dev>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261109084854.840576-1-fuad.tabba@linux.dev>
+References: <20261109084854.840576-1-fuad.tabba@linux.dev>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,118 +85,36 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi folks,
+A protected VM without the ptrauth vCPU features shouldn't have pointer
+authentication in its ID registers. Commit 3d7ff00700d1 ("KVM: arm64:
+Rework specifying restricted features for protected VMs") gated APA,
+API, APA3 and GPA3 on vm_has_ptrauth(), but left GPA and GPI capped
+at IMP. So generic authentication is advertised to a protected guest
+without ptrauth, and PACGA UNDEFs.
 
-Changes since v1 [1]:
-  - New patch 1, which hides generic PtrAuth from a protected VM
-    without PtrAuth. The pkvm_id_regs test checks for it.
-  - New pkvm_sve test, and MOPS, PIE, POE and FPMR checks in
-    pkvm_id_regs.
-  - Use the selftest syscall wrappers and vm_check_cap().
-  - Marked pkvm_hvc() as called from the guest. (Joey)
-  - Collected Reviewed-by from Joey on patches 3, 6 and 7. (thanks!)
+Gate GPA and GPI on vm_has_ptrauth() too.
 
-This series adds selftests for protected VMs. A test skips on a host
-without pKVM, and so does any case where the host doesn't have the
-required feature, e.g., PtrAuth, SVE or hugetlb pages.
+Fixes: 3d7ff00700d1 ("KVM: arm64: Rework specifying restricted features for protected VMs")
+Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+---
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-A couple of points:
-
-- Patch 1 is a fix, included here so that pkvm_id_regs can check the
-  correct behaviour. Without it, generic PtrAuth is advertised to a
-  protected VM without PtrAuth.
-
-- Each area gets its own test rather than cases folded into existing
-  tests such as psci_test, hypercalls, set_id_regs, etc. A protected
-  guest requires its own boot path, and has to share the ucall pool
-  before its first ucall. On top of that, a protected guest gets the
-  opposite result for many of those tests' checks.
-
-- Cases for a feature a protected VM may not have follow what the VM
-  is given, so they pass with or without the series that adds it [2],
-  and run once it lands. The debug cases follow
-  ID_AA64DFR0_EL1.DebugVer, the SVE cases KVM_CAP_ARM_SVE on a
-  protected VM's fd, and the MOPS, PIE, POE and FPMR checks their ID
-  register fields.
-
-The series is structured as follows:
-
-  01:     Hide generic PtrAuth from protected VMs without PtrAuth.
-  02:     external_aborts: an abort injected before a vCPU's first run.
-  03-05:  Generic selftest changes: creating a protected VM, the pKVM
-          function IDs and the ucall pool's address.
-  06-07:  Protected-VM library: boot trampoline and helpers.
-  08-18:  The tests, one per area.
-  19:     MOPS, PIE, POE and FPMR checks in pkvm_id_regs.
-
-Based on Linux 7.4-rc1 (6628e7d4c6b25; also applies to 7.4-rc2 7475ea8b58616).
-
-Cheers,
-/fuad
-
-[1] https://lore.kernel.org/all/20261104084842.132944-1-fuad.tabba@linux.dev/
-[2] https://lore.kernel.org/all/20261109083205.806619-1-fuad.tabba@linux.dev/
-
-Fuad Tabba (18):
-  KVM: arm64: Hide generic ptrauth from protected VMs without ptrauth
-  KVM: arm64: selftests: Inject an abort before a vCPU's first run
-  KVM: selftests: Allow arm64 tests to create protected VMs
-  tools: arm-smccc: Add the pKVM memory sharing function IDs
-  KVM: selftests: Export the ucall pool's guest physical address
-  KVM: arm64: selftests: Add protected-VM library helpers
-  KVM: arm64: selftests: Add pkvm_host_abi host-interface test
-  KVM: arm64: selftests: Add pkvm_psci multi-vCPU PSCI test
-  KVM: arm64: selftests: Add pkvm_mem_share hypercall test
-  KVM: arm64: selftests: Add pkvm_smccc hypercall test
-  KVM: arm64: selftests: Add pkvm_id_regs register and trap test
-  KVM: arm64: selftests: Add pkvm_vcpu_regs register-state test
-  KVM: arm64: selftests: Add pkvm_irq interrupt test
-  KVM: arm64: selftests: Add pkvm_isolation host-access test
-  KVM: arm64: selftests: Add pkvm_lifecycle teardown test
-  KVM: arm64: selftests: Add pkvm_exceptions debug and SError test
-  KVM: arm64: selftests: Add pkvm_sve vector-length test
-  KVM: arm64: selftests: Check MOPS, PIE, POE and FPMR in a protected VM
-
-Will Deacon (1):
-  KVM: arm64: selftests: Add protected-VM boot trampoline
-
- arch/arm64/kvm/hyp/nvhe/sys_regs.c            |   4 +-
- tools/include/linux/arm-smccc.h               |  22 +
- tools/testing/selftests/kvm/Makefile.kvm      |  13 +
- .../selftests/kvm/arm64/external_aborts.c     |  21 +
- .../selftests/kvm/arm64/pkvm_exceptions.c     | 261 ++++++++
- .../selftests/kvm/arm64/pkvm_host_abi.c       | 435 ++++++++++++
- .../selftests/kvm/arm64/pkvm_id_regs.c        | 394 +++++++++++
- tools/testing/selftests/kvm/arm64/pkvm_irq.c  | 268 ++++++++
- .../selftests/kvm/arm64/pkvm_isolation.c      | 225 +++++++
- .../selftests/kvm/arm64/pkvm_lifecycle.c      | 110 +++
- .../selftests/kvm/arm64/pkvm_mem_share.c      | 394 +++++++++++
- tools/testing/selftests/kvm/arm64/pkvm_psci.c | 632 ++++++++++++++++++
- .../testing/selftests/kvm/arm64/pkvm_smccc.c  | 117 ++++
- tools/testing/selftests/kvm/arm64/pkvm_sve.c  | 357 ++++++++++
- .../selftests/kvm/arm64/pkvm_vcpu_regs.c      | 218 ++++++
- .../selftests/kvm/include/arm64/pkvm.h        |  75 +++
- .../selftests/kvm/include/ucall_common.h      |   1 +
- tools/testing/selftests/kvm/lib/arm64/pkvm.c  | 255 +++++++
- .../selftests/kvm/lib/arm64/pvm-entry.S       |  57 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    |   5 +-
- .../testing/selftests/kvm/lib/ucall_common.c  |   9 +-
- 21 files changed, 3868 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_exceptions.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_host_abi.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_id_regs.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_irq.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_isolation.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_lifecycle.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_mem_share.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_psci.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_smccc.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_sve.c
- create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_vcpu_regs.c
- create mode 100644 tools/testing/selftests/kvm/include/arm64/pkvm.h
- create mode 100644 tools/testing/selftests/kvm/lib/arm64/pkvm.c
- create mode 100644 tools/testing/selftests/kvm/lib/arm64/pvm-entry.S
-
+diff --git a/arch/arm64/kvm/hyp/nvhe/sys_regs.c b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+index 32e82653ebf7e..e5502d5651b05 100644
+--- a/arch/arm64/kvm/hyp/nvhe/sys_regs.c
++++ b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+@@ -157,8 +157,8 @@ static const struct pvm_ftr_bits pvmid_aa64isar1[] = {
+ 	MAX_FEAT(ID_AA64ISAR1_EL1, JSCVT, IMP),
+ 	MAX_FEAT(ID_AA64ISAR1_EL1, FCMA, IMP),
+ 	MAX_FEAT(ID_AA64ISAR1_EL1, LRCPC, LRCPC3),
+-	MAX_FEAT(ID_AA64ISAR1_EL1, GPA, IMP),
+-	MAX_FEAT(ID_AA64ISAR1_EL1, GPI, IMP),
++	MAX_FEAT_FUNC(ID_AA64ISAR1_EL1, GPA, IMP, vm_has_ptrauth),
++	MAX_FEAT_FUNC(ID_AA64ISAR1_EL1, GPI, IMP, vm_has_ptrauth),
+ 	MAX_FEAT(ID_AA64ISAR1_EL1, FRINTTS, IMP),
+ 	MAX_FEAT(ID_AA64ISAR1_EL1, SB, IMP),
+ 	MAX_FEAT(ID_AA64ISAR1_EL1, SPECRES, COSP_RCTX),
 -- 
 2.47.3
 
