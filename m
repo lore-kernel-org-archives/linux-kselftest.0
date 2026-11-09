@@ -1,125 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794231495;
-	b=iuRICjz0leYa/7OQ+8EPiG5XWd3IyW2SX0ffwJANmk++QXpsdtH8k16tlAjKIVNop/Ok
-	 qK6iDrhxHtaCrkGuDzWE1sWcxBywyGhFchtngYm88jweVArzPNiQwKI/xAbFOTwP2Ch1u
-	 cdT+Nzr2BqTz6wRaVy2Fn0oaSZz8g+RQzFThcA2dW1IKx2hHJdgIDVZAGJt2ris938qnt
-	 UxcGSy8ZhXVN7eIlSOxrWEL28it2hZOgNDkAJuXx0n34A8+TgNss6e+V+DvbOBb0kmD4H
-	 Q31l+sgwu/GGWMdEjVlw57+zs4S34CqcSn86DFTZTfdKpWSfh+LZcFOi8cxbwH0Aoxw==
+	t=1794232624;
+	b=kELFUaTS9DYNH6XFhzS3PWvmkBZ2rqvR/4l5w1fUaZO0NTeQSl3PPgrVZl2Bcv3V6NUr
+	 fudCqlEMjMg3Wk1YoDjhQ3Laq19xegctX06+3wvPO8/8JV9tFnYAh1rp4ktl0y2XkHaIN
+	 fNfavRJoOHRQbphJaNcrx8gdiikgUmkNv3j2FwUYT1iZUaYShT5ZSCnvD+50JA95QVqpG
+	 tL4/FudTdeZPF6uufcTchnKjDjNHH9WXO4ptS5UQrcQ/qflidnSWOoPYHnwNwseg+L+sd
+	 bjLj7h5BKvv1c+pe+gJTl7N+ErspgAfK5On9/ulx+5xSyHtfMgBdsj5lqJx/rx2W0RQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794231495;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794232624;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=BGYsCV+6ghrjpGJ3qQugEb8Y0kCPQvn96f3QlByPPhE=;
-	b=Z/LFzFBRaHCSlHETR8Trfvac1+qovKWiaJ8IfdpqvkarI9mD8j+8vupBbntOQYuogNWa
-	 xLCQV4J4GcV+YIy6ddEMQbE6S+hEQ3LX3diagom6hWswOA7tIc5gTEDOM0/gJZrg7PnyY
-	 nISTN7jw52D69OKkNaDRrUwj+dqHGk1lDycfUvfpFKWbhK+b6VQ4Odh3WOCGP7dITHhlu
-	 reDtUiwbFxZyuIb13rKZRAUrrKjQLPuEE/3f0xm5+Nhh37U71PMRK0kW+JV4yosZzExAU
-	 qrK0AufknhV7vrcQ8RRW0vzWz3nVKLu4PmrrG2gltOkblZBShofkhm1m7IZLN18+nyg==
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=+Zlx9UXTcVUvxZSzHHlcX8ufFirWkBP9ER+pKSktKjY=;
+	b=XoJqApYa6xEO3Mhz83OtTElrKOa4OTrQVriRQnQuv29JaOtxq1RDhaaSkgQVgOP6leM7
+	 lpLV+yUeRKgrZOn8Dk8GvQghK8qE1v6jrM2sxscu0/r6EWmM49YSy27LzO/dDOUi9epLC
+	 2yPKQyn/G5bCv6njSesNZPqnp7cWwDQoEk6ptfTTHOBpG6V0BWSSd7s4WIu7GQRIhs/qr
+	 FScFEtGZazMqs6eB+UwV/q89dBZVY7oJV4gniUaPi2FWEZJbnNcG5GiCJPVk4fK7GG49S
+	 qrNi1OM7FtDG78jxteYtd04aGZy/82QEGfWKJscj16+dN/Iieq4PUxX01O1/lzUwJsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VUtCOFoi;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=HEIAIx1m;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=SnsdCDZK;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6700606A32A
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 13:38:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6700606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015D5606A330
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 13:57:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 015D5606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VUtCOFoi;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=HEIAIx1m
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=SnsdCDZK
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794231493;
+	s=mimecast20190719; t=1794232622;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=BGYsCV+6ghrjpGJ3qQugEb8Y0kCPQvn96f3QlByPPhE=;
-	b=VUtCOFoin3YsnZlHv1bGq3yzV7qv02AZiKSQEwCqxciMjpsbtAYhunQCGP+3TJqorp8+7s
-	XHva+KGu7ZSpUVy+QsQTGaGCv+s3xM3wiDikmYx+0gUM8sL7j5BEVbS58Ap38Ws2v8NlWY
-	aPRNxjHsXiCuAMXedfUcgPN2MLoOSMU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-55-ERfYdL_ZPjeSZUvWtR3-Jg-1; Mon, 09 Nov 2026 08:38:11 -0500
-X-MC-Unique: ERfYdL_ZPjeSZUvWtR3-Jg-1
-X-Mimecast-MFC-AGG-ID: ERfYdL_ZPjeSZUvWtR3-Jg_1794231491
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48df02b91f9so545267f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 05:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794231491; x=1794836291; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BGYsCV+6ghrjpGJ3qQugEb8Y0kCPQvn96f3QlByPPhE=;
-        b=HEIAIx1myBNl8RKtNU2XaCgpu79yU/cswIopgOKAAckX76fZaPPdUZz80jomxlLDwO
-         TKpL5uzkNnDfJql6smhnFjeHPj5toVH6EOsjjQvyTt2TTDk6jGYXTmWBMqt5oJ+OISXZ
-         bNk3+uKL9NKgignHq9zvMKt/kEK8wxGyRNU2KW7txfTsNUrLo2Scc0aQESVh0r4NWCvZ
-         JV+zF0NG9GxdWyiozHCOGj0s/PT/Uj8ExGGkdMxibWPUuFofVzD18pC5GlVDGIqE1EzS
-         VbALQvoq1rBNznrl6Krqrwsni8JvywssTcTmdCSNFkjO7HhJndbap36p2vQswKUuf5GZ
-         bPpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794231491; x=1794836291;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BGYsCV+6ghrjpGJ3qQugEb8Y0kCPQvn96f3QlByPPhE=;
-        b=yRpidrvIn17ehh4z+UipWm+o/t+mmWAGrNca5E6BF0k4HD9Q3pbZqRYFyIdJDwi/Da
-         uYEdeAL0fBeOzXr28mB1ISP0ONSopoOFOqgz8uHpEU/FUYp5gS3VqPTtVv3RzFzvPQeo
-         /2gUfeL9d/AyvMtN9lmdn9GRC4lwBRMA1d5nNVtzzZ7UeYJyXRtCS2QhzlPFeOipBKUe
-         u1GCVuCq56EoqySRRpTn97hPNkxdJqClgZEv/eCidx8yFQzJJylrISqGYJz7WnEvLYjn
-         K3fJRNgIwRb6jMJ2202L4Id9INZsKy6cr/CyVr5ZoAfr1beji8IRQlahcLIxf7uzOzl9
-         XOqQ==
-X-Forwarded-Encrypted: i=1; AL+hErEJOSO9WTY9FEgTAZ46PNdibssyAzoV5waAV+74BbCYx8/TElAYc7/Usyfs1kUukjYiH8rkoLUOYr07MBulUJQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/6LFI8pHo3lOTIUOCM1tU3/7bPyT5k6Evl0WZir3rj77MD+0gk
-	z5xB+yfEhQsJ+m4owlxNcWkWD2EQVvlr4B/1JFDuVEGlnTVfAZ09woH8N0cJg83KYaulQStS7yZ
-	bRo2RvOVS097xnCmlLNlNye/17HBtDYdG/F9TlhzYWG3feQPF+VSye6eZ5FgsF3itTEE0kNpI+9
-	HUx2aK
-X-Gm-Gg: AYBFou2R+HXTiEBS5kEZ+Vubbwjn3wxi1UOCubR3MwWiex7EP5ri5QWZ/Jzvq2qv+YK
-	ZEpf+2KDPdummN+f7/iVNQlXW29b9/bPHE+UXBXM+vRpi3lFpbu9r/rtYDHPieb6+gwTcrI4Hk1
-	AmQ1MuN2ozzALBZ8PrEo1Ic2axpE9CpxklL2z3x1jJMC7MPqlvNZS4+8NRcHuyAs1/Hjeu65mEy
-	sOONtmTGs+zEZJKRsrNl4W95Xyha3qG8M8VRyUNQCQpA007TU1BKFuZLzm0b1z6kfN7Cwtu6tX4
-	tsHIZMLluDFa14+q6iRlHIcViryhYupYxhH+w1uG4sikjoVJ9yx7Qy2gUW0NEoiHTrpGPWI95UM
-	Koqm/KYlaLTc1bVarFmOUS80e0A5oqauzJtdI8bsSiYp0K/hMTWNME+SVJVWX6gFkwCkl0W9wpR
-	p0NA==
-X-Received: by 2002:a05:6000:240f:b0:48d:f160:efad with SMTP id ffacd0b85a97d-49425566d13mr15141585f8f.30.1794231490545;
-        Mon, 09 Nov 2026 05:38:10 -0800 (PST)
-X-Received: by 2002:a05:6000:240f:b0:48d:f160:efad with SMTP id ffacd0b85a97d-49425566d13mr15141537f8f.30.1794231490148;
-        Mon, 09 Nov 2026 05:38:10 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49597652ca7sm10965139f8f.39.2026.11.09.05.38.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 05:38:09 -0800 (PST)
-Date: Mon, 9 Nov 2026 14:38:06 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
-	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org, longman@redhat.com,
-	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
-	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 04/29] sched: Let a task boosted by a deadline waiter
- change its policy
-Message-ID: <avHMvpJonTciAtx_@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-5-mathieu.desnoyers@efficios.com>
+	bh=+Zlx9UXTcVUvxZSzHHlcX8ufFirWkBP9ER+pKSktKjY=;
+	b=SnsdCDZKZ/jnb015umIXVXZG5wnob8z8BJWrtb1F75hDWW9xRbAKW/NwxkRfE7CZHPjwep
+	qZiGS+gENzMCJg6rtfaKDFN40AR0/VqNhTHT0KSzm4e06luT1JIiQA/3TnfVmQGfjdTZ1K
+	EJyho/6XOFGI/rmYoacOCKNky2bF2wY=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-228-NdtykzX0Mjm6uDMm8botRQ-1; Mon,
+ 09 Nov 2026 08:56:58 -0500
+X-MC-Unique: NdtykzX0Mjm6uDMm8botRQ-1
+X-Mimecast-MFC-AGG-ID: NdtykzX0Mjm6uDMm8botRQ_1794232616
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BDBE71956062;
+	Mon,  9 Nov 2026 13:56:55 +0000 (UTC)
+Received: from [100.91.101.41] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8F49B1956087;
+	Mon,  9 Nov 2026 13:56:50 +0000 (UTC)
+Message-ID: <1337732c-865c-474a-9d3d-456bee396449@redhat.com>
+Date: Mon, 9 Nov 2026 14:56:49 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -129,48 +71,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261108185406.1549770-5-mathieu.desnoyers@efficios.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 02/14] selftests: dpll: add test library and
+ device lifecycle tests
+To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Jani Nikula <jani.nikula@intel.com>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+ Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20261109093523.931201-1-poros@redhat.com>
+ <20261109093523.931201-3-poros@redhat.com>
+Content-Language: en-US
+From: Ivan Vecera <ivecera@redhat.com>
+In-Reply-To: <20261109093523.931201-3-poros@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hello,
-
-On 08/11/26 13:53, Mathieu Desnoyers wrote:
-> A SCHED_OTHER or SCHED_FIFO task that holds an rt_mutex can be boosted
-> into the deadline class by a deadline waiter. Then a sched_setattr() or
-> sched_setscheduler() call on it fails with EBUSY, unless it asks for
-> SCHED_DEADLINE. sysrq-n would not reset it either.
+On 11/9/26 10:35, Petr Oros wrote:
+> Add a shell library for DPLL selftests with wrappers around the iproute2
+> dpll tool and around the dpllsim configfs interface, and the first two
+> test scripts built on it. The library resolves devices by the clock ID
+> chosen at creation time, since netlink ids depend on what else exists
+> on the system, and the dpllsim helpers restrict the lookup to their
+> module, so that a device of another driver with the same clock ID is
+> never picked up. Every query runs the tool first and jq on what it
+> printed, so that a failed query is told apart from a missing attribute.
+> The library mounts configfs when nothing else did, and the exit trap of
+> each script undoes that, removes the devices the script created and
+> runs on INT and TERM as well, so that a timeout imposed by the harness
+> still cleans up.
 > 
-> The admission test runs "if setscheduling to SCHED_DEADLINE (or
-> changing the parameters of a SCHED_DEADLINE task)", as its comment
-> says. sched_dl_overflow() then handles three cases, by the task's
-> policy: the task enters, leaves or stays in SCHED_DEADLINE. But the
-> call site tests dl_task(p). That tests the priority, so a boosted task
-> passes it. For such a task and another policy, sched_dl_overflow()
-> matches no case and returns -1.
+> Two runs of scripts that create dpllsim devices would share the one
+> dpllsim directory and could draw the same clock IDs, so every such
+> script takes a lock before it mounts or creates anything and skips when
+> another run holds it. The lock file lives under /run rather than in
+> /tmp, since the scripts run as root and open the file for writing, and
+> a symlink planted in the world-writable /tmp would redirect that open.
 > 
-> Fix this by testing the policy, with task_has_dl_policy(). A boosted
-> task has no bandwidth of its own to admit or release.
+> dpll_basic.sh checks that a device reports the mandatory attributes
+> over netlink. It runs against the device named by DPLL_DEV_ID, the
+> first device of the driver named by DPLL_DRIVER, or the first device
+> that is not a dpllsim one, and creates a dpllsim device when there is
+> none or when DPLL_DRIVER asks for dpllsim, so the same script serves
+> the simulator and real drivers and picks one of several drivers on a
+> host. dpll_stress.sh is simulator only and exercises the lifecycle
+> paths of the core by creating and deleting devices in a loop and by
+> cycling one device through repeated register and unregister
+> transitions. The dpllsim MAINTAINERS entry covers the new directory.
 > 
-> Now sysrq-n can take a boosted task out of the class.
-> normalize_rt_tasks() calls __sched_setscheduler() without pi, so the
-> task gets its normal priority. Nothing then drops the boost. At the
-> unlock, rt_mutex_setprio() sees no change of priority. The pi_se of the
-> task would keep pointing to the waiter, which can exit. So also drop the
-> boost in __setscheduler_dl_pi() when the task leaves the class, as
-> rt_mutex_setprio() does.
-> 
-> The boosted_owner_policy case of deadline_bw_test, added later in this
-> series, fails with EBUSY on v7.4-rc1. It passes with this series. The
-> sysrq_boosted_owner case of deadline_switch_test tests the sysrq-n path.
-> 
-> Fixes: 332ac17ef5bf ("sched/deadline: Add bandwidth management for SCHED_DEADLINE tasks")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Signed-off-by: Petr Oros<poros@redhat.com>
 > ---
+> v3:
+> - move the selftests to tools/testing/selftests/drivers/dpll, next to
+>    where the drivers live, with the library in that directory as a
+>    TEST_FILES entry; the TARGETS and MAINTAINERS entries follow
+> - add DPLL_DRIVER, which picks the first device of the named driver
+>    or, as dpllsim, a created simulated device on a system that has
+>    hardware DPLL devices
+> - the Reviewed-by and Acked-by of v2 are not carried over, the
+>    device selection changed
 
-Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
-
-Thanks,
-Juri
+Reviewed-by: Ivan Vecera <ivecera@redhat.com>
 
