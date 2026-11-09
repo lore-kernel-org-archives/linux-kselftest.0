@@ -1,73 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.40
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794190393;
-	b=eFDaPUjieteNriI7RK42GsCByitA5b0B+hzQi8Yzpb125ifrl3Dw/jMl5DX8eUoTRdTg
-	 tTwjGb0NY0cFpX3hSkeIa8kzZluaVPsVpZoRzv3IYnR43yvoCH4Qga3xdwKfs77Mkaelw
-	 VEOeLoovqb7PqQQtJlB7lc2ozHzNamjKHzmBw5zXcpt2hb+TA4/0iKMxo5jD6EFjOnf+u
-	 QJ3EEmHZtUFz+T+M9i0+3aElA09B1c5/4C8bpdKcrg6VyjkICM0P4gm8FMfYczB3NXfVY
-	 vSjS3MDvo/lPt+cpcQzST1KsLHXEVI1S/nBCv6O+XhIQDwbRzepAc9xrL021Jrsfasw==
+	t=1794190515;
+	b=QbpB6hm9bq9d0+m3m6zmw9s6PxTnZn1QTaatKWgA+NqOQCFAvEsgEAE2UzL9rfcCLZ/I
+	 2TmXtGrSKglR3wbl7+GPx2OD/6jORjQV/jS3Pb3VAmQctIuPwFmCIkCj5KAlFFwjJi3ex
+	 ZR8sbXJWGbZv27Ie5AaP61Bgt96kz+yaYUygmgkSB5nkcp+ombmukP9VPd/LHY0sDMoLX
+	 4sv6vYeLo8dNARYdZYmj3Y9el7VPK5eXdCsaH9jptaSP0uBfr8V+t/Wac12+WQnQ09J+H
+	 ustpnckI69OPCH4tmF43hY5moTh8d7yVBXTZQkxhFJaGJjA55vq2ssur9MrRN9vx+3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794190393;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794190515;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=2Hrqs/JVKUcbfDET+jPKh8H9v2r5yy3K1PZrEbt8Ns8=;
-	b=QE1LwSK9dOXL3M16/nlH4NBlAxoB5VNkto6fvRoGgzV07YHZmoz454r60Mrrsyo82ciy
-	 3mgsIH4fiEPdcIGAG+buzz2LBy/zGGSmaLZhWLdUqFxOEbdOAV98BLTO66EfCI72SluLT
-	 7jMrYgD7uzjdIJkCYbeW6D8LZtz4sZr2N1uI1Psgdkrr0C5HamN9sUure2sSQItNo3/og
-	 c+DXTWBMpUtCij03G/MgkoYyk0SuG2EXQbofnN2lQhyT2wQX2xFeVCPowc/QyQgpUfDB9
-	 5tSSX2VQgWumLOaezbPC+2qtGR1Mxb2Gbh0U9hLPkWVo9wsdHHlkEKR3xuquEx8127A==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=bIloYSK3+4K/KkpgHLmr3ED9jzQvebQcrpQM//1CZGo=;
+	b=fN8G++KYK/XFQmE3F6W5ncPh6dnLVSe/X73rJ18qg6hExarZcKSyacsFeOU3SfBfVsEU
+	 VjZv7AJbOAmg8AwS0mqbfyWqDuvCBCy85OAmu/VR68za3g/VEuIHmLKg7nrfx+U5mB+Im
+	 pP7clFas4WynQZBZHHqFyyyPoiNlZ32osr8T72lo0DRLPn2xRQT1JAsMNVLzFaRmUPaKq
+	 T68A8tDbWkxs9qYs4hjx9ZheSyY61zzQxAFZOw2cKNw6vrigwXgYX+sI8V8ewekKIp5oS
+	 /vebp/+Ipag8HEC+wOHZhRV1sdpF5oiEpylsYOiN7eejKaK/mtkaPyN1h93ma72FZ7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DjlQzerJ;
-	arc=none smtp.remote-ip=95.215.58.40
-Received: from mta1.migadu.com (out-40.mta1.migadu.com [95.215.58.40])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Xa1Jr9pq;
+	arc=none smtp.remote-ip=91.218.175.182
+Received: from mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F260606A322
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 02:13:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F260606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328D0606A325
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 02:15:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 328D0606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DjlQzerJ
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Xa1Jr9pq
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nunKtJw2pkzgi9VVF0VjIUIjGkEovgWbt7tbN/jur34=;
+DKIM-Signature: a=rsa-sha256; bh=8n8V1yRl+iYZ7zK/bT1eTEsTmfpO4TUveKPsBFyRf8k=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794190390; v=1; x=1794795190;
- b=DjlQzerJmxVwZSoGIC5wn1fGAYeqaYdb0xmd0166dhd89K63DpTCiFCUxA3JOLHOCISkGpxz
- fCX+oGa3oTiS89WVQew6IaaqXTsUOWLtk7bDqIOQkpuHvSeWoCP0edT4f2oehSpnoOvuvKMuQlP
- dj2HW6m42/B01Se11MWUPnNE=
+ t=1794190511; v=1; x=1794795311;
+ b=Xa1Jr9pqz1vr1rqOZrFS0+WmpycF+gQF5QftMAeWPB9sFvpuO4IeHLZLxsBioaslsF2tXWUH
+ 64HHIz9xOEMmMctAASxPTKtUGNKqcuxlQSNGlNGKU7HN3Yecn/SoQRS9vWLWaKb2FzCUZ5mPR+3
+ aEOTp+nUxZJiQVqxrg2/+1F4=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id f1189d88acb6bb10;
-	Mon, 09 Nov 2026 02:13:10 +0000
-X-Mizu-Trace-ID: f1189d88acb6bb10
+Received: by smtp.migadu.com with ESMTPS id e4b351546fe3877f;
+	Mon, 09 Nov 2026 02:15:07 +0000
+X-Mizu-Trace-ID: e4b351546fe3877f
 X-Migadu-Flow: FLOW_OUT
-Date: Mon, 9 Nov 2026 10:12:51 +0800
-From: "Xu Xin (vivo)" <xu.xin@linux.dev>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Stefan Roesch <shr@devkernel.io>, Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] docs/mm: ksm: describe how smart scan picks the
- scans to skip
-Message-ID: <avEsIwSBUFygAdq4@dgvxl46587.localhost.localdomain>
-References: <20261108-bug-mm-ksm-smart-scan-align-skips-v4-0-86be8fe77e7a@gmail.com>
- <20261108-bug-mm-ksm-smart-scan-align-skips-v4-2-86be8fe77e7a@gmail.com>
+Message-ID: <65d109ab-3dca-4521-bc1d-bb1f8810bb14@linux.dev>
+Date: Mon, 9 Nov 2026 10:14:57 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,60 +58,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261108-bug-mm-ksm-smart-scan-align-skips-v4-2-86be8fe77e7a@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/8] selftests/bpf: Remove sockmap update from
+ bpf_iter_unix
+To: Michal Luczaj <mhal@rbox.co>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Eric Dumazet
+ <edumazet@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen
+ <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Stanislav Fomichev <sdf@fomichev.me>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
+ <20261107-sockmap-update-limit-iter-v3-1-7c0bad1ad036@rbox.co>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261107-sockmap-update-limit-iter-v3-1-7c0bad1ad036@rbox.co>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 08, 2026 at 08:22:51PM -0500, Qiliang Yuan wrote:
-> Documentation/mm/ksm.rst covers the stable tree and its reverse mapping,
-> and Documentation/admin-guide/mm/ksm.rst only says that smart scan skips
-> pages KSM has failed to merge before.
-> 
-> Neither says how often an unmerged page is looked at, or that the scans
-> are picked by the global scan number so that identical pages of
-> different ages still meet in some scan, which merging through the
-> unstable tree depends on.
-> 
-> Add a section on smart scan that describes both.
-> 
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> Tested-by: Andrew Morton <akpm@linux-foundation.org>
-> Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+
+On 11/8/26 1:58 AM, Michal Luczaj wrote:
+> BPF iterator programs that can update sockmaps will be limited to
+> iter/sockmap. Remove the update from the unix selftest.
+>
+> This reverts commit 997b8483d44c ("selftests/bpf: Extend bpf_iter_unix to
+> attempt deadlocking").
+>
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+
+
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+
 > ---
->  Documentation/mm/ksm.rst | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-
-Reviewed-by: Xu Xin (vivo) <xu.xin@linux.dev>
-
-> 
-> diff --git a/Documentation/mm/ksm.rst b/Documentation/mm/ksm.rst
-> index 5a80573162def..f954d221e8017 100644
-> --- a/Documentation/mm/ksm.rst
-> +++ b/Documentation/mm/ksm.rst
-> @@ -75,6 +75,22 @@ The whole list of stable_node "dups" linked in the stable_node
->  The frequency of such scans is defined by
->  ``stable_node_chains_prune_millisecs`` sysfs tunable.
+>  tools/testing/selftests/bpf/progs/bpf_iter_unix.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+> index 3061b148f338..90beada0386d 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+> @@ -7,13 +7,6 @@
 >  
-> +Smart scan
-> +----------
-> +With ``smart_scan`` enabled, ksmd skips pages that it has already tried
-> +to merge without success. The ``age`` of a page's ksm_rmap_item counts
-> +the scans that went by while the page stayed unmerged. A page younger
-> +than three scans is looked at on every scan; after that it is looked at
-> +every second scan up to an age of five, every fourth scan up to an age
-> +of eight, and every eighth scan from then on.
-> +
-> +The scans that look at a page are picked by the global scan number
-> +``ksm_scan.seqnr``, not counted per page. The unstable tree is rebuilt
-> +on every scan, so two identical pages can only be merged in a scan that
-> +looks at both. As the periods are powers of two, every page is looked
-> +at on each scan whose number is a multiple of eight, so two identical
-> +pages meet at least every eighth scan whatever their ages.
-> +
->  Reference
->  ---------
->  .. kernel-doc:: mm/ksm.c
-> 
-> -- 
-> 2.43.0
-> 
+>  char _license[] SEC("license") = "GPL";
+>  
+> -SEC(".maps") struct {
+> -	__uint(type, BPF_MAP_TYPE_SOCKMAP);
+> -	__uint(max_entries, 1);
+> -	__type(key, __u32);
+> -	__type(value, __u64);
+> -} sockmap;
+> -
+>  static long sock_i_ino(const struct sock *sk)
+>  {
+>  	const struct socket *sk_socket = sk->sk_socket;
+> @@ -82,8 +75,5 @@ int dump_unix(struct bpf_iter__unix *ctx)
+>  
+>  	BPF_SEQ_PRINTF(seq, "\n");
+>  
+> -	/* Test for deadlock. */
+> -	bpf_map_update_elem(&sockmap, &(int){0}, sk, 0);
+> -
+>  	return 0;
+>  }
+>
