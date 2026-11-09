@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.249
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.155
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794214140;
-	b=gb1jivkNTFvOT5IOrKLbRKHmCk7YZ3GBEfAi0MjcKrlq7dvBnXnBPuW8qqUpf+K0/7BH
-	 YmzeinQcGIPqyo9ds5Imi2JUu4HXCA6eH06HkudRoBM7SDh4300aZjD6bLqh/RAQGS+pV
-	 iFYEJKXsubiS8fiz7EUo9YN5rPOdHOb73ueJ+pgBYu40oO59xSmvttXDx5L7qB04wHQr3
-	 2q/HkzpZ/VVC1v2SAairZ/YuZ/0RB7d+9Hywu9llEj7RLm4UlGGu0YUbBF5UPIV1Rr6Qw
-	 Aiq4SW31a9f1M/x+EpwLoAV/J6fctK7pU+1Mif5nkBrv9m2BoYm8iYz/7vy6hqHIvHA==
+	t=1794214156;
+	b=SYlouiHUigN4ArkXLiFJJmxgcHotkAzacC9YVMpSwU9htUc1XazYoUG4cjcGI5qTXFNQ
+	 iL+E7OoEQyofRdG4mTbCquI9GPqhc8JjzdZOc4hpU0EFo+QsTbKtv3ZP2hQqzElg/wVlm
+	 ajySC+ru0/TVZLdH9mKZVfVxhvSGXCcslBZV2/4698Pv3nHv7X/Iq1mWjf/0cXA82Tvgz
+	 OgT1AgzrzTG0U2vMEtt0/eLQSPIXw9Uhea75UcWPv/WYkPODoiquy90ulq5xzJ2VCI8bJ
+	 uVNngR49H1sDlhRy/t2eessBuDm5VwvkbBX0Olj1hip/HARKcVVxe2aXxMN0eaO7+cA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794214140;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794214156;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=BcLq5g72+s7ounklw3j61AqvGiqhGMXsRHaqCza01SA=;
-	b=YloNxdHmanZ/pWaklyG8wqGq4FnSyRdNz5rMtTlz75q4qYC0huAmlF6LHDaLIi5SdkEf
-	 7AEpK5y16H8c0zB2832k34paazTUCOpBTy1m0diYnvLqNL5f/LmaiYH8vH+X32UcOLkLA
-	 OuNuSpvElKM4p3WUlhrPsj65BJGPaSUEHJ1nsJmHQSP7vhjtLYzeY3NenS6F4IhBfJP4J
-	 hUG9mmckxO7YWo1hcCKq1PG9QEoSoCN86UxXjpQTtvpGqzKt7rkdlCIVDWshPoL9Ki/7a
-	 I/RdbUqPPPZvWaLBZwCqYUUUPKCFWS+ySbHGNx10Pess2omF/4G9GFeT1pdpnFG9vww==
+	bh=AfXeCeneHqNmuixn/C9DCjk2UEGT5HCCQsR07Fy0vVk=;
+	b=r/9fQiMDdrlyWpRgQa8sbkhyFEAa8rYP6NBS2dNW5GkaNSmkyMBAklpCcrU1O8ZodKHa
+	 CP/p5jmtWmMzYNoIeAfoI6bTI/0NvcFXK+D6unD9/gl0Q5LYBVf77+C8/ng1GT9WqpV0v
+	 lJhoHmq8qqB/A3VoJw3WyyY73KXRqg8fqrIr4SifgFykwz4yXK3TOIeWyhKRItyOeSlJ3
+	 UTIzT10rx6JFmVJGFOQABi2t4rrVWa612vvQxJthroSZwozgN5Bz67nQi+LNdKppckO/s
+	 bA+BzoVk5QPXp6MF7ryQU8d/77VuyKlozoVraXtPpdpB/UNof7sDUwaFKLO65LESd5g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hkKMsnlC;
-	arc=none smtp.remote-ip=91.218.175.249
-Received: from mta0.migadu.com (out-249.mta0.migadu.com [91.218.175.249])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GgtV2rMd;
+	arc=none smtp.remote-ip=95.215.58.155
+Received: from mta1.migadu.com (out-155.mta1.migadu.com [95.215.58.155])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C03E606A334
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 08:48:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C03E606A334
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79306606A338
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 08:49:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79306606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hkKMsnlC
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GgtV2rMd
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=te8jt4hj3WwWfmT6OnfZqS4yAyifEnlgJtAVzuRwM5k=;
+DKIM-Signature: a=rsa-sha256; bh=RoNzd28AyvTb0ibr+4xItgKDPl/EqyvaBO8VS7dD1Vo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794214137; v=1; x=1794818937;
- b=hkKMsnlC9YHHEVYjusHC2USNtLneCUCRGfnUXE57MNoPcF5cKR21y6HKN+7+aojhrIwL5or6
- cUzAO4BopmaYridgsEHWhteuykAVamolvZMOIPMWEHzQCe2N2iqxbVeOD17ew10xebz5rzYPFGQ
- AQCtipsHJHorr+4+zRcYlF2g=
+ t=1794214153; v=1; x=1794818953;
+ b=GgtV2rMdHkAv2ej+ig2FtoiekZcw/PpaUYvKu19D7m/vypxOQTR90wu3EHIc6YIRNambBwlV
+ qlp4ZWhZfcpA46YgvjovCbehCYIqw28KSvEGwlSDoQysx4BTsp1nVgccCDqm8IzSf8HFNxb4EQ0
+ EaJ2G+V1y52yXP2AYhS7LVPI=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1bbb010ddd9ebf9b;
-	Mon, 09 Nov 2026 08:48:57 +0000
-X-Mizu-Trace-ID: 1bbb010ddd9ebf9b
+Received: by smtp.migadu.com with ESMTPS id 00fa88a3a43f583a;
+	Mon, 09 Nov 2026 08:49:13 +0000
+X-Mizu-Trace-ID: 00fa88a3a43f583a
 X-Migadu-Flow: FLOW_OUT
 From: Fuad Tabba <fuad.tabba@linux.dev>
 To: Marc Zyngier <maz@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Will Deacon <will@kernel.org>,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 03/19] KVM: selftests: Allow arm64 tests to create protected VMs
-Date: Mon,  9 Nov 2026 08:48:38 +0000
-Message-ID: <20261109084854.840576-4-fuad.tabba@linux.dev>
+Subject: [PATCH v2 05/19] KVM: selftests: Export the ucall pool's guest physical address
+Date: Mon,  9 Nov 2026 08:48:40 +0000
+Message-ID: <20261109084854.840576-6-fuad.tabba@linux.dev>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261109084854.840576-1-fuad.tabba@linux.dev>
 References: <20261109084854.840576-1-fuad.tabba@linux.dev>
@@ -85,37 +85,55 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On arm64, the VM type passed to KVM_CREATE_VM carries the IPA size,
-which the selftest library fills in. The library rejects any type a test
-provides in vm_shape.type. A protected VM is created by setting
-KVM_VM_TYPE_ARM_PROTECTED in that type, so a test can't create one.
+A protected guest's memory is private until the guest itself shares it,
+so the guest has to share the ucall pool before its first ucall. The
+host can't do that for it. Only the guest's copy of ucall_pool holds the
+pool's address.
 
-Accept KVM_VM_TYPE_ARM_PROTECTED from the test, and add the IPA size to
-it as for any other VM.
+Add get_ucall_pool_gpa(), which reads that copy, so that the host can
+pass the address to the guest.
 
-Reviewed-by: Joey Gouly <joey.gouly@arm.com>
 Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/include/ucall_common.h | 1 +
+ tools/testing/selftests/kvm/lib/ucall_common.c     | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index d42e201eba763..96c1e70dba3d3 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -400,9 +400,10 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
- 	}
+diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+index cbdcb0a50c4f9..3a6cdf9aa0464 100644
+--- a/tools/testing/selftests/kvm/include/ucall_common.h
++++ b/tools/testing/selftests/kvm/include/ucall_common.h
+@@ -41,6 +41,7 @@ __printf(5, 6) void ucall_assert(u64 cmd, const char *exp,
+ u64 get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+ void ucall_init(struct kvm_vm *vm, gpa_t mmio_gpa);
+ int ucall_nr_pages_required(u64 page_size);
++gpa_t get_ucall_pool_gpa(struct kvm_vm *vm);
  
- #ifdef __aarch64__
--	TEST_ASSERT(!vm->type, "ARM doesn't support test-provided types");
-+	TEST_ASSERT(!(vm->type & ~KVM_VM_TYPE_ARM_PROTECTED),
-+		    "ARM supports only KVM_VM_TYPE_ARM_PROTECTED as a test-provided type");
- 	if (vm->pa_bits != 40)
--		vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
-+		vm->type |= KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
- #endif
+ /*
+  * Perform userspace call without any associated data.  This bare call avoids
+diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+index 029ce21f9f2fa..aa1f0f92c6d1d 100644
+--- a/tools/testing/selftests/kvm/lib/ucall_common.c
++++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+@@ -21,10 +21,17 @@ int ucall_nr_pages_required(u64 page_size)
  
- 	vm_open(vm);
+ /*
+  * ucall_pool holds per-VM values (global data is duplicated by each VM), it
+- * must not be accessed from host code.
++ * must not be accessed from host code. The host reads only a VM's copy.
+  */
+ static struct ucall_header *ucall_pool;
+ 
++gpa_t get_ucall_pool_gpa(struct kvm_vm *vm)
++{
++	struct ucall_header **pool = addr_gva2hva(vm, (gva_t)&ucall_pool);
++
++	return addr_gva2gpa(vm, (gva_t)*pool);
++}
++
+ void ucall_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+ {
+ 	struct ucall_header *hdr;
 -- 
 2.47.3
 
