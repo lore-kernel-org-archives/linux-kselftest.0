@@ -1,67 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794232863;
-	b=LqdwW4aKmr9gqo66NnFi98xr5wLyLnUi4b2TTG3495hY46j+3zwGePqkm31RY3FL1uHw
-	 bzT27CdFwbTPaJe/zUJJcExxvkPmRAuBAGbRZaOTejyrtXibOHVfvuDUeX7mgdGtOC7Lk
-	 QUKzhw/K9YX5Zse/M5ZWetnhPkxH57oee08rh4XDebuLiQNX2FB7iCwYKFEwdxv4UHMwO
-	 ZW/9lvooD9jdWTefeU/OrIj+elQnS7HsSp424EEAZ8T5MGFMAPJxWgwIvlKNgRRh1d3JE
-	 G/wzuTn75/RA4EcJ/c+mjxC/j4r0lEIt0JBYEZqlPLMjYGNnvYsRLI25z2xPE46ikVw==
+	t=1794233310;
+	b=bFiaMxXIDr+EHaL84CsgXp2o965MeZ19YTDfT/inkNXV1Mk8whAySG4cdP4WzWz7RzXC
+	 c6kvDHUl19INlqKIFv4lHgHnT51FmMLzCRTtmMHjJ1LYQa0pDD9B5Zds5/7vYX1iyys3R
+	 LYLeSKlQLpfxsjTmeYbYaKbvgBP5RDMj0mN7vch6UxY6zX4pKcYmcoNUjbetFOO+u6l9g
+	 65M8nIHms7arqgLpFi/hMAp063QHG0q4ETPwG8uDAhiyIvcZ7iG1BoL/3u7VsEKku+i7T
+	 4bumXDMPQaz/a9aEeKG2APkTpYdRWBUTYHJnhkFLk6yjS+Uv8h3gw0QmiXyi3HiK/0g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794232863;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=9Oiih5slTZyatARVLusbIPjFVP7cGpNfYHK2OPkvmRA=;
-	b=z8hxCKrLZnmGdo3qDc4Y0Di3yW8a/pfo0aaEhQ38r1zFs2r8KYgPdxzp8zQ25cFt653c
-	 JojyLFuQ9WbfZmmaeZilxDTnZsZfIoiu9Mvcu0Jk/kUFACJ4h4Nbh5MHGjN8Hr5QP16D5
-	 9ATsatcM9K4paoBboyydGrrayqt134R2q/SO0onD9MNUVCb5KU6WoIzIc7IrL59ZsasnP
-	 34He6tp3qlRoZnUXbWVtHFOocGmoBqVaY1SHSPUNsKRIwiv1gLj1p8Gd1BvBan5Y/nqUg
-	 2k98Xd6UXu768pN+xF/E1aW6iNxP+MjonlGWF7sUkax2hAEC587758eFbIyyVJKUojw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794233310;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=nMfShMoTWWZnzsnuXz7dZMMK1Ty2nWujG10KYlZdues=;
+	b=QxjQSu7G5JSyDI4XPtL/+TYMqFQ/g9Jn4JLT/RyBeKDImGTuSj0BEb/hTwzMNNJUeI4C
+	 6X4kE6b3YR2op5f2XfZDBkkfmOmvR4CXuGu2x2BJSp4JebsoOIrwJl0L7lIarIYyIL0a7
+	 iIpoqKbOs2cmwThDvEQq1mpFxHB4564QRv2vYV0AiISgvrnpoeah9z3X1orFB08oNHVfw
+	 faLFCktW3F/LcnIcI2hZRiDpKe2fugazJjPB2R2wY9N7iR75ngO0l8l8nTdjufHBVtQDF
+	 EzADOQdsfK+Dn6LjZR9Dae+bBP1eltssE4xh1bHdb0GEl8FUcfYoR2U3T+jCc9N/VUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZwB0WqLr;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Zih1Nypg;
+	arc=none smtp.remote-ip=91.218.175.170
+Received: from mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EA0606A321
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 14:01:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5EA0606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635E5606D807
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 14:08:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 635E5606D807
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ZwB0WqLr
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794232862;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9Oiih5slTZyatARVLusbIPjFVP7cGpNfYHK2OPkvmRA=;
-	b=ZwB0WqLr6VFEWZYkFPoje9nwFOzZF6Oo1d6V/Zs7Pl67KGdyhRuvreAqycfV1F++ZKfiAR
-	5PTamG+FKuzs8+NJ43ymUVFnEOlg3guNnV/ll+l30W6V8d+ZIrZBWzmRrLB7BvFPmCrKB8
-	w0mSylDtEP17/ydvSmAPTwoGu8GPpgk=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-295-KZaldpeVMb2chDoXjrJOXg-1; Mon,
- 09 Nov 2026 09:00:58 -0500
-X-MC-Unique: KZaldpeVMb2chDoXjrJOXg-1
-X-Mimecast-MFC-AGG-ID: KZaldpeVMb2chDoXjrJOXg_1794232854
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3F27B180059C;
-	Mon,  9 Nov 2026 14:00:54 +0000 (UTC)
-Received: from [100.91.101.41] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D6FD330000E5;
-	Mon,  9 Nov 2026 14:00:49 +0000 (UTC)
-Message-ID: <36a27d0b-a4d8-4135-8796-525898b91807@redhat.com>
-Date: Mon, 9 Nov 2026 15:00:48 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Zih1Nypg
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=od9iAb6nN4npUfkIdrpGNq33ktulcg+4meU3VJi0/YM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794233306; v=1; x=1794838106;
+ b=Zih1NypgBkrIfUFE7W935KqWvPgHOj1qCug/vkFsewJ6uTBIONAicMmbYcArKwmsk3MSAH/Y
+ oBbVCrd3g9C5RBDIBqvS9vS8Qpi1ldtu3yyFM4heyVuDKUBvza2BNQQCnTrUy0/Q4GGD+K4vVe4
+ isJKj08Oh6qgFo/ee9XTVb2Q=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4ce0702978e98536;
+	Mon, 09 Nov 2026 14:08:26 +0000
+X-Mizu-Trace-ID: 4ce0702978e98536
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next 0/9] bpf: Add log support for tracing link_create
+Date: Mon,  9 Nov 2026 22:08:07 +0800
+Message-ID: <20261109140816.5196-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,67 +84,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 14/14] selftests: dpll: add reference leak
- tests
-To: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org
-Cc: Jiri Pirko <jiri@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Jani Nikula <jani.nikula@intel.com>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
- Jiri Pirko <jiri@resnulli.us>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20261109093523.931201-1-poros@redhat.com>
- <20261109093523.931201-15-poros@redhat.com>
-Content-Language: en-US
-From: Ivan Vecera <ivecera@redhat.com>
-In-Reply-To: <20261109093523.931201-15-poros@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Transfer-Encoding: 8bit
 
-On 11/9/26 10:35, Petr Oros wrote:
-> With CONFIG_DPLL_REFCNT_TRACKER the DPLL core keeps the stack traces of
-> unreleased device and pin references in debugfs. The entries do not
-> name their owner, so add library helpers that snapshot the entries
-> present before a test creates its devices and fail when an entry that
-> is not in the snapshot still holds references afterwards. An entry in
-> the snapshot belongs to an object of another driver and is ignored
-> even when its content changed, since other drivers take and drop
-> references while the tests run. The teardown of a device releases its
-> references before the write to live returns, so the entries are
-> expected to be gone at the first look; the check still polls for a
-> while before it reports a leak, so that it does not fail on a single
-> read. Attributing
-> by name means that a leak of an earlier run goes unnoticed and that an
-> object reusing the address of a freed one from the snapshot can hide a
-> leak, which is accepted, the entries carry nothing better to go by. A
-> second run alongside would have its devices attributed to this one,
-> which is one more reason for the lock every script takes.
-> 
-> Whether the tracker works is probed with a throwaway device, which has
-> to show entries while it is live and to drain them once it is deleted,
-> so that a kernel without the tracker is told apart from a broken
-> simulator and from a leak. The probe runs as the first test of the
-> stress script, which gains a final leak check, and of the new
-> dpll_reftrack.sh, which registers a device, removes it and verifies
-> that no reference survived. The snapshot file lives next to the lock
-> file under /run, for the same reason the lock file does not live in
-> /tmp. The library mounts debugfs when nothing else did, like it does
-> for configfs, and the selftest config enables the tracker together
-> with CONFIG_DEBUG_KERNEL, which it depends on, and debugfs.
-> 
-> Acked-by: Jiri Pirko<jiri@nvidia.com>
-> Signed-off-by: Petr Oros<poros@redhat.com>
-> ---
-> v3:
-> - say what the leak check waits for instead of a concurrent dump
->    holding references, which nothing does (Ivan Vecera)
-> - follow the move of the selftests to
->    tools/testing/selftests/drivers/dpll
+I'm adding syscall common attrs support for LINK_CREATE cmd.
 
-Reviewed-by: Ivan Vecera <ivecera@redhat.com>
+This is the second series for the plan, that adds syscall common attrs
+support for LINK_CREATE of tracing prog and cgroup prog.
+
+BTW, address Andrii's review [1] in patch 5:
+1. Change if (!OPTS_ZEROED(opts, iter_info_len)) to if
+   (!OPTS_ZEROED(opts, log_opts)).
+2. Add comment to iter_info and iter_info_len that they are
+   deprecated, and use iter.info and iter.len instead.
+
+Links:
+[1] https://lore.kernel.org/bpf/CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com/
+
+Leon Hwang (9):
+  bpf: Add log support for tracing link_create
+  bpf: Add log support for tracing_multi link_create
+  bpf: Add log support for iter link_create
+  bpf: Add log support for cgroup prog link_create
+  libbpf: Add log_opts support for BPF_TRACE_ITER
+  selftests/bpf: Verify tracing link_create logs
+  selftests/bpf: Verify tracing_multi link_create logs
+  selftests/bpf: Verify iter link_create logs
+  selftests/bpf: Verify cgroup prog link_create logs
+
+ include/linux/bpf-cgroup.h                    |   7 +-
+ include/linux/bpf.h                           |   3 +-
+ include/linux/trace_events.h                  |   7 +-
+ kernel/bpf/bpf_iter.c                         |  27 +-
+ kernel/bpf/cgroup.c                           |  76 +++-
+ kernel/bpf/syscall.c                          |  28 +-
+ kernel/trace/bpf_trace.c                      |  26 +-
+ tools/lib/bpf/bpf.c                           |  17 +-
+ tools/lib/bpf/bpf.h                           |   8 +
+ .../selftests/bpf/prog_tests/cgroup_link.c    | 324 +++++++++++++++
+ .../selftests/bpf/prog_tests/iter_link.c      | 132 ++++++
+ .../selftests/bpf/prog_tests/tracing_link.c   | 377 ++++++++++++++++++
+ 12 files changed, 979 insertions(+), 53 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iter_link.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_link.c
+
+-- 
+2.55.0
 
