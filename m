@@ -1,84 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.93
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794229408;
-	b=b3pyC0FJ4JMYoKU21S7SNLkNXZj5+wpPQMoJLQuxEVJq7SAYBwRSyGyKDMmglvm1n87x
-	 Nzjns34fu0LKRrjjq3DGgW7joGomU2jOhncs19U2d+bwPLmmZdWfltOA1DXEHPa/H19aZ
-	 sR2uXDkkIEA0QYHcvkfg9+1sQH1/Q026u1k3Ae08Kfj4kLYYr7dwD9+dNQunFw4GHjn2T
-	 u6ImiiiHTSwzRu14QGuL6xF2WZon3st2fFxUSn3sfB4qfRRe9FPJdy+xaQN+9QutTbtm4
-	 nWB+wy2i70PigZL/TX29oOVuQ9M0wsrsTq5bGLVFgr1YmYpn++xZMoE+K41LI5d2YLA==
+	t=1794229569;
+	b=VwkLvLdYHTgKKi58YCvKDOLAqTarX2gqzpB2SgcpBFWaEAQrEhvjZOow5b98Pmn6F4L7
+	 gE/FE8xNi72gvsk7Udfkj3odN9U3UAvfMZ0e+sOGXPwrPfUVw76sWPGaqrFFipLVucOHL
+	 0RIZR9S58iZT8Zfyllhr0mnHZTxjbLc44gPM2VsohJRLl2YaD2Gdc+1UmuwT4uD1Fp2zi
+	 vvR6QLyWSZR52V/axRwy/qy8Cwn2Ot/fL2AOfbpbRxLRDZwejOXHXV506TCjBKe8uQ2i5
+	 gtiB/1bZUTAXbauJr4+SKUdNHGRZcpL4PowoU7aq9YZPgoOTt2iIuoLNaGX9HwAnd4g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794229408;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
-	bh=72Pzf80vHJ6tg7h9s2yhzIcCJ8giywOh4xxajI0FVfE=;
-	b=LOX6qEyTZ3Q+Eq4tAAYUNJaw+kvJUHWD/OTq3hC6AEVZ34OEZSFoXmrOX5Af7uPb8gsy
-	 PiJUm+0Rz3wbIsBdKi3WIUbdZKiLrwMlLkLxtr+02LnU8aNlStxQLlUMH6NLVXK4A26Nv
-	 nPQQNxPlf0yQCRcsJgzeaxCDEb7GOYMCBE4yJxfTIMqljeDo6ITGuG/iQ/f3YOqdHc99d
-	 RJr8gbf2W/FAMJcCZR91G+EspSnmkvHEYHeYBeDWMrtVJb3dt4TUzXXVqmkCyPfcqZgx8
-	 D0CdKaWKmPZrUCCGrXB2wRf+p/VvtKFQQfH+vVBDBh1excV4jLL+Kh3iuGa2l2Ub/Dw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794229569;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=91+PrshXlXFSwP6fmMo9THAMzpUAzOQonBKifsHDzvY=;
+	b=slOpGQ3F6V5EM8xUs5GMPh/ReQPTJiMHljVI3bT/wkHcQOashbSMPaM3HoORoFyL14em
+	 osS93+XXyj3Q01lcYKN2d5eKnGhhZqI8Z98VCQed6pyByKLVqTkA/n1OUgqEf4On27OLC
+	 KW+LEGG0SS/CgbzjGqHz5iJqlUy+SxL9HjblmLqYcpKSIaqkhKSElJRuTrcy06GH9YBXX
+	 RVsWizzJTICYKp0ch9ZqtOs6TTKCKPQDeCSrj91prnbq1dv8BQJVTjxrXYh076ruo6aGA
+	 wu+BH9Q5VwfyRld6DXFrtrdYm5qquqQaWRNmnt+vTYn3xsiGXzvfzQ7pPcIIV3oycmQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Th6NR4gp;
-	arc=none smtp.remote-ip=209.85.219.54
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=L7VQSqXc;
+	arc=none smtp.remote-ip=91.218.175.93
+Received: from mta0.migadu.com (out-93.mta0.migadu.com [91.218.175.93])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3096606A31C
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 13:03:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3096606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A293606D809
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 13:06:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5A293606D809
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Th6NR4gp
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-91ea16d8072so6588076d6.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 05:03:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794229407; x=1794834207; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=72Pzf80vHJ6tg7h9s2yhzIcCJ8giywOh4xxajI0FVfE=;
-        b=Th6NR4gpQlycRBLRjBND2+14b1JRjtLWr70u04hTBSAFERKPkfJOkUTK3TEdNyfRL1
-         EdEWi4ne5l33XwRwB0IMecrK3EHlMksJaS2H9i4GxM3NATIPc+YcuZaUQ9+Us4vYWqu0
-         a7opGItIC1bBR5aL256gy45CpuBuBzS9m6EJBcNYglPbaUfm6KjU+s0vzQDbqgTEukLK
-         odJRimkIhb3JTbg75cf4GygFLOX8zJGE50MS07jGUEVGREv1k3k6wsr9OKQCh/zuCr0A
-         1EKAsR/Sp/3331X2ZIGFsUFaefJHCQulLSSxIfqaMlOUKO31bI9O+oU65URNeAqzzp5C
-         bNeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794229407; x=1794834207;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=72Pzf80vHJ6tg7h9s2yhzIcCJ8giywOh4xxajI0FVfE=;
-        b=JwYC1k6FtjTBmAoOyG16wUswvXh/ruJe2h6DFVo2d8XLZlPYgeljlYWuZsTFloOIvE
-         lvgjCMWr4x/E1PnQMip2m2sNpBw3Ea6vZc+D3qzdj3axIL4lWxIZ3rqPzGEpXgFI3IZJ
-         5t2gcZYnGyAMKMvf0g1RNGG8g3Q6i3jOaGYe8sps/nbw5kgmvRF9MMbUZ8X4e71tw+G2
-         8t2GAQNsUDkvRcu4CY4G8VVYuzqoqt404PVc10x6fVD7Fyc1X9AG9L38SW0eBHApLgTE
-         YGiHUD0wnz5wewg+AtBDBLaEhg2pSFdhR0fqtp9TDpm1FpmyQV3422Mlx4EN8zPu55SP
-         wFeQ==
-X-Forwarded-Encrypted: i=1; AL+hErHVZQyuim9UTVRhkEdiz2SkEQ8VPL/XL6H9lZ+JbMG3tlxg1wlk0OCLT9iEAaLpVqh1KVhLdMXfdzwCPlnFPvU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+V6SD8UR08ZP2d9Yf3g8WN35ej/f7ieuGa/TraCGl0KWK03Mbf
-	hUrHDiwqbWodakXxnLp5pQXKTbSipCKmtGNfntjz++A0cXfkG6G4VaTf
-X-Gm-Gg: AYBFou2tIgwcj9ccowUzxuVrlIDpGO/LvPX7lwJQJwg5YWrmD2FwpAUw1h9wBCFvyVJ
-	5r1zBFbQlhwhVaZLPTbhG+ij0EV4Tw8LHXJloc+mi3PE/g+lXzJyJzQEgKqG9KOTdrLdHrZY3Ci
-	D9IVl457wLtG6h3VkZEKocy3HWUVjCFLuY4/hLuRRChRBE3GmtrD/I9bNlmLWocD6xmy1t7+0dS
-	4fsAfEA1tMmw5UeW86FHhpAnOVPEhlUMCrXl4gEO+msDTKP5C7PteeCX65a/vNKVAoiFxq1N/qm
-	LEuVaGg2GQji2Cw5UP+MKAMeK84CEtKKBB4SWxdIlqGjmU9HDclkrPC3GekznR9dYSYhWMywV3g
-	/ubyJ7qXtSyYB2t/Z7wpwbiD2vUKqw4ll9wHzNBVM5LxZWds+m2pepTV1pSvi7fXZ554JRRNO7P
-	Cj3167QHvA0LFXsI1Uz0urHnDyn3ZuFEbYdCeo9gJl7fk4zbHCr+voxINcbfT65gsIkoHjT8lmX
-	vphCrftMWMg0cemD1bx4xVzYwfNfQ/6rqpsWx3I+4IoUzbK6AZz+XMo8M/j/RvU4eXU2ZKEu6kk
-	d6ZskV7vQ5NazMfxqYl4Ifx+dDRq6SoiIg==
-X-Received: by 2002:a05:620a:400b:b0:939:fde0:a71b with SMTP id af79cd13be357-947846073e3mr613394785a.0.1794229405262;
-        Mon, 09 Nov 2026 05:03:25 -0800 (PST)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-94782d61906sm469034185a.14.2026.11.09.05.03.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Nov 2026 05:03:24 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=L7VQSqXc
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Vb2HvE4C+LsP6a08cxDbF41GOuV0T8q7dEJG6iihUxU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794229565; v=1; x=1794834365;
+ b=L7VQSqXcJLz/vIuFbSFL/q+AEAcaiKbWXiQKNF4cqixih+OsdO3Ua8hiGmPprUoy1VmtUS6y
+ 2uoRs5lcXUjYiRXUNcW1nk+3DQDBbarbcFZszU0okemyYWy83i/0Fin2MNUko0s80eqqJJWBXEF
+ HcKyZwSvgYLuficIBKEdhyjQ=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 7c06950158a956d2;
+	Mon, 09 Nov 2026 13:06:03 +0000
+X-Mizu-Trace-ID: 7c06950158a956d2
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <1c4078e4-dd6a-4a70-bdda-d5cded19937a@linux.dev>
+Date: Mon, 9 Nov 2026 21:05:53 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,99 +57,77 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
+ martin.lau@kernel.org, yonghong.song@linux.dev, mason@kernel.org,
+ ihor.solodrai@linux.dev
+Subject: Re: [RFC PATCH v13 2/4] blk-iocost: add iocost_ioc_tick tracepoint
+ for per-period device summary
+To: bot+bpf-ci@kernel.org, tj@kernel.org, josef@toxicopanda.com,
+ axboe@kernel.dk, alexei.starovoitov@gmail.com
+References: <20261106122356.3224638-3-cui.tao@linux.dev>
+ <ebb6ebc5ddce3089fe912ca2d6e7a0658864c7369d15e1cdb7f203eae6d5a0d0@mail.kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <ebb6ebc5ddce3089fe912ca2d6e7a0658864c7369d15e1cdb7f203eae6d5a0d0@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 09 Nov 2026 08:03:22 -0500
-Message-Id: <DMQP8OMF2NZ2.3K3MJRWBNXWW@gmail.com>
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
-Cc: <kuba@kernel.org>, <willemdebruijn.kernel@gmail.com>,
- <davem@davemloft.net>, <edumazet@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <rdunlap@infradead.org>, <donald.hunter@gmail.com>,
- <andrew+netdev@lunn.ch>, <shuah@kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 4/5] selftests: drv-net: psp: factor out psp
- connection setup
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261106-psp-v3-4-a8dd38f5a727@gmail.com>
- <179408516862.994134.13048510473902240219@kernel.org>
-In-Reply-To: <179408516862.994134.13048510473902240219@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sat Nov 7, 2026 at 3:59 PM EST, netdev-bot+sashiko wrote:
-> Thank you for your contribution! Sashiko AI review found more severe
-> issue(s) in other patches of this series. This mail is only an FYI, in ca=
-se
-> you want to address the nit picks below when you respin.
->
-> Low priority / nit picks for your consideration:
->
-> - [Low] The commit message says "Here we are adding some more error
->   paths, so we just handle errors by closing the data sock".
->
-> --
->
-> selftests: drv-net: psp: factor out psp connection setup
->
-> This commit moves the PSP connection setup and the assoc uapi calls in
-> psp.py and psp_responder.c into helpers. Other tests that start with a ke=
-y
-> exchange can then reuse that sequence. It also makes run_session() close
-> the data socket when conn_setup_psp() fails.
->
->> The caller of conn_setup_psp() not handling errors was preexisting. Here
->> we are adding some more error paths, so we just handle errors by closing
->> the data sock to make the code a bit more robust.
->
-> [Severity: Low]
-> This isn't a bug, but is the "adding some more error paths" part still
-> accurate for v3?
->
-> Before this patch, conn_setup_psp() returned -1 in three cases:
-> psp_rx_assoc() returning NULL, recv() returning < 0, and psp_tx_assoc()
-> returning NULL.
->
-> After the patch, it fails in the same three cases:
->
->     rx_assoc() returns -1 when rsp is NULL
->     conn_setup_psp() returns -1 when recv() returns < 0
->     tx_assoc() returns -1 when tsp is NULL
->
-> The v3 changelog says the per-version key length table was replaced with
-> the key length from the kernel's rx-assoc reply. That table lookup looks
-> like the only new way this function could fail, so the sentence may be
-> left over from v1/v2.
->
+Hello,
 
-Ah darn. I let local sashiko convince me it was a good idea not to
-ignore the return code of conn_setup_psp(), even though it is purely a
-preexisting "issue". Then, when I was writing the commit message, I
-think I was looking at the code from the next patch where
-handle_tx_assoc() rekey handler, has an extra check against the key
-length.
+在 2026/11/6 20:56, bot+bpf-ci@kernel.org 写道:
+>> blk-iocost: add iocost_ioc_tick tracepoint for per-period device summary
+> 
+> TL;DR: Commit message only: it restates the code comment instead of giving the
+> motivation (monitoring without drgn) for the new iocost_ioc_tick tracepoint.
 
-If I have to respin, I'll probably drop the code chunk below entirely.
-Otherwise if we can just edit the sentence:
+Right, the changelog ended up restating the code comment.  I'll
+rewrite it to lead with the motivation: the tracepoint gives a
+per-period summary so monitoring iocost doesn't require drgn.  The
+emission semantics stay documented in the code.
 
-"Here we are adding some more error paths, so we just handle errors by
-closing the data sock".
-
-so it says,
-
-"Handle preexisting errors from conn_setup_psp(). No new error paths are
-introduced."
-
-Then it would be accurate.
-
-> The only behaviour change is in run_session():
->
->     if (conn_setup_psp(ys, opts, data_sock)) {
->         close(data_sock);
->         data_sock =3D -1;
->     }
->
-> Could the commit message give the actual reason for that change? For
-> example, the existing failures can leave a half set up data socket open.
+Thanks,
+Tao
+> Not a bug.
+> 
+>> blk-iocost: add iocost_ioc_tick tracepoint for per-period device summary
+>>
+>> Add iocost_ioc_tick, emitted once per period from ioc_timer_fn() with
+>> the overall controller state: period_us, vrate, busy_level, active iocg
+>> count and usage percentage.  busy_level, cur_period, nr_active and
+>> usage_us_sum are complete at the emission point.  usage is wall time
+>> over wall time, summed over iocgs, and is not capped at 100.  vrate and
+>> period_us reflect the current controller state, which an io.cost.qos
+>> write may have changed mid-period.
+>>
+>> The event fires every period the controller is running, including
+>> steady states, plus one final tick before the controller goes idle, so
+>> the transition to dormancy is directly visible.  The active iocg count
+>> is only gathered when the tracepoint is enabled.
+>>
+>> Suggested-by: Tejun Heo <tj@kernel.org>
+>> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+> 
+> this isn't a bug, but the middle of the first paragraph ("busy_level,
+> cur_period, nr_active and usage_us_sum are complete at the emission point
+> ... which an io.cost.qos write may have changed mid-period") restates the
+> block comment added above the tracepoint call in ioc_timer_fn() almost word
+> for word.
+> 
+> The reason for adding the event only appears in the comment in
+> include/trace/events/iocost.h ("so basic monitoring doesn't require drgn").
+> 
+> Could the changelog say why a per-period summary event is needed, for
+> example the monitoring-without-drgn motivation, rather than repeating the
+> code comment?
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42219005018
 
