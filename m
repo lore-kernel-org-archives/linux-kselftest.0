@@ -1,67 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794235312;
-	b=Dh4HAvU5uMqAsqbwN/GVLPIMA2OO3xR0vK1XLmfRTN0/4m+wR+A85YaybVNh73URZAMq
-	 W7IdhsdFiqwAJfZ1oGScsB9VO65aMC1w4geytu5zYB8FEoYniA7wIzEOm3x8mIYohd7Ft
-	 8VZwdAo/SoFaL5fUoHW8FpReXvimUgHoAAjNB573Tr3tyeaaR9ev6H5V3jOXPDbaG9zZS
-	 7ZEq5qeh+dI+fkQ8EEQMGfX4Ot0k7VplkCjJ1SygyGrRuM+WWZUui3bxmtsgBtLGkjCsQ
-	 lZZNvF0VUcd6U4x3Bu7TjOY3cgWnjADm8ZfpZIXQGaP2OSjCgmuh77DhaADr9yiXbag==
+	t=1794235665;
+	b=AJYB0SXoK0fH393bQSq1OjYiXMq9wWKQfT8cTiD/UBe96Mu+jDgVgsTG1asRQAINQfxu
+	 QVNXEfQXaSGswDNcFLkQMRB8DaOejKZKXkTnejk+42Yc+vOQHq+YE4JT4Hl+NfKbakhUe
+	 TYiWzzzFrlNzRSKWQXFtRMdEYgFQO9NFn+DmVxrPrLAwQbqokVb9Alb9M9ijxKNKuvjAv
+	 yTwh5cjwuVq6NQPzJFCyRCj1gWGQfGV44ym89xeXALMgMOVStr/rVrCLyD62v8/D0vw1l
+	 xZ0TebXwFfYHdht2dt5sHYYWPi4Eww2UDjjYoN+FK8Gc2OEFKwsMCT9qrxMZ1c3r58w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794235312;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=3DmiQTkcDrfvNKdokvdjGTmMgiq//nGrn6FpXJ0M9ek=;
-	b=rbu2pPwCIYPjWf0tRZmxUfgQP8YplCZ9tOVp2jxsDwOJKI3qYkrxEhe6xBvjvQdNk8Rw
-	 P8VSRBEzQt9Ja6hCbZQGaha0XwwEEUoGu8Ckxuy3nb6+LOMaH4lAd4OoLSi7sZs4rOyw0
-	 TOs92jM5plWC2MEEo1jCNDyZQjftUlfpbmtbAJ/gM+wCexjiVkPqLqNB2fXSv/vbolOjd
-	 0Ue77H+iPmnxkRKcwuq4iPAj9SjnsYuvLfqPd5TNgCYYPWqXvJd3gbT/j7XVHt+NlNJ9B
-	 GNl0ctqRNKxfgVv98NGWDaoTuMjZD0fj4YfHQdU7UVRuo9Au2MAGIrov3YnR4gLsUag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794235665;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Bwn4oMi4wD4Hm2RlK2+vnAdq4AFCLTg3OHrUehp6rKQ=;
+	b=zCG3yLN8mSgr5bRHbp/BJhu3H4mtXl9jYwFEVrb3KQ5DwUanRbSOBm7hXQslavX+a/90
+	 GuEkD9kpIXsbFLaGB2ZNVqErSR6fU5HsxUm5Q01ScGG5da5iHSApl7X56C8g1Gg3WmrTF
+	 T1KwjYtV3Qgra2/N2ng2hQwa/ui0m2t+OqVOh1SBxVC+CbAKUEuoZhFXy8HhkJf53sc3D
+	 NXAXbXqHHvCbLawF+6D2XAaIfTgkOM3JspMp4k0RV5Us4N/JRWkAx8ihoJPZymlAQ6uI6
+	 zdypE2WmebgQX1MpAZ6BYRWyanPKDz4AmXprkOglfpe+mEsnn1i474kZA6uaLc9PvKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TFyM6qjl;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y1u1vckD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C705606A334
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 14:41:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C705606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A57606D807;
+	Mon,  9 Nov 2026 14:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TFyM6qjl
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794235311;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3DmiQTkcDrfvNKdokvdjGTmMgiq//nGrn6FpXJ0M9ek=;
-	b=TFyM6qjlL3Feb5nW1ktI3RBis/7EM3euDT8Vuf74Q25kvLf5JoRvKAAbrNAuh9mQg8KD63
-	NYwrT9GI8vk7xWA18KzqdLdvuTo7N6jg4VBVlQulZr7ggCeFkF/Cv1jG5ckM633sb7Ogqp
-	Q1NLHuI4GgGdqAx9ZuLydAVVNDbXtjc=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-426-8PhPwMfTO4yn30hLTk4k0g-1; Mon,
- 09 Nov 2026 09:41:47 -0500
-X-MC-Unique: 8PhPwMfTO4yn30hLTk4k0g-1
-X-Mimecast-MFC-AGG-ID: 8PhPwMfTO4yn30hLTk4k0g_1794235304
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A035B1955E89;
-	Mon,  9 Nov 2026 14:41:43 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8DFFB1956089;
-	Mon,  9 Nov 2026 14:41:41 +0000 (UTC)
-Message-ID: <e575df2d-71dd-4844-83b7-d29bed349992@redhat.com>
-Date: Mon, 9 Nov 2026 09:41:40 -0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y1u1vckD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3521F008A6;
+	Mon,  9 Nov 2026 14:47:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794235664;
+	bh=Bwn4oMi4wD4Hm2RlK2+vnAdq4AFCLTg3OHrUehp6rKQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Y1u1vckDjH8hJB76C9UNV0Jie/UmxwTJ5xCoKFaBVFS4pYMvG3XP6ao8osYS5luGt
+	 7IVgAGiHiC++Y2xxERgx+6vLb53UrAUWJmxrXRdcEN4FT+hwDfqJnhGunyxwQY+1wg
+	 dySHKzmjZyPtmc2K0aXZCxNNP4iIhz5MpRZa7P8WvVU6zcSqPNJW6LFDSUBee47nYs
+	 FqF7Rk++hN2aYFPUo5ia4Wt4gc34hbT5NtZzXQM6cr9f0To21UNWQy7+Nr7aGy1//8
+	 jr959VB8xHKzHPTajKdbEL9KY3nOpthHwGV4xxp5+Nku32c1LqMm5PIz7ghcqbd3LA
+	 XFDDcIbadTZzQ==
+Content-Type: multipart/mixed; boundary="===============0156833231429614843=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,35 +49,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] cgroup/cpuset: Reject updates that empty the top
- sched domain
-To: Guopeng Zhang <guopeng.zhang@linux.dev>, tj@kernel.org,
- ridong.chen@linux.dev
-Cc: hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20261105130344.664336-1-guopeng.zhang@linux.dev>
- <20261105130344.664336-2-guopeng.zhang@linux.dev>
- <ccdab485-e1d1-4055-bb0b-f8f712fc0a9b@redhat.com>
- <0ae6fffe-d492-4e85-b464-fafdc4c2b064@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <0ae6fffe-d492-4e85-b464-fafdc4c2b064@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <8b9e5217cbe9c192e678ce5c8d59f573c80a659d72211f5b91c905ed00ebb799@mail.kernel.org>
+In-Reply-To: <20261109140816.5196-6-leon.hwang@linux.dev>
+References: <20261109140816.5196-6-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 5/9] libbpf: Add log_opts support for BPF_TRACE_ITER
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,kpsingh@kernel.org,matt@bobrowski.net,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  9 Nov 2026 14:47:44 +0000 (UTC)
+
+--===============0156833231429614843==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 11/8/26 11:42 PM, Guopeng Zhang wrote:
->> Could you also put this new test matrix together with the other test matrices?
->>
-> I'm not quite sure what you mean here. In v2, the new matrix is between
-> ISOLCPUS_TEST_MATRIX and NOHZ_FULL_TEST_MATRIX. Do you mean moving its
-> definition elsewhere, or merging its test cases into an existing
-> matrix?
+> libbpf: Add log_opts support for BPF_TRACE_ITER
 
-Sorry, forget what I said here. I have misread the context of the hunk.
+TL;DR:
+- libbpf BPF_TRACE_ITER case may not reject stray bytes after iter.len
+  (missing OPTS_ZEROED check), so unknown fields could be silently ignored
+- Nit: iter.len test in the legacy branch looks like dead code
 
-Cheers,
-Longman
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
 
+[ ... ]
+
+> @@ -821,6 +816,16 @@ int bpf_link_create(int prog_fd, int target_fd,
+>  			return libbpf_err(-EINVAL);
+>  	}
+>  
+> +	if (iter_info_len) {
+> +		if (OPTS_GET(opts, iter.len, 0))
+> +			return libbpf_err(-EINVAL);
+> +		iter_info = OPTS_GET(opts, iter_info, (void *)0);
+> +	} else {
+> +		log_opts = OPTS_GET(opts, log_opts, (void *)0);
+> +		iter_info = OPTS_GET(opts, iter.info, (void *)0);
+> +		iter_info_len = OPTS_GET(opts, iter.len, 0);
+> +	}
+> +
+
+When the legacy iter_info_len is non-zero, the check above already requires
+OPTS_ZEROED(opts, target_btf_id), which covers every byte from that offset
+up to sz, including iter.info and iter.len.  Can this OPTS_GET(opts,
+iter.len, 0) test ever be true?  It looks like dead code.
+
+[ ... ]
+
+>  	switch (attach_type) {
+>  	case BPF_TRACE_ITER:
+>  		attr.link_create.iter_info = ptr_to_u64(iter_info);
+>  		attr.link_create.iter_info_len = iter_info_len;
+>  		break;
+
+Every other union member's case ends with a check such as:
+
+    if (!OPTS_ZEROED(opts, tracing_multi))
+            return libbpf_err(-EINVAL);
+
+Should the BPF_TRACE_ITER case do the same with OPTS_ZEROED(opts, iter)?
+
+On the new iter.info/iter.len path, nothing checks the bytes after iter.len.
+A caller that sets opts.iter.info, opts.iter.len and opts.tracing_multi.cnt
+gets the stray field silently ignored instead of -EINVAL.  Likewise, a
+later field added to the iter struct after len, built against newer
+headers, would be silently dropped by this libbpf because sz still equals
+sizeof() and OPTS_VALID() cannot see it.
+
+Legacy callers would be unaffected, since their union is already zero, and
+the iter.len test in the legacy branch could then be dropped.  The later
+commits in this series only touch selftests and do not address this.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42633880300
+--===============0156833231429614843==--
