@@ -1,88 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794226444;
-	b=MGa0PipRAB+zw/2EaftSLJRMkHmWWQGOLavSIGKlIsmmtqsCWpt3F2sCYDw99NzF4djC
-	 Jxb7W4/nGpC4guCTShR87H1OeK4VOoAD9nj6d0Vl+FOLnhUSNbRWRhqIpf3pTiO+m96qH
-	 R9QP9OwoLnuVO85DuytN44lVd68WH402OU7GUfeOVLvsDqlJelbzy0nbWcdFLBiyJ5Xj9
-	 J9WO6bm9YxVASq1Kt5Gd4LqCADs6LPAxeQTHcxoMLSh3NY1+7eCV9+Vdk/VWyCn1+bjKu
-	 bVDun4pwo2vmG38QxprnXIlNyZGn27upB/sjL58n7WLyLHNfRsVHmw+dkLYlekwWhUA==
+	t=1794227454;
+	b=ZEWASawjUCzSGPJ6bFhdgMbLOUVpOkLsmV9vTGZ6/G93fq7qJa7yLNLbq+gQ/fWPUPyU
+	 Q/I4OtxdLusU3eKpIhEu/WKJ14rgM/73vMYvGFjP6mCToR0pV3jnV03k+pBEeofq1/wr7
+	 IGTZrS8ymYgDnV2Im27t7sjuSR0lqBUlE08tc6Pt5uyCnNOFg55dzMZx3tAj/vVq00Glg
+	 VwdGXo6jYUVz+nQvKeTqRrfGvdgdIDvHYUBL81DEdxcIisbtzQCGmDpMLGW6Lpa2S/2xn
+	 H1eIjuP5fbnsw0W6r+BYjdcuHXhtXPgOLMUVSUx8uQExau4qS0TQP5oYjOpldUOCCAQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794226444;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794227454;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=s/6rTMTiN3zjj45F6hON9XdsqIM41fhzAmDLM09T6Xo=;
-	b=PIyK0bZkWbwrlaXiwYijA2kZYhXRJN7xqknYqoweaGKoZEilVa96hnnpbleh9fxOXOP6
-	 z1yFnx8f4PtBj2nLznvwKgdxT1Yyz3zMpPrDfHvDRV8+kd67DyVZOMKetR0LtpfX58/MH
-	 Mifd2xUi+Em6kZRjq0stdDxZBBNsLVpAehf0oZpXjtETq3Sc9syfiZS+DpO3aUoxKghvC
-	 pNCJ7sPbqUopJwPNnR9S/5aSELR11R2+BWTjHbV/aCK/3zdCpFL1KwdMdjPDg/mRzseLY
-	 GSckh3SLBS0l+Yffy0TcVfiW5iu/kcNVNB87JQlQG0B3WEgBaQJLOR+NE7JZDvud2aQ==
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=GQFncqVueaFrQl85+04mTmZiBnBccR7JgnqJBrw51EM=;
+	b=dGzmOrSvWUTwGP9lYg2rVeh/yXquVRpKVBATB6ZEP5AtXw1/njropifHaMxalNxIxknN
+	 g/PgWeZbbP8+5gnrrN0KYpgEFmhv938chS2fCALQgoso13ecs4wv2G/RVw9Qr/i8GSuIL
+	 6LL3cncRwzhn2znRPt/DexuE181E+4ymCZaJEs+hNyhJjE7LmZap7BWlrnaeRDRXXR7K7
+	 wBVYc/Ry+bzKl0e7M1FZa2j5Jd52bhQaM9seIs7KbusxDhfZ6lMB06NBhhPQEJ1Pz65eV
+	 2l64ElQjt3mlONhSM5WaX6jP93qQVQgnG47onM1aM5G30jwl54IUVAo1Nxmqtgp05Vw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="V/OYuonF";
-	arc=none smtp.remote-ip=74.125.224.138
-Received: from mail-yx2-f10.google.com (mail-yx2-f10.google.com [74.125.224.138])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y58Dbjcn;
+	arc=none smtp.remote-ip=209.85.167.53
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9143A606A338
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 12:14:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9143A606A338
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032D1606A32A
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 12:30:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 032D1606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V/OYuonF
-Received: by mail-yx2-f10.google.com with SMTP id 00721157ae682-8b2fa622fddso2811967b3.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 04:14:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y58Dbjcn
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5c14e307f29so773555e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 04:30:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794226443; x=1794831243; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=s/6rTMTiN3zjj45F6hON9XdsqIM41fhzAmDLM09T6Xo=;
-        b=V/OYuonF4VZxJX6ZKEKVsMryA7aLihm5GRqBtYap8ddfmlGYuFx9dR/yXNlA/8uprb
-         SjloK+Yimo97YStkTi6dkfLaN6NZYTUoI2YaudEZE9jzyCZ52Kf+XlCQLz3i117Wc7I8
-         DeZqBL/+zDQ1ouSQYREfnWR1DXKq4+EaiCBQ7eHTuf8JBrTbNCN/Qawv73iGSaOiGG9q
-         0+q1QeUEFChLhmfQh4fynBRKJ+nUqynNGdqXbL+AwCHO2NtHYX3uVqtBGa/DgluT9zia
-         m6TJAwKOuI0JbYYRjRpd1RUzoTDAdh5PAPhYRQxcyuzPyc02XvXHMQCxvnL300VrtpuW
-         G41w==
+        d=gmail.com; s=20260707; t=1794227452; x=1794832252; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GQFncqVueaFrQl85+04mTmZiBnBccR7JgnqJBrw51EM=;
+        b=Y58DbjcnkyPQ1CZRralTMZTIGZBHupsTH/Og90s0MQFBmBQYwYdDQ7GQnuN0UWK+Df
+         zL1rszlu1x9PSyXNo7wZHtrTF0m4lfuq1Ni1lvH7SAA+eEKiCSSjrFd/u+uIw/vwLALH
+         sDdKpfomvP+ZwGpfyz1gP9S8x15+nQ8MmIVOl6gU/Wv0XQAC9FpewRQivFm4Nuk1M6NC
+         8L+KDCMHsM7MUnd8w08/FeT6DEoouBOfI+sq5029haSyZwdqcPYlWaplHFbiD1mQCMMl
+         tkt2v39ZU9yuV1j97WoskoirDA1lHKrBZsKMsDDt+NSnSaOh6s34fjijnid4W2ajqUnC
+         Vleg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794226443; x=1794831243;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=s/6rTMTiN3zjj45F6hON9XdsqIM41fhzAmDLM09T6Xo=;
-        b=Mryvb4opQho/l0AWnlBq7a0Tns7DKITcoDg50DYMIsuvyWrGIZLukcJksU8VXlDO7S
-         LNzYTnfw8Z/98EIqwtgvyx1wuOBMW//SKNB08upmwjZKfljaBhAqkRbFC+o0cy4sYhcO
-         X7fWge/4TCuuViv76zEGIEOH1UkGOheRLkcNabiLU5Xa965pwWsiESiWfUQQIyaYZ1RE
-         ntqeG43xFfaE8S4WagnuM270QNshCKyl/VdbxdbO6eM1DLHQaJ6O812rJq7fwQEDTqfE
-         XdlQ3MkurpcjjNsRV7AJ8DFAkF4NygSirN4/FeaB4z9GYk+6iBIjlg8udZao7WlenJfy
-         1qZw==
-X-Forwarded-Encrypted: i=1; AL+hErGNKRwbDzwOWPlj+i99WuxLmHXA6PWPbcezoDloQkYIJ0YQQwpzZIcPXRVi2SYPqf0/SMfpupq5HjS3NePCVlU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+BxHNVVxI+jZjVM36kkw+OLh1pAaojVQyflEaeH7GqPd34hZMs
-	A7lDF2GAxLn81wtWmPsbaGiZC5sNpEKLcbbgi7xdpp/yszVVChcE64o/
-X-Gm-Gg: AYBFou3CpNnkLdU/5TrBA8vPHdk7uRNdgenvgl9MKJ7wVHQ4bbRwu7D5m6KhEk/g7KL
-	zzxQwBF2Wlfsf4mKwcS903dcnWsNEdFjQNl/N4hE1uECC9MP1i8N/8EjPAPxhgG+RV3SXEGb8IT
-	+69CcIkWrhTaSLoHHDBelLTD1C6/aJvqgWOQqnNWeP+jDuQQr1CfU8HGYYv+IuCbPnTGQvf9P46
-	rEqAZ0eFbEoiY4y1Fl4qXDRHwDBxnPygm/kxf8nu23KmeIqf1WDlqUYJ4ikeNoXdOgCGQDTd6HP
-	vaHpPE3D2RFUkLbM1DkaL577xcKF4NUo3pmqHahJP2XRuyBMuP6j2uNzEUjxHed3buLbIYwqXlB
-	gOgnWNM6c/8yTQ3Pp9DqkYUlvtqfHZwCiQXhO1loOgy3dmj59Y3Ptud2DVJYogdfpeAIHNFeEki
-	fBT76QZRDu559IKMT4e7e8AkrZ4nK3OJpVgDm38OWXAs2mIAEam7x5p+e+ypFqNjbtsGlxri5Pe
-	1pI6hizMok9Kto8M3+cZK5fncl5jigz1rJSKESxagVINVb4S3bWjHr2hvxQQvkSZd129X640JlB
-	xXVcseqYrTOQoDV7eL7O/vFWq+c6il9JP6Y=
-X-Received: by 2002:a05:690c:e3ed:b0:8a0:76e8:c738 with SMTP id 00721157ae682-8b36c664b7dmr25866737b3.0.1794226443428;
-        Mon, 09 Nov 2026 04:14:03 -0800 (PST)
-Received: from [10.0.0.48] ([71.69.222.122])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67c3b95cf4bsm3720905d50.16.2026.11.09.04.14.02
+        d=1e100.net; s=20260707; t=1794227452; x=1794832252;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GQFncqVueaFrQl85+04mTmZiBnBccR7JgnqJBrw51EM=;
+        b=i9wp/gCJJ5jk+rlFQtsOhAKGV4BcciJsTn48aiK7sZFidvUs9Ps0Y04c7MqhDg/GE5
+         f7aarGeDnQ7LAefKbsdCS6H85/k3Sq1m2QbGZMCOLGfRzXjABzsWu9vGzl+P104pGjQn
+         WPOJ/F/O0WVLScBd05D3Yu0JlJeFjGPTP+ZfryqvaoXzBqIlQ0kO6W+z6k9HFAbdloE/
+         d9JQvPkZX97qGADY9RCsDYdZ5FZJss92L+rbVqbXu0nvaWgKCRGmPDwfPt1j1SKq7eY9
+         OPeYCM/p8d13pO6DX4S9UhD/xhiQ/CQnCF97JWULp7OaPPJHIt7ITpPW6IumWWpWV/rN
+         GBIA==
+X-Forwarded-Encrypted: i=1; AL+hErEh4Jqfr8eierUiHxfOYjiYni4NF9x31MlW05eusbgvdLXr81fNPkFSX8FT8BL2Banwm/G64v0460eKOh5aDzo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/rk0qwjVF4PoDZWGJx0Ybnae6egvqhX9iZyuvue5d4ZE2/nvRP
+	GfIzpqtRp8rHMQZSZb18T8QLY3Vxzkc8yeun7OSHHfZaPx7Dvtjh6/QJ
+X-Gm-Gg: AYBFou3tMFMgaZ2kZIVignFGk9xcNn8CdygbbSyQh5DWfTLJLoJrQOXu5gb570vJ/O8
+	ASHej9Ibr7OeZciCHrh2zENI7U15cIlAQ1lfOL37pfCx7BDTHSkC/B0BnT/3Wfd5ghz4JDa3S9C
+	h8SRmZYtBPDx2hwk8kpwjzw3zu/gGghXHh6tI1D2ESJMYTrVlaOLH+qYPTv1xqxFH1SR24HH9vP
+	4QY61G2h1sZ4bRntFF6KbKwS56/kcj5ww1WKqvYxkJqZy+17pGXfcDayWIXz41jfjaX/dwqOeRd
+	QvwcS853/SB/gxlhe5xR44UlJ4TRh9H+dFc3Z7E06JhSrXKFCyQAS9+mjT+gbNDaDYQQkw4Bh1X
+	GRHxC9IpopoxCZx1n6gNJB+dYWZHwaWBw5tnAVBzKJqEoNyc/oafW8B6TQB4snGS5JrBYXiA4bx
+	6KtOIV5mFlvp4NOE5c4aSNbusTMRLuU72hMUho2AOsMhmeLgF2B4IyQ3xv5gF05xFg56G9Z4XRi
+	psKn8SFMtR3V/JkIHDrwzT8FOEGD+I5ewz0p3S3iXsPToDyhxOTGRGpzDivW9rSDBgy+HIgNay0
+	g9a6zWrKZKCS6Y1uT4RFivqfvJw3Xxc/xa1O+sMChpG0P9pB/qBvsxQ=
+X-Received: by 2002:a05:6512:3e04:b0:5bf:d6b6:888d with SMTP id 2adb3069b0e04-5c14c00dd3fmr1236728e87.18.1794227451715;
+        Mon, 09 Nov 2026 04:30:51 -0800 (PST)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5c14b7fc086sm849084e87.23.2026.11.09.04.30.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Nov 2026 04:14:02 -0800 (PST)
-Message-ID: <7f9b7ab9-9728-42be-a5c1-9e8e62c23ab9@gmail.com>
-Date: Mon, 9 Nov 2026 07:14:01 -0500
+        Mon, 09 Nov 2026 04:30:50 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -91,119 +87,136 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 0/6] tls: perform TLS 1.3 KeyUpdate in the
- kernel
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hannes Reinecke <hare@kernel.org>, Chuck Lever <cel@kernel.org>,
- kernel-tls-handshake@lists.linux.dev, linux-nvme@lists.infradead.org,
- Alistair Francis <alistair.francis@wdc.com>,
- Martin Belanger <martin.belanger@dell.com>,
- Daniel Pereira <danielmaraboo@gmail.com>
-References: <20261105-keyupdate-rfc-v6-0-99b695f9eb4f@gmail.com>
- <au5JP__7P_PzwDUe@krikkit>
-Content-Language: en-US
-From: Martin Belanger <martin.nvme.dev@gmail.com>
-In-Reply-To: <au5JP__7P_PzwDUe@krikkit>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 09 Nov 2026 07:30:45 -0500
+Message-Id: <DMQOJPJ4AT7P.3DUQ9O213TZBI@gmail.com>
+Cc: <kuba@kernel.org>, <willemdebruijn.kernel@gmail.com>,
+ <davem@davemloft.net>, <edumazet@kernel.org>, <pabeni@redhat.com>,
+ <horms@kernel.org>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
+ <rdunlap@infradead.org>, <donald.hunter@gmail.com>,
+ <andrew+netdev@lunn.ch>, <shuah@kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 1/5] psp: support rx rekey operation
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: <netdev-bot+sashiko@kernel.org>, <daniel.zahka@gmail.com>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261106-psp-v3-1-a8dd38f5a727@gmail.com>
+ <179408516544.994134.848767943937829488@kernel.org>
+In-Reply-To: <179408516544.994134.848767943937829488@kernel.org>
 
-Hi Sabrina,
+On Sat Nov 7, 2026 at 3:59 PM EST, netdev-bot+sashiko wrote:
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in ca=
+se
+> you want to address the nit picks below when you respin.
+>
+> Low priority / nit picks for your consideration:
+>
+> - [Low] There is an unannotated data race on the new
+>   psp_assoc::prev_generation field.
+>
+> --
+>
+> psp: support rx rekey operation
+>
+> This commit lets an established PSP socket rekey its Rx direction. It
+> does this by creating a new psp_assoc that copies the existing Tx state,
+> and it records the previous Rx SPI and generation as a fallback.
+> psp_pse_matches_pas() now accepts packets that match either the current
+> or the previous Rx SPI/generation, and psp_assocs_key_rotated()
+> invalidates prev_generation as needed.
+>
+>> diff --git a/include/net/psp/functions.h b/include/net/psp/functions.h
+>> index 410adb6718c16..5a7a518b9579b 100644
+>> --- a/include/net/psp/functions.h
+>> +++ b/include/net/psp/functions.h
+>> @@ -77,10 +77,12 @@ psp_is_allowed_nondata(struct sk_buff *skb, struct p=
+sp_assoc *pas)
+>>  static inline bool
+>>  psp_pse_matches_pas(struct psp_skb_ext *pse, struct psp_assoc *pas)
+>>  {
+>> -	return pse && pas->rx.spi =3D=3D pse->spi &&
+>> -	       pas->generation =3D=3D pse->generation &&
+>> -	       pas->version =3D=3D pse->version &&
+>> -	       pas->dev_id =3D=3D pse->dev_id;
+>> +	return pse && pas->version =3D=3D pse->version &&
+>> +	       pas->dev_id =3D=3D pse->dev_id &&
+>> +	       ((pas->rx.spi =3D=3D pse->spi &&
+>> +		 pas->generation =3D=3D pse->generation) ||
+>> +		(pas->prev_spi && pas->prev_spi =3D=3D pse->spi &&
+>> +		 pas->prev_generation =3D=3D pse->generation));
+>>  }
+>
+> [ ... ]
+>
+>> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
+>> index f2cba3fa3a235..c1e38845f08c3 100644
+>> --- a/net/psp/psp_sock.c
+>> +++ b/net/psp/psp_sock.c
+>
+> [ ... ]
+>
+>> @@ -302,8 +333,21 @@ void psp_assocs_key_rotated(struct psp_dev *psd)
+>>  	 */
+>>  	list_for_each_entry_safe(pas, next, &psd->prev_assocs, assocs_list) {
+>>  		pas->generation |=3D ~PSP_GEN_VALID_MASK;
+>> +		pas->prev_generation |=3D ~PSP_GEN_VALID_MASK;
+>>  		psd->stats.stales++;
+>>  	}
+>> +
+>> +	/* Don't allow SPI from two generations ago to alias one from the
+>> +	 * current generation. Rx rekeying under the same device key generatio=
+n
+>> +	 * is currently permitted, so skip if the previous SPI is from just on=
+e
+>> +	 * generation ago.
+>> +	 */
+>> +	list_for_each_entry(pas, &psd->active_assocs, assocs_list) {
+>> +		if ((pas->rx.spi ^ pas->prev_spi) &
+>> +		    cpu_to_be32(PSP_SPI_KEY_PHASE))
+>> +			pas->prev_generation |=3D ~PSP_GEN_VALID_MASK;
+>> +	}
+>
+> [Severity: Low]
+> Will KCSAN report a data race on pas->prev_generation here?
+>
+> psp_assocs_key_rotated() updates prev_generation with a plain
+> read-modify-write while holding only psd->lock. That happens both for
+> the prev_assocs entries and in the new active_assocs loop. Both lists
+> hold assocs that are still attached to sockets and can still receive
+> traffic.
+>
+> On the Rx side, psp_pse_matches_pas() reads prev_spi and prev_generation
+> with plain loads and does not take psd->lock:
+>
+> tcp_v4_do_rcv() / tcp_v6_do_rcv()
+>   psp_sk_rx_policy_check()
+>     __psp_sk_rx_policy_check()
+>       psp_pse_matches_pas()
+>
+> psp_twsk_rx_policy_check() reaches the same check under RCU.
+>
+> This means a key-rotate running while a rekeyed socket is receiving PSP
+> traffic gives a plain write racing with a plain read. The writer and
+> reader hold no lock in common.
+>
+> Since the field is a u8, it can't tear. A racing packet would either
+> match the old prev_generation or be dropped against the invalidated one,
+> so there doesn't seem to be a functional problem. The existing
+> pas->generation update already follows the same unannotated pattern.
+>
+> Would it make sense to use WRITE_ONCE() for these stores in
+> psp_assocs_key_rotated() and READ_ONCE() for the loads in
+> psp_pse_matches_pas()? The later patches in this series don't appear to
+> add those annotations.
+>
+>>  	list_splice_init(&psd->prev_assocs, &psd->stale_assocs);
+>>  	list_splice_init(&psd->active_assocs, &psd->prev_assocs);
 
-On 11/6/26 16:40, Sabrina Dubroca wrote:
- > I'm on a medical break so I won't be able to give this a proper review
- > for another week or two, but since it keeps landing in my inbox, I
- > want to make a comment.
-[...]
- > So this is kind of a "can we slow down until we agree that we
- > really want that?"
-
-I am sorry to hear that. I hope you feel better soon. There is no
-hurry. I will not send a new version before we agree on the
-direction.
-
- >> kTLS does not currently handle TLS 1.3 KeyUpdate. It never sends a
- >> KeyUpdate.
- >
- > Because it isn't meant to handle any part of the handshake at all,
- > just the record layer.
-[...]
- > So what you're proposing is a very fundamental change to how kTLS
- > works, I'm not convinced we want to go this way.
-
-KeyUpdate is a handshake message, but it changes only record layer
-state: the traffic key and the record sequence number. The new
-secret is one HKDF-Expand-Label of the current one. Nothing else from
-the handshake is needed.
-
- > If userspace libraries don't do the right thing, we can fix the
- > libraries.
-
-I agree. The main users of this series are kernel consumers:
-NVMe/TCP (host and target) and sunrpc (client and nfsd). They have
-no user-space process above the socket. tlshd does the handshake,
-hands the keys to the kernel and exits.
-
- > And that can't be handled with the existing handshake subsystem?
-
-Not without new problems:
-
-- A handshake daemon cannot write the KeyUpdate record to a kernel
-   socket. It has no file descriptor for it.
-
-- NVMe/TCP sets sk_set_memalloc() on its sockets so that it can
-   write out pages under memory pressure. A daemon has no such
-   guarantee. With root or swap on NVMe/TCP, the daemon can wait for
-   a page-in from the queue that waits for the daemon. An upcall or a
-   reconnect every few minutes makes this deadlock possible every few
-   minutes.
-
-- The traffic secrets must reach the kernel in any design. If each
-   consumer does the KeyUpdate itself, NVMe/TCP, nvmet-tcp, sunrpc,
-   nfsd and every future kTLS consumer need the same state machine.
-   In kTLS it is one implementation, which user-space applications
-   can use too.
-
- >> the 2^24 limit can be reached in less than 10 minutes in many cases.
- >
- > My math says that's 28k records/second, it's a lot.
-
-Storage traffic is different from HTTPS. The NVMe/TCP host sends one
-TLS record per command, and a 4 KiB read is a 72-byte record. The
-record count follows I/O operations, not bytes. 28k operations per
-second on one queue is normal for NVMe. I measured one queue reaching
-2^24 records in about 80 seconds. Connections stay up as long as the
-host does, so even at 1000 records per second the limit comes after
-about 4.7 hours.
-
-Without KeyUpdate, the consumer must reconnect at the limit. For
-NVMe/TCP this tears down all queues of the controller, stops the I/O
-in flight and repeats every handshake. NVMe/TCP is storage for
-critical systems: databases for banking and stock trading, AI
-training data, and systems that hold personal data. These systems
-cannot reset their storage every few minutes.
-
- > I'm not yet convinced this is a strong enough argument to justify
- > changing the model under which ktls operates
-
-RFC 9846 4.7.3: after a KeyUpdate with update_requested, the receiver
-MUST send its own KeyUpdate "prior to sending its next Application
-Data record". If a sendmsg() or sendfile() is in progress on another
-thread, nothing above kTLS can stop it before its next record. kTLS
-checks before each record.
-
- > Why does this need to be a socket option? It feels wrong to use a
- > socket option to trigger sending data, why not hook on sendmsg()?
-
-I agree. I will remove TLS_TX_KEY_UPDATE.
-
-Martin
+This was a preexisting issue. I didn't want to move the exsiting
+read/write pair to READ/WRITE ONCE as part of this patch. I prefer to
+change all of them in a follow up. Also, as the bot notes, the field is
+a u8, so tearing isn't possible.
