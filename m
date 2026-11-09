@@ -1,104 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.132
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794233435;
-	b=cuHZPHdftRIN7KhDUMBfvC4RcVnwOr/aVRUKxTx3e1d6jLOWbdrLyG5/+cDukfwAxGzz
-	 zIC9C9cD359XALq1lyxiYPdsWUAF6rB4RbMyKVXupjQ7xaUpONHVJJiX4z1Kufupd+gKT
-	 GrxACR4DS6fs0zBmq4Md70liyVWTaSm1P/zuUNNEaNt/s3OIjzKRWo8jYIKLsYkI1B90A
-	 LsgeW4UZwg+cDt6rwi5cOFLHjZEJORB9voLi4WcGvC34Yp8bduwdBiDLmBX1ycHcjx3+g
-	 7+/KBeocbJQH6BrsErpiM/TRe/SqueGr/NeSl9aqjW9Rq3GH4U2CYzLrbwpvI3iE/1g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794233435;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
-	 From:To:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:
-	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=VaQv37q8ZitDUAB2W/RaW0tezbqXrVqD8mz8Gad3tho=;
-	b=ZJDoJIrItqHIetNd0mu9PmhqwJMfH3yqU2i2WsCpDZYYjU9XE6vVMBTHm1A+9q8GYW1e
-	 jA9pzzONcuHDfx2zMyBn/CvMOUNzruLWay9Tc+fJWsyKM40NIKB8AY3bv98HNmh4Ce/Lg
-	 CU0mdeok/53TVWz8/CRONBeBTEg0RoKLQ/GLpZNWoaO3mvBIQAxsikk3+/nBetbLI/8Bg
-	 891blIGlCF6pZ+LnjQG9VO/QXavoqVdjW9y0tuyAv/xb0BHvDrW1UmuwuQzH621SqhavP
-	 oMJvG5xCznxLgGgDlLE5G2yVz7/muq4b02AnrGQ+mIVFhdmkn7BOJ6qCQWKNfWXPCEQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=garyguo.net;
-	spf=pass smtp.mailfrom=garyguo.net;
-	dkim=pass header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=b5YwDDal;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.100.132
-Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021132.outbound.protection.outlook.com [52.101.100.132])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794234614;
+	b=ioqDHt+hH+ukld+DEzMyJ1QC6lXybbNQ6NdVw/EEvy6t6Z8BWeqWrdjmZqu0M7B7oCCY
+	 3YK2g65Gx6fVvjheBpTaGfMdCDmuuC3Ipj79ldNOTk9kWUhLOPk8CqHNCdEjeA6LNZb8+
+	 Jdme7+JDs/+jD0IZOcG+9yrz0A7kdcM11O8wG+bWMx1UkLGe9QwcmEtfXksiRecVoxt/N
+	 8JOJWDYb2/R5XKSKkI+nIePWk7Fe3y99fuKhXb+EFZv8WDDZRDX3Z4ZDhCPX+X+vxuN7W
+	 v3ESBs4UK/n9qu8/77lk6zXkBhe4W5vMcXKGTqjijpyB8XQzasKsz9WiTkmgz56RWNQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794234614;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=I/6OXbgLV4bCZUWKV0/koAsoiTh094pqrHlSP0k4YPc=;
+	b=q2GaDYsqJVxb+a8ukfecae+/lVZK6rZB/3IYkjvlvyZby5tRR3+E9csN1BFgVv4tCNwO
+	 Efh4eHD1/Lyw2Pa+nxwgNHnWTjZrk1Z0QtL9/zDbLB4z26rOojjYj+R4of/DIx3HSD9H7
+	 lLUorau2A4HBpgH42msAUVmsXH2DKRpyTG3Lt9JuSUMtvzzvFx0rzOC6QnmvFTZAnHzIx
+	 RYxgln30wuKdRHaQGFUYmFc9iGJp7pRhiwq3Exw80WQPLS5NsDG0u7dwISJX5XERzru3B
+	 zoRamSry/toLvHiNb4BZmdDdODvS9+T4oD7IggZ8PQIFtar+rbWP4YQq5udwVTimV9Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Gjh+K8CB;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=dd43KXn4;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA63606EEB7;
-	Mon,  9 Nov 2026 14:10:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9AA63606EEB7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F24B606A333
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 14:30:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F24B606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=b5YwDDal
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bs9B3tTDlt8lB6DutUhbUP55BoH+w25gVXk6e4vG3w/xm1zj9ml6nKJrHitpwgPJRke1bO/x5EDX8v2U+DhnII6FFBRU6fmQ8W+sZ1oN1dUOSJCmmQi6YcL8r1WYTMKn+S3Oi3O7ccc/7cQY9OxplBcwCfIEXZCCsoDYiMokBLWY6vZGXQ6ZlCIFpbLRtxPYSELxoc9mVwbzq92DfuDjxXWbiuAjQcy0LVuhHN2z5nRZ/VpiMzJlGc5thT4VxlGAptoq2jF5PDGuJUxGI//acGd0Q3NHDXoTBmA2+VEshfcWvlsFuo66XHEwEcf2L/meQQEHf+1D1rMHmUAsoIBx+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VaQv37q8ZitDUAB2W/RaW0tezbqXrVqD8mz8Gad3tho=;
- b=IoHRYWrnIVI0CiPxBSx7XL9xX9XVA468IlYogIXI0tWomBCjIPKdRwzlNO59X+qseNqhDxM3gifWJqeKCFHUINDcPURDEYpSrUcG/f86SVLi54EnFDep1WvtIZGqtKo+dTbtleAZIDUzxO1pIT25OZfCT7sQDCykppBsDeG5lRAS2fFObyMOQGaDCZK/Z2pwTM7XkLKwQ/erzenQiYITqLnfdL3hXHHnnCOB0uami/jNZ8wIie7SqzLDFj0Ug+8ti4K+CzwGzcs1NCVUTtSY526A8jaAe+rGTvrDyT6lNZdRAAxz2DXfoNwwcaS/CUukz4kInxw0NINnPWFbT9TeYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VaQv37q8ZitDUAB2W/RaW0tezbqXrVqD8mz8Gad3tho=;
- b=b5YwDDalDppvqI/n0eU3emGiHs43EXjO7cUFRD8SPKNbzV1GMvWWVI1NzgE4fkfi8uwCrNwgyckhlWt7z1/PzdRoTG7R8tcU1+HvYuKrBEmV4eM55Y7rI29CzPiUJhZVdOfzIvWiT+RUM1wydyTosvS9v2sUh3dY++QYR+6q520=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1cb::9)
- by LODP265MB340279.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4dc::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.13; Mon, 9 Nov
- 2026 14:10:32 +0000
-Received: from CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- ([fe80::55f6:f98b:7fad:c6e3]) by CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- ([fe80::55f6:f98b:7fad:c6e3%2]) with mapi id 15.21.0592.012; Mon, 9 Nov 2026
- 14:10:32 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 09 Nov 2026 14:10:31 +0000
-Message-Id: <DMQQO3EAIUDO.MAU4UO7UCLTU@garyguo.net>
-Cc: "Alexandre Courbot" <acourbot@nvidia.com>, "Andreas Hindborg"
- <a.hindborg@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Burak Emir" <burak.emir@gmail.com>, "Rae Moar"
- <raemoar63@gmail.com>, "Tamir Duberstein" <tamird@kernel.org>, "Trevor
- Gross" <tmgross@umich.edu>, "Yury Norov" <yury.norov@gmail.com>,
- <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] rust: kunit: allow same test name with different
- #[cfg(...)]
-From: "Gary Guo" <gary@garyguo.net>
-To: <nico.antinori.7@gmail.com>, "Alice Ryhl" <aliceryhl@google.com>, "Benno
- Lossin" <lossin@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Brendan
- Higgins" <brendan.higgins@linux.dev>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Danilo Krummrich" <dakr@kernel.org>,
- "David Gow" <david@davidgow.net>, "Gary Guo" <gary@garyguo.net>, "Miguel
- Ojeda" <ojeda@kernel.org>, =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-X-Mailer: aerc 0.22.0
-References: <20261029-rust_kunit_v6_send-v2-0-5ce551efc48e@gmail.com>
- <20261029-rust_kunit_v6_send-v2-2-5ce551efc48e@gmail.com>
-In-Reply-To: <20261029-rust_kunit_v6_send-v2-2-5ce551efc48e@gmail.com>
-X-ClientProxiedBy: LO4P265CA0116.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c3::16) To CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:400:1cb::9)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Gjh+K8CB;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=dd43KXn4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794234612;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I/6OXbgLV4bCZUWKV0/koAsoiTh094pqrHlSP0k4YPc=;
+	b=Gjh+K8CBtHRplJUjh8Z6lW55vteLw/9Cfmmob4fXONPeuzLIzivkKJlQCRyxcgT++kYVJ0
+	toYWOli8le+po3/VN0OMIXrY7S+DehqUdKu0WZ7mhX3dwwVBcFJcx/yCR4+ErXnkF5plZT
+	MgtzY7PjWYbRK2R2hdvqI7t6u9aa2kA=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-395-LGrstFKhMrODJbfjqFJRMw-1; Mon, 09 Nov 2026 09:30:11 -0500
+X-MC-Unique: LGrstFKhMrODJbfjqFJRMw-1
+X-Mimecast-MFC-AGG-ID: LGrstFKhMrODJbfjqFJRMw_1794234610
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-4923b9fdd43so907326f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 06:30:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794234610; x=1794839410; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=I/6OXbgLV4bCZUWKV0/koAsoiTh094pqrHlSP0k4YPc=;
+        b=dd43KXn4Wy1tYHjLd9a3rPrrv+UgG2J+eWe+fLmAlxk98/M0IFu3WKA8QurADR4kCk
+         AvoV2ea57h1fbdzNTEXULZ1LTeQW80Ewn5std7hx7eI7Ef2F9405Jwe47KF4JD5bc4Av
+         XtNS1k0LB6gEHlqO/gSgNE95zbODfcBJrmnYUQsDM2ytbH2M1GPMHCMZQQqa66GcfZk5
+         Ll8QaGrAf4wPtCHQu829NHJ0EGSRRnCwwhIXNoCg5CD8v5M4bRe/tlu0woD0dhK52s/u
+         kyiL6abg5nhUEVVYVcrC9tAQWCHEgXz/99Xp0OVbUrrm/sTCxYE0/azR0dzB9EunBA9x
+         pHkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794234610; x=1794839410;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=I/6OXbgLV4bCZUWKV0/koAsoiTh094pqrHlSP0k4YPc=;
+        b=tu9epG7C5QKSY+/tH7BRnxhdQukXTB2vcqmYiEh8e82C2JLuU7syJLuDJVehPwb4Wv
+         cWBz3LkmZ5ugaHUURxAq+p1vtQR/I87AUQpQ+X2K0W1c3pA7qgGtSwT9tWrhIwcFBEz6
+         ia+H/k9CNx6HUsxmLYiFy6EqQ1vdm7yKFBaSJDS6ytoYy68u9MoIAWo113eq8j5+6J65
+         K9lbAsZAcYqgX+l64mblBe5wj9gpryu9bMEu6ALFZN4ZOrpS+0NEE7YMkUnCU0lVc/KF
+         HNbpmomuq0+Szd+mBSAQhHoOk1sO6Cw+A2QhK0LnmOB3pLeWojQY0gci1MLQPy0hOQUr
+         XlEQ==
+X-Forwarded-Encrypted: i=1; AL+hErGcjwp9V0YFiUu7UnFT7KgW1vlC6tfDuTkRUhIdzv5GGU89M5cz7gBhaptWl2TsPmM/qsuZgxUL27ER6C/3bts=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ExGzSJixOA7zZr1mh9zVPaIVCel9VzBcP5gSIhmC4T4v2rnMR
+	BWcm+gotZB/UYZdUNPayOAWzDLBbxEmUDOhoRbiQtzO+DDJUQvhYYMdY241KHd5iTFgO+81VLUS
+	IaGw48tBH4hXZLrdDkY5QQhmOIvXbkQcLW/rddx6mVbhScT6rg5qEAr3jQJSp3muPiWZYxw==
+X-Gm-Gg: AYBFou0Gn0bnOvOMSuZ1BHCQhMgj2i435sMNba9YN3ZabtjmBJ3nbHHyI1QfpOthIpo
+	jMrG4bo+o1gC1CCJ4uXvYlBmAVTpYuE+Zd6nUnRDPAkrqT7erRV3RgLkRgm44yOoSyxUdaNqJ92
+	HMslsL6nlRxDV2RT4Yic41rYbbwF1pzKNEpIUPDFNeUXjxsHqko8XNGinP7NTLQ0eg8+QOe3Ufy
+	lOyweSgR7Iek7KLXQyLyxTzdpMfmxDucSfsaSAU2DLgny8nWoa1UepOUH7zn332j4DkhiKe/qXY
+	ygT4m4rY2u7nBGkHjirCmMwwBOid6NDEuKvipOYly9NA28qRtuoyikTOVpW5iyfj1UVnEdcWkI/
+	50dB1+PSEtWL8I0AeO/Py7gK75Ojm7RE/U/oWRJOZqa8hqsqzrU3YOTdfXAGJUjphzKJAVeo1/l
+	Hb2w==
+X-Received: by 2002:a05:600c:1c09:b0:4a3:5991:719 with SMTP id 5b1f17b1804b1-4b963c858d8mr92853615e9.31.1794234609906;
+        Mon, 09 Nov 2026 06:30:09 -0800 (PST)
+X-Received: by 2002:a05:600c:1c09:b0:4a3:5991:719 with SMTP id 5b1f17b1804b1-4b963c858d8mr92852865e9.31.1794234609470;
+        Mon, 09 Nov 2026 06:30:09 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7e32ad610sm553074535e9.3.2026.11.09.06.30.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 06:30:08 -0800 (PST)
+Date: Mon, 9 Nov 2026 15:30:06 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v5 05/29] sched/deadline: Do not divide by zero active
+ CPUs of a root domain
+Message-ID: <avHY7oNeuvjsLT4I@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-6-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,89 +128,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP265MB6051:EE_|LODP265MB340279:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d797b23-f379-4583-a653-08df3e6b376d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|10070799003|23010399003|921020|4143699003|56012099006|261021123027099003|261021135927099003|261021121427099003|261022075727099003|261022105027099003|261009223027099003|261026140227099003|261028144727099003|261102123227099003|10067099003|22082099003|18002099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	Cv9hyuh8EZtNU8z5qbkTVmheFXyqgDp1Jt5Tz4s1CpKJpiP/uNb+Akw/TFKsdqD7lhhZVUBNACP4BKiij0ijuainwl2oblqgsNrwGZe7heNVCay53BPlhkIUyJxqSOxuli3G8b+DJDdwCjT3K05X5j1y7026W0nRUELPi1uWF1/TdDux009Ut+uzQfLDr4kEOijs9xIF6LVtCfS12PtCNCmjUu+jP7E6q8lO6+NWX5HhrdX75HD0iR9CxK/puVXz88HkVR+65mgRHCJ6G19cm+yp3t3/WiJsVR9K/YKpuwug2F7fsquRxZ43OltuNlaeMSaPuWBtdJKeHJoDy06/soMCoxE0QWLA9f4HPVbd43jAVYVosYmoKfMu3Q+lLYNg0nKowaNcgT300zhzTsTaLPgEElLzVaUd6rAuvzlh6i2YhYcaEC4AuVS/8Nh+a2pvmPVPDdymvLFVITBM99JTgvqLAqJftjIUqIFanR2dAAP0rw420lfigJWAWtdi06nkKzduUw1ApLnuGw57g4qN6RFyBQ+Qbi2Ex1A9nLTvCkiDv9yLga0T/fpcIrc9A4Mifi5kljxR6VBDtKmsmzQ3yMg2N+XBqK0yTHti/HUz1YYscsL1mpM2TMlx5FEqdmeyjsBy4QtwwCEub5VeSfUXV2+vc96PNXJeZGwmxYCKPgorDknv2hqEbYO4bhx487zZLRnRX0KpSQFECB3y7Jm9/A==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(10070799003)(23010399003)(921020)(4143699003)(56012099006)(261021123027099003)(261021135927099003)(261021121427099003)(261022075727099003)(261022105027099003)(261009223027099003)(261026140227099003)(261028144727099003)(261102123227099003)(10067099003)(22082099003)(18002099003)(6133799003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZVh4amgxWUxHRFVaZVZIYmxVMFBrdldNL09kR01zeGJYbFpsNmFkejFtV3lY?=
- =?utf-8?B?SFBrVnNyQ0Z4L1NpWDJkei9haGpRL1JIMTVSR0poOHY2T1V1ODRocmRhWVAw?=
- =?utf-8?B?Zkh5ZExlMkNnR2IvMUhoVU9rbW0wNlRTQ3FoQXl4SkRBd2JXOUx2OUNNWnRU?=
- =?utf-8?B?dEpRODcwaDFEOXRtNzBDbHZtN2tabHZLWG9CV29tQldJeTl6b0hmQ1Q5cVJM?=
- =?utf-8?B?WXBlRS9MU05iYjlMbzlTV2ovS1MreU1SaHJFeUFGQkh5ZDhWaVh6aUIraUtJ?=
- =?utf-8?B?V21KNldrUjBlcDk4VlN4d2tCWG5teXNrTytTOFh2elBmVW5xZ1lOaG9uYlNr?=
- =?utf-8?B?WEZTeW1rZXd6QllUdHo5TERmUGNZc0NaOTFaUWRuZmpQUHFnN3ZqMXBZd1Ny?=
- =?utf-8?B?M2NPUGJ4Q2FzUS8yV1JaQU9NQjY3RkR3REE3RGpPRGxyMURPU0pMVWRRaTVs?=
- =?utf-8?B?cmNzTUo4aTVNOWV2a25mVnh3NUwwdXNxcnhxQjFudHg4YUdvVWQ1UDJwMURM?=
- =?utf-8?B?bGJlYlk1Y0c4MmJGSkhGQmhPOUJtak93U2dpRlNCd1lDZEpVR09BVHVNdXd6?=
- =?utf-8?B?KzJyNEROY1NTOGFaSDNweXZMMTdOYnovSVo5aWxBMHErSlpxb213UnkrZmUv?=
- =?utf-8?B?dGtKZnRuUUR4MlB4dzJrSkM3N1RKbWY0ZXF6ZnVFcVFQT0ZtOVVYaE1EQTNH?=
- =?utf-8?B?OWdrNUY0TEdSSU0xQ3VZS1FCMEU2K3B4REpDTVJINnN5VWNqMGlEa2NMbzl2?=
- =?utf-8?B?SC9aMDBLbjFKdTZ6ZGlzYVZVWXA2eUFNejk2RTZxOGd3WFpTUHlOT2lJeFhh?=
- =?utf-8?B?MHFHOUQyTDkyWmg5TkFVK0QrWHRGTUZwanZvQ2xFclNuZzZWalJjNjUwNnU1?=
- =?utf-8?B?M2FiUUV0VW9iaWZmMXFoZjhwVk9iYkExQ1Vja2FyYWR5V1FuY1Ivbjl3MDRi?=
- =?utf-8?B?WjI3ZzhVSGtNY3dGZFNYY0dpb0ZSU0hmSE1Id2wxMzNGYXlKYWZjcHFya2JV?=
- =?utf-8?B?S0ZxZkxTeHl6b2V3Ykw1WXN6bHdXR1NyR0kySUxJMzdaRnpCeWVOZ2tzRkF2?=
- =?utf-8?B?ZnpncWhteTRrR0VqdmlrOVFhZGlpbHA3MzlVZWxwdlNuWE16d2pxenZFYUxy?=
- =?utf-8?B?TkV3UkNFbm5zeVVERmcvQ1FkZjIxbXlkTFZVeTI2QkN6UEVwYWNqY2dmY0JL?=
- =?utf-8?B?VERIRUFVRWd5SXFsTnZSM0wvemp5RlNiczVTRFlIUUhKVERGTFkzNzFRelMx?=
- =?utf-8?B?MWt0QmUxTEF2TTMxSGZLNHdlQVdUaGtRdFVsQmQwbk1SU2RoVVc5R2M2K3dx?=
- =?utf-8?B?MXZqT0JKMTVtTWtBUllCa1hza2lBejZ6Yno1SUdoS2Q1Nko4VnZRRkhpTk9W?=
- =?utf-8?B?WXNaMnNtbGJtbm4yMnh5UVdIeitTSjdGSVVJQjhRZHFlRkN6M3JoRnY5bWVk?=
- =?utf-8?B?MlJ3UHRVSEp4bTFpWHJhQ0V6YVpmMGFpK3dhVkFiM1VQRGxFRzNyNGgvTktB?=
- =?utf-8?B?WWxuTm95K0J3eUhJZjdPeVZielRlYldlNUF1UUdDSnlOdHNXM3JFb01CbFd4?=
- =?utf-8?B?MmU1WitnSGZiN1lTY0xwS2x2SEhlditlSjhxQ3ZaaVhCN3VoS0lucUllWXNP?=
- =?utf-8?B?dE9lL1hVRENnbGRWMGo3VVN4am9vTjJUR2huNWNkbUhTVzlYNzBXOXMwV1J1?=
- =?utf-8?B?WldrQldOeURxZTFsUnF4Ym41dzVqRFRISlVVdlJJN3VOTFdrQ3Q2WGdmNE9V?=
- =?utf-8?B?WTUrR0xUUlVFTzhJMEYwRVFaOU1KdjZMUk0yOG51TkQ4QjVONjBLY2hlVi95?=
- =?utf-8?B?UFlNUDdPUDgxa3ZBNUlPM2h6S21uN0hiN0pJc1oxZjY0ME5uMHJmM1I5U2hk?=
- =?utf-8?B?VFVoUHVlc2NpRnl4aFVtV09UNTNtK2JQRTBXdTNkOHNVbTlXaHBzbmc0cUdQ?=
- =?utf-8?B?YkJxaFprWHFKZkpOSDR0SmhiYjJGQmdLQ3ExbEVVZHlPS2FGdW4vVTQvejZV?=
- =?utf-8?B?anJiNVVaVDd4RTUxUXpXV2dWK29jVzdIWFdrUXFXTkxVdG4yWkxETFpKSzlH?=
- =?utf-8?B?cHlRck5XRHovOGwzSUlCNGMyYk5TRi85UmVMNDdXZXk1QjN0WElFTkZoeEln?=
- =?utf-8?B?QmJac1RKTUhGL2NxL1ZJazQ3U0lPRHRDb1dFbjZrVHl6T0VmVWp5UUhKVjVz?=
- =?utf-8?B?UThsTy9XTmpMQ3pReXlhdFdVWFNCU3NUOHIzTEVMQ0JENm1LVEhDSkpBakhT?=
- =?utf-8?B?T1BtaW1xRGpsckljeXdLTERndlVvRDZ2TzBRSG5KZW0xYWR1ZTlqTHhDMkRa?=
- =?utf-8?B?VGp0bmxkR1JYOHNiMm5sZzIzckpyMStLZEMrQnFSTVlma1RJVUpTUT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d797b23-f379-4583-a653-08df3e6b376d
-X-MS-Exchange-CrossTenant-AuthSource: CWLP265MB6051.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2026 14:10:32.3948
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 14xOqt0RFTG5a/Y/wDiumdcvnVRI1aIN3ztDz7FEdvQTyx+Tf27BIGORb7NGs2cEBG9EXA2a05Udg0QYn2lCFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LODP265MB340279
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261108185406.1549770-6-mathieu.desnoyers@efficios.com>
 
-On Thu Oct 29, 2026 at 4:59 PM GMT, Nicol=C3=A1s Antinori via B4 Relay wrot=
-e:
-> From: Nicol=C3=A1s Antinori <nico.antinori.7@gmail.com>
->=20
-> Sometimes it is necessary to test the same code paths under different
-> configurations. The `#[cfg(...)]` macro can be used to check if specific
-> configurations are enabled and run tests accordingly.
->=20
-> Currently, defining multiple tests with the same name under different
-> `#[cfg(...)]` attributes results in a compilation error. This patch
-> removes that restriction, allowing identical test names across different
-> configurations.
->=20
-> Signed-off-by: Nicol=C3=A1s Antinori <nico.antinori.7@gmail.com>
+Hello,
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
-
+On 08/11/26 13:53, Mathieu Desnoyers wrote:
+> __dl_sub() and __dl_add() divide by their cpus argument. Most callers
+> pass dl_bw_cpus(), the number of active CPUs of a root domain. That
+> number can be 0, and the division then traps.
+> 
+> Commit daec57983670 ("sched/deadline: Reclaim bandwidth not used by dl
+> tasks") added extra_bw, the bandwidth that deadline tasks can reclaim
+> on a runqueue. A change of a root domain's total_bw is shared by the
+> extra_bw of its active CPUs.
+> 
+> During hotplug, a CPU sits in the default root domain, which can then
+> have no active CPU. This lasts from the rebuild in
+> sched_cpu_deactivate() to the offline, and from the online to
+> sched_cpu_activate(). A debugfs write to its fair server's runtime or
+> period divides there. Commit 4043f5498416 ("sched/deadline: Reject
+> debugfs dl_server writes for offline CPUs") refuses the write only once
+> the CPU is offline. A write of the same bandwidth passes admission in
+> the window. In 8-CPU VMs of v7.4-rc1, a loop of such writes oopses at
+> the first offline and online:
+> 
+>   Oops: divide error: 0000 [#1] SMP NOPTI
+>   RIP: 0010:dl_server_apply_params+0x335/0x380
+>   Call Trace:
+>    sched_server_write_common.isra.0+0x1c0/0x260
+>    full_proxy_write+0x58/0x90
+>    vfs_write+0xcb/0x550
+> 
+> By reading, two other paths would divide by zero:
+> - inactive_task_timer(), for a task that left SCHED_DEADLINE or died,
+>   if its CPU went offline.
+> - sched_setattr(SCHED_DEADLINE) on a task asleep on an offline CPU,
+>   with admission control off.
+> 
+> Fix this in two places:
+> - Refuse the debugfs write while the runqueue is offline. The server's
+>   bandwidth is not counted then. rq->online is set under the runqueue
+>   lock when the CPU joins a root domain that counts it, after
+>   cpu_active() is set.
+> - With no active CPU, have __dl_sub() and __dl_add() change total_bw
+>   alone. This covers the other paths.
+> 
+> With this patch, the reproducer survives 20 rounds with no warning.
+> 
+> Fixes: daec57983670 ("sched/deadline: Reclaim bandwidth not used by dl tasks")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
->  rust/kernel/kunit.rs | 22 ++++++++++++++++++++++
->  rust/macros/kunit.rs | 36 ++++++++++++++++++++----------------
->  2 files changed, 42 insertions(+), 16 deletions(-)
+>  kernel/sched/deadline.c | 11 +++++++++--
+>  kernel/sched/debug.c    | 10 +++++++++-
+>  2 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index dfae08625342..b614d5fc1a1a 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -189,18 +189,25 @@ void __dl_update(struct dl_bw *dl_b, s64 bw)
+>  	}
+>  }
+>  
+> +/*
+> + * Spread a change of total_bw over the extra_bw of the active CPUs of the
+> + * root domain. @cpus is their number. With no active CPU, as can happen
+> + * during CPU hotplug, change total_bw alone.
+> + */
+>  static inline
+>  void __dl_sub(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
+>  {
+>  	dl_b->total_bw -= tsk_bw;
+> -	__dl_update(dl_b, (s32)tsk_bw / cpus);
+> +	if (cpus)
+> +		__dl_update(dl_b, (s32)tsk_bw / cpus);
+>  }
+>  
+>  static inline
+>  void __dl_add(struct dl_bw *dl_b, u64 tsk_bw, int cpus)
+>  {
+>  	dl_b->total_bw += tsk_bw;
+> -	__dl_update(dl_b, -((s32)tsk_bw / cpus));
+> +	if (cpus)
+> +		__dl_update(dl_b, -((s32)tsk_bw / cpus));
+>  }
+>  
+>  static inline bool
+> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+> index e6a3b516c703..e0d6cd3bd607 100644
+> --- a/kernel/sched/debug.c
+> +++ b/kernel/sched/debug.c
+> @@ -410,7 +410,15 @@ static ssize_t sched_server_write_common(struct file *filp, const char __user *u
+>  			return  -EINVAL;
+>  		}
+>  
+> -		if (!cpu_online(cpu_of(rq)))
+> +		/*
+> +		 * Refuse the write while the runqueue is offline. This
+> +		 * includes the windows where the CPU goes offline or comes
+> +		 * online. The root domain then does not count the server's
+> +		 * bandwidth, and may have no active CPU. rq->online is set
+> +		 * under this lock when the CPU joins a root domain that
+> +		 * counts it. cpu_active() is set before that.
+> +		 */
+> +		if (!rq->online)
+>  			return -EBUSY;
+
+This 2nd hunk complements and tightens 4043f54984161 ("sched/deadline:
+Reject debugfs dl_server writes for offline CPUs") which has Fixes:
+d741f297bcea ("sched/fair: Fair server interface"). Do we need both
+fixes (if that is allowed) or maybe we need to split this change in two
+(as this second part won't apply to old kernels w/o dl-servers)?
+
+Thanks,
+Juri
 
