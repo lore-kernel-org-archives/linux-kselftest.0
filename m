@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794204018;
-	b=t08cQmplmJeAkD1/VCAbxmb4aM85/d1rq4SPsXWqvYzyk/TCplqTHbO5+Ca/w6JFYx1t
-	 jly0KurizoqFokKkjT/cZZaUcAmroWtOPnzUlU0VWka7bCR+Yl7ss/auqfYX2ZgwzvIYQ
-	 3cJ01UDk3wGp15Vf/O4PKkKWePbob3lqHycVYLWpyA+hUalonowZd5v3Lb9fug5hZw/DO
-	 h9SsKAKjFQT5N6w4Mm5WN2gPOXhSpQvw16dw+/gMrZ+7PdWYmzydKxmcx/IUW+7myldGS
-	 M3YMvZYRimz2jvrhdyZpC7cfi07N8cDZg6cVp6H6qoL7jmqcLkb12z1KMXCWytOsNdg==
+	t=1794204019;
+	b=XqfG9+kUVHIchcErk7Ucd0gbnyuV96JVeIz0h4fTf3S817rofyuXw1/kazP/JmfoEqJC
+	 qpirkGuhxkxcZ5h3Gz9nHZ29rfJEiH2yln8qSwL6MobQbRJ3c5oYsuHx4XIZumulruLj0
+	 +nW5129rFEOJdxKx3HNQi92NlHUR26ufh4bfwGymnap03s6Zu9HtIV6A9Z8MyoAJzr47w
+	 MnVHzFc7Iz0eBoNng3YfJ30jmLuTD60Nq6yOK2t6CKRwKSfGZjOWDmqOqx5y3rxzwohJ0
+	 rhPyJHEjaoRFlSufD3nFxkMmZzY0BA//tHUXAJgOzu025bPtmf3GptkaYPOHhCxGmcg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794204018;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794204019;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=qubYjXY2vptnpAVqagUiJ2qxHAQ4vMZJBnWCWzokVjA=;
-	b=xVqlkcWhFURKFa5Qyt02AYFQJH9L8R2bYqAm79ewDe+AKeAGSZDmRbLTQFff3oqvVA1W
-	 Imap+kTGCWX/qok4D3jCy2MB0dYhtVlnhmpCNh4lv1qM/qUDj85crHFWzhZsKdcGMG51x
-	 O+Dnc/mRbdScwWdH0WMORiam0LNgqJik+8QHAJxUdBgpZGqMQjL3tqR8aHQpzZF7PLEPD
-	 mN0HnVvQsTjUCOFPLRFPdTn9QDrfS58Mhbp3gUJK245BohV9giPfUOpIR3X4HgAl0bB04
-	 0Wspvd0NI5unj6P1RuD+fdmeLXV/75D9gyJXQEZ8ybl8bXewLivLHcdrRhzsS/MeDpg==
+	bh=Ezt0QzdtXRpdhW1yj2rTzGXOSQDTzrUEz+cuvrZygBU=;
+	b=2EHwHjQwkjdWt0pFVfqotv64D4Yd/OJGXeCgr3Zrr8r6br/qeA3w9kxsg6J+LGCGAZPd
+	 mbgpG7tz8BWYDYf08g33Yz9D6As0xvHWYldRE0qk73ZLt1del/j3bIhtCYLuXIRvcQF2C
+	 ruO02RpopmQBqQ+ggAaJn8GxEDyI/d4UviBpWmsWSdZkkom+l1wI5IEinOd1F8BpOhZ5x
+	 f2fJveI0i7BTX3HIdap+3RR87tcCUyWkCFgrbiS+4U8Q0h2HvrN4lNIhTPdpBbAmT5ipU
+	 vIQuR1ZhpEw8CL8/cevT1aYgZG3nZ0cCxBW5nPbY/916Mrd1n44L31DgjZKJBSPQZCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RrLbrDBr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YgH1LWq8;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73489606A337;
-	Mon,  9 Nov 2026 06:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FF6606D80D;
+	Mon,  9 Nov 2026 06:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RrLbrDBr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16F8B1F008A1;
-	Mon,  9 Nov 2026 06:00:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YgH1LWq8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A771F008A6;
+	Mon,  9 Nov 2026 06:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794204018;
-	bh=qubYjXY2vptnpAVqagUiJ2qxHAQ4vMZJBnWCWzokVjA=;
+	s=k20260515; t=1794204019;
+	bh=Ezt0QzdtXRpdhW1yj2rTzGXOSQDTzrUEz+cuvrZygBU=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=RrLbrDBrTTfZLLtOI+wHw4N3b09v1iPoUqWV82zGDXZClGr120nbboxL+Ku0Va9N2
-	 FaxC1ajIhXJKNSaQb6/Q095DCXi8lnUHaVZJYF/y0e3GT1b5Lr1pXn7uPJsuOeMf7I
-	 x7VPboHn7PdGzrRWDu2z0P6NxT91rF99OzA4hq6rPBRtLx8efVAiIlWluQju87LJdO
-	 bHRTHCmdsUqL1/KlZ8IHvWsz5r8jF79EDZlA1FODTyKn2tirfRzcHL0fo2y3Bl0ihv
-	 RRtTx2Wk5pXt14fAWwP2gkCtDvapd8yU3wwFyUG+fcFkAz8rMbsdXeJWnxa4KlYmLX
-	 7GzeAR/TfOz+Q==
-Subject: Re: [PATCH net-next v2 5/6] net: devmem: resolve physical map_dev for
- leased RX bindings
+	b=YgH1LWq8b35HH0hXDk3dOkDlwfVylAC4iCxcJZGczWKBo1r0frgv2K1lp23jQllPb
+	 uasE57Hw7nYvh277QI2NzK1XyGgCi+ErhSnoSGtG2YFitlWIDUAv++qAZLxca0wPbx
+	 K4gH42H0l62qbNpb2rBWHzcEe9YNJdYMP3tWu6qgxsus8gXB+GeXYb5mrRbHjqUUoI
+	 FXanv/is2rjhkHR9GZ2/w2nkDwpaGttIsgO6SyM+HxyGQ/EY+uxouPK8oeH+aFH+A5
+	 OXXT406BNJtqyPZt7FN/Z27wKmFRZ8kNonYF59ra7o7H5podeQS7oLLemSuKodu14S
+	 VdsEvX61WZkAA==
+Subject: Re: [PATCH net-next v2 6/6] selftests: net: add leased devmem RX and
+ TX netdev unregister tests
 From: netdev-bot+sashiko@kernel.org
 To: almasrymina@google.com
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
@@ -49,10 +49,10 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  daniel@iogearbox.net, razor@blackwall.org, dw@davidwei.uk,
  sdf.kernel@gmail.com, bobbyeshleman@meta.com, dtatulea@nvidia.com
-Date: Mon, 09 Nov 2026 06:00:16 +0000
-Message-ID: <179420401662.994134.8611720170424449790@kernel.org>
-In-Reply-To: <20261108055809.2122934-6-almasrymina@google.com>
-References: <20261108055809.2122934-6-almasrymina@google.com>
+Date: Mon, 09 Nov 2026 06:00:18 +0000
+Message-ID: <179420401815.994134.4956375359433881127@kernel.org>
+In-Reply-To: <20261108055809.2122934-7-almasrymina@google.com>
+References: <20261108055809.2122934-7-almasrymina@google.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,10 +66,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -77,138 +77,160 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] This patch fixes a use-after-free that predates the series,
-  but the commit message understates it and has no Fixes: tag.
-- [Medium] The series is not bisectable: the previous patch breaks leased
-  RX bindings, and this patch fixes that without saying so.
+- [Medium] The new leased tests bind through `_devmem_bind()`, which
+  turns every NlError with EOPNOTSUPP into KsftSkipEx.
+- [Low] devmem_lease_bind_rx_unregister_check()
+  (tools/testing/selftests/net/nl_netdev.py), remove_virt_first=True…
+- [Low] devmem_lease_bind_rx_unregister_check() and
+  devmem_lease_bind_tx_unregister_check() each run a two-pass loop…
 
 --
 
-net: devmem: resolve physical map_dev for leased RX bindings
+selftests: net: add leased devmem RX and TX netdev unregister tests
 
-For leased RX queues, netdev_nl_bind_rx_doit() now passes the physical
-backing netdev (rxq->lease->dev) as map_dev, and locks it around
-net_devmem_bind_dmabuf(). net_devmem_bind_dmabuf() now asserts that
-both devices are locked. It also refuses to bind when map_dev is no
-longer NETREG_REGISTERED.
+This commit adds two tests to nl_netdev.py. Each one binds an RX or TX
+dmabuf to a single-mode netkit device that leases RX queue 1 from
+netdevsim. The tests then check for clean teardown both when the netkit
+device is deleted first and when the netdevsim device is removed
+directly.
 
-> Previously, netdev_nl_bind_rx_doit() passed netdev as both map_dev and
-> bind_dev to net_devmem_bind_dmabuf(), so leased RX bindings stored the
-> virtual netdev in binding->map_dev without tracking the physical backing
-> netdev at all. Unregistering the physical backing netdev while a leased
-> RX binding was active failed to detach and unmap the dmabuf.
-
-[Severity: Medium]
-Does "failed to detach and unmap the dmabuf" understate the problem?
-
-Before this series, a leased RX binding only referenced the netkit
-device. Unregistering the physical device then goes like this:
-
-net_devmem_dev_unregister(phys)
-    binding->dev never matches phys
-dev_memory_provider_uninstall(phys)
-    mp_dmabuf_devmem_uninstall(phys_rxq)
-        bound_rxqs only holds the virtual rxq, so nothing happens
-
-Later, netkit_uninit()->netkit_queue_unlease()->netif_rxq_cleanup_unlease()
-calls mp_dmabuf_devmem_uninstall(virt_rxq) while rxq->lease is still set:
-
-    if (!rxq->lease)
-        net_devmem_dmabuf_binding_unmap(binding);
-
-The unmap is skipped and binding->dev is set to NULL. On socket close,
-net_devmem_unbind_dmabuf() skips the unmap too, because binding->dev is
-NULL.
-
-The attachment stays mapped against the physical device's dma_dev
-until __net_devmem_dmabuf_binding_free() calls
-net_devmem_dmabuf_binding_unmap().
-
-c4466d2c3e77 ("net: devmem: unmap dma_buf synchronously on queue
-uninstall") notes that dma_buf_dynamic_attach() takes no reference on
-dma_dev. Once the physical device is gone, isn't that final unmap a
-use-after-free in dma_unmap_sg_attrs()?
-
-If so, could the commit message name the use-after-free and carry
-Fixes: tags? Candidates are 222b5566a02d ("net: Proxy
-netdev_queue_get_dma_dev for leased queues"), which enabled devmem
-binding through leased queues, and c4466d2c3e77, which kept the leasee
-exception in mp_dmabuf_devmem_uninstall(). Without a Fixes: tag, stable
-selection would likely miss this.
-
-> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-> index 9e56c26fc65f9..442362f23fe88 100644
-> --- a/net/core/netdev-genl.c
-> +++ b/net/core/netdev-genl.c
+> diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+> index dd0321c0b463a..fa4b5be093257 100755
+> --- a/tools/testing/selftests/net/nl_netdev.py
+> +++ b/tools/testing/selftests/net/nl_netdev.py
 
 [ ... ]
 
-> @@ -1104,16 +1112,21 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
->  	if (err)
->  		goto err_rxq_bitmap;
->  
-> -	dma_dev = netdev_nl_get_dma_dev(netdev, rxq_bitmap, info->extack);
-> +	dma_dev = netdev_nl_get_dma_dev(netdev, rxq_bitmap, &map_dev,
-> +					info->extack);
->  	if (IS_ERR(dma_dev)) {
->  		err = PTR_ERR(dma_dev);
->  		goto err_rxq_bitmap;
->  	}
->  
-> -	binding = net_devmem_bind_dmabuf(netdev, netdev, dma_dev,
-> +	if (map_dev != netdev)
-> +		netdev_lock(map_dev);
-> +	binding = net_devmem_bind_dmabuf(map_dev, netdev, dma_dev,
+> +def devmem_lease_bind_rx_unregister_check(nf) -> None:
+> +    """Verify leased RX devmem bindings detach cleanly on virt/phys unregister."""
+> +    for remove_virt_first in (False, True):
+
+[ ... ]
+
+> +        _devmem_bind(nf_priv.bind_rx, {
+> +            "ifindex": nk_ifindex,
+> +            "fd": dmabuf_fd,
+> +            "queues": [{"id": res["id"], "type": "rx"}],
+> +        })
+> +        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
+> +
+> +        if remove_virt_first:
+> +            ip(f"link del dev {nk_ifname}")
+> +            phys_q = nf.queue_get({"ifindex": nsim.ifindex, "id": 1,
+> +                                   "type": "rx"})
+> +            ksft_not_in("dmabuf", phys_q)
+> +            ksft_not_in("lease", phys_q)
+
+[Severity: Low]
+Do these two absence checks show that unleasing removed anything?
+
+Nothing earlier checks that the physical queue reported dmabuf or lease
+while the binding was active. The only check after the bind is:
+
+    ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
+
+That count goes up when net_devmem_bind_dmabuf() maps the dma-buf, which
+happens before any queue gets the memory provider. So it says nothing
+about the physical rxq.
+
+Suppose netdev_nl_queue_fill_mp() stopped reporting dmabuf on the leased
+physical queue, or the lease redirect in netif_mp_open_rxq() never
+installed the memory provider. These ksft_not_in() checks would still
+pass.
+
+nk_qlease.py checks lease reporting, but no selftest checks dmabuf on a
+leased physical queue.
+
+Could a ksft_in() check on the physical queue be added right after the
+bind?
+
+> +            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
+> +            nsimdev.remove()
+> +        else:
+> +            nsimdev.remove()
+> +            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
+
+[Severity: Low]
+What happens on the second loop pass if this check fails?
+
+ksft_ne() only records the failure and does not raise. If removing
+netdevsim no longer cascades to the netkit device, the loop moves on to
+the remove_virt_first=True pass with the netkit device still there.
+
+That pass calls _create_netkit_single() again with the same name and
+NLM_F_EXCL:
+
+    ifname = f"nk{os.getpid()}"
+    ...
+                flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
+    ...
+    defer(cmd, f"ip link del dev {ifname}", fail=False)
+
+The deferred ip link del only runs when the whole test case ends, not
+after each iteration.
+
+Would RTM_NEWLINK then fail with EEXIST? _create_netkit_single() only
+turns EOPNOTSUPP and ENOENT into a skip, so it would re-raise that error.
+
+The real cascade failure would then be hidden under an unrelated NlError
+traceback, and the remove_virt_first=True case would not run.
+devmem_lease_bind_tx_unregister_check() has the same pattern.
+
+> +        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
+> +
+> +        nf_priv.close()
+> +
+> +
+> +def devmem_lease_bind_tx_unregister_check(nf) -> None:
+> +    """Verify leased TX devmem bindings detach cleanly on virt/phys unregister."""
+> +    for remove_virt_first in (False, True):
+
+[ ... ]
+
+> +        _devmem_bind(nf_priv.bind_tx, {
+> +            "ifindex": nk_ifindex,
+> +            "fd": dmabuf_fd,
+> +        })
 
 [Severity: Medium]
-Is the series bisectable at the previous patch, "net: devmem: always
-populate bind_dev and detach both devices on unregister"?
+Can a broken lease lookup be reported as SKIP here rather than FAIL?
 
-That patch dropped the netif_is_queue_leasee(dev) guard from
-net_devmem_dev_unregister(). It now unmaps whenever map_dev matches:
+_devmem_bind() turns every EOPNOTSUPP into a skip:
 
-    if (READ_ONCE(binding->map_dev) != dev)
-        continue;
-    ...
-    net_devmem_dmabuf_binding_unmap(binding);
+    def _devmem_bind(bind, attrs) -> None:
+        try:
+            bind(attrs)
+        except NlError as e:
+            if e.error == errno.EOPNOTSUPP:
+                raise KsftSkipEx(f"devmem binding not supported: {e}") from e
 
-At that commit, this call still passed (netdev, netdev). For a leased
-RX binding, map_dev == bind_dev == the netkit device.
+netkit sets dev->netmem_tx = NETMEM_TX_NO_DMA. So this bind only succeeds
+if netdev_find_netmem_tx_dev() walks the netkit rx queues, finds
+rxq->lease, and returns the physical device. If that walk fails,
+netdev_nl_bind_tx_doit() returns the same errno:
 
-Now delete the netkit device while the physical NIC stays up:
+    map_dev = netdev_find_netmem_tx_dev(netdev);
+    if (!map_dev) {
+        err = -EOPNOTSUPP;
+        NL_SET_ERR_MSG(info->extack,
+                       "No DMA-capable device found for netmem TX");
 
-unregister_netdevice_many_notify()
-    NETDEV_UNREGISTER
-        netdev_genl_netdevice_event()
-            net_devmem_dev_unregister(netkit)
-                net_devmem_dmabuf_binding_unmap()  <- unmap, unpin, detach
-    ndo_uninit
-        netkit_uninit()
-            netkit_queue_unlease()
-                netif_rxq_cleanup_unlease()
-                    __netif_mp_close_rxq(phys)
+The leased RX bind in devmem_lease_bind_rx_unregister_check() has the
+same problem. netif_mp_open_rxq() returns -EOPNOTSUPP when the lease
+redirect resolves to a device without a parent ("rx queue belongs to a
+virtual netdev"), and __netif_mp_open_rxq() does the same when there are
+no qops.
 
-In that window, can the physical NIC's page pool still hand out
-net_iovs whose DMA addresses come from the unmapped, unpinned sgt?
+The skip is needed when netdevsim has no DMA mask and so does not set
+NETMEM_TX_DMA. But the wrapper cannot tell that case apart from a lease
+resolution failure.
 
-If __netif_mp_close_rxq() fails to restart the queue (the case
-c4466d2c3e77 guarded against), the window never closes.
+Would it work to skip only if a direct bind on the nsim device also
+returns EOPNOTSUPP, or to check the nsim DMA capability up front?
 
-This patch fixes that by moving map_dev to rxq->lease->dev. The commit
-message only describes the physical-unregister case, though.
+> +        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
 
-Could the two patches be squashed or reordered, so the leasee guard is
-dropped only once map_dev is the physical device? Failing that, could
-the commit message mention this fix?
-
->  					 DMA_FROM_DEVICE, dmabuf_fd,
->  					 niov_shift, priv, NETLINK_CB(skb).sk,
->  					 info->extack);
-> +	if (map_dev != netdev)
-> +		netdev_unlock(map_dev);
->  	if (IS_ERR(binding)) {
->  		err = PTR_ERR(binding);
->  		goto err_rxq_bitmap;
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261108055809.2122934-1-almasrymina%40google.com
