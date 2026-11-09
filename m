@@ -1,75 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794202637;
-	b=PcWC0N5HumTDv/VOfxyx8HB8r0mauEkLx3g0nOhUhZp80vPSbgwFyK3Bc68ACGcuA6kk
-	 lzIBVz/gHVAlDrG+sU0bIncJdcjjBAkeSs6FRsNVVSKPgY5nA0NXgykeqhiME+pA+Xp3J
-	 9EEAMRC9MB25P5QwTe4OJcNyj1QKWDRi9Rjoi6fU3i9kKyKJEOEdjt5d998spteayzZoF
-	 3u45JU4MxJYXVs//QsGfbCcdTb5eNpPAObHzeBZgCu9mrfOrk+82VIFSbsqOPvqiLzu1g
-	 yR0z5o2nsBLEYmfP0415lKkzHOyuKJkKu+hlPwLQ46Kru2r94Sw77VgInbHqQ4nzE/w==
+	t=1794203941;
+	b=FcmTKgqKB+3evTGdCqgHO7AnmcwupTCd/A0hW8vIW3XJ2MKB8K5EdGgOssDs2KhBfdUg
+	 2ZAJe/xJqVq8W7C9GQTOOVoK+2fbmbzMl8eSUrKZ5TcmnWrQ7TuPQsptYxwc7oysnYl6W
+	 6nByZGLwLB9AxXWr+L17CO3HE6sm1wWWZ9KLDDDAgOnuNHxysrNq5oFsSfB+41HbiZRYP
+	 lonr9j7IEKWxCqZVbGpm8zdszN5CWaoc/ulbggy7zZO0vUreCMnJD+8MCOIXHul+u908m
+	 GX1Q8D6UJOWDzJNv0BlTdcKrdr3EM+8UXQvJaN/KvT/3xde0xkwFqMbHvul1fWpNXWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794202637;
-	h=Received:DKIM-Signature:X-Mailer:From:To:Cc:Subject:In-Reply-To:
-	 References:Date:Message-ID:MIME-Version:Content-Type;
-	bh=ozxqwrYfOeA2JdEt8v+EBV8WXqLYW6Q2JhJClZ3mZzM=;
-	b=Y1qwk5z3PfcvV/CaqmFCpFlXFN+6COS62SoJbe/ycLZlsRUeh75dNKh0Bjcv7tQx9biO
-	 EMjeBZuqjYhZmGr2wGqHO/tyYbt0a9D6StSy9DM+K+ToHFfHge64P1GoYyLPLUBPm+crm
-	 r2crpxLPybifTQN/HGpCXaU14AjOcMxk+mQIMckGq2QOgHosSOobRJrSl/FExBjV7cqUj
-	 4Lx42surnxyR+KYiZwPbioBz64mU1RiLklw3KDS9z6Vrrgjv7pcWMQfW6EPvHyuhXklph
-	 ErDexC2Ac1VtB9/dFPR3o75LVR6XeY1HItld2tutRgHq0RtmZzhYmDk8N+VXigwfEFw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794203941;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=/E3ZtH8ojoi/vmsGrVMl6AMo0m24rPSDyRXvjqgo+0c=;
+	b=mHm2/eAFQ6tKBFgbrCdKdM9dWlCYgNOQMpVeRaPvSlj49m7qzt7BJFX8i8jXwhBxU6tv
+	 0rWJdNtHZSltmTlMInPxFg7gU6tF0BpNu3YKJkSBRME/IEg43zPBtV9pUHk8DHQN9Jfi2
+	 +UQWzMeAVXJgHSOfHIhvpJpMyO9DfbQnGn3KkMtcgpZ348XIucXaBD8iAkm0uRKOwImAi
+	 9NTvJUZW4g21nl4M6pcseh6ycsj7pcI9xeGhi6/Unm5B4uvdqR2cYR1/cwXczIruUEetX
+	 oqVez3yFVQOyNM2bbrRCZu2gMggmEPlpi9ibUCiOHyOdqxWRMoPHxz1fiiWBSyFTLYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SFz3Dfvs;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=n8s+c+Xs;
+	arc=none smtp.remote-ip=192.198.163.19
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6EE606A31C;
-	Mon,  9 Nov 2026 05:37:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADB5606A31C;
+	Mon,  9 Nov 2026 05:59:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6ADB5606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SFz3Dfvs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F7101F0089F;
-	Mon,  9 Nov 2026 05:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794202637;
-	bh=ozxqwrYfOeA2JdEt8v+EBV8WXqLYW6Q2JhJClZ3mZzM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=SFz3Dfvsu49EC0/Dd5enhpMYmWj8WG1Qz9hgpIvpuXDuZX0vSXk4pAuw0K0wF1YuL
-	 WwDUfolgUFI2Z95Mj+vypcIBuavxOvqY7PYosR/ytl0T7qH7MNA9Y+7qQ/j1RJ9wZk
-	 4SiSD9XqUaDXctIFZTXendxhy90DdI3Bm1WydU9rMuQt9BOTWQ4IR3EsvkyBM8265K
-	 3hD7Ly6bu0ZlWsuggqeZ63OE7ec2LVGeSVpc6r9rFJUN87s8qYbt/Ura/kk+s3gp3j
-	 6CZzzWR+ksauY3XEPxzy8vViaLj4R4yfzyse28VDdlpdNmS/qXoV5AnmfzBBJgs3GU
-	 2jXPec4kDyPCg==
-X-Mailer: emacs 31.1 (via feedmail 11-beta-1 I)
-From: Aneesh Kumar K.V <aneesh.kumar@kernel.org>
-To: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>,
-	Alexey Kardashevskiy <aik@amd.com>,
-	Christian Brauner <brauner@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Fred Griffoul <fgriffo@amazon.co.uk>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Jianxiong Gao <jxgao@google.com>,
-	John Starks <John.Starks@microsoft.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Tarun Sahu <tarunsahu@google.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Xu Yilun <yilun.xu@linux.intel.com>,
-	Fuad Tabba <fuad.tabba@linux.dev>
-Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	Ackerley Tng <ackerleytng@google.com>
-Subject: Re: [PATCH RFC v3 87/88] QUESTION: KVM: guest_memfd: Disallow
- private mappings of shared-only PFNs
-In-Reply-To: <20261106-gmem-alternative-providers-v3-87-8484dde66a7e@google.com>
-References: <20261106-gmem-alternative-providers-v3-0-8484dde66a7e@google.com>
- <20261106-gmem-alternative-providers-v3-87-8484dde66a7e@google.com>
-Date: Mon, 09 Nov 2026 11:07:05 +0530
-Message-ID: <yq5ase1atvjy.fsf@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=n8s+c+Xs
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794203941; x=1825739941;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OGKuaFtpJu/00zUw78GQThfCA7h7SYaZtzIWG6Z/hag=;
+  b=n8s+c+XsSLhKKjFbsklhOU6U+BeJe+3SW+GghvcCYq47gh0iHgB4uXuH
+   18vd3diU8jINCdayagu5+oQDK2/nU0MkSCPL3T6ZNcOUjQ56CS1c0jDOP
+   MOnZsU6rXhY8GlDB0dwBbQ4mX6ElxoxK0CLtrIEw6VKxKuCtYGhylI717
+   Nx/7SLg9LSLWs9R23boFZcKRKBW9lV99/RRsctXYCg0R70CnU7aQHXXIx
+   +L9cxTpGAVXuSxHBi24raF6hGPgV4h0Wx/I13ek51QE6CXiBnxpJBP3A6
+   mE//q1CZ7zyKzvj2EYGusOJZyru7sbVY2MDHnsnUmttgAUYc74xOmWeoD
+   A==;
+X-CSE-ConnectionGUID: pQb27N7WQxG6A0I+q/IJkw==
+X-CSE-MsgGUID: ZjEghJfXThyIxTuQhwwqyQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11960"; a="3022706"
+X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
+   d="scan'208";a="3022706"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 21:59:00 -0800
+X-CSE-ConnectionGUID: tjo2rXZDQNSnB4+x8NjlaA==
+X-CSE-MsgGUID: wjgjw2klTIuEErLWbS1uLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
+   d="scan'208";a="7789063"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 21:58:53 -0800
+Message-ID: <d28422d6-7ac6-48ad-a28b-553ba724581b@linux.intel.com>
+Date: Mon, 9 Nov 2026 13:58:51 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -79,53 +72,56 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v16 03/20] KVM: selftests: Initialize the TDX VM
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
+ <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-writes:
+On 11/6/2026 7:46 AM, Lisa Wang wrote:
+> From: Sagi Shahar <sagis@google.com>
+> 
+> Add tdx_init_vm() to handle the mandatory VM-level initialization
+> sequence required for Intel TDX.
+> 
+> For TDX, the VM's CPUID configuration must be "sealed" during
+> KVM_TDX_INIT_VM before any vCPUs are created. This is necessary because
+> the TDX module does not allow the host to create and initialize any
+> vCPUs before the VM's CPUID configuration is accepted and sealed into
+> the TDCS.
+> 
+> Additionally, to satisfy the strict requirements of the TDH.MNG.INIT
+> SEAMCALL, the helper masks the KVM-supported CPUID
+> (kvm_get_supported_cpuid()) against the "directly configurable" bits
+> reported by KVM_TDX_CAPABILITIES.
+> 
+> Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-> From: Ackerley Tng <ackerleytng@google.com>
->
-> Host kernel drivers directly write to the PCI MSI-X vector table to
-> program and mask interrupts. On confidential computing platforms, allowing
-> hardware protection tables (such as RMP, Secure-EPT, or GPT) to mark MSI-X
-> pages private causes subsequent host kernel interrupt updates to trigger
-> fatal hardware protection faults.
->
-> I see 2 options here:
->
-> 1. Prevent it at conversion time, and require INIT_SHARED
-> 2. Let guest_memfd track all conversions to private as per normal, but
->    block setting the MSI-X range as private at the platform level by
->    blocking platform config for SNP, ARM CCA at fault time, and by blocking
->    faults for TDX.
->
-> Implement (2) partially by introducing a PFN attribute bit indicating that
-> a physical frame cannot be mapped or populated as private, reporting that
-> attribute from VFIO PCI whenever a BAR page overlaps the MSI-X vector
-> table.
->
-
-For the TDISP flow, we could initially treat all MMIO BARs as shared.
-The guest could then request that a specific BAR range be trusted
-through an mmio_validate request. The validation operation could call
-set_memory_attribute() to convert only the guest-requested range. This
-would allow the guest to control whether the MSI-X table and PBA ranges
-are trusted.
-
-Before reporting that the mmio_validate request succeeded, we would also
-need to ensure that the BAR range had been marked private and mapped
-into the guest VM.This is required for the device to transition to the
-RUN state. This also means we should not get a gmem fault on private
-device PFN. In my series, I enforce this in the architecture fault
-handler.
-
-The host must also be prevented from modifying the BAR attributes
-afterward, as that would cause an attested device to transition from
-TDISP RUN to the error state. An earlier discussion also considered
-whether the guest driver should be allowed to manage BME/MSE. VFIO
-currently emulates these, and the conclusion was that the VMM must not
-pass it through. Once the device is in the TDISP RUN state, the guest
-TSM manages the power state and BME/MSE changes.
-
--aneesh
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
