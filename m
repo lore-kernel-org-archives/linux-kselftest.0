@@ -1,66 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.30.148.35
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794239901;
-	b=seikPZHxWVJpJFIEIHIIBJXGgCTBf91bLCsH/x68inl3+eUo6g3Ub+kHFZOrp6P41Wjw
-	 yK1xgiXU40UQgssedrbHjVXNcYT7WsEQKg3VIiDoyrNB6vg/UbQh39pgqxakykWv3Vl5h
-	 R8cUy4/xBU8zGQ+S8Hl6s6xRVgbHpLe7mgTG3byBDul4iOKvl/rrSl8j6NB1iCyTMuzAo
-	 fRWpTEA+ABSqTcIwMUG5IwGTIAfeaaJCuYzX0cSZ2dGQc+pPyzrNa0P0ZsLWKPTQ+VDTQ
-	 l+ePU/KzPvJUjp97tntP54xEGSYrYy4xgNxUZ2HBo8gCs7rWxyuV5AMBqaaHwZH9Sdg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794239901;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Zmail-TransId:X-Mailer:Message-ID:Date:Mime-Version:From:To:Cc:
-	 Subject:Content-Type:X-MAIL:X-TLS:X-ENVELOPE-SENDER:X-SOURCE-IP:
-	 X-CLEAN:X-Fangmail-Anti-Spam-Filtered:X-Fangmail-MID-QID;
-	bh=zLeBDeQcVR5Q0Jv6hH+HoARVZwuyEL/ztbGvicGzjrg=;
-	b=t90ZjwwYti1rh/ODAbfwd1CDlq2XcG+jOaNDq5sI6AmgESAC5BQlEXflp7C/nObiQeta
-	 LAM0eNl21zqHGX03IvTtd6JzaOxmzjIAw9/e7PAvWFVyTpXNaUFXO+Jh6aFzx5N3AyD2q
-	 VYbUL+fFOaPISpDnOUjILv9LSc2in0XLZTzbZig5AFLN4wNVzt4Kh8QBIVZumrm6MH+Ie
-	 dDUhCERiNfBqvl8N6CldBf8+dawY99Iztqgo4ODXPY0mToV6zBWjtSn8DtQqKDImNPcxl
-	 d95UyTAEvdyrUtaEIHVhhDzsEA66fgmiD7I8EHg4binjP99wCRNGF7U+xRKe+Z69W6w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=zte.com.cn;
-	spf=pass smtp.mailfrom=zte.com.cn;
-	dkim=pass header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=OQLaxX+1;
-	arc=none smtp.remote-ip=160.30.148.35
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.35])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.54
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794240043;
+	b=sAidz+Cn53MA8Qc3s+3guKu7IxQiJTtY1nLIkchKyY3fSkRAbz0qnbdZ5CxnnEnKuWME
+	 VZYb1yxwKr5HJr9wCQFe4omhP+POn9w41kD4heHClndnSFQLG+2qz64pYt2Zti6aOSV6m
+	 nG5UAuUEJAjrfP8Ah47MxCm5zU669VRzNqlIr4GM3jS4BNb2xhLyEhzlRcwQwTcPLzzpH
+	 o0Bs/QbsbAelKTMRtX5iRxh+9X2LyrbakzRZpI+fOhQN9tZAJGVPZSILAb7mwItyKGrJ+
+	 y+jCWW64gjjyD5Fs3NuDhOR2sdtdxUOF/nufR+ijXrACPXEpF1Ule2zeM2ZlUiGYB7Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794240043;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:In-Reply-To:References:MIME-Version:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=1IVvR7owaTCfwRNK1gEl9dRHd5D6+SPRltJMKFkI3Z4=;
+	b=LcWF1jOC5Xi3UlHykYTOUwAG+dPKwwtbykySMfbuOWuCHq64qWoDYp9BFTdf+LZUp5yy
+	 sc2W5AUUbSXDiBdA8ncFwCkP9qsLoRZ0jLBVUo8a0lVF6mNdyh4Q68fU9CO5pjmTn5yPA
+	 kjiUzqfxCcfNnfWxmg5IK84Ou+JELTQVMEJhdftir/hs40X2YjPMP5GDvYPaQSDyfMnFi
+	 UTFTxp6XhDpOimoyXhRO5JfwsvZ+a1JzVsPBMq8wdPNf65LWQrnQnQyU8HKFAGt/QDPtM
+	 LN8hMsvQd23pBn7DF/dO6ceouLhP2cgBBqdu/RfIGxKQ3aWB/IEFyOfa0mzEfYhRbBQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=eVKMSmAw;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.54
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8DA60A2633;
-	Mon,  9 Nov 2026 15:58:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB8DA60A2633
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26286082BD5
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 16:00:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E26286082BD5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=OQLaxX+1
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4jNZFN434Dz8Xrnw;
-	Mon, 09 Nov 2026 23:58:16 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zte.com.cn;
-	s=z202610; t=1794239896;
-	bh=ZD5Vz0dYdMHAoRn66WdpVTqDsd56pq0fa4QdyoLKuG8=;
-	h=Date:From:To:Cc:Subject;
-	b=OQLaxX+11GbDnFLswRX/TE40XfrzbYOf4xISJ+RH0IThRMVMDvWrkDjjT0gKgnybs
-	 g2A6o0WJyqr2mAwKUC1BNxiVSZbbp/Ek1LJlvjIwkEN4AlbFdelVT+6VfWVFIrCOAO
-	 M1OdKNDDFUK/015H3s2R15hHvRD+E0fiy0+eq6pGo2M808nyiV+f0qFfoA4T9XaNoC
-	 VwXNvfV8HdzX0vPlbKS02H4JOzUQgIVVu6GsJ8HGqC+4xzdOkHylhvNQCshUBU+xVc
-	 8Rc+RfC8ECiIWq2q4xm8c4wKyFvy412h9hf5ucdVDBgVIXH1zB33sRQlRYluFfQNsj
-	 wQZ2rEzohr8Xw==
-Received: from xaxapp05.zte.com.cn ([10.99.98.109])
-	by mse-fl1.zte.com.cn with SMTP id 6A9Fw961036738;
-	Mon, 9 Nov 2026 23:58:09 +0800 (+08)
-	(envelope-from shao.mingyin@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Mon, 9 Nov 2026 23:58:13 +0800 (CST)
-X-Zmail-TransId: 2af96af1ed95a12-a17af
-X-Mailer: Zmail v1.0
-Message-ID: <202611092358134332uegNg75loROSwL53Em6A@zte.com.cn>
-Date: Mon, 9 Nov 2026 23:58:13 +0800 (CST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=eVKMSmAw
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-91c1f548f87so14166796d6.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 08:00:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794240042; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rzA5+AaTV29gPdobVUy4NXefLfQiIheUFR/gcePG5CChT+BRAyr7svLbIiB74WEoEJ
+         eSJ2wCVmROTpieWMo/+kU8S88PxTOUkZbvJbDeC5VNAqdq8WQTLIZJ9oCKTNf9LmGgdE
+         owOEktOwrCQs5l1hzEvcsPCBKM002YAbrtuMjiYArG9p6ZXfivhqCpOJnbX56L5yy7bW
+         tYdWb8jbiZ4sld8tC3gAuFUoPizHl7W++hKDLikqANGugKDjuBxmk8iUpc6eY1jTwsOm
+         SRqyFL5OYaIKTkIXbGrAod93zkL71LOgRK34TrJiQfY4HvgjbUa1V/JlaKFxRBqyqytW
+         gh+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=1IVvR7owaTCfwRNK1gEl9dRHd5D6+SPRltJMKFkI3Z4=;
+        fh=EdIP+vjHUpjBZ47w/QrtDXK03DNmTkw5XoyerVcke/w=;
+        b=KI3b3c4Prd7JT3k75VQv2bOgWSjOQN+KaBE+Eq/ulJdLvzmqQlDMQXPoSTsiLXVgDN
+         B0fkNow3LVNAyF8hm7koRsc0GjubM18f2JoMSYcZGqyUmobbUS/N3vRZCesX1HLM1jNv
+         LLfKx2JNqMxiJAoSHWXmDYDaVSQgaGZnJEDFGMUtihOkyXoy19B4k9NDFb7ZtItDprf0
+         qWkS+GbOOQtPGYyIHgoqBM7of/GUr/dWHanbtEwF1AAN3fnWAVnaajAKKjPeC8xskpjg
+         ss5uBypx7jeD07d1URr6NGzSS7TBHtJZUppusxlVLaNWRSS2KlpiaqBEtvqjjw49jca0
+         QqPQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794240042; x=1794844842; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1IVvR7owaTCfwRNK1gEl9dRHd5D6+SPRltJMKFkI3Z4=;
+        b=eVKMSmAwRDJ5fSeCORPgxCIKcy35/jStL56anO2mdaDeqKQUdUUrs7cHpaWXPuZrEe
+         WjOcE/rFJJZDNtW8F5K7QKryfLTX9qxoE6LEGRTnqqKJhwB3SztHb1R2eVMupG+FZOKD
+         sHQhKEJTm4xF3gxKt0PCmeqvGwDrZSCcl83RNoSyuGQXOvtLSuWD+rtxn/xMmCiBh8wl
+         jqmJmZEGQxYee6qcqdzBIofbPAvCVKcaAD7DLmvkc9zIGZ0ND7pzzZOWCx4LszFh1ntA
+         yUlfb8w9bELqfWFcod9ve/nX20GnAdXBKewbx7uv+Qcr5Usw+tWjXtqTnTge+NHNW8Lw
+         nBig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794240042; x=1794844842;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1IVvR7owaTCfwRNK1gEl9dRHd5D6+SPRltJMKFkI3Z4=;
+        b=mXo/KgLDmQs8TOhC3pvnCBcFokpKrdqhqvoko+NfovD6HRimmeOXgFt6Xdp9vY9pYl
+         G6HZ2x0zaIpcT20xaNaTNoF+O5TwnWPFdQIlMdoKBwkTx8yp6DYBWjKtmX8X91ueNTEq
+         PKNYd5nRaKtiheR/Z26edseDr/lyTqtlWTROznVdUPOCyniWfQFQZMZVTQzW9YS1VD2E
+         lfROAEZB4p2EtDf8iFXHFGdiuthU8K3UB0r4qWp6eU1lp6+jJRMz3brVD6g9z3MoWIo6
+         noUgR63/fvC9WCw7PI0iJcmnpDAbOrtMeU9tZasukOKC9g4ErYsQzl3z2LElpD/XS6ye
+         001Q==
+X-Forwarded-Encrypted: i=1; AL+hErFMmDQLGpV7mVNevI0X5PkKSkvl62/L8vBqWzrt/OI/Axrdx/uPbzwxrR9CrCYUPHRyArrKYqqclXA52Yq/EDM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9l0M4wpa7kD080tKujUNLn5nlQ389jc6LuR6gTQVwS4jO1+t99
+	9kxpA4u9QhAxvIYDsEDaJRekHT7mdygNBRkvE6SxzbF3jdw++KJValMNgVKO9TqPDXbA6NFH1EN
+	mhWrvy4PkXCDndLrbgr/5DEohsbFwUZQUZseCXIwL
+X-Gm-Gg: AYBFou2UX9juttublH8NgzLz1AQ/ZJw9dppIpLgLVIloKTXeJ8B3JBpDp2Lmt9JOEe+
+	hCb+JIqZHUjps/XA3MtV5SBnmRLl6vnXqM5HVD+gmH/Q69y9E2f2IGbXWhjKTp2a6HqQILbX3er
+	k+jQpTFO0EbYAphjrcb4712ugV8cdrVL+jyiOAJOTHCfRtzTl+cjsd6t9ktGHmwvE3TeqHNI8pz
+	njsW/NDM9i+7g1IwGqPugx1rtTsOBvBGr2Z/5cO+THafpeqUegMp4ZXAtZaB8UqGur8rtG7381G
+	KZne45ZqMevm6/dv+UOK3PWpdO8gkFaGhnk98VNCt/tQiLG5dTJLnQ9w15RrWmIzWpgBPhk7DX1
+	JaQKs0m+GgQQ8aDC2K+zlXJ6/5St9AqUUzTiNzW02J9vsdZdS88d0SRr5mMmqNo5SYw==
+X-Received: by 2002:a05:6214:5402:b0:91e:ee31:55ba with SMTP id
+ 6a1803df08f44-91eef8c841emr97756d6.57.1794240035928; Mon, 09 Nov 2026
+ 08:00:35 -0800 (PST)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 9 Nov 2026 08:00:34 -0800
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20261105-tdx-selftests-v16-2-2024e8fa517a@google.com>
+References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com> <20261105-tdx-selftests-v16-2-2024e8fa517a@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,283 +107,53 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-From: <shao.mingyin@zte.com.cn>
-To: <tom.leiming@gmail.com>, <shuah@kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBzZWxmdGVzdHM6IHVibGs6IHByb3BhZ2F0ZSByZWNvdmVyeSB3b3JrZXIgZmFpbHVyZXM=?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 6A9Fw961036738
-X-TLS: YES
-X-ENVELOPE-SENDER: shao.mingyin@zte.com.cn
-X-SOURCE-IP: 10.5.228.132 unknown Mon, 09 Nov 2026 23:58:16 +0800
-X-CLEAN: YES
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6AF1ED98.001/4jNZFN434Dz8Xrnw
+MIME-Version: 1.0
+Date: Mon, 9 Nov 2026 08:00:34 -0800
+X-Gm-Features: AclHuK8G0EZDW3tY7sTDlhlnaXZOXK3ScUEr2v83dxDnmQ6yymeVPIAKQ5tIQLE
+Message-ID: <CAEvNRgHhzFxfXB+jXy+RCwTWevFTEW3RH4q51xztrFZYa4Xe_w@mail.gmail.com>
+Subject: Re: [PATCH v16 02/20] KVM: selftests: Update kvm_init_vm_address_properties()
+ for TDX
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>, 
+	Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org, 
+	Adrian Hunter <adrian.hunter@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Shao Mingyin <shao.mingyin@zte.com.cn>
+Lisa Wang <wyihan@google.com> writes:
 
-The recovery tests update ERR_CODE in background subshells and use wait
-without PIDs. A worker can report a failure while the parent still prints
-PASS and exits with zero. Calling _show_result() from a failed worker also
-removes shared backing files while other workers may still be using them.
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> Initialize the TDX S-bit and the GPA tag mask in
+> kvm_init_vm_address_properties() for TDX VMs, similar to how the C-bit
+> is initialized for SEV VMs.
+>
+> The TDX S-bit is used to distinguish between shared and private guest
+> physical addresses. Its position is determined by the guest physical
+> address width, which is either 48 or 52 bits for current TDX
+> implementations.
+>
+> Co-developed-by: Adrian Hunter <adrian.hunter@intel.com>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> Co-developed-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
-Wait for each recorded worker PID and aggregate its status in the parent,
-keeping failures ahead of skips and preserving errors across batches.
-Return worker and device-creation errors without reporting or cleaning up
-from the child, so the parent can finish waiting before shared cleanup.
+Reviewed-by: Ackerley Tng <ackerleytng@google.com>
 
-Fixes: 57e13a2e8cd2 ("selftests: ublk: support user recovery")
-Fixes: 533c87e2ed74 ("selftests: ublk: add test for UBLK_F_QUIESCE")
-Fixes: 63276182c513 ("selftests: ublk: add user copy test cases")
-Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
----
-Tested on native x86_64 Bash 5.2 with the recovery scripts and common
-helpers from the unpatched and patched trees. Device and I/O operations
-were replaced by test-only stubs. Single-worker failures at every launch
-position, multiple failures, skips, signal termination and device-creation
-errors no longer produce a final PASS or a zero exit status. Successful
-runs still pass, and cleanup follows all worker exits. Prerequisite skips
-still exit before preparation. The 71 scenarios passed their expected
-checks on each tree. This does not exercise real ublk devices or I/O.
-
- tools/testing/selftests/ublk/test_common.sh   | 23 +++++++++++++++++--
- .../testing/selftests/ublk/test_recover_01.sh | 20 ++++++++++++----
- .../testing/selftests/ublk/test_recover_02.sh | 20 ++++++++++++----
- .../testing/selftests/ublk/test_recover_03.sh | 20 ++++++++++++----
- .../testing/selftests/ublk/test_recover_04.sh | 14 ++++++++---
- 5 files changed, 80 insertions(+), 17 deletions(-)
-
-diff --git a/tools/testing/selftests/ublk/test_common.sh b/tools/testing/selftests/ublk/test_common.sh
-index af2ea4fa1..c5adb4d29 100755
---- a/tools/testing/selftests/ublk/test_common.sh
-+++ b/tools/testing/selftests/ublk/test_common.sh
-@@ -379,6 +379,26 @@ run_io_and_kill_daemon()
- 	fi
- }
- 
-+# Collect recovery workers in the parent before removing shared backing files.
-+_wait_recovery_tests()
-+{
-+	local pid
-+	local ret
-+
-+	for pid in "$@"; do
-+		if wait "$pid"; then
-+			continue
-+		else
-+			ret=$?
-+		fi
-+
-+		# A failure takes precedence over a skipped worker.
-+		if [ "$ERR_CODE" -eq 0 ] || [ "$ERR_CODE" -eq "$UBLK_SKIP_CODE" ]; then
-+			ERR_CODE=$ret
-+		fi
-+	done
-+}
-+
- run_io_and_recover()
- {
- 	local size=$1
-@@ -387,8 +407,7 @@ run_io_and_recover()
- 	local dev_id
- 
- 	shift 2
--	dev_id=$(_add_ublk_dev "$@")
--	_check_add_dev "$TID" $?
-+	dev_id=$(_add_ublk_dev "$@") || return $?
- 
- 	fio --name=job1 --filename=/dev/ublkb"${dev_id}" --ioengine=libaio \
- 		--rw=randread --iodepth=256 --size="${size}" --numjobs=4 \
-diff --git a/tools/testing/selftests/ublk/test_recover_01.sh b/tools/testing/selftests/ublk/test_recover_01.sh
-index 1cddc2345..950928abd 100755
---- a/tools/testing/selftests/ublk/test_recover_01.sh
-+++ b/tools/testing/selftests/ublk/test_recover_01.sh
-@@ -11,8 +11,8 @@ ublk_run_recover_test()
- 	ERR_CODE=$?
- 	if [ ${ERR_CODE} -ne 0 ]; then
- 		echo "$TID failure: $*"
--		_show_result $TID $ERR_CODE
- 	fi
-+	return "$ERR_CODE"
- }
- 
- if ! _have_program fio; then
-@@ -25,20 +25,32 @@ _create_backfile 0 256M
- _create_backfile 1 128M
- _create_backfile 2 128M
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 -b &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 -b "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 -b "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 -i 1 &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 -i 1 "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
- _cleanup_test
- _show_result $TID $ERR_CODE
-diff --git a/tools/testing/selftests/ublk/test_recover_02.sh b/tools/testing/selftests/ublk/test_recover_02.sh
-index 9c3f48188..beeeb3535 100755
---- a/tools/testing/selftests/ublk/test_recover_02.sh
-+++ b/tools/testing/selftests/ublk/test_recover_02.sh
-@@ -11,8 +11,8 @@ ublk_run_recover_test()
- 	ERR_CODE=$?
- 	if [ ${ERR_CODE} -ne 0 ]; then
- 		echo "$TID failure: $*"
--		_show_result $TID $ERR_CODE
- 	fi
-+	return "$ERR_CODE"
- }
- 
- if ! _have_program fio; then
-@@ -29,20 +29,32 @@ _create_backfile 0 256M
- _create_backfile 1 128M
- _create_backfile 2 128M
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 -z -b &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 -z -b "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 -z -b "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 -z &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 -z "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 -z "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 -z -i 1 &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 -z -i 1 "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 -z -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
- _cleanup_test
- _show_result $TID $ERR_CODE
-diff --git a/tools/testing/selftests/ublk/test_recover_03.sh b/tools/testing/selftests/ublk/test_recover_03.sh
-index 92f401217..0c6b312e2 100755
---- a/tools/testing/selftests/ublk/test_recover_03.sh
-+++ b/tools/testing/selftests/ublk/test_recover_03.sh
-@@ -11,8 +11,8 @@ ublk_run_quiesce_recover()
- 	ERR_CODE=$?
- 	if [ ${ERR_CODE} -ne 0 ]; then
- 		echo "$TID failure: $*"
--		_show_result $TID $ERR_CODE
- 	fi
-+	return "$ERR_CODE"
- }
- 
- if ! _have_feature "QUIESCE"; then
-@@ -29,20 +29,32 @@ _create_backfile 0 256M
- _create_backfile 1 128M
- _create_backfile 2 128M
- 
-+pids=()
- ublk_run_quiesce_recover -t null -q 2 -r 1 -b &
-+pids+=("$!")
- ublk_run_quiesce_recover -t loop -q 2 -r 1 -b "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_quiesce_recover -t stripe -q 2 -r 1 -b "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
-+pids=()
- ublk_run_quiesce_recover -t null -q 2 -r 1 &
-+pids+=("$!")
- ublk_run_quiesce_recover -t loop -q 2 -r 1 "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_quiesce_recover -t stripe -q 2 -r 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
-+pids=()
- ublk_run_quiesce_recover -t null -q 2 -r 1 -i 1 &
-+pids+=("$!")
- ublk_run_quiesce_recover -t loop -q 2 -r 1 -i 1 "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_quiesce_recover -t stripe -q 2 -r 1 -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
- _cleanup_test
- _show_result $TID $ERR_CODE
-diff --git a/tools/testing/selftests/ublk/test_recover_04.sh b/tools/testing/selftests/ublk/test_recover_04.sh
-index 4c83c1840..232ae7d4a 100755
---- a/tools/testing/selftests/ublk/test_recover_04.sh
-+++ b/tools/testing/selftests/ublk/test_recover_04.sh
-@@ -11,8 +11,8 @@ ublk_run_recover_test()
- 	ERR_CODE=$?
- 	if [ ${ERR_CODE} -ne 0 ]; then
- 		echo "$TID failure: $*"
--		_show_result $TID $ERR_CODE
- 	fi
-+	return "$ERR_CODE"
- }
- 
- if ! _have_program fio; then
-@@ -25,15 +25,23 @@ _create_backfile 0 256M
- _create_backfile 1 128M
- _create_backfile 2 128M
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 -u &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 -u "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 -u "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
-+pids=()
- ublk_run_recover_test -t null -q 2 -r 1 -u -i 1 &
-+pids+=("$!")
- ublk_run_recover_test -t loop -q 2 -r 1 -u -i 1 "${UBLK_BACKFILES[0]}" &
-+pids+=("$!")
- ublk_run_recover_test -t stripe -q 2 -r 1 -u -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
--wait
-+pids+=("$!")
-+_wait_recovery_tests "${pids[@]}"
- 
- _cleanup_test
- _show_result $TID $ERR_CODE
+>
+> [...snip...]
+>
