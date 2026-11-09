@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794187280;
-	b=aG8FREQ5F5RYfxrfZgUUJA5eeHN9ARpGFPUajUEoIOVE77D121kTnBvTUkEl+8ArrRB8
-	 Q+yQPmsI8q4nTQDXD7av0i6YOgyhipCu7Zuh2L+Q9Nu7LqJ0snYNqGM0ui7opTtrmWLu2
-	 o3ZH85TULBTzvGvZgIGNME3NGCfBEphHPWAmwC+q2UaJvv8PFdWQ/xgvn/1pOOk3qdnfV
-	 66eTQ+usUC1LvmMFf/VGnlLFJb2KWaKQs1RGLcPF73tDHOXfazDaZSa/xELd1gEwFOi8/
-	 EVGlSKdYUJvCY166N6fu9RbMgQsThJgKkFcyvddVa/9TwFLxcFFKfYfaUkEZ/etb1aw==
+	b=1TLF5MGHP9wLe0iKxWwymF3cbtl15QWyCDT8nycwgTO+q5W5LK1qRhwXUI6Ase9Rm6wX
+	 YjUM/FGlI4kn0dpE5xy3+/OVS8/Q08RgEVkRhjSXk7Gf1oNm5wIF1an73Qz2A5VkwW4gg
+	 UFMppvUI6c3hE9aK7EapxOT06ftn9eivqLh8W6bb5iW+4oHeW6a4W9fwFTJMEpuIRIt0u
+	 9x5hgKLP7CItA+98wBasCbIc/GUSnajtDIBkS1qs5N2g9ixc6ArTgUZF404PiKzTfOa77
+	 flK3kV//SryFRiAPo+QaWrs9JQpp86jz6LOYN1+ISjTM0KgVf8XBqznEc9FQK52X9sg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794187280;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=8WjDO1KwcsvAUqxQwIXFac02DYVHmNDQBxlAENSfD/U=;
-	b=fpeIwW0vz8J4EhwxX37LUoE6zWVIwb1r7yLXXRProEDukLShZmySRaWmiHcgZ1q4WR+o
-	 NVYCbV97XJ5O9v/YOteeN0ZtWQM7RvGxVNozBFKJYX9T9nDad/jizNfGNkAjtUMYf55Qo
-	 zmwT6420tq5HnioP4QporBT0BlI1Wn/euTHlpw2RvxK23W2HtQdWz94xv3FkYBHAuNtcW
-	 jpGGGwQFkBuDusAZdFE4xpykeo12iY4AefYi80ODQo4rUoTPc1SDDZIw+IAm7mwrgLGB1
-	 ylja8ZAQHVN5ymkJ+2cSMNZlj4mEbexamWJSpG4Rt0o+q9LG2PDCZC4ipYGd5s1PIfg==
+	 Content-Type:Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
+	bh=o4iYp1mgiuHJ22mIDE1+YNcbZQqDTtCDvucolqruxaE=;
+	b=ln3GbimlRiZX4I5ga8y6vjP5uKKEYMr5TZ8ngpvmx1cfc4LrIWnprFCTpCrczN/RDQ1a
+	 3XT92+kpeWroP10DysPtCYZHhQZWIEtDmM1lU7gBONXa0UWQ6kfehQ5rSFtBuEGdYjIsO
+	 sA1vsXwAxVa0nt8UMkYGo063lG5G146/XbQ4XO0tzwEpAStbgZPqy+DrOOIakH6LYXlGI
+	 yhv/nrXb35IWN0Re/mOKp+I7l2xfv1F7WaGrz8oonYyUGMxFUwpN1/SA8R9DjluPk9Loo
+	 j7oXdgquftqkH9S5M2HFUkqRdRmBr+d+G4SXtqRGce18RMZcIIrzKzrbPzwA0Msi3Qw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
 	spf=none smtp.mailfrom=casper.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=liV+FqUf;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=Z8CMFoCM;
 	arc=none smtp.remote-ip=90.155.50.34
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7147B606A330;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713B2606A322;
 	Mon,  9 Nov 2026 01:21:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7147B606A330
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 713B2606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=liV+FqUf
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=Z8CMFoCM
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=8WjDO1KwcsvAUqxQwIXFac02DYVHmNDQBxlAENSfD/U=; b=liV+FqUfEo9NbHpQPBtOnhS+dK
-	kxTHX08rmlsewZVb58AgqOwtXwlDB1MwvcGE9QapYEpgHcWESi4JZsWp0dqPwIGfOXu6qo8X45EUs
-	DJbY4efx/Ovk3xhzByAIa4dNpIEV+/JKOnJT3ZC8IywuH/JUI0dF7iup7ZdQjV/eL62wlGaT7XmWj
-	/J6YlNlUPpFDy21UK0G1jWaEfeR8I6FyQ0NXBGNZF7ntCi/wJQ9AABu7Org/SjP9LsQvixuHY+rFB
-	eHftO7+6ftiTooo8YbLwd+Zf9UwX4b0KWa6EWBozxo2KTPNxgHBpBEa07P/5pPmZybA4Jm1wlpBHD
-	AeNCkTgQ==;
+	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
+	To:From:Reply-To:Content-ID:Content-Description;
+	bh=o4iYp1mgiuHJ22mIDE1+YNcbZQqDTtCDvucolqruxaE=; b=Z8CMFoCMwHNkaDy4xwo7g9Tmfd
+	tEwNb6kGCLWxN0HFFV7k4VHAgrkwh4xZ10twvER4YDsWRNU7lDrIrWJVB9GEAvPSoMKwxbphrCVg1
+	1JGCz0nSNZquQsoMn1Kt4Cv8ecpUsrPCB7TTO1LOr9YJ1YRS8QKOLbf5EnkpN3sNLCXajNGREffp+
+	VrUkl4ivaMoP1RzkF36Ret4vhIuuveiRg7A6jj8iPWsrIT/wmWo4+tloIbP98O6aIuEAxrzwI7+Mu
+	E7iwDwmUAL3iXuSad6DonGqnkgDshF30+l/0tqo6hRb5JC9/SY6VMj5PAvsgEDP1FI4v9G83nxEPi
+	X0Yzfb4g==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xQE4P-00000007PwK-2fAH;
+	id 1xQE4P-00000007Pvy-05vk;
 	Mon, 09 Nov 2026 01:21:13 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xQE4P-0000000EKVa-1pLG;
-	Mon, 09 Nov 2026 01:21:13 +0000
+	id 1xQE4O-0000000EKUd-3UqI;
+	Mon, 09 Nov 2026 01:21:12 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -78,9 +78,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Dongli Zhang <dongli.zhang@oracle.com>,
 	joe.jin@oracle.com,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v12 23/24] KVM: x86: Use a single time snapshot in kvm_vm_ioctl_set_clock()
-Date: Sun,  8 Nov 2026 17:21:09 -0800
-Message-ID: <20261109012112.3415328-24-dwmw2@infradead.org>
+Subject: [PATCH v12 09/24] KVM: x86: Cache host vclock_mode for masterclock eligibility checks
+Date: Sun,  8 Nov 2026 17:20:55 -0800
+Message-ID: <20261109012112.3415328-10-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109012112.3415328-1-dwmw2@infradead.org>
 References: <20261109012112.3415328-1-dwmw2@infradead.org>
@@ -93,89 +93,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-The KVM_CLOCK_REALTIME handling read CLOCK_REALTIME with
-ktime_get_real_ns() and then anchored the result at a different
-instant: the master clock reference point captured a few lines
-earlier, or a separate get_kvmclock_base_ns() read. The time elapsed
-between the two reads is added to the restored clock as error --
-bounded by the interrupts-off critical section, but gratuitous now
-that the timekeeping core can snapshot CLOCK_REALTIME and
-CLOCK_MONOTONIC_RAW at the same instant.
+The remaining users of pvclock_gtod_data only need to know whether
+the host clocksource is TSC-based. Cache the vclock_mode value in a
+simple kvm_host_vclock_mode variable, updated by the pvclock_gtod_notify
+callback, and use gtod_is_based_on_tsc() for eligibility checks.
 
-Take one ktime_get_snapshot_id(CLOCK_REALTIME) snapshot and derive
-both the realtime correction and the raw reference point from it. In
-master clock mode, keep anchoring at master_kernel_ns -- so that
-'system_time' cannot go negative for a very small data.clock, as the
-existing comment explains -- by projecting the snapshot's realtime
-value back to that reference point; CLOCK_REALTIME and
-CLOCK_MONOTONIC_RAW tick at the same rate across the few ns in
-between, give or take NTP slew.
+This is inherently racy (as it always was — kvm_track_tsc_matching
+never held the gtod seqcount), relying on eventual consistency: the
+notifier fires on every timekeeping update and will correct any
+transient inconsistency within one tick.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- arch/x86/kvm/x86.c | 36 +++++++++++++++++++++++++++++++-----
- 1 file changed, 31 insertions(+), 5 deletions(-)
+ arch/x86/kvm/x86.c | 27 +++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4642a9087df4..de3b5086f17c 100644
+index b47c36265c2f..0ed3d2549ac3 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -4855,19 +4855,45 @@ static int kvm_vm_ioctl_set_clock(struct kvm *kvm, void __user *argp)
- 	 * 'system_time' when 'data.clock' is very small.
- 	 */
- 	if (data.flags & KVM_CLOCK_REALTIME) {
--		u64 now_real_ns = ktime_get_real_ns();
-+		struct system_time_snapshot snap = {};
-+		u64 now_real_ns;
-+
-+		/*
-+		 * Snapshot CLOCK_REALTIME and CLOCK_MONOTONIC_RAW at the
-+		 * same instant, so that the elapsed time applied to
-+		 * data.clock and the reference point the result is anchored
-+		 * to are coherent.
-+		 */
-+		ktime_get_snapshot_id(CLOCK_REALTIME, &snap);
-+		now_real_ns = ktime_to_ns(snap.systime);
-+		now_raw_ns = ktime_to_ns(ktime_mono_to_any(snap.monoraw,
-+							   TK_OFFS_BOOT));
-+
-+		/*
-+		 * When the master clock is in use, anchor at its reference
-+		 * point instead, projecting the realtime value back to the
-+		 * same instant. The two clocks tick at the same rate across
-+		 * the few ns in between, give or take NTP slew. Skip the
-+		 * projection in the absurd case that it would take a
-+		 * CLOCK_REALTIME set to within moments of the 1970 epoch
-+		 * (legal with CAP_SYS_TIME) below zero and wrap.
-+		 */
-+		if (ka->use_master_clock &&
-+		    now_real_ns >= now_raw_ns - ka->master_kernel_ns) {
-+			now_real_ns -= now_raw_ns - ka->master_kernel_ns;
-+			now_raw_ns = ka->master_kernel_ns;
-+		}
+@@ -1187,6 +1187,8 @@ static u64 compute_guest_tsc(struct kvm_vcpu *vcpu, s64 kernel_ns)
+ }
  
- 		/*
- 		 * Avoid stepping the kvmclock backwards.
- 		 */
- 		if (now_real_ns > data.realtime)
- 			data.clock += now_real_ns - data.realtime;
--	}
--
--	if (ka->use_master_clock)
-+	} else if (ka->use_master_clock) {
- 		now_raw_ns = ka->master_kernel_ns;
--	else
-+	} else {
- 		now_raw_ns = get_kvmclock_base_ns();
-+	}
- 	ka->kvmclock_offset = data.clock - now_raw_ns;
- 	kvm_end_pvclock_update(kvm);
+ #ifdef CONFIG_X86_64
++static int kvm_host_vclock_mode;
++
+ static inline bool gtod_is_based_on_tsc(int mode)
+ {
+ 	return mode == VDSO_CLOCKMODE_TSC || mode == VDSO_CLOCKMODE_HVCLOCK;
+@@ -1216,7 +1218,6 @@ static bool kvm_use_master_clock(struct kvm *kvm)
+ static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool update_mclock)
+ {
+ 	struct kvm_arch *ka = &vcpu->kvm->arch;
+-	struct pvclock_gtod_data *gtod = &pvclock_gtod_data;
+ 	bool prev_matched_tsc = ka->all_vcpus_matched_tsc;
+ 	bool prev_matched_freq = ka->all_vcpus_matched_freq;
+ 
+@@ -1269,8 +1270,9 @@ static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool update_mclock)
+ 	 * are fine — each vCPU's pvclock has its own tsc_timestamp that
+ 	 * accounts for its offset.
+ 	 */
++	int host_vclock_mode = READ_ONCE(kvm_host_vclock_mode);
+ 	bool use_master_clock = kvm_use_master_clock(vcpu->kvm) &&
+-				gtod_is_based_on_tsc(gtod->clock.vclock_mode);
++				gtod_is_based_on_tsc(host_vclock_mode);
+ 
+ 	/*
+ 	 * Request a masterclock update if needed: toggling master clock,
+@@ -1283,7 +1285,7 @@ static void kvm_track_tsc_matching(struct kvm_vcpu *vcpu, bool update_mclock)
+ 
+ 	trace_kvm_track_tsc(vcpu->vcpu_id, ka->nr_vcpus_matched_tsc,
+ 			    atomic_read(&vcpu->kvm->online_vcpus),
+-		            ka->use_master_clock, gtod->clock.vclock_mode);
++			    ka->use_master_clock, host_vclock_mode);
+ }
+ #else
+ static inline void kvm_track_tsc_matching(struct kvm_vcpu *vcpu,
+@@ -1454,7 +1456,7 @@ static inline bool kvm_check_tsc_unstable(void)
+ 	 * TSC is marked unstable when we're running on Hyper-V,
+ 	 * 'TSC page' clocksource is good.
+ 	 */
+-	if (pvclock_gtod_data.clock.vclock_mode == VDSO_CLOCKMODE_HVCLOCK)
++	if (READ_ONCE(kvm_host_vclock_mode) == VDSO_CLOCKMODE_HVCLOCK)
+ 		return false;
+ #endif
+ 	return check_tsc_unstable();
+@@ -1788,7 +1790,6 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
+ {
+ #ifdef CONFIG_X86_64
+ 	struct kvm_arch *ka = &kvm->arch;
+-	int vclock_mode;
+ 	bool host_tsc_clocksource;
+ 
+ 	lockdep_assert_held(&kvm->arch.tsc_write_lock);
+@@ -1828,9 +1829,9 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
+ 			ka->use_master_clock = false;
+ 	}
+ 
+-	vclock_mode = pvclock_gtod_data.clock.vclock_mode;
+-	trace_kvm_update_master_clock(ka->use_master_clock, vclock_mode,
+-					ka->all_vcpus_matched_freq);
++	trace_kvm_update_master_clock(ka->use_master_clock,
++				      READ_ONCE(kvm_host_vclock_mode),
++				      ka->all_vcpus_matched_freq);
+ #endif
+ }
+ 
+@@ -7210,17 +7211,23 @@ static DEFINE_IRQ_WORK(pvclock_irq_work, pvclock_irq_work_fn);
+ static int pvclock_gtod_notify(struct notifier_block *nb, unsigned long unused,
+ 			       void *priv)
+ {
+-	struct pvclock_gtod_data *gtod = &pvclock_gtod_data;
+ 	struct timekeeper *tk = priv;
+ 
+ 	update_pvclock_gtod(tk);
+ 
++	/*
++	 * Pairs with the READ_ONCE() in the lockless readers; the race is
++	 * benign by design, relying on eventual consistency (the notifier
++	 * fires on every timekeeping update).
++	 */
++	WRITE_ONCE(kvm_host_vclock_mode, tk->tkr_mono.clock->vdso_clock_mode);
++
+ 	/*
+ 	 * Disable master clock if host does not trust, or does not use,
+ 	 * TSC based clocksource. Delegate queue_work() to irq_work as
+ 	 * this is invoked with tk_core.seq write held.
+ 	 */
+-	if (!gtod_is_based_on_tsc(gtod->clock.vclock_mode) &&
++	if (!gtod_is_based_on_tsc(kvm_host_vclock_mode) &&
+ 	    atomic_read(&kvm_guest_has_master_clock) != 0)
+ 		irq_work_queue(&pvclock_irq_work);
  	return 0;
 -- 
 2.43.0
