@@ -1,51 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=178.63.66.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794249311;
-	b=5erCXpkEQ3Ef7ZhCSKJTX5oirIdP9yA3I5+0icHRidH+StAcjHEhPbcjofaFtPY5LjKj
-	 3nnuZxSrtWVSkwAUZQUyF8bR4Ybt11dRZ+VoQ4DRbc71+Zfd+8MYSx/KpVwSaXuIWHLF3
-	 5J3cxpexPyF0i0kaJj1wGqG29Qlfssa6xpAvwVwWUPw0a10j+uFloE4ul3b/O+5b5BzmT
-	 wliNlZdlXbFqPj6T2QXXX96x/tqU7Hmm+vSLgT5kOxqssQzFQFsK3R3/snaSbvuf8egXH
-	 XiF/jTuDEU+6P6C6rqHvF+uHE5atKkXFg1Xuu0DGGAi+IHYRjRCqEAwC/j4ek5IIKtQ==
+	t=1794249997;
+	b=S7P9Uxc4Qp2o+Bq64yjXlGh169WMIpt8Pdg5PzQN53qNJdEEha1IiJt6nBMxcY/O+Chs
+	 ltkN5wvchH4FCR1H0wscfpQdcRWBJS2FaFLrGKlZNU+ikKQQA6QDapVhNH9b/bN3Nrwdv
+	 7CcRSX1rTmQvp4ZmrUW7Q8ITOh4x8isRNX8Ibk3VsQxCLzB8rwzZxnC+6qlsK5ohR3ISu
+	 rlXqmranyRHE6Qh4rOp7sWrs6j0bSROwGx8hE1g8x2XM/IhdMB4n3/Ci/DEMPDD/8IAIT
+	 j1FhjGs0q3tseI4Qgimpa+FcSIgAZZaxI0jpRqdejb8rm5xT3rdcUCaq/IWAY/s8IrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794249311;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=wdnN+sQlajVEoVpH0buQnH51ZS1/i7oAbyWmnuPlXis=;
-	b=42zQh4VwWxS6klPeUToCVWWr6FNB9xl8sCmTz9Ockf+Z05rxNATCg4umrg/XI3gX+WT7
-	 YqXvgUv8sLgfnfpr79OCD3dQsn7gOfGRo7C6811Iod6HMo1Sq8mmrmvcD59Xo9z3AgumZ
-	 8xs2kjSGACXL00yJkPMfmvZA9hL9Gts5c/HSCCLR1IS1cqtBPMX73l3wQNvHWK/671q0k
-	 WRCwjFZ73A+dwr8YzwhpNaM7tDzzQxQduDkwtb/qHgFTNbKf0OwtHNAcLyOcDpmJS3il0
-	 6Lg6P6ISAsYeKO0+49ETyhjifaqp7XEPPlGJ1UQtlCg0WkQlEvO1YVJqOeD8dBesrkA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794249997;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=ruyz/2K4wlVY4cyIFsxKJQ+uv+8W7GCsg6g5SZEw66U=;
+	b=ViM17cQVDaS0UPO0PBh5zvx5qMJXMxj/E0Me1uPSt4/Y9sE5bFcC31lHJZpIQ2EKbRbF
+	 DwrND+nIgrIkvJH7//9RhpPftdREbIl6POA0LQoNZ3p1aRFplh8JBTm2ogq0ZdaiaB0kR
+	 fASQkeQqRsqWnCQyehfW8vufAwjfEdkjoYbzjQPciD3eifWfOcI5mlAIMfEnNzSy1EcmL
+	 mQ7yDj9PMWgxKQ7MDt3MQ5aSkLQSIDep2IdsK64tl5lrHR9/krVhRt0FmxdHwinsYhFcL
+	 M4Dr95IBe8EG4raOsuo1ZEpHhrP7+yOa4QbEgpLXZZ1NvCJp7oKZqCIAvKvyuxp/x/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gentwo.org;
-	spf=pass smtp.mailfrom=gentwo.org;
-	dkim=pass header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=kPS1hr0K;
-	arc=none smtp.remote-ip=62.72.0.81
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+	dmarc=pass header.from=hallyn.com;
+	spf=pass smtp.mailfrom=hallyn.com;
+	dkim=pass header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=R9+SjjOM;
+	arc=none smtp.remote-ip=178.63.66.53
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBBE606A5FF;
-	Mon,  9 Nov 2026 18:35:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFBBE606A5FF
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1C5606A325;
+	Mon,  9 Nov 2026 18:46:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD1C5606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=kPS1hr0K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1794248809;
-	bh=+0LAwJo4Ty0qoQXCDWuXw1iK2qfnJ5rJryT//pIRZ5A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kPS1hr0KB7hypW6/VjW+i7uckX9o8qzWedcZRDAazdB1gW97iIMVu4KThAyLMOnYZ
-	 AxsyVw055wzvPjK6hNbsVpZsen0MCGcg9fGxIlnoSdbFIOkkra0WMJ0qG3cIBzx/bu
-	 N+obpZd/6hgycWlk8JQpejAGNsRgmPSRo7WyIM4M=
-Received: from sut02sys-r112.scc-lab.amperecomputing.com (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTPS id F2785402BC;
-	Mon, 09 Nov 2026 10:26:48 -0800 (PST)
-From: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-Date: Mon, 09 Nov 2026 10:26:47 -0800
-Subject: [PATCH v3 1/2] futex: Canonicalize arm64 tagged user addresses
+	dkim=pass (2048-bit key, unprotected) header.d=hallyn.com header.i=@hallyn.com header.a=rsa-sha256 header.s=mail header.b=R9+SjjOM
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=hallyn.com; s=mail;
+	t=1794249993; bh=6kVwTzI1/KcDLMSc20Gf48sZcIqocBBJVzv0nSohHRs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R9+SjjOMzRhZ05/CIvcJT2p8lmE7XRQKOFIX21zFe9O5hD12H4H1DPMPqDz6CGn/d
+	 +EN7gyBWrcbWHdu58Xgors8T+iHxqYvDpaZLBwZMTV4nKMlOE0JPbIUhUGoav+LpIJ
+	 4cWNeeCAhiLPpXPydpgjO9eowbgGlBdMYCxUUO6GJrf0QUOcyCqBPqWWw3U9/FvmCh
+	 +VJHBAoRWzpOeVcQzbvtlOA/rXPpFxHBCRh1S/bXcX1SbMjIl1MfaCK+LR8WIOMGO5
+	 I5/3Ksz0FyorAPpSh5U4f171zLiOwSWYne3a2fHuMlXz0y1gnhPhbfQErGurC/IGJP
+	 AbMtvKAc199jA==
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id 8DAE69CE; Mon,  9 Nov 2026 12:46:33 -0600 (CST)
+Date: Mon, 9 Nov 2026 12:46:33 -0600
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: kees@kernel.org, akpm@linux-foundation.org, david@kernel.org,
+	Jinjie Ruan <ruanjinjie@huawei.com>, ljs@kernel.org,
+	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com, mingo@redhat.com,
+	peterz@infradead.org, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	vschneid@redhat.com, kprateek.nayak@amd.com, paul@paul-moore.com,
+	jmorris@namei.org, shuah@kernel.org, brauner@kernel.org,
+	alexjlzheng@tencent.com, jannh@google.com, jaime.saguillo@gmail.com,
+	elver@google.com, blbllhy@gmail.com, bvanassche@acm.org,
+	pjw@kernel.org, broonie@kernel.org, debug@rivosinc.com,
+	tglx@kernel.org, aleksey.oladko@virtuozzo.com,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, morgan@kernel.org
+Subject: Re: [RFC PATCH v2 2/3] security: Add PR_CAPBSET_DROP_MASK for
+ process-wide bounding-set drops
+Message-ID: <avIVCf1ok6Xyfii0@hallyn.com>
+References: <20260929130200.1638343-1-ruanjinjie@huawei.com>
+ <20260929130200.1638343-3-ruanjinjie@huawei.com>
+ <atjN3JX7sWx9kpQ5@hallyn.com>
+ <avHfm5/mVtuN/oPW@hallyn.com>
+ <avIKUzCKAkfC-wuk@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,69 +80,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261109-futex-tagged-uaddr-v2-prep-v3-1-3f5f2ef83138@gentwo.org>
-References: <20261109-futex-tagged-uaddr-v2-prep-v3-0-3f5f2ef83138@gentwo.org>
-In-Reply-To: <20261109-futex-tagged-uaddr-v2-prep-v3-0-3f5f2ef83138@gentwo.org>
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
- Davidlohr Bueso <dave@stgolabs.net>, 
- =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
- Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
- Shubhang Kaushik <shubhang@os.amperecomputing.com>, 
- "Christoph Lameter (Ampere)" <cl@gentwo.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Will Deacon <will@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Shubhang Kaushik (Ampere)" <sh@gentwo.org>, stable@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794248808; l=1608;
- i=sh@gentwo.org; s=20251010; h=from:subject:message-id;
- bh=+0LAwJo4Ty0qoQXCDWuXw1iK2qfnJ5rJryT//pIRZ5A=;
- b=aTLJd4fkjvjQdkXIb2WUpDNI9H72Ui03ZsgFCJQV3iYAVMiGssjldH8eTmLCh2kXAoNoKDcv2
- OzSxDSBKGqnCaLI/IyIvKMhyTlcL2XLt7Q6DO3GX0hIxYt8B/q4tKJc
-X-Developer-Key: i=sh@gentwo.org; a=ed25519;
- pk=jc8YIRvxPSyJaBRe5y+a4N0RXKBUEcAh8+OFhlROXPY=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avIKUzCKAkfC-wuk@redhat.com>
 
-On arm64, a thread that enables the tagged address ABI can pass valid
-top-byte-tagged user pointers to futex syscalls. Such a pointer must
-have the same syscall behaviour as its untagged form.
+On Mon, Nov 09, 2026 at 07:00:51PM +0100, Oleg Nesterov wrote:
+> On 11/09, Serge E. Hallyn wrote:
+> >
+> > Hi Oleg,
+> >
+> > please see below.  Do you have any issues with this use of sighand?
+> 
+> Hi Serge,
+> 
+> I already tried to look at this patch, but sorry, can't really comment.
+> 
+> I'll try to take another look, but can't promise much, I don't understand
+> the problem space (I could never reallly understand capabilites in details).
 
-get_futex_key() validates the user address with access_ok(), but uses
-the raw address when constructing private and shared-anonymous futex
-keys. A waiter using a tagged address and a waker using the untagged
-form can therefore access the same futex word while hashing to distinct
-keys, causing FUTEX_WAKE to miss the waiter.
-
-Keep access_ok() on the original pointer so that arm64 retains its
-per-thread tagged-address ABI enforcement. Canonicalize the address
-afterwards, before it is used for futex key construction and shared
-mapping lookup.
-
-Fixes: 63f0c6037965 ("arm64: Introduce prctl() options to control the tagged user addresses ABI")
-Cc: stable@vger.kernel.org
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Acked-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
----
- kernel/futex/core.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/futex/core.c b/kernel/futex/core.c
-index a240638f69e5c65bd036434a15f3df680efb4638..dcc8ffca38595a5ea69f3672375ffb9f9c6766f9 100644
---- a/kernel/futex/core.c
-+++ b/kernel/futex/core.c
-@@ -539,6 +539,8 @@ int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
- 	if (unlikely(!access_ok(uaddr, size)))
- 		return -EFAULT;
- 
-+	address = untagged_addr(address);
-+
- 	if (unlikely(should_fail_futex(fshared)))
- 		return -EFAULT;
- 
-
--- 
-2.52.0
-
+Thanks.  I'm mainly wondering about the storing of this pending capability
+bounding mask in signal_struct, whether that might have any unexpected
+side effects.
