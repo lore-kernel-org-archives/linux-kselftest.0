@@ -1,63 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794251417;
-	b=2QtDVBI4fM//nmwgRLOJxusanOtjQEpQgdFMH2EJL5EyGxlH+kbVdXLSG0EKFZWGCUrQ
-	 lZ5uHJPWwY5fBfJC3FEBuk4jaZb6uTIG2f2lAFQsIAAfSPQ7vyy8FN59Q/CINsJdjisa9
-	 +43Bydd3Wb1figh7KFJslAGQRNaO2TqLAvkzjGpvmn5EqdVYXzND+seTOIx1GangQk/58
-	 n/3re6wE3o/Xq+SW0z4RZDjKy6jrc8rCFQI7MVlU2DY2Mn2Zzo3BhGjW++KmnlpNvlnIU
-	 ax/s/8u75Srni9Hibo6jTVOzuLxJSVbR/cRtXnxZ9gZP5lJa44H55mN22hLDuF85AwA==
+	t=1794251419;
+	b=HoWPUdPF8I9QSj/V+jLlL5hnGNMRw3QOKlAq1w4HQO4+HwLYKrEZ36VjqDzswf/4UKHR
+	 n/F+c4RdtfJsQVGd26i31dAnGv7ilb6SZXUnpp740EEEfrKgw5V15ciQbaS7aFoPpv2gj
+	 LudO1p0lfn5Xam4NlqA/BmHtyK1J7qmwou6rZoWWO9MyOGUC7QFQo/DgHdoglaluzHFlR
+	 /4kpgV6znmO39S9gfYZs5ybTJHI94jBBdtOS6WOl9colkJvEw2qnVtTk7Kx23bqPq6C8z
+	 Yxpor/GDoqb4I4TMgwlN+r2/eEqIqk6KP0EwKY5FUcTfaoDjk2mQxhh0uSp6gvVzTbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794251417;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794251419;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:MIME-Version:Content-Transfer-Encoding:X-Scanned-By;
-	bh=1+VGOzdszmEm5r9Dtb+uNL8xaPZUQtUCtTE44595/w0=;
-	b=f4d1es5GZqt2hXAn6kfa9mpVEKperMohpN9Oq+ljoMcyTNFkqDP95W3YWvluN/HCXEOe
-	 7lmva3jTLWoWFDZ23uJRAmhKQzAyJLBigOF+uPspPfLzXMXzDqnSQK2BIA57gpSwGT0xn
-	 VcuMV8nPODvUobkyF4YwVSDwejzu1np3L2t8L3FeM9Oeeht8VgCfk68KIStEGKv/Fh3ZC
-	 P+oLC/+yid7oZxTd/5jpHOQf/UkniLS8Hvgf+uWK8XZTas62RcZFcCH4YNoIwuPP0UDed
-	 +XzPK4PTZlWYveU8hk0QeJIInnr7yHCajzljAbhjKqUpZbKXJD0nARV6F8IQ/VSjGpw==
+	 Message-ID:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Scanned-By;
+	bh=WUCOrKKENO8IXlLMzZj3CvG/Cxz3vucJ04SUNwYIYhg=;
+	b=hpe7OuehTPHvyL8+fw52EaRWdvzF4B52bku6f0oBEmlAczgJYVmrWB2bPY5+1yHDfx/K
+	 3E7IY4HgV7zdJrjtxxO6GCUWnm/hYR84Is/nFi/dgClu9iCC22xMjfx3CHYZo56Ei5pNq
+	 N3vBUwbPyviNPuHhfqOWC+TYdg4M5AIhTLPXpMclPxdZACYTKjHRhTkeuAwk5JAvC63oH
+	 8aYf5eVPapUG3voQAyAxTXYVAS3oLjpDQcwU7XX0qQ8IJACiXmI4BIa8ZismNbcpiX+C2
+	 iT50s8DIgQpZ+hT1p/P0NtqtfV61NX7aP9tuuzKSF68m1iw98h/wqKnd4eT1zgahOZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Silqb14l;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AlTCGMis;
 	arc=none smtp.remote-ip=170.10.133.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47851606A332
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 19:10:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47851606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795CA60A2601
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 19:10:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 795CA60A2601
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Silqb14l
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AlTCGMis
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794251416;
+	s=mimecast20190719; t=1794251417;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1+VGOzdszmEm5r9Dtb+uNL8xaPZUQtUCtTE44595/w0=;
-	b=Silqb14lK8ZOBflQhtetTRdvHYqFP9sHbhxC0l3aQLZhCOlQ/mhlby7HpxoFnaTr3mjr0G
-	gSeQ6HlUV1utsS8AvXjLmp8LLNaPWCdHlezdcABHhsMHyfa1yx3vnfsYRtjZuRJS+1JgEN
-	alR3xjBpODPwe6AO079GUy2NeBwjGqM=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WUCOrKKENO8IXlLMzZj3CvG/Cxz3vucJ04SUNwYIYhg=;
+	b=AlTCGMissToDRnHSfjaHVYpL4RGnKEBc/bIQvfmk7qLS7X14oyBcnCpJJg2vrIhrV0BCAU
+	ruGriox53adceLtRgymNqbyEpo/DJBzFo1StwIGOjxr6L4loVfB0pI5koS2gxx5xxV65EX
+	5I6M5gcTyX4+YsNj85ege24kYsvT9o8=
 Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-336-iGvRxo4pMDuyUzyBPWroFA-1; Mon,
- 09 Nov 2026 14:10:11 -0500
-X-MC-Unique: iGvRxo4pMDuyUzyBPWroFA-1
-X-Mimecast-MFC-AGG-ID: iGvRxo4pMDuyUzyBPWroFA_1794251410
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-112-feW_DZNdPGKoQi_sENCSDQ-1; Mon,
+ 09 Nov 2026 14:10:14 -0500
+X-MC-Unique: feW_DZNdPGKoQi_sENCSDQ-1
+X-Mimecast-MFC-AGG-ID: feW_DZNdPGKoQi_sENCSDQ_1794251412
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0F5D4180060F;
-	Mon,  9 Nov 2026 19:10:10 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3B8B518001E1;
+	Mon,  9 Nov 2026 19:10:12 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E65EF195608C;
-	Mon,  9 Nov 2026 19:10:07 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 71A5A195608B;
+	Mon,  9 Nov 2026 19:10:10 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Ridong Chen <ridong.chen@linux.dev>,
 	Tejun Heo <tj@kernel.org>,
@@ -69,9 +71,11 @@ Cc: cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Guopeng Zhang <guopeng.zhang@linux.dev>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v2 0/5] More fix patches
-Date: Mon,  9 Nov 2026 14:09:50 -0500
-Message-ID: <20261109190955.1398611-1-longman@redhat.com>
+Subject: [PATCH-next v2 1/5] selftests/cgroup: Fix "test_cpuset_prs.sh -v" failures
+Date: Mon,  9 Nov 2026 14:09:51 -0500
+Message-ID: <20261109190955.1398611-2-longman@redhat.com>
+In-Reply-To: <20261109190955.1398611-1-longman@redhat.com>
+References: <20261109190955.1398611-1-longman@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,29 +88,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
- [v2]
-  - Reorder the series by putting the original patch 4 before patch 2.
-  - Update the Fixes tags in patch 1 and 5 as suggested by sashiko.
-  - Update the new patch 3 to remove obsolete WARN_ON_ONCE() and update
-    comment as reported by sashiko.
-  - Minor fix to the test case in patch 5 as reported by sashiko.
+When the -v option is used to run test_cpuset_prs.sh, it activates the
+use of sched-debug to determine the set of isolated CPUs which will
+also consider 1-CPU partition as being isolated though they will not be
+reflected in "cpuset.cpus.isolated". As a result, some of the expected
+isolated CPUs values have 2 different set of values to correspond to
+these two ways of determining isolated CPUs.
 
-This patch series contains an additional set of cpuset fix patches.
+Commit 6e4834ba8986 ("cgroup/cpuset: Fix incorrect CPU accounting with
+parent's effective_xcpus expansion") introduces some new test cases
+which fail when the -v option is used. Update the test cases to make
+them pass with the -v option as well.
 
-Waiman Long (5):
-  selftests/cgroup: Fix "test_cpuset_prs.sh -v" failures
-  cgroup/cpuset: Correctly set cpus_updated in
-    cpuset_hotplug_update_tasks()
-  cgroup/cpuset: Fix incorrect partition invalidation logic in
-    cpuset_hotplug_update_tasks()
-  cgroup/cpuset: Protect current->mems_allowed read in cpuset_fork()
-  cgroup/cpuset: Correctly set isolated_cpus when switching partition
-    state
+Also remove an obsolete comment in update_parent_effective_cpumask()
+of cpuset.c.
 
- kernel/cgroup/cpuset.c                        | 77 ++++++++++++-------
- .../selftests/cgroup/test_cpuset_prs.sh       | 20 +++--
- 2 files changed, 64 insertions(+), 33 deletions(-)
+Reported-by: Tejun Heo <tj@kernel.org>
+Link: https://lore.kernel.org/lkml/886a562b52b1c5094142d547a8336457@kernel.org
+Fixes: 362212853cd0 ("cgroup/cpuset: Fix incorrect CPU accounting with parent's effective_xcpus expansion")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/cgroup/cpuset.c                            |  6 ------
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 13 ++++++++-----
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 85e5b529d144..6074327c3477 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2164,12 +2164,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 			else
+ 				part_error = PERR_NOTEXCL;
+ 		}
+-		/*
+-		 * When both cs and parent remain valid, parent's
+-		 * compute_partition_effective_cpumask() call would have removed
+-		 * cs's effective_xcpus from the parent's effective_cpus. So
+-		 * there is no need to adjust parent's effective_cpus here.
+-		 */
+ 	}
+ 
+ write_error:
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 32e1e44fa0b1..2d4744f2d6ac 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -540,16 +540,19 @@ TEST_MATRIX=(
+ 
+ 	# The extra CPUs gained by a child partition when its parent expands the
+ 	# exclusive CPUs have to be taken away from the parent.
+-	" C2-6:X2-5:P1 CX3-6:P1 \
+-	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
+-	" C2-6:X2-5:P1 CX3-6:P2 \
+-	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P2 3-6"
++	" C2-6:X2-5:P1 CX4-6:P1 \
++	                    .      .    X2-6     .      .      .     0 A1:2-3|A2:4-6|XA2:4-6 \
++								       A1:P1|A2:P1 ."
++	" C2-6:X2-5:P1 CX4-6:P2 \
++	                    .      .    X2-6     .      .      .     0 A1:2-3|A2:4-6|XA2:4-6 \
++								       A1:P1|A2:P2 4-6"
+ 
+ 	# Both expansion and contraction of parent's effective_xcpus will be
+ 	# correctly handled in child partition and the child can be invalidated
+ 	# if a populated parent could lose all its effective_cpus.
+ 	" C2-6:X2-5:P1 CX3,5-6:P2 \
+-	                    .      .    X4-6     .      .      .     0 A1:4|A2:5-6|XA2:5-6 A1:P1|A2:P2 5-6"
++	                    .      .    X4-6     .      .      .     0 A1:4|A2:5-6|XA2:5-6 \
++								       A1:P1|A2:P2 4-6|5-6"
+ 	" C2-6:X2-5:P1 CX3-6:P2 \
+ 	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+ 
 -- 
 2.56.0
 
