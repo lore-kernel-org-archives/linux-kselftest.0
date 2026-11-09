@@ -1,110 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.85
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794208281;
-	b=CEe+RD/OsVCi2HuUklYGRQi0cvepVYCPC6ZLSyhJaFNu4pnqTzjwHKcYhzTxP0lLK+ME
-	 mC4Q7Pjzaj7WDRI30gJapbAP2l/k/sk0Ep5EtwQS5IGqReO96GIoEG32gH88eY6zuPpqe
-	 ibKf1kPZW+XXOlEqmiVnUUdR2rVSRSnIMKukJAkvC+L4+3QG3opb5EEPDsyFNZ6KFIUg0
-	 gNmJiLbJcrxY2PDQLH0UaSqFI1N2r9b94ENtykTutAdRoWoWva0+4VHO0ZyV/GqDpdBYu
-	 FtiL5vL+tZnc3jsMoS7G95gofa5hOdrw1HqWEQ4LdQGXge6gpBpvnGRp4z2hRnqRNSw==
+	t=1794214138;
+	b=ig6gBVqJDCMIWBxKhp22N1VaZb5OEeTcoe1rqADtUH4elN8IsiSomen5la9weyUS4ff5
+	 ekrnu+rTTVBxT9tjFDCW6fD2DvK1kWi84KpG8Cy14uBpGt8u2fKc+u4bP2Ye+gMi79WIm
+	 Va/nxCoy1KaAjycSUgZM982YRPukXfWAz7ZGIgbsUzGzU3+3sbego3/lPqanxY03HfRrM
+	 GbSAq0MtFwu9NQCIVePb2zQGyIbO2QDUrGkgnyWZP2G3yBP87cjjz/XyfhgrKmIfOOrMt
+	 CNq8CBarDGsfzq/VgOTMTlls/ho0sv6lVrhYbFY4k6xFxQqFSVgf2u01/v1tbQbIAlg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794208281;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=7mHMsCDVeycRBqs1waIeg/qc9zHDhufgZN4r24QbNvY=;
-	b=CQSBwX19eRhKC98SfnkssLOJi7x464U2VALz8yYoAisNmljy4LTb2PtB/CksnikztqC9
-	 aiM5v7VWld7D5lsXYFqK7MHcDIP6wRJ3dJPfSeCgYE6bHKMLrfeIMYiWtsyQWoVHs99IE
-	 gQFpvGTfo1p6BMcrg1a3GtrnELAm9aDvavKCEhxRt/rT/XZDKZ8SMonRiAqzaLzfyh2ZX
-	 Nh0GMG1puGzvVbd7C+IDU5NDGP44Gadq5mLrlMMOCC1677K3Lmz/4CnnKiBdl4B4wJPMk
-	 cZVg9GTmIxoTzM1LdNDOnVDVBdnNuXupMS1CPzZT1SpzlB2i50LMg2WEiOYI4EyehWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794214138;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=fBfm9dsEkwLJa3RQILFcp1NS9oIiSGmRdrDoGcyXcLU=;
+	b=Bq6OV+d3kHMFHqAyXMlre8F/VQ6dhAGeFE4JreTkJojCocdTTT+NJx750UloKwk5MDw9
+	 imIBFmO3U9/VYc3PGvnJLEl1gEf/woHS77RIaetDyVQWZws9+KHCEbEnY5DziBqru/k0V
+	 GD2w+HOXFPrOItZfv4QAmRJQXcl+SX1KHR+ddQ2zjXQCgakHiyxFKgTKb3OkDHKWcyW9J
+	 TF4iHD9iYKvBoW0uvnVz93Zjqq8VhmspO7VKqKTuwFm6Z80fzL2jpw8c1Np93G2aPJT6x
+	 JI3aieT1YI8QDfFeBTiJ5sYdkYQuJN3idc43ZCtr1aNusoh41fgWojSw1ZWBVufRszg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yrqxFb5P;
-	arc=none smtp.remote-ip=74.125.82.51
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AO9X86Hc;
+	arc=none smtp.remote-ip=95.215.58.85
+Received: from mta1.migadu.com (out-85.mta1.migadu.com [95.215.58.85])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D85606A321
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 07:11:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86D85606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE31606A323
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 08:48:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BE31606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yrqxFb5P
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1ae18eb9ad0so534369c88.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2026 23:11:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794208281; x=1794813081; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=7mHMsCDVeycRBqs1waIeg/qc9zHDhufgZN4r24QbNvY=;
-        b=yrqxFb5PaoQQpJVCeHWMecfV0DneFMtWF/GXOqRhI0nEu2oGg9szux5pv/edWk9+Sk
-         +ppyrwclcOxV+2mENRlj/4KIDweTwG+EqIRER130x0e7FLSpReLt0D+07OrhFl/CNj74
-         jTfLsmKQpgXRDkQHRHSLcePJ+ey/araaccry5l8QAO1xfFWqYunFSq2awtolqAN/Skd9
-         VdCI0eB415MTrBz3FRGDOx+Oixe8zNqL+9dGEYxBHJtja7zk700Cxfo3aveVGV43hd1c
-         Zb0PptMUKNJE7zcrXz34xw8SnuWKiy1n526v3PxdxA2SX3TU0f6GIh6CJ9aDoxgSHHRM
-         R44g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794208281; x=1794813081;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7mHMsCDVeycRBqs1waIeg/qc9zHDhufgZN4r24QbNvY=;
-        b=yugm8irJqJ1nTOmy71S1xGdjo4wTb7cDVftesNs4QKnnRf0hs3kwiKu0pnA7C6lG6a
-         s34lpkhb8j6BqJuU0/7TdA4MyPXCwI0OfOwh99GlK197BP+aGpv/n+xU0YfCqY0SqKkF
-         QspMeUxNi9h5gdjkR6T0xRhL8F07+zI/fp5atLvkc/2tbITCxZzWGnSkcX3h5AkV16k8
-         5OT80SwZ158JgeA37vKZO0UawKY+9DeIg+Y1Je+7MiDdCrJ4Yr8Rd8HdcLdfchDBPPnb
-         +FgtlUnDPm/QkDuXSuKdAT6ZkHVlNK/pGFcQC+GPzR8bKNTrU70hBvu2vjx0Ta/bNzG0
-         fn1Q==
-X-Forwarded-Encrypted: i=1; AL+hErF7041NKgoK7Y6DE29MuQYPDZ+PqVyRxrENmCgks23usCHSYP+hGqiOy76CJnRDNBnGHmjf+u8C56QcgnqoScs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8OxSYbaP80lAvYfiYcKmRPnBaOMKQC5+4PqjVgIeHDMzgjc3O+
-	opHh6ZSePk8r//aU9yASnrd0LC/FNGtjl8fszO0HgLrtj7qbacL6h76D
-X-Gm-Gg: AYBFou2lJ5SmF4IrX5XgmqpdFBYfyvhLqIRz/ZvodSCut9O+eCHH7ougnC9tZJSLtis
-	qU0QaGwbzODA9XNPUp1WpidsJvGqcHMBCa84HqDDPEWtD9ZH+pmd/l1nBmATXfHD0UiWo5K10c+
-	B1HKEZtntBpuP2aCnqR4Depp5Iy0j/7eoRulDlDL8inRhyf7FzGLObhCtF0T/eWRRuVY9IpgIyy
-	S7JfbtWUtbH3aaq73bIHR+0WmRVNM0UH3ftLz1DcR5QugO47seyHh7hkdYjyNkDR/ssSs6bZYEP
-	z6eIS2oJHCAD5QGLaQLq/O4CAK24QAv17NPKmE8ENmZHovJAiSIoXbnlBszUIi7SnfSHQehUFtd
-	OiqOK4FATOlUs0hr8wqjt75ANwJ0phFWUNKGYmCpabd6+oqHjlCf1s4Mgys+b1MfaeUsTnfoqPV
-	9q7cVes+8jdXU7Ez1NtyWSjXq1mz9IGwBG/EneYge74F3FqrYitwZKEwccflYX1JYT4x3DKFY4p
-	C50hykXFVlSfOWYQW0zDc6ogEAV2kFVu1jrHXNpoYrxFrzWStzLGNxGeZHgZmTplKzaX1/fdUd3
-	sgXgy2ypafAeZcTOrZjN+4kiisM89YxuCBNmQOaOdsSk4+IirMpjxslHH1WPJPCiU/MC3JTm5Tc
-	B6BSKw8grs1Y7ZG1AucoL15nPr3LF
-X-Received: by 2002:a05:7023:d07:b0:1b3:ad63:b9c2 with SMTP id a92af1059eb24-1b3ad63ba53mr2044328c88.22.1794208280449;
-        Sun, 08 Nov 2026 23:11:20 -0800 (PST)
-Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:cc96:e14b:76e:f8f1])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b3755eb6efsm13443513c88.4.2026.11.08.23.11.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 23:11:20 -0800 (PST)
-From: "Hemendra M. Naik" <hemendranaik@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jiri@resnulli.us,
-	jhs@mojatatu.com,
-	shuah@kernel.org,
-	donald.hunter@gmail.com,
-	ast@fiberby.net,
-	toke@redhat.com,
-	liuhangbin@kylinos.cn,
-	j.koeppeler@tu-berlin.de,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AO9X86Hc
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=1sOzaznMmJOHy+e+QiztzCqMUj8wOs6qA6WdAtqbHAA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794214135; v=1; x=1794818935;
+ b=AO9X86HcTL0K+CGNnuBPjfjNLE4+VlvxSRRM58BvIX2mWYXf3ukrfXySEoc8qb2e9zLW7Q1H
+ Hf8qEdzgN+FpuZ885LhNtC0c4Rig/HvT/lepYeYotNoH4ESpR+UhO6ucuCjKlr3+/qGFUR9ehHf
+ zopKudzN3+xXVCFXQDvgNAIU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 6d1e8b5ddadfa23a;
+	Mon, 09 Nov 2026 08:48:54 +0000
+X-Mizu-Trace-ID: 6d1e8b5ddadfa23a
+X-Migadu-Flow: FLOW_OUT
+From: Fuad Tabba <fuad.tabba@linux.dev>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>
+Cc: Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Fuad Tabba <tabba@google.com>,
+	kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	vishy0777@gmail.com,
-	tahiliani@nitk.edu.in,
-	"Hemendra M. Naik" <hemendranaik@gmail.com>
-Subject: [PATCH net-next v10 4/4] Documentation/netlink/specs: tc: describe fq_pie per-flow class stats
-Date: Mon,  9 Nov 2026 12:40:17 +0530
-Message-Id: <20261109071017.438478-5-hemendranaik@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261109071017.438478-1-hemendranaik@gmail.com>
-References: <20261109071017.438478-1-hemendranaik@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/19] KVM: arm64: selftests: Tests for protected VMs
+Date: Mon,  9 Nov 2026 08:48:35 +0000
+Message-ID: <20261109084854.840576-1-fuad.tabba@linux.dev>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,70 +82,118 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the tc-fq-pie-cl-stats header for fq_pie per flow (class) stats in Documentation/netlink/specs/tc.yaml
-with its five fields: prob, delay, deficit, avg-dq-rate, fq-rate-estimating.
+Hi folks,
 
-Extend the tc-fq-pie-xstats fixed header with the type discriminator and the per-flow class_stats fields
-that follow the nine legacy __u32 qdisc counters in struct tc_fq_pie_xstats.
+Changes since v1 [1]:
+  - New patch 1, which hides generic PtrAuth from a protected VM
+    without PtrAuth. The pkvm_id_regs test checks for it.
+  - New pkvm_sve test, and MOPS, PIE, POE and FPMR checks in
+    pkvm_id_regs.
+  - Use the selftest syscall wrappers and vm_check_cap().
+  - Marked pkvm_hvc() as called from the guest. (Joey)
+  - Collected Reviewed-by from Joey on patches 3, 6 and 7. (thanks!)
 
-Signed-off-by: Hemendra M. Naik <hemendranaik@gmail.com>
-Signed-off-by: Vishal Kamath <vishy0777@gmail.com>
-Signed-off-by: Mohit P. Tahiliani <tahiliani@nitk.edu.in>
----
- Documentation/netlink/specs/tc.yaml | 33 +++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+This series adds selftests for protected VMs. A test skips on a host
+without pKVM, and so does any case where the host doesn't have the
+required feature, e.g., PtrAuth, SVE or hugetlb pages.
 
-diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
-index b6ccc645b0e3..b159c4b563c7 100644
---- a/Documentation/netlink/specs/tc.yaml
-+++ b/Documentation/netlink/specs/tc.yaml
-@@ -894,6 +894,30 @@ definitions:
-         name: memory-limit
-         type: u32
-         doc: Memory limit in bytes
-+  -
-+    name: tc-fq-pie-cl-stats
-+    type: struct
-+    members:
-+      -
-+        name: prob
-+        type: u64
-+        doc: Current drop probability of the flow
-+      -
-+        name: delay
-+        type: u32
-+        doc: Current queue delay of the flow in microseconds
-+      -
-+        name: deficit
-+        type: s32
-+        doc: Number of remaining byte credits
-+      -
-+        name: avg-dq-rate
-+        type: u32
-+        doc: Current average dq_rate in bytes/second
-+      -
-+        name: dq-rate-estimating
-+        type: u32
-+        doc: Is avg-dq-rate being calculated?
-   -
-     name: tc-fq-pie-xstats
-     type: struct
-@@ -934,6 +958,15 @@ definitions:
-         name: memory-usage
-         type: u32
-         doc: Total memory across all queues
-+      -
-+        name: type
-+        type: u32
-+        doc: TCA_FQ_PIE_XSTATS_QDISC (0) or TCA_FQ_PIE_XSTATS_CLASS (1)
-+      -
-+        name: class-stats
-+        type: binary
-+        struct: tc-fq-pie-cl-stats
-+        doc: Class statistics of a particular flow (invoked via tc class show)
-   -
-     name: tc-fq-qd-stats
-     type: struct
+A couple of points:
+
+- Patch 1 is a fix, included here so that pkvm_id_regs can check the
+  correct behaviour. Without it, generic PtrAuth is advertised to a
+  protected VM without PtrAuth.
+
+- Each area gets its own test rather than cases folded into existing
+  tests such as psci_test, hypercalls, set_id_regs, etc. A protected
+  guest requires its own boot path, and has to share the ucall pool
+  before its first ucall. On top of that, a protected guest gets the
+  opposite result for many of those tests' checks.
+
+- Cases for a feature a protected VM may not have follow what the VM
+  is given, so they pass with or without the series that adds it [2],
+  and run once it lands. The debug cases follow
+  ID_AA64DFR0_EL1.DebugVer, the SVE cases KVM_CAP_ARM_SVE on a
+  protected VM's fd, and the MOPS, PIE, POE and FPMR checks their ID
+  register fields.
+
+The series is structured as follows:
+
+  01:     Hide generic PtrAuth from protected VMs without PtrAuth.
+  02:     external_aborts: an abort injected before a vCPU's first run.
+  03-05:  Generic selftest changes: creating a protected VM, the pKVM
+          function IDs and the ucall pool's address.
+  06-07:  Protected-VM library: boot trampoline and helpers.
+  08-18:  The tests, one per area.
+  19:     MOPS, PIE, POE and FPMR checks in pkvm_id_regs.
+
+Based on Linux 7.4-rc1 (6628e7d4c6b25; also applies to 7.4-rc2 7475ea8b58616).
+
+Cheers,
+/fuad
+
+[1] https://lore.kernel.org/all/20261104084842.132944-1-fuad.tabba@linux.dev/
+[2] https://lore.kernel.org/all/20261109083205.806619-1-fuad.tabba@linux.dev/
+
+Fuad Tabba (18):
+  KVM: arm64: Hide generic ptrauth from protected VMs without ptrauth
+  KVM: arm64: selftests: Inject an abort before a vCPU's first run
+  KVM: selftests: Allow arm64 tests to create protected VMs
+  tools: arm-smccc: Add the pKVM memory sharing function IDs
+  KVM: selftests: Export the ucall pool's guest physical address
+  KVM: arm64: selftests: Add protected-VM library helpers
+  KVM: arm64: selftests: Add pkvm_host_abi host-interface test
+  KVM: arm64: selftests: Add pkvm_psci multi-vCPU PSCI test
+  KVM: arm64: selftests: Add pkvm_mem_share hypercall test
+  KVM: arm64: selftests: Add pkvm_smccc hypercall test
+  KVM: arm64: selftests: Add pkvm_id_regs register and trap test
+  KVM: arm64: selftests: Add pkvm_vcpu_regs register-state test
+  KVM: arm64: selftests: Add pkvm_irq interrupt test
+  KVM: arm64: selftests: Add pkvm_isolation host-access test
+  KVM: arm64: selftests: Add pkvm_lifecycle teardown test
+  KVM: arm64: selftests: Add pkvm_exceptions debug and SError test
+  KVM: arm64: selftests: Add pkvm_sve vector-length test
+  KVM: arm64: selftests: Check MOPS, PIE, POE and FPMR in a protected VM
+
+Will Deacon (1):
+  KVM: arm64: selftests: Add protected-VM boot trampoline
+
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c            |   4 +-
+ tools/include/linux/arm-smccc.h               |  22 +
+ tools/testing/selftests/kvm/Makefile.kvm      |  13 +
+ .../selftests/kvm/arm64/external_aborts.c     |  21 +
+ .../selftests/kvm/arm64/pkvm_exceptions.c     | 261 ++++++++
+ .../selftests/kvm/arm64/pkvm_host_abi.c       | 435 ++++++++++++
+ .../selftests/kvm/arm64/pkvm_id_regs.c        | 394 +++++++++++
+ tools/testing/selftests/kvm/arm64/pkvm_irq.c  | 268 ++++++++
+ .../selftests/kvm/arm64/pkvm_isolation.c      | 225 +++++++
+ .../selftests/kvm/arm64/pkvm_lifecycle.c      | 110 +++
+ .../selftests/kvm/arm64/pkvm_mem_share.c      | 394 +++++++++++
+ tools/testing/selftests/kvm/arm64/pkvm_psci.c | 632 ++++++++++++++++++
+ .../testing/selftests/kvm/arm64/pkvm_smccc.c  | 117 ++++
+ tools/testing/selftests/kvm/arm64/pkvm_sve.c  | 357 ++++++++++
+ .../selftests/kvm/arm64/pkvm_vcpu_regs.c      | 218 ++++++
+ .../selftests/kvm/include/arm64/pkvm.h        |  75 +++
+ .../selftests/kvm/include/ucall_common.h      |   1 +
+ tools/testing/selftests/kvm/lib/arm64/pkvm.c  | 255 +++++++
+ .../selftests/kvm/lib/arm64/pvm-entry.S       |  57 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   5 +-
+ .../testing/selftests/kvm/lib/ucall_common.c  |   9 +-
+ 21 files changed, 3868 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_exceptions.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_host_abi.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_id_regs.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_irq.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_isolation.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_lifecycle.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_mem_share.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_psci.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_smccc.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_sve.c
+ create mode 100644 tools/testing/selftests/kvm/arm64/pkvm_vcpu_regs.c
+ create mode 100644 tools/testing/selftests/kvm/include/arm64/pkvm.h
+ create mode 100644 tools/testing/selftests/kvm/lib/arm64/pkvm.c
+ create mode 100644 tools/testing/selftests/kvm/lib/arm64/pvm-entry.S
+
 -- 
-2.34.1
+2.47.3
 
