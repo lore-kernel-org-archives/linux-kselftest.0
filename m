@@ -1,51 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.83
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.246.77.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794253604;
-	b=dhUxkHYFBF2vPEQKU9XH/cTJTm912Ft2aOvsNR3PP+7W42EQdPU1HjCaz0wUV5SW/8Ha
-	 hMVlqcAu9c6n+wn/fhco+f04GC2Kkj4K8+EzjtLczpbaZ5cvv1fuaL7WEsv0YyhOAcEO9
-	 xJEOMWSDKmesLcxtMvE39Tz38bPgVMG3xXU3DMGI5rHUB18A0bXCJVF2NwOFG2QIf7+Pf
-	 GvBWSNl+61ynnLIU04DTIBZ2J0YL1Xd95bPzA4dwF0AIvBO4k6bYnMEGE+XspqM6jfkgb
-	 DJucGPM+q/NPm2TS9B+h927em76rhFpxEeSbF7sekdHKJaeoHzZ+kTQq0hmD7OlwmiQ==
+	t=1794253714;
+	b=Gl/AraUkiSz2NbF2/JErJvmx3Dkzh8rtKWlsf59cqq98IJ3Xg9cBDmJQChkj97rX+83p
+	 Jbe4kjJCeGmG3do31EA3WGjCJkBS+TFqNidn6i2gzd2pyueGEJA95nHisjhS6ESofcrOH
+	 R/ImWDJNkDQfwLYOmSu5fsOkbWzI8vO3SHTlOb/ypRRLD9WR579miESDBBNASjmXJrcu/
+	 EbTuKVTMHjE34fecrwujrdH5uc5+RtwwecmxZgPHzAU9aCZUgB2Wr554lOnTdKscWIQYC
+	 APkGCxUIQ7ai4PB78xEneqLsMoCYW5hA7xp0UZbN16I/eH1kXImZO91nirNbnR/w5FA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794253604;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=qEBa9u+yInBAIiZjw4VsN7vRNVc+Jm7tQI4mTxNp3jo=;
-	b=N2CX72DKW1EL/lp0L6NoR04eqevrOq4tCXx0gFgaY8ye4OcdkSQGG5H+9bjz2/Jw6Rnm
-	 O3pw/jhmAhlXWln+btO/bz7/G9kodvB2hNf+NUiPtxye2VXGBFKsS/DGu1jJZPQVWUI34
-	 RNhefusxafupvUyKthIJpxq0+gMagN7/y1QYhdB9EMy5yMoKCSzc0aSWz70Qy7r/ba8gz
-	 HtaR0Kj36lCqiwRLEinZHt7/u+DDEMjqs+8or8sfrywPrLUHV7HWawUw+9UTf+gwN9JVn
-	 xmOW66ulXtB+K8YoeTaGq0fNFKG2iVZTYX2v3nKCY2b/cWE1EYS+ya+bV8c0VUrSzTw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794253714;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-Originating-IP:X-ClientProxiedBy:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=hg6Lq3LaZX+NBqsbdEPtxB2Zy/CQ06DdlwM0HCmSCr8=;
+	b=THFZDW4QnuU5B7CcKABwxBmd6oj1jVpmbYWaGp+66NfU8C6vI1hMYKFyEGnOpkeyfe3t
+	 m7Pxd6k+JCVoWIGeIFJIU5RO4xu8Q/URJ4P0CzPnPitB0XqQn/XROvStVcL7Mru8nigXc
+	 66Y4pFvvlUAE9XblRI2d1huXBOhrAKNNJOa3dDQ6Oc6vTwXIPqiEvtag0aHqiA8ppahdK
+	 tPYfJtUPUvInxXW7Lu2ANgkWQewqenU/UeIXNP822tZ1yjWHNy0Y21AyVnPHNPKzsE3JY
+	 vF8HPTskz2hXRqHoBDi2mY30aMLFeoUhT1w0lK1cQi4pu8g2aPBHA/nZa9zvmwI6IYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=95.215.58.83
-Received: from mta1.migadu.com (out-83.mta1.migadu.com [95.215.58.83])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=RIXLERVx;
+	arc=none smtp.remote-ip=44.246.77.92
+Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE03606A32A
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Nov 2026 19:46:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BE03606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=PIjbipDEmK9uXK7APGMPOggxwIyBx+5BzwGbBoTwbE8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794253601; v=1; x=1794858401;
- b=Nh8itQRjTd0/TuCusCGC7qb22M4+RP/At2u6Nhs+uE0uJY9amvjJz/gswMTRpN1p8aecKz7/
- FIXomRgIIuoJwJ8vChQWQPvw/K2DdenZ3JyJ5EdAiZJIraO6lTis0ohTuuwgvOZxWaQzcyFPhk3
- viKMdOvRjaQkuiRUCm1oMDeY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6e2f040e86cc4919;
-	Mon, 09 Nov 2026 19:46:40 +0000
-X-Mizu-Trace-ID: 6e2f040e86cc4919
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f5a22a46-0fd8-4739-bf11-a20e0b3a443b@linux.dev>
-Date: Mon, 9 Nov 2026 12:46:34 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F3560A260C;
+	Mon,  9 Nov 2026 19:48:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79F3560A260C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=RIXLERVx
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1794253714; x=1825789714;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hg6Lq3LaZX+NBqsbdEPtxB2Zy/CQ06DdlwM0HCmSCr8=;
+  b=RIXLERVxIpYCMvVKLibk4KuoUu+/e+Il6u2MfXxxSWEbJPjtSZo+C6im
+   T09I4xsgVtYy4ODLAagikLsxcynZQiSVOCg4fTBNne4TJKZ13nF92yHqc
+   gJgxvf6zpNpeq6tw2znnLgsu7RJyZA9G2DTPXEjVEe0bQSfENjuDXOKWf
+   HKlLU6HRRabYfjKCJ77pEgT8VE7S567BUP5zq6pOwUebBrTdTfeQ77X3J
+   mBE2okpxSxSWX/yjEvmd+TA6vAQcJhnJhLemfMwGmPHd3BcwVkj8jToRg
+   hM3EVKZ7P0I2DIzQmB1orJ34yOtC4Mz5AJKES+xpzgBy6xXr5bHVirzrA
+   Q==;
+X-CSE-ConnectionGUID: dviy2xHsSgW2E3LS/kxk/g==
+X-CSE-MsgGUID: lZDCxsgsRzWAHfjvihhVlg==
+X-IronPort-AV: E=Sophos;i="6.27,204,1787011200"; 
+   d="scan'208";a="33546071"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2026 19:48:32 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.236:22452]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.55.227:2525] with esmtp (Farcaster)
+ id f60dd975-c1d5-4f4e-a67b-dbe0158e5e0e; Mon, 9 Nov 2026 19:48:31 +0000 (UTC)
+X-Farcaster-Flow-ID: f60dd975-c1d5-4f4e-a67b-dbe0158e5e0e
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Mon, 9 Nov 2026 19:48:31 +0000
+Received: from dev-dsk-sieberf-metal-1a-7543e84d.eu-west-1.amazon.com
+ (172.19.116.227) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Mon, 9 Nov 2026
+ 19:48:28 +0000
+From: Fernand Sieber <sieberf@amazon.com>
+To: <mingo@redhat.com>, <peterz@infradead.org>, <juri.lelli@redhat.com>,
+	<vincent.guittot@linaro.org>, <shuah@kernel.org>
+CC: <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>, <bsegall@google.com>,
+	<mgorman@suse.de>, <vschneid@redhat.com>, <kprateek.nayak@amd.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<nh-open-source@amazon.com>, <hborghor@amazon.de>, <fmubeen@amazon.de>,
+	<dwmw@amazon.co.uk>
+Subject: [PATCH 0/2] sched/fair: Stop core-scheduled siblings trading rescheduling IPIs
+Date: Mon, 9 Nov 2026 21:48:25 +0200
+Message-ID: <20261109194827.87349-1-sieberf@amazon.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -55,110 +87,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next 0/7] bpf: Support struct_ops in light
- skeletons
-To: Siddharth Nayyar <sidnayyar@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Quentin Monnet <qmo@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Giuliano Procida <gprocida@google.com>,
- Neill Kapron <nkapron@google.com>, =?UTF-8?Q?Thi=C3=A9baud_Weksteen?=
- <tweek@google.com>, Maxime Ripard <mripard@kernel.org>
-References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
-Content-Type: text/plain; charset=UTF-8
+X-ClientProxiedBy: EX19D031UWA004.ant.amazon.com (10.13.139.19) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-On 11/6/26 1:19 PM, Siddharth Nayyar wrote:
-> BPF light skeletons (bpftool gen skeleton -L) compile BPF object loading
-> into a self-contained BPF_PROG_TYPE_SYSCALL loader program (gen_loader)
-> embedded in a C header, removing any runtime dependency on libbpf or
-> userspace BTF parsing. Currently, light skeletons do not support
-> BPF_MAP_TYPE_STRUCT_OPS maps or BPF_PROG_TYPE_STRUCT_OPS programs
-> because preparing a struct_ops map normally relies on libbpf parsing the
-> target vmlinux or kernel module BTF in userspace to resolve type IDs,
-> struct sizes, member byte offsets, and member indices.
-> 
-> This series adds BPF_MAP_TYPE_STRUCT_OPS support for link-based
-> (SEC(".struct_ops.link")) maps in light skeletons across both vmlinux
-> and kernel module BTF targets:
-> 
-> - Patch 1 adds a new bpf_btf_get_struct_member_info() helper for
->   BPF_PROG_TYPE_SYSCALL programs to query a struct's byte size (when the
->   member name is NULL) or a named member's byte offset and member index
->   from vmlinux or module BTF at load time.
-> - Patches 2-5 wire up struct_ops initialization, map creation, program
->   loading, and map update in libbpf's gen_loader. At runtime, the loader
->   program resolves the kernel wrapper type bpf_struct_ops_<name> and
->   target <name> struct BTF IDs (and module BTF FDs) via
->   bpf_btf_find_by_name_kind(), queries struct sizes and member
->   offsets/indices via bpf_btf_get_struct_member_info(), constructs the
->   kernel vdata buffer in the loader data blob, passes the resolved BTF
->   metadata to BPF_MAP_CREATE and BPF_PROG_LOAD, and populates the
->   callback program FDs before issuing BPF_MAP_UPDATE_ELEM.
-> - Patch 6 teaches bpftool to generate per-map skel_link_create() attach
->   functions and skel__attach() / skel__detach() plumbing for BPF_F_LINK
->   struct_ops maps in light skeletons, skips gen_st_ops_shadow() so the
->   light skeleton ctx layout is preserved, and rejects non-link
->   struct_ops maps.
-> - Patch 7 adds light skeleton struct_ops selftests covering both vmlinux
->   (tcp_congestion_ops) and bpf_testmod (bpf_testmod_ops, including a
->   subset struct with reordered members, scalar fields, detach, and
->   re-attachment).
-> 
-> Adding a new BPF helper and alternative kfunc approach
-> ======================================================
-> I am aware that BPF helpers have been frozen for several years in favor
-> of kfuncs. I propose adding bpf_btf_get_struct_member_info() as a BPF
-> helper (restricted exclusively to BPF_PROG_TYPE_SYSCALL loader programs,
-> alongside bpf_btf_find_by_name_kind()) because, to my knowledge, there
-> is no better way to enable struct_ops support in light skeletons.
-> 
-> Before settling on a BPF helper, I explored an alternative approach
-> using a kfunc, which hit a roadblock. Calling a kfunc directly from the
-> light skeleton loader program is not possible because kfunc calls
-> (BPF_PSEUDO_KFUNC_CALL) require the target kfunc's BTF ID in insn->imm
-> when the loader program itself is loaded, whereas light skeletons ship
-> pre-generated loader bytecode without userspace BTF resolution.
+Since v6.17, two SMT siblings under core scheduling can keep sending each
+other rescheduling IPIs, thousands per CPU per second, while each keeps
+running the same task.
 
-Hi Siddharth,
+Commit 0b9ca2dcabc3 ("sched/fair: Always trigger resched at the end of a
+protected period") makes update_curr() ask for a reschedule once the
+running entity's protected period has expired. set_protect_slice() only
+rearms that period on a fresh pick (SNT_PICK), so an entity that is picked
+again keeps an expired vprot and every later update_curr() on it asks
+again. Under core scheduling the ask is remote: a core wide pick calls
+pick_task() - hence update_curr() - on every sibling's runqueue, so each
+sibling IPIs the other, which schedules, re-picks the same entity, renews
+nothing, and IPIs back.
 
-I don't think a new helper is going to fly.
-It's a legacy baggage we are carrying because we can't easily get rid
-of it, we don't want to make it heavier.
+Patch 1 renews the protection on a repick. Patch 2 adds a selftest that
+cookies one SMT pair, runs two spinners on each sibling and fails above
+1000 rescheduling IPIs per CPU per second. It reproduces in a 4 vCPU QEMU
+guest (-smp 4,sockets=1,cores=2,threads=2) with CONFIG_SCHED_CORE=y and
+CONFIG_PREEMPT_LAZY=n: without patch 1 it fails 6 runs out of 7, at
+808-2123 IPIs/CPU/s; with it all 7 pass, at 224-271.
 
-IIUC the problem is that the BPF instructions of the loader are
-supposed to be frozen (signed?), therefore it's not an option to patch
-them at load time, as libbpf normally does with kfuncs.
+This series, including the changelogs, was prepared with the help of an AI
+coding assistant; I have reviewed and tested all of it.
 
-I think the way around this may be teaching the kernel to resolve
-kfuncs itself, similar to how it resolves CO-RE relocations?
+Fernand Sieber (2):
+  sched/fair: Renew slice protection when current is picked again
+  selftests/sched: Add a core scheduling rescheduling IPI test
 
-The call instruction (or a new bpf_core_relo kind) would refer to the
-kfunc in the *program* BTF instead of a kernel BTF ID. Early in
-bpf_check(), the verifier would look the name up in vmlinux and module
-BTF, check prototype compatibility against the local FUNC, and patch
-imm/off. The rest of the verifier would see a regular kfunc call.
+ kernel/sched/fair.c                           |   7 +
+ tools/testing/selftests/sched/.gitignore      |   1 +
+ tools/testing/selftests/sched/Makefile        |   4 +-
+ tools/testing/selftests/sched/config          |   2 +-
+ .../selftests/sched/cs_resched_ipi_test.c     | 377 ++++++++++++++++++
+ 5 files changed, 388 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/sched/cs_resched_ipi_test.c
 
-The loader could then call kfuncs, so your member info query could be
-a kfunc, and the programs it loads would resolve kfuncs the same way
-libbpf does.
-
-One concern with this may be that we are moving libbpf functionality
-into the kernel, which may not be desirable for reasons I haven't
-thought of. Not sure.
-
-Andrii, Alexei, wdyt? Any other ideas?
+-- 
+2.47.3
 
 
 
-> [...]
+
+Amazon Development Centre (South Africa) (Proprietary) Limited
+29 Gogosoa Street, Observatory, Cape Town, Western Cape, 7925, South Africa
+Registration Number: 2004 / 034463 / 07
+
