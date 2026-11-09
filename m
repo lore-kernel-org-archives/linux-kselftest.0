@@ -1,68 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794203941;
-	b=FcmTKgqKB+3evTGdCqgHO7AnmcwupTCd/A0hW8vIW3XJ2MKB8K5EdGgOssDs2KhBfdUg
-	 2ZAJe/xJqVq8W7C9GQTOOVoK+2fbmbzMl8eSUrKZ5TcmnWrQ7TuPQsptYxwc7oysnYl6W
-	 6nByZGLwLB9AxXWr+L17CO3HE6sm1wWWZ9KLDDDAgOnuNHxysrNq5oFsSfB+41HbiZRYP
-	 lonr9j7IEKWxCqZVbGpm8zdszN5CWaoc/ulbggy7zZO0vUreCMnJD+8MCOIXHul+u908m
-	 GX1Q8D6UJOWDzJNv0BlTdcKrdr3EM+8UXQvJaN/KvT/3xde0xkwFqMbHvul1fWpNXWQ==
+	t=1794204017;
+	b=02xR0/DhnWy8GB+g/8YIJ3xr4zhUDyNJW0HkP0oazo3VncpjGAZVuXciy4w1I8nAxl2+
+	 PyAWP8hVi8GJ8zsvrlgFG5y5d8OSbnemld7IGjlLU6fXtZnF2SEyFNM0nVcMTzUZmSl0/
+	 yCq+tPn62NTwNqKCipUoyk0ucNQGz3Be12BjCFcUb185EIDdbJKl8iSSm6wPAfqFcWoiR
+	 hK44dqMCTqTxI6alvHLfMGH3P0s5P9c5n0OMfk3f4GHJYqre1z4j3mY6l305WEmAyeKik
+	 2AuXPqeBGgCTHtA8erxH0uKaszaavw/89OpV5ZvKQCkcoJj0bLX4BRCTMA+uSt+9ewA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794203941;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=/E3ZtH8ojoi/vmsGrVMl6AMo0m24rPSDyRXvjqgo+0c=;
-	b=mHm2/eAFQ6tKBFgbrCdKdM9dWlCYgNOQMpVeRaPvSlj49m7qzt7BJFX8i8jXwhBxU6tv
-	 0rWJdNtHZSltmTlMInPxFg7gU6tF0BpNu3YKJkSBRME/IEg43zPBtV9pUHk8DHQN9Jfi2
-	 +UQWzMeAVXJgHSOfHIhvpJpMyO9DfbQnGn3KkMtcgpZ348XIucXaBD8iAkm0uRKOwImAi
-	 9NTvJUZW4g21nl4M6pcseh6ycsj7pcI9xeGhi6/Unm5B4uvdqR2cYR1/cwXczIruUEetX
-	 oqVez3yFVQOyNM2bbrRCZu2gMggmEPlpi9ibUCiOHyOdqxWRMoPHxz1fiiWBSyFTLYg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794204017;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=GrxJfi88WkqhPVzF/M0DQUHCgV9lItraqCHzofs7pXs=;
+	b=5jRD8ChKaYko5oqO0S9+1Ts7OpwrV6vMkQ6ioxqtdABFGJ3ujEKwueRr09VzaTWqxhSs
+	 MeOOZWskZcW3WOByy9ZDCyasIei08Xs0rDUQYJowQkuGq+SOUiVKyQ7tI/D0zKBNhBoch
+	 xSpLceWObXFEaxZizyk/FDPfgwnmyHeGSw6VR3XmDf9y+ks/PmRl1TTrbgjfjnnUNFB0f
+	 AmtztWxsmLhxb6eweiumxITVcr8LN2+GWPUiRgcBe6obgIyf+tCazNUDidUCIAB/Aq27z
+	 J+K/R3jtrkUGLt6R70+qACZEBfmySGrfpHInvEu0+iGnhdpypvvIpBszYukhYrblh9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=n8s+c+Xs;
-	arc=none smtp.remote-ip=192.198.163.19
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GBJL4Ska;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADB5606A31C;
-	Mon,  9 Nov 2026 05:59:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6ADB5606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2289606A32A;
+	Mon,  9 Nov 2026 06:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=n8s+c+Xs
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794203941; x=1825739941;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OGKuaFtpJu/00zUw78GQThfCA7h7SYaZtzIWG6Z/hag=;
-  b=n8s+c+XsSLhKKjFbsklhOU6U+BeJe+3SW+GghvcCYq47gh0iHgB4uXuH
-   18vd3diU8jINCdayagu5+oQDK2/nU0MkSCPL3T6ZNcOUjQ56CS1c0jDOP
-   MOnZsU6rXhY8GlDB0dwBbQ4mX6ElxoxK0CLtrIEw6VKxKuCtYGhylI717
-   Nx/7SLg9LSLWs9R23boFZcKRKBW9lV99/RRsctXYCg0R70CnU7aQHXXIx
-   +L9cxTpGAVXuSxHBi24raF6hGPgV4h0Wx/I13ek51QE6CXiBnxpJBP3A6
-   mE//q1CZ7zyKzvj2EYGusOJZyru7sbVY2MDHnsnUmttgAUYc74xOmWeoD
-   A==;
-X-CSE-ConnectionGUID: pQb27N7WQxG6A0I+q/IJkw==
-X-CSE-MsgGUID: ZjEghJfXThyIxTuQhwwqyQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11960"; a="3022706"
-X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
-   d="scan'208";a="3022706"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 21:59:00 -0800
-X-CSE-ConnectionGUID: tjo2rXZDQNSnB4+x8NjlaA==
-X-CSE-MsgGUID: wjgjw2klTIuEErLWbS1uLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,203,1787036400"; 
-   d="scan'208";a="7789063"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2026 21:58:53 -0800
-Message-ID: <d28422d6-7ac6-48ad-a28b-553ba724581b@linux.intel.com>
-Date: Mon, 9 Nov 2026 13:58:51 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GBJL4Ska
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997211F0089F;
+	Mon,  9 Nov 2026 06:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794204016;
+	bh=GrxJfi88WkqhPVzF/M0DQUHCgV9lItraqCHzofs7pXs=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=GBJL4Skaf9FMfW7kd2F2li4/fVbDjQviGF9354FIySX4IiXx/JDCMKO7aZfIt+ii0
+	 7RLlt+I7UMt0n/TVKL+UwNno+DMzjjvAgoxtfUBfbtkUMuqzaYJXQz7E6F56qyf3On
+	 ZhvW3LhVn4QlXXj7J8i98sT+1sCu3UoRqL6WOd59W4mDWZbyaaL5tyWPJzSbIC9ZLp
+	 /frkGKS4CeTAMkJ0PRelFwR0Zeqygu+GRfHQmcf5l0AIzTblMdpcH2O/QzzggL9nvA
+	 cQQdpjIKzLb+cIFiJIW/6OQ7R6KMfXhU4Dd7ShP3NI0ZrDLhBdCzlTzMhZCl811Wm/
+	 akMa2VmolCMCw==
+Subject: Re: [PATCH net-next v2 3/6] net: guard memory provider RX queue open
+ and close on unregister
+From: netdev-bot+sashiko@kernel.org
+To: almasrymina@google.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ daniel@iogearbox.net, razor@blackwall.org, dw@davidwei.uk,
+ sdf.kernel@gmail.com, bobbyeshleman@meta.com, dtatulea@nvidia.com
+Date: Mon, 09 Nov 2026 06:00:15 +0000
+Message-ID: <179420401516.994134.15789672166817166565@kernel.org>
+In-Reply-To: <20261108055809.2122934-4-almasrymina@google.com>
+References: <20261108055809.2122934-4-almasrymina@google.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,56 +65,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 03/20] KVM: selftests: Initialize the TDX VM
-To: Lisa Wang <wyihan@google.com>
-Cc: Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
- Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
- kvm@vger.kernel.org, linux-coco@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
- <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
-From: Binbin Wu <binbin.wu@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 11/6/2026 7:46 AM, Lisa Wang wrote:
-> From: Sagi Shahar <sagis@google.com>
-> 
-> Add tdx_init_vm() to handle the mandatory VM-level initialization
-> sequence required for Intel TDX.
-> 
-> For TDX, the VM's CPUID configuration must be "sealed" during
-> KVM_TDX_INIT_VM before any vCPUs are created. This is necessary because
-> the TDX module does not allow the host to create and initialize any
-> vCPUs before the VM's CPUID configuration is accepted and sealed into
-> the TDCS.
-> 
-> Additionally, to satisfy the strict requirements of the TDH.MNG.INIT
-> SEAMCALL, the helper masks the KVM-supported CPUID
-> (kvm_get_supported_cpuid()) against the "directly configurable" bits
-> reported by KVM_TDX_CAPABILITIES.
-> 
-> Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+Low priority / nit picks for your consideration:
+
+- [Low] The commit fixes two bugs that came in with the leased-queue
+  proxy in commit 5602ad61ebee ("net: Proxy netif_mp_{open,close}_rxq…
+
+--
+
+net: guard memory provider RX queue open and close on unregister
+
+This commit adds a reg_state check to __netif_mp_open_rxq() in
+net/core/netdev_rx_queue.c. The check stops a memory provider from being
+installed on a physical netdev that is being unregistered when the device
+is reached through a leased rxq. It also changes __netif_mp_close_rxq() to
+clear rxq->mp_params and return early whenever the device is past
+NETREG_REGISTERED, not only when mp_ops is already NULL.
+
+> When a memory provider RX queue is leased to a virtual netdev,
+> netif_mp_open_rxq() and netif_mp_close_rxq() redirect through
+> rxq->lease and lock the physical backing netdev directly rather than via
+> netdev_get_by_index_lock(). This raises two issues during netdev
+> unregistration:
+
+[ ... ]
+
+>    phys_rxq->mp_params remains populated until the virtual leasee's
+>    netif_rxq_cleanup_unlease() or socket teardown runs. At that point
+>    the physical netdev has already gone through dev_shutdown() and must
+>    not call netdev_rx_queue_reconfig(). When dev->reg_state >
+>    NETREG_REGISTERED, clear rxq->mp_params and return 0.
+>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+
+[Severity: Low]
+Should this have a Fixes: tag?
+
+The rxq->lease redirect in netif_mp_open_rxq() was added by the commit
+below. So was netif_rxq_cleanup_unlease(), which calls
+__netif_mp_close_rxq() on the physical device:
+
+Fixes: 5602ad61ebee ("net: Proxy netif_mp_{open,close}_rxq for leased queues")
+
+Before that commit, every caller reached __netif_mp_open_rxq() and
+__netif_mp_close_rxq() through netdev_get_by_index_lock(). That helper
+already rejects devices that are being unregistered.
+
+Could the commit message also say what goes wrong without the fix?
+
+On the open side, unregister_netdevice_many_notify() sets the physical
+device to NETREG_UNREGISTERING. It then runs dev_shutdown() and
+dev_memory_provider_uninstall() on it before NETDEV_UNREGISTER cascades
+into the virtual device's teardown. In that window, a bind-rx on the
+virtual device, which is still registered, could install a memory
+provider on the physical rxq after the uninstall has already run.
+
+On the close side, devmem's uninstall leaves phys_rxq->mp_params
+populated. The old early return only fired when mp_ops was NULL, so it
+did not trigger here. As a result,
+netif_rxq_cleanup_unlease()->__netif_mp_close_rxq() went on to call
+netdev_rx_queue_reconfig() on the shut-down device.
+
+Please state the visible result, for example a queue restart on a
+dismantled device, a WARN, or a provider left installed after shutdown.
+That would let stable maintainers judge which trees need this and how
+urgent it is.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261108055809.2122934-1-almasrymina%40google.com
