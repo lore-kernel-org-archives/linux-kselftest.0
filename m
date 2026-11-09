@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794187287;
-	b=DZTX74CXBHso9qZd9yhhMT4tSO/kD/1KVV+oZsmSBAx5eMMwAFkpTvvRzUHK5y+nvPvl
-	 UJD8UyU/vU272MtV584F67HeWF18FGe0iROXhaBLTkFp8kWltZcodpv/gK1WZBitn66T5
-	 28rmLQHjufcReG4gDHNUd2sfjH5Rr0f1jlcnG7KfwMKfnckgZK5V88EKfcGgyGEBfZsM2
-	 zDlMWTy1jZIFa0VrGc+ATAj0U58Aqn6FyfBMHftTwZpic540P+VBOR2xQfmFWsir0SRc6
-	 Lrs2xJWAX3NVixx0RGwcEb3/B49eIEPw3/LQgaEV2aBIDOZke9/RFlxeI79knGb1sLQ==
+	t=1794187289;
+	b=yJnLknCj+L1aupnO9tC9dDbIIJSeAPdftBXeafesOojba0Wj6TXXnaAk2liSJsUJQa1K
+	 OkH1gsuaUlVsq/iUERRf5LCux91ztUPuz/5DW55UgvzC5NTkTT1JAWxaYjjAArw77RBE3
+	 NFLle+mXRU15uogejG3wZlnhfLt5ZqX/noYA6+hComNo690jrwo+V5+b1MH90A+Tqnm7l
+	 cZER9nI8nLBKqGiTYhGrWXeah3gEfocLPYxxrpEyprtkWGbMArTBWQ8YY4vATtOekBSv9
+	 qpQGhR6hhcBjitOYdGTMkudBdaXn/EfFh7JBzgyhRddH6cVIRJTb9OxIPB/qp0w0ncg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794187287;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794187289;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=mKH9BxiVhD1hkWOxu0QRNvIl232YhI8uqiNY5R0UwSo=;
-	b=KA2J3j9hCTTdrCmKUN/y68Rcmc98cQez0GuNrZKoyheGa8f9xTRfTP1rErZWcpxgC6Xs
-	 Ocu9/9tUxsyllJ857QgJ9kQb0ulMd0YZ5fHukAIg8guzHOluUMM+8iRkLHzxkC4YBu3mV
-	 +b0XNsXiGF7XfA3Kr8qntjO+jZ1MYtBmYkzohIVTuzb7o0gV9PauwGWcs8W2hebPKAwwX
-	 LL1YCMF2V+WA11JNvj0Y7/Yr+waRFtmoEkWSDN5l19sxCL8/YYyFJWkWDuz7gHDmqaLY4
-	 6loH156bc/qwdMGgUh07/cT2QqGlhKvvwv9ALBJw4Myp7+BPtiQnJZxQsMk8ZHEatZw==
+	bh=E7RyVZdQRrFYW33Mv02BmWV0i6lT0Z4tqhtPA/W0mTY=;
+	b=jYw863juCLQmF9LVWh/1wItc2S+sCnp2rEChDrTcCLdMfihzVvgjOb30+yUfPq9OsaE2
+	 RbwB1gKKyt3NHrD6XMN/489cvaDyjm8H9zhOQOjjwoyrT0boo2t4viPW1rP249qxx8NWx
+	 kiicUGwepbgRZGRx6S0aEzYeH1pqAJcH+VE6Eh658xJv2UZxlOPkBF6+LtfARMTCpUFla
+	 o0jrbchGGCYVCERwHh90bDOUgibijeEslL+iOnUXKDw1NtQszSurfU4bYgkx2DgRv8sQi
+	 VLrVHXsBukI6oGzG9V2BGVkxPbpGYp4n9HnwCgiacj6yBn8WNOmlZrzDEZYiE6O0l9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=infradead.org;
 	spf=none smtp.mailfrom=desiato.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=hiBv5jBk;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=eRTdCHqg;
 	arc=none smtp.remote-ip=90.155.92.199
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FB3606EE8B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE1E606EE91;
 	Mon,  9 Nov 2026 01:21:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48FB3606EE8B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4DE1E606EE91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=hiBv5jBk
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=eRTdCHqg
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=mKH9BxiVhD1hkWOxu0QRNvIl232YhI8uqiNY5R0UwSo=; b=hiBv5jBkYSiZPhUbCSbYAV4UiX
-	HUw7iYbz4jTQZqq2mmZJB/qs6XJq24lQ4vJZ8KIi1zlm/YPI1sYsH7f1IcHL77g7ARIFuYulKhV9c
-	uAXC395GnZXdnZKz5fgjlDWXM0eNlupAsEX+YCa1lRAVfhJDIDbyD0T3wcsJ7in1tABH8ejB7Iczw
-	Jhab0aU50aIjniJzFhCwA9aAAxJ6oDAUt3kXCbxlRThaEPukHYw38qmyyd66ibIgqR08beDzTNuuf
-	nssZomSuZ/0ThtPMevXApE/vrGgzDbYIzs2h0qKo2x3mus4SJ5ODfap1zJuDR2PVmlaHnv+3hj5Di
-	A7JT6Ibw==;
+	bh=E7RyVZdQRrFYW33Mv02BmWV0i6lT0Z4tqhtPA/W0mTY=; b=eRTdCHqga3teHg35lgOR34b6cn
+	q5ONSuVeHNVKKRQhXyunsALN4W0snuo3P9WVT2d7Njg81U3m3z4gQXwrbGBsR9lv2Wf8dJpU7S83M
+	mS4itC92IvwcCfkkkL7fNswxRUZUXwYCmS5TPnc/VqyBmamjBnBTKFmZoaHNNQVdUDN4YMI3S+pep
+	mV1q+heYNq36ool1b3tGlQYF4Z2MKkTHnYtDnzZmJtcIbWycSi/Oq5y8mCLzq28umFgdLXjmZdtaX
+	d4FWYiWkFNy/jOjxliGlMuPCKiag2jMn1tEXHwGnH8sP7zJYqSBVodjBlP4DFFubP9x/c34WmO5IP
+	jISvsmkg==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xQE4Q-00000006AYD-28SP;
+	id 1xQE4Q-00000006AYF-29HJ;
 	Mon, 09 Nov 2026 01:21:14 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xQE4O-0000000EKUp-42LY;
-	Mon, 09 Nov 2026 01:21:12 +0000
+	id 1xQE4P-0000000EKV1-0MD2;
+	Mon, 09 Nov 2026 01:21:13 +0000
 From: David Woodhouse <dwmw2@infradead.org>
 To: kvm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -78,9 +78,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Dongli Zhang <dongli.zhang@oracle.com>,
 	joe.jin@oracle.com,
 	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v12 12/24] UAPI: x86: Move pvclock-abi to UAPI for x86 platforms
-Date: Sun,  8 Nov 2026 17:20:58 -0800
-Message-ID: <20261109012112.3415328-13-dwmw2@infradead.org>
+Subject: [PATCH v12 15/24] KVM: selftests: Add library helpers for clock and TSC-offset ioctls
+Date: Sun,  8 Nov 2026 17:21:01 -0800
+Message-ID: <20261109012112.3415328-16-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109012112.3415328-1-dwmw2@infradead.org>
 References: <20261109012112.3415328-1-dwmw2@infradead.org>
@@ -97,122 +97,85 @@ Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-From: Jack Allister <jalliste@amazon.com>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-A subsequent commit will provide a new KVM interface for performing a
-fixup/correction of the KVM clock against the reference TSC. The
-KVM_[GS]ET_CLOCK_GUEST API requires a pvclock_vcpu_time_info, as such
-the caller must know about this definition.
+Add wrappers for KVM_[GS]ET_CLOCK_GUEST, the KVM_VCPU_TSC_OFFSET device
+attribute and KVM_[GS]ET_CLOCK to the x86 library header, so that the
+KVM clock selftests don't each open-code the same ioctl invocations.
 
-Move the definition to the UAPI folder so that it is exported to
-usermode, change the type definitions to use the standard for UAPI
-exports, and add the Linux-syscall-note exception to the SPDX licence
-identifier as is conventional for exported headers.
-
-Define __KERNEL__ in scripts/xen-hypercalls.sh: the UAPI header now
-pulls in linux/types.h, and the script's raw $CPP invocation with
-$LINUXINCLUDE does not define it, which would trigger the "attempt to
-use kernel headers from user space" warning from the UAPI type
-headers.
-
-Signed-off-by: Jack Allister <jalliste@amazon.com>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Reviewed-by: Paul Durrant <paul@xen.org>
-Tested-by: Dongli Zhang <dongli.zhang@oracle.com>
 ---
- MAINTAINERS                                   |  4 +--
- arch/x86/include/{ => uapi}/asm/pvclock-abi.h | 27 ++++++++++---------
- scripts/xen-hypercalls.sh                     |  2 +-
- 3 files changed, 18 insertions(+), 15 deletions(-)
- rename arch/x86/include/{ => uapi}/asm/pvclock-abi.h (82%)
+ .../selftests/kvm/include/x86/processor.h     | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9fadc98d3c49..773f7c800f6a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14663,8 +14663,8 @@ S:	Supported
- T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
- F:	arch/um/include/asm/kvm_para.h
- F:	arch/x86/include/asm/kvm_para.h
--F:	arch/x86/include/asm/pvclock-abi.h
- F:	arch/x86/include/uapi/asm/kvm_para.h
-+F:	arch/x86/include/uapi/asm/pvclock-abi.h
- F:	arch/x86/kernel/kvm.c
- F:	arch/x86/kernel/kvmclock.c
- F:	include/asm-generic/kvm_para.h
-@@ -29780,8 +29780,8 @@ R:	Boris Ostrovsky <boris.ostrovsky@oracle.com>
- L:	xen-devel@lists.xenproject.org (moderated for non-subscribers)
- S:	Supported
- F:	arch/x86/configs/xen.config
--F:	arch/x86/include/asm/pvclock-abi.h
- F:	arch/x86/include/asm/xen/
-+F:	arch/x86/include/uapi/asm/pvclock-abi.h
- F:	arch/x86/platform/pvh/
- F:	arch/x86/xen/
+diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+index 5898a277a2e0..4062bdb32716 100644
+--- a/tools/testing/selftests/kvm/include/x86/processor.h
++++ b/tools/testing/selftests/kvm/include/x86/processor.h
+@@ -12,6 +12,7 @@
  
-diff --git a/arch/x86/include/asm/pvclock-abi.h b/arch/x86/include/uapi/asm/pvclock-abi.h
-similarity index 82%
-rename from arch/x86/include/asm/pvclock-abi.h
-rename to arch/x86/include/uapi/asm/pvclock-abi.h
-index b9fece5fc96d..6d70cf640362 100644
---- a/arch/x86/include/asm/pvclock-abi.h
-+++ b/arch/x86/include/uapi/asm/pvclock-abi.h
-@@ -1,6 +1,9 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- #ifndef _ASM_X86_PVCLOCK_ABI_H
- #define _ASM_X86_PVCLOCK_ABI_H
+ #include <asm/msr-index.h>
+ #include <asm/prctl.h>
++#include <asm/pvclock-abi.h>
+ 
+ #include <linux/kvm_para.h>
+ #include <linux/stringify.h>
+@@ -1029,6 +1030,55 @@ static inline void vcpu_xcrs_set(struct kvm_vcpu *vcpu, struct kvm_xcrs *xcrs)
+ 	vcpu_ioctl(vcpu, KVM_SET_XCRS, xcrs);
+ }
+ 
++static inline int __vcpu_get_clock_guest(struct kvm_vcpu *vcpu,
++					 struct pvclock_vcpu_time_info *pvti)
++{
++	return __vcpu_ioctl(vcpu, KVM_GET_CLOCK_GUEST, pvti);
++}
 +
-+#include <linux/types.h>
++static inline void vcpu_get_clock_guest(struct kvm_vcpu *vcpu,
++					struct pvclock_vcpu_time_info *pvti)
++{
++	vcpu_ioctl(vcpu, KVM_GET_CLOCK_GUEST, pvti);
++}
 +
- #ifndef __ASSEMBLER__
- 
- /*
-@@ -24,20 +27,20 @@
-  */
- 
- struct pvclock_vcpu_time_info {
--	u32   version;
--	u32   pad0;
--	u64   tsc_timestamp;
--	u64   system_time;
--	u32   tsc_to_system_mul;
--	s8    tsc_shift;
--	u8    flags;
--	u8    pad[2];
-+	__u32   version;
-+	__u32   pad0;
-+	__u64   tsc_timestamp;
-+	__u64   system_time;
-+	__u32   tsc_to_system_mul;
-+	__s8    tsc_shift;
-+	__u8    flags;
-+	__u8    pad[2];
- } __attribute__((__packed__)); /* 32 bytes */
- 
- struct pvclock_wall_clock {
--	u32   version;
--	u32   sec;
--	u32   nsec;
-+	__u32   version;
-+	__u32   sec;
-+	__u32   nsec;
- } __attribute__((__packed__));
- 
- #define PVCLOCK_TSC_STABLE_BIT	(1 << 0)
-diff --git a/scripts/xen-hypercalls.sh b/scripts/xen-hypercalls.sh
-index f18b00843df3..51a722198997 100755
---- a/scripts/xen-hypercalls.sh
-+++ b/scripts/xen-hypercalls.sh
-@@ -5,7 +5,7 @@ shift
- in="$@"
- 
- for i in $in; do
--	eval $CPP $LINUXINCLUDE -dD -imacros "$i" -x c /dev/null
-+	eval $CPP -D__KERNEL__ $LINUXINCLUDE -dD -imacros "$i" -x c /dev/null
- done | \
- awk '$1 == "#define" && $2 ~ /__HYPERVISOR_[a-z][a-z_0-9]*/ { v[$3] = $2 }
- 	END {   print "/* auto-generated by scripts/xen-hypercall.sh */"
++static inline int __vcpu_set_clock_guest(struct kvm_vcpu *vcpu,
++					 struct pvclock_vcpu_time_info *pvti)
++{
++	return __vcpu_ioctl(vcpu, KVM_SET_CLOCK_GUEST, pvti);
++}
++
++static inline void vcpu_set_clock_guest(struct kvm_vcpu *vcpu,
++					struct pvclock_vcpu_time_info *pvti)
++{
++	vcpu_ioctl(vcpu, KVM_SET_CLOCK_GUEST, pvti);
++}
++
++static inline u64 vcpu_get_tsc_offset(struct kvm_vcpu *vcpu)
++{
++	u64 offset;
++
++	vcpu_device_attr_get(vcpu, KVM_VCPU_TSC_CTRL, KVM_VCPU_TSC_OFFSET,
++			     &offset);
++	return offset;
++}
++
++static inline void vcpu_set_tsc_offset(struct kvm_vcpu *vcpu, u64 offset)
++{
++	vcpu_device_attr_set(vcpu, KVM_VCPU_TSC_CTRL, KVM_VCPU_TSC_OFFSET,
++			     &offset);
++}
++
++static inline void vm_get_clock(struct kvm_vm *vm, struct kvm_clock_data *data)
++{
++	vm_ioctl(vm, KVM_GET_CLOCK, data);
++}
++
++static inline void vm_set_clock(struct kvm_vm *vm, struct kvm_clock_data *data)
++{
++	vm_ioctl(vm, KVM_SET_CLOCK, data);
++}
++
+ const struct kvm_cpuid_entry2 *get_cpuid_entry(const struct kvm_cpuid2 *cpuid,
+ 					       u32 function, u32 index);
+ const struct kvm_cpuid2 *kvm_get_supported_cpuid(void);
 -- 
 2.43.0
 
