@@ -1,80 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794242678;
-	b=YKUBJBwL0qZL155bVtggSqKBrEowwIsgz1/nBBmmj3tGamwCJtzzm2FDbvAkCyXqWwS5
-	 Lh9acx/WLxD0YonTUdXMwnOyIFSb/ii5OPBYU85cD4RKEyo5y1cy0uFALFOS0u+NCuFmS
-	 tQxnza3wHeBr/Y4anEQkr2dhSJURzslBUt8/+rwfUKWgyLJka3cGU3amowRfKQsswdpuS
-	 pgRkodq7OvIosd+rP1lmsb5+C1GtFnqFQKtP4guayZGsHDVMQH32D1JeoFYAoUYNa/FGQ
-	 MVjzSIqD1hDpGjBr8iiwbgE8lxOhnmri8F6O7J41T+0eR3AqMfBLV3kVoNUMwvvs9GQ==
+	t=1794242679;
+	b=pCwlxB5sBEVwVcRMm0TA1eEkK5td89WWO+7h9TlNi5VhcNp/hpaIVEJZER8RWZYfb047
+	 wQ6XRPhcNAyUpbgnwGaf1o90W8xSS2JrmsCz0dzcu7yCa8K6UJl1blK9pQcJo9K/9UXaQ
+	 CdcUB2ztD4FpbiM3iJGu3jTBtvNDNcSdkytPC1Q+m2gfAhphnRBVg6m6MdYPS6M0nFQql
+	 uEiYmxqnzISYeh9v92lkMnuZ/5PuBfLn+EC15O+UusSofzajvpLkenV1U/VZHO/HBFWSf
+	 2DcseP0oA4jYQEYlUiLGyKNkh1lZ9Ax1TLILlmDqjIdZqRH01I09LSpM4jsWpLgMAOA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794242678;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=NHbkfNXtc131aUoF4N92IKmO0xkB3h3lCaJKrcrrfAw=;
-	b=YVHOoFTfKCkHG5S5DCAheZ2zUHW/aYwZHzlaytYiYjv5q6CArMhVAZmoufrKgnrM9yoZ
-	 tyn2Sy1D8bAqyzvqVxPGwUem75a2Qb7PBV8bWvWOb6mni9UFEKrgZkZnV5rxn3VnpBRpZ
-	 2t4HwhFlkSOkpp7kjJr7dORqGeonTOBoqT5RKWQ21st7Z1cSL8r04r7OZ4zE5tFg8jJmB
-	 nyrGZbMy7QOKcO7v+lbrL7b+iY/wsRsd7/zu55zShjFVbpgxbESpMkSk6u8tdfBu3/Nvp
-	 BAsqXilL4SALUjsGrZk7XEdqtqwWMqThq3QK4Yxon9nvLNONkHolvKSrTo9zv4XC0fg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794242679;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=8fRL+nTlnSV4hzSZwzm7zxIUFoAwvbUSW2rT3EZ4JHk=;
+	b=ugxIVvDFDmN+MiVvXfimY+WJCtWaC1f6Z5UmRnEBXQgzA9tEj/7MyosmmBJ6O6+wfOSp
+	 cRogFHf5SaLBvrLEX5R8VS0nu0P98vZvk1DqY4lCAZGac3+wNj4cqGAB9i76/DmaJ/ypf
+	 IiUPC+rZNKQFRk6xP6sd3MOcM3KQyAganSi2BgJs+VB6nr+nBw0QwXXR4i3t4lttGvDhy
+	 FQmNX0S+mW9tiaJlEWZioDhgI8H4Iqs0c4VR3XAHO3/Exdhm7yR8P5Yms9MjmuRh/3vbS
+	 EaUCkfLQfSZKE6xxuHn212V682Sc3sXVxIpq/2B68YeHE4hEUBd16kCfH26/uE3YLWQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wm2kBVCX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T8+WxjJL;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C43606EE83;
-	Mon,  9 Nov 2026 16:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C601606EE8E;
+	Mon,  9 Nov 2026 16:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wm2kBVCX
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T8+WxjJL
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794242678;
-	b=jQSiX6Az/WZIpQKVy5H2PlAQKW8+4/LjW3rfmKRYRNwv0+7OF0z0YHlSJSS3YAbYBwN2
-	 vPULfFDvxaTcp7NhEcK/LR56wxe9h5ZJOPTKUTIfQ5Dpk2trxnrQBvnAJdWF8FYpuRZmY
-	 cR1zyg09QdHUvu7io4h6BA0/VyD4ujY5T5Z4rKjTPXe9XSP8QPFV96dbxH1fTYmA3XHKL
-	 YsiuP8UDVhQ9cBwLFjX7JjGc4YO9Z3hqGyArv0Z4ytAZC6mMhypJiFlxkZeQ7nje2TPkc
-	 PZfpiSejxs/BoGJfQNI8JqZtAMpR+y0o7aHkP9SHeqsHznglhLxAcJEMJnBDp7/CVig==
+	t=1794242679;
+	b=Yq7uh387XZLxS3LvQZw7QqeyXaWZKuJcwCON6hVIVoBw8NLPVNomtnxNa2Vqp66ZKrgh
+	 nxnhJiMl9ScdaClrQePPYXS0B8sHcmxSoQQIyJaKI0QIXHVhFuKoyjVev6j805asi+FN4
+	 Cs/76o5/qiKlLEKDyMeOsfBXq0VQC+R/mgTRhwGn18s4YZjGTcTQlbHYNMWWImdKbpaHQ
+	 WX1l5k4igHxhIYHC+LZt4BqWqpKYrpEritlrcWctuKVrN+6ckLaJQPKfs3tADgEpE8K6z
+	 bahCeTlXGc0EcNQFPGApEElKHdSygmG5fnuM2Tr7ZNOuljclZsqFYX6yxs9fnO4qW9w==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794242678;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=NHbkfNXtc131aUoF4N92IKmO0xkB3h3lCaJKrcrrfAw=;
-	b=hfxY5qofmxlmrwNmtqrbC8n1LRmEI1ConwZkkzAUTZvBytofcz91MLwGnLGUpaQH65Gb
-	 7CdAx0sK3Jah5asuMGM10NHzQ/1cExuEZMWKTotXPLpecqqeptNtSBbh2ZuIpyMTTIYi9
-	 kFl3gyhdcRcQeO4UZ6/dULneNBMtd4rEthVq7heJg8yEMJ/CLvdsLDv1ULHdsMgy8daXF
-	 ZvTD71mxEl5XK8qd9s7KMxous+vwxJ5FrnZFAxpDKYQm1JD5xUE44Sk45mcdSsKyrZRCU
-	 BKAj2prBuccQZzr5JhkD5DZ5vTk+3BJ3vmi5rkN6mADXcrYUkbSARCWn4RXpE8UTEWA==
+	c=relaxed/relaxed; t=1794242679;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=8fRL+nTlnSV4hzSZwzm7zxIUFoAwvbUSW2rT3EZ4JHk=;
+	b=c8B8xEKRXuSYuxiaBgK3mpbOn2vwjWgNlibD6yr3tR1ZZ18iSAeSJW8WsZdEXQ49Tamc
+	 cewsbBJWQHRJvPbgEgIECb1Ewk5mnTvGW+gFP9nmK2yI4kVEYfMDHbpd1TcAeGR3fTcOw
+	 VMjWam7QVDQxLQ05Dl+DiBsbUB/y04WdkNYl4cPc5PsF573SDcQ2Z/Hi3Y6qeicJ+Gu93
+	 d0/4DracVknC0e+5TrOWVd4WapQqz8YVXXuiGT16MFm7RBQWAcmqVVkV3qQ6W+wTnn20p
+	 gpN8QPUlAOcckNVUnX6BxGtGZ2t7whgkL02KKDrRfQ1qLjeWQU4yiBXHMSXF+VCAHag==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7E2601F008A5;
+	by smtp.kernel.org (Postfix) with ESMTPS id B51201F008A7;
 	Mon,  9 Nov 2026 16:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794242678;
-	bh=NHbkfNXtc131aUoF4N92IKmO0xkB3h3lCaJKrcrrfAw=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=Wm2kBVCXZG9oDKyVz+rLA4DZj1qhV0ec2vIp8l4T22xGh8pfglJoivocsL5MS7roe
-	 Iog//E0tN3BCXfvsG1/Ve+1ybEWNA6bAQSKAyLs02Dx6ML9gwQOyZwRncoHZnWGXEO
-	 +0Yw1ZTvJZf5e5hwevGins7m78+PdVnqjjiUgWcbYENt8eUfWCfJrHKyUOe323sGPQ
-	 WbETGNDQV2XrOWvPA/p1T1QwjmJD/42KpLEKGAN0pDaXusFdQgn1h+FNL8552HrI9M
-	 mQvV8RuljQMiT8jeyCWsU+Pz9mNVU3QGN2dPyPgy9SZKMxxq/d5XMg9jDbvLoC2FJn
-	 XK8lQtowvtsPg==
+	s=k20260515; t=1794242679;
+	bh=8fRL+nTlnSV4hzSZwzm7zxIUFoAwvbUSW2rT3EZ4JHk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=T8+WxjJLzxulfz/5otnIZ1Sq4yVGQ6vC3nuQG7cbvCQHADwNchtLtEuirpKMjxbwC
+	 MhG2+JLfkXfaO2B5tQW1+Dpfmt2kt9l2roX3Tdf9aVkxm5i0qcr3K8yiTaIGIxTerI
+	 j6rtza0LnHAWMqxcZ8Rymnz7gcfYBMe45MHcxz/CZXoS3ayzkR7cySv6OsujvtrBYt
+	 EysbFouZKHhCelPLtwZ88+0IXBHuGvXUPQ1S7g0qD7k33m4QWUoSrjsJ/II1e07Qdp
+	 JGLtiJSrTK5UxFcXvGulSkGlINZu7XMK+lm6c5UvQ5OxDb56URIOtShuhIAhtyKXDN
+	 Y97QN8BT8uWHQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 14AA94853F;
+	by lkml.kernel.org (Postfix) with ESMTP id 4742948551;
 	Mon,  9 Nov 2026 16:44:37 +0000 (UTC)
 From: Yongjian Wang via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
-Subject: [PATCH net-next v3 0/4] tcp: fix tcp_base_mss on passive
- connections and test MTU probing
-Date: Tue, 10 Nov 2026 00:44:34 +0800
-Message-Id: <20261110-mtu-probing-series-v3-0-dedfab25d641@gmail.com>
+Date: Tue, 10 Nov 2026 00:44:37 +0800
+Subject: [PATCH net-next v3 3/4] selftests/net: packetdrill: add TCP black
+ hole detection test
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,12 +84,9 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHL48WoC/32Nyw7CIBBFf8WwFkPBvlz5H8YFlGk7xkIDlNQ0/
- Xf72HRhXN7MnHMm4sEheHI7TcRBRI/WLEOcT6RqpWmAol424YxnScIE7cJAe2cVmobuLJVFrkR
- ZawW6JgvYO6hx3KQPYiBQA2Mgz/3iB/WCKqzO9bdFH6z7bP2YbMS/VEwoo5IXrIScp1LKe9NJf
- F8q222ByI+K4qeCLwqRpjq7lqwSWh0V8zx/AZqEFmYTAQAA
-X-Change-ID: 20261103-mtu-probing-series-a87b39fdbedf
+Message-Id: <20261110-mtu-probing-series-v3-3-dedfab25d641@gmail.com>
+References: <20261110-mtu-probing-series-v3-0-dedfab25d641@gmail.com>
+In-Reply-To: <20261110-mtu-probing-series-v3-0-dedfab25d641@gmail.com>
 To: davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com, 
  shuah@kernel.org, kuniyu@google.com, horms@kernel.org, ncardwell@google.com, 
  kuba@kernel.org
@@ -98,65 +94,83 @@ Cc: netdev@vger.kernel.org, panweiping3@gmail.com,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Yongjian Wang <echoowall@gmail.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794242675; l=2247;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794242675; l=2277;
  i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
- bh=8Drvlb2AolCBjBW0hz5Yzs3wLctlMcWWUnLNb3Xmf30=;
- b=smYkDI3Wu6IkStp5vcQIpwLfu2m9tSlfMUzL2ltv/VNbH4MxnzC07U4KWY1FaKX/y1prmjHzE
- YWT/+UVtxdyCBqQIm+2z88kwb6iuW3nWQSTUawyYOLeyQz9qOAeVOwa
+ bh=DlEcv6f+Cg8yca5bPvzEty87MvxA44OfQo4Nhelyigg=;
+ b=b6IakWvTGhE9iFUrmoVJExBBuUp3WgBj6VBPI1QvZZxGs/n1mKHat+wB/r0KC3Cy8+Pg2TGyi
+ 2C6detkgoESASbiz3ieI2o7B9sN3LuK1dIqZZeEU821Qp8EEUNLwbsf
 X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
  pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
 X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
  auth_id=1323
 X-Original-From: Yongjian Wang <echoowall@gmail.com>
 Reply-To: echoowall@gmail.com
+Content-Transfer-Encoding: 7bit
 
-With tcp_mtu_probing=2, passive TCP connections can start at the full
-MSS because they sync MSS before initializing MTU probing. Patch 1
-moves initialization next to the existing MSS sync in the passive
-paths and in the active SYN-ACK path. Patch 2 adds a regression test.
+From: Yongjian Wang <echoowall@gmail.com>
 
-Patches 3 and 4 add coverage for black hole detection and the MTU
-search on active connections.
+Black hole detection (net.ipv4.tcp_mtu_probing=1) has no selftest
+coverage.
 
-On x86_64 KVM, the revised MTU search test passed in IPv4, IPv6 and
-IPv4-mapped IPv6 with patch 1 applied. Without patch 1, it failed in
-all three modes. The first TSO packet carried 2072 bytes of TCP
-payload, and the test expected 2048.
+Add a test where a full-sized segment keeps timing out without any ICMP
+feedback. Check that the MSS drops to tcp_base_mss once tcp_retries1 is
+exceeded, and that the smaller MSS is also used for new data after the
+retransmission is acknowledged.
 
+Set tcp_retries1 to 1 to keep the test short, and disable TLP so that
+every retransmission comes from the RTO timer, which is what
+tcp_write_timeout() counts.
+
+Signed-off-by: Yongjian Wang <echoowall@gmail.com>
 ---
-Changes in v3:
-- Document how the passive MSS issue was discovered (patch 1).
-- Let the SYN offer timestamps in the MTU search test so it also
-  covers the active-open change in patch 1 (Neal, patch 4).
-- Link to v2: https://lore.kernel.org/r/20261108-mtu-probing-series-v2-0-355d6490c3db@gmail.com
+ .../net/packetdrill/tcp_mtu_probing_blackhole.pkt  | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Changes in v2:
-- Move tcp_mtup_init() before the existing MSS sync in IPv4 and IPv6
-  passive opens and in the active SYN-ACK path. Remove the late
-  initialization from tcp_init_transfer() (Kuniyuki and Neal).
-- Keep the three packetdrill patches unchanged.
-- Link to v1: https://lore.kernel.org/netdev/20261103-mtu-probing-series-v1-0-a2809e725aaa@gmail.com/
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole.pkt b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole.pkt
+new file mode 100644
+index 000000000000..f10dbb36dd2d
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_blackhole.pkt
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test black hole detection with tcp_mtu_probing=1: when full-sized segments
++// keep timing out and no ICMP arrives, TCP falls back to tcp_base_mss.
++
++`./defaults.sh
++sysctl -q net.ipv4.tcp_mtu_probing=1
++sysctl -q net.ipv4.tcp_base_mss=1024
++sysctl -q net.ipv4.tcp_retries1=1
++sysctl -q net.ipv4.tcp_early_retrans=0`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 65535 <mss 1460,nop,nop,sackOK>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
++  +.1 < . 1:1(0) ack 1 win 65535
++   +0 accept(3, ..., ...) = 4
++
++   +0 write(4, ..., 1460) = 1460
++   +0 > P. 1:1461(1460) ack 1
++
++// The first retransmission keeps the full size.
++  +.3 > P. 1:1461(1460) ack 1
++
++// Once tcp_retries1 is exceeded the MSS drops to tcp_base_mss.
++  +.6 > . 1:1025(1024) ack 1
++  +.1 < . 1:1(0) ack 1025 win 65535
++   +0 > P. 1025:1461(436) ack 1
++  +.1 < . 1:1(0) ack 1461 win 65535
++
++// New data keeps using the smaller MSS.
++   +0 write(4, ..., 1460) = 1460
++   +0 > . 1461:2485(1024) ack 1
++   +0 > P. 2485:2921(436) ack 1
++  +.1 < . 1:1(0) ack 2921 win 65535
 
----
-Yongjian Wang (4):
-      tcp: initialize MTU probing before syncing MSS at connection setup
-      selftests/net: packetdrill: test tcp_base_mss on passive connections
-      selftests/net: packetdrill: add TCP black hole detection test
-      selftests/net: packetdrill: add TCP MTU probing test
-
- net/ipv4/tcp_input.c                               |  2 +-
- net/ipv4/tcp_ipv4.c                                |  1 +
- net/ipv6/tcp_ipv6.c                                |  1 +
- .../net/packetdrill/tcp_mtu_probing_blackhole.pkt  | 37 +++++++++++++++++++
- .../net/packetdrill/tcp_mtu_probing_passive.pkt    | 27 ++++++++++++++
- .../net/packetdrill/tcp_mtu_probing_search.pkt     | 42 ++++++++++++++++++++++
- 6 files changed, 109 insertions(+), 1 deletion(-)
----
-base-commit: fa5196392691051963726787944db872420dfa75
-change-id: 20261103-mtu-probing-series-a87b39fdbedf
-
-Best regards,
---  
-Yongjian Wang <echoowall@gmail.com>
+-- 
+Git-157)
 
 
