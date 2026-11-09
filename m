@@ -1,85 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794248302;
-	b=NnU/NPcb73oiBD3FvMylgqKS068tJfrGS9HHX7cFaGG4LljDUVujm1yuOYsIrfJ+TPhD
-	 UTkmkmENx1nKSeAd9ilcilrfiERSH9tEjJ2pItVkB0/fcKx5uIERUumHGC0o7OyaRtRej
-	 rFX3ibjLvFVkWRzLd/CUvSyZaDbgmBAbEeWY6+iC3iUrM36CiXacmJy3t05ElPhSJwZ0m
-	 rTGEj40KLzHXD3FvWERh1tjxAyAM6jDAPFM9mkEXa2wtwG48Vnoy5O+4bE+1LzOaeQSqp
-	 z7F1WnuLYpozFhDIv4j04POJo9FBNOBlRyx9M+XYjk4xQPkBs4gP0PSznOkMPTZyX5A==
+	t=1794248882;
+	b=Qm4eeo1QGnyF3FTksoRB9lgUJKYexepWfrDGVwm84nNXrH6sVikxJ/t2eFG/wEYsghyY
+	 X6fOp2jnLEYWfML9gkKRhz+SKluW9JGdQE/eD+nsslr+IiZk+ycTqx7cTR7McureGO0ZW
+	 nMSbMNwnkCWxAaarmzR99aveVDgagDFB6uVmn0v6BTTmgQiMJHgxVlhEvCsqPsAON2PIM
+	 0qMbLqWnFPMvgY0BTzt5YYXmsy+PEB3PI22PKT5OUDsP4UW4zM8HnhGe8fQEhzvP7yRua
+	 9nDgHVt/QoTOkudX7lPKFH/lhoC9OvVPyurSLcQ+n3Y4sndT7oVYytOf/DBsVpGQuiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794248302;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794248882;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=yTkdE7maNMK6imjnB7YH+dyPA4CS1X0Qhx1x4XkmNWo=;
-	b=WnuNZXbH9vJRpyhpfnWlK4iJis88qpCBtPC7PBULmqMWYnxdiiDt7kIj4I8uQW3MRNfM
-	 w35CiPDbORmc2wdwggH5Z0fWUDxwz2K/hRtC7ZZYRtzwzymn/SK37JkHkFZeMkfj9fDo3
-	 zxwBRPe7d2mTSYOx23uRZzIIaxZreCyo5zDvlFnhDUr09nW0Ae0zos+mL8R67DNvAa3dq
-	 DLEGOEkZkLp8Z/y0wnyHG9gHgmWZeEA2+mSRmFsEoZPsowkDSw39iAZHItE7vbd7l+k8r
-	 9N+g8eJg5PdJ1BOU1FkxhTSELzKZ2lQ1OlwEc0daadAG+RRRnaGC+W8l+oMcZ74Geow==
+	 Content-Transfer-Encoding;
+	bh=2Km2GSxbHj/FwJWinfGFQrNYNNiuY/aL3TRKRBAUre4=;
+	b=ilDCk5DmxSS7CAkSgs1OmeRhkvN5C9eeIBD//tGpbmW3uq9COfilVfCPMYCcrRFunNBq
+	 jsU3tTls7P2T0qgpFdqSYNKpkqsV/g77ECAb5j8mi6FimEbefG1XFj39dKKdxywzTD+2x
+	 iczCCK7yn+m4pQ109J3i7IjSxOIyA+uAtnFeAsRjzsq6O5f369lvK/YVX1jNFuLzkqqiO
+	 ZaAaT37w5L3iAhLdrxjF4dS/iS6Nd4p85Dy+yPcKoVLecjDHh5Q1SVv+IMHWg9fSBhtXj
+	 lre4l3a9qF2TRoIbnwb5QYpKI7Tnl6dfZS2KWVcetBLdxuWI38UP4Op/QUq03WpNTRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arm.com;
 	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=lwQiuZhG;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=LCpU0slD;
 	arc=none smtp.remote-ip=217.140.110.172
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AD4606A321;
-	Mon,  9 Nov 2026 18:18:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1AD4606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125D3606CC7E;
+	Mon,  9 Nov 2026 18:28:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 125D3606CC7E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=lwQiuZhG
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=LCpU0slD
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F39941476;
-	Mon,  9 Nov 2026 10:18:17 -0800 (PST)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F1553F85F;
-	Mon,  9 Nov 2026 10:18:16 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FAFD1516;
+	Mon,  9 Nov 2026 10:27:57 -0800 (PST)
+Received: from fedora (LJ9QCPV96V.austin.arm.com [10.118.150.23])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67B023F882;
+	Mon,  9 Nov 2026 10:28:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794248301; bh=+kKT4wUsq7CDHU0AL2TBwXRHS3FwQ1bCLDWSYWrdmXw=;
+	t=1794248880; bh=TezBVMNN6ys0eo1UDXqs5nEWcIgbDf5ZaksL5J9sVA4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lwQiuZhGl+8AQalV+u66cqF+1O6EKZ8cYVF8MVWAW+SJxHcQXxvFC1yaVtBa2xM3R
-	 TO37/fHYeLwKchPlvjEHL5pMHEIB8G4VDEJCvpij1shYcMM1dbUDavYCty6c7nVL6r
-	 LkHKuiRsWsyNfhHgib+kWMNe5ptePv/Bhd1M+IsE=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	maz@kernel.org,
-	oupton@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	b=LCpU0slDYy6FAmTne67yVMyUDseKI/TcfooVukx5cMHtl1ArCnMWZSfeh81vJYbRw
+	 sgikhecqphNp0sHI2P8Rz7m62kxFlqBPYq3fgAaVbjItBepgIINJf+NCh5Vg7sHCzo
+	 NVll1VkJIB0m4llujQkLtv8KQDKuY2/oym8U8lZk=
+From: Bill Roberts <bill.roberts@arm.com>
+To: "H. Peter Anvin" <hpa@zytor.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	rick.p.edgecombe@intel.com,
+	Shuah Khan <shuah@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	x86@kernel.org
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 11/15] KVM: arm64: Reserve dirty ring space for the HDBSS buffer
-Date: Mon,  9 Nov 2026 18:18:14 +0000
-Message-ID: <avIOZTvQF-1sxs2p@LeoBrasDK>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <d81243e3-d790-4ee8-9b28-36d35591ee77@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-12-zhengtian10@huawei.com> <auikG0clmr19sAjh@LeoBrasDK> <afcbf19b-bd13-4afc-ab56-8bc50c793e50@huawei.com> <au30DqzWIFny1tpr@LeoBrasDK> <d81243e3-d790-4ee8-9b28-36d35591ee77@huawei.com>
+	Bill Roberts <bill.roberts@arm.com>
+Subject: [PATCH v5 1/6] selftests/x86: fix Makefile dependencies
+Date: Mon,  9 Nov 2026 12:27:53 -0600
+Message-ID: <20261109182758.252223-2-bill.roberts@arm.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261109182758.252223-1-bill.roberts@arm.com>
+References: <20261109182758.252223-1-bill.roberts@arm.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,147 +70,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 09, 2026 at 12:00:52PM +0800, Tian Zheng wrote:
-> 
-> 
-> On 11/6/2026 11:36 PM, Leonardo Bras wrote:
-> > On Fri, Nov 06, 2026 at 06:36:04PM +0800, Tian Zheng wrote:
-> > > 
-> > > 
-> > > On 11/2/2026 10:54 PM, Leonardo Bras wrote:
-> > > > On Tue, Sep 29, 2026 at 06:36:51PM +0800, Tian Zheng wrote:
-> > > > > The dirty ring reserves room for CPU-side dirty buffers via
-> > > > > kvm_cpu_dirty_log_size(). Report the HDBSS buffer entry count
-> > > > > through it, so a full buffer flush always fits in the ring.
-> > > > > 
-> > > > > Pin the HDBSS buffer size to PAGE_SIZE when dirty-ring is enabled,
-> > > > > via kvm_arch_dirty_ring_size_updated(): a larger buffer only
-> > > > > shrinks the soft_limit and forces more frequent userspace drains.
-> > > > > 
-> > > > > Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
-> > > > > ---
-> > > > >    arch/arm64/kvm/arm.c | 8 ++++++++
-> > > > >    arch/arm64/kvm/mmu.c | 8 ++++++++
-> > > > >    2 files changed, 16 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > > > index 9d7bdece149a..5a7046acb62e 100644
-> > > > > --- a/arch/arm64/kvm/arm.c
-> > > > > +++ b/arch/arm64/kvm/arm.c
-> > > > > @@ -215,6 +215,14 @@ static int kvm_arm_default_max_vcpus(void)
-> > > > >    	return vgic_present ? kvm_vgic_get_max_vcpus() : KVM_MAX_VCPUS;
-> > > > >    }
-> > > > > 
-> > > > > +void kvm_arch_dirty_ring_size_updated(struct kvm *kvm)
-> > > > > +{
-> > > > > +	if (!system_supports_hdbss())
-> > > > > +		return;
-> > > > > +
-> > > > > +	kvm->arch.hdbss_buffer_size = KVM_ARM_HDBSS_DEFAULT_SIZE;
-> > > > > +}
-> > > > > +
-> > > > 
-> > > > On the same subject as a previous patch:
-> > > > I don't think this is the best approach, on top of adding a new weak
-> > > > function to take care.
-> > > > 
-> > > > Maybe during the dirty-ring allocation, on vcpu creation, we could take
-> > > > into account the requested dirty-ring size, and just allocate the HDBSS
-> > > > buffer taking that into account. That would make it simpler, don't you
-> > > > agree?
-> > > > 
-> > > > Thanks!
-> > > > Leo
-> > > 
-> > > Hi Leo,
-> > > 
-> > > The "set once" guard we're discussing comes from the patch that adds the
-> > > ioctl, and it isn't really needed. We discussed this earlier [1]: we can
-> > > just initialize hdbss_buffer_size to PAGE_SIZE at VM creation and let
-> > > the ring reservation use it directly. **That also means
-> > > kvm_arch_dirty_ring_size_updated() can be removed.** Thanks for your
-> > > suggestion.
-> > 
-> > :)
-> > 
-> > > 
-> > > As for why PAGE_SIZE is the right value in ring mode: the HDBSS buffer
-> > > is flushed on every VM exit, so a larger buffer doesn't reduce the flush
-> > > frequency. It only inflates the ring reservation (64 + size/
-> > > sizeof(u64)), which shrinks the soft_limit and forces more frequent
-> > > exits to userspace for the ring to be drained. Draining the dirty ring
-> > > from QEMU is more expensive than draining the HDBSS buffer from the
-> > > kernel, so the smallest buffer gives the best performance. In this mode,
-> > > a larger buffer provides no benefit to users.
-> > 
-> > Humm, if properly dimensioned larger buffers would be benefitial for
-> > memory-intensive workloads, unless they are guest_exiting for other
-> > reasons in the meantime.
-> > 
-> 
-> Agreed, and the workload I tested is on the "unless" side. The guest
-> exits constantly for other reasons, so the larger buffer never got a
-> chance to pay off, and only cost ring capacity.
-> 
-> > > 
-> > > In my tests, I also saw performance degrade when more space is reserved.
-> > > 
-> > 
-> > Humm, what kind of workloads did you test?
-> > Did you have the chance to monitor what were the reasons for VM exiting?
-> > 
-> 
-> For the workload question, it's a Redis server in the guest under redis-
-> benchmark (SET-only, 2KB values, 1M keys, 100M requests). The traffic is
-> network-driven, so the guest exits constantly to service requests. The
-> HDBSS buffer only accumulates entries between two exits and is flushed
-> on every exit, so it rarely fills regardless of size. A larger buffer
-> only inflated the ring reservation, which shrinks the soft_limit and
-> makes the ring-full exit and userspace drain fire more often.
-> 
-> > I am not saying this is mandatory for the HDBSS implementation, but the
-> > whole idea of letting the user choose their own HDBSS buffer size is
-> > because different workloads may benefit from different buffer sizes: if a
-> > VM writes a lot to new memory, and exits very little for other reasons,
-> > then a larger buffer will cause the VM to guest_exit much less often.
-> > 
-> > Does that make sense?
-> > 
-> > Thanks!
-> > Leo
-> 
-> It does make sense. That's exactly the workload where a larger buffer
-> pays off, and the next version no longer gets in its way. The two ioctls
-> are no longer mutually exclusive.
-> 
-> The only coupling left is the reservation. hdbss_buffer_size starts at
-> SZ_4K at VM creation, so a ring enabled right away reserves for the
-> default buffer (64 + 512 entries), and the minimum ring size accepted is
-> unchanged from v5. KVM_CAP_ARM_HDBSS_BUFFER_SIZE is the gate. When the
-> ring is already enabled, a size is accepted only if its reservation
-> still fits in the ring, otherwise -EINVAL. In the other order, ring-
-> enable validation rejects a ring too small for the configured size.
+The amx_64, avx_64, and apx_64 tests compile xstate.c as an
+additional source file. However, their Makefile rules add xstate.c
+directly to EXTRA_FILES without registering it as a prerequisite.
 
-I don't think this is needed. If using dirtyring, we don't need to allow 
-user to set hdbss size: HDBSS size should be sized according to the 
-dirty-ring dimensions, that are set by userspace before the first vcpu is 
-created.
+As a result, modifying xstate.c does not trigger a rebuild of the
+affected test binaries, potentially leaving stale test executables.
 
+Use the existing extra-files macro to register xstate.c as both
+an additional compilation input and a build dependency.
 
-> So SZ_4K is just the conservative default for guests that exit often.
-> Anything larger, within what the ring can reserve, is up to the user.
-> 
-> Does this work for you?
+Signed-off-by: Bill Roberts <bill.roberts@arm.com>
+---
+ tools/testing/selftests/x86/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I still think we should do PAGE_SIZE for dirty-bitmap. Dirty ring should do 
-based on the dirty-ring size, and maybe review the use of reserved 
-entries, or it's accounting.
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 7565d2cf6a3c..407f52ac2628 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -125,6 +125,9 @@ $(eval $(call extra-files,test_syscall_vdso_32,thunks_32.S))
+ $(eval $(call extra-files,fsgsbase_restore_64,clang_helpers_64.S))
+ $(eval $(call extra-files,fsgsbase_restore_32,clang_helpers_32.S))
+ $(eval $(call extra-files,sysret_rip_64,clang_helpers_64.S))
++$(eval $(call extra-files,amx_64,xstate.c))
++$(eval $(call extra-files,avx_64,xstate.c))
++$(eval $(call extra-files,apx_64,xstate.c))
+ 
+ # check_initial_reg_state is special: it needs a custom entry, and it
+ # needs to be static so that its interpreter doesn't destroy its initial
+@@ -136,8 +139,5 @@ $(OUTPUT)/nx_stack_32: CFLAGS += -Wl,-z,noexecstack
+ $(OUTPUT)/nx_stack_64: CFLAGS += -Wl,-z,noexecstack
+ 
+ $(OUTPUT)/avx_64: CFLAGS += -mno-avx -mno-avx512f
+-$(OUTPUT)/amx_64: EXTRA_FILES += xstate.c
+-$(OUTPUT)/avx_64: EXTRA_FILES += xstate.c
+-$(OUTPUT)/apx_64: EXTRA_FILES += xstate.c
+ 
+ $(OUTPUT)/sigframe_fpu_portability_64: CFLAGS += -mno-avx -mno-avx512f
+-- 
+2.55.0
 
-What do you think?
-
-Thanks!
-Leo
