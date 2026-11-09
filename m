@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794248882;
-	b=uUILEdwssl7vkbHDY3jVb9WDwpI8oL3miVdTvycKFsBLmnK3FkIsLF5b5ot9U9ykXKDf
-	 irYyeBbPKpiDUnMDxhqJYgU2+Mcjq/fjBF4bGxLAVK41BhG5xcl8o80QP/62bOh3tGuvG
-	 zX4TlygH1ZL4dHwO4JWN2OQ+1sbyEJ9m3tbpgxdYAoupCk7ipzOaVEV3ypm24Rc0Kb+p5
-	 WMuV7wjRq6E0ge3neq6Z82OFeVfOJcolTFtDONyEs8+/5IvRWaCpTxLAd7oP6Fd7RKMCY
-	 iTzhag2zgkdCR12Py9VenGseZPBl2huBtxke83yG+WihqBp1UtI5aUDCiNnnvyyYJfg==
+	t=1794248883;
+	b=uiLIz/MHLTOlMsmlgCym+FHaclonyiU5AE2ZoygUBDP9he6eId+AzI4TSP+30jH3qtHY
+	 teXl5oEHqxqgS4MTztmCmEPrftdRWFxyl0IpUu8sRXlQUA0PhIQqPmlBn7EDQFb5sIG+W
+	 9v0l/dZHIOeQg+6UHD+Amnsa6Lbwt8JkMV0U121CiDksAEdErB7LwbktUKDTrgRme6mRf
+	 CLL6kBA1aqfXp0//WK9HLngreD1FBcEzUD6oacCmkJH5n15J6c/B3FcCEfrWeOtNPaC5Q
+	 Y0QKBmyYRtldrC20pRZjwN9ha6Ni/cX+ZrxYbbE/A5PaESJVh8OpG47UiV+oYVxNilQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794248882;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794248883;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=tBVcLDTDQdLuRrkj3YaQGxFUQfaBfSmy+arSLpiA7uo=;
-	b=ag1DxXTiEzFLSJBgS57pLuGu0Eq61POzbAFhSxrOJCsusTUvViPLZVxMFmZG/hkiS0mQ
-	 5lZYvICa/xgt7v/vhftPm2xu4Ok8INwff9J50xZY6PsonA4D1SSX+CZtdmF/5k4tDS8xw
-	 TtxCBQ7jMeHpHcHI+L4TNc17Ut7AXhIiV7VnoxrHe7XhSHA23fCkFKJmzjT8jR4mcvOKh
-	 z+1pcGODXgpNy9CUIw/0S/7qOiTAdmk7mRbD57ZoE6TlUYHZml+r/9hwM+e03+E8cw63T
-	 GVnasgl+7hcBRd9rOANUX0xNnhJZUbvD/OI1FRVQB65hkgnvClBdn9zQdL5r/dDelBQ==
+	bh=tTolH0o7QRCBVU2804gfsGiaRlD38BjNVXmMOT4iXgQ=;
+	b=N9qD4lt1ymXwukYCAZ9FVga2AgH+IQBQaV1lclcVx65CH3EZHU5eIhv/HzvFSA33zQ+K
+	 THpWUM9eF9spzvUOqvi8BRaBftasLZMzIlMOKAXWH1MdZB6BmzdOgdewAds3uwf0kFg1J
+	 0XszBRqW1vrWFpqUqj1RXketmnWDpj3k42uZlPc3f1Bk6uPQi5mDHKIoiOXjA4GxSe9D1
+	 U6WvHCdhMHNMdD9Ecd2QSWPVaO3vxZxdWNt4T5Fnxnqws5gS2kLwG3w80E620+f4in7JH
+	 En3N0BRaQDhEewc4TexWe9KFrD5zfk5vkeqhMggw3DS6CPUWi+ITAY1SezhnlKuSMHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arm.com;
 	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MrmthumD;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b="et+/0fhC";
 	arc=none smtp.remote-ip=217.140.110.172
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3B8606A31C;
-	Mon,  9 Nov 2026 18:28:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E3B8606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 501FC606E110;
+	Mon,  9 Nov 2026 18:28:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 501FC606E110
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MrmthumD
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=et+/0fhC
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 281661BCB;
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6093C1BD0;
 	Mon,  9 Nov 2026 10:27:58 -0800 (PST)
 Received: from fedora (LJ9QCPV96V.austin.arm.com [10.118.150.23])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 115D73F85F;
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46A143F882;
 	Mon,  9 Nov 2026 10:28:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794248881; bh=lYo1Cd4405j4FxsBfBXZ4VfAkXOBhek+n65bObADoV4=;
+	t=1794248881; bh=35IbfdKltgH8SiL/vYtmwWbu9GJaRFKqy/syCjR48JM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MrmthumDbz8H2s29YVtokXEoCRNz6+HHM0q8Nph19XifQQDa6f7Pr7dyXz3E4gErs
-	 Vcgno8N4N88LO9XQURcc5Npj0FM1FNxvBfCwKgKPbFcCXhKephZuBEFUBb3v4b7rbR
-	 fT0mb798gAfVKPdZGkdXFHM33CUodIXX4BAxanOs=
+	b=et+/0fhCsJpdG7vxv75dFZ6synhrxOZSYY/yF1jJ/DVFfVc2RUfR44sTcsWcgoPpK
+	 IzPJpdp8DLkDJQYyYusVUGbLvArUYC98BkVlKqxXQZqMl4GS8uL6pY+H2PyfM5+RtO
+	 yxCQf7EOug254IBnFREGknlwOboScTs944RJvt7A=
 From: Bill Roberts <bill.roberts@arm.com>
 To: "H. Peter Anvin" <hpa@zytor.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -55,9 +55,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Bill Roberts <bill.roberts@arm.com>
-Subject: [PATCH v5 4/6] x86/shstk: support via prctl
-Date: Mon,  9 Nov 2026 12:27:56 -0600
-Message-ID: <20261109182758.252223-5-bill.roberts@arm.com>
+Subject: [PATCH v5 5/6] selftests/x86: support header files in extra-files
+Date: Mon,  9 Nov 2026 12:27:57 -0600
+Message-ID: <20261109182758.252223-6-bill.roberts@arm.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109182758.252223-1-bill.roberts@arm.com>
 References: <20261109182758.252223-1-bill.roberts@arm.com>
@@ -72,141 +72,36 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On x86, userspace shadow stack state is managed through the
-architecture-specific arch_prctl() interface. Other architectures,
-including arm64 and RISC-V, use the generic shadow stack prctl()
-interface instead.
+The extra-files Makefile macro uses its file list both as
+additional compiler inputs and as target prerequisites.
 
-This difference requires userspace runtimes, toolchains, and libc
-implementations to support architecture-specific interfaces for
-managing shadow stack state. It also complicates efforts to provide
-consistent LSM mediation of control-flow integrity state changes.
+This prevents header files from being included in the list,
+since they would also be passed to the compiler as independent
+compilation inputs.
 
-Implement the generic PR_SET_SHADOW_STACK_STATUS,
-PR_GET_SHADOW_STACK_STATUS, and PR_LOCK_SHADOW_STACK_STATUS
-operations on x86 using the existing shadow stack helpers.
-Retain the arch_prctl() interface for compatibility with
-existing userspace.
-
-Unlike arch_prctl(), which enables or disables individual features,
-PR_SET_SHADOW_STACK_STATUS specifies the desired state of the
-supported feature set. Translate this state into the corresponding
-shadow stack and WRSS operations, changing only features whose
-state differs from the requested state.
-
-Avoid unnecessary operations because the underlying shadow stack
-helpers check locked bits before checking whether the requested
-feature state is already satisfied. If enabling or disabling WRSS
-fails after enabling shadow stack, restore the original shadow
-stack state.
-
-Disabling shadow stack also disables WRSS, so do not disable WRSS
-separately when clearing the entire feature set. This avoids
-allowing a locked WRSS feature to prevent shadow stack disablement.
-
-Reject unsupported feature combinations and use the existing
-shadow stack helpers to enforce feature locking.
+Exclude .h files from EXTRA_FILES while retaining them as
+target prerequisites. This allows tests to track header
+dependencies and rebuild when those headers change, without
+attempting to compile them independently.
 
 Signed-off-by: Bill Roberts <bill.roberts@arm.com>
 ---
- arch/x86/kernel/shstk.c | 80 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ tools/testing/selftests/x86/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index eb690ba90180..6dfe310634b0 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -18,6 +18,7 @@
- #include <linux/sizes.h>
- #include <linux/user.h>
- #include <linux/syscalls.h>
-+#include <linux/prctl.h>
- #include <asm/msr.h>
- #include <asm/fpu/xstate.h>
- #include <asm/fpu/types.h>
-@@ -630,3 +631,82 @@ bool shstk_is_enabled(void)
- {
- 	return features_enabled(ARCH_SHSTK_SHSTK);
- }
-+
-+/* Handles the generic prctl interface for PR_SET_SHADOW_STACK_STATUS and its feature bits */
-+int arch_set_shadow_stack_status(struct task_struct *t, unsigned long status)
-+{
-+	int rc;
-+	bool shstk_was_enabled = features_enabled(ARCH_SHSTK_SHSTK);
-+
-+	/*
-+	 * Enable/disable the full feature set and preserve the original state for rollback.
-+	 * Only act on changed features, since shstk_prctl() checks locked bits before checking
-+	 * feature status.
-+	 */
-+	switch (status) {
-+	case 0:
-+		/*
-+		 * Do not explicitly disable WRSS. Disabling shadow stack also
-+		 * disables WRSS, and a locked WRSS must not prevent this.
-+		 */
-+		return shstk_was_enabled ?
-+			shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK) : 0;
-+
-+	case PR_SHADOW_STACK_ENABLE:
-+		if (!shstk_was_enabled) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
-+			if (rc)
-+				return rc;
-+		}
-+
-+		if (features_enabled(ARCH_SHSTK_WRSS)) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_WRSS);
-+			if (rc && !shstk_was_enabled)
-+				shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-+			return rc;
-+		}
-+
-+		return 0;
-+
-+	case PR_SHADOW_STACK_ENABLE|PR_SHADOW_STACK_WRITE:
-+		if (!shstk_was_enabled) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
-+			if (rc)
-+				return rc;
-+		}
-+
-+		if (!features_enabled(ARCH_SHSTK_WRSS)) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS);
-+			if (rc && !shstk_was_enabled)
-+				shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-+
-+			return rc;
-+		}
-+
-+		return 0;
-+
-+	/*
-+	 * Unknown bit mapping, unsupported PR_SHADOW_STACK_PUSH or *only*
-+	 * PR_SHADOW_STACK_WRITE.
-+	 */
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+/* Handles the generic prctl interface for PR_LOCK_SHADOW_STACK_STATUS and its feature bits */
-+int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long status)
-+{
-+	return shstk_prctl(t, ARCH_SHSTK_LOCK, status);
-+}
-+
-+/*
-+ * We assume the prctl() feature bits line up with the arch_prctl() specific ones. If not,
-+ * the flags returned via arch_get_shadow_stack_status will be mapped wrong.
-+ */
-+static_assert(PR_SHADOW_STACK_ENABLE == ARCH_SHSTK_SHSTK);
-+static_assert(PR_SHADOW_STACK_WRITE  == ARCH_SHSTK_WRSS);
-+int arch_get_shadow_stack_status(struct task_struct *t, unsigned long __user *status)
-+{
-+	return shstk_prctl(t, ARCH_SHSTK_STATUS, (unsigned long)status);
-+}
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 407f52ac2628..effbfe9b269f 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -115,7 +115,7 @@ endif
+ # the dependencies ("header3.h"), because clang, unlike gcc, will not accept
+ # header files as an input to the compiler invocation.
+ define extra-files
+-$(OUTPUT)/$(1): EXTRA_FILES := $(2)
++$(OUTPUT)/$(1): EXTRA_FILES := $(filter-out %.h,$(2))
+ $(OUTPUT)/$(1): $(2)
+ endef
+ 
 -- 
 2.55.0
 
