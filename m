@@ -1,91 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794309399;
-	b=0hbmrcpo8mycBaS7KHK3sVsTyoKbTRXv1k1x9eGdaAASWcwnB5Ss5ZfrKxowYRlzmcMU
-	 5yxZzIG4YDD/hKcjH6Mar8z/EHQ4gNdejxVtL4yMsGM0vhdVwq34qa5nbfFyo1OM0CZpR
-	 CcdukmLUz+iGnSSPDjAJ1xGs/YQs3fi+mUemy+SQI94ahct4EBoqEkk1nOK8WaA8JVcnY
-	 Yw9Y59JquNeTaZUqgP+N0br/C1nIV6GiG9QNjOxzRJ5eLfVxMKCKWLPq01V2pl1thdPmg
-	 qqoZTm0bniuuZoebtVx09oC69H6Oo6QwmWUAIWKjETZxgM9Cc4xmYEXUK0GBtqp+BSg==
+	t=1794309746;
+	b=EFQwO52dboUpHWbjaBvG0tXy+jA/blLBmLtzbg7r/r0WIW3gU0JxADFnHMZkJYsoJwxj
+	 S9N1szPHyyvBD4Ui1F353XRDbHPNNXswV8Yp/G2NO/UVDW9XtVR/JbxY/qaGrf7RifvYA
+	 gjtFqo8u87ibucwqIpQwdfuMZDHmh0BUw3oxnUixUFhTjX6kBojoKoLpK6EjPTNZc+t2N
+	 cOhzfxDwkXdClADACQAukRn940RLd2wFoou2NcvRarnawEv6JQe4nljVj0jqmlFxnQuF1
+	 bEfY2ta6yBxNYFITJandFmoNeSP6OpGRVJIrCJwFyMLTRF0BgW+L7NnAm8nEYZFxvSA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794309399;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-TM-AS-GCONF:X-Proofpoint-Spam-Info:
-	 X-Authority-Analysis:X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=1ebK31odweGtQWhb8awqQiL/qswy9J94/emBFfjDc6k=;
-	b=w8upfT42BGTdwgjtUnXCCKzEdSGExe8w9MCnVM8+VoNrW8l/d8w7lo3KTfT2CQ6/BEGp
-	 zQ4MfTWocRVUBe8y8J/CAr8OCegLkAt8+ehXxq5foWw0cQYE64KAks4IcgdUGhtJv/Q1z
-	 +Eze4HWhmpLi2MlfYb+qt72HDThvQLgS3554w6xpigNQ6BxjW0oQxTygv89mf2l8EoD3z
-	 UibMwtdks8QO+GZx8EmZ6SMv6QL2Dx9tWcK/yOSjKxW1PffKct0jMacCjeERUK7Vy03Un
-	 z9dCpn8mZrV2qDjCcs8GZtEHGvgjLOTa3MsIsF+nNfwj087h0fdzlvIX5wFfzFjPigw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794309746;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=gr0Loj1l7QJmya8XzBVn5nKxenToThw/bSNGb0oeKBE=;
+	b=vakhO0xy/w/PhfckgUgV6h2r5/XCnX/OgzVVIxkhdwqS3WQ2oacQA1zoreprQI7xVFLW
+	 d5t1SQuP/UwnYuebmM2yASwfPjvezi+MJWl4TXNxHm75wCHIxebCu/+IEdV9PO1Eg8Gpn
+	 L1Bf/S3RlcebdZ389NvR2o0lDTeXXGpITsiPyDG+smSzGXOEB2W50Pqvdjyr8gfFEVP8t
+	 2yzDF1bxgOtsAVEVrIN+iKyFNd77XjzNqAX4F/X5jGgw07HwzBMEy4NyI8XKbxBDTJsZp
+	 A9ZfynkkVH2U1a+1316iYE6UG5+uqqN2ciu9AhbY4sUdEDE8Gv2Q9Huvp1lvKaeK0RA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=k8v7v8EC;
-	arc=none smtp.remote-ip=148.163.158.5
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UBKJ7sW2;
+	arc=none smtp.remote-ip=95.215.58.174
+Received: from mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F186F60A2615;
-	Tue, 10 Nov 2026 11:16:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F186F60A2615
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34767606A325
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 11:22:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34767606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=k8v7v8EC
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AABEKon2179797;
-	Tue, 10 Nov 2026 11:16:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=1ebK31odweGtQWhb8
-	awqQiL/qswy9J94/emBFfjDc6k=; b=k8v7v8ECyKcsMX7tom4xS7E/e3m1Hdrj1
-	K+c+iHukJ82bmy/gney5sxtlJKAVPMrk1lllcaNSXsFyNf5nF+KtV7aLGVMbAtes
-	sdB2uXVQs6DUjQvscWRbg1JIKTgz9VJ8ztxw1jlBojgBBkIIdAm56d45pXglMiNj
-	0fu86qF9qMhIlwNiPm9LTr9u1qN3JrGfnzDbzslJ0o6Hm1wBa9N11M/4J0QcdgUa
-	NEePVRWSNr1Aftoh6SRdU+iy993ZFtrZrpgikbLmhQLjxqqPFO+hY2KFUNKolkb1
-	VB92CxdvykVQ+oTAr/4vtSwP+PcIGm9AIhGnbUl9e5ihAhgkmT4Yg==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4hsumuuumu-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 10 Nov 2026 11:16:37 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AA7o2JN1505967;
-	Tue, 10 Nov 2026 11:16:37 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4hth0y5yba-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Nov 2026 11:16:37 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AABGYbr32637586
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Nov 2026 11:16:35 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B7EC25805F;
-	Tue, 10 Nov 2026 11:16:34 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 300125805A;
-	Tue, 10 Nov 2026 11:16:34 +0000 (GMT)
-Received: from MacBookPro.localdomain (unknown [9.61.241.43])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 10 Nov 2026 11:16:34 +0000 (GMT)
-From: "Aaron M. Brown" <aaronmbr@linux.ibm.com>
-To: kvm@vger.kernel.org
-Cc: Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nitya Khamar <nkhamar@linux.ibm.com>
-Subject: [PATCH 6/6] KVM: s390: selftests: Add clock comparator interrupt test
-Date: Tue, 10 Nov 2026 06:16:19 -0500
-Message-ID: <20261110111619.61760-7-aaronmbr@linux.ibm.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261110111619.61760-1-aaronmbr@linux.ibm.com>
-References: <20261110111619.61760-1-aaronmbr@linux.ibm.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UBKJ7sW2
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=F+1UAVXb+agKFYnFE0eZcwVLRxkbjSKhuGkJWx+TCO8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794309741; v=1; x=1794914541;
+ b=UBKJ7sW2M9yPqhVJlOC9FoA5d2I9puBmA6wSVHs3LB2Dj/PxaBSWSiTY8FOpmZfmK9/GoGk7
+ Sy9qZVIsesLraUNgzP4QaQIMvQxa93kxm/ItOe0TGQFNVDnvhw0j6M6/JCUVBKIvKrJxAAlU4kv
+ QAu5KDcVguWt0Xj8hHJNg7+4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id d3b4e8450789c000;
+	Tue, 10 Nov 2026 11:22:21 +0000
+X-Mizu-Trace-ID: d3b4e8450789c000
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 10 Nov 2026 19:22:06 +0800
+From: "Xu Xin (vivo)" <xu.xin@linux.dev>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: akpm@linux-foundation.org, chengming.zhou@linux.dev, corbet@lwn.net,
+	david@kernel.org, link@vivo.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, odys.yuan@gmail.com, rppt@kernel.org,
+	surenb@google.com, tujinjiang@huawei.com, vbabka@kernel.org,
+	xiao.wang@vivo.com
+Subject: Re: [PATCH 2/4] ksm: skip rmap_item allocation for non-zero pages
+ under only_merge_zero_pages
+Message-ID: <avL+Xj5/Md58Gc98@dgvxl46587.localhost.localdomain>
+References: <20261110074312.219847-1-xu.xin@linux.dev>
+ <20261110074451.220524-1-xu.xin@linux.dev>
+ <20261110074451.220524-2-xu.xin@linux.dev>
+ <avLrHrnpP3tuXXPZ@gremlin>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -95,147 +71,236 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEwMDA0NCBTYWx0ZWRfX0pg61968tdca
- RnV0WXQE13g0o4w/fg5KzxuB5b1mmSPPAzfxtQ70Yt7HEPAInGiW4DOimn0M0+azCDDt/EYX+9S
- AhUpVKSeadPDrUS6haqRo4qOaVthuDI=
-X-Authority-Analysis: v=2.4 cv=GISdgeNK c=1 sm=1 tr=0 ts=6af2fd15 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=-XNLLfuuKHVqFyqJWFcA:9
-X-Proofpoint-GUID: YU2EyEg2_2aVPstZxgLXh6EK8HNFnhz9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEwMDA0NCBTYWx0ZWRfX3MyrlcV7FXZR
- 8t09FAzsxLY5mjI8ZaDMt1NHcTh1TBqRzweqMHNc8yN9A7OymtOoti89VzZtx7Y2Z2H2NQvtV/I
- XbnzWGxrRP0vSap4h+OWgAHrNUBwShtySvwC4LFTqYjuRSBuxAetVcWtBfe2QgwfXKMpWC2U4JG
- wOOHDYFzueegSISvVqWlI4KxziohD4NhbU2qBsCZF7mf0OUQwSNWj2TnkiD5Jx9nX0DlEUmnv+q
- FAyzn8ETSPiLVmfhnxOaaRm3qSGWwi2Kt2sPtrIUB4i07In+K4kJlYBsxw0kJXCjIBSYWwLDEeS
- ClLmjsvyk1wS/3x+462HJpyQGUjZzYSu0pEPNu06p3cR3CJwHUwUYowi+Ng6UQQR2Um8xUKXqZP
- +Jmpv5Sb02QdubPXeB6ftxGo5Q0ILMJl1yMVdM0FIy8LqnTaV51nWB3dTTTw5EXLFqKigzM9Knf
- 7c66BAYHkhIgGl8PBFA==
-X-Proofpoint-ORIG-GUID: YU2EyEg2_2aVPstZxgLXh6EK8HNFnhz9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-10_04,2026-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 impostorscore=0 clxscore=1015 adultscore=0
- priorityscore=1501 phishscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611100044
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avLrHrnpP3tuXXPZ@gremlin>
 
-Add a test that injects a clock comparator interrupt into a ucontrol
-VM. The guest sets the clock comparator far in the future, sets the
-subclass mask, and waits with the external mask set.
+On Tue, Nov 10, 2026 at 10:05:20AM +0000, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Nov 10, 2026 at 03:44:49PM +0800, Xu Xin (vivo) wrote:
+> > When only_merge_zero_pages is enabled, ksmd only ever merges empty
+> > (zeroed) anonymous pages with the kernel zero page. A page that carries
+> > data can never be merged, yet the current code still allocates an
+> > rmap_item for it in scan_get_next_rmap_item() before cmp_and_merge_page()
+> > decides to skip it.
+> >
+> > On workloads with a large amount of non-mergeable anonymous memory this
+> > is a real cost: every scanned non-zero page pays for an rmap_item
+> > allocation, and the rmap_items accumulate in the per-mm pending list.
+> > For example, a MySQL instance with hundreds of gigabytes of anonymous
+> > memory (mostly buffer pool pages that cannot be merged) ends up with
+> > ksmd creating rmap_item metadata for each candidate page; the metadata
+> > overhead can wipe out any gain from the zero-page merging and even turn
+> > the net benefit negative.
+> >
+> > Add should_skip_non_zero_page(), called in scan_get_next_rmap_item() before
+> > get_next_rmap_item(), which, when only_merge_zero_pages is enabled,
+> > checks whether the candidate page is all zeros. A non-zero page is
+> > skipped entirely: no rmap_item is allocated for it, and any stale
+> > pending rmap_items below it are freed (as get_next_rmap_item() would).
+> > The page is reported back to ksm_do_scan() as ERR_PTR(-EAGAIN), which
+> > counts it as scanned and continues, so the pages_to_scan budget is
+> > preserved.
+> >
+> > The all-zero check (pages_identical() against the kernel zero page) reads
+> > the whole page. For a non-zero page this is a net win: the extra page read
+> > is cheaper than the rmap_item allocation and the stable/unstable tree
+> > operations it would otherwise trigger.
+> >
+> > A page that is zero now but is written before cmp_and_merge_page() runs
+> > is still handled correctly, because the checksum-based decision in
+> > cmp_and_merge_page() (added by the previous patch) is the authoritative
+> > one.
+> >
+> 
+> Please re-write this in your own words.
+> 
+> It's rambling on and never gets to the point of _what this patch does and
+> why_.
+> 
+> I'm not interested in reading a novel to understand the code :)
+> 
+> It seems very LLM generated, LLMs are _terrible_ at writing commit messages
+> and commits, please re-write all of that.
 
-The first KVM_RUN exits with ICPT_WAIT. Inject KVM_S390_INT_CLOCK_COMP
-and run again. Check for ICPT_EXTREQ.
+Indeed, the description was generated by LLM, but I thought that was clear enough
+to present what this patch do and why. Aparrently, you don't like that style, I'll
+rewrite that by handd.
 
-Co-developed-by: Nitya Khamar <nkhamar@linux.ibm.com>
-Signed-off-by: Nitya Khamar <nkhamar@linux.ibm.com>
-Signed-off-by: Aaron M. Brown <aaronmbr@linux.ibm.com>
----
- tools/testing/selftests/kvm/s390/kvm_exit.c | 74 +++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+The goal is only to avoid rmap_item allocation for pages that can never merge
+under only_merge_zero_pages. The implementation is simple.
 
-diff --git a/tools/testing/selftests/kvm/s390/kvm_exit.c b/tools/testing/selftests/kvm/s390/kvm_exit.c
-index 4b9b30cd4e2a..0d2fd4f39a9c 100644
---- a/tools/testing/selftests/kvm/s390/kvm_exit.c
-+++ b/tools/testing/selftests/kvm/s390/kvm_exit.c
-@@ -42,6 +42,8 @@ int capget(cap_user_header_t header, cap_user_data_t data);
- #define SSKE_SUBOPCODE 0x2b
- #define SSKE_OPCODE 0xb2
- #define PSW_WAIT_BIT_MASK (1ULL << (63 - 14))
-+#define PSW_CLOCK_WAIT 0x0102000180000000ULL
-+#define CLK_COMPARATOR_MASK_BIT (1ULL << 11)
- #define PGM_CODE_GPA_ADDRESS 0x8e
- #define PGM_CODE_MASK        0x7f
- #define PGM_NEW_PSW_GPA 0x1d0
-@@ -682,6 +684,73 @@ static bool test_immediate_exit(void)
- 	return true;
- }
- 
-+static void guestcode_clock_comparator(void)
-+{
-+	asm volatile(
-+		/* Set SCKC to the maximum value so it cannot expire on its own */
-+		"lghi %%r7, -1\n"
-+		"stg  %%r7, 0(%%r15)\n"
-+		"sckc 0(%%r15)\n"
-+		/* Enable clock comparator interrupt in CR0 (bit 52) */
-+		"stctg %%c0, %%c0, 0(%%r15)\n"
-+		"oi    6(%%r15), 0x8\n"
-+		"lctlg %%c0, %%c0, 0(%%r15)\n"
-+		/* Load enabled wait PSW: 64-bit, DAT off, wait bit, external interrupt enabled */
-+		"larl  %%r8, 1f\n"
-+		"lpswe 0(%%r8)\n"
-+		".align 8\n"
-+		"1: .quad %[wait_psw], 0\n"
-+		:
-+		: [wait_psw] "i" (PSW_CLOCK_WAIT)
-+		: "r7", "r8", "memory"
-+	);
-+	GUEST_DONE();
-+}
-+
-+static bool test_clock_comparator_interrupt(void)
-+{
-+	struct kvm_parameters param = {
-+		.guest_code = guestcode_clock_comparator,
-+		.manual_parameters.immediate_exit_condition = false,
-+	};
-+	struct kvm_s390_irq irq = {};
-+	int rc;
-+
-+	if (!ucontrol_available())
-+		return false;
-+
-+	ksft_print_msg("Testing Clock Comparator Interrupt Exit\n");
-+	param = manual_kvm_creation_execution(param);
-+
-+	/* On a ucontrol VM, the guest's enabled wait exits to userspace as ICPT_WAIT. */
-+	TEST_ASSERT(param.run->exit_reason == KVM_EXIT_S390_SIEIC,
-+		    "Expected SIEIC, got %u\n", param.run->exit_reason);
-+	TEST_ASSERT(param.run->s390_sieic.icptcode == ICPT_WAIT,
-+		    "Expected ICPT_WAIT (0x1c), got 0x%x\n",
-+		    param.run->s390_sieic.icptcode);
-+	TEST_ASSERT((param.run->s.regs.crs[0] & CLK_COMPARATOR_MASK_BIT) != 0,
-+		    "CR0 clock comparator bit not set, cr0=0x%llx\n",
-+		    param.run->s.regs.crs[0]);
-+
-+	/* Inject clock comparator interrupt as a ucontrol VMM would */
-+	irq.type = KVM_S390_INT_CLOCK_COMP;
-+	rc = ioctl(param.manual_parameters.vcpu_fd, KVM_S390_IRQ, &irq);
-+	TEST_ASSERT(rc == 0, "KVM_S390_IRQ (clock comp) failed (%d)", errno);
-+
-+	/* With the interrupt pending and external interrupts enabled, expect ICPT_EXTREQ. */
-+	rc = ioctl(param.manual_parameters.vcpu_fd, KVM_RUN, NULL);
-+	TEST_ASSERT(rc == 0, "KVM_RUN (2) failed (%d)", errno);
-+	TEST_ASSERT(param.run->exit_reason == KVM_EXIT_S390_SIEIC,
-+		    "Expected SIEIC on second run, got %u\n",
-+		    param.run->exit_reason);
-+	TEST_ASSERT(param.run->s390_sieic.icptcode == ICPT_EXTREQ,
-+		    "Expected ICPT_EXTREQ (0x10), got 0x%x\n",
-+		    param.run->s390_sieic.icptcode);
-+
-+	manual_cleanup(param);
-+	return true;
-+}
-+
- static void test(void)
- {
- 	int i;
-@@ -738,6 +807,11 @@ static void test(void)
- 			.test = test_immediate_exit,
- 			.skip_reason = "KVM_CAP_S390_UCONTROL unavailable or insufficient privilege"
- 		},
-+		{
-+			.name = "Testing Clock Comparator External Interrupts",
-+			.test = test_clock_comparator_interrupt,
-+			.skip_reason = "KVM_CAP_S390_UCONTROL unavailable or insufficient privilege"
-+		},
- 	};
- 
- 	ksft_print_header();
--- 
-2.50.1 (Apple Git-155)
+I'll send a v3 with those changes.
 
+> 
+> > Signed-off-by: Xu Xin (vivo) <xu.xin@linux.dev>
+> > Co-developed-by: Jinjiang Tu <tujinjiang@huawei.com>
+> > Signed-off-by: Jinjiang Tu <tujinjiang@huawei.com>
+> 
+> Why are this and the other patches in-reply-to 1/4? That's not how you send
+> a series in mm.
+
+That was my mistake
+> 
+> > ---
+> >  mm/ksm.c | 82 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 82 insertions(+)
+> >
+> > diff --git a/mm/ksm.c b/mm/ksm.c
+> > index 49f3728a3d03..e641c37ee096 100644
+> > --- a/mm/ksm.c
+> > +++ b/mm/ksm.c
+> > @@ -2535,6 +2535,69 @@ static bool should_skip_rmap_item(struct folio *folio,
+> >  	return true;
+> >  }
+> >
+> > +/*
+> > + * Determines whether a candidate page should be skipped entirely when
+> > + * only_merge_zero_pages is enabled, before an rmap_item is allocated for
+> > + * it.
+> > + *
+> > + * A page that is not all zeros carries data and can never be merged with
+> > + * the kernel zero page, so there is no point in allocating an rmap_item
+> > + * for it. Skipping it here avoids the rmap_item metadata cost that full
+> > + * KSM would otherwise pay for every non-mergeable page.
+> > + *
+> > + * @rmap_list: head of the per-mm pending rmap_item list
+> > + * @addr:      address of the candidate page
+> > + * @folio:     folio containing the candidate page
+> > + * @page:      the candidate page
+> > + *
+> > + * Returns true if the page should be skipped (and any stale pending
+> > + * rmap_items below @addr are freed), false if it should be processed.
+> > + */
+> 
+> This is a really weird mix of kdoc style + not kdoc style while not being a
+> kdoc, for a static function?
+> 
+
+Will simplify it.
+
+> > +static bool should_skip_non_zero_page(struct ksm_rmap_item **rmap_list,
+> > +			     unsigned long addr, struct folio *folio,
+> > +			     struct page *page)
+> > +{
+> > +	struct ksm_rmap_item *rmap_item;
+> > +
+> > +	if (!ksm_only_merge_zero_pages)
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * Pages already merged by KSM are handled by cmp_and_merge_page();
+> > +	 * do not skip them here.
+> > +	 */
+> > +	if (folio_test_ksm(folio))
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * An all-zero page is exactly what we want to merge with the kernel
+> > +	 * zero page; process it.
+> > +	 */
+> > +	if (pages_identical(page, ZERO_PAGE(0)))
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * The page carries data: free any pending rmap_items that are below
+> > +	 * it (they are stale, as get_next_rmap_item() would), and skip it so
+> > +	 * no rmap_item is allocated for it.
+> > +	 *
+> > +	 * Compare the masked address, unlike get_next_rmap_item() which
+> > +	 * compares the raw rmap_item->address (which may carry the
+> > +	 * UNSTABLE/STABLE_FLAG bits). That is intentional: a pending
+> > +	 * rmap_item at the same address as a non-zero page is stale and must
+> > +	 * be freed here, not returned for processing.
+> > +	 */
+> 
+> We don't need a prose version of the code, and it reads like AI slop, we
+> don't want AI slop comments, thanks.
+
+Sorry, this is to clarify the difference between get_next_rmap_item() and here.
+Maybe too verbose to you ? I can simplify those words.
+
+> 
+> > +	while (*rmap_list) {
+> > +		rmap_item = *rmap_list;
+> 
+> Why is rmap_item function-scoped when it could be block-scoped here...
+
+You are right. Will fix it.
+
+> 
+> > +		if ((rmap_item->address & PAGE_MASK) > addr)
+> > +			break;
+> > +		*rmap_list = rmap_item->rmap_list;
+> > +		remove_rmap_item_from_tree(rmap_item);
+> > +		free_rmap_item(rmap_item);
+> > +	}
+> 
+> This code is very ugly.
+> 
+> Newline...
+> 
+> > +	return true;
+> 
+> 
+> > +}
+> > +
+> >  struct ksm_next_page_arg {
+> >  	struct folio *folio;
+> >  	struct page *page;
+> > @@ -2737,6 +2800,16 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+> >  			if (tmp_page) {
+> >  				flush_anon_page(vma, tmp_page, ksm_scan.address);
+> >  				flush_dcache_page(tmp_page);
+> > +
+> > +				if (should_skip_non_zero_page(ksm_scan.rmap_list,
+> > +						     ksm_scan.address, folio,
+> > +						     tmp_page)) {
+> > +					folio_put(folio);
+> > +					ksm_scan.address += PAGE_SIZE;
+> > +					mmap_read_unlock(mm);
+> > +					return ERR_PTR(-EAGAIN);
+> > +				}
+> > +
+> 
+> I don't love just shoving more logic into an already massive function. No
+> to this.
+> 
+> At some point technical debt has to be paid, clean up this code first please.
+
+Emmm... I agree scan_get_next_rmap_item() is already too large and needs cleanup.
+
+But it is the main KSM scan path, and a refactor there is high-risk. The cleanup
+deserves a separate series with careful review and testing.
+
+> 
+> >  				rmap_item = get_next_rmap_item(mm_slot,
+> >  					ksm_scan.rmap_list, ksm_scan.address);
+> >  				if (rmap_item) {
+> > @@ -2839,6 +2912,15 @@ static void ksm_do_scan(unsigned int scan_npages)
+> >  		rmap_item = scan_get_next_rmap_item(&page);
+> >  		if (!rmap_item)
+> >  			return;
+> > +		if (rmap_item == ERR_PTR(-EAGAIN)) {
+> > +			/*
+> > +			 * A non-zero page was skipped under
+> > +			 * only_merge_zero_pages: it was examined but not
+> > +			 * merged, so count it as scanned and keep going.
+> > +			 */
+> 
+> Similarly schloppy.
+> 
+> > +			ksm_pages_scanned++;
+> > +			continue;
+> > +		}
+> >  		cmp_and_merge_page(page, rmap_item);
+> >  		put_page(page);
+> >  		ksm_pages_scanned++;
+> > --
+> > 2.34.1
+> >
+> 
+> All in all adding far too much complexity in a cycle which is
+> fix-focused...
+> 
+> --
+> Cheers, Lorenzo
