@@ -1,82 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794343518;
-	b=qEAI1fCob/iGe7r9z5aqcGCmuJknND10DgktCc0NmX/i8envF6/9/ZNJ9+Z6d8L4RAMt
-	 2Bg281XVPRcFJI7kSNFvIomSU1ec7Uf/T7QDa+65Tq0KZaM9Uuq7O73WVaeTOmSh88hcd
-	 r1HB/MNziODsNdc6gowPJ8vda4xx9DJtUinDBT/W0wpShMTMfFM8YQAjiikBVKFEzhsk8
-	 N5IQIFM2NuY9EJ/ft/YP78n8FDJjZR6imMSMoSKvQAW2E+8t9tm4N++Fn52QVVMdYmXeM
-	 KQb1XjDbgp3xYh8mhQJt40xLJbJapIC1Yqmo43CvkJ+zjmlVCQ+tJITOXVL8/Is2lfA==
+	t=1794343565;
+	b=HNsC/vjJBuB5u/YK1G2yiqB2RKoFSadg3+fEXWHpxKyVV+t3ZMJlnzs3cuBbSaVwbkFi
+	 /QUt6or7HXVdMYUwrMAUZmBIpy7q7xyR4+u3E/zreORvVooq+tQdV8OmGcMIOybHw7SkY
+	 mEkd1VNBxmJw66WC+0IkwA4LsSs+nMyZyLW59wEelZz5VTKD7uC2KALCBSuPU0MC94vlx
+	 jTmrQqrd2xg8AePF0QrE49nK3ufouENS3Usdy1iZn3hAHyJ1AHx+BOSLYfm5yXeYDL4pN
+	 2xX2SrSe58Pdm+uuRkZH1tKAssOPEN6XT6ijayhuSckHrwKT9QgohBCqQfqFFmBNtqQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794343518;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=+g5OMTQ2eK/jzuD/lc6pSWB0BtDCYcs0etlVqiG8SOY=;
-	b=OiztT4BrEPyWvk0is54S0y22EE1jByTxmX0EjmigAQmk41am2LNzQn0gIMoX2Nod0hBX
-	 VBlkhKtc4yY7Xbak/jATdJb3dr2DKaeLydahdz8A0FUX+fJZd7KGyuv60g1rG3vr2e5sM
-	 KKpYJqovrLYvHtj2SE/MBToCg+qHo4i28XB2Ra2dxvml55z3NjE5MPNhvZGaPSkGA+gxl
-	 6wF1emVxKoF1QLbuKexoim1A2rgSFCZq2PN70wUsmQJE95msTIqoBACsGmEJnvP3XUwxl
-	 SqfIPHoHlkckIj9+uNpQB43gGYr+6BdKadKiIZT1V+crw4eVKXfgvycg1YRFovaYn9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794343565;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 Mail-Followup-To:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=rMRPONQOYjAF9HKKBayLjA2YuezRW4mL6HNg3dL1nlo=;
+	b=KVq5pWAZaN9ymIusfsctj4IF8fI8xdDg0PjE3VK/9sG5Wcm23Gc3dcn8FcRTXagiFayO
+	 kVJuNT6Q1MSw9YO4wWwTIrzSjEfFIdlFSOkvE2DPzPl6Fv4Z7BpDWj/k0ykNyktmZFpIU
+	 qQKJZBpnBknfsr687Y3S7sqB5QcURQhpFxC+Bj+VjIKK1bVqMsqDQ29LCEh3H19jbYTCJ
+	 IgQK67NjD+MbALDbGYFn7/n7Mwtkm9k4/8B1h42pi5npeqDd25xsiLhUI5W3cichSML6g
+	 W3ZPwzQ99nyaUR+991RrbE4tPHjiC9LRIcu47uRTMNLMR+hXmKpmFerdwgtf1sAyD7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=J1rnLui4;
-	arc=none smtp.remote-ip=52.35.192.45
-Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HzRYE13j;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E40606A327
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 20:45:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4E40606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117BB60A2603;
+	Tue, 10 Nov 2026 20:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=J1rnLui4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794343517; x=1825879517;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+g5OMTQ2eK/jzuD/lc6pSWB0BtDCYcs0etlVqiG8SOY=;
-  b=J1rnLui4SorO09ooLoGqTiXNY/cAyG/KWSavW8UXSo6PTEFjUF4LQMeP
-   8neNrkKa2bwvn+JleWQLWoueSLVHk6toq2xv+rEpo/1Jx3XweqUih/uBe
-   33c5JST235lqWIqidLtqNHh5FDamqfuTzqjfUMG87wIl3T2hwmNgZ+AvE
-   1jglqtORhjokbCQnS7W1n+ds/kNG/NXria0PB9+DrKgyLnPKar1Wh5bBY
-   o4Outr3Db2qQX1mie4hropnFzbP/ZOR6ZB3CNhiogS+GYKCwKOnSk+Pqa
-   1LCsQfoGNlQgybkWs4R3kQ5jB3Ru4NCPfb01AfOC8tPLAYOYZ9Rcx4sSx
-   Q==;
-X-CSE-ConnectionGUID: yxRkDm/AQGOC5EydsgE0Mw==
-X-CSE-MsgGUID: f5BiRCcQSJKTrL5A6Xsx7Q==
-X-IronPort-AV: E=Sophos;i="6.27,206,1787011200"; 
-   d="scan'208";a="33424244"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 20:45:17 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:30933]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.5.141:2525] with esmtp (Farcaster)
- id 9d06b6aa-756c-476c-be9a-958fe0b640d0; Tue, 10 Nov 2026 20:45:17 +0000 (UTC)
-X-Farcaster-Flow-ID: 9d06b6aa-756c-476c-be9a-958fe0b640d0
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Tue, 10 Nov 2026 20:45:16 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Tue, 10 Nov 2026 20:45:15 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: Miklos Szeredi <miklos@szeredi.hu>
-CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
- Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
-	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
-	<luis@igalia.com>, NeilBrown <neil@brown.name>
-Subject: [PATCH v8 2/2] selftests/fuse: add test for FUSE_OPEN_ATOMIC
-Date: Tue, 10 Nov 2026 20:44:21 +0000
-Message-ID: <20261110204421.1251726-3-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261110204421.1251726-1-jamz@amazon.com>
-References: <20261110204421.1251726-1-jamz@amazon.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HzRYE13j
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D441F008AB;
+	Tue, 10 Nov 2026 20:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794343564;
+	bh=rMRPONQOYjAF9HKKBayLjA2YuezRW4mL6HNg3dL1nlo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HzRYE13jB8RdQv3aSy711gVTQF5aN3kmny3Bm+Tqd6DGpMnW/UdmBhwvuV3tDKwWA
+	 qBQkdAe99fCfyY4HwhHW6vpWLb11tiX1rqZm0gqSH24JDOLS4Qw49hrn6RKPLTZ5tX
+	 8yK911/kTi5YKMv0Zeg0t9hinxeSS095ez81rveTvDj3lhZIp5MNrpZ0TzLVXjAROD
+	 H+8sIgKlcwqIAFUbaPlcIA/mKF9hJXlPwet/3tzJzqABID/FKMqpm7AOyUBYjWme3C
+	 0bNu78jINjA9S3ckBH6UNePnv8GkZJATc2s+TTg1AYJLjtNo7jNr7qgY8y7Qdi6pm5
+	 ugUx9cOxV5vJQ==
+Date: Tue, 10 Nov 2026 21:45:52 +0100
+From: Gao Xiang <xiang@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-mm@kvack.org,
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
+	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 40/41] erofs: refuse files on pseudo filesystems as
+ backing files
+Message-ID: <avOCgJPOwRdsIxgd@MacBookPro.fritz.box>
+Mail-Followup-To: Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-mm@kvack.org,
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
+	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-40-4c998976c6c7@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -86,679 +88,20 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWA002.ant.amazon.com (10.13.139.96) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261110-work-loop-pseudo-v1-40-4c998976c6c7@kernel.org>
 
-Add atomic_open_test. atomic_open_test contains a FUSE server and
-several test cases. The server reads requests from /dev/fuse and counts
-the requests that the kernel sends for open().
+On Tue, Nov 10, 2026 at 10:14:56AM +0100, Christian Brauner wrote:
+> File-backed mounts take any regular file as the image and the same goes
+> for the extra devices of such a mount. erofs reads them with the
+> credentials of the mounter so this doesn't hand out anything the mounter
+> couldn't read anyway. But files on pseudo filesystems aren't images.
+> Refuse them just like loop does.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-Each test case checks the result of open(). Most test cases also check
-the requests that the kernel sent. The test cases cover:
+Reviewed-by: Gao Xiang <xiang@kernel.org>
 
-- open() with O_CREAT on a missing name
-- open() with O_CREAT | O_EXCL on an existing name
-- open() of an existing file, of a missing name, and of a directory
-- open() of an existing file, with a reply of only fuse_entry_out
-- open() with O_TRUNC, with and without O_CREAT
-- open() with O_CREAT | O_EXCL and with O_TRUNC on a read-only mount
-- open() of a file that the server opens and the VFS denies
-- fuse_open_out without backing_id_64
-- fuse_open_out with a zero nodeid, which the kernel rejects
-- a name longer than name_max
-- FUSE_LOOKUP after a -ENOSYS reply
-
-Each test case runs with three server configurations:
-
-- the server replies -ENOSYS to FUSE_OPEN_ATOMIC
-- the server implements FUSE_OPEN_ATOMIC
-- the server implements FUSE_OPEN_ATOMIC and FUSE_ATOMIC_O_TRUNC
-
-Each test case runs in its own mount namespace. Each test case skips
-when the kernel's FUSE protocol version is below 7.48, or when the
-system refuses /dev/fuse or the fuse mount.
-
-Signed-off-by: Jimmy Zuber <jamz@amazon.com>
----
- .../selftests/filesystems/fuse/.gitignore     |   1 +
- .../selftests/filesystems/fuse/Makefile       |   3 +-
- .../filesystems/fuse/atomic_open_test.c       | 594 ++++++++++++++++++
- 3 files changed, 597 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_test.c
-
-diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
-index 7c787313e69b6..faac6d969ef94 100644
---- a/tools/testing/selftests/filesystems/fuse/.gitignore
-+++ b/tools/testing/selftests/filesystems/fuse/.gitignore
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+atomic_open_test
- fuse_mnt
- fusectl_test
- test_syncfs
-diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
-index e3ae3acff1139..8390d6019513b 100644
---- a/tools/testing/selftests/filesystems/fuse/Makefile
-+++ b/tools/testing/selftests/filesystems/fuse/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS := fusectl_test test_syncfs
--TEST_GEN_PROGS += write_extend_eof_test
-+TEST_GEN_PROGS += write_extend_eof_test atomic_open_test
- TEST_GEN_PROGS += fuse_acl_cache_test
- TEST_GEN_PROGS += fuse_symlink_cache_test
- TEST_GEN_PROGS += fuse_readdir_cache_test
-@@ -12,6 +12,7 @@ TEST_GEN_FILES := fuse_mnt
- include ../../lib.mk
- 
- $(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
-+$(OUTPUT)/atomic_open_test: LDLIBS += -lpthread
- 
- VAR_CFLAGS := $(shell pkg-config fuse3 --cflags 2>/dev/null)
- ifeq ($(VAR_CFLAGS),)
-diff --git a/tools/testing/selftests/filesystems/fuse/atomic_open_test.c b/tools/testing/selftests/filesystems/fuse/atomic_open_test.c
-new file mode 100644
-index 0000000000000..29b1d09c0c817
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fuse/atomic_open_test.c
-@@ -0,0 +1,594 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test the requests that open() sends with and without FUSE_OPEN_ATOMIC,
-+ * against a raw /dev/fuse server.
-+ *
-+ * Requires root to mount fuse.
-+ */
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <grp.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <stddef.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <linux/fuse.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#define MAX_WRITE	(128 * 1024)
-+#define MAX_ENTRIES	16
-+#define NOBODY		65534
-+
-+struct entry {
-+	uint64_t parent;
-+	char name[64];
-+	uint64_t nodeid;
-+	uint32_t mode;
-+};
-+
-+/* Server state, shared with the server thread */
-+struct server {
-+	int fd;
-+	int atomic, atomic_o_trunc;
-+	/* Protocol minor version of the kernel, from FUSE_INIT */
-+	uint32_t minor;
-+	struct entry ent[MAX_ENTRIES];
-+	int nent;
-+	int nr_lookup, nr_create, nr_open, nr_open_atomic, nr_setattr;
-+	int nr_enosys;
-+	/* Requests that carried O_TRUNC */
-+	int nr_trunc;
-+	/* Send fuse_open_out without backing_id_64, as older servers do */
-+	int short_open;
-+	/* Reply to FUSE_OPEN_ATOMIC with an opened file and a zero nodeid */
-+	int open_no_nodeid;
-+	/* Reply with only fuse_entry_out for an existing file */
-+	int entry_only;
-+};
-+
-+static size_t open_out_size(struct server *s)
-+{
-+	if (s->short_open)
-+		return offsetof(struct fuse_open_out, backing_id_64);
-+	return sizeof(struct fuse_open_out);
-+}
-+
-+static void reply(int fd, uint64_t unique, int error, void *data, size_t len)
-+{
-+	struct fuse_out_header oh = {
-+		.len = sizeof(oh) + (data ? len : 0),
-+		.error = error,
-+		.unique = unique,
-+	};
-+	struct iovec iov[2] = { { &oh, sizeof(oh) }, { data, len } };
-+
-+	/* Errors here are teardown races (device closed on unmount) */
-+	if (writev(fd, iov, data ? 2 : 1) < 0)
-+		return;
-+}
-+
-+static struct entry *find_in(struct server *s, uint64_t parent,
-+			     const char *name)
-+{
-+	int i;
-+
-+	for (i = 0; i < s->nent; i++)
-+		if (s->ent[i].parent == parent && !strcmp(s->ent[i].name, name))
-+			return &s->ent[i];
-+	return NULL;
-+}
-+
-+static struct entry *add_in(struct server *s, uint64_t parent,
-+			    const char *name, uint32_t mode)
-+{
-+	struct entry *e = &s->ent[s->nent];
-+
-+	if (s->nent >= MAX_ENTRIES)
-+		return NULL;
-+	e->parent = parent;
-+	snprintf(e->name, sizeof(e->name), "%.63s", name);
-+	e->nodeid = FUSE_ROOT_ID + 1 + s->nent++;
-+	e->mode = mode;
-+	return e;
-+}
-+
-+static struct entry *add(struct server *s, const char *name, uint32_t mode)
-+{
-+	return add_in(s, FUSE_ROOT_ID, name, mode);
-+}
-+
-+/* A NULL entry is a negative entry, cached like a found one */
-+static void fill_entry(struct fuse_entry_out *out, struct entry *e)
-+{
-+	memset(out, 0, sizeof(*out));
-+	out->entry_valid = 3600;
-+	if (!e)
-+		return;
-+	out->nodeid = e->nodeid;
-+	out->attr_valid = 3600;
-+	out->attr.ino = e->nodeid;
-+	out->attr.mode = e->mode;
-+	out->attr.nlink = S_ISDIR(e->mode) ? 2 : 1;
-+	out->attr.blksize = 4096;
-+}
-+
-+static void do_open_atomic(struct server *s, struct fuse_in_header *ih)
-+{
-+	struct fuse_create_in *in = (void *)(ih + 1);
-+	const char *name = (char *)(in + 1);
-+	struct entry *e = find_in(s, ih->nodeid, name);
-+	struct {
-+		struct fuse_entry_out entry;
-+		struct fuse_open_out open;
-+	} out = {0};
-+	size_t len = sizeof(out.entry) + open_out_size(s);
-+
-+	if (ih->opcode == FUSE_OPEN_ATOMIC && !s->atomic) {
-+		s->nr_enosys++;
-+		return reply(s->fd, ih->unique, -ENOSYS, NULL, 0);
-+	}
-+	if (ih->opcode == FUSE_CREATE)
-+		s->nr_create++;
-+	else
-+		s->nr_open_atomic++;
-+	if (in->flags & O_TRUNC)
-+		s->nr_trunc++;
-+	if (e && (in->flags & O_CREAT) && (in->flags & O_EXCL))
-+		return reply(s->fd, ih->unique, -EEXIST, NULL, 0);
-+	if (e && !(in->flags & O_CREAT) && s->open_no_nodeid) {
-+		fill_entry(&out.entry, NULL);
-+		return reply(s->fd, ih->unique, 0, &out, len);
-+	}
-+	if (!e && !(in->flags & O_CREAT)) {
-+		fill_entry(&out.entry, NULL);
-+		return reply(s->fd, ih->unique, 0, &out.entry,
-+			     sizeof(out.entry));
-+	}
-+	if (e && (!S_ISREG(e->mode) || s->entry_only)) {
-+		fill_entry(&out.entry, e);
-+		return reply(s->fd, ih->unique, 0, &out.entry,
-+			     sizeof(out.entry));
-+	}
-+	if (!e) {
-+		e = add_in(s, ih->nodeid, name, S_IFREG | in->mode);
-+		if (!e)
-+			return reply(s->fd, ih->unique, -ENOSPC, NULL, 0);
-+		if (ih->opcode == FUSE_OPEN_ATOMIC)
-+			out.open.open_flags = FOPEN_CREATED;
-+	}
-+	fill_entry(&out.entry, e);
-+	reply(s->fd, ih->unique, 0, &out, len);
-+}
-+
-+static void *server_thread(void *arg)
-+{
-+	struct server *s = arg;
-+	static char buf[MAX_WRITE + 4096];
-+
-+	for (;;) {
-+		ssize_t n = read(s->fd, buf, sizeof(buf));
-+		struct fuse_in_header *ih = (void *)buf;
-+
-+		if (n < 0) {
-+			if (errno == EINTR || errno == EAGAIN)
-+				continue;
-+			return NULL;	/* device closed on unmount */
-+		}
-+		if (n < (ssize_t)sizeof(*ih))
-+			continue;
-+
-+		switch (ih->opcode) {
-+		case FUSE_INIT: {
-+			struct fuse_init_in *in = (void *)(ih + 1);
-+			struct fuse_init_out out = {0};
-+
-+			s->minor = in->minor;
-+			out.major = FUSE_KERNEL_VERSION;
-+			out.minor = FUSE_KERNEL_MINOR_VERSION;
-+			out.max_readahead = in->max_readahead;
-+			out.max_write = MAX_WRITE;
-+			out.max_background = 16;
-+			out.congestion_threshold = 12;
-+			if (s->atomic_o_trunc)
-+				out.flags = FUSE_ATOMIC_O_TRUNC;
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_GETATTR:
-+		case FUSE_SETATTR: {
-+			struct fuse_attr_out out = {0};
-+			struct fuse_entry_out eo;
-+			int i;
-+
-+			if (ih->opcode == FUSE_SETATTR)
-+				s->nr_setattr++;
-+			out.attr_valid = 3600;
-+			out.attr.ino = FUSE_ROOT_ID;
-+			out.attr.mode = S_IFDIR | 0777;
-+			out.attr.nlink = 2;
-+			for (i = 0; i < s->nent; i++) {
-+				if (s->ent[i].nodeid == ih->nodeid) {
-+					fill_entry(&eo, &s->ent[i]);
-+					out.attr = eo.attr;
-+					out.attr_valid = eo.attr_valid;
-+				}
-+			}
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_LOOKUP: {
-+			struct fuse_entry_out out;
-+			struct entry *e;
-+
-+			s->nr_lookup++;
-+			e = find_in(s, ih->nodeid, (char *)(ih + 1));
-+			fill_entry(&out, e);
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_CREATE:
-+		case FUSE_OPEN_ATOMIC:
-+			do_open_atomic(s, ih);
-+			break;
-+		case FUSE_OPEN: {
-+			struct fuse_open_in *in = (void *)(ih + 1);
-+			struct fuse_open_out out = {0};
-+
-+			s->nr_open++;
-+			if (in->flags & O_TRUNC)
-+				s->nr_trunc++;
-+			reply(s->fd, ih->unique, 0, &out, open_out_size(s));
-+			break;
-+		}
-+		case FUSE_OPENDIR: {
-+			struct fuse_open_out out = {0};
-+
-+			reply(s->fd, ih->unique, 0, &out, open_out_size(s));
-+			break;
-+		}
-+		case FUSE_RELEASE:
-+		case FUSE_FLUSH:
-+		case FUSE_RELEASEDIR:
-+			reply(s->fd, ih->unique, 0, NULL, 0);
-+			break;
-+		case FUSE_FORGET:
-+		case FUSE_BATCH_FORGET:
-+			break;
-+		default:
-+			reply(s->fd, ih->unique, -ENOSYS, NULL, 0);
-+			break;
-+		}
-+	}
-+}
-+
-+FIXTURE(fuse)
-+{
-+	struct server *srv;
-+	char dir[64];
-+	int mounted;
-+};
-+
-+FIXTURE_VARIANT(fuse)
-+{
-+	int atomic;
-+	int atomic_o_trunc;
-+};
-+
-+FIXTURE_VARIANT_ADD(fuse, atomic)
-+{
-+	.atomic = 1,
-+};
-+
-+FIXTURE_VARIANT_ADD(fuse, atomic_trunc)
-+{
-+	.atomic = 1,
-+	.atomic_o_trunc = 1,
-+};
-+
-+FIXTURE_VARIANT_ADD(fuse, plain)
-+{
-+	.atomic = 0,
-+};
-+
-+static void cleanup(FIXTURE_DATA(fuse) *self)
-+{
-+	if (self->mounted)
-+		umount2(self->dir, MNT_DETACH);
-+	self->mounted = 0;
-+	/* The detached server thread can outlive cleanup() */
-+	if (self->srv && self->srv != MAP_FAILED && self->srv->fd >= 0)
-+		close(self->srv->fd);
-+	if (self->srv && self->srv != MAP_FAILED)
-+		self->srv->fd = -1;
-+	if (self->dir[0])
-+		rmdir(self->dir);
-+	self->dir[0] = '\0';
-+}
-+
-+FIXTURE_SETUP(fuse)
-+{
-+	char opts[128];
-+	struct stat st;
-+	pthread_t t;
-+	int ret, err;
-+
-+	if (geteuid() != 0)
-+		SKIP(return, "need root to mount fuse");
-+
-+	/* Mounts made by the test go away with its mount namespace */
-+	if (unshare(CLONE_NEWNS) ||
-+	    mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL))
-+		SKIP(return, "no private mount namespace: %s", strerror(errno));
-+
-+	self->srv = mmap(NULL, sizeof(*self->srv), PROT_READ | PROT_WRITE,
-+			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, self->srv);
-+	self->srv->fd = -1;
-+	self->srv->atomic = variant->atomic;
-+	self->srv->atomic_o_trunc = variant->atomic_o_trunc;
-+	add(self->srv, "ro", S_IFREG | 0444);
-+	add(self->srv, "rw", S_IFREG | 0644);
-+	add(self->srv, "dir", S_IFDIR | 0755);
-+
-+	self->srv->fd = open("/dev/fuse", O_RDWR);
-+	if (self->srv->fd < 0) {
-+		err = errno;
-+		cleanup(self);
-+		SKIP(return, "cannot open /dev/fuse: %s", strerror(err));
-+	}
-+
-+	strcpy(self->dir, "/tmp/fuse_aopen_XXXXXX");
-+	if (!mkdtemp(self->dir)) {
-+		self->dir[0] = '\0';
-+		cleanup(self);
-+	}
-+	ASSERT_NE('\0', self->dir[0]);
-+
-+	snprintf(opts, sizeof(opts),
-+		 "fd=%d,rootmode=40000,user_id=0,group_id=0,default_permissions,allow_other",
-+		 self->srv->fd);
-+	ret = mount("fuse", self->dir, "fuse", 0, opts);
-+	err = errno;
-+	if (ret)
-+		cleanup(self);
-+	if (ret && (err == EPERM || err == EACCES || err == ENODEV))
-+		SKIP(return, "cannot mount fuse: %s", strerror(err));
-+	ASSERT_EQ(0, ret);
-+	self->mounted = 1;
-+
-+	ret = pthread_create(&t, NULL, server_thread, self->srv);
-+	if (!ret) {
-+		pthread_detach(t);
-+		/* Wait for FUSE_INIT: the root GETATTR is queued behind it */
-+		ret = stat(self->dir, &st);
-+	}
-+	/* The harness skips teardown when setup fails or skips */
-+	if (ret || self->srv->minor < 48)
-+		cleanup(self);
-+	ASSERT_EQ(0, ret);
-+	if (self->srv->minor < 48)
-+		SKIP(return, "kernel without FUSE_OPEN_ATOMIC (protocol 7.48)");
-+}
-+
-+FIXTURE_TEARDOWN(fuse)
-+{
-+	cleanup(self);
-+}
-+
-+/* Open @name as an unprivileged user and return the errno, or 0 */
-+static int open_as_nobody(struct __test_metadata *_metadata, const char *dir,
-+			  const char *name, int flags)
-+{
-+	char path[128];
-+	int status, fd;
-+	pid_t pid;
-+
-+	snprintf(path, sizeof(path), "%s/%s", dir, name);
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		if (setgroups(0, NULL) || setgid(NOBODY) || setuid(NOBODY))
-+			_exit(255);
-+		fd = open(path, flags, 0644);
-+		_exit(fd < 0 ? errno : 0);
-+	}
-+	ASSERT_EQ(pid, waitpid(pid, &status, 0));
-+	ASSERT_TRUE(WIFEXITED(status));
-+	/* 255: the child could not drop its privileges */
-+	ASSERT_NE(255, WEXITSTATUS(status));
-+	return WEXITSTATUS(status);
-+}
-+
-+static int open_at(const char *dir, const char *name, int flags)
-+{
-+	char path[128];
-+
-+	snprintf(path, sizeof(path), "%s/%s", dir, name);
-+	return open(path, flags, 0644);
-+}
-+
-+static void open_close(struct __test_metadata *_metadata, const char *dir,
-+		       const char *name, int flags)
-+{
-+	int fd = open_at(dir, name, flags);
-+
-+	ASSERT_GE(fd, 0);
-+	close(fd);
-+}
-+
-+TEST_F(fuse, create_new)
-+{
-+	open_close(_metadata, self->dir, "a", O_CREAT | O_WRONLY);
-+	open_close(_metadata, self->dir, "b", O_CREAT | O_EXCL | O_WRONLY);
-+
-+	EXPECT_EQ(0, self->srv->nr_open);
-+	EXPECT_EQ(variant->atomic ? 2 : 0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(variant->atomic ? 0 : 2, self->srv->nr_lookup);
-+	EXPECT_EQ(variant->atomic ? 0 : 2, self->srv->nr_create);
-+}
-+
-+TEST_F(fuse, create_existing)
-+{
-+	ASSERT_EQ(-1, open_at(self->dir, "ro", O_CREAT | O_EXCL | O_WRONLY));
-+	EXPECT_EQ(EEXIST, errno);
-+	/* may_open() runs after the reply */
-+	EXPECT_EQ(EACCES, open_as_nobody(_metadata, self->dir, "ro",
-+					 O_CREAT | O_RDWR));
-+	EXPECT_EQ(0, self->srv->nr_create);
-+}
-+
-+TEST_F(fuse, read_only)
-+{
-+	ASSERT_EQ(0, mount(NULL, self->dir, NULL,
-+			   MS_REMOUNT | MS_BIND | MS_RDONLY, NULL));
-+	/* An existing name gives EEXIST, not EROFS */
-+	ASSERT_EQ(-1, open_at(self->dir, "rw", O_CREAT | O_EXCL | O_WRONLY));
-+	EXPECT_EQ(EEXIST, errno);
-+	ASSERT_EQ(-1, open_at(self->dir, "ro", O_RDONLY | O_TRUNC));
-+	EXPECT_EQ(EROFS, errno);
-+
-+	EXPECT_EQ(0, self->srv->nr_create);
-+	if (variant->atomic_o_trunc) {
-+		EXPECT_EQ(0, self->srv->nr_open_atomic);
-+		EXPECT_EQ(2, self->srv->nr_lookup);
-+	} else {
-+		EXPECT_EQ(variant->atomic ? 1 : 0, self->srv->nr_open_atomic);
-+		EXPECT_EQ(variant->atomic ? 1 : 2, self->srv->nr_lookup);
-+	}
-+}
-+
-+TEST_F(fuse, open_existing)
-+{
-+	/* may_open() runs after the reply */
-+	EXPECT_EQ(EACCES, open_as_nobody(_metadata, self->dir, "ro", O_RDWR));
-+	open_close(_metadata, self->dir, "rw", O_RDONLY);
-+	ASSERT_EQ(-1, open_at(self->dir, "missing", O_RDONLY));
-+	EXPECT_EQ(ENOENT, errno);
-+	/* A zero nodeid is cached like a negative LOOKUP */
-+	ASSERT_EQ(-1, open_at(self->dir, "missing", O_RDONLY));
-+	EXPECT_EQ(ENOENT, errno);
-+
-+	EXPECT_EQ(variant->atomic ? 0 : 1, self->srv->nr_open);
-+	EXPECT_EQ(variant->atomic ? 3 : 0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(variant->atomic ? 0 : 3, self->srv->nr_lookup);
-+}
-+
-+TEST_F(fuse, open_trunc)
-+{
-+	open_close(_metadata, self->dir, "rw", O_WRONLY | O_TRUNC);
-+	/* As a shell "> ro" */
-+	open_close(_metadata, self->dir, "ro", O_CREAT | O_TRUNC | O_WRONLY);
-+
-+	EXPECT_EQ(0, self->srv->nr_create);
-+	if (variant->atomic_o_trunc) {
-+		/* FUSE_OPEN truncates, after a LOOKUP */
-+		EXPECT_EQ(0, self->srv->nr_open_atomic);
-+		EXPECT_EQ(2, self->srv->nr_lookup);
-+		EXPECT_EQ(2, self->srv->nr_open);
-+		EXPECT_EQ(2, self->srv->nr_trunc);
-+		EXPECT_EQ(0, self->srv->nr_setattr);
-+	} else if (variant->atomic) {
-+		/* The server opens the file and SETATTR truncates it */
-+		EXPECT_EQ(2, self->srv->nr_open_atomic);
-+		EXPECT_EQ(0, self->srv->nr_lookup);
-+		EXPECT_EQ(0, self->srv->nr_open);
-+		EXPECT_EQ(0, self->srv->nr_trunc);
-+		EXPECT_EQ(2, self->srv->nr_setattr);
-+	} else {
-+		EXPECT_EQ(2, self->srv->nr_lookup);
-+		EXPECT_EQ(2, self->srv->nr_open);
-+		EXPECT_EQ(2, self->srv->nr_setattr);
-+	}
-+}
-+
-+TEST_F(fuse, open_directory)
-+{
-+	/* The server returns the entry only, and the VFS opens it */
-+	open_close(_metadata, self->dir, "dir", O_RDONLY);
-+	EXPECT_EQ(variant->atomic ? 1 : 0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(variant->atomic ? 0 : 1, self->srv->nr_lookup);
-+}
-+
-+TEST_F(fuse, open_o_directory)
-+{
-+	/* For O_DIRECTORY the kernel sends FUSE_LOOKUP */
-+	open_close(_metadata, self->dir, "dir", O_RDONLY | O_DIRECTORY);
-+	ASSERT_EQ(-1, open_at(self->dir, "rw", O_RDONLY | O_DIRECTORY));
-+	EXPECT_EQ(ENOTDIR, errno);
-+	EXPECT_EQ(0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(2, self->srv->nr_lookup);
-+	EXPECT_EQ(0, self->srv->nr_open);
-+}
-+
-+TEST_F(fuse, open_entry_only)
-+{
-+	/* The server returns only fuse_entry_out; the kernel sends FUSE_OPEN */
-+	self->srv->entry_only = 1;
-+	open_close(_metadata, self->dir, "rw", O_RDONLY);
-+	EXPECT_EQ(variant->atomic ? 1 : 0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(variant->atomic ? 0 : 1, self->srv->nr_lookup);
-+	EXPECT_EQ(1, self->srv->nr_open);
-+}
-+
-+TEST_F(fuse, short_open_out)
-+{
-+	self->srv->short_open = 1;
-+	open_close(_metadata, self->dir, "a", O_CREAT | O_WRONLY);
-+	open_close(_metadata, self->dir, "rw", O_RDWR);
-+
-+	EXPECT_EQ(variant->atomic ? 2 : 0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(variant->atomic ? 0 : 1, self->srv->nr_open);
-+}
-+
-+TEST_F(fuse, open_reply_no_nodeid)
-+{
-+	/* An opened file needs a nodeid */
-+	if (!variant->atomic)
-+		SKIP(return, "the server replies -ENOSYS to FUSE_OPEN_ATOMIC");
-+	self->srv->open_no_nodeid = 1;
-+	ASSERT_EQ(-1, open_at(self->dir, "rw", O_RDONLY));
-+	EXPECT_EQ(EIO, errno);
-+}
-+
-+TEST_F(fuse, open_atomic_enosys)
-+{
-+	/* After -ENOSYS the kernel sends FUSE_LOOKUP */
-+	if (variant->atomic)
-+		SKIP(return, "the server implements FUSE_OPEN_ATOMIC");
-+	open_close(_metadata, self->dir, "rw", O_RDONLY);
-+	open_close(_metadata, self->dir, "a", O_CREAT | O_WRONLY);
-+
-+	EXPECT_EQ(1, self->srv->nr_enosys);
-+	EXPECT_EQ(0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(2, self->srv->nr_lookup);
-+	EXPECT_EQ(1, self->srv->nr_open);
-+	EXPECT_EQ(1, self->srv->nr_create);
-+}
-+
-+TEST_F(fuse, name_too_long)
-+{
-+	char path[1200];
-+	int len;
-+
-+	/* Longer than the 1024 byte limit of a server without FUSE_MAX_PAGES */
-+	len = snprintf(path, sizeof(path), "%s/", self->dir);
-+	memset(path + len, 'x', 1100);
-+	path[len + 1100] = '\0';
-+	ASSERT_EQ(-1, open(path, O_CREAT | O_WRONLY, 0644));
-+	EXPECT_EQ(ENAMETOOLONG, errno);
-+	EXPECT_EQ(0, self->srv->nr_enosys);
-+	EXPECT_EQ(0, self->srv->nr_open_atomic);
-+	EXPECT_EQ(0, self->srv->nr_create);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.50.1
-
+Thanks,
+Gao Xiang
