@@ -1,64 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794271378;
-	b=bB2gQVwQU4MmhRERyAjsm5XjGIQxGfazMXItVDraNzDCPAbzLEbFG4hzW3m71o6rrXFo
-	 HKh7gpgQsl0h3B2qzVuMhLz9Ax8A4VTNaPKVuZb1MCjq328Ktuf9uLHOvGQXTmWdR70ul
-	 NapafGKkyQZLQeTqvTq74Srw4fwO1pudCihlYmzwaQcAbTEBesX56JyYztSRMKi57Ree8
-	 i5HqAvs5NwBRGdObklzt81/KbyRp1yP5sz3XJ5A03Cp0sxSXFllNuZiAabi1fFBgJk0dz
-	 8Q4O/TKozm8AvP0GRUa7A7XkoPkCJ/kvUrmkaK59FJ1mOJlgsfevCWJ8O2SCwKjpb2g==
+	t=1794271849;
+	b=XHoCHfAgR6x7DsKartoRZ5DITK00tgxWbGRb2/P6BfNovl/CP9D8cQajf2x9RpH6D6Jz
+	 adEmifu11WUV1xhQ8eDmvlQtj/jUCTpZXDfLO4Wm8zi+YF2a88lEAw2/P6izLK8Bg34Vn
+	 Z/xWXKGxFZszWYeh6CvwDHB2QCy9UO+dfyco4jJtXWj/pAtaRiPZdzrRjy/CjCh31tbau
+	 oZvCHMiGAqNdJw292jexCDwYh8ohJamOWxVrODP9vskYoG/7ZHfdErMNPgplgSLNpB1vO
+	 ZLGMgTlcVppTTnWmsH6YJ7IacIANiqBmaEYLeOeUS/rKFpNn1QGo0W4AwxyPjkLp4hA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794271378;
-	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
-	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
-	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
-	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
-	bh=CqdI/d5wgJOUaCu123F2dzY2ajSgkaE79+RY2xgj2nc=;
-	b=K/NI1J7xG3bfeoFB8j9ZyKBBXmBKnL9fJ8B5Eu3p5kQjVW9jCekvcmn81UAAD20kNozz
-	 HpS5tO0sUuW8AKkM3pFuh7RiiR4ir4D6Hoa+HKDrs+CbUQldjMffmYPt+1cmX0UsmqZ4Z
-	 s+yr41dWeD2ouGWEyRHEN1eLBNXyOw3DsHhzdwym43w0KkkmXwEH0R4z0GAvZGe9o/2Xz
-	 mEgBA5vir4F7awJl1JOOPpTotzvXpdUJsifmI4ei+HfUwOggERMrj6U+PBZzmlur/TVHT
-	 1M4HVJ1C82CBCgEcI6jNMCPTnzoQSfw/Na9chSpFeUX/Mq1scSzTl88LjeIiXv54xLg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794271849;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=9aUmjjXy2UpFvwIaZx+Kc6emVkBoaRCWFUjyBYUuXe4=;
+	b=o3DEJ1XdB/2b4lCo7v+ctgMoc+Z8XEjhtPtXhTntM8hQGfYFuhNpkjPgwuEvwyFt3mRd
+	 j2JKPNeRjFWCjO00CU6Ja78MNqqt/3zr2SUgx5M86kTnPV6MyBj9c4tLkthzorR/0qo+k
+	 ShbNKC2YopEcd78HkstAtvk/1cRGHspG3/o26/FNUVYsHCfBLunz8QTBCP5yt5t1dyC1P
+	 QI/B3rViQozc6+P8WtpPvYk7XQgl4C9FvrZBve0lmrlQbHMu1tg4Xg9bMLctF5Hztt9zE
+	 dGk8EXzApvPgCie3qv4JOc4aATG2ZC/QQe4pjQXLm3VfaVRYhktfcAQQ+9s+XyFfQnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nC7pdmQ0;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Rxqy6ixe;
+	arc=none smtp.remote-ip=209.85.216.71
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8086D606A325;
-	Tue, 10 Nov 2026 00:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0310606A325
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 00:50:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0310606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nC7pdmQ0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6EF1F0089F;
-	Tue, 10 Nov 2026 00:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794271378;
-	bh=CqdI/d5wgJOUaCu123F2dzY2ajSgkaE79+RY2xgj2nc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=nC7pdmQ0OnxxXP1rEFBLBk9m5bXrd5KpKNU/NOhh6d9FkCEXihIca1/1eRk8nMXQZ
-	 jCS9apTMaqlHWUWzSuro+ciUTOyLYEPnzWeXPZx+na98poFy0irKuw5sB5Q3pFWPu8
-	 JsP5u0KmFhsGZjkuWcOg8Tev4TOAgrZC9BaYP09L50sW+HviHeuKHwbidY0qfTKkV9
-	 hQXwoip7tCk/XIatFhPgWM/AX5512z5TaiNX/tKir/vinLsutjggG9/TiqQ9PGoO+o
-	 kQqGlAal6FohH+3ePLz1O2gQn6zSIIgJHQizuudnhlMuCOcs8ArpBI37vvbpKYwwOo
-	 p4t0XTTqKRnUg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 2129B391AFB2;
-	Tue, 10 Nov 2026 00:42:58 +0000 (UTC)
-Subject: Re: [GIT PULL] kselftest fixes update for Linux 7.4-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <65ee4aa7-b581-4b60-bdda-e91855499ee2@linuxfoundation.org>
-References: <65ee4aa7-b581-4b60-bdda-e91855499ee2@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <65ee4aa7-b581-4b60-bdda-e91855499ee2@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-7.4-rc3
-X-PR-Tracked-Commit-Id: 36990c8fda77d918b1e52d5d6df3a144b552d86e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b3dfbde62cf1981c4638939c159dfd087b7a72e9
-Message-Id: <179427137663.3573198.16939057349089589896.pr-tracker-bot@kernel.org>
-Date: Tue, 10 Nov 2026 00:42:56 +0000
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Rxqy6ixe
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3b0a9de9c2aso1098338a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 16:50:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794271848; x=1794876648; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9aUmjjXy2UpFvwIaZx+Kc6emVkBoaRCWFUjyBYUuXe4=;
+        b=Rxqy6ixetikDYH4GXTU6DVlNgIzULph56hr/ylPgKBEq0LAlCxBeqtn3zqJLm8xcn9
+         /8L8gEpu0FFua1AhJKLHLRbGekFetzUJMpAhLvBkyd6Io4I8yVRJ1QPbOdpOumJxKtNh
+         oMHHHRmbLW+xy9nfrbL3O/Y/GIENxUCBo+qprlcK5nHvk8Mf74MAkBQAagwOLqXMK0gK
+         01XQLwADmqO9ZRtOrPv4jag12vYH76y4TtBVV6TFN0ri4rMmBiFegEp+AZT1vNUQOljj
+         UCk05FbvXMpWSKjhnKf5Yt/0k1VwOGa3C7NyCBNMU6nsHzQkxBdxpMV8/sXi1UpwGU7s
+         PIyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794271848; x=1794876648;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9aUmjjXy2UpFvwIaZx+Kc6emVkBoaRCWFUjyBYUuXe4=;
+        b=15DKgNJyQ9U64hqgAWWZRNSYXd/vr/KaYUgxiHxKzrK4OGd1IyKyB3mX+1JkFW4UJp
+         SBEfCeIJTgghtRPAIfnnKGAPjNnBc9K8XhIR+VmM0wGLXwmVbHpmDS+v1veYoDn5dqpF
+         8gImzCkjZC7zcNNqT3I6dG41WRVIaMwzI8LQ//YopoJxK6eIdwUXi+N32Vb1Hr/1KRmw
+         9y1hvSfmelLKr4nOdJ5J/LN/dbs3Q/eqh26hLi5nSqoiFUxBrvVEM8csp91flGaCvxFQ
+         d/0cnQbHCegWLOIBiYYwuKS8gmO01RfrYnkE8wQPKg741XoQNfFzMXVUEHx/TdLk2Dhs
+         W8RA==
+X-Forwarded-Encrypted: i=1; AL+hErGBIgpwn3jd2mhLijyacaoeQ7f0zSgq02vLUdmeelyecjXP7IomUwZ14Ql0OjH5HFMiKmI4QlJj1j/XpnghijM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8oxbyCu1n6zeq326mBN34Sd1W69db5wpm0sm2AdzyUlrs4PWQv
+	Cp1cvey6uxG7OvhpZS+yEZMGoXRE2WXyyp6x1BWqWqIOumxLblRLqyEv8+eN7//TMyPd+qZUSEZ
+	ORX4oog==
+X-Received: from pjdq9.prod.google.com ([2002:a17:90a:2e09:b0:3ad:32d0:ca0a])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4a48:b0:3ae:898e:a123
+ with SMTP id 98e67ed59e1d1-3b166cd70c0mr1265220a91.14.1794271848067; Mon, 09
+ Nov 2026 16:50:48 -0800 (PST)
+Date: Mon, 9 Nov 2026 16:50:47 -0800
+In-Reply-To: <CA+EHjTzaJx2nV_9YEExgYn7STSP1Kvhsqan8va8M7ba4WtCiqQ@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,16 +77,26 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+References: <20260922071945.693714-1-fuad.tabba@linux.dev> <20261007074037.316564-1-fuad.tabba@linux.dev>
+ <CA+EHjTzaJx2nV_9YEExgYn7STSP1Kvhsqan8va8M7ba4WtCiqQ@mail.gmail.com>
+Message-ID: <avJqZzKX1ZVAMGr-@seanjc-mac.roam.internal>
+Subject: Re: [PATCH v2 0/2] KVM: selftests: Fix incremental build dependencies
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	"Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>, James Houghton <jthoughton@google.com>, Will Deacon <will@kernel.org>, 
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-The pull request you sent on Mon, 9 Nov 2026 13:49:17 -0700:
+On Mon, Nov 09, 2026, Fuad Tabba wrote:
+> Hi Sean, Paolo,
+> 
+> Another gentle ping on this series. Is there anything else you'd like
+> to see before it goes in?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-7.4-rc3
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b3dfbde62cf1981c4638939c159dfd087b7a72e9
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+I'll grab the KVM change, but I would prefer the cgroup change go through the
+cgroup tree, even though Michal already acked it. AFAICT there are no dependencies,
+and it really has nothing to do with KVM.
