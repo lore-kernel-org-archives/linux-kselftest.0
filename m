@@ -1,47 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.235
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315733;
-	b=PZPt37Dk9Of2llU1fsYA2S4p6PxdOWVd1IOMC4WV9ReI0+gCFIGzXduzweVL1Zd0Fha8
-	 VnSAGIknmeGpU8z+q1CcQvl1umm7sEHuyjmIlhmtO2qtg7FUnxt1a4i/FLrA6pL6eb92H
-	 i71o2IPFxyEimu6IGaL72jExbaxQQmqJVlbyRsNqd35ly886ZtEQstEpQNB8p/sMoS/Lj
-	 I7pd14VWvl89+vC7UzS9V7oB+GJhIKSHGJR6KHTxGYuvqOqF1K7sbGHlWtLj9ESq+S97f
-	 cdcemjcGoYpf2JUFAbz31UfVkkv2YbOYo+vIMB6GGh8dAcgfEuQ5+eRQhkEeWHqczNg==
+	t=1794315765;
+	b=LPdufi+0RzRz028YIxIBptu8OMdT4keDQjYm5GPNm0R7ACOw1nI9yD5LrW8cxO5FitD0
+	 HtbpqTHmJ6Q/9aRhODZxI7bexEQzI7oiuoDT45VMZDd28mVIfuB20/ZbRP9/EaUynB656
+	 36OgflrHr0F0Wnl0e3I5ML+AgC00TgYePfrLS8bYKwZB88kGk5Uu/ABrs1zccNRX/W3hY
+	 E5Da6zRScD9Zw/Hbis776GsZlw++Kn+DyqCmlzzms+0sitCp+RloWhksqybVAyN2mXMCq
+	 71rhQp5ymaf5Moyz1/mJNQLUxVP3ar99MjF6TT0HvVwZPoF+9FK8Ub5aJVhh13KYkzA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315733;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=jmytX1alxm46Z7KikqFXBcorSxxsi2qlPM9aYuMFJLo=;
-	b=LUiHKnTu9UasjpjnrXLXv6PCeKuIvuAb3iP8tgULbzOAurWBB3LfYDXpjGGmNZGxrBa0
-	 Dii0EZ9jKQA72UPO7kTiiIP2pn1q7oqRsFKs8NTDd68qRj4VdWoWOT7iVy/mUU5PJLdjk
-	 hX2bpEAS61DeJfoPHDGM3QUQoLzHRTzN6ZkP1o1vS6DzkZdQhRQSZc/5l5wRYjRYb1crX
-	 vLWUyvrYRB4vvGN/XB8olrk1nrxP6+X4PPb2aTOXV1wPBu+SxTiHtBNVBqMFzZA2NQ/0d
-	 UJ+b/DjkAiPsuWZpZAKIZY1fMGdLd+vI74wgZzy9IackExBVVyF7Cy575sUQ+k7lq1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315765;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:From:To:Cc:References:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=fKChlBEsU0BxCgu+4U4m0i58+OuS3b4o6yf14XxYTIE=;
+	b=LVGD9jLbD1TZhC3OlXf+oTgk5cRjUHn+jY8VKOwE6FKcqNXx3II91xAEio9DUrDXiLjT
+	 eGRlehlK1IeKBDJjAVi95GriW64QMkhGIt8plpvhb1JZV7TqBKj07GwL95fVWilbtgCwM
+	 0mu8+nElwq5LyJHQvJWhVhKz7eQcAw93WCfHRQFJss2AaxUD9OXOinf54N0z7Aw2xM4t4
+	 UT1T5mdCLII2+t9+NneKkhsOf/cGkfV4jnFAitXejgWHiCQpSGNqNuF6Vy67cN2jVn8tx
+	 vRDSwIhQeFlVSqn0s+y2UIjpmzD7oogMYXYuMUeePA+kDqg6T5DBN8sXgsTPCuaH6MA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eAo3gcZm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JEEUT+2q;
+	arc=none smtp.remote-ip=95.215.58.235
+Received: from mta1.migadu.com (out-235.mta1.migadu.com [95.215.58.235])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06368606A7D6;
-	Tue, 10 Nov 2026 13:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C279606BFE5
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:02:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C279606BFE5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eAo3gcZm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E9B1F008A1;
-	Tue, 10 Nov 2026 13:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794315732;
-	bh=jmytX1alxm46Z7KikqFXBcorSxxsi2qlPM9aYuMFJLo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=eAo3gcZmqWtOPx75UD0JZIp0/rUOLSR0khkKOdV3zDQpnO/7F2bZHqCcpNMU1s4Uw
-	 hWoWOZt/+jQTl7OgWOqvnge9FG9Fl/PAdnGKw7zFrGaUHZI/XslnIp+3eHejYM5OPC
-	 RD8x1cruazrVkl32sSZURBRLH/JOoe7yL8qFJr+fh3AWCGpNoq6qyH5yUujdFxbUHU
-	 6Rno1WwU7leYRROXtOmhgileWTmV45YB4mm5bWRb3TU/2g/mCEKhONzuGe2fF2Njrb
-	 etwhPt6N036CMwbplvwU+KhtCGY8K6gt508qM69S4B1uyQNA8toNyyXwnGBAuFo2te
-	 Z90IQAjrffWjw==
-Message-ID: <287c1cb5-7523-4f73-a16b-b066fd9d56a7@kernel.org>
-Date: Tue, 10 Nov 2026 14:01:59 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JEEUT+2q
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=h3CnaYUIR0Ew3TSmYVNV9po6Qt82ur42Pr7VtBnbcdc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794315762; v=1; x=1794920562;
+ b=JEEUT+2qKaNDcbfg+z+dVDwiDTip56+0MmXLPW4RbGOnIzTE8nxAO7iTwP0SyW833T6JOBpR
+ teFtNLGkhYrHInar9FMCIM1QJ7BgFg4Qlv9uTHqrxb3oBUmIPsn4o0b1riagC7w+oSDNpLsVLHC
+ 15nKPExQBrowE5MB+JKamNNc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a32e94bda5463846;
+	Tue, 10 Nov 2026 13:02:42 +0000
+X-Mizu-Trace-ID: a32e94bda5463846
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2e28d0a0-e0bc-422b-857c-226bcea62ffe@linux.dev>
+Date: Tue, 10 Nov 2026 21:02:34 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,183 +59,144 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-To: Tianyi Gao <tianyi@cloudflare.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Jakub Kicinski <kuba@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Vladimir Vdovin <deliran@verdict.gg>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter
- <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Tushar Vyavahare <tushar.vyavahare@intel.com>,
- Jason Xing <kerneljasonxing@gmail.com>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
- <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Chris J Arges <carges@cloudflare.com>, Jakub Sitnicki
- <jakub@cloudflare.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- llvm@lists.linux.dev, kernel-team@cloudflare.com
-References: <cover.1794281983.git.tianyi@cloudflare.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <cover.1794281983.git.tianyi@cloudflare.com>
+Subject: Re: [PATCH-next v2 5/5] cgroup/cpuset: Correctly set isolated_cpus
+ when switching partition state
+From: Ridong Chen <ridong.chen@linux.dev>
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20261109190955.1398611-1-longman@redhat.com>
+ <20261109190955.1398611-6-longman@redhat.com>
+ <aedd01b8-3f49-4916-b891-38e9c4ff3b06@linux.dev>
+In-Reply-To: <aedd01b8-3f49-4916-b891-38e9c4ff3b06@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 11/10/26 04:56, Tianyi Gao wrote:
-> An skb gets its RX hash, VLAN tag and checksum status from the RX
-> descriptor, which describes the packet before the XDP program ran.
+On 11/10/2026 7:40 PM, Ridong Chen wrote:
 > 
-> Without this series:
 > 
-> - On XDP_PASS, the values are stale. After the program strips a UDP
->    tunnel header, the stack applies the outer CHECKSUM_UNNECESSARY to the
->    inner packet [1]. If the outer UDP checksum is 0, a packet with a bad
->    inner checksum reaches the socket.
-
-Our XDP Unimog load-balancer uses GUE like packet encapsulation, so it
-hits above case all the time. If packet is end-host, it modify packet by
-popping header and returns XDP_PASS for local netstack delivery.
-
-> - On XDP_REDIRECT, the values are lost. The skb that cpumap or veth
->    builds from the xdp_frame has no RX hash and no VLAN tag, and its
->    checksum status is CHECKSUM_NONE.
+> On 11/10/2026 3:09 AM, Waiman Long wrote:
+>> When update_prstate() is called to switch the partition state from
+>> root to isolated or vice versa, the whole effective_xcpus is passed to
+>> isolated_cpus_update(). However, if there are child partitions present,
+>> some of the effective_xcpus are dedicated to those child partitions
+>> and their partition states will remain the same or get invalidated in
+>> the case of child root partition with isolated parent in the latter
+>> update_cpumasks_heir() call. In the latter case, their exclusive CPUs
 > 
-> In one use case, an XDP program redirects packets into a veth device.
-> The checksum status is lost, so GRO verifies every checksum in software.
-> With one TCP flow, this costs 34% of the receiving CPU.
+> update_cpumasks_heir
+
+Sorry, it should be update_cpumasks_hier.
+
 > 
-> Another use case [2] is load balancing IPsec tunnel traffic with cpumap.
-> Without the RX hash, GRO on cpumap puts all flows into the same bucket.
-> In a cpumap test with 16 TCP flows and no IPsec, the throughput is
-> 17.6 Gbit/s instead of 23.4.
+>> will be returned to their parent.
+>>
+>> Therefore isolated_cpus may be set incorrectly with child partitions
+>> underneath. Fix that by excluding their exclusive CPUs in computing
+>> the correct cpumask of exclusive CPUs used by that partition alone.
+>>
+>> Add new test cases into test_cpuset_prs.sh to test for such cases.
+>>
+>> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c                        | 30 +++++++++++++++----
+>>   .../selftests/cgroup/test_cpuset_prs.sh       |  7 +++++
+>>   2 files changed, 32 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 7aa614c6ac4d..41048997a955 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -3054,12 +3054,32 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>>                             cs->effective_xcpus, NULL))
+>>               err = PERR_HKEEPING;
+>>           else if (parent_prs == PRS_ISOLATED)
+>> -            err = PERR_ISOPARENT;
+>> +            err = PERR_ISOPARENT;    /* old_prs should be isolated */
+>> -        if (!err)
+>> -            isolcpus_updated = true;
+>> -        else
+>> +        if (err) {
+>>               disable_partition = true;
+>> +        } else {
+>> +            struct cgroup_subsys_state *css;
+>> +            struct cpuset *child;
+>> +
+>> +            /*
+>> +             * Need to scan child partitions, if present, and
+>> +             * exclude their effective_xcpus from cs. In the case
+>> +             * of switching to isolated partition with child root
+>> +             * partitions, those child partitions will be
+>> +             * invalidated in update_cpumasks_hier().
+>> +             */
+>> +            isolcpus_updated = true;
+>> +            cpumask_copy(tmpmask.new_cpus, cs->effective_xcpus);
+>> +            rcu_read_lock();
+>> +            cpuset_for_each_child(child, css, cs) {
+>> +                if (!is_partition_valid(child))
+>> +                    continue;
+>> +                cpumask_andnot(tmpmask.new_cpus, tmpmask.new_cpus,
+>> +                           child->effective_xcpus);
+>> +            }
+>> +            rcu_read_unlock();
+>> +        }
+>>       } else {
+>>           /*
+>>            * Switching back to member is always allowed even if it
+>> @@ -3093,7 +3113,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>>       if (!is_partition_valid(cs))
+>>           reset_partition_data(cs);
+>>       else if (isolcpus_updated)
+>> -        isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
+>> +        isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
+>>       spin_unlock_irq(&callback_lock);
+>>       /* Force update if partition is disabled & update effective_xcpus */
+>> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/ 
+>> testing/selftests/cgroup/test_cpuset_prs.sh
+>> index 2d4744f2d6ac..741a13bbeda7 100755
+>> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>> @@ -556,6 +556,13 @@ TEST_MATRIX=(
+>>       " C2-6:X2-5:P1 CX3-6:P2 \
+>>                           .      .   T:X4-6    .      .      .     0 A1:4-6| 
+>> A2:4-6 A1:P1|A2:P-2 ."
+>> +    # Switch PRS state (root <=> isolated) will properly update 
+>> cpuset.cpus.isolated
+>> +    # even if child partitions are present.
+>> +    " C1-6:P1 C3-6:P1 C5-6:P2  .       .    P2      .      .     0 
+>> A1:1-2:A2:3-4:A3:5-6
+>> +                                       A1:P1|A2:P2:A3:P2 3-6"
+>> +    " C1-6:P1 C3-6:P2 C5-6:P2  .       .    P1      .      .     0 
+>> A1:1-2:A2:3-4:A3:5-6
+>> +                                       A1:P1|A2:P1:A3:P2 5-6"
+>> +
+>>       #
+>>       #  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs 
+>> Pstate ISOLCPUS
+>>       #  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- 
+>> ------ --------
+> 
+> We hit the same issue in our testing earlier (an isolated child partition
+> loses its isolation when the parent is switched from isolated to root),
+> and this is the same fix I had in mind. I also ran a few 3-level nested
+> cases (root/isolated combinations, switching the parent and the middle
+> level) on top of this series and cpuset.cpus.isolated is correct in all
+> of them.
+> 
+> Nits: The first line of the two new test cases lacks
+> the trailing "\" used by the other multi-line entries. It still works
+> as the newline is just treated as a field separator, though.
+> 
+> Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+> Tested-by: Ridong Chen <ridong.chen@linux.dev>
 > 
 
-Yes, GRO missing RX-hash for bucket split is real. Above IPsec XDP load-
-balacing have been running in production for a year by now.
-Our more general RX-pipeline CPUMAP redirect is currently being tested
-in production.  This means all of our traffic will soon be hitting this
-GRO limitation.
-
-> This series introduces SKB core extensions for XDP. It reserves an skb
-> core extension area in the headroom, right after the space for struct
-> xdp_frame. An XDP program stores RX metadata in the area with kfuncs,
-> and the kernel sets the skb fields from it. This design was initially
-> proposed in [3].
-> 
-
-Yes, I agree. We don't want to add static members to xdp_frame, as it
-will always reserve the space.  Instead this only takes up the space
-when needed.  The most obvious case is the VLAN.
-
-
-> The layout of the area follows skb extensions (struct skb_ext). A small
-> header gives the offset of each entry. An entry takes headroom only when
-> the program stores it, so the area does not grow with each new type of
-> RX metadata, unlike [4]. Unlike skb_ext, the area needs no allocation.
-> 
-
-Hopefully other maintainers like this encoding format better than our
-previous attempt.  As this is already used by existing skb extensions.
-This is not expose as UAPI and BPF access this via helpers.
-
-
-> This series supports three types of RX metadata. Each type has a store
-> kfunc, and bpf_xdp_skb_ext_del() deletes an entry:
-> 
-> - The RX hash and its type: bpf_xdp_skb_ext_store_rx_hash().
-> - The VLAN tag and its protocol: bpf_xdp_skb_ext_store_rx_vlan().
-> - The checksum status: bpf_xdp_skb_ext_store_rx_csum(). Only
->    XDP_CHECKSUM_NONE, or XDP_CHECKSUM_UNNECESSARY with a csum_level up to
->    SKB_MAX_CSUM_LEVEL, are allowed [5][6].
-> 
-> The kernel sets the skb fields from the area:
-> 
-> - After XDP_REDIRECT, in __xdp_build_skb_from_frame().
-> - On XDP_PASS, in the NIC driver. A driver that does this sets the new
->    XDP feature skb-ext-pass. On other native XDP drivers, the kernel
->    warns once when the program returns XDP_PASS with stored values, and
->    ignores the area. This series adds the support to ice.
-> 
-> The existing XDP RX metadata kfuncs are bpf_xdp_metadata_rx_*(). Only
-> a device-bound program can call them. Programs on cpumap and devmap are
-> not device-bound, so they cannot call them. Relaxing this check would
-> change their semantics. So this series adds three load kfuncs,
-> bpf_xdp_skb_ext_load_rx_*(). They read the stored values.
-> 
-> bpf_xdp_adjust_head(), bpf_xdp_adjust_meta() and bpf_xdp_pull_data() do
-> not move the packet or the metadata into the area. In this series, the
-> area takes at most 20 bytes of headroom. With the hardware RX timestamp,
-> the RX queue index and CHECKSUM_COMPLETE, it would take up to 40 bytes.
-> 
-
-I like how the size usage is limited in this patchset. As I understood, 
-this was previously a concern from Jakub/kuba in my previous patchset.
-In my previous patchset we allowed more flexibility and others to use 
-this area. This has been dropped. Notice how this patchset focus only on 
-the fields needed for the SKB.  This is basically working towards that
-xdp_frame becomes the "mini-SKB" concept.
-
-
-> Lorenzo's RX checksum kfunc series v5 [7] also defines enum
-> xdp_checksum. The series that is merged second drops its copy.
-> 
-> Performance:
-> 
-> We measured on ice (E810, 25 Gbit/s) with bpf-next 0fb18ce8a2e9, patches
-> 1-3 of [7] and this series. In the RX metadata column, the XDP program
-> reads a value with bpf_xdp_metadata_rx_*() and stores it. The veth test
-> stores the checksum status, and the cpumap test stores the RX hash. The
-> kernel then sets the value on the skb. Baseline does not store it. Each
-> value is the median of 5 rounds:
-> 
-> test                  metric          baseline     RX metadata
-> veth, 1 TCP flow      RX CPU busy     100%         66% (-34%)
-> veth, 1 TCP flow      RX cycles/pkt   2027         1343 (-34%)
-> cpumap, 16 TCP flows  throughput      17.6 Gbit/s  23.4 (+33%)
-> cpumap, 16 TCP flows  pkts/GRO skb    3.4          7.5 (+122%)
-> 
-> Both veth columns reach line rate, so the gain is in CPU time. A store
-> kfunc takes 2.9 to 4.9 ns. Details are in [8].
-> 
-
-Nice performance gains :-)
-
---Jesper
-
-[... cut ...]
- > [1]https://lore.kernel.org/all/20260227153231.78d16b69@kernel.org/
- > 
-[2]https://lore.kernel.org/all/ca38f2ed-999f-4ce1-8035-8ee9247f27f2@kernel.org/
- > 
-[3]https://lore.kernel.org/all/1d5521eb-84fc-4417-a3f5-6366694d160a@kernel.org/
- > [4]https://lore.kernel.org/
- > all/175146824674.1421237.18351246421763677468.stgit@firesoul/
- > [5]https://lore.kernel.org/all/20260722113525.34092660@kernel.org/
- > [6]https://lore.kernel.org/all/20260721183256.6f49d6e1@kernel.org/
- > [7]https://lore.kernel.org/all/20260715-bpf-xdp-meta-rxcksum-
- > v5-0-623d5c0d0ab7@kernel.org/
- > [8]https://github.com/tgao-cf/skb-core-extensions-bench
-
+-- 
+Best regards
+Ridong
 
