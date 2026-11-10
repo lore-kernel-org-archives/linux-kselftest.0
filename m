@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794292701;
-	b=pAKnVn0LIEdrKx5uB4iNo6+yY5vZ4hOiV/9jryH+tdH/QZEpSk0VzJpWOrf/OY5d2VVo
-	 1OA9MbFr1wd3Ydv7a7R0VBHBMnXnnG0uXOd4yFeE2VXHFdGreUDKVXvdHmTuWK5F1YBWf
-	 cKAbI2SBzFvhggnnYWwp4T6zxwAoK9PeIVmUzlqGo6F8N60eazO7HzYhgNOrlcIflMesP
-	 iMzNx9kXubP/E89fdUpxNkW0c0XbrkhQa2qz9f1RLeG14FBBtrJiZj7W1SzfJNEbVVZ3c
-	 F3+V2AD6LcuI+WiQmlkaImOI+GXLUqSa1GZcDrFeM13sbuX/5qthjPU9tZGOv8mQncA==
+	t=1794292702;
+	b=hXsiEwmHO/91SYIPNePxALxPM5gL6ScdWyMljcJpL5WXE6XQ9rFGHIyQ6wxgWEqn6ryd
+	 MshmEO/Z9QYGWYUy+mbLIG0ZIBNrigT27N2Y2pWDFy4RSngENxk+s7gYbf1/7q1zZP4qn
+	 BP/Y78d9Y2C3S1gTtTm43tCpXQKHWoso974i7wvxuvvUdS5m2W9HBKPGQW8/Y4aM4i9WE
+	 H9nfERO21NTIrywLZq6qpf65xBc9PUjKniW1jfmhrxKpdTGtaShMfxmdbL8ldJI3XMz2x
+	 5uYUEdTt+//5abh5PI6gNpJTDRzlSL4c+z6HciPbgF9ZkpBpw8fIJZjcBxNf3QwPsSQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794292701;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794292702;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=tb6492JbkmgtBmoAA1lWUlcjhbJx5wzf1aKynM8S9Rs=;
-	b=2teSafqQRAcCU68dzGT1zoD4+3/0VMcKM6/iRpuLZ9ChLasw5Ox5nf1FmPAB+OtAURPO
-	 q3WOd4FTfwqRycvKZBOkVe5FUs7eVpsGvJaMSv0Vyu9rZ6djagNab+ASw+SICxYtlWUIS
-	 Bj+IW2f4AdpaG5fIKpPKmolmiRc3vAeHYpn+k8ITgURadJoXc/hPv7wiS+gbR41TG+N9M
-	 nJzHn+HMcoEIG+dRzWNiiUfbioNwtOcdNTv+mYl93i5lAcjlF2aa27hK50xQXgqJz3YJF
-	 AD7wuOv2ZonybAtUxQaO+QcmUerhZhjnQUylbPx+FRiXfCAmt+wNPobrTvOv0NSzg5w==
+	bh=RWInOMfw9GOXwISAMEtJFc91329pw/vtCm+j8sow0wY=;
+	b=p4GPL+rVQMZhtCJRsE9wAYHeKfY4RrLJdeWZKMWDjI8GTV/emqKWVQrlQykMWX6cjSmU
+	 p6gOmr55fz7a9VPqf7FMSdFdqYRu84hmAcd/TQ2ApjK239FVyk8xVAPPkl+1kYRbK6Bge
+	 TxOAhKHScg/XpXWrd4xK3n9wwh9EGurtLvpakCFklypI2Q9pMMO8Kz16/KRGo0jqi+AyU
+	 3Z//TfMybbIuHNSvE1rl8/mSGeGMqQMcYNt3zLxM4V/eG4MnSO8cw5iuC1/hLrVSJFLW2
+	 7w/IryI/7Pli/rUrT3DnhFFkvH+LTIMo+OtkTPHxrZqLjI08JffxCrxVpkts1ZfC1jw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NUepMDTX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OYie+R0z;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935D5606A334;
-	Tue, 10 Nov 2026 06:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C34560A2601;
+	Tue, 10 Nov 2026 06:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NUepMDTX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCDB1F008A2;
-	Tue, 10 Nov 2026 06:38:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OYie+R0z
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9031F008BF;
+	Tue, 10 Nov 2026 06:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794292700;
-	bh=tb6492JbkmgtBmoAA1lWUlcjhbJx5wzf1aKynM8S9Rs=;
+	s=k20260515; t=1794292701;
+	bh=RWInOMfw9GOXwISAMEtJFc91329pw/vtCm+j8sow0wY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=NUepMDTXMV1qSqxVZiGi7dTMF76kI6beGLfpgFoQm994HjHyQHhEo0pjgyNb2ThHM
-	 wXgUiUBUSxufsqt5BE8SrGxyRB43bLWCD0FDyJm0lgsh/IwTQBWro2gI7HS31ZqKoM
-	 h3PC3WQLXQkvmm9ZXljjtnJDGhTkoseoweHyUbq7RwzhATQ0OBH8Ko1QTaQHUK4QOY
-	 uuAucLUaaKv5yDEYu/APqwUDEbTZlFfg1rtJPmPQjM1jpNf0WZPKfWw0UEHhLdFtja
-	 34ytQjEC+WGd2G5jydmujjZnBa1E5CoqJjb1AApTCWEJYMTQE5m2mZUYNZGT8mVCTw
-	 Rq1qCSMykbTWg==
-Subject: Re: [PATCH net 2/4] af_unix: Fix scm_stat.nr_fds leaks for OOB skb.
+	b=OYie+R0z2I+81ZIbGNr/M1bu/c25hL8Rj75oPBcHX9DVaOCUNhDuYgbOcCVmpMNv8
+	 oEn0CjFczzgr8VaA5hO1ws3lq9EjlEGomfevhel9DISrybngN/NStF4mywWXtdnufZ
+	 gbRLJi6dn/93m/Og791W7CLroZuMlvesU/8FcVnb3BqM0UWABey2uJuUI54CVVbDb4
+	 2PRwnZzH/eGWTWg+T5DnzuEv3YsbQLjmDeos3wRJ+yJWXBPBXt+Kea3Z8SPa69j/w0
+	 peBW6TxhNNwqGaR/XE4n4ruCEsNzRCu5Gts9GwNSnjmp3j6t/t6OZVRigoTZfIpUmp
+	 QZtBwLY64TsSw==
+Subject: Re: [PATCH net 3/4] af_unix: Fix scm_stat.nr_fds leak in
+ unix_dgram_disconnected().
 From: netdev-bot+sashiko@kernel.org
 To: sidchintamaneni@gmail.com
 Cc: kuniyu@google.com, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
@@ -48,11 +49,11 @@ Cc: kuniyu@google.com, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  tkhai@ya.ru, apais@microsoft.com, rlmenge@gmail.com,
  hargar@linux.microsoft.com, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 10 Nov 2026 06:38:18 +0000
-Message-ID: <179429269890.994134.2299928525127713908@kernel.org>
-In-Reply-To: <20261106051905.218638-3-sidchintamaneni@gmail.com>
-References: <20261106051905.218638-3-sidchintamaneni@gmail.com>
-X-sashiko-severity: Low
+Date: Tue, 10 Nov 2026 06:38:20 +0000
+Message-ID: <179429270039.994134.15193839988115101095@kernel.org>
+In-Reply-To: <20261106051905.218638-4-sidchintamaneni@gmail.com>
+References: <20261106051905.218638-4-sidchintamaneni@gmail.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,103 +66,128 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] The commit message for "af_unix: Fix scm_stat.nr_fds leaks for
-  OOB skb." gives the wrong reason for the leak.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Pre-existing issues:
-- [Medium] unix_dgram_disconnected() (net/unix/af_unix.c:616) purges a
-  datagram socket's receive queue with skb_queue_purge_reason() and…
+- [Medium] In net/unix/af_unix.c, unix_dgram_disconnected() used to free
+  a fixed snapshot of the receive queue.
 
 --
 
-af_unix: Fix scm_stat.nr_fds leaks for OOB skb.
+af_unix: Fix scm_stat.nr_fds leak in unix_dgram_disconnected().
 
-This commit adds scm_stat_del() calls on the paths that free or skip an
-OOB skb. Those paths are in unix_stream_recv_urg(), manage_oob() and
-unix_stream_read_skb(). Without the calls, u->scm_stat.nr_fds stays
-elevated after an OOB skb carrying SCM_RIGHTS is dropped.
-
-> Because unix_destruct_scm() has no reference to the receiving socket when
-> passed descriptors are not AF_UNIX sockets, u->scm_stat.nr_fds (reported
-> as scm_fds in /proc/<pid>/fdinfo/<fd>) remains permanently elevated.
-
-[Severity: Low]
-Is this explanation accurate? It reads as if the leak only happens when
-the passed descriptors are not AF_UNIX sockets.
-
-The destructor path never decrements nr_fds for any fd type:
-
-unix_destruct_scm()->unix_detach_fds()->unix_destroy_fpl()->unix_del_edges()
-
-net/unix/garbage.c:unix_del_edges() {
-    ...
-	if (!fpl->dead) {
-		receiver = fpl->edges[0].successor;
-		receiver->scm_stat.nr_unix_fds -= fpl->count_unix;
-	}
-out:
-	WRITE_ONCE(fpl->user->unix_inflight, fpl->user->unix_inflight - fpl->count);
-    ...
-}
-
-The destructor can reach the receiver through the AF_UNIX edges, but it
-only updates nr_unix_fds and unix_inflight.
-
-The only decrement of nr_fds is the atomic_sub() in scm_stat_del(). So
-these OOB free paths leaked nr_fds for AF_UNIX descriptors too.
-
-The oob_fdinfo selftest in this series sends AF_UNIX socket fds
-(self->fd[inflight * 2]) over MSG_OOB. It expects scm_fds to go back to 0
-only with this fix applied.
-
-Could the commit message describe the cause as scm_stat_del() being the
-only place nr_fds is decremented, whatever the fd type?
+This patch changes unix_dgram_disconnected() so that it dequeues each skb
+from sk->sk_receive_queue, calls scm_stat_del(), and only then frees the
+skb. Before this, skb_queue_purge_reason() freed the skbs without updating
+the counter, so u->scm_stat.nr_fds stayed too high after a disconnect.
+scm_stat_add() and scm_stat_del() move above unix_dgram_disconnected() so
+they can be called from there.
 
 > diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index bfaab7c6d7203..44c0a81dd423a 100644
+> index 44c0a81dd423a..47120d81aca28 100644
 > --- a/net/unix/af_unix.c
 > +++ b/net/unix/af_unix.c
 
 [ ... ]
 
-> @@ -2906,6 +2915,7 @@ static int unix_stream_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
->  		spin_unlock(&queue->lock);
->  		mutex_unlock(&u->iolock);
->  
-> +		scm_stat_del(sk, skb);
->  		kfree_skb_reason(skb, SKB_DROP_REASON_UNIX_SKIP_OOB);
->  		return -EAGAIN;
->  	}
+> @@ -616,8 +638,12 @@ static void unix_write_space(struct sock *sk)
+>  static void unix_dgram_disconnected(struct sock *sk, struct sock *other)
+>  {
+>  	if (!skb_queue_empty(&sk->sk_receive_queue)) {
+> -		skb_queue_purge_reason(&sk->sk_receive_queue,
+> -				       SKB_DROP_REASON_UNIX_DISCONNECT);
+> +		struct sk_buff *skb;
+> +
+> +		while ((skb = skb_dequeue(&sk->sk_receive_queue)) != NULL) {
+> +			scm_stat_del(sk, skb);
+> +			kfree_skb_reason(skb, SKB_DROP_REASON_UNIX_DISCONNECT);
+> +		}
 
 [Severity: Medium]
-This is a pre-existing issue and was not introduced by this patch. Is
-there a similar nr_fds leak in unix_dgram_disconnected()?
+Can this loop keep running while other senders refill the queue?
 
-net/unix/af_unix.c:unix_dgram_disconnected() {
-	if (!skb_queue_empty(&sk->sk_receive_queue)) {
-		skb_queue_purge_reason(&sk->sk_receive_queue,
-				       SKB_DROP_REASON_UNIX_DISCONNECT);
+skb_queue_purge_reason() took a snapshot of the queue. It took the lock
+once, spliced everything onto a private list, and freed only that list:
+
+net/core/skbuff.c:skb_queue_purge_reason() {
     ...
+	spin_lock_irqsave(&list->lock, flags);
+	skb_queue_splice_init(list, &tmp);
+	spin_unlock_irqrestore(&list->lock, flags);
+
+	__skb_queue_purge_reason(&tmp, reason);
 }
 
-Each skb on that queue was counted by scm_stat_add() at send time. The
-queue is purged without scm_stat_del(), and the socket stays in use. This
-happens when unix_dgram_connect() gives it a new peer (or AF_UNSPEC), and
-also from unix_dgram_sendmsg().
+The new loop drains the live queue until it happens to be empty. It also
+takes and drops the irq-disabling queue lock once per skb.
 
-Sending SCM_RIGHTS to a connected SOCK_DGRAM socket and then calling
-connect() on it before reading would leave scm_fds in fdinfo too high.
+Both callers have already published the new peer state and dropped the
+unix state locks before they call this. In unix_dgram_connect():
 
-This is fixed later in the same series by "af_unix: Fix scm_stat.nr_fds
-leak in unix_dgram_disconnected()". That patch dequeues each skb and calls
-scm_stat_del() before kfree_skb_reason(), and the dgram_disconnect_fdinfo
-selftest covers it.
+	unix_peer(sk) = other;
+	...
+	unix_state_double_unlock(sk, other);
+
+	if (other != old_peer) {
+		unix_dgram_disconnected(sk, old_peer);
+
+On the dead-peer path in unix_dgram_sendmsg():
+
+	unix_peer(sk) = NULL;
+	unix_dgram_peer_wake_disconnect_wakeup(sk, other);
+
+	WRITE_ONCE(sk->sk_state, TCP_CLOSE);
+	unix_state_unlock(sk);
+
+	unix_dgram_disconnected(sk, other);
+
+>From then on the new peer can send to sk. If the peer is now NULL
+(AF_UNSPEC or the dead-peer case), any socket that can reach sk's bound
+address can send to it as well. Those senders reach this code in
+unix_dgram_sendmsg() while the loop is still running:
+
+	scm_stat_add(other, skb);
+	skb_queue_tail(&other->sk_receive_queue, skb);
+
+The receiver-side flow control does not hold them back:
+
+	if (other != sk &&
+	    unlikely(unix_peer(other) != sk &&
+	    unix_recvq_full_lockless(other))) {
+
+This check is skipped completely when the sender is sk's new peer. For
+other senders it only applies once the queue is above sk_max_ack_backlog,
+and the loop keeps the queue below that.
+
+If several CPUs keep sending, connect() or sendmsg() could stay in this
+loop with no fixed bound and no cond_resched(). Could that cause soft
+lockups on non-preemptible kernels?
+
+Datagrams that the new peer queues after the peer change would also be
+dropped as SKB_DROP_REASON_UNIX_DISCONNECT for as long as the loop runs.
+Before this patch, that window ended at the single splice.
+
+For reference, the old skb_queue_purge_reason() used the same
+dequeue-until-empty form before commit d86e5fbd4c96 changed it to splice.
+
+Would it work to keep the splice? The queue could be spliced into a local
+sk_buff_head under sk->sk_receive_queue.lock, and then the local list
+walked with scm_stat_del() and kfree_skb_reason() on each skb. That keeps
+the new nr_fds accounting and bounds the work at the time of the splice.
+
+>  
+>  		wake_up_interruptible_all(&unix_sk(sk)->peer_wait);
+>  
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106051905.218638-1-sidchintamaneni%40gmail.com
