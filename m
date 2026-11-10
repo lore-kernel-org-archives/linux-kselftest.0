@@ -1,95 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794314735;
-	b=OWzc5NF0RTmPIbS3kXmBZSSftj3AJTOT+9z89g4HNAPBC79WiImvf3t2tKu5103AMIj7
-	 WXg9q2A3K3oZjra4WviB4lnHN+BFhpN7No7ej34Tl++fHMfafCDtMdDrLJY2+y+s4A+F2
-	 fPjlwath5nchpz+pXamB1jfFOwYb+YTwLEb5S02c4JGhROKuqWa6J36a15o5SX3Ap0S45
-	 ehBpHnDp5Qb7+Vvm1KLE23Wuqd+pyNTCLUbsD4z2nv5m92rnklXY4Iv4XCb2LenxN8PLk
-	 zMdtFNP3KCSuE9ICVRCsrvnUFeuaJHIjHyeyK/VdqqLYjGo4eD9Kgy9anrvs4zfUtug==
+	t=1794314959;
+	b=J6MeK61RQMeNIEnpb2Pylae8gdtUYcFCS6QRZpv/TLE9vtVQjpYjoS4l5ZoXLyFznTgq
+	 rgvKAS6nYyGyl+s3jQPbdqNlusDB6s+MzvktkQBFYSzFxJDysm/D2EptAIGb1aN6I2GR8
+	 GkHUas2XLUA0+ssogn4DWQOc5YzuiQK8ED64/nsoD5C5l6yiGRzkVDsdOfxiFJuJTifUg
+	 gPfoJwcNO18ogMhlmIbU48FybJd+tMCRYo7ABhKWqfPYmSL7nulmK1eb3Yet6rseoissu
+	 CxHAVUbCZXlZc/wDu+/zaOeHDSri/wsX1bjvmS65ZGlMg5cXHH0b8KXpVRDfv08r4CQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794314735;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=BfINIDbdnp5YQZaOFA3yDq3s0AajpyTCWSTrx1kczfw=;
-	b=SwLRHz9OeY4gMiOs0LIBf4cmR2Oq+fFC+t1+/I6HQabO8vBBH1bydMK19ya51tju67Ul
-	 RfHC9ySgMMBqIfxLqvksFPRrwtzTg1CxZ6bu5JMJ+75JqzgD54lBKJDD5Rgk22B9ex6M6
-	 mLKY3MFFyM5Xmq+9bwzvT9Wi56mYpVlS6L+vzNs8sW1wD11u2jE5gJwn13s8ovSeAInnH
-	 dTe1Fe5Pa+uqBpcjt3i2dz3/EM9YJCcFVHYEe+MDGYaljtLT8shoV8hZHtd+nK6PCMd29
-	 6Q3L/g9aX+aTpvf2KrqIs1++ybIXLwuMQCG/rf6fPD5w6zvnQbeELwaxt/DckqdU9pw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794314959;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
+	bh=CbaK/OiLsBp24ctmmqfxEDeKLJHZS6Yzb8a5ARPuJDc=;
+	b=Up1iCLU55Gvct4GpFEuZ/qlqo3GbEVU5QvUkDvfiR8q66O3MRLDkdssuOM/grykJYp9g
+	 Gw2jnkjn/MIRin4zbQ68YoPE8P5ymk7EzOOFQUoYzuqw2jkU3cyfDv8PuEElMU5gsqM/T
+	 zeKGi6loSNxcuIXk/P7as/k+WW/sbk87sVdCwrx7NdaYfR0TGF3iToc37jCtxuqlllWi0
+	 NjsGo7joE9faeF58gdCT6sochgfyhYPSLYez0X/wAqzIAI8/vGjeqxUj4KtALZOzljPVh
+	 HPm+BHf3pjTgVHr6lMDxI4dLneuVEz173/6nD+9+OG8sdrq7A4dC8vEuE3uG0FbXS8w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=dEcZUNmu;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FB4606A332
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 12:45:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25FB4606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b="FW4jWPq/";
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B25606A337;
+	Tue, 10 Nov 2026 12:49:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99B25606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=dEcZUNmu
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so23951995e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 04:45:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1794314733; x=1794919533; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BfINIDbdnp5YQZaOFA3yDq3s0AajpyTCWSTrx1kczfw=;
-        b=dEcZUNmuEyvW10CwwvMzlj73emtXK/fpU4H7CvDEry6gD8AmS9pMZBCHmGO+rTr/6s
-         a1jZcXSIrGxQ4/dzRn/1Oi5yj6+AZa7H3S8HLfDHBQdEeXVaLy5gTLgTxKfPDzwEq+Lo
-         MV0NN62fzU+Phg8hUPH89UJplWl6wCql6scAU2ZeKnhmTEcoeGIQNq3BJIwCn/qvG40M
-         kL8idh1jg7BqKcTWM+XNKEweNrzQKtqQKHke4sOPAlA84d3EDAAjBHFIUI1vnWn6dAzH
-         PHmcCoK9PmgLWAIOXwtUyNVQpLn61o3FhsjUXL50KIAUjEKUaF0BJ/zsdWY5WeJSu+Pi
-         wJVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794314733; x=1794919533;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BfINIDbdnp5YQZaOFA3yDq3s0AajpyTCWSTrx1kczfw=;
-        b=ojRwFc7Q16QxmRrB6g6s4udmJIjdkpZFfVqW9ampNolKK4NmYqDwk1x0jHIxKyyCt6
-         8eVG+kRQTxyzM34zgB4aOqnXqCEo+JzIzbtD2J8vSCSnZwhW9cYKT5YvWT1NYXCjp0jh
-         AnLDB1Gn/d2olHtErFpLIpSPnO8juOAnVl7MOcyPBWGJnMJapOc5I5/9RwUtgr3MvmMa
-         v0p2Lv+xHLljvZYMEWPCHUApuqqlYPWHrFshkiWi/yuw0vAatwo5vsJV+CH/IdDjnc5P
-         2oDAbspPK1z2kFWkhqDMAIZMK4Llr0Bbf1exs0CA/tRHIGmtqiyVD2XKY3wWs2GD6sMD
-         wPeg==
-X-Forwarded-Encrypted: i=1; AL+hErEprkmk9J8tzNthpH4PCEgJgrTCjavFfAZTzWRITypZPHotYQtxmmITBPfWM6U1xNpZ60cC+4/+kDfRQb3RnuY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9wTXuTlgAmaHleGA+flikwwc7mHy0Snq9YCSj10ahq4mgrDsT0
-	lgAZz8v2JHzpBBAAmNYQBhHgNiF3qv4wnmZIpZQE+EnXZSQDcwwdPatsLaeYwqjJvR0LldeYugE
-	tsDgnWIw=
-X-Gm-Gg: AYBFou2rb/RSFNMzX33C0qUXId400zLKhhEVakdjXKh/l6j6mon9Nk1zemBLiYmPW56
-	k7IrNQ5P8GS7Ym9MQoTtrhK0dCyePw2YZbppGgs3AQ9ZdE2mzzGG8wCEfVCsx4au+mptVwjWnH2
-	hTNix6Qwr+vAWDxzt0b/lyx0Q14/XsbN2Y8kUPl0bJ6gNriYT3WoVUmcigUpVAibJK2+73K9aop
-	PhUCZ5MDJCG80rJZCfbNlZn8ClCMzQNlkD7ezsvxHx3PXzKKRT06VnpJ7p3TeFkXHS08WX5uPwO
-	e7i8Qwv/lHl4X6TFJwa27HT7yYoPUbBT35/Uuw/LOHqPzxTJeC7s2SAytoudWFe2XgvKfFXxl5W
-	m2Fs18M2dxj8UZ7vOC4J3OV3YIRukRTq0g4mNhPDHJG4BGrOx3e2Ur6HSrgXyPvOfBen/alQRsp
-	E0FOL9uFd7qOQydZAG25dizLBm8OfzXnJEHqa5jhu+389v0MKJekoOZrIHW4dBOIvHfwgKXWHVh
-	uCyPFI36a+pP9OrjuXyHYO4+NQrFEJMfdw4oYEfJCQFHUMb5aSmHYPg8z6g/Hi7mhpUYb2wR5nE
-	T3DmaTQ+MkrqhjywI/r00Xgg1orcJkdqnDkFmtF+zrKP/T0=
-X-Received: by 2002:a05:600c:6087:b0:4b4:a551:681a with SMTP id 5b1f17b1804b1-4ba0233cbbbmr40551245e9.3.1794314733553;
-        Tue, 10 Nov 2026 04:45:33 -0800 (PST)
-Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba02005946sm70546095e9.1.2026.11.10.04.45.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 04:45:33 -0800 (PST)
-Date: Tue, 10 Nov 2026 13:45:30 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Song Liu <song@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/12] klp-build: Fix dependent patches, add selftests
-Message-ID: <avMR6tKwddVBrkpk@pathway.suse.cz>
-References: <20261028214534.1919398-1-song@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=FW4jWPq/
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C64A514BF;
+	Tue, 10 Nov 2026 04:49:14 -0800 (PST)
+Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EE773F85F;
+	Tue, 10 Nov 2026 04:49:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1794314957; bh=P5lO3LRwfz3Xx9spMdnYq5HZgom/q8jT5u8waDgtbsc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FW4jWPq/tfDZxBG7gTvwO6Saghy4qPGyV+hze///XZNsFLtYaK5wj2gUsAQ3b/1gh
+	 T6W5B9h4lNu/oIbpkFS2CPsomzXXZPsB1rdaGrB44ze6FvmHsifyDOH/BV74iyXiQD
+	 /n5r91Z2/5jv4DVU8iWFUs+t19uEOqOgbofPVNlY=
+From: Leonardo Bras <leo.bras@arm.com>
+To: Tian Zheng <zhengtian10@huawei.com>
+Cc: Leonardo Bras <leo.bras@arm.com>,
+	maz@kernel.org,
+	oupton@kernel.org,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	corbet@lwn.net,
+	pbonzini@redhat.com,
+	yuzenghui@huawei.com,
+	wangzhou1@hisilicon.com,
+	yangjinqian1@huawei.com,
+	caijian11@h-partners.com,
+	liuyonglong@huawei.com,
+	tangchengchang@huawei.com,
+	yezhenyu2@huawei.com,
+	yubihong@huawei.com,
+	linuxarm@huawei.com,
+	joey.gouly@arm.com,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	seiden@linux.ibm.com,
+	suzuki.poulose@arm.com,
+	fuad.tabba@linux.dev,
+	mark.rutland@arm.com,
+	seanjc@google.com,
+	rdunlap@infradead.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH v5 11/15] KVM: arm64: Reserve dirty ring space for the HDBSS buffer
+Date: Tue, 10 Nov 2026 12:49:07 +0000
+Message-ID: <avMSw3LLDIFT3kSR@LeoBrasDK>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <90775cb3-84ab-4690-a252-1ac41488118f@huawei.com>
+References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-12-zhengtian10@huawei.com> <auikG0clmr19sAjh@LeoBrasDK> <afcbf19b-bd13-4afc-ab56-8bc50c793e50@huawei.com> <au30DqzWIFny1tpr@LeoBrasDK> <d81243e3-d790-4ee8-9b28-36d35591ee77@huawei.com> <avIOZTvQF-1sxs2p@LeoBrasDK> <90775cb3-84ab-4690-a252-1ac41488118f@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,49 +91,226 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261028214534.1919398-1-song@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed 2026-10-28 14:45:22, Song Liu wrote:
-> klp-build fails when a later patch in the series depends on an earlier
-> one, because it fixes each patch against the original source on its
-> own.  Patch 1 fixes this by combining the patches into a single patch
-> before adding the #line directives.
+On Tue, Nov 10, 2026 at 04:54:30PM +0800, Tian Zheng wrote:
 > 
->  scripts/livepatch/Makefile                    |   3 +-
->  scripts/livepatch/klp-build                   | 137 +--------
->  scripts/livepatch/klp-prepare-patch           | 277 ++++++++++++++++++
->  tools/testing/selftests/Makefile              |   1 +
->  tools/testing/selftests/livepatch/README      |  16 +
->  .../livepatch/test_klp_build/Makefile         |  26 ++
->  .../livepatch/test_klp_build/functions.sh     | 149 ++++++++++
->  .../livepatch/test_klp_build/run-tests.sh     |  68 +++++
->  .../livepatch/test_klp_build/test-basic.sh    |  93 ++++++
->  .../test_klp_build/test-cancelling-patches.sh | 102 +++++++
->  .../test-independent-patches.sh               | 124 ++++++++
->  .../test_klp_build/test-line-directives.sh    | 175 +++++++++++
->  .../test-new-and-deleted-files.sh             |  94 ++++++
->  .../test_klp_build/test-offset-and-fuzz.sh    | 120 ++++++++
->  .../test_klp_build/test-patch-not-applying.sh |  73 +++++
->  .../test_klp_build/test-unsupported-files.sh  |  30 ++
->  16 files changed, 1366 insertions(+), 122 deletions(-)
->  create mode 100755 scripts/livepatch/klp-prepare-patch
->  create mode 100644 tools/testing/selftests/livepatch/test_klp_build/Makefile
->  create mode 100644 tools/testing/selftests/livepatch/test_klp_build/functions.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/run-tests.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-basic.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-cancelling-patches.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-independent-patches.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-line-directives.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-new-and-deleted-files.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-patch-not-applying.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-unsupported-files.sh
+> 
+> On 11/10/2026 2:18 AM, Leonardo Bras wrote:
+> > On Mon, Nov 09, 2026 at 12:00:52PM +0800, Tian Zheng wrote:
+> > > 
+> > > 
+> > > On 11/6/2026 11:36 PM, Leonardo Bras wrote:
+> > > > On Fri, Nov 06, 2026 at 06:36:04PM +0800, Tian Zheng wrote:
+> > > > > 
+> > > > > 
+> > > > > On 11/2/2026 10:54 PM, Leonardo Bras wrote:
+> > > > > > On Tue, Sep 29, 2026 at 06:36:51PM +0800, Tian Zheng wrote:
+> > > > > > > The dirty ring reserves room for CPU-side dirty buffers via
+> > > > > > > kvm_cpu_dirty_log_size(). Report the HDBSS buffer entry count
+> > > > > > > through it, so a full buffer flush always fits in the ring.
+> > > > > > > 
+> > > > > > > Pin the HDBSS buffer size to PAGE_SIZE when dirty-ring is enabled,
+> > > > > > > via kvm_arch_dirty_ring_size_updated(): a larger buffer only
+> > > > > > > shrinks the soft_limit and forces more frequent userspace drains.
+> > > > > > > 
+> > > > > > > Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
+> > > > > > > ---
+> > > > > > >     arch/arm64/kvm/arm.c | 8 ++++++++
+> > > > > > >     arch/arm64/kvm/mmu.c | 8 ++++++++
+> > > > > > >     2 files changed, 16 insertions(+)
+> > > > > > > 
+> > > > > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > > > > > index 9d7bdece149a..5a7046acb62e 100644
+> > > > > > > --- a/arch/arm64/kvm/arm.c
+> > > > > > > +++ b/arch/arm64/kvm/arm.c
+> > > > > > > @@ -215,6 +215,14 @@ static int kvm_arm_default_max_vcpus(void)
+> > > > > > >     	return vgic_present ? kvm_vgic_get_max_vcpus() : KVM_MAX_VCPUS;
+> > > > > > >     }
+> > > > > > > 
+> > > > > > > +void kvm_arch_dirty_ring_size_updated(struct kvm *kvm)
+> > > > > > > +{
+> > > > > > > +	if (!system_supports_hdbss())
+> > > > > > > +		return;
+> > > > > > > +
+> > > > > > > +	kvm->arch.hdbss_buffer_size = KVM_ARM_HDBSS_DEFAULT_SIZE;
+> > > > > > > +}
+> > > > > > > +
+> > > > > > 
+> > > > > > On the same subject as a previous patch:
+> > > > > > I don't think this is the best approach, on top of adding a new weak
+> > > > > > function to take care.
+> > > > > > 
+> > > > > > Maybe during the dirty-ring allocation, on vcpu creation, we could take
+> > > > > > into account the requested dirty-ring size, and just allocate the HDBSS
+> > > > > > buffer taking that into account. That would make it simpler, don't you
+> > > > > > agree?
+> > > > > > 
+> > > > > > Thanks!
+> > > > > > Leo
+> > > > > 
+> > > > > Hi Leo,
+> > > > > 
+> > > > > The "set once" guard we're discussing comes from the patch that adds the
+> > > > > ioctl, and it isn't really needed. We discussed this earlier [1]: we can
+> > > > > just initialize hdbss_buffer_size to PAGE_SIZE at VM creation and let
+> > > > > the ring reservation use it directly. **That also means
+> > > > > kvm_arch_dirty_ring_size_updated() can be removed.** Thanks for your
+> > > > > suggestion.
+> > > > 
+> > > > :)
+> > > > 
+> > > > > 
+> > > > > As for why PAGE_SIZE is the right value in ring mode: the HDBSS buffer
+> > > > > is flushed on every VM exit, so a larger buffer doesn't reduce the flush
+> > > > > frequency. It only inflates the ring reservation (64 + size/
+> > > > > sizeof(u64)), which shrinks the soft_limit and forces more frequent
+> > > > > exits to userspace for the ring to be drained. Draining the dirty ring
+> > > > > from QEMU is more expensive than draining the HDBSS buffer from the
+> > > > > kernel, so the smallest buffer gives the best performance. In this mode,
+> > > > > a larger buffer provides no benefit to users.
+> > > > 
+> > > > Humm, if properly dimensioned larger buffers would be benefitial for
+> > > > memory-intensive workloads, unless they are guest_exiting for other
+> > > > reasons in the meantime.
+> > > > 
+> > > 
+> > > Agreed, and the workload I tested is on the "unless" side. The guest
+> > > exits constantly for other reasons, so the larger buffer never got a
+> > > chance to pay off, and only cost ring capacity.
+> > > 
+> > > > > 
+> > > > > In my tests, I also saw performance degrade when more space is reserved.
+> > > > > 
+> > > > 
+> > > > Humm, what kind of workloads did you test?
+> > > > Did you have the chance to monitor what were the reasons for VM exiting?
+> > > > 
+> > > 
+> > > For the workload question, it's a Redis server in the guest under redis-
+> > > benchmark (SET-only, 2KB values, 1M keys, 100M requests). The traffic is
+> > > network-driven, so the guest exits constantly to service requests. The
+> > > HDBSS buffer only accumulates entries between two exits and is flushed
+> > > on every exit, so it rarely fills regardless of size. A larger buffer
+> > > only inflated the ring reservation, which shrinks the soft_limit and
+> > > makes the ring-full exit and userspace drain fire more often.
+> > > 
+> > > > I am not saying this is mandatory for the HDBSS implementation, but the
+> > > > whole idea of letting the user choose their own HDBSS buffer size is
+> > > > because different workloads may benefit from different buffer sizes: if a
+> > > > VM writes a lot to new memory, and exits very little for other reasons,
+> > > > then a larger buffer will cause the VM to guest_exit much less often.
+> > > > 
+> > > > Does that make sense?
+> > > > 
+> > > > Thanks!
+> > > > Leo
+> > > 
+> > > It does make sense. That's exactly the workload where a larger buffer
+> > > pays off, and the next version no longer gets in its way. The two ioctls
+> > > are no longer mutually exclusive.
+> > > 
+> > > The only coupling left is the reservation. hdbss_buffer_size starts at
+> > > SZ_4K at VM creation, so a ring enabled right away reserves for the
+> > > default buffer (64 + 512 entries), and the minimum ring size accepted is
+> > > unchanged from v5. KVM_CAP_ARM_HDBSS_BUFFER_SIZE is the gate. When the
+> > > ring is already enabled, a size is accepted only if its reservation
+> > > still fits in the ring, otherwise -EINVAL. In the other order, ring-
+> > > enable validation rejects a ring too small for the configured size.
+> > 
+> > I don't think this is needed. If using dirtyring, we don't need to allow
+> > user to set hdbss size: HDBSS size should be sized according to the
+> > dirty-ring dimensions, that are set by userspace before the first vcpu is
+> > created.
+> > 
+> > 
+> > > So SZ_4K is just the conservative default for guests that exit often.
+> > > Anything larger, within what the ring can reserve, is up to the user.
+> > > 
+> > > Does this work for you?
+> > 
+> > I still think we should do PAGE_SIZE for dirty-bitmap. Dirty ring should do
+> > based on the dirty-ring size, and maybe review the use of reserved
+> > entries, or it's accounting.
+> > 
+> > What do you think?
+> > 
+> > Thanks!
+> > Leo
+> 
+> Hi Leo,
+> 
+> Thanks for your review. It does make sense!
+> 
+> I agree that dirty-bitmap mode will keep PAGE_SIZE as the default, and
+> in that mode the ioctl stays available for a larger buffer.
+> 
+> In ring mode we will drop the ioctl, the two remain mutually exclusive,
+> and the buffer will be derived from the ring size userspace configured
+> before the first vCPU is created:
+> 
+> ```
+> hdbss_buffer = clamp_t(unsigned long,
+>                        rounddown_pow_of_two(ring_size / 16),
+>                        SZ_4K, KVM_ARM_HDBSS_MAX_SIZE);
+> ```
+> 
 
-I am sorry, I am overloaded and do not have time for a proper review.
+Are you allocating 1/16th of the ring size in bytes as an hdbss buffer?
+That's confusing. I recommend we rather have something like:
 
-I just see that it adds a lot of new files. And I wonder how much it
-shares with the livepatch selftests. Would it make sense to put
-it into a separate directory, e.g. tools/testing/selftests/klp-build ?
+ring_entries = ring_size / sizeof(struct kvm_dirty_gfn);
+hdbss_entries = ring_entries / 2; // Or any number we decide to use here.
+hdbss_buf_size = hdbss_entries * sizeof(hdbss_buf_entry);
 
-Best Regards,
-Petr
+Then we do 
+hdbss_buf_size = clamp_t(unsigned long,
+                         rounddown_pow_of_two(hdbss_buf_size),
+                         SZ_4K, KVM_ARM_HDBSS_MAX_SIZE);
+
+So it's clear what is what here. 
+Just dividing by 16 above can be confusing to whoever is reading the code.
+
+
+> A buffer entry is 8 bytes and a ring entry is 16 bytes, so:
+> 
+> ```
+> buffer entries = buffer_size / 8
+> ring entries   = ring_size / 16
+> ```
+
+Remember to use the sizeof instead of fixed numbers.
+
+> 
+> This means ring_size / 16 reserves at most one eighth of the ring
+> entries for the HDBSS buffer. That keeps the usable ring above 85% while
+> the buffer still grows with the configured ring size, and the result is
+> independent of the kernel page size, with SZ_4K as the only minimum.
+
+Yeah, remember that if you are dealing with the ringbuffer like this, an 
+user can request a 4k ringbuffer and we just won't be able to use hdbss, as 
+it means 4k/16 entries, and hdbss has the minimum of 4k/8.
+
+As I mentioned, maybe this approach of reserved entries is not the right 
+way of dealing with it in arm64.
+
+> 
+> One eighth is the ratio that looks reasonable to me so far. What do you
+> think?
+> 
+
+I see no reason why it could not be higher than that. It all depends on how 
+you want to deal with the full buffer in the future patchset. If hdbss 
+buffer is full, it has to exit and drain to the dirtyring. The guarantee 
+you seek with reserved entries is that all hdbss entries fit in the 
+dirty-ring.
+
+As long as the user is required to drain entries until the dirty-ring is 
+not 'full' anymore, we could easily work with dirty-ring having twice as 
+many entries as the hdbss buffer.
+
+How does it sound?
+
+Thanks!
+Leo
+
