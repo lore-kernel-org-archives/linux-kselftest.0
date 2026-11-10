@@ -1,70 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.136
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.243
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794310477;
-	b=2BZZFOG3LGlPTUO/ilAK4IwByEnWKWZ5EA7lx3FM0eeNAgLKr2OsqeujVxloVWLjaaCw
-	 sottyHDzAPcfYzsYxIa7p9GrLKUNvMZkQj7W6imOXq2S1f/Q5vZqzn5EZi9E4k0penSES
-	 tE/rDB0pohujk65/h5L8r/Yr6bLlTpVynQFhYH9pDIKpkyJImwJkka8VY0wbJ5/XyCfJb
-	 BYibKc7rPq4HsBPkPvcxFl7iWrBbiOH//B+SjWDBpN/Z26CY5d7eMtI03ec7ejIEV+Tbs
-	 0Fyb5wQ0R84FB39RoQmi7syUOMGC0rACtiSuCTHMP7GfunW019blLrxqADABF57e3iw==
+	t=1794310851;
+	b=JzsP+HGvqlLG2N5u1gw91ktTSTELKh8wa9TJf05UtYZcj4whFmp0cFeVyp1e43T+QZ7y
+	 tPFBevl08ZVcL4G4fl043iW9E+En8fGiXqE6OoLmr031rpFcwE9BUsit/AwWexCet0R8G
+	 75+K5lPYgVz9WUmMxqWJhyhG0BYTN1E1bv4OzGMBAw7pUM8/U7KDgYJscw3vis/ZAs8YH
+	 kahryqMieZYcFfukA9QfomaEXjw1US1DWdFgEkBm3I5NXDWFEv0r/kskspCqr3yH9OKxz
+	 xaQ+2pMQFxs2+T6uHZp8hWHCchgSSNkdBICdDUrVeoo+mWWumEfprjvX+twcj/UAfEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794310477;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794310851;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=O2a1TDsS3iUxIM92pLHqfLDtktPZ6Hk3khSHvckjZDU=;
-	b=XIHq3YHTz/Xr6hPKCadCAagRzA02NHEC+2sio9QwiCcgiJm8ygdeeA5lM/2kWIGo++9R
-	 CHWOIkYV2fD7a0IJEEK7BxnZ3u29kmEFmivY2LpQs4UGBaSCRK41Cnxk5i/s0mjgGbV3H
-	 Y0UXj2VGB9E7exlqMCwZLd3ROXK8fBRy+Fk++T8M92WRMUJ2yOZDT2U8MFK5nodVdkBpd
-	 E7WfAkx8X4AzP/xjTGzFdx8wTJJA1eFOY4qtTiaT4vu4xjuj0RHm6XerJdOYGDOErYKX+
-	 WMyLFwxn0KXIXBmBjac3OGXO7bwpH23LIih7Nec0DSYsSbd3tzco/q94vIDYUaaIbjw==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=aPaouAXbgLRUhT/xSgZXmX+UlEKNyTfIZUEDZ/uv2QE=;
+	b=zIdp61LZDyzdCArTim/vowUV4L+UXlJDR7Q6/qqboyWCGNOFnSSJKXR5gdIjHzayxyYe
+	 gRRrlGuzbmhI+eaTZNdw/EY75Jz/wzPYtxfM+nRxZkxzHU6xlYVly9t339Gsgz8jOEbS6
+	 oYhpe7B3hvNMiHaejEuH1Ohc/ZracC5EJ6i8K8KkuuHNg8o5XlxzjY3xTzuLp4LW4Z2Oj
+	 ElaGSJLdDkbRI6NV6kWeqg1HupjeE1U1xqyFnvazCZMS4114WKUBEZ8FjEUexhOCecqHE
+	 zva7dP1IIJ3eUVW9G16O1nxH8iTmE/GrKW2WZumA8M3eiewBDffel1fOT6Z2SK+slsA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qZPqylz3;
-	arc=none smtp.remote-ip=91.218.175.136
-Received: from mta0.migadu.com (out-136.mta0.migadu.com [91.218.175.136])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DWQqkoOE;
+	arc=none smtp.remote-ip=91.218.175.243
+Received: from mta0.migadu.com (out-243.mta0.migadu.com [91.218.175.243])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2794B606A32A
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 11:34:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2794B606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ECF606A31C
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 11:40:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24ECF606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qZPqylz3
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DWQqkoOE
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=sx7YNgEU9+H0zh4XLdzTGH7bAYCesjUaRhN37pRVeCo=;
+DKIM-Signature: a=rsa-sha256; bh=HaOqBACZfDFJv1t2HPP1x99f2DA/TbJHsxjAZEbN/bY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794310474; v=1; x=1794915274;
- b=qZPqylz30aZ3e2BfZqsTlDRz+1A5BGW9qBCxc3KAgoelfm0jerbLRA5Mf59vl44Y4zV6fsTz
- I3Grq8ySLHtOt8IhhKwwnmYkw0eLgOyUZSDb/nVE9HYSLcWzf1/h9RUK0RhrHwMkYAjeU8wm6zz
- lU+CKzCBZOJ7GsPG8EUt6gB0=
+ t=1794310849; v=1; x=1794915649;
+ b=DWQqkoOEn6unSYxAqYOiunEoWmA7J5PYL8JqA5Rwqzpvqy9wDaD5ti59E0FwVZKHLOZSt0ym
+ WQNhQVVnkiH5Roias3P5v2hGvYhulgMKc/v0H4nDBB4hLG0r1W2jzky/Wp3/oN+HgwY8ZsGLHkn
+ Iuct4c1pw6VbdkWBn8J6/TOE=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 8d782ae6a49889d8;
-	Tue, 10 Nov 2026 11:34:34 +0000
-X-Mizu-Trace-ID: 8d782ae6a49889d8
+Received: by smtp.migadu.com with ESMTPS id 24b99d424b1b6eed;
+	Tue, 10 Nov 2026 11:40:34 +0000
+X-Mizu-Trace-ID: 24b99d424b1b6eed
 X-Migadu-Flow: FLOW_OUT
-Date: Tue, 10 Nov 2026 19:34:21 +0800
-From: "Xu Xin (vivo)" <xu.xin@linux.dev>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: David Hildenbrand <david@kernel.org>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jinjiang Tu <tujinjiang@huawei.com>,
-	Qiliang Yuan <odys.yuan@gmail.com>, linux-mm@kvack.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Huan Yang <link@vivo.com>,
-	Wang Xiao <xiao.wang@vivo.com>
-Subject: Re: [PATCH v2 0/4] KSM: introduce only_merge_zero_pages
-Message-ID: <avMBPaBPMpQ75odi@dgvxl46587.localhost.localdomain>
-References: <20261110074312.219847-1-xu.xin@linux.dev>
- <avLsbZz0S7sRYIL9@gremlin>
+Message-ID: <aedd01b8-3f49-4916-b891-38e9c4ff3b06@linux.dev>
+Date: Tue, 10 Nov 2026 19:40:27 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,43 +58,133 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avLsbZz0S7sRYIL9@gremlin>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 5/5] cgroup/cpuset: Correctly set isolated_cpus
+ when switching partition state
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20261109190955.1398611-1-longman@redhat.com>
+ <20261109190955.1398611-6-longman@redhat.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20261109190955.1398611-6-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 10, 2026 at 10:08:00AM +0000, Lorenzo Stoakes (ARM) wrote:
-> All-in-all this seems to be adding more complexity to a current major AI bugfix
-> target, in a cycle where we're not really looking for significant new
-> functionality.
-> 
-> So given [0] I wonder if this could be deferred to the next cycle? David, what
-> do you think?
-> 
-> In any case the code is pretty rough from a scan (I reviewed one of the commits
-> to have a mini-dig) and looks very LLM-generated.
-> 
-> It needs _human_ polishing before we could take it regardless.
 
-I don't mind deferring this to the next cycle.
 
-Also, the patches themselves are all written by Jinjiang and me; some of the
-descriptions may have been translated or generated with LLM, which helps improve
-efficiency for non-native English speakers like me. If you don't like that style,
-I'll try to avoid it and write the commit messages manually.
+On 11/10/2026 3:09 AM, Waiman Long wrote:
+> When update_prstate() is called to switch the partition state from
+> root to isolated or vice versa, the whole effective_xcpus is passed to
+> isolated_cpus_update(). However, if there are child partitions present,
+> some of the effective_xcpus are dedicated to those child partitions
+> and their partition states will remain the same or get invalidated in
+> the case of child root partition with isolated parent in the latter
+> update_cpumasks_heir() call. In the latter case, their exclusive CPUs
 
-Thanks.
-> 
-> And additionally, you are shoving yet more logic into already horribly massive
-> functions in dire need of rework.
-> 
-> Sorry but the technical debt does have to be paid at some point, so I think this
-> would need some initial patches doing something about that before the rest of it
-> anyway.
+update_cpumasks_heir
 
-Fine, I'll try but it's not that easy to refactor scan_get_next_rmap_item().
+> will be returned to their parent.
+> 
+> Therefore isolated_cpus may be set incorrectly with child partitions
+> underneath. Fix that by excluding their exclusive CPUs in computing
+> the correct cpumask of exclusive CPUs used by that partition alone.
+> 
+> Add new test cases into test_cpuset_prs.sh to test for such cases.
+> 
+> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   kernel/cgroup/cpuset.c                        | 30 +++++++++++++++----
+>   .../selftests/cgroup/test_cpuset_prs.sh       |  7 +++++
+>   2 files changed, 32 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 7aa614c6ac4d..41048997a955 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -3054,12 +3054,32 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>   						  cs->effective_xcpus, NULL))
+>   			err = PERR_HKEEPING;
+>   		else if (parent_prs == PRS_ISOLATED)
+> -			err = PERR_ISOPARENT;
+> +			err = PERR_ISOPARENT;	/* old_prs should be isolated */
+>   
+> -		if (!err)
+> -			isolcpus_updated = true;
+> -		else
+> +		if (err) {
+>   			disable_partition = true;
+> +		} else {
+> +			struct cgroup_subsys_state *css;
+> +			struct cpuset *child;
+> +
+> +			/*
+> +			 * Need to scan child partitions, if present, and
+> +			 * exclude their effective_xcpus from cs. In the case
+> +			 * of switching to isolated partition with child root
+> +			 * partitions, those child partitions will be
+> +			 * invalidated in update_cpumasks_hier().
+> +			 */
+> +			isolcpus_updated = true;
+> +			cpumask_copy(tmpmask.new_cpus, cs->effective_xcpus);
+> +			rcu_read_lock();
+> +			cpuset_for_each_child(child, css, cs) {
+> +				if (!is_partition_valid(child))
+> +					continue;
+> +				cpumask_andnot(tmpmask.new_cpus, tmpmask.new_cpus,
+> +					       child->effective_xcpus);
+> +			}
+> +			rcu_read_unlock();
+> +		}
+>   	} else {
+>   		/*
+>   		 * Switching back to member is always allowed even if it
+> @@ -3093,7 +3113,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>   	if (!is_partition_valid(cs))
+>   		reset_partition_data(cs);
+>   	else if (isolcpus_updated)
+> -		isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
+> +		isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
+>   	spin_unlock_irq(&callback_lock);
+>   
+>   	/* Force update if partition is disabled & update effective_xcpus */
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 2d4744f2d6ac..741a13bbeda7 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -556,6 +556,13 @@ TEST_MATRIX=(
+>   	" C2-6:X2-5:P1 CX3-6:P2 \
+>   	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+>   
+> +	# Switch PRS state (root <=> isolated) will properly update cpuset.cpus.isolated
+> +	# even if child partitions are present.
+> +	" C1-6:P1 C3-6:P1 C5-6:P2  .       .    P2      .      .     0 A1:1-2:A2:3-4:A3:5-6
+> +								       A1:P1|A2:P2:A3:P2 3-6"
+> +	" C1-6:P1 C3-6:P2 C5-6:P2  .       .    P1      .      .     0 A1:1-2:A2:3-4:A3:5-6
+> +								       A1:P1|A2:P1:A3:P2 5-6"
+> +
+>   	#
+>   	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+>   	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
 
-> 
-> [0]:https://lore.kernel.org/linux-mm/a2f584f6-e382-4876-aa6d-d5a34de6ee59@kernel.org/
-> 
-> --
-> Cheers, Lorenzo
+We hit the same issue in our testing earlier (an isolated child partition
+loses its isolation when the parent is switched from isolated to root),
+and this is the same fix I had in mind. I also ran a few 3-level nested
+cases (root/isolated combinations, switching the parent and the middle
+level) on top of this series and cpuset.cpus.isolated is correct in all
+of them.
+
+Nits: The first line of the two new test cases lacks
+the trailing "\" used by the other multi-line entries. It still works
+as the newline is just treated as a field separator, though.
+
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+Tested-by: Ridong Chen <ridong.chen@linux.dev>
+
+-- 
+Best regards
+Ridong
+
