@@ -1,100 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794316382;
-	b=FZ/Z+tq+BHZ1SmQiFqO9r8hAXzbb6QMJr3XikirmCjAazpKBh6mJu6sMLL8zA/fHyPFJ
-	 9T432cj73slwUyeXAX04sn3UbKg6KYzscwso70YEfGJSS+A3TuZHCL96cuvFaknwwKR85
-	 8CzNYF92JDKK2TB2lsXw+rPzeLlw4nx8U/yCoa/dUkimmNaMN2N3kZr1CQDi5uOhk5gel
-	 Pp+UyRUSrqqMdYe0nju1NLtp+ez4EM/p/yqKHkxt3FBXA12XUzAShi/nQ6+BO3oZvxexI
-	 K8g3NExLQXC5FMVMYuQDeq5WEwsWJffoOovLEcUfnMwEpFNaD77rwda+sNdrz1qiwSw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794316382;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=j9MOCzNF55rZGGpluezeQ+vnoNPiPbJ5pnRhrnmo5Bc=;
-	b=ziCmnxi6iWFwN6YQTr24d2mWRJTa0Evs1GearNM4QMN4EzctlCHtvzS0BtpqXMtXI4Rr
-	 cyNLSTM4I+lfxhG5AV9gqpTtQY2+uFy/A9ZoQbp7YqIDcJ42c5fGazizpUqhnE2vi/JPC
-	 +J1kdKdN790hMyPXmQnRekN337cuT7xgowOTo1KUvtffeBdn4Ua29BU7t1vmspUniKIZ5
-	 5WdIDaF+FnS+FC0br7+uXnLdUjCY1bugSmpxJL20Oyua0ODYwZyUpFGjXwHAdOFVE6ovq
-	 6l+Hpm7UptMrtdkXuo0lxHsD4J5Hrz+xUdvRXmHdARQbrK+W9WpzHzONIesZWttRGZg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Sdwbhu2K;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.143.172.20
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794316648;
+	b=OpsMlHbERdsvBxgVlUGVIgbuG0AzT0yaW972I8BmhJVl5TXbU0FAeBCqfM/Ulmi4Ipwb
+	 8nislx3T0Ae0OxBLUognjuMSoF6OZJTYF35FDvLcZXO8SE8pzT4mb/LCr/BDEuQTOBrVh
+	 ZWLz1SjQtgicn4tuCn/uQ7+RuezkGxHnS43+jdjlSn3UHNOZ3+nrN6d7ZCqWqp5WvOJiH
+	 ZC9p6TeJX69Z1OlsWtMiJ9AJVWYw0DuL6dLOzPL4qIsh3LaejI77+BtBi902CWmK7Hkpr
+	 9Uzl/gcVK2SNSp18XNvPY4UbkwnWyQOudAwUWN/Y4IipEFMDZQw4Zg/sbLp9/3a//VQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794316648;
+	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Bar:X-Rspamd-Report:X-Rspamd-Score:DKIM-Signature;
+	bh=Xz69vwdlgbH2AiksoxbbdfVj3ichWtpOW5WINr/u1E8=;
+	b=s00eADWBH8TR1L9dDvNGpA1OCIxhAQbJk4Q/4QFy184GMJA8SwoyCfsSDAfDHb1WhLl3
+	 4DKRCKibBHL7zpBKCHDN5wYQyghY19jv7GB/dLa3Vdf35ogNh+ZF6G4C/xPWn2Df+BHrG
+	 FBj6UECJs7CeWZ6ttTOis2XigsoUolwr6/4WobZP/qG5CPKSVYLDKbnbw0ZCODR9zbZhX
+	 6wkOKJJq5KdE4s3FEdXSqIlm3Tms75KngrUFPzprUJAiYI21XJ2ruK/7HfLRLCdTA8v7A
+	 uq8HRQ+vIw8nFHQcvhCz6XplEMLeq+1IbVRdtfgQKukZcU4/vNaOc+KQk1VdXpK2M/w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=lausen.nl;
+	spf=pass smtp.mailfrom=lausen.nl;
+	dkim=pass header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=qEMbmOVZ;
+	arc=none smtp.remote-ip=95.143.172.20
+Received: from mailgate01.uberspace.is (mailgate01.uberspace.is [95.143.172.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED12606BFE4
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:13:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CED12606BFE4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B328B6071E4E
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:17:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B328B6071E4E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lausen.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lausen.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Sdwbhu2K
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67c2c2ac1c3so3001597d50.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 05:13:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794316381; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VS4RBpPi1gPtX7VI65x5bMuYSFz3NbkG4vFZcTgnv+FwG19Dob0LgwUZWS+vH4q8C7
-         Q9eUKX92Gr7ZtbTeEQQL0gElGv9I1Pfr/B+x5/7VLlIxab60zmH2vOdXY4ciNz8YGpgq
-         De+64H5obeLYNY6AIoVBMt9WvtMjdbEWtyrqkX8J3z1i0x4uiYq8R9+H8tU77OMj2FDM
-         vEdYRnxo5KWXa3zxB/pq86PiAn4Ry6x4URFVhysdZ2v6cq3mmWbNVZofcFirUGD+XonD
-         s+cEDoyhq/eVVHvEC3dYmat7F0De8klfHjrgPFHGCy1iuRwroULROcBoGEVtxX0QF0nT
-         qJGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j9MOCzNF55rZGGpluezeQ+vnoNPiPbJ5pnRhrnmo5Bc=;
-        fh=OIz4rcUqcifuh5cgMt2a6wQhP+ZprjwTqlexIKAPVUY=;
-        b=WjK2QGmeWpJOeYxFhzsb2PvRPc0BCIqZ/PYa38xcyS/I9SX6zEl6et0mKeh419bSuh
-         EW9Xgs7aQnMXiYgUY04wJXGT3GWM69A1qPTH9zwUVkoT9z69FB1hqoDUmcWb6xa7M9NJ
-         e5pRl0md4xv4ZwnKGqvn3mXhW+IVf2knbkj5xWhEAFFnc3bTXeYUJZl9dngWIrr/VUcV
-         tdNctF73Lb+qIR8RAw5znBHhAw6kypI+KEsVGf+S6LsYP8MT/0iS/FIItFX/FkkLTOsa
-         N21QQnSvTS6Ru+G4VtSExWwcM2VZ4pEFf423NhdF1+yv1eRnldJxT5Ei5vsUd6ndKUdX
-         a4/Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794316381; x=1794921181; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=j9MOCzNF55rZGGpluezeQ+vnoNPiPbJ5pnRhrnmo5Bc=;
-        b=Sdwbhu2KpgwFLfVlfH6iDlq+dRJGSCxir2demi1cxoaqTT17leKdGKQlndYEKtYU5c
-         4CmjBWzYktFmk9hfzFAmZ1VoHanX2QcIdUGdKqTV5oC+C8BP+g4INWFSWYNKyCfLqt3X
-         tUcd3BGcEHlP5W4vaDqhhHjHeb5wnrSczCmCQGbzZ3ZHU/IySdOzvic3w8LMH7sL+mwn
-         V7+6WUxXTfMZH0o1cPClzyFGoiTHwiQWRleDmjIiztc8DYMf568wzkX3CAUQAh57tOPJ
-         tWrRaurKK4islFO7DwFl7kfIUnB1VXryOTOUJvrOa0eEUhqKjP4XdCoLIjoqDcDxUazt
-         dS0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794316381; x=1794921181;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=j9MOCzNF55rZGGpluezeQ+vnoNPiPbJ5pnRhrnmo5Bc=;
-        b=aCc9ngHYE76IKH2Xy85pSl74xKrFP/PfmQb3eKn/xI4NhSVSQ2wy4lz6ea3QbeRmm+
-         lPE5IDIwhsdSKS/9+aCGO2kQsPiH+Gif3OkcUOpOjqaBrInnvN12uDV9+Dn2njKRFHmB
-         ud41Kk/ylJukorsaZdXEV6mnZXUmMz5JLeT1/BCatnlDhrSu7dPTnIrDSjMJNvrx6XZn
-         1ULylbEhuDLZqC97Ak/v4MKdCfRvEGoRa+/v41oOrJNQJRG5pbHt/2CVgZm4o7uKrq6L
-         rxXHs/sPwHFCmh7oUIG/LyoW2Oa1NbfkUIsmRN0jYcSrL9+RZbgih0lBDxLMYFooQcYW
-         5SUA==
-X-Forwarded-Encrypted: i=1; AL+hErGrdDpwXR4lJhNHNeVHTMYDQ8wAwcomTP4JNCRdQDQihRjaf8og+xyZ+IJ/uzT1LkXl0j0xdSz5o5CfXWNEYN8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/HfUpb5ezRcxd+yIuymiQSJima3FCX8t4FXyyg7Ga+nDRCcc5i
-	Ag3IkTyOiJ9GFWnZu2FKJ/wBA93VpBtWbGW4p5YQ/Y6zSQRrioDaA8QAMnSQ52bHQVYIeUlx0X8
-	kjnT/ro8geDqYSbJFv5FTjyoReffyN4o=
-X-Gm-Gg: AYBFou129Q/eDnc/wYLNGqkY27BRrqjTt+lqMSnn50+ENo9SOdFvcC/lMhNgwglqGbU
-	fJxJIlF1lZ6/XV8yKHWWihzkT3ANeNBOuhHThsjTGTLU9yqOvg1YP3Y5GHFaGepV5hD3GmS+apV
-	xAqga0TFctZZMoV4twEIMMHT9Wljz5vRu1i4dIQ8ncSCPKQmyWQ80sSDKAzAZwbZ2g4vP0A6AZf
-	kFyw4kRsJ6o4shPB99Q6zJaVrmsz6ndUelXjoX3MBKGx+5XTgH8XwBzVvPi/1rwivEbxg+zj/Uz
-	YJf1MwK72z8kg8YjjEAodKYTV+z6ILIzu5VSg8gV0tYrycXRT/G6K1y/Z8x9amJSJgFuAG7qtW+
-	NEkKUSUJ6nbZS+CUHHMsANdI6aJR8XjeEZTz9qA==
-X-Received: by 2002:a05:690e:1386:b0:67b:eb7a:e62a with SMTP id
- 956f58d0204a3-67c56265785mr1829765d50.0.1794316380667; Tue, 10 Nov 2026
- 05:13:00 -0800 (PST)
+	dkim=pass (4096-bit key) header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=qEMbmOVZ
+Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
+	by mailgate01.uberspace.is (Postfix) with ESMTPS id 1B86560C8B
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 14:17:18 +0100 (CET)
+Received: (qmail 18734 invoked by uid 990); 10 Nov 2026 13:17:17 -0000
+Authentication-Results: devico.uberspace.de;
+	auth=pass (plain)
+Received: from unknown (HELO unknown) (::1)
+	by devico.uberspace.de (Haraka/3.1.1) with ESMTPSA; Tue, 10 Nov 2026 14:17:17 +0100
+From: Leonard Lausen <leonard@lausen.nl>
+To: netdev@vger.kernel.org
+Cc: leonard@lausen.nl,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Shuah Khan <shuah@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net 0/2] ipv6: honor rule suppression in raw FIB lookups
+Date: Tue, 10 Nov 2026 13:16:36 +0000
+Message-ID: <20261110131638.15004-3-leonard@lausen.nl>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,79 +73,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
- <f5a22a46-0fd8-4739-bf11-a20e0b3a443b@linux.dev> <DMR088J2OR6L.9TOD4IDBHTZ8@gmail.com>
-In-Reply-To: <DMR088J2OR6L.9TOD4IDBHTZ8@gmail.com>
-From: Anton Protopopov <aspsk2@gmail.com>
-Date: Tue, 10 Nov 2026 14:12:50 +0100
-X-Gm-Features: AclHuK-z3hLVWTJeTumw2Ph2v5vhN9G_65U0kCrk8Fj0jgmTxAiCTqvVd4CkNag
-Message-ID: <CAGn_ityW5Z+JEcTL9wKnQOgLXhjXxC357Q=h95AgR9xP+pcmjA@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/7] bpf: Support struct_ops in light skeletons
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Siddharth Nayyar <sidnayyar@google.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Giuliano Procida <gprocida@google.com>, 
-	Neill Kapron <nkapron@google.com>, =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>, 
-	Maxime Ripard <mripard@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: -
+X-Rspamd-Report: MID_CONTAINS_FROM(1) BAYES_HAM(-2.996444) MIME_GOOD(-0.1) R_MISSING_CHARSET(0.5)
+X-Rspamd-Score: -1.596444
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=lausen.nl; s=uberspace;
+	h=from:to:cc:subject:date;
+	bh=4jabfNk/+Si/BEhfu5MnAq/+ZlUBEjAIZzdfp/sdPnU=;
+	b=qEMbmOVZF0bxGo/52K9MwG4xc0nsDg9y6Jfdko5itxLM892vRRoqMGTAgEkd2mg2XPc0d1taCA
+	r157Erj6MXjgvg5dgPYR/t9+g+TMInPbnPbLSUX8tqgEfog8idPABSa/BoSnlImaz40hMCfwvVzr
+	/gl5qS37QzAWMcc8Zo7/CXXCJtyVkMcdhQhZd2uYgihhxFNnDXmXj4FCopPgVxDhDeX0tX43he9B
+	ysU7D1cDSQNeIpjcGG3wcpVQFlLI/3Cmh6EGxoCa6/aCSk27dSk6MDGn9NwTNQNIFPS4L3xR8X/f
+	ZIKwqHqcaM6rI8m6o9DODamoMgMAXEPGccoROX5CsKR5SBAtTkrY54p43qbps0E4YIv82jzxae/y
+	WMkzuNJYUtCDC0FH749MgHZhaiWMMbEkUMBkzCUZVF37o4YwHkg7aW94+efbp5X3OxjbxJOQ6N/o
+	p15f7WdDVKJHA+XYgqKtGajHVAa5VVrOPlcLi/POG08L1etIbhasycdQle4NbStWA9IAD++WplNw
+	CnEW1/0jYmE6V99nUp3QjzBhcFnbyhBmkJK5JrAHi9iDAZwmZglKC99bufx4N9wEOnf2mgA8OEeX
+	xlkVYxoHbqjJg5T3k4+V91NnioG286wLGTudqxd5RkZrQt4B5ieX6s3JhZ8oe+OGcJT3AwiBS5ui
+	Q=
 
-On Mon, Nov 9, 2026 at 10:40=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Nov 09, 2026 at 11:46 AM Ihor Solodrai <ihor.solodrai@linux.dev> =
-wrote:
->
-> > Andrii, Alexei, wdyt? Any other ideas?
->
-> The loader asks the kernel for ids, sizes and offsets only to pass them
-> back in the next three commands:
->
->   the loader asks                   and passes it back in
->   --------------------------------  ------------------------------------
->   id, size of bpf_struct_ops_<t>    BPF_MAP_CREATE
->   id of <t>, index of the member    BPF_PROG_LOAD
->   offset of data, of every member   BPF_MAP_UPDATE_ELEM
->
-> the kernel can match by name instead.
->
-> The kernel has both BTFs. BPF_MAP_CREATE of a struct_ops map demands
-> btf_fd of the object already, and bpf_struct_ops.c doesn't use it.
-> The kernel can find its struct_ops and the members by name,
-> like btf_parse_kptr() finds the type of a kptr.
-> Then the loader passes what bpftool knows when it generates
-> the skeleton:
->
->   command              the loader passes
->   -------------------  --------------------------------------------------=
--
->   BPF_MAP_CREATE       btf_fd, btf_value_type_id and value_size of the
->                        struct in the BTF of the object
->   BPF_PROG_LOAD        attach_btf_obj_fd =3D btf_fd, attach_btf_id =3D th=
-at
->                        struct, expected_attach_type =3D index of its memb=
-er
->   BPF_MAP_UPDATE_ELEM  that struct with the prog fds in it
->
-> The kernel rejects such BPF_MAP_CREATE and BPF_PROG_LOAD today.
-> Nothing changes for existing users.
-> The BTF of the object is in the blob, so the signature covers the names.
->
-> Then no need for a helper or a kfunc. The 4k buffer, the fds of module
-> BTF and the offsets at run time go away.
-> map->def.value_size, prog->attach_btf_id and prog->expected_attach_type
-> don't hold offsets into the blob.
->
-> The diff below replaces patches 1-5. Patches 6 and 7 stay.
+IPv6 raw FIB lookups ignore suppress_prefixlength and suppress_ifgroup
+because the suppression callback only examines the dst-based result.
+This can make nftables select a suppressed main-table default instead of
+a VPN route, causing strict reverse-path filtering to drop VPN replies.
 
-I like Alexei's approach here, it fits with shirudo. I also have tested it.
-(Patches 6,7 weren't tested, shirudo uses libbpf without bpftool.)
+Patch 1 supplies the prefix length and output device from the appropriate
+result representation. It preserves reject results: raw lookups can
+return success with RTF_REJECT set, whereas dst-based lookups report an
+error and skip suppression. Destination-reference handling is unchanged.
 
->
-> [...]
->
+Patch 2 extends the existing nft_fib.sh fixture with unicast suppression
+and retention checks, plus a loop covering all three terminal reject
+route types under both suppression attributes.
+
+The series targets net and is based on v7.4-rc2 (7475ea8b5861).
+
+Validation:
+- The original VPN failure was reproduced on unmodified v7.4-rc2 in QEMU
+  without kernel instrumentation.
+- The final fib6_rules.c compiles without warnings with the laptop's
+  existing configuration. Its extracted suppression callback passes 17
+  ASan/UBSan checks, including reject results from blackhole nexthops and
+  destination-reference handling.
+- On the rebuilt v7.4-rc2-based laptop kernel, all ten added selftest
+  cases pass and nft_fib.sh exits successfully. A separate twelve-probe
+  test confirms that blackhole, unreachable, prohibit and blackhole
+  nexthop results remain terminal with no suppression, prefix suppression
+  and matching interface-group suppression.
+
+OpenAI Codex assisted with investigation, reproduction, implementation,
+testing and these descriptions. The prompts asked it to investigate the
+VPN failure, validate on v7.4-rc2, simplify the series and preserve
+terminal reject routes. Both patches carry Assisted-by: LLM.
+
+Leonard Lausen (2):
+  ipv6: honor rule suppression in raw FIB lookups
+  selftests: netfilter: cover IPv6 FIB rule suppression
+
+ net/ipv6/fib6_rules.c                         | 32 ++++++---
+ .../selftests/net/netfilter/nft_fib.sh        | 68 +++++++++++++++++++
+ 2 files changed, 90 insertions(+), 10 deletions(-)
+
+
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+-- 
+2.55.0
+
