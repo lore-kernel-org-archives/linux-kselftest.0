@@ -1,59 +1,129 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794320555;
-	b=jazu6YvrCjU3NnnpUSCxhjZpDip/ZHUqAD6OHNaA+Gse4j0u5W1HBJsLxvc6QS9wjoN9
-	 yWRncGNzBbti4tHxEJbMGpKdQFuhXseddoUskDn6nprpyuPOmNoe4dLP85COgS++8st3s
-	 Rjs4Rpxie/tVjfIy7l0BxCdev7TlBnnAdUlQ+whRSVXy+mGQBYQhXsYRckKA00XTllvSP
-	 3ChqYpCEk2lUS+9WYmyasyVhtHZAoDm3YYhNiQMwK4U/VZRQECvU38ztpjQeFYIgFuFir
-	 Vz/mqjFQECPGUJq3VW55iogh4Tt7weNWZ/rqrMM8tYY0x2arUtJi5k0lTga1i0IZq0g==
+	t=1794320707;
+	b=MnLugNZUPFcjT+t5Pid/vGqFBmeW/8BBrt4QntWrwFmU6QkvAOe4x0z036OhQVTaROCX
+	 +PRa26ExMsOv0kQ1fIS4E1sAz8asd9JenJe3wGPrX9LZ8xwyhi5latuZxp9zT7d/p4/MT
+	 SH3cb8VIzJ/NV73krrUJJme/mt1oSGf5Ce3/5CgQgZ/rdkmoJfzoZhdrQ3vLk38Rf2zdo
+	 arZXBhgJ2xwQcBc2AjWBKZrMgga8JWlHxhfJH73561hs553wOLS14UZFbre5tMSDj3J0i
+	 fnACo7F8gEDKYB12iXTWMWlrfGqBPtW2imID/KXKLrkUmo0B2CeB7y5MT7R0M7OFCJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794320555;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=AIYmoG2ZPhdsPOSGAKvMRGDsvTlHJm2tfagrMZ0h6+E=;
-	b=haI81llh4d+hmntsPjEuiw8zOxuUJbUWj6xw9/vM/2wrLlm7j+zATpY4T2g3+BJzO1M1
-	 6X+NTE15N5cWuR2Uq3NP+S0Kzoke2mMFww/UZFA5SqyYuhAccPQta95C3K1KDRyF+m34/
-	 +CHYHiu2K4ygdRyeh+21pXAdpy0yA+dLR7ya6fa0yVABu5kWUpT6YdAQwanoNFKPfVgy5
-	 uT/5fe3bPewWM9ZtgB+SSUZb7uF0wCRsYb54oVdXaigLyJUTjE8fL5nuQRSMMjJbYc4dL
-	 VDAAR7YnFqB1/bQ9v3zotyWhJ32vX4mCUGkb+Yan0s0e5qBpovnAdeONK4BAokSEn8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794320707;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Rspamd-Server:X-Rspamd-Action:
+	 X-Spam-Flag:X-Spam-Score:X-Spam-Level:X-Rspamd-Queue-Id;
+	bh=vFU8SLB5yQFXTKmgyVP3p6vbPpLP3uckbwzKSwj5Zbg=;
+	b=lkoczamsdELe405gDE7OFxffnvJt2CQ3OB2Go9bN+60QvDnVWC8M0nkYDEv+TXPafvn0
+	 ft7ldf8Wn5qO/i3TLlY0qfVOptcraVtbiDqHSOctm7vZ3eGvZBIPC0hmwWLl7tG+kj5aI
+	 1NWus5WcGv6W6PfXAMwiIdnN59pMlXW+6m6/woNJ0LBIBjD/gcqIGyhYTMWmkYgNFRFEA
+	 pzIo/I6QGeHTPC6/VfYjriXjLS+AIqBgdBDas/e8RPKcl35K30jO5g0YfJZO2hvywOYqo
+	 ZkS1vzOrDuA8Lc5lBGN+Cx1kRNeJUdH2lX4c5XZliXP48jz3gBBNgu7e187pwTy9//g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MLutfqhQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=bjk4WUGs;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=DcZW88hG;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=bjk4WUGs;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=DcZW88hG;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEE0606A325;
-	Tue, 10 Nov 2026 14:22:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EF460A2613;
+	Tue, 10 Nov 2026 14:25:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47EF460A2613
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MLutfqhQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE24C1F0089F;
-	Tue, 10 Nov 2026 14:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794320554;
-	bh=AIYmoG2ZPhdsPOSGAKvMRGDsvTlHJm2tfagrMZ0h6+E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MLutfqhQmJMPBfQRVeyFBDU38p+SbvJq26SP6tRR8X3nTowgeWvkIgFkjEscpShhN
-	 QPjaeep4T1pWmb0KBVrDmVr1rejK9/RtWGyI0s35lO3GQlPDoxuJy0muqBDA+7MtK7
-	 QzZn47pNtf+AQotB1glSYUN6JsUOkWBiwYcfAALas71fhQPgQpK1hhn+BeqUD8+ImU
-	 MwQGR8H3CI9DobyIHL6BQFbPyZSC6BhygkQf2pt09xzlX7aFb73H9S41CVBFzm+YVR
-	 bpr0jSKmXzqhd9sfKsTP9WUkDF9BEo7FZPqgMlUBD3Q94YTuNXjGf/pUH01bIwD8rp
-	 CeOAlZWlhyhdQ==
-Date: Tue, 10 Nov 2026 14:22:26 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev, Wei-Lin Chang <weilin.chang@arm.com>, 
-	Will Deacon <will@kernel.org>, Fuad Tabba <tabba@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty
- ring is full
-Message-ID: <avMiLt3ZXjYesS3X@gremlin>
-References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
- <20261110110724.3614412-2-fuad.tabba@linux.dev>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=bjk4WUGs;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=DcZW88hG;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=bjk4WUGs;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=DcZW88hG
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id A263621E96;
+	Tue, 10 Nov 2026 14:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794320704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vFU8SLB5yQFXTKmgyVP3p6vbPpLP3uckbwzKSwj5Zbg=;
+	b=bjk4WUGsRYs0sP8E0ONkDW8hyxwCcqK6F/Z+No2aVyfis1MlyWmiOhtWAdfYs7F/8CipUe
+	M6ChAxycGmD+5TO2yaDPV3YEJYRhQ7n9jG4KZpA9RGENMEDcySYwTh7Zpl9Q1XnchbyaQz
+	9csObL3BU5hnSJHNTzbwr+PQnEnCSJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794320704;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vFU8SLB5yQFXTKmgyVP3p6vbPpLP3uckbwzKSwj5Zbg=;
+	b=DcZW88hGUmkolX453pml7rhjUnXP/geJBXTnLO3CcrhsdfC+rAH/ij69WBdSoxJA/XOD03
+	2vl1fFNAf7DiXYCQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=bjk4WUGs;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=DcZW88hG
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794320704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vFU8SLB5yQFXTKmgyVP3p6vbPpLP3uckbwzKSwj5Zbg=;
+	b=bjk4WUGsRYs0sP8E0ONkDW8hyxwCcqK6F/Z+No2aVyfis1MlyWmiOhtWAdfYs7F/8CipUe
+	M6ChAxycGmD+5TO2yaDPV3YEJYRhQ7n9jG4KZpA9RGENMEDcySYwTh7Zpl9Q1XnchbyaQz
+	9csObL3BU5hnSJHNTzbwr+PQnEnCSJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794320704;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vFU8SLB5yQFXTKmgyVP3p6vbPpLP3uckbwzKSwj5Zbg=;
+	b=DcZW88hGUmkolX453pml7rhjUnXP/geJBXTnLO3CcrhsdfC+rAH/ij69WBdSoxJA/XOD03
+	2vl1fFNAf7DiXYCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 737AB13479;
+	Tue, 10 Nov 2026 14:25:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id yxLEE0Ap82qXIAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 10 Nov 2026 14:25:04 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id A39EC2253A; Tue, 10 Nov 2026 15:24:59 +0100 (CET)
+Date: Tue, 10 Nov 2026 15:24:59 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Jann Horn <jannh@google.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Chris Mason <mason@kernel.org>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+	Eric Dumazet <edumazet@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jonathan Corbet <corbet@lwn.net>, Christoph Hellwig <hch@lst.de>, 
+	Greg Kroah-Hartman <gregkh@suse.de>, Joel Granados <joel.granados@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Jan Kara <jack@suse.cz>, Jan Kara <jack@suse.com>, 
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	netdev@vger.kernel.org, ntfs3@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
+	coreteam@netfilter.org, kexec@lists.infradead.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, netfilter-devel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	ibm-acpi-devel@lists.sourceforge.net, jfs-discussion@lists.sourceforge.net, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-cifs@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-mm@kvack.org, 
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org, samba-technical@lists.samba.org, 
+	sparclinux@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-doc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-atm-general@lists.sourceforge.net, 
+	Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org, linux-raid@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-modules@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	Chuck Lever <cel@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 14/51] proc: sysctl: don't stop readdir at an entry
+ that is being unregistered
+Message-ID: <efix7fc3j7xbogyb3zaotsi3bwl4s4p6nvwrnlpbue5khrlf43@orqtyoglh5b7>
+References: <20261104-work-procfs-bugfixes-v2-0-bbf7d5546809@kernel.org>
+ <20261104-work-procfs-bugfixes-v2-14-bbf7d5546809@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,144 +135,92 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261110110724.3614412-2-fuad.tabba@linux.dev>
+In-Reply-To: <20261104-work-procfs-bugfixes-v2-14-bbf7d5546809@kernel.org>
+X-Spamd-Result: default: False [-11.51 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLpnapcpkwxdkc5mopt1ezhhna)];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[60];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -11.51
+X-Spam-Level: 
+X-Rspamd-Queue-Id: A263621E96
 
-On Tue, Nov 10, 2026 at 11:07:23AM +0000, Fuad Tabba wrote:
-> Pre-faulting can map a dirty-logged page writable, which pushes it to
-> the vCPU's dirty ring. KVM_RUN exits with KVM_EXIT_DIRTY_RING_FULL
-> before the ring overflows, but the pre-fault loop never checks it, so
-> one call over more such pages than the ring has free trips the WARN in
-> kvm_dirty_ring_push() and overwrites entries userspace hasn't
-> harvested. On x86:
->
->   WARNING: arch/x86/kvm/../../../virt/kvm/dirty_ring.c:225 at kvm_dirty_ring_push+0x7a/0xd0
->   Call Trace:
->    make_spte+0x2cc/0x450
->    kvm_tdp_mmu_map+0x5e1/0x7f0
->    kvm_tdp_page_fault+0x12c/0x1b0
->    kvm_mmu_do_page_fault+0x181/0x250
->    kvm_arch_vcpu_pre_fault_memory+0x136/0x1d0
->    kvm_vcpu_pre_fault_memory+0xcf/0x180
->    kvm_vcpu_ioctl+0x455/0x770
-
-If you have a local repro maybe worth sending a regression test for this?... and
-I type that, then check the 2/2 and see that you already did :) ok haha thanks!
-
->
-> Stop the loop once the ring is soft full, returning the pages already
-> processed, or -ENOSPC when there are none, since a retry can't succeed
-> until userspace harvests the ring. kvm_dirty_ring_check_request() fills
-> in a KVM_RUN exit, so test the ring's state directly. The stub for
-> !HAVE_KVM_DIRTY_RING is for s390, which has the ioctl but no ring.
->
-> Fixes: bc1a5cd002116 ("KVM: Add KVM_PRE_FAULT_MEMORY vcpu ioctl to pre-populate guest memory")
+On Wed 04-11-26 18:47:00, Christian Brauner wrote:
+> proc_sys_fill_cache() creates the inode of an entry that has no dentry
+> yet. Since ace0c791e6c3 ("proc/sysctl: Don't grab i_lock under
+> sysctl_lock.") proc_sys_make_inode() refuses to do that once the table
+> is being unregistered and fails with -ENOENT. readdir takes every table
+> it lists into use and unregister_sysctl_table() marks the table as
+> being unregistered before it waits for readdir to let go of it. So an
+> entry that is unregistered right then makes proc_sys_fill_cache() fail,
+> proc_sys_readdir() stops there and returns 0. If that getdents64() call
+> hadn't emitted anything before that entry userspace sees the end of the
+> directory and never gets the entries behind it. A listing of
+> /proc/sys/net/ipv6/conf can end early that way while a device goes
+> away.
+> 
+> So skip an entry whose table is being unregistered, like readdir
+> already skips a link it can't follow. Lookup treats such an entry as
+> gone too since ea5751ccd665 ("proc/sysctl: don't return ENOMEM on
+> lookup when a table is unregistering").
+> 
+> Fixes: ace0c791e6c3 ("proc/sysctl: Don't grab i_lock under sysctl_lock.")
 > Cc: stable@vger.kernel.org
-> Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-Yikes, nasty. Thanks for addressing this!
+Looks sane. Feel free to add:
 
-LGTM so:
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+								Honza
 
 > ---
->  Documentation/virt/kvm/api.rst | 9 +++++++--
->  include/linux/kvm_dirty_ring.h | 6 ++++++
->  virt/kvm/dirty_ring.c          | 2 +-
->  virt/kvm/kvm_main.c            | 6 ++++++
->  4 files changed, 20 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index e95c9cda085d9..89eb6be9bc6e3 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6544,6 +6544,7 @@ Errors:
->    ENOENT     The specified `gpa` is outside defined memslots.
->    ENOEXEC    The vCPU has not been initialised (arm64).
->    EINTR      An unmasked signal is pending and no page was processed.
-> +  ENOSPC     The vCPU's dirty ring is full and no page was processed.
->    EFAULT     The parameter address was invalid.
->    EHWPOISON  A poisoned host page was encountered.
->    EOPNOTSUPP Mapping memory for a GPA is unsupported by the
-> @@ -6588,7 +6589,9 @@ case, the ioctl can be called in parallel.
->
->  When the ioctl returns, the input values are updated to point to the
->  remaining range.  If `size` > 0 on return, the caller can just issue
-> -the ioctl again with the same `struct kvm_map_memory` argument.
-> +the ioctl again with the same `struct kvm_pre_fault_memory` argument.
-> +If that fails with ENOSPC, the vCPU's dirty ring has to be harvested
-> +and reset first.
->
->  On x86, shadow page tables cannot support this ioctl because they
->  are indexed by virtual address or nested guest physical address.
-> @@ -8957,7 +8960,9 @@ Therefore, the ioctl must be called *before* reading the content of
->  the dirty pages.
->
->  The dirty ring can get full.  When it happens, the KVM_RUN of the
-> -vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL.
-> +vcpu will return with exit reason KVM_EXIT_DIRTY_RING_FULL, and
-> +KVM_PRE_FAULT_MEMORY on the vcpu will process no more pages until the
-> +ring has been harvested and reset.
->
->  The dirty ring interface has a major difference comparing to the
->  KVM_GET_DIRTY_LOG interface in that, when reading the dirty ring from
-> diff --git a/include/linux/kvm_dirty_ring.h b/include/linux/kvm_dirty_ring.h
-> index eb10d87adf7d5..88b4f2a009274 100644
-> --- a/include/linux/kvm_dirty_ring.h
-> +++ b/include/linux/kvm_dirty_ring.h
-> @@ -60,6 +60,11 @@ static inline void kvm_dirty_ring_push(struct kvm_vcpu *vcpu,
->  {
->  }
->
-> +static inline bool kvm_dirty_ring_soft_full(struct kvm_dirty_ring *ring)
-> +{
-> +	return false;
-> +}
-> +
->  static inline struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring,
->  						   u32 offset)
->  {
-> @@ -81,6 +86,7 @@ int kvm_dirty_ring_alloc(struct kvm *kvm, struct kvm_dirty_ring *ring,
->  int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring,
->  			 int *nr_entries_reset);
->  void kvm_dirty_ring_push(struct kvm_vcpu *vcpu, u32 slot, u64 offset);
-> +bool kvm_dirty_ring_soft_full(struct kvm_dirty_ring *ring);
->
->  bool kvm_dirty_ring_check_request(struct kvm_vcpu *vcpu);
->
-> diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-> index 572b854edf740..f73f92102cb7a 100644
-> --- a/virt/kvm/dirty_ring.c
-> +++ b/virt/kvm/dirty_ring.c
-> @@ -40,7 +40,7 @@ static u32 kvm_dirty_ring_used(struct kvm_dirty_ring *ring)
->  	return READ_ONCE(ring->dirty_index) - READ_ONCE(ring->reset_index);
->  }
->
-> -static bool kvm_dirty_ring_soft_full(struct kvm_dirty_ring *ring)
-> +bool kvm_dirty_ring_soft_full(struct kvm_dirty_ring *ring)
->  {
->  	return kvm_dirty_ring_used(ring) >= ring->soft_limit;
->  }
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index cf4cb586f1407..da1b76ceb65e3 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -4461,6 +4461,12 @@ static int kvm_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
->  			break;
->  		}
->
-> +		/* Like KVM_RUN: only the iteration crossing the soft limit uses the reserve. */
-> +		if (vcpu->kvm->dirty_ring_size && kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
-> +			r = -ENOSPC;
-> +			break;
-> +		}
-> +
->  		r = kvm_arch_vcpu_pre_fault_memory(vcpu, range);
->  		if (WARN_ON_ONCE(r == 0 || r == -EIO))
->  			break;
-> --
-> 2.47.3
->
-
---
-Cheers, Lorenzo
+>  fs/proc/proc_sysctl.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> index 6c0859c66563..b4a309d49698 100644
+> --- a/fs/proc/proc_sysctl.c
+> +++ b/fs/proc/proc_sysctl.c
+> @@ -704,6 +704,9 @@ static bool proc_sys_fill_cache(struct file *file,
+>  			if (unlikely(res)) {
+>  				dput(child);
+>  
+> +				/* skip an entry whose table is being unregistered */
+> +				if (res == ERR_PTR(-ENOENT))
+> +					return true;
+>  				if (IS_ERR(res))
+>  					return false;
+>  
+> 
+> -- 
+> 2.53.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
