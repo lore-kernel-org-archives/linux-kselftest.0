@@ -1,88 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.132
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794329998;
-	b=BTb+Yp1SIzGnska3Z0rChZP7UgjPUnSyqeCx776G6/WJfwihwXqLbYb1r6eD7e7r9pjR
-	 d4qaV1BIUx4V1sTwuUu8MrIPw920DYbFx9gbh3Y+8sRTxL1Fzedauxe3cvFMaxIjLIPh6
-	 b+HNNKK+sZ3M6VT2GULMovHlZSjGbg7OA9WZc8rG7tyM3d/KRd9qT+n1FixpOXgiXWGTZ
-	 yyNShF9kdAiFsFxOiMIq8ZA+//zj/VHaCQBnKo2La+P2fH9yJiZIjxmLHBDoUJ+Ke6Asu
-	 Wdr4ohjI97tvUAIyYOpKqRaWIdeArUQdB608+dcH69hMK+1Bvf6uBcQOsK8MFJ60ciA==
+	t=1794331144;
+	b=dHzeTOD1OV0yp40BrN8fGFbt9hoT/aYi9vUDM6NwO05DYtcfzAgwgRqRKsCcXp2DRVGI
+	 scZWE74LrghVzuOpOSB9njnQcq7kB3IQdtQvkOTy07KRm05QsaA1M6QEI6yIkrPAIakHq
+	 Td46jN6UTNT7FcNv73FCH05fQPwHRSd9L0aNlRg+ZDmrKHA0En0MI8ZjFaFOkVjJMr7ME
+	 4jRZS/MuBo81dFdCkBDDU0IlgACIYFg6e0duk9OQ+5JsESJPfFJ9YJWzgWIy16fm3e5Vj
+	 YLQBO7NLx92o38D4ght0ybjR41tBkhMF8s84Kht5o7kOT+QSVfn+BQqVbD46IddH8zA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794329998;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=Kf7w354TnqYFz6mNyIxqofoq3s7JBFyBYZ6UqKXQCes=;
-	b=sPs4VNJ4DJOsRI0LNuPCxgRThytxTVh25zBUvGMN0H+y2C4Ndf2HnyeI2JrzQg8fcbye
-	 tMUz1Euy+e7Y7i7FOvcLzkZ5XOIokgt/eMTUUK3smjhZ42Nd4A9c+wEDqPv+xc51OMAYp
-	 zFtWRRNF01B9sUHnDMaD2CA35zIOkjwLlCwUI05sd/kNF5ux2zBVTSeuj1AB7u8tnLI6b
-	 lMgwzZDelvGZJLMrLq8io5NSZHUjCUXygaqicBnWN+QzoFzQvTcRVt4OkNCMKWHoQK6gp
-	 h0PzdB+n6mUh5YROdb7tfOSYm7r2CJ8TR+iR+cxFKQsvz27KgT2CpbcBe3pz6OjOFjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794331144;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type;
+	bh=V7fyh20lQdCfEvkMlKmFXdlszEDXLNAOR5UNt1WFBvY=;
+	b=0NCnROMkgNlSdpFGS8+esHiEQOg++p4R+ygZryQfqTeZV2O5VtxdRzjHuOIU+lc6jUAp
+	 XBxdAqszzVqQZLJf7xv0v2AVzTqtpyt8mQgs5/zWT4VVYjhemJvJPRiq9MCekWIUUC+j3
+	 uVEGq+AaQzRDHbWvgRMTZuPDREKzJM+CyOJd31xictC/YfEoDTsUki4a5ooHbUMteHRPK
+	 sQO4+aKUohH9ekKmA4vWwwx2B77pwoaRorJezAVyQFrTn7iH+LV8Ij9PU5zBBkkhh1c9m
+	 rFTpAOTiF6qlagfqDdt2TZWuGFXnHtBL15UJwL0PaORYJvfqWfCvEiYrsL757fs/wgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="VMlRc/dY";
-	arc=none smtp.remote-ip=74.125.224.132
-Received: from mail-yx2-f4.google.com (mail-yx2-f4.google.com [74.125.224.132])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eePnUCkL;
+	arc=none smtp.remote-ip=91.218.175.52
+Received: from mta0.migadu.com (out-52.mta0.migadu.com [91.218.175.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13472606A333
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:59:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 13472606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FA3606A325
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 17:19:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53FA3606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VMlRc/dY
-Received: by mail-yx2-f4.google.com with SMTP id 956f58d0204a3-67603b254bbso482766d50.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 08:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794329997; x=1794934797; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Kf7w354TnqYFz6mNyIxqofoq3s7JBFyBYZ6UqKXQCes=;
-        b=VMlRc/dYo0gG+xfLo/0j8ixz2semg2ZuvI3E8PQY+x4HxTGob782iCF9vJDNiutK3/
-         cybGhnZmlzPzZ3o9Dx2IZMw06MVNhJS26tA826PS2yNQiQc+i1Xz+laPs3C5xf6uTRfx
-         E9iARkRgmd7apWFoaDw0aSKRaohSqG3oHo+EyOSf8CFEM31Sk5iAhgjyY3NU6lwlT2DG
-         2CsbJr/caRHdjZi+TYdtEY8r6vjtFqO+XkM8si4qQDTYLLTw8LYznx6kmOMxt1YLo7qK
-         X9YaQ7p/whE9IuG6a5jrkTuqcLQgiKCiq7OqnQm3H+oqDVLLodeSQ5PWXxVYZPKmSiAg
-         oQHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794329997; x=1794934797;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Kf7w354TnqYFz6mNyIxqofoq3s7JBFyBYZ6UqKXQCes=;
-        b=uNw+hZvJyWrpubP9yam4pwi9wjviP2ElQTyLF6gNxvCuKHPoHbIRBEfOts+4q3ASc4
-         1xNoleXrpXeSvSFov7SrAZxUn3RI64PosirjDHWAiPZWE5R3UHVrnoLkHY4mbvKGb/Fu
-         cA4D5EKrZRTWR50FstfnGqUNy8mhyA/C9qy9vy+JeCy2IBW2rJtc1UfnqaO6moid/Hfb
-         +Lx+QUVd8lqlfzzYvUlG1EaAuzQiY1USktufA478Ldr9uS8vR9bCbP+yaR/FzEqEBJaz
-         J1NgB2cDhTLlNVLy5kJWVXJ1M031UGlgTEuZLjZp+IXBXi2BI+yYJm1gRL68RfndmDkQ
-         FnKA==
-X-Forwarded-Encrypted: i=1; AL+hErF1toVc+pBrZASvvhHWa2u0luf1EAKIdmHXVCOraNpUREenqvuOSdvMXru4AH7zm9zYya77Ry66zxR+v+W2AW8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9GX7L+yFx/D8Qa64QRsfC0EJq1WMskGbwXIyXnDFsox2uCFgoF
-	rG8CqatfBDmx/l57wsgkhFYw2pcrU1O1MQnfCT8nJQ5gIirwsE43JX5n
-X-Gm-Gg: AYBFou09RB6JDnQXhedZmtPWUB8uIxRgyPliZyjzuVNlrHJXWV2HkvwI/+UtSmKUd5H
-	p7lzvcLb+KnQcn8kEEACp/Cy7UAMB7pfLcIcpZpJQnIKJgz2nKEJRnO/QeFmFF+78q7qem8s+XV
-	n8m7aH25ocbpIgCybiFDg+/d8wOZGMxg/TbB918+PeigRRF1trYHyaN1+7QFjPi7yPdnfNAJUBH
-	yo718r9eKW7R2S3AUbrbkSYPEln44VOc7L5cyc+m+t1cHzu8fdKuludHCAL8mHXVRnZSGdrZTRK
-	VDLVa4/KQKqgbz2ixpQvEb8cjYzqCE77N6jkwQn/waeTWfnWTo4jggl0iXDseCUFk8M4L7mnw4s
-	o41Jwt1Ital6Yt+6BGhKkXYq04yf6ebGa+Yla5BSPgoWbGRDbZ85/gT1+YS2JjY2YxLnwm07W+a
-	74c3gjoNqJkZKntrQA8Z5MzEkVhc9KoIbfKaGJzazJ3RB3HjW+NaZrvl2pSX+g+Vdfg2U4AuFLl
-	d5GbeYjwmrwUxZjpkazSzQJ7jq8g1Gag3fvrFvXdfzhBkp8E84DRKxf/fIM4V+hBx12fI0ICl3P
-	DIdr5OxfPN4KSIv1w5t4wDe0gJFX7p5On2k=
-X-Received: by 2002:a05:690c:e211:20b0:8b0:6d2c:1895 with SMTP id 00721157ae682-8b392b410d1mr14729287b3.32.1794329997081;
-        Tue, 10 Nov 2026 08:59:57 -0800 (PST)
-Received: from [10.0.0.48] ([71.69.222.122])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b393b2e455sm22746087b3.41.2026.11.10.08.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2026 08:59:56 -0800 (PST)
-Message-ID: <85e09745-7bab-43b9-9982-4428f5b61750@gmail.com>
-Date: Tue, 10 Nov 2026 11:59:55 -0500
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eePnUCkL
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=5N+pLaOxaXEBjI3kYto3LAKJTxf1OYPE2hTSsrnSYYI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794331140; v=1; x=1794935940;
+ b=eePnUCkLDIKsrkXMpz5S+zKWOOWC6foT+PMeZneNmaXO4Amq0AeLe7o6H0sIa12WRKAFLF/r
+ e1T4/x7QIa4xdNSFE7fCP+OdiG00gVoWl+YEzbedIOF2X2bcE90jpaTrbRqSdmxRIEDBSHMQiAX
+ 6XgCPlJ24W7EyIjmMYfDTngs=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 42c488bb3a1b7ea8;
+	Tue, 10 Nov 2026 17:19:00 +0000
+X-Mizu-Trace-ID: 42c488bb3a1b7ea8
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5be58ad9600so9177e87.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 09:18:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErGyBYqSremMzklsBmca+txqBIcPqE/53Ay7orSrD59b5ECV/Jn6Znho+JsQ+35sO1e+mjtGX7NzGlHSJMOZpEk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/no4JXJTVZBhie//ti6b7/l7eIfjdi4ifjbyx1aEEDQz84dfK7
+	MqhculnckrSYG+Lv3drztdDV0zeOPldIQSdoiCHCstnjEvi5cNrs8eWGmLO+hK2HLgVbzqiCZi9
+	G6zqdmpL+4Tzfi0doX04VIR96FbuWcGwKw04iYpAP
+X-Received: by 2002:a05:6512:1153:b0:5c1:5361:4aae with SMTP id
+ 2adb3069b0e04-5c157dccb40mr145514e87.11.1794331138677; Tue, 10 Nov 2026
+ 09:18:58 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -92,40 +66,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 6/6] selftests/tls: add KeyUpdate tests
-To: netdev-bot+sashiko@kernel.org
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com,
- horms@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
- rdunlap@infradead.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, hare@kernel.org, cel@kernel.org,
- kernel-tls-handshake@lists.linux.dev, alistair.francis@wdc.com,
- martin.belanger@dell.com
-References: <20261105-keyupdate-rfc-v6-6-99b695f9eb4f@gmail.com>
- <179424471492.994134.1896421329544039632@kernel.org>
-Content-Language: en-US
-From: Martin Belanger <martin.nvme.dev@gmail.com>
-In-Reply-To: <179424471492.994134.1896421329544039632@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
+ <20261110110724.3614412-2-fuad.tabba@linux.dev> <avM81YcTBTJ8zCMX@seanjc-mac.roam.internal>
+In-Reply-To: <avM81YcTBTJ8zCMX@seanjc-mac.roam.internal>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Tue, 10 Nov 2026 17:18:22 +0000
+X-Gmail-Original-Message-ID: <CA+EHjTz-Nb-g9YQKX2fKk61hC2BfzXfmUHv=2j+eZ18YuTv2Eg@mail.gmail.com>
+X-Gm-Features: AclHuK8XEMs-LG2DuXG_orFbD_2iTQdN4-tg95UYPdRQQh0AwcU2lWY30uJCy0M
+Message-ID: <CA+EHjTz-Nb-g9YQKX2fKk61hC2BfzXfmUHv=2j+eZ18YuTv2Eg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty
+ ring is full
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev, 
+	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Sean,
 
+On Tue, 10 Nov 2026 15:48:37 +0000, Sean Christopherson
+<seanjc@google.com> wrote:
+> On Tue, Nov 10, 2026, Fuad Tabba wrote:
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+[...]
+> > @@ -4461,6 +4461,12 @@ static int kvm_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
+> >                          break;
+> >                  }
+> >
+> > +                /* Like KVM_RUN: only the iteration crossing the soft limit uses the reserve. */
+>
+> Please don't include AI comments verbatim.
 
-On 11/9/26 12:18, netdev-bot+sashiko@kernel.org wrote:
-> If the AF_ALG hash interface is missing, should these tests skip rather
-> than fail?
+The series is LLM-assisted, but the comment was actually me.
 
-Yes. v7 will skip these tests when AF_ALG HMAC is not available.
+> > +                if (vcpu->kvm->dirty_ring_size && kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
+>
+> Eh, I vote to just use kvm_dirty_ring_check_request(), I don't see any harm in
+> clobbering vcpu->run->exit_reason.
 
-> This isn't a bug, but does any test check the next-generation secret,
-> key and IV against an independent calculation?
+Will do.
 
-No. v7 will derive the next key in user space and compare it with
-getsockopt(TLS_TX) after a KeyUpdate.
+> Side topic, kvm_dirty_ring_check_request() is rather confusing (clears and then
+> re-sets the requests).  AFAICT, it can be this instead:
+>
+>         lockdep_assert_held(vcpu->mutex);
+>
+>         /*
+>          * The vCPU isn't runnable when the dirty ring becomes soft full.  Keep
+>          * the requests set until the dirty pages are harvested and the dirty
+>          * ring is reset by userspace.  Note, checking if the ring is soft-full
+>          * can get a false positive, but not a false negative, because only the
+>          * vCPU can add entries to the ring, and its mutex is held.
+>          */
+>         if (kvm_test_request(KVM_REQ_DIRTY_RING_SOFT_FULL, vcpu) &&
+>             kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
+>                 vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+>                 trace_kvm_dirty_ring_exit(vcpu);
+>                 return true;
+>         }
+>
+>         kvm_clear_request(KVM_REQ_DIRTY_RING_SOFT_FULL, vcpu);
+>         return false;
 
-> Could the test also check that a KeyUpdate sent from cfd now reaches
-> user space on fd?
+I'll send it as its own patch.
 
-Yes. v7 will add that check.
+Cheers,
+/fuad
