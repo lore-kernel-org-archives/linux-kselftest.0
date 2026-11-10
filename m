@@ -1,54 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.161
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.216
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794298731;
-	b=lkpIzwFuwLi8EYvNFI23hJ3VroIP0gu0wt6hhXeE7iTF1zsfhLfZ9mccmOiwHsRTWZp9
-	 iKp764so7HlGgXUMHp+bfqdi3jklbgZgT3pX371ysHmnsX+ic+ZMp18dO8OElnsL1pU5N
-	 0doOyvnWqQf7BA+bLWsriTFTyHc5AQPzzpELhwNvvWBiTwFXrw2bkwagV0lGzObP4LcdW
-	 UIA1l8N1kdxyyKaIfuZR2lDDRS+msvUnN57jV38gBYrThrvmNv0STO0Uxlf3J86kieg4S
-	 GKj8S+92fpcWzF/NfNGEXnWB2t8zeKEUBjFTYEhMUXgAdhz1+UMmdwsfOwhPDSJmKLw==
+	t=1794299754;
+	b=AMNJTD9maDThBMGseK2Uip10pXM6N7r9nbZH7+4+kMQvo56Fkic4NUznH8k7OI6gSgSF
+	 r+7HYEZZDgD1Ca/uJRGhGl24bEDcCYHwWfksUd3nziIgJ3ao6PUHbPHyuL09J3qXaLQkr
+	 mCHLt6ehZgTbRS14SBVv9oT4kctWCYuV7zAe9xD5PIvRkjsgrb/fKJ/YDKCrjuOcmw5zC
+	 lj57Q0CEwBV1TBWqVD+SOIoMSAGte/mGxbH55rt95tMG/O8pd9ZV6YIXuUV9MpBt2UMO5
+	 ISocOsiRdK7l9lBCzDDCSfhNB/IfJgftCQ9Ji7yNUL30wA+kaRAX1w/PvibwRH5Oehg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794298731;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=E1d0Y8AFs/r4KdEu5f8rkTIOQJWTjXuDjQHahzUaRu0=;
-	b=KAaRvoK0t2srA7u5vDyN0XRfjGHNQC9ia6zupAyGcT0VhQKdYIBVBaEMlErmXB7maSRQ
-	 IzKzWf1typ+3ajv8Cm6mEwx1wAdMpjEyZklVYTAMrgmDzWd15y8sDYBlI8DQUokT9QaQD
-	 /s6qdZ2pxbA43P+iQ/yBwSmXgj00ifAsz+0dCGyNAZs3BjhqVcsk+Bsn/es+ONP3luy5u
-	 As3OuTInRdCIp8go3PiIeP+u7TRUSyW0zsws2vuXaEyrdsLKg1g7Gu1ElMGUdDeSmMo6/
-	 aQZFU1EzXS1D4qKIctiAoikK6GxpnL7L5SpL0le0Yu4Mco+CifGi79okEeAw4A7eklA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794299754;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=xAUrBlWbL2FZ/S0+otqcReK5SDInHMzk1Z3yvO27XrA=;
+	b=pphyjDAY+RkqmWvzPCEx58LOIR+d3rcuKjf/vM0udufXgznoEzEXU8DygpKaylo8AILp
+	 Q0MdtFeJwL3+oZ+tdyqz0QdFaYmkALYgBzIO1PlASUcbnpqWKD+Q12Wug8j79/9i2ykoK
+	 NeocloAzAFjX1xCEnQJuCZntDdH+54OPDflI/KfA7eZxUrsyeoU+g3PzivI/SXIj1B64c
+	 Wek4NhSoO2hlOyuutM0lcndl2NVN5mwp2b4wiK9EFWPbB4JLxi4GDlPZwqkMYDbNMrVEl
+	 sx+dJll32xQlyL/gnIXUhm5V4dSS9oJrRCtKeUWzKP+qa9wwiLKogpNQ/7JJhEMcTgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cxnjTVUm;
-	arc=none smtp.remote-ip=95.215.58.161
-Received: from mta1.migadu.com (out-161.mta1.migadu.com [95.215.58.161])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=g0Ry608X;
+	arc=none smtp.remote-ip=113.46.200.216
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7A760A3822
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 08:18:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B7A760A3822
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E66606A321;
+	Tue, 10 Nov 2026 08:35:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57E66606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cxnjTVUm
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=h51mbEgDokfWt7y+tgY8pofTmHxOpDVgA/1opxZbMyo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794298727; v=1; x=1794903527;
- b=cxnjTVUmdHVcUhvJpuUA+nW3kqxyd4P/9C4F0Jj7hgtBZlifYvd4J2MJE99bI2UW/dWvjTW6
- ItqYAv5IxGDuEMrOuNerEHfX+zNgCE2ftkWhfyji9oBfvs1wzBIkcVQt8irfISRCIKHpcg/vsbq
- dfWRRflVyahj+ERw6RhPfhRw=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ea234c83bdd75544;
-	Tue, 10 Nov 2026 08:18:47 +0000
-X-Mizu-Trace-ID: ea234c83bdd75544
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5a141006-e289-45db-a928-c3685eb377e9@linux.dev>
-Date: Tue, 10 Nov 2026 16:18:39 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=g0Ry608X
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=xAUrBlWbL2FZ/S0+otqcReK5SDInHMzk1Z3yvO27XrA=;
+	b=g0Ry608XAh6K75vIGFwwKMnQ+iCOGc1f6sCJJfthXuMalF176r4v09FE9EMNLTuRtkP74BMRk
+	A9m9PF40rDLryqEdenumhvv+BuvQGp+htiUt84zjrsW+ZTOEwrc586+foRELX7mEZyhyxD1d215
+	SCEGU46WJ96z0W79HMSm9j4=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4jP0Mj59m3z1T4Jq;
+	Tue, 10 Nov 2026 16:35:13 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id E75CA202E6;
+	Tue, 10 Nov 2026 16:35:41 +0800 (CST)
+Received: from [10.67.110.140] (10.67.110.140) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 10 Nov 2026 16:35:40 +0800
+Message-ID: <0e74a753-d967-4caa-b6a5-7aae7c517e92@huawei.com>
+Date: Tue, 10 Nov 2026 16:35:39 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,264 +63,29 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] cpuset: settle isolation state when CPUs are given
- back to parent
-To: Ridong Chen <ridong.chen@linux.dev>, Waiman Long <longman@redhat.com>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: Chen Ridong <chenridong@huawei.com>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Sashiko <sashiko-bot@kernel.org>, Guopeng Zhang <zhangguopeng@kylinos.cn>,
- Ridong Chen <chenridong@xiaomi.com>
-References: <20261107120100.3587595-1-ridong.chen@linux.dev>
- <20261107120100.3587595-4-ridong.chen@linux.dev>
- <09c033dd-41dc-4503-9def-4e662e946dc4@redhat.com>
- <fe49691f-54d9-410e-9110-bf2522ab17e8@linux.dev>
+Subject: Re: [PATCH -next 0/9] lockdown: fix the securityfs interface and add
+ tests
+To: <nicolas.bouchinet@oss.cyber.gouv.fr>
+CC: <xiujianfeng@huawei.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
+	<serge@hallyn.com>, <shuah@kernel.org>,
+	<linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+References: <20261103082421.3033195-1-caixinchen1@huawei.com>
+ <f118d32f369dff7182956b64e6bc1dd8@oss.cyber.gouv.fr>
 Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <fe49691f-54d9-410e-9110-bf2522ab17e8@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <f118d32f369dff7182956b64e6bc1dd8@oss.cyber.gouv.fr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
+Hi, Nicolas, no inconvenience at all. Thanks for the review.
 
+I will change selftests in v2 and look forward to your testing next Monday.
 
-在 2026/11/10 11:14, Ridong Chen 写道:
-> 
-> 
-> On 11/9/2026 10:51 PM, Waiman Long wrote:
->> On 11/7/26 7:00 AM, Ridong Chen wrote:
->>> From: Ridong Chen <chenridong@xiaomi.com>
->>>
->>> partition_xcpus_del() only updates isolated_cpus when the partition that
->>> gives back the CPUs has a different state than its parent. CPUs that were
->>> further distributed to descendant isolated partitions are not taken into
->>> account, so isolated_cpus_release() has to be called afterwards in
->>> several places to walk up the ancestors and fix isolated_cpus.
->>>
->>> Make partition_xcpus_del() always set the isolation state of the given
->>> back CPUs to the state of the parent that receives them. As the
->>> effective_xcpus of a partition covers the CPUs distributed to its
->>> descendants, the isolation state of those CPUs is settled at the same
->>> time. Boot-time isolated CPUs are still preserved by isolated_cpu_update().
->>>
->>> compute_partition_effective_cpumask() invalidates a child partition
->>> without going through partition_xcpus_del(), so do the same there: the
->>> CPUs of the invalidated child take the isolation state of its parent.
->>>
->>> As the parent may be shrunk and its effective_xcpus not updated yet,
->>> only do so for the CPUs the parent still owns. This is to keep the
->>> isolation state correct for now, the in-place invalidation here will be
->>> removed later in the partition rework.
->>>
->>> isolated_cpus_update() assumes the old and new states are different,
->>> which no longer holds now that partition_xcpus_del() proceeds regardless
->>> of the states. Drop its @old_prs argument and the WARN_ON_ONCE() so that
->>> it simply sets the isolation state of the given CPUs, and use it
->>> everywhere. The state check in partition_xcpus_add() is dropped as well,
->>> as setting the state is a no-op when the states are the same.
->>>
->>> isolated_cpus_release() is no longer needed and is removed.
->>>
->>> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
->>> ---
->>>   kernel/cgroup/cpuset.c | 98 ++++++++----------------------------------
->>>   1 file changed, 19 insertions(+), 79 deletions(-)
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index 85e5b529d144..fc9de6e16ff5 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -1244,17 +1244,17 @@ static bool isolated_cpu_update(int new_prs, int cpu)
->>>   }
->>>   /*
->>> - * isolated_cpus_update - Update the isolated_cpus mask
->>> - * @old_prs: old partition_root_state
->>> - * @new_prs: new partition_root_state
->>> - * @xcpus: exclusive CPUs with state change
->>> + * isolated_cpus_update - Set the isolation state of @xcpus
->>> + * @new_prs: partition root state that @xcpus will belong to
->>> + * @xcpus: exclusive CPUs whose isolation state may change
->>> + *
->>> + * CPUs isolated at boot time are kept isolated.
->>>    */
->>> -static void isolated_cpus_update(int old_prs, int new_prs, struct cpumask *xcpus)
->>> +static void isolated_cpus_update(int new_prs, struct cpumask *xcpus)
->>>   {
->>>       bool updated = false;
->>>       int cpu;
->>> -    WARN_ON_ONCE(old_prs == new_prs);
->>>       lockdep_assert_held(&callback_lock);
->>>       lockdep_assert_held(&cpuset_mutex);
->>>       for_each_cpu(cpu, xcpus)
->>> @@ -1263,45 +1263,6 @@ static void isolated_cpus_update(int old_prs, int new_prs, struct cpumask *xcpus
->>>           update_housekeeping = true;
->>>   }
->>> -/*
->>> - * isolated_cpus_release - Remove the relevant CPUs in @xcpus from isolated_cpus
->>> - * @cs: the current cpuset
->>> - * @xcpus: the set of effective xcpus to be considered for removal
->>> - *
->>> - * This function is called when an isolated partition is invalidated or when
->>> - * some of its effective xcpus are to be removed from isolated_cpus due to
->>> - * changes in parent cpuset. The given @xcpus must be modifiable as the function
->>> - * will update its value to determine the right set of CPUs to be removed.
->>> - */
->>> -static void isolated_cpus_release(struct cpuset *cs, struct cpumask *xcpus)
->>> -{
->>> -    struct cpuset *ancestor = parent_cs(cs);
->>> -    struct cpuset *iancestor = NULL;
->>> -
->>> -    /*
->>> -     * Search the furthest isolated partition root ancestor available
->>> -     * until top_cpuset or a remote partition root is hit.
->>> -     */
->>> -    for (; ancestor; ancestor = parent_cs(ancestor)) {
->>> -        if (ancestor->partition_root_state == PRS_ISOLATED)
->>> -            iancestor = ancestor;
->>> -        if (is_remote_partition(ancestor))
->>> -            break;
->>> -    }
->>> -
->>> -    /*
->>> -     * If a furthest isolated partition acnestor is found, use it to
->>> -     * determine which of the CPUs in @xcpus should be removed from
->>> -     * isolated_cpus. Otherwise, all of them will be removed.
->>> -     */
->>> -    if (iancestor && !cpumask_andnot(xcpus, xcpus, iancestor->effective_xcpus))
->>> -        return; /* No CPU should be removed from isolated_cpus */
->>> -
->>> -    spin_lock_irq(&callback_lock);
->>> -    isolated_cpus_update(PRS_ISOLATED, PRS_ROOT, xcpus);
->>> -    spin_unlock_irq(&callback_lock);
->>> -}
->>> -
->>>   /*
->>>    * partition_xcpus_add - Add new exclusive CPUs to partition
->>>    * @new_prs: new partition_root_state
->>> @@ -1325,9 +1286,7 @@ static void partition_xcpus_add(int new_prs, struct cpuset *parent,
->>>       if (parent == &top_cpuset)
->>>           cpumask_or(subpartitions_cpus, subpartitions_cpus, xcpus);
->>> -    if (new_prs != parent->partition_root_state)
->>> -        isolated_cpus_update(parent->partition_root_state, new_prs,
->>> -                     xcpus);
->>> +    isolated_cpus_update(new_prs, xcpus);
->>>       cpumask_andnot(parent->effective_cpus, parent->effective_cpus, xcpus);
->>>   }
->>> @@ -1355,9 +1314,8 @@ static void partition_xcpus_del(int old_prs, struct cpuset *parent,
->>>       if (parent == &top_cpuset)
->>>           cpumask_andnot(subpartitions_cpus, subpartitions_cpus, xcpus);
->>> -    if (old_prs != parent->partition_root_state)
->>> -        isolated_cpus_update(old_prs, parent->partition_root_state,
->>> -                     xcpus);
->>> +    /* CPUs given back, including those of descendants, take parent's state */
->>> +    isolated_cpus_update(parent->partition_root_state, xcpus);
->>>       cpumask_or(parent->effective_cpus, parent->effective_cpus, xcpus);
->>>       cpumask_and(parent->effective_cpus, parent->effective_cpus, cpu_active_mask);
->>> @@ -1612,6 +1570,7 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>       struct cgroup_subsys_state *css;
->>>       struct cpuset *child;
->>>       bool populated = partition_is_populated(cs, NULL);
->>> +    static cpumask_t xcpus;        /* Protected by cpuset_mutex */
->>>       /*
->>>        * Check child partition roots to see if they should be invalidated
->>> @@ -1640,14 +1599,15 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>               int parent_prs = cs->partition_root_state;
->>>               /*
->>> -             * Invalidate child partition and update isolated_cpus
->>> -             * if necessary.
->>> +             * Invalidate child partition. Its CPUs still owned by
->>> +             * cs take the isolation state of cs. effective_xcpus
->>> +             * of cs may not be updated yet, so recompute it.
->>>                */
->>>               spin_lock_irq(&callback_lock);
->>>               WRITE_ONCE(child->prs_err, PERR_NOCPUS);
->>> -            if ((old_prs == PRS_ISOLATED) && (parent_prs == PRS_ROOT))
->>> -                isolated_cpus_update(PRS_ISOLATED, PRS_ROOT,
->>> -                             child->effective_xcpus);
->>> +            compute_excpus(cs, &xcpus);
->>> +            cpumask_and(&xcpus, &xcpus, child->effective_xcpus);
->>> +            isolated_cpus_update(parent_prs, &xcpus);
->>>               child->partition_root_state = -old_prs;
->>>               spin_unlock_irq(&callback_lock);
->>>               notify_partition_change(child, old_prs);
->>> @@ -2080,22 +2040,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>>            *
->>>            * A partition error happens when parent has tasks and all
->>>            * its effective CPUs will have to be distributed out.
->>> -         *
->>> -         * For an isolated partition with a shrunk root partition parent
->>> -         * we may need to return some or all of its isolated CPUs.
->>>            */
->>>           nocpu |= cpumask_empty(tmp->delmask);
->>> -        if ((parent_prs == PRS_ROOT) && (old_prs == PRS_ISOLATED)) {
->>> -            cpumask_clear(tmp->addmask);
->>> -            if (nocpu)
->>> -                cpumask_copy(tmp->addmask, cs->effective_xcpus);
->>> -            else if (!cpumask_subset(cs->effective_xcpus, parent- >effective_xcpus))
->>> -                cpumask_andnot(tmp->addmask, cs->effective_xcpus,
->>> -                                 parent->effective_xcpus);
->>> -            if (!cpumask_empty(tmp->addmask))
->>> -                isolated_cpus_release(cs, tmp->addmask);
->>> -            /* Expansion of parent's effective_xcpus is handled below */
->>> -        }
->>>           if (nocpu) {
->>>               part_error = PERR_NOCPUS;
->>>               if (is_partition_valid(cs))
->>> @@ -2341,18 +2287,12 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->>>                   /*
->>>                    * When parent is not a valid partition root,
->>>                    * child partition roots become invalid too.
->>> -                 *
->>> -                 * For a to be invalidated isolated partition,
->>> -                 * call return_isolated_cpus() to remove the
->>> -                 * relevant CPUs from isolated_cpus.
->>> +                 * The isolation state of their CPUs has been
->>> +                 * settled when the parent gave them back.
->>>                    */
->>>                   if (is_partition_valid(cp))
->>>                       new_prs = -old_prs;
->>> -                if (old_prs == PRS_ISOLATED) {
->>> -                    cpumask_copy(tmp->delmask, cp->effective_xcpus);
->>> -                    isolated_cpus_release(cp, tmp->delmask);
->>> -                }
->>>                   WRITE_ONCE(cp->prs_err,
->>>                          is_partition_invalid(parent)
->>>                          ? PERR_INVPARENT : PERR_NOTPART);
->>> @@ -3108,7 +3048,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>>       if (!is_partition_valid(cs))
->>>           reset_partition_data(cs);
->>>       else if (isolcpus_updated)
->>> -        isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
->>> +        isolated_cpus_update(new_prs, cs->effective_xcpus);
->>>       spin_unlock_irq(&callback_lock);
->>>       /* Force update if partition is disabled & update effective_xcpus */
->>
->> The code change looks good to me. However this is not just a code restructuring, it also includes a bug fix. I wonder if we should clarify that and maybe add a Fixes tag.
->>
-> Hi Longman,
-> 
-> Thanks for the review. You are right, it also fixes the isolated CPU
-> leak reported by Guopeng [1]. When a root partition with an isolated
-> child partition is invalidated, partition_xcpus_del() gives the CPUs
-> back to the parent without updating isolated_cpus as both are root
-> partitions, so the CPUs of the isolated child are left in
-> isolated_cpus.
-> 
-> I'd like to describe it in the commit message and add the following
-> tags in the next version:
-> 
-> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
-> Reported-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> Closes: https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
-> 
-> Does that look OK to you?
-> 
-> [1] https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
-> 
-Hi Ridong,
-
-Since I've dropped my patch, I haven't added the reproducer to the selftests separately. If it's convenient, could you also include it in test_cpuset_prs.sh in v4?
-
-Thanks，
-Guopeng
+On 11/9/2026 5:08 PM, nicolas.bouchinet@oss.cyber.gouv.fr wrote:
+> Those looks good to me, I've added comments in patch 9.
+> I'm not at work this week so I'll tests your series next monday. Sorry
+> for the inconvenience. 
