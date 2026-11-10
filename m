@@ -1,98 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794277261;
-	b=v43lmxM4vNyvRnyPnUzD1Cccu2HYALTsynaZsN4/cEkYW16oDkWYBCLUXkdZTMFoc20c
-	 lKutoIrwDbeD7UH5fuc9TXNT04yBTyVm/lM333DxaLcT1NPTjVHsBp8IIrd1WWXrajE1u
-	 L8KifU9dqmDxHm9DrfjULcw+wubI1J6n34K8qCiRJeXpaUfuVYgzDBEJXD1rLW2jed/Cl
-	 yIwPLbSRI63fo6OsHjuJhmsTP5+vlkXkIXR1hnYno2l/tsT7dwG5A0qiZs+9AhdPOCe/M
-	 2c8YCKk72XOsAJXaOD+UpM3l3YK9UMojwXrj9PUGNcNLyQH+L9C2nrb9u6U8Fe58+5w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794277261;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=i2TUUoLgA3e8WVIbMjVbQ79gxzJuaS9VusLU6Lxc8WM=;
-	b=0KBAYFtVnvJddUlBhg4zAgbkCBtzzGgDewe6OBzq4DqeGeodyG9eHb23QnzG+r4ZpZd5
-	 8Kc+LJqVsJ/5cMZUJ4eFFwOqHWcAFD9EQRClpKGugdkAPc0z+rss0Z56XYExoQA+Yv+3b
-	 PULixjPVYcY5zS7XPifd35RPsF23HShwd/gyk/tOHpnaji2/veClH6QDtLQpLvvXdN7FV
-	 JrQxHK1iZpL/28Aj6wD+BT1/BTFvWJ/jlAWFFdoZnsK6etHKYzL3lhuc2dKbJJKE0H9FT
-	 RDUS2yrPFW3zsRyb5jPUzOgqk3QDpK+ItUdk49Q9KGwt+0ilNDU3/SqUSwpeQP3ubdw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=efz3coOY;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794277426;
+	b=opRUP/vNT6q0PHxmLZe8//9vv5bBLht7Sn5Tu3nfS1/TgaSunKu4zD655RdrOMHnVdmD
+	 4exoMer6z4j+SJVWzBGl/f8Ut1FTHAY05YDeMJL1xpFot0bLXEVfWY1Y36A2RmItfJhRg
+	 /0sw7gMRuOFET/aHlK2A2xrrY8X2kP3676UIAnfj++a048dk3zpYVJSdgMuO4/nfnLwuG
+	 g3quEZEcvPH7jTNt6VQIIOogMfDGYZwjNWk80jizPoLsEKIKrcn6L8ncr0/B7ZyDWLkQx
+	 tn4V37nolO0GImORjyb+MTmf6r+pjhSZgXLbG0fFCxtbAVldBT/nRY0Wvpp2th75eVQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794277426;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=DEGqL3suX9ldocZQ29zAd0b1mBO1aL2nD99fH9fUKlo=;
+	b=5YXfXWqivhNZ1RYZz9/lNw0YYKkpSW3hg0ddhcKIJojH89KVLw3yAIibwpwHG5xbl1HB
+	 TPEz7QxRwyuuIIHwkWbZ5IrH1wC/ycpjjRQzArPQUrSf7DewvXXfYZM7RDYViiIJzO4RE
+	 DKSVpfpcyIojJiX2Wg+7lPukzBeZvwZBVeynPInyns9hUGh/CKC0NroQinKUqAGpIVXO5
+	 P/Iwt9PRKEOCZNM6fYw+61JCK1riw9s5jcSajtN4d38HLtl+B+wh/+9g6XDyWJY118HkN
+	 +NyddiDcGAls+IIzRe2tG2hfMkQyXW2WnElCTWqAQLW4NCXKrd/mgqhf5sK3Y/YEhsw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=BA8e4TuF;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49367606A325
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 02:21:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49367606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4D7606A330
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 02:23:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D4D7606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=efz3coOY
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6b58cb69927so2488431a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 18:21:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794277260; cv=none;
-        d=google.com; s=arc-20260327;
-        b=nWLRqlikypEx6QwQZFDIGOn+79xpPd959FxZb9Bo7XY902bdjvL3tj1vd0orZO2/Aw
-         uIdvggeUz7UcUC8mtiwGudbQWfiXDoG+jntNwzNldegB5XeqRsIeFPJFW2G6zdEMMiOp
-         Y0mYY7OfRzBmgp4JUcqu2T15c0jMXc+Dn+7EWj3dKX13EtfdBZZCMhXLn3HHXmpLg07I
-         kDLvgwR9kyY3xzAyZ2Oa6MiL/V1ZFuob9Lm8WTWmP0yR7YkupKLTc89hfcd+KK1UMZEf
-         XCZwb0ewszd3dley/MzgBxeKboROgUfWpGob7OcP0b1BqFSSYrSqdOWSmYNCfzrmbWoh
-         F37w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=i2TUUoLgA3e8WVIbMjVbQ79gxzJuaS9VusLU6Lxc8WM=;
-        fh=z+mlmdOuCyO9oCZja4fAYUEBcsPQH55QZQh4z5Mk9tE=;
-        b=DJugop4MIicM2b38ML/lBEgj3cVVosDiKRV6MirvOdUju0OuepUUwgS1YUEjhDnTl1
-         Bfp+FQQOESKuuwtd0w0rU3n/9YWyjVBatZwp29B9dYfVy+/MRj0xNeWcG1K9zqWnGcTy
-         x5B5NGB+SY/0dR5i6Ie7jWNN/4ocSLqKN4ripFPWDc/2kwW4pZlkE5oR4lWMt1866/t2
-         C5iuag9sooP7ZszavsgrjiqDG1vtUJe3XaRiqDXSnv9V09HlU4Gjb8zKQVQ93PQnN69P
-         zlgYAqPcohvRoojXUrhyZJDj2Rbd/simydSYsCnMDmO7MFG6njl8eS+cY7zZYDzn9ZDK
-         0qXw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794277260; x=1794882060; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=i2TUUoLgA3e8WVIbMjVbQ79gxzJuaS9VusLU6Lxc8WM=;
-        b=efz3coOYSr2KjjBCeYtKdmztxPfUZXzmrZuhKN8iiDgBLAigWmRiYCMi8U0QbFK1G0
-         cgzKVwIYUXlzJNoBP9wkRFTO/NMb5iqX8ff0GwpBcU9XLNZHjPPqPJ9UtZAzS7VRSNU1
-         n5ltnJfdV+WaC+/GQjIHySvCuQ28At27/U10uV6UMYYNX6IaLFonSsffccyXk2BH4HXy
-         vfcyxnTGPNSOB6v0f9db9LOG2hWN5Z8JWccLFuV4wctFy6yMgxwXjeuqczcPsJw3Ir5B
-         Z1rb50JDKHOoz9Knj2obWH3I7N4IiObhZqVCf658cSxTZUX6KIZi1a74c0FLbTO/Rpqc
-         ak5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794277260; x=1794882060;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=i2TUUoLgA3e8WVIbMjVbQ79gxzJuaS9VusLU6Lxc8WM=;
-        b=XVyR7ujMK3cs1xuZn+KXBmOGAApJC1aURjM3NwNDDRVpYKnJVW6PYPz20H5Ex9NNJI
-         yHl8NiJKeLav5BpR/jytdt7QjejPka85eZWEhdw6HVOd/DRY1pdnkQ91sBUj5Abkrq5+
-         Q2L/bg+sm5PTpMMtkLthRkoz1QZXt0YGupBZjSRXgByy9/KpEiWDhudajLUWzdYx2TT7
-         XNmkcDziSNKp6mRpDIM3yfdRRfnE7hDji+24blFmHRsV/uet6mzt8JQOYmuHxMdCbaOb
-         OFNwuFFF9YK47eCtoqLNRz/LIHw6YYWHI+Ek8JQSomHy1nYtuaq0Kns3YSgNVU7VGIth
-         SqpA==
-X-Gm-Message-State: APuU4Z8t1YB0uTo5FaWj6Nqh4CLwHfzApCQtj7spcyfGgQPu6AFPW4Aj
-	e1UvjhzmkbXtSaCRN+FtHx7PW/WdZ4BdaSLLMpECHECCbf8M6B1xWBt+GtWOTpNe+8t8knb+KKy
-	WHyxikUcu+sG2qPspz2qmQOgLHR3lLpQ=
-X-Gm-Gg: AYBFou2QjWyKcDVSQz5nRLI/2y2EQO1JT3u3msOdO6GWh/wVwrl7w3C5pKbd78NwN7+
-	HJj4/8vK3XVD0nZTUgWwjFT2qYThmBo0ro57SOWqxDBwW778JOM3ItoAs1kivid8T7Q9myGEaDn
-	RIt7EP8cOKgpfTh032M5zJUm4aaKfDXw8Vj0Wkwtnz33wwsWF4hADs5RSnoORX2T7/GyQRe/ttb
-	pPQUxpo06W7LrY5l10ooe+0spxgNdpmHEe2l9rVlnMOjg7urScAJZ2UK1c8SFSqIWnb1eHsIzv+
-	nkipNhtqDRZgffRmCwuvNLuxO1R5HUFaMnm+KpS6JoNAQ4Ud+EP04ZAvNfNBDJGibRFupQ60xoP
-	D0KZfuh3tfOecHuzf+DmyRqhPzjpVkaLDibQxCaw=
-X-Received: by 2002:aa7:d492:0:b0:6b4:8d5c:f8b with SMTP id
- 4fb4d7f45d1cf-6b75721866amr598705a12.15.1794277259463; Mon, 09 Nov 2026
- 18:20:59 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=BA8e4TuF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794277424;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DEGqL3suX9ldocZQ29zAd0b1mBO1aL2nD99fH9fUKlo=;
+	b=BA8e4TuFa/ku5pb0nlDV7HydLwIhtyrn9Y4z2OD0YTkdqm+wlQZ2zQaJ/4uvCoMf5+MmT6
+	0P2QeoHvObTZhp61WfVW8xO/ndtEfjxHrNf+m/G1siwz1MKK1bllnvjt3s9yR1amiS5fSK
+	yy5BFUyWW7JOHx+sqRKtkUKNB8PtqmA=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-675-N34bE_7FOdCtzLIhwB2lOw-1; Mon,
+ 09 Nov 2026 21:23:38 -0500
+X-MC-Unique: N34bE_7FOdCtzLIhwB2lOw-1
+X-Mimecast-MFC-AGG-ID: N34bE_7FOdCtzLIhwB2lOw_1794277417
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 750C7180047B;
+	Tue, 10 Nov 2026 02:23:36 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 974E0180029D;
+	Tue, 10 Nov 2026 02:23:34 +0000 (UTC)
+Message-ID: <06a435e7-6bfd-442e-a541-84813b993600@redhat.com>
+Date: Mon, 9 Nov 2026 21:23:33 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,17 +71,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110021622.122490-1-technoboy85@gmail.com>
-In-Reply-To: <20261110021622.122490-1-technoboy85@gmail.com>
-From: Matteo Croce <technoboy85@gmail.com>
-Date: Tue, 10 Nov 2026 03:20:23 +0100
-X-Gm-Features: AclHuK8bXRdvgJU8KghZLOhvBMXkdeeRv7iNqoGqP4IMZRNV45bXoFiMpjug-xE
-Message-ID: <CAFnufp3CwHWxMj8pPPsgEMtCtjUxbwn1VbFd2OijqB8+NA0Ccw@mail.gmail.com>
-Subject: Re: [PATCH v7] kunit: memcpy: Add benchmark
-To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Laight <david.laight.linux@gmail.com>, 
-	Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 5/5] cgroup/cpuset: Correctly set isolated_cpus
+ when switching partition state
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20261109190955.1398611-1-longman@redhat.com>
+ <20261109190955.1398611-6-longman@redhat.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20261109190955.1398611-6-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-+Cc Kees and linux-hardening, as per get_maintainer.pl
+On 11/9/26 2:09 PM, Waiman Long wrote:
+> When update_prstate() is called to switch the partition state from
+> root to isolated or vice versa, the whole effective_xcpus is passed to
+> isolated_cpus_update(). However, if there are child partitions present,
+> some of the effective_xcpus are dedicated to those child partitions
+> and their partition states will remain the same or get invalidated in
+> the case of child root partition with isolated parent in the latter
+> update_cpumasks_heir() call. In the latter case, their exclusive CPUs
+> will be returned to their parent.
+>
+> Therefore isolated_cpus may be set incorrectly with child partitions
+> underneath. Fix that by excluding their exclusive CPUs in computing
+> the correct cpumask of exclusive CPUs used by that partition alone.
+>
+> Add new test cases into test_cpuset_prs.sh to test for such cases.
+>
+> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   kernel/cgroup/cpuset.c                        | 30 +++++++++++++++----
+>   .../selftests/cgroup/test_cpuset_prs.sh       |  7 +++++
+>   2 files changed, 32 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 7aa614c6ac4d..41048997a955 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -3054,12 +3054,32 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>   						  cs->effective_xcpus, NULL))
+>   			err = PERR_HKEEPING;
+>   		else if (parent_prs == PRS_ISOLATED)
+> -			err = PERR_ISOPARENT;
+> +			err = PERR_ISOPARENT;	/* old_prs should be isolated */
+>   
+> -		if (!err)
+> -			isolcpus_updated = true;
+> -		else
+> +		if (err) {
+>   			disable_partition = true;
+> +		} else {
+> +			struct cgroup_subsys_state *css;
+> +			struct cpuset *child;
+> +
+> +			/*
+> +			 * Need to scan child partitions, if present, and
+> +			 * exclude their effective_xcpus from cs. In the case
+> +			 * of switching to isolated partition with child root
+> +			 * partitions, those child partitions will be
+> +			 * invalidated in update_cpumasks_hier().
+> +			 */
+> +			isolcpus_updated = true;
+> +			cpumask_copy(tmpmask.new_cpus, cs->effective_xcpus);
+> +			rcu_read_lock();
+> +			cpuset_for_each_child(child, css, cs) {
+> +				if (!is_partition_valid(child))
+> +					continue;
+> +				cpumask_andnot(tmpmask.new_cpus, tmpmask.new_cpus,
+> +					       child->effective_xcpus);
+> +			}
+> +			rcu_read_unlock();
+> +		}
+>   	} else {
+>   		/*
+>   		 * Switching back to member is always allowed even if it
+> @@ -3093,7 +3113,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>   	if (!is_partition_valid(cs))
+>   		reset_partition_data(cs);
+>   	else if (isolcpus_updated)
+> -		isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
+> +		isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
+>   	spin_unlock_irq(&callback_lock);
+>   
+>   	/* Force update if partition is disabled & update effective_xcpus */
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 2d4744f2d6ac..741a13bbeda7 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -556,6 +556,13 @@ TEST_MATRIX=(
+>   	" C2-6:X2-5:P1 CX3-6:P2 \
+>   	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+>   
+> +	# Switch PRS state (root <=> isolated) will properly update cpuset.cpus.isolated
+> +	# even if child partitions are present.
+> +	" C1-6:P1 C3-6:P1 C5-6:P2  .       .    P2      .      .     0 A1:1-2:A2:3-4:A3:5-6
+> +								       A1:P1|A2:P2:A3:P2 3-6"
+> +	" C1-6:P1 C3-6:P2 C5-6:P2  .       .    P1      .      .     0 A1:1-2:A2:3-4:A3:5-6
+> +								       A1:P1|A2:P1:A3:P2 5-6"
+> +
+>   	#
+>   	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+>   	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+
+Sorry, I thought I had fixed the test case bug. Apparently I haven't 
+completely fixed it. I will send a v2.1 with the correct test cases.
+
+Thanks,
+Longman
+
