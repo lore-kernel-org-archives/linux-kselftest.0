@@ -1,84 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=50.112.246.219
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794311654;
-	b=ZeVhNkhMPPk4AJ9imDHJUOfmf11vxc+1kqQKbwxahK3DaoJGOhIC1Yt/UfSp70KlFp2+
-	 ZzPVdg4pKnBv60ziz6aTunD8xgYQAuG9SyauKWb/VOlFao0CWSW+bJKcCQKUMRpRTBd60
-	 jmfdpKpbAHse5DmpzIfLUA7LsMHwwXPf7F/KKhGn3qAPJFgS2yHIc7EYgb62qvtJ+HPQF
-	 tRwmyELSCnvPyb9L8oTAZaiwII6m/rvX/Qo7/97bNt/2KLyVYKd6br/0uhN1vn5K4wpRu
-	 M3CMRQXagSrEPbYl97+ue8CP1x6nQs9/G8Nt9kgb4i1gXY4ZmtGXOxrpjKCC9dFPz/Q==
+	t=1794312690;
+	b=FJtu0H+48Ra/GIj+gJPwka0TH82Hz0Xwu2ts1J9fvu3dcAJ+Yx+/avRoqEz7uARGSxWg
+	 BYLOCkSo2BcCo/7qwZNCzl8dO0tjfbtPSgKHGM97z+wY/lOe0lG0EhQBHWF4PqJU+8Tq6
+	 JsiW8YbJwjN5xe79+M9m6ifcz/HRxU2L+ylu6bWlYqJsX0PUTjhkwc/ePjHaD5G5Qao1d
+	 TwuyzGJVMAw6ojsVoutXTMaes5+Umzdz1GLgaWGy3gEdHQw04U/bO9LKEHd9pG2VVtY6l
+	 76NebIbBuJV4ZXr/UsJDc+ERSR4uuxG+vz0JMceGrrwTpTPkJk0brhunCqf0lPMJuDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794311654;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=00Fdwn10rGQVzKW8pjIVBgoz/XU0RjZKEKOP68LF8SA=;
-	b=dhBCx6ddPYRiHttxke055AACcUGMSZXzyP08klZmJsjQNmkWxvy0dZsIoEtUXyRJ1Ibq
-	 AGXuCXAbQG5ayJqIvzeLFqMepSAMF+uSEDHetEOwDhVo8ELoQ4wlWitCXXxwDIVNYv4FA
-	 ufrZTDzr9IeXjPwOLW8zr4vE9f7AmQ+bQaISdBSj0zRsAdiOvJg8eERkDe+ZNzbC41GBz
-	 P69pMqb3MzzDuS2b/RVdJPcn58Btxjs3Zom+9lPNv5RGlRT18LwOMSRzup1a0DxvbV8v2
-	 s9u2SEaiggbFwcqxsGMncNm72gDQTmUJik6KCCt5pejOyX6/4BmNZtmu+XCRIlTbs1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794312690;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=V6y3oj1wdghgriG30314q44VQVQpH2RHL0HCcz8YFiY=;
+	b=I4RV/5ldVNLV+4VPHHSY61q9wBlY8JViGkpdepjHjU/XNd27RKxsPY2J+WRrxRkWOyUG
+	 VAelwARArFxKUUpjxCK8l/WXfQI7dLQLJfmxADXHbFhlTBxr8dch3ZNtOwJMVIAToclcG
+	 JhZpFQxQsAvnygtRWCt6ubKYC07NevX5Htjlsc8gzUYltlFqmDaR2fuqwioqAHVhqpCGv
+	 6emMjdHn5P6vD26smxsJiwnoTq/UXhCst1RvNQ0CWWKBQ9Ba6u55L+KDtEB/4XCLygqBS
+	 K8ANFMQOU7Xilspv5cagK64J6ZLx3Ul85ZOig/46h2UtB9UV2SmwGSVwVwYq+X5OFRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.de;
-	spf=pass smtp.mailfrom=amazon.de;
-	dkim=pass header.d=amazon.de header.i=@amazon.de header.a=rsa-sha256 header.s=amazoncorp2 header.b=fGDDh90F;
-	arc=none smtp.remote-ip=50.112.246.219
-Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=anirYGOP;
+	arc=none smtp.remote-ip=91.218.175.11
+Received: from mta0.migadu.com (out-11.mta0.migadu.com [91.218.175.11])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041F3606A32E;
-	Tue, 10 Nov 2026 11:54:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 041F3606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D905606A330
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 12:11:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D905606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.de header.i=@amazon.de header.a=rsa-sha256 header.s=amazoncorp2 header.b=fGDDh90F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1794311654; x=1825847654;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=00Fdwn10rGQVzKW8pjIVBgoz/XU0RjZKEKOP68LF8SA=;
-  b=fGDDh90FeQwzuXd2dGDIxVaLAUTC34HC9UalHX5/m2sE2R+4O/NarqTE
-   psn8lpE8LH/5EEICMjFbeRfy+AzDXBtyGkKEmG664Pmf24VGp2VdoOAnR
-   pCU6bVlW46OjAXy+SQYmRICAcVDM28U1hF7GhZjRgKX77DrHkx/uemiB9
-   RVyAMtq8CA0xsy3+qy42v24XHXvMj+7vWO5dCKq7O8raKa2fuYFZ2nRKd
-   EdbAIk88/oJhKSx1pnvtdC/7387UMMo//OFqumRTZLia0k1q6dDwYRCPr
-   Sblp/U2PeWbJqFwouEQaiaRfloL5uWWUhOG3c7fIHUtOkXNyBdMweHcXS
-   g==;
-X-CSE-ConnectionGUID: SVXNrMN+THCX9A4p6AfVrw==
-X-CSE-MsgGUID: k3mSKaVWSnKq2dUmFntIYA==
-X-IronPort-AV: E=Sophos;i="6.27,205,1787011200"; 
-   d="scan'208";a="33384274"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 11:54:11 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:22431]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.5.141:2525] with esmtp (Farcaster)
- id 739f06b5-ed38-4d68-8e1c-236e5caac1a0; Tue, 10 Nov 2026 11:54:10 +0000 (UTC)
-X-Farcaster-Flow-ID: 739f06b5-ed38-4d68-8e1c-236e5caac1a0
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Tue, 10 Nov 2026 11:54:10 +0000
-Received: from dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com (10.169.119.5)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Tue, 10 Nov 2026 11:54:09 +0000
-From: Bjoern Doebel <doebel@amazon.de>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-CC: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, Liang Li
-	<liali@redhat.com>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] selftests: bonding: feed link monitor to deflake prio_test
-Date: Tue, 10 Nov 2026 11:53:52 +0000
-Message-ID: <20261110115354.2250237-1-doebel@amazon.de>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <auvnnIXQV2zufxtF@fedora>
-References:
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=anirYGOP
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=EMm/A2BN1q75zo8IDzHb8rOAGXmZADLMHipKeX0V8hQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794312687; v=1; x=1794917487;
+ b=anirYGOPNjpzWZekw3oE7YQCf1/CI3cOZ3UScO+Ewr3Bdf6WOgspTJpVw/fw9fapKtcqGlc/
+ Ulhc+VU74O1ZouEDCQLoY0X5YMW0gcH5RnTmerr/+gPSpy5ja8lbxpHRJ+PCbKxzuir5omPSEqF
+ rrEZwdycF+2arc74U3+aPMvA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cbcdfaa187e3d225;
+	Tue, 10 Nov 2026 12:11:27 +0000
+X-Mizu-Trace-ID: cbcdfaa187e3d225
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d615a099-5369-4e34-8f48-17152ce000d6@linux.dev>
+Date: Tue, 10 Nov 2026 20:11:18 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,28 +58,126 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWA002.ant.amazon.com (10.13.139.96) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] cgroup/cpuset: Allow top-level partition CPU
+ replacement
+To: Guopeng Zhang <guopeng.zhang@linux.dev>, Waiman Long
+ <longman@redhat.com>, Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20261110050324.173461-1-guopeng.zhang@linux.dev>
+ <20261110050324.173461-3-guopeng.zhang@linux.dev>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20261110050324.173461-3-guopeng.zhang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Hangbin,
 
-On Thu, Nov 05, 2026 at 10:19:08AM +0800, Hangbin Liu wrote:
-> If the kill fails for some reason, will we wait here forever and hang the
-> entire test?
 
-No. bash keeps a terminated child's exit status until it is reaped, so if
-the ping already exited the kill fails but the wait returns immediately.
-Only a genuinely unkillable ping would block, independent of kill. The
-idiomatic form is kill_process() from net/lib.sh, which short-circuits
-the wait when the kill fails.
+On 11/10/2026 1:03 PM, Guopeng Zhang wrote:
+> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> 
+> When replacing a partition's CPUs, tasks_nocpu_error() checks whether
+> the parent's current effective_cpus is a subset of the new exclusive
+> CPU mask. The parent mask does not yet include CPUs being returned by
+> the update, so this can invalidate an otherwise valid partition.
+> 
+> For example, on an 8-CPU system without boot isolation:
+> 
+>    echo 2-7 > A/cpuset.cpus
+>    echo isolated > A/cpuset.cpus.partition
+>    echo 0-4 > A/cpuset.cpus
+>    cat A/cpuset.cpus.partition
+>    isolated invalid (Parent unable to distribute cpu downstream)
+> 
+> The update should return CPUs 5-7 to the parent and leave A as a
+> valid isolated partition.
+> 
+> Skip this subset check for top_cpuset. top_cpuset_sd_nocpu() already
+> accounts for returned CPUs and ensures that an active boot domain
+> housekeeping CPU remains.
+> 
+> Add a regression test for this case.
+> 
+> Fixes: 0c7f293efc87 ("cgroup/cpuset: Add cpuset.cpus.exclusive.effective for v2")
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-Let's disregard v1 anyway. Your question made me look again, and it only
-treats a symptom: the Sashiko review was right that the mechanism in my
-commit message was wrong. I'll follow-up.
+Hi Guopeng,
 
-pw-bot: cr
+Patch 2 depends on patch 1. Skipping the cpumask_subset() check for
+top_cpuset is only safe because top_cpuset_sd_nocpu() added by patch 1
+now covers it. Without patch 1, patch 2 alone would let a partition
+take away all the CPUs of top_cpuset. So patch 2 can't be backported
+on its own, and the two have different Fixes tags. I think it would be
+better to fold patch 2 into patch 1.
 
-Thanks,
-Bjoern
+Also, the fix in patch 2 seems incomplete. The same false PERR_NOCPUS
+happens when the parent is a local partition, as cpumask_subset()
+there doesn't take the CPUs given back by the update into account
+either. On an 8-CPU system:
+
+	cd /sys/fs/cgroup
+	echo +cpuset > cgroup.subtree_control
+	mkdir A1
+	echo 1-7 > A1/cpuset.cpus
+	echo root > A1/cpuset.cpus.partition
+	echo +cpuset > A1/cgroup.subtree_control
+	mkdir A1/A2
+	echo 3-7 > A1/A2/cpuset.cpus
+	echo isolated > A1/A2/cpuset.cpus.partition
+	sleep 1000 &
+	echo $! > A1/cgroup.procs
+	echo 1-4 > A1/A2/cpuset.cpus
+	cat A1/A2/cpuset.cpus.partition
+	isolated invalid (Parent unable to distribute cpu downstream)
+
+A2 takes CPUs 1-2 from A1 and gives CPUs 5-7 back, so A1 still has
+CPUs for its task. Instead of skipping the check for top_cpuset only,
+how about making the check in tasks_nocpu_error() account for the CPUs
+given back by cs for all parents? The hotplug caller would then need
+to not count cs->effective_xcpus as given back, similar to what patch 3
+does for top-level partitions.
+
+> ---
+>   kernel/cgroup/cpuset.c                            | 4 +++-
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 3 +++
+>   2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index c405719ccd12..8b6831983803 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1232,8 +1232,10 @@ static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
+>   
+>   	/*
+>   	 * A populated partition (cs or parent) can't have empty effective_cpus
+> +	 * The top_cpuset check above also accounts for CPUs being returned.
+>   	 */
+> -	return (cpumask_subset(parent->effective_cpus, xcpus) &&
+> +	return (parent != &top_cpuset &&
+> +		cpumask_subset(parent->effective_cpus, xcpus) &&
+>   		partition_is_populated(parent, cs)) ||
+>   	       (!cpumask_intersects(xcpus, cpu_active_mask) &&
+>   		partition_is_populated(cs, NULL));
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 0288af1c2eb3..ee4d57b7e35b 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -554,6 +554,9 @@ TEST_MATRIX=(
+>   	" C2-6:X2-5:P1 CX3-6:P2 \
+>   	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+>   
+> +	# A CPU replacement must account for CPUs returned to the top cpuset.
+> +	" C2-${CPULIST#0-}:P2 . . . C0-4 . . . 0 A1:0-4 A1:P2 0-4"
+> +
+>   	#
+>   	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+>   	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+
+-- 
+Best regards
+Ridong
+
