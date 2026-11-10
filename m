@@ -1,47 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.102
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794329215;
-	b=1QEw/fDOTxXatGYW6KgcIlfN/UqsbqyCiAaoEQvrhGgBAuYrddamtpyOTbtLdPaVyINX
-	 kfb3K3AjO/qGeqZXmTafETjOc7PaTBMQO5rgSeDzzlWtBEJE8CSsNeyunGNg5SDjWkBwj
-	 Mga+Bzos2rofgShwS3Fg+0Xn841HZiEBISBLx1beSBlnE3+CtFxkJlL3IMB++WD2QW64e
-	 Yskee09eShwXZ10CQm5Y0VCqCHFDpuzrkC1aT8+qhrBtDfL9xFDSmW9qfsBYB+sqS5bRN
-	 e/OkoSZCg+/EN6VMJRWU+MmRxiwxSVByzJcztJvDiw3oFiNcmuNabbk2mo+LhsoxOCA==
+	t=1794329263;
+	b=spCv80FjYTDiE1KvyRtOV7TDZXrGX6ix9maRPUQlbpb3V43ESwOW3B7/ADJJPh+beqfO
+	 OvG6zaxl1ZsGqAl//Is/rgTIGxWi8qjbfK4sBG0M3QBEsgm0Dul79kZ/TpRSKTEk/EOsJ
+	 r5cC6MrGnvQolLgfB+QYzJ/kg1e1FbjRWO2RoyawLtFYtoYEf9Pwz2UhuNPcgMeCxO5sD
+	 aPSxq93Gdn0htbcKRPYVc+R4m7sJ5S82LsCDjcSrpzjIbmNQflh5FpZYVff32+P62BpUK
+	 RMu4fWkPMwGoMlcHPxfwCnwmzU1CnOdtT5adeyGJxJiWnEtO3Nl6kjoSPRUOTTv66iQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794329215;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=mgYDBwL3t2ZWVsbpa7bCSIH5rIRHkEyd38LzWhc7YQU=;
-	b=wQw9yc9yG/yeEQD2Vwh/0x+Q1dgw782pWlaThJd/pLmCwKQhKP2KIh8emb41P4r9vQL/
-	 2nKsYKHfjHk2kbVTsY1pHPmqQYfpv0xG2e1TRw9QY/1LO4oBTv4VW1IZ5MMVOSd1BxCzd
-	 xcOXhXr7jfqXb9ZISRLk91zkprmrUOLDN2mydQathLyf9H8biK7xubUNi19sPtrvioELo
-	 J1YGWaTQ4a/eL8A6t7qSyprNCHRUQtO+qsQ4+chhu4nA1a9sjAyxpc91WOdEK7dmyuEHv
-	 cerZbCG28lcqEwR9m5Iui/SYUGUzYdI8+MkI7ys9A0c8IvfoqbZLKcalr/ampYonKfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794329263;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
+	 DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=nG9stXQkwLVFlp/SM6Lzv9KwcbHb+1wfgq3qgejLqIQ=;
+	b=dQy84KQwJdLTA+Aakt2iJ/tSsUMbtrfaWCd84a3AObJ47wmKzDgvCxOF2tFuxEi+MQHq
+	 9uPxclVaNY4D9sD+tIGvOhUGJso+XZg3ILPdFnQl3ClccdnVKAf4guXPaYKP4DsqOdFrV
+	 QFtgsVwaqdJgxoqGSXvZrLaRsDLsNokHZ0tKh+MLiFbfNjclN7IX3GMTP/I4rDkTcwfDk
+	 aVwwPWgsLuQw3vhwffanE5pXoBdCSfVyFpcNXtq4vDywPmn0yDCVoHLOa/aADJlETXAd6
+	 2drnrORF3EGzQx7567gTxGWfwspH4npZIT89tKA8ynDaQZ0RyhvMUEw5uIWC+BABypQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XCr7enKn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=zx2c4.com;
+	spf=pass smtp.mailfrom=zx2c4.com;
+	dkim=pass header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b="IoRLkDg/";
+	arc=none smtp.remote-ip=209.85.216.102
+Received: from mail-pj1-f102.google.com (mail-pj1-f102.google.com [209.85.216.102])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C943606A337;
-	Tue, 10 Nov 2026 16:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16282606A32A
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:47:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16282606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=zx2c4.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zx2c4.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XCr7enKn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC411F0089F;
-	Tue, 10 Nov 2026 16:46:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794329214;
-	bh=mgYDBwL3t2ZWVsbpa7bCSIH5rIRHkEyd38LzWhc7YQU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=XCr7enKnWsrAipMWLDNpTp6sLFZS0sKTQvZjmmF7+1Fj8O3CB3f8YH+jI6EmZFjpo
-	 7EPCK7IyLT46dg5M52aQfoX5RSAp9Z+IH3VK4DedDAlbBZMb4uF8q9iXikitC09s0P
-	 ovLiiWRSLDXXoT4ZLxklGStTWPCht/mxpeC+WGMKSyFNr8GQRrv1Pos5RbB5cpW/Am
-	 I4Sjhsr7xuQLcfyVTepE4vDaicB9xouyHIrFOi9AXfKNAERayCEDTed/rPFPeYKT9g
-	 GIyXjvkm2o1gQjbdNJfGmD0qFEcAP5gep2pDc/suvk8YRP/JayTM0Ooq62rJ9eSnFR
-	 ME/iZWDRsnkYw==
-Message-ID: <a24ec940-ca3b-419b-85ae-9de88cd991d9@kernel.org>
-Date: Tue, 10 Nov 2026 16:46:53 +0000
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b=IoRLkDg/
+Received: by mail-pj1-f102.google.com with SMTP id 98e67ed59e1d1-3b0b3754f57so1344533a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 08:47:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794329262; x=1794934062;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:dkim-signature
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=nG9stXQkwLVFlp/SM6Lzv9KwcbHb+1wfgq3qgejLqIQ=;
+        b=lNHMH3RJJvhV4bm3D6Mo/6Ecl2rtnMoC0JxO4EsyAK7u2OyWn4YqLxFAUz8xw5wk4b
+         PVtz81jybYrS/HMAIDTA2E1D/hRwWzPIooixZCnAGvg5YfTQiaABIbVWkid6vzqhGxDK
+         CKELzVB5NdSvl/rVBI6+JpvwcsIECbpZR8inAwlcsjwlGbk70zBQThGDoShYb7e38rQL
+         M/adwCYshfgbGVtgOsRIQXEkaAWdEJHS/0582m2B818digXoavACnlnGwJaFhpnblbvy
+         fhJFCUxo9SJlqc8quyDVWIEyd8dIKkQmvK7JeUhKCwORj5OcBmQ+j5vkM6XMoCOf8kQZ
+         3hFw==
+X-Forwarded-Encrypted: i=1; AL+hErHxHxodyBNDEtc21RgnDW1rHyKRJlNef8DN5AMFyIZsOglPZMNTk/SGi2sxf2h9k3/UozMhEfotyaEWihIWTp0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z++1HULd72MowxVNRaNLDFeR7CJEFAza7yRGTBeS9c6BFzCNWWR
+	O5NAgtSAtxNpgQA/qa3TH+6MF9I7ro7dersxNKvEj5ljlRk6CYj8jxyrUaS3DoiSOPYowJ7VSnq
+	fkwMUUvRgjVL6IPEIaXJfYVxuDBzACwwoFlBeOxg=
+X-Gm-Gg: AYBFou3dLF0DfV3hupAPQg2+cblA5E48hbeB014if7XKJGMkNoma2uZ/cmsLK0S8T1F
+	NqLzOnw+oosoqbRjJoHBYmVQ3VSv1KD1kNrDjL/lA8/QBAYl566TfhJuNOhfD1oMFKlzn5SjIzE
+	RgKXOEERGXipuWF3ZDbYXEtM9+vq3IhCeMedrDKAiVhWB3MV3NVl9aLv4qB6CdKWPUid/RHXyUl
+	H4dmK4f6qYCKOrPkwbZ3h0oNULNsVWiZkwnLUht530IgAxftt/zUif2+gj9Zo0HWNuJubFVPFGH
+	cmq6H4rXuQ66hywOhTtpminPsH6d3fpggLFLiDqOE20TVLo2QyKFfzL+e+S/U3Gsk+7ZitinqXc
+	kkg==
+X-Received: by 2002:a17:90b:2707:b0:3b0:9e2c:9b61 with SMTP id 98e67ed59e1d1-3b166cf6979mr3264778a91.35.1794329262291;
+        Tue, 10 Nov 2026 08:47:42 -0800 (PST)
+Received: from zx2c4.com (mail.zx2c4.com. [104.131.123.232])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3b1690d291dsm990689a91.4.2026.11.10.08.47.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 08:47:42 -0800 (PST)
+X-Relaying-Domain: zx2c4.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1794329258;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nG9stXQkwLVFlp/SM6Lzv9KwcbHb+1wfgq3qgejLqIQ=;
+	b=IoRLkDg/XdQGCsYApczobF0xNyOZOVRsSpJaAeYcx8Z4QeSgHjqeionaAzNoKZGOOgM+oL
+	LUN63e/LMgVxBdYJN+e5T0DV8vpyjFnXnv5/I8AeILJ1A8QyF5AC0xmKpQ2laIA3oeKy2D
+	2Wj2oRk0lyawSr8TLpuq0OlohsoH0do=
+Received: 
+	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id 6530d039 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Tue, 10 Nov 2026 16:47:37 +0000 (UTC)
+Date: Tue, 10 Nov 2026 17:47:35 +0100
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Roman Khromenok <roma55592@yandex.ru>
+Cc: wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH wireguard] wireguard: device: allow userspace to enable
+ IPv6 link-local addresses
+Message-ID: <avNKp7OVA7d1X3fL@zx2c4.com>
+References: <20261022110039.270335-1-roma55592@yandex.ru>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -51,128 +100,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v9 2/2] selftests/bpf: Check bpftool batch map
- dumps
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, daniel@iogearbox.net,
- ast@kernel.org, alexei.starovoitov@gmail.com
-References: <cover.1793821981.git.hi@tychen.cc>
- <e4cd18723b893385d66232276f44049bb86c8e51.1793821981.git.hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <e4cd18723b893385d66232276f44049bb86c8e51.1793821981.git.hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261022110039.270335-1-roma55592@yandex.ru>
 
-On 04/11/2026 19:54, Tianyi Chen wrote:
-> Batched dumps must print the same output as individual lookups. Use an
-> fmod_ret program on security_bpf() to count the map lookups made by
-> bpftool children of the test, and to fail batch lookups with -EBUSY.
+On Thu, Oct 22, 2026 at 01:00:39PM +0200, Roman Khromenok wrote:
+> WireGuard interfaces do not get an IPv6 link-local address by default,
+> which wg_open() achieves by setting addr_gen_mode to
+> IN6_ADDR_GEN_MODE_NONE on every ndo_open. A side effect is that any mode
+> chosen by userspace, via sysctl or IFLA_INET6_ADDR_GEN_MODE, is silently
+> reset on the next down/up cycle. Users running routing protocols over
+> WireGuard, such as Babel or OSPFv3, need fe80::/64 addresses and today
+> have to set the mode again after every ifup, which network managers do
+> not expect to have to do. For example, systemd-networkd cannot honor
+> LinkLocalAddressing=ipv6 on WireGuard interfaces because of this.
 > 
-> For each map type with batched lookups, compare plain and JSON dumps
-> with a dump whose batch lookups all fail, and check that no individual
-> lookups were needed. Cover BTF and per-CPU output, an empty map, 1-byte
-> keys and unaligned values. With 4 KiB values, check dumps that need
-> several batches, and that failing the first or second batch lookup
-> continues with individual lookups without restarting the dump.
+> Instead, set the default once, when the inet6_dev is created. That
+> happens on NETDEV_REGISTER, both when the device is created and every
+> time it is moved to another network namespace, since addrconf tears down
+> the inet6_dev on NETDEV_UNREGISTER. So register a netdevice notifier
+> with a priority just below addrconf's, so that it runs after the
+> inet6_dev exists. The default behavior is unchanged, but userspace can
+> now opt in and the setting persists across down/up.
 > 
-> Pre-size RHASH maps so asynchronous growth does not race with the
-> order-sensitive dump comparisons.
+> An alternative approach using IFF_NO_ADDRCONF was proposed in [1], but
+> it removes the ability to have link-local addresses altogether, and it
+> was reverted because it broke the selftests.
 > 
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
+> Add a selftest checking that link-local addresses are off by default,
+> that they can be enabled and survive down/up, and that the default is
+> restored after moving the device to another namespace.
 
+This is an old decision, but one I think I'm inclined to stick with. You
+can't use WireGuard with LL generated addresses, because AllowedIPs
+requires explicitly binding to public keys. So you wind up having to do
+coordination between the chosen IP address and the distribution of keys.
+The solution for Babel and the like is to add explicitly WireGuard
+support and use the neat mesh qualities of Babel for key distribution
+too. There has been some talk about implementing this for a long time.
+That's the direction I'd like this to go in, not breaking the whole
+allowedips model, which is what this moves toward. I hope that's
+understandable.
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
-
-... with a few, non-blocking suggestions, inline below.
-
-
-> ---
->  .../bpf/prog_tests/bpftool_map_batch.c        | 231 ++++++++++++++++++
->  .../selftests/bpf/progs/bpftool_map_batch.c   |  42 ++++
->  2 files changed, 273 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-> new file mode 100644
-> index 0000000000000..4cca77f410a06
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-
-
-Maybe bpftool_map_dump_batch.c, so it's easier to visually group with
-the existing bpftool_map_dump.c?
-
-
-> @@ -0,0 +1,231 @@
-
-[...]
-
-> +void test_bpftool_map_batch(void)
-> +{
-> +	static const struct dump_case cases[] = {
-> +		{ "hash", BPF_MAP_TYPE_HASH, 4, 4, 100 },
-> +		{ "empty", BPF_MAP_TYPE_HASH, 4, 4, 0 },
-> +		/* The hash cursor is wider than the key; values are unaligned. */
-> +		{ "odd_sizes", BPF_MAP_TYPE_HASH, 1, 3, 100 },
-> +		{ "btf", BPF_MAP_TYPE_HASH, 4, 4, 100, true },
-> +		{ "lru_hash", BPF_MAP_TYPE_LRU_HASH, 4, 4, 100 },
-> +		{ "percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 3, 100 },
-> +		{ "lru_percpu_hash", BPF_MAP_TYPE_LRU_PERCPU_HASH, 4, 4, 100 },
-
-
-If I remember correctly, lru_hash/lru_percpu_hash are mostly the same
-code as hash/percpu_hash, so I'm not sure they're worth testing, unless
-you want completeness.
-
-You could also avoid checking both plain and JSON for all types (pick
-one, and just do a few check for the other?), if you want to save some
-bpftool invocations; I don't expect differences in the code related to
-batch lookups between the plain and JSON output printing code.
-
-
-> +		{ "btf_percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 4, 100, true },
-> +		{ "rhash", BPF_MAP_TYPE_RHASH, 4, 4, 100 },
-> +		{ "array", BPF_MAP_TYPE_ARRAY, 4, 4, 100 },
-> +		{ "percpu_array", BPF_MAP_TYPE_PERCPU_ARRAY, 4, 3, 100 },
-> +		{ "lpm_trie", BPF_MAP_TYPE_LPM_TRIE, 8, 4, 100 },
-> +		{ "array_of_maps", BPF_MAP_TYPE_ARRAY_OF_MAPS, 4, 4, 100 },
-> +		{ "hash_of_maps", BPF_MAP_TYPE_HASH_OF_MAPS, 4, 4, 100 },
-> +		/* Bucket and key cursors, up to 255 entries per batch. */
-> +		{ "multi_batch_hash", BPF_MAP_TYPE_HASH, 4, 4096, 256, false, true },
-> +		{ "multi_batch_array", BPF_MAP_TYPE_ARRAY, 4, 4096, 256, false, true },
-> +	};
-> +	struct bpftool_map_batch *skel;
-> +	char *expected = NULL, *output = NULL;
-> +	unsigned int i;
-> +
-> +	skel = bpftool_map_batch__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-> +		return;
-> +	skel->bss->test_tgid = getpid();
-> +	if (!ASSERT_OK(bpftool_map_batch__attach(skel), "skel_attach"))
-> +		goto out;
-> +	expected = malloc(OUTPUT_SIZE);
-> +	output = malloc(OUTPUT_SIZE);
-> +	if (!ASSERT_OK_PTR(expected, "expected") || !ASSERT_OK_PTR(output, "output"))
-> +		goto out;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(cases); i++)
-> +		if (test__start_subtest(cases[i].name))
-> +			run_case(skel, &cases[i], expected, output);
-> +out:
-> +	free(expected);
-> +	free(output);
-> +	bpftool_map_batch__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/bpftool_map_batch.c b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-> new file mode 100644
-> index 0000000000000..0ca6f7973e880
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-
-bpftool_map_dump_batch.c?
+Jason
