@@ -1,84 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794336991;
-	b=QfhFhV2XCVrRIeX5MnYO1dVe3axyH9uYGNqUwQxOx9CwciIafV/GOKlvlF9k5Bx8PsWG
-	 riNgvLjRV6sRfu0gAir2N7e3Y+u2c5mQ8rX7VGd5PqQCE6g8ZR/yKWytMcqFbIf3Zf72U
-	 3ha9UfagY8VT/SFhxdlD01G78hHfhW0pDL6Y/5ve2l1VZn2SkglECUqNrYoZ0H1KMKcb5
-	 ggVUjSOkU2Mxowhc2hIoJtNzeAcGbF7SUHvUfuYbsrpBEMdgNtmIpMfiFEkeiPiwf+I2Z
-	 80ttNa+c4HpR1II520Cnzq9m4QenLESn/RtAkhxKfdPTqo1AS1MNnvruXFOXxO/c03Q==
+	t=1794337040;
+	b=x8KTbbORH4xtnin0qlBJf5VoHrjMeBC0EOFuuieOru2CHcsMBX69W7anxmYHSndZE6AS
+	 mBGww28Oz+5NrJWcA/gDB3QuaiLX6M85VfSUR8nX8QtDqfxnu/b+HQ1K+mQV+eKZHktpD
+	 WhUBEjRQp7rgYb4KQAuGf+uhWPUTcXcJf0rT+1Km6KUJHUa1Zd4xkO9ntB8ARPjMRLm7W
+	 d1VhuRA0jWKLLMbOwN3+Dj4bhcxMtJa+zW+zImkCI0pAJGaMPCai2fu5GStFaXVoYhAZA
+	 1ff8VofhKX8WD4lOu01n0x+L+ku4Jks+R/26eWBYAkXHnkIhMQ0X7lcX90muYpZEbmA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794336991;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794337040;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
-	bh=g8kKfDytD/v7OOrYEkkTE88iqH3WPJ5eP+WcohkLFA8=;
-	b=4jFPyFp26H1Sqywi/6bHuVPEAEtQjNEfnWSohFW0/o++FshMOPsaZ4wmG6hbuqwDLwyo
-	 EAvp8d24Vf95m0dkYBhhsjHy0c/8y0cqUEdM+SqDVgig+8zYMnWR7cBETzFPmd7hyI3JG
-	 63+bkuYuRoaTXxePc4wpz2zptzkDc8ofwNdl7GoXOW5qbfZKJPWnWTYtfMjhJnqR2LSuO
-	 u0JT3lRGTRZc2lnhWTlNznWrveFdPUnhfLmpgzSbVLP9YSCz6xsvb2MwTE7DeSyivQN8Z
-	 7ysHYJyfC4h06FFVIigmHVCBh0A3RFRtbIJ4F7DIuCHDtZHaCscX5+XFu9bDo5kYGKw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=AQuihqHEux/S4RsBANsKy60bFVxIx3B8NgZdRBTW2qo=;
+	b=jt2vmZAY08hyVDGVr3aZgBwGIg6m4TY8BnIIPJlXTuI4uwLJXlMhcu6n68xmZGZcPecz
+	 +5vJlhbkVMW2KCX31XqZDySJpLcJlLQjy/O7x7vVI0huAULVoOeT10oMyB4BBSyYHkHuf
+	 GwLWGQTcyJJtfS50CBpKfuYg3vCUcT9jmyhVPg/f1WwuEYtF1rUbPdiLOnWb5be0rYw7N
+	 zYed4zSRGuEYJifccAQf3lkOtHZVzQfixxEMT+AzwhcMnsQKu7IshLVrFKXsHbX63yyfd
+	 wlPy1o7d+zhHcE00Ef4nRwbuewZQdWAJJaGOi5IXnmjGBQP9b2dEdiAFO2RszeSXSMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EQjWlEJU;
-	arc=none smtp.remote-ip=209.85.210.180
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KtdpTBuv;
+	arc=none smtp.remote-ip=209.85.216.70
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94EC606A331
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 18:56:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A94EC606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3126606A332
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 18:57:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3126606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EQjWlEJU
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8a07078200fso1030023b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 10:56:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KtdpTBuv
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3ae72da2f57so3308417a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 10:57:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794336990; x=1794941790; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=g8kKfDytD/v7OOrYEkkTE88iqH3WPJ5eP+WcohkLFA8=;
-        b=EQjWlEJUTqlvye1bZ+asbnnQFPH4ejxzuEM2f296OL9owhnNQy78horLu34TH42Na8
-         zbbjjim2s9YDMKlvERFXkEOfsjOBG4QU8ZC/vwzGPh5W199pxwr4yjhI+MnJg4pn5jkK
-         PbzehPQM4G3nMyOxJVf2i2wBP71w5DFcV23m4791KCLy5Td9v9zfgcLll/QOBChumv0P
-         XUZ2Gx1RuRQBIARaj0hh93NS2X1sppCBXz0tBj5SeGTIAS+TBqHIg0zt7Y9OyADXgniN
-         5RtULOmYcIIXYBOm7cOJFX88LvezrB+xjLoa6OYo+Nz60GmKrvi3Qa6bQagNkCnnYCim
-         NcBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794336990; x=1794941790;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1794337039; x=1794941839; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=g8kKfDytD/v7OOrYEkkTE88iqH3WPJ5eP+WcohkLFA8=;
-        b=0Q7JX1zpWy/TBvLO9pzbAcN0YabzmBzZA63CZMvNKG8ipnMJYMOoFf+D0TQ3EFzDq4
-         kQjidzAVOgiBqB3tfZrwOVXAt5sY60WTxqfkwEKaVGuzmv4FNI51+j2EGOldZiXJ1U34
-         vd6VOZ9lEbE9neE9ObEpG6k+U1ZbTAXeRkUDV7ppYsemBhtxZw9zNgmMEnTNEkmLimSN
-         BX/72zhQlH7Wk7nezaa9ydU8IruZ+brtFDXe3aQ+5anTM2qZEbwdSyYLy3NIXFQj/qS3
-         vekI8Hat4OW+Yy862TwrEFr5NUwW+AJXMmE1UdttnOdLM/Qs+JRlNapBBxDx5NrM6nPc
-         DRtA==
-X-Forwarded-Encrypted: i=1; AL+hErEMBjwBpH38gDsoiT4vQQo0Q/BPEmndslVP49THeouqwmTELX+zNyTW3C73yBe2SW2hFqTbIVXxCT8O2ATjVI8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9jAdbNF+Awev8Er48zBknOlBIlFYTDQI1mmunCT3DkYal9VRfi
-	w1bU39QlOyOhdiMs28OZf5BObxcQjinn7kTAybX66K8HMLEF+MUL16mYmlA6wIj7oA==
-X-Gm-Gg: AYBFou0AqNHPtsuim75aPsDi550aCeOkYU/i7IYrEhdLTbpakWBbRu76fMCHnQvOTXP
-	jC0r023wCxFHRzOB7zeUEaRUAERfKWHHj9J1/JrcUOPvijqBQaMdRusmd3RJFO+yfpUwNvk6pmI
-	Xsy6GDQP5G0BjDxuVbbZoQhpUqNAngyiJr58/3S6I/6z8BEHyxPzhFRyLMnT+fNFC86LzkyyraF
-	9nt7MmEO5jGFcaRgMtyf9hcgz612Hd/hn0qnMONhISJsVIHNwwJOTsUnGPs3KeyDkvt55nL6KPa
-	bADuTVCGxuTax3gMXMXzPdltDlRzYuovLujiHMT1lLbpf5XWbJAly7yzYJpaxBs9/fa5ddzim2v
-	hOFkb3XimvkPIocRDKMBXBL+r53kuFogK7676R8TnQNWZRirHb/SkQXK4LuyUt4m95pJ6jWFKGC
-	xgsIV6jp/60ns4bALaluPmYLO7nEkvjI7i+y5piA+S7LSzarhEIUz9ER6kd6bLmYW9QRzYz2y5G
-	0Ftvef2ycc1MiiAe47NG5RVKQ8/6kR9Cbw2+zRoph6fnyvPjZIyxxECxN91zYz3pAh4cEUyr+vQ
-	KjtAlUjDFFz1EMNjr0iqWol1vb4mD++l4jB15Uu2aK+oUbIwP7O+3/CncR2jF44/
-X-Received: by 2002:a05:6a00:2349:b0:89f:7a1b:2bf4 with SMTP id d2e1a72fcca58-8bc1b6feb8bmr5444b3a.16.1794336989281;
-        Tue, 10 Nov 2026 10:56:29 -0800 (PST)
-Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab21835fsm1302972b3a.42.2026.11.10.10.56.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2026 10:56:27 -0800 (PST)
+        bh=AQuihqHEux/S4RsBANsKy60bFVxIx3B8NgZdRBTW2qo=;
+        b=KtdpTBuvQpxNf/PQA2KlTeTveUJLkpuq8YAbqZeMA1bNsCwk9xe2hW4AaPxM7cqPyB
+         54PNxha3Zd9SpgDpvydjfPqJUzaZQJjU/baA4fc+/FQyoWQZxN03pKvLJEjfxSsSjq33
+         B9yq0EuzA3fbleQyqYBx8u7kxY4b7yD3qV03bH661i+7FM0wWY6U7fEVJkNijN4VC2VA
+         l9fE8acTdNN2AJSYSXedfZMA8cmlyAGdAEdj42pYqGONsf4G8kZv+mUExGcCV/+mNfGI
+         ejnhhcRKAfkzFsjDEfPTsiqDlCU2fT8urX0o+Gill3iNpasXAjAFaN+ZZM2CzJDz5ncW
+         tWvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794337039; x=1794941839;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=AQuihqHEux/S4RsBANsKy60bFVxIx3B8NgZdRBTW2qo=;
+        b=Q/gkKRqenzawPwyn1ZU9JgO8LZpxSdN5CZTYJUdCql110ePt1LjLzRSB5wj+bXRUM8
+         AEP7FC+FJUWL6ihrSIIl5ieC18WgjN5+4AJexJ4CldrpXZPxFKpyErT8s5ce0VyAuKLE
+         39zR+DkQrVET3kUTWFM5JQtUnFDGEoWtlujXKh2GfeUpe2ljLMUC/7a5iqm+ospZlyaj
+         O9jp9IOJ/FMQn/CI8afyeTO41qaTq5fMxBUVb5o3KdmZb0JAUCge4n5gaYbZ3/fJVQ6w
+         DPUytrdeXI6R8+x/KRzz6Om5Jj43Gz+QwY7g+SOzXg9UZyjqgIjQSehjLtI1m3OBn22d
+         Rjfw==
+X-Forwarded-Encrypted: i=1; AL+hErHA4qtw9buu3Kvi3uX03wv5OSGF8bMj/rJ5IzKt/Kzn/9/xQM3Z5Mn0eH6ecjTTEjapaEXox7eJvVnBkFTlTYU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8t2RaOOKaNz9H6w8Hjasj5T8oJXacKxa9Kd/KOB8dgMEL1mtmT
+	XX8zI+YOVFFfag7ACaww7ipzbWIkGNe6ZhJxxAzZ323vMw50RESCE5iTGU24RG9jcJVhhuCD0PD
+	GFwMaMA==
+X-Received: from pjdq9.prod.google.com ([2002:a17:90a:2e09:b0:3ad:32d0:ca0a])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c88:b0:3a0:ca1d:b40d
+ with SMTP id 98e67ed59e1d1-3b166ce0e87mr3977029a91.55.1794337038803; Tue, 10
+ Nov 2026 10:57:18 -0800 (PST)
+Date: Tue, 10 Nov 2026 10:57:18 -0800
+In-Reply-To: <CAEvNRgHKQVLVza1dw9-OrDAt4-b6zbhx4T64D421sqb2MPWs0w@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,82 +78,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Nov 2026 10:56:26 -0800
-Message-Id: <DMRRDJZ8UQ2D.30SLE82GDTH48@google.com>
-From: "David Matlack" <dmatlack@google.com>
-To: "Pratyush Yadav" <pratyush@kernel.org>, "David Matlack"
- <dmatlack@google.com>
-Cc: "Christian Brauner" <brauner@kernel.org>, <kexec@lists.infradead.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>, "Alexander Graf"
- <graf@amazon.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Baolin
- Wang" <baolin.wang@linux.alibaba.com>, "David Hildenbrand"
- <david@kernel.org>, "Hugh Dickins" <hughd@google.com>, "Jonathan Corbet"
- <corbet@lwn.net>, "Liam R. Howlett" <liam@infradead.org>, "Lorenzo Stoakes"
- <ljs@kernel.org>, "Michal Hocko" <mhocko@suse.com>, "Mike Rapoport"
- <rppt@kernel.org>, "Pasha Tatashin" <pasha.tatashin@soleen.com>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Samiullah Khawaja" <skhawaja@google.com>,
- "Shuah Khan" <skhan@linuxfoundation.org>, "Suren Baghdasaryan"
- <surenb@google.com>, "Vlastimil Babka" <vbabka@kernel.org>
-Subject: Re: [PATCH v3 00/10] liveupdate: Preserve tmpfs files across Live
- Update
-X-Mailer: aerc 0.21.0
-References: <20261103010216.3447716-1-dmatlack@google.com>
- <20261105-sitzordnung-nahkampf-ausbleiben-6db911d0333e@brauner>
- <auy0ThryqW5nVx20@google.com> <2vxzbj7witb7.fsf@kernel.org>
-In-Reply-To: <2vxzbj7witb7.fsf@kernel.org>
+References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
+ <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com> <CAEvNRgHKQVLVza1dw9-OrDAt4-b6zbhx4T64D421sqb2MPWs0w@mail.gmail.com>
+Message-ID: <avNpDjWxrgThIUXE@seanjc-mac.roam.internal>
+Subject: Re: [PATCH v16 03/20] KVM: selftests: Initialize the TDX VM
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <iweiny@kernel.org>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Xiaoyao Li <xiaoyao.li@intel.com>, Oliver Upton <oupton@kernel.org>, 
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue Nov 10, 2026 at 7:45 AM PST, Pratyush Yadav wrote:
-> On Thu, Nov 05 2026, David Matlack wrote:
->> On 2026-11-05 04:42 PM, Christian Brauner wrote:
->>> The checks on the target are trivial: a writable fd to an empty shmem
->>> file with the inode lock held while you fill it. A tmpfs file can't be
->>> sealed, it only ever has F_SEAL_SEAL, so there's nothing to restore but
->>> contents and size anyway.
->>
->> Sounds good. The one other check I plan to add is rejecting a target
->> that LUO is already managing, e.g. a file that is preserved in an
->> outgoing session and whose size is frozen.
->
-> I have been playing with this idea too, and I also stumbled onto this
-> problem.
->
-> You also need to make sure a preserve doesn't race with a retrieve.
-> Since userspace has access to the file, it can do both at the same time.
-> I think LUO should expose a "register file" function that registers the
-> file in luo_preserved_files. This should be the very first thing
-> retrieve does.
+On Mon, Nov 09, 2026, Ackerley Tng wrote:
+> Lisa Wang <wyihan@google.com> writes:
+> > +static const struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
+> > +{
+> > +	static struct kvm_tdx_capabilities *tdx_cap;
+> > +	int nr_cpuid_configs = 4;
+> > +	int rc = -1;
+> > +	int i;
+> > +
+> > +	if (tdx_cap)
+> > +		return tdx_cap;
+> > +
+> > +	do {
+> > +		nr_cpuid_configs *= 2;
+> > +
+> > +		tdx_cap = realloc(tdx_cap, sizeof(*tdx_cap) +
+> > +					   (sizeof(struct kvm_cpuid_entry2) * nr_cpuid_configs));
+> 
+> Would be nice if struct_size() could be used here instead of manual
+> calculation of the size. Same below.
 
-Agreed, that's what I have queued up for v4, which I'm hoping to send by
-tomorrow.
+...
 
-LUO gets two new functions for .retrieve() callbacks:
+> > +void tdx_init_vm(struct kvm_vm *vm)
+> > +{
+> > +	struct kvm_tdx_init_vm *init_vm;
+> > +	const struct kvm_cpuid2 *tmp;
+> > +
+> > +	tmp = kvm_get_supported_cpuid();
+> > +
+> > +	init_vm = calloc(1, sizeof(*init_vm) +
+> > +			 sizeof(init_vm->cpuid.entries[0]) * tmp->nent);
+> 
+> Would it be possible to use struct_size() here?
+> Or perhaps kvm_cpuid2_size(tmp->nent)?
+> 
+> > +	TEST_ASSERT(init_vm, "init_vm allocation failed");
+> > +
+> > +	memcpy(&init_vm->cpuid, tmp, kvm_cpuid2_size(tmp->nent));
+> > +	init_vm->cpuid.padding = 0;
+> > +	tdx_filter_cpuid(vm, &init_vm->cpuid);
+> 
+> How about something like this?
+> 
+> 1. Query TDX capabilities first to get tdx_cap->cpuid.nent (let's say N).
+> 2. Allocate init_vm sized for at most N entries, since the filtered
+>    result can never exceed TDX's supported CPUID set.
+> 3. Iterate over the TDX CPUID capabilities, look each one up in
+>    kvm_get_supported_cpuid(), and append matching, masked entries
+>    directly into init_vm->cpuid.entries.
+> 
+> This would avoid the memcpy and all the memmoves, though this works
+> as-is. Just an optimization/different perspective.
 
- - liveupdate_claim_file() inserts the target into luo_preserved_files,
-   and fails with -EBUSY if it's already there, e.g. because it's
-   preserved in an outgoing session or was retrieved before.
-
- - liveupdate_unclaim_file() undoes it. If .retrieve() claimed the file
-   it returns, LUO doesn't insert it again after the callback, and a
-   callback that fails after claiming must unclaim.
-
-On the preserve side, LUO inserts the file into luo_preserved_files
-before calling the file handler .preserve(), so whichever of the two
-inserts first wins and the other fails with -EBUSY.
-
-> Also, today LUO core expects a fresh file from file handlers, so it
-> always installs a FD to that file in the task. When doing the "retrieve
-> into FD" thing, that will result in two FDs to the same file. While it
-> isn't a strict problem, it seems kinda ugly from a uAPI prespective.
->
-> Perhaps we should let retrieve signal to LUO core that "I already
-> installed the file", or a "I have no file to install", or something
-> similar?
-
-Makes sense, I'll do that in v4. The file handler will tell LUO that it
-restored into an existing fd, and LIVEUPDATE_SESSION_RETRIEVE_FD will
-return that fd instead of installing a new one. Retrieving the token
-again later still returns a new fd for the same file, like it does today
-for any file that was already retrieved.
+At this point, I'll do minimial fixup when applying, e.g. if switching to
+struct_size() Just Works.  But I don't want to do anything more invasive at this
+point so that we can get TDX selftests landed asap.  To be clear, I'm not opposed
+to more cleanups, I just want to do them on top.
