@@ -1,63 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794327057;
-	b=QGfqZsyNOVmgY1LEtaRNze7F+9WDUhlRl7NEtbyWq/obewsVtRHrVyyZcfs8bX6/A1f/
-	 QzekY5BvTfLUdVcalx5JcN6e5GMqMuntjvxzGxauRLeiqQc70KK6dGRaA/c8adibL+vGv
-	 Ul4+OAnhfQ6HQPbHDURTUL1hbE8CqEnfRbgqq5VMSsCz5GIKXPCpyBie+k66AwqfLp3k/
-	 Z3XJt1jaNUO7kk9ek02uW71iJO0z5xjPA5VYRmI8Z1O2NM1goD7Qt7QsM364R8iaWXaMf
-	 40uZH3UxIKfpH/jJpSUuXK7K1oKFYRzoY1kEF739g2qVqGi6246My6hF779HE1yUY0w==
+	t=1794327127;
+	b=mQf8P8GfqbQIuP86SPrZbSGchmxxcXLvYQP0mn+lvBq8A99vOB4M3hr99Ny2WAc2Bcio
+	 CIPrqEhQwd5s9cSxKmz9bSMj8E9gz2/AwuOb6UqP7JB1DQ0mXnVg3IaE5ohWmRLoJFSkq
+	 9WC2WFXc88X3Ip+F2ic/j6G2YbKjdgRAcLAoBKSLkmMMz1VUsl9bMaOtQy+300RrM/6pE
+	 0ss2WsNpgCUp7Cqu8CzUnbjtZqUzMehum7bv6rfJWwbQuQybhnEJPgDHBUdg426RiPHXD
+	 5s5dQxDF5jrzYk9bzlok1V22cVFLQ5nCBYjOomcW6rPfWmLP6vid+sJKZdyFRpN74iQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794327057;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=QdU1aqKwlVngIKa2eaMFTNV7DLkp+ni68eEKDmr9dqA=;
-	b=z7xxpFtjamjRulDUWIPWqb2W0o9SOzpVJ2Z7clOq+uiBwx2cBwktOw65IlKTwAiXWVUI
-	 vawigpqOYak2xO6hGD4WXXnx7719aaPIyo6Mq7lNea9H+T8EsB7I6JP7dLKQ9SGrTaRdD
-	 1znkH2lufIGcPDjhZJB0uUQBtKHN8Ot0nISD2GEQwc5sBDA+zS/QuipcO1V693um4c7lQ
-	 63KaO4E7vIc18EMHllMDTpVNhrT9R6CamUfeq/I1ifetK2nPXIxoi4u/bDO5xvZeiuIa3
-	 icqPbQrEsiBXxuY8QGctVqN7tEAiHjd+20IC7yrNGCHBKiT3e86qgMNImonEz49oV6w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794327127;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=RSLplmlefCzlrzZekmOXD0yz8U/FyqcPjyO9JJ24e3g=;
+	b=pX7zBXYoXUUeGh3pZu6Ys9p0UOrtHDEV1IRSm8RB2cVlExKoiS9Wrrn6YMD1QaJLHqCM
+	 dr8usK4ugdEN3/SMe1HPaIJryC8s/xCEiwSb92Nl0ceVgRpjUidqRaqtmlwyDjTm7Dnbi
+	 hTN9iC/ISlSWQqu1ma6mfOFv+4r/1yU/jja7IlHfdSsBZMSMrAhxL8qPvIZMTARaPZsyX
+	 Iv76KBRckJTyf+eYtyOCnHOzjBGt30WQBDxaJgkEmF5Cng7iN5dq9tIR8hS4gLt7FcCSA
+	 fbLvaflw3uQ5j0OtCsL7OMmdJrIUQjmHXse6peaK3GxPzq9KpHoiEowWJYpTFlQn9gQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eN2aJ3lB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rT1851wK;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0D660A6F75;
-	Tue, 10 Nov 2026 16:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA36E60A2614
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:12:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA36E60A2614
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eN2aJ3lB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3632F1F008A3;
-	Tue, 10 Nov 2026 16:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794327057;
-	bh=QdU1aqKwlVngIKa2eaMFTNV7DLkp+ni68eEKDmr9dqA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=eN2aJ3lBMCXJnpWJLSJWHJHYe7XUcAgplG+1j6PP8+mrmya7mQe1z1Pf8yp7a2EaG
-	 nn8i8v4ALT7ta2GcAD1teuYJpS9cI0wBHKjehIbiu4nVPOhZZLuINIj1uEtxPrzGDv
-	 Ce8a2YJPXPEvmfCR16Muff4NiuavRhxJeGgjzPMtiCB1mQYBVa9F38LXvgujA5ONuu
-	 BtSuyWrZL+lXBIYxuBM4IAtd5XmeKGl2V7P1iQt0RnlG6GfSmnXmgPE8ezOo1Nz1hx
-	 O+ZnJkjzRtfkPrpnLAUOdtAr/j+2QCLmbnvm3aPuzRNWwLEg218uhTmhMdEuMNrVej
-	 XNgMPanCc6JlQ==
-From: Sasha Levin <sashal@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rT1851wK
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4af520023fdso3438955e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 08:12:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794327125; x=1794931925; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RSLplmlefCzlrzZekmOXD0yz8U/FyqcPjyO9JJ24e3g=;
+        b=rT1851wKskl1h9ymNh8Xbol+PH9UppLA29igRFHTHd3eFBfaEobdNkisj4eq6NLoCJ
+         iW6mkHMjfzEt3DomDzKW19n+/Q6ow/Qor3LjxEMpUQVg47KZ25vE0diQn5xg5ICcuBGg
+         QCZOwflNYFooSOY6okpZsSNyxwaCtAmpuLswLPpSWVNNaouXHM/j0aXlqvfKdxNnIPTR
+         ezfrSCPXgBm7pXfHKOgz5uEmkk5Kd8lAX7UAIdoaTt/9I4uq6xpJHAZGMb+Ep9mRqGBA
+         Jthp1U5JDjizPbUn4dLi7NUU62IX7JBGG+3rkoTs+EZS+sm4XTBH6hllm1jFNqXj0xNI
+         ClWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794327125; x=1794931925;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RSLplmlefCzlrzZekmOXD0yz8U/FyqcPjyO9JJ24e3g=;
+        b=TAw2axsoJDre5i+nKX1iiiv+1a5jwlHXTlyac0CNfJJTGKIFjNeKZnWV67hbUqKMb8
+         WRhy/jl71njnB19D30NdzNfxw6mQJBzpGGBAm2KMQPbHTfDMbClzH7fKeRrKrdYmA3Dl
+         VZmqB2f05M6VZJ/VQXhd+td9XGd8+dH1v+ZHHogc6PkivPZ1y6TD4qKLgtctONdaZgK8
+         gB9+s92R96UpQ5mtny0GO5XdSh/Bg3RN7pCbYSbRqPyMb1988zEiPZv6LLF1taKgF6e8
+         UvBT3FzFH1cX45OrUMefKO5N8FJkTTxKuL6S9XpaqVSJGTIdLCqqqJIvq9+bQxIAOiLQ
+         /6bA==
+X-Forwarded-Encrypted: i=1; AL+hErEjhskSaeL9v/dC45M/rT4RLLInNOUC3YbIoam4zQuHbwklB6J1l13GqI6OK6eV2ZjDfckp/Ip7RENfUbTxKPk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9fito1iC8/w3AK99ehgbzOirM3Cwn+CcP4oIUsCpvY5xhK4MOW
+	cC71cJBc73wFHHzEQavCOrCwkABf7SvbOOu0KBRU5Ja+J6GxcOY/yhLK
+X-Gm-Gg: AYBFou3QSuQhCzIa6Bo7sVKFK2sQsaLcN7NA1XCqm8MB1YqBye0Y7th4L7D9QuZcVMr
+	qrngu5tRvFcmSffoD4vpSZKEMbZaaXefQX/CflRSk7IyJ6bQxCKxmtyOfVkkx4mQPtCeMptblUU
+	Tw8VKpIvMPB9bKTVYGcwmsBW3r4ZPxqJ/6Rw0eDQet5PiRYs4rR/0a2bw5U8TLwp/0TgaKRdcbW
+	5TEiL/ischj+hVeuo0UlAFJKkoCn3y0R0dO3A06e42HBdTHrlrkxrpRQqi4BLidrN1izA9i8epN
+	qj2YvnA887VLkfNDfdOgQnpI7Ugcwl14TBxtwReIC/30fWDmkNejp8xMEP0EwHEaIAw0wI7nfli
+	cpI9T3gAATkhVjE5tcfDH0aFroR0PVJn5vKY1Z8jHOIcSl7mSFUavSsj6BwxWjimNot5sukeRAV
+	QyrRbFXsM6MATJ/C0RZ2YRV+vsB9niaxBnLe3VMZMcyanKB4cH0WHE2Jd9wOzIu3tqJX5VZNX38
+	9RlGEsVRRQnJBBQwbgQ7kQeZ3hZiijeZe7PlOgDPQNLMNalasD/AjsZqNb1Xxwd/gyyTRzfGgsY
+	FCLH/NfxANBUs7t1r8KFCf8Pgd5xSgRApQnOmhcNBX1PqIR3Ks2eVFTaWul6I11u03zCbL37
+X-Received: by 2002:a05:600c:350f:b0:4b2:3c81:103 with SMTP id 5b1f17b1804b1-4ba0233a711mr52624085e9.2.1794327125133;
+        Tue, 10 Nov 2026 08:12:05 -0800 (PST)
+Received: from localhost.localdomain ([95.183.147.101])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0235ef62sm46727135e9.2.2026.11.10.08.12.03
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 10 Nov 2026 08:12:04 -0800 (PST)
+From: =?UTF-8?q?Bilal=20Yaz=C4=B1c=C4=B1o=C4=9Flu?= <ahmetbilalyazicioglu@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org,
+	Mohsin Bashir <hmohsin@meta.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/4] selftests/livepatch: build the test modules against the kernel in O=
-Date: Tue, 10 Nov 2026 11:10:49 -0500
-Message-ID: <20261110161050.2451750-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261110161050.2451750-1-sashal@kernel.org>
-References: <20261110161050.2451750-1-sashal@kernel.org>
+Subject: Re: [PATCH net 1/2] selftests: drv-net: ring_reconfig: handle devices without channel config
+Date: Tue, 10 Nov 2026 19:12:02 +0300
+Message-ID: <20261110161202.77549-1-ahmetbilalyazicioglu@gmail.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <179432444472.994134.2763803571159924115@kernel.org>
+References: <20261106150509.30458-2-ahmetbilalyazicioglu@gmail.com> <179432444472.994134.2763803571159924115@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,112 +107,24 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Documentation/dev-tools/kselftest.rst describes building the selftests
-for a kernel built in a separate output directory:
+On Tue, 10 Nov 2026, netdev-bot+sashiko@kernel.org wrote:
+> This catches EOPNOTSUPP from channels_get, but what about drivers that
+> implement get_channels but not set_channels?
+[...]
+> Could the channels_set call get the same handling, i.e. log with
+> ksft_pr() and return on EOPNOTSUPP before registering the defer?
 
-  make O=/tmp/kselftest TARGETS=livepatch kselftest
+Good catch, that's a real gap. ethnl_set_channels_validate() rejects
+the change with -EOPNOTSUPP when there is no set_channels, and a few
+drivers only implement get_channels (vmxnet3, r8169, enic, octeon_ep
+and others), so ringparam() still fails on them.
 
-The livepatch test modules are not built against the kernel in
-/tmp/kselftest, but against the running kernel, using its devel files
-in /lib/modules/$(uname -r)/build. When those are not installed, the
-modules are silently left out. Only an explicit KDIR=/tmp/kselftest
-builds them for the kernel in /tmp/kselftest.
+The upcoming v2 handles it the way you suggest. Looking at the same
+drivers, channels() also fails there (its restore gets -EOPNOTSUPP),
+and so does reconfig_tx_stall() when a driver reports spare combined
+channels, so v2 skips those cases too. Other errors still fail.
 
-When KDIR is not set, use the output directory given with O= or
-KBUILD_OUTPUT if a kernel was built there, then the kernel source tree
-if the kernel was built in it, and only then the running kernel.
+I don't have any of those NICs, so that part is only tested against
+an emulated ethtool family.
 
-The selftests also pass their O= on to the module build, and the kernel
-Makefile takes it as the kernel build directory instead of KDIR. The
-top-level selftests Makefile passes O= even when it is empty, so on a
-Debian machine with the devel files of the running kernel installed,
-
-  make -C tools/testing/selftests TARGETS=livepatch
-
-uses the source part of the devel files as the build directory and
-fails:
-
-  /usr/src/linux-headers-6.19.13+deb14-common/Makefile:798: /usr/src/linux-headers-6.19.13+deb14-common/include/config/auto.conf: No such file or directory
-
-Do not pass O= and KBUILD_OUTPUT on to the module build, since KDIR
-already names the kernel build directory.
-
-Fixes: c4bbe83d27c2 ("livepatch: Move tests from lib/livepatch to selftests/livepatch")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/livepatch/Makefile    | 26 +++++++++++++++++++
- .../selftests/livepatch/test_modules/Makefile | 12 +++++----
- 2 files changed, 33 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index a080eb54a215d..97478ef90945c 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -1,5 +1,31 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+# The test modules are built against the kernel in KDIR. When KDIR is not
-+# set, use the output directory given with O= or KBUILD_OUTPUT if a kernel
-+# was built there, as with
-+#   make O=/tmp/kselftest TARGETS=livepatch kselftest
-+# otherwise the kernel source tree if the kernel was built in it, as with
-+#   cd tools/testing/selftests/livepatch; make
-+# and otherwise the build directory of the running kernel, which its
-+# devel files provide. A kernel was built in a directory if it has a
-+# Module.symvers.
-+ifndef KDIR
-+KBUILD_DIR := $(firstword $(O) $(KBUILD_OUTPUT))
-+ifneq ($(and $(KBUILD_DIR),$(wildcard $(KBUILD_DIR)/Module.symvers)),)
-+KDIR := $(KBUILD_DIR)
-+else ifneq ($(wildcard ../../../../Module.symvers),)
-+KDIR := ../../../..
-+else
-+KDIR := /lib/modules/$(shell uname -r)/build
-+endif
-+endif
-+
-+# test_modules is built from its own directory, so pass KDIR on as an
-+# absolute path, also when it was given on the command line.
-+override KDIR := $(abspath $(KDIR))
-+export KDIR
-+MAKEOVERRIDES := $(filter-out KDIR=%,$(MAKEOVERRIDES))
-+
- TEST_GEN_FILES := test_klp-call_getpid
- TEST_GEN_MODS_DIR := test_modules
- TEST_PROGS_EXTENDED := functions.sh
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index 01eaf2e1755c9..82f0119f6cf0d 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -16,6 +16,11 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_state3.o \
- 	test_klp_syscall.o
- 
-+# The kernel Makefile would take an O= or KBUILD_OUTPUT passed on from the
-+# selftests build as its build directory, instead of KDIR or, for clean,
-+# the source tree. Drop them.
-+modules clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
-+
- # Build the modules only if KDIR exists and its kernel was configured with
- # CONFIG_LIVEPATCH, as recorded in include/config/auto.conf. If that cannot
- # be read, still try the build, so that a KDIR that is not a kernel build
-@@ -29,14 +34,11 @@ endif
- 
- modules:
- ifdef BUILD_TEST_MODS
--	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-+	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
- endif
- 
- # Cleaning external modules needs no configured kernel, so clean them
--# through the kernel source tree that contains this directory. The kernel
--# Makefile would take an O= or KBUILD_OUTPUT passed on from the selftests
--# build as its build directory, so drop them.
--clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
-+# through the kernel source tree that contains this directory.
- clean:
- 	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(TESTMODS_DIR)/../../../../.. \
- 		clean KBUILD_EXTMOD=$(TESTMODS_DIR)
--- 
-2.53.0
-
+pw-bot: cr
