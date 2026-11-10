@@ -1,84 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.43
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794317964;
-	b=nLwcGd2A46bfByy/vhLmH8B8UcdTSC1udI5CUhbm0V7kzBhQHePn1jQA08nR0IWi0GT/
-	 tOx02ajyHSm4fTLPBQJTACVZAhTHcLvvCoeQkL/fdHvUAjiiNFmWckcKjuOhHSC5kfvUk
-	 92g0WyuShcFfFBfh64JqwT3NzE78m5xhKlE7ypuPFT8iEnK/xJgyUuF6LWKKr/kHk7321
-	 8YzymXEwVK8Fg1qelzRFi2DIJVI4SCuGedWgQZR+WlmUmy5I+fdAq8YAcRkFQ4umpZZ3E
-	 acqj2BN2NyilB7dPO4gfmEq0h14BSAAiVm2S4kiGXytIaorhSyJImTR8SrGTJ473YkQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794317964;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
-	bh=wrYdLEXUQczC45027W7j/17QxqnElVdgY/9dzZeBiks=;
-	b=nIFDVdu7AMnnsSsbrJAyUApAoZR52brd3CUI+ky2x8MaN8OKowPHuZhILnYdMFsgAjYg
-	 mqYcnXU5qHGSnR6i0v+Rz+YaCkm9BMnuad6cXiAv7IUrISV6zhMqBN66GarQvYYduZM1Z
-	 DEOzah7jzDDWj0fyzIwFYh3ZbJr6Pmu2HMWTbIMpQadNUGbn2etMPq5/MAG35qWdNo3Xe
-	 wpurkebIyoyVS5sAPPFDkJOLHOw4bFUQQOi/qZswKH+ew6Sk/7lxLOyzR2wzVcP9ieUMv
-	 t4FfvG3o21OruDLzs4kRED+7UzcB7StVcii1WnIOi058UNJXGon8HJWmQg+TI3nQ4og==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Jbfz6kh/";
-	arc=none smtp.remote-ip=74.125.224.43
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.87
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794318074;
+	b=k0JiNOs78pjlPXQCwgb+xczIdF3psaBToq+qWZXpTs4236eO74/jyv1GJE8JGIp6q3wN
+	 tpJXoKZHZdOzFxkaMpXwNOVJh4Cs0aNOUufmKxw1uCdovf1RiSHZE33oop+FbXyEVF9Y3
+	 toztYGaZE6aQLOg3en60pr0Ch+SyH9vsBpT0v/LrhLvKk5cC29mp84ec/vV6i5SnPRxmn
+	 395yPalNWOYxpj6/Ap8UnD/UFq7O+TMY31GdZeTG6Y5BO+s/KKlLzAHMll8JeXvSvnUIh
+	 5yuJz9rpsuq/RRwgQ3aMgwAdvSnxvKS6D6uoQ9uBBSzPBimX53bIjNK0kk3oT/2zobw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794318074;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=HGDMXE+d5D8lVIZsA2mJeMgP2VFVsZbVUDF9v6qfVYU=;
+	b=SeSizE4bI/zJeFXKV4yL9Zk9AZ3s24gIzMMBfd3gGldEBvEpO87kI2WDzDsFOT1lqSAG
+	 uNiD592Ye7bvC0s+JtPLqxQmBlziQ9PesIKMlCbhMbkpkPi8kDqjzJyrcBRPCVStyP5M9
+	 SgANd+vAFe5rikPcvyrK/FHnVWx1thwPU6dZw2h34SfGZhP35a+PuZ7yP7VKrUuWhGRvb
+	 aQszu0WYFvjdfaPP4aFI3LQU9YLDfR19vcBMPelkSW9E2+iRU+2yGH9X1NjqxN1EnSNUf
+	 uAkw16yTeVohQsDVWbtZV/XW40MF1r1gLv02vCgRW42yae4Pzo7jZSNMkP53gVjYENQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=sT7VLQem;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.87
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020087.outbound.protection.outlook.com [52.101.189.87])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA198606A330
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:39:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA198606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893A7606A330;
+	Tue, 10 Nov 2026 13:41:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 893A7606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Jbfz6kh/
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67990a45e02so1957927d50.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 05:39:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794317963; x=1794922763; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=wrYdLEXUQczC45027W7j/17QxqnElVdgY/9dzZeBiks=;
-        b=Jbfz6kh/HpDc+iYvSMq+UD27VNHlFLPHcbic2zVDi+JV7ZfeXFUIEbMhdvsJYMtQD7
-         6tDwNbi5/fxQaTlyxIlz+BsqrNDOaoUW8Nim91YHiIh3tvKr8//JolyFGlzJ5cZHy5ld
-         KSfLQBQTPTmMVV5tCIi0vOS7Eg6cYK23ihpvtZmD36PM0vNB/h9Z4ZZFgL88WS97gMfy
-         8PWPw+IdllFB+D8w1sPQwGBaDYNLUH9EGuw8NN+zAG+wV6bxulLNs1+EZdEGhahjW1BT
-         v3p3HAQ9/xSKxm4FgZTtEUkXmfArxUyS7hUpAEy0HomOQ1Fw37vo8H6R/+ziuteR1QkA
-         wbUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794317963; x=1794922763;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wrYdLEXUQczC45027W7j/17QxqnElVdgY/9dzZeBiks=;
-        b=qxE6vce6127j4jx6M4fL9JrsCE43LQvJENOmDg4oq0tV/LZV+DseTdzHNH3IC1jvWK
-         4hcEP1zAXhDKEDdCkY0t+kzLtHHgRdyidJLx/a3sRIQV/JDBzT7Aa0kcJLcZLRyKZwRC
-         iqIE3LEPxPmeAuJ+IuqNQgpIbW1T2PmHpExBpH9cuZE/GWm5qDqOv174mjwT9PFujVqB
-         HIVqIvg3nHK850GaBYEeEWJn+Trs+eSp10IArOgY54Gz7YjvYGf/hpGHGm36UhQ2eLnE
-         omBsTzYSM/td8bcIDJIcWoki0jQsSx3PNR8WH045JKfeUAGB/yB5u8CNYmB+C/P3SQio
-         NGAg==
-X-Forwarded-Encrypted: i=1; AL+hErFe4hK0Ji/KHpxBrYhPhF00ivL1/sP/+ZQgazZOCMZ1eDlWtolRnUTsJx8rNMwxYznxbZxIUC6tVcJBrVtO0As=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Qvo6PHpI6E54pN1FiZ7RvOQmsVMMgpyAU0LWKui4HSL7V5BVD
-	wafdW83ZHp4xn64ulBnClavIs3JfvLf0ik6eSWfNHy7Dz23w5UccdN0=
-X-Gm-Gg: AYBFou0qC8yBarWzffD37ltTJ1B/z6KZauchdJPXAsgt4y4n14wBeEy44qVsUaOQffd
-	EImhs5s/eI+JVZgcOxFyqDxC2bou7ZReDiBrQOIwYikh1aV7ezJG7l7/cgPDisRVnir4hquJXfr
-	lzi7fonc3eXCEYc6Ct5IGpAuaZt4SiBb1JVYccUeCgv58e5mrFzRw3ztHzjxiD5IE580lwQWiHG
-	qBU5xZT1dfUbBrfMD90EhOgkDQXACI+YeKHB+/xId9s1VetxuGtlIwUAVeHz9tvC4PkUy92SGAr
-	wrHprCtRuHkh5Z2oqb/KObi3PlelaHOrdCfSMpVRS5vUWmUgaTac4vSo+fYCsl6xjO2bfxuu5uC
-	b7tl7yKecrMuqxY4KVaq5vh2A9e429ToRPatbW7s7S3gHJqAflHjMdBxFKMzkb4PME8OgXFTE7o
-	qMJXw7pCyJKhB6r3PgaiFPZNsBi1CzUKgLGQkr9xozILzifXuHde/WmhFv6toY9c5BfyRLv6D2x
-	COi4pHwLubbEt6VID718paDjK5WfiXgZknuFJZBzBBP+J881vIESVMUf+5Zk0bKqBmWKEBKjHFU
-	q7Gyww1h2ypxVO/WL4D/If9GRX3E5acRbyGB6NV2duztvg/+zpi8VTSxrNPrbUz+
-X-Received: by 2002:a05:690e:4810:b0:67b:f249:5820 with SMTP id 956f58d0204a3-67c5676f8d1mr1411133d50.41.1794317962789;
-        Tue, 10 Nov 2026 05:39:22 -0800 (PST)
-Received: from localhost ([186.158.238.108])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b3934643aasm18888917b3.43.2026.11.10.05.39.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2026 05:39:21 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=sT7VLQem
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eypw9q/sxultSbH76QYJWJodvGj6kOrS6eUXIKrRa5BLl/skjU7UNbapCUTCUf5Ijuf5LNe6uzSzcBo173xoQ1jZ+QPNrCEQXc8wUFZhNxxdkmSS7rQ4UBAz5f3MIv1YCD+e786lYHt8v1PwfUBGcGgKTt3/Qvrzb7zFeixSN7Wd9K0SG1+mIIj3coPq+MowKrQ8UcWHSw1F58oSp9bsln/T8J/F9R6bQfd3OxbZawOZecv1j0zOSxtjmTCsXGWjGxEggzs0Vbtt71Xi0eFe75Dx3RZHFQh95QuImVrLg8gpJwl97zL11efw1IUItGNeS3CE4Ln5WLuK4r3Gl008Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HGDMXE+d5D8lVIZsA2mJeMgP2VFVsZbVUDF9v6qfVYU=;
+ b=yrwJZJtJ29kq9+5ed0ehIOd8XScNBrhNBQT+LSS+erUgbpCMoq8yBe/fRgbG1xGyA1BVMq4x42GVhOvQgjN7bGl6eaI5ODP7ruQFck1qVeRcP7Ub0RmH9u/mocl81g5EFA04TiP/kkqTWITPpRJut7V2JXhBR8zCtepZwIUb8+z9Rcx4WPK9LIYA3CsZ6ridcm0u9sFPVyMhBm8y5vAVdICuOfeDKUQ/53V5LK1MdwfKvzmDE3PPWMO4nu5WdAAcWp4KvncMJhTKuHc6ngtsFPvzleuNFNKmuv2BmlHJ9/8WNSGh5s3qtCAcfMSIialnSvTvtDhmpbvxSxfvDbVbfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HGDMXE+d5D8lVIZsA2mJeMgP2VFVsZbVUDF9v6qfVYU=;
+ b=sT7VLQeml+2XW1z/395q8F6iJ5VPKy5i9iUeOloNSHKo7m6wOLoU5s2LeQKWpCS8DPX7DuyMdUkbJMZgRzZ10aYdUa5fQcbatLin9r8YpAOZ+ItnPHwcbCMAgT/w2v/eiJdiuHwGwR1xDZ2MiMVhnirVylu9/4QnaAsz7STU9vJxf0PQpHPS7OGzwuk5dE9A40f82ALUZJSCY4JQjUpR9AaNTO2rxczfuO+s9dwrC96Mmrd+9rTXjJ0TbfSSI0fTD1m/EDgATZuzQkbgvSRvo13BOrTTGte2Yq6VnJNjcBokXu7+16kdVQQfMIUBpiybS1yXuBqnxq3z563Vk1hzqg==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YQ1PR01MB994322.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:103::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.8; Tue, 10 Nov
+ 2026 13:41:09 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.007; Tue, 10 Nov 2026
+ 13:41:09 +0000
+Message-ID: <2b872bff-0907-4a65-8347-85194eb457dd@efficios.com>
+Date: Tue, 10 Nov 2026 08:41:07 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 09/29] sched/deadline: Reset the deadline and the
+ runtime with the parameters
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+ linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+ boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+ kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+ mathieu.poirier@linaro.org, longman@redhat.com, ridong.chen@linux.dev,
+ tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
+ m.szyprowski@samsung.com, kayracizmeci@gmail.com, weihengqiuu@gmail.com,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, stable@vger.kernel.org
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-10-mathieu.desnoyers@efficios.com>
+ <avMZvuEdV8ua36jy@jlelli-thinkpadt14gen4.remote.csb>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <avMZvuEdV8ua36jy@jlelli-thinkpadt14gen4.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQZPR01CA0049.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:88::13) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,125 +108,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Nov 2026 10:39:14 -0300
-Message-Id: <DMRKMOLNNODA.3M7QNVIBGVI5R@gmail.com>
-Subject: Re: [PATCH v2 1/3] rust: kunit: add #[should_panic] support
-From: =?utf-8?q?Nicol=C3=A1s_Antinori?= <nico.antinori.7@gmail.com>
-To: "David Gow" <david@davidgow.net>, "Alice Ryhl" <aliceryhl@google.com>,
- "Benno Lossin" <lossin@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
- "Brendan Higgins" <brendan.higgins@linux.dev>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Danilo Krummrich" <dakr@kernel.org>, "Gary
- Guo" <gary@garyguo.net>, "Miguel Ojeda" <ojeda@kernel.org>,
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: "Alexandre Courbot" <acourbot@nvidia.com>, "Andreas Hindborg"
- <a.hindborg@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Burak Emir" <burak.emir@gmail.com>, "Rae Moar"
- <raemoar63@gmail.com>, "Tamir Duberstein" <tamird@kernel.org>, "Trevor
- Gross" <tmgross@umich.edu>, "Yury Norov" <yury.norov@gmail.com>,
- <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-X-Mailer: aerc 0.20.0
-References: <20261029-rust_kunit_v6_send-v2-0-5ce551efc48e@gmail.com>
- <20261029-rust_kunit_v6_send-v2-1-5ce551efc48e@gmail.com>
- <6d7a63ae-f08f-4973-b2d5-27be454380ef@davidgow.net>
- <DMMMDQO787UH.353XT44UDG8YS@gmail.com>
- <e7301e33-4813-4382-84e6-5c82a70b1ad7@davidgow.net>
-In-Reply-To: <e7301e33-4813-4382-84e6-5c82a70b1ad7@davidgow.net>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YQ1PR01MB994322:EE_
+X-MS-Office365-Filtering-Correlation-Id: 653fd9a0-37fd-42bf-0ee3-08df3f30470c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|4143699003|56012099006|10067099003|22082099003|18002099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	t2ZldUn8DQ12x+WuFEjwssDlHP9eofvxo7z+/eQ8z4eOrGCk73HBAVv2Kv3HZ8MapH9fUNpm4wHkGC0FvxY5vl6wSMhhyJwHZ/Z4wK5AtEJI3tacK2kpKw7BNv0KzYtQE7nyRphixsipUwJVEgsFoEruSDq4bEUfAkgoXoSf6BfxIhZEAtcExen/yGe6SDfZh9PB3kpDU9V5AYXyT97AzjzaFw/T1yJRfHQgcvJsT2EEhW2varv1Uv3iscM5uXfUcoG+v3I19H/kLge3lDTnRYMLjtJu9cvay1p82T1fWrFpxJ90WByvwbnqYqypKaRQHFH69UrmJfRbohKIBBst2VtL/KNc1RbYaXw0xhpcn3mr+m6xypi7WOmnwhdZ2Jt3PsyroOyf4O7JILBKl2rr/NTkZYvKpMZEr81L/G07zXcfuevYxSSDlhLkx8QstvdhnDNuW8iHwjml2Jb2llOS/kKAmxgNoyn3BlJ0yd/ZN6ErcnlkH3xtZU9dim3U4J1WxXW+CqjOfHhsmSeGY+tobV6QWS42VFZ2WATI2Wz+aM33wgwLfzomUfD58VXcnitZOpflqKYnMG2y6VuAFZTr+ShwQq8paPCZ2jejigIJRb0=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(4143699003)(56012099006)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WGRxLzh4OHJoUzF5aXovYUlpcVpNOGYxVTFxL3g3UmxYb1dVVVhoWWRPcHhS?=
+ =?utf-8?B?M3RCcHR6ZEppWndxVEQvMlgxcHFyM05pditsMmN0SlRDL2kxTzZPMVZzV1hs?=
+ =?utf-8?B?NWU1UjVGeWRHeGY2SkVkb3hYYlpMRUNFY3FQNkNjQ0VtRlRnL0RTUnhtRWZh?=
+ =?utf-8?B?L05oQkNQTFc1aFBKQy95ZU1QcHRWVDM1bHJySmJKNHF1VlBlNjhLeWRodXVz?=
+ =?utf-8?B?cFVPbXVHSDE3WDFUSHhXNkh6R0VNTFEwL1JXRjdaYVdtYTNRcWZFWWVqdXBo?=
+ =?utf-8?B?aGNCaWs3eExZeXdPS3FsNUU2V3FoOWlZTmNnVXVyeUFsaWdoRHFNaHJmbnQx?=
+ =?utf-8?B?a2tZbE5FckpsaGFZUjNIYWMwek5oY0NjZElZMmVKT0l0bnZHSFVlblYxRmhl?=
+ =?utf-8?B?SjhFelozM0xzenBEMC9YZXpGUDlBY0JsWmtSN0lYT2crUzN6eTRTR2l3TnBE?=
+ =?utf-8?B?THh5K1ZhZGlnRUVyMkNlWDJOYVF2bURnTWh3N0VlTWFBUHh2N1RSc21hdGds?=
+ =?utf-8?B?VWFZL2JFL0piRkc4eGJJb1l3MFJqSmlsT0FGdEU3OWNhc3Z2aTNhOFd4UGoy?=
+ =?utf-8?B?QVhqQU94VDl1UUJyMCt5K01sL3NxeUIydlA4Y1ZhQm9MTElmdUllVlRqaGJM?=
+ =?utf-8?B?SStFRkVmN3RYdU0zdmMxWllWNUl1TEw2SDkyVFJpVVg4YXBGZEpkUXNWVGw2?=
+ =?utf-8?B?MGtJaWk5c3FSRktIVHZ2TUhidEJHRDRhZXZTaUpoTEFkZDFVOXg1SWpzQkRV?=
+ =?utf-8?B?SThvQnI0aWVlcjV1S2J0eE5pREpCVkw5bFBlUGhiVW5XZVpqSUhYT1pkbW9K?=
+ =?utf-8?B?eHpGMis3N3pLQkk4NjZ4d3piZnRmbmMrS1p0QUozZ2JCV0Y4VDF5QjZ5Q1N2?=
+ =?utf-8?B?a01WMWNYZjQra0V1V1loMVBURTQweUVkR1ZlK0dFcUdIN3JvaFlodDhwOVNl?=
+ =?utf-8?B?Q3lsM2k3akdCdjUzcmlEWEEvenpzQXkzK3ovM1pqQ0ZDN2lNdHRhSjVGbFJQ?=
+ =?utf-8?B?UTFEaTFIcTA0UUsrTFFxMXdzU0FVT0hMeXF0MGtJZWl0WmVxZUVEQk0rRXAr?=
+ =?utf-8?B?RFM1VGlTM0dpYTZhRU44RGFRcGo1aEpaUktxYnR2SndyTUJpU3BmdDVROTdF?=
+ =?utf-8?B?MUhZaTNienQ4UU8xQUJuVklYM09DdU1oUTlTQ0pJeERDbVdtOWJOUURSaENv?=
+ =?utf-8?B?VGdSaHJrRGVBVm16bDB5dU9RUEFkMUNSU2xHaWNUWGIrZ05SOGtPMXR4eERN?=
+ =?utf-8?B?YUUrM0ZCVFl0VC9lanFzUENrcHM0Zzh0NXNhVE9xR04yZEIwbWRaV2hTZXEx?=
+ =?utf-8?B?ZFlwZzhGd3NOS1hheHJsd1l4MkVDMkc4TVI3S2poV0FOYXh0RFFIUmRheFFs?=
+ =?utf-8?B?Y1lWL1lyeVNNdWo2T2hlWmdYU1JKZTdIcTNEek9Jc3JGelhNNnp6Qk1VZHE0?=
+ =?utf-8?B?ZnZ2YVFpWVQ5d0VUYWNuSzF4N0dqWGFkd3dwUlNSM0x0U0E5OG9BNlhvZk5X?=
+ =?utf-8?B?Mkh5WWpCR3hkbHdKRVZMejlycXZtR2g1US9aOGZtN2FvVkVhemZDR1FSL1JP?=
+ =?utf-8?B?Ty9FZlJpSytua1MyQ2RFYjFTMjBkalZrRk9ESWw2ODMwK1B2U1l2bkl0dkxr?=
+ =?utf-8?B?Mkg1TGtab1YySTBZYzdQd2xOcVY1bGpQUERyd2diT01JWFBJUmJLQk5TS2lM?=
+ =?utf-8?B?d2ZHdG0rUis5NDZPcEVnUFFRNVpnNndrd1l1RXZyYXRXdEU5VlNOK1oxZXNG?=
+ =?utf-8?B?d2t2K28vYVhFWE5yT0RaNmVNbzVYbit0Q1Q4UTJCVzRNdk5YZ0x2a0RjLytk?=
+ =?utf-8?B?c3RzbmJYVmIvTHBXYm56NGxNR0RNbSthcnFLQmVBaUVqbnFRSndhSU5QZzR6?=
+ =?utf-8?B?SkZHQk8zRnpzUk5CWVN5alFOQTU3L0RIVWxyVmhhV0V0UU1rRm5HUDNDVHZC?=
+ =?utf-8?B?UlBoaGsrWmZUczVCYVYzRVg2UFBzdUtvN2VOTGFobWpYUFVnY01iR2VWYjg2?=
+ =?utf-8?B?eWVtWURTdSsyaGlpcXhxZU1mRzBxS1JVUER0YTNpYjdlQ2p5Z3E1ZkJ4UmlC?=
+ =?utf-8?B?TGIvbjRsVXdBSWhZMmc0YjMxdXo1QWdQNnZSK2lPN0pJTmxZdVhsbjJ5bUZp?=
+ =?utf-8?B?STFrYkN3TXdUN053NTZaeWRzLzl0MWtKZDV5V3NmSnZrVHkyQnQ3aXpxL0tX?=
+ =?utf-8?B?cU55MnpTOU5qZkVDL2xxTDltZEJQR1ZRNWpVOVowdmNhYjVPdXJFeTk4ajJU?=
+ =?utf-8?B?ekMzMEFJVENwdVpUNkNGdk0xbGw0NzRQWlNkSHJjKzJ5bFdoQmxLK2tpc2hT?=
+ =?utf-8?B?MnJZNndrL1BjZTBva0RUa3FMMDltOVdVbVN4OGcrMnhFdlpWVzFFSnh5TEhl?=
+ =?utf-8?Q?XuqqJgKmilnZaziYAg1NXNLHqohigD8/Xpt9q?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 653fd9a0-37fd-42bf-0ee3-08df3f30470c
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2026 13:41:09.4190
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NADg0mdiCkOmH+Vp6I39AZMB0Jo1lod1AKmiTnPMgTYVnGqFbM+oPOtNapePw+ntQZ/YEa50JrBqsGoncAhVG/GeQ+orcek5ichOydIMn8I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQ1PR01MB994322
 
-On Fri Nov 6, 2026 at 2:31 AM -03, David Gow wrote:
-> Le 05/11/2026 =C3=A0 1:58 AM, Nicol=C3=A1s Antinori a =C3=A9crit=C2=A0:
->> On Tue Nov 3, 2026 at 11:46 AM -03, David Gow wrote:
->> No problem at all!=20
->>=20
->> I'll be sending the v3 with the panic handler then. I decided go this
->> way because I thought it would be useful to catch C panics, but those
->> would be rather rare cases.
->>=20
->> The only thing I am not yet sure regarding the panic handler
->> implementation is how to read the `rust_should_panic` attribute from
->> `kunit_case` struct. If I am not mistaken, there's no way to retrieve
->> the test case linked to the running KUnit test from Rust. Would it be ok
->> to add a public `kunit_get_current_test_case()`? I am not sure if that
->> struct is meant to be used outside the runner.
+On 2026-11-10 08:18, Juri Lelli wrote:
+[...]
+> Nit below, other than that
 >
-> Yeah, this is a pain. In theory, struct kunit_case / struct kunit_suite
-> are internal to the executor, but we end up having to pass them around a
-> lot, and a way of getting the current test's attributes is, at a
-> minimum, something we should support.
+> Acked-by: Juri Lelli <juri.lelli@redhat.com>
+[...]
+>> @@ -3999,6 +4009,9 @@ static void __dl_clear_params(struct sched_dl_entity *dl_se)
 >
-> I'd rather not expose the struct kunit_case to test authors (though
-> exposing it to the Rust macros is fine by me: they're sufficiently
-> KUnit-internal that it's fine). The ultimate best 'public' API would
-> probably be to have a bunch of 'kunit_get_attribute_value()' style
-> things, but that's definitely a more involved thing.
->
-> How about we compromise on a way to get the attributres for the current
-> test. The simplest implementation for that is probably just including a
-> pointer to struct kunit_attributes in struct kunit.
->
-> (Though the better long-term solution would be to pass a struct
-> kunit_case pointer in struct kunit, and generally rework things to not
-> pass struct kunit_case/kunit_suite around as regularly. There are a lot
-> of gotcha's there, though, so it's not worth holding this up on that.)
+> Think we want to update the comment that comes with this function (as it
+> now clears also dynamic parameters).
 
-I'll add a kunit_attributes pointer to kunit then! I can rework this
-later to add the public kunit_get_attributre_value functions.
+Good point. v6 will say that it also resets the deadline and the runtime.
 
->>>>   #[macro_export]
->>>>   macro_rules! kunit_assert {
->>>> -    ($name:literal, $condition:expr $(,)?) =3D> {
->>>> +    ($name:literal, $test_should_panic:expr, $condition:expr $(,)?) =
-=3D> {
->>>>           'out: {
->>>>               // Do nothing if the condition is `true`.
->>>>               if $condition {
->>>> @@ -93,6 +93,14 @@ macro_rules! kunit_assert {
->>>>                   ));
->>>>                   break 'out;
->>>>               }
->>>> +            // If condition fails but the test should panic, then we =
-just abort.
->>>> +            else if $test_should_panic {
->>>> +                // SAFETY: FFI call. The `kunit_test` pointer is vali=
-d because we got it from
->>>> +                // `kunit_get_current_test()` and it was not null.
->>>> +                unsafe {
->>>> +                    $crate::bindings::__kunit_abort(kunit_test);
->>>> +                }
->>>> +            }
->>>
->>> I'd rather us keep asserts working as normal: a failed KUnit assertion=
-=20
->>> shouldn't be considered a panic. If normal Rust assertions (particularl=
-y=20
->>> those outside the test-specific code) compile down to a panic, though,=
-=20
->>> that's okay.
->>=20
->> I'll revert this. I made the change because in user space those tests
->> pass [1] [*].
->
-> Having thought about this a bit more, I think there's a compromise:
-> could we make the override of assert!() and assert_eq!() only appear on
-> non-should_panic tests. In that case, the assert!() and assert_eq!()
-> will behave the same as userspace tests (indeed, they'll use the same
-> code), and we won't need a complicated implementation. And later if we
-> want the (IMO, more logical) KUnit-style assertions which aren't
-> negated, we could suggest people use kernel::kunit_assert!() directly
-> (or with a small wrapper), so it's obvious the behaviour is different
-> from upstream assert!().
->
-> Thoughts?
+Thanks!
 
-I think it is a good solution! Making explicit that there is a different
-behavior using a different kind of assert, will make the tests easier to
-understand (since we are mimicking the userspace API, a Rust dev will
-expect a #[should_panic] test to pass if a common assert! fails).
+Mathieu
 
-I'll be sending a v3 this week!
 
-Regards,
-Nicol=C3=A1s=20
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
