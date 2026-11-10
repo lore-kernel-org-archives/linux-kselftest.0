@@ -1,61 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794292703;
-	b=eVvy3BtmUHCPPbbcnHMaETx5k21HZ4UNj9TBa9kSL8E7WTrWVqQrtbO/OvfXpcBAxjPj
-	 22j3y+LnkaAAwxJQFObC1lWWNB0h+SbOCNV7X1KagtK+LTe924BlmVCVi8ANhCPJZbs5q
-	 NBQ2lxvKPeK9ijAA0ugrK9/nsIwb0FovKKDBVoKZJ2I75ZVaKkXfZqR8xKeV3YYnw4dBK
-	 J3GaBmko/EfElOa0YWKY9ZKZQh2gAVIYD0/2sSaEn4VPd3B5i83T8eiRCxP5T5VXNBAQb
-	 PUR6aCqc27jC5wbiCJJ4GTbvszAqtnzwMax6hdqPOEbLdNU3yLzs7r5msrW+yDslZwQ==
+	t=1794292738;
+	b=RwAUd5wjmLhj2M4r/b57sVYU+9rwOAz+TLOBDHPMXzjNI1BsWCCkapwLXy41QrDiyAQ9
+	 tVBclF1DqhLJR7EWzCBvgQZSm5JrgXs0iqFDFLiRl4y+sSvV+OtwIXkthBWU++zvujYXc
+	 VgQ+XrjPoSQGdYv5FxunR2czbY6W8jCiopcdQ8wVYI2yS3OrIRYFkJh2tTwZCBlC4fu4i
+	 KAoWLojHFOoMasGmgvzk9xI5vTmdEFDdbtGsK4p40IPa1Tp1QSzqFeeEv1Nv6asY5UGc8
+	 ln301/oioh/VPKl4XbAdkykghW3vqEZGqR2CuyEGgvpsSB0+D7HAw819GC6K1UaWWwg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794292703;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=LOiKICujpBzPReN9GW/iERHG8sQmBIYj4fZnX5FM+J8=;
-	b=AImgA+4Zk/9SXgT74dWuYgOfBJahMkjIlUEmIxOWOyD9ihf8ZjD9sps9u+qUdAolgskw
-	 EsIRUi2LlzEZKAac3alY46R1Qde0VLvqWLZk85QeAKdu6CEZyrHXZM3ika/FCNplOJmJx
-	 ZipKDLx0F84ExEsBdn+vVKJY4UniETIUlF/FW49fULpr91VgYmS9V/KpnM5l9J+fpk4jy
-	 GikLEegLQdjgDtMXitXzfxxPqD7O6hdv+gbj0/FmrdEmoyi1E7Aw2zBCzgmmI0zjS1vuW
-	 IILXSGueB46uyEbuHTbfpy0XWxxSVJBxDz447M4E5lnn5aSkBNfgzVo4MYaRURkzjkg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794292738;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=xGnzNpbW5HBJowHbelE8TIAH0CHLKv+3lpr5Rd0UybU=;
+	b=pY8X2anXykukRRwwXZ66YIb0KcXAGMrEZVqBWWygTDLJGWQddqhvay8KNVvF2rDjaOh8
+	 wwZKoldK2NagxnCVu2cga7WLeCgUQITFI1V383xB8PRlLNw9fc7H1DPNxb0S9IpJwifK/
+	 QSPOH9d9dGSkSrAOyTEWqRh1MnWJfywDnUGMGUpR/h20aMS62IHFK3fvRPqDcmRa18t33
+	 NingsuWri8adCuvsWNuxNqBnOpnFyUW5uVnU+x0+epcnW0f/e5ncead6bP0QuLXV7D6Bb
+	 7kTCWQn+ajHy63favx3GiqjdhqfzsTIrlQUYiLrZ+3V4NHzkDeb6K/4SywtSP6CCPzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=au9KblM6;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lUjbyjdq;
+	arc=none smtp.remote-ip=209.85.215.199
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BBE606A337;
-	Tue, 10 Nov 2026 06:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2335606A31C
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 06:38:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2335606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=au9KblM6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D53F1F00902;
-	Tue, 10 Nov 2026 06:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794292703;
-	bh=LOiKICujpBzPReN9GW/iERHG8sQmBIYj4fZnX5FM+J8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=au9KblM6MDvvUk3stFQgLY+uzYxsGZluR6/clV6WxupExmxurx0pg07ia67CUdvO0
-	 qJ7xZi70FU4EzYb7ZyOPFpfAC2WkZidW7KLwRZMpca0FXX/f9mBZyzCse8+6bYvDoQ
-	 gGU//R/X4+j6HriKgXiVkI666AJtiNihCwWTl7dXcB1V0paTCdEDOMOcwCDmNJb1aX
-	 oPvNuljJoBLG1jKYdNUXIsll+yaA/Ano9YuR/Le82tDRdz5cgzdvulgFqsRICnHmOo
-	 q/YdR7zQ5U54WbWB+PFQdgQ8QtZMIGSjOkwZR31d8TGkl7YaybgZw90RT9mSSREYVK
-	 uH22tOA5oqhaA==
-Subject: Re: [PATCH net 4/4] selftest: af_unix: Test SIOCINQ and scm_fds with
- OOB and dgram disconnect.
-From: netdev-bot+sashiko@kernel.org
-To: sidchintamaneni@gmail.com
-Cc: kuniyu@google.com, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, willemb@google.com, jannh@google.com,
- tkhai@ya.ru, apais@microsoft.com, rlmenge@gmail.com,
- hargar@linux.microsoft.com, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 10 Nov 2026 06:38:21 +0000
-Message-ID: <179429270185.994134.9244218175897635555@kernel.org>
-In-Reply-To: <20261106051905.218638-5-sidchintamaneni@gmail.com>
-References: <20261106051905.218638-5-sidchintamaneni@gmail.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lUjbyjdq
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cdba239d0easo1780244a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 22:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794292737; x=1794897537; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xGnzNpbW5HBJowHbelE8TIAH0CHLKv+3lpr5Rd0UybU=;
+        b=lUjbyjdq0Cdy/5hmHfWdhJaKgFI7fDoSFMrmNdT1apdPUGgqHYEJPpK602EQgZubA8
+         lI5KHZU8Baq2CSU7na/Plt9wQEnHzajJ1QzZlUEi34qjWkKzxqExnCpGW0YHA4AljIvg
+         wX3ZtrFSbSGq46i6xgqbhdxIyzwP6i0o2Mw3d4DdZsOqIw57bS5eVSo2GbBKFCFgEcdK
+         AlvrGGoqmqcR3R0LDxkFNvbnlEIpdT9im9A37TihAhOjc5WTrd65PRbnrZvdM8WZvVGB
+         +aqz47nKcu3/P9gsdfAhMVxiY4EN1qK+NBbQF1ahO+m2wUwYjqZVDjvBR0ZGLTNAl49+
+         mNgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794292737; x=1794897537;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xGnzNpbW5HBJowHbelE8TIAH0CHLKv+3lpr5Rd0UybU=;
+        b=GuGf1zwhm3+usnB2nCRJJ+kfwQg/4CW7h6oOQqAk8bVlEgs0+4sGYKHj26/kKSvx2O
+         v/M/IhBrCZIZx+GC4u9lLk+aF+Y6If3bs5LOCavq+MfJF00dZFbUCHNcdfZIAlEYo67j
+         I/uaZIZQVFWzLawS2H4puw/3Aqns62R49Q7DcsaJBxZaSD/cltaQde948CSyoCmIlfB7
+         Zl+CWMbbkR8BAMm9x16su/ZB7QRDLvBb/1OV3/0hqHCJjsOPEPTsUgRJcgGbMb93n+ss
+         /aV07sDHFdwPrS1aB/5JPTJjxy4Hxh8OyILdjehr2HvYDyVo0M3gPMIUIOEEcUV0PEIH
+         AOxw==
+X-Forwarded-Encrypted: i=1; AL+hErFhKmFyk09z5YC4yws7PF1phtVBciIl7yj3azf5Tjcvosq5GuIjgazaB+i/Q2HHS/MOMr3OqvQZBgr40/CK3Ss=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9u0eJ6DDEaGbAk7ioUKc1r/1T06ZuQ1DTyW25uy/a+NAccbwt3
+	NXr/aOu78IUejNII4ij+JUzQrwrJUtUSzhfLsBXX2kb5ndagNzmU89GHjIuIgSubWr13RquTrmE
+	7o9dZ4Q==
+X-Received: from pjsd12.prod.google.com ([2002:a17:90a:bf8c:b0:3b0:994b:db90])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3889:b0:3ac:3e42:60a2
+ with SMTP id 98e67ed59e1d1-3b166cebaa7mr2018376a91.33.1794292736895; Mon, 09
+ Nov 2026 22:38:56 -0800 (PST)
+Date: Tue, 10 Nov 2026 06:38:56 +0000
+In-Reply-To: <20261106051905.218638-1-sidchintamaneni@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,103 +77,53 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20261106051905.218638-1-sidchintamaneni@gmail.com>
+Message-ID: <avK7nGo4aGxJ7QiU@google.com>
+Subject: Re: [PATCH net 0/4] af_unix: Fix inq_len and scm_stat.nr_fds
+ accounting leaks
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Cc: Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Jann Horn <jannh@google.com>, Kirill Tkhai <tkhai@ya.ru>, 
+	apais@microsoft.com, rlmenge@gmail.com, hargar@linux.microsoft.com, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+On Fri, 06 Nov 2026 05:19:01 +0000, Siddharth Chintamaneni wrote:
+> This series fixes receive-queue accounting leaks of u->inq_len and
+> u->scm_stat.nr_fds in AF_UNIX sockets, along with selftests:
+> 
+> - Patch 1 fixes a u->inq_len leak in manage_oob() when an unconsumed
+>   out-of-band (MSG_OOB) skb is skipped and dropped during a normal read.
+> - Patch 2 fixes u->scm_stat.nr_fds leaks when an OOB skb is skipped or
+>   freed in manage_oob(), unix_stream_recv_urg(), and
+>   unix_stream_read_skb().
+> - Patch 3 fixes a u->scm_stat.nr_fds leak in unix_dgram_disconnected()
+>   when purging queued skbs from sk->sk_receive_queue on disconnect.
+> - Patch 4 adds SIOCINQ and scm_fds (/proc/self/fdinfo/<fd>) checks to
+>   the msg_oob and scm_rights selftests.
 
-Low priority / nit picks for your consideration:
+I planed to drop MSG_OOB support in this cycle.
 
-- [Low] Two new tests in
-  tools/testing/selftests/net/af_unix/scm_rights.c, oob_fdinfo() and…
+Could you repost without OOB changes ?
 
---
 
-selftest: af_unix: Test SIOCINQ and scm_fds with OOB and dgram disconnect.
-
-This commit adds a SIOCINQ check to msg_oob's __resetpair() so that the
-drained stream receive queue reports 0 unread bytes. It also adds
-oob_fdinfo and dgram_disconnect_fdinfo tests to scm_rights.c. These check
-that scm_fds in /proc/self/fdinfo/<fd> goes back to 0 when OOB skbs carrying
-SCM_RIGHTS are skipped or freed, and when a dgram socket with queued
-SCM_RIGHTS skbs disconnects.
-
-> diff --git a/tools/testing/selftests/net/af_unix/scm_rights.c b/tools/testing/selftests/net/af_unix/scm_rights.c
-> index c165f250220a4..38a125d9f6e49 100644
-> --- a/tools/testing/selftests/net/af_unix/scm_rights.c
-> +++ b/tools/testing/selftests/net/af_unix/scm_rights.c
-
-[ ... ]
-
-> @@ -395,4 +425,82 @@ TEST_F(scm_rights, mixed_lowpoint)
->  	close_sockets(6);
->  }
->  
-> +TEST_F(scm_rights, oob_fdinfo)
-> +{
-> +	int recv_fd, ret;
-> +	char buf[2];
-> +
-> +	if (!(variant->flags & MSG_OOB) || variant->disabled)
-> +		return;
-
-[Severity: Low]
-Should these early returns use SKIP() instead?
-
-In kselftest_harness, a plain return from a TEST_F body counts as a pass.
-The scm_rights fixture has 10 variants, and oob_fdinfo() only does real
-work on stream_oob and stream_listener_oob. The other 8 variants report
-"ok" even though nothing was checked.
-
-dgram_disconnect_fdinfo() later in this patch has the same pattern:
-
-	if (variant->type != SOCK_DGRAM || variant->disabled)
-		return;
-
-It only runs on dgram and reports "ok" on the other 9 variants. That makes
-17 TAP results that show as passes rather than "# SKIP".
-
-The sibling test scm_rights_denial_lsm.c already uses this form:
-
-	SKIP(return, "requires root");
-
-Also, FIXTURE_SETUP and FIXTURE_TEARDOWN still run for these no-op cases.
-FIXTURE_TEARDOWN(scm_rights) does this:
-
-	if (variant->disabled)
-		return;
-
-	sleep(1);
-
-So the no-op runs on non-disabled variants add about 7 seconds of runtime.
-That is 3 for oob_fdinfo (dgram, stream, stream_listener) and 4 for
-dgram_disconnect_fdinfo (stream, stream_oob, stream_listener,
-stream_listener_oob).
-
-> +
-> +	create_sockets(2);
-> +
-> +	if (variant->test_listener) {
-> +		recv_fd = accept(self->fd[0], NULL, NULL);
-> +		ASSERT_LE(0, recv_fd);
-> +	} else {
-> +		recv_fd = self->fd[0];
-> +	}
-
-[ ... ]
-
-> +TEST_F(scm_rights, dgram_disconnect_fdinfo)
-> +{
-> +	struct sockaddr addr = {
-> +		.sa_family = AF_UNSPEC,
-> +	};
-> +	int ret;
-> +
-> +	if (variant->type != SOCK_DGRAM || variant->disabled)
-> +		return;
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106051905.218638-1-sidchintamaneni%40gmail.com
+> 
+> Siddharth Chintamaneni (4):
+>   af_unix: Fix inq_len leak when skipping unread OOB skb.
+>   af_unix: Fix scm_stat.nr_fds leaks for OOB skb.
+>   af_unix: Fix scm_stat.nr_fds leak in unix_dgram_disconnected().
+>   selftest: af_unix: Test SIOCINQ and scm_fds with OOB and dgram
+>     disconnect.
+> 
+>  net/unix/af_unix.c                            |  69 ++++++-----
+>  tools/testing/selftests/net/af_unix/msg_oob.c |  12 +-
+>  .../selftests/net/af_unix/scm_rights.c        | 108 ++++++++++++++++++
+>  3 files changed, 161 insertions(+), 28 deletions(-)
+> 
+> -- 
+> 2.43.0
+> 
