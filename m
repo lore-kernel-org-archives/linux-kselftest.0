@@ -1,67 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794281593;
-	b=qcVlSeMwkaWrKOkpFmBL8AAe1pqZE1AvxiI0VqPj0D97ml5fQo9j/FGOW5ioUqg1Y+Fi
-	 orEyNdp4DTmpnABQgD11+BhO6X+gahTzXPbjFgN6OOcu/BwYJ/FNbDpBW6uy2Pb4TnxFg
-	 XcqFDQ7icy02LkavNUBDUwX5H5DoO8+kh9psYDaVDKYpATVULfWF5V56xwtBOb7T0F4Df
-	 Wcx1jVPLhV+gyQJzXD1kTPhfdn5kDT/vB+Sc6aBo5JLDnVVrQ43BnA/aIv5lng554epqd
-	 x6M+oiouf2g61SoSPnAuU1CoA3/W3lVxzG3qcCaRmXzL/2arMYMIFFob9q8I1JQLt1g==
+	t=1794281869;
+	b=jK4MmbIgfXvr7hO2exrKustbyThNVXmJthvIKkKpXIFmJDjhDvbtVWH5xDuHiTFKS1OB
+	 94jpTX9eLgZRYY8jQd8GlUJze/5kWa7LVbA6618l8Y59P+tNugFTcOS4nbg+TDNP9vsQA
+	 /5zG3E0dCdWRz6CIQPz5kKZypmCkFQZLPSbpoXYglLEzjFwZJJKp6ch2xRndWD7wzCgDs
+	 faLTV7JEmhK7ZV9XnOYdtMmwUQwC0Fb3ME3Fz1LLB+CjQzjZOCLmTq30nA1j4+NWCiYSg
+	 SYNR/OTkDTLLCKJ/5hYjr8xg21kvwhn4m6Ukz4Nj48rb3/2DOtgNjWd4AwPpJZg+WQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794281593;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=N0SqkNbWeuHVFNNkfBhjb5eQ8Str/7iSCr6imSM6DLw=;
-	b=gOco8RkkVLfxAoiy7OLFFrxN9dj0SI05CGdVR92opmUHeAofhmRRBri4+Y6OMr9bzuIL
-	 /y1PlHZSsEEHoqQIdR2mGrVZ8MZAWOt9OxveyG05eync5DKs/KPw0RqjX+y+a/EYzUHKb
-	 voEKFQPNzTgDfv7puPa2elCrPCmkKt+LQGa5JVKTcxebFDe1SqPMUeeAy1DcQXZL/r08e
-	 6tI5oa7pKHnENZF/F/q+y7gaujijYkueTcETXGceG/eQbMC7joaIvn52B+oUzI8hjlSRJ
-	 npO0bBkLv1HeVu9+ei6PKJM42HIS+DEharmyVFGWGLKHMWFet2vg8XhbjzkNThU2HNA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794281869;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=d57Xwxdq7ggCiZHh4PGNXJufaWf8Hx04l8Vo55VakVk=;
+	b=AUdQtfDyOwRWzyIKu/Vc8tfe2UMMKRcN1VF/G1qtDUZhImBZ5FpWWYh+TC2zBKhaFmbg
+	 DpExW0ZrxbEgXOoiAS5+CbgICuq12YuISc9+ExW/hgKAJLSiGWdYc1NOUKGWRInZGdtsD
+	 MPla2vvoU5YxK5J+7SKlPVVwNAX2kIU2GiUWa4drq8EE10diFg8VZX+WTqg/EP0FW9vWE
+	 eFZoWmlFBfuFNqQca4qjw2NBCX0BJf0h4+FuPWANDAfnD6DDSA12V60TxMsnqGY7xzPFd
+	 mRbsPVm74/iiEA99+nsHMj2IpCouePjHq1r9iK9yjzZAp4nE6dAfi5Ud9RSKHVhabSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=E6zAcI6A;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bsfVIp2D;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2210606A31C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 03:33:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2210606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 8341C60A6F79;
+	Tue, 10 Nov 2026 03:37:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=E6zAcI6A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794281590;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N0SqkNbWeuHVFNNkfBhjb5eQ8Str/7iSCr6imSM6DLw=;
-	b=E6zAcI6AQqGnLcyi9xAF/NEOTHGKi8zTmBKt2c8MLrSmKLt7utv+Qdzru/pEAv5fn/C59X
-	z/kBmo51a4wPquOlW19ms3Lq5mfNPALPC06yN/vTGjCtjBle7Mi+ZsegY4PWueir6cUaD4
-	rKv4jh9loWOE2dNXCBMpqSCfEQiU/9k=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-619-h-m1eTdwNSidEgxfOL7IbQ-1; Mon,
- 09 Nov 2026 22:33:04 -0500
-X-MC-Unique: h-m1eTdwNSidEgxfOL7IbQ-1
-X-Mimecast-MFC-AGG-ID: h-m1eTdwNSidEgxfOL7IbQ_1794281583
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5E6A01955D98;
-	Tue, 10 Nov 2026 03:33:02 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 74D3F1956087;
-	Tue, 10 Nov 2026 03:32:59 +0000 (UTC)
-Message-ID: <c37c7ed1-5730-4e33-b0b9-3ebd45caf602@redhat.com>
-Date: Mon, 9 Nov 2026 22:32:58 -0500
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bsfVIp2D
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 792771F008A5;
+	Tue, 10 Nov 2026 03:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794281869;
+	bh=d57Xwxdq7ggCiZHh4PGNXJufaWf8Hx04l8Vo55VakVk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=bsfVIp2Du7+TXWzzv1AVkg0BHW0AFsZkouQiHfPJWSa2x5FGJe2ANFH0D2Clrwet+
+	 iR16SnW1I/mNLfeEjaYkfLIEimyDJiKfL/QHxUJQ6IHkbuY4q4HbDJ332UY0P4vD0t
+	 /RE+U06aE2/NAX5vLQjvjuDzwypa6ciwFVtPEIggzPQd/A+nsoHDnZ6rE+voj29qQ/
+	 LL1SK2K/KJShnBqE0fMgLQAceCTjZb3vAgoACCjyxgT8mRBWWF+gne6bmQPwClA6I5
+	 c/4nDAiNrC1h6D3p1M4QB1FbuAOqYJ/FpijRP8Evecbhkmq9fJQ0lXs/8QKnSzovQB
+	 YNgvt+MK3ZBmA==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ignat Korchagin <ignat@linux.win>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: [PATCH v7 1/3] KEYS: Introduce keyring_is_empty()
+Date: Tue, 10 Nov 2026 05:37:36 +0200
+Message-ID: <20261110033738.2495880-2-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261110033738.2495880-1-jarkko@kernel.org>
+References: <20261110033738.2495880-1-jarkko@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,303 +93,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] cpuset: settle isolation state when CPUs are given
- back to parent
-To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: Chen Ridong <chenridong@huawei.com>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Sashiko <sashiko-bot@kernel.org>, Guopeng Zhang <zhangguopeng@kylinos.cn>,
- Ridong Chen <chenridong@xiaomi.com>
-References: <20261107120100.3587595-1-ridong.chen@linux.dev>
- <20261107120100.3587595-4-ridong.chen@linux.dev>
- <09c033dd-41dc-4503-9def-4e662e946dc4@redhat.com>
- <fe49691f-54d9-410e-9110-bf2522ab17e8@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <fe49691f-54d9-410e-9110-bf2522ab17e8@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
+Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
+fs-verity how keyring internally manages the keys.
 
-On 11/9/26 10:14 PM, Ridong Chen wrote:
->
->
-> On 11/9/2026 10:51 PM, Waiman Long wrote:
->> On 11/7/26 7:00 AM, Ridong Chen wrote:
->>> From: Ridong Chen <chenridong@xiaomi.com>
->>>
->>> partition_xcpus_del() only updates isolated_cpus when the partition 
->>> that
->>> gives back the CPUs has a different state than its parent. CPUs that 
->>> were
->>> further distributed to descendant isolated partitions are not taken 
->>> into
->>> account, so isolated_cpus_release() has to be called afterwards in
->>> several places to walk up the ancestors and fix isolated_cpus.
->>>
->>> Make partition_xcpus_del() always set the isolation state of the given
->>> back CPUs to the state of the parent that receives them. As the
->>> effective_xcpus of a partition covers the CPUs distributed to its
->>> descendants, the isolation state of those CPUs is settled at the same
->>> time. Boot-time isolated CPUs are still preserved by 
->>> isolated_cpu_update().
->>>
->>> compute_partition_effective_cpumask() invalidates a child partition
->>> without going through partition_xcpus_del(), so do the same there: the
->>> CPUs of the invalidated child take the isolation state of its parent.
->>>
->>> As the parent may be shrunk and its effective_xcpus not updated yet,
->>> only do so for the CPUs the parent still owns. This is to keep the
->>> isolation state correct for now, the in-place invalidation here will be
->>> removed later in the partition rework.
->>>
->>> isolated_cpus_update() assumes the old and new states are different,
->>> which no longer holds now that partition_xcpus_del() proceeds 
->>> regardless
->>> of the states. Drop its @old_prs argument and the WARN_ON_ONCE() so 
->>> that
->>> it simply sets the isolation state of the given CPUs, and use it
->>> everywhere. The state check in partition_xcpus_add() is dropped as 
->>> well,
->>> as setting the state is a no-op when the states are the same.
->>>
->>> isolated_cpus_release() is no longer needed and is removed.
->>>
->>> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
->>> ---
->>>   kernel/cgroup/cpuset.c | 98 
->>> ++++++++----------------------------------
->>>   1 file changed, 19 insertions(+), 79 deletions(-)
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index 85e5b529d144..fc9de6e16ff5 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -1244,17 +1244,17 @@ static bool isolated_cpu_update(int new_prs, 
->>> int cpu)
->>>   }
->>>   /*
->>> - * isolated_cpus_update - Update the isolated_cpus mask
->>> - * @old_prs: old partition_root_state
->>> - * @new_prs: new partition_root_state
->>> - * @xcpus: exclusive CPUs with state change
->>> + * isolated_cpus_update - Set the isolation state of @xcpus
->>> + * @new_prs: partition root state that @xcpus will belong to
->>> + * @xcpus: exclusive CPUs whose isolation state may change
->>> + *
->>> + * CPUs isolated at boot time are kept isolated.
->>>    */
->>> -static void isolated_cpus_update(int old_prs, int new_prs, struct 
->>> cpumask *xcpus)
->>> +static void isolated_cpus_update(int new_prs, struct cpumask *xcpus)
->>>   {
->>>       bool updated = false;
->>>       int cpu;
->>> -    WARN_ON_ONCE(old_prs == new_prs);
->>>       lockdep_assert_held(&callback_lock);
->>>       lockdep_assert_held(&cpuset_mutex);
->>>       for_each_cpu(cpu, xcpus)
->>> @@ -1263,45 +1263,6 @@ static void isolated_cpus_update(int old_prs, 
->>> int new_prs, struct cpumask *xcpus
->>>           update_housekeeping = true;
->>>   }
->>> -/*
->>> - * isolated_cpus_release - Remove the relevant CPUs in @xcpus from 
->>> isolated_cpus
->>> - * @cs: the current cpuset
->>> - * @xcpus: the set of effective xcpus to be considered for removal
->>> - *
->>> - * This function is called when an isolated partition is 
->>> invalidated or when
->>> - * some of its effective xcpus are to be removed from isolated_cpus 
->>> due to
->>> - * changes in parent cpuset. The given @xcpus must be modifiable as 
->>> the function
->>> - * will update its value to determine the right set of CPUs to be 
->>> removed.
->>> - */
->>> -static void isolated_cpus_release(struct cpuset *cs, struct cpumask 
->>> *xcpus)
->>> -{
->>> -    struct cpuset *ancestor = parent_cs(cs);
->>> -    struct cpuset *iancestor = NULL;
->>> -
->>> -    /*
->>> -     * Search the furthest isolated partition root ancestor available
->>> -     * until top_cpuset or a remote partition root is hit.
->>> -     */
->>> -    for (; ancestor; ancestor = parent_cs(ancestor)) {
->>> -        if (ancestor->partition_root_state == PRS_ISOLATED)
->>> -            iancestor = ancestor;
->>> -        if (is_remote_partition(ancestor))
->>> -            break;
->>> -    }
->>> -
->>> -    /*
->>> -     * If a furthest isolated partition acnestor is found, use it to
->>> -     * determine which of the CPUs in @xcpus should be removed from
->>> -     * isolated_cpus. Otherwise, all of them will be removed.
->>> -     */
->>> -    if (iancestor && !cpumask_andnot(xcpus, xcpus, 
->>> iancestor->effective_xcpus))
->>> -        return; /* No CPU should be removed from isolated_cpus */
->>> -
->>> -    spin_lock_irq(&callback_lock);
->>> -    isolated_cpus_update(PRS_ISOLATED, PRS_ROOT, xcpus);
->>> -    spin_unlock_irq(&callback_lock);
->>> -}
->>> -
->>>   /*
->>>    * partition_xcpus_add - Add new exclusive CPUs to partition
->>>    * @new_prs: new partition_root_state
->>> @@ -1325,9 +1286,7 @@ static void partition_xcpus_add(int new_prs, 
->>> struct cpuset *parent,
->>>       if (parent == &top_cpuset)
->>>           cpumask_or(subpartitions_cpus, subpartitions_cpus, xcpus);
->>> -    if (new_prs != parent->partition_root_state)
->>> -        isolated_cpus_update(parent->partition_root_state, new_prs,
->>> -                     xcpus);
->>> +    isolated_cpus_update(new_prs, xcpus);
->>>       cpumask_andnot(parent->effective_cpus, parent->effective_cpus, 
->>> xcpus);
->>>   }
->>> @@ -1355,9 +1314,8 @@ static void partition_xcpus_del(int old_prs, 
->>> struct cpuset *parent,
->>>       if (parent == &top_cpuset)
->>>           cpumask_andnot(subpartitions_cpus, subpartitions_cpus, 
->>> xcpus);
->>> -    if (old_prs != parent->partition_root_state)
->>> -        isolated_cpus_update(old_prs, parent->partition_root_state,
->>> -                     xcpus);
->>> +    /* CPUs given back, including those of descendants, take 
->>> parent's state */
->>> +    isolated_cpus_update(parent->partition_root_state, xcpus);
->>>       cpumask_or(parent->effective_cpus, parent->effective_cpus, 
->>> xcpus);
->>>       cpumask_and(parent->effective_cpus, parent->effective_cpus, 
->>> cpu_active_mask);
->>> @@ -1612,6 +1570,7 @@ static void 
->>> compute_partition_effective_cpumask(struct cpuset *cs,
->>>       struct cgroup_subsys_state *css;
->>>       struct cpuset *child;
->>>       bool populated = partition_is_populated(cs, NULL);
->>> +    static cpumask_t xcpus;        /* Protected by cpuset_mutex */
->>>       /*
->>>        * Check child partition roots to see if they should be 
->>> invalidated
->>> @@ -1640,14 +1599,15 @@ static void 
->>> compute_partition_effective_cpumask(struct cpuset *cs,
->>>               int parent_prs = cs->partition_root_state;
->>>               /*
->>> -             * Invalidate child partition and update isolated_cpus
->>> -             * if necessary.
->>> +             * Invalidate child partition. Its CPUs still owned by
->>> +             * cs take the isolation state of cs. effective_xcpus
->>> +             * of cs may not be updated yet, so recompute it.
->>>                */
->>>               spin_lock_irq(&callback_lock);
->>>               WRITE_ONCE(child->prs_err, PERR_NOCPUS);
->>> -            if ((old_prs == PRS_ISOLATED) && (parent_prs == PRS_ROOT))
->>> -                isolated_cpus_update(PRS_ISOLATED, PRS_ROOT,
->>> -                             child->effective_xcpus);
->>> +            compute_excpus(cs, &xcpus);
->>> +            cpumask_and(&xcpus, &xcpus, child->effective_xcpus);
->>> +            isolated_cpus_update(parent_prs, &xcpus);
->>>               child->partition_root_state = -old_prs;
->>>               spin_unlock_irq(&callback_lock);
->>>               notify_partition_change(child, old_prs);
->>> @@ -2080,22 +2040,8 @@ static int 
->>> update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>>            *
->>>            * A partition error happens when parent has tasks and all
->>>            * its effective CPUs will have to be distributed out.
->>> -         *
->>> -         * For an isolated partition with a shrunk root partition 
->>> parent
->>> -         * we may need to return some or all of its isolated CPUs.
->>>            */
->>>           nocpu |= cpumask_empty(tmp->delmask);
->>> -        if ((parent_prs == PRS_ROOT) && (old_prs == PRS_ISOLATED)) {
->>> -            cpumask_clear(tmp->addmask);
->>> -            if (nocpu)
->>> -                cpumask_copy(tmp->addmask, cs->effective_xcpus);
->>> -            else if (!cpumask_subset(cs->effective_xcpus, parent- 
->>> >effective_xcpus))
->>> -                cpumask_andnot(tmp->addmask, cs->effective_xcpus,
->>> -                                 parent->effective_xcpus);
->>> -            if (!cpumask_empty(tmp->addmask))
->>> -                isolated_cpus_release(cs, tmp->addmask);
->>> -            /* Expansion of parent's effective_xcpus is handled 
->>> below */
->>> -        }
->>>           if (nocpu) {
->>>               part_error = PERR_NOCPUS;
->>>               if (is_partition_valid(cs))
->>> @@ -2341,18 +2287,12 @@ static void update_cpumasks_hier(struct 
->>> cpuset *cs, struct tmpmasks *tmp,
->>>                   /*
->>>                    * When parent is not a valid partition root,
->>>                    * child partition roots become invalid too.
->>> -                 *
->>> -                 * For a to be invalidated isolated partition,
->>> -                 * call return_isolated_cpus() to remove the
->>> -                 * relevant CPUs from isolated_cpus.
->>> +                 * The isolation state of their CPUs has been
->>> +                 * settled when the parent gave them back.
->>>                    */
->>>                   if (is_partition_valid(cp))
->>>                       new_prs = -old_prs;
->>> -                if (old_prs == PRS_ISOLATED) {
->>> -                    cpumask_copy(tmp->delmask, cp->effective_xcpus);
->>> -                    isolated_cpus_release(cp, tmp->delmask);
->>> -                }
->>>                   WRITE_ONCE(cp->prs_err,
->>>                          is_partition_invalid(parent)
->>>                          ? PERR_INVPARENT : PERR_NOTPART);
->>> @@ -3108,7 +3048,7 @@ static int update_prstate(struct cpuset *cs, 
->>> int new_prs)
->>>       if (!is_partition_valid(cs))
->>>           reset_partition_data(cs);
->>>       else if (isolcpus_updated)
->>> -        isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
->>> +        isolated_cpus_update(new_prs, cs->effective_xcpus);
->>>       spin_unlock_irq(&callback_lock);
->>>       /* Force update if partition is disabled & update 
->>> effective_xcpus */
->>
->> The code change looks good to me. However this is not just a code 
->> restructuring, it also includes a bug fix. I wonder if we should 
->> clarify that and maybe add a Fixes tag.
->>
-> Hi Longman,
->
-> Thanks for the review. You are right, it also fixes the isolated CPU
-> leak reported by Guopeng [1]. When a root partition with an isolated
-> child partition is invalidated, partition_xcpus_del() gives the CPUs
-> back to the parent without updating isolated_cpus as both are root
-> partitions, so the CPUs of the isolated child are left in
-> isolated_cpus.
->
-> I'd like to describe it in the commit message and add the following
-> tags in the next version:
->
-> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated 
-> partitions")
-> Reported-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> Closes: 
-> https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
->
-> Does that look OK to you?
->
-> [1] 
-> https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
->
-Yes, that looks good to me.
+Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/md/dm-verity-verify-sig.c                      |  2 +-
+ fs/verity/signature.c                                  |  2 +-
+ include/linux/key.h                                    |  1 +
+ kernel/bpf/keys.c                                      |  2 +-
+ security/keys/keyring.c                                | 10 ++++++++++
+ .../selftests/dm-verity/test-dm-verity-keyring.sh      |  2 +-
+ 6 files changed, 15 insertions(+), 4 deletions(-)
 
-Thanks,
-Longman
+diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+index 0c65c7a31da8..bd5143aae4fa 100644
+--- a/drivers/md/dm-verity-verify-sig.c
++++ b/drivers/md/dm-verity-verify-sig.c
+@@ -153,7 +153,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+ 	if (ret != -ENOKEY && ret != -EKEYREJECTED)
+ 		return ret;
+ 
+-	if (dm_verity_keyring->keys.nr_leaves_on_tree &&
++	if (!keyring_is_empty(dm_verity_keyring) &&
+ 	    dm_verity_keyring->restrict_link)
+ 		ret = verify_pkcs7_signature(root_hash, root_hash_len,
+ 					     sig_data, sig_len,
+diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+index 2f49c5d9d987..b45b39b829b2 100644
+--- a/fs/verity/signature.c
++++ b/fs/verity/signature.c
+@@ -70,7 +70,7 @@ int fsverity_verify_signature(const struct fsverity_info *vi,
+ 		return 0;
+ 	}
+ 
+-	if (fsverity_keyring->keys.nr_leaves_on_tree == 0) {
++	if (keyring_is_empty(fsverity_keyring)) {
+ 		/*
+ 		 * The ".fs-verity" keyring is empty, due to builtin signatures
+ 		 * being supported by the kernel but not actually being used.
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 420412aab926..9ff10b780865 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -439,6 +439,7 @@ extern int restrict_link_reject(struct key *keyring,
+ 				struct key *restriction_key);
+ 
+ extern int keyring_clear(struct key *keyring);
++bool keyring_is_empty(const struct key *keyring);
+ 
+ extern key_ref_t keyring_search(key_ref_t keyring,
+ 				struct key_type *type,
+diff --git a/kernel/bpf/keys.c b/kernel/bpf/keys.c
+index bffc356839ac..24e0416abc99 100644
+--- a/kernel/bpf/keys.c
++++ b/kernel/bpf/keys.c
+@@ -29,7 +29,7 @@ struct bpf_key *bpf_lookup_keyring(void)
+ 
+ 	if (!bpf_keyring)
+ 		return NULL;
+-	if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
++	if (keyring_is_empty(bpf_keyring) ||
+ 	    !READ_ONCE(bpf_keyring->restrict_link))
+ 		return NULL;
+ 
+diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+index 5281da9d5bf7..ac48d6204915 100644
+--- a/security/keys/keyring.c
++++ b/security/keys/keyring.c
+@@ -443,6 +443,16 @@ static void keyring_destroy(struct key *keyring)
+ 	assoc_array_destroy(&keyring->keys, &keyring_assoc_array_ops);
+ }
+ 
++/**
++ * keyring_is_empty - Check whether a keyring is empty
++ * @keyring: The keyring to check.
++ */
++bool keyring_is_empty(const struct key *keyring)
++{
++	return READ_ONCE(keyring->keys.nr_leaves_on_tree) == 0;
++}
++EXPORT_SYMBOL(keyring_is_empty);
++
+ /*
+  * Describe a keyring for /proc.
+  */
+diff --git a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+index 1f9601ef22f8..792449d356cf 100755
+--- a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
++++ b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+@@ -746,7 +746,7 @@ test_keyring_inactive_when_empty() {
+     log_info "TEST: Verify dm-verity keyring is inactive when sealed empty"
+ 
+     # When keyring_unsealed=0, the keyring is sealed immediately while empty
+-    # This means it should NOT be used for verification (nr_leaves_on_tree=0)
++    # An empty keyring should NOT be used for verification.
+ 
+     log_info "Keyring state (should be empty and sealed):"
+     list_keyring_keys
+-- 
+2.47.3
 
