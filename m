@@ -1,77 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.86
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794296753;
-	b=XUWQTRP76X4WPGDpaKwAK8DbLcMqPwCC/kDKMPrr7NedfGD7+LgqYkhYlq4Ft8dAhgct
-	 8xgDNxszj/mLrXuPsziDzJDZVHuf4ArluneIHJSUPhBhYxi/VexAGbLcyoDHKKoKBAWHj
-	 FjMCZMAMFv7gwatPe19YHmmZjQnFDrU86lclBK/lLGLIJkGTf12bZw1TlTnl3AVoKApQR
-	 z+L9qsDLcDJeSxW4EC8K1ErP17YXuYpTWjg6uhrm2YJEk0IM76loM/oD/OfYnwpdgOAIF
-	 a+3Qeo6z2ctzj4YsYWiS5gyYq+IsO2qB6pnfO6tHieEAbc9ca1LcurbqCh5yDpyE0wA==
+	t=1794297420;
+	b=Rr8L1+iVUQTUD+CA4yv0pHFVPO0VylCgJauDj5iaKLosXJY1XqRUHaGUPOicdZ1CuxL3
+	 HlLkL0OwxEFWqXln03P9/1lWL+iPnD/x4bXrZ9EUteyz7ppVgRfGCkm3xMzYekep8uMRD
+	 +GBeG6xoGUaFny+DTrx6yCn2LYA78LJKV9aIswuj1ev0+fVh9DfFKqYtSQdJE/OtvnWi0
+	 qD2+84ATPtAmABJkUjTOl07IQ6xkvII1KYNYKsKRprctRqzMZVmGehlM4lhfR7ChpRN2u
+	 hnT7xNtWKM2tbSd31GBq8yfw/rFKXzfURpeHDu5e8/BEZrAnssq875r4IFaw0MC4J9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794296753;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794297420;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=97mnfbHxocAhpCaQIusVnq6M8kRtn24K9aSi/cKW7BI=;
-	b=DO+Z4iPpkvPc6Zh58S4BTYggsgbAkXBAovy2qqwNA320XELqvwdY7jLl8MWRpIGYiTKg
-	 GlqztHn2ZNtTm5MhpfvONX4d57lAh32shl0KITcm4VVqAmNNHeOFEXFouz08tXLolcEra
-	 iIFfBBfvtZUO1TvfpcLTMQNobllHhslY1ouoTqpJbtG9gF8TAppaW5+tiQJSFVH64fN9Z
-	 uqJtubXPxDmHyBZ/CRd5z43xSfEw/hlel7Gin79bNAtIqZk5pGnw2p57lO5gp7H8QU2y8
-	 ZTtdQhDYbuZiFVjfdcj9byaiHd0apMVAejIdnGB3/CMDwBKnCCwkE1QLcCg/VXm4LLQ==
+	bh=sqVREHa+VsbwVp/tveO7uY5zfTiT+KV2x42NWjx3mjs=;
+	b=Gujk6Xo48ul+bka+pJ54ThS3v0j2JRSnlyd+LptCMHo2MnsuGxsfCOCTnueNW+yChnhw
+	 1vsZ2iOK1z9omLTDdh/IYuuTw/IDUH5surMrPoXrwY2mTXaHdNDQmSwyD1KxOHdNMdeFg
+	 6o0KG+MEOELhNEXhCbMGP3ZDIoGO7r0bqyzpKsfiDEw0GIbboQxAIkMStmYbbuYZJHiQO
+	 MHxJ98OHT+dmyQ+bH+O7XC2bMPMM0FOEnYWdEYgVmFlDzif9V9W5QKI1ch5+K/pJ268jM
+	 VNVR4QHeNTw79XKQzldZq3dObGCAcwRgEpBFWep0E6HHXUuoFQDJSe7UfrFjmHF7dZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CGkBLCdy;
-	arc=none smtp.remote-ip=91.218.175.3
-Received: from mta0.migadu.com (out-3.mta0.migadu.com [91.218.175.3])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YMepWfey;
+	arc=none smtp.remote-ip=91.218.175.86
+Received: from mta0.migadu.com (out-86.mta0.migadu.com [91.218.175.86])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA9560A2616
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 07:45:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4DA9560A2616
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71668606A321
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 07:56:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71668606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CGkBLCdy
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YMepWfey
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1opsdpS+bzNavYjufxeQTvMtfH316Seppf9uslprEeo=;
+DKIM-Signature: a=rsa-sha256; bh=Tr04FqnwqlKSyNdqCgh3OymEU28rd+8Oit5WxUPF1FA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794296750; v=1; x=1794901550;
- b=CGkBLCdyeAdmRQaMpYwOsFXQLR9CJ6tNn0SgokvVmqCHlrJNmlAeu0kPYyUKT7nJ2O+nRkEN
- xbm8PFIKoHAso4/v468DBUq8GxVQhz8qFDOOVXo3k9ax9eBrq9KLzP8HiPX/P9BE2cf80gcQ2b2
- 3Mye2KctND06Vm86NdcDvAP0=
+ t=1794297417; v=1; x=1794902217;
+ b=YMepWfeyaGQ/zCH1MpxpSZHumIWV/Fsg6URPg3oJelUGYf1ovFrCqP5w7F+CSTz0kI3VpH49
+ pFuMy11GGSgrZf0onqMjfuMg5bnC5lDkyteFjXjqEeALnTp780BqdRdcqQoGy6DXznOEDU3hJkJ
+ H6k2+6cQBcY7h6JjZ6IlejfU=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 8b40bb022d5288ba;
-	Tue, 10 Nov 2026 07:45:50 +0000
-X-Mizu-Trace-ID: 8b40bb022d5288ba
+Received: by smtp.migadu.com with ESMTPS id 6314aabc63771b3e;
+	Tue, 10 Nov 2026 07:56:57 +0000
+X-Mizu-Trace-ID: 6314aabc63771b3e
 X-Migadu-Flow: FLOW_OUT
-From: "Xu Xin (vivo)" <xu.xin@linux.dev>
-To: xu.xin@linux.dev
-Cc: akpm@linux-foundation.org,
-	chengming.zhou@linux.dev,
-	corbet@lwn.net,
-	david@kernel.org,
-	link@vivo.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	odys.yuan@gmail.com,
-	rppt@kernel.org,
-	surenb@google.com,
-	tujinjiang@huawei.com,
-	vbabka@kernel.org,
-	xiao.wang@vivo.com
-Subject: [PATCH 4/4] selftests/ksm: add test for only_merge_zero_pages
-Date: Tue, 10 Nov 2026 15:44:51 +0800
-Message-Id: <20261110074451.220524-4-xu.xin@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261110074451.220524-1-xu.xin@linux.dev>
-References: <20261110074312.219847-1-xu.xin@linux.dev>
- <20261110074451.220524-1-xu.xin@linux.dev>
+Message-ID: <6b01f2c6-2cf2-4650-8fdb-821f0222b082@linux.dev>
+Date: Tue, 10 Nov 2026 15:56:51 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,162 +58,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 1/5] selftests/cgroup: Fix "test_cpuset_prs.sh -v"
+ failures
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20261109190955.1398611-1-longman@redhat.com>
+ <20261109190955.1398611-2-longman@redhat.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20261109190955.1398611-2-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add a functional test that enables use_zero_pages and
-only_merge_zero_pages, maps a 2 MiB region with the first half filled
-with non-zero data and the second half with zeroes, and verifies that
-after KSM scanning reaches steady state:
 
-  - ksm_zero_pages equals the zero half (merged with the kernel zero
-    page)
-  - ksm_merging_pages is 0 (non-zero pages never reach the stable tree)
-  - ksm_rmap_items is 0 (non-zero pages are skipped before rmap_item
-    allocation, and the zero pages' rmap_items are freed once a scan
-    finds the merged pages are no longer anonymous)
 
-The test skips if the only_merge_zero_pages attribute is absent.
+On 11/10/2026 3:09 AM, Waiman Long wrote:
+> When the -v option is used to run test_cpuset_prs.sh, it activates the
+> use of sched-debug to determine the set of isolated CPUs which will
+> also consider 1-CPU partition as being isolated though they will not be
+> reflected in "cpuset.cpus.isolated". As a result, some of the expected
+> isolated CPUs values have 2 different set of values to correspond to
+> these two ways of determining isolated CPUs.
+> 
+> Commit 6e4834ba8986 ("cgroup/cpuset: Fix incorrect CPU accounting with
+> parent's effective_xcpus expansion") introduces some new test cases
+> which fail when the -v option is used. Update the test cases to make
+> them pass with the -v option as well.
+> 
+> Also remove an obsolete comment in update_parent_effective_cpumask()
+> of cpuset.c.
+> 
+> Reported-by: Tejun Heo <tj@kernel.org>
+> Link: https://lore.kernel.org/lkml/886a562b52b1c5094142d547a8336457@kernel.org
+> Fixes: 362212853cd0 ("cgroup/cpuset: Fix incorrect CPU accounting with parent's effective_xcpus expansion")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   kernel/cgroup/cpuset.c                            |  6 ------
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 13 ++++++++-----
+>   2 files changed, 8 insertions(+), 11 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 85e5b529d144..6074327c3477 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2164,12 +2164,6 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>   			else
+>   				part_error = PERR_NOTEXCL;
+>   		}
+> -		/*
+> -		 * When both cs and parent remain valid, parent's
+> -		 * compute_partition_effective_cpumask() call would have removed
+> -		 * cs's effective_xcpus from the parent's effective_cpus. So
+> -		 * there is no need to adjust parent's effective_cpus here.
+> -		 */
+>   	}
+>   
+>   write_error:
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 32e1e44fa0b1..2d4744f2d6ac 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -540,16 +540,19 @@ TEST_MATRIX=(
+>   
+>   	# The extra CPUs gained by a child partition when its parent expands the
+>   	# exclusive CPUs have to be taken away from the parent.
+> -	" C2-6:X2-5:P1 CX3-6:P1 \
+> -	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P1 ."
+> -	" C2-6:X2-5:P1 CX3-6:P2 \
+> -	                    .      .    X2-6     .      .      .     0 A1:2|A2:3-6|XA2:3-6 A1:P1|A2:P2 3-6"
+> +	" C2-6:X2-5:P1 CX4-6:P1 \
+> +	                    .      .    X2-6     .      .      .     0 A1:2-3|A2:4-6|XA2:4-6 \
+> +								       A1:P1|A2:P1 ."
+> +	" C2-6:X2-5:P1 CX4-6:P2 \
+> +	                    .      .    X2-6     .      .      .     0 A1:2-3|A2:4-6|XA2:4-6 \
+> +								       A1:P1|A2:P2 4-6"
+>   
+>   	# Both expansion and contraction of parent's effective_xcpus will be
+>   	# correctly handled in child partition and the child can be invalidated
+>   	# if a populated parent could lose all its effective_cpus.
+>   	" C2-6:X2-5:P1 CX3,5-6:P2 \
+> -	                    .      .    X4-6     .      .      .     0 A1:4|A2:5-6|XA2:5-6 A1:P1|A2:P2 5-6"
+> +	                    .      .    X4-6     .      .      .     0 A1:4|A2:5-6|XA2:5-6 \
+> +								       A1:P1|A2:P2 4-6|5-6"
+>   	" C2-6:X2-5:P1 CX3-6:P2 \
+>   	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
+>   
 
-Signed-off-by: Xu Xin (vivo) <xu.xin@linux.dev>
----
- .../selftests/mm/ksm_functional_tests.c       | 117 ++++++++++++++++++
- 1 file changed, 117 insertions(+)
+The commit message still refers to commit 6e4834ba8986, which isn't in
+next tree. It should be 362212853cd0 ?
 
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 2ffb97ae3120..764ead3425cb 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -257,6 +257,122 @@ static void test_unmerge_zero_pages(void)
- 	munmap(map, size);
- }
- 
-+/*
-+ * Enable or disable /sys/kernel/mm/ksm/only_merge_zero_pages. Returns 0 on
-+ * success, -errno on failure.
-+ */
-+static int ksm_set_only_merge_zero_pages(int enable)
-+{
-+	int fd;
-+	ssize_t ret;
-+
-+	fd = open("/sys/kernel/mm/ksm/only_merge_zero_pages", O_RDWR);
-+	if (fd < 0)
-+		return -errno;
-+
-+	ret = write(fd, enable ? "1" : "0", 1);
-+	close(fd);
-+	return ret == 1 ? 0 : -errno;
-+}
-+
-+static void test_only_merge_zero_pages(void)
-+{
-+	const unsigned int size = 2 * MiB;
-+	const unsigned int half = size / 2;
-+	const unsigned int half_pages = half / pagesize;
-+	char *map;
-+	int i;
-+	long zero_pages, merging_pages, rmap_items;
-+
-+	ksft_print_msg("[RUN] %s\n", __func__);
-+
-+	if (ksm_use_zero_pages() < 0) {
-+		ksft_test_result_skip("write /sys/kernel/mm/ksm/use_zero_pages failed\n");
-+		return;
-+	}
-+	if (ksm_set_only_merge_zero_pages(1) < 0) {
-+		ksft_test_result_skip("write /sys/kernel/mm/ksm/only_merge_zero_pages failed\n");
-+		return;
-+	}
-+
-+	/* Stabilize accounting by disabling KSM completely. */
-+	if (ksm_stop() < 0) {
-+		ksft_test_result_fail("Disabling (unmerging) KSM failed\n");
-+		goto restore;
-+	}
-+
-+	map = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (map == MAP_FAILED) {
-+		ksft_test_result_fail("mmap() failed\n");
-+		goto restore;
-+	}
-+
-+	/* Don't use THP. Ignore if THP are not around on a kernel. */
-+	if (madvise(map, size, MADV_NOHUGEPAGE) && errno != EINVAL) {
-+		ksft_test_result_fail("MADV_NOHUGEPAGE failed\n");
-+		goto unmap;
-+	}
-+
-+	/*
-+	 * Fill the first half with non-zero data (all 0x01) and the second
-+	 * half with zeroes. Under only_merge_zero_pages the zero half should
-+	 * be merged with the kernel zero page, while the non-zero half must be
-+	 * skipped entirely (no rmap_item allocated, no stable-tree insertion).
-+	 */
-+	memset(map, 0x01, half);
-+	memset(map + half, 0x00, half);
-+
-+	if (madvise(map, size, MADV_MERGEABLE)) {
-+		ksft_test_result_fail("MADV_MERGEABLE failed\n");
-+		goto unmap;
-+	}
-+
-+	/*
-+	 * Run KSM until steady state. Each ksm_start() waits for two full
-+	 * scans: the first records the checksums, the second merges the zero
-+	 * half with the kernel zero page. The second ksm_start() waits for
-+	 * more scans so that the rmap_items of the (now merged, no longer
-+	 * anonymous) zero pages are freed and ksm_rmap_items settles at 0.
-+	 */
-+	for (i = 0; i < 2; i++) {
-+		if (ksm_start() < 0) {
-+			ksft_test_result_fail("Running KSM failed\n");
-+			goto unmap;
-+		}
-+	}
-+
-+	/*
-+	 * Expected results (steady state):
-+	 *  - ksm_zero_pages: the zero half (size/2 pages) is merged with the
-+	 *    kernel zero page.
-+	 *  - ksm_merging_pages: 0, because the non-zero half is skipped before
-+	 *    it can reach the stable tree, and zero pages are accounted in
-+	 *    ksm_zero_pages, not ksm_merging_pages.
-+	 *  - ksm_rmap_items: 0. The non-zero half is skipped before
-+	 *    get_next_rmap_item(), so it never allocates an rmap_item; and the
-+	 *    zero half's rmap_items are freed once a scan finds the (now
-+	 *    merged) pages are no longer anonymous.
-+	 */
-+	zero_pages = ksm_get_self_stat("ksm_zero_pages");
-+	merging_pages = ksm_get_self_stat("ksm_merging_pages");
-+	rmap_items = ksm_get_self_stat("ksm_rmap_items");
-+
-+	ksft_print_msg("ksm_zero_pages=%ld ksm_merging_pages=%ld ksm_rmap_items=%ld"
-+		       " (expected %u/0/0)\n", zero_pages, merging_pages, rmap_items,
-+		       half_pages);
-+
-+	ksft_test_result(zero_pages == half_pages && merging_pages == 0 &&
-+			 rmap_items == 0, "only_merge_zero_pages: zero half merged, "
-+			 "non-zero half skipped\n");
-+
-+unmap:
-+	ksm_stop();
-+	munmap(map, size);
-+restore:
-+	ksm_set_only_merge_zero_pages(0);
-+}
-+
- static void test_unmerge_discarded(void)
- {
- 	const unsigned int size = 2 * MiB;
-@@ -827,6 +943,7 @@ int main(int argc, char **argv)
- 
- 	test_unmerge();
- 	test_unmerge_zero_pages();
-+	test_only_merge_zero_pages();
- 	test_unmerge_discarded();
- #ifdef __NR_userfaultfd
- 	test_unmerge_uffd_wp();
+I applied the whole series on top of next-20261109 and ran
+test_cpuset_prs.sh with and without -v as well as test_cpuset on an
+8-CPU VM. All tests passed and there is no warning in dmesg.
+
+
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+Tested-by: Ridong Chen <ridong.chen@linux.dev>
+
 -- 
-2.34.1
+Best regards
+Ridong
 
