@@ -1,55 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794341296;
-	b=a/kEasREe3IbBaHEUdhPQfTf0nlexbgApK6X+mxhz6sVGVMSEOg30jD1QS16GxwAeDxy
-	 TMB6nqJXo5wRdfHoBNd5XjF9eY2SgCkyWBt+EYCxBL/iRG134Yj5U+XK6QHojqoltlE3X
-	 f1SzLe/Kpw3Is1nal5ykxSLNp/VwmnKIME8XdQvvSfXv3GI2L/oTJtFvpZ8glgXmlzaV1
-	 bU2QHq2UC4OFvPNK+BgY4115nApt6gVJ4Jwb8RIso49cvkJti8SNGNhMVnpP5DuKXgFRO
-	 XgBEJ+pYnajOr61PCJW5N1pq5lp4vCuS8PKlcM9xf5sgm3Vl6uwSpIr/wQAE4CCrCGQ==
+	t=1794341442;
+	b=SBEvMpYbvuh4dgmPxLnvz0leCNySqUBRNRWRq+uFZAYhHYmsPZEvXdtUkPn4cj56yOne
+	 pQlwFGUamsp1G9iDZy3bqokLakPepKR/oBd17RLGdG5MwwtlaoT3G6JGAqj7dipqkRyPA
+	 JcNKAgPJ9soXLWuY3d1nljkG27XCqkvo+qEcCxuyms/SkZZwNV4tsFfv7uuaPDyX0iStO
+	 8MapeMGDvfd0Otmep1ZoeBRCFETkByURnL2gSZm+MVVdVFq6erpAiPbmGg2UDABQFhSnR
+	 HmN+Aug6/vMdae4mbxRcF7pxQom+VdGqKeSoKmzbFrGgzWNbxr7b5qvTaIZxQRFlNvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794341296;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=aZHkO6bQKS08fSFgnDFG2tKeYq7/D8f27wfiKMAH7bU=;
-	b=xI/CiZShP097CTs4nSQ1zWj5/PlRhP2iairrAcLvenq6+tuG0XaoUjIa69ZUOu+sUFxM
-	 YiNDbUxVqdkMtjDery4iRg0nWpHirEr68rDOP8MHXYgWzNxqOnt46K4bFzDqphlCcBvm8
-	 7qf/+KkCJRm8u0VCAxZkUyWyYb/AaomWuVBVcVsk1y9tybpz4mPuekuVEcudzBgjTIAB6
-	 zuOStxKiFIVpeR3JAiPCjRqsjPMePXVW6cD+Qm8cJidVsUhYIsEaHx/gqqTAzULE7WGhG
-	 Wqsrk8SckSh0VeKwCLNHd+Gsz3UbwsqknaW9K7HEGM0HFwegbjjN6UzTdXoNOo6iHrg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794341442;
+	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=gtnmaNHVD8u8S/tZT9pV39PfX4uefS+LpmURAAKxvqo=;
+	b=eZnAVg5yV4gyc42aPHL38EC8pkN+0ocK9xCa6tHNZ47Vs3xt71gvXnhTk/wnUYgSYIq3
+	 c1zQPeucmA2aEy0Mf1mlTwxB5WifrkbCO7/K38oynMGihmKD2qWfhyBXp6TQAqH9tBjDi
+	 1zL42WlyET7Zzhnw40KcswvIL0/BvhQzPZlRflyaMftRE87w4K9AAAOxR+IPT0vI5owPP
+	 4MfK6Nj2bK8WMK+hUjb520uzPb3zqRO2l1Fwxxo8iIZLNsaZPUj73CzZ9Z+50UAp85R9z
+	 68hK537cj8WMzmV0QiuwjvwNourUmPsTx11+gLEXuH6Gl4yK5Wqj93IrTVD1F6H51xA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QtAi854F;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="bomzhE/7";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F029D606A31C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 20:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749D5606A31C;
+	Tue, 10 Nov 2026 20:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QtAi854F
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA33C1F008AB
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 20:08:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bomzhE/7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDFE1F0089F;
+	Tue, 10 Nov 2026 20:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794341295;
-	bh=aZHkO6bQKS08fSFgnDFG2tKeYq7/D8f27wfiKMAH7bU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=QtAi854F3laJGtshXjSl+ghMmjgdlvCeQILg+iErmB1QHd8olXUIpvP0uickvlvBn
-	 iKDi8ttQSIELEYSrsKv7xrgzLdoEifyDrjud8AZhtdcDJJob45fT38fj4OLHz6hG4a
-	 FVp41Ux+VG2+l9qKEZdt7ayGCNsT4gJKfXcvlNZpqiClS6PfTNaqEaT4g+eA6/yNL/
-	 g/FVZgAYZlzV+uLTkLu+nbm4ccWs/Wefeej5daavYNEGj7mjjpWqAI1mVubThEGEYe
-	 5Pjmo/4WAdlJskWdhSnPO+nxwOvPwDC9isXwMQwn/4TfwQWgwBzDta3ZqOmZexXhva
-	 yjDKqchlk3kYQ==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3ace304021eso21733211fa.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 12:08:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErFHXXFGXAOMZWTpv2l/HBQaXK1bhxlUB8OPDTb1YqQygTJZqILW0pZo4ZgqI70n2HfjTh+3IzZIu6v7BtS+cQ8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/1ahUA5n8hrU+68Pv4rNIGVkwkIbmrTNeHI9jFUdxnF6JR6s+h
-	/JENpVAB4lDsqJPKy1GQexDgJ027/gUEW9Zq/ukS/yxkjlXBM6UnTVLrrqYiG7zKEgF1J2hrYGz
-	t1AF2m/F0ySAD5rerdb7MJop94ud+Wfc=
-X-Received: by 2002:a2e:be21:0:b0:3a9:d70c:f75e with SMTP id
- 38308e7fff4ca-3ae096315e6mr7823711fa.7.1794341294060; Tue, 10 Nov 2026
- 12:08:14 -0800 (PST)
+	s=k20260515; t=1794341442;
+	bh=gtnmaNHVD8u8S/tZT9pV39PfX4uefS+LpmURAAKxvqo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=bomzhE/7LLjWceOrHhdKeF98fMwj0iURvnSUMpEqCuyHCQ4lKt3up5gPkPMvdRZQc
+	 o1pz5fYeec5xnKmyMNWHEF8cnXzq6C4QpZYd7AdiVDQeSGyAU1s/YMFFVE57wJvnJz
+	 suGdaHg5favfWCQNT+8g+kYBzLdFNz3qwA1xvxDIeR7oPT5fkGeqy3Q9j1xB4a53q0
+	 dC1jQqMPyFOjvgsaN7wfvyLNtxwb4Yh4xzOTWmMJZwG5owDQD8BHILbb1ot33J9g3T
+	 56luJBSWQNHslCk6qXm/N68VpegtoDvUxXBiONhQtkxwiBW7as+/WTIZvNjbUTC+Ng
+	 THeb7M2Zd9gEQ==
+Date: Tue, 10 Nov 2026 10:10:41 -1000
+Message-ID: <3bdd435fd868ed7ca7ea9061e5966b7b@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Fernand Sieber <sieberf@amazon.com>
+Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, bsegall@google.com, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, mgorman@suse.de, vschneid@redhat.com,
+ kprateek.nayak@amd.com, hannes@cmpxchg.org, mkoutny@suse.com,
+ void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
+ skhan@linuxfoundation.org, corbet@lwn.net, rdunlap@infradead.org,
+ cgroups@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ nh-open-source@amazon.com, hborghor@amazon.de, fmubeen@amazon.de,
+ dwmw@amazon.co.uk, karataev@amazon.com
+Subject: Re: [PATCH v2 0/4] sched/fair: cpu.max.runtime and idle refill for CPU credits
+In-Reply-To: <cover.1794303670.git.sieberf@amazon.com>
+References: <cover.1794303670.git.sieberf@amazon.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,146 +67,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030104213.2030283-1-xiongyining1480@phytium.com.cn> <a6840be7-bd50-4e64-af1b-0ab9334d8ec7@oss.qualcomm.com>
-In-Reply-To: <a6840be7-bd50-4e64-af1b-0ab9334d8ec7@oss.qualcomm.com>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Tue, 10 Nov 2026 21:08:00 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jWW6Dg5fgMnj1R4eBOtKmGZYmj-5qTBzjtYQ7q9e4=ZQ@mail.gmail.com>
-X-Gm-Features: AclHuK_x7n05SR8j9DhdHMfZxJ7deHY9ClNLJVZNgAl_LZFa8GIt_2FxgsIBC-E
-Message-ID: <CAJZ5v0jWW6Dg5fgMnj1R4eBOtKmGZYmj-5qTBzjtYQ7q9e4=ZQ@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests: cpufreq: stop CPU hotplug loop after
- cpufreq update test
-To: Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>, 
-	xiong yining <xiongyining1480@phytium.com.cn>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chenbaozi@phytium.com.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 30, 2026 at 4:12=E2=80=AFPM Zhongqiu Han
-<zhongqiu.han@oss.qualcomm.com> wrote:
->
-> On 10/30/2026 6:42 PM, xiong yining wrote:
-> > Original test uses a fixed 5000 iteration loop to trigger CPU hotplug
-> > for verifying cpufreq synchronization between CPU hotplug and sysfs
-> > writes.
-> >
-> > Two issues exist:
-> > 1. Background hotplug task keeps running after test completes, causing
-> > redundant CPU on/offline operations.
-> > 2. When cpufreq frequency setup is slow, the hotplug loop may exit
-> > before frequency updates finish, which breaks test purpose.
-> >
-> > Use signal notification to terminate the infinite hotplug loop, and
-> > add an EXIT trap to clean up the hotplug child when this test function
-> > terminates abnormally.
-> >
-> > This makes hotplug run only during cpufreq sysfs write test,
-> > align with test objective.
-> >
-> > Signed-off-by: xiong yining <xiongyining1480@phytium.com.cn>
->
-> Reviewed-by: Zhongqiu Han <zhongqiu.han@oss.qualcomm.com>
+Hello, Fernand.
 
-Applied as 7.5 material, thanks!
+On Tue, Nov 10, 2026 at 01:08:47PM +0200, Fernand Sieber wrote:
+> This series adds cpu.max.runtime, a cgroup v2 file to read and set the
+> runtime the CFS bandwidth controller has for a cgroup, lets
+> cpu.max.burst exceed the quota, and makes an idle group keep earning
+> quota up to quota + burst. Patch 3 passes the writes on to BPF
+> schedulers, and patch 4 lets them charge their tasks to the same
+> runtime.
 
-> > ---
-> > Changes in v3:
-> > - Start the hotplug child after governor switch and sysfs frequency rea=
-ds,
-> > to avoid -EBUSY errors when the target CPU is offline.
-> >
-> > Changes in v2:
-> > - Stop the hotplug child process by signal notification instead of
-> > a stop file, avoiding the predictable temporary path.
-> > - Add an exit trap so the hotplug child is also cleaned up when the
-> > main shell terminates abnormally.
-> > - Link to v1:
-> > https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2662696.ht=
-ml
-> >
-> > This addresses the security and robustness concerns raised by Sashiko.
-> > ---
-> >   .../selftests/cpufreq/special-tests.sh        | 30 +++++++++++++++---=
--
-> >   1 file changed, 24 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/cpufreq/special-tests.sh b/tools/t=
-esting/selftests/cpufreq/special-tests.sh
-> > index e87ed7c8e5e5..0665da8f2444 100755
-> > --- a/tools/testing/selftests/cpufreq/special-tests.sh
-> > +++ b/tools/testing/selftests/cpufreq/special-tests.sh
-> > @@ -16,6 +16,8 @@ source cpu.sh
-> >   source cpufreq.sh
-> >   source governor.sh
-> >
-> > +HOTPLUG_PID=3D""
-> > +
-> >   # Test 1
-> >   # $1: policy
-> >   __simple_lockdep()
-> > @@ -92,6 +94,16 @@ governor_race()
-> >       restore_all_governors
-> >   }
-> >
-> > +hotplug_cleanup()
-> > +{
-> > +     if [[ -n "$HOTPLUG_PID" ]]; then
-> > +             kill -s SIGTERM "$HOTPLUG_PID"
-> > +             wait "$HOTPLUG_PID"
-> > +
-> > +             HOTPLUG_PID=3D""
-> > +     fi
-> > +}
-> > +
-> >   # Test 4
-> >   # $1: cpu
-> >   hotplug_with_updates_cpu()
-> > @@ -101,14 +113,18 @@ hotplug_with_updates_cpu()
-> >       # switch to ondemand
-> >       __switch_governor_for_cpu $1 "ondemand"
-> >
-> > -     for i in `seq 1 5000`
-> > -     do
-> > -             reboot_cpu $1
-> > -     done &
-> > -
-> >       local freqs=3D$(cat $filepath/scaling_available_frequencies)
-> >       local oldfreq=3D$(cat $filepath/scaling_min_freq)
-> >
-> > +     (
-> > +             local quit=3D0
-> > +             trap 'quit=3D1' SIGTERM
-> > +             while [ "$quit" -eq 0 ]; do
-> > +                     reboot_cpu "$1"
-> > +             done
-> > +     ) &
-> > +     HOTPLUG_PID=3D$!
-> > +
-> >       for j in `seq 1 5000`
-> >       do
-> >               # Set all frequencies one-by-one
-> > @@ -117,14 +133,16 @@ hotplug_with_updates_cpu()
-> >               done
-> >       done
-> >
-> > +     hotplug_cleanup
-> > +
-> >       # restore old freq
-> >       echo $oldfreq > $filepath/scaling_min_freq
-> >   }
-> >
-> >   hotplug_with_updates()
-> >   {
-> > +     trap 'hotplug_cleanup' EXIT
-> >       save_all_governors
-> >       for_each_non_boot_cpu hotplug_with_updates_cpu
-> > -     wait
-> >       restore_all_governors
-> >   }
->
->
-> --
-> Thx and BRs,
-> Zhongqiu Han
+I think this patchset is too maximalist. As described, the use case is
+specific to selling burstable CPU budget. Nobody else has asked for
+this. There may be other use cases which haven't been stated yet but the
+description doesn't surface any, so as it stands this is pretty niche.
+
+On top of that, the series integrates into both fair and sched_ext and
+then makes the two work together so that the handoff is seamless. That's
+too much for something which doesn't have a strong use case or an
+established generic need. As with scx_bpf_cgroup_report_throttled(),
+patch 4 modifies fair's internal state from sched_ext, which I don't
+think is a good idea as the cgroup piping is split at the interface
+level:
+
+  https://lore.kernel.org/all/ahdFAZVnb3DTv8Jo@slm.duckdns.org/
+
+Seamlessly switching tasks between the classes in partial mode has a lot
+of other integration problems beyond this one and at least I'm not
+aiming to achieve it. It'd cost a lot more than it'd be useful.
+
+The sched_ext part can just be a feature of your own BPF scheduler,
+which you seem to be using already. There, the credit level is just
+state in your BPF maps which your userspace can read and set, so the
+maximalist version can wait until the need is proven. If you want a
+handover between your scheduler and fair, that can be done from
+userspace.
+
+If a burstable budget is something useful to add to fair, can you do
+that first and separately? It should be able to stand on its own.
+
+Thanks.
+
+--
+tejun
