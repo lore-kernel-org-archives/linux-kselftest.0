@@ -1,81 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794290801;
-	b=bvkR+uUGf6/kjKNJcuD2xtW+5MrZzEqwicSArPhBLijiMXem1FgAEr840wm0wiiSc53S
-	 B384iC949ke3PgIkB38eejMt1n/GVt3r2/OQou9+qEuWPdPGGAWk7Y0Y+Tz+8gqgUv0yr
-	 pH7yB5LN8cpIpsHMYS7KmkXdeZK21jFk1iR1w1wRDsABdufINkg/UP4DYnUvljaJe+6nR
-	 qVFFc3/pSWXdCm7cPTPBLnyI2FuzFwSCp9fI9XQ6gv3R+hm0LmZHXQfp6nJ54sdJewAWQ
-	 qBTZ9oQGYrOpdZfyrBbrLlKUmmgdfGW2lupuLrDhwz+xlWmWscALb8K1TWFcROBu6pA==
+	t=1794291366;
+	b=wNVBXiMziu2ZCC5/8oOFbBIPuv4ptufAv1OmwBob3ubGkDpjsVS+eQXcGFbHSUWB3CFE
+	 83kKCvhMyuvlil4AHC9y3u6IVGQKFRiyKb8BtjB/GSlObUgaoqctnaL/apJW8VcpZmnER
+	 ukX23OdkQVM4QsB4zyDfXvhQXz1/2l9ZYY7nMA1P+ad4klWKImOqDiIRnlB2SnZA27s+m
+	 dCXEmV6gL/3iIOnKrpGkPDgoeaPx+0GB6tm5E+4CLEnQ1q92YpD295Oophc5vogrHnXlV
+	 Ft9mOS9QN189xgmnNU57S0A5JixL7g1HnM0/fwShOnt0D7P9NXSRDIjgAe8STwnMsDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794290801;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Hnh10F1zQfs5wctp+i2aDmqIYavrqW0fRXfCXxRBWTE=;
-	b=Y+IrpMwTBYWDBW7NLei4ErsrHYLdkaPn1wTv5MvWYoNTpjOxJCeF8JCknAZDgkKU8Dqj
-	 Vu+amg0YiKqlxshfaPjOHb5yMlsrc7H/WMJ08E8KzjW/+5L84AQ7/7TflOFIjD/oYIRlW
-	 YFaSgHJX4WjZrTlsyHygfRJdjTEpP/157ss2ClwKTzxgxL969LL88ueNmleCV0xRfqfX6
-	 hKJDRjWHdnMwLTDqRjCsamNAzcZ1TXz14TjFGNkioiDGRRbhpOaTQ46yQBMLG3ZHgiJ4C
-	 DqWWj8xt9WGuXZVnJY6r3Xise0Au1aGhYHoPCaModqa9pYdqa27BcYWMHOc8zm0TQ7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794291366;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=4rpBnan4h9EaTRrTQa5iufmTkFiE4enWZJ7KpZ2EtyE=;
+	b=RHS1QFCKPmtKz9scpWOaqOZa8pKdQSvlIx2aydBjek+KMp4L44XUl46k+DLI9dooB+Ms
+	 PzJVAjWabDsYyAFMgWmVcz6MACYAT75ICGXaiAXA8QBHJ6h4wMCwh2i3Z7ds2hxJ5rxhH
+	 LtnWMuiF816iYzt8KPb4QsaAC4Pf7lMN/bLYopxUKa/SIQPRLaMK+h9jcPsINC7qMn8dN
+	 h766mkCLRPLTuV5yp1l63eecW270ej2QApwdA+CMbHwmwUPvRhf89MEDEpgKE371JeKUV
+	 oE+KWkQYWjgL8XwQaQSnQT4uz4GDGLH/Z83JWbyrA+Kjc5TvyCfXAh6LNlD/xa5p42g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eb8TtXll;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=grapheneos.org;
+	spf=pass smtp.mailfrom=grapheneos.org;
+	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=pWN+Z8AS;
+	arc=none smtp.remote-ip=206.220.120.4
+Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id DC7CA606A321;
-	Tue, 10 Nov 2026 06:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF59606A32A;
+	Tue, 10 Nov 2026 06:16:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0DF59606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eb8TtXll
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 9088E1F0089F;
-	Tue, 10 Nov 2026 06:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794290800;
-	bh=Hnh10F1zQfs5wctp+i2aDmqIYavrqW0fRXfCXxRBWTE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=eb8TtXllKp/I2wuhSS3q+9ykKbgSIsPs7gk7VfGNWmGNU+WjweUEnFKh9TgZTVkGq
-	 sMrc6PQ+88V8fzudWMldoKc2AVHklkzkYa0+40xfi3AW18Q/K4K9h/OocoZpCsVTc7
-	 P3U7Lk6TDzGXSUBWVX72i99ctq9fxpCEAf7EPOcoxKbQ5HoOJlAOSS9DWUBbMFrSGs
-	 wq0Ih3E/DaXojtDOLNMTToD5a4szza7K5jiOH90rJg25i7q+WgS1YpUPqvG8ck732L
-	 facfIldhFjw/2ZFAetpxsSvQgpdMsJ0r4OYiQPZlv8X139dzSSBMZ5/L3G1OVKmP/B
-	 +37+kwO7JItFQ==
-Date: Tue, 10 Nov 2026 08:06:36 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: bpf@vger.kernel.org, dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ignat Korchagin <ignat@linux.win>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v9 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <avK0bC5VmO7LXlfS@kernel.org>
-References: <20261110053323.2936729-1-jarkko@kernel.org>
- <20261110053323.2936729-3-jarkko@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=pWN+Z8AS
+Received: by mail.grapheneos.org (Postfix) id 8868C3C08EF3F;
+	Tue, 10 Nov 2026 06:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
+	s=default; t=1794291359;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4rpBnan4h9EaTRrTQa5iufmTkFiE4enWZJ7KpZ2EtyE=;
+	b=pWN+Z8AS/hTfBYDuDe04b9qDbVQFO6GjMnQyT2M3LfKbxRM77S26loS5IBQj51zdsfgDNk
+	HO8nSi4rBs3bPeVjNp9sXCruwQZlONsuZ8suLASmx5UAa/WQ5kL75N2uVVZhXIgNwNXMZf
+	gtvkEarX9m1FyBSubwOEgHfmCLnOHwuacpXDTzB+8fflStiOZJHhq33qk8y1aoAaVt+Y9E
+	TXZiF4la6wzg8TJB1KlBDpV1JLkvSOmY953lGFTBMSmhmmr188P3L+h7lA4HiPVlAUqY3O
+	w2MY8bunH1G3gS5BF6Z+khhMWHOqa5l3HvPxPjv9XcMcYq7wLc8mgFzizu4i1g==
+From: liamsmith827 <liamsmith827@grapheneos.org>
+To: netdev@vger.kernel.org
+Cc: David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	liamsmith827 <liamsmith827@proton.me>
+Subject: [PATCH net v2 0/4] ipv4: restrict on-link fallback to lookup misses
+Date: Tue, 10 Nov 2026 06:15:32 +0000
+Message-ID: <20261110061536.10811-1-liamsmith827@grapheneos.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,117 +70,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110053323.2936729-3-jarkko@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 10, 2026 at 07:33:22AM +0200, Jarkko Sakkinen wrote:
->  /*
->   * Preallocate memory so that a key can be linked into to a keyring.
->   */
->  int __key_link_begin(struct key *keyring,
->  		     const struct keyring_index_key *index_key,
-> -		     struct assoc_array_edit **_edit)
-> +		     struct keyring_edit *edit)
->  {
-> -	struct assoc_array_edit *edit;
-> +	struct keyring_link *link = NULL;
-> +	struct keyring_link *replace;
-> +	struct keyring_index *links;
->  	int ret;
->  
->  	kenter("%d,%s,%s,",
->  	       keyring->serial, index_key->type->name, index_key->description);
->  
-> -	BUG_ON(index_key->desc_len == 0);
-> -	BUG_ON(*_edit != NULL);
-> +	if (WARN_ON(index_key->desc_len == 0) || WARN_ON(edit->new)) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
->  
-> -	*_edit = NULL;
-> +	edit->new = NULL;
-> +	edit->old = NULL;
->  
-> -	ret = -EKEYREVOKED;
-> -	if (test_bit(KEY_FLAG_REVOKED, &keyring->flags))
-> -		goto error;
-> +	if (test_bit(KEY_FLAG_REVOKED, &keyring->flags)) {
-> +		ret = -EKEYREVOKED;
-> +		goto out;
-> +	}
->  
-> -	/* Create an edit script that will insert/replace the key in the
-> -	 * keyring tree.
-> -	 */
-> -	edit = assoc_array_insert(&keyring->keys,
-> -				  &keyring_assoc_array_ops,
-> -				  index_key,
-> -				  NULL);
-> -	if (IS_ERR(edit)) {
-> -		ret = PTR_ERR(edit);
-> -		goto error;
-> +	links = keyring_get_index(keyring);
-> +	if (IS_ERR(links)) {
-> +		ret = PTR_ERR(links);
-> +		goto out;
->  	}
->  
-> -	/* If we're not replacing a link in-place then we're going to need some
-> +	link = kzalloc_obj(struct keyring_link);
-> +	if (!link) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +	link->hash = index_key->hash;
-> +
-> +	replace = keyring_find_link(links, index_key);
-> +
-> +	/*
-> +	 * If we're not replacing a link in-place then we're going to need some
->  	 * extra quota.
->  	 */
-> -	if (!edit->dead_leaf) {
-> +	if (!replace) {
->  		ret = key_payload_reserve(keyring,
->  					  keyring->datalen + KEYQUOTA_LINK_BYTES);
->  		if (ret < 0)
-> -			goto error_cancel;
-> +			goto out;
-> +
-> +		ret = rhashtable_insert_fast(&links->ht, &link->node,
-> +					     keyring_link_params);
-> +		if (ret < 0) {
-> +			key_payload_reserve(keyring,
-> +					    keyring->datalen - KEYQUOTA_LINK_BYTES);
-> +			goto out;
-> +		}
->  	}
->  
-> -	*_edit = edit;
-> -	kleave(" = 0");
-> -	return 0;
-> +	edit->new = link;
-> +	edit->old = replace;
-> +	ret = 0;
->  
-> -error_cancel:
-> -	assoc_array_cancel_edit(edit);
-> -error:
-> +out:
-> +	if (ret && link)
-> +		kfree(link);
->  	kleave(" = %d", ret);
->  	return ret;
->  }
+From: liamsmith827 <liamsmith827@proton.me>
 
-No additional Sashiko complains.
+For non-vrf unicast, the on-link fallback currently occurs regardless of
+the particular error returned by fib_lookup(). As a result, routes and
+rules that are supposed to restrict traffic (blackhole, prohibit,
+unreachable) are unable to do so comprehensively.
 
-Despite a few unfortunate extra rounds I'm happy how this shaped in the
-end. It has a sane flow now I think.
+A specific example of this being a problem is within Android, where the
+VPN "kill switch" is implemented with prohibit rules. Any process that
+can set flowi4_oif (SO_BINDTODEVICE, IP_UNICAST_IF, IP_PKTINFO, etc.) is
+able to utilize this fallback, meaning unprivileged Android apps can
+trivially bypass the VPN. This is particularly bad on cellular networks,
+where ARP is often not needed.
 
-And it definitely made sense to drop cleanup.h shenanigans from
-__key_link_begin().
+The first patch adds FIB_LOOKUP_REPORT_MISS. IPv4 FIB lookup maps a
+routing miss to -ENETUNREACH, which is also returned when an unreachable
+rule is encountered. This flag prevents the mapping, returning -ESRCH
+instead.
 
-Br, Jarkko
+The second patch uses this flag to restrict the fallback to routing
+lookup misses for non-vrf unicast. The fallback is still always taken
+for multicast, regardless of any restrictions or misses.
+
+The third patch updates tests now that the on-link fallback has been
+restricted to routing lookup misses for non-vrf unicast.
+
+The fourth patch replaces an existing comment which describes obsolete
+fib_lookup(), MSG_DONTROUTE and IPv6 behavior.
+
+This was originally observed on an Android device, by way of packet
+capture.
+
+Tested fcnal-test.sh in UML with CONFIG_IP_MULTIPLE_TABLES both enabled
+and disabled.
+
+v2:
+- Restrict the fallback to routing lookup misses, instead of only
+  honoring prohibit (-EACCES).
+- Add FIB_LOOKUP_REPORT_MISS to differentiate a routing miss from an
+  unreachable rule.
+- Split the comment update out into its own patch and remove the
+  signature.
+- Enable all of the commented out device bind tests in
+  ipv4_ping_novrf(), add a route miss test and update the UDP test
+  expectations.
+- Target net instead of net-next, add Fixes and Cc stable.
+- Drop RFC.
+v1: https://lore.kernel.org/netdev/20261019032406.88874-1-liamsmith827@grapheneos.org/
+
+liamsmith827 (4):
+  ipv4: add FIB_LOOKUP_REPORT_MISS
+  ipv4: restrict on-link fallback to lookup misses
+  selftests: net: test restricted on-link fallback
+  ipv4: replace obsolete routing comment
+
+ include/net/fib_rules.h                   |  5 +++
+ include/net/ip_fib.h                      |  6 +--
+ net/ipv4/fib_rules.c                      |  2 +-
+ net/ipv4/route.c                          | 34 ++++++++--------
+ tools/testing/selftests/net/fcnal-test.sh | 47 +++++++++++++----------
+ 5 files changed, 51 insertions(+), 43 deletions(-)
+
+-- 
+2.47.3
+
