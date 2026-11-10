@@ -1,99 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794343378;
-	b=hElwTZOcpcGrKJAjL3/+mN9AICVeAEVHDbvmfMKJtPTLQ2teZGwGtfAzQ+7COY1ZKs4s
-	 bCaRToxYPG8YTXM+5WFT/rIkWvGS3dZGm2usvp8dQIV1mQQdr1N1sqxTyHA6b6jYdhZAs
-	 XarTqyhJuy1koKZ/Utp199UNh8aPnvwkTQM0fgZ28hbnuQN7wDGy7ZsciBw1ZVpa83HNc
-	 0HeopcW9PSS3Tt1baaMtNHA4vIdTJeE/8roF5M3pENKWjdSYlcM2Vo+nIxpp6Xjt5x1EV
-	 +mKRf/9/dbMPrUinf4JTaPwUFdGjEKy0R7I9wLl92RNJPNx3kszhw+Q65Jo03BFLfzw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794343378;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=6JIpC5xmZmVh3gHvpm6TlSXy64wN88S92afzeHcQ6Bk=;
-	b=zSChHmaiut58dwvANWG9aN9RIn08cPXtdrRoEz+R2nqKVMXzDJN/hWE7TMSqOu3Lii2V
-	 3L1njKzVN9nJtCV+fzKwYxJ/3sJUpmOONwgJj5ni/OVsupxVFfgrmuAAkrmjbFDxZZ4/e
-	 sQSG2KAL0IXv+vIMb9avbR3ZRnQJxbJ4/PzZk8Gl7JM/PgapQU1HQolu4CYglcX7QTujC
-	 SfwWw2HaMFoVhj/Akha7YFSSHmuJPNQT/9VHV3w4r0WOYC4yNrszbnt7/caXZJm56T4jU
-	 5JV7I+TctKayVRSZ0CkeQDQWCzsUYGxKE3ulKYmhOwT9JhNyC/W7pCU9jdaJKzGlZEw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=sentinelone.com;
-	spf=pass smtp.mailfrom=sentinelone.com;
-	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=BzOrX5df;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.13.214.179
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794343474;
+	b=vVWT7K0O2cnA1Oyd/XyDl6Wi/I1qDLE9qbsR74h8zMaoMGfi3HfGguSrZ+LrvaDmzt/3
+	 BGxvecvLUP/eFIklRZr9dwBHIWi2L8NZjkkBQlE+wWC28YQaTTypg9TF1OWaBlwb85MrG
+	 1MUGAoKfaPw2Os/Uha+nMiHlEOrX+Z1QhMn7bHeuqpNEoMx7f9PI2kdrE0VDgl2Z9h+pa
+	 VpRGTFHa7hKeeWLV/flsaakbVJJjrHuBAwL/UK3m69PR7VAIwVZr6+ky64KsNOTBj2Ghn
+	 jtLgc156vS9fA9Gw1NZvxjsReicIg9R9+Qy6t8YqHGM5dQRZvzDkuyC+Pr6fTO6G1wA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794343474;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=Yr7AmTjhtaDuAyMokVe6PKeMqP8Y5YJ4ICeD0g2OcRo=;
+	b=hwI4bZ8IOBCn1Ry/BmOHF7wsfbJ4vTmyDs0hxzMSbjBkEKTtAU40lCcn8oKT4SzlZDh7
+	 sasCDQchtn/5roBR9KvaR6rleCZSfUe9mfx30KpgyeLP97GWZusn5NetgmIdmrqK0pkyk
+	 gs26S7tpEAKCl9u6x9Vhy1ZVgDVJlWHQ7HYogEPlAd9F8ZuB0wiA1pyCzb1Js7wnnc7Yb
+	 leffsS9t1rLCfeC6y5tdywwmCsq1agfoNXxAwYhBNjf9yal34HAN026FCnl6VwLDuDvGA
+	 oPiMl52jMl8xaD6A/F4YFTGG5w/6DNpQ6c9gH7JEUrnUirBxug3bG2d3rLBrEYa0eMw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=dyLy07sf;
+	arc=none smtp.remote-ip=52.13.214.179
+Received: from pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.13.214.179])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E986606A31C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 20:42:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E986606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B67606A321
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 20:44:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36B67606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=BzOrX5df
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b09cc7ed1aso302758a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 12:42:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794343377; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MW5bpOmCcCUJSP2Ktk9iOTFgds4vmruSCaSK8eN1kSocKOP44oADwiY5h1CawxQe54
-         8BSfeixaj8LHJpwX85H86k+8a9WpHuq7WnOpDh0IZAsW2jl0yawYs4m85rZ2GLL1ACN1
-         FVl5hUgINvzzgCaYrfBpWF7B5x7PUhghQs10VzTT2gmUzR/wlK9jFCwVv7850mp6QKdR
-         8U+1p1C84S6mR0LutRWY8ULHdthWD1/pGix4HpdjRZzHQit440XKCVchWnnJvP1n0S5N
-         QQFpRNm9M7B+cBowCr13HeNr0Wbi0X+2NjeP61ElrF1qQvtuuXGvCS6TwZzI1RJ9gxMz
-         96Cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=6JIpC5xmZmVh3gHvpm6TlSXy64wN88S92afzeHcQ6Bk=;
-        fh=LnJiC3eMh7EuxSIg6fH1r+MnfGJKGCMXvtfs+6aAYwU=;
-        b=dJYv4H8UIJurj9vGRP0hECP6zEts/eWsWsSAht64fT/YgR5iUoWNBOmPESJbbxd/BB
-         Vi/DDCNftbh3FIj7GE+4A6otpv2IBXdXra3UnM6c2iQvri44vAr8SvMdfKES7Bi9H4rD
-         VIv2mkOk3acxXkgYfDSC2YaeHAR0Qj4R38MAnDZ/6eSufgGGboRT9cX3/Zt7Qh0LkyhH
-         EGSYiyRKAlmpjpPUhVi91OurDfgKl3ZBXb9KKGb9j6w59km3F/stnYlrTH7DpVteLA1T
-         +SKivj2kQgQApsvYjjwL6/3xtspXjB+ZVD0yFSUynEDsLFb5H2UXqqGO3Snj2R2zHds8
-         NP7A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=dyLy07sf
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sentinelone.com; s=google; t=1794343377; x=1794948177; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6JIpC5xmZmVh3gHvpm6TlSXy64wN88S92afzeHcQ6Bk=;
-        b=BzOrX5dfpE+ATWGL/wdnDmqs110TVhKTlWIlwAI7dDMi72e9e0m7HPA4+FO3KKu4+D
-         jjDcivdVMk6pFQQZ7tqXAm81UmXbkm0Sj0zwPWm5dNiPJIje1jHSipW0d/82pks/7gP2
-         3WHAPaEwpL+zWUIS5nnUbKOHbvoNQHJIOaRvY54sQfLoC96BLA00QBwvxdr4Gtrv7GId
-         Jq9lCx92m78rRmjUjEJOlaG6bdRXLRNFcS2xrkwH+t7+0yVZbQ1bkObsSQJ0Ez1IefzT
-         NKBrqUOHNz1Y8Xgv4/wLJ6SmZHlCmp87DYAfN2IejsMxJKb1s3eCOwQFI/knqHBBQfrC
-         25YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794343377; x=1794948177;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=6JIpC5xmZmVh3gHvpm6TlSXy64wN88S92afzeHcQ6Bk=;
-        b=HFeCmpvupijaEGfU5/RdbhOvTu+LGx55HJ5T+5tuEq/Nuh+LZ7fqyOABXeeazI0J1e
-         Lll3oUAHIrNshLtrsTcutv77xlVJq/Bi8XRxkdT3FjL+kSaQ16wnuVgnnPg3L2jZHBmn
-         8Cqao65A+ybf4zBS1s+t2zEqIZYPoBCZVcn/R49yA2bPTi/m2PqRb8uRmzzfoDuvkVzW
-         +zu5EsYiNHeKVfDncCHW3YNvJ7rLK9q/JBur3zXSHqH4Uzq8P3yKREzYoUK3oxLHKdU5
-         Q0uOUNRkGfxdxJRAUgFCTw0SgtFwqHZwmLtb7s078t4CwLKs7PKmNa8Au4pznh6ohehB
-         9mfQ==
-X-Forwarded-Encrypted: i=1; AL+hErECIAnhbllDHEgdi/Y6BVuqQhMPbecniSCLmtl2+LOL4xLqwHK2JwEaC6xznqiazKswjme3thfCe2Yfuq5MDl4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/z0Q7/rInOK2UJJuJZbnzQE/ADRyXNSHJOXNY46TVHwcjbYVHa
-	eZnVIfVir74h398tFxwkp5+38khqqfQeVb/0qAak02xjht/xeBToSQ2y1QwI+eab/J+Wtvm5M84
-	4jExlHCsaXJ+REptbJ0vqPof13w2mqyoURK0ghIK0lg==
-X-Gm-Gg: AYBFou3DF6nhTilXENtakmEt3eUx1eI1k9jxhhLu+PZIdUufGRHD8kM8hsQt34z0UYC
-	Z5+Q4wuLN7OvDGSiIkGkSTiqNc9ofj6ux5Fzn+qBdn4pDNbqVL9F9bxaZjQEQGUzgGrz79hX30a
-	VizG7NmMt1qfZ7ux2cT5+YyMLUFXmln2ZbdCjIGC7yJ0AJ7xlSf7dg/tNDlP2iaT/NeBFollGTU
-	h+3HGGbjOqJ0TcHnk+6cMh5W7kWPBN+2kKi4xj7EHYN51kRxzB8oE79Dbn7fXP4bHrkrvFQcBx7
-	3JOdTLXX+1UR3Pg8aq56FrMV3mlX0A4Q/LRHr1mRNAI3GURQNqzKHLEzh+y0nkiA1nPCA9RP+1U
-	ukJ3pzwKkMZAaeK0EqSlFfpBybG26EGdQtyQdCXDcVAuEI0r1GTrqjNQj
-X-Received: by 2002:a17:90b:540b:b0:3b0:975b:2256 with SMTP id
- 98e67ed59e1d1-3b182f9b9d4mr203359a91.4.1794343377444; Tue, 10 Nov 2026
- 12:42:57 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1794343473; x=1825879473;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Yr7AmTjhtaDuAyMokVe6PKeMqP8Y5YJ4ICeD0g2OcRo=;
+  b=dyLy07sf7PIvCOKkuCcVc/okM/Z+jYLpfceJmIOmg/xUCSc6V70HnYoc
+   GDBVaRgmU/tsK8r8I2/xu/HRvf7CWomdmE1jCUABQEow2kcbJ4o+H+9mE
+   aNL45LsNz5dF9usYcHiB9CUAKY6NGaMDsUYl3mK02prYPv9TPggjuwXKE
+   8dQx4AYx1MW3w3P4cpQVh20nouwQuBoKYneVDKD9YCFbYH0mKbPGlcAKN
+   iWKtmgT4KpZ4Zr/LV2rTnQtXq39+pcA1ykUSGqqiLD9YHSd6taJJ7rAtk
+   OnTgAdXNFa2MS2sHvWfI62Y0Yjsoc/cSS41hu0I9bZPdPWjhanmQzuDL6
+   Q==;
+X-CSE-ConnectionGUID: ZSFckXSRQNeisxSB3+LUNg==
+X-CSE-MsgGUID: RWOS5BvES3KK3asnGgApjQ==
+X-IronPort-AV: E=Sophos;i="6.27,206,1787011200"; 
+   d="scan'208";a="33630797"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 20:44:32 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:29963]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.10.61:2525] with esmtp (Farcaster)
+ id b05dbcf9-5e5e-4b52-b2d8-099b6a4f9779; Tue, 10 Nov 2026 20:44:32 +0000 (UTC)
+X-Farcaster-Flow-ID: b05dbcf9-5e5e-4b52-b2d8-099b6a4f9779
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Tue, 10 Nov 2026 20:44:32 +0000
+Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Tue, 10 Nov 2026 20:44:31 +0000
+From: Jimmy Zuber <jamz@amazon.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+CC: <fuse-devel@lists.linux.dev>, <linux-kselftest@vger.kernel.org>, "Shuah
+ Khan" <shuah@kernel.org>, Bernd Schubert <bernd@bsbernd.com>, Jim Harris
+	<jiharris@nvidia.com>, Horst Birthelmer <horst@birthelmer.de>, Luis Henriques
+	<luis@igalia.com>, NeilBrown <neil@brown.name>
+Subject: [PATCH v8 0/2] fuse: atomic open
+Date: Tue, 10 Nov 2026 20:44:19 +0000
+Message-ID: <20261110204421.1251726-1-jamz@amazon.com>
+X-Mailer: git-send-email 2.50.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,60 +84,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
- <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
- <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com> <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
- <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com> <95e07cae-85ee-4f14-b5f3-070803ee567e@linux.dev>
-In-Reply-To: <95e07cae-85ee-4f14-b5f3-070803ee567e@linux.dev>
-From: Mike Bazov <mikeba@sentinelone.com>
-Date: Tue, 10 Nov 2026 22:43:02 +0200
-X-Gm-Features: AclHuK-KEMNOlfWD0UWl6ryn4dajINfOogjLWWr7jApapLp0YR3rK8ycXvkFphk
-Message-ID: <CAPnbwjqw=uxd8UyhEgNjSrpK1DhbB+dex0mGVW=dwuoygqgRHA@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	martin.kelly@crowdstrike.com, andrey.grodzovsky@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWA004.ant.amazon.com (10.13.139.19) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Mon, Nov 9, 2026 at 4:12 PM JP Kobryn wrote:
-> Before moving away from an in-kernel solution, can we consider the
-> direction this patch below takes?
+Add FUSE_OPEN_ATOMIC. FUSE_OPEN_ATOMIC is FUSE_LOOKUP plus FUSE_OPEN or
+FUSE_CREATE in one request. With FUSE_OPEN_ATOMIC, the kernel opens a
+name that is not in the dcache with one request to the server. This
+greatly improves performance for file systems where the bottleneck is
+calls between the kernel and the server. Servers that don't support
+FUSE_OPEN_ATOMIC are handled gracefully.
 
-I haven't proposed moving away from an in-kernel solution. Your patch
-is the same design I proposed earlier in this thread ("This is what I
-have in mind for v2") with Andrii's bpf_ctx suggestion folded in, and
-it's what I've been putting together for v2 (unless someone comes up
-with a better direction), which is nearly ready to
-post, so let's avoid duplicating the work.
+The kernel sends FUSE_OPEN_ATOMIC from ->atomic_open(). For a name with
+a valid positive dentry, the kernel sends FUSE_OPEN. FUSE_OPEN_ATOMIC
+for that would need a VFS change.
 
-beyond trampoline progs, v2 also covers raw_tp, tp_btf, syscall
-tracepoints, and BPF_PROG_TEST_RUN, and disables the per-CPU private
-stack for preemptible tracing progs since two tasks can now run the
-same prog concurrently on one CPU.
+If the server opens an existing file, the VFS checks permissions after
+the reply, as on other filesystems with ->atomic_open(). If open() fails
+after a valid reply with fuse_open_out, the kernel sends FUSE_RELEASE.
+The kernel clears O_TRUNC in FUSE_OPEN_ATOMIC, and follows up with a
+SETATTR, so it will never truncate files before permission checks.
 
-a couple of notes on your patch:
+Earlier series also proposed one request for lookup and open in FUSE
+[1][2]. This series covers only ->atomic_open(), with a single new
+request and no VFS change.
 
-- Passing prog to bpf_set_run_ctx() churns all callers that don't do
-  recursion checks, and doesn't fit bpf_prog_run_array_sleepable(),
-  which reuses one bpf_run_ctx across all progs in the array. In v2,
-  bpf_set_run_ctx() keeps its signature and initializes prog to NULL,
-  and bpf_prog_enter_recur_ctx() sets it after the walk succeeds.
-- bpf_io_uring_submit_sqes() calls bpf_set_run_ctx(NULL), so
-  dereferencing new_ctx unconditionally will NULL-deref there.
-- Cross-task synchronization isn't needed: a task only ever walks its
-  own current->bpf_ctx chain (and any IRQ/NMI on top of it runs on the
-  same CPU and walks the same chain), so compiler barriers around
-  linking and unlinking the frame are sufficient.
+Note on tmpfile: FUSE_TMPFILE shares fuse_create_open() and its
+d_instantiate() with FUSE_CREATE [3], and this series changes
+only ->atomic_open() (NeilBrown's question [4]).
 
-I'll Cc you on v2 once I post it (probably by tomorrow evening UTC).
-testing and review there would be appreciated.
+This series applies on top of "fuse: fix use-after-free in
+fuse_create_open() error path" [5].
 
-Mike
+I used Claude Code and Sashiko to help write and review the code.
+I reviewed and tested every change. Tested with a new selftest under
+UML and KVM.
+
+Changes in v8 (from the Sashiko review of v7 [8]):
+- Send FUSE_LOOKUP for open() with O_DIRECTORY. The server opens only
+  regular files, so FUSE_OPEN_ATOMIC saves no request for O_DIRECTORY.
+- Test open() with O_DIRECTORY.
+
+Changes in v7:
+- Reword the commit messages and comments after NeilBrown's review of
+  v6 [6]: the server can open an existing regular file or return only
+  fuse_entry_out, and it opens each file that it creates.
+- Test an existing regular file with a reply of only fuse_entry_out.
+- Rebase onto fuse for-next at 7.4-rc1.
+
+Changes in v6 (from the Sashiko review of v5 [7]):
+- Send FUSE_LOOKUP for O_EXCL without O_CREAT, so do_open() returns
+  -EEXIST for an existing name that the caller may not create.
+- With FUSE_ATOMIC_O_TRUNC, check O_TRUNC in file->f_flags. On a
+  read-only mount, the VFS clears O_TRUNC in the flags argument, and
+  file->f_flags contains O_TRUNC.
+- Before fuse_iget(), reject fuse_open_out for a file that is not a
+  regular file.
+- Test read-only mounts.
+
+Changes in v2-v5: see the earlier versions below.
+
+v7: https://lore.kernel.org/fuse-devel/20261110155219.2175318-1-jamz@amazon.com/
+v6: https://lore.kernel.org/fuse-devel/20261029130758.818617-1-jamz@amazon.com/
+v5: https://lore.kernel.org/fuse-devel/20261028200459.2922951-1-jamz@amazon.com/
+v4: https://lore.kernel.org/fuse-devel/20261026221639.628325-1-jamz@amazon.com/
+v3: https://lore.kernel.org/fuse-devel/20261026190747.2373775-1-jamz@amazon.com/
+v2: https://lore.kernel.org/fuse-devel/20261026151828.562870-1-jamz@amazon.com/
+v1: https://lore.kernel.org/fuse-devel/20261020141647.3271341-1-jamz@amazon.com/
+
+[1] Dharmendra Singh, "FUSE: Implement atomic lookup + open/create"
+    https://lore.kernel.org/all/20220517100744.26849-1-dharamhans87@gmail.com/
+[2] Bernd Schubert, "fuse: full atomic open and atomic-open-revalidate"
+    https://lore.kernel.org/all/20231023183035.11035-1-bschubert@ddn.com/
+[3] https://lore.kernel.org/all/20220922084442.2401223-11-mszeredi@redhat.com/
+[4] https://lore.kernel.org/fuse-devel/179264679002.1724252.4479504779598097455@noble.neil.brown.name/
+[5] https://lore.kernel.org/fuse-devel/20261026180649.1265825-1-jamz@amazon.com/
+[6] https://lore.kernel.org/fuse-devel/179332437497.269288.7305999595462479305@noble.neil.brown.name/
+[7] https://sashiko.dev/#/patchset/20261028200459.2922951-1-jamz@amazon.com
+[8] https://sashiko.dev/#/patchset/20261110155219.2175318-1-jamz@amazon.com
+
+Jimmy Zuber (2):
+  fuse: add FUSE_OPEN_ATOMIC
+  selftests/fuse: add test for FUSE_OPEN_ATOMIC
+
+ fs/fuse/dir.c                                 | 194 ++++++
+ fs/fuse/fuse_i.h                              |   6 +
+ fs/fuse/fuse_trace.h                          |   1 +
+ include/uapi/linux/fuse.h                     |  20 +-
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +-
+ .../filesystems/fuse/atomic_open_test.c       | 594 ++++++++++++++++++
+ 7 files changed, 817 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/atomic_open_test.c
+
+
+base-commit: ab9787d7e66ac7e6e94fc975b37c5b56fff98ca9
+prerequisite-patch-id: 95a6559bc4490d7d82bc80ba961ac52e80429b34
+-- 
+2.50.1
+
