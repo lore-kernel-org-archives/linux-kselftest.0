@@ -1,45 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.160
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794286391;
-	b=hPnsXt+yrw3jlTiJoyaHnCooCXlFjsMKCq47uKqpXTLE1rbNanyEnKiIGoKr9/Uq0oB6
-	 MrKWl7WiN3GJ94xtw0T9ZmVnq0J8+R99fMoXe0f6vsZoV11BxWyuAbtu7iBwuBYWVOoqC
-	 KiMz0g3FQC+ttruRU3lpPG5zJYDR0Mh/R9qQqdNRx8fT+aeU3Ke9o5EXHaxr+oaOiERsC
-	 U1w7HGIa195gLnVuH+9FtGH4qbJWtCQbiolvbm1zZKs/jKQ62Tahe+IBk2SP8IoN/xdLK
-	 BStNjdZPDjyIoLXVxhWs5i2CowS0dbd+AbQYmg1fE/oRAuF7laFxPpaOB/5NG5V6fvQ==
+	t=1794287021;
+	b=RzPK3Zh3QMhDDe3hIKlMpKFRBnxpwMzPx/XjW9VGcm5ZE2UMhscKaCYN/XjoRc7O6XAM
+	 hkYC61DpcoCINP/s5ZBEWmSN/IAry0fMxP7ItVqqL4Ikobsr7sJQXbWqdP1+JBicBVh/G
+	 h7tZeCYtlzXzTV5QJJrjTyP0VLLOVc9Lgom8DihfNOJb9ap7TLs+VFMealyO9j9cmaBKG
+	 7DSBEoUR77Zfq6pxH3+H8VHdrw0utjAdY14FOdjafTCpNYqG13Am9bWO7umi7/JPpu/Mt
+	 hkhVel+LSHdwxISoHYzni6z1x5394B+md7actSgENiFMXGwsqgvAWq9vXRLFQvpp1Zg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794286391;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=USevh6myHxF9emjydPOskkqmK7kqM8+0knzfuWzYf2E=;
-	b=UdbQNvq+AhNQllKRfthI7cCVIN5kWaDmoIjPhYdr4zdr/6EViUlBv9OaBn+7y7KOl3/h
-	 HQprTnPL8lC5WIXb4Ogd7ZF2jSCn4JvHWBEr/Yj5fRuy3iF4a2KzP6wGb650mSRSclx3r
-	 lsaih7NgTxgzqfN06Ed/XsY/vX77Idhw6BdTOEyVYIMrdc7e494ZqwoM5luei8r4RmCul
-	 fwdmIx+4PLqAr3hOiHrMdU8dpaB+2YiHR9xWMlSMaKS0JJR5ff+qaQIRVY5NPPUxXQXeB
-	 qxzhD6BcHsqVG6AlV7HkYaGVFiESXmBjBFIJUHDDiWHzM10cejw0E0GsfAlOdZ45mYQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794287021;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=W1sxioC7CMROvx/r1UAJHDcZA5UE9rSvFPDNj6JhOK4=;
+	b=LEjHitdCQC6u/ZXu8o23WU/ByGO/CCASfauv1wgUwInCHk+jBZJmh2nndOBVP5htO1Cq
+	 J/wz7ZbeFqMNy92ovuM67SStVWKqtjs6IYtxfOi7/wdDfWNwuqeZZ48NzEHvERhqnG+rt
+	 P6vWzjnRjppAbOTLOy/4ErgssW3OyVwvzS5YTMLBC9EySuXqIn+VKaFbV/JENWGZSqOxm
+	 GTFfynSB+xJ1LZVNkQjHK9qXm87z+PPnSDTtYpUjYZX/MgVi69BzR3PLrEbNDpgiVRSYv
+	 f0aDCoMwzaVZ/7LgdNWtHoW5odT5DvpvEEy9QuQrSIAYHZgVnOsI6lRnM3oVc1OQAug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bS8QK0uX;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Xd0EjLAQ;
+	arc=none smtp.remote-ip=95.215.58.160
+Received: from mta1.migadu.com (out-160.mta1.migadu.com [95.215.58.160])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F06606A31C;
-	Tue, 10 Nov 2026 04:53:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BF8606B08F
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 05:03:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1BF8606B08F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bS8QK0uX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1361F008A5;
-	Tue, 10 Nov 2026 04:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794286390;
-	bh=USevh6myHxF9emjydPOskkqmK7kqM8+0knzfuWzYf2E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bS8QK0uXH4CiE/pecLjA47r/58HoMdCcVoCr2Aj5ZbqYX8FUfQZw+zR3zouV2mNmK
-	 P0Ggop74FtzZ/noDXpDOmBsU8LuIgDwsRcOwIQBKYfTvnSFlvYyQp6mhCsrJj19i4E
-	 8AtFDqwQo6XuCCnMThbj3A/mquKdc778AaGUdSGFxFPfR9Cu+cvr37erupKdTLZRUZ
-	 slkziQBQN18Ol9bonmpQusu/LLhK4gYdx+hgOYyYs6truDVcFXoA9KNDzIfFgeEexk
-	 mh+SsRfu9Yhsgls4oSul1YEhpSfuBnkutavrJtXalAsKNTjUPk5VxJ5Nr9VxAgQYoD
-	 qETaCtYdWvXGA==
-Content-Type: multipart/mixed; boundary="===============6368028081372406392=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Xd0EjLAQ
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Qr6efF4jJpI/9qmyxgdFUkjEvcMPZqgHpk0hHki1Z4s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794287017; v=1; x=1794891817;
+ b=Xd0EjLAQInbtqgBG2V1h/z14CjaVAf7gULqoklf9JVH48Jr+t9XUp7Y2fHU+2y0YOagLbcGA
+ BlZUKjqsrlRpQWCqfynz2P9Br5u+10MTsYUM/4Q7rCuOHzOlv6XxK7zDlWZUS6MV/HINxnqJoUD
+ eioefPzq0vKMzGvxpk0PE59U=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2b2d84358f04e1ee;
+	Tue, 10 Nov 2026 05:03:37 +0000
+X-Mizu-Trace-ID: 2b2d84358f04e1ee
+X-Migadu-Flow: FLOW_OUT
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+To: Waiman Long <longman@redhat.com>,
+	Tejun Heo <tj@kernel.org>
+Cc: Ridong Chen <ridong.chen@linux.dev>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Guopeng Zhang <guopeng.zhang@linux.dev>,
+	cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: [PATCH v3 0/3] cgroup/cpuset: Keep the top scheduling domain populated
+Date: Tue, 10 Nov 2026 13:03:21 +0800
+Message-ID: <20261110050324.173461-1-guopeng.zhang@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,79 +72,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <debeafe053a315dc6c0634d019ea48075d9f9f0c68b4395deed84a9630dc77ab@mail.kernel.org>
-In-Reply-To: <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-References: <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-Subject: Re: [PATCH bpf-next 10/15] xdp: warn on XDP_PASS with stored values when XDP runs on an skb
-From: bot+bpf-ci@kernel.org
-To: tianyi@cloudflare.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,kuba@kernel.org,hawk@kernel.org
-Cc: john.fastabend@gmail.com,sdf@fomichev.me,lorenzo@kernel.org,deliran@verdict.gg,davem@davemloft.net,edumazet@kernel.org,pabeni@redhat.com,horms@kernel.org,andrew+netdev@lunn.ch,donald.hunter@gmail.com,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,maciej.fijalkowski@intel.com,aleksander.lobakin@intel.com,magnus.karlsson@intel.com,tushar.vyavahare@intel.com,kerneljasonxing@gmail.com,razor@blackwall.org,madalin.bucur@nxp.com,ioana.ciornei@nxp.com,corbet@lwn.net,skhan@linuxfoundation.org,shuah@kernel.org,rdunlap@infradead.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,carges@cloudflare.com,jakub@cloudflare.com,linux-doc@vger.kernel.org,linux-kselftest@vger.kernel.org,intel-wired-lan@lists.osuosl.org,llvm@lists.linux.dev,kernel-team@cloudflare.com,tianyi@cloudflare.com,ast@kernel.org,andrii@kernel.org,d
- aniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 10 Nov 2026 04:53:09 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============6368028081372406392==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-> xdp: warn on XDP_PASS with stored values when XDP runs on an skb
+Boot-isolated CPUs stay in top_cpuset.effective_cpus, but are excluded
+from its scheduling domain. Allocating all boot domain housekeeping CPUs
+to partitions can therefore leave the top scheduling domain empty even
+though effective_cpus is nonempty, leading to warnings and an OOPS in
+build_perf_domains(). CPU hotplug can reach the same state.
 
-TL;DR: Comment nit in xdp_skb_ext_warn_pass(): the new
-generic-XDP/BPF_PROG_RUN comment is inaccurate for BPF_F_TEST_XDP_LIVE_FRAMES,
-which uses a separate rxq, and the next comment is now stale. Not a bug.
+The patches are ordered as follows:
 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
+  1. Check local and remote partition creation and CPU mask updates.
+  2. Allow top-level partition CPU replacements that return CPUs to the
+     parent in the same update.
+  3. Handle CPU hotplug and preserve partitions that cannot return an
+     active boot domain housekeeping CPU.
 
-[ ... ]
+Changes since v2:
+  Keep patch 1's kernel changes unchanged. Update its selftests following
+  Longman's and Sashiko's comments and cover recovery with a single
+  top-level HK CPU. Add patch 2 to fix the CPU replacement rejection
+  reported by Sashiko, with its own regression test. Update the hotplug
+  fix, now patch 3, to avoid invalidating unrelated partitions, including
+  partitions whose boot housekeeping CPUs are all offline. Drop v2's
+  isolated CPU cleanup patch in favor of Ridong's fix:
+  https://lore.kernel.org/all/20261107120100.3587595-4-ridong.chen@linux.dev/
 
-> @@ -1124,12 +1125,17 @@ void xdp_skb_ext_to_skb(struct sk_buff *skb, const struct xdp_skb_ext *ext)
->  void xdp_skb_ext_warn_pass(const struct bpf_prog *prog,
->  			   const struct xdp_buff *xdp)
->  {
-> -	const struct net_device *dev = xdp->rxq->dev;
-> +	const struct xdp_rxq_info *rxq = xdp->rxq;
-> +	const struct net_device *dev = rxq->dev;
->  
->  	/* The skb is built later from the xdp_frame */
->  	if (prog->expected_attach_type == BPF_XDP_CPUMAP ||
->  	    prog->expected_attach_type == BPF_XDP_DEVMAP)
->  		return;
-> +	/* Generic XDP and BPF_PROG_RUN use the netdev_rx_queue xdp_rxq */
-> +	if (rxq->queue_index < dev->num_rx_queues &&
-> +	    rxq == &dev->_rx[rxq->queue_index].xdp_rxq)
-> +		return;
->  	/* No native XDP, so only generic XDP or BPF_PROG_RUN runs on dev */
->  	if (!(dev->xdp_features & NETDEV_XDP_ACT_BASIC))
->  		return;
+  v2: https://lore.kernel.org/all/20261105130344.664336-1-guopeng.zhang@linux.dev/
 
-This isn't a bug, but is the new comment accurate for BPF_PROG_RUN?
+Changes since v1:
+  Rework the fix following Ridong's suggestion and add test cases.
+  Add patch 2 for CPU hotplug and patch 3 for isolated CPU cleanup
+  when the parent partition becomes invalid.
 
-With BPF_F_TEST_XDP_LIVE_FRAMES, xdp_test_run_setup() registers a separate
-rxq embedded in struct xdp_test_data:
+  v1: https://lore.kernel.org/all/20261104071600.474587-1-guopeng.zhang@linux.dev/
 
-    xdp_rxq_info_reg(&xdp->rxq, orig_ctx->rxq->dev, 0, 0)
+Guopeng Zhang (3):
+  cgroup/cpuset: Reject updates that empty the top sched domain
+  cgroup/cpuset: Allow top-level partition CPU replacement
+  cgroup/cpuset: Keep the top sched domain non-empty on CPU hotplug
 
-and xdp_test_run_init_page() then does:
+ kernel/cgroup/cpuset.c                        | 75 +++++++++++++++++--
+ .../selftests/cgroup/test_cpuset_prs.sh       | 68 +++++++++++++++++
+ 2 files changed, 137 insertions(+), 6 deletions(-)
 
-    xdp_init_buff(new_ctx, TEST_XDP_FRAME_SIZE, &xdp->rxq);
+-- 
+2.43.0
 
-so in live-frames mode rxq != &dev->_rx[rxq->queue_index].xdp_rxq and the
-early return is not taken.
-
-That also makes the following comment stale: generic XDP and non-live
-BPF_PROG_RUN now return at the new check, so only the live-frames
-BPF_PROG_RUN can reach the NETDEV_XDP_ACT_BASIC test.
-
-Would something like "Generic XDP and BPF_PROG_RUN without
-BPF_F_TEST_XDP_LIVE_FRAMES use the netdev_rx_queue xdp_rxq" match the code
-better?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42755842687
---===============6368028081372406392==--
