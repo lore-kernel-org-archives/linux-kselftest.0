@@ -1,74 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794293158;
-	b=KaReBZ/503Uz9p+54jlU392QO1KLnXbCeen3Xxm9g3fvQmvUWHOABLfU2smfYAx3oJTo
-	 mRsc7DAr1CDhF3LmyHZzAqyQOCX/6qpwkwfj6dvw/CYBkVUMmKz+gjF3FfvBp20cnEk1h
-	 P4hQLLyfz4BOpayn7YLjoUuU18ht4MNbyyYbickcWietmb65Zr/LxrAj7TdG1Y5Wm2PNB
-	 4fsSljKCeNSoA4vKEUN5fekwvWJnWxreyROe7nZydU3tt23dLs5BELFRLgB6yb6vaNC9g
-	 vGmb1u7WDVhmGCHdy18U86u4ORWOXZ9Djh7ZUxER83F6ZzXB6bFEhJOWfEQ+YhGHxYw==
+	t=1794294311;
+	b=Jth1HMT8wg7oRcXkuTCqFDxhMKjwz0fJ8r6uQTD1VYeNxdimoUSXwTXrnxDb4cMmz4fH
+	 CTZl8MmkAnRnZG6RKhQTJuS1o9RT3xGx2L9sYtCrTkc0k0VPgk0Vxo9AzbRAprlg6ZW8g
+	 +I9UkuLNQblCB/bt313/c52OJTxmbigrudFRo+539EDvThyipMMKUQ0KWrYabknxl9OF/
+	 U4kjBFSfuFigCPxV0buooivYdbycWINL/aSTilvnyzbvgtr3nz4lEOZRPrvLM8KAga28t
+	 Z1SXzDNIaiSI1lME1n9tS2X20IHTSKfK5FS0HjJ8jydoS2AK9sLo+vpVtigTxHin4Ow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794293158;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=zVcHMSsusl1Ej7N/9YmP8osA54hse8QtuF0mZhuFuKE=;
-	b=lU/dXWaHjmROw9Yspeostrc45U2hy47t+5E05JFZYc7YNShyy71Qj7eLQ221xHGq2buO
-	 umUE50x3lB6aivPKNVH5xTXNCpS6tOCFYE+ND9GDcq+/+2QBdK+ebAyLvMfEYGevpRfWZ
-	 PhD5M6zN6RCCwImoC9zKKXJab/D8Kx3ygaQhYbVsvP9/O6ugS0O9x5MAg8Ow6BXZQ6sch
-	 IZDzas5d1huH4YKpygoXzE+k608Y/gDh3tdXBEpPz2mwAu3AK+ydYosF4/Rn22B1Kd6GO
-	 /KLDvqIWaPgho/dJVMrDy6lbN+/FTYbeowj7D+Xk2G94gfh8hOFmuSKo+cDRoFIgUqA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794294311;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=BnNedezTioyADzuMpCOdCnuZokX80G9WaFneDTb10vQ=;
+	b=RldmI+Z/90Y85ogeJhhFSosWGomAmck7XAvmXv3rXtU34Ztppt4n0ksCsknAKVr8Emfz
+	 FUKm2f1XbL/PLCMfSVYtJalglDfCRc8UrVNYq/8yFrTM6L4EFcPkS4+6L9S/Hae6mRQUQ
+	 +uXJ5JlFZjfk8QIfk56O2wvXzmA2OCJD7eagbFvy0xj8YACxbzRo5gJU+LM6wOBTb6mxi
+	 WcH8gPZYvBgEdDDencof13O7yDBKTU15wvPMRPH67eQo1KirKKPfxLAaOKaKuuN61+398
+	 GxKLHrpC7aZ+KpSAqkHOviT8qptM6vlWMExzsigLsAZSgz4X4eygP2mu9kFRhtCQJzg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iKXIWz4f;
-	arc=none smtp.remote-ip=209.85.214.200
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ofIwHVx8;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B475606A656
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 06:45:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B475606A656
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435C2606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 07:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iKXIWz4f
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2ed02a00b24so17466925ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 22:45:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794293157; x=1794897957; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zVcHMSsusl1Ej7N/9YmP8osA54hse8QtuF0mZhuFuKE=;
-        b=iKXIWz4f5+r9vNjEX1njp1JAE0DkemMvWqkFWMmG3Vjv1ZLOycapavc7kVSFLpv0WA
-         PsNPmLRxlONNp21iNG0QisN8PlO++GJPtHshY77ahqCn7ItMwytliqA1DhcAKvE2KmBO
-         7Jy+jiQo5Xwnk65oYSNtkD/4sFfJjtqtGqKOHsR8CUrqZ2zBkdQlEQOhZo3Udg9IVxwI
-         zc+SfBMN+8P38cESTNHsw6B9J1Epaio6O/ZozoBZ7rKezKKZnGKXVR1qiG3ZiTxWaJI/
-         KZ65SnaI23nwOWTRxUVgcparBkJ6QDAVGzXI5IUYZYv9wH1wull3D78cyskKidIRWjy/
-         RLYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794293157; x=1794897957;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=zVcHMSsusl1Ej7N/9YmP8osA54hse8QtuF0mZhuFuKE=;
-        b=TTORLMRHuqAY+qGMZC2rW+mw6xatmGBQNe60XQIv69UMFYe1HDU9Bb1yqpTzYxtbqD
-         uIH+RZS4D0tTXli+s2oiozWgS/Esx8DuOMVcJCRV0dGeg0PZMrtf+Me5MwAjsdggO7Pn
-         +uKZ+v2RrNQjooVGDd5pd/vXyaTocHC+Mj0u8XHIQxDChIfXIdvIJhtYJ7U1MuNMpFE4
-         QWlxydQNPMtuml5xzU8k8yY1A5ib25rhiehR3XMKcd4w3fTAAD1aZH3DQxWzc5qLpoc2
-         uSk5iyx0Uh2Nbc1ajq0QiDUisc11L7SUSTeDMD74QZOAQcrOi6yWja2FQkSE7cgJ8D6L
-         httQ==
-X-Forwarded-Encrypted: i=1; AL+hErExvGOK8C9KHcUiBeCul8BOrDTPa2cbClLZI41fbxLMN7Y2JpGuINWCeQlWw+Ixp8DqG8iZUW7tctn8tg4N7qA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+oCQ57rXM5xtRXLbXXoSUOdZ2VfG85IKprFdLvcwzR6tU7brdS
-	TNOTfuudTlBM5OaU3mSpnFHLX88zYRAJuNmtxSJAAsC9vZv/BMFfpd7m6EOFqgdQpFYV/PFwOGj
-	zja9kmA==
-X-Received: from plbmm14.prod.google.com ([2002:a17:903:a0e:b0:2ed:5534:d103])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f542:b0:2e9:5714:6087
- with SMTP id d9443c01a7336-2edb8f95ddbmr16875455ad.5.1794293157096; Mon, 09
- Nov 2026 22:45:57 -0800 (PST)
-Date: Tue, 10 Nov 2026 06:45:56 +0000
-In-Reply-To: <20261106171442.31811-2-baditaflorin@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ofIwHVx8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3CDC1F008BC
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 07:05:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794294310;
+	bh=BnNedezTioyADzuMpCOdCnuZokX80G9WaFneDTb10vQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=ofIwHVx8MbkgSNQVhfD72a+9EIzFn9QH/Ap9XuqX+xMBd/RDeIfHpR/hHjj3tRcMm
+	 lm7INK8ZwlFm6I6yTnJdORYxrdlj+FjPyf5Hr51UDTCmcd1xhoCFiJEYbiyE8VFBGl
+	 RdjeWt1LkEScnrP2YeG1s1mMUVFLBuqM55plz7yVN5Vbni+hzMzk0eGN0d6wQaQBLo
+	 3ac1wUXZUzTtaXupzznW6q89QWibbxEJGFX9DUpJ4sacp8PBfQJ5Zn4vnKKAK4h3K+
+	 usZBLbjJ30SWnbO1BiAdplljz95OGEMovLnKr9xy7o+9yOwGA+WxSJcfXfvoxTBIRW
+	 icZumDJwQV/lg==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-7143451981fso1115803eaf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 23:05:10 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AL+hErHnRezFUK8tWMOTwAfqXByI+xlPYYanFTOMsAS2u0o0jr6EsGs/2pFNxu/pLa8Vep+MLxrMND8rLfahyPAMwNE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Xo1LMdmyEazTa9RMVA8mFOj3yE7mTW7cOaEzSAFOE2yUECMsE
+	e4UoShKCVe70D4t2/ctLsJ2F+dmcSb4/25uIKe34ABBiV2EtcbpQv8aaUWqByjM09rOY8g/N/75
+	CisIM8hlKDPGSdGfIBWuiyEGzyv4KdzY=
+X-Received: by 2002:a05:6820:240b:b0:6dd:9701:6305 with SMTP id
+ 006d021491bc7-718a6e2ddd4mr641568eaf.65.1794294310126; Mon, 09 Nov 2026
+ 23:05:10 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,81 +58,53 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261106171442.31811-1-baditaflorin@gmail.com> <20261106171442.31811-2-baditaflorin@gmail.com>
-Message-ID: <avK8iXcNfXSt1_CQ@google.com>
+MIME-Version: 1.0
+References: <20261106171442.31811-1-baditaflorin@gmail.com>
+ <20261106171442.31811-2-baditaflorin@gmail.com> <avK8iXcNfXSt1_CQ@google.com>
+In-Reply-To: <avK8iXcNfXSt1_CQ@google.com>
+From: Eric Dumazet <edumazet@kernel.org>
+Date: Tue, 10 Nov 2026 08:04:58 +0100
+X-Gmail-Original-Message-ID: <CAL4WiioPRW-SxsKbOC3aOtZg8ZJpA28Xva0qM4375cTygfVHgA@mail.gmail.com>
+X-Gm-Features: AclHuK-NJxidM8lNPtjHGZ7TEVWKZvAA6snjm_p1ThNmdP7HN_Zn2F8YrWLmn4I
+Message-ID: <CAL4WiioPRW-SxsKbOC3aOtZg8ZJpA28Xva0qM4375cTygfVHgA@mail.gmail.com>
 Subject: Re: [PATCH net-next v2 1/2] tcp: avoid false bind exhaustion with
  odd-sized port ranges
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Florin Badita-Nistor <baditaflorin@gmail.com>
-Cc: netdev@vger.kernel.org, edumazet@kernel.org, ncardwell@google.com, 
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Florin Badita-Nistor <baditaflorin@gmail.com>, netdev@vger.kernel.org, ncardwell@google.com, 
 	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
 	shuah@kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 06 Nov 2026 19:14:41 +0200, Florin Badita-Nistor wrote:
-> inet_csk_find_open_port() rounds the range length down to an even
-> number but keeps the original exclusive upper bound for wrapping.
-> For an odd-sized range, the two scans can therefore miss a valid port
-> and return EADDRINUSE while an eligible port remains free.
-> 
-> For example, restrict a TCP socket to IP_LOCAL_PORT_RANGE [40000, 40002]
-> and hold explicit binds on 40000 and 40001. bind(..., 0) always fails,
-> although an explicit bind to 40002 succeeds. Both IPv4 and IPv6 TCP and
+Le mar. 10 nov. 2026 =C3=A0 07:45, Kuniyuki Iwashima <kuniyu@google.com> a =
+=C3=A9crit :
+>
+> On Fri, 06 Nov 2026 19:14:41 +0200, Florin Badita-Nistor wrote:
+> > inet_csk_find_open_port() rounds the range length down to an even
+> > number but keeps the original exclusive upper bound for wrapping.
+> > For an odd-sized range, the two scans can therefore miss a valid port
+> > and return EADDRINUSE while an eligible port remains free.
+> >
+> > For example, restrict a TCP socket to IP_LOCAL_PORT_RANGE [40000, 40002=
+]
+> > and hold explicit binds on 40000 and 40001. bind(..., 0) always fails,
+> > although an explicit bind to 40002 succeeds. Both IPv4 and IPv6 TCP and
+>
+> This is the reason of warning in set_local_port_range(),
+> so kind of WAI to me.
+>
+> The change should be fine, but we should remove the warning.
 
-This is the reason of warning in set_local_port_range(),
-so kind of WAI to me.
+I would keep the warning.
 
-The change should be fine, but we should remove the warning.
+It was added in commit ed2dfd900992 ("tcp/dccp: warn user for preferred
+ip_local_port_range") because connect() wants an even number of ports.
+This is still the case: __inet_hash_connect() rounds an odd-sized netns
+range down to an even size, so connect() can still miss one port there.
 
+The per-socket IP_LOCAL_PORT_RANGE case has no warning at all, and
+bind() can miss a free port there without any hint to the user.
+This patch fixes that.
 
-> MPTCP are affected. A namespace-wide odd-sized ip_local_port_range can
-> also trigger the failure without a per-socket range setting.
-> 
-> Keep the full length for the scan bound and wrapping. The two scans
-> then cover every candidate in an odd-sized range, with at most one
-> repeated candidate when exhausted. Even-sized candidate sequences
-> remain unchanged.
-> 
-> For odd-sized ranges, subtracting an odd remaining value when wrapping
-> flips parity. The first scan can therefore also select offsets of the
-> parity preferred by __inet_hash_connect(). Namespace-wide ranges with
-> same-parity endpoints already trigger a sysctl warning, while connect()
-> uses step 1 for a per-socket IP_LOCAL_PORT_RANGE.
-> 
-> This only fixes bind() allocation. The rounding in __inet_hash_connect()
-> for namespace-wide ranges is unchanged, so connect() can still miss a
-> port in an odd-sized namespace range.
-> 
-> The issue was triggered while developing port-range selftests with
-> Codex assistance, then confirmed using userspace reproducers on
-> unmodified kernels. No kernel instrumentation or fault injection was
-> needed. Booted x86-64 KVM kernels were tested against the regression
-> selftest, the full ip_local_port_range suite, and a Go net.Listen
-> reproducer. The Go reproducer fails 100/100 times per IP version before
-> the fix and 0/100 afterwards with a three-port namespace range and two
-> listeners occupying its first two ports.
-> 
-> Fixes: ea8add2b1903 ("tcp/dccp: better use of ephemeral ports in bind()")
-> Signed-off-by: Florin Badita-Nistor <baditaflorin@gmail.com>
-> ---
->  net/ipv4/inet_connection_sock.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-> index e56beec43..755fcea35 100644
-> --- a/net/ipv4/inet_connection_sock.c
-> +++ b/net/ipv4/inet_connection_sock.c
-> @@ -343,8 +343,6 @@ inet_csk_find_open_port(const struct sock *sk, struct inet_bind_bucket **tb_ret,
->  			low = half;
->  	}
->  	remaining = high - low;
-> -	if (likely(remaining > 1))
-> -		remaining &= ~1U;
->  
->  	offset = get_random_u32_below(remaining);
->  	/* __inet_hash_connect() favors ports having @low parity
-> -- 
-> 2.51.0
-> 
+Reviewed-by: Eric Dumazet <edumazet@kernel.org>
