@@ -1,49 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.136
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794310220;
-	b=EzSUCajpf4fyFE/4sRGC4ASthMnekg/nDT6NdKmKyHlZU6oTFisRqJur/TMXQOslmlop
-	 0TxAux/SzZKUCJ1V5Xi3yVqlVwtSbNHjCtxwcg9kuSz7AK4P5KCiOEu43LFxUcGHnJRgY
-	 +nF4srd+xjqSZgtUIEpzAp/50dD+ceM9Y/nUQGe3/G0Mn9ypUJu2lOScjKqdd0DawPZIi
-	 eyPxhFvaxX7eCf9RbC37maLBPwjfQm+1BBHvHqYJ4ybLgBRJjG1rvcUCYxjDqXjvGLm5b
-	 sdhwFwlGqUI0kfsX+ErKptVpoAKxzG3XY/hWexO9LSU7+J71BsJSgvItD3+FcbXY1AA==
+	t=1794310477;
+	b=2BZZFOG3LGlPTUO/ilAK4IwByEnWKWZ5EA7lx3FM0eeNAgLKr2OsqeujVxloVWLjaaCw
+	 sottyHDzAPcfYzsYxIa7p9GrLKUNvMZkQj7W6imOXq2S1f/Q5vZqzn5EZi9E4k0penSES
+	 tE/rDB0pohujk65/h5L8r/Yr6bLlTpVynQFhYH9pDIKpkyJImwJkka8VY0wbJ5/XyCfJb
+	 BYibKc7rPq4HsBPkPvcxFl7iWrBbiOH//B+SjWDBpN/Z26CY5d7eMtI03ec7ejIEV+Tbs
+	 0Fyb5wQ0R84FB39RoQmi7syUOMGC0rACtiSuCTHMP7GfunW019blLrxqADABF57e3iw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794310220;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=aUVMLnilPF/4lZLpMPs+hVsh/c7eJoai23cicRWqG5k=;
-	b=a5bRACZXnIQKhya+jFlRoUTfOaA3MJSmuFB+lLQWvanzeLYGhGj1konjKr82zNA0v2Jt
-	 ZhcBJSwk8H9re5zbGbw77Lzm1h7TtJd5UFRsBWX+03Ku6cq28kCyVlzBU7so6lX/+QWkR
-	 jluOvpSpc4Qps8S7j/ScGTLEoUrSst7zHo1Low4nNyyHebqsUX6nzX0u5/tAwBeM1Li3W
-	 W6kTKdyxSeVNEFBsPNvrj6x18gPuAVXWQLoqHgoAESpVdOfT4M87fFTWdhbwdZpR+r/M+
-	 RXGXyOW/LvOzQ+j305ilBEbPcr07LTRWALLdEQH7SdalM2p8FR+q9PPpaY0e0/p/39g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794310477;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=O2a1TDsS3iUxIM92pLHqfLDtktPZ6Hk3khSHvckjZDU=;
+	b=XIHq3YHTz/Xr6hPKCadCAagRzA02NHEC+2sio9QwiCcgiJm8ygdeeA5lM/2kWIGo++9R
+	 CHWOIkYV2fD7a0IJEEK7BxnZ3u29kmEFmivY2LpQs4UGBaSCRK41Cnxk5i/s0mjgGbV3H
+	 Y0UXj2VGB9E7exlqMCwZLd3ROXK8fBRy+Fk++T8M92WRMUJ2yOZDT2U8MFK5nodVdkBpd
+	 E7WfAkx8X4AzP/xjTGzFdx8wTJJA1eFOY4qtTiaT4vu4xjuj0RHm6XerJdOYGDOErYKX+
+	 WMyLFwxn0KXIXBmBjac3OGXO7bwpH23LIih7Nec0DSYsSbd3tzco/q94vIDYUaaIbjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BhQRC33a;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qZPqylz3;
+	arc=none smtp.remote-ip=91.218.175.136
+Received: from mta0.migadu.com (out-136.mta0.migadu.com [91.218.175.136])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AEC606A321;
-	Tue, 10 Nov 2026 11:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2794B606A32A
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 11:34:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2794B606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BhQRC33a
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2F21F008A6;
-	Tue, 10 Nov 2026 11:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794310219;
-	bh=aUVMLnilPF/4lZLpMPs+hVsh/c7eJoai23cicRWqG5k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=BhQRC33a5DLJFYXantknxoLz+4E8Y91YUxhJExBtYeHCnnzTft9NCC68+6j0cJlFX
-	 I+Or3X0S0wtqIGM7jPiyZ2JIJCSH03APr9VFuu7T0riRBO9w9HJGeJAV50fIGiQOTW
-	 xwKie1C93ccyuCWLZfI/Oir3am1i5zVW5aYrTQU9UHv89K9WRHd6o+TrwwZYpV8Ger
-	 0bWEVC4qGNrmF/hxqKZVvyJczkrdNfV0n1ml6zu0gA9MdoxNFzvBGVYBjaiSU35/cz
-	 o3HDA6YDqe/jj8adGHgHUdjpaaAAFDq/NmgaZEJq+ltwzutEsY2Ic7zmmvmwbxH+iG
-	 4QTwGjBjumTKg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5E12D391B17B;
-	Tue, 10 Nov 2026 11:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qZPqylz3
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=sx7YNgEU9+H0zh4XLdzTGH7bAYCesjUaRhN37pRVeCo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794310474; v=1; x=1794915274;
+ b=qZPqylz30aZ3e2BfZqsTlDRz+1A5BGW9qBCxc3KAgoelfm0jerbLRA5Mf59vl44Y4zV6fsTz
+ I3Grq8ySLHtOt8IhhKwwnmYkw0eLgOyUZSDb/nVE9HYSLcWzf1/h9RUK0RhrHwMkYAjeU8wm6zz
+ lU+CKzCBZOJ7GsPG8EUt6gB0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 8d782ae6a49889d8;
+	Tue, 10 Nov 2026 11:34:34 +0000
+X-Mizu-Trace-ID: 8d782ae6a49889d8
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 10 Nov 2026 19:34:21 +0800
+From: "Xu Xin (vivo)" <xu.xin@linux.dev>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jinjiang Tu <tujinjiang@huawei.com>,
+	Qiliang Yuan <odys.yuan@gmail.com>, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Huan Yang <link@vivo.com>,
+	Wang Xiao <xiao.wang@vivo.com>
+Subject: Re: [PATCH v2 0/4] KSM: introduce only_merge_zero_pages
+Message-ID: <avMBPaBPMpQ75odi@dgvxl46587.localhost.localdomain>
+References: <20261110074312.219847-1-xu.xin@linux.dev>
+ <avLsbZz0S7sRYIL9@gremlin>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,58 +74,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/5] seg6: fixes for the PSP flavor of SRv6
- End
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179431021818.3887755.4781870656519300838.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Nov 2026 11:30:18 +0000
-References: <20261105015715.57-1-andrea.mayer@uniroma2.it>
-In-Reply-To: <20261105015715.57-1-andrea.mayer@uniroma2.it>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, dsahern@kernel.org, horms@kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, hangbin.liu@linux.dev,
- justin.iurman@gmail.com, nicolas.dichtel@6wind.com, ahabdels@cisco.com,
- stefano.salsano@uniroma2.it, andrea@common-net.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avLsbZz0S7sRYIL9@gremlin>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Thu,  5 Nov 2026 02:57:10 +0100 you wrote:
-> This series addresses three related issues of the PSP flavor in the
-> SRv6 End behavior, all present since commit bdf3c0b9c10b ("seg6: add PSP
-> flavor support for SRv6 End behavior"). The three fixes build on each
-> other.
+On Tue, Nov 10, 2026 at 10:08:00AM +0000, Lorenzo Stoakes (ARM) wrote:
+> All-in-all this seems to be adding more complexity to a current major AI bugfix
+> target, in a cycle where we're not really looking for significant new
+> functionality.
 > 
-> The main one is a route with both the NEXT-C-SID and PSP flavors.
-> RFC 9800 says that the PSP flavor is unchanged when combined with
-> NEXT-C-SID (NEXT-CSID in the RFC) [1]. Currently, a packet with a zero
-> Argument (i.e. when the IPv6 DA carries no further C-SID) is processed
-> as End without flavors, and PSP is not applied. With this series, such
-> a packet is processed as End with PSP.
+> So given [0] I wonder if this could be deferred to the next cycle? David, what
+> do you think?
 > 
-> [...]
+> In any case the code is pretty rough from a scan (I reviewed one of the commits
+> to have a mini-dig) and looks very LLM-generated.
+> 
+> It needs _human_ polishing before we could take it regardless.
 
-Here is the summary with links:
-  - [net-next,v2,1/5] seg6: handle a Fragment or AH header before the SRH consistently in PSP
-    https://git.kernel.org/netdev/net-next/c/30ea41774b31
-  - [net-next,v2,2/5] seg6: handle a consumed SRH in SRv6 End with the PSP flavor
-    https://git.kernel.org/netdev/net-next/c/2316dd2c74c5
-  - [net-next,v2,3/5] seg6: apply the PSP flavor together with NEXT-C-SID in SRv6 End
-    https://git.kernel.org/netdev/net-next/c/8dd88d5e71ff
-  - [net-next,v2,4/5] selftests: seg6: add tests for PSP together with NEXT-C-SID
-    https://git.kernel.org/netdev/net-next/c/8eb0267c4802
-  - [net-next,v2,5/5] selftests: seg6: add tests for PSP with a consumed SRH
-    https://git.kernel.org/netdev/net-next/c/2e9d4b794675
+I don't mind deferring this to the next cycle.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Also, the patches themselves are all written by Jinjiang and me; some of the
+descriptions may have been translated or generated with LLM, which helps improve
+efficiency for non-native English speakers like me. If you don't like that style,
+I'll try to avoid it and write the commit messages manually.
 
+Thanks.
+> 
+> And additionally, you are shoving yet more logic into already horribly massive
+> functions in dire need of rework.
+> 
+> Sorry but the technical debt does have to be paid at some point, so I think this
+> would need some initial patches doing something about that before the rest of it
+> anyway.
 
+Fine, I'll try but it's not that easy to refactor scan_get_next_rmap_item().
+
+> 
+> [0]:https://lore.kernel.org/linux-mm/a2f584f6-e382-4876-aa6d-d5a34de6ee59@kernel.org/
+> 
+> --
+> Cheers, Lorenzo
