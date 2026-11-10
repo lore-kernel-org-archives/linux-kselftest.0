@@ -1,54 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.235
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315765;
-	b=LPdufi+0RzRz028YIxIBptu8OMdT4keDQjYm5GPNm0R7ACOw1nI9yD5LrW8cxO5FitD0
-	 HtbpqTHmJ6Q/9aRhODZxI7bexEQzI7oiuoDT45VMZDd28mVIfuB20/ZbRP9/EaUynB656
-	 36OgflrHr0F0Wnl0e3I5ML+AgC00TgYePfrLS8bYKwZB88kGk5Uu/ABrs1zccNRX/W3hY
-	 E5Da6zRScD9Zw/Hbis776GsZlw++Kn+DyqCmlzzms+0sitCp+RloWhksqybVAyN2mXMCq
-	 71rhQp5ymaf5Moyz1/mJNQLUxVP3ar99MjF6TT0HvVwZPoF+9FK8Ub5aJVhh13KYkzA==
+	t=1794315776;
+	b=bFyDcZwWiGl24ReJgOp9De4Lv0fvtFWoX+pvPKzsBAy3qlVSJw1a6K3+hXAUNzm7kprX
+	 +dO1MDwqf1Sctg1q501vT5ugPJzjEJaCqYaxCtktDwwte2GmthLLAlhg9qDfqXlnbjuzm
+	 9dxiINvYd0oq40OpEunpCJYhVFgqvHa59yPcRKE2ZrqwJJedaNG++1EhebLVGTDicNfNy
+	 aiVcmYDs6pO+a2dQDVj6K/mHBGf16xaFbPTJOavGicJm+ys4HfDdZmMJW5OyXPfFWV9S4
+	 K/6/nDPFR1TliuQ8L8dledHsxeQQLnsTPCht2tcxIkUlviPVrHlL0zZeZJrFjK/5AEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315765;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:From:To:Cc:References:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=fKChlBEsU0BxCgu+4U4m0i58+OuS3b4o6yf14XxYTIE=;
-	b=LVGD9jLbD1TZhC3OlXf+oTgk5cRjUHn+jY8VKOwE6FKcqNXx3II91xAEio9DUrDXiLjT
-	 eGRlehlK1IeKBDJjAVi95GriW64QMkhGIt8plpvhb1JZV7TqBKj07GwL95fVWilbtgCwM
-	 0mu8+nElwq5LyJHQvJWhVhKz7eQcAw93WCfHRQFJss2AaxUD9OXOinf54N0z7Aw2xM4t4
-	 UT1T5mdCLII2+t9+NneKkhsOf/cGkfV4jnFAitXejgWHiCQpSGNqNuF6Vy67cN2jVn8tx
-	 vRDSwIhQeFlVSqn0s+y2UIjpmzD7oogMYXYuMUeePA+kDqg6T5DBN8sXgsTPCuaH6MA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315776;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Spam-Score:X-Spam-Level:X-Spam-Flag;
+	bh=USDR2iE5M2UEpaP+1GfJYI3TDuWZn3GdzCTDZovKwBI=;
+	b=3sa8A+HEosPJBhzcx76XgGWELLYAnxhdfYzfjeLwf1ry3vJF4rNuAnT/MsbgmJhNjkfH
+	 Q1dmPaCz8DXWq240QbqzXHm2wRmEJRjb6NjVXCpGlRlnQuYOMxH2C2IYGz/JnBwxmiINy
+	 U5/7bxgv7SA5a4xhqrJm4plIDKafB5GoUfQn9HjAOH/BTJ4yi2qUGczIcXHaWa8SfGKoG
+	 EpjAiFzWgWiLXz5QkhZlHQzO1DxFQCM9bxs2hB8yuVTluux9GyU1ie0bX3Bgofpd7zAP/
+	 R78VVTT5bzvcWKenN4gqreUQPPbMAI/SiKUku9I2G6PON8KLIkjCGm3vVXfXE7yqyZw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JEEUT+2q;
-	arc=none smtp.remote-ip=95.215.58.235
-Received: from mta1.migadu.com (out-235.mta1.migadu.com [95.215.58.235])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=WWtetnZD;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=yu1DhDEP;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=WWtetnZD;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=yu1DhDEP;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C279606BFE5
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:02:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C279606BFE5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8745606A334;
+	Tue, 10 Nov 2026 13:02:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8745606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JEEUT+2q
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=h3CnaYUIR0Ew3TSmYVNV9po6Qt82ur42Pr7VtBnbcdc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794315762; v=1; x=1794920562;
- b=JEEUT+2qKaNDcbfg+z+dVDwiDTip56+0MmXLPW4RbGOnIzTE8nxAO7iTwP0SyW833T6JOBpR
- teFtNLGkhYrHInar9FMCIM1QJ7BgFg4Qlv9uTHqrxb3oBUmIPsn4o0b1riagC7w+oSDNpLsVLHC
- 15nKPExQBrowE5MB+JKamNNc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a32e94bda5463846;
-	Tue, 10 Nov 2026 13:02:42 +0000
-X-Mizu-Trace-ID: a32e94bda5463846
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2e28d0a0-e0bc-422b-857c-226bcea62ffe@linux.dev>
-Date: Tue, 10 Nov 2026 21:02:34 +0800
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=WWtetnZD;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=yu1DhDEP;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=WWtetnZD;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=yu1DhDEP
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 4CBE01F461;
+	Tue, 10 Nov 2026 13:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315773; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=USDR2iE5M2UEpaP+1GfJYI3TDuWZn3GdzCTDZovKwBI=;
+	b=WWtetnZDdpY3CtAQ5P1ACc9FV+Q/S+5upWrfSvOHBVg/CDxzET4BPczhpbK/0nKTIvhIK1
+	bJoSZBBd6xKzhenae5FUv3Cjcv6lVOt9c7qqlxsD1mkbGXiYDtk869K+0cd3OPJSH5NxR+
+	UXFonm344KX222leLjP7xQc612byqXU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315773;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=USDR2iE5M2UEpaP+1GfJYI3TDuWZn3GdzCTDZovKwBI=;
+	b=yu1DhDEPEx3W2fYEUxbPsnXt4QMtwAIEJLkOMN58QZdMiOL9l/WrEOFLFJ9XB9CeUk/K09
+	vhBCY/lPsE57BEAg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315773; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=USDR2iE5M2UEpaP+1GfJYI3TDuWZn3GdzCTDZovKwBI=;
+	b=WWtetnZDdpY3CtAQ5P1ACc9FV+Q/S+5upWrfSvOHBVg/CDxzET4BPczhpbK/0nKTIvhIK1
+	bJoSZBBd6xKzhenae5FUv3Cjcv6lVOt9c7qqlxsD1mkbGXiYDtk869K+0cd3OPJSH5NxR+
+	UXFonm344KX222leLjP7xQc612byqXU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315773;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=USDR2iE5M2UEpaP+1GfJYI3TDuWZn3GdzCTDZovKwBI=;
+	b=yu1DhDEPEx3W2fYEUxbPsnXt4QMtwAIEJLkOMN58QZdMiOL9l/WrEOFLFJ9XB9CeUk/K09
+	vhBCY/lPsE57BEAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1C287134F4;
+	Tue, 10 Nov 2026 13:02:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Nyb9LPwV82qMSgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 10 Nov 2026 13:02:53 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 7F6C6224F5; Tue, 10 Nov 2026 14:02:48 +0100 (CET)
+Date: Tue, 10 Nov 2026 14:02:48 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org, fuse-devel@lists.linux.dev, 
+	linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+	Amir Goldstein <amir73il@gmail.com>, linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 33/41] fs: add file_is_pseudo()
+Message-ID: <xy7rgmmpufyq4ls4obs5te3y4mrzblqst7heachjo7rrkmvhot@x5kxqkbsw247>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-33-4c998976c6c7@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,145 +119,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2 5/5] cgroup/cpuset: Correctly set isolated_cpus
- when switching partition state
-From: Ridong Chen <ridong.chen@linux.dev>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20261109190955.1398611-1-longman@redhat.com>
- <20261109190955.1398611-6-longman@redhat.com>
- <aedd01b8-3f49-4916-b891-38e9c4ff3b06@linux.dev>
-In-Reply-To: <aedd01b8-3f49-4916-b891-38e9c4ff3b06@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110-work-loop-pseudo-v1-33-4c998976c6c7@kernel.org>
+X-Spamd-Result: default: False [-16.80 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	REPLY(-4.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,kernel.org,toxicpanda.com,lst.de,lists.infradead.org,zeniv.linux.org.uk,suse.cz,lists.linux.dev,kvack.org,lists.ubuntu.com,lists.xenproject.org,lists.ozlabs.org,gmail.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -16.80
+X-Spam-Level: 
+X-Spam-Flag: NO
 
+On Tue 10-11-26 10:14:49, Christian Brauner wrote:
+> Add a helper to check whether a file is a regular file on a pseudo
+> filesystem. Only regular files count. Device nodes on pseudo filesystems
+> such as devpts, binderfs or the block devices on bdevfs are what they
+> are.
+> 
+> Look at the inode that actually provides the data via d_real_inode().
+> overlayfs accepts sysfs, cgroup2, debugfs, tracefs, configfs and
+> securityfs as lower layers and reads of such an overlayfs file are
+> served by the file on the pseudo filesystem. Checking the overlayfs
+> inode would miss that.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
+Looks good. Feel free to add:
 
-On 11/10/2026 7:40 PM, Ridong Chen wrote:
-> 
-> 
-> On 11/10/2026 3:09 AM, Waiman Long wrote:
->> When update_prstate() is called to switch the partition state from
->> root to isolated or vice versa, the whole effective_xcpus is passed to
->> isolated_cpus_update(). However, if there are child partitions present,
->> some of the effective_xcpus are dedicated to those child partitions
->> and their partition states will remain the same or get invalidated in
->> the case of child root partition with isolated parent in the latter
->> update_cpumasks_heir() call. In the latter case, their exclusive CPUs
-> 
-> update_cpumasks_heir
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Sorry, it should be update_cpumasks_hier.
+								Honza
 
+> ---
+>  include/linux/fs.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
->> will be returned to their parent.
->>
->> Therefore isolated_cpus may be set incorrectly with child partitions
->> underneath. Fix that by excluding their exclusive CPUs in computing
->> the correct cpumask of exclusive CPUs used by that partition alone.
->>
->> Add new test cases into test_cpuset_prs.sh to test for such cases.
->>
->> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset.c                        | 30 +++++++++++++++----
->>   .../selftests/cgroup/test_cpuset_prs.sh       |  7 +++++
->>   2 files changed, 32 insertions(+), 5 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 7aa614c6ac4d..41048997a955 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -3054,12 +3054,32 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>                             cs->effective_xcpus, NULL))
->>               err = PERR_HKEEPING;
->>           else if (parent_prs == PRS_ISOLATED)
->> -            err = PERR_ISOPARENT;
->> +            err = PERR_ISOPARENT;    /* old_prs should be isolated */
->> -        if (!err)
->> -            isolcpus_updated = true;
->> -        else
->> +        if (err) {
->>               disable_partition = true;
->> +        } else {
->> +            struct cgroup_subsys_state *css;
->> +            struct cpuset *child;
->> +
->> +            /*
->> +             * Need to scan child partitions, if present, and
->> +             * exclude their effective_xcpus from cs. In the case
->> +             * of switching to isolated partition with child root
->> +             * partitions, those child partitions will be
->> +             * invalidated in update_cpumasks_hier().
->> +             */
->> +            isolcpus_updated = true;
->> +            cpumask_copy(tmpmask.new_cpus, cs->effective_xcpus);
->> +            rcu_read_lock();
->> +            cpuset_for_each_child(child, css, cs) {
->> +                if (!is_partition_valid(child))
->> +                    continue;
->> +                cpumask_andnot(tmpmask.new_cpus, tmpmask.new_cpus,
->> +                           child->effective_xcpus);
->> +            }
->> +            rcu_read_unlock();
->> +        }
->>       } else {
->>           /*
->>            * Switching back to member is always allowed even if it
->> @@ -3093,7 +3113,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>       if (!is_partition_valid(cs))
->>           reset_partition_data(cs);
->>       else if (isolcpus_updated)
->> -        isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
->> +        isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
->>       spin_unlock_irq(&callback_lock);
->>       /* Force update if partition is disabled & update effective_xcpus */
->> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/ 
->> testing/selftests/cgroup/test_cpuset_prs.sh
->> index 2d4744f2d6ac..741a13bbeda7 100755
->> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> @@ -556,6 +556,13 @@ TEST_MATRIX=(
->>       " C2-6:X2-5:P1 CX3-6:P2 \
->>                           .      .   T:X4-6    .      .      .     0 A1:4-6| 
->> A2:4-6 A1:P1|A2:P-2 ."
->> +    # Switch PRS state (root <=> isolated) will properly update 
->> cpuset.cpus.isolated
->> +    # even if child partitions are present.
->> +    " C1-6:P1 C3-6:P1 C5-6:P2  .       .    P2      .      .     0 
->> A1:1-2:A2:3-4:A3:5-6
->> +                                       A1:P1|A2:P2:A3:P2 3-6"
->> +    " C1-6:P1 C3-6:P2 C5-6:P2  .       .    P1      .      .     0 
->> A1:1-2:A2:3-4:A3:5-6
->> +                                       A1:P1|A2:P1:A3:P2 5-6"
->> +
->>       #
->>       #  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs 
->> Pstate ISOLCPUS
->>       #  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- 
->> ------ --------
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 99caef43ff3c..407ffb6342ec 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2553,6 +2553,18 @@ static inline const struct inode *file_user_inode(const struct file *f)
+>  	return file_inode(f);
+>  }
+>  
+> +/*
+> + * Regular files on pseudo filesystems are kernel interfaces and must not be
+> + * used as storage. Look through stacking filesystems at the inode that
+> + * provides the data.
+> + */
+> +static inline bool file_is_pseudo(const struct file *file)
+> +{
+> +	const struct inode *inode = d_real_inode(file->f_path.dentry);
+> +
+> +	return S_ISREG(inode->i_mode) && (inode->i_sb->s_iflags & SB_I_PSEUDO);
+> +}
+> +
+>  static inline struct file *file_clone_open(struct file *file)
+>  {
+>  	return dentry_open(&file->f_path, file->f_flags, file->f_cred);
 > 
-> We hit the same issue in our testing earlier (an isolated child partition
-> loses its isolation when the parent is switched from isolated to root),
-> and this is the same fix I had in mind. I also ran a few 3-level nested
-> cases (root/isolated combinations, switching the parent and the middle
-> level) on top of this series and cpuset.cpus.isolated is correct in all
-> of them.
+> -- 
+> 2.53.0
 > 
-> Nits: The first line of the two new test cases lacks
-> the trailing "\" used by the other multi-line entries. It still works
-> as the newline is just treated as a field separator, though.
-> 
-> Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
-> Tested-by: Ridong Chen <ridong.chen@linux.dev>
-> 
-
 -- 
-Best regards
-Ridong
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
