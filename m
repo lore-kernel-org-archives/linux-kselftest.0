@@ -1,49 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794321008;
-	b=q9e2LlGK4Y60/KmEMDuw/BPxRkdawQTeJBb9HLl+4hz9rDz5fH6Onz/gojaHeNx2TksK
-	 XXR4Z0KkrXCs0rJUeSVriJig2710B3gcqYNJ8ce4pfs6nX954snbwojioQF2RCs1h1SiW
-	 Xhnm4fVgmWdnUMC/WU/Z18tzOi4xE9uTWfF3J/Q7ia7T/NYdh9emxbCBryJ5llbw0d7QZ
-	 JaXMfwYz9hlHZS5ersCnWjtKa8j2adNAsy0r/IW8cFwUu9hn1i9VI7coxhvFwn6dRdOcg
-	 f8vcGkXpjRuKiHzjgK3ghE2OoK06deo3/wfncZGaoGE6xkPEFoIB6yxsuYslmXjjAeA==
+	t=1794321035;
+	b=JsHKg/qjSygovnMNtSHM5UDLvhM1bbqy/o1Jz0j5xCMrKykZktqsQaPsgkQ+p+D5vymH
+	 0NF9c45rxHoBExC55/OOUNdn7YqT20HH0xd1etfIVRWDb0lcONreMrVUkyQRotszmb1Ka
+	 ZkBRj2bX0I1f2ZWq+soV8JdYayNH+NR9MbLeGeQxtGbowxabHzRCMO1z1JfuUq6R24qmJ
+	 y+5JuqEEjvmhgWoieYtxHWWCoMcWdmlR6QSluLguf1axck14PLx2jTcg0LXDVS2B43jPl
+	 XoVws2J0iiqBHx3+jjYvXh5pV6ldjqZkDKRwKS/M5Am8XdH5N65k1xwkr3DTIweZI0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794321008;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=6re/8M7BAKbsJAaby7V03QwRwM9/MqNLLzk54nsXA00=;
-	b=A8X7K2S7c88Mp95r51kLcO0sf/ypWipKLTHzo6xkatL1FCUj5UVK5uqqVde0LBlc9Vyr
-	 u9rrVFJ6qBv3zhJHpKVxTFfOvyEPK9MCNmaQxw6/qi+ywJIqsQ7DLj76SWnvUxkwUvLkc
-	 /kmQ0lU4RqlG2YTcOTyQlkjUuKYfvVWFb/Cyse2hl+c8XW1MxWdPPOIZHwQYowlKUVCh7
-	 lwhPIngTNgaJpaPP8qAZsiRKRIccwiRbHbumTyW79AcJltGHp07GYTN4PSixQmpuMadi/
-	 d25OQdiC2m2MDXwhqWWDCuWQXlGKUNJWV3IQw7hR4sXrGcqrFOIsTf7JaqbZCIdGasw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794321035;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=6/CXb4XAs6m7Y388P2LyinUrq14d6Ww5jL1xjGTpGAA=;
+	b=ZyNGiv913iXXKuTCcf2TfTyQxYWpA4KoYbk9UyxIPSgjguDScusXMQtV1mlybPcLsDMO
+	 VeEAyrF3toJwjAoY05f2ehD2l0tMGKKaaap+ozTPFhKS9ladOcBZwY+buRBm3NSjzXOU/
+	 /h4Poh5qGVRbKxYE9++kdF1oSz4pi1x310YhWOFFc1/qyRknqqvVPz3IFGU0Sj8Lh8pR0
+	 uY0vj7N/sYRKgWQpkaYbugPIahEksxY4laKMzKxGK0bwSHxEmr4da3C9MDJ6frO/XuCum
+	 FSnowaANZcq+2EvXpnT4T/Z5JmyTfzSjGwK6DrtmUanBU7tSpxKu9/AreJDWKVxH+0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JlqNEHB0;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=mojatatu.com;
+	spf=none smtp.mailfrom=mojatatu.com;
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=JhzTb3yk;
+	arc=none smtp.remote-ip=209.85.128.179
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B07D606A321;
-	Tue, 10 Nov 2026 14:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642B4606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 14:30:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 642B4606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JlqNEHB0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A819E1F0089F;
-	Tue, 10 Nov 2026 14:30:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794321007;
-	bh=6re/8M7BAKbsJAaby7V03QwRwM9/MqNLLzk54nsXA00=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=JlqNEHB0x83jrWOU+aXt+t6KdxBWq2a0su5gwKhZDBDzwdt1vIQ+NwqadIVD620Jl
-	 ZMlJKnzaNQn8mqKyJ431cKwCEnd14z50i39yzmzWsET+nkfQI0rpvua3TRIDtlNlIs
-	 7KNJgu85+cPAH0ouhch2WhSEoivO1FCxEzftHMCnDRMIwOywBFSqKLXWsH/34mPlV9
-	 6Z/vZWe/lIqMC5Cnyp86SOtVRvWI/qdbB0K6nMI9TKgEONPlilb/c8gOfxOH8CpsqH
-	 giLI4Stt/6YsFC+0yROroPr0/dQcoL6af4eM2KZEYtFU7qm6auzjkc3xxDdGbx1W7+
-	 N39ZX/MLnwP6Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9B09D39D0CA0;
-	Tue, 10 Nov 2026 14:30:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=JhzTb3yk
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-8b10d24345dso20802867b3.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 06:30:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1794321033; x=1794925833; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6/CXb4XAs6m7Y388P2LyinUrq14d6Ww5jL1xjGTpGAA=;
+        b=JhzTb3ykbX11lJSAIZbVscW5EaGa/+mr7Y7zxwC7ObWFtP/W1xxUi7zSpH9YZtyJiE
+         LrhPv1r4xwBer2rGx5z0wRcVQBw1mk3HJdUMN0eJOleaj/lU2qM+dhBnOekKKZuPudx7
+         0w72nEnKT3jf84Z0LtzKPC0VcjLzjEiNrN9JM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794321033; x=1794925833;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6/CXb4XAs6m7Y388P2LyinUrq14d6Ww5jL1xjGTpGAA=;
+        b=eQROCV461ciWARP6EiXLSKYF/L3saYQzfy29bAjy7ppeQnKu31sVDpleGqeDgn89Db
+         m3f3Kk11lS49bWcF2k/1oe42KPhaiiZ5ry/juwKm2aD+Wnpq+SadU7glKH4DsZxPfaXP
+         /pnHhobHgUN6Zk2nSponQ5dj6Owbp066i/Gv9boyozIAcp9QV+x+9qop1YiHZ3rmNnFR
+         Fwsb2Uc6YCPZPDWNmfE1Vju5gr4Wv1NTLXMu46NS5vxYlJLcBTwoSQeOv1VFaxRnHmOo
+         7eoG3I4c5bksMfjtXLFMOCJllrPJM+x/WZusVtWB23HkI2zJkze90fkEEf7dqPI254e9
+         6d1Q==
+X-Forwarded-Encrypted: i=1; AL+hErHwUizVhNzToBclzPygnVPrTdTqqHDFhusIxe43335WiZS48V1NHzBWCpjW5TVtoxEyah2rd7xP1HVBJGUO5oI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9nNYJLbtPkEnAwvjzACe4DnOBJwR456aphBsLe/YR9ickHIEEd
+	FZNWMEznoeGKWUpN4S/YlP9/Prb6mzFaelI4IvOrYggdR9txUBMdCskwpdYXFBNi1Q==
+X-Gm-Gg: AYBFou2yQuLd1vkcE0hDgjBcarSYT48/mcm7VHhWiuSCpKeWsmF0HzFZRbHr1OAhKot
+	r/D90iNH4NtBJU8Rhs0K7+oAvjoiDPY9T75uP0BMA+zWkSalzuKOzc9XjUWpb+NPPtyUJmYZQ3b
+	CtTJtriwtDtLMehodes2Oj15ywncRcUhcrIuwqxNlR4zldXGJkIJGqxIuVMHVhD19rSCieIl8uW
+	mFwf2vOhFHowAD4X/OlSUx05MyyfmzwFwf5T8yrVA1X8ZfxGcNp7JY/qO49bWmzb9zKURj0Sfqa
+	FhpQr7EbsvtFr04dl6rW2qIDfeCr5bV80WteANH2QGSfPg1/QLCr/f8HiaN/3/g2UVVewOken7o
+	Ou3d1Ae69kV47j/D7InOaugJDg2dRsX1OXGy+NVMtd3WOoD/pVH6zz+aNwDgLkNuL4Wqm6Td+FK
+	sB7UYpQBA2rqMiVLJCYhy85u/WjIfr4hxCatPz28qZuHn7rJ0d33kLyCNqLKrFQDHMz8jfuuDdW
+	aT+thnop9gqglBlci+QGWe0bNLauL0g09pFIW3Qun0dmVrCqFjyvtwgkPEXz1FiZFmLh05rxIpQ
+	XUb9p21BZHUy
+X-Received: by 2002:a05:690c:113:b0:8b3:34b6:4bb6 with SMTP id 00721157ae682-8b39290d62amr19146297b3.5.1794321033236;
+        Tue, 10 Nov 2026 06:30:33 -0800 (PST)
+Received: from exu-caveira ([2804:14d:5c54:4d67::1c9d])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b393479120sm20091647b3.45.2026.11.10.06.30.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 06:30:32 -0800 (PST)
+From: Victor Nogueira <victor@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: Jiri Pirko <jiri@resnulli.us>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	sashiko-bot <sashiko-bot@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3 0/3] net/sched: bound the deficit-refill dequeue loops
+Date: Tue, 10 Nov 2026 11:30:22 -0300
+Message-ID: <QDISC-TIAE.v3.r0.20261109173518@mojatatu.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,54 +100,57 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] net: fix mac_len of skbs copied by generic XDP
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179432100643.3999302.15619209426166377365.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Nov 2026 14:30:06 +0000
-References: <20261103200036.65764-2-tianyi@cloudflare.com>
-In-Reply-To: <20261103200036.65764-2-tianyi@cloudflare.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
- shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, lorenzo@kernel.org,
- toke@redhat.com, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- kernel-team@cloudflare.com
 
-Hello:
+DRR, ETS, sfq, fq, fq_codel and fq_pie refill the head entity one
+quantum at a time until it can send. With a size table that inflates
+packets to 1 MiB and a quantum of 256, one dequeue can loop thousands of
+times under the qdisc lock. This series skips the rounds in which
+nothing can send, so a stalled round costs O(N).
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+1/3 fixes drr, ets and sfq.
+2/3 fixes fq, fq_codel and fq_pie. There a flow can still fail to send
+after the skip (throttled, or dropped by the AQM), so a setup built to
+change state on every refill is still slow.
+3/3 adds DRR and ETS tests for the refill result and service order.
 
-On Tue,  3 Nov 2026 20:00:35 +0000 you wrote:
-> Generic XDP copies the skb before it runs a program with frags support.
-> The copy happens when the skb is cloned, nonlinear, or has less than 256
-> bytes of headroom. skb_pp_cow_data() makes the copy, but it does not
-> copy mac_len. After XDP, the skb has mac_len 0.
-> 
-> Two places after generic XDP move skb->data by mac_len:
-> - On XDP_REDIRECT to a cpumap, cpu_map_generic_redirect() pulls mac_len
->   bytes, the length of the Ethernet header. Then it queues the skb to
->   the target CPU. With mac_len 0, the IP layer on that CPU sees the
->   Ethernet header and drops the packet.
-> - On XDP_PASS, the skb can go on to tc ingress with a BPF program
->   attached (tcx, cls_bpf or act_bpf). Before it runs the program, tc
->   pushes mac_len bytes, the length of the Ethernet header. With
->   mac_len 0, skb->data stays at the IP header. Therefore, the program
->   reads the IP header as the Ethernet header.
-> 
-> [...]
+v2 -> v3:
+- drr, ets: a class quantum change takes the tree lock, so the round
+  count and the refill use one snapshot.
+- drr, ets, fq, fq_codel, fq_pie: the skip is repeated after a bulk
+  refill, so a child that exposes a longer head or changes state leaves
+  the fast path after one more pass instead of falling back to the
+  one-quantum loop for the rest of the dequeue.
+- 3/3 is unchanged.
 
-Here is the summary with links:
-  - [net,1/2] net: fix mac_len of skbs copied by generic XDP
-    https://git.kernel.org/netdev/net/c/71578e43b8a6
-  - [net,2/2] selftests: drv-net: ping: test generic XDP redirect to cpumap
-    https://git.kernel.org/netdev/net/c/71b116cf334b
+About the request to fold the loops together: the three dequeue loops
+read different data structures with different eligibility rules (DRR/ETS
+classes, fq bands and flows, fq_codel/fq_pie flow lists), so a shared
+helper would add an indirect call to the dequeue path without removing
+any of that logic. The common shape is described in the commit logs
+instead. cake_dequeue() has the same one-quantum refill, but its
+dithered quantum makes the right fix a different one; it is not part of
+this series.
 
-You are awesome, thank you!
+v2: https://lore.kernel.org/netdev/QDISC-TIAE.v2.r0.20261015163454@mojatatu.com/
+v1: https://lore.kernel.org/netdev/QDISC-TIAE.v1.20261008110502@mojatatu.com/
+
+Victor Nogueira (3):
+  net/sched: drr, ets, sfq: skip empty rounds in the deficit-refill
+    dequeue loop
+  net/sched: fq, fq_codel, fq_pie: skip empty rounds in the
+    deficit-refill dequeue loop
+  selftests: tc-testing: pin DRR and ETS deficit refill semantics
+
+ net/sched/sch_drr.c                           | 57 +++++++++++-
+ net/sched/sch_ets.c                           | 53 ++++++++++-
+ net/sched/sch_fq.c                            | 87 ++++++++++++++++++-
+ net/sched/sch_fq_codel.c                      | 80 ++++++++++++++++-
+ net/sched/sch_fq_pie.c                        | 74 +++++++++++++++-
+ net/sched/sch_sfq.c                           | 41 ++++++++-
+ .../tc-testing/tc-tests/qdiscs/drr.json       | 82 +++++++++++++++++
+ .../tc-testing/tc-tests/qdiscs/ets.json       | 54 ++++++++++++
+ 8 files changed, 519 insertions(+), 9 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
