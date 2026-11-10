@@ -1,47 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794324468;
-	b=3ThIg0p4xlXysARj40nMK/e33SD07DlScDTX87qy//JC1qkLWx6dz9mvrWR4DF+wgWdg
-	 NU/F8WFSQDeYXV213XrN1zHQDbE8uQpPTh/8DhvlM08hs7amMogdEmAwwiRtBOSjZWeTO
-	 T+o0DeArxULkpGL8j/MSJBPQLktcBgWgWj9pxwD64XfxYDFV8E4rGfuaGoXImUt3p9sl/
-	 h5OF96SBD+6hs6mcVS+5qfQDCe2yD2AG/baVzlbW4+EIRx8tdnhEcuxsfm9YLAjX6jBOs
-	 aVjfiF7dEmE7zHXAAS+6ejM4nRfVi+hpoYQgnv45Uwf+l4XOCXKJlAvDesDu2jsGafQ==
+	t=1794324696;
+	b=0OFB3FfLX9n2dD7o9JL20jmKIW928DADRLIN62OnoRvGfalKH8FTEVeANVNn/UVLAm36
+	 TtYeS5uk02/j3VleVLuFBCKcIlVNxokaSgqCsrYT6sl6rMb/+7iYCsJ9/H2T7iPYrw5Cy
+	 AO6tnp8VNWDQd9S9oByo/35VeGhdw+32e5coH1wjVNIthswWV4KUjz2Gk9Ha4jClvkcfu
+	 azFf2G2gHyj+7CBWCzznC+sXBZUBDthKAlL8FN2C8az1yxKksn1m+KT3+segp7r9p9n4r
+	 Ms3AlvxbzaHHa4iXQAmIvcxsjJz56FtRQQNmPFrkFC080Rvhv5ziWaQY1Z3VeLfz1+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794324468;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=hI6RrJGoR32nHOun34r6MzkSJfi8TLtc7U1OwfAK63U=;
-	b=3X78Q9NhWvKUqdiVAXy2s/ucjBPwN8kBLQ3vHt8aXuvOMK634Pz85eX/uwoR/zvqgd3V
-	 GE5Bg4UsUjAhTTQh29YPCOde0C9SzkJH1y1KNW/ZCgoJoWk5pmGMLr7I4BUfEJnLdBsTI
-	 UMwwoGDuuc1hNItKOk22CKQ/X36aoeolPMdCGgK2sRXFLrWYP71uNwXGqwadbywHOfPfV
-	 DlYqXSShlVrWOYoFVbFgWj9FDR2MBBw2m19Oy8ooHnra7XGR3S0IxVDKQqH6AGzRI2UT8
-	 5uHJmAQ+G9BRN6rHiQ6Or+xpiUDBUmbEJjKGJfOpx9csRTaWY3+7z9cPIUEJSdN49MQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794324696;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=SJjtzkP+sBHxUstFA6XSyOLuoy/E3cjaVl7XAdp7TZ4=;
+	b=j1y/+0LlrkRg3WeubWoocCPvK96ItlrBykhptkNeal7r6CZ2zohefKY/W7AboxjfyRuW
+	 LJRmf/3QJc5Beia1aAeOItM7kNxwqIlPoJCTPUofhkci8XjXC0NT3PoJwPUjL/GJXBgmu
+	 euNRmZgGENHEVopiFXqtkjpzEbnRbjHwddHRvnEAlaK4dXhoIb0foicSc0ubmE/qLH4kd
+	 kJcxanJgV6eJqoHCwHPm9RsoidDirUd5YwSwfOaVDfQyXWq0lm7JM1BNawvfGNjkviL5y
+	 K0+QR6WatZDyoOuR601a7kgoVjmV9DyDS1fapdkQwlAXQoQHX3bUjdoDmRXtv7BWqaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CN2EP6Il;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--halg.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EbaSWAnJ;
+	arc=none smtp.remote-ip=209.85.208.70
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41926606A31C;
-	Tue, 10 Nov 2026 15:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865DF606A325
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 15:31:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 865DF606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--halg.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CN2EP6Il
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF791F0089F;
-	Tue, 10 Nov 2026 15:27:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794324467;
-	bh=hI6RrJGoR32nHOun34r6MzkSJfi8TLtc7U1OwfAK63U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=CN2EP6Il+KD+On+yiFtvOfH0dAkLCu2EqAFqCDK7WLp/Av04Wrv5AsRcMYjuvXotV
-	 icurtL59ZKqwW8hXdJsmASUHo8jS+Y1oRds+Q0pTx8N8SVHK95574MoZA+gSq/oV1M
-	 PQ2dwA+5Uva0fJSWn2Nrl5D2t8fBqw33muc3WtSWrlNUryrUJMwTrSz3bG6fMrJBZT
-	 i/SfRNwjpXCgAvaKayWhO2BwmvVeXdpf7wv0lnAZYGWV25I5Ohc//BdUNSCEUeg67I
-	 s3aAq+xrjImJhh8vQ0PMqMjK1+E6rgG15wRB9tGCsY+3hwKMrheL5pMpNQ7ekwEuaF
-	 qnIUW991CzyDA==
-Message-ID: <4290bbfc-c72d-49d4-9d0c-66f316db9dd3@kernel.org>
-Date: Tue, 10 Nov 2026 15:27:44 +0000
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EbaSWAnJ
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-6b76329afcdso642165a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 07:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794324695; x=1794929495; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=SJjtzkP+sBHxUstFA6XSyOLuoy/E3cjaVl7XAdp7TZ4=;
+        b=EbaSWAnJ7A533qGpAvii2NS3I9zxkDKlvnsqDPtzIBKMTuzOPF5jRLHhwfsyK6diIL
+         2En3fr/6Wz2Zy14HVjG0BjTT6HzN+p6NPYlr8unPhlA6m2umktQnoqp2AYSjldSAJssk
+         xHzbOcqVaFfuuKFkgO7UgDfRrsaoBkRPDiUM6rHPYGDOR3M31dOOpz5vbhmi2t4d+DUT
+         jeFEACxiutXh0J7ifsM5tXZOXkDouo9+ARx8MVQmgZYMid1HxFVWY6jc0+kGfKGLmr9K
+         dwtVL5ln+2ptHee8NSHeS1SxVprCYBr2xvsLYm8F3UiIKYeFqvbgvqwm4UzA816ruQV6
+         HNoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794324695; x=1794929495;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SJjtzkP+sBHxUstFA6XSyOLuoy/E3cjaVl7XAdp7TZ4=;
+        b=FfmDSnX49HwUVfGkcDhYp+P7CmvbNkgG9kZo4KQ5u1820Qv++ePPiSsbZf8lgES+vJ
+         WMSZpjfmT/+NpebOGo2lIp3lB6S+DbrFJ163Vzaf8+BtYAcuf3ppjtim9ZtOOBiobUwC
+         qt0OO0oEFyYPJQHFEN3amZZ5Kk4wGqgXUaTSrc03p5R1VnLAyHhGqjO6Pqsxc2cougyP
+         mSxk0v5lMKth9LiJNNMJI1eckysSDU6M68FTv1hEQkM1CgdlxWxd4Lm2fSHlCk10mgl6
+         LictUnlwjV4gX5TsC5rWD2DONbC83W1/HxWqm94vddyGcevPNHqKIWYm6xOtLi6uWind
+         dJcA==
+X-Forwarded-Encrypted: i=1; AL+hErEqssD8s9MeHDcDhqVMsX4BLnw6d/Q7X0KomMn/dGfeAu0yiCUCG2n0O5GGhnYyWMt2hffyzPGeugpbIe6U9A4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z98VUzsvXGGHv+i+22Hd0SIXyFY08PjmIMvkZuQGZyp04lDtOYn
+	ds5VkHwnjG27KHdsdDmQc7VUhnjr1KTDdoZ/Jod7UbXPR+Kxh0dCjiH6s1DG5+biAxU0DOeKfA=
+	=
+X-Received: from edsw12.prod.google.com ([2002:aa7:da4c:0:b0:6b7:834:31d9])
+ (user=halg job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:68a:b0:6b7:675e:7a2f
+ with SMTP id 4fb4d7f45d1cf-6b7675e7a95mr879624a12.1.1794324694693; Tue, 10
+ Nov 2026 07:31:34 -0800 (PST)
+Date: Tue, 10 Nov 2026 15:31:33 +0000
+In-Reply-To: <CALCETrWa1SBLcb5oWjqjgzZvKvCoHjmYFk=Lf5ytEM9uqm5jYA@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -50,248 +79,152 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v11 2/3] bpftool: Add recursive map dumping
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, daniel@iogearbox.net,
- ast@kernel.org, alexei.starovoitov@gmail.com, skokovmaksimevg@gmail.com
-References: <cover.1793818386.git.hi@tychen.cc>
- <9d939026aea3c4a2d4d26702de1080c6733ad566.1793818386.git.hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <9d939026aea3c4a2d4d26702de1080c6733ad566.1793818386.git.hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20261028221705.3915340-1-halg@google.com> <CALCETrW9ygriu54gxiHFLEd5+hJminQo0r8Jwd63wR69Dj4W7w@mail.gmail.com>
+ <20261106-befreien-addieren-eislauf-e09212803534@brauner> <CALCETrWa1SBLcb5oWjqjgzZvKvCoHjmYFk=Lf5ytEM9uqm5jYA@mail.gmail.com>
+Message-ID: <avM41a80aig2de-R@google.com>
+Subject: Re: [PATCH 0/8] userns: per-namespace capability bounding set and
+ opt-in netns loopback
+From: "Hallgrimur H. Gunnarsson" <halg@google.com>
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jan Kara <jack@suse.cz>, 
+	James Morris <jmorris@namei.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Jann Horn <jannh@google.com>, "=?utf-8?Q?G=C3=BCnther?= Noack" <gnoack@google.com>, KP Singh <kpsingh@kernel.org>, 
+	Jonathan Calmels <jcalmels@3xx0.net>, Casey Schaufler <casey@schaufler-ca.com>, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-api@vger.kernel.org, containers@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 04/11/2026 18:54, Tianyi Chen wrote:
-> Dumping an array_of_maps or a hash_of_maps shows the IDs of the inner
-> maps but not their contents. Add a recursive keyword to map dump that
-> also dumps the inner map referenced by each entry, in that entry. JSON
-> entries gain an "inner_map" object next to "inner_map_id", and plain
-> output prints the inner map after the entry line. The output without
-> the keyword is unchanged.
-> 
-> The kernel supports a single level of map-in-map, so inner maps have
-> no inner maps of their own. Each inner map is opened by ID when its
-> entry is printed, dumped and closed, which needs one more map FD. An
-> inner map shared by several entries is dumped in each of them. If an
-> inner map cannot be opened, for example because it was replaced after
-> the outer lookup, the error is reported in that entry and the dump
-> continues.
-> 
-> Link: https://github.com/libbpf/bpftool/issues/58
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
-> ---
->  .../bpf/bpftool/Documentation/bpftool-map.rst |  9 ++-
->  tools/bpf/bpftool/bash-completion/bpftool     |  3 +
->  tools/bpf/bpftool/map.c                       | 59 +++++++++++++++++--
->  3 files changed, 65 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> index e4ed7e701c9e4..729baab2b7922 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> @@ -29,7 +29,7 @@ MAP COMMANDS
->  | **bpftool** **map create**     *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE* \
->  |     **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**inner_map** *MAP*] \
->  |     [**offload_dev** *NAME*]
-> -| **bpftool** **map dump**       *MAP*
-> +| **bpftool** **map dump**       *MAP* [**recursive**]
->  | **bpftool** **map update**     *MAP* [**key** *DATA*] [**value** *VALUE*] [*UPDATE_FLAGS*]
->  | **bpftool** **map lookup**     *MAP* [**key** *DATA*]
->  | **bpftool** **map getnext**    *MAP* [**key** *DATA*]
-> @@ -87,10 +87,15 @@ bpftool map create *FILE* type *TYPE* key *KEY_SIZE* value *VALUE_SIZE*  entries
->      Keyword **offload_dev** expects a network interface name, and is used to
->      request hardware offload for the map.
->  
-> -bpftool map dump    *MAP*
-> +bpftool map dump    *MAP* [recursive]
->      Dump all entries in a given *MAP*.  In case of **name**, *MAP* may match
->      several maps which will all be dumped.
->  
-> +    With **recursive**, each entry of an **array_of_maps** or **hash_of_maps**
-> +    also has the dump of the inner map that it refers to. An inner map that
-> +    cannot be opened, for example because it was replaced, is reported as an
-> +    error in that entry.
-> +
->  bpftool map update  *MAP* [key *DATA*] [value *VALUE*] [*UPDATE_FLAGS*]
->      Update map entry for a given *KEY*.
->  
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index a28af31937ad4..78fdb9396e96f 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> @@ -718,6 +718,9 @@ _bpftool()
->                              return 0
->                              ;;
->                          *)
-> +                            if [[ $command == dump && $cword -eq 5 ]]; then
-> +                                COMPREPLY=( $( compgen -W 'recursive' -- "$cur" ) )
-> +                            fi
->                              return 0
->                              ;;
->                      esac
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index b150a06a25085..fc820c07e9f4f 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-> @@ -22,6 +22,9 @@
->  #include "main.h"
->  
->  static struct hashmap *map_table;
-> +static bool recursive_dump;
-> +
-> +static void dump_inner_map(__u32 id);
->  
->  static bool map_is_per_cpu(__u32 type)
->  {
-> @@ -140,9 +143,14 @@ static void print_entry_json(struct bpf_map_info *info, unsigned char *key,
->  		print_hex_data_json(key, info->key_size);
->  		jsonw_name(json_wtr, "value");
->  		print_hex_data_json(value, info->value_size);
-> -		if (map_is_map_of_maps(info->type))
-> +		if (map_is_map_of_maps(info->type)) {
->  			jsonw_uint_field(json_wtr, "inner_map_id",
->  					 *(unsigned int *)value);
-> +			if (recursive_dump) {
-> +				jsonw_name(json_wtr, "inner_map");
-> +				dump_inner_map(*(unsigned int *)value);
-> +			}
-> +		}
->  		if (btf) {
->  			struct btf_dumper d = {
->  				.btf = btf,
-> @@ -273,6 +281,8 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
->  		}
->  
->  		printf("\n");
-> +		if (recursive_dump && map_is_map_of_maps(info->type))
-> +			dump_inner_map(*(unsigned int *)value);
->  	} else {
->  		unsigned int step;
->  		int i;
-> @@ -935,6 +945,36 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
->  	return err;
->  }
->  
-> +/* The kernel has one level of map-in-map: inner maps have no inner maps. */
-> +static void dump_inner_map(__u32 id)
-> +{
-> +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts, .open_flags = BPF_F_RDONLY);
-> +	struct bpf_map_info info = {};
-> +	json_writer_t *btf_wtr = NULL;
-> +	__u32 len = sizeof(info);
-> +	int fd;
-> +
-> +	fd = bpf_map_get_fd_by_id_opts(id, &opts);
-> +	if (fd < 0) {
-> +		p_err("can't get map by id (%u): %s", id, strerror(errno));
-> +		return;
-> +	}
-> +	if (bpf_map_get_info_by_fd(fd, &info, &len)) {
-> +		p_err("can't get map info: %s", strerror(errno));
-> +		goto out;
-> +	}
-> +
-> +	if (!json_output && info.btf_value_type_id)
-> +		btf_wtr = get_btf_writer();
-> +
-> +	map_dump(fd, &info, json_output ? json_wtr : btf_wtr, true);
+On Sat, Nov 07, 2026 at 10:47:41AM -0800, Andy Lutomirski wrote:
+> On Fri, Nov 6, 2026 at 5:13=E2=80=AFAM Christian Brauner <brauner@kernel.=
+org> wrote:
+> >
+> > On Wed, Oct 28, 2026 at 03:56:11PM -0700, Andy Lutomirski wrote:
+> > > The whole unshare/clone flag situation is getting out of hand, IMO.
+> > > And this new thing makes logical sense but is really about reducing
+> > > exposure.
+> > >
+> > > Perhaps we should instead have a small list associated with a userns
+> > > (extensible in the future) of things that the ns's admin (i.e. whoeve=
+r
+> > > has CAP_SYS_ADMIN relative to the ns) may do.  That list could
+> > > include:
+> > >
+> > > - Create loopback with sensible defaults for ipv4 and/or ipv6 (i see
+> > > no obvious reason to separate them)
+> > > - Create tun/tap interfaces in that ns (and attach them, etc)
+> > >
+> > > And add a very simple new API to do these things.  Actually, the
+> >
+> > We've had this idea in the past and I think it is reasonable. I had
+> > always thought that we should expose a system call to create empty
+> > namespaces ot any type. Usually I'd be excited about that but I think
+> > that point is a bit moot and I'd really like see whether we can turn
+> > cells (or whatever other name) into a first class api.
+> >
+> > The problem I have with the patchset as written is that adds a lot of
+> > moving parts. And yes, I find the CLONE_* and UNSHARE_* flags plus
+> > sysctl to be suboptimal as well.
+> >
+> > So the TL;DR is that CAP_NET_ADMIN + userns =3D
+> > CAP_NET_PRIVILEGE_ESCALATION 10+ years later. And this patchset wants t=
+o
+> > put it back on a leash.
+> >
+> > So why isn't an aggressively stupid solution to this problem to split a
+> > new capability out of CAP_NET_ADMIN so it covers the absolute minimal
+> > set of things that should be allowed instead of doing effectively the
+> > same thing but split over multiple apis?
+>=20
+> Because we don't actually have a clean way to make a list of
+> privileges that are, in theory, harmless but are hazardous from an
+> attack surface perspective and assign them only to tasks that ought to
+> have them.
 
+Exactly. Furthermore, even if we split a minimal capability out of
+CAP_NET_ADMIN, create_user_ns() still grants CAP_FULL_SET to new
+unprivileged user namespaces by default. Without a mechanism to
+withhold capabilities that are namespaced in scope but carry high
+attack surface risk (like CAP_NET_ADMIN and CAP_NET_RAW) and only
+selectively grant them to tasks that really need them, an unprivileged
+userns would still receive the full set of capabilities.
 
-Hi Tianyi, thanks for this version!
+Providing that mechanism is the core goal of the per-userns capability
+bounding set in this series. Even on its own, without any loopback
+changes, it can be configured to prevent unprivileged users from acquiring
+CAP_NET_ADMIN and CAP_NET_RAW when creating a new userns + netns, while
+still supporting sandboxes that use a completely disconnected netns or
+containers whose networking is configured externally.
 
-With the design in the newer versions (dump as soon as you find the
-entry), the plain output will look something like this:
+Finding a solution for loopback simply makes this bounding set more
+practical, as it allows us to also support sandboxes that rely on
+localhost networking without forcing them to retain full CAP_NET_ADMIN.
 
-   key: 01 00 00 00  inner_map_id: 80
-   80: hash  name c1202206_in2  flags 0x0
-   Found 0 elements
-   key: 00 00 00 00  inner_map_id: 79
-   79: hash  name c1202206_in1  flags 0x0
-   key: 07 00 00 00  value: 09 00 00 00
-   Found 1 element
-   Found 2 elements
+With a way to withhold CAP_NET_ADMIN from unprivileged userns, splitting
+out a minimal capability (as Christian suggests) is a very appealing way
+to handle the allowed subset for loopback, though the main challenge is
+defining a scope that justifies a capability bit without re-introducing
+LPE risk.
 
-It's quite difficult to understand where each inner map starts and
-stops. Can we have some sort of delimiter between maps (at least one
-empty line, I think that's what we use when dumping several maps with
-the same name?), and some sort of indentation or prefix character to
-show inner map entries and items count, please?
+Looking at the CAP_NET_ADMIN LPEs from Google's kernelCTF, most are
+concentrated in netfilter and tc, with a smaller number in virtual
+interfaces and routing. Simply bringing up loopback at netns init
+shouldn't carry any LPE risk, but something like CAP_NET_LOOPBACK_UP
+is obviously too specific to warrant a capability bit. Conversely,
+broadening it into something like CAP_NET_IFCONFIG (allowing link state,
+L3 address and basic route configuration on existing interfaces) might
+justify a bit, but even such a basic subset would still re-introduce
+some LPE risk (see e.g. CVE-2026-53259 / commit f723ccaff2fb),
+although it would drastically reduce the risk by excluding the most
+high-risk components.
 
-pw-bot: cr
+Furthermore, I think splitting out a smaller CAP_NET_ADMIN would also
+run into some practical difficulties when it comes to clean enforcement
+in rtnetlink. Currently, rtnetlink_rcv_msg() relies on a coarse
+CAP_NET_ADMIN check at the beginning before any complex message parsing
+occurs. To support more fine-grained capabilities, we would have to push
+these checks much deeper into the stack, spreading security checks
+across many locations, which could easily lead to mistakes.
 
-On a different note, we risk an infinite recursion here if the kernel
-ever allows inner maps to recurse. I'm not aware that there is any plan
-in that direction though, so it's probably fine to keep as-is for now.
+Given this, I was hoping to have a minimal mechanism to just allow
+bringing up loopback without going for a new capability bit. Ultimately,
+it's a pragmatic judgment call. Maybe something like CAP_NET_IFCONFIG
+offers enough value and risk reduction to be worth the trade-off.
 
+Otherwise, if we want to avoid consuming a capability bit just for
+loopback, we could also consider other alternatives, e.g. a small nsfs
+ioctl on the netns fd (e.g. NS_NET_LOOPBACK_UP). This would align with
+Andy's earlier suggestion of adding a "very simple new API" dedicated
+to these safely scoped operations.
 
-> +
-> +	if (btf_wtr)
-> +		jsonw_destroy(&btf_wtr);
-> +out:
-> +	close(fd);
-> +}
-> +
->  static int do_dump(int argc, char **argv)
->  {
->  	json_writer_t *wtr = NULL, *btf_wtr = NULL;
-> @@ -944,8 +984,8 @@ static int do_dump(int argc, char **argv)
->  	int *fds = NULL;
->  	int err = -1;
->  
-> -	if (argc != 2)
-> -		usage();
-> +	if (!REQ_ARGS(2))
-> +		return -1;
->  
->  	fds = malloc(sizeof(int));
->  	if (!fds) {
-> @@ -956,6 +996,16 @@ static int do_dump(int argc, char **argv)
->  	if (nb_fds < 1)
->  		goto exit_free;
->  
-> +	while (argc) {
-> +		if (**argv && is_prefix(*argv, "recursive")) {
-> +			NEXT_ARG();
-> +			recursive_dump = true;
-> +		} else {
-> +			p_err("expected 'recursive', got: '%s'", *argv);
-> +			goto exit_close;
-> +		}
-> +	}
-> +
->  	if (json_output) {
->  		wtr = json_wtr;
->  	} else {
-> @@ -1002,6 +1052,7 @@ static int do_dump(int argc, char **argv)
->  exit_free:
->  	free(fds);
->  	free_btf_vmlinux();
-> +	recursive_dump = false;
->  	return err;
->  }
->  
-> @@ -1510,7 +1561,7 @@ static int do_help(int argc, char **argv)
->  		"       %1$s %2$s create     FILE type TYPE key KEY_SIZE value VALUE_SIZE \\\n"
->  		"                                  entries MAX_ENTRIES name NAME [flags FLAGS] \\\n"
->  		"                                  [inner_map MAP] [offload_dev NAME]\n"
-> -		"       %1$s %2$s dump       MAP\n"
-> +		"       %1$s %2$s dump       MAP [recursive]\n"
->  		"       %1$s %2$s update     MAP [key DATA] [value VALUE] [UPDATE_FLAGS]\n"
->  		"       %1$s %2$s lookup     MAP [key DATA]\n"
->  		"       %1$s %2$s getnext    MAP [key DATA]\n"
+If we drop CLONE_NEWNET_LOOPBACK / UNSHARE_NEWNET_LOOPBACK from this
+series and handle loopback separately, do you think the per-userns
+bounding set is a reasonable approach for withholding capabilities
+(e.g. CAP_NET_ADMIN and CAP_NET_RAW) from unprivileged userns, or
+would you prefer a different mechanism?
 
+I think the single-deep case we were discussing on the other thread
+could also be cleanly built on top of this. The per-userns bounding
+set provides the underlying enforcement mechanism. How we configure
+and trigger that bounding, whether via sysctl and clone3() as proposed
+in this series, or via a per-task securebit to handle single-deep
+containers in init_user_ns as discussed on the other thread, is a
+policy control interface decision that can feed directly into the
+same mechanism.
 
-Note that there may be some interaction between this series and the one
-on batch lookups. With the approach suggested by Alexei - dump inner
-maps as soon as you find them - it would probably make sense to exclude
-the outer map from batch lookups when we do a recursive dump, to limit
-the risk of inner maps being replaced in the meantime.
+To address the concern about the number of moving parts, I am also
+happy to simplify the control interfaces. If we decide a per-task
+securebit is the cleanest way to drive this configuration for both
+single-deep and nested cases, we could focus on that and drop the
+clone3() and sysctl from this series entirely, or only expose whatever
+subset you prefer.
 
-Thanks,
-Quentin
+Thanks!
+
