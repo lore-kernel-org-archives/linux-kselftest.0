@@ -1,136 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.179
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794327792;
-	b=aghejoaZcZxRgUnZOSCKF01P1mlqNuyuH4BZpjwdRRNXI6WoHb45hrWdy8BgHpYo6QAi
-	 If1bg06Q483wnScOo9obCN37sGkHW3TJpAomn6ONEHieD3tc7Bm2SzTWWqRAHuN4MSU8a
-	 kbsRQL9gdb3veZvuJINGBNw6phcL9ZjNoY3EZ/smKrSIDs5cwLWSnILWiakLcXt13OoSq
-	 WQ0wfXXAM2AP//n08QfcHZThXexQUJ6DpYhUDdWeI6BoHM/5LcJaI72XRrJU1dGAjWy/x
-	 SGzdkXS/ZT5EmGuDHg9ZZ/kw3gyJDo1E1EKyLeD1xWrbU6a34vSMBHyuEQ5/z8wq7Ww==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794327792;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=42cpwdtrc4HrP4DqyvReN7gjWda0yb9ngByLx/bSiMU=;
-	b=BHX+oMfryO/5sMkYAmKqBpKdJFqlwrw/OQBv98sanCklX94EdEUU0Q1NILfrsNdqABVU
-	 2ErDQBHe64Eu++HBhoqiF9PViuppRkpbF+mZsf6LZhGAE5qzFBR0EabrHRW69BjFa2YgC
-	 cGQH8ZwA2kqKaNcvkjmtpldTzr4shU6NszvsR9VBGcqev9O5MrLxZh30ka8pERUAmh3wx
-	 u/a2Wnc8GEGYaay52Ow++p0pVuXg8cbYv+IwNMi0rwv+nTid/zALAu2GHViHJAFdPmS70
-	 QMg1pYJlzroX+vDx7Z1vYx49pizATl3YzzNhNApv3/RJ5ZyMP0lVu45FhiDi/VY79OQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=k9jynX5W;
-	arc=none smtp.remote-ip=209.85.221.179
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794329159;
+	b=gLErduubQspcivPiLahEiQkRSSCjV+uxiK/CnCBZQZE3YglYtTbR+2Tg2B7v0Rb5Ta03
+	 PrvaXZcBtuH7ZjSMAtlQzDCqGo4NY8GapuGlUCSAEZxjjk6TG7SC8u7TUWcwL1V7E/FCt
+	 cD2xXeOudnTXg/Hcf2PW3yBbNsqjPAT4SQRcbYP48GeRkqp7oU7f4zLi9o5BZ+uMMf/OK
+	 dotDHa2LPw9OQmrvwx7Sp9g4yuog9ztuPyaup6E2hMoR1MxZ/+MoF6rfG8dIOileaCoD9
+	 rQJ5cLcKCM3SgcWxkdzhTm3/KYfHhFxL8QYVvQtl9aK8IdHrWzJht0u+lYr32UnS92g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794329159;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=yHGcCbfrpGwBJxir5Cx0kWqq2YkGcMrums3mCpUF4D4=;
+	b=IkX/RnLY8mffabHIVgSDZny+TrD4KYZCmkC2XJf/P+gs4tbhOeBOtQIN1/X+6CbteMNr
+	 Mmnl9XmJuAdlzXjSo7H3jvXhBvnAjlbi6EBeaiEeK8OXb/KQWS+XmtD+q9F+SU2Qw4Eay
+	 OwoeAFd4rojy/X26XfXooftP8XnP5fuLzrASYSEZaL4xGiVHOIg3TBlV0Eq4XBTgpnxV2
+	 S423d/UprkDwnhgkZ9/aT3kwhoJSTILmnE1RtktKywsB/BJAgyuLdjxtsnUuURa5vrlzi
+	 fyjODefhP9Z8fbxs9w2Sj1Dn77Hi3v0wuPgxKCwZgZAa6AfIF2608wPrr+OpihQvp8Q==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D4zUEH3w;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B1D606A321;
+	Tue, 10 Nov 2026 16:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D4zUEH3w
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794329159;
+	b=3Rw/N3iYyZFku7BFhxoqxI221HsrNOmxHGN6NhwigBQ/AG2CQcSoPVD0J3fV25+ofXDi
+	 QJdoWOyrAdLrsFEQka1HmQGn8sgweYWEXfs8D0mkBjH/RBitc0EmHzlrbpMqjLFnXwA1H
+	 1eF9NiKqx678xF6mdXeLWvzpOhXhQ00rzMDgaKFPuFjGbNHd4Z0dcrYIi0oerHptk0I5M
+	 Jfe/96/odvuQvQDtm1j5fxHa4s7OXjSuZuNicsC4JFjMd4CiqVlegqYr0ndF5ybW1sDff
+	 0PUJqAXBqtTnFnRGi88H03qJ1spzNn/5XwBofJTVbiffW0eppDtG3JSbql9I3G/FfMA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794329159;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=yHGcCbfrpGwBJxir5Cx0kWqq2YkGcMrums3mCpUF4D4=;
+	b=QGCpB4AnZr4YXrXMZgJ0YkqzGhWGQhEHgBTjA9lpr7gsAAzoeNjEUfIuhr8JKL/YJ93z
+	 6yS4TXkbvyGJISn72h6gnq88Sq5GUSSgMuhJYSLYsmTNK+mFkAKvDmH9y0RmPA+eVcqzm
+	 mZxqcsDAfo5oWmZKRO2bYyagmRuDxWEzf54fIPjvlU1ZWXHF2eBeQhaJV2c/PuW1EU+4k
+	 UK0uoIGbyDaOyzOA//RZYIxBBWVD4nRbPvowH02alEtLh5zAIvH69WHT5WlWtTa/89w6s
+	 mLQiG4qu6ZxMcAZjLQr+I+4vCoZp4Ix5myFlbHyZ92ueBKpAczzju8lgCZAtoa2gM0g==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984BD606A31C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:23:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 984BD606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=k9jynX5W
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5e9528732b4so912185e0c.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 08:23:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794327790; x=1794932590; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=42cpwdtrc4HrP4DqyvReN7gjWda0yb9ngByLx/bSiMU=;
-        b=k9jynX5WUmAeD9j2NE6/ggs5zDZLdvScu7YwYXbqBbHL22S8jy8N7eEfyWdUvgcBpF
-         8TAHUcgd9VnzhBUjoptLnC2COcPn9xKFLvBh2LvJTPkk9frz8XfKNrLC4YMk3T7aRsTc
-         y5BqzughtJdwuo03qMeGDlzdpIWW9LTkAJVgO/wunOYTcgDRD8NE6D+4pTVaCLr7nUiA
-         uo2X6xEjzPkrR8zphv7oYSD9b8iVKcnZpqlk+Xe11f1uXZIuVS3fF1qUgiJethGSaUS6
-         wlcxLJaReAQCdUgdwFNR3hHlOpTVBIM7HJhltfl/pnlWIeN8VeVhcBWXaAwF/v0hnspp
-         gNzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794327790; x=1794932590;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=42cpwdtrc4HrP4DqyvReN7gjWda0yb9ngByLx/bSiMU=;
-        b=srF4l4G0svrNqhTsh2/eshIwdpHvqSi894h4IMo+1G3+UOCFLFJibJJCixLCMiUKrB
-         GDuzIWkUqBdzGqVQ9ij0TkSWMcKvyPn4QjJNdKBPWTB0hy6vY8165BdK0T8Kt1PhcvLA
-         7biAr4oEQJqUJSKIGK9gJXKtIm8JpR8pqoLbD/JZnMqaYL1UxcbWeKTcs02EWT8CrCb3
-         VA7HhZWLA3ZJOpK0w4fmDM5oa1Dabk4L6h+Y0ea7Dhe1/vxM5p2t6ktGseuQbiVg+weS
-         3lyfUqGsQ7AI2fIjujXYK0gQjnUGFMnJKUYBAUIVxYqXi1tMuke59DxoTafvo3JxhUGw
-         t2ZA==
-X-Forwarded-Encrypted: i=1; AL+hErFLmlhkdF9/xYTZm0cI7+RLatF6PS9oYIQjj9nB8sRw7OoVPgamg8v9Ih7x/Tx7peWXUZ5Fwz26NjGv4rx+B6s=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8c9D2IRjJ8DuFmhRC2qVdLS2zfhcyG0KqvnDd/UFPDcowpQ374
-	P7yI26eVZvkHYuq1rgS7eaJKqVWCVvlEke+GNwIVcUF3GnYCspaKzm9S
-X-Gm-Gg: AYBFou1wYjU11Hzb60xwfXCVkZmCF2fQZkLZFcoheVZjKXPi2cBLDd/Y6Vak7HOgU8b
-	9uJCQOqa4GM0+ar4l3ICT4pSRhHsPFPJ3fXTzdiUWbs0Feyfdp8JckOES+6AoUkHPjqicpQMegp
-	rwXNMdzDNHuslWyQ9fefWDZxkLaVCj/SiND9iC3GEHAYMXhHSLF/STHzDWK4ontWnmoiS/aTlcY
-	AlmnAdCgQJ68ZjJG+69uK6QxFEwYlDf08x8k/gjHJbCpsLM50nyyQZKNRSiyhNRU05Kbv1a0BRF
-	8EIoJ7nP08MPLnP+cPcKF4KIvX5j3YN2PO6psdeK6MKqQBJDB3ltuhfyKCNjDNGkWxl+9+Owt5r
-	huXwd10AJ5i2oHXuZKlshLyDYKAFHYj49iXBSfVcPT9dQO1Y2PyHuWNGvD6SK/QoAwS4VimVvGr
-	ExfxcaV0UCb4c0ucbYNGh7/ayJcRIM7BAGxD8q27o2I5tdsnRUq/cf22YnNREW0QVfBb/pv4SQU
-	mWIZ0NxSX1XPse8VtwwCgMMLkS/kSjsKGnC40WHlJql4nxf3XScxvzMDOiyTeec6TUZtbhK5eH/
-	ZrvKAZq/Anv4IJDEc0Z7thywdxIkuwe/iIohDTI9cL3P+nqfglL/bzCXlxaFzxZr3i9qPT/Mfq5
-	i4WiTvwuV0sZhv4KtY4ndzGcMczZQWc0UjwS10cyXzjfPA94uP5QJP2LR+cb9d++Wa57GOag=
-X-Received: by 2002:a05:6122:62e9:b0:5c9:c60e:3a4a with SMTP id 71dfb90a1353d-5ee0d19e59amr1124633e0c.22.1794327790334;
-        Tue, 10 Nov 2026 08:23:10 -0800 (PST)
-Received: from gmail.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-99c200838f0sm2123832241.9.2026.11.10.08.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 08:23:09 -0800 (PST)
-Date: Tue, 10 Nov 2026 11:23:09 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Tianyi Gao <tianyi@cloudflare.com>, 
- Stephen Hemminger <stephen@networkplumber.org>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- netdev@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Eric Dumazet <edumazet@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Simon Horman <horms@kernel.org>, 
- David Keogh <dkeogh@amazon.com>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- David Woodhouse <dwmw2@infradead.org>, 
- Dragos Tatulea <dtatulea@nvidia.com>, 
- Nimrod Oren <noren@nvidia.com>, 
- Alasdair McWilliam <alasdair@mcwilliam.dev>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- David Ahern <dsahern@kernel.org>, 
- Ido Schimmel <idosch@nvidia.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Donald Hunter <donald.hunter@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Randy Dunlap <rdunlap@infradead.org>, 
- Breno Leitao <leitao@debian.org>, 
- =?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>, 
- Danielle Ratson <danieller@nvidia.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- bpf@vger.kernel.org, 
- linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- kernel-team@cloudflare.com, 
- nh-open-source@amazon.com
-Message-ID: <willemdebruijn.kernel.935b9bf7f1a1@gmail.com>
-In-Reply-To: <20261109154909.32748-1-tianyi@cloudflare.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
- <20261108190831.3f991a13@phoenix.local>
- <20261109154909.32748-1-tianyi@cloudflare.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
+	by smtp.kernel.org (Postfix) with ESMTPS id 691C31F008A2;
+	Tue, 10 Nov 2026 16:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794329158;
+	bh=yHGcCbfrpGwBJxir5Cx0kWqq2YkGcMrums3mCpUF4D4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=D4zUEH3wYhhNPjKpEsf9OGhIAXc0+y5ATdeDUDMxLJSmi9ykOxNfke54vzbD76K1t
+	 YCHQvc+LBrkTxPp6DGNQXEANFuU1EkzqO60deGan53UsoBbwCCBOIDrFoggnZ7hfv1
+	 RMTJ8sJIXQFdPH9MhlHn05UrZjmMcVQFUkEutWnSOutYs6Zmz2C7uCWQRp1C8OeBHR
+	 7PqMxqncTv3gFBPn0ZFX+K/J7CHjkvsUrkLW7Af4GshcyrLKnQFcxtuqPG1Q7l1oYT
+	 e/M0FZ/I0HuILRB5RckfVxT8GwT1NNOue271lK5aWh6PgF4mG+UwztG5nzawO2fcuV
+	 2llefB7pBR1vQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id EA33348BFC;
+	Tue, 10 Nov 2026 16:45:57 +0000 (UTC)
+From: Yongjian Wang via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
+Date: Wed, 11 Nov 2026 00:45:56 +0800
+Subject: [PATCH net-next v4 2/4] selftests/net: packetdrill: test
+ tcp_base_mss on passive connections
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -140,70 +83,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261111-mtu-probing-series-v4-2-6f2e484ca8ea@gmail.com>
+References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com>
+In-Reply-To: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com>
+To: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, 
+ edumazet@kernel.org, horms@kernel.org, kuniyu@google.com, 
+ ncardwell@google.com, davem@davemloft.net
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ netdev@vger.kernel.org, panweiping3@gmail.com, 
+ Yongjian Wang <echoowall@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794329156; l=1599;
+ i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
+ bh=3lQsY78vSTiBOpqp4bdac9scSAkC/asJAFx3o/C4nk4=;
+ b=KlldzqTr+zVzxlntQk6qL3845h9aSVYsDMJB7yZ+xOEeVyu5/nQTgumE/1UvAkJnrWzaeoJsI
+ dv651n3WLjlA4RQ3jCzJFjwofZsYaDxxIZUSau/vUpeDfmsPiP2xN3+
+X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
+ pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
+X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
+ auth_id=1323
+X-Original-From: Yongjian Wang <echoowall@gmail.com>
+Reply-To: echoowall@gmail.com
 Content-Transfer-Encoding: 7bit
 
-Tianyi Gao wrote:
-> Hi Stephen,
-> 
-> Thanks for the invaluable and detailed review.
-> 
-> On Sun, 8 Nov 2026 19:08:31 -0800, Stephen Hemminger wrote:
-> > Since the motivating case is XDP, the mechanism should let the XDP program
-> > ask for the padding it needs, rather than making the operator translate
-> > the program's requirement into a device setting by hand.
-> 
-> The series started from David Keogh's TC egress case, as described in
-> the RFC [1] and in the first paragraph of the v1 cover letter. The veth
-> XDP case came later, when I found that the same field also avoids the
-> copy for generic XDP on veth.
-> 
-> > Your own reply already works this out:
-> >
-> > > - XDP on a veth peer: veth_xdp_set() and generic_xdp_install() can
-> > >   increase the headroom of the peer to XDP_PACKET_HEADROOM on attach
-> > >   and reset it on detach.
-> >
-> > That is the mechanism, and it needs no uapi, no operator arithmetic, and
-> > no stale state. I would rather see it implemented for the cases it covers
-> > than add a permanent uapi that removes the incentive to do so.
-> 
-> Agreed. For this case, I plan to move to this in v2. When an XDP program
-> is attached to a veth device, tx_extra_headroom of the peer is set to
-> XDP_PACKET_HEADROOM.
-> 
-> > On the argument that program-side declaration is itself new uapi, and that
-> > the labeled device is often not the device the skb was allocated on:
-> > granted for the general TC egress case.
-> 
-> For TC egress, the kernel does not know at attach time how many bytes
-> the program pushes. Only the program, or the software that loads it,
-> knows. Attach-time propagation works for XDP because XDP_PACKET_HEADROOM
-> is a fixed value.
-> 
-> Since we both agree that auto-tuning has real problems, a narrow UAPI,
-> such as a BPF-side declaration, seems unavoidable for TC egress. The
-> program declares the headroom that it needs through this UAPI. The
-> initial plan is a BTF decl_tag, as Dragos Tatulea suggested on the RFC
-> [2]. On attach, the kernel increases tx_extra_headroom of the device
-> that the program is attached to.
-> 
-> > Which leaves the genuinely hard case, the one you describe at Cloudflare: a
-> > service in a netns sends through a veth pair, the host forwards to the
-> > uplink, and a TC egress program there encapsulates, after ip_rcv_core()
-> > has orphaned the skb so the allocating device cannot be identified. If
-> > that is the real residue, make it the problem being solved and argue for
-> > the narrowest mechanism that solves it.
-> 
-> This case only came up after I started to look at in-kernel approaches,
-> because the general IFLA_TX_EXTRA_HEADROOM UAPI already solves it. It is
-> not a new case, and it is not uncommon. Cilium, Flannel and Calico use a
-> tunnel by default [3][4][5], so the device that encapsulates is not the
-> device that allocated the skb.
+From: Yongjian Wang <echoowall@gmail.com>
 
-I have some hope that if there is sufficient reason, this backlinking
-to the originating netdev (or socket?) can eventually be addressed as
-well. Rather than work around it.
+Check that a passive connection starts at tcp_base_mss with
+net.ipv4.tcp_mtu_probing=2, as an active connection does.
 
-The skb_orphan and iif issues are well know. But not set in stone.
+Signed-off-by: Yongjian Wang <echoowall@gmail.com>
+---
+ .../net/packetdrill/tcp_mtu_probing_passive.pkt    | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_passive.pkt b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_passive.pkt
+new file mode 100644
+index 000000000000..14bae144cce2
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_mtu_probing_passive.pkt
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test that a passive connection starts at tcp_base_mss with tcp_mtu_probing=2,
++// the same way as an active connection.
++
++`./defaults.sh
++sysctl -q net.ipv4.tcp_mtu_probing=2
++sysctl -q net.ipv4.tcp_base_mss=1024
++sysctl -q net.ipv4.tcp_timestamps=0`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 65535 <mss 1460,nop,nop,sackOK>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
++  +.1 < . 1:1(0) ack 1 win 65535
++   +0 accept(3, ..., ...) = 4
++
++// The initial window is sent with tcp_base_mss, not the peer's MSS.
++   +0 write(4, ..., 10240) = 10240
++   +0 > P. 1:2049(2048) ack 1
++   +0 > P. 2049:4097(2048) ack 1
++   +0 > P. 4097:6145(2048) ack 1
++   +0 > P. 6145:8193(2048) ack 1
++   +0 > P. 8193:10241(2048) ack 1
++  +.1 < . 1:1(0) ack 10241 win 65535
+
+-- 
+Git-157)
+
+
