@@ -1,58 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794313235;
-	b=xXG389Cr+voe52W58ZAbv/lOLMs2a31xME4sRzqQUYVlpEjXNyA7cp9nfeo/QfmIuFF5
-	 FgSDanCirqTR8CEzPND2/8WYuIspCW8ovSVIMueBU3tTrXN/L8Qnuwlt/P2Q54zjAOJp/
-	 eJeMnaYw4ej/pR7QMkqScuN20w9qG2zrLJYCTmHSQFUehOd5vmMLM5UWSFSu14JV0gTPU
-	 vTmj0IkN4zO7lviYq4RbKPsy9ctlN2u2nxgzDKx8iNNK5wxqUPV7K3HTJ1lQdFmTVOS5M
-	 K1yoXbs6a5N+X9o0c+r+pchnkYyHAXREqG5erUfX6/llXD15Cl/i+Hk+o1F2G92JuVQ==
+	t=1794313983;
+	b=jpUYPuwmNK/6oh+DuhqyCvxPJYP5lpxIP/vFkVHWusVZIXCSU0c84Yf0gs3OVN+++TVu
+	 2F8SCgs1zC0+ktacmo9HZc9/THr7eOVIHilf2bRlFz3VDM4gNJBZi7BywcXzRzR/Ak0v8
+	 DmHFN8BbYMsDtQXU6S0DV8P479s+ruopRSP+v5kNUP8s+j9JbEkNlQHJt08zWRQ99t671
+	 Nanos3qbQEGYs7tg5cwm6dr64OZQaEo7EUQr9/JGnHVvg5Tmzx4NbGj7LTvxnt8AK2vIO
+	 m+Bylw6EDscWLaaGqaRJwErc0JeuJ5wC2NNDULzMdKBIJEkUdU9PJQGgxN+iankOKuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794313235;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=6rM2EcZTe3ev5LTc6GsFrDgE2qx75I9quZj2GOEZIZg=;
-	b=0BdVmg/fW5mb+fcSnlfVy8rotGdjbadFN4Du/fTCF/xtW4etKbutF1+oZkv3gj6Vs0cq
-	 NgrFpU8zEVhhLyKxkV/x8T9QR95LeFAYBPLqLMj4cIYzO7s9/EAMnYJo1f9LJXKvliz/q
-	 z4vuFv5fU82fUKgjai9VX6xydh8aqTihqduHlboD7lEw+SMfG7yjUE7MN/ecVRi3i7m4d
-	 Bz+Zgr15aV9gkKkVxO2DHnKpD3acWU3ytY7yv6EPtkfw0ZjjKMEP/pHIprYMPqbktX8zo
-	 hN2vd/2tonRAaB6zoz5yF6zu0fixEs+aeFPyhPhRwGdlOamCNkWZdcx4Pz3zap/i9zQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794313983;
+	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Debian-User;
+	bh=uXHrdWcqiHpJ/+X7spV4X+YSqEs4YGoqydo4TrppAyA=;
+	b=gXxrFHATUSuSYHTdZJ8PbJks86IDdb85/ViHd+gYAet2jvgJK1s4RrhZnm7RaTwop8E1
+	 IOHaij0NFEW+IDKfkIOrz4F5SeJYKoA66ZM7ByuKx0vNVYs8Cow3vdbAM1W5vylAxrXNq
+	 UDEMZC7PsRZyQOpzAtkdOWfMe2bgB2N2D1NaWWKiuZTmG/xBF/X25mmy7LYMp1xS5YwBM
+	 0z2JzHmSWd569HMyk6Psw2UAKCg/1G875Fug70T0QTTG7IN9txZb3602bFegvwfoFnx9S
+	 l1YweXG3qT3uhVH5O4PnHIsQ7TSnNGghmRARyzHE8MwQsVNWVQv2Qsq+cfwWMhIC2JQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gq6lxTZH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b="suwBrA/n";
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476B7606A32E;
-	Tue, 10 Nov 2026 12:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BACE606A326;
+	Tue, 10 Nov 2026 12:33:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6BACE606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gq6lxTZH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E241F0089F;
-	Tue, 10 Nov 2026 12:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794313235;
-	bh=6rM2EcZTe3ev5LTc6GsFrDgE2qx75I9quZj2GOEZIZg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gq6lxTZH4cxRQwCO+gixC3+400bZsgkL+HI9hqBrQvX8EOuqFhxw92WuTo+wTkafG
-	 Io5hnrbhM/Cg+XCnyJ5/IQXj/JfU5ycNZmKVdj9T42UQyIqN3NBky+JSwBGGvvZeo8
-	 VVV+A0InKjZxGzTB7OQe2c+J+IjT79hOyYwser7I1WRbfVM0EI/vOebqoF6gs7Q0kL
-	 R8Bz3sEij1+vpv+gylytk/n6U1L6o0K0ydU0NHrHc5oCV3emN1fk0lRbRvwXZ233Q3
-	 E4rQGcwGgDeeMDFV+HJFggChFDFAQfP7/vqNLb3GnERl+3+pSuFQNyAXPLu+n0U8VD
-	 IlVmpef2C6MCQ==
-Date: Tue, 10 Nov 2026 12:20:30 +0000
-From: Simon Horman <horms@kernel.org>
-To: netdev-bot+sashiko@kernel.org
-Cc: mohsin.bashr@gmail.com, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
-	kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
-	maxime.chevallier@bootlin.com
-Subject: Re: [PATCH net v2] selftests: drv-net: pause: Avoid cleanup failures
- for unsupported link settings
-Message-ID: <20261110122030.GD18859@horms.kernel.org>
-References: <20261103190622.3981970-1-mohsin.bashr@gmail.com>
- <179387330655.488856.2246156256257342362@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=suwBrA/n
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=uXHrdWcqiHpJ/+X7spV4X+YSqEs4YGoqydo4TrppAyA=; b=suwBrA/nAsthm2JS9BiVooHsyZ
+	VmGmrgtUn8GSiRlcSV8Bn7v4lkqYoSzypMnCvGkwESfSmjDRl+X+2ezZhc9slm4hVDdu15a1oqC8y
+	FQ5WsAHx99+UI67Hv3vZHjrV9Nfs9l30fKxquAH86xlFzTEYRhM3D+3OuzPeVZplI6YeqKj//B4zG
+	QN5Ml3Id34TXvSkkMz1XvtvCKAtrEY8ftyxXrC6dmxZm3d7WfNNuVbE55e/AXX8Sx4+PVRrn7936R
+	hujqIkNiKWlgSc8ql2gP1z7JeBRbqhviJ9vnRvbF5zP3eDMiuSnv40ZfLDl+mrY88fb6plA9X2PXx
+	u6CMO4qg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xQl21-00COyt-2d;
+	Tue, 10 Nov 2026 12:32:58 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Tue, 10 Nov 2026 04:32:25 -0800
+Subject: [PATCH net] selftests: netconsole: enable the targets created by
+ the torture test
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,119 +63,76 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179387330655.488856.2246156256257342362@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261110-netcons_selftest_fix-v1-1-86643b837216@debian.org>
+X-B4-Tracking: v=1; b=H4sIAN0O82oC/x3MYQqDMAwG0KuE77cFW52wXmUM2bpkC4w4miKCe
+ PeB7wBvh3NVdmTaUXlV18WQKXaE8nnYm4O+kAmpT1OMsQ/GrSzms/NXGnubRbcwlqdMw5CuFxZ
+ 0hF9l0e1sbzBuuB/HH/DU14drAAAA
+X-Change-ID: 20261110-netcons_selftest_fix-4cbf633295ef
+To: Gustavo Luiz Duarte <gustavold@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+ Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.17-dev-ce4c1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1706; i=leitao@debian.org;
+ h=from:subject:message-id; bh=zSq8AOVPqKnj/9CHTFOYb9X/z7p6pl2TpOdMOIPN+og=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq8w71zvOB+X5okMZEU9Ai0aXgzKngHTwprGRqF
+ FostGn+XC+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCavMO9QAKCRA1o5Of/Hh3
+ bW1kD/4i/esf76C3fPut8KLl6FD9Ac8fm3Tn/C6cUztJyqnqwfd43nVET+taoAitIB5dKCDOxNf
+ 6UzzV4s2+Q9CIiA6LbhTZkajmI/LIuRzhDl9FkKWiDIpfVkASUb757A/DORDkNLbiWYeuFtDcsp
+ vKdkMR7bC9dptkdiC8FZLSs8KsUZqxoAFfYscoMK+lzraP3r05bddR+Oz6cunEvsyW+HdEFGRyp
+ 5mmTQSn5u8QkToZR9LPI1tWBl8tgWxwkMXmJ5jPGvJ8Q9o2dGas7bYKA5HajuVR1gvb3nfog8AM
+ wz4yxC4pCa5U4VkveHcLzz7IBkz26xZVvM4/YwxDMErQ8MMpko3RA4AE7p5cEEKrv1EiSBTIRa0
+ 1Nw9f75hmYP1pssPGiSS4cMaJ28LMVz95nGMUjAPzinlVsE6gX1wvlA5TXJ/vJ5DxcSV+CspaoF
+ AHR5rJKS9N7TbdNXtqCExLwx66tlVIoMP6FeghV9zgSkwJAAGisEIQNKktxCk2VvokSFOCz7sJG
+ HjL4nbG1UB28fuUIYGezCbV4M5Sx0fi+uZMHJjsC9lRnRrwVmRfMowcddwjON9JEE6jpv0elrp1
+ B6uc6QJZ7CCFQs+xuDa2WYmEU92JGOFi22iCB1d1US0MbuqftDpI/u5edGl42nlHq7T+xqQbcwI
+ GHGVwN3fa/oUD9A==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Thu, Nov 05, 2026 at 10:08:26AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 1 · Medium: 0 · Low: 1
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [High] The fix is incomplete: the same cleanup failure still happens on
->   the link-autoneg-on branch of pause_setup() in…
-> - [Low] In pause_setup()
->   (tools/testing/selftests/drivers/net/hw/pause.py, local lines 410-414,…
-> 
-> --
-> 
-> selftests: drv-net: pause: Avoid cleanup failures for unsupported link settings
-> 
-> This patch changes pause_setup() so that the forced-link restore is queued
-> only after setup has successfully enabled link autonegotiation. The goal is
-> to avoid EOPNOTSUPP cleanup failures on devices such as fbnic. It also makes
-> pause_test_support() fall back to checking forced MAC pause on the current
-> link when no link configuration change is accepted.
-> 
-> > diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
-> > index ca4a55e59c30f..99ce6a59dfcd6 100755
-> > --- a/tools/testing/selftests/drivers/net/hw/pause.py
-> > +++ b/tools/testing/selftests/drivers/net/hw/pause.py
-> > @@ -404,14 +404,14 @@ def pause_setup(cfg):
-> >  
-> >      if link["auto-negotiation"]:
-> >          defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
-> 
-> [Severity: High]
-> Can the same cleanup failure still happen on this branch?
-> 
-> This restore is still queued whenever the device reports link autoneg on,
-> even when setup never changes the link. The remote interface has the same
-> unconditional defer further down in pause_setup().
-> 
-> When the driver has no set_link_ksettings, ethnl_set_linkmodes_validate()
-> rejects every LINKMODES_SET before it checks for a no-op:
-> 
-> net/ethtool/linkmodes.c:ethnl_set_linkmodes_validate() {
->     ...
-> 	if (!ops->get_link_ksettings || !ops->set_link_ksettings)
-> 		return -EOPNOTSUPP;
->     ...
-> }
-> 
-> That means a restore to the same autoneg on value also fails with
-> EOPNOTSUPP.
-> 
-> Some in-tree drivers report autoneg on and provide only get_link_ksettings.
-> nicvf_get_link_ksettings() sets cmd->base.autoneg = AUTONEG_ENABLE.
-> be_get_link_ksettings() does the same when auto speeds are supported.
-> fbnic also has get_link_ksettings and no set_link_ksettings.
-> 
-> On these devices pause_test_support() takes the new "current link"
-> fallback. The deferred "ethtool -s <if> autoneg on" then fails in
-> ksft_flush_defer() and the test ends in a cleanup failure. The subject
-> line says the patch avoids exactly this.
-> 
-> Every other test that calls pause_setup() would hit it too, because the
-> defer is flushed even when the test skips.
-> 
-> Dropping the autoneg on restore isn't an option, since pause_test_support()
-> and pause_autoneg_link_autoneg() force the link and rely on it. Would it
-> work to queue the restore only where a link change is accepted? One place
-> is after a successful "autoneg off {forced}" in pause_test_support().
-> Another option is to let the restore tolerate EOPNOTSUPP.
+create_and_delete_random_target() is meant to create, enable and remove
+targets while messages are sent, but it only creates and removes them.
+The helper it calls, _create_dynamic_target(), stopped enabling the
+target when the bonding test moved that step into
+create_dynamic_target().
 
-This looks like a legitimate concern that warrants a v3.
+Enable the targets again, so they come up while messages flow and are
+disabled before being removed. Like toggle_netcons_target(), ignore a
+failed enable, which would otherwise end the function and leave the
+targets behind. With a console per target, this also registers and
+unregisters their consoles under load.
 
-> 
-> >  
-> >      # Local interface admin up, link aneg on
-> >      ip(f"link set {cfg.ifname} up")
-> >      if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
-> >          ethtool(f"-s {cfg.ifname} autoneg on")
-> > +        if "speed" in link and "duplex" in link:
-> > +            defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
-> > +                       f"duplex {link['duplex'].lower()}")
-> 
-> [Severity: Low]
-> Could this leave a forced link in autoneg state if the ethtool call fails
-> partway through?
-> 
-> ethtool() raises on a non-zero exit. With the defer now registered after
-> the call, nothing restores the original forced speed/duplex if the driver
-> commits part of the change and then returns an error.
-> 
-> bnxt_set_link_ksettings() is one example. It sets
-> link_info->autoneg |= BNXT_AUTONEG_SPEED before calling
-> bnxt_hwrm_set_link_setting(), and returns that call's error without
-> rolling back.
-> 
-> This branch only runs when the device supports autoneg. Would queuing the
-> restore just before the ethtool call still avoid the fbnic cleanup
-> failure? The same ordering applies to the remote interface later in
-> pause_setup().
-> 
-> [ ... ]
+Fixes: 236682db3b6f ("selftest: netcons: add test for netconsole over bonded interfaces")
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-This one I'm less sure about, but I think it should at least be considered.
+diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+index 33a44adb6f8f3a..3dfab0bf1b0756 100755
+--- a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
++++ b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+@@ -46,6 +46,7 @@ create_and_delete_random_target() {
+ 
+ 		# Basic population so the target can come up
+ 		_create_dynamic_target "${FORMAT}" "${RND_TARGET_PATH}"
++		echo 1 > "${RND_TARGET_PATH}"/enabled 2> /dev/null || true
+ 	done
+ 
+ 	echo "netconsole selftest: ${COUNT} additional targets were created" > /dev/kmsg
 
--- 
-pw-bot: cr
+---
+base-commit: b3dfbde62cf1981c4638939c159dfd087b7a72e9
+change-id: 20261110-netcons_selftest_fix-4cbf633295ef
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
