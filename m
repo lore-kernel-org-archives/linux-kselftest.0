@@ -1,54 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.241
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794312792;
-	b=0fzamPfCnTtGrLz8JJErAGBQVNGAP8ihwqmGNM7r+GKWkYTEoMxK1v6hKAgK0tiX3w8d
-	 qoNebhscfJK1id1xyd9VkYyRDLiVZN9z8nAMs3ejAQxSk8N8k3uUUm0v0dx5+7fNLyekA
-	 Uspbj8Rp8KhGPrOFWoC2/0FXGQkfySFXPfj0MndmJmAvIffrUNTS3Db0YLO0452k5oEhO
-	 OI3+lGpwr0nqm0x91HqhZGmYkJFbGTA8sKA6z0jvK2KjPM+YAag5aD59zXpMr6ZL7myJc
-	 ViPirOs1DY9+8h2PlClkbuEoTr4L7yz2oIYCRy1Z6dETHlnaLRxoeP93gjAssr91hTQ==
+	t=1794313235;
+	b=xXG389Cr+voe52W58ZAbv/lOLMs2a31xME4sRzqQUYVlpEjXNyA7cp9nfeo/QfmIuFF5
+	 FgSDanCirqTR8CEzPND2/8WYuIspCW8ovSVIMueBU3tTrXN/L8Qnuwlt/P2Q54zjAOJp/
+	 eJeMnaYw4ej/pR7QMkqScuN20w9qG2zrLJYCTmHSQFUehOd5vmMLM5UWSFSu14JV0gTPU
+	 vTmj0IkN4zO7lviYq4RbKPsy9ctlN2u2nxgzDKx8iNNK5wxqUPV7K3HTJ1lQdFmTVOS5M
+	 K1yoXbs6a5N+X9o0c+r+pchnkYyHAXREqG5erUfX6/llXD15Cl/i+Hk+o1F2G92JuVQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794312792;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=xPX6hjL/tuWyjzxA9vDr0JWxUdbpBrR5M1slKp3h4n4=;
-	b=gFDz3dKIYkYuj7iKr0PVEqm4/Tk98+L60Wrs2zCcy0H7chOsVZTTsDD1G4zc9m63dvF0
-	 duYvfurElRC9iN36+sZfICDA+OPaimG2LCOCp6GY4lv2dWeHGx74i9M3XySNQA1cqLis5
-	 IsamFpfVEIkJV5t7dpQWozuLwh+ITPWlHLqMXaun897TVJRlD6bEUV9jC5sA73yoXaEq2
-	 qKua1mj5U57PfhsBt+Ta9UpD+GgzueaORODw+zc2Rk6D7LujlIXpF/vbfeSQu+ugo3m1h
-	 LPHm7ahaYWxIB0ifp8HIAspisOjNmWBdJtgnilwdPonwMQ5Ia1G4BIQ7UcubTs8k/Ag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794313235;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=6rM2EcZTe3ev5LTc6GsFrDgE2qx75I9quZj2GOEZIZg=;
+	b=0BdVmg/fW5mb+fcSnlfVy8rotGdjbadFN4Du/fTCF/xtW4etKbutF1+oZkv3gj6Vs0cq
+	 NgrFpU8zEVhhLyKxkV/x8T9QR95LeFAYBPLqLMj4cIYzO7s9/EAMnYJo1f9LJXKvliz/q
+	 z4vuFv5fU82fUKgjai9VX6xydh8aqTihqduHlboD7lEw+SMfG7yjUE7MN/ecVRi3i7m4d
+	 Bz+Zgr15aV9gkKkVxO2DHnKpD3acWU3ytY7yv6EPtkfw0ZjjKMEP/pHIprYMPqbktX8zo
+	 hN2vd/2tonRAaB6zoz5yF6zu0fixEs+aeFPyhPhRwGdlOamCNkWZdcx4Pz3zap/i9zQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=vTf1Iu9k;
-	arc=none smtp.remote-ip=95.215.58.241
-Received: from mta1.migadu.com (out-241.mta1.migadu.com [95.215.58.241])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gq6lxTZH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0926606A331
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 12:13:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0926606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476B7606A32E;
+	Tue, 10 Nov 2026 12:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=vTf1Iu9k
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=G3nVUeH7hHipeIyGXvKuinPceTq9Y7FI9VYOHlt8gGM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794312790; v=1; x=1794917590;
- b=vTf1Iu9kTKIAJAcKbYl4y3J6wx57TpQxO4gCGgO8QSPYOVXDSHesXc6dbVMQ9rSCdMxs7UfU
- yiqOzKTWD/LocnNMZms9zAzROyzXHKsJXE+Ojvl8D8Ak7Z3mBa8okA7pcUQJJbIWro+Ti345kNb
- HBjGXwFYu50a8CON1McVyhPk=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2915aee026b5dd3d;
-	Tue, 10 Nov 2026 12:13:09 +0000
-X-Mizu-Trace-ID: 2915aee026b5dd3d
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <0c302879-0d06-4c90-970d-6c9b40946f0f@linux.dev>
-Date: Tue, 10 Nov 2026 20:13:03 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gq6lxTZH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E241F0089F;
+	Tue, 10 Nov 2026 12:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794313235;
+	bh=6rM2EcZTe3ev5LTc6GsFrDgE2qx75I9quZj2GOEZIZg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gq6lxTZH4cxRQwCO+gixC3+400bZsgkL+HI9hqBrQvX8EOuqFhxw92WuTo+wTkafG
+	 Io5hnrbhM/Cg+XCnyJ5/IQXj/JfU5ycNZmKVdj9T42UQyIqN3NBky+JSwBGGvvZeo8
+	 VVV+A0InKjZxGzTB7OQe2c+J+IjT79hOyYwser7I1WRbfVM0EI/vOebqoF6gs7Q0kL
+	 R8Bz3sEij1+vpv+gylytk/n6U1L6o0K0ydU0NHrHc5oCV3emN1fk0lRbRvwXZ233Q3
+	 E4rQGcwGgDeeMDFV+HJFggChFDFAQfP7/vqNLb3GnERl+3+pSuFQNyAXPLu+n0U8VD
+	 IlVmpef2C6MCQ==
+Date: Tue, 10 Nov 2026 12:20:30 +0000
+From: Simon Horman <horms@kernel.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: mohsin.bashr@gmail.com, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+	kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+	maxime.chevallier@bootlin.com
+Subject: Re: [PATCH net v2] selftests: drv-net: pause: Avoid cleanup failures
+ for unsupported link settings
+Message-ID: <20261110122030.GD18859@horms.kernel.org>
+References: <20261103190622.3981970-1-mohsin.bashr@gmail.com>
+ <179387330655.488856.2246156256257342362@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,57 +62,119 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] cgroup/cpuset: Reject updates that empty the top
- sched domain
-To: Guopeng Zhang <guopeng.zhang@linux.dev>, Waiman Long
- <longman@redhat.com>, Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20261110050324.173461-1-guopeng.zhang@linux.dev>
- <20261110050324.173461-2-guopeng.zhang@linux.dev>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20261110050324.173461-2-guopeng.zhang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179387330655.488856.2246156256257342362@kernel.org>
 
+On Thu, Nov 05, 2026 at 10:08:26AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 1 · Medium: 0 · Low: 1
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [High] The fix is incomplete: the same cleanup failure still happens on
+>   the link-autoneg-on branch of pause_setup() in…
+> - [Low] In pause_setup()
+>   (tools/testing/selftests/drivers/net/hw/pause.py, local lines 410-414,…
+> 
+> --
+> 
+> selftests: drv-net: pause: Avoid cleanup failures for unsupported link settings
+> 
+> This patch changes pause_setup() so that the forced-link restore is queued
+> only after setup has successfully enabled link autonegotiation. The goal is
+> to avoid EOPNOTSUPP cleanup failures on devices such as fbnic. It also makes
+> pause_test_support() fall back to checking forced MAC pause on the current
+> link when no link configuration change is accepted.
+> 
+> > diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
+> > index ca4a55e59c30f..99ce6a59dfcd6 100755
+> > --- a/tools/testing/selftests/drivers/net/hw/pause.py
+> > +++ b/tools/testing/selftests/drivers/net/hw/pause.py
+> > @@ -404,14 +404,14 @@ def pause_setup(cfg):
+> >  
+> >      if link["auto-negotiation"]:
+> >          defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
+> 
+> [Severity: High]
+> Can the same cleanup failure still happen on this branch?
+> 
+> This restore is still queued whenever the device reports link autoneg on,
+> even when setup never changes the link. The remote interface has the same
+> unconditional defer further down in pause_setup().
+> 
+> When the driver has no set_link_ksettings, ethnl_set_linkmodes_validate()
+> rejects every LINKMODES_SET before it checks for a no-op:
+> 
+> net/ethtool/linkmodes.c:ethnl_set_linkmodes_validate() {
+>     ...
+> 	if (!ops->get_link_ksettings || !ops->set_link_ksettings)
+> 		return -EOPNOTSUPP;
+>     ...
+> }
+> 
+> That means a restore to the same autoneg on value also fails with
+> EOPNOTSUPP.
+> 
+> Some in-tree drivers report autoneg on and provide only get_link_ksettings.
+> nicvf_get_link_ksettings() sets cmd->base.autoneg = AUTONEG_ENABLE.
+> be_get_link_ksettings() does the same when auto speeds are supported.
+> fbnic also has get_link_ksettings and no set_link_ksettings.
+> 
+> On these devices pause_test_support() takes the new "current link"
+> fallback. The deferred "ethtool -s <if> autoneg on" then fails in
+> ksft_flush_defer() and the test ends in a cleanup failure. The subject
+> line says the patch avoids exactly this.
+> 
+> Every other test that calls pause_setup() would hit it too, because the
+> defer is flushed even when the test skips.
+> 
+> Dropping the autoneg on restore isn't an option, since pause_test_support()
+> and pause_autoneg_link_autoneg() force the link and rely on it. Would it
+> work to queue the restore only where a link change is accepted? One place
+> is after a successful "autoneg off {forced}" in pause_test_support().
+> Another option is to let the restore tolerate EOPNOTSUPP.
 
+This looks like a legitimate concern that warrants a v3.
 
-On 11/10/2026 1:03 PM, Guopeng Zhang wrote:
-> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 > 
-> Boot-isolated CPUs remain in top_cpuset.effective_cpus, but are excluded
-> from its scheduling domain by generate_sched_domains(). Checking only
-> effective_cpus when distributing CPUs to partitions can therefore allow
-> all boot domain housekeeping CPUs to be taken from the top cpuset.
+> >  
+> >      # Local interface admin up, link aneg on
+> >      ip(f"link set {cfg.ifname} up")
+> >      if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
+> >          ethtool(f"-s {cfg.ifname} autoneg on")
+> > +        if "speed" in link and "duplex" in link:
+> > +            defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
+> > +                       f"duplex {link['duplex'].lower()}")
 > 
-> The resulting empty domain triggers a warning in build_sched_domains()
-> and can cause an out-of-bounds CPU access in build_perf_domains(). Both
-> root and isolated partitions can trigger this, whether local or remote.
-> For example, on a 32-CPU system booted with isolcpus=domain,10-31:
+> [Severity: Low]
+> Could this leave a forced link in autoneg state if the ethtool call fails
+> partway through?
 > 
->    echo 0-9 > A/cpuset.cpus
->    echo root > A/cpuset.cpus.partition
->    Oops: general protection fault
->    RIP: 0010:build_perf_domains+...
+> ethtool() raises on a non-zero exit. With the defer now registered after
+> the call, nothing restores the original forced speed/duplex if the driver
+> commits part of the change and then returns an error.
 > 
-> Require local and remote partition creation and CPU mask updates to
-> leave an active boot domain housekeeping CPU in the top cpuset,
-> accounting for CPUs returned by the same update.
+> bnxt_set_link_ksettings() is one example. It sets
+> link_info->autoneg |= BNXT_AUTONEG_SPEED before calling
+> bnxt_hwrm_set_link_setting(), and returns that call's error without
+> rolling back.
 > 
-> Add test cases to test_cpuset_prs.sh to verify that every partition
-> update leaves an active boot domain housekeeping CPU in the top cpuset.
+> This branch only runs when the device supports autoneg. Would queuing the
+> restore just before the ethtool call still avoid the fbnic cleanup
+> failure? The same ordering applies to the remote interface later in
+> pause_setup().
 > 
-> Fixes: 9b496a8bbed9 ("cgroup/cpuset: Prevent leakage of isolated CPUs into sched domains")
-> Co-developed-by: Ridong Chen <ridong.chen@linux.dev>
-> Signed-off-by: Ridong Chen <ridong.chen@linux.dev>
+> [ ... ]
 
-It would be better with: Ridong Chen <chenridong@xiaomi.com>
+This one I'm less sure about, but I think it should at least be considered.
 
 -- 
-Best regards
-Ridong
-
+pw-bot: cr
