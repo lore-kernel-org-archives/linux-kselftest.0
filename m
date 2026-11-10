@@ -1,54 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794292694;
-	b=JBZ+VBGMrse2n42YQa6YgG3VwgQZ1yvcvZNTQ6BLl7O5EBs9RSUCewGOO2MLks8zWi+6
-	 QuA9/iZtrWFPkDIxK+pGyGUl1QvlVVkHuqOMW2J4zfCVVWkjb9lc2zx6YgMsEZBiDDbds
-	 Zm2cZunBsePZDLIU/LqgOCXHIOZWUjTm5WmQv5aHconcSJsPaUl8V8+NBnMrQ4XPo9KnT
-	 2iWb5cKaNHuW7+RHuJ7Jfyl/VcvAj0qr8qiO/2ldMhO4+WQS7xNkNSbteBArbPbs6wYlC
-	 wNcFNT3BtnE/JoiG676qEH7tLSHE4vlUBSRGySuDeOyySn9cyfavQbU6ZdWvBJGm5/w==
+	t=1794292701;
+	b=pAKnVn0LIEdrKx5uB4iNo6+yY5vZ4hOiV/9jryH+tdH/QZEpSk0VzJpWOrf/OY5d2VVo
+	 1OA9MbFr1wd3Ydv7a7R0VBHBMnXnnG0uXOd4yFeE2VXHFdGreUDKVXvdHmTuWK5F1YBWf
+	 cKAbI2SBzFvhggnnYWwp4T6zxwAoK9PeIVmUzlqGo6F8N60eazO7HzYhgNOrlcIflMesP
+	 iMzNx9kXubP/E89fdUpxNkW0c0XbrkhQa2qz9f1RLeG14FBBtrJiZj7W1SzfJNEbVVZ3c
+	 F3+V2AD6LcuI+WiQmlkaImOI+GXLUqSa1GZcDrFeM13sbuX/5qthjPU9tZGOv8mQncA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794292694;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=uQfJDAzqv74OQj9PgNOrl2GZBw4mpbzbCmwJl/TcAx8=;
-	b=ouL/xgig8dYixi1ssf2mySvz/B7if2ro757BmEG3zuqtC2e686Bd4aHT80hJdw+Ab1eX
-	 VGZAdqVEqM/NIEbhynl02xXTP0CHRBp9xntSCU1ARnjUR+7nxznlA1XXE6JIxp80fouws
-	 TElNOR5+1Y9w8dkjL14sD7u5w+aN4yXYUS0py8jVoeTN90NhR5LboSeZT6WAGuzboqBBQ
-	 OMXyIIYJ5RTb2BjPkBWfoAhws3i99AJV8oKCWcHRK86QjJmS2EUPfRvVMDKftXJhzT0OM
-	 TbXLr5iqYiwDlfQbcyoUpiRG+1rMtNWgmjtLXmp4O31Osh/2NxeI/psZq5NaP+HUbsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794292701;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=tb6492JbkmgtBmoAA1lWUlcjhbJx5wzf1aKynM8S9Rs=;
+	b=2teSafqQRAcCU68dzGT1zoD4+3/0VMcKM6/iRpuLZ9ChLasw5Ox5nf1FmPAB+OtAURPO
+	 q3WOd4FTfwqRycvKZBOkVe5FUs7eVpsGvJaMSv0Vyu9rZ6djagNab+ASw+SICxYtlWUIS
+	 Bj+IW2f4AdpaG5fIKpPKmolmiRc3vAeHYpn+k8ITgURadJoXc/hPv7wiS+gbR41TG+N9M
+	 nJzHn+HMcoEIG+dRzWNiiUfbioNwtOcdNTv+mYl93i5lAcjlF2aa27hK50xQXgqJz3YJF
+	 AD7wuOv2ZonybAtUxQaO+QcmUerhZhjnQUylbPx+FRiXfCAmt+wNPobrTvOv0NSzg5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="q6j/KNAO";
-	arc=none smtp.remote-ip=95.215.58.173
-Received: from mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NUepMDTX;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D37606A325
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 06:38:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 13D37606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935D5606A334;
+	Tue, 10 Nov 2026 06:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=q6j/KNAO
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1MH47SrJNKyrBlImZVUKfskfdpHDxxkHzS/Ye+6eADU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794292691; v=1; x=1794897491;
- b=q6j/KNAOpCDbT4nm7weTjZHADonNjBKLBCX5P7Od22VxLV6IfVe5/HqDFMdLyWe/Fb0yWvxm
- H+eyIHPZLFwpyfMMh6AoxXkvahHdL9PJUNRC10zOGZAwzplOYXJTO378nlsSAExW1ZqwW4o9juD
- zNxvUVGXDT8FCRm20FkwBNPE=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2597cb3cd0548d62;
-	Tue, 10 Nov 2026 06:38:10 +0000
-X-Mizu-Trace-ID: 2597cb3cd0548d62
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4d46e469-e3b8-4ea6-a85d-b2aa3d750210@linux.dev>
-Date: Tue, 10 Nov 2026 14:38:03 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NUepMDTX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCDB1F008A2;
+	Tue, 10 Nov 2026 06:38:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794292700;
+	bh=tb6492JbkmgtBmoAA1lWUlcjhbJx5wzf1aKynM8S9Rs=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=NUepMDTXMV1qSqxVZiGi7dTMF76kI6beGLfpgFoQm994HjHyQHhEo0pjgyNb2ThHM
+	 wXgUiUBUSxufsqt5BE8SrGxyRB43bLWCD0FDyJm0lgsh/IwTQBWro2gI7HS31ZqKoM
+	 h3PC3WQLXQkvmm9ZXljjtnJDGhTkoseoweHyUbq7RwzhATQ0OBH8Ko1QTaQHUK4QOY
+	 uuAucLUaaKv5yDEYu/APqwUDEbTZlFfg1rtJPmPQjM1jpNf0WZPKfWw0UEHhLdFtja
+	 34ytQjEC+WGd2G5jydmujjZnBa1E5CoqJjb1AApTCWEJYMTQE5m2mZUYNZGT8mVCTw
+	 Rq1qCSMykbTWg==
+Subject: Re: [PATCH net 2/4] af_unix: Fix scm_stat.nr_fds leaks for OOB skb.
+From: netdev-bot+sashiko@kernel.org
+To: sidchintamaneni@gmail.com
+Cc: kuniyu@google.com, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, willemb@google.com, jannh@google.com,
+ tkhai@ya.ru, apais@microsoft.com, rlmenge@gmail.com,
+ hargar@linux.microsoft.com, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 10 Nov 2026 06:38:18 +0000
+Message-ID: <179429269890.994134.2299928525127713908@kernel.org>
+In-Reply-To: <20261106051905.218638-3-sidchintamaneni@gmail.com>
+References: <20261106051905.218638-3-sidchintamaneni@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,83 +64,104 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] cpuset: settle isolation state when CPUs are given
- back to parent
-To: Ridong Chen <ridong.chen@linux.dev>, Waiman Long <longman@redhat.com>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: Chen Ridong <chenridong@huawei.com>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Sashiko <sashiko-bot@kernel.org>, Guopeng Zhang <zhangguopeng@kylinos.cn>,
- Ridong Chen <chenridong@xiaomi.com>
-References: <20261107120100.3587595-1-ridong.chen@linux.dev>
- <20261107120100.3587595-4-ridong.chen@linux.dev>
- <c2ab6077-750e-48cb-bfd0-18882c807de5@linux.dev>
- <d7fef280-a076-42c6-a6c6-cf355bbbc29f@linux.dev>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <d7fef280-a076-42c6-a6c6-cf355bbbc29f@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
+Low priority / nit picks for your consideration:
 
-在 2026/11/10 14:24, Ridong Chen 写道:
-> 
-> 
-> On 11/9/2026 11:20 PM, Guopeng Zhang wrote:
->>
->>
->> 在 2026/11/7 20:00, Ridong Chen 写道:
->>> From: Ridong Chen <chenridong@xiaomi.com>
->>>
->>> partition_xcpus_del() only updates isolated_cpus when the partition that
->>> gives back the CPUs has a different state than its parent. CPUs that were
->>> further distributed to descendant isolated partitions are not taken into
->>> account, so isolated_cpus_release() has to be called afterwards in
->>> several places to walk up the ancestors and fix isolated_cpus.
->>>
->>> Make partition_xcpus_del() always set the isolation state of the given
->>> back CPUs to the state of the parent that receives them. As the
->>> effective_xcpus of a partition covers the CPUs distributed to its
->>> descendants, the isolation state of those CPUs is settled at the same
->>> time. Boot-time isolated CPUs are still preserved by isolated_cpu_update().
->>>
->>> compute_partition_effective_cpumask() invalidates a child partition
->>> without going through partition_xcpus_del(), so do the same there: the
->>> CPUs of the invalidated child take the isolation state of its parent.
->>>
->>> As the parent may be shrunk and its effective_xcpus not updated yet,
->>> only do so for the CPUs the parent still owns. This is to keep the
->>> isolation state correct for now, the in-place invalidation here will be
->>> removed later in the partition rework.
->>>
->>> isolated_cpus_update() assumes the old and new states are different,
->>> which no longer holds now that partition_xcpus_del() proceeds regardless
->>> of the states. Drop its @old_prs argument and the WARN_ON_ONCE() so that
->>> it simply sets the isolation state of the given CPUs, and use it
->>> everywhere. The state check in partition_xcpus_add() is dropped as well,
->>> as setting the state is a no-op when the states are the same.
->>>
->>> isolated_cpus_release() is no longer needed and is removed.
->>>
->>
->> Hi Ridong,
->>
->> Would it be worth briefly mentioning in the commit message that this patch also fixes the issue described here?
->>
->> https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
->>
-> Thanks, Guopeng.
-> 
-> As I replied to Longman, I will add it.
-> 
+- [Low] The commit message for "af_unix: Fix scm_stat.nr_fds leaks for
+  OOB skb." gives the wrong reason for the leak.
 
-Sorry, I just realized that my comment duplicated Longman's. I had some email connectivity issues and only just received the review emails.
+Pre-existing issues:
+- [Medium] unix_dgram_disconnected() (net/unix/af_unix.c:616) purges a
+  datagram socket's receive queue with skb_queue_purge_reason() and…
 
-Thanks for the clarification!
+--
 
-Cheers,
-Guopeng
+af_unix: Fix scm_stat.nr_fds leaks for OOB skb.
+
+This commit adds scm_stat_del() calls on the paths that free or skip an
+OOB skb. Those paths are in unix_stream_recv_urg(), manage_oob() and
+unix_stream_read_skb(). Without the calls, u->scm_stat.nr_fds stays
+elevated after an OOB skb carrying SCM_RIGHTS is dropped.
+
+> Because unix_destruct_scm() has no reference to the receiving socket when
+> passed descriptors are not AF_UNIX sockets, u->scm_stat.nr_fds (reported
+> as scm_fds in /proc/<pid>/fdinfo/<fd>) remains permanently elevated.
+
+[Severity: Low]
+Is this explanation accurate? It reads as if the leak only happens when
+the passed descriptors are not AF_UNIX sockets.
+
+The destructor path never decrements nr_fds for any fd type:
+
+unix_destruct_scm()->unix_detach_fds()->unix_destroy_fpl()->unix_del_edges()
+
+net/unix/garbage.c:unix_del_edges() {
+    ...
+	if (!fpl->dead) {
+		receiver = fpl->edges[0].successor;
+		receiver->scm_stat.nr_unix_fds -= fpl->count_unix;
+	}
+out:
+	WRITE_ONCE(fpl->user->unix_inflight, fpl->user->unix_inflight - fpl->count);
+    ...
+}
+
+The destructor can reach the receiver through the AF_UNIX edges, but it
+only updates nr_unix_fds and unix_inflight.
+
+The only decrement of nr_fds is the atomic_sub() in scm_stat_del(). So
+these OOB free paths leaked nr_fds for AF_UNIX descriptors too.
+
+The oob_fdinfo selftest in this series sends AF_UNIX socket fds
+(self->fd[inflight * 2]) over MSG_OOB. It expects scm_fds to go back to 0
+only with this fix applied.
+
+Could the commit message describe the cause as scm_stat_del() being the
+only place nr_fds is decremented, whatever the fd type?
+
+> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> index bfaab7c6d7203..44c0a81dd423a 100644
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+
+[ ... ]
+
+> @@ -2906,6 +2915,7 @@ static int unix_stream_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
+>  		spin_unlock(&queue->lock);
+>  		mutex_unlock(&u->iolock);
+>  
+> +		scm_stat_del(sk, skb);
+>  		kfree_skb_reason(skb, SKB_DROP_REASON_UNIX_SKIP_OOB);
+>  		return -EAGAIN;
+>  	}
+
+[Severity: Medium]
+This is a pre-existing issue and was not introduced by this patch. Is
+there a similar nr_fds leak in unix_dgram_disconnected()?
+
+net/unix/af_unix.c:unix_dgram_disconnected() {
+	if (!skb_queue_empty(&sk->sk_receive_queue)) {
+		skb_queue_purge_reason(&sk->sk_receive_queue,
+				       SKB_DROP_REASON_UNIX_DISCONNECT);
+    ...
+}
+
+Each skb on that queue was counted by scm_stat_add() at send time. The
+queue is purged without scm_stat_del(), and the socket stays in use. This
+happens when unix_dgram_connect() gives it a new peer (or AF_UNSPEC), and
+also from unix_dgram_sendmsg().
+
+Sending SCM_RIGHTS to a connected SOCK_DGRAM socket and then calling
+connect() on it before reading would leave scm_fds in fdinfo too high.
+
+This is fixed later in the same series by "af_unix: Fix scm_stat.nr_fds
+leak in unix_dgram_disconnected()". That patch dequeues each skb and calls
+scm_stat_del() before kfree_skb_reason(), and the dgram_disconnect_fdinfo
+selftest covers it.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106051905.218638-1-sidchintamaneni%40gmail.com
