@@ -1,59 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.30.148.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794278499;
-	b=3DbIztsCGX10LVmo8lNbwnSNBluIJPqfYeXACrBzTNtRBt0iF0Mn7u2Iu12TdMmsSAQL
-	 uaB4k4/TYUH+OvTH6JGzsAK3Dkh/Leq2DnC5xVowaG1ilq8OBp+VQK+IlAaPvf8Hf2+Kb
-	 hGUbvZCvTcNFH3LcfjMZvqOcqi/cSWib2YVQgThE5KsJ3VrGVTkq2OVICIM5dC9cBSjYq
-	 bcUxwd3rZZkYUivISo9F8PHDcsxG78LXCoKaTXmIY89HW4ZjrucHmG5Te+hl5/aoGspvK
-	 KgY98LKKbPk9y95WZmAybQzc+YsD+wBj174F+ocUBQstDn2tbQ4KXWDlNC7+wCankiQ==
+	t=1794278605;
+	b=PDXf7qzv9nZFn/PAOT/3jqYGKUyKkI8oOWWXTVslOMBVuBYqbcsHAsyEVO/6ynHJjhMo
+	 Pu7mHQi+x9L4XvssDIIf7swfshhHCxDL6pfPZT9UV2S3TXzv6JXzmANtrf9EeGqd1I2+H
+	 iDKk9u2t2UvkD/Xj3ouTAINfc3tRcFXG/MzGMSvLQlPZnkwDq95FjlStADgzssgtU7RBV
+	 ay+xgEXOcfIyzkh12gPCxhAzBlvK5TmKdXNGP5Gmjj0qqmXx5MK7IDj2GSq9Wn2UFXx11
+	 MqhiK26HoVWgLe3pKZ20nP3rYVzVRTuz3PiyZ4dzFVvJpT0MxSdHGNHVH97W2H7Ai3Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794278499;
-	h=DMARC-Filter:DKIM-Signature:Received:X-Lms-Return-Path:
-	 Content-Transfer-Encoding:To:From:Date:X-Original-From:Cc:
-	 Mime-Version:X-Mailer:Subject:Message-Id:Content-Type;
-	bh=rPoVYl5XhffNID/3V35m4DVz5rHd/NjoZ7mdTI10EK8=;
-	b=rDvT8RG3QxDvaZ4QtyjoSAOc0KFCGsrjZwzj0gk9HR6+lfdL0YWpZBZuWAYsFAf/zpR4
-	 i5E6o9TAglvj0muMX5cpmoUGYtl0TGVXoBn6+BteU9Lczyc2ypVMjCSFk7f23yJuuQ3KS
-	 XtEJJe3bXOPmKbyeFg50u+wChGvrkegkr8AcK4BBGIlP06Y/eYYbHGsNVgBkT3hg96g4c
-	 e59PruaiFHql1OZ/DYik2PB30JAjsEsDKyuhQbgamNQDpA1DApoXKpJW3+dSiMIQo1iOq
-	 6CK+0+Ep56Tey6Ixlqhoa8wYExVBJi+Dqp5pIflwWPdh7tZrm5cQSRV89lSGc/SdcVA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794278605;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Zmail-TransId:X-Mailer:Message-ID:In-Reply-To:References:Date:
+	 Mime-Version:From:To:Cc:Subject:Content-Type:X-MAIL:X-TLS:
+	 X-ENVELOPE-SENDER:X-SOURCE-IP:X-CLEAN:X-Fangmail-Anti-Spam-Filtered:
+	 X-Fangmail-MID-QID;
+	bh=wbgwxLxbqHUtIvxBG9CCwSuzwtZB4jvydCU5zVJ0F5U=;
+	b=cIxa3KhEdDwUfCdiUcQT9aD/g5cVT1OxS0q/jRhmbJeTsrN4l86kr597iWQ00lfTg+A7
+	 OP+PH7Bem2SmyjJYOkbntQAetWg3A6+Z7nLOgJgT0eQn8rCyx7Wnenzvvw+DS4rupppBg
+	 oarA3jm9c8ZGKAyA4YfwdZCFAFqoIyu+UdJgsxSHEHeGi2Ha0mJOG0yfN4y0G6XnzDCZJ
+	 U6C9dVOS97peTB4tPGZrpQzK88ZoDs7FfTqfHzs74dtYT9CgiUYgqJpRVh9QLdLXHcjhF
+	 nxwW9NhH8uGjzH1WeDbVX448aJJbTLbPNZlwcAwcvadz0PaSYAefGRoCIQKJPuQKMxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=lanxincomputing.com;
-	spf=pass smtp.mailfrom=lanxincomputing.com;
-	dkim=pass header.d=lanxincomputing-com.20200927.dkim.feishu.cn header.i=@lanxincomputing-com.20200927.dkim.feishu.cn header.a=rsa-sha256 header.s=s1 header.b="gzAiSxe/";
-	arc=none smtp.remote-ip=209.127.231.39
-Received: from va-2-39.ptr.blmpb.com (va-2-39.ptr.blmpb.com [209.127.231.39])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=zte.com.cn;
+	spf=pass smtp.mailfrom=zte.com.cn;
+	dkim=pass header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=5HRrsNqD;
+	arc=none smtp.remote-ip=160.30.148.34
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197DC606A31C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 02:41:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 197DC606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lanxincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lanxincomputing.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06766606A31C;
+	Tue, 10 Nov 2026 02:43:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 06766606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=lanxincomputing-com.20200927.dkim.feishu.cn header.i=@lanxincomputing-com.20200927.dkim.feishu.cn header.a=rsa-sha256 header.s=s1 header.b=gzAiSxe/
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=s1; d=lanxincomputing-com.20200927.dkim.feishu.cn; t=1794278491;
-  h=from:subject:mime-version:from:date:message-id:subject:to:cc:
- reply-to:content-type:mime-version:in-reply-to:message-id;
- bh=rPoVYl5XhffNID/3V35m4DVz5rHd/NjoZ7mdTI10EK8=;
- b=gzAiSxe/p0SPFoUDwY3q4yCkV6tuziRId6awtTfPqmkdYvK1BzhrDsW/7psvU8R2FaYkn+
- w/IryLVgTEbwkcg/Bt4tOkcpEVm08/njFnN7O5M6X8itUKIVf2NrrsiJ7F7XezHQ+Ge8X2
- 0AP2xHeANP6sixQ1Vad4JRK6cGq9qaEX2Wg7pMxnJ5mIpOPGNkA4nb3xhI5zK8z8WTeOTz
- pQTpkbQKUMLBxSxImUJP5f52du7GOcLpNV9jBAuW+JkPOiRCBihQWrHEAhqs1EP5oCXik5
- 3Sihgbg6dEHP4AQjnGr9JHSXDq9b3G6RUMLO3/WVeI4PaMIA7kXHRlnCgmkpmw==
-Received: from Test-PC-Jinli.lan ([123.120.5.129]) by smtp.feishu.cn with ESMTPS; Tue, 10 Nov 2026 10:41:28 +0800
-X-Lms-Return-Path: <lba+26af28459+5267c9+vger.kernel.org+jinli@lanxincomputing.com>
-Content-Transfer-Encoding: 7bit
-To: "Hangbin Liu" <hangbin.liu@linux.dev>, <dsahern@kernel.org>, 
-	<idosch@nvidia.com>, <shuah@kernel.org>
-From: "Jin Li" <jinli@lanxincomputing.com>
-Date: Tue, 10 Nov 2026 10:41:23 +0800
-X-Original-From: Jin Li <jinli@lanxincomputing.com>
-Cc: <davem@davemloft.net>, <edumazet@kernel.org>, <kuba@kernel.org>, 
-	<pabeni@redhat.com>, <horms@kernel.org>, <netdev@vger.kernel.org>, 
-	<linux-kselftest@vger.kernel.org>, "Jin Li" <jinli@lanxincomputing.com>
+	dkim=pass (2048-bit key, unprotected) header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=5HRrsNqD
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4jNrYj5k69z5HKfx;
+	Tue, 10 Nov 2026 10:43:21 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zte.com.cn;
+	s=z202610; t=1794278601;
+	bh=AN7wcGjU/OIqMlYgzCI+b3bup9gXpzPNbBvprbzC3PY=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject;
+	b=5HRrsNqDrfmgpKAZ2VUDB0+AU5l3bpGFnxNZ3vcvxoyrQmuDp5JTWnYFkRH/qyEnB
+	 OhVckpnFWiVSW9iHfnXGMtKS5+RFCK55jY6VVIgEDgcXtOf6DLeVSl3jvtURaaFLt9
+	 3oxMHK0/rEu8DnVL+QFZOSjO0YRvy73TFXCk8/0aEca7GgQ0JQAPUkeCRyo9nk5ynq
+	 152RVtrNQAsjGqnzDL/ShwFNv7F8cOc3FyyVeyG58jVbgqnhlClWxQJjD5AEF8ZlKJ
+	 BDX2Aw1+zzC17WG+B/yVK0nipbJIzpR7oiUy86X03Gihnzs15ncRNO+N8qFtLOYVN8
+	 oOzl3R1nLcJWA==
+Received: from xaxapp04.zte.com.cn ([10.99.98.157])
+	by mse-fl2.zte.com.cn with SMTP id 6AA2h9bV059154;
+	Tue, 10 Nov 2026 10:43:09 +0800 (+08)
+	(envelope-from shao.mingyin@zte.com.cn)
+Received: from mapi (xaxapp05[null])
+	by mapi (Zmail) with MAPI id mid32;
+	Tue, 10 Nov 2026 10:43:10 +0800 (CST)
+X-Zmail-TransId: 2afc6af284bee99-77963
+X-Mailer: Zmail v1.0
+Message-ID: <20261110104310919omj-YtucOjgfh-lZS19Ha@zte.com.cn>
+In-Reply-To: <avJ0Vn9G7XhZv-XL@fedora-laptop>
+References: 202611092358134332uegNg75loROSwL53Em6A@zte.com.cn,avJ0Vn9G7XhZv-XL@fedora-laptop
+Date: Tue, 10 Nov 2026 10:43:10 +0800 (CST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,86 +73,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0
-Subject: [PATCH net v2] selftests: net: forwarding: replace bash brace expansion with seq
-Message-Id: <20261110024123.535210-1-jinli@lanxincomputing.com>
-Content-Type: text/plain; charset=UTF-8
+From: <shao.mingyin@zte.com.cn>
+To: <tom.leiming@gmail.com>
+Cc: <shuah@kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?UmU6IFtQQVRDSF0gc2VsZnRlc3RzOiB1YmxrOiBwcm9wYWdhdGUgcmVjb3Zlcnkgd29ya2VyIGZhaWx1cmVz?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl2.zte.com.cn 6AA2h9bV059154
+X-TLS: YES
+X-ENVELOPE-SENDER: shao.mingyin@zte.com.cn
+X-SOURCE-IP: 10.5.228.133 unknown Tue, 10 Nov 2026 10:43:21 +0800
+X-CLEAN: YES
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6AF284C9.001/4jNrYj5k69z5HKfx
 
-{1..16384} is bash-specific brace expansion and will not work with POSIX
-shells like dash or busybox ash. This breaks the flowlabel test when
-/bin/sh is not bash.
+> Please run the real tests next time, it just needs one kernel with
+> ublk enabled, and stubs can't cover what the tests are supposed to
+> verify.
 
-Use $(seq 1 16384) for portable iteration. Fix the same issue in
-custom_multipath_hash.sh, gre_custom_multipath_hash.sh and
-ip6gre_custom_multipath_hash.sh.
+Agreed, and sorry for sending it that way.  The stubs only exercised the
+ERR_CODE aggregation in the shell: they can show that the parent now sees a
+worker's status, not that a real failed recovery reaches the final result.
+The note should not have claimed more than that.  The follow-up for
+test_stress_*.sh will be run on a kernel built with CONFIG_BLK_DEV_UBLK,
+and I'll do the same for any future revision of this patch.
 
-Fixes: 555e5531635a ("selftests: net/forwarding: spawn sh inside vrf to speed up ping loop")
-Signed-off-by: Jin Li <jinli@lanxincomputing.com>
----
-v2:
-- Add Fixes tag
+> Nit: the above can be simplified as:
+>
+> 		wait "$pid" && continue
+> 		ret=$?
+>
+> Not a big deal.
 
- .../selftests/net/forwarding/custom_multipath_hash.sh     | 8 ++++----
- .../selftests/net/forwarding/gre_custom_multipath_hash.sh | 8 ++++----
- .../net/forwarding/ip6gre_custom_multipath_hash.sh        | 8 ++++----
- 3 files changed, 12 insertions(+), 12 deletions(-)
+I'd rather not make you re-review a v2 just for this, so I'll leave it for
+now; if something else forces a revision I'll fold it in.  Say the word if
+you'd prefer a v2 with it either way.
 
-diff --git a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
-index 5dbfab0e2..92940370e 100755
---- a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
-+++ b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
-@@ -224,10 +224,10 @@ send_dst_ipv6()
- send_flowlabel()
- {
- 	# Generate 16384 echo requests, each with a random flow label.
--	ip vrf exec v$h1 sh -c \
--		"for _ in {1..16384}; do \
--			$PING6 -F 0 -c 1 -q 2001:db8:4::2 >/dev/null 2>&1; \
--		done"
-+	ip vrf exec v$h1 sh -c '
-+		for _ in $(seq 1 16384); do
-+			'"$PING6"' -F 0 -c 1 -q 2001:db8:4::2 >/dev/null 2>&1
-+		done'
- }
- 
- send_src_udp6()
-diff --git a/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
-index b4f17a5bb..19384be4b 100755
---- a/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
-+++ b/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
-@@ -319,10 +319,10 @@ send_dst_ipv6()
- send_flowlabel()
- {
- 	# Generate 16384 echo requests, each with a random flow label.
--	ip vrf exec v$h1 sh -c \
--		"for _ in {1..16384}; do \
--			$PING6 -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1; \
--		done"
-+	ip vrf exec v$h1 sh -c '
-+		for _ in $(seq 1 16384); do
-+			'"$PING6"' -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1
-+		done'
- }
- 
- send_src_udp6()
-diff --git a/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
-index b24acfa52..d848e82d4 100755
---- a/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
-+++ b/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
-@@ -321,10 +321,10 @@ send_dst_ipv6()
- send_flowlabel()
- {
- 	# Generate 16384 echo requests, each with a random flow label.
--	ip vrf exec v$h1 sh -c \
--		"for _ in {1..16384}; do \
--			$PING6 -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1; \
--		done"
-+	ip vrf exec v$h1 sh -c '
-+		for _ in $(seq 1 16384); do
-+			'"$PING6"' -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1
-+		done'
- }
- 
- send_src_udp6()
--- 
-2.53.0
+> BTW, test_stress_*.sh have the same issue (ERR_CODE set in background
+> worker + bare 'wait'), which may be handled in a follow-up.
+
+Yes, they set ERR_CODE in a worker and call a bare 'wait' the same way.  I
+will send that as a separate patch on top of this one, and make the helper
+in test_common.sh generic (_wait_test_pids) there, so this patch stays as
+reviewed.
+
+Thanks for the review and the R-b.
