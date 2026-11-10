@@ -1,72 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.143.172.20
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794316720;
-	b=PYadkIs5jUHeAM2XHnoh2/orI/0qy7Jn1QuGjw+7AAptTNkILXslJQSN3a1TKUM02gz7
-	 rPIboC/o+521ssDnmg2fjZchc3fXM3/0LytRule1hYS/1ToMvboDLWPEvOIKM+DdWkd2j
-	 txOiq0l5pHw6yz8XZCX6QcgmDUwU2yYfNXKzJAR87Kjzsb2EXImDIH+mOkGhM/6I4fNmj
-	 05vUjR6AZjCStulKjYzWP+bZmnA9d6SbqwOYOfQkiw1wkIZJsbmQWx5EJpBHB3mnAk6oU
-	 AE5oUyDzHFsrhtiZFsolYgTAbmgbCeu9qbg1aT1DNtsSYpph6MND36mu64bHgvvg3bw==
+	t=1794316742;
+	b=XsSmhhmgiYRDU2fsqsOqWM+FdTNq/jvNj9S01jKwJO6eBxpsmlC3FLWMJIRpO7VM7zkq
+	 ROPcot2DiCcdurERcvACAVJCIZa1B5hUWwfMoYz4E7mtKGxsiO92njeiF+Jn0gcXeV/uy
+	 i6TXN29ozYRpae4y8jObyx8yrFWRVTbVb7lCvDhuWuZhtEk7MSKqywb7MPtXubXioU773
+	 k2vuejkKovBsScreVkphQRw+WIuRA2/mXQv4v0ptDayBao9qaiwa3HSWoFCAm2KZrA0G0
+	 DpJf1Sr+p46VZ3ASVYB4o7hAU4e2OCi6zTQ8UHve/c6kaKzClyi2a8h5jHjm82bvkTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794316720;
-	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Rspamd-Bar:X-Rspamd-Report:X-Rspamd-Score:
-	 DKIM-Signature;
-	bh=1C/fnf89cUNx1UL0oOgTgDMQKEaqlsJP/h5JbLgPiys=;
-	b=E8dswcTNc41TbrYc8bNUOxF16ZedUAKPx2evaNE6LWJxq7vZDvnryTlqf7XVo47uuPZf
-	 U2ysMToA+rnKzg4CTvFwtJm5ocAt1N7KdGs/4s2MAx4VuWUfQpkpXcLb6htsLID4pass1
-	 tve4UFzO7jsOX8JXzma4tcYMufDcc6t3W9AMd9zPego9jAxOdb8iCfmk3gfyZFhWz38jV
-	 PSBplrUujL+Ya43VbvF6X5PaNXcAgti+klA/x0VaCufWpoXxvJfyw0c1ZluZ8LUZBCtV0
-	 ewH5QNfrJYReAHj65zYzS1RGqt6P356pPzuRclt19ZA4GZgBNbBXE3gY03/UGaz8uzA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794316742;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=uCK3DWsW5brHcg2UrNGkrWpwotXCDgVLqXuyjt+/CDE=;
+	b=yNjFS8CqG92MZASTWKiD1RVLMlLoVsT+uQp6zxe2TsGZyIehAiboy2YXlcGsHygsfFTP
+	 XouxcH4HcL6PNE0azkdoL2O3sInGIpzsaMN/NqeFou4aqc4o2sjxI8sNsO/LXV+wAo99R
+	 CwQOQnlXAM8K/1KTwDk8b6VKPTwJFZPEOVH9KQ780RLzYMBHZU/Wg6lK1bKFKiZdTNFi+
+	 tw5L6oRTnTOdj46hDtRPp3jL9Jwx+BBNtQ0uGLoFltEvFhzzvR/KMndyS/JPQKJcJR+rh
+	 JX9dEnTwA8oUuoXihF/KGAe05p+X4932jzb8bmDT/nUmM6oCfj90rZ7oY0HRTAEqMOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=lausen.nl;
-	spf=pass smtp.mailfrom=lausen.nl;
-	dkim=pass header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=bKyDX1oT;
-	arc=none smtp.remote-ip=95.143.172.20
-Received: from mailgate01.uberspace.is (mailgate01.uberspace.is [95.143.172.20])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PyURNxlR;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=NJBumCqO;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A810606A7F9
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:18:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A810606A7F9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lausen.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lausen.nl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9776606E461
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:19:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9776606E461
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=lausen.nl header.i=@lausen.nl header.a=rsa-sha256 header.s=uberspace header.b=bKyDX1oT
-Received: from devico.uberspace.de (devico.uberspace.de [185.26.156.185])
-	by mailgate01.uberspace.is (Postfix) with ESMTPS id 8516B60E14
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 14:18:37 +0100 (CET)
-Received: (qmail 19616 invoked by uid 990); 10 Nov 2026 13:18:37 -0000
-Authentication-Results: devico.uberspace.de;
-	auth=pass (plain)
-Received: from unknown (HELO unknown) (::1)
-	by devico.uberspace.de (Haraka/3.1.1) with ESMTPSA; Tue, 10 Nov 2026 14:18:37 +0100
-From: Leonard Lausen <leonard@lausen.nl>
-To: netdev@vger.kernel.org
-Cc: leonard@lausen.nl,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	Phil Sutter <phil@nwl.cc>,
-	Shuah Khan <shuah@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net 2/2] selftests: netfilter: cover IPv6 FIB rule suppression
-Date: Tue, 10 Nov 2026 13:16:40 +0000
-Message-ID: <20261110131638.15004-7-leonard@lausen.nl>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261110131638.15004-3-leonard@lausen.nl>
-References: <20261110131638.15004-3-leonard@lausen.nl>
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=PyURNxlR;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=NJBumCqO
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794316740;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uCK3DWsW5brHcg2UrNGkrWpwotXCDgVLqXuyjt+/CDE=;
+	b=PyURNxlRAenFUzo9w0kjcnogtkFUEj7FTJ5XbheE1IlWiQTXrMBfOe/scqn8BDVV+vtK5s
+	BDcW9LAzIJRt6f9a0EaZx/EQwGc6qUg52xsF5zGX2GDvGa3hXtmLqdyizNEDjTpjXWBc0r
+	7smZ0e2avj6mjwXqYwT00N1iCcnfLZI=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-435-Q1qVnw87M4uGMVEvjyKRlQ-1; Tue, 10 Nov 2026 08:18:59 -0500
+X-MC-Unique: Q1qVnw87M4uGMVEvjyKRlQ-1
+X-Mimecast-MFC-AGG-ID: Q1qVnw87M4uGMVEvjyKRlQ_1794316738
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-48df02b91f9so1325869f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 05:18:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794316738; x=1794921538; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uCK3DWsW5brHcg2UrNGkrWpwotXCDgVLqXuyjt+/CDE=;
+        b=NJBumCqObc+eY0/qBEhU38pm05rcyolsQTZaUxXYVbxPwYBwCJwgF439lA4PENvlqD
+         pjbGMLTs7j7UAK/YKXJpwEVRutWKUeoT41AmWGs/Vyyrr4Nrluqjp/ABJoym1rR0KvAx
+         C3FilF0Um11cWyOieP6xJ9SY9Ug1aIar8o+GABHy8F+edd6bL1FD8JXwhDpRmGEyj4/a
+         X+/WaYCoX6G6Xbz/AuZj7bFeeX83EMfzxsRuY+fFPaJFTmlzEiWr8rqHKD/g63FOSSlm
+         lxQQhnEfA9k1dKR8I6Ye9ii0obYsM/PC12Mh7oS7KagG8H21tbvnBMNt2PbFaDNcqt2t
+         zs1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794316738; x=1794921538;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uCK3DWsW5brHcg2UrNGkrWpwotXCDgVLqXuyjt+/CDE=;
+        b=ku0OcQXsgtM/syII6b8GTRY4+fRWsOPEOMUvjqV5ObpoNQUwVilAjNEXk95vvhEtxt
+         jAiJgbqNUqIpsO5S364A1Dykv4dA5hiADsw5bLS0mz/Ru3vSjhhlkUQ0Yu4gP9BUyO9p
+         YDK6OfEVLYlhn6h4RLmUm292CRmUb2r/lK1lMLlJBWJyLc48NaAkPjdrA3NqLO7UUc5R
+         i3U6XhEGpsY+9/XaAZnbfYhuWfXFHHvTaZc+RM8gG6WzekTp5Mh59QnvF3QQPa52fbLN
+         Z0GG6AWy2i/xDbi3PezOXl3cud4TbI09mDhn+MW9iuZTZdxmromfZOwLJorWhW5e5XkU
+         D0Qw==
+X-Forwarded-Encrypted: i=1; AL+hErHbZwHJweffHyTRIC1m9JURQb1Dp7UrWAu20EbzN8qifaMyoVo3iXa2Rm/oR/Ob2XwsKqzHin43Qc5Wo2GKAl0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9gQ9nSLGyVqDbg6PJTmrrJwmvNaY1yW3PetaQhbihrNhKVjIXK
+	jlbn7RpsMFgfxM2B6ENUf9drDXpe8uydCfaK7qpxeVXW8vfTlrZWHQdlST8yZ2p9ttxBgfOtKgk
+	Llpbxa7vnFiwnsHqq14AZzb4LczSIfWnxNGzjukvHV9CvhqXfyK2LeChE4Q9wisc7+AZURA==
+X-Gm-Gg: AYBFou2rAFZq6xYHzrfGzuFHYfYO1I4yK7lqgt6qfc0dAjQ05rAQjBJgC7G0s+K8fti
+	PtbVaEISunOvTQ33ulLQX7fLwVRP73vtYBLYoc15Ey8L//qQIm/0/ak5T3q4O/fpKhh8ZtB5HuE
+	UabMp0hAx6KJ5R1+iLguu0QHbnSUCz41jMuaHpxiNWIULZ8sBd5KXSyetS5DsLNGp0UMFZnIQ3P
+	BagjeAoYL77dO57+GCO6e5lSzvykKFjUMHkMigFEfP2IsrxjIAQE6xtpw7njfuDqwbCy2778KFy
+	tnHf2r3e9szj5AxbBuQF+ajJmyz/zzMdPl6Be2VcmKEleGm7OYHP4F39eXTnNZbJ6dAxWqwL2XO
+	I4WOWo7wUUWQtxV01NlvPM3JIVckqnrswpOgODUMN/wug7vG1yje+ex0NopLAd+ZO0qfoc1V4fn
+	91fvM=
+X-Received: by 2002:a05:600c:870e:b0:49f:c5aa:9ef4 with SMTP id 5b1f17b1804b1-4ba0234267amr43353365e9.8.1794316738356;
+        Tue, 10 Nov 2026 05:18:58 -0800 (PST)
+X-Received: by 2002:a05:600c:870e:b0:49f:c5aa:9ef4 with SMTP id 5b1f17b1804b1-4ba0234267amr43352395e9.8.1794316737684;
+        Tue, 10 Nov 2026 05:18:57 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0236f03esm49827465e9.3.2026.11.10.05.18.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 05:18:57 -0800 (PST)
+Date: Tue, 10 Nov 2026 14:18:54 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v5 09/29] sched/deadline: Reset the deadline and the
+ runtime with the parameters
+Message-ID: <avMZvuEdV8ua36jy@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-10-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -76,132 +128,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: -----
-X-Rspamd-Report: REPLY(-4) BAYES_HAM(-2.999956) MID_CONTAINS_FROM(1) MIME_GOOD(-0.1) R_MISSING_CHARSET(0.5)
-X-Rspamd-Score: -5.599956
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=lausen.nl; s=uberspace;
-	h=from:to:cc:subject:date;
-	bh=qynhRgY2JpWjstGEijv7L+7dlXnlYftKDMuVeub5Zm0=;
-	b=bKyDX1oTz4UOAJyRZB6msfxVRrBhxcHE0BVxbONt5m4kSfr6ExGzHDREjq7nTvWK1EBWoONwJU
-	tbARIvsUdy2iMqizWCLogE/Y9BT5vb8tmNvtwYopYo8v7M115R9+oq3BFh5YGDv5iXwrZRuEcrCh
-	5S4gnbeBY/RljYlEUUY4YuXlApHK6mmcxy6SZsmnELwqj+25cu3eu8sl9hbkgI0CPUkvE+scRBXD
-	MSoAHOSpqMyKN5KstMYBNQY+eDQ77gGjSEPbSq4MxNzAF/uNwzW2SOIQmVkq2SGAATearHsgDKbP
-	2yJOD0S5aT5dZ3bW7Rh7oE88g8IA7elCVyEt8BPjqU1Suym8CJzPI4o2n45gANO2v93bbc8N12TZ
-	9Rwx+P/ji80WvVs7SzGjlGXvzlwV4RbmSHVseJOk7s/RDaECPHa8tX8NiKD8HBqekHTS9ckpOlBL
-	NS3q4FB6Bo3QIdxly8j9SwJsVZ9bU/b7DbKA7DTR8sPvRZWhd19hmBmR1rfAEdwHAXFasvbMNKob
-	GL4NlKUuZ7gNfFcQC/l4KTHWh044GT2fZFLg1xzYZSu4FxZ5KCOEnRsn/KCBsT0JBfuqX8xVDRfP
-	1bPpsozXaZHILkDJ2zNTKOJydV/w6PhKaYyrpKI4HGEJLgCGUsCw8A2evqqY/uPC9dbfijVrLpJB
-	8=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261108185406.1549770-10-mathieu.desnoyers@efficios.com>
 
-Extend nft_fib.sh using its existing namespaces, interfaces and counter
-helper to exercise suppress_prefixlength and suppress_ifgroup.
+Hello,
 
-Check that a default route and a route through a matching interface group
-are suppressed, while a non-default route and a nonmatching group remain
-usable. Also check that blackhole, unreachable and prohibit routes remain
-terminal under either suppression attribute despite a usable route in a
-later table.
+On 08/11/26 13:53, Mathieu Desnoyers wrote:
+> A task that leaves SCHED_DEADLINE keeps its parameters until its 0-lag
+> time, so that leaving and coming back gains nothing. Commit 209a0cbda7a0
+> ("sched/deadline: Improve the tracking of active utilization") moved
+> their reset to that time. Before it, the replenishment timer did the
+> reset at the deadline. So a task back after the reset found its
+> deadline passed, and started a new period. But __dl_clear_params()
+> resets neither the deadline nor the runtime.
+> 
+> Now a task back after its 0-lag time can be enqueued on its old
+> deadline and runtime. With runtime left, its 0-lag time comes before
+> its deadline. Back before that deadline, it would first spend the runtime
+> of the reservation it gave back. Back after it, a constrained task
+> would be throttled until its old period ends. "sched/deadline: Do not
+> lose a throttled task switched out and back" moves the deadline of a
+> throttled task on. This widens the window before the deadline to about
+> a period.
+> 
+> A task with no parameters of its own, boosted by a deadline waiter,
+> keeps the donor's deadline and runtime after its deboost. If it then
+> enters SCHED_DEADLINE before that deadline, it runs on the donor's
+> runtime. On v7.4-rc1, a task of 10ms per 100ms ran 40ms of its first
+> period.
+> 
+> Fix this by resetting the deadline and the runtime in
+> __dl_clear_params(), and in switched_from_dl() at the deboost of a task
+> with no parameters. The next enqueue then starts a new period.
+> 
+> The Sashiko AI review found the first case in the second posting of
+> this series, and the deboost in the third. The deboost_resets_period
+> case of deadline_bw_test, added later in this series, tests the
+> deboost.
+> 
+> Fixes: 209a0cbda7a0 ("sched/deadline: Improve the tracking of active utilization")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
 
-Count an arriving probe only when the nftables FIB result matches the
-expected output interface or reject type. Compare this with an ordinary
-route lookup, which must select the expected device or fail for a reject
-route. Requiring a positive counter avoids treating a missing packet as
-proof of correct suppression.
+Nit below, other than that
 
-Assisted-by: LLM
-Signed-off-by: Leonard Lausen <leonard@lausen.nl>
----
- .../selftests/net/netfilter/nft_fib.sh        | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
+Acked-by: Juri Lelli <juri.lelli@redhat.com>
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_fib.sh b/tools/testing/selftests/net/netfilter/nft_fib.sh
-index 04544905c216..02b625794669 100755
---- a/tools/testing/selftests/net/netfilter/nft_fib.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_fib.sh
-@@ -202,6 +202,38 @@ check_fib_counter() {
- 	return 0
- }
- 
-+# Count and drop probes before the existing RPF rules can log expected failures.
-+test_fib_suppress() {
-+	local label="$1" expected="$2"
-+	local result="${3:-oifname}" err=0
-+
-+	ip netns exec "$nsrouter" nft -f /dev/stdin <<EOF || return 1
-+flush table ip6 filter
-+table ip6 filter {
-+	chain prerouting {
-+		type filter hook prerouting priority -1;
-+		ip6 saddr dead:1::99 icmpv6 type echo-request \
-+			fib saddr . mark $result "$expected" counter drop
-+	}
-+}
-+EOF
-+	ip netns exec "$ns1" ping -6 -c 1 -W 0.1 -q dead:1::1 > /dev/null 2>&1
-+	if [ "$result" = type ]; then
-+		ip -net "$nsrouter" -6 route get dead:1::99 from dead:1::1 > /dev/null 2>&1 && err=1
-+	else
-+		ip -net "$nsrouter" -6 route get dead:1::99 from dead:1::1 |
-+			grep -q "dev $expected " || err=1
-+	fi
-+	if check_fib_type_counter_family ip6 1 "$nsrouter" prerouting "$result" "$label" &&
-+	   [ "$err" -eq 0 ]; then
-+		echo "PASS: $label"
-+	else
-+		echo "FAIL: $label"
-+		ret=1
-+		return 1
-+	fi
-+}
-+
- load_ruleset "$nsrouter"
- load_ruleset "$ns1"
- load_ruleset "$ns2"
-@@ -724,6 +756,42 @@ test_fib_vrf()
- 	check_fib_veth_vrf_type "fib expression address types match (iif in vrf)"
- }
- 
-+# Test both suppression attributes before the other policy-routing tests.
-+# The non-default route and nonmatching group must remain usable.
-+ip -net "$nsrouter" -6 route add table 128 default dev veth1 || exit 1
-+ip -net "$nsrouter" -6 route add table 129 dead:1::/64 dev veth0 || exit 1
-+ip -net "$nsrouter" link set veth1 group 42 || exit 1
-+ip -net "$nsrouter" -6 rule add pref 100 to dead:1::99 table 128 suppress_prefixlength 0 || exit 1
-+ip -net "$nsrouter" -6 rule add pref 101 to dead:1::99 table 129 || exit 1
-+ip netns exec "$nsrouter" nft add table ip6 filter || exit 1
-+
-+test_fib_suppress "suppress default route" veth0 || ret=1
-+ip -net "$nsrouter" -6 route add table 128 dead:1::/64 dev veth1 || exit 1
-+test_fib_suppress "retain non-default route" veth1 || ret=1
-+ip -net "$nsrouter" -6 rule del pref 100
-+ip -net "$nsrouter" -6 rule add pref 100 to dead:1::99 table 128 suppress_ifgroup 42 || exit 1
-+test_fib_suppress "suppress matching interface group" veth0 || ret=1
-+ip -net "$nsrouter" link set veth1 group 43 || exit 1
-+test_fib_suppress "retain nonmatching interface group" veth1 || ret=1
-+
-+# Reject routes use loopback (group 0) and must remain terminal.
-+ip -net "$nsrouter" -6 route flush table 128
-+for suppress in suppress_prefixlength suppress_ifgroup; do
-+	ip -net "$nsrouter" -6 rule del pref 100
-+	ip -net "$nsrouter" -6 rule add pref 100 to dead:1::99 table 128 "$suppress" 0 || exit 1
-+	for type in blackhole unreachable prohibit; do
-+		ip -net "$nsrouter" -6 route replace "$type" default table 128 || exit 1
-+		test_fib_suppress "retain $type ($suppress)" "$type" type || ret=1
-+	done
-+done
-+
-+ip -net "$nsrouter" -6 rule del pref 100
-+ip -net "$nsrouter" -6 rule del pref 101
-+ip -net "$nsrouter" -6 route flush table 128
-+ip -net "$nsrouter" -6 route flush table 129
-+ip -net "$nsrouter" link set veth1 group 0
-+ip netns exec "$nsrouter" nft delete table ip6 filter
-+
- ip netns exec "$nsrouter" sysctl net.ipv6.conf.all.forwarding=1 > /dev/null
- ip netns exec "$nsrouter" sysctl net.ipv4.conf.veth0.forwarding=1 > /dev/null
- ip netns exec "$nsrouter" sysctl net.ipv4.conf.veth1.forwarding=1 > /dev/null
--- 
-2.55.0
+>  kernel/sched/deadline.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index cf24d2df6bfc..cc43c5eeae51 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -3573,6 +3573,16 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+>  	if (task_on_rq_queued(p) && p->dl.dl_runtime)
+>  		task_non_contending(&p->dl, false);
+>  
+> +	/*
+> +	 * A task with no parameters of its own was boosted into the class.
+> +	 * Its deadline and runtime are the donor's. Reset them, so that its
+> +	 * next entry into the class starts a new period.
+> +	 */
+> +	if (!p->dl.dl_runtime) {
+> +		p->dl.deadline = 0;
+> +		p->dl.runtime = 0;
+> +	}
+> +
+>  	/*
+>  	 * In case a task is setscheduled out from SCHED_DEADLINE we need to
+>  	 * keep track of that on its cpuset (for correct bandwidth tracking).
+> @@ -3999,6 +4009,9 @@ static void __dl_clear_params(struct sched_dl_entity *dl_se)
+
+Think we want to update the comment that comes with this function (as it
+now clears also dynamic parameters).
+
+>  	dl_se->dl_bw			= 0;
+>  	dl_se->dl_density		= 0;
+>  
+> +	dl_se->deadline			= 0;
+> +	dl_se->runtime			= 0;
+> +
+
+Thanks,
+Juri
 
