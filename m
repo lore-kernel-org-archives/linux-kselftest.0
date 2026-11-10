@@ -1,68 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=50.112.246.219
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794311409;
-	b=NvtQgSIOyYHic3RdP7SYELF+WTny438sZrnZK8ZPLIRsLUjS7b4JXaHYgoAxF3tC4H/+
-	 0sONYFTKd6hWZyPj8HMPe5C5ghzYqXFVtHp4berdgvaYb2IyUyESCEXPLXFO32SK6w+0o
-	 Lo2RH3SikK2tRAWqkAjVSnHv5Pho6qa6Z8AzHpy9+2mPw4gG5PQvf/wbj6xZJPx/CYy+e
-	 IbXoQI5FlgAG8OKcCI0VQOj6YVPo+OlsotLvVof1LG07UwTTVEPsfJgn2GNd9yjgDWzK0
-	 t9HU33R/0aAT35tQkMbQWlE4QPuBEM3leMW9Svb4hVd1XRR6Z/OK/ena69Yy8fDrc3A==
+	t=1794311654;
+	b=ZeVhNkhMPPk4AJ9imDHJUOfmf11vxc+1kqQKbwxahK3DaoJGOhIC1Yt/UfSp70KlFp2+
+	 ZzPVdg4pKnBv60ziz6aTunD8xgYQAuG9SyauKWb/VOlFao0CWSW+bJKcCQKUMRpRTBd60
+	 jmfdpKpbAHse5DmpzIfLUA7LsMHwwXPf7F/KKhGn3qAPJFgS2yHIc7EYgb62qvtJ+HPQF
+	 tRwmyELSCnvPyb9L8oTAZaiwII6m/rvX/Qo7/97bNt/2KLyVYKd6br/0uhN1vn5K4wpRu
+	 M3CMRQXagSrEPbYl97+ue8CP1x6nQs9/G8Nt9kgb4i1gXY4ZmtGXOxrpjKCC9dFPz/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794311409;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:In-Reply-To:References:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=SiUmjda1rou75Qdy1qEqvd78mTv+gHYp/EbdWyUqWuc=;
-	b=Rw2Gy12DTfrh+OUVdkEXqdQl7r0rEiXWt+keDrMjoz5XmNMuWQbJkRPT9nIzo22pmcf6
-	 eMZAmI9RoA5co/uVYcfYtdX57GeNoe7jW9BOI4Q1DhE/TBwfTRKC8PyuYSYCuPxHBv2HB
-	 MP0MGHCxa5ii0XbAfMnTv01/JjGEf7Uqmzq3b062KLse3YOxpZs/S1KIWb8WemhtwIrQM
-	 YJVr4pFUiiaXzvpb5TS/cnbiEI4IWMuo0L+E2PrxRGLmTG3zJ8Pgd+7qcSEtPqh+V2eNz
-	 IGNDiiqZQsJYgCH3QmiJfZkqmqz96PsnQGMWtlCW+zMWuK+bFFdZby5lF7RLlN025bw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794311654;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=00Fdwn10rGQVzKW8pjIVBgoz/XU0RjZKEKOP68LF8SA=;
+	b=dhBCx6ddPYRiHttxke055AACcUGMSZXzyP08klZmJsjQNmkWxvy0dZsIoEtUXyRJ1Ibq
+	 AGXuCXAbQG5ayJqIvzeLFqMepSAMF+uSEDHetEOwDhVo8ELoQ4wlWitCXXxwDIVNYv4FA
+	 ufrZTDzr9IeXjPwOLW8zr4vE9f7AmQ+bQaISdBSj0zRsAdiOvJg8eERkDe+ZNzbC41GBz
+	 P69pMqb3MzzDuS2b/RVdJPcn58Btxjs3Zom+9lPNv5RGlRT18LwOMSRzup1a0DxvbV8v2
+	 s9u2SEaiggbFwcqxsGMncNm72gDQTmUJik6KCCt5pejOyX6/4BmNZtmu+XCRIlTbs1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=jVIbUfnY;
-	arc=none smtp.remote-ip=111.22.67.139
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FE160A2629;
-	Tue, 10 Nov 2026 11:50:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41FE160A2629
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dmarc=pass header.from=amazon.de;
+	spf=pass smtp.mailfrom=amazon.de;
+	dkim=pass header.d=amazon.de header.i=@amazon.de header.a=rsa-sha256 header.s=amazoncorp2 header.b=fGDDh90F;
+	arc=none smtp.remote-ip=50.112.246.219
+Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041F3606A32E;
+	Tue, 10 Nov 2026 11:54:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 041F3606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=jVIbUfnY
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.de header.i=@amazon.de header.a=rsa-sha256 header.s=amazoncorp2 header.b=fGDDh90F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=jVIbUfnYLWPfDlsFAX4Mrp3e5u2NXXLyvH5/oiaEjD4L/GLPComTWGrmY58rCxErUrMghyn00Modx
-	 b+/Q3BqunHD/MWfNPE7GZpxGo/TyyoInHUc3dakqQdGoR5XS3pppoVIfNuVfpEP+t2E4ihnNKEnlq1
-	 mLvXpdgjsBDzDrwk=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56af304e9450-cc9c9;
-	Tue, 10 Nov 2026 19:50:04 +0800 (CST)
-X-RM-TRANSID:2ee56af304e9450-cc9c9
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from [198.18.0.27] (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee16af304eb538-b442e;
-	Tue, 10 Nov 2026 19:50:04 +0800 (CST)
-X-RM-TRANSID:2ee16af304eb538-b442e
-From: Xia Yan <yanxia@cmss.chinamobile.com>
-To: Jingjing Xu <xujingjing@cmss.chinamobile.com>, netdev@vger.kernel.org
-Cc: willemb@google.com, kuba@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- pabeni@redhat.com, horms@kernel.org, yana06070@163.com
-Subject: Re: [PATCH net] selftests: net: udpgso_bench_tx: honor CPU zero in
- the affinity option
-Date: Tue, 10 Nov 2026 19:50:02 +0800
-Message-ID: <1794311402000.8261.5604720993758809475@cmss.chinamobile.com>
-In-Reply-To: <20261110033920.49267-1-xujingjing@cmss.chinamobile.com>
-References: <20261110033920.49267-1-xujingjing@cmss.chinamobile.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1794311654; x=1825847654;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=00Fdwn10rGQVzKW8pjIVBgoz/XU0RjZKEKOP68LF8SA=;
+  b=fGDDh90FeQwzuXd2dGDIxVaLAUTC34HC9UalHX5/m2sE2R+4O/NarqTE
+   psn8lpE8LH/5EEICMjFbeRfy+AzDXBtyGkKEmG664Pmf24VGp2VdoOAnR
+   pCU6bVlW46OjAXy+SQYmRICAcVDM28U1hF7GhZjRgKX77DrHkx/uemiB9
+   RVyAMtq8CA0xsy3+qy42v24XHXvMj+7vWO5dCKq7O8raKa2fuYFZ2nRKd
+   EdbAIk88/oJhKSx1pnvtdC/7387UMMo//OFqumRTZLia0k1q6dDwYRCPr
+   Sblp/U2PeWbJqFwouEQaiaRfloL5uWWUhOG3c7fIHUtOkXNyBdMweHcXS
+   g==;
+X-CSE-ConnectionGUID: SVXNrMN+THCX9A4p6AfVrw==
+X-CSE-MsgGUID: k3mSKaVWSnKq2dUmFntIYA==
+X-IronPort-AV: E=Sophos;i="6.27,205,1787011200"; 
+   d="scan'208";a="33384274"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 11:54:11 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:22431]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.5.141:2525] with esmtp (Farcaster)
+ id 739f06b5-ed38-4d68-8e1c-236e5caac1a0; Tue, 10 Nov 2026 11:54:10 +0000 (UTC)
+X-Farcaster-Flow-ID: 739f06b5-ed38-4d68-8e1c-236e5caac1a0
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Tue, 10 Nov 2026 11:54:10 +0000
+Received: from dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com (10.169.119.5)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Tue, 10 Nov 2026 11:54:09 +0000
+From: Bjoern Doebel <doebel@amazon.de>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+CC: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, Liang Li
+	<liali@redhat.com>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] selftests: bonding: feed link monitor to deflake prio_test
+Date: Tue, 10 Nov 2026 11:53:52 +0000
+Message-ID: <20261110115354.2250237-1-doebel@amazon.de>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <auvnnIXQV2zufxtF@fedora>
+References:
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,16 +88,28 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWA002.ant.amazon.com (10.13.139.96) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On 11/10/26 03:39, Jingjing Xu wrote:
-> Testing cfg_cpu > 0 ignores an explicit -C 0, so the
-> benchmark can run on other CPUs despite the requested pinning.
+Hi Hangbin,
 
-Looks right. cfg_cpu defaults to -1 and set_cpu() treats 0 like any
-other CPU number, so ">= 0" honors -C 0 without changing the
-default. 3a687bef148d added the option and the "> 0" test together,
-so the Fixes tag is accurate.
+On Thu, Nov 05, 2026 at 10:19:08AM +0800, Hangbin Liu wrote:
+> If the kill fails for some reason, will we wait here forever and hang the
+> entire test?
 
-Reviewed-by: Xia Yan <yanxia@cmss.chinamobile.com>
+No. bash keeps a terminated child's exit status until it is reaped, so if
+the ping already exited the kill fails but the wait returns immediately.
+Only a genuinely unkillable ping would block, independent of kill. The
+idiomatic form is kill_process() from net/lib.sh, which short-circuits
+the wait when the kill fails.
 
+Let's disregard v1 anyway. Your question made me look again, and it only
+treats a symptom: the Sashiko review was right that the mechanism in my
+commit message was wrong. I'll follow-up.
 
+pw-bot: cr
+
+Thanks,
+Bjoern
