@@ -1,108 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=57.103.68.141
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794304784;
-	b=T4bTV5CqI/IHSfNaQ8jNjIjRboAOllvuDWUrYxGz9Rws1YVm6AnXJSTuXlCfv9+Xu9D5
-	 LhxAhJxTKT0SMI4N4D+h2EaZjdY0HU0WJVDLGiQ0Kgt7Drt6BCyw3d39CPQ8abG9CanIS
-	 3Nn0+7eFxTOqGCTcSEvxXYU7QVZJEKMelZfpd8uNe2I7209bwF/zXn0bHVQFb2zEmWDuI
-	 x8RLlp0lvPu+xAAe5sodUJkAVS05/br3RQ1wsM6AEjOh/qO48B0cJxj93BQdSvXNUKjYv
-	 s2683pYkGkqtBkG2NdVc/q5aP0lU2rx5zXX1KFiqO7zAGn5AGD0+oCBN/H38fHbMGUw==
+	t=1794304818;
+	b=hmwsma2thqp+uU65IlT3GZn+8dLZr+VASlifbkDEGeCWEhMYHZ0yse55ezhG9c4rXfog
+	 qdnzuk5shZQBF21+NiOXjcdLegRktndKAJPX92Xaqn6tXey3F0QoNAkkQI/AbejMuNV69
+	 I5nvl/1fWzGILkzwwS+T8hwvCu+/mwfSIisp3rx+mBldqTnb6rPbip20G5X24lxHaZEGA
+	 Z+DINL6e/5ArtbzWYRxWNkpP9snIP8bpC+ufOAHawiXy2iPxjIbavI4ZeN8VrkA0xPzi7
+	 AQwy1BiM3Z+heJ7+IGe1atqwpc9XHnSzxeVpUpk2OobweqJx8rPSymCbrEDo/4xkKlA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794304784;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=wJOySXG09dMXLqdSSIWuOhORrXWnSA3N/YtRXqebW2s=;
-	b=BKhstRK4Uf2lu2hXGQ2+bCiMY/8U09w2lmnhu98p9nWZmTw4hoIRgD9DPJyRnAI+fcgk
-	 A/9RNcge6c3Sh62LNKxOGauaSf1gN1wgN7MQBcq0ixcRPvCSvugYTcDoNzu/c5fOun4mb
-	 0aAzJ+pH5qKsOFQM/oTupM0UQU40HleVXJApAYi2DLoWuXoC6MxB3w3OHwuL5CRe4QMWW
-	 c5Ld4o4eX7KnrjpOk/sWGQaV5q2PoE6Oe9c1Pa0IgtkkskqHd+u5WGuX9koJUDjpiLWyI
-	 CoFZH90lvXsDVjelViQK3c/f5Iajznsf2vNJ8UFHZBv6CBEOoHyKrQ8xaCaUh+Frfbg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794304818;
+	h=DMARC-Filter:Received:X-ICL-RepId:X-ICL-Out-Info:Dkim-Signature:
+	 mail-alias-created-date:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Authority-Info-Out:X-JNJ;
+	bh=M/aCqaw2Mtg6jB8h6UgcQAAQmJapC49Yy87oXq4XTbI=;
+	b=W63jXAe/XJxAjPy2/W6ZKR9lAmB7zufCQ4WzS2MXhw0BA5wElCiDKD9Ivi6QI3SbapPR
+	 MftNJr1p478OafRX8glrL6z9vd46aEdoFKDIkskdhf4H5ogSoSLSQHa/uV4F27GItTmD2
+	 +6Szw82pBg/6D4iBRvRyn476U1OC0ScDKnUc4F1E9tA+WJ6zWH25WHiTqRZ9OHSLYtDKO
+	 YWOdSEuKNTYuWPiXpJlvmmPxWmWcbdkgzjH7z5pzVGQe2i0BfhQS9okARzwnaxL8QV9Ur
+	 BF0UigXB2Rxxky3AlomHBCmxWpDipJyW/7NFGK053rNxeSdBM9xaBQxHrjxSngJeyng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Sr8AcXcQ;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=sPqnSeoi;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dmarc=none header.from=verdict.gg;
+	spf=pass smtp.mailfrom=verdict.gg;
+	dkim=pass header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=n8pTp6Dg;
+	arc=none smtp.remote-ip=57.103.68.141
+Received: from outbound.mr.icloud.com (mr-2002h-snip4-11.eps.apple.com [57.103.68.141])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA5D606A338
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 09:59:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CA5D606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DDD606A334
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 10:00:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87DDD606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Sr8AcXcQ;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=sPqnSeoi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794304782;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wJOySXG09dMXLqdSSIWuOhORrXWnSA3N/YtRXqebW2s=;
-	b=Sr8AcXcQs/idA572AS4kHK5mkBfqbzDUhsVXooXETEkLQUhNdhAjrrhn1qTbuC+1RLV99Y
-	3t9yLwAtfBq1GB52cSdNh84FMArl5mXWzx0Qsvx8gDze9t56Fu08T5o0AUqJnET7cvToqF
-	KOJIb4WneTE/JXNiB/eY8Nt9kDXrIBo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-362-Kr2J2goAPIKlYabhK7ybMw-1; Tue, 10 Nov 2026 04:59:41 -0500
-X-MC-Unique: Kr2J2goAPIKlYabhK7ybMw-1
-X-Mimecast-MFC-AGG-ID: Kr2J2goAPIKlYabhK7ybMw_1794304780
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-48df02b91f9so1041717f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 01:59:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794304780; x=1794909580; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wJOySXG09dMXLqdSSIWuOhORrXWnSA3N/YtRXqebW2s=;
-        b=sPqnSeoi4vhi9k/Qk8upVc9av02O7XT2MLDS0rt0xhyMHyAOJTROqdLihjJ+H2zx6n
-         frm0rtCZ2oIBy/C6ZHHpV2ob4KNI+PdWmcdWFh82/mVEmIN3CPH8Q+HhXpLubBaC4oBt
-         oGJ0Ur1aYmxQqQpLEJGwhdWDUj/iJ0tP6tYm0BglzC+ZKE5E3qnCOP5O6zxLAIRdmmkG
-         HN75xD4GDthIjKj6G45ZFnBSqwTeabEWIumblhGmjUKx8YhN7a73AxdkDrxW2XrP/ZZ3
-         fGc6IR5e8EIgEe+03M1/3pUnLm2t/25VcRxYCteAYP1w1vIESf+zMfBEeEOHgzMLAp6v
-         3gjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794304780; x=1794909580;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wJOySXG09dMXLqdSSIWuOhORrXWnSA3N/YtRXqebW2s=;
-        b=WAgkI4iUfmd5YJCo4g49znvZPC+GjvzdAbDO973SxqWKVi7udfUcfM4XkUj2kRbpiM
-         fqrbPLQUKxaTBatZzQcKaYZy1zrzt37lQO+OcLrgGmMbZ2h8pDcKt5Hjgyb+mFg3xI4J
-         eqpsM1CXC896QMOivW/bIN+aq96YAlv73i1U7mkFBk67IWPnPOsBo0CMKTkbRU/fkQws
-         Y65wkctPA+/2H/40HnJSa5VGfJwkJehP5SvBlUew+J+qcZmw97fuwc7EkayxPrWLeO3m
-         F9cpShEp21zVCQy+BGVcDsdcjP3HyF/K/Fk8czGhreaKtTmNzLEof0YMIumcQdawOa0Y
-         buJA==
-X-Forwarded-Encrypted: i=1; AL+hErGxHKuafUUwH4OoRuh1dS0Lc4jAnt6jMe0d1ar4/1DqUV74fRbXXMVZURuK7WiKyTOFLjftBpufcMnAHXhVQWE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/8m8qgoRtIT+0aS5qvIIjCWyGYxYd7mSeZdQWOj/qiE+MUrLY8
-	UHx6zY+wkJVEXtu8wmFkJ0Ra4MMhfn9TwERECVUXCNyLi6Iq6oUmIXNanlGe4czol6Cz7yuJWPf
-	ppxozpZJ2I896u3v4aceAtVtiVe7LBMDb5EfqWmWfQUpqEQfq+3VYLRPZL5d1zM8pr03IJQ==
-X-Gm-Gg: AYBFou305D00apQDbD6nJDUW/MuvgX3ywC3+Xiry8fqaXChD9kkkqMmZbQzK0X/YF8B
-	XwrB756YG1pk+FiXjbQ5pkYfjESRLSqpFNUHbUju9mDfeGqGb/BDlDcmOaKAlDLEI8LjrxqbIXj
-	QYE1CvD2x3iISM1EzhbgQPzqpMVy9V7CjVwqAbH8Axz6Y2b6NHk9mz6GCsO2F/cMwYBC/EoxRHO
-	U4sa4B5Ju0g3TrK7jm/2/5gkA3v9thoA2QrTdP12o3NsyYxVTVNv5Eq9ZlLxGLd0IEFfGypfsKQ
-	yw4F4Y0y3VnDZe6v77skxdZTt3P1gkdyNYlkfQtLZ8Qey4noYLSznoLmuhK/9WWyWF9id/07fpR
-	g2HIakGwGvs+ogT3QAiz6a8n151x2dCarXpySIANGdNqF6/ZTMnAOhYgHwlt3ca1vg3K3QjHbVR
-	e1Bx9lFaG4HWqi6DVi90iSUQ5cvk4TBoq170dL91BG7rZJ
-X-Received: by 2002:a05:600c:4e0d:b0:4ba:cd:f45a with SMTP id 5b1f17b1804b1-4ba0234ee12mr34932785e9.14.1794304779736;
-        Tue, 10 Nov 2026 01:59:39 -0800 (PST)
-X-Received: by 2002:a05:600c:4e0d:b0:4ba:cd:f45a with SMTP id 5b1f17b1804b1-4ba0234ee12mr34932105e9.14.1794304779321;
-        Tue, 10 Nov 2026 01:59:39 -0800 (PST)
-Received: from [192.168.88.30] (ip231-128-192-82.pool-bba.aruba.it. [82.192.128.231])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba022fbf75sm44329265e9.0.2026.11.10.01.59.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2026 01:59:38 -0800 (PST)
-Message-ID: <c3e7afde-65ac-48e2-a89b-9fc1ad42aa87@redhat.com>
-Date: Tue, 10 Nov 2026 10:59:36 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=verdict.gg header.i=@verdict.gg header.a=rsa-sha256 header.s=sig1 header.b=n8pTp6Dg
+Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-2a-20-percent-1 (Postfix) with ESMTPS id E4F8518000BD;
+	Tue, 10 Nov 2026 10:00:14 +0000 (UTC)
+X-ICL-RepId: 01a1c4e6-ae8b-789c-9003-68e4323ba94d
+X-ICL-Out-Info: HUtFAUMEWwJACUgATUQeDx5WFlZNRAJCTQ1OHVwORQFEF0oBTVIPDxRcFFofVgVyBlwKVwRUHxwXXlhVCQodVwJdEVAZGQxVUEsbDlwFS1oVVRcOAkIfUB9MFldDWhkcGVoUXBhTRVEfVFhDGUVWaUELTx1dGVscQmRYVwkKHVcCXRFQGRkMVVBUEVdQC1kCQg9JAlwHWwtFAEgAQw9fCkEKVQJAUw5eGUsZXS1BDkAUUBtHQ1AMDFBNAUMICghHA00XXjJTBF8RUBY=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1; t=1794304815; x=1825840815; bh=M/aCqaw2Mtg6jB8h6UgcQAAQmJapC49Yy87oXq4XTbI=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=n8pTp6DgV7oIeUMPbJnpjTT0UOxj+xrNbZMFaLKQMoDx3mpGrpoZz1PakBrSDNcCvAF72ISbLqb+Q3XK3Y/y721m2SUJOhGoE7wmZAdhyfBV9MvNGBtQ0bw4qbw60xSi3+dQsyt0zla6CQy29LlnZcMs22t1ygBcMLiAV5wQhLPSaSBnHdeDFK3DAkWi6Yip/Ea3R6PkyHVlyiI72RHt2g8XTpTOiflhK5ogyhpiQ2J6j5XeoHdO2WVXuY/j5Od/PEfp69qECUy3L5b/Vg6ezk5JIjnI/+FhgWqYr6VdZwc0OuuA0jLhUJuhT1VfOG36zJiG1Lim+zH7hny69vhxUg==
+mail-alias-created-date: 1621344842221
+Received: from DelNac.mail.msk (unknown [17.156.200.36])
+	by p00-icloudmta-asmtp-us-west-2a-20-percent-1 (Postfix) with ESMTPSA id 059C2180081E;
+	Tue, 10 Nov 2026 10:00:11 +0000 (UTC)
+From: Vladimir Vdovin <deliran@verdict.gg>
+To: David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Vladimir Vdovin <deliran@verdict.gg>
+Subject: [PATCH net-next v2 0/3] ipv4/ipv6: Cache pmtu on all paths of a multipath route
+Date: Tue, 10 Nov 2026 12:59:00 +0300
+Message-ID: <20261110095903.84813-1-deliran@verdict.gg>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,56 +71,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/3] net: add SO_PASSCRED_THREAD to get a
- thread-specific SCM_CREDENTIALS
-To: Andrew Halaney <andrew@amutable.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Willem de Bruijn <willemb@google.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20261102-halaney-scm-creds-thread-v1-0-0b4d75dbf35f@amutable.com>
- <20261102-halaney-scm-creds-thread-v1-2-0b4d75dbf35f@amutable.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20261102-halaney-scm-creds-thread-v1-2-0b4d75dbf35f@amutable.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: YphijBkptA6mu8thNbD3KH-FA5vzny00
+X-Proofpoint-ORIG-GUID: YphijBkptA6mu8thNbD3KH-FA5vzny00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEwMDAzOSBTYWx0ZWRfX6/4NysvmG//1
+ O05+8IDpT5NMilmJnCSb+cBhEtESf34KeBReWOeCw9IVaT1MsScTFcOduhgHRk28WGNSNj0GiI5
+ fQi48dyd5AEVfl6pP2TMlcWOyUqRXdt4mOI0fV/NAfzypvh9i7gvr0l2Yc6hkcFHyzFFokNv+mG
+ qR1UpNoL4HAkEtUGJYimk1YP03Xq0u0NqGwEVCIb3+wBHeTcgaUJqmCrwKoFcMo+eeKs2j8Oejd
+ 3Mv0Zq5aEszk8A2vIEo84abkHzr0D6zMrtZsAzi2lfNlNcQfeDvQM4euIwaTfk0prwSAic6p2zz
+ zDU6c7en1oP42gotFPE33H8ppoaIvE3Eo+aSDSNj/0mmTKmZWpjIW4Brp1pbnE=
+X-Authority-Info-Out: v=2.4 cv=Ft8IPmrq c=1 sm=1 tr=0 ts=6af2eb2f
+ cx=c_apl:c_pps:t_out a=9mRn2PO/+PIrVdEbaIuMPg==:117
+ a=9mRn2PO/+PIrVdEbaIuMPg==:17 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=o5sbuWzAerGd3oVQC_MA:9
+X-JNJ: AAAAAAABz5X8B44X4clrnTTzrSdSW6tMT63kzU4ZOFBrxCS6fFETCkE7oHSn5Hmsk27N/K
+ UoLi6jUaZHCeUNL/rHaLzX6sHtfZmCEgD/zE3O3tbu2uQwPBXEMCYlYvnzoRhYEO2R47Ii
+ qeEpGSEBbuX4IOk8l5penKA+n/twXwPvPAkdW+8t+OlNCOUykvxsKuhupPCYzEsev04+Hm
+ xQM17Ie+ShfWpo3AF7CokGufJRSWSl3rh3EL/ipCbv5YvewI/+BmIxE+PzswkvgEzRBFYa
+ UFeLir1TXzTb8Y3vjRrU9s+627FaPy1/pFw5jDSPVMZbkhkvgqA4C5nzNyK7klF6XfScuj
+ n9WGlOjSNk8HEmTrBKdEuz5QPIL0P3NXilpqMnn+hoPiC3PuarL5DnIlU9993h1RX8pINR
+ PTXd4Pf7wdJjrK3gzKaF4InMJqIoBsjrk5MWRQTTzaN1MPTycgifNFEybe42eUeEoROb7Y
+ nI9zDQcxvh0uW8QKX5LR+3dPQ1ryllen+7BuTMGcmDkPPh8jzFgG7P4GsY+OmeIMflDEZ7
+ mkZIyW7G2vOckJubsvI8McPw8xaiYtXzw1LBpuCRr8phSpIXpWk23fTv0oaqOxtlp6l85b
+ Le8xibJSnp4ChiFiw1ojvyu/HXsX2FANFJPcpY7GchtKwR0sBPkiDdtirqCNsJQVpYDxtx
+ DUjb/f8M3mJx75gCVtJevzcpxRHAUK/1rzsriiI9NObQytl6BO8YfVUN1ym5osYV9Bd/fz
+ rdnF8muzSSiYV2rScozTPYz9BWSn/Zynf7NFSoBjx2LD5awji0jC397M/bnIgC6Sn04K5K
+ ALK7ti1Ni50vFi2LDxA/Rw2JemmAlC0vusRGU1UFBtvcrOtof2+sKo+y/ISxJMjhdHr2Gn
+ SG9qrEZNGO3Nn1YNAnZN74yeLYD5QPgrRqgDZ6xV4v3mjKMou+F1i9EeC1F09mqlPbZqq5
+ ta21cKvO2jz7Z1/vWJL4kvuSrfHThdzollPUWSHhtT4uYquxNKLj/rVnz/NyrHfTJxFzzd
+ YTGsIC1zu0hSp4spXuk+91JFDkxfkTBEoG8YhjZCnxzdP2lbX8SWL0KM0JMfO9IY+rzFhE
+ eV1ALNxJdFTPTYBqq4jyb19DpaPWi9AGcO6yj9+E929Id5sPW8kjJN3N0d5uowZYEoy4dt
+ oquNhZmU8xECPvpq4JR9FJN1ctDqmivt4dOhVMCqO4vPoXjrKe2t1oA3G3pNsVF/Em9yzG
+ owKddZOPqKHyiQ7adAzEfE0UB4EAEpz70EEsjd1jjyzCaO3yDFC+lef6tvglPJ2JA8+4Gb
+ h+MhVZQzKLREYsIYakh3FjsvZODnJ5geBicxMsDW+gxZ2I7w==
 
-On 11/3/26 00:12, Andrew Halaney wrote:
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index e7405be8941f..6b443bd44581 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -1586,6 +1586,13 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
->   			ret = -EOPNOTSUPP;
->   		break;
->   
-> +	case SO_PASSCRED_THREAD:
-> +		if (sk_is_unix(sk))
-> +			sk->sk_scm_credentials_thread = valbool;
-> +		else
-> +			ret = -EOPNOTSUPP;
-> +		break;
+IPv6 counterpart of commit 7d3f3b4367f3 ("net: ipv4: Cache pmtu for
+all packet paths if multipath enabled"), deferred back then:
+https://lore.kernel.org/netdev/ad29493c-9e48-4a94-b327-e47af3a9d137@kernel.org/
 
-AF_UNIX supports custom setsockopt since commit
-de1c489b57c11fabc766aeb6777ed5b0038fa3bb
+Patch 1 keeps the IPv4 fan-out from raising a pmtu a path already has,
+patch 2 creates or updates the PMTU exception on every path of an IPv6
+multipath route, patch 3 adds the IPv6 variant of the pmtu.sh multipath
+test and multipath tests with paths of different MTU for both families.
+The IPv6 tests fail without patch 2.
 
-I think it would be better to move add the af unix specific ones
-into net/unix/af_unix.c.
+Changes in v2, after the Sashiko review of v1:
+- Update the PMTU exception a path already has instead of replacing
+  it, so a lower pmtu or a gateway learned from a redirect on another
+  path is kept. The pmtu is now propagated to the other paths on every
+  Packet Too Big, not only on the first one, when the looked up dst is
+  still a plain route and not a cached exception yet.
+- Don't walk the siblings of a fib6_info that is no longer in the
+  tree: after NLM_F_REPLACE the old route and its siblings are freed
+  with the sibling list still linked.
+- Describe the real mechanism in the commit message: ip6_update_pmtu()
+  looks the destination up without the protocol and ports of the
+  offending packet, so the multipath hash may pick another path than
+  the one that packet took.
+- New patch 1: the same "a cached pmtu never goes up" rule for the IPv4
+  fan-out in update_or_create_fnhe().
+- Add selftests with a different MTU behind each router, so a second,
+  lower Packet Too Big is covered as well.
+- Rebased on net-next.
+v1: https://lore.kernel.org/netdev/20261017210508.71849-1-deliran@verdict.gg/
 
-But that is IMHO more suited for a follow-up; the series LGTM,
-thanks.
+Vladimir Vdovin (3):
+  ipv4: Don't raise a cached pmtu from another path's Packet Too Big
+  ipv6: Cache pmtu for all paths of a multipath route
+  selftests: net: pmtu: Add IPv6 and asymmetric multipath tests
 
-Paolo
+ net/ipv4/route.c                    |   8 +
+ net/ipv6/route.c                    | 124 ++++++++-----
+ tools/testing/selftests/net/pmtu.sh | 276 ++++++++++++++++++++++++----
+ 3 files changed, 328 insertions(+), 80 deletions(-)
+
+
+base-commit: d26955e57475434b59d43ba372b2a50d33d5e0ed
+-- 
+2.56.0
 
