@@ -1,97 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794307267;
-	b=VEguW393rcnMoLYWnwNdTcZ5fcUBaf7CsqHnjkR+Q7a8Zy+jTfK46GWmuh5eZu03x6zn
-	 wmMG5F7aNGlJW0SU11LK+AdS4YeSBC3evAE4BKPtn9xTUB2On0gSbYHbzwPuhpJMq+CMe
-	 5X+dUaQiPKcKdH6ZVd8IZ5ELrokjjUCRVoaC7BtLLBgt73iC52EvlrerF7s0haVvvdq6N
-	 7bkJ7JOxoCArBNuL5CCZTZGQwTQ3Hedmis/yZ3VBL7M9ngFt9b8FSBLiyzftUcAIDTHTX
-	 db10vEFrb0uAsqDloqJrGnGc3a7OWrPqURhJYYA1+deDSNBf73f0DNDEZmarOWlYsAw==
+	t=1794307704;
+	b=AUrR6mrugbkjpmHVVNFWhD6C9saK1NJdd6kG/chQec3eT4ArZf8lA3+Kz65NthlHhA0L
+	 A5Czdc/8JMqr2YlyeuGRatruPmX4pYWc69cPf3K8x+CSVqRUo3EZPfJjHe1kc1AOIZHjy
+	 N+igC1wu3x0PX/LbYIEFaaF02az+JfLlaG8r1Kn5yf82x1giRxn8tsW5TGvnkW2i+j8qY
+	 yuFlDwX1zQqKI2gr19DBv8t4R/ZUxt5tlY4CoAo+e+GGVtVjZPdV3OJkcbCNqFUDFPaXs
+	 w+RvFNImjOsXFwJNLS1FkX6Syl3QiKPaqKwNQpLgd5D6Zx7V8udsLoy96S+OSkx5idQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794307267;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=9RvJebEHN0ToJdhmNwuM3zN40XxviuMMEwwuGiw6/Qg=;
-	b=fItkab/sjZs21ezgggJnBf8ls0xbmrJ5nCa1KlJc6ejYU5CbGIlSkodOk6xyXcWmVtnQ
-	 i9kl5ST8XRdqYittiK6TzNXOH++bFIt6Ytq9oAk0WclaawSm5DvMeMXIa7UYpyv6pZdSm
-	 YKhlFo4G+VR8zL/iJoA0gVU9uFuD2SNvj1LStLyA3vmbGp0C4V6QRZBGwLDlnWkuD3u68
-	 zRpbxtWirNvEjh0L9QDewbaQc9TJkh51uZWYfgYiwgDdeBYoLrQFq82+J6mR5K/x0FGXt
-	 xQtgC8PjXqNqHSIPVP9bNrCAgmkJcvBOXVboyGN+Y4fUKKkvb62yUCemhdzFJSKzsoA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794307704;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:User-Agent:MIME-Version:Content-Type:
+	 X-Spamd-Result:X-Spam-Score:X-Spam-Level:X-Spam-Flag;
+	bh=k703M/piKyZ7PHvfHLHxgLKG63qKCWd6JJ43qPYVsb4=;
+	b=YZtoLOnmhSF1rqBc79DQiCz7p9TWjRVk22SJCwzBkH2m5Qj7Ssb6pYK7Er6nciiHwP0H
+	 YmYPN8WKLk/3syLMPw5Wufb5w6Ho9fzjo9ty6H6Py0RnJXuTCI98OjPcfxr0YlyWZv0rf
+	 roSMs9jpbD9lne6HFFoJSzd6377/akfz5PElr1C7wkwGLqKKVIx4y8kaPn9F990HyEExu
+	 FXWVUUeAbABcKX+C+8ZxHPjUo/v8QAB5vjBinYtKdxw9qAEku2tD91qk5RfhSCy0ayiuG
+	 Dp2nk3VefYfEltlP4skl2biA5LW6HSjpiB2RXTbd7ZXhZnO3QXj8V6/fb5XtTjFF5Vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HA5nYWRr;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=PEdBu6ae;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OJjryAXs;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=PEdBu6ae;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OJjryAXs;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF2E606A33C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 10:41:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DF2E606A33C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E71606A331;
+	Tue, 10 Nov 2026 10:48:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46E71606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HA5nYWRr
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794307265;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9RvJebEHN0ToJdhmNwuM3zN40XxviuMMEwwuGiw6/Qg=;
-	b=HA5nYWRrHEVWrXwvv5J8wG/3xnsycmnr6AK8d/bPb+UnylSXLXdOEHIotLlHFeQPzkJSIp
-	rJ27HWyuOSvve2965Z+1Ge8VSHt9uodlDqhAIyeaZO399oirLvy3BV2Z95YqgXaLK/mU4G
-	oUa81jfISRe0h2hI1w/kZ9urlEIYxlk=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-294-TOY0otYhNVWo4ajIt8-xfA-1; Tue,
- 10 Nov 2026 05:41:01 -0500
-X-MC-Unique: TOY0otYhNVWo4ajIt8-xfA-1
-X-Mimecast-MFC-AGG-ID: TOY0otYhNVWo4ajIt8-xfA_1794307259
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=PEdBu6ae;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OJjryAXs;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=PEdBu6ae;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=OJjryAXs
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B032D18004F9;
-	Tue, 10 Nov 2026 10:40:58 +0000 (UTC)
-Received: from pabeni-thinkpadp1gen8.rmtit.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CA62626C;
-	Tue, 10 Nov 2026 10:40:51 +0000 (UTC)
-From: Paolo Abeni <pabeni@redhat.com>
-To: bobbyeshleman@meta.com
-Cc: sgarzare@redhat.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	stefanha@redhat.com,
-	mst@redhat.com,
-	jasowangio@gmail.com,
-	xuanzhuo@linux.alibaba.com,
-	eperezma@redhat.com,
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 7F7541F7A9;
+	Tue, 10 Nov 2026 10:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1794307702; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k703M/piKyZ7PHvfHLHxgLKG63qKCWd6JJ43qPYVsb4=;
+	b=PEdBu6aeYbinim2tdZhleV9sVHQtfsHc+2YEfXh8P7eQa1FkwyOMvWaIXPDqdiXzrlL6I3
+	kHc0FDGi+XhThTkR476aT0+R8G5zIMLG428M104ofhhiZpXZ117Ka6AZCaknyCdQum1QI+
+	60rgQZL1KLWSszMtfRH+AJM2kyzzBbo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1794307702;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k703M/piKyZ7PHvfHLHxgLKG63qKCWd6JJ43qPYVsb4=;
+	b=OJjryAXs/NBbOB58RfQ0ikLCN+TGmP9sGa1n4fHHnjy9FNcgrzLrvh5NGgKZbPuZdxXrZP
+	BDGtNEDT9t9fKbCg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1794307702; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k703M/piKyZ7PHvfHLHxgLKG63qKCWd6JJ43qPYVsb4=;
+	b=PEdBu6aeYbinim2tdZhleV9sVHQtfsHc+2YEfXh8P7eQa1FkwyOMvWaIXPDqdiXzrlL6I3
+	kHc0FDGi+XhThTkR476aT0+R8G5zIMLG428M104ofhhiZpXZ117Ka6AZCaknyCdQum1QI+
+	60rgQZL1KLWSszMtfRH+AJM2kyzzBbo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1794307702;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k703M/piKyZ7PHvfHLHxgLKG63qKCWd6JJ43qPYVsb4=;
+	b=OJjryAXs/NBbOB58RfQ0ikLCN+TGmP9sGa1n4fHHnjy9FNcgrzLrvh5NGgKZbPuZdxXrZP
+	BDGtNEDT9t9fKbCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3FC9E1339F;
+	Tue, 10 Nov 2026 10:48:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HALuBnb28mpQPwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 10 Nov 2026 10:48:22 +0000
+Date: Tue, 10 Nov 2026 11:48:21 +0100
+Message-ID: <87qzgtufm2.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: HyeongJun An <sammiee5311@gmail.com>
+Cc: tiwai@suse.com,
+	broonie@kernel.org,
+	perex@perex.cz,
 	shuah@kernel.org,
-	rdunlap@infradead.org,
-	donald.hunter@gmail.com,
-	edumazet@kernel.org,
-	virtualization@lists.linux.dev,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org,
+	alyandra5b@gmail.com,
+	linux-sound@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	sargun@sargun.me,
-	jlinbox@meta.com,
-	bobbyeshleman@gmail.com
-Subject: Re: [PATCH net-next v5 5/7] vsock/virtio: support guest device network namespace
-Date: Tue, 10 Nov 2026 11:40:35 +0100
-Message-ID: <20261110104035.225429-1-pabeni@redhat.com>
-In-Reply-To: <20261103-vsock-guest-ns-v5-5-48179b9b66b8@meta.com>
-References: <20261103-vsock-guest-ns-v5-5-48179b9b66b8@meta.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/alsa: Add a test for the sequencer UMP conversion of RPN/NRPN
+In-Reply-To: <20261110012213.740288-1-sammiee5311@gmail.com>
+References: <20261110012213.740288-1-sammiee5311@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -100,228 +114,54 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-12.30 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.com,kernel.org,perex.cz,gmail.com,vger.kernel.org];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -12.30
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-Full review at: https://netdev-ai.bots.linux.dev/sashiko/
----
---- Patch [5]: [PATCH net-next v5 5/7] vsock/virtio: support guest device network namespace ---
-I found three issues in this patch: one functional regression, one commit message problem, and one existing tap leak that the patch now reaches.
+On Tue, 10 Nov 2026 02:22:13 +0100,
+HyeongJun An wrote:
+> 
+> The sequencer converts MIDI 1.0 CC and CONTROL14 events to UMP for
+> UMP clients. Add a test that sends such events from a legacy client to
+> a UMP MIDI 2.0 client and checks the RPN/NRPN packets it receives, and
+> one that checks that a UMP MIDI 1.0 client gets the CCs as they are.
+> 
+> The cases cover switching between RPN and NRPN, Data Entry sent with
+> nothing selected, repeated Data Entry, Null RPN and NRPN, and the
+> CONTROL14 path. Some of them come from the KUnit test in Alyandra
+> Zahran Nadhir's patch.
+> 
+> The test skips when /dev/snd/seq can't be opened or the kernel has no
+> UMP support in the sequencer.
+> 
+> Link: https://lore.kernel.org/all/20261107111056.667-1-alyandra5b@gmail.com/
+> Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
 
-commit 074136a5d2f57598d227b743b7c490274cb32bed
-Author: Bobby Eshleman <bobbyeshleman@meta.com>
+Applied to for-next branch now.  Thanks.
 
-vsock/virtio: support guest device network namespace
 
-This patch makes the virtio-vsock guest device assignable to a network
-namespace. virtio_transport_rx_work() now re-reads the assigned netns for
-each packet and passes it to virtio_transport_recv_pkt(). The listen and
-connecting receive paths now call vsock_maybe_set_connected() instead of
-vsock_insert_connected(), and virtio_transport_send_pkt() gains a
-reachability check.
-
-> Make the virtio-vsock device assignable to a namespace and initialize it
-> to init_net. Because virtio-vsock and init_net are both hardcoded to
-> global mode, nothing changes until the assign command is issued.
-
-[ ... ]
-
-> it wins the race to the table and does NOT pass the reachability tests,
-> then it will be reset. This is the purpose of the new helper
-> 'vsock_maybe_set_connected()'.
-
-[Severity: Low]
-[Finding: main-1-1]
-[Sources: opus-5-5]
-This isn't a bug, but does this description match what this patch does?
-
-The previous commit in the series ("vsock: add a netlink command to
-assign the g2h device to a netns") already defines and exports
-vsock_maybe_set_connected(). The same commit adds netns_assign_allow to
-struct vsock_transport and initializes the g2h netns to init_net:
-
-net/vmw_vsock/af_vsock.c:
-    static struct net __rcu *vsock_g2h_net = RCU_INITIALIZER(&init_net);
-
-This patch only calls the helper and sets .netns_assign_allow = true.
-
-The reachability check added to virtio_transport_send_pkt() is only
-described in the v4 changelog below the --- line, so it won't reach git
-history. Could the commit message say that virtio_transport_send_pkt()
-now drops packets from a netns that cannot reach the device and returns
--ENETUNREACH? That includes credit updates, shutdown packets and RST
-replies.
-
-> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> index eced6929405df..06df82b130cff 100644
-> --- a/net/vmw_vsock/virtio_transport.c
-> +++ b/net/vmw_vsock/virtio_transport.c
-> @@ -256,6 +256,15 @@ virtio_transport_send_pkt(struct sk_buff *skb, struct net *net)
->  		goto out_rcu;
->  	}
->  
-> +	/* A socket reset by an assign can still send credit updates from
-> +	 * recvmsg() and setsockopt(SO_RCVLOWAT).
-> +	 */
-> +	if (!vsock_g2h_net_reachable(net)) {
-> +		kfree_skb(skb);
-> +		len = -ENETUNREACH;
-> +		goto out_rcu;
-> +	}
-> +
-
-[ ... ]
-
-> @@ -682,10 +697,15 @@ static void virtio_transport_rx_work(struct work_struct *work)
->  
->  			virtio_transport_deliver_tap_pkt(skb);
->  
-
-[Severity: High]
-[Finding: main-6-6]
-[Sources: opus-5-5]
-This isn't a bug introduced by this patch, but this patch extends it to
-the guest device, which can now be isolated. Can tap delivery leak the
-assigned namespace's traffic to vsockmon devices in other namespaces?
-
-virtio_transport_deliver_tap_pkt() runs before the netns-aware
-virtio_transport_recv_pkt(). The call chain
-vsock_deliver_tap()->__vsock_deliver_tap() then walks the global
-vsock_tap_all list without any netns filter:
-
-net/vmw_vsock/af_vsock_tap.c:__vsock_deliver_tap() {
-    ...
-	list_for_each_entry_rcu(tmp, &vsock_tap_all, list) {
-		ret = __vsock_deliver_tap_skb(skb, tmp->dev);
-    ...
-}
-
-This loop never compares dev_net(tmp->dev) with the packet's namespace.
-vsockmon_link_ops has no netns restriction. RTM_NEWLINK only needs
-CAP_NET_ADMIN in the user namespace that owns the netns.
-
-So an unprivileged user can run unshare -Urn and create a vsockmon link.
-The module autoloads through MODULE_ALIAS_RTNL_LINK("vsockmon"). The user
-can then capture on that link with AF_PACKET.
-
-Wouldn't that let any namespace see the traffic of the local-mode
-namespace the guest device was assigned to? The tap paths in vhost-vsock
-and vsock_loopback have the same problem.
-
-> -			/* Force virtio-transport into global mode since it
-> -			 * does not yet support local-mode namespacing.
-> +			/* Only grab a reference if the net changes underneath
-> +			 * us.
->  			 */
-> -			virtio_transport_recv_pkt(&virtio_transport, skb, NULL);
-> +			if (unlikely(!vsock_g2h_net_eq(net))) {
-> +				put_net_track(net, &ns_tracker);
-> +				net = vsock_g2h_net_get(&ns_tracker);
-> +			}
-> +
-> +			virtio_transport_recv_pkt(t, skb, net);
->  		}
->  	} while (!virtqueue_enable_cb(vq));
-
-[ ... ]
-
-> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> index 1e762a480df49..7efcbdc7e04fc 100644
-> --- a/net/vmw_vsock/virtio_transport_common.c
-> +++ b/net/vmw_vsock/virtio_transport_common.c
-
-[ ... ]
-
-> @@ -1478,9 +1478,14 @@ virtio_transport_recv_connecting(struct sock *sk,
->  
->  	switch (le16_to_cpu(hdr->op)) {
->  	case VIRTIO_VSOCK_OP_RESPONSE:
-> -		sk->sk_state = TCP_ESTABLISHED;
-> +		if (!vsock_maybe_set_connected(vsk)) {
-> +			virtio_transport_reset_no_sock(t, skb, net);
-
-[Severity: High]
-[Finding: main-1-0]
-[Sources: opus-5-5]
-Can this RST ever reach the host?
-
-virtio_transport_reset_no_sock() ends in t->send_pkt(reply, net). The
-check this patch adds to virtio_transport_send_pkt() frees the reply when
-net cannot reach the device:
-
-	if (!vsock_g2h_net_reachable(net)) {
-		kfree_skb(skb);
-		len = -ENETUNREACH;
-		goto out_rcu;
-	}
-
-The v5 changelog says the arrival netns is passed here instead of
-sock_net(sk) so that the RST is not dropped. But vsock_net_check_mode()
-looks like an equivalence relation:
-
-	if (net_eq(ns0, ns1))
-		return true;
-	...
-	return mode0 == VSOCK_NET_MODE_GLOBAL && mode0 == mode1;
-
-A netns's mode is also fixed when the netns is created: vsock_net_init()
-sets it, and later writes to the ns_mode sysctl return -EPERM.
-
-virtio_transport_recv_pkt() finds the socket through
-__vsock_find_{connected,bound}_socket_net(), which requires
-vsock_net_check_mode(sock_net(sk), net). vsock_maybe_set_connected() only
-fails when sock_net(sk) cannot reach the newly assigned g2h netns.
-
-So the arrival netns cannot reach it either, and
-vsock_g2h_net_reachable(net) is false whenever this branch runs.
-
-An assign can land after the per-packet snapshot in
-virtio_transport_rx_work() and before the check in
-vsock_maybe_set_connected(). That is the race the commit message
-describes.
-
-In this OP_RESPONSE case the host already holds an ESTABLISHED socket. If
-the RST is dropped, won't that connection stay half-open until the host
-sends something? A host that only reads would wait forever.
-
-The commit message says such a socket "will be reset", but only the
-local socket is closed.
-
-The same applies to the new failure path in
-virtio_transport_recv_listen():
-
-	if (!vsock_maybe_set_connected(vchild)) {
-		release_sock(child);
-		virtio_transport_reset_no_sock(t, skb, net);
-		sock_put(child);
-		return -ENETUNREACH;
-	}
-
-Here the host's connect() gets neither a RESPONSE nor an RST. It waits for
-its connect timeout instead of failing with ECONNRESET.
-
-By the same reasoning, the other virtio_transport_reset_no_sock() calls in
-virtio_transport_recv_listen() that v5 moved from sock_net(sk) to net
-behave the same either way.
-
-Would getting the RST out need a different approach? For example, it
-could be sent on the newly assigned g2h netns, or replies could be exempt
-from the check in virtio_transport_send_pkt().
-
-> +			skerr = ECONNRESET;
-> +			err = -ENETUNREACH;
-> +			goto close;
-> +		}
-> +
->  		sk->sk_socket->state = SS_CONNECTED;
-> -		vsock_insert_connected(vsk);
->  		sk->sk_state_change(sk);
->  		break;
-
-[ ... ]
--- 
-This is an AI-generated review.
-
+Takashi
