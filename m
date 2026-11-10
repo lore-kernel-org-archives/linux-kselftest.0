@@ -1,62 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794331144;
-	b=dHzeTOD1OV0yp40BrN8fGFbt9hoT/aYi9vUDM6NwO05DYtcfzAgwgRqRKsCcXp2DRVGI
-	 scZWE74LrghVzuOpOSB9njnQcq7kB3IQdtQvkOTy07KRm05QsaA1M6QEI6yIkrPAIakHq
-	 Td46jN6UTNT7FcNv73FCH05fQPwHRSd9L0aNlRg+ZDmrKHA0En0MI8ZjFaFOkVjJMr7ME
-	 4jRZS/MuBo81dFdCkBDDU0IlgACIYFg6e0duk9OQ+5JsESJPfFJ9YJWzgWIy16fm3e5Vj
-	 YLQBO7NLx92o38D4ght0ybjR41tBkhMF8s84Kht5o7kOT+QSVfn+BQqVbD46IddH8zA==
+	t=1794331773;
+	b=a29xuYMZpam+LDI032VEavo0Mr8bfQag9YQy0r0zEE6t4MqYvxPDHW9OipLyNTCHyaj1
+	 OvlDIomSjmjyMYDWHWcX2FK/wIJjCcigosVwMaK0tRxN6AobW0Mc6nSBN2a/Lrq/RG/CK
+	 W59b+5o6lQBaOljO2HqTMqONtC28V0KWwNc+rxMshoTgiPtWnAVOw56B27V1jZjmh6AOi
+	 lrLyQEp1OmJQQaLXoVSASIU0su46CgcZPM06aieT7uBqcolXYkcXKrZTcZCJIPiMs8sVi
+	 PF6u/3HScwS79Dnyb2xHckC6flAi8TSInVUoXusRMQBmRPotW7BcrZSsuZSNBioupPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794331144;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type;
-	bh=V7fyh20lQdCfEvkMlKmFXdlszEDXLNAOR5UNt1WFBvY=;
-	b=0NCnROMkgNlSdpFGS8+esHiEQOg++p4R+ygZryQfqTeZV2O5VtxdRzjHuOIU+lc6jUAp
-	 XBxdAqszzVqQZLJf7xv0v2AVzTqtpyt8mQgs5/zWT4VVYjhemJvJPRiq9MCekWIUUC+j3
-	 uVEGq+AaQzRDHbWvgRMTZuPDREKzJM+CyOJd31xictC/YfEoDTsUki4a5ooHbUMteHRPK
-	 sQO4+aKUohH9ekKmA4vWwwx2B77pwoaRorJezAVyQFrTn7iH+LV8Ij9PU5zBBkkhh1c9m
-	 rFTpAOTiF6qlagfqDdt2TZWuGFXnHtBL15UJwL0PaORYJvfqWfCvEiYrsL757fs/wgw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794331773;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=u7j/C8xOjK1PHdAV1CJRzOiMQIPuYMRbIXTihi5NWIg=;
+	b=P657ZO8jK3Fjqe1Bbp1SLhvHmEentMZPYNHqr4lefKxiafyKh4zfKEN9ftG0q+oa8PfB
+	 /dr6yhhB9mnO2mdzY2f1E/zn4f5irS2rR4UgqUjBBQouxpp1EA4EzStJEPxY8ocqwFHo6
+	 07GxsatLxkk6/VrxpXTJQCNVFj8SkaHjNMFoOnX15f1LXwPZCy8E+62qB8L/UDDQR6VaL
+	 sw8dfMDbaGIEYv/wzbWdIucEu4qwgPItMVPIItHV4t7tUiCiML1w9yTcNxES52dYWnARj
+	 Vcnw9Xfk18GmMZNly/gpg+g700tG4w2jf8b0Pkjv5kSBDVPWFAyky47SIB4Mey6XbcQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eePnUCkL;
-	arc=none smtp.remote-ip=91.218.175.52
-Received: from mta0.migadu.com (out-52.mta0.migadu.com [91.218.175.52])
+	dmarc=pass header.from=networkplumber.org;
+	spf=pass smtp.mailfrom=networkplumber.org;
+	dkim=pass header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=K8svwTEZ;
+	arc=none smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FA3606A325
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 17:19:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53FA3606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6171606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 17:29:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6171606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eePnUCkL
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5N+pLaOxaXEBjI3kYto3LAKJTxf1OYPE2hTSsrnSYYI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794331140; v=1; x=1794935940;
- b=eePnUCkLDIKsrkXMpz5S+zKWOOWC6foT+PMeZneNmaXO4Amq0AeLe7o6H0sIa12WRKAFLF/r
- e1T4/x7QIa4xdNSFE7fCP+OdiG00gVoWl+YEzbedIOF2X2bcE90jpaTrbRqSdmxRIEDBSHMQiAX
- 6XgCPlJ24W7EyIjmMYfDTngs=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 42c488bb3a1b7ea8;
-	Tue, 10 Nov 2026 17:19:00 +0000
-X-Mizu-Trace-ID: 42c488bb3a1b7ea8
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5be58ad9600so9177e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 09:18:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErGyBYqSremMzklsBmca+txqBIcPqE/53Ay7orSrD59b5ECV/Jn6Znho+JsQ+35sO1e+mjtGX7NzGlHSJMOZpEk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/no4JXJTVZBhie//ti6b7/l7eIfjdi4ifjbyx1aEEDQz84dfK7
-	MqhculnckrSYG+Lv3drztdDV0zeOPldIQSdoiCHCstnjEvi5cNrs8eWGmLO+hK2HLgVbzqiCZi9
-	G6zqdmpL+4Tzfi0doX04VIR96FbuWcGwKw04iYpAP
-X-Received: by 2002:a05:6512:1153:b0:5c1:5361:4aae with SMTP id
- 2adb3069b0e04-5c157dccb40mr145514e87.11.1794331138677; Tue, 10 Nov 2026
- 09:18:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=K8svwTEZ
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8a07078200fso989004b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 09:29:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20260707.gappssmtp.com; s=20260707; t=1794331772; x=1794936572; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=u7j/C8xOjK1PHdAV1CJRzOiMQIPuYMRbIXTihi5NWIg=;
+        b=K8svwTEZd2HRzzn1CnYxhrOi/3XxGADM0ZIAURO93se/tbSpcD6bfCGozhZQvRZ960
+         aVE+ONOLhxL236MdIchKlAyfSPNU5GFRD9DDWtl1tGMx100ZAN6lv9xuUa2h0oMrbB8M
+         oisJBqykyqWQJoQLeJMTjRnvoXBMgV/aNAtqhlAirqAp/Ca76qJoSvC00Q0TScNeU2D6
+         TfWB6W/FqyUu1ibul3a12P1+NWuRyb++I9CvfY+Vozo+HotPzXFBWiv4kQiSHGP75QXv
+         QqjBthDU6OwsTcf4UWRvgMjod5srfOYtvt7SmpferJF2XQykWhLSah+08vIKIocpDdMf
+         U1cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794331772; x=1794936572;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=u7j/C8xOjK1PHdAV1CJRzOiMQIPuYMRbIXTihi5NWIg=;
+        b=eOZ5ltMGoZAbrB85KqvO9CJ84Jzhbs16BmEspeo/36r2Mod5gMdjqKmLwu+zsRWyL9
+         Cywt+eGpH+lDtO0AJ8feWEpLObtNkSNgoQ/iMmsbjn0tz4jnk76yvDVc3rR9nttXsh3x
+         nxlZuAHTmoTgzg99d3BT/8VR3zcboxgN20ub5Yce2XGDLo61CasGUmpYEOtPIR4WOt8V
+         WebwnTA8ztmJWIAca8Df73oQTianlt64sMs6qHYbi1gsrWGI2WxhZVaZED7Nw+S7zyEQ
+         ibGRb2IhOwtCIqjOdEkWlp4pyhbjGScio31uYhOdz3SCKBvCeVZByTQBNvdglCCG3gwS
+         uVAQ==
+X-Forwarded-Encrypted: i=1; AL+hErGy64u3mlDLI5vNgsKb7EZYmE3It6kv/dmiwrMs/sQihKVJO7LVjhY2D82F/c0ahExD+fdDLT/dBXh9mX9qfE8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+tiXXk+IHEzY+e8VeQYJtD8zAQ8m+Y9jiynzdrVp5Yz5EirrJm
+	w9BYBxx0tUZSODr18iYEqg7qcuZLo4AtpXjunN8QW3oBdU3U9xwdIRaS5QN6nWmrtgo=
+X-Gm-Gg: AYBFou1UsY5zFY3geaRXn1ww0rLOrMPqBbJ4c+pDX078uR3lMdQ+nh8leInwMy+Ne/f
+	L6vKXK+TXqFIrS+IWgAYXjk485pYMCxcz35HnT+e7x++hGWKxd/q5/QRp0Q+W2mFAyyNx/+6rtA
+	sZ9vIZM5JR6wxI4i5QGFuWJqxsamHnPEmSbozaNiQ2XakdylDH0HdLCdqnrCIAO1cDW/ncMQ67U
+	0rMKeJ+MsY1Lee3qMZ+SFdW2H0sw290pY02GsREx+DWTTAihQkPRV8OJTKuKRyRWZeP8VX+X1I5
+	uYgz9qa7CceDjosev4mv+bJ1zDO4pF/IaHzh4sQfNwqPQTN847lJYmbWWWfkqaYbKy6a8GKplJ7
+	BqJcFjjLO+iC64p/80MWpXhZqLCyGX3GzSWbVybrAB9RCFxAf5m7sOTxcIK1gnKMWz+znSMuZDR
+	GFeNtazuUfFVztgJyIWxzrAA+3H9URgRSUobJExUase1Rc1LgvQ2rAcrD0uWZnO9JRtJOcMQS9u
+	1O4ujtkBambTDJhrH6LE+8U/4YkO7b2QVpP66ZxfoLi3ekt0IXJm3PKsZBPfLY0ObXS7+1ZoFVP
+	pAm2AwRWyAoT2GbPMJcsjcQ0lKpVJ4BhoFKJNAavJPXfPKaeYOL+h1sgTK/GwetTcNRt7Q==
+X-Received: by 2002:a05:6a00:908d:b0:886:3a6c:a9da with SMTP id d2e1a72fcca58-8ba86b93834mr3122737b3a.26.1794331772149;
+        Tue, 10 Nov 2026 09:29:32 -0800 (PST)
+Received: from phoenix.lan (204-195-112-43.wavecable.com. [204.195.112.43])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baab5f1effsm1197939b3a.49.2026.11.10.09.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 09:29:31 -0800 (PST)
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: netdev@vger.kernel.org
+Cc: dsahern@kernel.org,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net v2 3/3] selftests: net: netlink-dumps: test dump of route larger than skb
+Date: Tue, 10 Nov 2026 09:26:18 -0800
+Message-ID: <20261110172925.3293312-4-stephen@networkplumber.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261110172925.3293312-1-stephen@networkplumber.org>
+References: <20261110172925.3293312-1-stephen@networkplumber.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,73 +105,343 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
- <20261110110724.3614412-2-fuad.tabba@linux.dev> <avM81YcTBTJ8zCMX@seanjc-mac.roam.internal>
-In-Reply-To: <avM81YcTBTJ8zCMX@seanjc-mac.roam.internal>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Tue, 10 Nov 2026 17:18:22 +0000
-X-Gmail-Original-Message-ID: <CA+EHjTz-Nb-g9YQKX2fKk61hC2BfzXfmUHv=2j+eZ18YuTv2Eg@mail.gmail.com>
-X-Gm-Features: AclHuK8XEMs-LG2DuXG_orFbD_2iTQdN4-tg95UYPdRQQh0AwcU2lWY30uJCy0M
-Message-ID: <CA+EHjTz-Nb-g9YQKX2fKk61hC2BfzXfmUHv=2j+eZ18YuTv2Eg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] KVM: Stop KVM_PRE_FAULT_MEMORY when the vCPU's dirty
- ring is full
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev, 
-	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Sean,
+Add IPv4 and IPv6 multipath routes that do not fit in the first dump
+skb of a fresh socket. The dump must return the route or fail with
+-EMSGSIZE, not end with status 0.
 
-On Tue, 10 Nov 2026 15:48:37 +0000, Sean Christopherson
-<seanjc@google.com> wrote:
-> On Tue, Nov 10, 2026, Fuad Tabba wrote:
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-[...]
-> > @@ -4461,6 +4461,12 @@ static int kvm_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
-> >                          break;
-> >                  }
-> >
-> > +                /* Like KVM_RUN: only the iteration crossing the soft limit uses the reserve. */
->
-> Please don't include AI comments verbatim.
+IPv6 nexthops cannot use lo, so create a dummy device and generalize
+lo_set_up() to if_set_up(). Add the IPv4 routing options to config.
 
-The series is LLM-assisted, but the comment was actually me.
+Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+---
+ tools/testing/selftests/net/config          |   3 +
+ tools/testing/selftests/net/netlink-dumps.c | 271 +++++++++++++++++++-
+ 2 files changed, 270 insertions(+), 4 deletions(-)
 
-> > +                if (vcpu->kvm->dirty_ring_size && kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
->
-> Eh, I vote to just use kvm_dirty_ring_check_request(), I don't see any harm in
-> clobbering vcpu->run->exit_reason.
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index d4416f8bdcfd..e2f136274e6d 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -29,6 +29,8 @@ CONFIG_IP6_NF_MATCH_RPFILTER=m
+ CONFIG_IP6_NF_NAT=m
+ CONFIG_IP6_NF_RAW=m
+ CONFIG_IP6_NF_TARGET_REJECT=m
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_MULTIPLE_TABLES=y
+ CONFIG_IP_NF_FILTER=m
+ CONFIG_IP_NF_IPTABLES=m
+ CONFIG_IP_NF_IPTABLES_LEGACY=m
+@@ -38,6 +40,7 @@ CONFIG_IP_NF_NAT=m
+ CONFIG_IP_NF_RAW=m
+ CONFIG_IP_NF_TARGET_REJECT=m
+ CONFIG_IP_NF_TARGET_TTL=m
++CONFIG_IP_ROUTE_MULTIPATH=y
+ CONFIG_IP_SCTP=m
+ CONFIG_IPV6=y
+ CONFIG_IPV6_FOU=m
+diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+index 4a94a25167e2..43f63f3f2289 100644
+--- a/tools/testing/selftests/net/netlink-dumps.c
++++ b/tools/testing/selftests/net/netlink-dumps.c
+@@ -263,11 +263,11 @@ TEST(close_with_ref)
+ 	usleep(100 * 1000);
+ }
+ 
+-static int lo_set_up(int sock, bool up)
++static int if_set_up(int sock, const char *name, bool up)
+ {
+ 	struct ifreq ifr = {};
+ 
+-	strcpy(ifr.ifr_name, "lo");
++	strcpy(ifr.ifr_name, name);
+ 	if (ioctl(sock, SIOCGIFFLAGS, &ifr))
+ 		return -1;
+ 	if (up)
+@@ -321,12 +321,12 @@ TEST(dump_with_queued_ntf)
+ 		       sizeof(addr)), 0);
+ 
+ 	// A large read makes the kernel attempt large dump skbs
+-	ASSERT_EQ(lo_set_up(inet_sock, true), 0);
++	ASSERT_EQ(if_set_up(inet_sock, "lo", true), 0);
+ 	n = recv(netlink_sock, buf, sizeof(buf), 0);
+ 	ASSERT_GE(n, (ssize_t)sizeof(struct nlmsghdr));
+ 
+ 	// Leave one notification queued, then start the dump
+-	ASSERT_EQ(lo_set_up(inet_sock, false), 0);
++	ASSERT_EQ(if_set_up(inet_sock, "lo", false), 0);
+ 	n = send(netlink_sock, &dump_links, sizeof(dump_links), 0);
+ 	ASSERT_EQ(n, sizeof(dump_links));
+ 
+@@ -362,4 +362,267 @@ TEST(dump_with_queued_ntf)
+ 	close(inet_sock);
+ }
+ 
++#define BIG_RT_TABLE	100
++#define BIG_RT_IFINDEX	100
++#define BIG_RT4_NH	1500
++#define BIG_RT6_NH	500
++
++static const struct {
++	struct nlmsghdr nlhdr;
++	struct ifinfomsg ifm;
++	struct nlattr name_hdr;
++	char name[8];
++	struct nlattr linkinfo_hdr;
++	struct nlattr kind_hdr;
++	char kind[8];
++} new_dummy = {
++	.nlhdr = {
++		.nlmsg_len	= sizeof(new_dummy),
++		.nlmsg_type	= RTM_NEWLINK,
++		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_ACK | NLM_F_CREATE |
++				  NLM_F_EXCL,
++		.nlmsg_seq	= 1,
++	},
++	.ifm = {
++		.ifi_family	= AF_UNSPEC,
++		.ifi_index	= BIG_RT_IFINDEX,
++	},
++	.name_hdr = {
++		.nla_len	= 4 + sizeof("dummy0"),
++		.nla_type	= IFLA_IFNAME,
++	},
++	.name = "dummy0",
++	.linkinfo_hdr = {
++		.nla_len	= 4 + 4 + 8,
++		.nla_type	= IFLA_LINKINFO,
++	},
++	.kind_hdr = {
++		.nla_len	= 4 + sizeof("dummy"),
++		.nla_type	= IFLA_INFO_KIND,
++	},
++	.kind = "dummy",
++};
++
++static struct {
++	struct nlmsghdr nlhdr;
++	struct rtmsg rtm;
++	struct nlattr dst_hdr;
++	__u8 dst[4];
++	struct nlattr table_hdr;
++	__u32 table;
++	struct nlattr mp_hdr;
++	struct rtnexthop nh[BIG_RT4_NH];
++} new_route4 = {
++	.nlhdr = {
++		.nlmsg_len	= sizeof(new_route4),
++		.nlmsg_type	= RTM_NEWROUTE,
++		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_ACK | NLM_F_CREATE |
++				  NLM_F_EXCL,
++		.nlmsg_seq	= 1,
++	},
++	.rtm = {
++		.rtm_family	= AF_INET,
++		.rtm_dst_len	= 24,
++		.rtm_protocol	= RTPROT_STATIC,
++		.rtm_scope	= RT_SCOPE_LINK,
++		.rtm_type	= RTN_UNICAST,
++	},
++	.dst_hdr = {
++		.nla_len	= 4 + 4,
++		.nla_type	= RTA_DST,
++	},
++	.dst = { 198, 51, 100, 0 },
++	.table_hdr = {
++		.nla_len	= 4 + 4,
++		.nla_type	= RTA_TABLE,
++	},
++	.table = BIG_RT_TABLE,
++	.mp_hdr = {
++		.nla_len	= 4 + sizeof(new_route4.nh),
++		.nla_type	= RTA_MULTIPATH,
++	},
++};
++
++struct rtnexthop6 {
++	struct rtnexthop rtnh;
++	struct nlattr gw_hdr;
++	__u8 gw[16];
++};
++
++static struct {
++	struct nlmsghdr nlhdr;
++	struct rtmsg rtm;
++	struct nlattr dst_hdr;
++	__u8 dst[16];
++	struct nlattr table_hdr;
++	__u32 table;
++	struct nlattr mp_hdr;
++	struct rtnexthop6 nh[BIG_RT6_NH];
++} new_route6 = {
++	.nlhdr = {
++		.nlmsg_len	= sizeof(new_route6),
++		.nlmsg_type	= RTM_NEWROUTE,
++		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_ACK | NLM_F_CREATE |
++				  NLM_F_EXCL,
++		.nlmsg_seq	= 1,
++	},
++	.rtm = {
++		.rtm_family	= AF_INET6,
++		.rtm_dst_len	= 64,
++		.rtm_protocol	= RTPROT_STATIC,
++		.rtm_scope	= RT_SCOPE_UNIVERSE,
++		.rtm_type	= RTN_UNICAST,
++	},
++	.dst_hdr = {
++		.nla_len	= 4 + 16,
++		.nla_type	= RTA_DST,
++	},
++	.dst = { 0x20, 0x01, 0x0d, 0xb8 }, // 2001:db8::/64
++	.table_hdr = {
++		.nla_len	= 4 + 4,
++		.nla_type	= RTA_TABLE,
++	},
++	.table = BIG_RT_TABLE,
++	.mp_hdr = {
++		.nla_len	= 4 + sizeof(new_route6.nh),
++		.nla_type	= RTA_MULTIPATH,
++	},
++};
++
++static struct {
++	struct nlmsghdr nlhdr;
++	struct rtmsg rtm;
++} dump_routes = {
++	.nlhdr = {
++		.nlmsg_len	= sizeof(dump_routes),
++		.nlmsg_type	= RTM_GETROUTE,
++		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_DUMP,
++		.nlmsg_seq	= 2,
++	},
++	.rtm = {
++		.rtm_table	= BIG_RT_TABLE,
++	},
++};
++
++static int nl_request_ack(int sock, const void *req, size_t len)
++{
++	struct nlmsghdr *nlh;
++	char buf[4096];
++	ssize_t n;
++
++	if (send(sock, req, len, 0) != (ssize_t)len)
++		return -errno;
++	n = recv(sock, buf, sizeof(buf), 0);
++	if (n < 0)
++		return -errno;
++	nlh = (struct nlmsghdr *)buf;
++	if (!NLMSG_OK(nlh, n) || nlh->nlmsg_type != NLMSG_ERROR)
++		return -EPROTO;
++	return *(int *)NLMSG_DATA(nlh);
++}
++
++// Dump table BIG_RT_TABLE on a fresh socket, so the first dump skb is
++// small, and count routes. The table holds only one route, too large for
++// that skb. Returns the status from NLMSG_DONE or NLMSG_ERROR.
++static int dump_big_table(struct __test_metadata *_metadata, int family,
++			  int *routes)
++{
++	int netlink_sock, i, ret = 1;
++	char buf[32768];
++	int one = 1;
++	ssize_t n;
++
++	netlink_sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
++	ASSERT_GE(netlink_sock, 0);
++	ASSERT_EQ(setsockopt(netlink_sock, SOL_NETLINK, NETLINK_GET_STRICT_CHK,
++			     &one, sizeof(one)), 0);
++
++	dump_routes.rtm.rtm_family = family;
++	n = send(netlink_sock, &dump_routes, sizeof(dump_routes), 0);
++	ASSERT_EQ(n, sizeof(dump_routes));
++
++	*routes = 0;
++	for (i = 0; i < 100 && ret > 0; i++) {
++		struct nlmsghdr *nlh;
++
++		n = recv(netlink_sock, buf, sizeof(buf), 0);
++		ASSERT_GE(n, 0);
++
++		for (nlh = (struct nlmsghdr *)buf; NLMSG_OK(nlh, n);
++		     nlh = NLMSG_NEXT(nlh, n)) {
++			if (nlh->nlmsg_type == RTM_NEWROUTE)
++				(*routes)++;
++			if (nlh->nlmsg_type == NLMSG_DONE ||
++			    nlh->nlmsg_type == NLMSG_ERROR) {
++				ret = *(int *)NLMSG_DATA(nlh);
++				break;
++			}
++		}
++	}
++	EXPECT_LE(ret, 0);
++
++	close(netlink_sock);
++	return ret;
++}
++
++// A route that doesn't fit in the first dump skb must either be dumped or
++// end the dump with EMSGSIZE. It must not end the dump as if complete.
++TEST(dump_large_route)
++{
++	int netlink_sock, inet_sock, i, ret, routes;
++
++	ret = unshare(CLONE_NEWNET);
++	if (ret && errno == EPERM)
++		SKIP(return, "Needs CAP_SYS_ADMIN for a netns");
++	ASSERT_EQ(ret, 0);
++
++	inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
++	ASSERT_GE(inet_sock, 0);
++	netlink_sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
++	ASSERT_GE(netlink_sock, 0);
++
++	ret = nl_request_ack(netlink_sock, &new_dummy, sizeof(new_dummy));
++	if (ret == -EOPNOTSUPP)
++		SKIP(return, "Needs CONFIG_DUMMY");
++	ASSERT_EQ(ret, 0);
++	ASSERT_EQ(if_set_up(inet_sock, "lo", true), 0);
++	ASSERT_EQ(if_set_up(inet_sock, "dummy0", true), 0);
++
++	for (i = 0; i < BIG_RT4_NH; i++) {
++		new_route4.nh[i].rtnh_len = sizeof(new_route4.nh[i]);
++		new_route4.nh[i].rtnh_ifindex = 1; // lo
++	}
++	ASSERT_EQ(nl_request_ack(netlink_sock, &new_route4,
++				 sizeof(new_route4)), 0);
++
++	for (i = 0; i < BIG_RT6_NH; i++) {
++		struct rtnexthop6 *nh = &new_route6.nh[i];
++
++		nh->rtnh.rtnh_len = sizeof(*nh);
++		nh->rtnh.rtnh_ifindex = BIG_RT_IFINDEX;
++		nh->gw_hdr.nla_len = sizeof(nh->gw_hdr) + sizeof(nh->gw);
++		nh->gw_hdr.nla_type = RTA_GATEWAY;
++		nh->gw[0] = 0xfe; // fe80::<i + 1>
++		nh->gw[1] = 0x80;
++		nh->gw[14] = (i + 1) >> 8;
++		nh->gw[15] = (i + 1) & 0xff;
++	}
++	ASSERT_EQ(nl_request_ack(netlink_sock, &new_route6,
++				 sizeof(new_route6)), 0);
++
++	// The ACK reads above used large buffers, which raise the dump
++	// skb size for this socket. Dump on fresh sockets instead.
++	close(netlink_sock);
++
++	ret = dump_big_table(_metadata, AF_INET, &routes);
++	if (ret != -EMSGSIZE)
++		EXPECT_EQ(routes, 1);
++
++	ret = dump_big_table(_metadata, AF_INET6, &routes);
++	if (ret != -EMSGSIZE)
++		EXPECT_EQ(routes, 1);
++
++	close(inet_sock);
++}
++
+ TEST_HARNESS_MAIN
+-- 
+2.53.0
 
-Will do.
-
-> Side topic, kvm_dirty_ring_check_request() is rather confusing (clears and then
-> re-sets the requests).  AFAICT, it can be this instead:
->
->         lockdep_assert_held(vcpu->mutex);
->
->         /*
->          * The vCPU isn't runnable when the dirty ring becomes soft full.  Keep
->          * the requests set until the dirty pages are harvested and the dirty
->          * ring is reset by userspace.  Note, checking if the ring is soft-full
->          * can get a false positive, but not a false negative, because only the
->          * vCPU can add entries to the ring, and its mutex is held.
->          */
->         if (kvm_test_request(KVM_REQ_DIRTY_RING_SOFT_FULL, vcpu) &&
->             kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
->                 vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
->                 trace_kvm_dirty_ring_exit(vcpu);
->                 return true;
->         }
->
->         kvm_clear_request(KVM_REQ_DIRTY_RING_SOFT_FULL, vcpu);
->         return false;
-
-I'll send it as its own patch.
-
-Cheers,
-/fuad
