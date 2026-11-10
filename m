@@ -1,115 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794346661;
-	b=ROLD7iA420jQbkyGR+kCwmh1PJ1oKwwbyH3R1yxoUHJ19Eb0fdhsRmsDTwSvtN2xnGFt
-	 VGTiX7yfbpFgl6bLvTdJr2GZEzsJVT9aFyNMNy21gpCnyu3ifd+4mIxdoFCKPtNYS5QM2
-	 9HJ7HYoWGJJfJCynA2ciHK2ucLTTXQaQlKAkUf2k3rESknHGDNOxC5HPMyiqepbeAljp1
-	 cEXlgIyWp+qfxflmUTk7z2XWQ/YL2vhUFXE8eBmdn/6oGjkyHRy7ka4ummI4WNPiG2+dO
-	 Qkqf6I9LyfB8VLNlqpdJKvig1hG1EE2IvLffcetkGh8CB/KydfjXsC5EnKiKV6hdrWw==
+	t=1794346664;
+	b=ZgKJLTFJrka5oBXT7kj7G1jRaMcLeRPusFr3zOD/ynAQhyr8KixP9WMMR1Ji13n5nAao
+	 IM7TBKnrCkZn4pv+aZnD1aHz2z/rQcNoqYPGYyWt27IthIjx7zXrCdpu0NNjP8rZqOOm5
+	 OkWua2Snks5KKsFHMZG0Sgg6ftqibCoUvlcJ8F2+ZhmcI36C3+VXBTSyaiTXW/Xy7soGW
+	 /o7lJnqGAK1+i6OQl++Ptn7Aq/PsJYaVLe1eOpTqVjID+lbqInBoSEOLyWsicEwE9JIq5
+	 sIH80nlGnhPiU7N5CCI7sR+iw0RoDyNYsEPnpqt6RpW0ym8CG7ZjfTqXTJCd/V9zH5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794346661;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer;
-	bh=pQPeTacN/BYl2gLmAN7uuVOyVLhnQcGIVBITEszOTd8=;
-	b=rJek6oVBxPgLrw4x/LaQ5SIdkZfBZ+efHhO1nOsKY7KoSuoHf0OcWfcFEIv68RHcue7w
-	 /nmfHO6WrSOsOjbKAWJYucq0Q6uu8mJzXQ06fEjz9X5+OQ28RZ4lWB254dZ301OZvV21P
-	 Rq+oEPtst3NmYxcKtbrQG8ytBIfM8S3njbd1Xr1/9/8Vb2pHDb+jFfaeGISC75Ib2vxFF
-	 cY6yBdvItFw9VrhQj3vNzy1jX6AcF8hn3nr5WOye6umG+omxcxQ0gOLquuvRejhB4GWR0
-	 ts9IiyyFvV7MOgnFZsAhFbhNpFY9toOg8kdFSlwuvQGfd34Ch8LhXCAKyI3pTwLhZ1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794346664;
+	h=Received:DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
+	 Reply-To:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=NEP7Ae8IL1zS4AFd2NI/v2KYJ70TRfoMA8rwYu6hoJc=;
+	b=MnCLfzwt7rvAscBczR5HQawQuM96oas9bKQODnOeCv470jh5RCM3C9eblMHkUVleaV4W
+	 TjMOUGLkrBBqiJAOp+jI1ei6e665oGbhpsbZ3EciQcWNl4oyBAyvPiee9ojNM6znY7+Z9
+	 LgUpYLXRVmjyHJv5IVAx9trEABPZeyqn9zSTaQLkLWA/h7EeWP6uf8J9v5vMBtDC4oufy
+	 GHR2U3ykgCaJFihkfETenKdnbWExQO5ES1nYq/z7VyUHbRWFtA/6Kbvk8bF8cxT9KaNud
+	 z9j4RE+RFdGHNYt2FCtSbDfF+ZTJ+qcm7lqgY9HqKKOT9q9wh3wSOidz6BPb9j4S6NQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fastmail.com;
-	spf=pass smtp.mailfrom=fastmail.com;
-	dkim=pass header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=gfwTy7+c;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=z8DX97bd;
-	arc=none smtp.remote-ip=202.12.124.149
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K49S0lKp;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D51F60A2629
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 21:37:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D51F60A2629
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30E060A263A;
+	Tue, 10 Nov 2026 21:37:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=gfwTy7+c;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=z8DX97bd
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.stl.internal (Postfix) with ESMTP id 11E741D001B6
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:37:40 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Tue, 10 Nov 2026 16:37:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1794346659;
-	 x=1794433059; bh=pQPeTacN/BYl2gLmAN7uuVOyVLhnQcGIVBITEszOTd8=; b=
-	gfwTy7+cif1e1LVct/UzO93FySeF/L6rOHFYPigDO4WR6oti4A6SsYIb4FoBfHko
-	smrXwqe/XfsQvuRAQQZwvfRoX7/wfrwRuQWoGJQcZsbzoCc0JGB67TgSZT6DCs3X
-	BTEgfOmFp0uj/oDfn50THCpFKFnygLcMXQQhQ4m4gxX2ROeQoNmpkfv087Kc7RlD
-	+J+8Okz0YQ+4j7ZsDuxqv9xhn+RPidHFiegAOyv540OEMC4/mQZgfug+ef6RAK3J
-	+MMzaEuDB7Ndx4Vm/wdwJ0RWtC9fbXRUtemNsRe03eRRwjh/XoMlFAi3AAvGvxvv
-	2Wt1fCX6hQfEswmFUw/8hA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794346659; x=
-	1794433059; bh=pQPeTacN/BYl2gLmAN7uuVOyVLhnQcGIVBITEszOTd8=; b=z
-	8DX97bdVTiHKspQTFx5mViskJPWEI3RT+8mVC/gZLIyRhqUqi2X9MZlNdo/OzYT9
-	GbtRnGjP6gLAO6kObwoEzGOOrPfkZ2Ukod73dwDBIQKF9Ffb0ruv4yACYlYuZkGp
-	yxzlG1BopWQvQJrJLum5vYTfx/RxHh22sOlzneU0ABs5tFv3H4t6zXHjIr9w91gx
-	Ctrburv16t05CrUV3P3xuryJagtayithjlYz0gb4nHNHNzPLRtrVpxHcBIBBBsJI
-	lswFRoE/a5mp8zYibJYpMkR4iofYz25oKdLh0KjslLFb8OOUOWMByBUJYg2ndjcw
-	QVPD9CDFYiPbuksDN6yow==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=fastmail.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794346659; d=fastmail.com;
-	mf=PGp1YW5sdUBmYXN0bWFpbC5jb20+;
-	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm3:rsa-sha256:Soq6o45YjlMTX/yY6tnnauaQDlVgTpGyfVnVnnd5ZDW0gjy
-	3Pgo0KDqdfbHlV2e/rU1M55nBjuPiLpgMHO2fuG+R82Jq7LWi7mV8gNmZXTHh378
-	4RLGh/N7qhNmRojyOe/HgvQtiE79mgsjYATJKS/iRkKK/uY3s4HFBR/U+Qfq7gEJ
-	asVBDZ4DJtOPNHy/Klto2a2RKjSeRT8ZtryZzBZTUqj7EUjdwKMUfbm/r+Fi9dFQ
-	/GDAUQXFHjQ5MQ2rhNMhKeVAedSLZZ7dRwp2wlDrtvd5GLUNpQ1HxbByPHYnSiUV
-	Kb/w1NBkpOA0WkKuwzlspl3MpBC86gVdTLfBRpw==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:eh/dKN/2QxMOjoEXNb5UK5C+r/WzrS1VQOk6m+ogYmA=:rIbkHgOQYUfQ1osRjj/4kXU7nTmkv5misKZNmcmqScE=;
-X-ME-Sender: <xms:o47zasAb6tti-vRIvRSQAI-J1iM1mXY0YGQhZn9gz5zFRioZGVhzGg>
-    <xme:o47zaiNEYqoBuBFRqJ0dzfYmm0VYNKN0RS-Z8Wa0OLRGRRreBzibecbbk0iFvOG0M
-    HIJjll9RmYuxH0wsrIAPKnIMMUOLIvmMpudTvk4ZO_fNOfdHLdfILRG>
-X-ME-Received: <xmr:o47zaoPCycbrKAKzHxOZW3oGQSESUZ-ZSdHBaA0sM1pV-M6YO9w2IvpN4SC0g3ySniYtvPdESWBOkakoJA>
-X-ME-Proxy-Cause: dmFkZTGNVXlGWE+7P2XXaL26F5AMGtpK2TycDVlf+xOjA+PYERZl6/BW+lbT0+wzTsbcnL
-    kBAhJvg1txFwRjOcd7bw7X+tErVQLKyqfU9/T4BbMHT193EbxKvHyY8bAQ6ww6NmZWX2Gj
-    S4oVvhJFMJ2BxkJuVf9ujSPSfv16nLGp7k9bwFNTR8UP/etY4ewbE2QpklWLWUkhZbd3tk
-    i2NFMM50EyvyBj3i7bkefkHzaAGSTWPc9b/2WlAEfIPv9QAFyLDidETcJqU8/KdZSLuzWm
-    YnikjaxRN8sYTqzmqmhrte8FXDDjJZwMnUc/kh6WLuGF7iefMNEW49vFlHrDG5ZIu0qxnb
-    vWHBHYmbVanc4mvFNBURK2LzrAF3B/Yo6DDs89K6yoDVQCqt4kOgmvGZEFc98pdMoX3UA+
-    ERVPXJV297cKHqg82Cmm4yWgRmP4ieHipAGa9mDa5wRUZP53ieM8gzbFuAxkR9awZXOr8t
-    kDNYvRgoAyPxlvwXs4pWirk7COdYvJ9s3rOrX1A/oF1hZTc2Y2fuSHjTuAw/3DEp6uUPxb
-    oA+82RihXNdAJtbxu/D1GwO8wsJ8VAKx9n2GBPr39VhzGtE382DS5nDm+JCa9hFGjJksMi
-    j1xABSJ7nsX21FNkUt6zJm+UumP7zctU530ecXwopTpDeaycXzd8/MZ688NQ
-X-ME-Proxy: <xmx:o47zakLL7QO78ILQizAgIMVkJ1B5GwKOlT3aVhNudLICMPiZpD4vGg>
-    <xmx:o47zaipfHw0lAq1mkKFM2WA2Kenhed-d6EhYInxm5KpefJT5UFepWQ>
-    <xmx:o47zagOAsYpXDOWckS1XKAsyMwJESmc5QxFgBxusffb6m6ZRXkfNOw>
-    <xmx:o47zarjG1QVeI8lDdNtLJdSik9ZTJemwFccGbEIM0ruYwmP7V22Gow>
-    <xmx:o47zal9_Ky0U15rZE_SEAgDZtkK19wkrP2KYdvqoLZECpYRqgYUsa_Jk>
-Feedback-ID: i80b64ba7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Nov 2026 16:37:39 -0500 (EST)
-From: Juanlu Herrero <juanlu@fastmail.com>
-Date: Tue, 10 Nov 2026 13:36:49 -0800
-Subject: [PATCH 3/3] dma-debug: add bucket bound lifetime coverage
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=K49S0lKp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADDE1F008BC;
+	Tue, 10 Nov 2026 21:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794346663;
+	bh=NEP7Ae8IL1zS4AFd2NI/v2KYJ70TRfoMA8rwYu6hoJc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=K49S0lKpP6s9saoGWzMH5Mywjt7CyJjxFP4w/nz8/7JO5Gzx0ijaSntFv+HkxhMsc
+	 ItoenSXjpGHR/jamv9ViKAIV8Jfb0K2pDtuAQjQoKjBqJwVcDymhVik6X4UG5hbMof
+	 TFH5+qu4lB7PoTZXxo7biA7c3XwnV+5eCvzryJYzd2kTHecZooQjK5TJazlOE8wT/m
+	 XAqWC8mwXsCy0IxZhFhctP3boThoHGafeaFi4/gNunxatiAgWNIfgYgc3Pb2AnB2KS
+	 wRW0ZdBUsQMi38XqdO72KMCAezATGsQJ/Oawfw3e8FGCL5+tKcgeFtMKfOR2v3GRzD
+	 LI6fRRxA5Ce3A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 67D4ACE0AD8; Tue, 10 Nov 2026 13:37:43 -0800 (PST)
+Date: Tue, 10 Nov 2026 13:37:43 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Kunwu Chan <kunwu.chan@gmail.com>
+Cc: boqun@kernel.org, mathieu.desnoyers@efficios.com,
+	jiangshanlai@gmail.com, corbet@lwn.net, mingo@redhat.com,
+	frederic@kernel.org, neeraj.upadhyay@kernel.org,
+	josh@joshtriplett.org, urezki@gmail.com, dave@stgolabs.net,
+	stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+	dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+	akiyks@gmail.com, dlustig@nvidia.com, joelagnelf@nvidia.com,
+	skhan@linuxfoundation.org, rdunlap@infradead.org,
+	longman@redhat.com, rostedt@goodmis.org, qiang.zhang@linux.dev,
+	brads@mainlining.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, lkmm@lists.linux.dev,
+	linux-doc@vger.kernel.org, rcu@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 09/28] hazptrtorture: Add READERS4 and READERS0 torture
+ configs
+Message-ID: <381033ae-d65e-44de-bbe7-69f707405f40@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20261104165504.2430480-1-kunwu.chan@gmail.com>
+ <20261104165504.2430480-10-kunwu.chan@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -119,129 +73,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261110-zcrx-dma-debug-registration-v1-3-48743ea61631@fastmail.com>
-References: <20261110-zcrx-dma-debug-registration-v1-0-48743ea61631@fastmail.com>
-In-Reply-To: <20261110-zcrx-dma-debug-registration-v1-0-48743ea61631@fastmail.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Robin Murphy <robin.murphy@arm.com>, Eric Dumazet <edumazet@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
- Juanlu Herrero <juanlu@fastmail.com>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261104165504.2430480-10-kunwu.chan@gmail.com>
 
-Add a KUnit test on a local bucket for conservative bounds, equal-sized
-mapping removal, empty-bucket reset and reuse. Exercise the existing
-insertion and removal helpers without DMA hardware.
+On Thu, Nov 05, 2026 at 12:54:27AM +0800, Kunwu Chan wrote:
+> Add READERS4 and READERS0 configs to cover reader-active and
+> reader-free synchronize paths.
+> 
+> Both use the PREEMPT baseline and hazptr-stack torture type,
+> with four readers for READERS4 and no readers for READERS0.
+> 
+> Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
 
-Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
----
- kernel/dma/Kconfig             | 10 ++++++++
- kernel/dma/debug.c             |  4 +++
- kernel/dma/tests/debug_kunit.c | 57 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 71 insertions(+)
+For these, why not just add '--bootargs "hazptrtorture.nreaders=0"'
+to the kvm.sh command line, for example in torture.sh?  Ditto for the
+four-readers case.
 
-diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
-index 3830a63ae032d..3f295a1503597 100644
---- a/kernel/dma/Kconfig
-+++ b/kernel/dma/Kconfig
-@@ -291,6 +291,16 @@ config DMA_API_DEBUG
- 
- 	  If unsure, say N.
- 
-+config DMA_API_DEBUG_KUNIT_TEST
-+	bool "Tests for DMA debug bucket bounds" if !KUNIT_ALL_TESTS
-+	depends on KUNIT=y && DMA_API_DEBUG
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Enable KUnit (kernel unit test) coverage for DMA debug bucket bounds.
-+	  Check that insertion and removal keep the bound conservative and
-+	  reset it when a bucket becomes empty. Exercise reuse and equal-sized
-+	  mappings on a local bucket. No physical DMA device is required.
-+
- config DMA_MAP_BENCHMARK
- 	bool "Enable benchmarking of streaming DMA mapping"
- 	depends on DEBUG_FS
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index 8dad45d0a4360..1d0990e447516 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -1700,3 +1700,7 @@ static int __init dma_debug_driver_setup(char *str)
- 	return 1;
- }
- __setup("dma_debug_driver=", dma_debug_driver_setup);
-+
-+#if IS_ENABLED(CONFIG_DMA_API_DEBUG_KUNIT_TEST)
-+#include "tests/debug_kunit.c"
-+#endif
-diff --git a/kernel/dma/tests/debug_kunit.c b/kernel/dma/tests/debug_kunit.c
-new file mode 100644
-index 0000000000000..96cff02a6918d
---- /dev/null
-+++ b/kernel/dma/tests/debug_kunit.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <kunit/test.h>
-+#include <linux/sizes.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+
-+static void dma_debug_bound_lifetime_test(struct kunit *test)
-+{
-+	struct dma_debug_entry *entries;
-+	struct hash_bucket bucket = {};
-+	unsigned long bounds[7];
-+
-+	entries = kunit_kcalloc(test, 3, sizeof(*entries), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, entries);
-+	entries[0].size = SZ_4K;
-+	entries[1].size = SZ_64K;
-+	entries[2].size = SZ_64K;
-+	INIT_LIST_HEAD(&bucket.list);
-+	spin_lock_init(&bucket.lock);
-+	spin_lock(&bucket.lock);
-+	hash_bucket_add(&bucket, &entries[0]);
-+	bounds[0] = bucket.max_entry_size;
-+	hash_bucket_add(&bucket, &entries[1]);
-+	hash_bucket_add(&bucket, &entries[2]);
-+	bounds[1] = bucket.max_entry_size;
-+	hash_bucket_del(&bucket, &entries[1]);
-+	bounds[2] = bucket.max_entry_size;
-+	hash_bucket_del(&bucket, &entries[2]);
-+	bounds[3] = bucket.max_entry_size;
-+	hash_bucket_del(&bucket, &entries[0]);
-+	bounds[4] = bucket.max_entry_size;
-+	hash_bucket_add(&bucket, &entries[0]);
-+	bounds[5] = bucket.max_entry_size;
-+	hash_bucket_del(&bucket, &entries[0]);
-+	bounds[6] = bucket.max_entry_size;
-+	spin_unlock(&bucket.lock);
-+
-+	KUNIT_EXPECT_GE(test, bounds[0], (unsigned long)SZ_4K);
-+	KUNIT_EXPECT_GE(test, bounds[1], (unsigned long)SZ_64K);
-+	KUNIT_EXPECT_GE(test, bounds[2], (unsigned long)SZ_64K);
-+	KUNIT_EXPECT_GE(test, bounds[3], (unsigned long)SZ_4K);
-+	KUNIT_EXPECT_EQ(test, bounds[4], 0UL);
-+	KUNIT_EXPECT_GE(test, bounds[5], (unsigned long)SZ_4K);
-+	KUNIT_EXPECT_EQ(test, bounds[6], 0UL);
-+}
-+
-+static struct kunit_case dma_debug_bound_cases[] = {
-+	KUNIT_CASE(dma_debug_bound_lifetime_test),
-+	{}
-+};
-+
-+static struct kunit_suite dma_debug_bound_suite = {
-+	.name = "dma-debug-bound",
-+	.test_cases = dma_debug_bound_cases,
-+};
-+
-+kunit_test_suite(dma_debug_bound_suite);
+							Thanx, Paul
 
--- 
-2.53.0-Meta
-
+> Acked-by: Bradley Morgan <brads@mainlining.org>
+> ---
+>  .../selftests/rcutorture/configs/hazptr/READERS0 | 16 ++++++++++++++++
+>  .../rcutorture/configs/hazptr/READERS0.boot      |  2 ++
+>  .../selftests/rcutorture/configs/hazptr/READERS4 | 16 ++++++++++++++++
+>  .../rcutorture/configs/hazptr/READERS4.boot      |  2 ++
+>  4 files changed, 36 insertions(+)
+>  create mode 100644 tools/testing/selftests/rcutorture/configs/hazptr/READERS0
+>  create mode 100644 tools/testing/selftests/rcutorture/configs/hazptr/READERS0.boot
+>  create mode 100644 tools/testing/selftests/rcutorture/configs/hazptr/READERS4
+>  create mode 100644 tools/testing/selftests/rcutorture/configs/hazptr/READERS4.boot
+> 
+> diff --git a/tools/testing/selftests/rcutorture/configs/hazptr/READERS0 b/tools/testing/selftests/rcutorture/configs/hazptr/READERS0
+> new file mode 100644
+> index 000000000000..c5b12f3bef74
+> --- /dev/null
+> +++ b/tools/testing/selftests/rcutorture/configs/hazptr/READERS0
+> @@ -0,0 +1,16 @@
+> +CONFIG_SMP=y
+> +CONFIG_NR_CPUS=16
+> +CONFIG_PREEMPT_NONE=n
+> +CONFIG_PREEMPT_VOLUNTARY=n
+> +CONFIG_PREEMPT=y
+> +CONFIG_HZ_PERIODIC=n
+> +CONFIG_NO_HZ_IDLE=y
+> +CONFIG_NO_HZ_FULL=n
+> +CONFIG_HOTPLUG_CPU=y
+> +CONFIG_SUSPEND=n
+> +CONFIG_HIBERNATION=n
+> +CONFIG_DEBUG_LOCK_ALLOC=n
+> +CONFIG_PROVE_LOCKING=n
+> +CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+> +CONFIG_DEBUG_KERNEL=y
+> +CONFIG_HAZPTR_DEBUG=y
+> diff --git a/tools/testing/selftests/rcutorture/configs/hazptr/READERS0.boot b/tools/testing/selftests/rcutorture/configs/hazptr/READERS0.boot
+> new file mode 100644
+> index 000000000000..f5564c218902
+> --- /dev/null
+> +++ b/tools/testing/selftests/rcutorture/configs/hazptr/READERS0.boot
+> @@ -0,0 +1,2 @@
+> +hazptrtorture.nreaders=0
+> +hazptrtorture.torture_type=hazptr-stack
+> diff --git a/tools/testing/selftests/rcutorture/configs/hazptr/READERS4 b/tools/testing/selftests/rcutorture/configs/hazptr/READERS4
+> new file mode 100644
+> index 000000000000..c5b12f3bef74
+> --- /dev/null
+> +++ b/tools/testing/selftests/rcutorture/configs/hazptr/READERS4
+> @@ -0,0 +1,16 @@
+> +CONFIG_SMP=y
+> +CONFIG_NR_CPUS=16
+> +CONFIG_PREEMPT_NONE=n
+> +CONFIG_PREEMPT_VOLUNTARY=n
+> +CONFIG_PREEMPT=y
+> +CONFIG_HZ_PERIODIC=n
+> +CONFIG_NO_HZ_IDLE=y
+> +CONFIG_NO_HZ_FULL=n
+> +CONFIG_HOTPLUG_CPU=y
+> +CONFIG_SUSPEND=n
+> +CONFIG_HIBERNATION=n
+> +CONFIG_DEBUG_LOCK_ALLOC=n
+> +CONFIG_PROVE_LOCKING=n
+> +CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+> +CONFIG_DEBUG_KERNEL=y
+> +CONFIG_HAZPTR_DEBUG=y
+> diff --git a/tools/testing/selftests/rcutorture/configs/hazptr/READERS4.boot b/tools/testing/selftests/rcutorture/configs/hazptr/READERS4.boot
+> new file mode 100644
+> index 000000000000..0d0df3f7dca4
+> --- /dev/null
+> +++ b/tools/testing/selftests/rcutorture/configs/hazptr/READERS4.boot
+> @@ -0,0 +1,2 @@
+> +hazptrtorture.nreaders=4
+> +hazptrtorture.torture_type=hazptr-stack
+> -- 
+> 2.43.0
+> 
