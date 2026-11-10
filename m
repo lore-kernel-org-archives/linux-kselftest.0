@@ -1,54 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.113
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.222
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315340;
-	b=5ZBH2HDW9UskyB8q38YcXOVofgYcs4yK99pjaoAX18JR552yxyBPSmE7zP/QKcyDYjNi
-	 QCpdQ2xwCzND8WEqR5EYhsHcXJNutUmPySvSPzsJkmneyd5Hst9oPvdbfqRYPfHQNe+/t
-	 +KQcBIejAULtf1QbOTqEBCm4JgKZ2rtaVSVS0Tjqc8gQjGy2bvOlS0J4XX6/uYNoflMod
-	 0UkV/0PzDQNpkkAIaoni+QER2Prbl20Payjs5XE7QMazsAu85OVS/4rNVevGwSX1zcXD/
-	 6YoR78gN03ZCtxZOcZlRTgb2KPE5AmZS9pmkwt7+f4tVEEZLOTCU/aGxz0vIG4bpo6g==
+	t=1794315356;
+	b=uPwqAq4ZePNZcLVA1ilYtRdtXPi8DKAn3IAofGYNBbCeuwVI5c4BlQJ9QrP2IxuTjXZv
+	 WQGIu2xx8BDW/Ihn8vnNJCAonT/Jz6XVZe3yqY6FZve99ebS2Rp00Eg01Pb5crlsPQkQw
+	 BiuRgZqiriWshhy86XsVapN0PVX44lKkYhU3lURSXUX73cFvLzfoyi+AgxJ/VKQNi5QB6
+	 bJbXjq/ViZG5NT3DcpvRcdvmCjHf+08Egqxrn1n7Pr/OL+e679TO07eGghjwWga7Vd7wR
+	 1PM3tukC064uPqQDznJrcvyF2BvybwFOYl+FxAhP+T0mWhJD9MYa3VVK7sODJW4J7fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315340;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=0YrNyvOkrO10J37Rz2X2JIGF70cIhICM0P7YzECl+1k=;
-	b=F4ziS0y3HPp1HgfUjKaxOCUsQiMqBRMMmLjotPOfEXmOWElSanIOjdAJHXeOMgBUyfGX
-	 6Ap0zhO8S4NPhHvkvHcNb4C8isZ7atbaYc5BRbPrH130VaKhPj3gfgi6gbkadvC0MQPr3
-	 5OG1c4skeI2cWEaFpaAdd2BWiJpprmVvZy9m9JNyzdQ0tQTM7PXl1ieziVS86M/tOWdNl
-	 rGk+jaAsw/j1KLgyhhM0LW0qv8riXkCv8pbQ4F5zSzypEfXNnBgadY9TVQOFvDz9v91CN
-	 UtUJEfEJVsZyxrzWzf2UZPKonRC/9H0ahE97e4p/O7QamS/OIt6CR2UKcMqilT305Eg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315356;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 X-Originating-IP:X-ClientProxiedBy;
+	bh=T2dWyS2c9HCj9HQ2w6QNE6Xzgrb9OoKtERWi7W6SZbU=;
+	b=SVnektij1thQUOQe00/wjO/qPevMpvJD1XlhNzV/sZs2pGQKEN95/uptmPmYwfiYOCtH
+	 c394n4Oo8SISKF1xB5q70WeM+WY5F5rujNSDfs68Ks4S4hQvQQVj1sVSKcU8+GqSGhSaw
+	 Ctfjzw3DZIxRtcTW1TGC/2x/VE0SWw0O4FGlQ1DsWvOLC/zi4cKbzm02fS4Lkb370kc6F
+	 vQxc0SuvR/mAJLSLLNjz7aw58GUo+lX6hMzJezWSRovbVK3YJLgwArotYl/BqJsYkDdh/
+	 HWSsSqqeAyXSp/1fEjz5pP9TFhwYomXs1Ji8uuywAOSd/4Xc5vjl2dCRmj0yLRPBXHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kXnyNkFd;
-	arc=none smtp.remote-ip=95.215.58.113
-Received: from mta1.migadu.com (out-113.mta1.migadu.com [95.215.58.113])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=nySpbsOQ;
+	arc=none smtp.remote-ip=113.46.200.222
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387D560A260E
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 12:55:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 387D560A260E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4EF606A33B;
+	Tue, 10 Nov 2026 12:55:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE4EF606A33B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kXnyNkFd
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=YXNTJ8EvTAje+v+yw6YmnQb/hbXtkj5MXzXnPyCZFEE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794315338; v=1; x=1794920138;
- b=kXnyNkFdHwMGIlKryzmC4olwC6vefPlrAb0PMxl8pelBVcW/khfy6ZMjoOR0KC84KFYqFmlp
- xgWcUp2wBaKWZeuUdxB+TXHgyquHuPNG4QTflGjFXltI5xk/ppabVx5upvJk9BsKgHpCe1pg3ta
- TrBg2Rpjglrv2BaazhpfSQ7c=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 425a090c15f8c4fd;
-	Tue, 10 Nov 2026 12:55:36 +0000
-X-Mizu-Trace-ID: 425a090c15f8c4fd
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <19708635-67de-45ab-9539-8d686caa7132@linux.dev>
-Date: Tue, 10 Nov 2026 20:55:29 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=nySpbsOQ
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=T2dWyS2c9HCj9HQ2w6QNE6Xzgrb9OoKtERWi7W6SZbU=;
+	b=nySpbsOQT9cafudOrzG91TTObxit+LIYM3JtT8zs6HTB47Uea2vFyCjBDRpHY6hXAzsNDl7nD
+	CvBLtODiu/qKVYJQB4T/DgE5WL3crgHPipGmLaiB0aRLi4UVFIM+j72y44Bk4UTQxc3XaGeFwww
+	zhnja4Vn7PnYedeFRcK2Tp0=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4jP6881zV5zLlVP;
+	Tue, 10 Nov 2026 20:55:36 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id E90CC4048B;
+	Tue, 10 Nov 2026 20:55:50 +0800 (CST)
+Received: from octopus.huawei.com (10.67.174.191) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 10 Nov 2026 20:55:49 +0800
+From: Cai Xinchen <caixinchen1@huawei.com>
+To: <nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+	<shuah@kernel.org>, <kalevi@kolttonen.fi>, <caixinchen1@huawei.com>
+CC: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+Subject: [PATCH -next -v2 0/8] lockdown: fix the securityfs interface and add tests
+Date: Tue, 10 Nov 2026 21:28:10 +0800
+Message-ID: <20261110132818.2231593-1-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,242 +70,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] cgroup/cpuset: Keep the top sched domain non-empty
- on CPU hotplug
-To: Guopeng Zhang <guopeng.zhang@linux.dev>, Waiman Long
- <longman@redhat.com>, Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>
-References: <20261110050324.173461-1-guopeng.zhang@linux.dev>
- <20261110050324.173461-4-guopeng.zhang@linux.dev>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20261110050324.173461-4-guopeng.zhang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
+The lockdown LSM provides /sys/kernel/security/lockdown, but the file is
+neither documented nor covered by a selftest.  While reviewing the
+interface, we also found a Kconfig bug and a few accumulated cleanups.
 
+The series is organized as follows:
 
-On 11/10/2026 1:03 PM, Guopeng Zhang wrote:
-> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> 
-> In cpuset_hotplug_update_tasks(), the local partition check passes only
-> the partition's own effective CPUs to tasks_nocpu_error(). For a
-> top-level partition with children, top_cpuset_sd_nocpu() treats the
-> children's CPUs as being returned, although hotplug does not return
-> them. This can leave the top sched domain empty when its last boot
-> domain housekeeping CPU goes offline.
-> 
-> For example, on a 32-CPU system with isolcpus=domain,10-31:
-> 
->    echo 0,2-9 > A/cpuset.cpus
->    echo root > A/cpuset.cpus.partition
->    echo 5-9 > A/B/cpuset.cpus
->    echo root > A/B/cpuset.cpus.partition
->    echo 0 > /sys/devices/system/cpu/cpu1/online
->    Oops: general protection fault
->    RIP: 0010:build_perf_domains+...
-> 
-> The remote hotplug path does not check whether the top sched domain
-> is empty.
-> 
-> Check the full effective_xcpus of top-level local and remote partitions
-> without assuming any CPUs have been returned. Only invalidate a
-> partition to restore the top domain if it can return an active boot
-> domain housekeeping CPU. Partitions holding only boot-isolated or
-> offline housekeeping CPUs cannot do that.
-> 
-> Add hotplug regression tests.
-> 
-> Fixes: 9b496a8bbed9 ("cgroup/cpuset: Prevent leakage of isolated CPUs into sched domains")
-> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> ---
->   kernel/cgroup/cpuset.c                        | 23 ++++++++++++++++---
->   .../selftests/cgroup/test_cpuset_prs.sh       | 19 +++++++++++++++
->   2 files changed, 39 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 8b6831983803..0b392d50df27 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -4043,6 +4043,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->   	static nodemask_t new_mems;
->   	bool cpus_updated;
->   	bool mems_updated;
-> +	bool nocpu;
->   	int partcmd = -1;
->   	struct cpuset *parent;
->   
-> @@ -4054,9 +4055,24 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->   	if (!tmp || !cs->partition_root_state)
->   		goto update_tasks;
->   
-> +	if (parent == &top_cpuset || is_remote_partition(cs)) {
-> +		/*
-> +		 * Hotplug does not return CPUs held by child partitions. Only
-> +		 * invalidate a partition for an empty top sched domain if it
-> +		 * can return an active boot domain housekeeping CPU.
-> +		 */
-> +		cpumask_and(tmp->addmask, cs->effective_xcpus,
-> +			    housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
-> +		nocpu = cpumask_intersects(tmp->addmask, cpu_active_mask) &&
-> +			top_cpuset_sd_nocpu(cs->effective_xcpus, NULL);
-> +		nocpu |= cpumask_empty(&new_cpus) &&
-> +			 partition_is_populated(cs, NULL);
-> +	} else {
-> +		nocpu = tasks_nocpu_error(parent, cs, &new_cpus);
-> +	}
-> +
->   	if (is_remote_partition(cs) && (cpumask_empty(subpartitions_cpus) ||
-> -				       (cpumask_empty(&new_cpus) &&
-> -					partition_is_populated(cs, NULL)))) {
-> +				       nocpu)) {
->   		WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
->   		remote_partition_disable(cs, tmp);
->   		compute_effective_cpumask(&new_cpus, cs, parent);
-> @@ -4069,10 +4085,11 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->   	 * 2) parent is invalid or doesn't grant any cpus to child
->   	 *    partitions.
->   	 * 3) subpartitions_cpus is empty.
-> +	 * 4) top_cpuset needs an active boot domain housekeeping CPU from cs.
->   	 */
->   	if (is_local_partition(cs) &&
->   	    (!is_partition_valid(parent) ||
-> -	     tasks_nocpu_error(parent, cs, &new_cpus) ||
-> +	     nocpu ||
->   	     cpumask_empty(subpartitions_cpus)))
->   		partcmd = partcmd_invalidate;
->   	/*
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index ee4d57b7e35b..f345696e5b53 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -648,8 +648,27 @@ ISOLCPUS_DOMAIN_TEST_MATRIX=(
->   
->   	# An invalid partition can recover once it leaves a top-level HK CPU.
->   	" C0-9:P1   .      .      .    C0-6,8-9 .      .      .     0 A1:0-6,8-9 A1:P1 7|"
-> +
-> +	# A local root must not count its child's CPUs as already returned.
-> +	" C0,2-9:P1 C5-9:P1 . . O1=0 . . . 0 A1:0,2-9|A2:5-9 A1:P-1|A2:P-1 1|"
-> +
-> +	# A remote root must return CPUs when the top domain loses its last HK CPU.
-> +	" X0,2-9 CX0,2-9:P1 . . O1=0 . . . 0 A2:0,2-9 A2:P-1 1|"
->   )
->   
-> +# Keep an online boot-isolated CPU at the top so hotplug does not
-> +# clear subpartitions_cpus before checking the individual partitions.
-> +if [[ "$ONLINE_LAST" -gt 10 ]]; then
-> +	ISOLCPUS_DOMAIN_TEST_MATRIX+=(
-> +		# An offline HK CPU cannot restore the top domain. Keep this local
-> +		# partition valid while its sibling returns active HK CPUs.
-> +		" O2=0:C2,10:P2 . . C0,3-9:P1 O1=0 . . . 0 A1:10|B1:0,3-9 A1:P2|B1:P-1 1-2|2"
-> +
-> +		# Check the same active-CPU rule for a remote partition.
-> +		" O2=0:X2,10 CX2,10:P2 . C0,3-9:P1 O1=0 . . . 0 A2:10|B1:0,3-9 A2:P2|B1:P-1 1-2|2"
-> +	)
-> +fi
-> +
->   # Test matrix to be run when boot time nohz_full CPUs cover all CPUs except CPUs 0-7
->   # This also means that CPU 8 is available and is a nohz_full CPU.
->   NOHZ_FULL_TEST_MATRIX=(
+  - patches 1-2 are small cleanups in lockdown_write(): stop scanning
+    after the matching level, and drop an update to a length variable
+    that is not used afterwards.
+  - patch 3 makes the LSM select SECURITYFS.  Without it, a kernel built
+    with CONFIG_SECURITYFS=n logs "failed LSM lockdown core initcall with
+    errno -19" and does not create the file advertised by the Kconfig
+    help text.
+  - patch 4 removes LSM_AUDIT_DATA_LOCKDOWN and its formatting code,
+    which became dead when the SELinux lockdown implementation was
+    removed by commit f5d0e5e9d72d.
+  - patch 5 drops an unused include and moves lockdown_reasons[] next to
+    its only user.
+  - patch 6 replaces sprintf() with scnprintf() so that the status
+    buffer
+    is bounded explicitly if more levels are added later, and adds a
+    BUILD_BUG_ON() that checks at compile time that all level labels,
+    their separators, and the terminating NUL still fit.
+  - patch 7 documents the ABI and adds the new file to the LOCKDOWN
+    SECURITY MODULE entry in MAINTAINERS.
+  - patch 8 adds a kselftest covering the read format, invalid levels,
+    the rejection of the current or a lower level, and an upgrade to the
+    next level.
 
-Hi Guopeng,
+The only functional change is patch 3; the rest are cleanups,
+documentation, or test coverage.
 
-Looking at patches 1-3, the same check is changed back and forth in
-several places, and the places don't do it in the same way. I'd prefer
-a single helper that is unified and easy to understand, so that every
-place can just call it.
+Changes since v1:
 
-As tasks_nocpu_error() is shared by the CPU mask update paths and the
-hotplug path, patches 1-3 end up checking the same thing in several
-places with different masks. How about making tasks_nocpu_error() take
-the CPUs to be returned as an explicit argument, the same way as
-top_cpuset_sd_nocpu() does, and use it for all parents? Something like
-the following (not tested):
+  - The scnprintf()/BUILD_BUG_ON() patch now comes after the audit and
+    cleanup patches.
+  - The lockdown_reasons move patch has a corrected commit message: the
+    enum comment already pointed at security/lockdown/lockdown.c.
+  - The ABI documentation now mentions CONFIG_LSM as a way to order
+    lockdown in, and states that the FORCE_* options only take effect
+    when the lockdown LSM is active.
+  - The selftest patch moves the read-format string checks before the
+    active-level checks, corrects the no-downgrade skip message, and adds
+    an upgrade test.  Because that test irreversibly raises the lockdown
+    level, the test is kept out of the default run
+    (TEST_GEN_PROGS_EXTENDED and run_lockdown_test),
+    CONFIG_SECURITY_LOCKDOWN_LSM is enabled in the selftest config
+    fragment, and non-ENOENT read failures now fail instead of being
+    skipped.
+  - The break, decrement, SECURITYFS, and audit patches are unchanged.
 
-/*
-* tasks_nocpu_error - Return true if tasks will have no effective_cpus
-* @parent: parent partition, NULL for a remote partition
-* @cs: the partition
-* @xcpus: exclusive CPUs that @cs will hold after the update
-* @del_cpus: exclusive CPUs to be returned to @parent, can be NULL
-*
-* @del_cpus may include CPUs that are also in @xcpus and will stay in
-* @cs. They are skipped by the @xcpus check, so callers can pass the
-* current effective_xcpus of @cs without masking it first.
-*
-* top_cpuset always has tasks, and its sched domain needs an active boot
-* domain housekeeping CPU.
-*/
-static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
-							const struct cpumask *xcpus,
-							const struct cpumask *del_cpus)
-{
-	const struct cpumask *mask = cpu_possible_mask;
-	int cpu;
+The upgrade test irreversibly raises the lockdown level, so lockdown_test
+is built but not run by default.  Use "make run_lockdown_test" to run it
+explicitly, preferably on a disposable test system.  The shared
+selftests/lsm config fragment now enables CONFIG_SECURITY_LOCKDOWN_LSM so
+that the test has something to exercise.
 
-	/* A populated @cs must have an active CPU in @xcpus */
-	if (!cpumask_intersects(xcpus, cpu_active_mask) &&
-		partition_is_populated(cs, NULL))
-			return true;
+Cai Xinchen (7):
+  lockdown: Add break in lockdown_write
+  lockdown: select SECURITYFS
+  lsm: remove unused lockdown audit data
+  lockdown: drop an unused include and move lockdown_reasons
+  lockdown: bound the status string with scnprintf
+  Documentation/ABI: document the lockdown securityfs file
+  selftests/lsm: add lockdown securityfs test
 
-	/*
-	 * A populated @parent must keep an active CPU in @mask, either from
-	 * its effective_cpus or from @del_cpus, that isn't taken by @cs.
-	 */
-	if (!parent)
-		  parent = &top_cpuset;
+Kalevi Kolttonen (1):
+  lockdown: remove useless decrement operation
 
-	if (parent == &top_cpuset)
-		  mask = housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
-	else if (!partition_is_populated(parent, cs))
-		  return false;
-		
-	for_each_cpu_and(cpu, mask, cpu_active_mask) {
-		  if (cpumask_test_cpu(cpu, xcpus))
-				  continue;
-		  if (cpumask_test_cpu(cpu, parent->effective_cpus) ||
-			  (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
-				  return false;
-	}
-	return true;
-}
-
-The callers then become:
-
-/* update_parent_effective_cpumask() */
-nocpu = tasks_nocpu_error(parent, cs, tmp->delmask,
-			is_partition_valid(cs) ? cs->effective_xcpus : NULL);
-						
-/* validate_partition() */
-if (tasks_nocpu_error(is_remote_partition(cs) ? NULL : parent, cs,
-			trialcs->effective_xcpus,
-			is_partition_valid(cs) ? cs->effective_xcpus : NULL))
-					
-/* remote_partition_enable(), instead of top_cpuset_sd_nocpu() */
-tasks_nocpu_error(NULL, cs, tmp->new_cpus, NULL)
-
-/* remote_cpus_update(), instead of top_cpuset_sd_nocpu() */
-tasks_nocpu_error(NULL, cs, excpus, cs->effective_xcpus)
-
-/* cpuset_hotplug_update_tasks(), hotplug returns nothing */
-nocpu = tasks_nocpu_error(is_remote_partition(cs) ? NULL : parent, cs,
-						&new_cpus, NULL);
-							
-In the hotplug path, @del_cpus is NULL as nothing is returned to the
-parent. new_cpus can be used as @xcpus for both checks, as the CPUs of
-the child partitions of cs are not in the parent's effective_cpus
-anyway. The check that cs can return an active boot domain housekeeping
-CPU before invalidating it can stay there.
-
-This also covers the local parent case I mentioned in patch 2, so
-patch 2 won't be needed. Could you give it a try with your test cases
-and that reproducer?
+ Documentation/ABI/testing/securityfs-lockdown |  43 ++++
+ MAINTAINERS                                   |   1 +
+ include/linux/lsm_audit.h                     |   2 -
+ include/linux/security.h                      |   2 -
+ security/lockdown/Kconfig                     |   1 +
+ security/lockdown/lockdown.c                  |  70 +++++-
+ security/lsm_audit.c                          |   4 -
+ security/security.c                           |  40 ---
+ tools/testing/selftests/lsm/Makefile          |   8 +
+ tools/testing/selftests/lsm/common.c          |  35 ++-
+ tools/testing/selftests/lsm/common.h          |   2 +
+ tools/testing/selftests/lsm/config            |   1 +
+ tools/testing/selftests/lsm/lockdown_test.c   | 230 ++++++++++++++++++
+ 13 files changed, 375 insertions(+), 64 deletions(-)
+ create mode 100644 Documentation/ABI/testing/securityfs-lockdown
+ create mode 100644 tools/testing/selftests/lsm/lockdown_test.c
 
 -- 
-Best regards
-Ridong
+2.18.0.huawei.25
 
