@@ -1,81 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794277484;
-	b=sbnvdD6zrMVnrMhZCad5YyTlONZv6dbTpDh+caLzkLTVZbNgejOcYKiN2DJB4nbKcd4V
-	 SYsksfMIfqaDAHiFJuPh5iswMQfW/EgYhepOTIuDPXFUGctUPc6wNhtEpqK8jbv449EDj
-	 CldhJ9SP7WCqj7GpN+BGsgm3jwAeKOlmJidomQ0g27J01FCB1X33W38mS+qgNPXDwZhW7
-	 KZUT6qG+v/m6IUwSiiFVO+93/S4eZoxjwIm9HXipRYhH4k0QVR/OHJhat0rKGBh8Dph4O
-	 s9a3uTwtzT08t5Srp7NRSBgECQlaTLilNBYeSf8EDuagDRI2L+HJE8wRJ5ZQrtP26+A==
+	t=1794278037;
+	b=Vku6gfQ+6coX/SuSrA+QauktrnocYKsmcbDxtQdMgJs7VSYoVKNI3DoUIGFgEMzZv2KO
+	 6BkmT06ua/kyMJv5F2KeiA4Gl7SfPpdqK2chbSnelAOZ0EPbRywyIz6LY6371IAUyXUGG
+	 3Q8zc8T1sy8tv/ikDZv+GA9toHF+FRtmqaCCFzk+NUYN3k9muDrijT5dLfUiyKcd5uXtj
+	 nMpw8IzddWvsn89RmdVYg7Ax2Xux3kNvY979JVj/HBvJxq3kvM5CS/Hea3bE8e7CG1Zl5
+	 CjNHtXEql2fqgisVoju4WhaO+kIE3Qq5jVFX/K2hvCrYMUt2Sap5CZmJjhcQQO1ozzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794277484;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=27Ci1Zm96fbspIIVyB98OB/5lJZMQqsULnEUarjSfnw=;
-	b=2ctTzWBbBAJpu3Ve4v4IN4/XbBUFcWgVWfZaxvyrbN97SE8rhkn+et09KSSh7md4bVV4
-	 twpkWJtqjw2nx6gsLQzAvS3q+nGXuQmyD12UcmSv32wvNZjqkZ1SnTlGyDAbAx1jEhkhm
-	 YGHnbVz9t0QQ4PZdWqrgmB3DvpPkOJOXFgjWkJ134xyWU6ML+RUqkKuo1SkjTOcUnoL6s
-	 jSeMEHzvIZrDmxhL8vP6CYYbsQwluUuD07KsqyG//acAlVCLJm+XUD0d4Ff5+c7iZQz2n
-	 Bq+CxD7eNIb7ErScGgZtcmm5OZBBADWaRPOnplpb9n22NK/TmGCGjDonahgEjL9ES5Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794278037;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=onDRaLguTUW2a83jMl1YZiAlaHNlpOxn5ahgZIssCS4=;
+	b=u/wEJGQac1Xu0uH/qP2srHN6j5w2X6Vx59HM3Y5TeoRugKhLWCG/wiWzu4rhS1TjSFlj
+	 Sr7ciWdSw8P2mpfsI3qwoT9P347ETofacMfapgCeACrxp6eFXsSugM4mXiBZ4gKe1nNy7
+	 L/2Nj9quam6ykrajddw9En8AlT7QXCYPU3bZryrmlthbrqt8YK/8bZVUWdfWi53q+nHSt
+	 c9tBwGtSdIe51QjVmXDnysJqSMn9+X1TZuh1+GRCpeBXe0I451dYz0nk2dRPbR3WIKZjI
+	 yCW3Sgidv7Y4tNLaUmyBEGoM8J/Q2uQIdRq66vd/i0oc83bUvGThZtKNWVYIpZGKZPQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Yndre2gS;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=G1obDVAS;
+	arc=none smtp.remote-ip=209.85.217.45
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94113606A31C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 02:24:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94113606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBB9606A336
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 02:33:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9DBB9606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Yndre2gS
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794277482;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=27Ci1Zm96fbspIIVyB98OB/5lJZMQqsULnEUarjSfnw=;
-	b=Yndre2gSFfPQcGgStcHWn6v3AO81eOlI8VVtY1oegZHBQicKdKOsM1YRtj+2TJuiuq+vMF
-	qMPmv+zpkJCl06JZikMtDauPQciXQvEs0sto2TtJV4dTPkvGUWiOhR2LPltodDKEnUJ4Uy
-	AAPuOFGwXI9eRtwkgMlagNGz8YrRhkE=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-658-wVwLMOsWPiyekHJO59cnVw-1; Mon,
- 09 Nov 2026 21:24:39 -0500
-X-MC-Unique: wVwLMOsWPiyekHJO59cnVw-1
-X-Mimecast-MFC-AGG-ID: wVwLMOsWPiyekHJO59cnVw_1794277477
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 510CF19560B4;
-	Tue, 10 Nov 2026 02:24:37 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 127DC1684;
-	Tue, 10 Nov 2026 02:24:34 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Guopeng Zhang <guopeng.zhang@linux.dev>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v2.1 5/5] cgroup/cpuset: Correctly set isolated_cpus when switching partition state
-Date: Mon,  9 Nov 2026 21:24:00 -0500
-Message-ID: <20261110022400.1450404-1-longman@redhat.com>
-In-Reply-To: <20261109190955.1398611-6-longman@redhat.com>
-References: <20261109190955.1398611-6-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=G1obDVAS
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-7d2d1b4a83aso467346137.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 18:33:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794278035; x=1794882835; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=onDRaLguTUW2a83jMl1YZiAlaHNlpOxn5ahgZIssCS4=;
+        b=G1obDVASqefxB6poYdjSmxCFHjae9eYxJSNGGnlEYlbaEUEJivW7JDtmuGERQcgQmN
+         jLQt9g2DSx1yyia37PP/ykKwYVfjHoNMpAsBsWcx1xnqRLrrH9i6dHgRXVgwLRphQ3mg
+         Y6aMvkPKSa0PJn/FT/cPJaxDossiDDXv6D6d/28oQy6ndp/q9nQBiOQYer/iTR21B9JE
+         Xr+gk/exekmfyJoJTVs6SVqVjtObZYwFB8IzkdhjCRTYi9wYeI0qdVL1DDvdM8XQyPki
+         oglumqrNc6J2a2pRN8Z7kaLNm6XEJZwSAv7/NPRMsrQ1PX8GwtTNfs5q91PjawEY7Mxj
+         2T+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794278035; x=1794882835;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=onDRaLguTUW2a83jMl1YZiAlaHNlpOxn5ahgZIssCS4=;
+        b=kxTU5CL8d83g3U3rHxgTJXxv6uu3zaGQDrQHq/J2Jq7uY35ThHcMggSqGSzsFJOe27
+         +tx3Kr2x2WwzgCSs8XnB4U1oORsfN3Fy0v3pUBPurooWUTnWvUcwcPEknbXxhJg8A3J1
+         QnaUpJlHdPWGBb22opafiJioVWfkKxaYo1uJxKvp4shpSPK0jimYM7izqzSjj/mniIeS
+         yeqzJtJRYIBvn0CcXo3iHeyPeHsEv7ZNP60TuEBMp+0JlJ9AjDSFoBrW7PPdcAOtpCn6
+         EnH8vqVXCOoJYh7LIZpvQEssNvkKBE4wCLDBBj78wKdcDUZZZhg6eOgYOFDjAtUsOpDc
+         p+nw==
+X-Forwarded-Encrypted: i=1; AL+hErF9lEeves7jWW5Q5HJtzCzaVWJOqKQhAZvp+L66T34NMZC8+hsYcHrchsmQl2d6e5RIMJK4tdi9KT88Rlwn2RQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z91R4GHfOGG3nbL/Bl4Tuu0P5hpG2LdlBj1gLr4GIxP75L4lj25
+	VB9JO9aGsaE5M182wYiEE84Xnen4PsVKOpG/8DZ9s40V353N5y3QOBxs
+X-Gm-Gg: AYBFou3S4P6H8bW6vm6eZ77WluDxxX3GDz4lUQL0SIENmeDoz3cHd4aM1ogfEZAYv1C
+	KTUFRApqqF3gpMaSKa75xyTgvpYlBM9O4QXXasXzbqkbJpOv8wsTlRTUU3gvHwdNsCUZ5NHcr39
+	38MK1/G833jXEOwzT0PvtleLOpbShSuORoOhdlcRRdI6szVEVj4XaslXs0yGMIk5M6SJiKlsWNa
+	0+/+T4THoDMNpwdl46rszoO+uR/xjxRucdIywLSmUZZI1GpTTi+gKp4sb4NXMi+ecNpK2a9X583
+	/uZWZmah/Qrx4Dqitjygt5hK9GlX6yePrvkYeztw+pL0FhJysxBjDa6DfIjodlLMqDCirTOWA5j
+	sNDYukJGm0bqMeNkl8nb3OUwWKShJxfjfYqOHIvKDMjvn/pDB95Y8jTeSmAD/FUgaobL/31VNyU
+	Vb64pQMxGhgfsQYbymeuXwYk6s277EZTxaZHe+Cv6eYx267KDP00cRMt1SXFGyYOSowVIgsMuzo
+	X91lG9SAQ+Joj17URf2JDzWGU9NMJ/1LpcNLjnrHJWc3rZcQ1KbFvxrDgpmiXbwbMVGSMLD161O
+	Ot9UuDNr0oNPUtH8WFWULCmBX4AZ14j/XzfGWwGMuNIP5CJtx8dOrJSpqgVWsu5940rk5koN2jv
+	ckjkedpRNFfaxc1YbUTMORuJP//gwKez/OCnxy6ATmUW0eIlwKEraLHzHdz5yXxj10L2z0c0=
+X-Received: by 2002:a05:6102:2912:b0:7d2:7c63:5a0a with SMTP id ada2fe7eead31-7d301bcae2cmr373574137.23.1794278035436;
+        Mon, 09 Nov 2026 18:33:55 -0800 (PST)
+Received: from gmail.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d302359221sm877564137.6.2026.11.09.18.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 18:33:54 -0800 (PST)
+Date: Mon, 09 Nov 2026 21:33:54 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Xia Yan <yanxia@cmss.chinamobile.com>, 
+ netdev@vger.kernel.org
+Cc: dsahern@kernel.org, 
+ idosch@nvidia.com, 
+ davem@davemloft.net, 
+ edumazet@kernel.org, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ horms@kernel.org, 
+ willemdebruijn.kernel@gmail.com, 
+ linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, 
+ yana06070@163.com, 
+ shuah@kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ willemb@google.com, 
+ tpluszz77@gmail.com
+Message-ID: <willemdebruijn.kernel.136b3b685931d@gmail.com>
+In-Reply-To: <20261109014400.9025-1-yanxia@cmss.chinamobile.com>
+References: <20261109014400.9025-1-yanxia@cmss.chinamobile.com>
+Subject: Re: [PATCH net v3 1/2] ipv6: fix cached route reuse for control
+ messages
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,99 +113,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-When update_prstate() is called to switch the partition state from
-root to isolated or vice versa, the whole effective_xcpus is passed to
-isolated_cpus_update(). However, if there are child partitions present,
-some of the effective_xcpus are dedicated to those child partitions
-and their partition states will remain the same or get invalidated in
-the case of child root partition with isolated parent in the latter
-update_cpumasks_heir() call. In the latter case, their exclusive CPUs
-will be returned to their parent.
+Xia Yan wrote:
+> A connected IPv6 UDP or ping socket can reuse its cached route when an
+> SO_MARK cmsg requests another mark. A packet can then bypass a prohibit
+> rule instead of failing with EACCES.
+> 
+> ip6_sk_dst_lookup_flow() reads the cache even when connected is false.
+> UDP clears connected after parsing IP or socket control messages. Ping
+> always passes false.
+> 
+> Only read the cache when connected is true. Ordinary connected UDP
+> sends keep using the cache. Ping sends do a fresh lookup.
+> 
+> Found during code review of IPv6 UDP route caching. On UML, the same
+> connected-socket selftest fails four IPv6 cases before the fix and
+> passes all 54 with it.
+> 
+> Fixes: c6af0c227a22 ("ip: support SO_MARK cmsg")
+> Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> Link: https://lore.kernel.org/netdev/willemdebruijn.kernel.1e0038bcc3ef8@gmail.com/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Xia Yan <yanxia@cmss.chinamobile.com>
 
-Therefore isolated_cpus may be set incorrectly with child partitions
-underneath. Fix that by excluding their exclusive CPUs in computing
-the correct cpumask of exclusive CPUs used by that partition alone.
-
-Add new test cases into test_cpuset_prs.sh to test for such cases.
-
-Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c                        | 30 +++++++++++++++----
- .../selftests/cgroup/test_cpuset_prs.sh       |  7 +++++
- 2 files changed, 32 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 7aa614c6ac4d..41048997a955 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3054,12 +3054,32 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 						  cs->effective_xcpus, NULL))
- 			err = PERR_HKEEPING;
- 		else if (parent_prs == PRS_ISOLATED)
--			err = PERR_ISOPARENT;
-+			err = PERR_ISOPARENT;	/* old_prs should be isolated */
- 
--		if (!err)
--			isolcpus_updated = true;
--		else
-+		if (err) {
- 			disable_partition = true;
-+		} else {
-+			struct cgroup_subsys_state *css;
-+			struct cpuset *child;
-+
-+			/*
-+			 * Need to scan child partitions, if present, and
-+			 * exclude their effective_xcpus from cs. In the case
-+			 * of switching to isolated partition with child root
-+			 * partitions, those child partitions will be
-+			 * invalidated in update_cpumasks_hier().
-+			 */
-+			isolcpus_updated = true;
-+			cpumask_copy(tmpmask.new_cpus, cs->effective_xcpus);
-+			rcu_read_lock();
-+			cpuset_for_each_child(child, css, cs) {
-+				if (!is_partition_valid(child))
-+					continue;
-+				cpumask_andnot(tmpmask.new_cpus, tmpmask.new_cpus,
-+					       child->effective_xcpus);
-+			}
-+			rcu_read_unlock();
-+		}
- 	} else {
- 		/*
- 		 * Switching back to member is always allowed even if it
-@@ -3093,7 +3113,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 	if (!is_partition_valid(cs))
- 		reset_partition_data(cs);
- 	else if (isolcpus_updated)
--		isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
-+		isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
- 	spin_unlock_irq(&callback_lock);
- 
- 	/* Force update if partition is disabled & update effective_xcpus */
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 2d4744f2d6ac..351c8e8e89fa 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -556,6 +556,13 @@ TEST_MATRIX=(
- 	" C2-6:X2-5:P1 CX3-6:P2 \
- 	                    .      .   T:X4-6    .      .      .     0 A1:4-6|A2:4-6 A1:P1|A2:P-2 ."
- 
-+	# Switch PRS state (root <=> isolated) will properly update cpuset.cpus.isolated
-+	# even if child partitions are present.
-+	" C1-6:P1 C3-6:P1 C5-6:P2  .       .    P2      .      .     0 A1:1-2|A2:3-4|A3:5-6
-+								       A1:P1|A2:P2|A3:P2 3-6"
-+	" C1-6:P1 C3-6:P2 C5-6:P2  .       .    P1      .      .     0 A1:1-2|A2:3-4|A3:5-6
-+								       A1:P1|A2:P1|A3:P2 5-6"
-+
- 	#
- 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
- 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
--- 
-2.56.0
-
+Reviewed-by: Willem de Bruijn <willemb@google.com>
