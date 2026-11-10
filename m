@@ -1,85 +1,117 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794314959;
-	b=J6MeK61RQMeNIEnpb2Pylae8gdtUYcFCS6QRZpv/TLE9vtVQjpYjoS4l5ZoXLyFznTgq
-	 rgvKAS6nYyGyl+s3jQPbdqNlusDB6s+MzvktkQBFYSzFxJDysm/D2EptAIGb1aN6I2GR8
-	 GkHUas2XLUA0+ssogn4DWQOc5YzuiQK8ED64/nsoD5C5l6yiGRzkVDsdOfxiFJuJTifUg
-	 gPfoJwcNO18ogMhlmIbU48FybJd+tMCRYo7ABhKWqfPYmSL7nulmK1eb3Yet6rseoissu
-	 CxHAVUbCZXlZc/wDu+/zaOeHDSri/wsX1bjvmS65ZGlMg5cXHH0b8KXpVRDfv08r4CQ==
+	t=1794315213;
+	b=cOATsLTEcpsSTvJlb3roeQuEb6VQc0HUNnbhDgbUqlKF3soEpdByh+EDXN2Q7Sd3Jd6P
+	 kNEnfptX/zhCNUFPd2pK7R7ZmKaoWvNWsmC+AxARS9GCrfOWkhFQ5EZ/SPh0PRfbvPKe4
+	 npVn65vNkfA82VOYfcsge0/vBhDgatWVi/nP9+7G9AY803CkjjGWVbMETv+EZ6dGtMr72
+	 eNMSbi0SEHOsgEGHIZ8H8pDVVBdN2CfGsZeQzTikW/J13BeuxMRkDYhtYVZZnMXHK3tqZ
+	 EROUzIeKbUI7uzTIFsu2OWxNf4attzw93XiZF1WVZ+jLHQM6ffkGpWtlYzQmEIWMw7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794314959;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=CbaK/OiLsBp24ctmmqfxEDeKLJHZS6Yzb8a5ARPuJDc=;
-	b=Up1iCLU55Gvct4GpFEuZ/qlqo3GbEVU5QvUkDvfiR8q66O3MRLDkdssuOM/grykJYp9g
-	 Gw2jnkjn/MIRin4zbQ68YoPE8P5ymk7EzOOFQUoYzuqw2jkU3cyfDv8PuEElMU5gsqM/T
-	 zeKGi6loSNxcuIXk/P7as/k+WW/sbk87sVdCwrx7NdaYfR0TGF3iToc37jCtxuqlllWi0
-	 NjsGo7joE9faeF58gdCT6sochgfyhYPSLYez0X/wAqzIAI8/vGjeqxUj4KtALZOzljPVh
-	 HPm+BHf3pjTgVHr6lMDxI4dLneuVEz173/6nD+9+OG8sdrq7A4dC8vEuE3uG0FbXS8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315213;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Spam-Score:X-Spam-Level:X-Spam-Flag;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=sQVVHnfkGWb1RN+IqVuDeJZQNxrKjwPrm0gQDDA4hGQTJU17ZJ+oCMzms/aZtdRW8ikt
+	 +9AAs1z+YZ8D82f5Pm0ZAD1WqkC1Q/hbWS2Qh4QUkp0P5CwWnMOhH9jDjTC+BFMI3vMgg
+	 MD6smJvCy4fA1pdw9GOU+d3/zQc9eO9tRsOPlchw5gdvCOrFW3TdlBmwzPPYzbVSPuHdZ
+	 t1YrHmf63oL/eHw6scUlsO7lJTDNJcAjH8YPuEkxFI+o78xLsJvkXzgwewJ50GSH7gV/1
+	 vnC8K7Moh+hGq8BHuKGhGTQJoE1JcfX3UJjRQOdWgJoic2SeBGJY3wZlw3S18PaG04g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b="FW4jWPq/";
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B25606A337;
-	Tue, 10 Nov 2026 12:49:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99B25606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA11606A321;
+	Tue, 10 Nov 2026 12:53:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EA11606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=FW4jWPq/
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C64A514BF;
-	Tue, 10 Nov 2026 04:49:14 -0800 (PST)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EE773F85F;
-	Tue, 10 Nov 2026 04:49:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794314957; bh=P5lO3LRwfz3Xx9spMdnYq5HZgom/q8jT5u8waDgtbsc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FW4jWPq/tfDZxBG7gTvwO6Saghy4qPGyV+hze///XZNsFLtYaK5wj2gUsAQ3b/1gh
-	 T6W5B9h4lNu/oIbpkFS2CPsomzXXZPsB1rdaGrB44ze6FvmHsifyDOH/BV74iyXiQD
-	 /n5r91Z2/5jv4DVU8iWFUs+t19uEOqOgbofPVNlY=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	maz@kernel.org,
-	oupton@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 11/15] KVM: arm64: Reserve dirty ring space for the HDBSS buffer
-Date: Tue, 10 Nov 2026 12:49:07 +0000
-Message-ID: <avMSw3LLDIFT3kSR@LeoBrasDK>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <90775cb3-84ab-4690-a252-1ac41488118f@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-12-zhengtian10@huawei.com> <auikG0clmr19sAjh@LeoBrasDK> <afcbf19b-bd13-4afc-ab56-8bc50c793e50@huawei.com> <au30DqzWIFny1tpr@LeoBrasDK> <d81243e3-d790-4ee8-9b28-36d35591ee77@huawei.com> <avIOZTvQF-1sxs2p@LeoBrasDK> <90775cb3-84ab-4690-a252-1ac41488118f@huawei.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 470B421F57;
+	Tue, 10 Nov 2026 12:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315211; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=KXGDllpgGiBBAdkJ+94+hx57x3NvF+B6wVf1VJPhzu/vdFL2qD1xN8ea3AfxZRuIEQrDNG
+	h6ARgN9r6E1Tp0L3/IOetfpivMPJgdCx8gDCmnuEUwvvykOGvRJ3e4L8lAmSVM7Bzl5Sdl
+	8yjrsZoBB4KbKRgxMsQEsJpHPQKPfVY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315211;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=02akHxQolbaeDkTqzMuoQ9qEenO8KZzqbD3pshHw2P9mLxjD414sxUGp3r+0OsfEjYG8bh
+	6lagVVxrNyrhB8AQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315211; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=KXGDllpgGiBBAdkJ+94+hx57x3NvF+B6wVf1VJPhzu/vdFL2qD1xN8ea3AfxZRuIEQrDNG
+	h6ARgN9r6E1Tp0L3/IOetfpivMPJgdCx8gDCmnuEUwvvykOGvRJ3e4L8lAmSVM7Bzl5Sdl
+	8yjrsZoBB4KbKRgxMsQEsJpHPQKPfVY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315211;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=02akHxQolbaeDkTqzMuoQ9qEenO8KZzqbD3pshHw2P9mLxjD414sxUGp3r+0OsfEjYG8bh
+	6lagVVxrNyrhB8AQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 197071339F;
+	Tue, 10 Nov 2026 12:53:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HDDqOMoT82qhQAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 10 Nov 2026 12:53:31 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 94F1F224D8; Tue, 10 Nov 2026 13:53:26 +0100 (CET)
+Date: Tue, 10 Nov 2026 13:53:26 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org, fuse-devel@lists.linux.dev, 
+	linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+	Amir Goldstein <amir73il@gmail.com>, linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH RFC 01/41] loop: refuse backing files that aren't open
+ for reading
+Message-ID: <yiiin5howot4r3fgcqkqfnreblloazpfatuuqzpjpqshpvphit@zirpwlmklj3d>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-1-4c998976c6c7@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -91,226 +123,87 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261110-work-loop-pseudo-v1-1-4c998976c6c7@kernel.org>
+X-Spamd-Result: default: False [-12.80 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	R_RATELIMIT(0.00)[to_ip_from(RLdu9otajk16idfrkma9mbkf9b)];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,kernel.org,toxicpanda.com,lst.de,lists.infradead.org,zeniv.linux.org.uk,suse.cz,lists.linux.dev,kvack.org,lists.ubuntu.com,lists.xenproject.org,lists.ozlabs.org,gmail.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,suse.cz:email]
+X-Spam-Score: -12.80
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Tue, Nov 10, 2026 at 04:54:30PM +0800, Tian Zheng wrote:
+On Tue 10-11-26 10:14:17, Christian Brauner wrote:
+> loop_configure() takes any file as long as it implements ->read_iter().
+> Loop itself never checked whether the file was actually opened for
+> reading. Buffered I/O went through vfs_iter_read() which refuses files
+> without FMODE_READ. Direct I/O has called ->read_iter() of the backing
+> file directly ever since loop grew support for it.
 > 
+> Since commit f2fed441c69b ("loop: stop using vfs_iter_{read,write} for
+> buffered I/O") buffered I/O calls ->read_iter() directly as well. That
+> commit was about O_DIRECT handling and the FMODE_READ check went away
+> as a side effect.
 > 
-> On 11/10/2026 2:18 AM, Leonardo Bras wrote:
-> > On Mon, Nov 09, 2026 at 12:00:52PM +0800, Tian Zheng wrote:
-> > > 
-> > > 
-> > > On 11/6/2026 11:36 PM, Leonardo Bras wrote:
-> > > > On Fri, Nov 06, 2026 at 06:36:04PM +0800, Tian Zheng wrote:
-> > > > > 
-> > > > > 
-> > > > > On 11/2/2026 10:54 PM, Leonardo Bras wrote:
-> > > > > > On Tue, Sep 29, 2026 at 06:36:51PM +0800, Tian Zheng wrote:
-> > > > > > > The dirty ring reserves room for CPU-side dirty buffers via
-> > > > > > > kvm_cpu_dirty_log_size(). Report the HDBSS buffer entry count
-> > > > > > > through it, so a full buffer flush always fits in the ring.
-> > > > > > > 
-> > > > > > > Pin the HDBSS buffer size to PAGE_SIZE when dirty-ring is enabled,
-> > > > > > > via kvm_arch_dirty_ring_size_updated(): a larger buffer only
-> > > > > > > shrinks the soft_limit and forces more frequent userspace drains.
-> > > > > > > 
-> > > > > > > Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
-> > > > > > > ---
-> > > > > > >     arch/arm64/kvm/arm.c | 8 ++++++++
-> > > > > > >     arch/arm64/kvm/mmu.c | 8 ++++++++
-> > > > > > >     2 files changed, 16 insertions(+)
-> > > > > > > 
-> > > > > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > > > > > index 9d7bdece149a..5a7046acb62e 100644
-> > > > > > > --- a/arch/arm64/kvm/arm.c
-> > > > > > > +++ b/arch/arm64/kvm/arm.c
-> > > > > > > @@ -215,6 +215,14 @@ static int kvm_arm_default_max_vcpus(void)
-> > > > > > >     	return vgic_present ? kvm_vgic_get_max_vcpus() : KVM_MAX_VCPUS;
-> > > > > > >     }
-> > > > > > > 
-> > > > > > > +void kvm_arch_dirty_ring_size_updated(struct kvm *kvm)
-> > > > > > > +{
-> > > > > > > +	if (!system_supports_hdbss())
-> > > > > > > +		return;
-> > > > > > > +
-> > > > > > > +	kvm->arch.hdbss_buffer_size = KVM_ARM_HDBSS_DEFAULT_SIZE;
-> > > > > > > +}
-> > > > > > > +
-> > > > > > 
-> > > > > > On the same subject as a previous patch:
-> > > > > > I don't think this is the best approach, on top of adding a new weak
-> > > > > > function to take care.
-> > > > > > 
-> > > > > > Maybe during the dirty-ring allocation, on vcpu creation, we could take
-> > > > > > into account the requested dirty-ring size, and just allocate the HDBSS
-> > > > > > buffer taking that into account. That would make it simpler, don't you
-> > > > > > agree?
-> > > > > > 
-> > > > > > Thanks!
-> > > > > > Leo
-> > > > > 
-> > > > > Hi Leo,
-> > > > > 
-> > > > > The "set once" guard we're discussing comes from the patch that adds the
-> > > > > ioctl, and it isn't really needed. We discussed this earlier [1]: we can
-> > > > > just initialize hdbss_buffer_size to PAGE_SIZE at VM creation and let
-> > > > > the ring reservation use it directly. **That also means
-> > > > > kvm_arch_dirty_ring_size_updated() can be removed.** Thanks for your
-> > > > > suggestion.
-> > > > 
-> > > > :)
-> > > > 
-> > > > > 
-> > > > > As for why PAGE_SIZE is the right value in ring mode: the HDBSS buffer
-> > > > > is flushed on every VM exit, so a larger buffer doesn't reduce the flush
-> > > > > frequency. It only inflates the ring reservation (64 + size/
-> > > > > sizeof(u64)), which shrinks the soft_limit and forces more frequent
-> > > > > exits to userspace for the ring to be drained. Draining the dirty ring
-> > > > > from QEMU is more expensive than draining the HDBSS buffer from the
-> > > > > kernel, so the smallest buffer gives the best performance. In this mode,
-> > > > > a larger buffer provides no benefit to users.
-> > > > 
-> > > > Humm, if properly dimensioned larger buffers would be benefitial for
-> > > > memory-intensive workloads, unless they are guest_exiting for other
-> > > > reasons in the meantime.
-> > > > 
-> > > 
-> > > Agreed, and the workload I tested is on the "unless" side. The guest
-> > > exits constantly for other reasons, so the larger buffer never got a
-> > > chance to pay off, and only cost ring capacity.
-> > > 
-> > > > > 
-> > > > > In my tests, I also saw performance degrade when more space is reserved.
-> > > > > 
-> > > > 
-> > > > Humm, what kind of workloads did you test?
-> > > > Did you have the chance to monitor what were the reasons for VM exiting?
-> > > > 
-> > > 
-> > > For the workload question, it's a Redis server in the guest under redis-
-> > > benchmark (SET-only, 2KB values, 1M keys, 100M requests). The traffic is
-> > > network-driven, so the guest exits constantly to service requests. The
-> > > HDBSS buffer only accumulates entries between two exits and is flushed
-> > > on every exit, so it rarely fills regardless of size. A larger buffer
-> > > only inflated the ring reservation, which shrinks the soft_limit and
-> > > makes the ring-full exit and userspace drain fire more often.
-> > > 
-> > > > I am not saying this is mandatory for the HDBSS implementation, but the
-> > > > whole idea of letting the user choose their own HDBSS buffer size is
-> > > > because different workloads may benefit from different buffer sizes: if a
-> > > > VM writes a lot to new memory, and exits very little for other reasons,
-> > > > then a larger buffer will cause the VM to guest_exit much less often.
-> > > > 
-> > > > Does that make sense?
-> > > > 
-> > > > Thanks!
-> > > > Leo
-> > > 
-> > > It does make sense. That's exactly the workload where a larger buffer
-> > > pays off, and the next version no longer gets in its way. The two ioctls
-> > > are no longer mutually exclusive.
-> > > 
-> > > The only coupling left is the reservation. hdbss_buffer_size starts at
-> > > SZ_4K at VM creation, so a ring enabled right away reserves for the
-> > > default buffer (64 + 512 entries), and the minimum ring size accepted is
-> > > unchanged from v5. KVM_CAP_ARM_HDBSS_BUFFER_SIZE is the gate. When the
-> > > ring is already enabled, a size is accepted only if its reservation
-> > > still fits in the ring, otherwise -EINVAL. In the other order, ring-
-> > > enable validation rejects a ring too small for the configured size.
-> > 
-> > I don't think this is needed. If using dirtyring, we don't need to allow
-> > user to set hdbss size: HDBSS size should be sized according to the
-> > dirty-ring dimensions, that are set by userspace before the first vcpu is
-> > created.
-> > 
-> > 
-> > > So SZ_4K is just the conservative default for guests that exit often.
-> > > Anything larger, within what the ring can reserve, is up to the user.
-> > > 
-> > > Does this work for you?
-> > 
-> > I still think we should do PAGE_SIZE for dirty-bitmap. Dirty ring should do
-> > based on the dirty-ring size, and maybe review the use of reserved
-> > entries, or it's accounting.
-> > 
-> > What do you think?
-> > 
-> > Thanks!
-> > Leo
+> So whoever can set up a loop device can read a file it was only allowed
+> to open for writing. Open the file O_WRONLY, configure a loop device
+> with it and read the contents through the loop device.
 > 
-> Hi Leo,
+> Refuse backing files that aren't open for reading. Loop always reads
+> from its backing file so a write-only backing file never made sense in
+> the first place.
 > 
-> Thanks for your review. It does make sense!
+> Fixes: bc07c10a3603 ("block: loop: support DIO & AIO")
+> Fixes: f2fed441c69b ("loop: stop using vfs_iter_{read,write} for buffered I/O")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+
+Looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  drivers/block/loop.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> I agree that dirty-bitmap mode will keep PAGE_SIZE as the default, and
-> in that mode the ioctl stays available for a larger buffer.
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index a3325ceab484..c96e35c3ef42 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -528,6 +528,9 @@ static void loop_assign_backing_file(struct loop_device *lo, struct file *file)
+>  
+>  static int loop_check_backing_file(struct file *file)
+>  {
+> +	if (!(file->f_mode & FMODE_READ))
+> +		return -EBADF;
+> +
+>  	if (!file->f_op->read_iter)
+>  		return -EINVAL;
+>  
 > 
-> In ring mode we will drop the ioctl, the two remain mutually exclusive,
-> and the buffer will be derived from the ring size userspace configured
-> before the first vCPU is created:
+> -- 
+> 2.53.0
 > 
-> ```
-> hdbss_buffer = clamp_t(unsigned long,
->                        rounddown_pow_of_two(ring_size / 16),
->                        SZ_4K, KVM_ARM_HDBSS_MAX_SIZE);
-> ```
-> 
-
-Are you allocating 1/16th of the ring size in bytes as an hdbss buffer?
-That's confusing. I recommend we rather have something like:
-
-ring_entries = ring_size / sizeof(struct kvm_dirty_gfn);
-hdbss_entries = ring_entries / 2; // Or any number we decide to use here.
-hdbss_buf_size = hdbss_entries * sizeof(hdbss_buf_entry);
-
-Then we do 
-hdbss_buf_size = clamp_t(unsigned long,
-                         rounddown_pow_of_two(hdbss_buf_size),
-                         SZ_4K, KVM_ARM_HDBSS_MAX_SIZE);
-
-So it's clear what is what here. 
-Just dividing by 16 above can be confusing to whoever is reading the code.
-
-
-> A buffer entry is 8 bytes and a ring entry is 16 bytes, so:
-> 
-> ```
-> buffer entries = buffer_size / 8
-> ring entries   = ring_size / 16
-> ```
-
-Remember to use the sizeof instead of fixed numbers.
-
-> 
-> This means ring_size / 16 reserves at most one eighth of the ring
-> entries for the HDBSS buffer. That keeps the usable ring above 85% while
-> the buffer still grows with the configured ring size, and the result is
-> independent of the kernel page size, with SZ_4K as the only minimum.
-
-Yeah, remember that if you are dealing with the ringbuffer like this, an 
-user can request a 4k ringbuffer and we just won't be able to use hdbss, as 
-it means 4k/16 entries, and hdbss has the minimum of 4k/8.
-
-As I mentioned, maybe this approach of reserved entries is not the right 
-way of dealing with it in arm64.
-
-> 
-> One eighth is the ratio that looks reasonable to me so far. What do you
-> think?
-> 
-
-I see no reason why it could not be higher than that. It all depends on how 
-you want to deal with the full buffer in the future patchset. If hdbss 
-buffer is full, it has to exit and drain to the dirtyring. The guarantee 
-you seek with reserved entries is that all hdbss entries fit in the 
-dirty-ring.
-
-As long as the user is required to drain entries until the dirty-ring is 
-not 'full' anymore, we could easily work with dirty-ring having twice as 
-many entries as the hdbss buffer.
-
-How does it sound?
-
-Thanks!
-Leo
-
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
