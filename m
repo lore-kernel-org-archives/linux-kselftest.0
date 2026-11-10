@@ -1,75 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794270279;
-	b=SNpwHqNJOym2ZorCKQHPIrY9Y06nT2KgtyFhgd3y2bnyRZdOLysvDsBVfJqGzxoV7o7N
-	 Fu68C2j+FdrxjaYfLMXK38sd8hA6FksADbNtKdlnHxb36jnMRJCM2331ITB2kDSeoZTYL
-	 pgABwjeb65LRzw7IRkmvk3JEMZ4PdgKcRGkvrhWqEcpkgIRN1LepYBqEtygir/DQeRATN
-	 Ss98oDCOYroNw1NLpu0j45ThVYNzzP3i8EOxNnS6+Yw32ToSSXCE4crT9jxpuT2p5XRwe
-	 gygNNS57uv63m55+tqlJ1zKN1aB6CsI+KC4Bw2fIIPjthO//arLB7kSSwoazbXQ+Q4g==
+	t=1794271378;
+	b=bB2gQVwQU4MmhRERyAjsm5XjGIQxGfazMXItVDraNzDCPAbzLEbFG4hzW3m71o6rrXFo
+	 HKh7gpgQsl0h3B2qzVuMhLz9Ax8A4VTNaPKVuZb1MCjq328Ktuf9uLHOvGQXTmWdR70ul
+	 NapafGKkyQZLQeTqvTq74Srw4fwO1pudCihlYmzwaQcAbTEBesX56JyYztSRMKi57Ree8
+	 i5HqAvs5NwBRGdObklzt81/KbyRp1yP5sz3XJ5A03Cp0sxSXFllNuZiAabi1fFBgJk0dz
+	 8Q4O/TKozm8AvP0GRUa7A7XkoPkCJ/kvUrmkaK59FJ1mOJlgsfevCWJ8O2SCwKjpb2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794270279;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=8R6psPcEpcxXBloXv1H5EoyGYGx6PRPHPE+vAtNfv8Q=;
-	b=pL8y+64W+qC17IATxaYxo2iW7nLY1ozBuYCAsySZJK+xXRu/h7c7w4685vmJXrWVnVqJ
-	 yVW4GxVAhjgV2ysT1kv/hFK2dKJ23vKP66UI60av0N/F1ij3a6xuJkbtcycyt8t1a89dw
-	 MotQakOPxHL4b4sY2AqV0PJYgCYScuOXUu0o91nx6mC+NWUS8xO6q8BQ6JjUvvoRCWSED
-	 uU2SDVPPmWq7BI9tFQgLrPO7V86hKgjZmLcU8dBDOnw3LXbFZYOdXfkfoeGA+5Ru4kcYH
-	 yL0fUf9cu6xU/oX/1gbZAGMMY7LGwVFSOTaEwTYHQxwIUC3pLA7vzZWXX8DV1Ch836A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794271378;
+	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
+	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
+	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
+	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
+	bh=CqdI/d5wgJOUaCu123F2dzY2ajSgkaE79+RY2xgj2nc=;
+	b=K/NI1J7xG3bfeoFB8j9ZyKBBXmBKnL9fJ8B5Eu3p5kQjVW9jCekvcmn81UAAD20kNozz
+	 HpS5tO0sUuW8AKkM3pFuh7RiiR4ir4D6Hoa+HKDrs+CbUQldjMffmYPt+1cmX0UsmqZ4Z
+	 s+yr41dWeD2ouGWEyRHEN1eLBNXyOw3DsHhzdwym43w0KkkmXwEH0R4z0GAvZGe9o/2Xz
+	 mEgBA5vir4F7awJl1JOOPpTotzvXpdUJsifmI4ei+HfUwOggERMrj6U+PBZzmlur/TVHT
+	 1M4HVJ1C82CBCgEcI6jNMCPTnzoQSfw/Na9chSpFeUX/Mq1scSzTl88LjeIiXv54xLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TuVRyzuW;
-	arc=none smtp.remote-ip=209.85.214.197
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nC7pdmQ0;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4352D606A326
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 00:24:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4352D606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rathodpriyank.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8086D606A325;
+	Tue, 10 Nov 2026 00:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TuVRyzuW
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ed2c307e62so21692325ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 16:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794270278; x=1794875078; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8R6psPcEpcxXBloXv1H5EoyGYGx6PRPHPE+vAtNfv8Q=;
-        b=TuVRyzuWUgVcsf9lNq678ixAFJhPOzvFG4t3LRHWBAlBem5Qaz6FmOVOsmGd4DW/L3
-         WU+Kwj6rfd2umV9dl9/VTCpXF/I9sEA96nbYfl9Oo5RqfmALRzU9IMLvz0Oh2MF8S+5r
-         +ZW/jM1G9O/WQVZme8EkVhftOC6lEUr4xRtvYPDvHvmL00PopnsM7nOyymLOgvQM/RnX
-         wLWpWi4iOC0GVGlmhfgGdoSlR9872llOD8o6fXNDODhkDXS9r5lTh0uAoht/UuGWphZF
-         Etf2c57hXs8kdFp4LjsVEqn9ikfHPTPyqnkwYPPvRGwHwZi2QwpE4jcn6alAxH2G7jX+
-         Dc3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794270278; x=1794875078;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8R6psPcEpcxXBloXv1H5EoyGYGx6PRPHPE+vAtNfv8Q=;
-        b=us4l+hQ/CmjHp3VuXQTWX2bdZN1Fm26yp0ZPl78ZxEb9XL3MiyWxMywbbarLoMXYZn
-         BLuCiBZLe4B2M+jpu4poBj/MI4XXAiY17vLoR+R4JG0kVzesY5UWIjZbuZOw6d9bxMKo
-         IHkHf5TqgEmkwUbtkVktiu3BYtLcDTl/vWRDvvbe5cyvR7sO3guTUrrm+2mqqO/x8R6b
-         /hmlj6WVnJW2bvshEM1s9tvkkj0733g6ZeFanyBVRWNmCY+hKw+48lRa/ZDVoPFI7m4x
-         fvYsRJlrdWe2zgUXI3L8KQ4XCVfC6hBHapQofY5NN8tpTP/Cjyt3i2OuM6R02I5aJNS6
-         hMCQ==
-X-Forwarded-Encrypted: i=1; AL+hErFB00aZqyYgU7X7uerbUK9I/F8/adQzOp813DTLpYWVsDYzYyVfzVngvL6XrYJryuCDyNVyCRkI7Llwq0XuHm0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Ujeb1JJprqJPEv1Rle3Sjd23C48Fub+rLVl2Xuswxp6aTBzG6
-	BaGqjPGdyRUTfOsJnBpWq2D3VSJ7bZnOSk51XZgYAxtxu0izVIkS4OCGwN5pYUhEq6NhSi52voY
-	72hSit3CPSeup52tOItadRLZIxQQHBA0ZJQ==
-X-Received: from plpb13.prod.google.com ([2002:a17:902:d60d:b0:2e9:6468:1ffe])
- (user=rathodpriyank job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:2302:b0:2e9:6f2c:71b9 with SMTP id d9443c01a7336-2edb8fa3768mr7596535ad.1.1794270278310;
- Mon, 09 Nov 2026 16:24:38 -0800 (PST)
-Date: Tue, 10 Nov 2026 00:24:37 +0000
-In-Reply-To: <20261012-pcie-link-endpoints-v7-0-36aba9c91f10@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nC7pdmQ0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6EF1F0089F;
+	Tue, 10 Nov 2026 00:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794271378;
+	bh=CqdI/d5wgJOUaCu123F2dzY2ajSgkaE79+RY2xgj2nc=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=nC7pdmQ0OnxxXP1rEFBLBk9m5bXrd5KpKNU/NOhh6d9FkCEXihIca1/1eRk8nMXQZ
+	 jCS9apTMaqlHWUWzSuro+ciUTOyLYEPnzWeXPZx+na98poFy0irKuw5sB5Q3pFWPu8
+	 JsP5u0KmFhsGZjkuWcOg8Tev4TOAgrZC9BaYP09L50sW+HviHeuKHwbidY0qfTKkV9
+	 hQXwoip7tCk/XIatFhPgWM/AX5512z5TaiNX/tKir/vinLsutjggG9/TiqQ9PGoO+o
+	 kQqGlAal6FohH+3ePLz1O2gQn6zSIIgJHQizuudnhlMuCOcs8ArpBI37vvbpKYwwOo
+	 p4t0XTTqKRnUg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 2129B391AFB2;
+	Tue, 10 Nov 2026 00:42:58 +0000 (UTC)
+Subject: Re: [GIT PULL] kselftest fixes update for Linux 7.4-rc3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <65ee4aa7-b581-4b60-bdda-e91855499ee2@linuxfoundation.org>
+References: <65ee4aa7-b581-4b60-bdda-e91855499ee2@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
+X-PR-Tracked-Message-Id: <65ee4aa7-b581-4b60-bdda-e91855499ee2@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-7.4-rc3
+X-PR-Tracked-Commit-Id: 36990c8fda77d918b1e52d5d6df3a144b552d86e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b3dfbde62cf1981c4638939c159dfd087b7a72e9
+Message-Id: <179427137663.3573198.16939057349089589896.pr-tracker-bot@kernel.org>
+Date: Tue, 10 Nov 2026 00:42:56 +0000
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,35 +67,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261012-pcie-link-endpoints-v7-0-36aba9c91f10@google.com>
-X-Mailer: git-send-email 2.56.0.567.gdb80ae8cd5-goog
-Message-ID: <20261110002437.2376944-1-rathodpriyank@google.com>
-Subject: Re: [PATCH v7 0/2] PCI: Add Lane Margining at the Receiver debugfs interface
-From: Priyank Rathod <rathodpriyank@google.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, 
-	"=?UTF-8?q?Ilpo=20J=C3=A4rvinen?=" <ilpo.jarvinen@linux.intel.com>, Lukas Wunner <lukas@wunner.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, linux-pci@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Hi Bjorn, Ilpo, Lukas,
+The pull request you sent on Mon, 9 Nov 2026 13:49:17 -0700:
 
-Gentle ping on this v7 series now that v7.4-rc1 is out (both patches
-still apply cleanly to v7.4-rc1 and pci/next).
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-7.4-rc3
 
-In v7:
-  - Both pcie_get_link_endpoints() and pci_aspm_inhibit() are dropped per
-    Ilpo's earlier feedback, leaving aspm.c, pci.c, and
-    include/linux/pci.h untouched and using the existing ASPM API.
-  - Retimer receiver discovery and margining coverage (receivers 2..5 via
-    LNKSTA2) are included in the pcie_lmr kselftest.
-  - Both patches passed Sashiko review with zero issues.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b3dfbde62cf1981c4638939c159dfd087b7a72e9
 
-Please let me know if you have any feedback or would like any changes.
+Thank you!
 
-Thanks,
-Priyank
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
