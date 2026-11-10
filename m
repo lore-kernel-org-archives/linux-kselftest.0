@@ -1,91 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.72.0.81
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794274706;
-	b=RrhgwIlMNyeTMthQiC2ot3kCTipeBlGoB3SrSdHMYit82IrYSwisoQnuceRBomCGBlgJ
-	 pHEkMSO6SXDaXR5QmagX7rGfO1qt+hRVSTkHfG5rb1Ftqev5pgrGDnmCdbtcL5JLHm9VT
-	 OvQDOq5vEro2zaYR+FvwKwqs3u5hU6sLCDC/HX5Xai86WFqeSEkuz2/oQHrqGbuxyJVz3
-	 rL5FeUEssvzR+tpoKsW7dQxUb5O+skGkhJUilUn4ZGg2tzCJSgaDvj0iH25r5Q4k0wdnH
-	 +zGqn4NykhgxzeArbhMbY0xt/U6K2UxsnBhEySM/tbcaM3xBRFmQdPDho7km8I/gSFQ==
+	t=1794276608;
+	b=iD77PRA+RpttFzCwbomV7S9lYbS0mngXQU7vb3wVWS31EF84WSgkZJab+smk5S3GlWQ5
+	 9BX0jYR7R7sSieMzhI5zEmICwY+hNf0xjhM3lrbO7H9/ntFsMsCW+MpmMshwl/NpmfuuE
+	 M2UJYsQ65kcHrW1UDH4kNZB1jc2NGleg0xhGIeHqeuaVpud/6CrVzwQUomiklE80cgZWH
+	 yScPV5NDGG9MTtYgcTt8Lak8BFvxYLkDlQ4l99QgQwN0s1iWWChnmrMfvg11dQ7catY7Q
+	 2xub9A/ptml3L9R9cZ+eI5NqepEYj7cxN4rqN9W2bsdLYjMD+gVwHXVaTx5wvUbk/gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794274706;
-	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
-	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=KA065hgUfmTVnISzUpxCY2dMzNQDUES0Dk4O5rmJ7Ak=;
-	b=UY982qVSlwBWqBkRoMybnZTvT3SIyH8w7v5NPQjUwRz5PnHKHXWC2z3oESNa5uRo7DIQ
-	 8nEUt5Nboj5+4lSOsGTWvAhUdja0i6TVH2U1hrAeq09Cx+fYXxIjiXK5fr7AsezaFV9uF
-	 vcDgdU7E4tPGJagLvz0rsCiWspHMqXb5pHR1t7sV4mIx/DjTk0y8EkQ81aZeN9iRRPodB
-	 EdXMN5JOimGTMwxF1lQYEhkvcpZovBsJ+GbmBHHyxNhkFKTT3+hbrNZZI4LqoP4TStyQ6
-	 crIBFldq+DyIsAzNeQa8M8uSiAqrmW5nSSvBRhV0bIp3vmaKYkMI1xwwCVEALCI219Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794276608;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:cc:
+	 Subject:In-Reply-To:Message-ID:References:MIME-Version:Content-Type;
+	bh=SYxtGMKwalYgdDriaZyFlHUIaJ1hNSA/fziq3mU9ZJg=;
+	b=rV5fSIF1ZvASsbF0/p043DKTPVMvPrjuxgKMBSExX9JVK3Awds890C7eq8C5GRQw33IB
+	 cUXzxBNKPFs0nyJL1BfZT01N8+KAi6GG2H9zwavpeTDRR6+GW/GfAy9VZyOnnEw0ksTjy
+	 p+7vQXxSPE5m9PtICjSwOcDvr1ZUtHHOu526Mo7pCqJtbyEYfpTte7hTDQy/nLBJJvjBR
+	 7z5OjkKqx450E/9qrv0ABQxpKZVQ+cKPzNJZ+kv3SK9KBWgI+3sUlDCDuyZeWSnBzyqK3
+	 cxaTr7syj1IG2+PMVLNrRmc84rOjf2HxwSOMPx8ldzSbaVQFYi2wJx2TJMcQ14L0FaQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.alibaba.com;
-	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=goqDVIjH;
-	arc=none smtp.remote-ip=115.124.30.130
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+	dmarc=pass header.from=gentwo.org;
+	spf=pass smtp.mailfrom=gentwo.org;
+	dkim=pass header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b="J/+peoyT";
+	arc=none smtp.remote-ip=62.72.0.81
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA97606A337;
-	Tue, 10 Nov 2026 01:38:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BA97606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3584606A31C;
+	Tue, 10 Nov 2026 02:10:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3584606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=goqDVIjH
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1794274702; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=KA065hgUfmTVnISzUpxCY2dMzNQDUES0Dk4O5rmJ7Ak=;
-	b=goqDVIjHZtfWxuBa9AQ/BDM33mg6OTpuRFyL5CwERRi4+lngfmP9jXOZbT016qJNyTHScVWbv+Wq1lPvSy7UKRTPtTyt8XDHSPpFo2j0kePenc3uObcpI83exkWLdePtB8O6Fr0ozkaLUmT8E6stzDKib4TWR0YtFOHmYB6PgxA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0XETOXBV_1794274698;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XETOXBV_1794274698 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 10 Nov 2026 09:38:20 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: palmer@dabbelt.com,
-	pjw@kernel.org,
-	aou@eecs.berkeley.edu
-Cc: alex@ghiti.fr,
-	linux-riscv@lists.infradead.org,
-	oleg@redhat.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mark.rutland@arm.com,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	acme@kernel.org,
-	namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	james.clark@linaro.org,
-	jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org,
-	mpdesouza@suse.com,
-	martin@kaiser.cx,
-	kmehltretter@gmail.com,
-	oliver.yang@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	xueshuai@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 10/10] selftests/livepatch: Add RISC-V syscall wrapper prefix
-Date: Tue, 10 Nov 2026 09:37:50 +0800
-Message-Id: <20261110013750.36800-11-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20261110013750.36800-1-xueshuai@linux.alibaba.com>
-References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
- <20261110013750.36800-1-xueshuai@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=J/+peoyT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1794276057;
+	bh=SYxtGMKwalYgdDriaZyFlHUIaJ1hNSA/fziq3mU9ZJg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=J/+peoyTckvyOebwJs3HH3XUZndKvgCzp4omBxJFi1Ij2fydyiMK6WJQpmH2vqimi
+	 2QgqVLI/z1mhJ4jgbkdfjAfy8MTjtr1qaouYL21fg3hYR3VCYJTzFywkl+nWIzELyi
+	 rizQKtUoHRvCu1BihZt+ED0czRL1z4aN0DDNKyyc=
+Received: by gentwo.org (Postfix, from userid 1007)
+	id 9D2524076D; Mon, 09 Nov 2026 18:00:57 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id 99CBC402BC;
+	Mon, 09 Nov 2026 18:00:57 -0800 (PST)
+Date: Mon, 9 Nov 2026 18:00:57 -0800 (PST)
+From: Shubhang <sh@gentwo.org>
+To: Shuah Khan <shuah@kernel.org>, Lu Shuaibing <shuaibinglu@126.com>, 
+    Andrew Morton <akpm@linux-foundation.org>, 
+    Shubhang Kaushik <shubhang@os.amperecomputing.com>, 
+    "Christopher Lameter (Ampere)" <cl@gentwo.org>, 
+    Davidlohr Bueso <dave@stgolabs.net>, 
+    Manfred Spraul <manfred@colorfullife.com>, 
+    Jan Koester <jan.koester@tuxist.de>, Cheng Yongkang <teel4res@gmail.com>
+cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    stable@vger.kernel.org
+Subject: Re: [PATCH v3] ipc/msg: fix msg_qbytes truncation in IPC_SET
+In-Reply-To: <20261029-ipc-msg-qbytes-v3-1-fc3f4307c85b@gentwo.org>
+Message-ID: <166800aa-ef71-24d6-39a7-11d1e29ae0dc@gentwo.org>
+References: <20261029-ipc-msg-qbytes-v3-1-fc3f4307c85b@gentwo.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -95,42 +68,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-From: Wang Han <wanghan@linux.alibaba.com>
+Hello,
 
-The syscall livepatch selftest resolves and patches a syscall wrapper
-symbol. To use that test for RISC-V livepatch validation, add the
-RISC-V FN_PREFIX definition for ARCH_HAS_SYSCALL_WRAPPER.
+Gentle ping for v3. It addresses the issue identified in the v2 review,
+and the targeted selftest passes on the patched kernel.
 
-Without this macro, the syscall livepatch selftest cannot resolve the
-RISC-V target symbol, and the syscall-related livepatch test fails on
-RISC-V.
+Please let me know if any further changes are needed.
 
-Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
-Reviewed-by: Martin Kaiser <martin@kaiser.cx>
-Tested-by: Martin Kaiser <martin@kaiser.cx>
-Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- .../testing/selftests/livepatch/test_modules/test_klp_syscall.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-index 08aacc0e14de..9baa2a5f84c9 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-@@ -24,6 +24,8 @@
-     #define FN_PREFIX __s390x_
-   #elif defined(__aarch64__)
-     #define FN_PREFIX __arm64_
-+  #elif defined(__riscv)
-+    #define FN_PREFIX __riscv_
-   #elif defined(__powerpc__)
-     #define FN_PREFIX
-   #else
--- 
-2.39.3
-
+Thanks,
+Shubhang Kaushik
