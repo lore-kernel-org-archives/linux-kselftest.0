@@ -1,79 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794329160;
-	b=ZAWqETLVHedpNcTtUQi0z8/Faz0+OCFTqGt31U1MFFI8E3Au+H3vVe9eHJUfS54+KX3h
-	 qbLiIDZlSzIXf2X+joaMTObw5/SZJu/C+1QtkXZKOJaK2kJsNo2K6gxHFMmH0UiENxKhl
-	 BfUFmb+zrixq+9zBWJ4K9H+L7a5GdSPMlGmxNIMjZobTeKfl1ZnAQi8x6HCcsOmWziHdj
-	 7vjLTkQs2mBGuOLArkYJ29N3j2NzSFznCW9VJXPROXfP7nkcVzKQvl5ymMWvwwexcvc7E
-	 HK92Y8ElYsJUdd7Y7bIE3L9ldz1efPVP8iNi5R7riFBoZSd9d4pVaq17OU6nOjfXm7A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794329160;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Ex4CIgJnnaVzBcgad3HZ6oNEALo0xHeE/NCSIrezaqg=;
-	b=oayLlQ2X0ooar91BXWwhE5UbcXR87+WDVE8o9wcvfR7DG8JH6gxFRxXm1GMk+rdLSuYT
-	 ypIJRZyLDzibXpr3ZRbpZHXHVMolVMZcfrOZumVUfuPOrJgXtQEvrFORctQVORCt7+7wp
-	 AaYTenJLEttxLJbKurK9mpr8qv0xBjO4YgmnLSc5ITfvNmIb8/1Z0D1kufpBZ6pxrsV0T
-	 GD2PPIZGRQqdv2jd2M7OTZwyCLK48CBmE8h65m3XTUIqVI0HCDCiilPjxLBartV1+XWAw
-	 kUw9Zgb7d4MflHyMEofRcC8cnNldjJcfL6Yo3GtChBKyn5/HONxwYElkF1xJXR94zsg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UdMCV8b2;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794329211;
+	b=3Ea1tisFQ9DF2CMSryD4VeHmF93mz+aRhCIoXYnM4JjAP03ogJJsVgvJjH+4Sgik0em5
+	 +auaAQ83FDNEfprGMgnIzreQst2xKjCA90i5NNwuduUDBIFI1kPSCp9gLj15xa2Adzaok
+	 nJudmp3yuPI4B1tt3TIt1lEYXetQOGUeWus0Visyhw6ycQw9ncRcTgsvCCUI7Vw8Esk1D
+	 gyx0l7xJ1mhFZiPRQruK4PspDrzwUvIGTl9b4cj9IExSq/w6hB1wGxBnuGo8iPE6fjtfw
+	 PRKdY3kesLCSPIRZcRH8eBggKqfmVSCuMJj1S1cN3ks3XEFkVjG3iRMFJLyLfQKvu1g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794329211;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=1Fk8B7TVD4J/uM5mrWeodLE6wQUClS3Amg/LXK/C8zM=;
+	b=wIIuZJdx8QNbMGsUsiFTGclxqkvncmwweDh+L1mpPLvdjI2Pf9YHSP46CJlWt8KVSbE1
+	 jvFFLfu1mGi37tDmafRKWNCmvufQ4artDzJ2VuFTZcpXc4BvGjndbN6/fXZ88OnSRy8Sz
+	 3XZ3+7asW/x7ON+uqs8MoDbTWfGoxOAg4BIX01LUNj5njW5JDrbaND4pSiVJSpw35oCf9
+	 3nbEMyBAOW9HRpbZYgR7ygzt5qI+C1nI+r85t91Lj1WLW+fvVtYSHv5pKbjbCWQ/4Pvob
+	 iispFvW6C1/OYqPRU/2p2c+THSuYcyThrRL4Wa7Dlu/6PFI+3XTGXQvzAivsEfpEvgw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hU9143BB;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B50606A331;
-	Tue, 10 Nov 2026 16:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7B2606A31C;
+	Tue, 10 Nov 2026 16:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UdMCV8b2
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794329159;
-	b=BtBVdW/SIdabtaR4QZTCqTCexw4doMTe90kGMP18KkpIFWvgmG8rSHNtOvoimw4Aw0RK
-	 IxqrI+EcifIt1xQFn2KppaCsE0x38i2YIquT6q4nuvlP6UenkGzLzzVeKEZirTG0NaSvH
-	 A971jcVDOhjbHh5xVgjjqcayxn4laqGhscEEelbKte1Oa7ddGW4cRUSRmlZ6d0HC2fwY1
-	 f2fquGs1aagImE07pdqzNQ6jfnZx23hwYifo0yTrh/t4jZc45Hxu3Lg/IEmymmQG4mMaw
-	 UZb3q/syA2ixFgnCi2XJRaI0QQHxPGo54LbKxR8yb2RH8ZBrAoPCa/a5I38rev6lUfA==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794329159;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Ex4CIgJnnaVzBcgad3HZ6oNEALo0xHeE/NCSIrezaqg=;
-	b=Em7QOTY6hJnV/4jZfmil6OqJijqYjJVbI8vLOG3Yw0XiM9vETNSmf4eTmP8TFaYSlHU2
-	 gZ9ZTzuytLOQASLH9GpUOAryhkErR4LkMcZJYj2NFPQKuIfn+4vqVzaEobQD7DpLqU5Tj
-	 czMr7B8lmlNqheoMlBwT9PP0jBdcpT6mA4CTKfsBhVNJ8rrb7zW/cncdmSJgCYs65TTZ7
-	 ouaL9lBicxxnOJZ9UemxQXyuPR2lVTuCI5nIYVCNTuLmuX6KojfI0E1k7PO3heme3kG+O
-	 LwgvXv0Qe3VGIXLenvne+cpnR637aK+/mze8CtGdAKg/OEsusOEdCpeQcySQQXmEnUA==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5D5071F0089F;
-	Tue, 10 Nov 2026 16:45:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hU9143BB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676E31F0089F;
+	Tue, 10 Nov 2026 16:46:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794329159;
-	bh=Ex4CIgJnnaVzBcgad3HZ6oNEALo0xHeE/NCSIrezaqg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=UdMCV8b2VeoM3w+D732bVQdtMCSluvH5LcKS4jctOWeuYgJUM/BIoVB9nx/qEhgN/
-	 UkdoA6JjUQE275VRFPngMjutTwgBR0wtAZ7N+Jick1DDeThcBRMG1NPg6ZLpd4A78U
-	 lh76R7o97dx1i+iyCSv5+BwcZUWT9+d/PQdPIRkpedjt0jOqp/8i/yZNUbrxAhGRT+
-	 vbpv9qpra/6L5DzLqzn5yj4kP2qFXuwvGiTnuc49fZSMwK7JBrTBAzYGU7ngs3scWi
-	 zQq9kIuXc6VRVLtMCnlGSm+vFDf/5XyWjjVLcUw64DlLPv9/rhwfB9wU1IHlomHTvT
-	 ChFgr4a2zAq8g==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id D725348BE0;
-	Tue, 10 Nov 2026 16:45:57 +0000 (UTC)
-From: Yongjian Wang via B4 Relay <devnull+echoowall.gmail.com@kernel.org>
-Date: Wed, 11 Nov 2026 00:45:55 +0800
-Subject: [PATCH net-next v4 1/4] tcp: initialize MTU probing before syncing
- MSS at connection setup
+	s=k20260515; t=1794329210;
+	bh=1Fk8B7TVD4J/uM5mrWeodLE6wQUClS3Amg/LXK/C8zM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=hU9143BBn3QrjzdNQwJ+hwRgnBDB6UfnfFVAzcM0rFEUMRicpoy4D1JtLgLuVC835
+	 3fi9LVSAaP/FOoZnQ/6Z64ZPfyN24YnSPgUPpYZ9eHI79t+ckZb+5RjU9AdhVZM8YM
+	 68nkpptSx/km8GjZe+uqVU2W70K3jRNNsjK839SmNEu+wRd+2DZrVWVdqSmLirV/ya
+	 Zk18DV1PvPANHedyf6mXpm3kDxO76yBRCG1yTuevkb2XOpy9U8TgPq2bEnnuQB3s2a
+	 aBwSOzi0CriraeP4QQGgN4M7WrbTo6J6C3ix8iOy4RAjsp/N4SmempqXHrxhuBOfBw
+	 xrKCUtU3bnrrg==
+Message-ID: <3901a136-d2e1-43eb-8284-31dae956391e@kernel.org>
+Date: Tue, 10 Nov 2026 16:46:48 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -83,114 +51,139 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261111-mtu-probing-series-v4-1-6f2e484ca8ea@gmail.com>
-References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com>
-In-Reply-To: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com>
-To: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, 
- edumazet@kernel.org, horms@kernel.org, kuniyu@google.com, 
- ncardwell@google.com, davem@davemloft.net
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, panweiping3@gmail.com, 
- Yongjian Wang <echoowall@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794329156; l=3243;
- i=echoowall@gmail.com; s=20261026; h=from:subject:message-id;
- bh=fc7GUdhcvf9vRkZ3ScF2x8cdgOAMENFCNY8ojAS8WTM=;
- b=wKZ+Ok+q/a8mkHceG56FgZXCEjtucb1MXa1ZWmh9WCQ+d8VksNSwEGcZ+i6rhSDL1yQz+RJzb
- 25sZVzwNdUaA6i/v5L1Qu+XEtsUlr2UYzCj6luNe0+EjO0xGqUZmsKT
-X-Developer-Key: i=echoowall@gmail.com; a=ed25519;
- pk=9XP6JhqjjPsHCF6UZZZTeqTRnXIa4+ufggnxXtTJ+no=
-X-Endpoint-Received: by B4 Relay for echoowall@gmail.com/20261026 with
- auth_id=1323
-X-Original-From: Yongjian Wang <echoowall@gmail.com>
-Reply-To: echoowall@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 1/2] bpftool: Use batch lookups for map dumps
+To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, daniel@iogearbox.net,
+ ast@kernel.org, alexei.starovoitov@gmail.com
+References: <cover.1793821981.git.hi@tychen.cc>
+ <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-From: Yongjian Wang <echoowall@gmail.com>
-
-With tcp_mtu_probing=2, a passive connection starts at the full MSS
-rather than tcp_base_mss. The IPv4 and IPv6 syn_recv_sock() paths
-call tcp_sync_mss() before tcp_init_transfer() enables MTU probing.
-With tcp_base_mss=1024, the first successful probe can therefore lower
-the MSS from 1460 to 1242. On a black hole path, the first reduction
-skips 1024 and goes straight to 512.
-
-The issue surfaced while developing packetdrill coverage for MTU
-probing and comparing the initial send MSS on active and passive
-IPv4 connections.
-
-Commit 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
-removed tcp_mtup_init() from the passive setup paths.
-Commit 27204aaa9dc6
-("tcp: uniform the set up of sockets after successful connection")
-later moved MTU probing initialization into tcp_init_transfer(),
-away from tcp_sync_mss().
-
-Initialize MTU probing immediately before the existing tcp_sync_mss()
-calls in the IPv4 and IPv6 passive setup paths and when processing
-a SYN-ACK for an active connection. Remove the late initialization
-from tcp_init_transfer(). This lets tcp_sync_mss() apply tcp_base_mss
-without adding another MSS calculation to connection setup. The
-crossed-SYN path already uses this order.
-
-Fixes: 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
-Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-Suggested-by: Neal Cardwell <ncardwell@google.com>
-Signed-off-by: Yongjian Wang <echoowall@gmail.com>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- net/ipv4/tcp_input.c | 2 +-
- net/ipv4/tcp_ipv4.c  | 1 +
- net/ipv6/tcp_ipv6.c  | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 3fd0e215324d..2b54b99f1f45 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -6763,7 +6763,6 @@ void tcp_init_transfer(struct sock *sk, int bpf_op, struct sk_buff *skb)
- 	struct inet_connection_sock *icsk = inet_csk(sk);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 
--	tcp_mtup_init(sk);
- 	icsk->icsk_af_ops->rebuild_header(sk);
- 	tcp_init_metrics(sk);
- 
-@@ -7020,6 +7019,7 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
- 			tp->tcp_header_len = sizeof(struct tcphdr);
- 		}
- 
-+		tcp_mtup_init(sk);
- 		tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
- 		tcp_initialize_rcv_mss(sk);
- 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 0dc3b087665d..fb968798be36 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1740,6 +1740,7 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *sk, struct sk_buff *skb,
- 
- 	tcp_ca_openreq_child(newsk, dst);
- 
-+	tcp_mtup_init(newsk);
- 	tcp_sync_mss(newsk, dst4_mtu(dst));
- 	newtp->advmss = tcp_mss_clamp(tcp_sk(sk), tcp_dst_advmss(dst));
- 
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index b1dec5d86d63..8ea1ae1ad2b2 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -1490,6 +1490,7 @@ static struct sock *tcp_v6_syn_recv_sock(const struct sock *sk, struct sk_buff *
- 
- 	tcp_ca_openreq_child(newsk, dst);
- 
-+	tcp_mtup_init(newsk);
- 	tcp_sync_mss(newsk, dst6_mtu(dst));
- 	newtp->advmss = tcp_mss_clamp(tcp_sk(sk), tcp_dst_advmss(dst));
- 
-
--- 
-Git-157)
+On 04/11/2026 19:54, Tianyi Chen wrote:
+> Dumping a map takes two BPF syscalls per element: one to get the next
+> key and one to look it up. Use BPF_MAP_LOOKUP_BATCH instead, with keys
+> and values bounded to 1 MiB and per-CPU value strides accounted for.
+> The output is unchanged.
+> 
+> For a hash map with 100,000 4-byte keys and values, a plain dump takes 5
+> BPF syscalls instead of 200,005. With output to /dev/null, the median of
+> 15 runs in an x86-64 KVM guest on Linux 7.3 dropped from 86 ms to 52 ms
+> (JSON: 78 ms to 42 ms). Printing to a terminal dominates either way.
+> 
+> If a batch lookup fails, discard its output and continue with individual
+> lookups after the last printed key. bpf_map_get_next_key() walks the map
+> in the same order. This covers maps without batch support, and hash
+> maps whose bucket lock cannot be taken, which individual lookups do not
+> need.
+> 
+> Link: https://github.com/libbpf/bpftool/issues/63
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Assisted-by: LLM
+> Signed-off-by: Tianyi Chen <hi@tychen.cc>
 
 
+Looks good to me, thanks!
+
+Acked-by: Quentin Monnet <qmo@kernel.org>
+
+
+> ---
+>  tools/bpf/bpftool/map.c | 97 ++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 82 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 4b65edf74859b..c0bd9bf846492 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+> @@ -59,13 +59,16 @@ static int map_type_from_str(const char *type)
+>  	return -1;
+>  }
+>  
+> -static void *alloc_value(struct bpf_map_info *info)
+> +static size_t map_value_size(struct bpf_map_info *info)
+>  {
+>  	if (map_is_per_cpu(info->type))
+> -		return malloc(round_up(info->value_size, 8) *
+> -			      get_possible_cpus());
+> -	else
+> -		return malloc(info->value_size);
+> +		return (size_t)round_up(info->value_size, 8) * get_possible_cpus();
+> +	return info->value_size;
+> +}
+> +
+> +static void *alloc_value(struct bpf_map_info *info)
+> +{
+> +	return malloc(map_value_size(info));
+>  }
+>  
+>  static int do_dump_btf(const struct btf_dumper *d,
+> @@ -741,15 +744,10 @@ static int do_show(int argc, char **argv)
+>  	return errno == ENOENT ? 0 : -1;
+>  }
+>  
+> -static int dump_map_elem(int fd, void *key, void *value,
+> -			 struct bpf_map_info *map_info, struct btf *btf,
+> -			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
+> +static void print_map_elem(void *key, void *value,
+> +			   struct bpf_map_info *map_info, struct btf *btf,
+> +			   json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
+>  {
+> -	if (bpf_map_lookup_elem(fd, key, value)) {
+> -		print_entry_error(map_info, key, errno);
+> -		return -1;
+> -	}
+> -
+>  	if (json_output) {
+>  		print_entry_json(map_info, key, value, btf, cpu_ids, cpu_cnt);
+>  	} else if (btf) {
+> @@ -763,10 +761,74 @@ static int dump_map_elem(int fd, void *key, void *value,
+>  	} else {
+>  		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
+>  	}
+> +}
+>  
+> +static int dump_map_elem(int fd, void *key, void *value,
+> +			 struct bpf_map_info *map_info, struct btf *btf,
+> +			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
+> +{
+> +	if (bpf_map_lookup_elem(fd, key, value)) {
+> +		print_entry_error(map_info, key, errno);
+> +		return -1;
+> +	}
+> +
+> +	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
+>  	return 0;
+>  }
+>  
+> +#define MAP_DUMP_BATCH_BYTES (1U << 20)
+> +
+> +/*
+> + * Print the elements returned by batched lookups, leaving the last one in
+> + * @key. Return true at the end of the map. After any error, the caller
+> + * continues with bpf_map_get_next_key(), which walks the map in the same order.
+> + */
+> +static bool dump_map_batch(int fd, void *key, void *value,
+> +			   struct bpf_map_info *info, struct btf *btf,
+> +			   json_writer_t *wtr, const int *cpu_ids, int cpu_cnt,
+> +			   unsigned int *num_elems)
+> +{
+> +	size_t value_size = map_value_size(info);
+> +	void *keys, *values, *batch, *in_batch = NULL;
+> +	__u32 capacity, count, i;
+> +	bool done = false;
+> +	int err;
+> +
+> +	capacity = min(MAP_DUMP_BATCH_BYTES / (info->key_size + value_size),
+> +		       (size_t)info->max_entries);
+
+
+Nit: If you respin, dump_map_batch() might be worth a comment to tell it
+assumes key_size + value_size to be non-zero. Right now we're good, we
+exit early from map_dump() (before calling dump_map_batch()) if we have
+no key.
