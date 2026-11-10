@@ -1,99 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794307028;
-	b=wO4vEV0y1C0Qawf2wnKEhI2Qc5y7tdyfpIiQXrzN8Ew9TS8y5duheiTb98ti3KUk5GkV
-	 VPa7B2cy9rVcb5RVq41Imni5H/c16W80xrPywgO9H7STTUwtMTj59dBwI/70vwsRtpm1N
-	 bJYS4V9BzwlHHUcAdgdRE3wBrocLvVVXmsrS+2jfedavGt4pPMQFidgubgnPxyEZJFvwP
-	 rzuWWRqLC4jZFGv3SOkVhRC9sXjBepLVmUfoVkD/kxVYAzvK9ev6qtDmXF8B5RwpFjA2z
-	 jnLBRciKtEhIYWO6qLkuUa1GfdP0AqEwtXCX2QOpFtc02he2spOQKNij2TmDS2kYoaA==
+	t=1794307267;
+	b=VEguW393rcnMoLYWnwNdTcZ5fcUBaf7CsqHnjkR+Q7a8Zy+jTfK46GWmuh5eZu03x6zn
+	 wmMG5F7aNGlJW0SU11LK+AdS4YeSBC3evAE4BKPtn9xTUB2On0gSbYHbzwPuhpJMq+CMe
+	 5X+dUaQiPKcKdH6ZVd8IZ5ELrokjjUCRVoaC7BtLLBgt73iC52EvlrerF7s0haVvvdq6N
+	 7bkJ7JOxoCArBNuL5CCZTZGQwTQ3Hedmis/yZ3VBL7M9ngFt9b8FSBLiyzftUcAIDTHTX
+	 db10vEFrb0uAsqDloqJrGnGc3a7OWrPqURhJYYA1+deDSNBf73f0DNDEZmarOWlYsAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794307028;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=aPt7aXHPfvHdE2UblKo8kSchH+XYw6EnXAvGnqpbEA4=;
-	b=GJV6l34NaretLuCCm8LfrthP7nfTsEc9uDMgOcFIe2zvZBjQ91cCI7m94zyEwN14wbRP
-	 6Y20TIJ76zrGFocQzcOZWeIf6a27UtglzsQdcPlFPLajLugDYBkTjqyKyWOakjJepoU33
-	 PDO5mXy3fNeljR0MiTrsrwQSfYY1B3uiJjI9IsUiz7NQjtJlHRPCMnLcevhjT69iLZ1Jj
-	 I5Lr8G99ErbEQZKaVUnFM2Iw2hyzY/zKW/H28qS4+Achvw3xb9aS9v2z+vrTAE5HcfRcV
-	 k53yMp9nLliqRF+HpirUgh0pchAW1SeRKsv1GPuaE+WaRAGyx600ugsT8nv295NxZlQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794307267;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
+	 Message-ID:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Scanned-By;
+	bh=9RvJebEHN0ToJdhmNwuM3zN40XxviuMMEwwuGiw6/Qg=;
+	b=fItkab/sjZs21ezgggJnBf8ls0xbmrJ5nCa1KlJc6ejYU5CbGIlSkodOk6xyXcWmVtnQ
+	 i9kl5ST8XRdqYittiK6TzNXOH++bFIt6Ytq9oAk0WclaawSm5DvMeMXIa7UYpyv6pZdSm
+	 YKhlFo4G+VR8zL/iJoA0gVU9uFuD2SNvj1LStLyA3vmbGp0C4V6QRZBGwLDlnWkuD3u68
+	 zRpbxtWirNvEjh0L9QDewbaQc9TJkh51uZWYfgYiwgDdeBYoLrQFq82+J6mR5K/x0FGXt
+	 xQtgC8PjXqNqHSIPVP9bNrCAgmkJcvBOXVboyGN+Y4fUKKkvb62yUCemhdzFJSKzsoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="gGEMD/02";
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HA5nYWRr;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4892606A321
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 10:37:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4892606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF2E606A33C
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 10:41:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DF2E606A33C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=gGEMD/02
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a214af2076so13306895e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 02:37:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1794307026; x=1794911826; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aPt7aXHPfvHdE2UblKo8kSchH+XYw6EnXAvGnqpbEA4=;
-        b=gGEMD/02KgLqbaZrSm/ICQNKt6tdpsc0lbc276bLUKHGgeD6+jjPbDCW3rzoPHK+mR
-         cZUQz2nDCByUtMhZuaq/ASxSkbCY2Vzu6aSd2Hmi9CHZN7JJl0rtBaKV+RJqMzKG9LtG
-         jrsCfETWUL1GdKuj/W/3C1IbyogIOpDpSSo3uVZ8djtN9q+1ae9dVicB14gyT0VAQSeE
-         8+OzgHE2FIE1Xgt0S/CpKrvJYtrfP1A6bzB7cZ1A12YWj0t1EtjbxwrRElK7o+uXQgTo
-         DjyvZp1Emc9HHQ8WcwD0tQalhKcObVZasTm95eMCei871BDLophdT/T5gN0tNlo5UDIR
-         +/ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794307026; x=1794911826;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aPt7aXHPfvHdE2UblKo8kSchH+XYw6EnXAvGnqpbEA4=;
-        b=UQ8Q0+XKvHyKrI9jFggfi6F3M26+dHKjMyPzzXlKLBZ4mkydA2msChKod7wd/0mdYR
-         TCiaPVP4FIRlDG/GIdti9MuwUCzpsCanIc+Vdx+Z0PAPUREs289qpQ0TqJ0MW03Eaczs
-         2FYdrFlvSJrlLCkgp6JP90AxHERfgCSZz6aXovceSKwmlcPf18THrSSvAhEZgG2II29d
-         lQNNMoPfAyPpriXWm3h5DH2IsnrSP0/3X/n0ej2oGYE+2kcJ7woW2GzkNjp2eEfCKDyk
-         TP4vL28yLLODGLnqlfVKGPUPJcU+jgVPYvZIjVXVMWHDZlfln7Q/FGesVemBrh//Ue67
-         21zg==
-X-Forwarded-Encrypted: i=1; AL+hErH+Omt7ELCIZYSMuejRtJhXnn3AsvOh7e+NeJ/H6yjFbX6IBeqC6blMlviQUHEVjg+F4sj8TwUHIVPKAUueIWM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Laj4tbSve8qc4HE3mTZyDdAWDjrBECYdY+8CyiEIB0KtzzmRQ
-	/7tyJJ9L0KlpKohG4pMW4UfQ4IVve+n5rydwDiXbBMvhO4If9pVvtWAlzxBn+va8Bug=
-X-Gm-Gg: AYBFou2OxRUQBWUHY/PQ2FFZh7Y+ahmGEjmSCAwJsMWTqdaWHoFDVnkPBoKp0+g8Eyc
-	QnSui4SrKIcTn6ETONgw4aviJlJiC1UZCj4tIcTrGSm23WOAr8y8s46cstz8DuFwt4daToS2YZV
-	EXIZHsdSMC0URNaRYYcMiuJCWxGsY8yBFVQuvB1g04syHAyR0W2DAbHMiLDD83jC9zOLXnn+6/G
-	er00js+ctrqPQnC46mOLxz7mAY74L6e40QPEOxKZTedeWErid1o18+U7EUM5fkfXZBCDsV/oxJT
-	0VEIZjaA2xuFx/nfuhNefEOIOrUb+KBnao27ZOsHWQFM0t+/krY1jYXqMh69hhmwv1WxeyXb8Ih
-	X8x4a4n6NrTbQkOnpxgcY8YwsbY8369pH/GiGspnVij0YfNdmNVQFPoopwqLHTtYdVfScwjDyt4
-	P7ZWGB0t0JeTn4rz1ShZSy51kyn/+IpVZU4FhDSGrRmk0QIhvt6gLeHZJubbp4qXYQQ9X6hq4eI
-	eSjhShpEbDXWfCzwDCLym2xn7s1gXlnCfD9ayCR21LQgnvIM7AtcrEorrRcb6yuL4Bod5wxWnlm
-	LqL7TPQ88ri+Km4U+s8OA5QAc1jCHYHtQOhbMAthya/AQw==
-X-Received: by 2002:a05:600c:8b21:b0:4a1:dfaf:f465 with SMTP id 5b1f17b1804b1-4ba023064e9mr33872945e9.4.1794307025923;
-        Tue, 10 Nov 2026 02:37:05 -0800 (PST)
-Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4983585923bsm4477565f8f.11.2026.11.10.02.37.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 02:37:05 -0800 (PST)
-Date: Tue, 10 Nov 2026 11:37:03 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] selftests/livepatch: build test modules against
- the selected kernel
-Message-ID: <avLzz7VlRWoKev8R@pathway.suse.cz>
-References: <20261103222706.1642224-1-sashal@kernel.org>
- <20261103222706.1642224-2-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HA5nYWRr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794307265;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9RvJebEHN0ToJdhmNwuM3zN40XxviuMMEwwuGiw6/Qg=;
+	b=HA5nYWRrHEVWrXwvv5J8wG/3xnsycmnr6AK8d/bPb+UnylSXLXdOEHIotLlHFeQPzkJSIp
+	rJ27HWyuOSvve2965Z+1Ge8VSHt9uodlDqhAIyeaZO399oirLvy3BV2Z95YqgXaLK/mU4G
+	oUa81jfISRe0h2hI1w/kZ9urlEIYxlk=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-294-TOY0otYhNVWo4ajIt8-xfA-1; Tue,
+ 10 Nov 2026 05:41:01 -0500
+X-MC-Unique: TOY0otYhNVWo4ajIt8-xfA-1
+X-Mimecast-MFC-AGG-ID: TOY0otYhNVWo4ajIt8-xfA_1794307259
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B032D18004F9;
+	Tue, 10 Nov 2026 10:40:58 +0000 (UTC)
+Received: from pabeni-thinkpadp1gen8.rmtit.csb (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CA62626C;
+	Tue, 10 Nov 2026 10:40:51 +0000 (UTC)
+From: Paolo Abeni <pabeni@redhat.com>
+To: bobbyeshleman@meta.com
+Cc: sgarzare@redhat.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	stefanha@redhat.com,
+	mst@redhat.com,
+	jasowangio@gmail.com,
+	xuanzhuo@linux.alibaba.com,
+	eperezma@redhat.com,
+	shuah@kernel.org,
+	rdunlap@infradead.org,
+	donald.hunter@gmail.com,
+	edumazet@kernel.org,
+	virtualization@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	sargun@sargun.me,
+	jlinbox@meta.com,
+	bobbyeshleman@gmail.com
+Subject: Re: [PATCH net-next v5 5/7] vsock/virtio: support guest device network namespace
+Date: Tue, 10 Nov 2026 11:40:35 +0100
+Message-ID: <20261110104035.225429-1-pabeni@redhat.com>
+In-Reply-To: <20261103-vsock-guest-ns-v5-5-48179b9b66b8@meta.com>
+References: <20261103-vsock-guest-ns-v5-5-48179b9b66b8@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,290 +101,227 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261103222706.1642224-2-sashal@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Hi,
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://netdev-ai.bots.linux.dev/sashiko/
+---
+--- Patch [5]: [PATCH net-next v5 5/7] vsock/virtio: support guest device network namespace ---
+I found three issues in this patch: one functional regression, one commit message problem, and one existing tap leak that the patch now reaches.
 
-the commit message seems to be generated using LLM.
-For me, it is a hard to read maze. But I'll try to go through it.
+commit 074136a5d2f57598d227b743b7c490274cb32bed
+Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Let's start with Subject. What is "the selected kernel"?
-How can it be selected?
+vsock/virtio: support guest device network namespace
 
-I would personally say that this this patch "allows to pre-built
-the test modules for the livepatch selftest into a separate directory".
+This patch makes the virtio-vsock guest device assignable to a network
+namespace. virtio_transport_rx_work() now re-reads the assigned netns for
+each packet and passes it to virtio_transport_recv_pkt(). The listen and
+connecting receive paths now call vsock_maybe_set_connected() instead of
+vsock_insert_connected(), and virtio_transport_send_pkt() gains a
+reachability check.
 
-My understanding is that there are several ways how to build
-the test modules, some work, and some does not. I would help
-me if the commit message better explains what works and what
-does not work.
+> Make the virtio-vsock device assignable to a namespace and initialize it
+> to init_net. Because virtio-vsock and init_net are both hardcoded to
+> global mode, nothing changes until the assign command is issued.
 
+[ ... ]
 
-On Tue 2026-11-03 17:27:05, Sasha Levin wrote:
-> The livepatch test modules are built against /lib/modules/$(uname -r)/build
-> unless KDIR is set, and they are built unconditionally. This has three
-> problems:
+> it wins the race to the table and does NOT pass the reachability tests,
+> then it will be reset. This is the purpose of the new helper
+> 'vsock_maybe_set_connected()'.
 
-My understanding is that the Makefiles currently expects that
-"the kernel devel files, for the running kernel, are installed
-on the system " so that they could find them by
-/lib/modules/$(uname -r)/build.
+[Severity: Low]
+[Finding: main-1-1]
+[Sources: opus-5-5]
+This isn't a bug, but does this description match what this patch does?
 
-The KDIR allows to find the devel files in another directory?
-But how do we set it?
+The previous commit in the series ("vsock: add a netlink command to
+assign the g2h device to a netns") already defines and exports
+vsock_maybe_set_connected(). The same commit adds netns_assign_allow to
+struct vsock_transport and initializes the g2h netns to init_net:
 
-> - When the selftests are built for a kernel in an output directory
->   (make O=...), the modules are still built against the running host
->   kernel, or fail when the host has no build directory.
+net/vmw_vsock/af_vsock.c:
+    static struct net __rcu *vsock_g2h_net = RCU_INITIALIZER(&init_net);
 
-What exactly is in the output directory?
-What is build directory?
-How they differ?
+This patch only calls the helper and sets .netns_assign_allow = true.
 
-I see in Documentation/dev-tools/kselftest.rst:
+The reachability check added to virtio_transport_send_pkt() is only
+described in the v4 changelog below the --- line, so it won't reach git
+history. Could the commit message say that virtio_transport_send_pkt()
+now drops packets from a netns that cannot reach the device and returns
+-ENETUNREACH? That includes credit updates, shutdown packets and RST
+replies.
 
-  <paste>
-  To build, save output files in a separate directory with O= ::
+> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> index eced6929405df..06df82b130cff 100644
+> --- a/net/vmw_vsock/virtio_transport.c
+> +++ b/net/vmw_vsock/virtio_transport.c
+> @@ -256,6 +256,15 @@ virtio_transport_send_pkt(struct sk_buff *skb, struct net *net)
+>  		goto out_rcu;
+>  	}
+>  
+> +	/* A socket reset by an assign can still send credit updates from
+> +	 * recvmsg() and setsockopt(SO_RCVLOWAT).
+> +	 */
+> +	if (!vsock_g2h_net_reachable(net)) {
+> +		kfree_skb(skb);
+> +		len = -ENETUNREACH;
+> +		goto out_rcu;
+> +	}
+> +
 
-    $ make O=/tmp/kselftest TARGETS="size timers" kselftest
-  </paste>
+[ ... ]
 
-It would help if the commit message follows this naming scheme,
-aka "save output files in a separate directory with O="
-and mentions an usable example, e.g.
-
-  $ make O=/tmp/kselftest TARGETS="livepatch" kselftest
-
-explain where it is supposed to search for the build files.
-
-My understanding is that you want to pre-built the test modules
-when building a kernel. I mean to use a custom kernel source
-tree instead of using devel files for the currently running kernel.
-
-
-> - The top-level selftests Makefile passes O to every suite, and the
->   test_modules Makefile hands it on to the kernel build. Even an empty
->   O= on the command line overrides the KBUILD_OUTPUT set by the
->   Makefile of a kernel build directory, so the build fails against
->   output directories and distribution headers such as Debian's:
->   "make -C tools/testing/selftests TARGETS=livepatch" builds no
->   modules at all.
-
-This is another way how to build the modules:
-
-    make -C tools/testing/selftests TARGETS=livepatch
-
-Again, it would be great to make it clear that it is for
-per-building the test modules from a custom kernel sources.
-
-But it mentions also KBUILD_OUTPUT which seems to be another
-way, from Documentation/dev-tools/kselftest.rst:
-
-  <paste>
-  To build, save output files in a separate directory with KBUILD_OUTPUT ::
-
-    export KBUILD_OUTPUT=/tmp/kselftest; make TARGETS="size timers" kselftest
-  </paste>
-
-It seems that "KBUILD_OUTPUT" has the same effect as "O".
-Why is it mentioned in a paragraph with
-"make -C tools/testing/selftests TARGETS=livepatch" example?
-
-> - A kernel configured without CONFIG_LIVEPATCH cannot build the
->   modules, although the installed scripts would correctly skip.
-
-This is a puzzle. If "the installed scripts would correctly skip"
-then what fails?
-
-
-> Select KDIR from O or KBUILD_OUTPUT when it is a prepared kernel build
-> directory containing Module.symvers, then from the source tree when the
-> kernel was built in place, and otherwise from the running kernel. An
-> explicit KDIR still takes precedence. Pass KDIR to test_modules as an
-> absolute path, also when it was given on the command line, and stop
-> forwarding O and KBUILD_OUTPUT to the kernel build, including when the
-> selftests are built through the kernel's kselftest targets, since KDIR
-> already names the output directory.
-> 
-> Read CONFIG_LIVEPATCH from the selected .config and skip the modules
-> only when the configuration is readable and the option is not enabled. A
-> KDIR without a readable configuration still attempts the build, so that
-> a directory that is not a prepared kernel tree fails the build instead
-> of silently producing an installation without modules. A KDIR that does
-> not exist keeps being skipped, as before.
-> 
-> Always clean test_modules, through the kernel source tree that contains
-> them. Cleaning external modules needs neither a configuration nor
-> Module.symvers, and unlike the build targets, the clean target of the
-> selftests Makefile does not pass the absolute O on, so the kernel the
-> modules were built against cannot always be found at that point.
-
-The above paragraphs might be "fine" as a "More details" section.
-
-> Have the scripts report a skip after the root check when the running
-> kernel does not provide livepatch.
-
-This patch should fix the build. This change does not fit here,
-see below.
-
-> --- a/tools/testing/selftests/livepatch/Makefile
-> +++ b/tools/testing/selftests/livepatch/Makefile
-> @@ -1,7 +1,26 @@
->  # SPDX-License-Identifier: GPL-2.0
+> @@ -682,10 +697,15 @@ static void virtio_transport_rx_work(struct work_struct *work)
+>  
+>  			virtio_transport_deliver_tap_pkt(skb);
 >  
 
-The code below is a maze. It would be nice to add a comment here
-explaining how we try to find the kernel sources, ideally
-even include examples.
+[Severity: High]
+[Finding: main-6-6]
+[Sources: opus-5-5]
+This isn't a bug introduced by this patch, but this patch extends it to
+the guest device, which can now be isolated. Can tap delivery leak the
+assigned namespace's traffic to vsockmon devices in other namespaces?
 
-   1. When using separate output directory, for example:
-      make O=/tmp/kselftest TARGETS="livepatch" kselftest
-      export KBUILD_OUTPUT=/tmp/kselftest; make TARGETS="livepatch" kselftest
+virtio_transport_deliver_tap_pkt() runs before the netns-aware
+virtio_transport_recv_pkt(). The call chain
+vsock_deliver_tap()->__vsock_deliver_tap() then walks the global
+vsock_tap_all list without any netns filter:
 
-   2. When building directly from the tools/testing/selftests/livepatch
-      source directory.
+net/vmw_vsock/af_vsock_tap.c:__vsock_deliver_tap() {
+    ...
+	list_for_each_entry_rcu(tmp, &vsock_tap_all, list) {
+		ret = __vsock_deliver_tap_skb(skb, tmp->dev);
+    ...
+}
 
-   3. When using installed devel files for the running kernel.
+This loop never compares dev_net(tmp->dev) with the packet's namespace.
+vsockmon_link_ops has no netns restriction. RTM_NEWLINK only needs
+CAP_NET_ADMIN in the user namespace that owns the netns.
 
-But I might be wrong.
+So an unprivileged user can run unshare -Urn and create a vsockmon link.
+The module autoloads through MODULE_ALIAS_RTNL_LINK("vsockmon"). The user
+can then capture on that link with AF_PACKET.
 
-> +ifndef KDIR
-> +LIVEPATCH_OBJTREE := $(firstword $(O) $(KBUILD_OUTPUT))
+Wouldn't that let any namespace see the traffic of the local-mode
+namespace the guest device was assigned to? The tap paths in vhost-vsock
+and vsock_loopback have the same problem.
 
-The above checks both $(O) $(KBUILD_OUTPUT)
-
-> +ifneq ($(and $(LIVEPATCH_OBJTREE),$(wildcard $(LIVEPATCH_OBJTREE)/Module.symvers)),)
-> +KDIR := $(LIVEPATCH_OBJTREE)
-
-I am a bit confused. What is the KDIR when using, for example:
-
-      make O=/tmp/kselftest TARGETS="livepatch" kselftest
-
-Is it in "/tmp" ?
-
-> +else ifneq ($(wildcard ../../../../Module.symvers),)
-> +KDIR := ../../../..
-
-This seems to support building by calling:
-
-   $ cd tools/tests/selftest/livepatch
-   $ make
-
-> +else
-> +KDIR := /lib/modules/$(shell uname -r)/build
-
-This supports the build with the devel files installed for the
-currently running kernel.
-
-> +endif
-> +endif
-> +override KDIR := $(abspath $(KDIR))
-> +export KDIR
-> +MAKEOVERRIDES := $(filter-out KDIR=%,$(MAKEOVERRIDES))
+> -			/* Force virtio-transport into global mode since it
+> -			 * does not yet support local-mode namespacing.
+> +			/* Only grab a reference if the net changes underneath
+> +			 * us.
+>  			 */
+> -			virtio_transport_recv_pkt(&virtio_transport, skb, NULL);
+> +			if (unlikely(!vsock_g2h_net_eq(net))) {
+> +				put_net_track(net, &ns_tracker);
+> +				net = vsock_g2h_net_get(&ns_tracker);
+> +			}
 > +
-> +LIVEPATCH_CONFIG := $(shell if [ -r "$(KDIR)/.config" ]; then \
-> +	grep -qx 'CONFIG_LIVEPATCH=y' "$(KDIR)/.config" && echo y || echo n; fi)
+> +			virtio_transport_recv_pkt(t, skb, net);
+>  		}
+>  	} while (!virtqueue_enable_cb(vq));
 
-Why LIVEPATCH_CONFIG and not CONFIG_LIVEPATCH?
-IMHO, the reverse ordering adds more harm than good.
+[ ... ]
 
->  TEST_GEN_FILES := test_klp-call_getpid
-> +ifneq ($(LIVEPATCH_CONFIG),n)
->  TEST_GEN_MODS_DIR := test_modules
-> +endif
->  TEST_PROGS_EXTENDED := functions.sh
->  TEST_PROGS := \
->  	test-livepatch.sh \
-> @@ -16,3 +35,12 @@ TEST_PROGS := \
->  TEST_FILES := settings
+> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> index 1e762a480df49..7efcbdc7e04fc 100644
+> --- a/net/vmw_vsock/virtio_transport_common.c
+> +++ b/net/vmw_vsock/virtio_transport_common.c
+
+[ ... ]
+
+> @@ -1478,9 +1478,14 @@ virtio_transport_recv_connecting(struct sock *sk,
 >  
->  include ../lib.mk
+>  	switch (le16_to_cpu(hdr->op)) {
+>  	case VIRTIO_VSOCK_OP_RESPONSE:
+> -		sk->sk_state = TCP_ESTABLISHED;
+> +		if (!vsock_maybe_set_connected(vsk)) {
+> +			virtio_transport_reset_no_sock(t, skb, net);
+
+[Severity: High]
+[Finding: main-1-0]
+[Sources: opus-5-5]
+Can this RST ever reach the host?
+
+virtio_transport_reset_no_sock() ends in t->send_pkt(reply, net). The
+check this patch adds to virtio_transport_send_pkt() frees the reply when
+net cannot reach the device:
+
+	if (!vsock_g2h_net_reachable(net)) {
+		kfree_skb(skb);
+		len = -ENETUNREACH;
+		goto out_rcu;
+	}
+
+The v5 changelog says the arrival netns is passed here instead of
+sock_net(sk) so that the RST is not dropped. But vsock_net_check_mode()
+looks like an equivalence relation:
+
+	if (net_eq(ns0, ns1))
+		return true;
+	...
+	return mode0 == VSOCK_NET_MODE_GLOBAL && mode0 == mode1;
+
+A netns's mode is also fixed when the netns is created: vsock_net_init()
+sets it, and later writes to the ns_mode sysctl return -EPERM.
+
+virtio_transport_recv_pkt() finds the socket through
+__vsock_find_{connected,bound}_socket_net(), which requires
+vsock_net_check_mode(sock_net(sk), net). vsock_maybe_set_connected() only
+fails when sock_net(sk) cannot reach the newly assigned g2h netns.
+
+So the arrival netns cannot reach it either, and
+vsock_g2h_net_reachable(net) is false whenever this branch runs.
+
+An assign can land after the per-packet snapshot in
+virtio_transport_rx_work() and before the check in
+vsock_maybe_set_connected(). That is the race the commit message
+describes.
+
+In this OP_RESPONSE case the host already holds an ESTABLISHED socket. If
+the RST is dropped, won't that connection stay half-open until the host
+sends something? A host that only reads would wait forever.
+
+The commit message says such a socket "will be reset", but only the
+local socket is closed.
+
+The same applies to the new failure path in
+virtio_transport_recv_listen():
+
+	if (!vsock_maybe_set_connected(vchild)) {
+		release_sock(child);
+		virtio_transport_reset_no_sock(t, skb, net);
+		sock_put(child);
+		return -ENETUNREACH;
+	}
+
+Here the host's connect() gets neither a RESPONSE nor an RST. It waits for
+its connect timeout instead of failing with ECONNRESET.
+
+By the same reasoning, the other virtio_transport_reset_no_sock() calls in
+virtio_transport_recv_listen() that v5 moved from sock_net(sk) to net
+behave the same either way.
+
+Would getting the RST out need a different approach? For example, it
+could be sent on the newly assigned g2h netns, or replies could be exempt
+from the check in virtio_transport_send_pkt().
+
+> +			skerr = ECONNRESET;
+> +			err = -ENETUNREACH;
+> +			goto close;
+> +		}
 > +
-> +ifeq ($(LIVEPATCH_CONFIG),n)
-> +clean: clean_livepatch_mods
-> +
-> +clean_livepatch_mods:
-> +	$(Q)$(MAKE) -C test_modules clean
-> +
-> +.PHONY: clean_livepatch_mods
+>  		sk->sk_socket->state = SS_CONNECTED;
+> -		vsock_insert_connected(vsk);
+>  		sk->sk_state_change(sk);
+>  		break;
 
-My understanding is that this will remove the test modules even
-LIVEPATCH_CONFIG became disabled in the meantime. I guess
-that it is related to the 3rd problem (puzzle) in the commit
-message.
+[ ... ]
+-- 
+This is an AI-generated review.
 
-It makes sense. I am surprised that we need an extra target
-for this.
-
-Anyway, it would make sense to fix this in a separate patch.
-
-> +endif
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 429fce1f31431..8b26b70f92d8c 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -150,6 +150,7 @@ function cleanup() {
->  #		 the ftrace_enabled sysctl.
->  function setup_config() {
->  	is_root
-> +	[[ -d "$SYSFS_KLP_DIR" ]] || skip "livepatch is not available"
-
-This seems to be used only when _running_ the test. But this patch
-fixes _building_. It should be in a separate patch, maybe
-together with the check for CONFIG_LIVEPATCH.
-
->  	has_kdir
->  	push_config
->  	set_dynamic_debug
-> diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-> index a13d398585dcb..62cb724c6b333 100644
-> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
-> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-> @@ -16,14 +16,15 @@ obj-m += test_klp_atomic_replace.o \
->  	test_klp_state3.o \
->  	test_klp_syscall.o
->  
-> +modules clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
-> +
->  # Ensure that KDIR exists, otherwise skip the compilation
->  modules:
->  ifneq ("$(wildcard $(KDIR))", "")
-> -	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-> +	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-
-Why is KBUILD_OUTPUT unset here?
-It would deserve a comment.
-
->  endif
->  
-> -# Ensure that KDIR exists, otherwise skip the clean target
-> +# Any kernel tree can clean the test modules, so use the one containing them
-
-Here is a comment. But what does "Any kernel tree" means?
-Could we be more specific, please?
-
->  clean:
-> -ifneq ("$(wildcard $(KDIR))", "")
-> -	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
-> -endif
-> +	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(TESTMODS_DIR)/../../../../.. \
-> +		clean KBUILD_EXTMOD=$(TESTMODS_DIR)
-
-Note that my workflow still works with this patch. I am testing the
-running kernel, have installed the devel files, and doing:
-
-  cd $KDIR/tools/tests/selftests/livepatch
-  make run_tests
-
-But it would be great to better document which other scenarios
-are newly supported by this patch.
-
-Best Regards,
-Petr
-
-
-Best Regards,
-Petr
->  LocalWords:  cd
