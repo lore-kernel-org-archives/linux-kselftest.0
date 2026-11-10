@@ -1,66 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=13.77.154.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794350234;
-	b=r5U+v77JfqagBgL0k1zTBAdyhWF53fuHkW44k7RdQsq+fHie18qBWGm6sIoxj0Ao+IxW
-	 ugSzvBJ8wTc93sa9TvLlpeYt1Bj+/IkJeOwrf8/AX0cIXYN3HATebndzTVJTGS5YymM2E
-	 Yn/EVXRD1D9hjSWu7AUPPBHe+Qp+SvSqBwk6NE/RFmtIFWATcXJGayI+YSaik9GmGT1x7
-	 biUwTd36r1inlBt64w1cH1ADvhs+HmWJJdZih6Wzcz0Kz0pfb86OALcuXgH9e+/uQnlgL
-	 plM6/o9oPH6r/jlDYZxXdIuMFFTvOMugJZ/MrTfAC10CXnX6C/OwjPfWwu8/RVmAVAw==
+	t=1794351007;
+	b=Bpe7EuzPgkjztca+MWTNfIPENfDYaraLK9jTqW5ptQEX2LHhOZhg+A8SzKHXcWZYX+9g
+	 lerE5bTfau1YLcgpChiCuNR0rrJHC6TVcE+/0GJmH+rf8L1q700Z3rGbD6JM/TDmMw3Gu
+	 tXJ6iAkWwy+voKVRXIBvM2fwWAVKS4OKWwCDzLE15mcbpsfNJ6A8iU0SAUzXHssYAJ6GD
+	 pw/gzdkukcKSTUVP2wwiG8qX+Hi7jvqAxeng/McSaX5KzN+azH6Dum1xayqi+OfcPf1m8
+	 sMYxpAewoO5QWPLzWuikZZ0cvh6qh0wiJ5+cVauXR4TVNDsitbBYXf2HlsYHtqwEOqw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794350234;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=iMS4Ufw6oLz0jxlRn0HZ4WRoRoCLrOY1iIoKp6s0bcg=;
-	b=sAUWqXxr6unvyVyGtf1mctOdAUncQeMpTQ5vRRvlCTToNG+fyukPo7oJz18q79b1pIfH
-	 IYGx1PuYrAzXB2Cfvab5gHHcVKy48ixd9ihdV9GCydPaIOnE+6gmvlbEkgR3BRTElm5BC
-	 7h9lXgLg25Hfq3lt9M4mJsH7IFgC33CRAtjgK/yQC4MmT3G5Kn8clQrRoaMPH/cjbs7lj
-	 8ctYdQKpApXIpUHQed0xnGvEaNV00WItkVfhy/+EzQ7i4SECYc68En4pfqzYpKgzN+4V9
-	 H2Z4C7vlcJyNflxVRZtAKhv1H0t/NlacDKLSbA21ONQLAOkgYF4J8znt/bG9k8P/DsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794351007;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Date:From:To:Cc:
+	 Message-ID:In-Reply-To:References:Subject:X-Mailer:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Content-Disposition:
+	 X-Spam-Status:X-Spam-Checker-Version;
+	bh=503JFiVK8vn/l3FW+t3kwxWFWPpMbnFzjHjaQEpu2Vo=;
+	b=eiglvQLH9rP9sBx1r3IYEOB4ofhtDFOWpMdkR0XKLzZ2Qi6Y4wwHHqwEs3FcrtWw4FKn
+	 kpKq+RRsghe0XL2/exQEVE/WUxkFnaXCgDQmYkW5SNJo47leq4BW8SAHglHE0oFiJRk4t
+	 D7JcLqxUpGk8WWM2EnoGvb17r2POo7zTQr+nseeGi945qykgsMOzA5cYrxwFF1lMKZ/7S
+	 bW6F2m028tEpC7As6R52VIEhqlQgjrFZHDz8fd4flfTXrSGEdk1ID8a43Du5S5O1Ayx+/
+	 Ph7DjO71te3vKTaKxfmmssL7twRurXW9X5FFuQh8yA8gUNU6+SY/cCjuoF7yqiB9APg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XSrafjLU;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2AE606A31C;
-	Tue, 10 Nov 2026 22:37:13 +0000 (UTC)
+	dmarc=pass header.from=linux.microsoft.com;
+	spf=pass smtp.mailfrom=linux.microsoft.com;
+	dkim=pass header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=jISbMcXW;
+	arc=none smtp.remote-ip=13.77.154.182
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48A0A606A320;
+	Tue, 10 Nov 2026 22:50:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48A0A606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XSrafjLU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5561F008A2;
-	Tue, 10 Nov 2026 22:37:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794350233;
-	bh=iMS4Ufw6oLz0jxlRn0HZ4WRoRoCLrOY1iIoKp6s0bcg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=XSrafjLUY47PUGSIDCgHxp8gdbmVLU2OR2SY2FmhaEWsenRuM432FQAGVenZvU0D4
-	 HTAFn1EOHS4zMJBVOWehiTkfLwhDZAxJ17Gw0xldhMGHo5fLsAnSCvGW+ZltKfq0jV
-	 MQI0V1bMYEvaTD8SXU9RD8+88iaMymTzkoxpLpELe5zaulvAEKXIvBBOzWFcGFRgc9
-	 mPHwpwEizkkJ2VQK6KkH61FnlA7GyGKRjOlAD7/VnUvfBF6GDLzmu00vNbyiEoO+5C
-	 YPxkv/zbA+4kwvQwTpoFiAO5twLPjn1hc22xJFSdOgUL8YIl46hBCw4XTwzMW8HXOo
-	 PC+GCdZjo93cA==
-Date: Tue, 10 Nov 2026 14:37:11 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: netdev-bot+sashiko@kernel.org, netdev@vger.kernel.org,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, edumazet@kernel.org, horms@kernel.org,
- corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
- michael.chan@broadcom.com, pavan.chebbi@broadcom.com, saeedm@nvidia.com,
- tariqt@nvidia.com, mbloch@nvidia.com, alexanderduyck@fb.com,
- kernel-team@meta.com, sdf@fomichev.me, dimitri.daskalakis1@gmail.com,
- almasrymina@google.com, dtatulea@nvidia.com, bobbyeshleman@meta.com,
- asml.silence@gmail.com, daniel@iogearbox.net, razor@blackwall.org,
- leitao@debian.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
- leon@kernel.org
-Subject: Re: [PATCH net-next v3 1/9] bnxt_en: let the stack segment GSO skbs
- with too many frags
-Message-ID: <20261110143711.1421385b@kernel.org>
-In-Reply-To: <e4def2839d68382fd50e4fe1e6b4f116@gmail.com>
-References: <179418737248.994134.10509157155829463489@kernel.org>
-	<e4def2839d68382fd50e4fe1e6b4f116@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=jISbMcXW
+Received: from [100.96.64.102] (unknown [52.179.129.152])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B7F3420B7169;
+	Tue, 10 Nov 2026 14:50:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B7F3420B7169
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1794351003;
+	bh=503JFiVK8vn/l3FW+t3kwxWFWPpMbnFzjHjaQEpu2Vo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=jISbMcXWAnWYOIBzcxe98miqDGDviywoQ+eXNQEp82At+GPcFejJCC2bL6+ZyXaUa
+	 qYoBSzDBtLPFSKe2Guo/hr5GK3+oMHvjBB48m/3WhtIBxz4rWrcwLl3eALk8VRqO0B
+	 xtGI+YgU8i69Jzg9xxpMV6I83VSm6dvSaoy0qwIw=
+Date: Tue, 10 Nov 2026 17:50:03 -0500
+From: Jeff Barnes <jeffbarnes@linux.microsoft.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "=?utf-8?Q?mhiramat=40kernel.org?=" <mhiramat@kernel.org>, 
+ "=?utf-8?Q?shuah=40kernel.org?=" <shuah@kernel.org>, 
+ "=?utf-8?Q?beaub=40linux.microsoft.com?=" <beaub@linux.microsoft.com>, 
+ "=?utf-8?Q?mathieu.desnoyers=40efficios.com?="
+ <mathieu.desnoyers@efficios.com>, 
+ "=?utf-8?Q?linux-trace-kernel=40vger.kernel.org?="
+ <linux-trace-kernel@vger.kernel.org>, 
+ "=?utf-8?Q?linux-kselftest=40vger.kernel.org?="
+ <linux-kselftest@vger.kernel.org>, 
+ "=?utf-8?Q?linux-kernel=40vger.kernel.org?="
+ <linux-kernel@vger.kernel.org>
+Message-ID: <40C83F97-D53F-4050-9CE4-19449912FB20@getmailspring.com>
+In-Reply-To: <20261019103957.69759ee3@gandalf.local.home>
+References: <20261019103957.69759ee3@gandalf.local.home>
+Subject: Re: [PATCH v2 0/3] tracing/user_events: Share state with
+ existing threads
+X-Mailer: Mailspring
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -70,14 +71,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-On Mon, 09 Nov 2026 10:29:20 -0800 Stanislav Fomichev wrote:
-> > The commit message describes both problems. Without a Fixes: tag, stable
-> > kernels that carry b91e82129400 won't pick up this fix.  
+
+Hi Steve, Beau,
+
+Gentle ping on this v2 series. I don't have any outstanding changes to
+make at this point.
+Just to clarify, this is a separate patch from the Fail fork one.
+Please let me know if anything further is needed from my side. 
+
+Thanks, Jeff
+
+
+On Oct 19 2026, at 10:39 am, Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Mon, 19 Oct 2026 10:23:01 -0400
+> Jeff Barnes <jeffbarnes@linux.microsoft.com> wrote:
 > 
-> Will add a Fixes tag, but not sure it's worth the backports..
-
-Either it doesn't matter and targets net-next or it needs a Fixes tag
-and targets net. Ignore the bot.
+>> Gentle ping on this series.
+>> 
+>> Please let me know if there are any further comments or changes you'd
+>> like me to make.
+> 
+> Hi Jeff,
+> 
+> FYI, always start a new thread when sending out a new series. Don't
+> make it
+> a reply to an old one. That makes it confusing to know which series to look
+> at.
+> 
+> Also, I've was traveling between September 14th and October 10th and my
+> backlog built up quite a bit.
+> 
+> If Beau can review this series, that would be great. I'm currently putting
+> together several branches for the merge window. Unfortunately, due to my
+> backlog, there's patches that have been sent this month that will need to
+> be postponed to the next window.
+> 
+> As user_events are agnostic to other changes, there's still a chance your
+> changes can get added this window.
+> 
+> -- Steve
+> 
