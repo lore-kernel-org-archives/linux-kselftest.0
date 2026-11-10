@@ -1,54 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.154
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794309855;
-	b=C2G+P4fdBI1kqtD5uVNJmjAt5yIC+FT4rD3+yj890NtV8VvC39BIsySvlw+jpjS7Qpte
-	 8fZu8HIcicl0GRxDRx4QwWzWUGBBRFPWk77i5tYi98yH1eLxHusnYSdBfUT3JoZCh7bgC
-	 7d+dgxvhi6fNpa+2aSRXoOuRFY5F/Ibytr7Cf0lDzZ1C28hN/0sj41YVQjobhugdsS7aK
-	 +2Wy5wdvaC40h1aXfsnJvzu2/5lZough/gBgA407+yux6ZJwkZeTfOs7phWubSSOZ+DFC
-	 ThTqvv03PUXomC2pPMw/XTA+FI2eFxsYFL9uGdpZYhAUHv0iNg7kXti/B5C8/bnq/LQ==
+	t=1794310220;
+	b=EzSUCajpf4fyFE/4sRGC4ASthMnekg/nDT6NdKmKyHlZU6oTFisRqJur/TMXQOslmlop
+	 0TxAux/SzZKUCJ1V5Xi3yVqlVwtSbNHjCtxwcg9kuSz7AK4P5KCiOEu43LFxUcGHnJRgY
+	 +nF4srd+xjqSZgtUIEpzAp/50dD+ceM9Y/nUQGe3/G0Mn9ypUJu2lOScjKqdd0DawPZIi
+	 eyPxhFvaxX7eCf9RbC37maLBPwjfQm+1BBHvHqYJ4ybLgBRJjG1rvcUCYxjDqXjvGLm5b
+	 sdhwFwlGqUI0kfsX+ErKptVpoAKxzG3XY/hWexO9LSU7+J71BsJSgvItD3+FcbXY1AA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794309855;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=6gYqU8yoGIqJYTt36NdvX8rGK65lFYTGTFaoagI1k10=;
-	b=X9NjaWIM/GPLG+ntD6AtFyyYqca0YrJvpYUGdwDqSf77vFORj1IpUR4cWvhsguIdEKNk
-	 dVe18wk/ksdmplNR2acvu3pwLoIKBPAm4DxuqByca85bwKMiXerJeP/3/qWUZBWL/QJsu
-	 SctsvCahrkeib1e9V+cETcYbflNY5wb+YUyv2yFJH92wMenaTUqfPU7m9GlLipDGQCe8b
-	 GMBElaLsOIGO9vIfvIYcbMU/lSzSwlgyBak8r/inuUd2RWR7s1B4uPSz8a8Ii39idFu0g
-	 c9+TuTRRWJ1q+fPqfmVkYQHEumnBiO2aTnmRkihqgUnBvFL+5MSZ/HunfbKRp5oOl3Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794310220;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=aUVMLnilPF/4lZLpMPs+hVsh/c7eJoai23cicRWqG5k=;
+	b=a5bRACZXnIQKhya+jFlRoUTfOaA3MJSmuFB+lLQWvanzeLYGhGj1konjKr82zNA0v2Jt
+	 ZhcBJSwk8H9re5zbGbw77Lzm1h7TtJd5UFRsBWX+03Ku6cq28kCyVlzBU7so6lX/+QWkR
+	 jluOvpSpc4Qps8S7j/ScGTLEoUrSst7zHo1Low4nNyyHebqsUX6nzX0u5/tAwBeM1Li3W
+	 W6kTKdyxSeVNEFBsPNvrj6x18gPuAVXWQLoqHgoAESpVdOfT4M87fFTWdhbwdZpR+r/M+
+	 RXGXyOW/LvOzQ+j305ilBEbPcr07LTRWALLdEQH7SdalM2p8FR+q9PPpaY0e0/p/39g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gAPuD05e;
-	arc=none smtp.remote-ip=91.218.175.154
-Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BhQRC33a;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A9A60A2607
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 11:24:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12A9A60A2607
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AEC606A321;
+	Tue, 10 Nov 2026 11:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gAPuD05e
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=QEorwODxY7FmS/wK8h8zlNj7pdzBxWuIPtBjJgyQ7ac=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794309853; v=1; x=1794914653;
- b=gAPuD05e+VTSDf3VxnXFYkby1F6wX639XFDmsmzBgqqyzsQ5OaOQkIrQPp/zV4RtNGi9VYbA
- uaximODf7+LCWEL60zvcgrd3MzLFfwg12l+3Xom20eJWt6zHaQDDqiMP1tqbb3URU58XgzOK6Gf
- dpFeaGLz2WueVRwzfDEttcbs=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b38db6903488a640;
-	Tue, 10 Nov 2026 11:24:13 +0000
-X-Mizu-Trace-ID: b38db6903488a640
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <cfa85d13-1da7-45ad-9dd8-208e1267000e@linux.dev>
-Date: Tue, 10 Nov 2026 19:24:07 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BhQRC33a
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2F21F008A6;
+	Tue, 10 Nov 2026 11:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794310219;
+	bh=aUVMLnilPF/4lZLpMPs+hVsh/c7eJoai23cicRWqG5k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=BhQRC33a5DLJFYXantknxoLz+4E8Y91YUxhJExBtYeHCnnzTft9NCC68+6j0cJlFX
+	 I+Or3X0S0wtqIGM7jPiyZ2JIJCSH03APr9VFuu7T0riRBO9w9HJGeJAV50fIGiQOTW
+	 xwKie1C93ccyuCWLZfI/Oir3am1i5zVW5aYrTQU9UHv89K9WRHd6o+TrwwZYpV8Ger
+	 0bWEVC4qGNrmF/hxqKZVvyJczkrdNfV0n1ml6zu0gA9MdoxNFzvBGVYBjaiSU35/cz
+	 o3HDA6YDqe/jj8adGHgHUdjpaaAAFDq/NmgaZEJq+ltwzutEsY2Ic7zmmvmwbxH+iG
+	 4QTwGjBjumTKg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5E12D391B17B;
+	Tue, 10 Nov 2026 11:30:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,76 +53,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v2 4/5] cgroup/cpuset: Protect current->mems_allowed
- read in cpuset_fork()
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>,
- Sashiko <sashiko-bot@kernel.org>
-References: <20261109190955.1398611-1-longman@redhat.com>
- <20261109190955.1398611-5-longman@redhat.com>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20261109190955.1398611-5-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/5] seg6: fixes for the PSP flavor of SRv6
+ End
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179431021818.3887755.4781870656519300838.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Nov 2026 11:30:18 +0000
+References: <20261105015715.57-1-andrea.mayer@uniroma2.it>
+In-Reply-To: <20261105015715.57-1-andrea.mayer@uniroma2.it>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, dsahern@kernel.org, horms@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, hangbin.liu@linux.dev,
+ justin.iurman@gmail.com, nicolas.dichtel@6wind.com, ahabdels@cisco.com,
+ stefano.salsano@uniroma2.it, andrea@common-net.org
 
+Hello:
 
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 11/10/2026 3:09 AM, Waiman Long wrote:
-> Reading mems_allowed of the current task outside of cpuset_mutex critical
-> section should be protected by using mems_allowed_seq seqlock as the
-> nodemask can be updated concurrently leading to a torn read. Such
-> protection is currently not implemented in cpuset_fork() for the
-> !CLONE_INTO_CGROUP case. As a result, the child task may inherit an empty
-> or corrupted mems_allowed nodemask. This violates NUMA memory policy
-> constraints and causes subsequent page allocations to unconditionally
-> fail, potentially leading to crashes or spurious OOM killer invocations
-> for the child task.
+On Thu,  5 Nov 2026 02:57:10 +0100 you wrote:
+> This series addresses three related issues of the PSP flavor in the
+> SRv6 End behavior, all present since commit bdf3c0b9c10b ("seg6: add PSP
+> flavor support for SRv6 End behavior"). The three fixes build on each
+> other.
 > 
-> Fix that by using a read_mems_allowed_begin/read_mems_allowed_retry()
-> loop to protect the mems_allowed read.
+> The main one is a route with both the NEXT-C-SID and PSP flavors.
+> RFC 9800 says that the PSP flavor is unchanged when combined with
+> NEXT-C-SID (NEXT-CSID in the RFC) [1]. Currently, a packet with a zero
+> Argument (i.e. when the IPv6 DA carries no further C-SID) is processed
+> as End without flavors, and PSP is not applied. With this series, such
+> a packet is processed as End with PSP.
 > 
-> Fixes: 06f4e9489891 ("cpuset: make sure new tasks conform to the current config of the cpuset")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Link: https://sashiko.dev/#/bug/linux-601100b4-fa77-45fd-99f9-bfbd4385201f
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/cgroup/cpuset.c | 11 ++++++++++-
->   1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index e9b84671af21..7aa614c6ac4d 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -3868,11 +3868,20 @@ static void cpuset_fork(struct task_struct *task)
->   	rcu_read_unlock();
->   
->   	if (cs == oldcs) {
-> +		unsigned int seq;
-> +
->   		if (cs == &top_cpuset)
->   			return;
->   
->   		set_cpus_allowed_ptr(task, current->cpus_ptr);
-> -		task->mems_allowed = current->mems_allowed;
-> +		/*
-> +		 * A cpuset.mems update can update current->mems_allowed
-> +		 * concurrently, so retry it again if it really happens.
-> +		 */
-> +		do {
-> +			seq = read_mems_allowed_begin();
-> +			task->mems_allowed = current->mems_allowed;
-> +		} while (read_mems_allowed_retry(seq));
->   		return;
->   	}
->   
+> [...]
 
-Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
-Thanks.
+Here is the summary with links:
+  - [net-next,v2,1/5] seg6: handle a Fragment or AH header before the SRH consistently in PSP
+    https://git.kernel.org/netdev/net-next/c/30ea41774b31
+  - [net-next,v2,2/5] seg6: handle a consumed SRH in SRv6 End with the PSP flavor
+    https://git.kernel.org/netdev/net-next/c/2316dd2c74c5
+  - [net-next,v2,3/5] seg6: apply the PSP flavor together with NEXT-C-SID in SRv6 End
+    https://git.kernel.org/netdev/net-next/c/8dd88d5e71ff
+  - [net-next,v2,4/5] selftests: seg6: add tests for PSP together with NEXT-C-SID
+    https://git.kernel.org/netdev/net-next/c/8eb0267c4802
+  - [net-next,v2,5/5] selftests: seg6: add tests for PSP with a consumed SRH
+    https://git.kernel.org/netdev/net-next/c/2e9d4b794675
+
+You are awesome, thank you!
 -- 
-Best regards
-Ridong
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
