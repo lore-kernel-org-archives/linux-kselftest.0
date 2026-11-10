@@ -1,70 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794291394;
-	b=i5adAEo+63mgrdYhSj5FDfSw6IxCNovVrCah6FA+heY2LZs3youHAOw65C9djJKtHcOW
-	 9MZUn0GbatwGl7vj4ZfLwG6/qWvXqNufNO61n+tzIO1nXrs8p2X/oryHlDI8i6V+UbJoa
-	 +UmfS+fqP9qIjOpem9JpWl7blSLxvQ/LsgkSV+1hHK/kmeGcbwJYOXe8+j51AQMnSOcw2
-	 mv5HBZk3fVk0WxIjYUKeMb/bkRgvCh5TFoPO/9i0FRQ7PYoFvFkGyYCVlhcjaJi7hueDD
-	 JFM+HPmV0JQoNN8jMy+iABrHTGkVYY3jYnI58djFCFXFixGysUIY0Enz/06OOiml8lQ==
+	t=1794291565;
+	b=y9dfxdupxxTQGBXeDjJMlOYZQAYlS1yTzI3SzZ53P+WTKZVlxJ8lLeLAvgKWEMA5R9+U
+	 zspYKhpWm90ycjDaLAq+5+i84dWbisTrBSgyES9YAQ54zuL7ZeD3d36pd5lXeo8M+I7i6
+	 nie90Na3ttHK2H4eW2ANM5DSjGVeyLXW8M6az0MggDn+D0fdlCOY5dcxWtRDe25ulZ7ZT
+	 TW5FG1PNEEAtoGWcWZbi4TjvrPRxeTy+EHr8kpjgq0E4wKPM3R3mjfwd8xdcToBGKEZRG
+	 /s6BFXSVcWIUo2az0St+CiD0SU6RMJtC5D+OCruiZmEmZ39iKHHewCJ7Xb9z0z3JC+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794291394;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=4Oeu07vqVy2JLN+Yu711g2KyCvjKmF5UCb4tBTlLQyw=;
-	b=h4TSxxpZKr8XNNk2Aq18fEjsuBLSW7h1fk/jphKJndojr2GV9iLiEZHl06PHMjiXMz7N
-	 gHXI6pXFx9gaiHtk/kgWB5LPCz+kvZHkJ0gWvfOBnevQGwrys3xfTfF2MlvFlzVq3wBar
-	 hQ8LDDfuE6zSNTv63sjpgsgI/TkJJ1N/w1CoSaOH/jjYjGFJFWVAdCSWjfR0yR0S92jOD
-	 Dz7Cc7VJjJaJqMZwAQ52GLbqfjHeJQO5UCPkY0Ao+tGTN5DsEZqHjNQKtJlXx9hgT++cp
-	 V0bQ1f7EZ6tuztyHmjmetQQrutG3gbqLpqbR/NNwTeaB/dBfMUMjRESUeZBYsLPFZOQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794291565;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=ULmBZxzjd9nmob9hw3BrOGPAN+eHGNmyepihG+CN0s8=;
+	b=4nfF5QzskVvDctPvWY+8NhGglzEWVFkzl1i+RPw6kD5YK9xy4FinJtOeRZ73O95V+OGd
+	 T/31xrlgb72VJExw0XOsXqActWCE2Qs/rnA4XUbfZFfqRpouTdcS4LPNFso5eUGJXOwkN
+	 Rj7FUIZF9RgyzJbWX3yWif/hCiG5XMylWH43H8ZTbuvPUL4lGRPacLkTKIh16ZhN53VZC
+	 B+FnuDs2u0Ll4fWRwP9Wx9cgmruGgQcumaedp5Vg622hgcPlV5o9mhuTZnHqTYF5z92cn
+	 xkC7jOdTo4/wUjyWaPKceVJAkIB5uJgp/hBegGgPu2yHFM8CFsLxRi5uWeIQN4ANd+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=grapheneos.org;
-	spf=pass smtp.mailfrom=grapheneos.org;
-	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=a21v7RIa;
-	arc=none smtp.remote-ip=206.220.120.4
-Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=APu2H1+i;
+	arc=none smtp.remote-ip=209.85.214.197
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D98A60A263F;
-	Tue, 10 Nov 2026 06:16:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D98A60A263F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46AD606A325
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 06:19:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D46AD606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=a21v7RIa
-Received: by mail.grapheneos.org (Postfix) id B46133C08EF3F;
-	Tue, 10 Nov 2026 06:16:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
-	s=default; t=1794291393;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4Oeu07vqVy2JLN+Yu711g2KyCvjKmF5UCb4tBTlLQyw=;
-	b=a21v7RIaoRJ0an++QN+Mm2oPu1OuK8aOcRDpjtunN1nnZnbZ0WIwSebGbXD5pH8IXetJ7G
-	REQVFjdxVMkE0ThIUw8lZexUxw87uNmaOLDJ+VFYwpRkhVC+OYPdgl2o18y7TtS02KVT8o
-	50W9By3neDRFcj9uyM6vmCqBREbWgjvqlHfoC8if2VYgXTrxjoAcsSKbE9IkGw4LHXhoaJ
-	Sht4x5g6wUGnh9J8Y+MX7uXoq188Oc5lK60urREWFg/bS7llRp0lioYmenPATppnX6kTmq
-	2jrPLpR6dwJ5hDIN1hBcR30QjdvqSV+jUPW22ISc57JWw7hXvKraANE7EzA96g==
-From: liamsmith827 <liamsmith827@grapheneos.org>
-To: netdev@vger.kernel.org
-Cc: David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	liamsmith827 <liamsmith827@proton.me>
-Subject: [PATCH net v2 4/4] ipv4: replace obsolete routing comment
-Date: Tue, 10 Nov 2026 06:15:36 +0000
-Message-ID: <20261110061536.10811-5-liamsmith827@grapheneos.org>
-In-Reply-To: <20261110061536.10811-1-liamsmith827@grapheneos.org>
-References: <20261110061536.10811-1-liamsmith827@grapheneos.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=APu2H1+i
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ed077a15c3so17378595ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2026 22:19:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794291564; x=1794896364; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ULmBZxzjd9nmob9hw3BrOGPAN+eHGNmyepihG+CN0s8=;
+        b=APu2H1+ik7IdrBZIaZnEAQ9+N/vfJh04TDRCzsHQ8gApRVTdpiv6gdKBgnRm7U1u1P
+         rkWSVBvKS0W6rC1PT1UNWRystkglBP30yLl2qF06gAD7fRKE3+djy0NmJVpEZPl0L+gK
+         VC4LMl6eLCvXzzakLrUoVPzl6rYBz/Zns59XG82izZuoGJ7Cx2YHcEBq3j6SzF9D8GmQ
+         k2oHWnhoZkv19hgyxY/n3kR0kyZfMjH+ojxms28aMAK+PPXBm6U0+hvwp0dW1VME3fBQ
+         EzFfGS8cLsxp72jmVmza5ieolAUgaR3Srk0Ct+CydekD1V7Ysn7nx6qc5JTTqnvoETT3
+         OwjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794291564; x=1794896364;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ULmBZxzjd9nmob9hw3BrOGPAN+eHGNmyepihG+CN0s8=;
+        b=zoONmM35AwFPBRO3Ww2ikQnl8SFL5O1y8/U7iO3YcsjxwaoCoVDRmIhi/8OMVgu+Oe
+         nc3S5YYlhpkLe0O3rZBIhTHSiExmwVDfRlg7GRBul+7mIH2DFohW4gwZ718xDWCdBgUa
+         ArHxxjUIH5D2UfMadZAGel6OVs2CJtNPrUkunv+zc7L3D81Ug/xlFJp/lCU9pZ/YExpz
+         Jpn9OEzkQWcU+Edo1E/sNyJFls7fCseiFqrcuzuciwmxcermJGdVILop3SFG60Xxn94S
+         MpGc+j4p4581SRmNunDI2tRk/fqtjtb6GPbA+M3VWgKaoucj5OAo25a7HJ6RZRwLqGc7
+         lejQ==
+X-Forwarded-Encrypted: i=1; AL+hErF0aAfuw6J7JL6Xze4Is6OFMw3Iw3IIuiRfGSjVWnbezVti0RkK0Kldubtyo5r65QSIsVPhKAbHp/yQQMzizUU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z92EDFRV7Z4UGoG7idWM+q3A0r6YKxa37azAhruKgnbMfF99um1
+	0hEAj2uGAY44VdTCAIeZSj2rg3Wj1AJcksKybXJf7uf0yAE/vajLVYUQL35M/ttO8YLLym9FSOT
+	linlctA==
+X-Received: from plbbi9.prod.google.com ([2002:a17:902:bf09:b0:2e9:dea5:138])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ccc9:b0:2e9:8b88:f1ee
+ with SMTP id d9443c01a7336-2edb91f89fdmr17283405ad.35.1794291563898; Mon, 09
+ Nov 2026 22:19:23 -0800 (PST)
+Date: Tue, 10 Nov 2026 06:19:23 +0000
+In-Reply-To: <20261110-mtu-probing-series-v3-1-dedfab25d641@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,59 +77,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20261110-mtu-probing-series-v3-0-dedfab25d641@gmail.com> <20261110-mtu-probing-series-v3-1-dedfab25d641@gmail.com>
+Message-ID: <avK3FGrs1ca2e-BT@google.com>
+Subject: Re: [PATCH net-next v3 1/4] tcp: initialize MTU probing before
+ syncing MSS at connection setup
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Yongjian Wang <echoowall@gmail.com>
+Cc: davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com, 
+	shuah@kernel.org, horms@kernel.org, ncardwell@google.com, kuba@kernel.org, 
+	netdev@vger.kernel.org, panweiping3@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-From: liamsmith827 <liamsmith827@proton.me>
+On Tue, 10 Nov 2026 00:44:35 +0800, Yongjian Wang wrote:
+> With tcp_mtu_probing=2, a passive connection starts at the full MSS
+> rather than tcp_base_mss. The IPv4 and IPv6 syn_recv_sock() paths
+> call tcp_sync_mss() before tcp_init_transfer() enables MTU probing.
+> With tcp_base_mss=1024, the first successful probe can therefore lower
+> the MSS from 1460 to 1242. On a black hole path, the first reduction
+> skips 1024 and goes straight to 512.
+> 
+> The issue surfaced while developing packetdrill coverage for MTU
+> probing and comparing the initial send MSS on active and passive
+> IPv4 connections.
+> 
+> Commit 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
+> removed tcp_mtup_init() from the passive setup paths.
+> Commit 27204aaa9dc6
+> ("tcp: uniform the set up of sockets after successful connection")
+> later moved MTU probing initialization into tcp_init_transfer(),
+> away from tcp_sync_mss().
+> 
+> Initialize MTU probing immediately before the existing tcp_sync_mss()
+> calls in the IPv4 and IPv6 passive setup paths and when processing
+> a SYN-ACK for an active connection. Remove the late initialization
+> from tcp_init_transfer(). This lets tcp_sync_mss() apply tcp_base_mss
+> without adding another MSS calculation to connection setup. The
+> crossed-SYN path already uses this order.
+> 
+> Fixes: 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
+> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Suggested-by: Neal Cardwell <ncardwell@google.com>
+> Signed-off-by: Yongjian Wang <echoowall@gmail.com>
 
-Replace an existing comment which describes obsolete fib_lookup(),
-MSG_DONTROUTE and IPv6 behavior.
-
-Signed-off-by: liamsmith827 <liamsmith827@proton.me>
----
- net/ipv4/route.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
-
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 80a2c8a3c571..ac94d8262b6e 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -2858,24 +2858,19 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
- 		if (fl4->flowi4_oif &&
- 		    (ipv4_is_multicast(fl4->daddr) ||
- 		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
--			/* Apparently, routing tables are wrong. Assume,
--			 * that the destination is on link.
-+			/* When oif is specified, fib_lookup() is called
-+			 * primarily to determine if the destination is
-+			 * accessible directly or through a gateway. It also
-+			 * checks whether there are any traffic restrictions
-+			 * (blackhole, prohibit, unreachable), or if there's a
-+			 * routing lookup miss.
- 			 *
--			 * WHY? DW.
--			 * Because we are allowed to send to iface
--			 * even if it has NO routes and NO assigned
--			 * addresses. When oif is specified, routing
--			 * tables are looked up with only one purpose:
--			 * to catch if destination is gatewayed, rather than
--			 * direct. Moreover, if MSG_DONTROUTE is set,
--			 * we send packet, ignoring both routing tables
--			 * and ifaddr state. --ANK
--			 *
--			 *
--			 * We could make it even if oif is unknown,
--			 * likely IPv6, but we do not.
-+			 * This fallback path is always taken for multicast,
-+			 * regardless of any restrictions or misses. Non-vrf
-+			 * unicast does honor restrictions, but falls back if
-+			 * there's a miss. The destination is assumed on-link
-+			 * for both.
- 			 */
--
- 			if (fl4->saddr == 0)
- 				fl4->saddr = inet_select_addr(dev_out, 0,
- 							      RT_SCOPE_LINK);
--- 
-2.47.3
-
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
