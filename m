@@ -1,115 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.157
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.149
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794346655;
-	b=ePyUiHRNJYOVV9TVP8nS1SGQpnMhDv1+gk19Blz3ESnjBL9ZWEnIYCwmqzpAGpuuGxmX
-	 Z7CtL+4KfGW8Z7ZJy9tzwW8UIrDFxiuHHF9z4p/aOpr0hs/mvAPBl/KYXR76NIfovoQql
-	 iffKtzX/IXoPSimfIH7Jp1VDhEpX4d/FxZWIh4XvcxTqmKfx0DICcZ8OEEy5eIt3VcCS3
-	 gyOjawQzQFPaaByD4gCHcmfAQz+lKJJIOVu/GFTCRs5drQAyVJrdBYa0NOCKkqKAavNbk
-	 V8OlArlSF30rXSnODKWWcHyR53/kevj8LqEAj/9osygnmZG88q9bRuw1HHwzP7F08Kw==
+	t=1794346658;
+	b=z3/hJo5SINUsbSlXn4dsYwNb9/C5c1lLcHy+F7xUmz3B6n4Y5SF/BeWhpWiTbTYLhErN
+	 So1TDsahn5o+xVqfaG6ZK1dxVt2SWBJH9Zr750NCVm+vxHSE9ApzFlKlVafR8e10B/jk7
+	 ItilOIouFsDufn+PXh0vpEegSpISAEJSCniP9ovpIIhFgc5ijZBdC1vhLi6P9uzMtOyjl
+	 ii9Dv/L20YaL4Q5ekm5lctu76wsp2RYv+wIim2B+9ddSnD01w3lE0ukz+W92wuObqtrHS
+	 lC1D1037PXDWQSwcDCDvJvfIkHborue0gxd0cpVmV8B30AHHIY+RncHDFb9uEAn5CDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794346655;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794346658;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
 	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
 	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
 	 Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer;
-	bh=DAgmNXTfpbXfKa6S7OGUo9aQXVJ3R8eY0yHFnv+eejs=;
-	b=AtT3d1C9HoGYb4CVzjUUzKHiV6x0lUw9VyzkPUqgQtKD55FzK/yvljIp6t69+nGDkO29
-	 tKnbSuibpNLzFj4kphrvvUnm8S9GIdLfQGt2hDEUicZqGFD4uwIyADUlS2g6Fd6RpegAr
-	 ra/1b4q7re0DnhkaI7p01aorrXIt/pRFwjVJTfXNJMiV1AZsXzLjrG2gCdbp1G6x8Wi9f
-	 1591R0LUH3nsdInR2MiqjDTF3zYXf0zU0tUd+4eBbHIrlCdEmrmI60xBq/zzUf4pGOl4M
-	 dYtoF+n4RcUnNk6N/EhPyE1/IZiB0M3FBrCphiszQBb6bE5D3N2p3KWVga5TVRVqXjg==
+	bh=HmnyzYI4NC7FFEJlhvkQV3ziJo06MpzXwTxFzxPsWpg=;
+	b=XOVwiPDDcM5p3+IXnlbsUOmrlHyCfsZ2+vUFjbj/GyklBh3Vb5MUSHVnIzTQw4wxlJAx
+	 VWUc6FIJH3AOvp4dA8tqJkL+iEbUrZervtn+RdgGB8NvvrUcbJS5WxVJG8azZzM4VwpVb
+	 9gLmazmgWXWT3iuUeu7Yy4CI1Qvhvp2Kmw97si9Mq9We+O5b6DC0td7tin93vHHKtRlH8
+	 tCMsbQn+5Jbef0+2KNHFJfOkA7Kl0HdbDg4JDeqX1Wy7WZFt+XGbUseWpzEPVLWrvnMEg
+	 /0lD5+fAH/plvHMJRp7EjP9EZ8Ir+s5lu+mRmPmSp1JRVjIZQBwCEDOHh1c9q67HC1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=fastmail.com;
 	spf=pass smtp.mailfrom=fastmail.com;
-	dkim=pass header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=Np4tTxxF;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=rDDd1bWY;
-	arc=none smtp.remote-ip=202.12.124.157
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+	dkim=pass header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=VZVHJDV6;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b="xqNs3/9z";
+	arc=none smtp.remote-ip=202.12.124.149
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9808A60A2601
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 21:37:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9808A60A2601
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844FE60A2612
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 21:37:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 844FE60A2612
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=Np4tTxxF;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=rDDd1bWY
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id E618F7A0278
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:37:33 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Tue, 10 Nov 2026 16:37:33 -0500
+	dkim=pass (2048-bit key, unprotected) header.d=fastmail.com header.i=@fastmail.com header.a=rsa-sha256 header.s=fm3 header.b=VZVHJDV6;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=xqNs3/9z
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfout.stl.internal (Postfix) with ESMTP id EDF771D0018A
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:37:36 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-10.internal (MEProxy); Tue, 10 Nov 2026 16:37:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1794346653;
-	 x=1794433053; bh=DAgmNXTfpbXfKa6S7OGUo9aQXVJ3R8eY0yHFnv+eejs=; b=
-	Np4tTxxFWuLcr8wZ1/V97Lkgp78gyQdflixwCbplordLy4g3Sl6iPZd082zgpm/r
-	adxj5dqEINktssCt6Pl6qzSx7EcZ1qfnl85TJxnmG6hEYPOYFKUlgZQEi5QidLhW
-	vuv1jJUWYDCltB0xWp/Vi22B0coyQqVcCi4kgYpMFNSa/vVTQ4+WpEN8npVHOAVi
-	816QAkuzmL4sW+5K+hg/0RbLXV4XtxdF5M4xLx4WHkHoxi/1Oh2YAMpZeH+bHIA6
-	o0GPnYAYNpDOo+0vD8jJ/Mx+qIqG0kUALo6zaAcQHGqdLT0XEPxEPY3Pd2hMeVy+
-	3wXruhPDLl/MxvRjSOjF7g==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1794346656;
+	 x=1794433056; bh=HmnyzYI4NC7FFEJlhvkQV3ziJo06MpzXwTxFzxPsWpg=; b=
+	VZVHJDV6sFaogEbrQ0R48VF4Lfjf5IZV3Juxu0ngsCzQF7PF1lVHcHN1UFaJy+RJ
+	U0G/rhSRAsFkZS674956DHrVML5Eczv9uPDkVmLX5qWsEyi8GROFquuOeV26yMY0
+	bsel24WouQaX+v7BSzN9CBIXm1frXB5fXm/+tS1FB9OP/m3DP3n9t98NzFzxe52S
+	R2/+nlCAyCBRkYBMyDKL5QxKuPHC1cXD/xUULryyPOXv2AjdAC5An5IoVQBOh8aZ
+	YplHjTlZdGne2k66cCCrAhbTIxypOVDhfTUg/QLcUS6rJoVwvWacHOIDr40T7o1X
+	NV6MI0KISBU/U//40KNlcA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794346653; x=
-	1794433053; bh=DAgmNXTfpbXfKa6S7OGUo9aQXVJ3R8eY0yHFnv+eejs=; b=r
-	DDd1bWYx/N97P7j+l04Ce04kDKN6ZcL31dCqj10/XKe5FLE89jCFBc2v28VoLJBM
-	3j8L27n3iyB2Zn/Fh1n1FxQf4ajkbfxsXtFVn1E/6orgSuXSO2FI5oHPUrazoitW
-	Fs+d/+Ah8NY6oXcXO7BtAi6Z14/ziG/G4Aq7HV4TKNfkt4eqi/M/7DaqEELflp9I
-	he4e7MRRCy1yIBnSdXbs/F6I6jckaWBsnJznbvIAczx3XUp78yuLKC4JcnKS6BUm
-	7a3CTDoWlDyJsA0d0xLwJly2cYdj75X+bhjY2Tys8vQF841rtymjIvR5atsVbhLx
-	CtjXsIl9QWCpn8/l+pt/w==
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794346656; x=
+	1794433056; bh=HmnyzYI4NC7FFEJlhvkQV3ziJo06MpzXwTxFzxPsWpg=; b=x
+	qNs3/9zSYlaONKaZq3VPU9UBqKoMiGAQAXQmI1apCu/2OiaY3E4ZBhuDDD8/4VKU
+	9BzzSDoixrFKmQRkCGte0AcsKE4zbnR+lJuCGwRmbhSLXlYMI8RQrWWpQGr5R+9F
+	2dpQDy0iL1YrJm0+xQw/cGnM6rCxfB4azfFZq5AfZYuyzKRLkghItFywHlKN7l1W
+	LEG4Jng+LQb9hQRuN7ffEpSRuogkJTeScxTkBHcxGDfFpSUdrM5uylJui5OScESu
+	ntmbm6RU1p6QGXibwycMFz0PvgnOnFncZpU2whPBRAPOdU6aVmKPUMBiGoJmHmCk
+	1H/fnk7gLP7dbpPtVDv4g==
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
 	action=sign d=fastmail.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794346653; d=fastmail.com;
+DKIM2-Signature: i=1; m=1; t=1794346656; d=fastmail.com;
 	mf=PGp1YW5sdUBmYXN0bWFpbC5jb20+;
 	rt=PGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm3:rsa-sha256:hI34So6VAlccIL3kYj16GS7GU4ZvEvf5Qlz/kbcGmTOg7NY
-	5BR3TVGGZLS64m8cSVLADLWwMVUyK/RKtenrNr6vDBQy1B8t652Nd++R3gZ+ENaV
-	JbtzmFCnrwsZY5Cryim4z0M2QHWXTC7T+DR5ZT+l+GMSN+lQIvnP+oAqpP1YA0uo
-	ApIyBhvoe818pILfVcJG2lRJgUaGJ+HdiO8GAd5k0bcisLQC69qwLXmjLMgLmcSb
-	qmKoqAS7eP1rMXwP4uch+QLXuX4tRfFgBvcUuBvNgGe3TiJrgWaPx0XUcbff25vT
-	1qX8ZQUefR921vacTOpD+0bJEIqcOoGZ1NzRn8w==;
+	s=fm3:rsa-sha256:PJEVhiA2djtkI4v3p7T/40xW7oB0lUgOjYjGCnCD6+OSeZp
+	ho7vfofHIoWCE3Te5UMYCXy9XPWrMv/wAbx4Y3iaFsOGPwo6d+Bsh2XcPpwmmw6G
+	KkNCr7rIsh3Y4Bb1tFg45S0Kmb3PxMJ2C7xa/cO5DWcdeMVHhiDlhpMFkDIkxUIK
+	SIO461FiCAiVtWiA19Qi8IfmRZdwTHt6MVGnTt6ol5bYutrY3DH5v0vd4xs1cBm0
+	q9XceRJG4jYQc57Opy4gw9lUtHwNSQmMWravpt6nzkv2o//a1O8TqFeMF4Pz7j+A
+	81M/ibsaMft551myG4d9823wFhMdVGL6EaMTDyw==;
 X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
 	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
 	action=mi-m=1; hc=12;
 	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
 	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:2CX10H8JoVidrLLvG9F8IcYxZO266HV4IEBXliJjxng=:lBVRBzi1HrV2oRlZgNvmYQY5wOEp9ku1L1JFVVgktXQ=;
-X-ME-Sender: <xms:nY7zalDO73lc4WFykTNBY7_rQXilAPPtYCi3hDK4wcMytbvGTSY_gg>
-    <xme:nY7zanOr_I0PaaUlY1uJjif5C1i0dAt-5ZvfEPN8VrfNrKfHwRpJ8woz-2E-Eggwl
-    CBW7V_2kJH7gPawngJfqInsDhuoPIsHt9JVmzNG5sltNnM-i0L5Jb-r>
-X-ME-Received: <xmr:nY7zapOfGQYRSjl5D4YETggFGIzYKbvtBW83iye4Kazc5-GrAE2elRIFgssUK7njY3Ow64wKJhGzpxmstw>
+Message-Instance: m=1; h=sha256:gW1DG81GwxOQdnOH24p38FLucUvQt83aQUTbPfczDuk=:f/GcBJZKLTIZ8eHBpQDVVCkyZSX10Wt04zDVixkF2Gc=;
+X-ME-Sender: <xms:oI7zat70OulmdVU62ktlHyNt5GAMp9na03JkPFXOij1wAQKm364nsA>
+    <xme:oI7zaumphyQuHsNRQl2vHzxG_lHzGXn6N6vcQ1AqeDKO7Rv4vYjWhV82mN66AQi-V
+    EVnPqK-ZhgDTbkp6HgmEQSalY2LZvgP4tREo7hqe9TbUIG9W1tUB6z3>
+X-ME-Received: <xmr:oI7zatH7reireYxj0kfoObXjzOGL3sS0AUa9gHXBm-HY054hJDijOT5JLcvIjr86Jure62LSFLjqa0NgAw8>
 X-ME-Proxy-Cause: dmFkZTGNVXlGWE+7P2XXaL26F5AMGtpK2TycDVlf+xOjA+PYERZl6/BW+lbT0+wzTsbcnL
     kBAhJvg1txFwRjOcd7bw7X+tErVQLKyqfU9/T4BbMHT193EbxKvHyY8bAQ6ww6NmZWX2Gj
     S4oVvhJFMJ2BxkJuVf9ujSPSfv16nLGp7k9bwFNTR8UP/etY4ewbE2QpklWLWUkhZbd3tk
     i2NFMM50EyvyBj3i7bkefkHzaAGSTWPc9b/2WlAEfIPv9QAFyLDidETcJqU8/KdZSLuzWm
-    YnikjaxRN8sYTqzmqmhrte8FXDDjJZwMnUc/kh6WLuGF7iefMNEW49vFlHrDG5ZIu0qxd+
-    D9vO3Bw4CT2UljGjG7FJWzQUcbDN5uNRik9Y7KEgJlbaRMK0H6OqShwO0uPXZhzQRqOBcx
-    HDS2ncD//RrwFwcGdxuA0OehwpJqUbR47QXYANZZLI52ra+xJkcEnd8QubtW6wn+aXThZA
-    GJVmjVI65mNH4XtuDybr6dte3omr/+b0SHLg06a+0Q8fUOpDuFGJs3Spr3d9MYUyWk9LRc
-    Ro1YkdIMoQ/wz55+nLCkHhP4QLdDCjA9LPffTuiez0R9PxXSvL0DCGZNKQM0kqYx7nl6CA
-    RT3C36a865oywJ0cc12qZtpAI8jRTB2BMB3yVkyuIg9utQYWA3EJ/ha6b4jw
-X-ME-Proxy: <xmx:nY7zahJLS2TIUV3aJPAejjG1y6YVpO7ZAIuRdXyxsjnuWPdVl-dgeg>
-    <xmx:nY7zarqqg0kNosLfmf7aZPAJ6M9EmpRLDRIMaSfFnA8mr0lM6ysNCQ>
-    <xmx:nY7zalMMCebesuQS66oBZZAf2A8_7lB9wlGbZY9bRqyrSELZBD2F-g>
-    <xmx:nY7zashk7EvZ9_U85VbuiIwum2xxFoxGwqApoHmdtBef4RRrqJ1_sg>
-    <xmx:nY7zai-hwiVsOiUZWeUh7KLEJnb9iXPW7FSUW4yz9foBE8KkkS_SEE2P>
+    YnikjaxRN8sYTqzmqmhrte8FXDDjJZwMnUc/kh6WLuGF7iefMNEW49vFlHrDG5ZIu0qxeh
+    4kwaVDCtUT1CaM3RYhJmWG/D1XjLCRHErbsgfIdM39qycKFGQ2tTwPGC3ck7HTTMLF7k2V
+    EV78uyTh1Ruu3uXN2sOf4yDSz3Y6/UyEMkdWt57IySF7aHGG7ssdvme2hlJjYtzgWoyNIf
+    oahXqBzQNpUhN9aps/IGi+mlUvjkDz8XPyM53CxgiVJHZyWkporo+cZaph/QD8EieDNLN2
+    BNp7OYWGZBLlnU/4Iq0oM2U8lyoh/5f3ueJvi/HyE8b0ZuUOCP+z6GcU69gPvV1/t20nl+
+    hsPDQqN1Q49QpVe0kfdIxvQfZiooWqzReQ5tj1W2Xg4KDp/RhhoqGakArtSw
+X-ME-Proxy: <xmx:oI7zanhFfvVE47gYQpin6yRvxCv8GOLdBbpPSSh-VsVKHesW9tab7g>
+    <xmx:oI7zaijsNzOEAPT8OmP27I6BWr4ekVaXj5vHqp6HIMGvfe4WP3T3NA>
+    <xmx:oI7zaim8-Q8B51V5ZonLAI2lBzpy8qsI56Y_-Lq4lCOP7Q3uwbDvQg>
+    <xmx:oI7zauaGqRIyxXAPh84XhqrM7MBnZ3j5_lBF34tNolP6lKoI3vAiEg>
+    <xmx:oI7zatTYQpmnW_O3FVAZwfwJH9iGtWym4YML80W7DP1HApoiV0GffpFl>
 Feedback-ID: i80b64ba7:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Nov 2026 16:37:32 -0500 (EST)
+ 10 Nov 2026 16:37:36 -0500 (EST)
 From: Juanlu Herrero <juanlu@fastmail.com>
-Date: Tue, 10 Nov 2026 13:36:47 -0800
-Subject: [PATCH 1/3] selftests: net: make iou-zcrx area size configurable
+Date: Tue, 10 Nov 2026 13:36:48 -0800
+Subject: [PATCH 2/3] dma-debug: skip irrelevant buckets for partial syncs
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -121,7 +121,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261110-zcrx-dma-debug-registration-v1-1-48743ea61631@fastmail.com>
+Message-Id: <20261110-zcrx-dma-debug-registration-v1-2-48743ea61631@fastmail.com>
 References: <20261110-zcrx-dma-debug-registration-v1-0-48743ea61631@fastmail.com>
 In-Reply-To: <20261110-zcrx-dma-debug-registration-v1-0-48743ea61631@fastmail.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -134,109 +134,124 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Juanlu Herrero <juanlu@fastmail.com>
 X-Mailer: b4 0.13.0
 
-Add an -a option for selecting the area size in pages while keeping
-8192 pages as the default. Combined with -d option, it allows
-registration testing without running traffic.
+Partial syncs may start after a mapping's first hash bucket. Finding the
+mapping then requires locking earlier buckets.
+
+Keep a conservative size bound per bucket and skip those that cannot
+span the sync range. Raise the bound on insertion and reset it when the
+bucket empties. Stale larger bounds only add searches, so removal needs
+no list rescan to update the bound.
+
+This relies on ordered map publication before sync and unmapping after
+sync. The bucket lock carries earlier bound updates through later
+insertions even when the bound is unchanged.
 
 Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
 ---
- tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 33 ++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 6 deletions(-)
+ kernel/dma/debug.c | 49 +++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 39 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index 91b025a8771e1..652b076d10fd5 100644
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <assert.h>
-+#include <ctype.h>
- #include <errno.h>
- #include <error.h>
- #include <fcntl.h>
-@@ -59,7 +60,7 @@ struct t_io_uring_zcrx_ifq_reg {
+diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+index 4cb5f86a7228a..8dad45d0a4360 100644
+--- a/kernel/dma/debug.c
++++ b/kernel/dma/debug.c
+@@ -90,6 +90,8 @@ typedef bool (*match_fn)(struct dma_debug_entry *, struct dma_debug_entry *);
+ struct hash_bucket {
+ 	struct list_head list;
+ 	spinlock_t lock;
++	/* Upper bound on live mapping sizes; reset when the bucket empties. */
++	unsigned long max_entry_size;
  };
  
- static long page_size;
--#define AREA_SIZE (8192 * page_size)
-+#define AREA_SIZE (cfg_area_pages * page_size)
- #define SEND_SIZE (512 * 4096)
- #define min(a, b) \
- 	({ \
-@@ -88,6 +89,7 @@ static int cfg_send_size = SEND_SIZE;
- static struct sockaddr_in6 cfg_addr;
- static unsigned int cfg_rx_buf_len;
- static bool cfg_dry_run;
-+static size_t cfg_area_pages = 8192;
- static int cfg_num_threads = 1;
- 
- static char *payload;
-@@ -328,6 +330,7 @@ static void *server_worker(void *arg)
- 	struct thread_ctx *ctx = arg;
- 	uint64_t tstop;
- 	int nr_conns;
-+	int ret;
- 	int i;
- 
- 	params.flags |= IORING_SETUP_COOP_TASKRUN;
-@@ -336,9 +339,12 @@ static void *server_worker(void *arg)
- 	params.flags |= IORING_SETUP_SUBMIT_ALL;
- 	params.flags |= IORING_SETUP_CQE32;
- 	params.flags |= IORING_SETUP_CQSIZE;
-+	params.flags |= IORING_SETUP_CLAMP;
- 	params.cq_entries = AREA_SIZE / page_size;
- 
--	io_uring_queue_init_params(512, &ctx->ring, &params);
-+	ret = io_uring_queue_init_params(512, &ctx->ring, &params);
-+	if (ret)
-+		error(1, -ret, "io_uring_queue_init_params()");
- 	setup_zcrx(ctx);
- 
- 	if (cfg_dry_run)
-@@ -574,9 +580,10 @@ static void run_client(void)
- 
- static void usage(const char *filepath)
+ /* Hash list to save the allocated dma addresses */
+@@ -354,27 +356,49 @@ static struct dma_debug_entry *bucket_find_contain(struct hash_bucket **bucket,
+ 						   struct dma_debug_entry *ref,
+ 						   unsigned long *flags)
  {
--	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
--		    "-l<payload_size> -i<ifname> -q<rxq_id> -t<num_threads>",
--		    filepath);
-+	error(1, 0, "Usage: %s %s %s %s", filepath,
-+	      "(-s|-c) -h<server_ip> -p<port>",
-+	      "-l<payload_size> -i<ifname> -q<rxq_id>",
-+	      "-t<num_threads> [-a<pages>] [-d]");
+-
+ 	struct dma_debug_entry *entry, index = *ref;
++	u64 min_offset = (index.dev_addr & ((1ULL << HASH_FN_SHIFT) - 1)) + 1;
+ 	int limit = min(HASH_SIZE, (index.dev_addr >> HASH_FN_SHIFT) + 1);
+ 
+-	for (int i = 0; i < limit; i++) {
++	entry = __hash_bucket_find(*bucket, ref, containing_match);
++	if (entry)
++		return entry;
++	put_hash_bucket(*bucket, *flags);
++
++	for (int i = 1; i < limit; i++) {
++		unsigned long max_entry_size;
++
++		index.dev_addr -= (1 << HASH_FN_SHIFT);
++		*bucket = &dma_entry_hash[hash_fn(&index)];
++		/*
++		 * Writers serialize updates with the bucket lock. For any entry
++		 * that can validly match this sync, publishing the mapping is
++		 * ordered before the sync, including a cross-CPU handoff, and
++		 * unmapping is ordered after it. The bound only grows while the
++		 * bucket is nonempty, so it cannot become smaller than a live
++		 * entry. Removing an unrelated mapping may leave a larger bound,
++		 * which only causes an unnecessary search.
++		 */
++		max_entry_size = READ_ONCE((*bucket)->max_entry_size);
++		/* The mapping must span the distance back to this bucket. */
++		if (max_entry_size < ref->size ||
++		    max_entry_size - ref->size < min_offset)
++			goto next;
++
++		*bucket = get_hash_bucket(&index, flags);
+ 		entry = __hash_bucket_find(*bucket, ref, containing_match);
+ 
+ 		if (entry)
+ 			return entry;
+ 
+-		/*
+-		 * Nothing found, go back a hash bucket
+-		 */
+ 		put_hash_bucket(*bucket, *flags);
+-		index.dev_addr -= (1 << HASH_FN_SHIFT);
+-		*bucket = get_hash_bucket(&index, flags);
++next:
++		min_offset += 1ULL << HASH_FN_SHIFT;
+ 	}
+ 
++	*bucket = get_hash_bucket(ref, flags);
+ 	return NULL;
+ }
+-
+ /*
+  * Add an entry to a hash bucket
+  */
+@@ -382,14 +406,19 @@ static void hash_bucket_add(struct hash_bucket *bucket,
+ 			    struct dma_debug_entry *entry)
+ {
+ 	list_add_tail(&entry->list, &bucket->list);
++	if (entry->size > bucket->max_entry_size)
++		WRITE_ONCE(bucket->max_entry_size, entry->size);
  }
  
- static void parse_opts(int argc, char **argv)
-@@ -594,7 +601,7 @@ static void parse_opts(int argc, char **argv)
- 		usage(argv[0]);
- 	cfg_payload_len = max_payload_len;
+ /*
+  * Remove entry from a hash bucket list
+  */
+-static void hash_bucket_del(struct dma_debug_entry *entry)
++static void hash_bucket_del(struct hash_bucket *bucket,
++			    struct dma_debug_entry *entry)
+ {
+ 	list_del(&entry->list);
++	if (list_empty(&bucket->list))
++		WRITE_ONCE(bucket->max_entry_size, 0);
+ }
  
--	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:dt:")) != -1) {
-+	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:a:dt:")) != -1) {
- 		switch (c) {
- 		case 's':
- 			if (cfg_client)
-@@ -632,6 +639,20 @@ static void parse_opts(int argc, char **argv)
- 		case 'x':
- 			cfg_rx_buf_len = page_size * strtoul(optarg, NULL, 0);
- 			break;
-+		case 'a': {
-+			char *end;
-+			unsigned long long area_pages;
-+
-+			errno = 0;
-+			area_pages = strtoull(optarg, &end, 0);
-+			if (!isdigit((unsigned char)optarg[0]) || errno ||
-+			    end == optarg || *end || !area_pages ||
-+			    area_pages > UINT_MAX ||
-+			    area_pages > SIZE_MAX / page_size)
-+				error(1, 0, "invalid area page count: %s", optarg);
-+			cfg_area_pages = area_pages;
-+			break;
-+		}
- 		case 'd':
- 			cfg_dry_run = true;
- 			break;
+ /*
+@@ -1100,7 +1129,7 @@ static void check_unmap(struct dma_debug_entry *ref)
+ 	}
+ #undef DMA_ATTR_UNMAP_VALID
+ 
+-	hash_bucket_del(entry);
++	hash_bucket_del(bucket, entry);
+ 	put_hash_bucket(bucket, flags);
+ 
+ 	/*
 
 -- 
 2.53.0-Meta
