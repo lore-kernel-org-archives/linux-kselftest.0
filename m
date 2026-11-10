@@ -1,53 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794338859;
-	b=C4MKcqw09fxrfWaXqfo61l6UdMBpA4dqh/g/XaGs25+zF6/Xywre9CBMIHd+p6kDWaes
-	 eLFXjNovXELxD9y5aY5DcR2vuCT/6Lw/3iZEJue5OFJMhavm106sDTj2CIvCLpLoWsXL7
-	 sNWrDoEC60123M+FmRTX3Fql05AQEC1Sq1mm1yh5WKXgtoWWHP6DVFIPvMFxMXRYL1dIq
-	 NeZpZFNjPQYxPzbBVjuGt8poxDuFmFWvfxUoUVk11YWpoLBkdA6dajUYAZmbzmtMESDm/
-	 3F58jrOPt3nyBbn14zQB3fRSQtQ77tD3rDtTYcfjxx4SoK3rS6KUuHkO2RiFuBmsv6Q==
+	t=1794340043;
+	b=YvBPPwr/3kslagv8myJq+eeUX0Cd1VeHL4H+3HQXG0ybFbSp3+o8A/spBST9kDd0ieND
+	 pupyxpUzVppTEIKwNEhXCXIPJybNmo83wVN4FZ9DP0HScGURUyLJDsqrSRQSTscDyQq68
+	 NxjWNRgFbGpaE6DWj9o8H1kuK39rRQJ0PP3GCN58ry8pJFVxVk+z31gvfRd72l6s8u1sP
+	 HRGV3PEMu8KY8Z/suRZV5CtBZWiFWOR1HMVBaSV28XWlhljuXVFjuxnHGsJz4v7vJBk2o
+	 fr/oAe6930SYzr9ovlbFM/Q/3HKauxmo5NI6BwZbhxYsbGCfNMog/e8uvhKcxBwwgFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794338859;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=JhoX3osY26F1MqRN+osOMk8T+9PdZqeDfzPnj4Ocp3w=;
-	b=DJGjYcov3mXooexhPigxQYM54feauDxbBFHy9shfUjyl9ArpqzInjZlEuPZN2sp3iyJg
-	 5dXP8OrJ/y9rw1ESqtGY4mYbFsfH7fgJ4lrK+CHB+ClDsTBheE/kGWzYzFhgZx3yfIOdn
-	 yismgo4MXBCM+eqpvk2epnQlPHOYnWaT6KIfjDLjW1mP+e7ks1Mi2lQROmK9g/9vb4zx9
-	 rVrpT7ihnyitDVNPwUuyyPHuzrXHAbGdEDg9n60yczt7Yt+PCxEb5C5xdNZWopzFTz6Ac
-	 JZsEc1XuPxk4UmTTu1eZ5cT4l435kHh8xrWTnCDa2uGLnYsyEKIABe+yEHwmdT2TXwQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794340043;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=dqGz2Ceiqh+ClSBXpHsYkjX+5pBbS+WZ/wLFaJOG/RQ=;
+	b=Q8Hh+axQWeeUqtIClN/743DbHhIKrWflATYW1ZHv5oWWqLYxrzCsAyGbi3OSfhFfYnJy
+	 4rF/5v/fbodYtYYbUXXDnOJDBEelgsZDpMJel36lMg5O5uV6mohxSx8pv5Q+IUwgWtX9R
+	 a56/1XlvDQ5KsmK4abCg1NM6kCEsHbh91kxHNI+vtEzBA0SjcLAS0SFnqMw7EnGACBiS3
+	 6KLZbC3GzTOwVzxAV/9vT5UUZGhvGeD2CuCTDtAMBtVXWaQOqk9mVd0M1YnkfawPbOwj1
+	 xa9IN41Yt2SwE+atyMzLvpu6QBqyCbLYaL9/8QXTPbHjkDZUheNDYrHAJtOsV9wsbJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ikmk3pxA;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AFsQoIbT;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=LlbC0SDd;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B17606A321;
-	Tue, 10 Nov 2026 19:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B395606A326
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 19:47:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B395606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ikmk3pxA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3D91F0089F;
-	Tue, 10 Nov 2026 19:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794338858;
-	bh=JhoX3osY26F1MqRN+osOMk8T+9PdZqeDfzPnj4Ocp3w=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ikmk3pxAY/SwBAYX+1FYoDk3XIXo2sUOx1rH6r9L7YDZesC1mmOQWEnxPSYekP9be
-	 1TBo2gykXeNCtYlkdIJs/TzgKHeeArN+ocJLcAnSNsQN42DeV02puqaDsYdwpnJp0o
-	 h08CFPnRir1nUEHWrdXn7qHKuaKWFLO8Q+PCQIItmZL5f+iRsojmX9s9FncJDJ1CkP
-	 LGpAIW1wyib35VLfsATFLHggCyfcXgP8ga36rVT6wlaAtO8WbOFBRR75eGik0x9HJR
-	 6Jn8lvvtbIWfplTGC4y3NqENeV7i2CbTe/FAVmpzRqfH+xnmLGn9N/qYTdoIeFCWN8
-	 xoam6TraMLnWA==
-Date: Tue, 10 Nov 2026 09:27:37 -1000
-Message-ID: <898b08d81ed8e3f1ee7d4985e4b47992@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>, sashiko-bot@kernel.org
-Subject: Re: [PATCH-next v2 0/5] More fix patches
-In-Reply-To: <20261109190955.1398611-1-longman@redhat.com>
-References: <20261109190955.1398611-1-longman@redhat.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AFsQoIbT;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=LlbC0SDd
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794340041;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dqGz2Ceiqh+ClSBXpHsYkjX+5pBbS+WZ/wLFaJOG/RQ=;
+	b=AFsQoIbToRtVBfKbZYZXx6UY5SQePeCRt2uY2xa1EoWVQ2yKRXfeuU6zzufjtiIE9GpHsM
+	y6DTlzGJpUNFQXGIrxV4rwl6DMFrVj5+RYx1WwmB6i/N6947NDuolrVCavhhstCQZBah18
+	sWjXPjt0OpivTzcU/geJCwD9aOknlxA=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-644-W0jilwClM9abnaleCodv9Q-1; Tue, 10 Nov 2026 14:47:19 -0500
+X-MC-Unique: W0jilwClM9abnaleCodv9Q-1
+X-Mimecast-MFC-AGG-ID: W0jilwClM9abnaleCodv9Q_1794340038
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-49090fde23aso1995508f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 11:47:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794340038; x=1794944838; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=dqGz2Ceiqh+ClSBXpHsYkjX+5pBbS+WZ/wLFaJOG/RQ=;
+        b=LlbC0SDdRVWh4mfVKJGcz5b2K1ftvVEwGYBArWTbuHzMzf/WlvIaTFqn3TBV0fMdHW
+         IUtbcJZSynNEkxstfl9y8Xw9FB6x8XZy3ZL4ueoM+AOvSiPzyJw2AyaQ53hiXbSwjO5n
+         DfF/YJJej+qDZYCASm9EKgkM/rEC6Q6FKfh1wb8FKCMHL8MlPNlXOoH0DKCapBIxUN8c
+         PxtPyNUHRKaSNw8eocImUNNnqMgAMkw6iZYVKWAgi+V6ihSZ8wKg6kMeALRagobSk7wE
+         XrgBjXNXzgRTleufl4Xyrl3ORlMUmgkXwSwrQb+Amt1D9BGvERr+shOhs6oBi1X0wSlr
+         g0zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794340038; x=1794944838;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dqGz2Ceiqh+ClSBXpHsYkjX+5pBbS+WZ/wLFaJOG/RQ=;
+        b=eFwtb9+cTvNTRxdsCqqg4VXWlBygWQ6GrMO8M9ll06uoPzlpst/4POu/W5LA60reia
+         hCssD8NO2RTc3OhvymXYlP5n5d7XbgwL/72mcF47ZH6U/uksKs3PnK0pA7/aKpjQTTTG
+         eYHI2L2IgxVcF7GQavnPqBmRtjNMfKmYFaRiNa803xV8WeKUgEf5uOPyUYiXw6KaPEN3
+         An8iNdomCrKOQ10i1NGDvzI9oYsO29gslfo/T9SN6Xf2/V3CopfQz04QkQykae+DEXho
+         LCgtKv3hmqCSR25pnHKpvqC5h/svJ2X46k57ZfRbYxRsJD0BFMH2SviNR3IbX8NNjl8l
+         r7sA==
+X-Forwarded-Encrypted: i=1; AL+hErFtYKGPPwBwzyb9j+zWG5Sf/PqL9oV22x1HoOr0PQ1h/Phkn5RRDhk5nQDH8ylEyKx3DV2dWMGYF6TYrsbHiXE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9CKzVCu5dtsbljrZEFnvZY6ctMvI3DXGyjOXsnuCsRHjUbdEWl
+	IbqMR4v2bPHMkWlBPphaB/V6BqTVd+upsnPGjBxvPHKyhUvOZxGjIv+28P4QuQ2E0V8opeDFStv
+	zk8FNUD6m1k3l6XnynxQZhOT2D3FYurP0xoF1+FlqOGJGPJnjLjr3vD9NTrwg6hEgS86eXQ==
+X-Gm-Gg: AYBFou1ijM4tyuKLe36Frw08IrwCJJj+Nx8g4vybfLmEc1KimM5Ptx9rvUY+fzhgYHR
+	fJgCt3MNWAmzIDrl2ZDXP5hm2oH71KTPUzOMSdHsFd22+AZWPNThZyQQJz/g9cokHmseBLYcyz+
+	NMAY6Mw41uIpxF1WMVu+STWAu0tNVPeyqU7pL737kF9ycT+FHWuWcgk6Xoowig/yTR+ro368B7I
+	UOVyrd0wwtPkcWQ3zkt9ZXr3F4nlPMZi0v1Wu80k91AwhlszSLLHBfiIoYIbmVTRicAZke/uMFs
+	Un6oIJuT+mA6TC17i8z3es/tVoDHCIZbWJjpqJWF2Ja57Us2alTFUoC2wT+rMP9c+UAbbF7/OoR
+	4skXgS2IT+wk2dOb7G9MtWuL6p2YaUjMMrLTndB8RlFvf4EG6XNPOkoXHmfDL8eW/qKts3d+HfM
+	XpNkM=
+X-Received: by 2002:a05:6000:2dc1:b0:497:bd30:8e39 with SMTP id ffacd0b85a97d-498304e5dd4mr6728816f8f.44.1794340038292;
+        Tue, 10 Nov 2026 11:47:18 -0800 (PST)
+X-Received: by 2002:a05:6000:2dc1:b0:497:bd30:8e39 with SMTP id ffacd0b85a97d-498304e5dd4mr6728770f8f.44.1794340037803;
+        Tue, 10 Nov 2026 11:47:17 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49836a9951csm6505110f8f.56.2026.11.10.11.47.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 11:47:17 -0800 (PST)
+Date: Tue, 10 Nov 2026 20:47:14 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v5 11/29] sched/deadline: Release the bandwidth of a task
+ that leaves the class asleep
+Message-ID: <avN0wpOY2zoRnK8q@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-12-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,33 +129,195 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20261108185406.1549770-12-mathieu.desnoyers@efficios.com>
 
->   selftests/cgroup: Fix "test_cpuset_prs.sh -v" failures
->   cgroup/cpuset: Correctly set cpus_updated in
->     cpuset_hotplug_update_tasks()
->   cgroup/cpuset: Fix incorrect partition invalidation logic in
->     cpuset_hotplug_update_tasks()
->   cgroup/cpuset: Protect current->mems_allowed read in cpuset_fork()
->   cgroup/cpuset: Correctly set isolated_cpus when switching partition
->     state
+Hello,
 
-Applied 1, 4 and 5 (5 as v2.1) to cgroup/for-7.4-fixes with the following
-changes:
+On 08/11/26 13:53, Mathieu Desnoyers wrote:
+> A task that leaves SCHED_DEADLINE while it is not queued can keep its
+> bandwidth in total_bw until the next rebuild of the root domains.
+> Repeated, this fills total_bw up to the admission limit. Then
+> sched_setattr(SCHED_DEADLINE) and CPU offlining fail with EBUSY.
+> 
+> A task that leaves the class keeps its bandwidth until its 0-lag time.
+> Releasing it earlier would allow temporary overloads. For a queued task,
+> switched_from_dl() calls task_non_contending(). It releases the
+> bandwidth if the 0-lag time is past. Otherwise it arms the inactive
+> timer, which releases it then. For a task that is not queued,
+> switched_from_dl() relies on the timer armed when the task blocked.
+> 
+> But that timer is not always armed. The task may have blocked after its
+> 0-lag time. Or the timer fired while the task was still in the class,
+> and only removed running_bw. Then nothing releases total_bw. The timer
+> is also cancelled before the 0-lag time when the task wakes up on
+> another CPU, or comes back to the class asleep.
+> 
+> Fix this in switched_from_dl(), for a task that is not queued and has no
+> timer pending. If the 0-lag time is ahead, arm the timer. If it is past,
+> release the bandwidth now. Then clear the parameters, as
+> inactive_task_timer() does, so that no later path releases the bandwidth
+> again. A timer handler that already started finds a dl_bw of 0. The
+> deboost of a later priority inheritance boost finds no parameters. Since
+> "sched/deadline: Take a deadline boost from the waiter's rt_mutex node",
+> a boost that the task gives as a waiter does not read them.
+> 
+> Juri Lelli's first fix, since dropped from tip, released the bandwidth
+> here without clearing dl_bw. The bandwidth of a boosted task was then
+> released twice.
+> 
+> The Sashiko AI review of the third posting found the two cases with the
+> 0-lag time ahead. deadline_bw_test, added later in this series, tests
+> this in pi_former_owner_asleep and deboost_released_resets_period.
+> 
+> Link: https://lore.kernel.org/all/20261103-b4-sched-dl-bw-fixes-v1-2-dd761fe005b4@redhat.com/
+> Fixes: 209a0cbda7a0 ("sched/deadline: Improve the tracking of active utilization")
+> Reported-by: Tejun Heo <tj@kernel.org>
+> Closes: https://lore.kernel.org/all/2b5fb3f22bca6aa383be8f4781923392@kernel.org/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+>  kernel/sched/deadline.c | 98 ++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 81 insertions(+), 17 deletions(-)
+> 
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index e6c55afcfd01..d5d0f87d3a94 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -403,6 +403,23 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
+>  
+>  static void __dl_clear_params(struct sched_dl_entity *dl_se);
+>  
+> +/*
+> + * Return the 0-lag time of @dl_se, relative to the clock of its runqueue.
+> + * After @dl_se blocks or leaves the class, its utilization counts until
+> + * that time.
+> + */
+> +static s64 dl_zero_lag(struct sched_dl_entity *dl_se)
+> +{
+> +	struct rq *rq = rq_of_dl_se(dl_se);
+> +
+> +	/*
+> +	 * Using relative times instead of the absolute "0-lag time"
+> +	 * allows to simplify the code
+> +	 */
+> +	return dl_se->deadline - rq_clock(rq) -
+> +	       div64_long((dl_se->runtime * dl_se->dl_period), dl_se->dl_runtime);
+> +}
+> +
+>  /*
+>   * The utilization of a task cannot be immediately removed from
+>   * the rq active utilization (running_bw) when the task blocks.
+> @@ -476,15 +493,7 @@ static void task_non_contending(struct sched_dl_entity *dl_se, bool dl_task)
+>  
+>  	WARN_ON(dl_se->dl_non_contending);
+>  
+> -	zerolag_time = dl_se->deadline -
+> -		 div64_long((dl_se->runtime * dl_se->dl_period),
+> -			dl_se->dl_runtime);
+> -
+> -	/*
+> -	 * Using relative times instead of the absolute "0-lag time"
+> -	 * allows to simplify the code
+> -	 */
+> -	zerolag_time -= rq_clock(rq);
+> +	zerolag_time = dl_zero_lag(dl_se);
+>  
+>  	/*
+>  	 * If the "0-lag time" already passed, decrease the active
+> @@ -3606,15 +3615,69 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
+>  	dec_dl_tasks_cs(p);
+>  
+>  	if (!task_on_rq_queued(p)) {
+> -		/*
+> -		 * Inactive timer is armed. However, p is leaving DEADLINE and
+> -		 * might migrate away from this rq while continuing to run on
+> -		 * some other class. We need to remove its contribution from
+> -		 * this rq running_bw now, or sub_rq_bw (below) will complain.
+> -		 */
+> -		if (p->dl.dl_non_contending)
+> +		bool released = false;
+> +
+> +		if (p->dl.dl_non_contending) {
+> +			/*
+> +			 * Inactive timer is armed. However, p is leaving
+> +			 * DEADLINE and might migrate away from this rq while
+> +			 * continuing to run on some other class. We need to
+> +			 * remove its contribution from this rq running_bw now,
+> +			 * or sub_rq_bw (below) will complain.
+> +			 *
+> +			 * inactive_task_timer() will find !dl_task(p) and
+> +			 * release total_bw via __dl_sub().
+> +			 */
+>  			sub_running_bw(&p->dl, &rq->dl);
+> +		} else if (p->dl.dl_runtime && !dl_entity_is_special(&p->dl) &&
+> +			   dl_zero_lag(&p->dl) >= 0 &&
+> +			   !hrtimer_active(&p->dl.inactive_timer)) {
+> +			/*
+> +			 * No inactive timer is armed, but the 0-lag time is
+> +			 * ahead. Either the task is waking up on another CPU,
+> +			 * and migrate_task_rq_dl() cancelled the timer. Or it
+> +			 * came back to the class asleep, and switched_to_dl()
+> +			 * cancelled it. Arm the timer, as for a queued task.
+> +			 * Its handler finds the task out of the class and
+> +			 * releases total_bw. running_bw is already off this
+> +			 * runqueue, or was never on it.
+> +			 */
+> +			task_non_contending(&p->dl, false);
+> +		} else if (p->dl.dl_runtime && !dl_entity_is_special(&p->dl)) {
+> +			/*
+> +			 * No inactive timer is armed, and the 0-lag time is
+> +			 * past. Either the task never ran in the class, or it
+> +			 * blocked after its 0-lag time. Or the timer fired
+> +			 * while the task was still in the class. Nothing else
+> +			 * releases total_bw, so release it now.
+> +			 *
+> +			 * A timer whose handler already runs also leads here,
+> +			 * since hrtimer_active() is true. The handler waits
+> +			 * for the runqueue lock, then finds a dl_bw of 0,
+> +			 * cleared below.
+> +			 *
+> +			 * A task deboosted from priority inheritance, with no
+> +			 * parameters of its own, has no bandwidth in total_bw.
+> +			 * Neither has a special task.
+> +			 */
+> +			struct dl_bw *dl_b = dl_bw_of(task_cpu(p));
+> +
+> +			raw_spin_lock(&dl_b->lock);
+> +			__dl_sub(dl_b, p->dl.dl_bw, dl_bw_cpus(task_cpu(p)));
+> +			raw_spin_unlock(&dl_b->lock);
+> +			released = true;
+> +		}
+>  		sub_rq_bw(&p->dl, &rq->dl);
+> +		/*
+> +		 * Clear the parameters too, as inactive_task_timer() does at
+> +		 * the 0-lag time. Then no later path releases the bandwidth
+> +		 * again. A later priority inheritance boost sees a task with no
+> +		 * parameters of its own. task_contending() and
+> +		 * task_non_contending() skip it, and its deboost releases
+> +		 * nothing.
+> +		 */
+> +		if (released)
+> +			__dl_clear_params(&p->dl);
 
-- 1: Nonexistent commit ID 6e4834ba8986 in the description corrected to
-  362212853cd0.
-- 5: "update_cpumasks_heir()" typo in the description fixed.
-- 5: Missing trailing "\" line continuation added to the first line of the
-  two new TEST_MATRIX entries in test_cpuset_prs.sh.
+The fix looks right, but I wondered if we can condense a bit the above
+if-else tree. It's essantially doing what task_non_contending() does
+already (special and non-DL tasks checks included)?
 
-The following tags were also added:
+What about something like
 
-  Reviewed-by: Ridong Chen <ridong.chen@linux.dev> (1, 4, 5)
-  Tested-by: Ridong Chen <ridong.chen@linux.dev> (1, 5)
-  Cc: stable@vger.kernel.org # v6.8+ (5)
+     if (!task_on_rq_queued(p)) {
+         if (p->dl.dl_non_contending)
+           sub_running_bw(&p->dl, &rq->dl);
+         sub_rq_bw(&p->dl, &rq->dl);
 
-Thanks.
+         if (!p->dl.dl_non_contending)
+           task_non_contending(&p->dl, false);
+    }
 
---
-tejun
+I ran the same collapse on top of the series and it passed the selftests
+with LOCKDEP w/o warnings.
+
+Thanks,
+Juri
+
