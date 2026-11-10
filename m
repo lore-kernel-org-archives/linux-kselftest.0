@@ -1,84 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794343565;
-	b=HNsC/vjJBuB5u/YK1G2yiqB2RKoFSadg3+fEXWHpxKyVV+t3ZMJlnzs3cuBbSaVwbkFi
-	 /QUt6or7HXVdMYUwrMAUZmBIpy7q7xyR4+u3E/zreORvVooq+tQdV8OmGcMIOybHw7SkY
-	 mEkd1VNBxmJw66WC+0IkwA4LsSs+nMyZyLW59wEelZz5VTKD7uC2KALCBSuPU0MC94vlx
-	 jTmrQqrd2xg8AePF0QrE49nK3ufouENS3Usdy1iZn3hAHyJ1AHx+BOSLYfm5yXeYDL4pN
-	 2xX2SrSe58Pdm+uuRkZH1tKAssOPEN6XT6ijayhuSckHrwKT9QgohBCqQfqFFmBNtqQ==
+	t=1794345219;
+	b=uV/BE+S/ao9p4uLcayGqYQkCAlWx1Ue6u05d2uHgC4MeCjfGvRoJLL4dL8i/92nbMbvA
+	 tCX5cHLEFWToWv4GDT1plOw07Em7mDDxfJfkp9fepu1nFBRWz6id04QXp2v45d/Q99GWk
+	 0zwdmb1GRLoQXgZdvZi9pP8K4RAw1YpmwtGbBWtd2Zqqnu/E9Gu2PA8JP4Q/Wd8gU4n3i
+	 t5KoZYmAgB7kJA3n8CX3u5OF28N6kVfBcgPKmxAL1iWMSuwh3T0Yv8ptFcF3GkKec0ltN
+	 0Pme9ch64FRQCzpWvLCK7RCdbExMgVDzZ9DQoiEPkP3UkQbWvszxq7myTvI7v29wjFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794343565;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 Mail-Followup-To:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=rMRPONQOYjAF9HKKBayLjA2YuezRW4mL6HNg3dL1nlo=;
-	b=KVq5pWAZaN9ymIusfsctj4IF8fI8xdDg0PjE3VK/9sG5Wcm23Gc3dcn8FcRTXagiFayO
-	 kVJuNT6Q1MSw9YO4wWwTIrzSjEfFIdlFSOkvE2DPzPl6Fv4Z7BpDWj/k0ykNyktmZFpIU
-	 qQKJZBpnBknfsr687Y3S7sqB5QcURQhpFxC+Bj+VjIKK1bVqMsqDQ29LCEh3H19jbYTCJ
-	 IgQK67NjD+MbALDbGYFn7/n7Mwtkm9k4/8B1h42pi5npeqDd25xsiLhUI5W3cichSML6g
-	 W3ZPwzQ99nyaUR+991RrbE4tPHjiC9LRIcu47uRTMNLMR+hXmKpmFerdwgtf1sAyD7Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794345219;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=lmB6Hd3K7WIxkVjF2clYujbDcz9bAuhj2rRE9NRLJbY=;
+	b=y3pBWSyfPdqAF+08udCIyhxDMNbmZfsugi0Za4l0GKtCROJm3dYVu1vQOh7tx09CQkfa
+	 xtRSljHcKpTCHH4fhyrqwlGrHNE5z0em/ka1jovoT2awROwwaPVOyBvoID4JxtDhR6ASH
+	 1z60MZXo/Him5q4w/po/vopUEvF41Xr6wPHeHKUzor3ffQrUqF5TYtXtG83z4cEmI79is
+	 85moHYcEaqm6/M8wcueVONdFH8DGpyX/x9+/vYkeDThejI6RYIFADc2skGFFYdjgCJjpz
+	 G9BYcp/a9Hx0aroBmJgEzC4wTDHk30hvr7aVbla79vZ9fuk3e2+HrFYDuQ6BPK06Mzg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HzRYE13j;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Vo3EESPq;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117BB60A2603;
-	Tue, 10 Nov 2026 20:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89CA606A31C
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 21:13:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D89CA606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HzRYE13j
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D441F008AB;
-	Tue, 10 Nov 2026 20:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794343564;
-	bh=rMRPONQOYjAF9HKKBayLjA2YuezRW4mL6HNg3dL1nlo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HzRYE13jB8RdQv3aSy711gVTQF5aN3kmny3Bm+Tqd6DGpMnW/UdmBhwvuV3tDKwWA
-	 qBQkdAe99fCfyY4HwhHW6vpWLb11tiX1rqZm0gqSH24JDOLS4Qw49hrn6RKPLTZ5tX
-	 8yK911/kTi5YKMv0Zeg0t9hinxeSS095ez81rveTvDj3lhZIp5MNrpZ0TzLVXjAROD
-	 H+8sIgKlcwqIAFUbaPlcIA/mKF9hJXlPwet/3tzJzqABID/FKMqpm7AOyUBYjWme3C
-	 0bNu78jINjA9S3ckBH6UNePnv8GkZJATc2s+TTg1AYJLjtNo7jNr7qgY8y7Qdi6pm5
-	 ugUx9cOxV5vJQ==
-Date: Tue, 10 Nov 2026 21:45:52 +0100
-From: Gao Xiang <xiang@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
-	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-mm@kvack.org,
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
-	linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
-	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 40/41] erofs: refuse files on pseudo filesystems as
- backing files
-Message-ID: <avOCgJPOwRdsIxgd@MacBookPro.fritz.box>
-Mail-Followup-To: Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
-	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-mm@kvack.org,
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
-	linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
-	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
- <20261110-work-loop-pseudo-v1-40-4c998976c6c7@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Vo3EESPq
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2eaae62796dso23819515ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 13:13:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794345218; x=1794950018; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lmB6Hd3K7WIxkVjF2clYujbDcz9bAuhj2rRE9NRLJbY=;
+        b=Vo3EESPq3s9qTUdHxZQztaVmL9/aC6NA99RVdFQtk9Th+ZTKg9qYYfhND0p7bl2Ono
+         TKEZzBVyUDd94dL+EodmR7LYSoJwCjvdZgB9ZeAC0kJ6A92dJk4tVSiVyBGJNxqXFimF
+         863enSCvrOFGp8vbu/PLMUTiA9LrYBwY44pEZQJreOVW9JJ95WuqfvajZPQIEZ67wlDR
+         pxFbIaMkVWIrXSbv+vQTTqOPl89SM1A7fIpxKzX9w58tvNljYUThGupW7rB+ztbIsNpX
+         l/x2bgq17uZi+Hnx3ht5YlWb/3u4BMoXjgx1i5np6J1DvSLR/gg9laH+hxxuXT/Vt214
+         crrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794345218; x=1794950018;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=lmB6Hd3K7WIxkVjF2clYujbDcz9bAuhj2rRE9NRLJbY=;
+        b=gcDFvUL/f6YxQ21rYra3ohsriyzp1yDGZKMgP+dwGDltKoxfefTtD6IfnUiyW3NjR/
+         LlRi6bufESrSVX5/DPsS35ST2W4S/9sv51sUFzRKZtrVGZrL0lGJDuh2ju6lql4YjrFf
+         3h+RxStIHTjeG9jr0wWETHrbY0m3OTGZOaeYv+A0zuwlcmjF1B6gmLYGRW1Q6SQIKJ6W
+         gpMtrMM/eiQTFjzc1sK9Lbik8BBriySSXuoyarbYK1jMv2p/5cZosjgB3sfZ0cxET12W
+         yFvcccShUppGTwHSA+4q1bbMnepTte10a77lCeNHXWMuDvt4x6RDHRvYDxwaxp5fLF6T
+         tmdg==
+X-Forwarded-Encrypted: i=1; AL+hErFQ4IMH4X+L7cMv/OTybUvD+I68PK7Q7YixUdqwAG8/IXSeQMZ9kbBbZXY4LVRnE+9Bp1vjySIeSdo2Z6J8Tco=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9zMxnwKq/6Ndgo+xh30a4ZpBdCGLAedqzh+FPMmyNG0/Kz8vgz
+	E4NzqmNkYdns0DCEwgJOTBGhzsjsFDrY1xy8PJS4kgw8XddrRcGqa1Sz9iIkkOwnvZFbVYimVUC
+	dOCDPiQ==
+X-Received: from pllh5.prod.google.com ([2002:a17:902:7485:b0:2e9:fe74:4523])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2c8b:b0:2ed:2176:2455
+ with SMTP id d9443c01a7336-2edd7b864b2mr3011055ad.38.1794345218010; Tue, 10
+ Nov 2026 13:13:38 -0800 (PST)
+Date: Tue, 10 Nov 2026 13:13:37 -0800
+In-Reply-To: <20261103220337.3578111-1-skhawaja@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,21 +77,32 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261110-work-loop-pseudo-v1-40-4c998976c6c7@kernel.org>
+Mime-Version: 1.0
+References: <20261103220337.3578111-1-skhawaja@google.com>
+Message-ID: <avOJAY8HvkTClshx@seanjc-mac.roam.internal>
+Subject: Re: [PATCH v3] vfio: selftests: Remove libuuid dependency
+From: Sean Christopherson <seanjc@google.com>
+To: Samiullah Khawaja <skhawaja@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Nov 10, 2026 at 10:14:56AM +0100, Christian Brauner wrote:
-> File-backed mounts take any regular file as the image and the same goes
-> for the extra devices of such a mount. erofs reads them with the
-> credentials of the mounter so this doesn't hand out anything the mounter
-> couldn't read anyway. But files on pseudo filesystems aren't images.
-> Refuse them just like loop does.
+On Tue, Nov 03, 2026, Samiullah Khawaja wrote:
+> Replace libuuid with a minimal uuid_t and uuid_parse() in libvfio, and
+> drop -luuid from the build. libvfio only uses libuuid to parse VF
+> tokens, so pulling in an external library is not worth it.
 > 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> libuuid is often missing from cross-compilation sysroots, which causes
+> the VFIO selftests to fail to link:
+> 
+>   ld: cannot find -luuid: No such file or directory
+> 
+> It also complicates building against glibc alternatives such as musl, see
+> https://lore.kernel.org/kvm/c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com/
+> 
+> Reviewed-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+> ---
 
-Reviewed-by: Gao Xiang <xiang@kernel.org>
-
-Thanks,
-Gao Xiang
+Tested-by: Sean Christopherson <seanjc@google.com>
