@@ -1,68 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=37.230.174.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794334781;
-	b=Na5WpmUdqtH+MF6p9OixuOTl1zB0kfXESBVMeMpAfcgQqD1WYt0iErBdqA3JNcKmMyuk
-	 BVhpj92SNIKJa44uQO0JD7yjrxTRePeC73jrd0cEFB4JflG5PIr3u/moCWuj9uLTj9W3V
-	 PrUodB/5wL4kVDqDjQSRyW1JfU+vFFYNpaKgHCc8Dfyfgas4cypbY2YLkhy2hQwMoxZk7
-	 WULfzut1ZjEkqxtQz4m//NEtBsC1z6HCTGb31XFU8ICmzw5Hb+tMTO0mJbJmvwurhZto3
-	 /alcmyglxaA1tVyJysZbBgzQLoAh2CyTRV7+dZ6/r6K1gp5QEMja03CDRUXZjZr6Fdw==
+	t=1794334983;
+	b=nD3mLyC0SDQq/Ow7Ngfi0ii25EIby9/vy8IPV8yequ3CJbWXTr+cgv0ZSfhcfOppMyGU
+	 +VXFdG4IIN3dYS4hlVi+K2XsgndvF1xBulixEa3nPqz5A/D+ndrnMPr+OWOspmm1ecv5J
+	 Yb76EAwi+tVrQ5X9cj6y2x5M5+SvkqucLocLs8S5tlUkA6xf1JNn/rcgTftoVJ/dsurAo
+	 Ps3hWTZCt/K0V4akcVP6WWtjBib1ytkBnuCo0A0z0NY2CDU8nM9ZAdU/nlANTAVq8Albg
+	 QdBVplpx55AAhlwOBH3w9YL+yYiVoC6NDsJNyqNrc6nuBKarTGD3a8HiVqaWxZYL7Jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794334781;
-	h=DMARC-Filter:Received:Received:X-Yandex-Fwd:DKIM-Signature:From:To:
-	 Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=VpKp3qfT9I2/4AIFnOHw2thJ8PJrOYzM5pM3X9hSNw4=;
-	b=0y4kTBJ2GsmiZYLmvIEcv1Gn4ar2zf7SVtwJ2yjCX/TdbL7kAvjM5Md9iq+Vb0SU2zzB
-	 7glFvUdKS44DG4F+LLhqnoYjjNn6DGVjSH5wTgPR0/sCQtcVc1xCmHau5cEUJcojaHgub
-	 +YztuCdtArHImaTj0oitxQDUfygwLwGd1kGehiRmu2U3xFbiNR6eFhI/Vhigy8PmwJEJ8
-	 tYp3LztJKw5z4nAnLd+VTmrHYCecA0oxb8aCbfXTNBLNFjNhe2rGuvTbMIpZqI+L6Qe1e
-	 e/RQrrC/eTbaxaGSiuWxXCC0yDEMrXj1KFt31OD3j/SaxVK0dzvetd/CgkgxgdbdnOQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794334983;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=STj4gsh+ECkiq52y42atn6++DW4Ig0+TQVJRAn04acQ=;
+	b=SPPR3sPOp8gNHjX8ebWEqaMRsNaFpYLbFywE6Z1MU/9e2UIVq6bqU4f6mK6qbdbFpXN2
+	 JvjvYVLEEx1GnPEQYm+NKTFz5gd3X7H9nOutx2IxfwERwnjKFxrcbBGVcgNnrZ/rE9sah
+	 LiDyJcFH0U/ke2jMOUyhVr7BxbGQRIk5c4M5Rz0QR58LKhZ0+9pEHC6/Nyr97OlS5vuSZ
+	 vHAliMntnEGcUtW2UnBznD3eAjSExMRXqL1TJSwRgCIUoujoLRf4TKghmnCQ8kF0XzrCj
+	 Utmrgsh9W2KlBubUZYvvLm5lu7BLjjNStNbMJnJbeIvQDyW2cRV5H5etlG22EPpAYPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=yandex.ru;
-	spf=pass smtp.mailfrom=yandex.ru;
-	dkim=pass header.d=yandex.ru header.i=@yandex.ru header.a=rsa-sha256 header.s=mail header.b=io6hQch6;
-	arc=none smtp.remote-ip=37.230.174.44
-Received: from forward504a.mail.yandex.net (forward504a.mail.yandex.net [37.230.174.44])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MBSXZjuH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10A1606A320;
-	Tue, 10 Nov 2026 18:19:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F10A1606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F71A606A336;
+	Tue, 10 Nov 2026 18:23:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=yandex.ru header.i=@yandex.ru header.a=rsa-sha256 header.s=mail header.b=io6hQch6
-Received: from mail-nwsmtp-smtp-production-main-65 (mail-nwsmtp-smtp-production-main-65.yp-c.yandex.net)
-	by forward504a.mail.yandex.net (postfix) with ESMTPS id 50958C0184;
-	Tue, 10 Nov 2026 21:19:31 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-65 with ESMTPSA id DJXb7GFia0U0-UuobqHqp;
-	Tue, 10 Nov 2026 21:19:30 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1794334770; bh=VpKp3qfT9I2/4AIFnOHw2thJ8PJrOYzM5pM3X9hSNw4=;
-	h=Message-ID:Date:In-Reply-To:Cc:Subject:References:To:From;
-	b=io6hQch6nxz7t+B89tSpK4FHF7YCawH7TZJcvP2USlG6IPMNsETp8OIJYWzxb9KQK
-	 2bWsz3AxDOhjRAJigmwP62k4ZioW0UNfDO1iHw/Ea+BQgOYbDQrPrWCFv1xL0odl3t
-	 WzFeAUXNNdFkrtKsAb3BNKdpMwExD1GAJoTpJlAM=
-Authentication-Results: mail-nwsmtp-smtp-production-main-65; dkim=pass header.i=@yandex.ru
-From: Roman Khromenok <roma55592@yandex.ru>
-To: "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc: wireguard@lists.zx2c4.com,
-	netdev@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH wireguard] wireguard: device: allow userspace to enable IPv6 link-local addresses
-Date: Tue, 10 Nov 2026 20:19:10 +0200
-Message-ID: <20261110181910.2679973-1-roma55592@yandex.ru>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <avNKp7OVA7d1X3fL@zx2c4.com>
-References: <avNKp7OVA7d1X3fL@zx2c4.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MBSXZjuH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F8C1F008A1;
+	Tue, 10 Nov 2026 18:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794334983;
+	bh=STj4gsh+ECkiq52y42atn6++DW4Ig0+TQVJRAn04acQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=MBSXZjuHQ9vFqwd+iX2S78XLwgd17suaM5GydqfUi9v08LyszHYr3TbpPYR+TQje/
+	 A3CeHzqP+jRHyMKXcRjR2gqAF6iDha4etd3p88/Jj2uw1GWTnDzaRCjEYx2SiGE/U/
+	 3kgdjIAzHPkAkoxzF87C2LKvOXgkViFA5IJSJuaaBX3tEkwWs7oA2rIN8MbgzW204T
+	 wfdfcGIUkZW8M3ab5nfOLHccQNplUjG9YXMdwwqMIDZ2KMuR5N0zW6fYA9nCZa3wNW
+	 pVWa6K1YqSnwMdyf9LUFNcdvArYrlyhBxUvKyn7ebOKBe6LxrY/zPn8kPlMl5qbcra
+	 fCLq1HXFOjM9g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 210EE39D608B;
+	Tue, 10 Nov 2026 18:23:03 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,21 +54,50 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 0/4] net/sched: fix short-skb metadata and
+ namespace
+ boundaries
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179433498169.4118637.9465762376116363079.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Nov 2026 18:23:01 +0000
+References: <SER-NSBD.v3.r0.20261103064310@mojatatu.com>
+In-Reply-To: <SER-NSBD.v3.r0.20261103064310@mojatatu.com>
+To: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: netdev@vger.kernel.org, stable@vger.kernel.org, shawnq1@163.com,
+ davem@davemloft.net, edumazet@kernel.org, horms@kernel.org, jiri@resnulli.us,
+ kuba@kernel.org, pabeni@redhat.com, victor@mojatatu.com,
+ sashiko-bot@kernel.org, thomas.goff@boeing.com, shuah@kernel.org,
+ yotam.gi@gmail.com, linux-kselftest@vger.kernel.org
 
-On Tue, Nov 10, 2026 at 04:47:35PM +0000, Jason A. Donenfeld wrote:
-> This is an old decision, but one I think I'm inclined to stick with. You
-> can't use WireGuard with LL generated addresses, because AllowedIPs
-> requires explicitly binding to public keys. So you wind up having to do
-> coordination between the chosen IP address and the distribution of keys.
+Hello:
 
-Thanks for the explanation, understood. Just to note, the use case I had
-in mind is one peer per interface with AllowedIPs ::/0, as commonly used
-for Babel/BIRD meshes, where no address/key coordination is needed.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> That's the direction I'd like this to go in, not breaking the whole
-> allowedips model, which is what this moves toward. I hope that's
-> understandable.
+On Tue,  3 Nov 2026 06:50:28 -0500 you wrote:
+> This series fixes three independent boundary problems in net/sched, and
+> covers the third one with tc-testing cases.
+> 
+> 1/4 act_ife: encode a configured zero metadata value.  The u32 and u16
+> presence callbacks reserve an 8-byte TLV for a configured zero value, but
+> the encoders returned without writing it, leaking stale skb headroom bytes.
+> 
+> [...]
 
-It is. I see the direction you prefer, so I'll drop this patch.
+Here is the summary with links:
+  - [net,v3,1/4] net/sched: act_ife: encode configured zero metadata values
+    https://git.kernel.org/netdev/net/c/7d02c07c738b
+  - [net,v3,2/4] net/sched: act_ife: require a full Ethernet header on egress
+    https://git.kernel.org/netdev/net/c/11dbce090834
+  - [net,v3,3/4] net/sched: sch_teql: reject qdiscs from another network namespace
+    https://git.kernel.org/netdev/net/c/1ae84bdd736f
+  - [net,v3,4/4] selftests: tc-testing: teql: cover each attach rejection on its own
+    https://git.kernel.org/netdev/net/c/367a50c3233e
 
-Roman
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
