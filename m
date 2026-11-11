@@ -1,85 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794411464;
-	b=VH52aI43H5l0+zT50jwWTC1aIhnVPjJpv2djiqMhZzeLsyhbNuilojdMWi4FkN5Kdaom
-	 DH+G6lA/RkdhBt+EQiEgnITZRVy9H3iIdpNGUy9LkLLl/m7SbTYW53qB2oBpSCv86UJyl
-	 nt+jNXbNtJePCbQXkvU4LkZ9xxbTTYehomhNhsccf4gKmoV9gBJmS+pdeW3HdbaBhMrIy
-	 4KVmqd5pEStAi7LKvSLirsEW7Te3IB003XPcqWRq7YBkmSaczXMMxMSJ1t+zvM+uGYvuy
-	 TFxF7zITYop6f/YgaYC6J0+uBZ2fjYCQkHVJBUyYJcaWAB+vycLA6G87s52i2YCLXDQ==
+	t=1794412459;
+	b=vZWh6yqxYlQ+TXF1ttnF+ws3TyOZsmjYP5jhc9pIzboviOrAtHD0Qm+FP1kxu3qT+wTD
+	 SEk52Y/MQWN48nLfHtQHU/4Qbp8zDBdqK5F+UzQRC7s4ZPWowLpxTOkevv5lwmVNgkKWo
+	 MI6y4Zcl4/Jk6dniX68oe/Zj8Kq84OxV3X1nXXsDl61GiMYcC4gBhikKuQpPqfZ86PRIz
+	 ljNLSisaCy1BZv0PlfxmHZqR9CjMljN3wORhWAX5UBwTqb/R5udT+sHthynQ3yBh6SOpy
+	 GhfSwBUPu+Gm5VJDwEFqYZEb0XLkNjK+W5I4slaYkeUuWG9XU2xPEDvg++yS/TdwT2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794411464;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
-	 From:To:X-Mailer:References:In-Reply-To;
-	bh=zyPyNsXNnyLp0wiWkbZYu4vFk3ow/rtQP4zegoB1/BA=;
-	b=PyG+QO77aEvS5+g/HOMBeQ4m7h90x6YA1wKUE2lrxioNYOF4WHGlrZJVVoi62cEmYpxi
-	 bYwCY2nHqcbyMqbodgNQSHGkB3Kx7DqOJ0MeLIN3SBSRcNavWJfN3Hg5jWlxwlWNpA7Mh
-	 MWXbvtINMEtrO/vyVayUVv9XOIfkkSZNXO/aVc5pfOf+Z2ODk0kZDJx3SRy0S2WYnYQYc
-	 21aekumicwkD7yGld4SSZjbcy/Rd4O/b/md8SPErUK+DHhzF75qzPabfYuUbgavhse1U6
-	 7JKBmidOAqdk+3MTaWL67JiMhlufgUGxKS10LsvlUwQOp3V5UQu7ngmuVsDQC+iNOdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794412459;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
+	b=Jp6LK8MTYZoEeQPmF6y9RcF9/XXME/LA5PWPMkyUE4vtQKpzEyfLQUnrWnXRMnkza843
+	 ZLhFw2CKyY0HLSWx3dlVq0qBJIc9U3y4V8NihKPRPQYp8KZpcJNfKm6mEaNsdWC6FTR1p
+	 MbZJe0jsKV3sKnJa36ipgX3tBUHl+EbzzOG2mhhLxmPzh9MvLGh8ejCkMN63fcZMVhmbH
+	 73Dvd7dOBUDZyECqL2DCRgOk4zx+Sr2ZlVK90b1qWJZZRjERelaiOt4vaxvYWgXl9Ro3h
+	 7DRceVGW+gD6QMk/YzI4VvpngV4JhYFnIlJjVljAOuc78n+emxpl55//uyXvVR7sLTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=soleen.com;
-	spf=pass smtp.mailfrom=soleen.com;
-	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=KSuOhJwR;
-	arc=none smtp.remote-ip=209.85.222.54
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ezfFuM0j;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=hiKOE+VI;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7CD606A326
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 15:37:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C7CD606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C387C606A332
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 15:54:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C387C606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=KSuOhJwR
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-9828fee1b4bso838807241.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:37:43 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ezfFuM0j;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=hiKOE+VI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794412458;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
+	b=ezfFuM0jz6fzoyYrlDbDH/ZOjffIbqfNNJI5WTqNQh2905hBCKDKUsN50479dEKgPdaonx
+	FYMAursiIT19v7UaNl/CCLLRwaQ5mb2fJUM7vb/eSod6aEpv7iDV8EYPJwjxo893wmXTEl
+	EW8zIVV6xAYa7AS3UXXi9lFxR3rx6Do=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-311-BBLg5y1INhusdCrnHdQB1w-1; Wed, 11 Nov 2026 10:54:14 -0500
+X-MC-Unique: BBLg5y1INhusdCrnHdQB1w-1
+X-Mimecast-MFC-AGG-ID: BBLg5y1INhusdCrnHdQB1w_1794412453
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48e4d1e29f3so3209290f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:54:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1794411462; x=1795016262; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=zyPyNsXNnyLp0wiWkbZYu4vFk3ow/rtQP4zegoB1/BA=;
-        b=KSuOhJwRVn6ezxXqsCVqq2eIvk3Dh/kvI46PwVUnLm7knleX/h46MK9EnsyzF2uPT2
-         8znC4z0CgZzu0GCKZGNR5klElinZk1//9/Vo6D1XDoyvdj1n2JDddPbgLuO1ItUhXQYP
-         ih1bhIB6EifntfuJRr1WuPoN9tze2Dpqo+wdyf7oqdDFcB4//nHcro2M8WIA8EGgKRJ7
-         V0/u59fnHK2FeHAX3ugQvtmuvbdXBh3QXpHv5I49SsH2WX6vIJ8+r82opWYWS5wP43oQ
-         CgvLb+EGw3c1cWJmX3IjDt+tT0oCUJB09UIjYquFsegJVlnjvDZl1t5TF38O4xHJVPmo
-         rYRA==
+        d=redhat.com; s=google; t=1794412453; x=1795017253; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
+        b=hiKOE+VIlxbOcOlW6Xs+bhV4MDSUdNJj6lNYBdYkNH69xwc9iSfRZYyqR7pcSGVcej
+         EEcP0okGXd9WXoggo1LTQD1ur2KEqBKSF6BKBBIIczRS41MfIiOYfb/Q3TECGm1AC33g
+         acxaxTc+t8FERzKUTxnKL6LcDwV94/ki7XqzzoXMgcwLLPY2tgkCgAaizVvmDNVC14JR
+         YovK5EmSA7o+FM4ykQ2tpnVnOXA1/Niyfr/4eNpGPM9bTaJtf7lz2NhewOXTg0z6hpAu
+         Bss9OudKo9sHusaHPSJKqdyUQkQrVi9n1Q/4nbn7rWfMu1fbBKm77f3Fj+JGWxFjQH29
+         xS6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794411462; x=1795016262;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1794412453; x=1795017253;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zyPyNsXNnyLp0wiWkbZYu4vFk3ow/rtQP4zegoB1/BA=;
-        b=n1NvtiUAVxBhgycsmfNf7iYKvM6AjUQ1KZOabvL7Jyvm00frivbRpR2AnX1oH7CGE8
-         LGbUiCVgN1VNIWT3B11HHhJiqV8oFtHqw59aVMA+LcyfqrD4SmlkZvcHd7knQwKCCQAt
-         IGUW/alxp8laMiih8L7axU25n/cQzjs88lta8lSrXiF0NFPMH1aPcRBCtPisE5H16IP5
-         zQYX/YIXCP6YHwWk/FSe6oyvkycKJ5Jkrzkp7YdaBnqHSd+rxflPw+2G52KID+TZgVNS
-         HfBgUyMxnNYR4DP9iP2wvjM/lyxjK1MjwIGwd7qcm4zZ1IYptGpvX3cxRkY6TLrY6kZL
-         n4ZQ==
-X-Gm-Message-State: APuU4Z9ikgpJSRJG4Xm3Hh3Yr/NECO4Aphyt3+VRGb5QXJAZ8lmDwtLR
-	KJ4J1p+jphW40uA4W0yWCIuq9LjrlT6WorAA912AKbWswl0rvT0Lmxm0MpsnqYL7xjxeii5WqTN
-	gEVAb
-X-Gm-Gg: AYBFou1ymnkouUclxTdsmFvZFSRZAiHl1pusJ3vQcC6qvn8U/cLMI5io9MescnBAr7t
-	oXIGVL0O4a3eyT4vpV+3R8HZeBpw266BuW8nEtnKOMeuyiGtRLiOw0lORKiMfhYawD8eLd7dlzs
-	6Q1BZfqkKzAO6OZK4KA86F8VnsH7/20t+G/ayuhg4i492GLTNB+g4QiG38X0pszKw9sQgcySzZK
-	21oypfzHYRS2ddYYfRgX7IWUKj5iRMMbxiIW93etfqp48XbEUHZkPYsg/OMfrL1qmfik99Fc2Gf
-	XpNQGW4JAEsiSVS0r0T5V84ZLxO5RZEveoNpL3bmTY1m7sG6o98TEZ09pBUBPSCv89BJp8WSGDN
-	hfSZ/Zj1/oVUq7FZhgsBb98WQ/Qso6qJq75SVAutzT0o6BxMBpIB+m28uDqzxd8XpwzbHPkXDo/
-	Lj3OJHz9nrvTbPh/ZH1e4YZXna+jZKb9AX/9yc2rMMiD+N4tYJpO03rKTKrCpW1V8SxorfC50P1
-	rZsL9FQdBSRxgx0m3ly0tDLrAtR6dHlMjA5WD1IMRsHS87FQ43KOHI6K6B8JC85trjSG/1NEXbx
-	gP9OA+W7JjwpNeviTiGQiJvzm7j4g3fuk4BJy9Ra8fvA+L+uazHUpb5vvW/tSl3gB0JFJcmLlRr
-	DTqaBsBSu5Rc27/hhLMgCGTguuYcoadRi
-X-Received: by 2002:a05:6102:6f06:b0:7c3:9059:49c2 with SMTP id ada2fe7eead31-7d50609f040mr768713137.22.1794411461945;
-        Wed, 11 Nov 2026 07:37:41 -0800 (PST)
-Received: from localhost (64.167.245.35.bc.googleusercontent.com. [35.245.167.64])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d3023aeac7sm3957545137.9.2026.11.11.07.37.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2026 07:37:41 -0800 (PST)
+        bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
+        b=RsjSBzK51eIBzLf4OU6KwkNj28DD3W+bdzIubZls3KO3UQ+LCdW0eukTrLWcWGNxx/
+         ucN6LM4imh/VWyAyn57Hd86LZBFX9w1qYEMkmC9FJLQ782fZGcJx5nQSFViq2vL3AY90
+         IxRJrvzDsH28+0AMDJ1/czoywqU2+lsz5CO4sn6z3uITFlNd+8Q3BCwAFE75gFFGYYor
+         n7zX0li808VAlCOvO/MUkt7v7H83zgyXXBFzJNClUDhYZze2RhhX5zqGJo2IKjj47uPQ
+         D92YedqmjZX4o8q8A3QB+L6u6jSDYwnkUqbB6qyPtJcX4c90QbgQDuic3MLXl8FCZ6eM
+         vvYg==
+X-Forwarded-Encrypted: i=1; AL+hErE5zO3NOF3Gkxr5+bZLyOoAmcQGx53Q9Jrqd5mXgIZGSbG7dGTAheipRe/vO+jlpo6dJdGWm/pckEJkNviufio=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+2vi/UBF8caL5rVcMNznI1sh5BwySwhiKMy/T/b9uIt5trohHH
+	6pEdeEJJqIZ7MpsIdnKU/skOC8nQoCXhxPdnw8OdycMVjfBR6+FMQYntzRuVZs6NWGQBQ2gdDui
+	SkHZmEXpwfTXw3XsMhigyI4ydxK0H57ARuT8OZww3IoB2kbScRA659722J7vEca/Hjy8joA==
+X-Gm-Gg: AYBFou2zypMMgRxKtKokXsdH0DmRC6YUWHewQ1TCm6VEFDuIpSf9zxH9laKuhYUTkIG
+	JA+IhO+vcaQY/cWIkKM5g0LyDKMUeCOdX5DG3vgywGBn8+yDMHjJfgO01r8ZCojXwQbY5wVWOe/
+	qyWWvfs/4R/4EiUUTGjAtM1BPPy0NjAwCZDihJDnIMy4SZLJe3MG6umQpax3b39xHUXbEn0nTOH
+	yKNXz21fxasCj0OPbkx/BTU9gZ9qAgOlS3ZfgDIHDCt7x0ANhKXfKL5f7FhOuKWLBven2atY0y8
+	tajC1LjsbSeGl+s/iUis5+jBCT7NoYVLscgLUcJNRjwlesNuuriNxy0jBx6Fv7Au7b5Yj4IWr/0
+	fec3cokB3FQexmEjmkC69AOvD86SRa+B9ofmfHNvi8A9s5zHX1H/kFWd9W2Z+oBF4p4sZmGqWM6
+	FePyE=
+X-Received: by 2002:a05:6000:3ce:b0:48e:2f7e:bdbb with SMTP id ffacd0b85a97d-499c77423e2mr4360031f8f.50.1794412453247;
+        Wed, 11 Nov 2026 07:54:13 -0800 (PST)
+X-Received: by 2002:a05:6000:3ce:b0:48e:2f7e:bdbb with SMTP id ffacd0b85a97d-499c77423e2mr4359995f8f.50.1794412452846;
+        Wed, 11 Nov 2026 07:54:12 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49836b8eb11sm12632851f8f.57.2026.11.11.07.54.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2026 07:54:11 -0800 (PST)
+Date: Wed, 11 Nov 2026 16:54:09 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v5 16/29] sched/deadline: Record the root domain holding
+ a task's bandwidth
+Message-ID: <avSPoSnNATnwZ8cS@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-17-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,233 +127,160 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 11 Nov 2026 10:37:40 -0500
-Message-Id: <DMSHRWYSS8FJ.2H4W2E388G00V@soleen.com>
-Cc: <linux-kselftest@vger.kernel.org>, <shuah@kernel.org>,
- <linux-mm@kvack.org>, <skhan@linuxfoundation.org>,
- <linux-doc@vger.kernel.org>, <vipinsh@google.com>,
- <linux-kernel@vger.kernel.org>, <corbet@lwn.net>, <dmatlack@google.com>,
- <kexec@lists.infradead.org>, <pratyush@kernel.org>,
- <rdunlap@infradead.org>, <graf@amazon.com>
-Subject: Re: [PATCH v5 3/6] liveupdate: luo: serialize sessions via
- per-session publish helper
-From: "Pasha Tatashin" <pasha.tatashin@soleen.com>
-To: "Mike Rapoport" <rppt@kernel.org>, "Pasha Tatashin"
- <pasha.tatashin@soleen.com>
-X-Mailer: aerc 0.22.0-39-g5d7784875be2
-References: <20261105050053.3063001-1-pasha.tatashin@soleen.com>
- <20261105050053.3063001-4-pasha.tatashin@soleen.com>
- <179439592040.425130.1571434550510654411.b4-review@b4>
-In-Reply-To: <179439592040.425130.1571434550510654411.b4-review@b4>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261108185406.1549770-17-mathieu.desnoyers@efficios.com>
 
-On Wed Nov 11, 2026 at 6:18 AM EST, Mike Rapoport wrote:
-> Hi,
->
->> With incremental kho_block publication in place, LUO sessions can be
->> published into sh->block_set individually as they are committed, rather
->> than rebuilding the entire session serialization chain during reboot.
->>=20
->> Currently, luo_session_serialize() resets *sh->sessions_pa and
->> serializes all outgoing sessions from scratch in a single pass at reboot
->> time.
->>=20
->> Introduce luo_session_publish_one() to append a session's
->> luo_session_ser entry via kho_block_set_it_append() and move the session
->> onto sh->published_list. Update luo_session_serialize() to freeze all
->> remaining unpublished sessions first (rolling back via
->> luo_session_unfreeze_one() on failure) and then publish them in a second
->> pass.
->>=20
->> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
->> ---
->>  kernel/liveupdate/luo_session.c | 92 ++++++++++++++++++++++-----------
->>  1 file changed, 63 insertions(+), 29 deletions(-)
->>
->> diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_ses=
-sion.c
->> index 6dea359111818..caf0e85081e87 100644
->> --- a/kernel/liveupdate/luo_session.c
->> +++ b/kernel/liveupdate/luo_session.c
->> @@ -103,20 +103,30 @@
->>  static DECLARE_RWSEM(luo_session_serialize_rwsem);
->>  /**
->>   * struct luo_session_header - Header struct for managing LUO sessions.
->> - * @count:       The number of sessions currently tracked in the @list.
->> + * @count:       The number of sessions currently tracked in the header=
-.
->> + * @published_count: The number of outgoing sessions currently publishe=
-d in
->> + *                   @block_set.
->>   * @list:        The head of the linked list of `struct luo_session` in=
-stances.
->
-> Add "yet unpublished" to the description?
+Hello,
 
-Yeap, will clarify list holds yet-unserialized sessions.
+On 08/11/26 13:53, Mathieu Desnoyers wrote:
+> Admission, moves and releases of a deadline task's bandwidth find the
+> root domain that counts it from the CPU the task is on. That CPU can be
+> in another root domain. Two cases show it.
+> 
+> Commit 7f51412a415d ("sched/deadline: Fix bandwidth check/update when
+> migrating tasks between exclusive cpusets") moves a deadline task's
+> bandwidth in two halves. cpuset_can_attach() reserves it in the
+> destination. set_cpus_allowed_dl() frees it in the root domain of the
+> task's runqueue. Both halves now move nothing when that root domain
+> overlaps the destination. But a sleeping task stays on the CPU it last
+> ran on. So a sleeping task moved to a partition and back leaves its
+> bandwidth in the partition:
+> 
+>   admin                                       task T
+> 
+>   makes P a partition root of CPU 3
+>     CPU 3 is now in root domain B
+>     CPUs 0-2 are in root domain A
+>                                               sched_setattr(SCHED_DEADLINE)
+>                                                 A: total_bw += bw of T
+>                                               runs on CPU 0, then sleeps
+>   echo T > P/cgroup.procs
+>     cpuset_can_attach()
+>       dl_task_needs_bw_move(): true,
+>       A does not overlap P
+>       B: total_bw += bw of T
+>     set_cpus_allowed_dl()
+>       dl_task_needs_bw_move(): true
+>       A: total_bw -= bw of T
+>                                               still asleep on CPU 0
+>   echo T > cgroup.procs of the root cgroup
+>     cpuset_can_attach()
+>       dl_task_needs_bw_move(): false,
+>       A overlaps the root cpuset
+>     set_cpus_allowed_dl()
+>       dl_task_needs_bw_move(): false
+>   kill -9 T
+>                                               wakes up on a CPU of A
+>                                               exits
+>                                                 A: total_bw -= bw of T
+> 
+> B keeps the bandwidth of T. A does not count T while T is in A, so A
+> admits beyond its capacity. When T exits, A loses the bandwidth of T a
+> second time. Its total_bw can underflow.
+> 
+> A rebuild of the accounting counts a task in the root domain of its
+> cpuset. With admission control off, a task can be pinned to one CPU.
+> When that CPU goes offline, it joins the default root domain, and the
+> release takes the bandwidth from there. The root domain of the cpuset
+> keeps it until the next rebuild.
+> 
+> The first case was reproduced on v7.4-rc1. The second was reproduced
+> with the earlier patches of this series. Without "sched/deadline:
+> Release the bandwidth of a task that leaves the class asleep", nothing
+> releases the bandwidth of that sleeping task.
+> 
+> Fix this by recording, in dl_bw_cpu, a CPU of the root domain that
+> counts the bandwidth. Each site that counts it sets the record. Each
+> release or move reads it, and the release clears it. A move skips a
+> bandwidth of 0, so sched_dl_overflow() does not use its record. The
+> move_zero_bw case of deadline_bw_test, added later in this series, tests
+> this. The record replaces dl_departed_cpu. If dl_bw_gen shows that a
+> rebuild dropped the bandwidth, nothing is taken back.
+> 
+> A move now leaves out a sugov kthread and a task boosted into the class
+> with no bandwidth of its own. The rebuild leaves them out too: no root
+> domain counts theirs. A move would take a sugov kthread's bandwidth
+> from a root domain that never held it.
+> 
+> Weiheng Qiu reported the moved sleeper, and Juri Lelli analysed it. His
+> fix, linked below, took the first active CPU of the task's mask. A mask
+> can have none during CPU hotplug. Tip dropped the fix after a sugov
+> kthread hit its BUG_ON() there. The Sashiko AI reviews of this series
+> found the other cases.
+> 
+> Reported-by: Weiheng Qiu <weihengqiuu@gmail.com>
+> Closes: https://lore.kernel.org/all/14508cb2-805f-41ac-9f6b-bfd7c3d7cb1c@gmail.com/
+> Link: https://lore.kernel.org/all/20261103-b4-sched-dl-bw-fixes-v1-1-dd761fe005b4@redhat.com/
+> Fixes: 7f51412a415d ("sched/deadline: Fix bandwidth check/update when migrating tasks between exclusive cpusets")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
 
->> + * @published_list:  The head of the linked list of published outgoing
->> + *                   sessions, ordered identically to their entries in
->> + *                   @block_set.
->>   * @rwsem:       A read-write semaphore providing synchronized access t=
-o the
->>   *               session list and other fields in this structure.
->>   * @block_set:   The set of serialization blocks.
->> + * @it:          Iterator tracking the next slot in @block_set for outg=
-oing
->> + *               session serialization.
->>   * @sessions_pa: Points to the location of sessions_pa within struct lu=
-o_ser.
->>   * @active:      Set to true when first initialized. If previous kernel=
- did not
->>   *               send session data, active stays false for incoming.
->>   */
->>  struct luo_session_header {
->>  	long count;
->> +	long published_count;
->>  	struct list_head list;
->> +	struct list_head published_list;
->>  	struct rw_semaphore rwsem;
->>  	struct kho_block_set block_set;
->> +	struct kho_block_set_it it;
->>  	u64 *sessions_pa;
->>  	bool active;
->>  };
->> @@ -134,12 +144,14 @@ struct luo_session_global {
->>  static struct luo_session_global luo_session_global =3D {
->>  	.incoming =3D {
->>  		.list =3D LIST_HEAD_INIT(luo_session_global.incoming.list),
->> +		.published_list =3D LIST_HEAD_INIT(luo_session_global.incoming.publis=
-hed_list),
->>  		.rwsem =3D __RWSEM_INITIALIZER(luo_session_global.incoming.rwsem),
->>  		.block_set =3D KHO_BLOCK_SET_INIT(luo_session_global.incoming.block_s=
-et,
->>  						sizeof(struct luo_session_ser)),
->>  	},
->>  	.outgoing =3D {
->>  		.list =3D LIST_HEAD_INIT(luo_session_global.outgoing.list),
->> +		.published_list =3D LIST_HEAD_INIT(luo_session_global.outgoing.publis=
-hed_list),
->>  		.rwsem =3D __RWSEM_INITIALIZER(luo_session_global.outgoing.rwsem),
->>  		.block_set =3D KHO_BLOCK_SET_INIT(luo_session_global.outgoing.block_s=
-et,
->>  						sizeof(struct luo_session_ser)),
->> @@ -186,6 +198,10 @@ static int luo_session_insert(struct luo_session_he=
-ader *sh,
->>  		if (!strncmp(it->name, session->name, sizeof(it->name)))
->>  			return -EEXIST;
->>  	}
->> +	list_for_each_entry(it, &sh->published_list, list) {
->> +		if (!strncmp(it->name, session->name, sizeof(it->name)))
->> +			return -EEXIST;
->> +	}
->> =20
->>  	/*
->>  	 * For outgoing we should make sure there is room in serialization arr=
-ay
->> @@ -203,6 +219,42 @@ static int luo_session_insert(struct luo_session_he=
-ader *sh,
->>  	return 0;
->>  }
->> =20
->> +static void luo_session_publish_one(struct luo_session *session)
->> +{
->> +	struct luo_session_header *sh =3D &luo_session_global.outgoing;
->> +	struct luo_session_ser entry =3D {};
->> +
->> +	lockdep_assert_held_write(&sh->rwsem);
->> +	lockdep_assert_held(&session->mutex);
->> +
->> +	if (!sh->active || !sh->sessions_pa)
->> +		return;
->> +
->> +	if (!sh->published_count)
->> +		kho_block_set_it_init(&sh->it, &sh->block_set);
->> +
->> +	strscpy(entry.name, session->name, sizeof(entry.name));
->> +	entry.file_set_ser.count =3D session->file_set.count;
->> +	entry.file_set_ser.files =3D
->> +		kho_block_set_head_pa(&session->file_set.block_set);
->> +
->> +	/* This should not fail normally as blocks were pre-allocated */
->> +	if (WARN_ON_ONCE(!kho_block_set_it_append(&sh->it, &entry)))
->> +		return;
->> +
->> +	if (!sh->published_count) {
->> +		/*
->> +		 * Ensure the first block header and entry are visible before
->> +		 * publishing sessions_pa to concurrent KHO readers.
->> +		 */
->> +		smp_store_release(sh->sessions_pa,
->> +				  kho_block_set_head_pa(&sh->block_set));
->> +	}
->
->
->> +
->> +	list_move_tail(&session->list, &sh->published_list);
->> +	sh->published_count++;
->> +}
->> +
->>  static void luo_session_remove(struct luo_session_header *sh,
->>  			       struct luo_session *session)
->>  {
->> @@ -636,50 +688,32 @@ int luo_session_deserialize(void)
->>  int luo_session_serialize(void)
->>  {
->>  	struct luo_session_header *sh =3D &luo_session_global.outgoing;
->> -	struct luo_session *session;
->> -	struct kho_block_set_it it;
->> +	struct luo_session *session, *tmp;
->>  	int err;
->> =20
->>  	down_write(&luo_session_serialize_rwsem);
->>  	down_write(&sh->rwsem);
->> -	*sh->sessions_pa =3D 0;
->> -
->> -	kho_block_set_it_init(&it, &sh->block_set);
->> =20
->>  	list_for_each_entry(session, &sh->list, list) {
->> -		struct luo_session_ser *ser =3D kho_block_set_it_reserve_entry(&it);
->> -
->> -		/* This should not fail normally as blocks were pre-allocated */
->> -		if (WARN_ON_ONCE(!ser)) {
->> -			err =3D -ENOSPC;
->> -			goto err_undo;
->> -		}
->> -
->>  		err =3D luo_session_freeze_one(session);
->>  		if (err) {
->> -			kho_block_set_it_prev(&it);
->> -			goto err_undo;
->> +			list_for_each_entry_continue_reverse(session, &sh->list, list)
->> +				luo_session_unfreeze_one(session);
->> +			goto err_unlock;
->
-> Why goto err_ can do this?
-> I really prefer to avoid error handling inside if (err) blocks whenever
-> possible.
+...
 
-Makes sense, will move it.
+> @@ -3541,17 +3570,29 @@ static void set_cpus_allowed_dl(struct task_struct *p,
+>  	 * domain (see cpuset_can_attach()).
+>  	 */
+>  	if (dl_task_needs_bw_move(p, ctx->new_mask)) {
+> -		struct dl_bw *src_dl_b;
+> +		unsigned int src_cpu = dl_task_root_domain_cpu(p);
+> +		struct dl_bw *src_dl_b = &cpu_rq(src_cpu)->rd->dl_bw;
+> +		unsigned int cpu;
+>  
+> -		src_dl_b = dl_bw_of(cpu_of(rq));
+>  		/*
+>  		 * We now free resources of the root_domain we are migrating
+>  		 * off. In the worst case, sched_setattr() may temporary fail
+> -		 * until we complete the update.
+> +		 * until we complete the update. A rebuild that dropped the
+> +		 * bandwidth of @p leaves nothing to free.
+> +		 */
+> +		if (p->dl.dl_bw_gen == dl_bw_gen) {
 
->
->>  		}
->> +	}
->> =20
->> -		strscpy(ser->name, session->name, sizeof(ser->name));
->> -		ser->file_set_ser.count =3D session->file_set.count;
->> -		ser->file_set_ser.files =3D
->> -			kho_block_set_head_pa(&session->file_set.block_set);
->> +	list_for_each_entry_safe(session, tmp, &sh->list, list) {
->> +		mutex_lock(&session->mutex);
->> +		luo_session_publish_one(session);
->
-> And running a loop of _publish() in _serialize() makes my bikeshedding
-> argument stronger ;-)
+So, this is not guarded by dl_departed_lock, but then this gets fixed in
+later patches?
 
-+1, will fix it in v6.
+> +			raw_spin_lock(&src_dl_b->lock);
+> +			__dl_sub(src_dl_b, p->dl.dl_bw, dl_bw_cpus(src_cpu));
+> +			raw_spin_unlock(&src_dl_b->lock);
+> +		}
 
---=20
-Pasha
+...
+
+> @@ -4189,6 +4245,23 @@ int sched_dl_overflow(struct task_struct *p, int policy,
+>  	if (new_bw == p->dl.dl_bw && task_has_dl_policy(p))
+>  		return 0;
+>  
+> +	/*
+> +	 * Change the bandwidth of a deadline task where it is counted: in
+> +	 * the root domain of the CPU recorded with it. A task moved asleep
+> +	 * has not run there yet, so the CPU it is on can be elsewhere. No
+> +	 * bandwidth is counted if a rebuild dropped it, or if the task
+> +	 * enters the class. A runtime below about a millionth of the period
+> +	 * gives a bandwidth of 0. It counts for nothing, and no move updates
+                    ^^^
+Ah right, quite cryptic corner case buried in this comment. :)
+
+This is the 1024ns/2s of the test. Which indeed gets dl_bw 0. Don't
+think it's a huge deal from a theory/practice pov as to actually make an
+impact we probably need quite a lot of these admitted (fork bomb style).
+But it's still weird :P. Not sure if we want to impose a min of 1 dl_bw
+for these. If it actually complicates the accounting (for no good
+returns) or not.
+
+> +	 * its record. In these three cases, the root domain of the CPU the
+> +	 * task is on takes the new bandwidth. The caller holds cpuset_mutex,
+> +	 * or dl_accounting_mutex without cpusets, so no rebuild runs
+> +	 * meanwhile.
+> +	 */
+> +	counted = task_has_dl_policy(p) && p->dl.dl_bw_cpu >= 0 &&
+> +		  p->dl.dl_bw_gen == dl_bw_gen;
+> +	cpu = counted && p->dl.dl_bw ? p->dl.dl_bw_cpu : task_cpu(p);
+> +	dl_b = dl_bw_of(cpu);
+> +
+
+Thanks,
+Juri
 
