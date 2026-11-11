@@ -1,56 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.222
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794397379;
-	b=E/VYBKU6f/B7GJ+L+EXh5iL+tPaG6No6C7dXPDfXOZgW8cy/rG7ybGWbb6Uvrw89S5r1
-	 bQHY/i7KnkNvauofylbNfCsfVbNqUAsE+AJCT27XnzZwAhZ7NsMgSTBfURi017jeZ/ggX
-	 b8t4hg7IH6Iz/71Hw0ORE1TkTHIMWvKo7MRuVciNtaWNyTLtLUHjzxqYSIbXbmYCzeS/y
-	 9PSYPbg9EoUj8mNEQ8ZMufyyD57lsyEmkfAEL6IQJPolzm16h4a+lAfU9bajLY4KPGBda
-	 7AjzqyNFsLrBC/widI34ysaDAK2EFPJyhNbCYKSP4myEcPNZMs7Oc0BIUl7AkNjT8Ng==
+	t=1794397381;
+	b=R3dgFSEIN+Deyt/JJuCwiIO33dFPke1SFvOh7egKFWna0iUH0I40bBnExOhRwqd6ZBEV
+	 fhQJ8YRaBcmEx7a71XYC32RnSU19CvVmBFcmg25Z8wcSt01j6kCevmaeeyfM5c1NcnEpa
+	 i51dyfqKe9e6XQ2HyLQI3Rub2NH9KOMv44uD/36cxGtrZOJNTqZI5icqhmaXq5XC5/gd4
+	 Ao22DcXvhZZMyJBCg4QHo6F+/22MrBoqa081snJG+YVb/SjFgCKfIwaVFUmfD+8AdnoOU
+	 9Y1CrYuHmWb2SSXPKs6ZpthNK62eTemjIoZ/5oin82JkpU1Ti/nhtpHueijuGT9frAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794397379;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794397381;
 	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
 	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
 	 X-ClientProxiedBy;
-	bh=sZSpbO9IcTEwUC97Fm4qSyjltlS7ssuPpR01THv8ukQ=;
-	b=Is2JRbs8jn7f+C/rYFFjCrmx0dp2+zRNjqtKLt+HjLBX2TF/ufvm+Cf/47SngUlKsArq
-	 LLkfIJxjYCZi/P8KavLviYBzmwcFBIHcMZfgpV+NCr8+CNn63Aaq+EZvBVyb9x6vOXvBV
-	 L/NzYbk3N5FrX+sETf86ZHvm8VcS4VLjU2MYKBJH1iG//lPqRZuPPi73e1a73DLLL4ah3
-	 iBTBwpbOEuIYvetVsgUScNBHKmAw1BHmXmhNv9Qsa2+W6GBL1c7cq6StEl3RgNwd3ycWD
-	 oaCbbaO/Y0Yz0QwLlB0PJwmUiF7ps9lKcod9ZbxmOIpL9S8Gqec0T7Q5CrDLVBD4VDA==
+	bh=hapHJX5CBE0NDRN9ZLEstnet2nYwtvfy5mzxbnNdOv8=;
+	b=2E3pxsCZMEZQCG6SKbs/MYmlIf+DVJEaO8WYXhSzaaFSQdaRSv0pK+TxX5oJjnKF0mu5
+	 XHjy9KKljuFwKpx9xFXtk3GOcDiErjNqIlnXM50cK4rtN5ZAQ/OYM56GgeoC5BD7D9PuF
+	 qf6qNtQWQABM6dyamrMJqvGqtGY2nE/lztgNX8lQJ8sjaS0k5o6MsjQvEmQhPsbcNWgHX
+	 vS1273RRBCYfuAl50BhEwc2GtPMsPrGQYub97PM9aObozuHvyVesqG1vEOSZ6BEirJPf7
+	 kx0EPv5eVwoi7f5SATM8y7y7OqHefTV76pRBc5az0Z+mCaT6kdnBNoTRxEFDCSlFlyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=huawei.com;
 	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=fDoZGbnV;
-	arc=none smtp.remote-ip=113.46.200.220
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Wz6XAmWk;
+	arc=none smtp.remote-ip=113.46.200.222
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF035606A88E;
-	Wed, 11 Nov 2026 11:42:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF035606A88E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCABC606A333;
+	Wed, 11 Nov 2026 11:43:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCABC606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=fDoZGbnV
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Wz6XAmWk
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=sZSpbO9IcTEwUC97Fm4qSyjltlS7ssuPpR01THv8ukQ=;
-	b=fDoZGbnV45YDNiTR6zCUOF2t6mzSJS0uWp1qBlqF+4Soik/WqcPB32qWWOHSPtfzJgCfAHXiR
-	gQTXDcp1mG8RS95tchNiModcsQvJqxCjPWRd9z4wnkkQNmE8Zl+qXWHWW2BgZfoAhYdmihEdGed
-	vGZ5JBVBiYB3iDbIAW+Jcrk=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4jPhTx6Z7fz12LFg;
-	Wed, 11 Nov 2026 19:43:01 +0800 (CST)
+	bh=hapHJX5CBE0NDRN9ZLEstnet2nYwtvfy5mzxbnNdOv8=;
+	b=Wz6XAmWk7oFSJGEEUVKr9opU5RIMYAQlGT1v/zo0ytAa5WpqhDgPQXSN2Kw3OUTFGsCmA7WoC
+	5Ghlc/u5SZaqRNRjW4/BBFKpx+cwWWCmzr2o1QYrrbuE+OGDA3fl4QfEnoakNykn3XM9+UIUyVh
+	ZH3MOJpYkibgFRklj4aBigM=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4jPhTb5th4zLlVY;
+	Wed, 11 Nov 2026 19:42:43 +0800 (CST)
 Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id EFDEA202E6;
-	Wed, 11 Nov 2026 19:42:56 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 186484048B;
+	Wed, 11 Nov 2026 19:42:59 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemk200008.china.huawei.com
  (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 11 Nov
- 2026 19:42:56 +0800
+ 2026 19:42:58 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <mark.rutland@arm.com>,
 	<oleg@redhat.com>, <shuah@kernel.org>, <kees@kernel.org>,
@@ -62,9 +62,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <mark.rutland@arm.com>,
 	<mathieu.desnoyers@efficios.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v21 08/15] arm64: ptrace: Extract arm64_syscall_exit_to_user_mode_work() helper
-Date: Wed, 11 Nov 2026 19:42:18 +0800
-Message-ID: <20261111114225.3977243-9-ruanjinjie@huawei.com>
+Subject: [PATCH v21 11/15] arm64: syscall: Simplify el0_svc_common() syscall exit path
+Date: Wed, 11 Nov 2026 19:42:21 +0800
+Message-ID: <20261111114225.3977243-12-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261111114225.3977243-1-ruanjinjie@huawei.com>
 References: <20261111114225.3977243-1-ruanjinjie@huawei.com>
@@ -82,18 +82,33 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
  kwepemk200008.china.huawei.com (7.202.194.74)
 
-Introduce a helper arm64_syscall_exit_to_user_mode_work() that
-encapsulates the re-reading of thread flags and the call to
-syscall_trace_exit(). Use it in el0_svc_common() to replace
-the open-coded instances, removing the duplicated flags read
-and making the control flow simpler.
+The fast exit path of el0_svc_common() is only taken when no syscall
+work was pending on entry and CONFIG_DEBUG_RSEQ is disabled:
 
-This aligns the arm64 exit path with the pattern expected by the
-generic entry infrastructure, which uses a similar
-syscall_exit_to_user_mode_work() callback.
+	if (!(flags & _TIF_SYSCALL_WORK) && !IS_ENABLED(CONFIG_DEBUG_RSEQ)) {
+		flags = read_thread_flags();
+		if (unlikely(flags & _TIF_SYSCALL_EXIT_WORK) || flags & _TIF_SINGLESTEP)
+			arm64_syscall_exit_to_user_mode_work(regs);
+		return;
+	}
+	trace_exit:
+		arm64_syscall_exit_to_user_mode_work(regs);
 
-No functional changes intended; this is a preparation step for converting
-arm64 to the generic entry infrastructure.
+arm64_syscall_exit_to_user_mode_work() already re-reads the thread
+flags and checks the same flags itself. The only other thing it does is
+rseq_syscall(), which is an empty stub when CONFIG_DEBUG_RSEQ is
+disabled, i.e. whenever the fast path is taken. So both paths end up
+doing exactly the same thing, and the fast path can be dropped:
+
+	trace_exit:
+		arm64_syscall_exit_to_user_mode_work(regs);
+
+With CONFIG_DEBUG_RSEQ enabled the fast path was never taken, so
+nothing changes there either.
+
+has_syscall_work() then has a single user left, so open-code it.
+
+No functional changes intended.
 
 Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: Will Deacon <will@kernel.org>
@@ -102,50 +117,54 @@ Cc: Ada Couprie Diaz <ada.coupriediaz@arm.com>
 Reviewed-by: Linus Walleij <linusw@kernel.org>
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- arch/arm64/include/asm/syscall.h | 7 +++++++
- arch/arm64/kernel/syscall.c      | 9 +++------
- 2 files changed, 10 insertions(+), 6 deletions(-)
+ arch/arm64/kernel/syscall.c | 20 +-------------------
+ 1 file changed, 1 insertion(+), 19 deletions(-)
 
-diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
-index 696739f5a250..3e4672ab4a4f 100644
---- a/arch/arm64/include/asm/syscall.h
-+++ b/arch/arm64/include/asm/syscall.h
-@@ -123,4 +123,11 @@ static inline int syscall_get_arch(struct task_struct *task)
- int arm64_syscall_trace_enter(struct pt_regs *regs, unsigned long flags);
- void syscall_trace_exit(struct pt_regs *regs, unsigned long flags);
- 
-+static __always_inline void arm64_syscall_exit_to_user_mode_work(struct pt_regs *regs)
-+{
-+	unsigned long flags = read_thread_flags();
-+
-+	syscall_trace_exit(regs, flags);
-+}
-+
- #endif	/* __ASM_SYSCALL_H */
 diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-index e778aac6fab9..0061fc63e7ba 100644
+index f1f0b6f3e32b..3488afd45d20 100644
 --- a/arch/arm64/kernel/syscall.c
 +++ b/arch/arm64/kernel/syscall.c
-@@ -127,16 +127,13 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
- 	 */
- 	if (!has_syscall_work(flags) && !IS_ENABLED(CONFIG_DEBUG_RSEQ)) {
- 		flags = read_thread_flags();
--		if (has_syscall_work(flags) || flags & _TIF_SINGLESTEP) {
--			flags = read_thread_flags();
--			syscall_trace_exit(regs, flags);
--		}
-+		if (has_syscall_work(flags) || flags & _TIF_SINGLESTEP)
-+			arm64_syscall_exit_to_user_mode_work(regs);
+@@ -54,11 +54,6 @@ static void invoke_syscall(struct pt_regs *regs, unsigned int scno,
+ 	syscall_set_return_value(current, regs, 0, ret);
+ }
+ 
+-static inline bool has_syscall_work(unsigned long flags)
+-{
+-	return unlikely(flags & _TIF_SYSCALL_WORK);
+-}
+-
+ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 			   const syscall_fn_t syscall_table[])
+ {
+@@ -95,7 +90,7 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
  		return;
  	}
  
- trace_exit:
--	flags = read_thread_flags();
--	syscall_trace_exit(regs, flags);
-+	arm64_syscall_exit_to_user_mode_work(regs);
- }
+-	if (has_syscall_work(flags)) {
++	if (unlikely(flags & _TIF_SYSCALL_WORK)) {
+ 		/*
+ 		 * The de-facto standard way to skip a system call using ptrace
+ 		 * is to set the system call to -1 (NO_SYSCALL) and set x0 to a
+@@ -119,19 +114,6 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+ 	}
  
- void do_el0_svc(struct pt_regs *regs)
+ 	invoke_syscall(regs, scno, sc_nr, syscall_table);
+-
+-	/*
+-	 * The tracing status may have changed under our feet, so we have to
+-	 * check again. However, if we were tracing entry, then we always trace
+-	 * exit regardless, as the old entry assembly did.
+-	 */
+-	if (!has_syscall_work(flags) && !IS_ENABLED(CONFIG_DEBUG_RSEQ)) {
+-		flags = read_thread_flags();
+-		if (unlikely(flags & _TIF_SYSCALL_EXIT_WORK) || flags & _TIF_SINGLESTEP)
+-			arm64_syscall_exit_to_user_mode_work(regs);
+-		return;
+-	}
+-
+ trace_exit:
+ 	arm64_syscall_exit_to_user_mode_work(regs);
+ }
 -- 
 2.34.1
 
