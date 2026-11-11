@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794425058;
-	b=TehSpyi+9pOSOh/kWyWN4sYwJlBBGyizqvmm2wur3habNsQz9OzUTcneDjewp6Yq9aOA
-	 znlhZSqDim71q6ny6RsH5zQkHwBVa4tr09AB1xPbeF4/MZR2BfyKMrhUC12Uj5cwvPVwh
-	 0F0kfejpSO5NIKJsMIefINP3Mw3u8bnD4SALNSlDKLj2/PJJaprGJATGzjhiSHdr4BYeN
-	 mu6KNOF3CYhDE/9bxmI6HEk/rVpd8VrqFHdA20SfD6RCV4pBJSvBZwY+ilQgSS05XAWOA
-	 xqo1e3DxZhA88m6KLu6iX4NqTJtIzc+iXYFTZERBoKLmulkOdsZ+2leb5shNONwAasg==
+	t=1794425059;
+	b=XnQrhhHKiIn3ZtXuPNXpdsk2nnyaOKYJJBlir0ChKrXdUgmunzyjuOFH5rskO5Ua9ygL
+	 zWghKyI96bJkzjyrrvYUoet0KItCHRAko6WqWJV8rrQ3A/5lzXG7n5trtfmOYYWCRFnwE
+	 CdXzjwSw7N+zZK/4WM8sX8/ncMWm4faSdzklLfRgoSVeofPy3i4lP0zqJYGGsIwAAiGr3
+	 6oXtQ0snfWH844kH6TdjpVbWaTUViNSo2T0aIzmPyx1SyVW6kuu9pqTdt21qSf1aOPD72
+	 /x37zuLpPO1PF31ehrTYPISCcZ9s+q/8Vv3X0Z8C04NQBNvxOWEmfkJcBFEm4Ocw5kQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794425058;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794425059;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=c1gmqyzGXPZYxPfKkRYqwd2gnFVkzUbXgN8JNV1Au+8=;
-	b=ETxRK1p3Ps6Yzc6ICUromYUO/3USTHSMaY1xS6qUCniSVrg69/l52RiMexzGhvkBAynm
-	 vFZPoKBaY8qD8O2212mKTg3iKhv4x3wdi3L3u5jtNc0kTvetWA9rDPkTHdKffrRd9WmiF
-	 mstQHuWbblWPy3F2tlKu9Q8kenQsr1WJwrYqgcAsJuutb6y3Ka7kHvw6QjrhbmmjNVZZj
-	 UdUAlg5PEp4mIHw/C5/g5Ihm53yr1ic2Qca21titrePw+sTqITFgjFPwh6vq2WCsMVeVm
-	 EW6+0Wm5tO2LPOg8Nvh1rv4t6wbqEE1ilhQUREN/88Y7wKDs2I9VckAJNDZnxHtHHkA==
+	bh=s6lt1PxCFx0agGLbXpFKlY/hoUAzM5xkPqAiIkWnGNA=;
+	b=jJGq2fDdajeQI0Yl5X9bYNotgCd8cxyeRmp3oLmg4OtyPSa3BQoakzWI/gwverzdrvEW
+	 z6VFjuFI/Xp+sbxZ2X1w2SWJQswDP419qoOU4rfoku9xz8co05iYtErwR6vZTxMPvjRsL
+	 W1npOeKcG7TKf+eGj4Z1I1F2rqIN2oNfdc17FUq+TcKFJv/hbGN1XCiWa2mF4WV4WFS9m
+	 VtwooTR6gQ7MgjoutelIsUAbLLpklCRTdVlXZwYS7G1SsX8eheTf1UBjrq10EJlbLervm
+	 lc8xTXyQ0NB/qp5VHimSydfs2d/Z/b6WLPjdP8/p/+td4X6qzDz9OdGFONFD1+qlz6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KqDGXT6s;
-	arc=none smtp.remote-ip=209.85.167.198
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UOq3nT8j;
+	arc=none smtp.remote-ip=209.85.167.200
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25835606A8BD
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 19:24:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25835606A8BD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37560606DD5B
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 19:24:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37560606DD5B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KqDGXT6s
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-4ab8b4887d4so2486652b6e.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 11:24:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UOq3nT8j
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-4cc89e86e9eso4180545b6e.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 11:24:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794425057; x=1795029857; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794425058; x=1795029858; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=c1gmqyzGXPZYxPfKkRYqwd2gnFVkzUbXgN8JNV1Au+8=;
-        b=KqDGXT6sHwxeuWqo8YplC2Ceb9xg+9zSmZThwIsQvt2GedE/QEV6pbzsu3tpPxAEbt
-         fqrdrqCJioAudnnhcPnpgu0LgJI1yN61YRZkFlgh4B3aZFjxfmiidRDIVL7fvLq1UVOq
-         MvK9Ou3hPvxDpyg1iPrWSuO1kPKdk0MItTwB21eYhGOAu83p8l1FwjdL7G2xpl4EsPRv
-         oNbOIZ5tZGO8pwExlshG31m5aRc7+6TLjfnGqIU9fzQQDPhc4iNA6o2m803h4jOHtL40
-         QrV/hM01WPvp0ygNA8B2ZzQdG4Z+6lH1t9q3hekvBRIuhrUpss2kHVS6P250crF7pp9M
-         vxBw==
+        bh=s6lt1PxCFx0agGLbXpFKlY/hoUAzM5xkPqAiIkWnGNA=;
+        b=UOq3nT8jfNIxrMk+znyvt21C9lwSewOGrh1jpeVu5iK5VmdqJeDT4fPjN6nDS+s/rz
+         E6Ho+bO3iAXvXkGBGN7CjciNZSs05x40V5C4Z9f0REOobKvYRI7U+31LkNo568hjhRz2
+         VA+FxI4lBIGhJ+ugD1He8j+J8VFk+dt26q+Q+oobnfzOprmYbN898bflauRMBfEEy4rd
+         5Njig5Se7CnUBaBXRSmjOERE/lZ83r/qYtfGEy9EiotAynG+Zijcmr8jieR2cggp/ebU
+         BtjWu6T0pL3mwZ94u0gf7+eonYPgaPav+OYjwJPpOUc8KIt158SxR+gGtte9ruBukesx
+         e0+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794425057; x=1795029857;
+        d=1e100.net; s=20260707; t=1794425058; x=1795029858;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=c1gmqyzGXPZYxPfKkRYqwd2gnFVkzUbXgN8JNV1Au+8=;
-        b=KeOotAQT8/0pAIOBDfLsWYMOC6Jw318E1sY401xPGLXjiPoVWhGUmq6Bb8fxLQliGf
-         1P8DjYhvj3HPGnlB1AKmEMWnTbBVJ6vb4GLTP+ZoUdkhsTQ1PBgNaJXinD4p4WHcuYbR
-         ai0qBT/kCBzS4yG/ZcFtDhxWUkn4DHmBmwXbfbh2n1jpZeURfuFw4dPkmreQXg96nhW4
-         Bhdov+NWA0HOiq7E4LkVv9j2u5QPGXfHA06b31Ylq6UrA5qnL09twVBEqvEmK+li529Z
-         ewe9DC3IA158YTMhDLRUf5ZXYsS/rk8TaAvf0BGEnN6SB0+Bd8ThfbcLA/WMAzEI/g6l
-         0npg==
-X-Forwarded-Encrypted: i=1; AL+hErH5P3r3VCvJKvwoqoUYCTtV3f1iOdJYKP4IFdCli5Y0wpBcCI7aON/vo/2idTPy3eawf1l/7EqQkzUM+ICLQr0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/hf1pMhkd6u9Zn2o0mPW0Uyg11iot1s46udqbVPdkuJfkphqF1
-	lXrfBoIoX9ovzAlwkw+xj2K61+FdtFiju53gxI8DQUM8R9aK/PSs6hd2NBC6zfa39/5eMDnQDWD
-	/3PYeFb4amafptQ==
-X-Received: from ilbdx27-n1.prod.google.com ([2002:a05:6e02:421b:10b0:53d:3ab5:58fa])
+        bh=s6lt1PxCFx0agGLbXpFKlY/hoUAzM5xkPqAiIkWnGNA=;
+        b=s6M5B8NOJ09Tk2kYfHurDxNeeV2BkA2fROlwMFmjHnUrzZDhXl/4pjfA3s/5ecSJNy
+         W9BTZ2hYF+s1tHc5Ck/1CnjrX/xcdzaTLwEGqGSfi2zY2pZ1naEkCNUEt9l0SkANh1x3
+         2sf9JuCO41/xIusOf3HiJ5KY/qm4SW20XUj017HWFSZIdhf+vJ/FqzaBCLDHeTJ3/ncN
+         eXYoonYeUskvH92u8FHDT5q/UWQbudLJ7/JlVAq81EdyIjFYEsGrhxwgm5hKShj6s+dE
+         7K5wmNFZw/oz2E4vyfx8yHUsMmIdrUESL866KJAmiMMufTV4kJE8GgpQ0M7YMOr2wpZF
+         /VQw==
+X-Forwarded-Encrypted: i=1; AL+hErE69ZfXCF3Akpe7CAqNWtfAGlVHMUQeVJjQgS3M2apirqEXVm8iBVdKVMIFYqR9tD5nV0m90k12q/SQnjR8HAI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z99GSYaR9+R46GQJxkDban8vfvdmPHwvFHmYVK48UppZrhgY/nh
+	eVfRahDzHwUxSU/vEOnwf4D44GMJVo9ytxaVE9vJG7OiXGVFNBj4SIFDgv/emVww+HThMZIh6v4
+	e44WEBL3gfE7zAg==
+X-Received: from iltr6.prod.google.com ([2002:a92:c5a6:0:b0:542:f469:6209])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:1382:b0:567:f784:f939 with SMTP id 5614622812f47-56b9791019amr2605655b6e.51.1794425056843;
- Wed, 11 Nov 2026 11:24:16 -0800 (PST)
-Date: Wed, 11 Nov 2026 19:24:05 +0000
+ 2002:a05:6808:23c7:b0:568:e5f:5dbe with SMTP id 5614622812f47-56b97d0f43cmr3278637b6e.61.1794425058062;
+ Wed, 11 Nov 2026 11:24:18 -0800 (PST)
+Date: Wed, 11 Nov 2026 19:24:06 +0000
 In-Reply-To: <20261111192411.4133780-1-dmatlack@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261111192411.4133780-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.56.0.567.gdb80ae8cd5-goog
-Message-ID: <20261111192411.4133780-2-dmatlack@google.com>
-Subject: [RFC PATCH 1/7] vfio: selftests: Add vfio_pci_find_mem_bar() helper
+Message-ID: <20261111192411.4133780-3-dmatlack@google.com>
+Subject: [RFC PATCH 2/7] vfio: selftests: Verify memory behavior in vfio_pci_find_mem_bar()
 From: David Matlack <dmatlack@google.com>
 To: dri-devel@lists.freedesktop.org, iommu@lists.linux.dev, 
 	kvm@vger.kernel.org, linaro-mm-sig@lists.linaro.org, 
@@ -98,141 +98,86 @@ Cc: Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>,
 	Sumit Semwal <sumit.semwal@linaro.org>, Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-From: Mina Almasry <almasrymina@google.com>
+Write and read back test patterns before returning a BAR from
+vfio_pci_find_mem_bar(), restoring the original contents and
+PCI_COMMAND_MEMORY state afterward.
 
-Add vfio_pci_find_mem_bar() to libvfio to locate a BAR (or range within
-a BAR) of at least min_size bytes that behaves like ordinary memory and
-can be safely read and written without device-specific side effects.
+QEMU's pci-testdev exposes a readable, writable, mmap-capable BAR2
+whenever membar=<size> is passed, even if membar-backed=on was omitted
+and accesses are dropped as unimplemented MMIO. Probing the BAR upfront
+lets callers skip cleanly instead of failing later DMA or fault checks.
 
-Detection is backed by a table of known devices, starting with QEMU's
-pci-testdev (1b36:0005) BAR 2 when configured with membar=<size> and
-membar-backed=on.
-
-Suggested-by: David Matlack <dmatlack@google.com>
-Cc: David Matlack <dmatlack@google.com>
-Cc: Matt Evans <matt@ozlabs.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-
-Reviewed-by: David Matlack <dmatlack@google.com>
+Suggested-by: Alex Williamson <alex@shazbot.org>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- .../lib/include/libvfio/vfio_pci_device.h     | 10 +++
- .../selftests/vfio/lib/vfio_pci_device.c      | 67 +++++++++++++++++++
- 2 files changed, 77 insertions(+)
+ .../selftests/vfio/lib/vfio_pci_device.c      | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-index 007adc322c1e..19d458adba1a 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-@@ -15,6 +15,13 @@ struct vfio_pci_bar {
- 	void *vaddr;
- };
- 
-+struct vfio_pci_mem_bar {
-+	struct vfio_pci_bar *bar;
-+	void *vaddr;
-+	u64 offset;
-+	u64 size;
-+};
-+
- struct vfio_pci_device {
- 	const char *bdf;
- 	int fd;
-@@ -162,6 +169,9 @@ static inline bool vfio_pci_device_match(struct vfio_pci_device *device,
- 		(device_id == vfio_pci_config_readw(device, PCI_DEVICE_ID));
- }
- 
-+bool vfio_pci_find_mem_bar(struct vfio_pci_device *device, u64 min_size,
-+			   struct vfio_pci_mem_bar *mem_bar);
-+
- const char *vfio_pci_get_cdev_path(const char *bdf);
- 
- void vfio_pci_group_setup(struct vfio_pci_device *device, const char *bdf);
 diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 4063a0e2b3df..d5308fe61490 100644
+index d5308fe61490..9840463594ab 100644
 --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
 +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -19,6 +19,7 @@
- #include <linux/log2.h>
- #include <linux/mman.h>
- #include <linux/overflow.h>
-+#include <linux/pci_ids.h>
- #include <linux/sizes.h>
- #include <linux/types.h>
- #include <linux/vfio.h>
-@@ -245,6 +246,72 @@ static void vfio_pci_bar_unmap_all(struct vfio_pci_device *device)
- 	}
- }
+@@ -13,6 +13,7 @@
+ #include <sys/mman.h>
  
-+#define PCI_DEVICE_ID_REDHAT_TEST	0x0005
-+
-+struct vfio_pci_mem_bar_desc {
-+	u16 vendor_id;
-+	u16 device_id;
-+	u8 bar_index;
-+	u64 offset;
-+	u64 size;
-+};
-+
-+static const struct vfio_pci_mem_bar_desc mem_bar_descs[] = {
-+	/* QEMU pci-testdev with membar=<size>,membar-backed=on */
-+	{
-+		.vendor_id = PCI_VENDOR_ID_REDHAT,
-+		.device_id = PCI_DEVICE_ID_REDHAT_TEST,
-+		.bar_index = 2,
-+	},
-+};
-+
-+bool vfio_pci_find_mem_bar(struct vfio_pci_device *device, u64 min_size,
-+			   struct vfio_pci_mem_bar *mem_bar)
+ #include <linux/align.h>
++#include <linux/io.h>
+ #include <linux/iommufd.h>
+ #include <linux/kernel.h>
+ #include <linux/limits.h>
+@@ -265,6 +266,33 @@ static const struct vfio_pci_mem_bar_desc mem_bar_descs[] = {
+ 	},
+ };
+ 
++static bool vfio_pci_mem_bar_verify(struct vfio_pci_device *device, void *vaddr)
 +{
-+	const u32 rw_mmap_flags = VFIO_REGION_INFO_FLAG_MMAP |
-+				  VFIO_REGION_INFO_FLAG_READ |
-+				  VFIO_REGION_INFO_FLAG_WRITE;
-+	size_t i;
++	const u64 pattern = 0x55aa55aa55aa55aaULL;
++	u16 orig_cmd;
++	u64 orig;
++	bool ok;
 +
-+	for (i = 0; i < ARRAY_SIZE(mem_bar_descs); i++) {
-+		const struct vfio_pci_mem_bar_desc *desc = &mem_bar_descs[i];
-+		struct vfio_pci_bar *bar;
-+		u64 size;
++	orig_cmd = vfio_pci_config_readw(device, PCI_COMMAND);
++	if (!(orig_cmd & PCI_COMMAND_MEMORY))
++		vfio_pci_config_writew(device, PCI_COMMAND,
++				       orig_cmd | PCI_COMMAND_MEMORY);
 +
-+		if (!vfio_pci_device_match(device, desc->vendor_id,
-+					   desc->device_id))
-+			continue;
-+
-+		VFIO_ASSERT_LT(desc->bar_index, PCI_STD_NUM_BARS);
-+		bar = &device->bars[desc->bar_index];
-+
-+		if ((bar->info.flags & rw_mmap_flags) != rw_mmap_flags)
-+			continue;
-+
-+		VFIO_ASSERT_NOT_NULL(bar->vaddr);
-+
-+		if (bar->info.size <= desc->offset)
-+			continue;
-+
-+		size = bar->info.size - desc->offset;
-+		if (desc->size)
-+			size = min(size, desc->size);
-+
-+		if (size < min_size)
-+			continue;
-+
-+		*mem_bar = (struct vfio_pci_mem_bar){
-+			.bar = bar,
-+			.vaddr = bar->vaddr + desc->offset,
-+			.offset = desc->offset,
-+			.size = size,
-+		};
-+		return true;
++	orig = readq(vaddr);
++	writeq(pattern, vaddr);
++	ok = (readq(vaddr) == pattern);
++	if (ok) {
++		writeq(~pattern, vaddr);
++		ok = (readq(vaddr) == ~pattern);
 +	}
++	writeq(orig, vaddr);
 +
-+	return false;
++	if (!(orig_cmd & PCI_COMMAND_MEMORY))
++		vfio_pci_config_writew(device, PCI_COMMAND, orig_cmd);
++
++	return ok;
 +}
 +
- void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
- 			    size_t config, size_t size, void *data)
+ bool vfio_pci_find_mem_bar(struct vfio_pci_device *device, u64 min_size,
+ 			   struct vfio_pci_mem_bar *mem_bar)
  {
+@@ -273,6 +301,8 @@ bool vfio_pci_find_mem_bar(struct vfio_pci_device *device, u64 min_size,
+ 				  VFIO_REGION_INFO_FLAG_WRITE;
+ 	size_t i;
+ 
++	min_size = max_t(u64, min_size, sizeof(u64));
++
+ 	for (i = 0; i < ARRAY_SIZE(mem_bar_descs); i++) {
+ 		const struct vfio_pci_mem_bar_desc *desc = &mem_bar_descs[i];
+ 		struct vfio_pci_bar *bar;
+@@ -300,6 +330,9 @@ bool vfio_pci_find_mem_bar(struct vfio_pci_device *device, u64 min_size,
+ 		if (size < min_size)
+ 			continue;
+ 
++		if (!vfio_pci_mem_bar_verify(device, bar->vaddr + desc->offset))
++			continue;
++
+ 		*mem_bar = (struct vfio_pci_mem_bar){
+ 			.bar = bar,
+ 			.vaddr = bar->vaddr + desc->offset,
 -- 
 2.56.0.567.gdb80ae8cd5-goog
 
