@@ -1,46 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794424321;
-	b=ERYxaDyh5v/lWDqyFJfb5c+3oJwdzpr2FNxPEAnItC1B6yAaByHAzRoCoQtGEa4g4eeQ
-	 SZohTrKDT+9T2vzxFERXekKOcsL6XT6c56KNagkzLVnxfJFjGSwe7I29q9RR4euL0Ol7H
-	 DHP0WW7vxA/9q4i/aDU8HwhadjU64mFOIQMckPKYmE1xBFmNqtkClQsyLOqEDDAPHh1fl
-	 H1leinxltYwtG3cVLnsUPaTVOK97J9ClzJCKJvIgYN/DZmexas254txAY7OllQwPBEGlA
-	 cbTaCC1+HTNZU+82m/hxCvu1SZXwNcwXgycRFAVK1dyjsRxgKeN5CMaEtq9j9QmFUjg==
+	t=1794424323;
+	b=sEwgxYfx40cSpzqvjGXx8taPznrPAd9acisLqKuJh0wSPbxjOdgG4amRK29dGZqbXrzK
+	 43sN/wSAaBZ8w+y1XwTTdfe7FEUhIlc7mMgIQI8FEuIsB3MPoypRZvkD8rra3MhXpgbrx
+	 oXbNQJo2uWyc91h8MSZUkaWWtrmNc6V3spZ7tsdb4sD/285D5RuJDnr1tgQpeYBe7d90g
+	 UKpf8/q3QhshLKL9mWpeK1csxMpr5pTekrLZDKmu9400MPiPTShNT+B7Z/ToF/c0Ue9uu
+	 rogPurw1hwx2mjOn3Gd7I4FuQFCa5kHJ1x9iB4IKgHqztzTDtfML60weqStzahMbJwg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794424321;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794424323;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=TYtcSEbeXrJzZbwSSVOIQbwHlUL+6uRNPP+QvBhwGKw=;
-	b=vfhcN0i0BcZwYO0zAVG0VfQSP/uKgPf1JTr2dEkxZMi+Z3hMt8QB++1XtdZhFZoxzr0v
-	 5ZKtY2guMkT3Zm1jHp45pRUdnnnb9YPFv6gzAuSn/XFV3rdy6mVapRqiE26Qgf8fjliSX
-	 MORNB0PQO2fFJRXrkO/KP2ChKdn8wPRpEVWBCv6Fa7cLU5nlanKCUm+di9+KRnb3wnIlV
-	 pkR0sW2jtOlNAbe0sCKLx/VewSseq78E1dAil76wHIOmHX1fBY3kiiErZHzXReojLNXNy
-	 i56UMq5QJDItC1UIWQ2b1p01hTS1TjhWCTZlShmI8BXcRGX+Gbw65DhGEoPxYUvJoFQ==
+	bh=NdkY7xp/B3wLXw3qOXSqhfDSdGzSUXTIrLEEowBCGRg=;
+	b=cccO6AyJ1eN0+ZqjoeiW7hQjiRP5og87mtWtAia4jLgc66X1NYwV7T1xrd6+mZ/8ehLg
+	 9754ykHzf3qWv+6MrSz/4rzcs3MlvgZKmAPdUv6euF3yGWMg85CAX3UXnAVc+wDClrDQu
+	 9/IMBuVFk/m7/i24HgbjFwNXZMbh3N2ez8HvvT8osQ58Bx4TsY+b9pM++oaxC6xPY55h6
+	 J4ilpiLbdUat7WY2hJmGYWgbJrRrsZk2+kreZVTusBvCsvDPDjVgLuCvwlS3XbhzbCDJM
+	 6mkj609g4+u42D9u64rQHfi+dvYoIQha7Df+u+n4ucN25xnNn+9K64kwP4Wllc0Ht6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Dki0UB+p;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U5j+cBKs;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD363606A881;
-	Wed, 11 Nov 2026 19:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0C560A2623;
+	Wed, 11 Nov 2026 19:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Dki0UB+p
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 109F21F00A05;
-	Wed, 11 Nov 2026 19:12:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U5j+cBKs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392AD1F00A0A;
+	Wed, 11 Nov 2026 19:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794424321;
-	bh=TYtcSEbeXrJzZbwSSVOIQbwHlUL+6uRNPP+QvBhwGKw=;
+	s=k20260515; t=1794424323;
+	bh=NdkY7xp/B3wLXw3qOXSqhfDSdGzSUXTIrLEEowBCGRg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Dki0UB+pU+9/Xirz3xv2X3IJ+8lHbn95JE6UV7Dcbk+PtyjesMnB64E+gnYdcT/p3
-	 Gihdt+S31WhdUCTKtZurtAnm30hR/+xztWYtxadxxmJDG5IfPnzG5Jeg0haph8IqMO
-	 6zPowngiipoBJ03kpd9PJpp7oVz5oknKi2QquY4qQvMm29zQ4SISYh6+D+Cn2WY1kS
-	 +1g0ohmkAEDSbgveD3fH+VN0GOAVqlgvleYWCEqtzkmhWO1o500zTAaiAtK1Wvmd/f
-	 O1EoSkBx/QQ7pTU+LA4xAYnVGfsDqAgMcYC6bBs+eHiM7OfIaOQK0i9DG3NbOzsxgY
-	 N604CpVViz/2w==
-Subject: Re: [PATCH net-next 02/10] cxgb4: flower: refuse a tunnel key wider
+	b=U5j+cBKsc9a+yOI/eNXb3MiV6eEzlMohwMgskjrcIC+ih7x1kepi0vN+TEoMw7dOY
+	 0FSxCO87K0iZ2f9iUQIGWPPNp+RQ50211hsLgk7+h8bILxLAw1LgXO5O9/C47rzPQQ
+	 L4orGYyYDz/NDqvYW3qv1pPplfev5UT2a3YmujDY9ciRiaoL8VDz4pJDcDEuoMZ22o
+	 fn/J9bjAZ22AhP5NrwgKeuEkVUbttOntcm9W2BtpMeBOn2czZvB8jffSxJz1mqchs8
+	 87HxPmdG1M85svOBi0M7Hnq6Fy2vn1kxMoOX0pQGbqNwjB8F+9yMZ5n95Ngf5qIbDO
+	 PJXWzKJzJTX4g==
+Subject: Re: [PATCH net-next 03/10] nfp: flower: refuse a tunnel key wider
  than the VNI
 From: netdev-bot+sashiko@kernel.org
 To: acassen@corp.free.fr
@@ -53,11 +53,11 @@ Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
  idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
  linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
-Date: Wed, 11 Nov 2026 19:11:59 +0000
-Message-ID: <179442431962.2199510.14986379471426017@kernel.org>
-In-Reply-To: <20261109131039.959438-3-acassen@corp.free.fr>
-References: <20261109131039.959438-3-acassen@corp.free.fr>
-X-sashiko-severity: Medium
+Date: Wed, 11 Nov 2026 19:12:01 +0000
+Message-ID: <179442432180.2199510.17732935950535223359@kernel.org>
+In-Reply-To: <20261109131039.959438-4-acassen@corp.free.fr>
+References: <20261109131039.959438-4-acassen@corp.free.fr>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -70,171 +70,91 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 (1) · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] cxgb4: unvalidated tunnel key mask in
-  cxgb4_validate_flow_match()
-- [Low] The commit message says the bug is already reachable today: "An
-  exact key above bit 23 already selects the wrong VNI".
-
-Pre-existing issues:
-- [Medium] This bug was not introduced by this patch, but it produces the
-  same symptom the commit message gives as its motivation ("The rule…
+- [Low] In drivers/net/ethernet/netronome/nfp/flower/offload.c, the new
+  nfp_flower_check_tun_vni() fixes a bug that already exists.
 
 --
 
-cxgb4: flower: refuse a tunnel key wider than the VNI
+nfp: flower: refuse a tunnel key wider than the VNI
 
-This patch adds a check to cxgb4_validate_flow_match(). Flower rules whose
-enc_key_id key has bits set above bit 23 are now rejected. Before this, the
-driver silently truncated such keys into the 24 bit vni bitfield.
+This patch adds nfp_flower_check_tun_vni() so that VXLAN and GENEVE flower
+rules are refused when the enc_key_id key does not fit in the 24 bit VNI.
+The check runs in nfp_flower_calculate_key_layers() after the UDP tunnel
+type is known. GRE keeps its 32 bit key.
 
-> An exact key above bit 23 already selects the wrong VNI.
+> diff --git a/drivers/net/ethernet/netronome/nfp/flower/offload.c b/drivers/net/ethernet/netronome/nfp/flower/offload.c
+> index 161190200dbd0..e5f6f4f464ad6 100644
+> --- a/drivers/net/ethernet/netronome/nfp/flower/offload.c
+> +++ b/drivers/net/ethernet/netronome/nfp/flower/offload.c
+> @@ -150,6 +150,23 @@ static bool nfp_flower_check_higher_than_l3(struct flow_rule *rule)
+>  	       flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ICMP);
+>  }
+>
+> +static int
+> +nfp_flower_check_tun_vni(struct flow_rule *rule,
+> +			 struct netlink_ext_ack *extack)
+> +{
+> +	struct flow_match_enc_keyid enc_keyid;
+> +
+> +	if (!flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_KEYID))
+> +		return 0;
+> +
+> +	flow_rule_match_enc_keyid(rule, &enc_keyid);
+> +	if (be32_to_cpu(enc_keyid.key->keyid) < VXLAN_N_VID)
+> +		return 0;
 
 [Severity: Low]
-The commit message says the truncation can already be hit today. Should
-this carry a Fixes: tag, and possibly go through net?
+The commit message says "An exact key above bit 23 already selects the
+wrong VNI", so this check also fixes a bug that exists today. Should the
+patch carry a Fixes: tag and a stable Cc so that stable trees get it too?
 
-At the baseline, cls_flower parses TCA_FLOWER_KEY_ENC_KEY_ID with
-TCA_FLOWER_UNSPEC as the mask, so the mask is all ones. After that,
-cxgb4_process_flow_match() stores the key and the mask into the 24 bit
-fields:
+Before cls_flower accepts an enc_key_id mask, fl_set_key() passes
+TCA_FLOWER_UNSPEC as the mask attribute. That means any enc_key_id that is
+present always gets an exact mask:
 
-drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c:cxgb4_process_flow_match() {
+net/sched/cls_flower.c:fl_set_key() {
     ...
-		fs->val.vni = be32_to_cpu(match.key->keyid);
-		fs->mask.vni = be32_to_cpu(match.mask->keyid);
-		if (fs->mask.vni) {
-			fs->val.encap_vld = 1;
-			fs->mask.encap_vld = 1;
-		}
+	fl_set_key_val(tb, &key->enc_key_id.keyid, TCA_FLOWER_KEY_ENC_KEY_ID,
+		       &mask->enc_key_id.keyid, TCA_FLOWER_UNSPEC,
+		       sizeof(key->enc_key_id.keyid));
     ...
 }
 
-The field is declared as uint32_t vni:ENCAP_VNI_BITWIDTH in struct
-ch_filter_tuple. So enc_key_id 0x01000005 becomes vni 0x5 with a vni mask
-of 0xffffff. The rule's action then applies to VNI 5 traffic.
+nfp_flower_compile_tun_udp_key() then shifts the key and the mask left by
+NFP_FL_TUN_VNI_OFFSET (8), which throws away bits 24-31:
 
-The truncation seems to date back to:
-
-Fixes: 98f3697f8d41 ("cxgb4: add tc flower match support for tunnel VNI")
-
-No later patch in the series touches drivers/net/ethernet/chelsio/, so
-nothing else adds the tag.
-
-> diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
-> index 3307e50426819..d9a509be5c517 100644
-> --- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
-> +++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
-> @@ -316,6 +316,17 @@ static int cxgb4_validate_flow_match(struct netlink_ext_ack *extack,
->  		return -EOPNOTSUPP;
->  	}
->  
-> +	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_KEYID)) {
-> +		struct flow_match_enc_keyid match;
-> +
-> +		flow_rule_match_enc_keyid(rule, &match);
-> +		if (be32_to_cpu(match.key->keyid) >> ENCAP_VNI_BITWIDTH) {
-> +			NL_SET_ERR_MSG_MOD(extack,
-> +					   "Tunnel key does not fit the 24 bit VNI");
-> +			return -EOPNOTSUPP;
-> +		}
-> +	}
-
-[Severity: Medium]
-Does this check cover the case the commit message describes? It only
-looks at match.key->keyid. The hazard named in the changelog is a mask
-that only covers bits above 23.
-
-cls_flower stores the key already ANDed with the mask. So a rule with
-enc_key_id 0 and a mask of 0xff000000 reaches
-cxgb4_validate_flow_match() with match.key->keyid == 0 and
-match.mask->keyid == cpu_to_be32(0xff000000). Shifting the key gives 0,
-and the rule is accepted.
-
-cxgb4_process_flow_match() then does:
-
-	fs->mask.vni = be32_to_cpu(match.mask->keyid);
-
-This truncates into the 24 bit vni bitfield of struct
-ch_filter_tuple and leaves fs->mask.vni == 0. The if (fs->mask.vni)
-block is skipped, so fs->val.encap_vld and fs->mask.encap_vld stay 0.
-__cxgb4_set_filter() then never reaches t4_alloc_encap_mac_filt().
-
-The hardware filter ends up with no tunnel constraint at all. It
-matches any traffic its other keys allow, including non-encapsulated
-packets. That is the failure mode the commit message says this patch
-prevents, and it opens up once the later patch in the series lets
-flower accept partial enc_key_id masks.
-
-Simply testing match.mask->keyid >> ENCAP_VNI_BITWIDTH would not work
-either. Exact matches today arrive with an all ones mask from
-TCA_FLOWER_UNSPEC, so every existing rule would be rejected.
-
-Would it make sense to also refuse a non-zero mask whose low
-ENCAP_VNI_BITWIDTH bits are all zero? Or is there a better way to
-express "match any VNI" for this hardware?
-
-[Severity: Medium]
-This is a pre-existing issue and was not introduced by this patch. It
-causes the same symptom the commit message names ("The rule would match
-any traffic its other keys allow"), but it depends on the firmware
-configuration.
-
-validate_filter() in cxgb4_filter.c checks encap_vld only against fconf
-VNIC_ID_F and the chip version:
-
-	    unsupported(fconf, VNIC_ID_F, fs->val.encap_vld,
-			fs->mask.encap_vld) ||
+drivers/net/ethernet/netronome/nfp/flower/match.c:nfp_flower_compile_tun_udp_key() {
     ...
-	if (fs->val.encap_vld &&
-	    CHELSIO_CHIP_VERSION(adapter->params.chip) < CHELSIO_T6)
-		return -EOPNOTSUPP;
+		vni = be32_to_cpu((match.key->keyid & match.mask->keyid)) <<
+		      NFP_FL_TUN_VNI_OFFSET;
+		*key |= cpu_to_be32(vni);
+		vni = be32_to_cpu(match.mask->keyid) << NFP_FL_TUN_VNI_OFFSET;
+		*key_msk |= cpu_to_be32(vni);
+    ...
+}
 
-It never checks that iconf (TP_INGRESS_CONFIG) has USE_ENC_IDX_F set.
+So on current and stable kernels, a VXLAN or GENEVE rule with enc_key_id
+0x01000005 gets programmed into the NIC as VNI 5 with mask 0xffffff00. The
+hardware then matches VNI 5 traffic. In software the rule never matches,
+because VXLAN and GENEVE tunnel ids are only 24 bits wide.
 
-In __cxgb4_set_filter(), the VNI is programmed only in the USE_ENC_IDX_F
-branch:
+The Fixes: tag would need to point at the commit that first added
+VXLAN/GENEVE VNI matching to nfp flower. Commit 77a5f73a8b33 ("nfp: flower:
+move udp tunnel key match compilation to helper function") only moved this
+code and says it makes no functional change, so the original commit is
+older than that one.
 
-	iconf = adapter->params.tp.ingress_config;
-	if (iconf & VNIC_F) {
-		f->fs.val.ovlan = (fs->val.pf << 13) | fs->val.vf;
-		f->fs.mask.ovlan = (fs->mask.pf << 13) | fs->mask.vf;
-		f->fs.val.ovlan_vld = fs->val.pfvf_vld;
-		f->fs.mask.ovlan_vld = fs->mask.pfvf_vld;
-	} else if (iconf & USE_ENC_IDX_F) {
-		if (f->fs.val.encap_vld) {
-			...
-			ret = t4_alloc_encap_mac_filt(adapter, pi->viid,
-			...
-
-If iconf has VNIC_F, ovlan_vld is overwritten with pfvf_vld, which is 0
-for a flower rule. If iconf has neither bit, nothing is programmed.
-
-set_filter_wr() has no VNI field, so tunnel information reaches hardware
-only through ovlan/ovlan_vld. In both cases the FW_FILTER_WR is sent
-without any VNI constraint.
-
-On a T6 with such a firmware config, could a rule like "flower skip_sw
-enc_key_id 5 action drop" be reported as offloaded with a VNI match, but
-drop all ingress traffic on the port that matches its other keys?
-
-Flower doesn't reach the hash filter path for these rules, since
-is_filter_exact_match() returns false when fs->mask.encap_vld is set.
-
-One possible fix would be for validate_filter() to reject encap_vld
-unless (iconf & USE_ENC_IDX_F).
-
-No later patch in the series touches drivers/net/ethernet/chelsio/.
+> +
+> +	NL_SET_ERR_MSG_MOD(extack, "unsupported offload: tunnel key does not fit the 24 bit VNI");
+> +	return -EOPNOTSUPP;
+> +}
+> +
 
 [ ... ]
 
