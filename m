@@ -1,84 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.42.203.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794427672;
-	b=YzP4vW6e1v+6FE0iBgQOxSIa4IG/O0WpEpC3eaVfO0EYX6nPwlSMMkQuvr3o21k6P25X
-	 OOubrwdxLIusbQ3KpdU5wMznnejlMP+RpglfVukmoVoKfXxfkICFjMjCUi5IazmFUeOr3
-	 DC7B1dMk5zBoB90pKVH4aaCBuebeQZy39Klws+EW5X4C4PC7RcCg5U2asrDZzlFprWM55
-	 rV6XLCdFTAhFhcGGLGGgHmqJDXaNZNodbRWtCZoLjSxftnal0VRMK/ZSga5rz+5Gpg3eJ
-	 LO+7Jh90TVK/07QtpkuDbGPv2aZCt/7GUZESpydljHlG2tO6n5EJ+FtbsfkAQJnfPDQ==
+	t=1794428616;
+	b=HQmeDhnrcncKWqxHbJXL4s/MIh7U6EGwQk/2GjIyCXXNlBXINMjQPOScHinj18yLh6Yn
+	 QUnuNijxH60X23BV9aNDaggixl/tuma8Gb1+f7TItiuNJ99frsIcOKpqNN8dJhYmuvOeS
+	 0l0ApJDruFp11+SK75EGqZ6jY/MEJJwPLcOg5QgRmgKHhAPVr1zREBMXMVdAfQu31JHjX
+	 whMxniU+GdZynd4NPYCStkBtlb1IbrEqzNBVllHLrz6ZrruvaFU5HIdkToJz+/PUAkn5z
+	 Qzv5y0loM7wp/6bc2TLcQozUcGzdzZDsYmqgAXwA8Jz8iXI0g1/PlqM3cCfC98lQM5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794427672;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=5EMCD1rtKeIzP4pmI2Kq0aEOHvbQvIVCDlgtYyGqRvY=;
-	b=Pd0tui6w5wNwJytk2ulzr3UUaXmjRSXELkZ+Mvv+K5+G/gzMtu4TG+BDFlFJc3fBp5Kd
-	 l8nrsFeMPPJqx5qUVFgkU/ULglqwe2ZHIRlzLCFab/IOOw3P4kNiX5l2+Qje6VPXttIEv
-	 5PyG4PG1XyuMjBgmUOyQ2I6ZigqtfznRBqfJd09W5728uCwIQ7Pr6FhTm1/oAENTTldx7
-	 tItPiMVbNOGFan3QRwJPATPVtcFT4vZsxro/bMBEq2jRtz49Ibe7srPDY7xT3GH26x4jY
-	 EvWkc1RBYsiakiy5sLzHuua/c6tBnUHmFeqRctNrrMqnNLVP1IfK0+lgdydGvDIsc9w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794428616;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
+	b=bf2G8JS248pX1tbrUqKkZ4JlsPUS1kyRKnOWLdpaoQgO/MRTVlsewXaLHJL9YZd9KPLX
+	 vyirsKZBPQMVRnQ8X/eMotPFyqQe+cai8r5xNV/DLhua1te5nBvfQ71++KEFtMe2rakO6
+	 B05L1CBPprTKZngToZn9Te+CZwqvz6GWktk7ZSzxAssJBSLsjLmyVavWzrdFX3ar9Z+sT
+	 bwsusJWveg7iFBLaWHtSa43H9ZL8H8/FXoEIJH8mI7g7agGyasIn145teNQT82XkTicTK
+	 RF3lWo67IzjIoiKbMMBu+Kr/zme92Nyw9JmcSc4NN+YuiHEj+N2gRoO1cvGTx14Vnkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ib994pDE;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b;
+	arc=none smtp.remote-ip=52.42.203.116
+Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0B4606A321
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 20:07:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF0B4606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A91606A31C;
+	Wed, 11 Nov 2026 20:23:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32A91606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ib994pDE
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cd6028ff33fso1769578a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 12:07:51 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794427671; x=1795032471; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5EMCD1rtKeIzP4pmI2Kq0aEOHvbQvIVCDlgtYyGqRvY=;
-        b=Ib994pDE2Q7BaLhj22bPoqfOJhpjDDRFZvrAJjF7ehEjzTVOj9cWTjN5eyCaRLx9Do
-         uaS2NF2dBOoNhOHaCI9cq6B0c4DpZT44Hwg4BXixTHzx/hoKZRKbUk2vfdj9GyW29j7f
-         U4BAO1G3gUuj8dyUyzwVofzhK55MVd3KDdmWW0CyJi7QEjT+RRSF0k5VKFhX7ObI7VYH
-         ZihBiev0hpknq2qZjGUOhL6B6WeIU89r6TxdMuT5YsT29F1WLV/aGEEzx20tAeRGPyaL
-         zxhqro5AjHVmfqcVxw1iU2Dd3YE+92tQUea9yMj1bQgdPsP8FxxF9dTN/JDZEZO6Q3mi
-         hP9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794427671; x=1795032471;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5EMCD1rtKeIzP4pmI2Kq0aEOHvbQvIVCDlgtYyGqRvY=;
-        b=LxXgaeiYwqfehAy8JTq1dsL+1f3PfLQKPDswkYXFSfk42AHEP5PmtarlhCXWHGDiHJ
-         hgNuEhRyAuPFhtyUWlBRJm45PXynPE/3W3OhQnxi7WYZwB95hp9K2DNIPaj8BU6fQSIP
-         kjvHuwZRrNswIhNzX2iF/v3tUa2/8AyxXv6Bejb13kJNETq3a29xdWlXRQ7qywMz+Jay
-         uJCWbCqNLcJSRLGIV77L2y7e8+xkY4VcKbMEwk5G8CDFFtPsUtn3EiJopj3WebdjEnAh
-         BV46+pURSl+DUlJedXBhsIzk2DdrSdT0mU6FnfkAbLGA4ohalZSNm6cvqlZSEnsuGBd4
-         VjSQ==
-X-Forwarded-Encrypted: i=1; AL+hErEittiEbqbPAwRfLY9l9WEtvBp0ik8PmvV+kN4Ruy3KqqV6M4nKaksjqKOnK+BLBGFMGyrAfhMpCW60ZvkzLKA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+isP4Dy9Iff984xmx0atyzcqe/PbOyxzbabZ1PSsSulMrH7jpO
-	2InvOAsiiOd8XS8Z0m6Imm9vMGeW2JyPRagzj+joI1wJVZRfHDBceLblUyjyUqISiA==
-X-Gm-Gg: AYBFou3GdDpSKw8aTFfB1HO042JctpM63MQFe3kepDBPWyI2TtlGnidC+5z1JDSw+ZQ
-	FoD+e3je78xIMRy2lA71IADBYnj2yVxnLG9P64/E+etZ6i6gjcZTTFUgsDJj6K3zoa282KhkpgF
-	dME3SZFF59O9KD+/iB2KqXLdBgNmgwht++J3cIQEQ0achWlDVowU4Uf80NtB//XD2uGq7W2EsHG
-	D8VXXfnr9jpWHm7PGChIVJYGAIp35qRWKXalTVTmkO/fpY6GvkTT+rfXZqlz4OP5osUJIs73nz1
-	A9PZr9mkrw9Is+TgeUJ9wWeUg0/SkFFukbwzpuMFuxxLAgmI8Fjw4PzMugyJqtx5/nOuF9ee0O4
-	sZ6BbnhyAet9J9iUj1/0OxwH01rFnTOIEwjPWir7Yih726dw7FtiaZ3Sf2ACQleV4czRF8oKF9w
-	F8M1GRmqu1+c8ErrRGWVlZ2Mm22mEo1mFZHEcoCiGzRQwm7I4Uo0IQ4Aq81/wpKv3o9A4q8IFbN
-	8812NOXOWj9u7jkozs93sUatdrOfzZPL+q2Rp30suIgnA1xsh8GE7wvwPVYJsh85IApLkkXGpHY
-	C3zgFWziluBfcf/cnjSRLOQSKwUB/je69FpqCG5F00V1g/HTGiQjxdk3zimv4N+0
-X-Received: by 2002:a17:90b:5101:b0:3b1:64d3:f308 with SMTP id 98e67ed59e1d1-3b182f8511amr3538560a91.43.1794427669947;
-        Wed, 11 Nov 2026 12:07:49 -0800 (PST)
-Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d27cf1sm691230a91.12.2026.11.11.12.07.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2026 12:07:49 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1794428616; x=1825964616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
+  b=iMEZvZ9bKPvYu+lyl63NXczZgb9k00IMn6p/B41NF+YSge2JQ78uaWaI
+   3TEwozp7ebCyFqGQJC10YwNyJFTpBT4U3fmu4ddRB2SEvIbFbSVXuqLiW
+   JVhDNg6z2jRzcs0ngJJjtAW8tcy7wgkxhx1R6E8fIvRf2wdkkR6tp1Wxf
+   D2y5arB9O0zx/GF7R/bGfS/yLIOi5HAWKqBDCS8EZkk/T761sHCwXsd4H
+   Gt61dIFcjAFO4DSHsohJvTEKUFf7MHOm1ElAmU8Gbqug0jZ+YyNxqytYv
+   OQ5eO/IOET+up0Oduz50oSqV8UXFOpL9cLD7O9EVeN3k0XujH1PLjG10w
+   A==;
+X-CSE-ConnectionGUID: Qyyc6pHYShOrjNU/eJizYg==
+X-CSE-MsgGUID: Fcia4Cx0S3GdQP0ncOIkSw==
+X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
+   d="scan'208";a="33786501"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 20:23:33 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:12262]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.46.128:2525] with esmtp (Farcaster)
+ id 16ece643-915b-4807-8d1b-662b366d2515; Wed, 11 Nov 2026 20:23:33 +0000 (UTC)
+X-Farcaster-Flow-ID: 16ece643-915b-4807-8d1b-662b366d2515
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Wed, 11 Nov 2026 20:23:32 +0000
+Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
+ (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
+ 20:23:32 +0000
+Date: Wed, 11 Nov 2026 20:23:26 +0000
+From: David Keogh <dkeogh@amazon.com>
+To: Tianyi Gao <tianyi@cloudflare.com>
+CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
+	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
+	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
+	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
+	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
+	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
+ Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
+	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
+ Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
+	<nh-open-source@amazon.com>
+Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
+ LL_ALLOC_SPACE()
+Message-ID: <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+References: <cover.1794020868.git.tianyi@cloudflare.com>
+ <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+ <willemdebruijn.kernel.1d64e7848503b@gmail.com>
+ <20261107182526.69543-1-tianyi@cloudflare.com>
+ <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
+ <20261108190831.3f991a13@phoenix.local>
+ <20261109154909.32748-1-tianyi@cloudflare.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,76 +107,27 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 11 Nov 2026 12:07:48 -0800
-Message-Id: <DMSNIQJ9G6P3.2L2X6PDV6QBGA@google.com>
-Cc: <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>, "Abhishek
- Sahu" <abhsahu@nvidia.com>, "Raghavendra Rao Ananta" <rananta@google.com>,
- "Shuah Khan" <shuah@kernel.org>
-Subject: Re: [PATCH 4/5] vfio: selftests: Add sysfs_kernel_warn_count_get()
-From: "David Matlack" <dmatlack@google.com>
-To: "Alex Williamson" <alex@shazbot.org>, "David Matlack"
- <dmatlack@google.com>
-X-Mailer: aerc 0.21.0
-References: <20261029203324.1637772-1-dmatlack@google.com>
- <20261029203324.1637772-5-dmatlack@google.com>
- <20261110103434.48709eba@shazbot.org>
-In-Reply-To: <20261110103434.48709eba@shazbot.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20261109154909.32748-1-tianyi@cloudflare.com>
+X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Tue Nov 10, 2026 at 9:34 AM PST, Alex Williamson wrote:
-> On Thu, 29 Oct 2026 20:33:23 +0000
-> David Matlack <dmatlack@google.com> wrote:
->
->> Add a helper to read /sys/kernel/warn_count, which counts the number of
->> warnings (e.g. WARN(), KASAN, and UBSAN reports) the kernel has
->> encountered since boot. Return a negative value if the file does not
->> exist, e.g. on kernels that predate it.
->>=20
->> Factor the code to read an integer from a sysfs file out of
->> sysfs_val_get_int() so that it can be shared by both helpers.
->>=20
->> This will be used in a subsequent commit to detect kernel warnings
->> triggered by tests.
->>=20
->> Signed-off-by: David Matlack <dmatlack@google.com>
->> ---
->>  .../vfio/lib/include/libvfio/sysfs.h          |  7 +++++++
->>  tools/testing/selftests/vfio/lib/sysfs.c      | 19 +++++++++++++++----
->>  2 files changed, 22 insertions(+), 4 deletions(-)
->
-> I have a concern with this approach.  I run selftests in parallel as
-> much as possible, using multiple devices, each targeted at specific
-> tests, with other functional and performance tests running
-> concurrently.  When wiring this into my harness, I initially saw a
-> failure, but can't reproduce and have no log from the original event.
->
-> I've updated my local CI to keep a console log so that I might have a
-> chance of chasing the next instance, but I don't much like the fact
-> that any warning occurring concurrently with this test can trigger a
-> failure and the test doesn't provide anything to go on in the test logs
-> themselves.  Thanks,
+On Mon, Nov 09, 2026 at 03:49:09PM +0000, Tianyi Gao wrote:
+> To David Keogh: this plan drops the generic device attribute UAPI that
+> your RFC proposed. Your TC egress use case stays in v2, with a BPF-side
+> declaration instead of the device attribute. Before I proceed, please
+> let me know if you are unhappy with this plan.
 
-Thanks for trying this out and the report.
+Sorry for the slow reply. I am happy with the plan, please go ahead.
 
-What do you think about keeping warn_count to detect warnings, but also
-reading /dev/kmsg so the failure details are captured?
+Dropping IFLA_TX_EXTRA_HEADROOM is fine with me. A BPF-side
+declaration covers the TC egress case, as long as the program is
+attached to the device the skb is allocated for.
 
- - In setup, record warn_count and open /dev/kmsg and seek to the end.
+I will rework the TCP test so it sets the value through one of the new
+paths, and send it as a reply to v2.
 
- - In teardown, if warn_count changed, read the new /dev/kmsg records
-   and print the kernel warning reports (WARNING:, BUG:, KASAN, UBSAN,
-   etc.), including their call traces, into the test log before
-   failing.
-
-That way, if the check fails, the test log would show exactly what
-fired and you could tell right away whether it came from VFIO or from
-something else running concurrently.
-
-To avoid breaking setups like yours that run lots of tests in
-parallel, we could also make failing on warnings opt-in via an
-environment variable, so by default the test only logs the reports.
-
-Alternatively we could just say warn checking should be up to the user.
+Thanks,
+David
