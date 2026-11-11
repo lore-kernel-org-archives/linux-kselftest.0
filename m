@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794424330;
-	b=gIrsbZoNTu1XA59hba1Vb3SZ0ngQ1o5gOfxhJ3u1/C8CL4Q/qC7b2x8y1628O4uRiHlW
-	 82fWNsyBg4t3rxXfQWkXBxDFGi/r33O5HmKu3fYPmcmDunoHij1OBvtp3Y0GTi1rR80Bv
-	 J6M9+FOomUNYrlkZs//46CVNAgOdOBunUicWUgjdGg7bq23NrmAIwRnLt8TK6VE+rQN8i
-	 UUtaah7UJ9ktBAQPFxfWF+lKOFZRAqtht83WXCvTblAd7v1EJECFURzNdcUGyRwG+amCF
-	 4oL+DOIfhtMPuG7QaICdavEcn8kUC8o+lAVgdFlzf4efXX+9JTNG930AIojDDeFEMDQ==
+	t=1794424325;
+	b=P8i2LE/MxenK3FUBUSkv2qyLIPam7J81Rq6CKjcT8k71YHPuCHBnt1eUgRv+mZj/YY7N
+	 rIuXiTZsYy1hg7+yfXd/sBmJX4PqVMPFZrYu4d+qzDNDS450pOUIPPSWTrgkmaLFJlIM+
+	 Xun7vScazdq4HirRQS455ZZIsFewZJA6BMJK+Y4DgFHZxBCldLKRi+4LQuVTk7f+na/sh
+	 Nas86raHUy0b6lNEa/oHOaG/keY4kcmY6SVZtOLr+Rm2smiG6CTu7CFIJbXjZOQUmJQSA
+	 P/XCHC0biQZSojhmampokMQSGh62RulZfgwMufVpnibVb2QKAB/hOBR7qOhXVzUFagg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794424330;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794424325;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=nCP5ZM0Xh8+yWU/AcUsqoA4PfWxdOwn0jfBwhfBlWIg=;
-	b=r89KR1QkLuGkyD8N07OU4m7UTV4uh3grqFecAtx8dJ+Sl76EhljAUTGZ+PBWR0NtWqgw
-	 7D5fB1kK2h7LRuUXY4ny9jiGWieyiOdVgiRB1xsX79K8GjyiMvXDcX6dIa2T+fSwpb+Wk
-	 h3ms6VHsLHufs6pAkDLSZYbxZCaoBl+SLqnYuoRJV0I0HTbDSDf0LTG4aZBHlawaTri6P
-	 vUoT7PmyJZA+l4xz4XRWP2X6TDApRA5ZlPAuExXouYUQBTFVvBA+gaUZkdPRGd9N/UmEz
-	 u2w9IrNViIuISAuAXAgNilxA5kZpMym625vmeFB2qmNwsKRHmOqYSJRJOx0vKYZUxNQ==
+	bh=GWPCe/ldRNhLGb02fnB2WOPB4LQypi+fk7L8hqeqjmQ=;
+	b=tXnBefUvPZ1rgzK2gy2Ne7XH8X8Kg+YN6C+sNf1A5zz+GhE54BUYasmYtg/APv2jQRSE
+	 lGRHSg5wo1a9+gvgTbOkDD+zgdGafiMYgjo6lknTLtt/N55bzewaNVJqW3NrgwVoLWPkG
+	 LWOUgpdmV1JSqXrPFUp3TAvS1YGPd7Ja5mUqR+Pio7YxhJAxu2mnKpaghU1wyL9isOC71
+	 m81oOWlYb5WfipRejB8xUos38+O19+Avnnv82JbJz5HfKfSMyGTPFAHjfrsW+BDiQE0qP
+	 sceLgVzILakS+gN0BIJyxF0cvJsKJyCcyGnYQO+WCXuzW0hr0oc7oxjmrrMxEgmveoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P1njNFm9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T0kegdlg;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCC960A380A;
-	Wed, 11 Nov 2026 19:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04BA606A326;
+	Wed, 11 Nov 2026 19:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P1njNFm9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F521F00A05;
-	Wed, 11 Nov 2026 19:12:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T0kegdlg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38EB81F00A0E;
+	Wed, 11 Nov 2026 19:12:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794424329;
-	bh=nCP5ZM0Xh8+yWU/AcUsqoA4PfWxdOwn0jfBwhfBlWIg=;
+	s=k20260515; t=1794424325;
+	bh=GWPCe/ldRNhLGb02fnB2WOPB4LQypi+fk7L8hqeqjmQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=P1njNFm9CRjRcoY78wDe+gQnFM13wyxX4hF9YC52ds+gnKJfA5TMZYMUkVzyg6LnT
-	 CNmoMJSkBZqUxLOVbd/fZ9YKB1V4e2+Uw3SObRxGfTISzZehuxHXRa+VFdZA1udbsX
-	 lVRtYDvA2ZZLYKm9XaJQjjYYmJTVKDbpoayFboV/T4E9lZjcpMCAcp/Hl3HEbGQgwI
-	 obDBUK5AnpJ0nd2gu99KIvt0nfxjiPx2vezLD369jDQvS71ltcIFvCXzKwKvI5AyCb
-	 99obRQurWy4slj9X4SRTnlQby1+83OwF7E92Lsp6khnHauOeibSpbN+bfmjW8EGwoX
-	 hAwZOIRe9Phzg==
-Subject: Re: [PATCH net-next 06/10] net/sched: cls_flower: add enc_key_id mask
+	b=T0kegdlgrk9PoSsp6PKx1X6Eg7xnnT9E2j03QTnOPQFAvCZaAl59irhKAtg/5mTDq
+	 bgx0yE7dltZJxE/ev1qf4BkMLr8jTnUg/OYU70/6onc0JUjeGAGFcsu4vhzMdkXCwt
+	 KKhGj+9nN1lXEel9NJ4CeL/Y8lQpAM6VrN/c8AmjrFbaHjeDOp5hajPKSCKfj01xnz
+	 UYlDxbj269iKs9ymtbOEB10OzsVRJUS6gg1DGrPA5hZJt9UPZZBeQ3r5iTadG3nPEp
+	 ylGhdgQ6QZYY45YZFz8oG8ckmis67EfbB125QqnZKUuWLeprAhxtcxUa9kv1VakR02
+	 TRYwbJ+Ih+Hfw==
+Subject: Re: [PATCH net-next 04/10] net/mlx5e: TC, refuse a tunnel key wider
+ than the VNI
 From: netdev-bot+sashiko@kernel.org
 To: acassen@corp.free.fr
 Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
@@ -52,11 +53,11 @@ Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
  idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
  linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
-Date: Wed, 11 Nov 2026 19:12:07 +0000
-Message-ID: <179442432794.2199510.1364864921481333835@kernel.org>
-In-Reply-To: <20261109131039.959438-7-acassen@corp.free.fr>
-References: <20261109131039.959438-7-acassen@corp.free.fr>
-X-sashiko-severity: Medium
+Date: Wed, 11 Nov 2026 19:12:03 +0000
+Message-ID: <179442432378.2199510.219572665710096354@kernel.org>
+In-Reply-To: <20261109131039.959438-5-acassen@corp.free.fr>
+References: <20261109131039.959438-5-acassen@corp.free.fr>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -69,135 +70,86 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 (1) · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] net/sched: cls_flower: 24-bit VNI mask truncation in
-  fl_set_key() offload
-
-Pre-existing issues:
-- [Medium] i40e and iavf accept an enc_key_id match but never program the
-  tenant ID into hardware.
+- [Low] The commit message says this is a fix for a bug that exists
+  today: "An exact key above bit 23 already selects the wrong VNI." The…
 
 --
 
-net/sched: cls_flower: add enc_key_id mask
+net/mlx5e: TC, refuse a tunnel key wider than the VNI
 
-This adds an optional TCA_FLOWER_KEY_ENC_KEY_ID_MASK attribute to flower,
-so one filter can match a block of tunnel keys. When no mask is given, the
-enc_key_id match stays exact. The new attribute is also added to the policy,
-the dump path and the tc.yaml netlink spec.
+This patch makes mlx5e_tc_tun_parse_vxlan() and
+mlx5e_tc_tun_parse_geneve_vni() reject an enc_key_id whose key does not
+fit in the 24 bit VNI match field. Such rules now fail with -EOPNOTSUPP
+and an extack message. The 32 bit GRE key handling is left as is.
 
-> diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
-> index 23eba4a00a947..dd248a335402a 100644
-> --- a/net/sched/cls_flower.c
-> +++ b/net/sched/cls_flower.c
+> VXLAN and GENEVE flows truncate the key and the mask of enc_key_id to a 24
+> bit VNI. An exact key above bit 23 already selects the wrong VNI. Flower
+> is about to accept partial masks. A mask that only covers bits above 23
+> would then match any VNI. Refuse a key that no VNI can match. GRE keeps
+> its 32 bit key.
 
 [ ... ]
 
-> @@ -2110,7 +2111,7 @@ static int fl_set_key(struct net *net, struct nlattr *tca_opts,
->  	}
->  
->  	fl_set_key_val(tb, &key->enc_key_id.keyid, TCA_FLOWER_KEY_ENC_KEY_ID,
-> -		       &mask->enc_key_id.keyid, TCA_FLOWER_UNSPEC,
-> +		       &mask->enc_key_id.keyid, TCA_FLOWER_KEY_ENC_KEY_ID_MASK,
->  		       sizeof(key->enc_key_id.keyid));
+> Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
 
-[Severity: Medium]
-The commit message says truncating the mask to a 24 bit VNI is correct
-when the key fits the VNI. The earlier patches in the series only check
-the key. Doesn't that miss a mask with no bits set in the low 24 bits?
+[Severity: Low]
+The commit message says the problem exists today ("An exact key above bit
+23 already selects the wrong VNI"). Should the patch carry a Fixes: tag,
+and maybe go through net?
 
-Take enc_key_id 0x0/0xff000000. It passes the check in
-cxgb4_validate_flow_match(), because be32_to_cpu(match.key->keyid) >>
-ENCAP_VNI_BITWIDTH is 0. cxgb4_process_flow_match() then stores
-be32_to_cpu(match.mask->keyid) into the 24 bit fs->mask.vni field, which
-ends up as 0.
+The truncation does look reachable in the current tree. Flower parses
+TCA_FLOWER_KEY_ENC_KEY_ID with TCA_FLOWER_UNSPEC as the mask type, so every
+enc_key_id rule is an exact 32 bit match. The parsers then write the key
+into 24 bit fields:
 
-fs->val.encap_vld and fs->mask.encap_vld are only set under
-if (fs->mask.vni). So the rule is programmed without the encapsulation
-qualifier, and t4_alloc_encap_mac_filt() is skipped. The hardware filter
-can then match non-encapsulated traffic on the port, which the user
-never asked for.
-
-mlx5e_tc_tun_parse_vxlan() has the same shape. It only bails out when
-enc_keyid.mask->keyid is zero, and only checks the key against
-MLX5E_TC_TUN_N_VNI. It then writes the truncated mask into vxlan_vni in
-misc_c. That gives a zero VNI mask while MLX5_MATCH_MISC_PARAMETERS is
-still set in spec->match_criteria_enable, so the VNI is no longer
-constrained at all. The same applies to
-mlx5e_tc_tun_parse_outer_key_vxlan(), added earlier in this series.
-
-Before this patch the mask was always all ones whenever enc_key_id was
-present, so the low 24 bits could never be zero. This patch is what
-makes the mismatch reachable from userspace.
-
-Should these drivers reject a mask whose low 24 bits are all zero? Or
-should cxgb4 base encap_vld on the full 32 bit mask rather than the
-truncated fs->mask.vni? Either way, it looks like the "key fits the VNI"
-checks from the earlier patches need to look at the mask as well.
-
-[Severity: Medium]
-This is a pre-existing issue and was not introduced by this patch. With
-this change, partial masks can now reach i40e and iavf. Neither driver
-programs the tenant ID into hardware, yet both report the offload as
-successful.
-
-In i40e_parse_cls_flower(), any non-zero mask, including a partial one,
-sets the tenant ID field flag:
-
-drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_parse_cls_flower() {
+mlx5e_tc_tun_parse_vxlan() {
     ...
-	if (match.mask->keyid != 0)
-		field_flags |= I40E_CLOUD_FIELD_TEN_ID;
-
-	filter->tenant_id = be32_to_cpu(match.key->keyid);
+	MLX5_SET(fte_match_set_misc, misc_v, vxlan_vni,
+		 be32_to_cpu(enc_keyid.key->keyid));
     ...
 }
 
-But i40e_set_cld_element() memsets the AQ element and never writes
-cld->tenant_id:
-
-drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_set_cld_element() {
+mlx5e_tc_tun_parse_geneve_vni() {
     ...
-	/* tenant_id is not supported by FW now, once the support is enabled
-	 * fill the cld->tenant_id with cpu_to_le32(filter->tenant_id)
-	 */
-	if (filter->tenant_id)
-		return;
+	MLX5_SET(fte_match_set_misc, misc_v, geneve_vni, be32_to_cpu(enc_keyid.key->keyid));
+    ...
 }
 
-iavf_parse_cls_flower() has the same problem. It sets
-IAVF_CLOUD_FIELD_TEN_ID for any non-zero mask but never sends a tenant ID
-value to the PF.
+In mlx5_ifc.h, vxlan_vni and geneve_vni are 0x18 bits wide, so MLX5_SET()
+masks off bits 24-31.
 
-As a result, the hardware filter installed on these drivers does not match
-the requested tunnel key, whether the mask is exact or partial. An exact key
-is ignored in the same way today, so a partial mask does not add a new kind
-of mismatch.
+The VXLAN-GBP path in mlx5e_tc_tun_parse_vxlan() also loses those bits. It
+shifts the key left by 8 into the 32 bit tunnel_header_1:
 
-The commit message already says this accurately:
+	MLX5_SET(fte_match_set_misc5, misc_v, tunnel_header_1,
+		 be32_to_cpu(enc_keyid.key->keyid) << 8);
 
-  "i40e and iavf never program the value of enc_key_id, with or without
-  this patch."
+As a result, a skip_sw rule with enc_key_id 0x01000001 is offloaded as a
+match on VNI 1. Software never matches that rule.
 
-Should i40e_parse_cls_flower() and iavf_parse_cls_flower() reject an
-enc_key_id match with -EOPNOTSUPP, at least until firmware support for the
-tenant ID exists? That would stop the offload from appearing to succeed
-while ignoring the key. It would probably fit best as a separate fix.
+Because this fixes a mismatch that already exists, a Fixes: tag would tell
+backporters which stable trees are affected. These look like the
+candidate targets:
 
->  
->  	fl_set_key_val(tb, &key->enc_tp.src, TCA_FLOWER_KEY_ENC_UDP_SRC_PORT,
+  9272e3df3023 ("net/mlx5e: Geneve, Add support for encap/decap flows
+  offload") for the geneve_vni MLX5_SET()
 
-[ ... ]
+  the original en_tc.c commit that added VXLAN VNI matching, for the
+  vxlan_vni MLX5_SET(). d386939a327d ("net/mlx5e: Rearrange tc tunnel code
+  in a modular way") later moved that code into tc_tun_vxlan.c.
+
+  eacc77a73275 ("net/mlx5e: Use custom tunnel header for vxlan gbp") for
+  the tunnel_header_1 path
+
+Would it also make sense to send this to net as a standalone fix, rather
+than untagged as part of the net-next series that adds flower partial
+masks?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109131039.959438-1-acassen%40corp.free.fr
