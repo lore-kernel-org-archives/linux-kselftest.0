@@ -1,74 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.30.148.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794409069;
-	b=jl1G+3iuF/tJzSjPmh3zOwua75NVi9zyvcORV7KdKcyFHxaQXtWqOESrGxTpE1F8mpyA
-	 IsLG3iSGTlxC7I8SRngfezPYLVGqqai2HMNS/vsfnvHz2Argm0fuIScB4R4k1Jrn31WqV
-	 zuaovylVMI3zqXOypXiJQkmwR5HwcfOj/2azuSd+fHAlhkc3jWsxfKkhwCvrKV0cuprMi
-	 lN8U9EQ5jgI0M5aKIHkrlHqaCg0MLqlNG6nZdw48ev6Tfi9OFW/IqgHZDpX4Uukksg8so
-	 WVMQNrisGa7r2WE9vuEaFuSL7WtLQgz+QclQ533IFNPHhPZOOM7PwDho7Xnp95HoX9g==
+	t=1794409080;
+	b=vjVpSvGBDVqoAvZ8c2z0tKLRk2GiodYn5HDlztD2FMCXqSsKSq3jk1TJsb0g63wk0xuN
+	 Et7K9FwOonmYrbIpRjWMGjqeT7/0xG3gY3i9T0NEIRD59125Un7+gc6RpZnTxmAw8F36C
+	 5n9BB2S/hPUyPSOmdYFmGoGYGe4nHlFj8/rVYCjnB9bOYRCvNOBlzTN2j/VjJCPB4U6dh
+	 rUHTTIhKwm0tpnkRlG/713SUOxLaHnj/sECM9jQVttIonMdhM/z00nOqZTKxFDTp1L/AU
+	 SR3YZuytbzsW6uTSRcRYMy7SPT9zsJ6LUI44JbK3jbpdYf8UpoLtRlig6l1POzEgvfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794409069;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=eAVBx7wFjerY7MFoeOAbmTCOK2sMbdc2RAGG1TuVAr8=;
-	b=aVAqbYKwQJgp71cF6cLqo2Ndx6ivogcDjHm5/BO0BqrkZyR/2dzSOSfmnC+kybqdmZSl
-	 G1+ej9tSm8omfumWCRsusTql638WVjx1uYQ/gtvLWVrZ1a3vNqY7cOmx0otB18jemnuK7
-	 8qxBUpcZNThd7THPt0kr3Hb5cgEXzr/0mprZbSvcnHEH2AapeOgA/PcCldn2OM88KDxbr
-	 Dibe20rIghbJwPkOR+2Xa96D0AaGdIap6MEzUMV+XzFyyvq7lVI0sHtSkQ3ZXnzes1wHn
-	 zxMnAihKhL9iBcMJeedOB8InCeI+wJyZnJQwldfHBMbL+3DLOV2Q3RO9LsObWJ8w/kg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794409080;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 X-Zmail-TransId:X-Mailer:Message-ID:Date:Mime-Version:From:To:Cc:
+	 Subject:Content-Type:X-MAIL:X-TLS:X-ENVELOPE-SENDER:X-SOURCE-IP:
+	 X-CLEAN:X-Fangmail-Anti-Spam-Filtered:X-Fangmail-MID-QID;
+	bh=7ykvl4TfBSk/nPuLE+62lmDD8jntOs2T+Nzf9MEyT00=;
+	b=2jMu3lusDCoeHBdPceSBGvp3y4hWwQjKapHymHGmUdP7ACT8HAP7jTZVDcPKFkiFYW3Y
+	 Bs0rTduniT2zXOfMFPE0PoPg+doydqOL3KgjTpGiQ9I20EhRvcAUaqLkphpvX9M0IPwCO
+	 UPq9DmPHjmgjf13p/VIf/CSUO/86Af5nKQ7QlcbE0jv0W4t2LluWRSag9xxyPO5qhKsTy
+	 IKv4xiRiIklswb9YG1UZzsX7HVoqfD+aGmkBEb3nop9D74v7ifu6V3ItNKAl/yKF1jxS8
+	 QgqzmwRjgvMYJBnKwLxnarZfb1TmL6H3gdYDo0uhuuSzwejwUqgZi/M7230Kl1ut6iw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SnDZnbQW;
-	arc=none smtp.remote-ip=209.85.214.200
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=zte.com.cn;
+	spf=pass smtp.mailfrom=zte.com.cn;
+	dkim=pass header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=wDBscz1H;
+	arc=none smtp.remote-ip=160.30.148.34
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AD8606A339
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 14:57:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78AD8606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A394D606A327;
+	Wed, 11 Nov 2026 14:57:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A394D606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=SnDZnbQW
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2ed08be1c84so49001895ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 06:57:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794409068; x=1795013868; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eAVBx7wFjerY7MFoeOAbmTCOK2sMbdc2RAGG1TuVAr8=;
-        b=SnDZnbQW08z6Fo4oJucBlqSIoq6P3dVOZg3XM1Dl/02agzkA/301/aw2F7NgWhAchy
-         Wrg3nXmwTrMfZdpaRe6LCOV0iBJotVmWkTKtR6lmYksyh9YQT30J1u8TqxL8NSwBEJ82
-         6s+Kzx8EwS9d4JgM255tB6JnwGGEcH87zaEeSrPuXt3/fVAXl9GgdYWOXnMXxgJj/onR
-         TPukIkcch7Kyq/N/MD4PSICv8FhVaHu01Y7RNzFFNpHWn1Bd+LbJy/xLbKreSZcB2Df4
-         I4Mu/MsJhKxSLF0dAtCfTtLoDcVSAQFGEqPmyZj2Ia7x9yDNmdOOTpKTQnia1OnqZfqu
-         ceuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794409068; x=1795013868;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=eAVBx7wFjerY7MFoeOAbmTCOK2sMbdc2RAGG1TuVAr8=;
-        b=XFJYwEKjJHE8g7k/TI0IM5+aHg2AItzIwk6xHq2BzY3bkmVRZSNtkHlAQnd/Rz1dHE
-         o4/uDwXzRDrA9M2b2XnyGkq2lvERo1sbRvPXN9He8OSYZqTNjw5rMO1jlgOu3xO4s6nw
-         aa8ztNtBsAfAyP4ozFHN27lStHunYqTycr3PNt31PxLgVpLrZOMEeRneAAGP69Pb50yb
-         hZZb0rQq2sdfunNgmy/QnMZiD3jJhtiQCADStKIAPpo4b0ekw9bc9tDhRFE2z/Nnr/SN
-         P/PNGU7R+T7nfkJHRPSBNHp2Doo5whXTWmfOaQr2s/Wwf71cOLbVd7y4tZoilsiZ7fpr
-         +6Ig==
-X-Forwarded-Encrypted: i=1; AL+hErETnO6yQMaZkLDss2kp4YDUMq8b3yQmHoVfO0jEnuHgNcSEK5W2EkyCM80HlrboUm2Kc75fuOv0KqeF0nzHLms=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/kYjUPebN4MLbGMABIGaMqjx4KbHKfQPg/C4pq/KNOcEoupcMs
-	d67MT3TzgQqWcCf+KKhYIOmLXumeugW9wYL9Q4KkkI2Ggt4v3arED8FDlbVvtX1fxmlg/RrRaTK
-	73hoziw==
-X-Received: from plri11.prod.google.com ([2002:a17:903:32cb:b0:2e9:4bf0:5f17])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:b84:b0:2ed:238b:7db8
- with SMTP id d9443c01a7336-2edd7bae0fcmr30337835ad.61.1794409067689; Wed, 11
- Nov 2026 06:57:47 -0800 (PST)
-Date: Wed, 11 Nov 2026 06:57:46 -0800
-In-Reply-To: <avQ9Jhsnq7e3KPw-@raptor>
+	dkim=pass (2048-bit key, unprotected) header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=wDBscz1H
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4jPmpt0sRzz4yjjF;
+	Wed, 11 Nov 2026 22:57:58 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zte.com.cn;
+	s=z202610; t=1794409078;
+	bh=RSyi96C+BtD/1WdNUT2fDfaAcsY630G7i3kXD0+PQ1U=;
+	h=Date:From:To:Cc:Subject;
+	b=wDBscz1Hn20cZ2iv5RRVsiw05ccTZPaemeILBenCloU7OrqxevmhIIgKBn9JbauFI
+	 54zLKA4S1418X5q/TV7irQORpEetHMtviP2dcLzfmdgJF/Frv1FBDIBTUJpuZfo9L0
+	 hs313izpM8xOmiHjOMT7oQ6aTqV6me2Na/YJpUW2emwM9fFm1+M3WUCnvVrmqkqsO8
+	 UHpm95jNM6TYfQG568hWgtmIoFkTrR/eaFn0Zn+XYV0LciWK12lprA7gkt3wkZgEjg
+	 qrSSPjiZ4XdJtfax7004HDWbK8f3Vv1kRrq9WElGxQ1ivajFFKYqrW+L3/qp3bRDLq
+	 iPXtA29rsbgng==
+Received: from xaxapp04.zte.com.cn ([10.99.98.157])
+	by mse-fl2.zte.com.cn with SMTP id 6ABEvp9F073354;
+	Wed, 11 Nov 2026 22:57:51 +0800 (+08)
+	(envelope-from shao.mingyin@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+	by mapi (Zmail) with MAPI id mid32;
+	Wed, 11 Nov 2026 22:57:52 +0800 (CST)
+X-Zmail-TransId: 2af96af482709ba-6b89b
+X-Mailer: Zmail v1.0
+Message-ID: <202611112257529855AMDZLzg8ZmFDQ3fBstbi@zte.com.cn>
+Date: Wed, 11 Nov 2026 22:57:52 +0800 (CST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,65 +70,80 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
- <20261110110724.3614412-3-fuad.tabba@linux.dev> <avMoubwqgXbpflwM@gremlin>
- <CA+EHjTxT_9NghyLSZmOOi_oQboQw-g+6z9WxwaF=-7RdaGbMNw@mail.gmail.com>
- <avM9_7aWUDJSL3Lq@seanjc-mac.roam.internal> <avM_FXXF9oBkderF@gremlin> <avQ9Jhsnq7e3KPw-@raptor>
-Message-ID: <avSCaugZ4fRxRdpT@seanjc-mac.roam.internal>
-Subject: Re: [PATCH 2/2] KVM: selftests: Test KVM_PRE_FAULT_MEMORY against a
- full dirty ring
-From: Sean Christopherson <seanjc@google.com>
-To: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>, 
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Isaku Yamahata <isaku.yamahata@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev, 
-	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+From: <shao.mingyin@zte.com.cn>
+To: <tom.leiming@gmail.com>, <shuah@kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIDAvNF0gdWJsazogcmVwb3J0IHJlY292ZXJ5IHRlc3QgZmFpbHVyZXMgYW5kIGZpeCB0aGUgZXhwb3NlZCBkZWZlY3Rz?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl2.zte.com.cn 6ABEvp9F073354
+X-TLS: YES
+X-ENVELOPE-SENDER: shao.mingyin@zte.com.cn
+X-SOURCE-IP: 10.5.228.133 unknown Wed, 11 Nov 2026 22:57:58 +0800
+X-CLEAN: YES
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6AF48276.000/4jPmpt0sRzz4yjjF
 
-On Wed, Nov 11, 2026, Alexandru Elisei wrote:
-> On Tue, Nov 10, 2026 at 04:02:21PM +0000, Lorenzo Stoakes (ARM) wrote:
-> > On Tue, Nov 10, 2026 at 07:53:35AM -0800, Sean Christopherson wrote:
-> > > On Tue, Nov 10, 2026, Fuad Tabba wrote:
-> > > > > > diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-> > > > [...]
-> > > > > > +static void test_pre_fault_dirty_ring(void)
-> > > > [...]
-> > > > > > +    /* Populate the pages, so that pre-faulting can map them writable. */
-> > > > >
-> > > > > Reviewed below, but I wonder how x86 could then read fault these?
-> > > >
-> > > > KVM_PRE_FAULT_MEMORY is defined as a read fault, but x86 maps the page
-> > > > writable when the host page is, and marks it dirty, unless it falls
-> > > > back to access tracking (below). Populating the pages makes sure they
-> > > > aren't backed by the zero page.
-> > >
-> > > Before we effectively solidify the behavior, I think we should have an explicit
-> > > discussion about the desired behavior of KVM_PRE_FAULT_MEMORY when dirty logging
-> > > is enabled.  E.g. the only reason I kept the existing behavior in my auto-prefault
-> > > series was because I couldn't think of a good reason to change it.  But we never
-> > > made a concious decision in the first place, i.e. we never considered what would
-> > > happen if prefaulting collided with dirty logging (as evidenced by this bug).
-> > 
-> > Yeah, I do worry about implicit assumptions (also commented re: ordering).
-> > 
-> > I guess what makes sense, given the general approach for prefaulting = injecting
-> > a synthetic read fault, is for the expectation to be that it matches the
-> > behaviour of an ordinary read fault.
-> 
-> Unfortunately, what happens in this case is not as obvious as it sounds,
-> because a read fault on a memslot backed by guest_memfd maps the GPA with
-> read *and* write permission on arm64 (if the memslot is not readonly,
-> haven't checked what x86 does).
+The four patches make the ublk recovery tests report failures from their
+workers, and then fix the two defects that the stricter tests exposed.
+They are one series because the later work came out of the earlier
+patches: patch 2 applies on top of patch 1, and patches 3 and 4 are the
+two independent fixes that patch 2's testing uncovered.
 
-Ya, this isn't about read vs. write faults, it's about whether or not *any* "fault"
-from KVM_PRE_FAULT_MEMORY should be allowed if the target memslot has dirty logging
-enabled.
+Patch 1 waits for the recorded recovery worker PIDs and reports their
+status from the parent, so a failed worker no longer ends in PASS.  It is
+a v2 of the patch posted separately on 11-09; the only change is the
+simplified wait loop Ming Lei asked for, and his Reviewed-by is kept.
 
-I'm leaning toward "yes", mainly because I suspect that fully preventing installing
-writable mappings when dirty logging is enabled across all architectures would be
-more difficult that ensuring generic code doesn't explode, and in practice I doubt
-any real VMM usage of KVM_PRE_FAULT_MEMORY will care about dirty logging interactions,
-i.e. any KVM behavior will be a-ok with userspace.
+Patch 2 generalizes that collector for the stress scripts, which used a
+bare wait in nine of them and could print PASS after a worker failed.
+
+Patch 3 cancels a command that is committed after the quiesce
+cancellation scan has passed its slot; without it the server waits for a
+completion that never comes and the device stays LIVE.  This is the
+kernel fix and carries Fixes: and Cc: stable.
+
+Patch 4 clears the uring_cmd flag word when a selftest batch SQE is
+reused, so a recycled slot no longer carries the multishot flag of the
+previous batch fetch and is rejected with -EINVAL.
+
+Tested on next-20261105 with CONFIG_BLK_DEV_UBLK=y in a local QEMU/KVM
+VM (4 vCPUs, 4 GiB), with real ublk devices, kublk and fio.  Patch 1
+keeps its 71-scenario stub matrix.  For patch 2, all nine stress scripts
+passed before and after; with an injected ADD_DEV failure all nine
+previously reported PASS with exit status 0, and now report FAIL with
+255.  For patch 3, a test-only server hook held one COMMIT across a
+successful quiesce: the original kernel stayed LIVE until a second
+quiesce, the patched kernel reached QUIESCED directly, two runs per
+version.  For patch 4, the original kublk rejected the reused batch SQE
+with -EINVAL and its daemon exited, the patched kublk kept the device
+LIVE.  With both fixes applied the four recovery scripts passed twice
+per version.
+
+Shao Mingyin (4):
+  selftests: ublk: propagate recovery worker failures
+  selftests: ublk: propagate stress worker failures
+  ublk: cancel commits arriving after the quiesce scan
+  selftests: ublk: clear reused batch SQE command flags
+
+ drivers/block/ublk_drv.c                        | 40 ++++++++++++++++---------
+ tools/testing/selftests/ublk/batch.c            |  1 +
+ tools/testing/selftests/ublk/test_common.sh     | 30 ++++++++++++++-----
+ tools/testing/selftests/ublk/test_recover_01.sh | 20 ++++++++++---
+ tools/testing/selftests/ublk/test_recover_02.sh | 20 ++++++++++---
+ tools/testing/selftests/ublk/test_recover_03.sh | 20 ++++++++++---
+ tools/testing/selftests/ublk/test_recover_04.sh | 14 +++++++--
+ tools/testing/selftests/ublk/test_stress_01.sh  |  9 ++++--
+ tools/testing/selftests/ublk/test_stress_02.sh  |  9 ++++--
+ tools/testing/selftests/ublk/test_stress_03.sh  | 23 +++++++++++---
+ tools/testing/selftests/ublk/test_stress_04.sh  | 23 +++++++++++---
+ tools/testing/selftests/ublk/test_stress_05.sh  | 28 ++++++++++++-----
+ tools/testing/selftests/ublk/test_stress_06.sh  | 15 ++++++++--
+ tools/testing/selftests/ublk/test_stress_07.sh  | 15 ++++++++--
+ tools/testing/selftests/ublk/test_stress_08.sh  | 10 +++++--
+ tools/testing/selftests/ublk/test_stress_09.sh  | 10 +++++--
+ 16 files changed, 221 insertions(+), 66 deletions(-)
+
+---
+base-commit: ddfe51b0a0f5dc9e415cc2c8ad8db17532dd426b
