@@ -1,42 +1,42 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.225
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.225
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794376814;
-	b=IDbfH741ZYIYvmj/iCsr+HULasFbBhCRonEzsWhcwpWj+oPYrLnszr7SolxnH6k95Wlj
-	 JKoh0lm7DgZzjkVlY5MQXm1eFWYbp1Y/cMntuqxJ5G5UToCeOJmCkG5dzLOFiWF8wZfGy
-	 19Qxp2p4/8p5jgck75cZnDlfTrKNu9FPEJmTtXGyA2l2nGs1Azq/eA91pqNA1jq13n8Ty
-	 yo+vfF9NByBPk/t+bOo3i6RCF5PqJNJYTNijJbcEMKIik5xlBkNkZel2hzyAuWIkHPTy6
-	 abTpRNF3ABmdXZ1D6qEDWu0NrQaV9uzFC2HOsD3oGE8FGpkerMsxUJJT6hOp7lOjNlQ==
+	t=1794376815;
+	b=t19dnlFpBsozNtvfKhngSUL/og8DfqMdLq7YdrlQ8YKq2OgOkOnibuCQtMd1+IXtAQ2V
+	 fGN3j5ccchLMiFlSSpTrQ8uIHDkynIBGFp+9t+YVkiPBrSW0+TbUd9424hllE+C08Mq9r
+	 uBk5g1xE3KkTgATgPzfq9zFolAvu56eh4oCEBjguLFZYuvubLXV4x4rM4d7DJjb0yALlh
+	 CVisCeKHVcMF1RjkaIyWr0DstNinfb5i2UV4DwEy5WzAoUkOObnRocwIfYLTG7w/s49SO
+	 NkLczAUmla9J7i3Lr1txCxxmsFMZyat7BR6LyEABWg6oDxvCypFtLN2pRMhGU6HszLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794376814;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794376815;
 	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
 	 X-CFilter-Loop:Received:DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Received:X-Received:Received:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-DetectorID-Processed;
-	bh=Op/9/DpgcKIe0jcvYLiJPNqXkkmx6XxpHhTMkcCwGrc=;
-	b=g64ViSXUCu4r7ZyVwKkBBQBleK/d4UPgBaydcfZjg634wmZtU5T9nFZbh7G1IJzX0J0U
-	 JxnwSllaisb4l6qe3wRyQiqGG8/gJvJ48oZDMW0wyi03YTzTiH1GXFGOmEdWbsGjWlApe
-	 3ZiHbs623LQTobmuyT8B64XhX8wtLSwG//WZAACDYlI/HYJIt6GgpShCPGmyVkoEYlH/m
-	 AmwC1R8+SVFxsSpEDlKi0HtLfmnB4Z4VLP3lKbsgXqF5iH8PdP/Zw9ExUmTPEDWtMZhXx
-	 xFvQDr6fd5BgOynjGDSigLY6abG+dHSVefMHgjCtpPdITNYu9JgpL4m1ce2BrfQPL6Q==
+	bh=7MFXZIdj2HlQkbhckc0+l+zCwbBlVh492hcyewGBnHg=;
+	b=qSY58cqFJQ9EUOSiWfaYhtLI8NklHEsciYaAALPuyhFjboI1IYl37FnWnFmif4bXCLgL
+	 neuPU+jWl/qs/uhV3ldPiswnYhtiP8H38eGXrZwAEFbp4I0sjh/yQx5IJjo/Dc6FoFm3h
+	 tywwotI0jqEZ9k623Q9BMQWBRaqJAwXV+IcIjugdm3/RMZA9ClEe/BD8CzWvmMeQZyA+/
+	 nbDmATAldBvipO1rCxqY8eqImuK41z80NQGBMq2b2PxmygU+QwL3l86fGoRM3As3+tiPF
+	 JU4e1iQe9bRh3j0Pbf+x6CSI3rhhbwZSK7ElwTk28cCkNoe2TXxq/taHk1C5rN1JQVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=broadcom.com;
 	spf=fail smtp.mailfrom=broadcom.com;
-	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=ZjFvApRI;
-	arc=none smtp.remote-ip=209.85.215.225
-Received: from mail-pg1-f225.google.com (mail-pg1-f225.google.com [209.85.215.225])
+	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=B7pcuPJ1;
+	arc=none smtp.remote-ip=209.85.160.225
+Received: from mail-qt1-f225.google.com (mail-qt1-f225.google.com [209.85.160.225])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC1560A2624
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F347B60A3830
 	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 06:00:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BC1560A2624
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F347B60A3830
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=ZjFvApRI
-Received: by mail-pg1-f225.google.com with SMTP id 41be03b00d2f7-cdab8873d9dso1205404a12.1
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=B7pcuPJ1
+Received: by mail-qt1-f225.google.com with SMTP id d75a77b69052e-5365d725440so25321561cf.0
         for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 22:00:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1794376814; x=1794981614;
@@ -44,55 +44,55 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
          :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Op/9/DpgcKIe0jcvYLiJPNqXkkmx6XxpHhTMkcCwGrc=;
-        b=imWhfuRtWZJE1xkkMhvHboXbFAQOzk+7+Mfi4NalXXFN0rSh9jHyM8lZUNabnrCZ+y
-         L31VclPVFo3cgPVOq3zI2RcK3vJv3YCbO/+7QVO/v3eJMUnIVh8+0nGcNBpMMS43+MaB
-         KquISLeQgrQlMT9Lx2j8E3+j2XB/uz9sq2VFGcMJGHt5aSelTcVk5iKTIX27++QfREkR
-         Fkcz/SHJE7Znkn2ZaAFy8+29KDzMdEW/SbaMq42wbJzya95FozWiFSU8+q6DwYPT4VYk
-         xih+Xk1oNQv3cj5QPbrbKDNRWaQTeWAK5ydORUF5vjDI4KzCnfXNQw1CVIxA3X09E70L
-         3fHw==
-X-Forwarded-Encrypted: i=1; AL+hErGSwLJR/vFm9UXJC3y6waB+zN8D2hn9dOnGlyQbu+qu3mqZftGrI+ZLOcYI8HXkbrSsrVcICYjBmcK8Qal0f9A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+1eGCooeKAfIgDhvSHVxi5NAOvTlO2V8KWzMxhzCmsJL8fXkea
-	QO+Po+XG78AgwQnoG6DnpsGGw+2RiaB9D4r5x4JKM6zjGH9eVQNSat5w+YmsCzQ7ioxon5Qx2HJ
-	7ZwVtmgmtFGhhVkZTq1a2mLD0VtlY0pg9+YfmInRzDGQ/Ku1DBWvN3nTckyjp5RXQAWzokfi6HJ
-	WtGDyZiREOn0gRDsix1gMBE1eAEoc5j3pYWYZ/gBYmNqs9uvzBF7+iSvGH8MmziQP3ebfd5koFi
-	ckM1EGm1nv6gwDdZmUt
-X-Gm-Gg: AYBFou18ChcwDWbRdmF9UVYGkTDWTdRgu4RCv0nrqi/DNAug4gk1Uub1x37pQxHInER
-	XL/s7gVG0ei887X0vAp16url14tk1X0HrnJoBG33uDmLE6L0NGQ83UWa3izMJIb5z7zspu/vbr0
-	Y3vq9FEaP67ehuzf6aY08ukXJE+Vg11FPLN4lTNQmtS5k76w996EqpnW2FKFpWlqcv99HWZRkN6
-	4+JYTB6r2U862Wctobi8Cs377gLPu2D+3efgEXg3dCx7+i8pyeYQn4Lj1hoGaDpRwT4kFdiAe5l
-	Utudc4rU9CKKuGjRIkBS765HM8li2rYirnUmDnBVKU5SB04Ouijb4KJQaoryR+SUMj+Ey0T8bVK
-	u+CbwjU4VcgWsaUTpJdRLAGo/t61aDWM15lX0rQetTkYRMEpAwvLfruvA8VGSkUdFTGIM2Bx55r
-	EcT4JrtOpNVx8PWMjW8wxHUoaqHr12i3jr
-X-Received: by 2002:a17:90b:51c8:b0:3ac:aa8d:19e0 with SMTP id 98e67ed59e1d1-3b182e03460mr1573885a91.9.1794376812138;
-        Tue, 10 Nov 2026 22:00:12 -0800 (PST)
+        bh=7MFXZIdj2HlQkbhckc0+l+zCwbBlVh492hcyewGBnHg=;
+        b=QJMkLcdRkk3H46xZlpOIt75H3hQc0Zt4L/T2bWRWpELso92fu6Y9vP6D7QUP+nG7tZ
+         kpEOwVUVbvPopNtPaN+54yBRAhDI0pvACH3cX0ZK2j7ErxOzwO6FyXtb763YMQ0kWd73
+         qk5Oo13Kv27v7Te6OlXB75HVOn0YE5pr/vlEZqPslzbW2Z4mSKdnoI9fbd9qE+jrl+00
+         gdyQU6OIgvPWm5iQrre4WbK2u2PfLalP1lq2ANIfVGA67rU0zmmzaJXbvL83bP99Irak
+         F0RKVrWGnZ1p6bGo/ijXUFpDdukhKPzTpkfZ9rE5lUJTmUg3wUCE3K256LRBh/yXHEIy
+         du+w==
+X-Forwarded-Encrypted: i=1; AL+hErGghdgiaa/5LC0tyjmb2AyT0U9iknkbMvIiNG19PknIY61htyQWiPM48/7V7KVGI0JKMAeHE4J5fF/V4qv+LqY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/7RRJosau0obB3Rne1w6nHlFil/igpfrYLHNAdrgs+WCfJQXVL
+	wFR5Zw9OSnQ+qFg1aygPd6rwf1yMJxOGF74KqCMU36cGsYk35Gry60SnJ6CHC+h/rCKp39dgYX4
+	sHdLzDW2xdPSoabs1lQAATVb5k4qYcmBAUb1mFZdCP/7xpdR5DL0T0kkUuJ4QvztJhf/OJA0Fn/
+	DbgEfBmjKxEOq0A/xe4pbpLNRmZ65Jm0fueFBvvpj42Q0AMfvzdAFq4yoMjFirHqXXzGjrEL8Mk
+	bb8kS3b5N/ohU0Qz7Ia
+X-Gm-Gg: AYBFou3gLZ3j9PUb0XcwrcQAhOYjM10AxmSWbq4nhqfiSUGEl2Tk5I7gh7+uNsZwAbC
+	Z8yfVzRExZYboAN6MAnz48cctoz+eyGSqGCwgsjd1w0a1965AepipowmjitRYpxt0iPxUPShfjt
+	fAMV1idskLSvDGdON/s2UxFX1XxnqVPCUisQVNI4OV/FI9aDPvuxs/gkw7UKa7rOv8c4eOeK/oM
+	9yPDRH+eIKzPPUROpkQZwZDzAfjPA1ZP4CGvtKnEOE3HWXrT7bqiJP/wC8qlAmgehVHWvx+8uOb
+	PIAS3MM6WX28uKgY5jjkuv4bReZ6aJW7hCJVYJQoPTASr06I56NQ6NMvBb6GvdfliFn9ndsLlyb
+	3lLHmn9/CCmGlS2uOVa070rILmQMj4Zx0FOB+C6RQYmu1LoktYGXG7tRiSaCXZ77iBE2rE8/uH7
+	/4c1tfV2TeAnmCdxy4vk+O3gqFN5yalTZP
+X-Received: by 2002:a05:622a:190a:b0:535:33a:c75d with SMTP id d75a77b69052e-556c07decd7mr16968941cf.32.1794376813671;
+        Tue, 10 Nov 2026 22:00:13 -0800 (PST)
 Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-28.dlp.protect.broadcom.com. [144.49.247.28])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3b17de318c9sm1420698a91.2.2026.11.10.22.00.07
+        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-91ef04f6705sm489006d6.32.2026.11.10.22.00.13
         for <linux-kselftest@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Nov 2026 22:00:12 -0800 (PST)
+        Tue, 10 Nov 2026 22:00:13 -0800 (PST)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-946038e22f5so668483685a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 22:00:07 -0800 (PST)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93f20addba1so530888085a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 22:00:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1794376807; x=1794981607; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1794376813; x=1794981613; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Op/9/DpgcKIe0jcvYLiJPNqXkkmx6XxpHhTMkcCwGrc=;
-        b=ZjFvApRIFsh5X67BEGnT6S/tCiy4gMnxOiTiBifW6Drt+KGNJIneE5/tzwMbbqtCaI
-         wWn/hwbp5ViDEJsqFOytKVMZJF4tQsgDlD81YvXuiLTVio1CuU3HnOXlzvqLWikXEJ58
-         EQa5SyazNYqU9R5FDBYimR48SIikcfIev0Xto=
-X-Forwarded-Encrypted: i=1; AL+hErEwOFKlEuXyxQBemefHnYXb8hGuYO572ln9OkLt5JS5FfeOclL4xHPSRXFXZ74FVFvdAjC4a1j14DroYC0vYzA=@vger.kernel.org
-X-Received: by 2002:a05:620a:29c8:b0:93c:720c:94e0 with SMTP id af79cd13be357-947b001c6afmr209721985a.30.1794376807039;
-        Tue, 10 Nov 2026 22:00:07 -0800 (PST)
-X-Received: by 2002:a05:620a:29c8:b0:93c:720c:94e0 with SMTP id af79cd13be357-947b001c6afmr209716085a.30.1794376806575;
-        Tue, 10 Nov 2026 22:00:06 -0800 (PST)
+        bh=7MFXZIdj2HlQkbhckc0+l+zCwbBlVh492hcyewGBnHg=;
+        b=B7pcuPJ1efyA1P+iJnKBh8O1jxhnkgCcMcREwSTUwfGHjuPhVBLLiFlcKfgOAcQ7yz
+         6FRSzMJfUCl+GRc3inYvOA6PxXLySDa5B9K9UtvCfmn7S/A+usowmFcGcBCA1xvG1OqA
+         wXMX9H776YjKzm4bSqGi0z7bzo8UPT+5FNrmM=
+X-Forwarded-Encrypted: i=1; AL+hErHDd43dcLPZqbeAEUteIall+uALyP9JZpNdnmg/lVKbrtroY2JwORd4NenRSO4M48gAUDlorplKS6Afz/HTs70=@vger.kernel.org
+X-Received: by 2002:a05:620a:28c8:b0:945:c3b7:e704 with SMTP id af79cd13be357-947aff8dcf0mr206703585a.39.1794376812361;
+        Tue, 10 Nov 2026 22:00:12 -0800 (PST)
+X-Received: by 2002:a05:620a:28c8:b0:945:c3b7:e704 with SMTP id af79cd13be357-947aff8dcf0mr206700585a.39.1794376811878;
+        Tue, 10 Nov 2026 22:00:11 -0800 (PST)
 Received: from vertex.localdomain (pool-173-49-113-140.phlapa.fios.verizon.net. [173.49.113.140])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9479e7e7f3bsm411506885a.37.2026.11.10.22.00.05
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9479e7e7f3bsm411506885a.37.2026.11.10.22.00.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 22:00:05 -0800 (PST)
+        Tue, 10 Nov 2026 22:00:07 -0800 (PST)
 From: Zack Rusin <zack.rusin@broadcom.com>
 To: Sean Christopherson <seanjc@google.com>,
 	Paolo Bonzini <pbonzini@redhat.com>,
@@ -120,9 +120,9 @@ Cc: Doug Covelli <doug.covelli@broadcom.com>,
 	bcm-kernel-feedback-list@broadcom.com,
 	linux-kernel@vger.kernel.org,
 	Zack Rusin <zack.rusin@broadcom.com>
-Subject: [PATCH v3 01/12] KVM: x86/pmu: Honor enable_vmware_backdoor for VMware pseudo-PMCs
-Date: Wed, 11 Nov 2026 00:59:50 -0500
-Message-ID: <e08e3b6d0a8dcd25f1ee3e97a64acc1cbd3c0f1d.1794374897.git.zack.rusin@broadcom.com>
+Subject: [PATCH v3 02/12] KVM: x86: Move VMware backdoor support to separate files
+Date: Wed, 11 Nov 2026 00:59:51 -0500
+Message-ID: <07581ff5998d40092c2f171ffe1fb05ac48f9446.1794374897.git.zack.rusin@broadcom.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794374897.git.zack.rusin@broadcom.com>
 References: <cover.1794374897.git.zack.rusin@broadcom.com>
@@ -138,35 +138,385 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-Check enable_vmware_backdoor before kvm_pmu_rdpmc() hands an RDPMC of a
-VMware pseudo-PMC to the VMware emulation.
+Move the enable_vmware_backdoor module parameter, the VMware backdoor
+port and pseudo-PMC definitions, and the VMware pseudo-PMC and opcode
+helpers out of x86.c, emulate.c and pmu.{c,h} into new vmware.{c,h}
+files, and add a MAINTAINERS entry for the new files.
 
-The pseudo-PMCs are part of the VMware backdoor, but only the
-emulator's check for RDPMC at CPL3 with CR4.PCE clear honors
-enable_vmware_backdoor.  An RDPMC that KVM intercepts at CPL0, or at
-CPL3 with CR4.PCE set, returns the host TSC or time to any guest, even
-with the backdoor disabled.  Inject #GP instead, as for any other
-invalid PMC index.
+KVM's VMware emulation is spread across the emulator, the PMU code and
+x86.c, and both vendor modules read the module parameter directly.  The
+following patches make the VMware interfaces a per-VM setting, add a
+userspace exit for VMware hypercalls and allow compiling the emulation
+out.  Collect the code in one place first, as KVM already does for
+Hyper-V and Xen emulation, so that those changes stay local and the
+code movement can be reviewed on its own.
 
-Fixes: 2d7921c499af ("KVM: x86: Add support for VMware backdoor Pseudo-PMCs")
+No functional change intended.
+
+Link: https://lore.kernel.org/r/aIEgVpjXDR0BXgHq@google.com
+Link: https://lore.kernel.org/r/aIEwOToiAkKfQA-4@google.com
 Signed-off-by: Zack Rusin <zack.rusin@broadcom.com>
 ---
- arch/x86/kvm/pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MAINTAINERS            |  9 +++++
+ arch/x86/kvm/Makefile  |  3 +-
+ arch/x86/kvm/emulate.c |  4 +--
+ arch/x86/kvm/pmu.c     | 35 +-----------------
+ arch/x86/kvm/pmu.h     |  5 ---
+ arch/x86/kvm/svm/svm.c |  1 +
+ arch/x86/kvm/vmware.c  | 81 ++++++++++++++++++++++++++++++++++++++++++
+ arch/x86/kvm/vmware.h  | 22 ++++++++++++
+ arch/x86/kvm/vmx/vmx.c |  1 +
+ arch/x86/kvm/x86.c     | 36 +------------------
+ arch/x86/kvm/x86.h     |  2 --
+ 11 files changed, 119 insertions(+), 80 deletions(-)
+ create mode 100644 arch/x86/kvm/vmware.c
+ create mode 100644 arch/x86/kvm/vmware.h
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 222b7fc2c3aa..017053e8f76e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15042,6 +15042,15 @@ F:	arch/x86/kvm/svm/hyperv.*
+ F:	arch/x86/kvm/svm/svm_onhyperv.*
+ F:	arch/x86/kvm/vmx/hyperv.*
+ 
++KVM X86 VMWARE (KVM/VMware)
++M:	Zack Rusin <zack.rusin@broadcom.com>
++M:	Doug Covelli <doug.covelli@broadcom.com>
++L:	kvm@vger.kernel.org
++S:	Supported
++T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
++T:	git https://github.com/kvm-x86/linux.git
++F:	arch/x86/kvm/vmware.*
++
+ KVM X86 Xen (KVM/Xen)
+ M:	David Woodhouse <dwmw2@infradead.org>
+ M:	Paul Durrant <paul@xen.org>
+diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+index c6bf463f5032..0cb47cfc1162 100644
+--- a/arch/x86/kvm/Makefile
++++ b/arch/x86/kvm/Makefile
+@@ -6,7 +6,8 @@ ccflags-$(CONFIG_KVM_WERROR) += -Werror
+ include $(srctree)/virt/kvm/Makefile.kvm
+ 
+ kvm-y			+= x86.o emulate.o irq.o lapic.o cpuid.o msrs.o pmu.o regs.o \
+-			   mtrr.o debugfs.o mmu/mmu.o mmu/page_track.o mmu/spte.o
++			   mtrr.o debugfs.o mmu/mmu.o mmu/page_track.o mmu/spte.o \
++			   vmware.o
+ 
+ kvm-$(CONFIG_X86_64) += mmu/tdp_iter.o mmu/tdp_mmu.o
+ kvm-$(CONFIG_KVM_IOAPIC) += i8259.o i8254.o ioapic.o
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index c1b21282187f..a7bcde6f0359 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -33,6 +33,7 @@
+ #include "tss.h"
+ #include "mmu.h"
+ #include "pmu.h"
++#include "vmware.h"
+ 
+ /*
+  * Operand types
+@@ -2523,9 +2524,6 @@ static bool emulator_bad_iopl(struct x86_emulate_ctxt *ctxt)
+ 	return ctxt->ops->cpl(ctxt) > iopl;
+ }
+ 
+-#define VMWARE_PORT_VMPORT	(0x5658)
+-#define VMWARE_PORT_VMRPC	(0x5659)
+-
+ static bool emulator_io_port_access_allowed(struct x86_emulate_ctxt *ctxt,
+ 					    u16 port, u16 len)
+ {
 diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index eef2f792dc9e..ca6dfb44949f 100644
+index ca6dfb44949f..ae7000c44677 100644
 --- a/arch/x86/kvm/pmu.c
 +++ b/arch/x86/kvm/pmu.c
-@@ -759,7 +759,7 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
- 	if (!pmu->version)
- 		return 1;
+@@ -23,6 +23,7 @@
+ #include "cpuid.h"
+ #include "lapic.h"
+ #include "pmu.h"
++#include "vmware.h"
  
--	if (is_vmware_backdoor_pmc(idx))
-+	if (enable_vmware_backdoor && is_vmware_backdoor_pmc(idx))
- 		return kvm_pmu_rdpmc_vmware(vcpu, idx, data);
+ /* This is enough to filter the vast majority of currently defined events. */
+ #define KVM_PMU_EVENT_FILTER_MAX_EVENTS 300
+@@ -716,40 +717,6 @@ int kvm_pmu_check_rdpmc_early(struct kvm_vcpu *vcpu, unsigned int idx)
+ 	return kvm_pmu_call(check_rdpmc_early)(vcpu, idx);
+ }
  
- 	pmc = kvm_pmu_call(rdpmc_ecx_to_pmc)(vcpu, idx, &mask);
+-bool is_vmware_backdoor_pmc(u32 pmc_idx)
+-{
+-	switch (pmc_idx) {
+-	case VMWARE_BACKDOOR_PMC_HOST_TSC:
+-	case VMWARE_BACKDOOR_PMC_REAL_TIME:
+-	case VMWARE_BACKDOOR_PMC_APPARENT_TIME:
+-		return true;
+-	}
+-	return false;
+-}
+-
+-static int kvm_pmu_rdpmc_vmware(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+-{
+-	u64 ctr_val;
+-
+-	switch (idx) {
+-	case VMWARE_BACKDOOR_PMC_HOST_TSC:
+-		ctr_val = rdtsc();
+-		break;
+-	case VMWARE_BACKDOOR_PMC_REAL_TIME:
+-		ctr_val = ktime_get_boottime_ns();
+-		break;
+-	case VMWARE_BACKDOOR_PMC_APPARENT_TIME:
+-		ctr_val = ktime_get_boottime_ns() +
+-			vcpu->kvm->arch.kvmclock_offset;
+-		break;
+-	default:
+-		return 1;
+-	}
+-
+-	*data = ctr_val;
+-	return 0;
+-}
+-
+ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+ {
+ 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 090c9bbb74f4..3fc2ce713b6f 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -17,10 +17,6 @@
+ #define fixed_ctrl_field(ctrl_reg, idx) \
+ 	(((ctrl_reg) >> ((idx) * INTEL_FIXED_BITS_STRIDE)) & INTEL_FIXED_BITS_MASK)
+ 
+-#define VMWARE_BACKDOOR_PMC_HOST_TSC		0x10000
+-#define VMWARE_BACKDOOR_PMC_REAL_TIME		0x10001
+-#define VMWARE_BACKDOOR_PMC_APPARENT_TIME	0x10002
+-
+ #define KVM_FIXED_PMC_BASE_IDX INTEL_PMC_IDX_FIXED
+ 
+ struct kvm_pmu_ops {
+@@ -287,7 +283,6 @@ void kvm_pmu_branch_retired(struct kvm_vcpu *vcpu);
+ void kvm_mediated_pmu_load(struct kvm_vcpu *vcpu);
+ void kvm_mediated_pmu_put(struct kvm_vcpu *vcpu);
+ 
+-bool is_vmware_backdoor_pmc(u32 pmc_idx);
+ bool kvm_need_perf_global_ctrl_intercept(struct kvm_vcpu *vcpu);
+ bool kvm_need_rdpmc_intercept(struct kvm_vcpu *vcpu);
+ 
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 721dc5e7e13a..980841d153f3 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -9,6 +9,7 @@
+ #include "smm.h"
+ #include "cpuid.h"
+ #include "pmu.h"
++#include "vmware.h"
+ 
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+diff --git a/arch/x86/kvm/vmware.c b/arch/x86/kvm/vmware.c
+new file mode 100644
+index 000000000000..772f295f8ff5
+--- /dev/null
++++ b/arch/x86/kvm/vmware.c
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * KVM VMware emulation support
++ *
++ * Copyright (C) 2025-2026 Broadcom. All Rights Reserved. The term
++ * "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
++ */
++
++#include <linux/moduleparam.h>
++
++#include "kvm_emulate.h"
++#include "vmware.h"
++
++bool __read_mostly enable_vmware_backdoor;
++EXPORT_SYMBOL_FOR_KVM_INTERNAL(enable_vmware_backdoor);
++module_param(enable_vmware_backdoor, bool, 0444);
++
++bool is_vmware_backdoor_pmc(u32 pmc_idx)
++{
++	switch (pmc_idx) {
++	case VMWARE_BACKDOOR_PMC_HOST_TSC:
++	case VMWARE_BACKDOOR_PMC_REAL_TIME:
++	case VMWARE_BACKDOOR_PMC_APPARENT_TIME:
++		return true;
++	}
++	return false;
++}
++
++int kvm_pmu_rdpmc_vmware(struct kvm_vcpu *vcpu, unsigned int idx, u64 *data)
++{
++	u64 ctr_val;
++
++	switch (idx) {
++	case VMWARE_BACKDOOR_PMC_HOST_TSC:
++		ctr_val = rdtsc();
++		break;
++	case VMWARE_BACKDOOR_PMC_REAL_TIME:
++		ctr_val = ktime_get_boottime_ns();
++		break;
++	case VMWARE_BACKDOOR_PMC_APPARENT_TIME:
++		ctr_val = ktime_get_boottime_ns() +
++			vcpu->kvm->arch.kvmclock_offset;
++		break;
++	default:
++		return 1;
++	}
++
++	*data = ctr_val;
++	return 0;
++}
++
++bool is_vmware_backdoor_opcode(struct x86_emulate_ctxt *ctxt)
++{
++	switch (ctxt->opcode_len) {
++	case 1:
++		switch (ctxt->b) {
++		case 0xe4:	/* IN */
++		case 0xe5:
++		case 0xec:
++		case 0xed:
++		case 0xe6:	/* OUT */
++		case 0xe7:
++		case 0xee:
++		case 0xef:
++		case 0x6c:	/* INS */
++		case 0x6d:
++		case 0x6e:	/* OUTS */
++		case 0x6f:
++			return true;
++		}
++		break;
++	case 2:
++		switch (ctxt->b) {
++		case 0x33:	/* RDPMC */
++			return true;
++		}
++		break;
++	}
++
++	return false;
++}
+diff --git a/arch/x86/kvm/vmware.h b/arch/x86/kvm/vmware.h
+new file mode 100644
+index 000000000000..debabaff9654
+--- /dev/null
++++ b/arch/x86/kvm/vmware.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __KVM_X86_VMWARE_H
++#define __KVM_X86_VMWARE_H
++
++#include <linux/kvm_host.h>
++
++struct x86_emulate_ctxt;
++
++#define VMWARE_BACKDOOR_PMC_HOST_TSC		0x10000
++#define VMWARE_BACKDOOR_PMC_REAL_TIME		0x10001
++#define VMWARE_BACKDOOR_PMC_APPARENT_TIME	0x10002
++
++#define VMWARE_PORT_VMPORT	(0x5658)
++#define VMWARE_PORT_VMRPC	(0x5659)
++
++extern bool enable_vmware_backdoor;
++
++bool is_vmware_backdoor_pmc(u32 pmc_idx);
++int kvm_pmu_rdpmc_vmware(struct kvm_vcpu *vcpu, unsigned int idx, u64 *data);
++bool is_vmware_backdoor_opcode(struct x86_emulate_ctxt *ctxt);
++
++#endif /* __KVM_X86_VMWARE_H */
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 68fa251dda60..d407eecf1034 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -68,6 +68,7 @@
+ #include "trace.h"
+ #include "vmcs.h"
+ #include "vmcs12.h"
++#include "vmware.h"
+ #include "vmx.h"
+ #include "x86.h"
+ #include "x86_ops.h"
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 2cd9ee316aad..389ae6213c85 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -31,6 +31,7 @@
+ #include "pmu.h"
+ #include "hyperv.h"
+ #include "lapic.h"
++#include "vmware.h"
+ #include "xen.h"
+ #include "smm.h"
+ 
+@@ -191,10 +192,6 @@ module_param(min_timer_period_us, uint, 0644);
+ static u32 __read_mostly tsc_tolerance_ppm = 250;
+ module_param(tsc_tolerance_ppm, uint, 0644);
+ 
+-bool __read_mostly enable_vmware_backdoor = false;
+-module_param(enable_vmware_backdoor, bool, 0444);
+-EXPORT_SYMBOL_FOR_KVM_INTERNAL(enable_vmware_backdoor);
+-
+ /*
+  * Flags to manipulate forced emulation behavior (any non-zero value will
+  * enable forced emulation).
+@@ -6291,37 +6288,6 @@ static bool kvm_vcpu_check_code_breakpoint(struct kvm_vcpu *vcpu,
+ 	return false;
+ }
+ 
+-static bool is_vmware_backdoor_opcode(struct x86_emulate_ctxt *ctxt)
+-{
+-	switch (ctxt->opcode_len) {
+-	case 1:
+-		switch (ctxt->b) {
+-		case 0xe4:	/* IN */
+-		case 0xe5:
+-		case 0xec:
+-		case 0xed:
+-		case 0xe6:	/* OUT */
+-		case 0xe7:
+-		case 0xee:
+-		case 0xef:
+-		case 0x6c:	/* INS */
+-		case 0x6d:
+-		case 0x6e:	/* OUTS */
+-		case 0x6f:
+-			return true;
+-		}
+-		break;
+-	case 2:
+-		switch (ctxt->b) {
+-		case 0x33:	/* RDPMC */
+-			return true;
+-		}
+-		break;
+-	}
+-
+-	return false;
+-}
+-
+ static bool is_soft_int_instruction(struct x86_emulate_ctxt *ctxt,
+ 				    int emulation_type)
+ {
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index 43850b524774..4d0a8558d931 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -718,8 +718,6 @@ static inline bool kvm_mpx_supported(void)
+ 
+ extern unsigned int min_timer_period_us;
+ 
+-extern bool enable_vmware_backdoor;
+-
+ extern int pi_inject_timer;
+ 
+ static inline u64 nsec_to_cycles(struct kvm_vcpu *vcpu, u64 nsec)
 -- 
 2.53.0
 
