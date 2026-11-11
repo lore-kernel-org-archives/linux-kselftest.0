@@ -1,59 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794424313;
-	b=Y8h1WYDuxo4lfLcIw43t4vQPXLKUMNC/5DTa3SBUyMQcfATERKZdnNkfIiV3sFQZ25Xb
-	 uQhKfM8bCwIV8pLLST63n53OyB5xxZJfiPcl4evxDa/KHbBwGiNclf56lbA6cWupNlZQ7
-	 nKENvgeNxN0AzrM/ArWzmTdml+N+O7dLyHmxGIn9JkHpTY+Q9PFBHA4r3G4SQWFdA/Drr
-	 zh8ZqJyVm8oPYkTaTYQ+Dd6y4I9sJF5OYBnOzuc2G51FekQ2fXEulybui6dHoyMLVWmmf
-	 EWzQA0vGoiEJcE2rs0qNpLLwDuMAt0mrsFWG4nBPVJ6xTIVaS/UNGBJ55tVaAd3/pag==
+	t=1794424321;
+	b=ERYxaDyh5v/lWDqyFJfb5c+3oJwdzpr2FNxPEAnItC1B6yAaByHAzRoCoQtGEa4g4eeQ
+	 SZohTrKDT+9T2vzxFERXekKOcsL6XT6c56KNagkzLVnxfJFjGSwe7I29q9RR4euL0Ol7H
+	 DHP0WW7vxA/9q4i/aDU8HwhadjU64mFOIQMckPKYmE1xBFmNqtkClQsyLOqEDDAPHh1fl
+	 H1leinxltYwtG3cVLnsUPaTVOK97J9ClzJCKJvIgYN/DZmexas254txAY7OllQwPBEGlA
+	 cbTaCC1+HTNZU+82m/hxCvu1SZXwNcwXgycRFAVK1dyjsRxgKeN5CMaEtq9j9QmFUjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794424313;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794424321;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=BmFRczvoBtmOwTG/7oMajmLwqMVNgNaQBfQiryDbdac=;
-	b=HckVgmcFUvyTLTZG8wI4gpOwMKfj81WNWI1SuoEo5xFrTOjEI78PcE++f96j8pA55dcY
-	 AEu6ugB/dTrHhsgWKPvKPLil/8k1uRxVbGWR/DCkAzZyZW8+loC5NNheX+7siiwAS0BCW
-	 inls5Ch1efEh+Eec4FwBX951NbbxuYiFFHfxW58E6UyHUm2Vb4O0fpXzDmAgdlBg2ET2Z
-	 Lsqvo+v6Y7gggliqHN5vqpWksdmhdeYHNFwLFzRvzA+GsB6vdmxC2f5a7C3ZHNhDkg8o3
-	 Z5Y0xCECPmp17mcm2KKcyrOnt24UVIPhyURd3PmhhgqMWBVNOkguSWLBGCCMkSECbFw==
+	bh=TYtcSEbeXrJzZbwSSVOIQbwHlUL+6uRNPP+QvBhwGKw=;
+	b=vfhcN0i0BcZwYO0zAVG0VfQSP/uKgPf1JTr2dEkxZMi+Z3hMt8QB++1XtdZhFZoxzr0v
+	 5ZKtY2guMkT3Zm1jHp45pRUdnnnb9YPFv6gzAuSn/XFV3rdy6mVapRqiE26Qgf8fjliSX
+	 MORNB0PQO2fFJRXrkO/KP2ChKdn8wPRpEVWBCv6Fa7cLU5nlanKCUm+di9+KRnb3wnIlV
+	 pkR0sW2jtOlNAbe0sCKLx/VewSseq78E1dAil76wHIOmHX1fBY3kiiErZHzXReojLNXNy
+	 i56UMq5QJDItC1UIWQ2b1p01hTS1TjhWCTZlShmI8BXcRGX+Gbw65DhGEoPxYUvJoFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UXhqP7lw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Dki0UB+p;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D44606A337;
-	Wed, 11 Nov 2026 19:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD363606A881;
+	Wed, 11 Nov 2026 19:12:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UXhqP7lw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70BAF1F00A08;
-	Wed, 11 Nov 2026 19:11:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Dki0UB+p
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 109F21F00A05;
+	Wed, 11 Nov 2026 19:12:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794424313;
-	bh=BmFRczvoBtmOwTG/7oMajmLwqMVNgNaQBfQiryDbdac=;
+	s=k20260515; t=1794424321;
+	bh=TYtcSEbeXrJzZbwSSVOIQbwHlUL+6uRNPP+QvBhwGKw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=UXhqP7lwuutW/dZFcFQe4jzt9KSgg0Xm3Iawqi+5OofgNlnG9R7neP4ey7XzX2o9T
-	 VyBI0sRs+vbbySD+iYcdPPnUfj3auz5a6B0HF8jgALxE/Hw4KBhY7sBNcpUAV3Mzry
-	 N46ubKa9/fFTOOYPoh36Pw2ewt3y9FrstuKXnk9YXfHbLtWs2DQ7WIwWyMeN0uUwlK
-	 Mo2NrtMCUFliZyXFboRROnWF9mDqFuuu0XiYt1QZzt3Yj2cT6x77nYpUT38E+US+sN
-	 heMhgg9JUXY03OIFZXW7ztewKyyrSB/sNNZtT6fTiXQcdFGA9+4clUKeOMuCQcZUgC
-	 Bzy9KAt/gb9Xg==
-Subject: Re: [PATCH net-next v10 2/4] selftests: tc-testing: add fq_pie
- per-flow class stats test
+	b=Dki0UB+pU+9/Xirz3xv2X3IJ+8lHbn95JE6UV7Dcbk+PtyjesMnB64E+gnYdcT/p3
+	 Gihdt+S31WhdUCTKtZurtAnm30hR/+xztWYtxadxxmJDG5IfPnzG5Jeg0haph8IqMO
+	 6zPowngiipoBJ03kpd9PJpp7oVz5oknKi2QquY4qQvMm29zQ4SISYh6+D+Cn2WY1kS
+	 +1g0ohmkAEDSbgveD3fH+VN0GOAVqlgvleYWCEqtzkmhWO1o500zTAaiAtK1Wvmd/f
+	 O1EoSkBx/QQ7pTU+LA4xAYnVGfsDqAgMcYC6bBs+eHiM7OfIaOQK0i9DG3NbOzsxgY
+	 N604CpVViz/2w==
+Subject: Re: [PATCH net-next 02/10] cxgb4: flower: refuse a tunnel key wider
+ than the VNI
 From: netdev-bot+sashiko@kernel.org
-To: hemendranaik@gmail.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, jiri@resnulli.us,
- jhs@mojatatu.com, shuah@kernel.org, donald.hunter@gmail.com, ast@fiberby.net,
- toke@redhat.com, liuhangbin@kylinos.cn, j.koeppeler@tu-berlin.de,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- vishy0777@gmail.com, tahiliani@nitk.edu.in
-Date: Wed, 11 Nov 2026 19:11:52 +0000
-Message-ID: <179442431204.2199510.9626682252073795058@kernel.org>
-In-Reply-To: <20261109071017.438478-3-hemendranaik@gmail.com>
-References: <20261109071017.438478-3-hemendranaik@gmail.com>
+To: acassen@corp.free.fr
+Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
+ jhs@mojatatu.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
+ bharat@chelsio.com, donald.hunter@gmail.com, corbet@lwn.net,
+ skhan@linuxfoundation.org, rdunlap@infradead.org, dsahern@kernel.org,
+ idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
+Date: Wed, 11 Nov 2026 19:11:59 +0000
+Message-ID: <179442431962.2199510.14986379471426017@kernel.org>
+In-Reply-To: <20261109131039.959438-3-acassen@corp.free.fr>
+References: <20261109131039.959438-3-acassen@corp.free.fr>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,10 +70,10 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 (1) · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,103 +81,162 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] Test 83c0 in tools/testing/selftests/tc-testing/tc-
-  tests/qdiscs/fq_pie.json does not do what the commit message says, and…
+- [Medium] cxgb4: unvalidated tunnel key mask in
+  cxgb4_validate_flow_match()
+- [Low] The commit message says the bug is already reachable today: "An
+  exact key above bit 23 already selects the wrong VNI".
+
+Pre-existing issues:
+- [Medium] This bug was not introduced by this patch, but it produces the
+  same symptom the commit message gives as its motivation ("The rule…
 
 --
 
-selftests: tc-testing: add fq_pie per-flow class stats test
+cxgb4: flower: refuse a tunnel key wider than the VNI
 
-This adds tc-testing case 83c0. The test builds a TBF + fq_pie hierarchy
-on $DUMMY and pushes ping traffic through it. It then checks that
-'tc -s class show' reports an fq_pie class.
+This patch adds a check to cxgb4_validate_flow_match(). Flower rules whose
+enc_key_id key has bits set above bit 23 are now rejected. Before this, the
+driver silently truncated such keys into the 24 bit vni bitfield.
 
-> Add tc-testing case 83c0: build a TBF + fq_pie hierarchy on $DUMMY, push
-> traffic through it with ping, and verify that 'tc -s class show' reports
-> an fq_pie class.
->
-> The per-flow counters themselves (prob, delay, deficit) are printed with
-> the companion iproute2 change, "tc: fq_pie: add support for printing
-> per-flow PIE statistics"
+> An exact key above bit 23 already selects the wrong VNI.
 
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-> index 229fe1bf4a906..15b2667285eb4 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_pie.json
-> @@ -40,5 +40,32 @@
+[Severity: Low]
+The commit message says the truncation can already be hit today. Should
+this carry a Fixes: tag, and possibly go through net?
 
-[ ... ]
+At the baseline, cls_flower parses TCA_FLOWER_KEY_ENC_KEY_ID with
+TCA_FLOWER_UNSPEC as the mask, so the mask is all ones. After that,
+cxgb4_process_flow_match() stores the key and the mask into the 24 bit
+fields:
 
-> +    },
-> +    {
-> +        "id": "83c0",
-> +        "name": "FQ-PIE class stats accessible via tc class show",
+drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c:cxgb4_process_flow_match() {
+    ...
+		fs->val.vni = be32_to_cpu(match.key->keyid);
+		fs->mask.vni = be32_to_cpu(match.mask->keyid);
+		if (fs->mask.vni) {
+			fs->val.encap_vld = 1;
+			fs->mask.encap_vld = 1;
+		}
+    ...
+}
 
-[ ... ]
+The field is declared as uint32_t vni:ENCAP_VNI_BITWIDTH in struct
+ch_filter_tuple. So enc_key_id 0x01000005 becomes vni 0x5 with a vni mask
+of 0xffffff. The rule's action then applies to VNI 5 traffic.
 
-> +        "cmdUnderTest": "$TC -s class show dev $DUMMY",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC -s class show dev $DUMMY",
-> +        "matchPattern": "class fq_pie 2:[0-9]+ .*prob .*delay .*deficit",
-> +        "matchCount": "1",
+The truncation seems to date back to:
+
+Fixes: 98f3697f8d41 ("cxgb4: add tc flower match support for tunnel VNI")
+
+No later patch in the series touches drivers/net/ethernet/chelsio/, so
+nothing else adds the tag.
+
+> diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
+> index 3307e50426819..d9a509be5c517 100644
+> --- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
+> +++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_tc_flower.c
+> @@ -316,6 +316,17 @@ static int cxgb4_validate_flow_match(struct netlink_ext_ack *extack,
+>  		return -EOPNOTSUPP;
+>  	}
+>  
+> +	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ENC_KEYID)) {
+> +		struct flow_match_enc_keyid match;
+> +
+> +		flow_rule_match_enc_keyid(rule, &match);
+> +		if (be32_to_cpu(match.key->keyid) >> ENCAP_VNI_BITWIDTH) {
+> +			NL_SET_ERR_MSG_MOD(extack,
+> +					   "Tunnel key does not fit the 24 bit VNI");
+> +			return -EOPNOTSUPP;
+> +		}
+> +	}
 
 [Severity: Medium]
-Will this test fail, rather than skip, on any iproute2 that doesn't have
-the companion patch?
+Does this check cover the case the commit message describes? It only
+looks at match.key->keyid. The hazard named in the changelog is a mask
+that only covers bits above 23.
 
-The commit message says the test checks that an fq_pie class is reported.
-The matchPattern, however, also needs the words prob, delay and deficit
-after the class line, and only the out-of-tree iproute2 change prints
-them.
+cls_flower stores the key already ANDed with the mask. So a rule with
+enc_key_id 0 and a mask of 0xff000000 reaches
+cxgb4_validate_flow_match() with match.key->keyid == 0 and
+match.mask->keyid == cpu_to_be32(0xff000000). Shifting the key gives 0,
+and the rule is accepted.
 
-On the kernel side, fq_pie_dump_class_stats() in net/sched/sch_fq_pie.c
-only sends a binary blob:
+cxgb4_process_flow_match() then does:
 
-net/sched/sch_fq_pie.c:fq_pie_dump_class_stats() {
+	fs->mask.vni = be32_to_cpu(match.mask->keyid);
+
+This truncates into the 24 bit vni bitfield of struct
+ch_filter_tuple and leaves fs->mask.vni == 0. The if (fs->mask.vni)
+block is skipped, so fs->val.encap_vld and fs->mask.encap_vld stay 0.
+__cxgb4_set_filter() then never reaches t4_alloc_encap_mac_filt().
+
+The hardware filter ends up with no tunnel constraint at all. It
+matches any traffic its other keys allow, including non-encapsulated
+packets. That is the failure mode the commit message says this patch
+prevents, and it opens up once the later patch in the series lets
+flower accept partial enc_key_id masks.
+
+Simply testing match.mask->keyid >> ENCAP_VNI_BITWIDTH would not work
+either. Exact matches today arrive with an all ones mask from
+TCA_FLOWER_UNSPEC, so every existing rule would be rejected.
+
+Would it make sense to also refuse a non-zero mask whose low
+ENCAP_VNI_BITWIDTH bits are all zero? Or is there a better way to
+express "match any VNI" for this hardware?
+
+[Severity: Medium]
+This is a pre-existing issue and was not introduced by this patch. It
+causes the same symptom the commit message names ("The rule would match
+any traffic its other keys allow"), but it depends on the firmware
+configuration.
+
+validate_filter() in cxgb4_filter.c checks encap_vld only against fconf
+VNIC_ID_F and the chip version:
+
+	    unsupported(fconf, VNIC_ID_F, fs->val.encap_vld,
+			fs->mask.encap_vld) ||
     ...
-	xstats.type = TCA_FQ_PIE_XSTATS_CLASS;
-    ...
-	return gnet_stats_copy_app(d, &xstats, sizeof(xstats));
-}
+	if (fs->val.encap_vld &&
+	    CHELSIO_CHIP_VERSION(adapter->params.chip) < CHELSIO_T6)
+		return -EOPNOTSUPP;
 
-Current iproute2 decodes fq_pie xstats with the qdisc layout (pkts_in,
-overlimit, overmemory, dropped, ecn_mark, new_flow_count and so on). None
-of those labels is prob, delay or deficit. The tbf class 1:1 is printed
-before the fq_pie class, so nothing after "class fq_pie 2:1" can supply
-those words either.
+It never checks that iconf (TP_INGRESS_CONFIG) has USE_ENC_IDX_F set.
 
-That means re.findall() gets 0 matches against a matchCount of 1, and
-run_one_test() in tdc.py marks the test as failed:
+In __cxgb4_set_filter(), the VNI is programmed only in the USE_ENC_IDX_F
+branch:
 
-tools/testing/selftests/tc-testing/tdc.py:run_one_test() {
-    ...
-	if len(match_index) != int(tidx["matchCount"]):
-	    res.set_result(ResultState.fail)
-    ...
-}
+	iconf = adapter->params.tp.ingress_config;
+	if (iconf & VNIC_F) {
+		f->fs.val.ovlan = (fs->val.pf << 13) | fs->val.vf;
+		f->fs.mask.ovlan = (fs->mask.pf << 13) | fs->mask.vf;
+		f->fs.val.ovlan_vld = fs->val.pfvf_vld;
+		f->fs.mask.ovlan_vld = fs->mask.pfvf_vld;
+	} else if (iconf & USE_ENC_IDX_F) {
+		if (f->fs.val.encap_vld) {
+			...
+			ret = t4_alloc_encap_mac_filt(adapter, pi->viid,
+			...
 
-tdc can already skip tests that depend on a userspace feature, through
-the dependsOn key, which run_one_test() checks. mirred.json uses it, for
-example:
+If iconf has VNIC_F, ovlan_vld is overwritten with pfvf_vld, which is 0
+for a flower rule. If iconf has neither bit, nothing is programmed.
 
-    "dependsOn": "$TC actions add action mirred help 2>&1 | grep -q blockid",
+set_filter_wr() has no VNI field, so tunnel information reaches hardware
+only through ovlan/ovlan_vld. In both cases the FW_FILTER_WR is sent
+without any VNI constraint.
 
-Test 83c0 has no dependsOn probe. As a result, a correct kernel tested
-with stock iproute2 would show a new tc-testing failure. The selftest
-would also depend on an output format that only exists in an unmerged
-userspace patch.
+On a T6 with such a firmware config, could a rule like "flower skip_sw
+enc_key_id 5 action drop" be reported as offloaded with a VNI match, but
+drop all ingress traffic on the port that matches its other keys?
 
-Would it make sense to either add a dependsOn probe for the new iproute2
-output, or narrow the pattern to just the "class fq_pie 2:N" line as the
-commit message describes? The commit message could then be updated to
-say which approach the test uses.
+Flower doesn't reach the hash filter path for these rules, since
+is_filter_exact_match() returns false when fs->mask.encap_vld is set.
 
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP addr del 10.10.11.10/24 dev $DUMMY || true"
-> +        ]
->      }
->  ]
+One possible fix would be for validate_filter() to reject encap_vld
+unless (iconf & USE_ENC_IDX_F).
+
+No later patch in the series touches drivers/net/ethernet/chelsio/.
+
+[ ... ]
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109071017.438478-1-hemendranaik%40gmail.com
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109131039.959438-1-acassen%40corp.free.fr
