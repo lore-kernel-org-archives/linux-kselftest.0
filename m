@@ -1,124 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794412459;
-	b=vZWh6yqxYlQ+TXF1ttnF+ws3TyOZsmjYP5jhc9pIzboviOrAtHD0Qm+FP1kxu3qT+wTD
-	 SEk52Y/MQWN48nLfHtQHU/4Qbp8zDBdqK5F+UzQRC7s4ZPWowLpxTOkevv5lwmVNgkKWo
-	 MI6y4Zcl4/Jk6dniX68oe/Zj8Kq84OxV3X1nXXsDl61GiMYcC4gBhikKuQpPqfZ86PRIz
-	 ljNLSisaCy1BZv0PlfxmHZqR9CjMljN3wORhWAX5UBwTqb/R5udT+sHthynQ3yBh6SOpy
-	 GhfSwBUPu+Gm5VJDwEFqYZEb0XLkNjK+W5I4slaYkeUuWG9XU2xPEDvg++yS/TdwT2Q==
+	t=1794413447;
+	b=JBM01kkiJL3oOEcEYOBYUVlkZr/LD9++WFRMvPOnh4+GB1iK7Givi7ZzVlx2Q3D2n622
+	 5ecSg8W2f+Hp/Pe5YQzl9REfa2jg1u/x7oOPpKFasf65QTm3KfZq3XcMN/C3BEhMQWkRo
+	 EoWsxuktUqJgp/lNltNEkTgKbmcBgSqyE3W7hnUlJ/vpXZymJIzK8Wp7/MlSckebOSAs5
+	 S4qawplTol3ZBe/B/f2jWNyF4k4sCtAgsgRfN0G5Kb9CGNRUH/QI3nYUl3VPjdbDY2/hO
+	 Qf66P/9jtk0I9sE8H79sEg8L9s2avb64HI1d0Ic9BxEGZi+AMALZNTdu4PSWYiiAn5A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794412459;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
-	b=Jp6LK8MTYZoEeQPmF6y9RcF9/XXME/LA5PWPMkyUE4vtQKpzEyfLQUnrWnXRMnkza843
-	 ZLhFw2CKyY0HLSWx3dlVq0qBJIc9U3y4V8NihKPRPQYp8KZpcJNfKm6mEaNsdWC6FTR1p
-	 MbZJe0jsKV3sKnJa36ipgX3tBUHl+EbzzOG2mhhLxmPzh9MvLGh8ejCkMN63fcZMVhmbH
-	 73Dvd7dOBUDZyECqL2DCRgOk4zx+Sr2ZlVK90b1qWJZZRjERelaiOt4vaxvYWgXl9Ro3h
-	 7DRceVGW+gD6QMk/YzI4VvpngV4JhYFnIlJjVljAOuc78n+emxpl55//uyXvVR7sLTQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794413447;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=/fQfvN//SsC5kV/BzNX6zgi6Mg1pRUnE62HeFEaVagc=;
+	b=LVXl2NeWTsqrypD5cPq5u50U6txMx29jzSBtWn11sESpbrNzfx6/nCp2NwTPz8IYzpuK
+	 2+8yjL2ozO9NzNQCL0V/KXiWuE30nMKt55/JcS3fDLKIh973utck/fPHnlA+mVLdYjdxT
+	 7uJYokeg7njIh8sp088+s2L0H9gf5YbSs5T9FgYNtD98/GZecT8Fe2MCA8n/pzWUv4uvO
+	 0aD0vA2KJHMHEDWnG9CVeacY0/q/kWtnVw4Tyu0Oy8BYIrEzrhRhZuXD3kRGJygpY85RQ
+	 jG6piJftp2Gk39EnnAjKt/BScdo4CO1ou/fpJJRzk2nZk5kFyWGU65nugEciP0m/pcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ezfFuM0j;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=hiKOE+VI;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V9OfH5IJ;
+	arc=none smtp.remote-ip=209.85.216.69
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C387C606A332
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 15:54:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C387C606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B40606A335
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 16:10:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 63B40606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=ezfFuM0j;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=hiKOE+VI
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794412458;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
-	b=ezfFuM0jz6fzoyYrlDbDH/ZOjffIbqfNNJI5WTqNQh2905hBCKDKUsN50479dEKgPdaonx
-	FYMAursiIT19v7UaNl/CCLLRwaQ5mb2fJUM7vb/eSod6aEpv7iDV8EYPJwjxo893wmXTEl
-	EW8zIVV6xAYa7AS3UXXi9lFxR3rx6Do=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-311-BBLg5y1INhusdCrnHdQB1w-1; Wed, 11 Nov 2026 10:54:14 -0500
-X-MC-Unique: BBLg5y1INhusdCrnHdQB1w-1
-X-Mimecast-MFC-AGG-ID: BBLg5y1INhusdCrnHdQB1w_1794412453
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48e4d1e29f3so3209290f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:54:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V9OfH5IJ
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3b175a69ab8so1942937a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 08:10:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794412453; x=1795017253; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
-        b=hiKOE+VIlxbOcOlW6Xs+bhV4MDSUdNJj6lNYBdYkNH69xwc9iSfRZYyqR7pcSGVcej
-         EEcP0okGXd9WXoggo1LTQD1ur2KEqBKSF6BKBBIIczRS41MfIiOYfb/Q3TECGm1AC33g
-         acxaxTc+t8FERzKUTxnKL6LcDwV94/ki7XqzzoXMgcwLLPY2tgkCgAaizVvmDNVC14JR
-         YovK5EmSA7o+FM4ykQ2tpnVnOXA1/Niyfr/4eNpGPM9bTaJtf7lz2NhewOXTg0z6hpAu
-         Bss9OudKo9sHusaHPSJKqdyUQkQrVi9n1Q/4nbn7rWfMu1fbBKm77f3Fj+JGWxFjQH29
-         xS6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794412453; x=1795017253;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1794413446; x=1795018246; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9yO4iRBEsOuH32jlGyQ/kcDjMlOuvsYBA1s1+h7mpqw=;
-        b=RsjSBzK51eIBzLf4OU6KwkNj28DD3W+bdzIubZls3KO3UQ+LCdW0eukTrLWcWGNxx/
-         ucN6LM4imh/VWyAyn57Hd86LZBFX9w1qYEMkmC9FJLQ782fZGcJx5nQSFViq2vL3AY90
-         IxRJrvzDsH28+0AMDJ1/czoywqU2+lsz5CO4sn6z3uITFlNd+8Q3BCwAFE75gFFGYYor
-         n7zX0li808VAlCOvO/MUkt7v7H83zgyXXBFzJNClUDhYZze2RhhX5zqGJo2IKjj47uPQ
-         D92YedqmjZX4o8q8A3QB+L6u6jSDYwnkUqbB6qyPtJcX4c90QbgQDuic3MLXl8FCZ6eM
-         vvYg==
-X-Forwarded-Encrypted: i=1; AL+hErE5zO3NOF3Gkxr5+bZLyOoAmcQGx53Q9Jrqd5mXgIZGSbG7dGTAheipRe/vO+jlpo6dJdGWm/pckEJkNviufio=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+2vi/UBF8caL5rVcMNznI1sh5BwySwhiKMy/T/b9uIt5trohHH
-	6pEdeEJJqIZ7MpsIdnKU/skOC8nQoCXhxPdnw8OdycMVjfBR6+FMQYntzRuVZs6NWGQBQ2gdDui
-	SkHZmEXpwfTXw3XsMhigyI4ydxK0H57ARuT8OZww3IoB2kbScRA659722J7vEca/Hjy8joA==
-X-Gm-Gg: AYBFou2zypMMgRxKtKokXsdH0DmRC6YUWHewQ1TCm6VEFDuIpSf9zxH9laKuhYUTkIG
-	JA+IhO+vcaQY/cWIkKM5g0LyDKMUeCOdX5DG3vgywGBn8+yDMHjJfgO01r8ZCojXwQbY5wVWOe/
-	qyWWvfs/4R/4EiUUTGjAtM1BPPy0NjAwCZDihJDnIMy4SZLJe3MG6umQpax3b39xHUXbEn0nTOH
-	yKNXz21fxasCj0OPbkx/BTU9gZ9qAgOlS3ZfgDIHDCt7x0ANhKXfKL5f7FhOuKWLBven2atY0y8
-	tajC1LjsbSeGl+s/iUis5+jBCT7NoYVLscgLUcJNRjwlesNuuriNxy0jBx6Fv7Au7b5Yj4IWr/0
-	fec3cokB3FQexmEjmkC69AOvD86SRa+B9ofmfHNvi8A9s5zHX1H/kFWd9W2Z+oBF4p4sZmGqWM6
-	FePyE=
-X-Received: by 2002:a05:6000:3ce:b0:48e:2f7e:bdbb with SMTP id ffacd0b85a97d-499c77423e2mr4360031f8f.50.1794412453247;
-        Wed, 11 Nov 2026 07:54:13 -0800 (PST)
-X-Received: by 2002:a05:6000:3ce:b0:48e:2f7e:bdbb with SMTP id ffacd0b85a97d-499c77423e2mr4359995f8f.50.1794412452846;
-        Wed, 11 Nov 2026 07:54:12 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49836b8eb11sm12632851f8f.57.2026.11.11.07.54.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 07:54:11 -0800 (PST)
-Date: Wed, 11 Nov 2026 16:54:09 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
-	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org, longman@redhat.com,
-	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
-	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 16/29] sched/deadline: Record the root domain holding
- a task's bandwidth
-Message-ID: <avSPoSnNATnwZ8cS@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-17-mathieu.desnoyers@efficios.com>
+        bh=/fQfvN//SsC5kV/BzNX6zgi6Mg1pRUnE62HeFEaVagc=;
+        b=V9OfH5IJti8IaVMsGoGROmRICksQAWzg5oySMiDPT3HFdwJeZaGbgLepEbyWICtY/z
+         ASPtpqwLTqrU36T4NSMfOERJsgOYJFYH98JqtSK1vClQSq4oX1XlXhEq+XCq4cPEMwlI
+         fkyCwFHqvv0gRYfSZFXY9EHnG44ZeTZBKqPPoQDDX99WL+mbTJ16idpMqrxARh8SVzN4
+         IA1aUvA2GcXJKmXeZcUNBrMQSwRPD7h6dgj0fJdX2qV11cp7ZEUYpTUmUmkurs7FH/jP
+         IKlpzd9jBXwPxkum5RtHQuh9di1FuRJ0Tnw4GUxuMVQCMElmKeaSU4n4282VsI9zpCq0
+         vbYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794413446; x=1795018246;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/fQfvN//SsC5kV/BzNX6zgi6Mg1pRUnE62HeFEaVagc=;
+        b=NIWnsy5w7o60BxPRd4kNnD4eQgmcnp8TTSnzwEbjIAzEWTqHTo+Y9rVvvPmJxvYrJG
+         xdASCZTSFUqpapwyfuuWg8IYeYsdloXCCmfb6e9iCu/2KPoHrz5QtJxHb+YOCDA2pHRY
+         VGSSKKfm7iLGSB38QiOGOHC/A3F/jCQIlNgcvBTdapfQnT9WIBQrEml3RPJSzAEruHUs
+         XymV/Z2TCo7vsOexr+EfyIhqGH6K6U+WvXiJI0CxyFspVC1gXB+1Fh+KnauDbvZnHlLy
+         rBwKl3BGNhXAlWJ/5magVBeLrUWsbWWrjWpPIZ7/Me9KNPWHPd49Mo49UG8QHy3lR+fC
+         krUg==
+X-Forwarded-Encrypted: i=1; AL+hErHYDmFsjSOgjirFLjvJoU/ny5JwFtFnaWjsopM9ypX//zCHWpvszbtIUgNKfMo4F6rdu4GmOvAYsDhnRZgL94w=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ZBdkzl4h1kXM0H9961koCHgO4pKxJ3iP48O69HyywrfdWq81k
+	kPYjSeuWZov/b5o3zJiwcSmfMnswCIHn9CDak6VRfJiPUHzoaQjDwWpAo6NMxOGBG2+W+dJJE3X
+	DMQR9IA==
+X-Received: from pjbkn15.prod.google.com ([2002:a17:90b:480f:b0:3ae:b67:263])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2f86:b0:39e:6c68:c77a
+ with SMTP id 98e67ed59e1d1-3b182f2699emr2883420a91.48.1794413445538; Wed, 11
+ Nov 2026 08:10:45 -0800 (PST)
+Date: Wed, 11 Nov 2026 08:10:44 -0800
+In-Reply-To: <833af78b-60b9-4031-88e0-555363f8dd0b@intel.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -127,160 +77,67 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261108185406.1549770-17-mathieu.desnoyers@efficios.com>
+Mime-Version: 1.0
+References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
+ <20261105-tdx-selftests-v16-12-2024e8fa517a@google.com> <833af78b-60b9-4031-88e0-555363f8dd0b@intel.com>
+Message-ID: <avSThO-PZPrIfT5g@seanjc-mac.roam.internal>
+Subject: Re: [PATCH v16 12/20] KVM: selftests: Call KVM_TDX_INIT_VCPU when
+ creating a new TDX vcpu
+From: Sean Christopherson <seanjc@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Ackerley Tng <ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
+	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
+	Ira Weiny <iweiny@kernel.org>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
+	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Hello,
-
-On 08/11/26 13:53, Mathieu Desnoyers wrote:
-> Admission, moves and releases of a deadline task's bandwidth find the
-> root domain that counts it from the CPU the task is on. That CPU can be
-> in another root domain. Two cases show it.
+On Wed, Nov 11, 2026, Xiaoyao Li wrote:
+> On 11/6/2026 7:46 AM, Lisa Wang wrote:
+> > diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> > index 4330290d29e9..9d951f67b3b5 100644
+> > --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> > +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> > @@ -46,9 +46,31 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
+> >  		    #cmd, ret, errno, strerror(errno), hw_error);	\
+> >  })
+> >  
+> > +#define __tdx_vcpu_ioctl(vcpu, cmd, _flags, arg)			\
+> > +({									\
+> > +	union {								\
+> > +		struct kvm_tdx_cmd c;					\
+> > +		unsigned long raw;					\
+> > +	} tdx_cmd = { .c = {						\
+> > +		.id = (cmd),						\
+> > +		.flags = (u32)(_flags),					\
+> > +		.data = (u64)(arg),					\
+> > +	} };								\
+> > +									\
+> > +	__vcpu_ioctl(vcpu, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
+> > +})
+> > +
+> > +#define tdx_vcpu_ioctl(vcpu, cmd, flags, arg)				\
+> > +({									\
+> > +	int ret = __tdx_vcpu_ioctl(vcpu, cmd, flags, arg);		\
+> > +									\
+> > +	TEST_ASSERT(!ret, "%s failed, rc: %i errno: %i (%s)",		\
 > 
-> Commit 7f51412a415d ("sched/deadline: Fix bandwidth check/update when
-> migrating tasks between exclusive cpusets") moves a deadline task's
-> bandwidth in two halves. cpuset_can_attach() reserves it in the
-> destination. set_cpus_allowed_dl() frees it in the root domain of the
-> task's runqueue. Both halves now move nothing when that root domain
-> overlaps the destination. But a sleeping task stays on the CPU it last
-> ran on. So a sleeping task moved to a partition and back leaves its
-> bandwidth in the partition:
-> 
->   admin                                       task T
-> 
->   makes P a partition root of CPU 3
->     CPU 3 is now in root domain B
->     CPUs 0-2 are in root domain A
->                                               sched_setattr(SCHED_DEADLINE)
->                                                 A: total_bw += bw of T
->                                               runs on CPU 0, then sleeps
->   echo T > P/cgroup.procs
->     cpuset_can_attach()
->       dl_task_needs_bw_move(): true,
->       A does not overlap P
->       B: total_bw += bw of T
->     set_cpus_allowed_dl()
->       dl_task_needs_bw_move(): true
->       A: total_bw -= bw of T
->                                               still asleep on CPU 0
->   echo T > cgroup.procs of the root cgroup
->     cpuset_can_attach()
->       dl_task_needs_bw_move(): false,
->       A overlaps the root cpuset
->     set_cpus_allowed_dl()
->       dl_task_needs_bw_move(): false
->   kill -9 T
->                                               wakes up on a CPU of A
->                                               exits
->                                                 A: total_bw -= bw of T
-> 
-> B keeps the bandwidth of T. A does not count T while T is in A, so A
-> admits beyond its capacity. When T exits, A loses the bandwidth of T a
-> second time. Its total_bw can underflow.
-> 
-> A rebuild of the accounting counts a task in the root domain of its
-> cpuset. With admission control off, a task can be pinned to one CPU.
-> When that CPU goes offline, it joins the default root domain, and the
-> release takes the bandwidth from there. The root domain of the cpuset
-> keeps it until the next rebuild.
-> 
-> The first case was reproduced on v7.4-rc1. The second was reproduced
-> with the earlier patches of this series. Without "sched/deadline:
-> Release the bandwidth of a task that leaves the class asleep", nothing
-> releases the bandwidth of that sleeping task.
-> 
-> Fix this by recording, in dl_bw_cpu, a CPU of the root domain that
-> counts the bandwidth. Each site that counts it sets the record. Each
-> release or move reads it, and the release clears it. A move skips a
-> bandwidth of 0, so sched_dl_overflow() does not use its record. The
-> move_zero_bw case of deadline_bw_test, added later in this series, tests
-> this. The record replaces dl_departed_cpu. If dl_bw_gen shows that a
-> rebuild dropped the bandwidth, nothing is taken back.
-> 
-> A move now leaves out a sugov kthread and a task boosted into the class
-> with no bandwidth of its own. The rebuild leaves them out too: no root
-> domain counts theirs. A move would take a sugov kthread's bandwidth
-> from a root domain that never held it.
-> 
-> Weiheng Qiu reported the moved sleeper, and Juri Lelli analysed it. His
-> fix, linked below, took the first active CPU of the task's mask. A mask
-> can have none during CPU hotplug. Tip dropped the fix after a sugov
-> kthread hit its BUG_ON() there. The Sashiko AI reviews of this series
-> found the other cases.
-> 
-> Reported-by: Weiheng Qiu <weihengqiuu@gmail.com>
-> Closes: https://lore.kernel.org/all/14508cb2-805f-41ac-9f6b-bfd7c3d7cb1c@gmail.com/
-> Link: https://lore.kernel.org/all/20261103-b4-sched-dl-bw-fixes-v1-1-dd761fe005b4@redhat.com/
-> Fixes: 7f51412a415d ("sched/deadline: Fix bandwidth check/update when migrating tasks between exclusive cpusets")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
+> Nit: tdx_vm_ioctl() uses %d for ret, while it uses %i for ret. It's better to
+> make them consitent.
 
-...
+Ugh, KVM is anything but consistent.  I didn't even realize half the macros use
+%i instead of %d.
 
-> @@ -3541,17 +3570,29 @@ static void set_cpus_allowed_dl(struct task_struct *p,
->  	 * domain (see cpuset_can_attach()).
->  	 */
->  	if (dl_task_needs_bw_move(p, ctx->new_mask)) {
-> -		struct dl_bw *src_dl_b;
-> +		unsigned int src_cpu = dl_task_root_domain_cpu(p);
-> +		struct dl_bw *src_dl_b = &cpu_rq(src_cpu)->rd->dl_bw;
-> +		unsigned int cpu;
->  
-> -		src_dl_b = dl_bw_of(cpu_of(rq));
->  		/*
->  		 * We now free resources of the root_domain we are migrating
->  		 * off. In the worst case, sched_setattr() may temporary fail
-> -		 * until we complete the update.
-> +		 * until we complete the update. A rebuild that dropped the
-> +		 * bandwidth of @p leaves nothing to free.
-> +		 */
-> +		if (p->dl.dl_bw_gen == dl_bw_gen) {
+I chose to "fix" tdx_vm_ioctl() purely because it has the completely unnecessary
+PRIx64:
 
-So, this is not guarded by dl_departed_lock, but then this gets fixed in
-later patches?
-
-> +			raw_spin_lock(&src_dl_b->lock);
-> +			__dl_sub(src_dl_b, p->dl.dl_bw, dl_bw_cpus(src_cpu));
-> +			raw_spin_unlock(&src_dl_b->lock);
-> +		}
-
-...
-
-> @@ -4189,6 +4245,23 @@ int sched_dl_overflow(struct task_struct *p, int policy,
->  	if (new_bw == p->dl.dl_bw && task_has_dl_policy(p))
->  		return 0;
->  
-> +	/*
-> +	 * Change the bandwidth of a deadline task where it is counted: in
-> +	 * the root domain of the CPU recorded with it. A task moved asleep
-> +	 * has not run there yet, so the CPU it is on can be elsewhere. No
-> +	 * bandwidth is counted if a rebuild dropped it, or if the task
-> +	 * enters the class. A runtime below about a millionth of the period
-> +	 * gives a bandwidth of 0. It counts for nothing, and no move updates
-                    ^^^
-Ah right, quite cryptic corner case buried in this comment. :)
-
-This is the 1024ns/2s of the test. Which indeed gets dl_bw 0. Don't
-think it's a huge deal from a theory/practice pov as to actually make an
-impact we probably need quite a lot of these admitted (fork bomb style).
-But it's still weird :P. Not sure if we want to impose a min of 1 dl_bw
-for these. If it actually complicates the accounting (for no good
-returns) or not.
-
-> +	 * its record. In these three cases, the root domain of the CPU the
-> +	 * task is on takes the new bandwidth. The caller holds cpuset_mutex,
-> +	 * or dl_accounting_mutex without cpusets, so no rebuild runs
-> +	 * meanwhile.
-> +	 */
-> +	counted = task_has_dl_policy(p) && p->dl.dl_bw_cpu >= 0 &&
-> +		  p->dl.dl_bw_gen == dl_bw_gen;
-> +	cpu = counted && p->dl.dl_bw ? p->dl.dl_bw_cpu : task_cpu(p);
-> +	dl_b = dl_bw_of(cpu);
-> +
-
-Thanks,
-Juri
-
+	TEST_ASSERT(!ret,						\
+		    "%s failed, rc: %i errno: %i (%s) hw_error: 0x%lx",	\
+		    #cmd, ret, errno, strerror(errno), hw_error);	\
