@@ -1,67 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794351007;
-	b=Bpe7EuzPgkjztca+MWTNfIPENfDYaraLK9jTqW5ptQEX2LHhOZhg+A8SzKHXcWZYX+9g
-	 lerE5bTfau1YLcgpChiCuNR0rrJHC6TVcE+/0GJmH+rf8L1q700Z3rGbD6JM/TDmMw3Gu
-	 tXJ6iAkWwy+voKVRXIBvM2fwWAVKS4OKWwCDzLE15mcbpsfNJ6A8iU0SAUzXHssYAJ6GD
-	 pw/gzdkukcKSTUVP2wwiG8qX+Hi7jvqAxeng/McSaX5KzN+azH6Dum1xayqi+OfcPf1m8
-	 sMYxpAewoO5QWPLzWuikZZ0cvh6qh0wiJ5+cVauXR4TVNDsitbBYXf2HlsYHtqwEOqw==
+	t=1794355218;
+	b=tmSZ8A2ctHj6bpv621PyazPP0vFzXpFAjPSdPu9n2wncO5ajqvdQUciArUleuY+OTboX
+	 W1oRBIGW8IiC+a85SJuW4uFrNVpwkbZA9XIbswZxLn6MLurZOWYU8l9omcT4pNU46EEIY
+	 6XbLH8Pe1Z/X1xnRgRC1Ykn2pshxdTdPhpMHLxt+moHWDGS0oJ1Zjc3RrPcEca1v06Rds
+	 5R8oOTPVXcd+fTMuIjkp9xEnM0W+O7ceQxCRGMg8s/fgOQnJpYyonJlb+ZQSumsvt99hv
+	 BE86tFX5cUK+KinVLE6XMoK7SF8tIjD6PK4B6U2t0xQ3osptKQm7YEEsc5B/G9J2XvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794351007;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Date:From:To:Cc:
-	 Message-ID:In-Reply-To:References:Subject:X-Mailer:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Content-Disposition:
-	 X-Spam-Status:X-Spam-Checker-Version;
-	bh=503JFiVK8vn/l3FW+t3kwxWFWPpMbnFzjHjaQEpu2Vo=;
-	b=eiglvQLH9rP9sBx1r3IYEOB4ofhtDFOWpMdkR0XKLzZ2Qi6Y4wwHHqwEs3FcrtWw4FKn
-	 kpKq+RRsghe0XL2/exQEVE/WUxkFnaXCgDQmYkW5SNJo47leq4BW8SAHglHE0oFiJRk4t
-	 D7JcLqxUpGk8WWM2EnoGvb17r2POo7zTQr+nseeGi945qykgsMOzA5cYrxwFF1lMKZ/7S
-	 bW6F2m028tEpC7As6R52VIEhqlQgjrFZHDz8fd4flfTXrSGEdk1ID8a43Du5S5O1Ayx+/
-	 Ph7DjO71te3vKTaKxfmmssL7twRurXW9X5FFuQh8yA8gUNU6+SY/cCjuoF7yqiB9APg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794355218;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=XXJOmUh6ZA2cxo0uMHH/7j9X480fJihmgHUTZSH0Lv4=;
+	b=iPT4zYaLE99GIj7vMmGwgWxVdyQX7Mk0nfDByMNWoIGWS2SEIJKhmiudq7Ab2RFElp/J
+	 /wMjuzFmJedV0KVdmhFZs5w6T521F/BfmR0IbRCPm/t5MfPeNnaKmGXElwChdmKJUq0xY
+	 IrzrRk+U7YrZNSdZU/vZ6SOIxVc33u3wgJd2Nf8Sr0PQYVg9wBRfE+wB3MElmKEmzKb6h
+	 Ela2i/V10hyb08AMUSdvetjcsh6h6J4nxPnyUNyuvkUCLwj0UHf8/RDVPmzcXbk7hGmAM
+	 UpVC3Lktt0z2ZkW0LugBU81UxrWEwBs3JauEyvsVcZFieAG0ABrGl2la2ceXL213eWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.microsoft.com;
-	spf=pass smtp.mailfrom=linux.microsoft.com;
-	dkim=pass header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=jISbMcXW;
-	arc=none smtp.remote-ip=13.77.154.182
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48A0A606A320;
-	Tue, 10 Nov 2026 22:50:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48A0A606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b6iWrDtb;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5376B60A2604;
+	Wed, 11 Nov 2026 00:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=jISbMcXW
-Received: from [100.96.64.102] (unknown [52.179.129.152])
-	by linux.microsoft.com (Postfix) with ESMTPSA id B7F3420B7169;
-	Tue, 10 Nov 2026 14:50:02 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B7F3420B7169
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1794351003;
-	bh=503JFiVK8vn/l3FW+t3kwxWFWPpMbnFzjHjaQEpu2Vo=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=jISbMcXWAnWYOIBzcxe98miqDGDviywoQ+eXNQEp82At+GPcFejJCC2bL6+ZyXaUa
-	 qYoBSzDBtLPFSKe2Guo/hr5GK3+oMHvjBB48m/3WhtIBxz4rWrcwLl3eALk8VRqO0B
-	 xtGI+YgU8i69Jzg9xxpMV6I83VSm6dvSaoy0qwIw=
-Date: Tue, 10 Nov 2026 17:50:03 -0500
-From: Jeff Barnes <jeffbarnes@linux.microsoft.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: "=?utf-8?Q?mhiramat=40kernel.org?=" <mhiramat@kernel.org>, 
- "=?utf-8?Q?shuah=40kernel.org?=" <shuah@kernel.org>, 
- "=?utf-8?Q?beaub=40linux.microsoft.com?=" <beaub@linux.microsoft.com>, 
- "=?utf-8?Q?mathieu.desnoyers=40efficios.com?="
- <mathieu.desnoyers@efficios.com>, 
- "=?utf-8?Q?linux-trace-kernel=40vger.kernel.org?="
- <linux-trace-kernel@vger.kernel.org>, 
- "=?utf-8?Q?linux-kselftest=40vger.kernel.org?="
- <linux-kselftest@vger.kernel.org>, 
- "=?utf-8?Q?linux-kernel=40vger.kernel.org?="
- <linux-kernel@vger.kernel.org>
-Message-ID: <40C83F97-D53F-4050-9CE4-19449912FB20@getmailspring.com>
-In-Reply-To: <20261019103957.69759ee3@gandalf.local.home>
-References: <20261019103957.69759ee3@gandalf.local.home>
-Subject: Re: [PATCH v2 0/3] tracing/user_events: Share state with
- existing threads
-X-Mailer: Mailspring
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b6iWrDtb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A7F21F0089F;
+	Wed, 11 Nov 2026 00:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794355218;
+	bh=XXJOmUh6ZA2cxo0uMHH/7j9X480fJihmgHUTZSH0Lv4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=b6iWrDtblbR/FyqTPmhsV3XQ0zme5icdDs7lcjaw7oPLl2XXmLeM5l3FxjDxPCW27
+	 aWoSDtcHo3OIfgCuEGIPDp6eltPs6/1Fd49XtFxy28fdcGgw1arKHD4uepr+j7mDqw
+	 5k3TmjN4VMgAUBWrI5C/CxAqQNNN7bAUPMd77ftBm1+hcKnCRAuzfmETiQC3edQIUG
+	 +dyOpHg/rUjDtWXr3b9C7SKW9JOD5EcT5bZZDL666fz0j7iB9fKwMXYsq9sh/1XFp0
+	 q/7kFnZU4ocnzxKEOJzim0zTjR9xqxbWuqNT4je9pbF9x2DzSKVWtLJlBHtH7yb4nc
+	 H8WgT+oncEeqQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 2112939E8A4C;
+	Wed, 11 Nov 2026 00:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,48 +53,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/3] selftests: drv-net: hds: fix state leaks and
+ ioctl tests
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179435521666.125436.2802528717977617642.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Nov 2026 00:00:16 +0000
+References: <20261106031208.465456-1-dimitri.daskalakis1@gmail.com>
+In-Reply-To: <20261106031208.465456-1-dimitri.daskalakis1@gmail.com>
+To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+Cc: davem@davemloft.net, andrew+netdev@lunn.ch, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu,  5 Nov 2026 19:12:05 -0800 you wrote:
+> From: Dimitri Daskalakis <daskald@meta.com>
+> 
+> Fix hds.py leaving tcp-data-split in a non-default state on drivers
+> that report HDS state rather than config, and fix the ioctl XDP tests.
+> 
+> Dimitri Daskalakis (3):
+>   selftests: drv-net: hds: always restore tcp-data-split to auto
+>   selftests: drv-net: hds: perturb settings via ioctl in
+>     ioctl_enabled_set_xdp
+>   selftests: drv-net: hds: restore HDS settings in ioctl_set_xdp
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/3] selftests: drv-net: hds: always restore tcp-data-split to auto
+    https://git.kernel.org/netdev/net-next/c/c1e042cb4de2
+  - [net-next,2/3] selftests: drv-net: hds: perturb settings via ioctl in ioctl_enabled_set_xdp
+    https://git.kernel.org/netdev/net-next/c/2839e04a9f76
+  - [net-next,3/3] selftests: drv-net: hds: restore HDS settings in ioctl_set_xdp
+    https://git.kernel.org/netdev/net-next/c/f4085a199ebd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Hi Steve, Beau,
-
-Gentle ping on this v2 series. I don't have any outstanding changes to
-make at this point.
-Just to clarify, this is a separate patch from the Fail fork one.
-Please let me know if anything further is needed from my side. 
-
-Thanks, Jeff
-
-
-On Oct 19 2026, at 10:39 am, Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Mon, 19 Oct 2026 10:23:01 -0400
-> Jeff Barnes <jeffbarnes@linux.microsoft.com> wrote:
-> 
->> Gentle ping on this series.
->> 
->> Please let me know if there are any further comments or changes you'd
->> like me to make.
-> 
-> Hi Jeff,
-> 
-> FYI, always start a new thread when sending out a new series. Don't
-> make it
-> a reply to an old one. That makes it confusing to know which series to look
-> at.
-> 
-> Also, I've was traveling between September 14th and October 10th and my
-> backlog built up quite a bit.
-> 
-> If Beau can review this series, that would be great. I'm currently putting
-> together several branches for the merge window. Unfortunately, due to my
-> backlog, there's patches that have been sent this month that will need to
-> be postponed to the next window.
-> 
-> As user_events are agnostic to other changes, there's still a chance your
-> changes can get added this window.
-> 
-> -- Steve
-> 
