@@ -1,69 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=183.62.165.209
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.95.11.211
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794409095;
-	b=LI0c45DwfD2F7ygpIhqgMS6aBB7L3uYqjqXYlXpipcVn6sFaJTpPMpqOyX5M/66ZVqio
-	 Fq5P3xpa2a54uSNcZrJa8f4C7hpi3HYHToQw6DQDK9lI70lOB5pfTqTMALYBMJkItFa4M
-	 v7GF9HGAF3CMCfSipMYekHARTtv/hWj/VkSHICKKqo5D7XlLJ49P6LqF8l1ymNXoyExyu
-	 HQHNenm6ce4ylnQE+tWjQuRFx7NXwsuGrmEHJeOi0sYcg9Xm4/xOa54fMb3u4FLfrvGfI
-	 exZYlxyMCzbIRTBlBO1Dzfu9DTmuo/vzsXpvcpMLf2HRCfsA8s8FH0AUalvqrS5LPNw==
+	t=1794409468;
+	b=uV6IaHeur+XV8s41e4abmU3xpiJDAnJO1Q3UEiR77JlQRLXgVWlhqE1fWFqaHLZE/S4Y
+	 HBOomD9N6+1/kzYH8cj1LXqhdPgy/nOlApjrtOUE1Hd+IdSvmvARSL0N8ktCW2yhQYjs/
+	 U3vT9chpY907vKq7wqJGgSjjvm4Ka4tUA1NflJpY4ioMgVmT/lj69U3Eonr1cErbTW9Xz
+	 TOy/xD4Q0Cj4I13hIk5F6PVlhRf+4UvvhG8tNzHvlv8ISI9Ac73Ik4QHhAgu/nL0gsCGk
+	 5+FVzc7SvNHK8hvPXaiZ5Usq9A4MQ0YSkqF/i/eRypBUaFV66re/ORNzPf/+liJFLsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794409095;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Zmail-TransId:X-Mailer:Message-ID:In-Reply-To:References:Date:
-	 Mime-Version:From:To:Cc:Subject:Content-Type:X-MAIL:X-TLS:
-	 X-ENVELOPE-SENDER:X-SOURCE-IP:X-CLEAN:X-Fangmail-Anti-Spam-Filtered:
-	 X-Fangmail-MID-QID;
-	bh=CpWCJ94xtknXCkn8v7FkrW6Znii5UB/65DwrssViU5k=;
-	b=AMFi9oeqQx0DnqLSyQoVwMjKxw+R7CQeR73uj9afALdr1tpkOG6eYDtikVTKKd196y//
-	 TJmW6nBbIcGOwXy9Luayw64rSW6ZU31qkypHb0t5c3pQAc7Q2N/BqDGwsKcVKGqZYvcJL
-	 vO7OUCJ4mMxIUrWzJZuVFy7iX3lO7b+UI6C++upYS3ABaq2L2++vX+PK3i3Htmf0AScCc
-	 Eh0vpGHF/OP2VPdq8vkpHbBbuHv2/VdlPe+aA/Dr5w4a5JgjxlKTGRv7bxyoydd0MV0lO
-	 BpuNvAiQ+y/kXUJbMF5TT+F4LQQcKV6WJ2st2I3GPizF/VCzP8ILSMqrnehAZ7u7N/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794409468;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:User-Agent;
+	bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=;
+	b=uwmwluH+XglHcST8XlEdABuodfKjhsfuYf1tFKPh9HyH4JlGnlyj+ADjtU+alkUYrNuM
+	 h8Hd97hJf/vB1Bucfpy5EuliO/w+ezvau9AgjSB/ChMihuj22VC6IPAqrpXfQLyQtl8k9
+	 GQ0aknav3DqtVHk95yWA5jw/oght6CHa9viaKUSzAfVZFFBo7k7V7R0HMdNKIMjowoopQ
+	 j2xr5naxQaSHdzoVdfXijtioPwI7Ys7PXJam9QjX4aO7VuEbcJJno3WGqqf60w8o+E1wd
+	 POAHD2Uv96SDkuPnkdRig/E6jvyWqW1nP47hcCYxTEzGZjg4BOLjqt4B9/T29bi8uDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=zte.com.cn;
-	spf=pass smtp.mailfrom=zte.com.cn;
-	dkim=pass header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b="0qLYETa/";
-	arc=none smtp.remote-ip=183.62.165.209
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=lst.de;
+	spf=pass smtp.mailfrom=lst.de;
+	arc=none smtp.remote-ip=213.95.11.211
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B46D60A263A;
-	Wed, 11 Nov 2026 14:58:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B46D60A263A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zte.com.cn header.i=@zte.com.cn header.a=rsa-sha256 header.s=z202610 header.b=0qLYETa/
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxct.zte.com.cn (FangMail) with ESMTPS id 4jPmpz3tm4z4xPSq;
-	Wed, 11 Nov 2026 22:58:03 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zte.com.cn;
-	s=z202610; t=1794409083;
-	bh=pRKfVc7wfVb7PMZfXlLg7JaYDLTtapskOa/+zvTpT80=;
-	h=In-Reply-To:References:Date:From:To:Cc:Subject;
-	b=0qLYETa/prukg6Sc1BuWXoVB0zs0aZB4MfkzKYinbyKT0BToDFsvP8uSsTXJQois3
-	 x39B5O6sezzSdB55i2Q+KZ3jFiTBGelYUw64WAs+6am6Jo2oBJIyIwYd7ZAMGvW4G2
-	 ypmbRX0ZDULHFwUkMy9UkNxy1TuBiwZaI6L95SB4X962k3NyOjvyf9awIRujjqJ4OU
-	 Z+pLkn91liWKfBvg/AVjmK4xJjMIYnm59mmZdSyBE5g7qBKJ2o45OyEMnzcyPuidXr
-	 zVLZ8eQJcHQV4LLvP9zWnoTu0HdC4Q9yVv8K0DE/RJmBWbAg+pCXvDKWDqAveT7Y6a
-	 oii8MWYclJrWQ==
-Received: from xaxapp05.zte.com.cn ([10.99.98.109])
-	by mse-fl1.zte.com.cn with SMTP id 6ABEvwcA003794;
-	Wed, 11 Nov 2026 22:57:58 +0800 (+08)
-	(envelope-from shao.mingyin@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Wed, 11 Nov 2026 22:58:02 +0800 (CST)
-X-Zmail-TransId: 2afa6af4827a592-8b453
-X-Mailer: Zmail v1.0
-Message-ID: <202611112258022807A4cJ4GoTzO_Q2qeMKeG1@zte.com.cn>
-In-Reply-To: <202611112257529855AMDZLzg8ZmFDQ3fBstbi@zte.com.cn>
-References: 202611112257529855AMDZLzg8ZmFDQ3fBstbi@zte.com.cn
-Date: Wed, 11 Nov 2026 22:58:02 +0800 (CST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9787D606A334;
+	Wed, 11 Nov 2026 15:04:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9787D606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 9B6F068D0A; Wed, 11 Nov 2026 16:04:20 +0100 (CET)
+Date: Wed, 11 Nov 2026 16:04:19 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-mm@kvack.org,
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
+	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 04/41] fs: add SB_I_PSEUDO
+Message-ID: <20261111150419.GA10644@lst.de>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org> <20261110-work-loop-pseudo-v1-4-4c998976c6c7@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,60 +59,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-From: <shao.mingyin@zte.com.cn>
-To: <tom.leiming@gmail.com>, <shuah@kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIDQvNF0gc2VsZnRlc3RzOiB1YmxrOiBjbGVhciByZXVzZWQgYmF0Y2ggU1FFIGNvbW1hbmQgZmxhZ3M=?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 6ABEvwcA003794
-X-TLS: YES
-X-ENVELOPE-SENDER: shao.mingyin@zte.com.cn
-X-SOURCE-IP: 10.5.228.132 unknown Wed, 11 Nov 2026 22:58:03 +0800
-X-CLEAN: YES
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6AF4827B.000/4jPmpz3tm4z4xPSq
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110-work-loop-pseudo-v1-4-4c998976c6c7@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-From: Shao Mingyin <shao.mingyin@zte.com.cn>
+Looks good:
 
-Batch FETCH commands set IORING_URING_CMD_MULTISHOT and select a buffer.
-When a SQE slot is reused for a PREP or COMMIT command, batch command
-initialization overwrites the SQE flags but leaves uring_cmd_flags set.
-The multishot flag then disagrees with buffer selection, so
-io_uring_cmd_prep() rejects the command with -EINVAL. The completion
-assertion aborts kublk, leaving a recovery device QUIESCED or its CLI
-waiting for a daemon notification that will never arrive.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-Clear rw_flags when initializing a batch command. The FETCH path sets
-its multishot flag explicitly afterwards.
-
-Fixes: cb5a6b308700 ("selftests: ublk: handle UBLK_U_IO_FETCH_IO_CMDS")
-Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
----
-Tested on next-20261105 with CONFIG_BLK_DEV_UBLK=y in a local QEMU/KVM
-VM (4 vCPUs, 4 GiB), using real kublk and fio. With the same diagnostic
-kernel and batch null workload, the original binary received -EINVAL
-for a multishot COMMIT without buffer selection and its daemon exited,
-leaving the device QUIESCED. With this change the daemon remained alive
-and the device stayed LIVE before deliberate device deletion.
-
-The four recovery scripts also passed twice with this change and a
-separate fix for commits arriving after the quiesce cancellation scan.
-
- tools/testing/selftests/ublk/batch.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/ublk/batch.c b/tools/testing/selftests/ublk/batch.c
-index 625a9c32a..fcab2ca9e 100644
---- a/tools/testing/selftests/ublk/batch.c
-+++ b/tools/testing/selftests/ublk/batch.c
-@@ -241,6 +241,7 @@ static void ublk_init_batch_cmd(struct ublk_thread *t, __u16 q_id,
- 
- 	sqe->fd	= 0;	/* dev->fds[0] */
- 	sqe->opcode	= IORING_OP_URING_CMD;
-+	sqe->rw_flags	= 0;
- 	sqe->flags	= IOSQE_FIXED_FILE;
- 
- 	cmd->q_id	= q_id;
