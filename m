@@ -1,84 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.220
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794397061;
-	b=5FreVFtfadJQDZT/6ZF6cP6ieISKEhO9D3LEWNpT6AGcihlaBm8gRbsPRNmuFTmDroKq
-	 Y6zTiu3coEWwi4SAK0qa6dE+udth/Ws3dnRqoYaF/1nFW4balHepMOe64h3qA48LAGMBx
-	 N3ZAHBh3fwAHbVjApq3u0n6vdATqx0g3P2NWvZ2hYVD2AuWygigRcH+hnN6g4gaL3SIcM
-	 WOwdQRrt1OYQMFUlFr0jfsxYU5wQDtGVH4drPDtJStqiNCq35KOTp/LBUx0P2M1GQa9hq
-	 5M8+uEr3yIQeHVCry/whxuvtf7M46VnCUMPePcRpYG/EmMebkNhBR9BFVLaDQAQWV2w==
+	t=1794397376;
+	b=040qFS9Rj5aiv3ydDBuZW2fkF6/WWCnpflid6qSkUQ7qQnpGB/WMTnmtSBFgSWjeACIJ
+	 Z2rXz7jt1UEEQrK2uH+8GQYBWfsWdci+bOYuILn5rc6LpvGefuC5/MVmVGA0PHM3MgjJV
+	 cWYJ+7jkNuplxJdVp0v5GWKMUnSknz7m185CiKu0RV1mGtArt+yI89Sieymvkg89LwLSo
+	 IOGIwq4OJTUmwjG+j2RLI3jxEeHTt4W6uoonoq3YbdMihZKZDE58/sPXv9KBGD2/dWX7x
+	 3rulmv3xexENI7cQ567roobHwiLIlRBDsegxJRlvTGHNvdppiVWiWi8Fhcng2piWlJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794397061;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
-	b=eEYHzj61d1zvpaWvI+U58X6REVXCJIq/UFt6vmJZf5v9BxwbXLFIK1jTrYkmA0eWkxuc
-	 a/Hf6szcygOy5ZjWSWVkcqcEXenpD1Sy1q4wVjkq35uhU60d05DM2rIQ8/nHQXvJ14tcv
-	 1TlOf/AOn1JJj9niZNgmXT4Z8MZlvuBISKngBg/+n4Jkudo1oH9kzs+FiXN307KBHsaZt
-	 qJX2v+y2uXvlEB0xgLv6rurA8mTghawiA/Nwu1dp1KcsfWgE90PyhKuVfb0rxSp6m0wuf
-	 IqN+0CyvSzvp6kv2+xG3DpTiT/DLm5qILCShUSu9ppOmM2dvaMIXc4EqYhi69+FqLIg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794397376;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=Xj8fMjIKXX9i2bKCDMf6EtuAPDwrGhq+CYl2rUVihFw=;
+	b=ojp60CmDC2/YoknYKRhgU3RY3VZ71R/W1sphH8y9NTcL/IeHZuMUEmKpc5jFnbfsAWYF
+	 xebB56kF8xrBin0771SiuFTOmONA0tKHg/QFzW38va2XyvNbC3426I3MvdDgHS0hANEDF
+	 JjvwWlD2w3Hsa6URBPTiqOOzU8JePzXLnawKmuvhUCAfl62h6Xs9WE5PCuwdVRQ7VcZe1
+	 mdM2dIdwwvFG7ju1eMnLIDPFmssjn4S7UtjBMVmnPw8SAE8J76l+BtneY0S1K2BnEgOva
+	 unkDNP/pO/SvzY/UCeGSxv4G0BK6CWJVHFke5AwgP88EP0qgw4N+pkMMTCq8hnJWScA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BlC5Gblx;
-	arc=none smtp.remote-ip=209.85.222.178
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=RQzlaW2h;
+	arc=none smtp.remote-ip=113.46.200.220
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C75606A321
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 11:37:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47C75606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82846606A31C;
+	Wed, 11 Nov 2026 11:42:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82846606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BlC5Gblx
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-93e64d52949so265729485a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 03:37:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794397060; x=1795001860; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
-        b=BlC5GblxeuC6mh7E5mlcHWaa6FbwL7M5zsHQyzNo0ElWDR1HAb/10OXHf4NPTjJrYZ
-         28qVLgXYI0cEYMl1lacrKBU6nz6AUicANfMZJzE7tO5nUNNb/YLGhvSTEHQIGzEOAuHd
-         nVuqyNnNQTSTYCKjeMB9T9GmTGazkGf9pwsNZ07qbwteqNGC2d7g3SsUnHMTDJ/U9yLA
-         UNk/kC7bqqiC/S3ciUXpdExCDcSYSMdftZTBSKD4owXddH4eUYyHOmIyppHH6JwIk37s
-         OAcw2gv8gQOn9dcZudYcQ7SMmXcsyH1a+VEFKbwnhezz+4FwBTNzgzrVoz9I0rpjutiu
-         fZ8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794397060; x=1795001860;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
-        b=QFClqpX2u8JdZjNpP6BZwxBHn9N01Xx1Mq0bYq85d9oSMW1qkCfQvt72+pGcP+8BBL
-         d4KrAmfIPw9UcNi+qEWvaWJoqGeqvmI1cFXUjCtBzU21wICX0eO6FlSG6KQhhJfUqUAK
-         bOK3SQQU8J0guWo7/xYZb8FA2jzPwUSvswQ0kK8/qIZp1kCfVDplQWrowic5pfkzwUBJ
-         MNMVag2eNxJkmQnH/D6HE8My5Iwmq4WHiAiohv55VvFUUPBqbkrMx0TpAX9jpSfOD+w1
-         c2lnmeHrD/oPip25uVFj8oGrgZd0KrAZDbGkX12facq+4JMl1kpYrPqV+F/Ahzj6aoxo
-         4VQQ==
-X-Forwarded-Encrypted: i=1; AL+hErGCRYgVGJCYUh1365J12BAj2tUjrY5rScuJANIPyb/uRzH+N2DDP3m4ebqWzzUSe+l2Lr1rrLn5FPeXj/I0dao=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9IpO+Cr8F+jZUiyhmzP9r/kTWDTwPjRoYsiYPOJFkWDeyie4aM
-	z1dCRW6H7vz2VDgb8uCx8oUp8CFk41AXjwPa38HGmbk+Dx1vDdJAuI7v
-X-Gm-Gg: AYBFou12vuGegKBcO65T2C1iUdvnFSTUuCUuApH5Mn3YAAxrl1la+WsE/y3DfkK02FR
-	nWt9pgIVIdPYeXyVtcS3RyJWVOx64W2QeqDrCr+c+/c/vjSqfOxUC3yAP5f2StANAUh9HPO2cA1
-	CUZSHouG46QWqaicfv+v2vfyTdF9yX2aRZKPZe20AuDk+APkhHXDMZ73DP2RByXJFrwTXkbTI92
-	hBCHIRafAxsqquy33T12PMAzu3P8dIB/9eBF/FpS7srlMhyBFrrcnhi8oWCXdwcaj/juREvNTQM
-	NRfGouhMNxPXXlXZkYCBnq/7vO9HaKr6KZq+GLIUiDsGdFRP+r/tTUhI9fUiz4G+XulGQQVl4yd
-	Gm0dmlTm3VFEtaOAzKDgxv+/H9WrUdqvD9J1oQzK/fM6qXe3O1AtwqTftqGcweoU23RHZlBTqta
-	mp+QMIyPp7USopbv5oDUs9SNn3uZQuPl9Ds4PGE/vmvS3gBDcs117y2vtWOjnMf5y8S0VJnjXb7
-	LKECwT+q/mU+nH8HBmmonxPw436IBdk6i35XGZoqdVuNZBvnXNbD2jwGHNBi/MsCgcnfUPvzSgB
-	FHWHU5W88n2KVETtoBinvD4Y2Z0M6oKHIZT/W7tT+7XPaVqQ0MerhKw=
-X-Received: by 2002:a05:620a:4444:b0:93f:3e45:a419 with SMTP id af79cd13be357-947b002af5bmr318209785a.38.1794397060199;
-        Wed, 11 Nov 2026 03:37:40 -0800 (PST)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9479e7dc398sm462686385a.35.2026.11.11.03.37.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Nov 2026 03:37:39 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=RQzlaW2h
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Xj8fMjIKXX9i2bKCDMf6EtuAPDwrGhq+CYl2rUVihFw=;
+	b=RQzlaW2hQLtJ2ZaZBg5Y3HVhBFgurlIwjp+UDZjzbeMzvFOk/xoYw/ZrMJ1P3+0Ivgpv4NoIw
+	TfruNSdzB+Zj606wYKpKkwa5xqR8VCxmCxXEHloPXSLhRJSKzJmUp/ebLHdIk/XOxPSXJ1gslxF
+	G5GSkJSALbeg2EPg6Gbdrms=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4jPhTr6NdHz12LFg;
+	Wed, 11 Nov 2026 19:42:56 +0800 (CST)
+Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id EB6F9202E6;
+	Wed, 11 Nov 2026 19:42:51 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemk200008.china.huawei.com
+ (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 11 Nov
+ 2026 19:42:51 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <mark.rutland@arm.com>,
+	<oleg@redhat.com>, <shuah@kernel.org>, <kees@kernel.org>,
+	<luto@amacapital.net>, <wad@chromium.org>, <peterz@infradead.org>,
+	<ada.coupriediaz@arm.com>, <linusw@kernel.org>, <kevin.brodsky@arm.com>,
+	<anshuman.khandual@arm.com>, <thuth@redhat.com>, <james.morse@arm.com>,
+	<yeoreum.yun@arm.com>, <vladimir.murzin@arm.com>, <broonie@kernel.org>,
+	<ryan.roberts@arm.com>, <liqiang01@kylinos.cn>,
+	<mathieu.desnoyers@efficios.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH v21 01/15] arm64: ptrace: Fix spurious pseudo-single-step for PTRACE_SYSEMU_SINGLESTEP
+Date: Wed, 11 Nov 2026 19:42:11 +0800
+Message-ID: <20261111114225.3977243-2-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261111114225.3977243-1-ruanjinjie@huawei.com>
+References: <20261111114225.3977243-1-ruanjinjie@huawei.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,81 +76,94 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 11 Nov 2026 06:37:38 -0500
-Message-Id: <DMSCO4I434TK.15MMEZI0V4UZR@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
- <bjorn@kernel.org>, <bpf@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Donald
- Hunter" <donald.hunter@gmail.com>, "Eric Dumazet" <edumazet@kernel.org>,
- "Jakub Kicinski" <kuba@kernel.org>, "Jamal Hadi Salim" <jhs@mojatatu.com>,
- "Jiri Pirko" <jiri@resnulli.us>, "John Fastabend"
- <john.fastabend@gmail.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-rdma@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Paolo Abeni" <pabeni@redhat.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
- "Simon Horman" <horms@kernel.org>, "Tariq Toukan" <tariqt@nvidia.com>, "Wei
- Wang" <weiwan@google.com>, "Willem de Bruijn"
- <willemdebruijn.kernel@gmail.com>
-Subject: Re: [PATCH net-next v1 08/15] psp: only give time-wait sockets of
- psp connections a validator
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261111005533.6436-1-toddfreed@meta.com>
- <20261111005533.6436-9-toddfreed@meta.com>
-In-Reply-To: <20261111005533.6436-9-toddfreed@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemk200008.china.huawei.com (7.202.194.74)
 
-On Tue Nov 10, 2026 at 7:55 PM EST, Todd Freed wrote:
-> psp_twsk_init() sets tw_validate_xmit_skb on tcp time-wait sockets.
-> today, that becomes set whether or not the socket has psp offload, which
-> is not needed but is harmless. psp_validate_xmit() passes such packets.
->
+PTRACE_SYSEMU_SINGLESTEP sets both _TIF_SYSCALL_EMU and _TIF_SINGLESTEP.
+Since commit ac2081cdc4d99 ("arm64: ptrace: Consistently use
+pseudo-singlestep exceptions"), syscall_trace_exit() injects a
+pseudo-single-step SIGTRAP (si_code SI_USER) whenever _TIF_SINGLESTEP is
+set, including for an emulated system call.
 
-This can get sent as a standalone patch. I would probably tag it as a
-fix too, even though it is benign. I can't remember why we (I) didn't
-put the validation hook under the branch, but looking at it now, it just
-looks like a bug.
+That pseudo-step was added for PTRACE_SINGLESTEP: the system call runs,
+and the tracer must get a stop at the return address to inspect the
+result. An emulated system call does not run, and its syscall-enter-stop
+already reports the SVC, as the x86 implementation and generic entry
+(report_single_step()) both say. The extra stop is wrong:
 
-> but a validator makes a socket look like it has an encryption offload of
-> its own, and the tc psp action, added in the next patch, relies on that:
-> encap refuses the packets of such a socket, and sk_validate_xmit_skb()
-> drops a packet with a psp association whose socket has a validator.
->
-> set the validator only when the socket has a psp association.
->
-> Signed-off-by: Todd Freed <toddfreed@meta.com>
-> ---
->  net/psp/psp_sock.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
-> index 609b06c7af65..664955bfb4fd 100644
-> --- a/net/psp/psp_sock.c
-> +++ b/net/psp/psp_sock.c
-> @@ -330,10 +330,14 @@ void psp_twsk_init(struct inet_timewait_sock *tw, c=
-onst struct sock *sk)
->  {
->  	struct psp_assoc *pas =3D psp_sk_assoc(sk);
-> =20
-> -	if (pas)
-> +	if (pas) {
->  		refcount_inc(&pas->refcnt);
-> +		/* Only for PSP connections: a validator makes the socket
-> +		 * look like it has an encryption offload of its own
-> +		 */
+1) Stepping armed before the SVC (the normal case). The SVC exception
+   leaves the step pending (SPSR_EL1.SS is 0, Arm ARM D2.11.5.1), so the
+   hardware step is taken at the return address anyway, and the tracer
+   now stops there twice without the tracee executing anything:
 
-comment nit: for my taste, having a comment that starts with "Only for
-PSP connections:" two lines under an if (pas) branch feels unnecessary.
+	syscall-enter-stop  pc=L
+	pseudo-step         pc=L    si_code=SI_USER  <- added by that commit
+	hardware step       pc=L    si_code=TRAP_TRACE
+	hardware step       pc=L+4
 
-> +		tw->tw_validate_xmit_skb =3D psp_validate_xmit;
-> +	}
->  	rcu_assign_pointer(tw->psp_assoc, pas);
-> -	tw->tw_validate_xmit_skb =3D psp_validate_xmit;
->  }
-> =20
->  void psp_twsk_assoc_free(struct inet_timewait_sock *tw)
+2) Stepping armed after the SVC, e.g. a tracer resuming a
+   PTRACE_EVENT_SECCOMP stop with PTRACE_SYSEMU_SINGLESTEP. The first
+   stop is the pseudo-step at L, so the instruction at L is not
+   executed before the step is reported. Before that commit, and on
+   x86, the first stop follows the instruction at L.
+
+Skip the pseudo-step when _TIF_SYSCALL_EMU is set, as generic entry
+does. The behaviour of PTRACE_SYSEMU_SINGLESTEP goes back to what it was
+before that commit. PTRACE_SINGLESTEP is unaffected and still gets the
+pseudo-step, so both problems fixed by that commit stay fixed.
+
+Only tracers using PTRACE_SYSEMU_SINGLESTEP see the difference. Measured
+in QEMU, L is the instruction after the SVC:
+
+  case          before that commit   v7.4-rc1      this patch
+  normal        L, L+4               L, L, L+4     L, L+4
+  after seccomp L+4                  L             L+4
+
+Fixes: ac2081cdc4d99 ("arm64: ptrace: Consistently use pseudo-singlestep exceptions")
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ arch/arm64/kernel/ptrace.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 7405c76724bf..4baf04f20e67 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -2482,16 +2482,26 @@ int syscall_trace_enter(struct pt_regs *regs)
+ 	return regs->syscallno;
+ }
+ 
++static inline bool report_single_step(unsigned long flags)
++{
++	if (flags & _TIF_SYSCALL_EMU)
++		return false;
++
++	return flags & _TIF_SINGLESTEP;
++}
++
+ void syscall_trace_exit(struct pt_regs *regs)
+ {
+ 	unsigned long flags = read_thread_flags();
++	bool step;
+ 
+ 	audit_syscall_exit(regs);
+ 
+ 	if (flags & _TIF_SYSCALL_TRACEPOINT)
+ 		trace_sys_exit(regs, syscall_get_return_value(current, regs));
+ 
+-	if (flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP))
++	step = report_single_step(flags);
++	if (step || flags & _TIF_SYSCALL_TRACE)
+ 		report_syscall_exit(regs);
+ 
+ 	rseq_syscall(regs);
+-- 
+2.34.1
 
