@@ -1,45 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794395944;
-	b=TE6jQVfDgq5fQ+OsNPML3V8M/TyQUPm633jqoNcVrlqkRlsiULi7emV1Gz/DEpF4klnn
-	 TMg6XKGtYylr0v/OUyI/F1f9/qLulnfHBMptFA6eyolsSWj6lJ2zZC+IqGCDhsHQ4MSN7
-	 bvzoOKsH6cPFMLuLjq4j4EjJqvmif1VP/JYUYjWrfR+jQ2AgHvmMme9XpIcF40dxQz1no
-	 Lls8383wt1vRJA8dH8n+Wwy5mGmxFKPMecZYsMTdwTc/ut5xGoTFUCXdlW2p/JRayGUDG
-	 LwW+Gm0SSya2fvIpdQouMIQkVxR0hRafFF4fSW4Sn0DymVPxtnHR2R0d0wN1BFD1THQ==
+	t=1794397061;
+	b=5FreVFtfadJQDZT/6ZF6cP6ieISKEhO9D3LEWNpT6AGcihlaBm8gRbsPRNmuFTmDroKq
+	 Y6zTiu3coEWwi4SAK0qa6dE+udth/Ws3dnRqoYaF/1nFW4balHepMOe64h3qA48LAGMBx
+	 N3ZAHBh3fwAHbVjApq3u0n6vdATqx0g3P2NWvZ2hYVD2AuWygigRcH+hnN6g4gaL3SIcM
+	 WOwdQRrt1OYQMFUlFr0jfsxYU5wQDtGVH4drPDtJStqiNCq35KOTp/LBUx0P2M1GQa9hq
+	 5M8+uEr3yIQeHVCry/whxuvtf7M46VnCUMPePcRpYG/EmMebkNhBR9BFVLaDQAQWV2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794395944;
-	h=Received:DKIM-Signature:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
-	 Date:Message-Id:X-Mailer;
-	bh=qYip/S6YR8HP6EPMfD+DO9PeevjFwxYNpr2ap+wiblQ=;
-	b=jGtjrdJT+8nWt7J/QIXdbNLJSMXbh6PO5+Smi4Vo/SJXXNefqL6ZNefabp4tgP3RHzFR
-	 MUhP7frAhXtovMjm1tpwG65cFuDi5PQzkVwXC22Ak1S+nJgeAfVNPxe8K2zao0PxvCW9s
-	 D0U/9+BOUdt1kbJqx8+95vMRyxIKP+Z3F4W+Wc0GfYtgqfpdiUVIcaBo7MFixbEJ7G2Je
-	 9DC5+5p00R4HUcXgqi7ofnaEp87KlDOVJDRxYdTFx2yDi6PGzQB+tIivDa3YS+NXMYB7C
-	 S6vO47YG8fEfUOT6bplBq45mOucj1DcLeS/+bKa8YVDFAC1VH8kS9SwiJjKyP8k6v5A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794397061;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
+	b=eEYHzj61d1zvpaWvI+U58X6REVXCJIq/UFt6vmJZf5v9BxwbXLFIK1jTrYkmA0eWkxuc
+	 a/Hf6szcygOy5ZjWSWVkcqcEXenpD1Sy1q4wVjkq35uhU60d05DM2rIQ8/nHQXvJ14tcv
+	 1TlOf/AOn1JJj9niZNgmXT4Z8MZlvuBISKngBg/+n4Jkudo1oH9kzs+FiXN307KBHsaZt
+	 qJX2v+y2uXvlEB0xgLv6rurA8mTghawiA/Nwu1dp1KcsfWgE90PyhKuVfb0rxSp6m0wuf
+	 IqN+0CyvSzvp6kv2+xG3DpTiT/DLm5qILCShUSu9ppOmM2dvaMIXc4EqYhi69+FqLIg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GqzS3vcn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BlC5Gblx;
+	arc=none smtp.remote-ip=209.85.222.178
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F62F606A324;
-	Wed, 11 Nov 2026 11:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C75606A321
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 11:37:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47C75606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GqzS3vcn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333081F00A06;
-	Wed, 11 Nov 2026 11:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794395943;
-	bh=qYip/S6YR8HP6EPMfD+DO9PeevjFwxYNpr2ap+wiblQ=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=GqzS3vcnCAk7RcM9m0TvajMcoWIE5tsCDTZDcdpms/zdOpMd0QJB+8k35zijIKLZ/
-	 9zMZaltBrIBk/p9iRKmL+q19QJxxJSkV3ewQwBIpTKZBwK9WP2DepzICMR5JH/Rfgb
-	 cxRWRVFpuNsMg1wugipdX3i36sBiYPJU+Km+w1Sh3SlIyRUAbg1+kNi0/VRpuax7jn
-	 kap/zpwjdpfDyIKPvnNqMuePwSyKJVfA2mFNJO6kaLwq8EuveY34RPGKhFDGjI5eJX
-	 fjk3pYjwjTrr8JpqdZaWbLH3WZnmoPAcxQUEL9vzgasoinjwD/Iy2Z5AlIfhdD6xt4
-	 GAckGa/L7Ow1w==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BlC5Gblx
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-93e64d52949so265729485a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 03:37:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794397060; x=1795001860; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
+        b=BlC5GblxeuC6mh7E5mlcHWaa6FbwL7M5zsHQyzNo0ElWDR1HAb/10OXHf4NPTjJrYZ
+         28qVLgXYI0cEYMl1lacrKBU6nz6AUicANfMZJzE7tO5nUNNb/YLGhvSTEHQIGzEOAuHd
+         nVuqyNnNQTSTYCKjeMB9T9GmTGazkGf9pwsNZ07qbwteqNGC2d7g3SsUnHMTDJ/U9yLA
+         UNk/kC7bqqiC/S3ciUXpdExCDcSYSMdftZTBSKD4owXddH4eUYyHOmIyppHH6JwIk37s
+         OAcw2gv8gQOn9dcZudYcQ7SMmXcsyH1a+VEFKbwnhezz+4FwBTNzgzrVoz9I0rpjutiu
+         fZ8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794397060; x=1795001860;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GWmJbLCR3Z0PWF883WQy0SlXPcx6C4wxGpgsQpGnChg=;
+        b=QFClqpX2u8JdZjNpP6BZwxBHn9N01Xx1Mq0bYq85d9oSMW1qkCfQvt72+pGcP+8BBL
+         d4KrAmfIPw9UcNi+qEWvaWJoqGeqvmI1cFXUjCtBzU21wICX0eO6FlSG6KQhhJfUqUAK
+         bOK3SQQU8J0guWo7/xYZb8FA2jzPwUSvswQ0kK8/qIZp1kCfVDplQWrowic5pfkzwUBJ
+         MNMVag2eNxJkmQnH/D6HE8My5Iwmq4WHiAiohv55VvFUUPBqbkrMx0TpAX9jpSfOD+w1
+         c2lnmeHrD/oPip25uVFj8oGrgZd0KrAZDbGkX12facq+4JMl1kpYrPqV+F/Ahzj6aoxo
+         4VQQ==
+X-Forwarded-Encrypted: i=1; AL+hErGCRYgVGJCYUh1365J12BAj2tUjrY5rScuJANIPyb/uRzH+N2DDP3m4ebqWzzUSe+l2Lr1rrLn5FPeXj/I0dao=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9IpO+Cr8F+jZUiyhmzP9r/kTWDTwPjRoYsiYPOJFkWDeyie4aM
+	z1dCRW6H7vz2VDgb8uCx8oUp8CFk41AXjwPa38HGmbk+Dx1vDdJAuI7v
+X-Gm-Gg: AYBFou12vuGegKBcO65T2C1iUdvnFSTUuCUuApH5Mn3YAAxrl1la+WsE/y3DfkK02FR
+	nWt9pgIVIdPYeXyVtcS3RyJWVOx64W2QeqDrCr+c+/c/vjSqfOxUC3yAP5f2StANAUh9HPO2cA1
+	CUZSHouG46QWqaicfv+v2vfyTdF9yX2aRZKPZe20AuDk+APkhHXDMZ73DP2RByXJFrwTXkbTI92
+	hBCHIRafAxsqquy33T12PMAzu3P8dIB/9eBF/FpS7srlMhyBFrrcnhi8oWCXdwcaj/juREvNTQM
+	NRfGouhMNxPXXlXZkYCBnq/7vO9HaKr6KZq+GLIUiDsGdFRP+r/tTUhI9fUiz4G+XulGQQVl4yd
+	Gm0dmlTm3VFEtaOAzKDgxv+/H9WrUdqvD9J1oQzK/fM6qXe3O1AtwqTftqGcweoU23RHZlBTqta
+	mp+QMIyPp7USopbv5oDUs9SNn3uZQuPl9Ds4PGE/vmvS3gBDcs117y2vtWOjnMf5y8S0VJnjXb7
+	LKECwT+q/mU+nH8HBmmonxPw436IBdk6i35XGZoqdVuNZBvnXNbD2jwGHNBi/MsCgcnfUPvzSgB
+	FHWHU5W88n2KVETtoBinvD4Y2Z0M6oKHIZT/W7tT+7XPaVqQ0MerhKw=
+X-Received: by 2002:a05:620a:4444:b0:93f:3e45:a419 with SMTP id af79cd13be357-947b002af5bmr318209785a.38.1794397060199;
+        Wed, 11 Nov 2026 03:37:40 -0800 (PST)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9479e7dc398sm462686385a.35.2026.11.11.03.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 03:37:39 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -48,117 +87,81 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v5 5/6] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl
- to freeze sessions early
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, 
- linux-mm@kvack.org, skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
- vipinsh@google.com, linux-kernel@vger.kernel.org, corbet@lwn.net, 
- dmatlack@google.com, kexec@lists.infradead.org, pratyush@kernel.org, 
- rdunlap@infradead.org, graf@amazon.com
-In-Reply-To: <20261105050053.3063001-6-pasha.tatashin@soleen.com>
-References: <20261105050053.3063001-1-pasha.tatashin@soleen.com>
- <20261105050053.3063001-6-pasha.tatashin@soleen.com>
-Date: Wed, 11 Nov 2026 13:18:40 +0200
-Message-Id: <179439592041.425130.6098227055493441109.b4-review@b4>
-X-Mailer: b4 0.16.1-dev
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Nov 2026 06:37:38 -0500
+Message-Id: <DMSCO4I434TK.15MMEZI0V4UZR@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?=
+ <bjorn@kernel.org>, <bpf@vger.kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Donald
+ Hunter" <donald.hunter@gmail.com>, "Eric Dumazet" <edumazet@kernel.org>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Jamal Hadi Salim" <jhs@mojatatu.com>,
+ "Jiri Pirko" <jiri@resnulli.us>, "John Fastabend"
+ <john.fastabend@gmail.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rdma@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Simon Horman" <horms@kernel.org>, "Tariq Toukan" <tariqt@nvidia.com>, "Wei
+ Wang" <weiwan@google.com>, "Willem de Bruijn"
+ <willemdebruijn.kernel@gmail.com>
+Subject: Re: [PATCH net-next v1 08/15] psp: only give time-wait sockets of
+ psp connections a validator
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Todd Freed" <toddfreed@meta.com>, <netdev@vger.kernel.org>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261111005533.6436-1-toddfreed@meta.com>
+ <20261111005533.6436-9-toddfreed@meta.com>
+In-Reply-To: <20261111005533.6436-9-toddfreed@meta.com>
 
-Hi,
-
-> Currently, LUO sessions are frozen automatically only inside the
-> reboot(LINUX_REBOOT_CMD_KEXEC) pathway, where luo_session_serialize()
-> iterates through all outgoing sessions under global write locks and
-> freezes them serially during shutdown. On hosts running multiple
-> workloads that quiesce one by one ahead of kexec, userspace needs an
-> explicit per-session freeze point so each session can capture final file
-> state under its per-session mutex as soon as its workload pauses.
-> 
-> Introduce LIVEUPDATE_SESSION_FREEZE on session FDs to freeze an outgoing
-> session early. The ioctl runs .freeze() across all preserved files in
-> the session and serializes their metadata. Once frozen, no additional
-> files can be added to the session, and subsequent freeze calls return
-> -EBUSY. Freeze is only valid on outgoing sessions and returns -EINVAL on
-> incoming ones.
-> 
-> By default (flags == 0), session lifetime remains bound to the session
-> FD: the session stays frozen while the FD remains open, and closing the
-> session FD before reboot (for example, to abort the session or on
-> process exit/crash) unfreezes it via .unfreeze(), unpreserves its files,
-> and reclaims all resources. During kexec, already-frozen sessions skip
-> the late auto-freeze and are published into the outgoing KHO subtree.
-> 
-> With LIVEUPDATE_SESSION_FREEZE_COMMIT set in
-> struct liveupdate_session_freeze.flags, the frozen session is committed:
-> it and its FLB dependencies are immediately inserted into the outgoing
-> KHO subtree via luo_session_publish_one(), and the session survives
-> close() with full ownership retained by LUO until reboot. Once
-> committed, closing the session FD (or another session failing to freeze
-> during reboot) never unfreezes or unpreserves the session, allowing
-> processes to hand off preserved state and exit prior to kexec.
-> 
-> Update the uAPI and core LUO documentation to describe session freeze
-> and commit semantics.
-
-Please teach your LLM to use shorter paragraphs, focus on why and don't
-list every implementation detail, but only important ones.
-
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  Documentation/userspace-api/liveupdate.rst | 30 +++++++++
->  include/linux/liveupdate.h                 |  3 +-
->  include/uapi/linux/liveupdate.h            | 46 +++++++++++++
->  kernel/liveupdate/luo_file.c               | 54 +++++++--------
->  kernel/liveupdate/luo_internal.h           |  7 ++
->  kernel/liveupdate/luo_session.c            | 77 ++++++++++++++++++++--
->  6 files changed, 184 insertions(+), 33 deletions(-)
+On Tue Nov 10, 2026 at 7:55 PM EST, Todd Freed wrote:
+> psp_twsk_init() sets tw_validate_xmit_skb on tcp time-wait sockets.
+> today, that becomes set whether or not the socket has psp offload, which
+> is not needed but is harmless. psp_validate_xmit() passes such packets.
 >
-> diff --git a/Documentation/userspace-api/liveupdate.rst b/Documentation/userspace-api/liveupdate.rst
-> index cdd74627ab75b..d36537c556ccb 100644
-> --- a/Documentation/userspace-api/liveupdate.rst
-> +++ b/Documentation/userspace-api/liveupdate.rst
-> @@ -22,6 +22,36 @@ change, so compatibility is not guaranteed when kexec rebooting between
->  different kernel versions. This is expected to change and stabilize in a future
->  version.
->  
-> +Session Freeze and Commit
-> +=========================
-> +
-> +By default, LUO freezes active sessions automatically inside the
-> +``reboot(LINUX_REBOOT_CMD_KEXEC)`` syscall path, and an outgoing session's
-> +lifetime is bound to its open session FD: closing the FD before reboot aborts
-> +preservation and returns all resources.
-> +
-> +Userspace may also freeze an outgoing session explicitly ahead of reboot via
-> +``ioctl(session_fd, LIVEUPDATE_SESSION_FREEZE, &arg)`` once it has finished
-> +preserving and modifying the session's files:
-> +
-> +- **Freeze** (``flags == 0``): Executes ``.freeze()`` on all preserved files in
-> +  the session under the per-session lock (allowing multiple sessions to freeze
-> +  concurrently), while keeping session lifetime tied to ``session_fd``. When
-> +  ``session_fd`` is closed before reboot (for example, to abort the session or
-> +  on process exit/crash), LUO runs ``.unfreeze()`` and ``.unpreserve()`` on all
-> +  files in the session and reclaims all resources. As long as ``session_fd``
-> +  remains open, the session stays frozen across any failed ``reboot()`` attempt;
-> +  at kexec time, already-frozen sessions skip the late auto-freeze step and are
-> +  published into the outgoing KHO subtree.
-> +- **Freeze and commit** (``LIVEUPDATE_SESSION_FREEZE_COMMIT``): Freezes the
-> +  session's files, immediately inserts the session and its FLB dependencies
-> +  into the outgoing KHO subtree, and commits the session so that it survives
-> +  closing ``session_fd`` with ownership retained by LUO until reboot. Once
-> +  committed, closing ``session_fd`` (or another session failing to freeze
-> +  during ``reboot()``) will neither unfreeze nor unpreserve the session,
-> +  allowing processes to hand off preserved state to LUO and exit prior to
-> +  kexec.
 
-Too wall-of-text'y, too much markup.
+This can get sent as a standalone patch. I would probably tag it as a
+fix too, even though it is benign. I can't remember why we (I) didn't
+put the validation hook under the branch, but looking at it now, it just
+looks like a bug.
 
-I'm stopping here until v6.
+> but a validator makes a socket look like it has an encryption offload of
+> its own, and the tc psp action, added in the next patch, relies on that:
+> encap refuses the packets of such a socket, and sk_validate_xmit_skb()
+> drops a packet with a psp association whose socket has a validator.
+>
+> set the validator only when the socket has a psp association.
+>
+> Signed-off-by: Todd Freed <toddfreed@meta.com>
+> ---
+>  net/psp/psp_sock.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/psp/psp_sock.c b/net/psp/psp_sock.c
+> index 609b06c7af65..664955bfb4fd 100644
+> --- a/net/psp/psp_sock.c
+> +++ b/net/psp/psp_sock.c
+> @@ -330,10 +330,14 @@ void psp_twsk_init(struct inet_timewait_sock *tw, c=
+onst struct sock *sk)
+>  {
+>  	struct psp_assoc *pas =3D psp_sk_assoc(sk);
+> =20
+> -	if (pas)
+> +	if (pas) {
+>  		refcount_inc(&pas->refcnt);
+> +		/* Only for PSP connections: a validator makes the socket
+> +		 * look like it has an encryption offload of its own
+> +		 */
 
--- 
-Sincerely yours,
-Mike.
+comment nit: for my taste, having a comment that starts with "Only for
+PSP connections:" two lines under an if (pas) branch feels unnecessary.
+
+> +		tw->tw_validate_xmit_skb =3D psp_validate_xmit;
+> +	}
+>  	rcu_assign_pointer(tw->psp_assoc, pas);
+> -	tw->tw_validate_xmit_skb =3D psp_validate_xmit;
+>  }
+> =20
+>  void psp_twsk_assoc_free(struct inet_timewait_sock *tw)
 
