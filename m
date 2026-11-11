@@ -1,56 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794390976;
-	b=gNzPd7iS+i0R0Dfw3R1iG2LlGf9qv+T8VERSfY+aEO02lsmrQUQ+e3WhdS/xgdmKDHSO
-	 K7goqyCSCy+/JsK9Q86tBghLzOu/g2RdAo+mejhnhWS/qdGVOuvjCml4oT9+cY++0xQjF
-	 KsFwcPTd0dZbsYo+MKotZ9xZispktWfD6aYqEK+zzCJ3mIzmLzxHnLyYDxGxXIDo6AJ0o
-	 r5wMSscfbWJBodKdnDlzLEzq7WRgAZQDc/SfCc5+dNkmiE+Y5hNUwpI4nUmCFOOK9+E+O
-	 yovWbvkwYB7oxriKu+jPhDN2JJxNsmliz1AAxatrprd4XFgpkrLCj7EmZLac2mEkiiQ==
+	t=1794391340;
+	b=zwPnCoD5LZI0GOgrRS2VZjuHcE3/VmmnTR/mJ33TZHHZkyGILrDEqPDJbJzQN00TZwD/
+	 Kc6wTzJMMMCht9nwzRG2OfFGnq78sB+V33hJwQb1vZF3FAVdIWLFRs0v2Kx6nLufmgZ0k
+	 +3tgRj7tqYFKEEHvojr0219hsZ8TQIeeqPnFddUo0xYyGsSOjxi9FPtXFYhsCV+gMWLu8
+	 0DzoK8F1I6JsskttFZSYh7F7EEYa388ol/he6S2P5PNs4KSHVXSuEQ933S8IqSN7tZQ5X
+	 TGyNtpvYqt369YA1mSwN/AxL4eAga8CVXAHfNo9sCnvrqlrp5tf8QswwtrB1wIIGMKA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794390976;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=diWWembtglhqYOPIvis4i129yRh0famPUXEo2wrIz2U=;
-	b=it6bdmt5jISEb2kAOXbim/vhSOkJRUvwUhWPYn5VJpVJOXKmOBL1hTQe4Fjpre0kTIdV
-	 UlDR4QYg0aWWDz0zt06lzNrdFSzmB4Ilt8xszqE8zf6qogcCFyaPNnXs0Nrpe14vnYm7I
-	 as2nfvzfm8F+JWx+Ku5zfIJ9zp/wgLf0qlsmi8yUS43cVknhsjVFnlq+wRQEbdEhpj3Ln
-	 5MjXH8pqNWbNkWENjqPVv6gn/JfLP0qMk3g073lHzxSqaw5jqOAs4+It8yVwx0xzuzhsR
-	 +WiOYcrcvkD11gV7rKXYPBoYlAsBgwtjSKtgcxr8FHP4NsOyhixTXxMAYKn1gyTsDCw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794391340;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=/008Nq1DBBEIqx5PPz70GiPaNVyQI+eFBJTDZljb44Q=;
+	b=K9DY4uzIKihVFv5D0UCDjKCdAo/tHNodheQW4W2DKrKRwcP2IAEsPQUzrhjY4HMvDgGZ
+	 z3uABubM89zASLlB4jJrwsjvYS/IlfNBVwP3kspQ7cOf1oehMt5ym61Ne+aJqJpyLcrWE
+	 14wBaeRJoALvq1GR9PKGeW8PD6jAwE5crTeIDu9+fa7KlgndlSN4OKxT360WbiShwmVn5
+	 bSpXLCo9ffQbKOAQQQN7cNQdC4NiK50sJxFvqtYZafzHIgAaN5jqlJiOCU/P2Vl+FjQ+p
+	 8oqR47aahS2dnp4HRuHsFICfENpgZUG5u92bxAyU0xuy806OhoZQyjX5n2n4uigCtvA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jfdjwyV7;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD54606A321;
-	Wed, 11 Nov 2026 09:56:16 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=O6IdHv3P;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0673460A261C;
+	Wed, 11 Nov 2026 10:02:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0673460A261C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jfdjwyV7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8389C1F00A07;
-	Wed, 11 Nov 2026 09:56:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794390975;
-	bh=diWWembtglhqYOPIvis4i129yRh0famPUXEo2wrIz2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jfdjwyV7bUSfgDZ02cMgBlkUPVzLsUIHBZpEZ9gjxJLEB7RQQotgrvJDisFBP2mGe
-	 1NHuCT0JkZNr+UP/Ybs26Lu+/9fKSssvhnCOKdmX7d9DcmfLg+SIOFKhUvkSfwW7ab
-	 HRtGRji2oHVakaCzi+qGkCEI7raAQ2t7BsCKCAhnGnHmFNCbzBewT2P0phoWMuaozQ
-	 cXI5F+lpiu9h/tgByfAOB+GrgTYhtXSaWyZXt4tt9baW75C+zFBV+IUEbq6Q60eMQw
-	 Co897B6NUq24lQqOADAhxfrdpeoY1uvOzL8cYDQ8MRlCFdEiVtHcAStNfURIKZ3Ovz
-	 pfm7uj1uJMbyA==
-Date: Wed, 11 Nov 2026 11:56:07 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	shuah@kernel.org, linux-mm@kvack.org, skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org, vipinsh@google.com,
-	linux-kernel@vger.kernel.org, corbet@lwn.net, dmatlack@google.com,
-	kexec@lists.infradead.org, pratyush@kernel.org,
-	rdunlap@infradead.org, graf@amazon.com
-Subject: Re: [PATCH v5 0/6] liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl
-Message-ID: <avQ7t_ijdR4nm-RO@kernel.org>
-References: <20261105050053.3063001-1-pasha.tatashin@soleen.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=O6IdHv3P
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A8041576;
+	Wed, 11 Nov 2026 02:02:16 -0800 (PST)
+Received: from raptor (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8B973F673;
+	Wed, 11 Nov 2026 02:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1794391339; bh=iBX7/caJMXnRG4auS6ChraoO4dSo/zwj7eCa2+s/N48=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O6IdHv3Pa6BF4W/gj+tmwDWoCPsjfXKjFP32FDKfEVDMDMDI8b+AdWLJIeDX4vXWL
+	 5tTlEk8MizP4FV96CYNLY32LXX4mXYgk+F1dgumoIHRXhgBBrmbT7eHPSDKAQZbgOE
+	 L/w7KjxCQz+kqbd4w3gQ9WrqNb468FzIICjG6R/k=
+Date: Wed, 11 Nov 2026 10:02:14 +0000
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Sean Christopherson <seanjc@google.com>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
+	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Isaku Yamahata <isaku.yamahata@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev,
+	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 2/2] KVM: selftests: Test KVM_PRE_FAULT_MEMORY against a
+ full dirty ring
+Message-ID: <avQ9Jhsnq7e3KPw-@raptor>
+References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
+ <20261110110724.3614412-3-fuad.tabba@linux.dev>
+ <avMoubwqgXbpflwM@gremlin>
+ <CA+EHjTxT_9NghyLSZmOOi_oQboQw-g+6z9WxwaF=-7RdaGbMNw@mail.gmail.com>
+ <avM9_7aWUDJSL3Lq@seanjc-mac.roam.internal>
+ <avM_FXXF9oBkderF@gremlin>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,142 +76,77 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261105050053.3063001-1-pasha.tatashin@soleen.com>
+In-Reply-To: <avM_FXXF9oBkderF@gremlin>
 
-(adding linux-api@)
+Hi all,
 
-On Thu, Nov 05, 2026 at 12:00:46AM -0500, Pasha Tatashin wrote:
-> Currently, LUO freezes outgoing sessions only inside the
-> reboot(LINUX_REBOOT_CMD_KEXEC) syscall path, serially under global write
-> locks, and binds every outgoing session's lifetime strictly to an open
-> session FD until reboot.
+On Tue, Nov 10, 2026 at 04:02:21PM +0000, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Nov 10, 2026 at 07:53:35AM -0800, Sean Christopherson wrote:
+> > On Tue, Nov 10, 2026, Fuad Tabba wrote:
+> > > Hi Lorenzo,
+> > >
+> > > On Tue, 10 Nov 2026 14:38:27 +0000, "Lorenzo Stoakes (ARM)"
+> > > <ljs@kernel.org> wrote:
+> > > > On Tue, Nov 10, 2026 at 11:07:24AM +0000, Fuad Tabba wrote:
+> > > > > Pre-fault more populated, dirty-logged pages than the vCPU's dirty ring
+> > > > > holds, and check that each call stops before the ring overflows, that a
+> > > > > retry returns ENOSPC without progress, and that the harvested entries
+> > > > > are the pages in order. A read pre-fault can map a page read-only, or
+> > > >
+> > > > Are we asserting an invariant that prefaulting happens in address order
+> > > > here?  Is that explicitly presumed in the prefault API, or just how it
+> > > > happens to pan out?
+> > > >
+> > > > I wonder if we might decide for whatever reason in future to do things
+> > > > differently there. Bit nitty I know, but wonder if it's asserting an
+> > > > implementation detail?
+> > >
+> > > Yes, the API doesn't guarantee an order. I'll assert that every page
+> > > is reported exactly once instead.
+> > >
+> > > [...]
+> > > > > diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
+> > > [...]
+> > > > > +static void test_pre_fault_dirty_ring(void)
+> > > [...]
+> > > > > +    /* Populate the pages, so that pre-faulting can map them writable. */
+> > > >
+> > > > Reviewed below, but I wonder how x86 could then read fault these?
+> > >
+> > > KVM_PRE_FAULT_MEMORY is defined as a read fault, but x86 maps the page
+> > > writable when the host page is, and marks it dirty, unless it falls
+> > > back to access tracking (below). Populating the pages makes sure they
+> > > aren't backed by the zero page.
+> >
+> > Before we effectively solidify the behavior, I think we should have an explicit
+> > discussion about the desired behavior of KVM_PRE_FAULT_MEMORY when dirty logging
+> > is enabled.  E.g. the only reason I kept the existing behavior in my auto-prefault
+> > series was because I couldn't think of a good reason to change it.  But we never
+> > made a concious decision in the first place, i.e. we never considered what would
+> > happen if prefaulting collided with dirty logging (as evidenced by this bug).
 > 
-> On hosts running many workloads (such as VMs or stateful daemons),
-> workloads do not all pause simultaneously inside reboot(): they quiesce
-> one by one ahead of the host kexec. Userspace needs an explicit
-> per-session freeze point to snapshot final file state (.freeze()) as
-> each workload pauses -- concurrently across sessions under per-session
-> locks -- along with a way to commit a frozen session into KHO so it
-> survives closing the session FD.
+> Yeah, I do worry about implicit assumptions (also commented re: ordering).
 > 
-> This series introduces LIVEUPDATE_SESSION_FREEZE on session FDs:
-> 
-> 1. Freeze (flags == 0):
->    Freezes all preserved files in the session under the per-session
->    mutex while keeping session lifetime tied to the session FD. The
->    session stays frozen as long as the FD remains open; closing the
->    session FD before reboot (for example, to abort the session or on
->    process exit/crash) runs .unfreeze() and .unpreserve() and reclaims
->    all resources. At kexec time, already-frozen sessions skip the late
->    auto-freeze step and are published into the outgoing KHO subtree.
-> 
-> 2. Freeze and commit (LIVEUPDATE_SESSION_FREEZE_COMMIT):
->    Freezes preserved files, immediately inserts the session and its FLB
->    dependencies into the outgoing KHO subtree in O(1), and commits the
->    session so it survives close() with full ownership retained by LUO
->    until reboot. Once committed, closing the session FD (or another
->    session failing to freeze during reboot) never unfreezes or
->    unpreserves it. This allows processes to hand off preserved state to
->    LUO and exit prior to kexec, and makes committed sessions immediately
->    visible in the outgoing KHO subtree before the host reboots.
-> 
-> Overview of the series:
-> - Patch 1 decouples luo_file_freeze()/unfreeze() from
->   struct luo_file_set_ser.
-> - Patches 2-4 add incremental KHO publication helpers for kho_block
->   (kho_block_set_it_append()), LUO sessions (luo_session_publish_one()),
->   and outgoing FLBs (luo_flb_ser_publish_one(), replacing the late
->   luo_flb_serialize() reboot pass).
-> - Patch 5 introduces LIVEUPDATE_SESSION_FREEZE and
->   LIVEUPDATE_SESSION_FREEZE_COMMIT and updates the LUO core and uAPI
->   documentation.
-> - Patch 6 adds selftests covering both uncommitted and committed session
->   freezes across unit and multi-session kexec tests.
-> 
-> This series is based on liveupdate/next commit d80a5528df4c ("Merge
-> branch 'lu-pci-preservation' into next").
-> 
-> Changelog:
-> v5:
-> - Rebase onto latest liveupdate/next.
-> - Replace reserved field in struct liveupdate_session_freeze with flags
->   and add LIVEUPDATE_SESSION_FREEZE_COMMIT so userspace can either
->   freeze a session while keeping it bound to its FD (rolled back on
->   close()) or commit the frozen session (inserted immediately into KHO
->   and retained by LUO across close() until reboot).
-> - Add incremental KHO publication helpers in kho_block, luo_session, and
->   luo_flb so committed sessions and their FLB dependencies are inserted
->   into the outgoing KHO subtree immediately on freeze, dropping the
->   separate luo_flb_serialize() pass at reboot.
-> - Keep luo_session_freeze_one() / luo_session_unfreeze_one() in Patch 1
->   rather than renaming them to luo_session_serialize_one() /
->   luo_session_unserialize_one() and back once luo_session_publish_one()
->   is introduced.
-> - Update Documentation/userspace-api/liveupdate.rst and kernel-doc
->   across kho_block, luo_flb, luo_file, and luo_session.
-> - Drop v4 Reviewed-by tag on the modified freeze and selftest patches,
->   and expand selftests to cover both uncommitted and committed freezes.
-> v4:
-> - Split out a preparatory patch that drops struct luo_file_set_ser *
->   from luo_file_freeze() / luo_file_unfreeze() and moves file_set_ser
->   handling into luo_session_serialize_one() /
->   luo_session_unserialize_one() (Suggested by Mike Rapoport).
-> - Few more nits from Mike.
-> v3:
-> - Renamed session->frozen to session->user_frozen, - Pratyush
-> - Added Reviewed-by's
-> v2:
-> - Rebased onto liveupdate/next (commit 27be83a12b24 ("Merge branch
->   'lu-pci-preservation' into next")) and split out early session freeze
->   into a standalone series (tmpfs preservation and its per-file user
->   argument plumbing were spun out into a separate series).
-> - Patch 1:
->   - Drop struct luo_file_set_ser * from luo_file_freeze() and
->     luo_file_unfreeze(), and rename the session helpers to
->     luo_session_serialize_one() / luo_session_unserialize_one() so all
->     of struct luo_session_ser is populated and cleared in one place
->     (Suggested by Pratyush Yadav).
->   - Unfreeze the session's files if luo_ucmd_respond() fails in
->     luo_session_freeze().
->   - Update remaining reboot-only wording in luo_file.c kernel-doc
->     comments.
-> - Patch 2:
->   - Add checks verifying that non-zero reserved bits and freezing an
->     incoming post-kexec session fail with -EINVAL.
-> Link: https://lore.kernel.org/all/20261015093816.2438942-1-pasha.tatashin@soleen.com/ # v1
-> 
-> Pasha Tatashin (6):
->   liveupdate: Move file_set_ser handling to luo_session_serialize()
->   kho: support incremental entry publication in kho_block
->   liveupdate: luo: serialize sessions via per-session publish helper
->   liveupdate: luo_flb: support incremental outgoing FLB publication
->   liveupdate: Add LIVEUPDATE_SESSION_FREEZE ioctl to freeze sessions
->     early
->   selftests: liveupdate: Add tests for LIVEUPDATE_SESSION_FREEZE
-> 
->  Documentation/userspace-api/liveupdate.rst    |  30 +++
->  include/linux/kho_block.h                     |   1 +
->  include/linux/liveupdate.h                    |   3 +-
->  include/uapi/linux/liveupdate.h               |  46 +++++
->  kernel/liveupdate/kho_block.c                 |  86 ++++++++-
->  kernel/liveupdate/luo_core.c                  |  10 +-
->  kernel/liveupdate/luo_file.c                  |  94 ++++-----
->  kernel/liveupdate/luo_flb.c                   | 111 +++++++----
->  kernel/liveupdate/luo_internal.h              |  16 +-
->  kernel/liveupdate/luo_session.c               | 178 ++++++++++++++----
->  .../liveupdate/lib/include/libliveupdate.h    |   5 +-
->  .../selftests/liveupdate/lib/lu_utils.c       |  21 ++-
->  .../testing/selftests/liveupdate/liveupdate.c | 107 +++++++++++
->  .../selftests/liveupdate/luo_kexec_simple.c   |  22 ++-
->  .../selftests/liveupdate/luo_multi_session.c  |  33 +++-
->  15 files changed, 612 insertions(+), 151 deletions(-)
-> 
-> 
-> base-commit: d80a5528df4cdee5871243e392da08c2d5c92e43
-> -- 
-> 2.56.0.398.g882cbad275-goog
-> 
+> I guess what makes sense, given the general approach for prefaulting = injecting
+> a synthetic read fault, is for the expectation to be that it matches the
+> behaviour of an ordinary read fault.
 
--- 
-Sincerely yours,
-Mike.
+Unfortunately, what happens in this case is not as obvious as it sounds,
+because a read fault on a memslot backed by guest_memfd maps the GPA with
+read *and* write permission on arm64 (if the memslot is not readonly,
+haven't checked what x86 does).
+
+Thanks,
+Alex
+
+> 
+> Or do you feel that it makes sense for the pre-faulting to do something special
+> in these cases and establish a sensible invariant?
+> 
+> If the pre-faulting does indeed dirty the pages, you'd need the dirty logging to
+> do its usual thing (not familiar with the code, so I'm guessing logging the page
+> :) though right?
+> 
+> --
+> Cheers, Lorenzo
+> 
