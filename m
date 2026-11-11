@@ -1,70 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.97.179.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794391340;
-	b=zwPnCoD5LZI0GOgrRS2VZjuHcE3/VmmnTR/mJ33TZHHZkyGILrDEqPDJbJzQN00TZwD/
-	 Kc6wTzJMMMCht9nwzRG2OfFGnq78sB+V33hJwQb1vZF3FAVdIWLFRs0v2Kx6nLufmgZ0k
-	 +3tgRj7tqYFKEEHvojr0219hsZ8TQIeeqPnFddUo0xYyGsSOjxi9FPtXFYhsCV+gMWLu8
-	 0DzoK8F1I6JsskttFZSYh7F7EEYa388ol/he6S2P5PNs4KSHVXSuEQ933S8IqSN7tZQ5X
-	 TGyNtpvYqt369YA1mSwN/AxL4eAga8CVXAHfNo9sCnvrqlrp5tf8QswwtrB1wIIGMKA==
+	t=1794391813;
+	b=air/pOEcVEoYbUqPpia3Oc8iAILt0fKTcPmVjkCW5sZ545HAKxs2w+brJiFyCy34mNEo
+	 KaZLuD7OP8Q8MUmDSW57BAXJoXDBl9m7zhEUA523ccJ3a212Qk+OgVHC3Kh2I24qSgjT5
+	 uFmp2Wkm4kLlPSk527QOhOcsnn/KE1BCOB1iTSTJ8CKRH76MhSbNaUEqZDzsJihvsRzvo
+	 CLqrWKXM6mrP1/YtPLCf5VgAJODRRACwSQzoncLh4S/oGhlNXvTte+1WZ/gHtddVL1pDA
+	 gwn3098BAlfwWNmZrojtm6ybNY1CRUZijnnQ2Fs7mr9eKTrNImok5r0bH1eJpp9aQJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794391340;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=/008Nq1DBBEIqx5PPz70GiPaNVyQI+eFBJTDZljb44Q=;
-	b=K9DY4uzIKihVFv5D0UCDjKCdAo/tHNodheQW4W2DKrKRwcP2IAEsPQUzrhjY4HMvDgGZ
-	 z3uABubM89zASLlB4jJrwsjvYS/IlfNBVwP3kspQ7cOf1oehMt5ym61Ne+aJqJpyLcrWE
-	 14wBaeRJoALvq1GR9PKGeW8PD6jAwE5crTeIDu9+fa7KlgndlSN4OKxT360WbiShwmVn5
-	 bSpXLCo9ffQbKOAQQQN7cNQdC4NiK50sJxFvqtYZafzHIgAaN5jqlJiOCU/P2Vl+FjQ+p
-	 8oqR47aahS2dnp4HRuHsFICfENpgZUG5u92bxAyU0xuy806OhoZQyjX5n2n4uigCtvA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794391813;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=TKdv7edjmPjExE3RyciVP5KfNQ2HgIujnfELAufwRbY=;
+	b=WG+ybpm5WllPDrKzle+BmlKQ33wYd1JyTB8fE9DNyrFDsGn10PS1Gt+UHeTGt9l7R6C0
+	 eBCehs9Z5bEo+ugGoOZSwQXUHgqtFUmWJ0Gn/z3Dwpgvr85mWbdGKvcRt4Mc7siUn35Fq
+	 TAXKzkAZEXPdbCRRcTemddOtqP93tRapiPCRkOpiV0xXftiComaDkivM7WDXrWhxwZLVT
+	 OhH4C4ke25B5UQBU/3Z/LUXb4NpCxBazwMHiZMtIC+Xn9mMTNQcbX/nxhoDT5AIjqtWI6
+	 vRg5s6kSZ1TGh3a9cDs8KF+6Tw3RMyLdk7817WVDqCC64gW333g6iCOtjJKmvGxbLBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=O6IdHv3P;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0673460A261C;
-	Wed, 11 Nov 2026 10:02:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0673460A261C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=igalia.com;
+	spf=pass smtp.mailfrom=igalia.com;
+	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=lYMH0dCe;
+	arc=none smtp.remote-ip=213.97.179.56
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6826606A31C;
+	Wed, 11 Nov 2026 10:10:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6826606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=O6IdHv3P
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A8041576;
-	Wed, 11 Nov 2026 02:02:16 -0800 (PST)
-Received: from raptor (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8B973F673;
-	Wed, 11 Nov 2026 02:02:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794391339; bh=iBX7/caJMXnRG4auS6ChraoO4dSo/zwj7eCa2+s/N48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O6IdHv3Pa6BF4W/gj+tmwDWoCPsjfXKjFP32FDKfEVDMDMDI8b+AdWLJIeDX4vXWL
-	 5tTlEk8MizP4FV96CYNLY32LXX4mXYgk+F1dgumoIHRXhgBBrmbT7eHPSDKAQZbgOE
-	 L/w7KjxCQz+kqbd4w3gQ9WrqNb468FzIICjG6R/k=
-Date: Wed, 11 Nov 2026 10:02:14 +0000
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Sean Christopherson <seanjc@google.com>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Isaku Yamahata <isaku.yamahata@intel.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev,
-	Wei-Lin Chang <weilin.chang@arm.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 2/2] KVM: selftests: Test KVM_PRE_FAULT_MEMORY against a
- full dirty ring
-Message-ID: <avQ9Jhsnq7e3KPw-@raptor>
-References: <20261110110724.3614412-1-fuad.tabba@linux.dev>
- <20261110110724.3614412-3-fuad.tabba@linux.dev>
- <avMoubwqgXbpflwM@gremlin>
- <CA+EHjTxT_9NghyLSZmOOi_oQboQw-g+6z9WxwaF=-7RdaGbMNw@mail.gmail.com>
- <avM9_7aWUDJSL3Lq@seanjc-mac.roam.internal>
- <avM_FXXF9oBkderF@gremlin>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=lYMH0dCe
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:From:Reply-To; bh=TKdv7edjmPjExE3RyciVP5KfNQ2HgIujnfELAufwRbY=;
+	t=1794391812; x=2109751812; b=lYMH0dCei7pknFhzgRYYfLo8lA58O0s5uUTC30SWtr9j425
+	aivLUSdgS+C2hYgM5fN3LZ5gGxdI6VXf+Yw8tdqpzpCsz0XYo42rBduleTus3xYxpHwAvYqXkVdFV
+	3DWmDOiZLnb2/eFLQLEokrsgZNbUF9eUEIngefQqHs6rM66ZWz3XjEr178id6hcXJyVppgLf3CpUQ
+	wJZgu6fi5ILTC0/Uh72kc9tKU773Vgh4ITlUKLEtvN030MdLj8I9Nz8chX9i2o5o/3hXqIjES9U0S
+	mmcsclOLX7rWIDfkMvGuKLM8GGFUPTDM/IM0MVsk3uPKdMDy+ah2m6X+o7s6ClEQ==;
+Received: from [58.29.145.179] (helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1xR5HH-008kZF-CK; Wed, 11 Nov 2026 11:10:04 +0100
+From: Changwoo Min <changwoo@igalia.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	david.dai@linux.dev,
+	Gavin Guo <gavinguo@igalia.com>,
+	bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	changwoo@igalia.com,
+	kernel-dev@igalia.com
+Subject: [PATCH bpf-next v3 1/3] selftests/bpf: libarena: Order equal rbtree keys FIFO
+Date: Wed, 11 Nov 2026 19:09:49 +0900
+Message-ID: <20261111100951.230730-2-changwoo@igalia.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261111100951.230730-1-changwoo@igalia.com>
+References: <20261111100951.230730-1-changwoo@igalia.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -74,79 +81,119 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avM_FXXF9oBkderF@gremlin>
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+An RB_DUPLICATE tree links a new key to the left of an equal one, so
+rb_least() and rb_pop() return the newest of several equal keys. A
+queue of tasks keyed by vtime should instead serve equal keys in
+arrival order, as sched_ext's vtime-ordered DSQs do.
 
-On Tue, Nov 10, 2026 at 04:02:21PM +0000, Lorenzo Stoakes (ARM) wrote:
-> On Tue, Nov 10, 2026 at 07:53:35AM -0800, Sean Christopherson wrote:
-> > On Tue, Nov 10, 2026, Fuad Tabba wrote:
-> > > Hi Lorenzo,
-> > >
-> > > On Tue, 10 Nov 2026 14:38:27 +0000, "Lorenzo Stoakes (ARM)"
-> > > <ljs@kernel.org> wrote:
-> > > > On Tue, Nov 10, 2026 at 11:07:24AM +0000, Fuad Tabba wrote:
-> > > > > Pre-fault more populated, dirty-logged pages than the vCPU's dirty ring
-> > > > > holds, and check that each call stops before the ring overflows, that a
-> > > > > retry returns ENOSPC without progress, and that the harvested entries
-> > > > > are the pages in order. A read pre-fault can map a page read-only, or
-> > > >
-> > > > Are we asserting an invariant that prefaulting happens in address order
-> > > > here?  Is that explicitly presumed in the prefault API, or just how it
-> > > > happens to pan out?
-> > > >
-> > > > I wonder if we might decide for whatever reason in future to do things
-> > > > differently there. Bit nitty I know, but wonder if it's asserting an
-> > > > implementation detail?
-> > >
-> > > Yes, the API doesn't guarantee an order. I'll assert that every page
-> > > is reported exactly once instead.
-> > >
-> > > [...]
-> > > > > diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-> > > [...]
-> > > > > +static void test_pre_fault_dirty_ring(void)
-> > > [...]
-> > > > > +    /* Populate the pages, so that pre-faulting can map them writable. */
-> > > >
-> > > > Reviewed below, but I wonder how x86 could then read fault these?
-> > >
-> > > KVM_PRE_FAULT_MEMORY is defined as a read fault, but x86 maps the page
-> > > writable when the host page is, and marks it dirty, unless it falls
-> > > back to access tracking (below). Populating the pages makes sure they
-> > > aren't backed by the zero page.
-> >
-> > Before we effectively solidify the behavior, I think we should have an explicit
-> > discussion about the desired behavior of KVM_PRE_FAULT_MEMORY when dirty logging
-> > is enabled.  E.g. the only reason I kept the existing behavior in my auto-prefault
-> > series was because I couldn't think of a good reason to change it.  But we never
-> > made a concious decision in the first place, i.e. we never considered what would
-> > happen if prefaulting collided with dirty logging (as evidenced by this bug).
-> 
-> Yeah, I do worry about implicit assumptions (also commented re: ordering).
-> 
-> I guess what makes sense, given the general approach for prefaulting = injecting
-> a synthetic read fault, is for the expectation to be that it matches the
-> behaviour of an ordinary read fault.
+Send equal keys right on insert, as the kernel's rb_add() does. A new
+node then lands after every node with an equal key. Rotations and
+removals preserve the in-order sequence, so equal keys stay in
+insertion order without a tie-break field.
 
-Unfortunately, what happens in this case is not as obvious as it sounds,
-because a read fault on a memslot backed by guest_memfd maps the GPA with
-read *and* write permission on arm64 (if the memslot is not readonly,
-haven't checked what x86 does).
+Add a selftest that interleaves equal keys while the tree grows and
+checks the pop order.
 
-Thanks,
-Alex
+Signed-off-by: Changwoo Min <changwoo@igalia.com>
+Reviewed-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ .../bpf/libarena/include/libarena/rbtree.h    |  6 +--
+ .../bpf/libarena/selftests/test_rbtree.bpf.c  | 37 +++++++++++++++++++
+ .../selftests/bpf/libarena/src/rbtree.bpf.c   |  6 +--
+ 3 files changed, 43 insertions(+), 6 deletions(-)
 
-> 
-> Or do you feel that it makes sense for the pre-faulting to do something special
-> in these cases and establish a sensible invariant?
-> 
-> If the pre-faulting does indeed dirty the pages, you'd need the dirty logging to
-> do its usual thing (not familiar with the code, so I'm guessing logging the page
-> :) though right?
-> 
-> --
-> Cheers, Lorenzo
-> 
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+index 486428911d96..00e63b12d82e 100644
+--- a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+@@ -45,9 +45,9 @@ enum rbtree_alloc {
+  * the existing node.
+  *
+  * RB_DUPLICATE: Allow nodes with identical keys in the rbtree.
+- * Finding/popping/removing a key acts on any of the nodes
+- * with the appropriate key - there is no ordering by time
+- * of insertion.
++ * Nodes with identical keys are kept in insertion order, so
++ * rb_least() and rb_pop() return the oldest of them. Finding
++ * or removing by key acts on any of them.
+  */
+ enum rbtree_insert_mode {
+ 	RB_DEFAULT,
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+index 856c484a009a..1e2a0fac1e4f 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+@@ -248,6 +248,43 @@ __weak int test_rbtree_duplicate(void)
+ 	return rb_destroy(rbtree);
+ }
+ 
++#define FIFO_NR_NODES	64
++#define FIFO_NR_KEYS	4
++
++SEC("syscall")
++__weak int test_rbtree_duplicate_fifo(void)
++{
++	const u64 per_key = FIFO_NR_NODES / FIFO_NR_KEYS;
++	struct rbtree __arena *rbtree;
++	u64 key, value;
++	int ret, i;
++
++	rbtree = rb_create(RB_ALLOC, RB_DUPLICATE);
++	if (!rbtree)
++		return 1;
++
++	for (i = 0; i < FIFO_NR_NODES && can_loop; i++) {
++		ret = rb_insert(rbtree, i % FIFO_NR_KEYS, i);
++		if (ret)
++			return 2;
++	}
++
++	for (i = 0; i < FIFO_NR_NODES && can_loop; i++) {
++		ret = rb_pop(rbtree, &key, &value);
++		if (ret)
++			return 3;
++
++		/* All of key 0 in insertion order, then all of key 1, ... */
++		if (key != i / per_key)
++			return 4;
++
++		if (value != key + FIFO_NR_KEYS * (i % per_key))
++			return 5;
++	}
++
++	return rb_destroy(rbtree);
++}
++
+ static inline int
+ clean_up_noalloc_tree(struct rbtree __arena *rbtree)
+ {
+diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+index 7f0f6dc3e17d..831a1ef1c2a1 100644
+--- a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+@@ -171,7 +171,7 @@ struct rbnode __arena *rbnode_least_upper_bound(struct rbnode __arena *subtree,
+ 		return NULL;
+ 
+ 	while (can_loop) {
+-		dir = (key <= node->key) ? 0 : 1;
++		dir = (key < node->key) ? 0 : 1;
+ 
+ 		if (!node->child[dir])
+ 			break;
+@@ -278,8 +278,8 @@ int rb_node_insert(struct rbtree __arena *rbtree,
+ 	}
+ 
+ 	node->parent = parent;
+-	/* Also works if key == parent->key. */
+-	if (key <= parent->key)
++	/* An equal key goes right, after the existing ones. */
++	if (key < parent->key)
+ 		parent->left = node;
+ 	else
+ 		parent->right = node;
+-- 
+2.56.0
+
