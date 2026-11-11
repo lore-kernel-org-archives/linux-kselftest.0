@@ -1,84 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794437514;
-	b=Hyq9V4QQoZmlIwz48JlHaly01Q5vLD2LdQjU4PBB0omVUMIiigfNX+avbRszy0ANtWku
-	 svpQSoSJaC53gJ/dxSi6vhMZxMxnlv1zPelQkorZTw2MgsviD0IjuFjQVC9LfJtwMmDiQ
-	 fYTJ4GNNFkFLbJU8XE10NwGQ22RmrAQjUpPFzyBjzlTAui83k6wVzqLZ04lhQP++Vbp/r
-	 735VyUaXaw70JbzCFtaWgSKXD4JHeyka9N3llQ2zqSOAlX5XgVL0J/aYzPnAzoIhUElH9
-	 gMagmQ0AI844fyVzT2cowrSQ7J/E9bWTVbOqNx7rZqmC+DW0sJ6AhklCqZ43TquzJ8A==
+	t=1794437516;
+	b=TriWPijxYlGHVDQQh1QTkwmj6uMxz1VL0L6A4vMBsZBdkM5M+cst9sGjfgWDxkKFxh3k
+	 Yvg/TiU1gGH3mT0BNQysye2bzXldPvSHSN+/MlTbY/+4oOaj2wrtm49kR3k7wFeEq4rnp
+	 PKbd9WU2Lvc7ogMCZ54k/+SFs4hW8DADEPTgxh+AEaDiGwWbfY+cIvEgG+REK381JsdDJ
+	 DN1HNRTSEYqhWFN4+DQcmGKcv/dcfwmnCRImEr++aH2R5NS7IyW9pdJjqzNhEplT0r0ET
+	 DiYRU0TK+nsllfL3XpTlAuTns5n57Ojma4TsLY7Zx/TeWaHE3kiou31hMQny+VXajnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794437514;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794437516;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=79ck1+vplnf+OrqiJIbR316gc5vOpfUXfVT8Q6jXBBg=;
-	b=4wruAtJNmMfb8Xc4eO3hBCfOIQfWCgScw87CS3dYn+cUEEjhyQDxcAiOJX4oDeSwgSQH
-	 EeQLFhSHpvAuQOCk47LclTY3/HmPbPgGwS8LDnP/ua3+rp1rkUReP12K3S4d8ehPtoW8V
-	 JwMckhmr0Yk+dXdELjp7EzuGS0bXbVRVzMBs1lEL3D1YtyZgC2oV2OnXH4R6z4NWD+nHa
-	 ETt76LrEppkySjmTYAlhCi3eW3lju/tBz5WgkVRsoUWDoFgr57dH7lmkmEBBMtMadD5O0
-	 Q6zUxpyyEVF/pZ0L+lLFMxioFDGwVisFRGUhrGH4Kc3drsyduQeoagEjvmsVIRX2Y/A==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=b4bZKC8l/stVb8IdDlz7ZRPG3wHaoZ3G+SCD8Xq5KG0=;
+	b=g1qSREGvXRSBK4ZuGGWc8aRf/XplGzj9FnJvM6j8FaERh77UiaKOy4ZkOuKaXFHtJJZ4
+	 /1xIYQrJD6yfNWoux1UnvBuQCyugeK7lQ83dpeaFzQyxIRdG8DXiz9/uvDZckosZ6vzBF
+	 fQnClEExAgwdF5/Ecy3EqSK2bbTrEORBix1Q0OOzHCXB5CfawTIrJa1tFaDavJyxyDCuo
+	 lknGAIn54j/EDuOaUCYOqBLMUt/MZ0VzUUZPZ4qFURLQZC02kadX9UJO5wZd/cHKfjS+Z
+	 7Sf4bbjtYqSX4M2OcgU5j2YrIkbZKRFZ4jcsa8UYVTHeH++Kr6iWCRRkOB/XaH+sY4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bmG84sQ6;
-	arc=none smtp.remote-ip=209.85.210.176
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vHKspmDp;
+	arc=none smtp.remote-ip=209.85.210.182
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DACE606A887
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 22:51:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DACE606A887
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE48C606A8B0
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 22:51:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE48C606A8B0
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bmG84sQ6
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8b68e59ab33so305850b3a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 14:51:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vHKspmDp
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8a0880a46e7so170344b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 14:51:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794437514; x=1795042314; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=79ck1+vplnf+OrqiJIbR316gc5vOpfUXfVT8Q6jXBBg=;
-        b=bmG84sQ6jOBx5Z1z9eiqgOqzF0G8a49vw2wPdyPszzMsTt7FCkfkAumUU54CrlrSDT
-         PeLNPVl4JYb0ZWMpPKqjUnU5JGWs6hH1zxFRntKvVnT2MNYr+lmcstg/A8uXxtRP3rKG
-         O3iMMDAOh+rRptveXwnFSlFHPOLBPayAvuBKwGm0bSZ1hUqAtoikIMAGfdXKSIPqq9jS
-         mZITDYkY9hKvMztmURdKb2OUOt6LFgtuLdJS8Lq+JfoKBC85y8FGvpX/q3nsPhKilMla
-         AQLn7aR1/8nqYxex0Ea9GCB3vrs7X8DvYYmNTMU1qa+KuaSfi8goilPXbxzJM5FOHHeD
-         bH3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794437514; x=1795042314;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1794437515; x=1795042315; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=79ck1+vplnf+OrqiJIbR316gc5vOpfUXfVT8Q6jXBBg=;
-        b=aZ3qikHTOeBn+DspbfI/PKQLkZF8nAr7xb7q16ecql0vON/KksYSL4B6iCTkB35Z1W
-         pvWuN36TfuLZaO8lxH+W55Vu37Ymrdhu+XYFfp6tv/NMjgWNBI8UYiYt5e27EGUDHSxh
-         43IVAnu0+PnpmMx15O1hGJ3hnBPSLRTpp71yTo/9ELGV7ANPQp072VtbOIsIqAsJ7L7b
-         o9xgAIQcj2lBYwbDlip/oa9SwFo8wBX0hvafHxEtb0QmFC6b3zs0djHslWHXl8r4+cZU
-         pzWU7MzgtACukAtLkFf7PJXtx+l1Vq5Yqj7VSXwXkZOUd2xZNvpk6z5qLMGd4+rSu2Nu
-         q7kA==
-X-Forwarded-Encrypted: i=1; AL+hErH2Amefb+aonViyjooAJau/aZwQSF5lXkHEhOUvDkSPCU7HCd4XbvNsmeB871NcUf0ZBwb1994dFIrWAiASIZg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/wnjX+Jrr+90yGH6GNpIzdE86sz9THFTqukoN9TSYl006FaTaE
-	HcXh4VKs5b3ISS1MSbFYEVoZ8KGO1pQ0kzTsXlliFjPXf5x7YV72fM/1
-X-Gm-Gg: AYBFou1D8W15t2PJHDkzBCMPduEdz/WXzVXuVMQZQxYJYZYXFr2Nye1Elu3wKmHQqPb
-	LdZV0QwQAQo9KIBk7/vLoI500NPgegmXiX7VkHFjKHpcEsYl9wpIcU5TUfxY3/qNZYboHpkSjCU
-	1FU63MBLf64VKuHWvLA2/GfDC5+7DkeNF7DnViB34qkSvCcuuoSAn9BvyaIPzcaO0KHtxy0+5Z3
-	FXuhoU/a+KOhzEANvKiNW40VlAZ61VbUpHTkkx6C3SKxXW6/F/zNfrerGgFpZooJpmIl2QicLyh
-	qV5U48WnfGuy/NHXGizcYrWA4YuCOEyHqo5iQsoRjOcx9wGkBScjntvjEV2aZ/dKk/ftmq0CaJe
-	jccHMCY595WtWh3WdrtwX7stmJ25OE5jQz5Pv+Vg15Vf6joPwIR3IAwd+8hy12QO2VGzyGcJH6J
-	YSOwMyuS8tlquRtasCg1e+XobX1H1Y8xEgYbpLqZyF3j9fTbvo5OlxYCx6kW34fT5jFLi5Sg7oG
-	d68EBfgX47xakS7KBdM3/X+6sa3PPi2fsOmo09hFdA4tAeKNIeCAHR4qCrWHm5A1n4MOjayJOKt
-	4DD/feYpN9xkeAHj96z3KjkKGgxcYBtx7CZFSbvgVpDMBXoSV+ER+SSSitbBRkrV921HQ7lTXdr
-	1qxC4pLnJ710eKk8u59qCGC+s3tVVxFJptuupNkeBSNHRlXCvd0cAlrngMmeH2vCcfyGO+H93qZ
-	/BrPKOFEqlzAiYaLPqyXCD27Kcu6fCQh0ey0XkUL5T
-X-Received: by 2002:a05:6a00:23c7:b0:89e:71df:d6da with SMTP id d2e1a72fcca58-8bc196faeafmr3981172b3a.5.1794437513734;
-        Wed, 11 Nov 2026 14:51:53 -0800 (PST)
+        bh=b4bZKC8l/stVb8IdDlz7ZRPG3wHaoZ3G+SCD8Xq5KG0=;
+        b=vHKspmDpUQ8KMm5L8YItAJAIwlu8eQo+5o/ptHXEIGWhUexMkRWiRpXSACYFv8wbeB
+         4e/z8EDqI/afq4BLX9eVob34Wp0D7juW2pHJffzCTZqQvSySNhYHJ4WPOXU3DvX08Gb4
+         MHbHefnN+YwIc4BP7rK8rfmhGuCD7Uk7h8czUGK3pjCyGn3vrQQK0qF2uXtty4h8hUhz
+         yDBs7ULbKhKVo4HB6biUsKC8UTyu63jXzwD715WQVvcwBNyOIHaMZF6GpD8U4xPV6fhv
+         GR8Bnbm8C8VvYwoGZ6CJMrYlwBfrZl6N95ov98VzRJRrjZx4A9vB/OGc+jpSXGEzsF+n
+         acmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794437515; x=1795042315;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=b4bZKC8l/stVb8IdDlz7ZRPG3wHaoZ3G+SCD8Xq5KG0=;
+        b=tGlHeqXaYgokSsJURkFBiM7liPSt+bCb/tItgUwMcrF8uC8UkluBtWpr8QYMGQSAFW
+         LBpiXjbxQtgIgi4APK8WKXEUXwLYY/B1hhy6DPl6NsOYHsNNjZN4GAfTbWkJBFBEPqF0
+         0uS9mE7wNg+3UHiucndEYURcsdN+2RgwHJRnenQbiuGNVwwdUBtuO6EpF77bMbBuMsD3
+         BQYJAhvpHx6D7kFZmFx18ApGxOUtBh27aXq09TuPzrxCSUL9vBxU4VYESN8P+NzlDTKv
+         rdX81n2dAAsvNn2XZfioiPlGo9uJ7AbXwlHFiK1lG4qedyiDzll1bzAIPOfN1MjUKIqt
+         34Jw==
+X-Forwarded-Encrypted: i=1; AL+hErFbhRpmRfr+TYCjZ5X80A7/LYY3yhhpkrNYeKcS14Gwu3SJGjL0zJBHoAC+VHtzmbeM6tVM6zfwqw4+GQT6+r0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/qR7oZCl0S1w+GvDMJ0952nKElrqVbeZ91fviInng7EFHo6hP4
+	RR5qWCeaxxgulMFfVhcsuELVLwE/oA3jyPDEspOQUbC/SvdFHArxPSQ6
+X-Gm-Gg: AYBFou1+XWEvYP0hE02pDKW5poop68sY4cdR6+zLAlRZ9mhH6kUnLjV81WAF8l3f0kp
+	tyPXSYqpMKCB+1R6S01d7RQ+c04xKpI70XdT7ioL/y/HT7JhpHqCDrIEmyIdAlMyndQgfatlW/a
+	UlS8MN7owC2UDp8J/wpxXSr8ZZpgfL6yoF5CvuOu6qKlliuzpMLLitpKdeFKllQROxowRuLA41k
+	RiO6LzAO0fG/hS9tMubzHTKZaVMhzvEU0iBmqfb7iYdR1GyU0dvF8VsS7TAdx1r5KPmqd6I11jN
+	qrvVO1qq+eq4TltKxm4raMD99c9k2Ja43ppwR8w6BlUn4o0qDaKfC5R1/zeuJE3R+QmCPCMffLI
+	Yp4UTPKJX+lalqITjpatiShoEDGMsL3u6o3DorwjTvHCy9/e2VyAKu522xz9QXTP0ZHApgcHHkZ
+	3QQHDQuIWor/xt7UwKpzB69KA+4HcSPop5jB2NXhcQ12D0RH7rkCYNATx0io2yQxN3M897z4z5r
+	smxI5SNngLdZsr+8R1OedhGQPeBJSbsjjemtfb5aehe8CkHuwh2ORYzYyx4qHSU6nxvvGYgIQNE
+	qBP9R3yXQGsxIVW0I+ds73rItTQOiEuVY21lPxe1vQAqnm+JkcRpeyuop8Ewnl2vjUssS0H1f4g
+	mM8IJEtAZOI312gDBytpwad1wlwlNGkoKA3By1plDXWcuoKXcHlPk7pKK+XgzOVh8gEJYh7/tg1
+	ghhWOAfOc4kiEFjEmVPt9YSFIFZyeYerFEn/MviTlV
+X-Received: by 2002:a05:6a00:4b54:b0:8a6:8f27:d4d0 with SMTP id d2e1a72fcca58-8bd5bbc8438mr542029b3a.3.1794437515312;
+        Wed, 11 Nov 2026 14:51:55 -0800 (PST)
 Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaa86dd0fsm2471575b3a.22.2026.11.11.14.51.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaa86dd0fsm2471575b3a.22.2026.11.11.14.51.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 14:51:52 -0800 (PST)
+        Wed, 11 Nov 2026 14:51:54 -0800 (PST)
 From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
 To: Kuniyuki Iwashima <kuniyu@google.com>,
 	"David S . Miller" <davem@davemloft.net>,
@@ -96,10 +97,12 @@ Cc: Simon Horman <horms@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Subject: [PATCH net v2 0/2] af_unix: Fix scm_stat.nr_fds leak in unix_dgram_disconnected()
-Date: Wed, 11 Nov 2026 22:51:46 +0000
-Message-ID: <20261111225148.88506-1-sidchintamaneni@gmail.com>
+Subject: [PATCH net v2 1/2] af_unix: Fix scm_stat.nr_fds leak in unix_dgram_disconnected().
+Date: Wed, 11 Nov 2026 22:51:47 +0000
+Message-ID: <20261111225148.88506-2-sidchintamaneni@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261111225148.88506-1-sidchintamaneni@gmail.com>
+References: <20261111225148.88506-1-sidchintamaneni@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,33 +114,111 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series fixes a u->scm_stat.nr_fds accounting leak in
-unix_dgram_disconnected() when purging queued skbs from
-sk->sk_receive_queue on disconnect, along with a selftest:
+When a connected SOCK_DGRAM socket disconnects (e.g. via connect() with
+AF_UNSPEC), reconnects to a different peer, or observes a dead peer in
+unix_dgram_sendmsg(), unix_dgram_disconnected() purges all unread
+datagrams from sk->sk_receive_queue via skb_queue_purge_reason().
 
-- Patch 1 splices sk->sk_receive_queue onto a local list in
-  unix_dgram_disconnected() and calls scm_stat_del() before freeing each
-  purged skb.
-- Patch 2 adds dgram_disconnect_fdinfo to scm_rights.c verifying scm_fds
-  in /proc/self/fdinfo/<fd> across connect(AF_UNSPEC) and dead-peer
-  send() disconnects.
+Because skb_queue_purge_reason() frees each skb without calling
+scm_stat_del(sk, skb), any SCM_RIGHTS file descriptors attached to the
+purged skbs remain permanently accounted in u->scm_stat.nr_fds (reported
+as scm_fds in /proc/<pid>/fdinfo/<fd>) for the remaining lifetime of the
+socket.
 
-Changes in v2:
-- Drop MSG_OOB patches and tests per Kuniyuki Iwashima.
-- Splice sk->sk_receive_queue onto a local list under the queue lock
-  before freeing skbs so concurrent senders cannot extend the drain loop.
-- Make dgram_disconnect_fdinfo a standalone TEST() instead of running
-  no-op fixture variants, and also test dead-peer send() disconnect.
-- Link to v1: https://lore.kernel.org/all/20261106051905.218638-1-sidchintamaneni@gmail.com/
+Move scm_stat_add() and scm_stat_del() above unix_dgram_disconnected(),
+splice sk->sk_receive_queue onto a local list under the queue lock, and
+call scm_stat_del() before kfree_skb_reason() on each purged skb.
 
-Siddharth Chintamaneni (2):
-  af_unix: Fix scm_stat.nr_fds leak in unix_dgram_disconnected().
-  selftest: af_unix: Test scm_fds on dgram disconnect.
+Fixes: 3c32da19a858 ("unix: Show number of pending scm files of receive queue in fdinfo")
+Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+---
+ net/unix/af_unix.c | 59 +++++++++++++++++++++++++++-------------------
+ 1 file changed, 35 insertions(+), 24 deletions(-)
 
- net/unix/af_unix.c                            | 59 ++++++++------
- .../selftests/net/af_unix/scm_rights.c        | 79 +++++++++++++++++++
- 2 files changed, 114 insertions(+), 24 deletions(-)
-
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index 98fcfd7301f6..990a98330d9c 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -609,6 +609,28 @@ static void unix_write_space(struct sock *sk)
+ 	rcu_read_unlock();
+ }
+ 
++static void scm_stat_add(struct sock *sk, struct sk_buff *skb)
++{
++	struct scm_fp_list *fp = UNIXCB(skb).fp;
++	struct unix_sock *u = unix_sk(sk);
++
++	if (unlikely(fp && fp->count)) {
++		atomic_add(fp->count, &u->scm_stat.nr_fds);
++		unix_add_edges(fp, u);
++	}
++}
++
++static void scm_stat_del(struct sock *sk, struct sk_buff *skb)
++{
++	struct scm_fp_list *fp = UNIXCB(skb).fp;
++	struct unix_sock *u = unix_sk(sk);
++
++	if (unlikely(fp && fp->count)) {
++		atomic_sub(fp->count, &u->scm_stat.nr_fds);
++		unix_del_edges(fp);
++	}
++}
++
+ /* When dgram socket disconnects (or changes its peer), we clear its receive
+  * queue of packets arrived from previous peer. First, it allows to do
+  * flow control based only on wmem_alloc; second, sk connected to peer
+@@ -616,8 +638,19 @@ static void unix_write_space(struct sock *sk)
+ static void unix_dgram_disconnected(struct sock *sk, struct sock *other)
+ {
+ 	if (!skb_queue_empty(&sk->sk_receive_queue)) {
+-		skb_queue_purge_reason(&sk->sk_receive_queue,
+-				       SKB_DROP_REASON_UNIX_DISCONNECT);
++		struct sk_buff_head tmp;
++		struct sk_buff *skb;
++
++		__skb_queue_head_init(&tmp);
++
++		spin_lock(&sk->sk_receive_queue.lock);
++		skb_queue_splice_init(&sk->sk_receive_queue, &tmp);
++		spin_unlock(&sk->sk_receive_queue.lock);
++
++		while ((skb = __skb_dequeue(&tmp)) != NULL) {
++			scm_stat_del(sk, skb);
++			kfree_skb_reason(skb, SKB_DROP_REASON_UNIX_DISCONNECT);
++		}
+ 
+ 		wake_up_interruptible_all(&unix_sk(sk)->peer_wait);
+ 
+@@ -2058,28 +2091,6 @@ static bool unix_skb_scm_eq(const struct sock *sk, struct sk_buff *skb,
+ 	       unix_secdata_eq(scm, skb);
+ }
+ 
+-static void scm_stat_add(struct sock *sk, struct sk_buff *skb)
+-{
+-	struct scm_fp_list *fp = UNIXCB(skb).fp;
+-	struct unix_sock *u = unix_sk(sk);
+-
+-	if (unlikely(fp && fp->count)) {
+-		atomic_add(fp->count, &u->scm_stat.nr_fds);
+-		unix_add_edges(fp, u);
+-	}
+-}
+-
+-static void scm_stat_del(struct sock *sk, struct sk_buff *skb)
+-{
+-	struct scm_fp_list *fp = UNIXCB(skb).fp;
+-	struct unix_sock *u = unix_sk(sk);
+-
+-	if (unlikely(fp && fp->count)) {
+-		atomic_sub(fp->count, &u->scm_stat.nr_fds);
+-		unix_del_edges(fp);
+-	}
+-}
+-
+ static void unix_orphan_scm(struct sock *sk, struct sk_buff *skb)
+ {
+ 	scm_stat_del(sk, skb);
 -- 
 2.43.0
 
