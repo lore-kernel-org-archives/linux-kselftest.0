@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.42.203.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=34.218.115.239
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794428616;
-	b=HQmeDhnrcncKWqxHbJXL4s/MIh7U6EGwQk/2GjIyCXXNlBXINMjQPOScHinj18yLh6Yn
-	 QUnuNijxH60X23BV9aNDaggixl/tuma8Gb1+f7TItiuNJ99frsIcOKpqNN8dJhYmuvOeS
-	 0l0ApJDruFp11+SK75EGqZ6jY/MEJJwPLcOg5QgRmgKHhAPVr1zREBMXMVdAfQu31JHjX
-	 whMxniU+GdZynd4NPYCStkBtlb1IbrEqzNBVllHLrz6ZrruvaFU5HIdkToJz+/PUAkn5z
-	 Qzv5y0loM7wp/6bc2TLcQozUcGzdzZDsYmqgAXwA8Jz8iXI0g1/PlqM3cCfC98lQM5g==
+	t=1794429454;
+	b=fNEukRASf06Uvp+hpW8QB7uRGOSw4uf/qncCDbiOpFQfOvvW8VOxTIngSPpOEWn1TkS7
+	 sXYu5stPD5iZW+K6UGsRx/ztaLgOAThzFgVCqr5Ei6InIvUBi9MMChnLs/UmFDFWIDmJo
+	 RWoSrmeMS5BEXt+2hPkC9oEbw5lV677iO6PcPYLfCzvNHR1mIA6es9Zns/+pntN2a2Bn/
+	 f3REUD5lgTOoLmW1bCGObtGItYYitl6mNU6y5ZbFH7V0soiQIVMxiOn+MnFQ7DZjTCMDK
+	 CpZq/Nq67QS1V8pI6NIliLIVgHjJHW1EX4LhWr+C29hxEEBjd0+rKbkF6ffPbw3lAyg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794428616;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794429454;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
 	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
 	 X-ClientProxiedBy;
-	bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
-	b=bf2G8JS248pX1tbrUqKkZ4JlsPUS1kyRKnOWLdpaoQgO/MRTVlsewXaLHJL9YZd9KPLX
-	 vyirsKZBPQMVRnQ8X/eMotPFyqQe+cai8r5xNV/DLhua1te5nBvfQ71++KEFtMe2rakO6
-	 B05L1CBPprTKZngToZn9Te+CZwqvz6GWktk7ZSzxAssJBSLsjLmyVavWzrdFX3ar9Z+sT
-	 bwsusJWveg7iFBLaWHtSa43H9ZL8H8/FXoEIJH8mI7g7agGyasIn145teNQT82XkTicTK
-	 RF3lWo67IzjIoiKbMMBu+Kr/zme92Nyw9JmcSc4NN+YuiHEj+N2gRoO1cvGTx14Vnkw==
+	bh=vpIyzJPxRnrClrGT6opul0fGUGxCRQ7iTyzY6dXBUDc=;
+	b=zxAmY3ZOMfYU7j0Ax/EivjCF0hX+8RUtcbG+wH6m+aEyWS2NagOvExHTwK40JM/QlbiN
+	 d4k9swPVOucbFdqgW2pjXxfTesb5rYi1h/j+UXlzpdOMNWGuioJ114vOpcYEhaB4xXLQA
+	 /KaaCFpGUy+wa3AWyHm7xRzJ7xxNCSpceadgWaGcbgq1JDTuu3OSMlYgjKRYrDbQ0fDcr
+	 jFoWe/0ygw3bHHRQUngGjJUDTskzuOK7B1f8eyAW9vl4qT3wmPKbO3xLSfalMHpBIsCx7
+	 F8AsPnpzL7BtiwnuPjyZbJmA9xx8x7E9innHGZFu4PHYnF0QQ7anhMJR6HFhZNac6uQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=amazon.com;
 	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b;
-	arc=none smtp.remote-ip=52.42.203.116
-Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=YYK+ZnQk;
+	arc=none smtp.remote-ip=34.218.115.239
+Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A91606A31C;
-	Wed, 11 Nov 2026 20:23:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32A91606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDD6606A89F;
+	Wed, 11 Nov 2026 20:37:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDDD6606A89F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=iMEZvZ9b
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=YYK+ZnQk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794428616; x=1825964616;
+  t=1794429454; x=1825965454;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jkJcn8ydDxvyf3lWLXA7GpBEZpUwB/Y6PIOpFmvjCRU=;
-  b=iMEZvZ9bKPvYu+lyl63NXczZgb9k00IMn6p/B41NF+YSge2JQ78uaWaI
-   3TEwozp7ebCyFqGQJC10YwNyJFTpBT4U3fmu4ddRB2SEvIbFbSVXuqLiW
-   JVhDNg6z2jRzcs0ngJJjtAW8tcy7wgkxhx1R6E8fIvRf2wdkkR6tp1Wxf
-   D2y5arB9O0zx/GF7R/bGfS/yLIOi5HAWKqBDCS8EZkk/T761sHCwXsd4H
-   Gt61dIFcjAFO4DSHsohJvTEKUFf7MHOm1ElAmU8Gbqug0jZ+YyNxqytYv
-   OQ5eO/IOET+up0Oduz50oSqV8UXFOpL9cLD7O9EVeN3k0XujH1PLjG10w
+  bh=vpIyzJPxRnrClrGT6opul0fGUGxCRQ7iTyzY6dXBUDc=;
+  b=YYK+ZnQkBuda9ap87dQ89X265NEdYSbOfrslXe+vr4TgOAvKtLF2YWFh
+   pA6hFgDHWeVo72/2XUwFeictRpNtmLjDn9VcZa21pMPhbpsa35xOVGjcn
+   iBoVHonTPHh1awrKgicakSWwvsLqHmMXsVSWx8k0FqVG4jxycVkNFZXJU
+   2j/1u4z4/4B+/qit6fiDCVZxcGZkJGwJ/qLm+UWENRaH84I7jjF8WbzrP
+   x39J6naVHcWAk75aPjEfG7wr8T0GgyftPcU3su3CL3ywyKh7kGzWWn77Y
+   RdJKCu0+40Th3c6s2ixzkwC9BaOB3MLNZsQkEU7JpSvjT5yXs8SD9M/by
    A==;
-X-CSE-ConnectionGUID: Qyyc6pHYShOrjNU/eJizYg==
-X-CSE-MsgGUID: Fcia4Cx0S3GdQP0ncOIkSw==
+X-CSE-ConnectionGUID: tiE9b2HlQrqB/PDjzj+nRw==
+X-CSE-MsgGUID: GGJF9NIVRMGQ5ByMC+l/mA==
 X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
-   d="scan'208";a="33786501"
+   d="scan'208";a="33526248"
 Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 20:23:33 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:12262]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.46.128:2525] with esmtp (Farcaster)
- id 16ece643-915b-4807-8d1b-662b366d2515; Wed, 11 Nov 2026 20:23:33 +0000 (UTC)
-X-Farcaster-Flow-ID: 16ece643-915b-4807-8d1b-662b366d2515
+  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 20:37:30 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:13310]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.12.127:2525] with esmtp (Farcaster)
+ id 389de7d3-cdac-4a03-93bb-a296349c3841; Wed, 11 Nov 2026 20:37:30 +0000 (UTC)
+X-Farcaster-Flow-ID: 389de7d3-cdac-4a03-93bb-a296349c3841
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 11 Nov 2026 20:23:32 +0000
+ Wed, 11 Nov 2026 20:37:30 +0000
 Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
  (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
- 20:23:32 +0000
-Date: Wed, 11 Nov 2026 20:23:26 +0000
+ 20:37:29 +0000
+Date: Wed, 11 Nov 2026 20:37:24 +0000
 From: David Keogh <dkeogh@amazon.com>
 To: Tianyi Gao <tianyi@cloudflare.com>
 CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
@@ -91,7 +91,7 @@ CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
 	<nh-open-source@amazon.com>
 Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
  LL_ALLOC_SPACE()
-Message-ID: <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+Message-ID: <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
 References: <cover.1794020868.git.tianyi@cloudflare.com>
  <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
  <willemdebruijn.kernel.1d64e7848503b@gmail.com>
@@ -99,6 +99,7 @@ References: <cover.1794020868.git.tianyi@cloudflare.com>
  <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
  <20261108190831.3f991a13@phoenix.local>
  <20261109154909.32748-1-tianyi@cloudflare.com>
+ <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -110,24 +111,31 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20261109154909.32748-1-tianyi@cloudflare.com>
-X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
+In-Reply-To: <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Mon, Nov 09, 2026 at 03:49:09PM +0000, Tianyi Gao wrote:
-> To David Keogh: this plan drops the generic device attribute UAPI that
-> your RFC proposed. Your TC egress use case stays in v2, with a BPF-side
-> declaration instead of the device attribute. Before I proceed, please
-> let me know if you are unhappy with this plan.
+On Wed, Nov 11, 2026 at 08:23:26PM +0000, David Keogh wrote:
+> Dropping IFLA_TX_EXTRA_HEADROOM is fine with me. A BPF-side
+> declaration covers the TC egress case, as long as the program is
+> attached to the device the skb is allocated for.
 
-Sorry for the slow reply. I am happy with the plan, please go ahead.
+One correction to that, after checking how our hosts run the program.
 
-Dropping IFLA_TX_EXTRA_HEADROOM is fine with me. A BPF-side
-declaration covers the TC egress case, as long as the program is
-attached to the device the skb is allocated for.
+Our TC egress programs are not attached individually. A loader keeps
+a chain: only the head is attached to the NIC, and the rest, including
+the program that encapsulates, are reached by bpf_tail_call through a
+prog array. The head can change as programs are added and removed.
 
-I will rework the TCP test so it sets the value through one of the new
-paths, and send it as a reply to v2.
+So if the kernel reads the declaration when a program is attached, it
+never sees the encapsulating program, because that program is only
+ever inserted into the prog array. Putting the declaration on the head
+instead does not help either: the head is a different program that
+pushes no headers itself, and it can change.
+
+For the BPF-side declaration to cover the TC egress case, it needs to
+account for tail call targets. Tianyi, how were you planning to handle
+a program that is only reached by tail call?
 
 Thanks,
 David
