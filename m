@@ -1,58 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.87
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794360143;
-	b=OWn2ZprMjTBN1gsASaHPS2rcb95mdRWr0ZqpaaJ0McQ438n8BxiVDLsjByEKZ2XQ71em
-	 kkdqMK97yPAiBkseIo4L3QmjndgowByG07mU33K3T+h+P+VjOR7Z5I4jF/zEGiZHsQht2
-	 lBUv4bxyIZE2Gmyvx6/FtRkM5zff5ofoDJtwg7js5O2cOzoV/1SPP87/LwiNwh/lNV9AO
-	 UhgQ3k+xwIX4WvnOvXI7Hn8CIr+kbY4fQU0dTaJ15VPNoHVwxQl9Jd8Bjpx35xEyJBGQK
-	 s14It0FMPTDXrMUGEdBkdCyKvP4JBfrOYRzDQKm6cssNO6da6P+BwTq55jflNh57h5w==
+	t=1794360784;
+	b=3lGTfhbafkVRyCn3dXweHTAu+hADXAmViVk1CLgbO/M21GB0sL+vZK4/Tx7dfcUc8a2r
+	 jNslOEbpjO7z2PMYAUJCFwofF7Hs3Fzf1ysmXKtFDmii21+vMje1pdOFAm7e5W5HnLOEm
+	 QcpwJAdAgO8cS/ecQnJ+vKkAAqq6VgKtNT6TlZ58TsiOGxLZ3tx4WYojSEzDYygYdUnLm
+	 TAiO4U2ntGF4nlG3Rnrf7NM6SsSxm/RxwDVNldxQsjd/7Eq54f2un2MTQB0iW49BAqwA5
+	 joQOk43uJtSs1Mt+iQJ1EGlUCYo0HDEQwRCWZGPbr0i9lXhwXzC8W2DqqwLpXY01hhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794360143;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=lo1Y/eriwUwwDPw3+rls7wGgAmgpKPYbEeueCJk2UMM=;
-	b=H6YEULzuK5yTmpSiOkSaPs6+hCWdVKu3r9QlI+F4ZcoVl1X3K85+MCfgCC3j2vNcmpZC
-	 CG3/sua1GPiffzWlkUsfJLMW+3HfIDmk4oew2ymG7rVFQhkhVDtXuSghZyYEVQTzvk7qA
-	 c6yJnccWAVybzwr4jRuiiuTP215Sv3BiKYipEEJCfsLgbOtrBg9/x5QwoMfJ6YWVapw9K
-	 VG6xSGxmsimxYY8G/Txgg2wURNh/GoYVyIJqzSHYJ/PcWQfQT7PqDHFfxMDBJj/dzahUN
-	 8Hky6rLEMBy7DdRyaR0e9xuQf82dxzZnpvhZtHzz+G8P9NDtyYBLA844Lkda3ib3ZUw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794360784;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=X239ULUfyrkajaKunHQocU2OLTbPnPbw7F9duFc9+NU=;
+	b=U6rQBhfRuqWczWR84mVss4G9/kwvNpLlxY5nyJybRs0KYsHsCjuI7h0p0xi988RWNtu4
+	 TzYaSXrvKGr1i7dDKywFk8xF0+ol86AwpmKvfsCg+GcJTD+s8NdxHKCeIQ6RGVokPMsZ5
+	 3RRWb650QmGuHM9tuyJwCvxMu811k4d3rrlWednNXNEaAFWBufFBXqEnh67QWia5OxvqM
+	 dLWjAND+elsa+phJWB8/jj6bx58sE7SlCIFApHRkx/ix4kUvBAldN5k0H16e5bzS3m9Hy
+	 C5DeW1E4zgMkUG8dd2IFwpj2ZIHP8ROJlnHoDozIINoMtRLbrIYeEc/ISzwGAJ8crfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i2WXy0Qj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bymnudtp;
+	arc=none smtp.remote-ip=91.218.175.87
+Received: from mta0.migadu.com (out-87.mta0.migadu.com [91.218.175.87])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E802A606A31C;
-	Wed, 11 Nov 2026 01:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A949D606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 01:33:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A949D606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i2WXy0Qj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35AE41F0089F;
-	Wed, 11 Nov 2026 01:22:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794360142;
-	bh=lo1Y/eriwUwwDPw3+rls7wGgAmgpKPYbEeueCJk2UMM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=i2WXy0QjIFqDhXOeusz99tfCJYusJr0oz1ArY+C51SKg+X75cmiHI7N+IXrP8QBet
-	 cqsWbVsmTJY8h6RV7tOfVKR5xV1/SnO6AekYukegNQlkcpHisfQYeZRo2/kNhI9UsB
-	 poEy/XvRb452HUAN+z2ZQfXFjEPIhl4fBEUPU3QT18634ay/ufylHLEnbo9Vq7ZkLl
-	 j9ZvytWMyvZw8O7GBf1sH12BY9UV/nFHIC/1P1nZ5Hq0+O8zoPBMSD91tSSe9c2yfW
-	 xXHyZND6Z5OBrfmavz7xHdsQF6mjOMy4f+9SKbHRiUontVUsHYD+Cp9/h4Q2k5KlNU
-	 07j6PMDxoc3aw==
-Date: Tue, 10 Nov 2026 17:22:21 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bilal =?UTF-8?B?WWF6xLFjxLFvxJ9sdQ==?= <ahmetbilalyazicioglu@gmail.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Mohsin Bashir
- <hmohsin@meta.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 0/2] selftests: drv-net: ring_reconfig: handle
- devices without channel config
-Message-ID: <20261110172221.49db2576@kernel.org>
-In-Reply-To: <20261110161423.77910-1-ahmetbilalyazicioglu@gmail.com>
-References: <20261110161423.77910-1-ahmetbilalyazicioglu@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bymnudtp
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=DzAs0Ah3oQjKHGbmLPoxZJXiKj68MaVFY04XQvUCebE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794360781; v=1; x=1794965581;
+ b=bymnudtpWXdkL9RA5rCZn+RZe5Ui5Ba8ew1IJLZ4K8caoSfCXwsNjacplXMBfpnjaM27rJ3D
+ bkRhFRtQx2yTEBav/NLtaXfuecjxcxgrJfrIcf6/6vh2M0mxrFohmlvTYY6TqeQ8JLqawPtG1Jy
+ X970BUWY8xH8l7koK1XIGw7U=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 66aefd4644d8a26d;
+	Wed, 11 Nov 2026 01:33:01 +0000
+X-Mizu-Trace-ID: 66aefd4644d8a26d
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 11 Nov 2026 09:32:49 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Jin Li <jinli@lanxincomputing.com>
+Cc: dsahern@kernel.org, idosch@nvidia.com, shuah@kernel.org,
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2] selftests: net: forwarding: replace bash brace
+ expansion with seq
+Message-ID: <avPFwYGo8ssob1n4@fedora>
+References: <20261110024123.535210-1-jinli@lanxincomputing.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,15 +66,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110024123.535210-1-jinli@lanxincomputing.com>
 
-On Tue, 10 Nov 2026 19:14:21 +0300 Bilal Yaz=C4=B1c=C4=B1o=C4=9Flu wrote:
-> ring_reconfig.py assumes that a device which supports ring parameters
-> also supports changing its channels. Drivers without a get_channels op,
-> such as e1000e, return -EOPNOTSUPP for the channel query, and drivers
-> with get_channels but no set_channels, such as vmxnet3 and r8169,
-> return it for every channel change. The resulting NlError makes the
-> tests fail instead of skipping them.
+On Tue, Nov 10, 2026 at 10:41:23AM +0800, Jin Li wrote:
+> {1..16384} is bash-specific brace expansion and will not work with POSIX
+> shells like dash or busybox ash. This breaks the flowlabel test when
+> /bin/sh is not bash.
+> 
+> Use $(seq 1 16384) for portable iteration. Fix the same issue in
+> custom_multipath_hash.sh, gre_custom_multipath_hash.sh and
+> ip6gre_custom_multipath_hash.sh.
+> 
+> Fixes: 555e5531635a ("selftests: net/forwarding: spawn sh inside vrf to speed up ping loop")
+> Signed-off-by: Jin Li <jinli@lanxincomputing.com>
+> ---
+> v2:
+> - Add Fixes tag
+> 
+>  .../selftests/net/forwarding/custom_multipath_hash.sh     | 8 ++++----
+>  .../selftests/net/forwarding/gre_custom_multipath_hash.sh | 8 ++++----
+>  .../net/forwarding/ip6gre_custom_multipath_hash.sh        | 8 ++++----
+>  3 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
+> index 5dbfab0e2..92940370e 100755
+> --- a/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
+> +++ b/tools/testing/selftests/net/forwarding/custom_multipath_hash.sh
+> @@ -224,10 +224,10 @@ send_dst_ipv6()
+>  send_flowlabel()
+>  {
+>  	# Generate 16384 echo requests, each with a random flow label.
+> -	ip vrf exec v$h1 sh -c \
+> -		"for _ in {1..16384}; do \
+> -			$PING6 -F 0 -c 1 -q 2001:db8:4::2 >/dev/null 2>&1; \
+> -		done"
+> +	ip vrf exec v$h1 sh -c '
+> +		for _ in $(seq 1 16384); do
+> +			'"$PING6"' -F 0 -c 1 -q 2001:db8:4::2 >/dev/null 2>&1
+> +		done'
+>  }
+>  
+>  send_src_udp6()
+> diff --git a/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
+> index b4f17a5bb..19384be4b 100755
+> --- a/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
+> +++ b/tools/testing/selftests/net/forwarding/gre_custom_multipath_hash.sh
+> @@ -319,10 +319,10 @@ send_dst_ipv6()
+>  send_flowlabel()
+>  {
+>  	# Generate 16384 echo requests, each with a random flow label.
+> -	ip vrf exec v$h1 sh -c \
+> -		"for _ in {1..16384}; do \
+> -			$PING6 -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1; \
+> -		done"
+> +	ip vrf exec v$h1 sh -c '
+> +		for _ in $(seq 1 16384); do
+> +			'"$PING6"' -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1
+> +		done'
+>  }
+>  
+>  send_src_udp6()
+> diff --git a/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh b/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
+> index b24acfa52..d848e82d4 100755
+> --- a/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
+> +++ b/tools/testing/selftests/net/forwarding/ip6gre_custom_multipath_hash.sh
+> @@ -321,10 +321,10 @@ send_dst_ipv6()
+>  send_flowlabel()
+>  {
+>  	# Generate 16384 echo requests, each with a random flow label.
+> -	ip vrf exec v$h1 sh -c \
+> -		"for _ in {1..16384}; do \
+> -			$PING6 -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1; \
+> -		done"
+> +	ip vrf exec v$h1 sh -c '
+> +		for _ in $(seq 1 16384); do
+> +			'"$PING6"' -F 0 -c 1 -q 2001:db8:2::2 >/dev/null 2>&1
+> +		done'
+>  }
+>  
+>  send_src_udp6()
+> -- 
+> 2.53.0
 
-The test is fine, please don't waste our time.
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
