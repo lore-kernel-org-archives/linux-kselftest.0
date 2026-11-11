@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794389861;
-	b=NoaDeK+OT50J6/xxTSxYkS79oUi0DFQahHVG4fRTt3HbnTzszOfXgeKmcdSAnZ3ysY4C
-	 fsROQ4/TKdjhg9WJ61dQM6CoSTWOrvDu1x+/YGCvDh0uwLDGkgsH0QzGqRWguc7cqGQQY
-	 pmnU3y8E4C4nfvY8zOo049nQbQ6t3U6oefT1MYtLfttQJHnwHdoydwuBYWjAponHnygXS
-	 HYtGHfFeK8DXeP5HGsJc1X8EH9Sg8zA+6pi0X3d1GMzTkNZCozLLX3HQ7VbtP34A7R4tm
-	 C1E0Q4S8cW8ITaKTPp2bawUoQHskrmD6dRMsePA5Q7xe+GHW345z54qnAwhtspn42+w==
+	t=1794389863;
+	b=WxnKyMeHih4K4LdWOqCRl6TWzdKvvn1Nh+w/HVSoTae05s4DRk/eRg8TVbVnElmONtml
+	 XiM+ar3eqQ5qWXGxE0ihSGFYORodkkktQvuxNXgutObeFjjam3dwg1fsTqfXBKFtH4zGc
+	 cjXjxMfagRsL+aC2UKLdmOG98j9qelh8KA3sxo3WmXKKNvCRMrybMor6f9WsH4fexNlNc
+	 vGtVPNtVSGL9C6WEqDlSg3oUa5jRDh1d5VuEj4nj1L/UFWfbkfIUThy52SiZEFPZEHy0M
+	 S9Dte09ZfBAMykyL0gEQr0dFWup5pQalO4gYqoZGPldgXcWTRH//1CdjAr/Yqg8VpNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794389861;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794389863;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=nnXnf7y1PhveoLpCg+02OBOmFeyqhtp88iWcIsSbdDc=;
-	b=tmMKoiXLTGFTGA1FvYTa7IAXE1w5olD3d2fma3a1CbhvVYAoVUzI75AdrMPWUtyQ+mQK
-	 +qMF9l+OkhliLz/R8gJSqU+kkYu1bJZk5RfvS/CQdWh2ae78EBERhSF0Li9CeHtB5e34c
-	 hImrY3PtJICi1hhR5wncMFAnUXo6s2mEYh3qq6boK7AmFV9SVJT8gA90fFCa0/gkrEI5W
-	 7ILsU8O/ZcgnbuTWtBuJp3uiB9oGSSd5ChgY+c1kp9evnLqvjzQp0W0aIW/24j4ZYFN07
-	 cLxaUgGfWrqUmO3X2s3rxCt9KMeVx6Q4796zB0qq1ZHrOhzqJ94UuGvb4Qi43ws36Jw==
+	bh=upZY0h5R3b9m1D99jNMy9hgBQx3iVAzrnP2rSZ8fU+w=;
+	b=5HQ2Ixlv2xjeVqzJ14vQZqJrvwoXqbtYWbXjc5G6s2TFnlY3p3vXwJGvfudYgy2hun1n
+	 ZxO0neSN2k+g1Ta/arzLEsN+uTXKErV9JG5vqgenc5/MQZUBzIyjs2oGOrNL7d9mYp2fk
+	 zwWBDPUYy68v0H/n3VvRRAITjAcBBblTDfuxDcIly50KQ89YFEWZd/XA87i5vw099KAq1
+	 DlrX+RFeKh4rqMiIHUjvEFoUF3Wjc/+nymUrIJT0WqkSQ65QfTPixbXvPkJsGRVFhbvJq
+	 YAhyE5Hs/9RIlwmriAASk48+PbDDReHsvzYYfALXVsNG8+wq2hxbxhp/h7PFiamKYKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkjsJEtv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VvnYT5ab;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32DF606A31C;
-	Wed, 11 Nov 2026 09:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D113606A32A;
+	Wed, 11 Nov 2026 09:37:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkjsJEtv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468AF1F00A05;
-	Wed, 11 Nov 2026 09:37:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VvnYT5ab
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB091F00A05;
+	Wed, 11 Nov 2026 09:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794389861;
-	bh=nnXnf7y1PhveoLpCg+02OBOmFeyqhtp88iWcIsSbdDc=;
+	s=k20260515; t=1794389862;
+	bh=upZY0h5R3b9m1D99jNMy9hgBQx3iVAzrnP2rSZ8fU+w=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=nkjsJEtvfVlzfinnaA9/WA2KaQ0FfUbPigA2eQLesbpUeUeewvuZxWrLNv6VOe/Zi
-	 979hO6ET/mprcOx0suJozkL53ZRnqRoKSkJoIhz7lhEdvl9m3aBRla8c6OaveCCTyd
-	 WdikiYVnYekWNhADRJ/0fRd+CHBIqT9JgNLeYhs8v6gIEcFnoceEj6BbRYE4j3w09F
-	 YUZWKYAj/KlRw3IpXWf8grMO8fQUxTAPBwF65YeocoMHRz6cYgWePGrSW53q8PBMkr
-	 Ov3dSfS/JoNOhHKGm7N+ee6fJRdJh0hkMuHCtBSsXshQGkqByx8zJnc2X7lkc5d/Yv
-	 Pm8YhC6BwZMfA==
-Subject:
- Re: [PATCH net-next v3 01/14] dpll: dpllsim: Add simulated DPLL device driver
+	b=VvnYT5abRep/31KDuUYWPah1mbMY+/Hfm0PTiIJlIBE/yNGJXmWBGgxvLwVaeGWkX
+	 tuOPCtZmcLzo+Z8aUc3OG3nWxKQC2YtHhQ/sNXpY2gyG1vr8DamWZ/ajBPyskoelDK
+	 Vs6fQmORPMvzcmByaiv9UBtAqko6prM/lQWpD2rn47QOWXwXrMWrcUvDYkQF6DrBUE
+	 P1AA6IWOTLiVI1Vpm9q3J9+BFEDBtuTkIAGFv0x+hd6jB3TWM3NuyAk5zdSzaodirt
+	 iADc4xvp9migX7lDTZ5bZPkd1ghExh4sfg773ghw09ZoJqKSb/UGGXm5mGcrWp2muf
+	 wMu0r8X/giZxQ==
+Subject: Re: [PATCH net-next v3 02/14] selftests: dpll: add test library and
+ device lifecycle tests
 From: netdev-bot+sashiko@kernel.org
 To: poros@redhat.com
 Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
@@ -50,11 +50,11 @@ Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
  arkadiusz.kubalewski@intel.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Wed, 11 Nov 2026 09:37:39 +0000
-Message-ID: <179438985979.2199510.15412273141557409959@kernel.org>
-In-Reply-To: <20261109093523.931201-2-poros@redhat.com>
-References: <20261109093523.931201-2-poros@redhat.com>
-X-sashiko-severity: Low
+Date: Wed, 11 Nov 2026 09:37:41 +0000
+Message-ID: <179438986148.2199510.10852681781802327265@kernel.org>
+In-Reply-To: <20261109093523.931201-3-poros@redhat.com>
+References: <20261109093523.931201-3-poros@redhat.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -67,61 +67,359 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 7 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 2 · Low: 5
 
-- [Low] The commit message says configfs was chosen partly because
-  "Unlike sysfs, configfs does not imply a stable ABI, which suits a…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] In dpll_lib_init()
+  (tools/testing/selftests/drivers/dpll/dpll_lib.sh), the DPLL_DRIVER…
+- [Medium] dpll_basic.sh exits with ksft_skip whenever
+  dpllsim_setup_standard_device() fails (`echo "SKIP: cannot create…
+- [Low] Several comments in dpll_lib.sh do not match what the code does.
+- [Low] DPLLSIM_CREATED_NAME is never initialized at the top level of
+  dpll_lib.sh or by either script.
+- [Low] dpllsim_create_device() sets DPLLSIM_CREATED_NAME=$name before
+  mkdir, so the cleanup handler counts the device as created by this run.
+- [Low] dpll_lib_cleanup() unmounts /sys/kernel/config whenever this run
+  did the mount and no dpllsim item is left.
+- [Low] In dpllsim_available(), the flag recording that this run mounted
+  configfs is set only after the mount: `mount -t configfs none…
 
 --
 
-dpll: dpllsim: Add simulated DPLL device driver
+selftests: dpll: add test library and device lifecycle tests
 
-This commit adds dpllsim, a driver that provides simulated DPLL devices
-for testing the DPLL subsystem without real hardware. Userspace creates
-instances through configfs under /sys/kernel/config/dpllsim/, sets a
-clock_id and writes 1 to live to register the device with the DPLL core.
-The device registers as a PPS type DPLL with only the mode_get and
-lock_status_get callbacks.
+This commit adds a shell library for DPLL selftests that wraps the
+iproute2 dpll tool and the dpllsim configfs interface. It also adds
+dpll_basic.sh, which checks mandatory device attributes against hardware
+or a created dpllsim device, and dpll_stress.sh, which cycles dpllsim
+devices through create/delete and register/unregister. The scripts take
+a lock under /run and clean up from an exit trap.
 
-> Keeping registration separate from creation lets a test register and
-> unregister the same device repeatedly, which is where the core bugs the
-> driver is meant to catch tend to live, and it allows the structural
-> attributes to be refused with EBUSY while the device is visible to
-> userspace. Unlike sysfs, configfs does not imply a stable ABI, which
-> suits a driver whose knobs exist only to drive tests.
+> diff --git a/tools/testing/selftests/drivers/dpll/dpll_basic.sh b/tools/testing/selftests/drivers/dpll/dpll_basic.sh
+> new file mode 100755
+> index 0000000000000..827c389fe1aa3
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/dpll/dpll_basic.sh
+> @@ -0,0 +1,94 @@
+
+[ ... ]
+
+> +cleanup()
+> +{
+> +	# A second signal must not abort the teardown half way.
+> +	trap '' INT TERM
+> +
+> +	if [ -n "$CREATED_DEVICE" ]; then
+> +		dpllsim_delete_device "$CREATED_DEVICE" ||
+> +			log_info "cannot delete device $CREATED_DEVICE"
+> +	fi
+> +	# The device whose creation a signal interrupted is recorded by the
+> +	# library alone, a double delete of a tracked one is harmless.
+> +	if [ -n "$DPLLSIM_CREATED_NAME" ]; then
+> +		dpllsim_delete_device "$DPLLSIM_CREATED_NAME" ||
+> +			log_info "cannot delete device $DPLLSIM_CREATED_NAME"
+> +	fi
 
 [Severity: Low]
-Is this statement about configfs accurate?
+Is DPLLSIM_CREATED_NAME always empty here when this run never created a
+device? It is only assigned inside dpllsim_create_device(). Neither
+dpll_lib.sh nor the scripts initialize it at the top level, unlike
+DPLLSIM_MOUNTED_CONFIGFS=0 and DPLL_LOCK_FD="" here, and
+DPLL_CREATED_DEVICE="" and DPLLSIM_PROBE_DEVICE="" later in the series.
 
-The kernel has no ABI exemption for configfs. Its attributes are
-user-visible interfaces and fall under the same no-regression rule as
-sysfs.
+Bash imports environment variables as shell variables. If
+DPLLSIM_CREATED_NAME is set in the inherited environment, this EXIT trap
+undeploys and removes an existing $DPLLSIM_CFG/<name> device even on
+paths that never create anything. Examples are a run against hardware,
+the dpllsim_check_module() skip, or an early signal.
 
-The tree already documents configfs interfaces as ABI in:
+cleanup() in dpll_stress.sh has the same check, and the variable is
+still uninitialized at the end of the series. Would a top-level
+DPLLSIM_CREATED_NAME="" in dpll_lib.sh be enough?
 
-  Documentation/ABI/testing/configfs-most
-  Documentation/ABI/testing/configfs-thunderbolt_stream
-  Documentation/ABI/testing/configfs-tsm-report
+> +	dpll_lib_cleanup
+> +}
 
-Neither Documentation/filesystems/configfs.rst nor Documentation/ABI/README
-makes an exception for configfs.
+[ ... ]
 
-The selftests in this series will use the layout added here,
-/sys/kernel/config/dpllsim/<dev>/{clock_id,live}, which later patches extend
-with pins/<pin>/{type,frequency,direction,prio}. External tooling may use it
-too. After that, renaming or changing these attributes would break
-userspace.
+> +if [ -z "$DPLL_DEV_ID" ]; then
+> +	dpllsim_check_module
+> +	if ! dpllsim_setup_standard_device; then
+> +		echo "SKIP: cannot create dpllsim device"
+> +		exit "$ksft_skip"
+> +	fi
 
-The layout is currently documented only in
-Documentation/driver-api/dpllsim.rst. There is no Documentation/ABI entry
-and no note saying the interface is unstable or for testing only.
+[Severity: Medium]
+Should every failure of dpllsim_setup_standard_device() be reported as a
+skip? That function returns 1 in three cases: the configfs mkdir fails,
+the write of 1 to <dev>/live fails, or dpll_device_wait_by_clock_id()
+times out.
 
-Could the claim be dropped from the commit message, or the interface be
-documented under Documentation/ABI/testing/?
+The live write goes to dpllsim_dev_live_store(), which passes back the
+DPLL core registration error:
+
+drivers/dpll/dpllsim/core.c:dpllsim_dev_live_store() {
+    ...
+	err = dpllsim_dev_deploy(sim);
+	if (err)
+		return err;
+    ...
+}
+
+The timeout means the registered device never showed up in the netlink
+dump. Both are failures of the core and netlink paths this test covers.
+dpll_stress.sh treats the same condition as a failure in
+test_deploy_cycle():
+
+	check_err 1 "device not on netlink (iteration $i)"
+
+Could only environment problems be skipped here, with deploy and netlink
+visibility failures reported as failures? This check is unchanged at the
+end of the series.
+
+> +	CREATED_DEVICE=$DPLLSIM_CREATED_NAME
+> +	DPLL_DEV_ID=$DPLLSIM_DEV_ID
+> +	DPLL_MODULE_NAME="dpllsim"
+> +fi
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/drivers/dpll/dpll_lib.sh b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
+> new file mode 100644
+> index 0000000000000..8d46d4cff06c5
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/dpll/dpll_lib.sh
+> @@ -0,0 +1,348 @@
+
+[ ... ]
+
+> +dpll_lib_init()
+> +{
+> +	DPLL_MODULE_NAME=""
+> +
+> +	if [ -n "${DPLL_DEV_ID:-}" ]; then
+> +		if ! dpll device show id "$DPLL_DEV_ID" &> /dev/null; then
+> +			echo "SKIP: DPLL device \"$DPLL_DEV_ID\" not found"
+> +			exit "$ksft_skip"
+> +		fi
+> +	elif [ "${DPLL_DRIVER:-}" = "dpllsim" ]; then
+> +		DPLL_DEV_ID=""
+> +	elif [ -n "${DPLL_DRIVER:-}" ]; then
+> +		DPLL_DEV_ID=$(dpll device show -j 2>/dev/null | \
+> +			      jq -r --arg mod "$DPLL_DRIVER" '[.device[]? |
+> +				      select(.["module-name"] == $mod)
+> +				     ][0].id // empty')
+> +		if [ -z "$DPLL_DEV_ID" ]; then
+> +			echo "SKIP: no DPLL device of driver \"$DPLL_DRIVER\""
+> +			exit "$ksft_skip"
+> +		fi
+> +	else
+> +		DPLL_DEV_ID=$(dpll device show -j 2>/dev/null | \
+> +			      jq -r '[.device[]? |
+> +				      select(.["module-name"] != "dpllsim")
+> +				     ][0].id // empty')
+> +	fi
+> +
+> +	if [ -n "$DPLL_DEV_ID" ]; then
+> +		DPLL_MODULE_NAME=$(dpll_device_get_module "$DPLL_DEV_ID")
+> +	fi
+> +}
+
+[Severity: Medium]
+Can a failed dump be told apart from a dump with no matching device
+here? Both the DPLL_DRIVER branch and the default branch use a pipeline,
+and nothing sets pipefail, so the command substitution only returns the
+status of jq.
+
+If dpll device show -j fails, jq reads empty input, prints nothing and
+exits 0, so DPLL_DEV_ID ends up empty.
+
+With DPLL_DRIVER set to a hardware driver, the run then skips with "no
+DPLL device of driver". With neither variable set, dpll_basic.sh decides
+the host has no hardware and tests a dpllsim device instead:
+
+dpll_basic.sh
+  dpll_lib_init()
+    dpll device show -j fails, jq prints nothing
+    DPLL_DEV_ID is empty
+  if [ -z "$DPLL_DEV_ID" ]; then
+    dpllsim_check_module
+    dpllsim_setup_standard_device
+
+The commit message says:
+
+  Every query runs the tool first and jq on what it printed, so that a
+  failed query is told apart from a missing attribute.
+
+The other helpers follow that with out=$(dpll ...) || return 1, but the
+device selection path does not. The DPLL_MODULE_NAME lookup at the end
+of dpll_lib_init() also ignores a failure of dpll_device_get_module().
+
+This is unchanged at the end of the series. dpll_features.sh, added
+later in the series, calls the same dpll_lib_init().
+
+[ ... ]
+
+> +# dpllsim_available mounts configfs when nothing else did, which is the
+> +# one side effect the library has outside the dpllsim directory. Scripts
+> +# call dpll_lib_cleanup last from their exit trap to undo it.
+> +
+> +DPLLSIM_MOUNTED_CONFIGFS=0
+> +
+> +dpllsim_available()
+> +{
+> +	[ -d "$DPLLSIM_CFG" ] && return 0
+> +
+> +	modprobe dpllsim &> /dev/null
+
+[Severity: Low]
+Is the "one side effect" comment above accurate? dpll_lib_run_dir() and
+dpll_lib_lock() also create /run/dpll-selftest/ and its lock file, and
+nothing removes them.
+
+This modprobe is not recorded either, and dpll_lib_cleanup() never
+unloads the module. A run on a system where dpllsim was not loaded
+therefore leaves it loaded.
+
+A few other comments also don't match the code. The file header says:
+
+  # devices. Sourcing this file has no side effects; call
+  # dpll_lib_check_prereqs and dpll_lib_init explicitly.
+
+dpll_lib_lock is also required, though, and dpll_stress.sh never calls
+dpll_lib_init.
+
+dpllsim_setup_standard_device() has:
+
+  # shellcheck disable=SC2120 # the argument is optional
+
+but the function uses no positional parameter.
+
+The comment on dpllsim_alloc_clock_id() about per-worker id ranges
+refers to workers that don't exist in this patch. That part is resolved
+later in the series by "selftests: dpll: add concurrency stress tests".
+
+At the end of the series, the header, the SC2120 directive and the side
+effect comment are still there. The side effect comment now reads "which
+are the only side effects the library has outside the dpllsim
+directory", and it still leaves out the /run files and the module load.
+
+> +	if ! mountpoint -q "$CONFIGFS_DIR"; then
+> +		mount -t configfs none "$CONFIGFS_DIR" &> /dev/null &&
+> +			DPLLSIM_MOUNTED_CONFIGFS=1
+
+[Severity: Low]
+Can a signal leave configfs mounted while DPLLSIM_MOUNTED_CONFIGFS is
+still 0? Both scripts install trap cleanup EXIT and trap 'exit 1' INT
+TERM before dpllsim_check_module().
+
+A SIGTERM or SIGINT that arrives while mount runs is handled after mount
+returns, before the right-hand side of the && list runs:
+
+  mount -t configfs ... succeeds
+  pending trap: exit 1
+    cleanup()
+      dpll_lib_cleanup()
+        [ "$DPLLSIM_MOUNTED_CONFIGFS" -eq 1 ] || return 0
+
+dpllsim_create_device() records its name before mkdir for this reason.
+The mount flag doesn't get the same ordering, so "a timeout imposed by
+the harness still cleans up" doesn't hold for the mount. The same
+pattern is used for debugfs (DPLL_MOUNTED_DEBUGFS) later in the series.
+
+> +	fi
+> +	[ -d "$DPLLSIM_CFG" ]
+> +}
+> +
+> +# Unmount configfs again when dpllsim_available mounted it. Call after
+> +# the devices of the script are gone. A dpllsim device the script could
+> +# not remove keeps the mount, so that what is left can be looked at.
+> +dpll_lib_cleanup()
+> +{
+> +	local dev_path name
+> +
+> +	[ "$DPLLSIM_MOUNTED_CONFIGFS" -eq 1 ] || return 0
+> +	DPLLSIM_MOUNTED_CONFIGFS=0
+> +
+> +	for dev_path in "$DPLLSIM_CFG"/*/; do
+> +		[ -d "$dev_path" ] || continue
+> +		name=$(basename "$dev_path")
+> +		log_info "device $name left behind, $CONFIGFS_DIR kept mounted"
+> +		return
+> +	done
+> +	umount "$CONFIGFS_DIR" 2>/dev/null ||
+> +		log_info "cannot unmount $CONFIGFS_DIR"
+
+[Severity: Low]
+Could this unmount configfs while another test is using it? The loop
+above only looks at $DPLLSIM_CFG/*/. The flock in dpll_lib_lock() only
+orders dpll selftests against each other.
+
+Other configfs users, such as the gpio-sim, netconsole or USB gadget
+tests, use the same check-then-mount pattern without a lock. Say one of
+them starts while a dpll script holds the mount:
+
+- It sees configfs already mounted and skips its own mount.
+- It starts using /sys/kernel/config/<subsys>.
+- This umount succeeds as long as that test has no open file or cwd in
+  the mount, and its paths disappear in the middle of the test.
+
+dpll_lib.sh seems to be the only selftest that unmounts configfs. Later
+in the series, "selftests: dpll: add reference leak tests" applies the
+same mount and unmount handling to debugfs.
+
+> +}
+
+[ ... ]
+
+> +dpllsim_create_device()
+> +{
+> +	local name=$1
+> +	local clock_id=$2
+> +	local dev_path="$DPLLSIM_CFG/$name"
+> +
+> +	# Record the name before the directory exists, so that a cleanup
+> +	# run by a signal between the two still finds it.
+> +	DPLLSIM_CREATED_NAME=$name
+> +	if ! mkdir "$dev_path" 2>/dev/null; then
+> +		DPLLSIM_CREATED_NAME=""
+> +		return 1
+> +	fi
+
+[Severity: Low]
+What happens when mkdir fails because a directory of that name already
+exists? Leftover devices can exist: dpll_lib_cleanup() deliberately
+keeps devices it could not remove, and the probe added later in the
+series retries on exactly that case.
+
+A SIGTERM or SIGINT that arrives while mkdir runs is handled after mkdir
+returns, before DPLLSIM_CREATED_NAME is cleared:
+
+  DPLLSIM_CREATED_NAME=$name
+  mkdir "$dev_path" fails with EEXIST
+  pending trap: exit 1
+    cleanup()
+      dpllsim_delete_device "$DPLLSIM_CREATED_NAME"
+
+In that case, cleanup() undeploys and removes a device this run did not
+create.
+
+> +	if ! echo "$clock_id" 2>/dev/null > "$dev_path/clock_id"; then
+> +		rmdir "$dev_path" 2>/dev/null
+> +		DPLLSIM_CREATED_NAME=""
+> +		return 1
+> +	fi
+> +}
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109093523.931201-1-poros%40redhat.com
