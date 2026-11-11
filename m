@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794356652;
-	b=ph5kaw2ZOhck4fFIEKkCM9yjSPl3Z+IX7mLVZWVz6vHPHnYbpizQTG2+1Y/bru1lsmV5
-	 pYT6m+aDbntjGv8EXJ4K+YvQ1sKTAkE2Ca0jEYu0AJx7Zo6PHs9b5tkiaAa4DN/IuXKo3
-	 TIlwFM/6qu1tRjLzX/8+wkRURqSn+QUQD+pen48JJZqM2n9iReJlkQD+uSNWTDpbSh2Rh
-	 /5UVBz7aptFh9wykRhTowfG0rCKbhZs32V+xDzOYd7iKoiKbbBsE/HZwA0oPJMMgB/vKY
-	 6LsOXiecd46TTTKWIPkVdwbzzwQvm/cTTBAoay2yb5AqE9VFuR1tQYxaPULMlc+VfeQ==
+	t=1794356653;
+	b=TmRAvKFqPOTqxVd8wz8Mdo6haZSZZtSZUvxDTwa+W/SoRDe4drUcs8I/wj+aGFNGz2s3
+	 /ESeRri4+Cy5mzaWxYBFOI5Qr8+s34ngeodR3SNBPcULCqwZcFIVlWbTBNWXO+QwvJF8g
+	 dcM/uQBK8i5XxhwyqBENqaVG7HJTgnxc566Qs3GOYPWCcbU+IIJ0a4SBOSrdOyoEnMZ2F
+	 zzvy8iNyIMTb3dX5zwr7qwa2NRtTzhg3TonJBvJL2Tq+OXLUO/vVE9JaZdno8hWjW825N
+	 kkVcO5NnePzcy9LG/+pJYKwKuNYqgBZqcfBX0GHWDVSCeb/VyBiHaTs+vnGCgWk03eQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794356652;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794356653;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=6pksLN3i9UP8nq6v/POjqMIUemdvKGeqKKQAaazi0ic=;
-	b=f7qB2K+0xugFDqZhE5SGCuO0f2AQ59PKx2bg4RJqLgLjzCqXXHQa+Lzv+zWvwoi9Ys3F
-	 EIXTXn4MtBeE2jGlhQ7Y0jgX5fb3BHJwx/aXH5Vn6L3dwnIHMlU/mg1KxLGGHoH7BcleV
-	 pnXb4kFqJIs5NOkU3UVJQci2Fzp8B+KwFe7SJ2dZuQk1vyGHmMRBz4aXgcNEmtJsR2kSz
-	 k+Mt5UFNgv6AX1SzpLXJ/N1DaA/LC5BSryZ0/LnDWbIApqkSD34/9kmhrgaCiMZQ3rtv6
-	 +GcvilLxEpD6iU9qAQRTh14TadreKRZLqT+ZgSBPyD8ORjkDXFDay/jMKEuInDodFNw==
+	bh=XT74yUDszl/ziK0mi3MJ4vZ5wlDvYd0idF7CJlDoa8U=;
+	b=osc8oqKFbXj7zENRxFTKCFtFDMYI8NxDK+2ZRgwJZ6goVJfz858YnGi2xeIh3YnUFeXF
+	 ZOd8PC5kIs1W1covI6UXEHosaRMVee+7E7g8s4aXMXM4pZcSz9C+QMlnw4ZP5tkFFr24W
+	 G4v+6Xy7LGiZsobRPiCUWAlkH3Ow9wBY32jk9o77OBAYLqtTLHhW9imTSjGSLO2/lgUKI
+	 l34XgIjeCfPf+uyXKm/kw2cxngM8eeY/xFwCikXlwWy75LHoBSQAOhFEmHauECdJ12reI
+	 PqgZcFViXYIj2nAgWyNRZNet5O50VIIDBvKty6r53xRMZOBTDBu4+5PZDyXYf3FpjRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=eigH2qWk;
-	arc=none smtp.remote-ip=209.85.210.70
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iR3k3qyg;
+	arc=none smtp.remote-ip=209.85.210.71
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10EC606A32E
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 00:24:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E10EC606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8834B60A262F
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 00:24:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8834B60A262F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=eigH2qWk
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-84586110393so2971598a34.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:24:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iR3k3qyg
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-847e2926d94so5227777a34.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:24:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794356651; x=1794961451; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794356652; x=1794961452; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6pksLN3i9UP8nq6v/POjqMIUemdvKGeqKKQAaazi0ic=;
-        b=eigH2qWkGhH5tiAgGSbUgDvFYuskoZbI+YP83rHFmlZ7ch41yBJ0Q2uxTmqSEG2C4K
-         84Ioqp5wQfdASP97HgKBpJSkVK4eYgkCDRLysgKi1A/Ff56dM2eUp/Qyp0YUOb63o1WB
-         jW0/Y0XS6E6MREG3u2c45zIQA65T60R8nAuw5VTyuhksqvKFFV8Pk/DpsWN+sbqLXKL9
-         EqhdxQOlRcAMjFLecHl8hGR3QUi/9WYOxgTaj5hPns8L0lR7PnW6tu0coApL9ecq4mcG
-         nXTmomivZ0o2MzJgRGTolqThh0wEbC4+muhB3OPibybYUfWjAZoAxi66dupe1JAZvFFL
-         OPQQ==
+        bh=XT74yUDszl/ziK0mi3MJ4vZ5wlDvYd0idF7CJlDoa8U=;
+        b=iR3k3qygvb3aCIlCIrSKnYKmCnxQIS+qdVbCG/ptGdEvqAtkZagRhJbJIpQT7cfNph
+         Npr+bDvbpQFEHA4A1kjUFAzZRLFIW8QnhcM/IogtLe22hW+kAOUhU8eC22immRSzbHo5
+         BSarK/TnJPYhmBn2umUi/osFakN9sQA44AoViByT7+lEfp1JPrfne8zRpQAHX2uYRO7E
+         exdLdpEQU6vHp6YcY4kZJIOKJqpMtR7TYQiQovC+aXKCiCsNU1rcwkWtOW4rWwpg3eer
+         1GiPGJ8LkTOMU0ph/lBRftNBUij831P5sYdgInBz4TdDUgAGrkroii7knK0lBxV1071i
+         mBCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794356651; x=1794961451;
+        d=1e100.net; s=20260707; t=1794356652; x=1794961452;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6pksLN3i9UP8nq6v/POjqMIUemdvKGeqKKQAaazi0ic=;
-        b=AHhUzpSTFtPYHjGVAooq1lSHHNlzjPrXQyHmW2npL64SIg2x+XnaVk5oBgX77c3Zd9
-         IyUbVeBeJ94FwqGfVnWAda67oegk3TqEnjVUGJ4JZo5kOsAG8MHTX3sUfgtThOIxHNpS
-         3+1/SJ34mdhTFRcpMixHezdgBiMgCFec8YoBMdshMSbm5TxNa5l42YeNJjoBZ2Xvo83+
-         DXiPu9/uTVZNBPgPM7ky0EuV4zgfi4KKrn/sCfi0c0IoAEKE6hIJb+2iZvmdgSSy/mc7
-         vsFklEsQr93ciO1wVQ7H0VKKg3SSg7ao6MyHNAQFsbr3pcUiT6tdDR39RXdOd8/9jEqK
-         67kw==
-X-Forwarded-Encrypted: i=1; AL+hErHAG+3n7I71VLtsVaI0DQUNXWujbRS7EF45cFV8AaNjBFU5r4peEtuRK9QxynuHkoaheoTSCgsqrdQTkkF+Wmo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+SPqiQmMH6TjW6aGZ1luyMs0KPDmwV8o8ZWGuIJUGowGXmZNHC
-	hA6E/N4eF7bx3U/HR/fLPpnw6NGaGdTKP9+swvGzrka15BkP5SkMj1oMOq+g6K61OabMbm/Z6gp
-	znV+HD8vZ62/4Og==
-X-Received: from iohk8-n1.prod.google.com ([2002:a05:6602:a608:10b0:9ca:dc6e:2262])
+        bh=XT74yUDszl/ziK0mi3MJ4vZ5wlDvYd0idF7CJlDoa8U=;
+        b=ZnjhijdNAGT2gVFcD2Ij+KOJq13HdVRKfS3PRU4rcns0oPY71jLBzpSNMN/bM/B6E+
+         oRt0hmtdqAKQqLCzobtjYiUZCs/TWrsNm+/V5OW/h29rYRKUOi4hcG3TUv+LKC1B+VHy
+         wY9DckVY1YBy510npRJT5ygK1TmKtba3Ucb4t8+n6iNUohpuDkB7gtIewZB1n0Tp3YsB
+         UYY0jzbR6EwkYtS8Gjzm9njtjFHjho1j6Wo28Xt2rJquZEHfCt5rdA/lt1hKQoCwmKoH
+         tRsXcqXK6BAizV+AP8o9hwwQBMGDRoqNnSpI17RjoK9At8GUd8aZMykx7ynE6XfJniiU
+         Z1PQ==
+X-Forwarded-Encrypted: i=1; AL+hErEM7/ivaIDVJL+NrUAsBo6cykB8EqrsGTi524HrsJztelp9MUP1c1QoQild+Mo/JsuE40aFhYm6RHtjUhMG81Q=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Ugx9JhCMaIa2Sq/Fk5ay9WXkYwFo/P/HcujsyjPvuipXzOuhb
+	MAiBgeLfuzVHNU1Y+gWzN1r9nf7qExl4o5//kZK4nVOQtpXOrnboZe6xwuNZss64vcrX18Cx8om
+	SsbIYoMW18qrRPw==
+X-Received: from ilbej4-n2.prod.google.com ([2002:a05:6e02:4e04:20b0:523:a008:3bb])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:148e:b0:4f5:20:d847 with SMTP id 5614622812f47-56b97611f9dmr681603b6e.36.1794356650705;
- Tue, 10 Nov 2026 16:24:10 -0800 (PST)
-Date: Wed, 11 Nov 2026 00:23:41 +0000
+ 2002:a05:6808:2392:b0:4f5:c4b9:dc14 with SMTP id 5614622812f47-56b968d6d45mr569805b6e.13.1794356652192;
+ Tue, 10 Nov 2026 16:24:12 -0800 (PST)
+Date: Wed, 11 Nov 2026 00:23:42 +0000
 In-Reply-To: <20261111002358.1842967-1-dmatlack@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261111002358.1842967-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.56.0.542.g3ef89b7020-goog
-Message-ID: <20261111002358.1842967-4-dmatlack@google.com>
-Subject: [PATCH v4 03/19] selftests/liveupdate: Add tests for preserve and
- retrieve user argument
+Message-ID: <20261111002358.1842967-5-dmatlack@google.com>
+Subject: [PATCH v4 04/19] liveupdate: Allow file handlers to mark retrieve
+ failures as retryable
 From: David Matlack <dmatlack@google.com>
 To: kexec@lists.infradead.org, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -101,151 +101,125 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Verify the user argument support in LIVEUPDATE_SESSION_PRESERVE_FD and
-LIVEUPDATE_SESSION_RETRIEVE_FD. Add luo_session_preserve_fd_arg() and
-luo_session_retrieve_fd_arg() helpers to libliveupdate so tests can pass
-a handler-specific argument.
+Add a retryable output flag to struct liveupdate_file_op_args, which a
+handler's .retrieve() can set on error to tell LUO that it hasn't
+consumed the preserved state. LUO then lets userspace retry the
+retrieve, and .finish() still releases the preserved state if the file
+is never retrieved.
 
-Add a preserve_memfd_with_arg test case to verify that memfd
-preservation rejects a non-zero argument with -EOPNOTSUPP, accepts an
-explicit zero argument, and remains compatible with callers passing the
-legacy struct size up to the token field.
+When luo_retrieve_file() invokes a handler's .retrieve() callback and it
+returns an error, LUO currently records the error in
+luo_file->retrieve_status and blocks any subsequent retrieve attempts.
+This is necessary when the handler has already partially consumed or
+freed the preserved KHO state.
+
+However, with user arguments passed to .retrieve(), a handler may fail
+early while validating caller-supplied parameters, such as a missing or
+invalid argument, before touching any preserved KHO state. In such
+cases, userspace should be able to fix the argument and retry
+LIVEUPDATE_SESSION_RETRIEVE_FD.
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
-Reviewed-by: Pratyush Yadav (Google) <pratyush@kernel.org>
 ---
- .../liveupdate/lib/include/libliveupdate.h    |  3 ++
- .../selftests/liveupdate/lib/lu_utils.c       | 17 ++++++-
- .../testing/selftests/liveupdate/liveupdate.c | 44 +++++++++++++++++++
- 3 files changed, 62 insertions(+), 2 deletions(-)
+ include/linux/liveupdate.h      | 11 ++++++++---
+ include/uapi/linux/liveupdate.h |  8 +++++---
+ kernel/liveupdate/luo_file.c    | 20 ++++++++++++++------
+ 3 files changed, 27 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-index fa07fed08364..cd1d843a0d3d 100644
---- a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-+++ b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-@@ -29,7 +29,10 @@ int luo_get_session_name(int session_fd, char *name, size_t name_len);
+diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
+index 7543f5d648d3..e4ad0bf78a5c 100644
+--- a/include/linux/liveupdate.h
++++ b/include/linux/liveupdate.h
+@@ -58,9 +58,13 @@ struct liveupdate_arg_spec {
+  * @session:          The session this file belongs to.
+  * @retrieve_status:  The retrieve status for the 'can_finish / finish'
+  *                    operation. A value of 0 means the retrieve has not been
+- *                    attempted, a positive value means the retrieve was
+- *                    successful, and a negative value means the retrieve failed,
+- *                    and the value is the error code of the call.
++ *                    attempted (or only failed with a retryable error), a
++ *                    positive value means the retrieve was successful, and a
++ *                    negative value means the retrieve permanently failed, and
++ *                    the value is the error code of the call.
++ * @retryable:        For .retrieve(): [OUT] Set to true by the callback on
++ *                    error when the preserved state has not been consumed and
++ *                    retrieval may be retried.
+  * @file:             The file object. For retrieve: [OUT] The callback sets
+  *                    this to the new file. For other ops: [IN] The caller sets
+  *                    this to the file being operated on.
+@@ -83,6 +87,7 @@ struct liveupdate_file_op_args {
+ 	struct liveupdate_file_handler *handler;
+ 	struct liveupdate_session *session;
+ 	int retrieve_status;
++	bool retryable;
+ 	struct file *file;
+ 	u64 serialized_data;
+ 	void *private_data;
+diff --git a/include/uapi/linux/liveupdate.h b/include/uapi/linux/liveupdate.h
+index 87e77c3bfd82..7420e2c5434b 100644
+--- a/include/uapi/linux/liveupdate.h
++++ b/include/uapi/linux/liveupdate.h
+@@ -174,9 +174,11 @@ struct liveupdate_session_preserve_fd {
+  * associated with the token and populates the @fd field with a new file
+  * descriptor referencing the restored resource in the current (new) kernel.
+  * This operation must be performed *before* signaling completion via
+- * %LIVEUPDATE_IOCTL_FINISH. If a retrieve of a token fails, subsequent
+- * attempts to retrieve the token fail with the same error code. Failed
+- * retrieves are not retried.
++ * %LIVEUPDATE_IOCTL_FINISH. If a retrieve of a token fails after consuming
++ * preserved state, subsequent attempts to retrieve the token fail with the
++ * same error code. A file handler may instead leave the token intact on errors
++ * that occur before it consumes the preserved state, e.g. an invalid @arg, so
++ * that the retrieve can be retried. See the documentation of the file handler.
+  *
+  * Retrieving a token that was already retrieved successfully returns a new file
+  * descriptor for the same file. Passing a non-zero @arg in that case fails
+diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+index 1437630d435e..0c9a3b6921d1 100644
+--- a/kernel/liveupdate/luo_file.c
++++ b/kernel/liveupdate/luo_file.c
+@@ -152,9 +152,10 @@ static DEFINE_XARRAY(luo_preserved_files);
+  * @retrieve_status: Status code indicating whether a user/kernel in the new kernel has
+  *                 successfully called retrieve() on this file. This prevents
+  *                 multiple retrieval attempts. A value of 0 means a retrieve()
+- *                 has not been attempted, a positive value means the retrieve()
+- *                 was successful, and a negative value means the retrieve()
+- *                 failed, and the value is the error code of the call.
++ *                 has not been attempted (or only failed with a retryable
++ *                 error), a positive value means the retrieve() was successful,
++ *                 and a negative value means the retrieve() permanently failed,
++ *                 and the value is the error code of the call.
+  * @mutex:         A mutex that protects the fields of this specific instance
+  *                 (e.g., @retrieved, @file), ensuring that operations like
+  *                 retrieving or finishing a file are atomic.
+@@ -588,7 +589,9 @@ void luo_file_unfreeze(struct luo_file_set *file_set,
+  * The operation is idempotent: if a file has already been successfully
+  * retrieved, this function will simply return a pointer to the existing
+  * 'struct file' and report success without re-executing the retrieve
+- * operation. This is handled by checking the 'retrieved' flag under a lock.
++ * operation. If a previous retrieve failed permanently, it returns that
++ * saved error code; if a previous retrieve failed with a retryable error
++ * before consuming preserved state, the retrieve operation is re-attempted.
+  *
+  * File retrieval can happen in any order; it is not bound by the order of
+  * preservation.
+@@ -655,8 +658,13 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+ 	err = luo_file->fh->ops->retrieve(&args);
+ 	kfree(args.arg);
+ 	if (err) {
+-		/* Keep the error code for later use. */
+-		luo_file->retrieve_status = err;
++		/*
++		 * Keep the error code for later use unless the handler marked
++		 * the failure as retryable (e.g. invalid user argument before
++		 * preserved state was consumed).
++		 */
++		if (!args.retryable)
++			luo_file->retrieve_status = err;
+ 		return err;
+ 	}
  
- int luo_ensure_nofile_limit(long min_limit);
- int luo_session_preserve_fd(int session_fd, int fd, __u64 token);
-+int luo_session_preserve_fd_arg(int session_fd, int fd, __u64 token,
-+				__u64 user_arg);
- int luo_session_retrieve_fd(int session_fd, __u64 token);
-+int luo_session_retrieve_fd_arg(int session_fd, __u64 token, __u64 user_arg);
- 
- int create_and_preserve_memfd(int session_fd, int token, const char *data);
- int restore_and_verify_memfd(int session_fd, int token, const char *expected_data);
-diff --git a/tools/testing/selftests/liveupdate/lib/lu_utils.c b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-index 74d41115c281..db7a90b002cb 100644
---- a/tools/testing/selftests/liveupdate/lib/lu_utils.c
-+++ b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-@@ -79,12 +79,14 @@ int luo_retrieve_session(int luo_fd, const char *name)
- 	return arg.fd;
- }
- 
--int luo_session_preserve_fd(int session_fd, int fd, __u64 token)
-+int luo_session_preserve_fd_arg(int session_fd, int fd, __u64 token,
-+				__u64 user_arg)
- {
- 	struct liveupdate_session_preserve_fd arg = {
- 		.size = sizeof(arg),
- 		.fd = fd,
- 		.token = token,
-+		.arg = user_arg,
- 	};
- 
- 	if (ioctl(session_fd, LIVEUPDATE_SESSION_PRESERVE_FD, &arg))
-@@ -93,11 +95,17 @@ int luo_session_preserve_fd(int session_fd, int fd, __u64 token)
- 	return 0;
- }
- 
--int luo_session_retrieve_fd(int session_fd, __u64 token)
-+int luo_session_preserve_fd(int session_fd, int fd, __u64 token)
-+{
-+	return luo_session_preserve_fd_arg(session_fd, fd, token, 0);
-+}
-+
-+int luo_session_retrieve_fd_arg(int session_fd, __u64 token, __u64 user_arg)
- {
- 	struct liveupdate_session_retrieve_fd arg = {
- 		.size = sizeof(arg),
- 		.token = token,
-+		.arg = user_arg,
- 	};
- 
- 	if (ioctl(session_fd, LIVEUPDATE_SESSION_RETRIEVE_FD, &arg))
-@@ -106,6 +114,11 @@ int luo_session_retrieve_fd(int session_fd, __u64 token)
- 	return arg.fd;
- }
- 
-+int luo_session_retrieve_fd(int session_fd, __u64 token)
-+{
-+	return luo_session_retrieve_fd_arg(session_fd, token, 0);
-+}
-+
- /* Helper function to get a session name via ioctl. */
- int luo_get_session_name(int session_fd, char *name, size_t name_len)
- {
-diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
-index 2dedd5fc2534..4c4272167635 100644
---- a/tools/testing/selftests/liveupdate/liveupdate.c
-+++ b/tools/testing/selftests/liveupdate/liveupdate.c
-@@ -20,6 +20,7 @@
- 
- #include <errno.h>
- #include <fcntl.h>
-+#include <stddef.h>
- #include <string.h>
- #include <sys/ioctl.h>
- #include <unistd.h>
-@@ -530,4 +531,47 @@ TEST_F(liveupdate_device, preserve_many_files)
- 	ASSERT_EQ(close(session_fd), 0);
- }
- 
-+/*
-+ * Test Case: Preserve MemFD with User Argument
-+ *
-+ * Verifies that passing a non-zero user argument to memfd preservation fails
-+ * with -EOPNOTSUPP, while passing a zero argument or using the minimum struct
-+ * size without the arg field succeeds.
-+ */
-+TEST_F(liveupdate_device, preserve_memfd_with_arg)
-+{
-+	struct liveupdate_session_preserve_fd min_arg = {};
-+	int session_fd, mem_fd1, mem_fd2;
-+
-+	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
-+	if (self->fd1 < 0 && errno == ENOENT)
-+		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
-+	ASSERT_GE(self->fd1, 0);
-+
-+	session_fd = luo_create_session(self->fd1, "preserve-arg-test");
-+	ASSERT_GE(session_fd, 0);
-+
-+	mem_fd1 = memfd_create("arg-memfd-1", 0);
-+	ASSERT_GE(mem_fd1, 0);
-+
-+	/* Non-zero arg is not supported by memfd handler */
-+	EXPECT_EQ(luo_session_preserve_fd_arg(session_fd, mem_fd1, 0x1111, 1),
-+		  -EOPNOTSUPP);
-+
-+	/* Legacy struct size (up to token) should zero-fill arg and succeed */
-+	min_arg.size = offsetof(struct liveupdate_session_preserve_fd, arg);
-+	min_arg.fd = mem_fd1;
-+	min_arg.token = 0x1111;
-+	ASSERT_EQ(ioctl(session_fd, LIVEUPDATE_SESSION_PRESERVE_FD, &min_arg), 0);
-+
-+	/* Explicit zero arg with full struct size should also succeed */
-+	mem_fd2 = memfd_create("arg-memfd-2", 0);
-+	ASSERT_GE(mem_fd2, 0);
-+	ASSERT_EQ(luo_session_preserve_fd_arg(session_fd, mem_fd2, 0x2222, 0), 0);
-+
-+	ASSERT_EQ(close(session_fd), 0);
-+	ASSERT_EQ(close(mem_fd1), 0);
-+	ASSERT_EQ(close(mem_fd2), 0);
-+}
-+
- TEST_HARNESS_MAIN
 -- 
 2.56.0.542.g3ef89b7020-goog
 
