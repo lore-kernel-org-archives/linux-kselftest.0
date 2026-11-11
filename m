@@ -1,95 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794383572;
-	b=5D6TOkBVtTD+OL5gCFm9/LZ0G5iQh+oUkn0fFdTG5n0ntvn3x2WcLWGulQyZepn4g1nB
-	 PTX64i9MXXmQI2AtYfSdJf8IGleKXFFGj5aHXdv4putj1UTnHLJGDnIx4s4ajWk599gkH
-	 vdJ5HuyJScKOVMMuggdtj1OM4pF/HnYV5LijLq5EVPlxnf64XuGkzC/UZTq5O93VMlv7o
-	 fSHpNowNS6AytpsC81+8imYrWb2u2D7h1Qo/jbW89aNioh9yDyfrnHDeYfW1YpREaf0gU
-	 TfkajV7wRkrAEsPCwCIojMeUZL7myBYbTntIZCAJJVhIJZJMDjFAgIYGKLEkbC/5foQ==
+	t=1794383580;
+	b=yXH7NnriaYC+1ZUub5vNqvieU9yQVGm8JA4DXp5Qaqp3wl1xkVqnuoN0pyCd4eQ531wr
+	 bWgZaN6vgZcqe3EAsKu55UTlRn6hguctSDCNa3Q+buwuqxFms/7ry2Zlu3lKPK5Zh+nPW
+	 zLP6KIyQp5YznYSAEcdbZ1YVBA789W86AJRfBS82Ehu7qghC0imYcHM+3odLcEY7pexS/
+	 65jwTIx5/1rzxPiTKJM96oTOAb8GZHGZH3lLuCEy3QVbI9ldQEM6BzS1TGrNDCAagt1WX
+	 lvOdszzMeludpKUXIU8rVqY4ytFbJetoI/DgodptwTkKmIVHN99cZxYY42zTWZx+8Ig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794383572;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794383580;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:User-Agent;
-	bh=59sgXJgrAjzlF6lUUIt9hHd7ZlSVCeSH79v3f3zBjaU=;
-	b=WNqGrQJ/TEXiyuu6oX37qJ4iWvnxlU7Cw6ul4xdT7nXXhAAamYcZE24B+l2mldowEqRS
-	 ofe/1BiP1qCViXhZLcYzyEFbZueIA6y401qj/otKDPPUHbShqqxe1zgXbnI+QeFP6iOnF
-	 kkOCcNbwMFjMhG7Af6Ztws7qntiVxSHAl+hQnB7Igsi0g0gkIWue/ThtsT6wJ6f/C1bkK
-	 T5oXBe8vY9514EYI/lDNfXT3OdkdgACbTkeSy1QL2s0dGpb9ebYmj8Ryr2xWJ2AWfbBok
-	 x751MGpW902ObA541hsXYO3Yd0AIJVfr6uWdaOrXVMVAPEbYCXSb/0Aga9VavPb4z+A==
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:User-Agent;
+	bh=HqU3Pl0zqzkcuaNDEwB/Ax9fkH+ammw/qBuPNlSTruE=;
+	b=28jUTgrftK+lpWOiIk4ltZ3D3HY2r9KxwnYMWHf5Kyde5W4E+1BZSiWyWmQlRk1qTKTm
+	 0e5zOvgVhKJqjqioaJSChWYzZ/J7AihZOh3viMoxm36pIyKivvkrtiZsV4aF983T/c3Hk
+	 slYqdVwDtQGYROHnUTD2IT6agx7kfTydhL3cO+TDgB8qGNzANQa1Y8Ck9c51lKE7jtR+7
+	 FKLCSXOxgk1Ud/S6+kUnti2nHxgXTqCDHJJrvIs1Ok/Jas9Z17Bdy5KlB3F7I9eEUWKpJ
+	 tDqV66IrNKSv5XY0hcitsnJ4c1GU0cc0cYn6zVMb9zzTcv4Sd6y7Whoh9IpREHiE/iw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=chrisdown.name;
 	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=rg0AnoZk;
-	arc=none smtp.remote-ip=209.85.214.170
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=i5l4IQz0;
+	arc=none smtp.remote-ip=209.85.210.173
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58999606A324
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:52:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 58999606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55EF606A33D
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:52:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C55EF606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=rg0AnoZk
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e8da6ef7ddso17688835ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 23:52:51 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=i5l4IQz0
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8a0673d9bd2so1828136b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 23:52:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794383571; x=1794988371; darn=vger.kernel.org;
-        h=user-agent:content-disposition:content-type:mime-version:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=59sgXJgrAjzlF6lUUIt9hHd7ZlSVCeSH79v3f3zBjaU=;
-        b=rg0AnoZkPwtV1r39FwY0fYtx+B96qCAj4XVMip88C/9myzm80RBPFU2IAquryZOpEw
-         HdyksEXUIKYlStPIHQFe+XswkRSfDVjCV+PuDM5mPVvVsB5Zhzq12JVethAv4uT7qDLh
-         gLXECA+eszlPSiHp3RlqZOoUtxhu/9gEEG7ag=
+        d=chrisdown.name; s=google; t=1794383579; x=1794988379; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=HqU3Pl0zqzkcuaNDEwB/Ax9fkH+ammw/qBuPNlSTruE=;
+        b=i5l4IQz0R+5YDpgXbhNWm7SdEua7y+JqwkVB9L2Qmr0CchldhP1OXMknep6mO2f5aT
+         TKQYC1CHS27Oa93etO0nrex+1MU7CLFaI8gawX7do4mO46mRVW3Hw1yF+zh8bTnjZDmQ
+         ageR2iK28RVfCgexgqgAShQZAdFw5WCopmSC4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794383571; x=1794988371;
-        h=user-agent:content-disposition:content-type:mime-version:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=59sgXJgrAjzlF6lUUIt9hHd7ZlSVCeSH79v3f3zBjaU=;
-        b=RFkoIsEkPdestAAAQJYDcdyLAIZVSLYVTRNUm2KBh7+XewmVityDYYNSjJn4Y3iJKW
-         lT5lZCce9TXgFbyFJoDn9OYUW0lrBO/aX4HhsMPEncFOoGmN/dMJAKKUrj2BhwfuY/x1
-         vsO2RFmi7ExpcBBLCiAfJck33jbWKt905IX97nxiEdz1SZgWpJZNwm2jC+FFanQ+7ISt
-         j0FukhjfKr0z12LKIslbdImqx7mxADvoeHYVDMnxSRiQwmq0ty0f6Q4z31X5MtfuF8Bt
-         zw9uBp/5btiEC2LsG24Jf3z8kbb0kGdLrTl0T/PtVYlJWtNrcsdla00Vm+CYJBXGkMtZ
-         X9sA==
-X-Forwarded-Encrypted: i=1; AL+hErF0xc6c7w9aBHpyZaYc1bya6vMgRVxGTBB97pP4C7KGaBDMB3ZMOlblqr0CND4VXgF4+4EQmW4RjEQu9PJpP6U=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9xvYwl98/QzKAk9+0t3NrDqFJeWx1+44O20DO9fXARe1/P79Ip
-	BCdQmFRqbU5lf46pZVWvwuqcPscMjtiBw9F1HQOmAwl6bJgj4s/BdvagBZ6kJPV/uCA=
-X-Gm-Gg: AYBFou1O+jhlfLHDa0IFi0gm4XaQV43rAszNKkvSmT6yiTw4dNgiZwkKgkr6qZPq056
-	Cn5Xbf+ht8DCsS8PQ86G/achu47Lq+BIcaXr98qB7QNgfhb9a+4906seNSfeiF7IPSgaCcTIk25
-	2kbIowdLuIDy+Fcy0le1hduSzdLHjy1gpsJ5+j18QTOaaeDGV/D+AvAQpJ6FZsul9eFqyuPZwip
-	zP/z9GYxUtTlRVSRrnkjT+KBOTDJGNkE2LJqnjBLG2wNYWNgGCwhGbdCSbQnegkrIGrUrwllqre
-	Nyi6GhEMINcyQGMxQwoDN60qssLvML+cjYM3D1BFo83gblwE9hSZMDHtBB6vbJJzh5f97xuF7Xq
-	qn6W/7IwNf3DQefx1kok7Z0fmos5wsjRdAgeQVpNERTAOfFIQ22KKh3yk9FPjgIFaUe8gJpE8Rl
-	kFnQ42TGHGir6AURX72G8sM3CT4pmMJDezDZR4HC5366RibfB9YkjOedFuArP1DXE6mvBdsHrBy
-	MdiI6Y6aKAbasDZL9/I6zs/PrBpzg3Ga/1KKvVsWZhjyAxRooFPbQ3VjVM3CUifrEYG12qMod93
-	sjzlL2Te0TUNiKDkOYuAPmRRqoP0vY+9k2Eyk0T8CVpAMuNRix8clYrQ5pWmDHRyoKWoPaPjpGX
-	HOCki2XVsJmP4tzZTrhUgrc6Ps6pxMXdDQ/jtKl48jeXXjIYhMEWbXaqz7TRJTlsn/ZkrFUpKJE
-	BLomZvjX2MI04Eq39WVXvc5IY98ap1ICIVXycn2Unku0qOaoj0gDzV
-X-Received: by 2002:a17:902:ce83:b0:2ed:205e:eac3 with SMTP id d9443c01a7336-2edd7673ee3mr20690885ad.12.1794383570630;
-        Tue, 10 Nov 2026 23:52:50 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794383579; x=1794988379;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HqU3Pl0zqzkcuaNDEwB/Ax9fkH+ammw/qBuPNlSTruE=;
+        b=0TAK4OCzjn7SsCEm+1DDCnjI6J58U4YcIX6fox4c3gu7jOBrrFvMg6BbYTuBlHAIbK
+         iQQ8iharpM4rwfvyBEcjAGxhwjgdQm6FRkV5oRPOFcxNOkQTlLJuIhtkTD7HKWO4/Pvm
+         cdizoNK85dUU/k9OHCsOIeeiK3/4MnfF44e0EhfMG+N893NRqc+1vbxp3+2Wu/ksy9aV
+         BuwyyAQn3ZOrewi9q83Acw47BCHi6JkzELbwngazwCPHLiTPHlsNq18Da6oewhUo0yJ+
+         7V82VXlHJ3BHpbOltm6RyBeE1Xxt9CWP7ZpdnxA2jBqAalOyaBCH4Q44dIPZUw/tHich
+         bzEg==
+X-Forwarded-Encrypted: i=1; AL+hErE8DfGLpVAtNY/zbfBo4m4KdAh3ouRXiM4B6rk1xch+tQJOD+N+fbnhZV3OvxoMUcjFGhf9UOQdRdtlX8bBLts=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/078jR5QWCBeHS+8ve7ZzdvYmabLWdEtmJBVGLdQBxOXZCuNyg
+	yJ1wPHe6mTipR9tmK1x8YECRhUIipodIql4fyeHmxZdZsSrKWxwhv564nFvU2rF62yo=
+X-Gm-Gg: AYBFou3twUChaeKmUBd7tTY8vfJGlMPpdgX82qGlRUgNaDZWZX8VcRDha6PFebdUguz
+	3cK6XOuC02hVEfWLUD+UFJCcP5y6Ov34THKYJoRfm7KFVk8BS1XrbK0ELEecKjOyon2SGvVC8/m
+	NsgNXWozedMPJJ4X1OneRLBNXoR0UdE7tkxp0M8LB54COEianarehclGMMo7XnuUV8CnnXelRIX
+	EPsmGMekOVq7u/bLQ+QarU3P7Dinq8hnoqYic8kL7hhwtcSt4edfdgCZoRyQeDtVpVA7uoMAiNA
+	ZXQ5S+ZHgSxjnsW9gwzcdloy6xX+4TU6oRBGAD79rueq/moEfmWL/siaKorx+lKGyh8T5jYmoCF
+	V+n8An9tSMQCQC17L0e0pU1nItqJadajBR08TeBXx7INFFGcurAVaWbxd8ixnrpVSsnkeF4wIPQ
+	k7xCoHtyPIsYkDDwwX3ASHnzfM6F8pxstkvq6k0mSFrkNforqd/aKG50V5wdRGK53W1T1x29WRe
+	va14eeS/qujYollRz/Le/5qugJR6hWUu/nZPT9EkijMEU9Lunuh0plERJ2EZI9pNkgXvM97qhEq
+	GgoqyDRRgS5CcXfulLkljOit2ycgQFWC0TCdQIBnuu3VhsccuYOjabeaLOtPpYyYFlWJfPVmbYA
+	kxx2CQ9l4Z1Lkd6VGlVICahsjKJUjAsDU14rX1keTZtI4Y9p/mmKir/57qxcqQwemyaDzemHITP
+	3GxkS39e+6ZQYAAfH4ny0NiVPvUYQvfD4wXMZn061XozOOVlZZC7kZ
+X-Received: by 2002:a05:6a20:431a:b0:3e2:47ab:6a25 with SMTP id adf61e73a8af0-3f2fe3d4734mr1995928637.46.1794383579151;
+        Tue, 10 Nov 2026 23:52:59 -0800 (PST)
 Received: from localhost ([199.201.64.8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2edb6e0d5c0sm17541865ad.71.2026.11.10.23.52.49
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaa86e030sm1861501b3a.27.2026.11.10.23.52.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 23:52:50 -0800 (PST)
-Date: Tue, 10 Nov 2026 23:52:46 -0800
+        Tue, 10 Nov 2026 23:52:58 -0800 (PST)
+Date: Tue, 10 Nov 2026 23:52:55 -0800
 From: Chris Down <chris@chrisdown.name>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Mike Rapoport <rppt@kernel.org>,
 	Pratyush Yadav <pratyush@kernel.org>
-Cc: Alexander Graf <graf@amazon.com>, Baoquan He <baoquan.he@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
+Cc: Breno Leitao <leitao@debian.org>, Alexander Graf <graf@amazon.com>,
+	Baoquan He <baoquan.he@linux.dev>, Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>, kexec@lists.infradead.org,
 	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH 0/9] kho, liveupdate: KHO/LUO observability
-Message-ID: <cover.1794383544.git.chris@chrisdown.name>
+Subject: [PATCH 1/9] kho: Reclaim the metadata page left reserved after kexec
+Message-ID: <63ca64c004b296a998a3e531f8c0c4964916b70c.1794383544.git.chris@chrisdown.name>
+References: <cover.1794383544.git.chris@chrisdown.name>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -101,65 +103,68 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1794383544.git.chris@chrisdown.name>
 User-Agent: Mutt/2.3.3 (9073d26d) (2026-06-12)
 
-At Meta, we are moving towards using live update on hypervisors whose
-VMs can't be migrated away first. We also want to preserve service fd
-stores across systemctl kexec.
+After a KHO kexec, the new kernel keeps the page holding the previous
+kernel's kexec metadata reserved for as long as it runs. It only needs
+the page once, since kho_in_kexec_metadata() copies the previous release
+and the kexec count out of it at boot, and nothing reads it again.
 
-Our kernel rollout is driven by health checks from each host. For
-example, an increase in rejected handovers or retrieval failures may be
-a reason to stop a rollout, and the bootmem size and sequence number
-help us understand what is happening on which hosts. The series exposes:
+Free it with kho_restore_free() once copying is complete.
 
-- how much memory KHO set aside
-- whether the new kernel accepted the incoming handover
-- whether LUO could give back the state that userspace handed over
+Fixes: 76aa46b9e404 ("kho: kexec-metadata: track previous kernel chain")
+Signed-off-by: Chris Down <chris@chrisdown.name>
+---
+ Documentation/admin-guide/mm/kho.rst |  4 +++-
+ kernel/liveupdate/kexec_handover.c   | 10 +++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-We expose these in sysfs so the collector can read them without opening
-/dev/liveupdate, which starts deserialisation, or depending on debugfs
-or the kernel log.
-
-I also noticed that the incoming kexec metadata page stays reserved
-after boot, so free it once its contents have been copied.
-
-Chris Down (9):
-  kho: Reclaim the metadata page left reserved after kexec
-  kho: Make bootmem reservations visible to fleet monitoring
-  liveupdate: Make failed retrieves distinguishable from dropped files
-  selftests/liveupdate: Catch incorrect file accounting across kexec
-  selftests/kho: Catch missing or zero bootmem reports before kexec
-  kho: Expose rejected handovers that look like cold boots
-  kho: Report how much handover memory is preserved and restored
-  liveupdate: Expose the sequence number for consecutive live updates
-  selftests/liveupdate: Check handover revival, sequence and memory
-    stats
-
- .../ABI/testing/sysfs-class-misc-liveupdate   |  56 ++++
- .../ABI/testing/sysfs-kernel-kexec-kdump      |  30 ++
- Documentation/admin-guide/mm/kho.rst          |  19 +-
- Documentation/userspace-api/liveupdate.rst    |   8 +
- MAINTAINERS                                   |   1 +
- include/linux/kexec_handover.h                |   3 +
- kernel/kexec_core.c                           |  26 +-
- kernel/liveupdate/kexec_handover.c            |  82 +++++-
- kernel/liveupdate/luo_core.c                  |  58 ++++
- kernel/liveupdate/luo_file.c                  |  16 +-
- kernel/liveupdate/luo_internal.h              |  34 +++
- kernel/liveupdate/luo_session.c               |   6 +
- tools/testing/selftests/kho/init.c            |  24 ++
- tools/testing/selftests/kho/vmtest.sh         |   1 +
- tools/testing/selftests/liveupdate/Makefile   |   1 +
- tools/testing/selftests/liveupdate/init.c     |   5 +
- .../selftests/liveupdate/luo_handover_stats.c | 258 ++++++++++++++++++
- .../selftests/liveupdate/run-vmtests.sh       |   1 +
- tools/testing/selftests/liveupdate/vmtest.sh  |   2 +
- 19 files changed, 624 insertions(+), 7 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-class-misc-liveupdate
- create mode 100644 tools/testing/selftests/liveupdate/luo_handover_stats.c
-
-
-base-commit: a0dc8eddbfdb6dd9c5c2b70eb66ab49cb1978425
+diff --git a/Documentation/admin-guide/mm/kho.rst b/Documentation/admin-guide/mm/kho.rst
+index 902d171a780a..f9d2cc5999ee 100644
+--- a/Documentation/admin-guide/mm/kho.rst
++++ b/Documentation/admin-guide/mm/kho.rst
+@@ -120,4 +120,6 @@ stabilized.
+ 
+ ``/sys/kernel/debug/kho/in/sub_fdts/``
+     Similar to ``kho/out/sub_fdts/``, but contains sub blobs
+-    of KHO producers passed from the old kernel.
++    of KHO producers passed from the old kernel. A blob disappears
++    once the kernel has read and freed it, as ``kexec-metadata`` does
++    during boot.
+diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec_handover.c
+index eeec298aa9d6..3046b89e5db4 100644
+--- a/kernel/liveupdate/kexec_handover.c
++++ b/kernel/liveupdate/kexec_handover.c
+@@ -1808,6 +1808,9 @@ static void __init kho_in_kexec_metadata(void)
+ 
+ 	pr_info("exec from: %s (count %u)\n",
+ 		kho_in.previous_release, kho_in.kexec_count);
++
++	kho_debugfs_blob_remove(&kho_in.dbg, metadata);
++	kho_restore_free(metadata);
+ }
+ 
+ /*
+@@ -1885,14 +1888,15 @@ static __init int kho_init(void)
+ 	if (err)
+ 		goto err_free_fdt;
+ 
++	if (fdt)
++		kho_in_debugfs_init(&kho_in.dbg, fdt);
++
+ 	err = kho_kexec_metadata_init(fdt);
+ 	if (err)
+ 		goto err_free_fdt;
+ 
+-	if (fdt) {
+-		kho_in_debugfs_init(&kho_in.dbg, fdt);
++	if (fdt)
+ 		return 0;
+-	}
+ 
+ 	for (int i = 0; i < kho_bootmem_cnt; i++) {
+ 		unsigned long base_pfn = PHYS_PFN(kho_bootmem[i].addr);
 -- 
 2.54.0
 
