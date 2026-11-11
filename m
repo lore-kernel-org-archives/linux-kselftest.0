@@ -1,107 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.245.243.92
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794439186;
-	b=vLGjlsN/yLi056IQmFF67Q1GnPEawuOMDFfL8q+IIFpK23m97j7JBqeg1L6p5KGHjqXc
-	 +m18KzkXGKMgeO1IBuS1cYaboCh30jQMNtFjSrJWjeLGuixOk8DbfkdVbwXIjYWXsnQhy
-	 f1n7DdzytwFxU2ndjT5yfiNP95fyyBdJUX7uzNPaFD99R0DKMeVdfUNumpYlFjJiCNPSb
-	 ri1K5YmfkacUOoLZwE8eFjhlclAyZ5pDUUocXqgyJQkcIEiZM5Tv0xvptbYbTRb2EFwPD
-	 xGJsOjdyXnuRBkOEVr5k1ZurAvXIgvRHmI9Ww6R4lL21pmv4gmSNTT+ieuru3/pZtCg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794439186;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=NcCiWMGAG/KcYeA/c2y5e8aTtWFVROWmHzpV73vYmEA=;
-	b=hTGs8bVIMzN6bSdj87VOox4hFZzMQizjz0Qz/iVjWAJjiuCXy3EgG1kqG+ycGRWv3HeJ
-	 2ziAl3kbBIKcV02QNvnZgRbuHAlgQ+EuCq0jwohVnEZCpAX5MZo6XR9jllQviU4SJHl4I
-	 087c5A27oznG5sUU0330O1btT/kK6L0OT21IyMRBwiJtep7/DeDkdeHBZj1abuqJF+QXR
-	 H+3WwVdM9ZKQBHdYbV3e7v8z6Z1Bvncdw7THlR+aaJPfOoDZwKXlHMmONfGs4UwVf3rit
-	 hs4YgDB74joX9a3suM6tv6fp32DrmfTfcHUujHW0rKZ73mXGBvtZF0Gu/jHoPAg1PHw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=IGyO4tUN;
-	arc=none smtp.remote-ip=44.245.243.92
-Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794439396;
+	b=rqHASKe8SYgBae/+3gO5ewGUmkpsxJhzPpR8gAjKBgQx/9Rpb7p/9YWPHQYMNVdm+3QY
+	 sEc9xMO/s4/9s2SME9NpVUxFhzIzJccSPHKR1w7IsEoGKJf7XDMa0vd4T0eho32dALgwF
+	 jJjdJRF1jTKTnQSyTKEsv5ITOMlS/7B7s7kydIF7PeaWWhmaNE+gXq4SEdq9XXmirqgb6
+	 p4NgFmSsEW4MIM4jVHVyEu5Xw+76EAzCUgTRbgmadIV4G8pMK6IHMEKB2kZ738zjSghet
+	 MBqsNA1d1r/Qau28m1qtihwJ2osEsnEQvoZn0Q6eiVuJxrVrS6ahE7Qj63G5e6YLQQw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794439396;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=zE4AdyJ1+yT1NztSJ3PyUf+wR+cmqR5P4rzXtjdrpsY=;
+	b=b0EpCjFRZkLbCWxoETqHHfXkjI5gqKW0+v03KTEISk/07P9cQssA3sIK3RuSmw/fcrXX
+	 CLLcINSAVZp6W7MPsn4W7xsufU6lMi0WprqUpguQ2W8nGagqC6pz7YIur3LpYQ7CwibXY
+	 UtiPm0Nk2QLOH8/srA+n0njL77gY6Z07TSuQ9EDaE9rLJe6+qd5LhBrnhADHvBGCmdeGB
+	 F9ctYQS30QYMOgvkD7Db1JHJI+EZo+YHsNt2GjqgwFwbdybnkHPY3eL7aSvsyB4+qJsLn
+	 Wmxds0s9rywOmy1fNYbfIzI5cs2FUvKQjp1rCcHhcFD42jKVVVCVQ6F/8mtdTp9PARA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ebl8P1Hp;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F326F606A321;
-	Wed, 11 Nov 2026 23:19:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F326F606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5CC606A31C;
+	Wed, 11 Nov 2026 23:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=IGyO4tUN
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794439185; x=1825975185;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NcCiWMGAG/KcYeA/c2y5e8aTtWFVROWmHzpV73vYmEA=;
-  b=IGyO4tUNNamfqJNlGdZY459Ybc1udO70iDVM97rAWz+fhCa2UMfU8x+T
-   rFs4bcLhNIRn6IyQSsFO7y3wvH23hhA7+T6fEBAu9u6Q4QRN4yjmr85b4
-   NBxxgYv1iy3ouAu+m4FGC5oxqNkYq41ebvT1MjyMHse5qABRv+f3RbLal
-   Qg9QVD6TYgFUle/oaKmzCi7OL0Qtqr5Y9tZYjXwn5B2fcrnVn6C6r4h86
-   6fbXD5Xi8SeA/PcKniFYePT7LujIIBDF1sJ5DmWOkVR9Okn9uWdowFL8I
-   cx8UgnDrBUkJrYaPvo9pK7OpwovPFQwCTsl+l0uaxmpFzwKzWWniS9Xmy
-   g==;
-X-CSE-ConnectionGUID: 6zDr3jFwQyKdSmvl3eZr3Q==
-X-CSE-MsgGUID: SFQQkNPQRoqkURot+YmiOw==
-X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
-   d="scan'208";a="33275423"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 23:19:43 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:7426]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.5.141:2525] with esmtp (Farcaster)
- id 976397fa-12de-4c16-a3e5-30f8dd11ed40; Wed, 11 Nov 2026 23:19:43 +0000 (UTC)
-X-Farcaster-Flow-ID: 976397fa-12de-4c16-a3e5-30f8dd11ed40
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 11 Nov 2026 23:19:42 +0000
-Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
- (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
- 23:19:42 +0000
-Date: Wed, 11 Nov 2026 23:19:37 +0000
-From: David Keogh <dkeogh@amazon.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
-	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
-	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
-	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
-	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
-	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
- Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
-	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
-	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
- Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
-	<nh-open-source@amazon.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
-Message-ID: <avT4CezZCiRhvCXw@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
- <20261108190831.3f991a13@phoenix.local>
- <20261109154909.32748-1-tianyi@cloudflare.com>
- <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
- <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
- <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ebl8P1Hp
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794439396;
+	b=dG16uP+DVgoc0xh7+xxhbKc3Ep79FfAmAvu2dUiqgFqwKcz/TLlHndqsJsmX3JlsmpPn
+	 edBfox1udBD0OUSWNHQFJWq4V41W4VwW7bVBBK4l6vt3YOv5FhgaIXdeF7JLBEnxalW4Y
+	 9JDlhnvIzFxoMzUPtfNrslFKB0dC1ZVtu4ynp8zkHSldyIS8n9fB/goW5GGeCy60MVEk5
+	 amzx+N1p5T95TkcKqGdnb943gV35d9oN3R6uDKW1xXixDcTzdKdOorhrI/iZk2lyzoOpL
+	 ll5o/wajTKr0bWITQwKZxtZexjghdd7MP3NAVR0DkmJCoLkRaZxJP/Okp8mKDAp2oXg==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794439396;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=zE4AdyJ1+yT1NztSJ3PyUf+wR+cmqR5P4rzXtjdrpsY=;
+	b=tNmyOQjbq5tPqV48IZxZgVKNUKO5QhIcogu1omu+Lsq/11FeMgcDa+FXoTjI1uMI1Egq
+	 VAwqXoF+/JlTbR+ot1ye32Ak+OZZk6LulDCL6FhvC9lKto9LGNkMv+c9if7oiEXFh45nT
+	 VBnd8Fubm98mQNmXsI8Njqx7bfVj0hg/CmLrrPjpSivCkpsxJd+1sfO0yBJ7PcNSmY8WN
+	 jWAOS4nz+NKXzjmJOznaDNZ9Uv2H4BhNZ4Jf7RRlrcKRDdE+2yyXScHrDXTIA88q+jdth
+	 tMMMf7lDdJA0H85yB+dBKkUcRYOoc/sgJWVYk9rwoAKzJOJBO97M9iNQ3qGO7DSCdtQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 762B11F00A05;
+	Wed, 11 Nov 2026 23:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794439396;
+	bh=zE4AdyJ1+yT1NztSJ3PyUf+wR+cmqR5P4rzXtjdrpsY=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=ebl8P1HpraNn40FLfpgT+Lj69xbIQoBguHHHiLjbxho7unXpae2j8h3WXfDTgI3sS
+	 PVUEXi6ry2rXoXLhh8dDIzVePPf8Lt0qctxxJ/Ll1Bpy279g+walCsirXdwS6WGNug
+	 /C+flCM3iN3pvE98LwRglpwPxKbcqwZgSfE5q2JQ83KUpvdJ3Kmzp/2gaht2VRdmxZ
+	 +q11UVj7f2auiAnIWYlNaWgzx0T/IkutIoa3Pbd/Y1AyD+YKtnAi6SQ9Bf9v3Wsl4z
+	 l3DEWBYinJ/1ZRBJAVJbvlWnBqJYxg5SKbCVBc5bjEFWN+rbbgP9aU+83izumQJzHr
+	 +h5uUnWXYt1xA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id C04C44916C;
+	Wed, 11 Nov 2026 23:23:14 +0000 (UTC)
+From: =?utf-8?q?Tom=C3=A1s_Senart_via_B4_Relay?= <devnull+ts.perfloop.ai@kernel.org>
+Date: Thu, 12 Nov 2026 00:23:13 +0100
+Subject: [PATCH] mm: zswap: honor zero cgroup limits after successful
+ reclaim
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,48 +83,268 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com>
-X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261112-zswap-zero-limit-v1-1-19f33081b09e@perfloop.ai>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/yWMwQ6CMBBEf4Xs2U0A00b9FeOhLYuswUJ2AQmEf
+ 7fVub3JzNtBSZgUbsUOQgsrDzFBdSogdC4+CblJDHVZ2yoFN/24ETeSAXt+84TOmEt7vtrSNgb
+ SbRRqef0p748/6+xfFKbsyQvvlNCLi6HLVc9xXjGXcBxfTwK4rJEAAAA=
+X-Change-ID: 20261111-zswap-zero-limit-a558f39606d5
+To: akpm@linux-foundation.org, yosry@kernel.org, hannes@cmpxchg.org, 
+ nphamcs@gmail.com
+Cc: roman.gushchin@linux.dev, tj@kernel.org, chengming.zhou@linux.dev, 
+ mkoutny@suse.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ mhocko@kernel.org, shakeel.butt@linux.dev, muchun.song@linux.dev, 
+ cerasuolodomenico@gmail.com, linux-kselftest@vger.kernel.org, 
+ shuah@kernel.org, cgroups@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794439392; l=8065;
+ i=ts@perfloop.ai; s=linux-zswap-send; h=from:subject:message-id;
+ bh=hFoFA37/xPMSR9gx/RxcnOaVQHs9U2AHzWcDrxEi6Ls=;
+ b=KH9964zzP1eOc4pd4uA+hh/AtHL3SDkaaIbkZR1HDNd7DnO/Opx+CWiMuhnE9oRrNEze3lj5z
+ 3pw2bW4hYupBF1Ql+ufpYl/jifbVbje1YooETPBo6snUJ/2u43gd4+F
+X-Developer-Key: i=ts@perfloop.ai; a=ed25519;
+ pk=b+DBayzsW8pO9vRMlsrjlegfP4eogiqFEXM4mEKusH8=
+X-Endpoint-Received: by B4 Relay for ts@perfloop.ai/linux-zswap-send with
+ auth_id=1492
+X-Original-From: =?utf-8?q?Tom=C3=A1s_Senart?= <ts@perfloop.ai>
+Reply-To: ts@perfloop.ai
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 11, 2026 at 09:41:32PM +0000, Tianyi Gao wrote:
-> My current plan is that the kernel reads the tag only from the program
-> that is attached with tcx. One way to use it is for the loader to tag
-> the head with the largest headroom that any program in the chain can
-> push. The tag describes the whole chain, so it does not matter that
-> the head pushes no headers itself. When the loader replaces the head,
-> the new head carries the tag and the kernel reads it again.
+From: Tomás Senart <ts@perfloop.ai>
 
-Thanks, that works for us.
+Commit a65b0e7607cc ("zswap: make shrinking memcg-aware") lets a store
+proceed after a successful cgroup reclaim. That also lets a cgroup
+whose memory.zswap.max was lowered to zero replace an old entry with a
+newly compressed page, although zswap is disabled for that hierarchy.
 
-> By the way, I plan to support tcx only in this series. A tcx program
-> is attached to one device, so the kernel knows which device to update
-> on attach. A cls_bpf filter can sit in a tc block that is shared by
-> several devices, which is harder to handle.
+Check for a zero limit again after a successful reclaim, before
+compression. Use a zero-only hierarchy check rather than repeating
+obj_cgroup_may_zswap(): a nonzero limit must still allow replacing cold
+entries even when one reclaim batch leaves usage above the limit. Keep
+the existing reference release and stale-entry invalidation paths.
 
-tcx only is fine with us. Our chain is attached with cls_bpf today.
-Rather than move it, the simplest option for us is a separate tcx
-program on each device that carries only the tag and returns
-TCX_NEXT, so the existing tc chain still runs after it. A few
-questions so we can check that this works with v2:
+Add a regression test to the cgroup zswap selftests. It seeds an old
+entry, lowers either the leaf or the ancestor limit to zero, and pages
+out fresh memfd pages. It counts written-back entries as well as
+retained ones and verifies the data on readback. The test fails without
+this change and passes with it, and the other test_zswap tests still
+pass.
 
-1. Is the tag read for programs attached with BPF_PROG_ATTACH as well
-   as with BPF_LINK_CREATE? "bpftool net attach tcx_egress" uses
-   BPF_PROG_ATTACH, so a startup script could do the whole setup
-   without keeping a link pinned.
+Limit updates that race with a store remain non-atomic. This change
+does not make nonzero limits exact.
 
-2. When several programs are attached at the same tcx hook, is the
-   value the largest tag among them, and is it recomputed when one of
-   them is detached or replaced?
+The problem was found, and the fix, the test and this changelog were
+drafted, by Perfloop, an AI coding agent.
 
-3. What is the exact form of the tag: which BTF element it must be
-   attached to, and the string format? It would help to have that
-   documented, since programs will depend on it.
+Fixes: a65b0e7607cc ("zswap: make shrinking memcg-aware")
+Assisted-by: Perfloop Agent <agent@perfloop.ai>
+Signed-off-by: Tomás Senart <ts@perfloop.ai>
+---
+Tested with the cgroup zswap selftests (tools/testing/selftests/cgroup/
+test_zswap) in QEMU with TCG only, not on hardware. The patch also
+applies cleanly to mm-new.
+---
+ include/linux/memcontrol.h                  |   5 ++
+ mm/memcontrol.c                             |  17 +++++
+ mm/zswap.c                                  |   2 +-
+ tools/testing/selftests/cgroup/test_zswap.c | 101 ++++++++++++++++++++++++++++
+ 4 files changed, 124 insertions(+), 1 deletion(-)
 
-4. Is there an upper bound on the value, and is a larger value
-   rejected at attach time with an error, or clamped?
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 69e1bcc67..948bc5b1b 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1944,11 +1944,16 @@ static inline void mem_cgroup_calculate_protection_path(struct mem_cgroup *root,
+ #endif
+ 
+ #if defined(CONFIG_MEMCG) && defined(CONFIG_ZSWAP)
++bool mem_cgroup_zswap_disabled(struct mem_cgroup *memcg);
+ bool obj_cgroup_may_zswap(struct obj_cgroup *objcg);
+ void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size);
+ void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size);
+ bool mem_cgroup_zswap_writeback_enabled(const struct mem_cgroup *memcg);
+ #else
++static inline bool mem_cgroup_zswap_disabled(struct mem_cgroup *memcg)
++{
++	return false;
++}
+ static inline bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+ {
+ 	return true;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 84f4a8fd4..448955327 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6267,6 +6267,23 @@ static struct cftype swap_files[] = {
+ };
+ 
+ #ifdef CONFIG_ZSWAP
++/**
++ * mem_cgroup_zswap_disabled - check if a zero limit disables zswap
++ * @memcg: the memory cgroup
++ *
++ * Unlike obj_cgroup_may_zswap(), this ignores nonzero limits so that reclaim
++ * can replace cold entries even if usage is still above a nonzero limit.
++ */
++bool mem_cgroup_zswap_disabled(struct mem_cgroup *memcg)
++{
++	for (; !mem_cgroup_is_root(memcg);
++	     memcg = parent_mem_cgroup(memcg))
++		if (!READ_ONCE(memcg->zswap_max))
++			return true;
++
++	return false;
++}
++
+ /**
+  * obj_cgroup_may_zswap - check if this cgroup can zswap
+  * @objcg: the object cgroup
+diff --git a/mm/zswap.c b/mm/zswap.c
+index ae19e301f..60a725680 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -1542,7 +1542,7 @@ bool zswap_store(struct folio *folio)
+ 	objcg = get_obj_cgroup_from_folio(folio);
+ 	if (objcg && !obj_cgroup_may_zswap(objcg)) {
+ 		memcg = get_mem_cgroup_from_objcg(objcg);
+-		if (shrink_memcg(memcg)) {
++		if (shrink_memcg(memcg) || mem_cgroup_zswap_disabled(memcg)) {
+ 			mem_cgroup_put(memcg);
+ 			goto put_objcg;
+ 		}
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index d50acc1b8..7632aadd8 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -22,6 +22,7 @@ static int page_size;
+ #define PATH_ZSWAP_ENABLED "/sys/module/zswap/parameters/enabled"
+ #define PATH_ZSWAP_SHRINKER_ENABLED "/sys/module/zswap/parameters/shrinker_enabled"
+ #define PATH_ZSWAP_STORED_PAGES "/sys/kernel/debug/zswap/stored_pages"
++#define PATH_ZSWAP_WRITTEN_BACK_PAGES "/sys/kernel/debug/zswap/written_back_pages"
+ 
+ static int read_int(const char *path, size_t *value)
+ {
+@@ -244,6 +245,105 @@ static int test_swapin_nozswap(const char *root)
+ 	return ret;
+ }
+ 
++/* Lowering the limit must also stop stores when old entries can be reclaimed. */
++static int pageout_zero_limit(const char *cgroup, void *arg)
++{
++	const char *limit_group = arg;
++	size_t stored_before, stored_after, wb_before, wb_after;
++	size_t size = 3 * page_size;
++	int fd, ret = -1;
++	char *mem;
++
++	fd = memfd_create("zswap_max_zero", 0);
++	if (fd < 0)
++		return -1;
++	if (ftruncate(fd, size))
++		goto out_close;
++	mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	if (mem == MAP_FAILED)
++		goto out_close;
++	for (int i = 0; i < size; i++)
++		mem[i] = 'a' + i / page_size;
++
++	if (get_zswap_stored_pages(&stored_before))
++		goto out;
++	if (madvise(mem, page_size, MADV_PAGEOUT))
++		goto out;
++	if (get_zswap_stored_pages(&stored_after))
++		goto out;
++	if (stored_after != stored_before + 1) {
++		ksft_print_msg("Failed to seed an old zswap entry\n");
++		goto out;
++	}
++	stored_before = stored_after;
++	if (read_int(PATH_ZSWAP_WRITTEN_BACK_PAGES, &wb_before))
++		goto out;
++	if (cg_write(limit_group, "memory.zswap.max", "0"))
++		goto out;
++
++	/* The first attempt can give the old entry a second chance. */
++	for (int i = 1; i < 3; i++)
++		if (madvise(mem + i * page_size, page_size, MADV_PAGEOUT))
++			goto out;
++
++	if (get_zswap_stored_pages(&stored_after))
++		goto out;
++	if (read_int(PATH_ZSWAP_WRITTEN_BACK_PAGES, &wb_after))
++		goto out;
++	/* Writing back old entries must not hide newly admitted entries. */
++	if (stored_after + wb_after != stored_before + wb_before) {
++		ksft_print_msg("New zswap entry after setting memory.zswap.max to zero\n");
++		goto out;
++	}
++	for (int i = 0; i < size; i++) {
++		if (mem[i] != 'a' + i / page_size) {
++			ksft_print_msg("Invalid data after zero-limit pageout\n");
++			goto out;
++		}
++	}
++	ret = 0;
++out:
++	munmap(mem, size);
++out_close:
++	close(fd);
++	return ret;
++}
++
++static int test_zswap_max_zero(const char *root)
++{
++	char *group = NULL, *child = NULL;
++	int ret = KSFT_FAIL;
++
++	if (access(PATH_ZSWAP_STORED_PAGES, R_OK) ||
++	    access(PATH_ZSWAP_WRITTEN_BACK_PAGES, R_OK))
++		return KSFT_SKIP;
++	if (cg_read_strcmp(root, "memory.zswap.writeback", "1"))
++		return KSFT_SKIP;
++
++	group = cg_name(root, "zswap_max_zero_test");
++	if (!group || cg_create(group))
++		goto out;
++	if (cg_run(group, pageout_zero_limit, group))
++		goto out;
++
++	if (cg_write(group, "memory.zswap.max", "max"))
++		goto out;
++	if (cg_write(group, "cgroup.subtree_control", "+memory"))
++		goto out;
++	child = cg_name(group, "child");
++	if (!child || cg_create(child))
++		goto out;
++	if (cg_run(child, pageout_zero_limit, group))
++		goto out;
++	ret = KSFT_PASS;
++out:
++	cg_destroy(child);
++	free(child);
++	cg_destroy(group);
++	free(group);
++	return ret;
++}
++
+ /* Simple test to verify the (z)swapin code paths */
+ static int test_zswapin(const char *root)
+ {
+@@ -824,6 +924,7 @@ struct zswap_test {
+ } tests[] = {
+ 	T(test_zswap_usage),
+ 	T(test_swapin_nozswap),
++	T(test_zswap_max_zero),
+ 	T(test_zswapin),
+ 	T(test_zswap_writeback_enabled),
+ 	T(test_zswap_writeback_disabled),
 
-Thanks,
-David
+---
+base-commit: b3dfbde62cf1981c4638939c159dfd087b7a72e9
+change-id: 20261111-zswap-zero-limit-a558f39606d5
+
+Best regards,
+--  
+Tomás Senart <ts@perfloop.ai>
+
+
