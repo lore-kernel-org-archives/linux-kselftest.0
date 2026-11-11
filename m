@@ -1,89 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.203
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794361346;
-	b=BF+K4PIyvVU6njr2T512Qg1Pal2VI0GJmOuauwAqEFV/Az6HUX/vnJqeoKHUJOLuUvHw
-	 yWuyVeagjBjpncBOjziaykpjDRimPl3vqztxGMPUBJiCzEcTfS7xzglTu+AWEY8Sr35Pl
-	 07LaRPOTSlcJtKk/gTa8wa3mFM9CGvLD3QS6i52gYM/RKNBFHgq59t5+NZTJsVVgDIbDg
-	 PbbXTBAPKV6BdRnPoTa2lMeLyBu1vqxKE3EqNsl9qI9WMH3qdfkVE7oZYZsTo7npHNFRt
-	 5KN1LYTvoOgysO6LWrPUhrLTQVZu1+SKUIMYPh8ot4YGytPzLZ9Yq8yrM0tdeUYCN3w==
+	t=1794362328;
+	b=iw/tCIMxQh16WIo6oPoC2rmrPc66g6zu/QDuhxHEU2B+AprWSnevpB2N+MuL6tn7jnLX
+	 /5iF664pjkfs6PVc+NNmwPqqgFw1HMsrR2CEi2OSuNiOHpklt4Recr4mOnGIu6ScCAVte
+	 BpD+lHCSL/6sBDaaRGgyKXq6VYKHYNgRzwpPwmLlTbPShM29Exvi1lcdgo3Vn2q6CS3/1
+	 ZQwBVJinQqkNIQoqb30OEdxaeLZmyblREC6236bnQgECUs0Kr9z9F1ogL8UphpO8QzR1P
+	 rP8lPtn7s0CEOj2y5g9uornss/zYs+Bhhha09noRcYxckdwDsYn/6NPkLvpeXQUfbbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794361346;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=1igh788IQLwPz3DR7AVGS8JvvpyJQ+HdANua38KjIzY=;
-	b=KHrvPtBUFGeokE8ATR3Em0IKEVuxMPM5EiXb44hGoQzR0cUKDcQddo1LtGsmkDuvc6Oj
-	 V9aoDkTu48XmAWB50PR2rbxE5wf1w0sM0H+GSG9nLwSq/A+gOScZKV6RzDv1BEUTyaFi2
-	 CK7TiDt4kTAxQR1o+T/K8CbkTILs/YCToFOdA6HOwV9LcbBJG5g/jPKfj+ssQeSlx0OAu
-	 H2q7z9Ov57ynJswequ2FYoLUjELzQG8Vuk4jbT60gzMGBDsYlcZ4AKoQxgylCE8blrtYo
-	 7CxJfur/s0iCQpm0HXas8gYXGy73kF7c8PDkBKSoQwcuFWTRbaMWqoF8D0SNjqIv/EQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794362328;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=qklwpoi6qq8nTgE1PW1qeUUVEPXIPv2nahyGGJhDRsw=;
+	b=3Ib8sRw4Jrlcl6SXZYf0TS/f1Uc+5dRpbI8z1G+RfS6jXQk1vu6u3mhFxvNr1R5MrqR2
+	 buzFl6HMRSHwOedN3dPAabMPIlGCHQMETDB+Xw3V9a5x3yla6bsYNjsRiS4T12x/cvOh6
+	 bxOJ7kVoMgjcsPGWuv5B0TDFWOXjtdTOzg3hBpeXczNQOltsLA0JPXs/7C8t25/laNobx
+	 V+cR6BTXXV+3D4Iu+wXEJdAdXGWeTEsotC3jCvv5kAJIYKV3/vBy5S25nI522eetooDpa
+	 d0+h9P4rhAE3S6pBbzP1cZ7gIGXT9kvQuWRvjS/tp6iwLZuGlYuXKjrQ6VVcxoLLWrA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=PBHTJhQK;
-	arc=none smtp.remote-ip=195.10.208.50
-Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UTTBV+EI;
+	arc=none smtp.remote-ip=95.215.58.203
+Received: from mta1.migadu.com (out-203.mta1.migadu.com [95.215.58.203])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC5D606A33F;
-	Wed, 11 Nov 2026 01:42:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9DC5D606A33F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF3F606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 01:58:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EF3F606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=PBHTJhQK
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4jPR8m1zG9z9tfj;
-	Wed, 11 Nov 2026 02:42:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1794361336;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1igh788IQLwPz3DR7AVGS8JvvpyJQ+HdANua38KjIzY=;
-	b=PBHTJhQK05SMxV0Gzcobvjg2RLAyCzPG9Tj8tRE4nsngQThZ/Kj3UJYCeo/+gv1CM7TMKe
-	ztXlVL+Ei5SMuixxIWp46X2yQWxzrDvYNKh2nzLo9EnvYSOVybiG8dXoR1RR5a1MGNWz6Y
-	9VEdklDWkSB1dylgZPcfJFWXE68V7rgD5+giZImlT4vJcu92x1uVDxdn23Iru3QdIfgNqx
-	HdU8S9YWWxl6Y0ntm1hSCorzUEBRc4Go3XE02k18vqPkg41u2Zs2Bg6/m515f8CQQxuP+v
-	qKWtJBqojp6WOH2ggjFXAOBZv9u0jQcm2yHk/Pk8qIbNCo4F7l8688KIT+tKuw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
-From: Antonio Quartulli <antonio@mandelbit.com>
-To: willemdebruijn.kernel@gmail.com,
-	jasowangio@gmail.com
-Cc: Antonio Quartulli <antonio@mandelbit.com>,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	mst@redhat.com,
-	eperezma@redhat.com,
-	shuah@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	maheshb@google.com,
-	peterpenkov96@gmail.com,
-	netdev@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net v5 1/2] tun: bound the NAPI receive queue
-Date: Wed, 11 Nov 2026 02:42:02 +0100
-Message-ID: <20261111014208.1795777-2-antonio@mandelbit.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261111014208.1795777-1-antonio@mandelbit.com>
-References: <20261111014208.1795777-1-antonio@mandelbit.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=UTTBV+EI
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=kn3s5jPUjfCWATljI2U5Ha05zn+bxfjQnlH9S4hueak=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794362324; v=1; x=1794967124;
+ b=UTTBV+EIoTyq6szgGRQsYYKgNK9FTPxsWWKuqE1liETgQIf0h7nR4tcV+jiXm477q4sEfpP+
+ 7AcnZZ5qRT5xbvaxPz8K+mByDAwKJFjXiE3nC6wBfmO4Vzj96zpMu5ZVJ5dwcyE8Qx1iCULWzka
+ 4uzTSxt1ifYFJ8BvMRjGc9Ck=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 31c899d3efa8a9fc;
+	Wed, 11 Nov 2026 01:58:44 +0000
+X-Mizu-Trace-ID: 31c899d3efa8a9fc
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 11 Nov 2026 09:58:32 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Breno Leitao <leitao@debian.org>
+Cc: Gustavo Luiz Duarte <gustavold@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net] selftests: netconsole: enable the targets created by
+ the torture test
+Message-ID: <avPLyMTFkhCRqRAS@fedora>
+References: <20261110-netcons_selftest_fix-v1-1-86643b837216@debian.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,177 +70,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jPR8m1zG9z9tfj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110-netcons_selftest_fix-v1-1-86643b837216@debian.org>
 
-With IFF_NAPI, tun_get_user() queues every written packet for NAPI on
-an unbounded list. When the poll runs asynchronously (threaded NAPI)
-and is slower than the writer, the queue grows until the system runs
-out of memory. An unprivileged user can do this from its own user and
-network namespaces, and the queued skbs are not charged to its memcg:
-in a test VM, a uid 1000 process limited to 128 MB caused a global OOM
-in ~6 seconds. The socket send buffer cannot bound this: tun sets it to
-INT_MAX, and the build_skb() and XDP batch paths do not check it.
+Hi Breno,
+On Tue, Nov 10, 2026 at 04:32:25AM -0800, Breno Leitao wrote:
+> create_and_delete_random_target() is meant to create, enable and remove
+> targets while messages are sent, but it only creates and removes them.
+> The helper it calls, _create_dynamic_target(), stopped enabling the
+> target when the bonding test moved that step into
+> create_dynamic_target().
+> 
+> Enable the targets again, so they come up while messages flow and are
+> disabled before being removed. Like toggle_netcons_target(), ignore a
+> failed enable, which would otherwise end the function and leave the
+> targets behind. With a console per target, this also registers and
+> unregisters their consoles under load.
+> 
+> Fixes: 236682db3b6f ("selftest: netcons: add test for netconsole over bonded interfaces")
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+> index 33a44adb6f8f3a..3dfab0bf1b0756 100755
+> --- a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+> +++ b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+> @@ -46,6 +46,7 @@ create_and_delete_random_target() {
+>  
+>  		# Basic population so the target can come up
+>  		_create_dynamic_target "${FORMAT}" "${RND_TARGET_PATH}"
+> +		echo 1 > "${RND_TARGET_PATH}"/enabled 2> /dev/null || true
+>  	done
+>  
+>  	echo "netconsole selftest: ${COUNT} additional targets were created" > /dev/kmsg
+> 
+> ---
+> base-commit: b3dfbde62cf1981c4638939c159dfd087b7a72e9
+> change-id: 20261110-netcons_selftest_fix-4cbf633295ef
+> 
+> Best regards,
+> --  
+> Breno Leitao <leitao@debian.org>
+> 
 
-Drop packets once more than netdev_max_backlog of them are queued, like
-enqueue_to_backlog() does, and count them as rx_dropped, before
-allocating and copying them. This covers write(), sendmsg() and the
-batches of XDP buffers vhost-net passes to tun_sendmsg(), which share
-the queue. Zerocopy buffers of dropped packets are completed. The check
-is lockless, so concurrent writers can each still add one packet.
+Ignore the failed enable makes sense to me, as we enabled `set -e`
+and use random target. Do we need sleep 1s like create_dynamic_target()
+to make sure the configuration loaded?
 
-The NAPI poll moved the whole queue out, processed up to its budget and
-put the rest back: while it ran, the queue looked empty to writers, so
-with the poll on another CPU the backlog could still grow without limit.
-Take at most budget packets instead, so that the queue never looks
-emptier than it is.
-
-Dropping because the queue is full also schedules NAPI. vhost-net sends
-with MSG_MORE while it has more packets, and tun_get_user() schedules
-NAPI only after the last one or once more than NAPI_POLL_WEIGHT are
-queued. With a netdev_max_backlog below that, the queue would not drain
-until vhost-net ran out of packets; with zerocopy, vhost-net never
-would, as it stops sending when too many queued buffers are pending.
-
-Reproducer, as an unprivileged user in a new user and network
-namespace, without kernel modifications or fault injection:
-  ip tuntap add t0 mode tun; ip addr add 10.11.0.1/24 dev t0
-  ip link add d0 type dummy; ip addr add 10.20.0.1/24 dev d0
-  ip link set t0 up; ip link set d0 up; sysctl net.ipv4.ip_forward=1
-  install ~500 iptables FORWARD rules and a MASQUERADE rule on d0
-  open t0 with IFF_TUN | IFF_NO_PI | IFF_NAPI
-  echo 1 > /sys/class/net/t0/threaded
-  write() 1400-byte IPv4 packets for 10.20.0.2 in a loop
-
-Tested in an x86-64 VM with 1 and 2 vCPUs: with the reproducer running
-for 15 seconds, with 1400 to 65000-byte packets, memory use stays flat
-and the forwarding rate is unchanged; the tun kselftest passes, as it
-does without the patch; and the tun_vhost kselftest added by the next
-patch, which drives the vhost-net batch, copy and zerocopy paths,
-passes, while it fails without the patch.
-
-Still open: the limit counts packets rather than bytes and applies per
-queue, so with large packets and many queues (IFF_MULTI_QUEUE works in a
-user namespace too) the queued skbs, which are not charged to the
-writer's memcg, can still add up to an OOM. This is hard to reach in
-practice: with large packets the writer's copy is slower than the NAPI
-poll, so the queue does not fill. With 64 KB writes the reproducer never
-reached the limit and memory use stayed flat.
-
-Found while analysing the performance of the tun write path, and tested,
-with the help of an AI coding assistant (Claude Code).
-
-Fixes: 943170998b20 ("tun: enable NAPI for TUN/TAP driver")
-Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
----
- drivers/net/tun.c | 59 ++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 51 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index dcec7311e601..396e4295589f 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -58,6 +58,7 @@
- #include <linux/nsproxy.h>
- #include <linux/virtio_net.h>
- #include <linux/rcupdate.h>
-+#include <net/hotdata.h>
- #include <net/net_namespace.h>
- #include <net/netns/generic.h>
- #include <net/rtnetlink.h>
-@@ -227,6 +228,16 @@ struct veth {
- static void tun_flow_init(struct tun_struct *tun);
- static void tun_flow_uninit(struct tun_struct *tun);
- 
-+/* In IFF_NAPI mode written packets wait in the tfile's sk_write_queue for the
-+ * NAPI poll, which may run later in a kthread or ksoftirqd. Bound that queue
-+ * like the per-CPU backlog of netif_rx().
-+ */
-+static bool tun_napi_queue_full(const struct sk_buff_head *queue)
-+{
-+	return skb_queue_len_lockless(queue) >
-+	       READ_ONCE(net_hotdata.max_backlog);
-+}
-+
- static int tun_napi_receive(struct napi_struct *napi, int budget)
- {
- 	struct tun_file *tfile = container_of(napi, struct tun_file, napi);
-@@ -237,21 +248,24 @@ static int tun_napi_receive(struct napi_struct *napi, int budget)
- 
- 	__skb_queue_head_init(&process_queue);
- 
-+	/* Take at most budget skbs, so that the queue never looks emptier to
-+	 * writers than it is.
-+	 */
- 	spin_lock(&queue->lock);
--	skb_queue_splice_tail_init(queue, &process_queue);
-+	if (skb_queue_len(queue) <= budget) {
-+		skb_queue_splice_tail_init(queue, &process_queue);
-+	} else {
-+		while (skb_queue_len(&process_queue) < budget &&
-+		       (skb = __skb_dequeue(queue)))
-+			__skb_queue_tail(&process_queue, skb);
-+	}
- 	spin_unlock(&queue->lock);
- 
--	while (received < budget && (skb = __skb_dequeue(&process_queue))) {
-+	while ((skb = __skb_dequeue(&process_queue))) {
- 		napi_gro_receive(napi, skb);
- 		++received;
- 	}
- 
--	if (!skb_queue_empty(&process_queue)) {
--		spin_lock(&queue->lock);
--		skb_queue_splice(&process_queue, queue);
--		spin_unlock(&queue->lock);
--	}
--
- 	return received;
- }
- 
-@@ -1856,6 +1870,24 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 			zerocopy = true;
- 	}
- 
-+	/* NAPI queue full: drop before allocating, and schedule NAPI, which a
-+	 * MSG_MORE sender may not have done yet. Lockless: concurrent writers
-+	 * can each still add one.
-+	 */
-+	if (tfile->napi_enabled &&
-+	    unlikely(tun_napi_queue_full(&tfile->sk.sk_write_queue))) {
-+		local_bh_disable();
-+		napi_schedule(&tfile->napi);
-+		local_bh_enable();
-+		if (msg_control) {
-+			struct ubuf_info *uarg = msg_control;
-+
-+			uarg->ops->complete(NULL, uarg, false);
-+		}
-+		dev_core_stats_rx_dropped_inc(tun->dev);
-+		return total_len;
-+	}
-+
- 	if (!frags && tun_can_build_skb(tun, tfile, len, noblock, zerocopy)) {
- 		/* For the packet that is not easy to be processed
- 		 * (e.g gso or jumbo packet), we will do it at after
-@@ -2561,6 +2593,17 @@ static int tun_xdp_one(struct tun_struct *tun,
- 		return -EIO;
- 	}
- 
-+	/* NAPI queue full: drop, and schedule NAPI so that it drains even if
-+	 * nothing in this batch gets queued
-+	 */
-+	if (tfile->napi_enabled &&
-+	    unlikely(tun_napi_queue_full(&tfile->sk.sk_write_queue))) {
-+		napi_schedule(&tfile->napi);
-+		put_page(virt_to_head_page(xdp->data));
-+		dev_core_stats_rx_dropped_inc(tun->dev);
-+		return 0;
-+	}
-+
- 	xdp_prog = rcu_dereference(tun->xdp_prog);
- 	if (xdp_prog) {
- 		if (gso->gso_type) {
--- 
-2.56.0
-
+Thanks
+Hangbin
