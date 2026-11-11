@@ -1,105 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.128
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794411324;
-	b=5YBcieH3tMjKX0UNY09YlXxnlkJCPW8YdhQUk7/MNm5tpD8tWbwuY+7FhGzdmqKYgB/e
-	 2ZzeJuPFzwDbtNONX1JGUrb/cguidisR+5yeBdT5oumIzS3u0D13msBoPwxMwZoqRTR+9
-	 PIWxVB1KxRAyNgPssZQ/EiTYxQ+eIOIaF2v7RjUNGIVfQGkgB/wwKmSlDNAh2o1h8PjOG
-	 I/jrP/vULNIw66BzgoUdIoRzdUOyVF3utBW72KXI5v0RGByLO1DLjA60XKuBAX04hv40P
-	 sF/6rzzW3kx4rdyf4KcG8lKQ980+SKE6jnPXBH10TQuUC5vstl/6/exsP5PDEAYNvEA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794411324;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=oCY7BZnYiToD6/ATqromLaznfVaKf+BX/Aui8Rih9MU=;
-	b=271OveRm392cxVgdfYfiBccmv/5zbdjjgQNLRZsnghcyY3WeJUNppGZhVa9I1mP3XB5H
-	 nlqU1fNOCk9i9VXbuVrBM98GfGk2WIDy4wIG8Sc/8rbAH+ZrPD1iMIQkVg/4H11rG/Dxi
-	 UTy4dZEScmSXN0M0m6zg2FhzyXVbuU2j1is0AonwqRjut3d2CO5L0TBLkyNkWppodu+2X
-	 Tzud93GasfCqu8B72iw/ATb7an5t1mFQuZ/z+LKk3bOVHcYUDJKI7sy4Tp+/GJk/Xbhsk
-	 j2paqiHRFEdwFXqrnSQQ9bQfZSQRrnND0tVGPtyyUh0D2d6Zr37Ljl6WLNJIBLIrqjQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=efficios.com;
-	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b="NKUmCoa/";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.191.128
-Received: from YQZPR01CU011.outbound.protection.outlook.com (mail-canadaeastazon11020128.outbound.protection.outlook.com [52.101.191.128])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.54
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794411464;
+	b=VH52aI43H5l0+zT50jwWTC1aIhnVPjJpv2djiqMhZzeLsyhbNuilojdMWi4FkN5Kdaom
+	 DH+G6lA/RkdhBt+EQiEgnITZRVy9H3iIdpNGUy9LkLLl/m7SbTYW53qB2oBpSCv86UJyl
+	 nt+jNXbNtJePCbQXkvU4LkZ9xxbTTYehomhNhsccf4gKmoV9gBJmS+pdeW3HdbaBhMrIy
+	 4KVmqd5pEStAi7LKvSLirsEW7Te3IB003XPcqWRq7YBkmSaczXMMxMSJ1t+zvM+uGYvuy
+	 TFxF7zITYop6f/YgaYC6J0+uBZ2fjYCQkHVJBUyYJcaWAB+vycLA6G87s52i2YCLXDQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794411464;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
+	 From:To:X-Mailer:References:In-Reply-To;
+	bh=zyPyNsXNnyLp0wiWkbZYu4vFk3ow/rtQP4zegoB1/BA=;
+	b=PyG+QO77aEvS5+g/HOMBeQ4m7h90x6YA1wKUE2lrxioNYOF4WHGlrZJVVoi62cEmYpxi
+	 bYwCY2nHqcbyMqbodgNQSHGkB3Kx7DqOJ0MeLIN3SBSRcNavWJfN3Hg5jWlxwlWNpA7Mh
+	 MWXbvtINMEtrO/vyVayUVv9XOIfkkSZNXO/aVc5pfOf+Z2ODk0kZDJx3SRy0S2WYnYQYc
+	 21aekumicwkD7yGld4SSZjbcy/Rd4O/b/md8SPErUK+DHhzF75qzPabfYuUbgavhse1U6
+	 7JKBmidOAqdk+3MTaWL67JiMhlufgUGxKS10LsvlUwQOp3V5UQu7ngmuVsDQC+iNOdQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=soleen.com;
+	spf=pass smtp.mailfrom=soleen.com;
+	dkim=pass header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=KSuOhJwR;
+	arc=none smtp.remote-ip=209.85.222.54
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA79C606A324;
-	Wed, 11 Nov 2026 15:35:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA79C606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7CD606A326
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 15:37:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C7CD606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=NKUmCoa/
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yxZoyLAJu5+510jqxNE4liAuEbL3/WIQaUPB1g68wkdzV0WqxTuRl0i8b8BRugfdgjTyUaulce43uAVcMVbR9swd6iXiGo2lUw/swUnP8+/FOg5uN10EglZv0PbreZwMZlMt/blydzhVo5Vu/9qWQYdv3Y/F0YntJFO3CJJIalyULphMULk/0Wl7CpKsYxIReS0e4REGZy8QB7/Ky9xAHi/VHDK8ILwrPzoWFyi5kW+5Natz/CGKQW8tZhTuIFvGXzmUCSnbXwS9ZW+1UrBme6Jg3ZApn/HepoY7B/sQmvz8iOsFkQ6ytWoest4IukzyRPSRw8IdAuR1CjYxX5KN2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oCY7BZnYiToD6/ATqromLaznfVaKf+BX/Aui8Rih9MU=;
- b=cx28mr81yjN7KoFPQW0aavWH7VMGIF3rV1DC0tzqECSydxyhS2q/HHDO0ClFuDrE5ikuT4QwmlJWnGO1EZLvfYiY0LSc0rxaltcN6sgn71FMJon2vHRg0slxEgWaGzbC8NZmSC6PvtkuQSOZ2IFSMNxHuMJ48riZWcFzZvaarwWYufWLIoVAb+0E52qb8qIediIOB+ShSidTOWnVrxClr/s/+2SO4zbg1oPWSwVtX70OxkwGhWhKkg8LFgoalK2DCKTuS+qcd4LeQHrcT9R5QRuACIsX8M9LmvDS1L3TGSjzmr/zkZ+z4Nq7UMSM2xFvIL/bHHCNArMjd6+sKJIMgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oCY7BZnYiToD6/ATqromLaznfVaKf+BX/Aui8Rih9MU=;
- b=NKUmCoa/qw6T9Gusja1tAmjKY9xb0m5fS45IW5yrsGW92ZzgJD1qlnct57HipzlaBUCa6FNrz9EW2/YX6HHUWGvc66CAp06UD+M+SsZrprP1XTIt5KiFd7vG0q2FD2xJJB0jjojHkW9bQAWbuCbHmiJgSEqovfWwmfbQjfnL1BYej4ZOR17DjTj+EN7l2wxOOYKX8wSYuwVxsyJzQzirZmP1gbigMd9HKnIBGHJ8uBJI9GN4oghTL9Qo/57rCfAQMxT/suzFf/JaHbeNQY582U2Is4Ih17gDy7gxg1rMvDMq8aNW9L+7XGAgf2TRfusEHVJPoJao7kxQksoKFNruxA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10) by YQ1PR01MB976392.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:113::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.9; Wed, 11 Nov
- 2026 15:35:20 +0000
-Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.008; Wed, 11 Nov 2026
- 15:35:19 +0000
-Message-ID: <c3e7054a-486c-4e5a-a646-eee42e815ce4@efficios.com>
-Date: Wed, 11 Nov 2026 10:35:17 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 13/29] sched/deadline: Keep departing bandwidth across
- a root domain rebuild
-To: Juri Lelli <juri.lelli@redhat.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
- linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
- boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
- bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
- kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
- mathieu.poirier@linaro.org, longman@redhat.com, ridong.chen@linux.dev,
- tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
- m.szyprowski@samsung.com, kayracizmeci@gmail.com, weihengqiuu@gmail.com,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, stable@vger.kernel.org
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-14-mathieu.desnoyers@efficios.com>
- <avRmoK08LoIeySBL@jlelli-thinkpadt14gen4.remote.csb>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <avRmoK08LoIeySBL@jlelli-thinkpadt14gen4.remote.csb>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0137.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:e::10) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:1d0::10)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.a=rsa-sha256 header.s=google header.b=KSuOhJwR
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-9828fee1b4bso838807241.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:37:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1794411462; x=1795016262; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=zyPyNsXNnyLp0wiWkbZYu4vFk3ow/rtQP4zegoB1/BA=;
+        b=KSuOhJwRVn6ezxXqsCVqq2eIvk3Dh/kvI46PwVUnLm7knleX/h46MK9EnsyzF2uPT2
+         8znC4z0CgZzu0GCKZGNR5klElinZk1//9/Vo6D1XDoyvdj1n2JDddPbgLuO1ItUhXQYP
+         ih1bhIB6EifntfuJRr1WuPoN9tze2Dpqo+wdyf7oqdDFcB4//nHcro2M8WIA8EGgKRJ7
+         V0/u59fnHK2FeHAX3ugQvtmuvbdXBh3QXpHv5I49SsH2WX6vIJ8+r82opWYWS5wP43oQ
+         CgvLb+EGw3c1cWJmX3IjDt+tT0oCUJB09UIjYquFsegJVlnjvDZl1t5TF38O4xHJVPmo
+         rYRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794411462; x=1795016262;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zyPyNsXNnyLp0wiWkbZYu4vFk3ow/rtQP4zegoB1/BA=;
+        b=n1NvtiUAVxBhgycsmfNf7iYKvM6AjUQ1KZOabvL7Jyvm00frivbRpR2AnX1oH7CGE8
+         LGbUiCVgN1VNIWT3B11HHhJiqV8oFtHqw59aVMA+LcyfqrD4SmlkZvcHd7knQwKCCQAt
+         IGUW/alxp8laMiih8L7axU25n/cQzjs88lta8lSrXiF0NFPMH1aPcRBCtPisE5H16IP5
+         zQYX/YIXCP6YHwWk/FSe6oyvkycKJ5Jkrzkp7YdaBnqHSd+rxflPw+2G52KID+TZgVNS
+         HfBgUyMxnNYR4DP9iP2wvjM/lyxjK1MjwIGwd7qcm4zZ1IYptGpvX3cxRkY6TLrY6kZL
+         n4ZQ==
+X-Gm-Message-State: APuU4Z9ikgpJSRJG4Xm3Hh3Yr/NECO4Aphyt3+VRGb5QXJAZ8lmDwtLR
+	KJ4J1p+jphW40uA4W0yWCIuq9LjrlT6WorAA912AKbWswl0rvT0Lmxm0MpsnqYL7xjxeii5WqTN
+	gEVAb
+X-Gm-Gg: AYBFou1ymnkouUclxTdsmFvZFSRZAiHl1pusJ3vQcC6qvn8U/cLMI5io9MescnBAr7t
+	oXIGVL0O4a3eyT4vpV+3R8HZeBpw266BuW8nEtnKOMeuyiGtRLiOw0lORKiMfhYawD8eLd7dlzs
+	6Q1BZfqkKzAO6OZK4KA86F8VnsH7/20t+G/ayuhg4i492GLTNB+g4QiG38X0pszKw9sQgcySzZK
+	21oypfzHYRS2ddYYfRgX7IWUKj5iRMMbxiIW93etfqp48XbEUHZkPYsg/OMfrL1qmfik99Fc2Gf
+	XpNQGW4JAEsiSVS0r0T5V84ZLxO5RZEveoNpL3bmTY1m7sG6o98TEZ09pBUBPSCv89BJp8WSGDN
+	hfSZ/Zj1/oVUq7FZhgsBb98WQ/Qso6qJq75SVAutzT0o6BxMBpIB+m28uDqzxd8XpwzbHPkXDo/
+	Lj3OJHz9nrvTbPh/ZH1e4YZXna+jZKb9AX/9yc2rMMiD+N4tYJpO03rKTKrCpW1V8SxorfC50P1
+	rZsL9FQdBSRxgx0m3ly0tDLrAtR6dHlMjA5WD1IMRsHS87FQ43KOHI6K6B8JC85trjSG/1NEXbx
+	gP9OA+W7JjwpNeviTiGQiJvzm7j4g3fuk4BJy9Ra8fvA+L+uazHUpb5vvW/tSl3gB0JFJcmLlRr
+	DTqaBsBSu5Rc27/hhLMgCGTguuYcoadRi
+X-Received: by 2002:a05:6102:6f06:b0:7c3:9059:49c2 with SMTP id ada2fe7eead31-7d50609f040mr768713137.22.1794411461945;
+        Wed, 11 Nov 2026 07:37:41 -0800 (PST)
+Received: from localhost (64.167.245.35.bc.googleusercontent.com. [35.245.167.64])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-7d3023aeac7sm3957545137.9.2026.11.11.07.37.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2026 07:37:41 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,157 +88,233 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YQ1PR01MB976392:EE_
-X-MS-Office365-Filtering-Correlation-Id: e65dbb6e-a769-4a6e-ae45-08df40096493
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|376014|7416014|261028144727099003|261026140227099003|261026121527099003|261102123227099003|261021121427099003|261022105027099003|4143699003|56012099006|10067099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	AQ70+EqQO8kOUE+CB5M/f8BwPrDA5mcejtI3uS/h4J1kXjWrTqb3S9JNBIsVkzgisA3ER6veZ7viyVRX1+LvUoJzZ7XZpirRR5r70SN+hXTJp/sntqpptXuyChuxmJCB2JoStTF+1xWhLyscWrUr2fWcbKO6axAbplZX6FxQKs50PgsyTiJHIWsjnddI06EpwojbwY/W8spXX1vLJPdIECldVFPPuA7XBF7wYZj8mnJEshBXwaC5c9coJ5ymachyYawXEL3a+t6BtXoOuLD0N33rGLHjlgpNqNeoTIH0rURlReulgpawf/EybrKfonoOk1yda8Ct/oSFV0obd1wbTQ+9x44T0+Ibe+oDBuUi/JLia8tnUiueqHVt88gyuu2/lokjJi8ebhO+j7F5cakqn+2TWuvfWfmBdo4MrT5XVlk9M2UYhbkCQYt1cL9W6uIoKZ4x18upHIlxRD+nH6yiHOWelD+FBMBeIDt+XCL2xHkFG7OgBOqn9CymF+0z8ooTMqHDzNQwMuMFTLoyJ+hZpvT3Hy/fVRd7tt8lmioqvbY5GU0wi+3ugHeOHaLmMcYZQvJhu5GVl2paWtn6lLwvTKYuQ17iCtjWtL8xKQrtsZQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(376014)(7416014)(261028144727099003)(261026140227099003)(261026121527099003)(261102123227099003)(261021121427099003)(261022105027099003)(4143699003)(56012099006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QWc5ZHZyRS9rK2JYakRsRm1jN3B6VSt1dFpUWUlkb1BHWGF0MVpMdnZwZXBz?=
- =?utf-8?B?aWhtaEk0bElkNi8vcDlsMmwwSER2azlnNkNjVTBJaTZMWkExRm9IWEtiRktn?=
- =?utf-8?B?dm9EVlBqU3U0c0ltWkVuck9QQUQ5czJDejIxYi9oWVlQdW9ZM29YeVdiSWJk?=
- =?utf-8?B?SXJNYUJzbHRaRDM5VjdKSS93eTlQZWdnZExYVEtiNkF1R00zUzBhckc4NzRV?=
- =?utf-8?B?d0djMHBhcTBpMmhGeXI5WW9SanBXdXhkWUQwTDZPTi9BVWdsWjZBM0p6V1pB?=
- =?utf-8?B?TjVVbk0yRk9GWkdnd3M0UHRSdlljZDA3M0FidXhienRkV1lpN1FvZHRFNFpy?=
- =?utf-8?B?QXAxWkQrTERLeENMWS9jb0dtT0J4TnJCUmJKZG8wWk9iay85WGQwSk1WanFM?=
- =?utf-8?B?djBZZXNORGhGdU9Bclh3eWtVcTh4KzRZV1V5OG9PMExmYzNmK2NrWU1vQzgv?=
- =?utf-8?B?VGZyUytYVEk0SUluZjBWaHo5S0hmZklQdlFWK3ptNU9iSGZnc0huaWVMOW44?=
- =?utf-8?B?U1l2L2h4eDhBaVRLMmgrWEFVZmZOOVR3alJRQ2VmYXJWK2xGRUk0SDVYOFVK?=
- =?utf-8?B?VFVBMnR4ZnBhajFnSU9lbUNQbnBXN1Fpc0RrYzM3SjdwcU9jbDBMa1haRTRm?=
- =?utf-8?B?YjQvQUZXTzlKZFBxam1TL25mUGxUQnYydWRVK0V1ejlzbFMzck5UaE5tWHBB?=
- =?utf-8?B?VGV3Zm5aZk9kY21Fdk4vY0xJVStKVk9yNmMrMUJOeW5nYmt6YkJmd1RsSVhQ?=
- =?utf-8?B?NTNRVnJ4VWg1eFVvb0ROcWpwNlVXdWJ4NlVIMERpejhOOTMzZUhFdG5Rb21h?=
- =?utf-8?B?NlArVkdHRXFJd0JZRXR0cFhtK1UyTVBCcWNWWVlrQ1cwd2xBNVErcjFEc0oy?=
- =?utf-8?B?djhCQjk5NTIyTFBmbnRJUVhmL2FoMEsyakVCSzFmMVdKMzJFUE5LS0dwaGVE?=
- =?utf-8?B?RDljOUpOa0NHWlNxb0pJTzFDVENDbWt2dHFwTmMwYXowNkk1TklsbXhXalB3?=
- =?utf-8?B?VkJXbHppYUZtK3Nlc29WczhmNlFsZk1lMFhHdHhRc1d6eFc0MDcxRncvMDRV?=
- =?utf-8?B?UURMQUJBZlhqcTRCVTd6K1hURGRTdG1ERCtGMUFRYjFSUGZUbjZTbXRNYzd4?=
- =?utf-8?B?eE1laTUyOVQySCtDLzZWa3FVVHlSejBjV3F2cVp2RTlKTzJWcEVEclVWSGtD?=
- =?utf-8?B?NEJyZkk3MnlPSC9aeXBnZFFvNEtqM25oa1RrQng4SzdaKzJLaE4ybStHY3JM?=
- =?utf-8?B?a01iZDM3dkg0aTNXR2grL2VVU21pN2xzRWNOTHp2TDFxM01yejJpblNwSDhp?=
- =?utf-8?B?MEpEaDVJbG5TV0FwR3JTcmlsMStCMzBDVTZwSXB4bDlsZnZCdFNpaUlvSVZN?=
- =?utf-8?B?T3hYc04rV1Y3NkFtVzc5UDZVemdUNHYwWVlDU0NWTXNzOVdpaC9YOVMrQnpm?=
- =?utf-8?B?TTFvd20rR3BrYldHTzdkL1BtdVJXalRvcGpxaDZJRWdXK2xreW4xSjZJc1A3?=
- =?utf-8?B?WTZRaVIwdDRXRTBweGl2dlRRb0N4QldMQWNhMUdsakVKa2NkVmVPSWU1MDBX?=
- =?utf-8?B?bUFEOGY2OGdCb2p6SDZZL0tUTUkvSG9WSXFiT0RVc3pLTWc1Z3ZpaW5UWGVq?=
- =?utf-8?B?eWEzTjNxVHYxMzdKZjN2WjczZTlnT25wK05XL1pMcVF6OXBTdVRPWjJ1TWd4?=
- =?utf-8?B?aUlFTk83MVNWVkNKeVpmU0pYa3l6U08xRG81Nm9RWDNCbkhtTTBVZ3Bhc1hF?=
- =?utf-8?B?b0ZCcVZmRURNWVhBUVJxZ2lLYkRkazhuclBjblpVaUhweFdRYXBwOUV2dTly?=
- =?utf-8?B?dEtqL2tBb2Jxd29uRXg5TnJlTXYreEJ1aTJZWWtibGo2T3FoMkdld2hsVVVo?=
- =?utf-8?B?WW9kaDh6K014MWRwZ2w1azJ5eGhkTTZIWlREelR5VjhEU2hHR3B1Vm9melNj?=
- =?utf-8?B?VFhRZWMwYnI1TVkrU3VtaCsxcGFUWkR2bEVJSVVWMXp6bUNVU1QrbFYxRUdM?=
- =?utf-8?B?d2hYckNxVXZNM3ZKcHdwTUViUVgrWWFWU2xyS01wbml4VnRHK2l4RUp2Ykly?=
- =?utf-8?B?RHBycGkxZzc5YktLUHJWbStXYms0NkhrdkhYdHY4b0s1VHFFZUhmK1VNdUx6?=
- =?utf-8?B?QWdwbFhQRTVSNGMrVGl1NmNWMk5TUkI3aGhCdEFrMDRwcUdpcXpWbXdseVov?=
- =?utf-8?B?UkdtQ2VjMDlZNzZqQkFXSjZURDJ4RWF1b05zdnFNc3JHdzVXQm1ldlBKZkpQ?=
- =?utf-8?B?Z0JDaEdTMG4vN0JJZU9Ka1N3dXVkZnZpV1QxK1ZGQlVOT2NRa2lQcXRpaFI4?=
- =?utf-8?B?U1lrSWRaY0NURmFzNmQ1R1RYNG9reEIrTktjV3VEUVBsU2pDaUdHZXhuSWhI?=
- =?utf-8?Q?UPRx+YPNpYjm5nhc0Kssw53Bs5Gckq4Q/b/4k?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e65dbb6e-a769-4a6e-ae45-08df40096493
-X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2026 15:35:19.7219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 50CnFNJkYN2fnyHEJiiAuvQlUDbz0q300T90YPSc4UoZAmN2pi1IOSL07awQlLhVbw3Huv/Vgl9rQhdz9mMfbssnFE+TaD4IeJBpTn+r65I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQ1PR01MB976392
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Nov 2026 10:37:40 -0500
+Message-Id: <DMSHRWYSS8FJ.2H4W2E388G00V@soleen.com>
+Cc: <linux-kselftest@vger.kernel.org>, <shuah@kernel.org>,
+ <linux-mm@kvack.org>, <skhan@linuxfoundation.org>,
+ <linux-doc@vger.kernel.org>, <vipinsh@google.com>,
+ <linux-kernel@vger.kernel.org>, <corbet@lwn.net>, <dmatlack@google.com>,
+ <kexec@lists.infradead.org>, <pratyush@kernel.org>,
+ <rdunlap@infradead.org>, <graf@amazon.com>
+Subject: Re: [PATCH v5 3/6] liveupdate: luo: serialize sessions via
+ per-session publish helper
+From: "Pasha Tatashin" <pasha.tatashin@soleen.com>
+To: "Mike Rapoport" <rppt@kernel.org>, "Pasha Tatashin"
+ <pasha.tatashin@soleen.com>
+X-Mailer: aerc 0.22.0-39-g5d7784875be2
+References: <20261105050053.3063001-1-pasha.tatashin@soleen.com>
+ <20261105050053.3063001-4-pasha.tatashin@soleen.com>
+ <179439592040.425130.1571434550510654411.b4-review@b4>
+In-Reply-To: <179439592040.425130.1571434550510654411.b4-review@b4>
 
-On 2026-11-11 07:59, Juri Lelli wrote:
-Hi Juri,
+On Wed Nov 11, 2026 at 6:18 AM EST, Mike Rapoport wrote:
+> Hi,
+>
+>> With incremental kho_block publication in place, LUO sessions can be
+>> published into sh->block_set individually as they are committed, rather
+>> than rebuilding the entire session serialization chain during reboot.
+>>=20
+>> Currently, luo_session_serialize() resets *sh->sessions_pa and
+>> serializes all outgoing sessions from scratch in a single pass at reboot
+>> time.
+>>=20
+>> Introduce luo_session_publish_one() to append a session's
+>> luo_session_ser entry via kho_block_set_it_append() and move the session
+>> onto sh->published_list. Update luo_session_serialize() to freeze all
+>> remaining unpublished sessions first (rolling back via
+>> luo_session_unfreeze_one() on failure) and then publish them in a second
+>> pass.
+>>=20
+>> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+>> ---
+>>  kernel/liveupdate/luo_session.c | 92 ++++++++++++++++++++++-----------
+>>  1 file changed, 63 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_ses=
+sion.c
+>> index 6dea359111818..caf0e85081e87 100644
+>> --- a/kernel/liveupdate/luo_session.c
+>> +++ b/kernel/liveupdate/luo_session.c
+>> @@ -103,20 +103,30 @@
+>>  static DECLARE_RWSEM(luo_session_serialize_rwsem);
+>>  /**
+>>   * struct luo_session_header - Header struct for managing LUO sessions.
+>> - * @count:       The number of sessions currently tracked in the @list.
+>> + * @count:       The number of sessions currently tracked in the header=
+.
+>> + * @published_count: The number of outgoing sessions currently publishe=
+d in
+>> + *                   @block_set.
+>>   * @list:        The head of the linked list of `struct luo_session` in=
+stances.
+>
+> Add "yet unpublished" to the description?
 
-> It took me a bit of staring to (hopefully) understand better how
-> dl_bw_gen works, maybe the following can help others?
+Yeap, will clarify list holds yet-unserialized sessions.
 
-It does, thanks. v6 takes your comment as is. I only changed the name
-of the function that increments the count: it is
-dl_clear_root_domains().
+>> + * @published_list:  The head of the linked list of published outgoing
+>> + *                   sessions, ordered identically to their entries in
+>> + *                   @block_set.
+>>   * @rwsem:       A read-write semaphore providing synchronized access t=
+o the
+>>   *               session list and other fields in this structure.
+>>   * @block_set:   The set of serialization blocks.
+>> + * @it:          Iterator tracking the next slot in @block_set for outg=
+oing
+>> + *               session serialization.
+>>   * @sessions_pa: Points to the location of sessions_pa within struct lu=
+o_ser.
+>>   * @active:      Set to true when first initialized. If previous kernel=
+ did not
+>>   *               send session data, active stays false for incoming.
+>>   */
+>>  struct luo_session_header {
+>>  	long count;
+>> +	long published_count;
+>>  	struct list_head list;
+>> +	struct list_head published_list;
+>>  	struct rw_semaphore rwsem;
+>>  	struct kho_block_set block_set;
+>> +	struct kho_block_set_it it;
+>>  	u64 *sessions_pa;
+>>  	bool active;
+>>  };
+>> @@ -134,12 +144,14 @@ struct luo_session_global {
+>>  static struct luo_session_global luo_session_global =3D {
+>>  	.incoming =3D {
+>>  		.list =3D LIST_HEAD_INIT(luo_session_global.incoming.list),
+>> +		.published_list =3D LIST_HEAD_INIT(luo_session_global.incoming.publis=
+hed_list),
+>>  		.rwsem =3D __RWSEM_INITIALIZER(luo_session_global.incoming.rwsem),
+>>  		.block_set =3D KHO_BLOCK_SET_INIT(luo_session_global.incoming.block_s=
+et,
+>>  						sizeof(struct luo_session_ser)),
+>>  	},
+>>  	.outgoing =3D {
+>>  		.list =3D LIST_HEAD_INIT(luo_session_global.outgoing.list),
+>> +		.published_list =3D LIST_HEAD_INIT(luo_session_global.outgoing.publis=
+hed_list),
+>>  		.rwsem =3D __RWSEM_INITIALIZER(luo_session_global.outgoing.rwsem),
+>>  		.block_set =3D KHO_BLOCK_SET_INIT(luo_session_global.outgoing.block_s=
+et,
+>>  						sizeof(struct luo_session_ser)),
+>> @@ -186,6 +198,10 @@ static int luo_session_insert(struct luo_session_he=
+ader *sh,
+>>  		if (!strncmp(it->name, session->name, sizeof(it->name)))
+>>  			return -EEXIST;
+>>  	}
+>> +	list_for_each_entry(it, &sh->published_list, list) {
+>> +		if (!strncmp(it->name, session->name, sizeof(it->name)))
+>> +			return -EEXIST;
+>> +	}
+>> =20
+>>  	/*
+>>  	 * For outgoing we should make sure there is room in serialization arr=
+ay
+>> @@ -203,6 +219,42 @@ static int luo_session_insert(struct luo_session_he=
+ader *sh,
+>>  	return 0;
+>>  }
+>> =20
+>> +static void luo_session_publish_one(struct luo_session *session)
+>> +{
+>> +	struct luo_session_header *sh =3D &luo_session_global.outgoing;
+>> +	struct luo_session_ser entry =3D {};
+>> +
+>> +	lockdep_assert_held_write(&sh->rwsem);
+>> +	lockdep_assert_held(&session->mutex);
+>> +
+>> +	if (!sh->active || !sh->sessions_pa)
+>> +		return;
+>> +
+>> +	if (!sh->published_count)
+>> +		kho_block_set_it_init(&sh->it, &sh->block_set);
+>> +
+>> +	strscpy(entry.name, session->name, sizeof(entry.name));
+>> +	entry.file_set_ser.count =3D session->file_set.count;
+>> +	entry.file_set_ser.files =3D
+>> +		kho_block_set_head_pa(&session->file_set.block_set);
+>> +
+>> +	/* This should not fail normally as blocks were pre-allocated */
+>> +	if (WARN_ON_ONCE(!kho_block_set_it_append(&sh->it, &entry)))
+>> +		return;
+>> +
+>> +	if (!sh->published_count) {
+>> +		/*
+>> +		 * Ensure the first block header and entry are visible before
+>> +		 * publishing sessions_pa to concurrent KHO readers.
+>> +		 */
+>> +		smp_store_release(sh->sessions_pa,
+>> +				  kho_block_set_head_pa(&sh->block_set));
+>> +	}
+>
+>
+>> +
+>> +	list_move_tail(&session->list, &sh->published_list);
+>> +	sh->published_count++;
+>> +}
+>> +
+>>  static void luo_session_remove(struct luo_session_header *sh,
+>>  			       struct luo_session *session)
+>>  {
+>> @@ -636,50 +688,32 @@ int luo_session_deserialize(void)
+>>  int luo_session_serialize(void)
+>>  {
+>>  	struct luo_session_header *sh =3D &luo_session_global.outgoing;
+>> -	struct luo_session *session;
+>> -	struct kho_block_set_it it;
+>> +	struct luo_session *session, *tmp;
+>>  	int err;
+>> =20
+>>  	down_write(&luo_session_serialize_rwsem);
+>>  	down_write(&sh->rwsem);
+>> -	*sh->sessions_pa =3D 0;
+>> -
+>> -	kho_block_set_it_init(&it, &sh->block_set);
+>> =20
+>>  	list_for_each_entry(session, &sh->list, list) {
+>> -		struct luo_session_ser *ser =3D kho_block_set_it_reserve_entry(&it);
+>> -
+>> -		/* This should not fail normally as blocks were pre-allocated */
+>> -		if (WARN_ON_ONCE(!ser)) {
+>> -			err =3D -ENOSPC;
+>> -			goto err_undo;
+>> -		}
+>> -
+>>  		err =3D luo_session_freeze_one(session);
+>>  		if (err) {
+>> -			kho_block_set_it_prev(&it);
+>> -			goto err_undo;
+>> +			list_for_each_entry_continue_reverse(session, &sh->list, list)
+>> +				luo_session_unfreeze_one(session);
+>> +			goto err_unlock;
+>
+> Why goto err_ can do this?
+> I really prefer to avoid error handling inside if (err) blocks whenever
+> possible.
 
-> Maybe additional info can again help (before the above)?
+Makes sense, will move it.
 
-Taken as well.
+>
+>>  		}
+>> +	}
+>> =20
+>> -		strscpy(ser->name, session->name, sizeof(ser->name));
+>> -		ser->file_set_ser.count =3D session->file_set.count;
+>> -		ser->file_set_ser.files =3D
+>> -			kho_block_set_head_pa(&session->file_set.block_set);
+>> +	list_for_each_entry_safe(session, tmp, &sh->list, list) {
+>> +		mutex_lock(&session->mutex);
+>> +		luo_session_publish_one(session);
+>
+> And running a loop of _publish() in _serialize() makes my bikeshedding
+> argument stronger ;-)
 
-> Can something like the following happen? And do we actually have a test
-> for it?
++1, will fix it in v6.
 
-Yes, it happens at this patch, and there was no test.
+--=20
+Pasha
 
-dl_task_undepart() forgets the CPU recorded. The end of the boost then
-takes X from rd(B). In my run the deboost armed the timer again, and
-the timer took X from rd(B) at the 0-lag time. total_bw of rd(B) went
-negative, and rd(A) kept X.
-
-The end of the series hides it. Patch 16 replaces dl_departed_cpu with
-dl_bw_cpu, and the record survives the boost. So only a kernel stopped
-between patches 13 and 15 shows it.
-
-Planned for v6:
-- This patch keeps the CPU recorded when a boost takes the task off the
-   list. The series then bisects.
-- deadline_bw_test gets a case for your scenario, pi_departed_moved.
-   It fails on v5 at this patch, and passes on v6 at this patch and at
-   the end.
-
-> Wouldn't it be better to move to a single list of accounted tasks
-> (current and departed alike), keyed by their recorded home CPU, which
-> turns the rebuild from a reconstruction into a re-partition? The
-> dl_bw_gen machinery and the cpuset walk would both go away.
-
-I tried it. It works, and the code gets simpler. But it costs
-interrupt latency, so I left it out of v6.
-
-What I tried:
-- Every task whose bandwidth is accounted is on one list. It joins at
-   admission and leaves at the release. A departed task is marked.
-- A rebuild clears the root domains and counts the list again under one
-   lock. A release or a move sees the accounting before or after it.
-- dl_bw_gen goes away, with the walk of the task list (which replaced
-   the cpuset walk in patch 15) and dl_add_task_root_domain().
-
-The 75 selftest cases pass with it. One point differs from your
-description. The rebuild is not a pure re-partition by the recorded
-CPU. A cpuset change sets the masks of the tasks, then rebuilds. A
-sleeping task must then be counted where its new mask puts it. So the
-rebuild still picks the CPU of a deadline task from its mask, as patch
-22 does.
-
-The problem is the lock. A release takes it under the rq lock, so it is
-a raw spinlock taken with interrupts disabled. The rebuild has to hold
-it from the clear to the last task. Otherwise a release sees a
-half-rebuilt accounting, and needs dl_bw_gen again.
-
-Measured in a 64-vCPU guest with sleeping deadline tasks:
-
-   tasks    today: rebuild, longest irqs-off    single list, all irqs-off
-   1000     0.75ms, under 0.1ms                 0.12ms (0.19ms worst)
-   10000    7.4ms, under 0.1ms (0.3ms once)     0.9ms (1.2ms worst)
-
-The rebuild itself is 8 times shorter. That comes from updating the
-extra_bw of the CPUs once per root domain, not once per task. But the
-longest section with interrupts disabled grows with the number of
-deadline tasks. I do not think that is a step forward for a real-time
-class.
-
-The patch is on a branch. I can post it as an RFC after this series if
-you want to look at it. A walk that drops the lock every N tasks would
-bound the latency, but it needs a per-task marker again.
-
-Thanks,
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
