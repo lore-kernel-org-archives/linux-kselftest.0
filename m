@@ -1,68 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.242
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794392425;
-	b=XmqDLio9sjPjBrgL9SIoTk48ExXuSVmujkuTkVWzo3IWfA/NIjFn5KrUEWMq2D+P/p5C
-	 hK1qxQdzqgFVM2dEjOLG3pXdyne6nw5D84pTnYBGQfDVEMYYS6FQbJhjVoqYUeSmuGSLE
-	 kKGnA/DqZH6bUdlCAx3WiqcKuV/J2Kvx3OVh9ZHDEELuR/NQvtO08HgRlk+RHRRsuO1G3
-	 D2YGHKwHJEB9z8Y+AalrXRuzPOV2ph5rs1ylfmCnn34KMT01lekTER5jEbJhbooWv5g14
-	 tIHZ8n7gBzbNiEyw6nBbO83dVaQxlocZXrJrsKTTrwxg14DfKRbBTGXTk29MwZzEFPg==
+	t=1794393532;
+	b=D73XB6M7PmpzT2XKLEhZz82gdiUo6pCBsM08PCiED5gwXcRDmhvF+Q/LnB7eYGw44peA
+	 N9aEUIuiw+pfLyKTxR19qfFeactl7XqxaUwyivPSZGzSc6VIwmCCFE6YiwzyOC0bhyozd
+	 w/jwQGPQHUM/irjdeOnoKdKv8Q5FN8xzDEsCauhEaOpv6b0fRdIQKUJkuBWystb93sIUy
+	 TSDRzd/tNAwCzD9FJDf2X3yeZzn2DtqQ1O47L2CJNI3DTRB4brsLMHm0RTNVWNOKol9Ny
+	 XRXwhf0mPLstPkm6HZO0q8TgqkBKqzxLi9hl/C8X9EZ93YYF2PJJLUJO05Oj16QEviQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794392425;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Debian-User;
-	bh=+wcp/kB2lBcCVUGz1/nNSNwOHKuLsx1qYPo3ER8SQH8=;
-	b=sllDMaXGAnMowco/fcE57qQLmqiQ6yBi96BuDLBpLOZz5ml6/CzDXDagAX9VjTegT/Ef
-	 b/dwpdHhq2BgFtOktmm1F6OwZOlpLqe5yJjCrChdlNrQQuoYmirmZc/c9qKtdqAKY+Xd8
-	 jg8b1NvcIwHdixJea0rN9tlHoqjpS3FYtySNYyJNkIPb/E8AC/W2M+j2PwjqGu69Rf80y
-	 Z7f3FpR12OJC0xooSdkjBRZV3b7E/P1hO6K5g7h+WAVAAX7jvyAj3DVCwL6d3PmAENSgd
-	 bzU/7+qBerazdFd2eT6b29qtqPSBMBbc+AgEbL6XIzR4urnSK2DO1nIXe9o0HaF6TVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794393532;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=xDU+VUQuiVqA+errFgpqHKql5l47PsMQESWCLQkI4gc=;
+	b=UIcokq6HGhyBjx1QRUTZ1N4uTRxn2PSyPh12SkdFhmdoJ6q2mQafosO8eovKNxCLlMQK
+	 WatHYIvS8E1j7etboXJ6OabWy7qEvR0FwlrkZdorWbCZAZl/HCN+2zyveCJVVNvwufO8Y
+	 VjXAMPs1srODQB3kZPbNP7q+7iF7wTCYIFSyp/8YAZaFufTHqMTnFP8f5i9g+/PVjvrxu
+	 5LDmGhtxwNwYsZQKGg/XtIYlJ18ej0Ch8HxxAqY8VJayB4oyJ6u2PCpBqSY5ErMU/SvUa
+	 N4zALu/f/rJUueSmESzczMdR2lwgvpan3gUw/nUu/4H2pBOH5xAQ5CPBCjcyHvPuxtw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Jz0coMMD;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bjvfla5w;
+	arc=none smtp.remote-ip=91.218.175.242
+Received: from mta0.migadu.com (out-242.mta0.migadu.com [91.218.175.242])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D684C606A321;
-	Wed, 11 Nov 2026 10:20:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D684C606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69981606A331
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 10:38:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69981606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Jz0coMMD
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=+wcp/kB2lBcCVUGz1/nNSNwOHKuLsx1qYPo3ER8SQH8=; b=Jz0coMMDNGkRDu6dzsTw5jimJy
-	5x/G51dDjFkMFVlX4hFH6HPoMNkylnH0IzUazy+wO3O/fGHbIToU7LruG+P4m/j5zqsfmDbOsqY8y
-	Ke/E7u8+A87rgj19j2lFNKvLAT1WXCZxiKXDnAzzbyiG099gNnlXwsWa9xj2Cb9DJVyWK4kig6Jqm
-	IVHYY4flGitylhY/qLUVbgNgn0N6UM9kDplr6rfYnVvToJi3rTUSaq3H9HuKk+Z38epPEs8PStu7m
-	XvqWqi7M+Wff/o6irIW3W3RHQWtrXZ+c06jlpA9/VuR4E5/QEmnXqydntz8QTVkMsoVy1U1Tq39Rn
-	jnY+ACBA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xR5R7-00D6xA-2U;
-	Wed, 11 Nov 2026 10:20:13 +0000
-Date: Wed, 11 Nov 2026 02:20:08 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: Gustavo Luiz Duarte <gustavold@gmail.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH net] selftests: netconsole: enable the targets created by
- the torture test
-Message-ID: <avRBD4SMHnfoqn3k@gmail.com>
-References: <20261110-netcons_selftest_fix-v1-1-86643b837216@debian.org>
- <avPLyMTFkhCRqRAS@fedora>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bjvfla5w
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Pgs9Rl2H9Mrm9v98ZZj54dqFp+ymM4kJacjilJCmcW0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794393528; v=1; x=1794998328;
+ b=bjvfla5wO8wtHYY4gSPf478Ha6EcgBkojYdgSSSWnEhPH2JZVAQ33yT1o3xNJVDqUw7YvvH0
+ 3EFHYlF/woFlHpDarnibVMC3p+oYEJxF6nosE0wGj9PNePOfrbD+l/9/tfEvKHC0UVKE/X/jmiB
+ gJmazx4HcncKYSXjLw154HKc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 272d3a1a2ff3a6d3;
+	Wed, 11 Nov 2026 10:38:46 +0000
+X-Mizu-Trace-ID: 272d3a1a2ff3a6d3
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	JP Kobryn <jp.kobryn@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	KP Singh <kpsingh@kernel.org>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Tobias Klauser <tklauser@distanz.ch>,
+	Eyal Birger <eyal.birger@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	Hao Luo <haoluo@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH v2 0/2] memcg_ext: dynamic memory.low protection requests
+Date: Wed, 11 Nov 2026 18:38:14 +0800
+Message-ID: <cover.1794393349.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,72 +120,204 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avPLyMTFkhCRqRAS@fedora>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-Hello Hangbin,
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-On Wed, Nov 11, 2026 at 09:58:32AM +0800, Hangbin Liu wrote:
-> On Tue, Nov 10, 2026 at 04:32:25AM -0800, Breno Leitao wrote:
-> > create_and_delete_random_target() is meant to create, enable and remove
-> > targets while messages are sent, but it only creates and removes them.
-> > The helper it calls, _create_dynamic_target(), stopped enabling the
-> > target when the bonding test moved that step into
-> > create_dynamic_target().
-> > 
-> > Enable the targets again, so they come up while messages flow and are
-> > disabled before being removed. Like toggle_netcons_target(), ignore a
-> > failed enable, which would otherwise end the function and leave the
-> > targets behind. With a console per target, this also registers and
-> > unregisters their consoles under load.
-> > 
-> > Fixes: 236682db3b6f ("selftest: netcons: add test for netconsole over bonded interfaces")
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> >  tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
-> > index 33a44adb6f8f3a..3dfab0bf1b0756 100755
-> > --- a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
-> > +++ b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
-> > @@ -46,6 +46,7 @@ create_and_delete_random_target() {
-> >  
-> >  		# Basic population so the target can come up
-> >  		_create_dynamic_target "${FORMAT}" "${RND_TARGET_PATH}"
-> > +		echo 1 > "${RND_TARGET_PATH}"/enabled 2> /dev/null || true
-> >  	done
-> >  
-> >  	echo "netconsole selftest: ${COUNT} additional targets were created" > /dev/kmsg
-> > 
-> > ---
-> > base-commit: b3dfbde62cf1981c4638939c159dfd087b7a72e9
-> > change-id: 20261110-netcons_selftest_fix-4cbf633295ef
-> > 
-> > Best regards,
-> > --  
-> > Breno Leitao <leitao@debian.org>
-> > 
-> 
-> Ignore the failed enable makes sense to me, as we enabled `set -e`
-> and use random target.
+This is v2 of the RFC "memcg_ext: dynamic memory.low and memory.min
+protection" [1].  It sits on the memcg_ext base [2], which adds
+bpf_memcg_ops - a struct_ops type attaching memory controller policy to
+a cgroup - and lets a BPF policy take part in memory.low protection:
+not by deciding whether reclaim skips the cgroup, which is what the RFC
+did and what the review correctly rejected, but by requesting
+protection and going through the same arbitration as a write to
+memory.low.
 
-ack!
+Two things changed since the RFC, and both are answers to the review.
 
-> Do we need sleep 1s like create_dynamic_target() to make sure the
-> configuration loaded?
+THE CEILING
 
-I don't think we need it. The write to enabled is synchronous:
-enabled_store() sets up netpoll and moves the target to STATE_ENABLED
-before it returns. If the setup fails, enabled reads back 0, and the
-disable loop checks enabled before writing 0 to it.
+As posted, a policy could make reclaim skip a cgroup whose usage was
+above what its parent affords.  That defeats the cap
+effective_protection() applies at subsequent levels precisely to keep
+delegation safe: a delegated tenant can attach a policy to its own
+cgroup, so it could grant itself protection its parent never gave.
+That was a defect in the interface, not a property to defend.
 
-The other reason for that sleep, keeping the console messages in
-order, does not apply either, since the torture test does not read
-back any message.
+In v2 the hook no longer decides anything; it requests.  The request is
+collected before the effective value is derived, and what a cgroup
+claims becomes the larger of its memory.low and the request - capped by
+the parent's effective protection and shared out with the siblings by
+the same code, on the same inputs, as a declared value.  A request can
+move protection around inside the parent's budget; it cannot lift the
+subtree above what the parent affords.  Anything a policy can request,
+a write to memory.low can request too.  What is left to the policy is
+when and on what evidence the request is made: every pass, at the point
+where the effective value is about to be derived, rather than between
+passes.
 
-Thanks for the review,
---breno
+min_policy is dropped rather than converted: this round concentrates on
+memory.low, and the interface goes from two members to one.  A
+memory.min counterpart can be revisited later.
+
+The rework also removes the memcontrol.h change entirely:
+mem_cgroup_below_low() and mem_cgroup_below_min() keep their signatures
+and the series no longer touches the protection checks.
+
+One cost is stated here rather than left to be found: the callback now
+runs for every memcg on every pass - with MGLRU that includes
+lru_gen_age_node() walking every memcg on the node - where the RFC
+asked only about the cgroups reclaim had found unprotected.  With
+nothing attached, a call is a page counter read, a static key check and
+a comparison against the stored request.  Measured under the reclaim
+storm of the demonstration below: ~56k hook calls in a 30s window, 52ns
+average per call, 2.9ms of in-hook CPU in total - 0.01% of one core.
+
+THE MEASUREMENT
+
+The review asked why the same cannot be achieved by changing
+memory.low from userspace - the same question Michal asked on the v7
+thread [3] in May.  This time the answer is a measurement rather than
+an argument.
+
+The claim under test is a window, not a throughput.  Direct reclaim
+runs in the allocating task's own context, and shrink_node_memcgs()
+examines memcgs one at a time, calling mem_cgroup_calculate_protection()
+per memcg.  An agent cannot do anything for the memcgs a pass has
+already examined, and for the ones it has not reached, a concurrent
+write to memory.low is picked up only once the agent has been woken,
+scheduled, read memory.stat or memory.pressure, decided and written -
+in a burst that window holds at least one full pass, which is where the
+working set goes.  After the rework the hook sits at the point where
+the request is collected, so it is asked on that pass.
+
+Method.  Three implementations run the same integer policy on the same
+evidence and differ only in where the decision runs:
+
+  U   userspace agent: preads the victim's memory.current on a 5ms
+      timer and pwrites the sample to memory.low.  Made as strong as
+      I can: pre-opened fds, no allocation in the loop, and its own
+      cgroup with memory.min so it survives the pressure (disclosed).
+      A PSI-poll trigger variant exists and was measured too.
+  B1  a bpf_wq callback on a 5ms timer reads the same counter through
+      bpf_mem_cgroup_usage() and stores the verdict; the low_request
+      hook executes it.  The control for "the action runs in the
+      kernel".
+  B2  the low_request hook decides from ctx->usage - the value the
+      kernel read for this very pass - on every protection pass.  The
+      only arm that claims something userspace cannot do.
+
+The shared evidence is the fall rate of the victim's memory.current:
+reclaim uncharges it synchronously in-pass, so a falling usage means
+"the victim is being stolen from" with no statistics-flush dependency.
+The textbook channels were tried and measured blind: workingset
+refaults need the shadow entry to survive eviction (96M stolen from the
+victim counted as 2 refault pages under the filler's shrinker churn),
+and pgsteal is only readable from flushed counters (a whole burst
+window passed with the in-hook arm seeing zero movement while the
+victim lost 19k pages).  The threshold is a rate - pages per second,
+not a per-sample fall - so the ~10x spread in sampling frequency
+between the arms does not bias the comparison.
+
+Workload.  Under T (memory.max=160M, memory.low=64M, swap off): a
+victim A (32M file working set re-read on a 500ms pace, hooks
+attached), a filler B (112M of file cache rewritten continuously - a
+renewable flow of cold pages that keeps satisfying T's reclaim while A
+is protected), and a one-shot 64M anonymous burst C that is
+unreclaimable without swap and raises A's share of the scan.  Metric:
+A's pgsteal over a 30s window.  Protocol: 15 rounds, arms in rotating
+order, a sanity gate every round that verifies the protection chain
+before any round counts, cache dropped between runs, every knob
+identical across arms and rounds; then a sweep of U's trigger interval
+(1/5/20/100ms timer and PSI poll, five repetitions per point, reported
+as medians).  QEMU VM, 8 GiB, no swap, booted with psi=1.
+
+Results (medians [IQR], 15 rounds per arm):
+
+  stolen from A    B2 452 [339-755]    U 3723 [2825-4730]    B1 3960 [3211-4853]
+
+  - B2's median is 8.2x below U's and 8.8x below B1's, and the IQRs do
+    not overlap (Mann-Whitney p < 1e-4).  In 14 of 15 rounds B2's
+    worst (968 pages) stayed below both other arms' best round
+    (2051 / 2615).
+  - The tails overlap only where the kernel itself broke protection:
+    B2's outlier round logged 920 MEMCG_LOW overrides, and B1's own
+    outlier - 9303 pages, the worst single round in the dataset -
+    logged 352.  That is memory.low's documented soft ceiling: reclaim
+    legally overrides it when T's max cannot be satisfied from
+    unprotected supply.  It applies to every arm and to any policy
+    alike; memory.min is the hard guarantee and is out of scope here.
+  - Overhead: B2's entire in-hook cost is 2.9ms per 30s window (~56k
+    calls at 52ns average, 0.01% of one core); U's agent costs 140ms
+    for ~6.7k decisions and 187 memory.low writes; B1's hook is 1.7ms
+    plus ~7k wq timer callbacks whose CPU is not in that figure.
+  - U and B1 are statistically indistinguishable.  Moving the action
+    into the kernel buys nothing by itself; what makes the difference
+    is deciding at the collection point.
+  - The sweep answers "poll faster".  U at 1ms leaks a median 1308
+    pages at 374ms of agent CPU per window; at 5ms, 5330 at 138ms; at
+    20ms, 7746 at 34ms; at 100ms it engages in only 2 of 5 windows and
+    by then the drain has happened.  B2 beats U's best point (452 vs
+    1308) at 1/129 of that point's CPU.
+  - The PSI-poll trigger never fired in any window - a publishable
+    negative result, not a bug: the victim stalls 0.3-0.6 ms/s, an
+    order of magnitude below the 10 ms/s trigger, while the filler
+    stalls 39-44 ms/s.  The cgroup being stolen from is the last place
+    PSI-on-the-victim can see it.
+  - Time to first protection is statistically identical across the
+    arms (medians 2.1-2.8s): under this pacing it measures when a
+    drain episode happens, not how fast an arm reacts inside one, so
+    I do not rank arms by it.
+
+In short: the same policy, decided at the collection point instead of
+out of band, cut the victim's losses ~8x at 2% of the userspace
+agent's CPU, and beat even the agent's most aggressive polling point
+while costing 129x less CPU.  The scripts and the protocol description
+are in [4]; the raw CSV rows and per-run logs behind the numbers above
+are at [5].
+
+THE PATCHES
+
+1/2 memcg_ext: arbitrate low protection requests like memory.low
+    struct page_counter grows low_req; low_setting() becomes
+    max(low, low_req) everywhere protection is derived; and the
+    bpf_memcg_ops callback moves from mem_cgroup_below_low() to
+    mem_cgroup_calculate_protection(), so the request is collected
+    before elow is computed.  The request is recomputed every pass and
+    reported as none whenever no program can run, so detaching the
+    last program drops what it asked for on the next pass - nothing to
+    clean up.
+
+2/2 selftests/bpf: Add bpf_memcg_ops protection test
+    A three-level tree, a policy on the grandchild requesting its
+    current usage, memory.low on the middle cgroup as the budget, and
+    reclaim from the top.  Three budgets, same request: with 0 the
+    effective value stays 0; with 2M an 8M request comes back capped
+    to 2M and reclaim still goes into the victim; with 16M it is
+    granted in full, reclaim skips the victim and memory.events low
+    moves.  The ctx contents are checked along the way.
+
+[1] https://lore.kernel.org/all/cover.1793086858.git.zhuhui@kylinos.cn/
+[2] https://lore.kernel.org/all/20260921192559.2619635-1-shakeel.butt@linux.dev/
+[3] https://lore.kernel.org/all/cover.1779760876.git.zhuhui@kylinos.cn/
+[4] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_20261109
+[5] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_20261109/log/run-20261111-071332
+
+Hui Zhu (2):
+  memcg_ext: arbitrate low protection requests like memory.low
+  selftests/bpf: Add bpf_memcg_ops protection test
+
+ include/linux/bpf_memcontrol.h                |  97 +++++-
+ include/linux/page_counter.h                  |   8 +
+ mm/bpf_memcontrol.c                           | 155 ++++++---
+ mm/memcontrol.c                               |  30 ++
+ mm/page_counter.c                             |  51 ++-
+ .../bpf/prog_tests/memcg_ops_protection.c     | 297 ++++++++++++++++++
+ .../bpf/progs/memcg_ops_protection.c          |  82 +++++
+ 7 files changed, 678 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops_protection.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops_protection.c
+
+-- 
+2.43.0
 
