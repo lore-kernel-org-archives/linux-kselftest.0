@@ -1,84 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794383586;
-	b=q3tWl+NxAgTtbqbMtvp1Thg+02T5cHJ0L9fcERxwTdCD3w67qcRRuXCoSVvJp1LymrU8
-	 m8JLG1ORQLG3yxlK3AAAJey4kyUZxRFqjWkq6fv+cq1W+ebaKUNfEuXNRdj6pfJE9iDK3
-	 lf66hk72OZivTbCoxTiwdTYU+ug/iZT95mgl+QIlTLKmOXSLPERQ4bNWuI0K4aNik/HN2
-	 3BFUrZS57eVAixCWhL5JZgNLBUAZiBbYfCa1ao5jTAghuaBbwfK4bK+wN9cK58LBtt4Zm
-	 apP7IJLIPhAo93AvydM2Jirex8G8xdG32uc2SMvAcsnS2Lfxscy8paZxmks0i1tXZjg==
+	t=1794383599;
+	b=FUkolM5a7Ly0WVyefWNWkVypA6usnjvZZK4eZXoB2bb5+irSw0t8+sx5E2dPf+RUDX6H
+	 2AB603orMIJ6sznSGNtk1MJoqLtY5jVoP9kIlDPfiHk9jmuKCEVUo3y18boNM16Yarcnt
+	 gec+RN+AYdsNcwQ0PJqKOF+oI0MNssx0I3eDAgnaBT0rUysiYQqwDsPGnQ6fVB2zmLFXm
+	 18MwCyanqKsp7uQWIATztA0Ovo2TzEoPZPILT3fAElijfQwK90WV9WD8uydoijuAIRDHR
+	 NdxcpXkd/BR6Kv7sfjQUQkVYhSF8vy5QZtlPpqo2eG4R6oEM796UA188Ewgpwx7tK9w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794383586;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794383599;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To:User-Agent;
-	bh=OO34thgIpfnBLKDxy+V7gJ/LfMCRQ5G6mslroPjHH60=;
-	b=uNQjZ0Qn91wqbhR+V5C8dw4Y6YnlDy/iBJklrw7rLM4VDqldh8wiRhNPz/hmx3iQn5JG
-	 gAJFUCDFL6d23cLEf+QPdvvlgWH3OLgeh6tF0FMF93Y8BoebLjz+E5OlCagLvgCOAz239
-	 VX1zpOWQE1liMVy3JKNajSm70S8iA7i+xvlXtQkrfBGt9gDDs5wm+WxiV92fdjQ48SSWb
-	 bPmzsly4JcB0Zw3mht5cZnU89mNEb+8ePcCuGAqvy+/FivDdLSZBSo/ZxhGYU0z2fdXjv
-	 3UOvdoJrTWW0BWR5feQN8TT2cPzOzKX33FNV4RPnx2aPr7XsAuwoQZdwjxQwxrJA7/g==
+	bh=2Kx3wzBfUwksk18ANuXPfQbbKvvrdq3wbuLdN7ATve0=;
+	b=OIxO2Qa1LswrNM0bxqrhIvFDf5x5c9b0T0yfHnRjIJf7m5Pa2ybeeW1f46T0NsBdxoFV
+	 Y0Ckz22zhm9yga3Z68xxkyK+mFmWRpPnvy8fMZMrlkVjt7891b2NjsBIeIPNfZvb08nq/
+	 UF7kiAZ6AX95eyVexJYWCA6DOPPc49XNq9gAKe2JRn54E0UeF1D5xwSheO5pLdrisGxIK
+	 vZSwOeVOiwKGR5xvc90FEdS9/q8CmBeQJk7ZFwrNWU5+ZvWdKnsFvpV3Cw/WIquQKz7A7
+	 jJ7LrRjxkPZUGydzxIy0AXD2jgrZd9H+RmRDSGaAaS88SCfVJbZCi2XEZNRIVWrN52A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=chrisdown.name;
 	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=qh9LCOAD;
-	arc=none smtp.remote-ip=209.85.128.46
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b="fGNiIs/k";
+	arc=none smtp.remote-ip=209.85.215.173
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123A9606A330
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:53:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 123A9606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6C5606A326
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 07:53:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CB6C5606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=qh9LCOAD
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4b467581b98so26276045e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 23:53:05 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=fGNiIs/k
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cdb684859cbso1652071a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 23:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794383584; x=1794988384; darn=vger.kernel.org;
+        d=chrisdown.name; s=google; t=1794383598; x=1794988398; darn=vger.kernel.org;
         h=user-agent:in-reply-to:content-disposition:content-type
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=OO34thgIpfnBLKDxy+V7gJ/LfMCRQ5G6mslroPjHH60=;
-        b=qh9LCOADWEzmdiA75k2jWPNA0yBkjcxg5am/zcWGrzyzxcPxj7HPRox/Oa3brD1NcL
-         JuXhUs0YWmoz/GUqgeUUom1FHtCXUO1eJnyrm6j1KAAShstl/Q8QAyyuxuAt14eq2G/B
-         yOpjPxWgYdBpuiNdPO8eTYjd5FuDD4HLBWXh0=
+        bh=2Kx3wzBfUwksk18ANuXPfQbbKvvrdq3wbuLdN7ATve0=;
+        b=fGNiIs/kKYx0403DrbRRx4hi8fCERhALKeVSsheU8y0T5TaTFJ1LdeOzGlYRL2QplD
+         uEfFBS7gAYc8hJbZxGUoX+aNOv7K6E2ApKaWCqsaaCEGqTaduheQ16riLpELvzs8XnTe
+         SKyhD3JzLfXKQ2PLXFIuZRwgLwyK7HW1ZxVTc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794383584; x=1794988384;
+        d=1e100.net; s=20260707; t=1794383598; x=1794988398;
         h=user-agent:in-reply-to:content-disposition:content-type
          :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OO34thgIpfnBLKDxy+V7gJ/LfMCRQ5G6mslroPjHH60=;
-        b=hSYlsr0qve4hSQW1YQQJ0yJdO6neOm3E5ALiDUPpok9gP0c22JYv42szCjmkP2zRIV
-         97GRCll20Rz3nw7V0iet5FxdNgqnOd9s2R9h8Y4JD9HZczNO/PcqfXYB05roQe6EbZyA
-         DdqVV74qx7BuFF3tGP0wdlzzg1Yxhe7foiEw0xjUUeLc6J9AGVHwpsV7/l2n+ZdpKcaK
-         AM0z3TANagMgw9fJIIhiB9RgGCzWIwufH7Ez+Uf5tRFreKbkQHl/CxPCXIAfHv1Mu38y
-         84jojwKBNaQ7kArdn9AiBnxr/wlk/TtVksk8UnWOL2UYrGWmObTDueVjb/PmohA9FX6f
-         P2/w==
-X-Forwarded-Encrypted: i=1; AL+hErGgtfMp8nT0diMBa/gUKdZKsDRUXRMd0MC9X/Q2bs0EvQjYqdd6JPw+9Pm+BaK/onOFriiqfcDnzUZMv9k77bM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9/tjT+WFyjNH0qcl9Z/JYPTJto7grvx6P8+FQ7Dmvuj9W0N8fK
-	rrCf+HBE44o1mDnHdyZkbPHvhP80GAj1ArQymcwEGpfeYPzISnDhx35q6eurgh1TzIA=
-X-Gm-Gg: AYBFou2LZbi4ZW+ptWG1MRQYRFVptKP4FQtiGNsvS8QmFN5jtAtz3NUSskq8B9yJOsH
-	DvwNC14JQJKm/cgKDgBdJOhSWBmql2i/cJnDI2bVMJwN5uw4Jx6OdNyoh7NMQnUriln20LvwYhG
-	LOM5Tt7Vkrc0Uy1A4eXBUXffq90DmGLJqg6OlA5bd1c9kHfiECQa/DCHTm4yehHY6vsNwbcyuCh
-	p351jQPdbzIN1SB4gzL2NS63LeF+s5grPlhV+5CG7SbBAw4IZzqfkq44v0ZzKSdhmY3JJcdwwHz
-	4F28px1KfVk71kxhC8tvc75/IbV6guae9nBz+bz+eSXQBoxMmfrVwbygWC2eRA8Ph0q/a+UKN9V
-	iTnfNIAsvnVjUAV63dKB4T5r9ME2vUkVKHESba23vPmiiwwDQKHgCJX+xClIXv9AwtA0+aftijC
-	JE5iiin+HX9VoEXcuVAfke3C3nFDccOZJqOIN9zgH/SFUMUtb7sedDoxVsRy333gzxUNM8ZJtvz
-	HHhvSpk2DYfnxCbsCh8lNCKF5vpl14GFT2XfzkWt0Im5e8r+jS8UI4Yr7kMzxVsXnLv3FS0lJIr
-	k/elun+H42J9zwVFZ1eqQBoKoGeCygPBoSyMxlq4GzLUl59nhf5zsGVtQqMSMueHiohc+fxb0Vz
-	bplVLb33NfG6dbha0mRe3kVuSL+tQKe0DMrPwvVevHNyLDEHSxAEFtI+3Ydk2TcbhJo5rz6P0rv
-	my+GuH4Qwma6n5cfGQhYJd3P0eKnNo5WhoxuX35XHQNJkQkjcEPFc3
-X-Received: by 2002:a05:600c:3508:b0:4b2:3c81:d1 with SMTP id 5b1f17b1804b1-4ba093811c8mr23533605e9.5.1794383584057;
-        Tue, 10 Nov 2026 23:53:04 -0800 (PST)
+        bh=2Kx3wzBfUwksk18ANuXPfQbbKvvrdq3wbuLdN7ATve0=;
+        b=WfMk+hM0I30Z0pAcyoNJlMy2yzhW4GN9MtWMbIEA0AlVLNayKMXHG27FYE2rSYI5K9
+         bc29M20FTXE4/UW30RGXfxO9BiIuyonrLWSlXDwtCUl9lrQZz96xd0OmcYKqec6bT0zv
+         6PuGCbngw55xo9ZWQQKv3aMS7cCPdevLtjYN4olrHYl8voQQunAt96iRcAhQ3uF8Cin6
+         5APNLvwMKqPYx7jROoM8wJLym6cH0nj1/2pYIr/ZpTOIz5qJx3UN5L6fZ2JdYfhCVhg2
+         7pEf7am/1qOBIK6w30QT/XiAr5lJrbuIUk/oHdkCqWsP9hHt+BrCBSRAny+tFdTf19qM
+         NtSQ==
+X-Forwarded-Encrypted: i=1; AL+hErHLlWcLZpJ1DUwTeIKlSYFVqKHJDmIEKpiOnTg0stfjgiH8AswfhyZoNZMtU1UTqZ2W7J154vZNrpvuY5s92rY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/LbOV5qhbf4SvA07gcaPun9WXh+8+E9EaJWDEsh9Dpp71OgE4D
+	QvmpqxVrp9uafZvymPtlJLHcuF5WtOIcBqlqbDOWlnh2bFqDYxUMYAx0lWDRlZXwA8k=
+X-Gm-Gg: AYBFou0DCj87ksMxHHkn8oCHzHq6AXEQXp8T0qPNSCir1VPCB3lM5kvfIb3wAUpPFOR
+	V8BSa52jNr4d2OsDxwFOzTbM0DIhZdiTNtAEfY6/xYfLtNYR5TYG2XtmIEh27Wc3ZyT53H2Y6SV
+	Z7EvyKNBooyrvKFqj1E6ycF2NX/QocKYQa6be5dZnA5r6duHsm8ukWP2iNEdFZhGTd858p21nMV
+	hy0XQqTiq18UIgsW1+wuwe2+b51idVgxSAXB8dV+w06FX/y5883dR+neAFwDZPE+P8Ajm4/SEU4
+	eo3PCinrY9rfNmEHXIuCNVE5cKpSHVdaSQZfoQiftbaZ9x/4/Fj67bVRGGUIcFtI9dcceRNRhvH
+	Hi13S8H9wVmbUhz6hMxuMi5fgAC8rEZQvAIN0PprwUHCKlh2bHGKVawxruEpztL65zu2zqERdx0
+	qyJzFNYOrDboaxYn1wbS6GY6qAhmtb0Pb0tIdWMzttBh2YOJ9eCGitqsJwwSwacrObkTshSMZkY
+	CTQWeMKOpZHs/1uT5c531p9iZP1RIvwYhjoJLrCRMIhWIrdkiZQPCq7otpEAmes245jTeIkYteW
+	iWJpW6t1isPnlYnpN/QWD0uPIL4Hp7p0uTXpCBgzcEQeDTHaVnTiIG5Rs5NjvM58GTe0ZAd/bBN
+	qL6+Qkj9LGDCoBVySf3nvNohN+J0Rmn0soqtMr3/P+jm7SvbVQNOSRbdcc7hvwCgXGarx+Wl2yu
+	15GixNRRyFpXYwEM5Kths78Qkc3G9FrdM4CJUXOumoOZPYEpAjcFjN4m2TjzoXZE7WGKvZdkhw8
+	w==
+X-Received: by 2002:a17:90b:4c4d:b0:3b0:9691:a240 with SMTP id 98e67ed59e1d1-3b182ee8638mr1751151a91.47.1794383598151;
+        Tue, 10 Nov 2026 23:53:18 -0800 (PST)
 Received: from localhost ([199.201.64.8])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0203a763sm120391615e9.4.2026.11.10.23.53.03
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b17dbcbaf5sm3506003a91.0.2026.11.10.23.53.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 23:53:03 -0800 (PST)
-Date: Tue, 10 Nov 2026 23:53:01 -0800
+        Tue, 10 Nov 2026 23:53:17 -0800 (PST)
+Date: Tue, 10 Nov 2026 23:53:14 -0800
 From: Chris Down <chris@chrisdown.name>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	Mike Rapoport <rppt@kernel.org>,
@@ -89,9 +90,9 @@ Cc: Alexander Graf <graf@amazon.com>, Baoquan He <baoquan.he@linux.dev>,
 	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH 2/9] kho: Make bootmem reservations visible to fleet
- monitoring
-Message-ID: <c41c639fc5f453d60a265ba42a233f2ea5b48319.1794383544.git.chris@chrisdown.name>
+Subject: [PATCH 3/9] liveupdate: Make failed retrieves distinguishable from
+ dropped files
+Message-ID: <772c150d0a90139a327803cecf087f6865702753.1794383544.git.chris@chrisdown.name>
 References: <cover.1794383544.git.chris@chrisdown.name>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -107,157 +108,323 @@ Content-Disposition: inline
 In-Reply-To: <cover.1794383544.git.chris@chrisdown.name>
 User-Agent: Mutt/2.3.3 (9073d26d) (2026-06-12)
 
-We want to use live update at Meta to upgrade hypervisors whose VMs
-can't be migrated away first. But this poses a problem: whether we can
-enable KHO on a class of host depends on how much memory it leaves
-available for unmovable allocations. In an early test, a 64 GiB host
-with hugetlb_cma=6G set aside about 30 GiB of bootmem, which the running
-kernel can only use for movable allocations.
+At Meta, we want to use live update to upgrade hypervisors in place and
+preserve service fd stores across systemctl kexec. Our kernel rollout
+stops automatically when host health checks fail.
 
-The reservation varies with the kernel, memory size, NUMA layout and
-command line. Our fleet collector needs the actual size from each host
-so we can decide where to enable KHO and catch a kernel release that
-takes those hosts over their bootmem budget.
+We need it to stop if the new kernel can't give back state that a VMM or
+service handed over. We also want to track files that userspace never
+asks for.
 
-Today the collector would have to sum kho/out/bootmem_len in debugfs,
-which isn't a userspace ABI. In /proc/meminfo, free bootmem contributes
-to CmaFree, but the reservation doesn't contribute to CmaTotal. The cma
-count in /proc/zoneinfo includes bootmem after a cold boot but not after
-a KHO kexec. On an 8 GiB QEMU guest booted with
-kho_bootmem=32M,1536M,512M:
+Today the process that tries a retrieve sees its error, but a fleet
+collector can't see that error or tell whether a session went unclaimed.
+Opening /dev/liveupdate to check would itself trigger deserialisation on
+the first open and can get in the way of the real restorer because the
+device is exclusive-open. The collector polls procfs and sysfs, so it
+needs a result it can read after the event.
 
-                CmaTotal  CmaFree     zoneinfo cma (all zones)
-    cold boot   0 kB      2127872 kB  2129920 kB
-    KHO kexec   0 kB       881336 kB  0 kB
-
-Even if bootmem becomes a CMA area, CmaTotal will still include other
-areas such as hugetlb CMA, so inferring the bootmem size is still
-error-prone.
-
-Let's report the total bootmem reservation in bytes at
-/sys/kernel/kexec/kho_bootmem_size.
+Let's expose the incoming deserialisation state and aggregate session
+and file counts under /sys/class/misc/liveupdate/incoming/. A collector
+can stop the rollout on state=failed or files_failed > 0, and track
+files that were dropped or are still held. The session owner already
+knows which VM or service it belongs to, so there is no need to expose
+session names.
 
 Signed-off-by: Chris Down <chris@chrisdown.name>
 ---
- .../ABI/testing/sysfs-kernel-kexec-kdump          |  8 ++++++++
- Documentation/admin-guide/mm/kho.rst              |  9 +++++++++
- include/linux/kexec_handover.h                    |  1 +
- kernel/kexec_core.c                               | 13 +++++++++++++
- kernel/liveupdate/kexec_handover.c                | 15 +++++++++++++++
- 5 files changed, 46 insertions(+)
+ .../ABI/testing/sysfs-class-misc-liveupdate   | 44 ++++++++++++++++
+ Documentation/userspace-api/liveupdate.rst    |  7 +++
+ MAINTAINERS                                   |  1 +
+ kernel/liveupdate/luo_core.c                  | 50 +++++++++++++++++++
+ kernel/liveupdate/luo_file.c                  | 16 +++++-
+ kernel/liveupdate/luo_internal.h              | 34 +++++++++++++
+ kernel/liveupdate/luo_session.c               |  6 +++
+ 7 files changed, 156 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-misc-liveupdate
 
-diff --git a/Documentation/ABI/testing/sysfs-kernel-kexec-kdump b/Documentation/ABI/testing/sysfs-kernel-kexec-kdump
-index f59051b5d96d..80941a7d8a7c 100644
---- a/Documentation/ABI/testing/sysfs-kernel-kexec-kdump
-+++ b/Documentation/ABI/testing/sysfs-kernel-kexec-kdump
-@@ -59,3 +59,11 @@ Description:	read only
- 		to the crash (kdump) kernel. It lists the start and end physical
- 		addresses of CMA regions assigned for crashkernel use.
- User:		kdump service
+diff --git a/Documentation/ABI/testing/sysfs-class-misc-liveupdate b/Documentation/ABI/testing/sysfs-class-misc-liveupdate
+new file mode 100644
+index 000000000000..25e3b49d7aeb
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-class-misc-liveupdate
+@@ -0,0 +1,44 @@
++What:		/sys/class/misc/liveupdate/incoming/
++Date:		Nov 2026
++Contact:	kexec@lists.infradead.org
++Description:
++		Incoming Live Update Orchestrator (LUO) state and counters.
++		Present when live update is enabled. Each attribute is read
++		independently.
++Users:		system monitoring
 +
-+What:		/sys/kernel/kexec/kho_bootmem_size
++What:		/sys/class/misc/liveupdate/incoming/state
 +Date:		Nov 2026
 +Contact:	kexec@lists.infradead.org
 +Description:	read only
-+		Total size of the KHO bootmem regions in bytes. Returns 0
-+		when KHO is disabled.
-+User:		system monitoring
-diff --git a/Documentation/admin-guide/mm/kho.rst b/Documentation/admin-guide/mm/kho.rst
-index f9d2cc5999ee..c329d720bf25 100644
---- a/Documentation/admin-guide/mm/kho.rst
-+++ b/Documentation/admin-guide/mm/kho.rst
-@@ -81,6 +81,15 @@ At scale, correlating crashes to the previous kernel version enables
- faster root cause analysis when issues only occur in specific kernel
- transition scenarios.
- 
-+sysfs Interfaces
-+================
++		Status of incoming LUO sessions:
 +
-+``/sys/kernel/kexec/kho_bootmem_size``
-+    Total size of the KHO bootmem regions in bytes, or 0 when KHO is
-+    disabled.
++		"none"          No sessions were handed over.
++		"pending"       Deserialization has not finished. It
++		                starts on the first open of /dev/liveupdate.
++		"deserialized"  The sessions can be retrieved.
++		"failed"        Deserialization failed. Opening
++		                /dev/liveupdate returns -EIO.
++Users:		system monitoring
 +
-+See Documentation/ABI/testing/sysfs-kernel-kexec-kdump for the sysfs ABI.
++What:		/sys/class/misc/liveupdate/incoming/sessions
++What:		/sys/class/misc/liveupdate/incoming/files
++Date:		Nov 2026
++Contact:	kexec@lists.infradead.org
++Description:	read only
++		Number of sessions deserialized and number of files in
++		those sessions, respectively. Counts can be partial while
++		state is "pending" or after it changes to "failed".
++Users:		system monitoring
 +
- debugfs Interfaces
- ==================
++What:		/sys/class/misc/liveupdate/incoming/files_retrieved
++What:		/sys/class/misc/liveupdate/incoming/files_failed
++What:		/sys/class/misc/liveupdate/incoming/files_dropped
++Date:		Nov 2026
++Contact:	kexec@lists.infradead.org
++Description:	read only
++		Number of successful retrieves, permanent retrieve failures,
++		and files discarded at session finish without a recorded
++		retrieve outcome, respectively. Retrieves and failures are
++		counted when they occur.
++Users:		system monitoring
+diff --git a/Documentation/userspace-api/liveupdate.rst b/Documentation/userspace-api/liveupdate.rst
+index cdd74627ab75..39bbb91d0dd4 100644
+--- a/Documentation/userspace-api/liveupdate.rst
++++ b/Documentation/userspace-api/liveupdate.rst
+@@ -45,6 +45,13 @@ For details, see:
+ - `sd_pid_notify_with_fds(3)
+   <https://www.freedesktop.org/software/systemd/man/latest/sd_pid_notify_with_fds.html>`_
  
-diff --git a/include/linux/kexec_handover.h b/include/linux/kexec_handover.h
-index ef2b188c8ed0..736d51e79fd2 100644
---- a/include/linux/kexec_handover.h
-+++ b/include/linux/kexec_handover.h
-@@ -40,6 +40,7 @@ void kho_populate(phys_addr_t fdt_phys, u64 fdt_len, phys_addr_t bootmem_phys,
- 		  u64 bootmem_len);
- 
- bool kho_bootmem_overlap(phys_addr_t phys, size_t size);
-+phys_addr_t kho_bootmem_size(void);
- 
- static inline enum migratetype kho_bootmem_migratetype(unsigned long pfn,
- 						       enum migratetype mt)
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index f4a31565c447..ed105e6351eb 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -13,6 +13,7 @@
- #include <linux/slab.h>
- #include <linux/fs.h>
- #include <linux/kexec.h>
-+#include <linux/kexec_handover.h>
- #include <linux/mutex.h>
- #include <linux/list.h>
- #include <linux/liveupdate.h>
-@@ -1324,6 +1325,15 @@ static struct kobj_attribute crash_elfcorehdr_size_attr = __ATTR_RO(crash_elfcor
- #endif /* CONFIG_CRASH_HOTPLUG */
- #endif /* CONFIG_CRASH_DUMP */
- 
-+#ifdef CONFIG_KEXEC_HANDOVER
-+static ssize_t kho_bootmem_size_show(struct kobject *kobj,
-+				     struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%llu\n", (unsigned long long)kho_bootmem_size());
-+}
-+static struct kobj_attribute kho_bootmem_size_attr = __ATTR_RO(kho_bootmem_size);
-+#endif
++Monitoring
++==========
 +
- static struct attribute *kexec_attrs[] = {
- 	&loaded_attr.attr,
- #ifdef CONFIG_CRASH_DUMP
-@@ -1335,6 +1345,9 @@ static struct attribute *kexec_attrs[] = {
- #ifdef CONFIG_CRASH_HOTPLUG
- 	&crash_elfcorehdr_size_attr.attr,
- #endif
-+#endif
-+#ifdef CONFIG_KEXEC_HANDOVER
-+	&kho_bootmem_size_attr.attr,
- #endif
- 	NULL
++Read ``/sys/class/misc/liveupdate/incoming/`` to monitor incoming
++sessions and file retrievals without opening ``/dev/liveupdate``.
++See Documentation/ABI/testing/sysfs-class-misc-liveupdate for the sysfs ABI.
++
+ See Also
+ ========
+ 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1572f6c905aa..b98b95cd6d12 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15523,6 +15523,7 @@ L:	kexec@lists.infradead.org
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git
++F:	Documentation/ABI/testing/sysfs-class-misc-liveupdate
+ F:	Documentation/core-api/liveupdate.rst
+ F:	Documentation/mm/memfd_preservation.rst
+ F:	Documentation/userspace-api/liveupdate.rst
+diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
+index 1b2bda22902d..ba174e9aae03 100644
+--- a/kernel/liveupdate/luo_core.c
++++ b/kernel/liveupdate/luo_core.c
+@@ -75,6 +75,8 @@ static struct {
+  */
+ DECLARE_RWSEM(luo_register_rwlock);
+ 
++struct luo_incoming_stats luo_incoming_stats;
++
+ static int __init early_liveupdate_param(char *buf)
+ {
+ 	return kstrtobool(buf, &luo_global.enabled);
+@@ -423,11 +425,59 @@ static const struct file_operations luo_fops = {
+ 	.unlocked_ioctl	= luo_ioctl,
  };
-diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec_handover.c
-index 3046b89e5db4..21d77e29d2bb 100644
---- a/kernel/liveupdate/kexec_handover.c
-+++ b/kernel/liveupdate/kexec_handover.c
-@@ -942,6 +942,21 @@ static void __init kho_reserve_bootmem(void)
- 	kho_enable = false;
+ 
++static const char * const luo_incoming_state_names[] = {
++	[LUO_INCOMING_NONE]		= "none",
++	[LUO_INCOMING_PENDING]		= "pending",
++	[LUO_INCOMING_DESERIALIZED]	= "deserialized",
++	[LUO_INCOMING_FAILED]		= "failed",
++};
++
++static ssize_t state_show(struct device *dev, struct device_attribute *attr,
++			  char *buf)
++{
++	enum luo_incoming_state state = READ_ONCE(luo_incoming_stats.state);
++
++	return sysfs_emit(buf, "%s\n", luo_incoming_state_names[state]);
++}
++static DEVICE_ATTR_RO(state);
++
++#define LUO_INCOMING_ATTR_RO(_name)					\
++static ssize_t _name##_show(struct device *dev,				\
++			    struct device_attribute *attr, char *buf)	\
++{									\
++	return sysfs_emit(buf, "%ld\n",					\
++			  atomic_long_read(&luo_incoming_stats._name));	\
++}									\
++static DEVICE_ATTR_RO(_name)
++
++LUO_INCOMING_ATTR_RO(sessions);
++LUO_INCOMING_ATTR_RO(files);
++LUO_INCOMING_ATTR_RO(files_retrieved);
++LUO_INCOMING_ATTR_RO(files_failed);
++LUO_INCOMING_ATTR_RO(files_dropped);
++
++static struct attribute *luo_incoming_attrs[] = {
++	&dev_attr_state.attr,
++	&dev_attr_sessions.attr,
++	&dev_attr_files.attr,
++	&dev_attr_files_retrieved.attr,
++	&dev_attr_files_failed.attr,
++	&dev_attr_files_dropped.attr,
++	NULL
++};
++
++static const struct attribute_group luo_incoming_group = {
++	.name	= "incoming",
++	.attrs	= luo_incoming_attrs,
++};
++__ATTRIBUTE_GROUPS(luo_incoming);
++
+ static struct luo_device_state luo_dev = {
+ 	.miscdev = {
+ 		.minor = MISC_DYNAMIC_MINOR,
+ 		.name  = "liveupdate",
+ 		.fops  = &luo_fops,
++		.groups = luo_incoming_groups,
+ 	},
+ 	.in_use = ATOMIC_INIT(0),
+ };
+diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+index a39992da504f..3aac1afa05c0 100644
+--- a/kernel/liveupdate/luo_file.c
++++ b/kernel/liveupdate/luo_file.c
+@@ -543,6 +543,16 @@ void luo_file_unfreeze(struct luo_file_set *file_set,
+ 	memset(file_set_ser, 0, sizeof(*file_set_ser));
  }
  
-+phys_addr_t kho_bootmem_size(void)
++/* Record the first retrieve result. A negative status is permanent. */
++static void luo_file_set_retrieve_status(struct luo_file *luo_file, int status)
 +{
-+	phys_addr_t size = 0;
-+	unsigned int i;
-+
-+	/* kho_init() can disable KHO without clearing kho_bootmem_cnt. */
-+	if (!kho_enable)
-+		return 0;
-+
-+	for (i = 0; i < kho_bootmem_cnt; i++)
-+		size += kho_bootmem[i].size;
-+
-+	return size;
++	luo_file->retrieve_status = status;
++	if (status > 0)
++		atomic_long_inc(&luo_incoming_stats.files_retrieved);
++	else
++		atomic_long_inc(&luo_incoming_stats.files_failed);
 +}
 +
- /*
-  * Look for free blocks of 1G. This is a heuristic chosen to work efficiently
-  * with large systems with hundreds of gigabytes of memory. It will work poorly
+ /**
+  * luo_retrieve_file - Restores a preserved file from a file_set by its token.
+  * @file_set: The file_set from which to retrieve the file.
+@@ -611,7 +621,7 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+ 	err = luo_file->fh->ops->retrieve(&args);
+ 	if (err) {
+ 		/* Keep the error code for later use. */
+-		luo_file->retrieve_status = err;
++		luo_file_set_retrieve_status(luo_file, err);
+ 		return err;
+ 	}
+ 
+@@ -624,7 +634,7 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+ 			  luo_file->file, GFP_KERNEL));
+ 
+ 	*filep = luo_file->file;
+-	luo_file->retrieve_status = 1;
++	luo_file_set_retrieve_status(luo_file, 1);
+ 
+ 	return 0;
+ }
+@@ -719,6 +729,8 @@ int luo_file_finish(struct luo_file_set *file_set)
+ 					   struct luo_file, list);
+ 
+ 		luo_file_finish_one(file_set, luo_file);
++		if (!luo_file->retrieve_status)
++			atomic_long_inc(&luo_incoming_stats.files_dropped);
+ 
+ 		if (luo_file->file) {
+ 			xa_erase(&luo_preserved_files,
+diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+index dac6644bfb18..504963fc9898 100644
+--- a/kernel/liveupdate/luo_internal.h
++++ b/kernel/liveupdate/luo_internal.h
+@@ -77,6 +77,40 @@ struct luo_session {
+ 
+ extern struct rw_semaphore luo_register_rwlock;
+ 
++/**
++ * enum luo_incoming_state - Deserialization state of incoming sessions
++ * @LUO_INCOMING_NONE: No incoming sessions.
++ * @LUO_INCOMING_PENDING: Deserialization has not finished.
++ * @LUO_INCOMING_DESERIALIZED: Sessions are ready to retrieve.
++ * @LUO_INCOMING_FAILED: Deserialization failed.
++ */
++enum luo_incoming_state {
++	LUO_INCOMING_NONE,
++	LUO_INCOMING_PENDING,
++	LUO_INCOMING_DESERIALIZED,
++	LUO_INCOMING_FAILED,
++};
++
++/**
++ * struct luo_incoming_stats - Incoming session and file counters
++ * @state: Deserialization state.
++ * @sessions: Sessions deserialized.
++ * @files: Files in deserialized sessions.
++ * @files_retrieved: Files retrieved.
++ * @files_failed: Permanent retrieve failures.
++ * @files_dropped: Files discarded without a retrieve outcome.
++ */
++struct luo_incoming_stats {
++	enum luo_incoming_state state;
++	atomic_long_t sessions;
++	atomic_long_t files;
++	atomic_long_t files_retrieved;
++	atomic_long_t files_failed;
++	atomic_long_t files_dropped;
++};
++
++extern struct luo_incoming_stats luo_incoming_stats;
++
+ static inline struct liveupdate_session *luo_session_from_file_set(struct luo_file_set *file_set)
+ {
+ 	struct luo_session *session;
+diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+index 74bc66929f4b..1a40607bfc45 100644
+--- a/kernel/liveupdate/luo_session.c
++++ b/kernel/liveupdate/luo_session.c
+@@ -549,6 +549,7 @@ int __init luo_session_setup_incoming(u64 sessions_pa)
+ 		return err;
+ 
+ 	sh->active = true;
++	luo_incoming_stats.state = LUO_INCOMING_PENDING;
+ 	return 0;
+ }
+ 
+@@ -583,6 +584,9 @@ static int luo_session_deserialize_one(struct luo_session_header *sh,
+ 		return err;
+ 	}
+ 
++	atomic_long_inc(&luo_incoming_stats.sessions);
++	atomic_long_add(session->file_set.count, &luo_incoming_stats.files);
++
+ 	return 0;
+ }
+ 
+@@ -626,12 +630,14 @@ int luo_session_deserialize(void)
+ 	}
+ 
+ 	kho_block_set_destroy(&sh->block_set);
++	WRITE_ONCE(luo_incoming_stats.state, LUO_INCOMING_DESERIALIZED);
+ 
+ 	return 0;
+ 
+ save_err:
+ 	kho_block_set_destroy(&sh->block_set);
+ 	saved_err = err;
++	WRITE_ONCE(luo_incoming_stats.state, LUO_INCOMING_FAILED);
+ 	return err;
+ }
+ 
 -- 
 2.54.0
 
