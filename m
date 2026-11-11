@@ -1,49 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794392034;
-	b=RS7GvQ2ZQrcryLUJ+LFz7hAmD/agSlSC0ZCFl6kMGghHtLZJ++pjvasdXWekmGH6lzZK
-	 xCCpGkjtjMcMjAanu1PRiMeGVwzlb3r8NGDF8D1+wL8e/fNIKmMqXEZkWSaZMQhijlVLU
-	 q9Eza7sZZ74tfY6zwMQRq6A9kZI2vLBSQWASckeIQXzMG0CL65lZKmEzzBMJGBLUwYamr
-	 1kiRX2VmToRB35NUWbaZHAJtLXrZigVIocz3Dk04LvU7JrcaRwYCmF2GrijI8FZymcwBY
-	 pLdzQWquu1f7bQ8uTRKfm1pkKZ1vWuaSnasKqDsCB5cyGve8h3XPyoqx59bWVMGMrXA==
+	t=1794392425;
+	b=XmqDLio9sjPjBrgL9SIoTk48ExXuSVmujkuTkVWzo3IWfA/NIjFn5KrUEWMq2D+P/p5C
+	 hK1qxQdzqgFVM2dEjOLG3pXdyne6nw5D84pTnYBGQfDVEMYYS6FQbJhjVoqYUeSmuGSLE
+	 kKGnA/DqZH6bUdlCAx3WiqcKuV/J2Kvx3OVh9ZHDEELuR/NQvtO08HgRlk+RHRRsuO1G3
+	 D2YGHKwHJEB9z8Y+AalrXRuzPOV2ph5rs1ylfmCnn34KMT01lekTER5jEbJhbooWv5g14
+	 tIHZ8n7gBzbNiEyw6nBbO83dVaQxlocZXrJrsKTTrwxg14DfKRbBTGXTk29MwZzEFPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794392034;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=QFsUrJ0dxOWP7r3frqNT5Bu7ce7smoD0qQQqG1/Rh6Q=;
-	b=C5qCqQXDNoBDLD8EbrvzWi6jyqizaTOAcZ4nhWwQPUEgo7qAnWzPE6yUe24boPQXxCG5
-	 xDHPclQkGY2Hvf8253S3T93gQzrfkmlcEESjdKJaIibqd+nhp/mVEfEE8rZG0bHYSqd1/
-	 Tqpz0cTcXIZZ3YfknEWE3X1R524tQiPAVmEDgsiKTbBc4hPaWLp7+g/FUAyKPd/MpCPSq
-	 T96pLTALMQWafNDPFptWzhqlZf6KyoLkPM1lk/6l6DGDwp6zC7zDG61jXYliMtGdMzKof
-	 3L84TD3xEybmyWKiRu778nRtArf/rM8XmZLq5iXdidUkvfBloC+3eUbHP8/TUPIuzOw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794392425;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Debian-User;
+	bh=+wcp/kB2lBcCVUGz1/nNSNwOHKuLsx1qYPo3ER8SQH8=;
+	b=sllDMaXGAnMowco/fcE57qQLmqiQ6yBi96BuDLBpLOZz5ml6/CzDXDagAX9VjTegT/Ef
+	 b/dwpdHhq2BgFtOktmm1F6OwZOlpLqe5yJjCrChdlNrQQuoYmirmZc/c9qKtdqAKY+Xd8
+	 jg8b1NvcIwHdixJea0rN9tlHoqjpS3FYtySNYyJNkIPb/E8AC/W2M+j2PwjqGu69Rf80y
+	 Z7f3FpR12OJC0xooSdkjBRZV3b7E/P1hO6K5g7h+WAVAAX7jvyAj3DVCwL6d3PmAENSgd
+	 bzU/7+qBerazdFd2eT6b29qtqPSBMBbc+AgEbL6XIzR4urnSK2DO1nIXe9o0HaF6TVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=t1XoflFL;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4D9A606A321;
-	Wed, 11 Nov 2026 10:13:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4D9A606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=debian.org;
+	spf=pass smtp.mailfrom=debian.org;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Jz0coMMD;
+	arc=none smtp.remote-ip=82.195.75.108
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D684C606A321;
+	Wed, 11 Nov 2026 10:20:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D684C606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=t1XoflFL
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19D6F1576;
-	Wed, 11 Nov 2026 02:13:50 -0800 (PST)
-Received: from [192.168.29.156] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF9843F632;
-	Wed, 11 Nov 2026 02:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794392033; bh=1UEncBFzc6ar7AzXQMp/oadOU3GZsGaET5zqzd1pFeE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=t1XoflFL8fdXTGRA8TKAuiSWlNqE8dajStSZclPxJPQhhPfQ4rp6WJdfL3xNKT35o
-	 5skjqINIMXPS133CRRqRgZMCqxpLzq/FXQw6Wwde839uQ4Yh5hRfQfyIvBwJeC2N5s
-	 mQs95NZEbgNSiP6CcMm6Fqqa1W3LWZEDLdaXhaNk=
-Message-ID: <f2df3351-ccc8-44c6-bcfc-d380264fb8fd@arm.com>
-Date: Wed, 11 Nov 2026 15:43:44 +0530
+	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Jz0coMMD
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=+wcp/kB2lBcCVUGz1/nNSNwOHKuLsx1qYPo3ER8SQH8=; b=Jz0coMMDNGkRDu6dzsTw5jimJy
+	5x/G51dDjFkMFVlX4hFH6HPoMNkylnH0IzUazy+wO3O/fGHbIToU7LruG+P4m/j5zqsfmDbOsqY8y
+	Ke/E7u8+A87rgj19j2lFNKvLAT1WXCZxiKXDnAzzbyiG099gNnlXwsWa9xj2Cb9DJVyWK4kig6Jqm
+	IVHYY4flGitylhY/qLUVbgNgn0N6UM9kDplr6rfYnVvToJi3rTUSaq3H9HuKk+Z38epPEs8PStu7m
+	XvqWqi7M+Wff/o6irIW3W3RHQWtrXZ+c06jlpA9/VuR4E5/QEmnXqydntz8QTVkMsoVy1U1Tq39Rn
+	jnY+ACBA==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1xR5R7-00D6xA-2U;
+	Wed, 11 Nov 2026 10:20:13 +0000
+Date: Wed, 11 Nov 2026 02:20:08 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: Gustavo Luiz Duarte <gustavold@gmail.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH net] selftests: netconsole: enable the targets created by
+ the torture test
+Message-ID: <avRBD4SMHnfoqn3k@gmail.com>
+References: <20261110-netcons_selftest_fix-v1-1-86643b837216@debian.org>
+ <avPLyMTFkhCRqRAS@fedora>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,87 +72,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v2 00/12] improve mremap_test
-To: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@suse.com>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- John Hubbard <jhubbard@nvidia.com>, Kalesh Singh <kaleshsingh@google.com>,
- Anshuman Khandual <anshuman.khandual@arm.com>, Park Tae-sun
- <ts930@dgu.ac.kr>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261102100211.141831-1-sarthak.sharma@arm.com>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <20261102100211.141831-1-sarthak.sharma@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avPLyMTFkhCRqRAS@fedora>
+X-Debian-User: leitao
 
+Hello Hangbin,
 
+On Wed, Nov 11, 2026 at 09:58:32AM +0800, Hangbin Liu wrote:
+> On Tue, Nov 10, 2026 at 04:32:25AM -0800, Breno Leitao wrote:
+> > create_and_delete_random_target() is meant to create, enable and remove
+> > targets while messages are sent, but it only creates and removes them.
+> > The helper it calls, _create_dynamic_target(), stopped enabling the
+> > target when the bonding test moved that step into
+> > create_dynamic_target().
+> > 
+> > Enable the targets again, so they come up while messages flow and are
+> > disabled before being removed. Like toggle_netcons_target(), ignore a
+> > failed enable, which would otherwise end the function and leave the
+> > targets behind. With a console per target, this also registers and
+> > unregisters their consoles under load.
+> > 
+> > Fixes: 236682db3b6f ("selftest: netcons: add test for netconsole over bonded interfaces")
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> >  tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+> > index 33a44adb6f8f3a..3dfab0bf1b0756 100755
+> > --- a/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+> > +++ b/tools/testing/selftests/drivers/net/netconsole/netcons_torture.sh
+> > @@ -46,6 +46,7 @@ create_and_delete_random_target() {
+> >  
+> >  		# Basic population so the target can come up
+> >  		_create_dynamic_target "${FORMAT}" "${RND_TARGET_PATH}"
+> > +		echo 1 > "${RND_TARGET_PATH}"/enabled 2> /dev/null || true
+> >  	done
+> >  
+> >  	echo "netconsole selftest: ${COUNT} additional targets were created" > /dev/kmsg
+> > 
+> > ---
+> > base-commit: b3dfbde62cf1981c4638939c159dfd087b7a72e9
+> > change-id: 20261110-netcons_selftest_fix-4cbf633295ef
+> > 
+> > Best regards,
+> > --  
+> > Breno Leitao <leitao@debian.org>
+> > 
+> 
+> Ignore the failed enable makes sense to me, as we enabled `set -e`
+> and use random target.
 
-On 11/2/26 3:31 PM, Sarthak Sharma wrote:
-> This series fixes correctness issues in mremap_test, simplifies its
-> test infrastructure and strengthens validation of remapped mappings.
-> 
-> Patches 1-3 remove unused command line handling, unnecessary cleanup
-> checks and redundant errno handling. Patch 4 converts the test to use
-> kselftest helpers and removes manual failure tracking.
-> 
-> Patches 5-8 fix handling of unavailable userfaultfd support, unexpected
-> mremap() successes, data-corruption failures and cleanup after mmap()
-> failures. Patch 9 removes perf tests and timing infrastructure.
-> 
-> Patches 10 and 11 replace threshold-based random-data validation with
-> sampled validation and a deterministic data pattern. Patch 12
-> strengthens multi VMA validation by also checking the mapping state
-> of holes after remapping.
-> 
-> This is a resend of v2 without any changes.
+ack!
 
-Hi,
+> Do we need sleep 1s like create_dynamic_target() to make sure the
+> configuration loaded?
 
-It has been some time since I've posted this series (v1 posted around 2 
-months back :)) but it hasn't been reviewed enough. Requesting for some 
-review on this series, if someone has some time to look at it.
+I don't think we need it. The write to enabled is synchronous:
+enabled_store() sets up netpoll and moves the target to STATE_ENABLED
+before it returns. If the setup fails, enabled reads back 0, and the
+disable loop checks enabled before writing 0 to it.
 
-> 
-> Changes in v2:
-> - Add a first patch to remove command-line options (David)
-> - Add a second patch to remove munmap() checks from cleanup paths (David)
-> - Add a third patch to simplify errno handling
-> - Drop the "correct multiple VMA range size" patch
-> - Add an eighth patch to fix cleanup after target mmap() failures
-> - Replace fully populating and validating large mappings with
->    populating and validating 10 pages each from the start, middle
->    and end (David)
-> - Extend multi VMA strengthening to userfaultfd multi VMA test
-> - Fix minor formatting issues
-> 
-> Previous versions:
-> v2: https://lore.kernel.org/all/20261006092511.145776-1-sarthak.sharma@arm.com/
-> v1: https://lore.kernel.org/all/20260924050009.19974-1-sarthak.sharma@arm.com/
-> 
-> ---
-> Sarthak Sharma (12):
->    selftests/mm: mremap_test: remove command line options
->    selftests/mm: mremap_test: drop munmap() checks from cleanup paths
->    selftests/mm: mremap_test: simplify errno handling
->    selftests/mm: mremap_test: use kselftest helpers
->    selftests/mm: mremap_test: skip test when userfaultfd is unavailable
->    selftests/mm: mremap_test: fail unexpected mremap successes
->    selftests/mm: mremap_test: fail on data corruption
->    selftests/mm: mremap_test: handle cleanup after mmap failures
->    selftests/mm: mremap_test: remove perf tests and timing
->    selftests/mm: mremap_test: replace validation threshold with sampled
->      checks
->    selftests/mm: mremap_test: replace random data with deterministic
->      pattern
->    selftests/mm: mremap_test: strengthen multi VMA validation
-> 
->   tools/testing/selftests/mm/mremap_test.c | 701 ++++++++++-------------
->   1 file changed, 291 insertions(+), 410 deletions(-)
-> 
+The other reason for that sleep, keeping the console messages in
+order, does not apply either, since the torture test does not read
+back any message.
+
+Thanks for the review,
+--breno
 
