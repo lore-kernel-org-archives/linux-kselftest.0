@@ -1,105 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=34.218.115.239
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794429454;
-	b=fNEukRASf06Uvp+hpW8QB7uRGOSw4uf/qncCDbiOpFQfOvvW8VOxTIngSPpOEWn1TkS7
-	 sXYu5stPD5iZW+K6UGsRx/ztaLgOAThzFgVCqr5Ei6InIvUBi9MMChnLs/UmFDFWIDmJo
-	 RWoSrmeMS5BEXt+2hPkC9oEbw5lV677iO6PcPYLfCzvNHR1mIA6es9Zns/+pntN2a2Bn/
-	 f3REUD5lgTOoLmW1bCGObtGItYYitl6mNU6y5ZbFH7V0soiQIVMxiOn+MnFQ7DZjTCMDK
-	 CpZq/Nq67QS1V8pI6NIliLIVgHjJHW1EX4LhWr+C29hxEEBjd0+rKbkF6ffPbw3lAyg==
+	t=1794430720;
+	b=gTVnLcDcyyXlp8bNTG1gZBBDSQTPfWGxvEz6OLeyNJRC5l+sPyKBMwO52cjuS1br1uBX
+	 4aH/xRkcAdofyH4bntR9IgF0zfq7Ya2z/43aND05JKpZeTQY+PJ7mpqtYSogP+RAKNJAK
+	 lroJCELsEeqxVWyMQ3LlYv0eboKo5Qa2dhYllBqNrmOHhKX++dHHzbEs+YE2STkeNneAS
+	 hfzk48BjFPL+vuXKQioAK6OvvSKk7RwAP1NryiRWfH2+LFEM4YsKrnOb/AZHVvNpfU6sB
+	 COhOQ9xxRdlHcUO4R92dCR9nin/r7w01bvPfPuiQCHd389J2MKSFg1AuMQNRAkbU+sQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794429454;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
-	 Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-ClientProxiedBy;
-	bh=vpIyzJPxRnrClrGT6opul0fGUGxCRQ7iTyzY6dXBUDc=;
-	b=zxAmY3ZOMfYU7j0Ax/EivjCF0hX+8RUtcbG+wH6m+aEyWS2NagOvExHTwK40JM/QlbiN
-	 d4k9swPVOucbFdqgW2pjXxfTesb5rYi1h/j+UXlzpdOMNWGuioJ114vOpcYEhaB4xXLQA
-	 /KaaCFpGUy+wa3AWyHm7xRzJ7xxNCSpceadgWaGcbgq1JDTuu3OSMlYgjKRYrDbQ0fDcr
-	 jFoWe/0ygw3bHHRQUngGjJUDTskzuOK7B1f8eyAW9vl4qT3wmPKbO3xLSfalMHpBIsCx7
-	 F8AsPnpzL7BtiwnuPjyZbJmA9xx8x7E9innHGZFu4PHYnF0QQ7anhMJR6HFhZNac6uQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794430720;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 Sender:X-SRS-Rewrite;
+	bh=YUFQ0BzuROj7vKv1gEx2DSIYXCVTpEtb08fn/aq/i9g=;
+	b=GeuFDTAl0cT3P7khb19Uz+hKkDPwMXJYx2I3bGHIiuQUo2UMBM3fgvliYtsg8x+JXsac
+	 dFr0k+mZzZoXdS1kQIZVHlL2AhfAQjiTdhA0Aki/8b3KxSNp6mRvDkKl7IWFQGL8YNl2Z
+	 YJy5B+Pp/opguZ2QW7rHY9ErJ75q29FMvSjFOj3v9dlz2Tty+v8JL7axJNMGie2NYC4IX
+	 QT3vjZWCzoTJjD0FazqXJ+gbMMSJpqsrJC9BLOoV60tn/JEE9HqrqTeMIj93W+jZfu+SR
+	 45QSMIeKzhtB1b207othSHe6cyBqIFeLtenlfW1szYLI/Rj8UgwxkZHW32coufxqQnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=amazon.com;
-	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=YYK+ZnQk;
-	arc=none smtp.remote-ip=34.218.115.239
-Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=infradead.org;
+	spf=none smtp.mailfrom=casper.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=BYRXdC+e;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDD6606A89F;
-	Wed, 11 Nov 2026 20:37:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDDD6606A89F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F6F606A31C;
+	Wed, 11 Nov 2026 20:58:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6F6F606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=YYK+ZnQk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794429454; x=1825965454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vpIyzJPxRnrClrGT6opul0fGUGxCRQ7iTyzY6dXBUDc=;
-  b=YYK+ZnQkBuda9ap87dQ89X265NEdYSbOfrslXe+vr4TgOAvKtLF2YWFh
-   pA6hFgDHWeVo72/2XUwFeictRpNtmLjDn9VcZa21pMPhbpsa35xOVGjcn
-   iBoVHonTPHh1awrKgicakSWwvsLqHmMXsVSWx8k0FqVG4jxycVkNFZXJU
-   2j/1u4z4/4B+/qit6fiDCVZxcGZkJGwJ/qLm+UWENRaH84I7jjF8WbzrP
-   x39J6naVHcWAk75aPjEfG7wr8T0GgyftPcU3su3CL3ywyKh7kGzWWn77Y
-   RdJKCu0+40Th3c6s2ixzkwC9BaOB3MLNZsQkEU7JpSvjT5yXs8SD9M/by
-   A==;
-X-CSE-ConnectionGUID: tiE9b2HlQrqB/PDjzj+nRw==
-X-CSE-MsgGUID: GGJF9NIVRMGQ5ByMC+l/mA==
-X-IronPort-AV: E=Sophos;i="6.27,208,1787011200"; 
-   d="scan'208";a="33526248"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2026 20:37:30 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:13310]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.12.127:2525] with esmtp (Farcaster)
- id 389de7d3-cdac-4a03-93bb-a296349c3841; Wed, 11 Nov 2026 20:37:30 +0000 (UTC)
-X-Farcaster-Flow-ID: 389de7d3-cdac-4a03-93bb-a296349c3841
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Wed, 11 Nov 2026 20:37:30 +0000
-Received: from dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com
- (172.19.55.127) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Wed, 11 Nov 2026
- 20:37:29 +0000
-Date: Wed, 11 Nov 2026 20:37:24 +0000
-From: David Keogh <dkeogh@amazon.com>
-To: Tianyi Gao <tianyi@cloudflare.com>
-CC: Stephen Hemminger <stephen@networkplumber.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, <netdev@vger.kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
-	<edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon Horman
-	<horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea
-	<dtatulea@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
-	<alasdair@mcwilliam.dev>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, Ido Schimmel
-	<idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, "Andrew
- Lunn" <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
-	<rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
-	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>, "Danielle
- Ratson" <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <kernel-team@cloudflare.com>,
-	<nh-open-source@amazon.com>
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
-Message-ID: <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
- <20261108190831.3f991a13@phoenix.local>
- <20261109154909.32748-1-tianyi@cloudflare.com>
- <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=BYRXdC+e
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=YUFQ0BzuROj7vKv1gEx2DSIYXCVTpEtb08fn/aq/i9g=; b=BYRXdC+eNh2MLKCFHYtHOlfJ7x
+	z0WWYh4ivfCNrvP1yonwgAV9TfOEeQGWAunQ4KkAWk5oawGTBATJXrNIIsUjbki8DTlnbbCMnNBZ1
+	xQmY4VFdEtau8ifckcdm3GOhnw6LtTT8mK5znOGEaJRFyfWBO4vxDlIk1/zjfNeB3ybwSwZGf6kfC
+	GVAmpEsPglkv1Bi3filNDXrol1TLz4CcE7zaZ6GB1ABadukinFf2NYrMXGKJ/95aw8xI7lDS2x7mF
+	MSnxXPE/5ZFivEjWfpXuZm6DmKvHYDKpWe7msuJoKyE0Fzvhqy/p5hnBTIoY8QDt1HdbcqbEAUw0L
+	yS3nQQMA==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRFOu-0000000Ea66-3PGx;
+	Wed, 11 Nov 2026 20:58:36 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
+	id 1xRFOu-0000000HZ7e-2DQI;
+	Wed, 11 Nov 2026 20:58:36 +0000
+From: David Woodhouse <dwmw2@infradead.org>
+To: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Thara Gopinath <tgopinath@linux.microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Michael Kelley <mhklinux@outlook.com>,
+	Nicolas Saenz Julienne <nsaenz@amazon.com>,
+	Nikolas Wipper <nik.wipper@gmx.de>,
+	Mushahid Hussain <hmushi@amazon.co.uk>,
+	Sriram Nambakam <snambakam@linux.microsoft.com>,
+	David Woodhouse <dwmw@amazon.co.uk>
+Subject: [PATCH 0/4] KVM: x86: hyper-v: Forward unimplemented hypercalls to userspace
+Date: Wed, 11 Nov 2026 12:58:32 -0800
+Message-ID: <20261111205836.4186584-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,33 +83,86 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
-X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-On Wed, Nov 11, 2026 at 08:23:26PM +0000, David Keogh wrote:
-> Dropping IFLA_TX_EXTRA_HEADROOM is fine with me. A BPF-side
-> declaration covers the TC egress case, as long as the program is
-> attached to the device the skb is allocated for.
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-One correction to that, after checking how our hosts run the program.
+KVM implements a fixed set of Hyper-V hypercalls and fails every other
+code with HV_STATUS_INVALID_HYPERCALL_CODE. A VMM that wants to
+implement more of the TLFS, such as the VSM hypercalls Windows uses for
+Virtualization Based Security, never sees them.
 
-Our TC egress programs are not attached individually. A loader keeps
-a chain: only the head is attached to the NIC, and the rest, including
-the program that encapsulates, are reached by bpf_tail_call through a
-prog array. The head can change as programs are added and removed.
+This series adds KVM_CAP_HYPERV_FORWARD_HCALL. As with KVM_CAP_XEN_HVM
+and KVM_CAP_EXIT_HYPERCALL, KVM_CHECK_EXTENSION returns a bitmask of
+features and KVM_ENABLE_CAP takes the subset to enable, rejecting any
+bit the kernel does not report:
 
-So if the kernel reads the declaration when a program is attached, it
-never sees the encapsulating program, because that program is only
-ever inserted into the prog array. Putting the declaration on the head
-instead does not help either: the head is a different program that
-pushes no headers itself, and it can change.
+ - KVM_HYPERV_HCALL_FORWARD_UNKNOWN (bit 0) sends the hypercalls KVM
+   does not implement, and extended hypercalls in fast form, out
+   through the existing KVM_EXIT_HYPERV_HCALL exit.
 
-For the BPF-side declaration to cover the TC egress case, it needs to
-account for tail call targets. Tianyi, how were you planning to handle
-a program that is only reached by tail call?
+ - KVM_HYPERV_HCALL_RAISE_UD (bit 1) lets userspace complete such an
+   exit by raising #UD at the hypercall instruction, which the TLFS
+   specifies for some invalid uses, instead of returning a status.
+   Userspace asks for that with KVM_HYPERV_HCALL_UD in a new 'flags'
+   field after the hypercall parameters; KVM zeroes it on every exit,
+   and refuses bits it does not know. The field fits in the existing
+   union, so struct kvm_run does not grow.
 
-Thanks,
-David
+Further mask bits will follow for HvCallVtlCall and HvCallVtlReturn on
+VMs with planes, so that KVM can handle VTL transitions in the kernel.
+
+Patch 3 reports HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE, since a VMM
+handling a forwarded fast hypercall can write the XMM output itself.
+Patch 4 adds a selftest.
+
+This is orthogonal to KVM_CAP_HCALL_FAULT_EXIT in the memory attributes
+series, which Vitaly asked about on v3 [2]. That one is about a memory
+fault *during* the processing of a hypercall KVM does implement, which
+it turns into KVM_EXIT_MEMORY_FAULT. This one is about the hypercalls
+KVM does not implement at all. A forwarded hypercall goes out to
+userspace before KVM touches any guest memory on its behalf, so the two
+never meet, and a VMM can use either without the other.
+
+This is the first part of the VSM work posted as an RFC [1] that does
+not depend on planes or memory attributes.
+
+The series is based on v7.4-rc2 and also applies cleanly to
+kvm-x86/next (cbe54fc3462b). It has been compile-tested on x86_64 with
+and without CONFIG_KVM_HYPERV.
+
+Tested on v7.4-rc2 with this series and the KVM_TRANSLATE fix posted
+alongside it, on an Intel Xeon 6 system (itself a KVM guest, so VMX
+there is nested) and on a bare-metal AMD EPYC (Zen 4) system. The new
+hyperv_forward_hcall selftest passes on both, as do hyperv_clock,
+hyperv_cpuid, hyperv_extended_hypercalls, hyperv_features, hyperv_ipi
+and hyperv_tlb_flush. hyperv_evmcs passes on Intel and hyperv_svm_test
+on AMD, each skipping on the other vendor.
+
+[1] https://lore.kernel.org/kvm/20261017122501.610248-1-dwmw2@infradead.org/
+[2] https://lore.kernel.org/kvm/kupv77y5yrc.fsf@vkuznets-thinkpadx1carbongen12.rmtcz.csb/
+
+David Woodhouse (4):
+  KVM: x86: hyper-v: Add KVM_CAP_HYPERV_FORWARD_HCALL
+  KVM: x86: hyper-v: Let userspace fault a forwarded hypercall
+  KVM: x86: hyper-v: Advertise XMM fast hypercall output
+  KVM: selftests: Add Hyper-V hypercall forwarding test
+
+ Documentation/virt/kvm/api.rst                |  65 +++++
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/kvm/hyperv.c                         |  38 ++-
+ arch/x86/kvm/hyperv.h                         |   9 +
+ arch/x86/kvm/x86.c                            |  14 +
+ include/uapi/linux/kvm.h                      |   7 +
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/x86/hyperv_forward_hcall.c  | 268 ++++++++++++++++++
+ 8 files changed, 402 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86/hyperv_forward_hcall.c
+
+
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+-- 
+2.50.1
+
