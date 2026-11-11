@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794356660;
-	b=YdqJ2bToX56J4SGTcyxS4ARm+gxc5Pqb9HWNUjhCzJbghHcyRTpJzSBCVbMOkaOHqTxf
-	 dj37JNdCg8vDoFl5u2kBd+p4x/76BnA0sV1Fc2C2yYipvZVMMO6yJB2cwAMvQJdjYfR1E
-	 xBrgsQPDA1B3WqR6+pEJdNhRFZPGtTcTZxzjUI9XCactmws40hF5ceTmQLo7scJbwWtE9
-	 6FVUggYxy/snB3ELLLex3jOwJuBRS6lcwkhM/mIYZNwcD6iZ9HT8Mzax1HHC99sjGKjDg
-	 nd3YuNe3h+JlN5aKU/xXqTJho7adh/s0dAHepd8SVDxSJrYPpgKrJkepSxijNsFcm2A==
+	t=1794356661;
+	b=PIxJRFDZqUPdzj1GeFgovons5mWBAqNeh+xIp0wa08fRO1YhkiG1tyTe2Nt65ruXagXw
+	 qQPqfTngFrKrb39oEmFGoOpOmB5FiwI03RNLnTzEVm6x678unw76A9NL8y1ico/K0virV
+	 RPxKongdDMvpmQ7Clofxd8bioGU5YxcyJVtLlOM4GY+bUNf06Op2wVzTIPLdac7I2nFBq
+	 tRKEwEv7TQnlCn2sSr3x4t66o1lw7rC5Dm0shyRiWjvH8AoB10DuANLCYPbBuiHuqzqjP
+	 Czf62yYgYXA/lgTgs9J0CCq71Smvsy1mAe6SUSw29/QWmmdOynFB5AFFnX7xI+lVskw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794356660;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794356661;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=vbpaElakptIh2hFwmXWUs/sq4k+QmnD2y26Qhgoo1AI=;
-	b=AJCKBOZTvQZF1x++xe2rtVPajif/K4YJcA4dvlrGgpw4N+gX7weVKgqDUHX/AaPftDqP
-	 +SflVcI90jIzzY01cAmj+FbFycUK+jPoPhP90QYMX30SClYv/RzFNt/u+9iyHK4ctReZh
-	 AHNo2lRcoMf9kaaUWnxuOMvsv1HsrW8GDE9ObpRy6p2VNGPqhpnjBV/H/MT2vw8sopJXv
-	 byOWivYiaLLnk2SH3Hd6tlDRkbU2TTy4T3xrPxqAcEc6Wg9s1Zfxdbdp4y6BRqsB04PwX
-	 /gAdhC6XFm67rzy3eLeicjatX8rue15yox4PYCwUH+V52DYVZJ9ivqg8WgYk+2Opo3Q==
+	bh=oDGpajhrmdSjBCrv+9z48USF9DLlcre7dauJ37omj8M=;
+	b=TXxqYmjfifxvSxQd3eHWGMIjm4e8BVDwIEMrXa7MpUwqVm6Zqpp5DnMTm3/bdiC5vHti
+	 EKfU1EdMO1LqT4tt84MVCuN17Fr/MA6q6rSwI9Z0JewPMTYo4HyQ60img+bOAg+tHm/2P
+	 RrnxtHOmzvg8U5kVw6V5jQa0LARIrWQyU8LD6lBNTRHZk5UC5IcFDdOW2PlqLfRXz6M/Y
+	 4Cx3gLaGXUyF2/s0Jt8HjzmdAobwKu6vozlYI6R/zXds/3g0hOgTAtMzW2zVBUZsqGzRB
+	 bbsFtKr2kWo2VzX49Cv52crdx4XJVFnsa1Yj6ZMQbBiYCfLvHRBHU5NL7jv3reEiFPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LbTkLkT8;
-	arc=none smtp.remote-ip=209.85.167.199
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ktF0P4T4;
+	arc=none smtp.remote-ip=209.85.210.69
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDA260A5BCA
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 00:24:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5CDA260A5BCA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C33C60A5BDA
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 00:24:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C33C60A5BDA
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LbTkLkT8
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-5587351d419so2013833b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:24:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ktF0P4T4
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-847e2926d94so5227976a34.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:24:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794356659; x=1794961459; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794356660; x=1794961460; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vbpaElakptIh2hFwmXWUs/sq4k+QmnD2y26Qhgoo1AI=;
-        b=LbTkLkT8laBq1avVHHPTq7AeTg1yGlj+jizTp7NlFZ5LoqkpiVNMWLGQBCxr1iC+kb
-         /K8ymlNrIA49xi2lMuATNMAml8PfsVlQM4kS4JZ5tKUH/V0Vske2MuK8bkhbnkb6f/QO
-         nt8Ea0YYLYFKyxBmH/WXOllO8pM0HLZtiyxS/qumFB3vDGZPVlBGqgzZgUazlfV5w7p9
-         QPbxNDdsZL0gAzy2gwzo0ICuKEkg283Qy4+DX0/DdhxIxP4T5B6YWuwoivuByDwXp2+g
-         tLI3lcDP9qOCErxlEvlzxRrgjxhUaVaFbzIN93pEFoK+5apS8gWc4jji431bU+xcLtlJ
-         kkUg==
+        bh=oDGpajhrmdSjBCrv+9z48USF9DLlcre7dauJ37omj8M=;
+        b=ktF0P4T4IydsOsl2xKIG1UXcZe/yOkI/JJICUYtlWGIBVwTWWO7o2nZ5KvH9j8kTYG
+         GfxgLbXlsJYm+M3TNZ5Cqt3ZaV2NjCvE+mocIarmHq5R3wvo2nhGbpSJlwGp7TLZKsWt
+         715AvaUxCYdXyJYti6WlxqKA/OSG5pKuEgJBSPxxivofhIHT+6VfCiUZygZBnmSrbG08
+         trzQFkw7qExOlUqbIY+Oniq7qiUlzPYi+UPaNqL5Pn/3pRaQGe3xFQ5J6W8xcd7P+A82
+         pOvFO8tM6AKrqQTj/ny/ItiVySKg1BC838ht51HntBFxK7leytHsWbv5KO7HHM1pBvH7
+         2fCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794356659; x=1794961459;
+        d=1e100.net; s=20260707; t=1794356660; x=1794961460;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vbpaElakptIh2hFwmXWUs/sq4k+QmnD2y26Qhgoo1AI=;
-        b=P0CTs8hlWSy1WL0w+/BaqmcjLOKPp/F2/z1nwcVMsDEW2NV8Zf9Xd/FsSziZknyv8w
-         trOeXR/hLctAu3/5KMqGPg1jH3vYEsntdwAdqBVNvpuTIWzmZFs3YpH3TrjexN6XH+NV
-         FQKwL1IvnuHE6BbDMyOQTXPpItyf9OcqLu7sXVgpskNDBMN9WWPTMjThGUCkpcdRMKr/
-         ORLqGJuDNupzyWNaHkLYdtoKzaugOGNU2M0Rw9tAZdolvSQ/a9UR2540LrSqAc32cDHk
-         gVtXg93rZVkTTWhCunOPp7LELvdp+MCLOPdlodXsQNAcyAlP10YjGp+3yIrq6/8RA/Po
-         n1HQ==
-X-Forwarded-Encrypted: i=1; AL+hErE8g+Ys8edVFkIDN4anwnoXPpiuTHb64lbGWVxEO88CS4AFE9ii1VWl3/QubSnuUdKUAhS/NaDicAJSMvzVXpI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+1dZr9k7rdJqCQ03qk7bPxn+6e9Dp1IuPZjfjoTH336OPgnTf6
-	xY36jQ5BabAWGhtVfmoVrTiLnjoJbeKfZ6k1M2iK717hNN1q2ymvSoPEIvhwGzrQIcXDehbInVt
-	ZTGo82fXUkace0w==
-X-Received: from ilben19-n1.prod.google.com ([2002:a05:6e02:5113:10b0:524:c21c:a8de])
+        bh=oDGpajhrmdSjBCrv+9z48USF9DLlcre7dauJ37omj8M=;
+        b=vChBHOLvBaZnTxwXrDGdXHaE1uTNAw5Udu0DqILG0kw1D7U3hdLtvQDhrTZl0ZdlJ7
+         PDQ4kjRXfd/Y7CfXf/hO4IKKd/FC1s3+KGmSDI3NGMq/RkFgShpm5bJdyjRh6mwnqp3f
+         7dUaiYf3ZfHlW6ZTEnoqy8nBz7K05U4PT1+GrqVcjvId06U+ApnFuUozRImSsN2Ez9Tb
+         m/DNmqXiAMAnjSPT+kmBOWNwV5VHIQgK8mApWmQ8XG0O7NwaNCfemJC7yaGGcsykEia+
+         2Flifxog6iGQ/Dv2C8J6KeXrKbvHllQ3RrJw1vIEL1lJzQM8ehHoXN4mYX7qx2ZMij1w
+         ezYg==
+X-Forwarded-Encrypted: i=1; AL+hErGH6YD8//j2o1/JcuIQYGRpyYzCa+Tkqqfxb2MzUoOWSbJac/P5zCswOaaJLNO1al7rcMyuJ5jbearHBS1aK+A=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+n1889or9dqYpPDSOkzNBT8FfVUUcOjQ+PYkMNEZQ0LOZSM6I2
+	AP+Y1ES4D4AJJ+FZjb6m2ObDQ9P0o7ATMdVhAc2KVzw8VICkQO6pNXl7b2lyUCAet3pARqN/luW
+	FcRvJr0c80rT9pw==
+X-Received: from iobgl21.prod.google.com ([2002:a05:6602:4f15:b0:9c7:70d7:1521])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:19a8:b0:539:596f:6623 with SMTP id 5614622812f47-56b98228b8bmr731061b6e.64.1794356659004;
- Tue, 10 Nov 2026 16:24:19 -0800 (PST)
-Date: Wed, 11 Nov 2026 00:23:47 +0000
+ 2002:a05:6808:1581:b0:4f3:e98f:fa26 with SMTP id 5614622812f47-56b98727e41mr556110b6e.58.1794356660168;
+ Tue, 10 Nov 2026 16:24:20 -0800 (PST)
+Date: Wed, 11 Nov 2026 00:23:48 +0000
 In-Reply-To: <20261111002358.1842967-1-dmatlack@google.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261111002358.1842967-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.56.0.542.g3ef89b7020-goog
-Message-ID: <20261111002358.1842967-10-dmatlack@google.com>
-Subject: [PATCH v4 09/19] mm/shmem_luo: Leave freeing the preserved state to finish()
+Message-ID: <20261111002358.1842967-11-dmatlack@google.com>
+Subject: [PATCH v4 10/19] mm/shmem_luo: Don't make early retrieve failures permanent
 From: David Matlack <dmatlack@google.com>
 To: kexec@lists.infradead.org, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -98,140 +98,54 @@ Cc: Alexander Graf <graf@amazon.com>, Andrew Morton <akpm@linux-foundation.org>,
 	David Matlack <dmatlack@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Don't free the serialized state in shmem_luo_retrieve(), whether the
-retrieve succeeds or fails, and let finish() free whatever is left of
-the preserved state of every file. Once retrieve() has restored the
-folios, it sets nr_folios in the serialized state to 0, so that
-finish() only frees the rest.
+Mark failures in shmem_luo_retrieve() before it starts restoring the
+folios as retryable. If no retrieve succeeds, finish() frees the
+preserved state, like it does for a file that was never retrieved.
 
-This fixes leaking the preserved folios when the retrieve fails before
-it restores them, e.g. because the file has seals that this kernel
-doesn't support, or because memfd_alloc_file() fails. The retrieve freed
-the serialized state but not the folios, and finish() then skipped the
-file because its retrieve had failed, so the folios were never freed.
+Until the folios are restored, nothing has consumed the preserved state.
+Leave it for another retrieve, which may succeed, e.g. if
+memfd_alloc_file() failed with -ENOMEM.
 
-Preserved folios may also be in use until the session is finished, e.g.
-by a device that was preserved with DMA mappings of them, so they must
-not be freed before finish().
+The exception is a preserved file that this kernel can't restore, e.g.
+because it has seals that this kernel doesn't support. Retrying can't
+help, so keep that failure permanent, so that every later retrieve
+returns the same error.
 
-Fixes: f85b1c6af5bc ("liveupdate: luo_file: remember retrieve() status")
 Signed-off-by: David Matlack <dmatlack@google.com>
+Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- mm/shmem_luo.c | 64 +++++++++++++++++++++++++++-----------------------
- 1 file changed, 35 insertions(+), 29 deletions(-)
+ mm/shmem_luo.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/mm/shmem_luo.c b/mm/shmem_luo.c
-index e747a0442295..b48d7f460493 100644
+index b48d7f460493..dc6ede528822 100644
 --- a/mm/shmem_luo.c
 +++ b/mm/shmem_luo.c
-@@ -390,13 +390,10 @@ static void shmem_luo_finish(struct liveupdate_file_op_args *args)
- 	struct shmem_luo_ser *ser;
+@@ -552,6 +552,14 @@ static int shmem_luo_retrieve(struct liveupdate_file_op_args *args)
+ 	if (ser->seals & ~SHMEM_LUO_ALL_SEALS)
+ 		return -EOPNOTSUPP;
  
- 	/*
--	 * If retrieve was successful, nothing to do. If it failed, retrieve()
--	 * already cleaned up everything it could. So nothing to do there
--	 * either. Only need to clean up when retrieve was not called.
-+	 * Preserved folios may be in use until the session is finished, so
-+	 * retrieve() leaves freeing the preserved state to finish(), whether it
-+	 * succeeds or not.
- 	 */
--	if (args->retrieve_status)
--		return;
--
- 	ser = phys_to_virt(args->serialized_data);
- 	if (!ser)
- 		return;
-@@ -515,9 +512,34 @@ static int shmem_luo_retrieve_folios(struct file *file,
- 	return err;
- }
- 
--static int shmem_luo_retrieve(struct liveupdate_file_op_args *args)
-+/*
-+ * Restore the preserved folios into @file. This consumes them even if it fails,
-+ * since they are then either in @file or freed, so make sure finish() doesn't
-+ * free them again.
-+ */
-+static int shmem_luo_restore_folios(struct file *file,
-+				    struct shmem_luo_ser *ser)
- {
- 	struct shmem_luo_folio_ser *folios_ser;
-+	u64 nr_folios = ser->nr_folios;
-+	int err;
++	/*
++	 * Nothing consumes the preserved state until the folios are restored
++	 * below. If the retrieve fails before that, leave the state for another
++	 * retrieve, or for finish() to free. The checks above can't succeed on
++	 * a retry, so they fail permanently.
++	 */
++	args->retryable = true;
 +
-+	if (!nr_folios)
-+		return 0;
-+
-+	ser->nr_folios = 0;
-+
-+	folios_ser = kho_restore_vmalloc(&ser->folios);
-+	if (!folios_ser)
-+		return -EINVAL;
-+
-+	err = shmem_luo_retrieve_folios(file, folios_ser, nr_folios);
-+	vfree(folios_ser);
-+	return err;
-+}
-+
-+static int shmem_luo_retrieve(struct liveupdate_file_op_args *args)
-+{
- 	struct shmem_luo_ser *ser;
- 	struct file *file;
- 	int err;
-@@ -527,10 +549,8 @@ static int shmem_luo_retrieve(struct liveupdate_file_op_args *args)
- 		return -EINVAL;
- 
- 	/* Make sure the file only has seals supported by this version. */
--	if (ser->seals & ~SHMEM_LUO_ALL_SEALS) {
--		err = -EOPNOTSUPP;
--		goto free_ser;
--	}
-+	if (ser->seals & ~SHMEM_LUO_ALL_SEALS)
-+		return -EOPNOTSUPP;
- 
  	/*
  	 * The seals are preserved. Allow sealing here so they can be added
-@@ -539,8 +559,7 @@ static int shmem_luo_retrieve(struct liveupdate_file_op_args *args)
- 	file = memfd_alloc_file("", MFD_ALLOW_SEALING);
- 	if (IS_ERR(file)) {
- 		pr_err("failed to setup file: %pe\n", file);
--		err = PTR_ERR(file);
--		goto free_ser;
-+		return PTR_ERR(file);
- 	}
- 
- 	err = memfd_add_seals(file, ser->seals);
-@@ -552,28 +571,15 @@ static int shmem_luo_retrieve(struct liveupdate_file_op_args *args)
+ 	 * later.
+@@ -571,6 +579,9 @@ static int shmem_luo_retrieve(struct liveupdate_file_op_args *args)
  	vfs_setpos(file, ser->pos, MAX_LFS_FILESIZE);
  	i_size_write(file_inode(file), ser->size);
  
--	if (ser->nr_folios) {
--		folios_ser = kho_restore_vmalloc(&ser->folios);
--		if (!folios_ser) {
--			err = -EINVAL;
--			goto put_file;
--		}
--
--		err = shmem_luo_retrieve_folios(file, folios_ser, ser->nr_folios);
--		vfree(folios_ser);
--		if (err)
--			goto put_file;
--	}
-+	err = shmem_luo_restore_folios(file, ser);
-+	if (err)
-+		goto put_file;
- 
- 	args->file = file;
--	kho_restore_free(ser);
--
- 	return 0;
- 
- put_file:
- 	fput(file);
--free_ser:
--	kho_restore_free(ser);
- 	return err;
- }
- 
++	/* The preserved state is consumed from here on. */
++	args->retryable = false;
++
+ 	err = shmem_luo_restore_folios(file, ser);
+ 	if (err)
+ 		goto put_file;
 -- 
 2.56.0.542.g3ef89b7020-goog
 
