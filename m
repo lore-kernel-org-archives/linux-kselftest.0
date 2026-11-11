@@ -1,107 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794421450;
-	b=Xb53H0kw49RKWZDyL/OcrCFgr8vQsaMYbxTAJd2APeixQyjJHQJA6nW6y0kgQGRzGegs
-	 oEfogA9wCnmelnvF0XFEHgVuLZ0F4UHsUNw6Qh97+oIhf5a1H55jT5VgAuaV1a67s2Wq1
-	 IJl2x5GNwgYFE3yUiyWgZU0fHgzLPJQPyEi4PAIaLe05XLvGXllLRQ8OgPK1iotlf94/N
-	 +Y8EV8MkmHRTxcROoye8bBWkt9llPhuhL7sWPSdqTrLm/o/oOJBdUmCiFjhfQYgg+QvH/
-	 3xBs8t7iYJ7EvMTflqfccvoyDv7XtOjPhAe6o2Upi+2OGlRtK/YQ5DDY8OD10FmtqtQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794421450;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Authority-Analysis:X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=aMG9NSIoryJ6ZmHzBOTcIKDBni97i5hfecL1FAmnbM4=;
-	b=PE8OT6MLKyotBQRTvVcLzIeNMIlhswUpcHWtbLDMRQ0HKhnHj+ga95xBhZW4FVUbjW7Q
-	 XjA35Sx775DXQT7S9BcZ8IGxKw6hhA91syU/iIkNwI5/Mqps+BtZK7DEhze6ENgJIEcWQ
-	 7zTWyV8EqVekYTtDmewpjN/rYr1C2Npo1aO6hpP3+3DeEgJTI7uE8ASyLkzMOjR1b+kEK
-	 wCNqMmX/axQloVmuoDq/0LJkzhmhr6FwJP1ZTDQX6RmqOZTaxkSOmEAeiQbVtzkmoFL4g
-	 s2zXBy84RaxLgSfgtXqlIgRk+ddOtlfbVlUNRP0AI6DGYI9rpAYsKq1K4ix7awEHKnw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=isns6Mqh;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=67.231.153.30
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=121.127.44.66
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794422019;
+	b=tQaoWMSk6LqwnrfkEUIiuXEf2ZfqOmRPwvSyXBirmqCLfzchlAY2tv7SluedyqVeXxLe
+	 exxcuMw4Y0HJ16PL7B2PgVVQq7SG7bNjym4VaqNQ/ND8WYzZEhl0+iTIFg6TYtuDmNJFs
+	 MC/Jx0ssPaxGp1xyxFOS6qALJv3+EM+m0/9q2f5HPyBS0V3crxwTEJtdRb345LNN/j4Zb
+	 xG3AHbuIcRuW5N4u8AxCAnFq/ThA/Zll2bgqvwh87XyI0D594YaCL78Zaz3vBPU/KhbOR
+	 VCE7ARlbTAuWHIXsTE4c1tDBwfKAnEKb8IODpopElSFEj5Xfg6cbrGgcdBuAIVmWo1g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794422019;
+	h=DMARC-Filter:DKIM-Signature:X-Forward-Email-ID:
+	 X-Forward-Email-Sender:X-Forward-Email-Version:
+	 X-Forward-Email-Website:X-Complaints-To:X-Report-Abuse:
+	 X-Report-Abuse-To:Message-ID:Date:MIME-Version:User-Agent:Subject:To:
+	 Cc:References:Content-Language:From:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=zGnr7qakqygUVED8TA1cVhOKcrSAOCJQcMqXrkzQb/c=;
+	b=yRrqBznOHX56J0JtVws/b+57G9nwWYQuSGuk3EKpdDWaC10PxCpodRvSR2KfrAGHZ5cd
+	 4McprAkqNIPOAga4qBspeAaeIn85EyCxpDVVbVQC9EliGt1ASmpqs2Dxlt+6kz50gG4oE
+	 c30xs0TWq/dBO8/2GhEyvKKfCZZ2/Izc2XzB/k1S2PFVOi1l9vJxRy4NIR3K9ZtTMzEur
+	 6FpNf19UrDmBopjtW5cWE3WBZr3JIelZWt5iCVrEClDjDN6nqBKEZFI6B0bVOHdUXE4Pw
+	 4Y6q7p/V1rATFIIAqNhtt4WimrvTzjSloCjJN6l8+ZyC+I4rbvyIX2wQfioHRABxeCQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=ovn.org;
+	spf=pass smtp.mailfrom=fe-bounces.ovn.org;
+	dkim=pass header.d=ovn.org header.i=@ovn.org header.a=rsa-sha256 header.s=fe-13eddc7e57 header.b=LMYletMR;
+	arc=none smtp.remote-ip=121.127.44.66
+Received: from smtp.forwardemail.net (smtp.forwardemail.net [121.127.44.66])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA75606A884
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 18:24:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCA75606A884
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A8F606A326
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 18:33:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47A8F606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.ovn.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=isns6Mqh
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 6ABHssd83129735
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 10:24:09 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=aMG9NSIoryJ
-	6ZmHzBOTcIKDBni97i5hfecL1FAmnbM4=; b=isns6MqhLK2gICBmvsfmHDefPrM
-	fcse+kjR+dgFtXbRypDtqotW1Yl02H8zLF60ugJCdMKKjv2bgp3/FfDVbtAj0qPL
-	nMdiMIQxDW/X1fu1xFPQrqO7h+9kKGnsak6+fIA8XRHkd2ZnZxPL61j+PZEgibEy
-	nBb5hifSwAd17cHCObGIGWr6WQCyzXxmQufY6UHIk7KcX4LXVPfTsiACYBolCFv2
-	uZsIapcgbM6aipiYch9uLbCT+xrDb7WMyVR20uj/cvl1DYR6dMROu6AKFq/+SWeu
-	7vwmmqM2W1TLALIA4l+/gOuarfulif/2FeT4KQUkwmvzHlyXdH6HmkOe6Mg==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by m0089730.ppops.net (PPS) with ESMTPS id 4huqmret7h-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 10:24:08 -0800 (PST)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3ad30487d55so5719840a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 10:24:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794421448; cv=none;
-        d=google.com; s=arc-20260327;
-        b=s+VEZMniMMG2z3ymw30spqxWv/XSauhJEZtmiwzeJ93xUKlOr/g6Hxtlt8npuBEWuD
-         h28JR9F5ceJlhAMmI4CXSgHfbpLrTvOCTRlwThO/mE29oz+4Fpu295Hb53UydygkKXIO
-         ZFmT2zkU7618dbHzxGBT7ZwEqrsnjzDRZA1U1j8CvUcdyb/xiMDFFxKqs40qmhudaPk8
-         aF0SPcD88JeKt+UAwpmgyiHgNZ+qx0XkCGpNFTGR6sZj8IuHkQ6G28o3ma5VPTdHZ6LG
-         RTt4S89vfUSmHOWn0vSaBhEnHuBi8PH7ndnh60MKl7ryHO/K7M2F8cmMKvbp0h1vgQeC
-         cWhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version;
-        bh=aMG9NSIoryJ6ZmHzBOTcIKDBni97i5hfecL1FAmnbM4=;
-        fh=UWWhzvSC1dGouOz1xj8B0dBsW/KlZUNQkBCoecrI2Yc=;
-        b=Qnij8voHtTeGJ0wQHVnYbP3R6q/OiBVOhO7LIhz2hpduKG2m6GBexMv7Q/6BPLStDB
-         ujiI02f0Vtd0qhjadk1iE6N1rXIKcbsy3l9Q4fsxNWrqfHcFq+XzQX1zFOBn9SJ6fVEB
-         aJW1M/uYK9Tw1PXYh6PbvidlTzNG0FJWFXh90nqaWq+Fa0u3ONzQWBZr+ttzTnuOrA7Z
-         BJtgDotIcunCMcdB74BJYC8UQn22rwC4EFUJi+raGKdzFi5FjlPnJjce72JXlzoo4RHh
-         AcOtZKRrv82paN4Bwn/hcKftxDnLTdwzCTDYne0Lb6PkZVi5J6momux/WUvnWK4OhJPh
-         wBug==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794421448; x=1795026248;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=aMG9NSIoryJ6ZmHzBOTcIKDBni97i5hfecL1FAmnbM4=;
-        b=cDQcoWClPDy/bVSNJzNkXXgrQs+XDe3oI3wJho/jTPUNNDOGzHO7EXlUyJuHheaNVw
-         AjOyJJTxiHPx6gOJaySo5Vcz7hdb6OpWC0caFb4z+Gfv/kjn/moSRbyQFDP7Sw3qG36Q
-         nV+sirSOzg6kZ3KMyhkaD5UUoJb4N70D2QADj0AGwpa/w7KFm3QBGwC5XHbxfjRbhcF/
-         ntB8iL2uePOw9XCJj6OLi+iD4HMXQhv87/Ow6F1hxyuxS/KYpPZQQ0t1U9Nkw/MdSsyv
-         eB+1nzYJKTh5pPvRJ1sQeIYISFyDoLIdgAX+9mDvvUUlOkGhLQLinzoC+5tozmsXZYeu
-         TH8Q==
-X-Forwarded-Encrypted: i=1; AL+hErH/MNJ1STDZfNvgcKLomMNUItRCwX2D0UwluLcIkRJ0844Nsg1+pPeQ8OOe+S/4XlLGZvIrm3R72o88FDDswSA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8kpBnVipS2hJiCwlkpzjco0v7B7J1pahxP01TbZpB9/DLF+Skm
-	V9AEpkF/5t8k2Fh5soi4zaWY00QOQuqy4oQP5yg28OmlTldU1w9QHcKwFMwtjkUjPmXiErvBC72
-	1ONjG5V76oeDLw6WUoo8uV0/QleCF9pA3M4oflj01VhdTN7YZbvnAVCEKCz8+TwprRYstaKgGGt
-	k6JDzxBPHzXOcoj9N9si80kZckLCUR6g6UnCAWsw3+hF4=
-X-Gm-Gg: AYBFou0ujeQBUm/yOpwqMXp96BZrAg5YQcnHffLr7CJV9jXysZtKT03lRPwDUUDets7
-	k/5W7GO9r4yuz/Iv7VqF0aRBl0See/5RVEyfy1IotRsQYrdDdUjTL25WdB28dl5aJozPVjquk9K
-	an4Opu9bU31P8gsjOM3AhCxiQvoEbE23s5/HfnC2IzdudxV5PrLLxn2PhBiqfABGq8ZuYjvfaIA
-	QlzMnw7j5rY/S92gmHUSNkT2kJN3OkH
-X-Received: by 2002:a17:90b:2f83:b0:3ab:884b:65a8 with SMTP id 98e67ed59e1d1-3b182eda7efmr3257450a91.26.1794421447603;
-        Wed, 11 Nov 2026 10:24:07 -0800 (PST)
-X-Received: by 2002:a17:90b:2f83:b0:3ab:884b:65a8 with SMTP id
- 98e67ed59e1d1-3b182eda7efmr3257421a91.26.1794421447127; Wed, 11 Nov 2026
- 10:24:07 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ovn.org header.i=@ovn.org header.a=rsa-sha256 header.s=fe-13eddc7e57 header.b=LMYletMR
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ovn.org;
+ h=Content-Transfer-Encoding: Content-Type: In-Reply-To: Autocrypt: From:
+ Content-Language: References: Cc: To: Subject: MIME-Version: Date:
+ Message-ID; q=dns/txt; s=fe-13eddc7e57; t=1794422012;
+ bh=zGnr7qakqygUVED8TA1cVhOKcrSAOCJQcMqXrkzQb/c=;
+ b=LMYletMRKoaHa8HrmmphA6zYW2ZVhYKHdXWG7TkW+EmxFffhdvsJWxJ2L+JldxNM84K33NK1W
+ OxLPG5drCs0hkU52ZiSa+GFZRexthA+uTeAebsUThtww54epQP2p30nep7j7a7jdvbZFwYg2aFL
+ 4Ee+Y6URfLm537i3EmlR3mQ=
+X-Forward-Email-ID: 6af4b4f706a4c0728fe463b8
+X-Forward-Email-Sender: rfc822; i.maximets@ovn.org, smtp.forwardemail.net,
+ 121.127.44.66
+X-Forward-Email-Version: 2.19.18
+X-Forward-Email-Website: https://forwardemail.net
+X-Complaints-To: abuse@forwardemail.net
+X-Report-Abuse: abuse@forwardemail.net
+X-Report-Abuse-To: abuse@forwardemail.net
+Message-ID: <488e10a9-ea28-41cf-9a8a-aa7431f6dd48@ovn.org>
+Date: Wed, 11 Nov 2026 19:33:21 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,89 +63,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111005533.6436-1-toddfreed@meta.com> <20261111005533.6436-5-toddfreed@meta.com>
- <DMSJB8MZZCXK.MCEBRZQDAM5Q@gmail.com>
-In-Reply-To: <DMSJB8MZZCXK.MCEBRZQDAM5Q@gmail.com>
-From: Todd Bert Freed <toddfreed@meta.com>
-Date: Wed, 11 Nov 2026 10:23:56 -0800
-X-Gm-Features: AclHuK8_olqmA7fXTYgEAj2-H4kgkwQj_X0uL-xyG8nZrZvhci79BGaB7ila0uo
-Message-ID: <CADh2yMx8MPjcH7Bpj72rNNd_tT=6uSC5Ow9JyGjTMjFgs499Pw@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 04/15] psp: add support for socket-less psp associations
-To: Daniel Zahka <daniel.zahka@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Donald Hunter <donald.hunter@gmail.com>,
-        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
-        John Fastabend <john.fastabend@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
-        Paolo Abeni <pabeni@redhat.com>, Saeed Mahameed <saeedm@nvidia.com>,
-        Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-        Wei Wang <weiwan@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTExMDA3MyBTYWx0ZWRfX9Upjj3hZNKid
- 1B1+N/WJO4FY+otcsQNWGY3cywcxGnJtRHMpU8nmZz3vikONQAkQsirWYh3JieVpHzmvq13Y2+B
- o4hHi7+X7yQxotCCn8W43nlPR0GvWb4=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTExMDA3MyBTYWx0ZWRfX0eXyOntvjkOK
- TFd4MP26Y6bzZal8kTJizNfnCWTeQ2mKppAXE7fWPP1af6+sIOxSWyrQNqSa9EPnmGCOaUudX15
- uwjJ6xcTDM1Ip/bV9XT/sxaO18NVUdBiQ2KcBJZ7V2d2sDeGcfB0i3etozTPpaWyzb8QFPWs9NY
- BS1kBMMsSCqtRTPfKdm2YOoIwEyjU5xjGAByWGSYqzrNPuwW67Wuktl0CM+6KpJ4I8g9eskGa2p
- 1WwgWY1wpf+y851XOkt9/nRcRB7+aExpwyZdoCWITv62f0PApTeR+yZkgA8ytMlWSaKxGuO6Q7j
- U6KOvvrOGJdNMxi/RmUPYh5r+O3luQsPZ6glZigM84FWlSFxbup1XWqbsP/84rSNmiqXNzeEvQl
- Bcb2CIVKKuHktY/7curHyXC8crBm4EQGuObkGjFw+hpu/OFs5EkpcJeLH2hrMxsoleaG65MwmCc
- eKW0ahSNdux8XsK2Maw==
-X-Authority-Analysis: v=2.4 cv=YIgKWhGx c=1 sm=1 tr=0 ts=6af4b2c8 cx=c_pps
- a=RP+M6JBNLl+fLTcSJhASfg==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=855S8uPTkML1Oy45N9_h:22
- a=-xR6GoDS8vL2zpuMsZwA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 2507LFEainoZJzuxgpH8rKb-J0ZuzaHS
-X-Proofpoint-ORIG-GUID: 2507LFEainoZJzuxgpH8rKb-J0ZuzaHS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-11_04,2026-11-11_03,2025-10-01_01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC net 0/3] net: fix stacked VLAN header corruption in TX
+ offloads and OVS
+To: Gabriel Goller <g.goller@proxmox.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>,
+ Boris Sukholitko <boris.sukholitko@broadcom.com>,
+ Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dev@openvswitch.org, linux-kselftest@vger.kernel.org, i.maximets@ovn.org
+References: <20261111-net_restore_the-v1-0-6aaeffa601c9@proxmox.com>
+Content-Language: en-US
+From: Ilya Maximets <i.maximets@ovn.org>
+Autocrypt: addr=i.maximets@ovn.org; keydata=
+ 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
+In-Reply-To: <20261111-net_restore_the-v1-0-6aaeffa601c9@proxmox.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> I'm not sure the kernel actually needs any bookkeeping at all for these
-> generic rx spi allocations. You could probably just pass the spi, dev
-> id, key, and probably rotation count (as a device key generation of
-> sorts) to the user without creating a kernel object. For socket
-> psp_assocs, the rx state is consulted on the datapath before queueing to
-> the socket. For tx state in all psp_assocs, there is the possibility
-> that an SADB handle needs to be cleaned up. Neither of those apply here
-> or in the rest of the series as I understand it.
->
-> I figure the tc ingress rule can just take the spi and dev id by value
-> rather than needing a reference to an object that we create here.
+On 11/11/26 6:37 PM, Gabriel Goller wrote:
+> Since commit 938863727076 ("tc: adjust network header after 2nd vlan
+> push"), a second VLAN push leaves network_header pointing to the
+> in-band VLAN header. The igb driver TSO and OVS IP set actions still
+> expect the L3 header, so they write to the VLAN header and corrupt
+> the packet. Patch 1 restores the L3 header in validate_xmit_skb() for
+> CHECKSUM_PARTIAL packets, which covers packets tagged by tc or BPF.
+> Patch 2 restores it in OVS right after the push, before later actions
+> run. Patch 3 adds a KUnit test. tc classification after a push keeps
+> working.
+> 
+> The kernel uses two conventions for skb->network_header when a packet
+> carries an in-band VLAN tag:
+> 
+> * network_header points at the L3 header
+> * network_header points at the in-band VLAN header
+> 
+> Since commit 938863727076 ("tc: adjust network header after 2nd vlan
+> push"), skb_vlan_push() uses the second convention when it pushes a
+> second tag. The flow dissector, and so tc flower, needs that layout to
+> classify the packet after the push. Drivers doing TSO or checksum
+> offload expect the first one. vlan_features_check() clears TSO for
+> multi-tagged packets, so most drivers fall back to software GSO, which
+> finds the L3 header itself. igb keeps TSO for these packets and reads
+> the IP header at skb->network_header, so it builds the TSO context from
+> the VLAN header and corrupts the packet. OVS set actions after a second
+> push write to the wrong header in the same way.
+> 
+> Which convention should a packet with in-band VLAN tags follow? This
+> series keeps the tc layout, converts to L3 in validate_xmit_skb() for
+> CHECKSUM_PARTIAL packets, and restores L3 right after the push in OVS.
+> If L3 should hold everywhere instead, the flow dissector would need to
+> find in-band tags from mac_len, and skb_vlan_push() could go back to
+> its old behavior.
 
-That is how it works in this series. The tc psp decap rule (ingress) does not
-make reference to an rx assoc ; instead, it should have flower matches on
-psp_spi, psp_ver, and psp_dev. That effectively ties it to packets from just
-one rx assoc.
+IMO, having 'network_header' pointing to something that is not a network
+layer doesn't make much sense, and having two separate meanings for the
+same field is a recipe for more issues introduced or discovered later.
+Others may, of course, disagree.
 
-So why keep track of rx assoc objects at all? Two considerations.
-
-1/ don't accept packets that correspond to a stale association. That is, even
-if the device decrypted the packet, it should be dropped if the device key
-which minted the assoc's SPI is two rotations behind. For psp socket offload
-that is enforced in __psp_sk_rx_policy_check() with the pas->generation
-check.
-
-The spec permits SPIs to be reused immediately after two rotations. So the
-device could decrypt a packet with a SPI that is more than two rotations old
-in that case, or if a previous packet is being replayed, for example.
-
-2/ hardware offload. the solution to #1 should be able to be fully offloaded
-to the device. psp tunnel mode will be hw offload only, and is implemented
-in the eswitch with connect-x.
-
-We could add a psp_gen flower match to replicate the pas->generation
-check, but the device has no access to the pas and can't offload that.
-
-Keeping track of the rx assoc means that the kernel can take action on the
-"this assoc is now stale" event. Possibly by enumerating the tc rules and
-either deleting them, or marking them stale for userspace to reap.
-
--Todd
+Best regards, Ilya Maximets.
