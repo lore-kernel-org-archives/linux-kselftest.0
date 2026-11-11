@@ -1,65 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.244
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794363773;
-	b=D6iSixLbuajmUbnulgXwRsCNNTzp2MUr90uO6i8NHHuDjIXMqoEZflrGQJW1SqwEcD9L
-	 NP9UY8B4z/n9eK9GqDIbMc1++kccY1h09eJptx9wA2UCq3aqgUMoZMVaOfS1Ckhlwlll2
-	 DLGtv2Wj77MYMiaI8FyQiHg9H7kcKmSXKXmeVuUgPXQMScis1KjbI6abKMEwsik6aoz4P
-	 fl8/bL/YVILegA6wF0/fTrjYlJzDtXm0U0xH/0I/F+hBWoPju/9qJxl6nhmPPY2kFKN1R
-	 GmJLGkYBSWWeG7p9uoMmQ22RAHAIcOcjrCQ2z9fqpaRz13nl1TnA+AfqKRlC+oF4ZcA==
+	t=1794365908;
+	b=M/5U28K0Jz9HJz+o1VQWURGz19tdZ76C56BGN1GR6rlFjVQliivO87Qp1ZZsyBvBp9WT
+	 nmZRm6+FUWt6CmrLNmvcR1kZ/YR7t2x6T7n2GprwoAmtl5r4PqRa0+RZwUp5UZvZ0HL/V
+	 caoYG1H+SmHlZydZHu3TDUuqmNCPNFH/C8PUFe/k2epuzvLPa8HGTikXuInywdO9BMlT6
+	 0K2yzjZJzRBe42KKH9Bo04+EVY9UiD8d8654kwaCHB4ABYF9PaVzdILhdHBnrK6yNHvXF
+	 wcVw4j2Lq7iOUyk+evhX/uiUmtYqxe7i9ZuGSKT5EMSD58rwzGykC5QvDWohbZ94jRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794363773;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794365908;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=UWESZWo6gRDJLbe6b+kb8OCoSR2NRoF3AodRyX5rbn4=;
-	b=QZc5g7L4wnMgf10RDdmCx3DSDfBC+qNgLkM095j6HAtIW2lUD0kRMcUfcx1ncR9kje0C
-	 QUDYHu5ryx9N1lX9klSU2HBllUE6tyy88JihTGQCD+XHpUdZ9NvqDKkWGotqXTJ36EG6S
-	 57JwDZ4MZ4sgTqrFu3sJR5GUhFZBUh5095glITai7dzVioZmsk6l7c2s7BulYqvDdAWtS
-	 tZvzEKEbWNY5rSTjBtJu+i2PBQMw55kBOgU9Bk/sn1c7YieHDktWS8IQd6noozIb51YV6
-	 MT38Rzwe/c2d4mlnCxBLaII4baLgR8DQ6L+S2Mn/FXk1gMCmtupD277lx2mQfNcXNnw==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=PeWu9qbTDaD6AUYNBe1UHdE6fcYEbMgUzjHngGTPIKc=;
+	b=I03P0PD/aBL9uEQldRXjTHXxw7yjXdY0/b+L1fTTvYKYuCT+H0EA/g2V0f5oeZJz2pct
+	 y5MzYuvyg7wgthFLcLv1+4tnTHiHWm9XRMozMNuaJCYusp8c2KNjhkTU4hrDQaOJ6Lbbx
+	 isNkXphueglQu7g16OS4IvAmRGb2GnU1tCseX+lcK564TYPWFzPD5dvmg+TDWIrNAFwqW
+	 dum5cyHcsxnv4eYEgbPbGQ+Eg4s0w+QFiV3V+w+p8uEvZ1wTOSDpVmHeQbH39s8ZXrYGF
+	 jPLfiPwOMo5a+bPEwvPNwSRXonM/icZawyjblQMpvr7H4zMrIUIBI5qa2TiJr4KdcyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=b9zIfTjL;
-	arc=none smtp.remote-ip=91.218.175.244
-Received: from mta0.migadu.com (out-244.mta0.migadu.com [91.218.175.244])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="W1uX4Bt/";
+	arc=none smtp.remote-ip=91.218.175.46
+Received: from mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05852606A321
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 02:22:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05852606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FE2606A32E
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 02:58:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2FE2606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=b9zIfTjL
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W1uX4Bt/
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=37SDGn2nMjZ1Z7oz6sEfcaIMb9d+InDjeAh5oHf8swE=;
+DKIM-Signature: a=rsa-sha256; bh=2xQ14q8i4wn8y+T/i0DeDAU8TKCKRdi8NWCJr0SA9QA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794363770; v=1; x=1794968570;
- b=b9zIfTjLmRwOvux3PXLjVurEN5l2T0Y9JK89N1JAoMnOI5cNwwjdKp30TlUYqQ/AogqAFJxk
- vUcFSf6CQ+MAde9KlACWnVB5XkX2kwjNCJa26X2e67n6pbbPVhJcjpbQaQhP/DsJLgAEs04PZIh
- PQPX/BoUm9zSrLOiTUlbVXzE=
+ t=1794365905; v=1; x=1794970705;
+ b=W1uX4Bt/nKxQByt1+kVfi/xFRp80Jj48Zqlgq2r52Z1Iv8Kbk9KoDWBvqa6xWY+/ypwUiSHU
+ QDcWCjkvgjdx7VBYmqKXTw0Ibrwtok3LD7TGeQd+eZ39i/7AD2X/4bNQUAFBrjoZ8l1bDuGDuhB
+ OfYZX7OwHV0GtslsE+6zr9v4=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 618b1c1bb1ebb779;
-	Wed, 11 Nov 2026 02:22:50 +0000
-X-Mizu-Trace-ID: 618b1c1bb1ebb779
+Received: by smtp.migadu.com with ESMTPS id cadda0c8b6efabd5;
+	Wed, 11 Nov 2026 02:58:25 +0000
+X-Mizu-Trace-ID: cadda0c8b6efabd5
 X-Migadu-Flow: FLOW_OUT
-Date: Wed, 11 Nov 2026 10:22:40 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Hannes Laimer <h.laimer@proxmox.com>
-Cc: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Petr Machata <petrm@nvidia.com>
-Subject: Re: [PATCH net-next] selftests: forwarding: vxlan_reserved: drop
- redundant in_defer_scope
-Message-ID: <avPRN_C333cX7HlI@fedora>
-References: <20261110-vxlan-reserved-tests-v1-1-a252d69c841e@proxmox.com>
+Message-ID: <17511044-f7ab-4c9c-af00-1b30554aa938@linux.dev>
+Date: Tue, 10 Nov 2026 18:58:18 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,129 +58,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261110-vxlan-reserved-tests-v1-1-a252d69c841e@proxmox.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
+ cause false recursion drops in trampoline progs
+To: Mike Bazov <mikeba@sentinelone.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ martin.kelly@crowdstrike.com, andrey.grodzovsky@crowdstrike.com
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+ <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
+ <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
+ <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com>
+ <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
+ <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
+ <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
+ <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
+ <95e07cae-85ee-4f14-b5f3-070803ee567e@linux.dev>
+ <CAPnbwjqw=uxd8UyhEgNjSrpK1DhbB+dex0mGVW=dwuoygqgRHA@mail.gmail.com>
+Content-Language: en-US
+From: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
+In-Reply-To: <CAPnbwjqw=uxd8UyhEgNjSrpK1DhbB+dex0mGVW=dwuoygqgRHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 10, 2026 at 03:03:55PM +0100, Hannes Laimer wrote:
-> With commit a6e263f125cd ("selftests: net: lib: Introduce deferred
-> commands") tests_run() already runs every test in its own defer scope.
-> So the per-test in_defer_scope here does not do anything. Drop the
-> in_defer_scope calls and the wrappers that only exist for that.
+On 11/10/26 12:43 PM, Mike Bazov wrote:
+> On Mon, Nov 9, 2026 at 4:12 PM JP Kobryn wrote:
+>> Before moving away from an in-kernel solution, can we consider the
+>> direction this patch below takes?
 > 
-> Suggested-by: Petr Machata <petrm@nvidia.com>
-> Link: https://lore.kernel.org/all/875wyo6b7d.fsf@pmachata.org/
+> I haven't proposed moving away from an in-kernel solution. Your patch
+> is the same design I proposed earlier in this thread ("This is what I
+> have in mind for v2") with Andrii's bpf_ctx suggestion folded in, and
+> it's what I've been putting together for v2 (unless someone comes up
+> with a better direction), which is nearly ready to
+> post, so let's avoid duplicating the work.
 
-Nit:
+Perhaps I could've replied inline to the mention of reusing bpf_ctx. I
+read it as assuming the chain was already traversable. After
+experimenting with making nesting traversable through the common
+bpf_run_ctx, I shared the RFC to help validate that direction.
 
-Closes: https://lore.kernel.org/all/875wyo6b7d.fsf@pmachata.org/
+> 
+> beyond trampoline progs, v2 also covers raw_tp, tp_btf, syscall
+> tracepoints, and BPF_PROG_TEST_RUN, and disables the per-CPU private
+> stack for preemptible tracing progs since two tasks can now run the
+> same prog concurrently on one CPU.
+> 
+> a couple of notes on your patch:
+> 
+> - Passing prog to bpf_set_run_ctx() churns all callers that don't do
+>   recursion checks, and doesn't fit bpf_prog_run_array_sleepable(),
+>   which reuses one bpf_run_ctx across all progs in the array. In v2,
+>   bpf_set_run_ctx() keeps its signature and initializes prog to NULL,
+>   and bpf_prog_enter_recur_ctx() sets it after the walk succeeds.
+> - bpf_io_uring_submit_sqes() calls bpf_set_run_ctx(NULL), so
+>   dereferencing new_ctx unconditionally will NULL-deref there.
+> - Cross-task synchronization isn't needed: a task only ever walks its
+>   own current->bpf_ctx chain (and any IRQ/NMI on top of it runs on the
+>   same CPU and walks the same chain), so compiler barriers around
+>   linking and unlinking the frame are sufficient.
 
-> Signed-off-by: Hannes Laimer <h.laimer@proxmox.com>
-> ---
->  .../selftests/net/forwarding/vxlan_reserved.sh     | 39 +++++-----------------
->  1 file changed, 8 insertions(+), 31 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/vxlan_reserved.sh b/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
-> index 0ce264cc57f8..a273e1fcd26c 100755
-> --- a/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
-> +++ b/tools/testing/selftests/net/forwarding/vxlan_reserved.sh
-> @@ -273,30 +273,18 @@ __default_test_do()
->  	log_test "$what: drops reported"
->  }
->  
-> -default_test_do()
-> +default_test()
->  {
->  	vxlan_device_add
->  	__default_test_do 0 "Default"
->  }
->  
-> -default_test()
-> -{
-> -	in_defer_scope \
-> -	    default_test_do
-> -}
-> -
-> -plain_test_do()
-> +plain_test()
->  {
->  	vxlan_device_add reserved_bits 0xf7ffffff000000ff
->  	__default_test_do 0 "reserved_bits 0xf7ffffff000000ff"
->  }
->  
-> -plain_test()
-> -{
-> -	in_defer_scope \
-> -	    plain_test_do
-> -}
-> -
->  reserved_test()
->  {
->  	local bit=$1; shift
-> @@ -311,35 +299,30 @@ reserved_test()
->  
->  reserved_0_test()
->  {
-> -	in_defer_scope \
-> -	    reserved_test 0
-> +	reserved_test 0
->  }
->  
->  reserved_10_test()
->  {
-> -	in_defer_scope \
-> -	    reserved_test 10
-> +	reserved_test 10
->  }
->  
->  reserved_31_test()
->  {
-> -	in_defer_scope \
-> -	    reserved_test 31
-> +	reserved_test 31
->  }
->  
->  reserved_56_test()
->  {
-> -	in_defer_scope \
-> -	    reserved_test 56
-> +	reserved_test 56
->  }
->  
->  reserved_63_test()
->  {
-> -	in_defer_scope \
-> -	    reserved_test 63
-> +	reserved_test 63
->  }
->  
-> -gbp_changelink_test_do()
-> +gbp_changelink_test()
->  {
->  	vxlan_device_add gbp
->  	__default_test_do 25 "gbp"
-> @@ -347,12 +330,6 @@ gbp_changelink_test_do()
->  	__default_test_do 25 "gbp after changelink"
->  }
->  
-> -gbp_changelink_test()
-> -{
-> -	in_defer_scope \
-> -	    gbp_changelink_test_do
-> -}
-> -
->  trap cleanup EXIT
->  
->  setup_prepare
-> 
-> ---
-> base-commit: 6db9448a443afde26231aaed7b112ed17b33f468
-> change-id: 20261026-vxlan-reserved-tests-f2ceea83bb0c
-> 
-> Best regards,
-> --  
-> Hannes Laimer <h.laimer@proxmox.com>
-> 
-> 
+Fair points on 1 & 2. On 3, "cross-task" was originally inaccurate
+wording. The intention was cross-context visibility under
+interrupts.
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> 
+> I'll Cc you on v2 once I post it (probably by tomorrow evening UTC).
+> testing and review there would be appreciated.
+
+Sounds good.
