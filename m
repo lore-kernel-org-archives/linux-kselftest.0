@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794424333;
-	b=MX2UpHj/APqebhErC+DqxxqsX78/9gyB65tCXBPEQbh6UJFfUbMctxjSxayhR8Xk/DeV
-	 AtOa2J2z3DpU38+Q0vKZpqB5VQXXybsSRzzZ5RvCPxC/gjDqps+t9nOGCq0mgd9KOhodh
-	 Vb6GQS98mQ0tAA69ywuFyyyQO090kQBBPzRelwwYjJ6QTJ4rdYSXwUhgVGx9B12U2zSLO
-	 4gld+n75tnFBHCoaST5OxCc/LiGfeGEbfnFAeTUzrps0bmJN8NVMR+BdTx8XBhn19xlYu
-	 kiDijgCp/nQEDB7k4q4om4X81PuX1ATm9M3A1dXmrhwio92ylXKHYXjJkSkX2S84m7A==
+	t=1794424338;
+	b=MFYcNT2Qb7LuodD7bONcCa2zKdftnikJAMjuMp6ijiIrQxoH4liihPnni2BqxklaQz+r
+	 p9wNQdu7P+DEWFB3lK58KqOsEV8VsohK0xndTbgZ2bQPK2s4h9ABzZKwcajgSz/T/Pf0E
+	 ZPkNtGmOGui+/tY1qhUBk1SbL/rSpkF2Cse70A3x3hkm0fApzZGvgY4OGOk9WcxvfEHuX
+	 LdgobCVbstJcxJ8JP3Gdk2gZr6i2RyZyaizOV5tVKyvKq/9jCQuycEoTPgjDQTjBr7BOl
+	 ImsAqGPyYXcLB8VerRxbc41t/kPKCdYjHLaVL/pgItvAnX1XwGhx4IIjXA90EeyXqyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794424333;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794424338;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=9jTV1cU8eRCsu/cOln8DSW5YMovrmFKMV7huP79WNyk=;
-	b=yB5aJn/U7Vw8l6gOrCtkSDJzwPgFnFoM0umxvZ6qedcJxLK5o6SA9gN4MrsZDfQOPpZX
-	 pyLDn2xuOWNY2Iz1eqD2oBNV4U1MQfdU/Xxa3mdsq6dAkGC2syLyiinB2SexEfk1qHd1S
-	 5pFT8QJnNPxXI85x5vwMqRC7Kg8FfcTD3PVLY4Ih37I+FrlsVn2+rRYLPaNaz3swRkj10
-	 P7+ooKFz4bZ4lXffLdmredLprxhD2DXgFW+d4+XDmevG9PXxrH64imHwnQppWRjPdg0aY
-	 D1SZ7kA7BKKwGoLw1w0gJIBPA86lMTzVtiLhtl83DIfkkJTcoI2ik/MPzHXJbeyO0dw==
+	bh=TYBYTqmsCEkuPeF6UUVuvymRyySqseSuHMHuFSF29/s=;
+	b=F79HWPG4grb0ujPWjBAIVwttDXsMBcJs0GaD6daYndQiCTWw1hUm0ngok7k2Ygngiszt
+	 Hcyk+P5tYj63z6mqj9RR7hvFpH6sLpg8BgXC8/0L6tEVZ2vNPWG0cbfOsNeICM9sY6kWj
+	 cPvXBZqQNaS1TNegDWSCBRXYIO4b1HgmIcTmVCAoS5qChrl3rRJHRsSJv8P7AOVnN8gQb
+	 JmDmcz+2fA7SdyjfYZKtupXkcpKzHYZ2cezh2h/jO7sg6VM5rLrxhmvRAOli0mm7TpvKr
+	 2NfUxYNANl9iF/R0q6VU69pzVbLyQjHqSjcfqYFsgdIHG7G7xsJXRYWd94DaSXlgjOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QhS5rO7q;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tb9sIjD5;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB558606A89F;
-	Wed, 11 Nov 2026 19:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5105A606A8A7;
+	Wed, 11 Nov 2026 19:12:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QhS5rO7q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D671F00A09;
-	Wed, 11 Nov 2026 19:12:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tb9sIjD5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9751F00A06;
+	Wed, 11 Nov 2026 19:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794424333;
-	bh=9jTV1cU8eRCsu/cOln8DSW5YMovrmFKMV7huP79WNyk=;
+	s=k20260515; t=1794424337;
+	bh=TYBYTqmsCEkuPeF6UUVuvymRyySqseSuHMHuFSF29/s=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QhS5rO7q7Kkwt5pgyQUSnaeRTvuxOkKq0LhVvckZ5oa8yBhmvAja8xok+1xdRVW9l
-	 88A/GInH3A015FrOBWehEs6vmLkvXqzpzH3884CSjQSy8/H/P3DonNYR5Uw6Q7+ak/
-	 ZUkHfN73KzLR7XOgK9i5zdjSb5jn8d4sFPqyv+2yEzaKkS53AoxLctTf0k/0wrDrgV
-	 aeREkyS/FCK8MNZZoo7578L0RHG4M79zjCWOwwNsTKrE1L2TbVIKh/zhMRmveW05kN
-	 SArqPYH9B8/VkDiMwfPBgwKxYghVMM6/GolvCOaHoAhbI3WGAMH8xgQzc3wQp99bcw
-	 hW9W0fiHOS9ww==
-Subject: Re: [PATCH net-next 08/10] net/mlx5e: TC, offload RX queue mapping in
- NIC flows
+	b=Tb9sIjD5MfxoIVlQ61rTb+WDUHdk4NZtEH6zlIzApmb331n5cMDbSLhoLzkrStAJI
+	 gmOi2NHeC/1pCO/UNWcLECw4jj9XNxO0QVObKGYKS24JWiWDtvrxo2+MyOKVWI0EzE
+	 Icn6rMoHDD5qJIeqcQ1yJsv6ZydJkY2DIKy8kMUz2KjWLxJB1+jw6B0v1qo3v11x33
+	 QK9RgcoxvdACiNQfaAHriAZvaUX8Wu1z8Kl6V0aassKuEos/5GUpQU30YaYzGKaNHW
+	 tpP205MwY/pH+K0UJEW8h+XeeYoOV1p54OscB4NI680JEkqn51Vklu/A4Wws586b6a
+	 aguPrJ59Sq8SA==
+Subject: Re: [PATCH net-next 10/10] docs: networking: describe tunnel key
+ partitioning in TC queue filtering
 From: netdev-bot+sashiko@kernel.org
 To: acassen@corp.free.fr
 Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
@@ -53,11 +53,11 @@ Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
  idosch@nvidia.com, shuah@kernel.org, netdev@vger.kernel.org,
  linux-rdma@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kselftest@vger.kernel.org, oss-drivers@corigine.com
-Date: Wed, 11 Nov 2026 19:12:11 +0000
-Message-ID: <179442433199.2199510.1112413550328435081@kernel.org>
-In-Reply-To: <20261109131039.959438-9-acassen@corp.free.fr>
-References: <20261109131039.959438-9-acassen@corp.free.fr>
-X-sashiko-severity: Medium
+Date: Wed, 11 Nov 2026 19:12:16 +0000
+Message-ID: <179442433615.2199510.11200298531505956799@kernel.org>
+In-Reply-To: <20261109131039.959438-11-acassen@corp.free.fr>
+References: <20261109131039.959438-11-acassen@corp.free.fr>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -70,135 +70,151 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The terminating-action guard in tc_act_can_offload_rx_queue()
-  (drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c) is…
-- [Low] tc_act_can_offload_rx_queue() reads
-  `flow->priv->channels.params.num_channels` (a u16) with no lock and no…
+- [Low] The new mlx5 paragraph in Documentation/networking/tc-queue-
+  filters.rst (lines 54-56) says: "The filter therefore needs skip_sw.
+- [Low] The commit message says the patch documents 'what enc_key_id
+  means on a physical port of mlx5'.
 
 --
 
-net/mlx5e: TC, offload RX queue mapping in NIC flows
+docs: networking: describe tunnel key partitioning in TC queue filtering
 
-This commit offloads the tc skbedit queue_mapping action for mlx5e NIC
-flows. Matching traffic goes to the direct TIR of the selected channel,
-the same way ethtool steering rules do it. The action must be last and
-cannot follow goto or mirred.
+This commit documents tunnel key partitioning in tc-queue-filters.rst, where
+a mask on enc_key_id steers blocks of tunnel flows to RX queues. It adds a
+GTP-U example and describes what enc_key_id means on an mlx5 physical port.
+It also covers what happens to the filter when its target queue goes away.
 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c
-> new file mode 100644
-> index 0000000000000..869da3cb703a8
-> --- /dev/null
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/rx_queue.c
-> @@ -0,0 +1,49 @@
+> diff --git a/Documentation/networking/tc-queue-filters.rst b/Documentation/networking/tc-queue-filters.rst
+> index 6b417092276f6..de54d43687c60 100644
+> --- a/Documentation/networking/tc-queue-filters.rst
+> +++ b/Documentation/networking/tc-queue-filters.rst
+> @@ -35,3 +35,25 @@ queues and/or a single queue are supported as below:
 
 [ ... ]
 
-> +static bool
-> +tc_act_can_offload_rx_queue(struct mlx5e_tc_act_parse_state *parse_state,
-> +			    const struct flow_action_entry *act,
-> +			    int act_index,
-> +			    struct mlx5_flow_attr *attr)
-> +{
-> +	struct netlink_ext_ack *extack = parse_state->extack;
-> +	struct mlx5e_tc_flow *flow = parse_state->flow;
+> +  # GTP-U TEIDs whose two top bits are 01 go to queue 1
+> +  tc filter add dev eth0 ingress protocol ip flower skip_sw \
+> +      ip_proto udp dst_port 2152 enc_key_id 0x40000000/0xc0000000 \
+> +      action skbedit queue_mapping 1 skip_sw
 > +
-> +	/* The direct TIR takes over the destination of the rule */
-> +	if (!flow_action_is_last_entry(parse_state->flow_action, act) ||
-> +	    attr->dest_chain || flow_flag_test(flow, HAIRPIN)) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "RX queue mapping must be the last action and cannot follow goto or mirred");
-> +		return false;
-> +	}
-
-[Severity: Medium]
-
-Does this guard catch every earlier terminating action whose destination
-the direct TIR would override? It only checks attr->dest_chain on the
-current attr and the HAIRPIN flag.
-
-A preceding gact ok seems to get through. mlx5e_tc_act_accept has
-is_terminating_action set, but tc_act_parse_accept() only does:
-
-	attr->action |= MLX5_FLOW_CONTEXT_ACTION_FWD_DEST;
-	attr->flags |= MLX5_ATTR_FLAG_ACCEPT;
-
-Nothing on the NIC path reads MLX5_ATTR_FLAG_ACCEPT, and dest_chain and
-HAIRPIN are not changed. So a filter like this passes the check:
-
-  tc filter add dev eth0 ingress protocol ip flower skip_sw ... \
-      action ok action skbedit queue_mapping 3
-
-verify_attr_actions() accepts it too, because it only rejects FWD_DEST
-combined with DROP. In mlx5e_add_offloaded_nic_rule(), the new branch
-then wins over the default forward to the VLAN table:
-
-	} else if (nic_attr->rx_tirn) {
-		dest[dest_ix].type = MLX5_FLOW_DESTINATION_TYPE_TIR;
-		dest[dest_ix].tir_num = nic_attr->rx_tirn;
-
-As a result, hardware sends the flow to direct TIR 3. In tc, the action
-list ends at ok, so the queue mapping should never apply.
-
-Can a goto in an earlier split attr get past the check in the same way?
-Take goto chain N, then a non-clear ct, then skbedit queue_mapping Q.
-tc_act_is_multi_table_act_ct() returns true for the ct, so
-parse_tc_actions() splits after it. mlx5e_clone_flow_attr_for_post_act()
-then clears the new attr:
-
-	attr2->dest_chain = 0;
-
-When the rx_queue action is checked against attr2, attr->dest_chain is
-0, so the rule is accepted. Hardware would then steer to queue Q instead
-of processing chain N.
-
-This second case assumes NIC CT offload is available and that goto
-followed by ct is accepted on the first attr.
-
+> +Not all drivers can program a partial mask.
 > +
-> +	if (act->rx_queue >= flow->priv->channels.params.num_channels) {
+> +On mlx5 devices such a filter runs on a physical port where nothing
+> +decapsulates the packet. All the keys describe the packet on the wire.
+> +ip_proto and dst_port tell the hardware which tunnel header holds the key.
 
 [Severity: Low]
 
-Is this read of priv->channels.params.num_channels meant to be lockless?
+The commit message says this documents "what enc_key_id means on a physical
+port of mlx5". Should this paragraph also list the limits the driver
+enforces? As written, the driver can refuse the GTP-U example above, and
+small variations of it, for reasons the document does not mention.
 
-mlx5e_setup_tc() sets f->unlocked_driver_cb = true, so this path can run
-without rtnl:
+First, the GTP-U example needs firmware flex parser support:
 
-mlx5e_configure_flower()->parse_tc_actions()->tc_act_can_offload_rx_queue()
+drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun_gtp.c:mlx5e_tc_tun_parse_outer_key_gtp() {
+    ...
+	if (!(MLX5_CAP_GEN(priv->mdev, flex_parser_protocols) &
+	      MLX5_FLEX_PARSER_GTPU_TEID_ENABLED)) {
+		NL_SET_ERR_MSG_MOD(extack,
+				   "Matching on GTP-U TEID is not supported");
+		return -EOPNOTSUPP;
+    ...
+}
 
-At the same time, mlx5e_switch_priv_channels() overwrites the whole
-struct under rtnl and priv->state_lock:
+The commit "net/mlx5e: TC, match the tunnel key without a tunnel device"
+says GTP-U needs flex parser profile 3, while GENEVE needs profile 0. Since
+skip_sw is mandatory there is no software fallback. The documented command
+therefore fails on a device that runs another profile.
 
-	priv->channels = *new_chs;
+Second, queue mapping is only offloaded in NIC mode. In en/tc/act/act.c,
+FLOW_ACTION_RX_QUEUE_MAPPING is registered only in tc_acts_nic, and
+mlx5e_tc_act_get() uses tc_acts_fdb for FDB flows. The action is refused on
+the uplink representor in switchdev mode, which is also a physical port.
 
-That leaves a plain write racing a plain read, which KCSAN can report.
+Third, ip_proto and dst_port only select a match register.
+mlx5e_tc_tun_outer_lookup() accepts only ip_proto GRE or an exact UDP
+dst_port of 2152, 4789 or 6081:
 
-The commit message already accepts the functional result. No out of
-bounds access is possible either: num_channels never exceeds max_nch,
-and direct TIRs exist for every index up to max_nch.
+drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:mlx5e_tc_tun_outer_lookup() {
+    ...
+	/* Only an exact port names a tunnel */
+	if (ports.mask->dst != htons(U16_MAX))
+		return NULL;
 
-For comparison, the similar ring_cookie check in validate_flow() in
-en_fs_ethtool.c runs under rtnl, so it is serialized with set_channels.
+	switch (ntohs(ports.key->dst)) {
+    ...
+}
 
-Should this read use READ_ONCE(), or should the check take
-priv->state_lock?
+VXLAN on port 8472, or a masked port, is refused with "enc_key_id needs
+ip_proto 0x2f or the exact dst_port of a supported tunnel".
 
-> +		NL_SET_ERR_MSG_MOD(extack, "RX queue index out of range");
-> +		return false;
-> +	}
+Fourth, VXLAN and GENEVE keys are 24 bit VNIs.
+mlx5e_tc_tun_parse_outer_key_vxlan() and
+mlx5e_tc_tun_parse_outer_key_geneve() refuse a masked key that does not fit
+in 24 bits ("Tunnel key does not fit the 24 bit VNI"). The top bits mask
+from the example (0x40000000/0xc0000000) cannot be reused for those tunnels.
 
-[ ... ]
+Fifth, mlx5e_tc_tun_parse_outer_key() also refuses decap actions.
+
+The only caveat the document gives is "Not all drivers can program a
+partial mask", which covers none of these limits.
+
+> +The software datapath has no tunnel metadata on such a port. The filter
+> +therefore needs skip_sw. Without it the filter stays in software, where
+> +the port reads key zero.
+
+[Severity: Low]
+
+Is "Without it the filter stays in software" accurate for the queue_mapping
+filters this document describes? Leaving out skip_sw does not seem to
+install a software only filter.
+
+If skip_sw is removed only from the filter, tcf_action_init() rejects the
+skip_sw action:
+
+net/sched/act_api.c:tcf_action_init() {
+    ...
+				if ((tc_act_skip_sw(act->tcfa_flags) && !skip_sw) ||
+				    (tc_act_skip_hw(act->tcfa_flags) && !skip_hw)) {
+					NL_SET_ERR_MSG(extack,
+						       "Mismatch between action and filter offload flags");
+					err = -EINVAL;
+					goto err;
+				}
+    ...
+}
+
+If skip_sw is removed from the action, tcf_skbedit_init() refuses ingress
+queue_mapping:
+
+net/sched/act_skbedit.c:tcf_skbedit_init() {
+    ...
+		if (is_tcf_skbedit_ingress(act_flags) &&
+		    !(act_flags & TCA_ACT_FLAGS_SKIP_SW)) {
+			NL_SET_ERR_MSG_MOD(extack, "\"queue_mapping\" option on receive side is hardware only, use skip_sw");
+			return -EOPNOTSUPP;
+		}
+    ...
+}
+
+The filter level skip_sw is not merged into the flags that the action init
+sees, so this happens whatever the filter flags are. Both failures happen
+before mlx5e_tc_tun_parse_outer_key() runs.
+
+The "stays in software, reads key zero" behavior only seems to apply to
+actions that can run in software, such as drop, mirred or mark. The text
+looks like it was carried over from the commit message of "net/mlx5e: TC,
+match the tunnel key without a tunnel device", which describes generic
+actions.
+
+Could this sentence say that the queue_mapping request is refused instead?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109131039.959438-1-acassen%40corp.free.fr
