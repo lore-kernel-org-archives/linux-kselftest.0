@@ -1,55 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794369543;
-	b=Amhd4xRFdypYHDX3yjbqkZz3Yh4SX2zaIaBUp4cEINgqMH+Gtmzl7ZVEh2RzaXoGqmk3
-	 g29LSuGrBsIJzHg0x3tVBxRyS+ZcDoyUHS9MVQG0G/rTGngRFzA9b1vXjxAnOX6RZ0jxy
-	 EXf6S2q/OjZ4y5nPADQK5+OU0YtJxY9R0AEb1V1Iqf313TSm82k+V24zqFJqT6T452v8O
-	 xfTWnH1WxAGBsOmFdT04V4tPjiVEvRfoGdtaRMOSboMGyupgbV2h+88Uoewr5OmtbMv9L
-	 KFqMRaTtaRk6gEnpS4JOw9C3ddoNWCznaujFRwxG1DA4mCwt3POTi7eHK1TpUaTNI1g==
+	t=1794372618;
+	b=HMnIUDeK4gJ9vPyRbXlbTs/f1/xnxuEkrjj9l3G2cn0r2/6seLGYeIQsoYgmzyHFfLuM
+	 dziFF0UbrrIeDQL8sRF/+sni6yDdkD20VMJLRW2rTSrCUqIMa4asiTxnZxIDWL4FdRMn8
+	 7kyg4dxdEYlaSiGVi4h3Ywl+lwXb/ndXr5FduoZhgbwbnZHpuglvdszRimmqHK3Ggh5Jp
+	 qSnZxSB/vUhbWzQyrJhSLaAtHcO02cuVLF3n4wC5uPlQapatuMyGT6vEI0ud/m+yF28KX
+	 NaU03LQj/tYnpG8oM5yjDHmJtU5DPPkOCoo5nXxmT2ocq9wbveEjvKGlmofOwgoLxsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794369543;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZjXqMQ6hdZ4kwTB36gvdCoIT1cQInDYuK47u5mGhQyM=;
-	b=jf4l9jGo9jDrUXxRF6t5m/jQwjXY7AlK6dSAGqaaJmw0NV0ulY4fU+axvxoawM+87/Mo
-	 yhsr66OCJsn12/cWN9x9uIg+muIwr/8O5/8oe+YedFMC7a15gr1hyniJlHpQrQ3jYPmWs
-	 v3eLNZMSpmFRbwW+yEArT8EE8zUD6ga7sDilbwKzAOxu3US/UtcS6VaFret8qXobulSET
-	 b/ZFgxh1KYp1Ry9N3E/Xluz65G6fsk7Ua7UANhJuDDMiw80xwUeKmAQZu7Vv9KlPcJdUW
-	 aND6Kr2+Cj5Ds+37Pm7/3JBN1BZ0XcYzCX6TU3v38GcUzufDiFeHNggTFuWah8/KHbQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794372618;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=GucDm2oz81wKTevTqbqEwI8JkuvXZ6eoYgO/mA1WjyU=;
+	b=AdAaMmiWe5ejZUKY7t62MZ3lELKFWG1sJLq0kTmMOOHorLONzbsHc6jkm7SNht0LovBh
+	 JvofMi0BZTtmY2zdmdsRIDglf9vdUKU+GctpFlHsE9ho9g7L8kJjN28rsJ1l6XK1i098l
+	 7QS6RevEaR0P7z7TwqIrbm00hL8s9OPGvIbdOMvq59LZtrd89Ax4QzplUkFVgrsD0CfP5
+	 VH6ZYRy8X83A+9w6mImxvBhb9Z+dfngDpFNFMat0mRKV/H+P9lM1C0qazG8ZOpCUO3ARH
+	 nfZeGgof9nEfTN5aWfdkpH7vFSAU0sSQyHGpDliaBYstwPKk5GqnyKF1Uk8eRoETDmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EFHl1tC6;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N5XPqJhI;
+	arc=none smtp.remote-ip=192.198.163.11
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29B0606A320
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 03:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB44606A320;
+	Wed, 11 Nov 2026 04:50:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDB44606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EFHl1tC6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB531F00A05
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 03:59:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794369543;
-	bh=ZjXqMQ6hdZ4kwTB36gvdCoIT1cQInDYuK47u5mGhQyM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=EFHl1tC6ueX3JKX2R3ySeYPUy01OSp6rXKtawQKXTBu94NPvJm9mZtRwQPE/LwqwY
-	 sYJqDrj04Y72nFkSsHbqlx0Vq7ptabNrt904LWtsXtWEXgDJLqJJV9p5GTnBdsZ2ex
-	 lehRSjT8cFj5yBfHb6sNHDAb5D/DvQ5mj7MhCbnGVmj7ruOszC3JzidQLA5jkKu+te
-	 DGtADIVeIJlEMT7kKXt6YHH5ZQdG01K3Cj/Ze3HWoex5ELm6ZrGKZGaEdti8OpX/na
-	 HJ0w2H/NIANei2micvB/xdnX4+C4DvTP4HpcIlTRsRcIhVYUCQNjZ7oOKOYyiU//li
-	 4BPALXu3EvhxA==
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93f3c895a0eso235844185a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 19:59:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErG3S/dZaFV90rlv2r0GZEZPuz1bbrftlQa7gfalTQ9965xQhz4/K+hOYla5MoHUIk1IQUIyloSLx/wu9loi0Vk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8TPbrZ1WmiDmUoHRV4/0G64KIlKhZWXmZ14vetqUwQD89+dMJX
-	/uEcu3FD1QbYAVU5A03czvVmNplBzPESRShrviEW13IakbGyKWPt3Zh/PKgEeOZhGFdAlQtmZpF
-	cX8LJ2k3TpqAtLkIaMCwYKuhExWv6j50=
-X-Received: by 2002:a05:620a:26a5:b0:93c:c7c6:90b5 with SMTP id
- af79cd13be357-947afcd389amr174760785a.9.1794369542448; Tue, 10 Nov 2026
- 19:59:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N5XPqJhI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1794372618; x=1825908618;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ljcrNKbpAZvY29Hoai/6dYOKOIn1MHeJbxONLN+KZis=;
+  b=N5XPqJhI2xZUqyK4fakr82V+DoQDJQEe4BN2kuukyKY4IKW8DVgZhRyE
+   qYpTr/vFZ1KuvrHjSkD/HzozyMwL6PH13OeLAV8qPA8xwOW0rQ/TIdl5I
+   g1qvdxTxgCkWRZnikO6Qvnia27wed7x7N82G6HmvwqYWvxwbFEvS+CdmY
+   s6YhDpMOCU7zpET+089C6caF50MP99NFh5502Ma8dvX369kwJM0Hu6x4m
+   1T6fgGxD10kUoGciwjHTHTU76YNoqZG30APKKUG2G7LPsLEWXu3P1uDCq
+   8S9iyB7gPfkSPFIDvZfGdwQLoY8h1/peYHct3RgclPQzECr40U6D4WCjS
+   w==;
+X-CSE-ConnectionGUID: onmzTCaBQQOT9e1ZCFH8NA==
+X-CSE-MsgGUID: Be++AGXfTp2pK62sqTXZBg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3056841"
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="3056841"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 20:50:17 -0800
+X-CSE-ConnectionGUID: RNtq6VTrRyq6Mn+kkbUsKw==
+X-CSE-MsgGUID: /Ga9LHOsTL+GMDFg52Zw+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
+   d="scan'208";a="8754365"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.71]) ([10.124.240.71])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 20:50:12 -0800
+Message-ID: <63efac33-22e7-4e4a-8fc4-20497af51927@intel.com>
+Date: Wed, 11 Nov 2026 12:50:08 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,60 +72,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261028214534.1919398-1-song@kernel.org> <avMR6tKwddVBrkpk@pathway.suse.cz>
-In-Reply-To: <avMR6tKwddVBrkpk@pathway.suse.cz>
-From: Song Liu <song@kernel.org>
-Date: Tue, 10 Nov 2026 19:58:50 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4Dh=QRgChcfbrTZtxCko90+o5cgzFpytBEQcHh9xd61A@mail.gmail.com>
-X-Gm-Features: AclHuK8gWgOZlTHZU4sFNAsP3ftW_dWVZ6cjjSNApGFC4mxEwRvyPBBX-lKjT34
-Message-ID: <CAPhsuW4Dh=QRgChcfbrTZtxCko90+o5cgzFpytBEQcHh9xd61A@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] klp-build: Fix dependent patches, add selftests
-To: Petr Mladek <pmladek@suse.com>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, 
-	joe.lawrence@redhat.com, shuah@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v16 03/20] KVM: selftests: Initialize the TDX VM
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
+ <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 10, 2026 at 4:45=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrot=
-e:
->
-[...]
-> >  create mode 100755 scripts/livepatch/klp-prepare-patch
-> >  create mode 100644 tools/testing/selftests/livepatch/test_klp_build/Ma=
-kefile
-> >  create mode 100644 tools/testing/selftests/livepatch/test_klp_build/fu=
-nctions.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/ru=
-n-tests.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-basic.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-cancelling-patches.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-independent-patches.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-line-directives.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-new-and-deleted-files.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-offset-and-fuzz.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-patch-not-applying.sh
-> >  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/te=
-st-unsupported-files.sh
->
-> I am sorry, I am overloaded and do not have time for a proper review.
+On 11/6/2026 7:46 AM, Lisa Wang wrote:
+> From: Sagi Shahar <sagis@google.com>
+> 
+> Add tdx_init_vm() to handle the mandatory VM-level initialization
+> sequence required for Intel TDX.
+> 
+> For TDX, the VM's CPUID configuration must be "sealed" during
+> KVM_TDX_INIT_VM before any vCPUs are created. This is necessary because
+> the TDX module does not allow the host to create and initialize any
+> vCPUs before the VM's CPUID configuration is accepted and sealed into
+> the TDCS.
+> 
+> Additionally, to satisfy the strict requirements of the TDH.MNG.INIT
+> SEAMCALL, the helper masks the KVM-supported CPUID
+> (kvm_get_supported_cpuid()) against the "directly configurable" bits
+> reported by KVM_TDX_CAPABILITIES.
+> 
+> Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-No worries.
-
-> I just see that it adds a lot of new files. And I wonder how much it
-> shares with the livepatch selftests. Would it make sense to put
-> it into a separate directory, e.g. tools/testing/selftests/klp-build ?
-
-This set of tests is mostly independent to current livepatch selftests.
-But in the longer term, as we add more end to end tests with klp-build,
-there will be more overlap between klp-build tests, and livepatch tests.
-
-Thanks,
-Song
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
