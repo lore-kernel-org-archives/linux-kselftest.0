@@ -1,49 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794355218;
-	b=tmSZ8A2ctHj6bpv621PyazPP0vFzXpFAjPSdPu9n2wncO5ajqvdQUciArUleuY+OTboX
-	 W1oRBIGW8IiC+a85SJuW4uFrNVpwkbZA9XIbswZxLn6MLurZOWYU8l9omcT4pNU46EEIY
-	 6XbLH8Pe1Z/X1xnRgRC1Ykn2pshxdTdPhpMHLxt+moHWDGS0oJ1Zjc3RrPcEca1v06Rds
-	 5R8oOTPVXcd+fTMuIjkp9xEnM0W+O7ceQxCRGMg8s/fgOQnJpYyonJlb+ZQSumsvt99hv
-	 BE86tFX5cUK+KinVLE6XMoK7SF8tIjD6PK4B6U2t0xQ3osptKQm7YEEsc5B/G9J2XvA==
+	t=1794355258;
+	b=Z6fBqaf7JdZ6KPmtqVOQs4ouaOFO8ZouebD9vqH7vhR83ar9W1CPiK9wzOkqd6Pc2Jaw
+	 dyjWegJegefo7eyg5FKA9kRtG/G2WgLEoTM8Et1sH1+9pYSPfX2jtTl1Nyo6OUX2nWktB
+	 1MFX/If7TdSaON6m//lclJr1UvLMEfujkv/3ExwVovK7L1Q7AHRT55T/3uIiuC3INc5QD
+	 egeWFE1CSMKfht0UZpOfq50m8Cf76eBZZD7jgB8ab781X31H5SfI+wruGa8NXbtV9dKw2
+	 SOpZDmJtpWneDQAwrhjE9a74CYxWZBtdwZk85ORkL8AHz665Glmobj/L0ZeaZjp+Ong==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794355218;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=XXJOmUh6ZA2cxo0uMHH/7j9X480fJihmgHUTZSH0Lv4=;
-	b=iPT4zYaLE99GIj7vMmGwgWxVdyQX7Mk0nfDByMNWoIGWS2SEIJKhmiudq7Ab2RFElp/J
-	 /wMjuzFmJedV0KVdmhFZs5w6T521F/BfmR0IbRCPm/t5MfPeNnaKmGXElwChdmKJUq0xY
-	 IrzrRk+U7YrZNSdZU/vZ6SOIxVc33u3wgJd2Nf8Sr0PQYVg9wBRfE+wB3MElmKEmzKb6h
-	 Ela2i/V10hyb08AMUSdvetjcsh6h6J4nxPnyUNyuvkUCLwj0UHf8/RDVPmzcXbk7hGmAM
-	 UpVC3Lktt0z2ZkW0LugBU81UxrWEwBs3JauEyvsVcZFieAG0ABrGl2la2ceXL213eWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794355258;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=bYaErAxQk82jgbOAPhvOLDjqMW7sA/6+9+NevIx4alw=;
+	b=ujsWp4X/qsSGRczMUK2VGGNPAEdd0qd+tN0WgqYeXJ4OLI2ZQh67JNb7UpaQuexoTNHC
+	 9bDgZWfktB6Ap5qXdeYW6kOm1CcCdXbKroT+hkEwuX+SvMBjiQs2Rk+oylgM9z0xRHReV
+	 VuI5NO/KJJer3fM08GyGx1ljg8wUDkLzHzrsDJHYJR5jf0HO8NyQKkCEfNQARprSUS6IC
+	 isdUThXUI6pcIoUqOFamin7Gxa6no3pQj2y627OiIai0dPDQM6vA9DXdxLNNtDQO4FUUK
+	 u4vNW21gJ1NmGizM51f9IVr0XnFYY9FdMTQutBKX/C3IsP+tR9vvcxvQ9i4tybFA2lA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b6iWrDtb;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9TAbB+g;
+	arc=none smtp.remote-ip=74.125.229.4
+Received: from mail-dy2-f4.google.com (mail-dy2-f4.google.com [74.125.229.4])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5376B60A2604;
-	Wed, 11 Nov 2026 00:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB4F606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 00:00:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3FB4F606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b6iWrDtb
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A7F21F0089F;
-	Wed, 11 Nov 2026 00:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794355218;
-	bh=XXJOmUh6ZA2cxo0uMHH/7j9X480fJihmgHUTZSH0Lv4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=b6iWrDtblbR/FyqTPmhsV3XQ0zme5icdDs7lcjaw7oPLl2XXmLeM5l3FxjDxPCW27
-	 aWoSDtcHo3OIfgCuEGIPDp6eltPs6/1Fd49XtFxy28fdcGgw1arKHD4uepr+j7mDqw
-	 5k3TmjN4VMgAUBWrI5C/CxAqQNNN7bAUPMd77ftBm1+hcKnCRAuzfmETiQC3edQIUG
-	 +dyOpHg/rUjDtWXr3b9C7SKW9JOD5EcT5bZZDL666fz0j7iB9fKwMXYsq9sh/1XFp0
-	 q/7kFnZU4ocnzxKEOJzim0zTjR9xqxbWuqNT4je9pbF9x2DzSKVWtLJlBHtH7yb4nc
-	 H8WgT+oncEeqQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 2112939E8A4C;
-	Wed, 11 Nov 2026 00:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9TAbB+g
+Received: by mail-dy2-f4.google.com with SMTP id 5a478bee46e88-36f758312e0so1267566eec.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 16:00:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794355257; x=1794960057; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=bYaErAxQk82jgbOAPhvOLDjqMW7sA/6+9+NevIx4alw=;
+        b=t9TAbB+gGdTcVq3NKRacPVt0N7MjkADs80KixPKvho+VsCVkoONwqkO/yJ/R8u5s2t
+         sU9qfXBu+fZ2f+ktLbaRcQP1JUWWcVt1Fdbqa/eQbcIiLEtxXQoKQ3sLAmrxeQykyCN2
+         49gyjEHNylCKfRyIbQk8A7tQfltVuGM4+o9KlANYaQOAdjVDaBEFIYSTSPPuHrHa5vH4
+         1ntDDzByXQNjxkoHCJ8Zg+FfDpNx5BdDMLoBbqgU2bUForQ7XgCLF8X3ErsGHfHghBfW
+         TrPH66Wi7muVvYkZOho47s0CKpbAoxIu5IjK2FIpcRJF2KmPFdk+AT0W3KF20V5scofS
+         +4sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794355257; x=1794960057;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bYaErAxQk82jgbOAPhvOLDjqMW7sA/6+9+NevIx4alw=;
+        b=w0QkzwmoNaOKB3xwYVqes9XZJULjRT+3zLmfqCRl2QShrJWdRDtrEtHqohuxHv14sv
+         dOb8Pfas1LIO+X4XHjHj2SL29cX1uk+Oq3WJUlJL2hMIA2lgwlhe+kbcngrXM2q1fRZ6
+         1tmihZvHMf0/3T7ExVhJ3JTYBs7ecIIOD612AKIeBVxtOTtpAS96pXrD+1E9jy/a5yp/
+         plUvRa2m8oKYUPF4yGuCG47I7tJaEiGiHzdMBNDydD9yxYjdZzoaFfd/om+TUEpCDdM8
+         fbby1nrpy5iTULAhWzgksX123apNnTeZ+PWEHiguTlSIMpvZHCl/FFdYvUzj0CYSQ5/9
+         z2Qw==
+X-Forwarded-Encrypted: i=1; AL+hErHRZLSH3nWq7d6p4MdXCQNqBCANd9crNHWHdfzW9xzd8+U6X5AcfSzgKc8zAytn1r1gwUrN8cYAPDMkoW1H9ms=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9PR/phgaht3eq4s+tI6rMd6fgj/VHBrv4U+3FaZ91RmepZ3TXt
+	yBbxN3kMElLD1fASdKzUe3okLz4/pQNArKEppxmuyvU1iheVsvty7/Xi
+X-Gm-Gg: AYBFou1WhgL9Q6DgoaujtuKLqJ3QQgfUNQAtQ9IFHd/hCcbgUjSgjqFg36upvsstJof
+	1pRbFcazH0MDUH5iD8ZgXFM2AF1dajnf6pglV+hwVSGAD9m5xglcSrRhXsTKuoO8mU0mwII2Zkx
+	suWiabLgXIU7vJIu0NGCCPUMD4gncz4HwpJVEPY56MuenPpq1Fi1ocgWK1KvKkJnxNtMp36v/xt
+	8nXMcypdTvIOxIvKoByN1OEHN+hg1cy+2dAFWgOJiJhyuJKejJpZnYUmz5sUJ+YaC+w6KBtayOD
+	MWPLFrXf5T8qoogpEiSPUruuJjPGAZGqdi5vzLQtCe4C/rHCjIDr/Q7NY5fFPYvNuR3BHu1td+Z
+	C03mmf+iQz9KTPBqZAlazas7zs7f+mRgvbLAYIhKi2lHn1Pn9IhZ98UDIWJBjziM/unc1hH4Up5
+	L61JY7KxSkb+nVxBbQ5BFPAHl7Skq9MnILO3WOyPSDMHdHEm/6tKsfp+N3wpdkZHXFnoTWk4jvq
+	2QLZ00ALqbiHeLSfr/Pj28UZJAT8Ax2KstA2EcChBe/oSLcNrW+AQHknqwW+8ddnOOrSNZOgywN
+	inCoPS4N9V7j1WRPMbuUrFKk
+X-Received: by 2002:a05:7301:90b:b0:375:4366:a90c with SMTP id 5a478bee46e88-3768730e517mr1138142eec.41.1794355256884;
+        Tue, 10 Nov 2026 16:00:56 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:71::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-375218c7c50sm19090263eec.29.2026.11.10.16.00.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 16:00:55 -0800 (PST)
+Date: Tue, 10 Nov 2026 16:00:51 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin <deliran@verdict.gg>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
+	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev, kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,50 +119,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] selftests: drv-net: hds: fix state leaks and
- ioctl tests
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179435521666.125436.2802528717977617642.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Nov 2026 00:00:16 +0000
-References: <20261106031208.465456-1-dimitri.daskalakis1@gmail.com>
-In-Reply-To: <20261106031208.465456-1-dimitri.daskalakis1@gmail.com>
-To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-Cc: davem@davemloft.net, andrew+netdev@lunn.ch, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1794281983.git.tianyi@cloudflare.com>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu,  5 Nov 2026 19:12:05 -0800 you wrote:
-> From: Dimitri Daskalakis <daskald@meta.com>
+On 11/10, Tianyi Gao wrote:
+> An skb gets its RX hash, VLAN tag and checksum status from the RX
+> descriptor, which describes the packet before the XDP program ran.
 > 
-> Fix hds.py leaving tcp-data-split in a non-default state on drivers
-> that report HDS state rather than config, and fix the ioctl XDP tests.
+> Without this series:
 > 
-> Dimitri Daskalakis (3):
->   selftests: drv-net: hds: always restore tcp-data-split to auto
->   selftests: drv-net: hds: perturb settings via ioctl in
->     ioctl_enabled_set_xdp
->   selftests: drv-net: hds: restore HDS settings in ioctl_set_xdp
+> - On XDP_PASS, the values are stale. After the program strips a UDP
+>   tunnel header, the stack applies the outer CHECKSUM_UNNECESSARY to the
+>   inner packet [1]. If the outer UDP checksum is 0, a packet with a bad
+>   inner checksum reaches the socket.
+> - On XDP_REDIRECT, the values are lost. The skb that cpumap or veth
+>   builds from the xdp_frame has no RX hash and no VLAN tag, and its
+>   checksum status is CHECKSUM_NONE.
 > 
-> [...]
+> In one use case, an XDP program redirects packets into a veth device.
+> The checksum status is lost, so GRO verifies every checksum in software.
+> With one TCP flow, this costs 34% of the receiving CPU.
+> 
+> Another use case [2] is load balancing IPsec tunnel traffic with cpumap.
+> Without the RX hash, GRO on cpumap puts all flows into the same bucket.
+> In a cpumap test with 16 TCP flows and no IPsec, the throughput is
+> 17.6 Gbit/s instead of 23.4.
+> 
+> This series introduces SKB core extensions for XDP. It reserves an skb
+> core extension area in the headroom, right after the space for struct
+> xdp_frame. An XDP program stores RX metadata in the area with kfuncs,
+> and the kernel sets the skb fields from it. This design was initially
+> proposed in [3].
 
-Here is the summary with links:
-  - [net-next,1/3] selftests: drv-net: hds: always restore tcp-data-split to auto
-    https://git.kernel.org/netdev/net-next/c/c1e042cb4de2
-  - [net-next,2/3] selftests: drv-net: hds: perturb settings via ioctl in ioctl_enabled_set_xdp
-    https://git.kernel.org/netdev/net-next/c/2839e04a9f76
-  - [net-next,3/3] selftests: drv-net: hds: restore HDS settings in ioctl_set_xdp
-    https://git.kernel.org/netdev/net-next/c/f4085a199ebd
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Awhile ago we discussed the alternative of adding setters for xdp metadata.
+Then the veth (or whoever turns xdp frame into an skb) can apply whatever
+metadata it needs (and there is some magic behind the scenes that takes
+it into account when creating an skb). That keeps the layout and most
+of the code outside of kernel. Have we considered that here?
