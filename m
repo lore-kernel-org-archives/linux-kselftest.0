@@ -1,68 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794372618;
-	b=HMnIUDeK4gJ9vPyRbXlbTs/f1/xnxuEkrjj9l3G2cn0r2/6seLGYeIQsoYgmzyHFfLuM
-	 dziFF0UbrrIeDQL8sRF/+sni6yDdkD20VMJLRW2rTSrCUqIMa4asiTxnZxIDWL4FdRMn8
-	 7kyg4dxdEYlaSiGVi4h3Ywl+lwXb/ndXr5FduoZhgbwbnZHpuglvdszRimmqHK3Ggh5Jp
-	 qSnZxSB/vUhbWzQyrJhSLaAtHcO02cuVLF3n4wC5uPlQapatuMyGT6vEI0ud/m+yF28KX
-	 NaU03LQj/tYnpG8oM5yjDHmJtU5DPPkOCoo5nXxmT2ocq9wbveEjvKGlmofOwgoLxsw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794372618;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=GucDm2oz81wKTevTqbqEwI8JkuvXZ6eoYgO/mA1WjyU=;
-	b=AdAaMmiWe5ejZUKY7t62MZ3lELKFWG1sJLq0kTmMOOHorLONzbsHc6jkm7SNht0LovBh
-	 JvofMi0BZTtmY2zdmdsRIDglf9vdUKU+GctpFlHsE9ho9g7L8kJjN28rsJ1l6XK1i098l
-	 7QS6RevEaR0P7z7TwqIrbm00hL8s9OPGvIbdOMvq59LZtrd89Ax4QzplUkFVgrsD0CfP5
-	 VH6ZYRy8X83A+9w6mImxvBhb9Z+dfngDpFNFMat0mRKV/H+P9lM1C0qazG8ZOpCUO3ARH
-	 nfZeGgof9nEfTN5aWfdkpH7vFSAU0sSQyHGpDliaBYstwPKk5GqnyKF1Uk8eRoETDmA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N5XPqJhI;
-	arc=none smtp.remote-ip=192.198.163.11
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794372888;
+	b=nCAedGwLJQOFE5mTs2XQ3hK14KLwxrdmJxtqP0lleKEgjZt2K3GSZl/1xOAO86IPjweD
+	 03PLVaIP4qyvfGVOF8vasrvN/vREnhIkc0eORYrDtvn8jszYORm6SsyIFM7iDkdh/LGtI
+	 cfN63rLhDvNZQrDT4MrwWk3ZQ+y1kvJu3wV/v7g8cltNlAWt5HMkVLcBGg7Tyxo4bK6eV
+	 X1Vdbh3PPmc3E+R8JBXImpy+2Sy3CBSqMvmObvOtG3CsxQoAJGWABLeN1k8fjRLIv7m5E
+	 xhHZYliLpYR/x/vWb5CmaZraU/B/PHzHv6uVwP7mQgACpwMqeZRlvwbt3w6gokeFUKA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794372888;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=BWQmGmJya3rTCVRcVfS+YlSp5iNMVlB54NT+v8IKoXw=;
+	b=JRBXXpL7ss5ke74ivnWErVctGjjm2w10vfb8Zx9EyI6iMOtHONYWeGD7pYq4JtNaV7HH
+	 5NEERWrqJe1lTWxnjUu1xQhzvZRvsEbBwFJdBlMSQF8V3Fm6shYuKi+FYQX/030g1pGJH
+	 Xl2LrC9oQFII+Lgxn5Lct/1iQUunoODOU9yqLPTfKeebTKkojGAm6+mWthHgTnUKZHwOf
+	 VRKzBU9pFx17k4mLrxhK0d0YHkWSFal26QuqnpMjmd0ILfiTQPRD47Fm7oSJnkXoGou+Y
+	 VzViwlIwdZJzz4g2hYPxd18nj1epz0eeqBuroTWsIhQIKw/U+vRAzPZz0FWMxLT7LSA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bHcI7e14;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB44606A320;
-	Wed, 11 Nov 2026 04:50:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDB44606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB46606A332;
+	Wed, 11 Nov 2026 04:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N5XPqJhI
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1794372618; x=1825908618;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ljcrNKbpAZvY29Hoai/6dYOKOIn1MHeJbxONLN+KZis=;
-  b=N5XPqJhI2xZUqyK4fakr82V+DoQDJQEe4BN2kuukyKY4IKW8DVgZhRyE
-   qYpTr/vFZ1KuvrHjSkD/HzozyMwL6PH13OeLAV8qPA8xwOW0rQ/TIdl5I
-   g1qvdxTxgCkWRZnikO6Qvnia27wed7x7N82G6HmvwqYWvxwbFEvS+CdmY
-   s6YhDpMOCU7zpET+089C6caF50MP99NFh5502Ma8dvX369kwJM0Hu6x4m
-   1T6fgGxD10kUoGciwjHTHTU76YNoqZG30APKKUG2G7LPsLEWXu3P1uDCq
-   8S9iyB7gPfkSPFIDvZfGdwQLoY8h1/peYHct3RgclPQzECr40U6D4WCjS
-   w==;
-X-CSE-ConnectionGUID: onmzTCaBQQOT9e1ZCFH8NA==
-X-CSE-MsgGUID: Be++AGXfTp2pK62sqTXZBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11962"; a="3056841"
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="3056841"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 20:50:17 -0800
-X-CSE-ConnectionGUID: RNtq6VTrRyq6Mn+kkbUsKw==
-X-CSE-MsgGUID: /Ga9LHOsTL+GMDFg52Zw+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,207,1787036400"; 
-   d="scan'208";a="8754365"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.71]) ([10.124.240.71])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2026 20:50:12 -0800
-Message-ID: <63efac33-22e7-4e4a-8fc4-20497af51927@intel.com>
-Date: Wed, 11 Nov 2026 12:50:08 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bHcI7e14
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1794372888;
+	b=T5m2ASId52Jz779rqMmY18S18xwftEzCk4HEZvMimOnNM9x85ouy/TnRV61SfHji82/0
+	 LYA/nCvQ/G7ax/SN2BTzT88DxMHpo/Qx8rbyISQEdWN2v3tMvg5eqCBSdaB9ukfVBnXxX
+	 GVNgjJHXeJhaVlMecgxsE2On+Qm3QI+DNJSaujXo2riTyXJOZLv9v5O5XOAJT8czCU38k
+	 V1xoRnQyn7I/zbx+CqUDNNYWW2D3kT7zyEqwtR+67YcRCYBvyefbPoLCWvlGwSDVNwPAb
+	 wkljlu52aaTCtpn++3EV8gLkXl5h1p7++S3iNXxnNjv2D+41fFVm42IhjdtFDEIU1HA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794372888;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=BWQmGmJya3rTCVRcVfS+YlSp5iNMVlB54NT+v8IKoXw=;
+	b=XDEGOhsEa/UEXV/0S7QwvIz3nhlrd5toGWqP1hwJFgrYD9w6tyZRpZQLwtocx2WUtbGN
+	 1tU7PBxTtbyBycmws2rD+z1xzHlepSwwarsI0OCcRbaIhgEsIEWMN0bgHXqsuhckIyS7F
+	 lmnlYou0gZ0IoDJSwJieVsGcXw10fzE1uf0FmqSpkxDNwsYRZirEinxIwLP/1lrco8gzs
+	 QqvfQdxTDDt5QE6dysMVkEFmULv/vMECkkNOIMGXLwcBEQrJ4507N33RT9HAKXifp7gJg
+	 vMbqnpyj3WptrzU+rmXcUx4EdEvPagQ9idMjsMFTkgWqGO3gx5VImGzB7FXYqXHGP9w==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 731DA1F00A00;
+	Wed, 11 Nov 2026 04:54:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794372888;
+	bh=BWQmGmJya3rTCVRcVfS+YlSp5iNMVlB54NT+v8IKoXw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=bHcI7e14vKFMrX4fCmUdpKU9G+SII5oQoHgBbGLnAEfLtb+lQpo500XI3yXdswEK/
+	 mMlOxcfA3f/KDTRYrANKBS/KXfSmjKobnK2yjT+E7bK6aI0U2nkAIqOl6kPoJn6hpZ
+	 YlXUl8aC3bCfGdtr9LUaOAwgQ5ZRTm/hrNtLx13ZcL5GjCSWad6v+iyPD89vBo3oGv
+	 jAbP7B3UraMo/BJLBkv80Ppd3lHtvubqgcVyMXea+BR5gUKAZeJx97dKXMf1gGAXD6
+	 QrU7GNnKa43znHS9p0RfUrOa+kN7S9l833VKFUkLsaGMwKUClpU41f3R0D3y/daF2X
+	 OnhbOQIJZ7Qjg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id D946D48DAB;
+	Wed, 11 Nov 2026 04:54:46 +0000 (UTC)
+From: Daejun Park via B4 Relay <devnull+daejun7.park.samsung.com@kernel.org>
+Date: Wed, 11 Nov 2026 13:54:46 +0900
+Subject: [PATCH 1/2] landlock: Fix landlock_restrict_self() failure on long
+ executable paths
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,53 +83,130 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 03/20] KVM: selftests: Initialize the TDX VM
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20261105-tdx-selftests-v16-0-2024e8fa517a@google.com>
- <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20261105-tdx-selftests-v16-3-2024e8fa517a@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261111-landlock-long-exe-v1-1-588cfd174a10@samsung.com>
+References: <20261111-landlock-long-exe-v1-0-588cfd174a10@samsung.com>
+In-Reply-To: <20261111-landlock-long-exe-v1-0-588cfd174a10@samsung.com>
+To: =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>
+Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+ "Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Dwi Siswanto <me@dw1.io>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>, 
+ linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Daejun Park <daejun7.park@samsung.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1794372885; l=3932;
+ i=daejun7.park@samsung.com; s=20261006; h=from:subject:message-id;
+ bh=f/18UpIHEi230vx5Ck3a8ZJ9SX6Z8YLTouikgG7pJjU=;
+ b=lZtEj/fYt7MzgKNh5JAsBrOfa5F+2IWnMtSyCemCE/EOVEywBi5MDExD5cmbB8rPoEY24HC6S
+ KbJ5auThT4eDTmbGYU3nETY59/zIMDOq2+DXamc9M8qY57RYXfx7l5D
+X-Developer-Key: i=daejun7.park@samsung.com; a=ed25519;
+ pk=4yUfDqGRZTIj0Ik43z1GoMZRWCNm/rgX6uJuM9dtNIg=
+X-Endpoint-Received: by B4 Relay for daejun7.park@samsung.com/20261006 with
+ auth_id=1122
+X-Original-From: Daejun Park <daejun7.park@samsung.com>
+Reply-To: daejun7.park@samsung.com
 Content-Transfer-Encoding: 7bit
 
-On 11/6/2026 7:46 AM, Lisa Wang wrote:
-> From: Sagi Shahar <sagis@google.com>
-> 
-> Add tdx_init_vm() to handle the mandatory VM-level initialization
-> sequence required for Intel TDX.
-> 
-> For TDX, the VM's CPUID configuration must be "sealed" during
-> KVM_TDX_INIT_VM before any vCPUs are created. This is necessary because
-> the TDX module does not allow the host to create and initialize any
-> vCPUs before the VM's CPUID configuration is accepted and sealed into
-> the TDCS.
-> 
-> Additionally, to satisfy the strict requirements of the TDH.MNG.INIT
-> SEAMCALL, the helper masks the KVM-supported CPUID
-> (kvm_get_supported_cpuid()) against the "directly configurable" bits
-> reported by KVM_TDX_CAPABILITIES.
-> 
-> Co-developed-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+From: Daejun Park <daejun7.park@samsung.com>
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+get_current_exe() treats a d_path() error on the current executable as
+a bug. But an absolute path is not bounded by PATH_MAX, and d_path()
+returns -ENAMETOOLONG when the path does not fit in the
+LANDLOCK_PATH_MAX_SIZE buffer.
+
+An unprivileged task with such an executable triggers the
+WARN_ON_ONCE(), and its landlock_restrict_self() call fails with
+-ENAMETOOLONG.
+
+The path is not used for enforcement. Record "<too_long>" instead, as
+audit_log_d_path() does, and create the domain.
+
+Reported-by: Dwi Siswanto <me@dw1.io>
+Closes: https://lore.kernel.org/r/20261102022018.73143-1-me@dw1.io
+Suggested-by: Dwi Siswanto <me@dw1.io>
+Fixes: 1d636984e088 ("landlock: Add AUDIT_LANDLOCK_DOMAIN and log domain status")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+---
+ Documentation/admin-guide/LSM/landlock.rst |  3 ++-
+ security/landlock/domain.c                 | 15 +++++++++++----
+ security/landlock/domain.h                 |  3 ++-
+ 3 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/admin-guide/LSM/landlock.rst b/Documentation/admin-guide/LSM/landlock.rst
+index 718e0d23ffb5..983223ce6818 100644
+--- a/Documentation/admin-guide/LSM/landlock.rst
++++ b/Documentation/admin-guide/LSM/landlock.rst
+@@ -104,7 +104,8 @@ AUDIT_LANDLOCK_DOMAIN
+     - the enforcement ``mode``
+     - the domain creator's ``pid``
+     - the domain creator's ``uid``
+-    - the domain creator's executable path (``exe``)
++    - the domain creator's executable path (``exe``), or ``"<too_long>"`` if
++      this path does not fit in the kernel buffer
+     - the domain creator's command line (``comm``)
+ 
+     Example::
+diff --git a/security/landlock/domain.c b/security/landlock/domain.c
+index 4c0b1f0e1db5..4c9858c11b3d 100644
+--- a/security/landlock/domain.c
++++ b/security/landlock/domain.c
+@@ -492,7 +492,8 @@ landlock_merge_ruleset(struct landlock_domain *const parent,
+  * get_current_exe - Get the current's executable path, if any
+  *
+  * @exe_str: Returned pointer to a path string with a lifetime tied to the
+- *           returned buffer, if any.
++ *           returned buffer, if any. It is "<too_long>" if the path does
++ *           not fit in this buffer.
+  * @exe_size: Returned size of @exe_str (including the trailing null
+  *            character), if any.
+  *
+@@ -502,6 +503,8 @@ landlock_merge_ruleset(struct landlock_domain *const parent,
+ static const void *get_current_exe(const char **const exe_str,
+ 				   size_t *const exe_size)
+ {
++	/* Cf. audit_log_d_path() */
++	static const char too_long_path[] = "<too_long>";
+ 	const size_t buffer_size = LANDLOCK_PATH_MAX_SIZE;
+ 	struct mm_struct *mm = current->mm;
+ 	struct file *file __free(fput) = NULL;
+@@ -521,9 +524,13 @@ static const void *get_current_exe(const char **const exe_str,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	exe = d_path(&file->f_path, buffer, buffer_size);
+-	if (WARN_ON_ONCE(IS_ERR(exe)))
+-		/* Should never happen according to LANDLOCK_PATH_MAX_SIZE. */
+-		return ERR_CAST(exe);
++	if (IS_ERR(exe)) {
++		/* The path does not fit: it is not bounded by PATH_MAX. */
++		memcpy(buffer, too_long_path, sizeof(too_long_path));
++		*exe_size = sizeof(too_long_path);
++		*exe_str = buffer;
++		return no_free_ptr(buffer);
++	}
+ 
+ 	size = buffer + buffer_size - exe;
+ 	if (WARN_ON_ONCE(size <= 0))
+diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+index 935e18b12b3c..d087882fd428 100644
+--- a/security/landlock/domain.h
++++ b/security/landlock/domain.h
+@@ -72,7 +72,8 @@ struct landlock_details {
+ 	/**
+ 	 * @exe_path: Executable path of the task that initially restricted
+ 	 * itself, at creation time.  Always NULL terminated, and never greater
+-	 * than LANDLOCK_PATH_MAX_SIZE.
++	 * than LANDLOCK_PATH_MAX_SIZE. It is "<too_long>" if the path does not
++	 * fit.
+ 	 */
+ 	char exe_path[];
+ };
+
+-- 
+2.43.0
+
+
