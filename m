@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794440041;
-	b=twxreJs4a0HUCAdztxVbpWeLaCMLFD9SjAK+CNMKO1Qzjetj5E57faFBqaEUrits5RKd
-	 9hdk5qehprJfuOMlJeQVG9GtyKe6wKEb2xw2Oy0ft4eW+A+U+NczzCXGbbDgxFoEshtal
-	 yruU7MyccmFHqpFKGJIHPXWUx0xXyzFxYMW/cTxTcL5/dPZUPwFiWIyCLDiOg1Qm3jQ9h
-	 lMToLqT7XrO6tj7X/lk2+5EKw4Epx2NOg3DsidCAVG+Hih2tGLXogrOXUQDZA14ohAHY5
-	 WpQHWuCZv9AjLZ5UOoAodhk2lUmzwQ++fA+qzI7//IMRhvyPoui+WB29eevvDV7Vs+Q==
+	t=1794440044;
+	b=jG7JGPFugQc9MlPAZTQaArfzqLugSM3087EzzYtA42HpxMkgRRfpU6x2YxQmDH48m5Yb
+	 u3z/5IqNMIyALjncWV2LnXW0sfupILe1TO09/MBs2v3tdfSJAyeBO4wZ+MlHs2+HWderc
+	 dC9n15cy2UksguiEKqJ18FVb4P9jxrYp6LRbfJgFfFlm2ZPztS3kim+ou5B9Ykp8v3QDy
+	 QR1EQf3D1mALDxcFZGbHBR7shJao8QvalWsQRDdCom5qd9B21RC+SSLZWvxE8k99h1CxN
+	 JVA/3RSw8UYBJy7xyW8lqQwMZVZLwWOlj8LLWMnyF6YgYrpdyF2Sn2m7xG9f8YMXW0Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794440041;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794440044;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=uAnkXJdgFVKL/Gpr5kEycYZSm62FStlfxyQDHzl+9qo=;
-	b=4AD6WubAZ5+gUwuIeuh6a3RlLpN2+Po1mOjGuVdsg9+CoRqRh9SwJ4lpgyHn9bxEmNZO
-	 k+jzF/4+DmBHKwYQbZVV5iSoz0LqdmjVqbA5LJiEPRQilAVTrbvDRsaX9kbRVVF5w05Yj
-	 WVEKd73HdnFAXg/i9Se9f88PjEmEa2tSzWvWpiDECU5BgaCAQZw0EoquDRLcBzUG7jHUo
-	 lQYB3Zl7SbKGoAtQiBWhppms1lCEos5FgLF0ETIACXs9vkEjayyQUcmC17RUK6Wl5fOVD
-	 0RCYJGv1zU7+G+RTAZCPZeTSblbfFp5drI+xlNyzj0OkksMB6E38ow52QHQ9xoGsN2w==
+	bh=IyJnyR+SDoNsHFXVp/2Wt9KkzpRaN5lxj9HriXnRMhI=;
+	b=WGNWu9AP+ejzccH/8X4uPIp5Z1UKMr4nEfQMbzojpaEaHb3IUM20Tv0nA1XK9cSeZBI7
+	 1AyNktpzyjIMX5iuJfkKii3mxIuCDyzDN7DeE7MqH2vI6GDFw+xtQ6zD9N7LTrUiqgl0U
+	 GzHdQCPqs1TpxI4RzAUOIsCQvzD8WHaFdQA3MbZuZ0n+NJ3oZIS7ZbVAJ/oezFqKwq8c6
+	 TeFQQi0Z3P1Guq2jwSGXqzHNekovIw022FG3fhh5QwXyRHCmPmZFY7GVjnNmE8TK7jzBc
+	 GA84wK0zl9G11iy5ZDfPaWzYl+hgTHRuXePfm/3W9ux30VTqPowbm4U+xUKAI4qxePw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RYOx0138;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cAIxChdU;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94752606A88C;
-	Wed, 11 Nov 2026 23:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFA1606A8A5;
+	Wed, 11 Nov 2026 23:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RYOx0138
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510811F00A09;
-	Wed, 11 Nov 2026 23:34:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cAIxChdU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA571F00A05;
+	Wed, 11 Nov 2026 23:34:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794440041;
-	bh=uAnkXJdgFVKL/Gpr5kEycYZSm62FStlfxyQDHzl+9qo=;
+	s=k20260515; t=1794440043;
+	bh=IyJnyR+SDoNsHFXVp/2Wt9KkzpRaN5lxj9HriXnRMhI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RYOx0138+nj+Ynai3bO30N9wJrmUBsUF7lt2DT9QA6EseQCvoCqU/NVdmOWROpvBf
-	 5YyWNpAlz6rouWyiQoKMVqhBXfyP+okg/h5Ru3azDHLnPeHn9nH2Jpti8SKQQjFL4f
-	 2XS0UU9po7XiUMgyG3PI8tOjZ/59PmMJGpiAZJhw38Fi7qTjATKlZDc6cYJDBjmAhu
-	 8JEOdbT6WSS3GJzN6HFAvO4ywR64I9A6qkOgyCf2//YdC+bplIS++KB2aD5Xqmjtti
-	 C5r4b2If2EAV53zPdJWTxYF7c8s1Rc92soRm2qUqEIbjeYUR8x52NQULnjlxVH4Bws
-	 IhWZjPQxeehcw==
-Content-Type: multipart/mixed; boundary="===============6245461029241772195=="
+	b=cAIxChdUeCsBC1JhUo4xDQEIvoOnch4nQks3/1Ib/V6S6rX0Sjaupp4FOp/WYnneM
+	 jvrscAQcY0LFA3nmUlYC33PaLYtoTSWaSDD/5SQ4wHLVnvSREKLNK+VFBL7CtkZggX
+	 E4dVOZeswNOXZCY4INLvuVz1B9jMxBha0btw/Xelv0i/fKzd+Gp20cVKiOP1gRLZhE
+	 al3O8TI4wVi3T21ICuXJQgWDv2v+45YDNgKYsMqZXH8Ngt6YaL+HD3kRknewKHBTQk
+	 PjScVOVOi3TrGilTH5cumyNtntyjS9ALnlDzCT6ds3Bi71lKhq18KOfrwEDkKKZZIs
+	 T+O9Wsg26Vqmw==
+Content-Type: multipart/mixed; boundary="===============8855634537732790590=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,25 +49,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <f76636ba6a20d7a9073063eca8aad6011888e88e4290045699c5191b7b06404b@mail.kernel.org>
-In-Reply-To: <20261111115911.1142000-5-david.laight.linux@gmail.com>
-References: <20261111115911.1142000-5-david.laight.linux@gmail.com>
-Subject: Re: [PATCH v3 next 04/13] scripts/kallsyms: make use of binary data output optional
+Message-Id: <accc0cb4b44bd410326ca2a60238127519258fa64d48fc4b090311199e1848ad@mail.kernel.org>
+In-Reply-To: <20261111115911.1142000-13-david.laight.linux@gmail.com>
+References: <20261111115911.1142000-13-david.laight.linux@gmail.com>
+Subject: Re: [PATCH v3 next 12/13] scripts/kallsyms: Reuse tokens that have no references
 From: bot+bpf-ci@kernel.org
 To: david.laight.linux@gmail.com,pmladek@suse.com,kees@kernel.org,david.laight.linux@gmail.com,linux-kernel@vger.kernel.org,linux-kbuild@vger.kernel.org,bpf@vger.kernel.org,jim.cromie@gmail.com,ljs@kernel.org
 Cc: mcgrof@kernel.org,andrey.grodzovsky@crowdstrike.com,rostedt@goodmis.org,andrii@kernel.org,wusamuel@google.com,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 11 Nov 2026 23:34:00 +0000 (UTC)
+Date: Wed, 11 Nov 2026 23:34:02 +0000 (UTC)
 
---===============6245461029241772195==
+--===============8855634537732790590==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> scripts/kallsyms: make use of binary data output optional
+> scripts/kallsyms: Reuse tokens that have no references
 
-TL;DR: Nits only: possibly unneeded sys/stat.h include in kallsyms.c, commit
-message typos and commit reference format, and a question whether independent
-changes should be split into separate patches.
+TL;DR: Nits only: sym_arr_free_all() in scripts/kallsyms.c has a misleading
+name, since it only zeroes counts, and returns its argument needlessly. The
+review suggests a void reset helper instead.
 
 > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
 > --- a/scripts/kallsyms.c
@@ -75,45 +75,36 @@ changes should be split into separate patches.
 
 [ ... ]
 
-> @@ -278,26 +283,16 @@ static void add_table_entry(struct sym_entry *sym)
->  	table[table_cnt++] = sym;
+> @@ -720,6 +733,19 @@ static void token_add_symbol(unsigned int token_idx, unsigned int sym_idx)
+>  	sym_arr_add(arr, sym_idx);
 >  }
 >  
-> -static bool file_is_empty(const char *path)
-> -{
-> -	struct stat st;
-> -
-> -	if (stat(path, &st))
-> -		err(EXIT_FAILURE, "stat(%s) failed", path);
-> -
-> -	return st.st_size == 0;
-> -}
-> -
+> +static unsigned int sym_arr_free_all(unsigned int ch)
+> +{
+> +	unsigned int i;
+> +
+> +	/* Just zero the counts, the entries are about to be reused. */
+> +	for (i = 0; i < 256; i++) {
+> +		token_syms[token_index(i, ch)].cnt = 0;
+> +		token_syms[token_index(ch, i)].cnt = 0;
+> +	}
+> +
+> +	return ch;
+> +}
 
-this isn't a bug, but with file_is_empty() gone, is #include <sys/stat.h>
-still needed in kallsyms.c, or can it be dropped in the same change?
+This isn't a bug, but would a name like token_syms_reset_char() with a void
+return be clearer here?
 
-[ ... ]
+sym_arr_free_all() sits next to sym_arr_free(), which really frees a struct
+sym_arr, but this function frees nothing and only clears ->cnt for the
+token_syms[] pairs containing ch.
 
-Commit message:
+It also returns its argument unchanged just so the caller can write:
 
->     While writing some of the output in binary (and using the .incbin directive
->     to get the assembler to read it) speeds up normal kernel builds, it makes
->     debugging kallsyms almost impossible.
->     Change the command line processing so that the out.bin file is optional,
->     if absent everything is written to out.S (at is was prior to 83da9f3197e5).
->     [ ... ]
->     To help anyone who ends up looking an hexdump of out.bin, add a text header
->     and 16 byte align each table.
+	to_process[idx++] = sym_arr_free_all(token_first(best));
 
-this isn't a bug, but there are typos here: "at is was" and "looking an
-hexdump".  Should the reference to 83da9f3197e5 also be given in the usual
-form with the subject, e.g. ("kallsyms: output binary data to speed output
-and kallsyms assembly")?
-
-Also, could the independent parts (the hexdump headers and alignment, the
-fwrite() offsets fast path, the token table reordering) go in separate
-patches?  They don't appear to depend on making out.bin optional.
+Would a plain to_process[idx++] = token_first(best) at the call site, after a
+separate reset call, read more directly?
 
 
 ---
@@ -121,4 +112,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43116767394
---===============6245461029241772195==--
+--===============8855634537732790590==--
