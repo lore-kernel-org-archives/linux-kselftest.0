@@ -1,109 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794362378;
-	b=3vc8Ax8rwbCWrXOdL6q/1toPPtFCEjL3TvF+Y0SwwQlBkRvLnA9Aw5DRXnwYi80eBQ7o
-	 imy52ZEgf9G/mrl+HzT2W2IMUJlvMNUiznleLwoUsDVECuvbG/MOFRa+Nv+KG6ITQQkwo
-	 jq30OiPNtk2rymfivN4Pbfh9yMLsEdmnGsFUFqjG9geBfwzGK4mUk+low7i5rS9pNZUmP
-	 lKv2tNKLJjm7ZEnsbQuCstpK8S8OCspaX/6Lj7MsigXOOuyRYseXIniol4GUfaPdnHs81
-	 RoLi0JrbyLwo4lbeOe5IE2rFPcx9QcrQSNGW1euWVaYxZmCMeHDTj9EVGPe2stLgzJg==
+	t=1794362481;
+	b=ruBaC+thto2I4FePeRiniaG/h24KHQIRKWvXsX3LO2F6lBUxOYqPx5STP37I+k+uZQjU
+	 D5kKfHOm3jbAA2cNoieBJ46FiplawH3f3y8/Gl2GDocd5l6HsvWoPyscVGWeR+0BZldkB
+	 wqh1BTYIdHFZsNxgsV7uAI9HIcFc5da3GBN9/w1TavoHLUHAlaLh/HhoTqLf3roJ6gmUB
+	 2Is1LG/cMfIXZV5g+ul6pL0j9L/bEDb05R4j845NhlKssg/nW3ToYdqlS35k1ynAzwc2z
+	 DqzoXV1x21Zy5GIWZZnB0gwY2aXuKOIK2WFSPIMsQuMaHWomGChPG9fZzZEN85L0/FQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794362378;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=Jgu962y8cHYH/mees700v1pRhH7ojTrqx1f7sTX+E/8=;
-	b=Pxe5NtSkT+bd9CY1lP2VszK6DAOCNfDT9srun41iTbgsvaMHg9MSUk/pWkhjILEToaFj
-	 XOtEm0cv95AXgPNR7dulMu674AfH3rZ7oT0jZXNRmwVhrpQLq3B4BRIUncIRl3pNUh8B4
-	 RXJthGWNE91t5OmgW3Y1NvE6vTHtsqpNVrlc3K6gCp9bWv+LGhobPnT2d/NORBQKiRIil
-	 RJoMpiwrP6FXG6rV3mVqaPkzSRgl8ldVnxcC7Oy6r/upQp9KgkKv4tle7cM7SsUB2P15B
-	 cobUyWeWil9quEW6RUxh0tKnNGSGmWHV8SLz9TUGq/tHAGnV5XYkHVf1AWpVx48oEAA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794362481;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
+	bh=OsWPDLq1wEo1BoziCE62yl+tVV1rVCRXzUhL5sSycqs=;
+	b=tSxmnabzRHD1X9QwfVzgEEzHaFuxCDDKTgM9Hl29Y+lhE4eGmLrMA2ZkQCbRbsQpeleI
+	 ys4RlwverlWHcSrxCAbAbmvWDgtto+KFBTl++zR779zhzzQLSj/NddLw/7UWBrfQ46Cqh
+	 OY1i6qqYXyg3e321rBspcgIjKTHPfqTX0xBRGj1vXlBeNbq5zdP17YYEmsBHcc11nlvZL
+	 2WBLi7bApcfH1uXlkTH7LB5qpCgYe4tJ7tsGj7JxALt2VR6MLUPZKfPmJ0vYfeSiJ9rkI
+	 K3OgWhHXyK+sQBv68v+hna7fx/YsD+NL2mZ/91jvQOFKpOjp/LPOMnLWPzbPj6OpCpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NAA8ObNw;
-	arc=none smtp.remote-ip=209.85.208.53
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=V08UthS5;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4830606A32A
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 01:59:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4830606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D60606A320
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 02:01:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87D60606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NAA8ObNw
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6b785ca42ebso13071a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2026 17:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794362376; x=1794967176; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Jgu962y8cHYH/mees700v1pRhH7ojTrqx1f7sTX+E/8=;
-        b=NAA8ObNw0VFx6zfK7QgM1ZFQMkCGhinaiCGyiEr/B2ayq9IY9lyHmHRK/ZIY952fas
-         U6I0nseO8oXA8WL4i/T4WnssVKG9ZTwFsZq9WnrxFUDQYMOal923XAORXy68UIoj/fp9
-         2o44YAqDd3V7i/wsQHzUoxOAQg2ZWdiVVgVRA78/MtLcuux2t4VWm8sbWXGsIL1CAFa7
-         ppxqerNjc8Ws6DKxXNWki1zOGGGni9XMFP+vgcYS8jQQMS2+0YgvR+yAVrdp0CsweV86
-         ul7lHm3tYS+gVl3leOtAa3t4ZdQOY2s1J6F4dlAkY64FxkLFuxYlLke/N78FKcpd41iX
-         VRag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794362376; x=1794967176;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Jgu962y8cHYH/mees700v1pRhH7ojTrqx1f7sTX+E/8=;
-        b=zRACRgueVUQ16NHqWHeNepkzPrW6MS38aUaBxVLEU1BufOqkrLnu3Sn3rasL19cAwI
-         75BV7v4gzIuF766w+iIcf1QWuWREy+lzp5bFnkBZXaet4VxVOoYZJQvJnjWxaN4OdxYi
-         iXfYiHUEG3vMFDqU2+qu5E8UeUIsHgQsJ5bQiXRaYh2kWhWtVc62EcJAq1Ace6Qg9pcc
-         dUkTGl2So1n66WqsPo5V93+p3zRCA3JuwFHfSt7jZItS2bmHdwZeOARlSy+7s4fumog4
-         GpjAfA0nOduQdTeDSNZ7h3p/VqvGrATMBfGYerAwbZZxSYbpplZXDQtlf/P/e/I6a2Vn
-         R0dw==
-X-Forwarded-Encrypted: i=1; AL+hErF9ryxwGkajTIlkSr3PyUebH3+I3d8LaKghSJu2k95rkUYFP7RNDOILnmGzemwio25/WJOB67iLVSZGBP0cf78=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+eOALNi9voiCcUc4sTDV9TJZpBy9hEc547yhDaatypOTm79QUS
-	EmeHn5p+1ybn2bXBM4myTn32XeZR+L15sSDM68BaCax3vbK98TSmL3vD/gdFVJzbRzo=
-X-Gm-Gg: AYBFou2cNfyLEDz18ws+6PoiI58uFbfGZQxz+WLySGhVzISKCfZju0mbhVrux8uPwPZ
-	bUN5Ga2P1CkwzaL6djz6NXBNHZTb+okA2phNT8he6bkRx1GnzHQQ8ovqJrbaUU/DNfxOH9VzeJr
-	d+h6E0Eih44ihTVHqzInCbn7P5XsAOfnIRej7vZVyn8gw+3QS1H6QtNmwXgw+gbbImrT1rtjEEl
-	xH2GVtdNCX2h2BI11SJEOVkE6ItylSOPUMRBgpBXQVmmJidU0vdW9hprsLp+ANUg8DsD+/UPZfX
-	m5wr7Nc6WR92dDVODH0g4MFG/Ik/WUAKpJZQdcHYgAnWaPoVGZrF2By2SN4FpHFRDewqfqzNPlq
-	P6jh8EbIetayVOPuVeGDfUm+GiB8wCvv6NTbpq++LJp+5+B3hHNQyhyAhqNBHYnKFT5qXeTfVOu
-	tNcdLaVSyMXYdrn1wIpu2EbjjRVPMl33KyATJYWvYDqKEhFNDXvpBrfuhHLiFVGTv1JhvU4KHGd
-	QLDdjOm13l8+z5XlFKt7sSph3uqhRpq+iOFtgaOTrZdlIEtRePtIXVvpLGkgFXYKPwsENGBU/+x
-	497eHH7RQFAKWDg9ACv6FJEeNY3C91ruljm9SIu9xvVr/U7ekpH2zOCarQ==
-X-Received: by 2002:aa7:c683:0:b0:6b6:feca:2450 with SMTP id 4fb4d7f45d1cf-6b7775eba49mr531899a12.19.1794362376364;
-        Tue, 10 Nov 2026 17:59:36 -0800 (PST)
-Received: from L9JK9NPFH9 ([104.28.20.58])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7834cdc23sm147498a12.12.2026.11.10.17.59.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 10 Nov 2026 17:59:35 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	toke@redhat.com,
-	lorenzo@kernel.org,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	shuah@kernel.org,
-	hawk@kernel.org,
-	kernel-team@cloudflare.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v2 3/3] selftests: net: veth: test RX queue NAPI links
-Date: Wed, 11 Nov 2026 01:59:22 +0000
-Message-ID: <20261111015922.67745-4-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261111015922.67745-1-tianyi@cloudflare.com>
-References: <20261111015922.67745-1-tianyi@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=V08UthS5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794362479;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OsWPDLq1wEo1BoziCE62yl+tVV1rVCRXzUhL5sSycqs=;
+	b=V08UthS5PPtfiPtZkwQEstkjzfsajFDue1MfEdSo+j46y6791CWFuHZBUfAiAVqb8CyYn1
+	vlTddsaGVjiF8uUfqnqFY9LOs3j0JM/JLBhOFd6Lliguwwp1Ba5OfOz/8/JMDbcsd/2TBM
+	iIoW35A9N+GPp9wpFnjVxxQObOMZv6E=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-122-fnqDO5Z5MXWQUnRoyX0wHA-1; Tue,
+ 10 Nov 2026 21:01:13 -0500
+X-MC-Unique: fnqDO5Z5MXWQUnRoyX0wHA-1
+X-Mimecast-MFC-AGG-ID: fnqDO5Z5MXWQUnRoyX0wHA_1794362470
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 848A21800599;
+	Wed, 11 Nov 2026 02:01:09 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C22A51966664;
+	Wed, 11 Nov 2026 02:01:07 +0000 (UTC)
+Message-ID: <c13526c0-50a4-4932-ab2d-5327a0313aa1@redhat.com>
+Date: Tue, 10 Nov 2026 21:01:06 -0500
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -113,126 +71,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v2 2/5] cgroup/cpuset: Correctly set cpus_updated in
+ cpuset_hotplug_update_tasks()
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <guopeng.zhang@linux.dev>,
+ Sashiko <sashiko-bot@kernel.org>
+References: <20261109190955.1398611-1-longman@redhat.com>
+ <20261109190955.1398611-3-longman@redhat.com>
+ <d66ec8aa-fb96-42de-a9a0-5b5aa29f1083@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <d66ec8aa-fb96-42de-a9a0-5b5aa29f1083@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Check that the napi-id of every RX queue matches a NAPI instance of the
-device. Also check that the queues are linked only while NAPI is
-enabled. Run the checks with GRO on and with XDP attached, and across RX
-channel changes and link down/up.
 
-queue-get and napi-get are only visible through netlink. Read them with
-the ynl CLI, as the ndo-xmit checks do. Compare the results with jq.
-Skip the checks if the ynl CLI or jq is not found.
+On 11/10/26 3:40 AM, Ridong Chen wrote:
+>
+>
+> On 11/10/2026 3:09 AM, Waiman Long wrote:
+>> When cpuset_hotplug_update_tasks() is called with the conditions that
+>> either remote_partition_disable() or update_parent_effective_cpumask()
+>> has to be called, the cs->effective_cpus can be updated such that it
+>> matches what is computed in new_cpus. In such case, cpus_updated can
+>> be incorrectly set to false leading to stale CPU afinity remained in the
+>> tasks not matching the new cpuset value. Fix that by forcing 
+>> cpus_updated
+>> to true whenever one of these partition helpers is being called.
+>>
+>> Fixes: 4b842da276a8a ("cpuset: Make CPU hotplug work with partition")
+>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> Link: 
+>> https://sashiko.dev/#/bug/linux-ab90f7e8-0d60-40ca-83e9-e405075b24d2
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 6074327c3477..3955d2d574cf 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -4002,7 +4002,7 @@ static void cpuset_hotplug_update_tasks(struct 
+>> cpuset *cs, struct tmpmasks *tmp)
+>>   {
+>>       static cpumask_t new_cpus;
+>>       static nodemask_t new_mems;
+>> -    bool cpus_updated;
+>> +    bool cpus_updated = false;
+>>       bool mems_updated;
+>>       int partcmd = -1;
+>>       struct cpuset *parent;
+>> @@ -4015,12 +4015,18 @@ static void 
+>> cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>>       if (!tmp || !cs->partition_root_state)
+>>           goto update_tasks;
+>>   +    /*
+>> +     * cpus_updated should be set to true when 
+>> remote_partition_disable()
+>> +     * or update_parent_effective_cpumask() is called as 
+>> cs->effective_cpus
+>> +     * may have been updated.
+>> +     */
+>>       if (is_remote_partition(cs) && 
+>> (cpumask_empty(subpartitions_cpus) ||
+>>                          (cpumask_empty(&new_cpus) &&
+>>                       partition_is_populated(cs, NULL)))) {
+>>           WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
+>>           remote_partition_disable(cs, tmp);
+>>           compute_effective_cpumask(&new_cpus, cs, parent);
+>> +        cpus_updated = true;
+>>       }
+>>         /*
+>> @@ -4045,6 +4051,7 @@ static void cpuset_hotplug_update_tasks(struct 
+>> cpuset *cs, struct tmpmasks *tmp)
+>>           partcmd = partcmd_update;
+>>         if (partcmd >= 0) {
+>> +        cpus_updated = true;
+>>           update_parent_effective_cpumask(cs, partcmd, NULL, tmp);
+>>           if (is_partition_valid(cs) || (partcmd == 
+>> partcmd_invalidate)) {
+>>               compute_effective_cpumask(&new_cpus, cs, parent);
+>> @@ -4053,7 +4060,7 @@ static void cpuset_hotplug_update_tasks(struct 
+>> cpuset *cs, struct tmpmasks *tmp)
+>>       }
+>>     update_tasks:
+>> -    cpus_updated = !cpumask_equal(&new_cpus, cs->effective_cpus);
+>> +    cpus_updated |= !cpumask_equal(&new_cpus, cs->effective_cpus);
+>>       mems_updated = !nodes_equal(new_mems, cs->effective_mems);
+>>       if (!cpus_updated && !mems_updated)
+>>           goto unlock;    /* Hotplug doesn't affect this cpuset */
+>
+> I think the issue only happens in the remote partition case.
+> remote_partition_disable() calls reset_partition_data(), which sets
+> cs->effective_cpus to what compute_effective_cpumask() will return
+> afterwards, so the cpumask_equal() check misses the change while the
+> tasks still have the old affinity.
+>
+> update_parent_effective_cpumask() only updates the effective_cpus of
+> the parent (through partition_xcpus_add/del()), and cs is skipped in
+> update_sibling_cpumasks(). So cs->effective_cpus isn't changed there and
+> the original check still works. If new_cpus is the same as
+> cs->effective_cpus in that case, forcing cpus_updated just walks all the
+> tasks in cs and calls set_cpus_allowed_ptr() with their current mask.
+> Should cpus_updated only be set in the remote partition case?
+>
+> Also, as the problem comes from remote_partition_disable() in the
+> hotplug path, should the Fixes tag be the following instead?
+>
+> Fixes: 181c8e091aae ("cgroup/cpuset: Introduce remote partition")
+>
+Yes, you are right. Thanks for the review. Will send out a v3 with the 
+suggested changes.
 
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
----
- tools/testing/selftests/net/veth.sh | 79 ++++++++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
-index 64c2a5a59821..685209995485 100755
---- a/tools/testing/selftests/net/veth.sh
-+++ b/tools/testing/selftests/net/veth.sh
-@@ -110,6 +110,44 @@ chk_xdp_feature() {
- 	fi
- }
- 
-+chk_queue_napi() {
-+	local msg="$1"
-+	local target=$2
-+	local expected=$3
-+	local ns=$BASE$target
-+	local ifindex
-+	local queues
-+	local napis
-+	local st
-+	local linked
-+
-+	ifindex=`ip netns exec $ns cat /sys/class/net/veth$target/ifindex`
-+	queues=`ip netns exec $ns "$YNL" --family netdev --dump queue-get \
-+		--output-json --json "{\"ifindex\": $ifindex}" 2>&1`
-+	st=$?
-+	napis=`ip netns exec $ns "$YNL" --family netdev --dump napi-get \
-+		--output-json --json "{\"ifindex\": $ifindex}" 2>&1` || st=$?
-+
-+	printf "%-60s" "$msg"
-+	if [ $st -ne 0 ]; then
-+		echo " fail - ynl cli error: $queues $napis"
-+		ret=1
-+		return
-+	fi
-+
-+	queues=`echo "$queues" | \
-+		jq -c 'map(select(.type == "rx") | ."napi-id" // empty) | sort'`
-+	napis=`echo "$napis" | jq -c 'map(.id) | sort'`
-+	linked=`echo "$queues" | jq length`
-+
-+	if [ "$queues" = "$napis" ] && [ "$linked" = "$expected" ]; then
-+		echo " ok "
-+	else
-+		echo " fail - expected $expected found $queues napis $napis"
-+		ret=1
-+	fi
-+}
-+
- chk_channels() {
- 	local msg="$1"
- 	local target=$2
-@@ -330,7 +368,8 @@ fi
- 
- [ $CPUS -lt 2 ] && echo "Only one CPU available, some tests will be skipped"
- [ $STRESS -gt 0 -a $CPUS -lt 3 ] && echo " stress test will be skipped, too"
--[ ! -f "$YNL" ] && echo "ynl cli not found, ndo-xmit tests will be skipped"
-+[ ! -f "$YNL" ] && echo "ynl cli not found, ndo-xmit/napi tests will be skipped"
-+[ ! -x "$(command -v jq)" ] && echo "jq not found, napi tests will be skipped"
- 
- chk_channels_carrier up up || ret=1
- chk_channels_carrier up down || ret=1
-@@ -443,6 +482,44 @@ else
- fi
- cleanup
- 
-+if [ -f "$YNL" ] && [ -x "$(command -v jq)" ]; then
-+	create_ns
-+	RXQ=1
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		RXQ=2
-+	fi
-+	chk_queue_napi "queue napi - default" $DST 0
-+	ip netns exec $NS_DST ethtool -K veth$DST gro on
-+	chk_queue_napi "           - with gro on" $DST $RXQ
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 1
-+		chk_queue_napi "           - fewer rx channels with gro" $DST 1
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		chk_queue_napi "           - more rx channels with gro" $DST 2
-+	fi
-+	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
-+	chk_queue_napi "           - with gro and xdp on" $DST $RXQ
-+	ip -n $NS_DST link set dev veth$DST xdp off
-+	chk_queue_napi "           - after xdp off with gro on" $DST $RXQ
-+	ip netns exec $NS_DST ethtool -K veth$DST gro off
-+	chk_queue_napi "           - after gro off" $DST 0
-+	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} section xdp
-+	chk_queue_napi "           - with xdp on" $DST $RXQ
-+	if [ $CPUS -gt 1 ]; then
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 1
-+		chk_queue_napi "           - fewer rx channels with xdp" $DST 1
-+		ip netns exec $NS_DST ethtool -L veth$DST rx 2
-+		chk_queue_napi "           - more rx channels with xdp" $DST 2
-+	fi
-+	ip -n $NS_DST link set dev veth$DST down
-+	ip -n $NS_DST link set dev veth$DST up
-+	chk_queue_napi "           - after down and up" $DST $RXQ
-+	ip -n $NS_DST link set dev veth$DST xdp off
-+	chk_queue_napi "           - after xdp off" $DST 0
-+	cleanup
-+fi
-+
- create_ns
- 
- CUR_TX=1
--- 
-2.56.0
+Cheers,
+Longman
 
