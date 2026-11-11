@@ -1,59 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794359337;
-	b=xyyw8sV4RospbN6JUOaXQMMp0xgtnFQcZiVOXNVLWkOC1GO2twiWOb30mj7Ww2T7Ei7O
-	 PoP8qaMt2s6WRB7T5mACJTCL9y5tRMQOh6vsFW6a4Xv7Y04MKGOkUJAK/3zyWYPiCLgcp
-	 9Zx5UD2jSxf5yZBS5IJqpflg8xCAX8PzuBbbWW/jLXe0155MVSsYMrGN+2LSlzNCvf1Y6
-	 4IqN4l+r+EO9k7WEGgvemTNqBYBBoLa61dQD8n7wTqKxeJzgO3fgWAsz+4+94OO26SZjW
-	 lbuBP5u/xbGyLy31RVOom3WBqdPXzpyjkR5nYoyJKwTk/Kgcir0GmLw7Thi115gj9kQ==
+	t=1794360143;
+	b=OWn2ZprMjTBN1gsASaHPS2rcb95mdRWr0ZqpaaJ0McQ438n8BxiVDLsjByEKZ2XQ71em
+	 kkdqMK97yPAiBkseIo4L3QmjndgowByG07mU33K3T+h+P+VjOR7Z5I4jF/zEGiZHsQht2
+	 lBUv4bxyIZE2Gmyvx6/FtRkM5zff5ofoDJtwg7js5O2cOzoV/1SPP87/LwiNwh/lNV9AO
+	 UhgQ3k+xwIX4WvnOvXI7Hn8CIr+kbY4fQU0dTaJ15VPNoHVwxQl9Jd8Bjpx35xEyJBGQK
+	 s14It0FMPTDXrMUGEdBkdCyKvP4JBfrOYRzDQKm6cssNO6da6P+BwTq55jflNh57h5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794359337;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794360143;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=TtYY5H+Y2SiCvwprj/5Tw0V7c61Jub2+DR/nTLQbuyA=;
-	b=xZH1hyaYl3WZWHsxwiLv+Ekm/3z7Jnupt1pfLuNhY7iQDb3Ee+6dFcyhPWvpJeb077OQ
-	 QjEW4fG+x67mCaKtsOpHcQvi201OfOD6K6r22eOHPylqnHfLJtd8m/OGcpd3cJQznUHWy
-	 1w8vAAfThlt79Q3PYtkkwEViKTN5foZ7scWCX72m2I8kR61ASuojaQ+FA+AXM2yrdqDDq
-	 9n+/hUwiu/BEVmAijFNJ5zWK9McGxqe0pk7j6gm/C4EdSlbQ0wDoUQJvhhCgl5EZtLFo6
-	 G4B43eXEjw+kw2H/VGMGSogcq9VFagHHxmD3q8803WqXZ204AeDcwXHFeQc0AlN3EpQ==
+	bh=lo1Y/eriwUwwDPw3+rls7wGgAmgpKPYbEeueCJk2UMM=;
+	b=H6YEULzuK5yTmpSiOkSaPs6+hCWdVKu3r9QlI+F4ZcoVl1X3K85+MCfgCC3j2vNcmpZC
+	 CG3/sua1GPiffzWlkUsfJLMW+3HfIDmk4oew2ymG7rVFQhkhVDtXuSghZyYEVQTzvk7qA
+	 c6yJnccWAVybzwr4jRuiiuTP215Sv3BiKYipEEJCfsLgbOtrBg9/x5QwoMfJ6YWVapw9K
+	 VG6xSGxmsimxYY8G/Txgg2wURNh/GoYVyIJqzSHYJ/PcWQfQT7PqDHFfxMDBJj/dzahUN
+	 8Hky6rLEMBy7DdRyaR0e9xuQf82dxzZnpvhZtHzz+G8P9NDtyYBLA844Lkda3ib3ZUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SjwBpwU7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i2WXy0Qj;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43C4606A324;
-	Wed, 11 Nov 2026 01:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E802A606A31C;
+	Wed, 11 Nov 2026 01:22:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SjwBpwU7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014B01F0089F;
-	Wed, 11 Nov 2026 01:08:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i2WXy0Qj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35AE41F0089F;
+	Wed, 11 Nov 2026 01:22:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794359337;
-	bh=TtYY5H+Y2SiCvwprj/5Tw0V7c61Jub2+DR/nTLQbuyA=;
+	s=k20260515; t=1794360142;
+	bh=lo1Y/eriwUwwDPw3+rls7wGgAmgpKPYbEeueCJk2UMM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=SjwBpwU7dqWZdRZ4kkbA1nk+poWewJqXfHR2dyQNqVzIavNmA26qBXraIdwli3SbI
-	 NsJfySyhbnv+zgW5selm++whA9SAhVFwm8Qw5c7maCNztHb/MGRJXKSvPc9NQ3WUne
-	 AjsXg8O3BGQdUTJ16iPQGl7ZC/TEXQ8/vlwRySFNVrP20b3IsQ2ia3/vjYDJERZCUf
-	 QC+j3Sig14Dyl85Vlya7AAy7uwoYT5Spu7oyL/JLrxYmcNvo3OCfwgi5blymiXJ/Lw
-	 V9MSquHwhnIBDj+CXUR4Si09Xv7qkQhs7zcdleFWcBlYk4TvSGEBmuibdaqi6kpVnN
-	 z2t4uvr8k/DiA==
-Date: Tue, 10 Nov 2026 17:08:55 -0800
+	b=i2WXy0QjIFqDhXOeusz99tfCJYusJr0oz1ArY+C51SKg+X75cmiHI7N+IXrP8QBet
+	 cqsWbVsmTJY8h6RV7tOfVKR5xV1/SnO6AekYukegNQlkcpHisfQYeZRo2/kNhI9UsB
+	 poEy/XvRb452HUAN+z2ZQfXFjEPIhl4fBEUPU3QT18634ay/ufylHLEnbo9Vq7ZkLl
+	 j9ZvytWMyvZw8O7GBf1sH12BY9UV/nFHIC/1P1nZ5Hq0+O8zoPBMSD91tSSe9c2yfW
+	 xXHyZND6Z5OBrfmavz7xHdsQF6mjOMy4f+9SKbHRiUontVUsHYD+Cp9/h4Q2k5KlNU
+	 07j6PMDxoc3aw==
+Date: Tue, 10 Nov 2026 17:22:21 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, pabeni@redhat.com, toke@redhat.com,
- lorenzo@kernel.org, horms@kernel.org, bpf@vger.kernel.org,
- shuah@kernel.org, hawk@kernel.org, kernel-team@cloudflare.com,
- ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- sdf@fomichev.me, linux-kselftest@vger.kernel.org, jiayuan.chen@linux.dev
-Subject: Re: [PATCH net-next 0/3] veth: link RX queues to their NAPI
- instances
-Message-ID: <20261110170855.5b05db3c@kernel.org>
-In-Reply-To: <20261105143356.17062-1-tianyi@cloudflare.com>
-References: <20261105143356.17062-1-tianyi@cloudflare.com>
+To: Bilal =?UTF-8?B?WWF6xLFjxLFvxJ9sdQ==?= <ahmetbilalyazicioglu@gmail.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Mohsin Bashir
+ <hmohsin@meta.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 0/2] selftests: drv-net: ring_reconfig: handle
+ devices without channel config
+Message-ID: <20261110172221.49db2576@kernel.org>
+In-Reply-To: <20261110161423.77910-1-ahmetbilalyazicioglu@gmail.com>
+References: <20261110161423.77910-1-ahmetbilalyazicioglu@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -63,16 +62,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu,  5 Nov 2026 14:33:53 +0000 Tianyi Gao wrote:
-> veth does not link its RX queues to their NAPI instances. queue-get
-> therefore reports no napi-id for them. napi-get lists the NAPI instances
-> of a veth, and their thread PIDs when NAPI is threaded. It does not show
-> which RX queue each instance polls. Userspace cannot tell which NAPI
-> thread to pin for a given queue, or which NAPI to change with napi-set.
+On Tue, 10 Nov 2026 19:14:21 +0300 Bilal Yaz=C4=B1c=C4=B1o=C4=9Flu wrote:
+> ring_reconfig.py assumes that a device which supports ring parameters
+> also supports changing its channels. Drivers without a get_channels op,
+> such as e1000e, return -EOPNOTSUPP for the channel query, and drivers
+> with get_channels but no set_channels, such as vmxnet3 and r8169,
+> return it for every channel change. The resulting NlError makes the
+> tests fail instead of skipping them.
 
-The test does not apply, series needs a respin
--- 
-pw-bot: cr
+The test is fine, please don't waste our time.
