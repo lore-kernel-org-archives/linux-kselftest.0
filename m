@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.83
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794411185;
-	b=IkpoYJsqou1KaI4XxqLfvGBP0bcbIF880yF+pF1QGM3C9HMSrikdB+ndQl2/nTkZql1U
-	 6qLKEl25PY5lwGRBLobJ7QhpdkIuyJeVBH57OtXHD3Ae2jw1lZfVkW7YgZ3On2JrNtS+U
-	 brOV158DfTpCMEKbezDipCTgGryFBDXgon2mUWvmxZnDVNef1BUq/XiCU1xaAl60gMvtf
-	 s1P7tT3CHKMLia0jgzztKrcVAIXOqV0yqvCtakNdbfg1GYlvy2tCiftDQ1er4NyLMFcmo
-	 M7pBEPvvuyStC/HbIQPTK+HpgOmoZOwHy+qucFLTsz+VmB61ntYdYvx72CP8H2gX2OA==
+	t=1794411284;
+	b=FtPZVsSg3YzH5JFKFEtoeTTD51g2n1blzTszC3RuozoP7uDA/kkGo/X1IrYjDQg9BeFe
+	 NpmpqGBc3F4Oq71qeewvB7207Uthaujr1zmkXe3wjuELq2NYRcUMwqQ6FhAUmtwzYqcPK
+	 Hyb8Ih7yDMzizVbaUkMqRbRjMpRkXNIhg0Fid1hQRxZ+zawaN/Qpi2NKj9qwAsB57E+/c
+	 zdZt0+8FT/18DIfVYyB2y8Um857tEah3lbzePJ2vxneIm0Lj+pUazAnEL427xkjDRoNnM
+	 s9JGRaike5hMyM5Fhf/PeytLfRK0AQNy1+5QEr7sPaCBV43mPkoqGVq3qd0wCi448lA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794411185;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794411284;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=EGBcdLyH+qWtPFF9G1WLyu068WqshojAGB+pBC2wncc=;
-	b=UhIRvDHVgLNLiyObGGlYzXzQBGEy9DCYMHS+Q1VrqeuPDHL43JA3qET2DY6hwnibFU3f
-	 mgVzTVLFPF+xEev8I1FlThnRQ9ZLIvBKBM4PeEPGNdePfZhyJXZ0xWpj1MyKwkvjzgslk
-	 fmXHaxXUXib4Ok92je3eE8xNh+WAp2IWeguiH/ZNUQ5SOWlSrFDahOaxM7Z4FxMupdPCw
-	 9Wq4hZy+gkC8YXng/6FsoNPfPGfVvl7WV105JOKn5R4nuX+GC/zJflP5yrS7uHYZCvtkW
-	 MIqUFOKdBz4SQ7pVef00tgrJSsxF3gGZjyHPU21bhDPDWG22F/dNEr1MMLLbEQc2VyA==
+	bh=WvgHQt21awwFEsX+j1alIUyCY9EcMQZLeAsaI5BvVZg=;
+	b=THwPycLFK4VbK77J/68VriM3h62+T0PsiZ+LR7QrNliLrH8vXuEpRvF1wAcAjI+GwtBe
+	 szp8ijXHIrcqkBUfr04pIVvHhuPBz6qBVg6axh7FEy34XQU78q+GTmLd4BAzD1R/0Heuy
+	 l2mIfns/T2bvsEAzRo48J67TQMB1IBwPk3XSmIzJfQTba1hNEVGx1cXonNx5sP+iL/fmu
+	 DG66bluOl5rP+WwMxNdJTWlWCT+z5/sAHcqXKTKWbV2Py/UTAvX+NYC2cQ2oSbZ3rboJq
+	 qVDqxDtuZZa2JaFCp5V74BjIzKFOqOt4BbJdPtn9m1lfHd9pKnZWlpEyf6qDziommlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fU0WQK3T;
-	arc=none smtp.remote-ip=95.215.58.45
-Received: from mta1.migadu.com (out-45.mta1.migadu.com [95.215.58.45])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=npvD7XTH;
+	arc=none smtp.remote-ip=91.218.175.83
+Received: from mta0.migadu.com (out-83.mta0.migadu.com [91.218.175.83])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1883606A32A
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 15:33:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1883606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F53360A2612
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 15:34:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F53360A2612
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fU0WQK3T
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=npvD7XTH
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=FYJ5fe5bszWYbPmBUf7pMhzfw1+piK655vw2zkho3KU=;
+DKIM-Signature: a=rsa-sha256; bh=7w1pPbFZvYsTAFkH0HQUA9QoTT++qjsV9aTz3PRLplM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794411183; v=1; x=1795015983;
- b=fU0WQK3TlyT/bMe+6X8gJE8piiEwBp+qMghoBptDNTz0q5iWaaHpEOkjV6eI8sKdavNcRvay
- fT6z3ZByUvQQ3mvS9nHCbxnH5C5RJz0loaFPjS+a4TyiF0E1ul1kPTEoNFDPSwifCmifz+6PE+V
- iwLZeNeNcl50T2eBrkew/rrU=
+ t=1794411281; v=1; x=1795016081;
+ b=npvD7XTHINDR3+HhKMfH6VaRQpLApK3O34ZCiEpOsgpfF6VB+i+Ael0kkhBhy6hbgcPCr4oN
+ FT0cG2KrlR8kTSBZfUQXZlZrVzUfTeLGqtiL8iTpTDx88CR1d1x/K05/H2ScCwj67C4JXFuwtBa
+ dFTx44JXhtwkX70hn8Ki8CvQ=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e7ccb356486f714d;
-	Wed, 11 Nov 2026 15:33:02 +0000
-X-Mizu-Trace-ID: e7ccb356486f714d
+Received: by smtp.migadu.com with ESMTPS id e9aae79e29a4cba2;
+	Wed, 11 Nov 2026 15:34:41 +0000
+X-Mizu-Trace-ID: e9aae79e29a4cba2
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <ab4e5c29-b835-4ea8-853b-57ae7ad2eafe@linux.dev>
-Date: Wed, 11 Nov 2026 23:32:50 +0800
+Message-ID: <8497ba87-354a-4564-a9cc-d376847e6b19@linux.dev>
+Date: Wed, 11 Nov 2026 23:34:24 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,8 +59,8 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 5/9] libbpf: Add log_opts support for
- BPF_TRACE_ITER
+Subject: Re: [PATCH bpf-next 6/9] selftests/bpf: Verify tracing link_create
+ logs
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
  andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
@@ -71,87 +71,69 @@ Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
  linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
  martin.lau@kernel.org, mason@kernel.org
-References: <20261109140816.5196-6-leon.hwang@linux.dev>
- <8b9e5217cbe9c192e678ce5c8d59f573c80a659d72211f5b91c905ed00ebb799@mail.kernel.org>
+References: <20261109140816.5196-7-leon.hwang@linux.dev>
+ <11d1648e59b112236d1add138094b2c057d19270ba45e0fc47f6342da665db95@mail.kernel.org>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <8b9e5217cbe9c192e678ce5c8d59f573c80a659d72211f5b91c905ed00ebb799@mail.kernel.org>
+In-Reply-To: <11d1648e59b112236d1add138094b2c057d19270ba45e0fc47f6342da665db95@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 2026/11/9 22:47, bot+bpf-ci@kernel.org wrote:
->> libbpf: Add log_opts support for BPF_TRACE_ITER
+>> selftests/bpf: Verify tracing link_create logs
 > 
-> TL;DR:
-> - libbpf BPF_TRACE_ITER case may not reject stray bytes after iter.len
->   (missing OPTS_ZEROED check), so unknown fields could be silently ignored
-> - Nit: iter.len test in the legacy branch looks like dead code
+> TL;DR: Test issue: the invalid attach_type subtest in tracing_link.c may fail
+> earlier in the generic check, so it may not exercise the new tracing log.
+> Using BPF_TRACE_FEXIT on the fentry program might fix it.
 > 
->> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
->> --- a/tools/lib/bpf/bpf.c
->> +++ b/tools/lib/bpf/bpf.c
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_link.c b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
+>> new file mode 100644
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
 > 
 > [ ... ]
 > 
->> @@ -821,6 +816,16 @@ int bpf_link_create(int prog_fd, int target_fd,
->>  			return libbpf_err(-EINVAL);
->>  	}
->>  
->> +	if (iter_info_len) {
->> +		if (OPTS_GET(opts, iter.len, 0))
->> +			return libbpf_err(-EINVAL);
->> +		iter_info = OPTS_GET(opts, iter_info, (void *)0);
->> +	} else {
->> +		log_opts = OPTS_GET(opts, log_opts, (void *)0);
->> +		iter_info = OPTS_GET(opts, iter.info, (void *)0);
->> +		iter_info_len = OPTS_GET(opts, iter.len, 0);
->> +	}
+>> +static void test_log_invalid_attach_type(void)
+>> +{
+>> +	const char *msg = "Invalid attach_type.\n";
 >> +
+>> +	test_fentry_link_create_log(0, 0, 0, BPF_XDP, false, msg);
+>> +}
 > 
-> When the legacy iter_info_len is non-zero, the check above already requires
-> OPTS_ZEROED(opts, target_btf_id), which covers every byte from that offset
-> up to sz, including iter.info and iter.len.  Can this OPTS_GET(opts,
-> iter.len, 0) test ever be true?  It looks like dead code.
+> Does this subtest reach the tracing-specific log added by "bpf: Add log
+> support for tracing link_create"?
+> 
+> With BPF_XDP on the fentry program, link_create() fails earlier in the
+> generic check:
+> 
+>     ret = bpf_prog_attach_check_attach_type(prog, attr->link_create.attach_type);
+>     if (ret) {
+>         bpf_log(log, "Invalid attach_type.\n");
+>         goto out;
+>     }
+> 
+> For BPF_PROG_TYPE_TRACING, attach_type_to_prog_type(BPF_XDP) returns
+> BPF_PROG_TYPE_XDP, so bpf_prog_attach_check_attach_type() returns -EINVAL
+> and the case below is never reached:
+> 
+>     case BPF_PROG_TYPE_TRACING:
+>         if (attr->link_create.attach_type != prog->expected_attach_type) {
+>             bpf_log(log, "Invalid attach_type.\n");
+> 
+> Both messages are identical, so this subtest would still pass if the
+> tracing-branch bpf_log() were removed.  The generic check is already
+> covered by the invalid_attach_type subtest in xdp_link.c.
+> 
+> Would passing an attach type that maps to BPF_PROG_TYPE_TRACING but
+> differs from the program's expected_attach_type, for example
+> BPF_TRACE_FEXIT for this fentry program, exercise the new log instead?
 > 
 
-Will drop the iter.len check.
+Agreed.
 
-> [ ... ]
-> 
->>  	switch (attach_type) {
->>  	case BPF_TRACE_ITER:
->>  		attr.link_create.iter_info = ptr_to_u64(iter_info);
->>  		attr.link_create.iter_info_len = iter_info_len;
->>  		break;
-> 
-> Every other union member's case ends with a check such as:
-> 
->     if (!OPTS_ZEROED(opts, tracing_multi))
->             return libbpf_err(-EINVAL);
-> 
-> Should the BPF_TRACE_ITER case do the same with OPTS_ZEROED(opts, iter)?
-
-Will add OPTS_ZEROED(opts, iter) check.
+Will change the log msg to "Invalid tracing attach_type.\n", and change
+BPF_XDP to BPF_TRACE_FEXIT.
 
 Thanks,
 Leon
-
-> 
-> On the new iter.info/iter.len path, nothing checks the bytes after iter.len.
-> A caller that sets opts.iter.info, opts.iter.len and opts.tracing_multi.cnt
-> gets the stray field silently ignored instead of -EINVAL.  Likewise, a
-> later field added to the iter struct after len, built against newer
-> headers, would be silently dropped by this libbpf because sz still equals
-> sizeof() and OPTS_VALID() cannot see it.
-> 
-> Legacy callers would be unaffected, since their union is already zero, and
-> the iter.len test in the legacy branch could then be dropped.  The later
-> commits in this series only touch selftests and do not address this.
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42633880300
 
