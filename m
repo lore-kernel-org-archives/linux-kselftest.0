@@ -1,77 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794413960;
-	b=SX034NmBxjemyAesHRk6gs/WBix6iOqpErqBixxNmmSPXs0SPvSxAvgMK87IH/sQNblE
-	 L0AAiRB5iTy1ltBpecSO+WxPrFWCwcwNbIEyzF78rS1oItya4kqUJXWYNqt8KnFGI0/Ig
-	 VuSnYAuVidh/mNT8ltefo4/RKaAmiLExHIQ93bcKLtI22Akl6Zj231KRaXlJE62lI3a+i
-	 et1IB/D/o9v8bx+DIhD+BgJDjUX7MFbyRKs0JRMpHjcNdW5tIqYYHehzyzXO+vxBWqf4R
-	 Uxe2OHSNWB60sOxniWvk9ISfxooj0TIDiHy0Eo11tl4DWCigMN3YZm14Vg19O6cf6oA==
+	t=1794414291;
+	b=ehpl5SgRSWFxH5sOY43cmHZqL8gqZ2meqE0qTsnCbvj4TpZIKOCFUy1EIh+y8l/gKmZq
+	 a/LZMxNnT1h3LO9ILqKZpvzmHLGMX/ht20qS/ajb5j3zWCSCHqEcuYe+jJzjBVNiv/VxD
+	 5Cd281cWRaTv3qKj5/iSd2XrY029MvgjlTUCk62VrJnNGbWAR125gylmpuUERGwEj5hdJ
+	 eofRNFlHTalf0quO/efe5Mucqr84WMJ4UYkwAz9ZHRB9+sOl0x5b06sNSUxdZINe86PNc
+	 Y8K1t1LumBYLbCnyfenjgzM7hGSAqfnnFQipLdRGKJOywZr2x5LhX1lGeSGsKilfx8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794413960;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=3Tr7kJyMgrxILW6bmy4HJBMvh/+CUoCrlh1UXHmeUfg=;
-	b=2q01niUkEDmujMK0DQJJsThu9t7ddswwi6UENQsX77CIazon2j9+ppR4qJhIqqS0suab
-	 nA9rBVRhUjqsT4GJecPl5eJ+WRzWY54JX5UGYdKASEE9IAZ2bUWgXQmi2O84EfY3QF4Q4
-	 O9rqISjv1Dy38LCQUspsQ6FRAxppKvnt82s6In1Mw8udq8iT6Gf66KAv99uw/YtrqT8fW
-	 9mlYSDUjTkxCmnyKFid8rWw7mfrzLmWfQY5UAWAHi4JNoMvIXsPIjCoim64Pnajhz5DBK
-	 IQEzcZ/jb6rSD1HvwQkNkA8mjdPRetayijPrTHtGvLMzPjddwO0mUoHaHIsiBjhlrqA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794414291;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=jNntaP3XwTuZXmgecucET7NTUcEEL+E3l6G+ho6z4r8=;
+	b=SrbgxJI5xBSzUgbzJUiCz0ny0oueZjHtUPIFXDXj34/r1SMwud8fGpIZK2Xa8NG2ZgGE
+	 KtQvMCk8s9anbLT2GbY1h5zINebGAXRrYZxJRmuNftCXcvzz2fFE5jTM3LVH2qSogilnU
+	 cy+LgY5/AKBquJo4oVjXW4B2y8ajBPiPaOae4As0ANy3QlezTl5d4ZBShY31tMFfLW9vL
+	 HvkVLc/2eujfeV6ckEeLrbGieIMRWOJev2W2vml9rGL5H7tqKsYvvdlTUiksEbXIITx/G
+	 vjSv3RMNZH+wtADhGD36seMgRy6ZO+VxOp9sroDTz/g7/q8+8dtmcnQ5epBE+Waza8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=JCvYPm5I;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KzRpG63W;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40175606A32D;
-	Wed, 11 Nov 2026 16:19:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40175606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0A1606A88A;
+	Wed, 11 Nov 2026 16:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=JCvYPm5I
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=3Tr7kJyMgrxILW6bmy4HJBMvh/+CUoCrlh1UXHmeUfg=; b=JCvYPm5Is+991YuywRlzjEMNp1
-	S7xApyjWkrIWpO1oeaL8ktGurfYFlNjlkCO5QDII88oChRyKxzldRJdHvNh12Qc9AqcRnnTbfHGgi
-	m24D8VAzk2xKVIS6fw5o+v0JyHDFmq1xcpGCCBrxJb/8xYuWZMHFFVQYsq7++pn3jgfUQgXXxRzch
-	9z4ADnYmpKTG72LwmxGF3ubyCFpL4b2Bw6SoxxtCFFZqjGjzvQLkdiEurQL6UszAOmvSbqcHjpFEp
-	ZQ6NLGlEPWFuQUKKypZ/upo4qvHU052VKpB4y13ADLWF5cwZm2yeau3pKtixdT09vC++p/dFkG29U
-	Ia7lrXtA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xRB2X-00000009KMT-3SmB;
-	Wed, 11 Nov 2026 16:19:14 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 3D91130031E; Wed, 11 Nov 2026 17:19:12 +0100 (CET)
-Date: Wed, 11 Nov 2026 17:19:12 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>, mingo@redhat.com,
-	vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-	tglx@kernel.org, will@kernel.org, boqun@kernel.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, vschneid@redhat.com, kprateek.nayak@amd.com,
-	luca.abeni@santannapisa.it, mathieu.poirier@linaro.org,
-	longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org,
-	hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
-	bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 13/29] sched/deadline: Keep departing bandwidth across
- a root domain rebuild
-Message-ID: <20261111161912.GP1779021@noisy.programming.kicks-ass.net>
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-14-mathieu.desnoyers@efficios.com>
- <avRmoK08LoIeySBL@jlelli-thinkpadt14gen4.remote.csb>
- <c3e7054a-486c-4e5a-a646-eee42e815ce4@efficios.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KzRpG63W
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BB11F00A05;
+	Wed, 11 Nov 2026 16:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794414291;
+	bh=jNntaP3XwTuZXmgecucET7NTUcEEL+E3l6G+ho6z4r8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=KzRpG63WF601aVxCqPnmcBV5FPY+g/t+VUS+dLF+ARoLBoDIIjLxtIx8sVTOljiND
+	 febIiSOycx24TrKU+bHTbungmbQeX9e7ZcnBiHioplZusgrl+qJ5yHaGqPOTJqEo0M
+	 tXbuNXWKhn9HSjH+j7TMxJw5a8tIN7PpoUbTnAMOFRguiLkeipYMyu3SMyonIHpX0E
+	 DUY1o9DGeIRolnsBM8i+nkhHlwSIKP72/YASPxdadT19XA6NSt+zRu5Cia0IS07jKm
+	 /yaklZy95Nmlnjc5s22yC84TWLiNi5V79ty/6O5TziC9PM0OPhhgwA833e43c4gjY5
+	 RG6uCqre5Qx4w==
+Message-ID: <447aeaaa-dd74-47c2-b517-790ae98e8962@kernel.org>
+Date: Wed, 11 Nov 2026 16:24:48 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,22 +51,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3e7054a-486c-4e5a-a646-eee42e815ce4@efficios.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v12 2/3] bpftool: Add recursive map dumping
+To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, ihor.solodrai@linux.dev
+References: <cover.1794380385.git.hi@tychen.cc>
+ <237281e76007092c3cd8debdc8dddce418f7354b.1794380385.git.hi@tychen.cc>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <237281e76007092c3cd8debdc8dddce418f7354b.1794380385.git.hi@tychen.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 11, 2026 at 10:35:17AM -0500, Mathieu Desnoyers wrote:
-
-> Measured in a 64-vCPU guest with sleeping deadline tasks:
+2026-11-11 16:19 UTC+0900 ~ Tianyi Chen <hi@tychen.cc>
+> Dumping an array_of_maps or a hash_of_maps shows the IDs of the inner
+> maps but not their contents. Add a recursive keyword to map dump that
+> also dumps each inner map in the entry that references it. JSON gains
+> an "inner_map" object next to "inner_map_id". Plain output separates
+> inner maps with blank lines and indents their raw entries and element
+> counts. Output without the keyword is unchanged.
 > 
->   tasks    today: rebuild, longest irqs-off    single list, all irqs-off
->   1000     0.75ms, under 0.1ms                 0.12ms (0.19ms worst)
->   10000    7.4ms, under 0.1ms (0.3ms once)     0.9ms (1.2ms worst)
+> The kernel permits only one map-in-map level. Look up outer entries
+> individually, then open, dump and close each referenced inner map
+> immediately. This uses one extra map FD; inner dumps may still use batch
+> lookups. Shared inner maps are dumped at every referring entry. If an
+> inner map has disappeared, report the error in that entry and continue.
 > 
-> The rebuild itself is 8 times shorter. That comes from updating the
-> extra_bw of the CPUs once per root domain, not once per task. But the
-> longest section with interrupts disabled grows with the number of
-> deadline tasks. I do not think that is a step forward for a real-time
-> class.
+> Link: https://github.com/libbpf/bpftool/issues/58
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Assisted-by: LLM
+> Signed-off-by: Tianyi Chen <hi@tychen.cc>
+> ---
+>  .../bpf/bpftool/Documentation/bpftool-map.rst |  10 +-
+>  tools/bpf/bpftool/bash-completion/bpftool     |   3 +
+>  tools/bpf/bpftool/map.c                       | 123 +++++++++++++++---
+>  3 files changed, 113 insertions(+), 23 deletions(-)
+> 
 
-This is domain rebuild? Do we really care about performance there?
+[...]
+
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 9e4dc3881060..79d33af257b6 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+
+[...]
+
+> @@ -1003,6 +1036,43 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+>  	return err;
+>  }
+>  
+> +/* The kernel has one level of map-in-map: inner maps have no inner maps. */
+> +static void dump_inner_map(__u32 id)
+> +{
+> +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts, .open_flags = BPF_F_RDONLY);
+> +	struct bpf_map_info info = {};
+> +	json_writer_t *btf_wtr = NULL;
+> +	__u32 len = sizeof(info);
+> +	int fd;
+> +
+> +	fd = bpf_map_get_fd_by_id_opts(id, &opts);
+> +	if (fd < 0) {
+> +		p_err("can't get map by id (%u): %s", id, strerror(errno));
+> +		return;
+> +	}
+> +	if (bpf_map_get_info_by_fd(fd, &info, &len)) {
+> +		p_err("can't get map info: %s", strerror(errno));
+> +		goto out;
+> +	}
+> +
+> +	if (!json_output && info.btf_value_type_id)
+> +		btf_wtr = get_btf_writer();
+
+
+This will not indent inner map entries for inner maps with BTF info,
+will it? But I guess indenting them would require changing the JSON
+writer, probably not worth it. It's probably OK if we have blank lines
+to delimit the different maps in that case.
+
+Acked-by: Quentin Monnet <qmo@kernel.org>
+
+Thank you!
+
+The series will need to be rebased once the batch lookups are merged, so
+that it can go through CI.
