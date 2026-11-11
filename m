@@ -1,71 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.229
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794389832;
-	b=BlpXVbpSkcTFfx/Y/il2a2Mc1XX22zT5bPOgdLwz6WX+QWsc2IBCePVD8EQmtTCeI6et
-	 nmhw09yDmwrJP1LzaHF6QwWFJn8NNVIfCr+4y1aH6o8USnC0JAhDpi9zKgQRTW2h8LMmZ
-	 F4Mv0I9TGj/Q3h3vvd6l0QDJudgcKk46MEL2AqgXjtE9Qm6nR9RPBAen6/6RxDEhn2jd6
-	 5aOCzXb/Tmnjz7KRza8lDg5Sfg9IXpAXtRoPy0/VB4/+EJJGTecYyztWXjWrYfagLdGb+
-	 xpWQxePb+X6jjh3jej7AWMKc4/gsXYVcGh1dR5C4xM4ynVRAMwprNb6gMzQ2/ZPBaJA==
+	t=1794389861;
+	b=NoaDeK+OT50J6/xxTSxYkS79oUi0DFQahHVG4fRTt3HbnTzszOfXgeKmcdSAnZ3ysY4C
+	 fsROQ4/TKdjhg9WJ61dQM6CoSTWOrvDu1x+/YGCvDh0uwLDGkgsH0QzGqRWguc7cqGQQY
+	 pmnU3y8E4C4nfvY8zOo049nQbQ6t3U6oefT1MYtLfttQJHnwHdoydwuBYWjAponHnygXS
+	 HYtGHfFeK8DXeP5HGsJc1X8EH9Sg8zA+6pi0X3d1GMzTkNZCozLLX3HQ7VbtP34A7R4tm
+	 C1E0Q4S8cW8ITaKTPp2bawUoQHskrmD6dRMsePA5Q7xe+GHW345z54qnAwhtspn42+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794389832;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=fU9XfcyXyDYY96b4oLkbxP2QCB6xnQM84ny0U+EIIak=;
-	b=0lvIsm5mPA0HY2GCHVF3pQ8TZIzIwd/jyYwwWFTX+aY9e/VV7nOjeD8fLK5vCpHb21jV
-	 vQyFos0NFMBNYK/35sI7iODAIDLrdYQVCVHibUwRyC1dTHyld9d6e6FLo3fK6xAZ5thrW
-	 HHRTWWTSL2OoBBKEhpiho7uPMDSIhr2GO/FSBmqAF9+VrROsnCsnEF5BnVSR8E/eX4p7m
-	 pylWQ5tJuLYhYfkQcaYYo6lGTRkSWb2B2jb+5pKMHkTnNb6h7NTk+AjKvPk4XD/37gx5a
-	 PAedIrm/B7QiH6vgIV+p4L88BLw6NusmuVJXdsofd5NQD29vWSvWN+DOcDbAFXUnrhw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794389861;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=nnXnf7y1PhveoLpCg+02OBOmFeyqhtp88iWcIsSbdDc=;
+	b=tmMKoiXLTGFTGA1FvYTa7IAXE1w5olD3d2fma3a1CbhvVYAoVUzI75AdrMPWUtyQ+mQK
+	 +qMF9l+OkhliLz/R8gJSqU+kkYu1bJZk5RfvS/CQdWh2ae78EBERhSF0Li9CeHtB5e34c
+	 hImrY3PtJICi1hhR5wncMFAnUXo6s2mEYh3qq6boK7AmFV9SVJT8gA90fFCa0/gkrEI5W
+	 7ILsU8O/ZcgnbuTWtBuJp3uiB9oGSSd5ChgY+c1kp9evnLqvjzQp0W0aIW/24j4ZYFN07
+	 cLxaUgGfWrqUmO3X2s3rxCt9KMeVx6Q4796zB0qq1ZHrOhzqJ94UuGvb4Qi43ws36Jw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NCG1t34W;
-	arc=none smtp.remote-ip=95.215.58.229
-Received: from mta1.migadu.com (out-229.mta1.migadu.com [95.215.58.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkjsJEtv;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354D6606A321
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 09:37:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 354D6606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32DF606A31C;
+	Wed, 11 Nov 2026 09:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NCG1t34W
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=6wp3khVZFr9nCgPoeJN5KkCAJtgzTDUmCQsA5IU4RCg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794389827; v=1; x=1794994627;
- b=NCG1t34WKyBUf0tl84L2OJ2uuUgCKiHRv5pALWp/FcCwgoX/vp3LA3T0ZWQAB4YbJrZ4Rn0p
- pFvs5QnI+rcSvi9h0WOIk6j/cPzqipj8tfQLzB2C/zzb7+sjjsXBQZ8sl3hkv9mdqDcQ0ecKHD8
- nFpv7YjoNYWjB1Rb3FTkxU5c=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 3265524654880463;
-	Wed, 11 Nov 2026 09:37:07 +0000
-X-Mizu-Trace-ID: 3265524654880463
-X-Migadu-Flow: FLOW_OUT
-From: "Xu Xin (vivo)" <xu.xin@linux.dev>
-To: david@kernel.org
-Cc: akpm@linux-foundation.org,
-	chengming.zhou@linux.dev,
-	link@vivo.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	tujinjiang@huawei.com,
-	xiao.wang@vivo.com,
-	xu.xin@linux.dev
-Subject: Re: [PATCH 2/4] ksm: skip rmap_item allocation for non-zero pages under only_merge_zero_pages
-Date: Wed, 11 Nov 2026 17:36:57 +0800
-Message-Id: <20261111093657.123292-1-xu.xin@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <5445434f-078f-47d8-9851-dcc3712d18f1@kernel.org>
-References: <5445434f-078f-47d8-9851-dcc3712d18f1@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkjsJEtv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468AF1F00A05;
+	Wed, 11 Nov 2026 09:37:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794389861;
+	bh=nnXnf7y1PhveoLpCg+02OBOmFeyqhtp88iWcIsSbdDc=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=nkjsJEtvfVlzfinnaA9/WA2KaQ0FfUbPigA2eQLesbpUeUeewvuZxWrLNv6VOe/Zi
+	 979hO6ET/mprcOx0suJozkL53ZRnqRoKSkJoIhz7lhEdvl9m3aBRla8c6OaveCCTyd
+	 WdikiYVnYekWNhADRJ/0fRd+CHBIqT9JgNLeYhs8v6gIEcFnoceEj6BbRYE4j3w09F
+	 YUZWKYAj/KlRw3IpXWf8grMO8fQUxTAPBwF65YeocoMHRz6cYgWePGrSW53q8PBMkr
+	 Ov3dSfS/JoNOhHKGm7N+ee6fJRdJh0hkMuHCtBSsXshQGkqByx8zJnc2X7lkc5d/Yv
+	 Pm8YhC6BwZMfA==
+Subject:
+ Re: [PATCH net-next v3 01/14] dpll: dpllsim: Add simulated DPLL device driver
+From: netdev-bot+sashiko@kernel.org
+To: poros@redhat.com
+Cc: netdev@vger.kernel.org, ivecera@redhat.com, jiri@nvidia.com,
+ corbet@lwn.net, skhan@linuxfoundation.org, shuah@kernel.org,
+ rdunlap@infradead.org, jani.nikula@intel.com, vadim.fedorenko@linux.dev,
+ arkadiusz.kubalewski@intel.com, jiri@resnulli.us, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Wed, 11 Nov 2026 09:37:39 +0000
+Message-ID: <179438985979.2199510.15412273141557409959@kernel.org>
+In-Reply-To: <20261109093523.931201-2-poros@redhat.com>
+References: <20261109093523.931201-2-poros@redhat.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -75,42 +66,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-> I think we should get rid of any rmap items when merging the shared zeropage
-> only. That might require more changes to the ksm code, but it really doesn't
-> make any sense to have rmap items.
-> 
-> Maybe we just want a separate KSM infrastrcture that only focuses on
-> deduplciating shared zeropages in KSM: get a page, see if it is zero-filled. If
-> so, try deduplciating with the shared zeropage. Done.
-> 
-> Mangling this into the existing infrastructure might look easier but it just
-> adds things like additional zero-page comparisons and (as Lorenzo points out)
-> makes the code harder to understand + maintain.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Makes sense, I agree.
+Low priority / nit picks for your consideration:
 
-I actually thought about doing it this way at first, but went with the
-current approach since it looked simpler back then. Without needing any
-rmap_item tracking for zero pages, we can avoid rewriting scan_get_next_rmap_item()
-with more complexities.
+- [Low] The commit message says configfs was chosen partly because
+  "Unlike sysfs, configfs does not imply a stable ABI, which suits a…
 
-Splitting them up has two obvious wins:
+--
 
-1. ksm_do_scan() becomes much easier to read:
+dpll: dpllsim: Add simulated DPLL device driver
 
-   if (only_merge_zero_pages) {
-           scan_get_empty_page();
-           try_to_merge_with_zero_pages();
-   } else {
-           /* existing logic */
-   }
+This commit adds dpllsim, a driver that provides simulated DPLL devices
+for testing the DPLL subsystem without real hardware. Userspace creates
+instances through configfs under /sys/kernel/config/dpllsim/, sets a
+clock_id and writes 1 to live to register the device with the DPLL core.
+The device registers as a PPS type DPLL with only the mode_get and
+lock_status_get callbacks.
 
-2. We can even add better filtering in scan_get_empty_page() to speed up
-   empty page scanning, without making scan_get_next_rmap_item() even messier.
+> Keeping registration separate from creation lets a test register and
+> unregister the same device repeatedly, which is where the core bugs the
+> driver is meant to catch tend to live, and it allows the structural
+> attributes to be refused with EBUSY while the device is visible to
+> userspace. Unlike sysfs, configfs does not imply a stable ABI, which
+> suits a driver whose knobs exist only to drive tests.
 
-That's a very constructive suggestion. I'll rework v3 this way.
+[Severity: Low]
+Is this statement about configfs accurate?
 
-Thanks,
-Xu
+The kernel has no ABI exemption for configfs. Its attributes are
+user-visible interfaces and fall under the same no-regression rule as
+sysfs.
+
+The tree already documents configfs interfaces as ABI in:
+
+  Documentation/ABI/testing/configfs-most
+  Documentation/ABI/testing/configfs-thunderbolt_stream
+  Documentation/ABI/testing/configfs-tsm-report
+
+Neither Documentation/filesystems/configfs.rst nor Documentation/ABI/README
+makes an exception for configfs.
+
+The selftests in this series will use the layout added here,
+/sys/kernel/config/dpllsim/<dev>/{clock_id,live}, which later patches extend
+with pins/<pin>/{type,frequency,direction,prio}. External tooling may use it
+too. After that, renaming or changing these attributes would break
+userspace.
+
+The layout is currently documented only in
+Documentation/driver-api/dpllsim.rst. There is no Documentation/ABI entry
+and no note saying the interface is unstable or for testing only.
+
+Could the claim be dropped from the commit message, or the interface be
+documented under Documentation/ABI/testing/?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261109093523.931201-1-poros%40redhat.com
