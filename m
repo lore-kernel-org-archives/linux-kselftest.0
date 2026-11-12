@@ -1,85 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794497619;
-	b=p7KkaHZgFmQZOSxPCdULzcD2vKeWC7te1JucOAgt2fmiiEfjDosa0x/DlESCrjrLPemy
-	 /691DvbOLUXUr8nO6RWVOtUwFF3EyBkwh7zLRElROKpElDpMoXK5nxp/vsgwgnaVfwlsl
-	 mTg1Wc2H8OAO5vtjTBVB/G9UsqJz+Jg0cCbqMJLezjALE3VcigPYd9KE8DX6vhNYpomG1
-	 P0yi/e4wFjG1DuMx4dt+2XNVVRUXMMWMwbRwjgzEBp9Se+re6+1r7WmBax3EX/iwdxz64
-	 z18Jvi4inZyQGk7dvSqKJaR7qCRLMAUVA5ntNn495cO2xlq8ZAZ2q0xRzX8B9qhtfGA==
+	t=1794497621;
+	b=cUlpIHGG5FCNeRPHElJ9iBGHsCTZdWfEMoEGu9QSnmx42cQtm1q7eS7bINJ0Ga1TiveN
+	 P1CTebLBSU3lENaHhC/6crqrKkyhX0zFIIHqYsmDtf0rZg/8xSFbp3dUjKv3EgxpTzRWO
+	 ODglGy/2VJgVEYKAX8+yJhYJpuccYBFTJkWnHQjulXJYncYYbmWTGAhsy0VoG8uqpRhwF
+	 ijDAQV4S3ohFkewxSH1b0njDJnamQIef/vtR1ibaeH1Cq5kG+r/U4OHFiGcD5AH1H/U9L
+	 BSRk2J3ekdJxGol7vIbVLjAoaBIeJXlmzd1pskMuulM6P+NVjJrfNCp2W3ooKNAv6Gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794497619;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794497621;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=p+LcMtXkYJFxrrRpSU30o1iHuZmxD+UW9aeN6zEXvqE=;
-	b=f9+XyEmRsGo1DKdMVrX/h1nJsVQwcsOMGYDIRcFebK6fkDSMFCNpLvpYLiQLhv0md/Si
-	 FcJ/5CObua6Tj58rTLXRwrQ5uJjR6+tY0LQt/vJfYaAwQElYK2nJDaA1sReLnrYEd0qUk
-	 S8FKzCnkyPQhG/zzUYhBIw1jHsmEwF61EUV+B8/gOA/tOI8GelN/u9fedG0kEoCHvYDcQ
-	 83plh67Y1qKRJR4YlQYgxG8o1MXz+I4w3Wm4c+fSrpH0ErlmKSRjSQHwakyc3ZypFTt/u
-	 P8ltZwWiVWVlnAofUsJDupKKs+oD1S1WZXWveuPC6uKF3aXFr8yBr6noU/Kp5HDnP/g==
+	bh=3xfIK9b16iFD8RabDIv0jNeXjsZ6mto/eDWpaCXgusI=;
+	b=FVsr1huToKpqOrhgNkgG0V2AmnOTS9FBGyaqWGLRxUrhTfGu5ZNMaO72dWgGvdfxZFdW
+	 2e8I46MPRIrg+bemHhtHId6AwhYkEZxBxtHptTnh+TVahg1+l6wDjy/p5JGUL942UAypT
+	 bJGYJDj8QF9yPV7bBgydRUmsx5+yo+3m3Wq9lxA/bqU21mfzLgkXV8HJMIaAYqS5zvXH5
+	 ehPzhRQjUW80HFH7RZSLi90dm45HMhFS4wHeT4yrPxOOJApDyHlwiyVESCwfZBpmY3gNm
+	 52vQfYcmyT7AOa/oS39JiDhswkvDu0wWl0c9cjuR1L2kPSgOhNI01gEhHHleE8lWrYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MFqta4Vw;
-	arc=none smtp.remote-ip=209.85.128.46
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yZEQjkEc;
+	arc=none smtp.remote-ip=209.85.128.45
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C7B606A880
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 15:33:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68C7B606A880
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C15606A8AA
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 15:33:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1C15606A8AA
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MFqta4Vw
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a599e9110eso5125225e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 07:33:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yZEQjkEc
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a78ec32fadso2307705e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 07:33:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794497618; x=1795102418; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794497619; x=1795102419; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=p+LcMtXkYJFxrrRpSU30o1iHuZmxD+UW9aeN6zEXvqE=;
-        b=MFqta4VwxR+E9iahrgxAuhn8pUai+bvJy8Vgeebb23TKSSnV/4SSrnUoYczRI/tBj0
-         yqtLc/6M2u3ixrP+fBt8sVxiEq+CqEWk1oPK07vrCsRvZxguJq82sDxMw+Q978AKQz3o
-         6ZoncKO8MQErw5zKUlpnbdwwf0B8BzoAeceapc5KgmMxBgyfpOcgbhNjDEkNycKIM3yt
-         lxSFZN5rlDsOdUGeLbaGzF917/UzaW1dwRj0yJlkC32pSCAQF3MfM4MDwWepdEu8iQ38
-         mIaMIshHiib23TKmFXtUy8+pYZKh7C1wTR5t3dsF32sA9VUNNawHqBk6qyNsISbuvO4y
-         uXdA==
+        bh=3xfIK9b16iFD8RabDIv0jNeXjsZ6mto/eDWpaCXgusI=;
+        b=yZEQjkEchwiAQkQRDzZMJ+fRKObEzFTosyO/AqTA3Zo7Qji7bFqwQRZJ/BH1KT3T9U
+         LttUmM72agPqas0bE9oDGF2VQ2ToPeYeFgQltyyvnDlWVKx8LCxKpOLKzNEiHbMEl8ET
+         fR89lRYpEDzzmqpVsS1FznEEq15oiQW01yPMoQTKbfNrSi7LgaOD/7F4/uPst5pfsMDP
+         fDUSLWB6bD0sEmI7Dq8u8ilPi2Yc3SzDoZoFYHiWdtBmmQDM5Ij42ajV6ke+cobFx5U9
+         0leEBR0YBVAxEI/N+9006Cf5Xg11YSEw1wd4BJ6sjm0isfk3RSEht0i8T0oaEEy34cYO
+         02aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794497618; x=1795102418;
+        d=1e100.net; s=20260707; t=1794497619; x=1795102419;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=p+LcMtXkYJFxrrRpSU30o1iHuZmxD+UW9aeN6zEXvqE=;
-        b=A30u+xWwY0Y5VuRcuUhUWaxoS6lctc5bDByJJLAWaTyFd6xx/IUfZcn0iPb7toPG0K
-         QnP3+U6coXhvnRuFcHsIXRqG+AMslFtoGdJTMLBFXiy/ThBp00DnGVyZ6+B/KklNqCEy
-         JhD2oeTPhgJtbzBkBfe9Qog1q+iTU4I/Y0RaKG24U4Gb6CAUjUgH2ihfMD553+a+0Cvj
-         TJnKZRKaaOmYAC2SGNoUR8Z0bJKHDlnLdPPLc8PKsTCVEDbVbvhCV4Sni5rhSQpgBrnW
-         TRlfSQFsM/5lixy9XuivkIAPBZoQkjhTcUzP6D2KTHZnKC7oN0EABRlmXRG9ANHmjRJj
-         Sl1A==
-X-Forwarded-Encrypted: i=1; AL+hErEINAeC6veVek1S0AcFxd/nehyIKtD/T2hSdm5FZnhO6peK+8lR/gnMVLqmTURksVIFDBO6MeVTWfeBfUK5Vn8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8OPZSRUUIbK5PAcxpKW2iGGS3LmkfQJnevX0oxa8JLyJ4KfiOj
-	OnrhiVvLi15EKCxVQ9lyPjf1PJ9PDnjT8cayRucCEbQ1OD+TrMq8gXpG
-X-Gm-Gg: AYBFou1KY7LR+pRIpSs+CBVxWmGHKU9E+kHIfhgw8h68Y/CJlOqBlVWI+53hGuVQ/6N
-	QYkdwsL/Sd1+wHfmpvv452W68d9c6Uk9iYgbm+JxUllbMYayKogTp1FbAOJymTf4CzlQFby4GhL
-	O7DvAqMJhweB3NrA68CreUNzGxsXI+X074DWJ7gYEvuVY/kny8VNcpqL87tNf3c1kHV7okILqsX
-	lLKlbPAialsHNLwMSALDyvi+ou89xTTH8FCrX1Qp1fNA0tJ2xshZmKVYLXFrDYUQGbBslBsIxKv
-	BEyUeFS6BCpJgdvOlG2vMXLsrDfhJHwHR+9//LcBxek30uRaIHDrk/46gKowLhfVsQ0oEvmHweC
-	jmCyP3jkOxez6nXNCGuRVRXNKe0ndcEumzYjJm3DIwCvDQO+ubQk+vpDnalnCJtGULQBP4a9Cgv
-	z+/0O+D2D684u24BBlSpXcsUE2jBigs1LTtl2WxPjxc526CLEoInhlRukfyS/Vsp4Bcfyswee37
-	4D4HQpRXSyHxXfvF1yEy1QzZywG+rN+7DY8QihV7YP/nn1cA/sSnc7HdXMOanRC49bB/biR93zJ
-	0KPql4hK8f7J5g0+bsSRL3WVS+UPb1aaNIIyWLp87msZuWPU3kb8AK4PGrH0kEnqMakTPjl6kxU
-	oxIaz5UR82jiVAn++ZEC0K33ngxZUyTzfb4ecUG6rLCdKCuUeK/ASa4/CZSOAuDVpMeBWpW1TFf
-	h0VqkbkHj0
-X-Received: by 2002:a05:600d:8448:b0:4a1:e015:6441 with SMTP id 5b1f17b1804b1-4ba091a59aamr89080845e9.0.1794497617706;
-        Thu, 12 Nov 2026 07:33:37 -0800 (PST)
+        bh=3xfIK9b16iFD8RabDIv0jNeXjsZ6mto/eDWpaCXgusI=;
+        b=JaTp3q//xPDAvUVTQqUuVwB+bJzwr7RGBYqE9H289Tik75vFxO24xD3iBJiSCn4JQh
+         rq7SRVJ3QL445L0wZpEgJ2ql5dX+lkF43mdgWW1KyxjTG7TvvuB1qzWieFjIEhgrim0x
+         WdmEHHSttpPseiHllM6pHB2r/0KU+zGdWw3VgZM1x6ZsDufdHEUeeoEE4jOS4wlToTNB
+         YXxTQ72UV+3hxDGg1okAVF3egkBx6inENkPEVax3gJarRNqShT+KxPJb3Xqaa4Ix7LO2
+         L0NJPTArqSY+hsz8z2hYARDBTGPYYfLZx1GEV6QfpXhAceC8uqbgtgl/Zs+cn0jJGwJ2
+         cJ9w==
+X-Forwarded-Encrypted: i=1; AL+hErHBubmc3/SLsEBu+yUgKqYVmfeYMIAAQ34uLgFfdxFJ0A/UKnMM97XRiKt4yBWMgm2vTB4Aga6P84OirhqaCnM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/9+udnR36HH4Y7pXTYRK4cGvekCPs4HSEpoaAVrcKBY6Rp+4OZ
+	WlCdnuqK4iSUGY9cVZPkDLhKDkxdpTz8bq1Q15UO6aeAhvi5tUY2T1Sr
+X-Gm-Gg: AYBFou0wq37bCCZpYTo6IJ5XNoQ3tSl19TZAPL52lcjHI1vuGsEWoOoxkirLSUGMRCF
+	XvM+uXz3JNxVOEqDyh5FN0R1inKpc6Yglvq80Jh2NLKufU6o7Xm38iOMhtQE11AKmBVLOlCnxCL
+	+VGNMU5xAB45erNL2zbUilV0RrxCM/H/TtGUq1rBU/8fQbRFxn17wBDdVYyZymQq/DPUmsM6Caz
+	3coI7QsxJ+o9hRLBSAtqgpuhE8iEffCxwZM0SE/E8IwXStoBmwxGaBj2jH25WAIFrR2gIXBNxbC
+	4XMbYLL+gs7nM5Y7419vIdyyJ8SF9nZTebAf90mLDk8G6oXz0Gu87U8Is3lJ7yM+THlfjh9zlph
+	CmHKYnGJAAxR1fQ4/jYgWN6Jhxc+136n3liQPQqYwTUFVKMoLoooqdS8bBkcDQTsZB1OXyQ82+T
+	/U/GZZb2kqvncW8a4aMJl49TbbXmwmyfhx37gPpH3D4eBUpSCLv+eciXrYKIjwpnhjXJAnc8Ikw
+	MEKZXXdWP5aY3SsUjyrTllA+6wFHfkug1djn3ek+24VjCZMVM2fx+s4/jP95Jh3CX82hWksIYpS
+	gadeL6AlJMTWvVVy2Wl8JbajmBSUrYMOVnyK7QhBVdd2AvPwB9HSFQQ8ZwAC/N/sJr9lk2TZnnm
+	s+ldvlMszjPYmddGV7msS0wXEuU/kTRdNnBCSLJ+ofFpdmQAwhw7jtEEzElyCi04=
+X-Received: by 2002:a05:600c:4e56:b0:4ad:5ec2:d3b3 with SMTP id 5b1f17b1804b1-4ba09357427mr110192375e9.1.1794497619120;
+        Thu, 12 Nov 2026 07:33:39 -0800 (PST)
 Received: from L-022584.energy.envision.com (dynamic-093-130-172-139.93.130.pool.telefonica.de. [93.130.172.139])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba08ddbe68sm229331185e9.0.2026.11.12.07.33.36
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba08ddbe68sm229331185e9.0.2026.11.12.07.33.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 07:33:37 -0800 (PST)
+        Thu, 12 Nov 2026 07:33:38 -0800 (PST)
 From: Xin Xie <xiexinet@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -106,13 +105,11 @@ Cc: davem@davemloft.net,
 	lukma@denx.de,
 	fmancera@suse.de,
 	danishanwar@ti.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH net v9 1/4] net: hsr: keep GRO disabled on HSR/PRP ports
-Date: Thu, 12 Nov 2026 16:33:30 +0100
-Message-ID: <20261112153333.20-2-xiexinet@gmail.com>
+	syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com,
+	sd@queasysnail.net
+Subject: [PATCH net v9 2/4] net: hsr: refuse forwarding devices as HSR/PRP ports
+Date: Thu, 12 Nov 2026 16:33:31 +0100
+Message-ID: <20261112153333.20-3-xiexinet@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261112153333.20-1-xiexinet@gmail.com>
 References: <20261112153333.20-1-xiexinet@gmail.com>
@@ -127,199 +124,212 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-HSR and PRP tag and de-duplicate each wire frame separately. GRO on a
-member device merges several frames into one skb that cannot get valid
-per-frame metadata, and userspace can turn GRO back on at any time.
+syzbot reported recursive locking with an HSR device whose slave is a
+bridge, and that bridge has the master of a second HSR device as a port.
+The first device transmits its supervision frames with its seqnr_lock
+held; the bridge floods them to the second HSR master, whose
+hsr_dev_xmit() takes the seqnr_lock of that device:
 
-Mark direct members (slave A/B, interlink) with a kernel role bit.
-While it is set, __netdev_update_features() drops software GRO and
-configurable GRO_HW from wanted_features as well as from the computed
-features, before ndo_fix_features(). GRO_HW that the driver keeps on
-is left alone. The request has to go too: veth adds and deletes its
-NAPI instances according to wanted_features, so with GRO still
-requested, closing an attached veth spins in napi_disable(), and
-detaching a veth that was attached while down and then brought up hits
-the BUG_ON() in napi_enable(). As for LRO disabled by an upper device,
-GRO is not restored when the port leaves; ethtool can turn it back on.
-The rule covers every direct member, PRP ports and ports with HSR
-offload included: one simple rule is preferred to per-port exceptions,
-at some cost in receive throughput.
+  WARNING: possible recursive locking detected
+  ...
+   hsr_dev_xmit+0x18a/0x210 net/hsr/hsr_device.c:234
+   ...
+   br_dev_xmit+0x1202/0x1b40
+   ...
+   hsr_forward_skb+0x171c/0x2ac0 net/hsr/hsr_forward.c:728
+   send_hsr_supervision_frame+0x63b/0xcc0 net/hsr/hsr_device.c:351
+   hsr_announce+0x1f8/0x3a0 net/hsr/hsr_device.c:408
 
-The attach fails if software GRO stays active. A failed attach does
-not restore the GRO request either. The next patch checks all ports
-before any of them is changed, so only a failure at run time, for
-example a driver that cannot turn GRO off or the upper device nesting
-limit (-EMLINK), leaves a port with its GRO request dropped.
-GSO skbs can still arrive, for example from a stacked member whose
-lower device runs GRO; a later patch segments them.
+Interlink RX forwards to the slaves with the same lock held. A chain of
+two devices does not deadlock, but such a port makes no sense: an HSR
+ring and the two PRP LANs are attached to the node directly.
 
-Fixes: 5055cccfc2d1 ("net: hsr: Provide RedBox support (HSR-SAN)")
+Refuse bridge and OVS masters and bond and team masters (also without
+ports, since ports can be added later) as slave or interlink, and a
+macvlan or MACsec device when an HSR/PRP, bridge, bond or team master
+is below it; on an ordinary NIC or veth such a device stays valid. This
+also refuses one on a DSA user port whose conduit is a bond or team,
+since it can gain ports later too. A macvlan takes its GRO setting
+from its lower device, so it is accepted only if GRO is off there when
+it is attached. The lower devices of other ports are not checked,
+because a DSA user port is an upper of its conduit and can offload HSR.
+VLAN devices are already refused. The check runs at attach; later
+changes below a stacked device are not rechecked. Not covered are a
+tunnel whose route leads back through the HSR master, a tc or BPF
+redirect to it, other stacked devices, and a software device without
+an identifying flag such as batman-adv. Narrowing seqnr_lock, planned
+for net-next, addresses that class as a whole.
+
+Also refuse a device whose RX handler is in use or not supported
+(IFF_NO_RX_HANDLER: ipvlan, VRF), or that already has a master, such as
+a VRF port, with an extack message and the same error codes. All ports
+are checked before any of them is changed. Some of these devices, such
+as a macvlan lower, ipvlan or VRF, used to fail only in
+netdev_rx_handler_register(), after the previous patch had dropped
+their GRO request; a refused device now keeps its state, and so do the
+ports given with it.
+
+A bridge can no longer be used directly as the interlink; connect it
+through a veth pair.
+
+Reported-by: syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=fbf74291c3b7e753b481
+Fixes: 06afd2c31d33 ("hsr: Synchronize sending frames to have always incremented outgoing seq nr.")
+Fixes: 430d67bdcb04 ("net: hsr: Use the seqnr lock for frames received via interlink port.")
 Signed-off-by: Xin Xie <xiexinet@gmail.com>
 ---
- .../networking/net_cachelines/net_device.rst  |  1 +
- include/linux/netdevice.h                     |  8 +++
- net/core/dev.c                                | 15 ++++++
- net/hsr/hsr_slave.c                           | 54 +++++++++++++++++++
- 4 files changed, 78 insertions(+)
+ net/hsr/hsr_device.c |  7 ++++
+ net/hsr/hsr_slave.c  | 79 ++++++++++++++++++++++++++++++++++++++++++--
+ net/hsr/hsr_slave.h  |  2 ++
+ 3 files changed, 86 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Documentation/networking/net_cachelines/net_device.rst
-index 8eceaa80b686..0d87e4d92a58 100644
---- a/Documentation/networking/net_cachelines/net_device.rst
-+++ b/Documentation/networking/net_cachelines/net_device.rst
-@@ -169,6 +169,7 @@ unsigned_long:1                     see_all_hwtstamp_requests
- unsigned_long:1                     change_proto_down
- unsigned_long:1                     netns_immutable
- unsigned_long:1                     fcoe_mtu
-+unsigned_long:1                     hsr_port
- struct list_head                    net_notifier_list
- struct macsec_ops*                  macsec_ops
- struct udp_tunnel_nic_info*         udp_tunnel_nic_info
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 435be7880d7e..0d13c7ecdd1f 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -2110,6 +2110,7 @@ enum netdev_reg_state {
-  *	@change_proto_down: device supports setting carrier via IFLA_PROTO_DOWN
-  *	@netns_immutable: interface can't change network namespaces
-  *	@fcoe_mtu:	device supports maximum FCoE MTU, 2158 bytes
-+ *	@hsr_port:	direct HSR/PRP member (slave A/B or interlink)
-  *
-  *	@net_notifier_list:	List of per-net netdev notifier block
-  *				that follow this device when it is moved
-@@ -2531,6 +2532,13 @@ struct net_device {
- 	unsigned long		change_proto_down:1;
- 	unsigned long		netns_immutable:1;
- 	unsigned long		fcoe_mtu:1;
-+	/* Direct HSR/PRP member: slave A/B or interlink. While set,
-+	 * software GRO and configurable GRO_HW are dropped from the
-+	 * request and before ndo_fix_features(); GRO_HW that the driver
-+	 * keeps on is left alone. Kernel role state only; no user ABI or
-+	 * offload capability.
+diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+index fc512204600c..90ee55eb3c19 100644
+--- a/net/hsr/hsr_device.c
++++ b/net/hsr/hsr_device.c
+@@ -758,6 +758,13 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+ 	INIT_LIST_HEAD(&hsr->proxy_node_db);
+ 	spin_lock_init(&hsr->list_lock);
+ 
++	/* Refuse a bad port before any port is changed. The same checks
++	 * in hsr_add_port() remain as a safety net.
 +	 */
-+	unsigned long		hsr_port:1;
- 
- 	struct list_head	net_notifier_list;
- 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index df1a840b0334..c8c2de212556 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -11269,6 +11269,21 @@ int __netdev_update_features(struct net_device *dev)
- 
- 	features = netdev_get_wanted_features(dev);
- 
-+	/* A direct HSR/PRP port needs per-frame metadata. Drop software
-+	 * GRO and configurable GRO_HW from the request as well as from the
-+	 * features passed to ndo_fix_features(), as the core does for
-+	 * upper-disabled features: drivers such as veth derive state from
-+	 * wanted_features and need the requested and the active bit to
-+	 * agree. Fixed-on or driver-required GRO_HW is left to the driver.
-+	 */
-+	if (dev->hsr_port) {
-+		netdev_features_t gro = NETIF_F_GRO |
-+					(dev->hw_features & NETIF_F_GRO_HW);
++	res = hsr_check_ports(slave, interlink, extack);
++	if (res)
++		return res;
 +
-+		dev->wanted_features &= ~gro;
-+		features &= ~gro;
-+	}
-+
- 	if (dev->netdev_ops->ndo_fix_features)
- 		features = dev->netdev_ops->ndo_fix_features(dev, features);
+ 	eth_hw_addr_set(hsr_dev, slave[0]->dev_addr);
  
+ 	/* initialize protocol specific functions */
 diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
-index a546f70f9cc8..b7765a4bb992 100644
+index b7765a4bb992..666220b24dee 100644
 --- a/net/hsr/hsr_slave.c
 +++ b/net/hsr/hsr_slave.c
-@@ -11,6 +11,7 @@
+@@ -10,6 +10,7 @@
+ #include "hsr_slave.h"
  #include <linux/etherdevice.h>
  #include <linux/if_arp.h>
++#include <linux/if_macvlan.h>
  #include <linux/if_vlan.h>
-+#include <net/netdev_lock.h>
+ #include <net/netdev_lock.h>
  #include "hsr_main.h"
- #include "hsr_device.h"
- #include "hsr_forward.h"
-@@ -137,6 +138,37 @@ static int hsr_check_dev_ok(struct net_device *dev,
+@@ -97,6 +98,16 @@ bool hsr_port_exists(const struct net_device *dev)
+ 	return rcu_access_pointer(dev->rx_handler) == hsr_handle_frame;
+ }
+ 
++/* A lower device that forwards into other ports or into a second
++ * HSR/PRP device; called under RTNL by the lower-device walk.
++ */
++static int hsr_lower_forwards(struct net_device *lower,
++			      struct netdev_nested_priv *priv)
++{
++	return is_hsr_master(lower) || netif_is_any_bridge_master(lower) ||
++	       netif_is_lag_master(lower);
++}
++
+ static int hsr_check_dev_ok(struct net_device *dev,
+ 			    struct netlink_ext_ack *extack)
+ {
+@@ -120,6 +131,27 @@ static int hsr_check_dev_ok(struct net_device *dev,
+ 		return -EINVAL;
+ 	}
+ 
++	/* The RX handler is taken by devices such as bridge/bond/team
++	 * ports, macvlan and ipvlan lowers and HSR ports, or unsupported
++	 * (IFF_NO_RX_HANDLER). Refuse before any state change, so a
++	 * failed attach leaves the device as it was.
++	 */
++	if (dev->priv_flags & IFF_NO_RX_HANDLER) {
++		NL_SET_ERR_MSG_MOD(extack,
++				   "This device does not support an RX handler.");
++		return -EINVAL;
++	}
++	if (netdev_is_rx_handler_busy(dev)) {
++		NL_SET_ERR_MSG_MOD(extack,
++				   "RX handler busy: device is already a lower of another device.");
++		return -EBUSY;
++	}
++	/* A master without an RX handler on its ports, such as VRF. */
++	if (netdev_master_upper_dev_get(dev)) {
++		NL_SET_ERR_MSG_MOD(extack, "Device already has a master.");
++		return -EBUSY;
++	}
++
+ 	if (is_vlan_dev(dev)) {
+ 		NL_SET_ERR_MSG_MOD(extack, "HSR on top of VLAN is not yet supported in this driver.");
+ 		return -EINVAL;
+@@ -131,13 +163,56 @@ static int hsr_check_dev_ok(struct net_device *dev,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+-	/* HSR over bonded devices has not been tested, but I'm not sure it
+-	 * won't work...
++	/* Forwarding devices feed HSR frames into another device's
++	 * transmit path and can nest seqnr_lock through a second HSR
++	 * device. A bridge, bond, team or OVS master makes no sense as a
++	 * ring or LAN port and is refused by type. A macvlan or MACsec
++	 * device is refused if such a master or an HSR/PRP master is
++	 * below it. Other devices keep their lower devices unchecked:
++	 * DSA user ports are uppers of their conduit.
++	 */
++	if (netif_is_any_bridge_master(dev) || netif_is_lag_master(dev)) {
++		NL_SET_ERR_MSG_MOD(extack,
++				   "Cannot use a bridge, bond, team or OVS master as HSR port.");
++		return -EINVAL;
++	}
++	if ((netif_is_macvlan(dev) || netif_is_macsec(dev)) &&
++	    netdev_walk_all_lower_dev(dev, hsr_lower_forwards, NULL)) {
++		NL_SET_ERR_MSG_MOD(extack,
++				   "Cannot use a macvlan or MACsec device stacked on an HSR, bridge, bond, team or OVS master as HSR port.");
++		return -EINVAL;
++	}
++	/* A macvlan takes its GRO setting from the lower device, so the
++	 * member role cannot turn it off. Refuse at attach, before any
++	 * state change, if the lower device runs GRO; it can still turn
++	 * GRO on later.
+ 	 */
++	if (netif_is_macvlan(dev) &&
++	    (macvlan_dev_real_dev(dev)->features & NETIF_F_GRO)) {
++		NL_SET_ERR_MSG_MOD(extack,
++				   "macvlan inherits GRO from its lower device; turn GRO off on the lower device.");
++		return -EBUSY;
++	}
+ 
  	return 0;
  }
  
-+/* Member role and feature policy.
-+ * Setting the role makes __netdev_update_features() clear GRO
-+ * and configurable GRO_HW from the request and before
-+ * ndo_fix_features(). A macvlan follows GRO on its lower device,
-+ * which can turn it back on later. Only the role and feature
-+ * update run under the device ops lock; unlink, promiscuous
-+ * updates and the master recompute stay outside.
++/* Check every port before any of them is changed, so that a refused
++ * port does not leave an earlier one modified.
 + */
-+static void hsr_portdev_role_set(struct net_device *dev)
++int hsr_check_ports(struct net_device *slave[2], struct net_device *interlink,
++		    struct netlink_ext_ack *extack)
 +{
-+	netdev_lock_ops(dev);
-+	dev->hsr_port = true;
-+	netdev_change_features(dev);
-+	netdev_unlock_ops(dev);
++	int res;
++
++	res = hsr_check_dev_ok(slave[0], extack);
++	if (!res)
++		res = hsr_check_dev_ok(slave[1], extack);
++	if (!res && interlink)
++		res = hsr_check_dev_ok(interlink, extack);
++	return res;
 +}
 +
-+static void hsr_portdev_role_clear(struct net_device *dev)
-+{
-+	netdev_lock_ops(dev);
-+	dev->hsr_port = false;
-+	/* Recompute features without the role. GRO was dropped from
-+	 * the request while the role was set and is not requested
-+	 * again; the user can turn it back on with ethtool. A dying
-+	 * device just drops the role, a netns move stays registered and
-+	 * is recomputed.
-+	 */
-+	if (dev->reg_state == NETREG_REGISTERED)
-+		netdev_change_features(dev);
-+	netdev_unlock_ops(dev);
-+}
-+
- /* Setup device to be added to the HSR bridge. */
- static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
- 			     struct hsr_port *port,
-@@ -169,6 +201,22 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
- 	if (res)
- 		goto fail_upper_dev_link;
+ /* Member role and feature policy.
+  * Setting the role makes __netdev_update_features() clear GRO
+  * and configurable GRO_HW from the request and before
+diff --git a/net/hsr/hsr_slave.h b/net/hsr/hsr_slave.h
+index edc4612bb009..e19c779b500d 100644
+--- a/net/hsr/hsr_slave.h
++++ b/net/hsr/hsr_slave.h
+@@ -14,6 +14,8 @@
+ #include <linux/rtnetlink.h>
+ #include "hsr_main.h"
  
-+	/* Enable the member role and recompute before the RX handler
-+	 * is published, so that software GRO on this device is off
-+	 * before frames can arrive. This covers the direct member
-+	 * only: a stacked member receives from a lower device that
-+	 * may still run GRO and can deliver merged frames as GSO skbs.
-+	 * A still-active software GRO rejects the port, a remaining
-+	 * GRO_HW alone does not.
-+	 */
-+	hsr_portdev_role_set(dev);
-+	if (dev->features & NETIF_F_GRO) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "software GRO still on after feature update, cannot join");
-+		res = -EBUSY;
-+		goto fail_role_policy;
-+	}
-+
- 	res = netdev_rx_handler_register(dev, hsr_handle_frame, port);
- 	if (res)
- 		goto fail_rx_handler;
-@@ -177,7 +225,12 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
- 	return 0;
- 
- fail_rx_handler:
-+fail_role_policy:
-+	/* Rollback order: unlink the upper, clear the role and
-+	 * recompute, then undo this setup's promiscuous increment.
-+	 */
- 	netdev_upper_dev_unlink(dev, hsr_dev);
-+	hsr_portdev_role_clear(dev);
- fail_upper_dev_link:
- 	if (!port->hsr->fwd_offloaded || port->type == HSR_PT_INTERLINK)
- 		dev_set_promiscuity(dev, -1);
-@@ -248,6 +301,7 @@ void hsr_del_port(struct hsr_port *port)
- 		if (port->type == HSR_PT_SLAVE_A || port->type == HSR_PT_SLAVE_B)
- 			vlan_vids_del_by_dev(port->dev, master->dev);
- 		netdev_upper_dev_unlink(port->dev, master->dev);
-+		hsr_portdev_role_clear(port->dev);
- 		if (hsr->prot_version == PRP_V1 &&
- 		    port->type == HSR_PT_SLAVE_B) {
- 			eth_hw_addr_set(port->dev, port->original_macaddress);
++int hsr_check_ports(struct net_device *slave[2], struct net_device *interlink,
++		    struct netlink_ext_ack *extack);
+ int hsr_add_port(struct hsr_priv *hsr, struct net_device *dev,
+ 		 enum hsr_port_type pt, struct netlink_ext_ack *extack);
+ void hsr_del_port(struct hsr_port *port);
 -- 
 2.53.0
 
