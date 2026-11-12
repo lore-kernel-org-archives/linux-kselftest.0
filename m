@@ -1,94 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.100
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794462535;
-	b=DIAVfWn6JgklBnJHFs7hqzDX5EEYvbFY6WmO4rKtJ0jnmCLrh40DtUHzqUnEtc4MQpIh
-	 7NEgRdDOOLAG0Wm+EkzYMvnpr8I6fwlV/+jz+LC3jopksIziXxPe1xFstRdUg5Nnf3RD2
-	 YTvgyKOY8WirS64gBh+osA7uWacl9qbPvqJmrVVFbkR7Kw9hrx667zUu6wqhMGHOYu/Yx
-	 hlMPnWIgE/5y70q9v1iQr7OPj9rrGTkzXctoeKWB3OdoG6PWKQ4d0Qm2y03hwwMOFBDfs
-	 KiLv3F22SVnt2b8dnsrpXitpotiF/jSu+KWJ/D1pqO7K5hfcet0rUZufG1K2z8Nv5Sg==
+	t=1794465660;
+	b=L8Yd4c/ifxMbcHQMML3wxsPHFOJR44wL6v4iZCqFwOagBtgBP/W/AgACEdgViCcSfn6d
+	 vFMdIUcmuwf6JX1I6uzXpYJSciP8sQNubZn7NHa7770r7weBb2Bj8YWy8n5xScGAI6Nw3
+	 Sjcc7rpzgIeSGInZskir5tNi4kWPSQb1RWqpC8hWqig64h5fXV2M364a9uxdC+r/dX8wy
+	 cVTgmTtqrS/EczhbjQzSsenqTgKaz0ZXq+ug1fS6w2kjUvpX7Qky8ohdULdCQW6Qxvnl4
+	 ciDGGAEs9Q7JWg+fMPVBLOhtpSA2+vtV5BTaZcjIPPHN8Jus5+LQUzg5ejs8QkhON+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794462535;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:X-Relaying-Domain:
-	 X-CFilter-Loop:Received:DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:X-DetectorID-Processed:
-	 Content-Type;
-	bh=QTb0j696LcWe+VdV5vEDEAw7Qq8CNB2AohTWxKJSgE0=;
-	b=SglM6TO8NY5IiqhbEXCLsaXcj4aymlo2PR14BTWj3Ylmcdtpp57elotan6L3NT5we9OX
-	 SQ5g+JcFWbtbsqLzSOALZKXEZIML+nc/fC1SiMVcrs9gi+HZ9qWG88hDM69VFaFkuYOfR
-	 RB+Cl4kygRw4pGM7I6CNZAZi2zLkfzNZ1AgbfuLW9a/fn7ZB8VvcsgwD7Zw0qEqXq8Xpd
-	 5LOARvdCN2RxENm5xdV4lGhYfNEw+ntlX/FZlQbwr2dFSt20hSMlOkaeBHg/5ESrYNl39
-	 1rUpcNF1y40pYHEsgbGkLdP2NpGQYUsWZKCVlXpSya7TbiAtwEi2DGQzdwqKiOjmWlQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794465660;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=8vDJ3Ou7xzCxze/52XPwkTIU2JyVZ1LI+BGZWXtekYc=;
+	b=4+XF+IGtykWkeoxR/RwOMqEPRB0yXMMKwEcQ7DdGx3FY5Ud+YyHFKpOa4SbtfXPIAkoi
+	 Adf/HRCqOp6unQ9cJP3y+4A+aP9WpZlHzbv0aHoeN3IA4Zybsp6Fa49u+Hyi5n02SO1Sr
+	 6ncZiSEQngVLQ+f2Jvva9eDDMUjHM1lZGSwow5Yz9S/cNxg4yW7gdrqacFENhH8yQ98f7
+	 i/yIUMu1TZheRb96BzBlvTq+OEvw6NkiqwU8CSLyCX065G+l43K5wUUbAKyyWh0LcA1f4
+	 GaXmlj2qYT8w9veaXtjh34ugpUIqGbO7zWkUEf0TH/T0+j9//d9nFZ19MenRAMTu0/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=broadcom.com;
-	spf=fail smtp.mailfrom=broadcom.com;
-	dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=azSHAVQ7;
-	arc=none smtp.remote-ip=209.85.216.100
-Received: from mail-pj1-f100.google.com (mail-pj1-f100.google.com [209.85.216.100])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OyPZjAqe;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ZtPfFQBc;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C93B606A324
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 05:48:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C93B606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5F9606A323
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 06:40:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC5F9606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256 header.s=google header.b=azSHAVQ7
-Received: by mail-pj1-f100.google.com with SMTP id 98e67ed59e1d1-3adac5c10e3so2068644a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 21:48:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794462534; x=1795067334;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:dkim-signature:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QTb0j696LcWe+VdV5vEDEAw7Qq8CNB2AohTWxKJSgE0=;
-        b=mb3TRwAL7b9IVkJVQAo6VeTaTT0eR3mZAtQNYmj8hjxEENkz1n4yq4MoAMGdll8RoH
-         wxzJXyckScVMYBChIUSNi4QLoxEQg93pP+YFOqrIXNCjKqhlKJR0zkPsRE3mXgDtJLNo
-         nsvUCspZFvrPxl6t7CPNkKmHK/unCZJwYYSbKndtkt6M0zSB/qDa06usY32VwnB0wGF+
-         CX6uVMduOEgYfDosFwisPn7oOqNUwEVon5Ceg422U5QC87mnkoUlM7bLtZp/RbyFGR13
-         3ZYFPFZEsMOos7/8qyP90Bov56Upe0wjRlEOXhZ9Ji5ilRb0DrUO43mi7uItgq4/zgOv
-         3org==
-X-Forwarded-Encrypted: i=1; AL+hErHLlYH1rMquyukftzLyHcTy1SVUvSoFTXD9gjkH8Y6xUffDAIYTtV62ptyZzxpxFvS1SR28sYIkj80EwE3ZIOg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+hDNgHprQiNReiD5XIreHpZv1m8SunusXvBazZaBFcrFQRPJUk
-	1fgqbMwe4RY3qNMkKhHbkF+Hhr70cUrJ8sqXKUc2fIn0sGUr4tZ998FPRKBs0DJlh8wCvEOMoPn
-	j2+c1yAJlPdxG4ovpCcbF3B5+ijq9RtkTu179ZFzNuJXe1bYpXEiw18Y2GwRNuPyyKH9fZMdsCO
-	06FwWKOh3jX8bIuzI3NCT7Cm+ZJzI6J6KuNYwx8fG4wNNSziyLdWTddzuiw3D5eE9qEH4MAEzoc
-	ccJn5eHWOyy8PeRDhYa
-X-Gm-Gg: AYBFou2AsTCdNIu+kDuyJrw8fN7pBRyZESIAGglvpFAHbuhy6T4oOAe8KHJxy1jW+mB
-	afo6j7mQke0lmZmqH4aafTw7hfGNjl7dzjeaV6OxG2iAkfAEa7eA8+QV6a5yV12oFYmutAjfmU2
-	R4ZVVZMr5FmR+FuXDqn0JshXQmUMH0tPCV129OpHxWwR3qVZYKFqSOqNQ1OzT+6BgJkauRVoBR0
-	sfQGH2nMj2wWJzMkrsSm8IzHXpU9q5OupsQDLMhDl6qYdWJeu0IenzaRqWSTUjHGNHV+0F0HR65
-	b5hnz4p+VkmPJW05MBwRsuPxTYBto0PCELtIcRQgYC1GstrVqI9wd77VWOjwjqrK+ayHnNV7Ut4
-	UMUFzM1YRvSjdUvehVi3I4uMZE5E72ns7gbbd+ssqZ8Kb6v2O2y3UAzDQrMAtRV9KSYgJLKyozm
-	u1DCNhtfDf1ewjJdPhUtLj9QhSUNGxUoEg
-X-Received: by 2002:a17:90b:2f4e:b0:3ac:9176:e82b with SMTP id 98e67ed59e1d1-3b182f42c74mr4372002a91.54.1794462533722;
-        Wed, 11 Nov 2026 21:48:53 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-22.dlp.protect.broadcom.com. [144.49.247.22])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3b181c053cdsm1670610a91.0.2026.11.11.21.48.53
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Nov 2026 21:48:53 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-3ab2f8ce13dso2735391fa.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 21:48:52 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OyPZjAqe;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ZtPfFQBc
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794465658;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8vDJ3Ou7xzCxze/52XPwkTIU2JyVZ1LI+BGZWXtekYc=;
+	b=OyPZjAqeZ4C295wMwuJ91saWYjokVhEHzfEaMFdy3a1GVeo46kGVTjH86hEV3hDoZQvNQS
+	f4MMCSztRPT0yXDBdTZKHOfCj0nEQMiPNuVwRh+LEmhWgmMyC6BH3D13IymFFLXK0tbcVH
+	9xDTCKvMtgvhmRyv+TO9THOEQATIA10=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-359-r67Z1NtWMreeX5VVzL00RQ-1; Thu, 12 Nov 2026 01:40:57 -0500
+X-MC-Unique: r67Z1NtWMreeX5VVzL00RQ-1
+X-Mimecast-MFC-AGG-ID: r67Z1NtWMreeX5VVzL00RQ_1794465656
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-4902ce85f72so3021109f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 22:40:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1794462531; x=1795067331; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1794465656; x=1795070456; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8vDJ3Ou7xzCxze/52XPwkTIU2JyVZ1LI+BGZWXtekYc=;
+        b=ZtPfFQBcpCF6197DbyyHLCxXyaVxz/UY4xcVByKJ74+PW7vqdZZNX1Z1hLEUok9+xZ
+         wnih+IBWhwWc/U1wNZYdnAYhsLDQw78ZsdaFXPNuB+MSXUJN3NhImiCuOBgYXPaIxqFf
+         +LfhmRZW62+yI6InGwr7JNWhZHGgGIuf9DEqZ9doz61ssCiK9+BahMHs8rJn1HNrdcfR
+         CfLuzCANLGo5LiGEW3rE7OitiigUkOAwWpED/2QgA1BAGGs85OqaU6LKhZPjoy2lg8tF
+         XB8cPijK1cS4ZXfcH0iteD8Ccv3CwriOrVvH7sfq6yfW4wTZenmKfQsJ9LMcpTIoZVTV
+         HD8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794465656; x=1795070456;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QTb0j696LcWe+VdV5vEDEAw7Qq8CNB2AohTWxKJSgE0=;
-        b=azSHAVQ70K0S2ug5YbpsBJq5BPnx88h9Phlb/TZEaqeskFQkAv6cM6b0yufQDCkWxD
-         /EgzmFFlhJU3K0KyKLk1srf+jfb0C0aEZaeAXxNXsACqrx6MMlHiKYXSdr2tLdrUNpX9
-         4y91tTGHSg7JJEetenNa08oVHbeqhZzboC8ok=
-X-Forwarded-Encrypted: i=1; AL+hErFyiYMGDg4zktmZg2f0f9P5LpnLZ838jMUk6jz7WKDbmvTUVPwdzqkpw0ZmRoJfklFLEmU6d5CVlPYLAoNR3is=@vger.kernel.org
-X-Received: by 2002:a2e:a98b:0:b0:3ab:1dcd:934c with SMTP id 38308e7fff4ca-3ae1bf10d93mr2744391fa.1.1794462531194;
-        Wed, 11 Nov 2026 21:48:51 -0800 (PST)
-X-Received: by 2002:a2e:a98b:0:b0:3ab:1dcd:934c with SMTP id
- 38308e7fff4ca-3ae1bf10d93mr2744181fa.1.1794462530604; Wed, 11 Nov 2026
- 21:48:50 -0800 (PST)
+        bh=8vDJ3Ou7xzCxze/52XPwkTIU2JyVZ1LI+BGZWXtekYc=;
+        b=IhzEUom3Ix4aeXKVpGhPNI4lec4oItoIgugmH46huGDl96kd/G0GHzIK71VqzbaEB+
+         rCgUy8HMNYMINY9DKUC1IpxJYXMc0Gbys18S16UaAcpgoJJWHPkSJ4Yy45VlDJqm5vmi
+         dOw8U5cavXvcJ4aiQFd5iWzC/o8QJHIU2ILufbtFWbTqDnLeNrVAbpRadc6nmuynzqKp
+         Tys1qDMFI4CQCS4wrTttnRKaXkBBNCddbKlU+YjC/G+a63CeLWIOqHE259kFiAD/KQFq
+         JwuSx3uOE1Y9Cd44rZ0Z1kURDSK8yzAXQsNiBNasHySa8/udNlFc/VXh4ukeRejwbS14
+         OFLw==
+X-Forwarded-Encrypted: i=1; AL+hErE7f06cm5c6UINyiVAtGetHxpRbeNcd9l1smhMKzqL4W4KWTD0V7kG1DfddVoPqV29/yEw1wgnZXiWNkkd/sbs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/YWMr3gSkrf080qNBsssClFjqPnf91dRWUQUGHk71dCJrTUlh6
+	Ko5fsP2g/blvV+tMAknjA4DHoUT9xlPN7uatJtSEue919o/EMWwUgRqEF6v/8kLkWjv5N1SDTOe
+	7f8IzkxIK3SLysGaipscFvy/CwNXql6Vrs0FR0Zd5PILR3hnpQOrAXRXPGvowCGrANf1xgA==
+X-Gm-Gg: AYBFou1tf1cKMMMVGfRTI9OQ7pMjKb/66zy+n7sOoJEEKa3Z/bXM6T55LU2H6S0eWHu
+	zqlSnHn+F8uEDjP1XJushr7CT+ya2CuBeNo9IAIy66YeGSxoZTJkoyF9ARgV1EvqdGdjPr87NdU
+	eOidqufSHijoCtyDp6SaS3I30QHGeh7S/W7e5Vle6y/QNKfLcCEXUwGApkXrR5C5XzQTXdj4YlE
+	BMiHQVKci4XIT0Iw9BC2Zz7w9E7Gl+wCcC+D0gjvjDW9c4eRM4rydKgd4H6JD4bj5DgJHoUM0Gw
+	ssNl0VysUead3Q2uxEK9tCW/Ky8XN0J2vq+mn1bTho6lQFd6cLfYtNKziJV/ZBP0tBjw3FC+2bZ
+	++yoLB5n19+81ju49SVoV6b978rFy73G0bf47u9UTVy7n1SxfJq7ymGPULDE08SC7p9WI3wbzui
+	iKu+Q=
+X-Received: by 2002:a5d:6f16:0:b0:491:6b1b:7f25 with SMTP id ffacd0b85a97d-499c792ec97mr7218185f8f.45.1794465656008;
+        Wed, 11 Nov 2026 22:40:56 -0800 (PST)
+X-Received: by 2002:a5d:6f16:0:b0:491:6b1b:7f25 with SMTP id ffacd0b85a97d-499c792ec97mr7218131f8f.45.1794465655658;
+        Wed, 11 Nov 2026 22:40:55 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49835d2bf91sm15226028f8f.23.2026.11.11.22.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2026 22:40:54 -0800 (PST)
+Date: Thu, 12 Nov 2026 07:40:52 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v5 17/29] sched/deadline: Leave a dying task out of a
+ rebuild of the accounting
+Message-ID: <avVfdI8NRaLN0ZHH@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-18-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -98,211 +128,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794374897.git.zack.rusin@broadcom.com> <90467782be23b83fd3e9a6afe2f1d2149eaf9db9.1794374897.git.zack.rusin@broadcom.com>
- <CALMp9eR2tm=RkNk_cYsYj0SZmcUBTfxpYiqtLbtCE4TJ4H6jzg@mail.gmail.com>
-In-Reply-To: <CALMp9eR2tm=RkNk_cYsYj0SZmcUBTfxpYiqtLbtCE4TJ4H6jzg@mail.gmail.com>
-From: Zack Rusin <zack.rusin@broadcom.com>
-Date: Thu, 12 Nov 2026 00:48:37 -0500
-X-Gm-Features: AclHuK8ZMoRLTwx7GdlQFNy0IhAHQdBDtS2QIwUSLiDD8CGm6dyYo5afDPhKYYI
-Message-ID: <CABQX2QNsMCke2vKuXarXbvVcC2H4FNq2=zNqrq2PO1Hv2cfSDA@mail.gmail.com>
-Subject: Re: [PATCH v3 06/12] KVM: x86: Forward VMware hypercalls to userspace
-To: Jim Mattson <jmattson@google.com>
-Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
-	Doug Covelli <doug.covelli@broadcom.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
-	Shuah Khan <shuah@kernel.org>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>, Xin Li <xin@zytor.com>, 
-	Francesco Lavra <flavra@baylibre.com>, =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>, 
-	Liran Alon <liran.alon@oracle.com>, Arbel Moshe <arbel.moshe@oracle.com>, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c3280306600ddd64"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261108185406.1549770-18-mathieu.desnoyers@efficios.com>
 
---000000000000c3280306600ddd64
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-On Wed, Nov 11, 2026 at 7:29=E2=80=AFPM Jim Mattson <jmattson@google.com> w=
-rote:
->
-> On Tue, Nov 10, 2026 at 10:05=E2=80=AFPM Zack Rusin <zack.rusin@broadcom.=
-com> wrote:
-> >
-> > Add KVM_VMWARE_ENABLE_HYPERCALL.  When it is enabled, exit to userspace
-> > with KVM_EXIT_VMWARE when an L1 vCPU executes VMCALL or VMMCALL with
-> > VMware's magic value in EAX, and let userspace complete the call by
-> > updating the guest's registers or by having KVM inject #UD, #GP or #PF.
-> >
-> > VMware guests reach the hypervisor through the "backdoor": either the
-> > I/O-port interface that KVM already emulates or, on newer guests,
-> > VMCALL or VMMCALL, with the same commands and register conventions.
-> > VMware's userspace implements the roughly one hundred commands, and
-> > reviewing the command list on the mailing list found none that needs
-> > to be handled in KVM (see the Links), so leave them in userspace.
-> >
-> > Only claim calls that carry the magic value, so that the same VM can
-> > still use Xen, Hyper-V or KVM hypercalls.  Never claim a call from L2:
-> > the only L2 hypercall that L0 handles itself is Hyper-V's L2 TLB flush,
-> > which doesn't use RAX as an input.
-> >
-> > Pass operands and results through KVM_SYNC_X86_REGS instead of defining
-> > a second register ABI; KVM_EXIT_HYPERCALL returns a single value in
-> > RAX, while backdoor commands use RAX through RBP.  Report the CPL and
-> > leave the privilege policy to userspace, as VMware Tools call the
-> > backdoor from user mode.  Instead of completing the call, userspace can
-> > have KVM inject a validated #UD, #GP or #PF at the hypercall, and may
-> > update the registers as well to keep the partial progress of a
-> > high-bandwidth transfer.
-> >
-> > Don't forward hypercalls of vCPUs whose state is protected, as KVM
-> > can't access their registers: reject the flag for VMs with protected
-> > state, omit it from their VM-scoped KVM_CHECK_EXTENSION result, and
-> > ignore it once a vCPU of a VM set up with the legacy KVM_SEV_ES_INIT
-> > becomes protected.
-> >
-> > Link: https://lore.kernel.org/r/c60b32a3-e699-4a8c-8d52-09b34c4d5269@re=
-dhat.com
-> > Link: https://lore.kernel.org/r/CADH9ctD1uf_yBA3NXNQu7TJa_TPhLRN=3D0YZ3=
-j2gGhgmaFRdCFg@mail.gmail.com
-> > Link: https://lore.kernel.org/r/CADH9ctBivnvP1tNcatLKzd8EDz8Oo6X65660j8=
-ccxYzk3aFzCA@mail.gmail.com
-> > Link: https://lore.kernel.org/r/aIEmawm9gLflg8zt@google.com
-> > Signed-off-by: Zack Rusin <zack.rusin@broadcom.com>
-> > ---
->
-> [ ... ]
->
-> > +static int complete_vmware_hypercall_exit(struct kvm_vcpu *vcpu)
-> > +{
-> > +       struct kvm_vmware_exit *vmware =3D &vcpu->run->vmware;
-> > +       u32 pad1 =3D READ_ONCE(vmware->pad1);
-> > +       u32 inject =3D READ_ONCE(vmware->hcall.exception.inject);
-> > +       u32 pad2 =3D READ_ONCE(vmware->hcall.exception.pad2);
-> > +       u32 vector =3D READ_ONCE(vmware->hcall.exception.vector);
-> > +       u32 error_code =3D READ_ONCE(vmware->hcall.exception.error_code=
-);
-> > +       u64 address =3D READ_ONCE(vmware->hcall.exception.address);
-> > +
-> > +       if (pad1 || pad2 || inject > 1)
-> > +               return -EINVAL;
-> > +
->
-> Should this check kvm_is_linear_rip(vcpu, vcpu->arch.cui_linear_rip),
-> like the fast PIO completions do?
+On 08/11/26 13:53, Mathieu Desnoyers wrote:
+> A rebuild of the root domains' accounting takes the pi_lock of each
+> deadline task, not its rq lock. A dying task past its 0-lag time
+> releases its bandwidth at its last schedule. It holds its rq lock there,
+> not its pi_lock. Then it clears dl_bw. The rebuild can find the task
+> between the two steps.
+> 
+> In this diagram, T is a deadline task that exits on CPU 0 past its 0-lag
+> time. bw is its dl_bw. CPU 1 rebuilds the accounting:
+> 
+>   CPU 0 (T)                                  CPU 1 (rebuild)
+> 
+>   do_task_dead(): TASK_DEAD, under pi_lock
+>   __schedule(): T's rq lock taken
+>     task_non_contending(T)
+>       dl_task_release_bw(T)
+>         total_bw -= bw
+>         dl_bw_gen recorded
+>         record cleared
+>                                              dl_rebuild_rd_accounting()
+>                                                dl_clear_root_domains()
+>                                                  dl_bw_gen++
+>                                                  total_bw reset
+>                                                dl_add_task_root_domain(T)
+>                                                  T's pi_lock taken
+>                                                  dl_bw != 0, dl_bw_gen old
+>                                                  total_bw += bw
+>       __dl_clear_params(T): dl_bw = 0
+> 
+> dl_bw_gen does not help, since the release came before the rebuild. The
+> rebuild would count a bandwidth that nothing releases again. The root
+> domain would then refuse deadline tasks it has room for, until the next
+> rebuild.
+> 
+> Fix this with the record of the bandwidth, dl_bw_cpu. The release
+> clears it under dl_departed_lock, which the walk holds. So leave out a
+> dead task with no record. A dead task with a record has not reached its
+> last schedule. The walk counts it as a live task. That schedule then
+> releases the bandwidth, or puts the task on the departed list. A dead
+> task on the departed list keeps its bandwidth until its timer, and the
+> rebuild counts it as before.
+> 
+> The Sashiko AI review of v2 of this series found this window. Its review
+> of v4 found a gap in the first version of this fix. That version also
+> left out a task between TASK_DEAD and its last schedule, with its 0-lag
+> time ahead.
+> 
+> Fixes: f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
 
-Yes, I think it should. It seems Xen has the same check. Thank you for
-spotting this!
+It's kind of minor, but I'm not sure the above Fixes is right. This
+patch alone can't be applied to fix the referenced commit, it needs the
+(at least 2?) preceeding patches.
 
-I'll fix it in the next version alongside the issues sashiko found
-(most of them valid). afaict one thing that this fix doesn't cover is
-if userspace swaps in different vcpu state that happens to have the
-same linear RIP. That's a preexisting blind spot though.
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
 
-z
+Other than that,
 
---000000000000c3280306600ddd64
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
 
-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
-6U6qgI8F5eiKsQyE0HgYrQJx/sDs9LLVZlaNiA3U8M8CgEnb8VhuH3BN/yXphhEQdJXb1TyaJA60
-SmHcZdEQZbl4EjwUcs3UIowmI/Mhi7ADQB7VNsO/BaOVBEQk53xH+4djY/cg7jvqTTeliY05j2Yx
-uwwXcDC4mWjGzxAT5DVqC8fKQvon1uc2heorHb555+sLdwYxAgMBAAGjggHYMIIB1DAOBgNVHQ8B
-Af8EBAMCBaAwgZMGCCsGAQUFBwEBBIGGMIGDMEYGCCsGAQUFBzAChjpodHRwOi8vc2VjdXJlLmds
-b2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3I2c21pbWVjYTIwMjMuY3J0MDkGCCsGAQUFBzABhi1o
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3I2c21pbWVjYTIwMjMwZQYDVR0gBF4wXDAJ
-BgdngQwBBQMBMAsGCSsGAQQBoDIBKDBCBgorBgEEAaAyCgMCMDQwMgYIKwYBBQUHAgEWJmh0dHBz
-Oi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwQQYDVR0fBDowODA2
-oDSgMoYwaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3I2c21pbWVjYTIwMjMuY3JsMCIG
-A1UdEQQbMBmBF3phY2sucnVzaW5AYnJvYWRjb20uY29tMBMGA1UdJQQMMAoGCCsGAQUFBwMEMB8G
-A1UdIwQYMBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1UdDgQWBBQNDn2m/OLuDx9YjEqPLCDB
-s/VKNTANBgkqhkiG9w0BAQsFAAOCAgEAF463syOLTQkWZmEyyR60W1sM3J1cbnMRrBFUBt3S2NTY
-SJ2NAvkTAxbPoOhK6IQdaTyrWi8xdg2tftr5FC1bOSUdxudY6dipq2txe7mEoUE6VlpJid/56Mo4
-QJRb6YiykQeIfoJiYMKsyuXWsTB1rhQxlxfnaFxi8Xy3+xKAeX68DcsHG3ZU0h1beBURA44tXcz6
-fFDNPQ2k6rWDFz+XNN2YOPqfse2wEm3DXpqNT79ycU7Uva7e51b8XdbmJ6XVzUFmWzhjXy5hvV8z
-iF+DvP+KT1/bjO6aNL2/3PWiy1u6xjnWvobHuAYVrXxQ5wzk8aPOnED9Q8pt2nqk/UIzw2f67Cn9
-3CxrVqXUKm93J+rupyKVTGgKO9T1ODVPo665aIbM72RxSI9Wsofatm2fo8DWOkrfs29pYfy6eECl
-91qfFMl+IzIVfDgIrEX6gSngJ2ZLaG6L+/iNrUxHxxsaUmyDwBbTfjYwr10H6NKES3JaxVRslnpF
-06HTTciJNx2wowbYF1c+BFY4r/19LHygijIVa+hZEgNuMrVLyAamaAKZ1AWxTdv8Q/eeNN3Myq61
-b1ykTSPCXjBq/03CMF/wT1wly16jYjLDXZ6II/HYyJt34QeqnBENU9zXTc9RopqcuHD2g+ROT7lI
-VLi5ffzC8rVliltTltbYPc7F0lAvGKAxggJXMIICUwIBATBiMFIxCzAJBgNVBAYTAkJFMRkwFwYD
-VQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBD
-QSAyMDIzAgxhPxw+eieHWB40hPkwDQYJYIZIAWUDBAIBBQCggccwLwYJKoZIhvcNAQkEMSIEIHh2
-ojIoVc+3rn2irljZv3qzzE3vW23R3iHaCmMN+AQSMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEw
-HAYJKoZIhvcNAQkFMQ8XDTI2MTExMjA1NDg1MVowXAYJKoZIhvcNAQkPMU8wTTALBglghkgBZQME
-ASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQcwCwYJ
-YIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAA6K3wUCPVcdX/KTXHg0WvMYuBl83T1MRwsPq4Fg
-TtIJamnHoRyG9hIrpfGcBkNDYNhKCU6IlIfP+NCiHctqFspBnCk+A8Fcqz6xaFAg1aGPMu5IhCgm
-/dOzGq9QUJ6v/aVCF0PNK0JRB0CEKew6aDAnZkKw6t9g3hZ0jkmU9uVQxKfXwW6njrvWd8ow3dEy
-lZsMQ2WosgYdHOdrIRglt260kTCzTIvO0L3MFTIxsS1N5iD2fCSGJ5Wx7O1G4JNy98uWRgqyFVel
-z111ia6n47Y5NVkrA1MfW+KR0lk9dds1z0CAyc0XaAA5ta22UJXamPo0B+xFUrsa3EQKzIHOVLQ=
---000000000000c3280306600ddd64--
+Thanks,
+Juri
+
