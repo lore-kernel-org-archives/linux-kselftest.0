@@ -1,79 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794511488;
-	b=eFCOz2KmuaRPdQ5L8lsCLcKw350MC8zKUlqqHQ1CA/bxlkTv29VyobMQJYfy5G8h8bEt
-	 llvI2FgNk8V6uGs6n9awS3xEYrXIWqTNefxblmumlq8KFd1Xx0jBhHEP3hGQKYOR3VCIe
-	 7MkXxfnkjPsqPg2hgSOgBaBZko5+BNpm9wWhoj2MXFvzlHv7VZZ/B7163SCiSEHPqz5a2
-	 qvzTcLNSfmoiq6HlQPtjgzaDd5/fj+iQRZaBnH9UEzMZDTZRPiZh9FLAh9SbqHw8n/JeY
-	 VM4WURvZ726cEcLO9sUSCWBf6rIlZNsIiAKh+jopXnCqPu6tWuHAhI9sRz2k53TCVzw==
+	t=1794511952;
+	b=urvjArM0SXo1gtuJ7ywGKXyh4V+khf5vrOcbplSxtqaUPkLw8gEexYeE//rYyrU+mBbE
+	 8uOr0cBaj4XzhWMfPpXG+RwUOWfXG+H0DlF4toF/nACqI+qLkxGqxG0cQ56YY8tcwumEp
+	 nvSJ8BKZSrHHVoHArQmN3HcLMS++kOoPBeYaoKHIvvPMwlV1pLuqv8eoFGhrnWinbg6hN
+	 7xZFjsBu2r/qKvqbzjFkGY8Op/R+O1bhhsGEk56Sb3VtXPaHdetzpZUGkFwIeiSW/2yyE
+	 kAg4NoflYYMPNvmT2JHsLhz8bxHysSstKN88/7IUYoWF7U+idCZIsVDsQIksm+B9p+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794511488;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=aXPVbybfZ2K+Jl8YN0tgOP5dffw3F3RWQsmOOU3BV0M=;
-	b=vZs43VIuxFgvSR3qP8NuFme509qAStuYY4SUW/6etDm8kgIjKeR79hRQ8QLyo2ic+Dxz
-	 H971pe5CFrBq9/07a+oPcV7MQrXSL4cUuY09GQ1gj8goN7aktBYCbM0vij2Ow5XQ4l/fZ
-	 jAA9Bp0er+NQw2JfXYgYblm62Ygr1eqGRkGZRnsaQZY+xiaEkVmnHgVwdaOPgmpBJuJ41
-	 jlljermR/2YlVr7jMl+WvIpyEYrxJCVtkqDd71PDaix8JqpyRFczdJBwaM1mXn5E8KdWV
-	 ti+W05A43Cqgx6SjTZmv4HTACV+7izHo6eFpRovpUFRbYwU4ReYrlDNz3v4zlmPM4Gw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794511952;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
+	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=PY286/snnbEF5QyixUAEHWZvLTqyb1OkbulZ3V9rDhA=;
+	b=kbkfbgR8kWzZS4uTeAvdVhdAKulF+Un3Pl1XEV4sy7dxY3x1jFx5KlWdQZS3guJp7+ZK
+	 hO7plc7Rrh6YtiJamNSUxJ5JvQdh3CeT4mwnBLfn5zi87eZu9VxjVVTTo/W0TYcgmHZHl
+	 9nlEhCdPFYttfTetSiarUcrMy2Fmr6fSGgj4NLTGeLrBK8bimXBGluyEBbNvwc7il+UC0
+	 G4dEmhof5usuiYiJHeu6J17zArPSl4slEoeO5V0q9KGutTYrfASiQNB3mEcJAYxHrGOp8
+	 8x4SjFwnNR94y2GvHgu9wUKbY8wNnhv7arzK1uRk/EjJ/+s7yksWrJ3pwplwxafEEig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=jxKoqo0Z;
-	arc=none smtp.remote-ip=67.231.145.42
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=h72fjJkI;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F710606A33B;
-	Thu, 12 Nov 2026 19:24:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F710606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEFB606A31C;
+	Thu, 12 Nov 2026 19:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=jxKoqo0Z
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ACFaiA53764456;
-	Thu, 12 Nov 2026 11:24:43 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=aXPVbybfZ2K+Jl8YN0tgOP5dffw3F3RWQsmOO
-	U3BV0M=; b=jxKoqo0ZPU8H3xAKbxC4ODm89oLq2j8Fpy4wUxpsHfX5hSJ6+dOI7
-	XoifY5W237W5Ws0VCKm6Bv6TeLe9sIO1epGqobDyQeXb094JI0X+aVKwJolKNmfO
-	mLKvJ5Ja/TrE7BV46gbVQc5xiee7rWlZJti5Cgu1q/dPgRiTQuAwvmL+UCCHMYZy
-	zZlwIX6g3rxNLA8B+zWx/qcppz5QLAtK2UqSCdggFV+IZ6+ydBmYnlwRzmuNXg/q
-	dgMWkejXVBagDp6UlHGin0/v9APiqU7r44O/sp2BG8fTxyI2uyKM15nyTP/pwsVV
-	eiRi9Uwe/4nvUrr/UiF8tNdAza/IXJ4FQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hw101y32s-14
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 12 Nov 2026 11:24:43 -0800 (PST)
-Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 12 Nov
- 2026 19:24:33 +0000
-From: Todd Freed <toddfreed@meta.com>
-To: <netdev@vger.kernel.org>, <toddfreed@meta.com>
-CC: David Ahern <dsahern@kernel.org>,
-        Stephen Hemminger
-	<stephen@networkplumber.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko
-	<jiri@resnulli.us>,
-        Daniel Zahka <daniel.zahka@gmail.com>,
-        Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH iproute2-next v2 3/3] tc: flower: add matches psp_spi, psp_ver and psp_dev
-Date: Thu, 12 Nov 2026 11:24:26 -0800
-Message-ID: <20261112192426.397604-4-toddfreed@meta.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261112192426.397604-1-toddfreed@meta.com>
-References: <20261112192426.397604-1-toddfreed@meta.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=h72fjJkI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F421F000C4;
+	Thu, 12 Nov 2026 19:32:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1794511952;
+	bh=PY286/snnbEF5QyixUAEHWZvLTqyb1OkbulZ3V9rDhA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=h72fjJkIt+Va71O69daZ2arnUrd8jTdiBVApIAer0TGjgBuC0c3GWO2JIn7yxg1E/
+	 soIzM0uy+i9p10EcjDxQk0LUSWGF+I6AmwdRErIL/d631Pe3mbD39m2difcanToBX3
+	 d7apj2AGagrXKdki612FGoiOc60Vs8V3QXoY9gAM=
+Date: Thu, 12 Nov 2026 11:32:31 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Xionggui Chen <evers_chen@163.com>
+Cc: David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ chenxionggui@lanxincomputing.com
+Subject: Re: [PATCH] selftests/mm: Handle implicit read permissions in
+ madv_populate
+Message-Id: <20261112113231.ce39807d300f102e6763a87b@linux-foundation.org>
+In-Reply-To: <20261112031811.56500-1-evers_chen@163.com>
+References: <20261112031811.56500-1-evers_chen@163.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -82,204 +58,183 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEyMDA3NyBTYWx0ZWRfXxw4zXV4dnoeI
- Yo7HVo5+lobFtSZSuGOrIterWQ3ikL/2jVIGDVgSnAbG1ltN3EfuvfYMibnXkXHKi9cM74M7h0k
- QWpxJzZ05WTyVO0TFRZwXnWZgz3YLk0=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEyMDA3NyBTYWx0ZWRfX+DuTJ4j01l1N
- Mwu/R78O6Np0roBx9nXDindxZc4EmfhQjMkMWcomndjct1ZG7j7zKjjC0Og/GNSERx7Ka+35U+x
- +0bxGuRzmvWFgwc+I1fH1jCER3vIgJQ438QjNWC9T5DrKeaa8pvuGBGgZ+k4QaU6F8bYFH9hiW3
- UesJTdvZ3eq9Ob5T5bKpIcnRHNGsuIeDw30QJDIQuA7PfIT91O+CyhUKuWv7Iy5lWBtDJuzRsga
- PseESvZIrQU2TajUkUWG+5cCpfCYB5xXG9ztjWQ/KSYRU1UIRN6lLHPkBf3ce+4rLmY7wUuK+0X
- RRjvgPBiegL1F0KmMSrM569WV8cq9msWCouxtWzkgrCQyGjYh+ds4Xw3JjWvRI2aC5yCN/AqrCz
- l5Cs1OErL9QogtQLqR0oKYzoM/RPbGXeSh/QCfFhOD6KrGVz8G9pO8O94qkkCtwt4qwdnhUxXvQ
- zqTSeV/dkIweK/ct9yw==
-X-Proofpoint-ORIG-GUID: MeGFn39qO6vC3mE--yPzPGPhoC83qKt2
-X-Authority-Analysis: v=2.4 cv=HaaB3SE8 c=1 sm=1 tr=0 ts=6af6127b cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=tpM8CJlwf7uhpglF1g9U:22 a=VabnemYjAAAA:8 a=l9_kp1f6lo_aXq9mhy8A:9
- a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-GUID: MeGFn39qO6vC3mE--yPzPGPhoC83qKt2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-12_02,2026-11-11_03,2025-10-01_01
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Match on the PSP Rx state of a packet the device decrypted: the SPI it
-was decrypted with (psp_spi, with an optional mask), the PSP version
-(psp_ver), and the ID of the PSP device which decrypted it (psp_dev).
+On Thu, 12 Nov 2026 03:18:11 +0000 Xionggui Chen <evers_chen@163.com> wrote:
 
-For example, to take the packets decrypted with one Rx SPI, from
-rx-spi-alloc, and remove their PSP state:
+> The madv_populate selftest assumes that a mapping created with
+> PROT_WRITE cannot be read, and expects MADV_POPULATE_READ to fail
+> with EINVAL.
+> 
+> However, some architectures, including RISC-V, may implicitly grant
+> read permission to PROT_WRITE mappings. On such architectures,
+> MADV_POPULATE_READ succeeds, causing the test to fail incorrectly.
+> 
+> Check the actual VMA permissions through /proc/self/maps and adjust
+> the expected result accordingly.
+> 
+> Add a PROT_NONE test to verify that MADV_POPULATE_READ still fails
+> with EINVAL for mappings without read permission.
+> 
+> On RISC-V with Linux 7.2.0, the original test fails 1 out of 16
+> tests, while the updated test passes all 17 tests.
 
-  tc filter add dev eth0 ingress protocol ipv6 flower
-      psp_spi 0x80000001 psp_ver 0 psp_dev 1
-      action psp decap
+Code looks good, thanks.
 
-These keys only match decrypted packets, even with a zero mask, so
-"psp_spi 0/0" matches any decrypted PSP packet.
+The changelog is a little imprecise.  
 
-psp_spi and its mask are hexadecimal, like spi. tc-flower(8) documents
-the keys.
+"some architectures" is too broad - this is purely riscv.
 
-Signed-off-by: Todd Freed <toddfreed@meta.com>
+The wording suggests that a readable hardware PTE alone determines the
+result.  riscv can have readable writable PTEs without setting VM_READ,
+and this test still expects EINVAL on those systems.  
+
+
+I altered the second paragraph, please review.
+
+
+From: Xionggui Chen <chenxionggui@lanxincomputing.com>
+Subject: selftests/mm: handle implicit read permissions in madv_populate
+Date: Thu, 12 Nov 2026 03:18:11 +0000
+
+The madv_populate selftest assumes that mmap(PROT_WRITE) creates a VMA
+without VM_READ and expects MADV_POPULATE_READ to fail with EINVAL.
+
+On RISC-V, commit 6c7559f22b6f ("riscv/mm: ensure PROT_WRITE leads to
+VM_READ | VM_WRITE") makes the kernel set VM_READ for mappings requested
+with PROT_WRITE.  MADV_POPULATE_READ checks this VMA permission, so it
+succeeds and the test fails incorrectly.  Whether the hardware can read a
+writable PTE does not, by itself, determine the madvise() result.
+
+Check the VMA permissions through /proc/self/maps and adjust the expected
+result accordingly.
+
+Add a PROT_NONE test to verify that MADV_POPULATE_READ still fails with
+EINVAL for mappings without read permission.
+
+On RISC-V with Linux 7.2.0, the original test fails 1 out of 16 tests,
+while the updated test passes all 17 tests.
+
+Link: https://lore.kernel.org/20261112031811.56500-1-evers_chen@163.com
+Signed-off-by: Xionggui Chen <chenxionggui@lanxincomputing.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>
 ---
- man/man8/tc-flower.8 | 29 ++++++++++++++++++
- tc/f_flower.c        | 71 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 100 insertions(+)
 
-diff --git a/man/man8/tc-flower.8 b/man/man8/tc-flower.8
-index 3f8ba4656ef4..88881671c693 100644
---- a/man/man8/tc-flower.8
-+++ b/man/man8/tc-flower.8
-@@ -56,6 +56,12 @@ flower \- flow based traffic control filter
- .IR TTL " | "
- .B l2tpv3_sid
- .IR LSID " | "
-+.B psp_spi
-+.IR SPI "[/" MASK "] | "
-+.B psp_ver
-+.IR VERSION " | "
-+.B psp_dev
-+.IR PSP_DEV_ID " | "
- .BR ip_proto " { " tcp " | " udp " | " sctp " | " icmp " | " icmpv6 " | " l2tp " | "
- .IR IP_PROTO " } | "
- .B ip_tos
-@@ -323,6 +329,29 @@ Match on L2TPv3 session id field transported over IPv4 or IPv6.
- .I LSID
- is an unsigned 32 bit value in decimal format.
- .TP
-+.BI psp_spi " SPI[/MASK]"
-+Match on the SPI which a PSP device decrypted the packet with.
-+.I SPI
-+and
-+.I MASK
-+are unsigned 32 bit values in hexadecimal format.
-+.TP
-+.BI psp_ver " VERSION"
-+Match on the PSP version which the packet was decrypted with, as numbered
-+by the PSP netlink family (0 for hdr0-aes-gcm-128, 1 for hdr0-aes-gcm-256,
-+2 for hdr0-aes-gmac-128, 3 for hdr0-aes-gmac-256).
-+.TP
-+.BI psp_dev " PSP_DEV_ID"
-+Match on the ID of the PSP device which decrypted the packet, from the PSP
-+netlink family.
-+.IP
-+The PSP keys only ever match packets which a PSP device decrypted, even with
-+a zero mask:
-+.B psp_spi 0/0
-+matches any packet decrypted with PSP. See
-+.BR tc-psp (8)
-+for an example.
-+.TP
- .BI ip_proto " IP_PROTO"
- Match on layer four protocol.
- .I IP_PROTO
-diff --git a/tc/f_flower.c b/tc/f_flower.c
-index 6fc2c6a1ccc6..6539856ba9d5 100644
---- a/tc/f_flower.c
-+++ b/tc/f_flower.c
-@@ -73,6 +73,9 @@ static void explain(void)
- 		"			mpls_bos BOS |\n"
- 		"			mpls_ttl TTL |\n"
- 		"			spi SPI-INDEX  |\n"
-+		"			psp_spi SPI[/MASK] |\n"
-+		"			psp_ver VERSION |\n"
-+		"			psp_dev PSP-DEV-ID |\n"
- 		"			l2tpv3_sid LSID |\n"
- 		"			dst_ip PREFIX |\n"
- 		"			src_ip PREFIX |\n"
-@@ -678,6 +681,25 @@ static int flower_parse_icmp(char *str, __u16 eth_type, __u8 ip_proto,
- 	return flower_parse_u8(str, value_type, mask_type, NULL, NULL, n);
+ tools/testing/selftests/mm/madv_populate.c |   67 +++++++++++++++++--
+ 1 file changed, 63 insertions(+), 4 deletions(-)
+
+--- a/tools/testing/selftests/mm/madv_populate.c~selftests-mm-handle-implicit-read-permissions-in-madv_populate
++++ a/tools/testing/selftests/mm/madv_populate.c
+@@ -69,10 +69,38 @@ static void test_prot_read(void)
+ 	munmap(addr, SIZE);
  }
  
-+static int flower_parse_psp_spi(char *str, struct nlmsghdr *n)
++static int mapping_is_readable(void *addr)
 +{
-+	__u32 spi, mask = UINT32_MAX;
-+	char *slash;
++	FILE *maps;
++	char line[256];
++	unsigned long start, end;
++	char perms[5];
++	int readable = -1;
 +
-+	slash = strchr(str, '/');
-+	if (slash) {
-+		*slash = '\0';
-+		if (get_u32(&mask, slash + 1, 16))
-+			return -1;
-+	}
-+	if (get_u32(&spi, str, 16))
++	maps = fopen("/proc/self/maps", "r");
++	if (!maps)
 +		return -1;
 +
-+	addattr32(n, MAX_MSG, TCA_FLOWER_KEY_PSP_SPI, htonl(spi));
-+	addattr32(n, MAX_MSG, TCA_FLOWER_KEY_PSP_SPI_MASK, htonl(mask));
-+	return 0;
++	while (fgets(line, sizeof(line), maps)) {
++		if (sscanf(line, "%lx-%lx %4s",
++			   &start, &end, perms) != 3)
++			continue;
++
++		if (start <= (unsigned long)addr &&
++		    (unsigned long)addr < end) {
++			readable = perms[0] == 'r';
++			break;
++		}
++	}
++
++	fclose(maps);
++	return readable;
 +}
 +
- static int flower_parse_spi(char *str, __u8 ip_proto, struct nlmsghdr *n)
+ static void test_prot_write(void)
  {
- 	__be32 spi;
-@@ -2074,6 +2096,31 @@ static int flower_parse_opt(const struct filter_util *qu, char *handle,
- 			ret = flower_parse_l2tpv3(*argv, ip_proto, n);
- 			if (ret < 0)
- 				return -1;
-+		} else if (!strcmp(*argv, "psp_spi")) {
-+			NEXT_ARG();
-+			ret = flower_parse_psp_spi(*argv, n);
-+			if (ret < 0) {
-+				fprintf(stderr, "Illegal \"psp_spi\"\n");
-+				return -1;
-+			}
-+		} else if (!strcmp(*argv, "psp_ver")) {
-+			__u8 ver;
-+
-+			NEXT_ARG();
-+			if (get_u8(&ver, *argv, 10)) {
-+				fprintf(stderr, "Illegal \"psp_ver\"\n");
-+				return -1;
-+			}
-+			addattr8(n, MAX_MSG, TCA_FLOWER_KEY_PSP_VERSION, ver);
-+		} else if (!strcmp(*argv, "psp_dev")) {
-+			__u32 dev;
-+
-+			NEXT_ARG();
-+			if (get_u32(&dev, *argv, 10)) {
-+				fprintf(stderr, "Illegal \"psp_dev\"\n");
-+				return -1;
-+			}
-+			addattr32(n, MAX_MSG, TCA_FLOWER_KEY_PSP_DEV, dev);
- 		} else if (!strcmp(*argv, "spi")) {
- 			NEXT_ARG();
- 			ret = flower_parse_spi(*argv, ip_proto, n);
-@@ -3236,6 +3283,30 @@ static int flower_print_opt(const struct filter_util *qu, FILE *f,
- 			   rta_getattr_be32(attr));
- 	}
+ 	char *addr;
+-	int ret;
++	int ret, readable;
  
-+	if (tb[TCA_FLOWER_KEY_PSP_SPI]) {
-+		__u32 mask = UINT32_MAX;
+ 	ksft_print_msg("[RUN] %s\n", __func__);
+ 
+@@ -80,9 +108,19 @@ static void test_prot_write(void)
+ 	if (addr == MAP_FAILED)
+ 		ksft_exit_fail_msg("mmap failed\n");
+ 
++	readable = mapping_is_readable(addr);
++	if (readable < 0)
++		ksft_exit_fail_msg("Cannot determine VMA permissions\n");
 +
-+		if (tb[TCA_FLOWER_KEY_PSP_SPI_MASK])
-+			mask = rta_getattr_be32(tb[TCA_FLOWER_KEY_PSP_SPI_MASK]);
-+		print_nl();
-+		print_hex(PRINT_ANY, "psp_spi", "  psp_spi 0x%x",
-+			  rta_getattr_be32(tb[TCA_FLOWER_KEY_PSP_SPI]));
-+		if (mask != UINT32_MAX)
-+			print_hex(PRINT_ANY, "psp_spi_mask", "/0x%x", mask);
-+	}
++	errno = 0;
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
+-	ksft_test_result(ret == -1 && errno == EINVAL,
+-			 "MADV_POPULATE_READ with PROT_WRITE\n");
 +
-+	if (tb[TCA_FLOWER_KEY_PSP_VERSION]) {
-+		print_nl();
-+		print_uint(PRINT_ANY, "psp_ver", "  psp_ver %u",
-+			   rta_getattr_u8(tb[TCA_FLOWER_KEY_PSP_VERSION]));
-+	}
++	if (readable)
++		ksft_test_result(ret == 0,
++				 "MADV_POPULATE_READ with readable PROT_WRITE mapping\n");
++	else
++		ksft_test_result(ret == -1 && errno == EINVAL,
++				 "MADV_POPULATE_READ with write-only mapping\n");
+ 
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
+ 	ksft_test_result(!ret, "MADV_POPULATE_WRITE with PROT_WRITE\n");
+@@ -90,6 +128,26 @@ static void test_prot_write(void)
+ 	munmap(addr, SIZE);
+ }
+ 
++static void test_prot_none(void)
++{
++	char *addr;
++	int ret;
 +
-+	if (tb[TCA_FLOWER_KEY_PSP_DEV]) {
-+		print_nl();
-+		print_uint(PRINT_ANY, "psp_dev", "  psp_dev %u",
-+			   rta_getattr_u32(tb[TCA_FLOWER_KEY_PSP_DEV]));
-+	}
++	ksft_print_msg("[RUN] %s\n", __func__);
 +
- 	flower_print_ip4_addr("arp_sip", tb[TCA_FLOWER_KEY_ARP_SIP],
- 			     tb[TCA_FLOWER_KEY_ARP_SIP_MASK]);
- 	flower_print_ip4_addr("arp_tip", tb[TCA_FLOWER_KEY_ARP_TIP],
--- 
-2.53.0-Meta
++	addr = mmap(0, SIZE, PROT_NONE,
++		    MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_msg("mmap failed\n");
++
++	errno = 0;
++	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
++	ksft_test_result(ret == -1 && errno == EINVAL,
++			 "MADV_POPULATE_READ with PROT_NONE\n");
++
++	munmap(addr, SIZE);
++}
++
+ static void test_holes(void)
+ {
+ 	char *addr;
+@@ -266,7 +324,7 @@ static void test_softdirty(void)
+ 
+ int main(int argc, char **argv)
+ {
+-	int nr_tests = 16;
++	int nr_tests = 17;
+ 	int err;
+ 
+ 	pagesize = getpagesize();
+@@ -280,6 +338,7 @@ int main(int argc, char **argv)
+ 	sense_support();
+ 	test_prot_read();
+ 	test_prot_write();
++	test_prot_none();
+ 	test_holes();
+ 	test_populate_read();
+ 	test_populate_write();
+_
 
