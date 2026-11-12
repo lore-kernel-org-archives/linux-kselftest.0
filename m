@@ -1,55 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794447628;
-	b=dfwxlkRnmReFQnBiuBLZ0Nljryq2JQzO3AntqJXZ8FDd1c6JF4XVI05vXlBBSnyfirh4
-	 nsGQAUKPG1DMZIarGIkEmT+63OR4u/OIrC0fk9fkGh1KDmhWs2KSi5t0GHEGrMmahIY7u
-	 e50J5EZgroQ7p2fNK2rag0HFUDCYr3wzWuHKfnYa6RzuRBV/loSbwR/gibDn1kpP21EQW
-	 nwhZ/EZHsiHjHqXnhg1Xvg66NIw10db0321VElzW/apPU3cU5Mvin8Mwz+lA1yefVoGBB
-	 g0s+9HJfn7zYw1UtqQSKfsISn5ED7G6bJ1WOpuYSDu2CV7vBM7ukZl6LinXVuwNtxXQ==
+	t=1794448227;
+	b=X9LtoIH52YiqowTf0dpdqvUzZyGMmC+EbPZ/Kwo1MsdsFQ+I91zneECR/rw4NZD7QSJA
+	 F4TkI1BVOH5rdWv+5uisWLKJe6h4CgjnCpOl4pLbjPx3YWCErddYYmCoQAfeJZNteU09O
+	 dcth3iMEvgls65y05o/t3MYf1bkVfbYvnSdm3ONeZPJx4dn6cJmxF0LblhbpQgFpQY2b3
+	 p7VjAwv5ZBkgiZfbpnMSnWMkLucejkopnExuEEVn0ZTMxl+Q7clulj5qmnLMqDQCh80JI
+	 mjHLo6AQuEkwY9RPw5ewLjolIfLb46SjlgpRBkenjdJVgSGj2NowMA+087G9dpHsNzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794447628;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=/7JN4d19OpFHvBR2Ri6GsbzacJ+6v7i/b4y+9yVieW8=;
-	b=q0cjfbAsclNBQwG6riA18K0aEDen8Q6XbAk82408xqyfmyw2FItInZFHrmKUZHlNixnY
-	 AdihsgKHmgQ3S0jg2GmsTI/lV/wx8RsesCwGnyd6/xAYnJwOIB37U6DlgPz9CP711drUm
-	 z5Yc4AY+CnbH32cKw4WS2VJ+HHH8ymMl6Eu+po2LFwNJomyXvmqrhaz94nWloUmkxWedH
-	 gS5FVLpSfPj+9xDZ0JrJCzvOiMjPi+60oR7CVi47AxZrhcA+XQNOP3rbVWHCyZOqkun4z
-	 +Plzx4vll5XPdu+hRcfskvjw6FZwb94JRNIwS1tF2uesso2/if0qPBvDWyHgBUXqHxA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794448227;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=VLQE4yDc+yHcjX02+9IxETSLcgSpZnI6ZugK4stcO84=;
+	b=RIUJQv6xFtl58NeW7nViXeNTE8UR/WJdiV1H7WgR9nY5j8dnNLd7xprG7WlShyKSoMnw
+	 CvRw0z+dHukPndZNQHH45rw8B1TJj45JywmYYFGRoKNwkcNUy+y+jpwkKmncmuNGBnZYk
+	 iSvKbK92b6bMmsIybf2JysDlacOVU9zdzq4VpfdC/F4ZR0CGtQc237JF4Dga4aeEPqjmF
+	 u9UDy9sjkxkArSu8w1+9gq4tnM0qTjWAS3xbvhaUIdhawlDBGSFhGeQt1JnNtdJbSxYth
+	 dnGpwUOWlia4CGf2AELoytcA9aQxDJzzyfVn1CT5vZIp+dYrh8GzRaq/Xs20DyLyKiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PixSkOzW;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--treapking.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hVOCFnWv;
+	arc=none smtp.remote-ip=209.85.216.71
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4D6606A32E;
-	Thu, 12 Nov 2026 01:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC02606A33D
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:50:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FC02606A33D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--treapking.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PixSkOzW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0261F00A05;
-	Thu, 12 Nov 2026 01:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794447627;
-	bh=/7JN4d19OpFHvBR2Ri6GsbzacJ+6v7i/b4y+9yVieW8=;
-	h=From:To:Cc:Subject:Date;
-	b=PixSkOzW9hIL3ixGtxZKFqJEarO1g+P0gmy8e2zTSVoOiSXTDyI1sP+Ziv02uOZBb
-	 a1RPYToiX65Uydq3XnGvMpUE20JDT1rN9ZehyULqCfWJSXhCqcONPpSNqoOCrXwVou
-	 wAzYeQudh3+W2rMaCmqfIsyQCa3ttoAQv8/FuWSjQ3sPoBhKzkvCuNWR/oZLcdVENV
-	 WqpcERePW9vNdxwNItHMxssg4CNOacFW8FNVMZPwPE3+mVV6uGZwWhoh+WNdEhfA8n
-	 6NX202EksQ3/ANXAOsbEmGx2M3ue2KZOdaoWpLkkti+9DJGJVVMf5bKm6gZwL7UBfe
-	 AESIpJNtHqAKg==
-From: Sasha Levin <sashal@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jori Koolstra <jkoolstra@xs4all.nl>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/filesystems: include <fcntl.h> in wrappers.h
-Date: Wed, 11 Nov 2026 20:40:25 -0500
-Message-ID: <20261112014025.1243753-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hVOCFnWv
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3b0afbf532eso3396021a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 17:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794448226; x=1795053026; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VLQE4yDc+yHcjX02+9IxETSLcgSpZnI6ZugK4stcO84=;
+        b=hVOCFnWvw2kpR0Ty2a//IAtp0NaWopqYg9Y77OHi2YgXXr4JV7EusYpPk2xfSXstwF
+         s/FL6H53Tur7xvhdNVnz6j/N60u2/qO3+3UYOaShx48ePVv7YPRmt3F1+ym0uw1Ec64T
+         OgiNa2aVbsXi2OaBdMv7g0nsfZ50LBFrxmRLNuzfL7T3/ZcefwKkEDRCe0wD+etvtMBQ
+         AurfZ/pTdMbSWfkE0tyT0c0U9eRteseMU35Ck7lf1dRN/gHmamQWjCMs/RDd6q+Ts8G4
+         9IwIc6H+Gy+vciWG1QWJ6IMHb9PNwPbf9nfv+LBZhDMGfNOv1Dp8szx67m6ZkNOMot7L
+         hDmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794448226; x=1795053026;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VLQE4yDc+yHcjX02+9IxETSLcgSpZnI6ZugK4stcO84=;
+        b=HUQRwaqbT8Z49DcRScoNNgMWm7/iExznI7/s1DYiyZNChVh4fZiVjmaOe8ELRup66S
+         sJrLxR7eWHK2eK1xAMo5BrX8c0vYSab94Lq2/ncQBImPQrT6R4kwPeej515KbNsxQHcv
+         sXZ9jf4vtXM+I+N4YG63aMTqeqGlqjGpOpNBsd/UISrtIlt2zbh6JeOQZEHsj//2n2ky
+         XTdvKo1Z8qebmhCt/Hk4EkS4NAz6U0eI4y38UGE2qZaJme3JmzkZevm7P7YzzKOSHL9s
+         v3HWH/3ChpRWmYbhVAruAkoNxp23qLzPUEQEknrwtgrGNpYadSYJ+sTSORUpU0UMIqTq
+         YuwA==
+X-Forwarded-Encrypted: i=1; AL+hErEQABWOGh/0PPjwUAdh5KF+XFEvJ1ugLEQH0rOW8/supq/LY1Xi25Deyo9HTLX6JkjF5w/MDCaooNasooKECEg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/JD0NZ2Wr0qaa99H9hzacB0XciRHzoc69uDj2/dKRQT2v56O5y
+	cOzf1eFH/2bptD4awh/o2080CSzaqGW7Oh3eA0pe1Ffx7hiK0DHyLEEmlE2Q6SOgYS80d3ANNJE
+	jZPB258cXDYCi9YkIJw==
+X-Received: from plpk4.prod.google.com ([2002:a17:903:3da4:b0:2e8:8642:f035])
+ (user=treapking job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:224b:b0:3ab:f38:2b3c with SMTP id 98e67ed59e1d1-3b182f1feeamr3842902a91.28.1794448225397;
+ Wed, 11 Nov 2026 17:50:25 -0800 (PST)
+Date: Wed, 11 Nov 2026 17:46:18 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,44 +75,135 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
+Message-ID: <20261112014942.2946303-1-treapking@google.com>
+Subject: [PATCH net] selftests: bonding: fix failover race in bond_options.sh
+ prio test
+From: Pin-yen Lin <treapking@google.com>
+To: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>, 
+	linux-kernel@vger.kernel.org, Jonathan Toppins <jon.toppins+linux@gmail.com>, 
+	linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>, 
+	Pin-yen Lin <treapking@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-openat_o_mkdir() in wrappers.h uses O_DIRECTORY, O_CREAT and O_EXCL, but
-the header doesn't include <fcntl.h>. fscontext_ns_test.c doesn't
-either, so it no longer builds:
+The prio test intermittently fails in the arp_ip_target and
+ns_ip6_target variants:
 
-  ../wrappers.h:116:32: error: 'O_DIRECTORY' undeclared
+  TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL]
+  	Current active slave is eth0 but not eth2
 
-Include it in the header.
+The ARP/NS monitor marks a slave down when it has received nothing for
+too long. With arp_interval 100 and the default arp_missed_max, that is
+about 250ms for the active slave (eth1) and 350ms for a backup slave
+(eth0, eth2). Every 100ms, eth1 sends a probe: eth1 receives the reply,
+and eth0/eth2 receive a copy forwarded by the gateway bridge. Once eth1
+is down, its probes reach no one and no slave receives anything, so
+eth1 normally times out first and the new active slave is picked by
+prio:
 
-Fixes: b536a4aa16ea ("selftest: add tests for open*(O_CREAT|O_DIRECTORY)")
-Reported-by: kernelci.org bot <bot@kernelci.org>
-Closes: https://d.kernelci.org/test/maestro:6af49b775b429d354e37819c
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/r/202611110221.YzAZrCXO-lkp@intel.com/
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
+  t=10   test sets eth1 down
+  t=300  monitor: eth1 idle 300ms -> down
+                  eth0/eth2 idle 300ms -> up, eth2 picked by prio
+
+But the test takes eth1 down right after bond_check_connection(), whose
+ping replies only arrive on eth1:
+
+  t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
+  t=70   ping reply on eth1 only
+  t=85   test sets eth1 down
+  t=300  monitor: eth1 idle 230ms -> still up
+  t=400  monitor: eth1 idle 330ms -> down
+                  eth2 idle 400ms -> down too
+
+eth2 can then no longer be picked. eth0 becomes the active slave if it
+happened to receive some other packet (e.g. an MLD report), otherwise
+whichever slave comes back first does. With primary_reselect 1 or 2,
+the bond keeps eth0 even after eth2 comes back.
+
+Before taking the active slave down, wait two monitor intervals
+(200ms), so that at least one more probe is sent after the last ping
+reply and all slaves last received that probe. The miimon variants do
+not need the wait, but the extra delay is negligible.
+
+Hit in our CI on GCE VMs (4 of 51 runs); the test only uses veth. On
+the same VMs, 7 of 30 loops of the prio tests failed without this
+change, and 20 of 20 loops passed with it.
+
+Fixes: 481b56e0391e ("selftests: bonding: re-format bond option tests")
+Signed-off-by: Pin-yen Lin <treapking@google.com>
 ---
-Every selftest that includes wrappers.h builds with this, gcc and clang
-on x86_64.
 
- tools/testing/selftests/filesystems/wrappers.h | 1 +
- 1 file changed, 1 insertion(+)
+ .../drivers/net/bonding/bond_options.sh       | 26 ++++++++++++++++---
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/filesystems/wrappers.h b/tools/testing/selftests/filesystems/wrappers.h
-index bc58bdb800631..09f02f67487c6 100644
---- a/tools/testing/selftests/filesystems/wrappers.h
-+++ b/tools/testing/selftests/filesystems/wrappers.h
-@@ -5,6 +5,7 @@
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond_options.sh b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+index 187b478d0ddf..16c1c2d97005 100755
+--- a/tools/testing/selftests/drivers/net/bonding/bond_options.sh
++++ b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+@@ -13,6 +13,24 @@ ALL_TESTS="
  
- #define _GNU_SOURCE
+ lib_dir=$(dirname "$0")
+ source ${lib_dir}/bond_topo_3d1c.sh
++
++# The ARP/NS monitor marks a slave down when it has received nothing for too
++# long: ~250ms for the active slave and ~350ms for a backup slave with
++# arp_interval 100. The backups only receive the copies of the active slave's
++# probes that the gateway bridge forwards, but the active slave also gets the
++# replies to the pings in bond_check_connection(). If the active slave goes
++# down right after such a reply, it times out in the same monitor run as the
++# backups, and the new active slave is then not picked by prio. Wait two
++# monitor intervals, so that at least one more probe is sent and all slaves
++# last received that probe.
++bond_link_down()
++{
++	local slave=$1
++
++	sleep 0.2
++	ip -n ${s_ns} link set "$slave" down
++}
++
+ c_maddr="33:33:ff:00:00:10"
+ g_maddr="33:33:ff:00:02:54"
  
-+#include <fcntl.h>
- #include <linux/types.h>
- #include <linux/mount.h>
- #include <sys/syscall.h>
-
-base-commit: 13419eff849a88a276dec97fa62a532dc7fff400
+@@ -97,12 +115,12 @@ prio_test()
+ 	check_active_slave eth1
+ 
+ 	# active slave should be the higher prio slave
+-	ip -n ${s_ns} link set $active_slave down
++	bond_link_down $active_slave
+ 	check_active_slave eth2
+ 	bond_check_connection "fail over"
+ 
+ 	# when only 1 slave is up
+-	ip -n ${s_ns} link set $active_slave down
++	bond_link_down $active_slave
+ 	check_active_slave eth0
+ 	bond_check_connection "only 1 slave up"
+ 
+@@ -134,7 +152,7 @@ prio_test()
+ 			;;
+ 		"2")
+ 			check_active_slave "$pre_active_slave"
+-			ip -n ${s_ns} link set $active_slave down
++			bond_link_down $active_slave
+ 			bond_check_connection "pre_active slave down"
+ 			check_active_slave "eth1"
+ 			;;
+@@ -153,7 +171,7 @@ prio_test()
+ 		check_err $? "eth3 prio is not -50"
+ 		check_active_slave "eth1"
+ 
+-		ip -n ${s_ns} link set $active_slave down
++		bond_link_down $active_slave
+ 		check_active_slave "eth0"
+ 		bond_check_connection "change slave prio"
+ 	fi
 -- 
-2.53.0
+2.56.1.703.gf848ed807c-goog
 
+base-commit: 665b4149e91b781a71bce8637c3a4d7d64dba05f
