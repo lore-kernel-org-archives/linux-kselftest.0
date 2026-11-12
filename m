@@ -1,77 +1,124 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794474223;
-	b=dvwEPzQq/Paf8FQnjMk5/m0yZBSAU3bUyweuRoKwhkwTpbCxwwJxN2ikDzDa1+0zgqA4
-	 /f/DTbHj0R6s2UT76woOChK1++rbpYho5fhRqh1uurfX8f/j9bbyZYMwEDXJrJ0Z5mLVb
-	 f6oXgu/F184MOWe8AnvmjyQpqXZ9AlCSQOwSdxQ757s1VKXtKGqsrPQFXY0qtMkZvXRvY
-	 i3X6s6cs3PxzWUqPVlRLVQP3jw/AcGBAXo4KeTdgPAK9wK+zbeP2tWFTgaXmfFnq/vLGk
-	 oj6pmSTYNM5V1+spNjmHKAE0FlX55enI1m/nWfalntdDIVbotY7b01peZbM2FfQpahw==
+	t=1794475197;
+	b=EtpBfk53HebQNE1YPOxLfXSxOZEkrswlSIB9Mk2Bl6KNU9zf/ICRh1K5HXosILK0GTp0
+	 tCPDBTuxBeXG/skGAulPgzYYi/ehOyho7qxz34EXI0eKgMPWwUtCBvUyWFY8LU2/dFV5F
+	 w/pxdAucmmfzzz5zAvPUXa8qHKxDOOFXFU3nEJUMvciUvvo4omtTtcJw7xtlRbi/2TNFi
+	 Iq040q3He/fgIxG1byyZNyPWluiy9F6L3YBHILTREeggR2awOgcwwJbV1vQvsMTBFwYDv
+	 GCcSZj4lalvkSyzZwm4TLM7EKwlqHW5seY0GrtIMSVxYebTEfbmpYmdYJkjWHWJZUVQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794474223;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=bfFED5wr1Gi/u3g1VjyKYj5gqmOAy1fX/7Q8JL8oA44=;
-	b=uxj6lldhYZVq87rJPt5YX2bzLPNTQZWLMcOFcxAXNOSwpr/XGUv4bclsnCdEfGSHYClQ
-	 6irOI1tX92Gi6oBt+wNhP33+Bdj4X7Ikfbs/7PaPKuT7HsPg6Yd0cPH/Vetm5LMqqGO8y
-	 UBRHTAa1Fp39luY5hj7mVfe6e9UatZvCg0kRmdU41WZ96G7lARDndqi8BoH1sYCDSxusS
-	 to3FLNJYlh/ESXVzLOvhftvZUCBL0MacCpT13ljmDl/RNDWpVZNeOoeSeA+A5R7VNtfGB
-	 W4NSrLLkAgUhM6udYkqlDERsLTQCGlC5tx3MSa8Dy43htHp2aa2Rin/NDdwjudz1cCg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794475197;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=BbdGJ+QfN/0a61vAo8i3jrwRHXo8FO9ut3fDr0zQx8s=;
+	b=1e/fJSNVU52p+IKCabKQSpLHKCXon8nrBjYtaDFevxoc2KPpgOp1I3qnhOU7RaDovfE0
+	 CKZ2SHSf7vldzN7PzZyszerg5Q1a97kyQXjuLAoaJ5U7NTxmCwYelie3Fqp0xMr42SeMm
+	 ICPP/3VQgMF4MFNd/T8jM4U/Jec7hTPL3kVCmy6xXnAW8Y1KZN5NJO3kqakCUc1VeHMlC
+	 CZ8Fz1IQXJpQqvju+cISS+yC7gWpMP2/HtM8kcdHt8MYSqcNhJYTrV/g/9Gf/3AEAeMsn
+	 BJhdvM3V78unmPhx4LX+wDpHASrI741k3D2x+DlWz5sQ18Ow/voolRjH69rLWz/Q/GA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=lH2D+Z8d;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A072D606A880;
-	Thu, 12 Nov 2026 09:03:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A072D606A880
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=G3nQzf9V;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=JtVRtgR2;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF4A606A32E
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 09:19:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EF4A606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=lH2D+Z8d
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F7E1339;
-	Thu, 12 Nov 2026 01:03:38 -0800 (PST)
-Received: from a081061.arm.com (unknown [10.163.169.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2FA103F632;
-	Thu, 12 Nov 2026 01:03:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794474221; bh=5iAvOQTpt9gk5MMxQSEmlDpVMvlgNN9go7ByTGre++Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lH2D+Z8dlONG/cWPX5ssVxZ8T5K2DcY5baTrSphflvBNku80FH69PmmoTmKhYrrSc
-	 HRgzHRFwmboGH3HDJxNTD2+SGG3/85MjQ9yZCQ3AxcXd1Fvn+kQawMfkLxo2zSfIfV
-	 H1JYzh/CZ74TK7bK8BFv3SC53pmf04iwfBlEFnu4=
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Kiryl Shutsemau <kas@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH 4/4] selftests/mm: add a THP compaction selftest
-Date: Thu, 12 Nov 2026 14:32:50 +0530
-Message-ID: <20261112090250.334344-5-sarthak.sharma@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261112090250.334344-1-sarthak.sharma@arm.com>
-References: <20261112090250.334344-1-sarthak.sharma@arm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=G3nQzf9V;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=JtVRtgR2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794475196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BbdGJ+QfN/0a61vAo8i3jrwRHXo8FO9ut3fDr0zQx8s=;
+	b=G3nQzf9VeRZQYW6rJ6HF59qJk5ITceiEwG2f+AMxq3UujANFYXUKP+lFECb4Wh88auGg6s
+	XVJ8Gb7TtoOYxLDnFxc9j80Y2LWmJ9/V3f5TOH4g82Ijt1HSfcPF7mvLQWV9dObL3jhwRz
+	hvZhmqZMsBRcyFjOutq6ZWQs5nLK6Ew=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-310-TrG3HPPhOcO4Ua1ihyzv8A-1; Thu, 12 Nov 2026 04:19:54 -0500
+X-MC-Unique: TrG3HPPhOcO4Ua1ihyzv8A-1
+X-Mimecast-MFC-AGG-ID: TrG3HPPhOcO4Ua1ihyzv8A_1794475193
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-4915ba023d4so2896283f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:19:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794475193; x=1795079993; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BbdGJ+QfN/0a61vAo8i3jrwRHXo8FO9ut3fDr0zQx8s=;
+        b=JtVRtgR2C0SjBS1Nj2DD5s84wQoSkzDiW6g5tqequisbAdDADpoqtam+SxCak1N20E
+         wsy31FYzdUXfK4cvt/kYHVBWjHvFFc8Ft8zxLIj5C/5YkbC92dNW5RprSKuL3QLMVnCL
+         unTKKMI2fq/SZkMWT7qFhjAu8/Kk/MdJfC0HMrsHO8Xkx433zCkLrp61/tQycThCPLSD
+         yBkPMLVncjib3/8E3Kwku3K0bBd9ilDcTs31lU9ye6UDKB8lsT72526F3Rpo8RfgT2vd
+         jXNetE64RCurGtlKTvPAoyA6DdlKiXZZuGi2GjajKD7Xd//bsXXZnQJj8bv0EXuLVcgl
+         0kbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794475193; x=1795079993;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BbdGJ+QfN/0a61vAo8i3jrwRHXo8FO9ut3fDr0zQx8s=;
+        b=duhfs59zrA6hFS8wIdO5WGk2P16ksgXsPHQEE+897MVv/6We2y5DHihwPsmPUr63bZ
+         L2TLiP+fd5BpyA1ZgWS9x8IlXW0hkKnVP7kUka/kljvCjufRZZTSf5pcgQXpwPnJ1PZY
+         MSc6uclJQ6+E3xVi4W4HH06dMY+41ODvUwuKZpmlJ9DjaaQhB8PMdAFnb4TAnEzHktV9
+         vLapJEaP1W9KcLtf0fmgOXa3gElsi4tJj5BVV3LPwat2hDKAiFaYK7DIarIe039+FQ0j
+         Jj+tI3i9tY5NG1QuKdwxfNLFVOQH94NUZ7Jb383iGdRlKIrJyD2n1RLKonBxfWaKR+bD
+         H05Q==
+X-Forwarded-Encrypted: i=1; AL+hErENpaqtrLmZSAiC1Tvesr1Isx3uHalocxiSfthJs/xPWX8JwnLMHS5/u6dFdNG3ituww8xCdiQOsp4aD1p++fg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+3wM8aK3t1NAW+5v4zGSiXhBC3KPKTuWacYKjocLUzM8d/iei0
+	ZVAB2Jzu53RZrRqdwN5TZkIX/2S/+wpGYWGTQrPzwrEVkPYhCeN7zYRhjRcZJOID4rBlxNN9U+D
+	FoLlTEJi0rhRC36IiBnHADDsQ2OoDvehFGYL7DV/Df7Sp3llPzh39SScXU+gU/UoIM2LDjw==
+X-Gm-Gg: AYBFou2LIxaNZsP7BQOHMoyQyu5qwa6WY5o/fKVCSeQY+nqHN3EUtTJC452yGTMN+9O
+	xrtmIaln/4GkgNOpgrFU7+cXhKFsHYx1qA5/IV+YftnSkJsFTOAKTHsqEeCjBVMRSeeiytIl2YQ
+	Ppj9rOEsLzrEy3Gw5M9jBbS7T3snGdFT6u5aAgHntIwSWfMFB9UYYxz6kp84aCdbqoildvxBcMH
+	aeGFDjCN7VPgB4EesPcMdUfvH2hIfISmlZZvNskjkhFXh/OeL/4T6WbEMO+hJp5eXKRlh0+Fo71
+	w/A3shCL+q62dtVyef2Kt15G2CPxv9FKe+sPcc1DBNj818EXIhsw4LtBvPH8+UNmaXYdZPh1mBN
+	xdO40Z6I69cTRU7InxUrfpmB/TllecfyKKSz09C9Yu/nbnN4hK0I6OEV1hRxn3m6mL5pGJMg3dG
+	zjQYI=
+X-Received: by 2002:a05:6000:144b:b0:488:7496:15b5 with SMTP id ffacd0b85a97d-499c6f8c43cmr8114280f8f.47.1794475193456;
+        Thu, 12 Nov 2026 01:19:53 -0800 (PST)
+X-Received: by 2002:a05:6000:144b:b0:488:7496:15b5 with SMTP id ffacd0b85a97d-499c6f8c43cmr8114228f8f.47.1794475192931;
+        Thu, 12 Nov 2026 01:19:52 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4988f5b1ce3sm13996822f8f.14.2026.11.12.01.19.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 01:19:52 -0800 (PST)
+Date: Thu, 12 Nov 2026 10:19:49 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v5 20/29] cgroup/cpuset: Give back the bandwidth an
+ attach did not move
+Message-ID: <avWEta7b9X4K6hF7@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-21-mathieu.desnoyers@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -81,313 +128,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261108185406.1549770-21-mathieu.desnoyers@efficios.com>
 
-Add a selftest to check whether THPs can be recovered through
-memory compaction after fragmenting memory.
+Hello,
 
-Read the PMD size during runtime. Use a fixed max test size
-of 32 GiB and calculate the number of max THPs based on PMD size.
+On 08/11/26 13:53, Mathieu Desnoyers wrote:
+> Commit 2ef269ef1ac0 ("cgroup/cpuset: Free DL BW in case can_attach()
+> fails") reserves the bandwidth of an attach as one sum.
+> cpuset_can_attach() adds up the bandwidth of the deadline tasks it
+> moves. Once all tasks pass their checks, it reserves the sum in the
+> destination root domain. If another controller refuses the attach,
+> cpuset_cancel_attach() frees the sum. If the attach goes through, the
+> move of each task uses its part of the sum.
+> 
+> But a task can change its policy, or die, before the attach:
+> 
+>  - A task that left SCHED_DEADLINE, or died, moves no bandwidth. Its
+>    part of the reservation stays in the destination's total_bw, until
+>    the next rebuild of the accounting.
+>  - A task that became a deadline task has nothing reserved. The attach
+>    still moves its bandwidth. The destination lacks it, and its
+>    total_bw underflows when the task leaves.
+> 
+> In testing, a task switched between SCHED_DEADLINE and SCHED_OTHER
+> while it was moved 200 times into a one-CPU partition root and back.
+> On v7.4-rc1 with the patches before this one, the partition's total_bw
+> ended wrong in 5 of 6 VMs with 8 CPUs. It kept up to two reservations,
+> or wrapped below zero.
+> 
+> Fix this by keeping the tally of what the attach moves, in
+> sum_moved_dl_bw. Flag the move of a task only if the rest of the
+> reservation covers its bandwidth. Once the attach is through, give back
+> what it did not move.
+> 
+> set_cpus_allowed_dl() decides the move under the runqueue lock.
+> cpuset_attach_task() does not hold it. dl_task_offline_migration() can
+> change the task's record meanwhile, for a task throttled on a CPU gone
+> offline. So the tally counts what set_cpus_allowed_dl() reports in the
+> affinity context.
+> 
+> With this patch, total_bw ended right in 6 VMs of 6. The random_mix case
+> of deadline_bw_test, added later in this series, found the bug. It could
+> no longer lower a fair server in a partition root with no room left.
+> 
+> Fixes: 2ef269ef1ac0 ("cgroup/cpuset: Free DL BW in case can_attach() fails")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
 
-Save existing THP settings and restore them at exit. Configure THP
-for MADV_HUGEPAGE mappings, enable only the PMD sized order and set
-defrag to madvise so that synchronous compaction is performed for the
-test mappings.
+...
 
-Allocate as many THPs as possible, until allocation falls back
-to base pages or the max test size is reached. If the max test
-size limit is reached, skip the test because retry allocations
-could use free memory and not recover memory through compaction.
+> @@ -3285,17 +3299,28 @@ static void cpuset_attach_task(struct cpuset *cs, struct task_struct *task)
+>  	 * cpuset_reserve_dl_bw() made room in @cs for the bandwidth of the
+>  	 * deadline tasks that cpuset_can_attach() counted. Flag the move, so
+>  	 * that the bandwidth of this task moves with it.
+> +	 *
+> +	 * Nothing was reserved for a task that became a deadline task since.
+> +	 * Flag its move only if the rest of the reservation covers its
+> +	 * bandwidth.
+>  	 */
+> -	if (dl_task(task) && dl_task_needs_bw_move(task, cs->effective_cpus))
+> +	if (dl_task(task) && dl_task_needs_bw_move(task, cs->effective_cpus) &&
+> +	    cs->sum_moved_dl_bw + task->dl.dl_bw <= cs->sum_migrate_dl_bw)
+>  		reserved = true;
 
-Record the starting PFN of every allocated THP. Split the allocated
-THPs to order 0 using the split_huge_pages debugfs interface and
-verify the split using pagemap and kpageflags. Keep the final base
-page from each THP mapped and discard the rest.
+Humm, this is identity-blind: it cannot tell a task that can_attach()
+counted (its bandwidth really is inside sum_migrate_dl_bw) from one that
+became a deadline task in the can_attach() -> attach() gap, for which
+nothing was reserved, can it?
 
-Retry the same number of successful THP allocations in a new mapping,
-while keeping the retained pages mapped. Count a THP as recovered
-through compaction if it uses a PFN which was previously used in the
-initial THP allocation. After retrying, check if every retained page
-is still resident. If not, skip the test since the range could have
-been freed through swapping and not through compaction. If more than
-half of the initial THP allocations are recovered, pass the test.
-Otherwise fail the test.
+Say A and B, 50 each, are reserved for a sum of 100, and C becomes a
+deadline task with 70 in the gap (can_attach() <-> attach()). If C comes
+first in the taskset it passes 0 + 70 <= 100 and moves; A and B then
+fail 70 + 50 <= 100 and both properly reserved tasks are denied their
+moves?
 
-Skip the test if PMD sized THPs are unavailable, the test is not
-running as root, split_huge_pages interface is unavailable,
-the pagemap PFNs are masked or the mapping is too large for the
-address space.
+Not sure if we can consider tracking the counted tasks per task? The
+taskset is pinned between can_attach() and attach(), so we could build a
+list of (task, bw) pairs at can_attach() and let the gate check
+membership?
 
-Add the test to Makefile, run_vmtests.sh and list it in MAINTAINERS.
-
-Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
----
- MAINTAINERS                                 |   1 +
- tools/testing/selftests/mm/Makefile         |   1 +
- tools/testing/selftests/mm/run_vmtests.sh   |   2 +
- tools/testing/selftests/mm/thp-compaction.c | 215 ++++++++++++++++++++
- 4 files changed, 219 insertions(+)
- create mode 100644 tools/testing/selftests/mm/thp-compaction.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4d74ad879ecf..eb0b46a361dc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17946,6 +17946,7 @@ F:	mm/mm_slot.h
- F:	tools/mm/thpmaps
- F:	tools/testing/selftests/mm/khugepaged.c
- F:	tools/testing/selftests/mm/split_huge_page_test.c
-+F:	tools/testing/selftests/mm/thp-compaction.c
- 
- MEMORY MANAGEMENT - USERFAULTFD
- M:	Andrew Morton <akpm@linux-foundation.org>
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 06d3d0350a9a..ac39e2afd59f 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -90,6 +90,7 @@ TEST_GEN_FILES += pfnmap
- TEST_GEN_FILES += process_madv
- TEST_GEN_FILES += prctl_thp_disable
- TEST_GEN_FILES += thuge-gen
-+TEST_GEN_FILES += thp-compaction
- TEST_GEN_FILES += uffd-stress
- TEST_GEN_FILES += uffd-unit-tests
- TEST_GEN_FILES += uffd-wp-mremap
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index cb5c7cccb585..a3fdc23c9cfe 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -448,6 +448,8 @@ if [ -n "${MOUNTED_XFS}" ]; then
-     rm -f ${XFS_IMG}
- fi
- 
-+CATEGORY="thp" run_test ./thp-compaction
-+
- CATEGORY="thp" run_test ./folio_split_race_test
- 
- CATEGORY="migration" run_test ./migration
-diff --git a/tools/testing/selftests/mm/thp-compaction.c b/tools/testing/selftests/mm/thp-compaction.c
-new file mode 100644
-index 000000000000..8935f1968a6d
---- /dev/null
-+++ b/tools/testing/selftests/mm/thp-compaction.c
-@@ -0,0 +1,215 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <sys/mman.h>
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+#include <mm/hugepage_settings.h>
-+#include "vm_util.h"
-+#include "kselftest.h"
-+
-+int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-+#define PROT_RW (PROT_READ | PROT_WRITE)
-+#define MAX_TEST_SIZE (32ULL << 30)
-+#define MAX_THP_RETRIES 3
-+
-+size_t pmd_size;
-+
-+static int compare_pfns(const void *a, const void *b)
-+{
-+	uint64_t pfn_a = *(const uint64_t *)a;
-+	uint64_t pfn_b = *(const uint64_t *)b;
-+
-+	return (pfn_a > pfn_b) - (pfn_a < pfn_b);
-+}
-+
-+static void *mmap_hpage_aligned(size_t len)
-+{
-+	void *ptr;
-+
-+	ptr = mmap(NULL, len + pmd_size, PROT_RW, mmap_flags, -1, 0);
-+	if (ptr == MAP_FAILED) {
-+		if (errno == ENOMEM) {
-+			ksft_test_result_skip("Cannot reserve enough virtual address space\n");
-+			ksft_finished();
-+		}
-+		ksft_exit_fail_perror("mmap");
-+	}
-+	ptr += pmd_size - (uintptr_t)ptr % pmd_size;
-+
-+	return ptr;
-+}
-+
-+int main(void)
-+{
-+	size_t len, max_thps, nr_initial = 0;
-+	size_t nr_recovered = 0;
-+	int pagemap_fd, kpageflags_fd, pmd_order;
-+	void *initial, *retry, *p, *last_page;
-+	struct thp_settings settings;
-+	uint64_t *initial_pfns;
-+	int64_t ret;
-+
-+	ksft_print_header();
-+
-+	if (!thp_available())
-+		ksft_exit_skip("Transparent Hugepages not available\n");
-+
-+	if (geteuid())
-+		ksft_exit_skip("Run this test as root\n");
-+
-+	pmd_size = pmd_psize();
-+	if (!pmd_size)
-+		ksft_exit_skip("Reading PMD pagesize failed\n");
-+
-+	if (SIZE_MAX - pmd_size < MAX_TEST_SIZE)
-+		ksft_exit_skip("Required mapping is too large for this architecture\n");
-+
-+	pmd_order = sz2ord(pmd_size, psize());
-+	if (!(thp_supported_orders() & (1UL << pmd_order)))
-+		ksft_exit_skip("PMD sized THPs are not supported\n");
-+
-+	if (!split_huge_pages_supported())
-+		ksft_exit_skip("split_huge_pages debugfs interface unavailable\n");
-+
-+	thp_save_settings();
-+	thp_read_settings(&settings);
-+
-+	settings.thp_enabled = THP_MADVISE;
-+	settings.thp_defrag = THP_DEFRAG_MADVISE;
-+
-+	for (int i = 0; i < NR_ORDERS; i++)
-+		settings.hugepages[i].enabled = THP_NEVER;
-+
-+	settings.hugepages[pmd_order].enabled = THP_INHERIT;
-+	thp_push_settings(&settings);
-+
-+	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-+	if (pagemap_fd < 0)
-+		ksft_exit_skip("Unable to open pagemap\n");
-+
-+	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
-+	if (kpageflags_fd < 0) {
-+		close(pagemap_fd);
-+		ksft_exit_skip("Unable to open kpageflags\n");
-+	}
-+
-+	ksft_set_plan(1);
-+
-+	len = (size_t)MAX_TEST_SIZE;
-+	max_thps = len / pmd_size;
-+	initial = mmap_hpage_aligned(len);
-+	initial_pfns = calloc(max_thps, sizeof(*initial_pfns));
-+	if (!initial_pfns)
-+		ksft_exit_fail_msg("Couldn't allocate initial PFNs array\n");
-+
-+	/*
-+	 * Try to allocate as many THPs as possible and keep them
-+	 * allocated
-+	 */
-+	for (nr_initial = 0; nr_initial < max_thps; nr_initial++) {
-+		p = initial + nr_initial * pmd_size;
-+
-+		for (int i = 0; i < MAX_THP_RETRIES; i++) {
-+			ret = allocate_transhuge(p, pagemap_fd);
-+			if (ret == -EACCES) {
-+				ksft_test_result_skip("Pagemap PFNs are unavailable\n");
-+				ksft_finished();
-+			}
-+			if (ret >= 0)
-+				break;
-+		}
-+		if (ret < 0) {
-+			if (madvise(p, pmd_size, MADV_DONTNEED))
-+				ksft_exit_fail_perror("MADV_DONTNEED");
-+			break;
-+		}
-+	}
-+
-+	if (!nr_initial) {
-+		ksft_test_result_skip("Failed to allocate any THPs\n");
-+		ksft_finished();
-+	}
-+
-+	/*
-+	 * If no fallback is observed, retry allocations could use untouched
-+	 * free memory instead of recovering memory through compaction.
-+	 */
-+	if (nr_initial == max_thps) {
-+		ksft_test_result_skip("Reached max allocation without failure\n");
-+		ksft_finished();
-+	}
-+
-+	/*
-+	 * Split all allocated THPs to order 0, keeping only the final base page
-+	 * from each THP
-+	 */
-+	for (size_t i = 0; i < nr_initial; i++) {
-+		p = initial + i * pmd_size;
-+		last_page = p + pmd_size - psize();
-+
-+		if (!is_backed_by_folio(p, pmd_order, pagemap_fd, kpageflags_fd)) {
-+			ksft_test_result_skip(
-+				"Initial range is not backed by a resident PMD sized folio\n");
-+			ksft_finished();
-+		}
-+
-+		initial_pfns[i] = pagemap_get_pfn(pagemap_fd, p);
-+
-+		split_huge_pages(p, psize(), 0);
-+		if (!is_backed_by_folio(last_page, 0, pagemap_fd, kpageflags_fd)) {
-+			ksft_test_result_fail("Failed to split THP to order 0\n");
-+			ksft_finished();
-+		}
-+		if (madvise(p, pmd_size - psize(), MADV_DONTNEED))
-+			ksft_exit_fail_perror("MADV_DONTNEED");
-+	}
-+
-+	qsort(initial_pfns, nr_initial, sizeof(*initial_pfns), compare_pfns);
-+
-+	/*
-+	 * Retry to allocate THPs in a separate mapping
-+	 */
-+	retry = mmap_hpage_aligned(nr_initial * pmd_size);
-+	for (size_t i = 0; i < nr_initial; i++) {
-+		p = retry + i * pmd_size;
-+
-+		ret = allocate_transhuge(p, pagemap_fd);
-+		if (ret == -EACCES) {
-+			ksft_test_result_skip("Pagemap PFNs are unavailable\n");
-+			ksft_finished();
-+		}
-+		if (ret >= 0) {
-+			uint64_t pfn = ret;
-+
-+			if (bsearch(&pfn, initial_pfns, nr_initial,
-+				    sizeof(*initial_pfns), compare_pfns))
-+				nr_recovered++;
-+		} else if (madvise(p, pmd_size, MADV_DONTNEED)) {
-+			ksft_exit_fail_perror("MADV_DONTNEED");
-+		}
-+	}
-+
-+	/* Check if the last page left from each initial THP is resident */
-+	for (size_t i = 0; i < nr_initial; i++) {
-+		uint64_t entry;
-+
-+		last_page = initial + (i + 1) * pmd_size - psize();
-+		entry = pagemap_get_entry(pagemap_fd, last_page);
-+
-+		if (!PAGEMAP_PRESENT(entry)) {
-+			ksft_test_result_skip("Retained page is not resident\n");
-+			ksft_finished();
-+		}
-+	}
-+
-+	close(pagemap_fd);
-+	close(kpageflags_fd);
-+	free(initial_pfns);
-+	ksft_test_result(nr_recovered > nr_initial / 2,
-+			 "Recovered %zu of %zu THP ranges after splitting\n",
-+			 nr_recovered, nr_initial);
-+	ksft_finished();
-+}
--- 
-2.53.0
+Thanks,
+Juri
 
