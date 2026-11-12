@@ -1,98 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794524416;
-	b=j8oAObY26Kn8Nui1VfXIG6cvPrvPtmZ0ZPYpIhi3WQPl/HZrKKRJGorN0yAtREL3x/EV
-	 UNqSkANobc89t8JpvVEUbPHjCp0SYCsch63ale9gfcrsiFxLBwp8Gric3+ZPbI++rYbp2
-	 dIf5Fn7XeM+E0ibnMYhWHf0WwwWOzbrjbg0jNWRRiPJxBMgYSeGOP0yg6RqLutzvRABve
-	 SIzUZ7aYCZ/Xm/jgh3jbEdJBfPT0F+AyUBvXYAU33JB6Dj+kB+u/qX8UKukrfBn5Ybb6+
-	 VOkwYzhrNwjUrFjz1+jKpXoOFDqHVIU6rGlASxjbHSZLJ/qofEJ4AqpRtz6V/4zu4Fg==
+	t=1794524925;
+	b=h/Kd/QvDjVTdXywr+UjiiP6tA+RY2UzxRuMWpnPFMhjyfHZHOLwVo9vzIvsYoq9dv3hG
+	 sVv1xdB1YBnfryGBIeiCUiUX7LV018zi0H/ZUrvp07LSqCh5ts1T9g6l5x/SbHC4dbA6u
+	 DQYH6jiZjJTskSGtWPqdq63Zla1108Ol4jVIxekBNoqoyxOGEVJEOEXpAnvjuW5Y1pU+d
+	 grNRBmKCZ/OBfeipdEOkD2AJZq1aR2C88u5w9/WHOLW9jXpFgebdsJmkaPi4fAapzKxCY
+	 GWzqUyl2ipejzs+QLYm28nSn4aHXFaMv0WsqlTjvASAi27vondm0mPS27IyGqkXuv2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794524416;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=EBkgmCwzSSGPUQEDHuaBTutli2Jfo6B14aVph4B8jx0=;
-	b=meGdMtEoN2os5caAMKgbKeJt74FNNfg4/ECIYf28VhLpn4xac65IRU+7alnqSa3DobLm
-	 It1TqI4giWWMS+2eP291nYhOx/0gpcgBwjH6aFIUIuUs64ABNVz5MJduy6XvTw0c4eH4e
-	 THdW/pJH98wcD2fyuP3fEpzisJjnTxgHFfayO2h33HHmcxGMiQDgISz+uVkVl12khSg+5
-	 drhby2lhr0qyG9fv2tUf4OvAQzMdOuC/UynvPLlzvCWwBnEsCCtIH6g31qeMHKYL5Vzf5
-	 4E3zfwcBoXlbg8/OWC+1x/72oBlfIQDUx0uT+538MiYx0bMqYyWX9R1oxIjvBn32tBg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794524925;
+	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Y+P7XadM8mg2ZusdvDmS9q16oQmmftq9v/082mmiWRs=;
+	b=Eo0ZVMKanrdXoeYq3l+SX/fqdUR35Eqbx6i18j+sgCPdFtT9Jhpzvranor0aHxB8zdYT
+	 h6zblU+6rbbeZCHu58v4S7aQbUhEnx6G4xdN8Y4OlasiLkLxPKRIiPAJ8oFXirnuaCrTJ
+	 jedSd03F4pg2diGobcFRtbIK2OXmm8WnhwVcB01E5ClLB1186wlmMjj0X9VJcCKfERATF
+	 R63q9vU84Hy0102hn/okuqRmClE3CM3qgak0mi/8fVxAkwIGlqPsEgmIrclQpqqFrAg36
+	 iLrYOkC4bPykYpcpFm/40dddD+Oc4geFAwVxUopXDaE7bAIiOUVVNUmPFB1nWdZhGvA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="UEmdS/dd";
-	arc=none smtp.remote-ip=74.125.229.4
-Received: from mail-dy2-f4.google.com (mail-dy2-f4.google.com [74.125.229.4])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=grapheneos.org;
+	spf=pass smtp.mailfrom=grapheneos.org;
+	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b="HIvcmT2/";
+	arc=none smtp.remote-ip=206.220.120.4
+Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CB5606A89D
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 23:00:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 26CB5606A89D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B5B606A323;
+	Thu, 12 Nov 2026 23:08:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1B5B606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UEmdS/dd
-Received: by mail-dy2-f4.google.com with SMTP id 5a478bee46e88-36f758312e0so123940eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 15:00:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794524415; x=1795129215; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EBkgmCwzSSGPUQEDHuaBTutli2Jfo6B14aVph4B8jx0=;
-        b=UEmdS/ddxgea87Jmi4D6KGO0cwNBW0iN6pjH4MYdOo/9psUz72Te3wCs/WBVGWCYin
-         oLAdMFp7CIubzlvzOBmyRG/Lj4TRocdsaMYZRyRloCp5icyGrXTBcF0NN3YDIdpbziPD
-         9dCoQysz795JPTNbOOEjaH/EeLGkosuG4aQkxwOskX09xUil/r1gN92uAD9OMsSjKiDB
-         F0lH6/nzBn/sVPwCLsDSnGNtu6ltHUoqDrztZuFogvL6rw+gfNvucXjpxiD1Anf0Up7c
-         0j1KXXL6s2KWDR5t1ZzoobkG3mM+v03VwLyiHohMh0pxNELAMXLgF+TZ4oIQZUO8hFiw
-         1I8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794524415; x=1795129215;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EBkgmCwzSSGPUQEDHuaBTutli2Jfo6B14aVph4B8jx0=;
-        b=qtftQWYt1c5FyLGmlDxVCfuuNsfgY8YQO6JbaGTctIaCOK7WcHCRxFNwHlUKUr4xU4
-         +9mtiwB7uRPWwSmo4gmm8VLb6cF8v65fjM5oclKN3Jk2+zFarDnC0N9m39gqLd44vm+h
-         o7VbUiNefyGCX5IMW9IBGlZm0YNak8EgbJYkcYOcLkEPvlQffv3GdF5ywpP8s6cF/MLw
-         4JGJcyyL2x3vho1/my6KcwH0EDqmZ8MZ8iZwOpvHIZUcN8gtgFdFB8pTrc75ci9iIjIX
-         Fxt0rdcniYSuuobPECfk/qxic4heX6VAxon79MWCb1Fs2NzbWdOjusejIge2UEMNtyUd
-         glGw==
-X-Forwarded-Encrypted: i=1; AL+hErE2vcbOCjelEeho479/OQKGZFueO2IPkSCY5XJuHjuQ+zU2wiTNgY4oq/GYLrARWbPA9rblThbT9Wp107W/TVk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/K9Euxq9uxeGdmrVBosfdoGrkpJSbquTnHgzi2QULt1bd4i2Y/
-	nejgEcV5cXYrkxQBZ1rAqSIREDLKsUfCtzcnyOZfSvVJMNqiIkOYbBxT
-X-Gm-Gg: AYBFou0Ba9G+t45Tm0cm420FEq/U2jakJj89PxeCgUcWWvR5iVPSDJZqRHzDTg4bw4P
-	e8YO5RLQlC49dGsKBXvteeQnh41+35lNoRSttt8Op/4Rf2mOx2WrpP3fDq4ECatyjtpSztaSbR3
-	41je4dlBUKFFYU5DIZZ0AP2gn4mAF8fuIOib2TI7Vy2pR0onrSeQ4A+MBZlxKinrOK47xwFuwz+
-	IusZKQOEsI43CeIpO6pBLVKa4NhexH6ZmH/1wXru15uWEb2s+MWZDs5V9xHQDT9UqHglBxNttDJ
-	BlEaaTzv4g3wiMfP1JEnhu41w7hvu8/LNBracKMsRyBS7MqF6I8r0XExplJUrI8W8bEOzQYAPkD
-	XarNHk2L/8osvKHtJ+YwKMSHhg7AMiCYM8/q+Gtzd24j58asv2+FBkej5v7kOl2XAQI2OQMli6A
-	0Wq6Z2x0ocGT0rmYL355FhB45THAsAL5wfh7oDqZGskT/lNeKOALqYx3WJdB6OOfWhBdUJQMpEh
-	0PzE8584eyMVu42OnI7XAif68HuRYu8DRIo/f4+SxdRDNXRcAowu3E99vOdwKBS/oLNbEZnrHke
-	fR1oviF14+I0MKNzHXarTy4=
-X-Received: by 2002:a05:701b:454f:10b0:1b2:4998:a0df with SMTP id a92af1059eb24-1b5030db655mr763014c88.35.1794524414765;
-        Thu, 12 Nov 2026 15:00:14 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:60::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5031b98e5sm2014845c88.14.2026.11.12.15.00.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 15:00:13 -0800 (PST)
-Date: Thu, 12 Nov 2026 15:00:09 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, michael.chan@broadcom.com, pavan.chebbi@broadcom.com, 
-	andrew+netdev@lunn.ch, edumazet@kernel.org, horms@kernel.org, shuah@kernel.org, 
-	almasrymina@google.com, sdf@fomichev.me, leitao@debian.org, dtatulea@nvidia.com, 
-	asml.silence@gmail.com, bobbyeshleman@meta.com, daniel@iogearbox.net, 
-	razor@blackwall.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 0/5] net: devmem: size TX net_iovs from the
- dmabuf layout
-Message-ID: <avZC2hp_0ODMQ4SG@devvm16445.scu0.facebook.com>
-References: <20261111224740.2744522-1-sdf@fomichev.me>
- <1b764043-2efd-4e65-adb9-a47c0136446b@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=HIvcmT2/
+Received: by mail.grapheneos.org (Postfix) id 7EAA93C08EF81;
+	Thu, 12 Nov 2026 23:08:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
+	s=default; t=1794524918;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y+P7XadM8mg2ZusdvDmS9q16oQmmftq9v/082mmiWRs=;
+	b=HIvcmT2/ut5/iOXALOpYFMWoKzu+HnRR1rBUEG6T4m6sycjeu65DG7Il8689yADCeBuFZj
+	v0gx9mPQO1yhL3u22W6RXpJbSbtaEFO3eR7hB6x8EX0WY9A1Oz1FvUAZifDEI3lngN1J+w
+	sQAaQfLGKrZERpLcNMwBCi0MLMWVecfvZKv/3CSikU+/M3QEhtUkaAvqMhgB4YGWmrmL5x
+	sAD1ufyZkVE2q90rdXC2QFIy1WqXix8QaJ5DzUDZ6SAJLUmmMQ3xHv27MAVOmKfP1zkaPn
+	+xOSn/NTAS+sbAF9ETH8jT+83BbFp23QtpRrKzouv0w8tbWOjRRH+8dcF81Cjg==
+Message-ID: <2503cfd2-5629-448f-bb9b-111ea239efb6@grapheneos.org>
+Date: Thu, 12 Nov 2026 23:08:28 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,85 +58,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1b764043-2efd-4e65-adb9-a47c0136446b@redhat.com>
+Subject: Re: [PATCH net v2 2/4] ipv4: restrict on-link fallback to lookup
+ misses
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ liamsmith827@proton.me
+References: <20261110061536.10811-3-liamsmith827@grapheneos.org>
+ <179451823511.2199510.15480690224597348773@kernel.org>
+Content-Language: en-US
+From: liamsmith827 <liamsmith827@grapheneos.org>
+In-Reply-To: <179451823511.2199510.15480690224597348773@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 11/12, Paolo Abeni wrote:
-> Hi,
-> 
-> A few (late) questions/comments to check I'm not missing relevant
-> points,
-> 
-> On 11/11/26 23:47, Stanislav Fomichev wrote:
-> > TX bindings use PAGE_SIZE net_iovs, so a frag covers at most a page.
-> > A 64KB skb needs 16 frags, and MAX_SKB_FRAGS caps devmem skbs at about
-> > 68KB, which makes BIG TCP ineffective for devmem TX.
-> 
-> ... with default .config. You could set MAX_SKB_FRAGS to 45 and reach
-> ~180K...
-> > This series picks the TX net_iov size from the dmabuf sg table instead:
-> > the largest power of 2, up to 2MB, which aligns every DMA segment. With
-> > a 2MB hugepage-backed udmabuf a BIG TCP skb takes a few frags. There's
-> > no UAPI change since TX addresses are dmabuf offsets.
-> 
-> ... still this option should be more effective because the limit would be
-> higher and the skb would use less cachelines for the shared_info,
-> 
-> I'm wondering if making a comparison vs MAX_SKB_FRAGS==45 would be
-> complex and if you could do that, too.
+On 11/12/26 21:17, netdev-bot+sashiko@kernel.org wrote:
+> - [High] The fix is incomplete for route-based restrictions.
 
-Originally I did not want to include bigtcp to keep it apples to apples:
-same tso size, just 16 frags in skb vs 1 (in ideal case).
-
-I just tried running mlx5 with 45 frags configured and it fails to start with
-the following error:
-mlx5e_attach_netdev() warns "MLX5E: Max SQ WQEBBs firmware capability: 16, needed 23" and returns -EIO.
-
-(fwiw quick review with llm claims that mlx5 only supports up to 20 skb frags)
-
-What I also tried just now is `gso_max_size 524280` (on top of this series)
-and it ups single flow throughput from 200Gbps to 240Gbps (presumably
-by making the receiver go faster with 512K TSOs vs 64K TSOs) and halves
-the sender softirq..
-
-I hope this gives you more data, not sure running with 20 frags is worth
-it (vs 16)? LMK if you disagree or want me to run something else.
-
-> > This doesn't make skbs larger. TCP still sizes them with size_goal.
-> > Only the frags get larger, and a single frag can now cover the whole
-> > skb.
-> > 
-> > An skb stays under 64KB unless BIG TCP is enabled. With BIG TCP,
-> > MSG_ZEROCOPY from huge pages can already create frags of 64KB or
-> > more. So drivers already have to handle them:
-> > - mlx5 has a 31-bit length per data segment
-> > - gve splits frags into 16KB descriptors
-> > - fbnic doesn't enable BIG TCP
-> > - bnxt has a 16-bit BD length. It is broken for such page frags today
-> >    and will be fixed separately.
-> > 
-> > Tested on two mlx5 400Gb/s hosts with kperf (udmabuf, 32KB RX
-> > net_iovs, 2MB hugepage-backed TX buffer), series backported to a 7.1
-> > kernel on the sender only. 1 flow, MTU 4200, receiver tcp_rmem capped
-> > at 16MB so it doesn't drop, median of 5 x 60s runs:
-> > 
-> >                                before    after
-> >    frags per skb (sender)       16-17      1-2
-> >    throughput (Gb/s)            208.6    211.2
-> >    sender sendmsg CPU (sys)     40.8%    19.5%   (-52%)
-> > 
-> > The receiver's CPU is the bottleneck, so the gain is CPU, not
-> > throughput. More of the transmit runs from the ACK path, so the
-> > sender's softirq grows (52% -> 59%), but sys + sirq still drops by 16%.
-> 
-> is the receiver using GRO H/W offload/big TCP? Which are the gro_max_size/
-> gso_max_size limits? In the `after` scenario, is the 2nd frag used for the
-> headers?
-
-hw gro, no big tcp (default tso of 64k). The headers are still in the
-linear part and most of the time we get 1 frag.
-
-I'm assuming 2 frags are happening sometimes because of tcp sending
-something over that 2MB boundary. So that one single range has to be expressed
-by to frags.
+This is not a legitimate issue. A RT_SCOPE_UNIVERSE route not matching a 
+RT_SCOPE_LINK lookup is expected. Route maintainers should install the 
+correct routes. An unprivileged process can influence which rules/routes 
+are matched in many ways other than MSG_DONTROUTE.
