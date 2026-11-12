@@ -1,65 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794504886;
-	b=AIyWc5g8X6BHsp+XnL5uIN78sDHoGAZ5t462lhR/uX3UFZCJDV+GlFGxlMMCKwQYP68A
-	 5MBEFzmfONFxBaJtYNN9YA17wqnn65FDyu76LeMthw9x1XtbZLSIKRZntfCuFVEzEy7Ak
-	 DPNKnW8K+aS34lca45Z4+LZggbUHCifspVSgFDpX5aXErbQpqPb+bmuxwhe6FkgjOuV/E
-	 tqJixPLhCTCxGYgjLXLW2jEbf1dPRomcJJw0TZuLiKciFhaIcnCmModXSuyhdaOd/m0Rr
-	 QFwz4oRBs361adhyfqjuK8qn8yR8R3Q44ZOclBK8wMM0oVYy5PJ7d6IgS3LA7RWIrvQ==
+	t=1794505099;
+	b=4upUiRUmH+NGxKD7GGXwqQedPl5lKhEsz5hl5Bk4s3mErMl8BVHItFkCcgxj4AvoN1e3
+	 kGWcRtvIvVU7oXagELoRyrc4rsvNNSWsyVm0+9+q/DBZGb+SZ0Q24PXKfBdesz9qg6Cqd
+	 Av46nFOH/mUqRb1livqDWTEM7Vq5ttjeyzRMyPSHGbDdMcEgDK9oPAMzuQ7E2HzdJBZtT
+	 sNycgkHS85ZrHOYWANWHEBGk68tn7KayrF09HJzNVPk/3aG1ytCd/DHUgKc+n6b6sons/
+	 h4XRmoz6j0MWKGfMyZm5x/tdAwDtRU5V10MJIgC2q4Rcnql7njKHZQaNkJ99LjgzIpg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794504886;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ycrCu3DcnDLB0U88T/9grZGWKZUG1dcYBjk8fgOCOfI=;
-	b=F8dSUgLzLZn7xMHGDDGShVsNqhNgh/INTxLu+BJFx+MSWCIfbwHtMu+Rd6xmGlT9bcL8
-	 BARX5lb7WnRYkvkZwMESDgDGbKok5f2kAoF/WFTkODcwI2HKgis5ks5g/2JhzcmYaakQx
-	 hsHuG01enjPWYjR04WvsnLofhT1p93NC3ygU3TFFx2ZxczPARRQ83I3wQodHL2hV9pxBp
-	 /2yI/3rchWDsLFG/IGPpycpkjzExiF0UAgf9c3th2h6JIAp32GeZHQINeW5Yzt/uCj042
-	 heVVkGDP0anawafrc+hn3PITkFPnmSZnxFwbfY3+P7gZu8UZfPuFslpUqZeskmWj4Nw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794505099;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=U97fnoD7MDO1xz+rlVTUI9VrSV2vbzS4xpJweB6GCX8=;
+	b=ipt8ra+rWKIG5zyb/0cMghq+RchOq9AxrZp+wmqHHlxetLBMkPAfcm9wL1UMq5UfvjC2
+	 hg5yUrU//ogc1QgWbrKAEA8j9PKz8oz2DZtTuFkRXh9S2uBqHHGgAfqrYo0r5S8slAkRv
+	 3AHkeC4CO9zx8Q/pjihIN6skxx/Zd/MCZ93Vxqcm+2UQ/CFIOBoCgQRQT5f6udOFPEpjW
+	 UR+G/QyqcKvHnpO5U6gpehEzWpzLEm08/JlFta8FnF++wTY9N+0YMYqd0NEP9HU6HIik7
+	 T9w6I6lWGVdDLUgOi7W9IUyUf60ozIQrX9uk8mh0Tjb9QLGLZiXaC5LtW+9FcZk1XnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=iK0VbpxC;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 364FA60A5BD7;
-	Thu, 12 Nov 2026 17:34:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 364FA60A5BD7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="E/cW18XC";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAF3606CFCA;
+	Thu, 12 Nov 2026 17:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=iK0VbpxC
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FB401516;
-	Thu, 12 Nov 2026 09:34:42 -0800 (PST)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECD4D3F632;
-	Thu, 12 Nov 2026 09:34:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794504885; bh=MuWT2VnKrf99VLJVMZG7nQfDKcJKJImkQExrQPVoaGg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iK0VbpxC17TUndKMMRwxW2JCmFfLy2r+U+X1AHMewdCIlUdsaX39Z++1PPW32ebO/
-	 au1F9IvHK63fT0EV6zljQHdOCa28tu6liLv1oXfdSKRJk/tJAAdkomiD1KNLAFhLrE
-	 bvP/0i3hikYeqaUShKyIgnOjeU3GaQAhl1AELh4I=
-Date: Thu, 12 Nov 2026 17:34:32 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
-	Shubhang Kaushik <shubhang@os.amperecomputing.com>,
-	"Christoph Lameter (Ampere)" <cl@gentwo.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] futex: Canonicalize arm64 tagged user addresses
-Message-ID: <avX4qJ9SG3SJynen@arm.com>
-References: <20261109-futex-tagged-uaddr-v2-prep-v3-0-3f5f2ef83138@gentwo.org>
- <20261109-futex-tagged-uaddr-v2-prep-v3-1-3f5f2ef83138@gentwo.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E/cW18XC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C27E11F000C4;
+	Thu, 12 Nov 2026 17:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794505099;
+	bh=U97fnoD7MDO1xz+rlVTUI9VrSV2vbzS4xpJweB6GCX8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=E/cW18XCL9lGsvizraEEe13YTC7Cef/EEWxEXv2NWkojaoDGyq6g70bI+wfKdJiSW
+	 hD0MgNYM45Asm8a5yLsiE4Jyc0atv6RbUA0/4wLhsYdE8vASKoBOXKwjd5rKAzB6hI
+	 nwpnKl8oNxeJNkBz3Q5tU7UNhaZvgA/HdJX+6xnDDEDqFYM6eJ3Vx8bro7cHu/qwT8
+	 5CsaUGlS27tMcqu++iGEwCV13pDBILCRv2j0Nva9k8MqWVrQXKJ2oUaN/qKMlKfZX9
+	 WvFWG7BwqpEgTm+TsGlwRb57JkYc499Q1zx9ONrN8UIoaqUlhFSj1yqNmg9ft2uUlw
+	 RSrFQO9VzTofg==
+Date: Thu, 12 Nov 2026 09:38:18 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: liamsmith827 <liamsmith827@grapheneos.org>
+Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>, Ido Schimmel
+ <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, liamsmith827
+ <liamsmith827@proton.me>, stable@vger.kernel.org
+Subject: Re: [PATCH net v2 2/4] ipv4: restrict on-link fallback to lookup
+ misses
+Message-ID: <20261112093818.0af5c5af@kernel.org>
+In-Reply-To: <20261110061536.10811-3-liamsmith827@grapheneos.org>
+References: <20261110061536.10811-1-liamsmith827@grapheneos.org>
+	<20261110061536.10811-3-liamsmith827@grapheneos.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -69,53 +64,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261109-futex-tagged-uaddr-v2-prep-v3-1-3f5f2ef83138@gentwo.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 09, 2026 at 10:26:47AM -0800, Shubhang Kaushik (Ampere) wrote:
-> On arm64, a thread that enables the tagged address ABI can pass valid
-> top-byte-tagged user pointers to futex syscalls. Such a pointer must
-> have the same syscall behaviour as its untagged form.
-> 
-> get_futex_key() validates the user address with access_ok(), but uses
-> the raw address when constructing private and shared-anonymous futex
-> keys. A waiter using a tagged address and a waker using the untagged
-> form can therefore access the same futex word while hashing to distinct
-> keys, causing FUTEX_WAKE to miss the waiter.
-> 
-> Keep access_ok() on the original pointer so that arm64 retains its
-> per-thread tagged-address ABI enforcement. Canonicalize the address
-> afterwards, before it is used for futex key construction and shared
-> mapping lookup.
-> 
-> Fixes: 63f0c6037965 ("arm64: Introduce prctl() options to control the tagged user addresses ABI")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> Acked-by: Davidlohr Bueso <dave@stgolabs.net>
-> Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
-> ---
->  kernel/futex/core.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/futex/core.c b/kernel/futex/core.c
-> index a240638f69e5c65bd036434a15f3df680efb4638..dcc8ffca38595a5ea69f3672375ffb9f9c6766f9 100644
-> --- a/kernel/futex/core.c
-> +++ b/kernel/futex/core.c
-> @@ -539,6 +539,8 @@ int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
->  	if (unlikely(!access_ok(uaddr, size)))
->  		return -EFAULT;
->  
-> +	address = untagged_addr(address);
-> +
->  	if (unlikely(should_fail_futex(fshared)))
->  		return -EFAULT;
+On Tue, 10 Nov 2026 06:15:34 +0000 liamsmith827 wrote:
+> From: liamsmith827 <liamsmith827@proton.me>
 
-Thomas, Peter, do you plan to take this fix via tip or you'd rather we
-take it via arm64? TBH, I don't think it's urgent, the bug has been
-around since 2019.
-
-Thanks.
-
--- 
-Catalin
+Author and SoB need to be your legal name with normal spelling.
