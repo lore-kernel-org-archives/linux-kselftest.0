@@ -1,72 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.163.188.212
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794448227;
-	b=X9LtoIH52YiqowTf0dpdqvUzZyGMmC+EbPZ/Kwo1MsdsFQ+I91zneECR/rw4NZD7QSJA
-	 F4TkI1BVOH5rdWv+5uisWLKJe6h4CgjnCpOl4pLbjPx3YWCErddYYmCoQAfeJZNteU09O
-	 dcth3iMEvgls65y05o/t3MYf1bkVfbYvnSdm3ONeZPJx4dn6cJmxF0LblhbpQgFpQY2b3
-	 p7VjAwv5ZBkgiZfbpnMSnWMkLucejkopnExuEEVn0ZTMxl+Q7clulj5qmnLMqDQCh80JI
-	 mjHLo6AQuEkwY9RPw5ewLjolIfLb46SjlgpRBkenjdJVgSGj2NowMA+087G9dpHsNzQ==
+	t=1794448237;
+	b=hPeSrJPAHIssvnNWtteds46rTxwUJzRw3T74avuSHl3UmEDnIkPbXQ29He0ZDl/+0sJc
+	 lpO9nfxE5O6lnMLcx1c0BSgKi7rNi7LBg8TA+/LbSEly6QlEytRetFFYJFLzvPMciaaST
+	 RVUtbT2ncJzMf+QN9o/Nqo8Ru1WARqG5csRpyTMjSIF2GZFo/uQmh7xY53hQHOCpGaPEN
+	 ACcu3KjTLzy7SbadhAYtv/SMro3+ibVLPA9yHde63vvSSGU7rBfbAcTiZf9aBDULdHhtx
+	 NC8kvLCUGaLIg6+eds9rEAZvipnHdUUpGRXIUECB1Qd3E1oXng/0eLHQ+hAgb7PGRWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794448227;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=VLQE4yDc+yHcjX02+9IxETSLcgSpZnI6ZugK4stcO84=;
-	b=RIUJQv6xFtl58NeW7nViXeNTE8UR/WJdiV1H7WgR9nY5j8dnNLd7xprG7WlShyKSoMnw
-	 CvRw0z+dHukPndZNQHH45rw8B1TJj45JywmYYFGRoKNwkcNUy+y+jpwkKmncmuNGBnZYk
-	 iSvKbK92b6bMmsIybf2JysDlacOVU9zdzq4VpfdC/F4ZR0CGtQc237JF4Dga4aeEPqjmF
-	 u9UDy9sjkxkArSu8w1+9gq4tnM0qTjWAS3xbvhaUIdhawlDBGSFhGeQt1JnNtdJbSxYth
-	 dnGpwUOWlia4CGf2AELoytcA9aQxDJzzyfVn1CT5vZIp+dYrh8GzRaq/Xs20DyLyKiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794448237;
+	h=DMARC-Filter:DKIM-Signature:X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:
+	 X-Sonic-ID:Received:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Mailer;
+	bh=O8h9fybdyu+Al7CdWlfRBQ6LgqQutaBSF+Rc2HGjCVE=;
+	b=aUi6w5cNVFHwyum6Ixpaw1EhuUfCpKGvhiipBlGZ22y2+ZQjJ4pt9tbgOeCcdivXrHaK
+	 1ULbZcgusi9Cy3SIrfSfuVzFKjCHsOMxpRNe6lglBcTFnV27kBvUQJ5ftZxyXVccb3HdO
+	 7ZhDnyA9nKud/3MsZn9iBhqQbfF6IRnW0wSgrPXRF2b9/vHT1MHBfyXTh9gkKmb+m0h41
+	 mIp8en1Wza6Y8M6vpCQHwHxiBjp0I+8qjlWAeI6/SlSnZ0Q0txS8hMiSChFl1u1KDRhPX
+	 qmCaO/1zKTnLv9y3g12GJzVPq7mshKp3hkmSYLgp1kA2yhOEyoADb9FZlCGfpZ70xQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--treapking.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hVOCFnWv;
-	arc=none smtp.remote-ip=209.85.216.71
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	dmarc=pass header.from=schaufler-ca.com;
+	spf=pass smtp.mailfrom=schaufler-ca.com;
+	dkim=pass header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=F+m434hx;
+	arc=none smtp.remote-ip=66.163.188.212
+Received: from sonic311-31.consmr.mail.ne1.yahoo.com (sonic311-31.consmr.mail.ne1.yahoo.com [66.163.188.212])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC02606A33D
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:50:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FC02606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--treapking.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA4B606A323
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:50:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AEA4B606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=hVOCFnWv
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3b0afbf532eso3396021a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 17:50:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794448226; x=1795053026; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VLQE4yDc+yHcjX02+9IxETSLcgSpZnI6ZugK4stcO84=;
-        b=hVOCFnWvw2kpR0Ty2a//IAtp0NaWopqYg9Y77OHi2YgXXr4JV7EusYpPk2xfSXstwF
-         s/FL6H53Tur7xvhdNVnz6j/N60u2/qO3+3UYOaShx48ePVv7YPRmt3F1+ym0uw1Ec64T
-         OgiNa2aVbsXi2OaBdMv7g0nsfZ50LBFrxmRLNuzfL7T3/ZcefwKkEDRCe0wD+etvtMBQ
-         AurfZ/pTdMbSWfkE0tyT0c0U9eRteseMU35Ck7lf1dRN/gHmamQWjCMs/RDd6q+Ts8G4
-         9IwIc6H+Gy+vciWG1QWJ6IMHb9PNwPbf9nfv+LBZhDMGfNOv1Dp8szx67m6ZkNOMot7L
-         hDmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794448226; x=1795053026;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VLQE4yDc+yHcjX02+9IxETSLcgSpZnI6ZugK4stcO84=;
-        b=HUQRwaqbT8Z49DcRScoNNgMWm7/iExznI7/s1DYiyZNChVh4fZiVjmaOe8ELRup66S
-         sJrLxR7eWHK2eK1xAMo5BrX8c0vYSab94Lq2/ncQBImPQrT6R4kwPeej515KbNsxQHcv
-         sXZ9jf4vtXM+I+N4YG63aMTqeqGlqjGpOpNBsd/UISrtIlt2zbh6JeOQZEHsj//2n2ky
-         XTdvKo1Z8qebmhCt/Hk4EkS4NAz6U0eI4y38UGE2qZaJme3JmzkZevm7P7YzzKOSHL9s
-         v3HWH/3ChpRWmYbhVAruAkoNxp23qLzPUEQEknrwtgrGNpYadSYJ+sTSORUpU0UMIqTq
-         YuwA==
-X-Forwarded-Encrypted: i=1; AL+hErEQABWOGh/0PPjwUAdh5KF+XFEvJ1ugLEQH0rOW8/supq/LY1Xi25Deyo9HTLX6JkjF5w/MDCaooNasooKECEg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/JD0NZ2Wr0qaa99H9hzacB0XciRHzoc69uDj2/dKRQT2v56O5y
-	cOzf1eFH/2bptD4awh/o2080CSzaqGW7Oh3eA0pe1Ffx7hiK0DHyLEEmlE2Q6SOgYS80d3ANNJE
-	jZPB258cXDYCi9YkIJw==
-X-Received: from plpk4.prod.google.com ([2002:a17:903:3da4:b0:2e8:8642:f035])
- (user=treapking job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:224b:b0:3ab:f38:2b3c with SMTP id 98e67ed59e1d1-3b182f1feeamr3842902a91.28.1794448225397;
- Wed, 11 Nov 2026 17:50:25 -0800 (PST)
-Date: Wed, 11 Nov 2026 17:46:18 -0800
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=F+m434hx
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794448235; bh=O8h9fybdyu+Al7CdWlfRBQ6LgqQutaBSF+Rc2HGjCVE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:Content-Type:From:Subject:Reply-To:Content-Type; b=F+m434hxnazo+znIsDN87b1q6q2BjDXrSK85l4sPO4/7/Nv6ouklEMGBpfrTHUnO8eGiNQoV5Bbw/uB3JZACliQBg8PtdTRYRP97HHZoegx3ArYwH69kAdVaUPkV7WcyNd89YKs91cZCwmWeziNsUM+FCRLahqzZW3a6Ku8pvIiJlMO/7XaKbdkzRicymfmmSk9XFsFNG+fkHI8UO70pZ1hFT9v2XQiwRrAslvpHUFbDR+3rpTT4Ikh/N/oSBL0qRMnhxDrBkdI0Mmku6tTsyJWpgcJjSTSvBuepznmh0kGiP8yElqSHRAm6ov8qvVTBbZJZj+71HtVfmpD+WAp7XA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794448235; bh=cB6ms4YZu3OSr7Oj5Ktyy9vRYllWqlKKBSjCDtAOhd3=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Wh5tO+A7k6l9RAB9CmF+7nFPpV+s7vwQOvHRCpB836zmpk+EmZdiT1obFQYb3eEYUV/ZZrDMNSGrpqiSFrVBvEAP1+BcX3bVXL8AkZe5aM0djERGyxVy+oivb40ItIA89tHRP/kW5BzO7GaPGZrOTfFkDQF1HHnKQVH/ifoH5PYTL/BXjLkbPViq5JKecTMlRIryhz3iU6NkOHkP1F3oliaijdeTD+Tk00HCA4w802Q1PFZvsZSndMk6hlb4A1wMRPh3z4tVeu12oZckS5JIJR1ywCFknBKWBE+hVxojbZ57Qr3RCaKJrua5vLBD1s/SnsdmRZ+/JLOhUlVDaAQyJw==
+X-YMail-OSG: zqmnDtkVM1n5t6ueog55b_vkFHSYM5E1qoECEJywzBr3UwiKAfUIVI_o6w7R9SH
+ CQ1t93f4qyBpZEcVGjU2OBO9C0Of8.lRAD_UtcVdUMSf6_GiG98G7rNXb1ZhUGsyYLDyJE5oLG69
+ MPpknxdoviNcfunvMa.q1ATsxUiRNZaaYFEtaSi7o3ARz3uzFbYwa4zXUFVTxVNR1M4yEm8E_vMu
+ CX3lc6b1b0MWbnmh3DAeGebLmTpZwI12LuF9QH7MRRpV.Y7YkiPkkooycQl42qWPa_ZCsKSCVnTi
+ cfYjzn7ZtEqmGYVjYEY1kEbVCA4JoS5GMMDKMoO39G5YhBugROnX2jrgGh0AwdwAby30.ZBxmd.l
+ S62hS2hlPvIDoPxGhzS2whxCcIZrt8XbiUGRsBq2lfu8t9x.TIubZ4wIiRqzfDYoZIwioLDCjm6k
+ .cljRFJEOnSix_ImX_sSyVP7eQAAEJ1GsHeUHb7atzAIHDlw0lV7YT_EQZaDbjuCghjYyGwMa7FJ
+ LxdRDFOXlr05WMcbROqV0a4sd0J7UyT01rGVa2p8mqlfg_ZPSk1p0.zKLMJDr5A1o8n0sxe4LbiR
+ qbREBgT6XAwECEJNbNHKO1YTM4iOmevp8GvnGDd6MDNapigfFoPwfu59SMy7zYd9LO3Z8_0VkIJt
+ aPlGTgcyxBF.v1wQggIdb30_WaSmydGJlcGPdQ03irHq2wrwxiCoQO6IJUZEr0jypo3mUQnAGyDG
+ k9vUUntKtCsyi.w0t_vFjR1T1M3Z6Xk5RLKDL9njS7LNW.CupQSEmNQ1GkX7kSwPFQP21HwmyMsp
+ i9SdJowJ0s5y.bw2SrHxrP7sM6YbNToNL5ZVELMODpe5VuCBtDWl7VcCxYMmahr5455.ZE_hGmHs
+ LrmFJx1uQ46OcZ2Ii956498sukETOy0INQsrtoq.ypS01I6QTO8GSI7rVFeq81ZNfcHhvUGJ06ME
+ B8yJmeeVBase_8cBDx_Yk7y0xRppCWZz9S9bNwiHzQcmhSHJ99JaTf4E0zOIsgLWqU5tZh4wLZKp
+ MnYneLIuBkBNwjBcYTuKXcpCwff8fTcsfan2g9ag6_HRqbKvb3lqTrnQRPIG.IGMBIXdu4D1HB2r
+ Ygn65JHFmN1QF2ROBGshwilsGajQNSqHXHgx.co9RO5Evfjv8vx67t__1ew7rn3sc1C.7W_m4N4M
+ cSR8SYdV43PcknGSee9yB1x8pWannWLYRUROzisZnoPLwDPX1S0a5pIeYojUo9jnHaAdfaOw5IJs
+ bc0nB3tQZQ.0b782FrYX_n_pf05DxifKK1hrJ0OqXSo23BlRt.p63_4auT8X4tq9HTs9fxQLg0OA
+ ydi2BtTIKopjFdQtWH0NOUC1U6_wILbgtZfZnlVsbVhHJ7Tk.UZGmAVff_vQl8b4id5D4T9jwtS9
+ 8nKfk1Ghey2tqeZDF9SgVACRH_x6kJa81R1e4J_83TMyBY4Ays_MTt39YbFzXRfBMRqG0I92h9IS
+ Xl4i4wMK_gUqmjpP0P_oaDsTzptxLp7NMOmOY3T81w3i60pQpmuYMvggEU3dv.ebRC4Brat.KcXq
+ ZyjrZ4BouQUvapbNSNNP1Y253sBId7Ys37DryRT0fCsyFp6LIN0DYA1xElaICSH34S2v84muDGZe
+ .CGRnjEo0Q2679LeUfRrG7eDmdHtGbtXa02kyQjntuOc7VrR9y8jRUHqkLiiITgSdxH1QGB5PWuQ
+ ARpFP1xjX3OHKFGeQd7o8WX3xDhKeppcWAPJEhIosno79RY0IQ4.4JX7WCaXgDYbj6BL4okuPPnu
+ 9CEiWKr_A1oRBHcXo_t2XyX1N2Jd1tPqjLAB1WY0vIGe1SVdGRdRloM6.RT24mU1pbFP4DjeRn1w
+ _aXrAymHoztvd7BVNk78MI6f1URU2iBFJ6msmP6JgXQac5cfrtvlS9yn2eohnwEPfv__IKNy26n1
+ mYs7i0yOvj6LH9jEvBJfejsFOAeuf8LBdL.MbTk8ZZiVorhzaxO81Zf4PRAQwZfM29CLtP5dAKbb
+ klVicXy3HgsPrMZiM94qTb2yOlO2WSLEgrPS_2Vx31FNEHJNJpuKXHkfgTtKgjLPmpCr4Taq44yO
+ KB8vbaoDybAHzNwFN22pWQG3NDp.x8aciLmMT8fUQgwMgW8NlLKb6ErL7ChYlwsHUhzhzMbUfvnT
+ 2bA6QlHpoN4OcRsGeb2ygbIpUCMhvL1tqClAnkg41oGlCJa3crNRCKKeXXqZBarf9KzLHJa8i581
+ 0YgHHROuHzbtZ8GRm6ggBoLbsrITMfTGKIshO9uwpGYYxl6nVscbC6LtZUsxlV5iP8t8XsYi.ga0
+ EDsRWYHlK
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 4e6572e0-628c-4102-8309-f6caa349ac8e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Thu, 12 Nov 2026 01:50:35 +0000
+Received: by hermes--production-gq1-fd7994565-9vhlr (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 15d81e1a8a6348ae9dcd84771e3b8196;
+          Thu, 12 Nov 2026 01:50:33 +0000 (UTC)
+Message-ID: <41617b0a-90d9-484e-a143-78e2a92e872c@schaufler-ca.com>
+Date: Wed, 11 Nov 2026 17:50:30 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -75,135 +83,69 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
-Message-ID: <20261112014942.2946303-1-treapking@google.com>
-Subject: [PATCH net] selftests: bonding: fix failover race in bond_options.sh
- prio test
-From: Pin-yen Lin <treapking@google.com>
-To: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>, 
-	linux-kernel@vger.kernel.org, Jonathan Toppins <jon.toppins+linux@gmail.com>, 
-	linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>, 
-	Pin-yen Lin <treapking@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [apparmor] [PATCH RFC 19/41] smack: use fc_init_pseudo() for
+ smackfs
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: linux-efi@vger.kernel.org, Jan Kara <jack@suse.cz>,
+ Amir Goldstein <amir73il@gmail.com>, linux-nvme@lists.infradead.org,
+ fuse-devel@lists.linux.dev, linux-mm@kvack.org,
+ target-devel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Chris Mason <mason@kernel.org>, Christoph Hellwig <hch@lst.de>,
+ linux-s390@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-scsi@vger.kernel.org, xen-devel@lists.xenproject.org,
+ driver-core@lists.linux.dev, Jann Horn <jannh@google.com>,
+ selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
+ Josef Bacik <josef@toxicpanda.com>, linux-block@vger.kernel.org,
+ ocfs2-devel@lists.linux.dev, Alexander Viro <viro@zeniv.linux.org.uk>,
+ linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-19-4c998976c6c7@kernel.org>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20261110-work-loop-pseudo-v1-19-4c998976c6c7@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.26943 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-The prio test intermittently fails in the arp_ip_target and
-ns_ip6_target variants:
+On 11/10/2026 1:14 AM, Christian Brauner via AppArmor wrote:
+> Initialize smackfs as a pseudo filesystem. This raises SB_I_PSEUDO and
+> also SB_I_NOEXEC and SB_I_NODEV. smackfs never holds executables or
+> device nodes.
+>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-  TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL]
-  	Current active slave is eth0 but not eth2
+Please include me at least as a CC on Smack patches.
+I ain't dead yet. Nonetheless,
 
-The ARP/NS monitor marks a slave down when it has received nothing for
-too long. With arp_interval 100 and the default arp_missed_max, that is
-about 250ms for the active slave (eth1) and 350ms for a backup slave
-(eth0, eth2). Every 100ms, eth1 sends a probe: eth1 receives the reply,
-and eth0/eth2 receive a copy forwarded by the gateway bridge. Once eth1
-is down, its probes reach no one and no slave receives anything, so
-eth1 normally times out first and the new active slave is picked by
-prio:
+Acked-by: Casey Schaufler <casey@schaufler-ca.com>
 
-  t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
-  t=10   test sets eth1 down
-  t=300  monitor: eth1 idle 300ms -> down
-                  eth0/eth2 idle 300ms -> up, eth2 picked by prio
-
-But the test takes eth1 down right after bond_check_connection(), whose
-ping replies only arrive on eth1:
-
-  t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
-  t=70   ping reply on eth1 only
-  t=85   test sets eth1 down
-  t=300  monitor: eth1 idle 230ms -> still up
-  t=400  monitor: eth1 idle 330ms -> down
-                  eth2 idle 400ms -> down too
-
-eth2 can then no longer be picked. eth0 becomes the active slave if it
-happened to receive some other packet (e.g. an MLD report), otherwise
-whichever slave comes back first does. With primary_reselect 1 or 2,
-the bond keeps eth0 even after eth2 comes back.
-
-Before taking the active slave down, wait two monitor intervals
-(200ms), so that at least one more probe is sent after the last ping
-reply and all slaves last received that probe. The miimon variants do
-not need the wait, but the extra delay is negligible.
-
-Hit in our CI on GCE VMs (4 of 51 runs); the test only uses veth. On
-the same VMs, 7 of 30 loops of the prio tests failed without this
-change, and 20 of 20 loops passed with it.
-
-Fixes: 481b56e0391e ("selftests: bonding: re-format bond option tests")
-Signed-off-by: Pin-yen Lin <treapking@google.com>
----
-
- .../drivers/net/bonding/bond_options.sh       | 26 ++++++++++++++++---
- 1 file changed, 22 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_options.sh b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-index 187b478d0ddf..16c1c2d97005 100755
---- a/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-@@ -13,6 +13,24 @@ ALL_TESTS="
- 
- lib_dir=$(dirname "$0")
- source ${lib_dir}/bond_topo_3d1c.sh
-+
-+# The ARP/NS monitor marks a slave down when it has received nothing for too
-+# long: ~250ms for the active slave and ~350ms for a backup slave with
-+# arp_interval 100. The backups only receive the copies of the active slave's
-+# probes that the gateway bridge forwards, but the active slave also gets the
-+# replies to the pings in bond_check_connection(). If the active slave goes
-+# down right after such a reply, it times out in the same monitor run as the
-+# backups, and the new active slave is then not picked by prio. Wait two
-+# monitor intervals, so that at least one more probe is sent and all slaves
-+# last received that probe.
-+bond_link_down()
-+{
-+	local slave=$1
-+
-+	sleep 0.2
-+	ip -n ${s_ns} link set "$slave" down
-+}
-+
- c_maddr="33:33:ff:00:00:10"
- g_maddr="33:33:ff:00:02:54"
- 
-@@ -97,12 +115,12 @@ prio_test()
- 	check_active_slave eth1
- 
- 	# active slave should be the higher prio slave
--	ip -n ${s_ns} link set $active_slave down
-+	bond_link_down $active_slave
- 	check_active_slave eth2
- 	bond_check_connection "fail over"
- 
- 	# when only 1 slave is up
--	ip -n ${s_ns} link set $active_slave down
-+	bond_link_down $active_slave
- 	check_active_slave eth0
- 	bond_check_connection "only 1 slave up"
- 
-@@ -134,7 +152,7 @@ prio_test()
- 			;;
- 		"2")
- 			check_active_slave "$pre_active_slave"
--			ip -n ${s_ns} link set $active_slave down
-+			bond_link_down $active_slave
- 			bond_check_connection "pre_active slave down"
- 			check_active_slave "eth1"
- 			;;
-@@ -153,7 +171,7 @@ prio_test()
- 		check_err $? "eth3 prio is not -50"
- 		check_active_slave "eth1"
- 
--		ip -n ${s_ns} link set $active_slave down
-+		bond_link_down $active_slave
- 		check_active_slave "eth0"
- 		bond_check_connection "change slave prio"
- 	fi
--- 
-2.56.1.703.gf848ed807c-goog
-
-base-commit: 665b4149e91b781a71bce8637c3a4d7d64dba05f
+> ---
+>  security/smack/smackfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+> index a72bc7fabea9..4a56bbeaeca3 100644
+> --- a/security/smack/smackfs.c
+> +++ b/security/smack/smackfs.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/magic.h>
+>  #include <linux/mount.h>
+>  #include <linux/fs_context.h>
+> +#include <linux/pseudo_fs.h>
+>  #include "smack.h"
+>  
+>  #define BEBITS	(sizeof(__be32) * 8)
+> @@ -2880,6 +2881,7 @@ static const struct fs_context_operations smk_context_ops = {
+>   */
+>  static int smk_init_fs_context(struct fs_context *fc)
+>  {
+> +	fc_init_pseudo(fc);
+>  	fc->ops = &smk_context_ops;
+>  	return 0;
+>  }
+>
