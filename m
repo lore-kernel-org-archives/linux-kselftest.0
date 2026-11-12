@@ -1,69 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=50.112.246.219
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794470305;
-	b=UALl7rnMG3kxvMOgvmrzDIPkK9ssg8Gf9YTkSIPaIXFFHJFaCtIxLcOjpZEkkCXge3pk
-	 C5DPWAbdu2J21y2woNP8f5W21+ALYZGdV2t0Kx+beUpndOXSEZYv3LhWQu0MXKgVwPFbg
-	 XlRxZOpwHX5Ps4DxJe1b9GtWxpKWdpMT8pzBG9hGhrK5s+QSoXyfNACLf+qJP3qPEHRMe
-	 P5SWFbn8WPr5bXQlGIpWk2ayu9aaWmYjXekiq9veY37R/3cZzj3BEHYKApKa1wg5nxlbC
-	 q/UNEbv+sCq1ePl5pRuKuhqALcMFdb0U5uSxeImoO5/Vc2+QgP9G4HQS8z8y3UAPN3w==
+	t=1794471117;
+	b=5WhoU6UEPaO6jCjGeCxh9XdNyIW+4P3wUZoKzTvWqBzN/ZJQKevnY70PTlRdODkTdRo7
+	 NcFlWk7f4PVSU6lkOLZAHxG3Gv57aH5QI5IcireGTv1LylXFUwRqAbfjhZfaZzabp9RHS
+	 RXBDtkEpO0aDEOGQW7fYEYqhX3tU7BFEAi7VrgENzDfu93X98IxUbJW36Q8H6gBdreb5X
+	 QH70XMssCR24I+ErIznCc7yV0hVO/guG0Hx7Ktx8RNS+h6iQlv11r2ifdHypmHQleHs5n
+	 46dYLiiPzwLE1Uw2YPpKtlCsSgAu4N3U5LyJ9/Bsn9yc8p/NgiRdkOnCP0GvPfsZitw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794470305;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:In-Reply-To:References:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=J8baeEDTu5OVHYiB1EXVa2hEXMKqyhqoH/nQJtiPgfI=;
-	b=TC9ge0m//KwaLspi0eUhV5FcEnJrLTIswIkHt9e/pR/rtTJuP04vztrW/jI5KBZG00+c
-	 sBBLhdfkuV66pHUHVZMKeaOu0SEp2VO02PJp5lPy9HhcZ+3mPl7U7ndamC2o1kT/poS0e
-	 BsIergRpSIF3tpPXPlKU1V+KxfJQiHrxsE8zq6kk2oGm+OuCSm3VudXxVPfynY1/1g3sI
-	 364Y1QsVUlpa45CuaxbwR22qH3tpxOxTTUSfLzEonqZO0F8X2JGCTeg8UjhpoJl6vE0lz
-	 KABTDfnOj9MBqhqe3BEyysiwsDHALAJA1+ngGE4/0y3cf1ViWbdprguFvYtzKIPi+aA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794471117;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
+	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:X-Originating-IP:X-ClientProxiedBy:
+	 Content-Transfer-Encoding;
+	bh=yRwejwn52j/pckFIXfpb6iPXXl8i/31yG967frHncGQ=;
+	b=2ZvXGcw7ZcqV7lhFR6S/I8pJa4flyNFRJGv7jevc8SlauEYpBWPI7906VY46qRJW0yyR
+	 HRsEWX85QbC0WDOQ39YU104grCq2p7B5F1qAZaVFzAEZDh4sFj5GsqNE+85DngMAr+8St
+	 dap+YcrdG8uYSQnmDPDP2Rb2b6ySJJQipja8E5E/Yeyj7xAKz7RrHWl4lGfQbv7by+Q5w
+	 CNMnZ5ZPP2iEtglMbhPmCFx6PIgnOWAp/X8gOphz3BjhUduNlskY+P3hZiGWh3MQ5Fsdc
+	 ay5ASlifbo1kxA++x/yr62uHHkPY14Dw2wGtDI12VdrWhYTueskE0XQi9z3EkTzS0QA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=wjN0HbQ1;
-	arc=none smtp.remote-ip=111.22.67.135
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82552606A333;
-	Thu, 12 Nov 2026 07:58:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82552606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dmarc=pass header.from=amazon.com;
+	spf=pass smtp.mailfrom=amazon.com;
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Eop3zxX0;
+	arc=none smtp.remote-ip=50.112.246.219
+Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B94B606A32D;
+	Thu, 12 Nov 2026 08:11:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B94B606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=wjN0HbQ1
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Eop3zxX0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=wjN0HbQ1UJgEwxELuwu58BfNZE+anSehR+B9rr2YqtHz6y9e/7TBqfJYsUDBTyh4BsPuFoOgOAGZG
-	 dhmv0cbeITwpcXLHDT3gpylnj/V8m394l3k4h63WEn286UdWrS15Nhy3gDx5QUnAiiRu7Or2ol4/gm
-	 3bPHxC5caWU6WG4Q=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76af57166cd0-e0743;
-	Thu, 12 Nov 2026 15:57:29 +0800 (CST)
-X-RM-TRANSID:2ee76af57166cd0-e0743
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from [198.18.0.6] (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af57160cfd-f8137;
-	Thu, 12 Nov 2026 15:57:29 +0800 (CST)
-X-RM-TRANSID:2ee76af57160cfd-f8137
-From: Xia Yan <yanxia@cmss.chinamobile.com>
-To: Pin-yen Lin <treapking@google.com>, netdev@vger.kernel.org
-Cc: j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- yana06070@163.com
-Subject: Re: [PATCH net] selftests: bonding: fix failover race in
- bond_options.sh prio test
-Date: Thu, 12 Nov 2026 15:57:21 +0800
-Message-ID: <1794470241000.677408.1894102218415876135@cmss.chinamobile.com>
-In-Reply-To: <20261112014942.2946303-1-treapking@google.com>
-References: <20261112014942.2946303-1-treapking@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1794471117; x=1826007117;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yRwejwn52j/pckFIXfpb6iPXXl8i/31yG967frHncGQ=;
+  b=Eop3zxX03l9RnQYMeBxTQelYygV5Tsez/u/Rer934FkD8eqkr65+A539
+   KlAIohQfZFEGz8vZMTWPDnQNUNXaBr5KXE7I/zQF/Zr074EnJfbGySRnC
+   j3UM4iK9qabTNowb8Bj9j2NP1v/KVNS+YwDSuYCD2Udg60jo8U+BVsz6d
+   YcM+7xk8q8gF8qFvHWPDdt3qR9ljF7mX+SxVG2ZgyNRc3mFqFmSkIU+gg
+   ynvrGnNjF9qWVdga6e9KgDKZDdRcgUdXPae4GYPWJ6lmq7M2epQDceinE
+   HhE3zJpGyVSjdMFVs2rOeR8BXdIdtZm5HY0mha/wFDcbqLQH1F/3L8S/7
+   A==;
+X-CSE-ConnectionGUID: 88UP8YXmSku6Ng9uIsV3zw==
+X-CSE-MsgGUID: BDVhN59CST2+sSodA55VWA==
+X-IronPort-AV: E=Sophos;i="6.27,209,1787011200"; 
+   d="scan'208";a="33570827"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 08:11:54 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.53:28378]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.55.227:2525] with esmtp (Farcaster)
+ id 57c27c56-a479-41ea-ac2a-2ef1fd33fc35; Thu, 12 Nov 2026 08:11:53 +0000 (UTC)
+X-Farcaster-Flow-ID: 57c27c56-a479-41ea-ac2a-2ef1fd33fc35
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
+ Thu, 12 Nov 2026 08:11:53 +0000
+Received: from dev-dsk-sieberf-metal-1a-7543e84d.eu-west-1.amazon.com
+ (172.19.116.227) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Thu, 12 Nov 2026
+ 08:11:49 +0000
+From: Fernand Sieber <sieberf@amazon.com>
+To: <tj@kernel.org>
+CC: <mingo@redhat.com>, <peterz@infradead.org>, <juri.lelli@redhat.com>,
+	<vincent.guittot@linaro.org>, <bsegall@google.com>,
+	<dietmar.eggemann@arm.com>, <rostedt@goodmis.org>, <mgorman@suse.de>,
+	<vschneid@redhat.com>, <kprateek.nayak@amd.com>, <hannes@cmpxchg.org>,
+	<mkoutny@suse.com>, <void@manifault.com>, <arighi@nvidia.com>,
+	<changwoo@igalia.com>, <skhan@linuxfoundation.org>, <corbet@lwn.net>,
+	<rdunlap@infradead.org>, <cgroups@vger.kernel.org>,
+	<sched-ext@lists.linux.dev>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <nh-open-source@amazon.com>,
+	<hborghor@amazon.de>, <fmubeen@amazon.de>, <dwmw@amazon.co.uk>,
+	<karataev@amazon.com>, <sieberf@amazon.com>
+Subject: Re: [PATCH v2 0/4] sched/fair: cpu.max.runtime and idle refill for CPU credits
+Date: Thu, 12 Nov 2026 10:11:44 +0200
+Message-ID: <20261112081144.38224-1-sieberf@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <e795d4feb4a4e7ca4cf24f3cde9e301b@kernel.org>
+References: <e795d4feb4a4e7ca4cf24f3cde9e301b@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,22 +95,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-ClientProxiedBy: EX19D031UWC004.ant.amazon.com (10.13.139.246) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Transfer-Encoding: 7bit
 
-On 11/12/26 01:49, Pin-yen Lin wrote:
-> The prio test intermittently fails in the arp_ip_target and
-> ns_ip6_target variants:
->
->   TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL]
->   	Current active slave is eth0 but not eth2
+Hi Tejun,
 
-I traced the timing through bond_ab_arp_inspect(). With
-arp_interval 100 and the default arp_missed_max of 2, the active
-slave is marked down after 200ms without a receive and the backups
-after 300ms, matching the timing analysis in the commit message.
+Fair point. I am happy to focus on the fair patches for now.
 
-All four link-down sites in prio_test() use the new helper, and
-the Fixes tag is right.
+v3, the two fair patches on their own with the bot findings fixed, is
+on the list:
 
-Reviewed-by: Xia Yan <yanxia@cmss.chinamobile.com>
+  https://lore.kernel.org/all/cover.1794398404.git.sieberf@amazon.com/
 
+Thanks,
+Fernand
+
+
+
+Amazon Development Centre (South Africa) (Proprietary) Limited
+29 Gogosoa Street, Observatory, Cape Town, Western Cape, 7925, South Africa
+Registration Number: 2004 / 034463 / 07
 
