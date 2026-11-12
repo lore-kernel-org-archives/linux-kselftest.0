@@ -1,89 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794515830;
-	b=hDTWzC/lV8XWEgRPgrb96h4JUgRUUdIlfLK30l8+vcHT5q64ss6wnLkPPhR/hHeHBKC8
-	 34Jbebrs7g+7VIUaYBPX3jcdbsLhKWWb6DxQ3JQuMxlyYwIzONXzS6V147k51tIBZTtSx
-	 ml6eD/dMWTJ3tenYyCG6ebfrvsf1K4RrBySs1ZRBfChmKYXoH8D37pB5NYtbXpvAs2G+F
-	 80yFXCMdIp1zg6NkLrjrct4X3xoXBy87WZlXBgEVaGwG31VS5uGIx6agxpU4SgtnrtSM0
-	 dA9T3CLGlbxRqTbwAuhudwupap6fKrcMA/0g90ffrOp+tvcxAc3StTQlp/X/Mx6+p8A==
+	t=1794517159;
+	b=3lQ0t9H1F+ADOOM0Hn1ZmJXLVlmnLjKCfF7m2jlvi2fCX/WZCR3V3BoUEx5jeWyMTOHb
+	 By3OpwpUPHc4k5HeapMTYeeGB7gBL4W7u4bPWW4w0hzc+3WrtaT4/S6aon55ODJqaTGZV
+	 Nkj+N/DAfkHXi57x3Dcyd3zrI9mcjjL2kV5Tf1ByYm/6tPkACsQemAjeod9jPp9Jaicc2
+	 LBUpsMoHgoExaLNzdoZUjhdsdQCxFjhzQnk5cnX0g5qNH0EdGjOJIRouefGiO79if7d3Y
+	 kS1zJx3Ct+Z5mivNtpK/9vUShg5zRXa2a3b5f6hk8KKjNkoKPWIsosstBGP6TCpcHiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794515830;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Virus-Version;
-	bh=yS4jNiYhRfGb5QojFYxrTDAoccyphd8P5VhC9esgLP8=;
-	b=KVciakOAIXQvgff06wt2c1n0s2zyhyeV1fTCn/iGZ5qVdesQFB/V3eHxIcND8wv6r3Ec
-	 idwEXsWtl5SglbLY4/JhgLjeogSEOitEWdABgWyM/kkFG1nPTHEP6DWMbndxfn2YiN2zA
-	 T7rNETg57Px9Sj2D7fLUp9xmT+TemfT+0MMhM0yOjgzcZt7H0jmlLt4yk7SPfdiZtiWEB
-	 e574wUpG4nc9uNjSudOx/e+Gz+0mBZ7aNiqkHfMQTfp/l1bVH5B7Rc+jx2omQbhRhugaK
-	 s7XsVK0bXqz9CDd436SFnZSeR4ShhG6wTsrSLbzlMEqGIn/X6+i2yj/8hmqx0iKvwOA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794517159;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=DWxW0v3Yp3gUIU8y20wR7hKoi5jJwchqtRdIOf3GtkQ=;
+	b=jkS/CbZ2mxMJxMk03D9QY/W3h61ycZZykCAD8JfdH5JgBxuoHdcwOR8uNBqVdCwp0/8w
+	 3JKPuZJMXyCwNqTkebLR7XOIS0phWQ8z8nkpdI3JBtbH+hY+WSmItRjXTgwiGGQ0q62vd
+	 RTePpr3Rxkn2kqIYGnvgqo14d2gObtjuH0+aXARbU2uOKfZ5EhE6W4iqqOJGSQo2RguXv
+	 5m808cWFKi8MXatmZHxfBCHgfwWhrIF7XTST1AiU2VRRvjhC34vih5d20YIRJanYC4QO3
+	 8CtqS+o5D6jieGp3RZTOWWFM+s+WsxwGroDCXNnWrG0psvaG4NjJG/oQ29g2tphzq+Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=fb.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=fb.com header.i=@fb.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=PMJdQsUZ;
-	arc=none smtp.remote-ip=67.231.145.42
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b="O0f92Jl/";
+	arc=none smtp.remote-ip=198.137.202.133
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B66606A333;
-	Thu, 12 Nov 2026 20:37:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16B66606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC79D606A31C;
+	Thu, 12 Nov 2026 20:59:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC79D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=PMJdQsUZ
-Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ACJcaXd3548768;
-	Thu, 12 Nov 2026 12:35:41 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=yS4jNiYhRfG
-	b5QojFYxrTDAoccyphd8P5VhC9esgLP8=; b=PMJdQsUZ9wFmcb1iynmoB69a2S9
-	/l6vcpkudJukcwnCYNVACZN0krn+ykO5/TIt8+EpvIbWXk/Thx5k4vZ5cgmq7W4p
-	YSdoLkzwG6uHSIzCdV+IylJorKuexJKBqUwpNz3SZ4B9WPoALoDExWQnCKXWDPRb
-	Z5/DS8vaRFuKSuzPHSYrcPHcAb99myPDRsf03Szq3cieanayPemOCovBQW9GdIeV
-	9RbFNayyQojAeuUGrtEiXtaos06zx2p1BuqvueNs74kFdqg74AT6KnsJC9/MrARK
-	c41Qbapm0737503MSI6RRWeUhYCOy69L1IbLs7qa5UjksU0IawyoORjMH9A==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hwjg5h7ms-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 12 Nov 2026 12:35:41 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.56; Thu, 12 Nov 2026 20:35:37 +0000
-Date: Thu, 12 Nov 2026 12:35:33 -0800
-From: Alex Mastro <amastro@fb.com>
-To: David Matlack <dmatlack@google.com>
-CC: <dri-devel@lists.freedesktop.org>, <iommu@lists.linux.dev>,
-        <kvm@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        Alex Williamson
-	<alex@shazbot.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christian
- =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jason Gunthorpe
-	<jgg@nvidia.com>, Josh Hilke <jrhilke@google.com>,
-        Kevin Tian
-	<kevin.tian@intel.com>, Leon Romanovsky <leon@kernel.org>,
-        Logan Gunthorpe
-	<logang@deltatee.com>, Matt Evans <mattev@meta.com>,
-        Matt Evans
-	<matt@ozlabs.org>, Mina Almasry <almasrymina@google.com>,
-        Samiullah Khawaja
-	<skhawaja@google.com>,
-        Shuah Khan <shuah@kernel.org>, Sumit Semwal
-	<sumit.semwal@linaro.org>,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [RFC PATCH 0/7] vfio: selftests: Add peer-to-peer DMA selftest
-Message-ID: <avYjFfqr3T/U7lvn@devgpu015.cco6.facebook.com>
-References: <20261111192411.4133780-1-dmatlack@google.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=O0f92Jl/
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=DWxW0v3Yp3gUIU8y20wR7hKoi5jJwchqtRdIOf3GtkQ=; b=O0f92Jl/Q7JNZC57lF2m123DO3
+	ZdljTMVUMMcWHgd354KPoiCaWYtR04IXtmDeLHs6jL3Hdw3NkGid7JuqrfD86VbShMe5qKFqG93lM
+	xPF0YfPpe6x7snQwKe93O4nUpuJQDwf4pXzje+EttCMdg12x3aOO8xmD5pspmuKCclG34iCVYOwQ+
+	0v3xQyOPAZWqClKkdiqhJYvDJrZmPhbvDlbOH9pq1mAHshLNcKkV+ue/9dzolAZ3QZ1mlsXmhgQo9
+	lc8z1ev5qYOT8qaSHOzu4YTatxSk1r8nfbEkVXuvy3sw9HSfRdDhFTHgzZAKIn4B1lYTKIlUsMdt1
+	ywLEKeNA==;
+Received: from [38.23.173.23] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRbt7-0000000B2ea-2awE;
+	Thu, 12 Nov 2026 20:59:17 +0000
+Date: Thu, 12 Nov 2026 15:59:10 -0500
+From: "Liam R. Howlett" <liam@infradead.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Tal Zussman <tz2294@columbia.edu>, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/madvise: disallow guard region installation in
+ uffd-armed VMAs
+Message-ID: <63skl724i2jss7itcq63fbojykh462s3voi6to52ze6v3unp35@kgakyccedf64>
+References: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -93,61 +69,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261111192411.4133780-1-dmatlack@google.com>
-X-Proofpoint-ORIG-GUID: gTZbwHAPJUHvcNcTQXZoaWTbiDqc3U-y
-X-Proofpoint-GUID: gTZbwHAPJUHvcNcTQXZoaWTbiDqc3U-y
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEyMDA4MSBTYWx0ZWRfX8+QGQcJzlVZg
- k4Zo3bVBz7pmfN3Sfd/laKYuJjmFQTltox9bHgb+vFKdRZxfPn2n0Byt7bGXetEoyIWHw2/XxUZ
- RUghY+S0CRIP/9z9WKscp43wNcr8TSs=
-X-Authority-Analysis: v=2.4 cv=Mcb5KJ/f c=1 sm=1 tr=0 ts=6af6231d cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=_1IyUuN4QrATX339ibzo:22 a=VwQbUJbxAAAA:8
- a=3j4BkbkPAAAA:8 a=qjNXR0RCjIH4vnWDDyQA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEyMDA4MSBTYWx0ZWRfX2wWt7WUyZDf5
- D7DqzOxzzAGKashRIAA/XPJs2s1+E5sQcsUHgQu8DNi/oAjPAVl+TFoYcfJpmKo1T+SifLgmnGv
- xX0gaGGyBdj3zBqzNmmH3Fd2JXAsfCEBPaGKMBfVskS8la626Xp/5xsN8j14N+BhVitHcuQFAnY
- /j/Hlo5VFXrSGrLA77e8dj3bzmtM7o9GzgI7nxcQFOvkHBp5VB2jhDeyzOtxhG7DsNjj8S9xSJV
- MQ4mjkW2fHOlYI05MAevUaRZ040NaOb9hNIRBhKLWfydQKtRmj56asgGGtHpbJU1G8GkZR5UxQW
- bQY9UIQoU9xJOkxyJhU0roi0DoxJZwWPF6pauZPOYebzxrW256aN69ysBxfjbUieqTqqTSS6C8z
- XUMjB16+VToOfr8zogSJU1k1HQxxg5xUIVI3PTQqSWHTIJIPK5qkJp79XjeEwbm0r/sW+xVS/9w
- FzxCuMNv0O5AhSkJmzQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-12_03,2026-11-11_03,2025-10-01_01
+In-Reply-To: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
 
-Hey David,
-
-On Wed, Nov 11, 2026 at 07:24:04PM +0000, David Matlack wrote:
- 
->     Is requiring userspace to re-issue IOMMU_IOAS_MAP_FILE the expected
->     uAPI behavior? VFIO_DEVICE_RESET (and runtime PM transitions) on the
->     target device also bracket the reset with
->     vfio_pci_dma_buf_move(vdev, true) and vfio_pci_dma_buf_move(vdev,
->     false), tearing down any active IOMMU_IOAS_MAP_FILE mapping of that
->     device's BAR even though PCI_COMMAND_MEMORY remains enabled when
->     VFIO_DEVICE_RESET returns.
-
-There was some discussion about this in the thread below. My understanding of
-Jason's point is that the current behavior, and differences between what
-revoking and move-capable importers see in regards to vfio-exported dma-buf is
-somewhat incidental and not necessarily desirable.
-
-https://lore.kernel.org/all/arMBqyI4XNfD+q1W@devgpu015.cco6.facebook.com/
-
->   - Physical target devices and P2P topology checks: mem_bar_descs[]
->     currently only matches QEMU's pci-testdev, and
->     vfio_pci_has_p2p_path() does not yet check PCI topology or ACS to
->     verify that P2P traffic can flow between two physical endpoints.
+On 26/11/12 05:38PM, Lorenzo Stoakes (ARM) wrote:
+> In order to establish guard regions, guard markers are installed in the
+> page tables of a mapped VMA.
 > 
->     Suggestions on physical target BARs to add to mem_bar_descs[] and on
->     checking P2P reachability from userspace are welcome.
+> However, problems arise when one tries to combine this with registering a
+> VMA for userfaultfd, as such operations may themselves need to install page
+> table markers such as uffd-wp.
+> 
+> When this installation is attempted the guard marker prevents these markers
+> being applied, which can lead to unexpected results (especially if the
+> guard regions are later removed.)
+> 
+> This is especially problematic because guard region installation causes the
+> regions to be zapped first, meaning that the removal of userfaultfd-tracked
+> ranges will not be logged in this case.
+> 
+> Therefore, disallow this.
+> 
+> This makes sense as conceptually, guard regions mark a part of a VMA as
+> effectively unmapped at the page table level, and removing the markers is
+> like mapping the VMA again, over which operation uffd markers would in any
+> case be lost.
+> 
+> Only check for this on installation, as a VMA can be registered for
+> userfaultfd after guard regions are established.
+> 
+> In this case, the guard regions cannot have new markers installed, and no
+> faults can occur in the guard regions, until they are removed, at which
+> point everything should function normally.
+> 
+> A survey of open source users indicates nobody is relying on installing
+> guard regions in uffd-armed VMAs. Software including glibc, android,
+> tcmalloc and CRIU were checked.
+> 
+> Fix the selftest to reflect the change.
+> 
+> Fixes: 662df3e5c376 ("mm: madvise: implement lightweight guard page mechanism")
+> Reported-by: Tal Zussman <tz2294@columbia.edu>
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-9-00713d368976@columbia.edu/
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-10-00713d368976@columbia.edu/
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-11-00713d368976@columbia.edu/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-FWIW, you can also exercise the "P2P" path with just a single device if you
-IOMMU map a device's BAR into it's own IOAS, and have the device DMA itself. For
-eventually validating aspects of Live Update, maybe you don't necessarily care
-if an actual peer device is being DMA'd?
+Reviewed-by: Liam R. Howlett (Google) <liam@infradead.org>
 
-Alex 
+> ---
+>  mm/madvise.c                               |  4 ++++
+>  tools/testing/selftests/mm/guard-regions.c | 12 ++++++++----
+>  2 files changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 0214efd2a014..268731e90f12 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1156,6 +1156,10 @@ static long madvise_guard_install(struct madvise_behavior *madv_behavior)
+>  	if (!is_valid_guard_vma(vma, /* allow_locked = */false))
+>  		return -EINVAL;
+>  
+> +	/* Guard markers are incompatible with UFFD markers. */
+> +	if (userfaultfd_armed(vma))
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * Set atomically under read lock. All pertinent readers will need to
+>  	 * acquire an mmap/VMA write lock to read it. All remaining readers may
+> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> index 02f69244f9a4..97da54dcf3a4 100644
+> --- a/tools/testing/selftests/mm/guard-regions.c
+> +++ b/tools/testing/selftests/mm/guard-regions.c
+> @@ -1476,7 +1476,7 @@ TEST_F(guard_regions, cold_pageout)
+>  	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+>  }
+>  
+> -/* Ensure that guard pages do not break userfaultd. */
+> +/* Ensure that guard regions cannot be installed in uffd-armed VMAs. */
+>  TEST_F(guard_regions, uffd)
+>  {
+>  	const unsigned long page_size = self->page_size;
+> @@ -1526,10 +1526,15 @@ TEST_F(guard_regions, uffd)
+>  	reg.mode = UFFDIO_REGISTER_MODE_MISSING;
+>  	ASSERT_EQ(ioctl(uffd, UFFDIO_REGISTER, &reg), 0);
+>  
+> -	/* Guard the range. This should not trigger the uffd. */
+> +	/* Now try to guard, should fail with EINVAL. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), -1);
+> +	ASSERT_EQ(errno, EINVAL);
+> +
+> +	/* Once unregistered, we should be able to guard the range. */
+> +	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
+>  	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
+>  
+> -	/* The guarding should behave as usual with no uffd intervention. */
+> +	/* The guarding should behave as usual. */
+>  	for (i = 0; i < 10; i++) {
+>  		char *curr = &ptr[i * page_size];
+>  
+> @@ -1537,7 +1542,6 @@ TEST_F(guard_regions, uffd)
+>  	}
+>  
+>  	/* Cleanup. */
+> -	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
+>  	close(uffd);
+>  	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+>  }
+> 
+> ---
+> base-commit: 4318887a3efa4c53d6f083ccfd7105b809a3ac65
+> change-id: 20261112-disallow-uffd-guard-install-a5294129ad7b
+> 
+> Cheers,
+> -- 
+> Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> 
