@@ -1,59 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794518238;
-	b=k1APFydMGGB9xf6/bk7sqjQlD8/fX7F9HaQkF5LPNRIc1dPJg0F5kv6tWDI6VpadTrAz
-	 VO7JW5SK3TA3oNzHC5PnCjUeJnJaN+MY5k71WHxrkuTKgzcQ2C6ytoaaj/MqPdVwVSMCd
-	 QzjsZXKih6Scv87XSINfoLtEDpbACl68Lk9YS8aBwH7K167rCWWs1FG81rCsVKRX8+usk
-	 JFGpSMIgTiZNB9HvpZLeTFcLniM8BTYZ8Z/d9AeljOe3ugHztNZxLrjNYkJjuUt6GNs7a
-	 GBLnmCXV8aGUAgAex2DpFL6tuM7QizOHPoZkr9lUzHLNBoKNomSRLdYwdv7dcFXwi6A==
+	t=1794520026;
+	b=MK/MGX1LWr4enGFeZSQJ9NoAPbmJAPF87lXd6ANI4FM82Ncxg4PuuZ2ghwff8hEC9c3R
+	 5TDxzxio83YR5ktN3PmyMcl/LW5c4EgqjOBakaOghmZYYad0RBzrowOX2/yNi1sHgKoDU
+	 JNpEdsxcPG5nBRaou86QGQRTKIAImO4+dLQXcSJZEbEGpMv78BxJ4GaDq0Jj4lnli27KO
+	 OofOBVqBGcwU2wGfzzj6eb7WBrh/n4yLuc7WvMr4z0Kr5XHwrHDzSELb/dZZpLgOsxuq2
+	 BS6j6xmidI+fnEjv2bNEWr2IiGWypxzwpOlxw7l5SKb84NhzZN+ddRXTP+CR4Adoh0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794518238;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=2uWCIwOUe1zG1Q5nA+J/tviFwJtvfJUjT9/gR+84VMA=;
-	b=K9B5xQRyrR5NfmRIPfR621QHys3dygbnpwLCQqA1fv59pF6GiemNwHkF214Q0LwncfHF
-	 MSBy+9/iQLpTrTRnjk690ZNAew+iCA6vLpVdFKGSb6FssluRwKlqEAVzuuSBRDR+ySUBG
-	 j2/yv0Jp7pydJNaPH6j0YA+OXqiT7UNy3TJU3kP1YPy1N6GLWSnHWiAahwxKQYfkoe3DV
-	 2ln/JGBP+N45wnqN9ZlZ4PZaJg70Ygo2KGA5Nq78jmfcTGPemMAf5dUnYpPVAw15ufJMZ
-	 PNnJvIpGrxXY39MXMgU3qpV+Yu6esNAkSKK2FUx+hoHBMkupFALopweT3IyZsare9yA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794520026;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=MRvrBEIopDqvuVb/vZ72s+DUNbn5hAJVvZTwAj02wNI=;
+	b=N+AhIGo7VCadEyh9atgOymcSyQMLnUmaYCj4ffRAj6J/0WkqzYCWLEQTbu1WcKYzMO8n
+	 GIhTHRF8OE2eKoisg0oDEVLBsOIrVRj8S0mUDY5wHvyP3DIiHT+8FBC5kf9LYRmqXQ2hJ
+	 i+n0RGJiS75TCbJl69HAS1F2jiRKquQBLtBUT7i88qyQUpezbIT1Lk+ukdbLj9qR3T4xs
+	 PU73drgPkXlokQKWZDVNky74R3Z7mWuXX3dZwemvCiQSEv6IkU07OzT1TKsemaJiUf6RY
+	 4RMwzHq6zAurVVJnln8+vSEpcRkg+OmfAdVoTvxjN8u13a+NpKqO4riK+2sDmoHe2mw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NDWfprdl;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IqQicUBc;
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDC2606A336;
-	Thu, 12 Nov 2026 21:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FEB606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 21:47:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82FEB606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NDWfprdl
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1793F1F000C4;
-	Thu, 12 Nov 2026 21:17:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794518237;
-	bh=2uWCIwOUe1zG1Q5nA+J/tviFwJtvfJUjT9/gR+84VMA=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=NDWfprdlnftLEAdZIZBtMjJobIhuoFx45bqX/XG8Dpv6OybR+kyfF1EKK4/H51gND
-	 hiQrS1G6lwU+phY2dgaJe+GSk9g3lpWRHglUxJVpf0iA3PdWazwsJjJaOqVAscfJgj
-	 ltER20ES71NFC1jGZ92L7nvuT7lAfxxdUOwwOcwflBlxzQyr6bHgXFlAUdTNQ+6ijn
-	 Ph/Jo4pxQvTxKSgFfu1WZBEaie4PJwo54lNaBTTtVpcFaM5Z3ZpfMEPqXwzHcTmlKp
-	 zfYMj75eg523tDjK/nLqPUdG4bfwWrzLekozXyLFXzWmmyn2sTPHVHsWFilqZgr7Ri
-	 VCWcbm+VVnF8Q==
-Subject: Re: [PATCH net v2 4/4] ipv4: replace obsolete routing comment
-From: netdev-bot+sashiko@kernel.org
-To: liamsmith827@grapheneos.org
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, liamsmith827@proton.me
-Date: Thu, 12 Nov 2026 21:17:16 +0000
-Message-ID: <179451823662.2199510.13028840415362290242@kernel.org>
-In-Reply-To: <20261110061536.10811-5-liamsmith827@grapheneos.org>
-References: <20261110061536.10811-5-liamsmith827@grapheneos.org>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IqQicUBc
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cd8ba7c2694so128366a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 13:47:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794520026; x=1795124826; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=MRvrBEIopDqvuVb/vZ72s+DUNbn5hAJVvZTwAj02wNI=;
+        b=IqQicUBcHFfASsPeC/FaWkK7/Crm2L2UYyn8/PxIFh5d3NQfwGTsj1ea0yYEQ647ZV
+         /ccaegp04k9hdkyY2Ail6N4rBeUM3LACMz8nX+7douczOTVskMzZJ6rF5iaIrVQm2heW
+         JeAJJRZGwbkWIX4oCdCOf9PAKsBXWkvG0Qf/0hEZ5qTZmjRSXZseI6akOjoL+PPSYmfs
+         n/o355gYSqEM305OphinxwQkhxOcncDRdESkE1XHs1UYEEh7UGYPCzuqJ/L28TVUC0U6
+         aJlfLAOYc0LEA5khjKc7nJefwozvr0lPgi0RdEjsCmQOzXego5h4dYanuiOcrof8EvZv
+         aU7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794520026; x=1795124826;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MRvrBEIopDqvuVb/vZ72s+DUNbn5hAJVvZTwAj02wNI=;
+        b=1x2Qpfu0pMvEHMPe4zLDu4i+ShB2q7MjgZ0+jYnstWxRm41+yqpnE4yk0BvUyrYqaZ
+         Djyb82mSmJJqD10Abat5BTpoSWfiAXde9rwc0FuwcI6o8CNrcyNDuOteZiO6Zp+nD5Ky
+         cy0IsSu0vrjdleHUtNTn6YVxNVbIzB40wGEw8qT8LhSnGup5YgltUqN3/PMsomXLr0sY
+         QerJembCFtqZdjefy14qmBhXQ+0A19+h0qf6kL/Vh93XpbnHVwGStLCWfLrU0pNxTsHM
+         Jgj3czRysgeHnmODGptXlEGz8FdVuhiA5MGhOaUnod9J9J5TORdya8Q41yfhvTK5xmZi
+         aZjg==
+X-Forwarded-Encrypted: i=1; AL+hErEbw6Kde07MTrS1FJIXGTZkdvILD08XncRgzEco60y7wKQUwk37EMA4Dqi5pd7ouZa25ScgUhOjwP92uxvGZQQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9lpYHvEjc67KhEBlb+QNu6HAe/ONZZAvqVGoDd5jnB5Ugv04ap
+	jQ7yKM4qcqnc9jn2wVzIepmMz+F+ybdheKsJrEg09bZnwqWuw7ZSska/6cKPWKDpWg==
+X-Gm-Gg: AYBFou2lgI+UUn7yaagLWJ4leOPQst1uOHbReMkDMQgpokPWHWZyecIo2eSMTed+7BW
+	wG2Fqer3evt+D4egJyBgJkoetfTJ+pQX+CFBhw3OkWldP53ke/uJ+7E7xt1pRcFqHwOtxO9hjCc
+	Ji5sCrnGzpLG+dvIcaBhoYm6yINClEIXESLhv36uL/Hk0BfTvQBiW2Cr0kpRo/YYjx2+69SfwVa
+	THNu43klF2fOpsrezLCA7VqTVYSQ8bbuG+SzZpmEPFPVADE77WGtixiJsC2VM/Mhyox2x9i2B09
+	hv+fPUr/9CTLo+I+iHbrZCdhOD3n8Gw1ccNB8Ngxhkq5KYvC/ZvqcFV3Q90M7fmnK//704H2Nmv
+	U5KRVAlBPM5CGD0Nlm2QL55OszVgUYfJt70z9nOvAN1RlBxrGd3oIqAeKLBI9ihgIJF2MniqWLj
+	tDtbp7Q4NPxrRc6le2wvpVAf4MxsuPFIUmUHas9I2rWy+RCCPPiGm+DA8+1dkvQI95uwtRZAZ8+
+	Kk/DTu+05Yukb5gaYuiptkiDfHuL+Di6Me094Zn8vgPcBvdnsJEwCywh5xpt8TrThvosY87hCOP
+	GHXjULBVHMU6HGUFhw97GisYcgkTu05MhW0IL9j+CCCmn/r0bCn9cTxfBpXUknzNeLMzVprU7VD
+	DK11XD3D9hw==
+X-Received: by 2002:a17:90b:30e:b0:3b0:97b8:d6bc with SMTP id 98e67ed59e1d1-3b1b0a0e889mr278699a91.16.1794520025137;
+        Thu, 12 Nov 2026 13:47:05 -0800 (PST)
+Received: from localhost (33.79.127.34.bc.googleusercontent.com. [34.127.79.33])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d257a0sm6493095a91.11.2026.11.12.13.47.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Nov 2026 13:47:04 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,91 +88,82 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 12 Nov 2026 13:47:03 -0800
+Message-Id: <DMTK99TDM9AM.SAM3Z4COP9WS@google.com>
+Cc: <dri-devel@lists.freedesktop.org>, <iommu@lists.linux.dev>,
+ <kvm@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-media@vger.kernel.org>, <linux-pci@vger.kernel.org>, "Alex
+ Williamson" <alex@shazbot.org>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, "Jason
+ Gunthorpe" <jgg@nvidia.com>, "Josh Hilke" <jrhilke@google.com>, "Kevin
+ Tian" <kevin.tian@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Logan
+ Gunthorpe" <logang@deltatee.com>, "Matt Evans" <mattev@meta.com>, "Matt
+ Evans" <matt@ozlabs.org>, "Mina Almasry" <almasrymina@google.com>,
+ "Samiullah Khawaja" <skhawaja@google.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Sumit Semwal" <sumit.semwal@linaro.org>, "Vipin Sharma"
+ <vipinsh@google.com>
+Subject: Re: [RFC PATCH 0/7] vfio: selftests: Add peer-to-peer DMA selftest
+From: "David Matlack" <dmatlack@google.com>
+To: "Alex Mastro" <amastro@fb.com>, "David Matlack" <dmatlack@google.com>
+X-Mailer: aerc 0.21.0
+References: <20261111192411.4133780-1-dmatlack@google.com>
+ <avYjFfqr3T/U7lvn@devgpu015.cco6.facebook.com>
+In-Reply-To: <avYjFfqr3T/U7lvn@devgpu015.cco6.facebook.com>
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+On Thu Nov 12, 2026 at 12:35 PM PST, Alex Mastro wrote:
+> Hey David,
+>
+> On Wed, Nov 11, 2026 at 07:24:04PM +0000, David Matlack wrote:
+> =20
+>>     Is requiring userspace to re-issue IOMMU_IOAS_MAP_FILE the expected
+>>     uAPI behavior? VFIO_DEVICE_RESET (and runtime PM transitions) on the
+>>     target device also bracket the reset with
+>>     vfio_pci_dma_buf_move(vdev, true) and vfio_pci_dma_buf_move(vdev,
+>>     false), tearing down any active IOMMU_IOAS_MAP_FILE mapping of that
+>>     device's BAR even though PCI_COMMAND_MEMORY remains enabled when
+>>     VFIO_DEVICE_RESET returns.
+>
+> There was some discussion about this in the thread below. My understandin=
+g of
+> Jason's point is that the current behavior, and differences between what
+> revoking and move-capable importers see in regards to vfio-exported dma-b=
+uf is
+> somewhat incidental and not necessarily desirable.
 
-Low priority / nit picks for your consideration:
+Thanks, I will read through that thread. It seemed like a surprising
+uAPI.
 
-- [Low] The comment added to ip_route_output_key_hash_rcu()
-  (net/ipv4/route.c, in the fib_lookup() error branch) is wrong for one…
+>
+> https://lore.kernel.org/all/arMBqyI4XNfD+q1W@devgpu015.cco6.facebook.com/
+>
+>>   - Physical target devices and P2P topology checks: mem_bar_descs[]
+>>     currently only matches QEMU's pci-testdev, and
+>>     vfio_pci_has_p2p_path() does not yet check PCI topology or ACS to
+>>     verify that P2P traffic can flow between two physical endpoints.
+>>=20
+>>     Suggestions on physical target BARs to add to mem_bar_descs[] and on
+>>     checking P2P reachability from userspace are welcome.
+>
+> FWIW, you can also exercise the "P2P" path with just a single device if y=
+ou
+> IOMMU map a device's BAR into it's own IOAS, and have the device DMA itse=
+lf. For
+> eventually validating aspects of Live Update, maybe you don't necessarily=
+ care
+> if an actual peer device is being DMA'd?
 
---
+The way I designed the P2P selftest support requires 2 things:
 
-ipv4: replace obsolete routing comment
+ (A) initiator: A device that has a VFIO selftests driver.
+ (B) target: A device that can provide a memory BAR (vfio_pci_find_mem_bar(=
+)).
 
-This replaces the comment in the fib_lookup() error fallback path of
-ip_route_output_key_hash_rcu(). The old comment described obsolete
-fib_lookup(), MSG_DONTROUTE and IPv6 behavior. The new one describes
-when the on-link fallback is taken.
+So far I haven't found a single device that can do both. But you are
+right that theoretically a single device could satisfy both
+requirements.
 
-> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-> index 80a2c8a3c571f..ac94d8262b6ed 100644
-> --- a/net/ipv4/route.c
-> +++ b/net/ipv4/route.c
-> @@ -2858,24 +2858,19 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
->  		if (fl4->flowi4_oif &&
->  		    (ipv4_is_multicast(fl4->daddr) ||
->  		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
-> -			/* Apparently, routing tables are wrong. Assume,
-> -			 * that the destination is on link.
-> +			/* When oif is specified, fib_lookup() is called
-> +			 * primarily to determine if the destination is
-> +			 * accessible directly or through a gateway. It also
-> +			 * checks whether there are any traffic restrictions
-> +			 * (blackhole, prohibit, unreachable), or if there's a
-> +			 * routing lookup miss.
->  			 *
-
-[ ... ]
-
-> +			 * This fallback path is always taken for multicast,
-> +			 * regardless of any restrictions or misses. Non-vrf
-> +			 * unicast does honor restrictions, but falls back if
-> +			 * there's a miss. The destination is assumed on-link
-> +			 * for both.
->  			 */
-
-[Severity: Low]
-Is "always taken for multicast" accurate when the oif is an L3 master
-(VRF) device?
-
-With a VRF configured, fib_has_custom_rules is set. That sends
-fib_lookup() through __fib_lookup(), which changes the caller's flow in
-place:
-
-net/ipv4/fib_rules.c:__fib_lookup() {
-    ...
-	/* update flow if oif or iif point to device enslaved to l3mdev */
-	l3mdev_update_flow(net, flowi4_to_flowi(flp));
-    ...
-}
-
-net/l3mdev/l3mdev.c:l3mdev_update_flow() {
-    ...
-			if (netif_is_l3_master(dev))
-				fl->flowi_oif = 0;
-    ...
-}
-
-The fallback condition reads fl4->flowi4_oif after the lookup. Take a
-multicast daddr that is not link-local and not IGMP (for example 239.x),
-with the oif set to the VRF master. If the VRF table lookup fails, for
-example on the usual unreachable default route, the oif test is false
-and the lookup error is returned. The on-link fallback is not taken.
-
-This behavior predates the patch. Could the comment mention this
-exception, and note that the oif test uses the value left after
-fib_lookup()?
-
-The opening sentence has the same problem. For a VRF master oif,
-fib_lookup() is used to select the VRF table and the oif match is
-dropped. It is not mainly a check for whether the destination is direct
-or gatewayed. Should the comment say that as well?
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110061536.10811-1-liamsmith827%40grapheneos.org
+I can relax vfio_pci_has_p2p_path() to allow initiator =3D=3D target.
