@@ -1,85 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794497181;
-	b=poz/wdH+w2YwcllWb5yzFAsv8uqF4AIfPWBHzYonWawDK9SGwz7zH2uhjUJC/h+gG6xk
-	 /EBKWch2pMdrlhmS9dl3vLMTY6m9GdY0r1f0I4p0MgwkwG2id8lbFvx5/AHxGwQrj28MX
-	 /N27uOm0MHcKxbgwXIpKNto8BqLPM3VfqsZSa8820fGu3NFM2on3rjMYzF8i136ScVBem
-	 tthbvcVe6J5LMo4rkb+bPvYq/6MRxo23PAu3Irf/6MjyGRb7h6au9qgqRc1soYlL8yEsv
-	 9eY7dZdXMt6rjLC9+Q6HZvyH59Z2xsdcMB2WjtAAzJ9lzjZaTqsMPdtHXh4zzhH01iQ==
+	t=1794497618;
+	b=R9bc5tKoZgMxyXqcMdljX3ZiS3ziFtUb06gtXxSye1yeBOWmhETwKnDQQEGEDbJLwuYO
+	 N+TF1CvQtX/mm5PuggDtv+iTUICdJxwkllQ5Lbd4+q1GHfDjzf9491aswd8wL0SjR15u2
+	 sTEj0m70b6jhGFT6qUbt+0mbaemTGZjCYb5sTF4hCr2o1KbfST2C1aLL3DMFc81tnJtqV
+	 8HdIHz8M5lz1qSvXYbZ39mmBMd0yB/Y5o6fBx6Ch4gtzesHruI72G+CyzQl3exs7jhobv
+	 oRQAELQ6eLB+DEbaWCYPzF88iIzzCVHmXP3NSvWPpTjgWs2LTbp8oVUyDtF+F9u8Fzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794497181;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding;
-	bh=S5SzpuE9K1j8lcY7r96zLl/v/riOJlJqayes6pUVvY8=;
-	b=nzV/xJjFojBjwiKSr0rRH/DGywiF8B0ztWB/wYoGUKNIdn/+w0cB6EA8LGBBx0v3ZAiN
-	 T6bD3Mgg3ykS5OU/7TUzEG94tFTiddx2VrqO70FK6MQLJZQXdgpTePH4nO5wG5jQnI1F0
-	 DclzvtQKGGs4AWE/0ktJQvHWGGumIWnsP7dUUZfeN7ad1qkGOGFD5+QlTKv4jlcvVYQCd
-	 vMJ9pR46UWDxePNOG1r/nCp3x7QzqixMHlk+L/jFNOvV8H9LZCtlC0oI/HkZ525roLf0/
-	 GptXxXBwZfIRY3CswAt2Vcvinn7uKBnY5/Cz07A7E+PCDOSiOirGq/tYUlROs5DiBjw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794497618;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=rEhQI3hSOE9lI+wJjJwvBECQfjSinYgfuJ/QdhixFTY=;
+	b=0MJ/FI7QF7eZeKKr6hzo4lf8rXzA2BKTWCuj0k+DovROSgnfT2BlqoVBrl3BkrFEq60r
+	 f6e/6ij/YrOL5qOB7S+QXHXBOpXkVCMMq8D9rxfOed50GNICWkWhNT+7cQEOg9RX5I/HP
+	 cvGe8/iFElQQTvPl1rljZ0fJdl3833xi2LhT/77YMlQlCGN6MEUFLx9MgRYaHeGVck1jf
+	 ABHk1TLryXRSf8T9mxxf4ozIGBMmZ/73JOFjKCqOlDWjgUuh3Cf01tZM6lOAg3urCDbeU
+	 htN6wiv5r0SPkUAcFYcQq229opLl75QHfG4RNmmRWclNrGck+inkkcU5GQI0ux6POUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=C3+eQTZO;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A506606A32E;
-	Thu, 12 Nov 2026 15:26:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A506606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jMLMrqdr;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F103D606A32A
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 15:33:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F103D606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=C3+eQTZO
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E79AE1516;
-	Thu, 12 Nov 2026 07:26:14 -0800 (PST)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45BF23F632;
-	Thu, 12 Nov 2026 07:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794497177; bh=btEnX4uDhjrUHVzZrwRd+YJ2duMYbN+7dhmt6hZ8QcE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C3+eQTZOzu1UELo2VKOMsYJ7L2S8YhbY8UfFsu/BvGX/rhLuuRVXaThVsd5Y0C8BK
-	 EHr+DnD1m5w7cpb0Bjcuis2I5Ozpjto38/PtiO/dQr2gTQJXID7h/fAXhiYcdFi1Rm
-	 djJbY6xjQgg5L6eMYfqJIxM9cMpalkGPCK70ZerE=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Tian Zheng <zhengtian10@huawei.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	maz@kernel.org,
-	oupton@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	corbet@lwn.net,
-	pbonzini@redhat.com,
-	yuzenghui@huawei.com,
-	wangzhou1@hisilicon.com,
-	yangjinqian1@huawei.com,
-	caijian11@h-partners.com,
-	liuyonglong@huawei.com,
-	tangchengchang@huawei.com,
-	yezhenyu2@huawei.com,
-	yubihong@huawei.com,
-	linuxarm@huawei.com,
-	joey.gouly@arm.com,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	fuad.tabba@linux.dev,
-	mark.rutland@arm.com,
-	seanjc@google.com,
-	rdunlap@infradead.org,
-	linux-doc@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jMLMrqdr
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a2119feee8so1582225e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 07:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794497616; x=1795102416; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rEhQI3hSOE9lI+wJjJwvBECQfjSinYgfuJ/QdhixFTY=;
+        b=jMLMrqdrw+sf9VotlU3FcMTa96S3NZy1TCicumpr6ODmSsTZMyuvA+ILiUWWR1qRuF
+         373uxwLJPAZENG6ysZRpyusJXuNW4CIuQ4h2/3GhBk7ZtY+Hqi2dmnQNVz18cEFgXz0n
+         dS+CM5qBPG67oWoVh0tYOSRNbX2SxhCYWKfdgh5C2ItnfNZyBS3Lt/CNfq16WvWWCh2p
+         6/fc16B6JIsFxXluBO+yC/AAVXPpkzbarh1WPa160M8tyNgSjZAuBLcec4orXcd7L8Np
+         H5/MO5WwkylQHs2n13Gs5celfVKXmvV8NJUwwnTNMw0qe6jGa3mXHSekqwRMeS/V90yI
+         mlmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794497616; x=1795102416;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rEhQI3hSOE9lI+wJjJwvBECQfjSinYgfuJ/QdhixFTY=;
+        b=y1epUV5nd9ZDyvCZzw4kmJK1R3HXSiR5JUuZbEff5i4wf+9PC6WMNgDf3/5Vrf9P+V
+         cGJkvUBQH7lePbcIcfGDt0XLhpGZGddkRI4W2suaIURzSb60F+Xblu35COYu8R2H+cyI
+         x3/BllITdesQk27eFpl3mX1naw5JbFXoKhICT364DS+ReyV+aiKaJeAUvXsXf/eK2j91
+         MyT7PDuIx7YpLn8N3lXmpq7EuJQ9nu+ow0xpk5nz3zBiwVQnfOjDiBGMSAf/2tHV2p08
+         aXcUwY2apaP3WBR7T3iEPtJk26ey1cPGHh3EYiOXV6E6ZXygNilkOa/zzlg6K6LD+tF7
+         5Kmg==
+X-Forwarded-Encrypted: i=1; AL+hErE0TOpIG8NXgFccjJN6DjoT7No9FRXBp2JKM3KzttR8yUgrh6gFqYCaieOUw1eM0AxHCcusdQSSLtc+neWMfeo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/bubmKsxrIKOqyKtkM2EBVMpSdOV4XFqCMYzFqHD9P0p+K3tS1
+	cvjDPY6gGv//K6jrlUToZmHzSfzF0NY6mauq4OrmX4xeLAeMBjLFwAXj
+X-Gm-Gg: AYBFou3ToNcwUtkY0e3YmZDMuNvII23TzA1bbr+PC1YqHS2KkyFLsDptosE8EpUUEuu
+	Ny7PUPtQx9XGFfy2mmU1uuXba0c7gfe4IPR2enc+Pn+tfh+YJaTnKBjBe4W2GZwVkafpaTAziiz
+	8WIsDiAcTtsngNNHetGm9NVKPiKhD0+mAXX3FyXjuGp3PKH3rfNuPqnajIaX8DU9A8gmhGbhSn8
+	wvFOGIdmYHsRVCDsp63EOFXi2Vl2oo8bMIVZwmihGVtnIvBBr+NUrhwp8SlbydPwTlk3xzb9iis
+	qmh/JDykrVIkgT+y1EKyOIUKyZyoxg3JDMbrYeNKob/1XJEyIwOUsA7Ze0fgRYHShsOUea7ckPT
+	8iY7YHMv+TOa3WFm2mZcLz2zarTQBd9WxqRWFu8B3hZC+G/xMEwYdNd/pgOJHxRvapG925ro5g5
+	4AVnIAxwyIVSnIC8SL3xjl3dNkHlayNfnwHjGzdLym6kbZQQqqCslePAWUVm0SaksY1/YpMrXcx
+	oBY3oezdWIy0283mGlzisiWXYaNmCo8ONnU8xRWkOPIu5UDsfoEBdoqLDnMGGPNH+oyRkneihN/
+	k2oJQDMS++zvHk7J2gwAukr4HHspZuFk0AX9vp3gVGxcBLiAzNo822AVuDlKgaEkLqig9h5g8m1
+	rEezSTpBxZZ94kUy4ASROfkjPjHAmHlv3dfiNM1wcdWPo3AfT9uwqaBnDaLNg0/0=
+X-Received: by 2002:a05:600d:8448:b0:4b6:2242:d0be with SMTP id 5b1f17b1804b1-4ba091a5d00mr85202145e9.0.1794497616053;
+        Thu, 12 Nov 2026 07:33:36 -0800 (PST)
+Received: from L-022584.energy.envision.com (dynamic-093-130-172-139.93.130.pool.telefonica.de. [93.130.172.139])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba08ddbe68sm229331185e9.0.2026.11.12.07.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 07:33:35 -0800 (PST)
+From: Xin Xie <xiexinet@gmail.com>
+To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 11/15] KVM: arm64: Reserve dirty ring space for the HDBSS buffer
-Date: Thu, 12 Nov 2026 15:26:12 +0000
-Message-ID: <avXak02I6i0tLLN9@LeoBrasDK>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <fee835a5-a027-4b68-b933-6f8e81987bce@huawei.com>
-References: <20260929103655.85107-1-zhengtian10@huawei.com> <20260929103655.85107-12-zhengtian10@huawei.com> <auikG0clmr19sAjh@LeoBrasDK> <afcbf19b-bd13-4afc-ab56-8bc50c793e50@huawei.com> <au30DqzWIFny1tpr@LeoBrasDK> <d81243e3-d790-4ee8-9b28-36d35591ee77@huawei.com> <avIOZTvQF-1sxs2p@LeoBrasDK> <90775cb3-84ab-4690-a252-1ac41488118f@huawei.com> <avMSw3LLDIFT3kSR@LeoBrasDK> <fee835a5-a027-4b68-b933-6f8e81987bce@huawei.com>
+	linux-kernel@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	kees@kernel.org,
+	petr.wozniak@gmail.com,
+	qingfang.deng@linux.dev,
+	fmaurer@redhat.com,
+	luka.gejak@linux.dev,
+	bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com,
+	skhawaja@google.com,
+	liuhangbin@gmail.com,
+	stable@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	xiexinet@gmail.com,
+	lukma@denx.de,
+	fmancera@suse.de,
+	danishanwar@ti.com
+Subject: [PATCH net v9 0/4] net: hsr: fix super-packet forwarding
+Date: Thu, 12 Nov 2026 16:33:29 +0100
+Message-ID: <20261112153333.20-1-xiexinet@gmail.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -89,267 +117,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 12, 2026 at 09:15:02PM +0800, Tian Zheng wrote:
-> 
-> 
-> On 11/10/2026 8:49 PM, Leonardo Bras wrote:
-> > On Tue, Nov 10, 2026 at 04:54:30PM +0800, Tian Zheng wrote:
-> > > 
-> > > 
-> > > On 11/10/2026 2:18 AM, Leonardo Bras wrote:
-> > > > On Mon, Nov 09, 2026 at 12:00:52PM +0800, Tian Zheng wrote:
-> > > > > 
-> > > > > 
-> > > > > On 11/6/2026 11:36 PM, Leonardo Bras wrote:
-> > > > > > On Fri, Nov 06, 2026 at 06:36:04PM +0800, Tian Zheng wrote:
-> > > > > > > 
-> > > > > > > 
-> > > > > > > On 11/2/2026 10:54 PM, Leonardo Bras wrote:
-> > > > > > > > On Tue, Sep 29, 2026 at 06:36:51PM +0800, Tian Zheng wrote:
-> > > > > > > > > The dirty ring reserves room for CPU-side dirty buffers via
-> > > > > > > > > kvm_cpu_dirty_log_size(). Report the HDBSS buffer entry count
-> > > > > > > > > through it, so a full buffer flush always fits in the ring.
-> > > > > > > > > 
-> > > > > > > > > Pin the HDBSS buffer size to PAGE_SIZE when dirty-ring is enabled,
-> > > > > > > > > via kvm_arch_dirty_ring_size_updated(): a larger buffer only
-> > > > > > > > > shrinks the soft_limit and forces more frequent userspace drains.
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Tian Zheng <zhengtian10@huawei.com>
-> > > > > > > > > ---
-> > > > > > > > >      arch/arm64/kvm/arm.c | 8 ++++++++
-> > > > > > > > >      arch/arm64/kvm/mmu.c | 8 ++++++++
-> > > > > > > > >      2 files changed, 16 insertions(+)
-> > > > > > > > > 
-> > > > > > > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > > > > > > > index 9d7bdece149a..5a7046acb62e 100644
-> > > > > > > > > --- a/arch/arm64/kvm/arm.c
-> > > > > > > > > +++ b/arch/arm64/kvm/arm.c
-> > > > > > > > > @@ -215,6 +215,14 @@ static int kvm_arm_default_max_vcpus(void)
-> > > > > > > > >      	return vgic_present ? kvm_vgic_get_max_vcpus() : KVM_MAX_VCPUS;
-> > > > > > > > >      }
-> > > > > > > > > 
-> > > > > > > > > +void kvm_arch_dirty_ring_size_updated(struct kvm *kvm)
-> > > > > > > > > +{
-> > > > > > > > > +	if (!system_supports_hdbss())
-> > > > > > > > > +		return;
-> > > > > > > > > +
-> > > > > > > > > +	kvm->arch.hdbss_buffer_size = KVM_ARM_HDBSS_DEFAULT_SIZE;
-> > > > > > > > > +}
-> > > > > > > > > +
-> > > > > > > > 
-> > > > > > > > On the same subject as a previous patch:
-> > > > > > > > I don't think this is the best approach, on top of adding a new weak
-> > > > > > > > function to take care.
-> > > > > > > > 
-> > > > > > > > Maybe during the dirty-ring allocation, on vcpu creation, we could take
-> > > > > > > > into account the requested dirty-ring size, and just allocate the HDBSS
-> > > > > > > > buffer taking that into account. That would make it simpler, don't you
-> > > > > > > > agree?
-> > > > > > > > 
-> > > > > > > > Thanks!
-> > > > > > > > Leo
-> > > > > > > 
-> > > > > > > Hi Leo,
-> > > > > > > 
-> > > > > > > The "set once" guard we're discussing comes from the patch that adds the
-> > > > > > > ioctl, and it isn't really needed. We discussed this earlier [1]: we can
-> > > > > > > just initialize hdbss_buffer_size to PAGE_SIZE at VM creation and let
-> > > > > > > the ring reservation use it directly. **That also means
-> > > > > > > kvm_arch_dirty_ring_size_updated() can be removed.** Thanks for your
-> > > > > > > suggestion.
-> > > > > > 
-> > > > > > :)
-> > > > > > 
-> > > > > > > 
-> > > > > > > As for why PAGE_SIZE is the right value in ring mode: the HDBSS buffer
-> > > > > > > is flushed on every VM exit, so a larger buffer doesn't reduce the flush
-> > > > > > > frequency. It only inflates the ring reservation (64 + size/
-> > > > > > > sizeof(u64)), which shrinks the soft_limit and forces more frequent
-> > > > > > > exits to userspace for the ring to be drained. Draining the dirty ring
-> > > > > > > from QEMU is more expensive than draining the HDBSS buffer from the
-> > > > > > > kernel, so the smallest buffer gives the best performance. In this mode,
-> > > > > > > a larger buffer provides no benefit to users.
-> > > > > > 
-> > > > > > Humm, if properly dimensioned larger buffers would be benefitial for
-> > > > > > memory-intensive workloads, unless they are guest_exiting for other
-> > > > > > reasons in the meantime.
-> > > > > > 
-> > > > > 
-> > > > > Agreed, and the workload I tested is on the "unless" side. The guest
-> > > > > exits constantly for other reasons, so the larger buffer never got a
-> > > > > chance to pay off, and only cost ring capacity.
-> > > > > 
-> > > > > > > 
-> > > > > > > In my tests, I also saw performance degrade when more space is reserved.
-> > > > > > > 
-> > > > > > 
-> > > > > > Humm, what kind of workloads did you test?
-> > > > > > Did you have the chance to monitor what were the reasons for VM exiting?
-> > > > > > 
-> > > > > 
-> > > > > For the workload question, it's a Redis server in the guest under redis-
-> > > > > benchmark (SET-only, 2KB values, 1M keys, 100M requests). The traffic is
-> > > > > network-driven, so the guest exits constantly to service requests. The
-> > > > > HDBSS buffer only accumulates entries between two exits and is flushed
-> > > > > on every exit, so it rarely fills regardless of size. A larger buffer
-> > > > > only inflated the ring reservation, which shrinks the soft_limit and
-> > > > > makes the ring-full exit and userspace drain fire more often.
-> > > > > 
-> > > > > > I am not saying this is mandatory for the HDBSS implementation, but the
-> > > > > > whole idea of letting the user choose their own HDBSS buffer size is
-> > > > > > because different workloads may benefit from different buffer sizes: if a
-> > > > > > VM writes a lot to new memory, and exits very little for other reasons,
-> > > > > > then a larger buffer will cause the VM to guest_exit much less often.
-> > > > > > 
-> > > > > > Does that make sense?
-> > > > > > 
-> > > > > > Thanks!
-> > > > > > Leo
-> > > > > 
-> > > > > It does make sense. That's exactly the workload where a larger buffer
-> > > > > pays off, and the next version no longer gets in its way. The two ioctls
-> > > > > are no longer mutually exclusive.
-> > > > > 
-> > > > > The only coupling left is the reservation. hdbss_buffer_size starts at
-> > > > > SZ_4K at VM creation, so a ring enabled right away reserves for the
-> > > > > default buffer (64 + 512 entries), and the minimum ring size accepted is
-> > > > > unchanged from v5. KVM_CAP_ARM_HDBSS_BUFFER_SIZE is the gate. When the
-> > > > > ring is already enabled, a size is accepted only if its reservation
-> > > > > still fits in the ring, otherwise -EINVAL. In the other order, ring-
-> > > > > enable validation rejects a ring too small for the configured size.
-> > > > 
-> > > > I don't think this is needed. If using dirtyring, we don't need to allow
-> > > > user to set hdbss size: HDBSS size should be sized according to the
-> > > > dirty-ring dimensions, that are set by userspace before the first vcpu is
-> > > > created.
-> > > > 
-> > > > 
-> > > > > So SZ_4K is just the conservative default for guests that exit often.
-> > > > > Anything larger, within what the ring can reserve, is up to the user.
-> > > > > 
-> > > > > Does this work for you?
-> > > > 
-> > > > I still think we should do PAGE_SIZE for dirty-bitmap. Dirty ring should do
-> > > > based on the dirty-ring size, and maybe review the use of reserved
-> > > > entries, or it's accounting.
-> > > > 
-> > > > What do you think?
-> > > > 
-> > > > Thanks!
-> > > > Leo
-> > > 
-> > > Hi Leo,
-> > > 
-> > > Thanks for your review. It does make sense!
-> > > 
-> > > I agree that dirty-bitmap mode will keep PAGE_SIZE as the default, and
-> > > in that mode the ioctl stays available for a larger buffer.
-> > > 
-> > > In ring mode we will drop the ioctl, the two remain mutually exclusive,
-> > > and the buffer will be derived from the ring size userspace configured
-> > > before the first vCPU is created:
-> > > 
-> > > ```
-> > > hdbss_buffer = clamp_t(unsigned long,
-> > >                         rounddown_pow_of_two(ring_size / 16),
-> > >                         SZ_4K, KVM_ARM_HDBSS_MAX_SIZE);
-> > > ```
-> > > 
-> > 
-> > Are you allocating 1/16th of the ring size in bytes as an hdbss buffer?
-> > That's confusing. I recommend we rather have something like:
-> > 
-> > ring_entries = ring_size / sizeof(struct kvm_dirty_gfn);
-> > hdbss_entries = ring_entries / 2; // Or any number we decide to use here.
-> > hdbss_buf_size = hdbss_entries * sizeof(hdbss_buf_entry);
-> > 
-> > Then we do
-> > hdbss_buf_size = clamp_t(unsigned long,
-> >                           rounddown_pow_of_two(hdbss_buf_size),
-> >                           SZ_4K, KVM_ARM_HDBSS_MAX_SIZE);
-> > 
-> > So it's clear what is what here.
-> > Just dividing by 16 above can be confusing to whoever is reading the code.
-> > 
-> > 
-> > > A buffer entry is 8 bytes and a ring entry is 16 bytes, so:
-> > > 
-> > > ```
-> > > buffer entries = buffer_size / 8
-> > > ring entries   = ring_size / 16
-> > > ```
-> > 
-> > Remember to use the sizeof instead of fixed numbers.
-> > 
-> > > 
-> > > This means ring_size / 16 reserves at most one eighth of the ring
-> > > entries for the HDBSS buffer. That keeps the usable ring above 85% while
-> > > the buffer still grows with the configured ring size, and the result is
-> > > independent of the kernel page size, with SZ_4K as the only minimum.
-> > 
-> > Yeah, remember that if you are dealing with the ringbuffer like this, an
-> > user can request a 4k ringbuffer and we just won't be able to use hdbss, as
-> > it means 4k/16 entries, and hdbss has the minimum of 4k/8.
-> > 
-> > As I mentioned, maybe this approach of reserved entries is not the right
-> > way of dealing with it in arm64.
-> > 
-> > > 
-> > > One eighth is the ratio that looks reasonable to me so far. What do you
-> > > think?
-> > > 
-> > 
-> > I see no reason why it could not be higher than that. It all depends on how
-> > you want to deal with the full buffer in the future patchset. If hdbss
-> > buffer is full, it has to exit and drain to the dirtyring. The guarantee
-> > you seek with reserved entries is that all hdbss entries fit in the
-> > dirty-ring.
-> > 
-> > As long as the user is required to drain entries until the dirty-ring is
-> > not 'full' anymore, we could easily work with dirty-ring having twice as
-> > many entries as the hdbss buffer.
-> > 
-> > How does it sound?
-> > 
-> > Thanks!
-> > Leo
-> 
-> Hi Leo,
-> 
-> Thanks for the suggestion.
-> 
-> For the next version I'll still go with the reservation scheme. It's the
-> safest approach I can think of. The guarantee I want is that a full
-> buffer flush always fits in the ring by construction, without depending
-> on how quickly userspace drains it.
+HSR and PRP tag, number and de-duplicate each frame on the wire. GRO
+and GSO can hand them one skb holding several frames, which the lower
+device then drops or which goes out with a single tag or RCT and
+sequence number.
 
-Of course, it should never depend on how quickly userspace drains the ring.
-My point is that reserved entries is not the only option that satisfies 
-that.
- 
-> 
-> I'll also switch to sizeof(struct kvm_dirty_gfn) and
-> sizeof(hdbss_buf_entry) instead of the hardcoded 16 and 8, and size the
-> HDBSS buffer at half the ring entries as you suggested.
-> 
-> On the 4K ring case: HDBSS can't fit there. One option is to just not
-> enable HDBSS in that scenario, but I'll start with returning -EINVAL for
-> now. I'm happy to switch to the other option if you think that's better.
-> 
+Patch 1 keeps software GRO off on HSR/PRP ports. GRO_HW that the
+driver keeps on is left alone.
 
-Return -EINVAL meaning what? userspace can't set the dirty-ring to 4k? that 
-could break a lot of users.
+Patch 2 refuses bridge, bond, team and OVS masters as ports, a macvlan
+or MACsec device on top of a bridge, bond, team or HSR/PRP master, and
+devices that already have a master or cannot take an RX handler.
+This fixes the syzbot recursive seqnr_lock report, as Sebastian
+suggested [1].
 
-Disabling HDBSS for that range could be the solution, but then we 
-would have HDBSS being used for dirty-rings above some size, which could be 
-kind of odd in the code, and possibly lead to trouble in the future.
+A port check cannot catch every path back into an HSR master, such
+as a tc/BPF redirect or a tunnel; those still nest the lock and can
+deadlock on the same device. Fixing them without dropping traffic
+needs seqnr_lock released before the port transmit, which can reorder
+frames for receivers without aae9d6b616b5 ("hsr: Implement more robust
+duplicate discard for HSR"). That is left to net-next, where Hangbin's
+patch [2] fits. He dropped it in favor of this series [3]; as this
+series no longer narrows seqnr_lock, it can go ahead there.
 
-That's one of the reasons I mentioned reserved entries may not be the best 
-solution for us.
+Patch 3 segments GSO skbs before per-frame processing, outside
+seqnr_lock. GSO reaches an HSR/PRP port even with GRO off, typically
+from a container attached to a PRP RedBox interlink through veth:
 
-Thanks!
-Leo
+  container/netns                  host PRP RedBox
+  prp0-peer ---- veth ---- prp0-int (interlink RX)
+                                  |
+                           split GSO into frames
+                                  |
+                           sequence number + RCT
+                              /          \
+                           LAN A        LAN B
+
+Some old Linux PRP senders put one RCT on a whole GSO skb; patch 3
+drops such aggregates when it can detect them. With GRO_HW off on
+virtio-net, the host may segment them first and the RCT arrives as
+payload; upgrade the sender or disable GSO and TSO on its HSR/PRP
+master.
+
+Patch 4 adds selftests.
+
+Tested on a lockdep kernel: the new selftests (also with Python 3.9)
+and the existing hsr selftests pass, and the syzbot reproducer no
+longer reports recursive locking. No new W=1 warnings.
+
+No stable backport is requested. The remaining HSR dev->stats races
+are left to a separate series, as Paolo suggested [4].
+
+Based on net 30c71476d842; also applies to net-next. Patch 3
+conflicts with Sebastian's pending net-next series [5]; its notes give
+the resolution.
+
+Changes since v8:
+- Patch 1: the message and comments say which ports the rule covers.
+- Patch 2: macvlan and MACsec are refused only on top of a bridge,
+  bond, team or HSR/PRP master; all ports are checked before any is
+  changed.
+- Patch 3: copy a head shared with a clone before segmenting.
+- Patch 4: no fixed sleep, no need for iproute2 to print the HSR
+  version, new refusal cases.
+
+[1] https://lore.kernel.org/netdev/20261014151838.6RyMIRVM@linutronix.de/
+[2] https://lore.kernel.org/netdev/20260805-hsr_deadlock-v1-1-d8a6f06fc5a8@kylinos.cn/
+[3] https://lore.kernel.org/netdev/anXnxn-PBv8qH6VB@fedora/
+[4] https://lore.kernel.org/netdev/4fc3b9f1-4bef-4b34-ae7a-e89037cce829@redhat.com/
+[5] https://lore.kernel.org/netdev/20261104-hsr_ptp-v10-0-2c4a38ad973c@linutronix.de/
+
+v8: https://lore.kernel.org/netdev/20261107220544.20-1-xiexinet@gmail.com/
+v7: https://lore.kernel.org/netdev/20261009201324.17-1-xiexinet@gmail.com/
+v6: https://lore.kernel.org/netdev/20260809121455.1745-1-xiexinet@gmail.com/
+v5: https://lore.kernel.org/netdev/20260807140751.1351-1-xiexinet@gmail.com/
+v4: https://lore.kernel.org/netdev/20260803222211.877-1-xiexinet@gmail.com/
+v3: https://lore.kernel.org/netdev/20260731090224.18-1-xiexinet@gmail.com/
+v2: https://lore.kernel.org/netdev/20260724161253.79-1-xiexinet@gmail.com/
+v1: https://lore.kernel.org/netdev/20260722171836.196-1-xiexinet@gmail.com/
+
+Xin Xie (4):
+  net: hsr: keep GRO disabled on HSR/PRP ports
+  net: hsr: refuse forwarding devices as HSR/PRP ports
+  net: hsr: segment GSO before per-frame forwarding
+  selftests: net: hsr: verify GRO policy and ordered forwarding
+
+ .../networking/net_cachelines/net_device.rst  |    1 +
+ include/linux/netdevice.h                     |    8 +
+ net/core/dev.c                                |   15 +
+ net/hsr/hsr_device.c                          |   13 +-
+ net/hsr/hsr_forward.c                         |  158 ++
+ net/hsr/hsr_forward.h                         |    1 +
+ net/hsr/hsr_slave.c                           |  145 +-
+ net/hsr/hsr_slave.h                           |    2 +
+ tools/testing/selftests/net/hsr/Makefile      |    7 +-
+ tools/testing/selftests/net/hsr/config        |   10 +
+ .../selftests/net/hsr/hsr_gro_superpacket.py  | 1456 +++++++++++++++++
+ .../selftests/net/hsr/hsr_gro_superpacket.sh  |    9 +
+ .../net/hsr/hsr_ordered_forwarding.sh         |    9 +
+ 13 files changed, 1819 insertions(+), 15 deletions(-)
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.py
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_ordered_forwarding.sh
+
+
+base-commit: 30c71476d842b094651bd7712f6c8ee8716147d0
+-- 
+2.53.0
+
