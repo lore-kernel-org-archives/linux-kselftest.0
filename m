@@ -1,63 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794523745;
-	b=MIlwzoy7k2U1pz+90Qojb3An4RJwOFjmGvfLfMbFe39XUWLNHBgznSS39YR7+vRskRas
-	 pZD4tg3lwj1Kj82/ZDBUhAh+1TmgE/1Ds98aA83Er4xjeJO4LFJxWZWSNA7H6nsmVRjAf
-	 pLx5ZBHK0VpsjbfV3CBZq5I+QZj+++MXlaRTOaX09igXFUm3k1qUGPfi0an484p3yyqO2
-	 bwiLtN5oAYvoklazbzD6sOfpgqgk/tbkP2rDVDGTgatof8jrQ7grP2j8uy7DLNc1um8Rf
-	 Q4gd0dEoc+7XWI7vQvWfcv2wX5sSsBZp8OInP/jfxoJ5qbyfBDQt/5Hb2/1/3muUKjQ==
+	t=1794524416;
+	b=j8oAObY26Kn8Nui1VfXIG6cvPrvPtmZ0ZPYpIhi3WQPl/HZrKKRJGorN0yAtREL3x/EV
+	 UNqSkANobc89t8JpvVEUbPHjCp0SYCsch63ale9gfcrsiFxLBwp8Gric3+ZPbI++rYbp2
+	 dIf5Fn7XeM+E0ibnMYhWHf0WwwWOzbrjbg0jNWRRiPJxBMgYSeGOP0yg6RqLutzvRABve
+	 SIzUZ7aYCZ/Xm/jgh3jbEdJBfPT0F+AyUBvXYAU33JB6Dj+kB+u/qX8UKukrfBn5Ybb6+
+	 VOkwYzhrNwjUrFjz1+jKpXoOFDqHVIU6rGlASxjbHSZLJ/qofEJ4AqpRtz6V/4zu4Fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794523745;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=wI3p+YFMsDDPnyhy/ooDHa6Q6Ez070BIob1RsZs6fmg=;
-	b=FNdk/SzlVbp3h4D+XiEwUxNCQH4wbDFP2LAm3qkc2V8/23D0TTviogBu/FL0W/huzCy/
-	 sWokqDESNCZL2+IEHaoA2wW37sgCB/NNuBqzaLw/03TU+f2JG5pbsmZMczTlV6JZ9M//j
-	 xwxNpKRZ3QBMAEzYXrleIx9Qx2s1nrZKSR79j56aaNk3a/yOnb4v5pMMcdz4hhFFxb9t2
-	 siQnW7O/Ye+H0EJaCr6jxZ5Vsr0UO0XkbVDxgJGfXz5sgw+C2dLuiVg3llVUmxlwDWwQ1
-	 wJHxflomLytkV2UeXIRtnXeNOkt8NbvSzLbFuTKSi0Xyo+mw4sCkZ0f0pUcU11L9Nyw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794524416;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=EBkgmCwzSSGPUQEDHuaBTutli2Jfo6B14aVph4B8jx0=;
+	b=meGdMtEoN2os5caAMKgbKeJt74FNNfg4/ECIYf28VhLpn4xac65IRU+7alnqSa3DobLm
+	 It1TqI4giWWMS+2eP291nYhOx/0gpcgBwjH6aFIUIuUs64ABNVz5MJduy6XvTw0c4eH4e
+	 THdW/pJH98wcD2fyuP3fEpzisJjnTxgHFfayO2h33HHmcxGMiQDgISz+uVkVl12khSg+5
+	 drhby2lhr0qyG9fv2tUf4OvAQzMdOuC/UynvPLlzvCWwBnEsCCtIH6g31qeMHKYL5Vzf5
+	 4E3zfwcBoXlbg8/OWC+1x/72oBlfIQDUx0uT+538MiYx0bMqYyWX9R1oxIjvBn32tBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OJ3fBm4z;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="UEmdS/dd";
+	arc=none smtp.remote-ip=74.125.229.4
+Received: from mail-dy2-f4.google.com (mail-dy2-f4.google.com [74.125.229.4])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C42606A335;
-	Thu, 12 Nov 2026 22:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CB5606A89D
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 23:00:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 26CB5606A89D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OJ3fBm4z
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37941F000CA;
-	Thu, 12 Nov 2026 22:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794523745;
-	bh=wI3p+YFMsDDPnyhy/ooDHa6Q6Ez070BIob1RsZs6fmg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=OJ3fBm4zTqOxKfAgpyy8NInHfLx2WwMDVfJjO8iDCaN4vixR8hUea9SoQB3UHuQ2E
-	 e8y/8Io1oq4Kggn5PijcShJDhkfVX4m9WJ8lNCIZUcK3xRe7jDM0TObIgx+Jp46a/Z
-	 MUWS0G19Me2yv/i5YQBNKIA7yTe+knmCWg5Y01V5F6JQovaGDduLEBO4aS52CELYdZ
-	 dHh8R+UdxWGJ2iqfZqAcwTXNQg1UfiYl1RA17KvEXLx3mpIJE/eu4bII+cipK6liIH
-	 upyKA/QT/0XLGVKFBmFVHGlbBENk48Y5o9rjT7dn1pxfSxGTO7RqHJ0n8VCCHBP1EM
-	 HHHEgaZSWpTFA==
-Subject: Re: [PATCH net-next v4 5/5] selftests: drv-net: devmem: TX from a
- hugepage-backed dmabuf
-From: netdev-bot+sashiko@kernel.org
-To: sdf.kernel@gmail.com
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, michael.chan@broadcom.com,
- pavan.chebbi@broadcom.com, andrew+netdev@lunn.ch, edumazet@kernel.org,
- horms@kernel.org, shuah@kernel.org, almasrymina@google.com, sdf@fomichev.me,
- leitao@debian.org, dtatulea@nvidia.com, asml.silence@gmail.com,
- bobbyeshleman@meta.com, daniel@iogearbox.net, razor@blackwall.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Thu, 12 Nov 2026 22:49:03 +0000
-Message-ID: <179452374350.2199510.6232070407318094793@kernel.org>
-In-Reply-To: <20261111224740.2744522-6-sdf@fomichev.me>
-References: <20261111224740.2744522-6-sdf@fomichev.me>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UEmdS/dd
+Received: by mail-dy2-f4.google.com with SMTP id 5a478bee46e88-36f758312e0so123940eec.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 15:00:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794524415; x=1795129215; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EBkgmCwzSSGPUQEDHuaBTutli2Jfo6B14aVph4B8jx0=;
+        b=UEmdS/ddxgea87Jmi4D6KGO0cwNBW0iN6pjH4MYdOo/9psUz72Te3wCs/WBVGWCYin
+         oLAdMFp7CIubzlvzOBmyRG/Lj4TRocdsaMYZRyRloCp5icyGrXTBcF0NN3YDIdpbziPD
+         9dCoQysz795JPTNbOOEjaH/EeLGkosuG4aQkxwOskX09xUil/r1gN92uAD9OMsSjKiDB
+         F0lH6/nzBn/sVPwCLsDSnGNtu6ltHUoqDrztZuFogvL6rw+gfNvucXjpxiD1Anf0Up7c
+         0j1KXXL6s2KWDR5t1ZzoobkG3mM+v03VwLyiHohMh0pxNELAMXLgF+TZ4oIQZUO8hFiw
+         1I8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794524415; x=1795129215;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EBkgmCwzSSGPUQEDHuaBTutli2Jfo6B14aVph4B8jx0=;
+        b=qtftQWYt1c5FyLGmlDxVCfuuNsfgY8YQO6JbaGTctIaCOK7WcHCRxFNwHlUKUr4xU4
+         +9mtiwB7uRPWwSmo4gmm8VLb6cF8v65fjM5oclKN3Jk2+zFarDnC0N9m39gqLd44vm+h
+         o7VbUiNefyGCX5IMW9IBGlZm0YNak8EgbJYkcYOcLkEPvlQffv3GdF5ywpP8s6cF/MLw
+         4JGJcyyL2x3vho1/my6KcwH0EDqmZ8MZ8iZwOpvHIZUcN8gtgFdFB8pTrc75ci9iIjIX
+         Fxt0rdcniYSuuobPECfk/qxic4heX6VAxon79MWCb1Fs2NzbWdOjusejIge2UEMNtyUd
+         glGw==
+X-Forwarded-Encrypted: i=1; AL+hErE2vcbOCjelEeho479/OQKGZFueO2IPkSCY5XJuHjuQ+zU2wiTNgY4oq/GYLrARWbPA9rblThbT9Wp107W/TVk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/K9Euxq9uxeGdmrVBosfdoGrkpJSbquTnHgzi2QULt1bd4i2Y/
+	nejgEcV5cXYrkxQBZ1rAqSIREDLKsUfCtzcnyOZfSvVJMNqiIkOYbBxT
+X-Gm-Gg: AYBFou0Ba9G+t45Tm0cm420FEq/U2jakJj89PxeCgUcWWvR5iVPSDJZqRHzDTg4bw4P
+	e8YO5RLQlC49dGsKBXvteeQnh41+35lNoRSttt8Op/4Rf2mOx2WrpP3fDq4ECatyjtpSztaSbR3
+	41je4dlBUKFFYU5DIZZ0AP2gn4mAF8fuIOib2TI7Vy2pR0onrSeQ4A+MBZlxKinrOK47xwFuwz+
+	IusZKQOEsI43CeIpO6pBLVKa4NhexH6ZmH/1wXru15uWEb2s+MWZDs5V9xHQDT9UqHglBxNttDJ
+	BlEaaTzv4g3wiMfP1JEnhu41w7hvu8/LNBracKMsRyBS7MqF6I8r0XExplJUrI8W8bEOzQYAPkD
+	XarNHk2L/8osvKHtJ+YwKMSHhg7AMiCYM8/q+Gtzd24j58asv2+FBkej5v7kOl2XAQI2OQMli6A
+	0Wq6Z2x0ocGT0rmYL355FhB45THAsAL5wfh7oDqZGskT/lNeKOALqYx3WJdB6OOfWhBdUJQMpEh
+	0PzE8584eyMVu42OnI7XAif68HuRYu8DRIo/f4+SxdRDNXRcAowu3E99vOdwKBS/oLNbEZnrHke
+	fR1oviF14+I0MKNzHXarTy4=
+X-Received: by 2002:a05:701b:454f:10b0:1b2:4998:a0df with SMTP id a92af1059eb24-1b5030db655mr763014c88.35.1794524414765;
+        Thu, 12 Nov 2026 15:00:14 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:60::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5031b98e5sm2014845c88.14.2026.11.12.15.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 15:00:13 -0800 (PST)
+Date: Thu, 12 Nov 2026 15:00:09 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, michael.chan@broadcom.com, pavan.chebbi@broadcom.com, 
+	andrew+netdev@lunn.ch, edumazet@kernel.org, horms@kernel.org, shuah@kernel.org, 
+	almasrymina@google.com, sdf@fomichev.me, leitao@debian.org, dtatulea@nvidia.com, 
+	asml.silence@gmail.com, bobbyeshleman@meta.com, daniel@iogearbox.net, 
+	razor@blackwall.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 0/5] net: devmem: size TX net_iovs from the
+ dmabuf layout
+Message-ID: <avZC2hp_0ODMQ4SG@devvm16445.scu0.facebook.com>
+References: <20261111224740.2744522-1-sdf@fomichev.me>
+ <1b764043-2efd-4e65-adb9-a47c0136446b@redhat.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -67,92 +102,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1b764043-2efd-4e65-adb9-a47c0136446b@redhat.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On 11/12, Paolo Abeni wrote:
+> Hi,
+> 
+> A few (late) questions/comments to check I'm not missing relevant
+> points,
+> 
+> On 11/11/26 23:47, Stanislav Fomichev wrote:
+> > TX bindings use PAGE_SIZE net_iovs, so a frag covers at most a page.
+> > A 64KB skb needs 16 frags, and MAX_SKB_FRAGS caps devmem skbs at about
+> > 68KB, which makes BIG TCP ineffective for devmem TX.
+> 
+> ... with default .config. You could set MAX_SKB_FRAGS to 45 and reach
+> ~180K...
+> > This series picks the TX net_iov size from the dmabuf sg table instead:
+> > the largest power of 2, up to 2MB, which aligns every DMA segment. With
+> > a 2MB hugepage-backed udmabuf a BIG TCP skb takes a few frags. There's
+> > no UAPI change since TX addresses are dmabuf offsets.
+> 
+> ... still this option should be more effective because the limit would be
+> higher and the skb would use less cachelines for the shared_info,
+> 
+> I'm wondering if making a comparison vs MAX_SKB_FRAGS==45 would be
+> complex and if you could do that, too.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Originally I did not want to include bigtcp to keep it apples to apples:
+same tso size, just 16 frags in skb vs 1 (in ideal case).
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+I just tried running mlx5 with 45 frags configured and it fails to start with
+the following error:
+mlx5e_attach_netdev() warns "MLX5E: Max SQ WQEBBs firmware capability: 16, needed 23" and returns -EIO.
 
-- [Medium] The new TX large-niov test (check_tx_large_niov in devmem.py
-  and check_nk_tx_large_niov in nk_devmem.py, both calling…
+(fwiw quick review with llm claims that mlx5 only supports up to 20 skb frags)
 
---
+What I also tried just now is `gso_max_size 524280` (on top of this series)
+and it ups single flow throughput from 200Gbps to 240Gbps (presumably
+by making the receiver go faster with 512K TSOs vs 64K TSOs) and halves
+the sender softirq..
 
-selftests: drv-net: devmem: TX from a hugepage-backed dmabuf
+I hope this gives you more data, not sure running with 20 frags is worth
+it (vs 16)? LMK if you disagree or want me to run something else.
 
-This adds a -H option to ncdevmem that backs the udmabuf with 2MB
-hugepages. It also adds a TX test, run from both devmem.py and
-nk_devmem.py, that sends a 3MB patterned buffer from that udmabuf so the
-frags cross the 2MB net_iov boundary. The received data is checked by
-comparing sha256 hashes from the remote side.
+> > This doesn't make skbs larger. TCP still sizes them with size_goal.
+> > Only the frags get larger, and a single frag can now cover the whole
+> > skb.
+> > 
+> > An skb stays under 64KB unless BIG TCP is enabled. With BIG TCP,
+> > MSG_ZEROCOPY from huge pages can already create frags of 64KB or
+> > more. So drivers already have to handle them:
+> > - mlx5 has a 31-bit length per data segment
+> > - gve splits frags into 16KB descriptors
+> > - fbnic doesn't enable BIG TCP
+> > - bnxt has a 16-bit BD length. It is broken for such page frags today
+> >    and will be fixed separately.
+> > 
+> > Tested on two mlx5 400Gb/s hosts with kperf (udmabuf, 32KB RX
+> > net_iovs, 2MB hugepage-backed TX buffer), series backported to a 7.1
+> > kernel on the sender only. 1 flow, MTU 4200, receiver tcp_rmem capped
+> > at 16MB so it doesn't drop, median of 5 x 60s runs:
+> > 
+> >                                before    after
+> >    frags per skb (sender)       16-17      1-2
+> >    throughput (Gb/s)            208.6    211.2
+> >    sender sendmsg CPU (sys)     40.8%    19.5%   (-52%)
+> > 
+> > The receiver's CPU is the bottleneck, so the gain is CPU, not
+> > throughput. More of the transmit runs from the ACK path, so the
+> > sender's softirq grows (52% -> 59%), but sys + sirq still drops by 16%.
+> 
+> is the receiver using GRO H/W offload/big TCP? Which are the gro_max_size/
+> gso_max_size limits? In the `after` scenario, is the 2nd frag used for the
+> headers?
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/devmem_lib.py b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-> index 71b916c161969..8058fd1ddd501 100644
-> --- a/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-> +++ b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
+hw gro, no big tcp (default tso of 64k). The headers are still in the
+linear part and most of the time we get 1 frag.
 
-[ ... ]
-
-> @@ -63,10 +66,15 @@ def require_devmem(cfg, rx_page_size=RX_PAGE_SIZE_DEFAULT):
->          # ncdevmem's queue range and cause the probe to fail.
->          cfg.devmem_supported = {size: _probe_devmem(cfg, size)
->                                  for size in PROBE_RX_PAGE_SIZES}
-> +        cfg.devmem_hugepages = _probe_devmem(cfg, RX_PAGE_SIZE_DEFAULT,
-> +                                             hugepages=True)
->  
->      if not cfg.devmem_supported[RX_PAGE_SIZE_DEFAULT]:
->          raise KsftSkipEx("Test requires devmem support")
->  
-> +    if hugepages and not cfg.devmem_hugepages:
-> +        raise KsftSkipEx("Test requires a 2MB hugepage-backed dmabuf")
-> +
-
-[Severity: Medium]
-Can this probe succeed anywhere other than a 4K page kernel whose default
-hugepage size is 2MB?
-
-Before the probe, the only reservation is _reserve_hugepages(). It writes
-64 to the default hstate's sysctl:
-
-NR_HUGEPAGES_FILE = "/proc/sys/vm/nr_hugepages"
-
-def _reserve_hugepages(want=64):
-
-That sysctl only grows the pool for the default hugepage size. On arm64
-with 16K or 64K base pages, the default size is 32MB or 512MB. An x86
-kernel booted with default_hugepagesz=1G has the same problem. In those
-setups the 2MB pool never grows.
-
-With -H, udmabuf_alloc() always requests MFD_HUGETLB | MFD_HUGE_2MB. The
-probe allocates its buffer in run_devmem_tests():
-
-	mem = provider->alloc(getpagesize() * NUM_PAGES);
-
-NUM_PAGES is 16000 and the size is rounded up to 2MB. That needs 32
-hugepages on 4K pages, 125 on 16K pages and 500 on 64K pages. So even
-when 2MB is the default size, 64 pages are too few on non-4K kernels.
-
-In both cases UDMABUF_CREATE fails and cfg.devmem_hugepages ends up False.
-check_tx_large_niov() and check_nk_tx_large_niov() then always skip with
-"Test requires a 2MB hugepage-backed dmabuf". That message does not say
-that the hugepage pool is the cause.
-
-Before this patch, hugetlb was only used when rx_page_size >
-getpagesize(). So -H looks like the first user to hit this on non-4K
-kernels.
-
-Would it make sense to reserve pages through
-/sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages instead? The count
-could be derived from the size ncdevmem will allocate, or -H could use a
-smaller buffer.
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111224740.2744522-1-sdf%40fomichev.me
+I'm assuming 2 frags are happening sometimes because of tcp sending
+something over that 2MB boundary. So that one single range has to be expressed
+by to frags.
