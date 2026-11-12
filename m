@@ -1,49 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794514208;
-	b=4xQ/D2BlEX15xVFCvMKWeUuh58x5Xlc3GW9K+qRmCkD8thVycM1qPq6qaeHm0hkTgJjW
-	 yQO/aQrcROVPD/Eo4A9PnMjK40/hyQCKiiMj5qqAfGH4vlXu2aFGauCiZWR37JqAekc8z
-	 nMQeQ8leM+WKartPmDT/61BZgrTeRYzz8bcSZwTI/kj2wN961xwXUxknqHASMVtP5ZmKc
-	 PqKDL1YR2VD4ygvqkUR11y1cZ0jbB+DRtPnUGt36u56ccmktBw7aJjUOkethg8f7Wuavt
-	 pEAjv1d1swNrRYmNjGOT0e/BGhx+qBsx7Zvo6H5Ee7h3zQExLxjBQnB7oW8CFyVKezg==
+	t=1794515029;
+	b=vJt2w38sLMSTW5+JTXg97fYuTzRHxuqRhi66FhDXAAl7T8Kn6JVZK3VaSlrQDP7xSRyr
+	 qPdK7oShRQh1j+G9qVifF8GvE50H7Q0Aq4t2AwSibPrc7putWQycfX5ppuN+fz4SERmC5
+	 6euegEJksEgKahAU0Nz6hoCAtinQLy1rsn7V1qAmSLiJGxz3Mk51WpdmnBZR3x1TyQdoy
+	 FzZ+Brugp/a0SssqnZLlW6cmFuPgSo9xKBDTGQX70ZKHheTL/j8GZr8p8VLkorjSNs95G
+	 dpWDc4el69vuHEloG22sSv95j+bfumTxW3RNENQpGMlg35E78LYKydRCmrwzYpB1qPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794514208;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=xTtPb0mEE9NlI/iq9raPIkYpxE2ttZ6CJm6ykK0SGT4=;
-	b=kmHeRCBD3h1DFBloU+IiiqqhbRYjGTS6jIWtoenBJz7fo7zx3usLuIQiCJg/avFc9+L5
-	 c41JTy4DPHpksT4NNpP+AvKmhaqYdWRVfLvQ0UFpLQt0yZFUzqE9DcVv+KEN5JBi82CiJ
-	 5eyXBlDdVhQcXeOniEXgqBBdhMEbU8skILRqYx977qgyNUkPYvEfpq4gJNMDoKNv9qWMD
-	 675Shw8uyPbzLpaEfSgC8HtYKNRzlJH60vO59RXNyue8OO8zDieGIG323/lZKExDSzrI3
-	 oLeApM2M9ow9B4eTQB1TfCktsaAvOv2963uDYX7d7z+GFzvRbPaNNeSKAnrt0i7PXJQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794515029;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
+	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=EcudHbkac4Srr2SEhy6D5BeBR++U6XmBZEuRnxOaSjM=;
+	b=CiWPiCj/4ex2ujvFMlEnmRU1mxljR13CcFFGmINSG5KWSypLN9L02nGdbrqTNFvSkGU0
+	 NrHZsnI8N76ZXjRgcQ4qBhPFSGsmlbRxhld0jIp0Q/XMt+8y6xjBjIUWFPuyz0EjfEiZ9
+	 oaqBuwyp+Y50mu0FwW7ApP8E+4g7u2DwwPPxpyMTTV0quuhAB+z9ev9VaTUlsS+58QvAK
+	 f0+6FP8XohjVplAIgVQzuTGgLPNiubDb9OMXzi7446S3lAUTK6pyW+BnBSDu0IA0NV35z
+	 Lp2FQ9pqQLXh4bbPRf8Gz5EGPMC5+J0246k0d6hdE1ooCVhn6aISJ7XLA4V9LMrPNBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L53KIXWV;
+	dkim=pass header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=N3Zc+5Zn;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DF2606A321;
-	Thu, 12 Nov 2026 20:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36FDC606A31C;
+	Thu, 12 Nov 2026 20:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L53KIXWV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826731F000C4;
-	Thu, 12 Nov 2026 20:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794514207;
-	bh=xTtPb0mEE9NlI/iq9raPIkYpxE2ttZ6CJm6ykK0SGT4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=L53KIXWVeFl63wPoKYO2nexZFMi5TbtKMdbxl59FNO0igYjHSQu9Tr/T+cxZsZrOd
-	 lfuoIc0Tv3vLEAiUdUcaBkKloAbqFIqmySKZaTEhRttZLWYPcJo9vTULOcDVcLOwcj
-	 slN7z/5Q+fREQakUoIn8CPHhfD6zNRUWDurWVB/CyBZaL+3GuTmgFNNy0HZEjUk0OV
-	 OtOoRycYNXXXg8HGOSnEpDZcji4DTat1Sr6IknMPtqKeN0n72zdj7xtTEX0RpJPUHu
-	 bpEbU/8iUQfp+0EPwdZY5hFpNgHsyZ9ZNj2JfcRzYtGPTLmYevUl6ORtCYAtIdR2Ca
-	 SeDhO0cqZbaEg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 776EA3926259;
-	Thu, 12 Nov 2026 20:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux-foundation.org header.i=@linux-foundation.org header.a=rsa-sha256 header.s=korg header.b=N3Zc+5Zn
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE441F000C4;
+	Thu, 12 Nov 2026 20:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1794515028;
+	bh=EcudHbkac4Srr2SEhy6D5BeBR++U6XmBZEuRnxOaSjM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=N3Zc+5ZncCkUskcdduh41XLWC3tnbnQ8C7qwgh59HI8QCJP838YIkuN6RVp45E+M+
+	 0DfvD3nNQ8JGgPpMbVSNrmVgoYjqPyEghjmn4Z5hlMV8tgPk4hUtbaaY+RcIQ5WAwL
+	 v0IKeJdVrMydA26T8yOCLLlO1xR0a1/NcNetni5Q=
+Date: Thu, 12 Nov 2026 12:23:47 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ linux-kbuild@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>,
+ linux-perf-users@vger.kernel.org, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
+ <linux@weissschuh.net>, Thorsten Leemhuis <linux@leemhuis.info>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] kbuild: build the userspace tools in tools/ with
+ the kernel
+Message-Id: <20261112122347.dbb972627dc856c50eb01cd0@linux-foundation.org>
+In-Reply-To: <20261112195427.3411746-1-sashal@kernel.org>
+References: <20261112195427.3411746-1-sashal@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -52,49 +65,38 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] Reject writable map iterators on read-only
- maps
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179451420628.625762.2223208572511592827.git-patchwork-notify@kernel.org>
-Date: Thu, 12 Nov 2026 20:10:06 +0000
-References: 
- <LO2P302MB0197C0434BCC2A9031E99A18BC702@LO2P302MB0197.GBRP302.PROD.OUTLOOK.COM>
-In-Reply-To: 
- <LO2P302MB0197C0434BCC2A9031E99A18BC702@LO2P302MB0197.GBRP302.PROD.OUTLOOK.COM>
-To: Adethya Srinivasan <adethyasrinivasan@outlook.com>
-Cc: bpf@vger.kernel.org, yonghong.song@linux.dev, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu, 12 Nov 2026 14:54:20 -0500 Sasha Levin <sashal@kernel.org> wrote:
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 12 Nov 2026 15:54:05 +0000 you wrote:
-> Reject writable map iterators on BPF_F_RDONLY_PROG maps and add an
-> attach-rejection selftest using the existing array-map iterator.
+> The userspace programs under tools/ are disconnected from the rest of the
+> kernel's build system. Each has its own makefiles and build framework, and
+> "make" never builds them: apart from the few host tools the build itself needs,
+> such as objtool and resolve_btfids, nothing under tools/ is compiled as part of
+> a kernel build.
 > 
-> Testing on x86_64 under QEMU:
-> - Kernel and test_progs builds passed.
-> - Six selected bpf_iter subtests passed, including bpf_array_map_rdonly.
-> 
-> [...]
+> That makes them easy to break. Most people, and most of the build bots, check a
+> change with "make allmodconfig && make", which doesn't cover tools/ at all. A
+> change that breaks a tool passes every build check and is only noticed when
+> someone happens to build that tool by hand, often much later.
 
-Here is the summary with links:
-  - [bpf,v2,1/2] bpf: Reject writable map iterators on read-only maps
-    https://git.kernel.org/bpf/bpf/c/e536074468a2
-  - [bpf,v2,2/2] selftests/bpf: Check writable iterator attach to a read-only array
-    https://git.kernel.org/bpf/bpf/c/e1224c9a9053
+ooh.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+A pet peeve is CONFIG_TRIM_UNUSED_KSYMS.  It zaps exports which aren't
+used by the current module set.
 
+So the 20-odd selftests which build modules and then modprobe them can
+find that some of the exports which they need were zapped by
+CONFIG_TRIM_UNUSED_KSYMS, so their modprobe fails.  This happens if the
+current module set happens to not use certain exports which the
+selftests need.
 
+CONFIG_TRIM_UNUSED_KSYMS has a whitelist dont-zap-this thing but I
+don't know how to populate that from the 20-odd selftests modules.
+
+From a high level, I think all this happens because selftests are
+considered "out of tree" for kbuild purposes.
+
+Does this patchset fix this CONFIG_TRIM_UNUSED_KSYMS-vs-sefltests thing?
