@@ -1,71 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.246.1.125
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794500228;
-	b=ARrFCoAhyHiBzIV+g665ue9sRFohXqdGNqxju2wExJXBsjSzr2VwAN39StxrIfKy/1U4
-	 xPv8gngfXOGvqewAGH/fwtcYDWNucKAjgTPRukvcudrXc2TMDPDrdQASGxnay95+0UM2A
-	 xdJM5DruFS+ns5DUnS2nIibfyLn0pyE++fy3algZ7Uewa3LrNGK0r2c4pm1L7+XEaJQAv
-	 zdTu1ViopAGqDhob4VQOiHvUPUMIiNlzpy/0+IW6vod0aJIxNR90zCi5hPFViz83o4Dx3
-	 Hji2Baahi2/mmaUlIe9BSx/lsM1Ug0TUzV26nGSkB8kBuXEj6jgAuJkzhC4isSPmB+Q==
+	t=1794500247;
+	b=f1rqj+vo8EmSgNKfX+qydeC/qQy4PHiHEqY0A9iHLo/kYkc3BQDrLr/ovqcoKI3hxkyh
+	 ANYxXgg1EdGAqSeuzojclFAcR85X3J++DtfyyvzDrtSQdcd7tp+WDGWQOkk7Wy0lwKH6y
+	 PEBuLOliosI9xONJZUJZpXfpDg5HRy7YW/w3DGEmyOZA3YZ198Wzm4EIFv9DajBfO1Uxr
+	 QPvYlmq+43W1wuaManjQ2sjAWKiEUmbZS4c4X6TVdnX9pI3LiWr12A8Zbze3N5qDt79eh
+	 MmQ7EPur1xxZ2yDwagtj38k4epjRxBNDdO8Nwo59JGTMTLZRvcdR0eEfco7qlIsNnuw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794500228;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794500247;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
 	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:X-Originating-IP:X-ClientProxiedBy:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=Yrvz3QzKkAfwEQ7kZgGigJVPNWT/Ew4XqbvaE9TIarE=;
-	b=uwNK75WXJotrCEah3d2xZqX/eiQhTXZSGFFHbhgjHrgeDK0lge+bM3HQUbw/wmt9cxAk
-	 TCz9Fc27BJkQtEmklVw1ftbIrSVodVPLGgSKUbLi9d3Ra9bxEppPqmXxQbRkNQVUYy3cL
-	 Yq71GyMNH66F1UpLb1eSR32IAsdyXAWQSs0VSam1LWfwBaZQWXbpN1HkG4THqFqS4EQPC
-	 T9l4ZL8MRsF+hSMcPW8IH2DnAyRYrT8CAB7IkuZ7WbHZB0oa9J9BkSyK1B/NUxi1jiJW+
-	 +AegGp3hyrPuVHMX0Glr+o98dVMLrT0u5NKxzaWXGl8eIbtdiA3KxtW8M/MAYO1Uuaw==
+	bh=GmY5lvPLJS1hj5L5fe9PTUj2Hep0rqPvHSqtsKT0SIA=;
+	b=32s3NVwchWEGRNeJkZUHaaFY2cqGHxfOKBS1zQ0pFCoMyFEySY7DL9XXh7gU6p3BuXlc
+	 yD2/XTUVLzaxOXgjG+5JmrBnU41S+KCiLW34BhT5cOHjFguHLnTjfSa6J/ZsEmWejMaOL
+	 bN1LfPLv9rXmPVQVxUDlJjRdBLDQFuSSPiPcCMVWZUQn8j4hYB0uKKH6uBXtr0xmSCmIu
+	 6kNmctIdvN4danjifCLc5dGSh72X+ejnw/XPZAtcz7Dp7ZM0FZRF2v65pmSKV3dWcUFam
+	 UvT26NB9Tx2Kxz30zN9Zk84dKa8Ct23E2KzZaj798M8Xbeq4P3pcbDm902PsKWdgRAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=amazon.com;
 	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=I0RtndbS;
-	arc=none smtp.remote-ip=52.35.192.45
-Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b="ANh0CCP/";
+	arc=none smtp.remote-ip=44.246.1.125
+Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F111606A31C;
-	Thu, 12 Nov 2026 16:17:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F111606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355D3606A31C;
+	Thu, 12 Nov 2026 16:17:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 355D3606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=I0RtndbS
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=ANh0CCP/
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794500228; x=1826036228;
+  t=1794500247; x=1826036247;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Yrvz3QzKkAfwEQ7kZgGigJVPNWT/Ew4XqbvaE9TIarE=;
-  b=I0RtndbSluS3DhZ14k92xKimu+N8ShiNUD9A0y8tJDeD+sVkmHGk6ROO
-   YPrzsg8x6ALvEoMR6MDb97589dSsQDBY/HV0KSGFi5bpuq4d7UAypnM5i
-   c+w3KjSonLQpDo80txKZzNPo9q+ck0LNkglgnFwkAovxFnD9oe+FCwm1M
-   R0tlOe3yfFhDy8ATL5hvKA3v3AjX9cTrR2xqAw/f0cd5W+nOLw/EU+4M/
-   VpunEyg4xw5xeQ03J7f16YXCJ/wKCQyfsNl/j2jTJzj8sUUxxGUzqEj2+
-   qNPIFuwpr15qPQEa2Y+4y/+RSrPzBh2ErpiARrp6kZfo+7u3SgY6H7hb4
+  bh=GmY5lvPLJS1hj5L5fe9PTUj2Hep0rqPvHSqtsKT0SIA=;
+  b=ANh0CCP/pddwMxQuQN6+IfFPf10aNweSssSaolr3pQI7CtievWdX0MoW
+   /Uq5N2fYCgrgwA/IuQBw/uR7fZ6k66cljxahX5tKUZldLzKve7tk0b8z/
+   FwO6SHB5MYbR4GOEO5EPXbc97x/0yfRebSG5DsgVnMyHjpDf3jJs4yBK+
+   Uf6133P/ue5KqZQGBReye2Z+njHE1GHYzDE62Fmg0Z/WlnUOLwr6iJUxa
+   VvMHzscQa5OdZ/ZXe4c5UrMgmDT9lQSTs6ILSNfGbVrfNIek7kc3C4/o+
+   kT1xjd4gvnRUjMcsMEM4bcz9qcCO1+MkMax3kJxIDJZyZfeOVKUe/blUS
    g==;
-X-CSE-ConnectionGUID: 6/VLLrNDRh+tP3b6XI7yKg==
-X-CSE-MsgGUID: FbAbPrH3QdCSimybOW7LmA==
+X-CSE-ConnectionGUID: FR8US6JjRAiYSyRL5VV21A==
+X-CSE-MsgGUID: eluSq235REGrECWWNk3EJg==
 X-IronPort-AV: E=Sophos;i="6.27,210,1787011200"; 
-   d="scan'208";a="33601504"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 16:17:05 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:25487]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.55.227:2525] with esmtp (Farcaster)
- id f031de29-1fdd-4db5-b74e-14794b6c8173; Thu, 12 Nov 2026 16:17:05 +0000 (UTC)
-X-Farcaster-Flow-ID: f031de29-1fdd-4db5-b74e-14794b6c8173
+   d="scan'208";a="33837868"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 16:17:24 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:21173]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.16.231:2525] with esmtp (Farcaster)
+ id 39d59ed5-643c-4f08-a4ce-3e4f2ec50af8; Thu, 12 Nov 2026 16:17:24 +0000 (UTC)
+X-Farcaster-Flow-ID: 39d59ed5-643c-4f08-a4ce-3e4f2ec50af8
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Thu, 12 Nov 2026 16:17:04 +0000
+ Thu, 12 Nov 2026 16:17:24 +0000
 Received: from dev-dsk-sieberf-metal-1a-7543e84d.eu-west-1.amazon.com
  (172.19.116.227) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Thu, 12 Nov 2026
- 16:17:01 +0000
+ 16:17:20 +0000
 From: Fernand Sieber <sieberf@amazon.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
@@ -80,9 +80,9 @@ CC: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
  Woodhouse" <dwmw@amazon.co.uk>, Misha Karataiev <karataev@amazon.com>,
 	Hendrik Borghorst <hborghor@amazon.de>, Ibrahim Elshahed <lshahed@amazon.de>,
 	Fernand Sieber <sieberf@amazon.com>
-Subject: [PATCH 3/5] sched/core: Rank DL server picks as deadline in the core-wide pick
-Date: Thu, 12 Nov 2026 18:15:46 +0200
-Message-ID: <20261112161548.78189-4-sieberf@amazon.com>
+Subject: [PATCH 4/5] sched/deadline: Don't charge core-sched forced idle to the DL servers
+Date: Thu, 12 Nov 2026 18:15:47 +0200
+Message-ID: <20261112161548.78189-5-sieberf@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261112161548.78189-1-sieberf@amazon.com>
 References: <20261112161548.78189-1-sieberf@amazon.com>
@@ -95,149 +95,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ClientProxiedBy: EX19D031UWC001.ant.amazon.com (10.13.139.241) To
+X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Commit 4b26cfdd3956 ("sched/core: Fix priority checking for DL server
-picks") made the core-wide selection rank a task picked through a DL
-server as deadline, so that a fair task competing with RT tasks under
-core scheduling still gets its server's bandwidth. It keys on
-p->dl_server, which pick_task() used to set.
+A deferred DL server is charged the idle time of its rq, on the premise
+that the time was available to the server's class and went unused. Core
+scheduling breaks that premise: a CPU is forced idle when a SMT sibling
+runs a task with an incompatible cookie, so that time was available to
+no class at all.
 
-Since commit bd9bbc96e835 ("sched: Rework dl_server"), pick_task()
-records the server in rq->dl_server and p->dl_server is only set once
-the task is switched in. The core-wide selection still ranks each
-sibling's pick with prio_less(), so a task the sibling's server has
-just picked ranks as a plain fair or ext task and loses to an RT task
-on another sibling. The server's CPU then runs a task with the RT
-task's cookie or is forced idle, and the fair task gets none of the
-server's bandwidth for as long as the RT task runs.
+update_curr_dl_se() then runs the server's runtime out while it is
+throttled and calls replenish_dl_new_period(), pushing the activation a
+full period out. dl_defer_idle does not help, as idle_rq() is false on a
+forced-idle CPU: nr_running is not 0. Every period of forced idle pushes
+the activation again, the zero-laxity timer never fires, and the class
+the server reserves for gets nothing.
 
-Rank each sibling's pick by the server it came through, rq_i->dl_server.
-prio_less() keeps using p->dl_server for the core tree, whose tasks are
-not being picked.
+Reproduction on 2 cores x 2 threads with the default fair server
+(50 ms / 1 s): a SCHED_FIFO spinner with a core-sched cookie on CPU0 and
+an uncookied CFS spinner on CPU1 force-idle CPU1, and the CFS task gets
+under 0.1% of a CPU instead of the reserved 5%. The ext server starves
+sched_ext tasks the same way, and there a plain CFS spinner on the
+sibling is enough.
 
-Fixes: bd9bbc96e835 ("sched: Rework dl_server")
+Don't charge forced idle. A server still only loses runtime to real
+execution or real idle, and one whose class has nothing to run still
+stops through dl_defer_idle once the rq is idle for real; with core
+scheduling off nothing changes. Getting the reserved bandwidth back also
+needs the server's pick to win the core-wide selection, which the
+preceding sched/core patches fix.
+
+Fixes: a110a81c52a9 ("sched/deadline: Deferrable dl server")
 Signed-off-by: Fernand Sieber <sieberf@amazon.com>
 ---
- kernel/sched/core.c | 50 ++++++++++++++++++++++++++++++---------------
- 1 file changed, 34 insertions(+), 16 deletions(-)
+ kernel/sched/idle.c  |  7 +++++++
+ kernel/sched/sched.h | 15 +++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 61d4e6e990bba..ffe8a41380d0e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -196,12 +196,13 @@ __read_mostly int scheduler_running;
- DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index f7dd151f77920..451b4846219d5 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -573,6 +573,13 @@ static void update_curr_idle(struct rq *rq)
  
- /* kernel prio, less is more */
--static inline int __task_prio(const struct task_struct *p)
-+static inline int __task_prio(const struct task_struct *p,
-+			      const struct sched_dl_entity *dl_server)
- {
- 	if (p->sched_class == &stop_sched_class) /* trumps deadline */
- 		return -2;
+ 	se->exec_start = now;
  
--	if (p->dl_server)
-+	if (dl_server)
- 		return -1; /* deadline */
- 
- 	if (rt_or_dl_prio(p->prio))
-@@ -223,12 +224,19 @@ static inline int __task_prio(const struct task_struct *p)
-  * ge(a,b) := !l(a,b)
-  */
- 
--/* real prio, less is less */
--static inline bool prio_less(const struct task_struct *a,
--			     const struct task_struct *b, bool in_fi)
-+/*
-+ * real prio, less is less
-+ *
-+ * @a_dl_server and @b_dl_server are the DL servers @a and @b run on
-+ * behalf of, if any.
-+ */
-+static inline bool __prio_less(const struct task_struct *a,
-+			       const struct sched_dl_entity *a_dl_server,
-+			       const struct task_struct *b,
-+			       const struct sched_dl_entity *b_dl_server,
-+			       bool in_fi)
- {
--
--	int pa = __task_prio(a), pb = __task_prio(b);
-+	int pa = __task_prio(a, a_dl_server), pb = __task_prio(b, b_dl_server);
- 
- 	if (-pa < -pb)
- 		return true;
-@@ -239,18 +247,13 @@ static inline bool prio_less(const struct task_struct *a,
- 	if (pa == -1) { /* dl_prio() doesn't work because of stop_class above */
- 		const struct sched_dl_entity *a_dl, *b_dl;
- 
--		a_dl = &a->dl;
- 		/*
--		 * Since,'a' and 'b' can be CFS tasks served by DL server,
-+		 * Since 'a' and 'b' can be tasks served by a DL server,
- 		 * __task_prio() can return -1 (for DL) even for those. In that
- 		 * case, get to the dl_server's DL entity.
- 		 */
--		if (a->dl_server)
--			a_dl = a->dl_server;
--
--		b_dl = &b->dl;
--		if (b->dl_server)
--			b_dl = b->dl_server;
-+		a_dl = a_dl_server ?: &a->dl;
-+		b_dl = b_dl_server ?: &b->dl;
- 
- 		return !dl_time_before(a_dl->deadline, b_dl->deadline);
- 	}
-@@ -266,6 +269,12 @@ static inline bool prio_less(const struct task_struct *a,
- 	return false;
++	/*
++	 * Forced idle was not time available to any class on this rq, so
++	 * don't let the deferred servers consume their runtime on it.
++	 */
++	if (forced_idle_rq(rq))
++		return;
++
+ 	dl_server_update_idle(&rq->fair_server, delta_exec);
+ #ifdef CONFIG_SCHED_CLASS_EXT
+ 	dl_server_update_idle(&rq->ext_server, delta_exec);
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index a4df59c9c9b60..f3b22c4bd6782 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1525,6 +1525,16 @@ static inline bool sched_core_disabled(void)
+ 	return !static_branch_unlikely(&__sched_core_enabled);
  }
  
-+static inline bool prio_less(const struct task_struct *a,
-+			     const struct task_struct *b, bool in_fi)
++/*
++ * True while core scheduling keeps @rq idle because a SMT sibling runs a task
++ * with an incompatible cookie, even though @rq has runnable tasks of its own.
++ */
++static inline bool forced_idle_rq(struct rq *rq)
 +{
-+	return __prio_less(a, a->dl_server, b, b->dl_server, in_fi);
++	return sched_core_enabled(rq) && rq->core->core_forceidle_count &&
++	       rq->nr_running;
 +}
 +
- static inline bool __sched_core_less(const struct task_struct *a,
- 				     const struct task_struct *b)
+ /*
+  * Be careful with this function; not for general use. The return value isn't
+  * stable unless you actually hold a relevant rq->__lock.
+@@ -1659,6 +1669,11 @@ static inline bool sched_core_disabled(void)
+ 	return true;
+ }
+ 
++static inline bool forced_idle_rq(struct rq *rq)
++{
++	return false;
++}
++
+ static inline raw_spinlock_t *rq_lockp(struct rq *rq)
  {
-@@ -6297,6 +6306,7 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
- 	__must_hold(__rq_lockp(rq))
- {
- 	struct task_struct *next, *p, *max;
-+	struct sched_dl_entity *max_dl_server;
- 	bool fi_before = false;
- 	bool core_clock_updated = (rq == rq->core);
- 	unsigned long cookie;
-@@ -6410,6 +6420,7 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
- 	 * Tie-break prio towards the current CPU
- 	 */
- 	max = NULL;
-+	max_dl_server = NULL;
- 	for_each_core_cpu_wrap(i, rq) {
- 		rq_i = cpu_rq(i);
- 
-@@ -6432,8 +6443,15 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
- 
- 		rq_i->core_pick = p;
- 
--		if (!max || prio_less(max, p, fi_before))
-+		/*
-+		 * p->dl_server is only set once @p runs; rank a pick that
-+		 * came through a DL server by that server.
-+		 */
-+		if (!max || __prio_less(max, max_dl_server, p, rq_i->dl_server,
-+					fi_before)) {
- 			max = p;
-+			max_dl_server = rq_i->dl_server;
-+		}
- 	}
- 
- 	cookie = rq->core->core_cookie = max->core_cookie;
+ 	return &rq->__lock;
 -- 
 2.47.3
 
