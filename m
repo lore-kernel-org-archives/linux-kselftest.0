@@ -1,59 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794503265;
-	b=oAQZsiZVDaFF4s+53elrEi+bz/hzLk9pZEFX1qt1PvaMQJna0QEH3kjnsoahMAj2+Zj5
-	 DBOy7HOl+BmvpnRMG43CC35KQ9HFzAZcoZanegpDY059ec4IIQu4uQc6RwBOwYWZFPc+W
-	 temvdorzGaz0DJa6v18EAecbTHnx8oSobP+q1fZHu3FE75NmEeDTAbfTToioGOUsJCpd/
-	 iTR6y4+5ULN0ofCgGBbg+If4CqWa5juVVEaPhV/yoq7QEoWQojFDFz9dfqbYuU6J+S4dV
-	 ThLGfaS2EWfQqmNlNy/0gqviAuuCwImf+rNtAaNnJynirMTAeLiQVxXt0WD1Nd8TC/w==
+	t=1794503275;
+	b=ZyQSxMLvEqDuEA+r7aZyEbSklosn8QvqO5A/yWAI9QWe21qF0YMsN6X0Giu2NgjW7iEi
+	 ZYiDhIONnzf4rn9n3AmczYcxZ0vX7fLS8h0QjAYrH9bxs1zuhsOn6Q9RW1GPJsdI6uxuP
+	 mFXVtKnb6n6Ud99qpYkmKe0xU40aGkxFh3E4DXf2h7gFKEDYPf5V7WpYyglcCo7Jb75cp
+	 erV5zZ/pxASAybVNAK+dRvPMRLtAWmXBLIkBkdShRj0eBvmebFohm712XaJm+/ymTByOK
+	 PyPERU3g002sWAliTQWkLYl9d8HI4dKdUB73GaryDI4dwTyyWFv7FoHSScVTHG17U2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794503265;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794503275;
 	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
 	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
 	 X-Debian-User;
-	bh=Ojqa0XJldiIPvWKnxsSzSwPPgqzGjP+HUV7neZ/Ynso=;
-	b=zZp4f4IZgeslpNelVmYZ5INs0mXDZc+jJZ3YYwWPY6vo7eNyM/HEs0bCqwAH2pzEuA7M
-	 YXb0REZ8yLty8RA5wlSjbbLmZQGFvxFEGuP5Nrgdw5cM0kKP53JIwk1gR7QRjrysQ9ikX
-	 /U373rsbras7dgz9eZHBI4k9ybvzveVi12XoJ1YpwWDAFJ4AM3aTnG3wDw/4u4rTTTiZr
-	 3ZxFdlOOP8yTS9PWeC9m1jrnkOmyYaMqW8Iv5D9BXJOx2kyAVA0ksoensG0+/cMxMAHt7
-	 SUCwfaUDDAcvOgDhia89GTuiVU7WBb/erixm2+G+4Fa7LhfTMmlFMfj1WskAr5QAwNw==
+	bh=yohNCCFWJ3Uy+nibYm0CCRLWC35AUKC1qEGysk1UZlg=;
+	b=A8kcsjG1DVQdAgq3H8T8eZoepMCvjuwipGze7neMcwoMl+HRUDCLScLA+KeuDA1LhnBg
+	 fi3HBTx+0gcoyo0SX4ZR0TRdvTqgU1tGUPQnUMc/NOLCTOQ+LLK72XWwBk+i2zYRS2loD
+	 1Z4HFVAK3q82ul7TiEwEq7Mj1mlSVN1X19qngfnRcw6+P/4+PfsHTxN0PUzWF/5SDGiMB
+	 ZefKAE7px1DLHQhmiVQpe9jkF1O0UE9lfnOEIMNQpcFhpa7RvWvexf5Fetv2gCBGsJPWl
+	 lSTL5DZTKPAVMRipl+1y9sR0MyF3NhQTO93U8qvFAwMNURJyy3UfkkhIKvE9j2zI9UQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=debian.org;
 	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=StAZuchq;
+	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=vwqJg43g;
 	arc=none smtp.remote-ip=82.195.75.108
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478C9606A330;
-	Thu, 12 Nov 2026 17:07:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 478C9606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811B6606A330;
+	Thu, 12 Nov 2026 17:07:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 811B6606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=StAZuchq
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=vwqJg43g
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=Ojqa0XJldiIPvWKnxsSzSwPPgqzGjP+HUV7neZ/Ynso=; b=StAZuchqKGcnW3WuAm+EpqDq/H
-	63NH8qrd5XuwtmaM4LFX/tUGuc/n3s2gZz5l/ihkno3PiWttciimPiKBGLeVHTbCIWadbxJNi+eC4
-	8qNa6UEyyUBWYrWWZIH7u+snhNiGYRGtHbh4bzA9XDV2i9ZL5g0X1jWBsGzvzjtpZtZHNqePJxGcQ
-	zkubFqI9D11YbCuSqMpnCf26EemTtQkA2sGqIZdcl4hv53rYBXrGDA491v6vtN3OLZDNlKZqpoRfi
-	9f2jLZWiOeBUTotyvRCBTAJ2DRt81y1jxMXhXSq1HUPLzg/Wk8fq7b5VHwe4qdqxPwE0oD9XJFhhG
-	LPGAoy8g==;
+	bh=yohNCCFWJ3Uy+nibYm0CCRLWC35AUKC1qEGysk1UZlg=; b=vwqJg43gaqm3Q6O33oofZGubLN
+	YnO8fHX0H8WbWVF0kbw5LALfHryZtnYAGRbPNNle3dxMt83hDoIdnNGb/10YpYxQmoEZfw4d8APdM
+	CH9BUc7A2s2zcQLTGTAw9esSh+4UdSGXXH7R3xd77yCRbsTeK8t0zlBeakdMhPkktIPWERbp3rFM5
+	TUcaMteXwJ7cMbiOWg3jMAgYr9r4eBsoXGlCgjf8ePSjYs+w1ghyGSW1HWrtC/0/WYYYc+ccP3Ay0
+	/weQM6ykdNpVmO/4RcmaCr4q/CUUP5H4FtfFXeYDa3tDeqgGxPPEew9YxId5GFbtEI54CsvXm26OC
+	R3lzTJvQ==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1xRYGv-00E7a5-0y;
-	Thu, 12 Nov 2026 17:07:37 +0000
+	id 1xRYH8-00E7aO-0m;
+	Thu, 12 Nov 2026 17:07:50 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Thu, 12 Nov 2026 09:05:25 -0800
-Subject: [PATCH net-next 1/3] net/tcp-ao: convert the getsockopt helpers to
- sockopt_t
+Date: Thu, 12 Nov 2026 09:05:27 -0800
+Subject: [PATCH net-next 3/3] selftests: net: getsockopt_iter: cover tcp
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,7 +64,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261112-getsockopt_phase7-v1-1-1eb759dd0929@debian.org>
+Message-Id: <20261112-getsockopt_phase7-v1-3-1eb759dd0929@debian.org>
 References: <20261112-getsockopt_phase7-v1-0-1eb759dd0929@debian.org>
 In-Reply-To: <20261112-getsockopt_phase7-v1-0-1eb759dd0929@debian.org>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -87,344 +86,304 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12017; i=leitao@debian.org;
- h=from:subject:message-id; bh=B3Z9SdvlbpC+8rsw7DMS0Gb33wx1vZmvzI07dWn1rzE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq9fJMbHRis7nIEpY4rbAOZkwbk/Y7SriMV1Ju0
- olgh2iT5rGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCavXyTAAKCRA1o5Of/Hh3
- bdjIEACViABSIWsWP+07ahfm8zDmLBdHQOc1TsQtO/Mi8Q+8qcE64em5j4feKJGdv2UgGFcvjo9
- OCnjuVHqpF+lJ0S74SqIgbVEDTmWmVo4yPst/62/lQ3ugAFbR6oQzzal7tEbV62Ed8k5b/v+XkU
- oViNYh5HluU7i0bPT1v3PCsviiWmH6I1vc5DmO225Sho5Q2G5cwUpM6dOnjJPgxcdk62Dy/azlw
- J0hV562NzgseIFS3eBjMwHFWaA7cLkNLgfeHA6QnqJQpBZncdySLiPuW/0fuMD7osGED3lCc41Q
- reyNLiQeaZCc2bdSwHjvbDgRSGh9bO9R/qC24r1cphaJNXqldKniHK+MjvnvAI/F6C83/DMjxMT
- z4Lsp4rICZaa3GtwGCbzeL9RmmW4hY6q39jRzxzEz9PyY51pl05WqODucDN3VdwDM1ZhMfMF6mb
- XH4k4kz6mKOQUO2O0lUBMeEMUz6K7QcqUv1j/nsNSCdNoaaqCyeEV4wW62DfPlr6kPbu4rOSMhZ
- T6XU23RDWenXNISWyE+fLePEQu1TrQqrpv05aE2aO7Hz/HPAnlu1TO4X+zOk2RPPWQkZDKsol3h
- POMOTM3sxdasF4tMyG3e7AAwfCgd/esszIQfJyXx1ZBLsUSOAyHIi5/vZ8LG9u9N4UFdOMhmlNt
- aOaznkBULEtMWCg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7537; i=leitao@debian.org;
+ h=from:subject:message-id; bh=Srvv6RQGgVr8JyB8jL0B8DLntHE5zYTcmX3okIhkLZo=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq9fJM8lzEroo+ZLLOVzVZ4NZCjVBPxSReqG2u2
+ g2mGqoa//2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCavXyTAAKCRA1o5Of/Hh3
+ bZPMD/4zrNOymciutmKdsHclbjI3QTIPOwmtmeMw89tClpBHfYi7AMP6AEed3PBGJFpj/e52m72
+ CZG+iclY7rQR3N5N87BuHZVFtknwdByLxYd6U9vaKik7lFFlf/6vJ9kHHGqGPbNTtRxJjB2oHOy
+ Mig/X+aZnyhcmjAdYOxRWz/IFO4Ws0CgufqvkSCaidA45i1bRxpC+XxqevfXAESBxnggQHMilRa
+ ClLmoMtt5OF9Y9H5OxyecZOhQfxFkH0uzBbsJbeh4jVscSUAg7aBPoKo8q99uESs4B+ri4Gpy7X
+ cZ58CRzaosRsw8H38Yo1vYkn8V0Nf6FIhrs7b9bivcmEkF/UtFOqyqQKomCJE4nmUdnDD78rXXH
+ FAhUspldV1PllljWq4WjKd1//I8wT6lob1SqmDpjVOVmjO9yYv7MExZEQo26YYKzhfTkyN8a45x
+ t+RcF3XH/P6ojY6SgPjwb8cdKpHT7sQaUkV5QTwMBHwpfM9zT99ImED4gsP3k4i+WGHxs6G2OJV
+ htSnPXdJhzcq3EVsqopDsgyRNxeyJoTCCa/zGIjUgS5RGo8GTkcrkdc5W5qVrhUQleXXwAgZVy9
+ /Qkldm2/UWAcly4xswPO4U1fmOZmo/R2sDZJPvCjQbRiHZRBUeC5GAx/N2Vdyk8bGW//lYO2R7L
+ u+Am1a0+eYkCE2Q==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-TCP_AO_GET_KEYS, TCP_AO_INFO and TCP_AO_REPAIR are read through
-tcp_ao_get_mkts(), tcp_ao_get_sock_info() and tcp_ao_get_repair(),
-reached from do_tcp_getsockopt() and from nowhere else. Convert them to
-sockopt_t. While do_tcp_getsockopt() still carries a sockptr_t pair, it
-calls them through tcp_ao_get_sockptr(), which builds the sockopt_t and
-writes optlen back.
+Add a fixture for do_tcp_getsockopt(). The setup keeps both ends of a
+loopback connection, with TCP_SAVE_SYN set on the listener, so the
+accepted socket has a saved SYN to report.
 
-TCP_AO_GET_KEYS and TCP_AO_INFO read a versioned struct from optval.
-Only a user buffer gets there, as BPF's sol_tcp_sockopt() takes no
-TCP-AO option, so they keep reading it with copy_struct_from_user(),
-now on iter_in.ubuf. A kernel buffer gets -EINVAL, as in
-sockopt_expand_out().
+TCP_INFO and TCP_CONGESTION cover clamping the reply down to what fits,
+TCP_ULP covers reporting zero and writing nothing, and TCP_SAVED_SYN
+covers the length-then-EINVAL path, which the second half of that test
+uses to read the SYN back.
 
-TCP_AO_GET_KEYS is sized by a field in optval rather than by optlen:
-optlen is the size of one entry, and nkeys says how many entries the
-buffer holds. The match count then goes into the first entry's nkeys,
-past optlen when the caller's struct is shorter than that field.
-
-Userspace relies on this, so sockopt_expand_out() grows optval for the
-reply, as for MCAST_MSFILTER. The growth is bounded by the keys on the
-socket, not by nkeys alone: sockopt_expand_out() refuses a reply above
-MAX_RW_COUNT, and a large nkeys would otherwise get -EINVAL.
-
-iter_out only moves forward, so the entries are written in turn and the
-bytes past each one are skipped, as before. The match count is written
-last, through a copy of iter_out saved at the head of optval.
-
-A reply that still needs more than MAX_RW_COUNT bytes now fails with
--EINVAL. With two keys on the socket, that takes entries of about 1 GiB.
-
-TCP_AO_INFO and TCP_AO_REPAIR now write optlen back on success, with
-the value they were given. TCP_AO_GET_KEYS stores optlen after nkeys
-instead of before it, which only shows when one of the two writes
-faults.
+TCP_ZEROCOPY_RECEIVE reads its struct from optval and writes it back.
+With nothing queued it maps nothing and succeeds, so the tests cover
+the 16-byte struct glibc still declares, a larger buffer cut down to
+the kernel's struct, and one whose extra tail is not zero.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- include/net/tcp_ao.h | 13 ++++-----
- net/ipv4/tcp.c       | 28 +++++++++++++++++--
- net/ipv4/tcp_ao.c    | 77 ++++++++++++++++++++++++++++++----------------------
- 3 files changed, 76 insertions(+), 42 deletions(-)
+ tools/testing/selftests/net/getsockopt_iter.c | 245 ++++++++++++++++++++++++++
+ 1 file changed, 245 insertions(+)
 
-diff --git a/include/net/tcp_ao.h b/include/net/tcp_ao.h
-index 9a2333e62e9940..0e1edd777a600a 100644
---- a/include/net/tcp_ao.h
-+++ b/include/net/tcp_ao.h
-@@ -210,9 +210,9 @@ void tcp_ao_calc_traffic_key(const struct tcp_ao_key *mkt, u8 *traffic_key,
- void tcp_ao_destroy_sock(struct sock *sk, bool twsk);
- void tcp_ao_time_wait(struct tcp_timewait_sock *tcptw, struct tcp_sock *tp);
- bool tcp_ao_ignore_icmp(const struct sock *sk, int family, int type, int code);
--int tcp_ao_get_mkts(struct sock *sk, sockptr_t optval, sockptr_t optlen);
--int tcp_ao_get_sock_info(struct sock *sk, sockptr_t optval, sockptr_t optlen);
--int tcp_ao_get_repair(struct sock *sk, sockptr_t optval, sockptr_t optlen);
-+int tcp_ao_get_mkts(struct sock *sk, sockopt_t *sopt);
-+int tcp_ao_get_sock_info(struct sock *sk, sockopt_t *sopt);
-+int tcp_ao_get_repair(struct sock *sk, sockopt_t *sopt);
- int tcp_ao_set_repair(struct sock *sk, sockptr_t optval, unsigned int optlen);
- enum skb_drop_reason tcp_inbound_ao_hash(struct sock *sk,
- 			const struct sk_buff *skb, unsigned short int family,
-@@ -334,18 +334,17 @@ static inline void tcp_ao_connect_init(struct sock *sk)
- {
+diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
+index 2367fce226d4cc..4e51c8aa6a8555 100644
+--- a/tools/testing/selftests/net/getsockopt_iter.c
++++ b/tools/testing/selftests/net/getsockopt_iter.c
+@@ -55,6 +55,9 @@
+ #ifndef TCP_ULP
+ #define TCP_ULP 31
+ #endif
++#ifndef TCP_CA_NAME_MAX
++#define TCP_CA_NAME_MAX 16
++#endif
+ /* linux/mroute.h does not coexist with netinet/in.h here. */
+ #ifndef MRT_VERSION
+ #define MRT_VERSION 206
+@@ -1005,4 +1008,246 @@ TEST_F(tls, bad_optname)
+ 	ASSERT_EQ(ENOPROTOOPT, errno);
  }
  
--static inline int tcp_ao_get_mkts(struct sock *sk, sockptr_t optval, sockptr_t optlen)
-+static inline int tcp_ao_get_mkts(struct sock *sk, sockopt_t *sopt)
- {
- 	return -ENOPROTOOPT;
- }
- 
--static inline int tcp_ao_get_sock_info(struct sock *sk, sockptr_t optval, sockptr_t optlen)
-+static inline int tcp_ao_get_sock_info(struct sock *sk, sockopt_t *sopt)
- {
- 	return -ENOPROTOOPT;
- }
- 
--static inline int tcp_ao_get_repair(struct sock *sk,
--				    sockptr_t optval, sockptr_t optlen)
-+static inline int tcp_ao_get_repair(struct sock *sk, sockopt_t *sopt)
- {
- 	return -ENOPROTOOPT;
- }
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index a1f89c1fa2ae51..552e8fe22e7e20 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4492,6 +4492,25 @@ struct sk_buff *tcp_get_timestamping_opt_stats(const struct sock *sk,
- 	return stats;
- }
- 
-+/* Bridge the sockptr_t pair of do_tcp_getsockopt() to a TCP-AO getter. */
-+static int tcp_ao_get_sockptr(struct sock *sk,
-+			      int (*get)(struct sock *sk, sockopt_t *sopt),
-+			      sockptr_t optval, sockptr_t optlen)
++/* ---------- tcp ---------- */
++
++FIXTURE(tcp)
 +{
-+	struct kvec kvec;
-+	sockopt_t sopt;
-+	int err;
++	int fd;		/* connected client */
++	int sfd;	/* accepted server side, its SYN was saved */
++};
 +
-+	err = sockptr_to_sockopt(&sopt, optval, optlen, &kvec);
-+	if (err)
-+		return err;
++FIXTURE_SETUP(tcp)
++{
++	struct sockaddr_in a = {
++		.sin_family = AF_INET,
++		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
++	};
++	socklen_t alen = sizeof(a);
++	int one = 1;
++	int lfd;
 +
-+	err = get(sk, &sopt);
-+	if (!err && copy_to_sockptr(optlen, &sopt.optlen, sizeof(int)))
-+		err = -EFAULT;
-+	return err;
++	self->fd = -1;
++	self->sfd = -1;
++
++	lfd = socket(AF_INET, SOCK_STREAM, 0);
++	if (lfd < 0)
++		SKIP(return, "TCP socket: %s", strerror(errno));
++	setsockopt(lfd, IPPROTO_TCP, TCP_SAVE_SYN, &one, sizeof(one));
++	if (bind(lfd, (struct sockaddr *)&a, sizeof(a)) || listen(lfd, 1) ||
++	    getsockname(lfd, (struct sockaddr *)&a, &alen)) {
++		close(lfd);
++		SKIP(return, "listener setup: %s", strerror(errno));
++	}
++	self->fd = socket(AF_INET, SOCK_STREAM, 0);
++	if (self->fd < 0) {
++		close(lfd);
++		SKIP(return, "TCP socket: %s", strerror(errno));
++	}
++	if (connect(self->fd, (struct sockaddr *)&a, sizeof(a))) {
++		close(lfd);
++		SKIP(return, "connect: %s", strerror(errno));
++	}
++	self->sfd = accept(lfd, NULL, NULL);
++	close(lfd);
++	if (self->sfd < 0)
++		SKIP(return, "accept: %s", strerror(errno));
 +}
 +
- int do_tcp_getsockopt(struct sock *sk, int level,
- 		      int optname, sockptr_t optval, sockptr_t optlen)
- {
-@@ -4830,16 +4849,19 @@ int do_tcp_getsockopt(struct sock *sk, int level,
- 	case TCP_AO_REPAIR:
- 		if (!tcp_can_repair_sock(sk))
- 			return -EPERM;
--		return tcp_ao_get_repair(sk, optval, optlen);
-+		return tcp_ao_get_sockptr(sk, tcp_ao_get_repair,
-+					  optval, optlen);
- 	case TCP_AO_GET_KEYS:
- 	case TCP_AO_INFO: {
- 		int err;
- 
- 		sockopt_lock_sock(sk);
- 		if (optname == TCP_AO_GET_KEYS)
--			err = tcp_ao_get_mkts(sk, optval, optlen);
-+			err = tcp_ao_get_sockptr(sk, tcp_ao_get_mkts,
-+						 optval, optlen);
- 		else
--			err = tcp_ao_get_sock_info(sk, optval, optlen);
-+			err = tcp_ao_get_sockptr(sk, tcp_ao_get_sock_info,
-+						 optval, optlen);
- 		sockopt_release_sock(sk);
- 
- 		return err;
-diff --git a/net/ipv4/tcp_ao.c b/net/ipv4/tcp_ao.c
-index bb7bbc20ba3fad..af33042478f9a8 100644
---- a/net/ipv4/tcp_ao.c
-+++ b/net/ipv4/tcp_ao.c
-@@ -2054,14 +2054,11 @@ int tcp_v4_parse_ao(struct sock *sk, int cmd, sockptr_t optval, int optlen)
- 	return tcp_parse_ao(sk, cmd, AF_INET, optval, optlen);
- }
- 
--/* tcp_ao_copy_mkts_to_user(ao_info, optval, optlen)
-+/* tcp_ao_copy_mkts_to_user(ao_info, sopt)
-  *
-  * @ao_info:	struct tcp_ao_info on the socket that
-  *		socket getsockopt(TCP_AO_GET_KEYS) is executed on
-- * @optval:	pointer to array of tcp_ao_getsockopt structures in user space.
-- *		Must be != NULL.
-- * @optlen:	pointer to size of tcp_ao_getsockopt structure.
-- *		Must be != NULL.
-+ * @sopt:	optval and optlen of that getsockopt(), described below.
-  *
-  * Return value: 0 on success, a negative error number otherwise.
-  *
-@@ -2091,29 +2088,31 @@ int tcp_v4_parse_ao(struct sock *sk, int cmd, sockptr_t optval, int optlen)
-  */
- static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
- 				    struct tcp_ao_info *ao_info,
--				    sockptr_t optval, sockptr_t optlen)
-+				    sockopt_t *sopt)
- {
- 	struct tcp_ao_getsockopt opt_in, opt_out;
- 	struct tcp_ao_key *key, *current_key;
- 	bool do_address_matching = true;
- 	union tcp_ao_addr *addr = NULL;
- 	int err, l3index, user_len;
-+	unsigned int nr_keys = 0;
- 	unsigned int max_keys;	/* maximum number of keys to copy to user */
--	size_t out_offset = 0;
- 	size_t bytes_to_write;	/* number of bytes to write to user level */
-+	struct iov_iter head;
- 	u32 matched_keys;	/* keys from ao_info matched so far */
--	int optlen_out;
-+	size_t reply_len;
- 	__be16 port = 0;
- 
--	if (copy_from_sockptr(&user_len, optlen, sizeof(int)))
--		return -EFAULT;
-+	user_len = sopt->optlen;
- 
- 	if (user_len <= 0)
- 		return -EINVAL;
- 
- 	memset(&opt_in, 0, sizeof(struct tcp_ao_getsockopt));
--	err = copy_struct_from_sockptr(&opt_in, sizeof(opt_in),
--				       optval, user_len);
-+	if (WARN_ON_ONCE(!iter_is_ubuf(&sopt->iter_in)))
-+		return -EINVAL;
-+	err = copy_struct_from_user(&opt_in, sizeof(opt_in), sopt->iter_in.ubuf,
-+				    user_len);
- 	if (err < 0)
- 		return err;
- 
-@@ -2214,6 +2213,21 @@ static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
- 	}
- 
- 	bytes_to_write = min_t(int, user_len, sizeof(struct tcp_ao_getsockopt));
++FIXTURE_TEARDOWN(tcp)
++{
++	if (self->fd >= 0)
++		close(self->fd);
++	if (self->sfd >= 0)
++		close(self->sfd);
++}
 +
-+	/* The reply is up to nkeys entries, user_len apart, with the match
-+	 * count in the first entry's nkeys, so it can outgrow optlen. Size it
-+	 * by the keys on the socket rather than by the caller's nkeys.
-+	 */
-+	hlist_for_each_entry_rcu(key, &ao_info->head, node,
-+				 lockdep_sock_is_held(sk))
-+		nr_keys++;
-+	reply_len = max(array_size(min(max_keys, nr_keys), user_len),
-+			offsetofend(struct tcp_ao_getsockopt, nkeys));
-+	err = sockopt_expand_out(sopt, reply_len);
-+	if (err)
-+		return err;
-+	head = sopt->iter_out;
++TEST_F(tcp, maxseg_exact)
++{
++	socklen_t optlen = sizeof(int);
++	int val = -1;
 +
- 	matched_keys = 0;
- 	/* May change in RX, while we're dumping, pre-fetch it */
- 	current_key = READ_ONCE(ao_info->current_key);
-@@ -2275,25 +2289,22 @@ static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
- 			strscpy(opt_out.alg_name, tcp_ao_algos[key->algo].name);
- 
- 		/* Copy key to user */
--		if (copy_to_sockptr_offset(optval, out_offset,
--					   &opt_out, bytes_to_write))
-+		if (copy_to_iter(&opt_out, bytes_to_write, &sopt->iter_out) !=
-+		    bytes_to_write)
- 			return -EFAULT;
--		out_offset += user_len;
-+		iov_iter_advance(&sopt->iter_out, user_len - bytes_to_write);
- 	}
- 
--	optlen_out = (int)sizeof(struct tcp_ao_getsockopt);
--	if (copy_to_sockptr(optlen, &optlen_out, sizeof(int)))
--		return -EFAULT;
-+	sopt->optlen = sizeof(struct tcp_ao_getsockopt);
- 
--	out_offset = offsetof(struct tcp_ao_getsockopt, nkeys);
--	if (copy_to_sockptr_offset(optval, out_offset,
--				   &matched_keys, sizeof(u32)))
-+	iov_iter_advance(&head, offsetof(struct tcp_ao_getsockopt, nkeys));
-+	if (copy_to_iter(&matched_keys, sizeof(u32), &head) != sizeof(u32))
- 		return -EFAULT;
- 
- 	return 0;
- }
- 
--int tcp_ao_get_mkts(struct sock *sk, sockptr_t optval, sockptr_t optlen)
-+int tcp_ao_get_mkts(struct sock *sk, sockopt_t *sopt)
- {
- 	struct tcp_ao_info *ao_info;
- 
-@@ -2303,18 +2314,17 @@ int tcp_ao_get_mkts(struct sock *sk, sockptr_t optval, sockptr_t optlen)
- 	if (!ao_info)
- 		return -ENOENT;
- 
--	return tcp_ao_copy_mkts_to_user(sk, ao_info, optval, optlen);
-+	return tcp_ao_copy_mkts_to_user(sk, ao_info, sopt);
- }
- 
--int tcp_ao_get_sock_info(struct sock *sk, sockptr_t optval, sockptr_t optlen)
-+int tcp_ao_get_sock_info(struct sock *sk, sockopt_t *sopt)
- {
- 	struct tcp_ao_info_opt out, in = {};
- 	struct tcp_ao_key *current_key;
- 	struct tcp_ao_info *ao;
- 	int err, len;
- 
--	if (copy_from_sockptr(&len, optlen, sizeof(int)))
--		return -EFAULT;
-+	len = sopt->optlen;
- 
- 	if (len <= 0)
- 		return -EINVAL;
-@@ -2323,7 +2333,9 @@ int tcp_ao_get_sock_info(struct sock *sk, sockptr_t optval, sockptr_t optlen)
- 	 * that may be needed to extend (struct tcp_ao_info_opt) and
- 	 * what getsockopt() provides in future.
- 	 */
--	err = copy_struct_from_sockptr(&in, sizeof(in), optval, len);
-+	if (WARN_ON_ONCE(!iter_is_ubuf(&sopt->iter_in)))
-+		return -EINVAL;
-+	err = copy_struct_from_user(&in, sizeof(in), sopt->iter_in.ubuf, len);
- 	if (err)
- 		return err;
- 
-@@ -2355,7 +2367,8 @@ int tcp_ao_get_sock_info(struct sock *sk, sockptr_t optval, sockptr_t optlen)
- 		out.rnext = ao->rnext_key->rcvid;
- 	}
- 
--	if (copy_to_sockptr(optval, &out, min_t(int, len, sizeof(out))))
-+	len = min_t(int, len, sizeof(out));
-+	if (copy_to_iter(&out, len, &sopt->iter_out) != len)
- 		return -EFAULT;
- 
- 	return 0;
-@@ -2396,15 +2409,14 @@ int tcp_ao_set_repair(struct sock *sk, sockptr_t optval, unsigned int optlen)
- 	return 0;
- }
- 
--int tcp_ao_get_repair(struct sock *sk, sockptr_t optval, sockptr_t optlen)
-+int tcp_ao_get_repair(struct sock *sk, sockopt_t *sopt)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct tcp_ao_repair opt;
- 	struct tcp_ao_info *ao;
- 	int len;
- 
--	if (copy_from_sockptr(&len, optlen, sizeof(int)))
--		return -EFAULT;
-+	len = sopt->optlen;
- 
- 	if (len <= 0)
- 		return -EINVAL;
-@@ -2425,7 +2437,8 @@ int tcp_ao_get_repair(struct sock *sk, sockptr_t optval, sockptr_t optlen)
- 	opt.rcv_sne	= READ_ONCE(ao->rcv_sne);
- 	rcu_read_unlock();
- 
--	if (copy_to_sockptr(optval, &opt, min_t(int, len, sizeof(opt))))
-+	len = min_t(int, len, sizeof(opt));
-+	if (copy_to_iter(&opt, len, &sopt->iter_out) != len)
- 		return -EFAULT;
- 	return 0;
- }
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_MAXSEG, &val,
++				&optlen));
++	ASSERT_EQ(sizeof(int), optlen);
++	ASSERT_GT(val, 0);
++}
++
++/* Unlike IPv4, TCP clamps the reply rather than shrinking it to a byte. */
++TEST_F(tcp, nodelay_undersize_clamped)
++{
++	socklen_t optlen = 1;
++	int val = 0;
++
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_NODELAY, &val,
++				&optlen));
++	ASSERT_EQ(1, optlen);
++}
++
++TEST_F(tcp, info_exact)
++{
++	struct tcp_info info;
++	socklen_t optlen = sizeof(info);
++
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_INFO, &info,
++				&optlen));
++	ASSERT_EQ(sizeof(info), optlen);
++	ASSERT_EQ(TCP_ESTABLISHED, info.tcpi_state);
++}
++
++TEST_F(tcp, info_short_clamped)
++{
++	struct tcp_info info;
++	socklen_t optlen = 8;
++
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_INFO, &info,
++				&optlen));
++	ASSERT_EQ(8, optlen);
++	ASSERT_EQ(TCP_ESTABLISHED, info.tcpi_state);
++}
++
++TEST_F(tcp, congestion_exact)
++{
++	socklen_t optlen = TCP_CA_NAME_MAX;
++	char name[TCP_CA_NAME_MAX] = {};
++
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_CONGESTION, name,
++				&optlen));
++	ASSERT_EQ(TCP_CA_NAME_MAX, optlen);
++	ASSERT_NE(0, name[0]);
++}
++
++TEST_F(tcp, congestion_short_clamped)
++{
++	socklen_t optlen = 4;
++	char name[4] = {};
++
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_CONGESTION, name,
++				&optlen));
++	ASSERT_EQ(4, optlen);
++	ASSERT_NE(0, name[0]);
++}
++
++/* No ULP attached: length reported as zero, nothing written. */
++TEST_F(tcp, ulp_none)
++{
++	socklen_t optlen = 16;
++	char buf[16];
++
++	memset(buf, 0x5a, sizeof(buf));
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_ULP, buf, &optlen));
++	ASSERT_EQ(0, optlen);
++	ASSERT_EQ(0x5a, (unsigned char)buf[0]);
++}
++
++TEST_F(tcp, repair_window_wrong_len)
++{
++	socklen_t optlen = 4;
++	char buf[4];
++
++	ASSERT_EQ(-1, getsockopt(self->fd, IPPROTO_TCP, TCP_REPAIR_WINDOW, buf,
++				 &optlen));
++	ASSERT_EQ(EINVAL, errno);
++}
++
++TEST_F(tcp, zerocopy_receive_short)
++{
++	socklen_t optlen = 4;
++	char buf[4] = {};
++
++	ASSERT_EQ(-1, getsockopt(self->fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE,
++				 buf, &optlen));
++	ASSERT_EQ(EINVAL, errno);
++}
++
++/* Nothing queued: the call maps nothing and succeeds. */
++TEST_F(tcp, zerocopy_receive_old_struct)
++{
++	struct tcp_zerocopy_receive zc = {};
++	socklen_t optlen = sizeof(zc);
++
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE,
++				&zc, &optlen));
++	ASSERT_EQ(sizeof(zc), optlen);
++	ASSERT_EQ(0, zc.length);
++}
++
++/* A larger struct is cut down to the kernel's, if its tail is zero. */
++TEST_F(tcp, zerocopy_receive_oversize_clamped)
++{
++	char buf[256] = {};
++	socklen_t optlen = sizeof(buf);
++
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE,
++				buf, &optlen));
++	ASSERT_GE(optlen, sizeof(struct tcp_zerocopy_receive));
++	ASSERT_LT(optlen, sizeof(buf));
++}
++
++TEST_F(tcp, zerocopy_receive_oversize_dirty)
++{
++	char buf[256] = {};
++	socklen_t optlen = sizeof(buf);
++
++	buf[sizeof(buf) - 1] = 1;
++	ASSERT_EQ(-1, getsockopt(self->fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE,
++				 buf, &optlen));
++	ASSERT_EQ(EINVAL, errno);
++	ASSERT_EQ(sizeof(buf), optlen);
++}
++
++/* The client never saved a SYN, so there is nothing to report. */
++TEST_F(tcp, saved_syn_none)
++{
++	socklen_t optlen = 128;
++	char buf[128];
++
++	memset(buf, 0x5a, sizeof(buf));
++	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_TCP, TCP_SAVED_SYN, buf,
++				&optlen));
++	ASSERT_EQ(0, optlen);
++	ASSERT_EQ(0x5a, (unsigned char)buf[0]);
++}
++
++/* A short buffer gets the required length back along with EINVAL, and the
++ * SYN is still there for the retry.
++ */
++TEST_F(tcp, saved_syn_short_reports_len)
++{
++	socklen_t optlen = 1;
++	char buf[256];
++	socklen_t need;
++
++	ASSERT_EQ(-1, getsockopt(self->sfd, IPPROTO_TCP, TCP_SAVED_SYN, buf,
++				 &optlen));
++	ASSERT_EQ(EINVAL, errno);
++	ASSERT_GT(optlen, 1);
++	ASSERT_LE(optlen, sizeof(buf));
++	need = optlen;
++
++	ASSERT_EQ(0, getsockopt(self->sfd, IPPROTO_TCP, TCP_SAVED_SYN, buf,
++				&optlen));
++	ASSERT_EQ(need, optlen);
++}
++
++TEST_F(tcp, negative_optlen)
++{
++	socklen_t optlen = (socklen_t)-1;
++	int val;
++
++	ASSERT_EQ(-1, getsockopt(self->fd, IPPROTO_TCP, TCP_MAXSEG, &val,
++				 &optlen));
++	ASSERT_EQ(EINVAL, errno);
++}
++
++TEST_F(tcp, bad_optname)
++{
++	socklen_t optlen = sizeof(int);
++	int val;
++
++	ASSERT_EQ(-1, getsockopt(self->fd, IPPROTO_TCP, 0x7fff, &val,
++				 &optlen));
++	ASSERT_EQ(ENOPROTOOPT, errno);
++	ASSERT_EQ(sizeof(int), optlen);
++}
++
+ TEST_HARNESS_MAIN
 
 -- 
 2.53.0-Meta
