@@ -1,71 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=44.246.77.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=35.155.198.111
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794500188;
-	b=neq91MWlYe6+v8KiRDmUGq/dXbQlSZZaaEfVXCzlRihY4eKzNtsyjhPgnEXhWYVKc5W/
-	 32GW1YlrNKYUOO9JSeqi5YIGybDt4ZJSeR7Cx9tHsDxzO9a/JngM9+3ydgxMFfGVnEqW5
-	 ZWJsJV3FLC+IJGLnys133v5+HDN8JL5d+0OCFTCwpt+Z19c1xGrX7MRr2tOqkNj3C9Mtz
-	 n4ApNTdIMckKn6+UptGesLTDjQJjn0tKQ9x5hxYOJu9lGMbZd4rcpVIuu3B6qfhx4eWiR
-	 aANT1HpnmxqLLlrsSkSj3GyLp5IOKLQ/pfyTSbyEq4vNAOofN0NoaFriNAa8+dCYuFg==
+	t=1794500208;
+	b=yKZgYgEyhFjcZ60ZZQGe6BlbG9RqzjRKUkr+5cF/2lttQ+bInylbHRcK14bRwcXAJiwN
+	 U50RpPuh4hhFIyiJ5UdpYmw02zzdFRChBGHqLTzZPpQv16TMS9dKfF5rJsoyFWXTUM+Qt
+	 04U1OlKD4ZG3qGy/BwoRMLth8YGbLC3ELM6TRUYFD0d3gi2P1KDurhqJ0rm98TT8Ug+RR
+	 l3HiVTixxyk9m698vRrXZ8hIcqgXyIFgbc+uMT4Ofi4bzMDfaFs7JO+7px9j9GGqkJoCj
+	 54c5WlHKJDi0dn4ypiA+/oPmz1M4Fm++Qn+WXGO8eiDWtkWqc9PcIA2MHGRj8MOPH1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794500188;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794500208;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:Received:Received:X-Farcaster-Flow-ID:Received:Received:
 	 From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:X-Originating-IP:X-ClientProxiedBy:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=zI6jpPdRTfEJ3iMeZVxYPwVawJ+oNViJsEyZsG8jQeo=;
-	b=z0nXIa9+0AHvuARkCmUEHK02bd0ShzUYRHX5ruF19+W8eYoMBylE2m+1NzpQjA5wlLNY
-	 3ufNjnWP36a+eC8tSO2VS9wJOTOev8LVy+OAy5o4GNXrG1UBE9sAfn7Yb2U9XMBw4C8mW
-	 ip9ibmJTy2S96yTTNZPpBMsFxyL1uE3SsBGLhhOaFfHQzbeeBC8bYrdE7MFp1fsHaz5EK
-	 YtIUGWwAWBzYRtrsVVtuN7FYvXeDrzoDOwWx8fYI5HGA7Wj/9igCbIJfj3YtAlBR9oW47
-	 aaro1rXnWWL6PTxeCS5vyAwlDEKdcBQbDsmlq0muPdf1ztl6jZ/yfPF4GtyvMkW6Epw==
+	bh=9ZQevISBhHYwgSnfIhwqNtzxOicUyU+bjXzaxpw3Fl8=;
+	b=D3fC53UyctaEtj7co07H6OXK8Ib0cOwlg22iRCQXXGdhz0LKOl342pTf9wnjM/bV/0v3
+	 tmY6M4anP4+frsNbsO9ES2zjujlYID9DfVVAZSYVa+DEZkEiWNyFV+pQnD2TsTY840P4J
+	 ILE432EfknY2yPasDN/BjKYPjW0G3U9m/gv4r4cIpqMJ/LImBZGgyGxyr2pmHX2TSu9H0
+	 GtFVWPnC8THUvkNrccQsC453Xxd60XTcKZ0wy+MwxP5fLdwLsqytS5I/Z2ulvg7dV3o2I
+	 TAesnC0PUOlGskS5U3B339wZqq/XPSQHrxts3y/ckPoDOQxV98LGSy2jjjHGsbS+fIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=amazon.com;
 	spf=pass smtp.mailfrom=amazon.com;
-	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=ETQW6o0s;
-	arc=none smtp.remote-ip=44.246.77.92
-Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
+	dkim=pass header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b="Kuk/BwkH";
+	arc=none smtp.remote-ip=35.155.198.111
+Received: from pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.155.198.111])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D58606A323;
-	Thu, 12 Nov 2026 16:16:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02D58606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D4A606A334;
+	Thu, 12 Nov 2026 16:16:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65D4A606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=ETQW6o0s
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.a=rsa-sha256 header.s=amazoncorp2 header.b=Kuk/BwkH
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1794500188; x=1826036188;
+  t=1794500208; x=1826036208;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zI6jpPdRTfEJ3iMeZVxYPwVawJ+oNViJsEyZsG8jQeo=;
-  b=ETQW6o0sIiscXzzfryk4AKdwRsodv6lpu8Dxk6pZJPQaWKuds4ucVS4q
-   gVtQZG8a2SGGE66MEUBoC3JDIAuUeNhA8+iTIcOb7wUA/niUFQa8QsgVf
-   fxi3CRfU8av4FF9TY3v5Pws7nhMCij/k6F9zKk6KAriiZXhDit/gUPQYK
-   IdQuzat12WOnrEF3g6jcMiMyqGZXLs0axyEVBK029kT89T8eLiVp+TdTB
-   Y3UwacmhH9z2jeBVgguhhbdGAdoPqx3O9Izj+zQeH+qmOYDbsSnCKvbGv
-   ZmkUiutl+gKsWNE9uNAulJHOHit89vy+NpNU2P4hMJhQxhFyvlcmB/tY9
-   w==;
-X-CSE-ConnectionGUID: i3W5HIP0Q/OS3pq1ol8tlg==
-X-CSE-MsgGUID: lCcJXC0AS5Kug8HyhYN2WA==
+  bh=9ZQevISBhHYwgSnfIhwqNtzxOicUyU+bjXzaxpw3Fl8=;
+  b=Kuk/BwkHDa9/lifQYB9PhHFGrOEcm/icbboJUQCdO5O9DliOusgj6Rzd
+   w5aIPoNW3OrqLVQWDQ9oN+PyBp1mO2qYUS/Tn/GUVDJ9K1BM9l/9nbsd5
+   0/80qfwqt+ntDlSmvGTvc/tB+2IG+jCZ+r8OZSP9WEpkNEIeyHP5Iy1Lo
+   s6Ylc7U7XJnrAGLKWmtU2FrHd1AG9F6D1JU7iLn4VXwMdEG9w6tG2hG7+
+   kwxnW1CbrpBARjeBSPe0uEK5igP5/fEucg9s1OSm3FLtTPZ/qwNv6D3VV
+   AhSsh3X+Or/VpXzC8cJFjuSbg+ukGbznPi/Ldlh6v13ulDIulYSW4U5LG
+   g==;
+X-CSE-ConnectionGUID: KFbEuYyeTzCsqrmXUiTi+A==
+X-CSE-MsgGUID: fZ2UiwVcTiiNzAKXolfOMw==
 X-IronPort-AV: E=Sophos;i="6.27,210,1787011200"; 
-   d="scan'208";a="33829665"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 16:16:25 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:24853]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.46.128:2525] with esmtp (Farcaster)
- id 1fc5008f-f181-49aa-b8ce-554d2f56a30b; Thu, 12 Nov 2026 16:16:25 +0000 (UTC)
-X-Farcaster-Flow-ID: 1fc5008f-f181-49aa-b8ce-554d2f56a30b
+   d="scan'208";a="33731713"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-009.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2026 16:16:45 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.53:13408]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.31.142:2525] with esmtp (Farcaster)
+ id 7b503f49-2b85-4a09-b3d2-289b8b468abc; Thu, 12 Nov 2026 16:16:45 +0000 (UTC)
+X-Farcaster-Flow-ID: 7b503f49-2b85-4a09-b3d2-289b8b468abc
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56;
- Thu, 12 Nov 2026 16:16:24 +0000
+ Thu, 12 Nov 2026 16:16:44 +0000
 Received: from dev-dsk-sieberf-metal-1a-7543e84d.eu-west-1.amazon.com
  (172.19.116.227) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.56; Thu, 12 Nov 2026
- 16:16:21 +0000
+ 16:16:41 +0000
 From: Fernand Sieber <sieberf@amazon.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
@@ -80,9 +80,9 @@ CC: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
  Woodhouse" <dwmw@amazon.co.uk>, Misha Karataiev <karataev@amazon.com>,
 	Hendrik Borghorst <hborghor@amazon.de>, Ibrahim Elshahed <lshahed@amazon.de>,
 	Fernand Sieber <sieberf@amazon.com>
-Subject: [PATCH 1/5] sched/core: Clear stale rq->dl_server when core-sched replaces a pick
-Date: Thu, 12 Nov 2026 18:15:44 +0200
-Message-ID: <20261112161548.78189-2-sieberf@amazon.com>
+Subject: [PATCH 2/5] sched/core: Keep a sibling's DL server link in the core-wide pick
+Date: Thu, 12 Nov 2026 18:15:45 +0200
+Message-ID: <20261112161548.78189-3-sieberf@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261112161548.78189-1-sieberf@amazon.com>
 References: <20261112161548.78189-1-sieberf@amazon.com>
@@ -95,92 +95,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ClientProxiedBy: EX19D031UWC001.ant.amazon.com (10.13.139.241) To
+X-ClientProxiedBy: EX19D031UWA002.ant.amazon.com (10.13.139.96) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-With core scheduling and the fair server, the forced-idle accounting
-warns from an idle core:
+The core-wide selection records in rq_i->core_dl_server the DL server
+each sibling's pick came through, then clears it for every sibling in
+the cookie matching loop, including when the pick is kept. The sibling
+takes the fast path, which sets rq->dl_server from rq->core_dl_server,
+and runs the task its server picked with p->dl_server NULL. Only the
+selecting CPU keeps the link, as its pick goes through rq->dl_server.
 
-  WARNING: kernel/sched/core_sched.c:263 at __sched_core_account_forceidle+0x1d6/0x1f0, CPU#0: swapper/0/0
+A running task is ranked for core scheduling by p->dl_server. While
+such a task runs on a sibling, each following core-wide selection
+ranks it as a plain fair or ext task rather than by its server's
+deadline, so a higher class task on another sibling takes the core
+back before the server's runtime is used. The RV nomiss monitor, which
+follows the server through next->dl_server at sched_switch, does not
+see the server run either.
 
-The core is in forced idle with no sibling running a task. The reason
-is a stale rq->dl_server causing the idle task to incorrectly be
-considered as carried by the deadline server. The idle task then wins
-over a runnable sibling task and the whole core is idle despite having
-runnable tasks.
-
-The timeline below describes the issue:
-
-  Setup. CPU0 and CPU1 are SMT siblings.
-  - CPU1 runs R, a SCHED_FIFO task with cookie X.
-  - CPU0 has C, a CFS task with no cookie, which has been starved.
-    So CPU0's fair server is due to step in.
-
-  t0, CPU0 picks for the core.
-  - pick_task(rq0) goes through the deadline class, which picks the
-    fair server, which picks C. As a side effect it sets
-    rq0->dl_server = &rq0->fair_server.
-  - pick_task(rq1) picks R.
-
-  t1, ranking. C->dl_server is only set once C is switched in, so C
-  ranks as CFS. R (RT) beats C (CFS), so the core cookie becomes X.
-
-  t2, matching. CPU0's pick C has cookie 0, not X, so it is replaced.
-  There is no cookie-X task on CPU0, so the replacement is idle, and
-  CPU0 is forced idle.
-  - The code sets rq0->core_pick = idle and rq0->core_dl_server = NULL.
-  - The bug: it leaves rq0->dl_server pointing at CPU0's fair server,
-    even though idle didn't come through any server.
-
-  t3, CPU0 switches. CPU0 is the selecting CPU, so next = idle, and
-  put_prev_set_next_task() hands the stale rq0->dl_server to it. Now
-  idle->dl_server is CPU0's fair server.
-
-  t4, C leaves. Load balancing moves C to another core, so CPU0 has
-  nothing runnable. The stale link stays on idle.
-
-  t5, the next core-wide selection (when CPU1 reschedules, say on a
-  wakeup).
-  - CPU0's pick is idle, and the ranking sees idle->dl_server set, so
-    it ranks idle as a deadline task.
-  - idle now beats R, and the core cookie becomes idle's cookie, 0.
-  - CPU1's R has cookie X, not 0, so CPU1 is forced idle.
-
-  t6, result. The whole core is idle. R is runnable but can't run, and
-  nothing runs on either CPU. That's the WARN in
-  __sched_core_account_forceidle(): forced idle with no sibling running
-  a task. It lasts until CPU0 goes through a full schedule that resets
-  its server link.
-
-With this patch, step t2 also does rq0->dl_server = NULL. At t3 idle
-gets no server, and at t5 it ranks as plain idle, so R wins and keeps
-running on CPU1.
+Keep the server that pick_task() left in rq_i->dl_server. With the
+previous patch it is NULL when the class pick was replaced. Drop the
+assignment in the first loop, which the matching loop always
+overwrites.
 
 Fixes: bd9bbc96e835 ("sched: Rework dl_server")
 Signed-off-by: Fernand Sieber <sieberf@amazon.com>
 ---
- kernel/sched/core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ kernel/sched/core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 175b52a7ea793..f7ac13186ee59 100644
+index f7ac13186ee59..61d4e6e990bba 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -6453,6 +6453,12 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
- 				p = sched_core_find(rq_i, cookie);
- 			if (!p)
- 				p = idle_sched_class.pick_task(rq_i, rf);
-+
-+			/*
-+			 * Neither a core tree pick nor idle comes through a
-+			 * DL server; drop the one the replaced pick left.
-+			 */
-+			rq_i->dl_server = NULL;
+@@ -6431,7 +6431,6 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
  		}
  
  		rq_i->core_pick = p;
+-		rq_i->core_dl_server = rq_i->dl_server;
+ 
+ 		if (!max || prio_less(max, p, fi_before))
+ 			max = p;
+@@ -6462,7 +6461,7 @@ pick_next_task(struct rq *rq, struct rq_flags *rf)
+ 		}
+ 
+ 		rq_i->core_pick = p;
+-		rq_i->core_dl_server = NULL;
++		rq_i->core_dl_server = rq_i->dl_server;
+ 
+ 		if (p == rq_i->idle) {
+ 			if (rq_i->nr_running) {
 -- 
 2.47.3
 
