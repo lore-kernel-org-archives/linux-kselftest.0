@@ -1,49 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794505117;
-	b=TUeRCjmj4p6g/GPTlSEoIXHUHg+7DwqyABfJKSXkYu3mmUDYv6TYNWT/9rI5GKJTm6sK
-	 yCkHJbg9Q6FV6puqUUcx0qYJKdDmcl0K2f3zzz89YnUMaQvLo0L0cLdDumXvwS4adwBS6
-	 fYDZscNcDosy5hi6xgE8jLRNXVwmqqsG7fUnlNG4UolI/n4PWGK18NbSno5GjrbinpPBB
-	 Qv9OueGd68iv2VTxImA10qRtGvpol5W9F8Ml8+Gd758QRrDvYMz/gVsWTbLejAlexDWu/
-	 Ui+cHr/kbh8c3zkwujr8dU3XKzbl82yn4nn3DUCCDOvV9bevzVScIALTCMHLXUZ24SA==
+	t=1794505356;
+	b=G9UV4/jy1L8KQ+AFRuSBzD/rcxsUV5nOlu2a/NsD3InnAn25mrXLKBYy9/+Du9HToVEM
+	 8j3nx3STkQ3X4CG7PfP12FhaZ53o6RfpwVg/AfC9dr0bp97y6+2lphM2aZEXCimmC7qM2
+	 Iex7C7OipYe8xm9BdAY87U0DirvQl5ZE8DVFHbVxFRDCa3I0um+FYp7j8n6z7gxeh4SGj
+	 oNsJnasY+KTa8gsv2/LuRJIKEER1RlOpZjcuPrA4d8uoDrwkZpqX3XbieuJLmH9ScC6Pp
+	 7oNNw4ZrseuVS4zeJY0Xlyovp84fogu0AII6vUkZyR+djoDQp2Efsx3SM4zGJYy5t2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794505117;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=6FLvIP+02fU3D3EgmUsZmg/BxYUoYrdtHX2qDoNfAQg=;
-	b=G9MKSOeDT94/rqSLEPzF5/nZuHZFd+rqeQSEBlBpNNtNGe5pJxE5Q/r5IFXtmzbpY7vP
-	 2fqnBzesUDnw3+oJnRb1Mmm2EZdbNVG6vqQR0l8QvM0Nk+FE5cCiEyW0J3AibN+mUh1Xw
-	 EIzcnu/CDvaQ96e/SaZZNJl9qrGAUwt4t3Y4wA/LxnQ4jj+Wqv8tQ6Gc2NHGdr9RH/hdC
-	 bc+lpF7xTxRU1XlXRuXL0pEzsVpy+hOrmWhVg0U0Q616HynjAXuzP8+B+YBgYGro5QS5o
-	 iMJnQK8v4nMaHR7FuIKipWEcwXqrCFqq5XPeXiBSi6s7Bo4c/Dpp85w1Nz55k6pJF0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794505356;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:CC:Subject:
+	 User-Agent:In-Reply-To:References:Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-SRS-Rewrite;
+	bh=dhhn+7b+E0uHrS+RfB6VPpH7GUzc/qwFeX5mWbYxz3o=;
+	b=ecni/6fZ+A21RlvQzWPuycTa1riVKUlAnec3uvmHo6VAxMdcPlfdIkMMCPB/zD20x8DJ
+	 SwdzcSg3dvwlpU43rqXwaK5yIr7sxgfnL+/rbI9ti/Mz4aLv51zQpF0+GgF2lEIUgPi5m
+	 X3f3Ot8HRDMTzF5S1wXTkK3rd5gMJFrmw87+faxpc6boQFog8E8TUyUZ3tvmKAGmpzldQ
+	 U3mq8HVIUVpTDGSS9Wjf4MmH1RqwB4EQ1hg/n2802oLVLqNQkTJjFN7xWa+LSiXWqE2XI
+	 UAI1BQNfNiMcoVRSjzJuoNVWP9Wluex0YdNYsv6XU+hojLVwYyMmUCz+Ijn8zOXh5Ug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IYmCQ62v;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=none smtp.mailfrom=desiato.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=AmUywf5c;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92EE0606CFE2;
-	Thu, 12 Nov 2026 17:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C778606A88D;
+	Thu, 12 Nov 2026 17:42:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C778606A88D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IYmCQ62v
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17701F000C5;
-	Thu, 12 Nov 2026 17:38:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794505117;
-	bh=6FLvIP+02fU3D3EgmUsZmg/BxYUoYrdtHX2qDoNfAQg=;
-	h=From:Date:Subject:To:Cc;
-	b=IYmCQ62vcyGAlECdg2yNK4EBmQ0N2pVumUcV+aM8yemIWDbalFnkxINv12qk8EsCm
-	 LgPnQ/WxzTcQoGOFK9ksV2JZdhoqvx21bldoapI3zR9oQzQ8gqriMC9Afykl2JaaUK
-	 jlOzqpPJVwOeHTBYtPSSp9mqgvvH/p9U4Tg2KeWVK6rh/AJiqhQEWsfLVfPA1zHyaB
-	 o5tjUIGuXWI+ZVn+GMrBbFB6aK8LzUA5J4bkNU5QI5ikb51kDhNWGL+NiLEpqX1EIx
-	 ybWd+krBH9eoKS3LZboAMPfFMiBbO6Wg8fPz2l04Ah7bdih/etLOjcTQ0dSAt/WOkZ
-	 OR2qr0jQPr5Qw==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Thu, 12 Nov 2026 17:38:26 +0000
-Subject: [PATCH] mm/madvise: disallow guard region installation in
- uffd-armed VMAs
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=AmUywf5c
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=dhhn+7b+E0uHrS+RfB6VPpH7GUzc/qwFeX5mWbYxz3o=; b=AmUywf5cub6TGT7GkBFrjaIEnx
+	VQ9jBElSsX7kqt1UOOgaFWPVwyiCVR2GVXdzRBQRTYe9Hp9BAoMr8VUeDV0vKDsFgeGJz0Y+AzyZ5
+	HfGKy6St0LD8EBTWgfRy/dQtlMDlYIjv9/AbSAbaW+wfBr1DgtvCrlz4FdXCpADdVDZ5yZNdhv7mt
+	KL7+QAynBdbvbaNp/9Mc4ehmo3eFFChstEfzlT5z7sVLMoCcjg58H9Mkek7XnLR80mE4AXXgBez4y
+	JQvIXZ3VaszEfmZvLKAoz4Cw3Ld8ntjiJkWrNDwkSElK/j+hBHIPjxNnDwAc47mCKN9aAljSaUGZf
+	K29Ey6wg==;
+Received: from [69.196.88.181] (helo=ehlo.thunderbird.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRYoh-0000000Ad1t-1Sec;
+	Thu, 12 Nov 2026 17:42:32 +0000
+Date: Thu, 12 Nov 2026 10:42:22 -0700
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>
+CC: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Anish Moorthy <amoorthy@google.com>, Shuah Khan <shuah@kernel.org>,
+ Nicolas Saenz Julienne <nsaenz@amazon.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, David Woodhouse <dwmw@amazon.co.uk>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_KVM=3A_selftests=3A_Drop_stale_exac?=
+ =?US-ASCII?Q?t_flags_check_in_private=5Fmem=5Fkvm=5Fexits=5Ftest?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <avX13o0qRkidIwWo@google.com>
+References: <20261112144220.30801-1-dwmw2@infradead.org> <avX13o0qRkidIwWo@google.com>
+Message-ID: <B98231C0-1516-4781-9C31-3CEE9922C8A6@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,139 +69,95 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQrCQAxA0auUrA00QS3tVcRFNJkaKNMysVUov
- buDy/cXf4ew4hYwNDsU2zx8zhV0auD5kjwaulYDt3wlIkb1kGmaP7impDiuUhQ9x7tGlAv3Z+J
- etHtAPSzFkn//99v9OH48gYlIbQAAAA==
-X-Change-ID: 20261112-disallow-uffd-guard-install-a5294129ad7b
-To: Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, 
- David Hildenbrand <david@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Jann Horn <jannh@google.com>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, ljs@kernel.org, 
- Tal Zussman <tz2294@columbia.edu>, stable@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4426; i=ljs@kernel.org;
- h=from:subject:message-id; bh=z0lXvuNFITlSBw/W7A69EZHiCMx/P/HmR1ujagLOP60=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLK+/py565nBh+S5gr8zV/1c4aC3+OoVrrXfg9817//ze
- I0jR+qK9x2lLAxiXAyyYoosz7+I7w8SCZvXecHfDWYOKxPIEAYuTgGYyMJ0hr8SQRty4qT8WP2m
- nBLcfaZhwp5jfxYmepQwbeMtWWFQ4byBkWHGb7PzTYtM2JpCH2Wk37RKXKBtu+b6lrPyp1csdWi
- /z80FAA==
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-In order to establish guard regions, guard markers are installed in the
-page tables of a mapped VMA.
+On 12 November 2026 10:22:38 GMT-07:00, Sean Christopherson <seanjc@google=
+=2Ecom> wrote:
+>On Thu, Nov 12, 2026, David Woodhouse wrote:
+>> From: David Woodhouse <dwmw@amazon=2Eco=2Euk>
+>>=20
+>> Commit 7d0afe669374 ("KVM: selftests: Take into account mixed memory
+>> fault flags") relaxed the memory_fault=2Eflags checks so that they only
+>> test for KVM_MEMORY_EXIT_FLAG_PRIVATE, since KVM may report the access
+>> type alongside it=2E In test_private_access_memslot_deleted() it added
+>> the relaxed check but left the exact match above it, and with the
+>> READ flag now reported the test fails for me there:
+>
+>Ah, this is against kvm/kvm-memprot-v4=2E
+>
+>Paolo, what are your plans with that branch?  Sashiko had valid complaint=
+s, e=2Eg=2E
+>against patch 1[*], so I assume the branch won't be merged as-is=2E
+>
+>[*] https://lore=2Ekernel=2Eorg/all/sashiko-outbox-193903@kernel=2Eorg
 
-However, problems arise when one tries to combine this with registering a
-VMA for userfaultfd, as such operations may themselves need to install page
-table markers such as uffd-wp.
+Yeah, I have a whole ASCII art diagram for VSM of the various branches it =
+depends on, all of which need to come together=2E
 
-When this installation is attempted the guard marker prevents these markers
-being applied, which can lead to unexpected results (especially if the
-guard regions are later removed.)
+Not sure how it'll survive being pasted on my phone=2E=2E=2E
 
-This is especially problematic because guard region installation causes the
-regions to be zapped first, meaning that the removal of userfaultfd-tracked
-ranges will not be logged in this case.
+```
+  *   e7bf7087c71e (vsm-v2, vsm2/rollup) Merge branch 'vsm2/translate-prob=
+e-fix' into vsm2/rollup
+  |\
+  | * 2041e48469c9 (vsm2/translate-probe-fix) KVM: selftests: Add a test f=
+or KVM_TRANSLATE write permission
+  | * 11e4bc669f5a KVM: x86: Report the guest's write permission from KVM_=
+TRANSLATE
+  | * (base: v7=2E4-rc2)                                    =E2=86=90 post=
+able =E2=84=962, [RFC]
+  |
+  * 711d67d9ee59 (vsm2/vsm-extras) =E2=8B=AF 10 EXTRA commits =E2=8B=AF
+  |      TLB-flush-inhibit group [Nikolas=C3=975 + 1 ours], suspended-stat=
+e,
+  |      hugepage selftest [Mushahid], stats, KVM_TRANSLATE allowlist
+  |
+  * 45e6e98c313e (vsm2/vsm-min, tag: vsm2-min1) =E2=8B=AF 32 MIN commits =
+=E2=8B=AF
+  |      per-plane attrs =E2=86=92 TSC page =E2=86=92 TLB flush =E2=86=92 =
+VTL call/return =E2=86=92
+  |      forced entry =E2=86=92 SynIC/overlays =E2=86=92 intercepts =E2=86=
+=92 SVM state =E2=86=92 selftests
+  |      [29 dwmw, 2 Mushahid incl=2E folds, 1 Sriram]
+  |
+  *   2dba8e6aa231 Merge branch 'vsm2/hcall-exit' into vsm2/vsm-min
+  |\
+  | * ab78e5f86ef8 (vsm2/hcall-exit) KVM: selftests: Add Hyper-V hypercall=
+ forwarding test
+  | * b5db9e2e8a73 KVM: x86: hyper-v: Advertise XMM fast hypercall output
+  | * 13c74a93fa3a KVM: x86: hyper-v: Let userspace fault a forwarded hype=
+rcall
+  | * 365758d0df84 KVM: x86: hyper-v: Add KVM_CAP_HYPERV_FORWARD_HCALL
+  | * (base: v7=2E4-rc2)                                    =E2=86=90 post=
+able =E2=84=961
+  |
+  *   d834e6e32d45 Merge branch 'vsm2/memattrs' into vsm2/vsm-min
+  |\
+  | *   2fd5c2a710a2 (vsm2/memattrs) Merge 'kvm-memprot-v4' of kvm=2Egit
+  | |\
+  | | * =E2=8B=AF 45 commits, Paolo, verbatim =E2=8B=AF
+  | |/
+  | * (base: v7=2E4-rc2)
+  |
+  * 08140f5dfd94 (vsm2/planes-uapi) =E2=8B=AF 9 commits =E2=8B=AF
+  |      KVM_CAP_PLANES opt-in, run-state ioctls, request fan-out,
+  |      APICv inhibit, XCR0 sharing, selftests [8 dwmw, 1 Paolo-reworked]
+  |
+  * 52a6b958f643 (vsm2/planes-fixes) =E2=8B=AF 16 commits =E2=8B=AF
+  |      s390 lkp fix first; Hyper-V init, allowlist, current_vcpu/IPIv,
+  |      TSC matching, CPUID [13 dwmw, 3 Mushahid]
+  |
+  * ea638a7ede9e (vsm2/planes) =E2=8B=AF 60 commits, J=C3=B6rg, verbatim =
+=E2=8B=AF
+  |
+  * (v7=2E4-rc2)
 
-Therefore, disallow this.
+  parked, not merged anywhere:
+  * de563700e7ed (vsm2/translate2) ours =C3=971 (squashed probe) on =E2=8B=
+=AF Nikolas =C3=9716 =E2=8B=AF on vsm2/memattrs
 
-This makes sense as conceptually, guard regions mark a part of a VMA as
-effectively unmapped at the page table level, and removing the markers is
-like mapping the VMA again, over which operation uffd markers would in any
-case be lost.
 
-Only check for this on installation, as a VMA can be registered for
-userfaultfd after guard regions are established.
-
-In this case, the guard regions cannot have new markers installed, and no
-faults can occur in the guard regions, until they are removed, at which
-point everything should function normally.
-
-A survey of open source users indicates nobody is relying on installing
-guard regions in uffd-armed VMAs. Software including glibc, android,
-tcmalloc and CRIU were checked.
-
-Fix the selftest to reflect the change.
-
-Fixes: 662df3e5c376 ("mm: madvise: implement lightweight guard page mechanism")
-Reported-by: Tal Zussman <tz2294@columbia.edu>
-Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-9-00713d368976@columbia.edu/
-Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-10-00713d368976@columbia.edu/
-Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-11-00713d368976@columbia.edu/
-Cc: stable@vger.kernel.org
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- mm/madvise.c                               |  4 ++++
- tools/testing/selftests/mm/guard-regions.c | 12 ++++++++----
- 2 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 0214efd2a014..268731e90f12 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1156,6 +1156,10 @@ static long madvise_guard_install(struct madvise_behavior *madv_behavior)
- 	if (!is_valid_guard_vma(vma, /* allow_locked = */false))
- 		return -EINVAL;
- 
-+	/* Guard markers are incompatible with UFFD markers. */
-+	if (userfaultfd_armed(vma))
-+		return -EINVAL;
-+
- 	/*
- 	 * Set atomically under read lock. All pertinent readers will need to
- 	 * acquire an mmap/VMA write lock to read it. All remaining readers may
-diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-index 02f69244f9a4..97da54dcf3a4 100644
---- a/tools/testing/selftests/mm/guard-regions.c
-+++ b/tools/testing/selftests/mm/guard-regions.c
-@@ -1476,7 +1476,7 @@ TEST_F(guard_regions, cold_pageout)
- 	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
- }
- 
--/* Ensure that guard pages do not break userfaultd. */
-+/* Ensure that guard regions cannot be installed in uffd-armed VMAs. */
- TEST_F(guard_regions, uffd)
- {
- 	const unsigned long page_size = self->page_size;
-@@ -1526,10 +1526,15 @@ TEST_F(guard_regions, uffd)
- 	reg.mode = UFFDIO_REGISTER_MODE_MISSING;
- 	ASSERT_EQ(ioctl(uffd, UFFDIO_REGISTER, &reg), 0);
- 
--	/* Guard the range. This should not trigger the uffd. */
-+	/* Now try to guard, should fail with EINVAL. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	/* Once unregistered, we should be able to guard the range. */
-+	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
- 	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
- 
--	/* The guarding should behave as usual with no uffd intervention. */
-+	/* The guarding should behave as usual. */
- 	for (i = 0; i < 10; i++) {
- 		char *curr = &ptr[i * page_size];
- 
-@@ -1537,7 +1542,6 @@ TEST_F(guard_regions, uffd)
- 	}
- 
- 	/* Cleanup. */
--	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
- 	close(uffd);
- 	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
- }
-
----
-base-commit: 4318887a3efa4c53d6f083ccfd7105b809a3ac65
-change-id: 20261112-disallow-uffd-guard-install-a5294129ad7b
-
-Cheers,
--- 
-Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
+```
