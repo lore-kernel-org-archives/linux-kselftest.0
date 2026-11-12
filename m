@@ -1,54 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.118
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794453428;
-	b=JFB2VlZ3PqRHG6/WpLglWm8jS4+lReEe+yTMicS9INV5FAbUE8Yj8r7ToFTVwYxqWe4u
-	 yJY2UVUAOh6hIVoXEFNVO3hgc5R2ncVDOK5M1PAZdxmobYpKTuH779lXuhksquRKU8yfp
-	 xjfD+01454x3mQTDD29D9huweglxooZrdRyjAJT3CE2/t1DcczfIb7An1Ce76/MWxqr3d
-	 QYfzEpxzGi5/u0af9dRqAtrvY0irwLVOeBSzfXfxXbBznCKSZvv51JhTY1rFUE8ikEryP
-	 WdNnKr2BFxITXyDpReZX0ACwx74sl2mHJ4OSSs+NCaNr1Ln+dqOyoylGyfXIxDq0WKQ==
+	t=1794453561;
+	b=KQh9ay6bAoy+QDAaBzynD3HFjgg+W+EjpCPUXRu6GKZCSmgYr1U5yyKTX3FeKdewXRw4
+	 xSzTZXNuQ4vvS0d03SZbpN+EwcFtVboySH78rqwOD8E9u+1exWdrUZnNPE61Obhk716at
+	 8EIabNPYalkklk/tE4m97YfIvjxD+3K6na3yXCIomCbvZk0MxEmJId5zQMPcjP4GY0oZm
+	 6I0La4OGknis/G10gJD+SQKjJIOsNjhcEcdbZccECFvb+fNI5/fAWjBLB9MgWSnKMnSWj
+	 Ma5i9Dr+Jzm74fL3gvCHtWyiYXT0LctQ/rCPPLPz4Dbpgcd23KJq+09Mj5GLNn2068g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794453428;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=/lhmtTuazCmY3fZNQEmgo+ZwLI/K4I5DZ+6AOxTkxlA=;
-	b=DItWAPDq4R/AVNmbmv0E3gjCP10ptvOpkLSgtoJzpaZUEqOjEsaBSdB6hdCuiZWhYh1F
-	 F6vNt7ohU3HDvGvpans73Xx/n7nLm0UsgAF4ddvLdTp7ICP1MAXwPDIyZqyhe5Nbb+YLH
-	 paqE6uYhaiUO9k7M27K02EWxVZ1kLR4oMBKkTKbh41sD5ytmVmJp2Vvv+tfCncWdPrFiV
-	 ZW1c3GMLKOdM4e2EC1NjCC3mEClguxI1OVZe+5ClvWRCBqxXUPy8KmLzMkm2yrEEdoUeW
-	 CN03Q1OrDhc1Wbtqn/NnFMHTS+zoRY2GODV8qIBaJk6nJk/WpTfEnvxADP04BxJUqNg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794453561;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=OAJSZeu5S+BGy7vQFCxiIgP/IXx1ATwnYQxbK6vospE=;
+	b=zqWe879PeWx5iJMwd1zgk4DxZw9uxAiBZLMjC9yT+mChhmpKOP/XTawQc2tWBF9QSVos
+	 Undfy+xBRUETOn4fXiiyB6VC3jdNpgA+C8W2KDquM8LaVgOBliAkAhbRDzPgGPffbNTiG
+	 2/qQPIy8ZleTOzwGauheUSN1KOq2uxv84dvDRQrQ68ccBk+tb7G9lOiz5Kraw0gdKj6eJ
+	 MrIyws9dMlt9Bh8bf+TnlK/xA8YWLjr33GH8lHZ3iECIgo49MdvSNri3XA3/c4dPJ89UT
+	 uhOcQIvCGhgrZ2IXIvA9wYjtGGZ7NR5lLRTbJ6VNcI7WuZ1L3/FjUjy5RDgVqJuIn8w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="ZCGxF/pH";
-	arc=none smtp.remote-ip=91.218.175.118
-Received: from mta0.migadu.com (out-118.mta0.migadu.com [91.218.175.118])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=J8q9LXeV;
+	arc=none smtp.remote-ip=117.135.210.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A670C606A338
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 03:17:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A670C606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C63606A321;
+	Thu, 12 Nov 2026 03:19:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12C63606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ZCGxF/pH
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=rQ0kbgtqLknf/wci94Tpoe1OhQxHL//COOLKY+b0g4E=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794453424; v=1; x=1795058224;
- b=ZCGxF/pHq4WwV4MQYKYcA0UhvAQDuG6iZd5jfeQmpvvPKCK6nTE1KAnUWPqAJAjNh6wzg6xp
- DlLsccaLW1Cb9wv6S3+7cVWrO81M+kAeJ1ce5r04VfcNCZKdTahUKM9PqqpaLbEJdAiVivYIAAB
- us5aHbC1NL8kxwyFxLh5tsho=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ec7f59e958af9291;
-	Thu, 12 Nov 2026 03:17:04 +0000
-X-Mizu-Trace-ID: ec7f59e958af9291
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4dac20a0-42a7-48a7-ae91-ef5a3ead0e10@linux.dev>
-Date: Thu, 12 Nov 2026 11:16:57 +0800
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=J8q9LXeV
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=OA
+	JSZeu5S+BGy7vQFCxiIgP/IXx1ATwnYQxbK6vospE=; b=J8q9LXeVwUeilZTDiw
+	SwlVJGeycGVnVK3XJqd93QTe0PwTpKW3fXyBPJ3b0Ef2tfgDlUO8aTWtgIrvg0bS
+	LFLqRubPPuKxfXOlV+VRNsH3X8KZHD5FLmgI9KBJ6o8kUMDpIR3J1a+lTIrEONe+
+	YNUPP5YSGNsxrfSrL6851St7M=
+Received: from 5219-2604 (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgDnl6oRMPVqpjyfFQ--.50271S2;
+	Thu, 12 Nov 2026 11:18:46 +0800 (CST)
+From: Xionggui Chen <evers_chen@163.com>
+To: David Hildenbrand <david@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chenxionggui@lanxincomputing.com
+Subject: [PATCH] selftests/mm: Handle implicit read permissions in madv_populate
+Date: Thu, 12 Nov 2026 03:18:11 +0000
+Message-ID: <20261112031811.56500-1-evers_chen@163.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,288 +64,148 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] cpuset: settle isolation state when CPUs are given
- back to parent
-To: Guopeng Zhang <guopeng.zhang@linux.dev>, Waiman Long
- <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: Chen Ridong <chenridong@huawei.com>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Sashiko <sashiko-bot@kernel.org>, Guopeng Zhang <zhangguopeng@kylinos.cn>,
- Ridong Chen <chenridong@xiaomi.com>
-References: <20261107120100.3587595-1-ridong.chen@linux.dev>
- <20261107120100.3587595-4-ridong.chen@linux.dev>
- <09c033dd-41dc-4503-9def-4e662e946dc4@redhat.com>
- <fe49691f-54d9-410e-9110-bf2522ab17e8@linux.dev>
- <5a141006-e289-45db-a928-c3685eb377e9@linux.dev>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <5a141006-e289-45db-a928-c3685eb377e9@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgDnl6oRMPVqpjyfFQ--.50271S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCw4DtFWxuw1DGw4xAr45Awb_yoWrJr1kpF
+	yDJas0vF4rt3ZrA3yxAF17Xrn0yryIyayxXw1xJ3s0vwnxK345Kr47Ka48tFy8JFZ7Xw15
+	Ca98ZasFkw4DJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jFnm_UUUUU=
+X-CM-SenderInfo: xhyh22pbfkv0i6rwjhhfrp/xtbC7BYpM2r1MBYfnQAA3b
 
+From: Xionggui Chen <chenxionggui@lanxincomputing.com>
 
+The madv_populate selftest assumes that a mapping created with
+PROT_WRITE cannot be read, and expects MADV_POPULATE_READ to fail
+with EINVAL.
 
-On 11/10/2026 4:18 PM, Guopeng Zhang wrote:
-> 
-> 
-> 在 2026/11/10 11:14, Ridong Chen 写道:
->>
->>
->> On 11/9/2026 10:51 PM, Waiman Long wrote:
->>> On 11/7/26 7:00 AM, Ridong Chen wrote:
->>>> From: Ridong Chen <chenridong@xiaomi.com>
->>>>
->>>> partition_xcpus_del() only updates isolated_cpus when the partition that
->>>> gives back the CPUs has a different state than its parent. CPUs that were
->>>> further distributed to descendant isolated partitions are not taken into
->>>> account, so isolated_cpus_release() has to be called afterwards in
->>>> several places to walk up the ancestors and fix isolated_cpus.
->>>>
->>>> Make partition_xcpus_del() always set the isolation state of the given
->>>> back CPUs to the state of the parent that receives them. As the
->>>> effective_xcpus of a partition covers the CPUs distributed to its
->>>> descendants, the isolation state of those CPUs is settled at the same
->>>> time. Boot-time isolated CPUs are still preserved by isolated_cpu_update().
->>>>
->>>> compute_partition_effective_cpumask() invalidates a child partition
->>>> without going through partition_xcpus_del(), so do the same there: the
->>>> CPUs of the invalidated child take the isolation state of its parent.
->>>>
->>>> As the parent may be shrunk and its effective_xcpus not updated yet,
->>>> only do so for the CPUs the parent still owns. This is to keep the
->>>> isolation state correct for now, the in-place invalidation here will be
->>>> removed later in the partition rework.
->>>>
->>>> isolated_cpus_update() assumes the old and new states are different,
->>>> which no longer holds now that partition_xcpus_del() proceeds regardless
->>>> of the states. Drop its @old_prs argument and the WARN_ON_ONCE() so that
->>>> it simply sets the isolation state of the given CPUs, and use it
->>>> everywhere. The state check in partition_xcpus_add() is dropped as well,
->>>> as setting the state is a no-op when the states are the same.
->>>>
->>>> isolated_cpus_release() is no longer needed and is removed.
->>>>
->>>> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
->>>> ---
->>>>    kernel/cgroup/cpuset.c | 98 ++++++++----------------------------------
->>>>    1 file changed, 19 insertions(+), 79 deletions(-)
->>>>
->>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>> index 85e5b529d144..fc9de6e16ff5 100644
->>>> --- a/kernel/cgroup/cpuset.c
->>>> +++ b/kernel/cgroup/cpuset.c
->>>> @@ -1244,17 +1244,17 @@ static bool isolated_cpu_update(int new_prs, int cpu)
->>>>    }
->>>>    /*
->>>> - * isolated_cpus_update - Update the isolated_cpus mask
->>>> - * @old_prs: old partition_root_state
->>>> - * @new_prs: new partition_root_state
->>>> - * @xcpus: exclusive CPUs with state change
->>>> + * isolated_cpus_update - Set the isolation state of @xcpus
->>>> + * @new_prs: partition root state that @xcpus will belong to
->>>> + * @xcpus: exclusive CPUs whose isolation state may change
->>>> + *
->>>> + * CPUs isolated at boot time are kept isolated.
->>>>     */
->>>> -static void isolated_cpus_update(int old_prs, int new_prs, struct cpumask *xcpus)
->>>> +static void isolated_cpus_update(int new_prs, struct cpumask *xcpus)
->>>>    {
->>>>        bool updated = false;
->>>>        int cpu;
->>>> -    WARN_ON_ONCE(old_prs == new_prs);
->>>>        lockdep_assert_held(&callback_lock);
->>>>        lockdep_assert_held(&cpuset_mutex);
->>>>        for_each_cpu(cpu, xcpus)
->>>> @@ -1263,45 +1263,6 @@ static void isolated_cpus_update(int old_prs, int new_prs, struct cpumask *xcpus
->>>>            update_housekeeping = true;
->>>>    }
->>>> -/*
->>>> - * isolated_cpus_release - Remove the relevant CPUs in @xcpus from isolated_cpus
->>>> - * @cs: the current cpuset
->>>> - * @xcpus: the set of effective xcpus to be considered for removal
->>>> - *
->>>> - * This function is called when an isolated partition is invalidated or when
->>>> - * some of its effective xcpus are to be removed from isolated_cpus due to
->>>> - * changes in parent cpuset. The given @xcpus must be modifiable as the function
->>>> - * will update its value to determine the right set of CPUs to be removed.
->>>> - */
->>>> -static void isolated_cpus_release(struct cpuset *cs, struct cpumask *xcpus)
->>>> -{
->>>> -    struct cpuset *ancestor = parent_cs(cs);
->>>> -    struct cpuset *iancestor = NULL;
->>>> -
->>>> -    /*
->>>> -     * Search the furthest isolated partition root ancestor available
->>>> -     * until top_cpuset or a remote partition root is hit.
->>>> -     */
->>>> -    for (; ancestor; ancestor = parent_cs(ancestor)) {
->>>> -        if (ancestor->partition_root_state == PRS_ISOLATED)
->>>> -            iancestor = ancestor;
->>>> -        if (is_remote_partition(ancestor))
->>>> -            break;
->>>> -    }
->>>> -
->>>> -    /*
->>>> -     * If a furthest isolated partition acnestor is found, use it to
->>>> -     * determine which of the CPUs in @xcpus should be removed from
->>>> -     * isolated_cpus. Otherwise, all of them will be removed.
->>>> -     */
->>>> -    if (iancestor && !cpumask_andnot(xcpus, xcpus, iancestor->effective_xcpus))
->>>> -        return; /* No CPU should be removed from isolated_cpus */
->>>> -
->>>> -    spin_lock_irq(&callback_lock);
->>>> -    isolated_cpus_update(PRS_ISOLATED, PRS_ROOT, xcpus);
->>>> -    spin_unlock_irq(&callback_lock);
->>>> -}
->>>> -
->>>>    /*
->>>>     * partition_xcpus_add - Add new exclusive CPUs to partition
->>>>     * @new_prs: new partition_root_state
->>>> @@ -1325,9 +1286,7 @@ static void partition_xcpus_add(int new_prs, struct cpuset *parent,
->>>>        if (parent == &top_cpuset)
->>>>            cpumask_or(subpartitions_cpus, subpartitions_cpus, xcpus);
->>>> -    if (new_prs != parent->partition_root_state)
->>>> -        isolated_cpus_update(parent->partition_root_state, new_prs,
->>>> -                     xcpus);
->>>> +    isolated_cpus_update(new_prs, xcpus);
->>>>        cpumask_andnot(parent->effective_cpus, parent->effective_cpus, xcpus);
->>>>    }
->>>> @@ -1355,9 +1314,8 @@ static void partition_xcpus_del(int old_prs, struct cpuset *parent,
->>>>        if (parent == &top_cpuset)
->>>>            cpumask_andnot(subpartitions_cpus, subpartitions_cpus, xcpus);
->>>> -    if (old_prs != parent->partition_root_state)
->>>> -        isolated_cpus_update(old_prs, parent->partition_root_state,
->>>> -                     xcpus);
->>>> +    /* CPUs given back, including those of descendants, take parent's state */
->>>> +    isolated_cpus_update(parent->partition_root_state, xcpus);
->>>>        cpumask_or(parent->effective_cpus, parent->effective_cpus, xcpus);
->>>>        cpumask_and(parent->effective_cpus, parent->effective_cpus, cpu_active_mask);
->>>> @@ -1612,6 +1570,7 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>>        struct cgroup_subsys_state *css;
->>>>        struct cpuset *child;
->>>>        bool populated = partition_is_populated(cs, NULL);
->>>> +    static cpumask_t xcpus;        /* Protected by cpuset_mutex */
->>>>        /*
->>>>         * Check child partition roots to see if they should be invalidated
->>>> @@ -1640,14 +1599,15 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
->>>>                int parent_prs = cs->partition_root_state;
->>>>                /*
->>>> -             * Invalidate child partition and update isolated_cpus
->>>> -             * if necessary.
->>>> +             * Invalidate child partition. Its CPUs still owned by
->>>> +             * cs take the isolation state of cs. effective_xcpus
->>>> +             * of cs may not be updated yet, so recompute it.
->>>>                 */
->>>>                spin_lock_irq(&callback_lock);
->>>>                WRITE_ONCE(child->prs_err, PERR_NOCPUS);
->>>> -            if ((old_prs == PRS_ISOLATED) && (parent_prs == PRS_ROOT))
->>>> -                isolated_cpus_update(PRS_ISOLATED, PRS_ROOT,
->>>> -                             child->effective_xcpus);
->>>> +            compute_excpus(cs, &xcpus);
->>>> +            cpumask_and(&xcpus, &xcpus, child->effective_xcpus);
->>>> +            isolated_cpus_update(parent_prs, &xcpus);
->>>>                child->partition_root_state = -old_prs;
->>>>                spin_unlock_irq(&callback_lock);
->>>>                notify_partition_change(child, old_prs);
->>>> @@ -2080,22 +2040,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->>>>             *
->>>>             * A partition error happens when parent has tasks and all
->>>>             * its effective CPUs will have to be distributed out.
->>>> -         *
->>>> -         * For an isolated partition with a shrunk root partition parent
->>>> -         * we may need to return some or all of its isolated CPUs.
->>>>             */
->>>>            nocpu |= cpumask_empty(tmp->delmask);
->>>> -        if ((parent_prs == PRS_ROOT) && (old_prs == PRS_ISOLATED)) {
->>>> -            cpumask_clear(tmp->addmask);
->>>> -            if (nocpu)
->>>> -                cpumask_copy(tmp->addmask, cs->effective_xcpus);
->>>> -            else if (!cpumask_subset(cs->effective_xcpus, parent- >effective_xcpus))
->>>> -                cpumask_andnot(tmp->addmask, cs->effective_xcpus,
->>>> -                                 parent->effective_xcpus);
->>>> -            if (!cpumask_empty(tmp->addmask))
->>>> -                isolated_cpus_release(cs, tmp->addmask);
->>>> -            /* Expansion of parent's effective_xcpus is handled below */
->>>> -        }
->>>>            if (nocpu) {
->>>>                part_error = PERR_NOCPUS;
->>>>                if (is_partition_valid(cs))
->>>> @@ -2341,18 +2287,12 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->>>>                    /*
->>>>                     * When parent is not a valid partition root,
->>>>                     * child partition roots become invalid too.
->>>> -                 *
->>>> -                 * For a to be invalidated isolated partition,
->>>> -                 * call return_isolated_cpus() to remove the
->>>> -                 * relevant CPUs from isolated_cpus.
->>>> +                 * The isolation state of their CPUs has been
->>>> +                 * settled when the parent gave them back.
->>>>                     */
->>>>                    if (is_partition_valid(cp))
->>>>                        new_prs = -old_prs;
->>>> -                if (old_prs == PRS_ISOLATED) {
->>>> -                    cpumask_copy(tmp->delmask, cp->effective_xcpus);
->>>> -                    isolated_cpus_release(cp, tmp->delmask);
->>>> -                }
->>>>                    WRITE_ONCE(cp->prs_err,
->>>>                           is_partition_invalid(parent)
->>>>                           ? PERR_INVPARENT : PERR_NOTPART);
->>>> @@ -3108,7 +3048,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
->>>>        if (!is_partition_valid(cs))
->>>>            reset_partition_data(cs);
->>>>        else if (isolcpus_updated)
->>>> -        isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
->>>> +        isolated_cpus_update(new_prs, cs->effective_xcpus);
->>>>        spin_unlock_irq(&callback_lock);
->>>>        /* Force update if partition is disabled & update effective_xcpus */
->>>
->>> The code change looks good to me. However this is not just a code restructuring, it also includes a bug fix. I wonder if we should clarify that and maybe add a Fixes tag.
->>>
->> Hi Longman,
->>
->> Thanks for the review. You are right, it also fixes the isolated CPU
->> leak reported by Guopeng [1]. When a root partition with an isolated
->> child partition is invalidated, partition_xcpus_del() gives the CPUs
->> back to the parent without updating isolated_cpus as both are root
->> partitions, so the CPUs of the isolated child are left in
->> isolated_cpus.
->>
->> I'd like to describe it in the commit message and add the following
->> tags in the next version:
->>
->> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
->> Reported-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->> Closes: https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
->>
->> Does that look OK to you?
->>
->> [1] https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
->>
-> Hi Ridong,
-> 
-> Since I've dropped my patch, I haven't added the reproducer to the selftests separately. If it's convenient, could you also include it in test_cpuset_prs.sh in v4?
-> 
-Hi Guopeng,
+However, some architectures, including RISC-V, may implicitly grant
+read permission to PROT_WRITE mappings. On such architectures,
+MADV_POPULATE_READ succeeds, causing the test to fail incorrectly.
 
-Thanks for the suggestion. I looked into it, but the reproducer doesn't
-fit into the existing test matrix for now.
+Check the actual VMA permissions through /proc/self/maps and adjust
+the expected result accordingly.
 
-To trigger the leak, the root partition has to take all the CPUs of the
-top cpuset except one, and that last CPU is then offlined. So the CPU
-list depends on how many CPUs the machine has. The test matrix only
-uses fixed CPU lists within CPUs 0-7, and on a machine with more CPUs
-the top cpuset keeps the others, so offlining one CPU doesn't
-invalidate the partition.
+Add a PROT_NONE test to verify that MADV_POPULATE_READ still fails
+with EINVAL for mappings without read permission.
 
-It would need a separate test function outside the matrix. The
-selftest is already large and getting hard to maintain, so I'd rather
-not add a special case for it. Instead, I put the reproducer in the
-commit message of patch 1 in v4, so it can still be used to verify the
-fix.
+On RISC-V with Linux 7.2.0, the original test fails 1 out of 16
+tests, while the updated test passes all 17 tests.
 
+Signed-off-by: Xionggui Chen <chenxionggui@lanxincomputing.com>
+---
+ tools/testing/selftests/mm/madv_populate.c | 67 ++++++++++++++++++++--
+ 1 file changed, 63 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
+index 7fce5d0b622b..818f99ee2004 100644
+--- a/tools/testing/selftests/mm/madv_populate.c
++++ b/tools/testing/selftests/mm/madv_populate.c
+@@ -69,10 +69,38 @@ static void test_prot_read(void)
+ 	munmap(addr, SIZE);
+ }
+ 
++static int mapping_is_readable(void *addr)
++{
++	FILE *maps;
++	char line[256];
++	unsigned long start, end;
++	char perms[5];
++	int readable = -1;
++
++	maps = fopen("/proc/self/maps", "r");
++	if (!maps)
++		return -1;
++
++	while (fgets(line, sizeof(line), maps)) {
++		if (sscanf(line, "%lx-%lx %4s",
++			   &start, &end, perms) != 3)
++			continue;
++
++		if (start <= (unsigned long)addr &&
++		    (unsigned long)addr < end) {
++			readable = perms[0] == 'r';
++			break;
++		}
++	}
++
++	fclose(maps);
++	return readable;
++}
++
+ static void test_prot_write(void)
+ {
+ 	char *addr;
+-	int ret;
++	int ret, readable;
+ 
+ 	ksft_print_msg("[RUN] %s\n", __func__);
+ 
+@@ -80,9 +108,19 @@ static void test_prot_write(void)
+ 	if (addr == MAP_FAILED)
+ 		ksft_exit_fail_msg("mmap failed\n");
+ 
++	readable = mapping_is_readable(addr);
++	if (readable < 0)
++		ksft_exit_fail_msg("Cannot determine VMA permissions\n");
++
++	errno = 0;
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
+-	ksft_test_result(ret == -1 && errno == EINVAL,
+-			 "MADV_POPULATE_READ with PROT_WRITE\n");
++
++	if (readable)
++		ksft_test_result(ret == 0,
++				 "MADV_POPULATE_READ with readable PROT_WRITE mapping\n");
++	else
++		ksft_test_result(ret == -1 && errno == EINVAL,
++				 "MADV_POPULATE_READ with write-only mapping\n");
+ 
+ 	ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
+ 	ksft_test_result(!ret, "MADV_POPULATE_WRITE with PROT_WRITE\n");
+@@ -90,6 +128,26 @@ static void test_prot_write(void)
+ 	munmap(addr, SIZE);
+ }
+ 
++static void test_prot_none(void)
++{
++	char *addr;
++	int ret;
++
++	ksft_print_msg("[RUN] %s\n", __func__);
++
++	addr = mmap(0, SIZE, PROT_NONE,
++		    MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_msg("mmap failed\n");
++
++	errno = 0;
++	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
++	ksft_test_result(ret == -1 && errno == EINVAL,
++			 "MADV_POPULATE_READ with PROT_NONE\n");
++
++	munmap(addr, SIZE);
++}
++
+ static void test_holes(void)
+ {
+ 	char *addr;
+@@ -266,7 +324,7 @@ static void test_softdirty(void)
+ 
+ int main(int argc, char **argv)
+ {
+-	int nr_tests = 16;
++	int nr_tests = 17;
+ 	int err;
+ 
+ 	pagesize = getpagesize();
+@@ -280,6 +338,7 @@ int main(int argc, char **argv)
+ 	sense_support();
+ 	test_prot_read();
+ 	test_prot_write();
++	test_prot_none();
+ 	test_holes();
+ 	test_populate_read();
+ 	test_populate_write();
 -- 
-Best regards
-Ridong
+2.53.0
 
