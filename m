@@ -1,52 +1,52 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794527995;
-	b=4x8eW6jIytIa1LLcAWWfkjLUbWkDjLTLi51SjV70iOqph83m/hgRNwOGcS/1UBmkU/US
-	 5zB2dTJuCJLbJTzXFT+4s8EKRKP+5yy132IYuRcKf5+fSzmjyoDNiqCYWqx8bnR+A1jWr
-	 eAqp2KGTW/KJ6FJfXjwErHGM8RAwLeWmzq3Qv1ujj3fC79M2GKR/2myHcA26Oh06wmXsY
-	 SbkrD5qj+2axVcclO8IuKfcVZzlAyt1dmbuGURGFOQKunWohU3v7tO9CdnOPhaz6IULMY
-	 Q/mclw58b2Zr8aoHslH7nJ4BiXuV3B2iVvV7HwaxweOvtIFoZ0zMUlovIGSQec+8BFg==
+	t=1794528003;
+	b=Xx+CsGRMeeX3CfpBsQFP3QpZg4nCJc11eevmzCAa8fM8YpN9oxjHhcvk7xd6tkHBcgDf
+	 lzVGNPmn2f+HN6qcYJW5kkIgDBIUvGxs8jp8a6AWR6sOvvn/9A6aD8ICG2fQ5EagIrR3K
+	 Jtk4HdqHbomYyCMdZ+KoSjEmx9H5jJfEucRtm0RtGYZJpZoGHcrlS91ejfX4aIHciRjd5
+	 mmclDJ3U0n0HlOCHDTSkDNKhNpSC7TqjZIo+Jo0ppgFnvklPn4Y+6f7RzUA0UBJlhcJg4
+	 mh8X8lmwsv8PxDmGgSnsnyy2CAXAdCxbr2S9LW10oxyV3lgmc0kKMPVPeldbwoVptPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794527995;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794528003;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=qv63BJZJpTuqn9oT/kkgXxBPtvhk9LgkyaQuITas9nE=;
-	b=396Ne7mwDkxxFJog55rzv7YkHoWGZoLAOQEhIb6p14Qh29xzR9M9rBOPtfbazVbW9eMj
-	 vf4J+xb7kv+5B03Ubgcxx/75TVxIZZNVXephzZwT+D++apEM+W2NjKPqQjvWFyYgB6UAl
-	 Swm8zF750ESlvirRe0a24T37pnphPCxypP4ckKGxcz5gQjXXUvY6vj3YKLtBsJmXuuXwg
-	 vOxmuV3osT2KG72XehGbmFD4o9ME3U6qDgLDSLB2RNYAyMJCroFMTrbiD4sXA9n5dFgeQ
-	 TzO8RwtLuyJsPLUhsAfD4mAJ/4N8q6eKsEmuwYwW5u++cq8qj7BK2X68OA0pwv/N1ew==
+	bh=BOTklJYt8KH7rFlZVdBoknjaS+NDwDtd3MuPB3oLLOc=;
+	b=jPyYa3FGNrZ/E0R3s9JZu2BKzZqdDHYM9R87vvawXNGHLEKhMrmZJDJB5IC+FhmuxOaV
+	 YHKG/q5D2pJWckp/Bz6Eb2WTxL4ap2hfO1PU6UiY4eTc2kidpUIdRFh6zY5ibI/Dmh3dH
+	 qSt5vnh62U7J2Y++uOABfQmI3C0eBNBMEWOtpvqOZD5GgT499LXEU/DI7uwM4FCXK1ccx
+	 /nfOWFZWBjzq4E1i2mGSyjGvXmD1XKATSH64c7VNsiS1DPe31BFUWRXEa2UHo7+HdPaEY
+	 fOgYbiYnJ6u863OyQUCKgdGhempyzCsB+QWY9RDj4UZkWn3/SlQqRNvheMcywc+b8aw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=grapheneos.org;
 	spf=pass smtp.mailfrom=grapheneos.org;
-	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=Dz9FIiUP;
+	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=c+9fpAX5;
 	arc=none smtp.remote-ip=206.220.120.4
 Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5E9606A327;
-	Thu, 12 Nov 2026 23:59:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B5E9606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E84606A33D;
+	Fri, 13 Nov 2026 00:00:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8E84606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=Dz9FIiUP
-Received: by mail.grapheneos.org (Postfix) id 5F1D23C08EE90;
-	Thu, 12 Nov 2026 23:59:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=c+9fpAX5
+Received: by mail.grapheneos.org (Postfix) id 551C03C08EEA4;
+	Thu, 12 Nov 2026 23:59:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
-	s=default; t=1794527994;
+	s=default; t=1794528001;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qv63BJZJpTuqn9oT/kkgXxBPtvhk9LgkyaQuITas9nE=;
-	b=Dz9FIiUP20f/k1yraDdTBqh6VRj7eFvi6Pb4XjJSWztaEAW3O81rZmC8RPBxGCCCxkhzvN
-	2H5JNvbM5xyIbZzhZFlO1MotD7njvO947CSaFR+jDgO1J3yrSdA+Se1zHXFpW+BHT9nODw
-	2Lpa+qGJSpVtqWJg8mZFP3EejsOZ00kP+UpQGxpoTJR70EEv6I7gxftmaISMdtQaBS9DfE
-	KuhF3vqbFTXWtC8LKtXU70DmbbhlvyQpVmlkRm+1bJ3YWGyGsI0c8Wg90MQ9yQlN0T9TFr
-	b36SvQHGLRMaqhD4HdaqVPoR3dTlSGuPwVaZhaWG98dvOYf69Bm/ZKoDiYgaGQ==
+	bh=BOTklJYt8KH7rFlZVdBoknjaS+NDwDtd3MuPB3oLLOc=;
+	b=c+9fpAX5gW+5t+H3ZktJL3Xgdt4urTLlOnpN75Mn+17fKIb3/Oy7eTXq7ZPX0vt4pgL0hL
+	H4Mgxs/fMY/3z1c4CiD4E0aValV8k72XXREkNLZurzPp0LXkl9vB4f399z2cbQ+g6UwNWd
+	6Hplqe7qWVa/pECcQQnAGp5As/PMwXuWpI/m2PZPnfSIwSz4dEPRwPCu6gwtuh4IgebKpV
+	HFAHbk+Komm3Oz5Df3aw/N4jwe+IcOGPW+qoc5BWMkZtSkGf2WMTGP+6Mlvc+a5uPtqw2S
+	CE1aC+ktdXYSzvz3Q15jx2dpmMz9AMw320OWyBIF3jJ/4e5N5vDm1vUFxtllPg==
 From: liamsmith827 <liamsmith827@grapheneos.org>
 To: netdev@vger.kernel.org
 Cc: David Ahern <dsahern@kernel.org>,
@@ -60,9 +60,9 @@ Cc: David Ahern <dsahern@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Liam Smith <liamsmith827@proton.me>
-Subject: [PATCH net-next v3 1/4] ipv4: add FIB_LOOKUP_REPORT_MISS
-Date: Thu, 12 Nov 2026 23:59:29 +0000
-Message-ID: <20261112235932.23836-2-liamsmith827@grapheneos.org>
+Subject: [PATCH net-next v3 2/4] ipv4: restrict on-link fallback to lookup misses
+Date: Thu, 12 Nov 2026 23:59:30 +0000
+Message-ID: <20261112235932.23836-3-liamsmith827@grapheneos.org>
 In-Reply-To: <20261112235932.23836-1-liamsmith827@grapheneos.org>
 References: <20261112235932.23836-1-liamsmith827@grapheneos.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -78,76 +78,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Liam Smith <liamsmith827@proton.me>
 
-Currently, fib_lookup() returns -ENETUNREACH for both a routing lookup
-miss and an unreachable rule. These two cases must be distinguishable to
-facilitate a fallback that only occurs when there's a miss.
+For non-vrf unicast, the on-link fallback currently occurs regardless of
+the particular error returned by fib_lookup(). As a result, routes and
+rules that are supposed to restrict traffic (blackhole, prohibit,
+unreachable) are unable to do so comprehensively.
 
-Add a new FIB_LOOKUP flag that instructs lookups to return -ESRCH when
-there's a miss.
+A specific example of this being a problem is within Android, where the
+VPN "kill switch" is implemented with prohibit rules. Any process that
+can set flowi4_oif (SO_BINDTODEVICE, IP_UNICAST_IF, IP_PKTINFO, etc.) is
+able to utilize this fallback, meaning unprivileged Android apps can
+trivially bypass the VPN. This is particularly bad on cellular networks,
+where ARP is often not needed.
+
+Restrict the fallback to routing lookup misses.
+
+This was originally observed on an Android device, by way of packet
+capture.
+
+Tested fcnal-test.sh in UML with CONFIG_IP_MULTIPLE_TABLES both enabled
+and disabled.
 
 Signed-off-by: Liam Smith <liamsmith827@proton.me>
 ---
- include/net/fib_rules.h | 1 +
- include/net/ip_fib.h    | 6 +++---
- net/ipv4/fib_rules.c    | 2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ net/ipv4/route.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/fib_rules.h b/include/net/fib_rules.h
-index c6b94790fa81..df1cb39ddf92 100644
---- a/include/net/fib_rules.h
-+++ b/include/net/fib_rules.h
-@@ -59,6 +59,7 @@ struct fib_lookup_arg {
- 	int			flags;
- #define FIB_LOOKUP_NOREF		1
- #define FIB_LOOKUP_IGNORE_LINKSTATE	2
-+#define FIB_LOOKUP_REPORT_MISS		4
- };
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index 595a3b7f1783..03db105303b4 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -2849,12 +2849,13 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
+ 		goto make_route;
+ 	}
  
- struct fib_rules_ops {
-diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
-index 92f4eb8b86d7..d0b4f261585a 100644
---- a/include/net/ip_fib.h
-+++ b/include/net/ip_fib.h
-@@ -318,7 +318,7 @@ static inline int fib_lookup(struct net *net, const struct flowi4 *flp,
- 			     struct fib_result *res, unsigned int flags)
- {
- 	struct fib_table *tb;
--	int err = -ENETUNREACH;
-+	int err = -EAGAIN;
- 
- 	rcu_read_lock();
- 
-@@ -327,7 +327,7 @@ static inline int fib_lookup(struct net *net, const struct flowi4 *flp,
- 		err = fib_table_lookup(tb, flp, res, flags | FIB_LOOKUP_NOREF);
- 
- 	if (err == -EAGAIN)
--		err = -ENETUNREACH;
-+		err = (flags & FIB_LOOKUP_REPORT_MISS) ? -ESRCH : -ENETUNREACH;
- 
- 	rcu_read_unlock();
- 
-@@ -398,7 +398,7 @@ static inline int fib_lookup(struct net *net, struct flowi4 *flp,
- 		err = fib_table_lookup(tb, flp, res, flags);
- 
- 	if (err == -EAGAIN)
--		err = -ENETUNREACH;
-+		err = (flags & FIB_LOOKUP_REPORT_MISS) ? -ESRCH : -ENETUNREACH;
- out:
- 	rcu_read_unlock();
- 
-diff --git a/net/ipv4/fib_rules.c b/net/ipv4/fib_rules.c
-index 060501b376a8..3d7dcb8d0865 100644
---- a/net/ipv4/fib_rules.c
-+++ b/net/ipv4/fib_rules.c
-@@ -101,7 +101,7 @@ int __fib_lookup(struct net *net, struct flowi4 *flp,
- 		res->tclassid = 0;
- #endif
- 
--	if (err == -ESRCH)
-+	if (err == -ESRCH && !(flags & FIB_LOOKUP_REPORT_MISS))
- 		err = -ENETUNREACH;
- 
- 	return err;
+-	err = fib_lookup(net, fl4, res, 0);
++	err = fib_lookup(net, fl4, res, FIB_LOOKUP_REPORT_MISS);
+ 	if (err) {
+ 		res->fi = NULL;
+ 		res->table = NULL;
+ 		if (fl4->flowi4_oif &&
+-		    (ipv4_is_multicast(fl4->daddr) || !fl4->flowi4_l3mdev)) {
++		    (ipv4_is_multicast(fl4->daddr) ||
++		     (!fl4->flowi4_l3mdev && err == -ESRCH))) {
+ 			/* Apparently, routing tables are wrong. Assume,
+ 			 * that the destination is on link.
+ 			 *
+@@ -2879,6 +2880,8 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
+ 			res->type = RTN_UNICAST;
+ 			goto make_route;
+ 		}
++		/* Reverse the mapping induced by FIB_LOOKUP_REPORT_MISS. */
++		err = err == -ESRCH ? -ENETUNREACH : err;
+ 		rth = ERR_PTR(err);
+ 		goto out;
+ 	}
 -- 
 2.47.3
 
