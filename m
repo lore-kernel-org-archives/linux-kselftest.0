@@ -1,67 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794470295;
-	b=3tZdoiqujNSRg2JS/xkw4ofbdYsQ2phx5aCQVQK1WBo8zHF4tkxhxLvKDzZvGVsiTN9Z
-	 waE9j4mPmaUHjmRaYdpg5Lc2grKARomvOqMWxm0Ygyd4zfBefSxu4t+F5eyd5kwGBGsdi
-	 MILT8rc8S+PBv8QsKopQ6oPtJcLVmDQ7Of1iAx/aGawFJ4ZK9CgoYPjWNF5Swsx261NiA
-	 Aisor7QFZzORKUpnmeuzaFdBILiXF4ymFkaSx41Gk794GWIig7qoGROaIQUpJxjV+3F9V
-	 /y83hG3tn+Z5yd5OMg4rMJtGfikp3MY+qC7dSRQ25WsbdBBr7bD8qYyRm2bdxpjHRgw==
+	t=1794470305;
+	b=UALl7rnMG3kxvMOgvmrzDIPkK9ssg8Gf9YTkSIPaIXFFHJFaCtIxLcOjpZEkkCXge3pk
+	 C5DPWAbdu2J21y2woNP8f5W21+ALYZGdV2t0Kx+beUpndOXSEZYv3LhWQu0MXKgVwPFbg
+	 XlRxZOpwHX5Ps4DxJe1b9GtWxpKWdpMT8pzBG9hGhrK5s+QSoXyfNACLf+qJP3qPEHRMe
+	 P5SWFbn8WPr5bXQlGIpWk2ayu9aaWmYjXekiq9veY37R/3cZzj3BEHYKApKa1wg5nxlbC
+	 q/UNEbv+sCq1ePl5pRuKuhqALcMFdb0U5uSxeImoO5/Vc2+QgP9G4HQS8z8y3UAPN3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794470295;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794470305;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=owjWlmr1RZxKH+9vBGpAZpDwjzAy6fCU9wzGVyPy1fU=;
-	b=1d893khOjuoVdCqNfrRAxATYZf6kNRW5TKiP/Z9km2qpB0QgUW4RvjAtiC5bnrhDO9Q7
-	 su2JC4B62B67F5IjF4Pheas3FYQVs2z/DO8IOaJX2Vr+fSz/xGdiv2LrRoNUL+yXfqbRo
-	 v6wKMbvLHOVSo4sNOB/qoaqntWDSrB40pyIh7r70PjpxLgjk4p3J5GdOQdVHUpfXxjcSl
-	 lq4YA5DULUbrOYhEePnkIemVdcqndYDwqT8kox+bs/gFdu/w4Lb6Doqva2iccmEeMwqfh
-	 9cwKOKAwEnYtP/PCtYnH2/bSgnWXxPp3429kEywqUydJ6/7RBiYf0prvPkHzrpUoEzw==
+	bh=J8baeEDTu5OVHYiB1EXVa2hEXMKqyhqoH/nQJtiPgfI=;
+	b=TC9ge0m//KwaLspi0eUhV5FcEnJrLTIswIkHt9e/pR/rtTJuP04vztrW/jI5KBZG00+c
+	 sBBLhdfkuV66pHUHVZMKeaOu0SEp2VO02PJp5lPy9HhcZ+3mPl7U7ndamC2o1kT/poS0e
+	 BsIergRpSIF3tpPXPlKU1V+KxfJQiHrxsE8zq6kk2oGm+OuCSm3VudXxVPfynY1/1g3sI
+	 364Y1QsVUlpa45CuaxbwR22qH3tpxOxTTUSfLzEonqZO0F8X2JGCTeg8UjhpoJl6vE0lz
+	 KABTDfnOj9MBqhqe3BEyysiwsDHALAJA1+ngGE4/0y3cf1ViWbdprguFvYtzKIPi+aA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=ApG+FbZK;
-	arc=none smtp.remote-ip=111.22.67.139
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0854606A321;
-	Thu, 12 Nov 2026 07:58:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0854606A321
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=wjN0HbQ1;
+	arc=none smtp.remote-ip=111.22.67.135
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82552606A333;
+	Thu, 12 Nov 2026 07:58:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82552606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=ApG+FbZK
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=wjN0HbQ1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=ApG+FbZKloocp0D3HIoLNqMTIFuy5z+Pbz178jxh0JcZ8vbMtiTvEA71QTAxHz5rql7Zzn6w34kJu
-	 Amr95cRsh0+F/rin4+WNN0ivt2oIxp2yib9MtnjsS6BXArMg89y6Ww6o456ZebCzeMqy6jdNQcvxlY
-	 iyqpWR/RkB9kOogc=
+	b=wjN0HbQ1UJgEwxELuwu58BfNZE+anSehR+B9rr2YqtHz6y9e/7TBqfJYsUDBTyh4BsPuFoOgOAGZG
+	 dhmv0cbeITwpcXLHDT3gpylnj/V8m394l3k4h63WEn286UdWrS15Nhy3gDx5QUnAiiRu7Or2ol4/gm
+	 3bPHxC5caWU6WG4Q=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee16af571901d7-bb76e;
-	Thu, 12 Nov 2026 15:58:10 +0800 (CST)
-X-RM-TRANSID:2ee16af571901d7-bb76e
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76af57166cd0-e0743;
+	Thu, 12 Nov 2026 15:57:29 +0800 (CST)
+X-RM-TRANSID:2ee76af57166cd0-e0743
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from [198.18.0.6] (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee26af57191086-f859b;
-	Thu, 12 Nov 2026 15:58:10 +0800 (CST)
-X-RM-TRANSID:2ee26af57191086-f859b
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af57160cfd-f8137;
+	Thu, 12 Nov 2026 15:57:29 +0800 (CST)
+X-RM-TRANSID:2ee76af57160cfd-f8137
 From: Xia Yan <yanxia@cmss.chinamobile.com>
-To: Jin Li <jinli@lanxincomputing.com>, netdev@vger.kernel.org
-Cc: Hangbin Liu <liuhangbin@kylinos.cn>, hangbin.liu@linux.dev,
- dsahern@kernel.org, idosch@nvidia.com, shuah@kernel.org, davem@davemloft.net,
+To: Pin-yen Lin <treapking@google.com>, netdev@vger.kernel.org
+Cc: j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- linux-kselftest@vger.kernel.org, yana06070@163.com
-Subject: Re: [PATCH net v2] selftests: net: forwarding: replace bash brace
- expansion with seq
-Date: Thu, 12 Nov 2026 15:58:09 +0800
-Message-ID: <1794470289000.677730.6981049676553902648@cmss.chinamobile.com>
-In-Reply-To: <20261110024123.535210-1-jinli@lanxincomputing.com>
-References: <20261110024123.535210-1-jinli@lanxincomputing.com>
+ yana06070@163.com
+Subject: Re: [PATCH net] selftests: bonding: fix failover race in
+ bond_options.sh prio test
+Date: Thu, 12 Nov 2026 15:57:21 +0800
+Message-ID: <1794470241000.677408.1894102218415876135@cmss.chinamobile.com>
+In-Reply-To: <20261112014942.2946303-1-treapking@google.com>
+References: <20261112014942.2946303-1-treapking@google.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,19 +74,20 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On 11/10/26 02:41, Jin Li wrote:
-> {1..16384} is bash-specific brace expansion and will not work with POSIX
-> shells like dash or busybox ash. This breaks the flowlabel test when
-> /bin/sh is not bash.
+On 11/12/26 01:49, Pin-yen Lin wrote:
+> The prio test intermittently fails in the arp_ip_target and
+> ns_ip6_target variants:
+>
+>   TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL]
+>   	Current active slave is eth0 but not eth2
 
-I ran both loop forms under dash and busybox ash. The old form
-hands the inner shell a literal {1..16384}, so the loop body runs
-once. With the patch it runs all 16384 iterations, and the spliced
-$PING6 expands to the same command line as before.
+I traced the timing through bond_ab_arp_inspect(). With
+arp_interval 100 and the default arp_missed_max of 2, the active
+slave is marked down after 200ms without a receive and the backups
+after 300ms, matching the timing analysis in the commit message.
 
-555e5531635a replaced $(seq 1 16384) with {1..16384} in these
-three scripts and nowhere else, so the Fixes tag is accurate. The
-rest of the forwarding directory has no sh -c call sites.
+All four link-down sites in prio_test() use the new helper, and
+the Fixes tag is right.
 
 Reviewed-by: Xia Yan <yanxia@cmss.chinamobile.com>
 
