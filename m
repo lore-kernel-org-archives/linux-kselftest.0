@@ -1,95 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794511188;
-	b=cIJ1YaCyzlupO804MrEjJxHk6WIm+2GH5bO2f9eDZeKniDSaUWnO9gPybvWf6pj0M8kz
-	 yfU6nLNbMZDVj98yexgrtiyyeqlTWE6XFHLoHVjl8SAQrGJX0ltTbru0TSXbPH8zRwWV8
-	 21Eu2X06FhrJkwE2anXtf7RxZboDBDdT8ZfJbE6yLfAN59drqJMgVzmEFrDTEEoCyj+BO
-	 BdPsXj5P8EiVC5+NYJ/AQfFzrNBjrh5MOdu65Z2YAEskfJ7HdcUzZLfdkHw4Z8iT1c+eB
-	 kzzTXKdby2FFl2/UbDydECVXoMuUzE74jKnhb1ZrXtB+dax/Rwi+sBUOfFKCR3v79IA==
+	t=1794511208;
+	b=CyaZt5v+RhJsTmlHrsSIt+9uxtMvr+BnmCGdm1qYu44P78OJNk2ajhejARspl0ajLtGH
+	 wUZ8caX30lNffKdqWN//APUiHU90GfVmBvXIxC3MlQ5eganmuBPdxXrB8GG3pK6xMTlC7
+	 KYEl3V1As0ZxFArq8f4GQGXkGgK69rbmipuz4VQUNlYe85zxSYn86NqKtZUuJjE9lck+o
+	 JYQQaGwg0t/z2wazAizNNzuiolqMPEzzHE8Yc0yreyOTJ/Lyd6SwOqDXlG65HzboRaxqG
+	 89pyppF1pQeKcg73SX71L8unslF6L3gX90AJErNs2yKQXbwR93B3s604yKnzRSIDZ8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794511188;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:X-Authority-Analysis:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version;
-	bh=a/3/vOknZNV5rMhfsRlvw02gGnblZnfFUGDt0wyzhjE=;
-	b=w8Ns7z30usfY+so0CfnjJleSgRqMc81Z5toqf6X55mEBYXozSc3Qo/BAPcb4J29ghE8c
-	 s98Du2JoeA3Ft+7d02waDSxStaxkNLfpNF1gk3XuoIVrdnRUFFmFVNY8W/XeZt8ZJpu/j
-	 WFfe+tMAFQ8kNxh2a3VdwbuRO9pwP3K2PzDlj52p3tFsjGEmnQae9kp7M7gC91PIFtJAJ
-	 06OHZtJgMegaRqLvNIszKwNIEnysXLSU04+SkNvc2HLLz1i6w7/RfCRAx+WgTqNzULUlg
-	 1IqT1jh8z4Vrk6q9KdDAZn7goj5tHtw4VbfPnvb2KD9TVEPp+vUQIDe13cpI7KCUWQw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794511208;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=Q6wHwgO5G+c57cKjEl6kAP/TFf8wRK6vv17rmHXwRU0=;
+	b=uReBgeDMADuX4L+nSDJn+yhxEAz1IJH8K8E5O4mUYgRV5KCvhomxxhQ76zaJM9a6QrX8
+	 QIQ5rQ+kSyZPE17Od8HzjUa8c979zswQkR+Aa01q/wfJ5fKY/i024+ZvCEE/zD56cR9Ib
+	 NCmprEaZ3ingmY4yZsFrmzFlwwFX2+lIredAswI+DZK3VB0gM8+MDnfCL5oMc/UujxbO8
+	 qluftO+x+E5pPqPrZM3/tUKQ6H4ze+CXAHSJjKdtSAZAIf/Z75gizLMM1IGY6IYk2eAne
+	 PtJW/xM8Mxop5hiP8IoHrjZF5S6kxU0A2PYJXIUnPiUfv6uYO9WIGx9fxLKT4W0/rHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=meta.com;
-	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ReSOOSyy;
-	arc=none smtp.remote-ip=67.231.153.30
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RwwJOTX4;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9498606A31C;
-	Thu, 12 Nov 2026 19:19:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9498606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76015606A31C;
+	Thu, 12 Nov 2026 19:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ReSOOSyy
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ACFapVR3401241;
-	Thu, 12 Nov 2026 11:19:16 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pps82601-s2048-2026-q3; bh=a/3/vOknZNV
-	5rMhfsRlvw02gGnblZnfFUGDt0wyzhjE=; b=ReSOOSyylrPqQ7w5znHrlGE8xe5
-	SRq+nMfSWT9+K3w+QUWwgPFl18x3t8ZXFwVDYz8hzD0ukBdvnAXhHPR5hDNzXYia
-	aIihrOdNs5daQ8LmrSNo9p8y7iFxcu/fzoSy0jp185nK8K00p875CxDwNBZq9/aw
-	58lWmQWM2WF+Ob9S4vaoNqEAf8TT9oHqaT8YpssjLnJ1UvZJgkZMS12AM4FFfVSt
-	WSes2w+bUupqKzGdsWbVHyKtN8emlkxnK4XoHnSBxwkoSZkybMBfL3AooSUuDK+y
-	+Ry8GGkx3VTTUy+aemx2CdOtJi6eni9KrHkdFjhhR3AgWNK+/wjgKPnTc6A==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hvaudygk7-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 12 Nov 2026 11:19:16 -0800 (PST)
-Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
- (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 12 Nov
- 2026 19:19:14 +0000
-Date: Thu, 12 Nov 2026 11:19:13 -0800
-From: Bobby Eshleman <bobbyeshleman@meta.com>
-To: Michal Luczaj <mhal@rbox.co>
-CC: Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller"
-	<davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>,
-        Simon Horman <horms@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Stefan Hajnoczi
-	<stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang
-	<jasowangio@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Eugenio
- =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Shuah Khan
-	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Donald Hunter
-	<donald.hunter@gmail.com>,
-        Eric Dumazet <edumazet@kernel.org>, <virtualization@lists.linux.dev>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>,
-        <jlinbox@meta.com>
-Subject: Re: [PATCH net-next v5 4/7] vsock: add a netlink command to assign
- the g2h device to a netns
-Message-ID: <avYRMQww+ui4uPkz@devvm29614.prn0.facebook.com>
-References: <20261103-vsock-guest-ns-v5-0-48179b9b66b8@meta.com>
- <20261103-vsock-guest-ns-v5-4-48179b9b66b8@meta.com>
- <c34123f3-e006-4c25-b8d7-cdf0784926f4@rbox.co>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RwwJOTX4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086671F000C4;
+	Thu, 12 Nov 2026 19:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794511208;
+	bh=Q6wHwgO5G+c57cKjEl6kAP/TFf8wRK6vv17rmHXwRU0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=RwwJOTX4k1xui9bHfKR1mYYhZUkgc+oAxPlifVj+uJFD9pOM3D2f+oxmbfk4VUmI0
+	 aRAlOTuI8W2DAe+rKxNT/GC8oqA4QwpOUVr187XLbrm144AwvMtAsuLRGc5O5shaGZ
+	 D0MVy7PqK/+9GIMjD47q+/QeDlXanra7gCZmo+d36swCKkpRPpKiVhCI0BHbfElDrc
+	 /Ib6hd4NCR3jZI8xGgpleG5jQeGF7Dfbuh06MZTHrT08Z005lMtSpzULyA51AlCprt
+	 /kl1aFEU4WAoZZDbghPpvKjVSbTg9Qs9Ui37b/H1+oXYi97ktnAKzJ/zdFVBs4LWXM
+	 hbG9cuKRmpwhA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15C0392624F;
+	Thu, 12 Nov 2026 19:20:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -99,59 +53,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <c34123f3-e006-4c25-b8d7-cdf0784926f4@rbox.co>
-X-Authority-Analysis: v=2.4 cv=AKwTwrWT c=1 sm=1 tr=0 ts=6af61134 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22 a=VwQbUJbxAAAA:8
- a=Bgyc4cfSFuLOcWupkI0A:9 a=CjuIK1q_8ugA:10 a=zZCYzV9kfG8A:10
-X-Proofpoint-GUID: _cVSF3NSQ_uvq6t-vYkVz_6cKrlEOdZl
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEyMDA3NyBTYWx0ZWRfX3ZEYaRYhoxQ8
- usrYrAigjaSSywUkrAML7m082FIZ9ahPa6osa/uLjGeURPOoNHW2DhRuRRqH8MO5qwe2ciVft8x
- NzE7lxNSVPJe1XXp4Iu0HiPfj/GkiZbi02cvfDvuuS1vqU0Dny9tFRHJC3vtiINZYIGuWEUewzN
- /pMtixzbQdUxfpN1rfc6nnBqAYW9q0Ky2ibw9EME0SEzeY7HcGeT2r5acmDJw0SBasnebv2sJlr
- LOI44viL/MzNw28pNFndfNU3SA9UhdAjQ4D7hArvOtZ7qvUs5y1MXsC6daoxsnOk2WaxPJ26iKd
- i8ii47IdwImq/MU8O5a30jphsmPyMdE6uBQGDiLehzjiXvuJyoYLckgbgQgywBSY8qgj+uq7rjL
- mkuSU6j7uiGvjX7zfAwE6UzWaBPzhUdmmcIOGq/Rao8qXqZ9wDo1sRuegm/RrlJTdCtyMCNC/qg
- DbgNkydXQ0fm7nWHtNQ==
-X-Proofpoint-ORIG-GUID: _cVSF3NSQ_uvq6t-vYkVz_6cKrlEOdZl
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEyMDA3NyBTYWx0ZWRfX0xgaferDqxVz
- fMjqjg/jghUeB/xn0OclUvGqHgL1ZiEL1sSDvdnPbjicEh9BXwwcUZZaGmFvNK+/7wz5h2yn+we
- AGI5UprcQ0+lFYfR17uH1zSuSF+OCBQ=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-12_02,2026-11-11_03,2025-10-01_01
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 0/5] net: tls: break the connection after a burst
+ of
+ empty data records
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179451120678.604801.8398607800818615102.git-patchwork-notify@kernel.org>
+Date: Thu, 12 Nov 2026 19:20:06 +0000
+References: <20261111185522.2859004-1-kuba@kernel.org>
+In-Reply-To: <20261111185522.2859004-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ sd@queasysnail.net, john.fastabend@gmail.com, shuah@kernel.org,
+ cel@kernel.org, linux-kselftest@vger.kernel.org
 
-On Thu, Nov 12, 2026 at 11:34:49AM +0100, Michal Luczaj wrote:
-> On 11/4/26 02:53, Bobby Eshleman wrote:
-> 
-> > +/* Avoid breaking the socket when another thread has changed its sock->state
-> > + * while we were asleep.
-> > + */
-> > +static void vsock_connect_close(struct socket *sock)
-> > +{
-> > +	sock->sk->sk_state = TCP_CLOSE;
-> > +	if (sock->state == SS_CONNECTING)
-> > +		sock->state = SS_UNCONNECTED;
-> > +}
-> > +
-> 
-> It'd be nice to have it as a separate commit. If I'm not mistaken, this
-> itself solved the vsock_connect() vs. transport reset
-> (vhost_vsock_reset_orphans(), virtio_vsock_reset_sock(),
-> vmci_transport_handle_detach()) races. And those were already reported a
-> couple of times, including a recent NIPA/Sashiko Severity-Medium[1].
-> 
-> [1]:
-> https://lore.kernel.org/netdev/179447093204.2199510.8895677421994612994@kernel.org/
-> 
-> thanks,
-> Michal
-> 
+Hello:
 
-That's fair, will break out on its own.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks,
-Bobby
+On Wed, 11 Nov 2026 10:55:17 -0800 you wrote:
+> Deal with overload of zero-length TLS records. This is the next iteration
+> of Chuck's series. I tried to make it as simple as possible - break the
+> connection if sender floods us with zero-length records. Consume / discard
+> those records even on PEEK to avoid infinite rx_list growth.
+> 
+> https://lore.kernel.org/20261019-tls-follow-on-v6-0-ab01c4ecca0c@kernel.org
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2,1/5] tls: Break the connection after a burst of empty data records
+    https://git.kernel.org/netdev/net/c/201f0531e413
+  - [net,v2,2/5] tls: Consume empty data records in tls_sw_splice_read()
+    https://git.kernel.org/netdev/net/c/db6a6c6863bd
+  - [net,v2,3/5] selftests: tls: Skip the zero_len tests when TLS is unavailable
+    https://git.kernel.org/netdev/net/c/77389a6d30a2
+  - [net,v2,4/5] selftests: tls: Extend coverage for zero-length records
+    https://git.kernel.org/netdev/net/c/512f2cb73664
+  - [net,v2,5/5] selftests: tls: Cover the cap on consecutive empty records
+    https://git.kernel.org/netdev/net/c/e6dfa7bfdf15
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
