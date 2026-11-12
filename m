@@ -1,54 +1,141 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.221
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794476605;
-	b=LJ81rhXZ2RrwKnKJ6u8BND8hPzNMSUJs/E7iZZCtsRUeK5YsdEfC4oEUgXm874sd+dgx
-	 zuiaA2g6r/+JgQw3Z6mLqMh0EXtyqL3btlkLyummVoBDIOPUkt9+iVjrukswgl4QsF7fX
-	 xtkjzMqu5oKGgMZGZd9pC2i0q5zLFVIhP6V/h9680fM/Lyv9AQLYke0LB7yzl+X/P3I8m
-	 SFFJICblmqdhwAo19DkYV8jO5eumPKSJ0wPw+Uuq1bnMgZEqATx9Wwk82lm3brCcTROBP
-	 PCl+nWvpq6uxNTf1RHaLCmE3ASaJA46/OcukldFMVt+nXL080hlpPsy14eAMp4Wep2g==
+	t=1794477409;
+	b=w7MdqoF+DthD4UJdwJvdn42TPfOA8J1xRSPDH3BuzRGJ5AVx27//G5SB1p+N4zoVqn7u
+	 TO2deGJ2Vek7SLtjnqqY5z6tHeyz0j4c6AFSb+wS45yJNbqkyCBHSeMhCxAdrF9eNz2O7
+	 8L0aZY/5Hfp3TMpVCaiVAJG+EAM933AlTyLrJM13/zOWBMXwvzDCYq12mEHv1jxKbTJ03
+	 0l9j6a+cLO0DhK7xQi7kd22Ys32Ftke0IjST2zZsyXALFWzDpzPfA2UOKnUZK69SY2oxo
+	 +9l9P0ckEFHw4Hsz4nUQKCM/NT4lVrzsIYhy6lVbUBLN6jhUkxxdSEqExBSp2Y17/VQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794476605;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=rKdnxS57GFUNzWHbYzk3wFQLMm5VzC6vH9U5Eq0QCX8=;
-	b=tQPNLq6AGRAzikLCSFdnED2d+hFgvAW9oYIQORG9PNqBHT8edp4rZR//Vh0V6KicbvSw
-	 SYzPqCaEHdOcf+EQmIRs6f/GwxoVSMKy9OnIuIDqGYBNTAMcrF/MZVMWN7ohCo7ls54FE
-	 mkLwoWly5BQQwkNx2N49jfR42Zcn98xE8EJn50F0dwjpucxY4xEvwsArXRQLE71pT3+ko
-	 +IpoQl96OJ9NIEWqZWlsJVNEQgz+nuhSH49LRkK0C/NhilUAr98OKztyeFek8XG4T1PjF
-	 qS90Ri79xzvmSrC6zuXomISeIoLfQVAfDqjd6NensX7vSGx6IddMjj29e7mriVKlKkA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794477409;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=USgqRYo1pzMpiu0iJQxs9uW5L1POEPPKTWq3pDYoKws=;
+	b=HhmMK9bSax0dxaSmF7YLfhFKRgTqZOAbtOQh1NfBbfy/uC6k6I2cj4z72E8zzerN15K6
+	 uYfWjYFKgOyvPh4/JkMjTHmlGCxms4DjLQyuTirSaoXRR/BQP+vj9zkTj3slf9k1Xs+5E
+	 69XWz967XOVfyyH/LXzjTZoQVGl3oAyokHO0gOCu599a3ZiHFrMnxtiWg+ScE4xY/1sfG
+	 +BtimIwvH/CWAB89DLk2vwQdbr4M2xv+Jf2TfIsRaoNI0YVb7HHN/++6BQj2pVOYwGXAD
+	 bDMSQt008nIN4nQzCfYcUEv8Xm7uRjpP6PbjxxSKjX+KzXjy6ntWWvcOP72KyDB1JPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E6uUH2wg;
-	arc=none smtp.remote-ip=95.215.58.221
-Received: from mta1.migadu.com (out-221.mta1.migadu.com [95.215.58.221])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b="FViaeY/F";
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=FMX7+ls8;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC8F606A323
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 09:43:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CC8F606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C034606A338
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 09:56:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C034606A338
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E6uUH2wg
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=4eIDGo3k+kc5buVBqIe8K9KZqyIb/OYjgJvJowIrDa0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794476602; v=1; x=1795081402;
- b=E6uUH2wgh65Zqb9Nu42SO6efv/uPlAzfhoaOOgdOikI/UMz+WOf2gKPGLD5GnA5vuFRPM+Qd
- RTUuqGyPStI+xI9jcj9noDcmbVNnZOY3mTPagkboNXx10L3Tg73El/QzoENXJvTMGuk1/BYxyVK
- kVCcYxz2u1HToVLRKFC3CbU8=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 948a1701d48ce8a5;
-	Thu, 12 Nov 2026 09:43:22 +0000
-X-Mizu-Trace-ID: 948a1701d48ce8a5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <be68fe2a-b0e8-470c-be47-26780a254d53@linux.dev>
-Date: Thu, 12 Nov 2026 17:43:11 +0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=FViaeY/F;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=FMX7+ls8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794477407;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=USgqRYo1pzMpiu0iJQxs9uW5L1POEPPKTWq3pDYoKws=;
+	b=FViaeY/FWssV5yp+9X2vMzy1rtF1g/9h3EO/ivuRiEwkvhKGc+GV6XpX3Pdt3adHvSOCft
+	PR04p4+QUdfLgDwDRN0xBTyOeqgaVrVvZzt3zlb44fKTvjoXCmgYTE7g6wmFC+rJOal5Pz
+	e/t2ksgFtsPnHlJNx6A3TfrIFAiYObk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-596-UmqnEHvKPRqONk5B4hfNSg-1; Thu, 12 Nov 2026 04:56:45 -0500
+X-MC-Unique: UmqnEHvKPRqONk5B4hfNSg-1
+X-Mimecast-MFC-AGG-ID: UmqnEHvKPRqONk5B4hfNSg_1794477404
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48e011829easo2646869f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:56:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794477404; x=1795082204; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=USgqRYo1pzMpiu0iJQxs9uW5L1POEPPKTWq3pDYoKws=;
+        b=FMX7+ls84Vb8eRo52E3PB2BneJo+Sc8h3JnysrUdAfHTWlVhFIS+qZCBBdWBdHqHeW
+         ABmQjRM+9+UM147nhS20wzKbQ5M6z6auIf3xmc+CeMsOD9qk6PzN+dyTOMdoJt79ZYOP
+         ja+YS2IS5dC7IeghtgH0Q1Xgu6KG26QcKbfoY3eenfgTYdGI5OAOVyjhhooinB4SNIf6
+         KF/eMAWLU+ryXvHGaW3W89udcOo8jW2RCpgZjoe1RpD/aE//YknoKRgaYDc+i03BOMkI
+         drE+PHjeG354T7O2YtrDftqq10UhWdSfjYox4j721CZX7nyf1UGpgYbMajGnqQQEBDNN
+         T+4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794477404; x=1795082204;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=USgqRYo1pzMpiu0iJQxs9uW5L1POEPPKTWq3pDYoKws=;
+        b=Jiuv2f8R1lblKbtyMM7bUZN6m5Oo2mK6xHAVKca19T8kJ4/XcGsJqgzOaz2LJ9kmpF
+         5eOWR4kJ/QjCDJEs3z53WbRFupaLyeQxxenkbwKKDwKedvtL8zU2Wg4N+vg8FoMXnHs+
+         OUgayndmqqBXXwEyoDOgK4DYfU+9o0S6t77kf4umSclWkluxFVLJnXD9Ooj3v/fBEcG5
+         nSlhLZ1XnKo54EJ6WGePod93vfh22mYNl9jO7y4R/1Ps/sGaeJKHS5nBXYwdY4zuv2qS
+         gtxGEixkse3B8udPNOwKPulk/a76n0sJlyblO7u5GEdCsqpVi8VmLasisGU/0mn66yQn
+         NVaA==
+X-Forwarded-Encrypted: i=1; AL+hErEUex2tKuOAk0zu2N8QTKzh3fXCQPdCXMxbQEv4T671sA+pqroFlZca1dDvCgh3yn/F4Z3tSe7hMgNBIN8Tq84=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+7/1uWHyveXQCnU606jYIt4gQ9e6l7zrjFKFHcPhlPINThj4zN
+	Az0kxW4wROvBiF/V3tYaL17ZWkhcDk4BvGthFGsPkQYMRssryfKUvmPnjTtcgAT6tZQtURtmp+5
+	7yqGLOy85UFBYKRnD0HlrCI/MnamqDxg33QQ6muu+wVcPKIpOCSkWcPoAby99jC5/o5w7MA==
+X-Gm-Gg: AYBFou1G8TAAe91x3bQXBgQzOn/fKXnYjdYMfxgAnnUkAX66jhnB8hZJ+6bX2HYM+dU
+	H9JGr1gKESWbkKIdqIGF5WrYPWvY70XzOM0lTDEtZNsVqEU5ZFTqLCe1pRgeD9Dyp2Djf4Dg9PF
+	ri6Y188vBkT/VI+NOqQW9tOfR3yBCMV6fLgzjlAmRkpM8k4v1LZzmCyeNqa5//kGgqnrss63amT
+	KE7RQ6cHmzcyBed4i/POKWHIFsiHye0aqnb6FazeKQpoYmnIoYVcJEWnoEbIMlbGQdeogNmiQcN
+	5V+i/POwuDOnkdriwuGO5AmBWcW3XvtkCP+vdtAyLyyUFeVEYgGlKvHeeBc3j3wEMntAIYTzzoL
+	uI3guFJRgT/vrJ3CZJfZH9/pY/85mRHqni0n5Z5x2CFU=
+X-Received: by 2002:a05:6000:4210:b0:48d:ff0d:cfa5 with SMTP id ffacd0b85a97d-499c8a7b6aamr8720948f8f.47.1794477404081;
+        Thu, 12 Nov 2026 01:56:44 -0800 (PST)
+X-Received: by 2002:a05:6000:4210:b0:48d:ff0d:cfa5 with SMTP id ffacd0b85a97d-499c8a7b6aamr8720905f8f.47.1794477403631;
+        Thu, 12 Nov 2026 01:56:43 -0800 (PST)
+Received: from localhost ([139.47.30.142])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498362eb158sm15464916f8f.36.2026.11.12.01.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 01:56:43 -0800 (PST)
+Date: Thu, 12 Nov 2026 10:56:42 +0100
+From: Albert Esteve <aesteve@redhat.com>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Brian Starkey <Brian.Starkey@arm.com>,
+	John Stultz <jstultz@google.com>,
+	"T.J. Mercier" <tjmercier@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+	Ondrej =?utf-8?B?TW9zbsOhxI1law==?= <omosnacek@gmail.com>,
+	Jens Wiklander <jenswi@kernel.org>,
+	Sumit Garg <sumit.garg@kernel.org>, cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Subject: Re: [Linaro-mm-sig] [PATCH v4 2/8] dma-heap: charge dma-buf memory
+ via explicit memcg
+Message-ID: <avWNWnXCXm1sUYch@aesteve-thinkpadp1gen8.rmtes.csb>
+References: <20261104-v2_20230123_tjmercier_google_com-v4-0-1819a017000b@redhat.com>
+ <20261104-v2_20230123_tjmercier_google_com-v4-2-1819a017000b@redhat.com>
+ <3fdad4e17008cd59bc528ab22e34c0c913a6d50f.camel@linux.intel.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,318 +145,520 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] cgroup/cpuset: Keep an active housekeeping CPU in
- the top sched domain
-To: Ridong Chen <ridong.chen@linux.dev>, longman@redhat.com
-Cc: cgroups@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org,
- mkoutny@suse.com, shuah@kernel.org, mathieu.desnoyers@efficios.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Guopeng Zhang <zhangguopeng@kylinos.cn>, Ridong Chen <chenridong@xiaomi.com>
-References: <20261111134250.16852-1-guopeng.zhang@linux.dev>
- <20261111134250.16852-2-guopeng.zhang@linux.dev>
- <8b256809-79b1-4438-ae3e-4cceb32cd7c2@linux.dev>
-Content-Language: en-US
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-In-Reply-To: <8b256809-79b1-4438-ae3e-4cceb32cd7c2@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <3fdad4e17008cd59bc528ab22e34c0c913a6d50f.camel@linux.intel.com>
 
+On Thu, Nov 12, 2026 at 08:42:18AM +0100, Thomas Hellström wrote:
+> On Wed, 2026-11-04 at 12:09 +0100, Albert Esteve wrote:
+> > On embedded platforms a central process often allocates dma-buf
+> > memory on behalf of client applications. Without a way to
+> > attribute the charge to the requesting client's cgroup, the
+> > cost lands on the allocator, making per-cgroup memory limits
+> > ineffective for the actual consumers.
+> > 
+> > Add charge_fd to struct dma_heap_allocation_data. When set to
+> > a valid pidfd or cgroupfd, DMA_HEAP_IOCTL_ALLOC resolves the target
+> > task's or cgroup's memcg and charges the buffer there via
+> > mem_cgroup_reserve_dmabuf() inside dma_heap_ioctl_allocate(). The
+> > resolved memcg is passed through dma_buf_export_info so that
+> > dma_buf_export() stores it and updates the MEMCG_DMABUF stat.
+> > Without charge_fd, and with the mem_accounting module parameter
+> > enabled, the buffer is charged to the allocator's own cgroup.
+> > The __GPF_ACCOUNT flag is removed from system heap allocations
+> > to avoid double counting.
+> > 
+> > Usage examples:
+> > 
+> >   1. Central allocator charging to a client at allocation time.
+> >      The allocator knows the client's PID (e.g., from binder's
+> >      sender_pid) and uses pidfd to attribute the charge:
+> > 
+> >        pid_t client_pid = txn->sender_pid;
+> >        int pidfd = pidfd_open(client_pid, 0);
+> > 
+> >        struct dma_heap_allocation_data alloc = {
+> >            .len         = buffer_size,
+> >            .fd_flags    = O_RDWR | O_CLOEXEC,
+> >            .charge_fd   = pidfd,
+> >        };
+> >        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
+> >        close(pidfd);
+> >        /* alloc.fd is now charged to client's cgroup */
+> > 
+> >   2. Default allocation (no pidfd, mem_accounting=1).
+> >      When charge_fd is not set and the mem_accounting module
+> >      parameter is enabled, the buffer is charged to the allocator's
+> >      own cgroup:
+> > 
+> >        struct dma_heap_allocation_data alloc = {
+> >            .len      = buffer_size,
+> >            .fd_flags = O_RDWR | O_CLOEXEC,
+> >        };
+> >        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
+> >        /* charged to current process's cgroup */
+> > 
+> > Current limitations:
+> > 
+> >  - Single-owner model: a dma-buf carries one memcg charge regardless
+> > of
+> >    how many processes share it. Means only the first owner (and
+> > exporter)
+> >    of the shared buffer bears the charge.
+> >  - Only memcg accounting supported. While this makes sense for system
+> >    heap buffers, other heaps (e.g., CMA heaps) will require
+> > selectively
+> >    charging also for the dmem controller.
+> > 
+> > Signed-off-by: Albert Esteve <aesteve@redhat.com>
+> > ---
+> >  Documentation/admin-guide/cgroup-v2.rst |  5 ++--
+> >  drivers/dma-buf/dma-buf.c               |  5 ++++
+> >  drivers/dma-buf/dma-heap.c              | 28 +++++++++++++++++---
+> >  drivers/dma-buf/heaps/cma_heap.c        |  3 ++-
+> >  drivers/dma-buf/heaps/system_heap.c     | 21 +++++++++++----
+> >  drivers/tee/tee_heap.c                  |  3 ++-
+> >  include/linux/dma-buf.h                 |  4 +++
+> >  include/linux/dma-heap.h                |  3 ++-
+> >  include/linux/memcontrol.h              |  7 +++++
+> >  include/uapi/linux/dma-heap.h           |  7 +++++
+> >  mm/memcontrol.c                         | 47
+> > +++++++++++++++++++++++++++++++++
+> >  11 files changed, 120 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/Documentation/admin-guide/cgroup-v2.rst
+> > b/Documentation/admin-guide/cgroup-v2.rst
+> > index a3265a4a953e..66ddba678784 100644
+> > --- a/Documentation/admin-guide/cgroup-v2.rst
+> > +++ b/Documentation/admin-guide/cgroup-v2.rst
+> > @@ -1663,8 +1663,9 @@ The following nested keys are defined.
+> >  		structures.
+> >  
+> >  	  dmabuf (npn)
+> > -		Amount of memory used for exported DMA buffers
+> > allocated by the cgroup.
+> > -		Stays with the allocating cgroup regardless of how
+> > the buffer is shared.
+> > +		Amount of memory used for exported DMA buffers
+> > allocated by or on
+> > +		behalf of the cgroup. Stays with the allocating
+> > cgroup regardless
+> > +		of how the buffer is shared.
+> 
+> This doesn't sound right. Graphics buffers exported as DMA buffers are
+> typically charged elsewhere, like gpu_active, and a transfer of their
+> charge would likely stay in that key? To be consistent, shouldn't this
+> be related to dma-heap memory and called dmaheap or something similar.
 
+Although this work initially targeted dma heaps only, in its current
+form is meant to stay generic (while solving the central allocator
+problem). The memory exported as dma-bufs has no memory.stat of its
+own, and an exporter allocating plain pages (e.g., V4L2) has nowhere
+else to report it.
 
-åœ¨ 2026/11/12 11:05, Ridong Chen å†™é“:
+> We should have a tighter definition of exactly what memory is to be
+> registered here.
+
+Yes, I will be more specific and clearly state that an exporter
+whose memory is already accounted must not opt in. That also
+naturally disallows transfers.
+
+> 
+> Also says "Stays with the allocating cgroup regardless of how the
+> buffer is shared", which isn't correct after the series? Perhaps that's
+> changed in a later patch.
+
+I missed updating the text after having added XFER_CHARGE to the
+series. I'll fix the wording in this patch and mention the transfer
+in the next one.
+
+BR,
+Albert
+
+> 
+> Thanks,
+> Thomas
 > 
 > 
-> On 11/11/2026 9:42 PM, Guopeng Zhang wrote:
->> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>
->> Boot-isolated CPUs remain in top_cpuset.effective_cpus, but are excluded
->> from its scheduling domain. A partition can therefore take all boot
->> domain housekeeping CPUs while leaving effective_cpus nonempty. For
->> example, on a 32-CPU system with all CPUs online and
->> isolcpus=domain,10-31:
->>
->> Â Â  echo 0-9 > A/cpuset.cpus
->> Â Â  echo root > A/cpuset.cpus.partition
->> Â Â  Oops: general protection fault
->> Â Â  RIP: 0010:build_perf_domains+...
->>
->> tasks_nocpu_error() also rejects valid CPU replacements because it does
->> not account for CPUs returned by the update. With a fresh cgroup A under
->> the same boot configuration:
->>
->> Â Â  echo 2-31 > A/cpuset.cpus
->> Â Â  echo isolated > A/cpuset.cpus.partition
->> Â Â  echo 0-4 > A/cpuset.cpus
->> Â Â  cat A/cpuset.cpus.partition
->> Â Â  isolated invalid (Parent unable to distribute cpu downstream)
->>
->> The update should return CPUs 5-31 to top_cpuset, including housekeeping
->> CPUs 5-9, and leave A valid. This replacement failure also occurs without
->> boot isolation and under populated local parents.
->>
->> Extend tasks_nocpu_error() to take an explicit mask of CPUs being
->> returned and use it for local and remote updates. Require an active
->> HK_TYPE_DOMAIN_BOOT CPU to remain in top_cpuset. For other populated
->> parents, check within their current exclusive grant so an ancestor
->> update cannot credit CPUs that the parent no longer owns.
->>
->> CPU hotplug can also empty the top scheduling domain. Pass no returned
->> CPUs during its availability check, and only invalidate a partition to
->> restore the top domain if it can return an active boot domain
->> housekeeping CPU. Still invalidate a populated partition that has no
->> active CPU of its own.
->>
->> Fixes: 9b496a8bbed9 ("cgroup/cpuset: Prevent leakage of isolated CPUs into sched domains")
->> Fixes: 0c7f293efc87 ("cgroup/cpuset: Add cpuset.cpus.exclusive.effective for v2")
->> Co-developed-by: Ridong Chen <chenridong@xiaomi.com>
->> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
->> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->> ---
->> Â  kernel/cgroup/cpuset.c | 85 ++++++++++++++++++++++++++++++++++--------
->> Â  1 file changed, 70 insertions(+), 15 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 3052413e41e7..85f92ae0c6f4 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -1181,18 +1181,54 @@ static void update_partition_sd_lb(struct cpuset *cs, int old_prs)
->> Â  }
->> Â  Â  /*
->> - * tasks_nocpu_error - Return true if tasks will have no effective_cpus
->> + * tasks_nocpu_error - Return true if tasks or the top domain lack active CPUs
->> + * @parent: parent partition, NULL for a remote partition
->> + * @cs: the partition
->> + * @xcpus: exclusive CPUs that @cs will hold after the update
->> + * @del_cpus: exclusive CPUs to be returned to @parent, can be NULL
->> + *
->> + * @del_cpus may include CPUs that are also in @xcpus and will stay in
->> + * @cs. They are skipped by the @xcpus check, so callers can pass the
->> + * current effective_xcpus of @cs without masking it first.
->> + *
->> + * top_cpuset always has tasks. Boot-isolated CPUs remain in its
->> + * effective_cpus but are excluded from its sched domain, which must
->> + * retain an active boot domain housekeeping CPU.
->> Â Â  */
->> Â  static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
->> -Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  struct cpumask *xcpus)
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  const struct cpumask *xcpus,
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  const struct cpumask *del_cpus)
->> Â  {
->> +Â Â Â  const struct cpumask *mask;
->> +Â Â Â  int cpu;
->> +
->> +Â Â Â  /* A populated @cs must have an active CPU in @xcpus. */
->> +Â Â Â  if (!cpumask_intersects(xcpus, cpu_active_mask) &&
->> +Â Â Â Â Â Â Â  partition_is_populated(cs, NULL))
->> +Â Â Â Â Â Â Â  return true;
->> +
->> Â Â Â Â Â  /*
->> -Â Â Â Â  * A populated partition (cs or parent) can't have empty effective_cpus
->> +Â Â Â Â  * A populated @parent must keep an active CPU in @mask, either from
->> +Â Â Â Â  * its effective_cpus or from @del_cpus, that isn't taken by @cs.
->> Â Â Â Â Â Â  */
->> -Â Â Â  return (cpumask_subset(parent->effective_cpus, xcpus) &&
->> -Â Â Â Â Â Â Â  partition_is_populated(parent, cs)) ||
->> -Â Â Â Â Â Â Â Â Â Â  (!cpumask_intersects(xcpus, cpu_active_mask) &&
->> -Â Â Â Â Â Â Â  partition_is_populated(cs, NULL));
->> +Â Â Â  if (!parent)
->> +Â Â Â Â Â Â Â  parent = &top_cpuset;
->> +
->> +Â Â Â  /* CPUs outside the parent's current grant cannot be returned. */
->> +Â Â Â  mask = parent->effective_xcpus;
->> +Â Â Â  if (parent == &top_cpuset)
->> +Â Â Â Â Â Â Â  mask = housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
->> +Â Â Â  else if (!partition_is_populated(parent, cs))
->> +Â Â Â Â Â Â Â  return false;
->> +
 > 
-> The mask selection looks right to me. HK_TYPE_DOMAIN_BOOT is the right
-> one for top_cpuset, since CPUs returned by an isolated child are not in
-> HK_TYPE_DOMAIN yet. Limiting a local parent to its effective_xcpus also
-> correctly drops stale CPUs in del_cpus after the parent shrinks.
 > 
-> One corner case: validate_partition() also calls this for an invalid
-> cs whose parent is not a valid partition. If the parent is an invalid
-> partition without cpuset.cpus.exclusive, reset_partition_data() has
-> cleared its effective_xcpus, the loop does nothing, and we return true
-> when the parent is populated. The child's prs_err then changes from
-> PERR_INVPARENT to PERR_NOCPUS, which reports the wrong reason. The old
-> code did not do that. How about:
-> 
-> Â Â Â Â Â  else if (!is_partition_valid(parent) ||
-> Â Â Â Â Â Â Â Â Â Â Â Â Â Â  !partition_is_populated(parent, cs))
-> Â Â Â Â Â Â Â Â Â Â Â Â Â  return false;
-> Â Â Â Â Â Â Â Â Â Â Â 
-> The invalid parent case is already reported by PERR_INVPARENT/PERR_NOTPART.
-> 
-
-Hi Ridong,
-
-Thanks for the review.
-
-I tested your guard and will add it. However, I reproduced the error
-change under slightly different conditions from those you described:
-the populated invalid parent still had an explicit exclusive mask.
-In that case, v4 changes PERR_INVPARENT to PERR_NOCPUS. Your check
-preserves the original reason, and also preserves PERR_NOTPART in the
-corresponding case where the parent is a member.
-
-In the case you described, with no explicit exclusive mask and the
-parent's effective_xcpus already cleared, I get PERR_INVCPUS in both the
-base kernel and v4. compute_trialcs_excpus() also produces an empty child
-trial mask, so validate_partition() returns PERR_INVCPUS before calling
-tasks_nocpu_error().
-
-> Nit: the comment "Return true if tasks or the top domain lack active
-> CPUs" doesn't cover local parents. Maybe "Return true if @cs or @parent
-> would lack active CPUs; for top_cpuset, only active boot domain
-> housekeeping CPUs count".
-> 
-Sure, I'll update the comment.
-> 
->> +Â Â Â  for_each_cpu_and(cpu, mask, cpu_active_mask) {
->> +Â Â Â Â Â Â Â  if (cpumask_test_cpu(cpu, xcpus))
->> +Â Â Â Â Â Â Â Â Â Â Â  continue;
->> +Â Â Â Â Â Â Â  if (cpumask_test_cpu(cpu, parent->effective_cpus) ||
->> +Â Â Â Â Â Â Â Â Â Â Â  (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
->> +Â Â Â Â Â Â Â Â Â Â Â  return false;
->> +Â Â Â  }
->> +Â Â Â  return true;
->> Â  }
->> Â  Â  static void reset_partition_data(struct cpuset *cs)
->> @@ -1724,7 +1760,7 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
->> Â Â Â Â Â Â  */
->> Â Â Â Â Â  compute_excpus(cs, tmp->new_cpus);
->> Â Â Â Â Â  if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
->> -Â Â Â Â Â Â Â  cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
->> +Â Â Â Â Â Â Â  tasks_nocpu_error(NULL, cs, tmp->new_cpus, NULL))
->> Â Â Â Â Â Â Â Â Â  return PERR_INVCPUS;
->> Â Â Â Â Â  if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
->> Â Â Â Â Â Â Â Â Â  return PERR_NOCPUS;
->> @@ -1828,7 +1864,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
->> Â Â Â Â Â Â Â Â Â  if (!capable(CAP_SYS_ADMIN))
->> Â Â Â Â Â Â Â Â Â Â Â Â Â  WRITE_ONCE(cs->prs_err, PERR_ACCESS);
->> Â Â Â Â Â Â Â Â Â  else if (cpumask_intersects(tmp->addmask, subpartitions_cpus) ||
->> -Â Â Â Â Â Â Â Â Â Â Â Â  cpumask_subset(top_cpuset.effective_cpus, tmp->addmask))
->> +Â Â Â Â Â Â Â Â Â Â Â Â  tasks_nocpu_error(NULL, cs, excpus, cs->effective_xcpus))
->> Â Â Â Â Â Â Â Â Â Â Â Â Â  WRITE_ONCE(cs->prs_err, PERR_NOCPUS);
->> Â Â Â Â Â Â Â Â Â  else if (prstate_housekeeping_conflict(prs, PRS_ROOT,
->> Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  excpus, tmp->delmask))
->> @@ -1961,7 +1997,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->> Â Â Â Â Â Â  */
->> Â Â Â Â Â  if ((cmd != partcmd_disable) && !newmask) {
->> Â Â Â Â Â Â Â Â Â  compute_excpus(cs, tmp->delmask);
->> -Â Â Â Â Â Â Â  nocpu = tasks_nocpu_error(parent, cs, tmp->delmask);
->> +Â Â Â Â Â Â Â  nocpu = tasks_nocpu_error(parent, cs, tmp->delmask,
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  is_partition_valid(cs) ? cs->effective_xcpus : NULL);
->> Â Â Â Â Â  }
->> Â  Â Â Â Â Â  if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
->> @@ -2497,7 +2534,9 @@ static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *tri
->> Â Â Â Â Â  if (cpumask_empty(trialcs->effective_xcpus))
->> Â Â Â Â Â Â Â Â Â  return PERR_INVCPUS;
->> Â  -Â Â Â  if (tasks_nocpu_error(parent, cs, trialcs->effective_xcpus))
->> +Â Â Â  if (tasks_nocpu_error(is_remote_partition(cs) ? NULL : parent, cs,
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  trialcs->effective_xcpus,
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  is_partition_valid(cs) ? cs->effective_xcpus : NULL))
->> Â Â Â Â Â Â Â Â Â  return PERR_NOCPUS;
->> Â  Â Â Â Â Â  return PERR_NONE;
->> @@ -3997,6 +4036,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->> Â Â Â Â Â  static nodemask_t new_mems;
->> Â Â Â Â Â  bool cpus_updated;
->> Â Â Â Â Â  bool mems_updated;
->> +Â Â Â  bool nocpu;
->> Â Â Â Â Â  int partcmd = -1;
->> Â Â Â Â Â  struct cpuset *parent;
->> Â  @@ -4008,9 +4048,23 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->> Â Â Â Â Â  if (!tmp || !cs->partition_root_state)
->> Â Â Â Â Â Â Â Â Â  goto update_tasks;
->> Â  -Â Â Â  if (is_remote_partition(cs) && (cpumask_empty(subpartitions_cpus) ||
->> -Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  (cpumask_empty(&new_cpus) &&
->> -Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  partition_is_populated(cs, NULL)))) {
->> +Â Â Â  /* Do not count any CPUs as returned during this hotplug check. */
->> +Â Â Â  nocpu = tasks_nocpu_error(is_remote_partition(cs) ? NULL : parent, cs,
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  &new_cpus, NULL);
->> +Â Â Â  if (nocpu && (parent == &top_cpuset || is_remote_partition(cs))) {
->> +Â Â Â Â Â Â Â  /*
->> +Â Â Â Â Â Â Â Â  * Only invalidate a partition for an empty top sched domain if
->> +Â Â Â Â Â Â Â Â  * it can return an active boot domain housekeeping CPU. A
->> +Â Â Â Â Â Â Â Â  * populated partition with no active CPU must still be invalidated.
->> +Â Â Â Â Â Â Â Â  */
->> +Â Â Â Â Â Â Â  cpumask_and(tmp->addmask, cs->effective_xcpus,
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
->> +Â Â Â Â Â Â Â  if (!cpumask_intersects(tmp->addmask, cpu_active_mask))
->> +Â Â Â Â Â Â Â Â Â Â Â  nocpu = cpumask_empty(&new_cpus) &&
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  partition_is_populated(cs, NULL);
->> +Â Â Â  }
->> +
-> 
-> This is hard to follow. nocpu is computed first and then partly undone,
-> so that only a partition owning an active housekeeping CPU gets
-> invalidated.
-> 
-
-v3 used separate branches for these cases. Adapting that structure to
-the unified helper, would something like the following be easier to
-follow?
-
-        if (parent == &top_cpuset || is_remote_partition(cs)) {
-                /*
-                 * Do not count child partition CPUs as already returned.
-                 * Only invalidate a partition for an empty top domain if
-                 * it can return an active boot domain housekeeping CPU.
-                 * A populated partition with no active CPU of its own
-                 * must still be invalidated.
-                 */
-                cpumask_and(tmp->addmask, cs->effective_xcpus,
-                            housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
-                nocpu = cpumask_intersects(tmp->addmask, cpu_active_mask) &&
-                        tasks_nocpu_error(NULL, cs, cs->effective_xcpus,
-                                          NULL);
-                nocpu |= cpumask_empty(&new_cpus) &&
-                         partition_is_populated(cs, NULL);
-        } else {
-                nocpu = tasks_nocpu_error(parent, cs, &new_cpus, NULL);
-        }
-
-> Do we really need this? When hotplug leaves top_cpuset with no active
-> CPU, cpuset_handle_hotplug() already clears subpartitions_cpus and
-> invalidates all the partitions under it. If we handle an empty top
-> sched domain the same way, this block can go away.
-> 
-
-The check keeps partitions that cannot return an active HK CPU from
-being invalidated just because the top domain is empty. For example,
-on a 32-CPU system with isolcpus=domain,10-31, A is an isolated partition
-holding CPU 10 and its sibling B is a root partition holding CPUs 0,2-9.
-When CPU 1 goes offline, v4 invalidates B and keeps A valid.
-
-As I understand it, if we use the reset approach, it can restore the
-top scheduling domain, but it should invalidate both A and B. If we
-eventually want the same reset policy for an empty top scheduling
-domain, I can make that change and update the existing test expectations.
-
-Thanks,
-Guopeng
-
-> Longman, what do you think?
-> 
->> +Â Â Â  if (is_remote_partition(cs) && (cpumask_empty(subpartitions_cpus) || nocpu)) {
->> Â Â Â Â Â Â Â Â Â  WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
->> Â Â Â Â Â Â Â Â Â  remote_partition_disable(cs, tmp);
->> Â Â Â Â Â Â Â Â Â  compute_effective_cpumask(&new_cpus, cs, parent);
->> @@ -4023,10 +4077,11 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
->> Â Â Â Â Â Â  * 2) parent is invalid or doesn't grant any cpus to child
->> Â Â Â Â Â Â  *Â Â Â  partitions.
->> Â Â Â Â Â Â  * 3) subpartitions_cpus is empty.
->> +Â Â Â Â  * 4) top_cpuset needs an active boot domain housekeeping CPU from cs.
->> Â Â Â Â Â Â  */
->> Â Â Â Â Â  if (is_local_partition(cs) &&
->> Â Â Â Â Â Â Â Â Â  (!is_partition_valid(parent) ||
->> -Â Â Â Â Â Â Â Â  tasks_nocpu_error(parent, cs, &new_cpus) ||
->> +Â Â Â Â Â Â Â Â  nocpu ||
->> Â Â Â Â Â Â Â Â Â Â  cpumask_empty(subpartitions_cpus)))
->> Â Â Â Â Â Â Â Â Â  partcmd = partcmd_invalidate;
->> Â Â Â Â Â  /*
-> 
+> >  
+> >  	  workingset_refault_anon
+> >  		Number of refaults of previously evicted anonymous
+> > pages.
+> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > index 1c6b9cee7ac2..837666273550 100644
+> > --- a/drivers/dma-buf/dma-buf.c
+> > +++ b/drivers/dma-buf/dma-buf.c
+> > @@ -714,6 +714,7 @@ struct dma_buf *dma_buf_export(const struct
+> > dma_buf_export_info *exp_info)
+> >  	struct dma_resv *resv = exp_info->resv;
+> >  	struct file *file;
+> >  	size_t alloc_size = sizeof(struct dma_buf);
+> > +	unsigned int nr_pages = PAGE_ALIGN(exp_info->size) >>
+> > PAGE_SHIFT;
+> >  	int ret;
+> >  
+> >  	if (WARN_ON(!exp_info->priv || !exp_info->ops
+> > @@ -750,6 +751,7 @@ struct dma_buf *dma_buf_export(const struct
+> > dma_buf_export_info *exp_info)
+> >  	dmabuf->size = exp_info->size;
+> >  	dmabuf->exp_name = exp_info->exp_name;
+> >  	dmabuf->owner = exp_info->owner;
+> > +	dmabuf->memcg = exp_info->memcg;
+> >  	spin_lock_init(&dmabuf->name_lock);
+> >  	init_waitqueue_head(&dmabuf->poll);
+> >  	dmabuf->cb_in.poll = dmabuf->cb_out.poll = &dmabuf->poll;
+> > @@ -771,6 +773,9 @@ struct dma_buf *dma_buf_export(const struct
+> > dma_buf_export_info *exp_info)
+> >  
+> >  	DMA_BUF_TRACE(trace_dma_buf_export, dmabuf);
+> >  
+> > +	if (dmabuf->memcg)
+> > +		mod_memcg_state(dmabuf->memcg, MEMCG_DMABUF,
+> > nr_pages);
+> > +
+> >  	return dmabuf;
+> >  
+> >  err_file:
+> > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+> > index 8a6c2b6e0cc6..7bd416ae2c23 100644
+> > --- a/drivers/dma-buf/dma-heap.c
+> > +++ b/drivers/dma-buf/dma-heap.c
+> > @@ -10,6 +10,8 @@
+> >  #include <linux/device.h>
+> >  #include <linux/dma-buf.h>
+> >  #include <linux/dma-heap.h>
+> > +#include <linux/memcontrol.h>
+> > +#include <linux/sched/mm.h>
+> >  #include <linux/err.h>
+> >  #include <linux/export.h>
+> >  #include <linux/list.h>
+> > @@ -78,6 +80,7 @@ static struct dma_buf
+> > *dma_heap_ioctl_allocate(struct file *file, void *data)
+> >  	struct dma_heap_allocation_data *heap_allocation = data;
+> >  	struct dma_heap *heap = file->private_data;
+> >  	struct dma_buf *dmabuf;
+> > +	struct mem_cgroup *memcg = NULL;
+> >  	int fd;
+> >  	size_t len;
+> >  
+> > @@ -90,15 +93,34 @@ static struct dma_buf
+> > *dma_heap_ioctl_allocate(struct file *file, void *data)
+> >  	if (heap_allocation->heap_flags &
+> > ~DMA_HEAP_VALID_HEAP_FLAGS)
+> >  		return ERR_PTR(-EINVAL);
+> >  
+> > +	if (heap_allocation->__padding != 0)
+> > +		return ERR_PTR(-EINVAL);
+> > +
+> > +	if (heap_allocation->charge_fd) {
+> > +		memcg = mem_cgroup_get_from_fd(heap_allocation-
+> > >charge_fd);
+> > +		if (IS_ERR(memcg))
+> > +			return ERR_CAST(memcg);
+> > +	}
+> > +
+> > +	if (!memcg && mem_accounting)
+> > +		memcg = get_mem_cgroup_from_mm(current->mm);
+> > +
+> >  	len = PAGE_ALIGN(heap_allocation->len);
+> > -	if (!len)
+> > +	if (!len) {
+> > +		mem_cgroup_put(memcg);
+> >  		return ERR_PTR(-EINVAL);
+> > +	}
+> >  
+> >  	dmabuf = heap->ops->allocate(heap, len, heap_allocation-
+> > >fd_flags,
+> > -				     heap_allocation->heap_flags);
+> > +				     heap_allocation->heap_flags,
+> > memcg);
+> >  
+> > -	if (IS_ERR(dmabuf))
+> > +	if (IS_ERR(dmabuf)) {
+> > +		mem_cgroup_put(memcg);
+> >  		return dmabuf;
+> > +	}
+> > +
+> > +	if (memcg && !dmabuf->memcg)
+> > +		mem_cgroup_put(memcg);
+> >  
+> >  	fd = get_unused_fd_flags(heap_allocation->fd_flags);
+> >  	if (fd < 0) {
+> > diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-
+> > buf/heaps/cma_heap.c
+> > index 3fb4b946c91a..04de88b468a8 100644
+> > --- a/drivers/dma-buf/heaps/cma_heap.c
+> > +++ b/drivers/dma-buf/heaps/cma_heap.c
+> > @@ -281,7 +281,8 @@ static const struct dma_buf_ops cma_heap_buf_ops
+> > = {
+> >  static struct dma_buf *cma_heap_allocate(struct dma_heap *heap,
+> >  					 unsigned long len,
+> >  					 u32 fd_flags,
+> > -					 u64 heap_flags)
+> > +					 u64 heap_flags,
+> > +					 struct mem_cgroup *memcg)
+> >  {
+> >  	struct cma_heap *cma_heap = dma_heap_get_drvdata(heap);
+> >  	struct cma_heap_buffer *buffer;
+> > diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-
+> > buf/heaps/system_heap.c
+> > index c8959eadc71d..2bd245e1eab8 100644
+> > --- a/drivers/dma-buf/heaps/system_heap.c
+> > +++ b/drivers/dma-buf/heaps/system_heap.c
+> > @@ -17,6 +17,7 @@
+> >  #include <linux/err.h>
+> >  #include <linux/highmem.h>
+> >  #include <linux/mem_encrypt.h>
+> > +#include <linux/memcontrol.h>
+> >  #include <linux/mm.h>
+> >  #include <linux/set_memory.h>
+> >  #include <linux/module.h>
+> > @@ -388,8 +389,6 @@ static struct page
+> > *alloc_largest_available(unsigned long size,
+> >  		if (max_order < orders[i])
+> >  			continue;
+> >  		flags = order_flags[i];
+> > -		if (mem_accounting)
+> > -			flags |= __GFP_ACCOUNT;
+> >  		page = alloc_pages(flags, orders[i]);
+> >  		if (!page)
+> >  			continue;
+> > @@ -401,11 +400,13 @@ static struct page
+> > *alloc_largest_available(unsigned long size,
+> >  static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+> >  					    unsigned long len,
+> >  					    u32 fd_flags,
+> > -					    u64 heap_flags)
+> > +					    u64 heap_flags,
+> > +					    struct mem_cgroup
+> > *memcg)
+> >  {
+> >  	struct system_heap_buffer *buffer;
+> >  	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> >  	unsigned long size_remaining = len;
+> > +	unsigned int nr_pages = PAGE_ALIGN(len) >> PAGE_SHIFT;
+> >  	unsigned int max_order = orders[0];
+> >  	struct system_heap_priv *priv = dma_heap_get_drvdata(heap);
+> >  	bool cc_shared = priv->cc_shared;
+> > @@ -416,10 +417,15 @@ static struct dma_buf
+> > *system_heap_allocate(struct dma_heap *heap,
+> >  	struct page *page, *tmp_page;
+> >  	int i, ret = -ENOMEM;
+> >  
+> > -	buffer = kzalloc_obj(*buffer);
+> > -	if (!buffer)
+> > +	if (!mem_cgroup_reserve_dmabuf(memcg, GFP_KERNEL, nr_pages))
+> >  		return ERR_PTR(-ENOMEM);
+> >  
+> > +	buffer = kzalloc_obj(*buffer);
+> > +	if (!buffer) {
+> > +		ret = -ENOMEM;
+> > +		goto cancel_charge;
+> > +	}
+> > +
+> >  	INIT_LIST_HEAD(&buffer->attachments);
+> >  	mutex_init(&buffer->lock);
+> >  	buffer->heap = heap;
+> > @@ -473,11 +479,14 @@ static struct dma_buf
+> > *system_heap_allocate(struct dma_heap *heap,
+> >  	exp_info.size = buffer->len;
+> >  	exp_info.flags = fd_flags;
+> >  	exp_info.priv = buffer;
+> > +	if (memcg)
+> > +		exp_info.memcg = memcg;
+> >  	dmabuf = dma_buf_export(&exp_info);
+> >  	if (IS_ERR(dmabuf)) {
+> >  		ret = PTR_ERR(dmabuf);
+> >  		goto free_pages;
+> >  	}
+> > +
+> >  	return dmabuf;
+> >  
+> >  free_pages:
+> > @@ -498,6 +507,8 @@ static struct dma_buf
+> > *system_heap_allocate(struct dma_heap *heap,
+> >  	list_for_each_entry_safe(page, tmp_page, &pages, lru)
+> >  		__free_pages(page, compound_order(page));
+> >  	kfree(buffer);
+> > +cancel_charge:
+> > +	mem_cgroup_cancel_dmabuf(memcg, nr_pages);
+> >  
+> >  	return ERR_PTR(ret);
+> >  }
+> > diff --git a/drivers/tee/tee_heap.c b/drivers/tee/tee_heap.c
+> > index 007c00156520..83e2fbd6960b 100644
+> > --- a/drivers/tee/tee_heap.c
+> > +++ b/drivers/tee/tee_heap.c
+> > @@ -167,7 +167,8 @@ static const struct dma_buf_ops tee_heap_buf_ops
+> > = {
+> >  
+> >  static struct dma_buf *tee_dma_heap_alloc(struct dma_heap *heap,
+> >  					  unsigned long len, u32
+> > fd_flags,
+> > -					  u64 heap_flags)
+> > +					  u64 heap_flags,
+> > +					  struct mem_cgroup *memcg)
+> >  {
+> >  	struct tee_dma_heap *h = dma_heap_get_drvdata(heap);
+> >  	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> > diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> > index 23ec0ff23fba..85dd747c9b36 100644
+> > --- a/include/linux/dma-buf.h
+> > +++ b/include/linux/dma-buf.h
+> > @@ -505,6 +505,9 @@ struct dma_buf_attachment {
+> >   * @flags:	mode flags for the file
+> >   * @resv:	reservation-object, NULL to allocate default one
+> >   * @priv:	Attach private data of allocator to this buffer
+> > + * @memcg:	memcg to charge for this buffer's memory. Set only
+> > for
+> > + *		buffers backed by system memory where @size reflects
+> > the
+> > + *		actual allocation in bytes.
+> >   *
+> >   * This structure holds the information required to export the
+> > buffer. Used
+> >   * with dma_buf_export() only.
+> > @@ -517,6 +520,7 @@ struct dma_buf_export_info {
+> >  	int flags;
+> >  	struct dma_resv *resv;
+> >  	void *priv;
+> > +	struct mem_cgroup *memcg;
+> >  };
+> >  
+> >  /**
+> > diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+> > index 648328a64b27..2d69f8432bd2 100644
+> > --- a/include/linux/dma-heap.h
+> > +++ b/include/linux/dma-heap.h
+> > @@ -23,7 +23,8 @@ struct dma_heap_ops {
+> >  	struct dma_buf *(*allocate)(struct dma_heap *heap,
+> >  				    unsigned long len,
+> >  				    u32 fd_flags,
+> > -				    u64 heap_flags);
+> > +				    u64 heap_flags,
+> > +				    struct mem_cgroup *memcg);
+> >  };
+> >  
+> >  /**
+> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > index 4d1e82cf0833..f8ec751b7d7b 100644
+> > --- a/include/linux/memcontrol.h
+> > +++ b/include/linux/memcontrol.h
+> > @@ -671,6 +671,8 @@ int mem_cgroup_charge_hugetlb(struct folio*
+> > folio, gfp_t gfp);
+> >  int mem_cgroup_swapin_charge_folio(struct folio *folio, unsigned
+> > short id,
+> >  				   struct mm_struct *mm, gfp_t gfp);
+> >  
+> > +struct mem_cgroup *mem_cgroup_get_from_fd(int fd);
+> > +
+> >  bool mem_cgroup_reserve_dmabuf(struct mem_cgroup *memcg, gfp_t gfp,
+> >  			       unsigned int nr_pages);
+> >  
+> > @@ -1178,6 +1180,11 @@ static inline int
+> > mem_cgroup_swapin_charge_folio(struct folio *folio,
+> >  	return 0;
+> >  }
+> >  
+> > +static inline struct mem_cgroup *mem_cgroup_get_from_fd(int fd)
+> > +{
+> > +	return ERR_PTR(-EOPNOTSUPP);
+> > +}
+> > +
+> >  static inline bool mem_cgroup_reserve_dmabuf(struct mem_cgroup
+> > *memcg,
+> >  					     gfp_t gfp,
+> >  					     unsigned int nr_pages)
+> > diff --git a/include/uapi/linux/dma-heap.h b/include/uapi/linux/dma-
+> > heap.h
+> > index a4cf716a49fa..bfcd1c25bc7e 100644
+> > --- a/include/uapi/linux/dma-heap.h
+> > +++ b/include/uapi/linux/dma-heap.h
+> > @@ -29,6 +29,11 @@
+> >   *			handle to the allocated dma-buf
+> >   * @fd_flags:		file descriptor flags used when allocating
+> >   * @heap_flags:		flags passed to heap
+> > + * @charge_fd:		optional pidfd or cgroupfd whose cgroup
+> > should be
+> > + *			charged for this allocation; 0 means charge
+> > the calling
+> > + *			process's cgroup when the mem_accounting
+> > module parameter
+> > + *			is enabled, or skip charging otherwise
+> > + * @__padding:		reserved, must be zero
+> >   *
+> >   * Provided by userspace as an argument to the ioctl
+> >   */
+> > @@ -37,6 +42,8 @@ struct dma_heap_allocation_data {
+> >  	__u32 fd;
+> >  	__u32 fd_flags;
+> >  	__u64 heap_flags;
+> > +	__u32 charge_fd;
+> > +	__u32 __padding;
+> >  };
+> >  
+> >  #define DMA_HEAP_IOC_MAGIC		'H'
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index e53dd7eebc3b..17fdefc56b97 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -5661,6 +5661,53 @@ void mem_cgroup_flush_workqueue(void)
+> >  	flush_workqueue(memcg_wq);
+> >  }
+> >  
+> > +/**
+> > + * mem_cgroup_get_from_fd - resolve a memcg from a cgroupfd or pidfd
+> > + * @fd: file descriptor (cgroupfd or pidfd)
+> > + *
+> > + * Tries @fd as a cgroupfd first; if that fails, tries it as a
+> > pidfd.
+> > + * On success returns a referenced memcg pointer. On failure returns
+> > + * an ERR_PTR.
+> > + */
+> > +struct mem_cgroup *mem_cgroup_get_from_fd(int fd)
+> > +{
+> > +	struct cgroup_subsys_state *css;
+> > +	struct mem_cgroup *memcg;
+> > +	struct cgroup *cgrp;
+> > +	struct task_struct *task;
+> > +	struct mm_struct *mm;
+> > +	unsigned int pidfd_flags;
+> > +
+> > +	cgrp = cgroup_get_from_fd(fd);
+> > +	if (!IS_ERR(cgrp)) {
+> > +		rcu_read_lock();
+> > +		css = cgroup_css(cgrp, &memory_cgrp_subsys);
+> > +		if (!css || !css_tryget_online(css)) {
+> > +			rcu_read_unlock();
+> > +			cgroup_put(cgrp);
+> > +			return ERR_PTR(-ENOENT);
+> > +		}
+> > +
+> > +		memcg = mem_cgroup_from_css(css);
+> > +		rcu_read_unlock();
+> > +		cgroup_put(cgrp);
+> > +		return memcg;
+> > +	}
+> > +
+> > +	task = pidfd_get_task(fd, &pidfd_flags);
+> > +	if (IS_ERR(task))
+> > +		return ERR_CAST(task);
+> > +
+> > +	mm = get_task_mm(task);
+> > +	put_task_struct(task);
+> > +	if (!mm)
+> > +		return ERR_PTR(-ESRCH);
+> > +
+> > +	memcg = get_mem_cgroup_from_mm(mm);
+> > +	mmput(mm);
+> > +	return memcg ?: ERR_PTR(-ENOENT);
+> > +}
+> > +
+> >  /**
+> >   * mem_cgroup_reserve_dmabuf - charge a memcg for a dma-buf
+> > allocation
+> >   * @memcg: memcg to charge (may be %NULL)
 
