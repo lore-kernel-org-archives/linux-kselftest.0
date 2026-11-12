@@ -1,86 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794445582;
-	b=Ie00aiRP9T2045CACRYfA/bziWzt3z2zcpwc2Bomj8Cx+ybnjaT3rM/VuGCOM47PWHBe
-	 rnBnZZZmn6hmquyc/g7ZtbIBRZMTnqMHoHA7RbWFy+pBDwFscNsXjOOSbiONmaUKT1eRj
-	 t9NCs/K1eBWXx1jtPPFC4Bjxi0abDeYjU40qzSeoPy/l+nODtGIgmWic8dLis6Bh+SxUY
-	 KlNb9ANW7KLG/K01QjUTbowssk4WKnWIMkpSnYhJzjFh1zow4hBIacyxNdGtzf2r+qtV2
-	 w+BWqwOr0OXPKFnq6yd/10e2t5tHi+Ec8eNaPkgh/QfSRsxwIHnXo6ODFdkjB95Brqg==
+	t=1794445637;
+	b=WoxNDcQByCTh1FjiOalNWZ9vwoALOj7LrwZKIjjle0kHoUpFyTbo+boBmeEZjJBrrxDm
+	 ISeID3CcQjZ3sMVc1xF4/ckeyxmoA+RwRSEuVTws86Q/0Ufzjuqi5nfW6zEgvPoM3KxRN
+	 KiORWkMZ0jsImox3NTebzIZzo5893PDw2wSoHqGmsDazxLHbhuUlm8aVNXi3Y41rSrd8M
+	 NbTV93PrVT+eIsqTN1H3o30dYpNAEe4r/z3MeoSoBkBmRY5YjRUUTsbRhCRiX4LI9MamJ
+	 dT33d+9QCsoI4P6p3B5v42wIIzxm0FObe+yGgu0fC2k6xJmKWejVM/rXFrco8r+FVJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794445582;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794445637;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=iCMY9zzRpVOQiNVF7wIbVbtJSXaMkhe3lrzE3/4Rz2U=;
-	b=w8all9wutb+DVTkfDZpZD8MDAjlQBf5bHkj8O9Z1o4RrOOMUESo5osjTlkJQZ72s88Jy
-	 GEi4O5sn/kxEyZw/YjqJc2+tlgtIcT9c724C+fY7PQDIQXiYRboRFZ8xXjKMXbNYicQ2a
-	 fQBMe+wl9y2nnKOh/UukB1rsNV/upJLR0yjGLecl7oxN33VT69VGeLO1YoKaaSwAnqdLr
-	 dRRDaA/of8OxzkbA8XatVtiI5j0oXHeAWsG3XEoTETKvbu9dmc1BPTe94qWD0FSy11TkS
-	 SXeJz/g6Mw3aJTnrb1jqUheOukg33yZGfJxdFQOxzYTpaM1Uy155lD2jBjbyfkMaeHw==
+	bh=2RReNFzwszTC+E0RspOXYqfO8c+r26PYFZscPQMQXPo=;
+	b=QnyTTQfNsTWOpE992AlZyvMCmqezgbvbGtp4dk1TAvjBeWFn8WtjnpWNRHqY/DfMb4Q6
+	 2ql6i7Ynai/Qoq0XagM/mU3MqS0Ui+QLqvhi5uOL549Sx+B3dcUofrkbQ2E5fWGHxkCAK
+	 nkbzXip3oTaelb3XR/XCzqtspqIriSjBlxqedJnM7NwZ+rk7qliuPwU+OTcBUGh+qFsiI
+	 bNfKvCUDsHBOnOeRDMvLV6XeXIwDRTkBuTRqEbRaBQfCXz4b6GmJvOJs4tbXWd9bVFtuP
+	 bLqhSTbSJl8irSZI3of0G3qsxEF6yYLNEMiW25M6Ts4yaNEKyW5CxbyKT3pYQXvNSHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=networkplumber.org;
 	spf=pass smtp.mailfrom=networkplumber.org;
-	dkim=pass header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=cuklAEao;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	dkim=pass header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=jIa+R2cZ;
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34CDD606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:06:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34CDD606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE74606A321
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:07:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EE74606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=cuklAEao
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3b0b3754f57so2170901a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 17:06:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=jIa+R2cZ
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b4c8b51b58so2671578b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 17:07:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20260707.gappssmtp.com; s=20260707; t=1794445580; x=1795050380; darn=vger.kernel.org;
+        d=networkplumber-org.20260707.gappssmtp.com; s=20260707; t=1794445637; x=1795050437; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=iCMY9zzRpVOQiNVF7wIbVbtJSXaMkhe3lrzE3/4Rz2U=;
-        b=cuklAEaoE6zQVXGV9gZrYyyqItQzkHyX4+pq6Om2py/IPAk90rm7VxGu5Niy6A/NAB
-         /CTDV9uLtEi5ePJ8SHDdTKeOsAKFYuSFlOTJVID1BXTctrPANHf6Fsh/94ViibuZdt4f
-         Q2uS27QxE15OXe1B2/UIVLPiH8FWH9HSBHg0lWTpyfxJc/g7mlpZgE8auqJVQ5K03uTQ
-         Oec6ye85GtdZOpnEnqGhX+SpcuIigx9tgpLuBeoJyiHnXVCeX6t6W+0E81/rOOn6mkrN
-         kDP4wV9wv+R5g1H09iidPza08AYoori8rgGZMt/P1JOfA4OD2urEbz84Z11ZPm+4xZvB
-         hNkw==
+        bh=2RReNFzwszTC+E0RspOXYqfO8c+r26PYFZscPQMQXPo=;
+        b=jIa+R2cZA8GeTGWY4OkBYSP1QFCIyWWlph2FPtReagpNxNoDxmiZOVCH1eJ2M7WU3o
+         D4mO5chbkhqnEgeKPmW7Ko50qbGyEuJKZJtZ/qZ3aONwoR2/havVtaEvOZvYpISSZP1M
+         z1nMBWNO5DteMV/pf4HKoB8hNglyNPsjJBduYVSouut9lLlrngwNf68xTsyvP6M6bC/+
+         5PuXzhcDe+fGSJ6iD0VvBVLEshrBsbM3DEpJMKYL8fj9gaYpN2U19vcsEOkqLj36NZUH
+         M1BR8IXXGRswP1pZb2d2u1Cc4GoeSekQHwqZQ23AF8jyRXJ1nN8MAvgYHWKOlXHV1num
+         lE1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794445580; x=1795050380;
+        d=1e100.net; s=20260707; t=1794445637; x=1795050437;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iCMY9zzRpVOQiNVF7wIbVbtJSXaMkhe3lrzE3/4Rz2U=;
-        b=itUaoN1JCJ2pFI+4AvjYff1HiZlltuaKoHQ6C96wsYO7nxZune4L65Aj60AQZ/DFPE
-         L4pDdKdQNe/HXC8kIBmne9ElX/QhA5u2hpRZVC7gOrXvvDaxkMQwpVe+HpGHrU8k+8bm
-         nBgRCsn0Q6E/1DmqLi2mNDhYt9tgebN4oS53brX9z7C0xwagDHJqv4d+MgdN3FIY17uA
-         GZaOYMB4q39q8C0DoR2i/bAu6dL3Txpphsda7Nqx35YDEiXgrsDk7JPcsmRcdrIY2oZa
-         ZD6qLbeQNJCfxdiASnt7mASjvFTRgGTyD1wNP4oL2ZiPvqLspUy/d3L58LBHLhVxzodj
-         n6Uw==
-X-Forwarded-Encrypted: i=1; AL+hErE+lo1qJ5/yP59t+ckAFLjrkT346Fz2AInpqEFgEB2AfFYelPwiUYPjuZ/IncfhQswrSYwBNLm//yx8TccCDII=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/f/f57kbeZLRSIjHJgQbQkPMxmyN9a9xWQ55DRaExSAZjyk0mI
-	/NbVQtt+/koaoJy+W7gE8VZ8hiJ2iw+tmD5q+WLbN+K+k9bBI7/DPjy4UXbafFUlx5Q=
-X-Gm-Gg: AYBFou3QqRC0JM71aDlTYIZEIsC+UNTw0Ck5yzmuq7cHfjKGXn44JnZClGhpHPKKniG
-	CTeGpw4eSjLg78csPNG2Q6v+b6Gx9znmDbpobOgSvBJOKkQ+hPtIGWkbBv7y9+oImrYkCPcsVXm
-	UnoX6hthEIIiIOtyIKyGqVKTBvoX7cgVXWgnC2HgCV+FAS7Gxmtdm/C29x7qPUZrbTWfifLrpgu
-	t9wNb2KCCtJ+AsC1G3Dnq1FJuY6/2vPuOr/UQQR4g+mG8Jc58K7CwO9qZ5TdkpL746J3UWp83EC
-	TuRyQGhuydMTZLF/hv4xx1L8PAeD+qFT3N4Wf71AFgCepJu0KydRQIJWccbIEOhmIIRKop2v+y+
-	nTDtRK8He5lp2afR0j2jlHJgEc5cVhTkH8xzsZKRep0fHCNJdWNqg6R7gjwAotis8uCQAyG/zgS
-	CgN2nzlHOmLm2ONZvyhiTymYjnn7ZiH0JjJc7e9WcZQ0a5OHhV862i5Nho223tkrMA3saHp5N1b
-	XQjeAuLKsntH8VOCoY6Zpmc5XwfW/d30egUcht73kpzX6onG62gvpZCmi49CmhTh9TEecLJObhp
-	NasRFE3f0Vub/8/Q1N/ccBwm09dkVSdoAV1L2Cx44Vj1deHVl55ZpeMlhQ3WIU2wruZzyExvuTd
-	e3MK0FlU1rprj+qUCobU=
-X-Received: by 2002:a17:90b:4c49:b0:3ad:4a8b:c6fd with SMTP id 98e67ed59e1d1-3b182eacc7emr3660192a91.28.1794445580376;
-        Wed, 11 Nov 2026 17:06:20 -0800 (PST)
+        bh=2RReNFzwszTC+E0RspOXYqfO8c+r26PYFZscPQMQXPo=;
+        b=D9T+E+ZE2Md9xqo6NQlr6qe/13uewZ8FIVVWE5ObYMv6X/EI62GFWy2s5RtiRaw2qT
+         u7+Q+7BoeXR6bCqZxQvwXoZR384namg+KLYQHLf0EhymlTR/UvZOkEpBwqSq5x7AZ3Tw
+         k9E3U8Jl+uQfKwvErfcX7ny0FUQTyL0rcKPmOrW5/6rPTBV63l2QR6SVCcqrpkueYlnU
+         YLRmGYdK2FT3gN8KpIPI3jRKfbI3xZmh9CPWFCxcYyog6bUrox8HE3VwreBm7UYcy9Jb
+         1xrOrkZHvSFv8Iv4h1xd2QmKRJDGOyOd08V+evWUXfM/6EOReflvdk2WijIq0aAFja9F
+         +LVw==
+X-Forwarded-Encrypted: i=1; AL+hErFt4lnoebk1mJmYnFpB9wAl/57yYqXsQxCCqyiP6zMPs9DiJdhI9PD6nH/OI6xT4kInnyUT/E+cTa7zS3y7CoM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+UdXxx1DQ8HsC256YZlZ+PzHDF9JTcPvEtCxdj9yITuusLWg1F
+	mkV1uDoSCwqcQAQb7nIrLGrcMG0gi7DPXM5EU+1XPmlX8E1b7vXkhh7vGCXz8DEo0IE=
+X-Gm-Gg: AYBFou3XRdZ0InpJEkkUikDZ06Gv3BF6EDo10F5B4WoYAV0eqEdrsdxAsGmupSHOJvA
+	i0z3pA/blcbvYgOOx5+ycto1MqiAV+XdGFtDt8ZrTvP9yRfIiKjyS7zPw/cci24pU80tSRsxUwL
+	o8/IFeXOp3fKIEvrGuHZQfd4WsP2zwggsXienWIi6iYy4GzJ90/Y7dD5V+cVM5BV0kMVvEqGZq9
+	mvr9xAnGBeMx4sFzd7s6yvoXaUfiQVhz4aiLEIw7RvODNOqwHtaPkmcaDPo77yi0W59W2iYCX7v
+	6q+Xg10BjDB61P+qWzGUYdYE/u0whvH8sz2pOW2SjmMaMq03GqvmJGq01jqAdFyqM36SCpYpE9W
+	/TRDwnKihMrGI1CV5evvLJcB4aZJQpjKuTgF7PvbhSBcr6h3lnrKPYfvc4plYjnPkDCXAxMRGeJ
+	P74LCz0l3A8NAsmeG3zqeLjR24/bCWzygxIHONyckqcLvTrZqygOl2lttu9Al5sT7tnrwwdHxKS
+	rV2VZ/q1kQw1iYb8uD6gVn8XaFhRch2HRQ3RSddFs3lW8Sgp4VZkWPr8hXDP8bM50/QuO2EKf7S
+	RJjpVKE1tr6cnSKYLaoJhCSAlAwEuc9P7sFet1cCLdTHMB9EVAa4qLm1j01rOFx0xl+243y+Pwp
+	KeYWnmAxhCoF2pVjJFJg=
+X-Received: by 2002:a05:6a00:6c8d:b0:89a:5f8d:2e35 with SMTP id d2e1a72fcca58-8bc1dbfb4abmr3789694b3a.49.1794445636851;
+        Wed, 11 Nov 2026 17:07:16 -0800 (PST)
 Received: from phoenix.local (204-195-112-43.wavecable.com. [204.195.112.43])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b182dff97fsm2402471a91.3.2026.11.11.17.06.19
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8baaa86dd0fsm2559942b3a.22.2026.11.11.17.07.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2026 17:06:19 -0800 (PST)
-Date: Wed, 11 Nov 2026 17:06:17 -0800
+        Wed, 11 Nov 2026 17:07:16 -0800 (PST)
+Date: Wed, 11 Nov 2026 17:05:24 -0800
 From: Stephen Hemminger <stephen@networkplumber.org>
 To: Todd Freed <toddfreed@meta.com>
 Cc: <netdev@vger.kernel.org>, David Ahern <dsahern@kernel.org>, Jamal Hadi
@@ -88,12 +88,11 @@ Cc: <netdev@vger.kernel.org>, David Ahern <dsahern@kernel.org>, Jamal Hadi
  <daniel.zahka@gmail.com>, Willem de Bruijn
  <willemdebruijn.kernel@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
  <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH iproute2-next 3/3] tc: flower: add matches psp_spi,
- psp_ver and psp_dev
-Message-ID: <20261111170617.5fbde961@phoenix.local>
-In-Reply-To: <20261112001512.3598626-4-toddfreed@meta.com>
+Subject: Re: [PATCH iproute2-next 2/3] tc: add the psp action
+Message-ID: <20261111170524.2b0a6af9@phoenix.local>
+In-Reply-To: <20261112001512.3598626-3-toddfreed@meta.com>
 References: <20261112001512.3598626-1-toddfreed@meta.com>
-	<20261112001512.3598626-4-toddfreed@meta.com>
+	<20261112001512.3598626-3-toddfreed@meta.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -106,32 +105,49 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 11 Nov 2026 16:15:12 -0800
+On Wed, 11 Nov 2026 16:15:11 -0800
 Todd Freed <toddfreed@meta.com> wrote:
 
-> Match on the PSP Rx state of a packet the device decrypted: the SPI it
-> was decrypted with (psp_spi, with an optional mask), the PSP version
-> (psp_ver), and the ID of the PSP device which decrypted it (psp_dev).
+> The psp action applies PSP (PSP Security Protocol) encap and encryption
+> to packets, separately from psp socket offload:
 > 
-> For example, to take the packets decrypted with one Rx SPI, from
-> rx-spi-alloc, and remove their PSP state:
+>   psp encap assoc ASSOC_ID   attach a PSP Tx association, created with
+>                              assoc-add over the PSP netlink family; the
+>                              association's device encrypts the packet
+>                              on transmit
+>   psp decap                  remove the PSP Rx state of a packet the
+>                              PSP device decrypted
 > 
->   tc filter add dev eth0 ingress protocol ipv6 flower
->       psp_spi 0x80000001 psp_ver 0 psp_dev 1
->       action psp decap
+> decap takes no association. To take only those packets which belong to a
+> single rx-spi-alloc call, a rule applies the corresponding flower psp_spi,
+> psp_ver and psp_dev matches.
 > 
-> These keys only match decrypted packets, even with a zero mask, so
-> "psp_spi 0/0" matches any decrypted PSP packet.
-> 
-> psp_spi and its mask are hexadecimal, like spi. tc-flower(8) documents
-> the keys.
+> In JSON, the verb is psp_action. The action is documented in tc-psp(8).
 > 
 > Signed-off-by: Todd Freed <toddfreed@meta.com>
 > ---
 
-AI review feedback on this
+I saw several things that need fixing here, but AI review saw more:
 
+New code must use strcmp(), not matches().  Six sites: "psp", "encap",
+"decap", "assoc", "help", and the "index" test.  matches() does prefix
+matching, so "e", "d", "a", "h", "i" all become valid keywords and are
+de-facto ABI once released -- any keyword added later that shares a
+prefix either changes the meaning of an existing one or can't be added.
+Your own 3/3 uses strcmp(), so this is just making 2/3 match.
 
-get_u8/get_u32 use base 0 for psp_ver and psp_dev, so "psp_ver 010" is
-octal.  The man page documents plain numbers; base 10 would match.
-Otherwise this one looks fine.
+"psp decap assoc 3" is accepted silently and sends both
+TCA_PSP_ACT_DECAP and TCA_PSP_ASSOC_ID.  Your changelog, the man page,
+and your uapi comment ("u32, encap only") all say this is meaningless.
+You already reject encap without assoc; please reject this too.  The
+check has to go outside the "if (!p.index)" guard, since the attribute
+is added unconditionally.  A repeated "assoc" is also silently
+last-one-wins -- duparg() is the usual way to flag that.
+
+print_psp() emits "psp_action" as a JSON string for encap/decap and as
+a number in the default case.  Which type a script sees depends on the
+kernel it's talking to.  Keep the key one type.  The default case also
+fires when TCA_PSP_ACTION is absent entirely, printing "action 0".
+
+explain() and the man page both omit "jump" from the CONTROL list,
+though parse_action_control_dflt() accepts it.
