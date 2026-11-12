@@ -1,80 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.163.188.212
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.33
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794448237;
-	b=hPeSrJPAHIssvnNWtteds46rTxwUJzRw3T74avuSHl3UmEDnIkPbXQ29He0ZDl/+0sJc
-	 lpO9nfxE5O6lnMLcx1c0BSgKi7rNi7LBg8TA+/LbSEly6QlEytRetFFYJFLzvPMciaaST
-	 RVUtbT2ncJzMf+QN9o/Nqo8Ru1WARqG5csRpyTMjSIF2GZFo/uQmh7xY53hQHOCpGaPEN
-	 ACcu3KjTLzy7SbadhAYtv/SMro3+ibVLPA9yHde63vvSSGU7rBfbAcTiZf9aBDULdHhtx
-	 NC8kvLCUGaLIg6+eds9rEAZvipnHdUUpGRXIUECB1Qd3E1oXng/0eLHQ+hAgb7PGRWQ==
+	t=1794452759;
+	b=awS3zrKrlpGsj7OvdvKd6sqGra+sYJqj1I/CFw0BjfL6Z5OpFgvRBt8J5ucf4eZTly3X
+	 qIZ/kGIs351uhzMsECSiaLM3yWwIjE7swo5i+JCK4fjutykAwnUId6PxYecMN6Z6uL8mZ
+	 EJDR3godFs0WyqTSIlE02wEmT+1rC7Yr+/vUoOPmGKmIIIutsMz3xwstgBMW5TKaexK/z
+	 Wh69w4Q26L3HmF5Qy63cK1xsaXwhx2tRSfVZEBWWMqW97vBzkEKX0wyP6b3pM8qCT/Bgf
+	 fiPrUQyCME/18x2E0DhOnwFQ7kjiN24EMxL+tkkjIX4HL1L5PftvK/mgyDKyaaf1eOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794448237;
-	h=DMARC-Filter:DKIM-Signature:X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:
-	 X-Sonic-ID:Received:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Mailer;
-	bh=O8h9fybdyu+Al7CdWlfRBQ6LgqQutaBSF+Rc2HGjCVE=;
-	b=aUi6w5cNVFHwyum6Ixpaw1EhuUfCpKGvhiipBlGZ22y2+ZQjJ4pt9tbgOeCcdivXrHaK
-	 1ULbZcgusi9Cy3SIrfSfuVzFKjCHsOMxpRNe6lglBcTFnV27kBvUQJ5ftZxyXVccb3HdO
-	 7ZhDnyA9nKud/3MsZn9iBhqQbfF6IRnW0wSgrPXRF2b9/vHT1MHBfyXTh9gkKmb+m0h41
-	 mIp8en1Wza6Y8M6vpCQHwHxiBjp0I+8qjlWAeI6/SlSnZ0Q0txS8hMiSChFl1u1KDRhPX
-	 qmCaO/1zKTnLv9y3g12GJzVPq7mshKp3hkmSYLgp1kA2yhOEyoADb9FZlCGfpZ70xQA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794452759;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=+p8m1xXCOpMHRar5y3t+7zIQNJagHd7hv3urfwSVoHY=;
+	b=q/Mm6xQeoJrg2fKcpw3ABM4dauJL2bwQlHrIYVi7Byrg7cBXtEO3IuJM7wgaCS1ss1AR
+	 k44kmPJuh2lbfH8sznsdEM7gRndE8QfAtAgrVsdehU9s/bTAl352Sofc9t2WDsb6WiQeq
+	 PFs5R1UlnuTd/SZYFs3bVqJmF7fVNQvXWnxCrmoIZPBgNGsY8GYT/nzSyEc7SlFAiMpFs
+	 Umk8gC00l5CRxXAaJJb1p0m+nBTre0OLf6ph/oceYyVYaXanlcoqMsD6YcvXyk9VfcRjG
+	 Lt+8fwTUj6P2CV3u3NIOCL0XcH+cN0wXL8EnCp3LIOKqJxPsDQGXeCT+UW4jTxoU4Mw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=schaufler-ca.com;
-	spf=pass smtp.mailfrom=schaufler-ca.com;
-	dkim=pass header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=F+m434hx;
-	arc=none smtp.remote-ip=66.163.188.212
-Received: from sonic311-31.consmr.mail.ne1.yahoo.com (sonic311-31.consmr.mail.ne1.yahoo.com [66.163.188.212])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=k5NTGYqx;
+	arc=none smtp.remote-ip=91.218.175.33
+Received: from mta0.migadu.com (out-33.mta0.migadu.com [91.218.175.33])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA4B606A323
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 01:50:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AEA4B606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schaufler-ca.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA7F606A323
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 03:05:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AA7F606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.a=rsa-sha256 header.s=s2048 header.b=F+m434hx
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794448235; bh=O8h9fybdyu+Al7CdWlfRBQ6LgqQutaBSF+Rc2HGjCVE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:Content-Type:From:Subject:Reply-To:Content-Type; b=F+m434hxnazo+znIsDN87b1q6q2BjDXrSK85l4sPO4/7/Nv6ouklEMGBpfrTHUnO8eGiNQoV5Bbw/uB3JZACliQBg8PtdTRYRP97HHZoegx3ArYwH69kAdVaUPkV7WcyNd89YKs91cZCwmWeziNsUM+FCRLahqzZW3a6Ku8pvIiJlMO/7XaKbdkzRicymfmmSk9XFsFNG+fkHI8UO70pZ1hFT9v2XQiwRrAslvpHUFbDR+3rpTT4Ikh/N/oSBL0qRMnhxDrBkdI0Mmku6tTsyJWpgcJjSTSvBuepznmh0kGiP8yElqSHRAm6ov8qvVTBbZJZj+71HtVfmpD+WAp7XA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1794448235; bh=cB6ms4YZu3OSr7Oj5Ktyy9vRYllWqlKKBSjCDtAOhd3=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Wh5tO+A7k6l9RAB9CmF+7nFPpV+s7vwQOvHRCpB836zmpk+EmZdiT1obFQYb3eEYUV/ZZrDMNSGrpqiSFrVBvEAP1+BcX3bVXL8AkZe5aM0djERGyxVy+oivb40ItIA89tHRP/kW5BzO7GaPGZrOTfFkDQF1HHnKQVH/ifoH5PYTL/BXjLkbPViq5JKecTMlRIryhz3iU6NkOHkP1F3oliaijdeTD+Tk00HCA4w802Q1PFZvsZSndMk6hlb4A1wMRPh3z4tVeu12oZckS5JIJR1ywCFknBKWBE+hVxojbZ57Qr3RCaKJrua5vLBD1s/SnsdmRZ+/JLOhUlVDaAQyJw==
-X-YMail-OSG: zqmnDtkVM1n5t6ueog55b_vkFHSYM5E1qoECEJywzBr3UwiKAfUIVI_o6w7R9SH
- CQ1t93f4qyBpZEcVGjU2OBO9C0Of8.lRAD_UtcVdUMSf6_GiG98G7rNXb1ZhUGsyYLDyJE5oLG69
- MPpknxdoviNcfunvMa.q1ATsxUiRNZaaYFEtaSi7o3ARz3uzFbYwa4zXUFVTxVNR1M4yEm8E_vMu
- CX3lc6b1b0MWbnmh3DAeGebLmTpZwI12LuF9QH7MRRpV.Y7YkiPkkooycQl42qWPa_ZCsKSCVnTi
- cfYjzn7ZtEqmGYVjYEY1kEbVCA4JoS5GMMDKMoO39G5YhBugROnX2jrgGh0AwdwAby30.ZBxmd.l
- S62hS2hlPvIDoPxGhzS2whxCcIZrt8XbiUGRsBq2lfu8t9x.TIubZ4wIiRqzfDYoZIwioLDCjm6k
- .cljRFJEOnSix_ImX_sSyVP7eQAAEJ1GsHeUHb7atzAIHDlw0lV7YT_EQZaDbjuCghjYyGwMa7FJ
- LxdRDFOXlr05WMcbROqV0a4sd0J7UyT01rGVa2p8mqlfg_ZPSk1p0.zKLMJDr5A1o8n0sxe4LbiR
- qbREBgT6XAwECEJNbNHKO1YTM4iOmevp8GvnGDd6MDNapigfFoPwfu59SMy7zYd9LO3Z8_0VkIJt
- aPlGTgcyxBF.v1wQggIdb30_WaSmydGJlcGPdQ03irHq2wrwxiCoQO6IJUZEr0jypo3mUQnAGyDG
- k9vUUntKtCsyi.w0t_vFjR1T1M3Z6Xk5RLKDL9njS7LNW.CupQSEmNQ1GkX7kSwPFQP21HwmyMsp
- i9SdJowJ0s5y.bw2SrHxrP7sM6YbNToNL5ZVELMODpe5VuCBtDWl7VcCxYMmahr5455.ZE_hGmHs
- LrmFJx1uQ46OcZ2Ii956498sukETOy0INQsrtoq.ypS01I6QTO8GSI7rVFeq81ZNfcHhvUGJ06ME
- B8yJmeeVBase_8cBDx_Yk7y0xRppCWZz9S9bNwiHzQcmhSHJ99JaTf4E0zOIsgLWqU5tZh4wLZKp
- MnYneLIuBkBNwjBcYTuKXcpCwff8fTcsfan2g9ag6_HRqbKvb3lqTrnQRPIG.IGMBIXdu4D1HB2r
- Ygn65JHFmN1QF2ROBGshwilsGajQNSqHXHgx.co9RO5Evfjv8vx67t__1ew7rn3sc1C.7W_m4N4M
- cSR8SYdV43PcknGSee9yB1x8pWannWLYRUROzisZnoPLwDPX1S0a5pIeYojUo9jnHaAdfaOw5IJs
- bc0nB3tQZQ.0b782FrYX_n_pf05DxifKK1hrJ0OqXSo23BlRt.p63_4auT8X4tq9HTs9fxQLg0OA
- ydi2BtTIKopjFdQtWH0NOUC1U6_wILbgtZfZnlVsbVhHJ7Tk.UZGmAVff_vQl8b4id5D4T9jwtS9
- 8nKfk1Ghey2tqeZDF9SgVACRH_x6kJa81R1e4J_83TMyBY4Ays_MTt39YbFzXRfBMRqG0I92h9IS
- Xl4i4wMK_gUqmjpP0P_oaDsTzptxLp7NMOmOY3T81w3i60pQpmuYMvggEU3dv.ebRC4Brat.KcXq
- ZyjrZ4BouQUvapbNSNNP1Y253sBId7Ys37DryRT0fCsyFp6LIN0DYA1xElaICSH34S2v84muDGZe
- .CGRnjEo0Q2679LeUfRrG7eDmdHtGbtXa02kyQjntuOc7VrR9y8jRUHqkLiiITgSdxH1QGB5PWuQ
- ARpFP1xjX3OHKFGeQd7o8WX3xDhKeppcWAPJEhIosno79RY0IQ4.4JX7WCaXgDYbj6BL4okuPPnu
- 9CEiWKr_A1oRBHcXo_t2XyX1N2Jd1tPqjLAB1WY0vIGe1SVdGRdRloM6.RT24mU1pbFP4DjeRn1w
- _aXrAymHoztvd7BVNk78MI6f1URU2iBFJ6msmP6JgXQac5cfrtvlS9yn2eohnwEPfv__IKNy26n1
- mYs7i0yOvj6LH9jEvBJfejsFOAeuf8LBdL.MbTk8ZZiVorhzaxO81Zf4PRAQwZfM29CLtP5dAKbb
- klVicXy3HgsPrMZiM94qTb2yOlO2WSLEgrPS_2Vx31FNEHJNJpuKXHkfgTtKgjLPmpCr4Taq44yO
- KB8vbaoDybAHzNwFN22pWQG3NDp.x8aciLmMT8fUQgwMgW8NlLKb6ErL7ChYlwsHUhzhzMbUfvnT
- 2bA6QlHpoN4OcRsGeb2ygbIpUCMhvL1tqClAnkg41oGlCJa3crNRCKKeXXqZBarf9KzLHJa8i581
- 0YgHHROuHzbtZ8GRm6ggBoLbsrITMfTGKIshO9uwpGYYxl6nVscbC6LtZUsxlV5iP8t8XsYi.ga0
- EDsRWYHlK
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 4e6572e0-628c-4102-8309-f6caa349ac8e
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Thu, 12 Nov 2026 01:50:35 +0000
-Received: by hermes--production-gq1-fd7994565-9vhlr (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 15d81e1a8a6348ae9dcd84771e3b8196;
-          Thu, 12 Nov 2026 01:50:33 +0000 (UTC)
-Message-ID: <41617b0a-90d9-484e-a143-78e2a92e872c@schaufler-ca.com>
-Date: Wed, 11 Nov 2026 17:50:30 -0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=k5NTGYqx
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Rscbj3ii3KXkedD9Ow5GtxaK25H7qUUhhe198y9+pqU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794452756; v=1; x=1795057556;
+ b=k5NTGYqx+Ej5c09JHDIEjuF6TeZNDFAC5aPg3p/egPViB3BFXWjoVBeosPD4ZLURp1bEo8qk
+ whre2bHnmbYq+LUveuBty+VmUUfaoHayUIpRYL7llbz78hogV2VvP/aWw5mkWPwLWKyZ05qMgG3
+ JXRSp5lwyNrfJBldK2DoiQSQ=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 481f0c4052730cb6;
+	Thu, 12 Nov 2026 03:05:56 +0000
+X-Mizu-Trace-ID: 481f0c4052730cb6
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <8b256809-79b1-4438-ae3e-4cceb32cd7c2@linux.dev>
+Date: Thu, 12 Nov 2026 11:05:50 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,67 +59,264 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [apparmor] [PATCH RFC 19/41] smack: use fc_init_pseudo() for
- smackfs
-To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc: linux-efi@vger.kernel.org, Jan Kara <jack@suse.cz>,
- Amir Goldstein <amir73il@gmail.com>, linux-nvme@lists.infradead.org,
- fuse-devel@lists.linux.dev, linux-mm@kvack.org,
- target-devel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Chris Mason <mason@kernel.org>, Christoph Hellwig <hch@lst.de>,
- linux-s390@vger.kernel.org, linux-erofs@lists.ozlabs.org,
- linux-scsi@vger.kernel.org, xen-devel@lists.xenproject.org,
- driver-core@lists.linux.dev, Jann Horn <jannh@google.com>,
- selinux@vger.kernel.org, apparmor@lists.ubuntu.com,
- Josef Bacik <josef@toxicpanda.com>, linux-block@vger.kernel.org,
- ocfs2-devel@lists.linux.dev, Alexander Viro <viro@zeniv.linux.org.uk>,
- linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, Casey Schaufler <casey@schaufler-ca.com>
-References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
- <20261110-work-loop-pseudo-v1-19-4c998976c6c7@kernel.org>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20261110-work-loop-pseudo-v1-19-4c998976c6c7@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v4 1/2] cgroup/cpuset: Keep an active housekeeping CPU in
+ the top sched domain
+To: Guopeng Zhang <guopeng.zhang@linux.dev>, longman@redhat.com
+Cc: cgroups@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org,
+ mkoutny@suse.com, shuah@kernel.org, mathieu.desnoyers@efficios.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>, Ridong Chen <chenridong@xiaomi.com>
+References: <20261111134250.16852-1-guopeng.zhang@linux.dev>
+ <20261111134250.16852-2-guopeng.zhang@linux.dev>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20261111134250.16852-2-guopeng.zhang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.26943 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On 11/10/2026 1:14 AM, Christian Brauner via AppArmor wrote:
-> Initialize smackfs as a pseudo filesystem. This raises SB_I_PSEUDO and
-> also SB_I_NOEXEC and SB_I_NODEV. smackfs never holds executables or
-> device nodes.
->
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-Please include me at least as a CC on Smack patches.
-I ain't dead yet. Nonetheless,
 
-Acked-by: Casey Schaufler <casey@schaufler-ca.com>
-
+On 11/11/2026 9:42 PM, Guopeng Zhang wrote:
+> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> 
+> Boot-isolated CPUs remain in top_cpuset.effective_cpus, but are excluded
+> from its scheduling domain. A partition can therefore take all boot
+> domain housekeeping CPUs while leaving effective_cpus nonempty. For
+> example, on a 32-CPU system with all CPUs online and
+> isolcpus=domain,10-31:
+> 
+>    echo 0-9 > A/cpuset.cpus
+>    echo root > A/cpuset.cpus.partition
+>    Oops: general protection fault
+>    RIP: 0010:build_perf_domains+...
+> 
+> tasks_nocpu_error() also rejects valid CPU replacements because it does
+> not account for CPUs returned by the update. With a fresh cgroup A under
+> the same boot configuration:
+> 
+>    echo 2-31 > A/cpuset.cpus
+>    echo isolated > A/cpuset.cpus.partition
+>    echo 0-4 > A/cpuset.cpus
+>    cat A/cpuset.cpus.partition
+>    isolated invalid (Parent unable to distribute cpu downstream)
+> 
+> The update should return CPUs 5-31 to top_cpuset, including housekeeping
+> CPUs 5-9, and leave A valid. This replacement failure also occurs without
+> boot isolation and under populated local parents.
+> 
+> Extend tasks_nocpu_error() to take an explicit mask of CPUs being
+> returned and use it for local and remote updates. Require an active
+> HK_TYPE_DOMAIN_BOOT CPU to remain in top_cpuset. For other populated
+> parents, check within their current exclusive grant so an ancestor
+> update cannot credit CPUs that the parent no longer owns.
+> 
+> CPU hotplug can also empty the top scheduling domain. Pass no returned
+> CPUs during its availability check, and only invalidate a partition to
+> restore the top domain if it can return an active boot domain
+> housekeeping CPU. Still invalidate a populated partition that has no
+> active CPU of its own.
+> 
+> Fixes: 9b496a8bbed9 ("cgroup/cpuset: Prevent leakage of isolated CPUs into sched domains")
+> Fixes: 0c7f293efc87 ("cgroup/cpuset: Add cpuset.cpus.exclusive.effective for v2")
+> Co-developed-by: Ridong Chen <chenridong@xiaomi.com>
+> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 > ---
->  security/smack/smackfs.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-> index a72bc7fabea9..4a56bbeaeca3 100644
-> --- a/security/smack/smackfs.c
-> +++ b/security/smack/smackfs.c
-> @@ -25,6 +25,7 @@
->  #include <linux/magic.h>
->  #include <linux/mount.h>
->  #include <linux/fs_context.h>
-> +#include <linux/pseudo_fs.h>
->  #include "smack.h"
->  
->  #define BEBITS	(sizeof(__be32) * 8)
-> @@ -2880,6 +2881,7 @@ static const struct fs_context_operations smk_context_ops = {
->   */
->  static int smk_init_fs_context(struct fs_context *fc)
->  {
-> +	fc_init_pseudo(fc);
->  	fc->ops = &smk_context_ops;
->  	return 0;
->  }
->
+>   kernel/cgroup/cpuset.c | 85 ++++++++++++++++++++++++++++++++++--------
+>   1 file changed, 70 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 3052413e41e7..85f92ae0c6f4 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1181,18 +1181,54 @@ static void update_partition_sd_lb(struct cpuset *cs, int old_prs)
+>   }
+>   
+>   /*
+> - * tasks_nocpu_error - Return true if tasks will have no effective_cpus
+> + * tasks_nocpu_error - Return true if tasks or the top domain lack active CPUs
+> + * @parent: parent partition, NULL for a remote partition
+> + * @cs: the partition
+> + * @xcpus: exclusive CPUs that @cs will hold after the update
+> + * @del_cpus: exclusive CPUs to be returned to @parent, can be NULL
+> + *
+> + * @del_cpus may include CPUs that are also in @xcpus and will stay in
+> + * @cs. They are skipped by the @xcpus check, so callers can pass the
+> + * current effective_xcpus of @cs without masking it first.
+> + *
+> + * top_cpuset always has tasks. Boot-isolated CPUs remain in its
+> + * effective_cpus but are excluded from its sched domain, which must
+> + * retain an active boot domain housekeeping CPU.
+>    */
+>   static bool tasks_nocpu_error(struct cpuset *parent, struct cpuset *cs,
+> -			      struct cpumask *xcpus)
+> +			      const struct cpumask *xcpus,
+> +			      const struct cpumask *del_cpus)
+>   {
+> +	const struct cpumask *mask;
+> +	int cpu;
+> +
+> +	/* A populated @cs must have an active CPU in @xcpus. */
+> +	if (!cpumask_intersects(xcpus, cpu_active_mask) &&
+> +	    partition_is_populated(cs, NULL))
+> +		return true;
+> +
+>   	/*
+> -	 * A populated partition (cs or parent) can't have empty effective_cpus
+> +	 * A populated @parent must keep an active CPU in @mask, either from
+> +	 * its effective_cpus or from @del_cpus, that isn't taken by @cs.
+>   	 */
+> -	return (cpumask_subset(parent->effective_cpus, xcpus) &&
+> -		partition_is_populated(parent, cs)) ||
+> -	       (!cpumask_intersects(xcpus, cpu_active_mask) &&
+> -		partition_is_populated(cs, NULL));
+> +	if (!parent)
+> +		parent = &top_cpuset;
+> +
+> +	/* CPUs outside the parent's current grant cannot be returned. */
+> +	mask = parent->effective_xcpus;
+> +	if (parent == &top_cpuset)
+> +		mask = housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT);
+> +	else if (!partition_is_populated(parent, cs))
+> +		return false;
+> +
+
+The mask selection looks right to me. HK_TYPE_DOMAIN_BOOT is the right
+one for top_cpuset, since CPUs returned by an isolated child are not in
+HK_TYPE_DOMAIN yet. Limiting a local parent to its effective_xcpus also
+correctly drops stale CPUs in del_cpus after the parent shrinks.
+
+One corner case: validate_partition() also calls this for an invalid
+cs whose parent is not a valid partition. If the parent is an invalid
+partition without cpuset.cpus.exclusive, reset_partition_data() has
+cleared its effective_xcpus, the loop does nothing, and we return true
+when the parent is populated. The child's prs_err then changes from
+PERR_INVPARENT to PERR_NOCPUS, which reports the wrong reason. The old
+code did not do that. How about:
+
+	  else if (!is_partition_valid(parent) ||
+			   !partition_is_populated(parent, cs))
+			  return false;
+			
+The invalid parent case is already reported by PERR_INVPARENT/PERR_NOTPART.
+
+Nit: the comment "Return true if tasks or the top domain lack active
+CPUs" doesn't cover local parents. Maybe "Return true if @cs or @parent
+would lack active CPUs; for top_cpuset, only active boot domain
+housekeeping CPUs count".
+
+
+> +	for_each_cpu_and(cpu, mask, cpu_active_mask) {
+> +		if (cpumask_test_cpu(cpu, xcpus))
+> +			continue;
+> +		if (cpumask_test_cpu(cpu, parent->effective_cpus) ||
+> +		    (del_cpus && cpumask_test_cpu(cpu, del_cpus)))
+> +			return false;
+> +	}
+> +	return true;
+>   }
+>   
+>   static void reset_partition_data(struct cpuset *cs)
+> @@ -1724,7 +1760,7 @@ static int remote_partition_enable(struct cpuset *cs, int new_prs,
+>   	 */
+>   	compute_excpus(cs, tmp->new_cpus);
+>   	if (!cpumask_intersects(tmp->new_cpus, cpu_active_mask) ||
+> -	    cpumask_subset(top_cpuset.effective_cpus, tmp->new_cpus))
+> +	    tasks_nocpu_error(NULL, cs, tmp->new_cpus, NULL))
+>   		return PERR_INVCPUS;
+>   	if (cpumask_intersects(tmp->new_cpus, subpartitions_cpus))
+>   		return PERR_NOCPUS;
+> @@ -1828,7 +1864,7 @@ static void remote_cpus_update(struct cpuset *cs, struct cpumask *xcpus,
+>   		if (!capable(CAP_SYS_ADMIN))
+>   			WRITE_ONCE(cs->prs_err, PERR_ACCESS);
+>   		else if (cpumask_intersects(tmp->addmask, subpartitions_cpus) ||
+> -			 cpumask_subset(top_cpuset.effective_cpus, tmp->addmask))
+> +			 tasks_nocpu_error(NULL, cs, excpus, cs->effective_xcpus))
+>   			WRITE_ONCE(cs->prs_err, PERR_NOCPUS);
+>   		else if (prstate_housekeeping_conflict(prs, PRS_ROOT,
+>   						       excpus, tmp->delmask))
+> @@ -1961,7 +1997,8 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>   	 */
+>   	if ((cmd != partcmd_disable) && !newmask) {
+>   		compute_excpus(cs, tmp->delmask);
+> -		nocpu = tasks_nocpu_error(parent, cs, tmp->delmask);
+> +		nocpu = tasks_nocpu_error(parent, cs, tmp->delmask,
+> +					  is_partition_valid(cs) ? cs->effective_xcpus : NULL);
+>   	}
+>   
+>   	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
+> @@ -2497,7 +2534,9 @@ static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *tri
+>   	if (cpumask_empty(trialcs->effective_xcpus))
+>   		return PERR_INVCPUS;
+>   
+> -	if (tasks_nocpu_error(parent, cs, trialcs->effective_xcpus))
+> +	if (tasks_nocpu_error(is_remote_partition(cs) ? NULL : parent, cs,
+> +			      trialcs->effective_xcpus,
+> +			      is_partition_valid(cs) ? cs->effective_xcpus : NULL))
+>   		return PERR_NOCPUS;
+>   
+>   	return PERR_NONE;
+> @@ -3997,6 +4036,7 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>   	static nodemask_t new_mems;
+>   	bool cpus_updated;
+>   	bool mems_updated;
+> +	bool nocpu;
+>   	int partcmd = -1;
+>   	struct cpuset *parent;
+>   
+> @@ -4008,9 +4048,23 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>   	if (!tmp || !cs->partition_root_state)
+>   		goto update_tasks;
+>   
+> -	if (is_remote_partition(cs) && (cpumask_empty(subpartitions_cpus) ||
+> -				       (cpumask_empty(&new_cpus) &&
+> -					partition_is_populated(cs, NULL)))) {
+> +	/* Do not count any CPUs as returned during this hotplug check. */
+> +	nocpu = tasks_nocpu_error(is_remote_partition(cs) ? NULL : parent, cs,
+> +				  &new_cpus, NULL);
+> +	if (nocpu && (parent == &top_cpuset || is_remote_partition(cs))) {
+> +		/*
+> +		 * Only invalidate a partition for an empty top sched domain if
+> +		 * it can return an active boot domain housekeeping CPU. A
+> +		 * populated partition with no active CPU must still be invalidated.
+> +		 */
+> +		cpumask_and(tmp->addmask, cs->effective_xcpus,
+> +			    housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
+> +		if (!cpumask_intersects(tmp->addmask, cpu_active_mask))
+> +			nocpu = cpumask_empty(&new_cpus) &&
+> +				partition_is_populated(cs, NULL);
+> +	}
+> +
+
+This is hard to follow. nocpu is computed first and then partly undone,
+so that only a partition owning an active housekeeping CPU gets
+invalidated.
+
+Do we really need this? When hotplug leaves top_cpuset with no active
+CPU, cpuset_handle_hotplug() already clears subpartitions_cpus and
+invalidates all the partitions under it. If we handle an empty top
+sched domain the same way, this block can go away.
+
+Longman, what do you think?
+
+> +	if (is_remote_partition(cs) && (cpumask_empty(subpartitions_cpus) || nocpu)) {
+>   		WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
+>   		remote_partition_disable(cs, tmp);
+>   		compute_effective_cpumask(&new_cpus, cs, parent);
+> @@ -4023,10 +4077,11 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+>   	 * 2) parent is invalid or doesn't grant any cpus to child
+>   	 *    partitions.
+>   	 * 3) subpartitions_cpus is empty.
+> +	 * 4) top_cpuset needs an active boot domain housekeeping CPU from cs.
+>   	 */
+>   	if (is_local_partition(cs) &&
+>   	    (!is_partition_valid(parent) ||
+> -	     tasks_nocpu_error(parent, cs, &new_cpus) ||
+> +	     nocpu ||
+>   	     cpumask_empty(subpartitions_cpus)))
+>   		partcmd = partcmd_invalidate;
+>   	/*
+
+-- 
+Best regards
+Ridong
+
