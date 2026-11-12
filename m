@@ -1,67 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794527437;
-	b=CozsU9Q9RP8JKGwIq36XnsSWHbWIx48EymrmSnCha4EQpiJv43IAE+5pcdnwzaN2YEYV
-	 vOOZmQ6nyd3os1Mk49nMHQvfyzSSlCnTs8LUbfoOa24HX1zU17Uj6adXvHmnq3jI2ESv0
-	 JQ02753iPk65xX2fyZKGEMGyLsknuKpdji1B3d4kvcZvEUGbx0K7pK0/PnP3O3CEVcX8G
-	 uC+IT1BlrQQhSaXPzyPc+mbHa3zi2plVXI4ybu/diqOhsDwiJfiB9WRz1cLteY8LCHtiB
-	 wEa68XBTrJB9y3bnVm9j7Z15iNV+TFb2o4t9k4r2m3Ua7CyMg5dYQnUc+z6vAuf/ekA==
+	t=1794527947;
+	b=b5+ixsRUSQKbu+Oo4u6UTbhmQBKV8AV3LWnqDOKFTylAlUdDRRSVNJhw+TW4cb4zMAPk
+	 lf7J+KUqPvBQTxRyxLeYaxdT1U3w5ubG63qcbPV3O7Y5IUv9ukXCZdJinX0JdlF6KYnbu
+	 3OMF7qYeQNSkuDqv184U2UJhyjeVJ634fsx/uhQQ8GJYuLhsCIpu9hw3H7iiYvPxOqMUP
+	 lQKL9fvGzzohFpUUZm+K5La6+BrrdgTmddEmovH+kaorANK7u2wGe1ieEk8oW4VG2Qaa6
+	 8jK3VLHHyGUoXRrKTz3aEL+rfYhA9LbTuJx4CzM1/zKw0pxOrgPCuHs73GG7L/Ssofw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794527437;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=KYerT8C4qC+ZU83I8xoTGRYN8+Qc7EuzFMb4fJ6T9dU=;
-	b=bvJTcBLjyi0HXNtTjDmlmAaDZc6vuF9RCEgRKG9S3F5SkpuZrPo+HhnYcQRt2DbfBWKC
-	 0HNK8aYaSyiiIOLDgCe87AOdX9tVUFnJhDNcN9R3pVCnefA+BENeVzGcWAZKHLI5HhhaK
-	 IMLMhtbsGO+PZoT7Kd8xrB9kehYhDD0HwGxx958769KoYPO+9K90TH9+53/xU/KEbTHUR
-	 MjtA7UHfGZDfgkFoKNWF3rkcTaTxG3u2XoP4fDdixC/JZfLceapxV88GLj2mYRdfMQ5iy
-	 fdgifQ1I85dY7szOryJHw+EgXlWUaRyQQUF9WR19LA9gdk23+prnNpY5g0oNLWcHgTg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794527947;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=WxgEX4388zF6U8KM4KgbrPSeQjWqRryJtZ/6cfDPpWs=;
+	b=yGlzcA8VfB0AcPVo0ZfOur+cJ+J/hbQ/DT5ZYbU+i8hEeibbtZgwzx6w6gtZlHav2fdj
+	 eyeaCXLkz2NBRr7FsWzejTmc+s+uP5T8Cko0Jq4sxmqT3dvlJ9IJSCQSnBVrpn+nbCIFY
+	 6kyXiURezVzosr89vkqDgqvP3+Rw0XNGelGgpLq1vD7B3oRrMTviGJDMj8IOAeXFF44xM
+	 ZWBAJOgmJ0vR9BpVWHMNxDjNJupeJbyMfxYGqmGEV7KbPnH63P0GJp84cPhnDy80yvBw7
+	 wZbk7G11rZSQ0oFvzsBeYpnO4e1+wGMrXcuqsBqTMrOjwLO1L9mu1mi9W7W9X+vqOBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XEjICfBH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fChm8D0E;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D84606A8BD;
-	Thu, 12 Nov 2026 23:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9A6606A327;
+	Thu, 12 Nov 2026 23:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XEjICfBH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 881F91F000CF;
-	Thu, 12 Nov 2026 23:50:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fChm8D0E
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B85D1F000C4;
+	Thu, 12 Nov 2026 23:59:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794527437;
-	bh=KYerT8C4qC+ZU83I8xoTGRYN8+Qc7EuzFMb4fJ6T9dU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XEjICfBHV6jmHi2oZbRaTIi8Kd3xMUHxJtLk+s+Tno85YKvi7de5vAgn8PRZYYf7H
-	 2q3lAAuBcZYe6bpWywA1PzQZ0KXtZBjqVimJgVyI/4erunHrO1ZSQtB3BEQcVQL5lQ
-	 gqoGoDnGDXbVv4sMdFW6vWVRDGc16q2KbNhDQjOhWWPswVG5oQvDNNRqmDr+LS5fYm
-	 /RKra+AxKcD8RkYbMfL91gRqnMDVe0BrwSOC6Fr3OFw3mGZ5PP0sNNUsdpfKZSX0xe
-	 rCpjR3lWPt0tiC/RcrRe5eRNCX+mqpGXcfyeEYjUB6QXYrJ8MpDY4kygLd/BD1brZB
-	 lnKvD98emxmFg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	jv@jvosburgh.net,
-	haiyangz@microsoft.com,
-	ast@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 5/5] selftests/bpf: check replacing and detaching XDP on a bond through a link
-Date: Thu, 12 Nov 2026 15:50:27 -0800
-Message-ID: <20261112235027.4072149-6-kuba@kernel.org>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261112235027.4072149-1-kuba@kernel.org>
-References: <20261112235027.4072149-1-kuba@kernel.org>
+	s=k20260515; t=1794527946;
+	bh=WxgEX4388zF6U8KM4KgbrPSeQjWqRryJtZ/6cfDPpWs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fChm8D0EaIVF/iA0odcAXXSgtLTuReq648ASLwVx75+fiP4hIn2IxqLOz393lT+YY
+	 dI8xkbOHhpkbeTDq49ki1fgPcIHoVyx1+iZ7zaGmN6hCbjsvGXdDGgiwJvYx3klF5e
+	 O5UVzIf7JepO57KRDdTFadPkEVTj5ipcuzLl84Jc8p4boWXZ7hEMKmtBfiA3xf1Stf
+	 a3XKSwLSu+8hq2nPVjCaLlJOWZVVtC6rH+jtL9Y5tn9d4ybEcMlJwSUsDYuHHrC4MU
+	 s1wQta+FgpLtpRPpuq1QPBR0dfJKP8XE5E9LXzW3BEYZwID1RrNmguRyzXA0OJAFs0
+	 MmIfRR0TmzGFg==
+Message-ID: <0e3e876e-c3df-4660-ad89-a5f0fd7dedc8@kernel.org>
+Date: Fri, 13 Nov 2026 00:59:00 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,135 +51,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/madvise: disallow guard region installation in
+ uffd-armed VMAs
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Jann Horn <jannh@google.com>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Tal Zussman <tz2294@columbia.edu>,
+ stable@vger.kernel.org
+References: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The bond tests attach and destroy links, but never replace the program
-behind one, or detach it without closing the link. Both only ever
-operate on the device the link was created on, and rely on the bond to
-pass the change down to its slaves.
+On 11/12/26 18:38, Lorenzo Stoakes (ARM) wrote:
+> In order to establish guard regions, guard markers are installed in the
+> page tables of a mapped VMA.
+> 
+> However, problems arise when one tries to combine this with registering a
+> VMA for userfaultfd, as such operations may themselves need to install page
+> table markers such as uffd-wp.
 
-Check that the slave follows the replacement and the detach, and that
-the program which got replaced is released - the bond used to leak it.
+How does this interact with UFFDIO_POISON markers that can outlive even
+userfaultfd registration?
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- .../selftests/bpf/prog_tests/xdp_bonding.c    | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
+I'd assume it's just the same thing, just like having proper hwpoison marker in
+anon mappings, so it just works (uffd-wp will skip, guard installation will zap).
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index ab0f01be4131..05f2e8079858 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -516,6 +516,99 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
- 	system("ip link del bond_nest2");
- }
- 
-+/*
-+ * Replace, then detach the program on a bond through its link. The link only
-+ * knows about the bond, the slave has to follow it, and the replaced program
-+ * has to be released.
-+ */
-+static void test_xdp_bonding_link_update(struct skeletons *skeletons)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts, .expected_attach_type = BPF_XDP);
-+	struct bpf_program *new_prog = skeletons->xdp_dummy->progs.xdp_dummy_prog;
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, XDP_PASS),
-+		BPF_EXIT_INSN(),
-+	};
-+	int veth, bond, err, fd, old_fd = -1, link_fd = -1;
-+	struct bpf_prog_info info = {};
-+	__u32 old_id, new_id, id, len;
-+
-+	if (!ASSERT_OK(system("ip link add veth type veth"), "add veth"))
-+		goto out;
-+	if (!ASSERT_OK(system("ip link add bond type bond"), "add bond"))
-+		goto out;
-+
-+	veth = if_nametoindex("veth");
-+	if (!ASSERT_GT(veth, 0, "if_nametoindex veth"))
-+		goto out;
-+	bond = if_nametoindex("bond");
-+	if (!ASSERT_GT(bond, 0, "if_nametoindex bond"))
-+		goto out;
-+
-+	err = system("ip link set veth master bond");
-+	if (!ASSERT_OK(err, "set veth master"))
-+		goto out;
-+
-+	/* same attach type as the skeleton's, or the link won't take it */
-+	old_fd = bpf_prog_load(BPF_PROG_TYPE_XDP, "xdp_old", "GPL", insns,
-+			       ARRAY_SIZE(insns), &opts);
-+	if (!ASSERT_GE(old_fd, 0, "load old program"))
-+		goto out;
-+	len = sizeof(info);
-+	if (!ASSERT_OK(bpf_prog_get_info_by_fd(old_fd, &info, &len), "old program info"))
-+		goto out;
-+	old_id = info.id;
-+
-+	memset(&info, 0, sizeof(info));
-+	len = sizeof(info);
-+	err = bpf_prog_get_info_by_fd(bpf_program__fd(new_prog), &info, &len);
-+	if (!ASSERT_OK(err, "new program info"))
-+		goto out;
-+	new_id = info.id;
-+
-+	link_fd = bpf_link_create(old_fd, bond, BPF_XDP, NULL);
-+	if (!ASSERT_GE(link_fd, 0, "attach old program to bond"))
-+		goto out;
-+
-+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
-+	if (!ASSERT_OK(err, "query veth") ||
-+	    !ASSERT_EQ(id, old_id, "veth runs the old program"))
-+		goto out;
-+
-+	err = bpf_link_update(link_fd, bpf_program__fd(new_prog), NULL);
-+	if (!ASSERT_OK(err, "replace the program through the link"))
-+		goto out;
-+
-+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
-+	if (!ASSERT_OK(err, "query veth") ||
-+	    !ASSERT_EQ(id, new_id, "veth follows to the new program"))
-+		goto out;
-+
-+	/* nothing but our fd should be holding on to the old program now */
-+	close(old_fd);
-+	old_fd = -1;
-+	fd = bpf_prog_get_fd_by_id(old_id);
-+	if (!ASSERT_EQ(fd, -ENOENT, "old program released") && fd >= 0)
-+		close(fd);
-+
-+	err = bpf_link_detach(link_fd);
-+	if (!ASSERT_OK(err, "detach the link"))
-+		goto out;
-+
-+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
-+	if (!ASSERT_OK(err, "query veth"))
-+		goto out;
-+	ASSERT_EQ(id, 0, "veth has no program left");
-+
-+out:
-+	if (link_fd >= 0)
-+		close(link_fd);
-+	if (old_fd >= 0)
-+		close(old_fd);
-+	system("ip link del veth");
-+	system("ip link del bond");
-+}
-+
- /*
-  * Test that XDP redirect via xdp_master_redirect() does not crash when
-  * the bond master device is not up. When bond is in round-robin mode but
-@@ -826,6 +919,9 @@ void serial_test_xdp_bonding(void)
- 	if (test__start_subtest("xdp_bonding_nested"))
- 		test_xdp_bonding_nested(&skeletons);
- 
-+	if (test__start_subtest("xdp_bonding_link_update"))
-+		test_xdp_bonding_link_update(&skeletons);
-+
- 	if (test__start_subtest("xdp_bonding_features"))
- 		test_xdp_bonding_features(&skeletons);
- 
+> 
+> When this installation is attempted the guard marker prevents these markers
+> being applied, which can lead to unexpected results (especially if the
+> guard regions are later removed.)
+> 
+> This is especially problematic because guard region installation causes the
+> regions to be zapped first, meaning that the removal of userfaultfd-tracked
+> ranges will not be logged in this case.
+
+Again, similar to trying to uffd-wp-protect'ing a hwpoison marker (which will be
+ignored), and then zapping that.
+
+Isn't guard marker installation/removal just another form of zapping?
+
+So to me this all sounds like "if user space does something stupid, it's user
+space's fault".
+
+> 
+> Therefore, disallow this.
+> 
+> This makes sense as conceptually, guard regions mark a part of a VMA as
+> effectively unmapped at the page table level, and removing the markers is
+> like mapping the VMA again, over which operation uffd markers would in any
+> case be lost.
+
+Right, but that to me just says "on the parts of the VMA where you mess with
+guard markers, your uffd-wp protection is similarly ignored".
+
+So disallowing it entirely for a VMA, I am not sure. I could see use cases for
+that, although you might argue that user space should then register uffd-wp on
+the separate pieces. But then you get multiple VMAs again.
+
+
 -- 
-2.56.0
+Cheers,
 
+David
