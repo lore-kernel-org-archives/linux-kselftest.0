@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.45
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794440811;
-	b=RXcyUOWocgl51MKXzLhfInFCC4tVBpR63fwooNkI5BR9DRWeUuRxU3BOX9VXOKWlfYJA
-	 lQ9FEadKxz3U+ksiQTCYWeyLj8VgraYS9IjVnV8MzixKaJDX1+SDlRmHrC/4FsQT4g4bF
-	 GojnGaLP2ti6UefYD+rvTvoJyxhxYDqzkLv4X+GETw6i/kywkBJxTRFPmoJaPMvgplNTD
-	 Yo8siUrH/W2FzOOiyYXpiyssmpx24/tsjRGc63dTJEFKv3F70oI2WnbycCGto6NW72mwq
-	 IkTvgaKEyvM//j21hPnqTfi2yigESTqxh2K8m3JpZntjN8+jUv44h4C3DPT3ho4JzqQ==
+	t=1794441795;
+	b=BHNwml7MlWAsm4L8McQpDhBRFqGCAHxMbFlT9niqCtHu/cNnl673zrewIkwW8F9/RwVy
+	 A5tglv/7d096b7ob8a/ze2+Mc+Yj6k1DmLd2DQ691j6baRZshV3+VS4mQHeD5/C5HyVve
+	 el9FO5EB/XSl/nA5kTBuSDRU7kpV5W0D7+2Zu/KlrzejIsLYF/o8nztUiG8ZeAkv+FleF
+	 h2JhCSTFTU3mSSNSKhi5mH+4Lh3JCpC0eLwSu50nVZ0ZNBZBlSwr6s+09oLUHqVlnoscC
+	 IztddN+4DsX7LshhHLWhqgASILEiZKQ8T+21VCRoSWNURL5oxqtBnI1e+tVEyw3PNBA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794440811;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794441795;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
-	b=Xi/DG+cpxK5MKzfC/L0Ya2PV1d/SjCy9Sxfub0F3BMiS5Qf+b3VR0nkChMd8wJ+dzUis
-	 k1AV4ecRzs7I6UEkPAK0M8IreQX4R5VXh8cBaQhY/ldb7YprINJsFHXn9fndbcHW5putO
-	 U+IAGdm/UUCmRnyiM5pZzqlFbXlNG8q0ycCHom635L90vHEwNxzFXW++vyw/Rc/jIt4mL
-	 5NgHBWNWQkB6iRAkzK9d93F5dG1UtOYhR2DwI0O8MMXTku4LOjHc3Dnxk46FbgO0rsFgm
-	 UQ+qHTqvSreRB9x3M/vi/hZ/AhmsZ5D2nvnZayMlmN4vJdy2REQKAAeE9TVMjCfLFwA==
+	bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
+	b=Y9w6s9yqt21MdxgYzrAzbfd+e0Uu1tDd8mmXhgEbL+iCX+d9nPU3aWWT07VCosmb5h3o
+	 f5KUgE2j8vj/mdF7prYnx42s0kKETOfeG0hj8Gz+7p3YOU8+/OWAX/+6XlBi2AHO9QxtS
+	 pKhEPkaRVTCsH9vjBRPi7uHphXPZqOI1fhR9xk37EGI6zyUqoCYlNjlEIBAm3yEdl5fgV
+	 F7LNC90rM2U4CM86Shsof4w0aqNg2P2bOwoXwzwqS0ApMnn+7Ac4qU/fSYLQq6TdaEOlu
+	 /shf1+VCrJbpSSC1DHxME5sIqUYjhSt1p3S60Di5xY/uGC8DcjXJC4PRf6YODdeFqvQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NMzD0TqQ;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=cILHLZST;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.45
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4448E606A888
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 23:46:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4448E606A888
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3B4606A324
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 00:03:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C3B4606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=NMzD0TqQ
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-716c0217635so371302eaf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 15:46:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794440810; cv=none;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=cILHLZST
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6de1fd5f572so1552689eaf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2026 16:03:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794441794; cv=none;
         d=google.com; s=arc-20260327;
-        b=MbLULjk9SQCxHVme1Zej8J/BeTFgJj+W32wqXcmEOydy/ayghLP8cKRjoKH3KoL49H
-         xiFgOSBqaP7uo6/p5TcEbGYr/r6wIrJ3eO9xjW1/7yOhEB1E3etVawn7Xr7rERNMqB3m
-         XFoZIA33z3jaopyi6MPb6E8P2JDXaQWRPo1nAkGWfAdK7nVwm/MZATL2XPkzpxN+yS4i
-         E9ZscWBPl1BKqOHl+GkVYUmy5UV2Hp2DPrQ40CX2fb+BiB6mXssmG622rowkhOSZ73an
-         vt00qkgmUK57llb63t7HAUnt1b4KIWpKFDx641nu7XqMv0YAIalA6/5seONJwO4NKKob
-         wF+w==
+        b=gBga8XEQU8lExPJQ6N24jqNiJh2uvVxVi2KV+N/NoDSxHkf/85lxDJFOo1mA82x9pW
+         uEzg8ASEXG3Ix2d87W5OknFHg9oZD7JdYxbTaDmeJjx9hiBQwzB1Fo2afncCMOYnB7dR
+         CWcw3BRybt/KS40e4Wiv9HpAAgL6qonObH3zIwXf8X/mUXW48oDZ98L829rJROBddVjO
+         tSlnP1kot5swgInEcjJs+0wDu7O943p4fGQve60VOvwxcO4F26Ivb4tyezox+pipgLJd
+         ByCYzpwsZKnqgKamglQyxWjnyw3D2O9tVJM55hLSjtc1CUJ8fE+Fe/qXsP/U88O7TCzM
+         vpJg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
-        fh=jlZ+jbzYGlXFDoGvLlvFlEAoSNPiScZIf67IZVQPSVg=;
-        b=ME/TSnnYBYCJIO1sogOaQ66BqIi28fEHakpayKYrHZ5gbrBzHJ6M1gm2kx/+wpnsF2
-         XhKsnKEOyPO3zd+RMd3RLmEf8478UWRFN9hB7e/aDd6SIpmFsVv0aJQfkuzvFpFD02xA
-         F/7cbFxtlhqsLkNNZ9uQogkObDZp5OmUwnkMjXQo9Eox8kS9wxwIyzACygmQdKO7ORt+
-         o0vWOXlSaDgN8UKXNkmVUcdDOCgY5bUS9eKDVc19cmlNebbgqpU4raUWi+LkfaJGmE3K
-         buxCeR6KwrpVnQ7RljuPCv2SbSYtG9RJwyQGY+jpB5lPj/dhJHK9KMeDQa6uE3Dx/lVZ
-         3z+A==;
+        bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
+        fh=EFAIW7GKjNEZ1GBZ8ixTlyy8Km2wHMhJB9CtgF0eJtc=;
+        b=tBAPQv30lBF4S0MYTPt/GGo++98rVRkBXOW2A7Wi53kcdtyCqlFlb6s7gwieiJ3SCS
+         XpXAKPRwoxts2mi8fLINQGlDOYa9XoBKpMx1qv7874vXdL9sMXGnH+3YJ4CPr4EKiBIR
+         3/4O59Q7ZCbLARqx5iZwC5NAs5PrmvPtcl5OoOp3sHv0Pd9M+Wohwn8MSkbrE37xfcOM
+         oHtVOxi6PodQomNhYXjFsOAmcaKBlOtRwUipwaTQ63ydGPp3+NHLLDI8Jx9A/+WqSlif
+         OKvazWAg58ooHtFb5HBrJGPIiXADAxyHlLHXp7AJ7a3/bz6YAGfSPPNiU7QTAkYreyla
+         dJeg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794440810; x=1795045610; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1794441794; x=1795046594; darn=vger.kernel.org;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
-        b=NMzD0TqQuwQhNFF7aHIeC3SA22YiAV6mClPOc6MrGmoClNILecdh5gv9EaYatBhdKE
-         S1H4sFNblnlve+OJ5uv+CLBpCh3zyK3uPT9kEdQN0l12HoIbPqEJlOF9UoFWSkvyP+rJ
-         3mNTQlsFv1mTjxeytumNxJdr4WJuHO33aTEDzdBhhksudoGOfutqWottdoB1bfhO6aSd
-         y367fAjCvv3590WzqeHb+Op5WihluIRpLNtFeGoYDaTL1OBZfeAsuyTJH/7XQqQHlccp
-         0Hkjf03LWm6Ft/NQ3NDaVlRkGHvuDpIkm3elkOCI9vAVjkFFQnT19iVmrD5Rtd8pjCBp
-         EfZg==
+        bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
+        b=cILHLZSTnKQEkbe7N+Oc0kZd1YMJ90v+inoo8hnd/du4Q8+TI7ThmqwGF7mc5pC4Zc
+         p3RST8uK9+o/pASznYLtV0Z7weQjU6OIrJgytinvIk4otwF+rNEOKoimbWWnNMqH5buJ
+         xCLw9HMNTcZlZTRHoJrN6pcicTv9FCZZeYbCVTLEV3d1vbtkvmzglrLY0Rw0y2iTXn+U
+         z7pDnxzc2gWXMtz92BavIWrAnQ1cEvS0+M9IK0CPUjNYAYrv8VaJisHOkU80CgP/RKfw
+         MyqjjMvpkeYtcCpkYSm24Gf8unvyyVbX7NIxTeOG3ssNop+SIoW1Unp6JfOBJr+qi4OR
+         Btjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794440810; x=1795045610;
+        d=1e100.net; s=20260707; t=1794441794; x=1795046594;
         h=content-type:cc:to:subject:message-id:date:from:in-reply-to
          :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=qNTqvp880V1AzQPjbJWvL9f9zomucT2LF6ZlJcI1BTI=;
-        b=PVnjQFMQL7AHEvEIsx7CZKJ2QGTKBSljYknKG21xUkepIE0KgNUjPbfPXzRip6JBA8
-         OGroZiMsiO3o6G3zfMldQElqp2FmSgj7jSysxoS6+1OTwQuvnQu4gJDcDkND81eOZSAr
-         phsdB4lbrdtxgdYLk+L9NgFLbB5kIMQ7oe1K+jjD6Zdc/iegyifril1RJvaaD/+GvKac
-         bZgwxxY361UE2H0CZBTotpRGu7AbMaT3S9QvKGu8GdZI1yEmJ90C1lhU616b9QX1DpI7
-         fPDyq12evaIF2ZcibKwyHgfeDEDrmHz2WdJVp7o/sVGi6Wg33/ZTVUjYKuM4TWFqKQgC
-         QoHQ==
-X-Forwarded-Encrypted: i=1; AL+hErGdVdRGE0ZbRfTG34dDRaanvsVm+sGN1RDfTlu7Z9rCF+qycCrycpgusIeM6tEEj3aO6/xkU/eVzl1ndoT3JSo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/6VKvPdoflQFvGUXXCql5c7I8ZsXfg+wvrGXbfo7RbOLcCcljj
-	Q5T5/+k4xivvdLRzzwO/g6n4uwymGyNOtZa2FwwsIaIPun/ucQK0ZsDQ3vwa5CZ5vPnWXibtidU
-	hgWMQRsfW6Aig8D2Et9x+UbCfSMAu2Q8/VoXReQEhWg==
-X-Gm-Gg: AYBFou3aqZZYLImfDm/VgrgAIgQXksV61emcgH1jXh2ofocO7Dy+YMAuU/GHDDxeERJ
-	/147N2pRztOYTIqVyPLJz2zqOhiTHF3FwAHUFpACzL4uvTbSYj2OBNoCFSTBLb0cA4Yz6v+f5Uz
-	4N/b+0INf4bv3Slx9QRkzf+GrKgmJHLN57kwaZbJ36MUcyV4Duzrzh0jgVmXnW271zClYWxKTKz
-	17s9NWWAQa5R/8XLnPndY2egMqS+wnHmyjQ03exuZ5gEBIhwRmAIGbmV4PnDAG2xdicXHwkX2HU
-	n5j98kp34dM6ZKd8dcbGbCeiNb08DhhxVIMDWW2qcYgOny9kM8N29fv6fWkX+xlaFQJo+syPdn6
-	R6KtToKD5zcwmBTDaYTgZE2vDY95RFI2iBbssU0ukA7gZ2HuqULeRg8vI7NShA9C0o6aFVXWbHk
-	DcAVuyW1qtVw==
-X-Received: by 2002:a05:6820:f004:b0:719:1627:6c16 with SMTP id
- 006d021491bc7-7196b62ab2dmr743911eaf.12.1794440810117; Wed, 11 Nov 2026
- 15:46:50 -0800 (PST)
+        bh=tSGqJI9Sfy6jLqsvt9BVccCgWOo1O99X2AFDHy843oU=;
+        b=SklZu/fIPz+0/rbR4/sDqBY/xjmpRp7cKcfVbJoTBwvwXCOyEEud/URwEXzcIkqT9v
+         dPkc339I5cBnSAypXUxfPXYcBlyfsqmTCQuc4OWYfxbz0D5cpaw1s1t1CGsFfQqI88EK
+         OWZh+0J1L/B9doFeaCqWjssWcCS33vuxM/XQPqypnAehCkaAhZXYGbxecjtFzRHSj3jH
+         dgifVQRDiFk+8ir4fizIyglQP6Ui+IMf+ZH3jNtdjTA3iVeTN79AjgeHvWJNaSnpQcTn
+         69m3bEUMImhFoD5wuqwwh+edKicwN8CUWqqlV0/WHub/yxP+zgfQsVMvNy9HqlhWZ7IZ
+         4ELA==
+X-Forwarded-Encrypted: i=1; AL+hErEGpxsTRI9GQ/FQylOSsxv6EESFXqA02dg7Zl6MA/q5Pgaug/LANAOkIBgoFqx+jSBpoVSfCQzH4YTdNoGkzZU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z85YcFeSd55JHdFklwjc0Uds584Jary+XOSvTc3/rSJy1o3WCHJ
+	eKIQJqUp4CvPkUnsOLFFUDuVvPNRo3PCDqjzLiQAlCxPsmhMDVDZLrQLq3ukFV0Qm+r37sNpxNZ
+	f6eFdpOfwY/dTzHWwuYxMvT8NdK/QSazJ8t7VNe2wwQ==
+X-Gm-Gg: AYBFou1DuZ1G6/RZCTy3OjNjtMr+0mEjxKyJinX3ceNRWkKRYUdxOTfpInBpUKjAMni
+	MrtesExB7ip4hJ0q1rSuErgf5BBnjwGhvlfjf5LAE6xacuVDAXXZvgFXaZLI6TJ/iN3HjPm8ltl
+	rXl5QdRWVce1rh2OTBVjiK13vLvdWgJpH9BWUv3FcZdBYTgdUFA8talPTIP+40R5ZLHKEiQ41Ta
+	gUTiOhQiaOYsHZ/jjC2mVASuAZbEequ/J3UCFbuSIr0iafdlHt0HKWpR9HpXY0+n6eWTj+mnpXf
+	szu410C9YkAt1ArBuYP1yF2OBO2BW4RCAKcsqKoAyYy/EfvHY6EdwkvTSRUYdLA1tQWRs6PdHn2
+	RrPelLwhgsl9sa1nin/xW1eptrDC8uaRQvIHpQu/J5dcOd4qFeY+OvedufvQpvFv23MUCBQC1Do
+	kIwr/YAKEEPw==
+X-Received: by 2002:a05:6820:1341:b0:70d:8086:e48e with SMTP id
+ 006d021491bc7-7191784f4c9mr2405201eaf.20.1794441794070; Wed, 11 Nov 2026
+ 16:03:14 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,85 +104,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794281983.git.tianyi@cloudflare.com> <avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
- <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com> <avTqb--WfUNBcEyN@devvm16445.scu0.facebook.com>
-In-Reply-To: <avTqb--WfUNBcEyN@devvm16445.scu0.facebook.com>
+References: <cover.1794020868.git.tianyi@cloudflare.com> <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+ <willemdebruijn.kernel.1d64e7848503b@gmail.com> <20261107182526.69543-1-tianyi@cloudflare.com>
+ <willemdebruijn.kernel.2c6a653eb65fa@gmail.com> <20261108190831.3f991a13@phoenix.local>
+ <20261109154909.32748-1-tianyi@cloudflare.com> <avTOvr+yy+2j8xrQ@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+ <avTSBFpR2t7PO9tx@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+ <CAG4wq-d+LtEi-omGwzgqx14rCp_4J9HztGMpa8ioMsviaPw+ZQ@mail.gmail.com> <avT4CezZCiRhvCXw@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
+In-Reply-To: <avT4CezZCiRhvCXw@dev-dsk-dkeogh-ai2-36d3b9a7.us-west-2.amazon.com>
 From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Wed, 11 Nov 2026 23:46:39 +0000
-X-Gm-Features: AclHuK98I8l2CyqIug_hRhhYiDHFe7Xrim7_SwhM5rRiI9ms5coKAG0rV8Jl2JY
-Message-ID: <CAG4wq-dw8VqiVTbi-fSJTnwj+amkfE_56ndKCYk4v31z2ppcTA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
- metadata until skb creation
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir Vdovin <deliran@verdict.gg>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Tushar Vyavahare <tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
-	Ioana Ciornei <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, 
+Date: Thu, 12 Nov 2026 00:03:02 +0000
+X-Gm-Features: AclHuK_s8wIPjsY9dzqaekzO2VZaPxMJTb6Tg8Z4dNlh8vuXp1Ar6fObcRSwolA
+Message-ID: <CAG4wq-cyLyxnnmhPvL+ZNmnXGjBp=OsbBNE=16j6WRSVJ8uv3w@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and LL_ALLOC_SPACE()
+To: David Keogh <dkeogh@amazon.com>
+Cc: Stephen Hemminger <stephen@networkplumber.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, netdev@vger.kernel.org, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea <dtatulea@nvidia.com>, 
+	Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam <alasdair@mcwilliam.dev>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, 
+	Ido Schimmel <idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, 
 	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Chris J Arges <carges@cloudflare.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	llvm@lists.linux.dev, kernel-team@cloudflare.com
+	Randy Dunlap <rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>, 
+	=?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>, 
+	Danielle Ratson <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@cloudflare.com, nh-open-source@amazon.com
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Stanislav,
+On Wed, Nov 11, 2026 at 11:19:37PM +0000, David Keogh wrote:
+> On Wed, Nov 11, 2026 at 09:41:32PM +0000, Tianyi Gao wrote:
+>> By the way, I plan to support tcx only in this series. A tcx program
+>> is attached to one device, so the kernel knows which device to update
+>> on attach. A cls_bpf filter can sit in a tc block that is shared by
+>> several devices, which is harder to handle.
+>
+> tcx only is fine with us. Our chain is attached with cls_bpf today.
+> Rather than move it, the simplest option for us is a separate tcx
+> program on each device that carries only the tag and returns
+> TCX_NEXT, so the existing tc chain still runs after it. A few
+> questions so we can check that this works with v2:
 
-On 11/11, Stanislav Fomichev wrote:
-> My main concern is that we are adding a lot of code and one more
-> special way to plumb the metadata (and another metadata area), another
-> set of kfuncs
+Yes, this works.
 
-The RX metadata can be stale on XDP_PASS and lost on XDP_REDIRECT.
-There are already separate attempts to fix it:
+> 1. Is the tag read for programs attached with BPF_PROG_ATTACH as well
+>    as with BPF_LINK_CREATE? "bpftool net attach tcx_egress" uses
+>    BPF_PROG_ATTACH, so a startup script could do the whole setup
+>    without keeping a link pinned.
 
-- the RX hash and the VLAN tag [1],
-- a checksum assertion [2],
-- the checksum invalidation that you suggested [3].
+Yes.
 
-For me, the question is not whether to plumb the metadata, but how.
-It is not great to have fragmented mechanisms. The skb core extension
-area aims to unify them.
+> 2. When several programs are attached at the same tcx hook, is the
+>    value the largest tag among them, and is it recomputed when one of
+>    them is detached or replaced?
 
-That is my view. What do you think is the best way to solve these
-problems?
+It is the sum of the tags, because each tcx program can push headers.
 
-> and slowly creeping more features into xdp making it
-> more and more like skb.
+Yes, it is recomputed.
 
-I will leave this to Jesper.
+> 3. What is the exact form of the tag: which BTF element it must be
+>    attached to, and the string format? It would help to have that
+>    documented, since programs will depend on it.
 
-> For containers in general, and for fast af_/xdp, we seem to have been
-> moving into netkit with queue leasing. Maybe that's something that
-> can help with your veth performance?
+This is the form I plan to use, and I will document it in v2:
 
-Thank you for the suggestion. Unfortunately, it does not fit our case.
-Our XDP program decides where each packet goes, from the inner
-headers after decap or even partial decryption [4]. Hardware queue
-steering cannot do this.
+SEC("tcx/egress")
+__attribute__((btf_decl_tag("tx_extra_headroom:64")))
+int headroom(struct __sk_buff *skb)
+{
+return TCX_NEXT;
+}
 
-This series also covers cases without containers: XDP_PASS on the NIC
-and cpumap load balancing.
+The tag is a BTF decl tag on the main function of the program, and the
+value is a decimal number of bytes. The kernel ignores tags on tail
+call targets.
 
-[1] https://lore.kernel.org/all/175146824674.1421237.18351246421763677468.stgit@firesoul/
-[2] https://lore.kernel.org/all/20260630191510.81402-1-deliran@verdict.gg/
-[3] https://lore.kernel.org/all/amEojEGsIGkUjIWn@devvm7509.cco0.facebook.com/
-[4] https://lore.kernel.org/all/ca38f2ed-999f-4ce1-8035-8ee9247f27f2@kernel.org/
+> 4. Is there an upper bound on the value, and is a larger value
+>    rejected at attach time with an error, or clamped?
 
-Cheers,
+The upper bound is still NETDEV_TX_EXTRA_HEADROOM_MAX (512 bytes).
+
+- A tag above 512 is rejected with -EINVAL in tcx_prog_attach(),
+  tcx_link_attach() and tcx_link_update() in kernel/bpf/tcx.c.
+- Several tags, XDP on the veth peer and VETH_INFO_TX_EXTRA_HEADROOM
+  can add up to more than 512. The total is then clamped to 512 in
+  netdev_update_tx_extra_headroom() in net/core/dev.c.
+
+Thanks,
 Tianyi
