@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.220.120.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794524925;
-	b=h/Kd/QvDjVTdXywr+UjiiP6tA+RY2UzxRuMWpnPFMhjyfHZHOLwVo9vzIvsYoq9dv3hG
-	 sVv1xdB1YBnfryGBIeiCUiUX7LV018zi0H/ZUrvp07LSqCh5ts1T9g6l5x/SbHC4dbA6u
-	 DQYH6jiZjJTskSGtWPqdq63Zla1108Ol4jVIxekBNoqoyxOGEVJEOEXpAnvjuW5Y1pU+d
-	 grNRBmKCZ/OBfeipdEOkD2AJZq1aR2C88u5w9/WHOLW9jXpFgebdsJmkaPi4fAapzKxCY
-	 GWzqUyl2ipejzs+QLYm28nSn4aHXFaMv0WsqlTjvASAi27vondm0mPS27IyGqkXuv2Q==
+	t=1794525026;
+	b=XKBgAO+stHA/WKAT42q64q1Q579tksSjMeh6hM/dikOO3p25lCHLbyazIbuIAntpZMZ2
+	 IdGrGxZx8q0eDjRkI5m48IIZW/HcG3qmxrlqk9VogZV+XEn8l3lYteuQnI546LBs/24cu
+	 yToH6CkguB2LmeNQAcRpKY7VjS+rS5eYjdLlONyId0UtC5IcAPjIJeFjvBjxXxDRSyS/M
+	 u5XQCDzK/auLJgdPETcXjj1eOF/JfhA3o21KNYiODItKld+EDybfkFqhYRg4pYa4fczwD
+	 ngZZeaBbm9vZoRK07z+CZ4rv3W2NZNuxLC2y1DE2JLHx/M1JRwZNfy3S/pGZe7Rf0XA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794524925;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794525026;
 	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=Y+P7XadM8mg2ZusdvDmS9q16oQmmftq9v/082mmiWRs=;
-	b=Eo0ZVMKanrdXoeYq3l+SX/fqdUR35Eqbx6i18j+sgCPdFtT9Jhpzvranor0aHxB8zdYT
-	 h6zblU+6rbbeZCHu58v4S7aQbUhEnx6G4xdN8Y4OlasiLkLxPKRIiPAJ8oFXirnuaCrTJ
-	 jedSd03F4pg2diGobcFRtbIK2OXmm8WnhwVcB01E5ClLB1186wlmMjj0X9VJcCKfERATF
-	 R63q9vU84Hy0102hn/okuqRmClE3CM3qgak0mi/8fVxAkwIGlqPsEgmIrclQpqqFrAg36
-	 iLrYOkC4bPykYpcpFm/40dddD+Oc4geFAwVxUopXDaE7bAIiOUVVNUmPFB1nWdZhGvA==
+	bh=NHpzrGhwScZQqo5O3e3O2msFByF8OHa6DDMLJsoZ0Lw=;
+	b=ipMnFCOgYBvNN0qdjk/4crB6Pxnk21qfHyASoUOWdH3ZpS0XgpNxCrAXRWJei2dE4EOX
+	 VGRWGh4At7sdSsmCBGFqL+xeHANHfmHrESQBHvDvFSjwE9K48iCHaju2GQqB6rPdGYvZ8
+	 EvwWNlkQ7UCrEby9YT2C96NevX48IKmp0KyqOvSw/muxdh22rkCKq6JyGhvuMBmJKpy6J
+	 P8VUaK6wER2e/3DdOGW7C17FUm1BfvjmjZL3ED94jYFQ16lEHgKNmnxwvnDf6nGmr9B3I
+	 0Sb3LnCnd2/Aq0kk6JFjJkYk22j4tV+0DowaRXdajX0KIVrZjojyboHA1f0fAmziPUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=grapheneos.org;
 	spf=pass smtp.mailfrom=grapheneos.org;
-	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b="HIvcmT2/";
+	dkim=pass header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=TpfD+fe2;
 	arc=none smtp.remote-ip=206.220.120.4
 Received: from mail.grapheneos.org (mail.grapheneos.org [206.220.120.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B5B606A323;
-	Thu, 12 Nov 2026 23:08:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1B5B606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4B3606A31C;
+	Thu, 12 Nov 2026 23:10:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B4B3606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grapheneos.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=HIvcmT2/
-Received: by mail.grapheneos.org (Postfix) id 7EAA93C08EF81;
-	Thu, 12 Nov 2026 23:08:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=grapheneos.org header.i=@grapheneos.org header.a=rsa-sha256 header.s=default header.b=TpfD+fe2
+Received: by mail.grapheneos.org (Postfix) id 385623C08EE90;
+	Thu, 12 Nov 2026 23:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grapheneos.org;
-	s=default; t=1794524918;
+	s=default; t=1794525025;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Y+P7XadM8mg2ZusdvDmS9q16oQmmftq9v/082mmiWRs=;
-	b=HIvcmT2/ut5/iOXALOpYFMWoKzu+HnRR1rBUEG6T4m6sycjeu65DG7Il8689yADCeBuFZj
-	v0gx9mPQO1yhL3u22W6RXpJbSbtaEFO3eR7hB6x8EX0WY9A1Oz1FvUAZifDEI3lngN1J+w
-	sQAaQfLGKrZERpLcNMwBCi0MLMWVecfvZKv/3CSikU+/M3QEhtUkaAvqMhgB4YGWmrmL5x
-	sAD1ufyZkVE2q90rdXC2QFIy1WqXix8QaJ5DzUDZ6SAJLUmmMQ3xHv27MAVOmKfP1zkaPn
-	+xOSn/NTAS+sbAF9ETH8jT+83BbFp23QtpRrKzouv0w8tbWOjRRH+8dcF81Cjg==
-Message-ID: <2503cfd2-5629-448f-bb9b-111ea239efb6@grapheneos.org>
-Date: Thu, 12 Nov 2026 23:08:28 +0000
+	bh=NHpzrGhwScZQqo5O3e3O2msFByF8OHa6DDMLJsoZ0Lw=;
+	b=TpfD+fe2XbvMUKrxV5bPoum/lSqERE3OPAsv8/ZAM4Z5IVIjJt5nXxClnXmYYI9rNe0xnf
+	xSXaWjsVWiY5W3U3PwxDYT77BcKP0Dmvlzd2C0NipnrVTajy3//NYXITh4vzeqhc+NpbW7
+	heCXxlxn755vPT/+vVKnmq5WWhP4e9S5BkLpwGYjPG5hrq1vxJLDAqddPXqELLszV1ZD7p
+	Pua3V9LSny60FH3Cse9Jj1GWVJ9o7u6PjFOLtI9/ZL54W/2LLXLNHvU0u0CJTTb66tbTwS
+	WiGvS7htiPmV4RNAxneLUCttmLISdzfSbgjPT/Ka1YbA/bBRav8A3ZBOKKYtFQ==
+Message-ID: <306d2707-3cc8-4899-a0cb-df36a53ace2c@grapheneos.org>
+Date: Thu, 12 Nov 2026 23:10:17 +0000
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,26 +58,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Subject: Re: [PATCH net v2 2/4] ipv4: restrict on-link fallback to lookup
- misses
+Subject: Re: [PATCH net v2 4/4] ipv4: replace obsolete routing comment
 To: netdev-bot+sashiko@kernel.org
 Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  liamsmith827@proton.me
-References: <20261110061536.10811-3-liamsmith827@grapheneos.org>
- <179451823511.2199510.15480690224597348773@kernel.org>
+References: <20261110061536.10811-5-liamsmith827@grapheneos.org>
+ <179451823662.2199510.13028840415362290242@kernel.org>
 Content-Language: en-US
 From: liamsmith827 <liamsmith827@grapheneos.org>
-In-Reply-To: <179451823511.2199510.15480690224597348773@kernel.org>
+In-Reply-To: <179451823662.2199510.13028840415362290242@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 11/12/26 21:17, netdev-bot+sashiko@kernel.org wrote:
-> - [High] The fix is incomplete for route-based restrictions.
+> [Severity: Low]
+> Is "always taken for multicast" accurate when the oif is an L3 master
+> (VRF) device?
 
-This is not a legitimate issue. A RT_SCOPE_UNIVERSE route not matching a 
-RT_SCOPE_LINK lookup is expected. Route maintainers should install the 
-correct routes. An unprivileged process can influence which rules/routes 
-are matched in many ways other than MSG_DONTROUTE.
+This is not a legitimate issue.
