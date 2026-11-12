@@ -1,49 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794494406;
-	b=I0j3QOmkecxs46lxoQxlGOGrphBE7ICGAtOfFXQEe4ja85KGUK5oEmXCijnoyKHfWRwL
-	 88pjAJpU+clkHpJKqNFCcbfDPxuyWx7qDB/0+jHhMHBMtlYJS4WggHUAgrHqyF7ot4kSp
-	 +HTwmRJztjvRCxXUHdHA4IhRHG6JNc9lauxAjslAik6rs1oqUsVFgw5O3R+231sy3/h4v
-	 8DbVkXPwmjOR6AHHVN5YFQ1HwF7jKgP+XcZJUKINkyxdP9mN6eQcsefuo8zYDARcnpuE/
-	 Zs0xmpoW9CZBSNsJKLQKxGHr/cJD6Y3YFCxAZ6CMFv7RdSYTsDydR8Od8qQgicl1Djw==
+	t=1794494547;
+	b=GhpLjV3ss1U2Q9U1gUsvfqlLcAK7WHl9kzg3xeBKpD21LR5+o1N0DY+T8Fb7VmNvWCo4
+	 ijj6oWjxkJJIg2At969qpF2qrYgoU1CJkLAdmaH9RhOEtyodiCzSl2t+WvX4SHeypqETQ
+	 E1+Nf6/5ffKuI6AV+F5hj7zvgEXS93KKQNSbflTmP22Lh2qvBa0B7oX4al4yNK8Jrn4uv
+	 IOe+pqMtvOQBEU5ZXdYmPWCOojxulII6lAQCit6pvxkriy6VofF+Snj/+QpVM40vl5VI1
+	 CyAQOCu5eqjcVgiUX1GtwozPmbNR4OrbYg1tZ5OSjqD0cY4QWkcMgKSQhVIL+ezI9cQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794494406;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=/YgjS0S7SEWiPuFC4J1IiVsVQwqG8NJBnGxBnySv3mw=;
-	b=h3gzlr3kr1jJ3V8+/ANdmZZ7ALWb9E+FhEa5IAtkmdI+JE/3fh7gg30l6hMu106gtLbG
-	 M3JtISNxCRO6pVV9sEcngRZ3jJ5AjV78rPHOR4GzllLq49sScN1DxS8vDbliilTjZlQCI
-	 UdKd9s6N8rpRW2B5TLcNW1jnPWnuSm+bfvx3LpVZpAf29Br6jItxk9tFPM9aTI+NqusdV
-	 FYBfjMg17jtwK3eHQGrn+tivabuwcZLZfgVph8P+LSUD26OuE3w/hr1Z2KbPRdrnVzo8u
-	 IpBtsToV+XRxZsxZUBidcTmZWEPyfIkiUtSdaSobfOLH47kcHbNoKBgyMlf0Obe9Sog==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794494547;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 Sender:X-SRS-Rewrite;
+	bh=qZYyj62zk4DKgGeMeAwMpBAlP2Mi8ofGhkV/pgn7PNs=;
+	b=2mfYcYSbdOLsrU1MpTVJMsqehR30PQxLUTMhWGEzPF6CpJcOJJTJwTvOVCXBQeS5iPyc
+	 ZNsUttfbC60VrgcNy/HA3H6dmhEOPoRNTQfnRcqNiLZsErU/iRqW+tXMTOrEwoiWT6vBZ
+	 VvXppOpB6nTzppF8s+kfyO2UyujpZ7FP25oyaGTfpFKI3OY0jNNHnGOTMB6OrDfSIK4EU
+	 TU3oEZa498xlKUV0c3oLFKVSxnpmTXWgwtA8go2OgCmRDKIvdZbf0r0V3+SPl3JKoT7j0
+	 Wne47XqPJxAMMP2jpOv3dwCztT49O804MQj9xAHjcQokpUmt0wWUGrc9wnp7xXVB3og==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k6XzK4fz;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=none smtp.mailfrom=desiato.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=qSmsmSGf;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EED606A321;
-	Thu, 12 Nov 2026 14:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2E1606A31C;
+	Thu, 12 Nov 2026 14:42:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F2E1606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k6XzK4fz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3081F00A05;
-	Thu, 12 Nov 2026 14:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794494406;
-	bh=/YgjS0S7SEWiPuFC4J1IiVsVQwqG8NJBnGxBnySv3mw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=k6XzK4fzei5qPr9skD02+W+3eqLqS3/FDo7SKXyIkO3qT58gLoSGL3K9yQAsfEY26
-	 5MCtewlmmOxg+huOdrdc9gMFqwja3swa0qjwCH7K3cdJGzEcig4xBFYlTkXXZgx2Jf
-	 wHfVm71hAmz46SsrdRc/sJ5eIn4KeA4felEH+OTAoM+EoG8Q8Rzt21DKma9vKvOKI8
-	 vDQfkanK4tIx4ErefaAGHkCboaflBKrnsk27/AWpU8CCDNzS333FCdHf4hiMvmFfA3
-	 6Ot6Zf6RMRFS30c8Jzvpy6CHtljj8cVf8jYO6HnyBt2GQRb7Mb9TqeghD7CieLCRCq
-	 uyQl7ZA38Bytw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 40C023AAA6D9;
-	Thu, 12 Nov 2026 14:40:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=qSmsmSGf
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=qZYyj62zk4DKgGeMeAwMpBAlP2Mi8ofGhkV/pgn7PNs=; b=qSmsmSGfb1mtxy7pnlkZ7QJVdY
+	M5PqfEID+y88Y0NyMwhrF+tZ6z2nHfHWYkTAg+cmRggQYOJw1m+kAwlDNDceoDktqtq072X8fofrD
+	fvOHzETrBlCATXTp7rtjFgDzYbUczA2arBII3GwSgWvm5dd7IOatsTxTHxRMjciefd1HnnqCiJ5ud
+	u0xwRF/qFB+NEXx4qESQzSyBYAOByukM+HJnLg18lj3PSyUKT2x7B58A3exvNb00DhX/FWmL6IZ/S
+	LQmPetx0sN3Fk2663fmOTk4JUywQ+otRwPNy02MjopFS44uVA+rHiYv+Pc4qeDqmxh8mc64GcdsDa
+	y1DRP+0A==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRW0O-0000000ARvJ-00Aj;
+	Thu, 12 Nov 2026 14:42:23 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
+	id 1xRW0K-0000000080t-3EEa;
+	Thu, 12 Nov 2026 14:42:20 +0000
+From: David Woodhouse <dwmw2@infradead.org>
+To: kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Anish Moorthy <amoorthy@google.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nicolas Saenz Julienne <nsaenz@amazon.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Woodhouse <dwmw@amazon.co.uk>
+Subject: [PATCH] KVM: selftests: Drop stale exact flags check in private_mem_kvm_exits_test
+Date: Thu, 12 Nov 2026 14:42:20 +0000
+Message-ID: <20261112144220.30801-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -54,44 +74,43 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: forwarding: vxlan_reserved: drop
- redundant in_defer_scope
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179449440512.2146648.7889847093364560776.git-patchwork-notify@kernel.org>
-Date: Thu, 12 Nov 2026 14:40:05 +0000
-References: <20261110-vxlan-reserved-tests-v1-1-a252d69c841e@proxmox.com>
-In-Reply-To: <20261110-vxlan-reserved-tests-v1-1-a252d69c841e@proxmox.com>
-To: Hannes Laimer <h.laimer@proxmox.com>
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, petrm@nvidia.com
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-Hello:
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Commit 7d0afe669374 ("KVM: selftests: Take into account mixed memory
+fault flags") relaxed the memory_fault.flags checks so that they only
+test for KVM_MEMORY_EXIT_FLAG_PRIVATE, since KVM may report the access
+type alongside it. In test_private_access_memslot_deleted() it added
+the relaxed check but left the exact match above it, and with the
+READ flag now reported the test fails for me there:
 
-On Tue, 10 Nov 2026 15:03:55 +0100 you wrote:
-> With commit a6e263f125cd ("selftests: net: lib: Introduce deferred
-> commands") tests_run() already runs every test in its own defer scope.
-> So the per-test in_defer_scope here does not do anything. Drop the
-> in_defer_scope calls and the wrappers that only exist for that.
-> 
-> Suggested-by: Petr Machata <petrm@nvidia.com>
-> Link: https://lore.kernel.org/all/875wyo6b7d.fsf@pmachata.org/
-> Signed-off-by: Hannes Laimer <h.laimer@proxmox.com>
-> 
-> [...]
+  x86/private_mem_kvm_exits_test.c:93: vcpu->run->memory_fault.flags == KVM_MEMORY_EXIT_FLAG_PRIVATE
+  0x9 != 0x8 (vcpu->run->memory_fault.flags != KVM_MEMORY_EXIT_FLAG_PRIVATE)
 
-Here is the summary with links:
-  - [net-next] selftests: forwarding: vxlan_reserved: drop redundant in_defer_scope
-    https://git.kernel.org/netdev/net-next/c/449f6097e144
+Drop the exact match, leaving the check that the fault was private.
 
-You are awesome, thank you!
+Fixes: 7d0afe669374 ("KVM: selftests: Take into account mixed memory fault flags")
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+ tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
+index ed8edde9b718..e07f4972ab7e 100644
+--- a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
++++ b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
+@@ -90,7 +90,6 @@ static void test_private_access_memslot_deleted(void)
+ 		TEST_ASSERT_EQ(vcpu->run->mmio.is_write, false);
+ 	} else {
+ 		TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
+-		TEST_ASSERT_EQ(vcpu->run->memory_fault.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
+ 		TEST_ASSERT(vcpu->run->memory_fault.flags & KVM_MEMORY_EXIT_FLAG_PRIVATE,
+ 			    "Memory fault didn't occur on a private memory access");
+ 		TEST_ASSERT_EQ(vcpu->run->memory_fault.gpa, EXITS_TEST_GPA);
+
+base-commit: e71c4e83c03926c300f6c43e79b783d47ba8b588
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.50.1
 
