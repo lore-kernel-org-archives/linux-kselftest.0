@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.1
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794472534;
-	b=q35XbbA6s/AirWl1ioI3Aufq50x/fIP5VZjRdkMbzAlqQpuMi3RbGoYBQO6CIm/q+eSb
-	 LIRUi5GyibW7r3A/nI99SWLSwH4z84EkMOEc5tX09JAjv0x+6bD6w5p7JWcU9i7PvJFWb
-	 EFVdTb40bjvxrVO2WHBZjrGmmN0NMP+MggV0scL41Pwfe9RVGrQPtFIYdT2p1DRjVWe5y
-	 CfGaI+ddj3WKAo1HONCmP+QNYmWdJ7o3BThVGKShOtidvwArh6EM2sjqHV/zUzpS+8pTT
-	 WziZjdpvocVMBLAg7X/2ficyzhJyVZLUWwPBZjfnGv3cu3M9rE7k6ecesPdzKhW0vww==
+	t=1794473511;
+	b=JGFoAZ1PK34y3oUpl89z8fnQnqjd5jw9R0V6NR+nbmcLzftxQaCJA9MsNAfgQ9Zb51H5
+	 i/9+L18O1XQaTwF4nfOO1Wi7gp1OQV0n61zUHEZs/enGrOF6Ub7Aj240xK8++ujTqOZsM
+	 9ENIgFcvVie7LeyTH/ztkKtLWzoKe2dx7sRmlquw346t5kRrIJPtKsTf4jGbO9A9XxdmH
+	 OpcIMz8bKHDEJaxQpUJJW/Wv/bzKblSMWA2BZwg0x8mhIPGPhiiKLRWP32M8ELekMo1yh
+	 X3WhDD5RjUJjVZqqMSGdZETg7LmlPdblQ9dGEnoKZ92tJt6qFaBDqHElXnY+rx4RZgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794472534;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=dKVNtn7bdM3YAW9/cnZrAZT8y8AfxYUcQfl2xiNbvxs=;
-	b=GMNjR3Zvu/GQbP4D1Y+nUMe22D9CttYbURWDzpJGEZTyUrHD5J6LTmhbJz4UOwA6TTh0
-	 GKftYhD/vCT2KT92mqaLVxa6mEXmXZQBg6D59oTsljjkEZKcWFS9uC16hGYdDxObM0cFN
-	 6N2kZcfB5WuB5CL+4pt6z/TT7DxxCowzPNFGKe82vfvvY8S5aNYAJaZ1YEFX9z8z5XV8o
-	 IMyEpRAndLqGUBolQFU/YcmOxysf5tMUGm3CSno+EALkSAC9tImfwkRJC9Ayid0GEeZAK
-	 Q4sPMF+kHtmu9/wlUdDZAmxUmOUxc18ocMmQZS2NGrDcZL01X6cF1YKrsl6sOPg+Esw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794473511;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ifd3Ny9pO2imzHx3tZY9omeBo1tLc+ksznp/hcOFanc=;
+	b=egzROAbZuEQm0w7kRu9NicMQPxRrDDHOL4Do1b+CriOHYUeFFNcNcx6DnIFoGRSu0JJb
+	 iSEQIKdBkBPr4yKYCBxvnGBTWiaz87/h6qXfqCbPd/4F1G1uWQKZQhXQoye8r0x26zwm0
+	 SrbRocWMRCu1lwE1/5c81cumc0mCqPepjEpoNs6AcKDlafhlgxQWIMd7O+Jue9Hy/03w0
+	 T36IKFRul6t9Ohci/uZSv6SMW2IQLJ0b87lZtOPoo7G3rg16ggiRKjO4J7WI7gCuzOZ/G
+	 dSSofQCwB/ymFXtbOh/yShqf4sGiPeOMOKMYmGGjqDLZPS/MCURLbTupq9Y4t8Wq2/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="mr/oqIs/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="Z5w/hPHN";
+	arc=none smtp.remote-ip=95.215.58.1
+Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 6128A606C808;
-	Thu, 12 Nov 2026 08:35:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832E1606B257
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 08:51:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 832E1606B257
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mr/oqIs/
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 6FD431F00A05;
-	Thu, 12 Nov 2026 08:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794472534;
-	bh=dKVNtn7bdM3YAW9/cnZrAZT8y8AfxYUcQfl2xiNbvxs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mr/oqIs/rJXeTIkb54mgzza1v4W4pxAVZgVmoBrVK2d+o2DmjcgtF5jLTMH9UbGVg
-	 JS3DYOV/dsVPO0zWU9/GI+d+f4ipV9u6+Pv2C1he8p6tTTSJ0hWk5zIHOMD/djOCPw
-	 JDCCNhhscp472YsTukARh1dEXLVbHkUpaBugbFKDORhr0lKjvKR6jT95Ew557JJ6/e
-	 lYDia1f8Qmaed+2xj6TpAE+P2nKiQlIPBJsaWbvJgVRNq8ZCI18oLR8E9mtds17Q0c
-	 qYxn++eublnvnr37v5YXubcHRT0LcD6jAIBO2Mqjq+TtNOPCa2E+XWgmofpBFwFjMZ
-	 qah4E7SdFf5rA==
-Date: Thu, 12 Nov 2026 09:35:24 +0100
-From: Bartosz Golaszewski <brgl@kernel.org>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: configs: enable power sequencing kunit test cases
- in all_tests.config
-Message-ID: <v5nvejf3gibujdxbcwcgbrnlxduwhuee6dhi4bdph5ygkkmvpf@qxb52uuewqz6>
-References: <20261023-pwrseq-kunit-all-tests-v1-1-a60f8637527c@oss.qualcomm.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Z5w/hPHN
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=mx9E1e/I3LCYVSIIJ+glyO3DlhIEku7AJQTeqmgZKic=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794473507; v=1; x=1795078307;
+ b=Z5w/hPHNqBkIdfcdI3VGvQtN1Gu/r/DrsPHjjpJ/gO5yiMtl4HeYhe78kGfsRDc+85K9eHOk
+ d4uxXVUl03LQCXgK7nL+bqgh1TgSm3v7gJhhT0t03G3HqQ3dGoXI8bAjhuVeOkYJh3JAeOpF3lB
+ BuLxORa9tK8nRtk3+YQlQSpc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id fdb8d4e8cc49206d;
+	Thu, 12 Nov 2026 08:51:47 +0000
+X-Mizu-Trace-ID: fdb8d4e8cc49206d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <5edbb6e7-589a-441a-b82d-99b64d5ecdbe@linux.dev>
+Date: Thu, 12 Nov 2026 16:51:32 +0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,33 +58,256 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261023-pwrseq-kunit-all-tests-v1-1-a60f8637527c@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-7.4-fixes v4 2/2] cpuset: generalize the
+ validate_partition() interface
+To: Ridong Chen <ridong.chen@linux.dev>, Waiman Long <longman@redhat.com>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>,
+ Ridong Chen <chenridong@xiaomi.com>
+References: <20261112031931.2815548-1-ridong.chen@linux.dev>
+ <20261112031931.2815548-3-ridong.chen@linux.dev>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <20261112031931.2815548-3-ridong.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 23, 2026 at 12:07:49PM +0200, Bartosz Golaszewski wrote:
-> Enable CONFIG_POWER_SEQUENCING in all_tests.config to ensure the kunit
-> test cases for power sequencing core can be built with this config.
+
+
+在 2026/11/12 11:19, Ridong Chen 写道:
+> From: Ridong Chen <chenridong@xiaomi.com>
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> Refactor validate_partition() to take the parent partition, the new
+> partition root state, the new effective exclusive CPUs and the CPUs to
+> be deleted, instead of a trial cpuset. A NULL parent stands for a
+> remote partition, whose CPUs come from top_cpuset. This makes the
+> interface flexible enough to handle both local and remote partition
+> validation.
+> 
+> This also fixes a false PERR_NOCPUS error when expanding a remote
+> partition. The no CPU left for tasks check in partition_cpus_change()
+> is done against the cgroup parent, but the CPUs of a remote partition
+> come from top_cpuset, not from its parent. For example, on a 4-CPU
+> system:
+> 
+>   echo 2-3 > P/cpuset.cpus
+>   echo 2-3 > P/cpuset.cpus.exclusive
+>   echo 2-3 > P/C/cpuset.cpus
+>   echo 2 > P/C/cpuset.cpus.exclusive
+>   echo root > P/C/cpuset.cpus.partition
+>   (a task in P)
+>   echo 2-3 > P/C/cpuset.cpus.exclusive
+>   cat P/C/cpuset.cpus.partition
+>   root invalid (Parent is not a partition root)
+> 
+> The effective_cpus of P is 3, a subset of the new exclusive CPUs 2-3 of
+> C, and P has a task, so the expansion is rejected. However, P is not a
+> partition root and does not give any CPU to C, and top_cpuset still has
+> CPUs 0-1 for the task. Enabling C directly with exclusive CPUs 2-3
+> succeeds, as remote_partition_enable() checks top_cpuset instead.
+> 
+> The no CPU left for tasks check now uses the given parent instead of
+> parent_cs(cs), and top_cpuset for a remote partition, as that is where
+> its CPUs are taken from.
+> 
+> The housekeeping conflict check is folded into validate_partition(). It
+> is skipped when the parent is not a valid partition root, as @cs can't
+> be a valid local partition in that case.
+> 
+> Use the new interface for local partition enablement in
+> update_parent_effective_cpumask() and in partition_cpus_change(),
+> replacing the open-coded checks there. The order of the checks is now
+> the same for both paths: empty CPUs, housekeeping conflict, then no CPU
+> left for tasks.
+> 
+> Add a test case to test_cpuset_prs.sh for the remote partition
+> expansion above.
+> 
+> Fixes: 181c8e091aae ("cgroup/cpuset: Introduce remote partition")
+> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
 > ---
->  tools/testing/kunit/configs/all_tests.config | 2 ++
->  1 file changed, 2 insertions(+)
+>  kernel/cgroup/cpuset.c                        | 119 +++++++++---------
+>  .../selftests/cgroup/test_cpuset_prs.sh       |   5 +
+>  2 files changed, 64 insertions(+), 60 deletions(-)
 > 
-> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-> index 31e930a0fb6912ff1daf20bae8ab007ba3b0e77a..2e95db076a26327f59e87d83bcedd0d7c686c240 100644
-> --- a/tools/testing/kunit/configs/all_tests.config
-> +++ b/tools/testing/kunit/configs/all_tests.config
-> @@ -61,3 +61,5 @@ CONFIG_SND=y
->  CONFIG_SND_SOC=y
->  CONFIG_SND_SOC_TOPOLOGY_BUILD=y
->  CONFIG_SND_SOC_CS35L56_I2C=y
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index c7d4cfb615b7..7e374210c123 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1414,6 +1414,48 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
+>  	return res;
+>  }
+>  
+> +/**
+> + * validate_partition - Validate a cpuset partition configuration
+> + * @cs: The cpuset to validate
+> + * @parent: Parent partition of @cs, NULL for remote partition
+> + * @new_prs: The proposed new partition root state
+> + * @new_excpus: The new effective exclusive CPUs mask to validate
+> + * @del: exclusive CPUs to be deleted from @cs, can be NULL
+> + *
+> + * A remote partition gets its CPUs from top_cpuset, so top_cpuset is used
+> + * as the parent when @parent is NULL.
+> + *
+> + * The housekeeping check is skipped if @parent is not a valid partition
+> + * root as @cs can't be a valid local partition in that case.
+> + *
+> + * Return: PRS error code (0 if valid, non-zero error code if invalid)
+> + */
+> +static enum prs_errcode validate_partition(struct cpuset *cs,
+> +					   struct cpuset *parent, int new_prs,
+> +					   struct cpumask *new_excpus,
+> +					   struct cpumask *del)
+> +{
+> +	int parent_prs;
 > +
-> +CONFIG_POWER_SEQUENCING=y
->
+> +	if (new_prs == PRS_MEMBER)
+> +		return PERR_NONE;
+> +
+> +	if (cpumask_empty(new_excpus))
+> +		return PERR_INVCPUS;
+> +
+> +	if (!parent)
+> +		parent = &top_cpuset;
+> +	parent_prs = parent->partition_root_state;
+> +	if (parent_prs > 0 &&
+> +	    prstate_housekeeping_conflict(new_prs, parent_prs, new_excpus, del))
+> +		return PERR_HKEEPING;
+> +
+> +	if (tasks_nocpu_error(parent, cs, new_excpus))
+> +		return PERR_NOCPUS;
+> +
+> +	return PERR_NONE;
+> +}
+> +
+>  /*
+>   * cpuset_update_sd_hk_unlock - Rebuild sched domains, update HK & unlock
+>   *
+> @@ -1934,18 +1976,10 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+>  	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
+>  		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
+>  
+> -		/*
+> -		 * Enabling partition root is not allowed if its
+> -		 * effective_xcpus is empty.
+> -		 */
+> -		if (cpumask_empty(tmp->delmask))
+> -			return PERR_INVCPUS;
+> -
+> -		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
+> -			return PERR_HKEEPING;
+> -
+> -		if (nocpu)
+> -			return PERR_NOCPUS;
+> +		part_error = validate_partition(cs, parent, new_prs,
+> +						tmp->delmask, NULL);
+> +		if (part_error)
+> +			return part_error;
+>  
+>  		/*
+>  		 * This function will only be called when all the preliminary
+> @@ -2428,32 +2462,6 @@ static int parse_cpuset_cpulist(const char *buf, struct cpumask *out_mask)
+>  	return 0;
+>  }
+>  
+> -/**
+> - * validate_partition - Validate a cpuset partition configuration
+> - * @cs: The cpuset to validate
+> - * @trialcs: The trial cpuset containing proposed configuration changes
+> - *
+> - * If any validation check fails, the appropriate error code is set in the
+> - * cpuset's prs_err field.
+> - *
+> - * Return: PRS error code (0 if valid, non-zero error code if invalid)
+> - */
+> -static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *trialcs)
+> -{
+> -	struct cpuset *parent = parent_cs(cs);
+> -
+> -	if (cs_is_member(trialcs))
+> -		return PERR_NONE;
+> -
+> -	if (cpumask_empty(trialcs->effective_xcpus))
+> -		return PERR_INVCPUS;
+> -
+> -	if (tasks_nocpu_error(parent, cs, trialcs->effective_xcpus))
+> -		return PERR_NOCPUS;
+> -
+> -	return PERR_NONE;
+> -}
+> -
+>  /**
+>   * partition_cpus_change - Handle partition state changes due to CPU mask updates
+>   * @cs: The target cpuset being modified
+> @@ -2467,33 +2475,24 @@ static void partition_cpus_change(struct cpuset *cs, struct cpuset *trialcs,
+>  				  struct tmpmasks *tmp)
+>  {
+>  	enum prs_errcode prs_err;
+> -	int parent_prs = is_remote_partition(cs)
+> -		       ? PRS_ROOT : parent_cs(cs)->partition_root_state;
+> +	struct cpuset *parent = is_remote_partition(cs) ? NULL : parent_cs(cs);
+>  
+>  	if (cs_is_member(cs))
+>  		return;
+>  
+> -	prs_err = validate_partition(cs, trialcs);
+> -	if (!prs_err && (parent_prs > 0) &&
+> -	    !cpumask_empty(trialcs->effective_xcpus)) {
+> -		int prs = cs->partition_root_state;
+> -
+> -		/*
+> -		 * Check for housekeeping conflict by passing the whole
+> -		 * effective_xcpus as well as those CPUs that are to be
+> -		 * removed from cs as delmask.
+> -		 */
+> -		if (prs > 0)
+> -			cpumask_andnot(tmp->delmask, cs->effective_xcpus,
+> -				       trialcs->effective_xcpus);
+> -		else
+> -			cpumask_clear(tmp->delmask);
+> -
+> -		if (prstate_housekeeping_conflict(prs, parent_prs,
+> -						  trialcs->effective_xcpus, tmp->delmask))
+> -			prs_err = PERR_HKEEPING;
+> -	}
+> +	/*
+> +	 * Check for housekeeping conflict by passing the whole
+> +	 * effective_xcpus as well as those CPUs that are to be
+> +	 * removed from cs as delmask.
+> +	 */
+> +	if (is_partition_valid(cs))
+> +		cpumask_andnot(tmp->delmask, cs->effective_xcpus,
+> +			       trialcs->effective_xcpus);
+> +	else
+> +		cpumask_clear(tmp->delmask);
+>  
+> +	prs_err = validate_partition(cs, parent, trialcs->partition_root_state,
+> +				     trialcs->effective_xcpus, tmp->delmask);
+>  	if (prs_err) {
+>  		WRITE_ONCE(cs->prs_err, prs_err);
+>  		trialcs->prs_err = prs_err;
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 1e9e6b4c6f7b..1397ec428c46 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -707,6 +707,11 @@ REMOTE_TEST_MATRIX=(
+>  	"  C1-4:P1 C5-6   C1-2     .       C5      .  \
+>  	      .      P1    P1      .      O5=0     .     p1:3-4|p2:6|c11:1-2|c12:3-4|c21:6|c22:6 \
+>  							 p1:P1|p2:P1|c11:P1"
+> +	# Expanding a remote partition should check top cpuset, not its member
+> +	# parent, for the no CPU left for tasks error.
+> +	"  CX2-3:T  .   C2-3:X2:P1  .       .       .  \
+> +	      .      .     X2-3    .       .       .     p1:1,4-7|c11:2-3 \
+> +							 p1:P0|c11:P1"
+>  )
+>  
+>  #
 
-Gentle ping. If nobody wants to pick it up, I can take it via the power
-sequencing tree.
+Reviewed-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
 Thanks,
-Bart
+Guopeng
