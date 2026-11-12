@@ -1,60 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.224
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794453561;
-	b=KQh9ay6bAoy+QDAaBzynD3HFjgg+W+EjpCPUXRu6GKZCSmgYr1U5yyKTX3FeKdewXRw4
-	 xSzTZXNuQ4vvS0d03SZbpN+EwcFtVboySH78rqwOD8E9u+1exWdrUZnNPE61Obhk716at
-	 8EIabNPYalkklk/tE4m97YfIvjxD+3K6na3yXCIomCbvZk0MxEmJId5zQMPcjP4GY0oZm
-	 6I0La4OGknis/G10gJD+SQKjJIOsNjhcEcdbZccECFvb+fNI5/fAWjBLB9MgWSnKMnSWj
-	 Ma5i9Dr+Jzm74fL3gvCHtWyiYXT0LctQ/rCPPLPz4Dbpgcd23KJq+09Mj5GLNn2068g==
+	t=1794453587;
+	b=ixLpuhQJKJLcCCfFqMtTS21paPgj+CGnyOYhqU7lkWg/QRUJI/Cpdq5cDaebJXCzY1ak
+	 Lyog/uQqMipqoI3XKlFX0fA/pl0lGEmlHjCXe5M8F1tNsroK+wrosFr215Myw08RuE3RL
+	 kCwaHEof+GiyLLfZWEf2Q9/foxDsc7p3T3nXITaoHSePoVTor2qIjjnn55T8vJwScIH9D
+	 rndyz7kLwIn8B0cEaCRvgqutQ0PHddX53zDLy5t9XVpITuvE/55jghOfFfSdmrf/O9xZh
+	 13Vq/h9+msbPOJ++2x+XzAljqyi60GM7Cwp1SA7O1VqfKhWKYiWhnCIHO8D4IYoIAcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794453561;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=OAJSZeu5S+BGy7vQFCxiIgP/IXx1ATwnYQxbK6vospE=;
-	b=zqWe879PeWx5iJMwd1zgk4DxZw9uxAiBZLMjC9yT+mChhmpKOP/XTawQc2tWBF9QSVos
-	 Undfy+xBRUETOn4fXiiyB6VC3jdNpgA+C8W2KDquM8LaVgOBliAkAhbRDzPgGPffbNTiG
-	 2/qQPIy8ZleTOzwGauheUSN1KOq2uxv84dvDRQrQ68ccBk+tb7G9lOiz5Kraw0gdKj6eJ
-	 MrIyws9dMlt9Bh8bf+TnlK/xA8YWLjr33GH8lHZ3iECIgo49MdvSNri3XA3/c4dPJ89UT
-	 uhOcQIvCGhgrZ2IXIvA9wYjtGGZ7NR5lLRTbJ6VNcI7WuZ1L3/FjUjy5RDgVqJuIn8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794453587;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=o5LE6Zx1zeEr/AzMTsVKB6zW5N3GqNQCHSyV4DrbDv8=;
+	b=UNNxGkz92hfrrlfijWRmdcIUSGHsv5Rph0zb+hijzVXNu1v1Livq6lVPYnyHWbBskiv2
+	 aeXh1uM0JnGaH2eF1AeP0M6+FmFBXdFAFJF4ZP6GdYgFfxWeKLh6pLFRIWuuIRuoIkt4d
+	 4bRH78cuiJ7M0KUC0bOjlPw2CCKWyvYRa2744WsSAt5dpQHKYGZ/tmq3TawV5lCbgHHcV
+	 HNLrgqQnLV7eKVIotI1quNqvL/wb+CI5BGi3Ed035ez/wID8KP5HZzvnhbNy3HMdEi8oY
+	 0piy3JlNYB3rqhC1uTIB926ZC24/yS7kXL6TNpwWDcQ9ihCVjaGdCQGUhrPwps/lwVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=J8q9LXeV;
-	arc=none smtp.remote-ip=117.135.210.4
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OiJospQR;
+	arc=none smtp.remote-ip=95.215.58.224
+Received: from mta1.migadu.com (out-224.mta1.migadu.com [95.215.58.224])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C63606A321;
-	Thu, 12 Nov 2026 03:19:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 12C63606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DAC606A31C
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 03:19:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6DAC606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=J8q9LXeV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=OA
-	JSZeu5S+BGy7vQFCxiIgP/IXx1ATwnYQxbK6vospE=; b=J8q9LXeVwUeilZTDiw
-	SwlVJGeycGVnVK3XJqd93QTe0PwTpKW3fXyBPJ3b0Ef2tfgDlUO8aTWtgIrvg0bS
-	LFLqRubPPuKxfXOlV+VRNsH3X8KZHD5FLmgI9KBJ6o8kUMDpIR3J1a+lTIrEONe+
-	YNUPP5YSGNsxrfSrL6851St7M=
-Received: from 5219-2604 (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgDnl6oRMPVqpjyfFQ--.50271S2;
-	Thu, 12 Nov 2026 11:18:46 +0800 (CST)
-From: Xionggui Chen <evers_chen@163.com>
-To: David Hildenbrand <david@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OiJospQR
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=rbSXXlWPEtbddhR5IFof2OtrVDKZHXiFi0qBQm26MgU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794453584; v=1; x=1795058384;
+ b=OiJospQRPN8nI99yuB4I6PZMVM4IANVO/tH6J3ulzSwahGeMtV6c7I/LHbdZK+qhv54xfw+1
+ xWg2Mq6gKQasI+g6ZPobRIJS0I+hECzGtJS0UgOHuJ5iWU6JU1NeOb3LFbQSyQitUzA6hAR2NUH
+ SChZb/rMW/oJi00Ixpcz36eM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4231d3eaa989e534;
+	Thu, 12 Nov 2026 03:19:44 +0000
+X-Mizu-Trace-ID: 4231d3eaa989e534
+X-Migadu-Flow: FLOW_OUT
+From: Ridong Chen <ridong.chen@linux.dev>
+To: Waiman Long <longman@redhat.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
 	Shuah Khan <shuah@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
+Cc: Ridong Chen <ridong.chen@linux.dev>,
+	cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	chenxionggui@lanxincomputing.com
-Subject: [PATCH] selftests/mm: Handle implicit read permissions in madv_populate
-Date: Thu, 12 Nov 2026 03:18:11 +0000
-Message-ID: <20261112031811.56500-1-evers_chen@163.com>
-X-Mailer: git-send-email 2.53.0
+	linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>,
+	Ridong Chen <chenridong@xiaomi.com>
+Subject: [PATCH for-7.4-fixes v4 0/2] cpuset: preparatory fixes and cleanups for partition rework
+Date: Thu, 12 Nov 2026 11:19:29 +0800
+Message-Id: <20261112031931.2815548-1-ridong.chen@linux.dev>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,147 +72,54 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgDnl6oRMPVqpjyfFQ--.50271S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCw4DtFWxuw1DGw4xAr45Awb_yoWrJr1kpF
-	yDJas0vF4rt3ZrA3yxAF17Xrn0yryIyayxXw1xJ3s0vwnxK345Kr47Ka48tFy8JFZ7Xw15
-	Ca98ZasFkw4DJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jFnm_UUUUU=
-X-CM-SenderInfo: xhyh22pbfkv0i6rwjhhfrp/xtbC7BYpM2r1MBYfnQAA3b
 
-From: Xionggui Chen <chenxionggui@lanxincomputing.com>
+From: Ridong Chen <chenridong@xiaomi.com>
 
-The madv_populate selftest assumes that a mapping created with
-PROT_WRITE cannot be read, and expects MADV_POPULATE_READ to fail
-with EINVAL.
+This series is part of the cpuset local partition rework [1], which I
+started while at Huawei and am now continuing at Xiaomi.
 
-However, some architectures, including RISC-V, may implicitly grant
-read permission to PROT_WRITE mappings. On such architectures,
-MADV_POPULATE_READ succeeds, causing the test to fail incorrectly.
+Patches 1 and 2 of v3 have been merged into cgroup/for-7.4-fixes. This
+version only has the remaining patches 3 and 4 of v3, rebased onto
+cgroup/for-7.4-fixes.
 
-Check the actual VMA permissions through /proc/self/maps and adjust
-the expected result accordingly.
+Both patches include a bug fix besides the restructuring (Waiman):
 
-Add a PROT_NONE test to verify that MADV_POPULATE_READ still fails
-with EINVAL for mappings without read permission.
+  1) settle the isolation state of CPUs given back to the parent in
+     partition_xcpus_del(). This fixes the isolated CPU leak reported by
+     Guopeng [2], where an isolated partition is invalidated after its
+     parent root partition has become invalid and its CPUs are left in
+     isolated_cpus.
+  2) generalize validate_partition() so it can be used for both local
+     and remote partitions. This fixes a false PERR_NOCPUS error when
+     expanding a remote partition, where the no CPU left for tasks check
+     is done against the cgroup parent instead of top_cpuset.
 
-On RISC-V with Linux 7.2.0, the original test fails 1 out of 16
-tests, while the updated test passes all 17 tests.
+Patch 2 adds a test case to test_cpuset_prs.sh for the bug it fixes.
+test_cpuset_prs.sh passes with this series applied.
 
-Signed-off-by: Xionggui Chen <chenxionggui@lanxincomputing.com>
----
- tools/testing/selftests/mm/madv_populate.c | 67 ++++++++++++++++++++--
- 1 file changed, 63 insertions(+), 4 deletions(-)
+[1] https://lore.kernel.org/all/20261101114206.2434398-1-ridong.chen@linux.dev/
+[2] https://lore.kernel.org/all/20261105130344.664336-4-guopeng.zhang@linux.dev/
 
-diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
-index 7fce5d0b622b..818f99ee2004 100644
---- a/tools/testing/selftests/mm/madv_populate.c
-+++ b/tools/testing/selftests/mm/madv_populate.c
-@@ -69,10 +69,38 @@ static void test_prot_read(void)
- 	munmap(addr, SIZE);
- }
- 
-+static int mapping_is_readable(void *addr)
-+{
-+	FILE *maps;
-+	char line[256];
-+	unsigned long start, end;
-+	char perms[5];
-+	int readable = -1;
-+
-+	maps = fopen("/proc/self/maps", "r");
-+	if (!maps)
-+		return -1;
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		if (sscanf(line, "%lx-%lx %4s",
-+			   &start, &end, perms) != 3)
-+			continue;
-+
-+		if (start <= (unsigned long)addr &&
-+		    (unsigned long)addr < end) {
-+			readable = perms[0] == 'r';
-+			break;
-+		}
-+	}
-+
-+	fclose(maps);
-+	return readable;
-+}
-+
- static void test_prot_write(void)
- {
- 	char *addr;
--	int ret;
-+	int ret, readable;
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
-@@ -80,9 +108,19 @@ static void test_prot_write(void)
- 	if (addr == MAP_FAILED)
- 		ksft_exit_fail_msg("mmap failed\n");
- 
-+	readable = mapping_is_readable(addr);
-+	if (readable < 0)
-+		ksft_exit_fail_msg("Cannot determine VMA permissions\n");
-+
-+	errno = 0;
- 	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
--	ksft_test_result(ret == -1 && errno == EINVAL,
--			 "MADV_POPULATE_READ with PROT_WRITE\n");
-+
-+	if (readable)
-+		ksft_test_result(ret == 0,
-+				 "MADV_POPULATE_READ with readable PROT_WRITE mapping\n");
-+	else
-+		ksft_test_result(ret == -1 && errno == EINVAL,
-+				 "MADV_POPULATE_READ with write-only mapping\n");
- 
- 	ret = madvise(addr, SIZE, MADV_POPULATE_WRITE);
- 	ksft_test_result(!ret, "MADV_POPULATE_WRITE with PROT_WRITE\n");
-@@ -90,6 +128,26 @@ static void test_prot_write(void)
- 	munmap(addr, SIZE);
- }
- 
-+static void test_prot_none(void)
-+{
-+	char *addr;
-+	int ret;
-+
-+	ksft_print_msg("[RUN] %s\n", __func__);
-+
-+	addr = mmap(0, SIZE, PROT_NONE,
-+		    MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
-+	if (addr == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed\n");
-+
-+	errno = 0;
-+	ret = madvise(addr, SIZE, MADV_POPULATE_READ);
-+	ksft_test_result(ret == -1 && errno == EINVAL,
-+			 "MADV_POPULATE_READ with PROT_NONE\n");
-+
-+	munmap(addr, SIZE);
-+}
-+
- static void test_holes(void)
- {
- 	char *addr;
-@@ -266,7 +324,7 @@ static void test_softdirty(void)
- 
- int main(int argc, char **argv)
- {
--	int nr_tests = 16;
-+	int nr_tests = 17;
- 	int err;
- 
- 	pagesize = getpagesize();
-@@ -280,6 +338,7 @@ int main(int argc, char **argv)
- 	sense_support();
- 	test_prot_read();
- 	test_prot_write();
-+	test_prot_none();
- 	test_holes();
- 	test_populate_read();
- 	test_populate_write();
+Changes in v4:
+  - Drop patches 1 and 2, which have been merged.
+  - Rebase onto cgroup/for-7.4-fixes, which includes commit 56681bc448a8
+    ("cgroup/cpuset: Correctly set isolated_cpus when switching partition state").
+  - Patch 1: describe the isolated CPU leak in the commit message, add
+    Fixes, Reported-by and Closes tags (Waiman, Guopeng).
+  - Patch 2: describe the remote partition expansion fix in the commit
+    message, add a Fixes tag and a test case for it (Waiman).
+  - Link to v3: https://lore.kernel.org/all/20261107120100.3587595-1-ridong.chen@linux.dev/
+
+Ridong Chen (2):
+  cpuset: settle isolation state when CPUs are given back to parent
+  cpuset: generalize the validate_partition() interface
+
+ kernel/cgroup/cpuset.c                        | 217 +++++++-----------
+ .../selftests/cgroup/test_cpuset_prs.sh       |   5 +
+ 2 files changed, 83 insertions(+), 139 deletions(-)
+
+
+base-commit: 56681bc448a80bb2473026b41c44c133766bc38d
 -- 
-2.53.0
+2.34.1
 
