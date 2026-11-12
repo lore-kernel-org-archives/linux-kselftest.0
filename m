@@ -1,67 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794510953;
-	b=031XeiXONJ0QsjZz1C41H4kRdLCy2mfdULAJPkKHSqC1gED7fhDGvRvRmGi+HLDLsPRx
-	 ccIGcluTDQRaHoqUYKFSx1MmXMDbdhlw38E71fHB0AKDiYp1qN/Y+2Vw2+B9PqSYtQ2nC
-	 uy1Wuq30oMIAvwjliI+Lvg8p9gkZzmKf1m4ClnExkzE3hqAQj1JrxqGRZeT0ZILsFFv5f
-	 TFaZI2Q+czvx02cYRf8I8fsPdB+WleNRJK/oezRuTaSvLtzH1Br2T+RDeUv1kxzsnHCW5
-	 gwqlac8xpOuorM3uFBi1BCZrkzdtKBUul7lwB5xEAcEzYWF1IIA0gOJYobfwIoEQhaA==
+	t=1794511188;
+	b=cIJ1YaCyzlupO804MrEjJxHk6WIm+2GH5bO2f9eDZeKniDSaUWnO9gPybvWf6pj0M8kz
+	 yfU6nLNbMZDVj98yexgrtiyyeqlTWE6XFHLoHVjl8SAQrGJX0ltTbru0TSXbPH8zRwWV8
+	 21Eu2X06FhrJkwE2anXtf7RxZboDBDdT8ZfJbE6yLfAN59drqJMgVzmEFrDTEEoCyj+BO
+	 BdPsXj5P8EiVC5+NYJ/AQfFzrNBjrh5MOdu65Z2YAEskfJ7HdcUzZLfdkHw4Z8iT1c+eB
+	 kzzTXKdby2FFl2/UbDydECVXoMuUzE74jKnhb1ZrXtB+dax/Rwi+sBUOfFKCR3v79IA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794510953;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=NW7THZlaf80mvmTuYOTfhqswF2bQb3V1m7VgmwQbFyU=;
-	b=FIvJdXG9wimaERX7pXKldLZOQqENTN1d1qXiVvR9nRJe/rkP5qxwZrLn7SFnW2yU1HrW
-	 4YxwbwtUUZifLcOg2OvyarfSKno+HhF8vfOU/km77GyM1thdu1pdGQsf70KnZten7vbSA
-	 0Ke9rK8zjcV9qOpaQEPNrRFaNYKeW2kWT5rMtrDA6qkdp8YIKvl1IXzZYct0C8/MDDIOK
-	 gQ5KW2NvdCtYQTxJ8hF1DlJMG3WSiiO1l3RoF/ynBa5j/+hSCVwazgTIdFOlg/WFf1f02
-	 xasLy70DD4yITUc4R8yrJ5MnupZiolQc80Yhd7PHp83kmScp+BGGPhBp77r2z7biRVA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794511188;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
+	 CC:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Originating-IP:X-Authority-Analysis:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Virus-Version;
+	bh=a/3/vOknZNV5rMhfsRlvw02gGnblZnfFUGDt0wyzhjE=;
+	b=w8Ns7z30usfY+so0CfnjJleSgRqMc81Z5toqf6X55mEBYXozSc3Qo/BAPcb4J29ghE8c
+	 s98Du2JoeA3Ft+7d02waDSxStaxkNLfpNF1gk3XuoIVrdnRUFFmFVNY8W/XeZt8ZJpu/j
+	 WFfe+tMAFQ8kNxh2a3VdwbuRO9pwP3K2PzDlj52p3tFsjGEmnQae9kp7M7gC91PIFtJAJ
+	 06OHZtJgMegaRqLvNIszKwNIEnysXLSU04+SkNvc2HLLz1i6w7/RfCRAx+WgTqNzULUlg
+	 1IqT1jh8z4Vrk6q9KdDAZn7goj5tHtw4VbfPnvb2KD9TVEPp+vUQIDe13cpI7KCUWQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=DbB54XfC;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ReSOOSyy;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D0A606A31C
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 19:15:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 17D0A606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9498606A31C;
+	Thu, 12 Nov 2026 19:19:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9498606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=DbB54XfC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794510952;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NW7THZlaf80mvmTuYOTfhqswF2bQb3V1m7VgmwQbFyU=;
-	b=DbB54XfC34n1tsCk5qH2tvaR//a7IZsEKf9UumLIF8XZlNAjta+vnxgMCxPz9+UbHs4GzB
-	pP1PnoKdQX3OpV2AOWKrKOKWVVbk6cKDWf7oLxTBoTrvvwCsU4oVd9tojsGYP5q+n0ue71
-	bIyJ2C8OvLqOJtdUMmSmEA44rwyA1Tc=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-277-L3EwCWwaMWGAFs1PctNVOg-1; Thu,
- 12 Nov 2026 14:15:50 -0500
-X-MC-Unique: L3EwCWwaMWGAFs1PctNVOg-1
-X-Mimecast-MFC-AGG-ID: L3EwCWwaMWGAFs1PctNVOg_1794510948
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A159518004DA;
-	Thu, 12 Nov 2026 19:15:47 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7E590410;
-	Thu, 12 Nov 2026 19:15:45 +0000 (UTC)
-Message-ID: <5402d139-37bf-408a-b956-6c76b8832710@redhat.com>
-Date: Thu, 12 Nov 2026 14:15:44 -0500
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ReSOOSyy
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ACFapVR3401241;
+	Thu, 12 Nov 2026 11:19:16 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pps82601-s2048-2026-q3; bh=a/3/vOknZNV
+	5rMhfsRlvw02gGnblZnfFUGDt0wyzhjE=; b=ReSOOSyylrPqQ7w5znHrlGE8xe5
+	SRq+nMfSWT9+K3w+QUWwgPFl18x3t8ZXFwVDYz8hzD0ukBdvnAXhHPR5hDNzXYia
+	aIihrOdNs5daQ8LmrSNo9p8y7iFxcu/fzoSy0jp185nK8K00p875CxDwNBZq9/aw
+	58lWmQWM2WF+Ob9S4vaoNqEAf8TT9oHqaT8YpssjLnJ1UvZJgkZMS12AM4FFfVSt
+	WSes2w+bUupqKzGdsWbVHyKtN8emlkxnK4XoHnSBxwkoSZkybMBfL3AooSUuDK+y
+	+Ry8GGkx3VTTUy+aemx2CdOtJi6eni9KrHkdFjhhR3AgWNK+/wjgKPnTc6A==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hvaudygk7-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Thu, 12 Nov 2026 11:19:16 -0800 (PST)
+Received: from localhost (2620:10d:c085:208::7cb7) by mail.thefacebook.com
+ (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 12 Nov
+ 2026 19:19:14 +0000
+Date: Thu, 12 Nov 2026 11:19:13 -0800
+From: Bobby Eshleman <bobbyeshleman@meta.com>
+To: Michal Luczaj <mhal@rbox.co>
+CC: Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller"
+	<davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Jonathan Corbet
+	<corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Stefan Hajnoczi
+	<stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang
+	<jasowangio@gmail.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Eugenio
+ =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Shuah Khan
+	<shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Donald Hunter
+	<donald.hunter@gmail.com>,
+        Eric Dumazet <edumazet@kernel.org>, <virtualization@lists.linux.dev>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <sargun@sargun.me>,
+        <jlinbox@meta.com>
+Subject: Re: [PATCH net-next v5 4/7] vsock: add a netlink command to assign
+ the g2h device to a netns
+Message-ID: <avYRMQww+ui4uPkz@devvm29614.prn0.facebook.com>
+References: <20261103-vsock-guest-ns-v5-0-48179b9b66b8@meta.com>
+ <20261103-vsock-guest-ns-v5-4-48179b9b66b8@meta.com>
+ <c34123f3-e006-4c25-b8d7-cdf0784926f4@rbox.co>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -71,253 +99,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-7.4-fixes v4 2/2] cpuset: generalize the
- validate_partition() interface
-To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>,
- Ridong Chen <chenridong@xiaomi.com>
-References: <20261112031931.2815548-1-ridong.chen@linux.dev>
- <20261112031931.2815548-3-ridong.chen@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20261112031931.2815548-3-ridong.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <c34123f3-e006-4c25-b8d7-cdf0784926f4@rbox.co>
+X-Authority-Analysis: v=2.4 cv=AKwTwrWT c=1 sm=1 tr=0 ts=6af61134 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7x6HtfJdh03M6CCDgxCd:22 a=xtH7KyWI9dI7BmFOsl-x:22 a=VwQbUJbxAAAA:8
+ a=Bgyc4cfSFuLOcWupkI0A:9 a=CjuIK1q_8ugA:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-GUID: _cVSF3NSQ_uvq6t-vYkVz_6cKrlEOdZl
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEyMDA3NyBTYWx0ZWRfX3ZEYaRYhoxQ8
+ usrYrAigjaSSywUkrAML7m082FIZ9ahPa6osa/uLjGeURPOoNHW2DhRuRRqH8MO5qwe2ciVft8x
+ NzE7lxNSVPJe1XXp4Iu0HiPfj/GkiZbi02cvfDvuuS1vqU0Dny9tFRHJC3vtiINZYIGuWEUewzN
+ /pMtixzbQdUxfpN1rfc6nnBqAYW9q0Ky2ibw9EME0SEzeY7HcGeT2r5acmDJw0SBasnebv2sJlr
+ LOI44viL/MzNw28pNFndfNU3SA9UhdAjQ4D7hArvOtZ7qvUs5y1MXsC6daoxsnOk2WaxPJ26iKd
+ i8ii47IdwImq/MU8O5a30jphsmPyMdE6uBQGDiLehzjiXvuJyoYLckgbgQgywBSY8qgj+uq7rjL
+ mkuSU6j7uiGvjX7zfAwE6UzWaBPzhUdmmcIOGq/Rao8qXqZ9wDo1sRuegm/RrlJTdCtyMCNC/qg
+ DbgNkydXQ0fm7nWHtNQ==
+X-Proofpoint-ORIG-GUID: _cVSF3NSQ_uvq6t-vYkVz_6cKrlEOdZl
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEyMDA3NyBTYWx0ZWRfX0xgaferDqxVz
+ fMjqjg/jghUeB/xn0OclUvGqHgL1ZiEL1sSDvdnPbjicEh9BXwwcUZZaGmFvNK+/7wz5h2yn+we
+ AGI5UprcQ0+lFYfR17uH1zSuSF+OCBQ=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-12_02,2026-11-11_03,2025-10-01_01
 
+On Thu, Nov 12, 2026 at 11:34:49AM +0100, Michal Luczaj wrote:
+> On 11/4/26 02:53, Bobby Eshleman wrote:
+> 
+> > +/* Avoid breaking the socket when another thread has changed its sock->state
+> > + * while we were asleep.
+> > + */
+> > +static void vsock_connect_close(struct socket *sock)
+> > +{
+> > +	sock->sk->sk_state = TCP_CLOSE;
+> > +	if (sock->state == SS_CONNECTING)
+> > +		sock->state = SS_UNCONNECTED;
+> > +}
+> > +
+> 
+> It'd be nice to have it as a separate commit. If I'm not mistaken, this
+> itself solved the vsock_connect() vs. transport reset
+> (vhost_vsock_reset_orphans(), virtio_vsock_reset_sock(),
+> vmci_transport_handle_detach()) races. And those were already reported a
+> couple of times, including a recent NIPA/Sashiko Severity-Medium[1].
+> 
+> [1]:
+> https://lore.kernel.org/netdev/179447093204.2199510.8895677421994612994@kernel.org/
+> 
+> thanks,
+> Michal
+> 
 
-On 11/11/26 10:19 PM, Ridong Chen wrote:
-> From: Ridong Chen <chenridong@xiaomi.com>
->
-> Refactor validate_partition() to take the parent partition, the new
-> partition root state, the new effective exclusive CPUs and the CPUs to
-> be deleted, instead of a trial cpuset. A NULL parent stands for a
-> remote partition, whose CPUs come from top_cpuset. This makes the
-> interface flexible enough to handle both local and remote partition
-> validation.
->
-> This also fixes a false PERR_NOCPUS error when expanding a remote
-> partition. The no CPU left for tasks check in partition_cpus_change()
-> is done against the cgroup parent, but the CPUs of a remote partition
-> come from top_cpuset, not from its parent. For example, on a 4-CPU
-> system:
->
->    echo 2-3 > P/cpuset.cpus
->    echo 2-3 > P/cpuset.cpus.exclusive
->    echo 2-3 > P/C/cpuset.cpus
->    echo 2 > P/C/cpuset.cpus.exclusive
->    echo root > P/C/cpuset.cpus.partition
->    (a task in P)
->    echo 2-3 > P/C/cpuset.cpus.exclusive
->    cat P/C/cpuset.cpus.partition
->    root invalid (Parent is not a partition root)
->
-> The effective_cpus of P is 3, a subset of the new exclusive CPUs 2-3 of
-> C, and P has a task, so the expansion is rejected. However, P is not a
-> partition root and does not give any CPU to C, and top_cpuset still has
-> CPUs 0-1 for the task. Enabling C directly with exclusive CPUs 2-3
-> succeeds, as remote_partition_enable() checks top_cpuset instead.
->
-> The no CPU left for tasks check now uses the given parent instead of
-> parent_cs(cs), and top_cpuset for a remote partition, as that is where
-> its CPUs are taken from.
->
-> The housekeeping conflict check is folded into validate_partition(). It
-> is skipped when the parent is not a valid partition root, as @cs can't
-> be a valid local partition in that case.
->
-> Use the new interface for local partition enablement in
-> update_parent_effective_cpumask() and in partition_cpus_change(),
-> replacing the open-coded checks there. The order of the checks is now
-> the same for both paths: empty CPUs, housekeeping conflict, then no CPU
-> left for tasks.
->
-> Add a test case to test_cpuset_prs.sh for the remote partition
-> expansion above.
->
-> Fixes: 181c8e091aae ("cgroup/cpuset: Introduce remote partition")
-> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
-> ---
->   kernel/cgroup/cpuset.c                        | 119 +++++++++---------
->   .../selftests/cgroup/test_cpuset_prs.sh       |   5 +
->   2 files changed, 64 insertions(+), 60 deletions(-)
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index c7d4cfb615b7..7e374210c123 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1414,6 +1414,48 @@ static bool prstate_housekeeping_conflict(int new_prs, int parent_prs,
->   	return res;
->   }
->   
-> +/**
-> + * validate_partition - Validate a cpuset partition configuration
-> + * @cs: The cpuset to validate
-> + * @parent: Parent partition of @cs, NULL for remote partition
-> + * @new_prs: The proposed new partition root state
-> + * @new_excpus: The new effective exclusive CPUs mask to validate
-> + * @del: exclusive CPUs to be deleted from @cs, can be NULL
-> + *
-> + * A remote partition gets its CPUs from top_cpuset, so top_cpuset is used
-> + * as the parent when @parent is NULL.
-> + *
-> + * The housekeeping check is skipped if @parent is not a valid partition
-> + * root as @cs can't be a valid local partition in that case.
-> + *
-> + * Return: PRS error code (0 if valid, non-zero error code if invalid)
-> + */
-> +static enum prs_errcode validate_partition(struct cpuset *cs,
-> +					   struct cpuset *parent, int new_prs,
-> +					   struct cpumask *new_excpus,
-> +					   struct cpumask *del)
-> +{
-> +	int parent_prs;
-> +
-> +	if (new_prs == PRS_MEMBER)
-> +		return PERR_NONE;
-> +
-> +	if (cpumask_empty(new_excpus))
-> +		return PERR_INVCPUS;
-> +
-> +	if (!parent)
-> +		parent = &top_cpuset;
-> +	parent_prs = parent->partition_root_state;
-> +	if (parent_prs > 0 &&
-> +	    prstate_housekeeping_conflict(new_prs, parent_prs, new_excpus, del))
-> +		return PERR_HKEEPING;
-> +
-> +	if (tasks_nocpu_error(parent, cs, new_excpus))
-> +		return PERR_NOCPUS;
-> +
-> +	return PERR_NONE;
-> +}
-> +
->   /*
->    * cpuset_update_sd_hk_unlock - Rebuild sched domains, update HK & unlock
->    *
-> @@ -1934,18 +1976,10 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
->   	if ((cmd == partcmd_enable) || (cmd == partcmd_enablei)) {
->   		new_prs = (cmd == partcmd_enable) ? PRS_ROOT : PRS_ISOLATED;
->   
-> -		/*
-> -		 * Enabling partition root is not allowed if its
-> -		 * effective_xcpus is empty.
-> -		 */
-> -		if (cpumask_empty(tmp->delmask))
-> -			return PERR_INVCPUS;
-> -
-> -		if (prstate_housekeeping_conflict(new_prs, parent_prs, tmp->delmask, NULL))
-> -			return PERR_HKEEPING;
-> -
-> -		if (nocpu)
-> -			return PERR_NOCPUS;
-> +		part_error = validate_partition(cs, parent, new_prs,
-> +						tmp->delmask, NULL);
-> +		if (part_error)
-> +			return part_error;
->   
->   		/*
->   		 * This function will only be called when all the preliminary
-> @@ -2428,32 +2462,6 @@ static int parse_cpuset_cpulist(const char *buf, struct cpumask *out_mask)
->   	return 0;
->   }
->   
-> -/**
-> - * validate_partition - Validate a cpuset partition configuration
-> - * @cs: The cpuset to validate
-> - * @trialcs: The trial cpuset containing proposed configuration changes
-> - *
-> - * If any validation check fails, the appropriate error code is set in the
-> - * cpuset's prs_err field.
-> - *
-> - * Return: PRS error code (0 if valid, non-zero error code if invalid)
-> - */
-> -static enum prs_errcode validate_partition(struct cpuset *cs, struct cpuset *trialcs)
-> -{
-> -	struct cpuset *parent = parent_cs(cs);
-> -
-> -	if (cs_is_member(trialcs))
-> -		return PERR_NONE;
-> -
-> -	if (cpumask_empty(trialcs->effective_xcpus))
-> -		return PERR_INVCPUS;
-> -
-> -	if (tasks_nocpu_error(parent, cs, trialcs->effective_xcpus))
-> -		return PERR_NOCPUS;
-> -
-> -	return PERR_NONE;
-> -}
-> -
->   /**
->    * partition_cpus_change - Handle partition state changes due to CPU mask updates
->    * @cs: The target cpuset being modified
-> @@ -2467,33 +2475,24 @@ static void partition_cpus_change(struct cpuset *cs, struct cpuset *trialcs,
->   				  struct tmpmasks *tmp)
->   {
->   	enum prs_errcode prs_err;
-> -	int parent_prs = is_remote_partition(cs)
-> -		       ? PRS_ROOT : parent_cs(cs)->partition_root_state;
-> +	struct cpuset *parent = is_remote_partition(cs) ? NULL : parent_cs(cs);
->   
->   	if (cs_is_member(cs))
->   		return;
->   
-> -	prs_err = validate_partition(cs, trialcs);
-> -	if (!prs_err && (parent_prs > 0) &&
-> -	    !cpumask_empty(trialcs->effective_xcpus)) {
-> -		int prs = cs->partition_root_state;
-> -
-> -		/*
-> -		 * Check for housekeeping conflict by passing the whole
-> -		 * effective_xcpus as well as those CPUs that are to be
-> -		 * removed from cs as delmask.
-> -		 */
-> -		if (prs > 0)
-> -			cpumask_andnot(tmp->delmask, cs->effective_xcpus,
-> -				       trialcs->effective_xcpus);
-> -		else
-> -			cpumask_clear(tmp->delmask);
-> -
-> -		if (prstate_housekeeping_conflict(prs, parent_prs,
-> -						  trialcs->effective_xcpus, tmp->delmask))
-> -			prs_err = PERR_HKEEPING;
-> -	}
-> +	/*
-> +	 * Check for housekeeping conflict by passing the whole
-> +	 * effective_xcpus as well as those CPUs that are to be
-> +	 * removed from cs as delmask.
-> +	 */
-> +	if (is_partition_valid(cs))
-> +		cpumask_andnot(tmp->delmask, cs->effective_xcpus,
-> +			       trialcs->effective_xcpus);
-> +	else
-> +		cpumask_clear(tmp->delmask);
->   
-> +	prs_err = validate_partition(cs, parent, trialcs->partition_root_state,
-> +				     trialcs->effective_xcpus, tmp->delmask);
->   	if (prs_err) {
->   		WRITE_ONCE(cs->prs_err, prs_err);
->   		trialcs->prs_err = prs_err;
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 1e9e6b4c6f7b..1397ec428c46 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -707,6 +707,11 @@ REMOTE_TEST_MATRIX=(
->   	"  C1-4:P1 C5-6   C1-2     .       C5      .  \
->   	      .      P1    P1      .      O5=0     .     p1:3-4|p2:6|c11:1-2|c12:3-4|c21:6|c22:6 \
->   							 p1:P1|p2:P1|c11:P1"
-> +	# Expanding a remote partition should check top cpuset, not its member
-> +	# parent, for the no CPU left for tasks error.
-> +	"  CX2-3:T  .   C2-3:X2:P1  .       .       .  \
-> +	      .      .     X2-3    .       .       .     p1:1,4-7|c11:2-3 \
-> +							 p1:P0|c11:P1"
->   )
->   
->   #
-LGTM
-Reviewed-by: Waiman Long <longman@redhat.com>
+That's fair, will break out on its own.
 
+Thanks,
+Bobby
