@@ -1,99 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794589547;
-	b=O/u7NLpYsrRwI9FcraOud1ll9d2WRQGOor3QuUg0Fmv37uEkzLoCxYzrTqGRatNmrErH
-	 iv15OKaj9dFZf7p3tp1/LN8P3gqYB/93EqFvvwloeyNz3GJCIpuIr7lmh1UemZqLdvTNB
-	 ss+Hz1zdCpaAidm79IlLXncwVZMKzfBCfjxvpevs2li8ANhKJ5guF88Z6nE1zIFTxqO+k
-	 eS2Ij1RUF/HuUv8AowL8wB4gBvPSvAUwQJu7X3H/RUKoVKhId4hKur25LcAiF91VEkl+6
-	 zfHImUH4xWnnEWYQT/05QXNdd2X58cmD4GwR+4lKswPJmz8Wu4EnldAS8b6n1h3QOuw==
+	t=1794589843;
+	b=H4OrJ38TqP+beaLlTrz+BopvCOq0sJowz6x6trljH43ZzXHlyXDzOgmcTYsMFbOi7vc5
+	 S1OWj0g+hCwUHgBr9dizjsB1FgIYzVgZBdbNdEs9QpJjC6qqI64LXewYl+GFc1TYlywq+
+	 PPbprgUuYDm/jU+3K9pR+CSb9nWa5Wl6rS608vymPl364FTg6qnRE0bUMauZejJoDdkBT
+	 xpHbl750boonlstJ43lz/JBRa1V7hvDLpozXnCWNHWAH50CgPn791WdjG40ihBvW6PWiA
+	 0YQ9N1iqS6ESs/T9r4bggDAfV+uD8Uefmmr8XzWaDnbRXTfx6y31TPVTrIzycsBsfYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794589547;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
-	bh=rtFUrJztFGFbta851mkuXzZ/23JIXnRd/M7360eizCU=;
-	b=Bk0ksUIRMOesaTmfR67LD1csH0l5J0Hf5oHktboxa1ovWpR5YbG7NJjnZOFhB2CgVLlX
-	 rQ3PU4RxH251TYAI92yCQwx9nXx4yhfYoLDeQ5alzp1PcqMXjzkp0lrMFcTZz06zEOyoA
-	 OLAIo3DlkNjUen0+EpGfZGCveRQm9C4NohwnlBN4zjkZMSef2DBBLnmnAyyNBEkcRrTkt
-	 MjAleUmmysFss7OEMkYJV2CDN2UoM7lHMIekv3svfKXhAEVpt1ZAFT5JgcWxkAb7c3lu6
-	 cApZ3Af+HX6TgVuIo6zskEiEwTJOC+NgLCFYKwLSB2qTmPsJgVtHGC2MzmsuZi/cP4g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794589843;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=E0HYZnvoFY2cqYeGKLL4I6ESGkmMzyISge4rNBKOPnQ=;
+	b=FJ431+G3iwvv+vy+QuiJXrq48UBmpjS/NgezjoXTI766XCkTVY5ya3pVvGP+ijeNypMU
+	 cj5m8kdJHuuepNBTLIjGj3rcq7U8s1px9x5UcY2a4c3rkmIa1k0LMkuBmvx5XuAi+SabH
+	 v8uuyed7MlNqD/k/LUXKK6cWm+/UT5c2KmMor83Z8fqbuOd0ROh/8WdvFSRfy81CkzpSQ
+	 j5ve/maS21xlerdxrspinrH4cnENOl2Y7eeHUUJ3yh+fvIc20V8qWT1eVzBFokrcS75jI
+	 st5yjiknfuENyJxnEYKH7iZi+vYI61QD806iVmTq5SBhz/Lk88wNQ0g2gCd7iv3deYA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=none smtp.mailfrom=casper.srs.infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=utaNzrrc;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ajpn1FZU;
+	arc=none smtp.remote-ip=209.85.215.199
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF864606A338;
-	Fri, 13 Nov 2026 17:05:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF864606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F08D606A32E
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 17:10:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F08D606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=utaNzrrc
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=rtFUrJztFGFbta851mkuXzZ/23JIXnRd/M7360eizCU=; b=utaNzrrciPIVMUBAoT3ELtmMrj
-	z4+oDOSotU7pndS6hZ1LCkc3Tm5vuVeuWXxR4PHs4eFjBxphRMzakEup8xMQ3QbYzgx5f2kqmRHZF
-	tMhqiQUG8bV7JkUtD6WQp7CZBYtKvslnjdkxQ2FP6xWAmujH3Y3kl8t08xU7AxarjirDNeRw2E2N3
-	hwSzi4V95T3DVJ05/XydrmJudqlBmvMvOB2MCBAbSRomfGWAKFqt5v8QCHvXW8gYEgu39utetd1UN
-	X3IfzWuQ1Re8+kmojFNUwOXsZi3vKRj5LVSvZxjpy/r25lEr1HVRHaDMwvV/jwg+MpzPJUj0DKM+w
-	Nt5kv0tQ==;
-Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xRuiW-00000003oWH-0f7x;
-	Fri, 13 Nov 2026 17:05:36 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xRuiV-00000000KcR-3xJ7;
-	Fri, 13 Nov 2026 17:05:35 +0000
-From: David Woodhouse <dwmw2@infradead.org>
-To: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Thara Gopinath <tgopinath@linux.microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Michael Kelley <mhklinux@outlook.com>,
-	Nicolas Saenz Julienne <nsaenz@amazon.com>,
-	Nikolas Wipper <nik.wipper@gmx.de>,
-	Mushahid Hussain <hmushi@amazon.co.uk>,
-	Sriram Nambakam <snambakam@linux.microsoft.com>,
-	Zack Rusin <zack.rusin@broadcom.com>,
-	Doug Covelli <doug.covelli@broadcom.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Paul Durrant <paul@xen.org>,
-	Xin Li <xin@zytor.com>,
-	Francesco Lavra <flavra@baylibre.com>,
-	=?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>,
-	Liran Alon <liran.alon@oracle.com>,
-	Arbel Moshe <arbel.moshe@oracle.com>,
-	David Woodhouse <dwmw@amazon.co.uk>
-Subject: [PATCH v2 3/4] KVM: x86: hyper-v: Advertise XMM fast hypercall output
-Date: Fri, 13 Nov 2026 10:05:34 -0700
-Message-ID: <20261113170535.79246-4-dwmw2@infradead.org>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ajpn1FZU
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cd3b9e70f88so1397472a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 09:10:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794589842; x=1795194642; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=E0HYZnvoFY2cqYeGKLL4I6ESGkmMzyISge4rNBKOPnQ=;
+        b=Ajpn1FZUD6fdphGL4f5vUwF219i7l5zDYRSDn5qpvopjTucfLpwhBi+V32T8AvbkT8
+         RWsRiKmQHMtZ0Y4DXyBIIzisa4aOm9Kpqn6zXnFueVRXAfSBqYFfjwXDeU+cneX/ZUV5
+         HefkxbOejcUXxKGiEy7KSwSP4IBU4fi/pKYMHUBYcv1mvmdQpwDaw3KHI/5S1lKhvGqr
+         Aqh8AaNox3wkrdcHJzrvSIPrPnnwYPqODX7othykMRmXizjKVDeUsrh370Tsh+29iDXB
+         +uM/wdIJpMXmJ6KUDCozEHrN42Uj0kEx3LPWxPBB1gb3KlpwfgJe+HUqqMPUhgl2ikGU
+         KuGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794589842; x=1795194642;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=E0HYZnvoFY2cqYeGKLL4I6ESGkmMzyISge4rNBKOPnQ=;
+        b=JEZQglfigtxdMGMxPM3rQpJINEn9Qig0A3591MXJFFOj7ubYgi8zLyPvRzcwC7kXPu
+         9GmpTfIPzasYZGgedL+ewJiRVGGmu+DhaUswA7IPYunPTZRdCeL9NRVbztuzpO/pEWox
+         +/sYEtKosEnb0d0IsWWQcbNcY1uEmxO5LXLV+J65LDt/w/M/tc0N/o5MyU+/mU4KSGQF
+         qNQ2k8CrBOjoa6bIfzPGGZ/JzpmL1vO1k/cQW+ofgOXfYlqvy5QDMhyYa0FQIkTxkSkc
+         OtqLexikBoYn10lym+bEfOuniODdS5idfpaon0BPRV71DOafmAD8WzxGRbYqkE1OisBS
+         jPww==
+X-Forwarded-Encrypted: i=1; AL+hErHbI1356QVY0Qeo6bq8Z8SEwyutCMFiZhZTUpkCsku+Zpi6+quvwiriJnH6gmslWs+WG4QDBbJLlSje/k4tYt8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+eh3zxFaZC1EeCA5kxhXlJUaDINWdDu9OlvjumAofufyseVrSp
+	bmnYaoe1PfUgDEkgcvyuB+k++edxPH1dqCJ1wLpiouV7F0pQSaR5oxiUIWF0XR/Kd9p2ya86pgL
+	vuD2l3A==
+X-Received: from pgbda3.prod.google.com ([2002:a05:6a02:2383:b0:cc7:dd4c:a852])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a10:b0:3d3:ae50:97ce
+ with SMTP id adf61e73a8af0-3f7a7bc23c1mr3448497637.27.1794589841765; Fri, 13
+ Nov 2026 09:10:41 -0800 (PST)
+Date: Fri, 13 Nov 2026 09:10:40 -0800
 In-Reply-To: <20261113170535.79246-1-dwmw2@infradead.org>
-References: <20261113170535.79246-1-dwmw2@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -102,41 +77,54 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Mime-Version: 1.0
+References: <20261113170535.79246-1-dwmw2@infradead.org>
+Message-ID: <avdEkNbqPWamMErl@google.com>
+Subject: Re: [PATCH v2 0/4] KVM: x86: hyper-v: Forward unimplemented
+ hypercalls to userspace
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>, 
+	Joerg Roedel <joro@8bytes.org>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Thara Gopinath <tgopinath@linux.microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Michael Kelley <mhklinux@outlook.com>, Nicolas Saenz Julienne <nsaenz@amazon.com>, 
+	Nikolas Wipper <nik.wipper@gmx.de>, Mushahid Hussain <hmushi@amazon.co.uk>, 
+	Sriram Nambakam <snambakam@linux.microsoft.com>, Zack Rusin <zack.rusin@broadcom.com>, 
+	Doug Covelli <doug.covelli@broadcom.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
+	Shuah Khan <shuah@kernel.org>, Paul Durrant <paul@xen.org>, Xin Li <xin@zytor.com>, 
+	Francesco Lavra <flavra@baylibre.com>, 
+	"Radim =?utf-8?B?S3LEjW3DocWZ?=" <rkrcmar@ventanamicro.com>, Liran Alon <liran.alon@oracle.com>, 
+	Arbel Moshe <arbel.moshe@oracle.com>, David Woodhouse <dwmw@amazon.co.uk>
+Content-Type: text/plain; charset="us-ascii"
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Fri, Nov 13, 2026, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> KVM implements a fixed set of Hyper-V hypercalls and fails every other
+> code with HV_STATUS_INVALID_HYPERCALL_CODE. A VMM that wants to
+> implement more of the TLFS, such as the VSM hypercalls Windows uses for
+> Virtualization Based Security, never sees them.
+> 
+> This series adds KVM_CAP_HYPERV_FORWARD_HCALL. As with KVM_CAP_XEN_HVM
+> and KVM_CAP_EXIT_HYPERCALL, KVM_CHECK_EXTENSION returns a bitmask of
+> features and KVM_ENABLE_CAP takes the subset to enable, rejecting any
+> bit the kernel does not report. The first feature,
+> KVM_HYPERV_HCALL_FORWARD_UNKNOWN, sends the hypercalls KVM does not
+> implement, and extended hypercalls in fast form, out through the
+> existing KVM_EXIT_HYPERV_HCALL exit, whose format does not change at
+> all.
 
-A fast hypercall may return its output in XMM registers when the
-hypervisor reports HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE, and Windows
-only uses those forms when the bit is set. KVM does not report it in
-KVM_GET_SUPPORTED_HV_CPUID, although nothing stops a VMM handling a
-forwarded fast hypercall from writing its output through the vCPU FPU
-state before resuming the vCPU.
+I'm not a fan of fowarding unknown hypercalls.  It seems like it would be quite
+easy to end up with a mess where it's difficult for KVM to implement "native"
+support without breaking userspace.
 
-Report the bit. None of the hypercalls KVM implements itself returns
-output, so it only matters for hypercalls the VMM handles, where the
-VMM writes the output registers.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- arch/x86/kvm/hyperv.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 858ee0f374e5..e0d9b2b1302d 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -2870,6 +2870,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 			ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
- 
- 			ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
-+			ent->edx |= HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE;
- 			ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
- 			ent->edx |= HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
- 
--- 
-2.50.1
-
+How much code (and ongoing churn) would it be to add an allowlist of hypercalls
+to forward to userspace?  And then obviously require userspace to configure its
+forwarding "intercepts".
