@@ -1,69 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=116.203.23.228
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794553994;
-	b=Sbkak8DZEv8f0K1N1KnSTwvOGZEmGPJDuUE0vLDlD80XF9BImN9fKNhL5lLvpmdl3xGJ
-	 i2Kg8aQhHR78+heOHJJFoqolMzbZ2f1x2CGl/tvKrXlEYgP94gjjRKUBoSBlEKsFcuf9L
-	 W28Mu/s4VAQBht7k/8mTcYtGfMsCovkctKxmHG5lfbYcHecUnZrS8e5Vd/UiiD0v1dMoQ
-	 v3swQL45ym6S/poUP5go44BDcYqhYNDVIGCspqazS6ve9LhJ+K9ly1FoAzuC6JIOG1Llr
-	 IH8JX9w2rX2xUBAkmN8DiDwU7dWNznbe9rKparmoxsaBAI6SIedMhBHF6O3c8fdmerQ==
+	t=1794554273;
+	b=xWmHuAnRn60W1ag7SaRiZ3XsY7V8AOmSawVRQRwCYvhOCk17KDpEhI6YzT8EwpE8RuEx
+	 GDltmn05R/kJfh2ptJMlMZo44frr5TqB8pkSH/KEZgu0zbvVd5ttSONR8ydJsg/8lGtdF
+	 sgRPZmEgsBbT6I7lyJZmMDlavkGDu/+4zbkM93LhNjInf4HuJ2g2jhIylFDNgAe9WHBHf
+	 Rc0ytK5HZ5UtiyLWpACyuVdRfYQvIbmPIEzMzm4rI4BQp401iDXXwxu2n/fZfcJazJOiU
+	 LX33esgugyju/x5tJLdPdoFUqm8udqrRZ5GC4moutt4wSpoJSqeYnHpkSAE2j2nCdlQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794553994;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=jwJEcLepynHbIn+FVTxG6lhSdNiQ07QILHBvbeYHS+M=;
-	b=hOzpL0DvS0nQGd/heSiwmIi4XNcQfdEubd08+OIKa1sWOa65X9f4l98uIqVZxsZf4U4f
-	 A+VqSSounpZcGVKIjgdqMRV3hFKvVMJQr4x2XowbFbMZ+MBsFjqFzeBqnk6xsWo/GZAqL
-	 ZbNSCMYTVU653T+HgCYibwPJl+URCMfgd8OWyM2puZWsumwUc0SFLqW0ATiRloYh4pZQl
-	 tcrLN4OpNrOpM8SFNxuAmkJ2n1nvWHrq0zG0+RwVaITAAiFgwNeLpbwil6DKlgM3ZRbj7
-	 lc+MoSnQYF13p4Y+ZyiQkB6akoVXIxOwLjIUeWJRDrUcjkfWPibTitroIHWmgt2UyPQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794554273;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=+PvlK30IsPvyDmdVzBsctIGAzhTBquDxEsbqbTaHXwg=;
+	b=5HlGMp8Oe9uo2MQByHf/VCXLOKvYiAv1NFkG5c7HoqdNiPgg7EyBJXl1Zk+92f0lmzdS
+	 wgVs0g58lzM0lJlZUbujGq8uA4YtBVQhhGHxvnK1LcZycPK4HzYIyzdUAdRkCLSoC7/fr
+	 ZcYL+eFU6jx5lU71U3YnwBQPxsM9k0w6iBv9QZue9RrQRkTQh0IHtxfqZGzcBm8SF6wwI
+	 TJcquvOTSFw/H7WgQDXp4XFUfzQo3FPoML4qHk0n1YA159AJI7MA3TE9774P4YfEURXyd
+	 w65C0vJQARABi6a0fA5u6KtToR7TRNjzDzKueYtblPqBI2MAXXxdpDy1O+NQK1p4JQQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=CjeDckG5;
-	arc=none smtp.remote-ip=111.22.67.135
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461D9606A323;
-	Fri, 13 Nov 2026 07:13:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 461D9606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=CjeDckG5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=CjeDckG5BJvVoZ+/d3qltobSl8QLrmOl9wvuXOj8dcFS6OjanaLVI5FxRAmioaXnIvQZMgOa+Jwo+
-	 ILVhlL4FjNplNBMz9rgAxjV7vmjkkdN8XvRym4rsFF364bTdRmclhMj1gpoTAOSB8OLr4ZGfFmrAR+
-	 swCzb+7S68Gtk9to=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76af6b8873fc-e9ebe;
-	Fri, 13 Nov 2026 15:13:11 +0800 (CST)
-X-RM-TRANSID:2ee76af6b8873fc-e9ebe
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from desktop-eb75daa8a6be458c-20260816004526035 (unknown[10.55.1.72])
-	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af6b883592-1bdcd;
-	Fri, 13 Nov 2026 15:13:11 +0800 (CST)
-X-RM-TRANSID:2ee76af6b883592-1bdcd
-From: zhangchujun <zhangchujun@cmss.chinamobile.com>
-To: hughd@google.com,
-	david@kernel.org
-Cc: akpm@linux-foundation.org,
-	baolin.wang@linux.alibaba.com,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhangchujun <zhangchujun@cmss.chinamobile.com>
-Subject: [PATCH] selftests/memfd: close fd in sysctl helpers
-Date: Fri, 13 Nov 2026 15:13:06 +0800
-Message-ID: <20261113071306.1673-1-zhangchujun@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.50.1.windows.1
+	dmarc=none header.from=blackshift.org;
+	spf=pass smtp.mailfrom=blackshift.org;
+	arc=none smtp.remote-ip=116.203.23.228
+Received: from glittertind.blackshift.org (glittertind.blackshift.org [116.203.23.228])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B1F606A32D;
+	Fri, 13 Nov 2026 07:17:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69B1F606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackshift.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blackshift.org
+Received: from bjornoya.blackshift.org (unknown [IPv6:2003:102:af17:cb00:cf3e:e168:1a5d:8293])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature ECDSA (secp384r1) server-digest SHA384
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "bjornoya.blackshift.org", Issuer "YR2" (not verified))
+	by glittertind.blackshift.org (Postfix) with ESMTPS id 43FCB79E6C0;
+	Fri, 13 Nov 2026 07:17:48 +0000 (UTC)
+Received: from pengutronix.de (p4ffb23c7.dip0.t-ipconnect.de [79.251.35.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id AA4D25EA5C4;
+	Fri, 13 Nov 2026 07:17:47 +0000 (UTC)
+Date: Fri, 13 Nov 2026 08:17:47 +0100
+From: Marc Kleine-Budde <mkl@blackshift.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: o.rempel@pengutronix.de, robin@protonic.nl, socketcan@hartkopp.net, 
+	mkl@pengutronix.de, shuah@kernel.org, kernel@pengutronix.de, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net, 
+	quchaosheng000406@163.com, penguin-kernel@i-love.sakura.ne.jp, kuba@kernel.org
+Subject: Re: [PATCH can-next v2 2/9] selftests: can: add J1939 test helper
+ header and library
+Message-ID: <20261113-classy-evasive-mule-559cfd-mkl@blackshift.org>
+References: <20261104-j1939-selftests-v2-2-cf797c83317b@pengutronix.de>
+ <179394331774.488853.9726002978646630085@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -73,51 +65,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-The three sysctl helpers sysctl_assert_write(), sysctl_fail_write()
-and sysctl_assert_equal() open /proc/sys/vm/memfd_noexec but never
-close the descriptor, leaking one fd on every call.  The noexec tests
-call these helpers in a loop, so the test can run out of file
-descriptors on a system with a low limit.
-
-Close the fd before returning from each helper.
-
-Signed-off-by: zhangchujun <zhangchujun@cmss.chinamobile.com>
-
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index cdab3a837624..8bdfa91d3b76 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -120,6 +120,8 @@ static void sysctl_assert_write(const char *val)
- 		printf("write sysctl %s failed: %m\n", val);
- 		abort();
- 	}
-+
-+	close(fd);
- }
- 
- static void sysctl_fail_write(const char *val)
-@@ -136,6 +138,8 @@ static void sysctl_fail_write(const char *val)
- 				val);
- 		abort();
- 	}
-+
-+	close(fd);
- }
- 
- static void sysctl_assert_equal(const char *val)
-@@ -153,6 +157,8 @@ static void sysctl_assert_equal(const char *val)
- 		abort();
- 	}
- 
-+	close(fd);
-+
- 	/* Strip trailing whitespace. */
- 	p = buf;
- 	while (!isspace(*p))
--- 
-2.50.1.windows.1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ri4qm6tshdojjwng"
+Content-Disposition: inline
+In-Reply-To: <179394331774.488853.9726002978646630085@kernel.org>
 
 
+--ri4qm6tshdojjwng
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH can-next v2 2/9] selftests: can: add J1939 test helper
+ header and library
+MIME-Version: 1.0
 
+On 06.11.2026 05:35:17, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in ca=
+se
+> you want to address the nit picks below when you respin.
+>
+> Low priority / nit picks for your consideration:
+>
+> - [Low] selftests: can: silent skip in j1939_test_main() when protocol is
+>   missing
+
+pr-bot: cr
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--ri4qm6tshdojjwng
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCava5mAAKCRDMOmT6rpmt
+0hvaAP9vUxyGuySMNG4POpe13CNvZdJujh4Bjs5N1ffj9YFqXQD9FAbTZ6gTgFjt
+84gHs7uZzUPaloLGa8OhmYfgCbQlzQ8=
+=Jp/F
+-----END PGP SIGNATURE-----
+
+--ri4qm6tshdojjwng--
