@@ -1,128 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794589046;
-	b=S+j90vYRxym3+5MZQHYrk563aW4o7SHn1B7nx7r/Fw3/+p18e3TB3Vz5I+F2F9AbaeIf
-	 YmHpOmPdyVFqXFhWei6F0iBcdc1j+pQxnqxqdf/KzFgmWxAwuKrwWbXnbnEmzdK3ZTLLO
-	 f4krRk4wDWtGaZV1NVis134rmMv1z3bdXUJUBUqeVyB/hJvOSkDxUqDY5RwBiCtGoRfYM
-	 wHucIvrAMv0/g6DoE1fXvMLchx78WYA7M2uI+S9hIWNOhDMNUxK/FMlJIPAakirqjZ7jq
-	 ESI7+kCTcKpX0ddM6qF4tVnP9CFu8DtZbJIAzOTkH0824SHFcETfFhVrApNQZc4kFUQ==
+	t=1794589372;
+	b=QnqDyPUL7X2HUMYKuORU/s7lLpmX/Jd6fOeF+AmpjbYR3PciCBiKqS12+BjK5FhGLxWY
+	 FLy8GGzWGtXi8f4RFFNNgp+Wwcgx9JBRBkpGPkkNT7eo72VkrPFbjJgVhoi7UjGGHIkwm
+	 5YpVp3cJmm/xXQdmSkEJNKkjF3+TESpznHI1G/5F1E++WxuzfAcMpQMYZLixB9PyNo+My
+	 FPoIofxg1yAUvyoeQHP6HR93Z715jYu50a6PpYZi+4j+BsghrPMnU7sLuGBMFbDQcjo1J
+	 P6KIYYUZ/LZUCbQVGZ0XTXTEzHg7jAxxbWEqFlJ2T0kiNHXWStTFu5zIboW7Z1kun5Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794589046;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=t7R90zeBhuCAPBYRWGVInzQKZ8XGZNdOKwhHfCCRUDk=;
-	b=bK0cYHlH+ZVEl9U8T4t0nNw2L3AD95E+oYzERz1jjqJTcV3LMVFtTC9oUELa/nif5+bu
-	 A5E1ESRx3REQ98aCD0ym4GowfjdzACDf/wMUCzdI3xhuY1bzJairXKAIuMaqLGJ0LV0IM
-	 F2rBLqvT2hqvWww5jD7GPJVPO+yxe5af9ubBLsSrc7vaM/xPhBI9nWrLSQaa3lAGlHDye
-	 RvPw/YTd9soG2A2cG5d7Qno379nuCmGCG9HTo4LFeme4R4DnEF0O6aDZGO2opW4yf28VH
-	 6YqdjG4x9ofGGNG8Gd4Li1WVSDzHEEoa9K382pB4Xzuhcg1zQrU/X0af/qvGP0xVfiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794589372;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To;
+	bh=ym2hLsozA7ZSQayntiTQLoO7fGKekGn6gbjoRP5CLXE=;
+	b=fdOddv1koY2PcGFNsavDBYbOhPiVYuuj2v+1X53vXhu3wSBes89obVv1yStc06Z1Mm6W
+	 tLqtMp/2T02eo9frgPvlku7l8hA0D45csuEyLCu7qZCKsYX9ujJ+j1nN0nIASUaNqrJ9c
+	 7ykXffdSVNpuTuT1NXRq/vOFsxHhfGl9TnlMA+jOl0yHDL4LSNj7tY+NsvcddlUIhyCp5
+	 bHo0m2j96DAFFGC3anB+xLo2cNRDhmvjVBndtvoM3aMbMNHb05YvzSFc1ywG1O+jgLAt8
+	 siocWO2IE2L3JKWC7utK5IJv4vbx4wUVPaMmWccM+9cn47UoPe7y6JcPTQ9fWKXoYlw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Ep7H9Wss;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=AZRJTjLl;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="wmFo/9UB";
+	arc=none smtp.remote-ip=74.125.229.5
+Received: from mail-dy2-f5.google.com (mail-dy2-f5.google.com [74.125.229.5])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8129D606A8A5
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 16:57:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8129D606A8A5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29880606A884
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 17:02:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 29880606A884
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Ep7H9Wss;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=AZRJTjLl
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794589044;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t7R90zeBhuCAPBYRWGVInzQKZ8XGZNdOKwhHfCCRUDk=;
-	b=Ep7H9Wss0Cyw1V0icaNRk6zVGjwr5RlqzTbHA4oAaSM7UsZV+XnG/DIztcxHjaoCSLoFhD
-	GAWF2Karg5mVPW0QQJ6tQARhp4+KoV6xewtmlDL5A8tOr64u3nyFSyuZuErM7iDtQ7hZXs
-	nw0SJksER9YL1gBqS6XzcyvvL+zHR1c=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-103-2_QT-xW-OLeHtiBcP1L0Qw-1; Fri, 13 Nov 2026 11:57:21 -0500
-X-MC-Unique: 2_QT-xW-OLeHtiBcP1L0Qw-1
-X-Mimecast-MFC-AGG-ID: 2_QT-xW-OLeHtiBcP1L0Qw_1794589040
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-49337a224a8so752244f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 08:57:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wmFo/9UB
+Received: by mail-dy2-f5.google.com with SMTP id 5a478bee46e88-36caa19b0ffso538617eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 09:02:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794589040; x=1795193840; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=t7R90zeBhuCAPBYRWGVInzQKZ8XGZNdOKwhHfCCRUDk=;
-        b=AZRJTjLla20/bOP0upZA9DbntAjJGTMNRT3S8PlEwzRNCXOTwmz7ChdydZogcVmJTR
-         Mc++h2/Ld2VCoAw45JbOfNAh3ny0mAlqq3Q/RvvMzAHMKTCwOpE/n0UJVUzLctm8haox
-         hGH0v5bA8SPIRiEW8/+44HBLPtSeJ8AMb8OTNDcwsOHv4B2vKE8HWmhDwLRez/1Wo45U
-         RCkHO0FuuHyBehHWDdybkyuk4wqSlnTfAXMS/on79RCztKaeIZJh64cHBnjbBVvFAdMG
-         IQyjPw7EolOtSCaEtc4/wrP4kITjqCJW2BaQ6TNsAJtcgRSaTVjjYwLGxrVs5WTFEFQt
-         tbeA==
+        d=gmail.com; s=20260707; t=1794589371; x=1795194171; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ym2hLsozA7ZSQayntiTQLoO7fGKekGn6gbjoRP5CLXE=;
+        b=wmFo/9UBoL9/fi9B+miMvv37P7UpU2FoOc+M6Eekvn8LgLVHVIIPyoE5Jn2T9FcHcc
+         FOcrA4RRVYam2oSrfBtAKa/ncJHHKnjnnwru8PDAbroLSpYXXH41gpGmApzKschZ2p+r
+         anuv8pU9QtFRC0YPk2UmYZbQGYaxn7Z0FQURyRtEDXGd+4jEEXHxLzoJw7jcI272PcUj
+         J/3soGoSb9FGOc1/0EMijJx9SutbYCPnmXscokmh4r4YRcOzLG6za6668LE/hsZ1Q8JD
+         5z08tyNHX0GIpsRx19UL2/U9d3naDzDSMn1ys00fnNvQv1fzgCJMZgyFFh9jgJsTIxzK
+         IHnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794589040; x=1795193840;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=t7R90zeBhuCAPBYRWGVInzQKZ8XGZNdOKwhHfCCRUDk=;
-        b=z3ZCX1YlyskxILAv285VjbIVT6Eslp0uJJvSFqy/luXVGp1+WksULvT7sCR7rb1qBD
-         Bw3H9KkrwKo9okYKjrrjiCqC67iQEx7l8VICeipKMLzY/Qa65Z2hVGOKP4XF6Sxvo+Hx
-         q6chO/iKIdXS8ksI0Fw4edNA4nDjC6yicX/xEjvnoi/wHMmbcT/vSp7cxueE1nEAKUfN
-         strjMr1OsGLyWqlCU1K+oQr7jRyP0AnTaMBNXwzX0e8Kz4a1ciQvR/J/jUwA+MNklY81
-         0Qixncfaa8Dn93o6eQgihk/hJV7CySx6kw6eZnG4y+1AauHXBs4dGaiqeqScHYB4dRNc
-         JMLg==
-X-Forwarded-Encrypted: i=1; AL+hErE4M1VJ4VNIRIANsnHpi1nXIhkPp5ef0H39coDaaBZRRaxDSEZ4dUcw0Vtg16xvc1cYkygHwj6OXuDWJW9Ukd8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+21k/NlXgl1FAgKMuagPFBnDzDLA9WqA5AzgLxFhGTKpqUKli4
-	e/Tr2u92DZIV4FA6yLWfVCsZOjz1d6J8S6ta9ILA7JnDcs/y0oPLlLGMcf2w1J3Fkn7xaxKzdNl
-	KpxdRQSUceNy4qqey5CZBmpj2HhXtEWVKicDlruZ/kFy+v3ixs0pVmwt1jDaAwM2m1EDvRg==
-X-Gm-Gg: AYBFou2aDndkecGQd70gwpgHQvTs8ytr45p3Oo0MiitYR2I7GNgHdNEHvKYUQShgM41
-	0mFLDrHZUZeMkKDoAJBYEayVukFNm6TKHjMve6MKOWjEECJ5WCcTH3Onl5DJXi4+p7xFnyDQ/Jb
-	MDTK/az/EKYSG3flsdxCDS9a1QDtaKVBuU9NsCySQLT7Wtkdb8XH2yjlfwj+M70YK2YjbCtUoF8
-	Wge+IAm2ksFq5rdZNWwC8YH8lEViaK4vUOVzBWZD7+MwBaa9uk0hRIjRtI8IBE/G2wNaCxpU1+z
-	/WRyOqDYfThWngPbg4xh6gLXJTiABfLK0oMisr9GG2x9aH0Ez2SXi2ufD5eZ0iNdW/Kh2OxBM1i
-	2lMW16l2kosZ9A+3FcqjS/RUPzzTnjD/41ckm8DtDED6jwBrI73nWX50CYGHj7bmRLAhP7EVi+A
-	XtzLk=
-X-Received: by 2002:a05:6000:4804:b0:49d:57b6:55eb with SMTP id ffacd0b85a97d-49d57b65632mr3158305f8f.17.1794589040117;
-        Fri, 13 Nov 2026 08:57:20 -0800 (PST)
-X-Received: by 2002:a05:6000:4804:b0:49d:57b6:55eb with SMTP id ffacd0b85a97d-49d57b65632mr3158249f8f.17.1794589039729;
-        Fri, 13 Nov 2026 08:57:19 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c604ee47dsm5790370f8f.38.2026.11.13.08.57.16
+        d=1e100.net; s=20260707; t=1794589371; x=1795194171;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ym2hLsozA7ZSQayntiTQLoO7fGKekGn6gbjoRP5CLXE=;
+        b=LMTxeNRTOl2pU1HYX+qwfdW+qr+NyTvLDUVAc45Q/qJqyJM/HIvAOiMm4Kn+D9S3HL
+         lcQW+mzXpRZfpbmGunKrJoTcXm3dju7CgF8VGmM3gRqHXQU98JT6aMH6BFnvH0B+3rV8
+         NIKUK8uLmBUbIGKakaXPoUaf1OFtScviaK2Qi/vIc4RGEiI+HfhskPrrW0/wacbCGfCi
+         O9otOl67cDD3ZInsAQ6Qq7JHqigxLfSJFaaxPU8x+9V8AN8cgGsnFDbOMNvZCDl0hAGg
+         kASX2GnVOgKAF8rxhAIpPFR+VXIXUDk/bxtIPsS76nXJ9TlDlf82ZtYN95JYAiyHiN5+
+         xvSg==
+X-Forwarded-Encrypted: i=1; AL+hErHmN5Ry3ogw6aHGwal3MLvKLuzwv2krRj0aIkZFYpHQdsbNWaqsU1+gRcNzrP79BQgM8++VzwBqSihnkrHbNTw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+0eDCiAsymETy4k88TW6jVuCVXR+D+gbIIijD6q10/YtvRQTVz
+	pogBprlbalhEF5Ha4LVZEtj/KDobYpQSH2i4YKAiqrM0h5BTNccwhggT
+X-Gm-Gg: AYBFou1OYE/QXyHV7zA9yDEXevX3KYPaEidVN8O55QzCzrdrjLd7JnK5aH6ifzpTvcz
+	L9Y5qvgGVWGUmG6HNvGTZRnm8jM5wsCp2pK9o386ybsJIxXgPmKphgvIV2dWwppyo9Qg68Zzl+j
+	LsCkjKrXJp6249J/1Dzcrl4/EE6wXcIYTmrdfJYDi+k3NgZ3c8/dTmm9/TcHfGGO8GpbdlBtD49
+	wRAqhl8z3wm+/WCjlAf/zxU+TtRK8oiGtErTxTioUz4CTrlkLksSd4U2aqa+M1cnJ7fgTqRw1s7
+	t8b+Aia+I2y+cznFvdGGezd+7mz0iQYZSHLjTnDQeGtnAE4uutVVT9UZ7Mqbwnsdm6nFRDyDYck
+	zWcdxv42RKvxv2yI5n/p8XyaYXPsKtayzFX+bsy1yeHL3VoZT0AoTxjrR5aqDC3TadUp6xicqN4
+	3vabKiRu7wKiNdFkKGbr8JBzbJMVoeQWLUv2jA+Pb4P/8Kv13vxQrc/yQQEwF33z42IkFMx9G5J
+	F9NYdlzH+OvPzsvTi3A9HXCE+KREqPfrTxRU36T5eZmcy68zEa3hoQ+Ul4MOqr9SKuNb9oZ87y4
+	+K8/sh8S8c+oFe/Oxd2N7lg=
+X-Received: by 2002:a05:701b:280a:b0:185:b157:f271 with SMTP id a92af1059eb24-1b50310fafamr2760874c88.23.1794589370935;
+        Fri, 13 Nov 2026 09:02:50 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:69::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50316e195sm9999831c88.8.2026.11.13.09.02.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 08:57:17 -0800 (PST)
-Date: Fri, 13 Nov 2026 17:57:14 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
-	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org, longman@redhat.com,
-	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
-	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 20/29] cgroup/cpuset: Give back the bandwidth an
- attach did not move
-Message-ID: <avdBakhOOFb_j6y3@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-21-mathieu.desnoyers@efficios.com>
- <avWEta7b9X4K6hF7@jlelli-thinkpadt14gen4.remote.csb>
- <e21aaf40-b929-444c-b707-3200e21d7301@efficios.com>
- <avczaaXEh_xUhxpa@jlelli-thinkpadt14gen4.remote.csb>
- <3b2419e4-3874-4ccd-8af1-3ca76df20717@efficios.com>
+        Fri, 13 Nov 2026 09:02:50 -0800 (PST)
+Date: Fri, 13 Nov 2026 09:02:46 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Octavian Purdila <tavip@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	michael.chan@broadcom.com, pavan.chebbi@broadcom.com, andrew+netdev@lunn.ch, 
+	edumazet@kernel.org, horms@kernel.org, shuah@kernel.org, sdf@fomichev.me, 
+	leitao@debian.org, dtatulea@nvidia.com, asml.silence@gmail.com, 
+	bobbyeshleman@meta.com, daniel@iogearbox.net, razor@blackwall.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 0/5] net: devmem: size TX net_iovs from the
+ dmabuf layout
+Message-ID: <avc_ptmBkAahiBHJ@devvm16445.scu0.facebook.com>
+References: <20261111224740.2744522-1-sdf@fomichev.me>
+ <1b764043-2efd-4e65-adb9-a47c0136446b@redhat.com>
+ <avZC2hp_0ODMQ4SG@devvm16445.scu0.facebook.com>
+ <avZZ-6GGciPC0Lti@devvm16445.scu0.facebook.com>
+ <CAHS8izOp2BpO7WnrNZRUryGQg=L3xreF8nSFp5S2_sO8HGhqpg@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -132,48 +107,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3b2419e4-3874-4ccd-8af1-3ca76df20717@efficios.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izOp2BpO7WnrNZRUryGQg=L3xreF8nSFp5S2_sO8HGhqpg@mail.gmail.com>
 
-On 13/11/26 11:14, Mathieu Desnoyers wrote:
-> Hi Juri,
+On 11/12, Mina Almasry wrote:
+> On Thu, Nov 12, 2026 at 4:42 PM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
+> >
+> > On 11/12, Stanislav Fomichev wrote:
+> > > On 11/12, Paolo Abeni wrote:
+> > > > Hi,
+> > > >
+> > > > A few (late) questions/comments to check I'm not missing relevant
+> > > > points,
+> > > >
+> > > > On 11/11/26 23:47, Stanislav Fomichev wrote:
+> > > > > TX bindings use PAGE_SIZE net_iovs, so a frag covers at most a page.
+> > > > > A 64KB skb needs 16 frags, and MAX_SKB_FRAGS caps devmem skbs at about
+> > > > > 68KB, which makes BIG TCP ineffective for devmem TX.
+> > > >
+> > > > ... with default .config. You could set MAX_SKB_FRAGS to 45 and reach
+> > > > ~180K...
+> > > > > This series picks the TX net_iov size from the dmabuf sg table instead:
+> > > > > the largest power of 2, up to 2MB, which aligns every DMA segment. With
+> > > > > a 2MB hugepage-backed udmabuf a BIG TCP skb takes a few frags. There's
+> > > > > no UAPI change since TX addresses are dmabuf offsets.
+> > > >
+> > > > ... still this option should be more effective because the limit would be
+> > > > higher and the skb would use less cachelines for the shared_info,
+> > > >
+> > > > I'm wondering if making a comparison vs MAX_SKB_FRAGS==45 would be
+> > > > complex and if you could do that, too.
+> > >
+> > > Originally I did not want to include bigtcp to keep it apples to apples:
+> > > same tso size, just 16 frags in skb vs 1 (in ideal case).
+> > >
+> > > I just tried running mlx5 with 45 frags configured and it fails to start with
+> > > the following error:
+> > > mlx5e_attach_netdev() warns "MLX5E: Max SQ WQEBBs firmware capability: 16, needed 23" and returns -EIO.
+> > >
+> > > (fwiw quick review with llm claims that mlx5 only supports up to 20 skb frags)
+> > >
+> > > What I also tried just now is `gso_max_size 524280` (on top of this series)
+> > > and it ups single flow throughput from 200Gbps to 240Gbps (presumably
+> > > by making the receiver go faster with 512K TSOs vs 64K TSOs) and halves
+> > > the sender softirq..
+> > >
+> > > I hope this gives you more data, not sure running with 20 frags is worth
+> > > it (vs 16)? LMK if you disagree or want me to run something else.
+> >
+> > Fun fact, also setting gro_max_size on the receiver gets line rate over
+> > single flow:
+> >
+> > I   client.c: Connected 1:cpu 39 | 1:cpu 118
+> > client: == Source 2401:db00:255a:4a:bace::b
+> > client:   Tx389.448 Gbps (2921248849920 bytes in 60008026 usec)
+> > client:   Rx  0.000 Gbps (0 bytes in 60008026 usec)
+> > client:   TCP retrans reord rtt rttvar d_ce snd_wnd cwnd
+> > client:             2   125  86      2    0 15300608 10142
+> > client:   net CPU 39: usr: 0.03% sys: 0.06% idle:67.39% iow: 0.00% irq: 5.69% sirq:26.81%
+> > client:   app CPU 40: usr: 0.05% sys: 2.91% idle:95.67% iow: 0.00% irq: 0.21% sirq: 1.14%
+> > client: == Target 2401:db00:255a:44:bace::b
+> > client:   Tx  0.000 Gbps (0 bytes in 60009306 usec)
+> > client:   Rx389.438 Gbps (2921238435008 bytes in 60009306 usec)
+> > client:   TCP retrans reord rtt rttvar d_ce snd_wnd cwnd
+> > client:             0     0 210    122    0  999424   10
+> > client:   net CPU118: usr: 0.00% sys: 0.00% idle: 1.60% iow: 0.00% irq: 0.33% sirq:98.05%
+> > client:   app CPU119: usr: 2.75% sys:77.46% idle:18.95% iow: 0.00% irq: 0.47% sirq: 0.34%
+> >
+> > 4200MTU, 32K rx-buf-len, this patch series, gso/gro_mas_size of 524280,
+> > still the default number of frags (enough on rx to fill 512K GRO with 32K
+> > chunks).
 > 
-> > I believe we already have (maybe broken in-kernel) EBUSY on trying to
-> > hotplug last cpu with bw standing?
-> 
-> Yes, in dl_bw_manage(), for dl_bw_req_deactivate. It refuses a CPU
-> offline in two cases:
-> - the CPU is the last one of its root domain, and that root domain
->   counts deadline bandwidth;
-> - the CPUs that remain lack the capacity for that bandwidth.
-> 
-> Both look at the root domain as a whole. The planned next version
-> leaves that check as it is.
-> 
-> The new refusal looks at each task. The root domain keeps other CPUs,
-> but none that the task is allowed on.
-> 
-> The case hotplug_last_refused of deadline_bw_test shows it, in a guest
-> booted with isolcpus="domain". I1 and I2 are isolated CPUs, in the
-> default root domain. H and K are housekeeping CPUs, in another root
-> domain. B is a cpuset of I1, I2 and H, and is not a partition root. T
-> is a deadline task, counted in the root domain of H and K. Without the
+> With 'devmem' over udmabuf? Is this possible without devmem on your
+> setup? How much is devmem helping I wonder.
 
-Oh, wow. So, this is indeed possible today, but of course completely
-broken from a theory/AC point of view. Urgh. :)
-
-IIUC, what you propose for v6 makes sense, in that at least it should
-close holes we have today. We will then need find time in the future to
-address what dl_bw_capacity() already points out:
-
- * XXX Fix: If 'rq->rd == def_root_domain' perform AC against capacity
- * of the CPU the task is running on rather rd's \Sum CPU capacity.
-
-In the example above T should be restricted (and its bw accounted for)
-to either I1, I2 or (H,K). It shouldn't be possible to admit it in a
-cpuset spanning both isolated and housekeeping cpus like B.
-
-Thanks,
-Juri
-
+Yes, devmem+udmabuf. I think what's helping here the most is 32K rx frags
+and bigtcp, this makes it possible to pack 512K TSOs into a single skb
+on rx (which is the bottleneck). At least on mlx5 don't think there
+is a way currently to configure that outside of iou/devmem memory
+providers? FWIW, devmem socket api with the cmsgs is not supper
+efficient, but bigger chunks do help here as well.
