@@ -1,80 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794587205;
-	b=yHGxPlPTsEx9FHqrXkAf/QsM5+ap5Vv2wnDQ19xH1vKBYOFjOzmeSpRoF/3sdV1FS2WC
-	 KAuM9E7ZG/VueSdUFPU+NgcTXEM9X1E2aG8biHF7beqREDW3DViD+Oz3Egp927q92MEzZ
-	 uq5U5fQzh2+H+tvOVRuP1M6zi48E+6srY/hBZOfZRdkdD+caMQ8V26AiZFWH+VtnpH1yn
-	 8nCildS0GcYd835+JV9J/WfC97ixi65biwHwHftk4EOUcEbxDjda7Tnu4cE/nWbEBmBQb
-	 cXVmrlt30hoyn4eXallKQkb/RtsMDwozHr51wmcZeTnYLJN6CQiLUDoxKiaTWgcql/g==
+	t=1794587813;
+	b=JCcDw69rWV1ny1RAzcmlpqNdQJBkEtKULaXhpVik4goznQCMk1dt8CxCNagrDk5++38F
+	 Qj711XFmso2AgojTIOQT44H1py79psqTkUePPJafPrPK4Bn2IfR0yMZ+OZWbGmD/Ybedm
+	 x87Ldhj3JrEgZ25dqSno7kXP1ZSz9zM4HGcOw5mIxvEZsRL0nKydEGV7d7jXfRuZn6C3f
+	 YUyauXAV3NKu/E28wi8ySUt2sGz2mqCUccdqRd9WbQFmcBS9E/M0/IL6uKHd1Lo45G6SI
+	 LPqfMMxiGWsgslHFOH1+QiC+kabIFyMZHRfKIADlr5PIpMxr+4MMuEYZow2DaGP+7fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794587205;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=7ZfF8luHREto/ub5t5xIcKnzvyfNad3KP1cbQ4+yoxs=;
-	b=TQ42+SvPVDgfofY3wrfBE1O/uKtJZDZ7Rbms3QnWvBxCa1FEf4AncrtzvxieXr9C1xTM
-	 vPLBLIYuZTKcTnMQLRh5ddkcIRMQdJ8vOzOzu4okF47Tz7ZttQ2U088xj1tic6F3zktBZ
-	 p/jDejhnVhTJ3PeF9GVr01VfWGKUOCdZcyGMefDgakqaDl1ehIryKXQlDfXMdStXbAWbT
-	 O+D3BUpjAA7eryt2nrg1jZMFKiOoLKer5J9xKAdl1j+VwBBn/DUQcSOMHYjvsvGISllgj
-	 KiyBJZNX1DTU9TMrZSmTY7i6T5Q90eTVohs0PRsy4vQ8oT7wDlFvXnx81IDnv0eqmyw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794587813;
+	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=W0073ALJig0hMJYwab+InzC0jgWWQhNHsIl2BaOpc4k=;
+	b=VaSJqTiAc0D/pcskwlzUJibmoR3c3hqu19QcYLlZrnZqkEVUEGXe9EG8bKIchEC/uh6l
+	 Sl1LK6ycvIqCVQqFgovt30iXzwNnMzfLYrZBEJeXmREXeztZcVnEoU1UKAHl2oBZhReyL
+	 2YT9LQdBz/e6jwtnuYSX1c/MoLba+WZx7K30AvEkdfgBG2XCfbsvecXEa1OaeTzutoesk
+	 tVL5x7oQeUSZYMFK8sWW4h+/QeTtgalIyItvIOx7tEY3pXQbg4O9LK/A/qsUOJEQvjIl5
+	 ChtE4xAhQLZkDHJ3pHpTrV2pcStUITJ7wJkWYcb+wdf31xCnZRZBHFIOgPCyHaQ7Asg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PGdbvyD+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=R1GKYOCs;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=g4cNNxiP;
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 6D136606B2EA;
-	Fri, 13 Nov 2026 16:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9FC606A323;
+	Fri, 13 Nov 2026 16:36:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C9FC606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PGdbvyD+
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 5B4821F000C4;
-	Fri, 13 Nov 2026 16:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794587205;
-	bh=7ZfF8luHREto/ub5t5xIcKnzvyfNad3KP1cbQ4+yoxs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PGdbvyD+2glvNYn4aWF67C5abmwt8X5SusDm06ubZ5KfmfHlvA6WSsotDlfEZ5Jo5
-	 nCkLaoKt0XLmtR1Hi6JkJ61CaAwYpyRTC740e6+kpGsdAxlAuQvQNwET/tXQKB+X3K
-	 /XdbhzeuRy2IFU1d0BiJxGO8t7i/48Vqq1Nsj238jba6JtysSGtxnC0shZNGF8ZtQP
-	 JnsH+OOidLxZFlQ/yFf5c97LWhpISeIeBjbWvvDsigvl9jdT1Taj/lRgvRobfeVEHK
-	 8cfOs6ioXBp1G03RIOuVBD8tQzIiQrwnD8WH+Qj5wr5SMUVr+KhZcoCLQSJoIWTxvm
-	 2JjKLTgq7vBMA==
-Date: Fri, 13 Nov 2026 18:26:41 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: bpf@vger.kernel.org, dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ignat Korchagin <ignat@linux.win>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=R1GKYOCs;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=g4cNNxiP
+Date: Fri, 13 Nov 2026 17:36:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1794587809;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W0073ALJig0hMJYwab+InzC0jgWWQhNHsIl2BaOpc4k=;
+	b=R1GKYOCsZa5n9FFnsbM0LFknAZHzWH1x1tXSLHs8OH40lTClLpnJF0GLi4+JttsIpiFBNF
+	2IbiKrE+UgXAH0OEfDaawxZpbCBstl0oOBFdFv2LwtPVe/XC1xKqDziefyGXA9WSEozBlh
+	ONaUHy7IaQ+DA+p2D8/nmscDlHS3Vxv+PNr1IARDOm+iY6DvKOi91FK94ukS5XGhy2+lua
+	rmEagEaHKPlylq6iC6WKRrp095vNd9FPh/tQaIV/EOst89kYxqcb1Qv9/lgIAufnsCSMvf
+	ecoEo86jFdNY/YSSVWLjsKQd//+LCErac69kNuyfekUARj91f0yQ4NGcOOJquw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1794587809;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W0073ALJig0hMJYwab+InzC0jgWWQhNHsIl2BaOpc4k=;
+	b=g4cNNxiPjikLIqtG448C3HF4/MmQKqJMYOMCVFurPsXXcwvn0POibBP7qBawynCQxZUT8y
+	waDBRi8dBnS77fDg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: paulmck@kernel.org, rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Davidlohr Bueso <dave@stgolabs.net>,
 	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH v10 0/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <avc6QSzdVwtpUxUf@kernel.org>
-References: <20261113161836.3587552-1-jarkko@kernel.org>
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 5/7] rcu: Add rcutree.boost_disable to disable
+ priority boosting at runtime
+Message-ID: <20261113163647.OrW62pCV@linutronix.de>
+References: <20261111213826.2035045-1-joelagnelf@nvidia.com>
+ <20261111213826.2035045-6-joelagnelf@nvidia.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -84,21 +84,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261113161836.3587552-1-jarkko@kernel.org>
+In-Reply-To: <20261111213826.2035045-6-joelagnelf@nvidia.com>
 
-On Fri, Nov 13, 2026 at 06:18:33PM +0200, Jarkko Sakkinen wrote:
-> v10:
-> - No changes since the previous round. This is a sanity check round
->   given the lack of feedback to v9. I'll apply these patch very soon,
->   unless nothing (relevant) comes up fast.
+On 2026-11-11 16:38:23 [-0500], Joel Fernandes wrote:
+> CONFIG_RCU_BOOST is now enabled automatically for preemptible RCU and
+> cannot be turned off, so rcutorture's BUSTED-BOOST scenario, which is
+> meant to show that rcutorture detects broken priority boosting, can no
+> longer break it.  Add a boot parameter that makes rcu_initiate_boost()
+> do nothing, giving that scenario a way to break boosting.
 
-We're at mid-cycle. Thus, it makes sense to get these changes ASAP to
--next so that they get more exposure.
+It has:
+|         depends on (RT_MUTEXES && PREEMPT_RCU && RCU_EXPERT) || PREEMPT_RT
+|         default y if PREEMPT_RT
 
-I have one PR waiting for keyrings in queue with a couple of bug fixes.
-As soon as -next is in-sync, I'll send tate PR, apply rhashstable patches
-and make the commits available at -next.
+which I read as always enable on PREEMPT_RT and on PREEMPT_RCU only with
+RCU_EXPERT enabled which off by default.
+But BUSTED-BOOST always enabled RCU_EXPERT which means it is always
+enabled. Hmm.
 
-Br, Jarkko
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -1270,6 +1270,9 @@ static int rcu_boost_kthread(void *arg)
+>  	return 0;
+>  }
+>  
+> +static bool boost_disable;
+> +module_param(boost_disable, bool, 0444);
+> +
+>  /*
+>   * Check to see if it is time to start boosting RCU readers that are
+>   * blocking the current grace period, and, if so, tell the per-rcu_node
+> @@ -1284,7 +1287,7 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
+>  	__releases(rnp->lock)
+>  {
+>  	raw_lockdep_assert_held_rcu_node(rnp);
+> -	if (!rnp->boost_kthread_task ||
+> +	if (boost_disable || !rnp->boost_kthread_task ||
+
+Could you instead make this a parameter of rcutorture (and not rcu's)
+and then check it behind IS_ENABLED(CONFIG_RCU_TORTURE_TEST)?
+That way non-testing code does not have this additional read and the
+variable parameter and so on.
+
+Maybe tell rcu_spawn_one_boost_kthread() not to populate the tread this
+thread in case.
+
+>  	    (!rcu_preempt_blocked_readers_cgp(rnp) && !rnp->exp_tasks)) {
+>  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>  		return;
+
+Sebastian
