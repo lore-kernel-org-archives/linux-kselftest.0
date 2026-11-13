@@ -1,96 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.132
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794608567;
-	b=ub9wozlkq9gvFK9/vh/qoOy3gprU3xTT8753nY83mzHDp4ZNRPq2NXrF5JXHxdtBPbHs
-	 LIPbFjul5m+GL+Ui/+oYW7BK5QsTa7QnCnwFfQYry6UGd9LhEGzEX/qnMTUxQuec6D3Ki
-	 ERB9NF+YGbw6/tvKETQw9Q1n9U23rw8lcQa+E/6TfLsvnDOVC199zHfXG47KwQKMUd/dD
-	 eRHOJUj+du2GkOq7w9b2lg2chCW14rTDk4wT+CcOb8nApmSoplTomW2UvrXh29ji3mKtI
-	 Ka2odxx30maErXvF62gSwHO785uBAU4joAF7sK7LPQf8llApstUAwnwBSz+DXiuu+vw==
+	t=1794608984;
+	b=CJRyQ2OIE4Pm6cjv/jg/cqC0NelbD2yxoBIdADOVCXRxaUb2zzkuk/EXyfDbrizp2CBd
+	 bWxfach/Qoqr9SepG4vN7cFp8PZ8IrSHqexHIvfhNVU6/2uyfpJZvbwEMCAlrhv3iKQ+E
+	 QUdBBM6uI4/vtSjNCkan1BjTTQOkPmb+1MEm1jv6cZOZbLwV476o3kUu/LKpXhITDf/BO
+	 6hSMfbHDxY59GxvA69LPEoZqWOHhsXgSqy4LohcAPrXTMeOyZJUygl+b9CkLWyO+s/x6y
+	 2buvXuhhIdaesnh/FfOe2W09cnryDfOEW7MeT7nuCvjQURpNEWHbc+tPBA5T13dUTTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794608567;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
-	b=xxoZXHLESnBqvAFWDe1eOxIC1JrlZr/B/nPr3x3UwNmQbPa1+rFnujO95LijFvblquBj
-	 Px4CXELibhxap5A979FQwGAVDXAWzS6zVHhwLuviNv18JFH+MqKUfQp0xMnz3a+rYGv3f
-	 7P0bI9wK5CMoOaVIZyYgvLxvJmFv7Hn+FqLtfDG2II+IAF7kkvOONctiqRKl1IAR+vkcF
-	 jdzueKJ2usjVGcRfKLF4oeMsFT1UNS0Qn/VLGAXndHga2IAWfnbVfV7xZR2bH86tthX2q
-	 e8/iVbdA4k1meWgJ897r2aaQcE7eYIefYPRpUHnNoqhxE6bOS4MNRRp1G6pg5u/ql4Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794608984;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=8l4U3zQpJVwCIUSroFNMy3UbW7wsKixV4Iy1YuhTSWU=;
+	b=xGSKbP+sMr2QnA0HWvmJmtvlvwrarcRgDWoCJieNAA6Bq8A3x3h2XEA/i7BPLa7LpeK+
+	 2ntQCw/Eww/3fai/A2DsZdYutLZEHZzBBdaYA7WZyJeEYKsmfaDWNbo8RT1HeX5ukF7pX
+	 qcMd3/rt6W06mI5r4jjSu/oIFItDfICvu/a2euLBNdsVLBTLrwxmCye6o75BLo+g6qr4Z
+	 93p/kVIz4YcLydxCnz5B84ge611w6+88UwGZWUTdhLfv43eP/NDGFuRKHSVny8j+Chpmr
+	 fVjREJdGET55UFVKGuFeZ8BwMXP2UWA7LRNhgky/AgPgViqKtKxiuHsoyxyKTxv5k8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kt0eGjZ6;
-	arc=none smtp.remote-ip=74.125.229.4
-Received: from mail-dy2-f4.google.com (mail-dy2-f4.google.com [74.125.229.4])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=o4KUS8tM;
+	arc=none smtp.remote-ip=91.218.175.132
+Received: from mta0.migadu.com (out-132.mta0.migadu.com [91.218.175.132])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB539606A88E
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:22:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB539606A88E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1ED606A8A8
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:29:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A1ED606A8A8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kt0eGjZ6
-Received: by mail-dy2-f4.google.com with SMTP id 5a478bee46e88-36e06480786so446941eec.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 14:22:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794608566; x=1795213366; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
-        b=kt0eGjZ6lI9yQVuQ0WalkgZYGqnAu6quAkbn/YNnSaNNY4bDxmg7vWu5L/iCEKeRq1
-         BcHDv16Nly2AE2lgZ1szXyCbpA//4r+TIy7pmoIrIaWlaAuhxishgr/nf6iJy+MF8JHL
-         MnFiQ8swqhS0T9o7CW2+KpZh79x4DzoeNMIG6AbPH6bu90SMA4+yEXC9cAzM6enI8Y0J
-         2N0H9Y4xL4Kj41pYFL5pMsv1U33XLXGZlmtM3S4WLqvVUbDJ+yObSu0oCraJ4gIg+Qrv
-         xYsUdpVKLCo1UNmumy85tcug4O2Qi4xN+kSO2xy4WFG7/h6Nu2vesGAp6pwgnTMh6ALv
-         Nypw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794608566; x=1795213366;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
-        b=xxefgmgm1q+tzq9+59Oi8WPc6jQQY4TeP6LuzarkcupR2AUq9IX/JgmPN3RPLvLE2+
-         jMwlA3fauVjK/cFNyAMwHy8nD+T5MyjFuxLkcNd2Ct7pqXNkMxAJg9hHq27If+5d0nR9
-         OGgr5g/HWUZOqcW/ptKDEB+jEVw1JIc5C/Uhd7ayjyN8U01LrHLc+oOcL4ZDHpRxo6uS
-         k3kiqUgDLCcSPm0TTNdmvP1EuzH7qzoGGeXmf11FSjBFHl00nTZYQo5Z5dPxP7swIiOY
-         bm/qMDB4a/vEYysSuJgNImDsMXSvHL9I/h5iUjpDcTs59Q6Ixpq22VK2bNRPjuGFd40W
-         AmFA==
-X-Forwarded-Encrypted: i=1; AL+hErHAujb1Bw1RDmuiOula0nE8QpoWbwpvygp+smVx0Tnhp7xztEcHew6m4hnyro80zOMsbwoVGgv/W3suc/7POnA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9l62Sj1e5w0ndmuDxNHPDy4fqP2758ujyDhKFzixqBCjcYxh7H
-	s8vtPelnlNExdslCR91h2dtdEyZHtjWJzzify7n2yW5QyHa6HiPpeIcY
-X-Gm-Gg: AYBFou1EV0nwrk5ZRGZnEDM6H5lydIInF3mZ4eH6hgLcEOFnX0ToFZQ9GyvKvKLquwd
-	MfOeWuqCvp8CgqIthJij+Vee9/Z8O/qBkvisI+ot7bENmGKZLe+0OtO8/qJAgBG9x1RjZXjhpvm
-	6FbsRUbo7AiscAqyarpk1qfTPj5cs5n4oqI4WlawrjF1hBUK5LddCpUK09IkWh3ZrD5HudHZKL4
-	i4GxMPVexAMd6AMXgFgnyAFKYp7606t2aW5OKleG+wcz2SC1g7LE0ZlsQz2J0q2xFRrrSkaaVq+
-	24x9OCn5yz2aAQpNGVqd7ZdNbg+m39AIoVSuqxwt3vT2SR5rYqGOoxUDaa39ILlA6+TTqkqHMrf
-	/be1AAeQYx7bKMfd05uSO1fThBxoZusDVTlxPlenOgCJMG/o87nxaoOhMyH3iZSNQGmpzcGIrF9
-	/+inapXUH57Th7UQMoI/NE7an1Z8PNyLW11bYS1r7G3lMaEFSHSNqirnPdscPFFvfQ7GunJkU6g
-	E6j1OBJP65M60yZuLLkdlZIpQQtmICoCCIIuApZGI36oVvDaFFsY0A0OVfj1XsegWxE3ohgqOhu
-	kLkMcgmWK4nw0wfgJSA/Fic=
-X-Received: by 2002:a05:7300:cf8c:b0:369:f70e:bd40 with SMTP id 5a478bee46e88-3796628f4c8mr3171439eec.16.1794608565735;
-        Fri, 13 Nov 2026 14:22:45 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:72::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3795378d7e5sm10160338eec.3.2026.11.13.14.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 14:22:45 -0800 (PST)
-Date: Fri, 13 Nov 2026 14:22:41 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, jv@jvosburgh.net, 
-	haiyangz@microsoft.com, ast@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, 
-	sdf@fomichev.me, bpf@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] net: make xdp config checks effective vs
- netif_xdp_propagate()
-Message-ID: <aveNqpUudFjo0jA9@devvm16445.scu0.facebook.com>
-References: <20261112235027.4072149-1-kuba@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=o4KUS8tM
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=n8IEDs7xrnCjPmghkJPxe401M0h/LXYpjYH/vz+UzOY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794608978; v=1; x=1795213778;
+ b=o4KUS8tMtk9ZwwtfYhEktsl05SPIWtBpT2be1y9/8DcWjy52uuJ5jZje86BcSGAwpqk7+zH7
+ 8BWDHmZ4sdjrXbEExFaK6Q6ILjU/NZkuxeVhRBqivfWSfr12M1/RGr7vBYLiHWqhpsjyerJB5lp
+ sVxRZTc2tFtdcY8vfhsDrgHk=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1e59735e2ce6f26e;
+	Fri, 13 Nov 2026 22:29:38 +0000
+X-Mizu-Trace-ID: 1e59735e2ce6f26e
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <b749b4c2-cd42-4a3d-b74d-af38648b9b1f@linux.dev>
+Date: Fri, 13 Nov 2026 14:29:33 -0800
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -100,34 +58,230 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261112235027.4072149-1-kuba@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
+ cause false recursion drops in trampoline progs
+To: Peter Zijlstra <peterz@infradead.org>,
+ Martin Kelly <martin.kelly@crowdstrike.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Mike Bazov <mikeba@sentinelone.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+ Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+ Thomas Gleixner <tglx@kernel.org>
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+ <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
+ <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
+ <DML75890DWIX.EYB690LPBM1O@gmail.com>
+ <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
+ <DMM2FJ2SNYYO.24TEJ05OOR08E@gmail.com>
+ <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
+ <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
+In-Reply-To: <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 11/12, Jakub Kicinski wrote:
-> Bonding (and netvsc) try to auto-propagate XDP programs down
-> to their lower devices. These programs were installed directly
-> with .ndo_bpf and not recorded in struct net_device of the lowers.
-> This makes all the config checks for features incompatible with XDP
-> ineffective - HDS, memory providers etc. use dev_xdp_prog_count()
-> and do not call down to the driver to ask it whether it has XDP
-> installed.
+On 11/5/26 4:26 AM, Peter Zijlstra wrote:
+> On Wed, Nov 04, 2026 at 05:12:15PM -0800, Martin Kelly wrote:
+>> We have noticed this issue independently in testing of our own security
+>> agent and have hit the same false recursion skips on 7.0 and 7.1
+>> kernels. More details and measurements below.
+>>
+>> On Tue, Nov 3, 2026 at 6:24 PM Alexei Starovoitov
+>> <alexei.starovoitov@gmail.com> wrote:
+>>> Today a fentry prog never runs twice at the same time on one cpu.
+>>> Existing progs rely on that for their per-cpu maps.
+>>>
+>>>   task A, cpu 0                     task B, cpu 0
+>>>   buf = lookup(&percpu_scratch)
+>>>   fill buf
+>>>   <preempted>
+>>>                                     buf = lookup(&percpu_scratch)
+>>>                                     fill buf
+>>>                                     output(buf)
+>>>   output(buf)   <- data of B
+>>>
+>>> A plain (*cnt)++ in a per-cpu map loses updates the same way.
+>>> Today B is skipped and recursion_misses counts it.
+>>> With the per-task check A sends a corrupted event and nothing counts it.
+>>
+>> Our programs avoid writing to per-CPU arrays because of corruption on
+>> PREEMPT_RT kernels, where trampolines have always been preemptible and
+>> thus can corrupt these structures. So for us, an opt-in flag that allows
+>> preemption (instead of skipping) would work well and not regress current
+>> programs that don't opt in. A verifier scan for per-CPU arrays could
+>> also work, but it would need to distinguish read-only vs write access to
+>> those maps.
 > 
-> Record the state appropriately. dev_xdp_prog_count() will now
-> "see" the propagated programs.
+> This seems weird; your task-B bpf prog would never run due to the
+> prog_active thing.
 > 
-> The issue was discovered when reworking HW-GRO and XDP interactions.
-> I was trying to make sure HW-GRO is reliably disabled with XDP,
-> and discovered we have a way to bypass all checks with bonding.
-> Not treating this as a fix since it's admin-only self-inflicted
-> damage that nobody is reporting being bothered by in real life.
+>> In a process-heavy workload on a 2-vCPU VM (~1M fork+exec of
+>> short-lived processes, ~606/second) we recorded the following number of
+>> recursion_misses on a 7.0.9 and a 7.1.5 kernel. Both kernels use lazy
+>> preemption with PREEMPT_RCU enabled. The miss rate has increased
+>> significantly, which we suspect is due to the HRTICK change.
+>>
+>>                                   7.0.9 (HRTICK off) 7.1.5 (HRTICK on)
+>>                                   ================== =================
+>> security_file_permission fentry   1 in 61,580        1 in 1,568
+>> security_inode_getattr fentry     1 in 59,242        1 in 1,707
+>> do_file_open fexit                1 in 813,983       1 in 2,503
+>> sched_process_exec raw_tracepoint 1 in 1,000,816     1 in 500,408
+>>
+>> The sched_process_exec raw_tp had few misses (1-2) but is included just
+>> to show that raw_tp can have misses as well since tracepoints became
+>> preemptible.
 > 
-> Jakub Kicinski (5):
->   net: don't safety-check device features for XDP uninstall
->   net: move dev_xdp_set_link() and dev_xdp_set_prog() up
->   net: record XDP programs propagated to lower devices
->   selftests/bpf: check XDP attach on a nested bond slave
->   selftests/bpf: check replacing and detaching XDP on a bond through a
->     link
+> So HRTICK will still only set RESCHED_LAZY, which should not tickle
+> preempt_enable() into a reschedule. RESCHED_LAZY is acted upon in only 2
+> distinct spots:
+> 
+>  - return to userspace; it will reschedule.
+>  - the periodic tick; it will upgrade RESCHED_LAZY to RESCHED.
+> 
+> This would suggest you're seeing a lot of tick driven promotion. One
+> reason could be due to HRTICK setting LAZY and the normal tick happening
+> very shortly after it. 
+> 
+> You've not mentioned your CONFIG_HZ setting? Anyway, something daft like
+> the below would make promotion less aggressive (also, clearly I couldn't
+> come up with a decent name for the intermediate step :-).
+> 
+> 
+>> Possible approaches
+>> ===
+>> We don't have a preferred mechanism and are generally open to any
+>> approach that would help reduce these recursion_misses. Whatever the
+>> mechanism, it would be ideal to cover raw_tp programs too, since
+>> a46023d5616e made those preemptible.
+>>
+>> We'd be happy to help test or develop patches if needed.
+> 
+> I would strongly prefer all BPF programs that attach to known
+> preemptible sites to use a per-task recursion counter or something of
+> that sort.
+> 
+> This per-cpu active count stuff is quite mad; and I think I've told
+> Alexei that plenty of times.
+> 
+> 
+> ---
+> diff --git a/include/asm-generic/thread_info_tif.h b/include/asm-generic/thread_info_tif.h
+> index 528e6fc7efe9..feed08b51a62 100644
+> --- a/include/asm-generic/thread_info_tif.h
+> +++ b/include/asm-generic/thread_info_tif.h
+> @@ -22,33 +22,35 @@
+>  #define _TIF_NEED_RESCHED	BIT(TIF_NEED_RESCHED)
+>  
+>  #ifdef HAVE_TIF_NEED_RESCHED_LAZY
+> -# define TIF_NEED_RESCHED_LAZY	5	// Lazy rescheduling needed
+> +# define TIF_NEED_RESCHED_MEH	5
+> +# define _TIF_NEED_RESCHED_MEH	BIT(TIF_NEED_RESCHED_MEH)
+> +# define TIF_NEED_RESCHED_LAZY	6	// Lazy rescheduling needed
+>  # define _TIF_NEED_RESCHED_LAZY	BIT(TIF_NEED_RESCHED_LAZY)
+>  #endif
+>  
+>  #ifdef HAVE_TIF_POLLING_NRFLAG
+> -# define TIF_POLLING_NRFLAG	6	// idle is polling for TIF_NEED_RESCHED
+> +# define TIF_POLLING_NRFLAG	7	// idle is polling for TIF_NEED_RESCHED
+>  # define _TIF_POLLING_NRFLAG	BIT(TIF_POLLING_NRFLAG)
+>  #endif
+>  
+> -#define TIF_USER_RETURN_NOTIFY	7	// notify kernel of userspace return
+> +#define TIF_USER_RETURN_NOTIFY	8	// notify kernel of userspace return
+>  #define _TIF_USER_RETURN_NOTIFY	BIT(TIF_USER_RETURN_NOTIFY)
+>  
+> -#define TIF_UPROBE		8	// breakpointed or singlestepping
+> +#define TIF_UPROBE		9	// breakpointed or singlestepping
+>  #define _TIF_UPROBE		BIT(TIF_UPROBE)
+>  
+> -#define TIF_PATCH_PENDING	9	// pending live patching update
+> +#define TIF_PATCH_PENDING	10	// pending live patching update
+>  #define _TIF_PATCH_PENDING	BIT(TIF_PATCH_PENDING)
+>  
+>  #ifdef HAVE_TIF_RESTORE_SIGMASK
+> -# define TIF_RESTORE_SIGMASK	10	// Restore signal mask in do_signal()
+> +# define TIF_RESTORE_SIGMASK	11	// Restore signal mask in do_signal()
+>  # define _TIF_RESTORE_SIGMASK	BIT(TIF_RESTORE_SIGMASK)
+>  #endif
+>  
+> -#define TIF_RSEQ		11	// Run RSEQ fast path
+> +#define TIF_RSEQ		12	// Run RSEQ fast path
+>  #define _TIF_RSEQ		BIT(TIF_RSEQ)
+>  
+> -#define TIF_HRTIMER_REARM	12       // re-arm the timer
+> +#define TIF_HRTIMER_REARM	13       // re-arm the timer
+>  #define _TIF_HRTIMER_REARM	BIT(TIF_HRTIMER_REARM)
+>  
+>  #endif /* _ASM_GENERIC_THREAD_INFO_TIF_H_ */
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 1c93da75226e..d5f9176e1a75 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -2117,7 +2117,9 @@ static inline void set_tsk_need_resched(struct task_struct *tsk)
+>  
+>  static inline void clear_tsk_need_resched(struct task_struct *tsk)
+>  {
+> -	atomic_long_andnot(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY,
+> +	atomic_long_andnot(_TIF_NEED_RESCHED |
+> +			   _TIF_NEED_RESCHED_MEH |
+> +			   _TIF_NEED_RESCHED_LAZY,
+>  			   (atomic_long_t *)&task_thread_info(tsk)->flags);
+>  }
+>  
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 04b62c16fa8c..f8e225dc2504 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -5854,8 +5854,17 @@ void sched_tick(void)
+>  	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
+>  	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
+>  
+> -	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
+> -		resched_curr(rq);
+> +	/*
+> +	 * Two-stage promotion of LAZY to RESCHED, ensuring there is at least
+> +	 * one full tick of respite.
+> +	 */
+> +	if (dynamic_preempt_lazy()) {
+> +		if (tif_test_bit(TIF_NEED_RESCHED_MEH))
+> +			resched_curr(rq);
+> +
+> +		else if (tif_test_bit(TIF_NEED_RESCHED_LAZY))
+> +			 set_thread_flag(TIF_NEED_RESCHED_MEH);
+> +	}
+>  
+>  	donor->sched_class->task_tick(rq, donor, 0);
+>  	if (sched_feat(LATENCY_WARN))
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Hi Peter,
+We tested this patch on d48723711bae with CONFIG_HZ=1000, SCHED_HRTICK=y,
+PREEMPT_{DYNAMIC,RCU}=y, and lazy preemption enabled, and saw roughly 60% fewer
+recursion misses.
+
+The test runs two tasks using the default sched policy pinned to the same CPU
+for 30s. One calls getpgid() continuously. The other does the same but sleeps 1ms
+between calls. Meanwhile a bpftrace fentry program on __x64_sys_getpgid does
+some bounded work to widen the preemption window each invocation:
+
+kfunc:vmlinux:__x64_sys_getpgid
+{
+    @entered = count();
+    @entered_tid[tid] = count();
+
+    $i = 0;
+    $last = nsecs;
+    while ($i < 10000) {
+        $last = nsecs;
+        $i++;
+    }
+    @last_ts[tid] = $last;
+}
