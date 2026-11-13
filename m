@@ -1,58 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.224
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794535692;
-	b=p+OCAdGyQTluAMXM2IMjhPqoDssF3k0v9cXs1PByJ8sQNTntlLl32u9gYFwRGQxoMsuF
-	 FpPG/uNtz8O8rMCukKoRuiXR90YdYwVEEHfhh616wlsW0OR8aRmepRvL3T0vJ7Oe+/PoU
-	 4h70MG50RqjBv4F69D6wB4lIn6PTxbuH6sLiTBTRz4YpwRIpEBaGqe7Y3kjI0ldcuXT2y
-	 RE7GRQphiYobnV4CB8aXdO9qtkyzxFSD4zKhKBTSTYrGSWn8nrhPQ784N5tWBWXnkSx6L
-	 cm/ce2LhWJlRj8jWTXMnlBy6cZxSt34FRzAUDB4jMReP09fSxH6cKHxxTMlSsaXEyKQ==
+	t=1794536841;
+	b=MCPo5EAQjouM+IrVjyAY60eQdnHQ8J82BBDK2vZ24CMg04FxTCF82J5fIWXM6EOsmhTF
+	 xWYrpH2nsibJ9TkO6/52rY8+5x5bHMAgGzthp8gc+AOSOSe5FucBasBjAeQjY24uQAUae
+	 uV4Z7bQ26YzcI5WAin4nUWWNFhzK+juGwefugFReyUhJN6jDudyCWx1g4FAqXauIHWiBj
+	 rrwGgZlhb0PT2HbrIteennOZ8yyKXOYU/TNpT9Ko0svRjInVJ1ZGrwHOWY6Fhzb8CTItm
+	 T1kMzXXLFq4IdoiHqZhD+caPHxBxbeBKq56QoV6fuahxHDpTvwRA+CeDNZXmpHWRDYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794535692;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=fRlFnEwOyhCsf6bntFNWmv0q3cjwumqt5gvXEY0j99s=;
-	b=h/zV89+qLgaCReHEGqt6Yz7QuMFLau76PrUC64xyupskVtNCPQ+nmxOMNmYpHzOqslFo
-	 kgKw5ZY2wbzhJd0lF+zjKrlPUCmjb5IgsUFtoQqhIVm9cnGfBBQV27Zmw0SOuawfTJrqj
-	 COUDeteeu91XQma3e/4ndW4VEdrl3CeyYA6qLcmmNoBHr88AeGjUDrznix08ey7CkL7dN
-	 ATYbiJ85jaQA4TqrEF0OxrluHBWYxqRn9fPvtPMnNG9q6tAJkXdtwGsMyPUdrjdmiatZM
-	 Nm2oKKg5nghW9PZOToKPGBNxCtDI6DTaPEoBLZidyMqSogmB9o3taotFsdyv1n5vU6w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794536841;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=dZCnN3zUSocYlZp/Mqt53uqs96/J8YMxA7iHx75dj9o=;
+	b=0IMQYsQ9elUVaJW1ub5I2WXmq0ImOtHu/anTDkADCG3c5yddEUqawQ3iFvfYm0U4cMxE
+	 2wYnAYHtuoX/fVeq1ej4RhzzhbUJ4nSHZ3z6amES9WMbC1AO0XN0f0yG/Ik6j67peGy/z
+	 vDsEFee0lhpirQWmo31eHhXRivBm91jY46Jk5OgSOCFyitL6z87SkYawP6HjgZ+/UEhGr
+	 PGwpQdELimqPKnH+j+NGVzakqposSvx1xWyTNT18AK3pCk9Szmv9z1dUzypWLZVGbkXhO
+	 whPb55INBnCPvovJGFjyBFP87PhIQbGVkElxigasITEvp3b+mCxfgvYE5OZzPVZaTpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=tgB76D+u;
-	arc=none smtp.remote-ip=113.46.200.224
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XKXLLfrH;
+	arc=none smtp.remote-ip=209.85.128.178
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81167606A31C;
-	Fri, 13 Nov 2026 02:08:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81167606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D46606A880
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 02:27:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9D46606A880
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=tgB76D+u
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=fRlFnEwOyhCsf6bntFNWmv0q3cjwumqt5gvXEY0j99s=;
-	b=tgB76D+uPHT+xoP/MsIq5QT99tPRFyjCjYAa5bPvS0n/BLMW7GmhAJphWd0AaFaCXwNcxc4Ka
-	dPjWkV3Gm+TFWMTFawukI93MmREL5xwGs2ILp3CVZdJ2RNXEKTgDHIK4mZDlwgvononmGVpnLul
-	eI6cXevbd8zNABceS1BMSf4=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4jQgdL6LlBz1cyTG;
-	Fri, 13 Nov 2026 10:07:50 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 63B8C40572;
-	Fri, 13 Nov 2026 10:08:07 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 13 Nov 2026 10:08:00 +0800
-Message-ID: <2dbd365b-eac5-448b-b6c2-4ed8754551a7@huawei.com>
-Date: Fri, 13 Nov 2026 10:07:59 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XKXLLfrH
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b335eeb340so5190627b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 18:27:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794536840; x=1795141640; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dZCnN3zUSocYlZp/Mqt53uqs96/J8YMxA7iHx75dj9o=;
+        b=XKXLLfrHn1TvqoodREmJNONu5R98SSd6i+jsBxzTjl9MCQtryB7SKaWQ6KFrKzx/MW
+         XFPBHM5fLPAZJPogD7IvWK/mQcWt0FywrVqOB1XbYlrJEuZUmV+SyQoKWqueFr0aAvKX
+         As1v8X4oOkv/mTKmJDYKQsjB8iMWzlHThEBJGZKOS3+AFBXCU4N3K9fJP0X6rGUQna3j
+         dgi4ngztdE8J9s3h+EU6ZDCCayree71DSEcTkuMd1BL5j+oHLf4BHYIv8SOVg2Hzt1E5
+         UMzfD9D5wY96HBHs25b8SOVh4KNtFG6MHvk0NpeLZ/DyBu+AUwgfo33oH8b2k/f2BLQG
+         BmCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794536840; x=1795141640;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dZCnN3zUSocYlZp/Mqt53uqs96/J8YMxA7iHx75dj9o=;
+        b=rqmQrDlBCgyNeDAKyXk+rjflnpCritHjN9qdOzXPyEGcCO9bmjfUx6J21RWciQEHTP
+         FORFh5ZtMkUDJy6pwaCdI/TKfCJKLayk2lOaZFHXMqY4hy71G8gt6bRPMTBJAuXrvm/f
+         q8zWBAmcEcvZTC3KJoG990+RB/TBTHRthuI36VDCZuM4uiYsheMbOfBoSm6tYm8nnPDy
+         n26HMeQfVBNoN1fnEax7i5vwvQOrI/up/DgpFFnosNlF8LnlEsibXJLCTuEtzp/7ic42
+         VCVSTnQ/s65Iwx0L2TJtFGPGo3VZXi+z9pzTCh/N44yeYEOLvURiWdShhr1AGvG9BEYy
+         C3gw==
+X-Forwarded-Encrypted: i=1; AL+hErGDii2zS2aF7JsEu53CzvYYSEIvoW4p5nMaOv3X1I1KfjMbTWtdii/RDoPLs8NHKptGk29rsC78J5cxlsClJfU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+SeQvfLAWsG13/28m0tlMCSHBkdel7CCO10059X273BZ2jfktC
+	23mxq2YaK0Q/ZywwFZ/5ovuQ9QSTviShk01puXV+jv4OxcEEAft7rlRx
+X-Gm-Gg: AYBFou12hMwbXtJ3xie94LBv4+k9Mo8egdkjh3/effIwRcO1wBckXLJIUFvo1daQKbT
+	oDo2jEpMthz8C2NLBDZLzGc3P+77e9lREBbz/PPjaxCXiBkIOIqY4F7Mm8YsX6IsT9gePDJy+4s
+	XqQoy4fKpZNYWjZyELU8Ppju3Th/F3zPEEohTdhoAAUAC8lLKtxkSlf7vzXowQdzNZWhq8Wuxw5
+	1qLWAkNnV7RnygemdSRfRks23mIrqT7SDrfEbdLMt1/8bCwDcN89ETJbb8vMqmbs7cF+bU+jbUv
+	ZWekK0wi0oOkwxuj8U3gdclWBZ4UNpgulj+ZTDPsG4zlWGId/1hzKTYt6X1pcjQl//hnp2gqPGf
+	8BTpWbFbeXkDMv5m+zQGOr9uFFBvemhF1pB0P+8NHVbGnWHmdK8ON8W8SNqkkVrdBoYLxybmnc1
+	OAlee/iAZXMNCIKBnxVPCBo+6JPK1VsELnO+0eAQBqIq1lphhEsZ9AkLSr134E/1cNZnUF3emAo
+	3Tt1p6BzwnfYiB7cJ1lxxu/JvDWMdi/2exRUbnu+OUqtKhqs2i+UkTK0xvLR4YcOUs9jFxObbnF
+	PCFCfPoJzeqU3btAEzeVLjqe9Q8=
+X-Received: by 2002:a05:690c:399:b0:8b1:3707:86a7 with SMTP id 00721157ae682-8b4aa2dd736mr8776587b3.83.1794536839855;
+        Thu, 12 Nov 2026 18:27:19 -0800 (PST)
+Received: from localhost ([2a03:2880:31ff:34::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b4aa8f3286sm10637027b3.15.2026.11.12.18.27.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2026 18:27:19 -0800 (PST)
+From: Mohsin Bashir <mohsin.bashr@gmail.com>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	maxime.chevallier@bootlin.com,
+	linux-kselftest@vger.kernel.org,
+	hmohsin@meta.com
+Subject: [PATCH net v3] selftests: drv-net: pause: Avoid cleanup failures for unsupported link settings
+Date: Thu, 12 Nov 2026 18:27:17 -0800
+Message-ID: <20261113022717.1914724-1-mohsin.bashr@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -62,95 +100,166 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 -next 00/18] landlock: Add READ_METADATA and
- WRITE_METADATA access rights
-To: Christian Brauner <brauner@kernel.org>
-CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
-	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
-	<skhan@linuxfoundation.org>, <utilityemal77@gmail.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
-	<memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
-	<ihor.solodrai@linux.dev>, <rdunlap@infradead.org>,
-	<gregkh@linuxfoundation.org>, <rafael@kernel.org>, <dakr@kernel.org>,
-	<johan@kernel.org>, <dlemoal@kernel.org>, <hch@lst.de>, <axboe@kernel.dk>,
-	<viro@zeniv.linux.org.uk>, <jack@suse.cz>, <dhowells@redhat.com>,
-	<code@tyhicks.com>, <linkinjeon@kernel.org>, <sj1557.seo@samsung.com>,
-	<yuezhang.mo@sony.com>, <hirofumi@mail.parknet.co.jp>, <cel@kernel.org>,
-	<jlayton@kernel.org>, <neil@brown.name>, <okorniev@redhat.com>,
-	<Dai.Ngo@oracle.com>, <tom@talpey.com>, <hyc.lee@gmail.com>,
-	<miklos@szeredi.hu>, <amir73il@gmail.com>, <senozhatsky@chromium.org>,
-	<chenxiaosong@chenxiaosong.com>, <dsterba@suse.com>, <mason@kernel.org>,
-	<kpsingh@kernel.org>, <matt@bobrowski.net>, <rostedt@goodmis.org>,
-	<mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<john.johansen@canonical.com>, <georgia.garcia@canonical.com>,
-	<zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
-	<dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
-	<stephen.smalley.work@gmail.com>, <omosnacek@gmail.com>,
-	<casey@schaufler-ca.com>, <takedakn@nttdata.co.jp>,
-	<penguin-kernel@i-love.sakura.ne.jp>, <xiujianfeng@huawei.com>,
-	<nanx95726@gmail.com>, <djwong@kernel.org>, <lujialin4@huawei.com>,
-	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<driver-core@lists.linux.dev>, <linux-block@vger.kernel.org>,
-	<linux-btrfs@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<netfs@lists.linux.dev>, <ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
-	<linux-nfs@vger.kernel.org>, <ntfs@lists.linux.dev>,
-	<linux-unionfs@vger.kernel.org>, <linux-cifs@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <apparmor@lists.ubuntu.com>,
-	<linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20261027121151.1887650-1-caixinchen1@huawei.com>
- <20261110-rekonstruieren-erbfolge-vollversammlung-26be74966211@brauner>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <20261110-rekonstruieren-erbfolge-vollversammlung-26be74966211@brauner>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100010.china.huawei.com (7.152.184.41)
 
-You are right, and thanks for catching it.
+From: Mohsin Bashir <hmohsin@meta.com>
 
-I have been working on these modifications over the past two weeks and 
-have deployed sashiko locally. However, my current changes are still 
-being flagged for some bugs by my local sashiko, and I am still in the 
-process of fixing them. I expect to release v4 in a few days. Regarding 
-these issues, my current fixes are as follows: - AT_EMPTY_PATH: v4 will 
-use CLASS(fd_raw, f)(dfd), the   same lookup path_init() does for an 
-empty path, so O_PATH descriptors   work again.  do_utimes_fd() 
-(futimens(2)) intentionally keeps   CLASS(fd, f), matching 
-fchmod(2)/fchown(2); AT_EMPTY_PATH returns   -EINVAL there anyway.  The 
-same patch rejects a NULL pathname with   -EFAULT before 
-CLASS(filename_maybe_null) can turn it into an empty   path relative to 
-AT_FDCWD, and adds the missing audit_file() on the   do_utimes_path() fd 
-branch. - __nullable (patches 5-9, 11-13): v4 will extend 
-kernel/bpf/bpf_lsm_proto.c (the existing   strong-override file used for 
-mmap_file) with strong definitions for   all 11 hooks that gained a file 
-argument, each declared   file__nullable, so the verifier sees 
-PTR_MAYBE_NULL and a program must   check before dereferencing. - ntfs 
-named stream setattr (patch 1): v3 forwarded with   
-__notify_change(idmap, base_dentry, ...).  v4 will use   
-notify_change_target(idmap, attr->ia_path, base_dentry, ...), so the   
-hook is checked against the path the syscall used while the attributes   
-still land on the base inode. - overlayfs fileattr (patch 8): v3 removed 
-the ovl_security_fileattr()   workaround but then called the unchecked 
-__vfs_fileattr_get()/_set()   on the real dentry, which bypasses the 
-hooks.  v4 will call the checked   vfs_fileattr_get()/_set() with the 
-real upper/lower path, so the hooks   also run for the underlying layer; 
-ecryptfs is switched the same way.
+pause_setup() saves the initial link settings before tests run. Devices
+that report link settings but do not support changing them can reject even
+a no-op restore with EOPNOTSUPP. That turns pause tests that use
+pause_setup() into cleanup failures.
 
-Best regards.
+Fix this by queuing link-setting restores only after a link-setting
+request has succeeded. Keep pause_test_support coverage for devices that
+cannot change link settings by falling back to forced MAC pause on the
+current link. Run the extra link autoneg on/off checks only when those
+link setting requests are accepted. Tests that force link autoneg off,
+including pause_autoneg_link_autoneg(), now queue their own autoneg-on
+restore after the force request succeeds.
 
-Cai
+Results on fbnic:
 
-On 11/11/2026 12:52 AM, Christian Brauner wrote:
-> This regresses AT_EMPTY_PATH. fchmodat2(), fchownat() and utimensat()
-> with an empty path now go through CLASS(fd) which is fdget() and that
-> refuses O_PATH file descriptors. IOW, this is very very broken.
->
-> Please also go through Sashiko's review of v3 (cf. [1]). The new struct
-> file arguments need __nullable or bpf programs can dereference NULL,
-> and the ntfs3 stream setattr and overlayfs fileattr paths that bypass
-> the hooks need treatment.
+  Before: # Totals: pass:0 fail:4 xfail:0 xpass:0 skip:24 error:0
+  After:  # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:24 error:0
+
+Fixes: cbd8a536cd6d ("selftests: drv-net: Introduce a selftest for ethtool flow control")
+Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
+Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+---
+Changelog:
+v3:
+- Drop the remaining unconditional autoneg-on restore from pause_setup()
+  and only queue link-setting restores after a link-setting request succeeds.
+- Since pause_setup() no longer restores autoneg on, make pause_test_support()
+  and pause_autoneg_link_autoneg() queue their own autoneg-on restores after
+  they successfully force the link.
+
+v2: https://lore.kernel.org/netdev/20261103190622.3981970-1-mohsin.bashr@gmail.com
+v1: https://lore.kernel.org/netdev/20261030173516.1002250-1-mohsin.bashr@gmail.com
+---
+ .../testing/selftests/drivers/net/hw/pause.py | 56 ++++++++++---------
+ 1 file changed, 30 insertions(+), 26 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/hw/pause.py b/tools/testing/selftests/drivers/net/hw/pause.py
+index ca4a55e59c30..c3398c7452e0 100755
+--- a/tools/testing/selftests/drivers/net/hw/pause.py
++++ b/tools/testing/selftests/drivers/net/hw/pause.py
+@@ -402,16 +402,13 @@ def pause_setup(cfg):
+     if "auto-negotiation" not in link:
+         raise KsftSkipEx(f"{cfg.ifname} doesn't report its link modes")
+ 
+-    if link["auto-negotiation"]:
+-        defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
+-    elif "speed" in link and "duplex" in link:
+-        defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
+-                   f"duplex {link['duplex'].lower()}")
+-
+     # Local interface admin up, link aneg on
+     ip(f"link set {cfg.ifname} up")
+     if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
+         ethtool(f"-s {cfg.ifname} autoneg on")
++        if "speed" in link and "duplex" in link:
++            defer(cmd, f"ethtool -s {cfg.ifname} autoneg off speed {link['speed']} "
++                       f"duplex {link['duplex'].lower()}")
+ 
+     # Get remote pause params
+     ret, params = ethtool_ret(f"-a {cfg.remote_ifname}", host=cfg.remote)
+@@ -426,18 +423,14 @@ def pause_setup(cfg):
+     if "auto-negotiation" not in link:
+         raise KsftSkipEx(f"{cfg.remote_ifname} doesn't report its link modes")
+ 
+-    if link["auto-negotiation"]:
+-        defer(cmd, f"ethtool -s {cfg.remote_ifname} autoneg on",
+-              host=cfg.remote)
+-    elif "speed" in link and "duplex" in link:
+-        defer(cmd, f"ethtool -s {cfg.remote_ifname} autoneg off "
+-                   f"speed {link['speed']} duplex {link['duplex'].lower()}",
+-                   host=cfg.remote)
+-
+     # Remote interface admin up, link aneg on
+     ip(f"link set {cfg.remote_ifname} up", host=cfg.remote)
+     if link["supports-auto-negotiation"] and not link["auto-negotiation"]:
+         ethtool(f"-s {cfg.remote_ifname} autoneg on", host=cfg.remote)
++        if "speed" in link and "duplex" in link:
++            defer(cmd, f"ethtool -s {cfg.remote_ifname} autoneg off "
++                       f"speed {link['speed']} duplex {link['duplex'].lower()}",
++                       host=cfg.remote)
+ 
+     wait_for_link(cfg)
+ 
+@@ -470,9 +463,12 @@ def pause_test_support(cfg, pauseparams):
+ 
+     forced = forced_link_settings(cfg)
+     _, supported = get_local_pause_supported(cfg)
++    link_config_tested = False
+ 
+     # We check that what we can configure in the pause params matches what we
+-    # support under various contditions : Link aneg on/off, pause aneg on/off
++    # support under various conditions: link aneg on/off, and pause aneg
++    # on/off. If no link configuration change is supported, fall back to
++    # checking forced MAC pause on the current link.
+     ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg on", is_get = False)
+     if ret != 0:
+         ksft_pr("link autoneg on refused, not tested")
+@@ -481,18 +477,23 @@ def pause_test_support(cfg, pauseparams):
+                                "link autoneg on")
+         expect_pauseparams_set(cfg, pauseparams, True, supported,
+                                "link autoneg on")
++        link_config_tested = True
+ 
+     if not forced:
+         ksft_pr("link speed unknown, the forced link is not tested")
+-        return
+-
+-    ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
+-    if ret != 0:
+-        ksft_pr(f"link autoneg off {forced} refused, not tested")
+-        return
+-
+-    expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
+-    expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
++    else:
++        ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}", is_get = False)
++        if ret != 0:
++            ksft_pr(f"link autoneg off {forced} refused, not tested")
++        else:
++            if link_config_tested:
++                defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
++            expect_pauseparams_set(cfg, pauseparams, False, supported, "link autoneg off")
++            expect_pauseparams_set(cfg, pauseparams, True, supported, "link autoneg off")
++            link_config_tested = True
++
++    if not link_config_tested:
++        expect_pauseparams_set(cfg, pauseparams, False, supported, "current link")
+ 
+ @ksft_variants(pauseparams_variants)
+ @ksft_disruptive
+@@ -902,11 +903,14 @@ def pause_autoneg_link_autoneg(cfg):
+                          is_get=False, host=cfg.remote)
+     if ret != 0:
+         raise KsftSkipEx(f"Can't force the peer's link at {forced}")
++    remote_restore = defer(cmd, f"ethtool -s {cfg.remote_ifname} autoneg on",
++                           host=cfg.remote)
+ 
+     ret, _ = ethtool_ret(f"-s {cfg.ifname} autoneg off {forced}",
+                          is_get=False)
+     if ret != 0:
+         raise KsftSkipEx(f"Can't force the link at {forced}")
++    local_restore = defer(cmd, f"ethtool -s {cfg.ifname} autoneg on")
+ 
+     try:
+         wait_for_aneg(cfg)
+@@ -917,8 +921,8 @@ def pause_autoneg_link_autoneg(cfg):
+     check_local_pauseparams(cfg, True, rx, tx)
+ 
+     # Re-enable autoneg
+-    ethtool(f"-s {cfg.remote_ifname} autoneg on", host=cfg.remote)
+-    ethtool(f"-s {cfg.ifname} autoneg on")
++    remote_restore.exec()
++    local_restore.exec()
+     wait_for_aneg(cfg)
+ 
+     # Pause autoneg must still be on
+-- 
+2.53.0-Meta
+
