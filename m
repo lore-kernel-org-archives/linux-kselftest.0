@@ -1,54 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.132
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794608984;
-	b=CJRyQ2OIE4Pm6cjv/jg/cqC0NelbD2yxoBIdADOVCXRxaUb2zzkuk/EXyfDbrizp2CBd
-	 bWxfach/Qoqr9SepG4vN7cFp8PZ8IrSHqexHIvfhNVU6/2uyfpJZvbwEMCAlrhv3iKQ+E
-	 QUdBBM6uI4/vtSjNCkan1BjTTQOkPmb+1MEm1jv6cZOZbLwV476o3kUu/LKpXhITDf/BO
-	 6hSMfbHDxY59GxvA69LPEoZqWOHhsXgSqy4LohcAPrXTMeOyZJUygl+b9CkLWyO+s/x6y
-	 2buvXuhhIdaesnh/FfOe2W09cnryDfOEW7MeT7nuCvjQURpNEWHbc+tPBA5T13dUTTQ==
+	t=1794610554;
+	b=fEqlrFhyMmReRur5+2plCN4woxzBSXgLRH/7LA+6AU/253DTWsVsrBgADUXCT1Yj/TO4
+	 cvC/DZsYsezERDGhwtCdNLAC8Vp6qMHtIu+kmOPDEkEiSA6EDZ+g5Hn/V4UW7btTTi6mG
+	 D0LJi9DIzwgBnl8yhFhCRktYI72NBsPp3OIcHxBwExILLsOrvd6Mt3deB34ojQXdowiZP
+	 dpIg2EULUSs+3KwvbcH01ZQxsshPrv6rOM9J4r8vlRlHRA0gm9rEguVX39G+puo0mCyr0
+	 sws7ZN7WIouQSAxnbG+C4IbVawE7jkmPxJK8msBBz3oCJ4z5rAPBA9xh3EVz8eHYlnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794608984;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=8l4U3zQpJVwCIUSroFNMy3UbW7wsKixV4Iy1YuhTSWU=;
-	b=xGSKbP+sMr2QnA0HWvmJmtvlvwrarcRgDWoCJieNAA6Bq8A3x3h2XEA/i7BPLa7LpeK+
-	 2ntQCw/Eww/3fai/A2DsZdYutLZEHZzBBdaYA7WZyJeEYKsmfaDWNbo8RT1HeX5ukF7pX
-	 qcMd3/rt6W06mI5r4jjSu/oIFItDfICvu/a2euLBNdsVLBTLrwxmCye6o75BLo+g6qr4Z
-	 93p/kVIz4YcLydxCnz5B84ge611w6+88UwGZWUTdhLfv43eP/NDGFuRKHSVny8j+Chpmr
-	 fVjREJdGET55UFVKGuFeZ8BwMXP2UWA7LRNhgky/AgPgViqKtKxiuHsoyxyKTxv5k8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794610554;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=KN3BAQQz6V4aWs3TRbBIzGlNzQXPAP/3NN2RobaOAEE=;
+	b=zxCeSbP0hzMqacB75PoePZi38buWIDrC8WVxO99/B0g44g6sY+qEQ4yg/5ft9T/W2jtV
+	 X9/zjYchkYvFsTHaG5NwuOz6nu4i7vLFjX3O5yxH/+kyypiMf2xCRxjEbwcFVXhR9lA+f
+	 6B7NsTEhuFIAvlUBYkxQojbTN5V8RVzbx/8726pAhJGJpQzyceBG/pW6tHVZjebN6Hu9L
+	 6BxW5JGBZY5QwcEnelekz/5WATTvqLaK09szve7YsR/GoWpUAE/qkGiBJfslhwa4sRzgY
+	 T/IprHqfxCg9dm6+TLjDgbfFD6Yvx8/Pr0sMAUYhbQvUvX33+h+YnfeKHcpisTfnPaQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=o4KUS8tM;
-	arc=none smtp.remote-ip=91.218.175.132
-Received: from mta0.migadu.com (out-132.mta0.migadu.com [91.218.175.132])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zr/r1yff";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1ED606A8A8
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:29:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A1ED606A8A8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA19606A890;
+	Fri, 13 Nov 2026 22:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=o4KUS8tM
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=n8IEDs7xrnCjPmghkJPxe401M0h/LXYpjYH/vz+UzOY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794608978; v=1; x=1795213778;
- b=o4KUS8tMtk9ZwwtfYhEktsl05SPIWtBpT2be1y9/8DcWjy52uuJ5jZje86BcSGAwpqk7+zH7
- 8BWDHmZ4sdjrXbEExFaK6Q6ILjU/NZkuxeVhRBqivfWSfr12M1/RGr7vBYLiHWqhpsjyerJB5lp
- sVxRZTc2tFtdcY8vfhsDrgHk=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1e59735e2ce6f26e;
-	Fri, 13 Nov 2026 22:29:38 +0000
-X-Mizu-Trace-ID: 1e59735e2ce6f26e
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b749b4c2-cd42-4a3d-b74d-af38648b9b1f@linux.dev>
-Date: Fri, 13 Nov 2026 14:29:33 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zr/r1yff
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4053A1F000C4;
+	Fri, 13 Nov 2026 22:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794610554;
+	bh=KN3BAQQz6V4aWs3TRbBIzGlNzQXPAP/3NN2RobaOAEE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Zr/r1yffsWfgcq3GiAScelw76p+OkyQYD2uH4hI/pcXZT/7E7x2Do+HBZm7e8OFNx
+	 c1oIKY+cvZEYv2sTZiX8+jnO5YqRpoKeiMbazqRw1aa4yUaQNbK7Mb95zvfQKKK1ig
+	 mxTFsa/RQhH/hCyvaswWfMYIpbiYkjjf2EiN/QQuWlfHGZB+EWhPT+tIC3Q4Mu5j8o
+	 t3lv1MPLpzLCUm09+TGX/ieOrJzoVKxT/z452fFm5NUzwDYL01fzfKWTbIMccvSMuj
+	 9FGL0SOXawyhCSF1WGLngab9+y6SU5rYrE3XlyC8yaZy7Xut3XdxIC/7rV4CX8ZWVe
+	 haNQtCPugcyAw==
+Content-Type: multipart/mixed; boundary="===============8280819268335858825=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -58,230 +49,139 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Peter Zijlstra <peterz@infradead.org>,
- Martin Kelly <martin.kelly@crowdstrike.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Mike Bazov <mikeba@sentinelone.com>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
- Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
- Thomas Gleixner <tglx@kernel.org>
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
- <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
- <DML75890DWIX.EYB690LPBM1O@gmail.com>
- <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
- <DMM2FJ2SNYYO.24TEJ05OOR08E@gmail.com>
- <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
- <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>
-In-Reply-To: <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <2f27a1ffca14cd87a744c447c5fded67459c1497ebafe05350f4721ef994c3f0@mail.kernel.org>
+In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
+References: <20261113221248.3535369-14-wusamuel@google.com>
+Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME ioctl to /proc/kallsyms
+From: bot+bpf-ci@kernel.org
+To: wusamuel@google.com,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,atomlin@atomlin.com,viro@zeniv.linux.org.uk,brauner@kernel.org,jack@suse.cz,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
+Cc: akpm@linux-foundation.org,pmladek@suse.com,david.laight.linux@gmail.com,wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,linux-doc@vger.kernel.org,linux-modules@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 13 Nov 2026 22:55:50 +0000 (UTC)
 
-On 11/5/26 4:26 AM, Peter Zijlstra wrote:
-> On Wed, Nov 04, 2026 at 05:12:15PM -0800, Martin Kelly wrote:
->> We have noticed this issue independently in testing of our own security
->> agent and have hit the same false recursion skips on 7.0 and 7.1
->> kernels. More details and measurements below.
->>
->> On Tue, Nov 3, 2026 at 6:24 PM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->>> Today a fentry prog never runs twice at the same time on one cpu.
->>> Existing progs rely on that for their per-cpu maps.
->>>
->>>   task A, cpu 0                     task B, cpu 0
->>>   buf = lookup(&percpu_scratch)
->>>   fill buf
->>>   <preempted>
->>>                                     buf = lookup(&percpu_scratch)
->>>                                     fill buf
->>>                                     output(buf)
->>>   output(buf)   <- data of B
->>>
->>> A plain (*cnt)++ in a per-cpu map loses updates the same way.
->>> Today B is skipped and recursion_misses counts it.
->>> With the per-task check A sends a corrupted event and nothing counts it.
->>
->> Our programs avoid writing to per-CPU arrays because of corruption on
->> PREEMPT_RT kernels, where trampolines have always been preemptible and
->> thus can corrupt these structures. So for us, an opt-in flag that allows
->> preemption (instead of skipping) would work well and not regress current
->> programs that don't opt in. A verifier scan for per-CPU arrays could
->> also work, but it would need to distinguish read-only vs write access to
->> those maps.
-> 
-> This seems weird; your task-B bpf prog would never run due to the
-> prog_active thing.
-> 
->> In a process-heavy workload on a 2-vCPU VM (~1M fork+exec of
->> short-lived processes, ~606/second) we recorded the following number of
->> recursion_misses on a 7.0.9 and a 7.1.5 kernel. Both kernels use lazy
->> preemption with PREEMPT_RCU enabled. The miss rate has increased
->> significantly, which we suspect is due to the HRTICK change.
->>
->>                                   7.0.9 (HRTICK off) 7.1.5 (HRTICK on)
->>                                   ================== =================
->> security_file_permission fentry   1 in 61,580        1 in 1,568
->> security_inode_getattr fentry     1 in 59,242        1 in 1,707
->> do_file_open fexit                1 in 813,983       1 in 2,503
->> sched_process_exec raw_tracepoint 1 in 1,000,816     1 in 500,408
->>
->> The sched_process_exec raw_tp had few misses (1-2) but is included just
->> to show that raw_tp can have misses as well since tracepoints became
->> preemptible.
-> 
-> So HRTICK will still only set RESCHED_LAZY, which should not tickle
-> preempt_enable() into a reschedule. RESCHED_LAZY is acted upon in only 2
-> distinct spots:
-> 
->  - return to userspace; it will reschedule.
->  - the periodic tick; it will upgrade RESCHED_LAZY to RESCHED.
-> 
-> This would suggest you're seeing a lot of tick driven promotion. One
-> reason could be due to HRTICK setting LAZY and the normal tick happening
-> very shortly after it. 
-> 
-> You've not mentioned your CONFIG_HZ setting? Anyway, something daft like
-> the below would make promotion less aggressive (also, clearly I couldn't
-> come up with a decent name for the intermediate step :-).
-> 
-> 
->> Possible approaches
->> ===
->> We don't have a preferred mechanism and are generally open to any
->> approach that would help reduce these recursion_misses. Whatever the
->> mechanism, it would be ideal to cover raw_tp programs too, since
->> a46023d5616e made those preemptible.
->>
->> We'd be happy to help test or develop patches if needed.
-> 
-> I would strongly prefer all BPF programs that attach to known
-> preemptible sites to use a per-task recursion counter or something of
-> that sort.
-> 
-> This per-cpu active count stuff is quite mad; and I think I've told
-> Alexei that plenty of times.
-> 
-> 
-> ---
-> diff --git a/include/asm-generic/thread_info_tif.h b/include/asm-generic/thread_info_tif.h
-> index 528e6fc7efe9..feed08b51a62 100644
-> --- a/include/asm-generic/thread_info_tif.h
-> +++ b/include/asm-generic/thread_info_tif.h
-> @@ -22,33 +22,35 @@
->  #define _TIF_NEED_RESCHED	BIT(TIF_NEED_RESCHED)
->  
->  #ifdef HAVE_TIF_NEED_RESCHED_LAZY
-> -# define TIF_NEED_RESCHED_LAZY	5	// Lazy rescheduling needed
-> +# define TIF_NEED_RESCHED_MEH	5
-> +# define _TIF_NEED_RESCHED_MEH	BIT(TIF_NEED_RESCHED_MEH)
-> +# define TIF_NEED_RESCHED_LAZY	6	// Lazy rescheduling needed
->  # define _TIF_NEED_RESCHED_LAZY	BIT(TIF_NEED_RESCHED_LAZY)
->  #endif
->  
->  #ifdef HAVE_TIF_POLLING_NRFLAG
-> -# define TIF_POLLING_NRFLAG	6	// idle is polling for TIF_NEED_RESCHED
-> +# define TIF_POLLING_NRFLAG	7	// idle is polling for TIF_NEED_RESCHED
->  # define _TIF_POLLING_NRFLAG	BIT(TIF_POLLING_NRFLAG)
->  #endif
->  
-> -#define TIF_USER_RETURN_NOTIFY	7	// notify kernel of userspace return
-> +#define TIF_USER_RETURN_NOTIFY	8	// notify kernel of userspace return
->  #define _TIF_USER_RETURN_NOTIFY	BIT(TIF_USER_RETURN_NOTIFY)
->  
-> -#define TIF_UPROBE		8	// breakpointed or singlestepping
-> +#define TIF_UPROBE		9	// breakpointed or singlestepping
->  #define _TIF_UPROBE		BIT(TIF_UPROBE)
->  
-> -#define TIF_PATCH_PENDING	9	// pending live patching update
-> +#define TIF_PATCH_PENDING	10	// pending live patching update
->  #define _TIF_PATCH_PENDING	BIT(TIF_PATCH_PENDING)
->  
->  #ifdef HAVE_TIF_RESTORE_SIGMASK
-> -# define TIF_RESTORE_SIGMASK	10	// Restore signal mask in do_signal()
-> +# define TIF_RESTORE_SIGMASK	11	// Restore signal mask in do_signal()
->  # define _TIF_RESTORE_SIGMASK	BIT(TIF_RESTORE_SIGMASK)
->  #endif
->  
-> -#define TIF_RSEQ		11	// Run RSEQ fast path
-> +#define TIF_RSEQ		12	// Run RSEQ fast path
->  #define _TIF_RSEQ		BIT(TIF_RSEQ)
->  
-> -#define TIF_HRTIMER_REARM	12       // re-arm the timer
-> +#define TIF_HRTIMER_REARM	13       // re-arm the timer
->  #define _TIF_HRTIMER_REARM	BIT(TIF_HRTIMER_REARM)
->  
->  #endif /* _ASM_GENERIC_THREAD_INFO_TIF_H_ */
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 1c93da75226e..d5f9176e1a75 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -2117,7 +2117,9 @@ static inline void set_tsk_need_resched(struct task_struct *tsk)
->  
->  static inline void clear_tsk_need_resched(struct task_struct *tsk)
->  {
-> -	atomic_long_andnot(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY,
-> +	atomic_long_andnot(_TIF_NEED_RESCHED |
-> +			   _TIF_NEED_RESCHED_MEH |
-> +			   _TIF_NEED_RESCHED_LAZY,
->  			   (atomic_long_t *)&task_thread_info(tsk)->flags);
->  }
->  
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 04b62c16fa8c..f8e225dc2504 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5854,8 +5854,17 @@ void sched_tick(void)
->  	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
->  	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
->  
-> -	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
-> -		resched_curr(rq);
-> +	/*
-> +	 * Two-stage promotion of LAZY to RESCHED, ensuring there is at least
-> +	 * one full tick of respite.
-> +	 */
-> +	if (dynamic_preempt_lazy()) {
-> +		if (tif_test_bit(TIF_NEED_RESCHED_MEH))
-> +			resched_curr(rq);
-> +
-> +		else if (tif_test_bit(TIF_NEED_RESCHED_LAZY))
-> +			 set_thread_flag(TIF_NEED_RESCHED_MEH);
-> +	}
->  
->  	donor->sched_class->task_tick(rq, donor, 0);
->  	if (sched_feat(LATENCY_WARN))
+--===============8280819268335858825==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Hi Peter,
-We tested this patch on d48723711bae with CONFIG_HZ=1000, SCHED_HRTICK=y,
-PREEMPT_{DYNAMIC,RCU}=y, and lazy preemption enabled, and saw roughly 60% fewer
-recursion misses.
+> kallsyms: Add KALLSYMS_QUERY_BY_NAME ioctl to /proc/kallsyms
 
-The test runs two tasks using the default sched policy pinned to the same CPU
-for 30s. One calls getpgid() continuously. The other does the same but sleeps 1ms
-between calls. Meanwhile a bpftrace fentry program on __x64_sys_getpgid does
-some bounded work to widen the preemption window each invocation:
+TL;DR:
+- KALLSYMS_QUERY_BY_NAME may scan BPF ksyms quadratically in one syscall with
+  no cond_resched(), possibly cancelling the speedup
+- module_filter may return -ENOENT for init symbols that the unfiltered query
+  finds via the ftrace section
 
-kfunc:vmlinux:__x64_sys_getpgid
-{
-    @entered = count();
-    @entered_tid[tid] = count();
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
 
-    $i = 0;
-    $last = nsecs;
-    while ($i < 10000) {
-        $last = nsecs;
-        $i++;
-    }
-    @last_ts[tid] = $last;
-}
+[ ... ]
+
+> +static int kallsyms_find_name_other(unsigned int sec, unsigned int *idx,
+> +				    const struct kallsyms_name_query *q,
+> +				    struct kallsyms_sym_match *m)
+> +{
+
+[ ... ]
+
+> +	do {
+> +		if (sec == KSYM_SEC_BPF)
+> +			err = bpf_get_kallsym(*idx, &m->addr, &type, m->name);
+> +		else if (sec == KSYM_SEC_KPROBE)
+> +			err = kprobe_get_kallsym(*idx, &m->addr, &type, m->name);
+> +		else
+> +			err = ftrace_mod_get_kallsym(*idx, &m->addr, &type,
+> +						     m->name, m->modname,
+> +						     &exported);
+> +		if (!err && !strncmp(m->name, q->name, q->cmp_len))
+> +			return 0;
+> +		(*idx)++;
+> +	} while (!err);
+
+Is this loop quadratic in the number of BPF ksyms, with no reschedule point?
+
+bpf_get_kallsym() restarts from the list head on every call and walks
+forward to the index:
+
+    list_for_each_entry_rcu(ksym, &bpf_kallsyms, lnode) {
+        if (it++ != symnum)
+            continue;
+
+So one ioctl that scans the BPF section without a match does n(n+1)/2 list
+steps inside a single syscall.  Every exhaustive query gets there, since
+even a query whose matches are all in vmlinux or modules still scans the
+ftrace, BPF and kprobe sections on the call that returns -ENOENT.
+
+The uapi comment tells users to keep calling with pos + 1 until -ENOENT,
+and the libbpf user later in this series (822e9da9a9b7 "libbpf: Resolve
+typeless ksyms via KALLSYMS_QUERY_BY_NAME ioctl") does this twice per
+typeless extern, once for the exact name and once for the "<name>.llvm."
+prefix.
+
+With read() of /proc/kallsyms the same getter cost is spread across
+syscalls, because seq_read fills at most one seq_file buffer per call.  Here
+all of it lands in each call that reaches the BPF section.  On hosts with
+thousands of BPF programs and trampolines, does this cancel the speedup the
+commit message describes?
+
+On kernels without ARCH_HAS_PREEMPT_LAZY, or with ARCH_NO_PREEMPT, it is
+also a long run with no reschedule, whereas kallsyms_on_each_symbol() and
+kallsyms_on_each_match_symbol() in this file call cond_resched().
+
+Would a helper that walks bpf_kallsyms once from a start index be better,
+or at least a cond_resched() in this loop?  ftrace_mod_get_kallsym() has the
+same restart-from-the-beginning pattern, although its lists are usually
+small.
+
+[ ... ]
+
+> +	if (karg.module_filter) {
+> +		len = kallsyms_copy_str_from_user(bufs->module_filter,
+> +						  sizeof(bufs->module_filter),
+> +						  karg.module_filter);
+> +		if (len < 0)
+> +			return len;
+> +		if (!strcmp(bufs->module_filter, "vmlinux")) {
+> +			end_sec = KSYM_SEC_VMLINUX + 1;
+> +		} else {
+> +			first_sec = KSYM_SEC_MODULE;
+> +			end_sec = KSYM_SEC_MODULE + 1;
+> +			q.modname = bufs->module_filter;
+> +		}
+
+Can module_filter return -ENOENT for a symbol that the unfiltered query
+finds in the same module?
+
+When a module name is given, only KSYM_SEC_MODULE is searched.  But
+/proc/kallsyms also lists entries for a loaded module from the ftrace
+section.  ftrace_free_mem(), called from do_init_module() for the module's
+init text, runs allocate_ftrace_mod_map() when any ftrace_ops is registered,
+and ftrace_mod_get_kallsym() returns those entries with
+strscpy(module_name, mod_map->mod->name, ...).  They appear as, for example:
+
+    ffffffffc0a01000 T foo_init [foo]
+
+and remain until the module is unloaded, because ftrace_release_mod() frees
+the map then.  After init, mod->kallsyms has switched to core_kallsyms, so
+these init symbols are no longer in the module section.  That gives:
+
+    BY_NAME("foo_init", module_filter = NULL)  -> match, sym_module = "foo"
+    BY_NAME("foo_init", module_filter = "foo") -> -ENOENT
+
+The uapi comment says the ioctl finds a symbol "in the entries of
+/proc/kallsyms", so the filtered result does not look like the unfiltered
+result limited to [foo].  kallsyms_find_name_other() does not check
+q->modname for the ftrace section, so extending end_sec alone would not be
+enough.
+
+Should the filtered case also search KSYM_SEC_FTRACE and skip entries whose
+m->modname differs from q->modname, or should the uapi comment document that
+module_filter only covers the module's own symbol table?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43520044354
+--===============8280819268335858825==--
