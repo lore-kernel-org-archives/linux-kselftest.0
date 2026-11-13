@@ -1,99 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794530524;
-	b=Pys26xNHt/7slvfM8G8TjZGG8Ru+WLSxDPajNSTeISf4UA/lnTDn66hldjNbrbs2ffTa
-	 lc3Vy4uDdhClG2rp0xpLs4NbDNcEueQWXPnIfnj3Cg+S+I0fHhVddPfk4ccWZ8wg3BQon
-	 c8U3orf+EfOoQaasvtkIZxLANnQHGcbeIM0ZxxVvbPJzCgotG7C9sAiQV1BegTnWn6ll2
-	 SsHAm2ri6oUDHPvo+sdFRKnSKt9/tUd+5TgA+A8a659/z6nHATeO8I4A/zB9+16ulxS2v
-	 2oMaft+4jVnD5CS7L5KMqoRl4LwsSYTzutcE7BSxCTHU0qt98hwxLKNmhhXrADdJo6A==
+	t=1794531495;
+	b=4fm30cH0ARwA15MyQn6rm6cbQwwXSTQHyG2oaglgLBTKiO3hVYkN3UbIYhc6KXpgIAGv
+	 1S50oOdJMGm8K4LWCojutUfyhrCVUZWH61i5m9XNaEDpSi4nMX9COSG1Ok38iDGUuQ3cp
+	 bDe09rDPAEkQ8DV3L7gdc3KSm5Px8BQ0yenQEZ6+F1v4IdbMmAKnfCs94RiEJ7INKZ+uo
+	 M4YsMSYy0fsUQ0+SLA4KSFyqSlZ83YaQvu7GWoXh3lRpkaETBK5IbK1lFaBH53lvvAyff
+	 1fvGeqBKEuao93nQrCQgA+1NF2blTF//4HZ2nvWnNNMG2Qio3/duQQyOr39kHclMcuA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794530524;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=YL7HdvRgoulMVBDaE6Qg6DwUJJA2vnGhioXYaH02k4E=;
-	b=1J1+7aVoo0Gxm/e+Nae6Qh1/t/p292gj9ZOfFL6h4cg7GZaYqTJ1JiujrmZv2nu2d15v
-	 7QV7WPY4Egw6bdQNcKAScBCSWjeRvtSFWCzo0SkvXzwKxHPsmflfR3kVCCNvOpAIlEJ3C
-	 JMHpcOyQvSFgFz4MH5a9j212qw/oTqa5XaGvoryy+Km/IfjLjbQSfKeCZnzaXY0BDvcm6
-	 27QZ8qgMQPmIii9neh1aveVnURJEvTYCpWVeo2mdHmfb2eDllM3zeYBRZirwm75Emd/X/
-	 htb1opuqVYOljzvS5YU9+KSVO0Dtrt+IrkFKdC8VbwsoRrx7e6uCtOHOV2L12kRqEng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794531495;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=4xezTsMykPCsRBdoB+0kcRf+vAPkHdzKTx2cPhaHPL4=;
+	b=1Nu0cK5rHkKjyffpv7UHBWeu6AajaJeFYyqJU05eDEu7hHzdJdfwZrAsESMugXm6oOcF
+	 1lIqh9fA9WzKS0TC7CrNqIMAU86wGb+4MgcgH/vFnM50PhFmP6/5TTyr+17KZxLtV2Cgq
+	 jtfs9QX9/cx3XsYfj52DoFsH6gZcQhQCdf4ZsruDTQMZAoe0Yc5gN7FTVsz8JVNDPhOHN
+	 bS+ZYLlnSqfkh+WMS0ex+Um7eUnqD9uV56hptJkgqwqyrdgR2NI6rx8UQltKfYXdBNQRw
+	 BQ7ijhvLSpTq1Zguz9Q/8Xk7/Ajjv+kHcWN4vFWJkaW8HmPiSS3q/udOH8suYgj+Urw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CpPKohat;
-	arc=none smtp.remote-ip=74.125.229.135
-Received: from mail-dl2-f7.google.com (mail-dl2-f7.google.com [74.125.229.135])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m+DlcIHi;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE1E606A885
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 00:42:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5BE1E606A885
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 7641860A3839;
+	Fri, 13 Nov 2026 00:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CpPKohat
-Received: by mail-dl2-f7.google.com with SMTP id a92af1059eb24-13985f8229aso348537c88.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2026 16:42:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794530523; x=1795135323; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=YL7HdvRgoulMVBDaE6Qg6DwUJJA2vnGhioXYaH02k4E=;
-        b=CpPKohatRHUTPl7O81pyX2Luk3+nxdLDH5mJo9iWEa1Bx0FmTZKMPI6bYU8rQZIjfM
-         QtNO28jJeIk3YxGGcvQNS/N1b6tpN22FMqkzkvMOq4SqEs/wWa0ILnCdZ/RU7Ffdr9q6
-         dW9TJVKj319GiULCAe+jPzAcHOyc18nBMJk4R3aUXjnmKXFaQwznf9D6ZqfLmHfeJugP
-         4k5Jha7vcEEyHDb8kMZCbIsYvo8fL2+jLMFb45RLPA+jjKvGQtHQf+cUXWEJo9DxNquX
-         INOk2dI0LwnL7/4hno/XcRSIgrqNO4WvDUYmGi0f4m4yKbysema+KXFZPAtMyKBc7uKW
-         fGCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794530523; x=1795135323;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YL7HdvRgoulMVBDaE6Qg6DwUJJA2vnGhioXYaH02k4E=;
-        b=lvLQZOXOk32cPw7HAgYwMpGHrMcd2PO5QvLm6BRFK/kX1wp+r7ch1Yuao7VLbXMHfy
-         rb6oy0TaFj5ibu3//oQWrF3+iVmtiaWWLsy+lLrog7Rplg5a1wNDO7InAx/FMEL4BBju
-         gX6MOXhweqVBhW84Vaqfj1bi+sjqYXoAlVLp1SRRsMV6vMBcouhfy8+nbFGrU1DvttZ+
-         GiE9uSv3P5qkq6gpr4h/8HMS6m/yeaRkDEKmxMBEtHd6xo/xrjNIbefugYDl8Frqb1VY
-         wvK5J2EH+Ks4JNCdj4aj2YxsBxmtv6+JZVEjcpCL8LzrU0r/rYusGIy59Rer1xqn31xM
-         8zRg==
-X-Forwarded-Encrypted: i=1; AL+hErGKe3rxeXWKzV7kARkZxA2aHu6RhUL86QsN6z9z4/3j0hzcRs9vNf9NpKHw6CKK6W0hpzpap4xr9zRNHTvKKas=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8AnLHd2GoJyPl4rNwsP+Zno+bcpyy4Yc4YYk9OpHxhFUxeJNUd
-	ElRDYRHi96moIgGb9XcZcauLB6kRf+RbTRYrclTPv3zTRVVj87BLAcav
-X-Gm-Gg: AYBFou2ZBlVZbBI3OEB1/vZtTKW6bXEBFEHqRVbErU+A8lq5X+ZlyRAoc1HVipgrwz9
-	giNiPLyDqTe3IUy73td6KakUf6vsl13gfLE6rcA74C/6qtGEA2oVbrgSnJLtNM1/XefAd1EX4E3
-	rDgb/nWAkxyHtFg6CC+7qj/l1BWZDPNGHPf4T6oe7bS9sCAxbZt/4HemjlH8gsvAPXK6oHpV2Z9
-	LGKv31RK34U8IBD4xc6PQGWRKiEaezS7j0xRs4lEc57jWF/BYeOsYsZS8k5YmFkgHDMRzsNrbQi
-	ZGAeLkifNzV4+u5YPJHTDcgSZFpyypMnjh/vzjBWvmEkAqS6ROYv96SusAV5DG555Mr9WLyIvOx
-	mbOp4VCQ/sIkbJr2hyXSW36EvYocHJTH/QHpTC8gZb+IVUfDpxF3VdiEtqzoryM9cCxPkTQ0N0F
-	f1EtUDCpwXe19ZkoopIymwt0519lJZNCwZviSZjK+/hs7aSO9887R2/AiReqEi2jCs6a53UNwMm
-	9aIpDxZs7WkGIo39IQ4HTHMEw54ULvoHRt4v2CdYkSGjrJl20vLKMnroYCnQjgJEsRlye8v/LK4
-	hbnbCCo9KZBxz3XHzvOyXdE=
-X-Received: by 2002:a05:701b:4213:20b0:1b3:b4cf:8f18 with SMTP id a92af1059eb24-1b5031a46bamr1155706c88.41.1794530523330;
-        Thu, 12 Nov 2026 16:42:03 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:62::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50313d990sm2811710c88.4.2026.11.12.16.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 16:42:02 -0800 (PST)
-Date: Thu, 12 Nov 2026 16:41:56 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, michael.chan@broadcom.com, pavan.chebbi@broadcom.com, 
-	andrew+netdev@lunn.ch, edumazet@kernel.org, horms@kernel.org, shuah@kernel.org, 
-	almasrymina@google.com, sdf@fomichev.me, leitao@debian.org, dtatulea@nvidia.com, 
-	asml.silence@gmail.com, bobbyeshleman@meta.com, daniel@iogearbox.net, 
-	razor@blackwall.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 0/5] net: devmem: size TX net_iovs from the
- dmabuf layout
-Message-ID: <avZZ-6GGciPC0Lti@devvm16445.scu0.facebook.com>
-References: <20261111224740.2744522-1-sdf@fomichev.me>
- <1b764043-2efd-4e65-adb9-a47c0136446b@redhat.com>
- <avZC2hp_0ODMQ4SG@devvm16445.scu0.facebook.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m+DlcIHi
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 0B5671F000C5;
+	Fri, 13 Nov 2026 00:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794531495;
+	bh=4xezTsMykPCsRBdoB+0kcRf+vAPkHdzKTx2cPhaHPL4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=m+DlcIHiRJdJVMUqoZBGhlrWK/NvAB5alD/1JuTwSTaqIw3nW9yiHsUp92pmzxK5a
+	 YvxSZD7MI6+pSWFIbZINew0klu3Rk25qMj/4rsPnFjxFYkG2a4Y5dGuDx7AnlQGLS9
+	 /5KnPIYe2jmGCiXw+I5I9ViGBXq+nfEODz241ef5HPA+Y1Zjkc23Bppy3PKtTWC7hG
+	 0yFSDvuMSTCGQDy9p0zy8PUWyk7uD65MkbT9hIzY0YsVWNvOb/e/vaI7560mF4wwgD
+	 UvxwZrM7tSx9217Kgph3+k0cLbTgzMnwpk1sg0104OVOb0KlLD8RyFZZU71yKeEhIh
+	 Tuytw/wjA9HSw==
+From: Joel Fernandes <jfern@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <jfern@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>
+Cc: rcu@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH for-v7.5 12/14] rcutorture: Enable RCU_BOOST where supported
+Date: Thu, 12 Nov 2026 19:57:39 -0500
+Message-ID: <20261113005747.2977123-13-jfern@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261113005747.2977123-1-jfern@kernel.org>
+References: <20261113005747.2977123-1-jfern@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,71 +74,214 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <avZC2hp_0ODMQ4SG@devvm16445.scu0.facebook.com>
+Content-Transfer-Encoding: 8bit
 
-On 11/12, Stanislav Fomichev wrote:
-> On 11/12, Paolo Abeni wrote:
-> > Hi,
-> > 
-> > A few (late) questions/comments to check I'm not missing relevant
-> > points,
-> > 
-> > On 11/11/26 23:47, Stanislav Fomichev wrote:
-> > > TX bindings use PAGE_SIZE net_iovs, so a frag covers at most a page.
-> > > A 64KB skb needs 16 frags, and MAX_SKB_FRAGS caps devmem skbs at about
-> > > 68KB, which makes BIG TCP ineffective for devmem TX.
-> > 
-> > ... with default .config. You could set MAX_SKB_FRAGS to 45 and reach
-> > ~180K...
-> > > This series picks the TX net_iov size from the dmabuf sg table instead:
-> > > the largest power of 2, up to 2MB, which aligns every DMA segment. With
-> > > a 2MB hugepage-backed udmabuf a BIG TCP skb takes a few frags. There's
-> > > no UAPI change since TX addresses are dmabuf offsets.
-> > 
-> > ... still this option should be more effective because the limit would be
-> > higher and the skb would use less cachelines for the shared_info,
-> > 
-> > I'm wondering if making a comparison vs MAX_SKB_FRAGS==45 would be
-> > complex and if you could do that, too.
-> 
-> Originally I did not want to include bigtcp to keep it apples to apples:
-> same tso size, just 16 frags in skb vs 1 (in ideal case).
-> 
-> I just tried running mlx5 with 45 frags configured and it fails to start with
-> the following error:
-> mlx5e_attach_netdev() warns "MLX5E: Max SQ WQEBBs firmware capability: 16, needed 23" and returns -EIO.
-> 
-> (fwiw quick review with llm claims that mlx5 only supports up to 20 skb frags)
-> 
-> What I also tried just now is `gso_max_size 524280` (on top of this series)
-> and it ups single flow throughput from 200Gbps to 240Gbps (presumably
-> by making the receiver go faster with 512K TSOs vs 64K TSOs) and halves
-> the sender softirq..
-> 
-> I hope this gives you more data, not sure running with 20 frags is worth
-> it (vs 16)? LMK if you disagree or want me to run something else.
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-Fun fact, also setting gro_max_size on the receiver gets line rate over
-single flow:
+Currently, RCU_BOOST depends on RCU_EXPERT, and is therefore often
+disabled in stress-test such as those run by syzbot.  This means that if
+syzbot runs a test that overloads CPUs on kernels built with PREEMPT_RCU,
+RCU CPU stall warnings are not unexpected.  What happens is that a
+low-priority task in an RCU read-side critical section is preempted,
+cannot be priority boosted, and stays that way for more than 21 seconds.
 
-I   client.c: Connected 1:cpu 39 | 1:cpu 118
-client: == Source 2401:db00:255a:4a:bace::b
-client:   Tx389.448 Gbps (2921248849920 bytes in 60008026 usec)
-client:   Rx  0.000 Gbps (0 bytes in 60008026 usec)
-client:   TCP retrans reord rtt rttvar d_ce snd_wnd cwnd
-client:             2   125  86      2    0 15300608 10142
-client:   net CPU 39: usr: 0.03% sys: 0.06% idle:67.39% iow: 0.00% irq: 5.69% sirq:26.81%
-client:   app CPU 40: usr: 0.05% sys: 2.91% idle:95.67% iow: 0.00% irq: 0.21% sirq: 1.14%
-client: == Target 2401:db00:255a:44:bace::b
-client:   Tx  0.000 Gbps (0 bytes in 60009306 usec)
-client:   Rx389.438 Gbps (2921238435008 bytes in 60009306 usec)
-client:   TCP retrans reord rtt rttvar d_ce snd_wnd cwnd
-client:             0     0 210    122    0  999424   10
-client:   net CPU118: usr: 0.00% sys: 0.00% idle: 1.60% iow: 0.00% irq: 0.33% sirq:98.05%
-client:   app CPU119: usr: 2.75% sys:77.46% idle:18.95% iow: 0.00% irq: 0.47% sirq: 0.34%
+This commit therefore drops RCU_EXPERT from the RCU_BOOST "depends on"
+line and removes the prompt, thus directly driving RCU_BOOST from the
+kernel configuration so as to enable it anywhere it is supported and
+might help.
 
-4200MTU, 32K rx-buf-len, this patch series, gso/gro_mas_size of 524280,
-still the default number of frags (enough on rx to fill 512K GRO with 32K
-chunks).
+This commit is also marked experimental because neither Ubuntu, Fedora,
+nor CentOS enable RCU_BOOST.  This suggests less testing of RCU priority
+boosting than one might wish.
+
+Reported-by: Andrew Morton <akpm@linux-foundation.org>
+Closes: https://lore.kernel.org/all/20260805122952.6ae38af69a0457779cb44359@linux-foundation.org/
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Joel Fernandes <jfern@kernel.org>
+---
+ kernel/rcu/Kconfig                                     | 10 ++++------
+ tools/testing/selftests/rcutorture/configs/rcu/NOCB01  |  1 -
+ tools/testing/selftests/rcutorture/configs/rcu/NOCB02  |  1 -
+ tools/testing/selftests/rcutorture/configs/rcu/TREE01  |  1 -
+ tools/testing/selftests/rcutorture/configs/rcu/TREE02  |  1 -
+ tools/testing/selftests/rcutorture/configs/rcu/TREE08  |  1 -
+ .../testing/selftests/rcutorture/configs/rcuscale/TINY |  1 -
+ .../selftests/rcutorture/configs/rcuscale/TRACE01      |  1 -
+ .../testing/selftests/rcutorture/configs/rcuscale/TREE |  1 -
+ .../selftests/rcutorture/configs/rcuscale/TREE54       |  1 -
+ .../selftests/rcutorture/configs/refscale/NOPREEMPT    |  1 -
+ .../selftests/rcutorture/configs/refscale/PREEMPT      |  1 -
+ .../testing/selftests/rcutorture/configs/refscale/TINY |  1 -
+ 13 files changed, 4 insertions(+), 18 deletions(-)
+
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index b6d3597758fc..2d0132e0a90f 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -238,17 +238,15 @@ config RCU_FANOUT_LEAF
+ 	  Take the default if unsure.
+ 
+ config RCU_BOOST
+-	bool "Enable RCU priority boosting"
+-	depends on (RT_MUTEXES && PREEMPT_RCU && RCU_EXPERT) || PREEMPT_RT
+-	default y if PREEMPT_RT
++	bool
++	default y if (RT_MUTEXES && PREEMPT_RCU) || PREEMPT_RT
+ 	help
+ 	  This option boosts the priority of preempted RCU readers that
+ 	  block the current preemptible RCU grace period for too long.
+ 	  This option also prevents heavy loads from blocking RCU
+-	  callback invocation.
++	  callback invocation.  It is now automatically enabled in
++	  any kernel that can benefit from it and that can support it.
+ 
+-	  Say Y here if you are working with real-time apps or heavy loads
+-	  Say N here if you are unsure.
+ 
+ config RCU_BOOST_DELAY
+ 	int "Milliseconds to delay boosting after RCU grace-period start"
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/NOCB01 b/tools/testing/selftests/rcutorture/configs/rcu/NOCB01
+index bbe6d28210ab..91ca7e8b5725 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/NOCB01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/NOCB01
+@@ -14,7 +14,6 @@ CONFIG_RCU_FANOUT_LEAF=2
+ CONFIG_RCU_NOCB_CPU=y
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_RCU_EQS_DEBUG=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/NOCB02 b/tools/testing/selftests/rcutorture/configs/rcu/NOCB02
+index 4c2b8cd6d8fd..ed3f3f7b29e7 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/NOCB02
++++ b/tools/testing/selftests/rcutorture/configs/rcu/NOCB02
+@@ -14,7 +14,6 @@ CONFIG_RCU_FANOUT_LEAF=2
+ CONFIG_RCU_NOCB_CPU=y
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_RCU_EQS_DEBUG=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE01 b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+index 54b1600c7eb5..be5bf69a1b60 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+@@ -10,6 +10,5 @@ CONFIG_RCU_TRACE=y
+ CONFIG_HOTPLUG_CPU=y
+ CONFIG_RCU_NOCB_CPU=y
+ CONFIG_DEBUG_LOCK_ALLOC=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE02 b/tools/testing/selftests/rcutorture/configs/rcu/TREE02
+index 2871ee599891..36b9228ae703 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE02
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE02
+@@ -13,7 +13,6 @@ CONFIG_RCU_FANOUT_LEAF=3
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=y
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_DEBUG_OBJECTS=y
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE08 b/tools/testing/selftests/rcutorture/configs/rcu/TREE08
+index 8b561355b9ef..ad7d7f873e1e 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE08
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE08
+@@ -13,7 +13,6 @@ CONFIG_RCU_FANOUT_LEAF=2
+ CONFIG_RCU_NOCB_CPU=y
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_RCU_EQS_DEBUG=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcuscale/TINY b/tools/testing/selftests/rcutorture/configs/rcuscale/TINY
+index c1a7d38823fb..f611b69f1189 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcuscale/TINY
++++ b/tools/testing/selftests/rcutorture/configs/rcuscale/TINY
+@@ -11,7 +11,6 @@ CONFIG_NO_HZ_FULL=n
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_RCU_TRACE=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcuscale/TRACE01 b/tools/testing/selftests/rcutorture/configs/rcuscale/TRACE01
+index f3f1368b8386..69f5764159df 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcuscale/TRACE01
++++ b/tools/testing/selftests/rcutorture/configs/rcuscale/TRACE01
+@@ -11,7 +11,6 @@ CONFIG_NO_HZ_FULL=n
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_RCU_TRACE=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcuscale/TREE b/tools/testing/selftests/rcutorture/configs/rcuscale/TREE
+index b10706fd03a4..5122cf08d5db 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcuscale/TREE
++++ b/tools/testing/selftests/rcutorture/configs/rcuscale/TREE
+@@ -12,7 +12,6 @@ CONFIG_HIBERNATION=n
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_RCU_TRACE=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcuscale/TREE54 b/tools/testing/selftests/rcutorture/configs/rcuscale/TREE54
+index 9f83e5372796..08d30edb3b99 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcuscale/TREE54
++++ b/tools/testing/selftests/rcutorture/configs/rcuscale/TREE54
+@@ -15,7 +15,6 @@ CONFIG_RCU_FANOUT_LEAF=2
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_RCU_TRACE=y
+diff --git a/tools/testing/selftests/rcutorture/configs/refscale/NOPREEMPT b/tools/testing/selftests/rcutorture/configs/refscale/NOPREEMPT
+index 1f215e17cbae..3e7d7793acc7 100644
+--- a/tools/testing/selftests/rcutorture/configs/refscale/NOPREEMPT
++++ b/tools/testing/selftests/rcutorture/configs/refscale/NOPREEMPT
+@@ -14,7 +14,6 @@ CONFIG_HIBERNATION=n
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_KPROBES=n
+diff --git a/tools/testing/selftests/rcutorture/configs/refscale/PREEMPT b/tools/testing/selftests/rcutorture/configs/refscale/PREEMPT
+index 52e3ef674056..feed29cf043f 100644
+--- a/tools/testing/selftests/rcutorture/configs/refscale/PREEMPT
++++ b/tools/testing/selftests/rcutorture/configs/refscale/PREEMPT
+@@ -12,6 +12,5 @@ CONFIG_HIBERNATION=n
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+diff --git a/tools/testing/selftests/rcutorture/configs/refscale/TINY b/tools/testing/selftests/rcutorture/configs/refscale/TINY
+index 9a11b578ff34..b67ea7a9128b 100644
+--- a/tools/testing/selftests/rcutorture/configs/refscale/TINY
++++ b/tools/testing/selftests/rcutorture/configs/refscale/TINY
+@@ -14,7 +14,6 @@ CONFIG_HIBERNATION=n
+ CONFIG_RCU_NOCB_CPU=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_PROVE_LOCKING=n
+-CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+ CONFIG_KPROBES=n
+-- 
+2.54.0
+
