@@ -1,45 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794610554;
-	b=fEqlrFhyMmReRur5+2plCN4woxzBSXgLRH/7LA+6AU/253DTWsVsrBgADUXCT1Yj/TO4
-	 cvC/DZsYsezERDGhwtCdNLAC8Vp6qMHtIu+kmOPDEkEiSA6EDZ+g5Hn/V4UW7btTTi6mG
-	 D0LJi9DIzwgBnl8yhFhCRktYI72NBsPp3OIcHxBwExILLsOrvd6Mt3deB34ojQXdowiZP
-	 dpIg2EULUSs+3KwvbcH01ZQxsshPrv6rOM9J4r8vlRlHRA0gm9rEguVX39G+puo0mCyr0
-	 sws7ZN7WIouQSAxnbG+C4IbVawE7jkmPxJK8msBBz3oCJ4z5rAPBA9xh3EVz8eHYlnw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794610554;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=KN3BAQQz6V4aWs3TRbBIzGlNzQXPAP/3NN2RobaOAEE=;
-	b=zxCeSbP0hzMqacB75PoePZi38buWIDrC8WVxO99/B0g44g6sY+qEQ4yg/5ft9T/W2jtV
-	 X9/zjYchkYvFsTHaG5NwuOz6nu4i7vLFjX3O5yxH/+kyypiMf2xCRxjEbwcFVXhR9lA+f
-	 6B7NsTEhuFIAvlUBYkxQojbTN5V8RVzbx/8726pAhJGJpQzyceBG/pW6tHVZjebN6Hu9L
-	 6BxW5JGBZY5QwcEnelekz/5WATTvqLaK09szve7YsR/GoWpUAE/qkGiBJfslhwa4sRzgY
-	 T/IprHqfxCg9dm6+TLjDgbfFD6Yvx8/Pr0sMAUYhbQvUvX33+h+YnfeKHcpisTfnPaQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zr/r1yff";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794613159;
+	b=IRcd15HUxySdJ6nv+u7q08Eiykf6fBoswB4zlVDf9hDrpMa03fc7LtGaUlPyxlz8FzrX
+	 8VzUsja4LjVIvhOaypRIMQKhjNfkQ8asSUF+Qzzobetf7AUK0G21fXX3hOd9luD6RrxFw
+	 3xlY2U3/WYs/AIAtFo3UDiLGF1Ez4oyP8xx2kSuHPsKVBYcmvlWRMtamMovY6AbuR48/m
+	 FH2xQneN8NuBtI2e9dAJcna/PpR9ct+oxI1OFVNl32qPh5ftiOijbD55qx63RA3oGlN3M
+	 J2nEq94bkD2VvS+weHhObChZeXFDVzgrWfEBnlXw6kqsOkjzb0tdqneioagrwK+cnJg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794613159;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=G+DCRJoT2rSliFioAt8IfNe8mKn1BXSOz5GwRKF6mJU=;
+	b=rfTaSmt31h44kpVkfeqlN45qMlKC5kqBeR8J7Xk7f/DfKzsYqUyUkwMOgb2loEsmfU/W
+	 YOly7XwhC0nDgxFED/cl5RV8IpmzrlcjSW7Z87IQt2dyaEXwXohF4sPH2hP5ABzl252ys
+	 1oi6r1uP1DhZUdda1JGgB+IN+hUvr6+7P5ZCbW0xcSbdxFFi7kqAN0ea8Pr4c1DX1VykX
+	 EddxLD21DIRJvpiy9IyR0O12v76xhmtdTjXfykTacukqBny9ajIrk413rwdMXFIjqPNFs
+	 blSqmdGLyIoxTX29UMHRlph807VNIMJ4QQPCqg4/u9VEo5MRxCecvteDRCgQn6LqhTw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GKzdNCOt;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.51
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA19606A890;
-	Fri, 13 Nov 2026 22:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C7D606A33A
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 23:39:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84C7D606A33A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zr/r1yff
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4053A1F000C4;
-	Fri, 13 Nov 2026 22:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794610554;
-	bh=KN3BAQQz6V4aWs3TRbBIzGlNzQXPAP/3NN2RobaOAEE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Zr/r1yffsWfgcq3GiAScelw76p+OkyQYD2uH4hI/pcXZT/7E7x2Do+HBZm7e8OFNx
-	 c1oIKY+cvZEYv2sTZiX8+jnO5YqRpoKeiMbazqRw1aa4yUaQNbK7Mb95zvfQKKK1ig
-	 mxTFsa/RQhH/hCyvaswWfMYIpbiYkjjf2EiN/QQuWlfHGZB+EWhPT+tIC3Q4Mu5j8o
-	 t3lv1MPLpzLCUm09+TGX/ieOrJzoVKxT/z452fFm5NUzwDYL01fzfKWTbIMccvSMuj
-	 9FGL0SOXawyhCSF1WGLngab9+y6SU5rYrE3XlyC8yaZy7Xut3XdxIC/7rV4CX8ZWVe
-	 haNQtCPugcyAw==
-Content-Type: multipart/mixed; boundary="===============8280819268335858825=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=GKzdNCOt
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c45551fa84eso378411866b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 15:39:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794613156; cv=none;
+        d=google.com; s=arc-20260327;
+        b=sJEFPHYe9n4x0bmtSOPKjRVJAseXZzV5khBEYBANdfEY0H4pFYeDe6PCVDm/R2ptTb
+         uJtNi+CWYqabshpE+KmVJS1ghqtui9nnbrZG6xmy9anamopZKtsEI6uoW6e0NjFjkgME
+         tfgJC2TyhlME7F9XD6b54YMQwfMRpA4O9BWa+UfEqT2QkQWrFimXPYd6ezKJFhRj62FO
+         Pqyh2wJ4xO9nGojPatwIM5Dg/Zczi/l0J7JGNEVjsZKc4mdFMVl/wYpKr1IMXcIMLkVH
+         0aGWRbvPoF19g4ftGXloaCNGtIOjqaSxcx0szFhnD6ZvmlEHd+kEopl4xWcY6TUL+KEv
+         R1cA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=G+DCRJoT2rSliFioAt8IfNe8mKn1BXSOz5GwRKF6mJU=;
+        fh=fSkiTP10fodTsjwJ9wdxkCEEDZ0sHeDU7C5vI8aXTfE=;
+        b=QYBJc/V45feGDBc+3Q1EgYJenal+P0+IhS3TBPfpZyQanLtCOFAItbEWAtYQwg6pDX
+         tOgJn5oc/ZUjGCQhf4Bm/8XPPIHFY3EDQgiq1TJlaA444wBqKYx0WZi5u8oks5KueVC2
+         LovB8UrPZMNpaGReaKBPUu1vlDTFz1WOBZTIL7kMchxqLbYCg/vfR6e8S/4OdycC8edF
+         sc74MovRlGx0OPUehp2j+Sp1HzViqMKnctAEGvp/njG+Xi9BWVeRjbUBpEZbl6p5uyS8
+         QPOcj1O3i2FLN1X2sd8+bG5bu/Ui2jkCcmimgBx7JMfUVPLB2s2m8MOGo/gRvLZkAFtr
+         FVuw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794613156; x=1795217956; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=G+DCRJoT2rSliFioAt8IfNe8mKn1BXSOz5GwRKF6mJU=;
+        b=GKzdNCOtJPWkmyv8qLZ34TzvbJvMPkkuwQ9UvVoZ21zjdb0FqwQhKM19IEGvUoo9W1
+         Aj0T2H4f3wWnAANVH/2wksXyuPuCElCiaQzAcfMMCA2CE7R21PAYI5eaGUk4nXlybp/Y
+         WQoltLRy+v3nyRbE7yS4h1P/8zdonuUzN7T+6NHhGSSsTp9dmQEqodS8X5/KicoYVWaI
+         NWOVq+eW3ahIqbrMTNlgsW/4LmyafL0i4AdGbirhPODewVw75HkPpbRaBaPQ4jq6Ut6L
+         CpzPj/fXvGuQlcyswF/lAdnhi+lWiwB+sCkEW2qHz601p5dWM+KZTdXJMdzJ+xahS1OR
+         UWHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794613156; x=1795217956;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=G+DCRJoT2rSliFioAt8IfNe8mKn1BXSOz5GwRKF6mJU=;
+        b=0vtzu8bC8dUU5IcPl0dmemB85xEF9P5tazLLMq3WVzoinYARWbnKFp5I47cSa+bVws
+         F2REPbJTtMvKYKx40Y+SxGEnLuAFrymHJjZnQSIHET1PAKBVOAJLKU0FH1Op/W8CBenE
+         2R1dXOHO46dPsv4EJM+Ul9bzzaG25tEF906t9ef9VfsFfRWTDCR9nUZxcllYqjOd3n7G
+         muM3oFeTmlXlggGQYisTsm1PeHzeJfxQt3BeYzMUao5Jccu6LurVsmaIveN1UA8QbSQg
+         74ny5fKtN5KdKQ3quMOSBVyxv97LP7TaLgPHc0gh1pfMdCFg/M1gWkWIjAyIaur6A/+l
+         RFBQ==
+X-Forwarded-Encrypted: i=1; AL+hErGNxUBCJulJoUaObY62VnwOkwqcvd9vaBr78j+cWy4azfTGU5rOerzCiDyEBB2hpE7gP/Yx+3dnxTvVDEp99Xg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9uDJmcr6z91pxrxgi/vXG1fE2yJOTRHRNLhLMElwJMVjkCEB4A
+	BGoG13EfVIKZb0zGN6xrUiJnV3E5Dl1IZs5EWYqagRY0TZE7f54q3FzQn9ywkN8jWvoXQu6PIM4
+	FkMzO8Vc27vLn0pGq65Dj893C7UZoG0x4v2Cpyinq
+X-Gm-Gg: AYBFou3skLfwKZCYBP0JmXnnsXf3r5DdwOpzbbpQzyXpdbY/MPvk2tzG7kz8nG5Nbmx
+	ln7e03VKzKTbLE0N/D5G8VpN3LSj9AB0hxu3ltPALC1HT+H3+/B5ncJyoD6XPdUbRk5hCcwq3+9
+	b9+rUI7Q2P1qw0bd0UZSSs9qOw29T+rH5It2+6HaV/wr5YAo4OOnb4Rga1frcmf/M3ozdtbkHkB
+	6QJxmJdvc+g+U7YPNpnvMlcK4EELlCF0ujQ9On423fqTpyK+Ynlb68lRSgzO559FrKt+iMOcqQ6
+	l5aMSmwqvRErd3G87ndjmiKeDSWVXP+HsOwt68zVsG5Oi7PUM8uUD+EJVOZTUBYd0zszN/QadFc
+	+fCi4+2j9HF8kanQ8qNf0xZkik0E9u0XEZMPLYs45W4zTfda2dWSS82urgboEevEjA1B4DgM=
+X-Received: by 2002:a17:907:72c8:b0:c2d:c98f:4824 with SMTP id
+ a640c23a62f3a-c509640e213mr336302366b.30.1794613155422; Fri, 13 Nov 2026
+ 15:39:15 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,139 +104,242 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <2f27a1ffca14cd87a744c447c5fded67459c1497ebafe05350f4721ef994c3f0@mail.kernel.org>
-In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
-References: <20261113221248.3535369-14-wusamuel@google.com>
-Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME ioctl to /proc/kallsyms
-From: bot+bpf-ci@kernel.org
-To: wusamuel@google.com,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,atomlin@atomlin.com,viro@zeniv.linux.org.uk,brauner@kernel.org,jack@suse.cz,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
-Cc: akpm@linux-foundation.org,pmladek@suse.com,david.laight.linux@gmail.com,wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,linux-doc@vger.kernel.org,linux-modules@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 13 Nov 2026 22:55:50 +0000 (UTC)
+References: <20261111115911.1142000-1-david.laight.linux@gmail.com> <20261111115911.1142000-8-david.laight.linux@gmail.com>
+In-Reply-To: <20261111115911.1142000-8-david.laight.linux@gmail.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Fri, 13 Nov 2026 15:39:04 -0800
+X-Gm-Features: AclHuK_-P0g2E85AlmiELg2QyC94n8audd5zwRdk4oJx2ijztAtCokHN_9_OxYI
+Message-ID: <CAG2KctoB6BudtFRS6AgpBKjSd7oFrtMSU4JmF_WECmArB4GCvA@mail.gmail.com>
+Subject: Re: [PATCH v3 next 07/13] kallsyms: Match compressed tokens on the
+ fly during binary search
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Petr Mladek <pmladek@suse.com>, Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+	Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii@kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============8280819268335858825==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> kallsyms: Add KALLSYMS_QUERY_BY_NAME ioctl to /proc/kallsyms
-
-TL;DR:
-- KALLSYMS_QUERY_BY_NAME may scan BPF ksyms quadratically in one syscall with
-  no cond_resched(), possibly cancelling the speedup
-- module_filter may return -ENOENT for init symbols that the unfiltered query
-  finds via the ftrace section
-
+On Wed, Nov 11, 2026 at 3:59=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> From: Jim Cromie <jim.cromie@gmail.com>
+>
+> kallsyms_lookup_names() runs a binary search across ~184k tokenized
+> (compressed) symbols.  For each of the ~17 comparisons in the search, it
+> currently decompresses the candidate symbol into a temporary buffer on
+> the stack before calling strcmp().
+>
+> Comparing tokenized symbols directly in compressed space is
+> impossible.  The BPE token table assigns values by frequency, not
+> alphabetical order (e.g. token 0x05 might expand to "zebra" while 0x42
+> expands to "apple"), so comparing raw token values scrambles
+> lexicographical order.  Even sorting the token table alphabetically
+> wouldn't help; "bpf_" and "bpf_foo_" do not *have* a determinative
+> sorting order, because the suffixes following those tokens would
+> matter.
+>
+> However, full string expansion at every step is equally wasteful: of
+> the ~17 strcmps in the binary search, only the last needs to check
+> all N chars in both strings, earlier steps will know +/- outcome at
+> char 0,1,2..N-1.
+>
+> However, full string expansion at every step is equally wasteful: of
+> the ~17 strcmp()s in the binary search, only the final matching step
+> needs to test all characters.  Earlier non-matching steps diverge at
+> the first differing character (0..N-1), but the baseline expands every
+> candidate symbol to the stack unconditionally, before comparing.
+>
+> So we introduce kallsyms_strcmp_symbol() to compare ASCII search_name
+> against tokenized symbols on the fly.  Like strcmp, it tests the
+> strings char by char, but when it hits a token in the symbol-string,
+> it continues the char-test against that token-string, which is in
+> kallsyms_token_table[].  It returns +- on 1st mismatch.
+>
+> Measured across all ~184k symbols via CONFIG_KALLSYMS_SELFTEST, this
+> shaves ~530 ns (~14%) off average kallsyms_lookup_name() latency (from
+> ~3810 ns to ~3280 ns on the default 256:1 baseline) and drops the
+> 512-byte namebuf buffer stack-alloc in kallsyms_lookup_names().
+>
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> Signed-off-by: David Laight <david.laight.linux@gmail.com>
+> ---
+>
+> Unchanged from Jim's patch.
+> I think this is the latest version of it, but any later changes
+> shouldn't cause problems.
+>
+>  kernel/kallsyms.c | 94 +++++++++++++++++++++++++++++------------------
+>  1 file changed, 59 insertions(+), 35 deletions(-)
+>
 > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index aec2f06858af..d18d78e626db 100644
 > --- a/kernel/kallsyms.c
 > +++ b/kernel/kallsyms.c
-
-[ ... ]
-
-> +static int kallsyms_find_name_other(unsigned int sec, unsigned int *idx,
-> +				    const struct kallsyms_name_query *q,
-> +				    struct kallsyms_sym_match *m)
+> @@ -34,6 +34,21 @@
+>
+>  #include "kallsyms_internal.h"
+>
+> +/*
+> + * Get the compressed symbol length and data pointer.
+> + */
+> +static inline const u8 *get_symbol_data(unsigned int off, unsigned int *=
+len)
 > +{
+> +       const u8 *p =3D &kallsyms_names[off];
+> +       unsigned int l =3D *p++;
+> +
+> +       if (unlikely(l & 0x80))
+> +               l =3D (l & 0x7F) | (*p++ << 7);
+> +       *len =3D l;
+> +
+> +       return p;
+> +}
+> +
+>  /*
+>   * Expand a compressed symbol data into the resulting uncompressed strin=
+g,
+>   * if uncompressed string is too long (>=3D maxlen), it will be truncate=
+d,
+> @@ -42,28 +57,12 @@
+>  static unsigned int kallsyms_expand_symbol(unsigned int off,
+>                                            char *result, size_t maxlen)
+>  {
+> -       int len, skipped_first =3D 0;
+> +       int skipped_first =3D 0;
+>         const char *tptr;
+> -       const u8 *data;
+> +       unsigned int len;
+> +       const u8 *data =3D get_symbol_data(off, &len);
+>
+> -       /* Get the compressed symbol length from the first symbol byte. *=
+/
+> -       data =3D &kallsyms_names[off];
+> -       len =3D *data;
+> -       data++;
+> -       off++;
+> -
+> -       /* If MSB is 1, it is a "big" symbol, so needs an additional byte=
+. */
+> -       if ((len & 0x80) !=3D 0) {
+> -               len =3D (len & 0x7F) | (*data << 7);
+> -               data++;
+> -               off++;
+> -       }
+> -
+> -       /*
+> -        * Update the offset to return the offset for the next symbol on
+> -        * the compressed stream.
+> -        */
+> -       off +=3D len;
+> +       off =3D (data - kallsyms_names) + len;
+>
+>         /*
+>          * For every byte on the compressed symbol data, copy the table
+> @@ -101,14 +100,43 @@ static unsigned int kallsyms_expand_symbol(unsigned=
+ int off,
+>   */
+>  static char kallsyms_get_symbol_type(unsigned int off)
+>  {
+> -       /*
+> -        * Get just the first code, look it up in the token table,
+> -        * and return the first char from this token. If MSB of length
+> -        * is 1, it is a "big" symbol, so needs an additional byte.
+> -        */
+> -       if (kallsyms_names[off] & 0x80)
+> -               off++;
+> -       return kallsyms_token_table[kallsyms_token_index[kallsyms_names[o=
+ff + 1]]];
+> +       unsigned int len;
+> +       const u8 *data =3D get_symbol_data(off, &len);
+> +
+> +       return kallsyms_token_table[kallsyms_token_index[*data]];
+> +}
+> +
+> +/*
+> + * Compare an uncompressed ASCII string against a compressed symbol tabl=
+e entry.
+> + * Returns negative if name < sym, positive if name > sym, 0 if equal.
+> + * Exits immediately on the first mismatched character without decompres=
+sing
+> + * the rest of the symbol name.
+> + */
+> +static int kallsyms_strcmp_symbol(unsigned int off, const char *name)
+> +{
+> +       const char *tptr;
+> +       unsigned int len;
+> +       const u8 *data =3D get_symbol_data(off, &len);
+> +
+> +       tptr =3D &kallsyms_token_table[kallsyms_token_index[*data++]] + 1=
+;
+> +       while (*tptr) {
+> +               int diff =3D (unsigned char)*name++ - (unsigned char)*tpt=
+r++;
+> +
+> +               if (diff)
+> +                       return diff;
+> +       }
+> +
+> +       while (--len) {
+> +               tptr =3D &kallsyms_token_table[kallsyms_token_index[*data=
+++]];
+> +               do {
+> +                       int diff =3D (unsigned char)*name++ - (unsigned c=
+har)*tptr++;
+> +
+> +                       if (diff)
+> +                               return diff;
+> +               } while (*tptr);
+> +       }
+> +
+> +       return (unsigned char)*name;
+>  }
+>
+>
+> @@ -174,7 +202,6 @@ static int kallsyms_lookup_names(const char *name,
+>         int ret;
+>         int low, mid, high;
+>         unsigned int seq, off;
+> -       char namebuf[KSYM_NAME_LEN];
+>
+>         low =3D 0;
+>         high =3D kallsyms_num_syms - 1;
+> @@ -183,8 +210,7 @@ static int kallsyms_lookup_names(const char *name,
+>                 mid =3D low + (high - low) / 2;
+>                 seq =3D get_symbol_seq(mid);
+>                 off =3D get_symbol_offset(seq);
+> -               kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf))=
+;
+> -               ret =3D strcmp(name, namebuf);
+> +               ret =3D kallsyms_strcmp_symbol(off, name);
+>                 if (ret > 0)
+>                         low =3D mid + 1;
+>                 else if (ret < 0)
+> @@ -200,8 +226,7 @@ static int kallsyms_lookup_names(const char *name,
+>         while (low) {
+>                 seq =3D get_symbol_seq(low - 1);
+>                 off =3D get_symbol_offset(seq);
+> -               kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf))=
+;
+> -               if (strcmp(name, namebuf))
+> +               if (kallsyms_strcmp_symbol(off, name) !=3D 0)
+>                         break;
+>                 low--;
+>         }
+> @@ -212,8 +237,7 @@ static int kallsyms_lookup_names(const char *name,
+>                 while (high < kallsyms_num_syms - 1) {
+>                         seq =3D get_symbol_seq(high + 1);
+>                         off =3D get_symbol_offset(seq);
+> -                       kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(n=
+amebuf));
+> -                       if (strcmp(name, namebuf))
+> +                       if (kallsyms_strcmp_symbol(off, name) !=3D 0)
+>                                 break;
+>                         high++;
+>                 }
+> --
+> 2.39.5
+>
 
-[ ... ]
-
-> +	do {
-> +		if (sec == KSYM_SEC_BPF)
-> +			err = bpf_get_kallsym(*idx, &m->addr, &type, m->name);
-> +		else if (sec == KSYM_SEC_KPROBE)
-> +			err = kprobe_get_kallsym(*idx, &m->addr, &type, m->name);
-> +		else
-> +			err = ftrace_mod_get_kallsym(*idx, &m->addr, &type,
-> +						     m->name, m->modname,
-> +						     &exported);
-> +		if (!err && !strncmp(m->name, q->name, q->cmp_len))
-> +			return 0;
-> +		(*idx)++;
-> +	} while (!err);
-
-Is this loop quadratic in the number of BPF ksyms, with no reschedule point?
-
-bpf_get_kallsym() restarts from the list head on every call and walks
-forward to the index:
-
-    list_for_each_entry_rcu(ksym, &bpf_kallsyms, lnode) {
-        if (it++ != symnum)
-            continue;
-
-So one ioctl that scans the BPF section without a match does n(n+1)/2 list
-steps inside a single syscall.  Every exhaustive query gets there, since
-even a query whose matches are all in vmlinux or modules still scans the
-ftrace, BPF and kprobe sections on the call that returns -ENOENT.
-
-The uapi comment tells users to keep calling with pos + 1 until -ENOENT,
-and the libbpf user later in this series (822e9da9a9b7 "libbpf: Resolve
-typeless ksyms via KALLSYMS_QUERY_BY_NAME ioctl") does this twice per
-typeless extern, once for the exact name and once for the "<name>.llvm."
-prefix.
-
-With read() of /proc/kallsyms the same getter cost is spread across
-syscalls, because seq_read fills at most one seq_file buffer per call.  Here
-all of it lands in each call that reaches the BPF section.  On hosts with
-thousands of BPF programs and trampolines, does this cancel the speedup the
-commit message describes?
-
-On kernels without ARCH_HAS_PREEMPT_LAZY, or with ARCH_NO_PREEMPT, it is
-also a long run with no reschedule, whereas kallsyms_on_each_symbol() and
-kallsyms_on_each_match_symbol() in this file call cond_resched().
-
-Would a helper that walks bpf_kallsyms once from a start index be better,
-or at least a cond_resched() in this loop?  ftrace_mod_get_kallsym() has the
-same restart-from-the-beginning pattern, although its lists are usually
-small.
-
-[ ... ]
-
-> +	if (karg.module_filter) {
-> +		len = kallsyms_copy_str_from_user(bufs->module_filter,
-> +						  sizeof(bufs->module_filter),
-> +						  karg.module_filter);
-> +		if (len < 0)
-> +			return len;
-> +		if (!strcmp(bufs->module_filter, "vmlinux")) {
-> +			end_sec = KSYM_SEC_VMLINUX + 1;
-> +		} else {
-> +			first_sec = KSYM_SEC_MODULE;
-> +			end_sec = KSYM_SEC_MODULE + 1;
-> +			q.modname = bufs->module_filter;
-> +		}
-
-Can module_filter return -ENOENT for a symbol that the unfiltered query
-finds in the same module?
-
-When a module name is given, only KSYM_SEC_MODULE is searched.  But
-/proc/kallsyms also lists entries for a loaded module from the ftrace
-section.  ftrace_free_mem(), called from do_init_module() for the module's
-init text, runs allocate_ftrace_mod_map() when any ftrace_ops is registered,
-and ftrace_mod_get_kallsym() returns those entries with
-strscpy(module_name, mod_map->mod->name, ...).  They appear as, for example:
-
-    ffffffffc0a01000 T foo_init [foo]
-
-and remain until the module is unloaded, because ftrace_release_mod() frees
-the map then.  After init, mod->kallsyms has switched to core_kallsyms, so
-these init symbols are no longer in the module section.  That gives:
-
-    BY_NAME("foo_init", module_filter = NULL)  -> match, sym_module = "foo"
-    BY_NAME("foo_init", module_filter = "foo") -> -ENOENT
-
-The uapi comment says the ioctl finds a symbol "in the entries of
-/proc/kallsyms", so the filtered result does not look like the unfiltered
-result limited to [foo].  kallsyms_find_name_other() does not check
-q->modname for the ftrace section, so extending end_sec alone would not be
-enough.
-
-Should the filtered case also search KSYM_SEC_FTRACE and skip entries whose
-m->modname differs from q->modname, or should the uapi comment document that
-module_filter only covers the module's own symbol table?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43520044354
---===============8280819268335858825==--
+Reviewed-by: Samuel Wu <wusamuel@google.com>
