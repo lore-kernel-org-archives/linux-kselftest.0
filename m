@@ -1,91 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794559054;
-	b=0O2Pm1MMeBY5UmnU46Ex0BJsMcvdgtoat1D3Kwr/3GQvS2VhF9Qsvd4EJp6GbfeGAzMo
-	 +Vs+FZ3UfSHK+O3WOPUHvk4twiyMEtR2R5FIejnRr3sOa6mH8X0vfwFnyGWgPdLskSX/v
-	 yEadxAnMyHSb1Eej7+Y5RYP8Axn8TxfB2WfLLtpaaCE2pZMq0pQHNdylBR/ZmJGAOo/Sl
-	 MCr0K0aQzbWrexWT6ohXX4ZeG5CBdeE4VqiF52Wd5eZNkRvP4yAIcS6Gf67Ct2OmQLwEk
-	 mAk1xDhOyzGLNRxbqjRa52DQu+aJN//b/QsVuVwjLG3GZ8lUxhuiweiR5B5IXmsPawA==
+	t=1794560340;
+	b=iCrD/QigXLywApmK7RBn2YYsxTsvkpy9DoU1mprLGGz30vmefDgm2b5h8E1OgNiHprLr
+	 o6Gg63yTrIQ578xlC0xkwg7AVZ60/Nv7815rglXK2BetcXOxsBNZOMbuF0UjTtF+LXuwl
+	 SUVMSl9eIzb9PaYc0VmkP7fA6+AMaTFa/5J8GdVzacbSwbbrL0G5cOD68TdAzcL1IBUjM
+	 Lh6X8quPrnVvHAQltLJaSJ0/6EP8my9XaPC/i6p6MJoFdVpSA7zOzW33muN+OXa9xZ++p
+	 5/Je0eWcklUMUPsUJ7YHv1cXe4v5WvUttHqvQ1yNoZCKpH4ieh50mDWHJLDLTV73HRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794559054;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Message-ID:User-Agent;
-	bh=yst+eH4qPHKZ+Mz1qLQUp8ASMlTj1NxEgEqc21eSWaw=;
-	b=Mmu0GqgDd4U3WiW5QrjbvA2+h72HJsJTdj3X9LGL56M8dPtyvRCCdMPNV+iEJSsK79Q1
-	 nfq3TidVSdlSjWQF+Ss7WAd6lmRVxUPTlpbNx4YubcPS1ztca9iOX54ZNFtkuSK1Nn1wG
-	 ogisMgCIJDsfqCP8BUF4TjEH3yKCqXEvjf2l6W67PXoGuqjm2g9EsAWp+vqeiE0UnGxw9
-	 vIvFXR0OrzVyiGvKbOJZ58WRH4zRwoDbQ8PZZrEGvyEuLch0Ad0mRkifRncXS5txTQcO7
-	 VG1GYNZ5Ngo3bltieyf44fALYrK3IWXqqVnk7MLVZR4HQSNXjDmVk2MYxGTrDhUyZ8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794560340;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:Content-Language:To:Cc:References:From:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=YF7NHY1fVlGveMHNsJnnjtGJ3+1XgRTTULcBOP2fUbI=;
+	b=AZG+DMFY+Vd5lLKHGrn0vLm/yQsiMbArfrUXNvfSlagp8lMkMlNA1hgwPGEdBDXRQE0t
+	 WexZSyYygIdiRVaWIhOn6aknCvarg/b9r/UJWa8GLLAW4CjacqmM6Ak0nLKne8+t2G8sd
+	 0Jy/63zYCRNGUqQaq1+9UryPI/8g6o2LWoHGihr4gi/OK+yf7PV/dCLcSy37hmJthzYWt
+	 XIV+J29ixkrW85TCVZhW//ubcoInt1XHh6q9ZxbYXazjpvwxLt1yMijEd0QWfN4Ra4ozl
+	 yY0MAem6CCKa2SvElzLr4EJnE402UrTLGuDwEkYHjfmUfZC65s+nsumb7hAk8CUbnxQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=mLALE3hD;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B+Sj1rnL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3421C60A5BDC
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 08:37:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3421C60A5BDC
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0597E606A321;
+	Fri, 13 Nov 2026 08:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=mLALE3hD
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e9ae391a05so3618945ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 00:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794559053; x=1795163853; darn=vger.kernel.org;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yst+eH4qPHKZ+Mz1qLQUp8ASMlTj1NxEgEqc21eSWaw=;
-        b=mLALE3hD0yOFh5RAN/jg1xLgT0bpSd2jsokmAxPWJwdtWtNzJUJKHU8ZSCDP+t0Son
-         fWbCv113pOpx4EpYvH0tfNYXl0bSPzFTvxf4T+Cwn2jFeJ0Q6iQAPTRusHye8tA95AIw
-         V3dDJFkUeKTBVoT9GYH9LXXDXMfZ+c6qqfyrA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794559053; x=1795163853;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yst+eH4qPHKZ+Mz1qLQUp8ASMlTj1NxEgEqc21eSWaw=;
-        b=dA/g9tuuRMNnPNhXdcZvsG1uGqUpkqDWXiTfRSP+N0jrRwUaQDAJQPlWi4JQd4M9XR
-         EwZd6dKo7ZM9jJES76o8fx2T5vsOf/U0VIrlftTb7CrSVU3CL56uUz3CbQJoA8yMxt/4
-         65/rNGJRm0eOi0YXKklxq6bbpTt5LMmZu7eaZroXhhCjZRO3bKlqETxX/U3HvFwL/6Jh
-         /MAeWSv4tM3sUvIvO/nMa6UbBdNYS3ibgSr7QDgO9dfEEk5sNxm4ZUZmYn4DXDF8ybKx
-         y9LX2QAVHbC60hEVmhOoMYhJC+vIzhX4L7HAd6/wjrrVjDwOAOh8X8ygkUmLn4nH8NxX
-         XeGQ==
-X-Forwarded-Encrypted: i=1; AL+hErGusnBnwVmQZKT30fnnWV5tQQwjHM1a+iA3z8RMOXvttJ1ZUBphyit3Vw/ia0g1CyjH9Qfu5agaKn0otWL5QjI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+X5EYI/VNNH7i5qXuYNxAW9GzUxxZa640AW3UE5UYVo5YeKPtl
-	7M89idnakGsDrqRMcVjZifu1Sa0rG0BW8vAVi98eFxOYdnB/1olYPgS8MJVHG+Oemzk=
-X-Gm-Gg: AYBFou03ZHWr4AKsbf6wP5A6xgPPlgTq5ck9h0TKbkV3CmgXqpkGo5K9T42HsURAOgA
-	v319gtGSzHoCz0ID1flT53hYI/lIufkhYuKVPsulfPgyZAX8bVHp8lLQ53uIhjqgU+4nfXPWTxa
-	BiRM4BNCmB3Ttpk0IgTmDCUIJxrkZ0+q9HWNWYlA0XPBH9JEvOX4H6rdV3WI1bgDtMBcNDaiDo+
-	y+1bxjQ3aip15y3Pr8dBY5ElfdaY6Sw26YEzi4CYC7uxrrnpRqkSpctor3vOkl2tzFRmVqIQttl
-	uRZkbKR7CZd/ukbXyeHD5ueboQcmHtSWAP9XIJtVumc0Xp66IXlMtZLfBwapxUepri4L2RymqsV
-	k/pA2ZUX69mHFCXr0duyMq+QeknjuhHo0OyYoz8+wbin4MRpwl++/8/1oY7OMvvVtGu2b2cPAKa
-	VpG7p2U9XoTFZLz0Dfg4bhP5uBrX2vnEWeDLSmFbQ7DhRY9/ZeHscbWcMHFmn3HVAahOPl0k08L
-	wakBsDec+6lCfe0iC3CHuF//gviFR1/LgTMZsitplwCJ3Sk3qx3C4X2VZtCsJOCfk+gYZMki/zB
-	dJ43ZRhfUkIGhupLi0lubu6ZYN79eepOtPc42hv/fv3JRF77EV1GerD4IwdxKPybNiYqZQNuIWs
-	uZMkrfu6jcd9JIo5XjXlcVsFx0DFHGO1/UqNnaIBnjvQsTsCgkCNe8CMLjfIUwu4l2GiGujNlTM
-	wO9gqttpHTDuZyM9KRihmVmgMSzRconbnN0Kw9JJXt/KUNZPXUHibOxzcXKr1gqp4BQ0yUZONdV
-	Z6vB2SB
-X-Received: by 2002:a17:903:3c6e:b0:2e9:8202:508a with SMTP id d9443c01a7336-2edf1ed6cdemr37400075ad.16.1794559053599;
-        Fri, 13 Nov 2026 00:37:33 -0800 (PST)
-Received: from [172.22.0.2] ([50.175.87.158])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f75ebbcsm6475845ad.26.2026.11.13.00.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 00:37:32 -0800 (PST)
-Date: Fri, 13 Nov 2026 00:37:31 -0800
-From: Chris Down <chris@chrisdown.name>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Kees Cook <kees@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 2/3] sched/core: Add sched_stack_end_check= boot parameter
-In-Reply-To: <099dc59b-0699-4c2d-875e-289cf6d32cce@infradead.org>
-References: <cover.1793082868.git.chris@chrisdown.name> <3d2bb6a8508b9d801878bb82c88165a1b1ff5f40.1793082868.git.chris@chrisdown.name> <099dc59b-0699-4c2d-875e-289cf6d32cce@infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B+Sj1rnL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA721F000C4;
+	Fri, 13 Nov 2026 08:58:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794560339;
+	bh=YF7NHY1fVlGveMHNsJnnjtGJ3+1XgRTTULcBOP2fUbI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=B+Sj1rnLIABT2rcMAHDb8ZnEfd0jTex4c1qrfj0CSRk0gqZnxgNlbeKj4GqmwtC9I
+	 o8Xe/mfzfwZupSsAirIa5j4T99BWCeooiaGkcPxrha+PA2hMxNFQo1B5qgiclciRvJ
+	 H/0QS47NbbvNelQKUZaLYxLikkesF1eucTGQ3XHglrVcE3sGxrTRW1h3QpwV9v3R4O
+	 YauwalFMafdrHEV4zgip1oDQUDuo7PK7wcQaXMuie0pD5uDbIAM5svIaPto7fRy0mo
+	 a6tlA/n7GVSd3t8dEWO4ZLrpdgPAAEY7SBncyX5yBNeewHKMKVczi4UYxnM0JXkXp/
+	 ptXy6a57Iw/5w==
+Message-ID: <01b19c1e-b87d-4996-acaa-cd5103f30edb@kernel.org>
+Date: Fri, 13 Nov 2026 09:58:55 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -95,22 +51,177 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Message-ID: <20261113003731.5754ed6732d351dc@chrisdown.name>
-User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/madvise: disallow guard region installation in
+ uffd-armed VMAs
+Content-Language: en-US
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, David Hildenbrand
+ <david@kernel.org>, Jann Horn <jannh@google.com>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Tal Zussman <tz2294@columbia.edu>,
+ stable@vger.kernel.org
+References: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Randy,
+On 11/12/26 18:38, Lorenzo Stoakes (ARM) wrote:
+> In order to establish guard regions, guard markers are installed in the
+> page tables of a mapped VMA.
+> 
+> However, problems arise when one tries to combine this with registering a
+> VMA for userfaultfd, as such operations may themselves need to install page
+> table markers such as uffd-wp.
+> 
+> When this installation is attempted the guard marker prevents these markers
+> being applied, which can lead to unexpected results (especially if the
+> guard regions are later removed.)
+> 
+> This is especially problematic because guard region installation causes the
+> regions to be zapped first, meaning that the removal of userfaultfd-tracked
+> ranges will not be logged in this case.
+> 
+> Therefore, disallow this.
+> 
+> This makes sense as conceptually, guard regions mark a part of a VMA as
+> effectively unmapped at the page table level, and removing the markers is
+> like mapping the VMA again, over which operation uffd markers would in any
+> case be lost.
+> 
+> Only check for this on installation, as a VMA can be registered for
+> userfaultfd after guard regions are established.
+> 
+> In this case, the guard regions cannot have new markers installed, and no
+> faults can occur in the guard regions, until they are removed, at which
+> point everything should function normally.
 
-Randy Dunlap writes:
->This error branch should return 1 since it handled the command
->line parameter -- it just didn't like the "value."
->
->Returning 0 causes the option string to be added to init's
->environment, which is not wanted in this case.
+So IIUC this means the other order of operations (first guard regions, then
+uffd) already prevents the two co-existing. Makes sense to prevent the same
+in the order of uffd and then guard regions then.
 
-Good catch. I've fixed that for v2.
+> A survey of open source users indicates nobody is relying on installing
+> guard regions in uffd-armed VMAs. Software including glibc, android,
+> tcmalloc and CRIU were checked.
+> 
+> Fix the selftest to reflect the change.
+> 
+> Fixes: 662df3e5c376 ("mm: madvise: implement lightweight guard page mechanism")
+> Reported-by: Tal Zussman <tz2294@columbia.edu>
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-9-00713d368976@columbia.edu/
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-10-00713d368976@columbia.edu/
+> Closes: https://lore.kernel.org/all/20261111-uffd-state-fixes-v1-11-00713d368976@columbia.edu/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Thanks!
+Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 
-Chris
+> ---
+>  mm/madvise.c                               |  4 ++++
+>  tools/testing/selftests/mm/guard-regions.c | 12 ++++++++----
+>  2 files changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 0214efd2a014..268731e90f12 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1156,6 +1156,10 @@ static long madvise_guard_install(struct madvise_behavior *madv_behavior)
+>  	if (!is_valid_guard_vma(vma, /* allow_locked = */false))
+>  		return -EINVAL;
+>  
+> +	/* Guard markers are incompatible with UFFD markers. */
+> +	if (userfaultfd_armed(vma))
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * Set atomically under read lock. All pertinent readers will need to
+>  	 * acquire an mmap/VMA write lock to read it. All remaining readers may
+> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> index 02f69244f9a4..97da54dcf3a4 100644
+> --- a/tools/testing/selftests/mm/guard-regions.c
+> +++ b/tools/testing/selftests/mm/guard-regions.c
+> @@ -1476,7 +1476,7 @@ TEST_F(guard_regions, cold_pageout)
+>  	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+>  }
+>  
+> -/* Ensure that guard pages do not break userfaultd. */
+> +/* Ensure that guard regions cannot be installed in uffd-armed VMAs. */
+>  TEST_F(guard_regions, uffd)
+>  {
+>  	const unsigned long page_size = self->page_size;
+> @@ -1526,10 +1526,15 @@ TEST_F(guard_regions, uffd)
+>  	reg.mode = UFFDIO_REGISTER_MODE_MISSING;
+>  	ASSERT_EQ(ioctl(uffd, UFFDIO_REGISTER, &reg), 0);
+>  
+> -	/* Guard the range. This should not trigger the uffd. */
+> +	/* Now try to guard, should fail with EINVAL. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), -1);
+> +	ASSERT_EQ(errno, EINVAL);
+> +
+> +	/* Once unregistered, we should be able to guard the range. */
+> +	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
+>  	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
+>  
+> -	/* The guarding should behave as usual with no uffd intervention. */
+> +	/* The guarding should behave as usual. */
+>  	for (i = 0; i < 10; i++) {
+>  		char *curr = &ptr[i * page_size];
+>  
+> @@ -1537,7 +1542,6 @@ TEST_F(guard_regions, uffd)
+>  	}
+>  
+>  	/* Cleanup. */
+> -	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
+>  	close(uffd);
+>  	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+>  }
+> 
+> ---
+> base-commit: 4318887a3efa4c53d6f083ccfd7105b809a3ac65
+> change-id: 20261112-disallow-uffd-guard-install-a5294129ad7b
+> 
+> Cheers,
+
