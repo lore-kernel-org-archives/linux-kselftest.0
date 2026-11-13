@@ -1,60 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794597732;
-	b=HkKB78wG7LvKoboR1Q6uwW9a3+V3/3PqtmsrRWckFSDFnYf4XBggsLuRJrKs0JIHqd9q
-	 Ey48oV9frA0KJcartBID57JHFisDeBRDYdNyhPg9zxw3cchkAZpnLKiElNXAZHHRyaBw+
-	 qTaZhCRiH1p+azzsmJk+cPi6Jr8lYunl+RBSNgj074moqkKuiWi6QoLixXwauz1cmD4iQ
-	 0OzTCjUvRFDb2nlZhhbtXSUxZNpEaG36vOVwb/CLgQHBMgG12ZoqoU7WK6TCsW7XuBFdk
-	 3tupPtMQBmp+2fSSN0EZtzY0jsd1tWp2m4mooTA+qMdljqUXa8cd2wVhdlgAuQ2eAwg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794597732;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Fdl4VOJT6zViP7jtfnU1Xg3aoOGQL41O0hxbPwDlR+A=;
-	b=nIyV2fQezND2RRdbuMaUvbtTZiCj+TlgBR/g877ffslgzdabz5gIbn3Z8J8GBTJ1j8z5
-	 Vb8zAzi2cWHYYBdMqdDAVzUkcKo8+ah2Lel83/gCMjDffRxyBKUzWU0i7QKThpC25lwR2
-	 AlIVCd5Avi8TWBJxRW0uwv/yPXbpA10YmMNhKJavaGllyxq0zsF4dMcm2nbehHF5G2sEL
-	 SRCMHDiRb1rchL13uzr9HwaS/WE3PcyCikjsxzxAFQkh87KlzToxfOJxPh5AAzGq0L9DX
-	 vPWcSfBOBmH8qS47EULGndAK9iWV6B76Doa1RPDQl73DYPG5e5ImeFTjsMFjKibolLg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NX6l4vlx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.192.88
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794598272;
+	b=EJV8PMpc+yao6RfU+DSOU2zZqqiiFjav4tnPx/eP9dUqLboBOppaMcrLq0eSTmnWTy+p
+	 pi6ej6inMFdNboRms/MnG9xkbBAZ8+5X9gq8AkSk/ludP77W/T9qzMPABUM49VLoj5Rf6
+	 LbG/+RJam/7uP+WZFW4velpnm6/a3dIanRxaFsOEDeTDXHu5C2yYNryzZGBQflSFK71h7
+	 KJh93oskpADKb6dnnMUUwowB1yKuuldK3YLrS94+MMn8pdc4Q9MUvNWt8w7kl66TukXwW
+	 bh9Q7glNkCkuJ4n3R6RRC/hfsJdoQc6v9u3V/qUPVtd8FurHz/sGDlRnZq5Vz07jZzA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794598272;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=weH0WDpdTgV93efTtz/KJr0XwSp6tp8FsOFCuTWC2Ew=;
+	b=5pZHogrcDsoPNE8lP0H3oMgqR50OjSxU0rqmC7gNluDtBrGLCbsB4ivbWm9QkduRjljN
+	 k+wBVzd4Savr46Pnfc70aAbGBNJTdI8fybwvANmBKmdZHOgznIm85PybUoSVnFdfiLT3I
+	 GYHDp5AA9Vt6mVIPEbyf6z/JVn1xlBIxDDK5mNenJXEJLWvZcd+Q1Aw8GKIDh4kHeFaqD
+	 a/njln9DbaQD1kr9CuoXCQmyNWyFXypXpvzN1t8OJVThbVxwf4iQjD5u7kqtXidxo95jo
+	 uEobkBGrYmkceU/EVihwvZXba7wetOJHN8hfqKGYDIR2gEncUF4lnWwH3/JsOQ3IDPA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=efficios.com;
+	spf=pass smtp.mailfrom=efficios.com;
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=FlCqaSPX;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.192.88
+Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021088.outbound.protection.outlook.com [40.107.192.88])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AF3606A890;
-	Fri, 13 Nov 2026 19:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216AC606A884;
+	Fri, 13 Nov 2026 19:31:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 216AC606A884
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NX6l4vlx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10861F000C8;
-	Fri, 13 Nov 2026 19:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794597732;
-	bh=Fdl4VOJT6zViP7jtfnU1Xg3aoOGQL41O0hxbPwDlR+A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=NX6l4vlxAsFOjaj+ZundCIjebkwjdIPIUBB6r6xto4qN1LhAmxdOJZlzrDEKEFlHX
-	 HE+RzVuSSPFuI5p/wzPEd1EWoL48luhiQrH5Fuylbug07Ef3zaiXlkH2raN+byKwcx
-	 ETtjAefB4pa1W94nXtaIlrAAzMDf7b2jtwqGkoqUv3j2kS3nzrIYUPM0FCJ6ZQ/TUH
-	 Pg9l/Ahp2pnUhstVIekqNTSYv5F0iZAVv+3d7lVWPZopB2q+jIlDKPVOg625y+x55w
-	 2HbExloMEtf2bl5fPgILQoRc23yrhUKrH3yaVEEApNzX0fSs170YpwQdkw5kr35VOZ
-	 TavaBPQLZKR1g==
-Date: Fri, 13 Nov 2026 19:22:06 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Tal Zussman <tz2294@columbia.edu>, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/madvise: disallow guard region installation in
- uffd-armed VMAs
-Message-ID: <avdjMNNkOXm2khTW@gremlin>
-References: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
- <0e3e876e-c3df-4660-ad89-a5f0fd7dedc8@kernel.org>
- <avcNcL6svEOTg_3r@gremlin>
- <0d6e29f8-54fc-427a-a979-1a8c6f4e3f06@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=FlCqaSPX
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=S0DfjkOtutse8OsrQzVLgQCwnNYBj4A1HQYE+gkFr2hfRzU12QxY/1uoQwm8IiqPINmlYM/5/+l9pGvQYbQaFuJ+udCnpb1jjvVCzFBUmttAFJLMh7KQCUat2o9Yk4boKPrZh6MsJAn2PIH1ygaIy6xgPwSZmqoC1MfhC2IJAJQGeLb3Tj/59Xy819HzNH5aLZ++Fh8FENPDEDUDz8g3iTjAW1gLDtO5UOvMF9Ucpsd4mVWCbtvhsDrBfSZxP26DA2r8uCUx/9L4CMbkTF6prRm7LNGraVJmV5rhDjMnCHyiIUPHIHdhTOtNKNJ85uwUgSkDbh+xcWr12dKmD660bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=weH0WDpdTgV93efTtz/KJr0XwSp6tp8FsOFCuTWC2Ew=;
+ b=knaINz2h9yMl60s8SB+E2U+B+s/uZOVl2Nsd7xfpuYEqPtQZZhkqrRdcjnCSLwBkvEp3Cph8J7KUXoVF227kA9HQynmOdZQHTF+x3GSklknZeOm2NI5rCwqNHqDTPoPROO6SbOqOcbFkXw915mgAMg71tIPOXNR+vWoFcp2E6V7OlcEQEabld3iok1zOHRyDK3VE5S8eZujN4/veDgQw+MSnXJGKY4a79vh3CFj7l/c9rqmYshDyB3Em2c0y0TiliJgmEMLiYWDSbuR3+G6Jrqi4ULHMtWP0CkIK57p8VXPnKzjktBiEMzSlkttyflgYi82eRNW97SthVlHYgVs+fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=weH0WDpdTgV93efTtz/KJr0XwSp6tp8FsOFCuTWC2Ew=;
+ b=FlCqaSPXS43hjV79vClePf4OqK5gNgiQQr4tqvAubr7AsNFannaexr+Og5MFSlyIYOhhTD86QvcS1WAHxBzs+ihkgkk+JX3BzQTScGNQ105KC3sqJPw4ccjQlKPOrITMw41uK1zWZ5LqJqGZdTM/YGnk1ZdcrLAyp6dykvL7PcEC05fZN1lCjKz7Ef+d2TGKiVmEW/sp5WuKEeSZShrx8Aq2VPTlzZz70S4WiR+Fy8x3mZUnyC8ZPvoQoV48jzddfdG3mMrUGYXsiLtNRyOIdmiE/WCKzUd/gDBatyABWP5JE0i2QxqOr7UGS3c/l8OpRcJLOGbmWUaf8Qv7VXnaJw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YT3PR01MB286964.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:198::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Fri, 13 Nov
+ 2026 19:31:08 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.008; Fri, 13 Nov 2026
+ 19:31:08 +0000
+Message-ID: <0fe54be2-0231-4039-9a5b-a98ea3bfbaed@efficios.com>
+Date: Fri, 13 Nov 2026 14:31:06 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 18/29] sched/deadline: Move a task's bandwidth only
+ where room was made
+To: Waiman Long <longman@redhat.com>
+Cc: juri.lelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
+ vincent.guittot@linaro.org, linux-kernel@vger.kernel.org, tglx@kernel.org,
+ will@kernel.org, boqun@kernel.org, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+ vschneid@redhat.com, kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+ mathieu.poirier@linaro.org, ridong.chen@linux.dev, tj@kernel.org,
+ hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
+ m.szyprowski@samsung.com, kayracizmeci@gmail.com, weihengqiuu@gmail.com,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-19-mathieu.desnoyers@efficios.com>
+ <bcb60245-abfb-4e3a-aa4e-f134ed310381@redhat.com>
+ <20261113135110.160083-1-mathieu.desnoyers@efficios.com>
+ <638e3138-1dfe-42a0-97bf-2acb32970fa3@redhat.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <638e3138-1dfe-42a0-97bf-2acb32970fa3@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0123.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2c::32) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,137 +111,168 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d6e29f8-54fc-427a-a979-1a8c6f4e3f06@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT3PR01MB286964:EE_
+X-MS-Office365-Filtering-Correlation-Id: 948c6251-62e6-4467-96e2-08df41bcaa84
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|7416014|1800799024|366016|18002099003|261009223027099003|22082099003|3023799007|4143699003|56012099006|10067099003|261102123227099003|261026140227099003|261026121527099003|261028144727099003|261022105027099003|261022075727099003|261021121427099003;
+X-Microsoft-Antispam-Message-Info:
+	40hqlBO9uvt7lUw6gCmY55ecwQUGzrlPoKQLUHC/D6wkYFbxUyPlLoHP6C2k1kK3A+qX+50TMXANSuqqQ5xy2xBRoauT2jUL65ThW4HI5HKgjRBlW9paUsnRpzpl9g0XKKC2msI11FnIgmxwQUmnLUiMQMuSbASd8oBq4r/oIxHV/l7PZnXifykxsfXpZRd+47X+WkI947eGAK70kiAf8rf/rWLrhKf/0Z4rHRjQAU9gMMDN2sXoxCW1yiTawty1t8wxJCYkR0rnHASxR+f7p/s1Jl8W/RY6UbuGugmpRe7AdFlJbN4nLmYtaYzYDdsxN1kscEXHGU0ZQ+MQrhGAlQ6PYLaVABZubGrE47fYU6y5hVS+RqErLOW90wHvujv5gHViLsbywOmRmhBmGW7gfcADo96wvZu/7jz69w7AtaiSel9ShIPY03yQ5GFvyTJmesFo1qb08VSw4hErMut45PFefvthIOiw7C1zxBReKvnsONZrBNLiC2oCILMOFKO+7C1zkHjPl85SdhcaU0pOc0VoPqicicVmwaNmjAebBbHwewnp5Fu0VjzrjNlFyyUWG7N5KaqHqckyMqpdkPGKMY4dPImTu9v1LdMORot0rk4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(1800799024)(366016)(18002099003)(261009223027099003)(22082099003)(3023799007)(4143699003)(56012099006)(10067099003)(261102123227099003)(261026140227099003)(261026121527099003)(261028144727099003)(261022105027099003)(261022075727099003)(261021121427099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?a3czeUMzQzhLMGVPNFowOEQwREhIc21NbUVuM2sxL3l6Qzc1SVRnZWFsVnZn?=
+ =?utf-8?B?WSt5RGZSRDJ5bGgyQWxpdFVEWFBCVTdiRmRZT2NjWUpWYlZqeDJRTXgvMFlL?=
+ =?utf-8?B?VlZsaDRPdXpRNzdteG9xWWVuckU4bFpIZHN1OTZKU3NLd2pxTnNEeUpjWkUv?=
+ =?utf-8?B?UG0rQVAwOEV0cVdIcGpPVHBFUWdpbjA4RUZiVjluSzJQMXZJMjNSVDR6cVo2?=
+ =?utf-8?B?eGFrWFhKc1BDYlgwL3J2aEdOWmpQRFFWT3h3OFlDcGEzMWNoUHpBTWlwRXFD?=
+ =?utf-8?B?aGpBRU9aZWRFR1VqcnBKRkhSQWM5QTB4VWkrS05kN2REMmdIQWpkc2dhc1Rr?=
+ =?utf-8?B?YkpHNUxUclpkRXlsLzRxSlgvTnFpWlFBRWhScHZ2MHFhRzZPOWNOdmRRSkFw?=
+ =?utf-8?B?MVdJRTZqMjkzUVpFb3RzWC9uTWQvVmVvNWl6RzRHaUZ6aGJYS2wvdW1DUGor?=
+ =?utf-8?B?aHEzTmltY2IwNUlPRkNQKzJHa0U0akNqd1c3bmo1T29oOE92QTBYSmlkY1BB?=
+ =?utf-8?B?SkxWRTYvYVZlWDBsYXhYS1phUjVUTW8xemxEK0x1dXJSSmZzRlhWbXRXUEY4?=
+ =?utf-8?B?a3hSZFJoMkFIbWI2WXNPTVN3RTRGSENVU0NrQm1jMXFUejdzQnUrMTRtc0Nm?=
+ =?utf-8?B?YlBzK2EydkNMeWdPUzlkd0wwaFpGT3ROT1AzSDMyOVFEOE9tNU1TK1pJdGhr?=
+ =?utf-8?B?WTQ5RFVoNkQ1SCs2SEFyNmJpWG90NFphSUpkU241OWFrMHBDUTgraklLY0dO?=
+ =?utf-8?B?c1dBdXFtcTJ1ZFNTaER5cGJYTWlWSnRON2lsdXNDcHFpejFZUkQ2TlA2NjJq?=
+ =?utf-8?B?NFRqTGNpRTBXZktzaEc5aFNoRURuVStFSnFlbUJqVVpMdmtPR1FiZk5IT2M1?=
+ =?utf-8?B?c3o0MEZNbDQzUG1ZdUNpdWorTVAyWTlrc3JLTmpFV1ZQMHRVOW0vMFdRM2RJ?=
+ =?utf-8?B?NTJrWTdIY2hCeWtoNDZyOC91M0haZmlnUE1tLzgxb0s3WUVaMUt1cnpVTThi?=
+ =?utf-8?B?V0xoRzR3d3Z5ZFpuZ2dUZ2VCdXVOaCtadzRvZkQ5NGtRS002RmdiNnc2ZWpu?=
+ =?utf-8?B?dVA5RmVMNHp6WHpIVUV5MTBlOVluanM4K25ZTFJFc2Z1TFlWTldGM2NINlNk?=
+ =?utf-8?B?QnJDZFZ0amkwMUR4dWhYVW0vcjRrT01XdXJ5YnFTL1pKVGtHYm9saUFSc3JB?=
+ =?utf-8?B?ZGNveWFNYnJIUmNBdXpBQWJueW0vT1FZSW0yVUFjQVFCYnlGZUJsQ1lsTTRI?=
+ =?utf-8?B?YkYxZWJVVUQxSnBjYWpIOXJRWHFyRWZNaE56WGs5cGhHNHV4NnhGZzBpYmZn?=
+ =?utf-8?B?bHhGLzZ0bFk5MXdQUDh6RHRJS1VnUWhzRU56UGFUZGFFSVQrK1NiRmpVM1RX?=
+ =?utf-8?B?cm1IYmVXazdNdDVlMm0vYkdPYkp2c3FqZFVHWEhleGR5emZpKzlyMUhRaEJa?=
+ =?utf-8?B?d1Y1RDhSS0dWOWhBNG1oSERNQ0VwOTR0eXpTU2o5MnVVRzNpRm1OZVNWVzRm?=
+ =?utf-8?B?cS9RS1Qrc2ZuNW03UjQ5MzZ0d0JKdy96a0h6MlNsS2hpelY2NEZCWHFLWDEx?=
+ =?utf-8?B?WkphQllZY1kyRGtjL0lraDdEUGZJcUxISVZnWGlLTmZGeWdEd3Myb29hYlg1?=
+ =?utf-8?B?cGtPQXYyd05ldFVHZG96UDhXUWJld2RBRVVZSWk4ZFBVM2U0dXlnUWJLRXVR?=
+ =?utf-8?B?eGxRbm81SzNvamlXV0VDdU5seTN6TGN2N2xST0RrQkRBMW1NQ3AwRFNMZGpQ?=
+ =?utf-8?B?UzN2YkkyVEJ5WjdPeHBQS1NvNE9UeWVpR3d1RUZ4L2FBcmViTG01M1Nkby9S?=
+ =?utf-8?B?R1diZTQ4WUZuTG1YUTJ3RC9MRUlGTDRxZUYxT2VEY0RnbCtoNFk5YlQzbTVD?=
+ =?utf-8?B?WHVPMkcyRG1uTk5lNzdyWUEzaU5UNDdvT0VwZEdJNlJBdkgzOWM2ZFZxRGVZ?=
+ =?utf-8?B?WVRYQjdNUTZmQk5JTnlDd0ZFTlRnYVoxWkFBOVZHS0xCYmJrYnBCcGY2UUFO?=
+ =?utf-8?B?S2NDa2hReFhQRFdzeU9ENmtCUUNJV3VVMEYzV09zU0tmdXNsMFJwTWJuYkww?=
+ =?utf-8?B?UHNBZG8yS1BrdGN3V0dTYWdWWm9qZlg2T25iQ0VhcUZRQ3ZUcTlDSTlsbW5X?=
+ =?utf-8?B?T0pKOUpZRlI4QWQ3YVRMWUJvY0pheVJHbEZoTzQ1ejc4Wms1OEhaTjlqTGN2?=
+ =?utf-8?B?d1pmYUxlRzVuNWJNSjlFcDRrRzZWWkFoRm1lMUZRWk52VG9aV1A2bXdleEtO?=
+ =?utf-8?B?dTIyakRYeExVVWd6MmlxbGxiS0VXeTRVMEZKUXlldXgrY3d0WTZHRkFGN1Ar?=
+ =?utf-8?B?WUhIQnpFL3RXWG00ZEk1K0Z3MnUrZlBCeE82ZzdvSDVXaW5PZHhnaWR1d1lC?=
+ =?utf-8?Q?a1paONkA03OtiEiI=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 948c6251-62e6-4467-96e2-08df41bcaa84
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2026 19:31:08.2151
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sBw77OqD/AzaTMHxjapFc56HzfoIgfwA6Ra7KpGeEAZAjWV3CC7DIsyM5fbWn+Lth8U1zWCrR44vxmTUoHTwQeTNrPPLaXko3QIg74KEd70=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB286964
 
-On Fri, Nov 13, 2026 at 08:15:34PM +0100, David Hildenbrand (Arm) wrote:
-> On 11/13/26 14:59, Lorenzo Stoakes (ARM) wrote:
-> > On Fri, Nov 13, 2026 at 12:59:00AM +0100, David Hildenbrand (Arm) wrote:
-> >> On 11/12/26 18:38, Lorenzo Stoakes (ARM) wrote:
-> >>> In order to establish guard regions, guard markers are installed in the
-> >>> page tables of a mapped VMA.
-> >>>
-> >>> However, problems arise when one tries to combine this with registering a
-> >>> VMA for userfaultfd, as such operations may themselves need to install page
-> >>> table markers such as uffd-wp.
-> >>
-> >> How does this interact with UFFDIO_POISON markers that can outlive even
-> >> userfaultfd registration?
-> >
-> > The zap clears poison markers, as is standard. It's really horrible this logic.
-> >
-> > So the code path for zap used by the guard install (via zap_vma_range()) is:
-> >
-> > zap_vma_range()
-> >   -> zap_vma_range_batched() with NULL zap_details
-> >     -> __zap_vma_range()
-> >       -> zap_p4d_range()
-> >         ...
-> >         -> zap_pte_range()
-> >           -> do_zap_pte_range()
-> >             -> zap_nonpresent_ptes()
-> >
-> > And zap_details is NULL.
-> > > In zap_non_present_ptes():
-> >
-> > 	...
-> > 	} else if (softleaf_is_uffd_wp_marker(entry)) {
-> > 		if (... !zap_drop_markers(details))
-> > 			return 1;
-> > 	} else if (softleaf_is_guard_marker(entry)) {
-> > 		...
-> > 		if (!zap_drop_markers(details))
-> > 			return 1;
-> > 	} else if (softleaf_is_hwpoison(entry) ||
-> > 		   softleaf_is_poison_marker(entry)) {
-> > 		if (!should_zap_cows(details))
-> > 			return 1;
-> > 	} ...
-> >
-> > And zap_drop_markers() checks zap_details && zap_details->flags &
-> > ZAP_FLAG_DROP_MARKER.
->
-> Right, my intuition tells me to just nuke that thing by setting
-> ZAP_FLAG_DROP_MARKER.
->
-> MADV_GUARD, is just like munmap() another form of "zap it all and protect it".
-> >>> This is especially problematic because guard region installation causes the
-> >>> regions to be zapped first, meaning that the removal of userfaultfd-tracked
-> >>> ranges will not be logged in this case.
-> >>
-> >> Again, similar to trying to uffd-wp-protect'ing a hwpoison marker (which will be
-> >> ignored), and then zapping that.
-> >>
-> >> Isn't guard marker installation/removal just another form of zapping?
-> >
-> > I mean users being weird could decide to use it for that rather than
-> > MADV_DONTNEED, but zapping is a side effect really.
-> >
-> > Really the idea is that you might have users who, for whatever reason,
-> > faulted in some range, and now want to make that a guard range, so for
-> > convenience we zap it for them :)
->
-> I think not just convenience. There was this problem with faultaround / THP
-> placement IIRC ...
->
-> I'd just zap everything that's there. That's literally what the user asked for.
->
-> >
-> >>
-> >> So to me this all sounds like "if user space does something stupid, it's user
-> >> space's fault".
-> >
-> > Unfortunately, as per Tal's series, there's more to it than that (linked in
-> > Closes: tags).
-> >
-> > You can get an infinite syscall restart (ugh) if you do this on a shmem
-> > range (Tal's 9/12) so it's a kernel bug that _has_ to be fixed.
-> >
-> > The other bits are just about a user losing track of uffd stuff if they
-> > guard/unguard, as you say.
-> >
-> > But every other zap code path does the uffd remove event stuff, so this is
-> > still an exception.
-> >
-> > If you support uffd, you have to add a whole bunch of horrifying, awful,
-> > terrible open-coded uffd crap, e.g. the userfaultfd_remove() etc. And you
-> > have to drop the bloody lock and reacquire it too and make sure all that
-> > works correctly (...!)
-> >
-> > Anyway there's basically 3 options here:
-> >
-> > 1. do something like what Tal's series does - add a TON of complexity for a
-> >    use case that nobody uses to get behaviour on something nobody sane
-> >    should care about (i.e. uffd/guard/unguard/expect uffd correctness).
-> >
-> > 2. Zap with ZAP_FLAG_DROP_MARKER, and silently lose uffd-wp state but
-> >   'support' uffd. It does fix the 9/12 bug but then subtly breaks uffd.
->
-> Right, that's what I would do.
->
-> MADV_GUARD_INSTALL zaps everything.
->
-> It already zaps swap entries, migration entries, hwpoison entries ... so just
-> zap everything.
->
-> [...]
->
-> >
-> > If you're really concerned though, we could go with option 2, which will
-> > just make UFFD behave differently for guard regions.
-> >
->
-> Not really concerned, it's just the most consistent one for me. Zap everything.
-> The user asks for it, like he would ask with munmap().
->
-> > (I regret, obviously, ever allowing this for uffd ranges. And we _all_
-> >  regret that uffd was _ever_ allowed to be merged in this state...)
-> Yeah ...
+Hi Waiman,
 
-Ack will send a v2 doing that then :)
+On 2026-11-13 12:33, Waiman Long wrote:
+> Right, top_cpuset is the exception here. Boot isolated CPUs are not
+> allowed in a root partition. They are only allowed in isolated
+> partitions. So root partition other than the top one cannot span more
+> than one root domain.
 
-Heads up that (naturally) the subject line will differ!
+Agreed for partition roots. The case I mean is a cpuset that is not a
+partition root. A member cpuset below the top cpuset can list the
+isolated CPUs, and gets them as effective CPUs. A in my last mail was
+one, and B below is another.
 
---
-Cheers, Lorenzo
+> Are you referring to the case that shrinking the cpuset CPU count to
+> reduce the total DL bandwidth will fail with EBUSY when it is less
+> than what the existing DL tasks require?
+
+No. That check is about capacity, and the planned next version leaves
+it as it is. The two new refusals are about the root domain that
+counts a task: the one whose total_bw holds its bandwidth. They apply
+when a change leaves a deadline task no CPU in that root domain. There
+is room everywhere in the two examples below.
+
+Both are on tip sched/urgent, in a 5-CPU guest booted with
+isolcpus=domain,1,2. CPUs 0, 3 and 4 are in the housekeeping root
+domain. CPUs 1 and 2 are in the default root domain. B is a member
+cpuset of CPUs 1-3:
+
+   # echo 1-3 > B/cpuset.cpus
+   # cat B/cpuset.cpus.effective
+   1-3
+   # cat B/cpuset.cpus.partition
+   member
+
+T is a task of the top cpuset, pinned to CPUs 0, 3 and 4 by
+sched_setaffinity(). It calls sched_setattr() for 10% and is admitted.
+I then move it into B:
+
+   # echo $T > B/cgroup.procs
+
+CPU 3 is the one CPU that B and the affinity of T share, so T is
+allowed on CPU 3 only. The housekeeping root domain counts it. The
+tables give total_bw of each root domain, from
+/sys/kernel/debug/sched/debug. "Before" is the fair servers alone, and
+T adds 104857.
+
+1. A write to cpuset.cpus of B:
+
+   # echo 1-2 > B/cpuset.cpus
+
+   CPUs    before    T in B    after the write
+   0,3,4   157284    262141    157284
+   1,2     104856    104856    104856
+
+The write is accepted. T is now allowed on CPUs 1-2 and is on CPU 1.
+No root domain counts its 10%.
+
+2. A partition root Q, next to B, takes CPU 3:
+
+   # echo 3 > Q/cpuset.cpus
+   # echo root > Q/cpuset.cpus.partition
+   # cat Q/cpuset.cpus.partition
+   root
+   # cat B/cpuset.cpus.effective
+   1-2
+
+   CPUs    before    T in B    after Q is a partition root
+   0,4     157284    262141    104856
+   3       157284    262141     52428
+   1,2     104856    104856    209713
+
+CPUs 0, 3 and 4 are one root domain until Q is a partition root. Q is
+valid. T is allowed on CPUs 1-2 and is on CPU 1. The rebuild counts it
+in the default root domain, which was never asked for room.
+
+With the planned next version:
+- the write of case 1 fails with EBUSY, and B keeps CPUs 1-3;
+- Q of case 2 is invalid, and cpuset.cpus.partition reads "root invalid
+   (Deadline task would leave its root domain)".
+
+T then stays on CPU 3, and total_bw keeps the values of the column
+"T in B". A move of T to another cpuset still takes it to the other
+root domain: the attach asks for room there.
+
+> We already have pending cpuset patch that will disallow taking the
+> last housekeeping CPU from the top_cpuset partition.
+
+Which patch is it? I would like to test the series on top of it. From
+your description it covers another case: in case 2 above, the top
+cpuset keeps the housekeeping CPUs 0 and 4.
+
+Thanks,
+
+Mathieu
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
