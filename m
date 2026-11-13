@@ -1,103 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794589372;
-	b=QnqDyPUL7X2HUMYKuORU/s7lLpmX/Jd6fOeF+AmpjbYR3PciCBiKqS12+BjK5FhGLxWY
-	 FLy8GGzWGtXi8f4RFFNNgp+Wwcgx9JBRBkpGPkkNT7eo72VkrPFbjJgVhoi7UjGGHIkwm
-	 5YpVp3cJmm/xXQdmSkEJNKkjF3+TESpznHI1G/5F1E++WxuzfAcMpQMYZLixB9PyNo+My
-	 FPoIofxg1yAUvyoeQHP6HR93Z715jYu50a6PpYZi+4j+BsghrPMnU7sLuGBMFbDQcjo1J
-	 P6KIYYUZ/LZUCbQVGZ0XTXTEzHg7jAxxbWEqFlJ2T0kiNHXWStTFu5zIboW7Z1kun5Q==
+	t=1794589546;
+	b=EDXXmih0jb8sjlMpjKO24sYb/xWpjSFP0WPSv/SXhEw9cjU3TWyHbbYP4wktyUq2chd6
+	 1i8b9j1SF3Vy6ZeYv5xYApi8z05jZTB8ni9hObTD+qPmx0RuaIP/kPnUfLY31PEStQXYp
+	 jy9NFAGyo3NhzrdyJc7jqt6wnhhwObUCQT4kuBRhkUUig3s/4dTCEbW9wKPfRroGEgx1+
+	 9JYpVpZIhdEoPNGzqKddO0+gaAD1UrEHqumwh0vjahdxSaylimFn56KMdp+6HltBwvupl
+	 JtWjHR7+dsYVlcfWUdVARgf6j4D7DXN9oh75BhRU+NMt/vxwtjLDKHsmI1+GQP47mcg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794589372;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=ym2hLsozA7ZSQayntiTQLoO7fGKekGn6gbjoRP5CLXE=;
-	b=fdOddv1koY2PcGFNsavDBYbOhPiVYuuj2v+1X53vXhu3wSBes89obVv1yStc06Z1Mm6W
-	 tLqtMp/2T02eo9frgPvlku7l8hA0D45csuEyLCu7qZCKsYX9ujJ+j1nN0nIASUaNqrJ9c
-	 7ykXffdSVNpuTuT1NXRq/vOFsxHhfGl9TnlMA+jOl0yHDL4LSNj7tY+NsvcddlUIhyCp5
-	 bHo0m2j96DAFFGC3anB+xLo2cNRDhmvjVBndtvoM3aMbMNHb05YvzSFc1ywG1O+jgLAt8
-	 siocWO2IE2L3JKWC7utK5IJv4vbx4wUVPaMmWccM+9cn47UoPe7y6JcPTQ9fWKXoYlw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794589546;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Sender:X-SRS-Rewrite;
+	bh=r4kolSWIQmB5Rco3QGYsut9S6KaTlLdaFXzI+IEU1KU=;
+	b=LMYm4U2jlWE63JWM/lhAML5w04GTMAokg0lzSMQjNyXE7zwi9veoxzrbzUzUMH5TzUIW
+	 M4Gh5gJPhXxfcxPUmTCVgp5hnICNsDFKO8tOKuxENHoYkRX6Q6u5Fyg7cdH3XHt9jd6Zu
+	 d7QvpDmTyLHPJc6B2xVKwh9w+DRrVpaY6wlYKaQY2ZVUqU1o2e5Wvcql1IGY9my7BVRFq
+	 pTmW0e707BFHYaswsv3qWs4oM6TyRxpNrY4i/FGeUe2u3C1oeoFIzOSV7KMHuuALj+7NA
+	 Z3bbrePUd20LPN1AgCCUoHs/9shA9yRfKUHlrqtDg1Cw8MyrpkNaG/b7DxtuIWerRAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="wmFo/9UB";
-	arc=none smtp.remote-ip=74.125.229.5
-Received: from mail-dy2-f5.google.com (mail-dy2-f5.google.com [74.125.229.5])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=none smtp.mailfrom=desiato.srs.infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=EAFC0cDO;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29880606A884
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 17:02:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 29880606A884
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3942606A330;
+	Fri, 13 Nov 2026 17:05:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3942606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wmFo/9UB
-Received: by mail-dy2-f5.google.com with SMTP id 5a478bee46e88-36caa19b0ffso538617eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 09:02:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794589371; x=1795194171; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ym2hLsozA7ZSQayntiTQLoO7fGKekGn6gbjoRP5CLXE=;
-        b=wmFo/9UBoL9/fi9B+miMvv37P7UpU2FoOc+M6Eekvn8LgLVHVIIPyoE5Jn2T9FcHcc
-         FOcrA4RRVYam2oSrfBtAKa/ncJHHKnjnnwru8PDAbroLSpYXXH41gpGmApzKschZ2p+r
-         anuv8pU9QtFRC0YPk2UmYZbQGYaxn7Z0FQURyRtEDXGd+4jEEXHxLzoJw7jcI272PcUj
-         J/3soGoSb9FGOc1/0EMijJx9SutbYCPnmXscokmh4r4YRcOzLG6za6668LE/hsZ1Q8JD
-         5z08tyNHX0GIpsRx19UL2/U9d3naDzDSMn1ys00fnNvQv1fzgCJMZgyFFh9jgJsTIxzK
-         IHnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794589371; x=1795194171;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=ym2hLsozA7ZSQayntiTQLoO7fGKekGn6gbjoRP5CLXE=;
-        b=LMTxeNRTOl2pU1HYX+qwfdW+qr+NyTvLDUVAc45Q/qJqyJM/HIvAOiMm4Kn+D9S3HL
-         lcQW+mzXpRZfpbmGunKrJoTcXm3dju7CgF8VGmM3gRqHXQU98JT6aMH6BFnvH0B+3rV8
-         NIKUK8uLmBUbIGKakaXPoUaf1OFtScviaK2Qi/vIc4RGEiI+HfhskPrrW0/wacbCGfCi
-         O9otOl67cDD3ZInsAQ6Qq7JHqigxLfSJFaaxPU8x+9V8AN8cgGsnFDbOMNvZCDl0hAGg
-         kASX2GnVOgKAF8rxhAIpPFR+VXIXUDk/bxtIPsS76nXJ9TlDlf82ZtYN95JYAiyHiN5+
-         xvSg==
-X-Forwarded-Encrypted: i=1; AL+hErHmN5Ry3ogw6aHGwal3MLvKLuzwv2krRj0aIkZFYpHQdsbNWaqsU1+gRcNzrP79BQgM8++VzwBqSihnkrHbNTw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+0eDCiAsymETy4k88TW6jVuCVXR+D+gbIIijD6q10/YtvRQTVz
-	pogBprlbalhEF5Ha4LVZEtj/KDobYpQSH2i4YKAiqrM0h5BTNccwhggT
-X-Gm-Gg: AYBFou1OYE/QXyHV7zA9yDEXevX3KYPaEidVN8O55QzCzrdrjLd7JnK5aH6ifzpTvcz
-	L9Y5qvgGVWGUmG6HNvGTZRnm8jM5wsCp2pK9o386ybsJIxXgPmKphgvIV2dWwppyo9Qg68Zzl+j
-	LsCkjKrXJp6249J/1Dzcrl4/EE6wXcIYTmrdfJYDi+k3NgZ3c8/dTmm9/TcHfGGO8GpbdlBtD49
-	wRAqhl8z3wm+/WCjlAf/zxU+TtRK8oiGtErTxTioUz4CTrlkLksSd4U2aqa+M1cnJ7fgTqRw1s7
-	t8b+Aia+I2y+cznFvdGGezd+7mz0iQYZSHLjTnDQeGtnAE4uutVVT9UZ7Mqbwnsdm6nFRDyDYck
-	zWcdxv42RKvxv2yI5n/p8XyaYXPsKtayzFX+bsy1yeHL3VoZT0AoTxjrR5aqDC3TadUp6xicqN4
-	3vabKiRu7wKiNdFkKGbr8JBzbJMVoeQWLUv2jA+Pb4P/8Kv13vxQrc/yQQEwF33z42IkFMx9G5J
-	F9NYdlzH+OvPzsvTi3A9HXCE+KREqPfrTxRU36T5eZmcy68zEa3hoQ+Ul4MOqr9SKuNb9oZ87y4
-	+K8/sh8S8c+oFe/Oxd2N7lg=
-X-Received: by 2002:a05:701b:280a:b0:185:b157:f271 with SMTP id a92af1059eb24-1b50310fafamr2760874c88.23.1794589370935;
-        Fri, 13 Nov 2026 09:02:50 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:69::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50316e195sm9999831c88.8.2026.11.13.09.02.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 09:02:50 -0800 (PST)
-Date: Fri, 13 Nov 2026 09:02:46 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Octavian Purdila <tavip@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	michael.chan@broadcom.com, pavan.chebbi@broadcom.com, andrew+netdev@lunn.ch, 
-	edumazet@kernel.org, horms@kernel.org, shuah@kernel.org, sdf@fomichev.me, 
-	leitao@debian.org, dtatulea@nvidia.com, asml.silence@gmail.com, 
-	bobbyeshleman@meta.com, daniel@iogearbox.net, razor@blackwall.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 0/5] net: devmem: size TX net_iovs from the
- dmabuf layout
-Message-ID: <avc_ptmBkAahiBHJ@devvm16445.scu0.facebook.com>
-References: <20261111224740.2744522-1-sdf@fomichev.me>
- <1b764043-2efd-4e65-adb9-a47c0136446b@redhat.com>
- <avZC2hp_0ODMQ4SG@devvm16445.scu0.facebook.com>
- <avZZ-6GGciPC0Lti@devvm16445.scu0.facebook.com>
- <CAHS8izOp2BpO7WnrNZRUryGQg=L3xreF8nSFp5S2_sO8HGhqpg@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=EAFC0cDO
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=r4kolSWIQmB5Rco3QGYsut9S6KaTlLdaFXzI+IEU1KU=; b=EAFC0cDOVy0JxPEa6TVaTElOqg
+	PYB1xooaLl6cyS29P7xnRqZkxiuR/5CHWCxlI00W5GMNpVEys1vixF9oT4mh2OLJtKZHQ3ScPnbyt
+	+AEvvzZhtHu694XwKUN5/wUKwwpzDr946Y31b7XUtZXORjsa5sNAnFXxywhI32gKRD7Fa/AnFgh3B
+	u1nM0WKc2U/LXSNEw25x/5oKah3w4CA5eKLKRBcvX/yqIy768oBu7CpKnL18HhRXh+O8GiEnewHF3
+	ILvVr9HAu5Xx4jHomxmwL/Qg8Lxjd0lRXs5ylI0aiyYZVRLyS9Gbj8sqm5SWFnsQHbgrn+qb1aGZB
+	mempxCdQ==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xRuiY-0000000BYhE-2A09;
+	Fri, 13 Nov 2026 17:05:38 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.5 #2 (Red Hat Linux))
+	id 1xRuiV-00000000KcJ-3RA0;
+	Fri, 13 Nov 2026 17:05:35 +0000
+From: David Woodhouse <dwmw2@infradead.org>
+To: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Thara Gopinath <tgopinath@linux.microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Michael Kelley <mhklinux@outlook.com>,
+	Nicolas Saenz Julienne <nsaenz@amazon.com>,
+	Nikolas Wipper <nik.wipper@gmx.de>,
+	Mushahid Hussain <hmushi@amazon.co.uk>,
+	Sriram Nambakam <snambakam@linux.microsoft.com>,
+	Zack Rusin <zack.rusin@broadcom.com>,
+	Doug Covelli <doug.covelli@broadcom.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Paul Durrant <paul@xen.org>,
+	Xin Li <xin@zytor.com>,
+	Francesco Lavra <flavra@baylibre.com>,
+	=?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>,
+	Liran Alon <liran.alon@oracle.com>,
+	Arbel Moshe <arbel.moshe@oracle.com>,
+	David Woodhouse <dwmw@amazon.co.uk>
+Subject: [PATCH v2 1/4] KVM: x86: hyper-v: Add KVM_CAP_HYPERV_FORWARD_HCALL
+Date: Fri, 13 Nov 2026 10:05:32 -0700
+Message-ID: <20261113170535.79246-2-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261113170535.79246-1-dwmw2@infradead.org>
+References: <20261113170535.79246-1-dwmw2@infradead.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -107,85 +103,217 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izOp2BpO7WnrNZRUryGQg=L3xreF8nSFp5S2_sO8HGhqpg@mail.gmail.com>
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-On 11/12, Mina Almasry wrote:
-> On Thu, Nov 12, 2026 at 4:42 PM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> >
-> > On 11/12, Stanislav Fomichev wrote:
-> > > On 11/12, Paolo Abeni wrote:
-> > > > Hi,
-> > > >
-> > > > A few (late) questions/comments to check I'm not missing relevant
-> > > > points,
-> > > >
-> > > > On 11/11/26 23:47, Stanislav Fomichev wrote:
-> > > > > TX bindings use PAGE_SIZE net_iovs, so a frag covers at most a page.
-> > > > > A 64KB skb needs 16 frags, and MAX_SKB_FRAGS caps devmem skbs at about
-> > > > > 68KB, which makes BIG TCP ineffective for devmem TX.
-> > > >
-> > > > ... with default .config. You could set MAX_SKB_FRAGS to 45 and reach
-> > > > ~180K...
-> > > > > This series picks the TX net_iov size from the dmabuf sg table instead:
-> > > > > the largest power of 2, up to 2MB, which aligns every DMA segment. With
-> > > > > a 2MB hugepage-backed udmabuf a BIG TCP skb takes a few frags. There's
-> > > > > no UAPI change since TX addresses are dmabuf offsets.
-> > > >
-> > > > ... still this option should be more effective because the limit would be
-> > > > higher and the skb would use less cachelines for the shared_info,
-> > > >
-> > > > I'm wondering if making a comparison vs MAX_SKB_FRAGS==45 would be
-> > > > complex and if you could do that, too.
-> > >
-> > > Originally I did not want to include bigtcp to keep it apples to apples:
-> > > same tso size, just 16 frags in skb vs 1 (in ideal case).
-> > >
-> > > I just tried running mlx5 with 45 frags configured and it fails to start with
-> > > the following error:
-> > > mlx5e_attach_netdev() warns "MLX5E: Max SQ WQEBBs firmware capability: 16, needed 23" and returns -EIO.
-> > >
-> > > (fwiw quick review with llm claims that mlx5 only supports up to 20 skb frags)
-> > >
-> > > What I also tried just now is `gso_max_size 524280` (on top of this series)
-> > > and it ups single flow throughput from 200Gbps to 240Gbps (presumably
-> > > by making the receiver go faster with 512K TSOs vs 64K TSOs) and halves
-> > > the sender softirq..
-> > >
-> > > I hope this gives you more data, not sure running with 20 frags is worth
-> > > it (vs 16)? LMK if you disagree or want me to run something else.
-> >
-> > Fun fact, also setting gro_max_size on the receiver gets line rate over
-> > single flow:
-> >
-> > I   client.c: Connected 1:cpu 39 | 1:cpu 118
-> > client: == Source 2401:db00:255a:4a:bace::b
-> > client:   Tx389.448 Gbps (2921248849920 bytes in 60008026 usec)
-> > client:   Rx  0.000 Gbps (0 bytes in 60008026 usec)
-> > client:   TCP retrans reord rtt rttvar d_ce snd_wnd cwnd
-> > client:             2   125  86      2    0 15300608 10142
-> > client:   net CPU 39: usr: 0.03% sys: 0.06% idle:67.39% iow: 0.00% irq: 5.69% sirq:26.81%
-> > client:   app CPU 40: usr: 0.05% sys: 2.91% idle:95.67% iow: 0.00% irq: 0.21% sirq: 1.14%
-> > client: == Target 2401:db00:255a:44:bace::b
-> > client:   Tx  0.000 Gbps (0 bytes in 60009306 usec)
-> > client:   Rx389.438 Gbps (2921238435008 bytes in 60009306 usec)
-> > client:   TCP retrans reord rtt rttvar d_ce snd_wnd cwnd
-> > client:             0     0 210    122    0  999424   10
-> > client:   net CPU118: usr: 0.00% sys: 0.00% idle: 1.60% iow: 0.00% irq: 0.33% sirq:98.05%
-> > client:   app CPU119: usr: 2.75% sys:77.46% idle:18.95% iow: 0.00% irq: 0.47% sirq: 0.34%
-> >
-> > 4200MTU, 32K rx-buf-len, this patch series, gso/gro_mas_size of 524280,
-> > still the default number of frags (enough on rx to fill 512K GRO with 32K
-> > chunks).
-> 
-> With 'devmem' over udmabuf? Is this possible without devmem on your
-> setup? How much is devmem helping I wonder.
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Yes, devmem+udmabuf. I think what's helping here the most is 32K rx frags
-and bigtcp, this makes it possible to pack 512K TSOs into a single skb
-on rx (which is the bottleneck). At least on mlx5 don't think there
-is a way currently to configure that outside of iou/devmem memory
-providers? FWIW, devmem socket api with the cmsgs is not supper
-efficient, but bigger chunks do help here as well.
+A VMM that implements Hyper-V hypercalls KVM does not know about has
+no way to receive them. kvm_hv_hypercall() fails an unknown code with
+HV_STATUS_INVALID_HYPERCALL_CODE, and only a fixed set (the synthetic
+debugger, memory-based extended hypercalls, HvCallPostMessage and the
+HvCallSignalEvent fallback) ever exits to userspace.
+
+Add a VM capability whose KVM_CHECK_EXTENSION value is a bitmask of the
+hypercall handling features the kernel implements, as KVM_CAP_XEN_HVM
+and KVM_CAP_EXIT_HYPERCALL do. KVM_ENABLE_CAP takes the subset to
+enable and rejects any bit the kernel does not report, so a VMM can
+probe for exactly the behaviour it relies on.
+
+The first feature, KVM_HYPERV_HCALL_FORWARD_UNKNOWN, sends a hypercall
+KVM would have failed as unknown, and an extended hypercall in fast
+form, out through the existing KVM_EXIT_HYPERV_HCALL. That exit already
+carries the control value and both parameter registers, and XMM state
+is reachable through the ordinary vCPU state ioctls, so no new exit
+format is needed.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+ Documentation/virt/kvm/api.rst  | 49 +++++++++++++++++++++++++++++++++
+ arch/x86/include/asm/kvm_host.h |  2 ++
+ arch/x86/kvm/hyperv.c           |  7 ++++-
+ arch/x86/kvm/hyperv.h           |  8 ++++++
+ arch/x86/kvm/x86.c              | 14 ++++++++++
+ include/uapi/linux/kvm.h        |  4 +++
+ 6 files changed, 83 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index e95c9cda085d..092f6f9ad8a0 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -7312,6 +7312,17 @@ Hyper-V SynIC state change. Notification is used to remap SynIC
+ event/message pages and to enable/disable SynIC messages/events processing
+ in userspace.
+ 
++	- KVM_EXIT_HYPERV_HCALL -- a hypercall for userspace to handle.
++
++'input' holds the hypercall control value and 'params' the two parameter
++registers.  Userspace sets 'result' to the hypercall result value before
++resuming the vCPU; KVM then writes it to the guest and advances past the
++hypercall instruction.  HvCallPostMessage, HvCallSignalEvent for a
++connection with no registered eventfd, the synthetic debugger hypercalls
++and memory-based extended hypercalls exit this way;
++KVM_CAP_HYPERV_FORWARD_HCALL (see section 7.48) adds the hypercalls KVM
++does not implement.
++
+ 	- KVM_EXIT_HYPERV_SYNDBG -- synchronously notify user-space about
+ 
+ Hyper-V Synthetic debugger state change. Notification is used to either update
+@@ -9181,6 +9192,44 @@ enabled, cmma can't be enabled anymore and pfmfi and the storage key
+ interpretation are disabled. If cmma has already been enabled or the
+ hpage_2g module parameter is not set to 1, -EINVAL is returned.
+ 
++7.48 KVM_CAP_HYPERV_FORWARD_HCALL
++---------------------------------
++
++:Architectures: x86
++:Target: VM
++:Parameters: args[0] is a bitmask of KVM_HYPERV_HCALL_* features to enable
++:Returns: 0 on success, -EINVAL if args[0] contains an unsupported bit
++
++KVM_CHECK_EXTENSION for this capability returns a bitmask of the Hyper-V
++hypercall handling features that KVM implements.  KVM_ENABLE_CAP takes
++the subset that userspace wants active and replaces the previously
++enabled set; it can be called at any time.  A bit that KVM_CHECK_EXTENSION
++does not report is rejected with -EINVAL, so a VMM can enable exactly the
++features it was written for and learn which ones the kernel lacks.
++
++The defined bits are::
++
++  #define KVM_HYPERV_HCALL_FORWARD_UNKNOWN	(1ULL << 0)
++
++KVM_HYPERV_HCALL_FORWARD_UNKNOWN: a hypercall that KVM would otherwise
++fail with HV_STATUS_INVALID_HYPERCALL_CODE exits to userspace with
++KVM_EXIT_HYPERV_HCALL instead, and an extended hypercall in fast form
++exits the same way instead of failing with HV_STATUS_INVALID_PARAMETER.
++The VMM can then implement hypercalls that KVM does not.  The synthetic
++debugger hypercalls (HvCallResetDebugSession, HvCallPostDebugData,
++HvCallRetrieveDebugData) are an exception: while the synthetic debugger
++is not enabled they still fail in KVM, with HV_STATUS_INVALID_PARAMETER
++for the fast form of HvCallPostDebugData and HvCallRetrieveDebugData
++and with HV_STATUS_INVALID_HYPERCALL_CODE otherwise.
++
++For a fast hypercall, 'params' carries RDX and R8 from a 64-bit caller,
++or the EBX:ECX and EDI:ESI pairs from a 32-bit caller.  XMM input and
++output registers of a fast hypercall are read and written with the
++ordinary vCPU state ioctls (KVM_GET_XSAVE/KVM_SET_XSAVE or
++KVM_GET_FPU/KVM_SET_FPU) before the vCPU is resumed.  Hypercalls that
++KVM implements itself, and the CPUID-enforcement checks KVM applies
++before dispatching a hypercall, are unaffected.
++
+ 8. Other capabilities.
+ ======================
+ 
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 1ee4b127004d..fce46ae26137 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1072,6 +1072,8 @@ struct kvm_hv {
+ 	struct mutex hv_lock;
+ 	u64 hv_guest_os_id;
+ 	u64 hv_hypercall;
++	/* KVM_HYPERV_HCALL_* features enabled by KVM_CAP_HYPERV_FORWARD_HCALL */
++	u64 hcall_features;
+ 	u64 hv_tsc_page;
+ 	enum hv_tsc_page_status hv_tsc_page_status;
+ 
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 5d2e3617c952..e72539f9acc9 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -2692,12 +2692,17 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+ 		goto hypercall_userspace_exit;
+ 	}
+ 	case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
+-		if (unlikely(hc.fast)) {
++		if (unlikely(hc.fast) &&
++		    !kvm_hv_hcall_feature(vcpu->kvm,
++					  KVM_HYPERV_HCALL_FORWARD_UNKNOWN)) {
+ 			ret = HV_STATUS_INVALID_PARAMETER;
+ 			break;
+ 		}
+ 		goto hypercall_userspace_exit;
+ 	default:
++		if (kvm_hv_hcall_feature(vcpu->kvm,
++					 KVM_HYPERV_HCALL_FORWARD_UNKNOWN))
++			goto hypercall_userspace_exit;
+ 		ret = HV_STATUS_INVALID_HYPERCALL_CODE;
+ 		break;
+ 	}
+diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+index 622a6553e9ac..20d40261c75b 100644
+--- a/arch/x86/kvm/hyperv.h
++++ b/arch/x86/kvm/hyperv.h
+@@ -205,6 +205,14 @@ static inline bool kvm_hv_hypercall_enabled(struct kvm_vcpu *vcpu)
+ 	return vcpu->arch.hyperv_enabled && to_kvm_hv(vcpu->kvm)->hv_guest_os_id;
+ }
+ 
++/* Features reported and accepted by KVM_CAP_HYPERV_FORWARD_HCALL. */
++#define KVM_HYPERV_HCALL_SUPPORTED	KVM_HYPERV_HCALL_FORWARD_UNKNOWN
++
++static inline bool kvm_hv_hcall_feature(struct kvm *kvm, u64 feature)
++{
++	return READ_ONCE(to_kvm_hv(kvm)->hcall_features) & feature;
++}
++
+ int kvm_hv_hypercall(struct kvm_vcpu *vcpu);
+ 
+ void kvm_hv_irq_routing_update(struct kvm *kvm);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 26e7beaff8a0..d8de7742a0da 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2305,6 +2305,11 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_EXIT_HYPERCALL:
+ 		r = KVM_EXIT_HYPERCALL_VALID_MASK;
+ 		break;
++#ifdef CONFIG_KVM_HYPERV
++	case KVM_CAP_HYPERV_FORWARD_HCALL:
++		r = KVM_HYPERV_HCALL_SUPPORTED;
++		break;
++#endif
+ 	case KVM_CAP_SET_GUEST_DEBUG2:
+ 		return KVM_GUESTDBG_VALID_MASK;
+ #ifdef CONFIG_KVM_XEN
+@@ -4144,6 +4149,15 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+ 		kvm->arch.hypercall_exit_enabled = cap->args[0];
+ 		r = 0;
+ 		break;
++#ifdef CONFIG_KVM_HYPERV
++	case KVM_CAP_HYPERV_FORWARD_HCALL:
++		r = -EINVAL;
++		if (cap->args[0] & ~KVM_HYPERV_HCALL_SUPPORTED)
++			break;
++		WRITE_ONCE(to_kvm_hv(kvm)->hcall_features, cap->args[0]);
++		r = 0;
++		break;
++#endif
+ 	case KVM_CAP_EXIT_ON_EMULATION_FAILURE:
+ 		r = -EINVAL;
+ 		if (cap->args[0] & ~1)
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 8dff2fc1972e..79f128958df5 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -126,6 +126,9 @@ struct kvm_hyperv_exit {
+ 	} u;
+ };
+ 
++/* KVM_CAP_HYPERV_FORWARD_HCALL feature bits */
++#define KVM_HYPERV_HCALL_FORWARD_UNKNOWN	(1ULL << 0)
++
+ struct kvm_xen_exit {
+ #define KVM_EXIT_XEN_HCALL          1
+ 	__u32 type;
+@@ -1000,6 +1003,7 @@ struct kvm_enable_cap {
+ #define KVM_CAP_PPC_COMPAT_CAPS 250
+ #define KVM_CAP_ARM_PMU_V3_STRICT 251
+ #define KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES 252
++#define KVM_CAP_HYPERV_FORWARD_HCALL 255
+ 
+ struct kvm_irq_routing_irqchip {
+ 	__u32 irqchip;
+-- 
+2.50.1
+
