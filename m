@@ -1,61 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=116.203.23.228
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794554273;
-	b=xWmHuAnRn60W1ag7SaRiZ3XsY7V8AOmSawVRQRwCYvhOCk17KDpEhI6YzT8EwpE8RuEx
-	 GDltmn05R/kJfh2ptJMlMZo44frr5TqB8pkSH/KEZgu0zbvVd5ttSONR8ydJsg/8lGtdF
-	 sgRPZmEgsBbT6I7lyJZmMDlavkGDu/+4zbkM93LhNjInf4HuJ2g2jhIylFDNgAe9WHBHf
-	 Rc0ytK5HZ5UtiyLWpACyuVdRfYQvIbmPIEzMzm4rI4BQp401iDXXwxu2n/fZfcJazJOiU
-	 LX33esgugyju/x5tJLdPdoFUqm8udqrRZ5GC4moutt4wSpoJSqeYnHpkSAE2j2nCdlQ==
+	t=1794554608;
+	b=5O65M11tGtypp2yIxIQgjVTR7dmz7eM0pf61FJulzY0KohW7LEV/IjWDmluJhecXg4sd
+	 D0Oy1rtg9ifksatVpq3Yn0GTh0l1hQ2YXB6bwWu1uodd+8f3UA6vXwfzkVyOU8HkcaPAS
+	 nIKoGrLVzMCohsi4OfWqdiDiL1ufxU0/GsrzAkj0eYTqzMRhhcOLqCnMJIivxPgT8ig8w
+	 gey6LwGsHvu18618D7cp36vEvbQ6o9Kj55Mea3XJgYD8FJE2FX2YgoY6zmRTJuIfiKdor
+	 /zRsuY/mkWZ+XoW2kHFKGTao9oUd2EqQbWWNpV8W87lhAAtyL8dxV/yTkgvQ09MKQ9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794554273;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=+PvlK30IsPvyDmdVzBsctIGAzhTBquDxEsbqbTaHXwg=;
-	b=5HlGMp8Oe9uo2MQByHf/VCXLOKvYiAv1NFkG5c7HoqdNiPgg7EyBJXl1Zk+92f0lmzdS
-	 wgVs0g58lzM0lJlZUbujGq8uA4YtBVQhhGHxvnK1LcZycPK4HzYIyzdUAdRkCLSoC7/fr
-	 ZcYL+eFU6jx5lU71U3YnwBQPxsM9k0w6iBv9QZue9RrQRkTQh0IHtxfqZGzcBm8SF6wwI
-	 TJcquvOTSFw/H7WgQDXp4XFUfzQo3FPoML4qHk0n1YA159AJI7MA3TE9774P4YfEURXyd
-	 w65C0vJQARABi6a0fA5u6KtToR7TRNjzDzKueYtblPqBI2MAXXxdpDy1O+NQK1p4JQQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794554608;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=NSvdMR5bdC0mD53YVwx+Xa6vtbAjmkknNO818XljrCU=;
+	b=t0v5LlUY3/z+q7RZdkpTmkLmNGz3oTV0g14SG8ckFbmGihIXf1tFC4QlbWGdJ1iZ2mv7
+	 egrIj4IHGpIyLoIxC3PLSITw8vAKxWVttfpz50EitcgkKCGYgYqcXrUYsIKt66TJ1/PkT
+	 3FB5j5qoz2D/1PZC2GMjpz/85oVMHvbOlognmiJGGNe4zty1XjgWo3qLZ3574lbwhQsGX
+	 m0nCRgzusx81dy3oCRhfl6yN7FikU4V2rFOkHXtVgzbHz3l2Xdj6wzsYgwUuGeCmoFgG1
+	 KHrKGBNhHH9nsVa9/WQ55CbrYxOauUq4gMLSTQnyIZMZY0G6XzbM8UHZLG4aFOSbJ5g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=blackshift.org;
-	spf=pass smtp.mailfrom=blackshift.org;
-	arc=none smtp.remote-ip=116.203.23.228
-Received: from glittertind.blackshift.org (glittertind.blackshift.org [116.203.23.228])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B1F606A32D;
-	Fri, 13 Nov 2026 07:17:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69B1F606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackshift.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blackshift.org
-Received: from bjornoya.blackshift.org (unknown [IPv6:2003:102:af17:cb00:cf3e:e168:1a5d:8293])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (secp384r1) server-digest SHA384
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "bjornoya.blackshift.org", Issuer "YR2" (not verified))
-	by glittertind.blackshift.org (Postfix) with ESMTPS id 43FCB79E6C0;
-	Fri, 13 Nov 2026 07:17:48 +0000 (UTC)
-Received: from pengutronix.de (p4ffb23c7.dip0.t-ipconnect.de [79.251.35.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id AA4D25EA5C4;
-	Fri, 13 Nov 2026 07:17:47 +0000 (UTC)
-Date: Fri, 13 Nov 2026 08:17:47 +0100
-From: Marc Kleine-Budde <mkl@blackshift.org>
-To: netdev-bot+sashiko@kernel.org
-Cc: o.rempel@pengutronix.de, robin@protonic.nl, socketcan@hartkopp.net, 
-	mkl@pengutronix.de, shuah@kernel.org, kernel@pengutronix.de, 
-	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net, 
-	quchaosheng000406@163.com, penguin-kernel@i-love.sakura.ne.jp, kuba@kernel.org
-Subject: Re: [PATCH can-next v2 2/9] selftests: can: add J1939 test helper
- header and library
-Message-ID: <20261113-classy-evasive-mule-559cfd-mkl@blackshift.org>
-References: <20261104-j1939-selftests-v2-2-cf797c83317b@pengutronix.de>
- <179394331774.488853.9726002978646630085@kernel.org>
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=sa4fun2s;
+	arc=none smtp.remote-ip=111.22.67.151
+Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA71D606A31C;
+	Fri, 13 Nov 2026 07:23:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA71D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=sa4fun2s
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=sa4fun2sOSH1mEAmixHIQZ3KOXxE71AcK9LfQ+DselMOwOsz1OJE1Q3kZD0hsIkonXZWTGXJLwg2s
+	 U7ZITf914PPDRlX+WwQkuwBO/0aX9o4V+ngMYfsl4ZR8G29jY5NZV+/j0RGDNgWXJsTpIirkB274It
+	 YHjUiiphg+S72cME=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66af6bae306e-b5e13;
+	Fri, 13 Nov 2026 15:23:17 +0800 (CST)
+X-RM-TRANSID:2ee66af6bae306e-b5e13
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from desktop-eb75daa8a6be458c-20260816004526035 (unknown[10.55.1.72])
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af6bae3ab4-1c302;
+	Fri, 13 Nov 2026 15:23:17 +0800 (CST)
+X-RM-TRANSID:2ee76af6bae3ab4-1c302
+From: zhangchujun <zhangchujun@cmss.chinamobile.com>
+To: kees@kernel.org,
+	shuah@kernel.org
+Cc: akpm@linux-foundation.org,
+	richard.weiyang@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	zhangchujun <zhangchujun@cmss.chinamobile.com>
+Subject: [PATCH] selftests/exec: check malloc() return in execveat concat()
+Date: Fri, 13 Nov 2026 15:23:12 +0800
+Message-ID: <20261113072313.1723-1-zhangchujun@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -65,50 +72,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ri4qm6tshdojjwng"
-Content-Disposition: inline
-In-Reply-To: <179394331774.488853.9726002978646630085@kernel.org>
+Content-Transfer-Encoding: 8bit
+
+concat() strcpy()s into the buffer returned by malloc() without
+checking it for NULL.  If the allocation fails, the helper
+dereferences NULL and crashes the test.
+
+Check the allocation and exit with a failure message via
+ksft_exit_fail_msg(), which is how the file already reports
+unrecoverable errors.
+
+Signed-off-by: zhangchujun <zhangchujun@cmss.chinamobile.com>
+
+diff --git a/tools/testing/selftests/exec/execveat.c b/tools/testing/selftests/exec/execveat.c
+index d37c068ed5fe..b70844a7a13c 100644
+--- a/tools/testing/selftests/exec/execveat.c
++++ b/tools/testing/selftests/exec/execveat.c
+@@ -138,6 +138,8 @@ static char *concat(const char *left, const char *right)
+ {
+ 	char *result = malloc(strlen(left) + strlen(right) + 1);
+ 
++	if (!result)
++		ksft_exit_fail_msg("malloc failed\n");
+ 	strcpy(result, left);
+ 	strcat(result, right);
+ 	return result;
+-- 
+2.50.1.windows.1
 
 
---ri4qm6tshdojjwng
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH can-next v2 2/9] selftests: can: add J1939 test helper
- header and library
-MIME-Version: 1.0
 
-On 06.11.2026 05:35:17, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found more severe
-> issue(s) in other patches of this series. This mail is only an FYI, in ca=
-se
-> you want to address the nit picks below when you respin.
->
-> Low priority / nit picks for your consideration:
->
-> - [Low] selftests: can: silent skip in j1939_test_main() when protocol is
->   missing
-
-pr-bot: cr
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---ri4qm6tshdojjwng
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCava5mAAKCRDMOmT6rpmt
-0hvaAP9vUxyGuySMNG4POpe13CNvZdJujh4Bjs5N1ffj9YFqXQD9FAbTZ6gTgFjt
-84gHs7uZzUPaloLGa8OhmYfgCbQlzQ8=
-=Jp/F
------END PGP SIGNATURE-----
-
---ri4qm6tshdojjwng--
