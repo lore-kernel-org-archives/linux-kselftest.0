@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794601340;
-	b=VsKtTAel+CPZgcqdLYqeh8wuvrl0PM4zqGlr7tfPpZlYT3tYlfgp0dCquRDQmj7lCBEp
-	 CFHHHQeXgUaTwyA2+m6JCAk9lZBY1p4uidc2UQBb6jotHtnkUl6mOlz5TzQZaYYvj5xsg
-	 ElPHG3ahpm3iRkeNYqHDLfZ8XxsmLlX4prS3k1089MdF5Xqog7A6zW8lNbrb88TsGa9PG
-	 ekw4jY28OBZJKlVnjQ7ER9Y6KDSZH2a4oW0ukgIWH2RpradATsI3QD6YYaNuIjunh9Ktt
-	 cwnYKyAUq5sbCtNLmkrPfQBm2WfDtTEPtbEYgkNVnvn/YQ4fc5db4fa0vZs88zg9/Ow==
+	t=1794601341;
+	b=2Z8y6qJkK45KcCxVdcswPX3/8j7JuS4Ztvuqs3JLss8++zVKwN8bbJCxxSuPBTraXEG2
+	 RHOOqphIw4Bzrr+bOGoVmplFCsjL0YayTS/3bUxqwisgg2CfUA8uQHJYR8PsFtOTV0Z+3
+	 FrQaf55gsM3wNjW1vgsUlZsvoOAbFnjbjDZCmxsRS/qQnS2j/CvLgM/rtO81NFKV03tFb
+	 nKfosXySfZ7V90IovzWx4xJ5RJqJ9VIp73V3wXUt+dcYVOMB6rzB1WIWVwqIsEzfJDw4a
+	 HE88VBQbC4CKgd8TKSyGtwpvPkAir6bhvK7E4rVbHQunaHHYSpoKMd81D1g/rPs8SCw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794601340;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794601341;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=HopEjVcKVy5WlPlbnxrcDQWkWX0L0xT3AvRN619hsz4=;
-	b=UQpj4GScPAt++3ge4XJmjZIwnoQZ60wp34uZIoD4FgTO581ha/+1nWKfn0dkziaTl3zJ
-	 2fNpqDf24dF9+kVR+uGICsGJsNxrh/VART3RRAapL5Xk+1NKlQILOJRhDlT0M8CVvE/58
-	 zluSIzWIktTADXpII7PzvvgCEm7otHTRjbgt5FzSSgm7tnvoqBqZsJuw7F9QcmnbtHGS2
-	 hQnARLqe2pJL8vkoudBCTIAfaLWJcLMuCzuQoHHfXVqIxzj0TaxK1st1K9YKuAQnnl/lS
-	 kOwzO+cKGBejgeXYkC0iMdsVH7newFpLewIdONXp0hp22cPL/uMklqtwz5JeCfheBiw==
+	bh=s5HRLWT3GJ5V57HOZzLlKs66p4zza+KZ/ooym+DPD/8=;
+	b=s1yCuRPCCKOVdAov/qnw2EpvNeD76TIaxzumzpCLCe4nqIbnPX0aXE2HzPcFHPB/ds55
+	 RmhAKhZV6dUD/Kej9RTCksvK0D86XbcWbKTaZZddzA8UlbQW0FC1ekGa1cFvqGeqMqQZm
+	 zuxOX7qL+bBcDtAbFQLOeyk3LuvSegjk2h3P0fRVjZ1lv8V49ItKGefHkBW7+83gOTwzg
+	 e92/FgwM6krJd9H/iFA1E5/TlNO+VkPEZy/j9rL1CW80WaE4rApueE/wcrXmIqI9wEYnV
+	 MKrLacI4hOhn9jBvyyJraRJPTYefUjWDOsYahHZVFWQ14V0F+RyqUyVWIPsye4ggpvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OpB7fYZ5;
-	arc=none smtp.remote-ip=74.125.229.133
-Received: from mail-dl2-f5.google.com (mail-dl2-f5.google.com [74.125.229.133])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wL9QWYYa;
+	arc=none smtp.remote-ip=74.125.229.7
+Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9A8606A33F
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 20:22:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C9A8606A33F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3884606A32D
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 20:22:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3884606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OpB7fYZ5
-Received: by mail-dl2-f5.google.com with SMTP id a92af1059eb24-1ac216daf7dso450206c88.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 12:22:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wL9QWYYa
+Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-36c9b5c6faaso691371eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 12:22:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794601339; x=1795206139; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794601340; x=1795206140; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=HopEjVcKVy5WlPlbnxrcDQWkWX0L0xT3AvRN619hsz4=;
-        b=OpB7fYZ5oudIYsb91KeZQgQ1i2+Yz+pWWPbfqpFJ0c/wuhFClNklZv6sc4wpmQeaDl
-         mUOsbOVX7fX4RiViMDJs2bAsdSH/f7cYI4vJPbL3GaFQcLDk2FVjwuZryQqyXIUMjYIc
-         cq8hIvkyFTHYgr64EYJprVhlJq+G0bix/FOaebLcvIFybOfqUcuDl9cx3LTbKx6THvar
-         0Sgko3b/NsmmejwxUdRbl7fx9witxeyO2B3kJMMwS2bWhIRQFd5P0Z5zAK4L+w0MZ7Nh
-         IqN2OxnSyPaddB0xEhdEs0rSnMF0M6WyShKcYcMK8UgAo/+ut4VgCMY/0f6ljygrmQdK
-         5qsA==
+        bh=s5HRLWT3GJ5V57HOZzLlKs66p4zza+KZ/ooym+DPD/8=;
+        b=wL9QWYYa8TzOJZVMNIyc+YX+4aWHXvMAiO159H51XCo86sRljVLG9cSgH+BOWJZiP2
+         6G2le+g8OtX74/MisNw15WdAoAWTDcvYg7tM3VF708EJMOGrOBUYzsjGUNGzc4V9dZto
+         EYO9AFg6efIX7i5dit17/pqUx+ghyCOxB1VwYfSjW3FRdQTE0aGgSh6aEwa7oNzFuSpG
+         g5wtAjhoE09wyLWJq6rj9H5RFxaTDKm+KXN18OL25Y/hsccmK9amysRVN2Lj8o6Zv/Va
+         jsOoobBDuEuXWpHTpjiPTYd4nIgte5zLNnQscwGjiU0QRaiRX4JhfCcH0qT1+lod5ULc
+         4HlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794601339; x=1795206139;
+        d=1e100.net; s=20260707; t=1794601340; x=1795206140;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HopEjVcKVy5WlPlbnxrcDQWkWX0L0xT3AvRN619hsz4=;
-        b=hbj8AyOQaH02XE4ohT5kUhVG7Mzt/UdLFaxpoGmiDaPr93jY5QiZsgzho8g9sBLaUO
-         woPzVJPKrZR0wLFFkLyLYHZWuSWOyjTXYQ/1/Vb4TEOXrmkY8vaqx2pqLrn8GvOCCttj
-         fbnGoEjlHSfdFD3j/E3UUJQO/JKEKMtr8vBUVqtbkfjfV2hqxmnj/3cY3cJ5A7uoQFwE
-         OCFvcXxyjAEs99ZAXVuHcT7n4v0USYMuQeQWwX069BbuUm+yNXfTIQ/aQjkX6AzDB216
-         8wE8cov6Ipo2nNOQnxOHfBw3dDmBGXcod/dg18aRyz1548B1hk0rEKaevtOzJMaoMe2D
-         GOlQ==
-X-Forwarded-Encrypted: i=1; AL+hErFkE+GFrToMdFtP3cQPgi9Xv/e0rpAu2y704cMFTUm634Gbd+TlgH4Tai6m5mxvZ8C9qpN9fmxJwpkkwyMQeKk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9AQYsTRVa2H08PvK6DCl9vu04woDwrFSFQeK/3i2xHPJGJNhqz
-	AkEe6pGeY9ZVleZoYlnCSicXF8aN4vywFpbfFBbGqjRBCRE9ARzkCJEw
-X-Gm-Gg: AYBFou0+hTw9dG4LSY1PORuDChEkeMf4MgHKUlFr+7VxpYIVYKNJ0T91mHaPafVlhPI
-	+rRdwz2vP3VbSKAdvK3QRX+LIotO5ObG6Qqr9rKe5tS7j2NQLpIFiSA9rS6o9UVXKz1IfMsBNm7
-	IajPk9kImpn74YYrNhpMXf5ohtF6eNwFpZKuQM9EqxpqE83YWmRNEZb1XybDKziIbRsGovw1IBM
-	wElrT9mfAUeEaLRKFaB6w+GJ2Wncb9qLBafKjduSsfSxnGeHF41MRgFjTOTIN2tjfA+AYYrjD1z
-	19RoeR6gchbOxUiyhCesARbSa/NpJPSds3O177X3bneAKIfCdCUTPO6nWv5R0F4QaLQaFC3A/KM
-	DUrGhkBl8cJN2ZRlS4Q3jF9QR80lJujH2J7zX3N/DLr6JIEoFK0dbh1syaVsbTukVKu+jy89Hc8
-	GjZneC8YH+b58p/UmRClgvlkSMVG74RWc1++sVAJeRe6Y+Wd1z7aWt4MN1xeCaQAck1Fr1OQ6or
-	iHnftsIjNt3ScC0qO0f14PcfJYCBMMSymg90vuf0H26TRnyGxpLKhAbrF4T6yt1XW6t8RYdhehg
-	cbiW+RaTN28hBAYhLuF2zAU=
-X-Received: by 2002:a05:701b:4587:b0:1b2:6844:25c9 with SMTP id a92af1059eb24-1b5030613dbmr3036601c88.3.1794601338374;
-        Fri, 13 Nov 2026 12:22:18 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:67::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50316e195sm11098622c88.8.2026.11.13.12.22.17
+        bh=s5HRLWT3GJ5V57HOZzLlKs66p4zza+KZ/ooym+DPD/8=;
+        b=kOlX4Zyg348TfSwQAZ//eIrZDJlB8ecvF9qHU4jlrpJWN56x6W+SlknfZ6zmenDnyd
+         kqRz/cKk8W8Nzjd+cCPu0M+3RPGOtX63zJZgwjLeWQpPAubVh6IWr0vcyZ0O/MOV8yte
+         dD51Z2FqZzp9g2LEMDUf++s/bRwwHHEb9VAgzth+TwAkrHZ7XqW1EZDZoQr3kbcMXC1u
+         sY++HW2i912h5EU6DsXDV8H/Z4GixAtjg8laSDulmEF6XQZjxEch/SzixPGkxlSkb/bK
+         VP2ojzMsmLza6LfD6KPX85XxZ7HK3qG65xsT/Omljz11A3YyVppZUVsv7WSjJvWF/PiR
+         m5YQ==
+X-Forwarded-Encrypted: i=1; AL+hErHhXWkBJJ/Zyc5hJvDjjhp7wqTSnvRTcopaN54e+Z5EkJRH3ZRrsayyhJ4416ijuw+dsmtyxjuUh9cxsf9VV0s=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8JWngqcifK5DE3V/w2kJ2xvG8l68s/y3esd2lHRafT2M8RA5J7
+	VPaFRowN6OZXBtftQtWfXt7DGs4Aoj7gSHCw81SfAZFBkqvczSPm/Jz1
+X-Gm-Gg: AYBFou0ANdwsykAm+97FA+iPD4QLXcpIDQkdPhlBDEeHlqT9VRS9asW9QyDUpMeIOxL
+	+rFLteSuuYXgEbOx8TRQmfR7B1966PUScawzdHl0I/ty4POBGoGd68PVdtUo2e52iVW/5RTgm5C
+	+6C5p5D1W1OxhtXejoAxXhnlxm4IW1wic5BItbEp8brYL2nTPFSZ9Fc2+FVua+uCIFBkW8v7AN0
+	WdW0ICYgenGcWmLuGiSvLlVdrQxf2VWEaNwF+3c5vTtKOVNRdOYKXjNYL3ZOTaTvMujX+t0JXwv
+	dFftYHIiCiN5Jo/IWnOn2ZCHhTMOANFAISxVq4dZeKoBP+yWziQurNLMqO+CoudRz/MIsL0CmB2
+	zzG1IMP9oSIGHTsctccmsEWzjR+B/T0nl6umeSpq79iuhzKGszcwTgSKnck8tZTY+szpluaz8Zm
+	cNV1s1X2HNeSP8yALBnEXEfcivYK0yZcg8v3KlWRNm0LPQiWWQfi6d1vwYwkLsEHJ9aS0Dh00fb
+	EOk/651UUVNBP+mNjUkLXm2fr9iHqjJ7Xk1kp3/LydEXLzvsClK0VhawiDmOxHBPFT9V2NMEvnK
+	mV944PNg1Jy7ni75/05RPHQ=
+X-Received: by 2002:a05:701b:4594:20b0:1b2:4871:b1f7 with SMTP id a92af1059eb24-1b50313a743mr3055299c88.39.1794601339464;
+        Fri, 13 Nov 2026 12:22:19 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:6a::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b50313d8f5sm15946929c88.3.2026.11.13.12.22.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 12:22:18 -0800 (PST)
-Date: Fri, 13 Nov 2026 12:21:59 -0800
+        Fri, 13 Nov 2026 12:22:19 -0800 (PST)
+Date: Fri, 13 Nov 2026 12:22:12 -0800
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: Breno Leitao <leitao@debian.org>
 Cc: "David S. Miller" <davem@davemloft.net>, 
@@ -95,11 +95,10 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
 	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 2/3] tcp: convert do_tcp_getsockopt() to
- sockopt_t
-Message-ID: <avdxYs47SOZHDU-D@devvm16445.scu0.facebook.com>
+Subject: Re: [PATCH net-next 3/3] selftests: net: getsockopt_iter: cover tcp
+Message-ID: <avdxbp3uCMtiO_KT@devvm16445.scu0.facebook.com>
 References: <20261112-getsockopt_phase7-v1-0-1eb759dd0929@debian.org>
- <20261112-getsockopt_phase7-v1-2-1eb759dd0929@debian.org>
+ <20261112-getsockopt_phase7-v1-3-1eb759dd0929@debian.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -111,49 +110,22 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261112-getsockopt_phase7-v1-2-1eb759dd0929@debian.org>
+In-Reply-To: <20261112-getsockopt_phase7-v1-3-1eb759dd0929@debian.org>
 
 On 11/12, Breno Leitao wrote:
-> Convert the SOL_TCP switch to sockopt_t. The TCP-AO helpers already
-> take one, so they get it directly and the tcp_ao_get_sockptr() bridge
-> goes away.
+> Add a fixture for do_tcp_getsockopt(). The setup keeps both ends of a
+> loopback connection, with TCP_SAVE_SYN set on the listener, so the
+> accepted socket has a saved SYN to report.
 > 
-> The options that re-read optlen to get past the sizeof(int) clamp at
-> the top take it from sopt->optlen instead, so optlen is read once.
+> TCP_INFO and TCP_CONGESTION cover clamping the reply down to what fits,
+> TCP_ULP covers reporting zero and writing nothing, and TCP_SAVED_SYN
+> covers the length-then-EINVAL path, which the second half of that test
+> uses to read the SYN back.
 > 
-> Only a user buffer reaches TCP_ZEROCOPY_RECEIVE: BPF's sol_tcp_sockopt()
-> does not take it, and it maps pages into the caller's mm anyway. It
-> keeps checking the bytes past its struct with check_zeroed_user(), now
-> on iter_in.ubuf, and a kernel buffer gets -EINVAL.
-> 
-> tcp_getsockopt() builds the sockopt_t with sockopt_init_user() once the
-> level is known to be SOL_TCP, and writes optlen back unconditionally,
-> because TCP_SAVED_SYN reports the length it needs and then fails with
-> -EINVAL. This mirrors ip_getsockopt().
-> 
-> Every SOL_TCP getsockopt() now writes optlen, including the ones that
-> did not before, such as TCP_REPAIR_WINDOW, TCP_ZEROCOPY_RECEIVE and the
-> error returns. An unwritable optlen word therefore turns them into
-> -EFAULT.
-> 
-> The others stored optlen before optval, so an unwritable optlen word
-> stopped optval from being written. Now optval is written first.
-> 
-> sol_tcp_sockopt() and sol_tcp_sockopt_congestion() reach
-> do_tcp_getsockopt() through sol_tcp_getsockopt(), which builds the
-> sockopt_t with sockptr_to_sockopt() and stores optlen back, as
-> sol_ip_sockopt() does.
-> 
-> copy_to_iter() runs the hardened usercopy check on its source, which
-> copy_to_sockptr() skips for a kernel buffer. BPF programs call
-> bpf_getsockopt() from the receive softirq too. On the vmapped IRQ
-> stack, the check then takes the lock in find_vmap_area(), which is not
-> softirq safe, and lockdep reports an inconsistent lock state.
-> 
-> sol_tcp_getsockopt() therefore calls do_tcp_getsockopt() with page
-> faults disabled, which makes check_heap_object() skip that lookup.
-> Commit d319f344561d ("mm: Fix copy_from_user_nofault().") added that
-> guard for BPF and kprobes.
+> TCP_ZEROCOPY_RECEIVE reads its struct from optval and writes it back.
+> With nothing queued it maps nothing and succeeds, so the tests cover
+> the 16-byte struct glibc still declares, a larger buffer cut down to
+> the kernel's struct, and one whose extra tail is not zero.
 > 
 > Signed-off-by: Breno Leitao <leitao@debian.org>
 
