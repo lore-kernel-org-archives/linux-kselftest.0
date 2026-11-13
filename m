@@ -1,49 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794574763;
-	b=Yq6haCVwSwMto/X0mvOd8Bilz8YdKdxKR04SfJpACtLefgZPBuX4622GHxI82ufjHSGi
-	 +73dMOUAD8DjkrJ27yNhNayLqCPwwjxue38kHXHFPwG67Gwm9O+NUPs/9Tlb2e2Qgze4q
-	 qU2DEpsuPruIYIK1U5ZQYd3y452wii4lgYFnCdwOhB43czZlufk1GrZbVlX1BytjCEZRc
-	 CadCFB+92VWX/pNXyJFpMFI1ts8VMcTqSmWwTgLpSJYziKF4frhSJpgYhHbgcVmk5sjVE
-	 93tGxZi5qsxQghtua64miRJaJvBP1fl6Kc1fk18uTbmgsRHdmSSOhJsYxg0FJYgj2CA==
+	t=1794574999;
+	b=lwfItLkcbvCQeQSzzyQ9ix+8tuVANTO/9LrnWiOodz04qv38cucym4pc/yVR7IMdDyC+
+	 nM8SlgePrQKsqbVayLRTsT9/+zyoB5lmfr7gUDoI5Q4MzQwYnzSVi+pA187GnOKKPs1uN
+	 cPlSmHvnSkoGCN66qZ74b01f7ICZvd1uqWL6ADZatgGx94eSA7O3r2ybEBIX2fChjHKMs
+	 +mSKfS31mLk1p9AJAIdJ7DROukWQ3Z4CORb6IkfCT2Z4r+7xQ5BLnjiYhDb4NNp5pLCWh
+	 Gurz05BzOTPGeJklfTCFuRDTkrMD6Io0bje8zmfqQ+QXXTNe6BdyNYxdRwafV3e+I/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794574763;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=L9o0QAn31EhODg5Xk6yf6VXd8Cb1/NtuAjQyDpQKKWc=;
-	b=CM4XUyyeJ2inJJEKkIoUk9RDUgFGfAKCAEgr7m3ci/3ajWei7dh/ER77e4CfFcD43xHv
-	 52KwmaDw3CwqTVTCRWglYHV0K0afRAOxYRaDHXaj2j0LltE9KUeLeFBpSTNDBOKi5Fr7s
-	 JzgYQeyq889K5S91FsE+i3nOIJPvbjztRryXFbG8pZFQLBCa/NCkMP+j6e8/9ejFIb1Oc
-	 GI5DhR7/iOkOVTRW5Qzp3Vh39xM7XqCx16Tow7RnmFM/OEtKmXsk1ptfzhr43w5apgPm2
-	 GBOR1EXChzr9NKQvDzS3OSKS/zXFbAlCoOAMLI4/qj1NUvWDDMiqgt7YLJmdzrOW3rg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794574999;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=B+8Vs+Yp/t4sjNvb+bzKDikl2pLwbkyUE3+1C85nf6Q=;
+	b=1PDyuiE6DmQdlBa+AY36KGOoIEuNnZj1D1iLbxeerbTWbQS/TH0hmLtnwmw6V60m3vWw
+	 lPlxhIqcT2OLluPOA3FOB0ov7CcwtWTATVVhCytvG/Zjt0YGeVuiCgOpyW0itFmbkRc78
+	 WOsRyLcInc9hazPt/VtKIMCV1ELU/7+Efbp5SxAttW3ySBL4ZrNGNxneFudC2KKSj9wuC
+	 /jy30/Ww9Y/sJBOhf823n1RSr7hy4tPyNa3ImsSj8gNtiC2WTFjIaNsQuBPY451kkJjuJ
+	 PVdfumCp19P0T6VkdsoIprixDB0+dD2nxbbId31WyQoe7xUNf+SXMey35zp75rM8qTg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=TuxtysPG;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F19606A32E;
-	Fri, 13 Nov 2026 12:59:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70F19606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zu/dJD9I";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CD0606A32D;
+	Fri, 13 Nov 2026 13:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=TuxtysPG
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA0A81476;
-	Fri, 13 Nov 2026 04:59:18 -0800 (PST)
-Received: from [10.43.20.13] (unknown [10.43.20.13])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3EAC3F673;
-	Fri, 13 Nov 2026 04:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794574761; bh=IA8HbrwIcSv7yszpiNKddpXBErCGjQg6blFLc6aN5Qs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TuxtysPGkHekTOZWakO1gsh0ZU6UXYkeHjTVMySBTC5bRkJpe89iJYfrTPPZBsPsP
-	 RNfp6yInd9YavKXA4MaZUVcMvkkZZJkxd1I85hSj+EcPLh+OwTih1jHciCoqfVxaxp
-	 PEP99UB64GxvcCTp4Xozo9TLGLjSplxdXdRAwpgg=
-Message-ID: <827c5b0b-ec80-43bd-abdb-8fce4a8b1df9@arm.com>
-Date: Fri, 13 Nov 2026 11:51:14 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zu/dJD9I
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 443361F000C4;
+	Fri, 13 Nov 2026 13:03:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794574999;
+	bh=B+8Vs+Yp/t4sjNvb+bzKDikl2pLwbkyUE3+1C85nf6Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Zu/dJD9IxV2WuikZeXb8bfuCS4pFsvaCSWQhcqGCqyhr6faG7ezYtwzldCTrszp8y
+	 OTPw5+vqWCMsanCAaNDu+XZ/OpEWNwtwQoGIappHXcN7Xz+uJD5pguphPmf9v+yFQU
+	 3MtMreJ3DVOb1nz9k9PK9BarE0LZuMDvcevz+bgRdFWr4gQPC8Xx16dtyro89poApS
+	 +aFXTjALkPX+yN6S3dS8g4HaorLdR97Gc0o0g/HMQ+8EeF9HETVOPLvWSqbzjaZZXK
+	 JvC5zC3O3VYsv9PkUqlcEBlOKlMNrrXjPmft8TppMm7vg7Akm6eLeP6v1OpzM9fU35
+	 zcl2BXrcHhXSA==
+Date: Fri, 13 Nov 2026 13:03:13 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Hongfu Li <lihongfu@kylinos.cn>, 
+	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	hongfu.li@linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/mm: mlock2-tests: fix fclose(NULL) in
+ is_vmflag_set()
+Message-ID: <avcKibrnNmJn47fL@gremlin>
+References: <20261113-for-mlock2-v2-1-f62195fc8394@kylinos.cn>
+ <fb5ebeaf-2e3a-4d5a-9fb1-e86c1f10252f@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -53,50 +62,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: pkeys: wait for the child in become_child()
-To: Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?Q?Carlos_L=C3=B3pez?=
- <clopez@suse.de>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- dave.hansen@linux.intel.com, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- linux-kselftest@vger.kernel.org, Muhammad Usama Anjum <usama.anjum@arm.com>,
- Joey Gouly <joey.gouly@arm.com>, Hongfu Li <lihongfu@kylinos.cn>
-References: <20261106164639.2959195-1-clopez@suse.de>
- <20261106135739.113e4b432ecb6e92f62e37d4@linux-foundation.org>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20261106135739.113e4b432ecb6e92f62e37d4@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fb5ebeaf-2e3a-4d5a-9fb1-e86c1f10252f@kernel.org>
 
-On 06/11/2026 22:57, Andrew Morton wrote:
-> On Fri,  6 Nov 2026 17:46:39 +0100 Carlos López <clopez@suse.de> wrote:
+On Fri, Nov 13, 2026 at 11:31:55AM +0100, David Hildenbrand (Arm) wrote:
+> On 11/13/26 03:52, Hongfu Li wrote:
+> > is_vmflag_set() jumps to the shared 'out' label when
+> > seek_to_smaps_entry() fails. smaps is NULL on that path, and the
+> > code at the 'out' label calls fclose(smaps) unconditionally.
+> > fclose(NULL) is undefined behaviour, so the test crashes before
+> > it can report a test result.
 >
->> become_child() forks during test_pkey_alloc_exhaust() and has the parent
->> exit, so that the remaining tests run in the child. However, the test
->> runner only waits for the original process, so it sees the test finish
->> early with a success status while the remaining tests keep running in
->> the background. Failures after the first fork are thus not reported in
->> the exit status, and the remaining tests overlap with the next selftest.
->>
->> Fix this by waiting for the child in the parent and exiting with its
->> status. A previous fix avoided waiting, arguing that the parents would
->> keep holding their resources [1]. Particularly, the parent keeps the
->> hugetlb reservation of its test memory, so the child runs out of hugetlb
->> pages after a few iterations. Avoid this by freeing the test memory
->> before waiting.
-> Thanks.
+> I was briefly confuses staring at get_value_for_name() diff below. WHich is
+> clarified below.
 >
->>  tools/testing/selftests/mm/protection_keys.c | 16 +++++++++++++---
-> get_maintainer coverage of selftests is poor, alas.  So it's a good
-> idea to poke around in the git-blame output to figure out who best to
-> cc.  I added four new lucky duckies to this thread.
+> >
+> > Return early on that error path instead, so smaps is always valid
+> > at the 'out' label.
+> >
+> > get_value_for_name() follows the same pattern. Return early on the
+> > seek_to_smaps_entry() error path there as well, and drop the now
+> > redundant 'if (smaps)' guard on the fclose().
+> >
+> > Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+>
+> Fixes: tag? :)
+>
+> Apart form that LGTM
+>
+> Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
-Thanks, looks sensible to me. These pkeys kselftests really rely on a
-lot of (black) magic...
+Similarly,
 
-Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
+>
+> --
+> Cheers,
+>
+> David
+
+--
+Cheers, Lorenzo
