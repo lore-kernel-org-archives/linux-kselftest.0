@@ -1,135 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=158.69.130.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794575964;
-	b=2MLmYMtf6uch0kYSxc4+G85zClbQBWDn4AFKIrJaJxhpKFKl41JyfrWEf1rwFRWIeTjg
-	 SDau7Y/mp1YuskolS5xmfiRJusgmLNnp/KOK9pOS9sMzcgW0CcTNJ5bmy45G5+RewnThA
-	 hVO4+b7zhBVSKfOekeQuBEgsKdIk00DBIeVYi8PGSapSjcvtrcmHBK4KAlTWNqpkJRpcP
-	 LxeY1pLe5T8HrIOdE7ZAeMH60fyJgHDAx9XwqrJHnRiDt/I0aNz7FpcRbwvmC56wvrRYC
-	 tkAhqyPyVG2tdX9EaPhKIk9ILTgkpSzm+K4F9wUa/YBlvAyA4G3P8QY3iXwmKUv8SMg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794575964;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=6K5+1bJFXUKUg3IFl6qgg/BC25Z/G5ULg9pbLn4UPTA=;
-	b=RAfugvVybIla1v4p4iFOTBTVev+jwSQ7XwDgY178UyjOHny0Rnvv58pgGV5V3apTrIZr
-	 JDX6Tus5ARI1gxIYjOfBpO8L3Tkt4jWUciuj3siLneehfhrq9fRB3DIBR0k+Fwy9qIWKR
-	 Rk9PsA7rIAjQX2g13D4ASJrh132li+rJMrMHJAav3F/mttRQ6vdoxNEMX4SuXO07IyPvC
-	 pUZFV7FDsoTYssWRR+bEkV2ydcEjVyMrxzZqxru0I1lJv+ScjTHRXxQ8udjknOYr/Xuw2
-	 X1vXx4ic318LTJQ7D/fB9Enfl5gX/GL0YT54cBiEnt66G9I141z3Cl0+wqgFvXJ40+g==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.106
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794576723;
+	b=5D2eX+d5PpwHhcvfmYK7A6s05gUN+TA2ryOG+dPUarcr2cHV9kUzEY9vfN0/tywRySKl
+	 WJELUe0+aJluUioik5st+/Ygp2ZVD2b8L/DCqCYfTFCX7baTP1Gw+AlOhO6LZKSIiNnw0
+	 BogjXoOkThY1NuhScl2adM9u/oSKif6NcPHyUSv7TyOTEWBzMZWXX7Zr+gNvGHpSfhqBH
+	 nzPGZgsNF1zPQ44OR6S85EUrYTlwZpQ0M3SXBMPRI0oevI7ONszLOskf55lNu/fpdShD4
+	 wacM5i/Th6CcJBP/21ckWwCGaMOb3nnNDiC3/Fgg0oPhlZOnZTVkrnpcrlKCC+kxhbA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794576723;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=6ey04CRDOBDBiM+CEkBWGNJ1jBopZXpl9SjVmQkFVno=;
+	b=o8v4INzJa/Pvr/S6fZsuTX5tCeGU2oZrNqg9ao7JRaoKvEedFSW3+8+xH7/KXZKGvtaz
+	 0BhHwOwyKrYbyVBUsBQ+WEQJpExsYvgzsDOnY1EueUaZqHIvqvX6++L9C02yfhN9K+UlN
+	 Ka66Jagu42JOBXMEz87OwN1qVEqsSYoPcvkMU5cl3DgiMdf68JBKYVfQ6nyxiJpZoY9jF
+	 xvMUhVudkVJkWn4MUo9Do0pm+PT2VKLfmDp+bqWRNTOWApWXbs0mizllvnzrZ/gLKhX+z
+	 qhXT3l09HHxRPvTdJa3ignqGI50UVrKJzB7yD/P3iht80ehPtPWGcZVufTMFWGHAguw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=efficios.com;
 	spf=pass smtp.mailfrom=efficios.com;
-	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=EnxNh76r;
-	arc=none smtp.remote-ip=158.69.130.18
-Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+	dkim=pass header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=Y5mouyoQ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.189.106
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020106.outbound.protection.outlook.com [52.101.189.106])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320A6606CABE;
-	Fri, 13 Nov 2026 13:19:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 320A6606CABE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158BE606A323;
+	Fri, 13 Nov 2026 13:32:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 158BE606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=smtpout1 header.b=EnxNh76r
+	dkim=pass (2048-bit key, unprotected) header.d=efficios.com header.i=@efficios.com header.a=rsa-sha256 header.s=selector1 header.b=Y5mouyoQ
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nX/1zKFAeYtYrOCcNEzccsHbHJmnE6lGUVPgq6IEDQOFQsmNV4WRogZD+D9P3h/HXO0nYqreSGBIk/c5RQ/+NTBywR0D3wCaxScN5MvvEqc/otAAK/+w6GaNKOpyt/Ph+jfeNSyb1fAFFz/AuHjKH/ib/CecgMT87ZitAKDh1xNgkdeW/3MpWHfoAg1Q1LEcqBshr1njyMsrcfE5px+bMXNKAJbT9coNTRCUqETAazaYYHqnhwEIW4TWQtSpX3nN5gY9o4oCwWBkCAa+nD5ev4J5DpACaZH2oPULZE5rf/yCsK7CZvd2yscwGYRTKBrXNz4kclIkPbSA4OX56ASZXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6ey04CRDOBDBiM+CEkBWGNJ1jBopZXpl9SjVmQkFVno=;
+ b=eysT9b70ElI0wqIL4HKhDX8oN4OSrEPgs1u3xSMcCDtyTx8/6gQvRo9gHM75UiF0MbLpNnRXKjQ75+BNagvsBhq9tQCtOd9K76XB689TbNfieQVluuIgJ4fNrBLRKyEsEYKm0V2X2XXaRrupsYPaE/FqEoXk0j0kH3d/Q05W9ERQFqrAMjNseiu+yefyHz8HChgiwdbg+GyS9lmYrpUlg/fH9mfFNRF6ikFZy5nB1MHxIGJjkCn+B+Fk7HXqmr2gc475vqGS8kuFPEJvCBVa9+0rKtBdHRP65xNNeAJcFBa+O7ekZFb1eNk5hbB8I6ilvJ8EMDOm4BWB7XHiqMf20A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1794575952;
-	bh=6K5+1bJFXUKUg3IFl6qgg/BC25Z/G5ULg9pbLn4UPTA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EnxNh76rEx+TrhUSzsnsZ3F3UT4G7JmFnAvOLo6y79PyIBiGOXO4WqcvtgE72z/My
-	 XLC2uBUfs5RuTsJHWD7upDrBo2yWHu2qw00ST7Al48W+unxLZ8BcO64rq5v44UaUJG
-	 ceddhO7H2rLjQWrMw6RoD3eygdTLKoWz6eaak4Nt3rN4oMAZ0/bzVhrBGx2A3X9WZ+
-	 ed2zb6dOBn8sZzAi/6MdgfCFQyoG+LKrByO4Fd9u7jJvYSBqp5Sy5AJPSeeVkDdLO0
-	 0lE7M6E5Wvw5G12zAdr1LZyZj/Q2uCcfbdxMx/wltow8YbrqtXEvHcy6UpX9CT5M4a
-	 sRsxvpkpqemUA==
-Received: from thinkos.internal.efficios.com (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4jQyX04hD8zPxN;
-	Fri, 13 Nov 2026 08:19:12 -0500 (EST)
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ey04CRDOBDBiM+CEkBWGNJ1jBopZXpl9SjVmQkFVno=;
+ b=Y5mouyoQId9cdBrIu0+2WicwpIAssxXCQzteNhAoVPKdVMofXhewc6MOy9OgSvpt5pi6p4RAe0vpoDnKKBNeG6zuXa3jZmtEQpasdbHAH3I4NUBFNZaGIBy+pp43ZRv3C1h6oHOPphZ4k1A5XzuAdwnKkhGtQCGI3Ff5YGOUhZ8bhb8DCHDPubM6OgK6cRDPWcBx2PYV2ylp+5juefMkoRj3e+H5T2Wr53kqYTs6BX14v1ND99CewWdN2kw7nGn7z2ePidqi+gLF5oJLkD708FC0KyRVOiWt/2NfAoZv/QcbX8aH2KBV8i5wsQ7PPM6AmfCAsI+BydkNJ7IuGMOXGA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YQ1PR01MB967408.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:b3::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Fri, 13 Nov
+ 2026 13:31:58 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0615.008; Fri, 13 Nov 2026
+ 13:31:58 +0000
+Message-ID: <3cb19d75-4269-467c-9d58-6c3ec26abc3f@efficios.com>
+Date: Fri, 13 Nov 2026 08:31:56 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 15/29] sched/deadline: Rebuild the root domains'
+ accounting from the task list
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+ linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+ boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+ kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+ mathieu.poirier@linaro.org, longman@redhat.com, ridong.chen@linux.dev,
+ tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ bigeasy@linutronix.de, clrkwllms@kernel.org, parri.andrea@gmail.com,
+ m.szyprowski@samsung.com, kayracizmeci@gmail.com, weihengqiuu@gmail.com,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, stable@vger.kernel.org,
+ Qais Yousef <qyousef@google.com>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-16-mathieu.desnoyers@efficios.com>
+ <avR6g-ndjl8Xdo1y@jlelli-thinkpadt14gen4.remote.csb>
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Michal Clapinski <mclapinski@google.com>,
-	Andrei Vagin <avagin@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Aniket Gattani <aniketgattani@google.com>,
-	linux-kselftest@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Chris Gellermann <christian.gellermann@codasip.com>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	loongarch@lists.linux.dev,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	John David Anglin <dave.anglin@bell.net>,
-	linux-parisc@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Guo Ren <guoren@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	linux-openrisc@vger.kernel.org,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	linux-sh@vger.kernel.org,
-	Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	linux-arch@vger.kernel.org,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Lutomirski <luto@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Boqun Feng <boqun@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	lkmm@lists.linux.dev,
-	bpf@vger.kernel.org,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-trace-kernel@vger.kernel.org
-Subject: [RFC PATCH 16/16] selftests/membarrier: Check the core serialization of the sync core command
-Date: Fri, 13 Nov 2026 08:19:03 -0500
-Message-Id: <20261113131903.157186-17-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20261113131903.157186-1-mathieu.desnoyers@efficios.com>
-References: <20261113131903.157186-1-mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <avR6g-ndjl8Xdo1y@jlelli-thinkpadt14gen4.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0086.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2d::25) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -139,349 +110,125 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YQ1PR01MB967408:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a4d2174-806f-4af8-5ed2-08df418a7dc7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|1800799024|376014|7416014|366016|18002099003|22082099003|6133799003|4143699003|56012099006|10067099003|261102123227099003|261022105027099003|261026121527099003|261022075727099003|261028144727099003|261021121427099003|261026140227099003;
+X-Microsoft-Antispam-Message-Info:
+	jCqbnzTefe0syRAaBPl0Qc3uYwUtoKXlJfkNAq3HaoiVRTKBHCH3vo9Jcgqqi9oDdPcKrWI0Amz87yG6JO2SjZ2QANae0Yh6A3FQ5ISoNUMOhg5PPL9OrQOSeRxgsRB+hXSfFrjzOagsjU3pZgv9Ht0wPFjjAvCwhYy6lufTAsNyJseesOVXBVXJfAOdb+WfZ58L7B0LFW9rklSc/biWbQE6I3YAkgRas9/pGA3SCK75Bvqi4DIRmPjC6bYxBhRRpneOSo+Q1N/93WbHEojuLw0Vgkvzb/GmeNI1AC9DZ56wapDRESsgz6BiyaJmC2WriTbAa9NUwTjT1ObuEjjghOgcTA/2Kqr6TFD0KVwWhjeiHbZt59ZZ6097dAiJ9u7dM3UtRYBJKy1uFEwtjMzRBk0cI9sUFmOu4pnTY6NVddCGD/qR8iasAgSq4SLK8/abDEtuU0SpZVTJ5cQdFX7w3HgGvR03Zi0jcD2AW5WVZydNOfm2Yc8Qq0gRETtV3MEhZVwG7Lh5QQio+QM8v0iMcTplm2hSM/2L8S1sB7gjteteqCdv8/t7+b6m09iAjzyioGrlfzq/wl9vacgOJfK6VAojH9ArhZ1PuzL9rBdPjuY=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(376014)(7416014)(366016)(18002099003)(22082099003)(6133799003)(4143699003)(56012099006)(10067099003)(261102123227099003)(261022105027099003)(261026121527099003)(261022075727099003)(261028144727099003)(261021121427099003)(261026140227099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?R0hpY1d1U09tRzV2ekFSOVhPbHhxWFVOZzB1d2xSYlFIcjlpenRXcnFuQUZq?=
+ =?utf-8?B?aUxhcjNXbW1NVUMybDgyWTY3SW1OY0ZiYXR3ejd0RGlHYUpCWWJ4Q091WDZo?=
+ =?utf-8?B?UkRTYXQ3elo0NVNMUGZPM3NqT3pDZnQ1YlZrS0F1S2NoT3BwY0J5ZG1EaGZN?=
+ =?utf-8?B?R2RGc2pOcFcvQUg0T0laOUtvdldpWlVGL1J2MDJaRi96eDh2d1ZvK0Z0dlN6?=
+ =?utf-8?B?NC9yNjkwNzBkYVc2L0FLOXFoeDJNYTN3MTZpVEp0T2Z3UzUyOWJZWEF3WXAw?=
+ =?utf-8?B?Y1JYRkJlcG8vT1lnSzUzK3JadTl3OEl4eGJpeHBuZTA4VzA4cXBoWmU3TWhE?=
+ =?utf-8?B?d2llR2tDRWVmMmlkQ0VWQnMvVUFZc0FTOGZncWJFZUEvUUJKU0E3TjVmQmFz?=
+ =?utf-8?B?cTBDc3Y0SGl2L1dSOHovd1dyMkpFTDZyblFxbDdnb25GOFpRRVFSWGtnQyta?=
+ =?utf-8?B?a1MzUE5ZdTJITmFXcmR2QUNUdlUwY3RlMHVqTjFGK1ZGRmd1ZUpsZHBoSHFB?=
+ =?utf-8?B?SU1vcHlCOHg3SERPbmx4R2lUaGZkMlJGN3AzUHhmMjc3S0VLMzFESExmYm9O?=
+ =?utf-8?B?TldMa3hsZ2h3bm4rN3NHTXlsTUtlUGVoM2FvMU9GVHF4OE8vTUhaUDBJL1J6?=
+ =?utf-8?B?QnVtRTB2dUlJWlZEakw2enVrYTQ2bDJLQXZrQU5kME5IdkVVWUNybk9SN0hp?=
+ =?utf-8?B?WXVrVElnaWFudFlncVhNTWlVWjd0OWlqdEY4RDU3bnc5UTl4S28wcmpRVEkx?=
+ =?utf-8?B?bXVXS0ZIbUZqdzkwSnFaS3IyaWhZdkwvRmx1bE9URWxSaGJBdzByZG5mK2U0?=
+ =?utf-8?B?MkxhQUhlU0NaRDRCdHVzUlRyaU83K0RaOWtYSHhzeXRqMDJxbk44NjVqRDFN?=
+ =?utf-8?B?U2hzV3F4dVVsdXFEWDQyQVR6Zllvbk1JVkJ0UTNxa3J0OVVua1ZxaWdtMjEx?=
+ =?utf-8?B?QU5iVXd0VWVlRVNrbUVjUkI1N21hQklFNDI5Q05XM29HMDBiYVdRblA0NWN5?=
+ =?utf-8?B?dlZKdmxNOXRQVDZOYm5QNkF0SUZiQWs2MkVPN05UNHpQbmtGamRhMWI1VEp4?=
+ =?utf-8?B?dThtdFlrbko1YnBsY1VqNmxUYmRlRlVjSFZ4cXVRRGJhc0V3bXdiVVYzRmwr?=
+ =?utf-8?B?Y0dhdHZlaFd4NndWb2Yyb3RYNnNBZzJ6b2FXK1hCTExTeTlFL0JFaytXV1Ri?=
+ =?utf-8?B?NTI1aHRGcSsxWmNiQVlaN296Yzl1RDlSSW5TU0t4dVF2S0lzeVViV2ljQmNE?=
+ =?utf-8?B?T2JCZkszT1dNQXZ0d0paWHdISldPeGlUeisvRU9UbFZpSGtGZWZjWHZ1OUYx?=
+ =?utf-8?B?LzFqM1ZNQnhwOWczOHB6UzRkOTlLU2w4L0p3NWVSMmkyY1ZkYmxkendBS1l1?=
+ =?utf-8?B?ZHJIRDdWcmZYb2g4anRnbHJmbG45MEY4cXJwNmU5TGpQdEFOR004NmZubWFm?=
+ =?utf-8?B?MEpCVTlYWENmdEpuZ1VzRkJuZ21TeGx3ZHpyUkdQcEFXSG9CYjR6YTZDOTdI?=
+ =?utf-8?B?ZjBVOXgwRSs1U0txUFRpU0VKMEE0MFNhcTdoRDBOU0lQN0NWSmliYU9STUI5?=
+ =?utf-8?B?eEVHQ05xSy9COWsxaElRbzR1K0FEcHppV3V1TGc0Q1ROTlJMMXdwM2ZBSzNr?=
+ =?utf-8?B?MUVEem1hSjJEVEtXQ1hXYW9DOUQ1dlFwc2ZzUGN4Y3dZQVdrQ2RGU2pINGhJ?=
+ =?utf-8?B?Q09NbVJ1SUgzSUpTczYwZitWY0Q4YnRZcjk0cE5vOFUxdUdtVW1wVnJtN3cz?=
+ =?utf-8?B?U1hMaHo0aERZRmNKcXVUdlRVN1VyR0cxc1hYUjBDV25ZNEVrdndaTE1nTGRh?=
+ =?utf-8?B?TUUwZE9YcW1YZUhqdURxTy9BazJHVXBZSTdYQklienEzMFpTYm1VWTZrVU5s?=
+ =?utf-8?B?VkpLaU01UnJIbm5FM1ZTcU9POXNtRkJlRGZXb2FYQUlSOEtYcUgzZy8zYXlm?=
+ =?utf-8?B?bzBkOXh5Umg4cTVCbnkzZ2pma1pIemdpeW1QNUJDdDJSQVprbFhVWVRFcE1i?=
+ =?utf-8?B?R3JVWGoxdHU1T1BZTVVwUkJ5akZIc2ZpL3B0YXA2WllSNzFIdTl4VE54OWY2?=
+ =?utf-8?B?cUpvZ0syN1FMNkpmZm1ReFRCeUlDekEwYVhubVpNT0pramNxWVYyZkRTQU9X?=
+ =?utf-8?B?Zmh1aENXcUNldEN2eE9jWmdEbzBaSnVZWmZjVXNWZXJjaTBBbWF3YllmNXF6?=
+ =?utf-8?B?TjZnb0tick84aVQ2RHlEck9mSFJyVTlNWm53c3hDQjB6Tk5xUEFNTFprT2pt?=
+ =?utf-8?B?OTV6UWJrbEVnLytrT1I0YzI2MU82dmRweGxOVGVxZzBWSmtGdlNjNnYxd1d2?=
+ =?utf-8?B?ZHpXY2ZLNzlocFJhYis1d0NoaXdCWEEwUmRRVHp3K1I2YjlhbjAyQmlVTEx6?=
+ =?utf-8?Q?4g3zx6TYXAU0JKSo=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a4d2174-806f-4af8-5ed2-08df418a7dc7
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2026 13:31:58.2398
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LK6G0zONSNqnDegR+U+ix1IuUySZNR5BfvB/e4KnU8Ctea1NaLhilQyt8C0klYf+OvKYx2m76a6unREUXaru8JgXycLkjmiAAFZgKcsmOYc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQ1PR01MB967408
 
-MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE promises more than a
-memory barrier. Each running sibling thread of the caller executes a
-core serializing instruction after the call starts, and before it
-runs user-space code again. A thread which is not running executes
-one before it resumes user-space. This supports memory reclaim by a
-JIT compiler.
+Hi Juri,
 
-On x86, the kernel serializes the core in the IPI handler and in the
-scheduler. membarrier_test_barrier counts the memory barriers of each
-thread, but not these instructions.
+> The new walk drops the per-task pi_lock that dominated the old cost, so
+> the approach might be OK, but since this is Cc: stable and will
+> eventually reach Android, maybe someone from there can confirm before we
+> pull the trigger?
+>
+> Alternatively, a single global "any deadline task exist" bail would keep
+> suspend/resume free for the no-DL case without reintroducing any
+> per-cpuset bookkeeping to drift?
 
-Count them as well. These are the instructions, for x86-64:
+You are right: the walk costs too much with no deadline task. I
+measured it.
 
- - sync_core() in ipi_sync_core(),
- - the writes to CR3 in switch_mm_irqs_off(),
- - sync_core() in finish_task_switch().
+The test runs in a 64-vCPU guest with no debug options and no deadline
+task. A process holds N sleeping threads. A partition root is made and
+removed, and each change rebuilds the accounting. The time of one
+rebuild with this patch, in testing:
 
-sync_core() issues SERIALIZE or IRET. An IRET cannot be probed, so the
-instruction before it is probed instead.
+   threads    one rebuild
+         0    0.04 to 0.08 ms
+      1000    0.12 to 0.17 ms
+     10000    0.7 to 1.2 ms
+     30000    2.3 ms
 
-The sync core test case then checks two more things:
+The first three lines are from three runs, the last from one. Upstream
+returns early for a cpuset with no deadline task, so its rebuild does
+not grow with the number of threads. I did not measure it.
 
- - A call makes each target execute a core serializing instruction
-   in the IPI handler. A check where the target was scheduled out is
-   dropped.
+ From reading, a suspend runs one rebuild for each CPU it takes offline,
+and a resume one for each CPU it brings back. With 8 CPUs and 10000
+threads that is 14 rebuilds: 10 to 16 ms on this host, and more on a
+phone.
 
- - A target can be scheduled in after a task of another mm or after
-   a kernel thread. The scheduler then executes a core serializing
-   instruction before the target is scheduled out again.
+So the planned next version skips the walk when no task holds a
+deadline bandwidth, as you suggest. It keeps one count for the whole
+system, and none per cpuset: the number of tasks whose dl_bw is not 0.
+__setparam_dl() and __dl_clear_params() are the only places that change
+the dl_bw of a task, and they keep it.
 
-These checks are skipped with page table isolation. The kernel then
-serializes the core with the write to CR3 of each return to
-user-space, in entry code which cannot be probed.
+In the same test, a rebuild then takes 0.03 ms whatever the number of
+threads. With a deadline task in the system, the walk runs as before. A
+test on an Android device would still be welcome.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- .../membarrier/membarrier_test_barrier.bpf.c  |  11 +-
- .../membarrier/membarrier_test_barrier.c      | 102 +++++++++++++++++-
- .../membarrier/membarrier_test_barrier.h      |   6 ++
- 3 files changed, 112 insertions(+), 7 deletions(-)
+For comparison, the single list of accounted tasks you suggested on
+patch 13 takes 0.03 ms in this test, whatever the number of threads. I
+left it out because the rebuild then runs with interrupts disabled for
+its whole length, which grows with the number of deadline tasks.
 
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_barrier.bpf.c b/tools/testing/selftests/membarrier/membarrier_test_barrier.bpf.c
-index 46cfba13f00f..ce18089f8dab 100644
---- a/tools/testing/selftests/membarrier/membarrier_test_barrier.bpf.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test_barrier.bpf.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Count the memory barriers which membarrier relies on, for each
-- * registered thread.
-+ * Count the memory barriers and the core serializing instructions which
-+ * membarrier relies on, for each registered thread.
-  *
-  * See membarrier_test_barrier.c.
-  */
-@@ -40,6 +40,7 @@ struct {
- 
- /* What the scheduler owes to the thread which it switched to. */
- #define OWES_BARRIER	1
-+#define OWES_SYNC_CORE	2
- 
- struct cpu_state {
- 	/* Slot, plus one, of the thread which this CPU last switched to. */
-@@ -111,6 +112,8 @@ int barrier_site(struct pt_regs *ctx)
- 		slot = state->slot;
- 		if (mask & (1U << MBT_SWITCH_MM))
- 			state->owed &= ~OWES_BARRIER;
-+		if (mask & (1U << MBT_SYNC_CORE_SWITCH))
-+			state->owed &= ~OWES_SYNC_CORE;
- 	} else {
- 		slot = slot_of(bpf_get_current_task_btf());
- 	}
-@@ -131,13 +134,15 @@ int BPF_PROG(sched_switch, bool preempt, struct task_struct *prev,
- 	/* The CPU leaves the thread which it last switched to. */
- 	if (state->owed & OWES_BARRIER)
- 		count(state->slot, 1U << MBT_SCHED_IN_MISSED);
-+	if (state->owed & OWES_SYNC_CORE)
-+		count(state->slot, 1U << MBT_SYNC_CORE_IN_MISSED);
- 	count(slot_of(prev), 1U << MBT_SCHED_OUT);
- 	slot = slot_of(next);
- 	state->slot = slot;
- 	state->owed = 0;
- 	/* The cases which need a barrier after the store to rq->curr. */
- 	if (slot && next->mm && prev->mm != next->mm) {
--		state->owed = OWES_BARRIER;
-+		state->owed = OWES_BARRIER | OWES_SYNC_CORE;
- 		count(slot, 1U << MBT_SCHED_IN);
- 	}
- 	return 0;
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_barrier.c b/tools/testing/selftests/membarrier/membarrier_test_barrier.c
-index 46502d271242..a8152ec4eecd 100644
---- a/tools/testing/selftests/membarrier/membarrier_test_barrier.c
-+++ b/tools/testing/selftests/membarrier/membarrier_test_barrier.c
-@@ -36,6 +36,9 @@
-  * must then execute a memory barrier after the store to rq->curr,
-  * before the target is scheduled out again.
-  *
-+ * The sync core command is checked in the same way, with the core
-+ * serializing instructions.
-+ *
-  * The instructions are found by their bytes in the kernel text, which
-  * is read from /proc/kcore. The list is for x86-64. It depends on what
-  * the compiler inlines into the functions it names.
-@@ -94,6 +97,10 @@ struct target_stats {
- 	atomic_ulong sched_in;
- 	/* Scheduled in without a barrier after the store to rq->curr. */
- 	atomic_ulong sched_in_missed;
-+	/* Checks where the target did not serialize its core. */
-+	atomic_ulong sync_core_missed;
-+	/* Scheduled in without a core serializing instruction. */
-+	atomic_ulong sync_core_in_missed;
- };
- 
- struct shared {
-@@ -126,6 +133,9 @@ struct target {
- static struct shared *shared;
- static int shared_fd;
- 
-+/* The targets of this process also check the sync core guarantee. */
-+static bool check_sync_core;
-+
- static int sys_membarrier(int cmd, unsigned int flags, int cpu_id)
- {
- 	return syscall(__NR_membarrier, cmd, flags, cpu_id);
-@@ -190,6 +200,11 @@ enum match {
- 	MATCH_CR3,
- 	/* Instruction with a LOCK prefix. */
- 	MATCH_LOCK,
-+	/*
-+	 * SERIALIZE or IRET, as issued by sync_core(). An IRET cannot be
-+	 * probed: the instruction before it is probed instead.
-+	 */
-+	MATCH_SYNC_CORE,
- };
- 
- struct site {
-@@ -205,15 +220,21 @@ struct site {
- #define IPI		(1U << MBT_IPI)
- #define SYSCALL		(1U << MBT_SYSCALL)
- #define SWITCH_MM	(1U << MBT_SWITCH_MM)
-+#define SYNC_CORE	(1U << MBT_SYNC_CORE)
-+#define SYNC_CORE_SWITCH (1U << MBT_SYNC_CORE_SWITCH)
- 
- static const struct site sites[] = {
- 	{ "ipi_mb", MATCH_MB, IPI },
- 	{ "ipi_sync_core", MATCH_MB, IPI },
-+	{ "ipi_sync_core", MATCH_SYNC_CORE, SYNC_CORE },
- 	{ "ipi_rseq", MATCH_MB, IPI },
- 	{ "membarrier_global_expedited", MATCH_MB, SYSCALL },
- 	{ "membarrier_private_expedited", MATCH_MB, SYSCALL },
--	/* Switch to another mm: write to CR3. It is a full barrier. */
--	{ "switch_mm_irqs_off", MATCH_CR3, SWITCH_MM, true },
-+	/*
-+	 * Switch to another mm: write to CR3. It is a full barrier and
-+	 * it is core serializing.
-+	 */
-+	{ "switch_mm_irqs_off", MATCH_CR3, SWITCH_MM | SYNC_CORE_SWITCH, true },
- 	/* Switch to the mm which the CPU kept in lazy TLB mode: smp_mb(). */
- 	{ "switch_mm_irqs_off", MATCH_MB, SWITCH_MM, true },
- 	/*
-@@ -221,6 +242,8 @@ static const struct site sites[] = {
- 	 * locked instruction of this function counts as well.
- 	 */
- 	{ "finish_task_switch", MATCH_LOCK, SWITCH_MM, true },
-+	/* membarrier_mm_sync_core_before_usermode() */
-+	{ "finish_task_switch", MATCH_SYNC_CORE, SYNC_CORE_SWITCH, true },
- };
- 
- struct probe {
-@@ -319,6 +342,7 @@ static void scan_function(const struct site *site, const struct ksym *sym,
- {
- 	unsigned char *text;
- 	size_t i, left;
-+	int32_t imm;
- 
- 	text = malloc(size);
- 	if (!text || !read_kernel(sym->addr, text, size)) {
-@@ -350,6 +374,24 @@ static void scan_function(const struct site *site, const struct ksym *sym,
- 			if (insn[0] == 0xf0)
- 				probe_insn(site, sym, addr);
- 			break;
-+		case MATCH_SYNC_CORE:
-+			/* SERIALIZE is 0f 01 e8. */
-+			if (left >= 3 && insn[0] == 0x0f && insn[1] == 0x01 &&
-+			    insn[2] == 0xe8) {
-+				probe_insn(site, sym, addr);
-+				break;
-+			}
-+			/*
-+			 * iret_to_self() is "pushq $1f; iretq; 1:". Probe the
-+			 * push.
-+			 */
-+			if (left < 7 || insn[0] != 0x68 || insn[5] != 0x48 ||
-+			    insn[6] != 0xcf)
-+				break;
-+			memcpy(&imm, insn + 1, sizeof(imm));
-+			if (imm == (int32_t)(addr + 7))
-+				probe_insn(site, sym, addr);
-+			break;
- 		}
- 	}
- 	free(text);
-@@ -624,8 +666,9 @@ static bool check_call(const uint64_t *counters, struct target_stats *stats)
- 	unsigned long done = atomic_load(&shared->done);
- 	uint64_t ipi = counter(counters, MBT_IPI);
- 	uint64_t sched_out = counter(counters, MBT_SCHED_OUT);
-+	uint64_t sync_core = counter(counters, MBT_SYNC_CORE);
- 	unsigned long started = atomic_load(&shared->started);
--	bool by_ipi, scheduled;
-+	bool by_ipi, scheduled, serialized;
- 	int spins = 0;
- 
- 	/* A call is in flight. */
-@@ -637,6 +680,7 @@ static bool check_call(const uint64_t *counters, struct target_stats *stats)
- 	}
- 	by_ipi = counter(counters, MBT_IPI) != ipi;
- 	scheduled = counter(counters, MBT_SCHED_OUT) != sched_out;
-+	serialized = counter(counters, MBT_SYNC_CORE) != sync_core;
- 	if (scheduled) {
- 		atomic_fetch_add(&stats->by_sched, 1);
- 		return true;
-@@ -648,6 +692,8 @@ static bool check_call(const uint64_t *counters, struct target_stats *stats)
- 		atomic_fetch_add(&stats->by_ipi, 1);
- 	else
- 		atomic_fetch_add(&stats->missed, 1);
-+	if (check_sync_core && !serialized)
-+		atomic_fetch_add(&stats->sync_core_missed, 1);
- 	return true;
- }
- 
-@@ -658,7 +704,8 @@ static void run_target(const struct target *target)
- 	const uint64_t *counters;
- 	long deadline = now_ms() + target->ms;
- 	unsigned long checks = 0;
--	uint64_t first_ipi, first_sched_in;
-+	uint64_t first_ipi, first_sched_in, first_sync_core_missed;
-+	uint64_t first_sched_out;
- 
- 	if (target->cpu >= 0 && pin_to_cpu(target->cpu))
- 		setup_error("sched_setaffinity");
-@@ -671,6 +718,18 @@ static void run_target(const struct target *target)
- 	atomic_fetch_add(&shared->ready, 1);
- 	while (!atomic_load(&shared->registered) && !atomic_load(&shared->stop))
- 		sched_yield();
-+	/*
-+	 * The scheduler serializes the core of a registered process
-+	 * only. The target may have been scheduled in before the
-+	 * registration. So wait until it is scheduled out, and count
-+	 * from there.
-+	 */
-+	first_sched_out = counter(counters, MBT_SCHED_OUT);
-+	while (check_sync_core &&
-+	       counter(counters, MBT_SCHED_OUT) == first_sched_out &&
-+	       !atomic_load(&shared->stop))
-+		usleep(1000);
-+	first_sync_core_missed = counter(counters, MBT_SYNC_CORE_IN_MISSED);
- 	first_ipi = counter(counters, MBT_IPI);
- 	first_sched_in = counter(counters, MBT_SCHED_IN);
- 	while (!atomic_load(&shared->stop)) {
-@@ -690,6 +749,10 @@ static void run_target(const struct target *target)
- 			 counter(counters, MBT_SCHED_IN) - first_sched_in);
- 	atomic_fetch_add(&stats->sched_in_missed,
- 			 counter(counters, MBT_SCHED_IN_MISSED));
-+	if (check_sync_core)
-+		atomic_fetch_add(&stats->sync_core_in_missed,
-+				 counter(counters, MBT_SYNC_CORE_IN_MISSED) -
-+				 first_sync_core_missed);
- }
- 
- static void *target_thread(void *arg)
-@@ -816,6 +879,9 @@ static void sum_stats(int first, int nr, struct target_stats *sum)
- 		sum->ipis += atomic_load(&stats->ipis);
- 		sum->sched_in += atomic_load(&stats->sched_in);
- 		sum->sched_in_missed += atomic_load(&stats->sched_in_missed);
-+		sum->sync_core_missed += atomic_load(&stats->sync_core_missed);
-+		sum->sync_core_in_missed +=
-+			atomic_load(&stats->sync_core_in_missed);
- 	}
- }
- 
-@@ -828,6 +894,8 @@ static void sum_stats(int first, int nr, struct target_stats *sum)
- 	       __sum.by_ipi, __sum.by_sched, __sum.ipis);		\
- 	EXPECT_EQ(__sum.missed, 0);					\
- 	EXPECT_EQ(__sum.sched_in_missed, 0);				\
-+	EXPECT_EQ(__sum.sync_core_missed, 0);				\
-+	EXPECT_EQ(__sum.sync_core_in_missed, 0);			\
- 	EXPECT_GT(__sum.by_ipi + __sum.by_sched + __sum.missed, 0);			\
- } while (0)
- 
-@@ -902,8 +970,34 @@ TEST(private_expedited)
- 		     MEMBARRIER_CMD_PRIVATE_EXPEDITED);
- }
- 
-+/*
-+ * With page table isolation, the kernel serializes the core with the
-+ * write to CR3 of each return to user-space. This write is in the entry
-+ * code, which cannot be probed.
-+ */
-+static bool page_table_isolation(void)
-+{
-+	char *line = NULL;
-+	bool pti = false;
-+	size_t len = 0;
-+	FILE *f;
-+
-+	f = fopen("/proc/cpuinfo", "r");
-+	if (!f)
-+		return false;
-+	while (!pti && getline(&line, &len, f) >= 0)
-+		pti = !strncmp(line, "flags", 5) &&
-+		      (strstr(line, " pti ") || strstr(line, " pti\n"));
-+	free(line);
-+	fclose(f);
-+	return pti;
-+}
-+
- TEST(private_expedited_sync_core)
- {
-+	check_sync_core = !page_table_isolation();
-+	if (!check_sync_core)
-+		TH_LOG("page table isolation: core serialization not checked");
- 	test_private(_metadata,
- 		     MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
- 		     MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE);
-diff --git a/tools/testing/selftests/membarrier/membarrier_test_barrier.h b/tools/testing/selftests/membarrier/membarrier_test_barrier.h
-index d615ad1d9e8a..7c31d8cba544 100644
---- a/tools/testing/selftests/membarrier/membarrier_test_barrier.h
-+++ b/tools/testing/selftests/membarrier/membarrier_test_barrier.h
-@@ -24,6 +24,12 @@ enum {
- 	 * the scheduler executed no memory barrier in between.
- 	 */
- 	MBT_SCHED_IN_MISSED,
-+	/* Core serializing instruction of the membarrier IPI handler. */
-+	MBT_SYNC_CORE,
-+	/* Core serializing instruction of the scheduler. */
-+	MBT_SYNC_CORE_SWITCH,
-+	/* Like MBT_SCHED_IN_MISSED, for a core serializing instruction. */
-+	MBT_SYNC_CORE_IN_MISSED,
- 	MBT_NR_COUNTERS,
- };
- 
+Thanks,
+
+Mathieu
+
 -- 
-2.47.3
-
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
