@@ -1,55 +1,125 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794581025;
-	b=JnAUtsDLzjjD2LsNO2qUrcL/2slYEr6muSPsmfN2ocInMcGnop4DzhqGNRySzxArcSrK
-	 BpQfJkZN0JeNWtKBshB/TGnddWla3w5UYPecImVpn2K8CLl0xVCnb4xhXz3LIp2Tmaky4
-	 B7vQbhwrkKTRCXq/H6TvNI4DNIte97k6F71jSxeW/EdYil2y/QNMtHNpzXyo4vabZjBK0
-	 3MCnKZAvBhxxoxGcMlcM6Q9QyJOPZGspB5nGsXMAuJfZMpAVscJhlZS5agrM8qNVXV8wH
-	 dKm/bYtV8I6igVmDniPC2UBu+bdOfb9fdVX5Il3y8cVpsVPqWCIREsS26Dp8l0xrhQA==
+	t=1794582265;
+	b=hKeQKRHx7vdIP4Bv7mnFgR2kwhAVumaZ/06xLMR1IXXSPv4rVQZ5+LOqYPWaw7Wr6Lus
+	 BPCD4RM2xrhOXfpY5o8Wr3d2fnBZDo/CR8tPf5sJu5YrbVCXdRAUnA3+FKJlCrJcdeWPl
+	 bDBjYgf/dxJ48AsNdLJkF3alwpVag55fsVHckcZTxeiQxaBfg2G5wr5WUMII+gphgSZxT
+	 azq2pqnUxHf4l8QQA7gwGFj3pFuKRfoX+6i7p0b5h2N3hazPsolVNpLMK/igXhtJzP6py
+	 jP/pftLIWwPiLlqcMF6umvJV+dVGf9tdHWqJYk2IgOUtqglFI6ZnOqXlsD9nLoppoIA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794581025;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=aIJ1R3I3zY6nNLuEgbZL5CCKuVIRDzNDPBPjyXpoCSI=;
-	b=1MS4sy3biaANOMrrWtM3Wy2go0axEkx2LEQs9u7vgXWFr/NZp0DpkASGFKogcWGbqgUj
-	 lCi3tjrEvjK6uUvKxk28cdnXnE5zr1QKeozR/iOUEpQcy7IDiQvw5m5CsOdj+jPgnGhvM
-	 TmoLrqC5sCJLrZ50E1rWzi0Y/NzaLC3gbWrGo4drLrvdermn8jx8Tvns8c+X1uiieuqAr
-	 ImXfh0DDICBoF0kZtkZJN/dfKmS9pwe98g2mORjAK1xG1j4zYg+g9zdTMSFvoNs52bOks
-	 v1Jz9PRfF4RIQoVN0lPYwjuHxltf5/Pd0Cd+hBNQRjVO6mgTXPQhs+Jz0ayB+YbvTpw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794582265;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=VBm4qF0y5CrLsLbvNlcB/jDiXe3RpYSa+rFP+kdVVgQ=;
+	b=C4dpWnNxzpRJ7g/VcrZ7hX3xakZAwGpxoD9zVJXtW6vZNJUUfkeW6ybVEjCtQFOGHvQd
+	 u1MsJSM9sTm4UW531+ebvBuEO8dk3YDpj+s/V1olGE/2YfCwaNmcvJO0VTPViBqmgXCGb
+	 LCuqPMsD3eFSIhnUKRh5bT4CfHXsDmEWO0oheJTJTcyqROATYr+XkhVDuVlYPz8/L9tte
+	 8mZxjmFTcsfl6FtY/a6d5UdttzIuY9Eh1BNEsZ9f/PLatIhNjpq7uvtVYBZnvRkdLClk0
+	 UUFGq0jqzb5fks3mk9j0KWZky+3l6xWpOxxssTgAvT3Dbnhu9be9C5aG7gH0o7SqWdg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=chBHvI6M;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Fr9UEepa;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=DvUd57AJ;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A1A606A330
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 14:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715CD606A330
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 15:04:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 715CD606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=chBHvI6M
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1461F000CC
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 14:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794581025;
-	bh=aIJ1R3I3zY6nNLuEgbZL5CCKuVIRDzNDPBPjyXpoCSI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=chBHvI6McXSDpHb0EWEVc33PGomMAQ7sDtEdoNdx/Cu0Rbq/W/hRuM5cj8zLXytEY
-	 3qEHRKcnBJour5iQixW57eDGNTvp22S/nugBuaewf20w504Ll1F0Giffoqu/D0/zDP
-	 qUFjAZWP/otiqb5GLUAbqaVLV7/9MouBJgprqbWw5sfErJK69E0bISjPhbFRyEH8eS
-	 IhYe5soo/trQszfwsezegv1bJp6YQjeYbApIe3GAd97d5UNE2pIW0jQQWNZqgG2gha
-	 JLMUOV75nxrYW/iL3i2aqoUQC0b6CcmEtGBt6XJ1Mc6IICkt253ArfEeQ0upo9rQjW
-	 0FPOyWuMXd4jA==
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-5eadef147ffso1943351e0c.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 06:43:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErFKBBBmWJ9HMbaSpQ5PEyNRHbWMGRrwUepmi/nDm9tstrrF6A3VHUSWn7kYL3R1Xupd7av5QOz+cTGI7aMsAV4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/pVGsPGaUk+hy1Ynvb92LdOdgoyH8XR+oCMayxstm6TA89athV
-	J0bxq7ePFD2RSWCTGZYTJgoSm1qHP49DiUr5E4SX4uI/zEpAt9zFekJOiil7ol/Izt6bBQYOTzC
-	/BWSgSf2Ruwq1n0OVziN6UsDbXUTnee8=
-X-Received: by 2002:a05:6122:2490:b0:5c9:c60e:3a48 with SMTP id
- 71dfb90a1353d-5ee34ae1ca8mr943708e0c.20.1794581024275; Fri, 13 Nov 2026
- 06:43:44 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Fr9UEepa;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=DvUd57AJ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1794582264;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VBm4qF0y5CrLsLbvNlcB/jDiXe3RpYSa+rFP+kdVVgQ=;
+	b=Fr9UEepamPBOJU22LWErbMatEYI7yXVpttMIbgCgEq8En8QMD1SDx2I2jqGFQ0QzGtEPln
+	OqD3HGc0Em1YjpuWgt93cWCA5pK9vpUgChASLhKev4wAlA5GI+3UCaHYNWWeD3s2X+aS9M
+	tZgD4+jNnuMybfLdMtfewPhOGJUlkYc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-27-IMtVU_R7MhSgyHlWhWlbyg-1; Fri, 13 Nov 2026 10:04:21 -0500
+X-MC-Unique: IMtVU_R7MhSgyHlWhWlbyg-1
+X-Mimecast-MFC-AGG-ID: IMtVU_R7MhSgyHlWhWlbyg_1794582261
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-492b5408dedso553869f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 07:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1794582261; x=1795187061; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VBm4qF0y5CrLsLbvNlcB/jDiXe3RpYSa+rFP+kdVVgQ=;
+        b=DvUd57AJrozlGhVyMRLhEIZVRbNiJOykXOUj4BLqPD/33eK7QVfWz/lW20XR9JFklI
+         etL7EvVjHMUOzINt2veI/BVDEYQS48fHyorV2pn5DXZI/N+pJjYFZwYrpHSOrVEP+sWM
+         8f3lgDrGcl1xnxUCnUqXbi6wBM9zCt6oSfcnMg+7h21x5ewoHq2PrZqYTZDwdTY8xk2N
+         chcF0wMZj4YvzupHWxqovkNDJjDv2/ZeUE/gGb0aTYb0HSByduuy0g9le5tXpKVRxs1F
+         E+rBEmxYNr2busfNv9/JuX1uCb0e9yNL4FTz/lqwKVcdtqJG/riRKp65UB/94tlkPNXP
+         Os6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794582261; x=1795187061;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VBm4qF0y5CrLsLbvNlcB/jDiXe3RpYSa+rFP+kdVVgQ=;
+        b=zA3zMzccHQnp81T8hpvY1jrzEVEL3iwlTx7xvT5fx1b7MSL1AAaFHhR69jj0uioYq/
+         IxsUyvThgfkavLIQpR3XZq6SQWgswW1kcKfRQXmL3V3L5pMyaB2+vt6I2rZ+Q/kuhluR
+         iqG5VcihKkqEXmH2MuFwhgiL98Yys1XUdZomBQ4l5meBcQZmkbX5sqGmuLHxhhMzafWI
+         lU6mO9PxX5qmPGDob/vc1r1MS87xloJ9AeKgdl0TuBnBNGpqI1ZSII0uL0+xuO8jHfvY
+         WBUjlDrNiDpdxC8LeYeOb/p+XAH63jj3ohpV2AVwFQWrNBa+v1lWqhxn7Dp4Eq6kQ56W
+         TzNQ==
+X-Forwarded-Encrypted: i=1; AL+hErHH9lSq6CfvLHj129D5tZdt5Sf/jxU1CLUBJzL8UD/EIUfrh1TvEfJbR6QbSQ5D1M4g39ogyrl3RZtg6WoAUFU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9gjAyBJ3nuLZLRpP5fsaYG67tVATdX78co8v/1+dhB/VenLcZn
+	dlXPTlRzyCpGOfHWZMduwCM50UAx4f4/GGbB+T5/nIRUSUXRwjV5vVJ6x/jaBac+pR86/0PHUIZ
+	NIEyaVxaMYM+UeThcWRT767igK844v0JZM68gjN4RHXZvPUPi1yf17p537k/eusvkIR251Q==
+X-Gm-Gg: AYBFou2leK1lyEKAtj9QKXlErOKKtcXxB1Sn3apREt3cM6LySYsfDxRSK8K0eM5mUB4
+	X7Ln88mfg/9fV4OTH+noh7vGMPkqPBMsudwjVkqRXVQARHSBNWA7QbjvGecDCrPezi6fGKm3i2M
+	Mz7zGjjOMRqco7x5Gmc/Nw6C5JK79AK/JuG9X0+FcWBXmaatIuauizpjNfNeQZJzVrEpe5xib19
+	ZiYpVR02TKXxE9KsuUd/yVaWlzNfueV06jQe0K3iFkhzk5O/8Kjncf3O6NWRZvzOuux+bIDNnYZ
+	B14pHCHXN/gYOv1Ke6AD7RfkrhyVdN7aeAkFtL9Anc0lhujkPZ9pq8Q9zbCae+qq+eNXGM5SyM+
+	s3dqc9bPBi8PmB6hcrBT/yxFqPjN8UotyfRuDjUNwqMyNMOnCMoa7J/vrLhBP7e3o9tIc+6L3Dv
+	atbW0=
+X-Received: by 2002:a05:600c:a44:b0:4a2:a6e:80f5 with SMTP id 5b1f17b1804b1-4bb55a45045mr59742615e9.11.1794582260653;
+        Fri, 13 Nov 2026 07:04:20 -0800 (PST)
+X-Received: by 2002:a05:600c:a44:b0:4a2:a6e:80f5 with SMTP id 5b1f17b1804b1-4bb55a45045mr59741585e9.11.1794582260021;
+        Fri, 13 Nov 2026 07:04:20 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb55af2901sm65285595e9.13.2026.11.13.07.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 07:04:17 -0800 (PST)
+Date: Fri, 13 Nov 2026 16:04:14 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
+	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
+	mathieu.poirier@linaro.org, longman@redhat.com,
+	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, parri.andrea@gmail.com,
+	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
+	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v5 26/29] sched/debug: Show the deadline bandwidth of
+ each runqueue
+Message-ID: <avcm7pyPqMx_r5Pl@jlelli-thinkpadt14gen4.remote.csb>
+References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
+ <20261108185406.1549770-27-mathieu.desnoyers@efficios.com>
+ <avWWlEGGqVPYkuZw@jlelli-thinkpadt14gen4.remote.csb>
+ <bcf6f03a-d596-4afc-9d3f-54219935bc2c@efficios.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -59,135 +129,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <b9ff4d03-61f7-4e17-b048-3cecee70f3ca@oss.qualcomm.com>
-In-Reply-To: <b9ff4d03-61f7-4e17-b048-3cecee70f3ca@oss.qualcomm.com>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Fri, 13 Nov 2026 15:43:30 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0g5TFTknAZwmhuLvJuaim7WwqBVDmuPHan6ChTmQgu-Pw@mail.gmail.com>
-X-Gm-Features: AclHuK8tWwNVIZk0uuz_ClJI2W7oD2KMYUmtoOxf6YQnxiXSC-VHM7u3YXnKAUc
-Message-ID: <CAJZ5v0g5TFTknAZwmhuLvJuaim7WwqBVDmuPHan6ChTmQgu-Pw@mail.gmail.com>
-Subject: Re: [GIT PULL] powercap: Add generic hierarchy support and convert DTPM
-To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Heiko St??bner" <heiko@sntech.de>, Shuah Khan <shuah@kernel.org>, 
-	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>, Lukasz Luba <Lukasz.Luba@arm.com>, 
-	Linux PM mailing list <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bcf6f03a-d596-4afc-9d3f-54219935bc2c@efficios.com>
 
-Hi Daniel,
+On 13/11/26 08:36, Mathieu Desnoyers wrote:
+> Hi Juri,
+> 
+> > OK, but we will still not printing additional useful information like
+> > extra_bw, etc. Not sure if you are aware of tools/sched/dl_bw_dump.py
+> > drgn script; maybe that is already useful for the needed additional
+> > debugging information?
+> 
+> I did not know that script, thanks. It shows more than this patch does.
+> 
+> The two lines are there for the selftests. params_waking and random_mix
+> of deadline_bw_test read running_bw and this_bw of each CPU from
+> /sys/kernel/debug/sched/debug. A selftest cannot rely on drgn and on
+> the debug information of the running kernel.
+> 
+> So I would keep the patch as it is. I would not add extra_bw: no test
+> reads it, and your script has it.
 
-On Tue, Nov 10, 2026 at 2:21=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@oss.qualcomm.com> wrote:
->
->
-> Hi Rafael,
->
-> as requested please consider the following changes since commit
-> 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
->
->    Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
->
-> are available in the Git repository at:
->
->    git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/powercap-hierarchy
->
-> for you to fetch changes up to 6ba41a1519ff1f91f96d90a6bf4f70131a8f7c73:
->
->    powercap: dtpm: Add RK3588 hierarchy (2026-11-09 17:33:40 +0100)
->
-> ----------------------------------------------------------------
-> Powercap controllers may expose trees of power zones, such as packages,
-> clusters and CPUs. This series adds generic helpers to duplicate a static
-> hierarchy description, create its zones through backend callbacks, and
-> destroy them in reverse order. Parents must precede their children in the
-> node array; the helpers validate that ordering rather than sorting nodes.
->
-> Drivers supporting multiple platforms can place each platform's hierarchy
-> description and node array in initdata. powercap_hierarchy_dup() creates =
-a
-> working copy of the selected hierarchy and rebases its parent pointers.
-> All original descriptions, including those for unused platforms, can then
-> be reclaimed automatically with init memory. Names and backend-private
-> data are not duplicated and must remain valid for the working hierarchy.
->
-> The controller supplies creation and destruction callbacks to connect the
-> generic hierarchy traversal to its backend. The creation callback receive=
-s
-> the control type, node name, private data and parent zone, registers the
-> zone with its operations and constraints, and returns it to the helper.
-> The destruction callback unregisters it during rollback or teardown.
->
-> The API supports both fatal creation errors, which roll back previously
-> created zones, and optional nodes: a NULL callback result skips a node an=
-d
-> its descendants while allowing independent branches to be created.
->
-> The helpers were motivated by the SPEL work and also let DTPM share the
-> same hierarchy infrastructure:
-> https://lore.kernel.org/lkml/20260702-qcom_spel_driver_upstream-v3-0-434d=
-50f0c5b0@oss.qualcomm.com/
->
-> A kselftest exercises static and duplicated hierarchies, skipped branches=
-,
-> reuse after partial destruction, and rejection of repeated creation. Its
-> userspace script checks the 16 exported zones and selected attribute
-> values, then removes the module with a sysfs attribute descriptor open.
->
-> DTPM is converted to the generic helpers while preserving best-effort
-> creation when individual backends are unavailable. The CPU backend finds
-> an online sibling when a hierarchy's representative CPU is offline.
-> Entirely offline policies remain unavailable during initialization.
->
-> The RK3399 description is reduced to one CPU entry per cpufreq policy.
-> The old backend already suppressed duplicate registration; the extra
-> entries were redundant descriptions, not additional registered zones.
-> Finally, a shared Rockchip virtual descriptor and an RK3588 CPU hierarchy
-> are added. RK3588's three frequency domains are represented by cpu@0,
-> cpu@400 and cpu@600 below a virtual package node; no GPU zone is added
-> for RK3588 in this series.
->
-> ----------------------------------------------------------------
-> Daniel Lezcano (6):
->        powercap: Add generic zone hierarchy creation helpers
->        selftests/powercap: Add powercap hierarchy creation API tests
->        powercap: dtpm: Remove duplicate RK3399 CPU hierarchy nodes
->        powercap: dtpm: Use generic powercap hierarchy helpers
->        powercap: dtpm: Rename Rockchip virtual node descriptor
->        powercap: dtpm: Add RK3588 hierarchy
->
->   drivers/powercap/dtpm.c                            | 180 ++++++------
->   drivers/powercap/dtpm_cpu.c                        |  62 +++-
->   drivers/powercap/dtpm_devfreq.c                    |  22 +-
->   drivers/powercap/powercap_sys.c                    | 204 +++++++++++++
->   drivers/soc/rockchip/dtpm.c                        | 129 +++++++--
->   include/linux/dtpm.h                               |   6 +-
->   include/linux/powercap.h                           | 205 ++++++++++++++
->   tools/testing/selftests/Makefile                   |   1 +
->   tools/testing/selftests/powercap/Kbuild            |   5 +
->   tools/testing/selftests/powercap/Makefile          |  46 +++
->   tools/testing/selftests/powercap/config            |   3 +
->   .../selftests/powercap/powercap_hierarchy.c        | 314
-> +++++++++++++++++++++
->   .../selftests/powercap/powercap_hierarchy.sh       | 128 +++++++++
->   13 files changed, 1153 insertions(+), 152 deletions(-)
->   create mode 100644 tools/testing/selftests/powercap/Kbuild
->   create mode 100644 tools/testing/selftests/powercap/Makefile
->   create mode 100644 tools/testing/selftests/powercap/config
->   create mode 100644 tools/testing/selftests/powercap/powercap_hierarchy.=
-c
->   create mode 100755 tools/testing/selftests/powercap/powercap_hierarchy.=
-sh
+Works for me, thanks.
 
-Pulled, but it had a small merge conflict with a previous cleanup.
-Please see my resolution:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/=
-?h=3Dbleeding-edge&id=3D95a9e882f5cb3ec891d1c021df3983358dd9b9e4
-
-and let me know in case something is missing.
-
-Thanks!
