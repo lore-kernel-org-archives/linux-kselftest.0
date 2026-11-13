@@ -1,68 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794549609;
-	b=nw513kFxJZ5qXO2vpP4sQamMbmzUzxow9ZA9OaYQS5DO0Y4zp3kYrCzh+Vc1rMeyqsWF
-	 ZPcU42mmFP3p3mKedLad51Ep+CI8O4cBEsVkRAdv2Ns9rafIL7qfBEiIr5zUK+AqYxL+F
-	 yER81zkDdZZx18X0Q1Emf83rmOhxshniYZQv7nGVsyiJJSRiLQACk0e5KljX5xtGLK8db
-	 nffYiiBTEVjyUDF1/BJckPMtYbLt0pAC5LsvEsh3jRbrpicikYDwjI+Zsk89++6oqbEbG
-	 zjWXcbT38Hd62Kl8VASb3Tj5pxwYDmDQOS5qrv6HMLD4Uv/5r+Yz4Ot1N2iEH6jev8A==
+	t=1794549721;
+	b=OQfSSJl0LYFfXoWsBy6P1+gQoLBXRdJfRU4IJ6ANcFcSNVGV1Ll70CtLxs1ydzF45ba1
+	 xF5IxuGOfGmU8mQHPJn8vh/ntQhSm+AkUtPoZDs73vCg7/bRVebyapqVkm6aWab9kXeqS
+	 1A/NBbWaLKNIABuoMkbC/ENmoOGU5JCsFJ9TTkjzF1eFRxRBE75IZe2cPE2eh+4krTXZr
+	 7quR3cMk6oT6u6GgdFlrl0FOmkABKsDLJ/dwIsaynwD8OAM4V6bfjcq30tCc7VQOLwEy4
+	 hnje5tz6fParqf7gY9Azsq7KSxleVYMAZlZ8ZADsAMu6pXA0AkGkde9PX9Y3ZILT/IA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794549609;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=EUL/aitfrfcM+1FPige7nV2S2I8JxJoAUHGZmHuZsgI=;
-	b=RQyf3qwo4vM+yDGE68umAo2OwCYm4jo5RsGANcBGohKKCli4i85fBQjpQxQ0kuWjVv5b
-	 8YXsiIui0wdlwBpIHuOagQBM1yF20f/a4oLyGvuSR9ru4GVws/EdCNoHioC1UlVdXRzof
-	 NIgq0eH9NqUA6CkSPSoj5wPT7LwHVU3OYgXppiyC+zsG/j2XerEzORv0evS8XPvvITYP0
-	 /2xBcflH5H/nptLUU7xHv9ak1Kv0Cwmk2YhWDvgD4Mb4ydZBCTtqi7iTRpDKJ6RUGAE53
-	 kbge+W/w4bHOePuVThETxs5ukUjv88vcaZXNUKHz9F6pVyhHWs2YJqYUfekgG+4dw1w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794549721;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=rLY2YoytpZKIMCK+OlU7rT12SKBNAp8v3ovHTlr1y94=;
+	b=WbgSKgwsns0Ww4S7QOZvIEyJjGK7DSGZJLUhCXzDf87r/y3HQLdDAv5wHkrr3B5FP5Dp
+	 45Kw0b3AnDnkN9JH15Zf6df1N+HokC47UnfgprZ7XUFD7jekuA1dosLU8xo61flBjTpab
+	 fXbXzLIhDt3VG3X3kU4SQp2eUSaQpVIA5+DrATXyZEiI9Mu50oaNE+WB9SprDcC/9H1Lw
+	 D7vljFqESU9gCzvKD/okmXYcRUB8LTfR35WOLCms5syZ4ers7ygp8aEJmd6ErmKoNx4/E
+	 dzTWZopLCmOOLFZcqs/Ow22007V+2WncKdWA+HmF2jb2WQLL3XCbowwcz0NRUD5I5nQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iO0RfYFP;
-	arc=none smtp.remote-ip=91.218.175.14
-Received: from mta0.migadu.com (out-14.mta0.migadu.com [91.218.175.14])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Aie+El2k;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE467606A323
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 06:00:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE467606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A8E606A31C;
+	Fri, 13 Nov 2026 06:02:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iO0RfYFP
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1shkp6ga0nLVFcW3TwDYwwcGH+hW1PeCl5r+sJWDuUM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794549606; v=1; x=1795154406;
- b=iO0RfYFPG97y9HZmu9OO1xu1ajZ/BA/0EsxCmoC1yesK+6jn+JLZM/wR3xYz4/1Qvk9ToqGy
- PJ9u6VbkX18iA1f9EjYYfGtknyQTHmGDSShieuvo8lFGUgVH1Z0j4d+0c9YCSDhrYfE2ySalY7b
- T66PS43WiYbTCrNpam84iPsc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id ec24db99b47d8887;
-	Fri, 13 Nov 2026 06:00:04 +0000
-X-Mizu-Trace-ID: ec24db99b47d8887
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 13 Nov 2026 13:59:50 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Pin-yen Lin <treapking@google.com>
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Bjoern Doebel <doebel@amazon.de>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Jonathan Toppins <jon.toppins+linux@gmail.com>,
-	linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>
-Subject: Re: [PATCH net] selftests: bonding: fix failover race in
- bond_options.sh prio test
-Message-ID: <avanVkILHDYdpond@fedora>
-References: <20261112014942.2946303-1-treapking@google.com>
- <avaewOJD7tX1UYfE@fedora>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Aie+El2k
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 931241F000C4;
+	Fri, 13 Nov 2026 06:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794549720;
+	bh=rLY2YoytpZKIMCK+OlU7rT12SKBNAp8v3ovHTlr1y94=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=Aie+El2koObfODXYt08Pzl4EAbPT706GxJHPiGoKZdAx167f3X48FR9hj1e3xSi/+
+	 inNL7swX3BnQiaDUBLvw839zPSJsin0L/RNq5KTSCH8aDFWG5TgqKR+ZbHpHrqA1tT
+	 8LByp4UnDcKx2NU+O+tQSGOUa5o4mHMCK9jVOwYe6+tKSPHIoEKcRFg2KX4BwO4UiW
+	 RqApzbfIquL+gVU1g7rXzWJp6O8jZccZ1cRI5bIOX2cIk02f0dmAarXCp0678fThTy
+	 haGPrv3ziMmaSI7N4XDNS85IVeViSvIaJdQOSNgA8vaUCIZf2a06pbqrHiqQ8NvK+a
+	 N9/iMMBfXTGpA==
+Subject:
+ Re: [PATCH can-next v3 3/9] selftests: can: add J1939 base functional tests
+From: netdev-bot+sashiko@kernel.org
+To: o.rempel@pengutronix.de
+Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
+ shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
+ quchaosheng000406@163.com, penguin-kernel@I-love.SAKURA.ne.jp,
+ kuba@kernel.org
+Date: Fri, 13 Nov 2026 06:01:59 +0000
+Message-ID: <179454971912.488853.3001942751202375383@kernel.org>
+In-Reply-To: <20261111-j1939-selftests-v3-3-5a80277ab363@pengutronix.de>
+References: <20261111-j1939-selftests-v3-3-5a80277ab363@pengutronix.de>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,63 +66,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <avaewOJD7tX1UYfE@fedora>
 
-On Fri, Nov 13, 2026 at 01:23:40PM +0800, Hangbin Liu wrote:
-> Hi Pin-yen,
-> On Wed, Nov 11, 2026 at 05:46:18PM -0800, Pin-yen Lin wrote:
-> > The prio test intermittently fails in the arp_ip_target and
-> > ns_ip6_target variants:
-> > 
-> >   TEST: prio (active-backup ns_ip6_target primary_reselect 1)   [FAIL]
-> >   	Current active slave is eth0 but not eth2
-> > 
-> > The ARP/NS monitor marks a slave down when it has received nothing for
-> > too long. With arp_interval 100 and the default arp_missed_max, that is
-> > about 250ms for the active slave (eth1) and 350ms for a backup slave
-> > (eth0, eth2). Every 100ms, eth1 sends a probe: eth1 receives the reply,
-> > and eth0/eth2 receive a copy forwarded by the gateway bridge. Once eth1
-> > is down, its probes reach no one and no slave receives anything, so
-> > eth1 normally times out first and the new active slave is picked by
-> > prio:
-> > 
-> >   t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
-> >   t=10   test sets eth1 down
-> >   t=300  monitor: eth1 idle 300ms -> down
-> >                   eth0/eth2 idle 300ms -> up, eth2 picked by prio
-> > 
-> > But the test takes eth1 down right after bond_check_connection(), whose
-> > ping replies only arrive on eth1:
-> > 
-> >   t=0    probe: eth1 gets the reply, eth0/eth2 get a copy
-> >   t=70   ping reply on eth1 only
-> >   t=85   test sets eth1 down
-> >   t=300  monitor: eth1 idle 230ms -> still up
-> >   t=400  monitor: eth1 idle 330ms -> down
-> >                   eth2 idle 400ms -> down too
-> > 
-> > eth2 can then no longer be picked. eth0 becomes the active slave if it
-> > happened to receive some other packet (e.g. an MLD report), otherwise
-> > whichever slave comes back first does. With primary_reselect 1 or 2,
-> > the bond keeps eth0 even after eth2 comes back.
-> > 
-> > Before taking the active slave down, wait two monitor intervals
-> > (200ms), so that at least one more probe is sent after the last ping
-> > reply and all slaves last received that probe. The miimon variants do
-> > not need the wait, but the extra delay is negligible.
-> 
-> I'm afraid the waiting time is too strict, especially with a debug kernel
-> since delays can happen.
-> 
-> Bjoern is also fixing[1] this issue by pinging a non-existent neighbor to
-> keep traffic flowing. Would you like to test whether that works for you?
-> 
-> [1] https://lore.kernel.org/netdev/20261104142018.552135-1-doebel@amazon.de/
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-BTW, using ping may not able to triger the arp request in time. You can try
-arping instead.
+Low priority / nit picks for your consideration:
 
-Thanks
-Hangbin
+- [Low] test_j1939_base never opens a CAN_RAW socket, yet it skips the
+  whole suite when CAN_RAW is missing.
+
+--
+
+selftests: can: add J1939 base functional tests
+
+This adds a J1939 functional selftest. It sends between CAN_J1939 sockets
+over vcan and checks payload integrity for single frame, TP and ETP sizes,
+the boundaries between them, and single-frame and BAM broadcast. It also
+enables CONFIG_CAN_J1939 and CONFIG_CAN_RAW in the selftest config.
+
+> diff --git a/tools/testing/selftests/net/can/test_j1939_base.c b/tools/testing/selftests/net/can/test_j1939_base.c
+> new file mode 100644
+> index 0000000000000..7bf492c767bf6
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/can/test_j1939_base.c
+> @@ -0,0 +1,236 @@
+
+[ ... ]
+
+> +int main(int argc, char **argv)
+> +{
+> +	return j1939_test_main(argc, argv);
+> +}
+
+[Severity: Low]
+Is this binary skipped on a kernel that has CONFIG_CAN_J1939 but not
+CONFIG_CAN_RAW?
+
+In j1939_tests.h, j1939_test_main() makes every J1939 binary depend on
+CAN_RAW:
+
+	if (can_proto_missing(SOCK_RAW, CAN_RAW)) {
+		fprintf(stderr, "# kernel lacks CAN_RAW\n");
+		return KSFT_SKIP;
+	}
+
+test_j1939_base only uses SOCK_DGRAM/CAN_J1939 sockets:
+
+- pair_up_ok() calls j1939_open_flags() and j1939_connect_ok().
+- bcast_needs_so_broadcast calls j1939_open().
+- The data path is send_recv_verify_ok() and recv_timeout() on those
+  sockets.
+
+Nothing in this file calls open_raw(), open_raw_rcvbuf() or
+J1939_SETUP_RAW.
+
+On such a kernel, the single frame, TP, ETP, size boundary, broadcast, BAM
+and SO_BROADCAST tests would all report SKIP, even though they could run.
+
+The v2 changelog says CONFIG_CAN_RAW is added here because "every test
+needs it". That seems true only because of this check, not because of
+anything the base test does.
+
+Could the CAN_RAW check move into the binaries that actually open raw
+sockets, or become a per-binary or per-test requirement?
+
+The check itself came from the earlier patch in this series ("selftests:
+can: add J1939 test helper header and library"). This is the first binary
+that gets skipped by it for no reason.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261111-j1939-selftests-v3-0-5a80277ab363%40pengutronix.de
