@@ -1,75 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794608088;
-	b=DntyMTPh2yF0IbQY5V59xrgp7QQ7miguZZxu25zNuYKG9K2YPx28+et4rgx2n0kTWFiS
-	 Snoaq6z/2pdaLKkgP9G4GiuGjhPG3UHzT0DoQM4LIxg9yh9J4qAMWP+M9yYEM6mwdVVyC
-	 Qgoyz1YOpdZ84lAbbVEqGb6B1+rq5doI0QN0DEcAnUCTfN5BscM0exp2GEC7I9zZ+ctdY
-	 6C++1ZMti6HILu1hVF2c91K5vmw3k4Er4Daat/wSkuFZKViEklv8gbjiQBTgF4eeAg+PB
-	 klrPFFFlVPquPyN5we3CCxLzXaQQcKiM03l2tHRXqChX2ZFzevHtG76V7A7joCrQZ4g==
+	t=1794608567;
+	b=ub9wozlkq9gvFK9/vh/qoOy3gprU3xTT8753nY83mzHDp4ZNRPq2NXrF5JXHxdtBPbHs
+	 LIPbFjul5m+GL+Ui/+oYW7BK5QsTa7QnCnwFfQYry6UGd9LhEGzEX/qnMTUxQuec6D3Ki
+	 ERB9NF+YGbw6/tvKETQw9Q1n9U23rw8lcQa+E/6TfLsvnDOVC199zHfXG47KwQKMUd/dD
+	 eRHOJUj+du2GkOq7w9b2lg2chCW14rTDk4wT+CcOb8nApmSoplTomW2UvrXh29ji3mKtI
+	 Ka2odxx30maErXvF62gSwHO785uBAU4joAF7sK7LPQf8llApstUAwnwBSz+DXiuu+vw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794608088;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794608567;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=ggQ4FFC8Bi0XuOsjCC8PKsr9I1n0o4RHBwZ93v/svPs=;
-	b=zmE/1k1UfHzj0htE3T0juPJ1rWaLl3y8RdaX4gZbqKVUPGNAcxOfRcEGdUCTEB+3MXdt
-	 w1GpKgpdskA0gZBurzJTy539adSWmKeHHMdJwLgI6Ypd5vn+aOonNF7oYw01Sh1RK2A4M
-	 5sORssoJZafsPK9/Dp98c9eJVFdl+/t877xgTPA67OpuYzPgTD1L7sJ0YG54NVOIF7NJu
-	 5/4FX8ZuKlmDEP4HmBV7LZhs23JHESTsrNqbV1tq+KwmNerz1z9ofE7mKsG1b8FJS70/U
-	 p55Vw3QTE+Zv3z4sxE8zRBZzwAo015RzN3tVikVF61xDNm4DBdaxMg7AOdmcocCBCbA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
+	b=xxoZXHLESnBqvAFWDe1eOxIC1JrlZr/B/nPr3x3UwNmQbPa1+rFnujO95LijFvblquBj
+	 Px4CXELibhxap5A979FQwGAVDXAWzS6zVHhwLuviNv18JFH+MqKUfQp0xMnz3a+rYGv3f
+	 7P0bI9wK5CMoOaVIZyYgvLxvJmFv7Hn+FqLtfDG2II+IAF7kkvOONctiqRKl1IAR+vkcF
+	 jdzueKJ2usjVGcRfKLF4oeMsFT1UNS0Qn/VLGAXndHga2IAWfnbVfV7xZR2bH86tthX2q
+	 e8/iVbdA4k1meWgJ897r2aaQcE7eYIefYPRpUHnNoqhxE6bOS4MNRRp1G6pg5u/ql4Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="F0h/yyOj";
-	arc=none smtp.remote-ip=74.125.82.72
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kt0eGjZ6;
+	arc=none smtp.remote-ip=74.125.229.4
+Received: from mail-dy2-f4.google.com (mail-dy2-f4.google.com [74.125.229.4])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3D260A5BDE
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:14:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F3D260A5BDE
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB539606A88E
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:22:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB539606A88E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=F0h/yyOj
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-16bc6f3fdb1so741574c88.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 14:14:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kt0eGjZ6
+Received: by mail-dy2-f4.google.com with SMTP id 5a478bee46e88-36e06480786so446941eec.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 14:22:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794608087; x=1795212887; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ggQ4FFC8Bi0XuOsjCC8PKsr9I1n0o4RHBwZ93v/svPs=;
-        b=F0h/yyOjK9Z89u9J7XgnC5+HYvJukeUSvtRdGdXRYSd6FxItb0m1DCbjnB/F8XGPiH
-         u0Mx0HpIawZ/cpcc/qnj3KgRo6EAPV6vOXXLFYrKpg11VGzUbKeGpr+4CsbKgKd2Ax9v
-         +1zrwsDOILL2dwtp+1vvlgb337Ta7aiDugkCNuzIGsYnXD5XDmv5t4wuwiCajtILk88n
-         LNrHiI4lH+GNFBraZ8z0cwAcBVqjXaoqhujdEUYZisLVg2gj7H76h8O6jAixSP+D0tvv
-         W+59YnqWcvMgH6qBfwQxFVFP3Epi+pArc1N0NAkUQSfQ64jH56UgbBzEPYYpE6uwDJii
-         ASLw==
+        d=gmail.com; s=20260707; t=1794608566; x=1795213366; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
+        b=kt0eGjZ6lI9yQVuQ0WalkgZYGqnAu6quAkbn/YNnSaNNY4bDxmg7vWu5L/iCEKeRq1
+         BcHDv16Nly2AE2lgZ1szXyCbpA//4r+TIy7pmoIrIaWlaAuhxishgr/nf6iJy+MF8JHL
+         MnFiQ8swqhS0T9o7CW2+KpZh79x4DzoeNMIG6AbPH6bu90SMA4+yEXC9cAzM6enI8Y0J
+         2N0H9Y4xL4Kj41pYFL5pMsv1U33XLXGZlmtM3S4WLqvVUbDJ+yObSu0oCraJ4gIg+Qrv
+         xYsUdpVKLCo1UNmumy85tcug4O2Qi4xN+kSO2xy4WFG7/h6Nu2vesGAp6pwgnTMh6ALv
+         Nypw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794608087; x=1795212887;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ggQ4FFC8Bi0XuOsjCC8PKsr9I1n0o4RHBwZ93v/svPs=;
-        b=GCVnQItrm5DN2Cm7kBQTFlygZAB6hZa6fjSAUY+3ED3GND2oInJp0YWMaRc+i3DpPC
-         13QhD+1fszbetMQ33BmDnp2lyUjvseAj1997g1u4N8fF3tDrmWJPi28aZ1KUXqfy7Coc
-         xSFd8rq8ypOHwUDhcwknxgiRvPVwnG/oeV//I6HGUwYkyCU0ZTEpDPqkqYjB0DUEEoe2
-         3Bt7kLnPy8Sy4sppFqsgzJ98DBi2EoHtHerpYn/p1UpTLTBUQg846rnbyRP2LUPSPHhr
-         oyhQFrRq8kLInec08lU5pu+BtSS/9oW4Gbfgfi6j9n2XMr/Gb9MAm0d/7RogxiltMABG
-         2/wg==
-X-Forwarded-Encrypted: i=1; AL+hErFuEyEXSuqMKHy7Vxw9tll8zbrS3b7oaXMy6+Qt79exzbF9Cf5Kx6roye//aYorXbd41HUN7mI5pAVNpnCehNE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z84bdKPcVQrNEU+mCc8ffdmv8TLuAR9vHX0Elk743CKAi7zLKWz
-	pdqQcFxUxVs8fJ7xp3VARPxJvEdD+sqd+gkrRblG0HtsVO9+bIfAd9DF1SdeNhXRk/WkF6XUfBH
-	6eRr0PlTye9+8WQ==
-X-Received: from dlbph19.prod.google.com ([2002:a05:7022:3713:b0:195:8b4e:20b7])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:b905:b0:1a9:d04f:1b55 with SMTP id a92af1059eb24-1b50311e3efmr3121638c88.26.1794608087024;
- Fri, 13 Nov 2026 14:14:47 -0800 (PST)
-Date: Fri, 13 Nov 2026 14:12:54 -0800
-In-Reply-To: <20261113221248.3535369-11-wusamuel@google.com>
+        d=1e100.net; s=20260707; t=1794608566; x=1795213366;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PuWQ2BwaMw0F60EupC+5yCUtgb9A+hweuIMrIgnawM4=;
+        b=xxefgmgm1q+tzq9+59Oi8WPc6jQQY4TeP6LuzarkcupR2AUq9IX/JgmPN3RPLvLE2+
+         jMwlA3fauVjK/cFNyAMwHy8nD+T5MyjFuxLkcNd2Ct7pqXNkMxAJg9hHq27If+5d0nR9
+         OGgr5g/HWUZOqcW/ptKDEB+jEVw1JIc5C/Uhd7ayjyN8U01LrHLc+oOcL4ZDHpRxo6uS
+         k3kiqUgDLCcSPm0TTNdmvP1EuzH7qzoGGeXmf11FSjBFHl00nTZYQo5Z5dPxP7swIiOY
+         bm/qMDB4a/vEYysSuJgNImDsMXSvHL9I/h5iUjpDcTs59Q6Ixpq22VK2bNRPjuGFd40W
+         AmFA==
+X-Forwarded-Encrypted: i=1; AL+hErHAujb1Bw1RDmuiOula0nE8QpoWbwpvygp+smVx0Tnhp7xztEcHew6m4hnyro80zOMsbwoVGgv/W3suc/7POnA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9l62Sj1e5w0ndmuDxNHPDy4fqP2758ujyDhKFzixqBCjcYxh7H
+	s8vtPelnlNExdslCR91h2dtdEyZHtjWJzzify7n2yW5QyHa6HiPpeIcY
+X-Gm-Gg: AYBFou1EV0nwrk5ZRGZnEDM6H5lydIInF3mZ4eH6hgLcEOFnX0ToFZQ9GyvKvKLquwd
+	MfOeWuqCvp8CgqIthJij+Vee9/Z8O/qBkvisI+ot7bENmGKZLe+0OtO8/qJAgBG9x1RjZXjhpvm
+	6FbsRUbo7AiscAqyarpk1qfTPj5cs5n4oqI4WlawrjF1hBUK5LddCpUK09IkWh3ZrD5HudHZKL4
+	i4GxMPVexAMd6AMXgFgnyAFKYp7606t2aW5OKleG+wcz2SC1g7LE0ZlsQz2J0q2xFRrrSkaaVq+
+	24x9OCn5yz2aAQpNGVqd7ZdNbg+m39AIoVSuqxwt3vT2SR5rYqGOoxUDaa39ILlA6+TTqkqHMrf
+	/be1AAeQYx7bKMfd05uSO1fThBxoZusDVTlxPlenOgCJMG/o87nxaoOhMyH3iZSNQGmpzcGIrF9
+	/+inapXUH57Th7UQMoI/NE7an1Z8PNyLW11bYS1r7G3lMaEFSHSNqirnPdscPFFvfQ7GunJkU6g
+	E6j1OBJP65M60yZuLLkdlZIpQQtmICoCCIIuApZGI36oVvDaFFsY0A0OVfj1XsegWxE3ohgqOhu
+	kLkMcgmWK4nw0wfgJSA/Fic=
+X-Received: by 2002:a05:7300:cf8c:b0:369:f70e:bd40 with SMTP id 5a478bee46e88-3796628f4c8mr3171439eec.16.1794608565735;
+        Fri, 13 Nov 2026 14:22:45 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:72::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3795378d7e5sm10160338eec.3.2026.11.13.14.22.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 14:22:45 -0800 (PST)
+Date: Fri, 13 Nov 2026 14:22:41 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, jv@jvosburgh.net, 
+	haiyangz@microsoft.com, ast@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, 
+	sdf@fomichev.me, bpf@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] net: make xdp config checks effective vs
+ netif_xdp_propagate()
+Message-ID: <aveNqpUudFjo0jA9@devvm16445.scu0.facebook.com>
+References: <20261112235027.4072149-1-kuba@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,106 +99,35 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261113221248.3535369-11-wusamuel@google.com>
-X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261113221248.3535369-20-wusamuel@google.com>
-Subject: [PATCH bpf-next v3 9/9] selftests/bpf: Test typeless module ksym resolution
-From: Samuel Wu <wusamuel@google.com>
-To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, 
-	David Laight <david.laight.linux@gmail.com>, Samuel Wu <wusamuel@google.com>, 
-	kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261112235027.4072149-1-kuba@kernel.org>
 
-The module ksym tests use typed ksyms, which libbpf resolves through
-BTF. Add a weak typeless module ksym to the ksyms test, to cover the
-module path of KALLSYMS_QUERY_BY_NAME.
+On 11/12, Jakub Kicinski wrote:
+> Bonding (and netvsc) try to auto-propagate XDP programs down
+> to their lower devices. These programs were installed directly
+> with .ndo_bpf and not recorded in struct net_device of the lowers.
+> This makes all the config checks for features incompatible with XDP
+> ineffective - HDS, memory providers etc. use dev_xdp_prog_count()
+> and do not call down to the driver to ask it whether it has XDP
+> installed.
+> 
+> Record the state appropriately. dev_xdp_prog_count() will now
+> "see" the propagated programs.
+> 
+> The issue was discovered when reworking HW-GRO and XDP interactions.
+> I was trying to make sure HW-GRO is reliably disabled with XDP,
+> and discovered we have a way to bypass all checks with bonding.
+> Not treating this as a fix since it's admin-only self-inflicted
+> damage that nobody is reporting being bothered by in real life.
+> 
+> Jakub Kicinski (5):
+>   net: don't safety-check device features for XDP uninstall
+>   net: move dev_xdp_set_link() and dev_xdp_set_prog() up
+>   net: record XDP programs propagated to lower devices
+>   selftests/bpf: check XDP attach on a nested bond slave
+>   selftests/bpf: check replacing and detaching XDP on a bond through a
+>     link
 
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- tools/testing/selftests/bpf/prog_tests/ksyms.c | 9 +++++++++
- tools/testing/selftests/bpf/progs/test_ksyms.c | 4 ++++
- 2 files changed, 13 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-index dc7aab532fb1..801d38560473 100644
---- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
-@@ -11,6 +11,7 @@ void test_ksyms(void)
- 	struct test_ksyms *skel;
- 	struct test_ksyms__data *data;
- 	__u64 link_fops_addr, per_cpu_start_addr;
-+	__u64 testmod_ksym_addr = 0;
- 	struct stat st;
- 	__u64 btf_size;
- 	int err;
-@@ -27,6 +28,12 @@ void test_ksyms(void)
- 	if (!ASSERT_NEQ(err, -ENOENT, "__per_cpu_start: ksym_find"))
- 		return;
- 
-+	if (env.has_testmod &&
-+	    !ASSERT_OK(kallsyms_find("bpf_testmod_ksym_percpu",
-+				     &testmod_ksym_addr),
-+		       "bpf_testmod_ksym_percpu: kallsyms_find"))
-+		return;
-+
- 	if (!ASSERT_OK(stat(btf_path, &st), "stat_btf"))
- 		return;
- 	btf_size = st.st_size;
-@@ -47,6 +54,8 @@ void test_ksyms(void)
- 	ASSERT_EQ(data->out__bpf_link_fops1, 0, "bpf_link_fops1");
- 	ASSERT_EQ(data->out__btf_size, btf_size, "btf_size");
- 	ASSERT_EQ(data->out__per_cpu_start, per_cpu_start_addr, "__per_cpu_start");
-+	ASSERT_EQ(data->out__bpf_testmod_ksym_percpu, testmod_ksym_addr,
-+		  "bpf_testmod_ksym_percpu");
- 
- cleanup:
- 	test_ksyms__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms.c b/tools/testing/selftests/bpf/progs/test_ksyms.c
-index 6c9cbb5a3bdf..0506bb574c4a 100644
---- a/tools/testing/selftests/bpf/progs/test_ksyms.c
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms.c
-@@ -9,6 +9,7 @@ __u64 out__bpf_link_fops = -1;
- __u64 out__bpf_link_fops1 = -1;
- __u64 out__btf_size = -1;
- __u64 out__per_cpu_start = -1;
-+__u64 out__bpf_testmod_ksym_percpu = -1;
- 
- extern const void bpf_link_fops __ksym;
- extern const void __start_BTF __ksym;
-@@ -16,6 +17,8 @@ extern const void __stop_BTF __ksym;
- extern const void __per_cpu_start __ksym;
- /* non-existing symbol, weak, default to zero */
- extern const void bpf_link_fops1 __ksym __weak;
-+/* module symbol, weak, zero if bpf_testmod is not loaded */
-+extern const void bpf_testmod_ksym_percpu __ksym __weak;
- 
- SEC("raw_tp/sys_enter")
- int handler(const void *ctx)
-@@ -25,6 +28,7 @@ int handler(const void *ctx)
- 	out__per_cpu_start = (__u64)&__per_cpu_start;
- 
- 	out__bpf_link_fops1 = (__u64)&bpf_link_fops1;
-+	out__bpf_testmod_ksym_percpu = (__u64)&bpf_testmod_ksym_percpu;
- 
- 	return 0;
- }
--- 
-2.56.0.679.gc527c65306-goog
-
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
