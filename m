@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794613997;
-	b=FqDpfsGBUcDhtue7QWI50vXUTZK8FZNTKsznAaLNlNdWmx+q9Sy1JyY88bIoarLRod9e
-	 2yMauVnWGv9O3Nud3kHZdpuQOo6RSvYl/fqpZzxpVlMBCSmX1PZ976fnFy9NMKNC4vY84
-	 yNEiBC9NOKtHjAuE4ZzLVJH4GOo5i/k42DyJE5QZVXiN/ryMcK8OGGl1/FpjCdRF6mF1G
-	 LtmohoUa25Gt5SqHlTFxxzkZjyYP/k338djuB9Z7Z3EluLjSITLktt0gEck6qCzt3J9nP
-	 YDiysX31Ya8qQjsngn3ethR4TVifKKN+8+bwuCVZMViX3zbKxt47yaul/OYjMPijccg==
+	t=1794613999;
+	b=SR84U2ak6rgb/UYnndeO21YzXMO1xn0moK/EWG/EJxrP11h8pm3VOtJW5fCDdHHZHbSe
+	 Zi5VjbWPzdC8+jlp31bSguTR5cummFOzANXzmib317G7pMxbzOuj6n0b9VT6DUzrIOITt
+	 DxQRt6Z4HdB3TrRBjrJCcEuM52nViuJdxuzhXGuaxQLU5VRypFkabg5xiSksSXJ47huR6
+	 nGn0xMs0NuXWFpJBasYjg2+F7FskzwHCsRcG9tW0uDHsot7bKzLKqhMct6rDQoaW8wsb0
+	 w5+W7bRY6hjVQuGPn04FJPVhMI9qoNJhSt392O5JzOwTeIGiIii+kjYDUyq8k1fboKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794613997;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794613999;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=h/mLbiKADvGR7z5YM9SFJJjqhyHQGjb51zVpQkm0VDw=;
-	b=DfLLO7QOL1325tGa7sRoDBogb5xwwFgj2nx+FrVdH2LHPQyx5f7hg+fT1n6ntPxEhFC7
-	 F4p/Xw80G4CSNoEKKJyc/E+Gx4K2fgi5/NRVepXd4sPOrw8njEHk0K283jqKu7SQf/O3d
-	 AyS/ZhESBPNq51L2GuqzvsgpC1/Iv2O2iIDuEQNaVqLu8haEwjum2ZNANnkX+AbI8gbhO
-	 PU0s5tpDAjpiIOfsLnkk5Lt1jY0Rgh10zVRh++biVp234mBRqwUiW5XbR9plq/p8ava4Z
-	 RURB8+eHfiSmeTOzLP8oGuykbvGSaNtTzC1xtCmrIV9P+/sDZ5PaLqMsDrA5raGZcCw==
+	bh=UO7zCD/dIdmHwhrdXFwbWOIaFNY3ih4tudZtgmKXEUw=;
+	b=2st43GoksBDnxAQOJucKbjziICX65TX8mnngJjl9HYRp7XvluLwQ0l38L9H9Ufq3qvJg
+	 FYxBsGMIOmO8cbFPw4gh49iwsefWQems8aZP2LqRqrgzj3KsghQ2j1SRt9CMvVJW3CVRP
+	 vSPTU2zA18Pn52vxUbnZsYTVW0g6xgHupO7lE94qbJjl3s6ZT8q1s3SzWGPAdmpU85BUI
+	 sR5uVwWuZWJL9YB1B5xJqA942AWIkW9MWqlr1JKyDqooHICEelq2WkMKNgQuhS0f4CeLM
+	 l08UVd17p2VRPDEBF6kcTbVtTfgCysLm8cbWPw5NF7W4sDq2Y8ghCnoc/aemK1dxYmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EgQcoHvG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cVNyIedS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DDA606A33B;
-	Fri, 13 Nov 2026 23:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2708D606A891;
+	Fri, 13 Nov 2026 23:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EgQcoHvG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93E171F000C4;
-	Fri, 13 Nov 2026 23:53:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cVNyIedS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB061F000C9;
+	Fri, 13 Nov 2026 23:53:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794613997;
-	bh=h/mLbiKADvGR7z5YM9SFJJjqhyHQGjb51zVpQkm0VDw=;
+	s=k20260515; t=1794613998;
+	bh=UO7zCD/dIdmHwhrdXFwbWOIaFNY3ih4tudZtgmKXEUw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=EgQcoHvGnYl4z6SVsU2Y2s8g+Rde/TXX4R5fY4/GAKBZvQsswzfxy0r7s/MtVbBFA
-	 aQOSVi2OT5NPVlP7fZ1h/qprjgklwPmoCEF08+BkfKdQvp4AWjgRVHhVCPNPvnbLAT
-	 rQ1kSzoFxbl5XylTsBxO8DKODiz4A051+IbvJN6KEHP8SLBqFhljIQRhUaoKQ50Esr
-	 yuhM3sNGYkg7IurcRmXtkDPnB/GWk0qOvmAyR4xHsWUWw0BGl2ue0vpedMButHPxOb
-	 1bcq0n5pQoWzSp8MlaMTya8aEsSw+RC0tm05Xap7rX4mMXUFckARBHpu7Ly6yfgO0t
-	 kbSIifCcoea+Q==
-Subject:
- Re: [PATCH net-next 3/5] net: record XDP programs propagated to lower devices
+	b=cVNyIedSVPLpDQ0RaCVl3M62/3SASAjvCWdUk8cop69qQl+JHHn2m2oJPbA9BOLvs
+	 PwuEkt/HAic9grpGOOkb2eMYzh+BY5xEhFFDHAqt7Xo/U5B7HsTgE5B84eapfxsaTQ
+	 sauJmAl2vf7lHFdnsFWRkUoLsl8aTUXZIxwonPGZomLx42RdU8uhQfxPgS5mqx1OBO
+	 YPopFb9x8lr/0WtghAGQPkf0BaRVeUc0jBdDBAyBEOToeSFdcOQt6Fq47czmQIamZW
+	 p8k1V50AR+0GEdiPqqmuserdM42IQmd4lfPL45AtQ+mMjMn9/UxUSOC/WLWxvpXSkU
+	 TU2p8eHRy1gyQ==
+Subject: Re: [PATCH net-next 5/5] selftests/bpf: check replacing and detaching
+ XDP on a bond through a link
 From: netdev-bot+sashiko@kernel.org
 To: kuba@kernel.org
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
@@ -49,11 +49,11 @@ Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  haiyangz@microsoft.com, ast@kernel.org, hawk@kernel.org,
  john.fastabend@gmail.com, sdf@fomichev.me, bpf@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Fri, 13 Nov 2026 23:53:16 +0000
-Message-ID: <179461399614.2199510.14192155072084970014@kernel.org>
-In-Reply-To: <20261112235027.4072149-4-kuba@kernel.org>
-References: <20261112235027.4072149-4-kuba@kernel.org>
-X-sashiko-severity: Medium
+Date: Fri, 13 Nov 2026 23:53:17 +0000
+Message-ID: <179461399762.2199510.9496726183772456630@kernel.org>
+In-Reply-To: <20261112235027.4072149-6-kuba@kernel.org>
+References: <20261112235027.4072149-6-kuba@kernel.org>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -66,187 +66,63 @@ List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 3
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] netvsc_register_vf() (drivers/net/hyperv/netvsc_drv.c) calls
-  netvsc_vf_setxdp(vf_netdev, prog) before netvsc_vf_join() has created…
-- [Low] The commit fixes a user-visible bug but has no Fixes: tag.
-- [Low] dev_xdp_attach() in net/core/dev.c now checks dev->xdp_from_upper
-  before the existing 'don't allow if an upper device already has a…
-- [Low] The comment on dev_xdp_has_own_prog() in net/core/dev.c says it
-  answers 'was it installed directly on the device rather than…
+- [Low] The commit message of "selftests/bpf: check replacing and
+  detaching XDP on a bond through a link" leaves out two things a reader…
 
 --
 
-net: record XDP programs propagated to lower devices
+selftests/bpf: check replacing and detaching XDP on a bond through a link
 
-This commit records XDP programs that an upper device propagates to its
-lowers in the lower's xdp_state[], and marks them with a new
-xdp_from_upper flag. It adds dev_xdp_has_own_prog() so bonding and netvsc
-can tell a lower's own program apart from theirs, and refuses attach on a
-lower while the flag is set. The flag is cleared when the master unlinks.
+This adds an xdp_bonding_link_update subtest. The subtest attaches a
+program to a bond through a link, replaces it with bpf_link_update(), and
+detaches it with bpf_link_detach(). It checks that the veth slave follows
+each change and that the replaced program is released.
 
->   ethtool -G $slave tcp-data-split on
->
-> is refused by dev_xdp_sb_prog_count() for a device running a
-> single-buffer XDP program, but not for a bond slave running the bond's,
-> even though netif_xdp_propagate() would have refused to install that
-> same program had header-data split been on already. Binding a memory
-> provider has the same asymmetry.
+> Check that the slave follows the replacement and the detach, and that
+> the program which got replaced is released - the bond used to leak it.
 
 [Severity: Low]
-This describes a user-visible bug, but there is no Fixes: tag. The
-install-direction checks in netif_xdp_propagate() came from these
-commits, and neither of them covered the reverse direction:
+This isn't a bug, but could the message name the fix this test guards?
+The leak appears to have been fixed by commit 184b5ddf82d4 ("bonding: fix
+the program leak when XDP is replaced"). That commit's message says the
+selftest would come in the net-next series.
 
-  2d46e481a9af ("net: disallow setup single buffer XDP when tcp-data-split is enabled.")
-  170aafe35cb9 ("netdev: support binding dma-buf to netdevice")
+The message also leaves out that the slave-side assertions depend on
+"net: record XDP programs propagated to lower devices", which is earlier
+in this series. The previous patch, "selftests/bpf: check XDP attach on a
+nested bond slave", does name that dependency.
 
-Should the commit carry Fixes: tags for them?
+bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id) reads
+dev->xdp_state[XDP_MODE_DRV] through
+rtnl_xdp_prog_drv()->dev_xdp_prog_id().
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 69ee4342f43ee..3a520c798d4a8 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -9326,6 +9326,9 @@ static void __netdev_upper_dev_unlink(struct net_device *dev,
->  
->  	__netdev_adjacent_dev_unlink_neighbour(dev, upper_dev);
->  
-> +	if (changeupper_info.master)
-> +		dev->xdp_from_upper = 0;
-> +
->  	call_netdevice_notifiers_info(NETDEV_CHANGEUPPER,
->  				      &changeupper_info.info);
->  
+Before that patch, netif_xdp_propagate() only called ndo_bpf() and never
+recorded the program on the lower device. A bond slave therefore always
+reported id 0.
 
-[Severity: Medium]
-The commit message says that clearing the flag here lets the device own a
-leftover program "rather than leave it with nobody allowed to remove it".
-Can a lower end up with xdp_from_upper set when no master link was ever
-created, so that this code never runs?
+In test_xdp_bonding_link_update() in
+tools/testing/selftests/bpf/prog_tests/xdp_bonding.c, the first slave
+check jumps to out before the leak check runs:
 
-netvsc_register_vf() propagates netvsc's program before it joins:
+	err = bpf_xdp_query_id(veth, XDP_FLAGS_DRV_MODE, &id);
+	if (!ASSERT_OK(err, "query veth") ||
+	    !ASSERT_EQ(id, old_id, "veth runs the old program"))
+		goto out;
+	...
+	fd = bpf_prog_get_fd_by_id(old_id);
+	if (!ASSERT_EQ(fd, -ENOENT, "old program released") && fd >= 0)
+		close(fd);
 
-    ret = netvsc_vf_setxdp(vf_netdev, prog);
-    ...
-    if (netvsc_vf_join(vf_netdev, ndev, context) != 0) {
-        ret = prog ? netvsc_vf_setxdp(vf_netdev, NULL) : 0;
-        if (ret)
-            netdev_warn(ndev,
-                        "failed to remove XDP program from VF %s: %d\n",
-                        vf_netdev->name, ret);
-        return NOTIFY_DONE;
-    }
+On a kernel that has 184b5ddf82d4 but not the propagation change, the test
+fails at the first veth query and the leak assertion never runs.
 
-The first call stores the program in vf_netdev->xdp_state[XDP_MODE_DRV]
-and sets xdp_from_upper. netvsc_vf_join() can fail in
-netdev_rx_handler_register() or in netdev_master_upper_dev_link(). Both
-failure paths return without a master link.
-
-If the driver's ndo_bpf() then refuses the NULL program,
-netif_xdp_propagate() returns before it touches xdp_state[] or the flag:
-
-    err = dev->netdev_ops->ndo_bpf(dev, bpf);
-    if (err)
-        return err;
-
-netvsc returns NOTIFY_DONE without storing the VF in
-net_device_ctx->vf_netdev, so it never comes back to this VF. No master
-was linked, so __netdev_upper_dev_unlink() never clears the flag. Only
-dev_xdp_uninstall() at unregister does.
-
->From then on, every IFLA_XDP set or remove and every BPF link attach on
-the VF hits the new -EBUSY check in dev_xdp_attach(). netvsc's program
-keeps running on the VF. Before this patch xdp_state[] was empty in this
-case, so the user could attach a program and then detach it to clear
-things up.
-
-The only way out seems to be linking the VF to some master and then
-unlinking it. Should the failed-join path, or netif_xdp_propagate(),
-handle this case?
-
-bond_xdp_set() has a smaller version of the same problem. If the unwind
-call fails:
-
-    err_unwind = dev_xdp_propagate(slave_dev, &xdp);
-
-the slave keeps the new program with xdp_from_upper set, while
-bond->xdp_prog has been reset to old_prog. That slave can't be fixed
-directly until it is released from the bond.
-
-> @@ -10561,6 +10564,15 @@ u8 dev_xdp_prog_count(struct net_device *dev)
->  }
->  EXPORT_SYMBOL_GPL(dev_xdp_prog_count);
->  
-> +/* Does the device have an XDP program, and was it installed directly on the
-> + * device rather than propagated down by an upper with netif_xdp_propagate()?
-> + */
-> +bool dev_xdp_has_own_prog(struct net_device *dev)
-> +{
-> +	return dev_xdp_prog_count(dev) && !dev->xdp_from_upper;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_xdp_has_own_prog);
-
-[Severity: Low]
-This isn't a bug, but does this comment still match what the function
-returns? It describes where the program came from. The new kernel-doc in
-include/linux/netdevice.h does too:
-
-    @xdp_from_upper: the program in @xdp_state was installed by an
-        upper device with netif_xdp_propagate(); it belongs to the
-        upper and can't be replaced or removed through this device.
-
-__netdev_upper_dev_unlink() clears xdp_from_upper on any master unlink.
-That includes the case where the upper's NULL propagate failed and
-bonding or netvsc only warned. After that, dev_xdp_has_own_prog() returns
-true for a program that an upper propagated.
-
-Could both comments describe the flag as current ownership, including the
-hand-over on master unlink?
-
-[ ... ]
-
-> @@ -10773,6 +10816,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
->  	}
->  
->  	mode = dev_xdp_mode(dev, flags);
-> +	if (dev->xdp_from_upper) {
-> +		NL_SET_ERR_MSG(extack, "Can't replace an XDP program installed by an upper device");
-> +		return -EBUSY;
-> +	}
-
-[Severity: Low]
-This check now runs before the existing loop that refuses an attach when
-an upper has a program:
-
-    netdev_for_each_upper_dev_rcu(dev, upper, iter) {
-        if (dev_xdp_prog_count(upper) > 0) {
-            NL_SET_ERR_MSG(extack, "Cannot attach when an upper device already has a program");
-            return -EEXIST;
-        }
-    }
-
-For a direct bond slave or a joined netvsc VF, the upper keeps its
-program in its own xdp_state[]. Attach, replace and detach on the lower
-were therefore already refused, with -EEXIST. They now fail with -EBUSY
-and a different extack message.
-
-The commit message says dev_xdp_attach() reads the flag "to keep the
-program from being replaced or removed behind the upper's back". However,
-that protection is only new for nested lowers and for the netvsc window
-before the join.
-
-Is the errno and message change for the common direct-lower case
-intended? If so, could the commit message mention it?
+Could the commit message reference both of these changes?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261112235027.4072149-1-kuba%40kernel.org
