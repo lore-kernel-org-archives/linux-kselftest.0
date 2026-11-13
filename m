@@ -1,126 +1,119 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794582406;
-	b=isCpYfu6fKhC89brcgeduz5ZqwX+yBN+ftyc65+JWBbm1autqc1dUGCp2ZRJEAXCJJh1
-	 ndkN+Dq7RGT/7dAu/8dqtt3S9gJv6yAauJBmRBAHSQRaYz04ZMbYpyIWi3PBXDimWVz0N
-	 3r83LSxYTs8BoU9slC2LdibJsH3S8xSrPjfuoNW7lk55e0CUz4vfNZCJrVfOPbif5Ic2e
-	 ICChgutPmNcmH03mkDOsqeqm28RbwRNGuSUD/WXF8ePAcnBnGZRdB0OABzaR/uSDF24Rt
-	 hjXbzdlDvEBHkHPqa6lGXa/mtDs1OWVLHCY1y5GBXILEjr5zNOHD5VZofV4fsuklkFQ==
+	t=1794582467;
+	b=Pt0jp9BGICX4VU5/q1fSzz5W9qL2D+URnsnOEfwDzjNqzZrBPxxocRHpYTXNOtizRKAX
+	 MEmjkvKyeOVwdVTvHwg9HFylwu3GSRGe/pMmC1weZ1gV4u2659IoEzCYADiVJdwamhihF
+	 MZSUIK9TBROliDmIzFLM4L/eJlyABEzj4vcc02lJm/aNZuT3zqPmEX2vaaQt1iGgjhIyn
+	 2vQmKXKSLZiGyViy3CggLXkqUHy3NPPkkK/qVFbHJ/lDFgGP+lEooTyHF5j5iDbOXqEuM
+	 zaWEgYN2n5EYuXGZLNu5XZzhVLbjvMf06CfVdhctAxwLy8vHmd2G7s2CMkYuNuR4Czw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794582406;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=2Tp6iQjkfangii/DKRnGc80WH6QKMSA/4QcC/JVtYtI=;
-	b=vdA8fzX50CwyivXMhM6T3mbVWPsPxmWcDrQGowYMRmWEybjUPvQ2PnpuE+QSJ+EtLODF
-	 qW55Y07Bv6gdqPF49soZgZtcpD3pKqbeWbjzAqr1F9NBJxc2gsVUOs1pGe3In07PNPksx
-	 bU6GZ8YelPErFDLE0BALvGgacRQBBoHYiHMzV3/hw38zbGLwnc7d45L/rYqBfZbgj9Sst
-	 mU6+jsrTkDsUh0KAFSZhP5WXcMdJxOXlr8oiaW2YzGLGetL/KdQIYtHJu2aoVrK3RxCOo
-	 pnUyOsZ03M4gpht6au5zfELJ7tzD7fi82B6RCHGrXmTCx+X34fangN5KchYZNmR6Hwg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794582467;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=Xdl4Tdbv431DSm2QRDQ9sk/ziyVXTlG68qSFJIbEu6c=;
+	b=UwV2mOZPHng6y7KSpqirL2z6IsAHd163jDKG5nWNOA7Rbgzniu3GbPHXrc0TZfPWZWOX
+	 PQX8mTx/qbbgDiPk3k6SYUQwRyEPmk6zsg0cW4mCHObSDFAjVny+OZikEuHvPvaH/WoTX
+	 2dHjs2mM4hHhxQVP136tqxKAwuZsSVUQVdXIHRT4YxHJawhOJ69LgX8tN9zNttPpgghFO
+	 nkq1BvSCzP5JnM+rkDbOfqNBok/FPQ+fik5LDeyulJgh7zsLbqtubm492Nf7xDAN8TT6Z
+	 3fOw21CDO3GL/eZTmnlBYTWacbeb/pIv/AGbJn57bGWI0LiITc5gO1Wv05S7gE0Qi4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TciBMSmE;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ns5S0Tu7;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlKFJQ5Q;
+	arc=none smtp.remote-ip=209.85.221.177
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9937660A6F77
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 15:06:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9937660A6F77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4C5606A895
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 15:07:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF4C5606A895
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=TciBMSmE;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=ns5S0Tu7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1794582404;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2Tp6iQjkfangii/DKRnGc80WH6QKMSA/4QcC/JVtYtI=;
-	b=TciBMSmE/FFXG9MYsN+ix7zwV6Y6/GUs5mmtdk4MHuNf8la8FlUCTpWUPSiAEpOvvbOcOe
-	XjOsiRDLwQu3u7vdeSK/7pE6jiIQjWE4OjHh5/Yv9KTgGj/jTqW1e4pG2TfE86saEgepzz
-	FBPEkedIRBc4UF6w6Twyl8zXqj5XgQs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-529-gRnzD0GdNFm_yIduesK9Qg-1; Fri, 13 Nov 2026 10:06:42 -0500
-X-MC-Unique: gRnzD0GdNFm_yIduesK9Qg-1
-X-Mimecast-MFC-AGG-ID: gRnzD0GdNFm_yIduesK9Qg_1794582401
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4a204f135ffso4756995e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 07:06:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KlKFJQ5Q
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5c9e7731b34so1883938e0c.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 07:07:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1794582401; x=1795187201; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2Tp6iQjkfangii/DKRnGc80WH6QKMSA/4QcC/JVtYtI=;
-        b=ns5S0Tu7MrONZXzIzknq9qO83Czobv4jEAo3Ald3QMyVHS3ISoFwgkL7ShfNZ2GFkE
-         0Jk0Fl5u8nkgUaJG9HLkJ1vmAj3Mhf+MuOr3LlU5CRjQsDtNyQ4ro5pnSosiHing3aGj
-         CSVsPusCsNEZ+tFBSX+rvrv/WMErUp0AiSLlbKDl0jnduSPaNh1YYWUwETX0vGso1dx7
-         5g8Bp2hlHDkXrZhrBqhEtigFDnd5SCvAs9gxkf6YOp0Rhz9P5nI7zdKSQaOo4kh41dG1
-         wur3/LJkw8oKkiO+EeTI5cmtNZzHnebHw0cgM1EW8ajBuRPJ2n28z8pNw4gDCd9kXi/V
-         54gQ==
+        d=gmail.com; s=20260707; t=1794582466; x=1795187266; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Xdl4Tdbv431DSm2QRDQ9sk/ziyVXTlG68qSFJIbEu6c=;
+        b=KlKFJQ5QPmLUdTnjclUHm38zTF2SAkx0xiF0MhAa3Y89oCgC52J4hdLsyOdxXE9slo
+         fkG2uJJxtO6pqBB0fdepdqPiia0eUjc9WNW5nj7L5EL8dt73uJxAG6IVVMx4psoVW7ww
+         jwBeXuVj0KXEax7xTZnZrxu7dqfvMuEuP6BnOAqcCr++FtVqm4tGd4yS3Y1rN92TjGy4
+         Ta5mjQ5XdVUN1FqFG3QuGnVMJ+9WaOhTbWILnZtdeHU/v9FJyjjiQG1cBkKqoIRemjQj
+         mkQvg+v43o+eaVir/iQvs5GmAfIEILoS+Gi+D+NC2LwXcQGd1d2/rjq1t0y9hg+oTA0E
+         KIeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794582401; x=1795187201;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1794582466; x=1795187266;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2Tp6iQjkfangii/DKRnGc80WH6QKMSA/4QcC/JVtYtI=;
-        b=DW5vjiRnRp8e8XhigWWeI0x1vwkXDqQh9GcMYzNeDNTh/hzrVXyUFiTnJw+EJGTgpt
-         niH/TsdabHV8OXIVMIWYzSalkUzMvVaO2H5kWopysoVK09v2343hC5MDuodDZssum6KT
-         IY4fMlGM59b9G1lXYTkiAPuEsCx7bQlXcqNmjDkQqVNBPylWXdh4q0ybkcM5plvql2Os
-         KjoISjWJkX45clfWxgPnA2CRFIJ7kcsYXQJ4C2If445hxGcsB1/c35BXqzgSYNmWZqpt
-         bUzsCnGQsiOp1MMmXjpbwSfOQd8lYQJkCmfQelLIsJDl3yI0SW63/60rOD2lKorYoAts
-         cBtQ==
-X-Forwarded-Encrypted: i=1; AL+hErFeLgGBGlyBuSGUePUxNRbJ+aZKWQ6ePR/acCrwEGrnP5R7Orq+BxzhuGtTcl3XW0aK1VG6kM7WbXE2PbUxVow=@vger.kernel.org
-X-Gm-Message-State: APuU4Z95G0/mV9LVN2DQfQHDEtxtl/raNhnTCbBo0XHu5x5LAtSfDfZc
-	kdW4TgOTLU8iObrzJlu2MTXk6FtqqyFu7ujl/1TIoJAUzLi4VK67zgyDoTA4gGT8zwYNQM0NmiY
-	Pmk3/sQIicJNk5uBGR8xzLZWWOLlHyOCQuIKC/FhdIVu6P3uQHnnZgpMylcimpz6N0kC8mg==
-X-Gm-Gg: AYBFou0pTlZdWYGFE52Ef7jVno28LrBpWIo3PRCrEYp4JSe6iyPJYaCgNp+VV3mGikB
-	HjJWCzc/wg5KOZ6ciHvXHLVJiQ1cV6Pjsu1mHtofpPSWrc6d+snkL3zHMtrSjjbFm7JUiKYPs1E
-	WIaITMDGuLX8nJ17/TBnu130axXyAQl4CmpRa+ZxU0DaqxrKhlGcirVzZXeYEELGU1cGqLO7K6s
-	PdOsMA5QIEjTVqPnkP7f0ERplrgRgiUoTOjE659LThl5GWqcZDsHm/R+mgAZzoA87eV8How3ebn
-	wihMtq+D8GM6ifirRNHjSIFT0BK2eQGMfmcR1eKN6HtiXfURPKfqsXEEXQUFy0kAXE3DZPOGyuS
-	v54UPDacNxU+B0EU2dCWGRzGQJy7fHdKlAnXh9O7vOovpv3IDFQutyd/QlgorAo3SS7pP0At/lt
-	/wpKo=
-X-Received: by 2002:a05:600c:a30e:b0:4a6:42cc:bf66 with SMTP id 5b1f17b1804b1-4bb55a5d63fmr51094625e9.11.1794582401503;
-        Fri, 13 Nov 2026 07:06:41 -0800 (PST)
-X-Received: by 2002:a05:600c:a30e:b0:4a6:42cc:bf66 with SMTP id 5b1f17b1804b1-4bb55a5d63fmr51093885e9.11.1794582401031;
-        Fri, 13 Nov 2026 07:06:41 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.158.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb5d2872edsm20774755e9.12.2026.11.13.07.06.38
+        bh=Xdl4Tdbv431DSm2QRDQ9sk/ziyVXTlG68qSFJIbEu6c=;
+        b=rwQIUPN4hB5Gf/u0+d79MxHivWZDrkdQja8iOSb7RIbJRCiTQMHjtH4AjQ4gbcZHvY
+         lFgnCgpXIVlQ0hFtjJ2Q6ME9OAOJHhAGbeyk414K14LdxuzeED9jvBu529lP5FqLjscw
+         mGPXMHBCZX2G90Ah8gGtPlW3u6oUO1po27lQalu6Mj50C5+I4HP6t4LbDxVAUO5Q1oUk
+         phaQmUiKwdG19fsLtvxLDup+4m9m/0M6olwoSET3C7P3c+/xAC/x0jngceiISM+2ef48
+         QgVKyFB0frd7zHKt7X12aPflV3Vzr7Wf4hh89/yMc0RJ0+xYK7KjyY0jsLWN+JrmYad+
+         G+ag==
+X-Forwarded-Encrypted: i=1; AL+hErF4HHFu1vYQNNsJedXhHlgbJrnHcSxG/huq8bOTTh+baH2wWqdNAPjlwS9vmFMuuOS97NQ6pAM5qVCj1rh8dLc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9bqf4ix2mDi3UIh9rEq8dEQIVt6uj8yne8wCAxnmEYViw893ZM
+	Mz8W84fXfP0htr1HwtAXtKDIydMxTfr8wQw+65nJ0lEj82xpRNHSBlHd
+X-Gm-Gg: AYBFou1fTwNmta+a8DzJE2lLy1JpdIVbPHfXPu4nQHpetnsy6pk1pKUolDn/CSGBs1q
+	pIqEYZFixm9cR3Oo5Jd7kQop/K3UmmzOtXlAHP9h7JvuyGgV0xBx9LJaEpdWAjb3f2pPZ+y/rgY
+	CYwV1g3L4LCGuVGs/ZezFtsw5vG4yZfmP8+ad8ombawKhdjI3qkps5aGvEwGNZJ/mCA1WqBk6+R
+	x+urXAZnIJ09JQXa/IJt/C10BFPJMk7xR1Vk4kL4cfrXBemNN8TJlOF6UCfcCiEtT4hCAtjX+wN
+	gtV9LoslT+6iuwz3W6KOK6cRL23ZCNnMHk369dE+flqTjrxnNiXAK2LZ16SP4XX1Ga3XHLkeLSF
+	ZJEn2nAzTwBK0b4PqOyZJ7uXN9rpoqDV//Sxc4452ARGqe9RkgvQksc6Dv+3ltMgmccouVIPvk2
+	7SqbJYeqVhtwTOXvelxge+X1CLh3R/uQdsaD8O0hm8cGJKAxrEyPXGzc2f4A5KvmKdsKApe4PXF
+	VRTXftClrMHPpwPSKJALwpvarGDrff9+DLK3Ju6xGUIqjspdAXaHXaQGNuw/nIVdKf5nuYEV4NE
+	2wVexh3tPqjxXK2IoPdXEVmWSGLiibZI4Pu/hRknWZHYSw+tIqDag/H/RNcMK3Eo30eOGUcZVjU
+	kXf6r5LBvRzBZR6OJZCZV7g+LU/ScMlpOhlPExzBi0mskZhpRmb14iRAzvhC5sPhVKSnww7PXIZ
+	WlPxVC6JBP
+X-Received: by 2002:a05:6122:3382:b0:5e9:176f:a548 with SMTP id 71dfb90a1353d-5ee344ee205mr1106421e0c.0.1794582465695;
+        Fri, 13 Nov 2026 07:07:45 -0800 (PST)
+Received: from gmail.com (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5ee3df52b8esm122502e0c.0.2026.11.13.07.07.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 07:06:39 -0800 (PST)
-Date: Fri, 13 Nov 2026 16:06:37 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-	linux-kernel@vger.kernel.org, tglx@kernel.org, will@kernel.org,
-	boqun@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	kprateek.nayak@amd.com, luca.abeni@santannapisa.it,
-	mathieu.poirier@linaro.org, longman@redhat.com,
-	ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
-	mkoutny@suse.com, shuah@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, parri.andrea@gmail.com,
-	m.szyprowski@samsung.com, kayracizmeci@gmail.com,
-	weihengqiuu@gmail.com, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v5 16/29] sched/deadline: Record the root domain holding
- a task's bandwidth
-Message-ID: <avcnfTqZzNGLlbHk@jlelli-thinkpadt14gen4.remote.csb>
-References: <20261108185406.1549770-1-mathieu.desnoyers@efficios.com>
- <20261108185406.1549770-17-mathieu.desnoyers@efficios.com>
- <avSPoSnNATnwZ8cS@jlelli-thinkpadt14gen4.remote.csb>
- <7459ff0d-d8e1-4fe4-b2de-4b4f06be9bb9@efficios.com>
+        Fri, 13 Nov 2026 07:07:44 -0800 (PST)
+Date: Fri, 13 Nov 2026 10:07:44 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Antonio Quartulli <antonio@mandelbit.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ jasowangio@gmail.com
+Cc: andrew+netdev@lunn.ch, 
+ davem@davemloft.net, 
+ edumazet@kernel.org, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ horms@kernel.org, 
+ mst@redhat.com, 
+ eperezma@redhat.com, 
+ shuah@kernel.org, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ hawk@kernel.org, 
+ john.fastabend@gmail.com, 
+ sdf@fomichev.me, 
+ maheshb@google.com, 
+ peterpenkov96@gmail.com, 
+ netdev@vger.kernel.org, 
+ virtualization@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.14b320acee076@gmail.com>
+In-Reply-To: <73aa2f53-e2ba-42b7-9712-06e223459144@mandelbit.com>
+References: <20261111014208.1795777-1-antonio@mandelbit.com>
+ <20261111014208.1795777-3-antonio@mandelbit.com>
+ <willemdebruijn.kernel.1220f3b31f685@gmail.com>
+ <73aa2f53-e2ba-42b7-9712-06e223459144@mandelbit.com>
+Subject: Re: [PATCH net v5 2/2] selftests: net: add a vhost-net test for the
+ tun NAPI queue bound
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -130,51 +123,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7459ff0d-d8e1-4fe4-b2de-4b4f06be9bb9@efficios.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On 13/11/26 08:33, Mathieu Desnoyers wrote:
-> Hi Juri,
-> 
-> > > +           if (p->dl.dl_bw_gen == dl_bw_gen) {
+Antonio Quartulli wrote:
+> On 13/11/2026 00:34, Willem de Bruijn wrote:
+> > Antonio Quartulli wrote:
+> >> Send 16k packets from vhost-net into a tap device with IFF_NAPI and
+> >> netdev_max_backlog set to 8, in the three ways vhost-net passes packets
+> >> to tun: batches of XDP buffers, one packet per sendmsg() with MSG_MORE,
+> >> and zerocopy buffers. Check that excess packets are dropped and counted,
+> >> that the queue keeps draining while vhost-net keeps sending, that every
+> >> packet is either delivered or dropped, and that every buffer comes back
+> >> to the ring. If a dropped zerocopy buffer is never completed, the test
+> >> fails, and closing vhost-net then blocks until the buffer is released.
+> >>
+> >> The zerocopy variant needs vhost_net loaded with experimental_zcopytx
+> >> set and is skipped otherwise; with it, vhost-net does not batch and the
+> >> batch variant is skipped instead.
 > > 
-> > So, this is not guarded by dl_departed_lock, but then this gets fixed in
-> > later patches?
-> 
-> Yes, but only as a side effect, and the patch should not rely on it.
-> 
-> dl_bw_gen changes in a rebuild, which holds cpuset_mutex. From patch 18
-> on, set_cpus_allowed_dl() reaches this test only from cpuset_attach(),
-> which holds cpuset_mutex too. At this patch, from reading, other
-> callers still reach it without cpuset_mutex: select_fallback_rq(), and
-> sched_setaffinity() with admission control off. A rebuild can then
-> change dl_bw_gen between the test and the __dl_sub().
-> 
-> The planned next version takes dl_departed_lock around the test and the
-> update of the record, from this patch on.
-> 
-> > > +    * enters the class. A runtime below about a millionth of the period
-> > > +    * gives a bandwidth of 0. It counts for nothing, and no move updates
+> > That means it will be skipped as part of kselftests.
 > > 
-> > Ah right, quite cryptic corner case buried in this comment. :)
+> > And as a misc device all tests may be skipped in minimal environments
+> > if vhost-net is not autoloaded.
 > > 
-> > This is the 1024ns/2s of the test. Which indeed gets dl_bw 0. Don't
-> > think it's a huge deal from a theory/practice pov as to actually make an
-> > impact we probably need quite a lot of these admitted (fork bomb style).
-> > But it's still weird :P. Not sure if we want to impose a min of 1 dl_bw
-> > for these. If it actually complicates the accounting (for no good
-> > returns) or not.
+> > Maybe a .sh wrapper could resolve both.
 > 
-> I agree that it is odd. I left it as it is upstream. The accounting
-> needs no special case for it beyond this comment: a bandwidth of 0 is
-> added and removed like any other. The case move_zero_bw of
-> deadline_bw_test covers it.
+> Right. With a wrapper script we should be able to deal with these.
 > 
-> A minimum of 1 would change what sched_setattr() admits, by one
-> millionth of a CPU for each such task. I would rather not do that in a
-> series of fixes. I can send it as a separate patch afterwards if you
-> want it.
+> >   
+> >> The test drives a minimal split virtqueue itself, in little-endian as
+> >> VIRTIO_F_VERSION_1 requires. It needs root and CONFIG_VHOST_NET.
+> >> netdev_max_backlog is global: the test lowers it only once setup has
+> >> succeeded and restores it first in teardown, and should not run in
+> >> parallel with other tests.
+> >>
+> >> Written and tested with the help of an AI coding assistant (Claude
+> >> Code).
+> >>
+> >> Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
+> >> ---
+> >>   tools/testing/selftests/net/.gitignore  |   1 +
+> >>   tools/testing/selftests/net/Makefile    |   1 +
+> >>   tools/testing/selftests/net/config      |   1 +
+> >>   tools/testing/selftests/net/tun_vhost.c | 409 ++++++++++++++++++++++++
+> >>   4 files changed, 412 insertions(+)
+> >>   create mode 100644 tools/testing/selftests/net/tun_vhost.c
+> > 
+> > That's a lot of code for a fairly narrow test.
+> > 
+> > Not that long ago I would have applauded all test coverage we can get.
+> > But now that LLMs generate them instantly, not sure where to draw the
+> > line.
+> 
+> Well, the test has already done its job because it immediately helped me 
+> fix some small itches in patch 1.
+> 
+> This said, I can definitely shrink this test a bit, maybe around 50% of 
+> the current code. But it'll still be quite some code for a small fix.
+> 
+> Should I just drop this patch?
+> 
+> Alternatively, I drop it from this series and I send the shrunk-down 
+> version with the wrapper script to net-next later on.
+> 
+> 
+> Opinions?
 
-Makes sense, thanks.
+If you could compress it to about 50%, let's merge.
 
+Maybe we can use it over time for more coverage in this area.
