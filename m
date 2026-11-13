@@ -1,112 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.135.74
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794604866;
-	b=KMHiNUW7kd6ACwW6ZePi1yi373/sxbXTgD3lJ44LLOoPVsqg3+9z6zTYAhTi6Kic65k8
-	 635VQdz+L0WS3fopJNDvEYUUSUvD2+0RhMHF+hF7ix8gxJx++phlIJFe6yFVLd4TqkWqT
-	 CX1rwiLIeEKoEILTHNZZYwC2VUMr/bSCuLL+O3JEKF5fMwSVjRbimDL9BCkf+sy4i7mK3
-	 d2wxABMLXzrrPXyUdrb840A0yCYV4gXLf7Bj7i1Nm6NbpwWPjDHIL1GLgieFvtCd8lMUM
-	 +lYhXLvqXs0RkP2LNrcMMyQQ4Mw9fK/Scc25SCLsHyrriYh8ZcVaSJmjjRAiXp/mylQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794604866;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Proofpoint-Spam-Info:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=ruQ3lHOmeWuryZ2uUe/iR9zV6WBvZ5ex3uR31DU9w70=;
-	b=BG+Jmn29Ear+/d45F3XzYoQXjXkrfdw6qvqdoBbBFo/rIhEL20esaA9uQf9e68/gD3H/
-	 nJnhP7GDBjJlMplzOY2AQ5NYTjs7EHA6CEZNYeAlwbnwzM0UjzzIaeFpZRWLC00qk9QnQ
-	 3GmUK+dzD9eGnWRbFt1b/XlNfWHXmqqOBnKrVEnz+T04C58pYgXW9ej8a2sxr/YRY7VEN
-	 nmOwB1LCers/hTNYM4OBDvhGwn8iQU4dO1RsG0l0ydmqTZkEH3bG8/+Vosc6G+jE/Bo0B
-	 Res7230kdRPH2aSBk7JYYcwUmX8z2lZqyBAz/Hy1vcmIlmVPDuHyf6lb067ysKeAFHQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=columbia.edu;
-	spf=pass smtp.mailfrom=columbia.edu;
-	dkim=pass header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=pps01 header.b=cSzAUYhn;
-	dkim=pass header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=lionmail header.b=5pDjkxSy;
-	arc=none smtp.remote-ip=148.163.135.74
-Received: from mx0a-00364e01.pphosted.com (mx0a-00364e01.pphosted.com [148.163.135.74])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.198.65
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794604944;
+	b=CuL+wHKRJ+RWZmHdBA2ijffAhkdlhxLFh8dp82eS9HH0A6jA7P0kaGK5RL1B7cpKFx7p
+	 2RLQKKOa8Dfif37vjQ0/GMpXsn3SjTepWdh1G+OyNe0zHezLtX2lFdLWDJ8whoFLdS8FT
+	 +qtxqbZW33L/xfcYYV7HCGWBKdmIWxH5lgGWJucEStrcUTXAwgTvh1bggpcMx1M5nr+Sv
+	 9lR907byzM8cOEgGYDQkRADp1V6ZA6B0uPc345PRdBLLPEVDf+RzpwWJRz64UkXrKFmV8
+	 VTGK0STUMHaomGD6dtVWSM9SC/Z8qiX+9735whBfuJtX/lwhg/xn9DmMxuPbJHdFXAw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794604944;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=iUUWfOIisgbrCVW4YUkL53arxf4v09B5XfJcE7IY+wo=;
+	b=V+KIhs8YFsOKvBOkeSVntUBGhq8SRF6HGaw8qj4Oq5lwZaCOjEOXZaPXiVyMzRGz1j63
+	 nofF+ZGlvwyaQEPaEgb5s0ML2mDKaLBYTrQaQjpvZWxrJQ63J7QKQTB37JWbfXbAMi+ow
+	 ldv6ZWtr1pqLPkbyOo+V2z4+lLnP03rNozDCp1ohK6MnH4JkOli0FJtcVO9GpJS6AqSzM
+	 2oJ7/ZilF4tl85Cy75q/Ggis1e87qhthHdwSlW72tPwrTkomPcQv0tlUP/0nlVX2gc8uU
+	 wbVIHZAnGV0WYS25CrrNAfwWdod3m+PH7HL6RCFpJIxQSh5LsIYqtTDUGWyTLUqMErg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=hPrIO+RI;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.198.65
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010065.outbound.protection.outlook.com [40.93.198.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819D6606A33A
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 21:21:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 819D6606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB353606A32D;
+	Fri, 13 Nov 2026 21:22:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB353606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=pps01 header.b=cSzAUYhn;
-	dkim=pass (2048-bit key, unprotected) header.d=columbia.edu header.i=@columbia.edu header.a=rsa-sha256 header.s=lionmail header.b=5pDjkxSy
-Received: from pps.filterd (m0167068.ppops.net [127.0.0.1])
-	by mx0a-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ADLCxi03426969
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 16:21:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps01; bh=ruQ3
-	lHOmeWuryZ2uUe/iR9zV6WBvZ5ex3uR31DU9w70=; b=cSzAUYhneIKURlzsloWl
-	Th9bGaxgkk/kFRRqzp+w4qllkj+vhDxOlOcCOEBg189VBN5iUBP3U8SKjsnGdukh
-	+En5RD33jw1ZG9DlETweMUyUOMjhr77/YVmegQ5ZOHdIXiwuwyGOUu8FaARP/gFq
-	hj22JC9DPE1RDRPB5tLBei/uKJvS7y+uIMCL2fSZXegk6UkyoV52jgL5RwnSfDur
-	7nLy4no1XeB3FL2UsboBghgeX+03Gau6yi8SiR9nnLX1jg6GqV87x+2s9sT1bG2F
-	dGkbJkTE8C0G918xasthcTxG48a7iChehb7tqLZlktn6XgFUCdRgTcwBKfyVB+LU
-	7w==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-00364e01.pphosted.com (PPS) with ESMTPS id 4hx1rjmtnc-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 16:21:04 -0500 (EST)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-91e8badc80fso23213336d6.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 13:21:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=columbia.edu; s=lionmail; t=1794604863; x=1795209663; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ruQ3lHOmeWuryZ2uUe/iR9zV6WBvZ5ex3uR31DU9w70=;
-        b=5pDjkxSygDuBc7Fi79vk+bAReyA4MIFYf5Bp7j9UFF8YNQBBgWPnLRKonee6k8SmMp
-         ku9eLxesmDEZCeUWfmIFdGWML7QwbT3E7i3c/q6143A9OMYmWlqDLGaGP+pOpJy+bd9G
-         tFgbvezux0v3Vd9l24xi8gCFPwmDmBIuZqQhD3Us8PaKK6iy+BbSd11DXC/Gj5lWY3Il
-         emAgnKIukycU2jj9JtBOB50g/oPqBZNzQ42PfICcFVOuc6ErRziRXOHu0vramQ1zyyh5
-         vwtQnVbyV32ASj4hikEsR9W4natoiRD44Kf+egS3LYDpeGG/FB5Ay+Is/jpQnHZ4vk4u
-         xuEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794604863; x=1795209663;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ruQ3lHOmeWuryZ2uUe/iR9zV6WBvZ5ex3uR31DU9w70=;
-        b=umf5RmvaVpxagLrLm/nYX3xugC+alAV8nqGxA8xtecbL5yAqhn1V0htNHaR86M708Z
-         RnWWi96tnAdgIa4gNVcDkmwoxJaSRsbLne5bfoIYOJJzwPsQf6d3k+TLD1VFpTsUaQyH
-         bWcqdh5Yl7qw39geLuvFZ6JMmKbcEqObCXdIJFfmaQ1L0wesgqNe515qnyFX66elxDUy
-         ENOQV+n2tZRJNAuqF4zAr/8p5xzk7sOqzzGQtiT7uNwLPDZokooBios9/NXlP8onEK1u
-         cE+ODpv1dmMhQIzawQzBXjnTxP+uj2/i1TrQdZIuiud6APcFOUjn8YejhJ6eiXlMAxgv
-         o1oA==
-X-Forwarded-Encrypted: i=1; AL+hErG0DKg9qGwaIk2PeGv7vZrNdE+f9YT9Z9zuo9EMaM+7JmmUDQS1P2lTmE+TVDfvWS8ZxPVEkkw2Lo1h+KXcSGQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+KwEdWIsZ0Z7SUgzx2NypSQrETeFdNtjNtYs+haC7K1mkdKzoP
-	p5Y5VswSOQBxVhavyPhDLDX9FUekGQqm/Ff/23Xm0anMgmQ7Xa/aFBapfL0Ks5VFh6Z7jgppKhl
-	IStsOIicjCMxajbyMKZ/H4c+N/GyYcaz6uRD9li6Jqz6mC+U8TcYucskjUhyE1FdsAw==
-X-Gm-Gg: AYBFou0hHzdV6a0HoSHX4GMEVRkZgOR3oOieL0rm3XJzoHjkGOAeDPxdmYiT4RzEMtA
-	x/mLjsQ1TdfibHnBKREewZug7yFwRAvoVf02L+72vQde1O36phgAWn+QyVCiMfwpVV5abdKtyDg
-	4jBkaoUbRSxEk2Aqspha1scsiNzT69mWeNoJdAaHh25jKSZMu7Py+Y2j3/g/Qf/vs7ytUHzqf6/
-	r7ZfPs8ggr4+DQBJAW8aCXEf3jXF/qCo2A7eMn/Yxxi79hC4Uy1ccJu/8l5kuz1NUxuZrWcId1I
-	LyB/w2U96umLV3oWHK2WIbupKhQSZHpBknQ3MlDSjq4NfHg+Ao1MrfTPGTRwal/cTrTFCbUk/6j
-	p6v/SN3GpYFAIkz6GobCGgi+Crlg8lHsMxci2JepM+0mTqLYI5YDFxB6i1gXEXSPIZB9PPa5FD/
-	2YMTjnBw55p+nfxargu0IS43rTmns=
-X-Received: by 2002:a05:622a:4c0c:b0:550:fe12:22b2 with SMTP id d75a77b69052e-55ac8e8a89dmr58388721cf.67.1794604863057;
-        Fri, 13 Nov 2026 13:21:03 -0800 (PST)
-X-Received: by 2002:a05:622a:4c0c:b0:550:fe12:22b2 with SMTP id d75a77b69052e-55ac8e8a89dmr58388061cf.67.1794604862426;
-        Fri, 13 Nov 2026 13:21:02 -0800 (PST)
-Received: from [10.207.116.169] (nat-128-59-178-153.net.columbia.edu. [128.59.178.153])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-55ad0533d7dsm27217721cf.8.2026.11.13.13.21.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2026 13:21:01 -0800 (PST)
-Message-ID: <1a77055d-c628-4832-becd-e2ca647b97c9@columbia.edu>
-Date: Fri, 13 Nov 2026 16:21:01 -0500
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=hPrIO+RI
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qrJV41DC+LA63t5QptakcjmO2QlY+O35CFG+nxrhjYbB3oPKo9YtourrAU4j3RYCqjR1RU4TshNYar1Z+LVbU8kd2KK8C8wke5txm6Tl9V4IseL4fdESPABpqZ2/l3n6OUiS4pOvIddYRE7qnOH+L8JTTH5aqyamNyBZGhrNpdxn9bAB/Q3utRvLQ5E1VK6HqF6EBldis1Z0+ZUxIsOzom8zMUioDNabG9t0mc6WiW5AdEEO/pIw7pjnR2fUcNVtFKpzRAMAFCiW44gGa9eqX39yt+U7uRRJIk91e2fSK6hGKG2ZgX/BfBQqkD0ap1p8cIFIt3+lE2pkMzARan1N6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iUUWfOIisgbrCVW4YUkL53arxf4v09B5XfJcE7IY+wo=;
+ b=iU5ZUs5+P4/ksE5EzXeYjhI+XoioKqTC7/W2dNPWvcqw4j8zhvjXKkEEDqyj1vBpSr0wRqq4NQsfMlxUa1KQRQFIsnyLKFTpAu3gZeMVWMl0f688YRmyPzRkaNHuIkGKBGSNYcJwL22Dj6BsvgdYV2BVVggjfwl1LwV2+CosTAfN6HTzPibAxgyLyaOBntPG7wR9afKKXawUC+Bdf/ePyZftnlKUOyzTki8Ip5gyUtICV0/2Lb97KW7og2ejVtljvsIlhXVmPHUeOdrhFjAPCprrFSqg5XFpDilOazfnXvnhWSe+PiaM6xOdiM6FCvarH2Zfpf7mzX7cxoRkkWgvCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iUUWfOIisgbrCVW4YUkL53arxf4v09B5XfJcE7IY+wo=;
+ b=hPrIO+RIknyNjW28tMYHKpKfVb3Gu5KUF6VHY+aDkDTQFLjirH0aFA6owz0vqXQK493Lz2mjccormEClslkGV38PLNY75q65wsnAenlz99GnFcz0v66KY6ed/3gi8FWiMl/3FCP7ejM60JBZCR3f4xcy3o4wfV75h+YegCk0CMFlYqxtgr5Orio3bv0O6lGwI1ikTB9SZ1bP4YSAIq85ljc4bnHSenQ4gsi4u1SjLO+cKs4finBNf2JFJ2RtAtfxjEMM1Oug16qafwyGFVouRHbNDSHYOhgrqBvnzKnxvo1kG23S1q6/02YkhdPPcMBrw8owe93tVy4EwDwZ/E2fIw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM4PR12MB7742.namprd12.prod.outlook.com (2603:10b6:8:102::18)
+ by CH1PPFC8B3B7859.namprd12.prod.outlook.com (2603:10b6:61f:fc00::622) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.11; Fri, 13 Nov
+ 2026 21:22:18 +0000
+Received: from DM4PR12MB7742.namprd12.prod.outlook.com
+ ([fe80::8df:c519:298a:94f6]) by DM4PR12MB7742.namprd12.prod.outlook.com
+ ([fe80::8df:c519:298a:94f6%6]) with mapi id 15.21.0615.007; Fri, 13 Nov 2026
+ 21:22:18 +0000
+Message-ID: <29fffc1a-081c-489e-b61b-3b37b2bf8bdf@nvidia.com>
+Date: Fri, 13 Nov 2026 16:22:16 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/7] rcutorture: Stop disabling RT throttling for
+ boost testing
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: paulmck@kernel.org, rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Davidlohr Bueso <dave@stgolabs.net>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261111213826.2035045-1-joelagnelf@nvidia.com>
+ <20261111213826.2035045-3-joelagnelf@nvidia.com>
+ <20261113155622.3SM4n6rp@linutronix.de>
+Content-Language: en-US
+From: Joel Fernandes <joelagnelf@nvidia.com>
+In-Reply-To: <20261113155622.3SM4n6rp@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0209.namprd13.prod.outlook.com
+ (2603:10b6:208:2be::34) To DM4PR12MB7742.namprd12.prod.outlook.com
+ (2603:10b6:8:102::18)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -116,198 +108,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/madvise: disallow guard region installation in
- uffd-armed VMAs
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <liam@infradead.org>,
-        Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20261112-disallow-uffd-guard-install-v1-1-bcf8b1aaa72e@kernel.org>
- <0e3e876e-c3df-4660-ad89-a5f0fd7dedc8@kernel.org> <avcNcL6svEOTg_3r@gremlin>
- <0d6e29f8-54fc-427a-a979-1a8c6f4e3f06@kernel.org> <avdjMNNkOXm2khTW@gremlin>
- <f53458fd-c268-4dfe-aa99-b050f63af728@columbia.edu>
- <avd6XEHndh30hyc-@gremlin>
-Content-Language: en-US
-From: Tal Zussman <tz2294@columbia.edu>
-In-Reply-To: <avd6XEHndh30hyc-@gremlin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEzMDA4NSBTYWx0ZWRfXxR8qHGuK9cnG
- hGWofvBlBCYwmmeSRNxyxfKUIYimoXF8kyXrWqFCHzmCYFk8tsikcfDLAqNlJbQrJJo6z9OjOEb
- ZQXT91WG9z5WcFkON2ovaRgV3kOtw5FSLvoqh8wq7o1xQjF/6Wn7
-X-Proofpoint-GUID: _oRufinKfwuvpOGtLLJ-DBH7JOiW1SCi
-X-Proofpoint-ORIG-GUID: _oRufinKfwuvpOGtLLJ-DBH7JOiW1SCi
-X-Authority-Analysis: v=2.4 cv=XsJvqlF9 c=1 sm=1 tr=0 ts=6af77f40 cx=c_pps
- a=UgVkIMxJMSkC9lv97toC5g==:117 a=Y+j3KQtDOE8TDC6EXH/Ajw==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=x7bEGLp0ZPQA:10 a=A0y_DWxS2BwA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Da8U98TiO7q1upZEImrf:22 a=usPcmh10W0ubT8QP8_c3:22
- a=1OPhSWX3wqg4YRnK4OYA:9 a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEzMDA4NSBTYWx0ZWRfXzEiM/Bk8W/vT
- 0VmgMd9cGazFuCHDTlTJzfMxtV2JylJ1kTM7D5Ch0VZuYVZv6USQFKB1bFVVAfqsVeAJA4R6sOw
- MpL+scthp9MabQRKH+IhWV5kwqceQK8VeT6JNgLUMkD2mEikrdoFJSSPTtIAxztF17VZeKalzP9
- WjKoSZ5UXedWmzZj3g7WplW2aPMPri0TewjyNCSbXvgp91cJyoLgbd5P6k7l8nCOlLG6VwRoz/L
- OBuC0dVfXpv62qfjlDaMDJMtUwoI83DiaxzEuk+pfUu6CGQawTsus5y6pheEJNrZy8HdGBYd3nP
- N418OfHgoLVRpCu1skT8zdaY2hQc3nqYLSowHMUuZYFyhURCa/p5Ln/dMAWSlHq1y3ygfBl3eQo
- IittRtEXZv1+pbdT3zjDR7QLj9mDi58T5+5pWu93cYUw6+eear4pQMfcdSr83nB6qWoJrsR3VN9
- WoeTkruyiEvnYt4lPEQ==
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11965
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 lowpriorityscore=10 spamscore=0 clxscore=1015
- priorityscore=1501 phishscore=0 bulkscore=10 impostorscore=10 malwarescore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
- definitions=main-2611130085
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB7742:EE_|CH1PPFC8B3B7859:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1765e600-a438-4588-623e-08df41cc3214
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|1800799024|376014|23010399003|366016|10067099003|4143699003|11063799006|261022105027099003|56012099006|261026140227099003|261026121527099003|261028144727099003|261022075727099003|261009223027099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	MZ2k1vQfgJo/5lwkZNru3uNc67WKwOqFs5HOcOUhYNmTsssz7G3EkNXoqrPMk77zKLPP9X3UIy5N+kwXyVGu3pULQnTe12ApFXEnCq2adYeMxJEK4FrpHoHjQ6cdMJC8B/UoZoEjIxQZKgeNWtwNVgFSOATI7t51oUn8mhW1J3SivoWJ8d/7dpP2Gu+sbozIQE/azDk6mrLu7M7TaW4Z2D95X73ky4CjWLt6hXu24AFTmOEFWhTCnjjTvgEzjH1ruzwAhjU25JQAxz7hzGP4gG4p8MkV157ch1PMLAPTZD4vRIxnyil8EMTGjMIzSrYxwKnAvRUujur0rCBuPZ3vbOsYnq7/5IB/hNUnhbZaiFBFp9+NlC2d4Vc2kcz4TZNmcGCUFkgZTQHWg5wf2VDlWAdMZI8o0zakZeq8XISCIY1k/TzkiONB00JxjRD2jtbRCcSlPF4HYdFwccbw8/+edTOYD1QFBuFsoibF1tugCaqfZvb3dSgCKt+ndbWAfdGj5SZDP9hsz6O8PWDWgQqXwMBw6JE/amy3Xl7V3BpNou502mMCK6gIE4e/tuC0mNCMwfr9LXfzdE6EYvSE3W1yKETsQcm0AiiL+yfhIljnvLH7uMAhhrNQ6x++uXp/96y2UNKiYaIc9ZpNmSvWcmNjBt9cMvNJ3EqP+g7hcsW8pfs=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB7742.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(23010399003)(366016)(10067099003)(4143699003)(11063799006)(261022105027099003)(56012099006)(261026140227099003)(261026121527099003)(261028144727099003)(261022075727099003)(261009223027099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UzlwWTVwR2t4OVJXUkFSS3ZNMWhabTlEclVodDRsdTJjU3hlaFk1KzNHaThj?=
+ =?utf-8?B?UVNXQTB0MWQvcHJPNFk0bmRoTkZpdkQwME51QXlta1hnZG1lZjN0aFg5L3I5?=
+ =?utf-8?B?d2hlWFFRVnFtTkI2MnZLOXVVWmdKdDZaanJrU1BYZ1pTSVl2NmJ2MzdGZ01W?=
+ =?utf-8?B?Z1dtVGhLYVFaRWlYSmV4SmhKL0dvckxLNk5BdjlzanhmWWJUaitLaEtrai8v?=
+ =?utf-8?B?NlM1WnIvV2dXcDhwQ3NwZ0g4bUJwekhWakVrQURhTDJsVU9Tdk9ncnNHZzdJ?=
+ =?utf-8?B?WUJWalVvUHJoVDdPNWlRamo0ZFppb2t6NnU1S3hqRVc0NmNvYmtQU1FlSW9t?=
+ =?utf-8?B?emY3MExKNmt3RkVTNVFqRXJudm5pakhVMENwdDZIQy9qamM3MnJERTl6Z0xH?=
+ =?utf-8?B?VFRDYnVRUmpyMjE4UFNkWWZuSVBoUlY3aEJGcHlrN1BxNERZd0srMURpMzlG?=
+ =?utf-8?B?S3JYM0RqcUR0TUkyVFFndStNV1NwZ1A5MElUN2tBR0xNUC9SbjhxUEhRNDcz?=
+ =?utf-8?B?M3hVeWtkTHU5SXBhbFl5OEJyZTlldFJYL0dxemxrcWFQVUp3NlgraEdiSml2?=
+ =?utf-8?B?RnpiaGV4MGtHTHhOa3dCL2VPVThOZTdBWTltMzAzNnFqME93NWdqZjBkanlC?=
+ =?utf-8?B?cWZ6YS9HQnRnb3h1OUprWWIzOHBEcEs1TEI0SHkxY0l1R0haYmxZR0txRVFU?=
+ =?utf-8?B?TVdBQXE2M3M1Q1krUFJ3TkZPblhsTXhwWmhvc01EZDQ5UVNIak8yWU9UWnZN?=
+ =?utf-8?B?a0t0T3NPV3FsazY4bU1CcmhyUU9NNWZxQ0ZZcTVKb0Q5K1FUZEYwaDJsc1B5?=
+ =?utf-8?B?Z1dCbzJhSFF4SjY4RzVEMTZNdm1HTi9WMlBZbGFQNXVwazYxUktpb3h5cXZ4?=
+ =?utf-8?B?WDBuKzJDUW9BbjBCenByTTFMU29IUnFtM0YzeUpLVmRNeXV3amd5WGNoeUdZ?=
+ =?utf-8?B?L3FuR0V3VXlOTDB1Z3o0bXk3ZjkrNncvZzFoRWtaTnJrLzRJNzZuWG82REpQ?=
+ =?utf-8?B?T3pqMTNYa2NGbFljSm5WQ0kyN1UyMEVYUjFrR2VvaUIxUlg3WXF0WkdHRUJM?=
+ =?utf-8?B?elhRKzFVMndabDRFWldlNzgvWEtaVFJ3M1BvQlNqdjM4cXdRMHJlVTh5Tysz?=
+ =?utf-8?B?YjJldUZzd1ZnZ0xacnhubnQxbFZnNDN6V2lrdUxiZC9FeFljeVhrVjhXUEdl?=
+ =?utf-8?B?a3k1VFRQNnlCdGc0Z0dwUCtqQi9OSTliUi9yamFGcVF6WGdqZTNoOW1lSm45?=
+ =?utf-8?B?S3B4SEV4M2FQd1dTVEFOZFdZekIycTJJZjJqUHIrR3VXb2ZKU0JYUzZuTDd5?=
+ =?utf-8?B?STJsZkNuSm1kank3UEVxRzVOMDF5Z3RnMkhMWG1BQVhKM3lUQndvMkV0VmIy?=
+ =?utf-8?B?dDdXSzMyenMrdlQ0NDBkZVpGdDdqU2ppcSt0V3N0Q0NUQjlzUUtRbTh6OXE0?=
+ =?utf-8?B?cDUxVjY3c2tvMWE0YWZWWDhINk9wT3k5MkE4L0swQ0pVQlgxUWM0TnlxWGJx?=
+ =?utf-8?B?Wlg3Y2pMQmthMWhXL2RuUWNFYzlOWGZkb0F5S09SYUkrRnNDU3NuR0NPSzRk?=
+ =?utf-8?B?b0cydEhVR1B5enRaRzF0TEEyVklWeVNFbENENUZVVm80NDU2OUI0bElib290?=
+ =?utf-8?B?SHg2VDFIa2VvenpCY1NMeUVLbW9naEJqcEw5TkNhSUJMUGJ3aW9BU3hrL3Jl?=
+ =?utf-8?B?N1Q2NW04dm44Z05wNDNCVHNHelZWU1Ywd09peWdqTmJCZFQwS1I1NTY1VStI?=
+ =?utf-8?B?ZXZzWms2Vm8xQWpwdVFYanBrcHVzaWxSVzJsR1ZxMko5UnRBNXl1TDhvMGFP?=
+ =?utf-8?B?QXBWN1pvSzdGZk1EblE5SEZuWnZBY1FtZ1JaUkl6VEdZNU5VSEF1SXo5eFdm?=
+ =?utf-8?B?Vm41M0FqRDRCbUlXYmhWUjJUeXd5dU1SdjdnT1VsbnVZUUdDdFFDNFlMaTBI?=
+ =?utf-8?B?cWFmempaK3BiRGN1VDRkbGY4ZVRhWUF4d2M4emJEUGRNdE5qWW8xa295c0Yy?=
+ =?utf-8?B?ZHE4b1lPQkh3ZkxuV0tPc3BBQmMxam85V3BLTHR3YnFjSjNkdUgrTXRGYnY3?=
+ =?utf-8?B?b292eFdaTkd6L1IzQzc4VE5RcUxRWjRpWTc3S3YzTWcvL2Z1US83YVEvSEdK?=
+ =?utf-8?B?cjdRUU4rVGljR1Uxb3ZaMDNwZThQZXI3NUF4Um5KczZ3WFZhQ3NaU2IrYiti?=
+ =?utf-8?B?SFJIYWhlNjlwN0pOM1dFNkRpelZ1VGIzUHR6ZVBTZW1lN0VDVzNGWFhJUVRI?=
+ =?utf-8?B?TDhhNUVsbUdLNk9ZTGt3MmRvTVJhbCs0MldjVEpxd01McVI5bm84L2dTZDNC?=
+ =?utf-8?B?OEZxODZLY0RRSXdRMSszQmVZTjVYQVRQR2pMbmFObFIveWV6VUd5Zz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1765e600-a438-4588-623e-08df41cc3214
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB7742.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2026 21:22:18.1405
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TxYx8HD5CKYHMY+4XOo5K2rqKsDCqvJp9ZHulbXlY6cJqDROgKdz/yC8VFAFiF2+sLUKKKGDGZWhNJIsrzn5ng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPFC8B3B7859
 
-On 11/13/26 4:09 PM, Lorenzo Stoakes (ARM) wrote:
-> On Fri, Nov 13, 2026 at 03:55:41PM -0500, Tal Zussman wrote:
->> On 11/13/26 2:22 PM, Lorenzo Stoakes (ARM) wrote:
->> > On Fri, Nov 13, 2026 at 08:15:34PM +0100, David Hildenbrand (Arm) wrote:
->> >> On 11/13/26 14:59, Lorenzo Stoakes (ARM) wrote:
->> >> > On Fri, Nov 13, 2026 at 12:59:00AM +0100, David Hildenbrand (Arm) wrote:
->> >> >> On 11/12/26 18:38, Lorenzo Stoakes (ARM) wrote:
->> >> >>> In order to establish guard regions, guard markers are installed in the
->> >> >>> page tables of a mapped VMA.
->> >> >>>
->> >> >>> However, problems arise when one tries to combine this with registering a
->> >> >>> VMA for userfaultfd, as such operations may themselves need to install page
->> >> >>> table markers such as uffd-wp.
->> >> >>
->> >> >> How does this interact with UFFDIO_POISON markers that can outlive even
->> >> >> userfaultfd registration?
->> >> >
->> >> > The zap clears poison markers, as is standard. It's really horrible this logic.
->> >> >
->> >> > So the code path for zap used by the guard install (via zap_vma_range()) is:
->> >> >
->> >> > zap_vma_range()
->> >> >   -> zap_vma_range_batched() with NULL zap_details
->> >> >     -> __zap_vma_range()
->> >> >       -> zap_p4d_range()
->> >> >         ...
->> >> >         -> zap_pte_range()
->> >> >           -> do_zap_pte_range()
->> >> >             -> zap_nonpresent_ptes()
->> >> >
->> >> > And zap_details is NULL.
->> >> > > In zap_non_present_ptes():
->> >> >
->> >> > 	...
->> >> > 	} else if (softleaf_is_uffd_wp_marker(entry)) {
->> >> > 		if (... !zap_drop_markers(details))
->> >> > 			return 1;
->> >> > 	} else if (softleaf_is_guard_marker(entry)) {
->> >> > 		...
->> >> > 		if (!zap_drop_markers(details))
->> >> > 			return 1;
->> >> > 	} else if (softleaf_is_hwpoison(entry) ||
->> >> > 		   softleaf_is_poison_marker(entry)) {
->> >> > 		if (!should_zap_cows(details))
->> >> > 			return 1;
->> >> > 	} ...
->> >> >
->> >> > And zap_drop_markers() checks zap_details && zap_details->flags &
->> >> > ZAP_FLAG_DROP_MARKER.
->> >>
->> >> Right, my intuition tells me to just nuke that thing by setting
->> >> ZAP_FLAG_DROP_MARKER.
->> >>
->> >> MADV_GUARD, is just like munmap() another form of "zap it all and protect it".
->> >> >>> This is especially problematic because guard region installation causes the
->> >> >>> regions to be zapped first, meaning that the removal of userfaultfd-tracked
->> >> >>> ranges will not be logged in this case.
->> >> >>
->> >> >> Again, similar to trying to uffd-wp-protect'ing a hwpoison marker (which will be
->> >> >> ignored), and then zapping that.
->> >> >>
->> >> >> Isn't guard marker installation/removal just another form of zapping?
->> >> >
->> >> > I mean users being weird could decide to use it for that rather than
->> >> > MADV_DONTNEED, but zapping is a side effect really.
->> >> >
->> >> > Really the idea is that you might have users who, for whatever reason,
->> >> > faulted in some range, and now want to make that a guard range, so for
->> >> > convenience we zap it for them :)
->> >>
->> >> I think not just convenience. There was this problem with faultaround / THP
->> >> placement IIRC ...
->> >>
->> >> I'd just zap everything that's there. That's literally what the user asked for.
->> >>
->> >> >
->> >> >>
->> >> >> So to me this all sounds like "if user space does something stupid, it's user
->> >> >> space's fault".
->> >> >
->> >> > Unfortunately, as per Tal's series, there's more to it than that (linked in
->> >> > Closes: tags).
->> >> >
->> >> > You can get an infinite syscall restart (ugh) if you do this on a shmem
->> >> > range (Tal's 9/12) so it's a kernel bug that _has_ to be fixed.
->> >> >
->> >> > The other bits are just about a user losing track of uffd stuff if they
->> >> > guard/unguard, as you say.
->> >> >
->> >> > But every other zap code path does the uffd remove event stuff, so this is
->> >> > still an exception.
->> >> >
->> >> > If you support uffd, you have to add a whole bunch of horrifying, awful,
->> >> > terrible open-coded uffd crap, e.g. the userfaultfd_remove() etc. And you
->> >> > have to drop the bloody lock and reacquire it too and make sure all that
->> >> > works correctly (...!)
->> >> >
->> >> > Anyway there's basically 3 options here:
->> >> >
->> >> > 1. do something like what Tal's series does - add a TON of complexity for a
->> >> >    use case that nobody uses to get behaviour on something nobody sane
->> >> >    should care about (i.e. uffd/guard/unguard/expect uffd correctness).
->> >> >
->> >> > 2. Zap with ZAP_FLAG_DROP_MARKER, and silently lose uffd-wp state but
->> >> >   'support' uffd. It does fix the 9/12 bug but then subtly breaks uffd.
->> >>
->> >> Right, that's what I would do.
->> >>
->> >> MADV_GUARD_INSTALL zaps everything.
->> >>
->> >> It already zaps swap entries, migration entries, hwpoison entries ... so just
->> >> zap everything.
->> >>
->> >> [...]
->> >>
->> >> >
->> >> > If you're really concerned though, we could go with option 2, which will
->> >> > just make UFFD behave differently for guard regions.
->> >> >
->> >>
->> >> Not really concerned, it's just the most consistent one for me. Zap everything.
->> >> The user asks for it, like he would ask with munmap().
->> >>
->> >> > (I regret, obviously, ever allowing this for uffd ranges. And we _all_
->> >> >  regret that uffd was _ever_ allowed to be merged in this state...)
->> >> Yeah ...
->> >
->> > Ack will send a v2 doing that then :)
->> >
->> This sounds better to me. My concern in [1] with completely disabling this
->> was that it could break a uffd manager that doesn't control the task it
->> manages (e.g. CRIU lazy restore registering the memory of a task whose libc
->> uses guard regions), but this should avoid that.
-> 
-> But they were completely broken already? So we're 'breaking' an already broken
-> user? :)
-> 
-> It's moot, but still!
-> 
 
-Only WP and RWP were completely broken! MISSING registration, which is what
-CRIU uses, worked correctly apart from the lack of event notification, which
-only matters if the manager still has contents for the page (which, again,
-is unlikely for these pages). But yes, this is moot now!
 
+On 11/13/2026 10:56 AM, Sebastian Andrzej Siewior wrote:
+> On 2026-11-11 16:38:20 [-0500], Joel Fernandes wrote:
+>> The CPU-hungry-reader boost test depends on RT throttling to bound the
+>> CPU time an unboosted reader can obtain, so there is no longer any
+>> reason to disable it.  Remove the code that does so, along with the
+>> now-unneeded sched/sysctl.h include.
+> 
+> Can I talk you into replacing this with
+>   20261113-sched_dl-v3-3-a76ffa1cdeee@linutronix.de ?
+> 
+> It removes an additional declaration in RCU's header file plus (the more
+> important part) it explains that it is not doing anything rather than
+> saying it is no longer needed due to the rework.
+
+Sure, I will take yours instead and include it in my series.
+
+thanks,
+
+Joel Fernandes
