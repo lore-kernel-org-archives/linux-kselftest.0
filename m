@@ -1,101 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794558026;
-	b=EzBJVXnNhwXJ2ZVH+eK5F03Hkbl+GgACLCHGDh/pvpIZDm4KidDW/VrsIBjAngGorBJn
-	 2BqkjLzTAWCY2dPIwCQJI8k0E8QORtAQWdvk5HRff6Y2ofThXwLerEB5qAqZC5pg8/SIi
-	 d9aLSbSx6ikDC1QxnpPiJ+KlNqgP3dD1m9RiPOaOV0R0LDphG9aG6a65K2JFikA8Lml5j
-	 TmbV8HDuJ9uc7allBp4pz581DEhPx/oe09th3d78nKr4uhMB6+RQ29cEh5fCXz/DMnX32
-	 2pJxizNa8kK4j9LAsgVSk4it7OulGD6ZVNJ1yjmkcHF6upCW6qH5OJaktgPMO+ZH1YA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794558026;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:X-Sent-From:
-	 X-URL:X-Accept-Language:X-Accept-Content-Type;
-	bh=f+STttU8DY+1QnHIs6fxG2bkNqb0eUBXzAOCFZnnc8Q=;
-	b=jVJbyjmBzzyCq5cV8ef548vOjOPzf2fNnk1RjA0rojxhhl0CFTle4ovkIUjhWH+jLupc
-	 +oMm9DjloIBgHD7kXWymngcaL9QA6WxBvbKTRTqYYCPimCssLMfOAByLJVSysUwubdJSg
-	 pJeblzVx6CzQdgqjb69QomhzZzUkm09I8pa9r2qtsBqMGBdKU+Rc9xB6GUQcmuCMTQ0Ed
-	 SnCKeEjPbZkqtxWWvnplWXrdKw2S4KNk1XZxOcf7jhbYVXMGaWENDLqn8cenIqEpGrZUu
-	 H4wTPD7yM2JxO/oX0gQzbrHHUVhU02flzXlZvY9ttnPnvw9hCQOaXamqTzzNnm3p8Kw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=pengutronix.de;
-	spf=pass smtp.mailfrom=pengutronix.de;
-	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=JIZRH8zc;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
-Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794558660;
+	b=ofVJ9CvvuF9VaZrxfgXRyEZ+cwmEkZXbDov0P5sXwlYyFl/WPxtTGxBQdVXWwTA1+4tG
+	 aHgeTVRP2R3VbuVN+eSI9GBG9Az7ydssypFtUOkw4lecLOxeNmGYxaCsd8mPNtEZInjV6
+	 caLAaK13aCtblrcP3Dm1wAq8JlpyhBWs5sbPwHhXXM04xni6O0C8nqWA0prF5Zmq5T9NE
+	 j8U/N+0rgDy3uWFu8s3sXdAGhtRk+f0Gw7sru+kWRyAi1A1QqUXiklDQTQa2B3+cKTpO6
+	 R1z+Ci7y/fTXrjDMJhWw33IRfTqM6Gzu1rNINEFD7VIlybB04EOHdwPuUN4YwQmnOog==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794558660;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Disposition:Message-ID:User-Agent;
+	bh=f61a/DEp6A2hm2rkE7XwudvGQ0m98AaZhEeJm5iO0+E=;
+	b=0xr3LwUQGybH96TOA2Sijj5vVMH8PrqQM4g7Le4RLcmhg87tbQ5YFQ2yuqF8qew4IrBs
+	 XZY/jMzeyNdw+WOGGgbfsYOfUxGGL1GMOo15EpGUnfJ+amTZnekAEiYtrSgqSz2R2Wt0B
+	 YSXcIZbZujp9SHa63B3yHPy9XblY0yNQmRnsToHm57NELEmwtQV6NY+GibdIgXylmp8UJ
+	 5ws5R4kVZxSsTaT9hNydMxuN1B4eatidISmy3+8ipLyLLCyO+dN2QPLgHliYyvFsJ+DQV
+	 N3A/Sap2KWGLFWm14S1hE9uMjMye0h46aTcSF83+60UADsHHg6BCVPxJdRz5dtXg42Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=chrisdown.name;
+	spf=pass smtp.mailfrom=chrisdown.name;
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=sRaNMk2O;
+	arc=none smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A240606A323;
-	Fri, 13 Nov 2026 08:20:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A240606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B213606A33D
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 08:31:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B213606A33D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=JIZRH8zc
-Received: from drehscheibe.grey.stw.pengutronix.de (drehscheibe.grey.stw.pengutronix.de [IPv6:2a0a:edc0:0:c01:1d::a2])
-	(Authenticated sender: relay-from-drehscheibe.grey.stw.pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id A48E620041D;
-	Fri, 13 Nov 2026 09:20:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1794558022;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f+STttU8DY+1QnHIs6fxG2bkNqb0eUBXzAOCFZnnc8Q=;
-	b=JIZRH8zcElq2hNQz9Z2idMOUOkn1yIusSqFpWEDmkm0E0fI2rJYs7o98s4VIA19Jmjksw8
-	Cnh0eZEONRtD/QxcrlwT0GtTzInVoVe6b1V734AgFF09C0uuIl6XjMqasmfn4CtyEKknYO
-	lxay2QKg6f5pOircB/NIrfXy1VpNGbDHWTwYmYDSSZ+vuR/OCRpolCKcZSBVLMYOTTgMgf
-	D3KqyPepw3jn3M/60A2qeAAVQCbeoD0LdeZaGIagzgPVADXJeqg27glRRGmJJreszkDnMx
-	pUm64r5lXwUFUYCWQ3LRuVb+uCYicWD1AqvI4QmM5/uLNm6DNiEWhOiBSQ+Mzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1794558022;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f+STttU8DY+1QnHIs6fxG2bkNqb0eUBXzAOCFZnnc8Q=;
-	b=AfklnWRjZD3DwPzi9o3MvOKhA9/zy4sq0PwpbliN5pF3hP4e/b+VVfTE56xtIWAZneziZW
-	yPzgXhX7OWVzbOVXhx7sz+NdcbGtFHkc3XH0XcczlgggFW7mg6spuZ4MiCiEH9DBMlCXBv
-	XMhbEsyOTqwy2T5kAvhfbNwAvcDiUg0ZVgz6ZXqVHDC0d/nT7C+DeouU9yYHGRJk8zCPBn
-	A/cr2PtsIasJ6Ssx+0d01LREO+H3FJ6NU21R2VlRRJC2gFP/XRnSpPA2hweOrrFyk5+cB2
-	HvMGzQ54Ph/wJiAwbxAcBLHUv96JauRJROFw/smK3T83pxGQ6A0qyriOhDvp2Q==
-ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1794558022; a=rsa-sha256;
-	cv=none;
-	b=Hlu3DseJZi8vyecGAygtR2XtXTcOtnJY24oWn/WHfWCsOowL6ykmoU9xSBSSK1Ggze9gMA
-	jt0tQO3lO6jQi5zqPcwYVYJZpskLcbuHeTBCQE+Nn71IemNqW6PJejErkNlB6G7B6tJfNK
-	JiVyhJYG28kBIQxw4ATUrkP9SzrSLwLQR9QVfjEEKPr5jNwrvFO4ZvpciP0XDMWzd7Peos
-	5sohfv1FCP3ub43z4oWFuSzxOMaEcZ/rFsVSyDAG8GzkBX636SDBKIedr8anJ/Ej4+p/iy
-	VorMSbOGkG+fvn1EZRlPuW1y26sXS78Z8GEWyMK1u+YFEF7EsuqcXtV8mKl+bg==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=relay-from-drehscheibe.grey.stw.pengutronix.de smtp.mailfrom=ore@pengutronix.de
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1xRmWE-003xgH-1v;
-	Fri, 13 Nov 2026 09:20:22 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1xRmWE-0000000Fppw-21hX;
-	Fri, 13 Nov 2026 09:20:22 +0100
-Date: Fri, 13 Nov 2026 09:20:22 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: netdev-bot+sashiko@kernel.org
-Cc: robin@protonic.nl, socketcan@hartkopp.net, mkl@pengutronix.de,
-	shuah@kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	fmaurer@redhat.com, mailhol@kernel.org, alexander.hoelzl@gmx.net,
-	quchaosheng000406@163.com, penguin-kernel@i-love.sakura.ne.jp,
-	kuba@kernel.org
-Subject: Re: [PATCH can-next v3 7/9] selftests: can: add J1939 TP/ETP
- multi-frame tests against CAN_RAW
-Message-ID: <avbIRi9NIgi6dcEB@pengutronix.de>
-References: <20261111-j1939-selftests-v3-7-5a80277ab363@pengutronix.de>
- <179454972353.488853.9453703448480835098@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=sRaNMk2O
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2e987a2ba0cso3417125ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 00:31:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google; t=1794558659; x=1795163459; darn=vger.kernel.org;
+        h=user-agent:message-id:content-disposition:content-type:mime-version
+         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=f61a/DEp6A2hm2rkE7XwudvGQ0m98AaZhEeJm5iO0+E=;
+        b=sRaNMk2OSk/a6aWGOqOWrMugAMmZ1cinBvSaGXXuX6T5FudhFdHlZzEHowq/jIOZ4n
+         Jzw04d95113kezBuy2csxHVIWCaqzTBp5Wqjaxn+c/Pl36oVol3U8iwzvNWwqzlINMwY
+         dUj5skD3W8p1FyAHmxD4xgC6UJvK3jssafyMo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794558659; x=1795163459;
+        h=user-agent:message-id:content-disposition:content-type:mime-version
+         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=f61a/DEp6A2hm2rkE7XwudvGQ0m98AaZhEeJm5iO0+E=;
+        b=HgXbN0vjl6ow3QEBV2rI60JXHR0XuYYqbgEq0SRdqNmazjzrhK7Jc/vNl9998kyE1D
+         /MMz8nxXUjlxXP9Tiyit/Z7PPny8y4GNXTubKkhHRxQ2KZGHGxC9uBsYKPEUf2GHKzjH
+         2jL9SIftYYw0Dm1Hws91iJ/fwvlke6UO6165EqIb/Sz9tS25pGV5rLy6UQq4REy5gdlN
+         57Sy0XMuMjth9UMNzl05TLfLj0nIPyKJO39TFXPgC+/Zwaarvh1+lLKD8Vwt2l6ecYIR
+         blk/XsIDYnnvgXpYxlrFCgTeSioScO4eduNseXOYyIMfiK/Jc5RZjEOjGoXEF5ZypQEZ
+         R1tA==
+X-Forwarded-Encrypted: i=1; AL+hErEAyBmvuzOZjixByOTBevswAE9qQftQkCStzdF6dNqs0E93/Uvj0lxpArPcCWJLOAIU0O9gngJwGnp1X+dfB6c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/j8qrN+03Uggr4VS3EvUMkbfMZ2lkbktvarrTfoNEHnNEzKJLH
+	b2ijcD+I2CpxFLWWzX9JxotO5Gij3+cCRUwyZpr81Vf8Ktig+yqX8jPCHotw0eXPmpY=
+X-Gm-Gg: AYBFou2rMucuRVUj1XcwdVAazS7G/MqTrTJxE9UkMZVCG8cst0wMKW++VirfFvUuwHg
+	ehDEQ4NAdJeCeBvHRjBeBcYn7JQFXCBTd9KtoUMPJfDGHFRX1O1uzZbua/SZMnsU1lzdDvIGgu8
+	ClbCSP2RgC82in/1TwT2mwnVelzFCbQWjsLF3dEhLklz7hj4tt/SAhLtfIMLf2lbwBtLCd80kF2
+	LmLGMz6kNVgFZ8jLosLczSwD9B97hInBShP27sVZYviBkpsWTzBhR/kUZmLX7FwVikr1GZ86VrS
+	EcBWCxOvZEnPbLkxEcIX3FPkaYxAWNOMF835ILJwMUl9OVm/TTvJvFeMVRBCm7iTB7a+sLeChXD
+	y2NzSfsB1WjexjXxB3j7b/aelmhdYIcDRryOBMWDQ3jyi4KsQb+9ipPT1bWgA9LGZ5jBOt+wDxT
+	KoynjZZfTUtohAYDGmP9NqqvsThgQHUOCo+S2TcqfjU9Ju+46MohHRNm1kTcKYdGebsY1kDsqBr
+	qJTFIwKXW9o0jxrBxID1O8UKp1B63ip9BjYNr4ufGGgPSj8iiENBfXL/bsNto5CPSB6r6M1dJ3W
+	VANBXeMyYlkSgiQXg43l9Sk/wpc0IofWsYw66oiNdcYg+PqHq6B+MYgyjrx529Iim5AuSEXVczg
+	KniyyPYtX8VL2v+HB6gmCWOZ4Wm4KDk1m5A1iLM/Onn5qvSyNYcrtbpaB2pKS1zwddK41wsKr9Y
+	j7UwvGNRON+LkOUXcyXlQgOnIXVHQwJ3GcyDQkxNqw3f4lXvLrn0e+CA0Gryk=
+X-Received: by 2002:a17:903:228e:b0:2e8:18ca:5f46 with SMTP id d9443c01a7336-2ee0da7bf97mr17781095ad.14.1794558659559;
+        Fri, 13 Nov 2026 00:30:59 -0800 (PST)
+Received: from [172.22.0.2] ([50.175.87.158])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f868217sm6442615ad.52.2026.11.13.00.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 00:30:58 -0800 (PST)
+Date: Fri, 13 Nov 2026 00:30:53 -0800
+From: Chris Down <chris@chrisdown.name>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Mike Rapoport <rppt@kernel.org>, Pratyush Yadav <pratyush@kernel.org>, Breno Leitao <leitao@debian.org>, Alexander Graf <graf@amazon.com>, Baoquan He <baoquan.he@linux.dev>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, kexec@lists.infradead.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 1/9] kho: Reclaim the metadata page left reserved after kexec
+In-Reply-To: <179443616043.2329176.17166425351392983946.b4-review@b4>
+References: <cover.1794383544.git.chris@chrisdown.name> <63ca64c004b296a998a3e531f8c0c4964916b70c.1794383544.git.chris@chrisdown.name> <179443616043.2329176.17166425351392983946.b4-review@b4>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,34 +94,23 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179454972353.488853.9453703448480835098@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
+Message-ID: <20261113003053.1c951f5a678d35e3@chrisdown.name>
+User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
 
-On Fri, Nov 13, 2026 at 06:02:03AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 0
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] The patch adds four TP/ETP tests (tp_rx_from_raw,
->   tp_tx_to_raw, etp_rx_from_raw, etp_tx_to_raw) that the author says can…
+Hi Pasha,
 
-pr-bot: cr
+Pasha Tatashin writes:
+>> Fixes: 76aa46b9e404 ("kho: kexec-metadata: track previous kernel chain")
+>
+>Do we really need to apply this to stable? It behaves correctly, and
+>your patch performs a minor optimization by releasing a single page back
+>to the system.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+No, I don't think it's worth a backport, since it's only one page per boot.
+I'll drop the Fixes tag in v2.
+
+Thanks for the review!
+
+Chris
