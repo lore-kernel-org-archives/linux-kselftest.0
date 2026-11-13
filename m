@@ -1,87 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794559039;
-	b=ET598DTFTbdcmh+3rq9AaJzyXydEgVE5L7ysgexyLBJgNrP8QE9FX1gcTf9l5z4OgLmX
-	 GI/LcDDczC8Hb+2OQvapdN8nI1TT/DbHFRqdd7r3Pzvju0yVgCiZ2Lk46dXSPuoxkLPCt
-	 idmpTRZyg5FQUsKRGFxiFOWFEEh+YmcMr37vYnIWsx1STvDIBB/8i6yYEs6Aw4q89OkM0
-	 sCcrYJkSIpwngDaqCGvPvIdSh0PbO/wERaJalTTGnwIjxkGPfaI28tIlxHEx7FNSR7Dws
-	 +lRaf5wS2159LIpZOwU61uJS5qwwhl7IkIXS9jHf/TJfQYIfVtrj3fX5IROJxzNWmaA==
+	t=1794559042;
+	b=ygIS2hDqpFB+hSD89vCmceQL+bMdb3M3W2mbD/H1ccxcfSh5H4ToC9jSEYvOPD/brEDZ
+	 cHaI+kC22FFyxtCOznNSxgRyp6sISWESB0L7CP6Xkzr0OYu06TrEu5vwbFvaj0nwZRDQi
+	 K58XTHlxIXbsYlM5TFfynM2sANRSHsHvgj8xW7qLRyddrfms3PdxbvuiIu81MMEYKgSil
+	 UnQj5+vDTOoIgWOzI43fYTBTKmmGuX5zu7573qZBbsUAjTzLwjGQ4GZZgms8b8FxwmHCe
+	 UUcM+S7wTnrS3d0NtLa4zxbXk4oxkX6FoPwfV0hxDp39quIeYCowZA0Gj54Xgr7SfTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794559039;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794559042;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:Message-ID:From:Subject:To:Cc:MIME-Version:Content-Type:
-	 Content-Disposition:User-Agent;
-	bh=bxaxghc2jPugp9fqdcujLfJj76940RCF2HnEXA8AlnQ=;
-	b=FXTh4m+vPRYQ4Im7StrTuD9TV+VCe2aT3G0UW4aN9jxUahNQrb2D0XcGtf7GQUuQQ6P8
-	 ONYu0KL+UTRu1G8M0lO0wI86Dw5IoGHZSuzS8rrWH1ETspvGBBuWXo2XeBO7zrNvZhkZt
-	 Y/5h+LSgKjyItO6FGiSaEl5uxtdw2Ba86PjLn1iCOQqeDNlO9qOJaJIF2zAOP3wDBGC/l
-	 DLYnMBXwNu2ddW0oVCH6+etGRSKzLz1xGR8ULz5sKXud56c1edkEIiju4Gve+jYle5IpT
-	 NqLOVUuuza+5bPcJgmxxvw02deU5zVsEpLSOMT/Iv060EggSpsAvUqOrFGTwffm3KyQ==
+	 Date:Message-ID:In-Reply-To:References:From:Subject:To:Cc:
+	 MIME-Version:Content-Type:Content-Disposition:User-Agent;
+	bh=EwMHpSevVZJc3LGGji9zq4te1/1ENtsYUuV/5eNMPz0=;
+	b=Z+rlrDOkT6P/FJdgwWvePmLY1yDg/Rn476PHqfIM0n0bE52ZBsb0o57I8x66POzCC1MP
+	 +Nhspcbh/+i8ROFTD04hKaC2UFtKT9UKK/MRnrTaftrMNh4Re6UKXaS/5SoZrHettkeyX
+	 M3oNClLBCny5oSO/iDp3JNCArbvzFSEbgFSwLZ+w/0G6FtSY+mslL9dUm8+6dN7PEG6su
+	 7Hnn/aKkskbj1MhEAcqaI75gfMcM5EndpFhSqTcOc8rjoISx/7DJKARy28N9op1Dkm8Cs
+	 /pKah9dgfaZjnQV+rlObyAUrrkZ2hKzQII3NNJb4CIXfilM/sHGfgy5BMOzyWFxFNCA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=chrisdown.name;
 	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=FUGKdwwy;
-	arc=none smtp.remote-ip=74.125.227.139
-Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=ami1KE7P;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214FD606A32E
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 08:37:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 214FD606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7785A606B1CF
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 08:37:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7785A606B1CF
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=FUGKdwwy
-Received: by mail-pj2-f11.google.com with SMTP id d9443c01a7336-2eac6e9aed5so2575035ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 00:37:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=ami1KE7P
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3b0bbdeae06so552351a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 00:37:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794559038; x=1795163838; darn=vger.kernel.org;
+        d=chrisdown.name; s=google; t=1794559042; x=1795163842; darn=vger.kernel.org;
         h=user-agent:content-disposition:content-type:mime-version:cc:to
-         :subject:from:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=bxaxghc2jPugp9fqdcujLfJj76940RCF2HnEXA8AlnQ=;
-        b=FUGKdwwy5qp1Qi31MPeEdEjYr98cr/fMoFORoQlH2iwqJ/AXUngqtv1zqJrP4cUvEv
-         x/nII5hqIUrGDUUv2cVC5QDADZ6XKn4Aial/KEbbH8VcA9bY9EV8JU6hFge+fBUIsOhE
-         BrLuIwU6hb8JiJGDb1/dLkGy5AvjdX2mufF6Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794559038; x=1795163838;
-        h=user-agent:content-disposition:content-type:mime-version:cc:to
-         :subject:from:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:from:references:in-reply-to:message-id:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=bxaxghc2jPugp9fqdcujLfJj76940RCF2HnEXA8AlnQ=;
-        b=X3fk0pxs48H7eixEH8YsU6sX1KhoDGbDGx702+RUMZchnXGZdP2tw7zygVnNeMnN25
-         9B31FlgCyVPID7LQjmGpRYRvP5uTypFOeQuDiVkxR6mSFegBsubJ0MGMoBlHMeC9KuLc
-         /Z03jwCPyTgQKP6T71mpZlb1NqjQRjM7GREG2m4W0jcK/OgGq77BDCEGPNvxyNGkRBPV
-         4Ni0HisHqD2IBCVeflmhgUEWB6p9mDxjnZZWZiBDSwaRVYl+RH2Aq9DLSHd7w+kmSM/6
-         ID8d5PiQqcKD6irow0LPgtzp83ehVQ+uzkimP77+AZjrcQXn59819b7szb1washgIYne
-         mzPg==
-X-Forwarded-Encrypted: i=1; AL+hErGuhYxzI9Hh1smjR+JXw37mz0nFhsGvE4PLZir95Ro0nLZjQxuL8hp+vvHR0/ePSuFd6DNJUoS9z7isSWcUAoE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/AE45+mxAmWqq2jwr0yKewEFaMxFJp0NXUnscZQ0gJV1uZleNL
-	QicckUXCNV4YqQ8iJlhsBPaS6DlB+igJR76ftBltTTZ9ou/cvhB0vrlsPySsH6EtkDPHFf0Rudz
-	e/BZLw8zetdSnjHExKw==
-X-Gm-Gg: AYBFou0TmEE8XYDn+YutQ7XQoDM0HWS8ET8uv7XrDqxTA0XhRGPFIDJoEG+zn93niOU
-	UVdNWvNOyiIDy1hrPztB5UNEmIZ4SeoIeq30nFfEXzRdBGTRaALjkx2K49Jn1EhTKl4CUz2oSB6
-	6xyE66rY/pHc5Uwrjwf91jbHyrPHf/ZhwuRCObdgDPkRP4uJZGwpW9t9VUf9qeCZe5OVebQaWoH
-	I0kP8c56KVgdvYylolvRpZ+QqLm9Q4tk8dM8dEj4Rjq1bT6us7UuS2JjQ5/Dj4C3p1FZyiDy9Ik
-	nhTAVNI8zYWP3w9evJkYlS4n+dnQSPtm3PwKj5gkbFmp0O3F+lCLeuT/Ehq/4KN+95nYTIl8bPN
-	qwukg5ex+v5nD0EnmXZu7nxY/ZCJktkTcWuBb+C/YNtcMRJwaig9bR0qhGvZFlr6LIyBUK1+Z+y
-	5yrIt5xvaih/GhUAJZa6K2k9LxIqL++899rBRjTH1VD+TMdD04mzUXJIbvc4iRp5fFUO1zUEXkG
-	2PoqHiZp8fru/yGLl6ultgBWSeEemiz7tld4DpWd75TiB+OmNS7CO9ow85MuRwLQvus/F2PMy1U
-	WBJiJbzsFhirzhXcZWL5+CUg2qZV1XBaPzbNPcNB2cDGRl5w6hoXMwh+6H4P2Qsz8SsIhk/SY+H
-	vTW0oobzFIVDfM16n4gHtB97KQslpGJs9wDexIwlXkA6kHLe1f/Tl7S4fs5Gvr5p2gRTiwBOdEz
-	3se77BKMY3pvuW3aBW9p7KDJHNehSMX4eaXISYi0YeuokMk8bQYMlX4u6+VrA=
-X-Received: by 2002:a17:903:120d:b0:2e9:5c51:19dc with SMTP id d9443c01a7336-2ee0dd14181mr18456195ad.41.1794559038435;
-        Fri, 13 Nov 2026 00:37:18 -0800 (PST)
+        bh=EwMHpSevVZJc3LGGji9zq4te1/1ENtsYUuV/5eNMPz0=;
+        b=ami1KE7P5QavEDOGMp60eQrXNRJgwmjS0vs05yvlrW1EqIwdZckNLm5O1zXxO5j2nP
+         F451yYIFwPl+eEzS408uV3WZLxSDOjKVtEiD7hphLYbylW4kSeGGadDd2Afkyns7ZdgU
+         eaVXAs8bUQ6ydMKgNm4qbha32qqeFrsDoNXrc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794559042; x=1795163842;
+        h=user-agent:content-disposition:content-type:mime-version:cc:to
+         :subject:from:references:in-reply-to:message-id:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EwMHpSevVZJc3LGGji9zq4te1/1ENtsYUuV/5eNMPz0=;
+        b=yH01CKfAZH518uUi/YaWXuXV3RcWTW/FvxsQICuo5wmnHZrqocUaZZKTjsAJb3XcsH
+         xr2Hu0OiBK0nWw1Zgc6397GvdhEkBAcYzztNkixLxcDMjepoSTyWtCsaMgAu6zlJdt0R
+         J41zzjSpQn2gZOEY0m4kiO7os2iBqJN+rP00qWqEdxbCiRm0sI6hYv0ekFhmVLqncNXn
+         q02/D1KtfA1gXcHomA1RzcG7q9323ouiZnXqgeC+Jth3DTcB4sG+8TiYGWVSy3EUJzxB
+         lpiiwXCOMeTnz3KwBb2rmWjo1dj6rsv6nrizodf6nHyTr+Huz+rn5w1352vwTi4kDEM/
+         glNQ==
+X-Forwarded-Encrypted: i=1; AL+hErG/D7D8rqqvIAl3Eey7FvNE32/lDaqj8M2fubwPeGOZI/rNLGjz0rfxelbPAMKyB55F9btMFZgI0FtUdhSSSlQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+GAw5MCnl+zq5moQLFkz+svOgY2wCvJ94gCkE1UDL1UAuTc2SF
+	3SDx1D2t/+E0vuPlbK6m9oXrYej24fzICWGMpF5m1L/yF3lskAW3f78ru8nYfUobbGI=
+X-Gm-Gg: AYBFou20/At0SWlx6ZbX9M1mvDO/AYk2qpdrEaf9V4XF+RQyi9cHU1xwMDgvCyHtlnp
+	nPPKDVxuy+uoniD/Z66q1cgULnbqpEWy+7Tr29C2kQh7/jMq10kX1QdqEnBWYoZyiMgIwDIproJ
+	1kJDQNx0Y8Y0tVuKWUAyAU6d+rcXjDjAG83LGp+EmBeRBcWfNS+M6/FLTMDGZN637Ys/8V9dSQI
+	uupoXp/LJcUH43UCn/lfGNaHDzTnZcy0RlYvm29Yo5t7ItWbVdvh7+pldlYvVb7fKVvcuJ5SMwX
+	b8rH5QZZe2Srn9KKYIZ+0JiqFegR9lAp86f1xXLhEZKwYIJRfuuuXoipQC+VkF9UjhWcF9vmDHJ
+	5RbdMg9s1wQH1eXPB4TQ+XAMz1zKjiI8DXjeExK9iaI6NUH/5U9LT9V52/wqId+f/JeNDwJxkGv
+	NTdDzPZavbPgjFoLQU9WUF3OcTkGTP2M0MGjY/15WHhGOzVr6bbjiN3YLBfAcVzPJPL/3x1CRHA
+	IOMvrrjPmA+n3AKMhAb/lBiV/pq6xSS5aVARqtaUV+oaah+eYXktZ8dVQqeh2JqyUUc9w72digD
+	VWrTmQkSDO+Oy1LLOcFqGGXxsqj/6sIpBp9yCsuI1yuFTKMNGAoxSToWtIUPXdDACk8oo4JKW8Z
+	LmHqgBz+V/b34C69Cmm65Yb905HW4ZUpbe5+jzHmZVm4tQiox6P+1x0WBXN6EPyiXnswXp09AaM
+	WQLH/TrpnfDa4nXSq8uHjyT5wJ1HRaxPn0Nx8OJfU/o2CKvaRHMB9BzIDitns=
+X-Received: by 2002:a17:90b:5585:b0:3b0:ae41:2711 with SMTP id 98e67ed59e1d1-3b1b0a12f15mr1404120a91.24.1794559041771;
+        Fri, 13 Nov 2026 00:37:21 -0800 (PST)
 Received: from [172.22.0.2] ([50.175.87.158])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ee0f874871sm6731535ad.54.2026.11.13.00.37.17
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b197d0fdbdsm8749569a91.10.2026.11.13.00.37.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 00:37:17 -0800 (PST)
-Date: Fri, 13 Nov 2026 00:37:14 -0800
-Message-ID: <cover.1794554867.git.chris@chrisdown.name>
+        Fri, 13 Nov 2026 00:37:21 -0800 (PST)
+Date: Fri, 13 Nov 2026 00:37:18 -0800
+Message-ID: <35b84656fe82fe1cff0ba3bc55ddc72dde70b089.1794554867.git.chris@chrisdown.name>
+In-Reply-To: <cover.1794554867.git.chris@chrisdown.name>
+References: <cover.1794554867.git.chris@chrisdown.name>
 From: Chris Down <chris@chrisdown.name>
-Subject: [PATCH v2 0/3] Make the scheduler stack end check selectable at boot
+Subject: [PATCH v2 1/3] scs: Skip the shadow stack end check when SCS is
+ disabled
 To: Peter Zijlstra <peterz@infradead.org>,
     Ingo Molnar <mingo@redhat.com>,
     Kees Cook <kees@kernel.org>
@@ -124,43 +127,62 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
 
-At Meta, some of our host types enable CONFIG_SCHED_STACK_END_CHECK, but
-we don't want it generally on because of the extra work on every context
-switch.
+With CONFIG_DYNAMIC_SCS, shadow call stacks are only used when the boot
+CPU lacks pointer authentication. scs_release() already checks
+scs_is_enabled() before it looks at the shadow stack since commit
+9beccca09840 ("scs: add support for dynamic shadow call stacks"), but
+schedule_debug() does not.
 
-Right now this is only configurable by setting the Kconfig option at
-build time. Let's make it so we can also select it at boot with
-sched_stack_end_check=, so that those hosts can share one kernel image.
+With CONFIG_SCHED_STACK_END_CHECK=y it therefore checks init_task's
+unused shadow stack on every context switch. That is harmless right now,
+but the check is redundant and costs a load from an unrelated cache line
+in __schedule().
 
-(Patch 1 is a cleanup I happened upon while working on this, it can
-also be taken independently.)
+Make task_scs_end_corrupted() check scs_is_enabled() itself. It is a
+static branch, and it folds to true when CONFIG_DYNAMIC_SCS is not set.
 
-v2:
+Signed-off-by: Chris Down <chris@chrisdown.name>
+---
+ include/linux/scs.h | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-- Check scs_is_enabled() inside task_scs_end_corrupted() rather than in
-  schedule_debug() (Peter)
-- Return 1 when sched_stack_end_check= can't be parsed (Randy)
-- Say in the changelog why the other task_stack_end_corrupted() callers
-  are left alone (Peter)
-- Rebase onto tip/sched/core
-
-v1: https://lore.kernel.org/r/cover.1793082868.git.chris@chrisdown.name
-
-Chris Down (3):
-  scs: Skip the shadow stack end check when SCS is disabled
-  sched/core: Add sched_stack_end_check= boot parameter
-  lkdtm/bugs: Add CORRUPT_STACK_END to test the scheduler stack end
-    check
-
- .../admin-guide/kernel-parameters.txt         |  8 +++++
- drivers/misc/lkdtm/bugs.c                     | 21 ++++++++++++
- include/linux/scs.h                           | 19 ++++++-----
- kernel/sched/core.c                           | 33 +++++++++++++++----
- tools/testing/selftests/lkdtm/tests.txt       |  1 +
- 5 files changed, 68 insertions(+), 14 deletions(-)
-
-
-base-commit: d7e670601af6c564ccf6d3b2ddf70ee4f41a6d1c
+diff --git a/include/linux/scs.h b/include/linux/scs.h
+index 4ab5bdc898cf..29ec2b8cf7bf 100644
+--- a/include/linux/scs.h
++++ b/include/linux/scs.h
+@@ -45,14 +45,6 @@ static inline unsigned long *__scs_magic(void *s)
+ 	return (unsigned long *)(s + SCS_SIZE) - 1;
+ }
+ 
+-static inline bool task_scs_end_corrupted(struct task_struct *tsk)
+-{
+-	unsigned long *magic = __scs_magic(task_scs(tsk));
+-	unsigned long sz = task_scs_sp(tsk) - task_scs(tsk);
+-
+-	return sz >= SCS_SIZE - 1 || READ_ONCE_NOCHECK(*magic) != SCS_END_MAGIC;
+-}
+-
+ DECLARE_STATIC_KEY_FALSE(dynamic_scs_enabled);
+ 
+ static inline bool scs_is_dynamic(void)
+@@ -69,6 +61,17 @@ static inline bool scs_is_enabled(void)
+ 	return scs_is_dynamic();
+ }
+ 
++static inline bool task_scs_end_corrupted(struct task_struct *tsk)
++{
++	unsigned long *magic = __scs_magic(task_scs(tsk));
++	unsigned long sz = task_scs_sp(tsk) - task_scs(tsk);
++
++	if (!scs_is_enabled())
++		return false;
++
++	return sz >= SCS_SIZE - 1 || READ_ONCE_NOCHECK(*magic) != SCS_END_MAGIC;
++}
++
+ #else /* CONFIG_SHADOW_CALL_STACK */
+ 
+ static inline void *scs_alloc(int node) { return NULL; }
 -- 
 2.56.1
 
