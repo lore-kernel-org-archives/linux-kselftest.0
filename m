@@ -1,100 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794595189;
-	b=nigUmbxHxfa1C4m0FXHpl6yR5LUaiwOyk12XnPgTkqATT1UJ+E6dNxuUrNyXX1y4ZK4A
-	 hJAEkB7qkeOw4oG0KDp57w5SAVeD9zkQQTsiiNyPh75/kPYnubE4uzsfvQ6c7+ylm2sak
-	 vomW0IydiLsn9FYJTUuCqEyTpILgBZ1DFABG99ZDs05J8O6zAixpiFTPzOBp1O2ehvGLy
-	 TLlCZg/xVpR/heJ8eyh5thTCOwAE7bI2sOg8DTYOb6YchbH2rOCMfN4Y0LA22ZrG5jAYu
-	 bcanYXUdzRNXTp7ln2dI/oqvIQXjipmd3dNvJB+MMPHQ5ZIVCIz070Yx/OXOhL1eg9g==
+	t=1794596566;
+	b=fKNoJLtbqyKeU9PrhcXA21awuAdqrNxwWhGMzd5bngepAwuekTGVE1JTcPQkK3vqh9OJ
+	 9S60QHhKzEYs3lTDWwB+qBkYj46JU5jYb8nQf/6ubgC3ufB+OD0yQKhjVGp3g727QJ24f
+	 uNsCtDJ/JNbBFJ9mjQqyklwQ81NOEI/Vrsbnu9dwg9X37wLgvBuemTJo51CmOSb/FqcBV
+	 OTlOXLBRLcs/jGyzlg3x7QEyvDQbZ2Rauzs+DiT0sC96Rhy3/VwUKMXgVSYEPSRYuYXL/
+	 kqOTTruGw+BeQ1b7OJY4aH37Tk2DZ6gjTZ5RAkreZYIfb4B99tKVlm2WdMgRI2D7U3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794595189;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:Content-Transfer-Encoding:
-	 In-Reply-To;
-	bh=3NBWFEB6FU4/z3ljBBQ8NoiqjrMo0KVomaOmiAC4b50=;
-	b=KCh8HdTIv8rfwZk8B0V/a41LLg6Boa/ITp2Rfxv1+ZVCJUxe4FQDce+qY4bykkWcO1mb
-	 QSc8Y/hgZtTe5+jgSwp2nu3hfkHY0tn7XU9SAfSAim1Ol9H9eiIDGuzjnk28EnbxmUl9w
-	 x0IWmvlkDQxcf/WFr9ZeRNd1HEn5WM3ty+z26RhjaJDkU2QntAaoqCSCeAW7M5ISvcr5W
-	 c7+J7XuTcRaR4jUehoKTJiWX0U8Ogwpyo2cvW8lqq7HZV4FkwIeelwWV+e7ogkscfhajc
-	 TY0Ye+iC7c3Bf8U04xozF9U0+GP7gJawiMSybkWTd1L/5Ft1PYE0ebceCsSDzcWQRlQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794596566;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=KwTOBx+Jltn2XW+4Mg0maGISpF6Y7cfL2ZL24ASbOeA=;
+	b=ZToOK0w0PKkXABPBnZCBCgZwZCU+R8wR7EQGamcj0v1sxWxTKxPSpH/H5B2RcVOqUJXi
+	 AImTfb6hKTmbY4/5j54OMAhE6PPMyqbY6Mc6NGw1OyAVL5tvYad+rqcKn+LaWtjE0xfc4
+	 h2Dn7ek9cxx1tmcpajgRJ6bzBYooDdld4cthP+TnrOFg2BCJVa66Ex74MYP2zXKpU/LwN
+	 MlOzXjW6SkGXUSYv/5roFnuHdEw5k0Z/qSxz99t4/NBLub9orupDx7eGIME1RFZbt6u2f
+	 ntJExRY79ton4zNna3YAwpNZtQBMZka+4m4Sy9zxB+yDFoT2msPhwDv5cOYzZNwCvPQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qV+oc8d0;
-	arc=none smtp.remote-ip=209.85.221.42
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X78cUYoU;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA9D60718A5
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 18:39:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCA9D60718A5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A753C606A33B;
+	Fri, 13 Nov 2026 19:02:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qV+oc8d0
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-491aaed7565so590359f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 10:39:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794595187; x=1795199987; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3NBWFEB6FU4/z3ljBBQ8NoiqjrMo0KVomaOmiAC4b50=;
-        b=qV+oc8d0hSgnBdxOfdlcbt3gZsZIo6yoeaCK65K5fkRU+FjSHaBWnHZSFnQ5tVF8Vg
-         jvMUiJnk/8K/QN/vQPKBYvKhu6OQs7B/6R/V7mKggi1e3HVzBX48JKU22vy6fWVCyjo7
-         FNYnSx8KjCnqHu0aEsu3D+RUa5t/P3Vhbbz21efPcust5Tr8FbSo514Ct2BjzZJlbLoF
-         Vg0c0sVAaqwoEVYf6es5Y9I1CzVGo/68ZPXtuNvkfpc8dkxLQbV3tPXdcU27Ti+dg+jT
-         Q8/gnsRcA4KjzxTU8cAOtjwMEr8OWiR3Kwcx4KyG9Y+RpMFOoRJt8MI22yzCx+xpM2rQ
-         URJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794595187; x=1795199987;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=3NBWFEB6FU4/z3ljBBQ8NoiqjrMo0KVomaOmiAC4b50=;
-        b=Q/1uEnOQSOGJAUZax1CVHe62ymKIbksNF2NTswc90wQr4XjQWvUGGhEzbbFKzJ/gUx
-         jFayvHErGHkEOH08mxTTRzySgdCVDDV7GjkpOrYftzFqxpBsSmV8CidhgEYjqVoUvknZ
-         58OdftB+dj8jlC6iodJyCfAYGJRscWRSk9Sd+8KIJQAbOoxxHBNPoIbUxdciH8Ra1r15
-         o/RIivkzKmT+3zWeQEsbgu51+EXuig231KpsO1bo3WUvfetiZE8hAFrEA+3aGBFEz7Su
-         nITxVvFW1dm3WRRacgCpiCDDxA1maAsZPyHcjqE4GjZwEc8vMz7gQCsosZPGGjbvft4U
-         dhkQ==
-X-Forwarded-Encrypted: i=1; AL+hErE2wkozk+RnLwossVvHdiR9ooVJYbHN7/7fqFVjAyDR40s5Zmsx1G/USdBdjFuB1Hmaiev171wvtGZ13A/MBQo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+bQT1ZNTXdYx9rjTm7n/tFNEHZy3njhJE2ew3z/RshUW3LpXed
-	yLvzLyBszZAitVoxMXKK3xMlJJVgcU5aXkHQbQvCFdnlsTDb3YQHAMyB
-X-Gm-Gg: AYBFou0WZ+JQM+xbUlLRDdutypwqWt27BPQQAnVadcGPhPouO6voTu8Vo1ssTSqLzN1
-	X2SJqGmTQ4x/X4NYEtY11Y4gW3xlK5hDi+5x4nVUpWXuLtZ4qsXBA+ODAYC+FPedcWh6BAbVfsG
-	MeAfVHzKDStPSnViAoRS545kUyQNQgYFPke0mqqPJ+796gQdMMgutoE4GmGWx+Rw/B2317GNjna
-	Sk6AbO+uG4RMVLqpxVCh6weT1Q3iYK0PnL6m8CJ2Fg3br04yOqso1lstkfQTiM5zViFHeVM8U/7
-	n+oeXih1RmStR3uRch2dRsEUm3RTyiXgJl9itjICwkl26ZydgZcFIQIdiPUVlSXPqfx9rXkRlDi
-	VPSwch9bhzh+QCpftNiGPgtn0J/r6GZdcf0+KHGqcPQKg6zpKlUT8jFyTXUyxKZVH4Q048ce47Y
-	EQP96esHdMm7JfwWYK5ISntOtxLITmo1XN6BLJbJb8MO2cQ5yERvfIgNTqZZzZo0u6EdBz626xq
-	to8SxB2PFgFJzY3DfYPMgPDyqbe3B5j67nr5oBR28j4+TTdCPXyTkVnrxgJObhJMM9JtAWq9Mt0
-	ck9maejIsLD8qZGH8p4tmmW9F62j4frkGmYvgeIVEyM5LDHo0GpfLg==
-X-Received: by 2002:a5d:5f91:0:b0:493:d5f0:4e4c with SMTP id ffacd0b85a97d-49c723fc45emr7653677f8f.23.1794595186940;
-        Fri, 13 Nov 2026 10:39:46 -0800 (PST)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49c5f5972a7sm6346363f8f.21.2026.11.13.10.39.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 10:39:46 -0800 (PST)
-Date: Fri, 13 Nov 2026 19:39:41 +0100
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-	Shuah Khan <shuah@kernel.org>, Dwi Siswanto <me@dw1.io>,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] landlock: Clarify implicit handling of
- LANDLOCK_ACCESS_FS_REFER
-Message-ID: <20261113.7a962670e000@gnoack.org>
-References: <20261108-b4-landlock-refer-nonfs-layer-v2-0-2b405fc1b3aa@gmail.com>
- <20261108-b4-landlock-refer-nonfs-layer-v2-4-2b405fc1b3aa@gmail.com>
- <20261113.Ahzeu2seey4e@digikod.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X78cUYoU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A18431F000C4;
+	Fri, 13 Nov 2026 19:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794596566;
+	bh=KwTOBx+Jltn2XW+4Mg0maGISpF6Y7cfL2ZL24ASbOeA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=X78cUYoUjXHiG1qzWewIHCXS6qqkU3WoRc6BWbaI0b6GthrnVwI4mhpWL2GGvBZWT
+	 r9GgfeBG8++oZO+Bw6dr+LZtOv/NMjN4Ntb9BpTSTN0ofH13FFgd+uCkE3iArb/zXe
+	 89P9/ZVy/euGWgXCEWX9Jc4Wm0VLMjbBOv1Q7eI+SSO3fDwUW+HDvAxDZVlG/dwgXS
+	 x7agLj5mWRKyknKwmcYIXT4fLNklS5d/bg7ydZB/TGeXgPqnaMHVRuNB7YijhLgxVT
+	 EalRbF7PWqw6h+r5GnZsXMGFpYWbnBb4qzqyOi7hZk6yZ0/p64jepacEhvldSBqOdY
+	 fWZfF67xhBkIg==
+Message-ID: <64e1c24f-08fb-437e-80c1-e5b486d15200@kernel.org>
+Date: Fri, 13 Nov 2026 20:02:40 +0100
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -104,94 +51,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261113.Ahzeu2seey4e@digikod.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Handle implicit read permissions in
+ madv_populate
+To: Xionggui Chen <evers_chen@163.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ chenxionggui@lanxincomputing.com
+References: <20261112031811.56500-1-evers_chen@163.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20261112031811.56500-1-evers_chen@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 13, 2026 at 12:28:56AM +0100, Mickaël Salaün wrote:
-> On Sun, Nov 08, 2026 at 09:23:51PM +0100, Günther Noack wrote:
-> > The LANDLOCK_ACCESS_FS_REFER right is handled implicitly in a ruleset,
-> > but only if any other filesystem access right is declared as handled
-> > in the given ruleset.
-> > 
-> > The old documentation was still a remnant from the times when
-> > filesystem access rights were the only access rights that existed in
-> > Landlock, but it became misleading when we introduced additional types
-> > of access rights.
-> > 
-> > Fixes: fff69fb03dde ("landlock: Support network rules with TCP bind and connect")
-> > Signed-off-by: Günther Noack <gnoack3000@gmail.com>
-> > ---
-> >  include/uapi/linux/landlock.h | 17 +++++++++--------
-> >  security/landlock/access.h    |  9 +++++----
-> >  2 files changed, 14 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-> > index 24510e5d8479..7e38b9d1bf12 100644
-> > --- a/include/uapi/linux/landlock.h
-> > +++ b/include/uapi/linux/landlock.h
-> > @@ -22,10 +22,10 @@
-> >   * enacted.  Vice versa, access rights that are not specifically listed here are
-> >   * not going to be denied by this ruleset when it is enacted.
-> >   *
-> > - * For historical reasons, the %LANDLOCK_ACCESS_FS_REFER right is always denied
-> > - * by default, even when its bit is not set in @handled_access_fs.  In order to
-> > - * add new rules with this access right, the bit must still be set explicitly
-> > - * (cf. `Filesystem flags`_).
-> > + * For historical reasons, as soon as any filesystem access right is handled in
-> > + * @handled_access_fs, the %LANDLOCK_ACCESS_FS_REFER right is always denied as
-> > + * well.  In order to add new rules with this access right, the bit must still
-> > + * be set explicitly (cf. `Filesystem flags`_).
-> >   *
-> >   * The explicit listing of *handled access rights* is required for backwards
-> >   * compatibility reasons.  In most use cases, processes that use Landlock will
-> > @@ -462,10 +462,11 @@ struct landlock_capability_attr {
-> >   *   This access right is available since the second version of the Landlock
-> >   *   ABI.
-> >   *
-> > - *   This is the only access right which is denied by default by any ruleset,
-> > - *   even if the right is not specified as handled at ruleset creation time.
-> > - *   The only way to make a ruleset grant this right is to explicitly allow it
-> > - *   for a specific directory by adding a matching rule to the ruleset.
-> > + *   This is the only access right which is denied by default by any ruleset
-> > + *   that handles filesystem access rights, even if the right is not specified
-> > + *   as handled at ruleset creation time.  The only way to make a ruleset grant
-> > + *   this right is to explicitly allow it for a specific directory by adding a
-> > + *   matching rule to the ruleset.
-> >   *
-> >   *   In particular, when using the first Landlock ABI version, Landlock will
-> >   *   always deny attempts to reparent files between different directories.
-> > diff --git a/security/landlock/access.h b/security/landlock/access.h
-> > index f9eaa2f53686..c4a81f7dadeb 100644
-> > --- a/security/landlock/access.h
-> > +++ b/security/landlock/access.h
-> > @@ -18,10 +18,11 @@
-> >  #include "limits.h"
-> >  
-> >  /*
-> > - * All access rights that are denied by default whether they are handled or not
-> > - * by a ruleset/layer.  This must be ORed with the .handled field of all
-> > - * domain->layers[] entries when we need to get the absolute handled access
-> > - * masks, see landlock_upgrade_handled_layer_config().
-> > + * All filesystem access rights that are denied by default as soon as any other
-> > + * filesystem access right is handled, even if the access right is not
-> > + * explicitly declared to be handled itself.  This must be ORed with the
-> > + * .handled field of all domain->layers[] entries when we need to get the
-> > + * absolute handled access masks, see landlock_upgrade_handled_layer_config().
-> >   */
-> >  /* clang-format off */
-> >  #define _LANDLOCK_ACCESS_FS_INITIALLY_DENIED ( \
+On 11/12/26 04:18, Xionggui Chen wrote:
+> From: Xionggui Chen <chenxionggui@lanxincomputing.com>
 > 
-> This is good, but it should also be extended to
-> landlock_upgrade_handled_layer_config()'s and
-> reparent-exdev_layers_rename[12]'s comments.
+> The madv_populate selftest assumes that a mapping created with
+> PROT_WRITE cannot be read, and expects MADV_POPULATE_READ to fail
+> with EINVAL.
+> 
+> However, some architectures, including RISC-V, may implicitly grant
+> read permission to PROT_WRITE mappings. On such architectures,
+> MADV_POPULATE_READ succeeds, causing the test to fail incorrectly.
+> 
+> Check the actual VMA permissions through /proc/self/maps and adjust
+> the expected result accordingly.
+> 
+> Add a PROT_NONE test to verify that MADV_POPULATE_READ still fails
+> with EINVAL for mappings without read permission.
+> 
+> On RISC-V with Linux 7.2.0, the original test fails 1 out of 16
+> tests, while the updated test passes all 17 tests.
 
-Wow, good catch!  Updated.
+I would have said, if RISCV is the odd one, special case it and call it a day?
 
-Used the same wording there as well, "...as soon as any other
-filesystem access right is handled".  It's a bit verbose, but it's
-unambiguous and I'm hoping that we won't need another edit to that
-wording.
+That would keep the changes to test_prot_write() to a minimum.
 
-–Günther
+
+-- 
+Cheers,
+
+David
