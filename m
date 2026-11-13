@@ -1,81 +1,53 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794555333;
-	b=fyW9cjk6RIBUUMIB+seAUaluT3+ajF7glzVi87d+nZVJVm6ghGXFIirq/o1Byl9hgVk5
-	 Dj+T//O+bebYwLp/hi9D7pBiC4B13uR2tJDXwM0yiFp0p1xqBdy+kaSBFI6TtNEzBdmbx
-	 KbYI2NgUNdNDSpwny0HS036sWIKujha4tuuGJXgKm67en6Dr1Ipz/o6xFlLaCb8yPtAGF
-	 4hjsEILp1my+qxN7buz2d9wrQ5xXi27WCNYYKNIg293xTXRpkvdA670dQMjaRAsZdLSXe
-	 ixSZbMX4TSd7NxRPaWVwuf+Vet468LvDSND48Lqj+Q33zV7X1v+tSUHLWtN0TIkhCTw==
+	t=1794556309;
+	b=U8HhWYIctG0+wsi1egGO4aKKaNwOhZ1HONbq3rbcCWXgSc/BinMwE4WNGTMDRN4t2cqO
+	 NWyDhb08koh/AiXCy633ziBsXJWODlTtpN1g5eZIqENjKjoREWopUEBY1YEjaqndXJcDg
+	 8W3YFm/lfPR4ga1IuEJ0Oqym+5gWRO+WCWgynqoL/GAjpH9rfaDEXKteCwnRSiUdQ9Lty
+	 /uu+9sXw3YNni/lS9zAOrtCkqrJkDjTgybDjEVFyeDjx3lb4NaGtXyXgOPJKQ5kSYDtkY
+	 8Kj3wjkCUzDfIBYQnAFK3GFgIdV1MGBJSDs5rjnkDDC71xU9lIHLxvyhXh2FhuplDzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794555333;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-TM-AS-GCONF:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=qTnig7zC5pLjxm9m59TXQlChEZTk5WYxI0U3w8qOtMc=;
-	b=2oeWDOU/jk+Da1vuEHPQnM+E061+H7cgpti1XS1b9PYK7cxBifvFvNxUdRxek2qvCgKb
-	 BnrkeMZm9NLkD4opcVeo53cCcMBxEc4uJzcycJ/V7MefKW2eMNKhOTg9hPMPZO7ENzJcO
-	 i0IOBp7TI/mWFV3tOFV1vuYqAt5Wdg3djR1mAM1psGYsJRtjMlnWDSKw1Jz8vZw7eL5qk
-	 3JfB5T+KejEqRFwKt6kTzhlIhgspO/O9zLerhSw1a0zFpW3QyiYtVQHvqfh+OTyXKdPjR
-	 blgRMz5VL6WQrDrdLd03GS9GFTNalBPLeZwkCpid2UrNewQjVn6uIde+VR1+BGa73VA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794556309;
+	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=BWefGk4puDoDVQr0nLGSSA6FF1qoZg/O5V+gtT/rjLc=;
+	b=wMWz0AxuKOZUHh8+WGKvXh4Lw9ZOUrWUnN4zvRiyDNzgYhKO7oUGJ3VWEnONI3X+GP8T
+	 bAjsCJWAubTL8+8ZPVdS7rYe5TZiSFJrcTxsasDCqkeaKg6F4z8epxauTzkHaeReRNZMK
+	 IcH97/WWw69AlZqLtQzYQ2JTD2olcoLOW3Ww4XtH5hTHwXiBrSXb6F4VcHiBN67ClOcg3
+	 Vq0B8SyznG4ri1U69ueOUVDBPe+QgM09ni9oIjwSjBCDMmi54FQNRUaGphfLZkDRxeVUF
+	 W6zojHHBMXzpIFbsFyWjVknIHaOB5kt92nZvmoqVXokklu+vTY5ZQbcz9jFYzls+qFg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=RkKjHsjV;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BNMtn1rD;
+	arc=none smtp.remote-ip=220.197.31.3
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51758606A321;
-	Fri, 13 Nov 2026 07:35:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51758606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0FB606A31C;
+	Fri, 13 Nov 2026 07:51:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF0FB606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=RkKjHsjV
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AD7Kxju2377190;
-	Fri, 13 Nov 2026 07:35:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=qTnig7
-	zC5pLjxm9m59TXQlChEZTk5WYxI0U3w8qOtMc=; b=RkKjHsjV2w05G1ksKcnQES
-	SfpKOQ/B0Or6l5SAUBYN3YiALsYonmbLGPG2O2S/fVfm/m8SkqZ+NzyAISNvpKts
-	OAt5YHixn9aD7zf6LNvwelsDrFeCst90geQ4zKR5FW1dOWpI886yqpApccsivFUQ
-	iHPQJbQjdz/NJ3Er+Sr3DgsNbxK7ZaUR7zYEfLC2briqOogv2vbX1+HoWjP/ECPF
-	+90va3dRHlEaPu4CH6HiY132aD0kU0HDr46zw9q7Qn6tgjNll/N64IZYpJPquI4C
-	RXuJvrey7zhA53LNtA6nEW3cS1rp/ZfboOlBjoQKyl9anFBvs1Mu4U1fgg57OOnQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4hsug6jf5p-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 13 Nov 2026 07:35:32 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AD5JvT21741183;
-	Fri, 13 Nov 2026 07:35:31 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4hwegfawwb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Nov 2026 07:35:31 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AD7ZTbv19792562
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Nov 2026 07:35:29 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9917858056;
-	Fri, 13 Nov 2026 07:35:29 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2117658052;
-	Fri, 13 Nov 2026 07:35:29 +0000 (GMT)
-Received: from [9.61.250.111] (unknown [9.61.250.111])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 13 Nov 2026 07:35:29 +0000 (GMT)
-Message-ID: <6df96ce4-7065-4c2c-b3d0-1874bedefdd1@linux.ibm.com>
-Date: Fri, 13 Nov 2026 02:35:28 -0500
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BNMtn1rD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=BWefGk4puDoDVQr0nLGSSA6FF1qoZg/O5V+gtT/rjLc=;
+	b=BNMtn1rDOMbAlMap9vvR/BpB+LvNymn11X5rVkyT3CypQb7U8y/P2f6+PtM4Uh
+	MTg5X9QjaDQ+on2g0A/v409yGQp5zWb/wTvGtMAkKKqgV4sEgpoxTAhvHGt1rFeA
+	Dl/C5gPchHi9ykicQOfVU2y/XJrMbOg0sqX2MchF2yqXY=
+From: Chaosheng Qu <quchaosheng000406@163.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, Robin van der Gracht <robin@protonic.nl>, Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde <mkl@pengutronix.de>, Shuah Khan <shuah@kernel.org>, kernel@pengutronix.de, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH can-next v3 7/9] selftests: can: add J1939 TP/ETP multi-frame tests against CAN_RAW
+Date: Fri, 13 Nov 2026 15:49:49 +0800
+Message-ID: <179455618934.121136.10008965335170070665@163.com>
+In-Reply-To: <179454972353.488853.9453703448480835098@kernel.org>
+References: <20261111-j1939-selftests-v3-7-5a80277ab363@pengutronix.de> <179454972353.488853.9453703448480835098@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -85,335 +57,191 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] KVM: s390: selftests: Add kvm_exit test for
- instruction intercepts
-To: Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nitya Khamar <nkhamar@linux.ibm.com>
-References: <20261110111619.61760-1-aaronmbr@linux.ibm.com>
- <20261110111619.61760-2-aaronmbr@linux.ibm.com>
- <90cf2229-af79-4f08-b001-753dc7a86aa2@linux.ibm.com>
-Content-Language: en-US
-From: Aaron Brown <aaronmbr@linux.ibm.com>
-In-Reply-To: <90cf2229-af79-4f08-b001-753dc7a86aa2@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dOg5tRj4iga1cXHeFW9lWm-pVDEBIvrN
-X-Authority-Analysis: v=2.4 cv=PeVqFShd c=1 sm=1 tr=0 ts=6af6bdc4 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
- a=owjdTxqFgtlei93qGv4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: dOg5tRj4iga1cXHeFW9lWm-pVDEBIvrN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTEzMDAyOCBTYWx0ZWRfX645K7Nx8EV9J
- 2wekf7MB06pMl9/qbSVyTCwLgr9HC/Peq2xv8iqCkDzcymutPxBPMv+xhVvxQAzx7r41FCXgWlH
- ilxSK+udO23d6saxb+733Ay+XSpZ/gmBu1xWnKfXWHtldpun5Z1jD1Gq4FeVdY260Du6MKqdRSM
- 7PqhdQuoPP1YeWJT7j4hrEWzR87kwST1G5CVR7xLstO3ftFAZdWC1vcl6HKOgMnmb758JizQVso
- dXRyW6b0wL54iyAFnjyLTT0WM7HewhMh/bfuizRmtQ3eEIXfH2hI2j8dcqx3iPeYKTkSdKgBANG
- yMPKc7alGDGLvP8Hiwibla/rXjhNxdaSBJ3lICoj5WVbOXV5TzLUkkJInJQ9Gp+4WTadnusuiRS
- uWvCwXuFiZWMWdsu0QUhT0MWkBVJdMgE2bN9i8lsI1SSj1jinkh+pTzKgbRw75DVOgw5VyrzAM0
- lg7Wq2sr7yf9p+zhMhA==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTEzMDAyOCBTYWx0ZWRfX49E147FwrMyx
- dqhAFF6BRE9fA/kh1NrglYWEtIyT73XEUkPpQ4bN9ANpm0lpT0NACNjeszArtjtpBaC7sZUkEgG
- SyMRvT2Ndfzq9LSHXxt08FleYHNUujg=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-13_02,2026-11-11_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 malwarescore=0 clxscore=1015 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611130028
+X-CM-TRANSID:_____wDnL61gwfZqI58BHA--.10753S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Ar1DCF1rJr1fKr13Kw15Arb_yoWfZw4kpF
+	WrGFyUtr1kGrWIyw4kZa18W34Fyrn3JrW5Xr1UJ34UA398Xr4fKFsxK3y7ZFyDCwn5Za4j
+	vw4Sg34DGa1DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRoqcUUUUUU=
+X-CM-SenderInfo: xtxfxtprvkv0bjqqikiqw6il2tof0z/xtbDAAHgVmr2wWEQpAAA3-
 
-On 11/12/26 8:45 AM, Janosch Frank wrote:
-> On 11/10/26 12:16 PM, Aaron M. Brown wrote:
-[...]
->> +++ b/tools/testing/selftests/kvm/include/s390/kvm_lifecycle.h
->> @@ -0,0 +1,35 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Definition of structs for KVM lifecycle tests.
->> + *
->> + * Copyright IBM Corp. 2026
->> + *
->> + * Authors:
->> + *  Nitya Khamar (nkhamar@linux.ibm.com)
->> + *  Aaron Malik Brown (aaronmbr@linux.ibm.com)
->> + */
->> +#ifndef SELFTEST_KVM_LIFECYCLE_H
->> +#define SELFTEST_KVM_LIFECYCLE_H
->> +
->> +#include "kvm_util.h"
->> +#include <stdbool.h>
->> +
->> +struct kvm_lifecycle_testdef {
->> +    const char *name;
->> +    bool (*test)(void);
->> +};
->> +
->> +struct kvm_parameters {
->> +    struct kvm_vm *vm;
->> +    struct kvm_vcpu *vcpu;
->> +    void *guest_code;
->> +    struct kvm_run *run;
->> +    unsigned int interrupt_type;
->> +    struct kvm_s390_irq *irq;
->> +    struct kvm_s390_irq_state *irq_state;
->> +    struct {
->> +        bool immediate_exit_condition;
->> +    } manual_parameters;
->> +};
-> 
-> In this patch I don't see any benefit in having this struct.
-> I'm hoping there's some use for it in later patches.
+Hi,
 
-Yeah I may have added it a bit prematurely, as most of these fields are 
-only used by the ucontrol tests later in the series, so patch 1 doesn't 
-need them. I'll drop the struct from this patch and use local variables
-in the next version, thanks
+I am only on the Cc list of this series, not its author, so this is a
+third-party check of the review rather than a respin note. I went through
+all four mails against the patches as posted, with the surrounding code read
+in a v7.3-rc7 tree (which carries unrelated local changes in transport.c, so
+treat the line numbers there as approximate; the function names are what
+matter). None of the findings is wrong. Below is what I could confirm, the
+two places where I would state the claim more narrowly, and the smallest
+change I think each one needs. Oleksij should decide what to take; the
+pw-bot tag is his to add.
 
-[...]
->> +
->> +static struct kvm_parameters create_vm_kvm_exit(struct kvm_parameters 
->> parameters)
-> 
-> Why aren't we using a pointer to the argument?
-> 
->> +{
->> +    parameters.vm = vm_create_with_one_vcpu(&parameters.vcpu,
->> +                        parameters.guest_code);
->> +    return parameters;
->> +}
->> +
->> +static void cleanup_kvm(struct kvm_parameters *parameters)
->> +{
->> +    kvm_vm_free(parameters->vm);
->> +}
-> 
-> These two function generate >= 4 lines for a single line of useful code.
-> 
+7/9 (Medium, echo race in test_j1939_multi) -- confirmed
 
-Good point, I'll remove these helpers as well and just call
-vm_create_with_one_vcpu() and kvm_vm_free() directly
->> +
->> +static void compare_regs(struct kvm_regs *regs, struct kvm_sync_regs 
->> *sregs)
->> +{
->> +    int register_number;
->> +
->> +    for (register_number = 0; register_number < NUM_GPRS; 
->> register_number++)
->> +        TEST_ASSERT_EQ(regs->gprs[register_number], sregs- 
->> >gprs[register_number]);
->> +}
->> +
->> +static void guestcode_instruction_intercept(void)
->> +{
->> +    asm volatile("diag 0,0, 0x500\n" :::);
->> +    GUEST_DONE();
->> +}
->> +
->> +static bool test_instruction_intercept(void)
->> +{
->> +    struct kvm_parameters param = {
->> +        .guest_code = guestcode_instruction_intercept,
->> +        .interrupt_type = KVM_S390_INT_EXTERNAL_CALL,
->> +        .manual_parameters.immediate_exit_condition = false,
->> +    };
->> +    struct kvm_s390_irq_state irq_state = {};
->> +    struct kvm_s390_irq irq = {};
->> +    struct kvm_regs regs;
->> +    int interrupts;
->> +
->> +    ksft_print_msg("Testing Instruction Intercept Exit\n");
->> +    param = create_vm_kvm_exit(param);
->> +    vcpu_run(param.vcpu);
->> +    param.run = param.vcpu->run;
->> +    irq.type = param.interrupt_type;
->> +    irq.u.extcall.code = param.vcpu->id;
->> +    irq_state.len = sizeof(irq);
->> +    irq_state.buf = (unsigned long)&irq;
->> +    param.irq = &irq;
->> +    param.irq_state = &irq_state;
->> +    TEST_ASSERT_KVM_EXIT_REASON(param.vcpu, KVM_EXIT_S390_SIEIC);
->> +    TEST_ASSERT(param.run->s390_sieic.icptcode == ICPT_INST,
->> +            "Failed with Unexpected icptcode of 0x%x\n",
->> +            param.run->s390_sieic.icptcode);
->> +    interrupts = __vcpu_ioctl(param.vcpu, KVM_S390_SET_IRQ_STATE,
->> +                  param.irq_state);
-> 
-> Why are we doing two things at the same time?
-> What does the IRQ code add to the test?
+Every step of the mechanism checks out:
 
-You're right, we should focus on only  testing the exit, moreover 
-irq_injection has gotten its own test file now, ill drop this
-in v2 >> +    TEST_ASSERT(interrupts >= 0, "Cannot Inject Interrupt 
-(%d)", errno);
-> 
-> That should be a == 0, no?
-> Documentations says "0 on success".
-> 
+  net/can/raw.c:67,386-388   MASK_ALL is 0, so the raw socket lands on
+                             rx[RX_ALL] via can_rcv_list_find()
+                             (af_can.c:395)
+  main.c:122-123             J1939 registers with CAN_EFF_FLAG |
+                             CAN_RTR_FLAG, so it lands on rx[RX_FIL]
+                             (af_can.c:410)
+  af_can.c:601,607           can_rcv_filter() walks RX_ALL before RX_FIL
+  vcan.c                     echo=0 by default, so the loopback is
+                             netif_rx() in can_send() (af_can.c:263,289)
 
-Indeed, this can also go away in v2, lets keep it simple
->> +    irq_state.buf = (unsigned long)&irq;
->> +    irq_state.len = sizeof(irq);
->> +    interrupts = __vcpu_ioctl(param.vcpu, KVM_S390_GET_IRQ_STATE,
->> +                  &irq_state);
->> +    TEST_ASSERT(interrupts > 0,
->> +            "Expected pending interrupt after injection, got %d", 
->> interrupts);
-> 
-> Here it's fine since the rc returns the number of bytes KVM copied.
-> But we could actually check for a number being at least len(irq_state)
+so the raw peer does see a frame before the stack does, on the CPU that
+sent it. The two cancel sites are the ones named: the default case of the
+last_cmd switch in j1939_xtp_rx_dat_one() (transport.c:1949) and the
+last_cmd != 0 check in j1939_xtp_rx_rts_session_active()
+(transport.c:1768).
 
-Good point, I will note that for possibly extending the irq tests in the 
-future! >> +    TEST_ASSERT_EQ(irq.type, KVM_S390_INT_EXTERNAL_CALL);
->> +    TEST_ASSERT_EQ(irq.u.extcall.code, param.vcpu->id);
->> +    vcpu_run(param.vcpu);
->> +    TEST_ASSERT_KVM_EXIT_REASON(param.vcpu, KVM_EXIT_S390_SIEIC);
->> +    TEST_ASSERT(param.run->s390_sieic.icptcode == ICPT_INST,
->> +            "Expected ICPT_INST from GUEST_DONE after inject, got 
->> 0x%x\n",
->> +            param.run->s390_sieic.icptcode);
->> +    vcpu_regs_get(param.vcpu, &regs);
->> +    compare_regs(&regs, &param.run->s.regs);
->> +    cleanup_kvm(&param);
->> +    return true;
->> +}
->> +
->> +static void guestcode_diagnose_hypercall(void)
->> +{
->> +    asm volatile("diag 0,0, 0x501\n" :::);
->> +}
->> +
->> +static bool test_diagnose_code(void)
->> +{
->> +    struct kvm_parameters param = {
->> +        .guest_code = guestcode_diagnose_hypercall,
->> +        .manual_parameters.immediate_exit_condition = false,
->> +    };
->> +    ksft_print_msg("Testing Diagnosis Hypercall Exit\n");
-> 
-> Instruction is called diagnose according to the POP.
+One detail that decides which half of the file is fragile: the switch has
+cases for 0xff, DPO, BAM and TP CTS (0x11) only. An ETP session whose last
+command was the peer's ETP.CTS has last_cmd 0x15, which matches nothing and
+goes to default, so in ETP TX the echo of the previous block's last DT that
+arrives after the peer's next ETP.CTS does cancel the session. In TP TX the
+equivalent echo arrives with last_cmd 0x11 and takes the TP_CMD_CTS case,
+which breaks for a TP session and is accepted. So the DT-echo half of the
+race is ETP-only, and the ETP TX tests should be expected to be the flaky
+ones, not TP and ETP equally.
 
-I will update that accordingly, thanks !
+One thing I would state more narrowly: deliver() is called twice inside a
+single can_rcv_filter(), on one CPU, with no scheduling point between them.
+"RX_ALL is walked first" orders the two deliveries, not the two consumers'
+reads. For the peer to win, the test task has to be woken on another CPU
+and complete the whole reply path back into j1939_can_recv() before the
+first CPU finishes the second loop body. That is a real window but a narrow
+one, which matches "I have not seen this in QEMU runs". I would not argue
+about the ordering guarantee; I would just not let a test depend on it.
 
->> +    param = create_vm_kvm_exit(param);
->> +    vcpu_run(param.vcpu);
->> +    param.run = param.vcpu->run;
->> +    TEST_ASSERT_KVM_EXIT_REASON(param.vcpu, KVM_EXIT_S390_SIEIC);
->> +    TEST_ASSERT(param.run->s390_sieic.icptcode == ICPT_INST,
->> +            "Failed with Unexpected Exit Reason of %u and icptcode of 
->> 0x%x\n",
->> +            param.run->exit_reason, param.run->s390_sieic.icptcode);
->> +    TEST_ASSERT(param.run->s390_sieic.ipa >> 8 == IPA_DIAG,
->> +            "Failed with Unexpected Opcode of %u\n",
->> +            param.run->s390_sieic.ipa >> 8);
->> +    TEST_ASSERT(param.run->s390_sieic.ipb >> 16 == DIAG_ASSEMBLY_CODE,
->> +            "Failed with Unexpected Diagnose Code of %u\n",
->> +            param.run->s390_sieic.ipb >> 16);
->> +    cleanup_kvm(&param);
->> +    return true;
->> +}
->> +
->> +static void guestcode_diagnose_conditional(void)
->> +{
->> +    asm volatile("lghi %%r3,0x3333\n"
->> +        "lghi %%r5, 0x555\n"
->> +        "lghi %%r6, 0x3333\n"
->> +        "cgrjne %%r6, %%r3, 1f\n"
->> +        "diag 0,0, 0x501\n"
->> +        "1:\n"
->> +        :
->> +        :
->> +        : "r3", "r5", "r6"
->> +    );
->> +    GUEST_DONE();
->> +}
->> +
->> +static bool test_diagnose_conditional_code(void)
->> +{
->> +    struct kvm_parameters param = {
->> +        .guest_code = guestcode_diagnose_conditional,
->> +        .manual_parameters.immediate_exit_condition = false,
->> +    };
->> +    struct kvm_regs regs;
->> +
->> +    ksft_print_msg("Testing Diagnosis Hypercall for Conditional Code 
->> Exit\n");
-> 
-> What is this testing?
+On the three suggested remedies, XFAIL is the one I would avoid. In
+kselftest_harness.h, __test_passed() is exit_code != KSFT_FAIL &&
+exit_code <= KSFT_SKIP, so KSFT_XFAIL (2) and KSFT_XPASS (3) both count as
+passing, and ksft_test_result_code() prints XPASS as "ok # XPASS". An
+XFAIL test is green both when the race fires and after the stack is fixed,
+so a later regression in these tests would be invisible.
 
-It is only testing that r3-r6 survive the intercept, so I think I can 
-merge it into the DIAG 0x501 test for v2 >> +    param = 
-create_vm_kvm_exit(param);
->> +    vcpu_run(param.vcpu);
->> +    param.run = param.vcpu->run;
->> +    TEST_ASSERT_KVM_EXIT_REASON(param.vcpu, KVM_EXIT_S390_SIEIC);
->> +    TEST_ASSERT(param.run->s390_sieic.icptcode == ICPT_INST,
->> +            "Failed with Unexpected Exit Reason of %u and icptcode of 
->> 0x%x\n",
->> +            param.run->exit_reason, param.run->s390_sieic.icptcode);
->> +    TEST_ASSERT(param.run->s390_sieic.ipa >> 8 == IPA_DIAG,
->> +            "Failed with Unexpected Opcode of %u\n",
->> +            param.run->s390_sieic.ipa >> 8);
->> +    TEST_ASSERT(param.run->s390_sieic.ipb >> 16 == DIAG_ASSEMBLY_CODE,
-> 
-> Which diag assembly code?
-> There's a huge number of them and this test already uses 2.
-This is for the virtio notify hypercall (500) in particular, I will be 
-more explicit with the variable names in v2 ! >> +            "Failed 
-with Unexpected Diagnose Code of %u\n",
->> +            param.run->s390_sieic.ipb >> 16);
->> +    vcpu_regs_get(param.vcpu, &regs);
->> +    TEST_ASSERT_EQ(regs.gprs[3], 0x3333);
->> +    TEST_ASSERT_EQ(regs.gprs[5], 0x555);
->> +    TEST_ASSERT_EQ(regs.gprs[6], 0x3333);
->> +    cleanup_kvm(&param);
->> +    return true;
->> +}
->> +
->> +static void test(void)
->> +{
->> +    int i;
->> +    struct kvm_lifecycle_testdef testlist[] = {
->> +        {
->> +            .name = "Testing Instruction Intercepts",
->> +            .test = test_instruction_intercept,
->> +        },
->> +        {
->> +            .name = "Testing DIAG Code",
->> +            .test = test_diagnose_code,
->> +        },
->> +        {
->> +            .name = "Testing Conditional DIAG Code",
->> +            .test = test_diagnose_conditional_code,
->> +        },
->> +    };
->> +
->> +    ksft_print_header();
->> +    ksft_set_plan(ARRAY_SIZE(testlist));
->> +
->> +    for (i = 0; i < ARRAY_SIZE(testlist); i++) {
->> +        if (testlist[i].test())
->> +            ksft_test_result_pass("%s\n", testlist[i].name);
->> +        else
->> +            ksft_test_result_skip("%s\n", testlist[i].name);
->> +    }
->> +}
->> +
->> +int main(void)
->> +{
->> +    TEST_REQUIRE(kvm_has_cap(KVM_CAP_USER_MEMORY2));
->> +    TEST_REQUIRE(kvm_has_cap(KVM_CAP_SYNC_REGS));
->> +    test();
->> +    ksft_finished();
->> +}
-> 
-thanks for the constructive comments Janosch, I will get to updating this,
+TEST_PROGS_EXTENDED does what the mail asks for without that cost:
+Documentation/dev-tools/kselftest.rst:283 says such entries are "not tested
+by default", lib.mk:131-133 still rsyncs them into an out-of-tree build and
+lib.mk:163 still installs them; the binary is built because it stays in
+TEST_GEN_FILES. For this Makefile that is
 
-Aaron
+	TEST_PROGS_EXTENDED := test_j1939_multi.sh
+	TEST_GEN_FILES := $(TEST_PROGS:.sh=) $(TEST_PROGS_EXTENDED:.sh=)
+
+and the existing "$(filter $(OUTPUT)/test_j1939_%,$(TEST_GEN_FILES))" rule
+keeps working. That plus a paragraph in the commit message, as asked,
+seems like the right shape until the stack handles its own echo.
+
+3/9 (Low, base skipped for a missing CAN_RAW) -- confirmed
+
+j1939_test_main() in j1939_tests.h skips on CAN_RAW for every binary, and
+test_j1939_base.c only ever creates SOCK_DGRAM/CAN_J1939 sockets: the data
+path is send_recv_verify_ok()/recv_timeout() and the setup is
+j1939_open_flags()/j1939_open()/j1939_connect_ok(). No open_raw(),
+open_raw_rcvbuf() or J1939_SETUP_RAW anywhere in the file.
+
+The configuration is reachable: CAN_J1939 (net/can/j1939/Kconfig:6) only
+depends on CAN and does not select CAN_RAW, which is merely "default y"
+(net/can/Kconfig:24). CAN_J1939=y with CAN_RAW=n builds, and on it all
+seven base tests report SKIP while they could run.
+
+A flags argument to j1939_test_main(), with J1939_NEEDS_RAW passed only by
+the four binaries that open a raw socket, fixes it. Keeping both symbols in
+config is right either way; what needs changing is the v2 changelog line
+"every test needs it".
+
+4/9 (Low, ordering barrier in filter_pgn) -- partly confirmed
+
+There is a stronger guarantee than the comment claims, in the common case.
+Both sends land on the same sk_session_queue. The first one calls
+j1939_sk_queue_session(), sees an empty queue, and activates plus schedules
+its txtimer with 0 ms from sendmsg(); the second one only queues, and is
+activated later from j1939_sk_queue_activate_next_locked() inside the first
+session's txtimer, with err == 0 so time_ms is 0 as well. The second timer
+is therefore started from the softirq of the first timer, on the same CPU,
+and both loopbacks go into that CPU's FIFO backlog in order.
+
+The comment only breaks if the second sendto arrives after the first
+session has already left the queue (so sendmsg() activates it itself), and
+the task has migrated between the two syscalls, and the first CPU's NET_RX
+has been deferred past the second CPU's. All three at once, and as noted it
+can only produce a false pass. So I would keep the barrier and make the
+last read bounded instead of instant:
+
+	EXPECT_EQ(recv_timeout(self->rx, rx_buf, sizeof(rx_buf),
+			       J1939_NEG_RECV_TIMEOUT_MS), -1)
+
+That costs 300 ms on the passing path and catches a late PGN_B on any CPU,
+which is exactly the case the MSG_DONTWAIT read misses.
+
+5/9 (Low, ACLAIM_* comment) -- confirmed
+
+The comment says "the tests that time the first send also check that it
+does not succeed before ACLAIM_MIN_MS", but only name_addressing and
+address_claim_send have the EXPECT_GE. ac_conflict_lose passes elapsed_ms
+to TH_LOG() only, and the baseline send in ac_conflict_probe_ok() has no
+lower bound either.
+
+Adding the check there is valid, not just cosmetic: a send to NAME_LOWER
+goes through j1939_ac_fixup() -> j1939_name_to_addr(), which returns the
+address only while j1939_ecu_is_mapped_locked() is true and otherwise
+returns J1939_IDLE_ADDR, which turns into -EADDRNOTAVAIL
+(address-claim.c:115-119, bus.c:253-270). The mapping happens only from
+the hold-off timer, so a kernel that maps the winner immediately would be
+caught. I would add EXPECT_GE(elapsed_ms, ACLAIM_MIN_MS) after the send to
+NAME_LOWER and leave the comment alone; then it is accurate.
+
+5/9 (High, pre-existing ac_timer leak and the teardown that hides it) --
+confirmed, but I would not fix it here
+
+The chain is exactly as described:
+
+  address-claim.c:240,242   j1939_ecu_timer_start() takes the only
+                            reference, then j1939_ac_process() drops its own
+  main.c:210-219            __j1939_rx_release() unregisters, unmaps and
+                            clears the ndev
+  bus.c:99-108              j1939_ecu_unmap_all() walks priv->ents[] only,
+                            so a pending ECU is skipped
+  bus.c:128-147             the timer handler maps unconditionally, which
+                            takes the mapping reference back
+  bus.c:159,167 + main.c:140  ECU holds the netdev and the priv, priv holds
+                            the netdev
+
+and netdev_wait_allrefs_any() then never returns; it prints
+"unregister_netdevice: waiting for %s to become free" every
+netdev_unregister_timeout_secs (10 s) and keeps waiting.
+
+It is reachable without privileges: can_create() has no capability check,
+and a user namespace with its own netns has CAP_NET_ADMIN there, so an
+unprivileged task can create the vcan, send the Address Claimed frame,
+close the socket inside the 250 ms window, and leave the netns teardown
+spinning.
+
+What I would push back on is doing it in this series. Cancelling the timers
+in j1939_ecu_unmap_all() runs into the existing ABBA that Marc described on
+2026-10-15: j1939_ac_process() calls j1939_ecu_timer_cancel() while holding
+priv->lock, hrtimer_cancel() waits for j1939_ecu_timer_handler(), and the
+handler starts by taking priv->lock. There is also the rule that the final
+j1939_ecu_put() must happen under priv->lock, which the unlocked puts in
+j1939_ac_recv() already break. And the work is in flight: Tetsuo Handa's
+"struct j1939_ecu refcount leak" series is at v11 as of 2026-11-10, with
+2/3 being the j1939_ecu_timer_cancel() lockup. Marc dropped the unmap_all()
+version from the queue on 2026-10-15 saying the review bot was not happy
+with it, so this area is currently somebody else's to land.
+
+So: the suite does not catch this leak, that is true, and the teardown
+workaround is why. But the regression test (close the last socket during
+the hold-off, then delete the interface, expect the delete to return) only
+means something on a fixed kernel. It should land with the stack fix, not
+in front of it, and this series should keep the workaround and say so.
+
+Thanks for the careful read of the timing assumptions; the two places I
+would tighten are the ones above.
+
+Chaosheng
+
