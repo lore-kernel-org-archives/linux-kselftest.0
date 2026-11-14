@@ -1,13 +1,13 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.58
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794664893;
-	b=S/HX/DZnCK+MRYDL3wHIkLfHBJOFiy+S268pNREtSzEhEzsKNgF6F/11KpLjcIsuEuY7
-	 MGtykI7OIvVUDYGX74PqNJsI4L3Vf8XL//uLAEz6F8s7/TLfLbjc9UNocIO7HNM/lcpIF
-	 MJpRqxAN0D0CxhTPLbVOjAjiKchaNhA4li1qJ00YH02rm1qNz18SRJlt9hZrvUjgvDVvk
-	 Kx0BPEthYJ2h0Ls96FHAGgUaTyetOWL6qWXf/8nW9tyUj7Ca+tDjbioDsW2U2mshf9lED
-	 A6yDqs8xetDe1KAeI1FuGGOng3oiYXBOHw7WNzbLCWI09A4MAe3yQ0q3DeloDnO7mew==
+	t=1794664891;
+	b=lYj+hQWS0UMSBscN3LfVo6RI0ZcqSUNd5ijAFnq+kx4q5RTZvsofkwlth0vQQeXofvg6
+	 qoBL1nZjH/aK3YCstWQF+/qd6oiptii82OlAVLWDzGRwAN53z0dZKfPywcklhScGgRWPB
+	 APCWEzG5J2xY0FGpYLNO9PZ+r7aXUEOKt/dVRi4eYUxax7cnbDVoGcEM5ErYqAh4Cy8nN
+	 M3f1t8zAClM6dRbFK9q3w7E/95RUHeRQVlvuy8/I19Q/hTEXE70WVRjmwGT16ZhsZtG8k
+	 N5VJzJQ5IqhL9VqlTY0xCv0Ylmy8ytuYQw53iZk0gvNmhGSvtVd4sl0IDroTCZxkjdg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794664893;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794664891;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 Content-Transfer-Encoding:Content-Type:X-ClientProxiedBy:MIME-Version:
@@ -24,54 +24,54 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
 	 X-MS-Exchange-CrossTenant-UserPrincipalName:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=+SLTM6oj4Hp+3JVEJeLw0qiEEKr0kwGunMWiDoj4IXc=;
-	b=Ezw5bCIQf7u5Tgj/DuHahlAsiGv3S+WBECtIlzWhPHZmqqJwJJZE60eX075Ba0TpWGMZ
-	 HoOVvNRkQxjcy16KT4x6FaDF88X3/G2A1RYbMJBj6xiftbKcc2qdf7ZA7gko7IqCV6C7p
-	 2npuAL7UcGylV3qeHMlDUFZAVmz7YS2tS83NUtQlkdcYsOlXXCSqwVqJS76KRaxK7pmxn
-	 FBoTPbzmGZekRiFVosc14Yj2/R/urzSsh/HGTpu31ICzGTNoFshsP7v/fYkHmL0t6JqpC
-	 vAY5SP5JlBslKd54VwCW/Zt99/n3FO2PhW7RGMb8vvVe6Sdx3SHdSOlSfxiSuDymEtg==
+	bh=nGRkhBOm0acFfiSEmh9UF3jmdHKOK9XTOIMbhkg3R1M=;
+	b=Vru2l4/PkkzC+NellsMcEhQKdbQHOdSF6stmwNtXH+kPqn5IG7/qVrfqgdD3gvICVtJN
+	 ikJPgGiLibfDioCafWB3Tnt/5zFUj8rmoteWM6PMW59p+4jEItav7G0F8VZRGGF7bL2YQ
+	 UJQrlP19Ho3NIzfqhbCTXhNBIsu88wi/Fkh279+VgHslHn9I/H8VukTfdJLtzXLnKavk7
+	 v182cpGmS0LsnBb4gEDrlveY2QD7a/kjSvK00lVOjkgEOokzIxP747UqPmEvKmWEN0Owe
+	 lE1XQVyFIaIVpJObMeUyx46jitxvzro75A1F53q9BeXeHexSz7Ggpv5FEyi6S9OHQMg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=nvidia.com;
 	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=qAyb+pJS;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.58
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011058.outbound.protection.outlook.com [40.107.208.58])
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=bnPdxBkk;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.208.18
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011018.outbound.protection.outlook.com [40.107.208.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0011606A330;
-	Sat, 14 Nov 2026 14:01:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0011606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F230606A327;
+	Sat, 14 Nov 2026 14:01:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F230606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=qAyb+pJS
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=bnPdxBkk
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=q2ncHhBBiIk4jyf4jLPD/ZQ3cJYx4XYhaRAZW3WFSmyQv/1NQb9p6KoyGo869OOFLQakEJtaXBJjh5p8PtoRmQURffiF0Q2h39mGObkZtL6+QV0Vhji+LRkx+d4aMMzVpjdYkMOQTwyWBDmqs+VFJnUp2SKT1tBme9toTdN2lOG8FhZX3aOT4n7KHdJlfwrgoHmPAt3x6bsTdTjBJwzHS5H4NHr/6n+DAJWVdO2krWGutzpSLYPiOQztIXyY4CPXRVDcyflnn/Q35igAEXTV33PTM3WTFQxaFWTd5xVqt4sAtSkRifzo10WsraeSCoFOFIkBk3Vera+0eKIho5Rj7w==
+ b=koyNJlcqgfgLtszatgoUN1FTE64l+QYik5ZigExlIw6mpQMUILXXy61JYexMs8sFFm/1AT1G+8p7YspObCz/ip7gTatllaQt3shN5eiiGSFUmjoSbso0aN95x8W1x9yuIY1w8SFJsnDGiBdV04KYRw9WwBk9V2CiN2jKLdUOApA6YB3hzJbx37//MVFhL2i6HYqRvJLDow7zSBZ41BLGdb6k3cptwlY07PGwEqRi8hkA1oKSjZI8bCgo1l1sLv+DgNN3XVizQOu0Mvb7OCiZhpAoqm4NU+hPmC5EUpk5Bi8kaGYq5glp+KuEYHrj7ZG7BpE1YYGSR37x5i/BIx73RA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+SLTM6oj4Hp+3JVEJeLw0qiEEKr0kwGunMWiDoj4IXc=;
- b=osxq0MqFnpS3zhb/5tHUtcqZYvuSzp/kdYH4vuXDdbIVw/u11A6sslMoVOhhJr9JzYkYzXFzaqJDhnRgkUMXsRLXA81d1xxqeX+3mJtAQZjyN6QNcBy/SRoYojup6X+qgusHN38IWYOldzW4IheSzYmMHZ9LmbWE/LBpk5IC8lhJiVK7peY6dzXdzLlKbw0OJ84hbRIyH+FrWF3FDkNVUQ+HUx6vHUISe734K0esY1sLDX4DWC+y9aNDdFNmt2hdRKMwdlGziqxDSDE1xDdUjues00Q2+6caWzTsZ5fiZOlAneRZGSQhTAs0H9nzPiy6FauK16Of9ypfzE5ioxfaCQ==
+ bh=nGRkhBOm0acFfiSEmh9UF3jmdHKOK9XTOIMbhkg3R1M=;
+ b=U2SZTEHGtV5NWizYqb524gCcgoJYwae700YtTghhNInGIvAg6cgrWn1o/C/g/MRsrfzEgoEJuWwgfzG+SkvJlXh+pNZhfffE0SD5ekNKcBT44MTkeHZgFDqBegcWiFM3lJKvs/DfcN8nWvFyOaroZjz1sbV1mXr54zydVHvy0NW4N6JQ/JDMr2ykvo8n6zJyS62RD4FuJElU4Se196BipxVq25GnGQSDl8ULnHTE6OD1pRlM0coXgKIZ6PnyISCH7xlOA4e9Z5Ur26OwTMHF1y3GMGCb3UajAZv6vI4uqJu0j1l7YkJoybbuKGUOm4Jt5qfFXs5+2OFjvBTFDlnsVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+SLTM6oj4Hp+3JVEJeLw0qiEEKr0kwGunMWiDoj4IXc=;
- b=qAyb+pJSfrgDzw5JFkP4a4yRXOtgK+t3Xfi92h9gBYp2kVGyQ5uoiV94oribFDm9x343q5n10CcnoxKk2p/78rrJEh9Fh7uh2zellAZlk81roL6xrqB3UMCS5mVH8lXApc3KWvuFxEag/CHHhUTChUMndktU/thQEcUUQ2FThuH0UQqVYYjLHqVESBVeQL2HNsL4K9dTnOczh2KBncJNEgBeIH/ffEsl7YidbRijSPbDEJzAD3Ce1Uf8giFLQdxaUKhDV8cPXUAvFLef8d7j523iQFrsXdB0jZOg9lGj1yNJvMgNSGavlTfKcXXhtMHCnKiesTAhqlh8xL9Mvazi+A==
+ bh=nGRkhBOm0acFfiSEmh9UF3jmdHKOK9XTOIMbhkg3R1M=;
+ b=bnPdxBkkkOEgynJJZcMVu3vhZKTHCM7z2DSpYsEIbEtBdjUi+818zZlSzw4kU+vhpc0ZRPQrhnB15+K/bWUWZtHMIv2y6UwjoeXz+PL5fYWqPlQcx/YuzHiTdQhfgLvdWxyOTkvxJqMGnbTtZJxEv+ZSiDX+pKhkxGkzohLQ/GcQKvKZh0UsAe1rHWz0wTWvl9DpRmiwXOLrwDLmLGKOSuZGEhQo1VATish8MvpnK4LFVXYmnPxm2JGxH8EtSwWR26vm76fEbfcfy1AOWeNLAxuQbPLzcjB7JBp+KoKZNLd6BxoeuaFuNCha1c7nBrSD7H65jgN+kaV9BQtifaYQjw==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
  by SJ0PR12MB8613.namprd12.prod.outlook.com (2603:10b6:a03:44d::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Sat, 14 Nov
- 2026 14:01:28 +0000
+ 2026 14:01:21 +0000
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0615.009; Sat, 14 Nov 2026
- 14:01:28 +0000
+ 14:01:21 +0000
 From: Richard Cheng <icheng@nvidia.com>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -89,16 +89,16 @@ Cc: x86@kernel.org,
 	newtonl@nvidia.com,
 	kristinc@nvidia.com,
 	Richard Cheng <icheng@nvidia.com>
-Subject: [PATCH v6 2/2] selftests/resctrl: Check that CBM limits LLC occupancy in CMT test
-Date: Sat, 14 Nov 2026 22:01:08 +0800
-Message-ID: <20261114140108.36954-3-icheng@nvidia.com>
+Subject: [PATCH v6 1/2] selftests/resctrl: Fix CMT test failure when all cache bits are tested
+Date: Sat, 14 Nov 2026 22:01:07 +0800
+Message-ID: <20261114140108.36954-2-icheng@nvidia.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20261114140108.36954-1-icheng@nvidia.com>
 References: <20261114140108.36954-1-icheng@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TPYP295CA0047.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:8::16) To BL0PR12MB2370.namprd12.prod.outlook.com
+X-ClientProxiedBy: TPYP295CA0050.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:7d0:8::12) To BL0PR12MB2370.namprd12.prod.outlook.com
  (2603:10b6:207:47::27)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -111,197 +111,101 @@ Precedence: list
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|SJ0PR12MB8613:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9eb302d1-ddc7-4935-5031-08df4257c6fc
+X-MS-Office365-Filtering-Correlation-Id: 379688df-3d63-4170-71ca-08df4257c2e8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|23010399003|10067099003|11063799006|56012099006|261021123027099003|261021121427099003|261009223027099003|261102123227099003|261026121527099003|261026140227099003|261022113327099003|261022105027099003|261028144727099003|18002099003|22082099003|6133799003|3023799007;
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|23010399003|10067099003|11063799006|56012099006|261021123027099003|261021121427099003|261009223027099003|261102123227099003|261026140227099003|261022105027099003|261028144727099003|18002099003|22082099003|6133799003|3023799007;
 X-Microsoft-Antispam-Message-Info:
-	cOl22d2mTsq7ssHhNlASLX+rJmjezWftAsMSnQL2sem43kbr+6/bqxeHqA+OHKN/95zpWrKzu+2lmPX9SKBBKvefS3/ez2ENL9HEx/HNWbxwmnvvPjzlA4c0i8m4faeqbq03L2Ao7QUp1Pe6ZnCI7P/yTvADAsDNKtlEZseFE/PlMjAP9Zn646Vl9ySA2DXDIL0TOm8KKCzpmogA69rrA9GxIjTc3FEY6iQhtHhutDNb+K8PgZ3JRY2sYuiSy8i21eSsDccCwPKuCWljoYMrWlmIBEkArkjYRgI9Zv80h2Ajzkky/Yf7x70mGKavly7ELzev4cUR0HM1HoJROebFEQdCQhiyv3GKLo9T2M2C9b89mM12IDvJJn0mfXTteGJ2l6gmJnYImPYK/uNK/n5Cl6wWDLQgVFnSBw05JQiepSCWE9OULIPEqYjMERj8h3AhEUsm1VTX2tPQCTT5jDqxKXQGZl0DukMTDhDg1GkIeVu+lLqodKjBGx9c6xTKwb1exoDhJ4Pq+DPwJiwwurYn8r0BcjKv7t25VocklIu9MVIn8jRHg+/rRbHesldBurkoihyTpp1xLWHAND7z4vz0o3fMS2S4iURTBDuQ6/no43XTOXsdCBbJVpMYtCZO8Ql/iqgyCrD+yHz8NkIJsSbG9Ks0mDZL4ma7Kl23DzORzVw=
+	vnPsYHUOha15lg0Mcl6Ft4hZuVRoRg9QGXasS7YBXw2rKh4h4vb8+46UQH3TnivazAPLhKcQevf31lRXT3OePmayewY+nQVBeJ7GvP3Shr9RK/EyqDqCn5SCqjrvUdL0bjRWXxKyr53Un+hbVmZ/kome1QwcpxxUe012ftOBftDj3ZvN8OeQQFOFrmnFdbR5BjapgfIDZXSL72lqPaEBv8GyO+yTWtXc1Ww60gCL9Tnf/sz4G80YBhm8atbjsa9DMRfEv12HuP2Vhvw8/rxVOadVEe8DfhA68bVrw9Iy+L9H9qw+bsjVkmzYvPVnWo84r5EwvNWgrRktX7AgM8SybuMceyrtRtWMbOUEzhpdZJFbEswuKf/4O2t+s0UhzT5rpc7ZS/Rc6Fm5s875u1TiWbTfzA4xDA23ScxDV1SQWV60KIzRktmDLy76X9Ap+IwWwF/BrQk/lLykK8LpV2ydpJvcdkznhhFQX7aetpDkqwFM4P27oxu+8MSUHkPpPTrq2FyAOLjpoPzRZ1+apjfeZ+gNHBiwkmpimEVgfw6dYXMTVj1jQx25xFYSSNGb4ACoPRLui7EctbM+7DD922ao+TfHZpT6/d9SqXVl4k91/0DzA1LWD53ldOlt+Uk2TUNWO82z9SuNHjDrLNWh7qYmcS0oWoqArbdHne9wn0rIpnk=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(23010399003)(10067099003)(11063799006)(56012099006)(261021123027099003)(261021121427099003)(261009223027099003)(261102123227099003)(261026121527099003)(261026140227099003)(261022113327099003)(261022105027099003)(261028144727099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(23010399003)(10067099003)(11063799006)(56012099006)(261021123027099003)(261021121427099003)(261009223027099003)(261102123227099003)(261026140227099003)(261022105027099003)(261028144727099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3ri+HL0Jh3hLcJZq4HkBoFEOiHK1XXopJF1ZkS9Lpx9C0OmsCSCNCynQ23W+?=
- =?us-ascii?Q?eST30oLIhHAWKM1zVRVX5HAD5LEfyqi2Wa1NB+2DErTx2Oe9s0t+WSU7lP/T?=
- =?us-ascii?Q?WF3UqlMlS4dN/SSA0E5FFxwkYTnL4uFy3nByIG7v6LBCy8J/c1gjP8AZFAjO?=
- =?us-ascii?Q?/tgMX6EgsgP+LIrss3iK76ZMNbBwyFix9dANPICdQOmusijvOn8ee+YBt7z1?=
- =?us-ascii?Q?josq/V3uLnEgZEU3L629WyNNRv5DnsXCQyV2P8TIWbyyFULuHTSVVoZKQ9D+?=
- =?us-ascii?Q?3h9yJhUEbCm9Ms0uzibS0LwvVijO0FcP3Kj5jXyXnPUyARjZbRqvUyTvpztD?=
- =?us-ascii?Q?M04T16Wm8rA66lvj6YcO22EDYAhyMcWl5lmYeA/pRtpQ1Oa1yG0BGdUGqG+P?=
- =?us-ascii?Q?U7eHDlvXY4EjJ2REXsndcfhbPfehTghX+DjuXavK2rxbyRfAOlMEdA6dzJCA?=
- =?us-ascii?Q?DtJ1hG10xxDAzgBeetuayJePdLdeiu1LQkm6OvowFTApBVpQCsgMVeNJZF7G?=
- =?us-ascii?Q?m5q2LXfShA3UYNkokfNAV/4BGH6gJAF7L3CuZPeckzBgdGSew0v7AJPOWM1F?=
- =?us-ascii?Q?aTYewGnm1UE132xDJJjfZe0x9mRwqHiabOkXkkPng5VQavgC+bXByncjPFV+?=
- =?us-ascii?Q?xK63JKKw57hewS9FsOPIlCW1/ktbgYraMcwEa5rPQAS3OF+bH1iyUNKnzl/c?=
- =?us-ascii?Q?UuIeHnDNs4sKbxrmx6OOOToiuYLx/YQ4yvz8sM2ypiAlZQBWyeGKqn8E0Tvy?=
- =?us-ascii?Q?F/mX8IMyTDgDV4F79AOk+SX1ksmGgNsYrvYB2CqZ/AkeaJaDXxpr3gBAT/G9?=
- =?us-ascii?Q?atY/TyaTYrRSIxX0LKKPKo/530kDa1tO8AnaQnqhJ4tpZJmSVnd117oftRZQ?=
- =?us-ascii?Q?XOLA/12TR4BHn//rvU/Lp+nCxKCBEUykH7bud11A8bXOCa0Ce8nHk6pQG042?=
- =?us-ascii?Q?cjzJ14MB7be5PvRWv3plQPRtMbV8DQZz18C7cuNja8lnsLotU6bhI30qhau2?=
- =?us-ascii?Q?0CfsYMNXk2rAbBz2U57NrUnvw6OQ/QiepU4XAb8bcwviL2xOzIN1hfjdzogx?=
- =?us-ascii?Q?65K97rZ4b+a69vqDl1L8cNinEp6LSCj6nzdwowB0w6t8rrmw/zWxnbDz8p/Z?=
- =?us-ascii?Q?MKxfWPldH7Rv7f8JQ2OsCKnsWlD9zY+5fyhYWK9M4/mr0egQDMMh+1ft/FTd?=
- =?us-ascii?Q?MZERnPb4uSO88h2qvT487XrarBpE7GmC5kpxFjBOcToY4OFrxBle5skx0WKC?=
- =?us-ascii?Q?K/Obudhy+xWEQvV3fMm9Eur+ltObvz26ZZgEs333xDUknMy5bxHt2nwiL8a3?=
- =?us-ascii?Q?8WtTH56ZrCAJY91lr8C5xgkQdc4WlsADY0kvjHvFGfD6Qh0E+6QoLCPr/Jc3?=
- =?us-ascii?Q?tzBYD6InWmiRqcGkzVo1X2HygA/CRqRelgQsHO+iODKxjwVFbXpNOQsYfgU2?=
- =?us-ascii?Q?jitZzEki0+/Oll8nqyg7/bvyC6/krpkSJhZzADLc/3lFI54LcjOVPeHekXDm?=
- =?us-ascii?Q?v609ptXlLUr7nRUvPb70XdDB0zyO2gPiwNVQqTPYCTmiTjK/NGnIAHR5b2z7?=
- =?us-ascii?Q?4zTKNL9RFLSWTn1gZ3u1wxeaOF0KH15pU8GT2kyKUB8DS+sRbfC1GtM0ZaPR?=
- =?us-ascii?Q?S7KHYTa1nXFAP5wFSYeWsnhwDwP7yUfHGxtwWElJ1UCREWt+u9PYz47fYsRA?=
- =?us-ascii?Q?ven+OnHsjyWIhkPw+AwXXJ/mSsrJOnuvJj58MbyTSJ5AceZtbY1R72iqTwz5?=
- =?us-ascii?Q?d0Hoten3eg=3D=3D?=
+	=?us-ascii?Q?ArshEaXuGz1g8AT6NblYOhSMecrzhE9LUnJu0iYivQXAn+wr2Pde7atc2ebq?=
+ =?us-ascii?Q?4aYYoM4o4WyUWS/+0oQOCFdnaI3ss6kHfkgecbK62n+ObjQ3AbfXc63AKOAq?=
+ =?us-ascii?Q?Tgt18ev+HBnHjUPIDYNDbea8er7B5udKRcp/Ue/0Klw0GZEwOU+7W2c9sdY+?=
+ =?us-ascii?Q?fB/+lEGUaDzsK2HfnuCIZ5KWUj6w8cfkVIlzvc4B/QQ3fpqLuFETcj+OOtoY?=
+ =?us-ascii?Q?aEEQalUQ8tR/yWpbngYa13r5QatdDOZBCdckjE3GSomV71CDrme6oTphueat?=
+ =?us-ascii?Q?aBywIZntOyyymZhov4muHv7EEsFZaXvOM0UrLGyxIGs3tzHJqv7EmYq05ily?=
+ =?us-ascii?Q?OTvSxuAY3ymL2ovPIw/UkzNcVTic+a37uLW7CJZgJi1jqSlb4b8sGIiJcczW?=
+ =?us-ascii?Q?CcG4FsYI4ZDBQwuUTCw/D9PNvxZ0NJl/NOr77xOdhZkxzBc9RXCb/32IOaSX?=
+ =?us-ascii?Q?YpJHIZI/epH1AC12UrmE98lcrSEGGTXM5G98mG5u1sUmWIRX0dLCy7Ar5qdb?=
+ =?us-ascii?Q?C6JJqMIwm0OWPXVfu8oFHpk6R8c+BGHOvNX01CBW390SzflJHu0Lon4AwVka?=
+ =?us-ascii?Q?Q48flTD3tiGq1kvcL0mtdW18H0jdCuv9nvmgL6Xz8mp50DRworCB8rY2D6me?=
+ =?us-ascii?Q?yYNFLVkY3hlZxsVWUI3zOXjhXeGCd3QMN7r30FkQM3gv0vTZcWU87azNQGk7?=
+ =?us-ascii?Q?heYNSOpKtw/v1jTgTrS3yvcuJWkYHnE+umxLICHppBJUfzy3unI5YMsN5Jyl?=
+ =?us-ascii?Q?8qFfTqKn6JiU7YjxiiSCiAORqtuC5ytUctYh3EdBiBjYMcuP4qBBVBjNm3Ht?=
+ =?us-ascii?Q?r7OapIuVd5kB+ItNjLtw0rqIfwhtUJsDcAxuFIvxqTiZEScr1WCL5vDgzzLk?=
+ =?us-ascii?Q?VPmfkHKxiaecrC1egyrkF1CqLU5SC5TGk47spodUI0Pp7IZ9ea6OBV2bJQlE?=
+ =?us-ascii?Q?qAWOYcc/9WClW27jmlJTBVnZIpdopWmOUBLYF0GTvaE7tFKZ6bb/jszsQRCm?=
+ =?us-ascii?Q?WFrT/nIx7v5wxTVRtgXskEefDziqSTeiT2Jh5MJXSbERrZtWr51CnCgU36MU?=
+ =?us-ascii?Q?YbLN50KyxsoByog5bCWmxYl+7yh3fuPqRxMVmKLdy5N6YoXQZyESXGk5scSL?=
+ =?us-ascii?Q?n2IdKOIprGh+RogmbOLbxsY3av9FxZN4gMS4XK7Pw4hVu3eSu/AunDC4IA4N?=
+ =?us-ascii?Q?CNWRdvVVD52l4ElqpT4hBVW/EDBshPEF1btatvI6ZEJbr4qTVa8N4L5bLQkR?=
+ =?us-ascii?Q?+ScBj3nQkuNVhE0uAGkeNdyXdaGbB6iuQBqgf/H20gifJZtcf/Ufa7/pA2qc?=
+ =?us-ascii?Q?rFS5HJ1a/ZbyhGaBbr3Paz77YdrKSr+eigpk89usp1KPwPbZJRdwKvAmvvg5?=
+ =?us-ascii?Q?L5J70+HwElpq5BC9kTiUl+v36kGlW/AVnkxKOwjSVeHxVMmtJGvW697qlb+M?=
+ =?us-ascii?Q?4mxKtWed9b++oAL8r6RuL3HFiHHZN/Y6hgkFPx9HwNZInFYkOiMQx1nDvwhz?=
+ =?us-ascii?Q?pap3Jx3Exwm48MagzqqdIpV2tJz2G7uJRNO58SfqHhU5ffVWvOot4eI42YSl?=
+ =?us-ascii?Q?XIz0ufBBQsfzKQiu3ZSelxtHrwYzyDwDCRNQCvZmlfGqYt3sRwcSNIhhSfGE?=
+ =?us-ascii?Q?0qr2K9Wu8gYMovAJiMjf2FnnQ/nSW7yeN4kwsRxBl+eyIoVv4QnMSnKHUmEf?=
+ =?us-ascii?Q?u9FRj0OzUrJ1ECliyKK6TlAxCw3a+oocqPun5OxTZU4rnEA5HeyeJC7YETe8?=
+ =?us-ascii?Q?a1mEUy/28w=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9eb302d1-ddc7-4935-5031-08df4257c6fc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 379688df-3d63-4170-71ca-08df4257c2e8
 X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2026 14:01:28.1790
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2026 14:01:21.2434
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: k80eOj5qHOQsdqDgIWnusb/Yz9QXG+2NBOMNFDqBWX/i9cnoMCOSrI86fwpPW8/tvR3AJFUgp61UYrbMW0AOow==
+X-MS-Exchange-CrossTenant-UserPrincipalName: vqKe92L8mNIgl40rIDI151rOyDsRxI3vRPJPaAdmNunC6CtuqhgAONLFQjJMN4N3bbfS2eHHTFlHs8JKfCmhug==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8613
 
-The CMT test measures LLC occupancy with one CBM and never checks that
-the CBM limits it.
+The CMT test accepts any number of bits from 1 to the length of the full
+cache bit mask via "-n". Since cmt_init() gives the default resource
+group the inverse of the tested mask to keep other tasks out of the
+tested cache portion.
 
-Measure again with all CBM bits set while the benchmark keeps running.
-This needs no cache flush, what the group has in the cache is covered by
-the wider CBM too.
+When all bits are tested the inverse mask is empty. resctrl rejects an
+empty mask with "Mask out of range" on systems that require at least one
+bit to be set, cmt_init() fails and the test fails before taking any
+measurement.
 
-The buffer is twi the tested portion, so occupancy should about double.
-Only require an increase above MAX_DIFF_PERCENT.
+Only write the schemata of the default resource group when there're bits
+left for it. When all bits are tested the default resource group keeps
+its allocation.
 
-Skip this for an user-provided benchmark or a buffer larger than the
-cache.
-
+Fixes: 7a214b4ec1c9 ("selftests/resctrl: Improve accuracy of cache occupancy test")
 Signed-off-by: Richard Cheng <icheng@nvidia.com>
 ---
- tools/testing/selftests/resctrl/cmt_test.c | 74 +++++++++++++++++++---
- 1 file changed, 66 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/cmt_test.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 5d0bb27b7817..5962aeb0cd8b 100644
+index ccb6fe881a94..5d0bb27b7817 100644
 --- a/tools/testing/selftests/resctrl/cmt_test.c
 +++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -19,6 +19,12 @@
- #define CON_MON_LCC_OCCUP_PATH		\
- 	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
+@@ -42,10 +42,13 @@ static int cmt_init(const struct resctrl_test *test,
+ 	if (ret)
+ 		return ret;
  
-+/*
-+ * CBM that the control group being tested is widened to after the first
-+ * NUM_OF_RUNS measurements. Zero when measuring with a single CBM only.
-+ */
-+static unsigned long wide_mask;
-+
- /*
-  * Initialize capacity bitmasks (CBMs) of:
-  * - control group being tested per test parameters,
-@@ -62,10 +68,26 @@ static int cmt_setup(const struct resctrl_test *test,
- 		     const struct user_params *uparams,
- 		     struct resctrl_val_param *p)
- {
--	/* Run NUM_OF_RUNS times */
--	if (p->num_of_runs >= NUM_OF_RUNS)
-+	char schemata[64];
-+	int ret;
-+
-+	/* Run NUM_OF_RUNS times with each CBM */
-+	if (p->num_of_runs >= (wide_mask ? 2 * NUM_OF_RUNS : NUM_OF_RUNS))
- 		return END_OF_TESTS;
- 
-+	/*
-+	 * Widen the CBM while the benchmark keeps running. All that the
-+	 * control group has in the cache was allocated using the narrower
-+	 * CBM and thus is covered by the wider CBM also, no flush is needed
-+	 * between the two sets of measurements.
-+	 */
-+	if (wide_mask && p->num_of_runs == NUM_OF_RUNS) {
-+		snprintf(schemata, sizeof(schemata), "%lx", wide_mask);
-+		ret = write_schemata(p->ctrlgrp, schemata, uparams->cpu, test->resource);
+-	snprintf(schemata, sizeof(schemata), "%lx", ~param->mask & full_mask);
+-	ret = write_schemata("", schemata, uparams->cpu, test->resource);
+-	if (ret)
+-		return ret;
++	/* No bits are left for the default group when all bits are tested. */
++	if (~param->mask & full_mask) {
++		snprintf(schemata, sizeof(schemata), "%lx", ~param->mask & full_mask);
++		ret = write_schemata("", schemata, uparams->cpu, test->resource);
 +		if (ret)
 +			return ret;
 +	}
-+
- 	p->num_of_runs++;
  
- 	return 0;
-@@ -107,10 +129,12 @@ static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
- 
- static int check_results(struct resctrl_val_param *param, size_t span, int no_of_bits)
- {
-+	unsigned long sum_llc_occu_resc = 0, sum_llc_occu_wide = 0;
- 	char *token_array[8], temp[512];
--	unsigned long sum_llc_occu_resc = 0;
--	int runs = 0;
-+	int runs = 0, runs_wide = 0;
-+	unsigned long llc_occu, avg, avg_wide;
- 	FILE *fp;
-+	int ret, ret_wide;
- 
- 	ksft_print_msg("Checking for pass/fail\n");
- 	fp = fopen(param->filename, "r");
-@@ -130,13 +154,36 @@ static int check_results(struct resctrl_val_param *param, size_t span, int no_of
- 		}
- 
- 		/* Field 3 is llc occ resc value */
--		sum_llc_occu_resc += strtoul(token_array[3], NULL, 0);
--		runs++;
-+		llc_occu = strtoul(token_array[3], NULL, 0);
-+		if (runs < NUM_OF_RUNS) {
-+			sum_llc_occu_resc += llc_occu;
-+			runs++;
-+		} else {
-+			sum_llc_occu_wide += llc_occu;
-+			runs_wide++;
-+		}
- 	}
- 	fclose(fp);
- 
--	return show_results_info(sum_llc_occu_resc, no_of_bits, span,
--				 MAX_DIFF, MAX_DIFF_PERCENT, runs, true);
-+	ret = show_results_info(sum_llc_occu_resc, no_of_bits, span,
-+				MAX_DIFF, MAX_DIFF_PERCENT, runs, true);
-+	if (!runs_wide)
-+		return ret;
-+
-+	/*
-+	 * The buffer is twice the size of the cache portion being tested and
-+	 * LLC occupancy is expected to about double with the wider CBM. Only
-+	 * check that it increased by more than the tolerated difference.
-+	 */
-+	avg = sum_llc_occu_resc / runs;
-+	avg_wide = sum_llc_occu_wide / runs_wide;
-+	ret_wide = avg_wide <= avg + avg * MAX_DIFF_PERCENT / 100;
-+	ksft_print_msg("%s Check cache occupancy increased with wider CBM\n",
-+		       ret_wide ? "Fail:" : "Pass:");
-+	ksft_print_msg("Number of bits: %u\n", count_bits(wide_mask));
-+	ksft_print_msg("Average LLC val: %lu\n", avg_wide);
-+
-+	return ret || ret_wide;
- }
- 
- static void cmt_test_cleanup(void)
-@@ -193,6 +240,17 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 		param.fill_buf = &fill_buf;
- 	}
- 
-+	/*
-+	 * The buffer is twice the size of the cache portion being tested. If
-+	 * the entire buffer fits in the cache then also measure with the full
-+	 * CBM to check that the tested CBM is what limits the LLC occupancy.
-+	 */
-+	wide_mask = 0;
-+	if (param.fill_buf && 2 * n <= count_of_bits)
-+		wide_mask = long_mask;
-+	else
-+		ksft_print_msg("Not measuring with wider CBM\n");
-+
- 	remove(RESULT_FILE_NAME);
- 
- 	ret = resctrl_val(test, uparams, &param);
+ 	snprintf(schemata, sizeof(schemata), "%lx", param->mask);
+ 	ret = write_schemata(param->ctrlgrp, schemata, uparams->cpu, test->resource);
 -- 
 2.43.0
 
