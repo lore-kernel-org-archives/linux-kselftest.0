@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794676193;
-	b=okBEihn/mLhB+EXZ+sCZbQERNgAvvZHHp2yJp/ugBViQh7niT1sMCEYBkVqsHr+4e7gG
-	 K02NIYuV4SZxolPI3WDQMj3NIqDKyK42aw/N+TFI0sOFrv8GhO9qagmRvMflDs900Tvxm
-	 DTU9d1ZzjWrAuHg32rvOiAakCA2uShDZTblSmsjPTWKuFiT6Mm3p67dkoXlUKnZlTIDYP
-	 rCX6VeWbSndGC5Pfk7Foz/exAO+GjWX6zdmbsWPgN55G1Ap+TSd1q7jCeBRizallPdaje
-	 W5G0WP8AlhD+MjozF9PSH8Mu9o+DnVDkrE5ZXEFEVWbKrh57r3n+ejN5Vi36b/QzR/g==
+	t=1794676194;
+	b=gAJGbMLyImWhDLTun45/KYNuXVY0LnSHHIxPK0uW7LT/CR765qXVeNlGhvGPnHF7WFfF
+	 nD3yUZqIoXEngMZRa8bZ1YCmjiJC1falqqAVl8MxigTe8VMERbcik1QiwLAAcfMr3H5xU
+	 VkbpXdLW/OjLFrkTsdNt3kQxymza0n+/nSfpIW/BGoSplzqeRoYP4yQWjLSltTUesU30n
+	 0cCi2JdQpAAmeXEgk7DaP9JQbH+lIBIM6eEgDBvCy2bh0c7baan63zURir0uIc/QaKPtU
+	 jdjEHoYf9lBQ3h05RT/mtnex5jtASlg9KSs+lNfHgvdtTHg0dXMWidm7RP26rdK2gbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794676193;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794676194;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=Ako3KP9iF8f2dzDuNLnMay3yDlimcTa4jk9cf80I3xE=;
-	b=ID+kfoo9Rfmw0Z/HEtj5MgkIus+HB9Y2/XHL6cuePIkIrchOahWn2M2rBK3gs9KHmhWz
-	 VjUch/rjp/SOJf/Cx8eAV+DlqIKtObe1lC25KzoKlFFg6YncGWSd+LCNka2pv8wazuL6U
-	 gghqQgCXAB0prqLGyZvyogvVTUan+zBM1VYlW//KAnXnd7xQYoaAU3uguzOkazLCwGdfM
-	 JjFRn4rlz9ectITP0bQex5qso2ppRAlmIfJ0/9BbVEBR/xTQTtqf2vydVhFgTv9/MrnLs
-	 GjecYsDcKQqYx3AY5g7NuFq1Kp6s4yJX6RnckUn7WGwmdLx8DSiNxVYCsEoIxJ3hWfg==
+	bh=FqN4KDJIxmU9Q0izWI8VvuQ7FOMtenlG/mu/G5wNfQI=;
+	b=xcirxJN+3arySARqW9Fk5QGClqz8DYNZbECJjW8rzU0rWpTJUbPYhF3ccfIt8nhWZqck
+	 daLrbB4GxnqKIhWw6DAYzooj0tNdnrtDCaCROBHfpqNmQBZBsHqAVdROZ2bPwdgjcyk1s
+	 bZ65YYfT/YKPMieCF5UGt0Fd57GaYFIQU3NFTomViYva+2V/ARrSCe7U/QdOEN2NQnFnZ
+	 5dzumnbw7VmIRurMFQjPHJFe7g87+lZ5CSKuBOZU4W7JoqhjCdVij1ewUXc3m/baYFfP/
+	 ppLF5rNnHr340NoxqAzJ/x6l8JThV9CaufwL/5X6h69J1JIdb0NdTPSSKqAB59r69kA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UPocnQe8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oJ0KiTP1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86330606A881;
-	Sat, 14 Nov 2026 17:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6421606A330;
+	Sat, 14 Nov 2026 17:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UPocnQe8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9AB1F000C4;
-	Sat, 14 Nov 2026 17:09:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oJ0KiTP1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06A91F000C5;
+	Sat, 14 Nov 2026 17:09:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794676193;
-	bh=Ako3KP9iF8f2dzDuNLnMay3yDlimcTa4jk9cf80I3xE=;
+	s=k20260515; t=1794676194;
+	bh=FqN4KDJIxmU9Q0izWI8VvuQ7FOMtenlG/mu/G5wNfQI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=UPocnQe8OfxbsMscSd49AYam4wggk6YxKthBgX54I2wBy2RU7qVWqm6esAmV3f5o6
-	 HCDXuMPffxjlRC6W2ebdaeA501HO70EP83CWAcIb6oFtZVvXXCbOzl0PKVCBZHgWqb
-	 yvrr1p+IFpPW6wM8NRBpboc7hq4X50GZebauyD+mq0xMUG2UhoJrxVLz5JZz3oVAxb
-	 ZbATwVmJ0BCHAkii6C4DAAiqBM/1LJEZVu2ISD84jBTnJmRLxWhAvf8DO70ZifYWTr
-	 bYo7JuuGxfkPl91Wti8RBEf9SK2z9Sg5GCCCQfBuHeSaLD6LOIlTFISzUFxRkaLmwA
-	 +8YfSsi5LyJqA==
-Subject: Re: [PATCH net-next v3 2/3] net/sched: fq, fq_codel, fq_pie: skip
- empty rounds in the deficit-refill dequeue loop
+	b=oJ0KiTP1QWhKE07HqLIv9lKb2Y9MR0hJK8ZIAvVeJKfiZ9mLuZClbjotW7YAezHwE
+	 sONCvmSf7v1mc9EougkcF9GC/oGQnyCLnsbCxdDBJn6naBvBpo3G8CtY1CUFPjLTy7
+	 ptEGoQGBo36HrEmClqaSZsSS4RUSqzPOpuW3BsUQcK6o3voe7qcUX1hfv5vvL3QaWq
+	 TARg4vevZrTcHbUWppcEqOhgVcESiZ6Akz6HAN6hKhHLJezBuSCjR73/YOayPj+Rbt
+	 jDShlTJBNVUQs+Wk18uHOxXwgDweuBjOsJOx2jTY5z2pQ2JvgjvriV2IQqZiMN4BPo
+	 SOPOBUjTgNM3Q==
+Subject: Re: [PATCH net-next v3 3/3] selftests: tc-testing: pin DRR and ETS
+ deficit refill semantics
 From: netdev-bot+sashiko@kernel.org
 To: victor@mojatatu.com
 Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net,
  edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
  jhs@mojatatu.com, sashiko-bot@kernel.org, shuah@kernel.org,
  linux-kselftest@vger.kernel.org
-Date: Sat, 14 Nov 2026 17:09:52 +0000
-Message-ID: <179467619215.2199510.960010901115312228@kernel.org>
-In-Reply-To: <QDISC-TIAE.v3.r0.20261109173518-2@mojatatu.com>
-References: <QDISC-TIAE.v3.r0.20261109173518-2@mojatatu.com>
-X-sashiko-severity: High
+Date: Sat, 14 Nov 2026 17:09:53 +0000
+Message-ID: <179467619339.2199510.6248385322007095412@kernel.org>
+In-Reply-To: <QDISC-TIAE.v3.r0.20261109173518-3@mojatatu.com>
+References: <QDISC-TIAE.v3.r0.20261109173518-3@mojatatu.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 (1) · Medium: 1 · Low: 2
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -76,294 +76,219 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] The skip-ahead can be turned off for the rest of a dequeue call,
-  so the N * rounds spin the patch says it removes is still reachable.
-- [Medium] In __fq_codel_dequeue() (net/sched/sch_fq_codel.c), the bulk-
-  skip loop removes empty flows with k < rounds by calling…
-- [Low] The commit message and the new comments give reasons for the
-  repeated scan that do not match the code.
-- [Low] The patch is written as a bug fix ("The issue" / "The Fix", a
-  reproducer, a Reported-by from the netdev bot) for a user-triggerable…
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but sch_cake has
-  the same unbounded deficit-refill loop, and the series leaves it as is.
+- [Medium] All three new tests pass or fail based on wall-clock timing,
+  with roughly ±0.5 s of margin, and nothing synchronises them with when…
+- [Low] The commit message says only 57a1 and 2177 put netem under the
+  classful qdisc and log the "non-work-conserving?" warning.
+- [Low] In ETS test 2177, band 1:1 is expected to show "bytes": 1514,
+  "packets": 1, although the band was never served (backlog 3028, qlen…
+- [Low] The commit says it pins the DRR/ETS deficit refill 'so a change
+  to the refill loop can't silently alter the result'.
 
 --
 
-net/sched: fq, fq_codel, fq_pie: skip empty rounds in the deficit-refill dequeue loop
+selftests: tc-testing: pin DRR and ETS deficit refill semantics
 
-This patch adds a skip-ahead to the deficit-refill loops in fq_dequeue(),
-__fq_codel_dequeue() and fq_pie_qdisc_dequeue(). After a full round in
-which no flow could dequeue, the quanta for the remaining rounds are added
-to every flow in one pass. Empty flows that the old loop would have removed
-during those rounds are removed in the same pass, and the skip is retried
-after every bulk refill.
+This commit adds three tc-testing cases. 3f3e checks the DRR deficit after
+a 1514-byte packet at quantum 256. 57a1 and 2177 check that DRR and ETS
+serve a 514-byte packet before a 1514-byte one, using netem delay under the
+classful qdisc to hold packets while stats are inspected.
 
-Link: https://lore.kernel.org/netdev/179182028153.434549.4854377793269282267@kernel.org/
-Link: https://lore.kernel.org/netdev/3ab59725-e34c-4243-bc72-d93f837bcad1@redhat.com/
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+> index 2b61d8d79bde8..d7ac32294738e 100644
+> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+> @@ -86,5 +86,87 @@
 
-> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-> Link: https://lore.kernel.org/netdev/179182028153.434549.4854377793269282267@kernel.org/
-> Link: https://lore.kernel.org/netdev/3ab59725-e34c-4243-bc72-d93f837bcad1@redhat.com/
-> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+[ ... ]
+
+> +        "setup": [
+> +            "$IP addr add 10.10.11.10/24 dev $DUMMY",
+> +            "$TC qdisc add dev $DUMMY root handle 1: drr",
+> +            "$TC class add dev $DUMMY parent 1: classid 1:1 drr quantum 256",
+> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 2s limit 10",
 
 [Severity: Low]
-This isn't a bug, but the patch is written as a fix for a stall that users
-can trigger under the qdisc lock. Should it carry Fixes: tags for the
-commits that added the one-quantum refill loops in sch_fq.c,
-sch_fq_codel.c and sch_fq_pie.c? If a stable backport isn't intended, a
-note saying so would also help.
-
-The sibling patch "net/sched: drr, ets, sfq: skip empty rounds in the
-deficit-refill dequeue loop" doesn't have Fixes: tags either.
-
-> diff --git a/net/sched/sch_fq.c b/net/sched/sch_fq.c
-> index a282812c192ee..4229065e48094 100644
-> --- a/net/sched/sch_fq.c
-> +++ b/net/sched/sch_fq.c
-
-[ ... ]
-
-> @@ -782,9 +788,82 @@ static struct sk_buff *fq_dequeue(struct Qdisc *sch)
->  	f = head->first;
->  	retry = 0;
->  	if (f->credit <= 0) {
-> +		/* No flow could dequeue in the last full round. Add the
-> +		 * quanta for the rounds still needed in one pass.
-> +		 */
-> +		if (!scanned && f == first) {
-> +			unsigned int rounds = UINT_MAX;
-> +			struct fq_flow *iter, *prev;
-> +			bool skip = true;
-> +
-> +			scanned = true;
-> +			/* new_flows is empty after a full round. */
-> +			for (iter = pband->old_flows.first; iter;
-> +			     iter = iter->next) {
-> +				/* Empty flows don't limit the rounds. */
-> +				if (!fq_peek(iter))
-> +					continue;
-> +				if (iter->credit > 0) {
-> +					skip = false;
-> +					break;
-> +				}
-
-[ ... ]
-
-> @@ -796,6 +875,9 @@ static struct sk_buff *fq_dequeue(struct Qdisc *sch)
->  		if (now + offload_horizon < time_next_packet) {
->  			head->first = f->next;
->  			f->time_next_packet = time_next_packet;
-> +			/* The round's first flow left; the next one takes over. */
-> +			if (f == first)
-> +				first = scanned ? NULL : head->first;
->  			fq_flow_set_throttled(q, f);
->  			goto begin;
->  		}
-
-[Severity: High]
-Can the skip-ahead be turned off for the rest of this fq_dequeue() call?
-scanned is set to true before every scan. It is only cleared again after
-a successful bulk refill or on a band switch.
-
-Suppose the scan finds a non-empty flow P with credit > 0, so skip is
-false. P can have picked up that credit from its own one-quantum refill
-in the round that just ended. If P's head packet has an EDT (SO_TXTIME)
-or pacing time in the future, P is throttled here, and only first is
-adjusted:
-
-	if (f == first)
-		first = scanned ? NULL : head->first;
-	fq_flow_set_throttled(q, f);
-
->From then on "!scanned && f == first" is always false, so the remaining
-flows go back to one-quantum refills. With the 1 MiB stab setup that is
-about 4096 iterations per flow, under the qdisc lock with BH disabled.
-
-__fq_codel_dequeue() looks like it has the same problem. If codel_dequeue()
-drops all of P's packets and returns NULL, P is removed with
-list_del_init() and scanned stays true.
-
 The commit message says:
 
-  "a flow that changes state (throttled in fq, dropped by the AQM in
-  fq_codel and fq_pie, or a new packet at the head) does not leave the
-  loop on the one-quantum path for the rest of the dequeue"
+    57a1 and 2177 put netem under the classful qdisc, so they log the usual
+    "non-work-conserving?" warning.
 
-Does that still hold when the state change follows a failed scan rather
-than a bulk refill? Should scanned also be reset on these paths?
+3f3e also puts netem under DRR class 1:1 here, so doesn't it log the same
+warning? The first ping packet is enqueued and qdisc_run() calls
+drr_dequeue(). netem's peek, qdisc_peek_dequeued()->netem_dequeue(),
+returns NULL because the packet is not due for 2s:
 
-fq_pie doesn't seem to be affected, because a non-empty flow with positive
-deficit always returns an skb there.
+net/sched/sch_drr.c:drr_dequeue() {
+    ...
+		skb = cl->qdisc->ops->peek(cl->qdisc);
+		if (skb == NULL) {
+			qdisc_warn_nonwc(__func__, cl->qdisc);
+			goto out;
+		}
+    ...
+}
 
-> diff --git a/net/sched/sch_fq_codel.c b/net/sched/sch_fq_codel.c
-> index e6c87a32950f9..25d7bc9b6414b 100644
-> --- a/net/sched/sch_fq_codel.c
-> +++ b/net/sched/sch_fq_codel.c
+Each test creates a new netem qdisc with TCQ_F_WARN_NONWC clear, so it
+looks like all three tests print the warning, not two.
 
-[ ... ]
+Should the commit message say that all three tests log it?
 
-> @@ -298,6 +300,73 @@ static struct sk_buff *__fq_codel_dequeue(struct Qdisc *sch)
-
-[ ... ]
-
-> +			if (skip) {
-> +				struct fq_codel_flow *tmp;
-> +
-> +				list_for_each_entry_safe(iter, tmp, &q->old_flows,
-> +							 flowchain) {
-> +					unsigned int k = 0;
-> +
-> +					/* An empty flow leaves the list after
-> +					 * k more refills. If that falls within
-> +					 * the skipped rounds, remove it now.
-> +					 */
-> +					if (iter->head) {
-> +						WRITE_ONCE(iter->deficit,
-> +							   iter->deficit +
-> +							   rounds * q->quantum);
-> +						continue;
-> +					}
-> +					if (iter->deficit <= 0)
-> +						k = DIV_ROUND_UP(1 - iter->deficit,
-> +								 q->quantum);
-> +					if (k < rounds) {
-> +						WRITE_ONCE(iter->deficit,
-> +							   iter->deficit +
-> +							   k * q->quantum);
-> +						list_del_init(&iter->flowchain);
-> +						continue;
-> +					}
+> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match u32 0 0 flowid 1:1",
+> +            "ping -c 2 -s 1472 -i 1 10.10.11.11 -I $DUMMY -W 0.01 >/dev/null 2>&1 &"
+> +        ],
+> +        "cmdUnderTest": "sleep 2.5",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC -s class show dev $DUMMY",
+> +        "matchPattern": "deficit 22b",
 
 [Severity: Medium]
-Does this bulk removal skip the CoDel state reset that the old path did?
-In the old one-quantum loop, an empty flow only left old_flows after
-codel_dequeue() had run on it. When dequeue_func() returns NULL,
-codel_dequeue() does:
+Can these tests fail intermittently because of scheduling latency?
 
-include/net/codel_impl.h:codel_dequeue() {
+nsPlugin runs the traffic generators in the background with & through ip
+netns exec. The verify step then runs after a fixed sleep 2.5. Nothing
+ties the verify step to the time the packets are actually enqueued.
+
+In 3f3e, ping sends at T+d1 and T+d1+1, and netem releases each packet 2s
+later. drr_dump_class_stats() reports the deficit only while the class is
+backlogged:
+
+net/sched/sch_drr.c:drr_dump_class_stats() {
     ...
-	if (!skb) {
-		vars->first_above_time = 0;
-		WRITE_ONCE(vars->dropping, false);
-		return skb;
-	}
+	if (qlen)
+		xstats.deficit = READ_ONCE(cl->deficit);
     ...
 }
 
-Here the flow is removed with list_del_init() without going through
-codel_dequeue(). first_above_time, dropping, drop_next and count keep
-whatever values they had.
+So "deficit 22b" only matches while the first packet has been dequeued and
+the second is still held by netem. If ping start-up or tdc overhead moves
+things by more than about 0.5s, tc prints either deficit 256b (nothing
+released yet) or deficit 0b (class drained).
 
-When fq_codel_enqueue() re-attaches the flow, it only resets the deficit:
+57a1 and 2177 have the same problem. Batch 1 is released at about T0+p1+3,
+and verify runs at about T0+1+2.5 plus overhead:
 
-	if (list_empty(&flow->flowchain)) {
-		list_add_tail(&flow->flowchain, &q->new_flows);
-		q->new_flow_count++;
-		WRITE_ONCE(flow->deficit, q->quantum);
-	}
+- If starting ip netns exec plus python3 takes more than about 0.5s,
+  batch 1 is still held at verify time. Class 1:2 then shows bytes 0 with
+  backlog 1028 / qlen 2 instead of 514 / 1.
+- If tdc overhead between setup and verify is too large, batch 2 is
+  released and backlog/qlen change.
 
-Could a returning flow, or a new connection that hashes to the same
-bucket, then be dropped or ECN marked right away? codel_should_drop()
-would see a stale first_above_time that is already in the past, or
-dropping would still be true.
+tdc.sh runs tdc.py -J"$(nproc)", which adds CPU contention. Debug kernels
+such as KASAN or lockdep slow start-up further.
 
-This path runs in normal operation whenever quantum is smaller than the
-packet length, for example quantum 300 with 1514 byte packets, not only
-with an inflated stab.
-
-The commit message says "credits and list order match the old loop", but
-it doesn't mention this per-flow AQM reset.
-
-> diff --git a/net/sched/sch_fq_pie.c b/net/sched/sch_fq_pie.c
-> index 5982847df8f85..15ae977101207 100644
-> --- a/net/sched/sch_fq_pie.c
-> +++ b/net/sched/sch_fq_pie.c
+Could the tests wait for the packets to appear in the qdisc backlog before
+the timed window starts? Alternatively, could the margin between the netem
+delay and the verify time be made wider?
 
 [ ... ]
 
-> @@ -254,6 +256,67 @@ static struct sk_buff *fq_pie_qdisc_dequeue(struct Qdisc *sch)
-
-[ ... ]
-
-> +					iter->deficit += rounds * q->quantum;
-> +				}
-> +				/* A flow may show a non-empty queue or a
-> +				 * dropped packet now; scan again if the loop
-> +				 * still cannot dequeue.
-> +				 */
-> +				first = NULL;
-> +				scanned = false;
-> +				goto begin;
-> +			}
-> +		}
+> +        "cmdUnderTest": "sleep 2.5",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC -j -s class show dev $DUMMY",
+> +        "matchJSON": [
+> +            {
+> +                "class": "drr",
+> +                "handle": "1:1",
+> +                "root": true,
+> +                "stats": {
+> +                    "bytes": 0,
+> +                    "packets": 0,
+> +                    "backlog": 3028,
+> +                    "qlen": 2
+> +                }
+> +            },
 
 [Severity: Low]
-Is this comment accurate for fq_pie? fq_pie_qdisc_dequeue() never drops
-on dequeue. It calls dequeue_head() and then pie_process_dequeue(), which
-returns void and only updates qdelay, avg_dq_rate and burst_time.
+The commit message says the tests ensure "a change to the refill loop
+can't silently alter the result". Does 57a1 actually pin the multi-class
+refill?
 
-A non-empty flow with positive deficit always returns an skb here, so the
-repeated scan can never find a stalled round in fq_pie.
+This matchJSON only checks bytes, packets, backlog and qlen, which only
+shows the service order. The batched refill in drr_dequeue() adds
+rounds * quantum to every active class:
 
-The commit message makes the same claim:
-
-  "dropped by the AQM in fq_codel and fq_pie"
-
-The matching comments in __fq_codel_dequeue() ("a non-empty queue") and
-fq_dequeue() ("a non-empty queue, a new packet") also list state changes
-that can't happen inside one dequeue call. Nothing is enqueued while the
-qdisc lock is held, and fq_check_throttled() only runs before the begin
-label. The only real changes seem to be CoDel drops in fq_codel and
-throttling in fq.
-
-Could the comments and the commit message be updated to match?
-
-> +
-> +		/* Remember which flow started this round. */
-> +		if (!first)
-> +			first = flow;
->  		flow->deficit += q->quantum;
->  		list_move_tail(&flow->flowchain, &q->old_flows);
->  		goto begin;
-
-[Severity: High]
-This isn't a bug introduced by this patch, but sch_cake seems to have the
-same unbounded refill loop, and the series leaves it unchanged:
-
-net/sched/sch_cake.c:cake_dequeue() {
+net/sched/sch_drr.c:drr_dequeue() {
     ...
-	if (flow->deficit <= 0) {
-		...
-		WRITE_ONCE(flow->deficit,
-			   flow->deficit + cake_get_flow_quantum(b, flow, q->config->flow_mode));
-		list_move_tail(&flow->flowchain, &b->old_flows);
-
-		goto retry;
-	}
+			if (skip && rounds != UINT_MAX) {
+				list_for_each_entry(iter, &q->active, alist)
+					WRITE_ONCE(iter->deficit,
+						   iter->deficit + rounds *
+						   READ_ONCE(iter->quantum));
     ...
 }
 
-Deficits are charged with adjusted_len, which is derived from
-qdisc_pkt_len(), so a root stab can inflate it to 1 MiB. The refill is
-flow_quantum (300..1514) scaled by host load:
+Suppose that loop were changed to refill only the first class. B would
+still be dequeued first, and the asserted stats would match exactly.
+Class 1:1's deficit, though, would end at 1280 (or 768) instead of 1024.
+Class 1:2 ends at 254 in both cases. 3f3e has only one class, so it can't
+tell these cases apart either.
 
-	return (q->flow_quantum * quantum_div[host_load] +
-		get_random_u16()) >> 16;
+Class 1:1 still has qlen 2 at verify time, so drr_dump_class_stats()
+exports its deficit. Could 57a1 also check the per-class deficits (1024
+and 254)? ETS does not export a deficit, so 2177 can only check the order.
 
-With the default triple-isolate mode and many bulk flows from one host,
-each refill can add well under one byte on average, about 0.29 bytes at
-1024 flows.
+[ ... ]
 
-Even without host scaling, 1024 flows at about -1 MiB need about 3500
-refills each. That is roughly 3.6M iterations per stalled dequeue under
-the qdisc lock with BH disabled.
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
+> index d2eab61c099a8..ea3adba2f06c7 100644
+> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
+> @@ -1007,5 +1007,59 @@
 
-Should cake get the same skip-ahead, or could the commit messages say why
-it is left out? hhf has the same loop, but with only two buckets it stays
-bounded.
+[ ... ]
+
+> +        "verifyCmd": "$TC -j -s class show dev $DUMMY",
+> +        "matchJSON": [
+> +            {
+> +                "class": "ets",
+> +                "handle": "1:1",
+> +                "root": true,
+> +                "stats": {
+> +                    "bytes": 1514,
+> +                    "packets": 1,
+> +                    "backlog": 3028,
+> +                    "qlen": 2
+> +                }
+> +            },
+
+[Severity: Low]
+Is "bytes": 1514, "packets": 1 the intended expectation for band 1:1?
+
+Band 1:1 still has backlog 3028 and qlen 2. Both 1514-byte packets are
+still queued, so the band was never served. The count seems to come from
+netem's accounting at peek time. ets_class_dump_stats() reports the
+child's bstats:
+
+net/sched/sch_ets.c:ets_class_dump_stats() {
+    ...
+	if (gnet_stats_copy_basic(d, NULL, &cl_q->bstats, true) < 0 ||
+    ...
+}
+
+netem's peek is qdisc_peek_dequeued(), which calls netem_dequeue(). That
+updates bstats before the skb is stashed back in gso_skb:
+
+net/sched/sch_netem.c:netem_dequeue() {
+    ...
+deliver:
+		qdisc_qstats_backlog_dec(sch, skb);
+		qdisc_bstats_update(sch, skb);
+		return skb;
+    ...
+}
+
+So a single ETS peek of the first A packet sets band 1:1 to 1514/1.
+
+The DRR version, 57a1, runs the same scenario and expects bytes 0 /
+packets 0. That is because drr_dump_class_stats() reports cl->bstats,
+which is only updated on a real dequeue.
+
+The expectation here depends on how netem accounts a peek. Could band 1:1
+check only backlog/qlen, so the test does not break if that accounting
+changes while ETS scheduling stays the same?
+
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-TIAE.v3.r0.20261109173518%40mojatatu.com
