@@ -1,75 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794662532;
-	b=bVr+UI4sHR5ARfqcRAZQYHFid6FEpRL+veOuGMn4iT6aJSgvRCnCsciJcP5KRCSSHFjO
-	 2+aQOvZw03cQzBySYv5Cbfb9EynGrlJDxK5O/QfYuUvrktsxlmdvrseseH5oVsn1cmlrg
-	 oAcuuE225V9hA5fiFk0Fc00aEIZ/A4KA2+V5y9K9ENX/TL81pisSqp8Trql6qhzEdYYwH
-	 78dKG9oMNwD9K20sSg8s013TU9iUamk0HpPpl8mP1AYxELBOQrudF/w7c6zQvWkZbLSmb
-	 uugp+5hOvOUYq9jEFiWUOFE4tAzgrD2Smkz+tc7TlGwXlTvsYKBQzGDPXJJTdPGdR6Q==
+	t=1794664496;
+	b=yP7+dX7p3iS9wbCgHDGUVq641Nxxuk2mFjKYY5pVOZUEGPJPgHF3JhNF97/3CoYMLmkz
+	 Mkq6PTiBvZej2Q7RcD4E3BMaK0Q4dY1uE9P5s2Cp7jFS+A77MVAT8FC1J5mAt5koodxSV
+	 uvnF6lvc3i6BeIdqtBPQ7MlwpZPAnx8iU9ztXMhLIOXld3hcsq7ZXagWl+aw+0VL7pmoL
+	 69kh7tzIJsjqTukSFSS6/72hnMvigQDcQi2MB8T71IhbCQbo3x0KQHs/x1CYU2SvZNRGM
+	 x7GO+SINOfsK/gmYVQZ6j7XTw2oqpM+kJc0pW8SySimJPmOF+nD53MbtgY5XqDo1kHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794662532;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=mr8KrDnzXuL95QpOwferNfI2WjvgEHCDBjvr34Rp5qY=;
-	b=3kuXA+hk64eJ/d2shrhQQtKHttBUDuTeeLsBYR0k/WcejCP26WXyUzM2M7O3SSvOGwvg
-	 DBZ6MXSZefdhaOktW+hBRoprXs5AblaTtTxOAgeTbhRhR1uyfJBPFGYYtO4PdUn23Az9h
-	 0qnGt7sW/ssKy6KcDcvUg9B4WVVeC3hAi2Tg05W+vI27QpcQpoJ0fA7ApbHt+RSWykSYV
-	 TmeGvl3+swXDAXi8xDdw52U49xxQS7osDnJ2FXOimBvTP2Z1DwL2vSIYiiR7GCo1YZvfK
-	 FiEau24m1uVGcdm8N4SqGU0prwmcvuy2en7Tw8tLgL7k2gT9hIvDfCwHYd+iWB/qYuA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794664496;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=I6J+1H3vQpLdJ7UVpJ/tC85ye3HYuCATNIJGMbrXQJM=;
+	b=q1CZ4i+mmH7K20AAIyHJtswA2VFZqxHuZuIbP6uRX8Q+KFJx0jzV2Yhix46Fjl2JCCl1
+	 R7pNlnSnqt9uX0l6qz1gP1UYlDEGVC4IUZugkDAH7fomc7aK7vAybU0eT9w5hpPJ/Rqwe
+	 MyyEwtr9yM2uaoEwOQvp1Qbf7d3CMvZtjij/CdVYSYlhGtNRwvEfhUTma+iVrKVQ+uwdX
+	 lZwDXr+SHhCpllkAJ8g3gelLMj84PnqRQKCRqjKhV6Swhh/A2YQe6EVIJEK4UinR10QzZ
+	 ZDmwhaiI7GaX0Ro7FirDObnlgbuEz0vwSYZYDNtTZZZIvSM/xAT12hQtnfT3s188zsA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--aaronlewis.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ou0we7Sp;
-	arc=none smtp.remote-ip=74.125.82.69
-Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gm28Ha6j;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BEEB606A33A
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 13:22:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BEEB606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aaronlewis.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604C3606A32E;
+	Sat, 14 Nov 2026 13:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ou0we7Sp
-Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1a2af4c8cbaso669c88.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 05:22:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794662531; x=1795267331; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mr8KrDnzXuL95QpOwferNfI2WjvgEHCDBjvr34Rp5qY=;
-        b=Ou0we7SpIwUt6oK3wYbaGcGxTp6O9oPptV4MzvM3uJUBl0B1IKDIOJaOSjWzqvS+Sd
-         frITv+vj6MBcNYcKdbKH5Oifod5SJ8hUJv0QwOX/dEOSMVvorBkNTuF8oHnWwvEZdXzI
-         z/xvLgcZh/5+BYLXoeMjmSCY81qyzk4M+RMCxhtQtWrBR+WPsPBX02eciAgm90q++iBN
-         pg6yvY9qapkupzgSIufJOg44OREoqPJ7W01Pq6gwKBTE9VsGfS3GFg09Xu77KA0XZsGA
-         df7/QPm5iR4r7O+dEXk1tBNjxmQLSxIpa/FA/MPsKx5LP0aNuEHH86ZaCUp8BTgh2Dyl
-         0dlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794662531; x=1795267331;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mr8KrDnzXuL95QpOwferNfI2WjvgEHCDBjvr34Rp5qY=;
-        b=vLbUIqAkNfGdDe3oGD+oa0Xa1jPxjtq94soyxiyVBDC18oZUEU29+uDHHJDetmffsJ
-         Rf4d3zV4ZBTwvE6ztjNTDa57/jvAxiGdBA6foLs31dmjWwqLFR+5OJEmWhACv2k29Ugf
-         xJISwPmp2l0Vl1HWHpjEE8KJ/q/ODIVEIfDxuzc8rFbqxyQkD2aZ5ghVj2L1trqKoLE+
-         yeM3silVz71gT88B0pliryL6VjuPfgxfMQ5X00t4CuFgGo73gFtAFJPTa8lmUVxeeVE4
-         kch3OFJdXypZLH9WRjX0wHh/r9/0sAj3GytItk0UIR5WY6W0noFm3OQ/X9lonnnKgs6W
-         HFJg==
-X-Forwarded-Encrypted: i=1; AL+hErFXjUKLmrjByyAjjVUUV/uQhbd0GGW/XyLClhZ4BTeJztCCtNvjQbWcm6fP42sjW2V5MZtS/ZTxWPmR/k4+7KY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+W48CCZb/bd3kWTaOxv0haxm6J835C/+8ldXCxSjUzq8Ynpcjc
-	MnJs1eexPpdE2tWKFkiAM3/LcPyhsrA+1EFMdWZwq3iEyn2ye/Rkuz5T41VJbCiswCOJGW3Ov4i
-	7tqLK7FaNrszSiCtL7XsuBQ==
-X-Received: from dyad23.prod.google.com ([2002:a05:693c:8357:b0:369:7ef0:57b0])
- (user=aaronlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:701b:2912:b0:1b2:490b:6fdd with SMTP id a92af1059eb24-1b5030ad368mr5481397c88.24.1794662530894;
- Sat, 14 Nov 2026 05:22:10 -0800 (PST)
-Date: Sat, 14 Nov 2026 13:22:00 +0000
-In-Reply-To: <20261114132200.113697-1-aaronlewis@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gm28Ha6j
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8EC1F000C4;
+	Sat, 14 Nov 2026 13:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794664496;
+	bh=I6J+1H3vQpLdJ7UVpJ/tC85ye3HYuCATNIJGMbrXQJM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=gm28Ha6jFbZAVZELeCoAiv8yQmKhg2t27IzqaM5E6DHf1m/iHwaa05oOee2NvjSBl
+	 kc6ZaW7X7pNIXQAoh9xnp9MBMni3b8MRxZdEx/eTPDoUQsu/YruOICy0eelWOEyqgn
+	 3P8g8niOi/8NoL9V5UYuZAEp6DyvrAtH4YeuzU3fc3guDfP87KZmI3TI0lTfqozu4+
+	 ZpGn4biS09ByqImLH4ZYYUNpv6w1MO+E82dAPetup0Rc/sR/ssg0FbIV+aiwW6MIcv
+	 EBQr5L1AgJXIgzU68vHxaHLJx8/fkvXF+Z3xx/GTGkbG1HInFcXsLmVQOWzwu1EgJY
+	 hMWqsgyXoIXvw==
+Content-Type: multipart/mixed; boundary="===============4078380530865713043=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,262 +48,70 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261114132200.113697-1-aaronlewis@google.com>
-X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
-Message-ID: <20261114132200.113697-6-aaronlewis@google.com>
-Subject: [PATCH v4 5/5] vfio: selftests: Allow a size for vfio_dma_mapping_perf_test
-From: Aaron Lewis <aaronlewis@google.com>
-To: kvm@vger.kernel.org
-Cc: alex@shazbot.org, dmatlack@google.com, jgg@nvidia.com, 
-	Aaron Lewis <aaronlewis@google.com>, Kees Cook <kees@kernel.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <bf4a6d1a8af90f3fac8754638a5f9b02fb40c0a066237181d456a25ac7f2c606@mail.kernel.org>
+In-Reply-To: <20261114-work-loop-pseudo-v2-4-98639a2286fb@kernel.org>
+References: <20261114-work-loop-pseudo-v2-4-98639a2286fb@kernel.org>
+Subject: Re: [PATCH RFC v2 04/42] fs: add SB_I_PSEUDO
+From: bot+bpf-ci@kernel.org
+To: brauner@kernel.org,linux-fsdevel@vger.kernel.org
+Cc: jannh@google.com,mason@kernel.org,josef@toxicpanda.com,hch@lst.de,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,linux-nvme@lists.infradead.org,viro@zeniv.linux.org.uk,jack@suse.cz,linux-scsi@vger.kernel.org,target-devel@vger.kernel.org,driver-core@lists.linux.dev,linux-mm@kvack.org,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,selinux@vger.kernel.org,apparmor@lists.ubuntu.com,linux-nfs@vger.kernel.org,netdev@vger.kernel.org,fuse-devel@lists.linux.dev,linux-efi@vger.kernel.org,xen-devel@lists.xenproject.org,ocfs2-devel@lists.linux.dev,linux-s390@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-usb@vger.kernel.org,amir73il@gmail.com,linux-erofs@lists.ozlabs.org,linux-kselftest@vger.kernel.org,brauner@kernel.org,alex@amutable.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 14 Nov 2026 13:54:52 +0000 (UTC)
 
-Allow the user to specify a DMA region size via the command line for
-vfio_dma_mapping_perf_test.
+--===============4078380530865713043==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Use test_harness_run_opts() to introduce a '-b' option to specify the
-DMA region size so that both the test size and test harness options can
-be passed together naturally:
+> fs: add SB_I_PSEUDO
 
-  ./vfio_dma_mapping_perf_test -b 16G -v vfio_type1_iommu_anonymous_hugetlb_1gb
+TL;DR: Nit only: the fc_init_pseudo() comment and commit message claim pseudo
+filesystems never hold device nodes, but devpts and binderfs do and must clear
+SB_I_NODEV; the wording could mislead.
 
-Signed-off-by: Aaron Lewis <aaronlewis@google.com>
+> diff --git a/include/linux/pseudo_fs.h b/include/linux/pseudo_fs.h
+> --- a/include/linux/pseudo_fs.h
+> +++ b/include/linux/pseudo_fs.h
+
+[ ... ]
+
+> +/*
+> + * Common initialization for all pseudo filesystems, mountable or not. Their
+> + * regular files are kernel interfaces. They don't store data and pseudo
+> + * filesystems never hold executables or device nodes.
+> + */
+> +static inline void fc_init_pseudo(struct fs_context *fc)
+> +{
+> +	fc->s_iflags |= SB_I_PSEUDO | SB_I_NOEXEC | SB_I_NODEV;
+> +}
+
+This isn't a bug, but is it accurate that pseudo filesystems "never hold
+executables or device nodes"?  The same wording is in the commit message.
+
+devpts creates character device inodes in devpts_pty_new():
+
+    init_special_inode(inode, S_IFCHR|opts->mode,
+                       MKDEV(UNIX98_PTY_SLAVE_MAJOR, index));
+
+and binderfs does the same with init_special_inode(inode, S_IFCHR | 0600,
+...).  Both filesystems are converted to fc_init_pseudo() later in the
+series, and both have to undo the flag in their fill_super callbacks:
+
+    s->s_iflags &= ~SB_I_NODEV;
+
+This works because sget_fc() ORs fc->s_iflags into sb->s_iflags before
+fill_super runs.  A filesystem that has device nodes and relies on this
+comment would not know it needs to clear SB_I_NODEV, and its device nodes
+would fail to open with -EACCES from may_open_dev().
+
+Could the comment say that SB_I_NODEV is the default and that pseudo
+filesystems with device nodes must clear it in fill_super, or could "never
+... device nodes" be dropped?
+
+
 ---
- .../vfio/vfio_dma_mapping_perf_test.c         | 144 ++++++++++++++----
- 1 file changed, 117 insertions(+), 27 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_perf_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_perf_test.c
-index 086a63a50df8..6e38cc134a49 100644
---- a/tools/testing/selftests/vfio/vfio_dma_mapping_perf_test.c
-+++ b/tools/testing/selftests/vfio/vfio_dma_mapping_perf_test.c
-@@ -1,10 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+#include <ctype.h>
- #include <limits.h>
- #include <stdio.h>
- #include <sys/mman.h>
- #include <time.h>
- #include <unistd.h>
- 
-+#include <linux/align.h>
- #include <linux/iommufd.h>
- #include <linux/limits.h>
- #include <linux/memfd.h>
-@@ -17,7 +19,81 @@
- 
- #include "kselftest_harness.h"
- 
--static const char *device_bdf;
-+static struct {
-+	u64 size;
-+	const char *size_str;
-+	const char *device_bdf;
-+} test_params = {
-+	.size = SZ_1G,
-+	.size_str = "1G",
-+};
-+
-+/*
-+ * Parses "[0-9]+[kmgt]?".
-+ */
-+static u64 parse_size(const char *size)
-+{
-+	int shift = 0;
-+	char *scale;
-+	u64 base;
-+
-+	VFIO_ASSERT_TRUE(size && isdigit(size[0]),
-+			 "Need at least one digit in '%s'.", size);
-+
-+	base = strtoull(size, &scale, 0);
-+
-+	VFIO_ASSERT_GT(base, 0, "Size must be greater than 0!");
-+	VFIO_ASSERT_TRUE(base != ULLONG_MAX, "Overflow parsing size!");
-+
-+	switch (tolower(*scale)) {
-+	case 't':
-+		shift = 40;
-+		break;
-+	case 'g':
-+		shift = 30;
-+		break;
-+	case 'm':
-+		shift = 20;
-+		break;
-+	case 'k':
-+		shift = 10;
-+		break;
-+	case 'b':
-+	case '\0':
-+		shift = 0;
-+		break;
-+	default:
-+		VFIO_FAIL("Unknown size letter '%c'.", *scale);
-+	}
-+
-+	VFIO_ASSERT_TRUE((base << shift) >> shift == base,
-+			 "Overflow scaling size!");
-+
-+	return base << shift;
-+}
-+
-+static void opts_help(void)
-+{
-+	fprintf(stderr,
-+		"\t-b bytes Specify the size of the DMA region to be mapped\n"
-+		"\t         and unmapped. e.g. 16M or 8G, (default: 1G)\n");
-+}
-+
-+static int opts_handler(int opt, char *optarg)
-+{
-+	if (opt == 'b') {
-+		test_params.size = parse_size(optarg);
-+		test_params.size_str = optarg;
-+		return KSFT_PASS;
-+	}
-+	return KSFT_FAIL;
-+}
-+
-+static const struct test_harness_cli_opts opts = {
-+	.optstring = "b:",
-+	.handler = opts_handler,
-+	.help = opts_help,
-+};
- 
- FIXTURE(vfio_dma_mapping_perf_test) {
- 	struct iommu *iommu;
-@@ -27,25 +103,27 @@ FIXTURE(vfio_dma_mapping_perf_test) {
- 
- FIXTURE_VARIANT(vfio_dma_mapping_perf_test) {
- 	const char *iommu_mode;
-+	u64 page_size;
- 	int mmap_flags;
- };
- 
--#define FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode, _name, _mmap_flags)		  \
--FIXTURE_VARIANT_ADD(vfio_dma_mapping_perf_test, _iommu_mode ## _ ## _name) {	  \
--	.iommu_mode = #_iommu_mode,						  \
--	.mmap_flags = MAP_ANONYMOUS | MAP_PRIVATE | MAP_POPULATE | (_mmap_flags), \
-+#define FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode, _name, _page_size, _mmap_flags) \
-+FIXTURE_VARIANT_ADD(vfio_dma_mapping_perf_test, _iommu_mode ## _ ## _name) {	    \
-+	.iommu_mode = #_iommu_mode,						    \
-+	.page_size = (_page_size),						    \
-+	.mmap_flags = MAP_ANONYMOUS | MAP_PRIVATE | MAP_POPULATE | (_mmap_flags),   \
- }
- 
--FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous, 0);
--FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_2mb, MAP_HUGETLB | MAP_HUGE_2MB);
--FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_1gb, MAP_HUGETLB | MAP_HUGE_1GB);
-+FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous, 0, 0);
-+FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_2mb, SZ_2M, MAP_HUGETLB | MAP_HUGE_2MB);
-+FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_1gb, SZ_1G, MAP_HUGETLB | MAP_HUGE_1GB);
- 
- #undef FIXTURE_VARIANT_ADD_IOMMU_MODE
- 
- FIXTURE_SETUP(vfio_dma_mapping_perf_test)
- {
- 	self->iommu = iommu_init(variant->iommu_mode);
--	self->device = vfio_pci_device_init(device_bdf, self->iommu);
-+	self->device = vfio_pci_device_init(test_params.device_bdf, self->iommu);
- 	self->iova_allocator = iova_allocator_init(self->iommu);
- }
- 
-@@ -58,11 +136,16 @@ FIXTURE_TEARDOWN(vfio_dma_mapping_perf_test)
- 
- TEST_F(vfio_dma_mapping_perf_test, dma_map_unmap)
- {
--	const u64 size = SZ_1G;
-+	const u64 page_size = variant->page_size ?: getpagesize();
-+	const u64 size = test_params.size;
- 	const int flags = variant->mmap_flags;
- 	struct dma_region region;
- 
--	ksft_print_msg("mmap size = %lluG\n", (unsigned long long)(size / SZ_1G));
-+	if (!IS_ALIGNED(size, page_size))
-+		SKIP(return, "Size 0x%llx is not aligned to page size 0x%llx",
-+		     (unsigned long long)size, (unsigned long long)page_size);
-+
-+	ksft_print_msg("mmap size = %s\n", test_params.size_str);
- 
- 	TIME("mmap",
- 	     region.vaddr = mmap(NULL, size, PROT_READ | PROT_WRITE, flags, -1, 0));
-@@ -90,30 +173,32 @@ FIXTURE(vfio_dma_mapping_perf_memfd_test) {
- };
- 
- FIXTURE_VARIANT(vfio_dma_mapping_perf_memfd_test) {
-+	u64 page_size;
- 	int mmap_flags;
- 	int memfd_flags;
- };
- 
--#define FIXTURE_VARIANT_ADD_MEMFD_MODE(_name, _mmap_flags, _memfd_flags)      \
--FIXTURE_VARIANT_ADD(vfio_dma_mapping_perf_memfd_test, iommufd ## _ ## _name) {\
--	.mmap_flags = MAP_SHARED | MAP_POPULATE | (_mmap_flags),	      \
--	.memfd_flags = (_memfd_flags),					      \
-+#define FIXTURE_VARIANT_ADD_MEMFD_MODE(_name, _page_size, _mmap_flags, _memfd_flags) \
-+FIXTURE_VARIANT_ADD(vfio_dma_mapping_perf_memfd_test, iommufd ## _ ## _name) {	     \
-+	.page_size = (_page_size),						     \
-+	.mmap_flags = MAP_SHARED | MAP_POPULATE | (_mmap_flags),		     \
-+	.memfd_flags = (_memfd_flags),						     \
- }
- 
--FIXTURE_VARIANT_ADD_MEMFD_MODE(memfd, 0, 0);
--FIXTURE_VARIANT_ADD_MEMFD_MODE(memfd_hugetlb_2mb,
--				    MAP_HUGETLB | MAP_HUGE_2MB,
--				    MFD_HUGETLB | MFD_HUGE_2MB);
--FIXTURE_VARIANT_ADD_MEMFD_MODE(memfd_hugetlb_1gb,
--				    MAP_HUGETLB | MAP_HUGE_1GB,
--				    MFD_HUGETLB | MFD_HUGE_1GB);
-+FIXTURE_VARIANT_ADD_MEMFD_MODE(memfd, 0, 0, 0);
-+FIXTURE_VARIANT_ADD_MEMFD_MODE(memfd_hugetlb_2mb, SZ_2M,
-+			       MAP_HUGETLB | MAP_HUGE_2MB,
-+			       MFD_HUGETLB | MFD_HUGE_2MB);
-+FIXTURE_VARIANT_ADD_MEMFD_MODE(memfd_hugetlb_1gb, SZ_1G,
-+			       MAP_HUGETLB | MAP_HUGE_1GB,
-+			       MFD_HUGETLB | MFD_HUGE_1GB);
- 
- #undef FIXTURE_VARIANT_ADD_MEMFD_MODE
- 
- FIXTURE_SETUP(vfio_dma_mapping_perf_memfd_test)
- {
- 	self->iommu = iommu_init(MODE_IOMMUFD);
--	self->device = vfio_pci_device_init(device_bdf, self->iommu);
-+	self->device = vfio_pci_device_init(test_params.device_bdf, self->iommu);
- 	self->iova_allocator = iova_allocator_init(self->iommu);
- }
- 
-@@ -154,12 +239,17 @@ static void teardown_memfd(int fd, u64 size, void *vaddr)
- 
- TEST_F(vfio_dma_mapping_perf_memfd_test, dma_map_unmap_from_file)
- {
--	const u64 size = SZ_1G;
-+	const u64 page_size = variant->page_size ?: getpagesize();
-+	const u64 size = test_params.size;
- 	const int mmap_flags = variant->mmap_flags;
- 	struct dma_region region;
- 	int fd;
- 
--	ksft_print_msg("mmap size = %lluG\n", (unsigned long long)(size / SZ_1G));
-+	if (!IS_ALIGNED(size, page_size))
-+		SKIP(return, "Size 0x%llx is not aligned to page size 0x%llx",
-+		     (unsigned long long)size, (unsigned long long)page_size);
-+
-+	ksft_print_msg("mmap size = %s\n", test_params.size_str);
- 
- 	region.vaddr = setup_memfd(&fd, size, mmap_flags, variant->memfd_flags);
- 
-@@ -184,6 +274,6 @@ TEST_F(vfio_dma_mapping_perf_memfd_test, dma_map_unmap_from_file)
- 
- int main(int argc, char *argv[])
- {
--	device_bdf = vfio_selftests_get_bdf(&argc, argv);
--	return test_harness_run(argc, argv);
-+	test_params.device_bdf = vfio_selftests_get_bdf(&argc, argv);
-+	return test_harness_run_opts(argc, argv, &opts);
- }
--- 
-2.56.0.611.g1030f0b940-goog
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43599461726
+--===============4078380530865713043==--
