@@ -1,100 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794639494;
-	b=VKNrnvmeTjQVfioTP4nWGQ7Tl5amPaAkGOZ0JoSmGXltuYh0+iwLbawB/wKW7CQlLk0t
-	 KYwVZ/Py9t2/srau26O8WJhI8wkp5lc2Ik0TzWaR7y6t375axLWgSwdl9q3i22fXaqx66
-	 QzjKkCFkTrBrR/q9zT+saySUKrjBg/3zXr8rr9VN1r2NOjnM2F9q/QfDgqR3ODlmpeKh2
-	 C4ZLT+J8+mgxgy8LCEKfpFa9qUuq1c/xo0QB6qyal1TWMf4awxWUuRdrtCk6Kod2PGppw
-	 RV40u6CmvtWxPLW82XA6qgkgXIjl1L/0decC7RyCGtuVzOFo61lqM1sUgh1CQLAsMDg==
+	t=1794641316;
+	b=qbR9IigvfIHo2uvdOpjlVB3VLW1TYVaCCWUDMFIRzdv+tN7jW21zCMk8ImBA0RHtn5pO
+	 T4fLrQ0qMbXH16h/d05bu+tEW3mMPToUlYl8x8vyCNMTYsX/Yhj8qhmRFBpRUY5+i1bvt
+	 dLgg8taQw3w7uneQC25vJVRzylJvYgjtANv4TCZ1IAoNJ1aHO8hcO/gV2EP3W4j6t25W6
+	 mys2SLTDd8F5ezdmVz0ziadQC3EAggoiY8aGu304t0EnNsEhWPdpJC0iHzj06y2fBRCQT
+	 LWrX9fVSjHAFubVBPXe72UUSAlZugOm85tVhw8VbkrYLD2Aq6Kq02rI9EYO6MtkT66A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794639494;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794641316;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=ERt19hwTl9KdBsm8dTCky9arS4UpYC33CQITUvUy7Fc=;
-	b=2ai4p/pP7xyYj0AkqZqoCqAiWObTVPKLUpsNm93lPyrFZp/lQa5GWeMYGpOSxzpNo7Zy
-	 MbhofMg2vwMDBLIHtv6BPbUv3EcrBhBbjWb7Ao1GXf5fNviJr5pcmU5d2ulwwG+WeUUiy
-	 AHy39el7tuBKREGh5p3HB50D/MPHxJuf8Ah3VbtTjqdzLqtHJLlVdoebCtxb9UrSQcBff
-	 yUjAiwJBbcOPOZtcnVGJ6s24F7fWtUlQEhBTXSbqmCcJbQIuaUhaLTC27Y9e4cx30Szdl
-	 izHwd68KOK9R80pKRQKmelmlhuv0g8Akg2MWBob92h65jjAv00BxHgeB9h2kZJU+yVg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=ZUmq/AHkNakT7HaOv5RMPiqqshA3T3BUppFdjgJH3H8=;
+	b=d06VyYElwrdoomquqcawH8JIJ4ctkUnXa2eYDH1V55HVJw+CG4mVxjFH8OZMHEaaAdRy
+	 j0Q0J6dSQgDsgdaTnvwZdmiBUTmT0tCpDsyGGlDr/wm17b57ikZViyX9GMPPcogjQ3EiK
+	 cZoGVgpdIxUBNcP81uERAAxcUbhpl8GR08SP9sKoI38USOuI+CABicXcGmSgzUS383w3o
+	 7QUl4ZAHBrBeMuJ2lg8JBoK8P2a7OOofHEzZV/N1GPBk1qRuii0I8DVIPY0mneaqesfij
+	 oKiHQa2d8FrmqYa9Kd4fm8ElqlxTO3sIDsz+WMs8LSJNHk4P+FxvKFzf5bu72ocaltQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q4ky18Nh;
-	arc=none smtp.remote-ip=74.125.82.180
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JphWNBTa;
+	arc=none smtp.remote-ip=209.85.216.72
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DE2606A329
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 06:58:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34DE2606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC9C606A327
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 07:28:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BC9C606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q4ky18Nh
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-3282db206d3so5111264eec.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:58:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JphWNBTa
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3b0ac277beaso1490021a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 23:28:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794639493; x=1795244293; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ERt19hwTl9KdBsm8dTCky9arS4UpYC33CQITUvUy7Fc=;
-        b=Q4ky18Nh1X8Ybygkod2Uz/LMgNUzOU1R7JirxOS/qz5/CiwuXEODFxK5G7qD7NNoM2
-         UyTrfz5mlPvT35Fh3pji9fQnBQi8b+PP+cNJAV/Y7ihbtr2FEpMGjyB7J86f1E5ksS4r
-         xwI0rvjqsxJp6Y0kxt4OxItj3wyXUUW7MM5tLSEzUNb+vcf/IdplHYubJ6EHmkLHIwGl
-         Lh15DuNLqLHVCeorrxXLnBPMogKUll/vopmmAPaz+0sLF4guJxZao78fSLFhMmvr4lTR
-         7p8QdqImrg7KPKl9Zy9oF6UJfCmcggeH9MzGj8dLDW78rls/BP4ZbIBi5CHv8ovAFtRv
-         eS/w==
+        d=google.com; s=20260707; t=1794641315; x=1795246115; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZUmq/AHkNakT7HaOv5RMPiqqshA3T3BUppFdjgJH3H8=;
+        b=JphWNBTa0MysOtfljwluIzxQpgBb4srmXPAiYuHn+LD9l6dGRPGc4Ir5+ckJVNh4v0
+         Vj8vRMyPfD+lrJexHDsG9k11M2w+pz7t6ONU3FgC0Ry58L2Oen1OsVKDt0x0QSN43PQs
+         i01ig1PN0a6kNaUNhXV6plrJumm5YXmwmXbkW/7Hx0b2bVEG5cgU50QF0m3KMJ4FMExd
+         A8SVuSw/6TEDNm9OpLnyH4GRHbEv3p51UNqesePVDGs5wYWzPZxQjuLKB0wHj4kQ0NwH
+         jRzb0HwYWNzM8e2aQzHBiAF4koJHzT7scHHKBYsP/5lWAdQOeJ+bFqKkx91yyyKzIyO0
+         CBJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794639493; x=1795244293;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1794641315; x=1795246115;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ERt19hwTl9KdBsm8dTCky9arS4UpYC33CQITUvUy7Fc=;
-        b=NtWwc98gU1R91M5VA5hqBuhmQI331gd5vnU1UBLLAqSP6QIyaceTo03cp+G95RsCcx
-         qB9hWWVcSFsJLDaghwIi3jmQdbZgw3lwWnABdTspmen/NtzGn9xtJTpyljhvpDvfZmtx
-         Z4V5n12ZzrhgYyQ5O/OV2Rx+RlzCykjmwb8IwOjdZNWRiA8qjJEXAJh2v2GugcMjR62l
-         pL2MdW9beGmiL1yggqg2ixjMCpTLGziDD1hSg5hGXfRov/Inrp7UJiKBSoGA6nYRSOP8
-         YbIp4GJ/KLqCh1nRhJSO5yWAFjFfQxdeO1WkQkGpR70e2IpkSX2xwL5JGItSzJbgOret
-         YjGg==
-X-Forwarded-Encrypted: i=1; AL+hErFnrAPYoVeVqhDjiuQAOSKlaJSSw/QOen1ZhwBcseBW3CMmZRNp9u50PjEaGJjBaE7GRGuQkjFE303uCxTeDSs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/iHXKnZ14oMiw6u0kD/TBPp/q7OhHn9GmtikkzgrJbJS5q5RaS
-	+CDZEKgHInvEtp/8/q6dYF775sW3791Oj0U+kdiQQwbG79e/S9+WSprl
-X-Gm-Gg: AYBFou1585aK7VEU0GX2Ej6Vzan4JZFCHvcQDVkrP7eoMUpG5kC4dkph1SJeZ8P7Ok6
-	UtR/B+CX6PSytUV6m1ta0Zl7UAtcr6xFhWOM1BUeDFKx1ugUTPM6HAvPqjm4kFyj+Ify5QLhTB2
-	5FEBsL19GDTYbP3y+u7lOaC+wc/474skTZjslH66pvQSE3qaU9Y29vV1Tz4wObBy2SQzd7sMAkO
-	LzxylE2IV40ibnsVx9YCKMLyWAYkjcr2dr9zJOwQt4UGVaq9i0Yxo2mter6opB74o15uyiu1HTs
-	sDOViPKm3ZnOw6Dr4Iw47NjLt8CqwHJI8CnnQEJNkSY8TN1ser7U528JOAuSfRccyDQpdc9R4PT
-	5d0/uTL1e/GyyoXxyqDT/VtU6wtMBenQdJEXcg1Bgrbs8IIqiCILvi5LSTAkGLLCcA7LiAXnj7/
-	EysvmyP0NUcDr+HrFg97y5YqJVzWgublDrSUO2ZX0R5oojp5mfg29FsCMVeL9ZyQO+hGL6/5jyW
-	f1ArPaAn0gxJMfo/J7FyPmqHPA7y9cnT6SNrFE+EmXlyKQLhOvzKECD+40zQKmMePCnIUyaGoLx
-	LkX0dGtdITpwW4XBOsD8Cesik9/JBt3iBcx6zweD74wZ
-X-Received: by 2002:a05:7301:a4:b0:378:b1be:2d3e with SMTP id 5a478bee46e88-37967ae558emr4824571eec.32.1794639493190;
-        Fri, 13 Nov 2026 22:58:13 -0800 (PST)
-Received: from LAPTOP-G6J9COQB.lan ([182.253.124.115])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379560f5e06sm17823905eec.19.2026.11.13.22.58.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2026 22:58:12 -0800 (PST)
-From: Ahmad Wicaksono <supersonix03@gmail.com>
-To: bpf@vger.kernel.org
-Cc: emil@etsalapatis.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Ahmad Wicaksono <supersonix03@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Remove accidentally committed default.profraw
-Date: Sat, 14 Nov 2026 13:57:59 +0700
-Message-ID: <20261114065759.46263-1-supersonix03@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=ZUmq/AHkNakT7HaOv5RMPiqqshA3T3BUppFdjgJH3H8=;
+        b=faMSmA8wV/ox56NUfEjYVaWqXKb1iScousxvFhaY00QAxfQc+VRhjGi9t9++Uz2pqo
+         QwkuS5HTeREvLc8/J2WZi8bWm222fSiJJubfLE4EwOKHdLBWrEnppWgMVLCHBVpNp48b
+         XHQyxTPPeURbX9F9qvWKniG2FtQZEZxlYmr1lV3rwFu9cwgJqxPFjK0ECksiFfV8elmZ
+         lj7cwh3pAb6QyB1LVWWBIsEGNOZGF/ROJFaDVvHmTTh5m7NJ9o1FhjTJewC1ar5pXP5p
+         Grpw6gKvWrCz3y/JFMkUadsg9DwmDJZAPy2RhmLtvMPP0k30Ky3ci/mF/Ul1r345xoRs
+         NJPg==
+X-Forwarded-Encrypted: i=1; AL+hErE/7roqWYnBrPTaaYUoPItBf9YO0yQmYdVx3KzVCEY/NjI9e+bzGlNWMpSLj5X978M8CCmBVlHIV9errQarNAA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Rk2qOzOWq5kpSd7SAw0w7IXUIFKoYXGNQUra8NdJ5+JqmZ3dL
+	Qkb1FsJxGfWI5iHYYkzdbZen1HgeTQt5NDVIGrR4B88xdCCb8BZwmrDZIUxmDaR6XyC3xylYWur
+	csXmZmA==
+X-Received: from pjbbu21.prod.google.com ([2002:a17:90a:ee55:b0:3a7:d1df:7b34])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:35c6:b0:3b0:e2a9:345a
+ with SMTP id 98e67ed59e1d1-3b1b0b9b782mr4266092a91.64.1794641314735; Fri, 13
+ Nov 2026 23:28:34 -0800 (PST)
+Date: Sat, 14 Nov 2026 07:28:34 +0000
+In-Reply-To: <20261111174704.24312-2-juanagusnicco@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -103,59 +77,49 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20261111174704.24312-1-juanagusnicco@gmail.com> <20261111174704.24312-2-juanagusnicco@gmail.com>
+Message-ID: <avgNl96dmc23KOrW@google.com>
+Subject: Re: [PATCH net v2 1/2] tcp: Fix the SO_REUSEPORT bind cache admitting
+ a conflicting socket
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Juan Agustin Niccolini <juanagusnicco@gmail.com>
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, ncardwell@google.com, 
+	josef@toxicpanda.com, jbacik@fb.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-default.profraw is a 160-byte LLVM raw profile data file ("LLVM raw
-profile data, version 10") that was committed by accident in commit
-86426a28c52d ("selftests/bpf: Add buddy allocator for libarena"), whose
-other five files are all libarena sources. It is output produced by
-running a clang-instrumented binary, not source, and nothing in the tree
-builds, reads or references it.
+On Wed, 11 Nov 2026 12:47:03 -0500, Juan Agustin Niccolini wrote:
+> When the port is in the FASTREUSEPORT_STRICT state, inet_csk_get_port()
+> skips the bind conflict check if sk_reuseport_match() finds the new
+> socket's address covered by the socket cached in tb->fast_*.
+> 
+> This is only safe if both sockets match on everything
+> inet_bind_conflict() reads. The cache misses some of it:
+> 
+> - It does not record sk_bound_dev_if or sk_reuse.
+> - It records the family and IPV6_V6ONLY but never compares them with
+>   the new socket, so a cached v6only [::] (or 0.0.0.0) socket covers
+>   a dual-stack [::] socket.
+> 
+> As a result, an unprivileged user can bind and listen on a port that
+> another user is listening on, for example a dual-stack [::] socket on
+> top of a 0.0.0.0 listener:
+> 
+>   victim:   bind(0.0.0.0:P), listen()
+>   attacker: SO_REUSEPORT + IPV6_V6ONLY, bind([::]:P)   /* fills cache */
+>   attacker: SO_REUSEPORT, bind([::]:P), listen()       /* should fail */
+> 
+> Only take the fast path when the new socket matches the cached one in
+> family, IPV6_V6ONLY, bound device and SO_REUSEADDR. Identical
+> SO_REUSEPORT listeners, the workload this cache was added for, still
+> skip the scan (binding 16384 of them: 9.80 ms before, 9.86 ms after,
+> 5874 ms with the full check every time).
+> 
+> Fixes: 637bc8bbe6c0 ("inet: reset tb->fastreuseport when adding a reuseport sk")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Juan Agustin Niccolini <juanagusnicco@gmail.com>
 
-Delete the file and add *.profraw to the BPF selftests .gitignore so
-that stray profiles are not committed again.
-
-Fixes: 86426a28c52d ("selftests/bpf: Add buddy allocator for libarena")
-Signed-off-by: Ahmad Wicaksono <supersonix03@gmail.com>
----
-An AI coding assistant (Claude, via Claude Code) was used to find this
-file and draft the changelog, per
-Documentation/process/generated-content.rst.
-
-Not runtime-tested: the patch deletes an unused build artifact and adds
-a .gitignore entry, so there is nothing to execute.
-
- tools/testing/selftests/bpf/.gitignore      |   1 +
- tools/testing/selftests/bpf/default.profraw | Bin 160 -> 0 bytes
- 2 files changed, 1 insertion(+)
- delete mode 100644 tools/testing/selftests/bpf/default.profraw
-
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index e318a38035d..2a7756b7226 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -36,6 +36,7 @@ test_cpp
- /uprobe_multi
- *.ko
- *.tmp
-+*.profraw
- xdp_redirect_multi
- xdp_synproxy
- xdp_features
-diff --git a/tools/testing/selftests/bpf/default.profraw b/tools/testing/selftests/bpf/default.profraw
-deleted file mode 100644
-index e865e87829f8662aa272b0d0ca779c890dd26a70..0000000000000000000000000000000000000000
-GIT binary patch
-literal 0
-HcmV?d00001
-
-literal 160
-zcmZoHO3N=Q$obF3009b6n${E()B+JGExb|ZcYWo}X~!y4U)Rnyov5~~E)paK05RPT
-AxBvhE
-
-
-base-commit: 1440a14a7ed58d5fbc3b9170b68fc977939b4985
--- 
-2.43.0
-
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
