@@ -1,45 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794627149;
-	b=ikjof5ip8ODU3L2hGolAqjpOhn3JQ9MlG+HiIOHvRjf71Ddmv45F1PbaQVHcgrpmhE+C
-	 fb0zNnNTt3XJv6LyG9KephGOV7ZYtaKAQILrm7embcfrl9iPRpoX7/0TPiWbiWW4EJhQS
-	 WLnRTWX1TNa/dSRd8jdKY5WJeK/hCBoP0e8bFxmsUJs+bWfjMGFXYSluLlBXiYAxNcoYI
-	 Vq8d/RwUY5DzRcWt8vkJOledQyoNX88qSfJDi2ZXTtIIIuCRgakwDo8QmU9Z8nkFld5Yb
-	 PyauHJhbP2pUcVowZllcBNnl0VP1GK5BdDQBCuqOZimXykVChK1mH0JVjsfDbWY3clQ==
+	t=1794636891;
+	b=Cl4EJ8X8N65Ldpgs0b9bSgNprUkn+dBbgHe41EwE/yQ6J92BKxGsrniixp1iBu2OOeNJ
+	 fPcudOpSuBP9tM6dmaFi7EB+50ngEG10RbGuDFF9F8yh32v057fB+xGBvpWAID+yY18E+
+	 UDLd78W2lxwKDjgR2aNyZld/7sBBGcygaTGJ7Inl7PlWMTcm/3ve2OkCm6EYaGTvc8pvQ
+	 XixFyPUq9U+Ltv3eP/gGFjB8NOYMSO7TADSemXQ4CF76QZYhrn2O4HajqK48s95BH9u1o
+	 WfhhK0y3YGRGndi4xNo4MiOI683a16DjAhT9rehftIqGl6ztVakFYwVuTsCUD8OgEdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794627149;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=hZ/+DLpUIlcbirEPmqeVlKHp9sAsvUE1CUbfS01vK7I=;
-	b=2FSf8QcY6erjWA9bYYaDd2UmRYsglAP4eouYhd+bxmSVYRp99H9zW5GQLShV4yWoqbh2
-	 w+BM+OmU4EJFchMR6451Vf4+QxPNgF5ODWGLbF1o/gUgI09ztdYJQTpwMqBjLKxviqnNU
-	 0HGfHP+ivsR2dSWSztRmK/LvyD5oPnQHsYQCzrt6sVCqC4Fv1JWfyaYXYoBe8aCeNr/l3
-	 5kiEQGOGHphOfy9cOP1N5I2XDLfxMQ0ZfHnaQgbU7NUAW9ZLZSBBRKy2uNCavGHpqdeAC
-	 IVUKrAdSQG6sgtujkM/bJQEneNEzq7AUNvOYLkft/5Jc4mxb6S7cAQDI1KzyPJPJe2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794636891;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=rcRT1KXRxMVMkbqC0U3OtsyJos+rmMAQkFnzvfRCjWY=;
+	b=LZOyRbFOGqIt4v0T7qT6ezA1QGqVsqPDr/aDdcOJ5mn0Jzjb3PuHb229bOQDXqMAVM8k
+	 h7RlS1zOhviWdGSND2gmvKjB8weGG7VRceS9BWUAT/mFKQZPhDMOiVPQUplBX0/f233hc
+	 ON+WE7+KC7dEULNmIxwm2jqvMJePnQ3HYpZ1GgiTP8xZhMxUF9hDRROveeT7Ffo/xwgX9
+	 saesdmCvltcCk0R5zVOwzPUepR//wHnk2Gvig+fAa1Eu1vLaSeIX/DQDikOYlA9tYN8AH
+	 nJeum6Nk8/nwCbtbSijnuFHqAXTWB9Rqxpn+CwmBP4aAqye4Ncf0r7ET8R2p7ZQzfNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="fSpHT/5Y";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AAXItUB6;
+	arc=none smtp.remote-ip=209.85.210.200
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D07606A898;
-	Sat, 14 Nov 2026 03:32:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AD1606A330
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 06:14:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74AD1606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fSpHT/5Y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EC11F000C4;
-	Sat, 14 Nov 2026 03:32:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794627149;
-	bh=hZ/+DLpUIlcbirEPmqeVlKHp9sAsvUE1CUbfS01vK7I=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fSpHT/5YlKnVLQuflwMsI4ithJsCcCowAQeNfKXQn68pyvBjpKOneHjq/7tzigdU/
-	 fBYUSuvX8vs6XD0Sn0kOKRcLcTwIu0Vg+RMZHWWD3GcLzqxkS3cfmNIIqSZYc26qY+
-	 e+zaW8YGi4y83EuS58EkSpi3pyOfNOq8dmKJmiH2jWdqIZtcpzuEOpufh+oDPw55vW
-	 NlHXaKHb0KHbJFsWf1drlXvwoCAnfiwAPpnZUcdaNCSrw/PXdN5K49A1P6Ts/eABr4
-	 bzbs8Ld8g0AH+bTkbgSH6KnYPbPzcnPA9mJWzrtCxdw0ooLNs+ziSbnxkD9zD2M0t9
-	 jQAMzdYVhW1tg==
-Content-Type: multipart/mixed; boundary="===============0128583470197541293=="
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=AAXItUB6
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8b647bbf8a9so2047181b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794636891; x=1795241691; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rcRT1KXRxMVMkbqC0U3OtsyJos+rmMAQkFnzvfRCjWY=;
+        b=AAXItUB6nLo8Ld8relHkMakJMmcuRNIsknoR4+BEM4pSV8B6NMLHbLLbDWU9hi9tNb
+         jgdzHxKTj5/DbNttUCWS/1H0D+IQKlezeFugNBvN4aDY/BrH5cd7Frj3L9D7yB0ULnfJ
+         OR9HjF4GH6UYfG8ZUTCfjJwfE0Cql/Wisd9i4Ndx1F/bQqjp5kwVkKvYFV6WZ++sB7LR
+         NTbv6uW33BsKh6oOwCVC9D2uSV3X851/fTC7Q0G0wly/pQF/ZlmUp+qZy9Q0qh/OpQ7C
+         28IB8ztcs5lZfX3WXcO/lhJIl1bE3fnuMYrEiVXQDSWtzek+YrI2BeCzD44YzcKvERsG
+         ++nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794636891; x=1795241691;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rcRT1KXRxMVMkbqC0U3OtsyJos+rmMAQkFnzvfRCjWY=;
+        b=FYKnGRp+eC0uP1HJtdpETOy4uuzp/SM8VFA3X5fFwHpuYlnk4WYu7nP8qAEVBTPmLv
+         2PDHYUHicuvOP3vKk00AckR6gBwIGWrNr2psxsluPZA62IIQ1h1sguNoIwKtLbCV1pCF
+         WDqrZjN+hPIdij37SzPgvulJ3Oqs5RjXq7QGEQuNNKnC3iDozeUlM3Q6q6ccMdwFvnRD
+         wl9W/u+XJMdMuECcGUlxjH7/eh/mHPVZI3jOeigSL9B2zu1hc5xw5edU/3ztvguJPofW
+         Y7URoVq13MU4SnWK8TxqRXMw5y/4q9WqrF8Ap7xTIl+/eNtehYmz4IHn0l+jgP95Sl/q
+         a+sw==
+X-Forwarded-Encrypted: i=1; AL+hErF8oN+WQOFbevqb05QPpQHOVOJddUYebQwk/hiEBbAT0ai4NCXHyeyLxuvkLtK4Fb93UCBbm4Q6HyVDf2RMwn8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+CJBR8rUQcIr0hydDtlC9UewZ1lJDYQkRWSWEOt7XobCekjosX
+	obdwBKzuTSVGHRJNL7R+qcSwhEOwui7iasgt3ZaJ2E3zjOTPpufpo70XzdNJIUr3FDWlZ6Dhc+C
+	c8Zg9hQ==
+X-Received: from pgij8.prod.google.com ([2002:a05:6a02:8408:b0:cd3:da0f:7741])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:888e:b0:3e2:7bc3:9bde
+ with SMTP id adf61e73a8af0-3f7a83b8ec2mr4021901637.59.1794636890522; Fri, 13
+ Nov 2026 22:14:50 -0800 (PST)
+Date: Sat, 14 Nov 2026 06:14:50 +0000
+In-Reply-To: <20261111-mtu-probing-series-v4-2-6f2e484ca8ea@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -48,96 +77,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <2bd464dd12d81f4d712f7d89f65e0e572c66c9e84acce225d144eef3badc0251@mail.kernel.org>
-In-Reply-To: <20261113161836.3587552-3-jarkko@kernel.org>
-References: <20261113161836.3587552-3-jarkko@kernel.org>
-Subject: Re: [PATCH v10 2/3] KEYS: Replace assoc_array with rhashtable
-From: bot+bpf-ci@kernel.org
-To: jarkko@kernel.org,dhowells@redhat.com
-Cc: jarkko@kernel.org,bpf@vger.kernel.org,dm-devel@lists.linux.dev,fsverity@lists.linux.dev,keyrings@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-security-module@vger.kernel.org,agk@redhat.com,ast@kernel.org,alexs@kernel.org,akpm@linux-foundation.org,andrii@kernel.org,bmarzins@redhat.com,daniel@iogearbox.net,dzm91@hust.edu.cn,eddyz87@gmail.com,emil@etsalapatis.com,ebiggers@kernel.org,ignat@linux.win,ihor.solodrai@linux.dev,jmorris@namei.org,jolsa@kernel.org,corbet@lwn.net,memxor@gmail.com,torvalds@linux-foundation.org,martin.lau@linux.dev,snitzer@kernel.org,mpatocka@redhat.com,paul@paul-moore.com,rdunlap@infradead.org,serge@hallyn.com,skhan@linuxfoundation.org,song@kernel.org,tytso@mit.edu,si.yanteng@linux.dev,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 14 Nov 2026 03:32:25 +0000 (UTC)
-
---===============0128583470197541293==
+Mime-Version: 1.0
+References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com> <20261111-mtu-probing-series-v4-2-6f2e484ca8ea@gmail.com>
+Message-ID: <avf70FWg6nSW1zhX@google.com>
+Subject: Re: [PATCH net-next v4 2/4] selftests/net: packetdrill: test
+ tcp_base_mss on passive connections
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Yongjian Wang <echoowall@gmail.com>
+Cc: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, edumazet@kernel.org, 
+	horms@kernel.org, ncardwell@google.com, davem@davemloft.net, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, panweiping3@gmail.com
 Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> KEYS: Replace assoc_array with rhashtable
+On Wed, 11 Nov 2026 00:45:56 +0800, Yongjian Wang wrote:
+> Check that a passive connection starts at tcp_base_mss with
+> net.ipv4.tcp_mtu_probing=2, as an active connection does.
+> 
+> Signed-off-by: Yongjian Wang <echoowall@gmail.com>
 
-TL;DR: keyring_read() now needs keyring->sem, but s390 cert_store calls it
-unlocked; this may trigger a lockdep splat and possibly a use-after-free if a
-link or index is freed during the walk.
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
-
-[ ... ]
-
->  static long keyring_read(const struct key *keyring,
->  			 char *buffer, size_t buflen)
->  {
-> -	struct keyring_read_iterator_context ctx;
-> +	struct keyring_index *links = keyring_index_locked(keyring);
-> +	key_serial_t *serials = (key_serial_t *)buffer;
-> +	struct keyring_link *link;
-> +	size_t count = 0;
->  	long ret;
->  
->  	kenter("{%d},,%zu", key_serial(keyring), buflen);
-
-[ ... ]
-
-> +	if (buffer && buflen && links) {
-> +		list_for_each_entry(link, &links->list, list) {
-> +			if (count == buflen / sizeof(*serials))
-> +				break;
-> +
-> +			serials[count++] = keyring_link_key(link)->serial;
-> +			cond_resched();
-> +		}
->  	}
-
-keyring_index_locked() is rcu_dereference_protected() on
-lockdep_is_held(&keyring->sem), and the list is then walked with plain
-list_for_each_entry() and a cond_resched() per entry.  That is fine when
-the caller holds keyring->sem, as __keyctl_read_key() does.
-
-Is that also true for all callers of the read method?  The s390 certificate
-store calls it with no lock held:
-
-arch/s390/kernel/cert_store.c:invalidate_keyring_keys() {
-    keyring_payload_len = key_type_keyring.read(keyring, NULL, 0);
-    ...
-    rc = key_type_keyring.read(keyring, (char *)key_array,
-                               keyring_payload_len);
-}
-
-The path is refresh_store() -> fill_cs_keyring() -> create_cs_keyring() ->
-cleanup_cs_keys() -> find_cs_keyring() -> invalidate_keyring_keys(), and it
-holds only cs_refresh_lock.
-
-Before this patch the (keyring, NULL, 0) size query only read
-nr_leaves_on_tree, and the real read used assoc_array_iterate(), which has
-no lockdep check and never scheduled.  Now keyring_index_locked() runs at
-function entry, so with CONFIG_PROVE_RCU=y a second cert_store refresh
-looks like it would report a suspicious rcu_dereference_protected() usage.
-
-The walk also runs with neither keyring->sem nor rcu_read_lock(), and
-cond_resched() lets a grace period complete while the walker is sitting on
-a link.  Can a concurrent key_unlink() or keyring_gc() (list_del_rcu() plus
-call_rcu(keyring_link_free_rcu)), or keyring_clear() or keyring_revoke()
-(keyring_index_free() -> queue_rcu_work()), free the link or the whole
-index under the walker?
-
-Should invalidate_keyring_keys() take down_read(&keyring->sem) around its
-two read calls as part of this conversion?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43549115625
---===============0128583470197541293==--
+Somehow this series didn't reach my gmail inbox.
