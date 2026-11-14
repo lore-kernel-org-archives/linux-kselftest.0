@@ -1,105 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794686759;
-	b=jfw7oym7hlsIo9q33zYt43iQYKDo0ldgyOtMaxIQSanxqS33pJfidRLGlR+fAbVPlp2a
-	 9FWl85e9gQjjov43Fa7gHCvTnxtFwkZz9tiL6DUD7Kq12zxCGtgGRvTF/3zVGtNxVZ108
-	 1E0dHPmS0H44E97HiW1UtuDRCmCJqHi0h7mL0+ZPA7ywAKRRjggqo29o6c/WDtobqkAMK
-	 uLo0ZycTgLUJlWNxazosacxePgQtIsm7WDgQJMJCSbufN0T+yQLV/CpiLMYmTruHNktl+
-	 ao5l2XvfEFX+Ry32/7R3AR57yn6xwsIpACFzlMfX8vsLyA8jQW7VZtXwGRWQfnhCpsw==
+	t=1794687872;
+	b=DaBsTS9NoolLlaq/Czkf8DGbFP3nk095ZADBUInrCPKMHZ82RdTXP1U9t8dZVCRzI37Y
+	 iF6EYIJKK0TQNaCd19GzVio3A+90jXZKk2k5U8bvpGJdtzcTk3Ezd7uLH0ARqpVrPRrw4
+	 musBWWFr0H13zKSueLY88WSOMUNe6Brk3Ahkazt8o5HphHDXpboVSI+SaZQuSubzA+olW
+	 JrfrlmSGx8fUutXuN3BKs9krVnuz0S3ibutNgKzd4NiGFpCocnWfilxzqH8YSZ65t3WZQ
+	 6h8rVgf/DX9xXg5svM9GpUMDPCervSF+mbEZfIsdq/nXUUQ+lMJ3WxdVTOrOqeu+ktA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794686759;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Disposition:Message-ID:User-Agent;
-	bh=cEK0v6G1yB2cz/8630PKsjvi8Z78P9QyctaIU0ylRW4=;
-	b=E+WG25Gbc6EIxrHR+QaPXhw27MAlQAD1AuUETO3W+SztW5AY5/bQd7yXOgJ4IwtTcd6F
-	 JES8VmL/rQkrOPmrfWVhwKJ0WAGr+C9yKH6j2IRPmMqoVErWaxIzUe6KMFxIrJM7v/uoy
-	 W9U1PRdAz+V62u15VL+ccHGMlAlFk82R4nlo8NmnYvPIR7SilN+LaF74J6u+Fo+MNdnJQ
-	 cHedAzxSPuIeu3bV9cq9sIDaJQ7wo++wILW8TPSZ9CigeD+/ugB9PJRm6xSawmCMR4cIS
-	 aHQJFVyy4jrEZ6AgOMp6Rvi7axN3zYxCz4so+cqVWuOd9rjLo1MX6oHggKq9KTAhijQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794687872;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=V9Oz70E155O9jInt6hTC5pYZasQgcnWNCVJSKndXa7k=;
+	b=XM+gSjmVvc1o6nNXIcrZ0D195COcDYLAZiWYV8XuZntC73DL+Mmu/4W5h8TfQYrxzJBL
+	 Ank682qqcLTPsA8Xq9PMcZ83ReHD2za2D0AdpuDm+L+CGcAh0lQGglXgYve9YwIjYSAge
+	 nWoTq1yPAStIveO+fmvrGDg5ifjd2TTPXwJSnEB+2qygm9zzWKqkyJXCsOdiSnB2PTpjs
+	 nK+rPmqx70zK4GcaEShgO7MrjKu2Y9jRJGbhELz+N+UByNP51iVkST0XpSFijC4/XNu/t
+	 npVcAUsGoK92jigSrnS8BRR69YftJJ9Q4kVkPxkUvf25T4IDDtWTuQRqPmfzdC/uM2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=chrisdown.name;
-	spf=pass smtp.mailfrom=chrisdown.name;
-	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=t4xxtvlP;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jjyAKqBD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C188606A8BA
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 20:05:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C188606A8BA
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2325E606A329;
+	Sat, 14 Nov 2026 20:24:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=t4xxtvlP
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc4be0e5351so814321a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 12:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google; t=1794686758; x=1795291558; darn=vger.kernel.org;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=cEK0v6G1yB2cz/8630PKsjvi8Z78P9QyctaIU0ylRW4=;
-        b=t4xxtvlP4RAICjpBIWPIkESb6EJJVOcRd9+LEytv251d1ZQsfD2pYblwETMOf/zroc
-         BDzAo5elUgpAiRA0oYEfExHYSjjGywxztBxThvGs665InMbo4S8LytfXKr2B4Cw2IX6x
-         hCl30XcWjOl3zGKKK0Vny1KN9lt2zjyLiPz3U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794686758; x=1795291558;
-        h=user-agent:message-id:content-disposition:content-type:mime-version
-         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cEK0v6G1yB2cz/8630PKsjvi8Z78P9QyctaIU0ylRW4=;
-        b=IWHMMgyrsfxUpEjPaDijh3BP7HDWMKtEDgGZFt0sktQod1iXHzfSWAgUkKoWcrCUZQ
-         0ihDIe2J5qcjMZMli1S624wLGgoCrFwjT6Pj2aF+4iem8Xwdhjh59STrLI9p/o7EU93Q
-         cSdHPmLzVyKyqi7V7uDCCEnp2u5iv9mEnc8h2gh7/FE2EDu2KiCEtYndsOmQzDw1IqfK
-         xSeAqhK6JvKJevUgeUObq9vBZcZk5qEz2Vlg6NTckvbPIPi6lUjQuqX1oYacqXjmCjzy
-         sU6jhiF6lzXmxuIt6OU+kus/HPN98Evr+Ei1HAsSiGJRxIeHXUOtVR9bMIg1m2U4/lFJ
-         mGdQ==
-X-Forwarded-Encrypted: i=1; AL+hErGclST6jzaP7gtetutrt9DYStdRWbekQFQ/RACHQdkHMkI/XpsSqTaDVzeYTMRG93wBT2UWHxx8E0o5PCNndIE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8OYAAAjx9emjYwcQF6Mkxd8oEHPZZoAMaFiReye4H5dEo0/yWM
-	nZrbMu3LQaFk6LL8GsJGFJf0wAZsVmU1Az+lHupSpQkhU7MeK1wT+b81vfHs126+W3k=
-X-Gm-Gg: AYBFou3p4xJmpCxRfsN3733bJCwET56fyLziBA562Ykmpe/zlwt2+1DWm443exRHKhD
-	CxrFNRyhvoavGzjEhLDIdds3mfr++2K/5Bn1PTRZ3AS0kqVQovCMied68x8gfQ3lrNQ1Ez+f/FQ
-	BkBSuGEp00amdrq05rXoe+nhrNy9EYfB2cB4tXNacSZMxiQwCgBVw4Tirgb5GyBcbngI/ja2mBo
-	hL6rbyAy+CxBFcI4a4lQ41TWmU6/VqFPEVW6YJshvrZ1mR1TsXhcr/cmTBCGOuiTyKmPi9p6315
-	4sWZG+1QQYKRrYsOazA0SjcJ/+4Xo3VUlHRe9fBMzic9nA+AACTgmJtQHPUTQEDyQEKDXx2l8G7
-	UiHhidKBQE5cekmEsqmtkeYzciGbVt48T7GBqyrciphy3qK5WZ/7n+zxs8DvDR1WlNZB6/dDY5L
-	aBK3IeqhWIHus1i3xP088mYOlrJ+2+yGf7kgT+wnKZvBQUlrnTb0w53R2/dXRQV0YVahESh0Yc2
-	fOZe94xDe/42Y2hl7p+1jYUfcc1UkWOnbKLT/4pPQabTEQc3EuBv4+t2kGNpjYv0jaxswzCh/pw
-	LkKCCWoJDl/iUTJRTDL9IIY1GmSqIQ/SxRMssIl/+ZFwSUVV1eXy76GH20tJXVX9kdoonDUo8K1
-	OYk+QrWg+BhXCc4Sbq8WIetscZlqidCHb0Hb9Ih+pOtU2sOTOiBLM0JD6kTPJCKxMK+bIq0xGJD
-	BrXKWTR4NHel88xx+exLyCluQ9iuLhfl59Elay2UMPsRgxVm9xdxM0UgYn
-X-Received: by 2002:a17:90b:3b8a:b0:3b0:9f53:e8a8 with SMTP id 98e67ed59e1d1-3b1b0b5f2c1mr6192503a91.52.1794686758572;
-        Sat, 14 Nov 2026 12:05:58 -0800 (PST)
-Received: from [172.22.0.2] ([64.16.22.130])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1b266d873sm4654869a91.1.2026.11.14.12.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Nov 2026 12:05:57 -0800 (PST)
-Date: Sat, 14 Nov 2026 12:05:55 -0800
-From: Chris Down <chris@chrisdown.name>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>,
-	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
-	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
-	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-usb@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-	linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-	Alexander Mikhalitsyn <alex@amutable.com>
-Subject: Re: [PATCH RFC v2 17/42] securityfs: use fc_init_pseudo()
-In-Reply-To: <20261114-work-loop-pseudo-v2-17-98639a2286fb@kernel.org>
-References: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
-	<20261114-work-loop-pseudo-v2-17-98639a2286fb@kernel.org>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jjyAKqBD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360D21F000C4;
+	Sat, 14 Nov 2026 20:24:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794687871;
+	bh=V9Oz70E155O9jInt6hTC5pYZasQgcnWNCVJSKndXa7k=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=jjyAKqBDcfwj3adWi8yNdPH+HlRifwnvumzIU4W0VCkulv16TycwN4NG2NMOzVuBa
+	 F8kZfYeoNSO1X73ZEEtPzIvcCcVg0fXWpqxl/ECrCSxl3abjRb4E1MaEdts1VS5JDf
+	 X3gcenvuxtT8Grm0f5iy95PvQIPr/MmvcWMTAa0Lrj2YLQ0EeFkpyrReIqDfLMCqPq
+	 sXPlSdQhkATWRwgtUR6FL7PR169AzBS6PV/QZV2LpdKJhusIIYNmoqItbOAgBizTcm
+	 /YMzVQf/1uAMwwQZo3IqIWPrR/hIxBWuJXk3oe1fDt+TFmZnQQyeYck8z+dDPX89s3
+	 AvRmJ3rlFmRQg==
+Content-Type: multipart/mixed; boundary="===============2241572966179256876=="
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -109,25 +49,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Message-ID: <20261114120555.cbfaf8ab8a92fb25@chrisdown.name>
-User-Agent: Mutt/2.4.3 (cc9e3943) (2026-10-09)
+Message-Id: <717a43d830b7a6544a51f3c227592eaadcd0afcf61ec9bf922ad517a280b8bfe@mail.kernel.org>
+In-Reply-To: <20261114193631.731615-7-jarkko@kernel.org>
+References: <20261114193631.731615-7-jarkko@kernel.org>
+Subject: Re: [PATCH v13 6/7] KEYS: Replace assoc_array with rhashtable
+From: bot+bpf-ci@kernel.org
+To: jarkko@kernel.org,dhowells@redhat.com
+Cc: jarkko@kernel.org,bpf@vger.kernel.org,dm-devel@lists.linux.dev,fsverity@lists.linux.dev,keyrings@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-security-module@vger.kernel.org,agk@redhat.com,agordeev@linux.ibm.com,ast@kernel.org,alexs@kernel.org,anastasia.eskova@ibm.com,akpm@linux-foundation.org,andrii@kernel.org,bmarzins@redhat.com,borntraeger@linux.ibm.com,daniel@iogearbox.net,dzm91@hust.edu.cn,eddyz87@gmail.com,emil@etsalapatis.com,ebiggers@kernel.org,ignat@linux.win,hca@linux.ibm.com,ihor.solodrai@linux.dev,James.Bottomley@HansenPartnership.com,jmorris@namei.org,jolsa@kernel.org,corbet@lwn.net,memxor@gmail.com,torvalds@linux-foundation.org,martin.lau@linux.dev,snitzer@kernel.org,mpatocka@redhat.com,zohar@linux.ibm.com,paul@paul-moore.com,oberpar@linux.ibm.com,rdunlap@infradead.org,roberto.sassu@huawei.com,serge@hallyn.com,skhan@linuxfoundation.org,song@kernel.org,svens@linux.ibm.com,tytso@mit.edu,gor@linux.ibm.com,
+ si.yanteng@linux.dev,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 14 Nov 2026 20:24:27 +0000 (UTC)
 
-Hi Christian,
+--===============2241572966179256876==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Christian Brauner writes:
->AppArmor puts a .null device node into securityfs but only ever opens
->it via dentry_open() which doesn't care about SB_I_NODEV.
+> KEYS: Replace assoc_array with rhashtable
 
-Not a big deal, but userspace can see that node too, as
-/sys/kernel/security/apparmor/.null. Opening it by path works in current
-kernels and fails with EACCES after this patch. Now, I don't know of
-anything that does that, but selinuxfs gets SB_I_NODEV cleared again in
-the next patch for the same kind of node, so I think we should do the
-same thing here. If not, it would be good to have a line in the
-changelog saying that opening it by path is meant to stop working.
+TL;DR: Comment only, not a bug today: the new keyring_read() comment says no
+semaphore is needed and concurrent changes are possible, but the caller's
+semaphore prevents that. Suggests rewording it.
 
-Once that's fixed, please feel free to add:
+> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+> --- a/security/keys/keyring.c
+> +++ b/security/keys/keyring.c
 
-Reviewed-by: Chris Down <chris@chrisdown.name>
+[ ... ]
+
+>  /*
+>   * Read a list of key IDs from the keyring's contents in binary form
+>   *
+> - * The keyring's semaphore is read-locked by the caller.  This prevents someone
+> - * from modifying it under us - which could cause us to read key IDs multiple
+> - * times.
+> + * The walk is RCU-protected, so the keyring's semaphore is not required.  A
+> + * keyring modified concurrently may list a key twice or miss one, but it can
+> + * never have a link freed under the walk.
+>   */
+>  static long keyring_read(const struct key *keyring,
+>  			 char *buffer, size_t buflen)
+
+[ ... ]
+
+> +		ret = keyring_iterate(keyring, keyring_read_iterator, &ctx);
+> +		if (ret < 0)
+>  			return ret;
+
+[ ... ]
+
+This isn't a bug today, but the new comment looks inaccurate.  It says the
+keyring's semaphore is not required and that a concurrent modification may
+list a key twice or miss one.
+
+keyring_read() walks the list under RCU, but the length it returns is
+computed separately afterwards:
+
+    ret = keyring_iterate(keyring, keyring_read_iterator, &ctx);
+    ...
+    ret = keyring_nr_links(keyring) * sizeof(key_serial_t);
+
+keyctl_read_key() allocates key_data with kvmalloc(), which is not zeroed,
+and when the returned length is <= buflen it does:
+
+    ret = __keyctl_read_key(key, key_data, key_data_len);
+    if (ret <= 0 || ret > buflen)
+        break;
+    ...
+    if (copy_to_user(buffer, key_data, ret))
+
+If a link were added between the walk and keyring_nr_links(), ret would
+cover more entries than were written, and the extra uninitialised bytes
+would be copied to userspace.
+
+Today this can't happen, because __keyctl_read_key() does
+down_read(&key->sem) (as does the s390 invalidate_keyring_keys()), and every
+writer of index->list and index->nr (__key_link_lock(), __key_move_lock(),
+__key_unlink_lock(), keyring_clear(), keyring_gc(), and key_revoke() via
+keyring_revoke()) holds the semaphore for write.  So the concurrent
+modification described by the comment does not occur.
+
+Could the comment instead say that the caller holds the keyring's semaphore,
+which keeps the list and the link count stable across the walk and the
+length calculation, with RCU only keeping the walk itself memory-safe?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43634583011
+--===============2241572966179256876==--
