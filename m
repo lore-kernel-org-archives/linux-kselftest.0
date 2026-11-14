@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.160.177
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1794672880;
-	b=lGTokKy3G2W72dQGE2Uowo+gPnyzLtSyZjRc74+4Q7kOvPBpLd1hscQ510JbXKGELaSL
-	 8DV8a23NXqfHF1CvrcDykuM13TYjo4qRNq8k+v1y5cLn4BHZ3712IpwkX/R1iFfOjY68c
-	 NKOZhuJlRSUCBXZBZJBE2UgGOwpmxoGcHqJ/L3nogduv7FoDY4Lp47GBaGIudlvUFZM5w
-	 MQ9mp1ZCPm3owuBg0IeWria1NuJ26inUkdMooOfKA0UgYodZUaW+nFdVwA5sKD6oXtRcn
-	 uzcKVXgRDmp+zXsAw8GQxsf9CnQ8pUgF0Sp3pj42a9FVX5NBXEAb3j+7OVtiW/TPJvQ==
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794673381;
+	b=zI0+0v7Kjk+dEz2iQPXebtV0t2w0BT2lXPDl0JFo2ihvgR5Zpr6MThiF7teMrhu/qYvW
+	 QM6PH9M82NxA5YX0x/gEZVr7OP4Y/2gy994nd7RKgEiHbLtjNsoSlweMR1c1j3ocmuPLS
+	 ZCOAOJEQ/UkFsjJTHEHb/MwnI2pDN+Eiumc+fQyl0JBp3cn3d6kj4nGSSscbtXf6ASV/F
+	 wa7FxMcFbt3WGBxaTIA9xLg6a/SePHyd5ZsqoVWnuoaAykrkQgDoyjbMNpQxC/62HHCYA
+	 08Yn/OfrjhQmj4btvOL9yq6FD881bEhVtUsoePtmWuYyp5CNqubgKLG6PERBoQKGyOA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794672880;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794673381;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=j8apjl5nKZpbhUKAqnsuXWh8fD6xWu4DQgoUsG2JJJo=;
-	b=NDyhRY8R4VSIF5cxX5WwOSm2TCO7rXGKx9BhIUu6sZe1s2IAX4WareMXI4tU0Dmg/Bpz
-	 SEFDucIJz7J8TyqfZHBz1XNCDGFIPLyEyAggiN9G+fjxYXx4AB46yrhR3LGA0orHgkYD8
-	 c5oZ/4c16Z9T8CyRxpohqW0H/TD9M7zDhccMJA5I7/uL1TvXwxm2M4/g1kwJaaKxouj0H
-	 dV+X5Mw7Y+Ua7Wf6TiYa2ncYQFoFhabnPLRqFp4p3jJndgZoFrAtE1XDO7ffvGpbl2t2g
-	 3Y94ctmmSV0kBLUJpSPPI0RY0vlXfMjxy1M2q/S2EhpoYidQa95rJI9fCjd1U12No5Q==
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=kIrdsg15x4joWnwi7mHS0sRF/D5IlopS+RsU+PycYPQ=;
+	b=rw3MpHKMhTitTTQO//Kw48k19Vz1aADKQdLLVMLZVUDycJ3tJbpiO1T2pMZ9Tlb8j66w
+	 dcaBDBm6GEKhV9PnF95nRvXBuzHiL75nBAZAbmMV8fS7lVdtC18dk/GqAhHR8n5D2JSC4
+	 N021G/Rx9oh4XPilm4CfkPVvos1v+3Pb+dud3yKLWUwslkzwzZXeKLzoBYmd25iIY13Qd
+	 pLWjYdDKNTZ28jB1c2oiPDDsfFYXFZwMdjNHChOL12gBC/vQmDCdjqkSpP6DySulwl6GG
+	 26upw5Z4RKp4e32SCTqrwOiI+sbbm5HkwiD+ziws8rO1et/TqrIhRg3HDfxfmNyUEWA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=eGnH8kXM;
-	arc=fail smtp.remote-ip=209.85.160.177
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=APdQoQCw;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.42
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFA9606A884
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 16:14:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5EFA9606A884
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1B2606A32D
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 16:23:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B1B2606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=eGnH8kXM
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-55c7445cf85so114851cf.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 08:14:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794672879; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=APdQoQCw
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-67990a45e02so2119210d50.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 08:23:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794673380; cv=none;
         d=google.com; s=arc-20260327;
-        b=GL2lrwg7EjxroAuF5129oYERUKInSnqAx6rOBeSAo0YajvgN2c8/RRnqJBqqFXnCcy
-         iodkVFn6srJJWnNNtg0ha/1nVPncex1Iu9H7uUAw36oxI9YmfOMTMzAI/oc+TwDkbpAS
-         Ri8mw21TAqxDN1b2RnfH0icbqdQqbYqUQNt46SdGZqRsDiDDsWPuZYg5Role+6wk9fCJ
-         hmFdxGYK8IUcWX3WQPZW+nnNYyCqyrDK3IQWFFYtLeMa7U8saYSlaNZPvm8IILoKo592
-         sISkzC5lWp+u9zr0CVVe8W+CKxp7dcLIiBtqaw21ZC6Gk1HNDZ4iBTzBqlHKP00/a5K5
-         c6OQ==
+        b=SGpiIWDJ0VXL3IgwOTNKgqylwsyH+fkxO5LcTZ4/mLumMnPBA9ukZqkOwHjFDFUtSz
+         HE+gKbyGqXBYbkVTZiVzAcqd9PRPcS/WDK9FqR8M7e50Y76N2/e+F4031q/lZT3yARt/
+         KgTE5FH7/rIwofgteIItOUmp3BS/lN3zh/rTFfK+/NA98f+RGGBZeu7aWesGI+x3Lbja
+         sjZEb0OOuwRPeT6t8Vk4/rs7UFQG20TBKHM172OGscQk4bxmKKiJ65I24GH7g0JhloZf
+         u443vw4Z++VQiPXoKgX0IGEuU3kMHzLLcyxE62VEVQYLnQi65HjnlmyuN7b295jV/lwJ
+         7XEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j8apjl5nKZpbhUKAqnsuXWh8fD6xWu4DQgoUsG2JJJo=;
-        fh=UWJUBW4g+vn2d2f0uKPXMvkkvArsfVLPBKcxFPWnyPY=;
-        b=KtFh/Gh4q5LQroeUSLaEsiiHXfVJZxvuQO7RlqYgSByVRf0TcdJWArjj+PpNx29VdR
-         5ej908xfKzdHTnNQrtDcQwcn0Ao7IOF08oNAzHedDqQ0o1OfGNIHlLuAnNNPUhknuFbL
-         ZNcAzOk0y4cP21P5HLCZz45X64AfcwWntprL8vGQQbtf5iKqtlKvBRQjoxLDN7udI6vg
-         8hE1oSoIqU+WGT8TxU4PE1C7dkLYdug2hoZpyTU0o5lyVRT3O/QPogpZWpPse+RMWlT+
-         a7Ow1d02YkoJpxLZYsf87Hz3dHHQ7ReSeubo7T3Z872CYz1HZb/RgukSCwO2vrBsW5VX
-         5i8w==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=kIrdsg15x4joWnwi7mHS0sRF/D5IlopS+RsU+PycYPQ=;
+        fh=eGmPkvS9CgYH7ro38XCdGqecx23kGtGeYC5civWf23s=;
+        b=IS1eDmyG6q8mah2YODzaw4br2nePGvTJ3NlAgu6G/mtCmJKeInm4z5WQi7k3FBzgqe
+         ofNdunfjARUMB0Tk9mY8Ec57E49ieNbucUFEQFlVa1MMjKpwFLSRtom4H/i3wOC7kD0E
+         ZC9Ls3pDOkbjUiqmH1rIpYO9TnPCSMlnxsBQii2tZvKyvqHGpcwwbBQGLZiIzQguBgjs
+         M2LalzuDUwPDyOnlDLb954CEjp1Bjs7sz/SGGfkV2jbh1KN1yKqxccgakajGorKV7W8j
+         /jcfkAQ02P+UYhhL5yIwU+JGAKRaW5h5tqsH7U18R3cgZlPkxBLRGajF/XaA5EkWzGJd
+         Hz4Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794672879; x=1795277679; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=j8apjl5nKZpbhUKAqnsuXWh8fD6xWu4DQgoUsG2JJJo=;
-        b=eGnH8kXMOYxC2TlWp4DVV3gFXtmUqtPsMEjaeD15pze6UXKcTQk0PVcY2uu88INmhy
-         cQUr9WEkFjDQ5HeF4AE6m2Tudp7FCIF5CKTgK1EcnR07aNwNxqADbdO9eCaezTJUgtqm
-         Fb4i2HWdBNYqQQumVPu+XIKwapyBXUNPo8zxsuaFeKFnAti+agc5Qgv4TJ++gkYDTzKz
-         U5M9p6WJkHeu7Pk89bjg8ZGAsXSj1U6XFwKM9chftOZCCjy4IfUmjXrulYXGqWbbKmaM
-         TFYH/pKdO/TMo5YxegGwUcggTRsZZTp2dYhIHBSzWafLSFHWPyyvGygDoSxX4Sbwjx+Z
-         B/9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794672879; x=1795277679;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20260707; t=1794673380; x=1795278180; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=j8apjl5nKZpbhUKAqnsuXWh8fD6xWu4DQgoUsG2JJJo=;
-        b=cQw2v3OvXLlqvdB+QK9cLU3eygjw3G4PHCb7MAlYI3GqTUwnlpU4BLprMEWqWLr6tM
-         iA8N3HT6nV86TXm5RkFZ5LD/6pAuX3RSiALdKuoVS32dqPyYR1/FQk3jBJ5J5m65UAra
-         D+X29SvmfUH3XGExo8I6Kvu+n04Wust4Xksce3MMWqoq60fjTTVlw81D/zSlCeG8UF0k
-         UNzM7ZX4TftZgmU8WSaFQ+N1/9YPSspViZuAleW3+J/A2VTYU08sb9eD/S7vEzQ1K1wE
-         njtS80N6bickqSiDp9MULDrc2dOtIAlmgHcmihuyrUAJcyuTOaEx8KrPoXvI+fV+FVa0
-         bg7g==
-X-Forwarded-Encrypted: i=1; AL+hErFQbve9oM53T9Ru69Ya+0hwS4c3plKINPiX4t4oa+eCjHxFJu4hLSfdy28NouVc+zU4JJIKL1qwcFIeipa2dQ4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+TlHRpjXG/4L2r6m3AWGt5GDo6JhunX7W73NBmdtPdiRgsLcQA
-	uVpbCFqtXCQ7UJhPsXj69PurGaPtFT2EkrDAFRhSAJkO5JGmueBmUOVZMFUMwP87RiQpYQUONgX
-	8rQjrvlPmcy9b0KJEyoK2PU/4ZW/SuVOM+4ccaFBw
-X-Gm-Gg: AYBFou1WDI5U1QlVS6MSCeQs7DvtE0KrMmgfVX99ERUqNHn8GO2YESdwEdpfpC/PuZ6
-	wBsr9wyU37G/2CweN5qB2qGZTeVuwZlIWngm951m6LddUIsFKhSMacf/3WJflpKftuAWifuL0sm
-	5V9xjqaZotC9lZc9yjTq4fYd5uS3SQKHQtpJ6qazoRqwBW7s5uCglsGEil/r/QHuxBLNyD9U2XU
-	PWswLLFiXSi7eaD4k+nR4rwiEFVp0r+C1pqPcPMOEMtQ2CF5b+VD7w/IjPsSoJFQOyo47m4gFq8
-	7GaetOhqLXL/F1mbR21udWQOfA3p9dleXdTK7ma1FBhKtGPuj39WQUWfj3j5lpGvBKZcTGHxYU9
-	Srl0lXTl05bUr9gbiFIuNMq2lylIlpIJjqyxRhdjTH5LQmM2LtnSVYJ3RJAY/FxrG/ECM4NbJ/q
-	ieaoGjWZycMzaJH7ncTXZJD94A8YY=
-X-Received: by 2002:a05:622a:230f:b0:55b:ab4a:6fad with SMTP id
- d75a77b69052e-55c67104981mr13076961cf.9.1794672878652; Sat, 14 Nov 2026
- 08:14:38 -0800 (PST)
+        bh=kIrdsg15x4joWnwi7mHS0sRF/D5IlopS+RsU+PycYPQ=;
+        b=APdQoQCw4TyQgXX7302jy7sKpUOemBZ4YzjW5ZzZnDAbAXo2VYfez9gb2Z2Grl83Fz
+         W3FFJxdzWvNY/LaiEUZtO1N9KaNikO+ws3FBIDmAJqOc27WoUMdtoOYO7JtMFGM0X+yg
+         b76rLyjPDHMRxfSSFHCbo5VnFgW7kLgJRoHcJSi/1e11d1PyNXb1mgeRTZu93dOJQVmJ
+         3igUdwJ2oiTJdZ9KOu5ZALJemocETQ/4NTyLnr+yxNd4TeqeWBDWX3dLyRFjnNZC31lO
+         simp0koL5wenXBnHoooIMg08JPKufYY/c0sdBByBFAY6GvpF87jSGiiJQN4ynN4xSmXN
+         fDTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794673380; x=1795278180;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=kIrdsg15x4joWnwi7mHS0sRF/D5IlopS+RsU+PycYPQ=;
+        b=irXjRtTFZbVK5JDF1QuIkGArvJktCz+nvkuj6EkETHwRDfbk6FEsSuXU8Hp3YtKVg2
+         d3EEmjpOYYgQp+lMk4xxmzcv/bUAmyvEnnPXCwMz5soxG/n0GZ7NK4J3rHHi5LTosJVb
+         IJM4VTR9hptP0ol2/7HO8Uqnvb8TwXCJplxUIawkQK1w1np5rOCbDZ8pjo9iwPCictRw
+         bvaHZgo8OKBUzC0YZMf9h1eF+VNOcN0ixffmfRMFPobJ1JN0vMYl5WXF4fsiFJkP0kcC
+         pfND0iLfV1/0KuUq+eG01521ZoMk5/gxxciMdo+U6uAj9tRk5sm0dwYSHNjqP8XXHl8n
+         ov9w==
+X-Forwarded-Encrypted: i=1; AL+hErE0uDvCKjOIEJFxvVEwqC6SANWKG1QVatHtcCRdCRHjZqi6B+FvK6eI8agODqrrav1i1J2apEjLT8+Giv0x8MY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/p2HO15ftw2GbGPZoQSMg5R+lGNMxRONg+Fozs3v5lr7YYJPXd
+	c4v+kvOc4dtxwqv/vHIJZkYA5HlXeXpItLzAVHIwcMebKmxyE4oIorOvmGDkAtHIrAtBFh81PAe
+	xsZg02tbQUOAUcMy7YRxiMgaqAi4ySGg=
+X-Gm-Gg: AYBFou370dOmmwbza2mGHF9K8xEy7Uwio78us1ZEr9Dnf+BrmYuaJoP7SHf+1nBwBfE
+	Ew1HlMLHzW/bRiu0NFEngqLZoM+9hbJwghSvXIiRyxgPfPYBYny/JTxnTvs1R2prRAVenxXsbRJ
+	jTXR8BXpDuiTQ4HXGqGJbGVMEbUPGDrUD+D5n9fEHaC2WwUKeUvSmT0l2YSVl2OrGaZhDgbg1yW
+	+DiQCodts7UJ7nylv3+T2H/wKg6xcYVJdbGFU9Wylh/lxMJYGntr8fLZfo/DEYK6qJdBVY8vNxh
+	csjWUsxuzbP2hQ/CtRxhPBghgF++QvVzWpwWGo4HVyc/4F+t6aoxg8lkbyElyvQNi5c1XcrbqFV
+	j+JwdxCs1qqOYZQ/uNv+MLVEfE9C1R6VAqESLW61EPMNoOPWsircxx5D5z4mLAKHcZ8kz6rP4ew
+	zk1cHtHeiWkC1VZPqgHrPh18VX2rmGrfMiaVpuhq+EGbwfT5Srw7YMGe8yIQHbffCYiA4yy4NZT
+	ozmBCi1PfjOfGKnhSV19ntSdArT3tw=
+X-Received: by 2002:a05:690e:1917:b0:675:a278:10a4 with SMTP id
+ 956f58d0204a3-67d89888ea5mr3886121d50.103.1794673380065; Sat, 14 Nov 2026
+ 08:23:00 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,43 +105,139 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com> <20261111-mtu-probing-series-v4-4-6f2e484ca8ea@gmail.com>
-In-Reply-To: <20261111-mtu-probing-series-v4-4-6f2e484ca8ea@gmail.com>
-From: Neal Cardwell <ncardwell@google.com>
-Date: Sat, 14 Nov 2026 11:14:19 -0500
-X-Gm-Features: AclHuK9fNu1No-43bBVfzzgRbtaoksUaeXTfvDONR5zNzzDJjI-OMhnJGTsg3KY
-Message-ID: <CADVnQykdN2GhRDNsA6yMoMcj4Yig2gYt=i96zfbVOSmP=qb1jA@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 4/4] selftests/net: packetdrill: add TCP MTU
- probing test
-To: echoowall@gmail.com
-Cc: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, edumazet@kernel.org, 
-	horms@kernel.org, kuniyu@google.com, davem@davemloft.net, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, panweiping3@gmail.com
+References: <20261111225148.88506-1-sidchintamaneni@gmail.com>
+ <20261111225148.88506-3-sidchintamaneni@gmail.com> <avgQgQeWDfQMQgvl@google.com>
+In-Reply-To: <avgQgQeWDfQMQgvl@google.com>
+From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Date: Sat, 14 Nov 2026 08:22:49 -0800
+X-Gm-Features: AclHuK_8gEV-etDhqKooisr3RfW8V3KHVl580Th2LAmWabQ5EUshcJqxA7SCoT0
+Message-ID: <CAE5sdEgGjK0x3QuetQaTycmtxUMwFf1aQChXyrQxZUkbX6uO6A@mail.gmail.com>
+Subject: Re: [PATCH net v2 2/2] selftest: af_unix: Test scm_fds on dgram disconnect.
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Kirill Tkhai <tkhai@ya.ru>, apais@microsoft.com, 
+	hargar@linux.microsoft.com, rlmenge@gmail.com, egoriluk@gmail.com, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 10, 2026 at 11:46=E2=80=AFAM Yongjian Wang via B4 Relay
-<devnull+echoowall.gmail.com@kernel.org> wrote:
+On Fri, 13 Nov 2026 at 23:53, Kuniyuki Iwashima <kuniyu@google.com> wrote:
 >
-> From: Yongjian Wang <echoowall@gmail.com>
+> On Wed, 11 Nov 2026 22:51:48 +0000, Siddharth Chintamaneni wrote:
+> > Add dgram_disconnect_fdinfo in scm_rights.c verifying that scm_fds in
+> > /proc/self/fdinfo/<fd> returns to 0 when a connected SOCK_DGRAM socket
+> > with queued SCM_RIGHTS datagrams disconnects via connect(AF_UNSPEC) or
+> > observes a dead peer in send().
+> >
+> > Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+> > ---
+> >  .../selftests/net/af_unix/scm_rights.c        | 79 +++++++++++++++++++
+> >  1 file changed, 79 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/net/af_unix/scm_rights.c b/tools/testing/selftests/net/af_unix/scm_rights.c
+> > index c165f250220a..ced83d3173b7 100644
+> > --- a/tools/testing/selftests/net/af_unix/scm_rights.c
+> > +++ b/tools/testing/selftests/net/af_unix/scm_rights.c
+> > @@ -395,4 +395,83 @@ TEST_F(scm_rights, mixed_lowpoint)
+> >       close_sockets(6);
+> >  }
+> >
+> > +static int count_scm_fds(struct __test_metadata *_metadata, int fd)
+> > +{
+> > +     char path[64], *line = NULL;
+> > +     int scm_fds = -1, ret;
+> > +     size_t unused = 0;
+> > +     FILE *f;
+> > +
+> > +     snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", fd);
+> > +
+> > +     f = fopen(path, "r");
+> > +     ASSERT_NE(NULL, f);
+> > +
+> > +     while (getline(&line, &unused, f) != -1) {
+> > +             if (strncmp(line, "scm_fds:", 8))
+> > +                     continue;
+> > +
+> > +             ret = sscanf(line + 8, "%d", &scm_fds);
+> > +             ASSERT_EQ(1, ret);
+> > +
+> > +             break;
+> > +     }
+> > +
+> > +     free(line);
+> > +
+> > +     ret = fclose(f);
+> > +     ASSERT_EQ(0, ret);
+> > +
+> > +     return scm_fds;
+> > +}
+> > +
+> > +TEST(dgram_disconnect_fdinfo)
+> > +{
+> > +     const FIXTURE_VARIANT(scm_rights) variant = {
+> > +             .name = "UNIX ",
+> > +             .type = SOCK_DGRAM,
+> > +     };
+> > +     FIXTURE_DATA(scm_rights) self = {};
+> > +     struct sockaddr addr = {
+> > +             .sa_family = AF_UNSPEC,
+> > +     };
+> > +     int ret;
+> > +
+> > +     ret = unshare(CLONE_NEWNET);
+> > +     ASSERT_EQ(0, ret);
+> > +     ASSERT_EQ(0, count_sockets(_metadata, &variant));
 >
-> Packetization layer path MTU discovery (net.ipv4.tcp_mtu_probing=3D2) has
-> no selftest coverage.
+> nit: count_sockets() is not needed.
 >
-> Add a test for an active connection. Check that it starts at
-> tcp_base_mss, that it sends the first probe half way between
-> tcp_base_mss and the peer's MSS once cwnd allows it, and that an
-> acknowledged probe raises the MSS and leads to a larger probe.
 >
-> The SYN offers timestamps and the scripted SYN-ACK declines them.
-> This also checks that MTU probing uses the negotiated header length
-> for the initial send MSS.
+> > +
+> > +     create_socketpairs(_metadata, &self, &variant, 2);
+> > +
+> > +     /* 1. Disconnect via connect(AF_UNSPEC) */
+> > +     __send_fd(_metadata, &self, &variant, 0, 0);
+> > +     ASSERT_EQ(2, count_scm_fds(_metadata, self.fd[0]));
+> > +
+> > +     ret = connect(self.fd[0], &addr, sizeof(addr.sa_family));
+> > +     ASSERT_EQ(0, ret);
+> > +     ASSERT_EQ(0, count_scm_fds(_metadata, self.fd[0]));
+> > +
+> > +     /* 2. Dead-peer disconnect via send() */
+> > +     __send_fd(_metadata, &self, &variant, 1, 1);
+> > +     ASSERT_EQ(2, count_scm_fds(_metadata, self.fd[2]));
+> > +
+> > +     ret = close(self.fd[3]);
+> > +     ASSERT_EQ(0, ret);
+> > +
+> > +     ret = send(self.fd[2], "x", 1, 0);
+> > +     ASSERT_EQ(-1, ret);
+> > +     ASSERT_EQ(ECONNREFUSED, errno);
+> > +     ASSERT_EQ(0, count_scm_fds(_metadata, self.fd[2]));
+> > +
+> > +     ret = close(self.fd[0]);
+> > +     ASSERT_EQ(0, ret);
+> > +     ret = close(self.fd[1]);
+> > +     ASSERT_EQ(0, ret);
+> > +     ret = close(self.fd[2]);
+> > +     ASSERT_EQ(0, ret);
+> > +
+> > +     sleep(1);
+> > +     ASSERT_EQ(0, count_sockets(_metadata, &variant));
 >
-> Signed-off-by: Yongjian Wang <echoowall@gmail.com>
-> ---
+> Same, these two lines are unnecessary.
+>
+> sleep() and count_sockets() in FIXTURE_TEARDOWN(scm_rights)
+> were to wait GC to purge cyclic references, but this test does
+> not create that.
+>
 
-Reviewed-by: Neal Cardwell <ncardwell@google.com>
+Thanks for the review! I'll drop both count_sockets() calls and re-spin in it.
 
-Thanks!
-neal
+>
+> > +}
+> > +
+> >  TEST_HARNESS_MAIN
+> > --
+> > 2.43.0
+> >
