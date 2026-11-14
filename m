@@ -1,74 +1,133 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.136.161.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794680385;
-	b=2NoWyFN7cir5Vir9ATg0VMQb9q5NayIl9AMVYaCw2FLw+mpiD5xrFYGJ1+uqZ/U9VqWb
-	 9P9iUFeFJ2vi8BMgE2qHSImdIsljps2QI/Poa2mhC7dkoEJ/LxqtrYZ/71JevidXpNg9+
-	 /pVsgWwKdW2Fv0Wb4+O1WsWn0j+7eOpN7quLTzJt+gKexLLtyJSSMAqY8YYrApAqSU+aH
-	 QqSy0sMPTIxv9gcyQBzqeaqxQm5agBw4D9Y0wqhLwusK5o1nOoRglJHLHKyupOKkJNRZ7
-	 +Z3g4OVmUzpct4tH8FOW2rcW4rhjV0yXz6siI4mMC3sWcXLL9tuH8iANgv7mpMWxiBg==
+	t=1794680869;
+	b=MXN8zYX8yRfxcMq5pt1wVOnnXUa7ewwhlkcWz30DfsnlcyNIb0w1tEUXMIb/ZK9KQPc7
+	 DxL0ZfjsMklnjXxHoG1fZzjyKu+C+Dx/rHzGs+z2WEqw05tOk1dtjbQzxBwLpNN0dsIA3
+	 NoXenQ3NkvGU6t2oBtqLGTRWZU1F75S5Rz7KFUaITAlEE8mowihWqMhVudVwvkLnAuzyP
+	 LMSK2q24DOxz5lt9qdV4ARy0bPqbCayucsvJeohFsBH16LNfRmgoOmZ+CyBEBkscw9gY6
+	 jqZLO1yj6Rg2YHT7sL0LPt8Vo3G4xg891QmjylKPIz8Toiv3kNS3mOYi5MVHNbWwAXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794680385;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794680869;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=E3vCj5tUgzGkPFi9k75RiC9oPN7M2Lkb82L+I2HGw/Y=;
-	b=10U/Eb9DxpQg0oq2bJRzAnRZz/dabqjfTmo0KFim+nLZwlZ46dL3b2K7pYK53iimucHe
-	 dUorTIES27WBqHA4cyvMh9wYKF+8Up5TzTXxG1p98kq4pJGZrwg7mEhsRikvWqarqagRM
-	 RLONM/MxJplLjyCkYTRG6bJ5F73k8sfU3LBZTe5cwKp526aB4KYmUmqkpjfMWB+gELcKC
-	 iFU1ZUPNdFAMs1cJhdfbBCJRfA1WD06zjfHPQVndJIbcxq+IO80y2MKgLRwTO/PteA+dN
-	 Mw3gOKtDSVE1NjjixYA3HS1OSfByjCcj+MJKjSaYhnhmIVhQ56ITzC1lU+nttQApVnw==
+	bh=821hPZ3mSrVkDru9zjRsyXQ6m5zbLDq4PwmJzq0vjp8=;
+	b=TOii15PMquOOlpu2R33jZmGdT46ZZNwQl0zLGNoqI4sUdfzWneUpy0DRHEI7/LsxaMZW
+	 +stZcpNZqYKH42FHiICGWOzcao8gfu1yfi2AOYhfi1MBsXT3ywwDmNMchvlSsCI3HvQ/o
+	 FZRzPvEy52TzV0YJxXQcEb20qEX7dyvjtaJTK6CdmLX1zS5pFyX2Qn+CN5nWDinDcVpBc
+	 GRLfs3+vJ19OV5ZrfR+SOG2BtfP1Yun8MRleb55Q+dtXUzO8lPnAvHeS04EiIiumyqfLy
+	 b7ZKhf1xKA1ooD1KIViFPJ7BiUnJ9I6oqJ93CYHKcH+cdMnDKJPKVOzDS1+GY1l3R/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cs.unibo.it;
-	spf=pass smtp.mailfrom=cs.unibo.it;
-	dkim=pass header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=ciw9jSd+;
-	arc=none smtp.remote-ip=130.136.161.50
-Received: from mail.virtlab.unibo.it (mail.virtlab.unibo.it [130.136.161.50])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636F5606A884;
-	Sat, 14 Nov 2026 18:19:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 636F5606A884
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cs.unibo.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unibo.it
+	dmarc=pass header.from=bairaktaris.de;
+	spf=pass smtp.mailfrom=bairaktaris.de;
+	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=ez3H+WVb;
+	arc=none smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DBB606A332
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 18:27:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 06DBB606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=ciw9jSd+
-Received: from eipi10.cs.unibo.it (host0.studiodavoli.it [109.234.61.1])
-	by mail.virtlab.unibo.it (Postfix) with ESMTPA id 95C6B1C0264;
-	Sat, 14 Nov 2026 19:19:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cs.unibo.it;
-	s=virtlab; t=1794680378;
-	bh=bpoTWuAHUl034Z+d9Tywg/ip83+J02Key3fpE1ExJfQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ciw9jSd+sWIlEcklSZ6htPVTgHexLE0yO/dmzuse2AJQ87VVQsZ/BdDQdohN1Cz5Q
-	 htmzyr8tCT7Rw/NLzYYPI6/vspvW4tKi8Bfz+XP/lCR1O9s3bPkn1mMb7FtqOE4HIH
-	 l6WSabr/K41fQfH2/Z5dOFSMsxIL1KSGOFGJV4iA=
-From: Renzo Davoli <renzo@cs.unibo.it>
-To: linux-kernel@vger.kernel.org
-Cc: Renzo Davoli <renzo@cs.unibo.it>,
-	Oleg Nesterov <oleg@redhat.com>,
-	=?UTF-8?q?Michal=20Such=C3=A1nek?= <msuchanek@suse.de>,
-	Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	"Dmitry V . Levin" <ldv@strace.io>,
-	Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=ez3H+WVb
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c4cdc606b47so400217966b.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 10:27:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bairaktaris.de; s=google; t=1794680867; x=1795285667; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=821hPZ3mSrVkDru9zjRsyXQ6m5zbLDq4PwmJzq0vjp8=;
+        b=ez3H+WVb8N6kuW9DSLlXuva7AGxWZhqKOmf3bTmNJDi15V1K+XpPiqn6V3wnMJ+z3N
+         DzTmTMxOpPKMtqA7m6sFzIVGrnsIAwRXMsGoD+ctZ1mUNaqCpcHfTX6ISVopadsOmS1Y
+         dI4TZ5U0q0AmUZXHAhjAjKh+et3IsiEX+asKYbfP0RSUUyXOqZmBRTpM1SFqoJyZb+dD
+         +g4scdis7G/SsRvmAROVwigJRQrXtsff6692FBvdeC1pmSKAA0CjlTVllh+LdX2AWD0l
+         XgQrBIk9Rrt7/rxndra2MG1WboVkfpi3iiKakjiYIh/7/mv0nKFLH9qVf16/AhcHP5Of
+         BcGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794680867; x=1795285667;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=821hPZ3mSrVkDru9zjRsyXQ6m5zbLDq4PwmJzq0vjp8=;
+        b=TaXOCIRuZPALk15NOkaun0pasCoAucFwMKU1CjBXuip0m7yTSOu2BrtDCj4dsG9x9t
+         2OnY3VsxwBJXJzSDRiqDPoEMBJKAoljsx/dt4VOIdygq22ddmTyDm69QTQLUynUX+iEJ
+         /C1Hp3Th7kOb8km84RR6yhKvw6bNviHT04wRyXswAWMVWlVMpsNjUVSdYUSNGo8lGpuw
+         NMPA1o7YioxuKTCDgldfWHD36oP5SNgkXAX530mgKIVUo6WSGeWCy62uSjvcYonWFt3u
+         eOKktZssmkVk/tqaU89S7xrnV2Hn4l6+oGyrPgwf8y78liVyeXl1uLuIE9YliODf5z8F
+         yvTQ==
+X-Forwarded-Encrypted: i=1; AL+hErGHK2aYDR7v1zIOkaPNhVqFubNKReyrqFjyxAiYLVseP8hMQ5+1NphugzcsQvLUVklxzwHuevoZZ/RoZSpsRj4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8DPNDieZIE7shevUMVwiRtdKLK8i+nnVTVbLEw9BUnfblyadi1
+	ydVIVNNCCEh+oHN2s1N/szUa3Q9ATcejuVjyB+pYEuxg2LcJLGgpSEf/X6vWK6WHUg==
+X-Gm-Gg: AYBFou3nNaUSCRoODXpaapzlsNl4j1noOEcYivWvB7+0OvFnFAuXxorN0w8ohphsmG1
+	PsH0JNRyoWjYqLcilr/IyxQ6DMvjXIQJTr8RqVWzc/lmPGeRk2PQDqrUENQqazVqo/e03Jh8//m
+	U6Fc7+aBSDHXEltckSt802Q9WCfOsUtuX9axIysTg5cI+1luiAJqlkOQwoNUDsufrdqVeJzvpqC
+	xC+jMBssR8S8KyjpmugnBr9eU26FGJdVJGfmyYV6lH4e5uZLQu54hhFvaQ2yyHOy2W913QP8u6s
+	drpJvoEgYwpmx1RgrV7aFJPCV1mJqAX/5Nzla5JfMq7BCEYZueWcexsLcuPASOOG7ce8Adj+2/u
+	6D2BhwQQ1o0LJAS3LBPo6BCem+wzUqOhek98g6sn5AC7vQpQgPyPg2RFpC/uQuwaSic0bl9sk9I
+	ef3WWiFP4oG3VOerJHZO+FRk255NzyAcwjcTk98baFOT6WZz8SEKrS4/uxY5KeBvB5xG+9gIRfq
+	+tacfdPh2up9HD0HY6a/JGA3+fsxmt7Lzzp6QrS5YAF50wSE84E2rwpBkddk4bJzsYiKSBcKyQf
+	v6iV6Rckil4qUyrERyQEE4PBv+oXibkRNgS6PYF+1fkdKk9XmTpr2Tu+AtBlUX6/0WIZG/K1Qhn
+	AffB+XUNREpAaWWlwMEi6oNhkrlWUtXW2omF01PiyxR2uRaa11ylCjuiSCiYyIOdCYaAFta/RMQ
+	YNopCjFtnDxJjdp9faS7k5voL2bqZQ8FtLusCDnCG2e+cW/b4yVAeubiOtYimpZCuVLuqE4Ga/f
+	5ntS/rtHwrve+6Xu/kHbhL80dbxdjnxUInzbmMicnOjAeh5p0nIaQIzNom73ko86YHysz7OpiTx
+	hOo=
+X-Received: by 2002:a17:907:86a6:b0:c4d:4be1:4197 with SMTP id a640c23a62f3a-c5096410ca0mr549445066b.41.1794680867320;
+        Sat, 14 Nov 2026 10:27:47 -0800 (PST)
+Received: from Desktop.fritz.box ([185.181.130.189])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b56df7sm245554366b.47.2026.11.14.10.27.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Nov 2026 10:27:46 -0800 (PST)
+From: Julius Bairaktaris <julius@bairaktaris.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	dsahern@kernel.org,
+	idosch@nvidia.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	richardbgobert@gmail.com,
+	willemb@google.com,
+	ecree.xilinx@gmail.com,
+	linux-net-drivers@amd.com,
+	saeedm@nvidia.com,
+	tariqt@nvidia.com,
+	mbloch@nvidia.com,
+	leon@kernel.org,
+	linux-rdma@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	martin.lau@linux.dev,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	corbet@lwn.net,
+	rdunlap@infradead.org,
+	skhan@linuxfoundation.org,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	strace-devel@lists.strace.io
-Subject: [PATCH v11 3/3] selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO syscall skipping
-Date: Sat, 14 Nov 2026 19:19:22 +0100
-Message-ID: <20261114181923.370930-4-renzo@cs.unibo.it>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261114181923.370930-1-renzo@cs.unibo.it>
-References: <20261114181923.370930-1-renzo@cs.unibo.it>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net v2 0/2] net: keep the TCP fixed-ID flags on the header they describe
+Date: Sat, 14 Nov 2026 19:27:43 +0100
+Message-ID: <cover.1794139176.git.julius@bairaktaris.de>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,316 +139,89 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check whether PTRACE_SET_SYSCALL_INFO syscall skipping semantics
-implemented in the kernel matches userspace expectations.
+GRO sets SKB_GSO_TCP_FIXEDID for a TCP packet whose IPv4 IDs do not
+change. Since commit 3271f19bf7b9 ("net: gso: restore ids of outer ip
+headers correctly") the flag describes the outermost header and
+SKB_GSO_TCP_FIXEDID_INNER the inner one, so every path that adds or
+removes a header would have to move the flags. None does, and a TCP
+stream that GRO merged and that crosses a tunnel boundary is segmented
+with the fixed-ID state of the wrong header.
 
-Signed-off-by: Renzo Davoli <renzo@cs.unibo.it>
-[v8: also check an error return value, and that the syscall cannot be
- changed anymore once skipped while its return value still can;
- checkpatch fixes]
-[v11: check that PTRACE_GET_SYSCALL_INFO reports an exit stop once
- the syscall is skipped]
-Assisted-by: claude-opus-5-5
----
- .../selftests/ptrace/set_syscall_info.c       | 249 +++++++++++++++++-
- 1 file changed, 248 insertions(+), 1 deletion(-)
+Patch 1 lets SKB_GSO_TCP_FIXEDID describe the innermost header again and
+replaces the inner flag with SKB_GSO_TCP_FIXEDID_OUTER, as Alexei
+suggested in review of v1. Patch 2 adds a selftest.
 
-diff --git a/tools/testing/selftests/ptrace/set_syscall_info.c b/tools/testing/selftests/ptrace/set_syscall_info.c
-index 1cc411a41cd6..0e2fc2cdf1dc 100644
---- a/tools/testing/selftests/ptrace/set_syscall_info.c
-+++ b/tools/testing/selftests/ptrace/set_syscall_info.c
-@@ -11,9 +11,15 @@
- #include <err.h>
- #include <fcntl.h>
- #include <signal.h>
-+#include <stdlib.h>
-+#include <stddef.h>
- #include <asm/unistd.h>
-+#include <sys/prctl.h>
- #include <linux/types.h>
- #include <linux/ptrace.h>
-+#include <linux/filter.h>
-+#include <linux/seccomp.h>
-+#include <linux/prctl.h>
- 
- #if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
- /*
-@@ -36,6 +42,7 @@ struct si_exit {
- 
- static unsigned int ptrace_stop;
- static pid_t tracee_pid;
-+static pid_t tracer_pid;
- 
- static int
- kill_tracee(pid_t pid)
-@@ -64,6 +71,25 @@ sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
- 		       ptrace_stop, ##__VA_ARGS__);		\
- 	} while (0)
- 
-+static int sys_seccomp(unsigned int operation, unsigned int flags, void *args)
-+{
-+	return syscall(__NR_seccomp, operation, flags, args);
-+}
-+
-+static struct sock_filter seccomp_filter[] = {
-+	BPF_STMT(BPF_LD+BPF_W+BPF_ABS, offsetof(struct seccomp_data, nr)),
-+
-+	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_restart_syscall, 0, 1),
-+	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
-+
-+	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_TRACE),
-+};
-+
-+static struct sock_fprog seccomp_prog = {
-+	.filter = seccomp_filter,
-+	.len = ARRAY_SIZE(seccomp_filter)
-+};
-+
- static void
- check_psi_entry(struct __test_metadata *_metadata,
- 		const struct ptrace_syscall_info *info,
-@@ -128,7 +154,6 @@ check_psi_exit(struct __test_metadata *_metadata,
- 
- TEST(set_syscall_info)
- {
--	const pid_t tracer_pid = getpid();
- 	const kernel_ulong_t dummy[] = {
- 		(kernel_ulong_t) 0xdad0bef0bad0fed0ULL,
- 		(kernel_ulong_t) 0xdad1bef1bad1fed1ULL,
-@@ -138,6 +163,7 @@ TEST(set_syscall_info)
- 		(kernel_ulong_t) 0xdad5bef5bad5fed5ULL,
- 	};
- 	int splice_in[2], splice_out[2];
-+	tracer_pid = getpid();
- 
- 	ASSERT_EQ(0, pipe(splice_in));
- 	ASSERT_EQ(0, pipe(splice_out));
-@@ -516,4 +542,225 @@ TEST(set_syscall_info)
- 	ASSERT_EQ(ptrace_stop, ARRAY_SIZE(si) * 2);
- }
- 
-+TEST(set_syscall_info_seccomp)
-+{
-+	/*
-+	 * Check for seccomp filter support without installing a filter:
-+	 * a NULL filter fails with EFAULT if SECCOMP_SET_MODE_FILTER is
-+	 * supported, and with EINVAL or ENOSYS otherwise.
-+	 */
-+	ASSERT_EQ(-1, sys_seccomp(SECCOMP_SET_MODE_FILTER, 0, NULL));
-+	if (errno != EFAULT)
-+		SKIP(return, "SECCOMP_SET_MODE_FILTER: %m");
-+
-+	tracer_pid = getpid();
-+	tracee_pid = fork();
-+
-+	ASSERT_LE(0, tracee_pid) {
-+		TH_LOG("fork: %m");
-+	}
-+
-+	/* tracee */
-+	if (tracee_pid == 0) {
-+		tracee_pid = getpid();
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		ASSERT_EQ(0, kill(tracee_pid, SIGSTOP)) {
-+			/* cannot happen */
-+			TH_LOG("kill SIGSTOP: %m");
-+		}
-+
-+		ASSERT_EQ(0, prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+			TH_LOG("prctl: %m");
-+		}
-+		ASSERT_EQ(0, sys_seccomp(SECCOMP_SET_MODE_FILTER, 0,
-+					(void *) &seccomp_prog)) {
-+			TH_LOG("seccomp: %m");
-+		}
-+
-+		/*
-+		 * From now on every syscall stops the tracee, so do not use
-+		 * ASSERT_*() here: it would write() its message before
-+		 * _exit(1) and the tracer would report a syscall nr mismatch
-+		 * instead of the test case that failed.
-+		 */
-+
-+		/* run getpid unmodified */
-+		if (getpid() != tracee_pid)
-+			_exit(1);
-+
-+		/* run getppid instead of getpid */
-+		if (getpid() != tracer_pid)
-+			_exit(1);
-+
-+		/* skip getpid and return 42 */
-+		if (getpid() != 42)
-+			_exit(1);
-+
-+		/* skip getpid and fail with ESRCH */
-+		errno = 0;
-+		if (syscall(__NR_getpid) != -1 || errno != ESRCH)
-+			_exit(1);
-+
-+		_exit(0);
-+	}
-+
-+	int status;
-+
-+	/* tracer */
-+	ASSERT_LE(0, waitpid(-1, &status, 0)) {
-+		LOG_KILL_TRACEE("waitpid: %m");
-+	}
-+
-+	ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, tracee_pid, 0,
-+			(PTRACE_O_TRACESECCOMP | PTRACE_O_TRACESYSGOOD)))
-+		LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
-+
-+	ASSERT_EQ(0, sys_ptrace(PTRACE_CONT, tracee_pid, 0, 0)) {
-+		LOG_KILL_TRACEE("PTRACE_CONT: %m");
-+	}
-+
-+	static const char * const testname[] = {
-+		"unknown error",
-+		"getpid seccomp unchanged",
-+		"getpid seccomp nr change: getppid",
-+		"getpid seccomp skip+set retvalue",
-+		"getpid seccomp skip+set error"
-+	};
-+
-+	static const unsigned int expected_nr[] = {
-+		__NR_getpid,
-+		__NR_getpid,
-+		__NR_getpid,
-+		__NR_getpid,
-+		__NR_exit_group
-+	};
-+
-+	for (ptrace_stop = 0; ; ++ptrace_stop) {
-+		ASSERT_EQ(tracee_pid, wait(&status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("wait: %m");
-+		}
-+
-+		if (WIFEXITED(status)) {
-+			tracee_pid = 0; /* the tracee is no more */
-+			ASSERT_EQ(0, WEXITSTATUS(status)) {
-+				LOG_KILL_TRACEE("unexpected exit status %u",
-+						WEXITSTATUS(status));
-+			}
-+			break;
-+		}
-+		ASSERT_FALSE(WIFSIGNALED(status)) {
-+			tracee_pid = 0; /* the tracee is no more */
-+			LOG_KILL_TRACEE("unexpected signal %u",
-+					WTERMSIG(status));
-+		}
-+		ASSERT_TRUE(WIFSTOPPED(status)) {
-+			LOG_KILL_TRACEE("unexpected wait status %#x", status);
-+		}
-+
-+		ASSERT_EQ(status >> 8, SIGTRAP | (PTRACE_EVENT_SECCOMP << 8)) {
-+			LOG_KILL_TRACEE("unexpected stop, wait status %#x", status);
-+		}
-+
-+		struct ptrace_syscall_info info = {
-+			.op = 0xff  /* invalid PTRACE_SYSCALL_INFO_* op */
-+		};
-+		size_t info_size = sizeof(info);
-+
-+		ASSERT_LT(0, sys_ptrace(PTRACE_GET_SYSCALL_INFO, tracee_pid,
-+					info_size, (uintptr_t) &info)) {
-+			LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+		}
-+		ASSERT_EQ(PTRACE_SYSCALL_INFO_SECCOMP, info.op) {
-+			LOG_KILL_TRACEE("entry op mismatch: %m");
-+		}
-+		ASSERT_TRUE(info.arch) {
-+			LOG_KILL_TRACEE("entry arch mismatch: %m");
-+		}
-+		ASSERT_TRUE(info.instruction_pointer) {
-+			LOG_KILL_TRACEE("entry instruction_pointer mismatch: %m");
-+		}
-+		ASSERT_TRUE(info.stack_pointer) {
-+			LOG_KILL_TRACEE("entry stack_pointer mismatch: %m");
-+		}
-+
-+		ASSERT_LT(ptrace_stop, ARRAY_SIZE(expected_nr)) {
-+			LOG_KILL_TRACEE("ptrace stop overflow");
-+		}
-+		ASSERT_FALSE(info.seccomp.nr == __NR_exit_group && info.seccomp.args[0] == 1) {
-+			LOG_KILL_TRACEE("tracee error: %s",
-+					testname[ptrace_stop]);
-+		}
-+		ASSERT_EQ(info.seccomp.nr, expected_nr[ptrace_stop]) {
-+			LOG_KILL_TRACEE("syscall nr mismatch");
-+		}
-+		const struct ptrace_syscall_info seccomp_info = info;
-+
-+		switch (ptrace_stop) {
-+		case 0:
-+		case 4:
-+			break;
-+		case 1:
-+			info.seccomp.nr = __NR_getppid;
-+			break;
-+		case 2:
-+			info.op = PTRACE_SYSCALL_INFO_EXIT;
-+			info.exit.rval = 41;
-+			info.exit.is_error = 0;
-+			ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
-+						tracee_pid, info_size,
-+						(uintptr_t) &info)) {
-+				LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
-+			}
-+			/* once skipped, the stop is reported as an exit stop */
-+			struct ptrace_syscall_info exit_info = {
-+				.op = 0xff  /* invalid PTRACE_SYSCALL_INFO_* op */
-+			};
-+
-+			ASSERT_LT(0, sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						tracee_pid, info_size,
-+						(uintptr_t) &exit_info)) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO after skip: %m");
-+			}
-+			ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, exit_info.op) {
-+				LOG_KILL_TRACEE("op mismatch after skip");
-+			}
-+			ASSERT_EQ(41, exit_info.exit.rval) {
-+				LOG_KILL_TRACEE("rval mismatch after skip");
-+			}
-+			ASSERT_EQ(0, exit_info.exit.is_error) {
-+				LOG_KILL_TRACEE("is_error mismatch after skip");
-+			}
-+			/* the syscall cannot be changed anymore once skipped */
-+			ASSERT_EQ(-1, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
-+						 tracee_pid, info_size,
-+						 (uintptr_t) &seccomp_info)) {
-+				LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO after skip succeeded");
-+			}
-+			ASSERT_EQ(EINVAL, errno) {
-+				LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO after skip: %m");
-+			}
-+			/* but its return value can */
-+			info.exit.rval = 42;
-+			break;
-+		case 3:
-+			info.op = PTRACE_SYSCALL_INFO_EXIT;
-+			info.exit.rval = -ESRCH;
-+			info.exit.is_error = 1;
-+			break;
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO, tracee_pid,
-+					info_size, (uintptr_t) &info)) {
-+			LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_CONT, tracee_pid, 0, 0)) {
-+			LOG_KILL_TRACEE("PTRACE_CONT: %m");
-+		}
-+	}
-+}
-+
- TEST_HARNESS_MAIN
+Tested in QEMU (KVM, KASAN and lockdep) with the selftest, 18 cases,
+400 segments each:
+- net (30c71476d842), 2 of 2 runs: 6 cases fail. Fixed inner IDs
+  increment after IPIP over IPv4 and IPv6 and after the ESP tunnel (390
+  of 400 segments carry an inner ID the sender did not use), the outer
+  IDs repeat after GRE and VXLAN over IPv4 (10 distinct outer IDs for 400
+  segments), and a VXLAN stream with fixed outer IDs keeps that state
+  after decapsulation into IPIP (10 distinct outer IDs).
+- this series, 2 of 2 runs: 18 of 18 pass, no KASAN or lockdep report.
+
+With a tunnel inside a tunnel, such as GRE traffic that GRO merged and
+that is routed into an IPIP tunnel without decapsulation, two flags still
+describe three IPv4 headers: the new outermost header takes
+SKB_GSO_TCP_FIXEDID_OUTER of the header below it, as it takes
+SKB_GSO_TCP_FIXEDID on net. This series does not change that case; it
+gets a separate fix.
+
+Changes in v2:
+- Keep SKB_GSO_TCP_FIXEDID on the innermost header and describe the
+  outer header with SKB_GSO_TCP_FIXEDID_OUTER instead of moving the
+  flag on encapsulation and decapsulation (Alexei). Encapsulation then
+  needs no change, which also covers ESP tunnel mode with crypto
+  offload, missed in v1 (Alexei, Sashiko), the Geneve GRO hint path,
+  which sets skb->encapsulation again after iptunnel_pull_offloads()
+  (Sashiko), and BPF encapsulation followed by an L3-only decapsulation
+  (Sashiko). FOU, which pulls the offloads twice, clears the outer flag
+  twice.
+- Keep the encap_level reset in gre_gso_segment() and
+  __skb_udp_tunnel_segment(): v1 undid commit 5197f3499c47 ("net: Reset
+  encap_level to avoid resetting features on inner IP headers"), which
+  with remote checksum offload masks NETIF_F_HW_CSUM out of the inner
+  features on devices without it in hw_enc_features (Alexei, Sashiko).
+- Drop the segment routing changes: the outer header there is IPv6
+  (Alexei). This also drops the read of hdr->nexthdr after
+  iptunnel_pull_offloads() in ipv6_srh_rcv() that Sashiko reported as a
+  use-after-free; ipv6_srh_rcv() is unchanged.
+- Convert mlx5 and sfc to the outer flag (Alexei).
+- Selftest: add an ESP tunnel mode case offloaded to netdevsim; check
+  the inner ID values, not only how many distinct IDs arrive; skip the
+  decap cases when the IPIP device cannot be created; fail a case whose
+  receiver reports no result; keep IPv6 link-local traffic off the
+  tunnels, whose tx_packets decide the GRO skip; remove the temporary
+  file on exit; sort the Makefile entry; wrap lines at 80 columns
+  (Sashiko, NIPA).
+- v1: https://lore.kernel.org/netdev/cover.1792857378.git.julius@bairaktaris.de/
+
+I used Claude (Anthropic) to help write these patches.
+
+Julius Bairaktaris (2):
+  net: keep the TCP fixed-ID flags on the header they describe
+  selftests: net: check TCP IP IDs across tunnels after GRO and GSO
+
+ .../networking/segmentation-offloads.rst      |   4 +-
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   |   8 +-
+ drivers/net/ethernet/sfc/ef100_tx.c           |  12 +-
+ include/linux/netdevice.h                     |   2 +-
+ include/linux/skbuff.h                        |   4 +-
+ include/net/ip_tunnels.h                      |   1 +
+ net/core/filter.c                             |   1 +
+ net/ipv4/af_inet.c                            |   8 +-
+ net/ipv4/tcp_offload.c                        |   6 +-
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/Makefile          |   2 +
+ tools/testing/selftests/net/tcp_fixedid.c     | 411 ++++++++++++++++++
+ tools/testing/selftests/net/tcp_fixedid.sh    | 400 +++++++++++++++++
+ 13 files changed, 836 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/net/tcp_fixedid.c
+ create mode 100755 tools/testing/selftests/net/tcp_fixedid.sh
+
+
+base-commit: 30c71476d842b094651bd7712f6c8ee8716147d0
 -- 
-2.47.3
+2.53.0
 
