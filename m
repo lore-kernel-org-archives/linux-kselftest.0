@@ -1,66 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.145.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794626449;
-	b=tyZ6DNXIGLLKSalJhL9oWqgS/AJWp3Lpyfdg6NIN1O/MhcWGDiJYPQztVrErG8QT0GjN
-	 BmAtwZ/fEO7ozjGYkSeb8dODELDUGCfIQSAqAtfws3UXzYHXDuc4e1v43wgqd1n/CUBmp
-	 34Co9FubXp1iCUG6Bo/hzVJbUQTg7bqgbmyUGFp3kCdHwwqMKfGw76F1qu5DlOWQsp6e/
-	 jIbbCs5DsVu74Kf0LCTqN3vfThPtbkVWOqriZWwwUly3hc3arXey7xbGL4txTDHydsRe/
-	 BND1ogklctxVGAaydUPHnY6WRYbaDXkusyFHeTcTbvQCboUBtmJYoMTIpjeG3qjExUA==
+	t=1794626450;
+	b=FnLAnSB/PH4Z1ak4IsLDMKNfmcSvu++xqaG/MSO9QZK+oFmZBl20a+fOskIoUkRBBIyH
+	 r0QQwfqMF+18Tkt2yiZyPotHd47WNlkE8CY9IxbrAZ8ICgA+IRaRo3AjmBBzjHwtHmAKA
+	 P1dJ+Qlt7zB/OPJfORLejyzCmVgAyPkHKRfyH+l4eH77F68rEAiTAWr+tVD3TMOcky4pe
+	 xJX7R8iKH5UcqBDex9DCoPTyK0gub+AJcZF7SjUjyyD5oUymWc8M8oyaAGZDkX7kvmgso
+	 VeFDAVIJQZCisFJDbP0d9oI7FQ3ZV4I8yNoxa21eBej0oCkL9x4eZ/zkpsnbMf9dcow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794626449;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794626450;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-ID:References:In-Reply-To:To:CC:X-Mailer:X-Originating-IP:
 	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
 	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
 	 X-Proofpoint-Virus-Version;
-	bh=uUxUfqd9LI7JvXXA4EpxThcsrnoWv7uHxs805oALM0U=;
-	b=mDNhPahqG+9uXNKbMsNqpEF1zhvlM61iqtVS/rssbauTOcl/yLUA3C0KXeluWGXSAUeF
-	 HIuGMbfjH9Wj/JO+nDf9HnecIbcE/G+SlJxgvYKVxlCSktX/JrUdZCVYCgdpkjUR4jwFw
-	 tTLeeybLnsPKuGQWapWnyLqUxFLuR97sjLgwolQ1h4azt9vkjLysCS26kqKe/iNDoN5aT
-	 TT4WGL1UrUJ7mT6sAzFPI/s+xURN7noxBkRYhaUl2tcS4GYK04aFHPp00aI4wieuLw3hy
-	 FLye3+6vT5USVwa6XfHHWNLoy9McsdVw8MhsHetmVUnm9CWfyJiTBFQTTy+P8nW1fZQ==
+	bh=Zat2TDCQjQrCJJMrldTuofKduoOsw5NtEo4KJnXzX30=;
+	b=5Q/TheAPme+VUyHKCaCrJ/SsRqkHQNNPb/j+01LcbQiER1/UlYh5UQhrJFKJlwhwO7ID
+	 1dzbzywx0lPiG7ylTtuC78SJbKJpQo9EJuZ6ap7+eybqJykmvqXr2Sfv4cQxZP8BZAuYc
+	 wRnxnhNSrtMvf+/5IW5HApe2tsR8ApTnYmd0du7DkjwIchxG2uxco7fEdlj79q1iQB8bQ
+	 ERMoeuBP4lRfGaeiJGTCA3wQA1YXuKUC1QeIjmygcaK8VE0GedYYbjJIw6gLIX/3oyq9s
+	 xyoC+UFK3sf2UCdz/dnqHKhcnndGdJVGVTl2XbdMfDQVFd77mfDXVfKLe93FJwqjp6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=meta.com;
 	spf=pass smtp.mailfrom=meta.com;
-	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ic+Ed4qM;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=DbVcyXLr;
 	arc=none smtp.remote-ip=67.231.145.42
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1146606A32E;
-	Sat, 14 Nov 2026 03:20:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1146606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73419606A32D;
+	Sat, 14 Nov 2026 03:20:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73419606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=ic+Ed4qM
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=DbVcyXLr
 Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AE22XeV3157915;
-	Fri, 13 Nov 2026 19:20:25 -0800
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AE22QKo3157778;
+	Fri, 13 Nov 2026 19:20:23 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=uUxUfqd9LI7JvXXA4EpxThcsrnoWv7uHxs805
-	oALM0U=; b=ic+Ed4qM+dTh/spfmGgmV1Lzd46ckq12/UPrcfZ/lzK3bHwnxDB1a
-	IvuNkbnRakv3k6u4bsa1zVMTXCS5BpIjXeZFgMPU1yC5ClJtcBNPl+zaWAi8llhB
-	GlqEgPNI9hqA6Q+4Ai05ErFM4YZiaRsocdKzLqwyDJjko0/Jif+gN4hUihDEQdTZ
-	wKSMUakxgkExDjHkGRmyooCTVJlbxzbv+VpCn0QY23HIpOD//CVSUgurIsOuTpuK
-	4Za4a3IBVa+Q4BWAy7NxMb4AL0s4R1vk45PCI0NpdqDWC0wnuJywFO0vjrBNv9OE
-	kR8HcWL+qSndm4lBCsep7//NgK9Y+2NHA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hwjg5tf9k-2
+	pps82601-s2048-2026-q3; bh=Zat2TDCQjQrCJJMrldTuofKduoOsw5NtEo4KJ
+	nXzX30=; b=DbVcyXLr2uaGvRGegH7A+eoDwDt4dpnjN6ZanArxGLZj+W9eHd0B/
+	syjY2L/lZeYAgG8qPCXGDdrozSz7d6gbuJ8RSq19bq06WPmoa4C3kwErQzso5w6S
+	HlXaW6PtmcNLns0rsA+lCMpwwEx9Q9LcA7hmBq0wLb10gXcXctRBll2G1KnG9YGZ
+	F28/qeGZsv/gQHl4eTuVCvtQSCgkgP3Lxz0FzGxgV5Ds5WV58GPI92QA59cjPnLq
+	MtVqGqk0rKuDiR9I3zsl16CEuql5I0KGufHnMCpU0FOPzBlqsZgeyYaaS3GuWQox
+	8JQtGQpoLAuk4fFtcJ6NelZ1yToJ1f8SA==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hwjg5tf9d-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 13 Nov 2026 19:20:24 -0800 (PST)
-Received: from localhost (2620:10d:c085:108::150d) by mail.thefacebook.com
- (2620:10d:c08b:78::c78f) with Microsoft SMTP Server (version=TLS1_2,
+	Fri, 13 Nov 2026 19:20:23 -0800 (PST)
+Received: from localhost (2620:10d:c0a8:1b::30) by mail.thefacebook.com
+ (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Sat, 14 Nov
- 2026 03:20:23 +0000
+ 2026 03:20:22 +0000
 From: Bobby Eshleman <bobbyeshleman@meta.com>
-Date: Fri, 13 Nov 2026 19:14:15 -0800
-Subject: [PATCH net-next v6 4/8] vsock: pass the netns to
- ->has_remote_cid()
+Date: Fri, 13 Nov 2026 19:14:13 -0800
+Subject: [PATCH net-next v6 2/8] vsock: constify the transport in
+ vsock_for_each_connected_socket()
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -72,7 +72,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20261113-vsock-guest-ns-v6-4-3737ce4673c0@meta.com>
+Message-ID: <20261113-vsock-guest-ns-v6-2-3737ce4673c0@meta.com>
 References: <20261113-vsock-guest-ns-v6-0-3737ce4673c0@meta.com>
 In-Reply-To: <20261113-vsock-guest-ns-v6-0-3737ce4673c0@meta.com>
 To: Stefano Garzarella <sgarzare@redhat.com>,
@@ -107,108 +107,68 @@ CC: <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
         Bobby Eshleman
 	<bobbyeshleman@meta.com>
 X-Mailer: b4 0.14.3
-X-Proofpoint-ORIG-GUID: yU5Tx7R08RVqQlSfn9tQnz8FbCvbXmWU
-X-Proofpoint-GUID: yU5Tx7R08RVqQlSfn9tQnz8FbCvbXmWU
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE0MDAxMiBTYWx0ZWRfXwbM0xFof1axD
- 5uxYrPu3HN0lUmlLfmpexrdR8QpWCR0H+hTCV0U0rp0RUkkMokADOH82S3i9xeyxk4zIpQrnuJ+
- jsUZauXWJ28gCktSGsMvuCu/Cs9Jveg=
-X-Authority-Analysis: v=2.4 cv=Mcb5KJ/f c=1 sm=1 tr=0 ts=6af7d378 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+X-Proofpoint-ORIG-GUID: bemiz2S90q8sVTl3DAMVPZy6ZL5HvRAb
+X-Proofpoint-GUID: bemiz2S90q8sVTl3DAMVPZy6ZL5HvRAb
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTE0MDAxMiBTYWx0ZWRfXw1vd/KzJ5D0k
+ /K5YHwTpZm72AmOSdGOWmF/ZfIy9Am0QO3b38BpKregGz+o36YKVkqV7B3vJngpPhmMedV4Xlsh
+ yTuYfvx6nrIK4GcFjcp127wpV2JDQpQ=
+X-Authority-Analysis: v=2.4 cv=Mcb5KJ/f c=1 sm=1 tr=0 ts=6af7d377 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
  a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
  a=7x6HtfJdh03M6CCDgxCd:22 a=_1IyUuN4QrATX339ibzo:22 a=20KFwNOVAAAA:8
- a=VabnemYjAAAA:8 a=XJcQsa36eN5O9Fc7FbYA:9 a=QEXdDO2ut3YA:10
+ a=VabnemYjAAAA:8 a=YkCHES2veT9o9JeyN-cA:9 a=QEXdDO2ut3YA:10
  a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE0MDAxMiBTYWx0ZWRfX+x0vwLItIxVJ
- C+TGdIlla7MAmJbBTc3RmppxXJUQKIe/lX4lfqIQRV8aGg7v5hdFK8uPRJ/irkNA/WmQzUoaqv6
- 4NWEcIqxGIwuDrIm7rYXCWC5yi2nMICCk4BuKsah69mHx1g7o+wrZmweQlNSNMPAnLzk08ssLOc
- G+q6UFmIaTxYOs1hjiSQ+lT0g+my5eFMzctzm4G0PHbaP6J3InKqohADrWq8vZp9Vn6Yywa4M1r
- N/uCKk5HArM/h292SqVF+cRTXnTunBtiDDqRpPEWzZVs8NRU7rwtj6baoeg/N7cvch/v41gBzYX
- EnidUUpsP5+tmmyQxOqE+C4okXn9Du0dbW86IpQLKCm98FdUsGVlXG/WsXekvVNXOF0sVx27lRB
- GeVfkHgpfgo7zzMEnqOo8kfS/hPbesvJeF8i3zdcW/lU9HSBm8HzFrIfFfG+VHpisP0LIXQS3Uo
- vSRCA3i9ZMNC/m1MnjA==
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTE0MDAxMiBTYWx0ZWRfXxdNMnqxwZfFH
+ aXA5yH2re5udZq7NOLooD6zLaCqK8i3ZCVKPmYvit744jAX0h9bY3Mz2zdl2Uv2tf8FG9SbtzC1
+ jAnLTXx9faylJ2z9q+s7YURDUpPafIjeogPYNhZcOo7A3rhGH97+CbVDMm5oNkOLt4n9smtPaOo
+ /t3E9W3V6Mobpw15ortGGOYf7I0+O3P4wgBYK6TuOFy49eEWhbOgXVL+EvM1ltsWz42HcC88G4x
+ rgLn7LKCXmxZ1pOV9lnVtLgONYq6MIELQY5QMVsNrUiMn4K0S2f1ItyC/LKCHsg9am8zM11aFb0
+ NaVJkMSCGVBOnAJ6aci54m5am0NSIh5q45Hgt9A0joxYUqKCJxurZ8PaiIJpOwHUkiV839LKRI9
+ bU5X7lFheIaIQL40qrUM1VX3/o9GMQaVmY2qO0NEeDVv7K2wlCM/hlkxcDv9IjHvAr/2ICOtUwo
+ xFgbAmcNg76cInSFSxw==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-11-14_01,2026-11-11_03,2025-10-01_01
 
-The transports only use the socket to find its network namespace. Pass
-the namespace instead, so that a later patch can ask whether a CID is
-taken in a namespace without necessarily having a socket on hand. This
-will help with avoiding CID collisions when devices move between
-namespaces.
+Allow const transports to be passed too. The function only compares the
+pointer against vsk->transport, which is itself const, and never writes
+through it.
 
 No functional change.
 
 Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- drivers/vhost/vsock.c            | 4 +---
- include/net/af_vsock.h           | 2 +-
- net/vmw_vsock/af_vsock.c         | 6 ++++--
- net/vmw_vsock/virtio_transport.c | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ include/net/af_vsock.h   | 2 +-
+ net/vmw_vsock/af_vsock.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-index abed1fbcf66c..01f8930ca51f 100644
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@ -91,10 +91,8 @@ static struct vhost_vsock *vhost_vsock_get(u32 guest_cid, struct net *net)
- 	return NULL;
- }
- 
--static bool vhost_transport_has_remote_cid(struct vsock_sock *vsk, u32 cid)
-+static bool vhost_transport_has_remote_cid(struct net *net, u32 cid)
- {
--	struct sock *sk = sk_vsock(vsk);
--	struct net *net = sock_net(sk);
- 	bool found;
- 
- 	rcu_read_lock();
 diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
-index 370fcd3ddabc..1c38a27fadf2 100644
+index 5549298c1ec6..370fcd3ddabc 100644
 --- a/include/net/af_vsock.h
 +++ b/include/net/af_vsock.h
-@@ -183,7 +183,7 @@ struct vsock_transport {
- 	 * CIDs via the hypervisor (i.e. supports the fallback overlay). VMCI
- 	 * does not implement this as it only serves CIDs 0 and 2.
- 	 */
--	bool (*has_remote_cid)(struct vsock_sock *vsk, u32 remote_cid);
-+	bool (*has_remote_cid)(struct net *net, u32 remote_cid);
- 
- 	/* Read a single skb */
- 	int (*read_skb)(struct vsock_sock *, skb_read_actor_t);
+@@ -233,7 +233,7 @@ bool vsock_check_source(const struct vsock_sock *vsk,
+ 			const struct vsock_transport *transport,
+ 			const struct sockaddr_vm *src);
+ void vsock_remove_sock(struct vsock_sock *vsk);
+-void vsock_for_each_connected_socket(struct vsock_transport *transport,
++void vsock_for_each_connected_socket(const struct vsock_transport *transport,
+ 				     void (*fn)(struct sock *sk));
+ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
+ bool vsock_find_cid(unsigned int cid);
 diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 4dee7af259ab..37abde1ca26c 100644
+index dc81cd47f099..eaf77ab55321 100644
 --- a/net/vmw_vsock/af_vsock.c
 +++ b/net/vmw_vsock/af_vsock.c
-@@ -633,11 +633,13 @@ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk)
- 			new_transport = transport_g2h;
- 		else if (transport_h2g &&
- 			 (!transport_h2g->has_remote_cid ||
--			  transport_h2g->has_remote_cid(vsk, remote_cid)))
-+			  transport_h2g->has_remote_cid(sock_net(sk),
-+							remote_cid)))
- 			new_transport = transport_h2g;
- 		else if (sock_net(sk)->vsock.g2h_fallback &&
- 			 transport_g2h && transport_g2h->has_remote_cid &&
--			 transport_g2h->has_remote_cid(vsk, remote_cid)) {
-+			 transport_g2h->has_remote_cid(sock_net(sk),
-+						       remote_cid)) {
- 			vsk->remote_addr.svm_flags |= VMADDR_FLAG_TO_HOST;
- 			new_transport = transport_g2h;
- 		} else {
-diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-index 4f9aa9c4c3aa..eced6929405d 100644
---- a/net/vmw_vsock/virtio_transport.c
-+++ b/net/vmw_vsock/virtio_transport.c
-@@ -548,7 +548,7 @@ bool virtio_transport_stream_allow(struct vsock_sock *vsk, u32 cid, u32 port)
- static bool virtio_transport_seqpacket_allow(struct vsock_sock *vsk,
- 					     u32 remote_cid);
+@@ -480,7 +480,7 @@ void vsock_remove_sock(struct vsock_sock *vsk)
+ }
+ EXPORT_SYMBOL_GPL(vsock_remove_sock);
  
--static bool virtio_transport_has_remote_cid(struct vsock_sock *vsk, u32 cid)
-+static bool virtio_transport_has_remote_cid(struct net *net, u32 cid)
+-void vsock_for_each_connected_socket(struct vsock_transport *transport,
++void vsock_for_each_connected_socket(const struct vsock_transport *transport,
+ 				     void (*fn)(struct sock *sk))
  {
- 	/* The CID could be implemented by the host. Always assume it is. */
- 	return true;
+ 	int i;
 
 -- 
 2.53.1-Meta
