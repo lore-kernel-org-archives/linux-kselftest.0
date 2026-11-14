@@ -1,85 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.136.161.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794681955;
-	b=eKBTqmS+Di/BRSBMAjeioN4uV+lsxwa2l/5mUXPV70ak489WoVEthwsDr2p0UuWeGov4
-	 aY0KyqXCSc3eft+vI0b2kU0i/iM9BuTmdmkX16dQ6s/OROWZpinNUO/KElYyhV1oDZopy
-	 rBGc185BiQhy1fs5RMT3KnyOxoBPX0RNfQnHJn2/JOjEI9nWFDVwe1Rxj/Yt6MX4E1/oN
-	 ItjE679LrqsUxiegezOI5IGotrFJUFky3tJarlvvAIw4gM1gBxmRebQe/sd/t1dJic84K
-	 7IP/+zMS/zlbFu448i/jrqYJ/bTkKYFtDdi4woCrL5Oh5/PlGHPOhblML9BCZLlfmTA==
+	t=1794682052;
+	b=arsm0qnNpP9ztNg6tgEOOPpNokgQmUuGOrwhR0ogTcqxUs2D7pzJFm31SImcUni1cGNB
+	 db9DorqiM683maZuEfA7X8pJHIhm8/DHz4NM/etcWGi+fXbkluI2t9cHmkWk8cRhGqWdZ
+	 fQ1x8FF1fxq+4brnI9jwjUtDLM4VWpwlIN0DYnHzmOSG285NvnMSeboaMyRs6fGaxVKaA
+	 ld3q4lMc8jI6pdXxcLWtgjyO+DjUBXx6lUz8IB95Zw0mfhQssC5XL6gt7AVQd6dyMeThq
+	 yOdBBtIZndTdB609FmLxiQjb3oHjvuXBwBa5bPqVYjDRHggTk7WcxDQhiuLVDiWlVGg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794681955;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
-	bh=mhjMuwlcmmA6xmnk85ku3gy5AP9/nFkfmboSqD/BPaw=;
-	b=vIoK7AVC6A99V74N9p+2qjj53rsdQv6ceayJZl0ajfV21H+6+ahCn3KRXoEWYzm8ohe0
-	 j/2MvX68bMTAprPhurdAp8TFGS813TSu2TeKGXq5rAMzoVGr/x4jrbMQ4/YEU1ELFgUB+
-	 uTD71846XBpNldFX4x78X84n9c4TnWXC0EMWecDY/0sLbmKOiyh30qxaNPhoO53ogguFy
-	 j35IpvNgHOYSgeCgNpd/Ww8fge4ddWnFpCGg4oxV8QS9tV/ScFW0SEhMlJvuTacHYKMJx
-	 hkNADDk9vRgc6CIMNLJeir36EPOM/r+6jh9aMgFKELW4Ju1fWnIUUF8yZn//ooMNFDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794682052;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=usIPslq1cfT97Mm83gdtb2Vu2a+gdviQvXX9W9YM1v8=;
+	b=vaWO9fuAlQshIbzDlrnGKRBqU1UERjD1b3RDZH62XjUbkf2kRcLgumTU5xPH+SN9CMrU
+	 CEhuQYm0ibIql7dmlI2/JyYOVuTYNPfAUJ2yYSkMvyl0RYNt4rxykGuB7cpLwf1nFpqOz
+	 EPhj2aQLOSH3yCIg9oSe/+vn+tC5k8JuHTnIIy9fxpp2RMx3F3s8GV9yVWIqXFi7KeZ0t
+	 Uai5keT42Uby7hywz6a1tCyUrXXZEVULsv00WJctqmH3b6UWQ5xMNm4DOzQzCqwZqDyD/
+	 R9hM6b/Du3CusiysRZtmj7sRJqeM18VIzENgQC+3ZqJ8o2jmKJkD+2lJ5hzPpBabHBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JUeDpqG+;
-	arc=none smtp.remote-ip=209.85.222.178
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE99606A327
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 18:45:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADE99606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	dmarc=pass header.from=cs.unibo.it;
+	spf=pass smtp.mailfrom=cs.unibo.it;
+	dkim=pass header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=I8r0O3zb;
+	arc=none smtp.remote-ip=130.136.161.50
+Received: from mail.virtlab.unibo.it (mail.virtlab.unibo.it [130.136.161.50])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C710B606A323;
+	Sat, 14 Nov 2026 18:47:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C710B606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cs.unibo.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unibo.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JUeDpqG+
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-93f2b8cf037so274327185a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 10:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794681954; x=1795286754; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=mhjMuwlcmmA6xmnk85ku3gy5AP9/nFkfmboSqD/BPaw=;
-        b=JUeDpqG++mf++7m4owPYQY97vDM1BdXIWpPWR9xMWUZo/jdQTQsMwApPcqakMIy9T4
-         bxBTvAMMz8cKj90Y6hp8UVgQ08iHpVMTDGMkUDTTZhVtpCSlyDuLv23ZnhonAuYDQgX8
-         oKPmJkcSN/LwL2vss6NxVKCVeiDgu6Jb9i1asyhayqdGhm3Z2qCoxUSeMlF0vthK2ck5
-         xAz0/N+HElRMTaHFWZq2OAQvjEq5u87HjKalMvOkcw0cuyITO7+1Q1tMelM41VswOSma
-         eUXZCNlTSp9PzhYqOD42jYE7WEurOcBwmyk9tMnP0YI2OkSYeC7Oqkb+p2tb0NKGtJCS
-         ZZBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794681954; x=1795286754;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mhjMuwlcmmA6xmnk85ku3gy5AP9/nFkfmboSqD/BPaw=;
-        b=iG8xhd+uloV3/9DqKMWF+TG58YqHtnHCR7uV/l3jDBHgCkmyy1mojlTjA9Uan9fgzs
-         mXoNGFUIa+4olvygANt0A8scl6F7W+gQjVTwYcXm9WiDy0L++GG9REyXd4uJ1pYFTD+Z
-         kSasVFEwz66vl6hxXlYRglQD+shIbXorBdSjKWwcFXWnNHXo5f/2Fbxh2ENDS4SMxtA8
-         G0fTi4EG9xs6sVTR+HAqPrgIdHS5ifPIw4LpzhIOvKeRqz5pxCf+6509YiWdsY7n8oAV
-         BO2icpbzX8VPZlYe+yuawF3X6i+/Uwzeap6eR+L/e8Dan1PkR52Q3dGvauHeAPJKfBQ5
-         JgTg==
-X-Forwarded-Encrypted: i=1; AL+hErGwG2tpTLUmlt9+n7/g1QQHcQNf4dq1Ycb8bwYtatsnLgbm36bFW7OV7MKJuL/hydy6o79IakunQ9FSujnpEMA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8kFrAOzQrpMci32J64mGwGLU06fme8Do/TzzWRPUK4Enqbnaic
-	I83fMAc1hvFIWdSi5/q31M5eFr8dXbl0XjF9SmLmn/Tz+munBkmjvSbc
-X-Gm-Gg: AYBFou0bVVYeJTlp0ibw0WOYQcc/Gm7zKgcmgE+htVFiiar6wd1Dnq6Qdm22uBvyZt6
-	XK1CggfoUu4u+WHZQU3+1H44nyU0PPOd6uQsC97jSDsbng/IFEGRFWarWYjuWGSRlxVSwHxu/DF
-	ailMudH8BoVcKhqtCxcT9WgkYB59djVB//UDzcIop+lsOlhhjfzwvUdUhnAIQH/hxwpGJrASO7/
-	Qd8rX38Owg2h8SK44yoAMTMzBPtlpB8CYI9z9DopS7gtDZvWftcD849/pY2R1hZtk7X7JZx0prf
-	4Ue7T8pak/pA6qp/4CZpgt47fAr5Qa23d1D6MTJTKqGQMZW9sI5yjCzfqZZ1TQDGnTkNWSeRSZW
-	DXK/qbVm03dD0UQUlNssOoi8H2eod1Reg2f6oirSoOXTflw+Sh0FaLlyxhOdhgqf/Vep6614uy2
-	Dvq7It8sySdN72eF8mYg2Cks6waExgL4IWoqreH68LnCJaseFWI94z1M7MKE3yfs/7TtCYU0jPn
-	5sNsudL4dSU43iIYcm3/2JwOk6n94/SNgz1U7C0JSQnXpECEJaJ7Uz7utO6mlA5NMLfkc6xVdyG
-	q5o3k1oCyaNtH//XxLihLPxXFb/LEIyQpzhzPFQbOr2X209nPPbDF11ALE+r2hbx3yYMTl2Z1ez
-	alxykrHiqIGmBti3jj0u5sCRpMMZk1itLpA==
-X-Received: by 2002:a05:620a:25c6:b0:93f:1936:b229 with SMTP id af79cd13be357-9494bbfe4ecmr937435085a.77.1794681953514;
-        Sat, 14 Nov 2026 10:45:53 -0800 (PST)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9495a5ef5c4sm338706085a.6.2026.11.14.10.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Nov 2026 10:45:52 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=I8r0O3zb
+Received: from eipi10.cs.unibo.it (host0.studiodavoli.it [109.234.61.1])
+	by mail.virtlab.unibo.it (Postfix) with ESMTPA id 84A081C0145;
+	Sat, 14 Nov 2026 19:47:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cs.unibo.it;
+	s=virtlab; t=1794682049;
+	bh=4OoxQ6arIeZu/vN+Ihq9aApJ9I0DFUIQBpN7zRBlfZw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=I8r0O3zbGw34mgT2X1Qre//qmSTh3gOeexo8EaGTtv1ZazwUCTNcO/YfjfCGKTnCG
+	 +Qjgrxy6JEZ9aPs6zu1KrZAdFabi1gHaSujHV+wLlPncx8IFQ48giOpWqp6GIm7RYO
+	 oGb/EWxerDf355sdx1T0uRv3Ywp3mhxUq8KzFGYg=
+From: Renzo Davoli <renzo@cs.unibo.it>
+To: linux-kernel@vger.kernel.org
+Cc: Renzo Davoli <renzo@cs.unibo.it>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	"Dmitry V . Levin" <ldv@strace.io>,
+	=?UTF-8?q?Michal=20Such=C3=A1nek?= <msuchanek@suse.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	strace-devel@lists.strace.io,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Brian Cain <bcain@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Simon Schuster <schuster.simon@siemens-energy.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	linux-alpha@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-um@lists.infradead.org
+Subject: [PATCH v4 0/3] ptrace_set_syscall_info: add support for instruction pointer modification
+Date: Sat, 14 Nov 2026 19:47:15 +0100
+Message-ID: <20261114184720.373178-1-renzo@cs.unibo.it>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -88,56 +83,162 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 14 Nov 2026 18:45:49 +0000
-Message-Id: <DMV5NLOEYFGF.C7ITHCRCNA7P@gmail.com>
-To: "Michal Luczaj" <mhal@rbox.co>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, "Eric Dumazet"
- <edumazet@kernel.org>, "Kuniyuki Iwashima" <kuniyu@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, "Willem de Bruijn" <willemb@google.com>, "Jakub
- Sitnicki" <jakub@cloudflare.com>, "Jiayuan Chen" <jiayuan.chen@linux.dev>,
- "David S. Miller" <davem@davemloft.net>, "Jakub Kicinski"
- <kuba@kernel.org>, "Simon Horman" <horms@kernel.org>, "Jonathan Corbet"
- <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy Dunlap"
- <rdunlap@infradead.org>, "Stanislav Fomichev" <sdf@fomichev.me>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>
-Subject: Re: [PATCH bpf-next v3 0/8] bpf, sockmap: Restrict iter-context
- sockmap updates to sockmap iterators
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
-In-Reply-To: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat Nov 7, 2026 at 5:58 PM UTC, Michal Luczaj wrote:
-> Follow-up to Sashiko's report [1] and the decision to restrict which
-> iterator may perform sockmap updates [2]. Series started short: remove
-> about-to-be-stale test, restrict updates, add a negative test. Then it
-> expanded: mark bpf_iter__sockmap::sk as PTR_TRUSTED, restrict
-> bpf_sock_destroy() callers to iter/{tcp,udp}, few little tweaks.
->
-> [1]: https://msgid.link/20260626205814.BAC3C1F000E9@smtp.kernel.org
-> [2]: https://msgid.link/87echn2fhd.fsf@cloudflare.com
->
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
-> Changes in v3:
-> - Drop RFC prefix
-> - Update bpf_iter_reg::feature docs
-> - Fix tcp_request_sock BTF build error
-> - Restrict allowed callers of bpf_sock_destroy() to iter/{tcp,udp} (Alexe=
-i)
-> - Link to v2: https://patch.msgid.link/20261102-sockmap-update-limit-iter=
--v2-0-e96a63c43b39@rbox.co
+PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
+PTRACE_GET_SYSCALL_INFO by allowing a tracer to modify details of a
+system call in which the tracee is currently blocked.
 
-Sorry for the delay. Applied.
+The API is designed to let tracers inspect and modify system call
+information in a simple, architecture-agnostic manner.
+
+The current implementation only supports modifying the subset of
+system call information needed by strace: the system call number,
+arguments, and return value.
+
+This patch set extends PTRACE_SET_SYSCALL_INFO with support for
+modifying the tracee's instruction pointer.
+
+To do this, the tracer stores the new instruction pointer value in the
+instruction_pointer field of the ptrace_syscall_info structure and
+sets the PTRACE_SYSCALL_INFO_FLAG_SET_IP flag in the flags field.
+
+This flag is introduced to avoid breaking existing code that uses
+PTRACE_SET_SYSCALL_INFO and currently ignores the
+instruction_pointer field.
+
+The proposal does not add any new ptrace capability. It merely provides a
+portable interface for a capability that already exists and is already relied
+upon by existing applications.
+
+WHY
+
+PTRACE_SYSCALL_INFO_FLAG_SET_IP completes the set of actions that a tracer can
+request when intercepting a system call.
+
+A tracer can currently instruct a tracee to:
+
+* execute the original system call;
+* execute a different system call (or the same system call with modified arguments);
+* skip the system call and provide the desired return value and/or errno.
+
+The proposed PTRACE_SYSCALL_INFO_FLAG_SET_IP adds a fourth possibility:
+* execute an arbitrary sequence of two or more system calls in place of the original one.
+
+The mechanism is straightforward. During a PTRACE_SYSCALL_INFO_EXIT stop, the
+tracer rewinds the instruction pointer to the system call instruction (e.g. by
+2 bytes on x86-64 for syscall, or by the appropriate amount on other
+architectures). When the tracee resumes, it immediately generates a new
+syscall-entry stop, allowing the tracer to provide a new system call number and
+arguments. By repeating this process, a tracer can transparently replace a
+single system call with any sequence of system calls.
+
+This capability already exists on all architectures through
+architecture-specific interfaces such as PTRACE_POKEUSER, PTRACE_SETREGS, or
+PTRACE_SETREGSET. PTRACE_SYSCALL_INFO_FLAG_SET_IP does not introduce a new
+capability; it merely exposes an existing one through the portable
+PTRACE_GET_SYSCALL_INFO/PTRACE_SET_SYSCALL_INFO API.
+
+WHO
+
+The VUOS project uses this mechanism extensively.
+VUOS provides namespace-like execution environments implemented entirely in
+user space, without relying on kernel namespaces.
+https://wiki.virtualsquare.org/#/tutorials/vuosbasics
+
+For example, VUOS allows unprivileged processes to use user-space
+implementations of filesystems (FUSE), networking stacks, virtual devices, and
+other resources.
+
+To improve scalability on multicore systems, VUOS implements what we call the
+guardian angel model: each traced thread has its own dedicated tracer thread.
+This avoids a single tracer becoming a bottleneck.
+
+When a traced thread creates a child, ownership of the new tracee must be
+transferred to a newly created guardian angel. This requires delaying execution
+of the child's first system call until the new tracer has attached.
+
+The current implementation proceeds as follows:
+* save the original system call number and arguments;
+* replace the system call with a blocking ppoll(NULL, 0, NULL, NULL) call;
+* detach the original tracer;
+* attach the new guardian angel using PTRACE_SEIZE;
+* interrupt the blocking ppoll() with PTRACE_INTERRUPT;
+* at the subsequent syscall-exit stop, rewind the instruction pointer to the system call instruction;
+* at the following syscall-entry stop, restore the original system call number and arguments.
+
+This mechanism is currently implemented using architecture-specific register
+manipulation. PTRACE_SYSCALL_INFO_FLAG_SET_IP would allow the same
+implementation to be written using the portable ptrace syscall information API.
+
+Although VUOS is the primary motivation for this proposal, the feature is
+generally useful for any project implementing ptrace-based system call
+interposition, including PRoot, strace's syscall injection machinery, and
+similar frameworks.
+
+This patchset is a new version of the proposed patchset entitled:
+ptrace_set_syscall_info: add support for seccomp syscall skipping and
+instruction pointer modification
+
+The patchset has been split in two:
+syscall skipping (previously sent)
+instruction pointer modification (this)
+
+This patch series depends on the syscall-skipping series:
+[PATCH v11 0/3] PTRACE_SET_SYSCALL_INFO: add support for seccomp syscall skipping
+https://lore.kernel.org/lkml/20261114181923.370930-1-renzo@cs.unibo.it/
+
+This series is based on top of v11 of that series and should be applied
+after it.
+
+The prerequisite series is currently not in mainline.
+
+Testing (QEMU, v7.4-rc2 with v11 of the syscall-skipping series,
+tools/testing/selftests/ptrace/set_syscall_info):
+
+                               x86_64 (KVM)
+  ptrace/set_syscall_info      3/3
+
+Changes in v04:
+* rebased to Linux 7.4-rc2, on top of v11 of the syscall-skipping series
+* ptrace: adapted to the syscall-skipping series, where a
+  PTRACE_SYSCALL_INFO_SECCOMP stop turned into a PTRACE_SYSCALL_INFO_EXIT
+  one is handled by ptrace_set_syscall_info_seccomp_skip();
+  PTRACE_SYSCALL_INFO_FLAG_SET_IP applies to that case too
+* ptrace: check that the new instruction pointer fits in an unsigned long
+  before changing any register, so that -ERANGE leaves the tracee untouched
+* selftests/ptrace/set_syscall_info.c: checkpatch fixes in the
+  PTRACE_SYSCALL_INFO_FLAG_SET_IP test case
+
+Changes in v03:
+rebased to Linux 7.3-rc1
+
+Changes in v02:
+compatibility issues with updated syscall skipping
+set_syscall_info selftest: improve error messages
+
+Renzo Davoli (3):
+  asm/ptrace.h: add instruction_pointer_set
+  ptrace: add PTRACE_SYSCALL_INFO_FLAG_SET_IP
+  selftests/ptrace: add a test case for PTRACE_SYSCALL_INFO_FLAG_SET_IP
+
+ arch/alpha/include/asm/ptrace.h               |   6 +
+ arch/hexagon/include/asm/ptrace.h             |   6 +
+ arch/m68k/include/asm/ptrace.h                |   6 +
+ arch/microblaze/include/asm/ptrace.h          |   6 +
+ arch/nios2/include/asm/ptrace.h               |   6 +
+ arch/um/include/asm/ptrace-generic.h          |   6 +
+ arch/xtensa/include/asm/ptrace.h              |   6 +
+ include/uapi/linux/ptrace.h                   |   4 +
+ kernel/ptrace.c                               |  38 ++--
+ .../selftests/ptrace/set_syscall_info.c       | 173 ++++++++++++++++++
+ 10 files changed, 247 insertions(+), 10 deletions(-)
+
+base-commit: 7e1392a42ea288d70a266f6553fe06f57f8647ea
+prerequisite-patch-id: bad42bc3bb8ed701597b19c4de6b76e5bab93895
+prerequisite-patch-id: 1b2e63fe71203031ae67a78e49b091369f8de5e1
+prerequisite-patch-id: 2135a43ed9d9539fb21b5e2539ef35e959251ab6
+-- 
+2.47.3
+
