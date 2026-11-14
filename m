@@ -1,74 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794637353;
-	b=E1k4lqgD+BbGcON/P87/t2Kswi0nNZCvHsbnoSdI3ZxqNtqSZoUY7Kr/vVW3k1X9/gvM
-	 RZ6U3n4Df1EY70mT6Kr5Ttcd0oA4knwmkzRBKjXWRGSa0PWsKbeyUtOWlHpqjIixlTZP+
-	 divym1iQA8FpeJuV2eZd/FlETqeFSX3bAHrGL12cGNhJBSdNHDQeV5VwgTOrh5NYPw1Ix
-	 KvldHbSsqedpzz5eM5ZPXCgTKtZDwabP9CJKFfm1Uh6FiLx3Fgh4r3dJJCRPtxeL+UbQC
-	 DQFrYzwzf3+ypmXFUnDIHn0+zGpZdqVzQPW2deiNedGzuT3wWXis9qz15iz46/2yKvA==
+	t=1794639494;
+	b=VKNrnvmeTjQVfioTP4nWGQ7Tl5amPaAkGOZ0JoSmGXltuYh0+iwLbawB/wKW7CQlLk0t
+	 KYwVZ/Py9t2/srau26O8WJhI8wkp5lc2Ik0TzWaR7y6t375axLWgSwdl9q3i22fXaqx66
+	 QzjKkCFkTrBrR/q9zT+saySUKrjBg/3zXr8rr9VN1r2NOjnM2F9q/QfDgqR3ODlmpeKh2
+	 C4ZLT+J8+mgxgy8LCEKfpFa9qUuq1c/xo0QB6qyal1TWMf4awxWUuRdrtCk6Kod2PGppw
+	 RV40u6CmvtWxPLW82XA6qgkgXIjl1L/0decC7RyCGtuVzOFo61lqM1sUgh1CQLAsMDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794637353;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794639494;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=KyLpXKnKTIyQF0OFuEovgw/bxqguxRHqnAp90g8bfao=;
-	b=IvfKb2FK2mLI3ERw1L5gNIKM2T8gSWixNsNWzjS4FSr2J0TZPnlR6zlBGvjSPhWepaEX
-	 1ngxNEjGjNijpohvDI8/+hoJ1LD0yylKTRt9YxYf1vHlvsMOEVRnzxljOvSh3RvJbbEDA
-	 AAvVSRU7j2P17E6Q1qSj14I+Y4E+mwPFVoXpoif2Ny5v6OGDTn26/x2briu4tZedyx7SB
-	 TU6ZB0KlZwrlFR+AJu6bIlNQDQLfIAWBXjoeDVGdMswkyDWDdxqxwyq4v//ccU511smdE
-	 aeX9qRNaRwA5Yp5YwhYh6M4AT2MxPTj2SE5fz2KCUxHOdkDkzmnuAD38FcsTD9X+jRA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=ERt19hwTl9KdBsm8dTCky9arS4UpYC33CQITUvUy7Fc=;
+	b=2ai4p/pP7xyYj0AkqZqoCqAiWObTVPKLUpsNm93lPyrFZp/lQa5GWeMYGpOSxzpNo7Zy
+	 MbhofMg2vwMDBLIHtv6BPbUv3EcrBhBbjWb7Ao1GXf5fNviJr5pcmU5d2ulwwG+WeUUiy
+	 AHy39el7tuBKREGh5p3HB50D/MPHxJuf8Ah3VbtTjqdzLqtHJLlVdoebCtxb9UrSQcBff
+	 yUjAiwJBbcOPOZtcnVGJ6s24F7fWtUlQEhBTXSbqmCcJbQIuaUhaLTC27Y9e4cx30Szdl
+	 izHwd68KOK9R80pKRQKmelmlhuv0g8Akg2MWBob92h65jjAv00BxHgeB9h2kZJU+yVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mMJFUWim;
-	arc=none smtp.remote-ip=209.85.210.197
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q4ky18Nh;
+	arc=none smtp.remote-ip=74.125.82.180
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9BD606A329
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 06:22:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A9BD606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DE2606A329
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 06:58:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34DE2606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=mMJFUWim
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8b97460a133so1177630b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:22:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q4ky18Nh
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-3282db206d3so5111264eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 22:58:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794637352; x=1795242152; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KyLpXKnKTIyQF0OFuEovgw/bxqguxRHqnAp90g8bfao=;
-        b=mMJFUWimdqfkp4EJbS3j07OIyHMSPjcmBn5T4H4u3G6CfdkQg7do7nYlqgilY03S2H
-         /SI4eTidz6FAlIz/hn+/Ox/47OjRrNQSbDNszCmAN+0tzFR3IJNH5F6eEecioZAenTkP
-         OjqMuD36Dz6M/OXCNTijKKaB1UmkUGXV/Bca9LZDgVvDo8aNGDQcq7kbg0i9Y49XkedY
-         CVH37XGJTStX9gk6abeZtqcwNBsD7tNWOZXzlfIBnguxddWQURDpljblDA/Q6ln4ZcR3
-         5Ln4LMRrffERmhiBN4+jMQ6qiYRW2pl52L/NLOwu4LppLLygxYLDcYJ0J9hXDd3dZTZk
-         PoUg==
+        d=gmail.com; s=20260707; t=1794639493; x=1795244293; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ERt19hwTl9KdBsm8dTCky9arS4UpYC33CQITUvUy7Fc=;
+        b=Q4ky18Nh1X8Ybygkod2Uz/LMgNUzOU1R7JirxOS/qz5/CiwuXEODFxK5G7qD7NNoM2
+         UyTrfz5mlPvT35Fh3pji9fQnBQi8b+PP+cNJAV/Y7ihbtr2FEpMGjyB7J86f1E5ksS4r
+         xwI0rvjqsxJp6Y0kxt4OxItj3wyXUUW7MM5tLSEzUNb+vcf/IdplHYubJ6EHmkLHIwGl
+         Lh15DuNLqLHVCeorrxXLnBPMogKUll/vopmmAPaz+0sLF4guJxZao78fSLFhMmvr4lTR
+         7p8QdqImrg7KPKl9Zy9oF6UJfCmcggeH9MzGj8dLDW78rls/BP4ZbIBi5CHv8ovAFtRv
+         eS/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794637352; x=1795242152;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1794639493; x=1795244293;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KyLpXKnKTIyQF0OFuEovgw/bxqguxRHqnAp90g8bfao=;
-        b=rrim6QwqlUAnrDGwQ8NC5oHDOihFta9TGnDIba3E5avfUD5Zo+xKDq83A20sYSJGDK
-         bYfQIA+Bq5KkJ3a3X2bPVHTZDX/1XUnQeMqLFknqBjjrpjgFB8AXKiiKPtvcCior+NHS
-         arO9UMCOhOCJfJ7GEJ5qgf+fj97R4AMEDfFo4BOB24dh6Mppb4jyExsWUo9/19rh6ZCf
-         KJ3ni/UOBSIp+HpLf0lNtl2tJZoWBw1dBnY2zanfiAoMLi24609iCMD5wUWhh//GrtFJ
-         zY+79h08/HewVCDqM3Vu/J1Fe5+1bi2DawTvAL98cZXRUesI01hckA47Jn88q23jat9y
-         bloQ==
-X-Forwarded-Encrypted: i=1; AL+hErHGfD0g42xGWqQ0jscsAZdU+gy9kw/3x36GxmtgyGbMDvsfgsc/UB09XIO04ewudbkmrNryXfXUR10l78+ufl8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Ec+vumXzhctLNhNfZKaCWUKbW+q3Voeiw2Ah6dkTE+LyQtF6Y
-	tnw38SUVtcPcAhqktVbJoFDZc6VYM6gkWu8k1ezwL6GrgmFEpFWVYlmXKtWjKV4zrr34p0PtREz
-	wJoD9zw==
-X-Received: from pffj8-n1.prod.google.com ([2002:a05:6a00:c2c8:10b0:8b6:c93c:12fa])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:17a8:b0:88d:3f61:20f3
- with SMTP id d2e1a72fcca58-8beb80023bbmr4277418b3a.54.1794637351416; Fri, 13
- Nov 2026 22:22:31 -0800 (PST)
-Date: Sat, 14 Nov 2026 06:22:30 +0000
-In-Reply-To: <20261111-mtu-probing-series-v4-4-6f2e484ca8ea@gmail.com>
+        bh=ERt19hwTl9KdBsm8dTCky9arS4UpYC33CQITUvUy7Fc=;
+        b=NtWwc98gU1R91M5VA5hqBuhmQI331gd5vnU1UBLLAqSP6QIyaceTo03cp+G95RsCcx
+         qB9hWWVcSFsJLDaghwIi3jmQdbZgw3lwWnABdTspmen/NtzGn9xtJTpyljhvpDvfZmtx
+         Z4V5n12ZzrhgYyQ5O/OV2Rx+RlzCykjmwb8IwOjdZNWRiA8qjJEXAJh2v2GugcMjR62l
+         pL2MdW9beGmiL1yggqg2ixjMCpTLGziDD1hSg5hGXfRov/Inrp7UJiKBSoGA6nYRSOP8
+         YbIp4GJ/KLqCh1nRhJSO5yWAFjFfQxdeO1WkQkGpR70e2IpkSX2xwL5JGItSzJbgOret
+         YjGg==
+X-Forwarded-Encrypted: i=1; AL+hErFnrAPYoVeVqhDjiuQAOSKlaJSSw/QOen1ZhwBcseBW3CMmZRNp9u50PjEaGJjBaE7GRGuQkjFE303uCxTeDSs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/iHXKnZ14oMiw6u0kD/TBPp/q7OhHn9GmtikkzgrJbJS5q5RaS
+	+CDZEKgHInvEtp/8/q6dYF775sW3791Oj0U+kdiQQwbG79e/S9+WSprl
+X-Gm-Gg: AYBFou1585aK7VEU0GX2Ej6Vzan4JZFCHvcQDVkrP7eoMUpG5kC4dkph1SJeZ8P7Ok6
+	UtR/B+CX6PSytUV6m1ta0Zl7UAtcr6xFhWOM1BUeDFKx1ugUTPM6HAvPqjm4kFyj+Ify5QLhTB2
+	5FEBsL19GDTYbP3y+u7lOaC+wc/474skTZjslH66pvQSE3qaU9Y29vV1Tz4wObBy2SQzd7sMAkO
+	LzxylE2IV40ibnsVx9YCKMLyWAYkjcr2dr9zJOwQt4UGVaq9i0Yxo2mter6opB74o15uyiu1HTs
+	sDOViPKm3ZnOw6Dr4Iw47NjLt8CqwHJI8CnnQEJNkSY8TN1ser7U528JOAuSfRccyDQpdc9R4PT
+	5d0/uTL1e/GyyoXxyqDT/VtU6wtMBenQdJEXcg1Bgrbs8IIqiCILvi5LSTAkGLLCcA7LiAXnj7/
+	EysvmyP0NUcDr+HrFg97y5YqJVzWgublDrSUO2ZX0R5oojp5mfg29FsCMVeL9ZyQO+hGL6/5jyW
+	f1ArPaAn0gxJMfo/J7FyPmqHPA7y9cnT6SNrFE+EmXlyKQLhOvzKECD+40zQKmMePCnIUyaGoLx
+	LkX0dGtdITpwW4XBOsD8Cesik9/JBt3iBcx6zweD74wZ
+X-Received: by 2002:a05:7301:a4:b0:378:b1be:2d3e with SMTP id 5a478bee46e88-37967ae558emr4824571eec.32.1794639493190;
+        Fri, 13 Nov 2026 22:58:13 -0800 (PST)
+Received: from LAPTOP-G6J9COQB.lan ([182.253.124.115])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-379560f5e06sm17823905eec.19.2026.11.13.22.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2026 22:58:12 -0800 (PST)
+From: Ahmad Wicaksono <supersonix03@gmail.com>
+To: bpf@vger.kernel.org
+Cc: emil@etsalapatis.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ahmad Wicaksono <supersonix03@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Remove accidentally committed default.profraw
+Date: Sat, 14 Nov 2026 13:57:59 +0700
+Message-ID: <20261114065759.46263-1-supersonix03@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -77,34 +103,59 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com> <20261111-mtu-probing-series-v4-4-6f2e484ca8ea@gmail.com>
-Message-ID: <avf-GWBmzjHr5agk@google.com>
-Subject: Re: [PATCH net-next v4 4/4] selftests/net: packetdrill: add TCP MTU
- probing test
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Yongjian Wang <echoowall@gmail.com>
-Cc: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, edumazet@kernel.org, 
-	horms@kernel.org, ncardwell@google.com, davem@davemloft.net, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, panweiping3@gmail.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 11 Nov 2026 00:45:58 +0800, Yongjian Wang wrote:
-> Packetization layer path MTU discovery (net.ipv4.tcp_mtu_probing=2) has
-> no selftest coverage.
-> 
-> Add a test for an active connection. Check that it starts at
-> tcp_base_mss, that it sends the first probe half way between
-> tcp_base_mss and the peer's MSS once cwnd allows it, and that an
-> acknowledged probe raises the MSS and leads to a larger probe.
-> 
-> The SYN offers timestamps and the scripted SYN-ACK declines them.
-> This also checks that MTU probing uses the negotiated header length
-> for the initial send MSS.
-> 
-> Signed-off-by: Yongjian Wang <echoowall@gmail.com>
+default.profraw is a 160-byte LLVM raw profile data file ("LLVM raw
+profile data, version 10") that was committed by accident in commit
+86426a28c52d ("selftests/bpf: Add buddy allocator for libarena"), whose
+other five files are all libarena sources. It is output produced by
+running a clang-instrumented binary, not source, and nothing in the tree
+builds, reads or references it.
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Delete the file and add *.profraw to the BPF selftests .gitignore so
+that stray profiles are not committed again.
 
-Thanks
+Fixes: 86426a28c52d ("selftests/bpf: Add buddy allocator for libarena")
+Signed-off-by: Ahmad Wicaksono <supersonix03@gmail.com>
+---
+An AI coding assistant (Claude, via Claude Code) was used to find this
+file and draft the changelog, per
+Documentation/process/generated-content.rst.
+
+Not runtime-tested: the patch deletes an unused build artifact and adds
+a .gitignore entry, so there is nothing to execute.
+
+ tools/testing/selftests/bpf/.gitignore      |   1 +
+ tools/testing/selftests/bpf/default.profraw | Bin 160 -> 0 bytes
+ 2 files changed, 1 insertion(+)
+ delete mode 100644 tools/testing/selftests/bpf/default.profraw
+
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index e318a38035d..2a7756b7226 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -36,6 +36,7 @@ test_cpp
+ /uprobe_multi
+ *.ko
+ *.tmp
++*.profraw
+ xdp_redirect_multi
+ xdp_synproxy
+ xdp_features
+diff --git a/tools/testing/selftests/bpf/default.profraw b/tools/testing/selftests/bpf/default.profraw
+deleted file mode 100644
+index e865e87829f8662aa272b0d0ca779c890dd26a70..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 160
+zcmZoHO3N=Q$obF3009b6n${E()B+JGExb|ZcYWo}X~!y4U)Rnyov5~~E)paK05RPT
+AxBvhE
+
+
+base-commit: 1440a14a7ed58d5fbc3b9170b68fc977939b4985
+-- 
+2.43.0
+
