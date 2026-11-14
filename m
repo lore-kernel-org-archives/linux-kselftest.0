@@ -1,104 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.69
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794661171;
-	b=CPruJt8BoowGglupI8NCdQHFiD984Pg9iAiFBlF0O4f8X4NU83DF7grGMH507RkNBGyP
-	 U3ky96/UQ1cN06c6XwLDDaqhwgMTfI8BIivCjP7IV9QThR2N6lhaKHgWP6tCPQspfN0jR
-	 O+Vk/O6AY1jnuGu0Xt76DVK8zr86ReQvgkg5dhfVc0I5GnRSSX2TInynix3m+NIE4aDUu
-	 AJR+koDe0jWRrO2D/FXfgD5rfTyu3I/OaUPsn3RCLPfqvEnfwqXrfaHICPD07JTwPIEVG
-	 WBVawbOnNNSqh+HX/AxmfrW2xeql11AT0obarx6HTWG3vqp2arV55rtwHRTaHiHAe2g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794661171;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=iIlHbzz9irDmCGn2cenOpI0VONULecj9Xu4zZNgTalQ=;
-	b=0Z4UB7+Z1ctHxSbZgjfWuuj+o6dQxmsp+v5EmlFGia3Nd9NMFgO/DuH4dibtN8zkp/1K
-	 5eTrYwJ8dxi49KNEdxjT2hV3VpH8886pKKIfpOFAJ2WyGDbVkr374mmQGXPVkFngexK+n
-	 +tv4SXORKjq2d6ORqqzh+6odbwRtrniE4idizMybzSdDWzxeYvL3S7MY02340NdFMvDo7
-	 L1XJCamKeN2bICDZGdfzQEmFXm2lJs94AHMcJsktPymwPHYAoXRl8sKt4ppLlVaACsalP
-	 AIMWz0yV5q+9oZ6y1rm4P2/GVSDSzK/vc6fYF2v+p6V6Op6GucjU9G+VwOu3wWT6v7Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ffvFcqAe;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.201.69
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013069.outbound.protection.outlook.com [40.107.201.69])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794661537;
+	b=Tqn16gUoil/ElC6oOe4ssohdauQlhkwZhjNhqqQkrZ0kUQzAc2PCmvoD/0E19YOwWDZ7
+	 Z/Xmt4ZWt20f1llWr7ld5aQuzHnsLJJL2BdJ1NV9IARHBC5aPoQk2COM1cH/BsOhBLPuN
+	 8WW3Cl6ePNr8/EdIXcvebBaaDoAuLBUTSxq9qREdMAdaeHy+9h0B226J8BTpAHvY5wx6C
+	 YTpsqCOFP3wprfr4n298e7MQipv4tWMry6zXao8VlEXfbO7tZPvXcaJm/WFmTnbpH0OMV
+	 P7yTELLCqaDMMKua7MjYLHAdgK9hSrvYGD4yfe2oeDupB2SUci/7arSo8/i0hMGYCBA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794661537;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=CJQu819tgn1Q7KG3DzWeopl4zGjNY06MsJ8ooIiMWRc=;
+	b=oDNm/7RppY/9cGgnAIYOpnZOF+Og5YdFHymPfJUMvF3LNQMaYDQTMzYFiloEbvyjzieJ
+	 94lngAMT3iHeH1dubh2+rm1F7Jlncmx8BbC945KNIvwykps9HMbBv91bqfDpM4vJEySeb
+	 fTNkC5I8b0DhEBkZH/faHWNd7WnF9Kds2Or9NzwrFDb9+t/m/1MWZ3GQTsfi/LmRcXrxc
+	 kQdHCgpX42TyzAIQOc8uN1PDL3ratvEh9R0YbJOBNDMWek8gdFuNpUoVPyq1JrOp/aYxM
+	 DS4UUB1ICAbayyuvBG3Xyla8iYMdkVwilIilua6lgK0vc6xToEHOpp5Gy1WnSbT4+bA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Vp/8lsUb";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46EAC606A329;
-	Sat, 14 Nov 2026 12:59:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46EAC606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FD7606A323;
+	Sat, 14 Nov 2026 13:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=ffvFcqAe
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KAeZpsrzFHydttrkWnkj4J33q0YqwXKlYYee4y9TaRfLiS7ml1MFgcEfIGdAjFAI1hwdOvttxKwzOMAEK4ByZvz4Uz0ntkCuDqjF3DZ5PeGKHcoHbeldd5qBw7UdF6+nNcExHrBeGVz0EQ7DJpTrNu5X8DKr0UUP6Vc8Lau2QYRJD7qxBlWv92z12PBwyDyjKxFo/UdoQ0m9i8U4WfNe0PiodNkjAKG/g+8JhJk9xo2b0EmQLgqOqbW8mJ2uO4XHjVa/F9McVo4jDyqi9WTWrAVI5EqfWXR/BjkMCMBPdVOjyvqlTNLJpe+DxTUB+3RqUw6CO36jdq9vVwTXG2eBNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iIlHbzz9irDmCGn2cenOpI0VONULecj9Xu4zZNgTalQ=;
- b=lXtP/KA0eLK1zHnKtTkhMnTKv3sgQan4nIylTCtwHwkiRlvSvrgdeXY4E2K363OoRzjokhJBACGgmOe4XUpLeia4TJxtQe3fK7R4Fscd29mSerwCddU/rS8N8WrJ3zmH96zgXYHyYx4Xy3h2xAT46oVUS0xGyC9GQrpryX/Fi5zXs09U+UMqV0ULkoV+rprJRKeCUJ+S5Cl03rkF6WHuD3DiFtTb2pmYOLkzdKatZENktaN3xg4dwDEP8TtLu5Q5l32zk7n1kRozeJlBCGzeVBs3s0Ys7Hx17JUd8xrNHgojwRvKMN0D77GDY4Be+QIyVEMMq/ybgVf1eWWhsQlCwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iIlHbzz9irDmCGn2cenOpI0VONULecj9Xu4zZNgTalQ=;
- b=ffvFcqAeCTwDniq0oNz6C7252y3RuezPQnFhELrZWSwTX1CDrBAA7nYyvGMwz6tTc7EfUggv6m5QP3gtXuAcptINWCZsiWV1wTv11dtWSfpy4i7x6h2QS8+aBrmf85pKb9+Q7LcBxbmsTbuGg3PJDnD3BCvrcgcraHnnPvIPjar6BB7a8EN0P54J4QMz8MdA41OWewBPuyCNVbod8Jig9vMbMBolQq5gzZGLoT19zDY/osnlXdUbsFj5KvAQQFWjcjNSQPytx81WQfCUhq2MqXT2k9ZDImBBnY8EuKytaLoOUpTcq8DkZN9RqnNmFX0mnxWqC2LL3VEeUdaoD7+Yug==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
- by IA1PR12MB6139.namprd12.prod.outlook.com (2603:10b6:208:3e9::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.10; Sat, 14 Nov
- 2026 12:59:24 +0000
-Received: from BL0PR12MB2370.namprd12.prod.outlook.com
- ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
- ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0615.009; Sat, 14 Nov 2026
- 12:59:24 +0000
-Date: Sat, 14 Nov 2026 20:59:18 +0800
-From: Richard Cheng <icheng@nvidia.com>
-To: Ben Horgan <ben.horgan@arm.com>
-Cc: Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com, 
-	x86@kernel.org, shuah@kernel.org, fenghuay@nvidia.com, Dave.Martin@arm.com, 
-	james.morse@arm.com, babu.moger@amd.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kaihengf@nvidia.com, kobak@nvidia.com, newtonl@nvidia.com, 
-	kristinc@nvidia.com
-Subject: Re: [PATCH v5 1/2] selftests/resctrl: Implement cl_flush() and sb()
- for aarch64
-Message-ID: <avhZnuz2caJWIfLo@MWDK4CY14F>
-References: <847af89d-7b79-44b4-8273-243dfb51ef5e@arm.com>
- <9cccea63-397c-4913-95bc-eed38f0ebd66@arm.com>
- <aurOz7iGKInyjddW@MWDK4CY14F>
- <b94aa5e5-a4ab-4b61-a864-d10ff1ff2b63@arm.com>
- <auxM9hVAgp61Qbgv@MWDK4CY14F>
- <c58c397e-26e4-4866-be80-59d9bd861654@arm.com>
- <808923a4-0a6e-4d8f-8ace-d3573aa125e8@intel.com>
- <89549a38-4764-466b-b66e-98bab801fefc@arm.com>
- <0583dad3-f761-48d5-a9a2-f2ad39567a6b@intel.com>
- <7501303c-d304-47d4-8150-b1efc8554d36@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7501303c-d304-47d4-8150-b1efc8554d36@arm.com>
-X-ClientProxiedBy: SI2PR04CA0004.apcprd04.prod.outlook.com
- (2603:1096:4:197::22) To BL0PR12MB2370.namprd12.prod.outlook.com
- (2603:10b6:207:47::27)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vp/8lsUb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E561F000C4;
+	Sat, 14 Nov 2026 13:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794661537;
+	bh=CJQu819tgn1Q7KG3DzWeopl4zGjNY06MsJ8ooIiMWRc=;
+	h=From:Subject:Date:To:Cc;
+	b=Vp/8lsUbHRSKrh4ttKx/RVHJB7Ec7ONHIIW64irL2cjjacaR6J3rc/TVx34YmN2JY
+	 hD7p4Lvjsdv8bdSTtvVg3Uo8hJbSv98inn/as02deo60GIBVbfirXFgWB/Mcxz4xgu
+	 eNSZC0qRLBqbNvr4t9rxw1I+3C99Y5V4g0RNH0aW7CMG7xAojpfebDeeIxHa/hV/bK
+	 rTGxkqIXzRUJBPtygJ+V6kczZ6fMZdsmbXQvq7GJF04QCZhqWlHP/dZDEjF9dxkMRO
+	 bgT7mx1rfBdc7CasG01hMs/lp2dY+CVgKWNLT/1dXr8V6zJu13+oGNRULDYK5HyWcp
+	 5xD4EImziW4Gg==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH RFC v2 00/42] fs: don't use pseudo filesystem files as
+ storage
+Date: Sat, 14 Nov 2026 14:01:41 +0100
+Message-Id: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -108,168 +54,271 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|IA1PR12MB6139:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fe7b34c-0110-463b-d4e9-08df424f1b39
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|366016|376014|1800799024|23010399003|10067099003|5023799004|11063799006|4143699003|56012099006|261022105027099003|261022075727099003|261022113327099003|261026121527099003|261028144727099003|261026140227099003|261021123027099003|261021121427099003|261102123227099003|261009223027099003|18002099003|22082099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	Ws2ZSasYZra6RrshzxTcgHkdCndC9sSPsWJUo5fwphRIwIhcAHbtPTaMRNX9wtOHC4fWxcxbJY1M4uQQIdUSOxGTgu1CTo3anWE9nsuYBI9FGA2oJVHnwXqFA1aPMOdqen9ixfbE0zMnx/ygsXdYRC6hrTtlO30C9lnIAIA498mMj3RdB96O9In30qW6vgcQXCI7YH1PUN+hAKiWqnVio1WHnmOWgT0aqezLBXAYE0fp3WTqndc4ylWXR/AribxkV24mlZmj5uNAnJSOJIWRjzBGf6UA9rAA/PpT1bxYb9M+ouBDJqb2WYWmNdoRkwRboTByDgLmwLZ0ge9vNg4KBlDYjdw9ap0S/eFNouTGeWv+VH/P/l7rqV2trNtrrJJUo5XeP5idwFZxhygmPlqPulsVIif4SeguU9RyVltaMFYtb9HD9fpeM+LuN0kp/3xzoWGkX1T4mUjevs4UNNvoF4yqfvR6D5HUNefRzqfA/luBHBfvjaHxxDhjBitwUECzYrsv+XzMOdKbWJJTLaO0MpADg4XBlsYdSZ74AupMwAyANON0lub6GItzwH7rXIt+6zIiNpEFyHSwyQyNkgNYUr8XD6z4mv4nS83I7Bs2zJBHKajYV/YxO5qlVtxLlGEjT1Do2+/p5r4hKUar1LAnUCTBu0hTWWQYHqdrKtZUfT0=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(23010399003)(10067099003)(5023799004)(11063799006)(4143699003)(56012099006)(261022105027099003)(261022075727099003)(261022113327099003)(261026121527099003)(261028144727099003)(261026140227099003)(261021123027099003)(261021121427099003)(261102123227099003)(261009223027099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DyqlwUirfislw9mgOcxsyorbw8gKTo8ocPclpHbIEdNrJoh9TwJcKhQP3GMY?=
- =?us-ascii?Q?EcC2hza6YlMG/UEdi4nq9sIfsau1uJU1CD5hnjie+WzVzeq4O1revHLrETpk?=
- =?us-ascii?Q?g19yXLS9Q6JRokVb0X2hRHzsVbyGlHvd9uXGFdQW/WmYqw8LYQx3epb4jaik?=
- =?us-ascii?Q?GiUnC31I1XBXajCaJpE8LhX5C0YNISakbthFPRhu/r0AFUvmV69529m7nLjZ?=
- =?us-ascii?Q?SaOGrkmpKPNbQpIgFOCgF6aX+A1vkjT+AD9C0WeuLRBq9mts1rV9p9279gpo?=
- =?us-ascii?Q?zcjqgXVVqNUH7fy779IeG/eMGwiPpQPbB7EFokuhtP4MgyM/tdf6cW1VTtI0?=
- =?us-ascii?Q?CnufeCiqmFtt2QxfOdkFxSju7H+v8Tx0X86yLv4qt8tMAXhOYAO+rJrqxRg7?=
- =?us-ascii?Q?knxJmJBNWHER6Sxv2pqHxTcd2/mEdTvPLgRmGJDnVrKVGNKpU4VNOZlcpyK3?=
- =?us-ascii?Q?hl2aPAaYtmel3ALTZxyKqbz9WNNyEIccr4WZzyJSI2f3cyOKF32/O4lO7FlG?=
- =?us-ascii?Q?+p3Lt8ssxE86QNU9s3FUaz7NWYVjr0Wwuap+GcZysU4USUjAeroq7QwLjPDS?=
- =?us-ascii?Q?ABVtlCFXiTaef57ezKYnNItdBfJ5EJY5Bzt7IKOZ0X/QBteDNY7EKlFvE2y9?=
- =?us-ascii?Q?9fHpt5L6uDOnWgcNKEP8h9Ld3J/S4spy7kEX8y9C+AdQAhMJoUr5/bIK64fh?=
- =?us-ascii?Q?nIypkUzsrsvuLzwdEUY3qVHBzB/ZHMlcsSwJNmI4FeETZF/+EKRNJDCK8BmG?=
- =?us-ascii?Q?XLTnyHqRNj9q24Yc4Z/nRNlTJj09K7pV6j9kH5rrqnyRlzJOPegEHYVN2Z8L?=
- =?us-ascii?Q?Tc8kgZoO7yT4/u9tI4vztjdUD6KJaVzTueyDbETar9dXk+7aP+juApDpZO60?=
- =?us-ascii?Q?HBg9vbw5dfhQQS5oWIIclz9xy71/poPsgvTWs8a6nucONhJaICDBkegIsHFw?=
- =?us-ascii?Q?Ke8pMIDN1KPsWJm61pAAn4Bs4xRL9l1a/PULlWmiNM9K+E9APe3Z+9Iux3Xe?=
- =?us-ascii?Q?ygQA3SszwycOOQhWL09bw9KlDpHwDPiwA0cJRXD2hqDzVFONubouLW3Eo35Q?=
- =?us-ascii?Q?ln7Sy5MQE1rxYOG/FLvGx5UqLf7WdQWSk5w3Vvo6hk48OSFxZM1yD4k3Np55?=
- =?us-ascii?Q?2ZIuw12wz6SZmOALYDQFAV/RdcSErjVCSROCaK15YTdQLzQuFvItU/4Glmtj?=
- =?us-ascii?Q?mp7c2E1dWu9xJZoTaG5nZG1yLI1AELkFe5rz2D5okkymjWYiD0CRdVvYMKjf?=
- =?us-ascii?Q?NiarX5pUraAB0sHZcmFviQVND+sl7r9yagu5StJP+2Qp/y0I5eHD9lBtbUVR?=
- =?us-ascii?Q?rI3aOntp+1KWS797Im7RTmsOvDVU49S3X9bQ2eulzgfvOiLHshchZNJrLUgD?=
- =?us-ascii?Q?xwr3Ez54YH7aXpfamE9oB6q4g3nX8OnHU7GM59MC7Tc+TFf12WgnuQbOuYNx?=
- =?us-ascii?Q?UTZolGbN+ANN3lLk2MC+WUdb6s0IMXoAVR7pBUuCEE+avOdR3bYT1ZMU4WJ3?=
- =?us-ascii?Q?XX3jO//pSbSmLB50Fywl9XCgAbFaIOvPn+7W4jut/MDMRdSBDsNuO8WjFw2A?=
- =?us-ascii?Q?wS545Oqcw6e/5R35PIxyhg7Jci0cONEtA+nOtdLmb5nWP5dxkDsRNJmAE1M2?=
- =?us-ascii?Q?xioYJyuAgMlKxKNEPyNnSuR1GEwiSux8oVkWd4WeVefXDjqV2BlsRwLj05IK?=
- =?us-ascii?Q?DYm8MoIJx/+zINbwPNjbIkOL6UHs67NiBydncqwsucAUGU0OR/7PBbd9huYI?=
- =?us-ascii?Q?hp2JxDyDUg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fe7b34c-0110-463b-d4e9-08df424f1b39
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2026 12:59:24.3314
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tevs7Ay1fXZdgSlljaQA3kfla6WtkXwp1P+IFbYchns7FI8Atr8uQhRvUm1ppoJFMVI9r+m1h9JTPnUVvbgSFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6139
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2WOQQ6CMBBFr2JmbZuWkNK6MjHxAG4NCygDVEhLW
+ kAN4e5SWLr8f/68vAUCeoMBLqcFPM4mGGe3kJxPoNvCNkhMtWVIWCI4Z4q8ne9I79xAhoBT5Yh
+ UTKYpFxJrDtvb4LE2nx35hMf9BvlRhql8oR4jLM7KIiApfWF1G6uIpRFLDyyN97hrTRid/+6CM
+ 9+hhwtn/y4zJ4ykWimpMqGFzq4deos9db6BfF3XHzBro2XwAAAA
+X-Change-ID: 20261109-work-loop-pseudo-890844168ef1
+To: linux-fsdevel@vger.kernel.org
+Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, 
+ Josef Bacik <josef@toxicpanda.com>, Christoph Hellwig <hch@lst.de>, 
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, 
+ target-devel@vger.kernel.org, driver-core@lists.linux.dev, 
+ linux-mm@kvack.org, bpf@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+ apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, 
+ netdev@vger.kernel.org, fuse-devel@lists.linux.dev, 
+ linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, 
+ ocfs2-devel@lists.linux.dev, linux-s390@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+ Amir Goldstein <amir73il@gmail.com>, linux-erofs@lists.ozlabs.org, 
+ linux-kselftest@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@vger.kernel.org, 
+ Alexander Mikhalitsyn <alex@amutable.com>, Breno Leitao <leitao@debian.org>, 
+ Casey Schaufler <casey@schaufler-ca.com>, Chuck Lever <cel@kernel.org>, 
+ Sashiko <sashiko-bot@kernel.org>
+X-Mailer: b4 0.17-dev-ce4c1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11058; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=1K5fqA8aYSFKqf+hZmwJu8L6D/XIowRL9F+k2izC4+I=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT9iEnN4p/wft6Sgg3772gac+ROEzmmcSOrZ4f1rddhB
+ RrfCvY86yhlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZhI0xOG/7GX+s0nhAj+YWd+
+ 7PfmzuuVXtolzr/nsKTMzc7ROfLNoZfhf1He254pcgrflbqY9lh2nVZVKVy6ZZGJ5E1Ny1XLT7L
+ k8wEA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Tue, Nov 10, 2026 at 12:35:48PM +0800, Ben Horgan wrote:
-> Hi Reinette, Richard,
-> 
-> On 09/11/2026 17:01, Reinette Chatre wrote:
-> > Hi Ben,
-> > 
-> > On 11/13/26 7:16 PM, Ben Horgan wrote:
-> >> On 07/11/2026 00:29, Reinette Chatre wrote:
-> > 
-> > ... 
-> >>>
-> >>> If you do end up using a benchmark I'd suggest to make the checks as forgiving as
-> >>> possible. For example, instead of checking something like "LLC occupancy needs to be
-> >>> X when bitmap is Y" it should check something like "LLC occupancy when bitmap is all ones
-> >>> is larger than LLC occupancy when only half of bitmap is ones".
-> >>
-> >> Do you think it's too strong to say that a bitmap with n + 1 bits set
-> >> has higher occupancy than one with n bits set? I think it has slightly
-> >> more utility in that all bits of the bitmap are plumbed down to a
-> >> working control but I'm ok with a weaker check if a stronger check will
-> >> just be problematic and maintenance heavy.
-> > 
-> > My comment was motivated by the recent change I needed to make to the CAT test
-> > that uses cache misses measured via perf instead of cache occupancy. Originally
-> > this test incremented the bitmap with one at each cycle but incrementing it with
-> > two proved to be more robust.
-> > 
-> > What you are proposing sounds more like an enhancement to the CMT test that
-> > uses cache occupancy as measurement while following the same methodology as the
-> > CAT test. 
-> 
+Loop happily takes any regular file with ->read_iter() as a backing
+file and any file that also has ->write_iter() as a writable one. A few
+examples:
 
-Hi Ben, Reinette,
+* /proc/kcore attaches read-only as a loop device the size of the
+  kernel's virtual address space (64 PiB with 5-level paging)
+* sysfs attributes attach read-write as 4096 byte loop devices
+* using /sys/kernel/mm/transparent_hugepage/enabled for the loop device
+  and writing a block to the loop device changes the THP setting
 
-> Ok, then perhaps it's best just to enhance the CMT test to also check that the cache allocation
-> bitmap has some measureable effect rather than a new test. In the spirit of making the checks as
-> weak as possible we could just check that the measured llc_occupancy is lowest for the minimum
-> number of cache allocation bits set, higher when half the bits set and highest when all the bits are
-> set.
->
+It's not just silly. It's abusable (is that a word?). Loop calls
+->read_iter() and ->write_iter() of the backing file directly from its
+kworker which runs with kernel credentials.
 
-Agreed. I'll enhance the CMT test instead of adding a new one.
-Please forget my "must not exceed" idea, as you said there's still an
-absolute number with the same accuarcy problem.
+But pseudo files enforce part of their access rules at read and write
+against the caller. So dozens of sysfs ->show() and ->store() methods
+call capable().
 
- 
-> This brings us back to the initial subject of this patch. For MPAM we need a new implementation for
-> memflush() as cl_flush() doesn't have a direct equivalent on arm64. There is an smmcc based option
-> but the kernel support isn't upstream yet [1] and I don't know how widely it is supported in
-> firmware. As such, we need to use the writing of a buffer from a different control group. This
-> should be distinct from the default control group and have all cache portion bits set, as the CMT
-> test uses the inverse of the testing mask for the default group. The llc_occupancy of the testing
-> group can be used to check the group is clean enough, i.e. the memflush() had the desired effect.
-> All this does have the disadvantage of using the same features we are checking to to help with the
-> testing interface but there seems no easy way out of that while staying generic across even MPAM
-> platforms.
-> 
+But setting up a loop device requires no capabilities. It only requires
+access to the device nodes. So whoever has a loop device skips all of
+the capable() checks.
 
-I think we can avoid the flush completely if the bitmpas are measured
-from narrow to wide while the same benchmark keeps running.
+A couple of fun examples:
 
-Two reason I can think of to backed it up.
+On v7.4-rc1 uid 0 without any capabilities can't kill a process of uid
+1000 and can't poison its memory either:
 
-- Everything the test group has in the cache after the narrow step was
-  allocate using the narrow bitmap, and the wide bitmap covers those portions
-  as well. Nothing is left in a portion the group may not use any more, so
-  there's nothing to flush before the wide step. Only going from wide to
-  narrow can leave such lines behind.
+    $ grep CapEff /proc/self/status
+    CapEff: 0000000000000000
+    $ kill -9 327
+    bash: kill: (327) - Operation not permitted
+    $ echo 0x220689000 > /sys/devices/system/memory/hard_offline_page
+    bash: echo: write error: Operation not permitted
 
-- The first step doesn't need a flush either. resctrl_val() moves the task
-  to the test group and writes the schemata before the buffer is allocate
-  and init, so the buffer never wasa in the cache under another bitmap.
+But put hard_offline_page behind a loop device, write a block
+containing 0x220689000 to the loop device and the loop worker happily
+does it:
 
-I'll work on v6 with patch 1 of this series, and patch 2 does not depend
-on this so I'll send it as a standalone patch.
+    Memory failure: 0x220689: recovery action for dirty LRU page: Recovered
+    MCE: Killing victim:327 due to hardware memory corruption fault at 7f468e972000
 
-Best regards,
-Richard Cheng.
+That hard_offline_page is a write-only file doesn't stop loop from
+using it as a writable backing file either.
 
+Other fun examples:
 
-> [1] https://lore.kernel.org/linux-arm-kernel/20261021224557.1827361-1-smadhavan@nvidia.com/
-> 
-> At the moment the CMT test just uses a single cycle of a hardcoded
-> > (unless user provides something else) bitmap with five bits set. Even with this
-> > I needed add enhancements to make it more robust:
-> > 
-> >  commit ca0ea39288c9 ("selftests/resctrl: Reduce interference from L2 occupancy during cache occupancy test")
-> >  commit 7a214b4ec1c9 ("selftests/resctrl: Improve accuracy of cache occupancy test")
-> > 
-> > As one enhancement highlights the accuracy can be managed better on a system that
-> > supports L2 as well as L3 allocation. Not all systems able to run such test will have such
-> > capability. Also, looks like CMT does not require there to not be interference as the CAT
-> > test does but with MPAM systems having each cache portion as shareable this may also be
-> > a big influence on accuracy.
-> > 
-> > I am not able to judge if a test that uses LLC occupancy and relies on single bit increments
-> > will be robust across all platforms of all architectures. Even so, I do see several risks
-> > for such test to be reliable while I do not see how such fine grained increment provides
-> > insight into resctrl kernel subsystem health.
-> 
-> Thanks for sharing your experience on the testing robustness. I now see that being as permissive as
-> possible with our testing is the way to go.
-> 
-> Ben
-> 
-> > 
-> > Reinette
-> > 
-> > 
-> 
+(1) soft-block radios via /sys/class/rfkill/rfkill*/soft
+    (CAP_NET_ADMIN)
+
+(2) change the reboot mode via /sys/kernel/reboot/mode (CAP_SYS_BOOT)
+
+(3) reconfigure md arrays via /sys/block/md*/md/. md_attr_store()
+    requires CAP_SYS_ADMIN for every md attribute.
+
+(4) reconfigure scsi disks via /sys/class/scsi_disk/*/allow_restart and
+    friends (CAP_SYS_ADMIN)
+
+(5) read dmi-sysfs attributes (CAP_SYS_ADMIN)
+
+And an unprivileged container that was handed a loop device can change
+gro_flush_timeout of its own network devices. That usually requires
+CAP_NET_ADMIN in the initial user namespace (via sysfs and via netlink).
+
+I've reproduced that all on v7.4-rc1.
+
+Aaaand zloop, the nvme target's file backend, the scsi target's fileio
+backend, fuse passthrough and the usb mass storage gadget have the same
+problem. erofs takes pseudo files as images for file-backed mounts as
+well. It reads them with the mounter's credentials though so that's just
+silly and not abusable.
+
+Fwiw, device mapper doesn't need anything. It only takes block devices.
+md's deprecated bitmap file is fine as well. It maps the file with
+bmap() which no pseudo filesystem implements.
+
+So this series adds SB_I_PSEUDO to state that the regular files of a
+filesystem are kernel interfaces and not storage and makes all seven
+refuse such files.
+
+I didn't want to sprinkle SB_I_PSEUDO over all pseudo filesystems one by
+one. Instead there's now a common initialization point for all of them
+via fc_init_pseudo().
+
+init_pseudo() uses it for the internal pseudo filesystems and all
+mountable pseudo filesystems call it from their ->init_fs_context().
+
+kernfs does it once in kernfs_get_tree(). It raises SB_I_PSEUDO,
+SB_I_NOEXEC and SB_I_NODEV. Pseudo filesystems never hold executables or
+device nodes. Some of them raised SB_I_NOEXEC and SB_I_NODEV already,
+most didn't.
+
+I went through every single one of them. None of them needs to execute
+anything. The files that can be mmap()ed map data and the tracing ring
+buffer refuses VM_EXEC anyway.
+
+SB_I_NODEV is cleared again by devpts, binderfs and selinuxfs. The first
+two did that already. selinuxfs needs it because Android init opens
+/sys/fs/selinux/null by path as /dev/null doesn't exist yet at that
+point. Note that systemd mounts most of these filesystems with noexec
+and nodev already.
+
+file_check_backing() looks at d_real_inode(). overlayfs happily stacks on
+top of sysfs, cgroup2, debugfs, tracefs, configfs and securityfs and
+reads of such overlayfs files are served by the pseudo file. Only procfs
+and binfmt_misc are refused as they set s_stack_depth to
+FILESYSTEM_MAX_STACK_DEPTH.
+
+Whether all pseudo filesystems should refuse stacking is a separate
+discussion. overlayfs reads the lower file with the mounter's
+credentials so a root-mounted overlayfs on top of a sysfs directory
+hands capability gated reads to every reader. With SB_I_PSEUDO overlayfs
+could easily refuse them.
+
+The first three patches are independent fixes. Loop never checked
+whether its backing file is open for reading. It relied on
+vfs_iter_read() refusing such files. Direct I/O never went through
+vfs_iter_read() and since v6.15 buffered I/O doesn't either. So whoever
+has a loop device can read files they could only open for writing. And
+the nvme target's file backend and the scsi target's fileio backend call
+->read_iter() and ->write_iter() without checking that they exist.
+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Changes in v2:
+- Add file_check_backing() and use it in all consumers. It replaces
+  file_is_pseudo() and the open-coded file type, open mode and method
+  checks.
+- nvmet, fileio and zloop refuse everything that isn't a regular file
+  or, for nvmet and fileio, a block device.
+- fileio: check the protection file as well. (sashiko)
+- acct: refuse files on all pseudo filesystems. (Alexander)
+- selftests: add nvmet (Bui), fileio, zloop, link, FIFO and character
+  device tests.
+- Collect tags. They are dropped on the patches that changed.
+- Link to v1: https://patch.msgid.link/20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org
+
+---
+Christian Brauner (42):
+      loop: refuse backing files that aren't open for reading
+      nvmet: check that the file backend supports ->{read,write}_iter
+      target: fileio: check that the backing file supports ->{read,write}_iter
+      fs: add SB_I_PSEUDO
+      kernfs: use fc_init_pseudo()
+      proc: use fc_init_pseudo()
+      binfmt_misc: use fc_init_pseudo()
+      mqueue: use fc_init_pseudo()
+      bpf: use fc_init_pseudo() for bpffs
+      nullfs: use fc_init_pseudo()
+      failfs: use fc_init_pseudo()
+      rust_binderfs: use fc_init_pseudo()
+      devpts: use fc_init_pseudo()
+      debugfs: use fc_init_pseudo()
+      tracefs: use fc_init_pseudo()
+      configfs: use fc_init_pseudo()
+      securityfs: use fc_init_pseudo()
+      selinux: use fc_init_pseudo() for selinuxfs
+      smack: use fc_init_pseudo() for smackfs
+      apparmor: use fc_init_pseudo() for apparmorfs
+      nfsd: use fc_init_pseudo()
+      sunrpc: use fc_init_pseudo() for rpc_pipefs
+      fuse: use fc_init_pseudo() for fusectl
+      efivarfs: use fc_init_pseudo()
+      pstore: use fc_init_pseudo()
+      xenfs: use fc_init_pseudo()
+      openpromfs: use fc_init_pseudo()
+      ocfs2: use fc_init_pseudo() for dlmfs
+      s390/hypfs: use fc_init_pseudo()
+      powerpc/spufs: use fc_init_pseudo()
+      usb: gadget: f_fs: use fc_init_pseudo()
+      usb: gadget: gadgetfs: use fc_init_pseudo()
+      fs: add file_check_backing()
+      loop: refuse files on pseudo filesystems as backing files
+      zloop: refuse zone files on pseudo filesystems
+      nvmet: refuse files on pseudo filesystems as namespace backing files
+      target: fileio: refuse files on pseudo filesystems as backing files
+      fuse: refuse files on pseudo filesystems as passthrough backing files
+      usb: gadget: f_mass_storage: refuse files on pseudo filesystems
+      erofs: refuse files on pseudo filesystems as backing files
+      acct: refuse files on pseudo filesystems
+      selftests/filesystems: add backing file tests for pseudo files
+
+ arch/powerpc/platforms/cell/spufs/inode.c          |   2 +
+ arch/s390/hypfs/inode.c                            |   2 +
+ drivers/android/binder/rust_binderfs.c             |   3 +-
+ drivers/block/loop.c                               |  14 +-
+ drivers/block/zloop.c                              |   5 +-
+ drivers/nvme/target/io-cmd-file.c                  |   4 +
+ drivers/target/target_core_file.c                  |  14 +
+ drivers/usb/gadget/function/f_fs.c                 |   2 +
+ drivers/usb/gadget/function/storage_common.c       |  11 +-
+ drivers/usb/gadget/legacy/inode.c                  |   2 +
+ drivers/xen/xenfs/super.c                          |   2 +
+ fs/binfmt_misc.c                                   |   5 +-
+ fs/configfs/mount.c                                |   2 +
+ fs/debugfs/inode.c                                 |   2 +
+ fs/devpts/inode.c                                  |   2 +
+ fs/efivarfs/super.c                                |   2 +
+ fs/erofs/super.c                                   |   5 +-
+ fs/failfs.c                                        |   3 +-
+ fs/fuse/backing.c                                  |   4 +
+ fs/fuse/control.c                                  |   2 +
+ fs/kernfs/mount.c                                  |   4 +-
+ fs/libfs.c                                         |   2 +-
+ fs/nfsd/nfsctl.c                                   |   2 +
+ fs/nullfs.c                                        |   3 +-
+ fs/ocfs2/dlmfs/dlmfs.c                             |   2 +
+ fs/openpromfs/inode.c                              |   2 +
+ fs/proc/root.c                                     |   4 +-
+ fs/pstore/inode.c                                  |   2 +
+ fs/read_write.c                                    |  48 ++
+ fs/tracefs/inode.c                                 |   2 +
+ include/linux/fs.h                                 |   2 +
+ include/linux/fs/super_types.h                     |   1 +
+ include/linux/pseudo_fs.h                          |  11 +
+ ipc/mqueue.c                                       |   3 +-
+ kernel/acct.c                                      |   6 +-
+ kernel/bpf/inode.c                                 |   4 +-
+ net/sunrpc/rpc_pipe.c                              |   2 +
+ security/apparmor/apparmorfs.c                     |   2 +
+ security/inode.c                                   |   2 +
+ security/selinux/selinuxfs.c                       |   5 +
+ security/smack/smackfs.c                           |   2 +
+ tools/testing/selftests/filesystems/.gitignore     |   1 +
+ tools/testing/selftests/filesystems/Makefile       |   2 +-
+ tools/testing/selftests/filesystems/config         |  14 +
+ .../selftests/filesystems/pseudo_backing_test.c    | 570 +++++++++++++++++++++
+ 45 files changed, 747 insertions(+), 39 deletions(-)
+---
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+change-id: 20261109-work-loop-pseudo-890844168ef1
+
