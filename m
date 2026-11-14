@@ -1,60 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=130.136.161.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794676194;
-	b=gAJGbMLyImWhDLTun45/KYNuXVY0LnSHHIxPK0uW7LT/CR765qXVeNlGhvGPnHF7WFfF
-	 nD3yUZqIoXEngMZRa8bZ1YCmjiJC1falqqAVl8MxigTe8VMERbcik1QiwLAAcfMr3H5xU
-	 VkbpXdLW/OjLFrkTsdNt3kQxymza0n+/nSfpIW/BGoSplzqeRoYP4yQWjLSltTUesU30n
-	 0cCi2JdQpAAmeXEgk7DaP9JQbH+lIBIM6eEgDBvCy2bh0c7baan63zURir0uIc/QaKPtU
-	 jdjEHoYf9lBQ3h05RT/mtnex5jtASlg9KSs+lNfHgvdtTHg0dXMWidm7RP26rdK2gbA==
+	t=1794680384;
+	b=VSFJIel98aZZ6j5md8SD8BCHD9dsVvIofjdNOGCQtzNrPpilrbeCu2DO1oLaK449FTa5
+	 66+Kn3dEDFn/orJ7SzDaS4KJ5JO3W4PoNauhTrtfAtQ9qkcqUi3iXpDQ4+N1tpaBH9aeW
+	 y+5AtNGRnqufPWWhnZ2Z3x/Z1EKBn9cLHwdm0vanrDyvdTVWWZJzgAV2KQTFoFsGtWFm+
+	 NhHhgublE9f1h9804dEkG/jAYNxwbWJisFYkGoZ5uKcpj3awcDud/C1s7b7nSUKTprDo1
+	 kQMcltxgat1XKKCg64RtU8A5Pzx/n8YVP4m0zIU9b1l6pNgItoQ7duyI3myjZE/w3yw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794676194;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=FqN4KDJIxmU9Q0izWI8VvuQ7FOMtenlG/mu/G5wNfQI=;
-	b=xcirxJN+3arySARqW9Fk5QGClqz8DYNZbECJjW8rzU0rWpTJUbPYhF3ccfIt8nhWZqck
-	 daLrbB4GxnqKIhWw6DAYzooj0tNdnrtDCaCROBHfpqNmQBZBsHqAVdROZ2bPwdgjcyk1s
-	 bZ65YYfT/YKPMieCF5UGt0Fd57GaYFIQU3NFTomViYva+2V/ARrSCe7U/QdOEN2NQnFnZ
-	 5dzumnbw7VmIRurMFQjPHJFe7g87+lZ5CSKuBOZU4W7JoqhjCdVij1ewUXc3m/baYFfP/
-	 ppLF5rNnHr340NoxqAzJ/x6l8JThV9CaufwL/5X6h69J1JIdb0NdTPSSKqAB59r69kA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794680384;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=fneCtoft1jE/z5cQICLaBJ4/CSSYpKeQ7A9soDkriNI=;
+	b=ZUQisef8YsIwBcn7UDXxKU2AC2ez3NsjEv3oD2/VRcxKvFZ8T3yL3V14qcAVpOkLMe2X
+	 Z44wkhNj1svWcCa98QMUXgBSHU8ZwD0Efy9Q1Ids9qmUd2eeRjeuG71Z/UbSBxH+qs8xN
+	 Q8e9hOjD97XIyZLFOB2Pii6uPZwji2miC1sw352HKnRAMltx5AUOepADXxQhrRK+8cZLs
+	 W8BbuPcTnRA+fNTiDiCqyXGM0Hpyqt8RA+gfnOcOPZYgNolH8J1tT+9AOEoSJjxeF82Kg
+	 9x8Bv8/KxOmLgGS2H8v5UiIdFVcnksKlQ2h7WrW9uUHzFXSt7j05lK3UzVSN5auRUYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oJ0KiTP1;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6421606A330;
-	Sat, 14 Nov 2026 17:09:54 +0000 (UTC)
+	dmarc=pass header.from=cs.unibo.it;
+	spf=pass smtp.mailfrom=cs.unibo.it;
+	dkim=pass header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=aP3HwpnO;
+	arc=none smtp.remote-ip=130.136.161.50
+Received: from mail.virtlab.unibo.it (mail.virtlab.unibo.it [130.136.161.50])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B9FC606A329;
+	Sat, 14 Nov 2026 18:19:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B9FC606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cs.unibo.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unibo.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oJ0KiTP1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06A91F000C5;
-	Sat, 14 Nov 2026 17:09:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794676194;
-	bh=FqN4KDJIxmU9Q0izWI8VvuQ7FOMtenlG/mu/G5wNfQI=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=oJ0KiTP1QWhKE07HqLIv9lKb2Y9MR0hJK8ZIAvVeJKfiZ9mLuZClbjotW7YAezHwE
-	 sONCvmSf7v1mc9EougkcF9GC/oGQnyCLnsbCxdDBJn6naBvBpo3G8CtY1CUFPjLTy7
-	 ptEGoQGBo36HrEmClqaSZsSS4RUSqzPOpuW3BsUQcK6o3voe7qcUX1hfv5vvL3QaWq
-	 TARg4vevZrTcHbUWppcEqOhgVcESiZ6Akz6HAN6hKhHLJezBuSCjR73/YOayPj+Rbt
-	 jDShlTJBNVUQs+Wk18uHOxXwgDweuBjOsJOx2jTY5z2pQ2JvgjvriV2IQqZiMN4BPo
-	 SOPOBUjTgNM3Q==
-Subject: Re: [PATCH net-next v3 3/3] selftests: tc-testing: pin DRR and ETS
- deficit refill semantics
-From: netdev-bot+sashiko@kernel.org
-To: victor@mojatatu.com
-Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- jhs@mojatatu.com, sashiko-bot@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-Date: Sat, 14 Nov 2026 17:09:53 +0000
-Message-ID: <179467619339.2199510.6248385322007095412@kernel.org>
-In-Reply-To: <QDISC-TIAE.v3.r0.20261109173518-3@mojatatu.com>
-References: <QDISC-TIAE.v3.r0.20261109173518-3@mojatatu.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=cs.unibo.it header.i=@cs.unibo.it header.a=rsa-sha256 header.s=virtlab header.b=aP3HwpnO
+Received: from eipi10.cs.unibo.it (host0.studiodavoli.it [109.234.61.1])
+	by mail.virtlab.unibo.it (Postfix) with ESMTPA id 1A4041C0145;
+	Sat, 14 Nov 2026 19:19:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=cs.unibo.it;
+	s=virtlab; t=1794680374;
+	bh=/jZX3I3Baf9Yzk43cr+jSHpUEb9Hel2mhebb/m9ZUaM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aP3HwpnOX9fpF9+uRHGXvdKP7vUX16c4N10VZUiROLKfGMrX+NF/miPeZY0ddycCi
+	 y9PtbcODQIs8a7Kr+psTN05b3stH+J4nI/Sb76lKX22TQhwm/XKe/1+hWzgaSI667G
+	 SHcQKQ5oWYN4513oBF60P4YDEtzE2tB26K6+hEbE=
+From: Renzo Davoli <renzo@cs.unibo.it>
+To: linux-kernel@vger.kernel.org
+Cc: Renzo Davoli <renzo@cs.unibo.it>,
+	Oleg Nesterov <oleg@redhat.com>,
+	=?UTF-8?q?Michal=20Such=C3=A1nek?= <msuchanek@suse.de>,
+	Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"Dmitry V . Levin" <ldv@strace.io>,
+	Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	strace-devel@lists.strace.io
+Subject: [PATCH v11 0/3] PTRACE_SET_SYSCALL_INFO: add support for seccomp syscall skipping
+Date: Sat, 14 Nov 2026 19:19:19 +0100
+Message-ID: <20261114181923.370930-1-renzo@cs.unibo.it>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -64,231 +76,147 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider.
+PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
+PTRACE_GET_SYSCALL_INFO by allowing a tracer to modify details of a
+system call in which the tracee is currently blocked.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 3
+This patch set extends PTRACE_SET_SYSCALL_INFO with support for
+skipping a system call at a PTRACE_EVENT_SECCOMP stop and setting its
+return value.  To do this, the tracer changes 'op' from
+PTRACE_SYSCALL_INFO_SECCOMP to PTRACE_SYSCALL_INFO_EXIT and fills in the
+exit union fields (rval and is_error).
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Michal pointed out in the review of v7 [1] that the register state alone
+cannot tell whether a syscall has to be executed or skipped with a
+preset return value, since on some architectures the return value
+shares a register with the syscall number or the arguments, and that
+the "already dispatched" information should be architecture
+independent rather than an architecture-specific thread flag.
 
-- [Medium] All three new tests pass or fail based on wall-clock timing,
-  with roughly ±0.5 s of margin, and nothing synchronises them with when…
-- [Low] The commit message says only 57a1 and 2177 put netem under the
-  classful qdisc and log the "non-work-conserving?" warning.
-- [Low] In ETS test 2177, band 1:1 is expected to show "bytes": 1514,
-  "packets": 1, although the band was never served (backlog 3028, qlen…
-- [Low] The commit says it pins the DRR/ETS deficit refill 'so a change
-  to the refill loop can't silently alter the result'.
+v8 does exactly that: the tracer no longer sets the syscall number to -1
+and relies on syscall_get_nr() reading it back as negative.  Instead,
+patch 1 adds a per-task flag owned by seccomp, which the tracer sets
+while the tracee is stopped.  When the tracee resumes, seccomp skips the
+system call just like for SECCOMP_RET_ERRNO, a path every architecture
+already handles without touching the return value.  This also fixes
+skipping on s390, where -1 is read back as syscall 65535.
 
---
+On powerpc, a separate fix has been posted [2]:
+syscall_set_return_value() currently sets TIF_SYSCALL_RET on the
+*caller*, i.e. on the tracer when called from PTRACE_SET_SYSCALL_INFO,
+and skipped system calls lose non-error return values.  These problems
+are already present in the source tree and break the existing
+set_syscall_info selftest and seccomp_bpf user_notification_basic on
+ppc64le independently of this series, which therefore no longer
+depends on [2].
 
-selftests: tc-testing: pin DRR and ETS deficit refill semantics
+[1] https://lore.kernel.org/lkml/apWFHkZnCMfxQCEk@kunlun.suse.cz/
+[2] https://lore.kernel.org/lkml/20261030084926.1068384-1-renzo@cs.unibo.it/
+[3] https://sashiko.dev/#/patchset/20261113165509.229869-1-renzo@cs.unibo.it?part=2
 
-This commit adds three tc-testing cases. 3f3e checks the DRR deficit after
-a 1514-byte packet at quantum 256. 57a1 and 2177 check that DRR and ETS
-serve a 514-byte packet before a 1514-byte one, using netem delay under the
-classful qdisc to hold packets while stats are inspected.
+Testing (tools/testing/selftests/ptrace/set_syscall_info and
+tools/testing/selftests/seccomp/seccomp_bpf):
 
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-> index 2b61d8d79bde8..d7ac32294738e 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
-> @@ -86,5 +86,87 @@
+v11, QEMU, v7.4-rc2:
 
-[ ... ]
+                               x86_64 (KVM)
+  ptrace/set_syscall_info      2/2
+  seccomp/seccomp_bpf          142/142
 
-> +        "setup": [
-> +            "$IP addr add 10.10.11.10/24 dev $DUMMY",
-> +            "$TC qdisc add dev $DUMMY root handle 1: drr",
-> +            "$TC class add dev $DUMMY parent 1: classid 1:1 drr quantum 256",
-> +            "$TC qdisc add dev $DUMMY parent 1:1 handle 10: netem delay 2s limit 10",
+v9, QEMU, v7.3-rc6 (the v11 change is architecture independent):
 
-[Severity: Low]
-The commit message says:
+                               x86_64 (KVM)   ppc64le (TCG)   s390x (TCG)
+  ptrace/set_syscall_info      2/2            2/2             2/2
+  seccomp/seccomp_bpf          111/111        111/111         110/111 (*)
 
-    57a1 and 2177 put netem under the classful qdisc, so they log the usual
-    "non-work-conserving?" warning.
+  Build-tested also with CONFIG_SECCOMP=n and CONFIG_SECCOMP_FILTER=n.
 
-3f3e also puts netem under DRR class 1:1 here, so doesn't it log the same
-warning? The first ping packet is enqueued and qdisc_run() calls
-drr_dequeue(). netem's peek, qdisc_peek_dequeued()->netem_dequeue(),
-returns NULL because the packet is not due for 2s:
+  Skipping getpid() at a PTRACE_EVENT_SECCOMP stop, with a filter that
+  kills the process on unknown syscall numbers:
 
-net/sched/sch_drr.c:drr_dequeue() {
-    ...
-		skb = cl->qdisc->ops->peek(cl->qdisc);
-		if (skb == NULL) {
-			qdisc_warn_nonwc(__func__, cl->qdisc);
-			goto out;
-		}
-    ...
-}
+  op=SECCOMP, nr=-1 (before)   error          r3 left as is   SIGSYS kill
+  op=SECCOMP->EXIT (this)      -ESRCH         -ESRCH          -ESRCH
 
-Each test creates a new netem qdisc with TCQ_F_WARN_NONWC clear, so it
-looks like all three tests print the warning, not two.
+  (*) user_notification_wait_killable_after_reply timed out under TCG
+      while another VM was running; it passes 5/5 both with and without
+      this series on an idle x86_64 KVM guest.
 
-Should the commit message say that all three tests log it?
+  ppc64le results were obtained with an earlier version of the powerpc
+  fix [2] applied.
 
-> +            "$TC filter add dev $DUMMY parent 1: protocol ip prio 1 u32 match u32 0 0 flowid 1:1",
-> +            "ping -c 2 -s 1472 -i 1 10.10.11.11 -I $DUMMY -W 0.01 >/dev/null 2>&1 &"
-> +        ],
-> +        "cmdUnderTest": "sleep 2.5",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC -s class show dev $DUMMY",
-> +        "matchPattern": "deficit 22b",
+  Not tested: MIPS, arm64, riscv, loongarch, real hardware.
 
-[Severity: Medium]
-Can these tests fail intermittently because of scheduling latency?
+Changes in v11:
+* once the system call is skipped, PTRACE_GET_SYSCALL_INFO reports the
+  stop as a PTRACE_SYSCALL_INFO_EXIT one, as the syscall number and
+  arguments may have been overwritten by the return value (reported by
+  Sashiko [3]); a later PTRACE_SYSCALL_INFO_SECCOMP update is still
+  rejected, now by the generic check on the stop type
+* selftests/ptrace/set_syscall_info.c: check PTRACE_GET_SYSCALL_INFO
+  after the system call is skipped
 
-nsPlugin runs the traffic generators in the background with & through ip
-netns exec. The verify step then runs after a fixed sleep 2.5. Nothing
-ties the verify step to the time the packets are actually enqueued.
+Changes in v10:
+* rebased to Linux 7.4-rc2
+* no longer depends on the powerpc fix [2], which addresses a bug
+  already present in the source tree
 
-In 3f3e, ping sends at T+d1 and T+d1+1, and netem releases each packet 2s
-later. drr_dump_class_stats() reports the deficit only while the class is
-backlogged:
+Changes in v9:
+* selftests/ptrace/set_syscall_info.c: check for seccomp filter support,
+  fix failure report
+* rebased to Linux 7.3
 
-net/sched/sch_drr.c:drr_dump_class_stats() {
-    ...
-	if (qlen)
-		xstats.deficit = READ_ONCE(cl->deficit);
-    ...
-}
+Changes in v8:
+* skip the system call via a seccomp per-task flag instead of
+  syscall_set_nr(-1), as suggested by Michal Suchánek
+* new helper ptrace_set_syscall_info_seccomp_skip() instead of a bool
+  argument to ptrace_set_syscall_info_exit() (Michal Suchánek)
+* once the system call is skipped, reject further
+  PTRACE_SYSCALL_INFO_SECCOMP updates during the same stop
+* selftest: also test an error return value and the above
+* dropped the Reviewed-by tags of Oleg and Dmitry, as patch 2 changed
+  significantly
 
-So "deficit 22b" only matches while the first packet has been dequeued and
-the second is still held by netem. If ping start-up or tdc overhead moves
-things by more than about 0.5s, tc prints either deficit 256b (nothing
-released yet) or deficit 0b (class drained).
+Changes in v7:
+* rebased to Linux 7.3-rc1
 
-57a1 and 2177 have the same problem. Batch 1 is released at about T0+p1+3,
-and verify runs at about T0+1+2.5 plus overhead:
+Changes in v6:
+* selftests/ptrace/set_syscall_info.c: improve messages in case of failure.
 
-- If starting ip netns exec plus python3 takes more than about 0.5s,
-  batch 1 is still held at verify time. Class 1:2 then shows bytes 0 with
-  backlog 1028 / qlen 2 instead of 514 / 1.
-- If tdc overhead between setup and verify is too large, batch 2 is
-  released and backlog/qlen change.
+Changes in v5:
+* reworded the explanation for not supporting PTRACE_SYSCALL_INFO_ENTRY yet.
+* selftests/ptrace: removed a redundant check.
 
-tdc.sh runs tdc.py -J"$(nproc)", which adds CPU contention. Debug kernels
-such as KASAN or lockdep slow start-up further.
+Changes in v4:
+* Reworded the commit messages for clarity.
+* Renamed the local variable child_op to op in ptrace_set_syscall_info()
+* Clean up and improve the coding style of selftests/ptrace/set_syscall_info.c
+  (suggested by Dmitry V. Levin)
 
-Could the tests wait for the packets to appear in the qdisc backlog before
-the timed window starts? Alternatively, could the margin between the netem
-delay and the verify time be made wider?
+Changes in v3:
+* restrict the syscall skipping feature to PTRACE_SYSCALL_INFO_SECCOMP
 
-[ ... ]
+Changes in v2:
+bugfix: _NONE -> _EXIT transition was erroneously permitted
 
-> +        "cmdUnderTest": "sleep 2.5",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC -j -s class show dev $DUMMY",
-> +        "matchJSON": [
-> +            {
-> +                "class": "drr",
-> +                "handle": "1:1",
-> +                "root": true,
-> +                "stats": {
-> +                    "bytes": 0,
-> +                    "packets": 0,
-> +                    "backlog": 3028,
-> +                    "qlen": 2
-> +                }
-> +            },
+Davide Berardi (1):
+  seccomp: let the tracer skip a syscall independently of its number
 
-[Severity: Low]
-The commit message says the tests ensure "a change to the refill loop
-can't silently alter the result". Does 57a1 actually pin the multi-class
-refill?
+Renzo Davoli (2):
+  ptrace: add PTRACE_SET_SYSCALL_INFO syscall skipping support
+  selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO syscall
+    skipping
 
-This matchJSON only checks bytes, packets, backlog and qlen, which only
-shows the service order. The batched refill in drr_dequeue() adds
-rounds * quantum to every active class:
+ include/linux/seccomp.h                       |  33 +++
+ include/linux/seccomp_types.h                 |   4 +
+ kernel/ptrace.c                               |  49 +++-
+ kernel/seccomp.c                              |  11 +-
+ .../selftests/ptrace/set_syscall_info.c       | 249 +++++++++++++++++-
+ 5 files changed, 342 insertions(+), 4 deletions(-)
 
-net/sched/sch_drr.c:drr_dequeue() {
-    ...
-			if (skip && rounds != UINT_MAX) {
-				list_for_each_entry(iter, &q->active, alist)
-					WRITE_ONCE(iter->deficit,
-						   iter->deficit + rounds *
-						   READ_ONCE(iter->quantum));
-    ...
-}
-
-Suppose that loop were changed to refill only the first class. B would
-still be dequeued first, and the asserted stats would match exactly.
-Class 1:1's deficit, though, would end at 1280 (or 768) instead of 1024.
-Class 1:2 ends at 254 in both cases. 3f3e has only one class, so it can't
-tell these cases apart either.
-
-Class 1:1 still has qlen 2 at verify time, so drr_dump_class_stats()
-exports its deficit. Could 57a1 also check the per-class deficits (1024
-and 254)? ETS does not export a deficit, so 2177 can only check the order.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> index d2eab61c099a8..ea3adba2f06c7 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/ets.json
-> @@ -1007,5 +1007,59 @@
-
-[ ... ]
-
-> +        "verifyCmd": "$TC -j -s class show dev $DUMMY",
-> +        "matchJSON": [
-> +            {
-> +                "class": "ets",
-> +                "handle": "1:1",
-> +                "root": true,
-> +                "stats": {
-> +                    "bytes": 1514,
-> +                    "packets": 1,
-> +                    "backlog": 3028,
-> +                    "qlen": 2
-> +                }
-> +            },
-
-[Severity: Low]
-Is "bytes": 1514, "packets": 1 the intended expectation for band 1:1?
-
-Band 1:1 still has backlog 3028 and qlen 2. Both 1514-byte packets are
-still queued, so the band was never served. The count seems to come from
-netem's accounting at peek time. ets_class_dump_stats() reports the
-child's bstats:
-
-net/sched/sch_ets.c:ets_class_dump_stats() {
-    ...
-	if (gnet_stats_copy_basic(d, NULL, &cl_q->bstats, true) < 0 ||
-    ...
-}
-
-netem's peek is qdisc_peek_dequeued(), which calls netem_dequeue(). That
-updates bstats before the skb is stashed back in gso_skb:
-
-net/sched/sch_netem.c:netem_dequeue() {
-    ...
-deliver:
-		qdisc_qstats_backlog_dec(sch, skb);
-		qdisc_bstats_update(sch, skb);
-		return skb;
-    ...
-}
-
-So a single ETS peek of the first A packet sets band 1:1 to 1514/1.
-
-The DRR version, 57a1, runs the same scenario and expects bytes 0 /
-packets 0. That is because drr_dump_class_stats() reports cl->bstats,
-which is only updated on a real dequeue.
-
-The expectation here depends on how netem accounts a peek. Could band 1:1
-check only backlog/qlen, so the test does not break if that accounting
-changes while ETS scheduling stays the same?
-
-[ ... ]
-
+base-commit: 7e1392a42ea288d70a266f6553fe06f57f8647ea
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-TIAE.v3.r0.20261109173518%40mojatatu.com
+2.55.0
+
