@@ -1,45 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794675860;
-	b=aKdHbWQoc4hmoFElUnRYnklauLS2pXm1+6WHO3KwGDySGxXRmZz/SafUBOL9NzJl8vf/
-	 AFdNGSgbOioZHjo98TUkYHmSN07+gYE45CND/S6+6afPh+lJU+0EIY32KaVQnRjiLo3iQ
-	 lG/81mqIxIc5ieD+HIhpFgXx5nE013FEhK246gCI+p9Vw9jLum5XfKuKjlLWHZmSghAos
-	 cS/LDe9mxmDhXlGc2r2zkF8/DImuITndVsRzc590QduXd9P8CpAp5Xayd+dOsHyYIassZ
-	 LUJI/JlCDtstwlbSxj73Iq4pwr2uipsOqKuoPOsrqwSmy96HL38ds0jPpb3oIbgLk8w==
+	t=1794676192;
+	b=VIXYeBSrsE2pYxmwpOYbUPX2wYbbrv4AeMAya9MhZbVcaiqCRXwZe2flZevpwAgIuwje
+	 Bd6lgNHUac5O8rj4ScJBPtHQlR0Icfqm0S26OUJZDVVMBsld0G19e9gLN0CQkfx6SdXXG
+	 SHnQI+6+J0+gU38A1EBGfUUir9lPNGpg4cgFvoyZKXU/X3e6ICbrVbmAf9d1wFkSgCAw9
+	 F+QkGvxeI1AwfhzV8erE6I5wjyqSn7vHdybUHz0IZ+42uo6QoOQ45v3ykYRoOpGcVn9Tf
+	 BWZ2Km7F1iJHwV5gjVzG2CNNhIFK1+xdVBqLHFWzEX6q/kr2XkoGQq8hlymcsmqdgvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794675860;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=P3R1fxnK2fHEw6kEa18V4jQ4Zete2japEw/6tUn8fvc=;
-	b=MVmz9s6+bcJewF9H/erwWGw7+LZBlO8MQCqMK+ToQLyY5Wc8H0xlCsNsqUGd0bbDKcUZ
-	 TYI8ls78yu0H96fxGFEt8Oef95K++hr4a+Y8HAXrcsY0yYEOhba7igUKEJg+EkPhYddAc
-	 0NMdsOyXkGnbZY4MHSyUyGBN4eZfAJ59EGtrm+atjw5Ih4Ax3/YbyChWhhNkYsV4v3kqp
-	 fhaDw+Ze0HfcMbIbFyvY6k6Xb+A1J7Y+ygPgX3KUuZcT1CU4z7Dy4ZCmew5lMj3GbY+MD
-	 ecFjqmvLVUL9npn4uufHnXUxGAqcLwtZ9hP7GCVvJezla2pkzL3EEPhh8QAlVEsCFAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794676192;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=0GdjTtQZ3wJcZ4URpoeAgc52Y13xDUWhD+cjgtAcWHk=;
+	b=yFiSrbApOvKhjKZW03MhSTz+Sg3GR8FOdv0mXXgHNp3/ejEApg0oOiOXakOPXu9cKAEg
+	 Ya3H6RQZIRggO35tDJcIzI4Ahi+q/Tl57TZQXSixlZi3W1cKTYrOKeoVx7uSYyBy57IpH
+	 7I0OBjr5ukAv/Bv1Pcj3BRy7xcBWvCeBJoHkf7L9fBSFQAjVVJ9eWqv9/hadq6kvJ2HhK
+	 yjERXjSJriGzF/ZcdJ8wwAuJ2k0W4HkMUkP/qf/3EZk9g10wEy+oEG5sEtfC41JBjvbMi
+	 afMVazWRzgnTDaUkbdOK02p7Hoi9DJp+jqiyjOaB5coqn7JM0edz8z+XVsql/bwWZjA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RrIO2nnn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HXKtIlkh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FCB606A330;
-	Sat, 14 Nov 2026 17:04:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B29606A32D;
+	Sat, 14 Nov 2026 17:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RrIO2nnn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB051F000C4;
-	Sat, 14 Nov 2026 17:04:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HXKtIlkh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C55E1F000C4;
+	Sat, 14 Nov 2026 17:09:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794675859;
-	bh=P3R1fxnK2fHEw6kEa18V4jQ4Zete2japEw/6tUn8fvc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RrIO2nnnCtVuyU/3tU5BytDg8ykluxl0TSYiZA5BT1lRK8o2OWF3fBeB1rSbWbl3f
-	 oGMj5qdXl4Zp2XJuE0GBqah0MoZlbi2OsX01yaNb7uKlHlcY5HcFjvntxwxzB5hex1
-	 Cpn/WU29mb0mmZKZCwijaMvEVfH9YFJ+c4G21hFpOj+tC70+6R+KOgFnq2WfJXVarj
-	 2c+9TWR3EVBBCVH6l3zW2dr9RVyrv1sYjE2ZjziajRktF8WWiiO96gC8DBEiJy6DJn
-	 akiQhO2HK7LBWcznqKceUuWopzvuCqgvBCrWt7w4fLnrVTq1SqD8nXjvkhXR9vBCSb
-	 l6G1S4bCu59cA==
-Content-Type: multipart/mixed; boundary="===============3120634351969932012=="
+	s=k20260515; t=1794676192;
+	bh=0GdjTtQZ3wJcZ4URpoeAgc52Y13xDUWhD+cjgtAcWHk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=HXKtIlkhl2ZZd6RH6kZsPWAb+S2qX92WBNDHuUbXcGom5xd7pDYSc12NYxyYpogKy
+	 ooJ7TRCX8TEXJ/76rVAHv1Yz2JqBUmD5ZxgW3JZ9RIXRjTm2r1uhOcIUfieVCT1zZj
+	 7PKUWk8Akyk62nkNV6+MtvPBxwqPW2eR1OcXJ5B5ZqdtZh4CnjaSfHbst/q/kLpoUf
+	 47jXCaNbLJolELwc/fQqQzDHUHRfQVOFJIWhGtBYGJnPFcaToZsXHf9p5jJRI8D2lq
+	 DYpq/icStsilsHs/axP58vpmHAEhDTARMAr2ru41OPKxrOMbrrbH1KqV/iG3piPncE
+	 KYyXGBlMCSO4A==
+Subject: Re: [PATCH net-next v3 1/3] net/sched: drr, ets, sfq: skip empty
+ rounds in the deficit-refill dequeue loop
+From: netdev-bot+sashiko@kernel.org
+To: victor@mojatatu.com
+Cc: netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ jhs@mojatatu.com, sashiko-bot@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Sat, 14 Nov 2026 17:09:50 +0000
+Message-ID: <179467619090.2199510.9471789623632120012@kernel.org>
+In-Reply-To: <QDISC-TIAE.v3.r0.20261109173518-1@mojatatu.com>
+References: <QDISC-TIAE.v3.r0.20261109173518-1@mojatatu.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -49,84 +64,193 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a75e29128bdce3037d830cd6f269f27e01a680e943df2db427a12c99971bc8be@mail.kernel.org>
-In-Reply-To: <20261114161211.376859-6-jarkko@kernel.org>
-References: <20261114161211.376859-6-jarkko@kernel.org>
-Subject: Re: [PATCH v11 5/6] KEYS: Replace assoc_array with rhashtable
-From: bot+bpf-ci@kernel.org
-To: jarkko@kernel.org,dhowells@redhat.com
-Cc: jarkko@kernel.org,bpf@vger.kernel.org,dm-devel@lists.linux.dev,fsverity@lists.linux.dev,keyrings@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-security-module@vger.kernel.org,agk@redhat.com,agordeev@linux.ibm.com,ast@kernel.org,alexs@kernel.org,anastasia.eskova@ibm.com,akpm@linux-foundation.org,andrii@kernel.org,bmarzins@redhat.com,borntraeger@linux.ibm.com,daniel@iogearbox.net,dzm91@hust.edu.cn,eddyz87@gmail.com,emil@etsalapatis.com,ebiggers@kernel.org,ignat@linux.win,hca@linux.ibm.com,ihor.solodrai@linux.dev,James.Bottomley@HansenPartnership.com,jmorris@namei.org,jolsa@kernel.org,corbet@lwn.net,memxor@gmail.com,torvalds@linux-foundation.org,martin.lau@linux.dev,snitzer@kernel.org,mpatocka@redhat.com,zohar@linux.ibm.com,paul@paul-moore.com,oberpar@linux.ibm.com,rdunlap@infradead.org,roberto.sassu@huawei.com,serge@hallyn.com,skhan@linuxfoundation.org,song@kernel.org,svens@linux.ibm.com,tytso@mit.edu,gor@linux.ibm.com,
- si.yanteng@linux.dev,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 14 Nov 2026 17:04:15 +0000 (UTC)
 
---===============3120634351969932012==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-> KEYS: Replace assoc_array with rhashtable
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-TL;DR: Not a bug today, but the new keyring_read() comment says the semaphore
-isn't needed; without it, a missed key could possibly leak uninitialized
-kvmalloc() bytes to user space. Comment should say the read lock matters.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
+- [Medium] The bulk-refill scan in drr_dequeue()
+  (net/sched/sch_drr.c:422-431) and ets_qdisc_dequeue()…
+- [Low] The commit "net/sched: drr, ets, sfq: skip empty rounds in the
+  deficit-refill dequeue loop" fixes a dequeue stall: one dequeue spins…
+
+--
+
+net/sched: drr, ets, sfq: skip empty rounds in the deficit-refill dequeue loop
+
+This patch changes the DRR, ETS and SFQ dequeue loops. After a full round
+in which no class could dequeue, they compute how many rounds remain and
+credit every active class that many quanta at once. It also takes the tree
+lock when a DRR or ETS class quantum is changed.
+
+Link: https://lore.kernel.org/netdev/3ab59725-e34c-4243-bc72-d93f837bcad1@redhat.com/
+Link: https://lore.kernel.org/netdev/CA+NMeC_kwd5yihR3SSqb+Z8wX+NuobntbvpKtAyOwjZ1Xa4mVg@mail.gmail.com/
+
+> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
+> Closes: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260819143213.57401-1-jhs@mojatatu.com
+
+[Severity: Low]
+Should this have a Fixes: tag? The patch fixes a dequeue stall: one dequeue
+spins up to N * 4096 times under the root lock with BH disabled. It has
+Reported-by and Closes trailers, but no Fixes:.
+
+The earlier commit 8f735d64382d ("net/sched: bound qdisc_pkt_len to
+prevent qdisc soft lockup") fixed the unbounded form of the same refill
+loop, and it carried Fixes: 1da177e4c3f4. Without a Fixes: tag here,
+stable has nothing to target for the remaining bounded but long form of
+the loop.
+
+> diff --git a/net/sched/sch_drr.c b/net/sched/sch_drr.c
+> index 8621d057edd9f..bff7b307e98eb 100644
+> --- a/net/sched/sch_drr.c
+> +++ b/net/sched/sch_drr.c
 
 [ ... ]
 
->  /*
->   * Read a list of key IDs from the keyring's contents in binary form
->   *
-> - * The keyring's semaphore is read-locked by the caller.  This prevents someone
-> - * from modifying it under us - which could cause us to read key IDs multiple
-> - * times.
-> + * The walk is RCU-protected, so the keyring's semaphore is not required.  A
-> + * keyring modified concurrently may list a key twice or miss one, but it can
-> + * never have a link freed under the walk.
->   */
->  static long keyring_read(const struct key *keyring,
->  			 char *buffer, size_t buflen)
+> @@ -402,6 +410,51 @@ static struct sk_buff *drr_dequeue(struct Qdisc *sch)
+>  			return skb;
+>  		}
+>  
+> +		/* No class could dequeue in the last full round. Add the
+> +		 * quanta for the rounds still needed in one pass.
+> +		 */
+> +		if (!scanned && cl == first) {
+> +			unsigned int rounds = UINT_MAX;
+> +			struct drr_class *iter, *tmp;
+> +			bool skip = true;
+> +
+> +			scanned = true;
+> +			list_for_each_entry_safe(iter, tmp, &q->active, alist) {
+> +				unsigned int pkt_len;
+> +				struct sk_buff *peek;
+> +
+> +				/* A child that emptied itself while peeking
+> +				 * is no longer in the list and needs no rounds.
+> +				 */
+> +				peek = iter->qdisc->ops->peek(iter->qdisc);
+> +				if (!peek)
+> +					continue;
+> +				pkt_len = qdisc_pkt_len(peek);
+> +				if (pkt_len <= iter->deficit) {
+> +					skip = false;
+> +					break;
+> +				}
+> +				rounds = min(rounds,
+> +					     DIV_ROUND_UP(pkt_len - iter->deficit,
+> +							  READ_ONCE(iter->quantum)));
+> +			}
+> +			if (skip && rounds != UINT_MAX) {
+> +				list_for_each_entry(iter, &q->active, alist)
+> +					WRITE_ONCE(iter->deficit,
+> +						   iter->deficit + rounds *
+> +						   READ_ONCE(iter->quantum));
 
-This isn't a bug today, but is the new comment accurate about the
-semaphore not being required?
+[Severity: Medium]
+Is the comment above the peek accurate? When peek() returns NULL in
+drr_dequeue() the class is skipped with continue. Nothing checks that it
+has actually left q->active.
 
-keyring_read() writes serials while walking the list, and then computes the
-returned length separately from the link count:
+If the class is still linked, its need never limited rounds. But the
+refill loop above walks all of q->active and adds rounds * quantum to
+that class too.
 
-    ret = keyring_iterate(keyring, keyring_read_iterator, &ctx);
+Can a backlogged child return NULL here after it returned a packet earlier
+in the same round? multiq_peek() does not cache its result, and it skips
+bands whose TX queue is stopped:
+
+net/sched/sch_multiq.c:multiq_peek() {
     ...
-    ret = keyring_nr_links(keyring) * sizeof(key_serial_t);
-
-keyctl_read_key() kvmalloc()s key_data without zeroing it and copies back
-exactly ret bytes when ret <= buflen:
-
-    key_data = kvmalloc(key_data_len, GFP_KERNEL);
-    ret = __keyctl_read_key(key, key_data, key_data_len);
+		if (!netif_xmit_stopped(
+		    netdev_get_tx_queue(qdisc_dev(sch), curband))) {
+			qdisc = q->queues[curband];
+			skb = qdisc->ops->peek(qdisc);
     ...
-    if (copy_to_user(buffer, key_data, ret))
+}
 
-Both callers of ->read, __keyctl_read_key() and read_sed_opal_key(), hold
-down_read(&key->sem), and every writer of index->list and index->nr
-(__key_link(), __key_unlink(), keyring_gc(), keyring_clear(),
-keyring_revoke()) holds down_write() on the same semaphore, so the walk
-always writes exactly nr serials.
+Another CPU can change the TX queue state while this CPU holds the root
+lock. Examples are a qdisc-bypass sender going through dev_direct_xmit(),
+or a driver reset or link-down path.
 
-Without the semaphore, a walk that misses a key, as the comment allows
-(for example a link prepended with list_add_rcu() after the walk has passed
-the head), would leave keyring_nr_links() larger than the number of serials
-written.  Could the uninitialized tail of the kvmalloc() buffer then be
-copied to user space?
+multiq can be grafted under a DRR or ETS class. Such a class stays on
+q->active because it still has packets.
 
-The old comment described the requirement correctly.  Could the new comment
-say that the caller's read lock on the semaphore is what keeps the returned
-length consistent with the serials written?
+Every class that is counted has deficit >= quantum >= 256, and pkt_len is
+bounded by QDISC_PKT_LEN_MAX. So rounds <= 4095, and rounds * quantum on
+its own fits in a u32.
 
+The sum can still wrap. Take a skipped class B with quantum 1 << 20 that
+already got its quantum this round, so its deficit is in [2^20, 2^21).
+If a quantum 256 class needs 4095 rounds, then:
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+    iter->deficit + rounds * READ_ONCE(iter->quantum)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/43615900108
---===============3120634351969932012==--
+wraps B's u32 deficit. With a smaller rounds nothing wraps, but B can still
+gain up to about 4 GiB of credit. It can then send thousands of
+stab-inflated packets back to back and starve the other classes. Each
+repeated scan after a refill can add more credit.
+
+In the old loop, a NULL peek at the head ended the dequeue through
+qdisc_warn_nonwc() and goto out. A class gained at most one quantum per
+visit.
+
+Does this conflict with the commit message statement that "Deficits and
+service order are the same as with the one-quantum loop"?
+
+One option is to abandon the bulk refill (skip = false; break) when peek()
+returns NULL and !list_empty(&iter->alist). Another is to credit only the
+classes that were counted. Either way, the comment above the peek would
+need updating.
+
+> +				/* A child may show a longer head now that its
+> +				 * deficit is positive; scan again if it still
+> +				 * cannot send.
+> +				 */
+> +				first = NULL;
+> +				scanned = false;
+> +				continue;
+> +			}
+> +		}
+
+[ ... ]
+
+> diff --git a/net/sched/sch_ets.c b/net/sched/sch_ets.c
+> index 6cc902a038387..86fdf772fe2e5 100644
+> --- a/net/sched/sch_ets.c
+> +++ b/net/sched/sch_ets.c
+
+[ ... ]
+
+> @@ -493,6 +500,50 @@ static struct sk_buff *ets_qdisc_dequeue(struct Qdisc *sch)
+
+[ ... ]
+
+> +				peek = iter->qdisc->ops->peek(iter->qdisc);
+> +				if (!peek)
+> +					continue;
+
+[ ... ]
+
+> +			if (skip && rounds != UINT_MAX) {
+> +				list_for_each_entry(iter, &q->active, alist)
+> +					iter->deficit += rounds *
+> +							 READ_ONCE(iter->quantum);
+
+[Severity: Medium]
+The same pattern is in ets_qdisc_dequeue(). A class whose child peek()
+returns NULL is skipped without checking that it left q->active. It then
+gets rounds * quantum in the refill loop, and the ETS quantum can also be
+up to 1 << 20.
+
+Would the same fix apply here?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-TIAE.v3.r0.20261109173518%40mojatatu.com
