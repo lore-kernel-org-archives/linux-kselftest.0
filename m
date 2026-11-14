@@ -1,101 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794672720;
-	b=4khWJf1CIxAvUryqwz9QMkVWSzfRoGx8hjpB0YhDWfnV3hFI0dT143PPSh+uawGhmUhU
-	 c69MY6kq0FsEZNDmDbAf7N/LSBKcwUGry0SQ5WEhbRIW44TGbo3tdYb/DX4XB5xaAzTbC
-	 FatG5uC0jT0TfQl5DUkDdWK6faSmEOlu6VWRtFka42CW9AVqUHabBja+wfI4Xoa7TW2Ox
-	 hAtCCPTxjDiE8vP14kESSq/dogFkyX9+JDE7vimwBRbC4MupQHfUy9cwgBfJB6GuZ2WKr
-	 sFaEudY/AcuSIrU+F2CoBftbwFR0Hvjg/c9JUqpsrBxuspkkLyjEje+/PM7hR+qnCng==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794672720;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
-	b=NQhAjOAxqfG4+v1kLkzgNwtoQWXF9cQOqsFZOXHJjJ4JzuPXfI/in3y/GnKm/bgx9vP0
-	 ktCxn47h5msBnl7im6o5BkD85sDBi/zMC0oIt3qncZ9qWSVXr1RD5o22jjgkck9wEgLKp
-	 30dlQGAM5iIaTnuO77V+hbYO4gWIkWo0D+hGkdqXurmK3hkYzkhsUfllZ1st/mjiYXgQ0
-	 ofMcGsg3YpJhYnsHIvEUOtXbecj2ipGeDT4vlprYU5Mnhd+fuY8pombPl0RC4OlU5fkwa
-	 VhScGxC1uuKoKsGwZzvstsTffSL6OE198YAYS6YBZ1QmLuHXpTdb+sFoiSzqFMO8+iw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bCmLBMrs;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794672741;
+	b=xWkzga6Id5LlGTmHr+BUbWeuNDSnV1lytHyznOEYMWQ/S6qstR0fPx6Ry2dW2X7ds64n
+	 pueERn/YLvxrvajmu4Fk9/UpsbgwnMre2fq3Q5V/5fG787ixI7hXJrbZuPbyBMwT30/b2
+	 zL/lf9hqvg0PYthW3dEit+1f2Giq9/3mgOeno57huJ/c8XlFW19CURVUX/eO/V8YgtrE7
+	 g2Ji12PVjTn4dN5apSmP4l793yq4DZQm/DN77tOhZJ9Z3ecqQ3B7iX3pjaTIwgD87YTKm
+	 6NP9H2n+J7zIXRbnM/OK10Nfn87NRvAoxUo3MyUK8Plnjv/Xgg112m17AmF/MMqPXpQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794672741;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=npXXWf9bkQOy8U5TqJ9aVn20ccmsTW/bXp+1TmKrOYs=;
+	b=k4cjkJ9H394w4CFUEdqhoz93bUp8vJowSYEqQ4Rb+9X+up5M0yXii6+rpp3CwGu0dEFR
+	 c4Un1E+bIYNSpdFqnFIu89ARl9SsTYcgGcAj914cKjX1Y7u6V9TpJ2g82mRQXxoRJ2J+6
+	 bIUVktBwSLgvgg6UZWIPLZErQr/97ICOna3NQOQyM9MJ0hOwQVrFX0jeNpUusXTiix5AO
+	 PTyBTmOlY8TUu7ZzjaoAVNBcBVagTwWsckOnn5PFp5qYog7LyD1rjeZG7PUrLanEH8F+D
+	 a5ymri+/BkzwUfWhbPSM4IelJ8jU6Fes6DIb9UMPTIKV6oAKrTc1AFl5C8amhINvS3w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EJTBUzXB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B0A606A331
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 16:11:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85B0A606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 3D88C606A327;
+	Sat, 14 Nov 2026 16:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bCmLBMrs
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-55c7445cf85so114601cf.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 08:11:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794672718; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mTOjZ9eUsRG1PRxY64Q7fK8YT2O5odC14C9EKGH2kSBlDe441swJuFqeSl5Vt7iNtA
-         R2iw9gRB3AIV2sL+7FvJUDkR7aMHgIGSYudX4V1UNZ96uGFEeUQN1DOtbO+729gLNWsg
-         F2lB5pVqoILTkYvwbDneJagv0nUUvQSyunUNxOtR/hi6jzvpgjvX9VF2jHXxowjodUAr
-         oNFqzkQak9GlYebbkJcZqO9bU7Nb3XO04aYdNHqzkHRv8WaUYLMNAHkS7sVFAb1yGsYJ
-         PCuBReRAQRZQd9sWJLbyOr6BfrM2MivRH9oykc3ZMOl7I+5WN1Z57hMMrRqo3VO2nYVe
-         Gs5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
-        fh=qpaUlJoYsrd6HTiw6HHuRnm3wfp1HZZzg54RG7E/ROQ=;
-        b=Nr7XJ2ebIzrqZHBCGW9S1VSsiQjOSg8u1J/7J5rtjUeQPObbnFumdAp+q9WcNEDSng
-         nTyotqsmtmqvVTEqnUsCBYoPDLKwlX+bqSlwevDaJGKTEEkspY5Alw3p+r1yGc/PVgCM
-         XcqI90fz8Jh40/t3tceQq5igdkct2R0ffoXjg2qJx7ZKDrDSwqgu/MCHQnKgNqbcdgK3
-         L0zlF6OxBJ8SYDqxYWP0CKHbXiR6MdqboF6cahZ6VeYYyPooHoyQHBMi85W917uKJ70g
-         vcDKbrEjf7fTcrSQTjWfzv2VA3xeAOVtUeLUXWMZ4aOuynbBJM3AWiOni0reBkyB2mkJ
-         +Beg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794672718; x=1795277518; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
-        b=bCmLBMrsoS+E3FJJS14wew7hWIzp/cpZA9aiKnclbK84765KkPFQee3u3wA/T/u+/e
-         Bo+/LU+J7yY8R5ef1Nk0gTxuxnjUT3vuIwzINP7WEWgIvcBUSnN3GuU9dvzsUq2dGtks
-         jfWz63UG9DdqOtOTHwd6lGqOm4Z6zzPdtdOY8pJtf3Knv3LM3yUHrl2mjfZ0HAlH83Hn
-         iQt9L5+xs99sc4ist1nJ0zfTFqgYoaM/OBm4uKtKqkM3oKRhTX8oc3YgJ2p7w/TYVTBy
-         FjZ+qy2L1c+ZWy9ooKdoCo7qlx3z2rkDAbdEeK+OYnBqX4vOqo7PRBjSocymbAgDnw0R
-         B07Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794672718; x=1795277518;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
-        b=RQxOCKCuFJ/QN5TBFNMf5Ki/QOuLF+LEE4gYL2ew0bxLR38WWXWEG7i9ZnDX/2TVxH
-         QOi1w2310vMdDBSWKHRYB3YQOsMnVDkg8UzlC1yGHGQQMjP9BubSKCVRdtIXkkdP2UG3
-         CyJsy/DwRZohUNWpnmrKXIz8hPo8p5Qrx/Tswqd/Wl4H04Bk9oXbNZ63MIfe/aVbrqmz
-         vjZGIUm818JrvpRDu6He9ObIy0eLPd0cuQHINrcKSk+mvcsxTvSliKKfvFq/zZw+F3co
-         FdAX9T5U/ia15im6wbecFgZ+2WjaRHLganiKSAJp2cWfJN7IpkqkihU6bDgcU6P2Bb5q
-         Z2CA==
-X-Forwarded-Encrypted: i=1; AL+hErHX5QUrYwAduKwHc8JO7bQFEdm33UhJjXyoOmuJJHlcPVrmJ5bX06bA7hN2bzUhfTATYtqMkw3xnIn+aPDtjQw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+lcuriM0SNPTOn5rf6Nbtd9NMdZrGhJX8m0b9VgCAOGELtcrTv
-	KUzc1Z+QTBn/u4ld99VqXW4lzpev7JHj5z7fQHyZ5EUW0ohvOpw1Zx7Ey95cBBECYpFMvQIQCoN
-	zY7/bjVS0yquz+Y77TEoDBNKMMYfXuh2mljQjZ6mG
-X-Gm-Gg: AYBFou2ath/Z9g5KR+baGfuMUBnFr2tPg5ftQxSvvJKxmO5SU1CBUaE9wGHmv73/Bqh
-	ohu3+WhD0ykW3zGUy5MqDsZurs4uMVoCjr9KlHIl85gLe4yJbVrfQFWOaQxya5Lfbrzh/PcaCxp
-	wHzsoXjBprVAeXgsAJ5YGX0xrBDV/69Abq0xn1rV0wySGlphmEzjM/FA+c6duRIsLiXJO3D1sLA
-	VrN88fDSUiHUthZskvtfKg6POB2I9vvy2M/twed4JyqN840VSEcPeI67zNlfSRdu3xKqgc9p5YJ
-	XFyvtHI/TPvcyr42Lik9LCCl2W4OitSaG1dUGN5Y+o+na148RtFttCC/4V4RdL/Rr9eZ/Ciw825
-	9Hm4FdokuqEcBSCE8tIvH3v7Cp0aIbSTynOgchjoUeULNXdrOSnjNOwEDIg5odQ0LETOap8byJ2
-	gaAxNOqskRwTWesnn4+/FfkbrKIUY=
-X-Received: by 2002:a05:622a:1f13:b0:536:353e:8d2a with SMTP id
- d75a77b69052e-55c420acbb5mr16403621cf.1.1794672717702; Sat, 14 Nov 2026
- 08:11:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EJTBUzXB
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 2905A1F000C4;
+	Sat, 14 Nov 2026 16:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794672740;
+	bh=npXXWf9bkQOy8U5TqJ9aVn20ccmsTW/bXp+1TmKrOYs=;
+	h=From:To:Cc:Subject:Date;
+	b=EJTBUzXBe8rjr5yh5ccLRpts7XvWjq18FiMs8xaL2XAeu2uQxJ/hrTJnbN6rbxseb
+	 LixAmCY2Z0ySqxyrMr80GlwFgwl4PFLFhwdJTLcVPBEmrathSm95qk2RbEXpYAO2No
+	 MGcb6mqnOlu/q47fxN2Jfut9WVDUIa+b4dKANM5gTSpK7+f4zq6rItS26T1LLrQmA8
+	 YYdEHESexWT1eFLACP/GeWvV+q1t9hIhjCU0MPU79Ki3CDghyAFHgdc+lhmysODDyV
+	 qzVJdfxGK5xP5BsMBERiRRg+cXj0rM9KRc7IyswfTXmXDBfmwO1lQ5MNLqghs23SUZ
+	 Rf0DP8aUVi1iw==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Alex Shi <alexs@kernel.org>,
+	Anastasia Eskova <anastasia.eskova@ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ignat Korchagin <ignat@linux.win>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	James Morris <jmorris@namei.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Peter Oberparleiter <oberpar@linux.ibm.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Song Liu <song@kernel.org>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: [PATCH v11 0/6] KEYS: Replace assoc_array with
+Date: Sat, 14 Nov 2026 18:12:05 +0200
+Message-ID: <20261114161211.376859-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -105,60 +102,211 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com> <20261111-mtu-probing-series-v4-1-6f2e484ca8ea@gmail.com>
-In-Reply-To: <20261111-mtu-probing-series-v4-1-6f2e484ca8ea@gmail.com>
-From: Neal Cardwell <ncardwell@google.com>
-Date: Sat, 14 Nov 2026 11:11:39 -0500
-X-Gm-Features: AclHuK_-nV7pf1PB8PO4ykYtxVbAD9myD3UdJz53eZ7VZY4ZOzGRrnnpG944peE
-Message-ID: <CADVnQymNTE-Etw4hhAgCAz9B86qzpFye9vZPkE_W62c2hY4Q8A@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 1/4] tcp: initialize MTU probing before
- syncing MSS at connection setup
-To: echoowall@gmail.com
-Cc: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, edumazet@kernel.org, 
-	horms@kernel.org, kuniyu@google.com, davem@davemloft.net, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, panweiping3@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 10, 2026 at 11:46=E2=80=AFAM Yongjian Wang via B4 Relay
-<devnull+echoowall.gmail.com@kernel.org> wrote:
->
-> From: Yongjian Wang <echoowall@gmail.com>
->
-> With tcp_mtu_probing=3D2, a passive connection starts at the full MSS
-> rather than tcp_base_mss. The IPv4 and IPv6 syn_recv_sock() paths
-> call tcp_sync_mss() before tcp_init_transfer() enables MTU probing.
-> With tcp_base_mss=3D1024, the first successful probe can therefore lower
-> the MSS from 1460 to 1242. On a black hole path, the first reduction
-> skips 1024 and goes straight to 512.
->
-> The issue surfaced while developing packetdrill coverage for MTU
-> probing and comparing the initial send MSS on active and passive
-> IPv4 connections.
->
-> Commit 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
-> removed tcp_mtup_init() from the passive setup paths.
-> Commit 27204aaa9dc6
-> ("tcp: uniform the set up of sockets after successful connection")
-> later moved MTU probing initialization into tcp_init_transfer(),
-> away from tcp_sync_mss().
->
-> Initialize MTU probing immediately before the existing tcp_sync_mss()
-> calls in the IPv4 and IPv6 passive setup paths and when processing
-> a SYN-ACK for an active connection. Remove the late initialization
-> from tcp_init_transfer(). This lets tcp_sync_mss() apply tcp_base_mss
-> without adding another MSS calculation to connection setup. The
-> crossed-SYN path already uses this order.
->
-> Fixes: 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Suggested-by: Neal Cardwell <ncardwell@google.com>
-> Signed-off-by: Yongjian Wang <echoowall@gmail.com>
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
+The keyrings subsystem is the sole user of assoc_array. It has over 1700
+lines of code, no test suite, and a long history of bugs, with LLMs now
+finding more.
 
-Reviewed-by: Neal Cardwell <ncardwell@google.com>
+This unfortunate outcome has evolved over time by large from the shortage
+of in-kernel callers, time bandwidth and 3rd party contributors.  What the
+keyrings subsystem needs is just a generic key-value store, which performs
+well with sparse key sets. Replace assoc_array with an rhashtable-backed
+keyring index and remove assoc_array from the kernel.
 
-Thanks!
-neal
+CHANGES
+=======
+
+v11:
+- RCU-safe iterator for keyring_read().
+- Addresses s390 issues. I won't carry them for long in the series.
+
+v10:
+- No changes since the previous round. This is a sanity check round
+  given the lack of feedback to v9. I'll apply these patch very soon,
+  unless nothing (relevant) comes up fast.
+
+v9:
+- Replace __free(kfree) with explicit cleanup so early goto out paths
+  cannot bypass initialization of the link pointer. Preserve kleave()
+  tracing on all exit paths.
+
+v8:
+- Fixed broken rebase.
+- Restructured __key_link_begin() a bit as a response to a minor
+  complaint from Sashiko.
+- Fixed a minor glitch in __key_link_begin(): now also first invariant
+  invokes kleave() on failure.
+
+v7:
+- Rebased.
+
+v6:
+- Eric Biggers: Set .insecure_elasticity = true in keyring_link_params and
+  drop the -EBUSY retry loop in __key_link_begin().
+- Addeded Reviewed-by's from Eric Bigger and Ignat Korchagin.
+
+v5:
+- Eric Biggers: Include <linux/jhash.h> explicitly in keyring.c.
+- Eric Biggers: Document why hashing type/domain_tag pointers with SipHash
+  and truncating the digest to 32 bits are safe.
+- Eric Biggers: Rework the commit message for "KEYS: Replace assoc_array
+  with rhashtable", including behavioral and operational changes.
+- Retry rhashtable_insert_fast() on transient -EBUSY in __key_link_begin().
+
+v4:
+- Eric Biggers: Correct the kerneldoc summary for keyring_is_empty().
+- Eric Biggers: Truncate keyring_index_key hash to u32 and drop index_id.
+- Eric Biggers, David Howells: Use a proper struct instead of a two-element
+  array to pass the edits.
+- Eric Biggers: __keyring_link(): Call key_put() in the rollback of
+  rhashtable_replace_fast().
+- Eric Biggers: Retract from using __free(kfree) in keyring_get_index().
+- Eric Biggers: Reuse keyring_link_key() in keyring_obj_cmpfn().
+- Eric Biggers: Document why keyring_index_free() uses queue_rcu_work().
+- Eric Biggers: Fix the commit message for "KEYS: Replace assoc_array with
+  rhashtable".
+
+v3:
+- Since David is away for the next week I decided to address the
+  low hanging fruit that I reported myself.
+- Unified and sanitized function and variable naming and removed
+  unnecessary asymmetry e.g., by renaming keyring_remove_all_links
+  as keyring_index_free, 'links' as 'index' and '_edit' as 'edit'.
+- Flattened the implementation by refactoring out some useless
+  wrappers and other constructs.
+- Addressed continuation after triggered WARN_ON() on at the three
+  sites that I've described in my email response to the previous
+  patch set version.
+- Reworked keyring_read() so that it triggers the scheduler between
+  the iterations.
+- Dropped "Assisted-by: LLM" tag because checkpatch.pl told me so.
+
+v2:
+- Tried to address all the issues pointed out by David and Eric. Tell me
+  if something was ignored, as that would be an unintentional mishap.
+- Updated and trimmed the source code comments.
+- For assoc_array_edit I decided to go with two-element pointer array,
+  which shifts a bit what David suggested.
+- Dropped is_keyring flag. It was so obvious call so I mention it here
+  just in case because too obvious maxes out my self-doubt ;-)
+- Used cleanup.h primitives where I possibly could especially in order
+  to make fallible initializations more bug-resistant.
+- The already-ack'd bug fixes are included but will be dropped as soon
+  as I've sent them over to Linus.
+
+VERSIONS
+========
+
+- v10:
+  https://lore.kernel.org/keyrings/20261113161836.3587552-1-jarkko@kernel.org/
+- v9:
+  https://lore.kernel.org/keyrings/20261110053323.2936729-1-jarkko@kernel.org/k
+- v8:
+  https://lore.kernel.org/keyrings/20261110044043.2608600-1-jarkko@kernel.org/
+- v7:
+  https://lore.kernel.org/keyrings/20261110033738.2495880-1-jarkko@kernel.org/
+- v6:
+  https://lore.kernel.org/keyrings/20261107195605.3929659-1-jarkko@kernel.org/
+- v5:
+  https://lore.kernel.org/keyrings/20261105031401.956609-1-jarkko@kernel.org/
+- v4:
+  https://lore.kernel.org/keyrings/20261029232437.2581640-1-jarkko@kernel.org/
+- v3:
+  https://lore.kernel.org/keyrings/20261025001105.1824178-1-jarkko@kernel.org/
+- v2:
+  https://lore.kernel.org/keyrings/20261023120953.1206778-1-jarkko@kernel.org/
+- v1:
+  https://lore.kernel.org/keyrings/20261016215326.4110064-1-jarkko@kernel.org/
+
+
+Cc: bpf@vger.kernel.org
+Cc: dm-devel@lists.linux.dev
+Cc: fsverity@lists.linux.dev
+Cc: keyrings@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Alex Shi <alexs@kernel.org>
+Cc: Anastasia Eskova <anastasia.eskova@ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Benjamin Marzinski <bmarzins@redhat.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Dongliang Mu <dzm91@hust.edu.cn>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Ignat Korchagin <ignat@linux.win>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Mike Snitzer <snitzer@kernel.org>
+Cc: Mikulas Patocka <mpatocka@redhat.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Song Liu <song@kernel.org>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Yanteng Si <si.yanteng@linux.dev>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+
+Jarkko Sakkinen (6):
+  s390/cert_store: Pin the user session keyring
+  s390/cert_store: Return an owned reference from find_cs_keyring()
+  s390/cert_store: Skip keys that disappeared during invalidation
+  KEYS: Introduce keyring_is_empty()
+  KEYS: Replace assoc_array with rhashtable
+  lib: Remove assoc_array
+
+ Documentation/core-api/assoc_array.rst        |  564 ------
+ Documentation/core-api/index.rst              |    1 -
+ .../zh_CN/core-api/assoc_array.rst            |  473 -----
+ .../translations/zh_CN/core-api/index.rst     |    1 -
+ arch/s390/kernel/cert_store.c                 |   47 +-
+ drivers/md/dm-verity-verify-sig.c             |    2 +-
+ fs/verity/signature.c                         |    2 +-
+ include/keys/keyring-type.h                   |    1 -
+ include/linux/assoc_array.h                   |   88 -
+ include/linux/assoc_array_priv.h              |  178 --
+ include/linux/key-type.h                      |    1 -
+ include/linux/key.h                           |   29 +-
+ kernel/bpf/keys.c                             |    2 +-
+ lib/Kconfig                                   |   14 -
+ lib/Makefile                                  |    1 -
+ lib/assoc_array.c                             | 1724 -----------------
+ security/keys/Kconfig                         |    1 -
+ security/keys/internal.h                      |   14 +-
+ security/keys/key.c                           |   22 +-
+ security/keys/keyring.c                       | 1016 +++++-----
+ security/keys/request_key.c                   |    8 +-
+ .../dm-verity/test-dm-verity-keyring.sh       |    2 +-
+ 22 files changed, 530 insertions(+), 3661 deletions(-)
+ delete mode 100644 Documentation/core-api/assoc_array.rst
+ delete mode 100644 Documentation/translations/zh_CN/core-api/assoc_array.rst
+ delete mode 100644 include/linux/assoc_array.h
+ delete mode 100644 include/linux/assoc_array_priv.h
+ delete mode 100644 lib/assoc_array.c
+
+--
+2.47.3
+
