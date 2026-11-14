@@ -1,62 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794696903;
-	b=LGPs2rrE3tszJHUvXA6FeC8j2NPdgq0HQHYumx4RLVuoAwxy4QqRbSMH6aNzAodenCE9
-	 57PnBVkx8dyRHdL+GG93Jfl7AhndaKVo0vf8Ul0wfsKZj414cjKNE56KcZxYY/cM0GhpJ
-	 LmKPtjU3MNdAuDUP+rnpMn4Iqummk7f/W8LJa9L9nzs94OpgDtLaA3p0KrHK/Z/AGAEnu
-	 yHdb9rCpooPrADjiOj6SWIFtpfTtzmn+LZX/KtiozFKyciMF1nSjnOqv83j+AQaT5yJG4
-	 Qx/0+DAFt2Y0y6hQCrC6ib9fFkrs5oZ8ZO2CxG3uQ9oU47on32rfjguHRb8zJDl9XnA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794696903;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=AwLtpM86VpsnnK+7uMHIt8eLqok2JSlouQ2cKrdoe24=;
-	b=Ro7hmhcWYokOycUBcftfUvVmCmmXcOZpjKgYYeKYyWR1/6y2rQ+PlR1YDNS+Ox2gmcMQ
-	 AxsoSh640wxrg4lojrYO7hF9DSi9lN8KcgnLf6vL/Lk/iwi/UTutJAOa1bVDfN/VVX4hg
-	 4rdENisThRxShZYrwzBBXHjaXPrJOrJLQ1t3UBhPJg81Fvx5Jfh7WRC0Io5zLid/G4Tkc
-	 gY1eyrq5SqGvJyjG4Yqh6IP4GQXMOXv3vZ5iIC9CvwIEUlLCWJ5wj9aeKla1emwc2iLv+
-	 t7OxkhVA9toS9fPWVpXlQ5AW3wKae/OZUEI3lRcnCRT8V9BYwbJCJ9S5YZtQsEnUgtA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PaRg3yZ2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794698411;
+	b=Zx49vvXuJfQJEp7+pZzm6HCHQRY6A3ngPIx6MXjbUI4Fonrzulv9QDuD0lX/k1yqopeU
+	 5KGb6WWohUk7HLC9LHG5TH1bQFw2+jtbcduIM8AKSEFaz8Trl3FhTd7CIPI6LEeWdmk0S
+	 RLy+vP7lW+k7cPDgOhtJe5AMotcKmyddUylplg6Y7b/fyfaChV8SAlxTDVMjLbHlhN2vU
+	 THBjbk689I49KssTxAUBGFS8mxhXbtJo3E3tGIgqL7YD6+BpwD0GgpasMzkzewB6yVupv
+	 CeSNCCuklBVZJM/tMHPwgAA4zqlIJDGoggP5CqsyM5m++JSLF4zaJmffCrH4ktElGdw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794698411;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
+	b=JU3ne6lem6fUVH7lF8IcGK6SvJ4a6evsiP7N8F1xVQGaXtPBZ7bOv/dy8J89nMdbT31z
+	 r5lhjT0pMrpJ2L4ZK2UtePXD1kSKf1KdIxRXTHs8lYNT1bxdqwaMMmIGBCyPQXhMEwSLi
+	 66Y65cvyaCNmBqYybtYhn5wfTP23IyEMMGPnVbJP4JJ8wSY997jt8xm4kI6l5eZxNy6/3
+	 xg8L4JCxYV6mBnq6zYL5ReaADnJMK0GJlX6kXX8Xa+OjXqQyTAxj4D8G0w9Pe1nO0mrEb
+	 sleIJgHNFcowuFN46QwhK+t1Yi7g/ep6Cc+8SSXr7ZAu9r0h4jUNVz3peNttrQWgnNA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bZ4A5V+6;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.52
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEFA606A329;
-	Sat, 14 Nov 2026 22:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7815606A331
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 23:20:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7815606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PaRg3yZ2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CC91F000C4;
-	Sat, 14 Nov 2026 22:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794696903;
-	bh=AwLtpM86VpsnnK+7uMHIt8eLqok2JSlouQ2cKrdoe24=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=PaRg3yZ2KodS4qjZTfLXAgWRKyc3dVn4Y7qSiVlmcl9ANTZP9U6aYG5+ClzLFbp1u
-	 i95xLc6DjBLiPkK86ymbA9CDlmRnRj12xVY/Z6fRw2D7faFpsOuvLwlJZUpE0Fx0vB
-	 u4F4WGrNVlEQUhDRIw9UnfR8tr89X4pBZcIOQl4Jxj5hu1Om5UjpRmkPdHQetXnFjF
-	 abQlqHN6JKKDIubWIQDqUmzFkEPJieOloPi4UzYkv2z6NF/eg4I5eTIcDrwPt7ULL0
-	 JRYL+rV0QhELnsd8a0if+U67SrJYCaVJxUvIMv8AKXUbULqyDWKhe3ttCOH1/Q39bU
-	 MeKzQYjNy/zrg==
-Subject:
- Re: [PATCH net 2/2] selftests: netfilter: cover IPv6 FIB rule suppression
-From: netdev-bot+sashiko@kernel.org
-To: leonard@lausen.nl
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, idosch@nvidia.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, pablo@netfilter.org, fw@strlen.de, phil@nwl.cc,
- shuah@kernel.org, daniel@iogearbox.net, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Sat, 14 Nov 2026 22:55:01 +0000
-Message-ID: <179469690148.2199510.9157183592994872143@kernel.org>
-In-Reply-To: <20261110131638.15004-7-leonard@lausen.nl>
-References: <20261110131638.15004-7-leonard@lausen.nl>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bZ4A5V+6
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b70192ebceso4502088a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 15:20:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794698409; cv=none;
+        d=google.com; s=arc-20260327;
+        b=VT4fHtH4VH9LcM3lp0NV7VERMd9VNq+n3IrCLVDD6Uq1HGsQ3AxtUuU9UP5hk83Xme
+         An7AvBZ6PL5DZD6ZTPr50S6F33WBT61FmjRw2OAocZTK6PfU0aA6uTA8R5k0SJ4E251e
+         NwIbCIKA6SdTi6v6yAtyInYxSaUYR3UrZ0MehJBVVLE6H/4VbtGMsGYhkaZEKaeOSNjo
+         DiYwKeBWoW+RCcTsSvZLcs0M0SaDDilDvz/yt57wZjc4U0drjzjKARYzjT5EIaNUFzqU
+         g8QM18FJISzYtXjOvwf/Kux3M/mlqHAP8gH/HyClXtnodCp0VgkLZzNVy5K7fUwa1lO4
+         TpaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
+        fh=mSgYNKGeYUgXB4HLJ7yndzU1Iu9BrPtCcfqKw2KXFek=;
+        b=PhTP/BvT6dC6t4KSiwWDqkTnpTcQ/SJyEqtjZkOXMjG1/nt/ejDH3lcKv4XOsyOG+S
+         SvewB0Wp69L202sDfV1Lu9eHneJqTcbKf7uPZtuZX3CwxdwBeoK85Q+ZLC2z/ey75q+j
+         wyKvQiAGEWeiiipWIPAatTPZ8yWkYsbSyTJvMoVZR3NWBSqgnBv5ZOPYTXVBF1MScBsy
+         a3RrcGDEQtLrwmWHl8M6Xoq4vvsqC1svtG73veLS9+ipX7f53vY2eIP+yeGzLDK36Scl
+         YQO7vmEAmckBItG/g18gWwXY6hokVXBd+mHC6CsOhrLgPyMCm5tDTIw9L6nAgpdCTz6C
+         d5Dw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794698409; x=1795303209; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
+        b=bZ4A5V+6Vs4HKIPLNbCXlaoHg6GUiZAgPE1CoHup/u8F9XnmCFMSb6naMqQFAl++mw
+         +LZR0jt78s/FhrwMU+95xN0Ho10rZ/g9p6M/dfGpr9SfvlaOXM2WfiTCtO0CejnyefhK
+         5gg17lDjyCI6S+pTTK/DIWzHtcTY1JHkLI4t/I/Teu6/Lgz9A0oKfkx231Ay53Fdu4Kp
+         zCo0ecwmPzO3ZOIddRCFMjOjLH94BU3oXsC8cOhJgJSeLFwZkZlFyxo1cq6JVw7hHb6A
+         21NW8PziNlBat7d4DfM9UgO0YIScpglsDnmQoGQNIOQhlOx3hw76q6t8+8jTPfBn24eS
+         FVGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794698409; x=1795303209;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=98mXXJR5XCg4Z4S2yqrizowpYg4fQiN0pgPOU/BiUFY=;
+        b=FD4WCdsF3ohX4fzsPMD1QzLtbnsS9RnCUK8WdPMKyyHq3kLUuIg4/0OXDL5K4FZEUr
+         P225NHqndl/Rormj/naOD4HJMq5as0SvV7l0Y2cNWCqNpQt6QI7pPUeGZFbPxvtZEuQk
+         Ha+tle3hKdQne9tE0hsF9HL6fmbjqYW4AoS8EfyFxQtlZk5uV0U/PJ9/u+MwwAHoyBg3
+         Oax7tTrfniTxcZ8sA/ZUmAtg9ROC6Ohm99SZNmyHCaTU+H2Rkb++v1VsQ5bQLC4RijKI
+         mp8SYKEPk5q12prguERQ4bheq5yJ14SeoSqoo7vKyn0o+i22Dw+bCweonYAMn+5hLdET
+         CXBg==
+X-Forwarded-Encrypted: i=1; AL+hErEYEpxsA6mXNGbNR81HbGTPrPBSSax4XwngUa8sXRa5DY6MDe4NX/5L1lRilDsE93xTyg/qJSm31wB0tTAfVPs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+yv5kHqcPgz2kRffxrs6seGjZyMywoorBZUylmWelEM/67w5g4
+	0BPxXz0u59GixRUuGlpYj2mIr/i6QGiWcKXUhV0HoOuaCZiWvbPmMYL7QYmcjAM90gm0XUWyNjk
+	VDnZJFA5S5F2Deoe7AIfgRxm/gQljcd8=
+X-Gm-Gg: AYBFou1JSggdIaHk9H5pEmxF+iSWbz7tJZ23OzD3c56yfQEl1UOA4fL0hqph2VoV8JK
+	k8JQBKlLpZ5pCvklw73viAJUo+efKpQsl1OrbmnA+a3KyXpw5PbgWCMkHWKf1JK4zPs/Mkf5+nG
+	ImFDwwCt1KMtoAEL6erlrA4JQRPvcOiwr4ydTvbhuDb0lLpplJfjeNdBHdcfem2kCKt5aKjF/15
+	UfJlFL2te1dO+TbUyG5Yrx1H4omSOd75nczZu4aI5Vstx5hesCb76Fsr3VXlR376w+3ahYHmf69
+	bPQAt+udgYWXbJvWdV+S8vqQKBYM5diMNf5+oKwTNYlGCxXTMels43VOukOnia/+Ic98k48s/cC
+	vx+wj1QjS0wYOQmKUukabJIccjftxbV5+0Dbwpfr3pEpd56OmThOap2egw9HVXTjpBimV8w==
+X-Received: by 2002:a05:6402:e10:b0:6b7:f00e:5e56 with SMTP id
+ 4fb4d7f45d1cf-6b7f00e5f37mr1542816a12.1.1794698409123; Sat, 14 Nov 2026
+ 15:20:09 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -66,188 +104,86 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261114-work-loop-pseudo-v2-0-98639a2286fb@kernel.org>
+ <20261114-work-loop-pseudo-v2-33-98639a2286fb@kernel.org> <20261114120557.4bc1eb6e57218cdc@chrisdown.name>
+In-Reply-To: <20261114120557.4bc1eb6e57218cdc@chrisdown.name>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Sun, 15 Nov 2026 00:19:57 +0100
+X-Gm-Features: AclHuK_YVxhIpv6JLzeNAX5mX5IHGfu05WS6uQ-TCKewxE3JKeci2PyA-UDMCbo
+Message-ID: <CAOQ4uxhGxpBtMZ5kfuzR1tQAewiecoX7UjXQRo91QjJHH9T_Yw@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 33/42] fs: add file_check_backing()
+To: Chris Down <chris@chrisdown.name>
+Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org, 
+	fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-usb@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Sat, Nov 14, 2026 at 9:06=E2=80=AFPM Chris Down <chris@chrisdown.name> w=
+rote:
+>
+> Hi Christian,
+>
+> Christian Brauner writes:
+> >+      /* Look through stacking filesystems at the inode with the data. =
+*/
+> >+      if (d_real_inode(file->f_path.dentry)->i_sb->s_iflags & SB_I_PSEU=
+DO)
+> >+              return -EINVAL;
+>
+> This looks good in general, but what the bots said about O_PATH files
+> here is real. With FMODE_PATH this is reached for a file that was never
+> opened, so on overlayfs nothing has been through ovl_open() to look up
+> the lowerdata of a metacopy file yet. ovl_d_real() then does the lookup
+> itself, and when that fails it hits the WARN(1) at its end and returns
+> the overlayfs dentry, so the check passes as well.
+>
+> Only fuse passes FMODE_PATH, so it takes CAP_SYS_ADMIN to get there, but
+> it's easy to trigger with that. From a quick test with a metacopy file
+> whose redirect into a data-only layer points at nothing, registering an
+> O_PATH fd of it with FUSE_DEV_IOC_BACKING_OPEN gives
+>
+>      ovl_d_real(/f, 0): real dentry not found
+>      WARNING: fs/overlayfs/super.c:79 at ovl_d_real+0xc9/0x210
+>      [...]
+>       file_check_backing+0x308/0x5e0
+>       fuse_backing_new+0x219/0x4a0
+>       fuse_backing_open+0xe8/0x390
+>       fuse_dev_ioctl+0x53a/0x7d0
+>
+> and the ioctl still succeeds. A normal open of that file fails with
+> ENOENT, so nothing could have used it as a backing file anyway, but with
+> panic_on_warn this is now a panic.
+>
+> Maybe ovl_d_real() should just stop warning when the lookup fails, now
+> that it has a caller that isn't trace_uprobe?
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Yeh I guess that this needs to be a Fixes for lazy data lookup.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+The correct fix would be to teach all the callers to deal with an error.
 
-- [Medium] The ICMPv6 neighbour discovery replies that this test itself
-  triggers can make the existing logging RPF rule fire, and…
-- [Low] The new reject-route checks in nft_fib.sh only create legacy
-  reject route types, via `ip -6 route replace $type default table 128`…
+> The check would still pass
+> for an O_PATH file whose lowerdata couldn't be looked up at that point,
+> though.
 
---
+One observation relevant to this patch set is that a datadir layer has no
+business being a pseudo fs and that can and should be blocked explicitly
+at overlayfs mount time.
 
-selftests: netfilter: cover IPv6 FIB rule suppression
+The other observation is that fuse_passthrough_open() should probably
+check the backing_file that was opened for io in addition to checking
+in fuse_backing_open(), which could have different FMODE and specifically
+could be FMODE_PATH.
 
-This commit extends nft_fib.sh to exercise suppress_prefixlength and
-suppress_ifgroup for IPv6 FIB rules. It checks that default routes and
-routes through a matching interface group are suppressed. It also checks
-that non-default routes and nonmatching groups stay usable, and that
-blackhole, unreachable and prohibit routes remain terminal.
-
-> diff --git a/tools/testing/selftests/net/netfilter/nft_fib.sh b/tools/testing/selftests/net/netfilter/nft_fib.sh
-> index 04544905c2164..02b6257946694 100755
-> --- a/tools/testing/selftests/net/netfilter/nft_fib.sh
-> +++ b/tools/testing/selftests/net/netfilter/nft_fib.sh
-> @@ -202,6 +202,38 @@ check_fib_counter() {
->  	return 0
->  }
->  
-> +# Count and drop probes before the existing RPF rules can log expected failures.
-> +test_fib_suppress() {
-> +	local label="$1" expected="$2"
-> +	local result="${3:-oifname}" err=0
-> +
-> +	ip netns exec "$nsrouter" nft -f /dev/stdin <<EOF || return 1
-> +flush table ip6 filter
-> +table ip6 filter {
-> +	chain prerouting {
-> +		type filter hook prerouting priority -1;
-> +		ip6 saddr dead:1::99 icmpv6 type echo-request \
-> +			fib saddr . mark $result "$expected" counter drop
-> +	}
-> +}
-> +EOF
-
-[Severity: Medium]
-
-The comment above test_fib_suppress() says probes are dropped before the
-existing RPF rules can log expected failures. This chain only matches
-echo-request, though.
-
-Can other ICMPv6 packets from dead:1::99 still reach the logging rule that
-load_ruleset() installed on nsrouter?
-
-load_ruleset() {
-    ...
-	        fib saddr . iif oif missing counter log prefix "$netns nft_rpfilter: " drop
-    ...
-}
-
-In most of the states this block sets up, dead:1::99 does not resolve to
-veth0. In "retain non-default route" and "retain nonmatching interface
-group" the lookup picks dead:1::/64 dev veth1. In the six reject loop
-states, nft_fib6_eval() returns with no oif.
-
-The block itself looks like it produces such a packet:
-
-1. The first ping makes ns1 send an NS from dead:1::99. ndisc_recv_ns() on
-   nsrouter creates a NUD_STALE neighbour entry. Sending the NA reply moves
-   it to NUD_DELAY with a DELAY_PROBE_TIME (5s) timer.
-
-2. All echo-requests are dropped, so nothing confirms the entry. About 5s
-   later neigh_timer_handler() moves it to NUD_PROBE, and nsrouter sends a
-   unicast NS to dead:1::99.
-
-3. ns1 answers through ndisc_send_na(). The target is its own address, so
-   the NA is sourced from dead:1::99:
-
-   net/ipv6/ndisc.c:ndisc_send_na() {
-       ...
-	ifp = ipv6_get_ifaddr(dev_net(dev), solicited_addr, dev, 1);
-	if (ifp) {
-		src_addr = solicited_addr;
-       ...
-   }
-
-4. The NA does not match the echo-request chain. The RPF rule checks it
-   under the current pref 100/101 rules, then logs and drops it. With
-   ucast_probes=3, nsrouter retries at about +1s and +2s.
-
-ns1's own NUD probes do not seem to cause this. In the NUD_PROBE state,
-ndisc_send_ns() uses the link-local source, and the "to dead:1::99" rules
-do not match that. The trigger is nsrouter's NUD_DELAY to NUD_PROBE
-transition.
-
-Right after the block, check_drops() greps the global dmesg:
-
-    test_ping 10.0.2.1 dead:2::1 || exit 1
-    check_drops
-
-Would this print "FAIL: rpfilter did drop packets" and set ret=1?
-
-That would also hide the later "PASS: fib expression did not cause
-unwanted packet drops" message, even when every suppression check passed.
-It only happens if the block runs longer than about 5s after the first
-probe. That seems plausible on slow or debug kernels such as KASAN or
-lockdep builds.
-
-Some possible ways to avoid it:
-
-- Install permanent neighbour entries on both sides while the block runs.
-- Temporarily flush or replace the logging inet prerouting rule.
-- Also drop nd-neighbor-advert from dead:1::99 in the priority -1 chain.
-
-An accept in the priority -1 chain would not help, because the priority 0
-base chain still runs.
-
-[ ... ]
-
-> @@ -724,6 +756,42 @@ test_fib_vrf()
-
-[ ... ]
-
-> +# Reject routes use loopback (group 0) and must remain terminal.
-> +ip -net "$nsrouter" -6 route flush table 128
-> +for suppress in suppress_prefixlength suppress_ifgroup; do
-> +	ip -net "$nsrouter" -6 rule del pref 100
-> +	ip -net "$nsrouter" -6 rule add pref 100 to dead:1::99 table 128 "$suppress" 0 || exit 1
-> +	for type in blackhole unreachable prohibit; do
-> +		ip -net "$nsrouter" -6 route replace "$type" default table 128 || exit 1
-> +		test_fib_suppress "retain $type ($suppress)" "$type" type || ret=1
-> +	done
-> +done
-
-[Severity: Low]
-
-This loop only creates legacy reject route types. Should it also cover a
-route that uses a blackhole nexthop object?
-
-The companion commit "ipv6: honor rule suppression in raw FIB lookups"
-reads the result flags in fib6_rule_suppress(). Its commit message says
-this is so blackhole nexthop objects are covered too:
-
-net/ipv6/fib6_rules.c:fib6_rule_suppress() {
-    ...
-	if (arg->lookup_ptr == fib6_table_lookup) {
-		/* Raw lookups report reject routes without an error. */
-		if (res->fib6_flags & RTF_REJECT)
-			return false;
-    ...
-}
-
-Blackhole, unreachable and prohibit routes have RTF_REJECT both in
-f6i->fib6_flags and in the result. A blackhole nexthop sets it only in the
-result, in __find_rr_leaf():
-
-net/ipv6/route.c:__find_rr_leaf() {
-    ...
-			if (nexthop_is_blackhole(f6i->nh)) {
-				res->fib6_flags = RTF_REJECT;
-				res->fib6_type = RTN_BLACKHOLE;
-    ...
-}
-
-This means the new checks cannot tell res->fib6_flags apart from
-res->f6i->fib6_flags.
-
-Suppose the guard were changed to read the FIB entry flags. A blackhole
-nexthop default route in table 128 would then be suppressed, and the lookup
-would fall through to table 129 (veth0). The tests here would still pass.
-
-Something like this inside the suppress loop might cover it:
-
-    ip -net "$nsrouter" nexthop add id N blackhole
-    ip -net "$nsrouter" -6 route replace default nhid N table 128
-    test_fib_suppress "retain blackhole nexthop ($suppress)" blackhole type
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261110131638.15004-3-leonard%40lausen.nl
+Thanks,
+Amir.
