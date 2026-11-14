@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794641393;
-	b=zWaGAuNFob4Hk3wJQbX8E5kTS/hhAafgknaReWyJ11SRcQiOBFF/RnxL7fT5ZUxmRivC
-	 crm6xpNgA62O6hX+QQr1jQ9HF8LAIqZu721asmgXj5rdcxpWsZCQO0p9rBtW05OgLCnlL
-	 eB9KnjnMCARav0PfjYEJFS3LWOCxArWhi/DF7GKyL8Z6TTw3+3rqIgYEBuZBAjjl765YG
-	 1rksn0Ny2oCl1K+nFS75zEC1o60EwN7Xz3omZd2ZcGhYnqLejOLR6tN6MrnJO9UOi1uf+
-	 PMbceVgVDnAYRtsd3TLhzbaGCZbQFUO53uhn9EW4uEUzidBcUY19XKiHRBWo2YtfOLA==
+	t=1794641594;
+	b=EsLvM1MeRBmGYFmMR3JGy7IWmizH8TKTw4QSS11cAaHVpqzyjJlPcXb6J2FqjzB5m/wU
+	 QFUnn3cBXXr1Uee+skHBV4rsMNwf+9UerUj3vszFWuV9o3pFqTpkk1BdwTvDss1UXHNHL
+	 u6vVQTT3SKTeN1Z7i5dD/uhUpiOSfMCC4RskFhoYFJNUtOAuTwRBqShMIJyljsOmB2DRy
+	 nyU+WUBNfmsxPnp7X+6fvoCJPe0VNICMdWdkT262ewDHjPv5GwRQ4ZuFJwPwWBAWu8pD7
+	 jlAHTRr6v9ytnoCYFOTIbYu1FhcGsWeowOdLhJm3kQ2WcLkqhPCKEfhD1xbZLcyVJRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794641393;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794641594;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=YscHU8cxmYbOE+D0m/M4PBQW0cNNFEC4g/fELP/11Pw=;
-	b=ri5F6CEzFp+ysmPPcI0V7AFmGMLwb8NQVU9/gEDwb3OVP2DJdy4b0qIe+JXFYNvS0Yd6
-	 qpYlpa3GB37eirCBb8T8k+8pk6MnmNUcgoFAx5OY+PtnkRrTtR2Qle6O8IL8I8E8DNYHQ
-	 OXcDygrehMP/WRQfIulscoLNITHgB4pZ4V8xnntXTVFYhhcTRR7RoROkkA8uvbsWu3E6v
-	 hClJ7fuss4so/UMk/xeLY+d59sb7O4fLrCfp2Ujhfq16FdbNciSF+CDGyFqg81LcVT1F/
-	 pwo/L9AsN/auEPgQ1MO4TbxPRl8G71hf3y3bnL+5IzQXAFfKUuUnBlO5XHbOLpnet3Q==
+	bh=mIqG4gDjs7qWgNSrfHEZi4r8CEaK0H3ibIoVTKmXC9M=;
+	b=uWbR/SsgSIMPTWiYAz/o8eagDhit8ewtVU7a6nzXeFTlRV4saI+FSNawP3fYKTcz5rvW
+	 UOhZfqiRSPKFEF2Ucq9nTquV8RcCaWKfRjRYkPjEA8qreIrMpvnFlMeMxX76cit0mLU5e
+	 4ww0bQ2gxLPMYDg5OG61rimnGa3GzuTpuWhVAW+ZY6lqgpPwa9RbOL/JoY9ATg1o9qGBa
+	 D5z6dpmXV4o/GzEppAqBjbl24FbIT/QQUV6kiuLOtk5RHPA3/u8/A3OVT7wiR4J2gvTb6
+	 dZnOlZCmLZl0XGORd/Qi34xP1qnE7EX59GnpBnag/g/2zYKtcGZgYswN3fK6AX6N/Qg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aL2wuFjo;
-	arc=none smtp.remote-ip=209.85.214.199
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="VjnO8/qN";
+	arc=none smtp.remote-ip=209.85.214.197
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED5A606A329
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 07:29:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CED5A606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADEC606A323
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 07:33:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1ADEC606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aL2wuFjo
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2ed2c307e62so28626315ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 23:29:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=VjnO8/qN
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2e9995cea88so13955315ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2026 23:33:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794641392; x=1795246192; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794641593; x=1795246393; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YscHU8cxmYbOE+D0m/M4PBQW0cNNFEC4g/fELP/11Pw=;
-        b=aL2wuFjomcsvsfQmrCeIzXmKyM/FDwAhfsv09F0lNDUgz9JuANGlYt/QreGkeMnYny
-         IjWDDx07aAvuofmQ+rPn8ayCCQjiFZ6Bdr/MTVAQ8bzKhjk4bnvVo/r4h5P0UziJU1EN
-         Ox9z+Lvxf57ofAOz4ukf3LyIWjuXWYozEEw4ZrAfEcYHjT2xY2eP5R9DEE9zH86bryoS
-         jVJX1cW6OFoO/7PZE5PHn4fHyK+sc7UdnBCxgnSzUA6eVzj4DIA1CZze5LRqf2rADghB
-         2onp8c+5TDdHjrQuNaEt48thf6zhZFVw2FkEHAyImbXRkp+VkfXGvoaK9nMxNcJy6Yjh
-         vMgA==
+        bh=mIqG4gDjs7qWgNSrfHEZi4r8CEaK0H3ibIoVTKmXC9M=;
+        b=VjnO8/qN9HKKidM9JOEQtM25OmpQbG9qTz6MeThIgpFMuFrsLGP5A2Ope4XO8oexDk
+         3DTLgeaGoIyBAFfTct7K/xq6oBMghIIf3kA6wc2ekKMvnxtP8OtAHEctJN8Ca3Njo8q6
+         wWdirrbEtPSSIH3IQ0ZDBTRqZr4lkbhYqTNhlOZsEUK10dAASj0RTp5Kb0HlJNf3cN97
+         SddPzafva9uw3iJPrfMzoprpWtzVrf3YzGqPpsvB1MrWIDRrM+xtmmQ2K7V1iLwRbsoX
+         s1yqn5QaTTfR/RXTvolCbveFU/tgSiDDHHoMPVwypBEPIfzqbdpqReapPTMntsSuxaHH
+         wh1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794641392; x=1795246192;
+        d=1e100.net; s=20260707; t=1794641593; x=1795246393;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=YscHU8cxmYbOE+D0m/M4PBQW0cNNFEC4g/fELP/11Pw=;
-        b=BIbH9i7O05p6ekhu1/UZ50N+wR3wBQi+w7XdZ5/UwmankwuYSzwIuv4piGTxLthbHC
-         j41Vhz8VZmE8VrBkjrGILD0rzFKG2W2NzT7I/M3iGK8uDfoXAYYgK63yHKl2L8Pq/V2f
-         uZ3UmJD4GiNbkldbRhSDCKY+/fr6KCHotHYlCGx9Cwjvm42rf59Zivuhu1KVEuKFq01K
-         CHxHLFTjeE9HJjMDfo10vYfXiGkW8gh54qwruWI555/cPCtzheNll0gDHMsJZ5RJIniY
-         W00/SpBEWnZE37z5VW/JtSlL7dNzwIZaqzXEeXJbUZhYZFufeah1wND0EECKDxVxpE+n
-         fOmw==
-X-Forwarded-Encrypted: i=1; AL+hErGnY/X3v+2YBTH0cjlKFMPEg6nAR8Twm459wyQcDsofJVWtqJ00gIAKCUkjS/334tmTYW9lvykm5Z6xkd5LG8s=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9x1GFurMzSyYaUQGkH5LxrGYv2NfsJFhGKt0gq+zpcKfq/qDEj
-	klY84Nh+/IO6PeV7/qSeNxYpyqPaVKC38Lw8v7DUWblCCuoqmZ3iFA1bD2av0vMDxqBsxQkw564
-	B+CAPAw==
-X-Received: from pjbdt22.prod.google.com ([2002:a17:90a:fa56:b0:3ae:825a:57e3])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:c106:b0:3ab:d45c:59da
- with SMTP id 98e67ed59e1d1-3b1b0a3288fmr4973155a91.40.1794641391863; Fri, 13
- Nov 2026 23:29:51 -0800 (PST)
-Date: Sat, 14 Nov 2026 07:29:51 +0000
-In-Reply-To: <20261111174704.24312-3-juanagusnicco@gmail.com>
+        bh=mIqG4gDjs7qWgNSrfHEZi4r8CEaK0H3ibIoVTKmXC9M=;
+        b=pckYG/hDJvBmdYXgbWm8ZbIjDrWqQ6KVC30ZXmQb/jjIoSWka4pf6DN0gtFkl4UwFz
+         YGWwsQovXqJ+pWYkDNVYdJS6nLhGsNn27AateCVJdFC5jhHcEcHCNQlKm4beZzlpWIcg
+         2XOWEmhDgm/DbFvgGswCjaIDlL291TSrGYPJ77wN8DYU9YWWf0srdG1Zx2RuU8Z7virT
+         BJVdisTpGbpYe0N5a6fZV9mbBcBpC8YAHQNvThtvE1T5885QukIlMd/vKUjuzjR+JQ4F
+         NhCtjOZG+5E5/3mojwLA6B0BDJhnO53TTBqzx3UDgtrK/gq4k/U51IaZah/T9B/w0GBb
+         YM7g==
+X-Forwarded-Encrypted: i=1; AL+hErERDiFrw4FHbI5zTRExHDW/twNgiE63KzjeVoHJlGC6KOjjSmfqdiYAdojdGLppC6aw1HEB38qfAYKULk8r9rw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8GJARyexkzH1er1+OwCExBUK3wiGlXgFCUYVINb+pTMd5gDSjL
+	GeB2urOlQjaQMF40ZjIlmGHncsrYT1T6IkYHbiaY0kOUNaQsJX/LZfIc/WaAYcQg8Or2vpxTtds
+	nUuXbxQ==
+X-Received: from plbl7.prod.google.com ([2002:a17:902:eb07:b0:2eb:2db:b93d])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d54e:b0:2e9:6790:212c
+ with SMTP id d9443c01a7336-2ee0dee857emr53512405ad.30.1794641593150; Fri, 13
+ Nov 2026 23:33:13 -0800 (PST)
+Date: Sat, 14 Nov 2026 07:33:12 +0000
+In-Reply-To: <20261111225148.88506-2-sidchintamaneni@gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,39 +78,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-References: <20261111174704.24312-1-juanagusnicco@gmail.com> <20261111174704.24312-3-juanagusnicco@gmail.com>
-Message-ID: <avgNulWmQTaUHD3N@google.com>
-Subject: Re: [PATCH net v2 2/2] selftests: net: Add SO_REUSEPORT bind cache
- test to bind_wildcard.c
+References: <20261111225148.88506-1-sidchintamaneni@gmail.com> <20261111225148.88506-2-sidchintamaneni@gmail.com>
+Message-ID: <avgOk7BctoXaaoZx@google.com>
+Subject: Re: [PATCH net v2 1/2] af_unix: Fix scm_stat.nr_fds leak in unix_dgram_disconnected().
 From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Juan Agustin Niccolini <juanagusnicco@gmail.com>
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, ncardwell@google.com, 
-	josef@toxicpanda.com, jbacik@fb.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Kirill Tkhai <tkhai@ya.ru>, apais@microsoft.com, 
+	hargar@linux.microsoft.com, rlmenge@gmail.com, egoriluk@gmail.com, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="us-ascii"
 
-On Wed, 11 Nov 2026 12:47:04 -0500, Juan Agustin Niccolini wrote:
-> Add a test for the bug fixed by "tcp: Fix the SO_REUSEPORT bind cache
-> admitting a conflicting socket". With a 0.0.0.0 listener on the port, a
-> v6only [::] SO_REUSEPORT socket fills the bind cache, and a dual-stack
-> [::] SO_REUSEPORT socket must then fail to bind with EADDRINUSE.
+On Wed, 11 Nov 2026 22:51:47 +0000, Siddharth Chintamaneni wrote:
+> When a connected SOCK_DGRAM socket disconnects (e.g. via connect() with
+> AF_UNSPEC), reconnects to a different peer, or observes a dead peer in
+> unix_dgram_sendmsg(), unix_dgram_disconnected() purges all unread
+> datagrams from sk->sk_receive_queue via skb_queue_purge_reason().
 > 
-> Without the fix:
+> Because skb_queue_purge_reason() frees each skb without calling
+> scm_stat_del(sk, skb), any SCM_RIGHTS file descriptors attached to the
+> purged skbs remain permanently accounted in u->scm_stat.nr_fds (reported
+> as scm_fds in /proc/<pid>/fdinfo/<fd>) for the remaining lifetime of the
+> socket.
 > 
->   #  RUN           global.reuseport_v6only_cache ...
->   # bind_wildcard.c:860:reuseport_v6only_cache:Expected ret (0) == -1 (-1)
->   # reuseport_v6only_cache: Test terminated by assertion
->   #          FAIL  global.reuseport_v6only_cache
->   not ok 1 global.reuseport_v6only_cache
+> Move scm_stat_add() and scm_stat_del() above unix_dgram_disconnected(),
+> splice sk->sk_receive_queue onto a local list under the queue lock, and
+> call scm_stat_del() before kfree_skb_reason() on each purged skb.
 > 
-> With it:
-> 
->   #  RUN           global.reuseport_v6only_cache ...
->   #            OK  global.reuseport_v6only_cache
->   ok 1 global.reuseport_v6only_cache
-> 
-> Signed-off-by: Juan Agustin Niccolini <juanagusnicco@gmail.com>
+> Fixes: 3c32da19a858 ("unix: Show number of pending scm files of receive queue in fdinfo")
+> Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
 
 Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
