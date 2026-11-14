@@ -1,83 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.93
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794668888;
-	b=2yhmKACzyJtayh6CGE2hdFexuVoBZyvZwBlG6stpqwEZnaK4dbwfr5IOadjOCDe1aq+9
-	 JIEZSQasjoSKXNx9e9Zb5uDnA4ClfiEBjjlF+9Vt9UYawYDkfMZKIw7C9O8MCDaJJ18Fr
-	 Awq41fUFnZPj5l0RiXlawheSvx3VWuVS+zPtRrcVSVq0fF9jMTwYl3IbpGORq8u3n+t+y
-	 YrEtB/7kplTSUFmJb8MpsQ1+HGbmvU8LDovmWguxUOmJOnBaGGHu2vYMg8dpQBtigCpx3
-	 yoH3Lp7vcyXRHHFh8qRtmRP1HtrxTAEcDj4bvdDup/6+lmthuXBkn3IMQg2XzRNXtYg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794668888;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=ci9vDSWyHxSq9FnZq3Zk79d2N7kH1vKnpPKWHcUFCWk=;
-	b=1pUJxwD5djaDTdgl4fYfBGi9bHoe8mQ66NSrVq2wbcNo8r2mE6F0pMGsOaNSkzWmAnnU
-	 lP77n/0FX1qxpwLijxrCRFpPK/q6+KVrqfo0XSUPnBdF2wqohRkiIFABL1Uc+63yqwe8v
-	 +8NP+5NM4SagfFFPFC8leYWtk+CC6wZnFE9PKyRSjfgFg/kRspc3iAhqVow2Z5JVLRPuX
-	 hYHsMQS6r8NFPkMc8yxq397FvvYi9a7sIJYYmOQVHILkAJ70h0jo/G94jM1GY31fsWvpB
-	 hME5zLw/dEBwmJgUU8Likbwu/HI8Lg9aygNMC+BbAgQsMm86SVbwAxPk8J42iXr9EKg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=uEb5sEUq;
-	arc=none smtp.remote-ip=95.215.58.93
-Received: from mta1.migadu.com (out-93.mta1.migadu.com [95.215.58.93])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794672720;
+	b=4khWJf1CIxAvUryqwz9QMkVWSzfRoGx8hjpB0YhDWfnV3hFI0dT143PPSh+uawGhmUhU
+	 c69MY6kq0FsEZNDmDbAf7N/LSBKcwUGry0SQ5WEhbRIW44TGbo3tdYb/DX4XB5xaAzTbC
+	 FatG5uC0jT0TfQl5DUkDdWK6faSmEOlu6VWRtFka42CW9AVqUHabBja+wfI4Xoa7TW2Ox
+	 hAtCCPTxjDiE8vP14kESSq/dogFkyX9+JDE7vimwBRbC4MupQHfUy9cwgBfJB6GuZ2WKr
+	 sFaEudY/AcuSIrU+F2CoBftbwFR0Hvjg/c9JUqpsrBxuspkkLyjEje+/PM7hR+qnCng==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794672720;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
+	b=NQhAjOAxqfG4+v1kLkzgNwtoQWXF9cQOqsFZOXHJjJ4JzuPXfI/in3y/GnKm/bgx9vP0
+	 ktCxn47h5msBnl7im6o5BkD85sDBi/zMC0oIt3qncZ9qWSVXr1RD5o22jjgkck9wEgLKp
+	 30dlQGAM5iIaTnuO77V+hbYO4gWIkWo0D+hGkdqXurmK3hkYzkhsUfllZ1st/mjiYXgQ0
+	 ofMcGsg3YpJhYnsHIvEUOtXbecj2ipGeDT4vlprYU5Mnhd+fuY8pombPl0RC4OlU5fkwa
+	 VhScGxC1uuKoKsGwZzvstsTffSL6OE198YAYS6YBZ1QmLuHXpTdb+sFoiSzqFMO8+iw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bCmLBMrs;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.180
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40CA606A339
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 15:08:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D40CA606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B0A606A331
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 16:11:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85B0A606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=uEb5sEUq
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uLmLi4eG+xNd/B9EvuWggXquRDTQtxE2MGsM+EpVXzc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794668886; v=1; x=1795273686;
- b=uEb5sEUqEWnO9e/zwEGolvdfNdaxKrawCxA4ovVZFX9yjOtnP73NE8L8089CodO9DZREaZqm
- wtqcGyWqJ6cJ4C4iDsjh+AZGi7VAiDxuwYjhN57/RoRG34maURsqCHor0ZfbTCnelAJSOl7uDjS
- zshK7NivgFBcX5LopfjJiMc8=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ee575a0b9f653efa;
-	Sat, 14 Nov 2026 15:08:05 +0000
-X-Mizu-Trace-ID: ee575a0b9f653efa
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <matt@bobrowski.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 9/9] selftests/bpf: Verify cgroup prog link_create logs
-Date: Sat, 14 Nov 2026 23:06:10 +0800
-Message-ID: <20261114150610.84507-10-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261114150610.84507-1-leon.hwang@linux.dev>
-References: <20261114150610.84507-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bCmLBMrs
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-55c7445cf85so114601cf.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 08:11:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794672718; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mTOjZ9eUsRG1PRxY64Q7fK8YT2O5odC14C9EKGH2kSBlDe441swJuFqeSl5Vt7iNtA
+         R2iw9gRB3AIV2sL+7FvJUDkR7aMHgIGSYudX4V1UNZ96uGFEeUQN1DOtbO+729gLNWsg
+         F2lB5pVqoILTkYvwbDneJagv0nUUvQSyunUNxOtR/hi6jzvpgjvX9VF2jHXxowjodUAr
+         oNFqzkQak9GlYebbkJcZqO9bU7Nb3XO04aYdNHqzkHRv8WaUYLMNAHkS7sVFAb1yGsYJ
+         PCuBReRAQRZQd9sWJLbyOr6BfrM2MivRH9oykc3ZMOl7I+5WN1Z57hMMrRqo3VO2nYVe
+         Gs5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
+        fh=qpaUlJoYsrd6HTiw6HHuRnm3wfp1HZZzg54RG7E/ROQ=;
+        b=Nr7XJ2ebIzrqZHBCGW9S1VSsiQjOSg8u1J/7J5rtjUeQPObbnFumdAp+q9WcNEDSng
+         nTyotqsmtmqvVTEqnUsCBYoPDLKwlX+bqSlwevDaJGKTEEkspY5Alw3p+r1yGc/PVgCM
+         XcqI90fz8Jh40/t3tceQq5igdkct2R0ffoXjg2qJx7ZKDrDSwqgu/MCHQnKgNqbcdgK3
+         L0zlF6OxBJ8SYDqxYWP0CKHbXiR6MdqboF6cahZ6VeYYyPooHoyQHBMi85W917uKJ70g
+         vcDKbrEjf7fTcrSQTjWfzv2VA3xeAOVtUeLUXWMZ4aOuynbBJM3AWiOni0reBkyB2mkJ
+         +Beg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794672718; x=1795277518; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
+        b=bCmLBMrsoS+E3FJJS14wew7hWIzp/cpZA9aiKnclbK84765KkPFQee3u3wA/T/u+/e
+         Bo+/LU+J7yY8R5ef1Nk0gTxuxnjUT3vuIwzINP7WEWgIvcBUSnN3GuU9dvzsUq2dGtks
+         jfWz63UG9DdqOtOTHwd6lGqOm4Z6zzPdtdOY8pJtf3Knv3LM3yUHrl2mjfZ0HAlH83Hn
+         iQt9L5+xs99sc4ist1nJ0zfTFqgYoaM/OBm4uKtKqkM3oKRhTX8oc3YgJ2p7w/TYVTBy
+         FjZ+qy2L1c+ZWy9ooKdoCo7qlx3z2rkDAbdEeK+OYnBqX4vOqo7PRBjSocymbAgDnw0R
+         B07Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794672718; x=1795277518;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rAXOsiY7dgF8E9nvWQfWLqo1mF0hHpyBG3jPK7/IHMQ=;
+        b=RQxOCKCuFJ/QN5TBFNMf5Ki/QOuLF+LEE4gYL2ew0bxLR38WWXWEG7i9ZnDX/2TVxH
+         QOi1w2310vMdDBSWKHRYB3YQOsMnVDkg8UzlC1yGHGQQMjP9BubSKCVRdtIXkkdP2UG3
+         CyJsy/DwRZohUNWpnmrKXIz8hPo8p5Qrx/Tswqd/Wl4H04Bk9oXbNZ63MIfe/aVbrqmz
+         vjZGIUm818JrvpRDu6He9ObIy0eLPd0cuQHINrcKSk+mvcsxTvSliKKfvFq/zZw+F3co
+         FdAX9T5U/ia15im6wbecFgZ+2WjaRHLganiKSAJp2cWfJN7IpkqkihU6bDgcU6P2Bb5q
+         Z2CA==
+X-Forwarded-Encrypted: i=1; AL+hErHX5QUrYwAduKwHc8JO7bQFEdm33UhJjXyoOmuJJHlcPVrmJ5bX06bA7hN2bzUhfTATYtqMkw3xnIn+aPDtjQw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+lcuriM0SNPTOn5rf6Nbtd9NMdZrGhJX8m0b9VgCAOGELtcrTv
+	KUzc1Z+QTBn/u4ld99VqXW4lzpev7JHj5z7fQHyZ5EUW0ohvOpw1Zx7Ey95cBBECYpFMvQIQCoN
+	zY7/bjVS0yquz+Y77TEoDBNKMMYfXuh2mljQjZ6mG
+X-Gm-Gg: AYBFou2ath/Z9g5KR+baGfuMUBnFr2tPg5ftQxSvvJKxmO5SU1CBUaE9wGHmv73/Bqh
+	ohu3+WhD0ykW3zGUy5MqDsZurs4uMVoCjr9KlHIl85gLe4yJbVrfQFWOaQxya5Lfbrzh/PcaCxp
+	wHzsoXjBprVAeXgsAJ5YGX0xrBDV/69Abq0xn1rV0wySGlphmEzjM/FA+c6duRIsLiXJO3D1sLA
+	VrN88fDSUiHUthZskvtfKg6POB2I9vvy2M/twed4JyqN840VSEcPeI67zNlfSRdu3xKqgc9p5YJ
+	XFyvtHI/TPvcyr42Lik9LCCl2W4OitSaG1dUGN5Y+o+na148RtFttCC/4V4RdL/Rr9eZ/Ciw825
+	9Hm4FdokuqEcBSCE8tIvH3v7Cp0aIbSTynOgchjoUeULNXdrOSnjNOwEDIg5odQ0LETOap8byJ2
+	gaAxNOqskRwTWesnn4+/FfkbrKIUY=
+X-Received: by 2002:a05:622a:1f13:b0:536:353e:8d2a with SMTP id
+ d75a77b69052e-55c420acbb5mr16403621cf.1.1794672717702; Sat, 14 Nov 2026
+ 08:11:57 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -87,353 +105,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261111-mtu-probing-series-v4-0-6f2e484ca8ea@gmail.com> <20261111-mtu-probing-series-v4-1-6f2e484ca8ea@gmail.com>
+In-Reply-To: <20261111-mtu-probing-series-v4-1-6f2e484ca8ea@gmail.com>
+From: Neal Cardwell <ncardwell@google.com>
+Date: Sat, 14 Nov 2026 11:11:39 -0500
+X-Gm-Features: AclHuK_-nV7pf1PB8PO4ykYtxVbAD9myD3UdJz53eZ7VZY4ZOzGRrnnpG944peE
+Message-ID: <CADVnQymNTE-Etw4hhAgCAz9B86qzpFye9vZPkE_W62c2hY4Q8A@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 1/4] tcp: initialize MTU probing before
+ syncing MSS at connection setup
+To: echoowall@gmail.com
+Cc: pabeni@redhat.com, kuba@kernel.org, shuah@kernel.org, edumazet@kernel.org, 
+	horms@kernel.org, kuniyu@google.com, davem@davemloft.net, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, panweiping3@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Check the error code, log message, and reported log size for unsupported
-flags, invalid target FDs, and relative attachment errors. Cover missing
-or conflicting ordering flags, a missing BPF_F_LINK flag, invalid link FDs
-and IDs, preorder mismatches, and anchors outside the target cgroup.
+On Tue, Nov 10, 2026 at 11:46=E2=80=AFAM Yongjian Wang via B4 Relay
+<devnull+echoowall.gmail.com@kernel.org> wrote:
+>
+> From: Yongjian Wang <echoowall@gmail.com>
+>
+> With tcp_mtu_probing=3D2, a passive connection starts at the full MSS
+> rather than tcp_base_mss. The IPv4 and IPv6 syn_recv_sock() paths
+> call tcp_sync_mss() before tcp_init_transfer() enables MTU probing.
+> With tcp_base_mss=3D1024, the first successful probe can therefore lower
+> the MSS from 1460 to 1242. On a black hole path, the first reduction
+> skips 1024 and goes straight to 512.
+>
+> The issue surfaced while developing packetdrill coverage for MTU
+> probing and comparing the initial send MSS on active and passive
+> IPv4 connections.
+>
+> Commit 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
+> removed tcp_mtup_init() from the passive setup paths.
+> Commit 27204aaa9dc6
+> ("tcp: uniform the set up of sockets after successful connection")
+> later moved MTU probing initialization into tcp_init_transfer(),
+> away from tcp_sync_mss().
+>
+> Initialize MTU probing immediately before the existing tcp_sync_mss()
+> calls in the IPv4 and IPv6 passive setup paths and when processing
+> a SYN-ACK for an active connection. Remove the late initialization
+> from tcp_init_transfer(). This lets tcp_sync_mss() apply tcp_base_mss
+> without adding another MSS calculation to connection setup. The
+> crossed-SYN path already uses this order.
+>
+> Fixes: 4d83e1773031 ("tcp: delete redundant calls of tcp_mtup_init()")
+> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Suggested-by: Neal Cardwell <ncardwell@google.com>
+> Signed-off-by: Yongjian Wang <echoowall@gmail.com>
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> ---
 
-Also cover revision mismatches, conflicting attachment flags, cgroup
-hierarchy restrictions, and the per-cgroup program limit.
+Reviewed-by: Neal Cardwell <ncardwell@google.com>
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/cgroup_link.c    | 324 ++++++++++++++++++
- 1 file changed, 324 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-index 15093a69510e..5a27d3a6a26c 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-@@ -253,3 +253,327 @@ void serial_test_cgroup_link(void)
- 	}
- 	cleanup_cgroup_environment();
- }
-+
-+static void check_cgroup_link_create_log(int prog_fd, int target_fd,
-+					 struct bpf_link_create_opts *opts,
-+					 int err_exp, const char *msg)
-+{
-+	char log_buf[128] = {};
-+	LIBBPF_OPTS(bpf_log_opts, log_opts,
-+		    .buf = log_buf,
-+		    .size = sizeof(log_buf),
-+		    .level = 1,
-+	);
-+	int fd;
-+
-+	opts->log_opts = &log_opts;
-+	fd = bpf_link_create(prog_fd, target_fd, BPF_CGROUP_INET_EGRESS, opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_EQ(fd, err_exp, "err");
-+	ASSERT_STREQ(log_buf, msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
-+}
-+
-+static void test_cgroup_link_create_log(int target_fd, __u32 flags, int err_exp, const char *msg)
-+{
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = flags,
-+	);
-+	struct test_cgroup_link *skel;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		return;
-+
-+	check_cgroup_link_create_log(bpf_program__fd(skel->progs.egress), target_fd, &opts,
-+				     err_exp, msg);
-+
-+	test_cgroup_link__destroy(skel);
-+}
-+
-+static void test_log_invalid_flags(void)
-+{
-+	const char *msg = "Invalid flags.\n";
-+
-+	test_cgroup_link_create_log(-1, BPF_F_ALLOW_OVERRIDE, -EINVAL, msg);
-+}
-+
-+static void test_log_invalid_target_fd(void)
-+{
-+	const char *msg = "Invalid target_fd.\n";
-+
-+	test_cgroup_link_create_log(-1, 0, -EBADF, msg);
-+}
-+
-+static void test_log_cgroup_attach(struct bpf_link_create_opts *opts,
-+				   int err_exp, const char *msg)
-+{
-+	struct test_cgroup_link *skel;
-+	int cg;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_attach");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto out;
-+
-+	check_cgroup_link_create_log(bpf_program__fd(skel->progs.egress), cg, opts, err_exp, msg);
-+	test_cgroup_link__destroy(skel);
-+
-+out:
-+	close(cg);
-+}
-+
-+static void test_log_relative_without_order(void)
-+{
-+	const char *msg = "Specify exactly one of BPF_F_BEFORE or BPF_F_AFTER.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_both_orders(void)
-+{
-+	const char *msg = "Specify exactly one of BPF_F_BEFORE or BPF_F_AFTER.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK | BPF_F_BEFORE | BPF_F_AFTER,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_type_mismatch(void)
-+{
-+	const char *msg = "BPF_F_LINK is required for relative link attachment.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_BEFORE,
-+		    .cgroup.relative_fd = -1,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EINVAL, msg);
-+}
-+
-+static void test_log_invalid_relative_link_fd(void)
-+{
-+	const char *msg = "Invalid relative link FD.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK | BPF_F_BEFORE,
-+		    .cgroup.relative_fd = -1,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EBADF, msg);
-+}
-+
-+static void test_log_invalid_relative_link_id(void)
-+{
-+	const char *msg = "Invalid relative link ID.\n";
-+	/* Link ID zero cannot identify a link. */
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK | BPF_F_ID | BPF_F_BEFORE,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -ENOENT, msg);
-+}
-+
-+static void test_log_relative_anchor(__u32 flags, bool other_cgroup, int err_exp, const char *msg)
-+{
-+	int cg, other_cg = -1, anchor_fd = -1, prog_fd;
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = flags,
-+	);
-+	struct test_cgroup_link *skel;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_relative");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	if (other_cgroup) {
-+		other_cg = test__join_cgroup("/cgroup_link_log_other");
-+		if (!ASSERT_GE(other_cg, 0, "join_cgroup other"))
-+			goto cleanup;
-+	}
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.egress);
-+	anchor_fd = bpf_link_create(prog_fd, cg, BPF_CGROUP_INET_EGRESS, NULL);
-+	if (!ASSERT_GE(anchor_fd, 0, "bpf_link_create"))
-+		goto destroy;
-+
-+	if (flags & BPF_F_LINK)
-+		opts.cgroup.relative_fd = anchor_fd;
-+	check_cgroup_link_create_log(prog_fd, other_cgroup ? other_cg : cg, &opts, err_exp, msg);
-+
-+	close(anchor_fd);
-+
-+destroy:
-+	test_cgroup_link__destroy(skel);
-+cleanup:
-+	if (other_cg >= 0)
-+		close(other_cg);
-+	close(cg);
-+}
-+
-+static void test_log_both_orders(void)
-+{
-+	const char *msg = "BPF_F_BEFORE and BPF_F_AFTER are mutually exclusive.\n";
-+
-+	test_log_relative_anchor(BPF_F_BEFORE | BPF_F_AFTER, false, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_preorder_mismatch(void)
-+{
-+	const char *msg = "Relative attachment BPF_F_PREORDER mismatch.\n";
-+
-+	test_log_relative_anchor(BPF_F_LINK | BPF_F_BEFORE | BPF_F_PREORDER, false, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_not_in_cgroup(void)
-+{
-+	const char *msg = "Relative attachment not found in target cgroup.\n";
-+
-+	test_log_relative_anchor(BPF_F_LINK | BPF_F_BEFORE, true, -ENOENT, msg);
-+}
-+
-+static void test_log_revision_mismatch(void)
-+{
-+	const char *msg = "Cgroup revision mismatch: expected 2, actual 1.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .cgroup.expected_revision = 2,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -ESTALE, msg);
-+}
-+
-+static void test_log_exclusive_attach(bool child, const char *msg)
-+{
-+	LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	int cg, child_cg = -1, prog_fd, err;
-+	struct test_cgroup_link *skel;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_exclusive");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	if (child) {
-+		child_cg = test__join_cgroup("/cgroup_link_log_exclusive/child");
-+		if (!ASSERT_GE(child_cg, 0, "join_child_cgroup"))
-+			goto cleanup;
-+	}
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.egress);
-+
-+	err = bpf_prog_attach(prog_fd, cg, BPF_CGROUP_INET_EGRESS, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto destroy;
-+
-+	check_cgroup_link_create_log(prog_fd, child ? child_cg : cg, &opts, -EPERM, msg);
-+
-+	err = bpf_prog_detach2(prog_fd, cg, BPF_CGROUP_INET_EGRESS);
-+	ASSERT_OK(err, "bpf_prog_detach2");
-+
-+destroy:
-+	test_cgroup_link__destroy(skel);
-+cleanup:
-+	if (child_cg >= 0)
-+		close(child_cg);
-+	close(cg);
-+}
-+
-+static void test_log_attachment_flags_conflict(void)
-+{
-+	const char *msg = "Attachment flags conflict with existing flags.\n";
-+
-+	test_log_exclusive_attach(false, msg);
-+}
-+
-+static void test_log_hierarchy_disallows_attach(void)
-+{
-+	const char *msg = "Cgroup hierarchy does not allow attachment.\n";
-+
-+	test_log_exclusive_attach(true, msg);
-+}
-+
-+#define BPF_CGROUP_MAX_PROGS 64
-+
-+static void test_log_too_many_programs(void)
-+{
-+	const char *msg = "Too many programs attached to cgroup (limit 64).\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	int cg, prog_fd, err, i, nr_links = 0;
-+	int link_fds[BPF_CGROUP_MAX_PROGS];
-+	struct test_cgroup_link *skel;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_limit");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.egress);
-+
-+	for (i = 0; i < ARRAY_SIZE(link_fds); i++) {
-+		err = bpf_link_create(prog_fd, cg, BPF_CGROUP_INET_EGRESS, NULL);
-+		if (!ASSERT_GE(err, 0, "bpf_link_create"))
-+			goto destroy;
-+
-+		link_fds[nr_links++] = err;
-+	}
-+
-+	check_cgroup_link_create_log(prog_fd, cg, &opts, -E2BIG, msg);
-+
-+destroy:
-+	for (i = 0; i < nr_links; i++)
-+		close(link_fds[i]);
-+	test_cgroup_link__destroy(skel);
-+cleanup:
-+	close(cg);
-+}
-+
-+void test_cgroup_link_log(void)
-+{
-+	if (test__start_subtest("invalid_flags"))
-+		test_log_invalid_flags();
-+	if (test__start_subtest("invalid_target_fd"))
-+		test_log_invalid_target_fd();
-+	if (test__start_subtest("relative_without_order"))
-+		test_log_relative_without_order();
-+	if (test__start_subtest("relative_both_orders"))
-+		test_log_relative_both_orders();
-+	if (test__start_subtest("relative_type_mismatch"))
-+		test_log_relative_type_mismatch();
-+	if (test__start_subtest("invalid_relative_link_fd"))
-+		test_log_invalid_relative_link_fd();
-+	if (test__start_subtest("invalid_relative_link_id"))
-+		test_log_invalid_relative_link_id();
-+	if (test__start_subtest("both_orders"))
-+		test_log_both_orders();
-+	if (test__start_subtest("relative_preorder_mismatch"))
-+		test_log_relative_preorder_mismatch();
-+	if (test__start_subtest("relative_not_in_cgroup"))
-+		test_log_relative_not_in_cgroup();
-+	if (test__start_subtest("revision_mismatch"))
-+		test_log_revision_mismatch();
-+	if (test__start_subtest("attachment_flags_conflict"))
-+		test_log_attachment_flags_conflict();
-+	if (test__start_subtest("hierarchy_disallows_attach"))
-+		test_log_hierarchy_disallows_attach();
-+	if (test__start_subtest("too_many_programs"))
-+		test_log_too_many_programs();
-+}
--- 
-2.55.0
-
+Thanks!
+neal
