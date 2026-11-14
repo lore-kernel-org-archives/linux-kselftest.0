@@ -1,109 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794681624;
-	b=vajXL/UGFX74RMNVjTADxeuWeb57sRVJcIqaBnclcEs/MYZaMfhM6EPxACQDJ1QB3S+B
-	 F6DWVptdMYZH7Carj6sPOlBDe7+SvDjv0O/f4xAO1rZTUIkX5JuN3DvShKnUg3HZx7JgE
-	 IzuHza1IiPWsvqrlDuu0Wf6F6z11bu3iR+G9/Yv8al2RKoJo6TNJCnoBm8AquBBaqar6b
-	 y1NygS93b+usM+527kzsW1Mw0oiWsPMqIwOZUsaMmvPpYJyM6bE9LzBkOlu+brBMcdGBZ
-	 SsVPpkeK5esLJISazssta9xO3M9OsTIyJJv4CCNTcJNo0PW8SKECZRlmJzQIT4r/bYA==
+	t=1794681955;
+	b=eKBTqmS+Di/BRSBMAjeioN4uV+lsxwa2l/5mUXPV70ak489WoVEthwsDr2p0UuWeGov4
+	 aY0KyqXCSc3eft+vI0b2kU0i/iM9BuTmdmkX16dQ6s/OROWZpinNUO/KElYyhV1oDZopy
+	 rBGc185BiQhy1fs5RMT3KnyOxoBPX0RNfQnHJn2/JOjEI9nWFDVwe1Rxj/Yt6MX4E1/oN
+	 ItjE679LrqsUxiegezOI5IGotrFJUFky3tJarlvvAIw4gM1gBxmRebQe/sd/t1dJic84K
+	 7IP/+zMS/zlbFu448i/jrqYJ/bTkKYFtDdi4woCrL5Oh5/PlGHPOhblML9BCZLlfmTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794681624;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794681955;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=RDeoDvuqMX5CXuZ8DatSTgljbUzCp6t2qFD5+t+XaFE=;
-	b=yijEVlXsnQFKYv78g1jqDGRKuzWTVQSHWPiXbGNqN74TUXNxdKNWdSX8I7l3UB84M5Ou
-	 jjV//cuvXseEjmcWlwNW1W3CFyxW4Jr2YKTcT/Mi/rbpSXLu9ZBK28RQqvs9yZa+wVwgd
-	 KyhoXqCeTz7kNjvggCL/9xWQuf/cmFdd6K6MY7vuSoOl9LoMIHgOAcdiQ2/LfSpJnIkLr
-	 K8Mg/ROTFzlgaF8jwM70pyNCNNAYuXivGS6P3sZ1ELHOS9uafOFjttspRtRMNewyL1m86
-	 mfazfKUB9wTSnqwPPq3v/d9EUXJDSJFjJg9/cXejjQnQEHogZ5pzzB/uG8RnMrvOO0Q==
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
+	bh=mhjMuwlcmmA6xmnk85ku3gy5AP9/nFkfmboSqD/BPaw=;
+	b=vIoK7AVC6A99V74N9p+2qjj53rsdQv6ceayJZl0ajfV21H+6+ahCn3KRXoEWYzm8ohe0
+	 j/2MvX68bMTAprPhurdAp8TFGS813TSu2TeKGXq5rAMzoVGr/x4jrbMQ4/YEU1ELFgUB+
+	 uTD71846XBpNldFX4x78X84n9c4TnWXC0EMWecDY/0sLbmKOiyh30qxaNPhoO53ogguFy
+	 j35IpvNgHOYSgeCgNpd/Ww8fge4ddWnFpCGg4oxV8QS9tV/ScFW0SEhMlJvuTacHYKMJx
+	 hkNADDk9vRgc6CIMNLJeir36EPOM/r+6jh9aMgFKELW4Ju1fWnIUUF8yZn//ooMNFDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OKQvH0XB;
-	arc=none smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JUeDpqG+;
+	arc=none smtp.remote-ip=209.85.222.178
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943AB606A331
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 18:40:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 943AB606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE99606A327
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 18:45:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADE99606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OKQvH0XB
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8a06e79e152so1007870b3a.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 10:40:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JUeDpqG+
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-93f2b8cf037so274327185a.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 10:45:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794681623; x=1795286423; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RDeoDvuqMX5CXuZ8DatSTgljbUzCp6t2qFD5+t+XaFE=;
-        b=OKQvH0XBu++VojD/u+INoAqGc3Ax0Cm7sYdvZeGr3L8gqCisEOw5EBV3aKep+umVWn
-         an/nnKbxKy6DYbjRYvgu/fZ2SPbcgI9KPEl1Trd1mckq3R53F/E6Eaq3wvQbeeuu9l0M
-         0r3nMj/ruEGEiipnr4mvv1s9NXN36nHgwxKsBDsYSprDn+XISlJ2s9UsbYlL1fZ36+YW
-         A/Qnm1iUNoYEqgY3KOs/GSb9tQtZyGLrV2AnfoR1Y7B/pv/QjEJyAnpnTilMgTc+fpPP
-         l+S5oKVA1wky3qlKOje4o9/IM6XIqLEcmeKmB1OmFo+lhyEmEARsV93Mfdv+LzfBQJk1
-         QToA==
+        d=gmail.com; s=20260707; t=1794681954; x=1795286754; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mhjMuwlcmmA6xmnk85ku3gy5AP9/nFkfmboSqD/BPaw=;
+        b=JUeDpqG++mf++7m4owPYQY97vDM1BdXIWpPWR9xMWUZo/jdQTQsMwApPcqakMIy9T4
+         bxBTvAMMz8cKj90Y6hp8UVgQ08iHpVMTDGMkUDTTZhVtpCSlyDuLv23ZnhonAuYDQgX8
+         oKPmJkcSN/LwL2vss6NxVKCVeiDgu6Jb9i1asyhayqdGhm3Z2qCoxUSeMlF0vthK2ck5
+         xAz0/N+HElRMTaHFWZq2OAQvjEq5u87HjKalMvOkcw0cuyITO7+1Q1tMelM41VswOSma
+         eUXZCNlTSp9PzhYqOD42jYE7WEurOcBwmyk9tMnP0YI2OkSYeC7Oqkb+p2tb0NKGtJCS
+         ZZBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794681623; x=1795286423;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1794681954; x=1795286754;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=RDeoDvuqMX5CXuZ8DatSTgljbUzCp6t2qFD5+t+XaFE=;
-        b=WGg7ZT83cw37mbi52hZQ90LIJUdo11+9oPQ62oPeXZV1Gsg8KszaJw7z2YOje377Wq
-         FZQZdRcOy0MgOdoYIopsUtD11sxtETblAihySa6/n0I3x1MrYuyd0t/Z2sVVOI2vE+bK
-         MSt+0fKGbvz1XBYr/LxTLI6MMA12Kx6rDFYQ2o+SlXDT3aa7KgVU8DZrQf2jjRkIauXo
-         EligUxIlHDYKj8nZ7tPgMkq8dVXRdVR9SzlssIqr3ByyX759HttuxMCXr9ZIRGYaKwIU
-         QZc9F1wFFBEBomM2ZTi88VDqrSXIHTVo5aUArtAWOuTwiw0lapE92xCuOfPBmb6ADpcX
-         4GcA==
-X-Forwarded-Encrypted: i=1; AL+hErHk9rr0iIIIfBqPYVhkZI/OaC/m1bGzFzWh7KpQx1jCcwWuZYnizY/cWgcw70cxjhI5V3u0m+ILa6cxUPfnbLA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+zUlqJ4xSwX8zP/LfPZ4hRxqk9WCK6TXUjXMz4kD11kaXTCkZR
-	btEV4FW0/SCZU5l4+fM3sMAcTxUIHRIz0w6s+HgyBrj5ak8sJuumak92
-X-Gm-Gg: AYBFou0MkbmPgUeicb/j83QXKkAY/5Ha3nIl86YK9kmVpBbbvSIIzYlSTWo4N9n8p4n
-	Jjl94BkpPiThof0Om2cHbJZerKRBwl3vHOHru4Bksjv7qYFkGNJWVYCLTj+OFqC59+6NBxtBfbE
-	wyldOUora7QiTw/0lhpouGIkd8eL27wUL+Ce4pNpuCrMn8dBYzow9eWDcOMxBeCop8A2/D7TnzI
-	+0nVUlGv/Ig2xZ5ujXY+HF0Mm/rpa7zF9X3g5wjlQEtOeOi69uhwIbKQzd9OrxUudw6v3VjNlg2
-	4RU0ykPvoQH4/+OY5ZJBL9/ucs7ng3sA+EdgK01P7Fh2q9EGWvJK7YupaqOChWr8Uts5+LXl1a2
-	RsOYqdF8L+EX2RfekVMWDh+P1tDhwG0ED/HunFtFvWf/bjNpU+Lz5wmA+zDZm2ySs3kBR2OT4Jy
-	1R1I48rYSUyBaQMQw2hmGF8gGp7YePfUaVgWJCGxpSA3jFRi0VpvCgBlGV59f90f/8RWuMmCzjm
-	Q8GSnaY0uFFTxR9a6XX+p9LR7tAiQKSZpZU6OXrxSqeu1lsISubKsgU6dg7BHamN7m7Qrp4JUnJ
-	BvBJ6PEZFr8zHk70fL1Ze1E0MUYiDF74uAqDXEQVeYs38s7gO7P8eIMGI6WeV+3VBLhgS6cBUF2
-	9WRS5fxXDTnbQl9q53JydkG42BdndBOLzxDI=
-X-Received: by 2002:a05:6a00:2346:b0:89f:ed3b:df97 with SMTP id d2e1a72fcca58-8beb7150117mr5498543b3a.51.1794681622656;
-        Sat, 14 Nov 2026 10:40:22 -0800 (PST)
-Received: from localhost ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8bed263649esm2256214b3a.45.2026.11.14.10.40.20
+        bh=mhjMuwlcmmA6xmnk85ku3gy5AP9/nFkfmboSqD/BPaw=;
+        b=iG8xhd+uloV3/9DqKMWF+TG58YqHtnHCR7uV/l3jDBHgCkmyy1mojlTjA9Uan9fgzs
+         mXoNGFUIa+4olvygANt0A8scl6F7W+gQjVTwYcXm9WiDy0L++GG9REyXd4uJ1pYFTD+Z
+         kSasVFEwz66vl6hxXlYRglQD+shIbXorBdSjKWwcFXWnNHXo5f/2Fbxh2ENDS4SMxtA8
+         G0fTi4EG9xs6sVTR+HAqPrgIdHS5ifPIw4LpzhIOvKeRqz5pxCf+6509YiWdsY7n8oAV
+         BO2icpbzX8VPZlYe+yuawF3X6i+/Uwzeap6eR+L/e8Dan1PkR52Q3dGvauHeAPJKfBQ5
+         JgTg==
+X-Forwarded-Encrypted: i=1; AL+hErGwG2tpTLUmlt9+n7/g1QQHcQNf4dq1Ycb8bwYtatsnLgbm36bFW7OV7MKJuL/hydy6o79IakunQ9FSujnpEMA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8kFrAOzQrpMci32J64mGwGLU06fme8Do/TzzWRPUK4Enqbnaic
+	I83fMAc1hvFIWdSi5/q31M5eFr8dXbl0XjF9SmLmn/Tz+munBkmjvSbc
+X-Gm-Gg: AYBFou0bVVYeJTlp0ibw0WOYQcc/Gm7zKgcmgE+htVFiiar6wd1Dnq6Qdm22uBvyZt6
+	XK1CggfoUu4u+WHZQU3+1H44nyU0PPOd6uQsC97jSDsbng/IFEGRFWarWYjuWGSRlxVSwHxu/DF
+	ailMudH8BoVcKhqtCxcT9WgkYB59djVB//UDzcIop+lsOlhhjfzwvUdUhnAIQH/hxwpGJrASO7/
+	Qd8rX38Owg2h8SK44yoAMTMzBPtlpB8CYI9z9DopS7gtDZvWftcD849/pY2R1hZtk7X7JZx0prf
+	4Ue7T8pak/pA6qp/4CZpgt47fAr5Qa23d1D6MTJTKqGQMZW9sI5yjCzfqZZ1TQDGnTkNWSeRSZW
+	DXK/qbVm03dD0UQUlNssOoi8H2eod1Reg2f6oirSoOXTflw+Sh0FaLlyxhOdhgqf/Vep6614uy2
+	Dvq7It8sySdN72eF8mYg2Cks6waExgL4IWoqreH68LnCJaseFWI94z1M7MKE3yfs/7TtCYU0jPn
+	5sNsudL4dSU43iIYcm3/2JwOk6n94/SNgz1U7C0JSQnXpECEJaJ7Uz7utO6mlA5NMLfkc6xVdyG
+	q5o3k1oCyaNtH//XxLihLPxXFb/LEIyQpzhzPFQbOr2X209nPPbDF11ALE+r2hbx3yYMTl2Z1ez
+	alxykrHiqIGmBti3jj0u5sCRpMMZk1itLpA==
+X-Received: by 2002:a05:620a:25c6:b0:93f:1936:b229 with SMTP id af79cd13be357-9494bbfe4ecmr937435085a.77.1794681953514;
+        Sat, 14 Nov 2026 10:45:53 -0800 (PST)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9495a5ef5c4sm338706085a.6.2026.11.14.10.45.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Nov 2026 10:40:21 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 14 Nov 2026 18:40:20 +0000
-Message-Id: <DMV5JEF4P0Z8.3K0HQK7SWX2S@gmail.com>
-Cc: <davem@davemloft.net>, <edumazet@kernel.org>, <kuba@kernel.org>,
- <pabeni@redhat.com>, <horms@kernel.org>, <andrew+netdev@lunn.ch>,
- <dsahern@kernel.org>, <idosch@nvidia.com>, <ncardwell@google.com>,
- <kuniyu@google.com>, <richardbgobert@gmail.com>, <willemb@google.com>,
- <ecree.xilinx@gmail.com>, <linux-net-drivers@amd.com>, <saeedm@nvidia.com>,
- <tariqt@nvidia.com>, <mbloch@nvidia.com>, <leon@kernel.org>,
- <linux-rdma@vger.kernel.org>, <daniel@iogearbox.net>,
- <john.fastabend@gmail.com>, <sdf@fomichev.me>, <martin.lau@linux.dev>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>, <corbet@lwn.net>,
- <rdunlap@infradead.org>, <skhan@linuxfoundation.org>, <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net v2 0/2] net: keep the TCP fixed-ID flags on the
- header they describe
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Julius Bairaktaris" <julius@bairaktaris.de>, <netdev@vger.kernel.org>
-In-Reply-To: <cover.1794139176.git.julius@bairaktaris.de>
-References: <cover.1794139176.git.julius@bairaktaris.de>
-Content-Transfer-Encoding: 8bit
+        Sat, 14 Nov 2026 10:45:52 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -112,11 +88,56 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 14 Nov 2026 18:45:49 +0000
+Message-Id: <DMV5NLOEYFGF.C7ITHCRCNA7P@gmail.com>
+To: "Michal Luczaj" <mhal@rbox.co>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Eric Dumazet"
+ <edumazet@kernel.org>, "Kuniyuki Iwashima" <kuniyu@google.com>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Willem de Bruijn" <willemb@google.com>, "Jakub
+ Sitnicki" <jakub@cloudflare.com>, "Jiayuan Chen" <jiayuan.chen@linux.dev>,
+ "David S. Miller" <davem@davemloft.net>, "Jakub Kicinski"
+ <kuba@kernel.org>, "Simon Horman" <horms@kernel.org>, "Jonathan Corbet"
+ <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy Dunlap"
+ <rdunlap@infradead.org>, "Stanislav Fomichev" <sdf@fomichev.me>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>
+Subject: Re: [PATCH bpf-next v3 0/8] bpf, sockmap: Restrict iter-context
+ sockmap updates to sockmap iterators
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.20.1-355-gf870624f6c37
+References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
+In-Reply-To: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
 
-On Sat, Nov 14, 2026 at 10:27 AM Julius Bairaktaris <julius@bairaktaris.de> wrote:
-> Patch 1 lets SKB_GSO_TCP_FIXEDID describe the innermost header again and
-> replaces the inner flag with SKB_GSO_TCP_FIXEDID_OUTER, as Alexei
-> suggested in review of v1. Patch 2 adds a selftest.
+On Sat Nov 7, 2026 at 5:58 PM UTC, Michal Luczaj wrote:
+> Follow-up to Sashiko's report [1] and the decision to restrict which
+> iterator may perform sockmap updates [2]. Series started short: remove
+> about-to-be-stale test, restrict updates, add a negative test. Then it
+> expanded: mark bpf_iter__sockmap::sk as PTR_TRUSTED, restrict
+> bpf_sock_destroy() callers to iter/{tcp,udp}, few little tweaks.
+>
+> [1]: https://msgid.link/20260626205814.BAC3C1F000E9@smtp.kernel.org
+> [2]: https://msgid.link/87echn2fhd.fsf@cloudflare.com
+>
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
+> Changes in v3:
+> - Drop RFC prefix
+> - Update bpf_iter_reg::feature docs
+> - Fix tcp_request_sock BTF build error
+> - Restrict allowed callers of bpf_sock_destroy() to iter/{tcp,udp} (Alexe=
+i)
+> - Link to v2: https://patch.msgid.link/20261102-sockmap-update-limit-iter=
+-v2-0-e96a63c43b39@rbox.co
 
-Thx. lgtm.
+Sorry for the delay. Applied.
