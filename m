@@ -1,111 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794771350;
-	b=RWI/z1pzVqsHshYeKM6bZjn3b1e6Wr989WILNtzqRf2U6jC2TxWWyfXxGD9298pXVhnK
-	 7LyfdfuFtkv63ABGfjODOG0jsK+MQR9hSZvRAynywYB4pYibQvMyPz0SZTlXKlYhN2Om/
-	 TSMsRB5IGPiCRWYZAxjN0rvZ8pc1mp8NPdUXDt1CkVrXgGkGdfqoRXA2TED53QMGEforL
-	 /bzkuUNwg6Ml2Ykwk9VRQUbR0Up9zy1lnXfzOURUZjgo+PXn5lLTs4GfZhbXE+bJdtpLq
-	 jG72GSd6vJ/UkSLzTfdx917cJQLiU7ozVBuHxpBT1PiNgP8C+YxLsMc0Nh977XoPvPg==
+	t=1794771545;
+	b=ht9e48ECeeIMNUqO+SRYsM/BmzBRrlj9HEetx5xgSeK9e1Pr9flttt4fE0Rj/X3byksg
+	 7Ig3hjz4aMw7jH/cmNiz9GPrDs/q+LLev7lZz2JnEW+CUukGFg1lplAfmWfjFu/5b8urH
+	 U8n7G/j56i2srEiI0eId/aDUoVHdF5Lq5MlopxZD0Z0YaOpZfdryHU98DNpux4hpy9q67
+	 jKfgsTZz/b2f0V7qLuh6vo99MI4AvSUkcVmAb1Yd4fErYQlU1Usy50QDBHraaLKiOADjQ
+	 3o8gPouYIMIByJ5oRcbL5/q7NcfYODzyPzEKAB2/fR8JJ9wB7E1k5fM7ggxZDtgruNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794771350;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=A71Vxm6qPP+187+TkTcZc1nFho9ZnzIp6cYrVgpdGpg=;
-	b=JpIS7NFVnEsWtS+XOAcr8/p2lRpcA8j4mwaaim/NgaRqDlrBdVPKfuYxIDIsxEFCOYqm
-	 n40emlPW+b33tqgshpXFt4h0o4iYKYwoszIZ24XrcdFjcky3TkTPsg3wupTitBmGCmD3X
-	 EMgejCIpWRAH19ICucwGAnGTCzDaqgdQ1Di0hqjTQMr25ClWI8A3Su7w44xdIY0JnXvaU
-	 2rDmfmJExAl3tN0USD+eRRzkEHsmRpkH8C5ZZ7Vxlig+KaUHfvVaoAog88jCKI5ix5Hfv
-	 UGybBhs10U/tBbQHJX2yF3zND4SVFlvaG0hJBwRq6QOpTxJhB5VvIf6b2mk+08DL3Og==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794771545;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=nhfeoYtF7WorX7zGjUIuskRdAMeUM/Fthys1xBCjJm0=;
+	b=nOxt/zB4e2MAd88yK2g6LfDYzNXqU2MvfapAk8CsotFrau6kNJE6jd2C4FpfLSoBibwx
+	 nwaFAItza7ciyuNcjDA1bqIGJj1ifKkikkjg/D8uztDgjs6+gGHXii6+23VYWCjUEAAOm
+	 +L3RdHRMjSmCGAEnCxxzffrq03qLuCrZPAh3pzKjNgf8XqddbUcxBz0RLyoLiBZWLYnrU
+	 D/wmyfYxkQ1qM01MKOW06kkeccG6Lp5+28SOPJA1C39o6iDqXs2416W6pwfljMUdzJgrz
+	 TcXduxZsgFgd4ym2bKWQVc5tcRIflntz2Vg5ZDx/KjVyYDUPmWY36P4PHOme6Bt9OtA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=BnRr26k3;
-	arc=none smtp.remote-ip=209.85.218.46
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dVa3kJOZ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6653E606A887
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 19:35:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6653E606A887
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179CA606A333;
+	Sun, 15 Nov 2026 19:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=BnRr26k3
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c4d21051042so464937566b.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 11:35:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794771345; x=1795376145; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=A71Vxm6qPP+187+TkTcZc1nFho9ZnzIp6cYrVgpdGpg=;
-        b=BnRr26k399RsdMOHX5eH/Zxcr0/ZNWhSJ0dtvkwH/YUqVso17JVwuWk1gH0B4garbK
-         CT4nnq3fpTI51stp3EpGM4ZB3aWoRlNcp61ZHTZN8jhjdzHyVYGEWmjPN6swd2ntHS1N
-         IrvOiVM/qhoMax+IaloSB49L2W7FBrL5BKiv+3opc3jBBqBi1gHuJjX2PIrLzttChG5b
-         Sbw5Mcq5pt4lIWRFGkV1T1UWIszVEz/BmZ16V8F8KDopQ86V/X1nR6fjdEoGmpCdiQGf
-         aZm8HUU/D6yE0d/cvyGR7WzYuI2PEDBopzxMP3qw5vZW2z6gc+mjZcUnn+XHfU4lfsUn
-         swyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794771345; x=1795376145;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A71Vxm6qPP+187+TkTcZc1nFho9ZnzIp6cYrVgpdGpg=;
-        b=FauVnh7Z4Z+un8IU1uVBCEodDww8CLfIxRlm8XHVyZnTEJ8recXEaBO5umvAtHOgQP
-         i+LxZUlWj8UsyuuMu2SEa9MI7H6EAEb9nKISKpMzLKG/LE8wdU3eotGIaB+ureJN9+ay
-         hXvuy2httAIW7c17CACinPnF+mVATMXbwAnyI5Cz1xyEmbOnNzr9GoxCK0RKd9xVobrP
-         aimQzX0jg7aEKSBsMHypeeZ5NCwctuYiiHYK+ld5aWtnu2Znl+sonZzOjaoDUfJNRdJb
-         RnY2mjBzNZrZftSBS9xJJmUb4k8ieXpKio35V3kSyv6CeWUklBUxl1t+g4/xAPNcqrTD
-         I7WQ==
-X-Forwarded-Encrypted: i=1; AL+hErEUZhdMkuI4R7e8FxHzwWlYELdkuMgzmJmmp/K6ckZgYRnTP5rVTkM+nhpWbp1jcU2JiUqWXfk2rdU+dQCPKDk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8o2NOmNfZEXB/qM4slYf5RKV69S5b94EoQ1docoLw0oj3OHDzg
-	qzwqhYYg64Wdn5HJQbMwXzKkR60yqhjBWyZmKcEuDZ9/HB7mf2Ln/9eI/+p+siL7mJY=
-X-Gm-Gg: AYBFou1slPyGLQGM4ryjiBiyXubMkq5ZFqcmlrXFfXCs2bkN19FI82h6gA6YRZhDdxO
-	POWzUytWs/AhV/Htzeqx4ADXVdzUl2lrhVkoSWO3IYjsDZpGfoRPJxzLB0cxuhoOYuOaquDWIwD
-	ZfBnF0c+Id04Kd/HZHs/MbjBsp/xDQ6k13xe0SZpIbEpmi+Uuy8Tihfm/Mgt/3NcuqXEJ5OoTO3
-	/wKMfCEuobX0NOuvrL7gpMc+xNzTo3gQlp2gI6AAi9/UyTI8lotegMnDnMsq25KTYbl7w4nc2/h
-	Lo/aaKsVl5DTV++ylutkMrr5ELXzIt6T3Zwi1bZSTYhLwbAWmH9+pRUfGdxfkX4aOnSl4vlMeZK
-	uxJk22djKXRzwj/mEqGKc3qHhQ24ph7WL/ZZ2oHSCDK1C3Y76wUsDHwzG7hTPLlq8KWhhF60rRJ
-	1e/mEBcQ6RWFh+1hldOu0s0AtAiXdUeAHZFR4R0d/dxY/qNh+pNN5Xf3Y6T3JUOJNsQQbCE42Wt
-	/fAfuUxby0/7ofxKvICXvIlUUlv/h3AeEVrChIwpLUeBw+6Xvfx+OlRvYkd+UjlbFsH6tCFJgDj
-	0s8Xyz0LXzAvz4uY9VD3htDixJeI84MVM/2N0QDdXaIrGLaaASRlzCTs0g==
-X-Received: by 2002:a17:906:9f8f:b0:c49:a539:aa45 with SMTP id a640c23a62f3a-c50963cf771mr650243166b.42.1794771344781;
-        Sun, 15 Nov 2026 11:35:44 -0800 (PST)
-Received: from L9JK9NPFH9 ([104.28.20.57])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c5095b24b88sm340448766b.16.2026.11.15.11.35.43
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 15 Nov 2026 11:35:44 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	toke@redhat.com,
-	lorenzo@kernel.org,
-	horms@kernel.org,
-	shuah@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	joe@dama.to,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v3 4/5] veth: use persistent NAPI config
-Date: Sun, 15 Nov 2026 19:35:30 +0000
-Message-ID: <20261115193531.57679-5-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261115193531.57679-1-tianyi@cloudflare.com>
-References: <20261115193531.57679-1-tianyi@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dVa3kJOZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8141F000C4;
+	Sun, 15 Nov 2026 19:39:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794771544;
+	bh=nhfeoYtF7WorX7zGjUIuskRdAMeUM/Fthys1xBCjJm0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=dVa3kJOZBz7IO1OByxjM4DlK62AKKz9Ka3JoFzukyf8Mtt0WvAaVeywOTe2Oxg/b8
+	 pJyd/Hcb01G5boe98nFycm5mUUClT8X7Ntu/1hFxdikFhRyhtf5j8ITJmO/TeBJjtn
+	 MllBZTZzBOIQzHQks6G53m4E5EztR9RrlaTTKls1hOvK+K0NTFkTZ0W9xoU+OfWydr
+	 ehuUkkZB4od/5R7m6mbCjNblOJ3ivYl6FVgGGrPUx9aJuPBpos7I+xoq6QBgkYsa+6
+	 gWd3jR4JLD89gS/0b1XfIfCvKSoESH/3bKWJJBKhwwBrXXZ7j6EIEV0axeTCYXQoLi
+	 8Uf7b4PEUNkjQ==
+Date: Sun, 15 Nov 2026 11:39:02 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>, Vladimir
+ Vdovin <deliran@verdict.gg>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Donald
+ Hunter <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
+ Jason Xing <kerneljasonxing@gmail.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
+ <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Chris J Arges
+ <carges@cloudflare.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, llvm@lists.linux.dev,
+ kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next 00/15] xdp: add SKB core extensions to keep RX
+ metadata until skb creation
+Message-ID: <20261115113902.4834dda6@kernel.org>
+In-Reply-To: <CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+	<avOvI8xrHI0dwyHj@devvm16445.scu0.facebook.com>
+	<CAG4wq-egD55NZDw+OKVKTKN2tQJ9oKEC504wFv=xoMXyJ-0z4g@mail.gmail.com>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -115,41 +88,16 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-veth deletes the NAPI instances on link down, when NAPI is no longer
-needed for GRO or XDP, and when ethtool -L reduces the number of RX
-queues. When veth adds them again, each queue gets a new NAPI ID and
-loses its per-NAPI settings. An AF_XDP socket bound to the queue keeps
-the old NAPI ID, so its busy polling stops.
+On Wed, 11 Nov 2026 01:07:46 +0000 Tianyi Gao wrote:
+> - On veth, an XDP program removes software GSO from the peer, limits
+>   its MTU, and can copy skbs from the peer.
 
-Use netif_napi_add_config(), as Documentation/networking/napi.rst asks
-drivers to do whenever possible. The queue then keeps its NAPI ID and
-its settings. virtio_net made the same change in commit d5d715207e29
-("virtio_net: Use persistent NAPI config").
+Could you remind us why you XDP_REDIRECT xdp_frames to the veth
+if you end up allocating the skb on the veth, anyway?
 
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
----
-New in v3, as Sashiko suggested on v2 [1].
-
-[1] https://lore.kernel.org/all/179470883411.2199510.13825316417997386083@kernel.org/
----
- drivers/net/veth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 470c4f95e4a1..1c7ee3bf65f0 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1057,7 +1057,7 @@ static int veth_napi_enable_range(struct net_device *dev, int start, int end)
- 	}
- 
- 	for (i = start; i < end; i++)
--		netif_napi_add(dev, &priv->rq[i].xdp_napi, veth_poll);
-+		netif_napi_add_config(dev, &priv->rq[i].xdp_napi, veth_poll, i);
- 
- 	for (i = start; i < end; i++) {
- 		struct veth_rq *rq = &priv->rq[i];
--- 
-2.56.0
-
+I thought that was to let veth run its own prog before skb is allocated
+but you're saying that you want to avoid veth having a prog, so clearly
+it's not that.
