@@ -1,75 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794709576;
-	b=APOJkQvPmoj/NqVGnrOtNebv9x3YteB99fIuJqpcqqZTKYAG7sfEZt3kCPMNWwT5V/2p
-	 82kflfVH/u7zWOaQa5tIUoR+7jla2egQpFnnjOZnfrRpvzrKqjlmqejElJVDUMlUx6H/x
-	 HLFDfjIkm03MFNwutCSx9QCJZE0TkHJ/uBLF7uq1k3qBut+E/IbL+dCBpI7wKBe5+cyhm
-	 twoH2MaV1MPPZt0An5hSNjyv6kArgAnBo+xCTsBcLxCeHnYqHB73ZmO+4+wOTCtDRm8m0
-	 hn54XrCT23h2554JtBUkQFY/xutFgo/pmkWpG3Vc97fycHVUm1uJh0hU7L5nQnyvB/g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794709576;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794709737;
+	b=JYgyJtWo4iPQtUDTnMq4JGO+2XfCf5EKWu5+bdimXVCD/lq63xpstE1tyNdEPhp1LdOU
+	 12C7Y5VQFTyLMyisUpMZzSu0RB52H0hN3Xbod3nFHGch5LaHRzbc5aj4OURJ3mQ9J7/EF
+	 ejgzeCIPJQBW3q5bybzSORN3CxI+X7EJ93qD6OKuNMA9iyiJeIMDj4v0I0uGdFepu+iiN
+	 OGHQ5zLVeZWVzPu+5emCmG/S3midEUoHyB4rTvRIVxbBfD40WpQ27UUsO0d529iC355ch
+	 elw9nzbcnWoxf09swmkccEd0t31F67+Ii8++XvuZI4qu7zS2mo0q9yuMCtSIYja3H5Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794709737;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=PtHeqDpn0F+FD4D08P2fvOlL4SuwQcvcficGZrgtsYM=;
-	b=ults4yxCihgRpS4/VVteDjRuU+gaLjICZmg7CxddOjrQfj1q5xALyitE9+XCAyUFA2eW
-	 YMrdiN3UEbs+mq3j7rvIubKspkh6M6h/VNkT1SHP1MUU1vS/+7RDFjPjKtB9p78G10KEa
-	 pcT1JgBUUzjEX/h8g63Xi63UPlZdUPjP9FPw9yN7Sr3EqaG5P2WbNLHmyWnfnPskqzwrt
-	 UZG1Iw1aTP22m/cCosX85jGlfBNVQbaFXqDZq01G7e8XmtXIFQEV9PfU/YA7boKCZnib8
-	 sIIMBUqZIVn7tEbDfe7uONPxvqrbVrXz3FjGZficbZ6CuQTsnPL7Nq4CgLnx2mF0DWA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RWIuLnAm;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=G0R1NDMcyta6okyUda1y3v58EnPaSSc7GPjs8feVmgU=;
+	b=W4+bt6czHn4MExTi6dj8sTGLqvcMQ4fRFw5D5AJNhBBCqy9h/uH64D28uo1hJq1MSUbZ
+	 K9nuqtXAdGbU7mBIU3AFSiyzX27tpey6TJPiFUH3LN6LvjoFjVw+D6zTlUet9kTjrdMb/
+	 JQ4WayJuMKA468HfclzuUNs92Wnf/X6mlvQ7z2u0eBHPqyigcK+0PnCtGtpn7QyZ1NhIf
+	 a0WpFkpM1BvaCTHuy68Y1eVespQYbtUqDgP/CqAsDToq39hsKODphRZY+W98Y34i3eBNi
+	 M16VNzIkkGYeZAmN8xtUsdZJZUAVW1N9rNf6x4ORJIVAfwEAK6efohnOp+ee47Plo8Q==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nbfneGYr;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.43
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5340F606A8AC
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 02:26:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5340F606A8AC
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2140B606A329
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 02:28:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2140B606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=RWIuLnAm
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-36f479b9819so477756eec.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 18:26:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nbfneGYr
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-4adaa0f72abso3490480fac.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2026 18:28:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794709736; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ondt65WQJdNwEgqvnvrP3EE7sanyWAk3uYuMpU9zQ5jcmU1oE2derR+uqv6neI4hJV
+         cXJz5VvelPdOeCwIiaKVDfgDcGlsqVlY2ChzreWExkMNbxOND+eMRHVB5cA5iMN09Ca9
+         Yb1wCKWjctx4kp0QZ4PZZfXvA49OIVgOUdcHPStoOYz1F+7unrOqt79WbQtJ8Xrie5ql
+         S87Ff/1oWrNBfbzaxajxx6QmLNSYUYufyauMIiXV7TyxkZKJENHxJiH2uBZg6qW+mac+
+         9hHxDf9kxMfAtqoY087o47WnIfz0ENx6qSV4Z4cojS85tW/CdCrjBqywtb/UaDsTABXq
+         /irw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=G0R1NDMcyta6okyUda1y3v58EnPaSSc7GPjs8feVmgU=;
+        fh=y8audzr99AlngnRaWqD9td7+tdkF/d80Hk9b9UsQVE0=;
+        b=FmnTTQPvgajmdTGeygp8ROqpvOyUFtjaRNaOhksXLgsmxBpYditeu2R4pgnZaFmUIu
+         nN62Lbe9MZkD86RqaK79shSe9vSDroNQGD7vfVVBoY11e2VSU3V43zr6A/YtUZ6Wpfi8
+         +Ju7q8CoZa9QGoiWRXkxIdqkd8N3Dh13qyInivKIlB5N5fB7hwxLPZ3RbzhA43wjE/95
+         tYjznXG4Bb+wHf64pz1JDhSlmDrHu1W7z4f9Hdy8NaSgle+Cvna16k2mY4DOkbboW2on
+         vLQgICSIGf9mSK3fyCmL5FvwPaIIuvfdgpzqvaajOAEbHHyyFkBOKU9oNb68Z/vKqHPg
+         k7tA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794709576; x=1795314376; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PtHeqDpn0F+FD4D08P2fvOlL4SuwQcvcficGZrgtsYM=;
-        b=RWIuLnAmyxQGxVWkdrGCJ/0/6Q60rFIC+A5rzmBrXqbBUQOTDFoCmWY15oxMiawi36
-         8dL3srAMlkK3y5x8anTOgJRF6AXwbd5+H1IpbjnxLUpiWepOvfr6qUG2LEQKMH8x4MJ0
-         Kvn2DF4BwqAy7JvfnulXXzq0kFKGeePxYQFzKqPJkS0xWFsqhl9m7Ulo355lX83z7QQ2
-         nwpSZoqpFkl3i9Re2r/WZmZbW21iBDYAZ/FBUragQT1NxGh43eJBOkmtcnkC9/yvFzW/
-         mAT7DNFbPSV8DhiC67vw6JPAXagYOMs7MSZ1lsTBIo8ZjEBhfti6tktzr13f0smQjUHk
-         KG8Q==
+        d=gmail.com; s=20260707; t=1794709736; x=1795314536; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=G0R1NDMcyta6okyUda1y3v58EnPaSSc7GPjs8feVmgU=;
+        b=nbfneGYreYpMfUAFkHDdlSMQmERdv23sSDuuWJ0gzACuRP9FFyRT1YhoCeaRNHI/jL
+         GsNPvJ1lCij/s0E8/JKYBXgeOm98BmOsIqtmYEEd9Q11go5twbrwrZfHYhwsxndejGwb
+         coGSqvOT/VjRhCiU0gDbZO9XzTM9tsW8vq8oPHjV11xIHreG57Y+9SAlELikVNansz7w
+         DBfUMM01rxIJZvCOdRfWEtFTZUWi91j+FXUH6H2pFwKEpwV1o5EMLC3tREoEQjcKt6Rx
+         rQ043/klYKCRt+u1wmVY8lr65wlrxV5NKQbmiv5au+/hyPqPvinslNUx6gAjn09+GaSY
+         CHYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794709576; x=1795314376;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PtHeqDpn0F+FD4D08P2fvOlL4SuwQcvcficGZrgtsYM=;
-        b=LKrTOxaYD+VkTSbfzglOG3+7ovyM5E6lTAU3mzXjbqJp9RG/D38ep6hzwTkFEgPInI
-         DEto0JbqAfZAaEzX8YeGkbPvlWvENEnIohD71UIVmn+6Eg07Gnf6HMpjFMYL72LA3ing
-         j7UpN1vtacvCEoRb9OzcH+y4LrBhan3YBOCUoaoIdK1hO/v4+x5IIFrMl2mogruYkq5V
-         U8Dk7zzQ7fIJBzozvxYHupd6kFd9iTgaRmwLIRnW1asEi915aRmCIb3e7YD8bhTxKPaN
-         0EZETxexidkDwLjoRWstt2Qkvk2jT8uE6lSuslaxZBeCLRluBx6hzZ7gdjTrNf7geKWZ
-         lOEQ==
-X-Forwarded-Encrypted: i=1; AL+hErHVGTC4IW93ODef2rIeIJlaAL1JNtKRgKMLOaoFrWx7cU5JBXI1DlLX5nrDPFQ5oIT0zs0svMe/oPSyvkGg3Gs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8Vo0AkVz0/OnNDaR7JPo2qRwD5Ygp+WWPw+Z8ijzja42dHvfxz
-	QkfxJe53hsUyEhGBHzeWCUBAyPndJOEpApMnnOQFs6i/UugY18Ih6CdXCwr7uDu48LOSlsuGDXq
-	sp5FJZ+Fjzu+gSkIK7Qt+ZIy8eA==
-X-Received: from dyab25.prod.google.com ([2002:a05:693c:8319:b0:372:7af9:c0a7])
- (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:cca2:b0:36e:371:8255 with SMTP id 5a478bee46e88-379603825bemr6161512eec.0.1794709575230;
- Sat, 14 Nov 2026 18:26:15 -0800 (PST)
-Date: Sun, 15 Nov 2026 02:26:07 +0000
-In-Reply-To: <20261115022607.348112-1-almasrymina@google.com>
+        d=1e100.net; s=20260707; t=1794709736; x=1795314536;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=G0R1NDMcyta6okyUda1y3v58EnPaSSc7GPjs8feVmgU=;
+        b=wCu/lv6ep+OwWudTOUCgTkZYbQxC73ImwBKTb93w1Fw7nKTVcivl0/NJhrREeZhTDC
+         89M8XyMN6IMP0mkGz98ucgdB2sdopU5Ryj8jv73BgOjiG7LxbGNEDC2mBH+6HL+PErUK
+         hD+n21QHNbFBJXbI0SHAQtHas8wsp/IkBv6PET7W1VpyCV3rY7vfdLmx9bR5BDlNpI2c
+         wmfD1FDDbQWKaz+nfnnl/Q/6nYIN+LJ7QqS1M+UY3GjRfJQMdlMKiKOgDysMY/bgnY7N
+         oXp/LGoaagHItnt4hGhck2ThpjNJVXH7VRXC45ERn6HfS4J8O8K5sfw1NGodOvv2B1aB
+         IABg==
+X-Forwarded-Encrypted: i=1; AL+hErHfc9pE/Smrm4RfYCsQP2jELD138zhyTLzrSsfYY2iVXKSyY5b/N35raLSH3PxKrNfHyp+Reyp/oFZG4PlOR+8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9rfoU4YBam+rZjAfBKOCWO5oi9Fal/0owXHUxrPE0j7UDnA6+5
+	8Whfr0Q5fa8Y0hzzZZJLx4Rp87cNUJJ/rP0/n1WeTpgdWnFUyYWpixOgf2NcKtP1XOpmiklVUpL
+	GcTvW0XFfiKcsGUFf5/ldAWoJ9QGsTuE=
+X-Gm-Gg: AYBFou3fgR6JHvvKgWtMRJuQPQc33JaeqeW9WOgEr8VbpDl/rM7S3mj9SfaCiU5Pm7r
+	w+pUCdDNbGAhqwgNTUgMtIZMB7DLh4NONWs53PB1suKaVTie78+dwly55nAZerb1kCZGSUgQOt8
+	U+ANNbAlTEc83w51rWeIcBOD8j8xuzgQBtK9tFqkhhUXqUzCuvXyrMj29wRK3rrMIYSNO8uEoKy
+	y5mPMcMEtN3/386yNzNWLED6nctU4dmQGCjWkgMiaiwof/4JuYTfzUrF375t/7SLfQdhxGo0Zj7
+	jX+g0ljh+OQ6Y0xpT7nUkneID1QqlRuq06lIaFuI6QcgV8XQwUklPJ6+ddy+vJOFV5vCGxeuVnD
+	M4mwd0kvjcYccU+XRf9KGIEwsT+UOWkd0jGFoGqDaXPxogQfUAE+z4D/IiohXkBB9lxdwUAickD
+	8o9Ar8ylg+qGD9k+IXszuoJc5QN8ujBXBFOSg6muHboLiNVk1UM972tCc41A==
+X-Received: by 2002:a05:6820:8105:b0:6dc:7513:c06d with SMTP id
+ 006d021491bc7-7197cf12f05mr6314842eaf.50.1794709735598; Sat, 14 Nov 2026
+ 18:28:55 -0800 (PST)
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -78,240 +104,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261115022607.348112-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
-Message-ID: <20261115022607.348112-7-almasrymina@google.com>
-Subject: [PATCH net-next v3 6/6] selftests: net: add leased devmem RX and TX
- netdev unregister tests
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Weiming Shi <bestswngs@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, 
-	Stanislav Fomichev <sdf.kernel@gmail.com>, Bobby Eshleman <bobbyeshleman@meta.com>, 
-	Dragos Tatulea <dtatulea@nvidia.com>
+MIME-Version: 1.0
+References: <202611112257529855AMDZLzg8ZmFDQ3fBstbi@zte.com.cn>
+ <20261111225759742pwhACD8p_0GdXSYIk_Ob6@zte.com.cn> <avkT5yu3hJgi-YWb@fedora-laptop>
+In-Reply-To: <avkT5yu3hJgi-YWb@fedora-laptop>
+From: Ming Lei <tom.leiming@gmail.com>
+Date: Sat, 14 Nov 2026 20:28:43 -0600
+X-Gm-Features: AclHuK_Ifc5tkbepMLK0d8ZgWsUZJ0Zl-dFfIWODo7gKqOHzWbB2LamABucX8Fs
+Message-ID: <CACVXFVN0Kw+jvDuZJB-XaAN3hNDd3WFvLZULJcpKrpz3qiehXw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] selftests: ublk: propagate stress worker failures
+To: shao.mingyin@zte.com.cn
+Cc: shuah@kernel.org, linux-block@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Extend nl_netdev.py to cover netdev unregistration while devmem RX and
-TX bindings are active on a virtual netkit device leasing an RX queue
-from netdevsim:
+On Sat, Nov 14, 2026 at 8:07=E2=80=AFPM Ming Lei <tom.leiming@gmail.com> wr=
+ote:
+>
+> On Wed, Nov 11, 2026 at 10:57:59PM +0800, shao.mingyin@zte.com.cn wrote:
+> > From: Shao Mingyin <shao.mingyin@zte.com.cn>
+> >
+> > The stress tests update ERR_CODE in background subshells and use a bare
+> > wait in the parent. A worker can therefore fail while the parent still
+> > prints PASS and exits successfully. Calling _show_result() from a worke=
+r
+> > also removes backing files shared with other workers.
+> >
+> > Generalize the recovery PID collector and use it to wait for every stre=
+ss
+> > worker in the parent. Return errors from the worker helpers, leave resu=
+lt
+> > reporting and cleanup to the parent, and reset the PID array after each
+> > batch. Keep failures ahead of skips when collecting worker exit statuse=
+s.
+> >
+> > Fixes: bb2cabf23568 ("selftests: ublk: run stress tests in parallel")
+> > Reported-by: Ming Lei <tom.leiming@gmail.com>
+> > Link: https://lore.kernel.org/all/avJ0Vn9G7XhZv-XL@fedora-laptop/
+> > Signed-off-by: Shao Mingyin <shao.mingyin@zte.com.cn>
+> > ---
+>
+> Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-1. devmem_lease_bind_rx_unregister_check: binds an RX dmabuf to a netkit
-   device backed by a leased netdevsim queue and verifies clean teardown
-   both when the virtual netkit device is deleted first (unleasing the
-   queue while netdevsim remains up) and when the underlying netdevsim
-   device is unregistered directly (which uninstalls the physical queue
-   memory provider and cascades unregistration to the leasing netkit).
-2. devmem_lease_bind_tx_unregister_check: binds a TX dmabuf to a netkit
-   device backed by a leased netdevsim queue and verifies clean teardown
-   both when the virtual netkit device is deleted first and when the
-   underlying netdevsim device is unregistered directly.
+Reviewed-by: Ming Lei <tom.leiming@gmail.com>
 
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- tools/testing/selftests/net/nl_netdev.py | 159 ++++++++++++++++++++++-
- 1 file changed, 155 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-index dd0321c0b463a..2e4e34257e873 100755
---- a/tools/testing/selftests/net/nl_netdev.py
-+++ b/tools/testing/selftests/net/nl_netdev.py
-@@ -12,8 +12,10 @@ import os
- import struct
- from os import system
- from lib.py import ksft_run, ksft_exit, KsftFailEx, KsftSkipEx
--from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
--from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, NlError, defer, ip
-+from lib.py import ksft_eq, ksft_ge, ksft_in, ksft_ne, ksft_not_in
-+from lib.py import ksft_raises, ksft_busy_wait
-+from lib.py import EthtoolFamily, NetdevFamily, NetdevSimDev, Netlink
-+from lib.py import NlError, RtnlFamily, cmd, defer, ip
- 
- 
- def empty_check(nf) -> None:
-@@ -423,12 +425,22 @@ def _dmabuf_attach_count(dmabuf_fd) -> int:
-     raise KsftFailEx(f"dma-buf {ino} not found in {path}")
- 
- 
--def _devmem_bind(bind, attrs) -> None:
-+def _devmem_bind(bind, attrs, phys_attrs=None) -> None:
-     """Run a devmem bind op, skip the test if the device can't do devmem."""
-     try:
-         bind(attrs)
-     except NlError as e:
-         if e.error == errno.EOPNOTSUPP:
-+            if phys_attrs is not None:
-+                try:
-+                    bind(phys_attrs)
-+                except NlError as probe_e:
-+                    if probe_e.error == errno.EOPNOTSUPP:
-+                        raise KsftSkipEx(
-+                            f"devmem binding not supported: {probe_e}"
-+                        ) from probe_e
-+                    raise e from probe_e
-+                raise
-             raise KsftSkipEx(f"devmem binding not supported: {e}") from e
-         raise
- 
-@@ -483,6 +495,143 @@ def devmem_bind_tx_unregister_check(_nf) -> None:
-     nf_priv.close()
- 
- 
-+def _create_netkit_single(rxqueues=2):
-+    """Create a single-device netkit interface for queue lease tests."""
-+    ifname = f"nk{os.getpid()}"
-+    try:
-+        with RtnlFamily() as rtnl:
-+            rtnl.newlink(
-+                {
-+                    "ifname": ifname,
-+                    "linkinfo": {
-+                        "kind": "netkit",
-+                        "data": {
-+                            "mode": "l2",
-+                            "pairing": "single",
-+                        },
-+                    },
-+                    "num-rx-queues": rxqueues,
-+                },
-+                flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
-+            )
-+    except NlError as e:
-+        if e.error in (errno.EOPNOTSUPP, errno.ENOENT):
-+            raise KsftSkipEx(f"netkit single mode not supported: {e}") from e
-+        raise
-+    defer(cmd, f"ip link del dev {ifname}", fail=False)
-+
-+    link = ip(f"-d link show dev {ifname}", json=True)[0]
-+    return ifname, link["ifindex"]
-+
-+
-+def _queue_lease(nf, nk_ifindex, phys_ifindex, phys_qid=1):
-+    try:
-+        return nf.queue_create({
-+            "ifindex": nk_ifindex,
-+            "type": "rx",
-+            "lease": {
-+                "ifindex": phys_ifindex,
-+                "queue": {"id": phys_qid, "type": "rx"},
-+            },
-+        })
-+    except NlError as e:
-+        if e.error == errno.EOPNOTSUPP:
-+            raise KsftSkipEx(f"queue lease not supported: {e}") from e
-+        raise
-+
-+
-+def devmem_lease_bind_rx_unregister_check(nf) -> None:
-+    """Verify leased RX devmem bindings detach cleanly on virt/phys unregister."""
-+    for remove_virt_first in (False, True):
-+        dmabuf_fd = _create_udmabuf()
-+        defer(os.close, dmabuf_fd)
-+        nf_priv = NetdevFamily()
-+        defer(nf_priv.close)
-+        nsimdev = NetdevSimDev(queue_count=2)
-+        defer(nsimdev.remove)
-+        nsim = nsimdev.nsims[0]
-+
-+        ip(f"link set dev {nsim.ifname} up")
-+        with EthtoolFamily() as ef:
-+            ef.rings_set({"header": {"dev-index": nsim.ifindex},
-+                          "tcp-data-split": "enabled"})
-+
-+        nk_ifname, nk_ifindex = _create_netkit_single(rxqueues=2)
-+        ip(f"link set dev {nk_ifname} up")
-+
-+        res = _queue_lease(nf, nk_ifindex, nsim.ifindex)
-+
-+        _devmem_bind(nf_priv.bind_rx, {
-+            "ifindex": nk_ifindex,
-+            "fd": dmabuf_fd,
-+            "queues": [{"id": res["id"], "type": "rx"}],
-+        }, phys_attrs={
-+            "ifindex": nsim.ifindex,
-+            "fd": dmabuf_fd,
-+            "queues": [{"id": 0, "type": "rx"}],
-+        })
-+        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+        phys_q = nf.queue_get({"ifindex": nsim.ifindex, "id": 1, "type": "rx"})
-+        ksft_in("dmabuf", phys_q)
-+        ksft_in("lease", phys_q)
-+
-+        if remove_virt_first:
-+            ip(f"link del dev {nk_ifname}")
-+            phys_q = nf.queue_get({"ifindex": nsim.ifindex, "id": 1,
-+                                   "type": "rx"})
-+            ksft_not_in("dmabuf", phys_q)
-+            ksft_not_in("lease", phys_q)
-+            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+            nsimdev.remove()
-+        else:
-+            nsimdev.remove()
-+            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
-+            cmd(f"ip link del dev {nk_ifname}", fail=False)
-+        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
-+
-+        nf_priv.close()
-+
-+
-+def devmem_lease_bind_tx_unregister_check(nf) -> None:
-+    """Verify leased TX devmem bindings detach cleanly on virt/phys unregister."""
-+    for remove_virt_first in (False, True):
-+        dmabuf_fd = _create_udmabuf()
-+        defer(os.close, dmabuf_fd)
-+        nf_priv = NetdevFamily()
-+        defer(nf_priv.close)
-+        nsimdev = NetdevSimDev(queue_count=2)
-+        defer(nsimdev.remove)
-+        nsim = nsimdev.nsims[0]
-+
-+        ip(f"link set dev {nsim.ifname} up")
-+
-+        nk_ifname, nk_ifindex = _create_netkit_single(rxqueues=2)
-+        ip(f"link set dev {nk_ifname} up")
-+
-+        _queue_lease(nf, nk_ifindex, nsim.ifindex)
-+
-+        _devmem_bind(nf_priv.bind_tx, {
-+            "ifindex": nk_ifindex,
-+            "fd": dmabuf_fd,
-+        }, phys_attrs={
-+            "ifindex": nsim.ifindex,
-+            "fd": dmabuf_fd,
-+        })
-+        ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+
-+        if remove_virt_first:
-+            ip(f"link del dev {nk_ifname}")
-+            ksft_ge(_dmabuf_attach_count(dmabuf_fd), 1)
-+            nsimdev.remove()
-+        else:
-+            nsimdev.remove()
-+            ksft_ne(cmd(f"ip link show dev {nk_ifname}", fail=False).ret, 0)
-+            cmd(f"ip link del dev {nk_ifname}", fail=False)
-+        ksft_eq(_dmabuf_attach_count(dmabuf_fd), 0)
-+
-+        nf_priv.close()
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
-     nf = NetdevFamily()
-@@ -498,7 +647,9 @@ def main() -> None:
-               page_pool_ifindex_leak_check,
-               page_pool_stats_ifindex_check,
-               devmem_bind_rx_unregister_check,
--              devmem_bind_tx_unregister_check
-+              devmem_bind_tx_unregister_check,
-+              devmem_lease_bind_rx_unregister_check,
-+              devmem_lease_bind_tx_unregister_check
-               ],
-              args=(nf, ))
-     ksft_exit()
--- 
-2.56.0.611.g1030f0b940-goog
-
+Thanks,
+Ming Lei
