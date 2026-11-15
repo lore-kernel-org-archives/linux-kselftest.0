@@ -1,76 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794779115;
-	b=EHZJjsAt8BMsJpuu+xcbf95/xqJQ5tpsoxfFOSvBfEkx7ZhYI2b0DnP6drY4FwY7TEeM
-	 7eXwKPzG5VsBtJi0GpDps5W//GvkrYru2mkRiuzkEFOOXDY7h0st7YqiweWjdJrSXhPOu
-	 kKrPV6hYWFhCsJpx6lmbhy1MmshcYLK0URmJpgwAbyh+0ZdmSJNp83ylPDf4DUFbuoKMK
-	 7fxRvBxgV0wP0uqsnAOsckoQeDUbg/7lrU3+acDWaMcREYlpWN9GUTT78yCtWjsUvP8oR
-	 tSb9WGKyLk3LzVGgE7Or+7p/hoAqnhzkmuP8W96QMrkdz+Xr9LObyjPTj/8n2TU4MIQ==
+	t=1794779237;
+	b=F42txUSAZNohx68DN7tDDCXO0NsGppqMVyRUMIqVjAsmdrRXFaR5XvossxOXxTTRjy1K
+	 7r2av3Hu4RXx+XSfeh/9LtKiHtD1kRF+TkuvPkbKnOETeL+8pMoD3ECklSybqUo5G199D
+	 EXCPBvD7Lzglhw43BAz+7YsRLo4Qp1uXORpLrxDA22xoZm7mBETZM0+vbp38DkVP17yvf
+	 2ql1J0PCR5uvyEpmNY/89WBkAWkrbExNcKdBcTHeV7TXM9HaZeMxQsxbPAoD+9EU1QP6A
+	 79g58tUrSs6mYr01w05GJtJz8hVtMcqhB1VvQSk5RZOPFciMxVC+V5fRP0TUBXnLG5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794779115;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=mD9hayVJvAjyxBRT0dnmZkuOvhkP4+8zcep4nlSZMwg=;
-	b=2oYJvq1vCjnJm2lUv80nj9qmWRydhFMf0P36gWzNz6fEDI4H2Igp7vSvC/L2Qh7MCJP2
-	 Eeob6DwcpR4hs0qeCAFeyMXrry3FlKFPviFuLmomrZ87Yyme9VxqFfw8JtSClMRH51ld/
-	 d+2wM9mMt/rpTKYP/FayZ/V4LVMYe99lWoBVClCflwLxg3FS7fGIdrBj5JVa39lm1imwz
-	 fBRmAGYYlsNzLOk/8s8GJ1UnWrGmHLxDx2M1TnCUD00un1n5poz48mtyZoMJ/8vXsrizE
-	 YyeEFLp5i3N5Z1/NHBrqj3ChCHbbvGwmA/g3jYDZN+1ry1JrdNR9aIYAqqbWD7nWg1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794779237;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=psvhFR3gX3h277fYLdFab5gaUTS02PdmPaUdlYbgfe0=;
+	b=Fdfiupey+csqYh9A0zm3CuKt2luvOT40lJCswRTDLZmGDlQnGuKJ8RuIElPZlaueO319
+	 tVDSqn3XSgDlqZdR7rqAAENk2X9l96R7BEYMKIG0L4EnxJwOzMQB/oQUYO92z7sSBBXUW
+	 LdQ3kicW2eaYafrmLJ00ywHnSVO5nJdi17Ne6yQaqItC+qP039UJqygbcG3g/tjyq8qOh
+	 7gklxSYbDj0zJ3dhcdio8rVdyp8mI5dvkPxheSXVhP4XJ0V0sO3m6XsDhUVFoOsvNa4u+
+	 NlhQ9C4DeKI9uRJvufqUC4HGD/N/2MfJaySKYp8VZ2simmFNI9yyr0/WTF1qcQmPuSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=Semlvncf;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=0MXy4QeK;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i0vogCSl;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE38606A329;
-	Sun, 15 Nov 2026 21:45:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAE38606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FCC606A32C
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 21:47:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92FCC606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=Semlvncf;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=0MXy4QeK
-Date: Sun, 15 Nov 2026 22:45:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1794779112;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mD9hayVJvAjyxBRT0dnmZkuOvhkP4+8zcep4nlSZMwg=;
-	b=SemlvncfCZsr8wvzwJ9LmjkuUasMvqfPlROuJ9H1rzoRgdOzU6eG+GiKdAdO9bz/+Q2PuD
-	XJxo9E5R5KmORZDsICthK9uqUL+XkbzTkcVEbPeURl4mWqnahfBkI97eXyZEPTn+5FiAPj
-	ObIAUDx5U1MuSq4p/XTf8JliePdTMWftvG4PgO8JutWhsr7mnEC3hhy1M/OmJ38O5xbZVs
-	hxHKs9Ej/tS9VDW8hFFAU7qyhOHCON03vYUE6j5pGIoe10zAWt8mVGoBb+EUPzuHmSIVyq
-	ZVrjvi9itmv+RC1/laXB5AZyLkOsc8KC6e/OFX0ekZN/FsojOu2cW3YdStE5wA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1794779112;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mD9hayVJvAjyxBRT0dnmZkuOvhkP4+8zcep4nlSZMwg=;
-	b=0MXy4QeKAOE5FDfZNvA6N1LHvj9XBXZVVKTSUIPkyw88KgGhJXYpewH07pNTK9+Bb6Dqdt
-	Tqsj5NDEMtdW1+Dg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, davem@davemloft.net,
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
-	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
-	fmaurer@redhat.com, luka.gejak@linux.dev, xiaoliang.yang_1@nxp.com,
-	skhawaja@google.com, liuhangbin@gmail.com, stable@vger.kernel.org,
-	sdf.kernel@gmail.com, lukma@denx.de, fmancera@suse.de,
-	danishanwar@ti.com
-Subject: Re: [PATCH net v9 0/4] net: hsr: fix super-packet forwarding
-Message-ID: <20261115214510.MDb9zdCb@linutronix.de>
-References: <20261112153333.20-1-xiexinet@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i0vogCSl
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4946589267bso343611f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Nov 2026 13:47:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794779235; x=1795384035; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=psvhFR3gX3h277fYLdFab5gaUTS02PdmPaUdlYbgfe0=;
+        b=i0vogCSliLZJGYDRv14NGvoJrO5SGotB1IECpyR/cQn7RkJjcbXtZ15LN3HdYRuzJK
+         3ghnZOKGJad3pty8zTXUIZyySoqi8t2T6QndoUZVwetLEruinA3Q23qATRL9sGf1hOf4
+         Z7Vc7cAvyNjD8JJ8NLUXTZqI6ZeVlaC1M87vbmcRfiGsVmZj6cLm0rggjPOMTeej35rb
+         hpi9+DgGTyVh7vvBbDkGkrVt9fQAn43NYaliIguXV3JrZaBTpt9dH7BGClgcmthhrLOo
+         aOBH+5LgzrDvj4Wo//E5vupbxzwtPtwBU/4eJ9RBWvtUstHxE6d7ZyC2C4Dghe53V1Z7
+         YZOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794779235; x=1795384035;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=psvhFR3gX3h277fYLdFab5gaUTS02PdmPaUdlYbgfe0=;
+        b=ysDZ8Cd0av0Nu/B75mFBFtfy+BJEoQgheV1YfXwINW/XpMBXYKhx7SsX0cZP8OlXQ/
+         tP4RhC4/EzKdi1qpeK/GbsMJ8W/LvjDnT9a6HRFjvIofDB4ayrTOUd2TN/C++zSLe7Wl
+         34utlIpd9oyai8SCI2YV7nRgnti/v3QStd6+IHQ7jWo0M1i/draKDi2tXB+wSY0nFeNM
+         VTUSMBLccaLboNeZLKFmrTXW0g+8ARiG2maVWU7uK/b3iLTHJSxBP/z7C4uMFRL+uxrI
+         ks337QXbduqsLSF+pEkSlY3BVfFFJ66cw3MroXuIAds8Lzlmy7NMKVVeGIc/ZDgj9TMW
+         kNrQ==
+X-Forwarded-Encrypted: i=1; AL+hErFzxrWpjI0edmajMXtUUU15/PXuVFqfUnEe91rdCjHC4sbvhhAfAG53tOsvhxnrRznuukyNIiaqETLFwexZuM8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8et6NPw7L8lZO0rRXf3kw2i0EB//HQIAd1te0KWbJgOME4tFy/
+	Qu2XNMfzhEdPmlYswa6NM/NrKPTOrQkHk4p/YryGdMzQCv8lUHDESFR6
+X-Gm-Gg: AYBFou1+F2vZow/4n1yRLlVlGtsSlkmHgE11XtZ1Tt9TLchVxuHFvSfE1udS/PffX1E
+	bAbExyMBg1Y2ZNUFEg/5i8k9vT+xyWOryQOthXKR+UEY6LXMcG7in/Xygk2z0QFHRs3oqK0B9Qp
+	gSJLqPEiRzrzqwK70JVqqGe+EeQ1AaOnyAUhjVhmqiKw3AbhAif5EIkkDx+/ryVfnkzn5sqS56Q
+	Yhg5TEuRyxSxeN9tz1Mx6kNvJCG4bwF45QuaT9k4f8Dh0YInalheBfQ4jAOF9oykEs67gtywTU6
+	YeJeyPVY9wyoVUpzxfy9rlIek4nLmFVmidkYB80XsYPCfZDF0WH26Syj5RTgO4+IssMtubf86y1
+	V+IAUFSOtDyzu9CaI+IcyOUVnuZFTl1PRErwu5YG3SomDqlbPCDOjUOJAm0PIjZaAFeu+uxoWjK
+	o98s+MzBb5doNd7gWOqodfEqq0raHkpnhjSIOSf2AuW0+5i/U921zcPZpYLdu77NQx2L0obObI0
+	e07Iy7wLsG1UKVfh9XLpZzYaQRXQaUqK5LHpgF7eNwf9UBs7poz0R45XNejsUZJAMJ0zsIW0Uq8
+	zwjgSn9EZSksU4KCEABYnt8Xpxc2Yrv8+p8q/VeRz860MjyzF3EUm1PBEL7gp+uXHWzWexGjvQ=
+	=
+X-Received: by 2002:a05:600c:8a17:20b0:4b6:2242:d0be with SMTP id 5b1f17b1804b1-4bb5599b367mr144632065e9.0.1794779234728;
+        Sun, 15 Nov 2026 13:47:14 -0800 (PST)
+Received: from Nuel20.localdomain ([105.112.221.201])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb6f93b3e9sm43204765e9.1.2026.11.15.13.47.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Nov 2026 13:47:14 -0800 (PST)
+From: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+To: kuba@kernel.org,
+	tianyi@cloudflare.com,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	skhan@linuxfoundation.org,
+	Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Subject: [PATCH net v2] selftests: net: veth: propagate channel-check failures to exit status
+Date: Sun, 15 Nov 2026 22:47:02 +0100
+Message-ID: <20261115214702.50817-1-emmaonana18@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Post: <mailto:linux-kselftest@vger.kernel.org>
@@ -80,27 +110,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:linux-kselftest+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20261112153333.20-1-xiexinet@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On 2026-11-12 16:33:29 [+0100], Xin Xie wrote:
-> HSR and PRP tag, number and de-duplicate each frame on the wire. GRO
-> and GSO can hand them one skb holding several frames, which the lower
-> device then drops or which goes out with a single tag or RCT and
-> sequence number.
->=20
-=E2=80=A6
-> Xin Xie (4):
->   net: hsr: keep GRO disabled on HSR/PRP ports
->   net: hsr: refuse forwarding devices as HSR/PRP ports
->   net: hsr: segment GSO before per-frame forwarding
->   selftests: net: hsr: verify GRO policy and ordered forwarding
+chk_channels() reports mismatches with a "fail" line but never sets
+ret, so the script exits 0 even when channel counts are wrong. Every
+other check helper in the file (__chk_flag, chk_xdp_feature, chk_gro)
+sets ret=1 on failure, and all chk_channels() call sites expect the
+check to pass. Set ret=1 on mismatch.
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Fixes: 1ec2230fc721 ("selftests: net: veth: add tests for set_channel")
+Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+---
+v2: correct Fixes tag (was c017800af5c71, now 1ec2230fc721)
 
-The test covers the aggregated frames which are unfolded which is nice.
-It looks good from what I can tell.
+ tools/testing/selftests/net/veth.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sebastian
+diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+index 64c2a5a59821d..5c1dbe1516bb4 100755
+--- a/tools/testing/selftests/net/veth.sh
++++ b/tools/testing/selftests/net/veth.sh
+@@ -130,6 +130,7 @@ chk_channels() {
+ 		echo " ok "
+ 	else
+ 		echo " fail rx:$rx:$cur_rx tx:$tx:$cur_tx combined:n/a:$cur_combined"
++		ret=1
+ 	fi
+ }
+ 
+-- 
+2.43.0
+
